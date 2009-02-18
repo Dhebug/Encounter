@@ -18,6 +18,9 @@ Here is the structure for the whole repository at the moment:
 |   |   +---games
 |   |   \---tools
 |   \---pc
+|       +---emulators
+|       |   +---caloric
+|       |   \---euphoric
 |       \---tools
 |           \---osdk
 \---users
