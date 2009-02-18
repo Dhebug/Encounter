@@ -23,4 +23,6 @@ Here is the structure for the whole repository at the moment:
 \---users
     +---chema
     +---dbug
+    +---mmu_man
     \---twilighte
+
