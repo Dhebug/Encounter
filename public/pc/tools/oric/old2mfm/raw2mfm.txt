@@ -1,0 +1,40 @@
+Raw -> MFM is a simple tool converting raw images of double density disks to
+the MFM format used by Euphoric.
+
+Raw images are those images you get when using PC tools like rawread.exe or
+WinImage, or when using the 'dd' command under unix workstations. This means
+the image only contains a copy of the sector contents, without any formatting
+info. So, it is a simple format for the most common configurations, since the
+size of the image gives information about the format:
+
+360KB  means 2 sided, 40 tracks,  9 sectors/track, 512 bytes/sector
+720KB  means 2 sided, 80 tracks,  9 sectors/track, 512 bytes/sector
+1.2MB  means 2 sided, 80 tracks, 15 sectors/track, 512 bytes/sector
+1.44MB means 2 sided, 80 tracks, 18 sectors/track, 512 bytes/sector
+
+These are the usual PC floppy disks: if you have a single sided disk, or use
+a different number of sectors per track, the size of the image might be the
+same as another format, and so is not enough to determine the actual format.
+
+Raw -> MFM builds virtual disks from the first two PC formats above (the two
+others are high density disks, not double density disks, so they can not be
+used on the oric). The MFM format is bigger in size than a raw format, but it 
+can cope with any exotic format, mixing sectors of 128, 256, 512 or 1024 bytes.
+
+Current limitations:
+Raw->MFM does not build a very precise virtual disk for now, gap lengths are
+not real ones, it's just because I've been too lazy to look at a real one...
+
+Note to WinImage users:
+Disk images used with WinImage are raw images, but they are often compressed.
+Standard extension is .IMA for uncompressed images and .IMZ for compressed
+ones. Please uncompress your images before converting them with Raw->MFM
+(use PKunzip or InfoZip)
+
+Note to Unix users:
+Use the standard dd command to build a raw image from a real disk.
+Eg:
+        dd if=/dev/fd0 of=mydisk.dsk bs=9b
+(you might need to replace fd0 with your special device name, like fd0D720.
+Also the bs option is not mandatory, but it often speeds the process 8-)
+
