@@ -15,54 +15,21 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-mms-bitfields" />
-					<Add directory="..\libs\GTK+\lib\gtk-2.0\include" />
 					<Add directory="." />
+					<Add directory="..\libs\GTK+\include\gtk-2.0" />
+					<Add directory="..\libs\CAIRO\include\cairo" />
+					<Add directory="..\libs\GLIB\include\glib-2.0" />
+					<Add directory="..\libs\GLIB\lib\glib-2.0\include" />
+					<Add directory="..\libs\PANGO\include\pango-1.0\" />
+					<Add directory="..\libs\GTK+\lib\gtk-2.0\include" />
+					<Add directory="..\libs\ATK\include\atk-1.0" />
+					<Add directory="..\libs\libglade\include\libglade-2.0\" />
+					<Add directory="..\libs\SDL-1.2.13\include" />
+					<Add directory="..\libs\pthreads.2" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-Wl --export-dynamic" />
-					<Add library="..\..\..\SDL-1.2.13\lib\libSDLmain.a" />
-					<Add library="..\..\..\SDL-1.2.13\lib\libSDL.dll.a" />
-					<Add library="..\..\..\libglade\lib\libglade-2.0.dll.a" />
-					<Add library="..\..\..\Pre-built.2\lib\pthreadVSE2.lib" />
-					<Add library="..\..\..\Pre-built.2\lib\pthreadVC2.lib" />
-					<Add library="..\..\..\Pre-built.2\lib\pthreadVCE2.lib" />
-					<Add library="..\..\gtk\lib\zdll.lib" />
-					<Add library="..\..\gtk\lib\atk-1.0.lib" />
-					<Add library="..\..\gtk\lib\cairo.lib" />
-					<Add library="..\..\gtk\lib\gdk_pixbuf-2.0.lib" />
-					<Add library="..\..\gtk\lib\gdk-win32-2.0.lib" />
-					<Add library="..\..\gtk\lib\gio-2.0.lib" />
-					<Add library="..\..\gtk\lib\glib-2.0.lib" />
-					<Add library="..\..\gtk\lib\gmodule-2.0.lib" />
-					<Add library="..\..\gtk\lib\gobject-2.0.lib" />
-					<Add library="..\..\gtk\lib\gthread-2.0.lib" />
-					<Add library="..\..\gtk\lib\gtk-win32-2.0.lib" />
-					<Add library="..\..\gtk\lib\intl.lib" />
-					<Add library="..\..\gtk\lib\libatk-1.0.dll.a" />
-					<Add library="..\..\gtk\lib\libcairo.dll.a" />
-					<Add library="..\..\gtk\lib\libgdk_pixbuf-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgdk-win32-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgio-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libglib-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgmodule-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgobject-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgthread-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libgtk-win32-2.0.dll.a" />
-					<Add library="..\..\gtk\lib\libintl.dll.a" />
-					<Add library="..\..\gtk\lib\libpango-1.0.dll.a" />
-					<Add library="..\..\gtk\lib\libpangocairo-1.0.dll.a" />
-					<Add library="..\..\gtk\lib\libpangoft2-1.0.dll.a" />
-					<Add library="..\..\gtk\lib\libpangowin32-1.0.dll.a" />
-					<Add library="..\..\gtk\lib\libpng12.dll.a" />
-					<Add library="..\..\gtk\lib\libpng.lib" />
-					<Add library="..\..\gtk\lib\libtiff.dll.a" />
-					<Add library="..\..\gtk\lib\libtiff.lib" />
-					<Add library="..\..\gtk\lib\libz.a" />
-					<Add library="..\..\gtk\lib\pango-1.0.lib" />
-					<Add library="..\..\gtk\lib\pangocairo-1.0.lib" />
-					<Add library="..\..\gtk\lib\pangoft2-1.0.lib" />
-					<Add library="..\..\gtk\lib\pangowin32-1.0.lib" />
 				</Linker>
 			</Target>
 		</Build>
