@@ -63,6 +63,11 @@ FILE29="pthreadVSE2.lib"
 FILE30="SDL.dll"
 FILE31="zlib1.dll"
 FILE32="caloric.ini"
+FILE33="atmos.rom"
+FILE34="oric1.rom"
+FILE35="teleass.rom"
+FILE36="telematic.rom"
+FILE37="telemon-2.4.rom"
 [SourceFiles]
 SourceFiles0=C:\Caloric\Release\
 [SourceFiles0]
@@ -99,3 +104,8 @@ SourceFiles0=C:\Caloric\Release\
 %FILE30%=
 %FILE31%=
 %FILE32%=
+%FILE33%=
+%FILE34%=
+%FILE35%=
+%FILE36%=
+%FILE37%=
