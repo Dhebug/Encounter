@@ -4,6 +4,6 @@ const char *rcfiles[] =
   "~/.caloric/caloricrc",
   "./.caloricrc",
   "caloric.ini",
-  "C:\\Program Files\\Caloric\\caloric.ini",
+  "caloric.ini",
   0
 };
