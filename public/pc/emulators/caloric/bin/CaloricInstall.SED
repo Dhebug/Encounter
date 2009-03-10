@@ -24,7 +24,7 @@ SourceFiles=SourceFiles
 InstallPrompt=Voulez vous installez Caloric ?
 DisplayLicense=
 FinishMessage=
-TargetName=C:\Users\jerome\Documents\Oric\Caloric\bin\Release0.1\CaloricInstall.EXE
+TargetName=C:\CaloricInstall.EXE
 FriendlyName=Caloric
 AppLaunched=
 PostInstallCmd=
@@ -63,7 +63,7 @@ FILE29="pthreadVSE2.lib"
 FILE30="SDL.dll"
 FILE31="zlib1.dll"
 [SourceFiles]
-SourceFiles0=C:\Users\jerome\Documents\Oric\Caloric\bin\Release\
+SourceFiles0=C:\Caloric\Release\
 [SourceFiles0]
 %FILE0%=
 %FILE1%=
