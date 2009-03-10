@@ -4,6 +4,6 @@ const char *datapath[] =
   "./",
   "~/",
   "/usr/local/share/caloric",
-  "C:\\Program Files\\Caloric",
+  "",
   0
 };
