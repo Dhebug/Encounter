@@ -62,8 +62,7 @@ FILE28="pthreadVSE2.dll"
 FILE29="pthreadVSE2.lib"
 FILE30="SDL.dll"
 FILE31="zlib1.dll"
-FILE32="caloric.ini.txt"
-FILE33="caloric.ini"
+FILE32="caloric.ini"
 [SourceFiles]
 SourceFiles0=C:\Caloric\Release\
 SourceFiles1=C:\Users\jerome\Documents\Oric\Caloric\bin\Release\
@@ -102,4 +101,3 @@ SourceFiles1=C:\Users\jerome\Documents\Oric\Caloric\bin\Release\
 %FILE31%=
 [SourceFiles1]
 %FILE32%=
-%FILE33%=
