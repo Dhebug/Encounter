@@ -65,7 +65,6 @@ FILE31="zlib1.dll"
 FILE32="caloric.ini"
 [SourceFiles]
 SourceFiles0=C:\Caloric\Release\
-SourceFiles1=C:\Users\jerome\Documents\Oric\Caloric\bin\Release\
 [SourceFiles0]
 %FILE0%=
 %FILE1%=
@@ -99,5 +98,4 @@ SourceFiles1=C:\Users\jerome\Documents\Oric\Caloric\bin\Release\
 %FILE29%=
 %FILE30%=
 %FILE31%=
-[SourceFiles1]
 %FILE32%=
