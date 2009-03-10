@@ -2232,3 +2232,14 @@
 	<sys/types.h>
 	<time.h>
 
+1236705603 source:c:\users\jerome\documents\oric\caloric\src\1793.s
+	"support.h"
+
+1236705603 c:\users\jerome\documents\oric\caloric\src\support.h
+
+1236705603 source:c:\users\jerome\documents\oric\caloric\src\6502.s
+	"support.h"
+	"6502.h"
+
+1236705603 c:\users\jerome\documents\oric\caloric\src\6502.h
+
