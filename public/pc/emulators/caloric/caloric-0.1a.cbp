@@ -2,23 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="caloric-0.1a" />
+		<Option title="caloric" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Debug">
-				<Option output="bin\Debug\libcaloric-0" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="" />
-				<Option object_output="obj\Debug\" />
-				<Option type="2" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="-mms-bitfields" />
-				</Compiler>
-			</Target>
 			<Target title="Release">
-				<Option output="bin\Release\caloric-0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin\Release\caloric" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj\Release\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -26,19 +15,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-mms-bitfields" />
-					<Add directory="..\caloric-0.1a" />
-					<Add directory="..\..\..\GLIB\include\glib-2.0" />
-					<Add directory="..\..\..\ATK\include\atk-1.0" />
-					<Add directory="..\..\..\CAIRO\include\cairo" />
-					<Add directory="..\..\..\GLADEUI\include\libgladeui-1.0" />
-					<Add directory="..\..\..\GTK+\include\gtk-2.0" />
-					<Add directory="..\..\..\GTK+\lib\gtk-2.0\include" />
-					<Add directory="..\..\..\PANGO\include\pango-1.0\" />
-					<Add directory="..\..\..\GLIB\lib\glib-2.0\include" />
-					<Add directory="..\..\..\SDL-1.2.13\include" />
-					<Add directory="..\..\..\Pre-built.2\include" />
-					<Add directory="..\..\..\libglade\include\libglade-2.0" />
-					<Add directory="..\..\..\SDL-1.2.13\lib" />
+					<Add directory="..\libs\GTK+\lib\gtk-2.0\include" />
 					<Add directory="." />
 				</Compiler>
 				<Linker>
@@ -86,25 +63,12 @@
 					<Add library="..\..\gtk\lib\pangocairo-1.0.lib" />
 					<Add library="..\..\gtk\lib\pangoft2-1.0.lib" />
 					<Add library="..\..\gtk\lib\pangowin32-1.0.lib" />
-					<Add directory="..\..\..\SDL-1.2.13\lib" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-mms-bitfields" />
-			<Add directory="..\caloric-0.1a" />
-			<Add directory="..\..\..\GLIB\include\glib-2.0" />
-			<Add directory="..\..\..\ATK\include\atk-1.0" />
-			<Add directory="..\..\..\CAIRO\include\cairo" />
-			<Add directory="..\..\..\GLADEUI\include\libgladeui-1.0" />
-			<Add directory="..\..\..\GTK+\include\gtk-2.0" />
-			<Add directory="..\..\..\GTK+\lib\gtk-2.0\include" />
-			<Add directory="..\..\..\PANGO\include\pango-1.0\" />
-			<Add directory="..\..\..\GLIB\lib\glib-2.0\include" />
-			<Add directory="..\..\..\SDL-1.2.13\include" />
-			<Add directory="..\..\..\Pre-built.2\include" />
-			<Add directory="..\..\..\libglade\include\libglade-2.0" />
 		</Compiler>
 		<Linker>
 			<Add option="-lgmodule-2.0" />
@@ -150,7 +114,6 @@
 			<Add library="..\..\gtk\lib\pangocairo-1.0.lib" />
 			<Add library="..\..\gtk\lib\pangoft2-1.0.lib" />
 			<Add library="..\..\gtk\lib\pangowin32-1.0.lib" />
-			<Add directory="..\..\gtk\lib" />
 		</Linker>
 		<Unit filename="config.h" />
 		<Unit filename="gui\gtk\euphoricgui.glade" />
