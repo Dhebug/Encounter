@@ -39,6 +39,7 @@
 					<Add directory="..\..\..\Pre-built.2\include" />
 					<Add directory="..\..\..\libglade\include\libglade-2.0" />
 					<Add directory="..\..\..\SDL-1.2.13\lib" />
+					<Add directory="." />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
