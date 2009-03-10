@@ -541,7 +541,7 @@ void setup(char *env[])
   int i;
   const char **p;
   int count = 0;
-
+  FILE *fp;
   for (i = 0; i < 35; i++)
     messages[i][0] = 0;
   for(i=0;env[i]!=NULL;i++)
@@ -552,24 +552,37 @@ void setup(char *env[])
 
   for (p = rcfiles; *p != NULL; p++)
   {
-    FILE *fp;
+
     char *pathname = NULL;
 
     pathname = expand_path (*p);
+     #ifdef DEBUG_RELEASE
+      printf("Trying to find %s in %s\n",*p,pathname);
+     #endif
+
     fp = fopen (pathname, "r");
     if (fp == NULL)
     {
       if (errno != ENOENT)
 	err("warning: %s: %s", pathname, strerror (errno));
+     #ifdef DEBUG_RELEASE
+      printf("Can't found %s\n",pathname);
+     #endif
+
+
     }
     else
     {
       parse_rcfile (pathname, fp);
+      #ifdef DEBUG_RELEASE
+      printf("Reading %s\n",pathname);
+      #endif
       count++;
       fclose (fp);
     }
     free (pathname);
   }
+ // #endif
   if (count == 0)
     err("warning: no config file found");
 }
