@@ -12,11 +12,10 @@
 alt_charset=0
 
 ctrl_chars="                                "
-ctrl_chars="|"
 # MUST stay iso latin!
-charset_def="$ctrl_chars"' !"#$%&'\''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^  abcdefghijklmnopqrstuvwxyz{|}'
+charset_def=' !"#$%&'\''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ abcdefghijklmnopqrstuvwxyz{|}  '
 # MUST stay iso latin!
-charset_alt="$ctrl_chars"' !"#$%&'\''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^  abcdefghijklmnopqrstuvwxyz{|}'
+charset_alt="$ctrl_chars"' !"#$%&'\''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ abcdefghijklmnopqrstuvwxyz{|}  '
 charset="$charset_def"
 #charset="charset_def"
 
@@ -42,6 +41,8 @@ gen_bitmap()
 	x=2
 	y=6
 	TMPSC=/tmp/imsc.txt
+	out="$(basename "$ttf")"
+	out="${out/.ttf/}"
 
 	convert_args="-background $BG -fill $FG -size $size xc:$BG -colors 2"
 
@@ -50,6 +51,7 @@ gen_bitmap()
 	fi
 	if [ -n "$ptsize" ]; then
 		convert_args="$convert_args -pointsize $ptsize"
+		out="${out}_$ptsize"
 	fi
 	if [ -n "$offset" ]; then
 		x=$(($x + ${offset%,*}))
@@ -73,11 +75,14 @@ gen_bitmap()
 		y="$(($y + $CHAR_HEIGHT))"
 	done
 	convert_args="$convert_args -draw @$TMPSC"
-	 convert $convert_args out.png
+
+	echo "Generating $size bitmap '$out.png' ..."
+	convert $convert_args "$out".png
+	echo "Generating header file '$out.h'..."
 	 # convert to an hex dump...
 	 # the XBM format seems to have bits in reverse order
 	 # so we flop.
-	 convert out.png -flop out.xbm
+	 convert out.png -flop xbm:"$out.h"
 	return 0
 }
 
