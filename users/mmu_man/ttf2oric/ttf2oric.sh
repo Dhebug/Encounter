@@ -77,12 +77,12 @@ gen_bitmap()
 	convert_args="$convert_args -draw @$TMPSC"
 
 	echo "Generating $size bitmap '$out.png' ..."
-	convert $convert_args "$out".png
+	convert $convert_args "$out.png"
 	echo "Generating header file '$out.h'..."
 	 # convert to an hex dump...
 	 # the XBM format seems to have bits in reverse order
 	 # so we flop.
-	 convert out.png -flop xbm:"$out.h"
+	 convert "$out.png" -flop xbm:"$out.h"
 	return 0
 }
 
