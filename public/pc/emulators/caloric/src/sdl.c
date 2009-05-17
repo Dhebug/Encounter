@@ -101,7 +101,7 @@ video_mem	Total amount of video memory in Kilobytes
 vfmt	Pixel format of the video device
     */
    // printf("Can we start a hardware surface : %d\n",vid_info->video_mem);
-
+zoom=2;
     if(fullScreen) {
     	//flags |= SDL_FULLSCREEN;
     	flags_video ^= SDL_FULLSCREEN;
@@ -119,7 +119,11 @@ const SDL_VideoInfo *pVideoInfo = SDL_GetVideoInfo();
 
 if (!pVideoInfo) {
    printf("\n\t SDL_GetVideoInfo return NULL\n");
-  }else {
+  }
+#if HAVE_DEBUG_MODE
+  else {
+
+
    printf("\thardware surfaces                   : %d\n", pVideoInfo->hw_available);
    printf("\twindow manager available            : %d\n", pVideoInfo->wm_available);
    printf("\thardware to hardware blits          : %d\n", pVideoInfo->blit_hw);
@@ -131,6 +135,8 @@ if (!pVideoInfo) {
    printf("\tcolor fills accelerated             : %d\n", pVideoInfo->blit_fill);
    printf("\tTotal video memory Kilobytes        : %d\n", pVideoInfo->video_mem);
   }
+
+#endif
 modes=SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
 
 /* Check is there are any modes available */
@@ -203,12 +209,13 @@ void display_frame (void)
     static uint32_t *tmp = NULL;
     static uint32_t *tmpback;
     uint8_t *bs;
-
+/*
     if(zoomChange != zoom) {
         sdl_end();
         zoom = zoomChange;
         sdl_start();
     }
+    */
     if(setfullScreen != fullScreen) {
         fullScreen = setfullScreen;
         /*
