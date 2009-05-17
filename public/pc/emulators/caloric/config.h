@@ -8,7 +8,9 @@
 /* #undef HAVE_ARPA_INET_H */
 
 /* Define to 1 to enable debugger */
- #define HAVE_DEBUGGER 1
+ #define HAVE_DEBUGGER 0
+
+ #define HAVE_DEBUG_MODE 0
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
