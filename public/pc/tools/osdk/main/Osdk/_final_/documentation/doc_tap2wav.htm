@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Tap2Wav & Tap2Cd</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Tap2Wav & Tap2Cd</h1>
+
+<p id=chapter>Description</p>
+
+<p>These two tools perform the same thing: allowing the creation of .WAV files
+from .TAP files. Those .WAV files then can be either written on an Audio CD, or
+directly played by the PC sound card to the oric, or recorded on a tape recorder.
+</p>
+
+<p>The main difference between both programs, is that Tap2Wav simply generate a
+Wav file corresponding to the given tape, while Tap2Cd uses a special encoding
+that give a x10 speed up by appending a special fast loader before the converted
+TAP file. It's faster, but also less reliable, and cannot work for all kind of
+programs.
+</p>
+
+
+
+<p id=chapter>Utilisation</p>
+
+<p>To create a wave file using Tap2Wav, here is the syntax:
+</p>
+<pre>
+	%OSDK%\bin\Tap2Wav [switches] tap_file wav_file
+</pre>
+
+<p>Switches can be:
+</p>
+
+<pre>
+	-8  produces a  8 kHz WAV file
+	-11 produces a 11 kHz WAV file  (default is 4800 Hz)
+</pre>
+
+<p>To create a wave file using Tap2Cd, here is the syntax:
+</p>
+<pre>
+	%OSDK%\bin\Tap2Cd tap_file wav_file
+</pre>
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

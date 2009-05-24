@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Oric memory map</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Oric memory map</h1>
+
+<p id=chapter>General considerations</p>
+
+<p>The first important thing to consider, is that the memory map is not the same in all video modes.
+Since HIRES mode require 8000 bytes of memory while TEXT mode require only 1120 bytes, some things
+are moved around. This is the main reason while there are two memory maps.
+</p>
+
+
+<p id=chapter>TEXT mode memory map</p>
+
+<center>
+<TABLE BORDER>
+<TR>
+	<TD><B>START</B> </TD>
+	<TD><B>NAME</B> </TD>
+	<TD><B>DESCRIPTION</B> </TD>
+	<TD><B>END</B> </TD>
+	<TD><B>SIZE</B> </TD>
+<TR>
+	<TD> C000 </TD>
+	<TD> <b>Read Only Memory (ROM)</b></TD>
+	<TD align=left>Contains the BASIC interpreter and all graphics/sound/math code</TD>
+	<TD> FFFF </TD>
+	<TD> 16384 </TD>
+</TR>
+<TR>
+	<TD> BFE0</TD>
+	<TD> <b>FREE MEMORY</b></TD>
+	<TD align=left>This area is free.</TD>
+	<TD> BFFF</TD>
+	<TD> 32 </TD>
+</TR>
+<TR>
+	<TD> BB80</TD>
+	<TD> <b>SCREEN</b></TD> 
+	<TD align=left>40*28 character mode <br>Line 0 is the status line </TD>
+	<TD> BFDF</TD>
+	<TD> 1120</TD>
+</TR>
+<TR>
+	<TD> B800</TD>
+	<TD> <b>ALTERNATE CHAR SET</b></TD> 
+	<TD align=left> Mozaic char set in a 2x3 matrix for semi-graphics drawing.
+		Can be redefined
+	</TD>
+	<TD> BB7F</TD>
+	<TD> 896</TD>
+</TR>
+<TR>
+	<TD> B400</TD>
+	<TD> <b>STANDARD CHAR SET </b></TD> 
+	<TD align=left> Contains the font displayed on screen.
+		Can be redefined. Characters of ASCII code less than 32 can only be 
+		displayed in HIRES mode using the CHAR commande since those values
+		are display attributes in TEXT mode !
+	</TD>
+	<TD> B7FF</TD>
+	<TD> 1024</TD>
+</TR>
+<TR>
+	<TD> 9800</TD>
+	<TD> <b>GRABABLE MEMORY</b></TD> 
+	<TD align=left> This area is unused in TEXT mode, but by default is reserved by the BASIC in order to allow
+		the use of HIRES mode. To use it from BASIC, you need to use the GRAB command.
+	</TD>	
+	<TD> B3FF</TD>
+	<TD> 7168</TD>
+</TR>
+<TR>
+	<TD> 500</TD>
+	<TD> <b>FREE MEMORY</b></TD> 
+	<TD align=left> This zone is entirelly available to your programs.
+	</TD>
+	<TD> 97FF</TD>
+	<TD> 37632</TD>
+</TR>
+<TR>
+	<TD> 400</TD>
+	<TD> <b>Page 4</b></TD> 
+	<TD align=left> Is officially used only by the DOS. In reality most little utility programs are conceived
+		to be used in page 4. DOS uses this location to put a piece of code that redirect BASIC
+		commands to the BASIC ROM or to the overlay memory.
+	</TD>
+	<TD> 4FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 300</TD>
+	<TD> <b>Page 3</b></TD> 
+	<TD align=left> This is the input-output area. Those 256 bytes are linked to the expansion
+		bus of the oric and are used to communicate with the external peripherals.
+		This is no real memory.
+	<TD> 3FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 200</TD>
+	<TD> <B>Page 2</B></TD> 
+	<TD align=left> Contains run time variables used by the BASIC interpreter as well as interupt handlers.
+	</TD>
+	<TD> 2FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 100</TD>
+	<TD> <B>Page 1</B></TD> 
+	<TD align=left> This area is used by the 6502 as the stack.<br> It's non movable.
+	</TD>
+	<TD> 1FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 0</TD>
+	<TD> <B>Page 0</B></TD> 
+	<TD align=left> This 256 bytes area can be optimaly used by the 6502 processor contrary
+		to the other part of the memory. It also allow the use of specific 
+		adressing modes. The C Library and the system use a part of this area.
+	</TD>
+	<TD> FF</TD>
+	<TD> 256 </TD>
+</TR>
+<CAPTION ALIGN=Top><B>Oric 48k - TEXT</B></CAPTION>
+</TABLE>
+</center>
+
+
+
+<p id=chapter>HIRES mode memory map</p>
+
+<center>
+<TABLE BORDER>
+<TR>
+	<TD><B>START</B> </TD>
+	<TD><B>NAME</B> </TD>
+	<TD><B>DESCRIPTION</B> </TD>
+	<TD><B>END</B> </TD>
+	<TD><B>SIZE</B> </TD>
+<TR>
+	<TD> C000 </TD>
+	<TD> <b>Read Only Memory (ROM)</b></TD>
+	<TD align=left>Contains the BASIC interpreter and all graphics/sound/math code</TD>
+	<TD> FFFF </TD>
+	<TD> 16384 </TD>
+</TR>
+<TR>
+	<TD> BFE0</TD>
+	<TD> <b>FREE MEMORY</b></TD>
+	<TD align=left>This area is free.</TD>
+	<TD> BFFF</TD>
+	<TD> 32 </TD>
+</TR>
+<TR>
+	<TD> A000</TD>
+	<TD> <b>SCREEN</b></TD> 
+	<TD align=left>200 scanlines of 40 bytes each, and 3 text lines of 40 bytes each</TD>
+	<TD> BFDF</TD>
+	<TD> 8000</TD>
+</TR>
+<TR>
+	<TD> 9C00</TD>
+	<TD> <b>ALTERNATE CHAR SET</b></TD> 
+	<TD align=left> Mozaic char set in a 2x3 matrix for semi-graphics drawing.
+		Can be redefined
+	</TD>
+	<TD> 9FFF</TD>
+	<TD> 896</TD>
+</TR>
+<TR>
+	<TD> 9800</TD>
+	<TD> <b>STANDARD CHAR SET </b></TD> 
+	<TD align=left> Contains the font displayed on screen.
+		Can be redefined. Characters of ASCII code less than 32 can only be 
+		displayed in HIRES mode using the CHAR commande since those values
+		are display attributes in TEXT mode !
+	</TD>
+	<TD> 9BFF</TD>
+	<TD> 1024</TD>
+</TR>
+<TR>
+	<TD> 500</TD>
+	<TD> <b>FREE MEMORY</b></TD> 
+	<TD align=left> This zone is entirelly available to your programs.
+	</TD>
+	<TD> 97FF</TD>
+	<TD> 37632</TD>
+</TR>
+<TR>
+	<TD> 400</TD>
+	<TD> <b>Page 4</b></TD> 
+	<TD align=left> Is officially used only by the DOS. In reality most little utility programs are conceived
+		to be used in page 4. DOS uses this location to put a piece of code that redirect BASIC
+		commands to the BASIC ROM or to the overlay memory.
+	</TD>
+	<TD> 4FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 300</TD>
+	<TD> <b>Page 3</b></TD> 
+	<TD align=left> This is the input-output area. Those 256 bytes are linked to the expansion
+		bus of the oric and are used to communicate with the external peripherals.
+		This is no real memory.
+	<TD> 3FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 200</TD>
+	<TD> <B>Page 2</B></TD> 
+	<TD align=left> Contains run time variables used by the BASIC interpreter as well as interupt handlers.
+	</TD>
+	<TD> 2FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 100</TD>
+	<TD> <B>Page 1</B></TD> 
+	<TD align=left> This area is used by the 6502 as the stack.<br> It's non movable.
+	</TD>
+	<TD> 1FF</TD>
+	<TD> 256 </TD>
+</TR>
+<TR>
+	<TD> 0</TD>
+	<TD> <B>Page 0</B></TD> 
+	<TD align=left> This 256 bytes area can be optimaly used by the 6502 processor contrary
+		to the other part of the memory. It also allow the use of specific 
+		adressing modes. The C Library and the system use a part of this area.
+	</TD>
+	<TD> FF</TD>
+	<TD> 256 </TD>
+</TR>
+<CAPTION ALIGN=Top><B>Oric 48k - HIRES</B></CAPTION>
+</TABLE>
+</center>
+
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

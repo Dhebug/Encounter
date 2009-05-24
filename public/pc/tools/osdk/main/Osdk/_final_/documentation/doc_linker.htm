@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Linker</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Linker</h1>
+
+<p id=chapter>Description</p>
+
+<p>The linker is responsible to solve the referencement of labels, and eventually 
+append library source codes to the build process.
+</p>
+
+<p>To disable the automatic inclusion of 'header.s' and 'tail.s', just modify your OSDK_CONFIG.BAT file, and add the following:
+</p>
+
+<pre>
+	SET OSDKLINK=-B
+</pre>
+
+
+<p id=chapter>Switches</p>
+
+<p>The -d defines the location of the library files. It must be followed by a path:
+</p>
+<pre>
+	-d /usr/oric/lib/
+</pre>
+
+<p>The -s defines the location of the sources files. It must be followed by a path:
+</p>
+<pre>
+	-s /sources/oric/demo/
+</pre>
+
+<p>The -o defines the name of the outputed file. It must be followed by the file name.
+By default the output name will be 'go.s':
+</p>
+<pre>
+	-o final.s
+</pre>
+
+<p>The -l switch prints out defined labels.Usefull when building lib index files.
+</p>
+
+<p>The -v switch activates the verbose mode.
+</p>
+
+<p>The -q switch enables the quiet mode.
+</p>
+
+<p>The -b switch disables the automatic inclusion of 'header.s' and 'tail.s
+</p>
+
+<p>The -f inserts a #file directives before each linked file.
+</p>
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.059</p>
+ - Corrected a bug that made it impossible to "link" only one source file<br>
+
+<p id=dateentry>Version 0.058</p>
+ - Added filtering of all '#' directives<br>
+ - Added an icon to the executable file to make it more 'OSDK' integrated :)<br>
+ - Added '-F' option to enable #file directive (requires modified XA assembler)<br>
+ - Modified the handling of comments to avoid crashes on C and C++ comments<br>
+ 
+<p id=dateentry>Version 0.057</p>
+ - Added '-B' option to suppress inclusion of HEADER and TAIL<br>
+
+<p id=dateentry>Version 0.056</p>
+ - Handling of lines that have more than 180 characters<br>
+
+<p id=dateentry>Before that...</p>
+ - This program was created and maintained by somebody else :)
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

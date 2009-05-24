@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Visual Studio</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Visual Studio</h1>
+
+<p id=chapter>Using Visual Studio</p>
+
+<p>If you want to edit 6502 source code using Visual Studio, you will have to hack a little bit, because
+it's not normaly posible to define new languages in Visual Studios. This hack will simply be to let Visual C++
+believe that .S files are C++ files, and to add 6502 source code files to known C++ keywords.
+</p>
+
+<p>In the following folder
+<pre>
+	osdk\extra\VisualC++6\</pre>
+
+<p>you will find two files:
+</p>
+<pre>
+	language.reg
+	usertype.dat</pre>
+
+<p>
+Simply execute the <b>language.reg</b> file to modify the registry settings (this will add the .S files to the
+list of C++ extensions), and copy the <b>usertype.dat</b> file in the following folder:
+</p>
+
+<pre>
+	Program Files\Microsoft Visual Studio\Common\MSDev98\Bin\</pre>
+
+<p><i>Note: this works for Visual C++ 6, but is not guaranteed for other versions, use at your own risks.</i>
+</p>
+
+<p>In this folder, you will also find another folder called	<b>OsdkSampleProject</b>.
+It contains a complete Visual C++ 6 project, pre-configurated to allow compilation for the IDE.
+You can use this project as a basic for your own project. Simply copy the folder somewhere else, rename it
+to the name of your project, rename the <b>OsdkSampleProject.dsp</b> file with the same name, and edit it
+with a standard text éditor (not Visual C++ !) and replace all the OsdkSampleProject occurences by the name
+of your project. Voila ! 
+</p>
+
+<p>You now have a ready to use Oric project correctly integrated in the IDE. 
+Compile with the F7 key, and use CTRL+F5 to run the program.
+</p>
+
+
+<p id=chapter>Creating projects</p>
+
+<p>If the already made project is not good enoug for you, here are the step by step explanations on how 
+to do it yourself.
+</p>
+
+<p>If the configuration is correctly done, launch Visual Studio, and go to the menu"
+"file/new". The following formular appear. Of course, you should replace "OsdkTest" by the
+name you want to give to your own project !
+</p>
+
+<center><IMG SRC="pics/visualstudio_new_project.gif" ALT="New project" ALIGN="middle"></center>
+
+
+<p id=chapter>Appwizard configuration</p>
+
+<p>Now, you simply have to correctly fill (follow the example) the two dialog boxes of the
+app wizard.
+</p>
+
+<p>Right now, there are no differences between the DEBUG and RELEASE versions. Anyway, in the
+future it's possible that it will be used.
+</p>
+
+<center><IMG SRC="pics/visualstudio_setup_1.gif" ALT="AppWizard 1/2" ALIGN="middle"></center>
+<br>
+<center><IMG SRC="pics/visualstudio_setup_2.gif" ALT="AppWizard 2/2" ALIGN="middle"></center>
+
+
+<p id=chapter>Modify the configuration</p>
+
+<p>If you later need to change the configuration (or if you do not make the right configuration
+during the project creation), you can go to hte "project/settings" menu, that will display the
+following dialog boxes.
+</p>
+
+<center><IMG SRC="pics/visualstudio_project_settings_1.gif" ALT="Settings 1" ALIGN="middle"></center>
+<br>
+<center><IMG SRC="pics/visualstudio_project_settings_2.gif" ALT="Settings 2" ALIGN="middle"></center>
+
+<p id=chapter>Usage</p>
+
+<p>The configuration is now terminated. You can launch the compilation by pressing the F7
+key ("Build" icon), and run the program (using the emulator) by pressing the "Execute program"
+key (CONTROL+F5).
+</p>
+
+<p>Have fun !
+</p>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

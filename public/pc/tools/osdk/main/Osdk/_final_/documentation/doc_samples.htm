@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Samples</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Introduction</h1>
+
+
+<p>How to use samples:<br>
+<ol>
+<li>If there is a "OSDK_MAKEDATA.BAT" file in the folder, run it first.</li>
+<li>Run the "OSDK_BUILD.BAT" file that is in each folder to build the program.</li>
+<li>Run the "OSDK_EXECUTE.BAT" file to execute using OSDK's emulator.</li>
+<li>It's F10 to quit the emulator.</li>
+</ol>
+</p>
+
+<p><b>Note:</b> if you doubleclick on the TAP file, it will run your default version of 
+Euphoric (if you have it installed) it instead of the OSDK version. 
+Not a big deal, but you have to know it :)
+</p>
+
+
+<p id=chapter>hello world (simple)</p>
+
+<p>A simple "hello world" program.
+</p>
+<p>If that one works fine it means everything is correcly configurated.
+This program shows how to create a program using a single "C" module.
+It calls the "printf" function that is available as a library function.
+</p>
+
+<p id=chapter>hello world (assembly)</p>
+
+<p>A simple "hello world" program.
+</p>
+<p>This one is written entirely in assembly code, and does not rely on the available code library.
+(Anyway, there is some setup code executed before calling the program.)
+</p>
+
+
+<p id=chapter>hello world (mixed)</p>
+
+<p>A "hello world" program that uses a "C" module calling a display routine writen in assembly code.
+</p>
+<p>This example shows how it's possible to access "C" data from the assembly side, and how to pass parameters using the stack.
+</p>
+
+
+<p id=chapter>hello world (advanced)</p>
+
+<p>A "hello world" program that uses a "C" module calling a display routine writen in assembly code.
+</p>
+<p>This example shows how it's possible to access "C" data from the assembly side, and how to pass parameters using the stack.
+This one use three parameters: 
+</p>
+<ul>
+<li>The X display coordinate</li>
+<li>the Y display coordinate</li>
+<li>the pointer on the string to be displayed.</li>
+</ul>
+<p>It also demonstrate how to use XA advanced syntax to create data tables.
+</p>
+
+
+
+<p id=chapter>hires draw</p>
+
+<p>A small program that display squares and circles on the hires screen.
+</p>
+<p>This example shows how it's possible to use BASIC drawing commands to draw things
+using Oric hires graphic mode.
+</p>
+
+
+
+<p id=chapter>hires picture</p>
+
+<p>A simple program that display a picture on the hires screen.
+</p>
+<p>This example shows how it's possible to use PictConv to convert a picture to a format readable on the oric.
+</p>
+
+
+<p id=chapter>compression test</p>
+
+<p>A program that unpack a picture on the hires screen.
+</p>
+<p>This example shows how it's possible to use PictConv to convert a picture to a format readable on the oric.
+And also show to use FilePack and Bin2Txt to generate compressed data files
+</p>
+
+
+<p id=chapter>Game 4KKong</p>
+
+<p>This is a complete game source code presented at the Minigame Compo 2003.
+</p>
+<p>This example shows how it's possible to use make a 100% assembly code program using the OSDK.
+It also show how to use FilePack to generate a self depacking executable program.
+</p>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+

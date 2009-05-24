@@ -1,0 +1,262 @@
+
+
+	//
+	// Check the validity
+	//
+	/*
+	if (color_count==1)
+	{
+		// 6 pixels of the same color
+		if (c0==cur_paper)
+		{
+			// Paint with paper pixels
+			ptr_hires[0]=64;
+		}
+		else
+		if (c0==cur_ink)
+		{
+			// Paint with ink pixels
+			ptr_hires[0]=64|63;
+		}
+		else
+		if (c0==(7-cur_paper))
+		{
+			// Paint with paper pixels
+			// using inverse video
+			ptr_hires[0]=128|64;
+		}
+		else
+		if (c0==(7-cur_ink))
+		{
+			// Paint with ink pixels
+			// using inverse video
+			ptr_hires[0]=128|64|63;
+		}
+		else
+		{
+			// Invalid combination
+			return false;
+		}
+	}
+	else
+	{
+		// 6 pixels using two colors
+		if ((c0==cur_paper) && (c1==cur_ink))
+		{
+			// Paper/Ink
+			ptr_hires[0]=64|v;
+		}
+		else
+		if ((c0==cur_ink) && (c1==cur_paper))
+		{
+			// Ink/Paper
+			ptr_hires[0]=64|(v^63);
+		}
+		else
+		if ((c0==(7-cur_paper)) && (c1==(7-cur_ink)))
+		{
+			// Paper/Ink
+			// using inverse video
+			ptr_hires[0]=128|64|v;
+		}
+		else
+		if ((c0==(7-cur_ink) && (c1==(7-cur_paper)))
+		{
+			// Ink/Paper
+			// using inverse video
+			ptr_hires[0]=128|64|(v^63);
+		}
+		else
+	}
+	*/
+
+
+
+
+
+/*
+bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,unsigned char cur_paper,unsigned char cur_ink)
+{
+	if (count>max_count)
+	{
+		max_count=count;
+		printf("\r\n max: %d",max_count);
+	}
+
+	if (count>=m_buffer_cols)
+	{
+		//
+		// End of recursion
+		//
+		return true;
+	}
+
+	unsigned char	color_count=ptr_bloc6->color_count;
+	unsigned char	c0=ptr_bloc6->color[0];
+	unsigned char	c1=ptr_bloc6->color[1];
+	unsigned char	v =ptr_bloc6->value;
+
+
+
+	//
+	// Recurse
+	//
+
+	count++;
+	ptr_bloc6++;
+	ptr_hires++;
+
+	if (color_count==1)
+	{
+		// ========================================
+		// The current bloc of pixels is using only 
+		// one color. It's the right opportunity to
+		// change either the PAPER or the INK color.
+		// ========================================
+
+		if (c0==cur_paper)
+		{
+			//
+			// The 6 pixels are using the current paper color.
+			//
+
+			// Use current paper color
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=64;
+				return true;
+			}
+
+			// Try each of the 8 possible ink colors
+			int	color;
+			for (color=0;color<8;color++)
+			{
+				if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
+				{
+					ptr_hires[-1]=color;
+					return true;
+				}
+			}
+		}
+
+
+		if (c0==(7-cur_paper))
+		{
+			//
+			// The 6 pixels are using the current inverted paper color.
+			//
+
+			// Use current paper color
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=128|64;
+				return true;
+			}
+
+			// Try each of the 8 possible ink colors
+			int	color;
+			for (color=0;color<8;color++)
+			{
+				if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
+				{
+					ptr_hires[-1]=128|color;
+					return true;
+				}
+			}
+		}
+
+
+		// Use current ink color
+		if (c0==cur_ink)
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=64|63;
+				return true;
+			}
+		}
+
+		// Use current inverted ink color
+		if (c0==(7-cur_ink))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=128|64|63;
+				return true;
+			}
+		}
+
+		// Change paper color
+		if (RecurseLine(count,ptr_bloc6,ptr_hires,c0,cur_ink))
+		{
+			ptr_hires[-1]=16+c0;
+			return true;
+		}
+
+		
+		// Change paper color, using inverse vidéo
+		if (c0==(7-cur_paper))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,c0-7,cur_ink))
+			{
+				ptr_hires[-1]=128|16+c0;
+				return true;
+			}
+		}
+	}
+	else
+	{
+		// ========================================
+		// The current bloc of pixels is using two 
+		// different colors. It's totaly impossible
+		// to use attributes changes on this one.
+		// ========================================
+
+
+		// Try simple pixels.
+		if ((c0==cur_paper) && (c1==cur_ink))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=64|v;
+				return true;
+			}
+		}
+
+		// Try simple pixels, but invert the bitmask.
+		if ((c0==cur_ink) && (c1==cur_paper))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=64|(v^63);
+				return true;
+			}
+		}
+
+		// Try simple video inverted pixels.
+		if ((c0==(7-cur_paper)) && (c1==(7-cur_ink)))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=128|64|v;
+				return true;
+			}
+		}
+
+		// Try simple video inverted pixels, but invert the bitmask.
+		if ((c0==(7-cur_ink)) && (c1==(7-cur_paper)))
+		{
+			if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,cur_ink))
+			{
+				ptr_hires[-1]=128|64|(v^63);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+*/
+
+
+
+

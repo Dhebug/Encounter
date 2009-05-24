@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Euphoric</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Euphoric</h1>
+
+<p id=chapter>Description</p>
+
+<p>Euphoric is an Oric emulator for DOS that happens to also work correctly under Windows (pfiuu).
+</p>
+
+<center>
+<img src="pics/euphoric_menu.gif">
+<img src="pics/euphoric_boot.gif">
+</center>
+
+<p id=chapter>Utilisation</p>
+
+<p>In theory you should not have to run Euphoric directly since you can execute your programs by runing the OSDK_EXECUTE.BAT files.
+Anyway, if you need to do it, you can still go into the osdk\euphoric directory where you will be able to locate the emulator.
+</p>
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+
+<p id=dateentry>Version 1007</p>
+<ul>
+	<li>only a bugfix that caused Euphoric to crash under DOS when accessing the environment screen (F1).</li>
+</ul>
+
+<p id=dateentry>Version 1006</p>
+<ul>
+	<li>added a third ram pattern type: Simon sent me a very neat picture of his Oric boot screen demonstrating this pattern type.</li>
+	<li>added a "video dump" feature. Two new options are now recognized in the euphoric.ini file. FrameDump=Y enables the frame dump feature : video frames are dumped as long as the F12 key is pressed. Screenshot files with names frame0000, frame0001, etc. are created. Beware that pressing the F12 key in this mode can quickly fill up your hard disk. You can adjust the framerate with option FrameSkip=... FrameSkip=0 dumps 50 images per second. FrameSkip=1 skips every other frame, and thus dumps 25 images per second. FrameSkip=9 skips 9 frames out of 10, and thus dumps 5 images per second, etc.</li>
+</ul>
+
+
+<p id=dateentry>Version 1005</p>
+<ul>
+	<li>the debugger has been slightly improved (there's a small assembler now) and made more consistent with existing PC debuggers (like debug :-). 
+		The commands are on the <A href="doc_debugger.htm">debugger page</A>
+	</li>
+</ul>
+
+<p id=dateentry>Version 1.004a</p>
+
+<ul>
+	<li>correction of a small bug in ULA emulation. Switching from hires to text was reseting the inverse vidéo register.</li>
+</ul>
+
+
+<p id=dateentry>Version 1.003</p>
+
+<ul>
+	<li>thanks to Dom and his joystick, an "electrical" bug has been discovered in Euphoric: the joystick status was forcing the state of VIA's port A, when it can only force high level lines to ground. This is now fixed.</li>
+	<li>a new way of using the unused PB5 line has been added: instead of acting as the A14 line of a 27256 eprom, PB5 can be connected to the CLK line of a 74LS273, so that this chip stores the contents of port A and thus acts as a bank register allowing to use (very) big eproms (e.g I have a 4Mb flash eeprom in an Oric). The handling of PB5 is the same as PB4, you have to send a negative pulse (strobe) on one of these outputs in order to send a byte to (respectively) the bank register or the printer.</li>
+	<li>two printer-related options have been added in order to get proper listings when sending the output of the Oric printer to a file. This is because the oric firmware sends unusual bytes to the printer in several places. The Oric-1 and Atmos roms have a bug in the initialization of the VIA which cause a STROBE to be emitted and thus a byte to be sent to the printer. The rom can be easily fixed, but if you still use one of the original rom, Euphoric printer options allow you to get a clean listing. The LLIST command of Telestrat's HyperBasic has a different behavior: it sends many NUL bytes to the printer as part of the listing, it's not due to a VIA handling bug. So, option PrintNULs=No allows to not print the ASCII NUL bytes that are sent to the printer. This is mainly interesting when sending the output of the printer to a file in order to further edit that file (real printers ignore those NUL bytes). PrintNULs option is set to 'No' by default, so you will have to set it to PrintNULs=Yes if you want to get those NUL bytes. Also, another "feature" of HyperBasic's LLIST command is that it sends Carriage Return and Line Feed bytes in the unusual order : LF+CR instead of the usual CR+LF sequence. This confuses a lot of text editors, so I have included a FixCRs option : it is on by default (FixCRs=Yes), and has the following behavior : every Carriage Return printed by the Oric is removed, and a CR+LF sequence is sent each time the Oric prints a Line Feed.</li>
+	<li>oops, I don't remember why I removed the SYNC-to-TAPEIN option in the environment screen (maybe because I had not enough space). So, it is back again, with a slight modification of the environment screen.</li>
+</ul>
+
+ 
+<p id=dateentry>Version 1.002</p>
+
+<ul>
+	<li>I've removed a difference between Telestrat drives and Microdisc drives that doesn't exist...</li>
+	<li>A display bug has been fixed, I thought I had fixed it some time ago, but the fix was not complete.</li>
+	<li>Enabling PB5-switch in euphoric.ini had an effect on the Telestrat, which it shouldn't have. 
+	This is fixed now, and it's also easier to use the PB5-switch because if you use a 16K rom instead of a 32K one, 
+	the rom will appear whatever the state of PB5 (ie there's no A14 address line on a 16K rom).</li>
+	<li>I've added a 6502 trace to the log file when running under the debugger screen. 
+	Beware if you enable the log file in euphoric.ini, and run under the debugger screen: the log file will quickly fill up your hard disk.</li>
+</ul>
+
+
+<p id=dateentry>Version 1.001</p>
+
+<ul>
+	<li>
+	Thanks to Luc Buisson who sent me BD-DOS disks, I have tried to include a BD500 emulation in Euphoric.<br>
+	It's still a very approximative emulation, because I haven't put my hand on a real BD500 controller yet.<br>
+	Anyway, it allows to boot BD-DOS, with a small boot eprom I have written <br>
+	(of course it's not the real eprom contents : if someone has it, please send me its image).<br>
+	</li>
+</ul>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

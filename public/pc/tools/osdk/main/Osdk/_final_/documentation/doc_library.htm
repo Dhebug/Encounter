@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Library structuration</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Library structuration</h1>
+
+<p id=chapter>Description</p>
+
+<p>The OSDK contains a decently complete standard library, and also some Oric
+specific functionalities.
+</p>
+
+<p>Most other SDK are based on binary library files, and the right functions
+are included in the final executable during the link phase. This SDK works 
+differently because the library is made of source code that is included in the
+main program by the linker before the final assembly pass.
+</p>
+
+<p>This method is interesting because it's possible to easily add functions,
+and correct bugs.
+</p>
+
+
+
+<p id=chapter>Include folder</p>
+
+<p>The OSDK\INCLUDE folder contains all the header files. If you add a function
+in the library, you will have to add a function declaration in one of the header
+files. LIB.H is a good choice for that operation.
+</p>
+
+
+
+<p id=chapter>LIB folder</p>
+
+<p>The OSDK\LIB folder contains a bunch of assembly code source file, as well as
+a LIBRARY.NDX file.
+</p>
+
+<p>The LIBRARY.NDX file simply is a list of all source files with the exported functions
+it contains.
+</p>
+
+<p>The source files simply are normal assembly code functions and declarations.
+Please note that only function that starts by a underscore ("_") symbol will be
+accessible from C source code.
+</p>
+
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

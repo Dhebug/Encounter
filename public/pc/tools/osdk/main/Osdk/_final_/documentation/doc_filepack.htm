@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - FilePack</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>FilePack</h1>
+
+<p id=chapter>Description</p>
+
+<p>FilePack is simply a tool that can compress any kind of data. 
+It typically perform a 50% compression ratio on code and graphics.
+</p>
+
+
+<p id=chapter>Utilisation</p>
+
+<p>FilePack can compress files, but also restore files that have been compressed.
+</p>
+<p>To compress a file:
+</p>
+<pre>
+	%OSDK%\bin\FilePack -p source_file compressed_file 
+</pre>
+<p>To decompress a file:
+</p>
+<pre>
+	%OSDK%\bin\FilePack -u compressed_file destination file 
+</pre>
+
+
+<p id=chapter>Packed file format</p>
+
+<p>The format of packed files is actually very simple, and is mostly based on a 8 bytes header
+followed by compressed data.
+</p>
+
+<pre>
+	+0	'L'
+	+1	'Z'
+	+2	'7'
+	+3	'7'
+	+4	Unpacked size (low byte)
+	+5	Unpacked size (high byte)
+	+6	Packed size (low byte) 
+	+7	Packed size (high byte)
+	+8	Compressed data starts here
+</pre>
+
+<p>Please note that this header is present only when packed in default mode (-p1), if you pack in -p0 mode
+the header is not present. In place of the header you will find a text file having the same name that your
+"program.s", looking like this:
+</p>
+
+<pre>
+	#define run_adress $600 	; Come from original TAP executable
+	#define unpacked_size $1000	; Come from original TAP executable
+</pre>
+
+
+<p id=chapter>Depacking</p>
+
+<p>For depacking a file, you can simply use the corresponding library routine:
+</p>
+
+<pre>
+	void file_unpack(void *ptr_dst,void *ptr_src);
+</pre>
+
+<p>Please note that this routine expect the data to get a header, so it will not work for files packed in -p0 mode.
+To unpack these files you need to use another routine.
+</p>
+
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.004</p>
+ - Added p0/p1 mode to pack a file without appending the header. 
+ Very usefull when you want to spare a maximum of bytes in a minigame compo...
+ 
+<p id=dateentry>Version 0.001-0.003</p>
+ - First released version
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

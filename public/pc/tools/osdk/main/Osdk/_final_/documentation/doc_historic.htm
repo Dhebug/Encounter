@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Version history</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Version history</h1>
+
+<p id=dateentry>Version 0.017 - ???</p>
+	<ul>
+		<li>It is now possible to indicate subfolders in the OSDK_CONFIG file list</li>
+		<li>A new configuration parameter <b>OSDKDISK</b> can be used to define the layout of a DSK file. When calling OSDK_EXECUTE this will automatically run <A href="doc_euphoric.htm">Euphoric</A> in microdisc mode, and make it boot on the newly generated floppy.</li>
+		<li>Upgraded the version of Tap2Dsk</li>
+		<li>Integrated the first version of Wilfrid AVRILLON's BASIC labelizer tool</li>
+		<li><A href="doc_bas2tap.htm">Bas2Tap</A> now accepts line number 0, and has a new parameter -color[0|1] to enable syntax coloring on rem statements.</li>
+		<li>Added a 256 bytes demo in the assembler samples, to show how to do a minimalistic program.</li>
+		<li>PictConv now uses FreeImage 3, this means more supported file formats.</li>
+	</ul>
+
+<p id=dateentry>Version 0.016 - December the 13th 2006</p>
+	<ul>
+		<li>Replaced a part of the build process that was crashing Wine. It is now possible to compile an Oric program with the OSDK on a Linux machine.</li>
+		<li>If you have DosBox installed, it is now possible to run <A href="doc_euphoric.htm">Euphoric</A> in a windowed mode.</li>
+		<li>Updated the documentation with more interpage links.</li>
+		<li>Upgraded <A href="doc_euphoric.htm">Euphoric</A> to the version 1007</li>
+		<li>Added <A href="doc_bas2tap.htm">Bas2Tap</A> as a native part of the OSDK. It is now possible to generate programs from a BASIC source code easily.</li>
+		<li>Added a lot of options to fine tune the output of <A href="doc_bin2txt.htm">Bin2Txt</A>, including the possibility to generate BASIC files.</li>
+		<li>PictConv can now export pictures as BASIC DATA lines.</li>
+		<li>PictConv can convert colored pictures that are not 240 pixels wide</li>
+	</ul>
+
+<p id=dateentry>Version 0.015 - August the 2nd 2006</p>
+	<ul>
+		<li>Corrected a stupid mistake that led to invalid code generation</li>
+	</ul>
+		
+<p id=dateentry>Version 0.014 - June the 9th 2006</p>
+	<ul>
+		<li>Some new features in <A href="doc_pictconv.htm">PictConv</A>
+			<ul>
+				<li>If there is something specified after -o3 or -o4 modes, it's used as a label name to use when generating source code data.</li>
+				<li>If there is a 'z' specified after -f0 mode (monochrome conversion), it means that bit 6 should not be set in converted bytes</li>
+				<li>Added -n switch to set the number of values per line (stolen from <A href="doc_bin2txt.htm">Bin2Txt</A> !)</li>
+			</ul>
+		</li>
+		<li>Update the documentation page about <A href="doc_pictconv.htm">PictConv</A>, it was severly lacking some important details -like file formats-</li>
+	</ul>
+
+<p id=dateentry>Version 0.013 - June the 4th 2006</p>
+	<ul>
+		<li>Corrected a bug in the makefile (introduce in version 0.012) that make it impossible to compile C programs</li>
+		<li>It is now possible to use .ASM extension for assembly source code, in addition to .S</li>
+		<li>Added pictures of Windows 2000 and Windows XP system properties in the installation page.</li>
+	</ul>
+
+<p id=dateentry>Version 0.012 - June the 4th 2006</p>
+	<ul>
+		<li>Corrected a bug in the linker that made it impossible to use the linker with only one source file</li>
+		<li>Corrected a bug in the #file command in XA, it now correctly displays the file and line if an error happens during the second pass</li>
+		<li>Corrected a bug in the handling of static function pointer generating bad code (1.29 code generator by Fabrice)</li>
+		<li>Added an option to display the size of generated programs in Header</li>
+	</ul>
+
+<p id=dateentry>Version 0.011 - March 2006</p>
+	<ul>
+		<li>Corrected a bug in the data unpacking code (overflow when offset was equal to 4096 exactly)</li>
+		<li>Corrected a bug (hack) in XA that make it crash when processing too many levels of macro expansion</li>
+		<li>Added a way to generate masks from a bitmap in <A href="doc_pictconv.htm">PictConv</A></li>
+		<li>Added support for Atari ST compatible bitmap data in <A href="doc_pictconv.htm">PictConv</A></li>
+		<li>Added an option in <A href="doc_bin2txt.htm">Bin2Txt</A> to set the number of values per line of data</li>
+		<li>Added a new program in the OSDK, MemMap with the associated osdk_showmap.bat to show how memory is used</li>
+	</ul>
+
+<p id=dateentry>Version 0.010 - January 2004</p>
+	<ul>
+		<li>Corrected bug in the memset routine: it was trashing the first byte that follow the routine.</li>
+		<li>Added screenshots of <A href="doc_euphoric.htm">Euphoric</A> menu, boot sequence and debugger in action</li>
+	</ul>
+
+<p id=dateentry>Version 0.009 - January 2004</p>
+	<ul>
+		<li>Corrected a bug in the data unpacking code</li>
+		<li>Corrected a bug in the EQW_DI macro instruction</li>
+		<li>Modified the linker to handle pure assembly code projects (SET OSDKLINK=-B in the configuration file)</li>
+		<li>Modified the linker to make it not complain about .( and .)</li>
+		<li>Modified the linker to add #file directives in order to get valid error messages (file/line) from XA assembler</li>
+		<li>Modified the linker to makes it accept /* */ comments (was previously crashing badly)</li>
+		<li>Modified the assembleur to accept the #file directive</li>
+		<li>Modified the makefile to accept a OSDKCOMP variable to handle compiler optimisation settings</li>
+		<li>Updated <A href="doc_euphoric.htm">Euphoric</A> to release 1.004a</li>
+		<li>Added "testing" mode to <A href="doc_pictconv.htm">PictConv</A></li>
+		<li>Added a "don't save header" mode to <A href="doc_filepack.htm">FilePack</A></li>
+		<li>Added a new sample project: 4KKong game</li>
+	</ul>
+
+<p id=dateentry>Version 0.008 - Nov 2002</p>
+	<ul>
+		<li>Corrected bug in the code generator: floating point code is now working.</li>
+		<li>Made some improvements in the build and execute batch files.</li>
+		<li>Added already made Visual Studio projects and workspaces.</li>
+	</ul>
+
+<p id=dateentry>Version 0.007 - Nov 2002</p>
+	<ul>
+		<li>Corrected bug in the code generator: function pointers are now working correctly.</li>
+		<li>Corrected bug in the code generator: NULL pointers as parameters are now working correctly.</li>
+		<li>Corrected bug in memset, it was crashing !</li>
+		<li>Added configuration information on how to use VisualC++ and UltraEdit for editing.</li>
+		<li>Added some definitions in the glossary.</li>
+		<li>Added a page with the 6502 instruction set.</li>
+	</ul>
+
+<p id=dateentry>Version 0.006 - Nov 2002</p>
+	<ul>
+		<li>Corrected bug with -u option of <A href="doc_filepack.htm">FilePack</A> (was not working anymore)</li>
+		<li>Corrected various problems in the documentation (spelling, html errors)</li>
+		<li>Added version number on the first documentation page.</li>
+	</ul>
+
+<p id=dateentry>Version 0.005 - Nov 2002</p>
+	<ul>
+		<li>Corrected error in <A href="doc_bin2txt.htm">Bin2Txt</A> documentation</li>
+		<li>Corrected problem with "tmp" folder that was missing in the Zip archive</li>
+		<li>Added FreeImage.dll (needed for <A href="doc_pictconv.htm">PictConv</A>)</li>
+	</ul>
+
+<p id=dateentry>Version 0.004 - Nov 2002</p>
+	<ul>
+		<li>Updated code generator and macros for the C compiler.</li>
+		<li>Updated tape header manager, can now remove headers and set autorun flag</li>
+		<li>Added <A href="doc_filepack.htm">FilePack</A>, <A href="doc_bin2txt.htm">Bin2Txt</A>, <A href="doc_pictconv.htm">PictConv</A>, WriteDsk, Tap2Cd and Tap2Wav</li>
+		<li>Added this documentation :)</li>
+		<li>Added two samples (picture display, and file decompression)</li>
+		<li>Added "file_unpack" function</li>
+		<li>Corrected bug in "clock" function</li>
+		<li>XA symbol table is now compatible with <A href="doc_euphoric.htm">Euphoric</A> debuger format</li>
+	</ul>
+
+<p id=dateentry>Version 0.003 - Jan 2002</p>
+	<ul>
+		<li>Lots of modification. The setup/use is a lot simpler than before.</li>
+		<li>Can now be used from within Visual Studios.</li>
+		<li><A href="doc_euphoric.htm">Euphoric</A> is integrated into the release</li>
+	</ul>
+  
+<p id=dateentry>Version 0.002 - August 2001</p>
+	<ul>
+		<li>Correction of a bug in the header creator</li>
+	</ul>
+
+<p id=dateentry>Version 0.001 - March 2001</p>
+	<ul>
+		<li>First version of the OSDK</li>
+	</ul>
+
+<p id=dateentry>Version 0.000</p>
+	<ul>
+		<li>Internal test release</li>
+ 	</ul>
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

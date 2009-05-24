@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="VC6 workspace">
+		<Project filename="Osdk\osdk.cbp" />
+		<Project filename="common\common.cbp" />
+		<Project filename="bas2tap\bas2tap.cbp">
+			<Depends filename="common\common.cbp" />
+		</Project>
+		<Project filename="bin2txt\bin2txt.cbp">
+			<Depends filename="common\common.cbp" />
+		</Project>
+		<Project filename="compiler\compiler.cbp" />
+		<Project filename="filepack\FilePack.cbp">
+			<Depends filename="common\common.cbp" />
+		</Project>
+		<Project filename="MemMap\MemMap.cbp" />
+		<Project filename="pictconv\PictConv.cbp" active="1">
+			<Depends filename="common\common.cbp" />
+		</Project>
+		<Project filename="header\header.cbp">
+			<Depends filename="common\common.cbp" />
+		</Project>
+		<Project filename="link65\link65.cbp" />
+		<Project filename="macrosplitter\macrosplitter.cbp" />
+		<Project filename="opt65\opt65.cbp" />
+		<Project filename="xa\xa.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

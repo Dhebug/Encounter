@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="osdk" />
+		<Option platforms="" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Win32 Release">
+				<Option output="..\Osdk\_final_\Bin\osdk" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Build\Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-O2" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_MBCS" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="odbc32" />
+					<Add library="odbccp32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="_final_\Bin\make.bat" />
+		<Unit filename="_final_\Bin\vc_execute.bat" />
+		<Unit filename="_final_\Bin\vc_make.bat" />
+		<Unit filename="_final_\documentation\arrow_back.gif" />
+		<Unit filename="_final_\documentation\doc_6502_instruction.htm" />
+		<Unit filename="_final_\documentation\doc_BASIC_instruction.htm" />
+		<Unit filename="_final_\documentation\doc_assembler.htm" />
+		<Unit filename="_final_\documentation\doc_bas2tap.htm" />
+		<Unit filename="_final_\documentation\doc_bin2txt.htm" />
+		<Unit filename="_final_\documentation\doc_compiler.htm" />
+		<Unit filename="_final_\documentation\doc_copyright.htm" />
+		<Unit filename="_final_\documentation\doc_creating_project.htm" />
+		<Unit filename="_final_\documentation\doc_debugger.htm" />
+		<Unit filename="_final_\documentation\doc_euphoric.htm" />
+		<Unit filename="_final_\documentation\doc_filepack.htm" />
+		<Unit filename="_final_\documentation\doc_glossary.htm" />
+		<Unit filename="_final_\documentation\doc_header.htm" />
+		<Unit filename="_final_\documentation\doc_historic.htm" />
+		<Unit filename="_final_\documentation\doc_installation.htm" />
+		<Unit filename="_final_\documentation\doc_issues.htm" />
+		<Unit filename="_final_\documentation\doc_library.htm" />
+		<Unit filename="_final_\documentation\doc_linker.htm" />
+		<Unit filename="_final_\documentation\doc_memmap.htm" />
+		<Unit filename="_final_\documentation\doc_memorymap.htm" />
+		<Unit filename="_final_\documentation\doc_pictconv.htm" />
+		<Unit filename="_final_\documentation\doc_presentation.htm" />
+		<Unit filename="_final_\documentation\doc_samples.htm" />
+		<Unit filename="_final_\documentation\doc_tap2wav.htm" />
+		<Unit filename="_final_\documentation\doc_ultraedit.htm" />
+		<Unit filename="_final_\documentation\doc_visualstudio.htm" />
+		<Unit filename="_final_\documentation\doc_writedsk.htm" />
+		<Unit filename="_final_\documentation\doc_zeropage.htm" />
+		<Unit filename="_final_\documentation\documentation.css" />
+		<Unit filename="_final_\documentation\documentation.htm" />
+		<Unit filename="_final_\documentation\euphoric_menu.gif" />
+		<Unit filename="_final_\documentation\pics\buffy.jpg" />
+		<Unit filename="_final_\documentation\pics\buffy_0_0.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_0_1.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_0_2.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_0_3.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_2_0.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_2_1.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_2_2.gif" />
+		<Unit filename="_final_\documentation\pics\buffy_2_3.gif" />
+		<Unit filename="_final_\documentation\pics\euphoric_boot.gif" />
+		<Unit filename="_final_\documentation\pics\euphoric_debugging.gif" />
+		<Unit filename="_final_\documentation\pics\euphoric_menu.gif" />
+		<Unit filename="_final_\documentation\pics\lena.gif" />
+		<Unit filename="_final_\documentation\pics\lena_0_0.gif" />
+		<Unit filename="_final_\documentation\pics\lena_0_1.gif" />
+		<Unit filename="_final_\documentation\pics\lena_0_2.gif" />
+		<Unit filename="_final_\documentation\pics\lena_0_3.gif" />
+		<Unit filename="_final_\documentation\pics\lena_2_0.gif" />
+		<Unit filename="_final_\documentation\pics\lena_2_1.gif" />
+		<Unit filename="_final_\documentation\pics\lena_2_2.gif" />
+		<Unit filename="_final_\documentation\pics\lena_2_3.gif" />
+		<Unit filename="_final_\documentation\pics\logo_dosbox.png" />
+		<Unit filename="_final_\documentation\pics\logo_winehq.png" />
+		<Unit filename="_final_\documentation\pics\mire2.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_0_0.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_0_1.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_0_2.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_0_3.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_2_0.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_2_1.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_2_2.gif" />
+		<Unit filename="_final_\documentation\pics\mire2_2_3.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1.jpg" />
+		<Unit filename="_final_\documentation\pics\moxica1_0_0.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_0_1.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_0_2.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_0_3.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_2_0.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_2_1.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_2_2.gif" />
+		<Unit filename="_final_\documentation\pics\moxica1_2_3.gif" />
+		<Unit filename="_final_\documentation\pics\osdk_logo_large.png" />
+		<Unit filename="_final_\documentation\pics\osdk_logo_small.png" />
+		<Unit filename="_final_\documentation\pics\system_properties_windows2000.png" />
+		<Unit filename="_final_\documentation\pics\system_properties_windowsxp.png" />
+		<Unit filename="_final_\documentation\pics\visualstudio_new_project.gif" />
+		<Unit filename="_final_\documentation\pics\visualstudio_project_settings_1.gif" />
+		<Unit filename="_final_\documentation\pics\visualstudio_project_settings_2.gif" />
+		<Unit filename="_final_\documentation\pics\visualstudio_setup_1.gif" />
+		<Unit filename="_final_\documentation\pics\visualstudio_setup_2.gif" />
+		<Unit filename="_final_\extra\UltraEdit\WORDFILE.TXT" />
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\Main.c">
+			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\OsdkSampleProject.dsp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\display.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\display.s">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\documentation.txt">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\osdk_build.bat">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\osdk_config.bat">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\OsdkSampleProject\osdk_execute.bat">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="_final_\extra\VisualC++6\language.reg" />
+		<Unit filename="_final_\extra\VisualC++6\usertype.dat" />
+		<Unit filename="_final_\include\6502.h" />
+		<Unit filename="_final_\include\ALLOC.H" />
+		<Unit filename="_final_\include\CTYPE.H" />
+		<Unit filename="_final_\include\LIB.H" />
+		<Unit filename="_final_\include\MATH.H" />
+		<Unit filename="_final_\include\OLD\ORIC.H" />
+		<Unit filename="_final_\include\OLD\STDLIB.H" />
+		<Unit filename="_final_\include\ORIC.H" />
+		<Unit filename="_final_\include\STDIO.H" />
+		<Unit filename="_final_\include\STDLIB.H" />
+		<Unit filename="_final_\include\STRING.H" />
+		<Unit filename="_final_\include\STRINGS.H" />
+		<Unit filename="_final_\include\SYS\GRAPHICS.H" />
+		<Unit filename="_final_\include\SYS\ORIC.H" />
+		<Unit filename="_final_\include\SYS\SOUND.H" />
+		<Unit filename="_final_\include\conio.h" />
+		<Unit filename="_final_\include\rs232.h" />
+		<Unit filename="_final_\include\time.h" />
+		<Unit filename="_final_\lib\MEMCCPY.S" />
+		<Unit filename="_final_\lib\SEDORIC.S" />
+		<Unit filename="_final_\lib\STRCAT.S" />
+		<Unit filename="_final_\lib\STRCHR.S" />
+		<Unit filename="_final_\lib\STRCMP.S" />
+		<Unit filename="_final_\lib\STRCMPI.S" />
+		<Unit filename="_final_\lib\STRCPY.S" />
+		<Unit filename="_final_\lib\STRCSPN.S" />
+		<Unit filename="_final_\lib\STRDUP.S" />
+		<Unit filename="_final_\lib\STRLEN.S" />
+		<Unit filename="_final_\lib\STRLWR.S" />
+		<Unit filename="_final_\lib\STRNCAT.S" />
+		<Unit filename="_final_\lib\STRNCMP.S" />
+		<Unit filename="_final_\lib\STRNCMPI.S" />
+		<Unit filename="_final_\lib\STRNCPY.S" />
+		<Unit filename="_final_\lib\STRNSET.S" />
+		<Unit filename="_final_\lib\STRPBRK.S" />
+		<Unit filename="_final_\lib\STRRCHR.S" />
+		<Unit filename="_final_\lib\STRREV.S" />
+		<Unit filename="_final_\lib\STRSET.S" />
+		<Unit filename="_final_\lib\STRSPN.S" />
+		<Unit filename="_final_\lib\STRSTR.S" />
+		<Unit filename="_final_\lib\STRTOK.S" />
+		<Unit filename="_final_\lib\STRUPR.S" />
+		<Unit filename="_final_\lib\TSTRING.S" />
+		<Unit filename="_final_\lib\clock.s" />
+		<Unit filename="_final_\lib\ctype.s" />
+		<Unit filename="_final_\lib\div.s" />
+		<Unit filename="_final_\lib\free.s" />
+		<Unit filename="_final_\lib\ggeneral.s" />
+		<Unit filename="_final_\lib\gotoxy.s" />
+		<Unit filename="_final_\lib\gpchar.s" />
+		<Unit filename="_final_\lib\graphics.s" />
+		<Unit filename="_final_\lib\grsimple.s" />
+		<Unit filename="_final_\lib\header.s" />
+		<Unit filename="_final_\lib\irq.s" />
+		<Unit filename="_final_\lib\istring.s" />
+		<Unit filename="_final_\lib\itoa.s" />
+		<Unit filename="_final_\lib\library.ndx" />
+		<Unit filename="_final_\lib\lprintf.s" />
+		<Unit filename="_final_\lib\malloc.s" />
+		<Unit filename="_final_\lib\math.s" />
+		<Unit filename="_final_\lib\memcpy.s" />
+		<Unit filename="_final_\lib\memset.s" />
+		<Unit filename="_final_\lib\mult.s" />
+		<Unit filename="_final_\lib\oric.s" />
+		<Unit filename="_final_\lib\osdkdiv6.s" />
+		<Unit filename="_final_\lib\osdkmod6.s" />
+		<Unit filename="_final_\lib\printf.s" />
+		<Unit filename="_final_\lib\rand.S" />
+		<Unit filename="_final_\lib\random.s" />
+		<Unit filename="_final_\lib\realloc.s" />
+		<Unit filename="_final_\lib\scanf.s" />
+		<Unit filename="_final_\lib\sound.s" />
+		<Unit filename="_final_\lib\sscanf.s" />
+		<Unit filename="_final_\lib\tail.s" />
+		<Unit filename="_final_\lib\tape.s" />
+		<Unit filename="_final_\lib\unpack.s" />
+		<Unit filename="_final_\macro\MACROS.H" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

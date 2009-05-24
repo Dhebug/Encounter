@@ -1,0 +1,119 @@
+# depslib dependency file v1.0
+1188670859 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\data\icones.rc
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xaa.cpp
+	<stdio.h>
+	"xah.h"
+	"xar.h"
+	"xa.h"
+	"xal.h"
+	"xaa.h"
+	"xat.h"
+
+1242918031 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xah.h
+	<string>
+	<vector>
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xar.h
+
+1188748427 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xa.h
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xal.h
+	<stdio.h>
+
+1188670859 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xaa.h
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xat.h
+
+1242757781 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xal.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"xah.h"
+	"xar.h"
+	"xa.h"
+	"xam.h"
+	"xal.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xam.h
+
+1224264923 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xam.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"xah.h"
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xao.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"xah.h"
+	"xar.h"
+	"xa.h"
+	"xat.h"
+	"xao.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xao.h
+
+1242923892 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xap.cpp
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	<vector>
+	<map>
+	"xah.h"
+	"xah2.h"
+	"xar.h"
+	"xa.h"
+	"xam.h"
+	"xal.h"
+	"xat.h"
+	"xap.h"
+
+1188764683 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xah2.h
+	<string.h>
+	"xam.h"
+
+1242920966 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xap.h
+
+1242757781 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xar.cpp
+	<stdio.h>
+	<stdlib.h>
+	"xah.h"
+	"xar.h"
+	"xa.h"
+	"xal.h"
+	"xao.h"
+	"xau.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\xa\includes\xau.h
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xar2.cpp
+	<stdio.h>
+	<stdlib.h>
+	"xah.h"
+	"xa.h"
+	"xar.h"
+
+1224265076 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xat.cpp
+	<ctype.h>
+	<stdio.h>
+	"xah.h"
+	"xah2.h"
+	"xar.h"
+	"xa.h"
+	"xaa.h"
+	"xal.h"
+	"xat.h"
+	"xao.h"
+	"xap.h"
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\xa\sources\xau.cpp
+	<stdio.h>
+	<stdlib.h>
+	"xau.h"
+	"xah.h"
+	"xal.h"
+

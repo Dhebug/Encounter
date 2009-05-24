@@ -1,0 +1,743 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - 6502 instruction set</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>6502 instruction set</h1>
+
+<p id=chapter>The 6502 instruction set</p>
+
+
+<p>For each instruction is given the mnemonic, the description of what does the instruction, a
+symbolic description of what the instruction is doing, the affected status flag, and finaly
+the various adressing mode available for that instruction with the corresponding opcode.
+</p>
+
+<p>Symbols:
+</p>
+
+	<ul>
+	<li>A - Accumulator</li>
+	<li>C - Carry flag</li>
+	<li>D - Decimal mode flag</li>
+	<li>I - Interupt flag</li>
+	<li>M - Memory</li>
+	<li>X - X index register</li>
+	<li>Y - Y index register</li>
+	<li>V - Overflow flag</li>
+	<li>Z - Zero flag</li>
+	</ul>
+
+   
+<p id=opcodename>ADC</p>
+<span id=opcodedescription>Add to Accumulator with Carry</span><br>
+<span id=opcodeaction>A+M+C -> A,C</span><br>
+<span id=opcodeflags>N, Z, C, V</span><br>
+
+	<ul>
+	<li>$69 - ADC #aa		</li>
+	<li>$65 - ADC aa		</li>
+	<li>$75 - ADC aa,X	</li>
+	<li>$6D - ADC aaaa	</li>
+	<li>$7D - ADC aaaa,X	</li>
+	</ul>
+
+
+<p id=opcodename>AND</p>
+<span id=opcodedescription>AND Memory with Accumulator</span><br>
+<span id=opcodeaction>A and M -> A</span><br>
+<span id=opcodeflags>N, Z</span><br>
+      
+	<ul>
+	<li>$29 - AND #aa		</li>
+	<li>$25 - AND aa		</li>
+	<li>$35 - AND aa,X	</li>
+	<li>$2D - AND aaaa	</li>
+	<li>$3D - AND aaaa,X	</li>
+	<li>$39 - AND aaaa,Y	</li>
+	<li>$21 - AND (aa,X)	</li>
+	<li>$31 - AND (aa),Y</li>	
+	</ul>
+      
+
+<p id=opcodename>ASL</p>
+<span id=opcodedescription>Arithmetic Shift Left</span><br>
+
+<pre>
+           +-+-+-+-+-+-+-+-+ 
+      C <- |7|6|5|4|3|2|1|0| <- 0    
+           +-+-+-+-+-+-+-+-+</pre>
+
+<span id=opcodeflags>N, Z, C</span><br>
+           
+	<ul>
+	<li>$0A - ASL A			</li>
+	<li>$06 - ASL aa		</li>
+	<li>$16 - ASL aa,X		</li>
+	<li>$0E - ASL aaaa		</li>
+	<li>$1E - ASL aaaa,X	</li>
+	</ul>
+      
+      
+<p id=opcodename>BCC</p>
+<span id=opcodedescription>Branch on Carry Clear</span><br>
+<span id=opcodeaction>branch on C=0</span><br>
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$90 - BCC aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BCS</p>
+<span id=opcodedescription>Branch on Carry Set</span><br>
+<span id=opcodeaction>branch on C=1</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$B0 - BCS aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BEQ</p>
+<span id=opcodedescription>Branch Zero Set</span><br>
+<span id=opcodeaction>branch on Z=1</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$F0 - BEQ aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BIT</p>
+<span id=opcodedescription>Test Bits in Memory with Accumulator</span><br>
+<span id=opcodeaction>A and M, M7 -> N, M6 -> V (neither A nor M are altered)</span><br>
+<span id=opcodeflags>N=M7, V=M6, Z=1 if A and M = 0</span><br>
+      
+<ul>
+<li>$24 - BIT aa		</li>
+<li>$2C - BIT aaaa		</li>
+</ul>
+      
+      
+<p id=opcodename>BMI</p>
+<span id=opcodedescription>Branch on Result Minus</span><br>
+<span id=opcodeaction>branch on N=1</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$30 - BMI aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BNE</p>
+<span id=opcodedescription>Branch on Z reset</span><br>
+<span id=opcodeaction>branch on Z=0</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$D0 - BNE aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BPL</p>
+<span id=opcodedescription>Branch on Result Plus</span><br>
+<span id=opcodeaction>branch on N=0</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$10 - BPL aa		</li>
+	</ul>
+      
+      
+<p id=opcodename>BRK</p>
+<span id=opcodedescription>Force a Break</span><br>
+<span id=opcodeaction>forced interrupt</span><br>
+<span id=opcodeflags>B=1, I=1</span><br>
+      
+	<ul>
+	<li>$00 - BRK   		</li>
+	</ul>
+      
+      
+<p id=opcodename>BVC</p>
+<span id=opcodedescription>Branch on Overflow Clear</span><br>
+<span id=opcodeaction>branch on V=0</span><br>					 
+<span id=opcodeflags>no flags</span><br>
+      
+	<ul>
+	<li>$50 - BVC aa</li> 					
+	</ul>
+      
+      
+<p id=opcodename>BVS</p>
+<span id=opcodedescription>Branch on Overflow Set</span><br>
+<span id=opcodeaction>branch on V=1</span><br>					 
+<span id=opcodeflags> no flags</span><br>
+
+	<ul>
+	<li>$70 - BVS aa</li> 					
+	</ul>
+      
+      
+<p id=opcodename>CLC</p>
+<span id=opcodedescription>Clear Carry Flag</span><br>
+<span id=opcodeaction>0 -> C</span><br>						 
+<span id=opcodeflags> C=0</span><br>
+
+	<ul>
+	<li>$18 - CLC</li> 			 			
+	</ul>
+
+
+
+<p id=opcodename>CLD</p>
+<span id=opcodedescription>Clear Decimal Mode</span><br>
+<span id=opcodeaction>0 -> D</span><br>	  					 
+<span id=opcodeflags> D=0</span><br>
+
+	<ul>
+	<li>$D8 - CLD</li> 			  			
+	</ul>
+
+
+<p id=opcodename>CLI</p>
+<span id=opcodedescription>Clear Interrupt Disable</span><br>
+<span id=opcodeaction>0 -> I</span><br>						 
+<span id=opcodeflags> I=0</span><br>
+
+	<ul>
+	<li>$58 - CLI</li> 			 			
+	</ul>
+
+
+
+<p id=opcodename>CLV</p>
+<span id=opcodedescription>Clear Overflow Flag</span><br>
+<span id=opcodeaction>0 -> V</span><br>						 
+<span id=opcodeflags> V=0</span><br>
+
+	<ul>
+	<li>$B8 - CLV</li> 			
+	</ul>
+
+
+<p id=opcodename>CMP</p>
+<span id=opcodedescription>Compare Memory and Accumulator</span><br>
+<span id=opcodeaction>A compared with M</span><br>				
+<span id=opcodeflags>A, X, or Y < Memory  --->  N=1, Z=0, C=0</span><br>
+
+	<ul>
+	<li>$C9 - CMP #aa		           </li>
+	<li>$C5 - CMP aa		</li>
+	<li>$D5 - CMP aa,X		</li>
+	<li>$CD - CMP aaaa		</li>
+	<li>$DD - CMP aaaa,X	</li>
+	<li>$D9 - CMP aaaa,Y	</li>
+	<li>$C1 - CMP (aa,X)	</li>
+	<li>$D1 - CMP (aa),Y	</li>
+	</ul>
+
+
+<p id=opcodename>CPX</p>
+<span id=opcodedescription>Compare Memory and X register</span><br>
+<span id=opcodeaction>X compared with M</span><br>				
+<span id=opcodeflags>A, X, or Y < Memory  --->  N=1, Z=0, C=0</span><br>
+
+	<ul>
+	<li>$E0 - CPX #aa		</li>
+	<li>$E4 - CPX aa		</li>
+	<li>$EC - CPX aaaa		</li>
+	</ul>
+
+
+<p id=opcodename>CPY</p>
+<span id=opcodedescription>Compare Memory and Y register</span><br>
+<span id=opcodeaction>Y compare with M</span><br>				
+<span id=opcodeflags>A, X, or Y < Memory  --->  N=1, Z=0, C=0</span><br>
+
+	<ul>
+	<li>$C0 - CPY #aa		</li>
+	<li>$C4 - CPY aa		</li>
+	<li>$CC - CPY aaaa		</li>
+	</ul>
+
+
+
+<p id=opcodename>DEC</p>
+<span id=opcodedescription>Decrement Memory by One</span><br>
+<span id=opcodeaction>M - 1 -> M</span><br>					
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$C6 - DEC aa		</li>
+	<li>$D6 - DEC aa,X		</li>
+	<li>$CE - DEC aaaa		</li>
+	<li>$DE - DEC aaaa,X	</li>
+	</ul>
+
+
+
+<p id=opcodename>DEX</p>
+<span id=opcodedescription>Decrement X</span><br>
+<span id=opcodeaction>X - 1 -> X</span><br>					
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$CA - DEX			</li>
+	</ul>
+
+
+
+<p id=opcodename>DEY</p>
+<span id=opcodedescription>Decrement Y</span><br>
+<span id=opcodeaction>Y - 1 -> Y</span><br>					
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$88 - DEY			</li>
+	</ul>
+
+
+
+
+<p id=opcodename>EOR</p>
+<span id=opcodedescription>Exclusive-OR Memory with Accumulator</span><br>
+<span id=opcodeaction>A xor M -> A</span><br>                  
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$49 - EOR #aa		</li>
+	<li>$45 - EOR $aa		</li>
+	<li>$55 - EOR $aa,X		</li>
+	<li>$4D - EOR $aaaa		</li>
+	<li>$5D - EOR $aaaa,X	</li>
+	<li>$59 - EOR $aaaa,Y	</li>
+	<li>$41 - EOR ($aa,X)	</li>
+	<li>$51 - EOR ($aa),Y	</li>
+	</ul>
+
+
+
+<p id=opcodename>INC</p>
+<span id=opcodedescription>Increment Memory by one</span><br>
+<span id=opcodeaction>M + 1 -> M </span><br>                   
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$E6 - INC $aa		</li>
+	<li>$F6 - INC $aa,X		</li>
+	<li>$EE - INC $aaaa		</li>
+	<li>$FE - INC $aaaa,X	</li>
+	</ul>
+
+
+
+<p id=opcodename>INX</p>
+<span id=opcodedescription>Increment X by one</span><br>
+<span id=opcodeaction>X + 1 -> X </span><br>                  	
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$E8 - INX			</li>
+	</ul>
+
+
+
+<p id=opcodename>INY</p>
+<span id=opcodedescription>Increment Y by one</span><br>
+<span id=opcodeaction>Y + 1 -> Y </span><br>                  	
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$C8 - INY			</li>
+	</ul>
+
+
+
+<p id=opcodename>JMP</p>
+<span id=opcodedescription>Jump</span><br>
+
+	<ul>
+	<li>$4C - JMP $aaaa		</li>
+	<li>$6C - JMP ($aaaa)	</li>
+	</ul>
+
+
+
+<p id=opcodename>JSR</p>
+<span id=opcodedescription>Jump to subroutine</span><br>
+
+
+	<ul>
+	<li>$20 - JSR $aaaa		</li>
+	</ul>
+
+
+
+<p id=opcodename>LDA</p>
+<span id=opcodedescription>Load Accumulator with memory</span><br>
+<span id=opcodeaction>M -> A</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$A9 - LDA #aa		</li>
+	<li>$A5 - LDA $aa		</li>
+	<li>$B5 - LDA $aa,X		</li>
+	<li>$AD - LDA $aaaa		</li>
+	<li>$BD - LDA $aaaa,X	</li>
+	<li>$B9 - LDA $aaaa,Y	</li>
+	<li>$A1 - LDA ($aa,X)	</li>
+	<li>$B1 - LDA ($aa),Y	</li>
+	</ul>
+
+
+
+<p id=opcodename>LDX</p>
+<span id=opcodedescription>Load X with Memory</span><br>
+<span id=opcodeaction>M -> X</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$A2 - LDX #aa		</li>
+	<li>$A6 - LDX $aa		</li>
+	<li>$B6 - LDX $aa,Y		</li>
+	<li>$AE - LDX $aaaa		</li>
+	<li>$BE - LDX $aaaa,Y	</li>
+	</ul>
+
+
+
+<p id=opcodename>LDY</p>
+<span id=opcodedescription>Load Y with Memory</span><br>
+<span id=opcodeaction>M -> Y</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$A0 - LDY #aa		</li>
+	<li>$A4 - LDY $aa		</li>
+	<li>$B4 - LDY $aa,X		</li>
+	<li>$AC - LDY $aaaa		</li>
+	<li>$BC - LDY $aaaa,X	</li>
+	</ul>
+
+
+
+<p id=opcodename>LSR</p>
+<span id=opcodedescription>Logical Shift Right</span><br>
+
+<pre>
+     +-+-+-+-+-+-+-+-+ 
+0 -> |7|6|5|4|3|2|1|0| -> C    
+     +-+-+-+-+-+-+-+-+</pre>
+
+
+<span id=opcodeflags>N, Z, C</span><br>
+
+	<ul>
+	<li>$4A - LSR A			</li>
+	<li>$46 - LSR $aa		</li>
+	<li>$56 - LSR $aa,X		</li>
+	<li>$4E - LSR $aaaa		</li>
+	<li>$5E - LSR $aaaa,X	</li>
+	</ul>
+
+
+
+<p id=opcodename>NOP</p>
+<span id=opcodedescription>No Operation</span><br>
+
+	<ul>
+	<li>$EA - NOP			</li>
+	</ul>
+
+
+
+<p id=opcodename>ORA</p>
+<span id=opcodedescription>OR Memory with Accumulator</span><br>
+<span id=opcodeaction>A or M -> A</span><br>					
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$09 - ORA #aa		</li>
+	<li>$05 - ORA $aa		</li>
+	<li>$15 - ORA $aa,X		</li>
+	<li>$0D - ORA $aaaa		</li>
+	<li>$1D - ORA $aaaa,X	</li>
+	<li>$19 - ORA $aaaa,Y	</li>
+	<li>$01 - ORA ($aa,X)	</li>
+	<li>$11 - ORA ($aa),Y	</li>
+	</ul>
+
+
+
+<p id=opcodename>PHA</p>
+<span id=opcodedescription>Push Accumulator on Stack</span><br>
+<span id=opcodeaction>A -> Stack</span><br>
+
+	<ul>
+	<li>$48 - PHA			</li>
+	</ul>
+
+
+
+<p id=opcodename>PHP</p>
+<span id=opcodedescription>Push Processor Status on Stack</span><br>
+<span id=opcodeaction>P -> Stack</span><br>
+
+	<ul>
+	<li>$08 - PHP			</li>
+	</ul>
+
+
+
+<p id=opcodename>PLA</p>
+<span id=opcodedescription>Pull Accumulator from Stack</span><br>
+<span id=opcodeaction>Stack -> A</span><br>					
+<span id=opcodeflags> N, Z</span><br>
+
+	<ul>
+	<li>$68 - PLA			</li>
+	</ul>
+
+
+
+<p id=opcodename>PLP</p>
+<span id=opcodedescription>Pull Processor Status from Stack</span><br>
+<span id=opcodeaction>Stack -> P</span><br>
+<span id=opcodeflags> P from stack</span><br>
+
+	<ul>
+	<li>$28 - PLP			</li>
+	</ul>
+
+
+
+<p id=opcodename>ROL</p>
+<span id=opcodedescription>Rotate Left</span><br>
+
+<pre>
+     +-+-+-+-+-+-+-+-+ 
+C <- |7|6|5|4|3|2|1|0| <- C    
+     +-+-+-+-+-+-+-+-+</pre>
+
+<span id=opcodeflags>N, Z, C</span><br>
+
+<ul>
+<li>$2A - ROL A			</li>
+<li>$26 - ROL $aa		</li>
+<li>$36 - ROL $aa,X		</li>
+<li>$2E - ROL $aaaa		</li>
+<li>$3E - ROL $aaaa,X	</li>
+</ul>
+
+
+
+<p id=opcodename>ROR</p>
+<span id=opcodedescription>Rotate Right</span><br>
+<pre>
+     +-+-+-+-+-+-+-+-+ 
+C -> |7|6|5|4|3|2|1|0| -> C    
+     +-+-+-+-+-+-+-+-+</pre>
+
+<span id=opcodeflags>N, Z, C</span><br>
+
+<ul>
+<li>$6A - ROR A			</li>
+<li>$66 - ROR $aa		</li>
+<li>$76 - ROR $aa,X		</li>
+<li>$6E - ROR $aaaa		</li>
+<li>$7E - ROR $aaaa,X	</li>
+</ul>
+
+
+
+<p id=opcodename>RTI</p>
+<span id=opcodedescription>Return from Interrupt</span><br>
+
+<ul>
+<li>$40 - RTI			</li>
+</ul>
+
+
+
+<p id=opcodename>RTS</p>
+<span id=opcodedescription>Return from Subroutine</span><br>
+
+<ul>
+<li>$60 - RTS			</li>
+</ul>
+
+
+
+<p id=opcodename>SBC</p>
+<span id=opcodedescription>Subtract from Accumulator with Carry</span><br>
+<span id=opcodeaction>A - M - ~C -> A  (~C is NOT C)</span><br>	
+<span id=opcodeflags> N, Z, C, V</span><br>
+
+<ul>
+<li>$E9 - SBC #aa		</li>
+<li>$E5 - SBC $aa		</li>
+<li>$F5 - SBC $aa,X		</li>
+<li>$ED - SBC $aaaa		</li>
+<li>$FD - SBC $aaaa,X	</li>
+<li>$F9 - SBC $aaaa,Y	</li>
+<li>$E1 - SBC ($aa,X)	</li>
+<li>$F1 - SBC ($aa),Y	</li>
+</ul>
+
+
+
+<p id=opcodename>SEC</p>
+<span id=opcodedescription>Set Carry Flag</span><br>
+
+<ul>
+<li>$38 - SEC			</li>
+</ul>
+
+
+
+<p id=opcodename>SED</p>
+<span id=opcodedescription>Set Decimal Mode</span><br>
+
+<ul>
+<li>$F8 - SED			</li>
+</ul>
+
+
+
+<p id=opcodename>SEI</p>
+<span id=opcodedescription>Set Interrupt Disable</span><br>
+
+<ul>
+<li>$78 - SEI			</li>
+</ul>
+
+
+
+<p id=opcodename>STA</p>
+<span id=opcodedescription>Store Accumulator in Memory</span><br>
+
+<ul>
+<li>$85 - STA $aa		</li>
+<li>$95 - STA $aa,X		</li>
+<li>$8D - STA $aaaa		</li>
+<li>$9D - STA $aaaa,X	</li>
+<li>$99 - STA $aaaa,Y	</li>
+<li>$81 - STA ($aa,X)	</li>
+<li>$91 - STA ($aa),Y	</li>
+</ul>
+
+
+
+<p id=opcodename>STX</p>
+<span id=opcodedescription>Store X in Memory</span><br>
+
+
+<ul>
+<li>$86 - STX $aa		</li>
+<li>$96 - STX $aa,Y		</li>
+<li>$8E - STX $aaaa		</li>
+</ul>
+
+
+
+<p id=opcodename>STY</p>
+<span id=opcodedescription>Store Y in Memory</span><br>
+
+
+<ul>
+<li>$84 - STY $aa		</li>
+<li>$94 - STY $aa,X		</li>
+<li>$8C - STY $aaaa		</li>
+</ul>
+
+
+
+<p id=opcodename>TAX</p>
+<span id=opcodedescription>Transfer Accumulator to X</span><br>
+<span id=opcodeaction>A -> X</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$AA - TAX			</li>
+</ul>
+
+
+
+<p id=opcodename>TAY</p>
+<span id=opcodedescription>Transfer Accumulator to Y</span><br>
+<span id=opcodeaction>A -> Y</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$A8 - TAY			</li>
+</ul>
+
+
+
+<p id=opcodename>TSX</p>
+<span id=opcodedescription>Transfer Stack to X</span><br>
+<span id=opcodeaction>S -> X</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$BA - TSX			</li>
+</ul>
+
+
+
+<p id=opcodename>TXA</p>
+<span id=opcodedescription>Transfer X to Accumulator</span><br>
+<span id=opcodeaction>X -> A</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$8A - TXA			</li>
+</ul>
+
+
+
+<p id=opcodename>TXS</p>
+<span id=opcodedescription>Transfer X to Stack</span><br>
+<span id=opcodeaction>X -> S</span><br>						
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$9A - TXS			</li>
+</ul>
+
+
+
+<p id=opcodename>TYA</p>
+<span id=opcodedescription>Transfer Y to Accumulator</span><br>
+<span id=opcodeaction>Y -> A</span><br>
+<span id=opcodeflags> N, Z</span><br>
+
+<ul>
+<li>$98 - TYA			</li>
+</ul>
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

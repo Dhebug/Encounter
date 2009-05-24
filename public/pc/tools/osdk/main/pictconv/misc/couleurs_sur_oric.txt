@@ -1,0 +1,200 @@
+
+
+Comment faire une image colorée sur ORIC
+========================================
+
+Historique:
+===========
+Dbug - Mercredi 3 juillet 2002: Première version
+
+
+Préambule
+=========
+L'oric ne dispose pas d'un systeme vidéo tres conventionel. Il est possible de
+parvenir a des résultats tres corrects, mais cela implique de comprendre totalement
+comment fonctionne le circuit vidéo de l'oric.
+
+Ce document est un peu long, mais devrait être suffisant (après une lecture sérieuse)
+pour permettre à quiconque de faire des graphes haut en couleur sur ORIC.
+
+
+La mémoire vidéo, comment elle marche
+=====================================
+Contrairement a de nombreux ordinateurs où l'on peut redéfinir la palette, et où
+les couleurs sont choisies en fonction d'un numéro de couleur encodé sur l'image,
+sur l'oric on dispose d'une mémoire vidéo monochrome, ainsi que d'un moyen de
+changer les couleurs utilisées... rentrons dans le détail.
+
+Déja, la résolution (240x200)
+
+Sur l'oric, on dispose d'une résolution de 240 pixels par ligne, et de 200 lignes
+sur l'écran. La valeur étrange de 240 (au lieu des 320 habituels), vient du fait
+que chaque octet de l'écran (qui contient donc 8 bit), ne sert en fait à définir
+que l'affichage de 6 pixels. Vu que nous avons 40 octets par ligne écran, nous
+avons donc 40x6 pixels par ligne, donc 240 pixels.
+
+Cette notion d'octet est importante, car c'est le coeur de la compréhension pour 
+ce qui est le placement des couleurs. Par la suite, lorsque j'utiliserait le terme
+"bloc", cela voudra dire "un des 40 octets d'une ligne d'affichage".
+
+Au total, la mémoire vidéo occupe donc 40 octets x 200 lignes = 8000 octets (soit
+presque 8 kilo octets).
+
+
+Papier et Encre
+===============
+Chacun de ces blocs contient donc de quoi définir l'état de 6 pixels. Pour chaque
+pixel on dispose d'une seule information: ETEIND ou ALLUME. Cela correspond donc
+à une définition d'écran monochrome. Par convention, on dira que les pixels éteinds,
+qui prennent donc la couleur du fond, sont des pixels de PAPIER, quand aux pixels
+allumés, ce sont des pixels d'ENCRE.
+
+Lorsque l'oric comence à tracer une des 200 lignes de graphique, la valeur du PAPIER
+est systématiquement fixées à NOIR, et la valeur de l'encre est systématiquement
+fixée à BLANC. De ce fait, sans rien faire de particulier on peut donc dessiner des
+images monochromes de résolution 240x200 en utilisant les couleurs NOIR et BLANC.
+
+Ca se complique quand on veut changer les couleurs :)
+
+
+La couleur, notion d'attribut
+=============================
+Précédement, nous avons appris que chaque octet définissait l'état de 6 pixels.
+Vu qu'un octet contient 8 bits, il se trouve que seuls 6 bits sont utilisés pour
+encoder l'état des pixels, il reste donc 2 bits de libres sur chacun des ses
+octets. C'est la lecture de ces deux informations qui permettra de connaitre 
+l'apparence finale de l'affichage sur l'écran. La structure d'un octet de la mémoire
+vidéo est donc la suivante:
+
+		     7 6 5 4 3 2 1 0
+			[I|A|...........]
+
+Le bit 7 concerne l'inversion vidéo. C'est un "bonus" donc la connaissance n'est pas
+indispensable pour faire des images colorées, mais je l'explique un peu plus tard car
+cela permet de faire des bidouilles avancées pour ceux qui ont déja tout maitrisé :)
+
+Le bit 6 quand à lui détermine la signification des bits 0 à 5. C'est ce que l'on
+appelle le bit "d'attributs". Lorsque ce bit est à 1, cela signifie que les bits 0
+à 5 correspondent à une définition de pixels. Les bits 0 zéro correspondent au PAPIER
+et les bits à 1 à l'ENCRE (situation expliquée précédement). Cela correpond donc à
+ceci au niveau de l'octet:
+
+		     7 6 5 4 3 2 1 0
+			[.|1| pixel def ]
+
+Si le bit 6 est à zéro, les bits 0 à 5 correspondent alors à une valeur numérique 
+entre 0 et 31 qui provoque un "effet spécial". Cet effet spécial peut être un de
+ceux ci:
+
+	 0 ENCRE NOIR
+	 1 ENCRE ROUGE
+	 2 ENCRE VERT
+	 3 ENCRE JAUNE
+	 4 ENCRE BLEU
+	 5 ENCRE MAGENTA
+	 6 ENCRE CYAN
+	 7 ENCRE BLANCHE
+	 8 CLIGNOTANT OFF
+	 9 CLIGNOTANT OFF
+	10 CLIGNOTANT OFF
+	11 CLIGNOTANT OFF
+	12 CLIGNOTANT ON
+	13 CLIGNOTANT ON
+	14 CLIGNOTANT ON
+	15 CLIGNOTANT ON
+	16 PAPIER NOIR     
+	17 PAPIER ROUGE   
+	18 PAPIER VERT    
+	19 PAPIER JAUNE   
+	20 PAPIER BLEU    
+	21 PAPIER MAGENTA 
+	22 PAPIER CYAN    
+	23 PAPIER BLANCHE 
+	24 PASSAGE EN MODE TEXTE 60 HZ
+	25 PASSAGE EN MODE TEXTE 60 HZ
+	26 PASSAGE EN MODE TEXTE 50 HZ
+	27 PASSAGE EN MODE TEXTE 50 HZ
+	28 PASSAGE EN MODE GRAPHIQUE 60 HZ
+	29 PASSAGE EN MODE GRAPHIQUE 60 HZ
+	30 PASSAGE EN MODE GRAPHIQUE 50 HZ
+	31 PASSAGE EN MODE GRAPHIQUE 50 HZ
+
+En consultant cette table, il est aisé de voir que l'on peut changer la couleur
+de l'ENCRE ou la couleur du PAPIER en placant la bonne valeur d'attribut. Cela
+correspond à ceci au niveau de l'octet:
+
+		     7 6 5 4 3 2 1 0
+			[.|0|  attribut ]
+
+Une question peut néanmoins surgir du tréfond de votre inconscient:
+
+	"Diantre, si je doit sacrifier un octet pour changer une couleur,
+	 cela veut-il dire qu'il faut que je sacrifiace un second octet
+	 pour changer la couleur de papier ET la couleur d'encre ???"
+
+Effectivement, c'est le cas. C'es d'ailleur pour cela que par défaut
+l'oric ne permet pas de tracer du graphisme dans les 12 premier pixels
+de l'écran lorsque l'on place des couleurs: 6 pixels sont utilisés pour
+définir la couleur du papier, et 6 autres pixels sont utilisés pour
+définit la couleur de l'encre. Et vu qu'a chaque ligne les couleurs sont
+réinitialisée sur NOIR et BLANC, il faut refaire l'opération au début de
+chaque ligne, ce qui fait que la résolution effective pour une image 
+bi-colore (non blanche et noire) n'est plus que de 228x200 pixels.
+
+Ayant analysé cette réponse, survient soudain une seconde question 
+fondamentale:
+
+	"Ok, j'ai compris que pour changer une des deux couleurs en cours
+	d'utilisation, il fallait que je sacrifie les 6 pixels du bloc
+	courant. Soit, mais à l'écran, on voit quoi à l'emplacement des
+	ces 6 pixels sacrifiés ???"
+
+Excellente question ! C'est effectivement le coeur du problème. La réponse
+est "ca dépend". La règle est que de toute façon, ces 6 pixels seront
+tous de la même couleur, qui en l'occurence sera la couleur du papier.
+Si le PAPIER était ROUGE, et que l'on insère un attribut pour changer
+la couleur de l'encre en BLEU, les 6 pixels seront ROUGES (c'est a dire
+la couleur du papier). Le cas particulier est lorsque l'on change la couleur
+du PAPIER. Dans ce cas là, la valeur est validée immédiatement. Donc les
+6 pixels seront de la couleur du PAPIER que l'on vient de définir.
+
+
+L'inversion vidéo
+=================
+Donc, maintenant que tout ceci est clair, je peut parler de l'inversion
+vidéo. Contrairement à ce que certains pensent, ca ne revient pas à 
+échanger l'encre et le papier: Ca serait stupide et ca ne servirait à
+rien. Non, l'inversion vidéo, inverse les composantes RGB de chacune 
+des couleurs affichées, aussi bien pour le PAPIER que pour l'ENCRE.
+
+Pour connaitre la valeur inversée d'une couleur il suffit d'inverser
+les composantes. Donc pour les couleurs oric ca donne:
+
+				RVB	   RVB
+	NOIR		000	=> 111	BLANC
+	ROUGE		100	=> 011	CYAN
+	VERT		010	=> 101	MAGENTA
+	JAUNE		110	=> 001	BLEU
+	BLEU		001	=> 110	JAUNE
+	MAGENTA		101	=> 010	VERT
+	CYAN		011	=> 100	ROUGE
+	BLANCHE		111	=> 000	NOIR
+
+A noter (et c'est bien dommage) qu'avec les couleurs par défaut (NOIR
+et BLANC) l'inversion vidéo ne sert a rien: on obtient du BLANC et du
+NOIR, super !
+
+L'intéret de l'inversion vidéo peut apparaitre pour obtenir de nouvelles
+couleurs sans avoir les contraintes des placement d'attributs. Ainsi, si
+vous faites un dessins avec du ROUGE et du JAUNE, vous pouvez localement
+obtenir 6 pixels de couleur BLEU et CYAN. Ca peut être pratique.
+
+Voila !
+
+
+
+Pour plus d'informations, ou si des choses ne sont pas claires: 
+
+	dbug@defence-force.org
+
+

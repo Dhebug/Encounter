@@ -1,0 +1,8 @@
+
+This "OsdkSampleProject" is a simple example that contains almost nothing,
+but that can be used as a starting base for developing new projects. 
+You just have to copy it somewhere, rename the "OsdkSampleProject" references
+you will find in the .DSP file, and voila !
+
+Note: Do not try to edit the DSP with VisualStudio ;)
+

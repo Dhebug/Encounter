@@ -1,0 +1,89 @@
+To use it:
+
+PictConv options source_name destination_name
+
+options can be:
+(I only put the one that are already working)
+
+-f0 => output a MONOCHROME picture
+-f1 => output a COLORED picture
+-f2 => output a RGB picture
+-f3 => output a RB picture
+
+-d0 => No dithering (0/1)
+-d1 => Alternate dithering  (0/0.5/1)
+-d2 => Ordered dithering (4x4 matrix, 8 levels)
+-d3 => Riemersma dithering (based on hilbert curves)
+
+-o0 => Tape format, including a BASIC loader
+-o1 => Tape format, simply the picture
+-o2 => RAW format. No header.
+-o3 => C source code
+-o4 => S source code
+-o5 => Output a PC picture format
+-o6 => 2 bytes (dx,dy) size followed by RAW picture
+
+-t0 => test mode deactivated
+-t1 => test mode activated
+
+
+Have fun.
+
+
+Frequently Asked Questions:
+---------------------------
+Q: In colored mode, free size pictures are not accepted. Why ???
+A: Try to imagine how you could scroll horizontaly a picture containing
+   attributes changes without having huge color changes. This is not possible.
+   Free vertical size is allowed anyway, but it's bugged right now :))
+
+Q: In colored mode, the converted picture contains some lines that are black and
+   white.
+A: These scanlines cannot be converted. A colored pictures should use Oric constraints,
+   be in at most 8 colors, no more than 2 colors per 6 pixel bloc, and so on...
+
+Q: In colored mode, PictConv decided to use strange paper and ink changes.
+A: Actually PictConv simply tries all the possible combinations of paper, ink,
+   video inverse changes that could work to convert the picture. When it find
+   one working combination, it moves to the next scanline.
+
+
+Historic:
+---------
+0.008
+ - Not finished version that try to supported inversed dithering patterns.
+
+0.007
+ - Removed the timer check in the colored conversion mode. It was producing bad 
+   conversion on slow computers. Anyway, if you are unlucky, a conversion could
+   now take hours to perform if the tool has to perform ALL possible combinations.
+
+0.006
+ - A message is given if the picture is not found or invalid.
+ - Colored mode had some bugs: all now corrected ???
+
+0.005
+ - Debugged the -o6 format.
+ - Debugged the -f1 mode.
+
+0.004
+ - Allow free size pictures (bigger than screen size except for colored mode)
+
+0.003
+ - Riemersman dithering implemented 
+
+0.002
+ - New version with basic dithering
+
+0.001
+ - First beta release
+						
+
+
+To do:
+------
+- Allow the possibility to choose the label name when using -o3 and -o4 modes. 
+- Allow the possibility to choose to "append" the new bitmap to an existing one.
+
+
+

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Debugger</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Debugger</h1>
+
+<p id=chapter>Description</p>
+
+<p>The debugger is an integral part of <A href="doc_euphoric.htm">Euphoric</A>, and can be used to trace what
+the program is doing.
+</p>
+
+<center>
+<img src="pics/euphoric_debugging.gif">
+</center>
+
+
+<p id=chapter>Keys</p>
+
+<p>To use the debugger, you need to know some keys:
+</p>
+
+<ul>
+<li><b>F11:</b> enter/leave from the debugger</li>
+<li><b>F2:</b> step by step tracing (enter in JSR)</li>
+<li><b>F3:</b> step by step tracing (do not enter in subroutines)</li>
+<li><b>F4:</b> show Oric screen (can crash...)</li>
+<li><b>F5:</b> execute up to breakpoint address</li>
+<li><b>F6:</b> reset</li>
+<li><b>F7:</b> nmi</li>
+<li><b>F10:</b> exit Euphoric</li>
+<li><b>F12:</b> abort execution (during F3 or F5)</li>
+<li><b>UP & DOWN arrows:</b> scroll zero page window</li>
+<li><b>PAGE UP & PAGE DOWN:</b> scroll the memory window</li>
+<li><b>A xxxx:</b> assemble code</li>
+<li><b>B xxxx:</b> set a breakpoint</li>
+<li><b>D xxxx:</b> set the memory window adress</li>
+<li><b>E xxxx:</b> edit a value in memory</li>
+<li><b>F xxxx:</b> fill memory with a single value</li>
+<li><b>M xxxx:</b> copy a block of memory</li>
+<li><b>U xxxx:</b> disassemble code</li>
+<li><b>P:</b> set PC</li>
+<li><b>R:</b> change Register. Type register to change (A,X,Y,S,P), or type N,V,B,D,I,Z,C to change a flag.</li>
+</ul>
+
+
+<p id=chapter>Symbols</p>
+
+<p>Since the assembler has been modified to output Euphoric compatible symbol
+table, you should see all the symbols defined in your program directly
+under the debugger.
+</p>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

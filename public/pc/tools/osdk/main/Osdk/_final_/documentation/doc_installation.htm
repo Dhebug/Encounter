@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Installation</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Installation</h1>
+
+
+<p><i>Note: Detailed informations on how to use the OSDK with a Linux operating system using Wine are given at <A href="#LinuxInstall">the end of the page</a>.
+</i></p>
+
+<p id=chapter>Configuring the OSDK</p>
+			 
+<p>The only important thing you need to do is to set an environment variable to locate the OSDK folder. Starting from this points the make file is able to locate the other files by itself.
+</p>
+<p>If you install the OSDK on your drive C:\ in a folder OSDK, you simply have to add the following line in your AUTOEXEC.BAT:
+</p>
+<pre>
+	SET OSDK=C:\OSDK
+</pre>
+
+<p>Note that if you are using windows 2000 or later, you can also do this operation by creating a new environment 
+variable called OSDK into the "advanced" menu of the system properties dialog box.
+You can go to the system properties using on of the following methods:
+</p>
+<ol>
+<li>Start > Settings > Control Panel > System</li>
+<li>Right-click My Computer; select Properties</li>
+<li>Press the keyboard shortcut WINDOWS+BREAK</li>
+</ol>
+
+<p>
+<img src="pics/system_properties_windows2000.png" alt="Setting OSDK variable under Windows 2000">
+<img src="pics/system_properties_windowsxp.png" alt="Setting OSDK variable under Windows XP">
+</p>
+
+<p>Optionaly, you can also define a second environment variable that will be used to run Euphoric using DOSBox.
+Doing this will allow you to run it with sound and in a Windows friendly environment.
+</p>
+<pre>
+	SET OSDKDOSBOX=C:\Program Files\DOSBox-0.65\dosbox.exe
+</pre>
+
+<a name="TestingInstall"></a>
+<p id=chapter>Testing if all is working</p>
+
+<p>After setting up the variable, you can test if everything works fine, by simply trying to build and execute one of the samples.
+</p>
+<p>Just go to the folder "Osdk\sample\hello_world_simple", and launch "OSDK_BUILD.BAT". You should have the following display:
+</p>
+<pre>
+	Building the program TEST1 at adress $800
+	Compiling MAIN.C
+	  - preprocess
+	  - compile
+	  - convert C to assembly code
+	  - cleanup output
+	Build of TEST1.tap finished
+</pre>
+
+<p>If you have errors messages like "out of environment space", it means you will perhaps have to modify your "config.sys" file. At the end of the "config.sys" simply add the following line:
+</p>
+<pre>
+	SHELL=C:\WINDOWS\COMMAND.COM /E:4096 /P
+</pre>
+
+<p>If you have this message instead:
+</p>
+<pre>
+	== ERROR ==
+	The Oric SDK was not configured properly
+	You should have a OSDK environment variable setted to the location of the SDK
+</pre>
+
+<p>it simply means you did something wrong in the section (2). Please not that some versions of windows require you to reboot the system before the modifications made to the environment became effective.
+</p>
+
+
+<p>If it works, a BUILD folder should have appear, containing the following files:
+</p>
+<ul>	
+	<li>final.out => the raw binary file. Usefull for disk loading 
+	</li>
+	<li>test1.tap => a tape file that is made from the raw file with a header appended
+	</li>
+	<li>xaerr.txt => the error messages outputed by the assembler
+	</li>
+	<li>xalbl.txt => the list of labels outputed by the assembler (usefull to check size/allignement)
+	</li>
+</ul>
+<p>Now, you just have to run OSDK_EXECUTE.BAT, that should launch the emulator and run your program. If you don't remember, it's F10 to quit.
+</p>
+<p>Well done, you have compiled and run you first Oric program !
+</p>
+
+<p><i>See also:</i>
+	<ul>
+		<li><A href="doc_samples.htm">Samples</A></li>
+	</ul>
+</p>
+
+<a name="LinuxInstall"></a>
+<p id=chapter>Using the OSDK under Linux</p>
+
+<p>
+<img src="pics/logo_winehq.png" alt="Wine logo">
+</p>
+
+<p>I agree that a native port would be probably more practical, but at least after some feedback and some attempts myself, I managed
+to successfully compile all the sample programs of the OSDK using Wine installed on a Ubuntu 6.06 LTS distribution. I think this is
+definitively better than nothing. The only part that do not work, is the Euphoric emulator itself, but this should be too much of a
+problem since the generated programs are compatible with all existing Oric emulators.
+</p>
+
+<p>Tested in Ubuntu Diaper Drake 6.06 LTS with Wine 0.9.23
+</p>
+
+
+<ol>
+	<li>
+		<b>Installing Wine:</b>
+		<br>
+		Most probably you can install Wine directly by using the application installer/update of your Linux distribution.
+		Alternatively you can go on the official Wine website, and download it from there:<br>
+		<A href="http://www.winehq.com">Wine official website</A>
+		<br>
+	</li>
+	<br>
+	<li>
+		<b>Installing the OSDK in Wine:</b>
+		<br>
+		You need to unzip the archive in the emulated windows drive.
+		If we want to get it in <b>C:/osdk</b>, then you need to unzip in:
+		<pre>~/.wine/.dosdevices/c</pre>
+	</li>
+	<br>
+	<li>
+		<b>Setting the environment variable.</b>
+		<br>
+		Just run regedit from Wine.
+		You can do that by opening a terminal, and then type:
+
+		  <pre>wine regedit</pre>
+
+		at this point you need to create (if it does not yet exist) a new key
+
+		 <pre>HKEY_CURRENT_USER/Environment</pre>
+
+		and there you create a new string:
+
+		<ul>
+			<li>Name: OSDK</li>
+			<li>Value: C:\OSDK</li>
+		</ul>
+	</li>
+	<br>
+	<li>
+		<b>Running OSDK</b>
+		<br>
+
+		Just run the following command:
+
+<pre>wine cmd</pre>
+
+		then 
+		
+<pre>c:
+cd OSDK
+</pre>
+
+		etc...
+		you can try compiling a sample by going in 
+ 
+<pre>cd C:\osdk\sample\hello_world_simple
+osdk_build.bat</pre>
+	</li>
+
+</ol>
+
+<p>When this is done, you can <A href="#TestingInstall">test that everything works fine</a>.
+</p>
+
+
+<i>Note: The creation of the Build folder is failing. Probably the existing test that fails.
+</i>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

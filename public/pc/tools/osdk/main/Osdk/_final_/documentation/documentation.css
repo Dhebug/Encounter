@@ -1,0 +1,106 @@
+BODY { font-family: verdana; background-color: #ffffff }
+H1 { text-align: center; }
+A.qindex {}
+A.qindexRef {}
+A.el {  text-decoration: none; font-weight: bold }
+A.elRef {  font-weight: bold }
+A.code {  text-decoration: none; font-weight: normal; color: #4444ee }
+A.codeRef {  font-weight: normal; color: #4444ee }
+DL.el {  margin-left: -1cm }
+DIV.fragment {  width: 100%; border: none; background-color: #eeeeee }
+DIV.ah {  background-color: black; margin-bottom: 3; margin-top: 3 }
+TD.md {  background-color: #f2f2ff }
+DIV.groupHeader {  margin-left: 16; margin-top: 12; margin-bottom: 6; font-weight: bold }
+DIV.groupText {  margin-left: 16; font-style: italic; font-size: smaller }
+FONT.keyword       { color: #008000 }
+FONT.keywordtype   { color: #604020 }
+FONT.keywordflow   { color: #e08000 }
+FONT.comment       { color: #800000 }
+FONT.preprocessor  { color: #806020 }
+FONT.stringliteral { color: #002080 }
+FONT.charliteral   { color: #008080 }
+
+PRE
+{
+	background-color: #f5f5f5;
+}
+
+
+#preprocessor { color: #8000FF }
+#comment { color: #008000 }
+#string { color: #808080 }
+#instruction { color: #0000FF }
+#function { color: #8000FF }
+#block { color: #FF8000 }
+#symbole { color: #FF00FF }
+#reference { color: #8000FF }
+#commande { color: #FF8000 }
+
+#chapter
+{ 
+	background: #D0D0D0;
+	color: #000000 ; 
+	font-weight: bold ; 
+	text-align: left; 
+	font-size: large ;
+}
+
+
+#keyword 
+{ 
+	background: #F0F0F0;
+	color: #8080F0 ; 
+	font-weight: bold ; 
+	text-align: center; 
+	font-size: bigger;
+}
+
+#keywordtype
+{ 
+	background: #E0E0E0;
+	color: #404040 ; 
+	text-align: center; 
+	font-size: large;
+}
+
+#usage
+{ 
+	color: #000000 ; 
+	font-weight: bold ; 
+	text-align: left; 
+}
+
+#dateentry
+{ 
+	background: #F0F0F0;
+	color: #8080F0 ; 
+	font-weight: bold ; 
+	text-align: center; 
+	font-size: bigger;
+}
+
+#opcodename
+{ 
+	background: #F0F0F0;
+	color: #8080F0 ; 
+	font-weight: bold ; 
+	text-align: center; 
+	font-size: bigger;
+}
+
+#opcodedescription
+{ 
+	font-weight: bold ; 
+}
+
+#opcodeaction
+{ 
+	color: #8080F0 ; 
+	font-weight: bold ; 
+}
+
+#opcodeflags
+{ 
+	color: #4040F0 ; 
+	font-weight: bold ; 
+}

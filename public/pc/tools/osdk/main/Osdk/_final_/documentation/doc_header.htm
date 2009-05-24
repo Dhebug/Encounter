@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Header</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Header</h1>
+
+<p id=chapter>Description</p>
+
+<p>Add a header to a raw binary file in order to make it loadable by an Oric 
+using the CLOAD command. 
+This operation is necessary because the result of the compilation process is
+a raw binary file without any loading information.
+</p>
+
+<p id=chapter>Utilisation</p>
+
+<p>To add or remove a header on a tape file:
+</p>
+<pre>
+	%OSDK%\bin\Header [switches] source_file destination_file load_adress
+</pre>
+
+<p>Please note that for the load adress, hexadecimal adresses should be 
+prefixed by a $ symbol.
+</p>
+
+<p id=chapter>Switches</p>
+
+<p>The -a switch control the autorun flag:
+</p>
+<pre>
+-a0 => program simply load and stop
+-a1 => program automaticaly executes after loading
+</pre>
+
+<p>The -h switch controls fact that the header is present or removed
+</p>
+<pre>
+-h0 => Remove the header
+-h1 => Output a file with a header
+</pre>
+
+<p>The -s switch controls the display of file size information. 
+This switch is particularly interesting for people coding size limited programs, like roms, minigames or 256 bytes demos.
+</p>
+<pre>
+-s0 => No size infor,ation is displayed
+-s1 => Display size informations in the output
+</pre>
+<p>To enable this feature in your own programs, just modify your OSDK_CONFIG.BAT file, and add the following:
+</p>
+
+<pre>
+	SET OSDKHEAD=-S1
+</pre>
+
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.001</p>
+ - Added s0/s1 mode to display file size information.
+ Very usefull when you want to know the size of your game in a minigame compo...
+ 
+<p id=dateentry>Non numbered version</p>
+ - First released version had no version number
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+
