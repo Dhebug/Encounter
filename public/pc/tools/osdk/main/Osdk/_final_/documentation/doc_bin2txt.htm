@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Bin2Txt</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Bin2Txt</h1>
+
+<p id=chapter>Description</p>
+
+<p>In order to deal with binary data, instead of loading them as file, you can transform
+them in source code format and included them as normal files. Bin2Txt is a tool that can
+transform any kind of binary file in the equivalent assembly or C source code.
+</p>
+
+<p id=chapter>Utilisation</p>
+
+<p>To transform a binary file as a texte file:
+</p>
+<pre>
+	%OSDK%\bin\Bin2Txt [switches] binary_file text_file label_name
+</pre>
+
+
+<p id=chapter>Switches</p>
+
+<p>The -s switch control the size of data:
+</p>
+<pre>
+-s1 => 8 bits
+-s2 => 16 bits
+-s4 => 32 bits
+</pre>
+
+<p>The -f switch controls the output format
+</p>
+<pre>
+-f1 => C output
+-f2 => S output (assembly code)	
+-f3 => BASIC output (lines of DATA)
+</pre>
+
+<p>The -l switch defines the line parameters when exporting to BASIC mode. It must be followed by one or two values separated by a : character.
+By default the numerating starts at line 10 and increase by 10 every line.
+</p>
+<pre>
+-l100  => Output will start at line 100, then increase by 10 (100, 110, 120, 130, ...)
+-l90:5 => Output will start at line 90, then increase by 5 (90, 95, 100, 105, ...)
+</pre>
+
+<p>The -e switch controls the endianness of the source data. This affects only the 16 and 32 bits mode.
+</p>
+<pre>
+-e1 => Little Endian format (default)
+-e2 => Big Endian format
+</pre>
+
+<p>The -h switch controls if the output should be done in decimal or hexadecimal.
+</p>
+<pre>
+-h1 => Hexadecimal format (default)
+-h2 => Decimal format
+</pre>
+
+<p>The -n switch controls the number of values to export per line
+</p>
+<pre>
+-n6 => 6 values per line
+-n16 => 16 values per line
+-n48 => 48 valies per line
+... etc
+</pre>
+
+
+<p id=chapter>History</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.004</p>
+ - Added -f3 (Export to BASIC) output format.<br>
+ - Added -h switch to select between hexadecimal and decimal format.<br>
+ - Added -e switch to control the endianess of source data.<br>
+ - Added -l switch to control line numbering (BASIC only)<br>
+
+<p id=dateentry>Version 0.003</p>
+ - Added -n switch to set the number of values per line.
+ 
+<p id=dateentry>Version 0.001-0.002</p>
+ - First released version
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

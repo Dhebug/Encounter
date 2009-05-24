@@ -1,0 +1,35 @@
+       Environment Screen
+Disk A:
+Disk B:
+Disk C:
+Disk D:
+Hardware Tape :
+YES
+NO
+Tape :
+Volume:
++- vol., <> pos., ENTER: rec., SPC: play
+SPACE: stop
+Show/Hide Drives
+Pos :
+Clock Speed :
+Sound :
+reserved
+reserved
+F2 & F3 to modify
+Printer :
+On
+Connect SYNC to TAPE-IN :
+Off
+Return    Sound     Printer   Double
+to Oric   On/Off    On/Off    Clock
+Initial   Hard      Soft     SoundDump
+Clock     Reset     Reset     On/Off
+DEL: eject, Left/Right: protect on/off
+ENTER: select, SPACE: insert blank disk
+Up/Down: move cursor
+ENTER: modify
+ENTER: select, SPACE: insert blank tape
+Left/Right: adjust
+Save      Quit      Debugger  Screen
+State               On/Off    Snapshot

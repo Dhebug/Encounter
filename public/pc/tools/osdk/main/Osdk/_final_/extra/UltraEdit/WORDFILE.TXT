@@ -1,0 +1,34 @@
+/L1"ASM for 6502" Nocase Line Comment = ; File Extensions = S
+/Delimiters = $%+();"' ,	#
+/C1"Instructions"
+adc and asl
+bcc bcs beq bit bmi bne bpl brk bvc bvs
+clc cld cli clv cmp cpx cpy
+dec dex dey
+eor
+inc inx iny
+jmp jsr
+lda ldx ldy lsr
+nop
+ora
+pha php pla plp
+rol ror rti rts
+sbc sec sed sei sta stx sty stz
+tax tay tsx txa txs tya
+/C2"Registers"
+X
+Y
+/C3"Controls"
+.byt .dsb .text .word .asc .scrl .scru .include .incbin .label .goto .if .end .enrty .opt 
+*=
+/C4"Delimiter/Operator"
+#
+$
+%
+(
+)
++
+,
+;
+<
+>

@@ -1,0 +1,73 @@
+# depslib dependency file v1.0
+1218377609 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\sources\dither_riemersma.cpp
+	<malloc.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"freeimage.h"
+	"getpixel.h"
+
+1218382430 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\freeimage.h
+	<wchar.h>
+	<inttypes.h>
+
+1188769588 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\getpixel.h
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\sources\dithering.cpp
+	"dithering.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\dithering.h
+
+1218381938 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\sources\getpixel.cpp
+	"FreeImage.h"
+	"defines.h"
+	"getpixel.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\defines.h
+
+1218377832 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\sources\hires.cpp
+	<assert.h>
+	<io.h>
+	<conio.h>
+	"freeimage.h"
+	"defines.h"
+	"getpixel.h"
+	"hires.h"
+	"dithering.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\hires.h
+	<map>
+
+1218381730 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\sources\pictconv.cpp
+	<assert.h>
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<fcntl.h>
+	<io.h>
+	<string.h>
+	<stdlib.h>
+	<conio.h>
+	<sys/types.h>
+	<sys/stat.h>
+	"infos.h"
+	"common.h"
+	"FreeImage.h"
+	"defines.h"
+	"getpixel.h"
+	"hires.h"
+	"dithering.h"
+
+1188670860 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\includes\infos.h
+
+1218378453 e:\sources\pc\tools\oric\osdk-dev\main\common\includes\common.h
+	<string>
+	<vector>
+
+1188670860 source:e:\sources\pc\tools\oric\osdk-dev\main\pictconv\data\icones.rc
+
+1218381781 e:\sources\pc\tools\oric\osdk-dev\main\pictconv\libs\freeimage.h
+	<wchar.h>
+	<inttypes.h>
+

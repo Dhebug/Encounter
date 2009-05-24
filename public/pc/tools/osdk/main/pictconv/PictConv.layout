@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Win32 Debug" />
+	<File name="includes\getpixel.h" open="1" top="0" tabpos="6">
+		<Cursor position="104" topLine="0" />
+	</File>
+	<File name="libs\FreeImage.h" open="1" top="0" tabpos="7">
+		<Cursor position="34459" topLine="826" />
+	</File>
+	<File name="sources\dither_riemersma.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="596" topLine="0" />
+	</File>
+	<File name="sources\dithering.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="193" topLine="0" />
+	</File>
+	<File name="sources\getpixel.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="775" topLine="0" />
+	</File>
+	<File name="sources\hires.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="5593" topLine="365" />
+	</File>
+	<File name="sources\pictconv.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="883" topLine="6" />
+	</File>
+</CodeBlocks_layout_file>

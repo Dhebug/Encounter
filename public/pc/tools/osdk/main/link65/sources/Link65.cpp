@@ -1,0 +1,968 @@
+/* 
+
+The 6502 Linker, for the lcc or similar, that produce .s files 
+to be processed later by a cross assembler 
+
+List of modifications:
+
+  Originaly created by Vagelis Blathras
+  
+	2003-05-27 [Mike] Handling of lines that have more than 180 characters
+
+	2003-09-13 [Mike] 	Version 0.57
+						Added '-B' option to suppress inclusion of HEADER and TAIL
+					
+	2004-01-18 [Mike]	Version 0.58
+						Added filtering of all '#' directives
+						Added an icon to the executable file to make it more 'OSDK' integrated :)
+						Added '-F' option to enable #file directive (requires modified XA assembler)
+						Modified the handling of comments to avoid crashes on C and C++ comments
+
+	2006-06-02 [Mike]	Version 0.59
+						Corrected a bug that made it impossible to "link" only one source file
+							
+*/
+
+
+
+#include "infos.h"
+
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <memory.h>
+#include <ctype.h>
+#include <direct.h>
+
+#include "common.h"
+
+// Disable the warning C4706 -> assignment within conditional expression
+// Allow us to use Warning level 4 instead of level 3
+#pragma warning( disable : 4706)
+#pragma warning( disable : 4786)	// Debug symbols thing
+
+#include <vector>
+#include <string>
+#include <set>
+
+#define NB_ARG	2
+
+
+#define MAX_LINE_SIZE	4096	// XA is limited to 2048
+
+
+
+// Structure for labels in a pair of : label_name/resolved_flag
+struct ReferencedLabelEntry_c 
+{
+	bool		m_bIsResolved;
+	std::string label_name;
+};
+
+// Lib index structure in pair of : label_name/file_containing_label 
+struct LabelEntry_c 
+{
+	std::string label_name;
+	std::string file_name;
+};
+
+class FileEntry_c
+{		 
+public:
+	FileEntry_c() : 
+		m_nSortPriority(0) 
+		{}
+
+public:
+	std::string	m_cFileName;
+	int			m_nSortPriority;
+};
+
+
+bool gFlagIncludeHeader=true;			// Use -B option to force to 0
+bool gFlagEnableFileDirective=false;	// Use -F option to enable (force to one)
+bool gFlagInCommentBloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
+bool gFlagVerbose=false;				// Use -V option to enable
+bool gFlagQuiet=false;					// Use -Q option to enable (note: seems to work the other way arround !)
+bool gFlagLibrarian=false;				// Use -L option to enable
+
+char *label;
+
+
+
+
+// gInputFileList contains filenames to be linked. 
+// nflist is 1 for file given in command line or 0 for files given from lib file index, 2 for tail. It's used for sort...
+std::vector<FileEntry_c>			gInputFileList;
+std::vector<LabelEntry_c>			gLibraryReferencesList;
+std::vector<ReferencedLabelEntry_c>	gReferencedLabelsList;
+std::set<std::string>				gDefinedLabelsList;
+
+
+//
+// Some pre-declarations...
+//
+bool ParseFile(const char* filename);
+
+
+
+
+std::string FilterLine(std::string cSourceLine)
+{
+	char inpline[MAX_LINE_SIZE+1];
+	assert(sizeof(inpline)>cSourceLine.size());
+	strcpy(inpline,cSourceLine.c_str());
+
+	//
+	// Checking for a end of C bloc comment 
+	//
+	if (gFlagInCommentBloc)
+	{
+		char *ptr_line=strstr(inpline,"*/");
+		if (ptr_line)
+		{
+			//
+			// Finalize the comment
+			//
+			*ptr_line=0;
+			strcpy(inpline+2,ptr_line);
+			gFlagInCommentBloc=false;
+		}
+		else
+		{
+			//
+			// We are still in the bloc
+			//
+			inpline[0]=0;
+		}
+	}
+	
+	//
+	// Filtering of C++ like comments
+	//
+	{
+		char *ptr_line=strstr(inpline,"//");
+		if (ptr_line)
+		{
+			*ptr_line=0;
+		}
+	}
+	
+	//
+	// Filtering of assembly comments
+	//
+	{
+		char *ptr_line=strchr(inpline,';');
+		if (ptr_line)
+		{
+			*ptr_line=0;
+		}
+	}
+	
+	//
+	// Checking for a begining of C bloc comment 
+	//
+	if (!gFlagInCommentBloc)
+	{
+		char *ptr_line=strstr(inpline,"/*");
+		if (ptr_line)
+		{
+			*ptr_line=0;
+			gFlagInCommentBloc=true;
+		}
+	}
+
+	return std::string(inpline);
+}
+
+
+
+/*
+C:\OSDK\BIN\link65.exe -d C:\OSDK\lib/ -o C:\OSDK\TMP\linked.s -s C:\OSDK\TMP\ -q main         
+*/
+
+// 
+// Parse a line. Mask out comment lines and null lines.
+// Clear ending comments.
+// Return defined labels in label var, with return value of 1
+// Return labels used by JSR, JMP, LDA, STA in label var, with ret value of 2
+//
+int parseline(const std::string cInputLine)
+{
+	char *tmp;
+
+	char inpline[MAX_LINE_SIZE+1];
+	assert(sizeof(inpline)>cInputLine.size());
+	strcpy(inpline,cInputLine.c_str());
+	
+	int len=strlen(inpline);
+	
+	//
+	// Return if comment line or too small line
+	//
+	if (inpline[0] ==';')	return 0;
+	if (len < 2)				return 0;
+	
+	//
+	// Is a label defined..? (first char in line is what we want)
+	//
+	if ((inpline[0] !=' ') && (inpline[0] != 9))
+	{
+		label=strtok(inpline," *+-;\\\n/\t,");
+		if (!label)
+		{
+			//
+			// No token was found
+			//
+			return 0;
+		}
+		
+		if (label[0]=='#')
+		{
+			//
+			// It's a preprocessor directive
+			//
+			if (!stricmp(label,"#define"))	// MIKE: Do not need problems with #define (for XA equates)
+			{
+				//
+				// #define is always followed by something that can be considered as a label.
+				// For the linker that means that we have to add this 'label' in the list of 
+				// things to consider as internal linkage. (no need to lookup in the librarie)
+				//
+				// Read define name
+				label=strtok(NULL," *+-;\\\n/\t,()");
+				return 1;
+			}
+			else if (!stricmp(label,"#include"))
+			{
+				//
+				// Problem with #include is that they may contain labels,
+				// but we do not want to insert the content of the file,
+				// so basically we should just recurse on the name without
+				// including the content.
+				// A kind of "label eater", really.
+				//
+				// Read define name
+				const char* pcFilename=strtok(NULL," \"*+-;\\\n/\t,()");
+
+				if (!stricmp(pcFilename,"GenericEditorRoutines.s"))
+				{
+					printf("toto");
+				}
+				ParseFile(pcFilename);
+				return 0;
+			}
+			//
+			// Other '#' directives are not considered as labels.
+			//
+			return 0;
+		}
+		else
+		if ((label[0]=='.') && ((label[1]=='(') || (label[1]==')')) )
+		{
+			// Opening or closing a local scope, not considered as label
+			return 0;
+		}
+		else
+		{
+			//
+			// Something else (probably a label)
+			//
+			return 1;
+		}
+    }
+	
+	//
+	// Check for JMP or JSR and for the following label
+	//
+	int status = 0;
+	tmp=strtok(inpline," *+-;\\\n/\t,()");
+	while (tmp != NULL) 
+	{
+		if (status == 1)
+			break;
+
+		if (!stricmp(tmp,"JSR"))		status = 1;
+		else
+		if (!stricmp(tmp,"JMP"))		status = 1;
+		else
+		if (!stricmp(tmp,"LDA"))		status = 1;
+		else
+		if (!stricmp(tmp,"STA"))		status = 1;
+		else
+		if (!stricmp(tmp,"LDX"))		status = 1;
+		else
+		if (!stricmp(tmp,"STX"))		status = 1;
+		else
+		if (!stricmp(tmp,"LDY"))		status = 1;
+		else
+		if (!stricmp(tmp,"STY"))		status = 1;
+		
+		//
+		// Get next token in same line. This is the way strtok works
+		//
+		tmp=strtok(NULL," *+-;\\\n/\t,()");
+	}
+	if (tmp)
+	{
+		if ((status == 1)  && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0])) 
+		{
+			label = tmp;
+			return(2);
+		}
+		if ((status == 1) && (tmp[0] == '#') )
+		{
+			if (tmp[1] == 'H' || tmp[1] == 'L') 
+			{
+				//
+				// HIGH / LOW syntax
+				//
+				tmp=strtok(NULL," *+-;\\\n/\t,()<>");
+				if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0])) 
+				{
+					label=tmp;
+					return 2;
+				}
+			}
+			else
+			if (tmp[1]=='<' || tmp[1]=='>') 
+			{
+				// < / > syntax
+				if (tmp[2])	
+				{
+					tmp+=2;
+				}
+				else		
+				{
+					tmp=strtok(NULL," *+-;\\\n/\t,()<>");
+				}
+				
+				if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0])) 
+				{
+					label=tmp;
+					return 2;
+				}
+			}
+		}
+	}	
+	return 0;
+}
+
+
+
+void outall()
+{
+	flushall();
+	fcloseall();
+}
+
+//
+// Simple function that prints error message/calls outall. 
+// Simplifies the look of the main program
+//
+void linkerror(char *msg)
+{
+	printf(msg);
+	outall();
+}
+
+
+
+
+bool ParseFile(const char* filename)
+{
+	std::vector<std::string> cTextData;
+	if (!LoadText(filename,cTextData))
+	{
+		printf("\nCannot open %s \n",filename);
+		outall();
+		exit(1);
+	}
+
+	if (gFlagVerbose)
+		printf("\nScanning file %s " ,filename);
+				   
+	unsigned int i;
+
+	// Scanning the file
+	std::vector<std::string>::const_iterator cItText=cTextData.begin();
+	while (cItText!=cTextData.end())
+	{			
+		//  Get line file and parse it
+		const std::string& cCurrentLine=*cItText;
+
+		std::string cFilteredLine=FilterLine(cCurrentLine);
+		int state=parseline(cFilteredLine);
+
+		std::string cFoundLabel;
+		if (state && label)
+		{
+			cFoundLabel=label;
+		}
+
+		//  Oh, a label defined. Stuff it in storage 
+		if (state==1) 
+		{
+			std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cFoundLabel);
+			if (cIt!=gDefinedLabelsList.end())
+			{
+				// Found the label in the list.
+				// It's a duplicate definition... does not mean it's an error, because XA handles allows local labels !
+				//printf("\nError ! Duplicate label : %s\n",label);
+				//outall();
+				//exit(1);
+				//break;
+			}
+			else
+			{
+				// Insert new label in the set
+				gDefinedLabelsList.insert(cFoundLabel);
+			}
+		}			
+		else 
+		if (state == 2) 
+		{
+			// A label reference.
+			// Store it if not already in list.
+			bool bUndefinedLabel=true;
+			for (i=0;i<gReferencedLabelsList.size();i++) 
+			{
+				if (gReferencedLabelsList[i].label_name==label)
+				{
+					bUndefinedLabel=false;
+					break;
+                }
+			}
+
+			if (bUndefinedLabel) 
+			{
+				// Allocate memory for label name and store it 
+				ReferencedLabelEntry_c cLabelEntry;
+				cLabelEntry.label_name		=label;
+				cLabelEntry.m_bIsResolved	=false;
+
+				gReferencedLabelsList.push_back(cLabelEntry);
+			}
+		}
+		++cItText;
+	}
+
+	return true;
+}
+
+
+
+
+bool LoadLibrary(const std::string& path_library_files)
+{
+	std::string ndxstr=path_library_files+"library.ndx";
+
+	std::vector<std::string> cTextData;
+	if (!LoadText(ndxstr.c_str(),cTextData))
+	{
+		printf("Cannot open Index file : %s \n",ndxstr.c_str());
+		exit(1);
+	}
+	
+	if (gFlagVerbose)
+		printf("Reading lib index file\n");
+
+	LabelEntry_c cLabelEntry;
+	cLabelEntry.file_name	="";
+	cLabelEntry.label_name	="";
+
+	std::vector<std::string>::const_iterator cItText=cTextData.begin();
+	while (cItText!=cTextData.end())
+	{			
+		//  Get line file and parse it
+		const std::string& cCurrentLine=*cItText;
+
+		// Lines that indicate files start with - 
+		if (cCurrentLine[0] < 32)
+			break;
+
+		// Found a file indicator. Check if already used, if not start using it in table
+		if (cCurrentLine[0] == '-') 
+		{
+			cLabelEntry.file_name=path_library_files+(cCurrentLine.c_str()+1);
+			// check for duplicate
+			for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
+			{
+				if (cLabelEntry.file_name==gLibraryReferencesList[i].file_name)
+				{
+					printf("Duplicate file %s in lib index\n",cLabelEntry.file_name.c_str());
+					outall();
+					exit(1);
+                }
+			}
+		}
+		else 
+		{
+			// Found a label. Check if already used, if not put it in table
+			if (cLabelEntry.file_name.size()<2) 
+			{
+				linkerror("Error with file line indicator\n");
+				exit(1);
+			}
+
+			cLabelEntry.label_name=cCurrentLine;
+
+			// Check if label is duplicate
+			for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
+			{
+				if (cLabelEntry.label_name==gLibraryReferencesList[i].label_name)
+				{
+					printf("Duplicate label %s in lib index file\n",cLabelEntry.label_name.c_str());
+					outall();
+					exit(1);
+                }
+			}
+
+			// One more entry in the table
+			gLibraryReferencesList.push_back(cLabelEntry);
+		}          
+		++cItText;
+	}
+
+	return true;
+}
+
+
+/*
+unsigned char SquareTable[6100];
+
+// 0 0
+// 1 1*1 = 1
+// 2 2*2 = 4
+// 3 3*3 = 9
+
+// The nth square number can be calculated from the previous two by adding the (n - 1)th square to itself, 
+// subtracting the (n - 2)th square number, and adding 2 (n2 = 2(n - 1)2 - (n - 2)2 + 2). 
+// For example, 2×52 - 42 + 2 = 2×25 - 16 + 2 = 50 - 16 + 2 = 36 = 62.
+
+void GenerateSquareTables()
+{
+	int sq0=0;
+	int sq1=1;
+	int squared_index=2;
+	int n=2;
+
+	SquareTable[0]=0;
+	SquareTable[1]=1;
+
+	while (1)
+	{		
+		int sq2=2*sq1-sq0+2;	// n2 = 2(n-1)2 - (n-2)2 + 2
+		if (sq2>=6100)
+		{
+			break;
+		}
+
+		while (squared_index<=sq2)
+		{
+			SquareTable[squared_index++]=n;
+		}
+		n++;
+		sq0=sq1;
+		sq1=sq2;
+	}
+}
+*/
+
+unsigned char 	SquareRootTable[6100];
+unsigned int 	SquareTable[60];
+
+void GenerateSquareTables()
+{
+	unsigned int nOddValue=1;
+	unsigned int squared_index=1;
+	unsigned int squared_value=0;
+	unsigned int n=1;
+
+	SquareRootTable[0]=0;
+	SquareTable[0]=0;
+	
+	while (squared_value<6100)
+	{		
+		squared_value+=nOddValue;
+		while (squared_index<=squared_value)
+		{
+			SquareRootTable[squared_index++]=n;
+		}
+		
+		if (n<60)
+		{
+			SquareTable[n]=squared_value;
+		}
+		
+		nOddValue+=2;
+		n++;
+	}	 
+
+	printf("toto\n");
+}
+
+
+
+int main(int argc,char **argv)
+{
+	GenerateSquareTables();
+
+	//
+	// Some initialization for the common library
+	//
+	SetApplicationParameters(
+		"Link65",
+		TOOL_VERSION_MAJOR,
+		TOOL_VERSION_MINOR,
+		"{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+		"\r\n"
+		"Author:\r\n"
+		"  Vagelis Blathras\r\n"
+		"Maintainer:\r\n"
+		"  Mickael Pointier (aka Dbug)\r\n"
+		"  dbug@defence-force.org\r\n"
+		"  http://www.defence-force.org\r\n"
+		"\r\n"
+		"Purpose:\r\n"
+		"  Gluing together a set of 6502 assembly source codes, and solve the external\r\n"
+		"  references by looking up missing ones in the library files.\r\n"
+		"\r\n"
+		"Usage : {ApplicationName} [options] file1 file2 ...\n"
+		"Options:\r\n"
+		"  -d : Directory to find library files.Next arg in line is the dir name.\r\n"
+		"       e.g : link65 -d /usr/oric/lib/ test.s\r\n"
+		"  -s : Directory to find source files.Next arg in line is the dir name.\r\n"
+		"  -o : Output file. Default is go.s . Next arg in line is the file name.\r\n"
+		"       e.g : link65 -o out.s test.s\r\n"
+		"  -l : Print out defined labels.Usefull when building lib index files.\r\n"
+		"  -v : Verbose output.\r\n"
+		"  -q : Quiet mode.\r\n"
+		"  -b : Bare linking (don't include header and tail).\r\n"
+		"  -f : Insert #file directives (require expanded XA assembler).\r\n"
+		);
+
+		
+	// Init the path_library_files variable with default library directory and the output_file_name var with the default go.s	
+	std::string path_library_files("lib6502/");
+	std::string path_source_files("");
+	std::string output_file_name("go.s");
+	
+	ArgumentParser cArgumentParser(argc,argv);
+
+	while (cArgumentParser.ProcessNextArgument())
+	{
+		if (cArgumentParser.IsSwitch("-q") || cArgumentParser.IsSwitch("-Q"))
+		{
+			// Quiet mode.
+            gFlagQuiet=true;
+		}
+		else
+		if (cArgumentParser.IsSwitch("-l") || cArgumentParser.IsSwitch("-L"))
+		{
+			// Print out defined labels (Useful when building lib index files)
+            gFlagLibrarian=true;
+		}
+		else
+		if (cArgumentParser.IsSwitch("-v") || cArgumentParser.IsSwitch("-V"))
+		{
+			// Verbose output.
+            gFlagVerbose=true;
+		}
+		else
+		if (cArgumentParser.IsSwitch("-d") || cArgumentParser.IsSwitch("-D"))
+		{
+			// Directory to find library files.Next arg in line is the dir name. e.g : link65 -d /usr/oric/lib/ test.s
+			if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+			{
+				printf(" Must have dir name after -d option\n");
+				exit(1);
+			}
+            path_library_files=cArgumentParser.GetStringValue();
+		}
+		else
+		if (cArgumentParser.IsSwitch("-s") || cArgumentParser.IsSwitch("-S"))
+		{
+			// Directory to find source files.Next arg in line is the dir name
+			if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+			{
+				printf(" Must have dir name after -s option\n");
+				exit(1);
+			}
+            path_source_files=cArgumentParser.GetStringValue();
+		}
+		else
+		if (cArgumentParser.IsSwitch("-o") || cArgumentParser.IsSwitch("-O"))
+		{
+			// Output file. Default is go.s . Next arg in line is the file name. e.g : link65 -o out.s test.s
+			if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+			{
+				printf(" Must have file name after -o option\n");
+				exit(1);
+			}
+            output_file_name=cArgumentParser.GetStringValue();
+		}
+		else
+		if (cArgumentParser.IsSwitch("-b") || cArgumentParser.IsSwitch("-B"))
+		{
+			// Bare linking, does not add "header" and "tail" to the list
+			gFlagIncludeHeader=false;
+		}
+		else
+		if (cArgumentParser.IsSwitch("-f") || cArgumentParser.IsSwitch("-F"))
+		{
+			// Enable the #file directive (require expanded XA assembler)
+			gFlagEnableFileDirective=true;
+		}				
+		else
+		if (cArgumentParser.IsParameter())
+		{
+			// Not a switch
+			FileEntry_c cFileEntry;
+		
+			if (gFlagIncludeHeader && gInputFileList.empty())
+			{
+				// header.s is the first file used. 
+				// So reserve the 0 place in array for after option scanning, to put there the dir name too if needed.
+				cFileEntry.m_cFileName	  =path_library_files;
+				cFileEntry.m_cFileName   +="header.s";
+				cFileEntry.m_nSortPriority=0;
+				gInputFileList.push_back(cFileEntry);
+			}
+			
+			//
+			// Then we add the new file
+			//
+			cFileEntry.m_cFileName	  =path_source_files;
+			cFileEntry.m_cFileName   +=cArgumentParser.GetStringValue();
+			cFileEntry.m_nSortPriority=1;
+			gInputFileList.push_back(cFileEntry);
+		}
+		else
+		{
+			// Unknown argument
+            printf("Invalid option %s \n",cArgumentParser.GetRemainingStuff());
+            exit(1);
+		}
+	}
+
+    if (cArgumentParser.GetParameterCount())
+    {
+		ShowError(0);
+    }
+
+	
+	if (!gFlagQuiet)
+	{
+		printf("\nLink65: 6502 Linker, by Vagelis Blathras. Version %d.%3d\n\n",TOOL_VERSION_MAJOR,TOOL_VERSION_MINOR);
+	}
+	
+	
+	if (gFlagIncludeHeader)
+	{	
+		// Now put the tail.s . 
+		// Give it nflist of 2 to put it last in file list after the sort
+		FileEntry_c cFileEntry;
+		cFileEntry.m_cFileName	  =path_library_files;
+		cFileEntry.m_cFileName   +="tail.s";
+		cFileEntry.m_nSortPriority=2;
+		gInputFileList.push_back(cFileEntry);
+	}	
+	
+	
+	// Open and scan Index file for labels - file pair list
+	LoadLibrary(path_library_files);
+
+	int state;
+	unsigned int i,j;
+	unsigned int k,l;
+	
+	// Scanning files loop 
+	for (k=0;k<gInputFileList.size();k++) 
+	{
+		// Skip header.s file if gFlagLibrarian option is on 
+		if (gFlagLibrarian && k == 0)
+        {
+			k=1;
+        }
+				
+		char filename[255];
+		strcpy(filename,gInputFileList[k].m_cFileName.c_str());
+		ParseFile(filename);
+
+		//		
+		// Check if used labels are defined inside the files 
+		//
+		std::vector<ReferencedLabelEntry_c>::iterator cItReferenced=gReferencedLabelsList.begin();
+		while  (cItReferenced!=gReferencedLabelsList.end()) 
+		{
+			ReferencedLabelEntry_c& cLabelEntry=*cItReferenced;
+			std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cLabelEntry.label_name);
+			if (cIt!=gDefinedLabelsList.end())
+			{
+				// Found the label in the definition list
+				cLabelEntry.m_bIsResolved=true;
+			}
+			++cItReferenced;
+		}
+		
+		if (!gFlagLibrarian)
+		{
+			// Check for not resolved labels. 
+			// If defined in lib file index then insert their file right after in the list
+			for (i=0;i<gReferencedLabelsList.size();i++) 
+			{
+				// Unresolved label and -l option off. If -l option is on don't care 
+				ReferencedLabelEntry_c& cReferencedLabelEntry=gReferencedLabelsList[i];
+				if (!cReferencedLabelEntry.m_bIsResolved)
+				{
+					// Act for unresolved label 
+					for (j=0;j<gLibraryReferencesList.size();j++) 
+					{
+						LabelEntry_c& cLabelEntry=gLibraryReferencesList[j];
+						// If in lib file index, take file and put it in gInputFileList if not already there 
+						if (cReferencedLabelEntry.label_name==cLabelEntry.label_name)
+						{
+							bool labstate=true;
+							for (l=0;l<gInputFileList.size();l++) 
+							{
+								FileEntry_c& cFileEntry=gInputFileList[l];
+								if (cFileEntry.m_cFileName==cLabelEntry.file_name) 
+								{
+									labstate=false;
+									break;
+								}
+							}
+
+							// Not present : labstate == 1 , insert file in list 
+							if (labstate) 
+							{	   
+								FileEntry_c	cNewEntry;
+								gInputFileList.push_back(cNewEntry);
+								
+								// NICE TRICK : Insert lib file in file list to be processed immediately. 
+								// With this labels used by the lib file will be resolved, without the need for multiple passes							
+								for (l=gInputFileList.size()-1;l>k+1;l--) 
+								{
+									gInputFileList[l]=gInputFileList[l-1];
+								}
+								FileEntry_c& cFileEntry=gInputFileList[k+1];
+								cFileEntry.m_cFileName		=cLabelEntry.file_name;
+								cFileEntry.m_nSortPriority	=1;
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+				}
+			}              		
+		}
+	}
+
+	if (gFlagVerbose)
+		printf("\nend scanning files \n\n");
+	
+	state=0;
+	
+	if (gFlagLibrarian)
+	{
+		// If -l option just print labels and then exit 
+		printf("\nDefined Labels : \n");
+
+		std::set<std::string>::iterator cIt=gDefinedLabelsList.begin();
+		while (cIt!=gDefinedLabelsList.end())
+		{
+			const std::string& cLabelName=*cIt;
+			printf("%s\n",cLabelName.c_str());
+			++cIt;
+		}
+		outall();
+		return(0);
+	}
+	else 
+	{
+		// Check for Unresolved external references. 
+		// Print them all before exiting  
+		for (i=0;i<gReferencedLabelsList.size();i++) 
+		{
+			ReferencedLabelEntry_c& cReferencedLabelEntry=gReferencedLabelsList[i];
+			if (!cReferencedLabelEntry.m_bIsResolved) 
+			{
+				printf("Unresolved external: %s\n",cReferencedLabelEntry.label_name.c_str());
+				state=1;
+			}
+		}
+	}
+	
+	if (state == 1) 
+	{
+		linkerror("Errors durink link.\n");
+		exit(1);
+	}
+	
+	
+	// Combine all files in list in a nice big juicy go.s or file selected 
+	FILE *gofile=fopen(output_file_name.c_str(),"wb");
+	if (!gofile)
+	{
+		linkerror("Cannot open output file for writing\n");
+		exit(1);
+	}
+	
+	//
+	// Add a simple header to the linked file
+	//
+	fprintf(gofile,
+		"//\r\n"
+		"// This file was generated by Link65 version %d.%03d \r\n"
+		"// Do not edit by hand\r\n"
+		"//\r\n"
+		,TOOL_VERSION_MAJOR,TOOL_VERSION_MINOR);
+	
+	
+	// Get lines from all files and put them in go.s 
+	for (k=0;k<gInputFileList.size();k++) 
+	{
+		if (gFlagVerbose)
+		{
+			printf("Linking %s\n",gInputFileList[k]);
+		}
+		
+		//
+		// Then insert the name of the included file
+		//
+		if (gFlagEnableFileDirective)
+		{
+			char current_directory[_MAX_PATH+1];
+			char filename[_MAX_PATH];
+			
+			getcwd(current_directory,_MAX_PATH);
+			_splitpath(gInputFileList[k].m_cFileName.c_str(),0,0,filename,0);
+			
+			fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
+		}
+		
+		std::vector<std::string> cTextData;
+		if (!LoadText(gInputFileList[k].m_cFileName.c_str(),cTextData))
+		{
+			printf("\nCannot open %s \n",gInputFileList[k].m_cFileName.c_str());
+			outall();
+			exit(1);
+		}
+
+		std::vector<std::string>::const_iterator cItText=cTextData.begin();
+		while (cItText!=cTextData.end())
+		{			
+			//  Get line file and parse it
+			const std::string& cCurrentLine=*cItText;
+			fprintf(gofile,"%s\r\n",cCurrentLine.c_str());
+			++cItText;
+		}
+	}
+	
+	outall();
+	return(0);
+}

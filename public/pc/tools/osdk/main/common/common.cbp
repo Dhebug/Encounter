@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="common" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Win32 Release">
+				<Option output="build\Release\libcommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="build\Release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-O2" />
+					<Add option="-O1" />
+					<Add option="-O" />
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_MBCS" />
+					<Add option="-D_LIB" />
+					<Add directory="includes" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Win32 Debug">
+				<Option output="build\Debug\libcommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="build\Debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_MBCS" />
+					<Add option="-D_LIB" />
+					<Add directory="includes" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Unit filename="includes\common.h" />
+		<Unit filename="sources\common.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

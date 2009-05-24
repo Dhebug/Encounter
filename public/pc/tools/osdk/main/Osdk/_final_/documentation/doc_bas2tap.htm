@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Bas2Tap</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Bas2Tap</h1>
+
+<p id=chapter>Description</p>
+
+<p>This program can be used to convert an Oric BASIC program to and from TAPE binary format.
+Technicaly this means that instead of using the Oric BASIC line based text editor, you can
+edit an ORIC BASIC program entirely in a comfortable text editor, and then convert it automaticaly
+to a tape file format that can later be loaded on the emulator -or played on a real Oric-.
+</p>
+
+<p id=chapter>Utilisation</p>
+
+<p>To transform a binary file as a texte file:
+</p>
+<pre>
+	%OSDK%\bin\Bas2Tap [switches] source_file destination_file
+</pre>
+
+
+<p id=chapter>Switches</p>
+
+<ul>
+	<li>
+		<p>With the -t2b switch Bas2Tap converts a binary encoded tape to text format:
+		</p>
+		<pre>
+		-t2b tapefile textfile 
+		</pre>
+	</li>
+
+	<li>
+		<p>The -b2t[0|1] switch convert a text file to binary encoded tape format
+		</p>
+		<pre>
+		-b2t0 textfile tapefile => Generate a TAPE file that do not auto run after the loading is finished (you have to manualy use the RUN command)
+		-b2t1 textfile tapefile => Generate a TAPE file that auto run after the loading is finished
+		</pre>
+	</li>
+
+	<li>
+		<p>The -color[0|1] switch set if the REM and ' statements should be colorized or not
+		</p>
+	</li>
+</ul>
+
+
+<p id=chapter>History</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.001</p>
+ - Created Bas2Tap by joining and extending two of Fabrice Frances programs: Bas2Txt and Txt2Bas<br>
+ - Added error messages when missing line numbers are found<br>
+ - Added support for the #file preprocessor directive making it possible to link together more than one BASIC source code and get the right error messages<br>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

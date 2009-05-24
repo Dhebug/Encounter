@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PictConv" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Win32 Release">
+				<Option output="..\Osdk\_final_\Bin\PictConv" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Build\Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_MBCS" />
+					<Add option="-DFREEIMAGE_LIB" />
+					<Add directory="includes" />
+					<Add directory="..\common\includes" />
+					<Add directory="libs" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="odbc32" />
+					<Add library="odbccp32" />
+					<Add library="..\common\build\Release\libcommon.a" />
+					<Add library="libs\FreeImaged.a" />
+				</Linker>
+			</Target>
+			<Target title="Win32 Debug">
+				<Option output="Build\Debug\PictConv_debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Build\Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-fexceptions" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_MBCS" />
+					<Add option="-DFREEIMAGE_LIB" />
+					<Add directory="includes" />
+					<Add directory="..\common\includes" />
+					<Add directory="libs" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="odbc32" />
+					<Add library="odbccp32" />
+					<Add library="..\common\build\Debug\libcommon.a" />
+					<Add library="libs\FreeImaged.a" />
+					<Add directory="libs" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="data\icones.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="data\normal.ico" />
+		<Unit filename="includes\defines.h" />
+		<Unit filename="includes\dithering.h" />
+		<Unit filename="includes\getpixel.h" />
+		<Unit filename="includes\hires.h" />
+		<Unit filename="includes\infos.h" />
+		<Unit filename="includes\resource.h" />
+		<Unit filename="libs\FreeImage.h" />
+		<Unit filename="misc\KnownBugs.txt" />
+		<Unit filename="misc\Whatsnew.txt" />
+		<Unit filename="misc\a.txt" />
+		<Unit filename="misc\couleurs_sur_oric.txt" />
+		<Unit filename="misc\documentation.txt" />
+		<Unit filename="misc\license-fi.txt" />
+		<Unit filename="misc\license-gpl.txt" />
+		<Unit filename="sources\dither_riemersma.cpp" />
+		<Unit filename="sources\dithering.cpp" />
+		<Unit filename="sources\getpixel.cpp" />
+		<Unit filename="sources\hires.cpp" />
+		<Unit filename="sources\pictconv.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1188670868 source:e:\sources\pc\tools\oric\osdk-dev\main\bin2txt\data\icones.rc
+
+1218378446 source:e:\sources\pc\tools\oric\osdk-dev\main\bin2txt\sources\bin2txt.cpp
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<ctype.h>
+	<fcntl.h>
+	<io.h>
+	<string.h>
+	"infos.h"
+	"common.h"
+
+1188670868 e:\sources\pc\tools\oric\osdk-dev\main\bin2txt\includes\infos.h
+
+1218378453 e:\sources\pc\tools\oric\osdk-dev\main\common\includes\common.h
+	<string>
+	<vector>
+

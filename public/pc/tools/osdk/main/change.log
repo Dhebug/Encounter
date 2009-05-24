@@ -1,0 +1,8 @@
+ChangeLog for Osdk 0.1.0
+
+2004/08/15 - [Portability / Warnings] - Jylam
+	--xa
+	xa.c : Removed getch() call in error()
+	xa.c : Removed conio.h include
+	xa.c : Decommented unistd.h include for unlink()
+	Fixed a bunch of silly warnings

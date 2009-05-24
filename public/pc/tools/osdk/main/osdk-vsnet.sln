@@ -1,0 +1,152 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FilePack", "filepack\FilePack.vcproj", "{836A55ED-32D1-47AB-B9D4-12D207205BE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MemMap", "MemMap\MemMap.vcproj", "{4DB442ED-88D5-460C-B3D1-9E07F1F6F4D2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PictConv", "pictconv\PictConv.vcproj", "{D5286405-B7D1-427E-8933-832A9D27DF8D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bas2tap", "bas2tap\bas2tap.vcproj", "{645966BA-5A15-4C5C-AA33-BA47477AECA4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bin2txt", "bin2txt\bin2txt.vcproj", "{8076BBA6-E757-4DC3-99DF-768EE684A1DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcproj", "{3F43C467-3CCF-4703-AB22-DD71F4361EFA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "compiler", "compiler\compiler.vcproj", "{EE1BA7EF-0164-4B52-BD05-305904483410}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "header", "header\header.vcproj", "{00CA4C9B-CE7F-460D-A951-66FA7181FFD1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "link65", "link65\link65.vcproj", "{DE7282F2-2482-4388-BD64-BD9373E99DD9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "macrosplitter", "macrosplitter\macrosplitter.vcproj", "{8EF90FCA-623B-4A23-AC11-F319B61E5748}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "opt65", "opt65\opt65.vcproj", "{E665379B-2090-4CD7-93F9-F3D4B27F1FD3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osdk", "Osdk\osdk.vcproj", "{F14954FC-F923-4CF9-89C9-4119ACCB3BA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8076BBA6-E757-4DC3-99DF-768EE684A1DE} = {8076BBA6-E757-4DC3-99DF-768EE684A1DE}
+		{EE1BA7EF-0164-4B52-BD05-305904483410} = {EE1BA7EF-0164-4B52-BD05-305904483410}
+		{836A55ED-32D1-47AB-B9D4-12D207205BE6} = {836A55ED-32D1-47AB-B9D4-12D207205BE6}
+		{00CA4C9B-CE7F-460D-A951-66FA7181FFD1} = {00CA4C9B-CE7F-460D-A951-66FA7181FFD1}
+		{DE7282F2-2482-4388-BD64-BD9373E99DD9} = {DE7282F2-2482-4388-BD64-BD9373E99DD9}
+		{4DB442ED-88D5-460C-B3D1-9E07F1F6F4D2} = {4DB442ED-88D5-460C-B3D1-9E07F1F6F4D2}
+		{E665379B-2090-4CD7-93F9-F3D4B27F1FD3} = {E665379B-2090-4CD7-93F9-F3D4B27F1FD3}
+		{D5286405-B7D1-427E-8933-832A9D27DF8D} = {D5286405-B7D1-427E-8933-832A9D27DF8D}
+		{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5} = {ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}
+		{645966BA-5A15-4C5C-AA33-BA47477AECA4} = {645966BA-5A15-4C5C-AA33-BA47477AECA4}
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA} = {3F43C467-3CCF-4703-AB22-DD71F4361EFA}
+		{8EF90FCA-623B-4A23-AC11-F319B61E5748} = {8EF90FCA-623B-4A23-AC11-F319B61E5748}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xa", "xa\xa.vcproj", "{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 14
+		SccProjectName0 = Perforce\u0020Project
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Perforce\u0020SCM
+		SccProjectUniqueName1 = filepack\\FilePack.vcproj
+		SccProjectName1 = \u0022$/sources/pc/tools/oric/FilePack\u0022,\u0020XKAAAAAA
+		SccLocalPath1 = filepack
+		SccProjectUniqueName2 = MemMap\\MemMap.vcproj
+		SccProjectName2 = \u0022$/sources/pc/tools/oric/MemMap\u0022,\u0020XWAAAAAA
+		SccLocalPath2 = MemMap
+		SccProjectUniqueName3 = pictconv\\PictConv.vcproj
+		SccProjectName3 = \u0022$/sources/pc/tools/oric/PictConv\u0022,\u0020TIAAAAAA
+		SccLocalPath3 = pictconv
+		SccProjectUniqueName4 = bas2tap\\bas2tap.vcproj
+		SccProjectName4 = bas2tap
+		SccLocalPath4 = bas2tap
+		SccProjectUniqueName5 = bin2txt\\bin2txt.vcproj
+		SccProjectName5 = \u0022$/VisualC/ConsoleMode/Utilities/Bin2Txt\u0022,\u0020CBAAAAAA
+		SccLocalPath5 = bin2txt
+		SccProjectUniqueName6 = common\\common.vcproj
+		SccLocalPath6 = common
+		SccProjectUniqueName7 = compiler\\compiler.vcproj
+		SccProjectName7 = compiler
+		SccLocalPath7 = compiler
+		SccProjectUniqueName8 = header\\header.vcproj
+		SccProjectName8 = header
+		SccLocalPath8 = header
+		SccProjectUniqueName9 = link65\\link65.vcproj
+		SccProjectName9 = link65
+		SccLocalPath9 = link65
+		SccProjectUniqueName10 = macrosplitter\\macrosplitter.vcproj
+		SccProjectName10 = macrosplitter
+		SccLocalPath10 = macrosplitter
+		SccProjectUniqueName11 = opt65\\opt65.vcproj
+		SccProjectName11 = opt65
+		SccLocalPath11 = opt65
+		SccProjectUniqueName12 = Osdk\\osdk.vcproj
+		SccProjectName12 = osdk
+		SccLocalPath12 = Osdk
+		SccProjectUniqueName13 = xa\\xa.vcproj
+		SccProjectName13 = xa
+		SccLocalPath13 = xa
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{836A55ED-32D1-47AB-B9D4-12D207205BE6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{836A55ED-32D1-47AB-B9D4-12D207205BE6}.Release|Win32.ActiveCfg = Release|Win32
+		{4DB442ED-88D5-460C-B3D1-9E07F1F6F4D2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4DB442ED-88D5-460C-B3D1-9E07F1F6F4D2}.Release|Win32.ActiveCfg = Release|Win32
+		{D5286405-B7D1-427E-8933-832A9D27DF8D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D5286405-B7D1-427E-8933-832A9D27DF8D}.Release|Win32.ActiveCfg = Release|Win32
+		{645966BA-5A15-4C5C-AA33-BA47477AECA4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{645966BA-5A15-4C5C-AA33-BA47477AECA4}.Release|Win32.ActiveCfg = Release|Win32
+		{8076BBA6-E757-4DC3-99DF-768EE684A1DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8076BBA6-E757-4DC3-99DF-768EE684A1DE}.Release|Win32.ActiveCfg = Release|Win32
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA}.Debug|Win32.Build.0 = Debug|Win32
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA}.Release|Win32.ActiveCfg = Release|Win32
+		{3F43C467-3CCF-4703-AB22-DD71F4361EFA}.Release|Win32.Build.0 = Release|Win32
+		{EE1BA7EF-0164-4B52-BD05-305904483410}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EE1BA7EF-0164-4B52-BD05-305904483410}.Release|Win32.ActiveCfg = Release|Win32
+		{00CA4C9B-CE7F-460D-A951-66FA7181FFD1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{00CA4C9B-CE7F-460D-A951-66FA7181FFD1}.Release|Win32.ActiveCfg = Release|Win32
+		{DE7282F2-2482-4388-BD64-BD9373E99DD9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE7282F2-2482-4388-BD64-BD9373E99DD9}.Release|Win32.ActiveCfg = Release|Win32
+		{8EF90FCA-623B-4A23-AC11-F319B61E5748}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8EF90FCA-623B-4A23-AC11-F319B61E5748}.Release|Win32.ActiveCfg = Release|Win32
+		{E665379B-2090-4CD7-93F9-F3D4B27F1FD3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E665379B-2090-4CD7-93F9-F3D4B27F1FD3}.Release|Win32.ActiveCfg = Release|Win32
+		{F14954FC-F923-4CF9-89C9-4119ACCB3BA8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F14954FC-F923-4CF9-89C9-4119ACCB3BA8}.Release|Win32.ActiveCfg = Release|Win32
+		{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}.Debug|Win32.Build.0 = Debug|Win32
+		{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}.Release|Win32.ActiveCfg = Release|Win32
+		{ABA50B6B-5B5D-4A4A-8E57-9EC9FE7C94B5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

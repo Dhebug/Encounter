@@ -1,0 +1,289 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "FilePack"=".\filepack\FilePack.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/sources/pc/tools/oric/FilePack", XKAAAAAA
+    .\filepack
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MemMap"=".\MemMap\MemMap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/sources/pc/tools/oric/MemMap", XWAAAAAA
+    .\memmap
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "PictConv"=".\pictconv\PictConv.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/sources/pc/tools/oric/PictConv", TIAAAAAA
+    .\pictconv
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "bas2tap"=".\bas2tap\bas2tap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    bas2tap
+    .\bas2tap
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "bin2txt"=".\bin2txt\bin2txt.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/VisualC/ConsoleMode/Utilities/Bin2Txt", CBAAAAAA
+    .\bin2txt
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "common"=".\common\common.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    Perforce Project
+    .\common
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "compiler"=".\compiler\compiler.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    compiler
+    .\compiler
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "header"=".\header\header.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    Perforce Project
+    .\header
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "link65"=".\link65\link65.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    link65
+    .\link65
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "macrosplitter"=".\macrosplitter\macrosplitter.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    macrosplitter
+    .\macrosplitter
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "opt65"=".\opt65\opt65.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    opt65
+    .\opt65
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "osdk"=".\Osdk\osdk.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    osdk
+    .\osdk
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name bin2txt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name compiler
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name FilePack
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name header
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name link65
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MemMap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name opt65
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name PictConv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xa
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name bas2tap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name macrosplitter
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xa"=".\xa\xa.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    xa
+    .\xa
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    Perforce Project
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

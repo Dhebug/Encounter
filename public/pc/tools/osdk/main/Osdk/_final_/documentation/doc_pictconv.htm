@@ -1,0 +1,360 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - PictConv</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>PictConv</h1>
+
+<p id=chapter>Description</p>
+
+<p>PictConv is a tool that can be used to convert pictures created with a standard
+PC paint program (PaintShopPro, PhotoShop, ...), in a format displayable on the Oric.
+</p>
+
+
+<p id=chapter>Utilisation</p>
+
+<p>To convert a picture:
+</p>
+<pre>
+	%OSDK%\bin\PictConv [switches] source_picture destination_file 
+</pre>
+<p>Supported formats for the source picture are BMP, PCX, PNG, TGA and TIFF.
+</p>
+
+
+<p id=chapter>Switches</p>
+
+<ul>
+<li>The -f switch control the type of picture conversion that will be performed:
+<p>
+<pre>
+-f0[z] => output a MONOCHROME picture
+-f1 => output a COLORED picture
+-f2 => output a RGB picture
+-f3 => output a picture using Twilight's embeded masks
+-f4 => output a RB picture
+-f5 => output a Shifter picture (Atari ST)
+</pre>
+For f0, 'z' is used to disable setting the bit 6
+</p>
+</li>
+
+<li>The -d switch controls the dithering operation:
+<p>
+<pre>
+-d0 => No dithering (0/1)
+-d1 => Alternate dithering  (0/0.5/1)
+-d2 => Ordered dithering (4x4 matrix, 8 levels)
+-d3 => Riemersma dithering (based on hilbert curves)
+</pre>
+</p>
+</li>
+
+<li>The -o switch defines the final file format:
+<p>
+<pre>
+-o0 => Tape format, including a BASIC loader
+-o1 => Tape format, simply the picture
+-o2 => RAW format. No header.
+-o3[label name] => C source code
+-o4[label name] => assembler source code
+-o5 => Output a PC picture format
+-o6 => 2 bytes (dx,dy) size followed by RAW picture
+-o7 => RAW palette mode
+-o8[line:step] => BASIC source code
+</pre>
+For o3 and o4, if "label name" is not defined, the default "LabelPicture" is used.<br>
+For o5, supported formats are BMP, PNG and TIFF
+For o7 you can specify to values that will be taken respectively as the first line number and the step between lines
+</p>
+</li>
+
+<li>The -t switch enable the testing mode:
+<pre>
+-t0 => Testing disabled
+-t1 => Testing enabled
+</pre>
+</li>
+
+<li>The -m switch defines the type of machine:
+<pre>
+-m0 => Oric
+-m1 => Atari ST
+</pre>
+</li>
+
+<li>The -n switch defines the number of entries per line when generating text format:
+<pre>
+-n16 => Output 16 values each line
+-n40 => Output 40 values each line
+</pre>
+</li>
+</ul>
+
+
+<p id=chapter>Some picture samples</p>
+
+<p>
+Here are some conversion samples, with the parameters used.
+</p>
+
+
+<center>
+
+<br>
+Buffy
+<br>
+<img SRC="pics/buffy.jpg" WIDTH=240 HEIGHT=200>
+<br>
+<table cellspacing="5">
+<tr>
+<th></th>
+<th>-f0</th>
+<th>-f2</th>
+</tr>
+<tr>
+<th>-d0</th>
+<td><img SRC="pics/buffy_0_0.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/buffy_2_0.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d1</th>
+<td><img SRC="pics/buffy_0_1.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/buffy_2_1.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d2</th>
+<td><img SRC="pics/buffy_0_2.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/buffy_2_2.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d3</th>
+<td><img SRC="pics/buffy_0_3.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/buffy_2_3.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+</table>
+<br>
+
+
+<br>
+Mire
+<br>
+<img SRC="pics/mire2.gif" WIDTH=240 HEIGHT=200>
+<br>
+<table cellspacing="5">
+<tr>
+<th></th>
+<th>-f0</th>
+<th>-f2</th>
+</tr>
+<tr>
+<th>-d0</th>
+<td><img SRC="pics/mire2_0_0.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/mire2_2_0.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d1</th>
+<td><img SRC="pics/mire2_0_1.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/mire2_2_1.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d2</th>
+<td><img SRC="pics/mire2_0_2.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/mire2_2_2.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d3</th>
+<td><img SRC="pics/mire2_0_3.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/mire2_2_3.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+</table>
+<br>
+
+
+<br>
+Moxica
+<br>
+<img SRC="pics/moxica1.jpg" WIDTH=240 HEIGHT=200>
+<br>
+<table cellspacing="5">
+<tr>
+<th></th>
+<th>-f0</th>
+<th>-f2</th>
+</tr>
+<tr>
+<th>-d0</th>
+<td><img SRC="pics/moxica1_0_0.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/moxica1_2_0.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d1</th>
+<td><img SRC="pics/moxica1_0_1.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/moxica1_2_1.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d2</th>
+<td><img SRC="pics/moxica1_0_2.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/moxica1_2_2.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d3</th>
+<td><img SRC="pics/moxica1_0_3.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/moxica1_2_3.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+</table>
+<br>
+
+
+<br>
+Lena
+<br>
+<img SRC="pics/lena.gif" WIDTH=240 HEIGHT=200>
+<br>
+<table cellspacing="5">
+<tr>
+<th></th>
+<th>-f0</th>
+<th>-f2</th>
+</tr>
+<tr>
+<th>-d0</th>
+<td><img SRC="pics/lena_0_0.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/lena_2_0.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d1</th>
+<td><img SRC="pics/lena_0_1.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/lena_2_1.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d2</th>
+<td><img SRC="pics/lena_0_2.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/lena_2_2.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+<tr>
+<th>-d3</th>
+<td><img SRC="pics/lena_0_3.gif" WIDTH=240 HEIGHT=200></td>
+<td><img SRC="pics/lena_2_3.gif" WIDTH=240 HEIGHT=200></td>
+</tr>
+</table>
+<br>
+
+
+</center>
+
+
+
+
+
+<p id=chapter>Frequently Asked Questions</p>
+
+<ul>
+	<li>
+		<p>
+		<b>In colored mode, free size pictures are not accepted. Why ???</b>
+		</p>
+		<p>
+		Try to imagine how you could scroll horizontaly a picture containing
+		attributes changes without having huge color changes. This is not possible.
+		Free vertical size is allowed anyway, but it's buggy right now :))
+		</p>
+	</li>
+
+
+	<li>
+		<p>
+		<b>In colored mode, the converted picture contains some lines that are black and white.</b>
+		</p>
+		<p>
+		These scanlines cannot be converted. A colored pictures should use Oric constraints, 
+		be in at most 8 colors, no more than 2 colors per 6 pixel bloc, and so on...
+		</p>
+	</li>
+
+	<li>
+		<p>
+		<b>In colored mode, PictConv decided to use strange paper and ink changes.</b>
+		</p>
+		<p>
+		Actually PictConv simply tries all the possible combinations of paper, ink, video inverse 
+		changes that could work to convert the picture. When it find one working combination, 
+		it moves to the next scanline.
+		</p>
+	</li>
+</ul>
+
+
+<p id=chapter>History</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.011</p>
+ - Added the -o7 format to generate BASIC source codes.<br>
+ - Removed the constraints in the -f1 mode, pictures just need to be multiple of 6 in width, and no more than 240 pixel wide.
+
+<p id=dateentry>Version 0.010</p>
+ - If there is something specified after -o3 or -o4 modes, it's used as a label name to use when generating source code data.<br>
+ - If there is a 'z' specified after -f0 mode (monochrome conversion), it means that bit 6 should not be set in converted bytes<br>
+ - Added -n switch to set the number of values per line (stolen from Bin2Txt !)<br>
+
+<p id=dateentry>Version 0.009</p>
+ - New option for generating 'masks' in bits 6 and 7 based on what is presents in bits 0/1/2 and 3/4/5.<br>
+   (Twilighte's request for his new games)<br>
+ - Added a way to convert pictures to something that can be used on an Atari ST.<br>
+   (needed that for my entry to the 20 years anniversary Atari ST compo)<br>
+
+<p id=dateentry>Version 0.008</p>
+ - Added "test" mode that's usefull to debug a picture in colored mode
+ 
+<p id=dateentry>Version 0.007</p>
+ - Removed the timer check in the colored conversion mode. It was producing bad 
+   conversion on slow computers. Anyway, if you are unlucky, a conversion could
+   now take hours to perform if the tool has to perform ALL possible combinations.
+
+<p id=dateentry>Version 0.006</p>
+ - A message is given if the picture is not found or invalid.<br>
+ - Colored mode had some bugs: all now corrected ???<br>
+
+<p id=dateentry>Version 0.005</p>
+ - Debugged the -o6 format.<br>
+ - Debugged the -f1 mode.<br>
+
+<p id=dateentry>Version 0.004</p>
+ - Allow free size pictures (bigger than screen size except for colored mode)<br>
+
+<p id=dateentry>Version 0.003</p>
+ - Riemersman dithering implemented <br>
+
+<p id=dateentry>Version 0.002</p>
+ - New version with basic dithering<br>
+
+<p id=dateentry>Version 0.001</p>
+ - First beta release<br>
+
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

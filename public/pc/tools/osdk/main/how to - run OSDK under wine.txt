@@ -1,0 +1,39 @@
+Tested in Ubuntu Diaper Drake 6.06 LTS with Wine 0.9.23
+
+* Installing the OSDK in Wine:
+You need to unzip the archive in the emulated windows drive.
+If we want to get it in C:/osdk, then you need to unzip in;
+~/.wine/.dosdevices/c
+
+
+* Setting the environment variable.
+Just run regedit from Wine.
+You can do that by opening a terminal, and then type:
+
+  wine regedit
+
+at this point you need to create (if it does not yet exist) a new key
+
+ HKEY_CURRENT_USER/Environment
+
+and there you create a new string:
+
+ Name: OSDK
+ Value: C:\OSDK
+
+
+* Running OSDK
+
+Just run the following command:
+
+  wine cmd
+
+then c:
+cd OSDK
+etc...
+you can try compiling a sample by going in 
+ 
+  cd C:\osdk\sample\hello_world_simple
+  osdk_build.bat
+
+

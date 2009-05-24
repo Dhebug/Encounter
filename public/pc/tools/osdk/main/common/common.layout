@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Win32 Release" />
+	<File name="includes\common.h" open="1" top="0" tabpos="1">
+		<Cursor position="3946" topLine="64" />
+	</File>
+	<File name="sources\common.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="4370" topLine="188" />
+	</File>
+</CodeBlocks_layout_file>

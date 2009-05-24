@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - The Compiler</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>The Compiler</h1>
+
+<p id=chapter>Description</p>
+
+<p>RCC16 is an Oric targeted version of the LCC Compiler.
+</p>
+
+<p>This compiler is decently ANSI compliant, and event support C++ comments as well as standard C comments. 
+</p>
+
+<p>Optimisation level can be modified using the OSDKCOMP variable. By default this variable will be initialized to -O2 value,
+but you can try -O3 for more aggresive optimizations.
+</p>
+
+
+<p id=chapter>Data types</p>
+
+<p>Since the 6502 is an 8 bit processor, the data size are as follow:
+
+<ul>
+<li>Pointers are 16 bits long</li>
+<li>char and shorts are 8 bits long</li>
+<li>int are 16 bits long</li>
+</ul>
+
+
+<p id=chapter>Libraries</p>
+
+<p>Some standard functions (memcpy, printf, ...) are implemented, but most of the standard library is not available.
+</p>
+
+<p>Some functions are just quick hacks done by directly calling the ROM functions.
+Unfortunately, ROM releases are different, and thus any code calling these functions will work only on ATMOS.
+</p>
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

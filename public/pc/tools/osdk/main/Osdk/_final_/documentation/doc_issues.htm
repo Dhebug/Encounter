@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Known issues</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Known issues</h1>
+
+<p id=chapter>Code generation problems</p>
+
+<p>Even if it has been seriously tested, unfortunately some bugs remains in the code generator, so it's possible to have 
+code that will not compile at all, or code that will compile but crash :(
+</p>
+<p>In this eventuality, all you can do is to send us the faulty code in order to allows us to correct the OSDK.
+</p>
+
+
+<p id=chapter>C Code performance</p>
+
+<p>Let's face it, the C compiler is crappy. But you should know that it is a lot better than some others !
+There are professional C compilers for embeded computing, that generate high quality code, but unfortunately
+they are very, very, very expensive, do you really wish to pay $3600 to develop in C on the Oric ???
+</p>
+
+
+<p id=chapter>C++ comments in assembly source code</p>
+
+<p>It's kind of working, but generaly fail. Just be aware of that, it's one of these things that will be corrected one day.
+</p>
+
+
+<p id=chapter>Compatibility with other Oric models</p>
+
+<p>Code that does not rely on the ROM calls should work correctly on all Oric models. If the code uses the OSDK library,
+you can bet it will work only on the ATMOS because most functions are calling the ROM to perform simple tasks like outputing
+a character to screen or reading the keyboard. Since floating point values support is done using Basic routines, the problem is the same.
+</p>
+
+
+<p id=chapter>WriteDSK and Windows 2000</p>
+
+<p>Due to its nature, WriteDsk needs low level access to the floppy disk controler.
+Unfortunately this is not working under windows 2000. Even using VmWare or VirtualPC
+will note solve the problem. The only solution is to create a bootable dos floppy, 
+put the DSK file and WriteDsk, and hoping it will work fine.
+</p>
+
+
+<p id=chapter>Problems running Euphoric</p>
+
+<p>It has been reported that if you install the OSDK in a path that contains the word DEV (like D:\emul\oric\dev\osdk) Euphoric
+will keep complaining about not finding "message.txt" in his directory. Just avoid to do that :)
+</p>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="compiler" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Win32 Release">
+				<Option output="..\Osdk\_final_\Bin\Compiler" prefix_auto="1" extension_auto="1" />
+				<Option object_output="build\Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-O2" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_MBCS" />
+					<Add directory="includes" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="odbc32" />
+					<Add library="odbccp32" />
+				</Linker>
+			</Target>
+			<Target title="Win32 Debug">
+				<Option output="compiler_debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="build\Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_MBCS" />
+					<Add directory="includes" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="odbc32" />
+					<Add library="odbccp32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="sources\dag.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\debug.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\decl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\enode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\error.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\expr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\gen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\input.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\lex.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\output.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\profio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\simp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\stmt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\string.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\sym.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\tree.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources\types.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="includes\c.h" />
+		<Unit filename="includes\config.h" />
+		<Unit filename="includes\keywords.h" />
+		<Unit filename="includes\ops.h" />
+		<Unit filename="includes\token.h" />
+		<Unit filename="includes\version.h" />
+		<Unit filename="data\icones.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="data\normal.ico" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
