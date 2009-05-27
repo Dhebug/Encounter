@@ -30,8 +30,8 @@
 #ifndef _SDL_TTF_H
 #define _SDL_TTF_H
 
-#include "SDL.h"
-#include "begin_code.h"
+#include "SDL/SDL.h"
+#include "SDL/begin_code.h"
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
@@ -229,6 +229,6 @@ extern DECLSPEC int SDLCALL TTF_WasInit(void);
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include "SDL/close_code.h"
 
 #endif /* _SDL_TTF_H */
