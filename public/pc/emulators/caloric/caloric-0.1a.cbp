@@ -16,39 +16,16 @@
 					<Add option="-O2" />
 					<Add option="-mms-bitfields" />
 					<Add directory="." />
-					<Add directory="..\libs\GTK+\include\gtk-2.0" />
-					<Add directory="..\libs\CAIRO\include\cairo" />
-					<Add directory="..\libs\GLIB\include\glib-2.0" />
-					<Add directory="..\libs\GLIB\lib\glib-2.0\include" />
-					<Add directory="..\libs\PANGO\include\pango-1.0\" />
-					<Add directory="..\libs\GTK+\lib\gtk-2.0\include" />
-					<Add directory="..\libs\ATK\include\atk-1.0" />
-					<Add directory="..\libs\libglade\include\libglade-2.0\" />
-					<Add directory="..\libs\SDL-1.2.13\include" />
-					<Add directory="..\libs\pthreads.2" />
+					<Add directory="..\libs\SDL\include" />
+					<Add directory="..\libs\SDL_ttf\include" />
+					<Add directory="..\libs\SDL\include\SDL" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-Wl --export-dynamic" />
-					<Add library="..\libs\SDL-1.2.13\lib\libSDL.dll.a" />
-					<Add library="..\libs\SDL-1.2.13\lib\libSDLmain.a" />
-					<Add library="..\libs\GLIB\lib\gio-2.0.lib" />
-					<Add library="..\libs\GLIB\lib\glib-2.0.lib" />
-					<Add library="..\libs\GLIB\lib\gmodule-2.0.lib" />
-					<Add library="..\libs\GLIB\lib\gobject-2.0.lib" />
-					<Add library="..\libs\GLIB\lib\gthread-2.0.lib" />
-					<Add library="..\libs\GLIB\lib\libgio-2.0.dll.a" />
-					<Add library="..\libs\GLIB\lib\libglib-2.0.dll.a" />
-					<Add library="..\libs\GLIB\lib\libgmodule-2.0.dll.a" />
-					<Add library="..\libs\GLIB\lib\libgobject-2.0.dll.a" />
-					<Add library="..\libs\GLIB\lib\libgthread-2.0.dll.a" />
-					<Add library="..\libs\GTK+\lib\gdk_pixbuf-2.0.lib" />
-					<Add library="..\libs\GTK+\lib\gdk-win32-2.0.lib" />
-					<Add library="..\libs\GTK+\lib\gtk-win32-2.0.lib" />
-					<Add library="..\libs\GTK+\lib\libgdk_pixbuf-2.0.dll.a" />
-					<Add library="..\libs\GTK+\lib\libgdk-win32-2.0.dll.a" />
-					<Add library="..\libs\GTK+\lib\libgtk-win32-2.0.dll.a" />
-					<Add library="..\libs\libglade\lib\libglade-2.0.dll.a" />
+					<Add library="..\libs\SDL\lib\libSDL.dll.a" />
+					<Add library="..\libs\SDL\lib\libSDLmain.a" />
+					<Add library="..\libs\SDL_ttf\lib\SDL_ttf.lib" />
 				</Linker>
 			</Target>
 		</Build>
