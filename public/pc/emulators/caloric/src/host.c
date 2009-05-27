@@ -416,7 +416,7 @@ debugger=1;
 		if      (g == '1') { telestrat=0; atmos=0; }
 		else if (g == 'a') { telestrat=0; atmos=1; }
 		else if (g == 'A') { audio_device=optarg; }
-		else if (g == 'd') { telestrat=0; disk=1; }
+		else if (g == 'd') {  disk=1; }
 		else if (g == 'j') { telestrat=0; jasmin=1; disk=1; }
 		else if (g == 'J') { joystickport=1; }
 		else if (g == 'p') { joystick=1; disable_keypad(); }
