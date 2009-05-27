@@ -10,7 +10,7 @@
 /* Define to 1 to enable debugger */
  #define HAVE_DEBUGGER 0
 
- #define HAVE_DEBUG_MODE 0
+ #define HAVE_DEBUG_MODE 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
