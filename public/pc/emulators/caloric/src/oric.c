@@ -100,7 +100,7 @@ int main(int argc, char *argv[], char *env[])
 
 	setup(env);
 	keyboard_map_init();
-
+    initSDL_display();
 	restart_flag=init(argc,argv);
 
     if(!sdl_start()) {
