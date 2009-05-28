@@ -180,7 +180,7 @@ void render_frame (void)
     if (y % CHAR_HEIGHT == CHAR_HEIGHT - 1)
       from[0] += x;
 
-    *b++ = (char) touched;		/* KLUDGEy eh ? */
+    *b++ = (char) touched;		/* KLUDGEy eh ?  -> comment from Jede : it put a flag at the end of the line -> touched=1 then the line has changed*/
     if (touched)
       frametouched = 1;
   }
