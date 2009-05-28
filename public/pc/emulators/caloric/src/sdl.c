@@ -57,6 +57,7 @@ time_t previoustime;
 typedef struct {
     	int  red;
 	int blue;
+
 	int green;
 } oriccolor;
 oriccolor oriccolors[8];
@@ -70,7 +71,7 @@ int sdl_start()
 {
     char title[1024];
     Uint32 flags = SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE|SDL_INIT_TIMER;
-    Uint32 flags_video= SDL_HWPALETTE; // Correcting full screen
+    Uint32 flags_video= SDL_HWPALETTE|SDL_HWACCEL|SDL_HWSURFACE|SDL_RLEACCEL; // Correcting full screen
     zoomChange = zoom;
     SDL_Rect **modes;
     int i;
@@ -80,7 +81,7 @@ int sdl_start()
     /* Init video blah */
     /*Get some infos from video card and resolution*/
 
- zoom=1;
+ zoom=2;
     if(fullScreen) {
     	flags |= SDL_FULLSCREEN;
     	flags_video ^= SDL_FULLSCREEN;
@@ -116,7 +117,7 @@ if (!pVideoInfo) {
   }
 
 #endif
-modes=SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
+modes=SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE|SDL_HWACCEL);
 
 /* Check is there are any modes available */
 if(modes == (SDL_Rect **)0){
@@ -140,7 +141,7 @@ else{
 #endif
 
     /* 320x240x32 */
-    screen = SDL_SetVideoMode(VIDEO_WIDTH*zoom, VIDEO_HEIGHT*zoom+border, 32, flags_video); //
+    screen = SDL_SetVideoMode(VIDEO_WIDTH*zoom, VIDEO_HEIGHT*zoom+border, 8, flags_video); //
     if ( screen == NULL ) {
         fprintf(stderr, "Unable to set %dx%dx32 video: %s\n", VIDEO_WIDTH*zoom, VIDEO_HEIGHT*zoom, SDL_GetError());
         return 0;
@@ -222,14 +223,75 @@ oriccolors[6].blue=255;
 oriccolors[7].red=255;
 oriccolors[7].green=255;
 oriccolors[7].blue=255;
-
+/*
 if(TTF_Init() == -1)
 {
     fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
     exit(EXIT_FAILURE);
 }
-
+*/
 }
+
+void DrawRect(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B, int zoom)
+{
+  Uint32 color = SDL_MapRGB(screen->format, R, G, B);
+    SDL_Rect position;
+//  gdImageFilledRectangle(screen,x,y,x+zoom-1,y+zoom-1,color);
+
+        //Uint32 color=0;
+        position.x = x;
+        position.y = y;
+        position.w = zoom;
+        position.h = zoom;
+        SDL_FillRect(screen,&position, color);
+
+
+  /*
+  switch (screen->format->BytesPerPixel)
+  {
+    case 1: // Assuming 8-bpp
+      {
+        Uint8 *bufp;
+        bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
+        *bufp = color;
+      }
+      break;
+    case 2: // Probably 15-bpp or 16-bpp
+      {
+        Uint16 *bufp;
+        bufp = (Uint16 *)screen->pixels + y*screen->pitch/2 + x;
+        *bufp = color;
+      }
+      break;
+    case 3: // Slow 24-bpp mode, usually not used
+      {
+        Uint8 *bufp;
+        bufp = (Uint8 *)screen->pixels + y*screen->pitch + x * 3;
+        if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+        {
+          bufp[0] = color;
+          bufp[1] = color >> 8;
+          bufp[2] = color >> 16;
+        } else {
+          bufp[2] = color;
+          bufp[1] = color >> 8;
+          bufp[0] = color >> 16;
+        }
+      }
+      break;
+    case 4: // Probably 32-bpp
+      {
+        Uint32 *bufp;
+        bufp = (Uint32 *)screen->pixels + y*screen->pitch/4 + x;
+        *bufp = color;
+      }
+      break;*/
+  }
+
+
+
+
+//
 
 void DrawPixel(SDL_Surface *screen, int x, int y,
                                     Uint8 R, Uint8 G, Uint8 B)
@@ -301,7 +363,7 @@ void unlockscreenSDL_Display(SDL_Surface *screen)
 void displaySDL_stats()
     {
     SDL_Surface  *texte = NULL, *fond = NULL;
-
+/*
     time_t timenow;
     time_t seconds;
     char mychar[30]="";
@@ -325,7 +387,7 @@ if (police==NULL)
         exit(12);
     }
     time (&timenow);
-    seconds = timenow - previoustime;/*
+    seconds = timenow - previoustime;
     sprintf(&mychar, "%f /s\0",  (float) count_frame/ seconds);
     //fprintf(stderr,"%d\n",stats.frames);
     //printf(
@@ -345,10 +407,10 @@ if (police==NULL)
   fprintf (fp, ", polls %lu", stats.polls);
   if (seconds != 0)
     fprintf (fp, " (%.1f/s)", (double) stats.polls / seconds);
-*/
+
 TTF_CloseFont(police);
 previoustime=timenow;
-
+*/
     }
 
 void displaySDL_run(void)
@@ -357,30 +419,43 @@ void displaySDL_run(void)
 int x=0;
 int y=0;
 int calcul=0;
+int move_x=0;
+int move_y=0;
 render_frame ();
-
-	//if (frametouched)
+zoom=2;
+	if (frametouched) // if frame is modified let's go !
 	{
     lockscreenSDL_Display(screen);
-	//xeuphoricSDLDisplay_lockscreen(screen);
-
-
-	for (y=0;y<VIDEO_HEIGHT;y++)
-	{
-		//err("=>%d\n",buf[240]);
-		//if (buf[240*(y+1)]==0)
-		{
-			for (x=0;x<VIDEO_WIDTH;x++)
-			{
-				DrawPixel(screen, x, y+border,oriccolors[buf[calcul+x]].red, oriccolors[buf[calcul+x]].green, oriccolors[buf[calcul+x]].blue);
-
-				//calcul++;
-			}
-		}
-		//else
-			calcul+=VIDEO_WIDTH+1;
-		//calcul++;
-	}
+    if (zoom==1)
+        {
+        for (y=0;y<VIDEO_HEIGHT;y++)
+            {
+                if (buf[y * (VIDEO_WIDTH + 1) + VIDEO_WIDTH]==1)
+                for (x=0;x<VIDEO_WIDTH;x++)
+                    {
+                    DrawPixel(screen, x, y+border,oriccolors[buf[calcul+x]].red, oriccolors[buf[calcul+x]].green, oriccolors[buf[calcul+x]].blue);
+                    }
+                calcul+=VIDEO_WIDTH+1;
+            }
+        }
+    else
+        {
+        for (y=0;y<VIDEO_HEIGHT;y++)
+            {
+                if (buf[y * (VIDEO_WIDTH + 1) + VIDEO_WIDTH]==1)
+                    {
+                    for (x=0;x<VIDEO_WIDTH;x++)
+                        {
+                        //DrawRect(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B, zoom)
+                        DrawRect(screen, move_x, move_y+border,oriccolors[buf[calcul+x]].red, oriccolors[buf[calcul+x]].green, oriccolors[buf[calcul+x]].blue,zoom);
+                        move_x+=zoom;
+                        }
+                    }
+                move_x=0;
+                calcul+=VIDEO_WIDTH+1;
+                move_y+=zoom;
+            }
+        }
 	unlockscreenSDL_Display(screen);
 	count_frame++;
 	displaySDL_stats();
