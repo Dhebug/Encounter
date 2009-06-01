@@ -15,12 +15,12 @@ _VX .byt 0
 _VY .byt 0
 _VZ .byt 0
 
-;; A vector definition
+;; A vector definition: Should be contiguous!
 _VectX .byt 0,0
 _VectY .byt 0,0
 _VectZ .byt 0,0
 
-;; Position of a ship
+;; Position of a ship: Should be contiguous!
 _PosX  .byt 0,0
 _PosY  .byt 0,0
 _PosZ  .byt 0,0
@@ -119,11 +119,10 @@ LaunchShipFromOther
     lda #>_PosY
     sta tmp0+1    
 
-;    lda #0
-;dbug beq dbug
-
     pla
     jsr AddSpaceObject
+    cpx #0
+    beq failure
 
      ; Copy orientation matrix
 
@@ -140,7 +139,9 @@ savx
     ldy #0  ; SMC
     lda _speed,y
     sta _speed,x    
-    
+
+failure    
+
     rts
 
 .)
@@ -159,6 +160,16 @@ AddSpaceObject
     and #%01111111
     tax
     stx saveModelIndex+1
+
+
+    ; See if we have enough space...
+    lda NUMOBJS
+    cmp #MAXSHIPS
+    bne roomok
+noroom  
+    ldx #0
+    rts
+roomok
 
     lda ShipModelHi-1,x
     tay
@@ -209,6 +220,7 @@ saveModelIndex
     sta _target,x
     sta _flags,x
     sta _ttl,x
+    sta _ai_state,x
 
 
 
@@ -305,6 +317,20 @@ GetShipPos
 .)
 
 
+; Gets the type of ship
+; given in reg X
+; and returns it in reg A
+GetShipType
+.(
+    jsr GetObj
+   ; Check ship ID byte...
+    STA POINT        ;Object pointer
+    STY POINT+1
+    ldy #ObjID
+    lda (POINT),y
+    rts
+
+.)
 
 ;; For moving ships
 
@@ -579,6 +605,15 @@ maxspeed .byt 0
 ;; passed in reg X
 fly_to_ship
 .(
+
+    jsr substract_positions
+    jmp _fly_to_vector
+
+.)
+
+
+substract_positions
+.(
     jsr GetObj
     jsr GetShipPos
     ldy #5
@@ -617,9 +652,7 @@ loop
     sbc _PosZ+1
     sta _VectZ+1
 
-
-    jmp _fly_to_vector
-
+    rts
 .)
 
 

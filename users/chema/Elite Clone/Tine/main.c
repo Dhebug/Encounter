@@ -114,6 +114,7 @@ char accel[MAXSHIPS];
 char speed[MAXSHIPS];
 char target[MAXSHIPS];
 char flags[MAXSHIPS];
+char ai_state[MAXSHIPS];
 char ttl[MAXSHIPS];
 char energy[MAXSHIPS];
 char missiles[MAXSHIPS];
@@ -195,14 +196,14 @@ void MoveOthers()
 {
    
 
-    //SetCurrentObject(2);
-    //fly_to_pos();
+    SetCurrentObject(2);
+    fly_to_pos();
 
     Tactics();
     
     MoveShips();
 
-    SetCurrentObject(3);
+    /*SetCurrentObject(3);
     GetShipPos();
     printf("Pos ");
     printf("%d,%d,%d\n",PosX,PosY,PosZ);
@@ -210,7 +211,7 @@ void MoveOthers()
     {
 
         target[3]=0; speed[3]=0; accel[3]=0;
-    }
+    }*/
 }
 
 
