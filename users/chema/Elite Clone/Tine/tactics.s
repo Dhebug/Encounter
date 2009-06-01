@@ -9,9 +9,11 @@ dis_tab_lo .byt <(ExplodeObject), <(DisappearObject), <(HyperObject), <(DockObje
 dis_tab_hi .byt >(ExplodeObject), >(DisappearObject), >(HyperObject), >(DockObject)
 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tactics function
-;; Implements AI
+;; Implements the control loop
+;; Calls AIMain for objects when necessary
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _Tactics
 .(
 
@@ -36,9 +38,7 @@ loop
     dec _ttl,x
     jmp noflags
 do_special
-    ; Make ship disappear for now
-    ;jsr DelObj
-    ;tay
+    ; Call routine for each flag kind...
     lda dis_tab_lo-1,y
     sta jump+1
     lda dis_tab_hi-1,y
@@ -50,14 +50,11 @@ jump
 
 
 noflags    
-    ; If a moving ship has a target, make her go
-    ; for it!
-    
-    lda _target,x
-    and #%01111111  ; Remove angry flag
-    beq nomove
-    tax
-    jsr fly_to_ship    
+    lda _ai_state,x
+    and #IS_AICONTROLLED
+    beq noai
+    jsr AIMain
+noai
 
 nomove
     jsr GetNextOb
@@ -70,10 +67,114 @@ end
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; AIMain function
+; Implements the genera AI for objects
+; which have the flag AI_CONTROLLED set
+; in _ai_state flag.
+; Corresponds to tactics() in tactics.c in
+; Elite AGB
+; Parameters: Reg X contains ship ID
+; for which we are running the AI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+AIMain
+.(
+
+    jsr GetShipType
+    cmp #SHIP_MISSILE
+    bne nomissile
+
+    ; lda _ecm_counter
+    ; beq noecm
+    ; ;Incrementamos kills y eliminamos el misil
+    ; rts
+;noecm
+    ; Get vector to target
+    lda _target,x
+    and #%01111111
+    bne cont1
+    rts
+cont1
+    tax
+ 
+    jsr substract_positions
+    ;if ( (abs(x)< 256) && (abs(y) < 256) && abs(z) < 256) {
+    ldy #4
+loop
+    lda _VectX,y
+    sta op1
+    lda _VectX+1,y
+    sta op1+1
+    jsr abs
+    
+    lda op1+1
+    bne nohit
+    ;lda op1
+    ;cmp #70
+    ;bcs nohit
+    dey
+    dey
+    bpl loop
+ 
+    ; Missile hit!!!
+ 
+    
+    ; Missile explodes
+    jsr GetCurOb
+    lda _flags,x
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags,x
+    lda #0
+    sta _ttl,x
+
+    ; Perform damage
+    lda _target,x
+    and #%01111111
+    tax
+    lda _speed,x
+    lsr
+    sta _speed,x
+    lda #0
+    sta _accel,x
+    lda #$40
+    jmp damage_ship
+        
+nohit
+nomissile
+
+  ; If a moving ship has a target, make her go
+    ; for it!
+    
+    lda _target,x
+    and #%01111111  ; Remove angry flag
+    beq end
+    tax
+    jsr fly_to_ship    
+
+end
+    rts
+.)
+
+
 FireLaser
 .(
     jsr _DrawLaser
 
+    jsr FindTarget
+
+    ldx _ID
+    beq nohit
+    lda #10 ; Current laser strength. SHOULD CHANGE   
+    jsr damage_ship
+
+nohit
+    rts
+.)
+
+
+FindTarget
+.(
     lda #$0
     sta _ID
 
@@ -93,9 +194,6 @@ loop
     ; Remove flags to get Object's type
     and #%01111111
     beq next ; Suns and planets...
-
-;    ldy #0
-;dbug    beq dbug
   
     asl
     tax
@@ -112,7 +210,6 @@ loop
     sta op1+1
     lda CX,x
     sta op1
-  ;  stx sav_x+1 ; Save X for later...
     jsr abs
 
     lda op1+1
@@ -120,8 +217,6 @@ loop
     lda op1
     sta uno+1
 
-;sav_x
-;    ldx #0  ; SMC    
     lda HCY,x
     sta op1+1
     lda CY,x
@@ -148,11 +243,8 @@ dos
    
     jsr cmp16
     bcs next
-    
-    ; HIT!
+
     ; Should save ID to get the last one, after iterating...
-    ; For now just print something...
-     
     jsr GetCurOb
     stx _ID
     
@@ -162,15 +254,8 @@ next
 
 end
 
-    ldx _ID
-    beq nohit
-    lda #10 ; Current laser strength. SHOULD CHANGE   
-    jsr damage_ship
-
-nohit
     rts
 .)
-
 
 _ID .byt $0
 
@@ -189,6 +274,14 @@ LaunchMissile
     sta _rotz,x
     ;lda #30
     ;sta _speed,x       
+    ; Set ai_controlled
+    lda _ai_state,x
+    ora #IS_AICONTROLLED 
+    sta _ai_state,x
+        
+    ; Get objective
+    lda #2
+    sta _target,x
 
     ; Make it disappear soon
     lda #( IS_DISAPPEARING )
@@ -200,8 +293,11 @@ LaunchMissile
 
     ; Push it a bit
     jsr SetCurOb
-    lda #10
-    jmp MoveForwards
+    lda #100
+    jsr MoveForwards
+    lda #100
+    jsr MoveSide;Down
+    rts
 
 .)
 
@@ -247,14 +343,14 @@ loop
 
     ; Now some plates, if exploding
     ; object is a ship
-    jsr GetObj
-    sta tmp
-    sty tmp+1
+    ;jsr GetObj
+    ;sta tmp
+    ;sty tmp+1
 
-    ldy #ObjID
-    lda (tmp),y
+    ;ldy #ObjID
+    ;lda (tmp),y
     and #%01111111   
-
+    jsr GetShipType
     cmp #SHIP_VIPER
     bcc nomore  ; if it is space junk nothing more...
 
@@ -488,26 +584,34 @@ damage_ship
     sta _flags,x
     lda #0
     sta _ttl,x
-    rts 
+    jmp end 
 
 noexplode
-
-   jsr _printHit     
+    ; Preserve reg X
+    stx end+1
+    jsr _printHit     
     ; Make a nice sound
+
+end
+    ldx #0  ; SMC
+    cpx #1
+    bne noplayer
+    jmp damage_player
+noplayer
     rts
 
 .)
 
 
-;;; damage_ship
+;;; damage_player
 ; Perform damage of player
-; Params: Reg A is damage amount.
+; Params: Reg A is damage amount. Reg X equals 1
 
 damage_player
 .(
-    ldx #1
-    jsr damage_ship
-    lda _flags,x
+    ;ldx #1
+    ;jsr damage_ship
+    lda _flags+1
     and #%IS_EXPLODING
     beq nokill    
    

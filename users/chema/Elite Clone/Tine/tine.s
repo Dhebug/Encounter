@@ -360,8 +360,6 @@ _InitTestCode
          STX VOB          ;View object
 
 
-
-
          ; Add some ships
 
          lda #<OCEN
@@ -371,6 +369,10 @@ _InitTestCode
          lda #SHIP_ADDER
          jsr AddSpaceObject   
          stx savid+1   
+         lda _ai_state,x
+         ora #IS_AICONTROLLED   
+         sta _ai_state,x
+        
 
          lda #<OCEN2
          sta tmp0
@@ -381,9 +383,10 @@ _InitTestCode
 
         ; This one will pursue the other :)
 savid   lda #0  ;SMC
-
-        ;lda #0
         sta _target,x        
+        lda _ai_state,x
+        ora #IS_AICONTROLLED   
+        sta _ai_state,x
         
 
         ;ldx VOB
