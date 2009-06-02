@@ -572,15 +572,18 @@ nadaz
 
     ldx CUROBJ
     lda _accel,x
-    ora _speed,x
+    ;ora _speed,x
     beq end
     clc
     adc _speed,x
     ;; Don't let them ever stop
-    cmp #3
-    bcs noneg
-    lda #2
-    bne nomax ;allways branch
+    ;cmp #3
+    ;bcs noneg
+    ;lda #2
+    ;bne nomax ;allways branch
+    bpl noneg
+    lda #0
+    beq nomax ; allways branch
 noneg    
     cmp maxspeed
     bcc nomax
@@ -746,6 +749,7 @@ fly_to_vector_final
   ;  return;
   ;}
 
+    ;jmp nonessadd
     lda our_ang0
     sta op1
     lda our_ang0+1
@@ -759,7 +763,7 @@ fly_to_vector_final
  
     ldx CUROBJ;_curr_ship
     lda _rotx,x
-    ora #4
+    ora #8
     sta _rotx,x
     lda our_ang0+1
     bpl noneg
@@ -799,12 +803,14 @@ nonessadd
     lda op1 
     cmp ang_lim
     bcc nothingtodo
+    lda #4
 rotatez
-    lda #ROTATE_AMOUNT
+    ;lda #ROTATE_AMOUNT
+    lsr
     sta _rotz,x
 nothingtodo
     lda our_ang1+1
-    bpl neg;bmi neg ; BEWARE rotz seems to be interpreted differently so sign should be inverted!
+    bpl neg;    bmi neg ; BEWARE rotz seems to be interpreted differently so sign should be inverted!
     lda _rotz,x
     ora #$80
     sta _rotz,x    
@@ -846,8 +852,10 @@ neg
     lda op1 
     cmp ang_lim
     bcc nothingtodo2
+    lda #4 
 rotatex
-    lda #ROTATE_AMOUNT
+    ;lda #ROTATE_AMOUNT
+    lsr
     sta _rotx,x
 nothingtodo2
     lda our_ang2+1

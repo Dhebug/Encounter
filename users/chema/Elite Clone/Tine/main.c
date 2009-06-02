@@ -203,7 +203,8 @@ void MoveOthers()
     
     MoveShips();
 
-    /*SetCurrentObject(3);
+    /*
+    SetCurrentObject(2);
     GetShipPos();
     printf("Pos ");
     printf("%d,%d,%d\n",PosX,PosY,PosZ);
@@ -212,6 +213,9 @@ void MoveOthers()
 
         target[3]=0; speed[3]=0; accel[3]=0;
     }*/
+
+
+    printf("rx %d, ry %d, rz %d, s %d, a %d\n", rotx[6],roty[6],rotz[6],speed[6],accel[6]);
 }
 
 
