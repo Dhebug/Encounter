@@ -77,10 +77,20 @@ end
 ; Parameters: Reg X contains ship ID
 ; for which we are running the AI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+AIShipID    .byt 00 ; Current ship's ID
+AIShipType  .byt 00 ; Current ship's type
+AITarget    .byt 00 ; Current ship's target
+
+
 AIMain
 .(
-
+    stx AIShipID
+    lda _target,x
+    and #%01111111
+    sta AITarget
     jsr GetShipType
+    sta AIShipType
     cmp #SHIP_MISSILE
     bne nomissile
 
@@ -90,8 +100,7 @@ AIMain
     ; rts
 ;noecm
     ; Get vector to target
-    lda _target,x
-    and #%01111111
+    lda AITarget
     bne cont1
     rts
 cont1
@@ -109,9 +118,9 @@ loop
     
     lda op1+1
     bne nohit
-    ;lda op1
-    ;cmp #70
-    ;bcs nohit
+    lda op1
+    cmp #70
+    bcs nohit
     dey
     dey
     bpl loop
@@ -120,17 +129,20 @@ loop
  
     
     ; Missile explodes
-    jsr GetCurOb
+    ;jsr GetCurOb
+    ldx AIShipID
     lda _flags,x
     and #%11110000  ; Remove older flags...
     ora #IS_EXPLODING
     sta _flags,x
     lda #0
     sta _ttl,x
+    lda #0
+    sta _speed,x
+    sta _accel,x
 
     ; Perform damage
-    lda _target,x
-    and #%01111111
+    lda AITarget
     tax
     lda _speed,x
     lsr
@@ -146,14 +158,14 @@ nomissile
   ; If a moving ship has a target, make her go
     ; for it!
     
-    lda _target,x
-    and #%01111111  ; Remove angry flag
+    lda AITarget
     beq end
     tax
     jsr fly_to_ship    
 
 end
     rts
+
 .)
 
 
