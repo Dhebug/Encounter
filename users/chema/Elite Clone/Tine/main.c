@@ -47,65 +47,6 @@ extern int addr;
 extern char scan;
 
 
-
-
-main()
-{
-   
-    char * p;
-    unsigned int delay;
-    int i,j,k;
-
-   
-    init_tine();
-
-
-
-
-    p=(char *)0x24e;  
-    *p=5;
-    p=(char *)0x24f;  
-    *p=1; 
-
-    /*
-    for (i=0;i<240;i++)
-    {
-        pixel_address(i,0);
-        printf("Address: $%x ",addr);
-        printf("Scan %d\n",scan);
-        getchar();
-    }*/
-        
-
-
-    hires();
-
-
-    curset(5,5);
-    draw(0,123,1);
-    draw(230,0,1);
-    draw(0,-123,1);
-    draw(-230,0,1);
-
-    printf("A/Z Pitch, Q/W Roll, S/D Yaw\nO/L accel/deccel B missile 1 laser");
-
-
-    InitTestCode();
-    
-    FirstFrame();
-
-    RunDemo();
-
-    //FirstFrame();
-    //TestLoop();
-
-
-}
-
-
-
-
-
 /* Variables to mantain for each space object */
 char rotx[MAXSHIPS];
 char roty[MAXSHIPS];
@@ -140,6 +81,67 @@ extern void SetCurrentObject(char);
 extern int dot_product();
 extern void fly_to_vector();
 extern void norm_big();
+
+
+
+main()
+{
+   
+    char * p;
+    /*unsigned int delay;
+    int i,j,k;
+    int res1,res2;*/
+    
+       
+    init_tine();
+
+
+
+
+    p=(char *)0x24e;  
+    *p=5;
+    p=(char *)0x24f;  
+    *p=1; 
+
+      
+/*    for (i=0;i<=30000;i+=10000)
+        for(j=0;j<=20000;j+=10000)
+            for(k=0;k<=20000;k+=10000)
+                {
+                    VectX=i;VectY=j;VectZ=k;
+                    printf("%d, %d, %d ->",VectX,VectY,VectZ); 
+                    norm_big();
+                    printf("%d, %d, %d\n",VectX,VectY,VectZ); 
+                    getchar();
+                    
+                }
+        
+*/
+
+    hires();
+
+
+    curset(5,5);
+    draw(0,123,1);
+    draw(230,0,1);
+    draw(0,-123,1);
+    draw(-230,0,1);
+
+    printf("A/Z Pitch, Q/W Roll, S/D Yaw\nO/L accel/deccel B missile 1 laser");
+
+
+    InitTestCode();
+    
+    FirstFrame();
+
+    RunDemo();
+
+    //FirstFrame();
+    //TestLoop();
+
+
+}
+
 
 
 

@@ -22,6 +22,17 @@
 
 #define IS_ANGRY            128
 
+// Values for equipment (user Byte in OBJ3D record)
+#define HAS_ECM             1
+#define HAS_MILLASER        2
+#define HAS_ESCAPEPOD       4
+#define HAS_ANTIRADAR       8
+#define HAS_GALHYPER        16
+#define HAS_SCOOPS          32
+#define HAS_EXTRACARGO      64
+#define HAS_ITEM3           128
+
+
 #endif
 
 
