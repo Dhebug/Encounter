@@ -332,6 +332,24 @@ GetShipType
 
 .)
 
+
+
+; Gets the user byte (equipment)
+; given in reg X
+; and returns it in reg A
+GetShipEquip
+.(
+    jsr GetObj
+   ; Check ship ID byte...
+    STA POINT        ;Object pointer
+    STY POINT+1
+    ldy #ObjData
+    lda (POINT),y
+    rts
+.)
+
+
+
 ;; For moving ships
 
 _MoveShips
@@ -731,15 +749,7 @@ store
 fly_to_vector_final
 .(
   ;  // Fly_to_vector_final
-  ; GetDownVector();
-  ; our_ang1=dot_product();
-    jsr _GetDownVector
-    jsr dot_product
-    lda op1+1
-    ldx op1
-    stx our_ang1
-    sta our_ang1+1
-
+ 
   ; // NES addition 
   ;if (our_ang0 < -0xdc7){//-0x1000) {
   ;  rotx[curr_ship] |= 2;
@@ -772,13 +782,23 @@ fly_to_vector_final
     sta _rotx,x
 noneg
     lda #0
-    sta _rotz,x
+    sta _roty,x
     rts
 nonessadd   
 
     ;; Now start with checks for angles.
     ;; We want to make ang1 and ang2 0 and
     ;; ang0 the max possible (64*64=4096 i.e. $1000)
+
+
+ ; GetDownVector();
+  ; our_ang1=dot_product();
+    jsr _GetDownVector
+    jsr dot_product
+    lda op1+1
+    ldx op1
+    stx our_ang1
+    sta our_ang1+1
 
   ;rotz[curr_ship]=0;
   ;if (abs(our_ang1)/255>=ang_lim) {
@@ -789,7 +809,7 @@ nonessadd
 
     lda #0
     ldx CUROBJ;_curr_ship
-    sta _rotz,x 
+    sta _roty,x 
 
     lda our_ang1
     sta op1
@@ -807,13 +827,13 @@ nonessadd
 rotatez
     ;lda #ROTATE_AMOUNT
     lsr
-    sta _rotz,x
+    sta _roty,x
 nothingtodo
     lda our_ang1+1
     bpl neg;    bmi neg ; BEWARE rotz seems to be interpreted differently so sign should be inverted!
-    lda _rotz,x
+    lda _roty,x
     ora #$80
-    sta _rotz,x    
+    sta _roty,x    
 neg
     
   
@@ -947,6 +967,8 @@ notsmall
     sta _accel,x
     
     ;; And that is all folks
+    ;lda #0
+    ;sta _rotz,x
     rts
 
 .)
@@ -1190,8 +1212,15 @@ getnorm
 
 _norm_big
 .(
-
     jsr getnorm ; Result in op1
+ 
+   ; This makes no sense, just some deffensive programming
+    lda op1
+    ora op1+1
+    bne nozero
+    inc op1
+nozero
+
     lda #>$2000
     sta op2+1
     lda #<$2000  

@@ -307,7 +307,7 @@ LaunchMissile
     jsr SetCurOb
     lda #100
     jsr MoveForwards
-    lda #100
+    lda #50
     jsr MoveSide;Down
     rts
 
