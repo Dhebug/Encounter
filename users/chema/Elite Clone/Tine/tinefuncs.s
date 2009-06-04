@@ -621,60 +621,6 @@ maxspeed .byt 0
 
 
 
-;; fly_to_ship
-;; Makes current object fly towards a given ship
-;; passed in reg X
-fly_to_ship
-.(
-
-    jsr substract_positions
-    jmp _fly_to_vector
-
-.)
-
-
-substract_positions
-.(
-    jsr GetObj
-    jsr GetShipPos
-    ldy #5
-loop
-    lda _PosX,y
-    sta _VectX,y
-    dey
-    bpl loop
-
-    jsr GetCurOb
-    jsr GetShipPos
-
-    ; Substract both positions
-    ; and store in _VectX,Y,Z
-    lda _VectX
-    sec
-    sbc _PosX
-    sta _VectX
-    lda _VectX+1
-    sbc _PosX+1
-    sta _VectX+1
-
-    lda _VectY
-    sec
-    sbc _PosY
-    sta _VectY
-    lda _VectY+1
-    sbc _PosY+1
-    sta _VectY+1
-
-    lda _VectZ
-    sec
-    sbc _PosZ
-    sta _VectZ
-    lda _VectZ+1
-    sbc _PosZ+1
-    sta _VectZ+1
-
-    rts
-.)
 
 
 ;; fly_to_vector
@@ -712,6 +658,14 @@ ang_lim .byt 00
 
 _fly_to_vector
 .(
+    jsr get_attack_angle
+    jmp fly_to_vector_final
+.)
+
+
+
+get_attack_angle
+.(
 
   ; norm_big();
   ; GetFrontVector();
@@ -745,7 +699,9 @@ limnorm
     lda #50      ; Force 0 for aggresive following... maybe when ANGRY?
 store
     sta ang_lim
+    rts
 .)
+
 fly_to_vector_final
 .(
   ;  // Fly_to_vector_final
@@ -972,6 +928,10 @@ notsmall
     rts
 
 .)
+
+
+
+
 
 
 

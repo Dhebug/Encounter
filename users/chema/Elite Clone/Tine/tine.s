@@ -2,6 +2,7 @@
 
 #include "ships.h"
 #include "params.h"
+#include "tine.h"
 
 #define OBS  osdk_end
 
@@ -383,6 +384,9 @@ _InitTestCode
 
         ; This one will pursue the other :)
 savid   lda #0  ;SMC
+
+        ; make it angry
+        ora #IS_ANGRY
         sta _target,x        
         lda _ai_state,x
         ora #IS_AICONTROLLED   

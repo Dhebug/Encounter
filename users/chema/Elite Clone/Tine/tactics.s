@@ -1,6 +1,16 @@
 
 #include "tine.h"
 
+#define SHUTTLE_CHANCE      $fc
+#define VIPER_CHANCE        $ef
+#define ANACONDA_CHANCE     $c7
+#define BREAK_CHANCE        $f9
+#define ESCAPE_POD_CHANCE   $e5
+#define FIRING_DISTANCE     $e000
+#define ECM_CHANCE          $10
+#define HERMIT_CHANCE       $fc
+
+
 ;; Function table for ships that are
 ;; hyperspacing, docking, exploding or disappearing...
 ;; Flags IS_whatever in tine.h
@@ -153,9 +163,29 @@ loop
     jmp damage_ship
         
 nohit
-nomissile
+    ;; Mirar a ver si se activa ECM (si no es el jugador)
+    ;; Si no lo activa entonces seguimos la persecución (?)
+    jmp approach
 
-  ; If a moving ship has a target, make her go
+nomissile
+    ;; It was NOT a missile, but another kind of ship
+    ; Update energy
+
+    ; If it is a THARGON and there are no THARGOIDS
+    ; halve speed and set ai_state=0 and rts
+    
+    ; Get a random number
+    jsr _gen_rnd_number
+
+    ; If FLAG_TRADER and r1>100 rts
+
+    ; If FLAG_BOUNTYHUNTER and our legal status >=40 set angry flag and target us (=1)
+
+    ; If FLAG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
+
+
+approach
+    ; If a moving ship has a target, make her go
     ; for it!
     
     lda AITarget
@@ -167,6 +197,176 @@ end
     rts
 
 .)
+
+
+;; Some variables to decouple firing and drawing the lasers
+_numlasers .byt 00
+_laser_source .dsb 4
+_laser_target .dsb 4
+
+;; fly_to_ship
+;; Makes current object fly towards a given ship
+;; passed in reg X
+fly_to_ship
+.(
+
+    ; Get the vector towards the target
+    jsr substract_positions
+    
+    ; Calculate attack angle
+    jsr get_attack_angle
+
+
+    ; if it is a missile, just fly towards it
+    lda AIShipType
+    cmp #SHIP_MISSILE
+    beq approach
+
+    ; if it is an Anaconda and there are less than 3 worms
+    ; launch one randomly. As _gen_rnd_number has already
+    ; been called, just use _rnd_seed (+1,+2,+3)
+
+    ; Randomly roll a bit to throw away anyone tracking me
+    lda _rnd_seed
+    cmp #BREAK_CHANCE
+    bcc noroll
+    ora #$68    ; doesn't $68 seem too high?
+    ldx AIShipID
+    sta _rotx,x    
+noroll
+    
+    ; Check ship's energy. If it is max/2
+    ; check if also less than max/8
+    ; if it is
+    ; launch escape pod, if possible and rts
+    ; if only less than max/2 launch missile and rts
+
+    ; If we arrive here energy is still high or we didn't
+    ; want to or couldn't launch missile or escape pod
+    ; Try to shoot at target
+    
+    ; Check distance... as A=abs(x)|abs(y)|abs(z)..
+    jsr getnorm ; Does precisely this with x,y,z being VectX,Y,Z (see tinefuncs.s)
+
+    ; Check if greater (or equal) than $2000 (maximum firing -and visibile- distance)
+    ; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
+    lda op1+1
+    and #>FIRING_DISTANCE
+    bne toofar  
+
+    ; Check if laser is fitted... check FLAG_DEFENCELESS?
+    ; if none goyo toofar
+    
+    ; We can shoot, so let's do it
+    
+    ; Check the attack angle (our_ang0)
+    ; According to Elite-AGB if greater than $2000 fire, if greater than $2300 fire and hit.
+    ; Scaling down approprately $2000 is 0.888 times the max value ($2400). The 88 percent of
+    ; our max value ($1000) is $e38. $2300 is equivalent to $f8e.
+
+    lda our_ang0
+    sta op1
+    lda our_ang0+1
+    sta op1+1
+ 
+    lda #<$f1c8 ;$e38
+    sta op2
+    lda #>$f1c8 ;$e38
+    sta op2+1
+    jsr cmp16
+    bpl toofar
+
+
+   ;lda #0
+;dbug beq dbug  
+  
+    ; We fire! 
+    ldx _numlasers
+    cpx #3
+    beq toofar  ; Too many lasers at the same time!
+
+    lda AIShipID
+    sta _laser_source,x
+    lda AITarget
+    sta _laser_target,x
+    inc _numlasers
+    
+    ; Do we hit or miss?
+    lda #<$f07d ;$f83
+    sta op2
+    lda #>$f07d ;$f8e
+    sta op2+1
+    jsr cmp16
+    bpl toofar
+
+    ; We hit!
+
+    ldx AIShipID
+    dec _accel,x
+
+    ldx AITarget
+    lda #10 ; Current laser strength. SHOULD CHANGE   
+    jmp damage_ship ; This is jsr/rts
+    
+     
+toofar    
+    ; Target far away
+    ; or angle of attack to great,
+    ; or fired and missed
+    ; or no laser fitted
+    ; fly about "randomly"
+
+approach
+    jmp fly_to_vector_final
+
+.)
+
+
+substract_positions
+.(
+    jsr GetObj
+    jsr GetShipPos
+    ldy #5
+loop
+    lda _PosX,y
+    sta _VectX,y
+    dey
+    bpl loop
+
+    jsr GetCurOb
+    jsr GetShipPos
+
+    ; Substract both positions
+    ; and store in _VectX,Y,Z
+    lda _VectX
+    sec
+    sbc _PosX
+    sta _VectX
+    lda _VectX+1
+    sbc _PosX+1
+    sta _VectX+1
+
+    lda _VectY
+    sec
+    sbc _PosY
+    sta _VectY
+    lda _VectY+1
+    sbc _PosY+1
+    sta _VectY+1
+
+    lda _VectZ
+    sec
+    sbc _PosZ
+    sta _VectZ
+    lda _VectZ+1
+    sbc _PosZ+1
+    sta _VectZ+1
+
+    rts
+.)
+
+
+
 
 
 FireLaser
@@ -610,6 +810,20 @@ end
     bne noplayer
     jmp damage_player
 noplayer
+    
+    ; Make ship angry at who shoot
+    ; If he can defend himself...
+    
+    ; Check for pressence of FLAG_DEFENCELESS
+    ; and behave also depending on type of ship (FLAG)
+    ; police allways get angry, pirates and bounty may
+    ; and others may with a smaller probability...
+    ; and depending on their ammo.
+
+    lda AIShipID
+    ora #IS_ANGRY
+    sta _target,x
+    
     rts
 
 .)
