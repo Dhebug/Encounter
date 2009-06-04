@@ -479,6 +479,8 @@ LaunchMissile
 .(
     lda #SHIP_MISSILE   ; Ship to launch
     jsr LaunchShipFromOther
+    cpx #0
+    beq failure
 
     lda #11
     sta _accel,x
@@ -509,6 +511,8 @@ LaunchMissile
     jsr MoveForwards
     lda #50
     jsr MoveSide;Down
+
+failure
     rts
 
 .)
@@ -598,9 +602,13 @@ CreatePart
 .(
     sta savA+1
     jsr LaunchShipFromOther
+    cpx #0
+    bne nofailure
+    rts
+nofailure
     lda #$ff ;d ; -3
     sta _accel,x
-    lda #5
+    lda #20
     sta _speed,x
     lda #3
     sta _rotz,x
@@ -618,13 +626,14 @@ savA
  
     lda _rnd_seed
     and #%00000111
-    ora #%00001000
+    ;ora #%00001000
+    ora #%00000100
     jmp setttl
 nodeb
     lda #255    
 setttl
     sta _ttl,x
-       
+    
     jsr SetCurOb
 
     jsr _gen_rnd_number

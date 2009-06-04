@@ -591,7 +591,7 @@ nadaz
     ldx CUROBJ
     lda _accel,x
     ;ora _speed,x
-    beq end
+    beq move
     clc
     adc _speed,x
     ;; Don't let them ever stop
@@ -608,7 +608,8 @@ noneg
     lda maxspeed  
 nomax
     sta _speed,x
-
+move
+    lda _speed,x
     jsr MoveForwards    
 end
     rts
