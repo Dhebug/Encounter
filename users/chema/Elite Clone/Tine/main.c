@@ -71,6 +71,13 @@ extern int PosX,PosY,PosZ;
 extern int VectX,VectY,VectZ;
 
 
+/* For fired lasers */
+extern char numlasers;
+extern char laser_source[4];
+extern char laser_target[4];
+
+
+
 extern int SqRoot(int);
 extern int abs(int);
 extern void GetFrontVector();
@@ -196,10 +203,10 @@ void fly_to_pos()
 
 void MoveOthers()
 {
-   
+   int i;
 
     SetCurrentObject(2);
-    fly_to_pos();
+    //fly_to_pos();
 
     Tactics();
     
@@ -217,7 +224,13 @@ void MoveOthers()
     }*/
 
 
-    printf("rx %d, ry %d, rz %d, s %d, a %d\n", rotx[6],roty[6],rotz[6],speed[6],accel[6]);
+    //printf("rx %d, ry %d, rz %d, s %d, a %d\n", rotx[6],roty[6],rotz[6],speed[6],accel[6]);
+
+    for (i=0; i<numlasers;i++)
+        printf("%d fires at %d!\n",laser_source[i],laser_target[i]);
+
+    numlasers=0;
+
 }
 
 
