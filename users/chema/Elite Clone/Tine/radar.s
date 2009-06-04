@@ -1,3 +1,5 @@
+#include "tine.h"
+
 ;
 ; Radar object.  To do the radar, an object is used whose points are simply
 ; the translated and rotated object centers.  This object is then projected
@@ -12,7 +14,7 @@ RADOBJ
 
 ; Point list
 
-RADDAT   .dsb 256
+RADDAT   .dsb MAXSHIPS*2
 
 
 
@@ -228,8 +230,8 @@ end
 ; that height of stalk is also in that range?
 
 
-savX .dsb 128
-savY .dsb 128
+savX .dsb MAXSHIPS
+savY .dsb MAXSHIPS
 countobjs .byt 00
 
 EraseRadar

@@ -4,7 +4,7 @@
 /* Some defines for TINE */
 /* Maximum number of simultaneous ships */
 
-#define MAXSHIPS 128 // With less ships radar fails firing a missile to the infinity (?)
+#define MAXSHIPS 40
 
 // Values for the _flags field
 
