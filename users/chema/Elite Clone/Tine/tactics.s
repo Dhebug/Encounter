@@ -91,12 +91,13 @@ end
 AIShipID    .byt 00 ; Current ship's ID
 AIShipType  .byt 00 ; Current ship's type
 AITarget    .byt 00 ; Current ship's target
-
+AIIsAngry   .byt 00 ; Angry status (with target)
 
 AIMain
 .(
     stx AIShipID
     lda _target,x
+    sta AIIsAngry
     and #%01111111
     sta AITarget
     jsr GetShipType
@@ -204,6 +205,11 @@ _numlasers .byt 00
 _laser_source .dsb 4
 _laser_target .dsb 4
 
+A1  .word 0
+oX   .word 0
+oY   .word 0
+oZ   .word 0
+
 ;; fly_to_ship
 ;; Makes current object fly towards a given ship
 ;; passed in reg X
@@ -213,6 +219,21 @@ fly_to_ship
     ; Get the vector towards the target
     jsr substract_positions
     
+    ; Need to save some data for later on... :(
+    jsr getnorm
+    lda op1
+    sta A1
+    lda op1+1
+    sta A1+1
+    
+    ldy #5
+loop
+    lda _VectX,y
+    sta oX,y
+    dey
+    bpl loop
+    
+
     ; Calculate attack angle
     jsr get_attack_angle
 
@@ -220,7 +241,10 @@ fly_to_ship
     ; if it is a missile, just fly towards it
     lda AIShipType
     cmp #SHIP_MISSILE
-    beq approach
+    ;beq approach
+    bne cont
+    jmp approach
+cont
 
     ; if it is an Anaconda and there are less than 3 worms
     ; launch one randomly. As _gen_rnd_number has already
@@ -241,16 +265,23 @@ noroll
     ; launch escape pod, if possible and rts
     ; if only less than max/2 launch missile and rts
 
+    ; If we are not angry we don't want to shoot.
+    lda AIIsAngry
+    and #IS_ANGRY
+    beq toofar
+
     ; If we arrive here energy is still high or we didn't
     ; want to or couldn't launch missile or escape pod
     ; Try to shoot at target
     
     ; Check distance... as A=abs(x)|abs(y)|abs(z)..
-    jsr getnorm ; Does precisely this with x,y,z being VectX,Y,Z (see tinefuncs.s)
+    ;jsr getnorm ; Does precisely this with x,y,z being VectX,Y,Z (see tinefuncs.s)
+    ; Now precalculated in A1
 
     ; Check if greater (or equal) than $2000 (maximum firing -and visibile- distance)
     ; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
-    lda op1+1
+    ; BEWARE! Bug. VectX,Y,Z are now normalized!
+    lda A1+1
     and #>FIRING_DISTANCE
     bne toofar  
 
@@ -269,17 +300,14 @@ noroll
     lda our_ang0+1
     sta op1+1
  
-    lda #<$f1c8 ;$e38
+    lda #<$e38; $f1c8 ;$e38
     sta op2
-    lda #>$f1c8 ;$e38
+    lda #>$e38; ;$e38
     sta op2+1
     jsr cmp16
-    bpl toofar
+    bmi toofar
 
-
-   ;lda #0
-;dbug beq dbug  
-  
+ 
     ; We fire! 
     ldx _numlasers
     cpx #3
@@ -287,17 +315,25 @@ noroll
 
     lda AIShipID
     sta _laser_source,x
+
     lda AITarget
     sta _laser_target,x
     inc _numlasers
-    
+ 
+
+    ; Make ship angry at who shoots
+    ldx AIShipID
+    lda AITarget
+    jsr make_angry
+
+   
     ; Do we hit or miss?
-    lda #<$f07d ;$f83
+    lda #<$f8e;f07d ;$f8e
     sta op2
-    lda #>$f07d ;$f8e
+    lda #>$f8e;f07d ;$f8e
     sta op2+1
     jsr cmp16
-    bpl toofar
+    bmi toofar
 
     ; We hit!
 
@@ -305,17 +341,91 @@ noroll
     dec _accel,x
 
     ldx AITarget
-    lda #10 ; Current laser strength. SHOULD CHANGE   
+    lda #3 ; Current laser strength. SHOULD CHANGE   
     jmp damage_ship ; This is jsr/rts
     
      
 toofar    
-    ; Target far away
-    ; or angle of attack to great,
+    ; Target far away,
+    ; or not angry,
+    ; or angle of attack too great,
     ; or fired and missed
     ; or no laser fitted
     ; fly about "randomly"
 
+    ; First see if we are on a collision course
+    
+    ; if z>$300 no problem
+;    lda #0
+;dbug beq dbug  
+    
+    lda oZ+1
+    bpl notneg0
+    sec
+    lda #0
+    sbc oZ+1
+notneg0
+    cmp #3
+    bcs approach 
+
+    ; it is less than $300, so check X and Y
+    ; if (abs(x)|abs(y)) & $fe00 then not on collision
+    ; it is enough to check the high bytes...
+
+    lda oX+1
+    bpl notneg1
+    sec
+    lda #0
+    sbc oX+1
+notneg1    
+    sta tmp    
+
+    lda oY+1
+    bpl notneg2
+    sec
+    lda #0
+    sbc oY+1
+notneg2
+    ora tmp    
+    and #$fe
+    bne approach
+    
+    ; On collision course, invert everything
+
+    lda #0
+    sec
+    sbc _VectX
+    sta _VectX
+    lda #0
+    sbc _VectX+1
+    sta _VectX+1
+
+    lda #0
+    sec
+    sbc _VectY
+    sta _VectY
+    lda #0
+    sbc _VectY+1
+    sta _VectY+1
+
+    lda #0
+    sec
+    sbc _VectZ
+    sta _VectZ
+    lda #0
+    sbc _VectZ+1
+    sta _VectZ+1
+
+    lda #0
+    sec
+    sbc our_ang0
+    sta our_ang0
+    lda #0
+    sbc our_ang0+1
+    sta our_ang0+1
+
+ 
+    
 approach
     jmp fly_to_vector_final
 
@@ -371,14 +481,20 @@ loop
 
 FireLaser
 .(
+
     jsr _DrawLaser
 
+    ; Check to see if we hit
     jsr FindTarget
-
     ldx _ID
     beq nohit
     lda #10 ; Current laser strength. SHOULD CHANGE   
     jsr damage_ship
+    
+    ; Make him angry at us
+    ldx #1  ; Player
+    lda _ID
+    jsr make_angry
 
 nohit
     rts
@@ -538,6 +654,7 @@ DisappearObject
 ExplodeObject
 .(
     stx _ID
+    jsr _explode
     jsr _gen_rnd_number
     ldx _ID
 
@@ -810,8 +927,9 @@ damage_ship
 noexplode
     ; Preserve reg X
     stx end+1
-    jsr _printHit     
+    ;jsr _printHit     
     ; Make a nice sound
+    jsr _shoot
 
 end
     ldx #0  ; SMC
@@ -819,20 +937,41 @@ end
     bne noplayer
     jmp damage_player
 noplayer
-    
-    ; Make ship angry at who shoot
-    ; If he can defend himself...
-    
-    ; Check for pressence of FLAG_DEFENCELESS
-    ; and behave also depending on type of ship (FLAG)
-    ; police allways get angry, pirates and bounty may
-    ; and others may with a smaller probability...
-    ; and depending on their ammo.
+     
+    rts
 
-    lda AIShipID
-    ora #IS_ANGRY
-    sta _target,x
+.)
+
+;; make_angry
+;; Makes a ship angry at another.
+;; but first checks if this is possible
+;; and the reaction is logical.
+;; Params: reg A is the ship ID
+;;         reg X is the bad guy
+make_angry
+.(
+
+   ; Check for pressence of FLAG_DEFENCELESS
+   ; and behave also depending on type of ship (FLAG)
+   ; police allways get angry, pirates and bounty may
+   ; and others may with a smaller probability...
+   ; and depending on their ammo.
+
+
+    cmp #2  ; Don't make player angry
+    bcc cannot
+
+    tay
+
+    ; If he is already angry, he might not change his mind
+    lda _target,y
+    bmi cannot  ; IS_ANGRY is the 7th bit
     
+    txa
+    ora #IS_ANGRY
+    sta _target,y
+
+cannot
     rts
 
 .)
@@ -861,7 +1000,7 @@ damage_player
     sta _speed+1    
 
     ; Delay explosion a bit
-    lda #1
+    lda #0
     sta _ttl+1
     
     jsr SetCurOb
@@ -879,8 +1018,8 @@ damage_player
     jsr SetCurOb
     lda #$9c     ; -100
     jsr MoveForwards
-    lda #$9c     ; -100
-    jsr MoveForwards
+    ;lda #$9c     ; -100
+    ;jsr MoveForwards
  
 
     ; Disable keyboard...
@@ -915,7 +1054,75 @@ enemy_energy
     bne loop
 
 
-    jsr _prcolls
+    ;jsr _prcolls
 
     rts
 .)
+
+
+
+
+_Lasers
+.(
+    ldx _numlasers
+    beq end
+    
+loop
+    ldy _numlasers
+
+    lda _laser_source-1,y
+    tax
+    lda _vertexXLO,x
+    sta X1        
+    lda _vertexXHI,x
+    bmi neg1
+    lda #0
+    beq post1
+neg1
+    lda #$ff
+post1
+    sta X1+1        
+    lda _vertexYLO,x
+    sta Y1        
+    lda _vertexYHI,x
+    bmi neg2
+    lda #0
+    beq post2
+neg2
+    lda #$ff
+post2
+    sta Y1+1        
+
+    lda _laser_target-1,y
+    tax
+    lda _vertexXLO,x
+    sta X2   
+    lda _vertexXHI,x
+    bmi neg3
+    lda #0
+    beq post3
+neg3
+    lda #$ff
+post3
+    sta X2+1        
+    lda _vertexYLO,x
+    sta Y2        
+    lda _vertexYHI,x
+    bmi neg4
+    lda #0
+    beq post4
+neg4
+    lda #$ff
+post4
+    sta Y2+1        
+
+    jsr _DrawClippedLine
+
+    dec _numlasers
+    bne loop
+end
+    rts
+.)
+
+
+

@@ -55,10 +55,14 @@ char accel[MAXSHIPS];
 char speed[MAXSHIPS];
 char target[MAXSHIPS];
 char flags[MAXSHIPS];
-char ai_state[MAXSHIPS];
 char ttl[MAXSHIPS];
 char energy[MAXSHIPS];
 char missiles[MAXSHIPS];
+char ai_state[MAXSHIPS];
+char vertexXLO[MAXSHIPS];
+char vertexXHI[MAXSHIPS];
+char vertexYLO[MAXSHIPS];
+char vertexYHI[MAXSHIPS];
 
 
 
@@ -200,10 +204,10 @@ void fly_to_pos()
 }
 
 
-
+#ifdef 0
 void MoveOthers()
 {
-   int i;
+   
 
     SetCurrentObject(2);
     //fly_to_pos();
@@ -225,6 +229,16 @@ void MoveOthers()
 
 
     //printf("rx %d, ry %d, rz %d, s %d, a %d\n", rotx[6],roty[6],rotz[6],speed[6],accel[6]);
+ 
+
+}
+
+
+void Lasers()
+{
+    int i;
+
+   if (! numlasers) cls();
 
     for (i=0; i<numlasers;i++)
         printf("%d fires at %d!\n",laser_source[i],laser_target[i]);
@@ -232,8 +246,7 @@ void MoveOthers()
     numlasers=0;
 
 }
-
-
+#endif
 
 
 /*
@@ -246,26 +259,28 @@ void print()
 */
 
 extern char ID;
-int * pop1=(int *)0x66;
+/*int * pop1=(int *)0x66;
 int * pop2=(int *)0x68;
-
+*/
 void printHit()
 {
     
     //props();
-    printf("  HIT %d \n",ID);
+    //printf("  HIT %d \n",ID);
     explode();
     
 
 }
 
+/*
 void props()
 {
     printf("op1=%d, op2=%d",*pop1,*pop2);
 
 }
+*/
 
-
+/*
 extern char num_collisions;
 extern char collision_list[4];
 
@@ -284,7 +299,7 @@ void prcolls()
       
 
 
-}
+}*/
 
 void DrawLaser()
 {
@@ -296,6 +311,28 @@ void DrawLaser()
 
 }
 
+#ifdef 0
+void prdbug()
+{
+
+    int i;
+
+    //for (i=4;i<=5;i++)
+
+    //for (i=0; i<numlasers;i++)
+    if (1/*numlasers*/)
+    {
+        i=0;
+        printf("%d,%d to %d,%d!\n",vertexXLO[laser_source[i]]+vertexXHI[laser_source[i]]*256,
+                                   vertexYLO[laser_source[i]]+vertexYHI[laser_source[i]]*256,
+                                   vertexXLO[laser_target[i]]+vertexXHI[laser_target[i]]*256,
+                                   vertexYLO[laser_target[i]]+vertexYHI[laser_target[i]]*256);
+    }
+    
+     i=5;
+     printf("%d: s %d, a %d, ai %d\n",i,speed[i],accel[i],ai_state[i]);
 
 
+}
+#endif
 
