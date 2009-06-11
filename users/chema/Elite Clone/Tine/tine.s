@@ -373,6 +373,8 @@ _InitTestCode
          lda _ai_state,x
          ora #IS_AICONTROLLED   
          sta _ai_state,x
+         lda #1
+         sta _speed,x
         
 
          lda #<OCEN2
@@ -464,14 +466,18 @@ _FirstFrame
 
 _RunDemo
 .(
- 
+    ;sei
 loop
 
-    jsr _MoveOthers
+    ;jsr _MoveOthers
+
+    jsr _Tactics;
 
     ldx VOB
     jsr SetCurOb
+    ;cli
     jsr ProcessKeyboard
+    ;sei
 
     ldx VOB
     ;jsr SetCurOb
@@ -491,12 +497,17 @@ loop
 
     jsr PlotStars
 
-  
+    jsr _Lasers
+      
 #ifdef FILLEDPOLYS
     jsr _ClearAndSwapFlag
 #else
     jsr dump_buf
 #endif
+
+    jsr _MoveShips
+
+   ; jsr _prdbug    
 
     ldx VOB
     jsr SetCurOb

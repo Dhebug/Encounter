@@ -81,22 +81,24 @@ OBLETS   .dsb OBHEAD+1      ;Oblet list
 
 .dsb 256-(*&255)
 
-OBJLO    .dsb 128         ;Object pointers
-OBJHI    .dsb 128         ;if 0 then empty
+
 VISOBJS  .dsb 129
 OBCEN    .dsb 127         ;Center object #
                           ;Note: will bug if 128 vis objs
 
-CX       .dsb 128          ;Rotated/relative centers
-HCX      .dsb 128
-CY       .dsb 128
-HCY      .dsb 128
-CZ       .dsb 128
-HCZ      .dsb 128
+OBJLO    .dsb MAXOBJS         ;Object pointers
+OBJHI    .dsb MAXOBJS         ;if 0 then empty
 
-PLISTX   .dsb 256         ;Point lists (projected)
-PLISTY   .dsb 256
-PLISTZ   .dsb 256
+CX       .dsb MAXOBJS          ;Rotated/relative centers
+HCX      .dsb MAXOBJS
+CY       .dsb MAXOBJS
+HCY      .dsb MAXOBJS
+CZ       .dsb MAXOBJS
+HCZ      .dsb MAXOBJS
+
+PLISTX   .dsb (MAXVERTEX*2)         ;Point lists (projected)
+PLISTY   .dsb (MAXVERTEX*2)
+PLISTZ   .dsb (MAXVERTEX*2)
 
 ;PQ       .dsb 120         ;Point queue. Just used in filled polygon drawing...
 
@@ -162,18 +164,18 @@ Init3D
          sta PLISTZLO+1
 
 
-         lda #<(PLISTX+$80)
+         lda #<(PLISTX+MAXVERTEX)
          sta PLISTXHI
-         lda #<(PLISTY+$80)
+         lda #<(PLISTY+MAXVERTEX)
          sta PLISTYHI
-         lda #<(PLISTZ+$80)
+         lda #<(PLISTZ+MAXVERTEX)
          sta PLISTZHI
 
-         lda #>(PLISTX+$80)
+         lda #>(PLISTX+MAXVERTEX)
          sta PLISTXHI+1
-         lda #>(PLISTY+$80)
+         lda #>(PLISTY+MAXVERTEX)
          sta PLISTYHI+1
-         lda #>(PLISTZ+$80)
+         lda #>(PLISTZ+MAXVERTEX)
          sta PLISTZHI+1
 
 
@@ -774,9 +776,9 @@ loop
          iny
          lda (tmp3),y
          sta pdata+2
-         ldy #0
+         ;ldy #0
 pdata
-         lda $1234,y     ; Get ObjType
+         lda $1234;,y     ; Get ObjType
          beq normal
          cmp #5           ; is it 1,2 or 4 ? Then planet, sun or moon
          bcc checkmin    ; skip max check
@@ -859,17 +861,37 @@ COB      .byt 00           ;Current object
 .(
 DrawLoop 
          STY COB
-;;;
-; FIX ME!!!
-;;;
-         ;LDA OBCEN,Y      ;Actual object number
-         ;TAX
-        
-         ldx OBCEN,y
+         ldx OBCEN,y    ;Actual object number
         
          JSR RotDraw
-+DrawAllVis
 
+         ; Save the (projected) laser vertex for each visible ship
+         ; I hate this, because uses information and routines out of
+         ; oobj3d, but this saves time and space, so... :( 
+
+         ldy COB
+         ldx OBCEN,y
+    
+         ; Get ship ID byte...
+         jsr GetObj
+         STA POINT        ;Object pointer
+         STY POINT+1
+         ldy #ObjID
+         lda (POINT),y
+         tay; ldy #0
+         
+         lda ShipLaserVertex-1,y
+         tay
+         lda PLISTX,y
+         sta _vertexXLO,x
+         lda PLISTX+MAXVERTEX,y
+         sta _vertexXHI,x
+         lda PLISTY,y
+         sta _vertexYLO,x
+         lda PLISTY+MAXVERTEX,y
+         sta _vertexYHI,x
+
++DrawAllVis
          LDX COB          ;Head = #$80
          LDY VISOBJS,X
          BPL DrawLoop
@@ -890,9 +912,6 @@ DrawRTS  RTS
          BMI DrawRTS
          php
          STY COB
-; yet another FIX ME!!!
-         ;.byt $BE
-         ;.word OBCEN         ;LDX OBCEN,Y
          ldx OBCEN,y
          LDA #00
          STA NUMLINES
@@ -915,10 +934,6 @@ NFACES   .byt 00           ;Faces/Oblets
 
 RotDraw  
 .(
-        ; lda #0
-        ; sta TotalLines
-
-
          LDA OBJLO,X
          STA POINT
          LDA OBJHI,X
@@ -1007,8 +1022,7 @@ c3       STX P0Z+1
 
          BMI Compound
          beq dloop
-         ;beq SmallDot
-
+  
          cpx #PLANET   ; Sun or planet object
          beq FilledCircle   
 
@@ -1017,7 +1031,10 @@ c3       STX P0Z+1
 
          cpx #DEBRIS         ; Space debris
          beq SmallDot
-         
+
+         ; Can't reach here. Either it is Compound (branches to Compound)
+         ; or it is normal (0), so branching to dloop, or one of the above
+         ; options. All those branches end with RTS.            
 
 dloop    JSR DrawFace
          DEC NFACES
@@ -1079,12 +1096,12 @@ SmallDot
         ldy #0
         lda PLISTX,x
         sta X1
-        lda PLISTX+$80,x
+        lda PLISTX+MAXVERTEX,x
         sta X1+1        
 
         lda PLISTY,x
         sta Y1
-        lda PLISTY+$80,x
+        lda PLISTY+MAXVERTEX,x
         sta Y1+1
 
         jmp draw_debris
@@ -1122,7 +1139,7 @@ sort     LDY NFACES       ;Number of oblets
          TAX
          LDA PLISTZ,X
          STA TEMP
-         LDA PLISTZ+$80,X
+         LDA PLISTZ+MAXVERTEX,X
          STA TEMP+1
 
          LDX NFACES       ;Current oblet
@@ -1134,7 +1151,7 @@ l1       LDA OBLETS,Y     ;Linked list
          TAY              ;Next object
          LDA PLISTZ,Y     ;If farther, then
          CMP TEMP         ;move down list
-         LDA PLISTZ+$80,Y
+         LDA PLISTZ+MAXVERTEX,Y
          SBC TEMP+1
          BCS l1
                           ;Nearest objects last in list
@@ -1148,11 +1165,6 @@ link     STA OBLETS,X     ;X -> rest of list
                           ;Now draw them
          LDY #OBHEAD
 loop     
-         ;LDA OBLETS,Y
-;
-; FIX ME!
-;
-         ;TAX
          ldx OBLETS,y
 
          STX COBLET
@@ -1221,12 +1233,12 @@ CirclePrepare
         ldy #0
         lda PLISTX,x
         sta cx
-        lda PLISTX+$80,x
+        lda PLISTX+MAXVERTEX,x
         sta cx+1        
 
         lda PLISTY,x
         sta cy
-        lda PLISTY+$80,x
+        lda PLISTY+MAXVERTEX,x
         sta cy+1
 
         ldx RTEMPA
@@ -1323,6 +1335,7 @@ DrawFace
 
          JSR IsVis
          bmi exit
+         ;bpl exit
 
 
          JSR POLYFILL
@@ -1340,18 +1353,17 @@ exit     LDA FACEPTR
 Wire
          JSR IsVis
          bmi exit
-                          
 
          LDY #2           ;Connect the dots...
 l2       LDA (POINT),Y
          TAX
          LDA PLISTX,X
          STA X1
-         LDA PLISTX+$80,X
+         LDA PLISTX+MAXVERTEX,X
          STA X1+1
          LDA PLISTY,X
          STA Y1
-         LDA PLISTY+$80,X
+         LDA PLISTY+MAXVERTEX,X
          STA Y1+1
          STX RTEMPA
 
@@ -1360,11 +1372,11 @@ l2       LDA (POINT),Y
          TAX
          LDA PLISTX,X
          STA X2
-         LDA PLISTX+$80,X
+         LDA PLISTX+MAXVERTEX,X
          STA X2+1
          LDA PLISTY,X
          STA Y2
-         LDA PLISTY+$80,X
+         LDA PLISTY+MAXVERTEX,X
          STA Y2+1
 
          STY RTEMPY
@@ -1423,11 +1435,11 @@ l2       LDA (POINT),Y
          TAX
          LDA PLISTX,X
          STA X1
-         LDA PLISTX+$80,X
+         LDA PLISTX+MAXVERTEX,X
          STA X1+1
          LDA PLISTY,X
          STA Y1
-         LDA PLISTY+$80,X
+         LDA PLISTY+MAXVERTEX,X
          STA Y1+1
          ;STX RTEMPA
 
@@ -1436,11 +1448,11 @@ l2       LDA (POINT),Y
          TAX
          LDA PLISTX,X
          STA X2
-         LDA PLISTX+$80,X
+         LDA PLISTX+MAXVERTEX,X
          STA X2+1
          LDA PLISTY,X
          STA Y2
-         LDA PLISTY+$80,X
+         LDA PLISTY+MAXVERTEX,X
          STA Y2+1
 
          STY RTEMPY
@@ -1491,8 +1503,8 @@ IsVis
 	sec
 	sbc PLISTX,x
 	sta op1
-	lda PLISTX+$80,y
-	sbc PLISTX+$80,x 
+	lda PLISTX+MAXVERTEX,y
+	sbc PLISTX+MAXVERTEX,x 
 	sta op1+1
 
 
@@ -1503,8 +1515,8 @@ IsVis
 	sec
 	sbc PLISTY,x
 	sta op2
-	lda PLISTY+$80,y
-	sbc PLISTY+$80,x 
+	lda PLISTY+MAXVERTEX,y
+	sbc PLISTY+MAXVERTEX,x 
 	sta op2+1
 
 	jsr mul16
@@ -1529,8 +1541,8 @@ IsVis
 	sec
 	sbc PLISTY,x
 	sta op1
-	lda PLISTY+$80,y
-	sbc PLISTY+$80,x 
+	lda PLISTY+MAXVERTEX,y
+	sbc PLISTY+MAXVERTEX,x 
 	sta op1+1
 
 	;op2=	(x3-x2)
@@ -1540,13 +1552,15 @@ IsVis
 	sec
 	sbc PLISTX,x
 	sta op2
-	lda PLISTX+$80,y
-	sbc PLISTX+$80,x 
+	lda PLISTX+MAXVERTEX,y
+	sbc PLISTX+MAXVERTEX,x 
 	sta op2+1
 
 	jsr mul16
 
 	sec
+
+#ifdef OLDVER
 savop1l
 	lda #00
 	sbc op1
@@ -1559,6 +1573,24 @@ savtmp1l
 savtmp1h
 	lda #00
 	sbc tmp1+1
+
+#else
+    lda op1
+savop1l
+	sbc #00
+	lda op1+1
+savop1h	
+	sbc #00
+	lda tmp1
+savtmp1l
+	sbc #00
+	lda tmp1+1
+savtmp1h
+	sbc #00
+
+#endif
+
+
 	rts
 
 .)

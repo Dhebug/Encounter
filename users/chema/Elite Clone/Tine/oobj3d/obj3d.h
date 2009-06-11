@@ -6,6 +6,10 @@
 
 #include "params.h"
 
+// Maximum number of objects that can be handled
+#define MAXOBJS     64  
+#define MAXVERTEX   64
+
 /*
  Each object is of the following form:
 
