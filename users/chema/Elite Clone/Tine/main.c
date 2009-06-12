@@ -131,13 +131,13 @@ main()
 
     hires();
 
-
+#ifndef FILLEDPOLYS
     curset(5,5);
     draw(0,123,1);
     draw(230,0,1);
     draw(0,-123,1);
     draw(-230,0,1);
-
+#endif
     printf("A/Z Pitch, Q/W Roll, S/D Yaw\nO/L accel/deccel B missile 1 laser");
 
 
