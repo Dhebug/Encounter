@@ -20,15 +20,30 @@
 //#define CLIP_BOTTOM	199
 
 
+//#define FILLEDPOLYS
+
+#ifdef FILLEDPOLYS
+
+#define CLIP_LEFT	11
+#define CLIP_RIGHT	(239)
+#define CLIP_TOP	5
+#define CLIP_BOTTOM	(127-1)
+
+
+#else
+
 #define CLIP_LEFT	5
 #define CLIP_RIGHT	(239-5)
 #define CLIP_TOP	5
 #define CLIP_BOTTOM	(127-1)
 
+#endif
+
+
 #define USE_ACCURATE_CLIPPING
 
 
-//#define FILLEDPOLYS
+
 
 
 
