@@ -1041,10 +1041,18 @@ loop
     ldy count
     lda _collision_list-1,y
     tax
-    lda _energy,x
+    lda _energy,x   ; Get enemy's energy/2
+    lsr
     sta enemy_energy+1
-    lda _energy+1   ; Get player's energy
+    lda _energy+1   ; Get player's energy/2
+    lsr
     jsr damage_ship ; Damage enemy
+
+   ; Make him angry at us
+    ldx #1  ; Player
+    ldy count
+    lda _collision_list-1,y
+    jsr make_angry
 
 enemy_energy
     lda #0  ; SMC
@@ -1053,9 +1061,7 @@ enemy_energy
     dec count
     bne loop
 
-
     ;jsr _prcolls
-
     rts
 .)
 
