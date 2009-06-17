@@ -255,6 +255,13 @@ main()
             infoplanet(dest_num);
             makesystem();
             printsystem();
+            break;
+        case 'G':
+            plot_galaxy();
+            break;
+        case 'C':
+            plot_chart();
+            break;
     
     }
     }

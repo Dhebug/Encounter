@@ -433,6 +433,406 @@ notequal
 
 
 
+; Plot galaxy (long range chart)
+
+_plot_galaxy
+.(
+
+    jsr clr_hires
+
+    ; Initialize seed for this galaxy
+   
+    ldx #5
+loop
+    lda _base0,x
+    sta _seed,x
+    dex
+    bpl loop
+
+    ; Loop creating systems
+    lda #$ff
+    sta num
+
+loop3
+    inc num
+
+    ; Plot a dot at system's position (X/2, Y/4)
+
+    lda _seed+3  ; HI part of seed.w1 is sys X
+    ;lsr
+    tax
+    lda _seed+1  ; This is sys Y
+    lsr
+    ;lsr
+    tay
+    jsr pixel_address
+
+    ldy #0
+    lda (tmp0),y
+    ora tmp1        
+    sta (tmp0),y
+
+    ldy #4
+loop4    
+    jsr _tweakseed
+    dey
+    bne loop4
+    
+    lda num
+    cmp #$ff
+    bne loop3
+    
+end
+    rts
+
+.)
+
+
+; Plot chart (short range chart)
+
+names .dsb 24
+col .byt 00
+row .byt 00
+plotX .byt 00
+plotY .byt 00
+temp_seed2 .dsb 6
+
+#define SHORT_CENTRE_X $68
+#define SHORT_CENTRE_Y $56
+
+_plot_chart
+.(
+
+    ; Save seed
+    ldx #5
+loopsavseed
+    lda _seed,x
+    sta temp_seed2,x
+    dex
+    bpl loopsavseed
+
+    ; init names
+    ldx #23
+    lda #0
+loopnames
+    sta names,x
+    dex
+    bpl loopnames
+
+    jsr clr_hires
+    ldy #0
+    lda #6
+    sta (sp),y
+    jsr _ink
+
+   ; Draw fuel circle
+    ldy #0
+    lda #SHORT_CENTRE_X
+    sta (sp),y
+    iny
+    lda #0
+    sta (sp),y
+    iny
+    lda #SHORT_CENTRE_Y
+    sta (sp),y
+    iny
+    lda #0
+    sta (sp),y
+    iny
+    lda #1
+    sta (sp),y
+    lda #0
+    sta (sp),y
+    jsr _curset
+
+    lda #70
+    ldy #0
+    sta (sp),y
+    iny
+    iny
+    lda #1
+    sta (sp),y
+    jsr _circle   
+
+
+    ; Initialize seed for this galaxy
+   
+    ldx #5
+loop
+    lda _base0,x
+    sta _seed,x
+    dex
+    bpl loop
+
+    ; Loop creating systems
+    lda #$ff
+    sta num
+
+loop3
+    inc num
+
+    ; Check if in range
+
+    ; int dx = cseed.s3 - g_commander.cpl_coord.x;
+    ; int dy = cseed.s1 - g_commander.cpl_coord.y;
+
+    ; if (abs(dx) < 0x14) {
+    ;   if (abs(dy) < 0x26) {
+    lda _seed+3  ; HI part of seed.w1 is sys X
+    sec
+    sbc _cpl_system+SYSX
+    sta tmp
+    bpl nonegx
+    lda #0
+    sec
+    sbc tmp
+nonegx
+    cmp #$14
+    bcc checkY
+    jmp next
+checkY    
+    lda _seed+1  ; This is Y
+    sec
+    sbc _cpl_system+SYSY
+    sta tmp+1
+    bpl nonegy
+    lda #0
+    sec
+    sbc tmp+1
+nonegy
+    cmp #$26
+    bcc inrange
+    jmp next
+inrange
+
+    ; Ok it is in range, prepare where to place the name
+    ;     int x = (dx*4) + SHORT_CENTRE_X;
+    ;     int col = (x/8) + 1;
+    ;     int y = (dy*2) + SHORT_CENTRE_Y;
+    ;     int row = (y/8);
+ 
+    lda tmp
+    asl
+    asl
+    clc
+    adc #SHORT_CENTRE_X
+    sta plotX            ; Save X for plotting
+    lsr
+    lsr
+    lsr
+    sta col
+    inc col    
+    
+    lda tmp+1
+    asl
+    clc
+    adc #SHORT_CENTRE_Y
+    sta plotY          ; Save Y for plotting
+    lsr
+    lsr
+    lsr
+    sta row
+    
+    ;     if (names[row] != 0) {
+    ;       row++;
+    ;       if (names[row] != 0) {
+    ;         row-=2;
+    ;       }
+    ;     }
+
+
+    ldx row
+    lda names,x
+    beq cont
+    inx
+    inc row
+    lda names,x
+    beq cont
+    dec row
+    dec row
+
+cont
+
+    ;  if (row >= 2 && row < 19 ) {
+    ;      if ( names[row] == 0) {
+    ;        // draw the name
+    ;        names[row] = 0xff;
+    ;        textmod = 0x80;
+    ;        //g_bindex = 0;
+    ;        g_xc = col;
+    ;        g_yc = row;
+    ;        christen_planet(cseed);
+    ;      }
+
+    ldx row
+    cpx #2
+    bcc next
+    cpx #19
+    bcs next
+
+    lda names,x
+    bne noprint
+
+    ; Draw the name
+
+    ;ldx row
+    lda #$ff
+    sta names,x
+    jsr name_planet
+    lda col
+    asl
+    asl
+    asl 
+    clc
+    adc #3
+    tax
+    lda row
+    asl
+    asl
+    asl
+    clc
+    adc #2
+    tay
+    jsr gotoXY
+    ;lda #<_hyp_system+NAME     
+    ;ldx #>_hyp_system+NAME
+    ;jsr print
+    jsr gs_planet_name
+
+noprint
+
+    ; plot the star
+    ;  // bigstars
+    ;  int size = 2+ (cseed.s5 & 1) + g_carry;
+    ;  sun(x,y,size,0);
+    ;ldx plotX
+    ;ldy plotY
+    ;jsr pixel_address
+    ;ldy #0
+    ;lda (tmp0),y
+    ;eor tmp1        
+    ;sta (tmp0),y
+
+    ;ldy #0
+    ;lda plotX
+    ;sta (sp),y
+    ;iny
+    ;lda #0
+    ;sta (sp),y
+    ;iny
+    ;lda plotY
+    ;sta (sp),y
+    ;iny
+    ;lda #0
+    ;sta (sp),y
+    ;iny
+    ;lda #1
+    ;sta (sp),y
+    ;lda #0
+    ;sta (sp),y
+    ;jsr _curset
+
+    ;lda _seed+5
+    ;and #1
+    ;clc
+    ;adc #2
+    ;ldy #0
+    ;sta (sp),y
+    ;iny
+    ;iny
+    ;lda #1
+    ;sta (sp),y
+    ;jsr _circle    
+
+    jsr box
+
+next
+
+    ldy #4
+loop4    
+    jsr _tweakseed
+    dey
+    bne loop4
+    
+    lda num
+    cmp #$ff
+    beq end
+    jmp loop3
+    
+end
+
+    ; restore seed
+    ldx #5
+resseed
+    lda temp_seed2,x
+    sta _seed,x
+    dex
+    bpl resseed
+
+    jmp _makesystem ; This is jsr/rts
+
+.)
+
+
+
+box
+.(
+    ; Draws a box at planet's position (plotX and plotY) with the 
+    ; size depending on the size of the planet
+
+    ; Get the size
+    lda _seed+5
+    and #1
+    clc
+    adc #2
+    sta tmp2
+
+    lda plotY
+    sec
+    sbc tmp2
+    sta plotY
+
+
+    lda plotX
+    sec
+    sbc tmp2
+    sta inipX+1
+
+
+    lda tmp2
+    asl
+    sta tmp2
+    sta looprows+1
+   
+looprows
+    lda #0  ; SMC
+    sta tmp3    
+
+inipX
+    lda #0  ; SMC
+    sta plotX
+
+loopcols                
+    ldx plotX    
+    ldy plotY
+    jsr pixel_address
+    ldy #0
+    lda (tmp0),y
+    eor tmp1        
+    sta (tmp0),y
+    
+    inc plotX
+    dec tmp3
+    bpl loopcols
+
+    inc plotY
+    dec tmp2
+    bpl looprows
+
+    rts
+
+.)
+
 ; /**-Generate system info from seed **/
 
 _makesystem
@@ -1325,7 +1725,7 @@ ok
 
 print_distance
 .(
-   lda _cpl_system+SYSX  ; Current X pos
+    lda _cpl_system+SYSX  ; Current X pos
     sta tmp
     lda _hyp_system+SYSX
     sta tmp+1
