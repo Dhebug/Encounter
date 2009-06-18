@@ -369,11 +369,9 @@ found
     ldy #(200-6*4)
     jsr gotoY
     jsr put_space
-    ldy #1
-    lda (sp),y
+    lda #>_hyp_system+NAME
     tax
-    dey
-    lda (sp),y
+    lda #<_hyp_system+NAME
     jsr print
     jsr put_space
     jmp print_distance
@@ -500,7 +498,8 @@ temp_seed2 .dsb 6
 #define SHORT_CENTRE_X $68
 #define SHORT_CENTRE_Y $56
 
-_plot_chart
+
+save_seed
 .(
 
     ; Save seed
@@ -510,7 +509,65 @@ loopsavseed
     sta temp_seed2,x
     dex
     bpl loopsavseed
+    rts
+.)
 
+restore_seed
+.(
+    ; restore seed
+    ldx #5
+resseed
+    lda temp_seed2,x
+    sta _seed,x
+    dex
+    bpl resseed
+
+    rts
+
+.)
+
+
+in_range
+.(
+    ; Check if in range
+
+    ; int dx = cseed.s3 - g_commander.cpl_coord.x;
+    ; int dy = cseed.s1 - g_commander.cpl_coord.y;
+
+    ; if (abs(dx) < 0x14) {
+    ;   if (abs(dy) < 0x26) {
+    lda _seed+3  ; HI part of seed.w1 is sys X
+    sec
+    sbc _cpl_system+SYSX
+    sta tmp
+    bpl nonegx
+    lda #0
+    sec
+    sbc tmp
+nonegx
+    cmp #$14
+    bcc checkY
+    jmp end
+checkY    
+    lda _seed+1  ; This is Y
+    sec
+    sbc _cpl_system+SYSY
+    sta tmp+1
+    bpl nonegy
+    lda #0
+    sec
+    sbc tmp+1
+nonegy
+    cmp #$26
+
+end
+    rts
+.)
+
+_plot_chart
+.(
+
+    jsr save_seed
     ; init names
     ldx #23
     lda #0
@@ -571,39 +628,9 @@ loop
 loop3
     inc num
 
-    ; Check if in range
-
-    ; int dx = cseed.s3 - g_commander.cpl_coord.x;
-    ; int dy = cseed.s1 - g_commander.cpl_coord.y;
-
-    ; if (abs(dx) < 0x14) {
-    ;   if (abs(dy) < 0x26) {
-    lda _seed+3  ; HI part of seed.w1 is sys X
-    sec
-    sbc _cpl_system+SYSX
-    sta tmp
-    bpl nonegx
-    lda #0
-    sec
-    sbc tmp
-nonegx
-    cmp #$14
-    bcc checkY
-    jmp next
-checkY    
-    lda _seed+1  ; This is Y
-    sec
-    sbc _cpl_system+SYSY
-    sta tmp+1
-    bpl nonegy
-    lda #0
-    sec
-    sbc tmp+1
-nonegy
-    cmp #$26
-    bcc inrange
-    jmp next
-inrange
+    jsr in_range
+    bcs next
+   
 
     ; Ok it is in range, prepare where to place the name
     ;     int x = (dx*4) + SHORT_CENTRE_X;
@@ -611,23 +638,19 @@ inrange
     ;     int y = (dy*2) + SHORT_CENTRE_Y;
     ;     int row = (y/8);
  
-    lda tmp
-    asl
-    asl
-    clc
-    adc #SHORT_CENTRE_X
-    sta plotX            ; Save X for plotting
+    ldx _seed+3
+    ldy _seed+1
+    jsr universe_to_short_chart
+    stx plotX
+    sty plotY
+    txa
     lsr
     lsr
     lsr
     sta col
-    inc col    
-    
-    lda tmp+1
-    asl
-    clc
-    adc #SHORT_CENTRE_Y
-    sta plotY          ; Save Y for plotting
+    inc col
+
+    tya
     lsr
     lsr
     lsr
@@ -761,13 +784,15 @@ loop4
     
 end
 
-    ; restore seed
-    ldx #5
-resseed
-    lda temp_seed2,x
-    sta _seed,x
-    dex
-    bpl resseed
+    ; Draw the cursor
+    lda #SHORT_CENTRE_Y
+    sta plotY
+    lda #SHORT_CENTRE_X
+    sta plotX
+    lda #6
+    jsr plot_cross
+
+    jsr restore_seed
 
     jmp _makesystem ; This is jsr/rts
 
@@ -831,6 +856,358 @@ loopcols
 
     rts
 
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; plot_cross
+; Draws (with eor) a cross (clipped) at
+; current plotX, plotY position
+; with size passed in reg A.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+plot_cross
+.(
+    sta cross_size
+    ; init point X
+    lda plotX
+    sec
+    sbc cross_size
+    cmp #12
+    bcs inside1
+    lda #12
+inside1
+    sta inic
+
+    lda plotX
+    clc
+    adc cross_size
+    cmp #240 
+    bcc inside2
+    lda #240
+inside2
+    sta endc+1   
+    
+    ; horizontal arm
+
+loophor
+    ldy plotY
+    ldx inic
+    jsr pixel_address   
+    ldy #0
+    lda (tmp0),y
+    eor tmp1        
+    sta (tmp0),y         
+    inc inic
+    lda inic
+endc
+    cmp #0  ;SMC
+    bne loophor
+
+    ; vertical arm
+    lda plotY
+    sec
+    sbc cross_size
+    cmp #6
+    bcs inside3
+    lda #6
+inside3
+    sta inic
+
+    lda plotY
+    clc
+    adc cross_size
+    cmp #200 
+    bcc inside4
+    lda #199
+inside4
+    sta endc2+1   
+
+loopver
+    ldx plotX
+    ldy inic
+    jsr pixel_address   
+    ldy #0
+    lda (tmp0),y
+    eor tmp1        
+    sta (tmp0),y         
+    inc inic
+    lda inic
+endc2
+    cmp #0  ; SMC
+    bne loopver
+
+    rts
+
+cross_size .byt 0
+inic .byt 0
+.)
+
+_move_cross_v
+.(
+    ldy #0
+    lda (sp),y
+
+    sta amount+1
+    ; erase
+    lda #6
+    jsr plot_cross
+    
+    ; inc/dec Y
+    clc
+    lda plotY
+amount
+    adc #0  ;SMC
+    cmp #199
+    bcs outside
+    cmp #10
+    bcc outside
+    sta plotY
+outside
+
+    lda #6
+    jsr plot_cross
+    rts
+
+.)
+
+_move_cross_h
+.(
+    ldy #0
+    lda (sp),y
+
+    sta amount+1
+    ; erase
+    lda #6
+    jsr plot_cross
+    
+    ; inc/dec X
+    clc
+    lda plotX
+amount
+    adc #0  ;SMC
+    cmp #239
+    bcs outside
+    cmp #12
+    bcc outside
+    sta plotX
+outside
+
+    lda #6
+    jsr plot_cross
+    rts
+
+.)
+
+
+
+; Convert coordinates in regs X,Y to universe coordinates in a
+; short-range chart and back
+
+universe_to_short_chart
+.(
+    txa
+    sec
+    sbc _cpl_system+SYSX
+    asl
+    asl
+    clc
+    adc #SHORT_CENTRE_X
+    tax
+    
+    tya
+    sec
+    sbc _cpl_system+SYSY
+    asl
+    clc
+    adc #SHORT_CENTRE_Y
+    tay
+
+    rts
+
+.)
+
+short_chart_to_universe
+.(
+    txa
+    sec
+    sbc #SHORT_CENTRE_X
+    bmi by4
+    clc
+    bcc by4b
+by4
+    sec
+    ror
+    sec
+    ror
+    jmp by4end
+by4b    
+    ror
+    ror
+by4end
+    clc
+    adc _cpl_system+SYSX
+    tax
+    
+    tya
+    sec
+    sbc #SHORT_CENTRE_Y
+    bmi by2
+    clc
+    bcc by2b
+by2
+    sec
+by2b
+    ror
+    clc
+    adc _cpl_system+SYSY
+    tay
+    
+    rts
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; snap_to_planet
+; Finds a planet closest to a given coordinate (x,y)
+; passed in the X and Y registers
+; It is the next hyperspace destination
+; result planet num is returned in reg a
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+snap_to_planet
+.(
+
+    lda #$ff
+    sta tmp1
+
+    lda _dest_num
+    sta tmp1+1
+    
+    stx tmp0    ; Cursor X
+    sty tmp0+1  ; Cursor Y
+
+    ; Initialize seed for this galaxy
+    
+    ldx #5
+loop
+    lda _base0,x
+    sta _seed,x
+    dex
+    bpl loop
+
+    ; Loop creating systems
+    lda #$ff
+    sta num
+
+loop3
+    inc num
+
+    jsr in_range    ; BEWARE. In long-chart this should not be called!!
+    bcs next
+
+    lda tmp0
+    sec
+    sbc _seed+3 ; Get X
+    bpl noneg
+    eor #$ff
+    clc 
+    adc #1
+noneg
+    cmp #10
+    bcs next
+    sta tmp
+
+    lda tmp0+1
+    sec
+    sbc _seed+1 ; Get Y
+    bpl noneg2
+    eor #$ff
+    clc 
+    adc #1
+noneg2
+    cmp #10
+    bcs next
+
+    cmp tmp
+    bcs ygreater
+    clc
+    adc tmp
+    adc tmp
+    jmp check
+ygreater
+    asl
+    clc
+    adc tmp
+check
+    lsr
+    cmp tmp1
+    bcs next
+    
+
+
+    sta tmp1
+    lda num
+    sta tmp1+1
+    
+next    
+    ldy #4
+loop4    
+    jsr _tweakseed
+    dey
+    bne loop4
+    
+    lda num
+    cmp #$ff
+    bne loop3
+    
+    lda tmp1+1
+    rts
+
+.)
+
+
+_find_planet
+.(
+
+    ldx plotX
+    ldy plotY
+    jsr short_chart_to_universe
+    jsr snap_to_planet
+    ldx tmp1
+    cpx #$ff
+    beq noplanet
+    sta _dest_num
+
+    lda _dest_num
+    ldy #0
+    sta (sp),y
+    iny
+    lda #0
+    sta (sp),y
+    jsr _infoplanet
+
+    jsr _makesystem
+
+    lda #6
+    jsr plot_cross
+    ldx _hyp_system+SYSX
+    ldy _hyp_system+SYSY
+    jsr universe_to_short_chart
+    stx plotX
+    sty plotY
+    lda #6
+    jsr plot_cross
+
+    jsr perform_CRLF
+    ldy #(200-6*4)
+    jsr gotoY
+    jsr put_space
+    lda #>_hyp_system+NAME
+    tax
+    lda #<_hyp_system+NAME
+    jsr print
+    jsr put_space
+    jsr print_distance
+noplanet
+    rts
 .)
 
 ; /**-Generate system info from seed **/
@@ -2188,6 +2565,7 @@ loopsp
 
 +print_num
     jsr itoa
+    ;jsr utoa
 loop
     lda #<bufconv
     ldx #>bufconv

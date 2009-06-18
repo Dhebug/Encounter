@@ -76,6 +76,7 @@ extern void print_colonial();
 extern void infoplanet(int num);
 extern void printsystem();
 extern void search_planet(char * name);
+extern void move_cross_v(int dist);
 
 /*
 printsystem()
@@ -206,6 +207,13 @@ main()
 
     unsigned int i;
     char n[12];
+
+    char * p;
+    p=(char *)0x24e;  
+    *p=5;
+    p=(char *)0x24f;  
+    *p=1; 
+
    
     //plot_galaxy();
 
@@ -263,6 +271,22 @@ main()
             plot_chart();
             break;
     
+        case 'Q':
+            move_cross_v(-2);
+            break;
+        case 'A':
+            move_cross_v(2);
+            break;
+        case 'S':
+            move_cross_h(-2);
+            break;
+        case 'D':
+            move_cross_h(2);
+            break;
+        case ' ':
+            find_planet();
+            break;
+
     }
     }
          
