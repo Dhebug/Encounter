@@ -648,8 +648,12 @@ tab_mod06
 #ifdef miitoa
 bufconv
 	.byt 0,0,0,0,0,0,0,0,0,0,0,0
-itoa
-.(
+utoa
+.( 
+    ldy#0
+    sty bufconv
+    jmp itoaloop   
++itoa
 	ldy #0
 	sty bufconv
 	lda op2+1
