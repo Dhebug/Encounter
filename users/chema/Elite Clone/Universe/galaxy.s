@@ -54,6 +54,11 @@
 #define NAME    14
 
 
+#define SCR_MARKET  1
+#define SCR_SYSTEM  2
+#define SCR_GALAXY  3
+#define SCR_CHART   4
+
 
 
 ;typedef struct
@@ -166,7 +171,7 @@ loop
 	;	q =  (commodities[i].basequant) + changing - product;	
 
     lda #0
-    ;beq loop
+  
     sta op1+1
     sta op2+1
  
@@ -435,7 +440,20 @@ notequal
 
 _plot_galaxy
 .(
+    lda #0  ; No scroll
+    sta scroll
+    jmp plot_galaxy_with_scroll
+.)
 
+
+#define LONG_START_X 12
+#define LONG_START_Y 16
+#define LONG_END_X   (239-12)
+#define SCROLL_AMOUNT 30
+
+scroll .byt 0
+plot_galaxy_with_scroll
+.(
     jsr clr_hires
 
     ; Initialize seed for this galaxy
@@ -456,13 +474,17 @@ loop3
 
     ; Plot a dot at system's position (X/2, Y/4)
 
-    lda _seed+3  ; HI part of seed.w1 is sys X
-    ;lsr
-    tax
-    lda _seed+1  ; This is sys Y
-    lsr
-    ;lsr
-    tay
+    ldx _seed+3  ; HI part of seed.w1 is sys X
+    ldy _seed+1  ; This is sys Y
+    jsr universe_to_long_chart
+    
+    ; Is in range?
+    cpx #LONG_START_X
+    bcc postdraw
+    cpx #LONG_END_X
+    bcs postdraw
+
+
     jsr pixel_address
 
     ldy #0
@@ -470,6 +492,7 @@ loop3
     ora tmp1        
     sta (tmp0),y
 
+postdraw
     ldy #4
 loop4    
     jsr _tweakseed
@@ -481,10 +504,77 @@ loop4
     bne loop3
     
 end
+
+    ; Draw the cursor
+
+    ldx _cpl_system+SYSX
+    ldy _cpl_system+SYSY 
+    jsr universe_to_long_chart
+    
+    ; Is in range?
+    cpx #LONG_START_X
+    bcc postdraw2
+    cpx #LONG_END_X
+    bcs postdraw2
+
+    sty plotY
+    stx plotX
+    lda #12
+    jsr plot_cross
+
+    lda #6
+    jsr plot_cross
+
+postdraw2
     rts
 
 .)
 
+
+universe_to_long_chart
+.(
+    txa
+    ;lsr
+    clc
+    adc #LONG_START_X
+    ldx scroll
+    beq noscroll
+    sec
+    sbc #SCROLL_AMOUNT
+noscroll
+    tax
+    
+    tya 
+    lsr
+    ;lsr
+    clc
+    adc #LONG_START_Y
+    tay
+
+    rts
+.)
+
+
+long_chart_to_universe
+.(
+    txa
+    sec
+    sbc #LONG_START_X
+    ldx scroll
+    beq noscroll
+    clc
+    adc #SCROLL_AMOUNT
+noscroll
+    tax
+
+    tya
+    sec
+    sbc #LONG_START_Y
+    asl
+    tay
+
+    rts
+.)
 
 ; Plot chart (short range chart)
 
@@ -986,14 +1076,31 @@ _move_cross_h
 amount
     adc #0  ;SMC
     cmp #239
-    bcs outside
+    bcs outside1
     cmp #12
-    bcc outside
+    bcc outside2
     sta plotX
-outside
-
+    jmp plot
+outside1
+    lda _current_screen
+    cmp #SCR_GALAXY
+    bne plot
+    lda scroll
+    bne plot
+    inc scroll
+    jmp plot_galaxy_with_scroll
+outside2
+    lda _current_screen
+    cmp #SCR_GALAXY
+    bne plot
+    lda scroll
+    beq plot
+    dec scroll
+    jmp plot_galaxy_with_scroll
+plot
     lda #6
     jsr plot_cross
+    
     rts
 
 .)
@@ -2404,6 +2511,9 @@ _displaymarket
     lda #0
     sta count    
 loop
+    ;printf("\n");
+    jsr perform_CRLF
+
     jsr print_mkt_item
     inc count
     lda count
@@ -2415,9 +2525,6 @@ loop
 
 print_mkt_item
 .(
-    ;printf("\n");
-    jsr perform_CRLF
-
     ;printf(Names[i]);
     lda #(A_FWGREEN+A_FWYELLOW*16+128)
     jsr put_code
