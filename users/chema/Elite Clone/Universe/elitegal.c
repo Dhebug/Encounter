@@ -64,6 +64,14 @@ unsigned char fluct;
 unsigned char dest_num;
 unsigned char current_name[9]; 
 
+
+#define SCR_MARKET  1
+#define SCR_SYSTEM  2
+#define SCR_GALAXY  3
+#define SCR_CHART   4
+
+unsigned char current_screen;
+
 //markettype localmarket;
 //int fuelcost =2; /* 0.2 CR/Light year */
 //int maxfuel =70; /* 7.0 LY tank */
@@ -243,17 +251,20 @@ main()
     {
         case 'M':
             displaymarket();
+            current_screen=SCR_MARKET;
             break;
         case 'J':
             jump();
             break;
         case 'P':
             printsystem();
+            current_screen=SCR_SYSTEM;
             break;
         case 'R':
             printf("Search planet? ");
             gets(n);
             search_planet(n);
+            current_screen=SCR_SYSTEM;
             //printsystem();
             break;
         case 'Z':
@@ -263,12 +274,15 @@ main()
             infoplanet(dest_num);
             makesystem();
             printsystem();
+            current_screen=SCR_SYSTEM;
             break;
         case 'G':
             plot_galaxy();
+            current_screen=SCR_GALAXY;
             break;
         case 'C':
             plot_chart();
+            current_screen=SCR_CHART;
             break;
     
         case 'Q':
