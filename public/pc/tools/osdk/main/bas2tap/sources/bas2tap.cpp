@@ -196,7 +196,11 @@ void Bas2Tap(const char *pSourceFile,const char *pDestFile,bool bAutoRun,bool bU
 	}
 	buf[i++]=0;
 	buf[i++]=0; 
-	end=0x501+i;
+        //end=0x501+i;
+        //following line modified by Wilfrid AVRILLON (Waskol) 06/20/2009
+        //It should follow this rule of computation : End_Address=Start_Address+File_Size-1
+        //Let's assume a 1 byte program, it starts at address #501 and ends at address #501 (Address=Address+1-1) ! 
+	end=0x501+i-1;
 
 	if (bAutoRun)	head[7]=0x80;	// Autorun for basic :)
 	else			head[7]=0;
