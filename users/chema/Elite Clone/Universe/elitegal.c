@@ -250,39 +250,39 @@ main()
     switch(i)
     {
         case 'M':
-            displaymarket();
             current_screen=SCR_MARKET;
+            displaymarket();
             break;
         case 'J':
             jump();
             break;
         case 'P':
-            printsystem();
             current_screen=SCR_SYSTEM;
+            printsystem();
             break;
         case 'R':
+            current_screen=SCR_SYSTEM;
             printf("Search planet? ");
             gets(n);
             search_planet(n);
-            current_screen=SCR_SYSTEM;
             //printsystem();
             break;
         case 'Z':
+            current_screen=SCR_SYSTEM;
             printf("New planet? ");
             scanf("%d",&dest_num);
             printf("\n\n");
             infoplanet(dest_num);
             makesystem();
             printsystem();
-            current_screen=SCR_SYSTEM;
             break;
         case 'G':
-            plot_galaxy();
             current_screen=SCR_GALAXY;
+            plot_galaxy();
             break;
         case 'C':
-            plot_chart();
             current_screen=SCR_CHART;
+            plot_chart();
             break;
     
         case 'Q':
