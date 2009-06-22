@@ -13,6 +13,14 @@
 #define A_FWMAGENTA      5
 #define A_FWCYAN         6
 #define A_FWWHITE        7
+#define A_BGBLACK       16
+#define A_BGRED         17
+#define A_BGGREEN       18
+#define A_BGYELLOW      19
+#define A_BGBLUE        20
+#define A_BGMAGENTA     21
+#define A_BGCYAN        22
+#define A_BGWHITE       23
 
 ;typedef struct
 ;{ char a,b,c,d;
@@ -436,25 +444,96 @@ notequal
 
 
 
+#define LONG_START_X 12
+#define LONG_START_Y 16
+#define LONG_END_X   (239-LONG_START_X)
+#define SCROLL_AMOUNT 40
+
+
+
+plot_frame_title
+.(
+    ldx #13
+    lda #<$a000
+    sta tmp
+    lda #>$a000
+    sta tmp+1
+    ldy #0
+loopt
+    lda #A_BGRED
+    sta (tmp),y
+    clc
+    lda tmp
+    adc #40
+    sta tmp
+    bcc nocarry
+    inc tmp+1
+nocarry
+    dex
+    bne loopt
+
+    lda #A_BGCYAN
+    sta $a208
+   
+    ldy #4
+    ldx #48
+    jsr gotoXY
+    lda _current_screen
+    cmp #SCR_CHART
+    bne long
+    lda #<str_short_chart
+    ldx #>str_short_chart
+    jmp print   ; this is jsr/rts
+long
+    lda #A_BGCYAN
+    sta $b680
+    lda #<str_galactic_chart
+    ldx #>str_galactic_chart
+    jmp print   ; this is jsr/rts
+
+.)
+
+
 ; Plot galaxy (long range chart)
 
 _plot_galaxy
 .(
     lda #0  ; No scroll
     sta scroll
-    jmp plot_galaxy_with_scroll
+    ; Prepare player's position and calculate
+    ; if we need scroll
+    ldx _hyp_system+SYSX
+    ldy _hyp_system+SYSY 
+    cpx #(LONG_END_X-LONG_START_X)
+    bcc nodanger
+    inc scroll
+nodanger
+    jsr universe_to_long_chart
+    sty plotY
+    stx plotX
+    
+    ; Is in range?
+    ;cpx #LONG_START_X
+    ;bcc noscroll
+    cpx #LONG_END_X
+    bcc noscroll
+    inc scroll
+noscroll
+    jsr plot_galaxy_with_scroll
+
+    rts
+
 .)
 
 
-#define LONG_START_X 12
-#define LONG_START_Y 16
-#define LONG_END_X   (239-12)
-#define SCROLL_AMOUNT 30
+
 
 scroll .byt 0
 plot_galaxy_with_scroll
 .(
     jsr clr_hires
+
+    jsr plot_frame_title
 
     ; Initialize seed for this galaxy
    
@@ -505,8 +584,6 @@ loop4
     
 end
 
-    ; Draw the cursor
-
     ldx _cpl_system+SYSX
     ldy _cpl_system+SYSY 
     jsr universe_to_long_chart
@@ -517,15 +594,30 @@ end
     cpx #LONG_END_X
     bcs postdraw2
 
+    ; Draw big the cursor
+    lda plotY
+    pha
+    lda plotX
+    pha
     sty plotY
     stx plotX
-    lda #12
+   
+    lda #12    ;lda #6
+    ;jsr plot_cross
     jsr plot_cross
 
-    lda #6
-    jsr plot_cross
+    ;lda #6
+    ;jsr plot_cross
+    pla
+    sta plotX
+    pla
+    sta plotY
 
 postdraw2
+
+    ; Draw the cursor
+    lda #6
+    jsr plot_cross
     rts
 
 .)
@@ -619,36 +711,55 @@ resseed
 
 in_range
 .(
-    ; Check if in range
+    ; Check if in range. Need to do this in 16-bit signed arithmetic!
 
     ; int dx = cseed.s3 - g_commander.cpl_coord.x;
     ; int dy = cseed.s1 - g_commander.cpl_coord.y;
 
+    ; Prepare X and Y (so we can call in_range2 for other matters...)
+    lda _seed+3
+    sta tmp2
+    lda _seed+1
+    sta tmp2+1
+
++in_range2
     ; if (abs(dx) < 0x14) {
     ;   if (abs(dy) < 0x26) {
-    lda _seed+3  ; HI part of seed.w1 is sys X
+    lda #0
+    sta op1+1
+    lda tmp2  ; HI part of seed.w1 is sys X
     sec
     sbc _cpl_system+SYSX
     sta tmp
-    bpl nonegx
-    lda #0
-    sec
-    sbc tmp
+    sta op1
+    bcs nonegx
+    dec op1+1
 nonegx
-    cmp #$14
+    jsr abs
+    
+    lda #0
+    sta op2+1
+    lda #$14
+    sta op2
+    jsr cmp16
     bcc checkY
-    jmp end
+    bcs end
 checkY    
-    lda _seed+1  ; This is Y
+    lda #0
+    sta op1+1
+    lda tmp2+1  ; This is Y
     sec
     sbc _cpl_system+SYSY
+    sta op1
     sta tmp+1
-    bpl nonegy
-    lda #0
-    sec
-    sbc tmp+1
+    bcs nonegy
+    dec op1+1
 nonegy
-    cmp #$26
+    jsr abs
+
+    lda #$26
+    sta op2
+    jsr cmp16
 
 end
     rts
@@ -658,6 +769,7 @@ _plot_chart
 .(
 
     jsr save_seed
+
     ; init names
     ldx #23
     lda #0
@@ -671,6 +783,11 @@ loopnames
     lda #6
     sta (sp),y
     jsr _ink
+
+
+    ; Plot title   
+ 
+    jsr plot_frame_title
 
    ; Draw fuel circle
     ldy #0
@@ -797,7 +914,7 @@ cont
     asl
     asl 
     clc
-    adc #3
+    adc #5
     tax
     lda row
     asl
@@ -818,45 +935,6 @@ noprint
     ;  // bigstars
     ;  int size = 2+ (cseed.s5 & 1) + g_carry;
     ;  sun(x,y,size,0);
-    ;ldx plotX
-    ;ldy plotY
-    ;jsr pixel_address
-    ;ldy #0
-    ;lda (tmp0),y
-    ;eor tmp1        
-    ;sta (tmp0),y
-
-    ;ldy #0
-    ;lda plotX
-    ;sta (sp),y
-    ;iny
-    ;lda #0
-    ;sta (sp),y
-    ;iny
-    ;lda plotY
-    ;sta (sp),y
-    ;iny
-    ;lda #0
-    ;sta (sp),y
-    ;iny
-    ;lda #1
-    ;sta (sp),y
-    ;lda #0
-    ;sta (sp),y
-    ;jsr _curset
-
-    ;lda _seed+5
-    ;and #1
-    ;clc
-    ;adc #2
-    ;ldy #0
-    ;sta (sp),y
-    ;iny
-    ;iny
-    ;lda #1
-    ;sta (sp),y
-    ;jsr _circle    
-
     jsr box
 
 next
@@ -873,12 +951,35 @@ loop4
     jmp loop3
     
 end
-
-    ; Draw the cursor
-    lda #SHORT_CENTRE_Y
-    sta plotY
+    ; Draw the big cursor
     lda #SHORT_CENTRE_X
     sta plotX
+    lda #SHORT_CENTRE_Y
+    sta plotY
+    lda #12
+    jsr plot_cross
+
+
+    ; Draw the cursor
+    ldx _hyp_system+SYSX
+    ldy _hyp_system+SYSY
+
+    ; Check if in range
+    stx tmp2
+    sty tmp2+1
+    jsr in_range2
+    bcc inside
+
+    ldx #SHORT_CENTRE_X
+    ldy #SHORT_CENTRE_Y
+    jmp default
+inside
+    ldx tmp2
+    ldy tmp2+1
+    jsr universe_to_short_chart
+default
+    sty plotY
+    stx plotX
     lda #6
     jsr plot_cross
 
@@ -1088,6 +1189,10 @@ outside1
     lda scroll
     bne plot
     inc scroll
+    lda plotX
+    sec
+    sbc #SCROLL_AMOUNT
+    sta plotX
     jmp plot_galaxy_with_scroll
 outside2
     lda _current_screen
@@ -1096,6 +1201,10 @@ outside2
     lda scroll
     beq plot
     dec scroll
+    lda plotX
+    clc
+    adc #SCROLL_AMOUNT
+    sta plotX
     jmp plot_galaxy_with_scroll
 plot
     lda #6
@@ -1207,9 +1316,13 @@ loop
 loop3
     inc num
 
+    lda _current_screen
+    cmp #SCR_CHART
+    bne nocheck
     jsr in_range    ; BEWARE. In long-chart this should not be called!!
     bcs next
 
+nocheck
     lda tmp0
     sec
     sbc _seed+3 ; Get X
@@ -1276,7 +1389,14 @@ _find_planet
 
     ldx plotX
     ldy plotY
+    lda _current_screen
+    cmp #SCR_GALAXY
+    bne short
+    jsr long_chart_to_universe
+    jmp snap
+short    
     jsr short_chart_to_universe
+snap
     jsr snap_to_planet
     ldx tmp1
     cpx #$ff
@@ -1297,7 +1417,14 @@ _find_planet
     jsr plot_cross
     ldx _hyp_system+SYSX
     ldy _hyp_system+SYSY
+    lda _current_screen
+    cmp #SCR_GALAXY
+    bne short2
+    jsr universe_to_long_chart
+    jmp snap2
+short2
     jsr universe_to_short_chart
+snap2
     stx plotX
     sty plotY
     lda #6
@@ -2720,6 +2847,48 @@ printtail
 
 ;;;; Math functions needed to perform some calculations. These should be revised...
 
+;; Calculate the absolute value
+;; of a 16-bit integer in op1,op1+1
+
+abs
+.(
+    lda op1+1
+    bpl notneg
+    sec
+    lda #0
+    sbc op1
+    sta op1
+    lda #0    
+    sbc op1+1
+    sta op1+1
+notneg
+    rts
+
+.)
+
+
+
+;; Compares two 16-bit numbers in op1 and op2
+;; Performs signed and unsigned comparisions at the same time.
+;; If the N flag is 1, then op1 (signed) < op2 (signed) and BMI will branch
+;; If the N flag is 0, then op1 (signed) >= op2 (signed) and BPL will branch 
+;; For unsigned comparisions ,the behaviour is the usual with the carry flag:
+;; If the C flag is 0, then op1 (unsigned) < op2 (unsigned) and BCC will branch 
+;; If the C flag is 1, then op1 (unsigned) >= op2 (unsigned) and BCS will branch 
+;; The Z flag DOES NOT indicate equality...
+
+cmp16
+.(
+    lda op1 ; op1-op2
+    cmp op2
+    lda op1+1
+    sbc op2+1
+    bvc ret ; N eor V
+    eor #$80
+ret
+    rts
+ 
+.)
 
 ;;; Here goes mul16.  It takes two 16-bit parameters and multiplies them to a 32-bit signed number. The assignments are:
 ;;;	op1:	multiplier

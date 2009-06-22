@@ -635,6 +635,18 @@ desc_list
     .byt 0
 
 
+; For charts
+str_galactic_chart
+    .byt 6 ;A_FWCYAN
+    .asc "GALACTIC CHART"
+    .byt 0
+
+str_short_chart
+    .byt 6 ;A_FWCYAN
+    .asc "SHORT RANGE CHART"
+    .byt 0
+
+
 ; For searching planets
 str_notfound
     .asc "Not Found"
