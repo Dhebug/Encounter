@@ -329,12 +329,7 @@ _infoplanet
 ;  seed.w0=base0; 
 ;  seed.w1=base1; 
 ;  seed.w2=base2; /* Initialise seed for galaxy 1 */  ;
-    ldx #5
-loop
-    lda _base0,x
-    sta _seed,x
-    dex
-    bpl loop
+    jsr init_seed
 
     lda _dest_num
     beq end
@@ -2870,6 +2865,42 @@ printtail
     ;rts
 .)
 
+
+
+;;;; Changing galaxy
+
+;Rotate reg A left once. Carry is put in bit 0.
+crol
+.(
+    asl
+    adc #0
+    rts
+.)
+
+_enter_next_galaxy
+.(
+    ldx #5
+loop
+    lda _base0,x
+    jsr crol
+    sta _base0,x
+    dex
+    bpl loop
+
+    ldy _galaxynum
+    iny
+    cpy #9
+    bne more
+    ldy #1
+more
+    sty _galaxynum    
+    lda _currentplanet
+    sta _dest_num
+    jsr _infoplanet
+    jsr _makesystem
+    rts
+
+.)
 
 
 ;;;; Math functions needed to perform some calculations. These should be revised...

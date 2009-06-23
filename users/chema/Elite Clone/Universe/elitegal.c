@@ -152,7 +152,8 @@ main()
             jump();
             break;
         case 'H':
-            jump();
+            enter_next_galaxy();
+            jump();   
             break;
 
         case 'P':
