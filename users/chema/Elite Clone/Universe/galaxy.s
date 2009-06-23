@@ -139,6 +139,22 @@ gs_init_str
         .byt 0
 
 
+
+; initialize seed for current galaxy
+init_seed
+.(
+    ; Initialize seed for this galaxy
+    ldx #5
+loop
+    lda _base0,x
+    sta _seed,x
+    dex
+    bpl loop
+    
+    rts
+.)
+
+
 ;genmarket(signed char fluct)
 ;/* Prices and availabilities are influenced by the planet's economy type
 ;   (0-7) and a random "fluctuation" byte that was kept within the saved
@@ -157,14 +173,8 @@ gs_init_str
 
 
 
-fluct .byt 0
 _genmarket
 .(
-    ; Keep C parameter passing for now
-    ldy #0
-    lda (sp),y
-    sta fluct
-    	
     ;unsigned short i;
     ;for(i=0;i<=lasttrade;i++)
 
@@ -196,7 +206,7 @@ positive2
      
     ldx count
     lda Maskbytes,x
-    and fluct
+    and _fluct
     pha
     clc
     adc Basequants,x
@@ -252,8 +262,20 @@ positive
 .)
                 
 
-                
-                
+
+; tweak seed four times (usual way)
+tweakseed4
+.(
+    ; use reg Y as it is not touched in _tweakseed
+
+    ldy #4    
+loop2
+    jsr _tweakseed
+    dey
+    bne loop2
+
+    rts                
+.)              
 ;               
 ;void tweakseed()
 ;{              
@@ -314,8 +336,7 @@ loop
     dex
     bpl loop
 
-    ldy #0
-    lda (sp),y
+    lda _dest_num
     beq end
     sta num
  
@@ -327,12 +348,7 @@ loop
 ; }
     ; Will use reg y, as it is not used in tweakseed
 loop3   
-    ldy #4    
-loop2
-    jsr _tweakseed
-    dey
-    bne loop2
-    
+    jsr tweakseed4    
     dec num
     bne loop3
 end    
@@ -344,13 +360,7 @@ end
 _search_planet
 .(
     ; Initialize seed for this galaxy
-    
-    ldx #5
-loop
-    lda _base0,x
-    sta _seed,x
-    dex
-    bpl loop
+    jsr init_seed
 
     ; Loop creating systems
     lda #$ff
@@ -362,11 +372,7 @@ loop3
     jsr compare_names
     beq found    
     
-    ldy #4
-loop4    
-    jsr _tweakseed
-    dey
-    bne loop4
+    jsr tweakseed4
     
     lda num
     cmp #$ff
@@ -376,43 +382,55 @@ loop4
 found
     lda num
     sta _dest_num
+    jsr _infoplanet
     jsr _makesystem
 
-    jsr perform_CRLF
+    lda _current_screen
+    cmp #SCR_CHART
+    bne long
+    jsr _plot_chart
+    jmp print_distinfo
+long
+    jsr _plot_galaxy
+    jmp print_distinfo  
+
+notfound
+    ;jsr perform_CRLF
+    ;jsr perform_CRLF
+    ;ldy #1
+    ;lda (sp),y
+    ;tax
+    ;dey
+    ;lda (sp),y
+    ;jsr print
+    ;jsr put_space
+    jsr prepare_area
+    lda #<str_notfound
+    ldx #>str_notfound
+    jsr printnl
+    jsr _infoplanet
+    jmp _makesystem
+
+.)
+
+prepare_area
+.(
+    jsr clear_frame_data 
     ldy #(200-6*4)
-    jsr gotoY
-    jsr put_space
+    ldx #12
+    jmp gotoXY
+.)
+
+print_distinfo
+.(
+    jsr prepare_area
+    ;jsr put_space
     lda #>_hyp_system+NAME
     tax
     lda #<_hyp_system+NAME
     jsr print
     jsr put_space
-    jmp print_distance
-
-notfound
-    jsr perform_CRLF
-    jsr perform_CRLF
-    ldy #1
-    lda (sp),y
-    tax
-    dey
-    lda (sp),y
-    jsr print
-    jsr put_space
-    lda #<str_notfound
-    ldx #>str_notfound
-    jsr printnl
-
-    lda _dest_num
-    ldy #0
-    sta (sp),y
-    iny
-    lda #0
-    sta (sp),y
-    jsr _infoplanet
-    jsr _makesystem
-    rts
-
+    jmp print_distance ; This is jsr/rts
 .)
 
 
@@ -449,7 +467,36 @@ notequal
 #define LONG_END_X   (239-LONG_START_X)
 #define SCROLL_AMOUNT 40
 
+clear_frame_data
+.(
+    ; Clears the two lines of text
+    ; where data is printed on chart screens
+    
+    ldx #10 ; ten lines
+    lda #<($a000+176*40)
+    sta tmp
+    lda #>($a000+176*40)
+    sta tmp+1
+loopt
+    lda #$40
+    ldy #39
+loopscans
+    sta (tmp),y
+    dey
+    bpl loopscans
+    clc
+    lda tmp
+    adc #40
+    sta tmp
+    bcc nocarry
+    inc tmp+1
+nocarry
+    dex
+    bpl loopt
 
+    rts
+
+.)
 
 plot_frame_title
 .(
@@ -489,7 +536,12 @@ long
     sta $b680
     lda #<str_galactic_chart
     ldx #>str_galactic_chart
-    jmp print   ; this is jsr/rts
+    jsr print   
+    jsr put_space
+    lda _galaxynum
+    clc
+    adc #48   
+    jmp put_char ; This is jsr/rts
 
 .)
 
@@ -532,18 +584,25 @@ scroll .byt 0
 plot_galaxy_with_scroll
 .(
     jsr clr_hires
-
     jsr plot_frame_title
 
-    ; Initialize seed for this galaxy
-   
-    ldx #5
-loop
-    lda _base0,x
-    sta _seed,x
-    dex
-    bpl loop
+    lda scroll
+    beq right
+    lda #"<"
+    ldx #18
+    bne plotarrow
+right
+    lda #">"
+    ldx #(240-18)
+plotarrow
+    ldy #4
+    jsr gotoXY
+    jsr put_char
 
+
+    ; Initialize seed for this galaxy
+    jsr init_seed
+    
     ; Loop creating systems
     lda #$ff
     sta num
@@ -572,12 +631,7 @@ loop3
     sta (tmp0),y
 
 postdraw
-    ldy #4
-loop4    
-    jsr _tweakseed
-    dey
-    bne loop4
-    
+    jsr tweakseed4    
     lda num
     cmp #$ff
     bne loop3
@@ -675,12 +729,12 @@ col .byt 00
 row .byt 00
 plotX .byt 00
 plotY .byt 00
-temp_seed2 .dsb 6
+;temp_seed2 .dsb 6
 
 #define SHORT_CENTRE_X $68
 #define SHORT_CENTRE_Y $56
 
-
+#ifdef 0
 save_seed
 .(
 
@@ -688,7 +742,7 @@ save_seed
     ldx #5
 loopsavseed
     lda _seed,x
-    sta temp_seed2,x
+    ;sta temp_seed2,x
     dex
     bpl loopsavseed
     rts
@@ -699,7 +753,7 @@ restore_seed
     ; restore seed
     ldx #5
 resseed
-    lda temp_seed2,x
+    ;lda temp_seed2,x
     sta _seed,x
     dex
     bpl resseed
@@ -707,7 +761,7 @@ resseed
     rts
 
 .)
-
+#endif
 
 in_range
 .(
@@ -768,7 +822,7 @@ end
 _plot_chart
 .(
 
-    jsr save_seed
+   ; jsr save_seed
 
     ; init names
     ldx #23
@@ -820,13 +874,7 @@ loopnames
 
 
     ; Initialize seed for this galaxy
-   
-    ldx #5
-loop
-    lda _base0,x
-    sta _seed,x
-    dex
-    bpl loop
+    jsr init_seed
 
     ; Loop creating systems
     lda #$ff
@@ -939,12 +987,7 @@ noprint
 
 next
 
-    ldy #4
-loop4    
-    jsr _tweakseed
-    dey
-    bne loop4
-    
+    jsr tweakseed4    
     lda num
     cmp #$ff
     beq end
@@ -983,8 +1026,9 @@ default
     lda #6
     jsr plot_cross
 
-    jsr restore_seed
+    ;jsr restore_seed
 
+    jsr _infoplanet
     jmp _makesystem ; This is jsr/rts
 
 .)
@@ -1000,7 +1044,7 @@ box
     lda _seed+5
     and #1
     clc
-    adc #2
+    adc #1
     sta tmp2
 
     lda plotY
@@ -1137,8 +1181,18 @@ _move_cross_v
 .(
     ldy #0
     lda (sp),y
-
     sta amount+1
+
+    lda _current_screen
+    cmp #SCR_CHART
+    bne long
+    lda #168
+    bne save
+long
+    lda #145
+save
+    sta amount+3
+
     ; erase
     lda #6
     jsr plot_cross
@@ -1148,9 +1202,9 @@ _move_cross_v
     lda plotY
 amount
     adc #0  ;SMC
-    cmp #199
+    cmp #199 ; SMC
     bcs outside
-    cmp #10
+    cmp #14
     bcc outside
     sta plotY
 outside
@@ -1301,13 +1355,7 @@ snap_to_planet
     sty tmp0+1  ; Cursor Y
 
     ; Initialize seed for this galaxy
-    
-    ldx #5
-loop
-    lda _base0,x
-    sta _seed,x
-    dex
-    bpl loop
+    jsr init_seed
 
     ; Loop creating systems
     lda #$ff
@@ -1368,12 +1416,7 @@ check
     sta tmp1+1
     
 next    
-    ldy #4
-loop4    
-    jsr _tweakseed
-    dey
-    bne loop4
-    
+    jsr tweakseed4    
     lda num
     cmp #$ff
     bne loop3
@@ -1403,14 +1446,7 @@ snap
     beq noplanet
     sta _dest_num
 
-    lda _dest_num
-    ldy #0
-    sta (sp),y
-    iny
-    lda #0
-    sta (sp),y
     jsr _infoplanet
-
     jsr _makesystem
 
     lda #6
@@ -1429,17 +1465,8 @@ snap2
     sty plotY
     lda #6
     jsr plot_cross
+    jmp print_distinfo ; This is jsr/rts
 
-    jsr perform_CRLF
-    ldy #(200-6*4)
-    jsr gotoY
-    jsr put_space
-    lda #>_hyp_system+NAME
-    tax
-    lda #<_hyp_system+NAME
-    jsr print
-    jsr put_space
-    jsr print_distance
 noplanet
     rts
 .)

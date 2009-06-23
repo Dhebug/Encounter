@@ -50,8 +50,11 @@ plansys hyp_system;
 unsigned int   shipshold[lasttrade+1];  /* Contents of cargo bay */
 unsigned char  currentplanet;           /* Current planet */
 unsigned char  galaxynum;               /* Galaxy number (1-8) */
-unsigned long  cash;
-unsigned int   fuel;
+unsigned long  cash;                    /* four bytes for cash */
+unsigned int   fuel;                    /* Amount of fuel, can this be a byte? */    
+unsigned char  fluct;                   /* price fluctuation */
+
+
 
 unsigned char quantities[lasttrade+1];
 unsigned int prices[lasttrade+1];
@@ -59,7 +62,6 @@ unsigned int   holdspace;
 //seedtype localseed;
 plansys cpl_system;
 
-unsigned char fluct;
 
 unsigned char dest_num;
 unsigned char current_name[9]; 
@@ -81,81 +83,11 @@ unsigned char current_screen;
 extern void tweakseed();
 extern void makesystem();
 extern void print_colonial();
-extern void infoplanet(int num);
+extern void infoplanet();
 extern void printsystem();
 extern void search_planet(char * name);
 extern void move_cross_v(int dist);
 
-/*
-printsystem()
-{
- printf("\n\nSystem:  ");
- printf(system.name);
- printf(" position (%d,",(int)system.x);
- printf("%d)",system.y);
- printf("\nEconomy: (%d) ",system.economy);
- printf(econnames[system.economy]);
- printf("\nGovernment: (%d) ",system.govtype);
- printf(govnames[system.govtype]);
- printf("\nTech Level: %d ",(system.techlev)+1);
- printf("Turnover: %d",(unsigned int)(system.productivity));
- printf("\nRadius: %d",system.radius);
- //printf("\nPopulation: %d Billion",(system.population)>>3);
- printf(" Population: %f Billion\n",(float)(system.population)/10);//(system.population)>>3);
- printf("(");
- print_colonial();
- printf("s)\n");
- printf("--\n");
- 
- rnd_seed = system.goatsoupseed;
- // goat_soup("\x8F is \x97.",&system);
- goat_soup2("\x8F is \x97.");
- printf("--\n");
-}
-
-*/
-/*
-void displaymarket()
-{	unsigned short i;
- 	for(i=0;i<=lasttrade;i++)
- 	{ printf("\n");
-   printf(Names[i]);
-   printf("   %f",(float)prices[i]/10);
-   printf("   %d",quantities[i]);
-   printf(unitnames[Units[i]]);
-   printf("   %d",shipshold[i]);
- }
-}	
-*/
-
-/*   int i,x,y;
-
-void plot_galaxy()
-{
- 
-
-    hires();
-
-    gotoplanet(0);
-    
-    
-    for (i=0;i<256;i++)
-    {
-     x=((seed.w1)>>8)&0xff;
-     y=((seed.w0)>>8)&0xff;
-     x=x>>1&0xff;
-     x=x>>2&0xff;
-     curset(x+30,y+30,1);
-
-     tweakseed();
-     tweakseed();
-     tweakseed();
-     tweakseed();
-
-    }
-
-
-}*/
 
 void jump()
 {
@@ -165,50 +97,10 @@ void jump()
     //savename(current_name,hyp_system.name);
     strcpy(current_name,hyp_system.name);
     cpl_system=hyp_system;
-    genmarket(0);
+    genmarket();
     displaymarket();
 }
 
-/*
-void savename(char * dest, char * name)
-{
-    unsigned int k=0;
-    unsigned int i;
-
-    for (i=0;name[i];i++)
-    {
-      if (name[i]!='.') dest[k++]=name[i];
-    }
-    dest[k]=0;
-}*/
-/*
-void search_planet(char * name)
-{
-   unsigned int i;
-   unsigned char found=0;
- 
-   for (i=0;i<256;i++)
-   {
-    infoplanet(i);
-    makesystem();
-    if (!strcmp(name,hyp_system.name)){
-        found=1;
-        break;
-    }
-
-    }
-
-   if (!found){
-     printf("System not found\n");
-     infoplanet(dest_num);
-     makesystem();
-    }
-  else{
-    dest_num=i;
-    //makesystem();
-    }  
-
-}*/
 
 main()
 {
@@ -229,12 +121,15 @@ main()
 
     init_print();
 
-    infoplanet(7);
-    makesystem();
-    printsystem();
+    galaxynum=1;
     dest_num=7;
+    infoplanet();
+    makesystem();
+    /*printsystem();*/
+    
     jump();    
-    genmarket(0);
+    fluct=0;
+    genmarket();
     
     //getchar();getchar();
     //genmarket(0);
@@ -256,12 +151,16 @@ main()
         case 'J':
             jump();
             break;
+        case 'H':
+            jump();
+            break;
+
         case 'P':
             current_screen=SCR_SYSTEM;
             printsystem();
             break;
         case 'R':
-            current_screen=SCR_SYSTEM;
+            //current_screen=SCR_SYSTEM;
             printf("Search planet? ");
             gets(n);
             search_planet(n);
@@ -272,7 +171,7 @@ main()
             printf("New planet? ");
             scanf("%d",&dest_num);
             printf("\n\n");
-            infoplanet(dest_num);
+            infoplanet();
             makesystem();
             printsystem();
             break;
