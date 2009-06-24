@@ -1789,6 +1789,11 @@ nocarry
 .)
 
 
+search_string_and_print
+.(
+    jsr search_string
+    jmp print2
+.)
 
 
 ; Prints the colonial type
@@ -1822,8 +1827,7 @@ _print_colonial
     sta tmp0
     lda #>Fierce
     sta tmp0+1
-    jsr search_string
-    jsr print2
+    jsr search_string_and_print
     jsr put_space
 
 cont1
@@ -1850,8 +1854,7 @@ cont1
     sta tmp0
     lda #>Type
     sta tmp0+1
-    jsr search_string
-    jsr print2
+    jsr search_string_and_print
     jsr put_space
 
 
@@ -1876,8 +1879,7 @@ cont2
     sta tmp0
     lda #>Bugeyed
     sta tmp0+1
-    jsr search_string
-    jsr print2
+    jsr search_string_and_print
     jsr put_space
 
 cont3
@@ -1900,10 +1902,7 @@ cont3
     sta tmp0
     lda #>Race
     sta tmp0+1
-    jsr search_string
-    jsr print2
-    rts
-
+    jmp search_string_and_print
 
 
 ;  } else {
@@ -2095,9 +2094,6 @@ goat_soup
     stx gs_sourcep+1
     lda #0
     sta gs_index
-
-;dbug
-;    beq dbug
 
 main_loop       
 
@@ -2454,10 +2450,6 @@ _printsystem
     ; Print name
     ; Draw a line
     ; If distance <> 0 print distance
-;    lda #0
-;dbug
-;    beq dbug
-
 
     jsr print_distance
 
@@ -2580,8 +2572,43 @@ end
 
 .)
 
+#define START_X_LIST 1
+
+//#define PACK
+
+#ifdef PACK
+
+mkstrslo
+    .byt <(str_mktunit)
+    .byt <(str_mktquant)
+    .byt <(str_mktin)
+    .byt <(str_mktlist)
+    .byt <(str_mktunit)
+    .byt <(str_mktprice)
+    .byt <(str_mktsale)
+    .byt <(str_mktcargo) 
+mkstrshi  
+    .byt >(str_mktunit)
+    .byt >(str_mktquant)
+    .byt >(str_mktin)
+    .byt >(str_mktlist)
+    .byt >(str_mktunit)
+    .byt >(str_mktprice)
+    .byt >(str_mktsale)
+    .byt >(str_mktcargo) 
+
+positionsX  
+    .byt 20*6, 26*6, 35*6, 2*6, 14*6, 20*6, 26*6, 35*6
+
+#endif
+
+
 _displaymarket
 .(
+    ; clear selection
+    lda #$ff
+    sta _cur_sel
+    
     ; Clear hires and draw frame
     jsr clr_hires
 
@@ -2605,6 +2632,35 @@ _displaymarket
     ;lda #(A_FWWHITE+A_FWCYAN*16+128)
     jsr put_code
 
+
+#ifdef PACK
+    lda #0
+    sta count
+loop
+    ldx count
+    lda positionsX,x    
+    tax
+    jsr gotoX
+    ldy count
+    lda mkstrshi,y
+    tax
+    lda mkstrslo,y
+    jsr print
+    
+    ldx count
+    cpx #2
+    bne nothing
+
+    jsr perform_CRLF
+    lda #A_FWCYAN
+    jsr put_code
+nothing
+    ldx count
+    inx
+    cpx #8
+    bne loop
+    
+#else
     ldx #(20*6)
     jsr gotoX
 
@@ -2618,12 +2674,20 @@ _displaymarket
     lda #<str_mktquant
     ldx #>str_mktquant
     jsr print
+
+    ldx #(35*6)
+    jsr gotoX
+        
+    lda #<str_mktin
+    ldx #>str_mktin
+    jsr print
     
     jsr perform_CRLF
 
     lda #A_FWCYAN
     jsr put_code
-    
+
+  
     lda #<str_mktlist
     ldx #>str_mktlist
     jsr print
@@ -2649,7 +2713,15 @@ _displaymarket
     ldx #>str_mktsale
     jsr print
     
-    jsr perform_CRLF
+    ldx #(35*6)
+    jsr gotoX
+        
+    lda #<str_mktcargo
+    ldx #>str_mktcargo
+    jsr print
+
+#endif
+    ;jsr perform_CRLF
 
     lda #0
     sta capson    
@@ -2659,7 +2731,7 @@ _displaymarket
     ; Loop thru the 17 market items
     lda #0
     sta count    
-loop
+loop2
     ;printf("\n");
     jsr perform_CRLF
 
@@ -2667,7 +2739,7 @@ loop
     inc count
     lda count
     cmp #17
-    bne loop  
+    bne loop2  
     
     rts
 .)	
@@ -2683,10 +2755,7 @@ print_mkt_item
     sta tmp0
     lda #>Goodnames
     sta tmp0+1
-    jsr search_string
-    lda tmp0    
-    ldx tmp0+1
-    jsr print
+    jsr search_string_and_print
 
     lda #(A_FWWHITE)
     jsr put_code
@@ -2718,30 +2787,45 @@ print_mkt_item
 
     ldx count
     lda _quantities,x
+    jsr prstock
+
+    jsr put_space
+
+    ;printf(unitnames[Units[i]]);
+
+    jsr punit   
+    
+   ;printf("   %d",shipshold[i]);
+
+    ldx #(35*6)
+    jsr gotoX
+
+    ldx count
+    lda _shipshold,x
+    jsr prstock
+
+    ;jsr punit
+
+  ; }
+
+    rts
+.)
+
+
+prstock    
+.(
     beq nostock
     sta op2
     lda #0
     sta op2+1
     ldx #3
-    jsr print_num_tab
-    jsr put_space
-
-
-    ;printf(unitnames[Units[i]]);
-
-    jmp punit   ; This is jsr/rts
-    
-   ;printf("   %d",shipshold[i]);
-  ; }
-nostock    
+    jmp print_num_tab
+nostock
     jsr put_space
     jsr put_space
     lda #"-"
     jmp put_char ; this is jsr/rts
-
-    ;rts
 .)
-
 
 punit
 .(
@@ -2752,11 +2836,7 @@ punit
     sta tmp0
     lda #>Unitnames
     sta tmp0+1
-    jsr search_string
-    lda tmp0    
-    ldx tmp0+1
-    jmp print ; this is jsr/rts
-
+    jmp search_string_and_print ; this is jsr/rts
 .)
 
 print_float_tab
@@ -2811,8 +2891,8 @@ tabs
     lda #00
     sbc tmp
     
+    beq loop
     tax
-
 loopsp
     jsr put_space
     dex
@@ -2854,15 +2934,196 @@ printtail
     sta tmp0
     lda #>str_data
     sta tmp0+1
-    jsr search_string
-    lda tmp0    
-    ldx tmp0+1
-    jsr print
+    jsr search_string_and_print
 
     ;jmp put_space ; This is jsr/rts
     lda #A_FWWHITE
     jmp put_code
     ;rts
+.)
+
+;;; Selection of items
+; Start at row 36 and add 6 per item
+
+_cur_sel .byt $ff
+
+get_p
+.(
+    ldx _cur_sel
+    lda #30
+    clc
+loop
+    adc #6
+    dex
+    bpl loop 
+
+    tay
+    ldx #0
+    jmp gotoXY
+.)
+
+remove_hilite
+.(
+    lda _cur_sel
+    cmp #$ff
+    beq noerase
+    jsr get_p
+    lda #A_BGBLACK
+    jmp put_code
+noerase
+    rts
+.)
+
+set_hilite
+.(
+    jsr get_p
+    lda #A_BGBLUE
+    jmp put_code
+.)
+
+_inc_sel
+.(
+    jsr remove_hilite
+    ldx _cur_sel
+    inx
+    cpx #17
+    bne cont
+    ldx #0
+cont
+    jmp set_sel
+.)
+
+_dec_sel
+.(
+    jsr remove_hilite
+    ldx _cur_sel
+    dex
+    bpl cont
+    ldx #16
+cont
+    jmp set_sel
+.)
+
+
+set_sel
+.(
+    stx _cur_sel
+    jsr set_hilite
+ .)
+mkt_status
+.(
+    ; Print player status:
+    ; Cash & free cargo space
+
+    jsr prepare_area
+ 
+    lda #(A_FWCYAN|A_FWWHITE*16+128)
+    jsr put_code
+    ldx #>str_freespace
+    lda #<str_freespace
+    jsr print
+    jsr put_space
+    lda _holdspace
+    sta op2
+    lda #0
+    sta op2+1
+    ldx #3
+    jsr print_num_tab
+    jsr put_space
+    ldx #>Unitnames
+    lda #<Unitnames
+    jsr printnl
+;    ldx #4
+;loop
+;    jsr put_space
+;    dex
+;    bne loop
+ 
+    lda #(A_FWCYAN|A_FWWHITE*16+128)
+    jsr put_code      
+    jsr put_space
+    ldx #>str_cash
+    lda #<str_cash
+    jsr print
+    jsr put_space
+    lda #0
+    sta op2
+    sta op2+1
+    jsr print_float
+    jsr put_space
+    ldx #>str_credits
+    lda #<str_credits
+    jmp print
+
+.)
+
+_buy
+.(
+    ; check if there is something for sale
+    ldx _cur_sel
+    lda _quantities,x
+    beq nosell
+    
+    ; check for cash
+
+    ; check for cargo space
+    lda Units,x
+    bne space
+    lda _holdspace
+    beq nospace
+    dec _holdspace
+space
+
+    dec _quantities,x
+    inc _shipshold,x    
+    
+    ; decrement cash
+
+    jmp update_mkt
+nosell
+nospace
+nocash
+end
+    rts
+.)
+
+_sell
+.(
+    ; check if there is something for sale
+    ldx _cur_sel
+    lda _shipshold,x
+    beq nosell
+    
+    lda Units,x
+    bne space
+    inc _holdspace
+space
+    inc _quantities,x
+    dec _shipshold,x    
+    
+    ; increment cash
+    
+    jmp update_mkt
+
+nosell
+end
+    rts
+.)
+
+update_mkt
+.(
+    jsr get_p
+    lda Cursor_origin_x
+    clc
+    adc #6
+    tax
+    jsr gotoX
+
+    lda _cur_sel
+    sta count
+    jsr print_mkt_item
+
+    jmp mkt_status
 .)
 
 
@@ -2903,236 +3164,8 @@ more
 .)
 
 
-;;;; Math functions needed to perform some calculations. These should be revised...
-
-;; Calculate the absolute value
-;; of a 16-bit integer in op1,op1+1
-
-abs
-.(
-    lda op1+1
-    bpl notneg
-    sec
-    lda #0
-    sbc op1
-    sta op1
-    lda #0    
-    sbc op1+1
-    sta op1+1
-notneg
-    rts
-
-.)
 
 
-
-;; Compares two 16-bit numbers in op1 and op2
-;; Performs signed and unsigned comparisions at the same time.
-;; If the N flag is 1, then op1 (signed) < op2 (signed) and BMI will branch
-;; If the N flag is 0, then op1 (signed) >= op2 (signed) and BPL will branch 
-;; For unsigned comparisions ,the behaviour is the usual with the carry flag:
-;; If the C flag is 0, then op1 (unsigned) < op2 (unsigned) and BCC will branch 
-;; If the C flag is 1, then op1 (unsigned) >= op2 (unsigned) and BCS will branch 
-;; The Z flag DOES NOT indicate equality...
-
-cmp16
-.(
-    lda op1 ; op1-op2
-    cmp op2
-    lda op1+1
-    sbc op2+1
-    bvc ret ; N eor V
-    eor #$80
-ret
-    rts
- 
-.)
-
-;;; Here goes mul16.  It takes two 16-bit parameters and multiplies them to a 32-bit signed number. The assignments are:
-;;;	op1:	multiplier
-;;;	op2:	multiplicand
-;;; Results go:
-;;;	op1:	result LSW
-;;;	tmp1:	result HSW
-;;; The algorithm used is classical shift-&-add, so the timing depends largely on the number of 1 bits on the multiplier.
-;;; This is based on Leventhal / Saville, "6502 Assembly Language Subroutines", as it's compact and general enough, but
-;;; it's optimized for speed, sacrificing generality instead.
-;;; Max time taken ($ffff * $ffff) is 661 cycles.  Average time is around max time for 8-bit numbers.
-;;; Max time taken for 8-bit numbers ($ff * $ff) is 349 cycles.  Average time is 143 cycles.  That's fast enough too.
-
-; Subroutine starts here.
-
-sign .byt 0
-
-
-mul16
-.(
-	lda #0
-	sta sign
-
-	lda op1+1
-	bpl positive1
-	
-	sec
-	lda #0
-	sbc op1
-	sta op1
-	lda #0
-	sbc op1+1
-	sta op1+1
-
-	lda sign
-	eor #$ff
-	sta sign
-
-positive1
-	lda op2+1
-	bpl positive2
-
-	sec
-	lda #0
-	sbc op2
-	sta op2
-	lda #0
-	sbc op2+1
-	sta op2+1
-
-	lda sign
-	eor #$ff
-	sta sign
-
-positive2
-
-	jsr mul16uc
- 
-	lda sign
-	beq end
-	
-	; Put sign back
-	sec
-	lda #0
-	sbc op1
-	sta op1
-	lda #0
-	sbc op1+1
-	sta op1+1
-	lda #0
-	sbc tmp1
-	sta tmp1
-	lda #0
-	sbc tmp1+1
-	sta tmp1+1
-
-end
-	rts
-
-.)
-
-mul16uc
-.(
-	lda #0
-	sta tmp1
-	sta tmp1+1
-	ldx #17
-	clc
-_m16_loop
-	ror tmp1+1
-	ror tmp1
-	ror op1+1
-	ror op1
-	bcc _m16_deccnt
-	clc
-	lda op2
-	adc tmp1
-	sta tmp1
-	lda op2+1
-	adc tmp1+1
-	sta tmp1+1
-_m16_deccnt
-	dex
-	bne _m16_loop
-	rts
-.)
-
-
-
-; Calculates the 8 bit root and 9 bit remainder of a 16 bit unsigned integer in
-; op1. The result is always in the range 0 to 255 and is held in
-; op2, the remainder is in the range 0 to 511 and is held in tmp0
-;
-; partial results are held in templ/temph
-;
-; This routine is the complement to the integer square program.
-;
-; Destroys A, X registers.
-
-; variables - must be in RAM
-
-#define Numberl op1     ; number to find square root of low byte
-#define Numberh op1+1   ; number to find square root of high byte
-#define Reml    tmp0    ; remainder low byte
-#define Remh    tmp0+1	; remainder high byte
-#define templ	tmp		; temp partial low byte
-#define temph   tmp+1	; temp partial high byte
-#define Root	op2		; square root
-
-
-SqRoot
-.(
-	LDA	#$00		; clear A
-	STA	Reml		; clear remainder low byte
-	STA	Remh		; clear remainder high byte
-	STA	Root		; clear Root
-	LDX	#$08		; 8 pairs of bits to do
-Loop
-	ASL	Root		; Root = Root * 2
-
-	ASL	Numberl		; shift highest bit of number ..
-	ROL	Numberh		;
-	ROL	Reml		; .. into remainder
-	ROL	Remh		;
-
-	ASL	Numberl		; shift highest bit of number ..
-	ROL	Numberh		;
-	ROL	Reml		; .. into remainder
-	ROL	Remh		;
-
-	LDA	Root		; copy Root ..
-	STA	templ		; .. to templ
-	LDA	#$00		; clear byte
-	STA	temph		; clear temp high byte
-
-	SEC			; +1
-	ROL	templ		; temp = temp * 2 + 1
-	ROL	temph		;
-
-	LDA	Remh		; get remainder high byte
-	CMP	temph		; comapre with partial high byte
-	BCC	Next		; skip sub if remainder high byte smaller
-
-	BNE	Subtr		; do sub if <> (must be remainder>partial !)
-
-	LDA	Reml		; get remainder low byte
-	CMP	templ		; comapre with partial low byte
-	BCC	Next		; skip sub if remainder low byte smaller
-
-				; else remainder>=partial so subtract then
-				; and add 1 to root. carry is always set here
-Subtr
-	LDA	Reml		; get remainder low byte
-	SBC	templ		; subtract partial low byte
-	STA	Reml		; save remainder low byte
-	LDA	Remh		; get remainder high byte
-	SBC	temph		; subtract partial high byte
-	STA	Remh		; save remainder high byte
-
-	INC	Root		; increment Root
-Next
-	DEX			; decrement bit pair count
-	BNE	Loop		; loop if not all done
-
-	RTS
-.)
 
 
 

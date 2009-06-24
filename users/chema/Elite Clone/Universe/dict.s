@@ -179,20 +179,37 @@ str_cr      .asc " M CR."
 ; These are for market
 str_mkt     .asc "market prices"
             .byt 0
-str_mktlist .asc "product"
+str_mktquant
+            .asc "quantity"
+            .byt 0    
+str_mktlist 
+            .asc "product"
             .byt 0
 str_mktunit
             .asc "unit"
             .byt 0
+str_mktin   .asc "in"
+            .byt 0
 str_mktprice
             .asc "price"
             .byt 0
-str_mktquant
-            .asc "quantity"
-            .byt 0    
 str_mktsale
             .asc "for sale"
             .byt 0             
+str_mktcargo 
+            .asc "ship"
+            .byt 0
+
+; For market buying/selling
+
+str_cash    .asc "Cash"
+            .byt 0
+str_freespace
+            .asc "Space left"
+            .byt 0
+str_credits
+            .asc "Cr."
+            .byt 0
 
 ; Goat soup dictionary
 
