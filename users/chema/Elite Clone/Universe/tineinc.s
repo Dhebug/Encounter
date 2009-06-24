@@ -420,7 +420,7 @@ poploop
 	rts
 			
 ;
-; udiv10 op2= op2 / 10 and A= tmp2 % 10
+; udiv10 op2= op2 / 10 and A= op2 % 10
 ;
 udiv10
 	lda #0

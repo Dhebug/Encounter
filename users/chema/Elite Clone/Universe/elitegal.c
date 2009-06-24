@@ -53,12 +53,11 @@ unsigned char  galaxynum;               /* Galaxy number (1-8) */
 unsigned long  cash;                    /* four bytes for cash */
 unsigned int   fuel;                    /* Amount of fuel, can this be a byte? */    
 unsigned char  fluct;                   /* price fluctuation */
-
+unsigned int   holdspace;               /* Current space used? */
 
 
 unsigned char quantities[lasttrade+1];
 unsigned int prices[lasttrade+1];
-unsigned int   holdspace;
 //seedtype localseed;
 plansys cpl_system;
 
@@ -99,6 +98,8 @@ void jump()
     cpl_system=hyp_system;
     genmarket();
     displaymarket();
+    current_screen=SCR_MARKET;
+
 }
 
 
@@ -110,7 +111,7 @@ main()
 
     char * p;
     p=(char *)0x24e;  
-    *p=5;
+    *p=8;
     p=(char *)0x24f;  
     *p=1; 
 
@@ -129,7 +130,11 @@ main()
     
     jump();    
     fluct=0;
+    holdspace=20;
     genmarket();
+    displaymarket();
+    current_screen=SCR_MARKET;
+
     
     //getchar();getchar();
     //genmarket(0);
@@ -186,16 +191,28 @@ main()
             break;
     
         case 'Q':
-            move_cross_v(-2);
+            if (current_screen == SCR_MARKET)
+                dec_sel();
+            else
+                move_cross_v(-2);
             break;
         case 'A':
-            move_cross_v(2);
+            if (current_screen == SCR_MARKET)
+                inc_sel();
+            else
+                move_cross_v(2);
             break;
         case 'S':
-            move_cross_h(-2);
+            if (current_screen == SCR_MARKET)
+                sell();
+            else
+                move_cross_h(-2);
             break;
         case 'D':
-            move_cross_h(2);
+            if (current_screen == SCR_MARKET)
+                buy();
+            else
+                move_cross_h(2);
             break;
         case ' ':
             find_planet();
