@@ -1,4 +1,4 @@
-
+#define itoa itoa2
 
 ; Functions to re-create galaxy and market of Elite
 ; adapted from the TextElite C source
@@ -2859,6 +2859,7 @@ loopsp
     
 +print_float
     jsr itoa
++print_bufconv
 loop
     ldx #0
 text
@@ -3046,16 +3047,87 @@ mkt_status
     lda #<str_cash
     jsr print
     jsr put_space
-    lda #0
-    sta op2
-    sta op2+1
-    jsr print_float
+
+    ldx #3
+loop
+    lda _cash,x
+    sta op1,x
+    dex
+    bpl loop
+    jsr ltoa
+    jsr print_bufconv
     jsr put_space
     ldx #>str_credits
     lda #<str_credits
     jmp print
 
 .)
+
+
+
+; Check if we have enough cash to pay op2,op2+1 credits
+; C=0 no cash, C=1, we have cash
+enough_cash
+.(
+    lda _cash+3
+    ora _cash+2
+    bne havecash
+    lda _cash+1
+    sta op1+1
+    lda _cash
+    sta op1
+    jmp cmp16
+havecash
+    sec
+    rts
+.)
+
+
+; Pay the value in op2,op2+1
+dec_cash
+.(
+    ; decrement cash
+    ; 32-bit substraction here
+    sec
+    lda _cash
+    sbc op2
+    sta _cash
+    lda _cash+1
+    sbc op2+1
+    sta _cash+1
+    bcs nomore    
+    lda _cash+2
+    sbc #0
+    sta _cash+2
+    bcs nomore
+    dec _cash+3
+nomore
+    rts
+.)
+
+
+; Add op2,op2+1 credits to player
+inc_cash
+.(
+   ; increment cash
+    ; 32-bit addition here
+    clc
+    lda _cash
+    adc op2
+    sta _cash
+    lda _cash+1
+    adc op2+1
+    sta _cash+1
+    bcc nomore    
+    lda _cash+2
+    adc #0
+    sta _cash+2
+    bcc nomore
+    inc _cash+3
+nomore
+    rts
+.)
+
 
 _buy
 .(
@@ -3065,6 +3137,20 @@ _buy
     beq nosell
     
     ; check for cash
+    ; Get price in op2
+    stx savx+1
+    txa
+    asl
+    tax
+    lda _prices,x
+    sta op2
+    lda _prices+1,x
+    sta op2+1
+savx
+    ldx #0  ;SMC   
+
+    jsr enough_cash
+    bcc nocash
 
     ; check for cargo space
     lda Units,x
@@ -3076,9 +3162,8 @@ space
 
     dec _quantities,x
     inc _shipshold,x    
-    
-    ; decrement cash
 
+    jsr dec_cash
     jmp update_mkt
 nosell
 nospace
@@ -3101,8 +3186,17 @@ space
     inc _quantities,x
     dec _shipshold,x    
     
-    ; increment cash
+    ; Get price in op2
+    txa
+    asl
+    tax
+    lda _prices,x
+    sta op2
+    lda _prices+1,x
+    sta op2+1
     
+    jsr inc_cash
+     
     jmp update_mkt
 
 nosell

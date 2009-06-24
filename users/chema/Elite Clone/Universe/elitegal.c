@@ -50,7 +50,7 @@ plansys hyp_system;
 unsigned int   shipshold[lasttrade+1];  /* Contents of cargo bay */
 unsigned char  currentplanet;           /* Current planet */
 unsigned char  galaxynum;               /* Galaxy number (1-8) */
-unsigned long  cash;                    /* four bytes for cash */
+unsigned char  cash[4];                 /* four bytes for cash */
 unsigned int   fuel;                    /* Amount of fuel, can this be a byte? */    
 unsigned char  fluct;                   /* price fluctuation */
 unsigned int   holdspace;               /* Current space used? */
@@ -131,6 +131,17 @@ main()
     jump();    
     fluct=0;
     holdspace=20;
+    
+    cash[0]=0xd0;  
+    cash[1]=0x7;
+    cash[2]=0;
+    cash[3]=0;
+
+/*
+    cash[0]=0;//0xd0;  
+    cash[1]=0xc2;//0x7;
+    cash[2]=0xeb;//0;
+    cash[3]=0xb;//0; */
     genmarket();
     displaymarket();
     current_screen=SCR_MARKET;
