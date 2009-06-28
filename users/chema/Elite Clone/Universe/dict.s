@@ -153,19 +153,19 @@ econnames
 
 str_data    .asc "Data on"
             .byt 0
-str_dist    .asc "Distance:"
+str_dist    .asc "Distance"
             .byt 0
-str_eco     .asc "Economy:"
+str_eco     .asc "Economy"
             .byt 0
-str_gov     .asc "Government:"
+str_gov     .asc "Government"
             .byt 0
-str_tech    .asc "Tech. Level:"
+str_tech    .asc "Tech. Level"
             .byt 0
-str_gross   .asc "Gross Productivity:"
+str_gross   .asc "Gross Productivity"
             .byt 0
-str_rad     .asc "Average Radius:"
+str_rad     .asc "Average Radius"
             .byt 0
-str_pop     .asc "Population:"
+str_pop     .asc "Population"
             .byt 0
 str_km      .asc " Km."
             .byt 0
@@ -188,8 +188,10 @@ str_mktlist
 str_mktunit
             .asc "unit"
             .byt 0
+
 str_mktin   .asc "in"
             .byt 0
+
 str_mktprice
             .asc "price"
             .byt 0
@@ -669,6 +671,130 @@ str_notfound
     .asc "Not Found"
     .byt 0
 
+
+; For main screen
+str_commander
+    .asc "Commander"
+    .byt 0
+str_present
+    .asc "Present"
+    .byt 0
+str_hyper
+    .asc "Hyperspace"
+    .byt 0
+str_system
+    .asc "System"
+    .byt 0
+str_fuel
+    .asc "Fuel"
+    .byt 0
+str_status
+    .asc "Legal Status"
+    .byt 0
+str_rating
+    .asc "Rating"
+    .byt 0
+str_colon
+    .asc ": "
+    .byt 0
+
+; Legal status
+str_clean
+    .asc "Clean"
+    .byt 0
+str_offender
+    .asc "Offender"
+    .byt 0
+str_fugitive
+    .asc "Fugitive"
+    .byt 0
+
+; Rating
+str_harmless
+    .asc "Harmless"
+    .byt 0
+str_mostly
+    .asc "Mostly Harmless"
+    .byt 0
+str_poor
+    .asc "Poor"
+    .byt 0
+str_average
+    .asc "Average"
+    .byt 0
+str_above
+    .asc "Above Average"
+    .byt 0
+str_competent
+    .asc "Competent"
+    .byt 0
+str_dangerous
+    .asc "Dangerous"
+    .byt 0
+str_deadly
+    .asc "Deadly"
+    .byt 0
+str_elite
+    .asc "---- E L I T E ----"
+    .byt 0
+
+
+
+; Equipment
+
+; Fuel, Missile, Pulse laser
+; Large Bay, Escape pod, Scoops, ECMs, Bomb, Energy, GH, Beam laser, Mil Laser, Speed, Man
+
+; Prices
+priceseqLO
+   .byt <2,<300
+   .byt <4000,<6000,<5250,<10000,<9000,<15000,<50000,<10000,<60000,<30000,<45000
+priceseqHI
+   .byt >2,>300
+   .byt >4000,>6000,>5250,>10000,>9000,>15000,>50000,>10000,>60000,>30000,>45000
+
+; Techlevel min
+
+eq_tech
+    .byt 1,1
+    .byt 1,6,5,2,7,8,10,4,10,10,10
+
+str_equipment
+    .asc "equipment"
+    .byt 0
+str_equip
+    .asc "Pulse laser"
+    .byt 0
+    .asc "Large Cargo Bay"
+    .byt 0
+    .asc "Escape Pod"
+    .byt 0
+    .asc "Scoops"
+    .byt 0
+    .asc "E.C.M. System"
+    .byt 0
+    .asc "Energy Bomb"
+    .byt 0
+    .asc "Extra Energy Unit"
+    .byt 0
+    .asc "Galactic Hyperspace"
+    .byt 0
+    .asc "Beam Laser"
+    .byt 0
+    .asc "Military Laser"
+    .byt 0
+    .asc "Extra Speed Unit"
+    .byt 0
+    .asc "Extra Maneuvrability Unit"
+    .byt 0
+
+str_selleq
+    .asc "Equip Ship"
+    .byt 0
+
+str_item
+    .asc "Item"
+    .byt 0
 
 __texts_end
 
