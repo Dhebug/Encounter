@@ -155,6 +155,33 @@ loop
 .)
 
 
+
+; jump()
+; jumps to dest_num and hyp_system. I guess those should be consistent. Normaly you would
+; call infoplanet to find the seed and then makesystem to create the system data
+; so these two should be fused and jump just use the current hyp_system...
+
+_jump
+.(
+    ldx #25
+loop
+    lda _hyp_system,x
+    sta _cpl_system,x
+    dex
+    bpl loop
+
+    lda _dest_num
+    sta _currentplanet
+    
+    ; Generate the market
+    ; and show it
+    jsr _genmarket
+    jmp _displaymarket  
+  
+.)
+
+
+
 ;genmarket(signed char fluct)
 ;/* Prices and availabilities are influenced by the planet's economy type
 ;   (0-7) and a random "fluctuation" byte that was kept within the saved
@@ -2433,16 +2460,14 @@ _printsystem
     jsr clr_hires
 
     ; Print title: Data on <planetname>
-    lda #1
-    sta capson
+    inc capson
 
     ldx #STR_DATA
     jsr printtitle
     jsr gs_planet_name
     ;jsr print_planet_name    
 
-    lda #0
-    sta capson
+    dec capson
 
     jsr perform_CRLF
     jsr perform_CRLF
@@ -2559,7 +2584,7 @@ print_planet_name
 .(
     ldx #0
 loop
-    lda _current_name,x
+    lda _cpl_system+NAME,x
     beq end
     cmp #"."
     beq noprint
@@ -2574,7 +2599,7 @@ end
 
 #define START_X_LIST 1
 
-//#define PACK
+#define PACK
 
 #ifdef PACK
 
@@ -2612,8 +2637,7 @@ _displaymarket
     ; Clear hires and draw frame
     jsr clr_hires
 
-    lda #1
-    sta capson
+    inc capson
 
     jsr put_space
     jsr put_space
@@ -2654,9 +2678,10 @@ loop
     jsr perform_CRLF
     lda #A_FWCYAN
     jsr put_code
-nothing
     ldx count
+nothing
     inx
+    stx count
     cpx #8
     bne loop
     
@@ -2715,7 +2740,7 @@ nothing
     
     ldx #(35*6)
     jsr gotoX
-        
+
     lda #<str_mktcargo
     ldx #>str_mktcargo
     jsr print
@@ -2723,8 +2748,7 @@ nothing
 #endif
     ;jsr perform_CRLF
 
-    lda #0
-    sta capson    
+    dec capson    
     
     ;for(i=0;i<=lasttrade;i++)
     ;	{
@@ -2928,6 +2952,12 @@ printtitle
 
     lda #(A_FWGREEN+A_FWYELLOW*16+128)
     jsr put_code
+    jsr printtail
+    jmp pr_colon
+
+    ;lda #A_FWWHITE
+    ;jmp put_code
+
 .)
 printtail
 .(
@@ -2935,12 +2965,7 @@ printtail
     sta tmp0
     lda #>str_data
     sta tmp0+1
-    jsr search_string_and_print
-
-    ;jmp put_space ; This is jsr/rts
-    lda #A_FWWHITE
-    jmp put_code
-    ;rts
+    jmp search_string_and_print
 .)
 
 ;;; Selection of items
@@ -3048,6 +3073,13 @@ mkt_status
     jsr print
     jsr put_space
 
+    jmp pr_cash
+
+.)
+
+pr_cash
+.(
+
     ldx #3
 loop
     lda _cash,x
@@ -3060,9 +3092,7 @@ loop
     ldx #>str_credits
     lda #<str_credits
     jmp print
-
 .)
-
 
 
 ; Check if we have enough cash to pay op2,op2+1 credits
@@ -3220,6 +3250,296 @@ update_mkt
     jmp mkt_status
 .)
 
+
+;;;; Information screen
+_displayinfo
+.(
+    jsr clr_hires
+    inc capson
+    jsr put_space
+    jsr put_space
+    lda #(A_FWWHITE+A_FWCYAN*16+128)
+    jsr put_code
+    lda #<str_commander
+    ldx #>str_commander
+    jsr print
+    jsr put_space
+    lda #<_name
+    ldx #>_name
+    jsr printnl
+    dec capson
+    jsr perform_CRLF
+    jsr perform_CRLF
+
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_present
+    ldx #>str_present
+    jsr print
+    jsr pr_sys
+    jsr pr_colon
+    ldy #3
+loop
+    jsr put_space
+    dey
+    bne loop
+    jsr print_planet_name
+    jsr perform_CRLF
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_hyper
+    ldx #>str_hyper
+    jsr print
+    jsr pr_sys
+    jsr pr_colon
+    lda #<_hyp_system+NAME
+    ldx #>_hyp_system+NAME
+    jsr printnl
+
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_fuel
+    ldx #>str_fuel
+    jsr print
+    jsr pr_colon
+    lda _fuel
+    sta op2
+    lda #0
+    sta op2+1
+    jsr print_float
+    lda #<str_ly    
+    ldx #>str_ly
+    jsr printnl
+
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_cash
+    ldx #>str_cash
+    jsr print
+    jsr pr_colon
+    jsr pr_cash
+    jsr perform_CRLF
+
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_status
+    ldx #>str_status
+    jsr print
+    jsr pr_colon
+    jsr get_statstr
+    jsr print2
+    jsr perform_CRLF
+
+    lda #A_FWCYAN
+    jsr put_code
+    lda #<str_rating
+    ldx #>str_rating
+    jsr print
+    jsr pr_colon
+    jsr get_ratstr
+    jsr print2
+    jsr perform_CRLF
+
+    ; Print equipment
+    jsr perform_CRLF
+
+    lda #A_FWCYAN
+    jsr put_code
+
+    inc capson
+    lda #<str_equipment
+    ldx #>str_equipment
+    jsr print
+    jsr pr_colon
+    dec capson
+    jsr perform_CRLF
+
+    lda _equip
+    sta op1
+    lda _equip+1
+    sta op1+1
+    ldx #0
+
+loope
+    lsr op1+1
+    ror op1
+    bcc no_fit
+
+    ; Fitted, print it
+    stx savx+1
+    lda #<str_equip
+    sta tmp0
+    lda #>str_equip
+    sta tmp0+1
+    ldy #5
+loopsp
+    jsr put_space
+    dey
+    bne loopsp
+    jsr search_string_and_print
+    jsr perform_CRLF
+savx    
+    ldx #0  ; SMC
+    
+no_fit
+    inx
+    cpx #16
+    bne loope
+    
+    rts
+
+;tmp4b .word 0000
+.)
+
+pr_colon
+.(
+    lda #<str_colon
+    ldx #>str_colon
+    jsr print
+    lda #A_FWWHITE
+    jmp put_code
+.)
+pr_sys
+.(
+    jsr put_space
+    lda #<str_system
+    ldx #>str_system
+    jmp print
+.)
+
+get_statstr
+.(
+    lda #<str_clean
+    sta tmp0
+    lda #>str_clean
+    sta tmp0+1
+
+    ldx #0
+    lda _legal_status
+    beq end
+    inx
+    cmp #50
+    bcc end 
+    inx
+end
+    jmp search_string
+.)
+
+
+; Rating    : $0000, $0008, $0010, $0020, $0040, $0080, $0200, $0a00, $1900
+rat_lo .byt <$0008, <$0010, <$0020, <$0040, <$0080, <$0200, <$0a00, <$1900
+rat_hi .byt >$0008, >$0010, >$0020, >$0040, >$0080, >$0200, >$0a00, >$1900
+
+#define NUM_RATINGS 9
+
+get_ratstr
+.(
+    lda #<str_harmless
+    sta tmp0
+    lda #>str_harmless
+    sta tmp0+1
+
+    ldx #0
+    lda _score
+    sta op1
+    lda _score+1
+    sta op1+1
+
+    ldx #(NUM_RATINGS-2)
+loop
+    lda rat_lo,x
+    sta op2
+    lda rat_hi,x
+    sta op2+1
+    jsr cmp16
+    bcs end
+    dex
+    bpl loop
+
+end
+    inx
+    jmp search_string
+.)
+
+
+
+
+_displayequip
+.(
+    ; clear selection
+    lda #$ff
+    sta _cur_sel
+    
+    ; Clear hires and draw frame
+    jsr clr_hires
+
+    inc capson
+
+    jsr put_space
+    jsr put_space
+    ;lda #A_FWCYAN
+    lda #(A_FWWHITE+A_FWCYAN*16+128)
+    jsr put_code
+    lda #<str_selleq
+    ldx #>str_selleq
+    jsr printnl        
+    jsr perform_CRLF
+
+    lda #A_FWCYAN
+    ;lda #(A_FWWHITE+A_FWCYAN*16+128)
+    jsr put_code
+
+    dec capson    
+    
+    ; Loop thru the equip items (16 max, but only 12 implemented for now)
+    lda #0
+    sta count    
+loop2
+    ;printf("\n");
+    jsr perform_CRLF
+
+    jsr print_equ_item
+    inc count
+    lda count
+    cmp #12
+    bne loop2  
+    
+    rts
+.)	
+
+
+print_equ_item
+.(
+    lda #(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+
+    ldx count
+    lda #<str_equip
+    sta tmp0
+    lda #>str_equip
+    sta tmp0+1
+    jsr search_string_and_print
+
+    lda #(A_FWWHITE)
+    jsr put_code
+
+    ldx #(16*6)
+    jsr gotoX
+ 
+    ldx #(239-8*6)
+    jsr gotoX    
+    ;jsr put_space
+    lda count
+    tax
+    lda priceseqLO,x
+    sta op2
+    lda priceseqHI,x
+    sta op2+1
+    ldx #7
+    jsr print_float_tab
+    
+    rts
+.)
 
 
 ;;;; Changing galaxy

@@ -58,8 +58,10 @@ loop
 text
     lda 1234,x		; Get Next letter
     beq end         ; if 0, we are finished
+    stx savx+1
     jsr decomp
-    ;jsr put_char
+savx
+    ldx #0  ;SMC
     inx
     jmp loop
 
@@ -337,7 +339,9 @@ put_char
         stx res_x 
         sty res_y
         cmp #32 
-        beq put_space 
+        beq put_space
+        cmp #97
+        bcc nocaps  ; It is not a letter 
         ldx capson
         beq nocaps
         and #$df    ; Uppercase it 

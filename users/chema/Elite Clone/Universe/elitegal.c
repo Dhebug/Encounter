@@ -47,13 +47,19 @@ plansys hyp_system;
 
 
 /* Player workspace */
+unsigned char  name[32]="Jameson";      /* Commander's name */
 unsigned int   shipshold[lasttrade+1];  /* Contents of cargo bay */
 unsigned char  currentplanet;           /* Current planet */
-unsigned char  galaxynum;               /* Galaxy number (1-8) */
-unsigned char  cash[4];                 /* four bytes for cash */
-unsigned int   fuel;                    /* Amount of fuel, can this be a byte? */    
+unsigned char  galaxynum=1;             /* Galaxy number (1-8) */
+unsigned char  cash[4]={0xd0,0x07,0,0}; /* four bytes for cash */
+unsigned char  fuel=70;                 /* Amount of fuel, can this be a byte? */    
 unsigned char  fluct;                   /* price fluctuation */
-unsigned int   holdspace;               /* Current space used? */
+unsigned int   holdspace=20;            /* Current space used? */
+unsigned char  legal_status=50;         /* Current legal status 0=Clean, <50=Offender, >50=Fugitive */
+unsigned int   score=60000;             /* Score. Can this be just two bytes? */
+unsigned char  mission=0;               /* Current mission */
+unsigned int   equip=0xfff;             /* Equipment flags */
+
 
 
 unsigned char quantities[lasttrade+1];
@@ -63,15 +69,17 @@ plansys cpl_system;
 
 
 unsigned char dest_num;
-unsigned char current_name[9]; 
+//unsigned char current_name[9]; 
 
 
+#define SCR_INFO    0
 #define SCR_MARKET  1
 #define SCR_SYSTEM  2
 #define SCR_GALAXY  3
 #define SCR_CHART   4
+#define SCR_EQUIP   5
 
-unsigned char current_screen;
+unsigned char current_screen=0;
 
 //markettype localmarket;
 //int fuelcost =2; /* 0.2 CR/Light year */
@@ -88,19 +96,19 @@ extern void search_planet(char * name);
 extern void move_cross_v(int dist);
 
 
-void jump()
+/*void jump()
 {
     
-    printf("Jumping to planet %s (%d)\n",hyp_system.name,dest_num);
+    //printf("Jumping to planet %s (%d)\n",hyp_system.name,dest_num);
     currentplanet=dest_num;
     //savename(current_name,hyp_system.name);
-    strcpy(current_name,hyp_system.name);
+    //strcpy(current_name,hyp_system.name);
     cpl_system=hyp_system;
     genmarket();
     displaymarket();
     current_screen=SCR_MARKET;
 
-}
+}*/
 
 
 main()
@@ -115,9 +123,6 @@ main()
     p=(char *)0x24f;  
     *p=1; 
 
-   
-    //plot_galaxy();
-
     hires();
 
     init_print();
@@ -128,23 +133,25 @@ main()
     makesystem();
     /*printsystem();*/
     
-    jump();    
+    jump();
     fluct=0;
-    holdspace=20;
+    current_screen=SCR_MARKET;
+
+    //holdspace=20;
     
-    cash[0]=0xd0;  
+ /*   cash[0]=0xd0;  
     cash[1]=0x7;
     cash[2]=0;
-    cash[3]=0;
+    cash[3]=0;*/
 
 /*
     cash[0]=0;//0xd0;  
     cash[1]=0xc2;//0x7;
     cash[2]=0xeb;//0;
     cash[3]=0xb;//0; */
-    genmarket();
-    displaymarket();
-    current_screen=SCR_MARKET;
+    //genmarket();
+    //displaymarket();
+    //current_screen=SCR_MARKET;
 
     
     //getchar();getchar();
@@ -160,15 +167,25 @@ main()
 
     switch(i)
     {
+        case 'E':
+            current_screen=SCR_EQUIP;
+            displayequip();
+            break;
+        case 'L':
+            current_screen=SCR_INFO;
+            displayinfo();
+            break;
         case 'M':
             current_screen=SCR_MARKET;
             displaymarket();
             break;
         case 'J':
             jump();
+            current_screen=SCR_MARKET;
             break;
         case 'H':
             enter_next_galaxy();
+            current_screen=SCR_MARKET;
             jump();   
             break;
 
