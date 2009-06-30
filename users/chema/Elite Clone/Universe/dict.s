@@ -685,9 +685,9 @@ str_hyper
 str_system
     .asc "System"
     .byt 0
-str_fuel
-    .asc "Fuel"
-    .byt 0
+;str_fuel 
+;    .asc "Fuel"
+;    .byt 0
 str_status
     .asc "Legal Status"
     .byt 0
@@ -742,27 +742,32 @@ str_elite
 
 ; Equipment
 
-; Fuel, Missile, Pulse laser
+; Fuel, Missile and Pulse laser 
 ; Large Bay, Escape pod, Scoops, ECMs, Bomb, Energy, GH, Beam laser, Mil Laser, Speed, Man
 
 ; Prices
 priceseqLO
-   .byt <2,<300
+   .byt <2,<300,<2000
    .byt <4000,<6000,<5250,<10000,<9000,<15000,<50000,<10000,<60000,<30000,<45000
 priceseqHI
-   .byt >2,>300
+   .byt >2,>300,>2000
    .byt >4000,>6000,>5250,>10000,>9000,>15000,>50000,>10000,>60000,>30000,>45000
 
 ; Techlevel min
 
 eq_tech
-    .byt 1,1
+    .byt 1,1,1
     .byt 1,6,5,2,7,8,10,4,10,10,10
 
 str_equipment
     .asc "equipment"
     .byt 0
+str_fuel
 str_equip
+    .asc "Fuel"
+    .byt 0
+    .asc "Missile"
+    .byt 0
     .asc "Pulse laser"
     .byt 0
     .asc "Large Cargo Bay"
@@ -794,6 +799,9 @@ str_selleq
 
 str_item
     .asc "Item"
+    .byt 0
+str_missile
+    .asc "Missile"
     .byt 0
 
 __texts_end
