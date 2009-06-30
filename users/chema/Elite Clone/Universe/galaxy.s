@@ -173,6 +173,10 @@ loop
     lda _dest_num
     sta _currentplanet
     
+    ; Randomize price fluctuation
+    jsr _gen_rnd_number
+    sta _fluct
+
     ; Generate the market
     ; and show it
     jsr _genmarket
@@ -3358,8 +3362,7 @@ loop
     sta op1
     lda _equip+1
     sta op1+1
-    ldx #0
-
+    ldx #2
 loope
     lsr op1+1
     ror op1
@@ -3485,20 +3488,23 @@ _displayequip
     jsr printnl        
     jsr perform_CRLF
 
-    lda #A_FWCYAN
+    ;lda #A_FWCYAN
     ;lda #(A_FWWHITE+A_FWCYAN*16+128)
-    jsr put_code
-
+    ;jsr put_code
     dec capson    
     
     ; Loop thru the equip items (16 max, but only 12 implemented for now)
     lda #0
     sta count    
 loop2
-    ;printf("\n");
-    jsr perform_CRLF
-
+    ; Check planet techlevel
+    tax
+    lda _cpl_system+TECHLEV
+    cmp eq_tech,x
+    bcc noitem
     jsr print_equ_item
+    jsr perform_CRLF
+noitem 
     inc count
     lda count
     cmp #12
@@ -3514,6 +3520,7 @@ print_equ_item
     jsr put_code
 
     ldx count
+
     lda #<str_equip
     sta tmp0
     lda #>str_equip
@@ -3528,13 +3535,24 @@ print_equ_item
  
     ldx #(239-8*6)
     jsr gotoX    
-    ;jsr put_space
     lda count
+    bne cont
+    ; It is fuel, put the price to get 7.0 LY of travel...
+    lda #70
+    sec
+    sbc _fuel
+    asl ; Fuel is 0.2 Cr/LY
+    sta op2
+    lda #0
+    sta op2+1
+    jmp cont2
+cont
     tax
     lda priceseqLO,x
     sta op2
     lda priceseqHI,x
     sta op2+1
+cont2
     ldx #7
     jsr print_float_tab
     

@@ -96,20 +96,6 @@ extern void search_planet(char * name);
 extern void move_cross_v(int dist);
 
 
-/*void jump()
-{
-    
-    //printf("Jumping to planet %s (%d)\n",hyp_system.name,dest_num);
-    currentplanet=dest_num;
-    //savename(current_name,hyp_system.name);
-    //strcpy(current_name,hyp_system.name);
-    cpl_system=hyp_system;
-    genmarket();
-    displaymarket();
-    current_screen=SCR_MARKET;
-
-}*/
-
 
 main()
 {
@@ -200,7 +186,7 @@ main()
             search_planet(n);
             //printsystem();
             break;
-        case 'Z':
+ /*       case 'Z':
             current_screen=SCR_SYSTEM;
             printf("New planet? ");
             scanf("%d",&dest_num);
@@ -208,7 +194,7 @@ main()
             infoplanet();
             makesystem();
             printsystem();
-            break;
+            break;*/
         case 'G':
             current_screen=SCR_GALAXY;
             plot_galaxy();
@@ -219,13 +205,15 @@ main()
             break;
     
         case 'Q':
-            if (current_screen == SCR_MARKET)
+            if ((current_screen == SCR_MARKET)||
+                (current_screen == SCR_EQUIP))
                 dec_sel();
             else
                 move_cross_v(-2);
             break;
         case 'A':
-            if (current_screen == SCR_MARKET)
+            if ((current_screen == SCR_MARKET)||
+                (current_screen == SCR_EQUIP))
                 inc_sel();
             else
                 move_cross_v(2);
