@@ -42,6 +42,9 @@ _PosZ  .byt 0,0
 #ifndef FILLEDPOLYS
 pixel_address_real
 .(
+    lda double_buff
+    beq pixel_address
+
 	lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4

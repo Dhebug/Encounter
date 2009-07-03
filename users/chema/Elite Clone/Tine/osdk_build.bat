@@ -8,6 +8,11 @@
 IF "%OSDK%"=="" GOTO ErCfg
 
 
+
+:: CHEMA: Compress texts
+CALL txtcomp.bat
+
+
 ::
 :: Set the build paremeters
 ::

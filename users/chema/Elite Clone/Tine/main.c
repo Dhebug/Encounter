@@ -95,7 +95,7 @@ extern void norm_big();
 
 
 
-main()
+space_main()
 {
    
     char * p;
@@ -104,7 +104,7 @@ main()
     int res1,res2;*/
     
        
-    init_tine();
+    //init_tine();
 
 
 
@@ -140,7 +140,6 @@ main()
 #endif
     printf("A/Z Pitch, Q/W Roll, S/D Yaw\nO/L accel/deccel B missile 1 laser");
 
-
     InitTestCode();
     
     FirstFrame();
@@ -154,114 +153,7 @@ main()
 }
 
 
-
-
-
-
-
-#define DESTX 10000
-#define DESTY 10000
-#define DESTZ 3500
-
-int GoX=DESTX;
-int GoY=DESTY;
-int GoZ=DESTZ;
-
-
-void fly_to_pos()
-{
-
-    GetShipPos();
-
-    //printf("Pos ");
-    //printf("%d,%d,%d\n",PosX,PosY,PosZ);
-   
-    VectX=(GoX-PosX);
-    VectY=(GoY-PosY);
-    VectZ=(GoZ-PosZ);
-
-    //printf("Vect %d\n",abs(VectX)|abs(VectY)|abs(VectZ));
-
-    /*if ( (abs(VectX)|abs(VectY)|abs(VectZ)) < 500)
-        fly_to_vector_old();
-    else fly_to_vector();*/
- 
-    if ( (abs(VectX)|abs(VectY)|abs(VectZ)) > 300)
-        fly_to_vector();
-    else
-    {
-    printf("*");
-        GoX=-GoX;GoY=-GoY;//GoZ=-GoZ;
-    }
-    //fly_to_vector();
-
-   // printf("rotx=%d, roty=%d, rotz=%d\n",(int)rotx[curr_ship],(int)roty[curr_ship], (int)rotz[curr_ship]);
-   /*printf("Speed 1 = %d\n",speed[1]);
-   printf("Speed 2 = %d\n",speed[2]);
-   printf("Speed 3 = %d\n",speed[3]);
-   printf("Speed 4 = %d\n",speed[4]);*/
-
-}
-
-
-#ifdef 0
-void MoveOthers()
-{
-   
-
-    SetCurrentObject(2);
-    //fly_to_pos();
-
-    Tactics();
-    
-    MoveShips();
-
-    /*
-    SetCurrentObject(2);
-    GetShipPos();
-    printf("Pos ");
-    printf("%d,%d,%d\n",PosX,PosY,PosZ);
-    if ((abs(PosX)<70 && abs(PosY)<70 && abs(PosZ-1300)<70))
-    {
-
-        target[3]=0; speed[3]=0; accel[3]=0;
-    }*/
-
-
-    //printf("rx %d, ry %d, rz %d, s %d, a %d\n", rotx[6],roty[6],rotz[6],speed[6],accel[6]);
- 
-
-}
-
-
-void Lasers()
-{
-    int i;
-
-   if (! numlasers) cls();
-
-    for (i=0; i<numlasers;i++)
-        printf("%d fires at %d!\n",laser_source[i],laser_target[i]);
-
-    numlasers=0;
-
-}
-#endif
-
-
 /*
-void print()
-{
-  //printf("POS: %d,%d,%d\n",*(int *)pointer,*((int *)(pointer)+2),*((int *)(pointer)+4));
-    printf("POS: %d,%d,%d\n",pointer->CenterX,pointer->CenterY,pointer->CenterZ);
-
-}
-*/
-
-extern char ID;
-/*int * pop1=(int *)0x66;
-int * pop2=(int *)0x68;
-*/
 void printHit()
 {
     
@@ -270,36 +162,8 @@ void printHit()
     explode();
     
 
-}
-
-/*
-void props()
-{
-    printf("op1=%d, op2=%d",*pop1,*pop2);
-
-}
-*/
-
-/*
-extern char num_collisions;
-extern char collision_list[4];
-
-void prcolls()
-{
-    int i;
-
-    if (num_collisions)
-     printf("Collision with ");
-    for (i=0;i<num_collisions;i++)
-    {
-        printf("%d ",collision_list[i]);
-    }
-    if (num_collisions)
-     printf("\n");
-      
-
-
 }*/
+
 
 void DrawLaser()
 {
@@ -311,28 +175,5 @@ void DrawLaser()
 
 }
 
-#ifdef 0
-void prdbug()
-{
 
-    int i;
-
-    //for (i=4;i<=5;i++)
-
-    //for (i=0; i<numlasers;i++)
-    if (1/*numlasers*/)
-    {
-        i=0;
-        printf("%d,%d to %d,%d!\n",vertexXLO[laser_source[i]]+vertexXHI[laser_source[i]]*256,
-                                   vertexYLO[laser_source[i]]+vertexYHI[laser_source[i]]*256,
-                                   vertexXLO[laser_target[i]]+vertexXHI[laser_target[i]]*256,
-                                   vertexYLO[laser_target[i]]+vertexYHI[laser_target[i]]*256);
-    }
-    
-     i=5;
-     printf("%d: s %d, a %d, ai %d\n",i,speed[i],accel[i],ai_state[i]);
-
-
-}
-#endif
 
