@@ -81,6 +81,10 @@ _ClipYc         .dsb 2
 
 	
 	.text
+
+;; To include double-buffer (on and off)
+double_buff .byt 1
+
 	
 	.dsb 256-(*&255)
 
@@ -514,17 +518,33 @@ _TableBit6Reverse
 	.byt 32,16,8,4,2,1
 
 
+_SwitchDoubleBuff
+.(
+    lda double_buff
+    eor #$ff
+    sta double_buff
+    jmp _GenerateTables
+.)
+
 _GenerateTables
 .(
 
 	; Generate screen offset data
 .(
-	;lda #<$a000
+    lda double_buff
+    beq toscreen
+    
     lda #<buffer
 	sta tmp0+0
-	;lda #>$a000
-    lda #>buffer
+	lda #>buffer
 	sta tmp0+1
+    jmp nextstep
+toscreen
+    lda #<$a000
+    sta tmp0+0
+	lda #>$a000
+    sta tmp0+1
+nextstep
 
 	ldx #0
 loop

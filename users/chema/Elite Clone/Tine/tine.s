@@ -19,6 +19,7 @@ OCEN0   .word 0;1000
         .word 0;1000
         .word 0;2500
 
+#ifdef 0
 OCENA    .word 1000            ;X-coord
          .word 1000            ;Y-coord
          .word -5000            ;Z-coord
@@ -34,6 +35,8 @@ OCENC    .word -1000            ;X-coord
 OCEND    .word 1000            ;X-coord
          .word 1000            ;Y-coord
          .word -1000            ;Z-coord
+#endif
+
 OCENE   .word 0
         .word 0
         .word 12200
@@ -42,286 +45,6 @@ OCENF   .word 1000
         .word 300
         .word 10000
 
-//#define TESTRADAR
-//#define FULLC
-
-#ifdef FULLC
-CEN1 .word -12200 
- 	.word 0
-	.word 0
-
-CEN2 .word -9489 
- 	.word 0
-	.word -7668
-
-CEN3 .word -6778 
- 	.word 0
-	.word -10144
-
-CEN4 .word -4067 
- 	.word 0
-	.word -11502
-
-CEN5 .word -1356 
- 	.word 0
-	.word -12124
-
-CEN6 .word 1356 
- 	.word 0
-	.word -12124
-
-CEN7 .word 4067 
- 	.word 0
-	.word -11502
-
-CEN8 .word 6778 
- 	.word 0
-	.word -10144
-
-CEN9 .word 9489 
- 	.word 0
-	.word -7668
-
-CEN10 .word 12200 
- 	.word 0
-	.word 0
-
-CEN11 .word -12200 
- 	.word 0
-	.word 0
-
-CEN12 .word -9489 
- 	.word 0
-	.word 7668
-
-CEN13 .word -6778 
- 	.word 0
-	.word 10144
-
-CEN14 .word -4067 
- 	.word 0
-	.word 11502
-
-CEN15 .word -1356 
- 	.word 0
-	.word 12124
-
-CEN16 .word 1356 
- 	.word 0
-	.word 12124
-
-CEN17 .word 4067 
- 	.word 0
-	.word 11502
-
-CEN18 .word 6778 
- 	.word 0
-	.word 10144
-
-CEN19 .word 9489 
- 	.word 0
-	.word 7668
-
-CEN20 .word 12200 
- 	.word 0
-	.word 0
-#endif
-
-#ifdef FRONTC
-
-CEN1 .word -12200 
- 	.word 0
-	.word 0
-
-CEN2 .word -10916 
- 	.word 0
-	.word 5448
-
-CEN3 .word -9632 
- 	.word 0
-	.word 7488
-
-CEN4 .word -8347 
- 	.word 0
-	.word 8897
-
-CEN5 .word -7063 
- 	.word 0
-	.word 9947
-
-CEN6 .word -5779 
- 	.word 0
-	.word 10744
-
-CEN7 .word -4495 
- 	.word 0
-	.word 11342
-
-CEN8 .word -3211 
- 	.word 0
-	.word 11770
-
-CEN9 .word -1926 
- 	.word 0
-	.word 12047
-
-CEN10 .word -642 
- 	.word 0
-	.word 12183
-
-CEN11 .word 642 
- 	.word 0
-	.word 12183
-
-CEN12 .word 1926 
- 	.word 0
-	.word 12047
-
-CEN13 .word 3211 
- 	.word 0
-	.word 11770
-
-CEN14 .word 4495 
- 	.word 0
-	.word 11342
-
-CEN15 .word 5779 
- 	.word 0
-	.word 10744
-
-CEN16 .word 7063 
- 	.word 0
-	.word 9947
-
-CEN17 .word 8347 
- 	.word 0
-	.word 8897
-
-CEN18 .word 9632 
- 	.word 0
-	.word 7488
-
-CEN19 .word 10916 
- 	.word 0
-	.word 5448
-
-CEN20 .word 12200 
- 	.word 0
-	.word 0
-
-#endif
-
-#ifdef REARC
-CEN1 .word -12200 
- 	.word 0
-	.word 0
-
-CEN2 .word -10916 
- 	.word 0
-	.word -5448
-
-CEN3 .word -9632 
- 	.word 0
-	.word -7488
-
-CEN4 .word -8347 
- 	.word 0
-	.word -8897
-
-CEN5 .word -7063 
- 	.word 0
-	.word -9947
-
-CEN6 .word -5779 
- 	.word 0
-	.word -10744
-
-CEN7 .word -4495 
- 	.word 0
-	.word -11342
-
-CEN8 .word -3211 
- 	.word 0
-	.word -11770
-
-CEN9 .word -1926 
- 	.word 0
-	.word -12047
-
-CEN10 .word -642 
- 	.word 0
-	.word -12183
-
-CEN11 .word 642 
- 	.word 0
-	.word -12183
-
-CEN12 .word 1926 
- 	.word 0
-	.word -12047
-
-CEN13 .word 3211 
- 	.word 0
-	.word -11770
-
-CEN14 .word 4495 
- 	.word 0
-	.word -11342
-
-CEN15 .word 5779 
- 	.word 0
-	.word -10744
-
-CEN16 .word 7063 
- 	.word 0
-	.word -9947
-
-CEN17 .word 8347 
- 	.word 0
-	.word -8897
-
-CEN18 .word 9632 
- 	.word 0
-	.word -7488
-
-CEN19 .word 10916 
- 	.word 0
-	.word -5448
-
-CEN20 .word 12200 
- 	.word 0
-	.word 0
-#endif
-
-#ifdef TESTRADAR
-
-nsp .byt 19
-
-AddCOb
-.(
-    lda #<CEN1
-    sta tmp0
-    lda #>CEN1
-    sta tmp0+1
-     
-loop
-    LDX #SHIP_ADDER
-    jsr AddSpaceObject
-    
-    lda tmp0
-    clc
-    adc #6
-    sta tmp0
-    bcc noinc
-    inc tmp0+1
-noinc
-    dec nsp
-    bne loop     
-
-    rts
-.)
-
-#endif
 
 
 _init_tine
@@ -422,12 +145,6 @@ savid   lda #0  ;SMC
          JSR AddSpaceObjectDirect
          lda #255
          sta _energy,x
-
-
-
-#ifdef TESTRADAR
-        jsr AddCOb
-#endif
 
          clc              ; Wireframe mode
          JSR SetParms
@@ -642,9 +359,11 @@ fireM
 fireL   jsr FireLaser
         rts
 
-setdbg  lda #0
-        sta _dbf
-        rts 
+setdbg  ;lda #0
+        ;sta _dbf
+        jsr save_frame
+        jmp _main
+        ;rts 
 
 .)
 
@@ -669,7 +388,7 @@ VOB      .byt 00           ;View object
 #define VSTRIPES  12
 
 
-
+#ifdef 0
 
 ;
 ; Test object 1: simple tetrahedron
@@ -712,7 +431,7 @@ FACE4
          .byt 3
          .byt HOLES
          .byt 3,1,0,3
-
+#endif
 
 ONEDOT
          .byt DEBRIS         ;Moon Object
@@ -1171,42 +890,11 @@ end
     rts
 .)
 
+#endif
 
 //.dsb 256-(*&255)
 
-buffer 
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-    .dsb 256
-
-
-#endif
-
-
-
-
-
-
-
-
-
+buffer
 _controls
     .byt  $7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
     .byt  $7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
@@ -1349,6 +1037,31 @@ _controls
     .byt  $60,$50,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40
     .byt  $40,$40,$40,$40,$40,$40,$44,$40,$40,$40,$40,$40,$40,$50,$40,$41
 
+#ifndef FILLEDPOLYS
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+//    .dsb 256
+#endif
+
+#endif
+
 
 #define STARTCTRL $bf68-(57*40)
 
@@ -1399,6 +1112,50 @@ noinc2
 
 .)
 
+save_frame
+.(
+    lda #56
+    sta countlines
 
+    lda #<STARTCTRL
+    sta tmp0
+    lda #>STARTCTRL
+    sta tmp0+1
+
+    lda #<_controls
+    sta tmp1
+    lda #>_controls
+    sta tmp1+1
+
+
+looplines
+    ldy #40
+loopscans
+    lda (tmp0),y
+    sta (tmp1),y
+    dey
+    bpl loopscans
+    
+    lda tmp0
+    clc
+    adc #40
+    bcc noinc1
+    inc tmp0+1
+noinc1
+    sta tmp0
+
+    lda tmp1
+    clc
+    adc #40
+    bcc noinc2
+    inc tmp1+1
+noinc2
+    sta tmp1
+    
+    dec countlines
+    bne looplines
+    rts
+
+.)
 
 
