@@ -1,0 +1,27 @@
+C:/Projects/FreeImage/Source/FreeImage.h:173: Warning: Compound tagRGBQUAD is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:186: Warning: Compound tagRGBTRIPLE is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:218: Warning: Compound tagBITMAPINFO is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:204: Warning: Compound tagBITMAPINFOHEADER is not documented.
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:150: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:150: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:149: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:1381: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:1355: Warning: argument `name' of command @param is not found in the argument list of fipTag::setKeyValue(const char *key, const char *value)
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:1355: Warning: The following parameters of fipTag::setKeyValue(const char *key, const char *value) are not documented:
+  parameter key
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:1381: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Wrapper/FreeImagePlus/FreeImagePlus.h:1380: Warning: end of comment block while expecting command </b>
+C:/Projects/FreeImage/Source/FreeImage.h:236: Warning: Member red (variable) of class tagFIRGB16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:237: Warning: Member green (variable) of class tagFIRGB16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:238: Warning: Member blue (variable) of class tagFIRGB16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:244: Warning: Member red (variable) of class tagFIRGBA16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:245: Warning: Member green (variable) of class tagFIRGBA16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:246: Warning: Member blue (variable) of class tagFIRGBA16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:247: Warning: Member alpha (variable) of class tagFIRGBA16 is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:261: Warning: Member red (variable) of class tagFIRGBAF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:262: Warning: Member green (variable) of class tagFIRGBAF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:263: Warning: Member blue (variable) of class tagFIRGBAF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:264: Warning: Member alpha (variable) of class tagFIRGBAF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:253: Warning: Member red (variable) of class tagFIRGBF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:254: Warning: Member green (variable) of class tagFIRGBF is not documented.
+C:/Projects/FreeImage/Source/FreeImage.h:255: Warning: Member blue (variable) of class tagFIRGBF is not documented.
