@@ -429,18 +429,18 @@ print_distinfo
 
 compare_names
 .(
-    ldy #0
-    lda (sp),y
-    sta st1+1
-    iny
-    lda (sp),y
-    sta st1+2
+   ; ldy #0
+   ; lda (sp),y
+   ; sta st1+1
+   ; iny
+   ; lda (sp),y
+   ; sta st1+2
     ldx #$ff
 loop
     inx
     lda _hyp_system+NAME,x
 st1
-    cmp $1234,x
+    cmp str_buffer,x
     bne notequal
     cmp #0
     bne loop    

@@ -517,3 +517,66 @@ colour_1
  .byt 0 
 
 
+;;; SOME EXTRA FUNCTIONS.... These are kludges... BEWARE
+
+del_char
+.(
+    sty savy+1
+    ldy Cursor_origin_y
+    lda Cursor_origin_x
+    sec
+    sbc #6    
+    tax
+    jsr relocate_cursor
+    lda #79
+    jsr put_char_direct
+savy
+    ldy #0  ;SMC
+    rts
+.)
+
+
+gets
+.(
+    lda #<str_buffer
+	sta tmp
+    lda #>str_buffer
+	sta tmp+1
+	ldy #0
+
+getsloop
+	jsr $023B
+	cmp #$0D
+	beq endgets
+	cmp #$20
+	bcc getsloop
+	cmp #$7f
+	beq backspace
+	cpy #$ff
+	beq getsloop
+	sta (tmp),y
+	iny
+echochar
+	;tax
+	;jsr $0238
+    jsr put_char
+	jmp getsloop
+backspace
+	cpy #0
+	beq getsloop
+	dey
+    jsr del_char
+	jmp getsloop;echochar
+endgets
+    ;lda #$0A
+    ;jsr putchar
+	lda #0
+	sta (tmp),y
+	
+	rts
+
+.)
+
+
+
+
