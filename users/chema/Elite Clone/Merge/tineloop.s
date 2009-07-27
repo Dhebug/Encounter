@@ -570,8 +570,18 @@ splanet
     beq doit
     rts
 doit
-    ; ask for planet and searchit
-    rts
+    ; ask for planet and search it
+    jsr prepare_area    
+    lda #(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+    lda #<str_searchplanet
+    ldx #>str_searchplanet
+    jsr print
+    lda #A_FWWHITE
+    jsr put_code
+    jsr gets
+    jmp _search_planet    ; This is jsr/rts
+    ;rts
 
 
 ;;;; END OF TABLE
@@ -629,8 +639,12 @@ sel
 
 keyl
 .(
+    lda _current_screen
+    cmp #SCR_EQUIP
+    beq ret
     jsr check_scr
     bcc do
+ret
     rts
 do
     beq sel
@@ -645,8 +659,12 @@ sel
 
 keyr
 .(
+    lda _current_screen
+    cmp #SCR_EQUIP
+    beq ret
     jsr check_scr
     bcc do
+ret
     rts
 do  
     beq sel
@@ -664,6 +682,10 @@ sele
     beq doit2
     cmp #SCR_CHART
     beq doit2
+    cmp #SCR_EQUIP
+    bne ret
+    ; Jump to acquire equipment
+ret
     rts
 doit2
     jmp _find_planet

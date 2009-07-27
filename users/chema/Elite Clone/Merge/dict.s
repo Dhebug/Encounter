@@ -667,6 +667,11 @@ str_short_chart
 
 
 ; For searching planets
+
+str_searchplanet
+    .asc "Search planet:"
+    .byt 0
+
 str_notfound
     .asc "Not Found"
     .byt 0
