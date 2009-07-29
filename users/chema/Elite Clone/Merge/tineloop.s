@@ -17,6 +17,7 @@ OCEN2    .word -1000            ;X-coord
          .word 1000            ;Y-coord
          .word 1300            ;Z-coord
 
+#ifdef 0
 OCEN0   .word 0;1000
         .word 0;1000
         .word 0;2500
@@ -29,7 +30,9 @@ OCENE   .word 0
 OCENF   .word 1000
         .word 300
         .word 10000
+#endif
 
+;OPOS    .dsb 6      ; 6 bytes for object position, Xlo, Xhi, Ylo, Y hi and Zlo, Zhi
 
 
 _init_tine
@@ -51,10 +54,176 @@ _init_tine
 .)
 
 
+; Creates the environment, based on the data from cpl_system, so
+; should be called after _jump on galaxy.s
+
+CreateEnvironment
+.(
+    ; Make sure Obj3D is empty
+    jsr _EmptyObj3D
+    ; Create the radar object (number 0)
+    jsr CreateRadar
+    ; Add our ship, which is  object number 1 at initial position (fixed)
+    
+    lda #0
+    sta _PosX
+    sta _PosX+1
+    sta _PosY
+    sta _PosY+1
+    lda #<(-16384)
+    sta _PosZ
+    lda #>(-16384)
+    sta _PosZ+1
+    
+    lda #<_PosX
+    sta tmp0
+    lda #>_PosX   
+    sta tmp0+1
+    lda _ship_type
+    JSR AddSpaceObject
+    ; Set our ship as view object
+    STX VOB          
+        
+    ; Now create the planet (adapted from Elite TNK, but with small variations)
+    lda #0
+    sta _PosZ
+    sta _PosX
+    sta _PosY
+    lda _cpl_system+SEED+1   
+    and #%00110000
+    clc
+    adc #%00010000      ; result number between $10 and $40
+    sta _PosZ+1
+    lsr
+    tax
+    lda _cpl_system+SEED+1
+    and #1
+    beq noinvert
+    txa
+    eor #%11110000
+    tax
+noinvert
+    stx _PosX+1
+    stx _PosY+1
+    LDA #<ONEPLANET
+    LDY #>ONEPLANET
+    jsr addmoonplanet
+    
+    ; Now create some moons (between 0 and 3)      
+    lda _cpl_system+SEED+1
+    and #%00000011
+    beq moonsdone
+    sta tmp1
+    
+    lda _PosX+1
+    sta savpX+1
+    lda _PosY+1
+    sta savpY+1
+    lda _PosZ+1
+    sta savpZ+1
+
+
+loop
+    lda _cpl_system+SEED
+    sta tmp
+    jsr moonpos
+    lda _PosX+1
+    sec
+    sbc tmp
+    sta _PosX+1
+
+    lda _cpl_system+SEED+2
+    sta tmp
+    jsr moonpos
+    lda _PosY+1
+    sec
+    sbc tmp
+    sta _PosY+1
+
+    lda _cpl_system+SEED+3
+    sta tmp
+    jsr moonpos
+    lda _PosZ+1
+    sec
+    sbc tmp
+    sta _PosZ+1
+
+    LDA #<ONEMOON
+    LDY #>ONEMOON
+    jsr addmoonplanet
+
+
+savpX 
+    lda #0
+    sta _PosX+1
+savpY 
+    lda #0
+    sta _PosY+1
+savpZ 
+    lda #0
+    sta _PosZ+1
+
+
+    dec tmp1
+    bne loop
+
+moonsdone
+    ; Create ships and others... for now, just testing
+    jsr _InitTestCode
+    rts
+
+
+.)
+
+addmoonplanet
+.(
+
+    ldx #<_PosX
+    stx tmp0
+    ldx #>_PosX   
+    stx tmp0+1
+
+    LDX #$80   ; Non-moving object
+    JSR AddSpaceObjectDirect
+    lda #255
+    sta _energy,x    
+    rts
+.)
+
+moonpos
+.(
+    lda tmp
+    ldx tmp1
+loop
+    lsr
+    lsr
+    dex
+    bne loop
+    php
+    and #%00000011
+    clc
+    adc #%00000001              ; Result between $1 and $4
+    asl
+    asl                     
+    tax
+    ;lda tmp
+    plp
+    ;and #1
+    ;beq noinvert2
+    bcc noinvert2
+    txa
+    eor #$ff
+    tax
+noinvert2    
+    stx tmp
+    rts
+.)
+
 _InitTestCode 
 
          ;jsr load_frame
 
+#ifdef 0
          jsr CreateRadar
 
     
@@ -68,6 +237,7 @@ _InitTestCode
          JSR AddSpaceObject
          STX VOB          ;View object
 
+#endif
          ; Add some ships
 
          lda #<OCEN
@@ -105,6 +275,7 @@ savid   lda #0  ;SMC
          ;ldx VOB
         ;sta _target,x
 
+#ifdef 0
          lda #<OCENE
          sta tmp0
          lda #>OCENE
@@ -132,6 +303,8 @@ savid   lda #0  ;SMC
 
 ;         clc              ; Wireframe mode
 ;         JSR SetParms
+
+#endif
          rts
 
 
@@ -492,8 +665,9 @@ jumphyper
 endjump
         jsr _jump
         jsr EraseRadar
-        jsr _EmptyObj3D
-        jsr _InitTestCode
+        ;jsr _EmptyObj3D
+        ;jsr _InitTestCode
+        jsr CreateEnvironment
         jsr _FirstFrame
         rts
 
@@ -508,20 +682,20 @@ frontview
         beq notdocked
         
         ; Exit to space...
-        inc _docked
-        jsr _EmptyObj3D
-        jsr _InitTestCode
+        inc _docked     ; docked is either ff or 0, this gets it back to 0
+        ;jsr _EmptyObj3D
+        ;jsr _InitTestCode
+        jsr CreateEnvironment
 
-        jsr clr_hires
-        jsr load_frame
-        jsr _DoubleBuffOn
-        jsr _FirstFrame
-        rts
-        
-
+        ;jsr clr_hires
+        ;jsr load_frame
+        ;jsr _DoubleBuffOn
+        ;jsr _FirstFrame
+        ;rts
 notdocked
         jsr clr_hires
         jsr load_frame
+        jsr _DrawFrameBorder   
         jsr _DoubleBuffOn
         jsr _FirstFrame
 

@@ -20,6 +20,14 @@
 
 #define IS_AICONTROLLED     128
 
+#define FLG_FLY_TO_PLANET     1
+#define FLG_FLY_TO_HYPER      2
+#define FLG_SLOW              4
+#define FLG_BOLD              8
+#define FLG_POLICE           16
+#define FLG_DEFENCELESS      32
+
+
 // Values for _target field
 
 #define IS_ANGRY            128
