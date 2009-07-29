@@ -1,0 +1,54 @@
++ AddSpaceObject needs tmp0 pointing to a coordinate structure, but it is allways _PosX. 
+Should we change this, or at least add another routine that loads the tmp0 pointer?
+
+
++ Elite TNK uses the current galactic seed (6bytes) to create planets. As this seed may be corrupt (whenever used for creating
+a galactic chart or to find a planet), I will use the system's seed of 4 bytes (base for goatsoup).
+
+
++ When saving the laser vertex there is no check to see if it is not a ship (something like a planet)
+         beq normal
+         cmp #5           ; is it 1,2 or 4 ? Then planet, sun or moon
+         bcc checkmin    ; skip max check
+normal
+
+
++ Make a better circle routine. All those checks for clipping are destroying performance. Also something like:
+int circle(int x, int y, int size) {
+  // first check circle -
+  //  x + size < lhs of screen fails
+  //  x - size > rhs of screen fails 
+  //  y + size < top of screen fails
+  //  y - size > bot of screen fails
+
+  // CHKON 3C28
+  int lhs = x-size;  // lhs of circle
+  int rhs = x+size;
+
+  if ( (rhs < CLIP_X_MIN) || ( lhs > CLIP_X_MAX) )
+    return 0;
+
+  int top = y - size;  // top of circle
+  int bot = y + size;
+  if ( (bot < CLIP_X_MIN) || ( top > CLIP_Y_MAX) )
+    return 0;
+may help, won't it?
+
++ When drawing planets, if they are too close, maybe it is better not to draw them // if 0x6000/Z > 0xff then return  (too close to draw?)
+
++ Check distance with planets to implement collisions with them. Maybe at the time of drawing we could set a flag warn_heigth or something? 
+Maybe do the same for docking?
+
++ Look in tineloop.s
+notdocked
+        jsr clr_hires
+        jsr load_frame
+        jsr _DrawFrameBorder   
+        jsr _DoubleBuffOn
+        jsr _FirstFrame
+
+If DrawFrameBorder is called before load_frame there is a bug the second time we switch from screen2 to frontview (the frame is erased at the bottom).
+
++ DrawLaser, DrawCrosshair and DrawFrameBorder (tactics.s), should use a common Draw4Lines function...!
+
+

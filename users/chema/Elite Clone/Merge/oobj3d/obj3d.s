@@ -786,27 +786,31 @@ checkmin
          ADC CX,X
          LDA TEMP+1
          ADC HCX,X
+         bcc n1
          BMI SKIP
-
+n1
          LDA TEMP         ;z-x>0
          CMP CX,X
          LDA TEMP+1
          SBC HCX,X
+         bcc n2
          BMI SKIP
-
+n2
          LDA TEMP         ;y+z>0
          CLC
          ADC CY,X
          LDA TEMP+1
          ADC HCY,X
+         bcc n3
          BMI SKIP
-
+n3
          LDA TEMP         ;z-y>0
          CMP CY,X
          LDA TEMP+1
          SBC HCY,X
+         bcc n4
          BMI SKIP
-
+n4
          LDY #$80         ;Head of list
 l1       LDA VISOBJS,Y    ;Linked list of objects
          BMI link
@@ -998,7 +1002,7 @@ c3       STX P0Z+1
          STA FACEPTR+1
 
          LDY NPOINTS
-         LDX RTEMPA        ;Center index
+         LDX RTEMPA       ;Center index
          SEC              ;Rot and proj
          JSR ROTPROJ
 
@@ -1064,6 +1068,7 @@ SmallFilledCircle
 
         lda tab_projtab,x
         lsr
+        ora #1
         ;lsr    
         jmp CircleCall    
         

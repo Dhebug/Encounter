@@ -1,6 +1,7 @@
 
 #include "oobj3d/obj3d.h"
 #include "tine.h"
+#include "ships.h"
 
 
 ; Player workspace (for saving)
@@ -19,21 +20,22 @@
 ;unsigned int   equip=0xfff;             /* Equipment flags */
 
 
-_name			.asc "Jameson"
-				.byt 00
+_name			.asc "Jameson"          ; Commander's name
+				.byt 00 
 				.dsb 24 
-_shipshold		.dsb 34 
-_currentplanet	.byt 7 
-_galaxynum		.byt 1 
-_cash			.byt $d0,$07
+_shipshold		.dsb 34                 ; Contents of cargo bay
+_currentplanet	.byt 7                  ; Current planet
+_galaxynum		.byt 1                  ; Galaxy number (1-8)
+_cash			.byt $d0,$07            ; Four bytes for cash
 				.byt $00,$00
-_fuel			.byt 50 
-_fluct			.byt 0 
-_holdspace		.word 20 
-_legal_status	.byt 50 
-_score			.word 60000 
-_mission		.byt 0 
-_equip			.word $ffff 
+_fuel			.byt 50                 ; Amount of fuel
+_fluct			.byt 0                  ; Price fluctuation
+_holdspace		.word 20                ; Current space left in cargo bay
+_legal_status	.byt 50                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
+_score			.word 60000             ; Current score
+_mission		.byt 0                  ; Current mission
+_equip			.word $ffff             ; Equipment flags
+_ship_type      .byt SHIP_COBRA3        ; Current player's ship
 
 
 ;typedef struct

@@ -379,9 +379,7 @@ toofar
     ; First see if we are on a collision course
     
     ; if z>$300 no problem
-;    lda #0
-;dbug beq dbug  
-    
+
     lda oZ+1
     bpl notneg0
     sec
@@ -1232,6 +1230,42 @@ XO .byt 104, 129, 120, 120
 YO .byt 64, 64, 49, 72
 XD .byt 111,136, 120, 120
 YD .byt 64, 64, 56, 79
+
+.)
+
+_DrawFrameBorder
+.(
+
+	ldx #3
+loop
+	stx savx+1
+	lda XO,x
+	sta _CurrentPixelX
+	lda YO,x
+	sta _CurrentPixelY
+	lda XD,x
+	sta _OtherPixelX
+	lda YD,x
+	sta _OtherPixelY
+	jsr _DrawLine
+
+savx
+	ldx #0	; SMC
+	dex
+	bpl loop
+
+	rts
+
+ ;   curset(5,5);
+ ;   draw(0,123,1);
+ ;   draw(230,0,1);
+ ;   draw(0,-123,1);
+ ;   draw(-230,0,1);
+
+XO .byt 5,      5,      5+230, 5+230
+YO .byt 5,      5+123,  5+123, 5
+XD .byt 5,      5+230,  5+230, 5
+YD .byt 5+123,  5+123,  5,     5
 
 .)
 
