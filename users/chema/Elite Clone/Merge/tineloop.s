@@ -83,6 +83,10 @@ CreateEnvironment
     JSR AddSpaceObject
     ; Set our ship as view object
     STX VOB          
+
+
+;    lda #0
+;dbug beq dbug
         
     ; Now create the planet (adapted from Elite TNK, but with small variations)
     lda #0
@@ -385,6 +389,7 @@ nofire
 	jsr _DrawCrosshair
     jsr dump_buf
 
+    jsr update_compass
 nodraw
 
     jsr _CheckHits  ; Should be called after DrawAllVis!!!!

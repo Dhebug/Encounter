@@ -1166,6 +1166,10 @@ end
 .)
 
 
+
+#ifdef OLD4LINES
+
+
 ; Draw player's lasers
 
 
@@ -1268,4 +1272,90 @@ XD .byt 5,      5+230,  5+230, 5
 YD .byt 5+123,  5+123,  5,     5
 
 .)
+
+
+#else
+
+#define pzero tmp
+
+Draw4Lines
+.(
+
+	ldy #15
+loop
+	lda (pzero),y    ; YD
+	sta _OtherPixelY
+    dey
+	lda (pzero),y    ; XD
+	sta _OtherPixelX
+    dey
+  	lda (pzero),y    ; YO
+	sta _CurrentPixelY
+    dey
+  	lda (pzero),y    ; XO
+	sta _CurrentPixelX
+
+	sty savy+1
+	jsr _DrawLine
+savy
+	ldy #0	; SMC
+	dey
+	bpl loop
+
+	rts
+.)
+
+
+_DrawLaser
+.(
+    lda #<Coords
+    sta pzero
+    lda #>Coords
+    sta pzero+1
+    jmp Draw4Lines
+
+Coords 
+    .byt 10,  127, (120-1), (64+1)
+    .byt 57,  127, (120-1), (64+1)
+    .byt 230, 127, (120+1), (64+1)
+    .byt 183, 127, (120+1), (64+1) 
+.)
+
+
+_DrawCrosshair
+.(
+    lda #<Coords
+    sta pzero
+    lda #>Coords
+    sta pzero+1
+    jmp Draw4Lines
+
+Coords 
+    .byt 104, 64, 111, 64
+    .byt 129, 64, 136, 64
+    .byt 120, 49, 120, 56
+    .byt 120, 72, 120, 79 
+
+.)
+
+
+_DrawFrameBorder
+.(
+    lda #<Coords
+    sta pzero
+    lda #>Coords
+    sta pzero+1
+    jmp Draw4Lines
+
+Coords
+    .byt 5,     5,      5,     5+123
+    .byt 5,     5+123,  5+230, 5+123
+    .byt 5+230, 5+123,  5+230, 5
+    .byt 5+230, 5,      5,     5 
+.)
+
+
+#endif
+
+
 

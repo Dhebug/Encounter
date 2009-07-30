@@ -232,6 +232,71 @@ sx    .word 0
 
 _circleMidpoint
 .(
+    ; Check if circle is visible
+    ;;  cx + rad < lhs of screen fails
+    lda #CLIP_LEFT
+    sta op2
+    lda #0
+    sta op2+1
+    lda cx
+    clc
+    adc rad
+    sta op1
+    lda cx+1
+    adc rad+1
+    sta op1+1
+    jsr cmp16
+    bpl next1
+    rts
+next1
+    ;;  x - size > rhs of screen fails 
+    lda #CLIP_RIGHT-1
+    sta op2
+    lda #0
+    sta op2+1
+    lda cx
+    sec
+    sbc rad
+    sta op1
+    lda cx+1
+    sbc rad+1
+    sta op1+1
+    jsr cmp16
+    bmi next2
+    rts
+next2
+    ;;  y + size < top of screen fails
+    lda #CLIP_TOP
+    sta op2
+    lda #0
+    sta op2+1
+    lda cy
+    clc
+    adc rad
+    sta op1
+    lda cy+1
+    adc rad+1
+    sta op1+1
+    jsr cmp16
+    bpl next3
+    rts
+next3
+    ;;  y - size > bot of screen fails
+    lda #CLIP_BOTTOM-1
+    sta op2
+    lda #0
+    sta op2+1
+    lda cy
+    sec
+    sbc rad
+    sta op1
+    lda cy+1
+    sbc rad+1
+    sta op1+1
+    jsr cmp16
+    bmi next4
+    rts
+next4
 
     ;x=0;y=radius
     lda #0
@@ -598,7 +663,72 @@ sx    .word 0
 _circleMidpoint
 .(
 
-    ;x=0;y=radius
+    ; Check if circle is visible
+    ;;  cx + rad < lhs of screen fails
+    lda #CLIP_LEFT
+    sta op2
+    lda #0
+    sta op2+1
+    lda cx
+    clc
+    adc rad
+    sta op1
+    lda cx+1
+    adc rad+1
+    sta op1+1
+    jsr cmp16
+    bpl next1
+    rts
+next1
+    ;;  x - size > rhs of screen fails 
+    lda #CLIP_RIGHT-1
+    sta op2
+    lda #0
+    sta op2+1
+    lda cx
+    sec
+    sbc rad
+    sta op1
+    lda cx+1
+    sbc rad+1
+    sta op1+1
+    jsr cmp16
+    bmi next2
+    rts
+next2
+    ;;  y + size < top of screen fails
+    lda #CLIP_TOP
+    sta op2
+    lda #0
+    sta op2+1
+    lda cy
+    clc
+    adc rad
+    sta op1
+    lda cy+1
+    adc rad+1
+    sta op1+1
+    jsr cmp16
+    bpl next3
+    rts
+next3
+    ;;  y - size > bot of screen fails
+    lda #CLIP_BOTTOM-1
+    sta op2
+    lda #0
+    sta op2+1
+    lda cy
+    sec
+    sbc rad
+    sta op1
+    lda cy+1
+    sbc rad+1
+    sta op1+1
+    jsr cmp16
+    bmi next4
+    rts
+next4
+     ;x=0;y=radius
     lda #0
     sta sx
     sta sx+1

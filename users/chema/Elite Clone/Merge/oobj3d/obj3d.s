@@ -765,7 +765,13 @@ pdata
          lda $1234;,y     ; Get ObjType
          beq normal
          cmp #5           ; is it 1,2 or 4 ? Then planet, sun or moon
-         bcc checkmin    ; skip max check
+         bcs normal
+         lda TEMP+1
+         ;bmi SKIP
+         ;bpl n4;checkmin    ; skip max check
+         cmp #$60
+         bcs SKIP
+         bcc checkmin   ;n4
 
 normal
          lda TEMP
@@ -786,14 +792,14 @@ checkmin
          ADC CX,X
          LDA TEMP+1
          ADC HCX,X
-         bcc n1
+         ;bcc n1
          BMI SKIP
 n1
          LDA TEMP         ;z-x>0
          CMP CX,X
          LDA TEMP+1
          SBC HCX,X
-         bcc n2
+         ;bcc n2
          BMI SKIP
 n2
          LDA TEMP         ;y+z>0
@@ -801,14 +807,14 @@ n2
          ADC CY,X
          LDA TEMP+1
          ADC HCY,X
-         bcc n3
+         ;bcc n3
          BMI SKIP
 n3
          LDA TEMP         ;z-y>0
          CMP CY,X
          LDA TEMP+1
          SBC HCY,X
-         bcc n4
+         ;bcc n4
          BMI SKIP
 n4
          LDY #$80         ;Head of list
@@ -1053,9 +1059,10 @@ FilledCircle
 nooverflow
         asl TEMP
         rol
-        asl TEMP
-        rol
-
+        ;asl TEMP
+        ;rol
+        bne ccall
+        lda #2
 ccall
         jmp CircleCall
 
@@ -1068,11 +1075,12 @@ SmallFilledCircle
 
         lda tab_projtab,x
         lsr
-        ora #1
-        ;lsr    
+        ;lsr
+        ;ora #1
+        bne ccall
+        lda #1
+ccall
         jmp CircleCall    
-        
-
 .)
 
 

@@ -523,6 +523,83 @@ afters
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Compass code
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+compass_x .byt 00
+compass_y .byt 00
+compass_index .byt 02   ; Planet
+
+update_compass
+.(
+
+    ldx compass_x
+    ldy compass_y
+    jsr pixel_address_real
+    eor #$ff
+    and (tmp0),y
+    sta (tmp0),y         
+
+    ldx compass_index
+
+    jsr GetObj
+    sta tmp1
+    sty tmp1+1
+    ldy #ObjCenPos
+    lda (tmp1),Y
+    tax
+
+    lda CX,x
+    sta _VectX
+    lda HCX,x
+    sta _VectX+1
+    lda CY,x
+    sta _VectY
+    lda HCY,x
+    sta _VectY+1
+    lda CZ,x
+    sta _VectZ
+    lda HCZ,x
+    sta _VectZ+1
+
+    jsr _norm_big
+    
+    lda _VectX
+    cmp #$80
+    ror
+    cmp #$80
+    ror
+    cmp #$80
+    ror
+    clc
+    adc #171
+    sta compass_x
+    tax
+    lda _VectY
+    cmp #$80
+    ror
+    cmp #$80
+    ror
+    cmp #$80
+    ror
+    clc
+    adc #155
+    sta compass_y
+    tay
+    
+    jsr pixel_address_real
+    eor (tmp0),y
+    sta (tmp0),y         
+    
+    rts
+
+.)
+
+
+
+
+
 
 
 
