@@ -533,14 +533,6 @@ compass_index .byt 02   ; Planet
 
 update_compass
 .(
-
-    ldx compass_x
-    ldy compass_y
-    jsr pixel_address_real
-    eor #$ff
-    and (tmp0),y
-    sta (tmp0),y         
-
     ldx compass_index
 
     jsr GetObj
@@ -572,9 +564,9 @@ update_compass
     ror
     cmp #$80
     ror
+ 
     clc
     adc #171
-    sta compass_x
     tax
     lda _VectY
     cmp #$80
@@ -583,24 +575,146 @@ update_compass
     ror
     cmp #$80
     ror
+ 
     clc
     adc #155
-    sta compass_y
     tay
-    
-    jsr pixel_address_real
-    eor (tmp0),y
-    sta (tmp0),y         
-    
+
+    cpx compass_x
+    bne update
+    cpy compass_y
+    beq end
+
+update    
+    stx savx+1
+    sty savy+1
+    jsr clear_compass
+savx
+    ldx #0
+savy
+    ldy #0
+    stx compass_x
+    sty compass_y
+    stx sdx
+    sty sdy
+    jsr compass_dot
+end    
     rts
 
 .)
 
 
+compass_dot
+.(
+    jsr outer_dot
+    lda _VectZ+1
+    bmi end
+    jsr inner_dot
+end
+    rts
+.)
+
+inner_dot
+.(
+    jsr pdot        
+    
+    inc sdx
+    jsr pdot         
+    
+    inc sdy
+    jsr pdot
+    
+    dec sdx
+    jmp pdot
+.)
 
 
+pdot
+.(
+    ldx sdx
+    ldy sdy
+    jsr pixel_address_real
+    eor (tmp0),y
+    sta (tmp0),y 
+    rts
+.)
 
 
+outer_dot
+.(
+    dec sdx
+    jsr pdot
+    inc sdy
+    jsr pdot
+    inc sdy
+    inc sdx       
+    jsr pdot
+    inc sdx
+    jsr pdot
+    inc sdx
+    dec sdy
+    jsr pdot
+    dec sdy
+    jsr pdot
+    dec sdy
+    dec sdx
+    jsr pdot
+    dec sdx
+    jsr pdot
+    inc sdy
+    rts
+.)
 
+clear_compass
+.(
+    ldx compass_x
+    dex
+    stx sdx
+    ldy compass_y
+    dey
+    sty sdy
 
+    lda #4
+    sta county
+loop2
+    lda #4
+    sta countx
+loop1
+    ldx sdx
+    ldy sdy
+    jsr pixel_address_real
+    eor #$ff
+    and (tmp0),y
+    sta (tmp0),y  
+    inc sdx
+    dec countx
+    bne loop1    
+
+    lda sdx
+    sec
+    sbc #4
+    sta sdx
+
+    inc sdy
+    dec county
+    bne loop2
+
+    rts
+
+countx .byt 0
+county .byt 0
+
+.)
+
+sdx .byt 0
+sdy .byt 0
+
+set_compass
+.(
+    lda #171
+    sta compass_x
+    lda #155
+    sta compass_y
+    rts
+.)
 

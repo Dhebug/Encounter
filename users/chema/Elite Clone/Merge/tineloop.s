@@ -70,9 +70,9 @@ CreateEnvironment
     sta _PosX+1
     sta _PosY
     sta _PosY+1
-    lda #<(-16384)
+    lda #<(-16384+6000)
     sta _PosZ
-    lda #>(-16384)
+    lda #>(-16384+6000)
     sta _PosZ+1
     
     lda #<_PosX
@@ -83,6 +83,10 @@ CreateEnvironment
     JSR AddSpaceObject
     ; Set our ship as view object
     STX VOB          
+    ldy _ship_type
+    lda ShipMaxSpeed-1,y
+    lsr
+    sta _speed,x
 
 
 ;    lda #0
@@ -319,6 +323,7 @@ _FirstFrame
 #endif
          LDX VOB          ;Calculate view
          jsr SetRadar
+         jsr set_compass
          JSR CalcView
          JSR SortVis      ;Sort objects
          JSR DrawAllVis   ;Draw objects
@@ -482,7 +487,7 @@ norm_key
         sta routine+2   
 
 cont
-        cpx #8  
+        cpx #7  
         bcs skip
                 
         lda double_buff
@@ -652,7 +657,6 @@ galhyper
 		
 		; Test if we have the Galactic Hyperspace equipped
 
-
         jsr _enter_next_galaxy
         jmp endjump
 ;J
@@ -670,7 +674,8 @@ jumphyper
 endjump
         jsr _jump
         jsr EraseRadar
-        ;jsr _EmptyObj3D
+        jsr clear_compass
+         ;jsr _EmptyObj3D
         ;jsr _InitTestCode
         jsr CreateEnvironment
         jsr _FirstFrame
@@ -1519,6 +1524,7 @@ noinc2
 
 save_frame
 .(
+    jsr clear_compass
     jsr EraseRadar
 
     lda #56
