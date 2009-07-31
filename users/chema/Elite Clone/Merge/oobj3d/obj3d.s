@@ -1075,7 +1075,7 @@ SmallFilledCircle
 
         lda tab_projtab,x
         lsr
-        ;lsr
+        lsr
         ;ora #1
         bne ccall
         lda #1

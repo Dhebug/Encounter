@@ -34,7 +34,7 @@ _holdspace		.word 20                ; Current space left in cargo bay
 _legal_status	.byt 50                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 _score			.word 60000             ; Current score
 _mission		.byt 0                  ; Current mission
-_equip			.word $ffff             ; Equipment flags
+_equip			.word $000f             ; Equipment flags
 _ship_type      .byt SHIP_COBRA3        ; Current player's ship
 
 
