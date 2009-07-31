@@ -211,19 +211,20 @@ loop
     and #%00000011
     clc
     adc #%00000001              ; Result between $1 and $4
-    asl
-    asl                     
-    tax
+    ;asl
+    ;asl                     
+    ;tax
     ;lda tmp
     plp
     ;and #1
     ;beq noinvert2
     bcc noinvert2
-    txa
+    ;txa
     eor #$ff
-    tax
+    ;tax
 noinvert2    
-    stx tmp
+    ;stx tmp
+    sta tmp
     rts
 .)
 
