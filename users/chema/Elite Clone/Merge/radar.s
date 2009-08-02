@@ -33,7 +33,7 @@ CreateRadar
         
         lda #0
         tay           ; z and y angles 0 deg of rotation
-        ldx #8;       ; rotate 6*360/256 deg around x axis (about 8.4 deg)
+        ldx #8;       ; rotate 8*360/256 deg around x axis (about 8.4 deg)
         jsr SetMat
 
         rts

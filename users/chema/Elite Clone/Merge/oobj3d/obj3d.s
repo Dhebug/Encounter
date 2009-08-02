@@ -1064,7 +1064,18 @@ nooverflow
         bne ccall
         lda #2
 ccall
-        jmp CircleCall
+        jsr CircleCall
+
+        ldx RTEMPA
+
+        ; Save this in the debug value
+        lda CZ,x
+        sta dbg
+        lda HCZ,x
+        sta dbg+1
+        
+        sta _planet_dist
+        rts
 
 .)
 
@@ -1249,7 +1260,7 @@ CirclePrepare
         inx
     
 done
-        rts
+         rts
 
 
 .)
