@@ -78,6 +78,7 @@ _quantities		.dsb 17
 _dest_num		.byt 7	; So we start at LAVE 
 _current_screen	.byt 0 
 _docked			.byt 255 
+_planet_dist    .byt 255
 
 
 ; Variables to mantain for each space object

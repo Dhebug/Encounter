@@ -64,7 +64,22 @@ CreateEnvironment
     ; Create the radar object (number 0)
     jsr CreateRadar
     ; Add our ship, which is  object number 1 at initial position (fixed)
-    
+    ; This is different depending on whether we are launched from planet,
+    ; or exit hyperspace. This depends on the _docked variable
+
+    lda _docked
+    beq hyper
+
+    ; Create at planet's position
+    jsr planetpos
+    ; With Z a bit closer
+    lda _PosZ+1
+    sec
+    sbc #7
+    sta _PosZ+1
+    jmp createship
+
+hyper   
     lda #0
     sta _PosX
     sta _PosX+1
@@ -74,45 +89,37 @@ CreateEnvironment
     sta _PosZ
     lda #>(-16384+6000)
     sta _PosZ+1
-    
+
+createship    
     lda #<_PosX
     sta tmp0
     lda #>_PosX   
     sta tmp0+1
     lda _ship_type
     JSR AddSpaceObject
-    ; Set our ship as view object
+   ; Set our ship as view object
     STX VOB          
+ 
+    lda _docked
+    beq norot
+    
+    ; Rotate it 180 deg
+    jsr SetCurOb
+    lda #0
+    tay           ; z and y angles 0 deg of rotation
+    ldx #50;     ; rotate 180 deg
+    jsr SetMat
+
+norot
     ldy _ship_type
     lda ShipMaxSpeed-1,y
     lsr
-    sta _speed,x
+    sta _speed+1
+    lda #3
+    sta a_r
+    
 
-
-;    lda #0
-;dbug beq dbug
-        
-    ; Now create the planet (adapted from Elite TNK, but with small variations)
-    lda #0
-    sta _PosZ
-    sta _PosX
-    sta _PosY
-    lda _cpl_system+SEED+1   
-    and #%00110000
-    clc
-    adc #%00010000      ; result number between $10 and $40
-    sta _PosZ+1
-    lsr
-    tax
-    lda _cpl_system+SEED+1
-    and #1
-    beq noinvert
-    txa
-    eor #%11110000
-    tax
-noinvert
-    stx _PosX+1
-    stx _PosY+1
+    jsr planetpos
     LDA #<ONEPLANET
     LDY #>ONEPLANET
     jsr addmoonplanet
@@ -181,6 +188,34 @@ moonsdone
     rts
 
 
+.)
+
+
+planetpos
+.(
+
+    ; Now create the position of the planet (adapted from Elite TNK, but with small variations)
+    lda #0
+    sta _PosZ
+    sta _PosX
+    sta _PosY
+    lda _cpl_system+SEED+1   
+    and #%00110000
+    clc
+    adc #%00010000      ; result number between $10 and $40
+    sta _PosZ+1
+    lsr
+    tax
+    lda _cpl_system+SEED+1
+    and #1
+    beq noinvert
+    txa
+    eor #%11110000
+    tax
+noinvert
+    stx _PosX+1
+    stx _PosY+1
+    rts
 .)
 
 addmoonplanet
@@ -319,6 +354,9 @@ savid   lda #0  ;SMC
 
 
 _FirstFrame
+        lda #$ff
+        sta _planet_dist
+
 #ifndef FILLEDPOLYS
          jsr clr_hires2
 #endif
@@ -366,7 +404,18 @@ loop
 	sta COUNTER+1
 
     jsr _Tactics
+    
+    lda _planet_dist
+    cmp #06
+    bcs nodock    
 
+    dec _docked
+    jsr save_frame
+    jsr _DoubleBuffOff
+    jsr info
+    jmp _TineLoop
+    
+nodock
     ldx VOB
     jsr SetCurOb
     jsr move_stars
@@ -428,12 +477,24 @@ nodraw
 	jsr gotoXY
 	ldx #5
 	jsr print_num_tab	
+    
+    lda dbg
+    sta op2
+    lda dbg+1
+    sta op2+1
+	ldx #50
+	ldy #0
+	jsr gotoXY
+	ldx #5
+	jsr print_num_tab	
+
+
 nofr	 
     jmp loop
 
 .)
 
-
+dbg .word $0000
 
 
 ;; Now the keyboard map table
@@ -491,6 +552,14 @@ cont
         cpx #7  
         bcs skip
                 
+        ; No market or equip if not docked
+        lda _docked
+        bne isdock
+        cpx #4
+        beq return
+        cpx #5 
+        beq return      
+isdock
         lda double_buff
         beq skip
         stx savx+1
@@ -693,11 +762,13 @@ frontview
         beq notdocked
         
         ; Exit to space...
-        inc _docked     ; docked is either ff or 0, this gets it back to 0
         ;jsr _EmptyObj3D
         ;jsr _InitTestCode
         jsr CreateEnvironment
-
+        ; We update the _docked variable AFTER CreateEnvironment, so it can be used
+        ; to decide if we are exitting hyper or leaving planet.
+        inc _docked     ; docked is either ff or 0, this gets it back to 0,
+ 
         ;jsr clr_hires
         ;jsr load_frame
         ;jsr _DoubleBuffOn
@@ -736,12 +807,20 @@ gal_chart
 
 ;6
 market
+;    lda _docked
+;    bne cont
+;    rts
+;cont
     lda #SCR_MARKET
     sta _current_screen
     jmp _displaymarket
 
 ;7
 equip
+;    lda _docked
+;    bne cont2
+;    rts
+;cont2
     lda #SCR_EQUIP
     sta _current_screen
     jmp _displayequip
