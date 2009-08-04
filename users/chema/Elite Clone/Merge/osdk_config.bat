@@ -17,7 +17,7 @@ SET OSDKFILE=main
 SET OSDKFILE=%OSDKFILE% oobj3d\lib3dtab oobj3d\lib3d oobj3d\obj3d oobj3d\filler oobj3d\LineDraw 
 SET OSDKFILE=%OSDKFILE% oobj3d\clip oobj3d\mextra oobj3d\circle oobj3d\debris
 SET OSDKFILE=%OSDKFILE% data models ships radar stars random tinefuncs
-SET OSDKFILE=%OSDKFILE% dictc text tineinc galaxy
+SET OSDKFILE=%OSDKFILE% dictc text tineinc galaxy cockpit
 SET OSDKFILE=%OSDKFILE% tactics tineloop tail
 
 :: List of files to put in the DSK file.
