@@ -115,8 +115,8 @@ norot
     lda ShipMaxSpeed-1,y
     lsr
     sta _speed+1
-    lda #3
-    sta a_r
+    ;lda #3
+    ;sta a_r
     
 
     jsr planetpos
@@ -292,10 +292,12 @@ _InitTestCode
          jsr AddSpaceObject   
          stx savid+1   
          lda _ai_state,x
-         ora #IS_AICONTROLLED   
+         ora #(IS_AICONTROLLED|FLG_FLY_TO_PLANET)   
          sta _ai_state,x
          lda #1
          sta _speed,x
+		 lda #2 ; Planet
+		 sta _target,x
         
 
          lda #<OCEN2
@@ -310,7 +312,7 @@ savid   lda #0  ;SMC
 
         ; make it angry
         ora #IS_ANGRY
-        sta _target,x        
+        ;sta _target,x        
         lda _ai_state,x
         ora #IS_AICONTROLLED   
         sta _ai_state,x
@@ -444,6 +446,11 @@ nofire
 	jsr _DrawCrosshair
     jsr dump_buf
 
+	lda message_delay
+	beq nomessage
+	dec message_delay
+	jsr print_inflight_message
+nomessage
     jsr update_compass
 nodraw
 
@@ -711,7 +718,16 @@ deccel
 ;         jmp MoveDown
 
 fireM   
+        ;first call FindTarget then make AITarget=_ID and call this...
+        jsr FindTarget
+        lda _ID
+        beq nolock
+        sta AITarget
+        ldx #1
+        jsr SetCurOb
         jmp LaunchMissile
+nolock
+        rts
 fireL   jmp FireLaser
         
 
@@ -737,6 +753,11 @@ jumphyper
 
 		; Compare current_planet with dest_planet too see if it is a "bad jump"
 		; and simply ignore
+        lda _dest_num
+        cmp _currentplanet
+        bne good
+        rts
+good
 		; Compare distance and check it is not a "hyperspace range?"
 
 		; Should start sequence, but not perform the jump right now... 

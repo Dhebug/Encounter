@@ -809,6 +809,11 @@ str_missile
     .asc "Missile"
     .byt 0
 
+flight_message_base
+	.asc "INCOMING MISSILE"
+	.byt 0
+
+
 __texts_end
 
 #echo Size of texts in bytes:

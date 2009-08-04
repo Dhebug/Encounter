@@ -31,3 +31,20 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + PROBLEM: Seems that rotating 3 degrees is too much for easy targeting the enemy!!! That requires modifications in the engine for the player!!!
 
++ Cannot add color if the frame is in pixel 5. If it is not, the frame should be drawn at every screen dump?
+
++ Implement a Cargo screen
+
++ Check and manage fuel
+
++ Buy/manage equipment
+
++ Create enemies dynamically
+
++ Missiles should not destroy planets... (should never target them!). Is this solved now?
+
++ Complete AI
+
++ Implement ECM for missiles
+
++ Implement the kill-values

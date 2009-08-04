@@ -1,7 +1,7 @@
 
 #include "main.h"
 #include "tine.h"
-
+#include "cockpit.h"
 
 #define SHUTTLE_CHANCE      $fc
 #define VIPER_CHANCE        $ef
@@ -38,8 +38,8 @@ _Tactics
     ;bcs end
 
 loop
-    STA POINT        ;Object pointer
-    STY POINT+1
+    sta POINT        ;Object pointer
+    sty POINT+1
 
     lda #( IS_HYPERSPACING | IS_DOCKING | IS_EXPLODING | IS_DISAPPEARING )
     and _flags,x
@@ -50,11 +50,21 @@ loop
     beq do_special
     dec _ttl,x
     jmp noflags
+
 do_special
+	; Get pointer to routine
+	
+	tya
+	ldy #$ff
+loopi
+	iny
+	lsr
+	bcc loopi
+
     ; Call routine for each flag kind...
-    lda dis_tab_lo-1,y
+    lda dis_tab_lo,y
     sta jump+1
-    lda dis_tab_hi-1,y
+    lda dis_tab_hi,y
     sta jump+2
 jump
     jsr $1234   ; SMC
@@ -123,6 +133,11 @@ AIMain
     sta AIShipType
     cmp #SHIP_MISSILE
     bne nomissile
+    
+    ; It is a missile. If the target is 0 then there is no target
+    ; so should do nothing or explode? OR should this never happen? 
+
+
 
     ; lda _ecm_counter
     ; beq noecm
@@ -148,9 +163,10 @@ loop
     
     lda op1+1
     bne nohit
-    lda op1
-    cmp #70
-    bcs nohit
+; The original is <256, so this is all
+;    lda op1
+;    cmp #70
+;    bcs nohit
     dey
     dey
     bpl loop
@@ -171,17 +187,22 @@ loop
     sta _speed,x
     sta _accel,x
 
-    ; Perform damage
-    lda AITarget
+    ; Make ship angry at who fired the missile
+    lda _missiles,x
     tax
+    lda AITarget
+    jsr make_angry 
+ 
+   ; Perform damage
+    ldx AITarget
     lda _speed,x
     lsr
     sta _speed,x
     lda #0
     sta _accel,x
     lda #$40
-    jmp damage_ship
-        
+    jmp damage_ship ; This is JSR/RTS
+
 nohit
     ;; Mirar a ver si se activa ECM (si no es el jugador)
     ;; Si no lo activa entonces seguimos la persecución (?)
@@ -277,17 +298,44 @@ cont
     ldx AIShipID
     sta _rotx,x    
 noroll
-    
+
+    ; If we are not angry we don't want to shoot.
+    lda AIIsAngry
+    and #IS_ANGRY
+    bne areangry
+    jmp toofar
+areangry    
     ; Check ship's energy. If it is max/2
     ; check if also less than max/8
     ; if it is
     ; launch escape pod, if possible and rts
     ; if only less than max/2 launch missile and rts
 
-    ; If we are not angry we don't want to shoot.
-    lda AIIsAngry
-    and #IS_ANGRY
-    beq toofar
+    ldx AIShipType
+    lda ShipEnergy-1,x
+    lsr
+    ldx AIShipID
+    cmp _energy,x
+    bcc nolowen  
+    lsr
+    lsr
+    cmp _energy,x
+    bcc nocriten
+    ; Launch escape pod if fitted 
+    jmp nolowen
+    rts
+nocriten
+    ; Can we launch a missile
+    lda _missiles,x
+    and #%00000011
+    beq nolowen
+    ; Launch missile
+    jsr SetCurOb
+    jsr LaunchMissile   
+    beq nolowen ; Could not fire missile
+    ldx AIShipID
+    dec _missiles,x
+nolowen
 
     ; If we arrive here energy is still high or we didn't
     ; want to or couldn't launch missile or escape pod
@@ -410,9 +458,21 @@ notneg2
     ora tmp    
     and #$fe
     bne approach
-    
-    ; On collision course, invert everything
 
+    ; What if our target is a planet? Then if want to dock, dock
+	ldx AIShipID
+	lda _ai_state,x
+	and #FLG_FLY_TO_PLANET
+	beq nodock
+
+	; Dock to planet
+	lda #IS_DOCKING
+	sta _flags,x
+	rts
+	
+nodock
+    
+	; On collision course, invert everything
     lda #0
     sec
     sbc _VectX
@@ -621,6 +681,7 @@ _ID .byt $0
 ;; launches a missile
 LaunchMissile
 .(
+    stx savx+1
     lda #SHIP_MISSILE   ; Ship to launch
     jsr LaunchShipFromOther
     cpx #0
@@ -632,14 +693,26 @@ LaunchMissile
     sta _rotz,x
     ;lda #30
     ;sta _speed,x       
+
     ; Set ai_controlled
     lda _ai_state,x
     ora #IS_AICONTROLLED 
     sta _ai_state,x
         
     ; Get objective
-    lda #2
-    sta _target,x
+    lda AITarget  
+    sta _target,x ;Seems you don't need to set the ANGRY flag... Then what is target is 0 ??? Maybe check first and beq to failure (and maybe
+                  ; print a message?
+	; If we are the objective, set inflight message
+	cmp #1
+	bne notus
+	ldx #STR_INCOMING_MISSILE
+	jsr flight_message 
+notus
+    ; Set who is launching at _missiles field
+savx
+    lda #0  ;SMC
+    sta _missiles,x
 
     ; Make it disappear soon
     lda #( IS_DISAPPEARING )
@@ -655,7 +728,7 @@ LaunchMissile
     jsr MoveForwards
     lda #50
     jsr MoveSide;Down
-
+    lda #1 ; So we dont return with zero
 failure
     rts
 

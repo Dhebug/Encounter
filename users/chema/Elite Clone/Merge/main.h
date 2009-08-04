@@ -11,7 +11,7 @@
 #define SCR_EQUIP   6
 
 
-; Attributes 
+/* Attributes */
 #define A_FWBLACK        0
 #define A_FWRED          1
 #define A_FWGREEN        2
@@ -29,21 +29,21 @@
 #define A_BGCYAN        22
 #define A_BGWHITE       23
 
-; To access plansys records
+/* To access plansys records */
 
-;typedef struct
-;{	 
-;   unsigned char x;
-;   unsigned char y;       /* One byte unsigned */
-;   unsigned char economy; /* These two are actually only 0-7  */
-;   unsigned char govtype;   
-;   unsigned char techlev; /* 0-16 i think */
-;   unsigned char population;   /* One byte */
-;   unsigned int productivity; /* Two byte */
-;   unsigned int radius; /* Two byte (not used by game at all) */
-;   fastseedtype	goatsoupseed;
-;   char name[12];
-;} plansys ;
+//typedef struct
+//{	 
+//   unsigned char x;
+//   unsigned char y;       /* One byte unsigned */
+//   unsigned char economy; /* These two are actually only 0-7  */
+//   unsigned char govtype;   
+//   unsigned char techlev; /* 0-16 i think */
+//   unsigned char population;   /* One byte */
+//   unsigned int productivity; /* Two byte */
+//   unsigned int radius; /* Two byte (not used by game at all) */
+//   fastseedtype	goatsoupseed;
+//   char name[12];
+//} plansys ; 
 
 #define SYSX 0
 #define SYSY 1
@@ -58,3 +58,5 @@
 
 
 #endif
+
+
