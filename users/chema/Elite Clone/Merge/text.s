@@ -18,8 +18,9 @@
 #define A_FWWHITE        7
 
 
-print2buffer .byt 00
-buffercounter .byt 0
+print2buffer	.byt 00	; Prints in str buffer, for formatting text
+buffercounter	.byt 00
+print2dbuffer	.byt 00	; Prints to the double-buffer area
 
 ; Put this as a value different from 0
 ; and text will be printed on caps.
@@ -304,16 +305,20 @@ perform_CRLF
 ;Pass: 
 ;X X position on screen (Byte alligned 0 to 39) 
 ;Y Y position on screen (Row alligned 0 to 195) 
-relocate_cursor 
+relocate_cursor
+.( 
         pha 
         ;Calculate screen loc 
         stx Cursor_origin_x 
         sty Cursor_origin_y 
         
-        ;stx op1
-        ;sty op2
-            
-        jsr pixel_address_real
+		lda print2dbuffer
+		beq normal
+		jsr pixel_address
+		jmp cont
+normal
+		jsr pixel_address_real
+cont
         tya
         clc
         adc tmp0
@@ -327,8 +332,10 @@ noinctmp0
        
         pla
         rts
+.)
 
 put_colcombo 
+.(
         pha 
         and #7 
         sta colour_0 
@@ -340,7 +347,7 @@ put_colcombo
         and #7 
         sta colour_1 
         jmp put_colour_combo 
-
+.)
 ;Print character, colour or Carriage return at next cursor position 
 ;A Character Code 
 put_code 

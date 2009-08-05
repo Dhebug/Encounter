@@ -47,4 +47,10 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Implement ECM for missiles
 
-+ Implement the kill-values
++ Remove inflight messages afer jumping/docking...
+
++ Update ship's energy, in a timely manner and to maximum when dock (or before leaving the planet)
+
++ Add bounties to kills...
+See C:\DOCUMENTS AND SETTINGS\CHEMA\MIS DOCUMENTOS\PERSONAL\ORIC\MIOS\ELITE\ELITEAGB-0.5.2\universe.c(471)
+Bounty values are in the excel sheet, but not currently in ships.s
