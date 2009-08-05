@@ -83,12 +83,15 @@ loop
 
 print_inflight_message
 .(
+	dec print2dbuffer
 	ldx message_X
 	ldy #HUD_MSG_Y
 	jsr gotoXY	
 	lda #<message_buffer
 	ldx #>message_buffer
-	jmp print
+	jsr print
+	inc print2dbuffer
+	rts
 .)
 
 

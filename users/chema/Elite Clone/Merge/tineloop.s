@@ -296,8 +296,8 @@ _InitTestCode
          sta _ai_state,x
          lda #1
          sta _speed,x
-		 lda #2 ; Planet
-		 sta _target,x
+		 ;lda #2 ; Planet
+		 ;sta _target,x
         
 
          lda #<OCEN2
@@ -312,7 +312,7 @@ savid   lda #0  ;SMC
 
         ; make it angry
         ora #IS_ANGRY
-        ;sta _target,x        
+        sta _target,x        
         lda _ai_state,x
         ora #IS_AICONTROLLED   
         sta _ai_state,x
@@ -444,13 +444,13 @@ nodock
     jsr _DrawLaser
 nofire
 	jsr _DrawCrosshair
-    jsr dump_buf
-
 	lda message_delay
 	beq nomessage
 	dec message_delay
 	jsr print_inflight_message
 nomessage
+
+    jsr dump_buf
     jsr update_compass
 nodraw
 

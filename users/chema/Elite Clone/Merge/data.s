@@ -32,7 +32,8 @@ _fuel			.byt 50                 ; Amount of fuel
 _fluct			.byt 0                  ; Price fluctuation
 _holdspace		.word 20                ; Current space left in cargo bay
 _legal_status	.byt 50                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
-_score			.word 60000             ; Current score
+_score_rem		.byt 00					; Score, remainder
+_score			.word 00000             ; Current score
 _mission		.byt 0                  ; Current mission
 _equip			.word $000f             ; Equipment flags
 _ship_type      .byt SHIP_COBRA3        ; Current player's ship

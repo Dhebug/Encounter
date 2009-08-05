@@ -137,8 +137,6 @@ AIMain
     ; It is a missile. If the target is 0 then there is no target
     ; so should do nothing or explode? OR should this never happen? 
 
-
-
     ; lda _ecm_counter
     ; beq noecm
     ; ;Incrementamos kills y eliminamos el misil
@@ -190,10 +188,11 @@ loop
     ; Make ship angry at who fired the missile
     lda _missiles,x
     tax
+	stx savy+1	; Save it for later
     lda AITarget
     jsr make_angry 
  
-   ; Perform damage
+    ;Perform damage
     ldx AITarget
     lda _speed,x
     lsr
@@ -201,6 +200,8 @@ loop
     lda #0
     sta _accel,x
     lda #$40
+savy
+	ldy #0	;SMC
     jmp damage_ship ; This is JSR/RTS
 
 nohit
@@ -413,6 +414,7 @@ nolowen
 	lsr
 	;lsr	; do laser damage/2 (according to elite agb)
     ldx AITarget
+	ldy AIShipID
     jmp damage_ship ; This is jsr/rts
     
      
@@ -577,6 +579,7 @@ FireLaser
     lsr
 	lsr
 	;lsr	; do laser damage/2 (according to elite agb)
+	ldy #1	; Player does damage
     jsr damage_ship
     
     ; Make him angry at us
@@ -1009,6 +1012,7 @@ no_hit
 ;;; damage_ship
 ; Perform damage of ships and explodes them, if necessary
 ; Params: Reg X is ship ID, Reg A is damage amount.
+; Reg Y who is making the damage
 damage_ship
 .(
 
@@ -1020,17 +1024,27 @@ damage_ship
     bcs noexplode 
     
     lda _flags,x
+	;and #(IS_EXPLODING|IS_HYPERSPACING|IS_DISAPPEARING|IS_DOCKING)
+	and #IS_EXPLODING
+	bne noplayer	; Can't do damage here, has already been killed
+
+	; We perform damage
     and #%11110000  ; Remove older flags...
     ora #IS_EXPLODING
     sta _flags,x
     lda #0
     sta _ttl,x
+	cpy #1
+	bne noinckills
+	; The player killed this...
+	; Reg X already contains the ship's ID
+	jsr increment_kills
+noinckills
     jmp end 
 
 noexplode
     ; Preserve reg X
     stx end+1
-    ;jsr _printHit     
     ; Make a nice sound
     jsr _shoot
 
@@ -1240,114 +1254,6 @@ end
 
 
 
-#ifdef OLD4LINES
-
-
-; Draw player's lasers
-
-
-_DrawLaser
-.(
-	ldx #3
-loop
-	stx savx+1
-	lda XO,x
-	sta _CurrentPixelX
-	lda YO,x
-	sta _CurrentPixelY
-	lda XD,x
-	sta _OtherPixelX
-	lda YD,x
-	sta _OtherPixelY
-	jsr _DrawLine
-
-savx
-	ldx #0	; SMC
-	dex
-	bpl loop
-
-	rts
-
-; Lasers
-XO .byt 10,  57,  230, 183
-YO .byt 127, 127, 127, 127
-
-XD .byt (120-1), (120-1), (120+1), (120+1)
-YD .byt (64+1),  (64+1),  (64+1),  (64+1)
-
-.)
-
-
-;Crosshair
-
-_DrawCrosshair
-.(
-
-	ldx #3
-loop
-	stx savx+1
-	lda XO,x
-	sta _CurrentPixelX
-	lda YO,x
-	sta _CurrentPixelY
-	lda XD,x
-	sta _OtherPixelX
-	lda YD,x
-	sta _OtherPixelY
-	jsr _DrawLine
-
-savx
-	ldx #0	; SMC
-	dex
-	bpl loop
-
-	rts
-
-XO .byt 104, 129, 120, 120
-YO .byt 64, 64, 49, 72
-XD .byt 111,136, 120, 120
-YD .byt 64, 64, 56, 79
-
-.)
-
-_DrawFrameBorder
-.(
-
-	ldx #3
-loop
-	stx savx+1
-	lda XO,x
-	sta _CurrentPixelX
-	lda YO,x
-	sta _CurrentPixelY
-	lda XD,x
-	sta _OtherPixelX
-	lda YD,x
-	sta _OtherPixelY
-	jsr _DrawLine
-
-savx
-	ldx #0	; SMC
-	dex
-	bpl loop
-
-	rts
-
- ;   curset(5,5);
- ;   draw(0,123,1);
- ;   draw(230,0,1);
- ;   draw(0,-123,1);
- ;   draw(-230,0,1);
-
-XO .byt 5,      5,      5+230, 5+230
-YO .byt 5,      5+123,  5+123, 5
-XD .byt 5,      5+230,  5+230, 5
-YD .byt 5+123,  5+123,  5,     5
-
-.)
-
-
-#else
 
 #define pzero tmp
 
@@ -1428,7 +1334,33 @@ Coords
 .)
 
 
-#endif
+
+; Increment player's killpoints
+; Params: reg X is destroyed ship's ID
+increment_kills
+.(
+	jsr GetShipType
+	; Remove cloacking bit
+	and #%01111111
+	asl
+	tax
+	lda ShipKillValue-2,x
+	clc
+	adc _score_rem
+	sta _score_rem
+	lda ShipKillValue-1,x
+	adc _score
+	sta _score
+	bcc all
+	inc _score+1
+all
+	rts
+.)
+
+
+
+
+
 
 
 
