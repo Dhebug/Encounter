@@ -36,13 +36,16 @@ extern long  cycles;
 extern long  initial_cycles;
 
 char env_screen;
+char hard_screen;
 char exit_menu;
 unsigned char Kbd_Matrix[65];		/* FIXME should be 8 */
 extern uint8_t setfullScreen, fullScreen;
 
 static signed char keycode_to_oric[512];
-
-
+extern char atmos;
+extern char telestrat;
+extern int current_machine;
+extern int zoom_changed;
 /*
  *	keyboard_map_init - initialise keycode_to_oric;
  */
@@ -194,11 +197,38 @@ fprintf(stderr, "SDL_KEY%s sym %d \n", (ev->type ==  SDL_KEYDOWN)?"DOWN":"UP", k
         case 0x11a :				/* F1 - setup screen */
             Sys_Request |= 0x8000;
             if (env_screen == 1)
+                {
+                    if (zoom!=zoom_changed)
+                        {
+                        zoom=zoom_changed;
+                    // initSDL_display();
+                        sdl_end();
+                        sdl_start();
+                        }
+                if (current_machine==1 && atmos==0 && telestrat==0)
+                    {
+                    Init_Hard();
+                    Load_ROM(Oric_Mem+0x10000);
+                    Sys_Request |= 0x400;
+                    }
+                if (current_machine==1 && atmos==0 && telestrat==1)
+                    {
+                    Init_Hard();
+                    Load_Banks();
+                    Load_EPROM();
+                    Restart();
+                    Sys_Request |= 0x400;
+                    }
+                    //Restart();
+                //current_machine
                 exit_menu = 1;
+                }
             return;
             break;
         case 0x11b :				/* F2 - sound switch */
             /* toggle_sound (); */
+            if (hard_screen == 1)
+                exit_menu = 1;
             return;
             break;
         case 0x11c :				/* F3 - keyboard toggle */
