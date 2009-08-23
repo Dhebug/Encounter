@@ -35,6 +35,11 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 #include "keyb_us.h"
 #include "traps.h"
 
+extern char atmos;
+extern char telestrat;
+extern char disk;
+extern char jasmin;
+extern char acia;
 
 extern char Kbd_Matrix[];
 extern char env_screen,exit_menu;
@@ -58,7 +63,7 @@ extern char HardwareTape;
 extern char charset[],charset2[];
 extern char output_name[];
 extern char messages[][41];
-
+extern char hard_screen;
 static void open_list(void);
 static void init_list(void);
 static void close_list(void);
@@ -66,7 +71,9 @@ static int read_dir_entry(char *buf);
 static void print_screen(void);
 static int menu(void);
 static void print_clockspeed(void);
+static void print_machine(void);
 static void print_tape_pos(void);
+static void print_zoom(void);
 void reinvoke_fdc_command (void);  /* 1793.S */
 
 static unsigned char *screen=Oric_Mem+0xBB80;
@@ -75,7 +82,7 @@ static int paper_color=0x16, ink_color=0;
 static int select_paper_color=0x14, select_ink_color=2;
 static int select_choice=13;
 static jmp_buf context;
-
+extern int zoom_changed;
 
 void clear_screen(void)
 {
@@ -138,6 +145,37 @@ void home(void)
 /***************************************************************************/
 static FILE *dir_file;
 static int last_entry;
+
+static void print_screen_hardware(void)
+{
+	int i,drive;
+
+	clear_screen();
+	printf("Entré");
+	for(i=21;i<=26;i++) screen[40*i]=0x12;
+	set_cursor(0);
+/*  0 */{
+		size_t n;
+		size_t padding;
+		const char *left = "Caloric PROUT";
+		n = strlen (left) + strlen (VERSION);
+		if (n > 40)
+			padding = 0;
+		else
+			padding = (40 - n) / 2;
+		while (padding-- > 0)
+			print_char(' ');
+		print(left);
+		print(VERSION);
+		print_line("");
+	}
+/*  1 */print_line("");
+/*  2 */print_char('\012');print_line(messages[1]);
+/*  3 */print_char('\012');print_line(messages[1]);
+/*  4 */print_line("      01234567        04152637");
+
+}
+
 
 static void open_list(void)
 {
@@ -227,6 +265,12 @@ void delay(void)
 		print_screen();
 		select_line(select_choice);
 	}
+	if (hard_screen)
+        {
+            print_screen_hardware();
+            select_line(select_choice);
+        }
+
 	display_frame();
 	Tick=0;
 }
@@ -467,6 +511,9 @@ void config_screen(void)
 	}
 }
 
+
+
+
 static void print_screen(void)
 {
 	int i,drive;
@@ -477,7 +524,7 @@ static void print_screen(void)
 /*  0 */{
 		size_t n;
 		size_t padding;
-		const char *left = "Xeuphoric ";
+		const char *left = "Caloric ";
 		n = strlen (left) + strlen (VERSION);
 		if (n > 40)
 			padding = 0;
@@ -489,11 +536,16 @@ static void print_screen(void)
 		print(VERSION);
 		print_line("");
 	}
-/*  1 */print_line("");
-/*  2 */print_char('\012');print_line(messages[1]);
-/*  3 */print_char('\012');print_line(messages[1]);
+	// atmos
+/*  1 */print("Machine :");print_char('\001'); print_machine();
+        //print_char('\001');
+        print("Zoom :");print_char('\001');  print_zoom();
+        print_line("");
+        //print_line("Telestrat");
+/*  2 *///print_char('\012');print_line(messages[1]);
+/*  3 *///print_char('\012');print_line(messages[1]);
 /*  4 */print_line("      01234567        04152637");
-/*  5 */print_line("      \x10\x11\x12\x13\x14\x15\x16\x17\x16       \x10\x14\x11\x15\x12\x16\x13\x17\x16");
+/*  5 */ print_line("      \x10\x11\x12\x13\x14\x15\x16\x17\x16       \x10\x14\x11\x15\x12\x16\x13\x17\x16");
 /*  6 */print_line("");
 /*  7 */if (disk && drives[0]) {
 		if (disk_name[0][0]==0) print("    ");
@@ -545,13 +597,16 @@ static void print_screen(void)
 /* 19 */print_line("");
 /* 20 */print(messages[20]);print_char('\001');print_line(joystickport?messages[21]:joystick?messages[22]:messages[23]);
 /* 21 */print_line("\004F1      F2      F3      F4      F5");
-/* 22 */print_line(messages[24]);
+/* 22 *///print_line("Return Hardware Keyboard Double Initial");// messages[24]
+        print_line(messages[24]);
 /* 23 */print_line(messages[25]);
 /* 24 */print_line("\004F6      F7      F8      F9      F10");
 /* 25 */print_line(messages[26]);
 /* 26 */print_line(messages[27]);
 /* 27 */cursor-=2;
 	switch(select_choice) {
+        case 1:
+
 		case 7:
 		case 8:
 		case 9:
@@ -603,13 +658,38 @@ static int menu(void)
 	command=get_command();
 	switch(command) {
 		case UP:
-			if ((disk && select_choice>7) || select_choice>12)
+			//if ((disk && select_choice>1) || select_choice>12)
+            if ((select_choice>2) || select_choice>12)
 				select_choice--;
 			break;
 		case DN:
 			if (select_choice<20) select_choice++;
 			break;
 		case LFT:
+            if (select_choice==1)
+                {
+                if (atmos==1 && telestrat==0)
+                    {
+                    atmos=0;
+                    telestrat=0;
+                    disk=0;
+                    acia=0;
+                    jasmin=0;
+                    //machine_changed=1; // 0 pour oric-1, 1 pour atmos, 2 pour télestrat
+                    }
+                else
+                    if (atmos==0 && telestrat==1)
+                        {
+                        atmos=1;
+                        telestrat=0;
+                        //machine_changed=1;
+                        //machine_changed=2;
+                        }
+                }
+             if (select_choice==2)
+                if (zoom_changed!=1)
+                    zoom_changed=zoom_changed-1;
+
 			if (select_choice==16)
 				if (cycles>2000) cycles-=2000;
 			if (select_choice==13 && HardwareTape) protect_tape();
@@ -621,6 +701,26 @@ static int menu(void)
 				}
 			break;
 		case RGH:
+            if (select_choice==1)
+                {
+                if (atmos==1 && telestrat==0)
+                    {
+                    atmos=0;
+                    telestrat=1;
+                    disk=1;
+                    jasmin=0; acia=1;
+                    }
+                else
+                    if (atmos==0 && telestrat==0)
+                        {
+                        atmos=1;
+                        telestrat=0;
+                        }
+                }
+        if (select_choice==2)
+                if (zoom_changed!=3)
+                    zoom_changed=zoom_changed+1;
+
 			if (select_choice==16)
 				if (cycles<2000000-2000) cycles+=2000;
 			if (select_choice==13 && HardwareTape) unprotect_tape();
@@ -649,6 +749,28 @@ static void print_clockspeed(void)
 	sprintf (buf, "%.6g MHz", mhz);
 	print_line(buf);
 }
+
+static void print_machine(void)
+{
+	char buf[20];
+	if (atmos==1)
+        sprintf (buf,"%s","Atmos");
+    else
+        if (telestrat==1)
+            sprintf (buf,"%s","Telestrat");
+                else
+                    sprintf (buf,"%s","Oric-1");
+	print_line(buf);
+}
+
+
+static void print_zoom(void)
+{
+	char buf[20];
+    sprintf (buf,"x%d",zoom_changed);
+	print_line(buf);
+}
+
 
 static void print_tape_pos(void)
 {
