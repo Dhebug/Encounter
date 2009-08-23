@@ -81,7 +81,7 @@ int sdl_start()
     /* Init video blah */
     /*Get some infos from video card and resolution*/
 
- zoom=2;
+ //zoom=2;
     if(fullScreen) {
     	flags |= SDL_FULLSCREEN;
     	flags_video ^= SDL_FULLSCREEN;
@@ -136,11 +136,16 @@ else{
   printf("Available Modes\n");
   for(i=0;modes[i];++i)
     printf("  %d x %d\n", modes[i]->w, modes[i]->h);
+
 }
 
 #endif
 
+    // calculate the best full screen mode
+    //zoom=modes[0]->h/VIDEO_HEIGHT;
+
     /* 320x240x32 */
+
     screen = SDL_SetVideoMode(VIDEO_WIDTH*zoom, VIDEO_HEIGHT*zoom+border, 8, flags_video); //
     if ( screen == NULL ) {
         fprintf(stderr, "Unable to set %dx%dx32 video: %s\n", VIDEO_WIDTH*zoom, VIDEO_HEIGHT*zoom, SDL_GetError());
@@ -171,8 +176,12 @@ void sdl_display (void)
     windowChanging=0;
 }
 
+
+
 void Reset_Screen (void)
 {
+
+    //initialised=1;
     display_frame ();
 }
 
@@ -414,15 +423,13 @@ previoustime=timenow;
     }
 
 void displaySDL_run(void)
-{
-
-int x=0;
-int y=0;
-int calcul=0;
-int move_x=0;
-int move_y=0;
-render_frame ();
-zoom=2;
+    {
+    int x=0;
+    int y=0;
+    int calcul=0;
+    int move_x=0;
+    int move_y=0;
+    render_frame ();
 	if (frametouched) // if frame is modified let's go !
 	{
     lockscreenSDL_Display(screen);
@@ -446,7 +453,6 @@ zoom=2;
                     {
                     for (x=0;x<VIDEO_WIDTH;x++)
                         {
-                        //DrawRect(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B, zoom)
                         DrawRect(screen, move_x, move_y+border,oriccolors[buf[calcul+x]].red, oriccolors[buf[calcul+x]].green, oriccolors[buf[calcul+x]].blue,zoom);
                         move_x+=zoom;
                         }
@@ -494,8 +500,13 @@ void display_frame (void)
     */
     if(setfullScreen != fullScreen) {
         fullScreen = setfullScreen;
+
         sdl_end();
+
         sdl_start();
+    render_frame_init();
+
+
     }
  // comment this 3 lines to use jylam method and uncoment from render_frame() to SDL_Delay(20); included
     displaySDL_run();
