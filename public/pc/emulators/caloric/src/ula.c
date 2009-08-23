@@ -52,6 +52,19 @@ int framenum = 0;			/* Frame counter (for blinking) */
 #define BLINK_HALF_PERIOD_F 32		/* Half period of blinking in frames */
 
 
+void render_frame_init()
+    {
+     int y;
+
+    /* Force a refresh the first time */
+    for (y = 0; y < VIDEO_HEIGHT; y++)
+      buf[y * (VIDEO_WIDTH + 1) + VIDEO_WIDTH] = 1;
+    frametouched = 1;
+
+    }
+
+
+
 void render_frame (void)
 {
   unsigned bg;
