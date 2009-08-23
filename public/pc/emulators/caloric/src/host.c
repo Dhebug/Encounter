@@ -69,6 +69,10 @@ int quit_on_trap;
 int zoom;
 int debugger = 0;
 
+int machine_changed=0;
+int zoom_changed=1;
+int current_machine;
+
 void Load_ROM(unsigned char *rom_adr)
 {
   const char *basename = atmos ? atmos_name : oric1_name;
@@ -412,9 +416,10 @@ int init(int argc, char *argv[])
 	int g;
     zoom = 1;
 debugger=1;
+current_machine=1;
 	while ((g = getopt (argc, argv, "1aA:djJpQrs:S:tX:z:g")) != EOF) {
-		if      (g == '1') { telestrat=0; atmos=0; }
-		else if (g == 'a') { telestrat=0; atmos=1; }
+		if      (g == '1') { telestrat=0; atmos=0; current_machine=0; }
+		else if (g == 'a') { telestrat=0; atmos=1; current_machine=1;}
 		else if (g == 'A') { audio_device=optarg; }
 		else if (g == 'd') {  disk=1; }
 		else if (g == 'j') { telestrat=0; jasmin=1; disk=1; }
@@ -450,7 +455,8 @@ debugger=1;
 				exit (1);
 			}
 		}
-		else if (g == 't') { telestrat=1; disk=1; }
+		else if (g == 't') { telestrat=1; disk=1; current_machine=2;}
+
 		else if (g == 'z')
 		{
 		  zoom = atoi(optarg);
