@@ -239,8 +239,8 @@ end
 ; that height of stalk is also in that range?
 
 
-savX .dsb MAXSHIPS
-savY .dsb MAXSHIPS
+;savX .dsb MAXSHIPS	; defined in data.s
+;savY .dsb MAXSHIPS
 countobjs .byt 00
 
 EraseRadar

@@ -17,24 +17,6 @@ OCEN2    .word -1000            ;X-coord
          .word 1000            ;Y-coord
          .word 1300            ;Z-coord
 
-#ifdef 0
-OCEN0   .word 0;1000
-        .word 0;1000
-        .word 0;2500
-
-
-OCENE   .word 0
-        .word 0
-        .word 12200
-
-OCENF   .word 1000
-        .word 300
-        .word 10000
-#endif
-
-;OPOS    .dsb 6      ; 6 bytes for object position, Xlo, Xhi, Ylo, Y hi and Zlo, Zhi
-
-
 _init_tine
 .(
 
@@ -96,9 +78,10 @@ createship
     lda #>_PosX   
     sta tmp0+1
     lda _ship_type
-    JSR AddSpaceObject
-   ; Set our ship as view object
-    STX VOB          
+    jsr AddSpaceObject
+	
+	; Set our ship as view object
+    stx VOB          
  
     lda _docked
     beq norot
@@ -120,8 +103,8 @@ norot
     
 
     jsr planetpos
-    LDA #<ONEPLANET
-    LDY #>ONEPLANET
+    lda #<ONEPLANET
+    ldy #>ONEPLANET
     jsr addmoonplanet
     
     ; Now create some moons (between 0 and 3)      
@@ -163,8 +146,8 @@ loop
     sbc tmp
     sta _PosZ+1
 
-    LDA #<ONEMOON
-    LDY #>ONEMOON
+    lda #<ONEMOON
+    ldy #>ONEMOON
     jsr addmoonplanet
 
 
@@ -226,8 +209,8 @@ addmoonplanet
     ldx #>_PosX   
     stx tmp0+1
 
-    LDX #$80   ; Non-moving object
-    JSR AddSpaceObjectDirect
+    ldx #$80   ; Non-moving object
+    jsr AddSpaceObjectDirect
     lda #255
     sta _energy,x    
     rts
@@ -264,24 +247,7 @@ noinvert2
 .)
 
 _InitTestCode 
-
-         ;jsr load_frame
-
-#ifdef 0
-         jsr CreateRadar
-
-    
-         ; Add our ship
-
-         lda #<OCEN0
-         sta tmp0
-         lda #>OCEN0   
-         sta tmp0+1
-         lda #SHIP_COBRA3
-         JSR AddSpaceObject
-         STX VOB          ;View object
-
-#endif
+.(
          ; Add some ships
 
          lda #<OCEN
@@ -289,22 +255,29 @@ _InitTestCode
          lda #>OCEN
          sta tmp0+1   
          lda #SHIP_ADDER
+		 ;lda #SHIP_ANACONDA
          jsr AddSpaceObject   
          stx savid+1   
          lda _ai_state,x
-         ora #(IS_AICONTROLLED|FLG_FLY_TO_PLANET)   
+         ;ora #(IS_AICONTROLLED | FLG_BOUNTYHUNTER)   
+		 ora #(IS_AICONTROLLED)   
          sta _ai_state,x
-         lda #1
-         sta _speed,x
+
 		 ;lda #2 ; Planet
 		 ;sta _target,x
-        
+         ;lda _flags,x
+		 ;ora #FLG_FLY_TO_PLANET
+		 ;sta _flags,x
+		
+		 lda #(HAS_ESCAPEPOD)
+		 jsr SetShipEquip
 
          lda #<OCEN2
          sta tmp0
          lda #>OCEN2
          sta tmp0+1   
          lda #SHIP_ASP
+		 ;lda #SHIP_ANACONDA
          jsr AddSpaceObject   
 
         ; This one will pursue the other :)
@@ -312,50 +285,24 @@ savid   lda #0  ;SMC
 
         ; make it angry
         ora #IS_ANGRY
-        sta _target,x        
+        ;sta _target,x        
         lda _ai_state,x
         ora #IS_AICONTROLLED   
         sta _ai_state,x
-        
 
-         ;ldx VOB
+  		 lda #(HAS_ESCAPEPOD)
+		 jsr SetShipEquip
+
+
+        ;ldx VOB
         ;sta _target,x
 
-#ifdef 0
-         lda #<OCENE
-         sta tmp0
-         lda #>OCENE
-         sta tmp0+1   
-
-         LDA #<ONEPLANET
-         LDY #>ONEPLANET
-         LDX #$80   ; Non-moving object
-         JSR AddSpaceObjectDirect
-         lda #255
-         sta _energy,x
-
-
-         lda #<OCENF
-         sta tmp0
-         lda #>OCENF
-         sta tmp0+1   
-
-         LDA #<ONEMOON
-         LDY #>ONEMOON
-         LDX #$80   ; Non-moving object
-         JSR AddSpaceObjectDirect
-         lda #255
-         sta _energy,x
-
-;         clc              ; Wireframe mode
-;         JSR SetParms
-
-#endif
-         rts
-
+        rts
+.)
 
 
 _FirstFrame
+.(
         lda #$ff
         sta _planet_dist
 
@@ -373,12 +320,12 @@ _FirstFrame
 
 
 #ifdef FILLEDPOLYS
-         jsr _ClearAndSwapFlag
+         jmp _ClearAndSwapFlag
 #else
-         jsr dump_buf
+         jmp dump_buf
 #endif
-         rts
-
+         ;rts
+.)
 
 
 #define DBUG  lda #0\
@@ -392,7 +339,6 @@ player_in_control .byt $ff
 #define COUNTER $276
 
 
-
 _TineLoop
 .(
     lda _docked
@@ -404,6 +350,16 @@ loop
 	lda #0
 	sta COUNTER
 	sta COUNTER+1
+
+	lda #0
+	ldx NUMOBJS
+loopcl
+	sta _vertexXLO-1,x
+	sta _vertexXHI-1,x
+	sta _vertexYLO-1,x
+	sta _vertexYHI-1,x
+	dex
+	bne loopcl
 
     jsr _Tactics
     
@@ -484,12 +440,44 @@ nodraw
 	jsr gotoXY
 	ldx #5
 	jsr print_num_tab	
-    
-    lda dbg
+
+#ifdef DBGVALUES
+    lda dbg1
     sta op2
-    lda dbg+1
+    lda dbg1+1
     sta op2+1
-	ldx #50
+	ldx #47
+	ldy #0
+	jsr gotoXY
+	ldx #5
+	jsr print_num_tab	
+
+    lda dbg2
+    sta op2
+    lda dbg2+1
+    sta op2+1
+	ldx #47+48
+	ldy #0
+	jsr gotoXY
+	ldx #5
+	jsr print_num_tab	
+
+    lda dbg3
+    sta op2
+    lda dbg3+1
+    sta op2+1
+	ldx #47+48+48
+	ldy #0
+	jsr gotoXY
+	ldx #5
+	jsr print_num_tab	
+#endif
+
+    lda NUMOBJS
+    sta op2
+    lda #0
+    sta op2+1
+	ldx #47+48+48+48
 	ldy #0
 	jsr gotoXY
 	ldx #5
@@ -501,7 +489,9 @@ nofr
 
 .)
 
-dbg .word $0000
+dbg1 .word $0000
+dbg2 .word $0000
+dbg3 .word $0000
 
 
 ;; Now the keyboard map table
@@ -718,7 +708,6 @@ deccel
 ;         jmp MoveDown
 
 fireM   
-        ;first call FindTarget then make AITarget=_ID and call this...
         jsr FindTarget
         lda _ID
         beq nolock
@@ -978,15 +967,6 @@ doit2
 
 
 
-;        case 'R':
-;            printf("Search planet? ");
-;            gets(n);
-;            search_planet(n);
-;            break;
-
-      
-
-
 #ifndef OLDROLLS
 dorolls
 .(
@@ -1127,27 +1107,26 @@ VOB      .byt 00           ;View object
 
 
 ONEDOT
-         .byt DEBRIS         ;Moon Object
-         .byt 1            ;Number of points
-         .byt 1            ;Number of faces
+    .byt DEBRIS       ;Debris object
+    .byt 1            ;Number of points
+    .byt 1            ;Number of faces
 
 ; Point list
-   
     .byt 0
     .byt 0
     .byt 0
 
 ; Face list
-         .byt 1            ;Number of vertices
-         .byt 0        ;Fill pattern
-         .byt 0      ;Vertices
+    .byt 1      ;Number of vertices
+    .byt 0      ;Fill pattern
+    .byt 0      ;Vertices
 
 
 
 ONEPLANET
-         .byt PLANET       ;Sun or planet Object
-         .byt 1            ;Number of points
-         .byt 1            ;Number of faces
+   .byt PLANET       ;Sun or planet Object
+   .byt 1            ;Number of points
+   .byt 1            ;Number of faces
 
 ; Point list
    
@@ -1156,28 +1135,24 @@ ONEPLANET
     .byt 0
 
 ; Face list
-         .byt 1            ;Number of vertices
-         .byt SOLID ;5        ;Fill pattern
-         .byt 0      ;Vertices
-
-
+    .byt 1            ;Number of vertices
+    .byt SOLID ;5        ;Fill pattern
+    .byt 0      ;Vertices
 
 ONEMOON
-         .byt MOON         ;Moon Object
-         .byt 1            ;Number of points
-         .byt 1            ;Number of faces
+    .byt MOON         ;Moon Object
+    .byt 1            ;Number of points
+    .byt 1            ;Number of faces
 
 ; Point list
-   
     .byt 0
     .byt 0
     .byt 0
 
 ; Face list
-         .byt 1            ;Number of vertices
-         .byt 5        ;Fill pattern
-         .byt 0      ;Vertices
-
+    .byt 1            ;Number of vertices
+    .byt 5        ;Fill pattern
+    .byt 0      ;Vertices
 
 
 #define WIDTH 37

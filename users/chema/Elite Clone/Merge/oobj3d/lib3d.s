@@ -99,6 +99,7 @@ TEMPY    .word 00
 TEMPZ    .word 00
 
 
+; This are converted in defines, to speed things up
 XOFFSET  .byt 00          ;Center of the screen
 YOFFSET  .byt 00
 

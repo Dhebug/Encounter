@@ -13,9 +13,9 @@
 
 
 /* These have parameterers */
-#define STR_ITEM_DESTROYED		16
-#define STR_KILLVALUE			17
-#define STR_SCOOPCARGO			18
+#define STR_ITEM_DESTROYED		(128|0)
+#define STR_BOUNTY				(128|1)
+#define STR_SCOOPCARGO			(128|2)
 
 
 /* Frames a message should stay in the HUD */

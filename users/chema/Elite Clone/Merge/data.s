@@ -23,7 +23,7 @@
 _name			.asc "Jameson"          ; Commander's name
 				.byt 00 
 				.dsb 24 
-_shipshold		.dsb 34                 ; Contents of cargo bay
+_shipshold		.dsb 17;34                 ; Contents of cargo bay
 _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
 _cash			.byt $d0,$07            ; Four bytes for cash
@@ -104,20 +104,6 @@ _vertexYHI	.dsb MAXSHIPS
 ; Some more variables
 
 
-; From galaxy.s
-
-; These are filled when accessing the equip list screen
-
-equip_items .byt 0 ; Number of possible items (for selection)
-equip_flags .word 00   ; Flags with 1's when an item is available
-
-
-; Some vars for loops, etc...
-count2 .byt 0 ; used in genmarket & displaymarket
-num .byt 0   ; used in infoplanet
-index .byt 00   ; These two usedin gs_randomname
-lowcase .byt 00
-
 ; Digrams
 
 _pairs0 .asc "ABOUSEITILETSTONLONUTHNO"
@@ -147,6 +133,20 @@ gs_jump_lo .byt <gs_planet_name,<gs_planet_nameian,<gs_random_name
 gs_jump_hi .byt >gs_planet_name,>gs_planet_nameian,>gs_random_name
 
 
+; From galaxy.s
+
+
+.bss
+
+*=$400
+
+
+; Some vars for loops, etc...
+count2 .byt 0 ; used in genmarket & displaymarket
+num .byt 0   ; used in infoplanet
+index .byt 00   ; These two usedin gs_randomname
+lowcase .byt 00
+
 ; For plotting charts
 
 scroll .byt 0   ; Are we scrolling?
@@ -158,11 +158,80 @@ plotX .byt 00
 plotY .byt 00
 
 
+; Buffer for strings, so they can be centered or justified. Main use is goatsup texts.
+; The speccy version has room for 4 lines of 30 character (120 in total), AND
+; performs justification of texts (which adds more spaces). I guess that is 
+; a good limit for the buffer. As we print 38 characters per line we'd need 152
+; bytes, but I guess 120 should be enough. 
+; Also used for inflight messages.
+
+str_buffer .dsb 120
+
+
 ; For naming planets
 ; Uses a temporal seed
 temp_seed .dsb 6
 ; Use temporal buffer for name
 temp_name .dsb 9
+
+
+; For market
+; Current selection
+_cur_sel .byt $ff
+
+; These are filled when accessing the equip list screen
+
+equip_items .byt 0 ; Number of possible items (for selection)
+equip_flags .word 00   ; Flags with 1's when an item is available
+
+;From radar.s
+; To store objects for plotting the radar
+savX .dsb MAXSHIPS
+savY .dsb MAXSHIPS
+
+
+;From tinefuncs.s
+;; Some Global Variables
+;; that can be used from C
+
+;; General coordinate variables
+_VX .byt 0
+_VY .byt 0
+_VZ .byt 0
+
+;; A vector definition: Should be contiguous!
+_VectX .byt 0,0
+_VectY .byt 0,0
+_VectZ .byt 0,0
+
+;; Position of a ship: Should be contiguous!
+_PosX  .byt 0,0
+_PosY  .byt 0,0
+_PosZ  .byt 0,0
+
+
+; From tactics.s
+
+;; Some variables to decouple firing and drawing the lasers
+_numlasers .byt 00
+_laser_source .dsb 4
+_laser_target .dsb 4
+
+
+; fly_to_ship
+A1   .word 0
+oX   .word 0
+oY   .word 0
+oZ   .word 0
+
+; AIMain
+AIShipID    .byt 00 ; Current ship's ID
+AIShipType  .byt 00 ; Current ship's type
+AITarget    .byt 00 ; Current ship's target
+AIIsAngry   .byt 00 ; Angry status (with target)
+
+
+.text
 
 ; For displaying the market
 mkstrslo
@@ -187,9 +256,6 @@ mkstrshi
 positionsX  
     .byt 20*6, 26*6, 35*6, 2*6, 14*6, 20*6, 26*6, 35*6
 
-
-; Current selection
-_cur_sel .byt $ff
 
 
 

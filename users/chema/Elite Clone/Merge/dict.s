@@ -173,7 +173,7 @@ str_bill    .asc " Billion"
             .byt 0
 str_ly      .asc " Light Years"
             .byt 0
-str_cr      .asc " M CR."
+str_cr      .asc " M Cr."
             .byt 0
 
 ; These are for market
@@ -810,8 +810,9 @@ str_missile
     .byt 0
 
 flight_message_base
-	.asc "INCOMING MISSILE"
+	.asc "Incoming Missile"
 	.byt 0
+
 
 
 __texts_end

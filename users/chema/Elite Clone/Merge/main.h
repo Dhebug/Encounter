@@ -57,6 +57,25 @@
 #define NAME    14
 
 
+
+// Player equipment flags
+//#define EQ_FUEL			1
+//#define EQ_MISSILE		2
+#define EQ_PULSELASER	 1
+#define EQ_LARGECARGO	 2
+#define EQ_ESCAPEPOD	 4
+#define EQ_SCOOPS		 8
+#define EQ_ECM			 16
+#define EQ_ENERGYBOMB	 32
+#define EQ_EXTRAENERGY	 64		
+#define EQ_GALACTICHYPER 128
+
+// High byte
+#define EQ_BEAMLASER	 1
+#define EQ_EXTRASPEED	 2
+#define EQ_EXTRAMAN		 4
+ 
+
 #endif
 
 
