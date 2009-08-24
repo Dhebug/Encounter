@@ -3435,13 +3435,6 @@ more
 ;Print goatsoup correctly
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; The speccy version has room for 4 lines of 30 character (120 in total), AND
-; performs justification of texts (which adds more spaces). I guess that is 
-; a good limit for the buffer. As we print 38 characters per line we'd need 152
-; bytes, but I guess 120 should be enough. 
-
-str_buffer .dsb 120
-
 print_goatsoup
 .(
 

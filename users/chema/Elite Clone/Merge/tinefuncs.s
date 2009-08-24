@@ -7,25 +7,6 @@
 #include "oobj3d\params.h"
 
 
-;; Some Global Variables
-;; that can be used from C
-
-;; General coordinate variables
-_VX .byt 0
-_VY .byt 0
-_VZ .byt 0
-
-;; A vector definition: Should be contiguous!
-_VectX .byt 0,0
-_VectY .byt 0,0
-_VectZ .byt 0,0
-
-;; Position of a ship: Should be contiguous!
-_PosX  .byt 0,0
-_PosY  .byt 0,0
-_PosZ  .byt 0,0
-
-
 ;; Main functions
 
 ;; Some extensions of obj3d
@@ -106,6 +87,7 @@ pixel_address
 ;; LaunchShipFromOther
 ;; Launches a ship from current ship
 ;; Reg A contains the new ship type
+;; Returns the new ship ID in reg X
 
 LaunchShipFromOther
 .(
@@ -167,7 +149,7 @@ AddSpaceObject
 
     ; See if we have enough space...
     lda NUMOBJS
-    cmp #MAXSHIPS
+    cmp #(MAXSHIPS)
     bne roomok
 noroom  
     ldx #0
@@ -224,8 +206,6 @@ saveModelIndex
     sta _flags,x
     sta _ttl,x
     sta _ai_state,x
-
-
 
 ;nopos
     rts
@@ -291,8 +271,8 @@ GetShipPos
 .(
     jsr GetObj
 
-    STA POINT        ;Object pointer
-    STY POINT+1
+    sta POINT        ;Object pointer
+    sty POINT+1
 
     ldy #0
     lda (POINT),y
@@ -327,8 +307,8 @@ GetShipType
 .(
     jsr GetObj
    ; Check ship ID byte...
-    STA POINT        ;Object pointer
-    STY POINT+1
+    sta POINT        ;Object pointer
+    sty POINT+1
     ldy #ObjID
     lda (POINT),y
     rts
@@ -344,13 +324,29 @@ GetShipEquip
 .(
     jsr GetObj
    ; Check ship ID byte...
-    STA POINT        ;Object pointer
-    STY POINT+1
-    ldy #ObjData
+    sta POINT        ;Object pointer
+    sty POINT+1
+    ldy #ObjUser
     lda (POINT),y
     rts
 .)
 
+
+; Sets the user byte (equipment)
+; of the ship given in reg X
+; as the value given in reg a
+SetShipEquip
+.(
+	pha
+	jsr GetObj
+	; Check ship ID byte...
+    sta POINT        ;Object pointer
+    sty POINT+1
+    ldy #ObjUser
+	pla
+    sta (POINT),y
+    rts
+.)
 
 
 ;; For moving ships
@@ -369,8 +365,8 @@ _MoveShips
     beq end 
 
 loop
-    STA POINT        ;Object pointer
-    STY POINT+1
+    sta POINT        ;Object pointer
+    sty POINT+1
 
     ; Get ship ID byte...
     ldy #ObjID
@@ -1053,7 +1049,7 @@ divQ
     sta op2+1
 
     jsr unsgn
-    jsr divu;DIVXY
+    jsr divu	;DIVXY
     ; X low resultado, A hi resultado
             
     ; Multiplicar por 64 y quedarse con el byte alto

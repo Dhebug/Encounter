@@ -188,13 +188,9 @@ Init3D
          ; Oric port: Let's put center in center :)
 
          ldx #119
-         ;ldy #99
          ldy #63
 
-         ;JSR VERSION
-         ;BPL NOM
-         ;LDX #79          ;tab_multicolor
-NOM      STX XOFFSET
+	     STX XOFFSET
          STY YOFFSET
 
 
@@ -1068,14 +1064,12 @@ ccall
 
         ldx RTEMPA
 
-        ; Save this in the debug value
-        lda CZ,x
-        sta dbg
         lda HCZ,x
-        sta dbg+1
-        
         sta _planet_dist
-        rts
+#ifdef DBGVALUES
+		jsr saveposdbg
+#endif		
+		rts
 
 .)
 
@@ -1806,7 +1800,26 @@ no_inc2
 
 .)
 
-
+#ifdef DBGVALUES
+saveposdbg
+.(
+          ; Save this in the debug value
+        lda CX,x
+        sta dbg1
+        lda HCX,x
+        sta dbg1+1
+        lda CY,x
+        sta dbg2
+        lda HCY,x
+        sta dbg2+1
+        lda CZ,x
+        sta dbg3
+        lda HCZ,x
+        sta dbg3+1
+	
+		rts
+.)
+#endif
 
 __obj3d_end
 

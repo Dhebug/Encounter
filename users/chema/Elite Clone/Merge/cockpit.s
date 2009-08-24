@@ -24,6 +24,47 @@ loop
 .)
 
 
+
+flight_message_loot
+.(
+
+	inc capson
+	inc print2buffer
+	lda #0
+	sta buffercounter
+    lda #<Goodnames
+	sta tmp0
+    lda #>Goodnames
+    sta tmp0+1
+    jsr search_string_and_print
+	
+	dec print2buffer
+	dec capson
+
+	jmp flight_message_end
+.)
+
+
+
+flight_message_bounty
+.(
+
+	inc capson
+	inc print2buffer
+	lda #0
+    sta buffercounter
+	jsr print_float
+	jsr put_space
+	lda #<str_credits
+	ldx #>str_credits
+	jsr print
+	dec print2buffer
+	dec capson
+
+	jmp flight_message_end
+.)
+
+
 ; Pass X=message id
 
 flight_message
@@ -34,17 +75,22 @@ flight_message
 	beq cont
 	rts
 cont*/
-	; Print message id to buffer
+	
 	lda #<flight_message_base
 	sta tmp0
 	lda #>flight_message_base
 	sta tmp0+1
+
+	; Print message id to buffer
 	inc print2buffer
+	inc capson
 	lda #0
     sta buffercounter
 	jsr search_string_and_print
 	dec print2buffer
+	dec capson
 
++flight_message_end
 	; Calculate length of string
 	jsr strlen
 	txa

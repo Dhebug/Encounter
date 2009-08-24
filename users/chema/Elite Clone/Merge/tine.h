@@ -4,7 +4,7 @@
 /* Some defines for TINE */
 /* Maximum number of simultaneous ships */
 
-#define MAXSHIPS 20
+#define MAXSHIPS 10
 
 //#define OLDROLLS
 
@@ -14,18 +14,24 @@
 #define IS_DISAPPEARING     2 
 #define IS_HYPERSPACING     4 
 #define IS_DOCKING          8 
+#define FLG_FLY_TO_PLANET   16
+#define FLG_FLY_TO_HYPER    32
+#define FLG_INNOCENT		64
 
 
 // Values for the _ai_state field
 
 #define IS_AICONTROLLED     128
 
-#define FLG_FLY_TO_PLANET     1
-#define FLG_FLY_TO_HYPER      2
-#define FLG_SLOW              4
-#define FLG_BOLD              8
-#define FLG_POLICE           16
-#define FLG_DEFENCELESS      32
+#define FLG_SLOW              1
+#define FLG_BOLD              2
+#define FLG_POLICE            4
+#define FLG_DEFENCELESS       8 
+#define FLG_TRADER			 16
+#define FLG_BOUNTYHUNTER     32
+#define FLG_PIRATE			 64
+
+
 
 
 // Values for _target field

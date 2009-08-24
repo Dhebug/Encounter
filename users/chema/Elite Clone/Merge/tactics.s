@@ -117,10 +117,6 @@ end
 ; for which we are running the AI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-AIShipID    .byt 00 ; Current ship's ID
-AIShipType  .byt 00 ; Current ship's type
-AITarget    .byt 00 ; Current ship's target
-AIIsAngry   .byt 00 ; Angry status (with target)
 
 AIMain
 .(
@@ -173,7 +169,6 @@ loop
  
     
     ; Missile explodes
-    ;jsr GetCurOb
     ldx AIShipID
     lda _flags,x
     and #%11110000  ; Remove older flags...
@@ -211,20 +206,48 @@ nohit
 
 nomissile
     ;; It was NOT a missile, but another kind of ship
+
     ; Update energy
+	ldy AIShipType
+	lda ShipEnergy-1,y
+	cmp _energy,x
+	beq maxen
+	inc _energy,x
+maxen
 
     ; If it is a THARGON and there are no THARGOIDS
     ; halve speed and set ai_state=0 and rts
     
     ; Get a random number
     jsr _gen_rnd_number
+	ldx AIShipID	; Get back X with ship ID, as it was destroyed by gen_rnd_number
 
-    ; If FLAG_TRADER and r1>100 rts
-
-    ; If FLAG_BOUNTYHUNTER and our legal status >=40 set angry flag and target us (=1)
-
-    ; If FLAG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
-
+    ; If FLG_TRADER and r1>100 rts
+	lda _ai_state,x
+	and #FLG_TRADER
+	beq notrader
+	lda _rnd_seed+1
+	cmp #100
+	bcc approach	; if <100 continue and no rts
+	rts
+notrader
+    ; If FLG_BOUNTYHUNTER and our legal status >=40 set angry flag and target us (=1)
+	lda _ai_state,x
+	and #FLG_BOUNTYHUNTER
+	beq nobounty
+	; If already targetting someone, keep it
+	lda AITarget
+	bne approach
+	lda _legal_status
+	cmp #40
+	bcc approach ; if <40 continue and don't target us
+	lda #%10000001
+	sta _target,x
+	lda #1
+	sta AITarget
+nobounty
+    ; If FLG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
+	
 
 approach
     ; If a moving ship has a target, make her go
@@ -241,15 +264,6 @@ end
 .)
 
 
-;; Some variables to decouple firing and drawing the lasers
-_numlasers .byt 00
-_laser_source .dsb 4
-_laser_target .dsb 4
-
-A1  .word 0
-oX   .word 0
-oY   .word 0
-oZ   .word 0
 
 ;; fly_to_ship
 ;; Makes current object fly towards a given ship
@@ -323,10 +337,34 @@ areangry
     cmp _energy,x
     bcc nocriten
     ; Launch escape pod if fitted 
-    jmp nolowen
-    rts
+	jsr GetShipEquip
+	and #(HAS_ESCAPEPOD)
+	beq nocriten
+	; fitted, launch it and leave ship without management
+	lda _speed,x
+	lsr
+	sta _speed,x
+	lda #$fd ; -3
+	sta _accel,x
+	lda #0
+	sta _ai_state,x
+
+	lda #SHIP_ESCAPE
+	jsr LaunchShipFromOther
+	cpx #0
+	bne noerror
+	;;;; Could not create Escape POD!!
+	rts
+noerror
+	lda #2	; Planet
+	sta _target,x
+	lda #(FLG_FLY_TO_PLANET|FLG_INNOCENT)
+	sta _flags,x
+	lda #(IS_AICONTROLLED|FLG_DEFENCELESS)
+	sta _ai_state,x
+	rts
 nocriten
-    ; Can we launch a missile
+    ; Can we launch a missile?
     lda _missiles,x
     and #%00000011
     beq nolowen
@@ -336,6 +374,7 @@ nocriten
     beq nolowen ; Could not fire missile
     ldx AIShipID
     dec _missiles,x
+	rts
 nolowen
 
     ; If we arrive here energy is still high or we didn't
@@ -355,6 +394,11 @@ nolowen
 
     ; Check if laser is fitted... check FLAG_DEFENCELESS?
     ; if none goto toofar
+	
+	ldx AIShipID
+	lda _ai_state,x
+	and #FLG_DEFENCELESS
+	bne toofar
     
     ; We can shoot, so let's do it
     
@@ -463,41 +507,32 @@ notneg2
 
     ; What if our target is a planet? Then if want to dock, dock
 	ldx AIShipID
-	lda _ai_state,x
+	;lda _ai_state,x
+	lda _flags,x
 	and #FLG_FLY_TO_PLANET
 	beq nodock
 
 	; Dock to planet
 	lda #IS_DOCKING
+	ora _flags,x
 	sta _flags,x
 	rts
 	
 nodock
     
 	; On collision course, invert everything
+	ldx #4
+loopinv
     lda #0
     sec
-    sbc _VectX
-    sta _VectX
+    sbc _VectX,x
+    sta _VectX,x
     lda #0
-    sbc _VectX+1
-    sta _VectX+1
-
-    lda #0
-    sec
-    sbc _VectY
-    sta _VectY
-    lda #0
-    sbc _VectY+1
-    sta _VectY+1
-
-    lda #0
-    sec
-    sbc _VectZ
-    sta _VectZ
-    lda #0
-    sbc _VectZ+1
-    sta _VectZ+1
+    sbc _VectX+1,x
+    sta _VectX+1,x
+	dex
+	dex
+	bpl loopinv
 
     lda #0
     sec
@@ -765,57 +800,86 @@ ExplodeObject
     ; Generate some debris
 
     lda _rnd_seed+1
-    and #%00001111
-    ora #%00001000
+    and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly :/
+    ora #%00000100
     sta tmp3
 loop
     jsr SetCurOb
 
-    lda #(SHIP_DEBRIS|SHIP_NORADAR) ; #SHIP_ALLOY
+    lda #(SHIP_DEBRIS|SHIP_NORADAR)
     jsr CreatePart
     
     ldx _ID
     dec tmp3
     bne loop
 
-    ; Now some plates, if exploding
+    ; Now some loot, if exploding
     ; object is a ship
-    ;jsr GetObj
-    ;sta tmp
-    ;sty tmp+1
-
-    ;ldy #ObjID
-    ;lda (tmp),y
-    and #%01111111   
     jsr GetShipType
+    and #%01111111   
     cmp #SHIP_VIPER
     bcc nomore  ; if it is space junk nothing more...
 
-    lda _rnd_seed+2
-    and #%00000011
-    clc
-    adc #1
-    ;ora #%00000001
+	lda #SHIP_ALLOY
+	jsr ReleaseRandom
+	lda #SHIP_CARGO
+	jsr ReleaseRandom
+
+nomore
+
+	ldx _ID
+	jsr SetCurOb	; Without this destroying player's ship does NOT work!!!
+    jmp RemoveObject
+
+.)
+
+
+; Release random loot
+; Pass a=type, _ID=parent's id 
+
+ReleaseRandom
+.(
+    sta type+1	
+	jsr _gen_rnd_number
+	ldx _ID
+	cpx #1	; if it is the player's ship, release allways
+	bne noplayer
+
+	lda #%01111111
+	sta _rnd_seed+1
+noplayer
+    lda _rnd_seed+1
+	bmi nomore
+
+	cpx #1
+	bne cont
+	lda #2
+	sta tmp3
+	lda #SHIP_ALLOY
+	sta type+1
+	jmp loop2
+cont
+    jsr GetShipType
+    and #%01111111   
+	tax
+    lda _rnd_seed+1
+ 	and ShipCargo-1,x
+    and #$0f
+	beq nomore
     sta tmp3
+	ldx _ID
 loop2
     jsr SetCurOb
-    lda #SHIP_ALLOY
+type
+    lda #0	;SMC
     jsr CreatePart
     
     ldx _ID
     dec tmp3
-    bpl loop2
+    bne loop2
 
 nomore
-
- 
-    ;lda #IS_DISAPPEARING
-    ;ora _flags,x
-    ;sta _flags,x
-
-    ;rts
-    jmp RemoveObject
-
+	rts
 .)
 
 
@@ -834,27 +898,23 @@ nofailure
     lda #3
     sta _rotz,x
 
-    ; Make it disappear soon
-    lda #IS_DISAPPEARING
-    ora _flags,x
-    sta _flags,x
 
 savA
     lda #0  ;SMC
     and #%01111111  ; Remove flag
     cmp #SHIP_DEBRIS
     bne nodeb
- 
+
+    ; Make it disappear soon
+    lda #IS_DISAPPEARING
+    ora _flags,x
+    sta _flags,x
+
     lda _rnd_seed
     and #%00000111
-    ;ora #%00001000
     ora #%00000100
-    jmp setttl
+	sta _ttl,x
 nodeb
-    lda #255    
-setttl
-    sta _ttl,x
-    
     jsr SetCurOb
 
     jsr _gen_rnd_number
@@ -864,9 +924,7 @@ setttl
     jsr SetMat
    
     lda #5
-    jmp MoveForwards
-
-    ;rts
+    jmp MoveForwards ; This is JSR/RTS
 
 .)
 
@@ -935,7 +993,7 @@ _CheckHits
     jsr GetNextVis
     bmi end
 loop
-    stx sav_x+1
+    stx theobject
     sta POINT
     sty POINT+1    
 
@@ -943,8 +1001,44 @@ loop
     beq no_hit
 
     ; HIT
-sav_x
-    lda #0
+	; Can we scoop?
+	lda _equip
+	and #EQ_SCOOPS
+	beq noscoop
+	; Is the object below us?
+	lda HCY,x	
+	bmi noscoop ; Y coordinates are INVERTED!!!! BEWARE
+	; Do we have space?
+	lda _holdspace
+	beq noscoop
+
+	; Look at ship's type
+	ldx theobject
+	jsr GetShipType
+	cmp #SHIP_CARGO
+	bne nocannister
+	jsr _gen_rnd_number
+	and #$0f
+	jsr scoop_item
+	jmp no_hit
+nocannister
+	; Not a cannister, scoop, depending on type
+	tax
+	lda ShipCargo-1,x
+	ldx #4
+loopd
+	lsr
+	dex
+	bne loopd
+	cmp #0
+	beq noscoop
+	clc
+	adc #1
+	jsr scoop_item
+	jmp no_hit
+
+noscoop
+    lda theobject
     ldx _num_collisions
     sta _collision_list,x
     inc _num_collisions
@@ -964,6 +1058,21 @@ none
 
 .)
 
+theobject .byt 0
+
+
+scoop_item
+.(
+	tax
+	stx saveme+1
+	jsr flight_message_loot
+
+saveme
+	ldx #0 ; SMC
+	inc _shipshold,x
+	ldx theobject
+	jmp RemoveObject ; This is jsr/rts
+.)
 
 ;; Check if an object is too near: collision or scoop
 ;; X is obj ID, POINT does have the pointer to object record pre-loaded
@@ -989,10 +1098,7 @@ hit
     lda (POINT),y
     ; Remove flags to get Object's type
     and #%01111111
-
-    ;; What to do if it is a planet?
-    ;; Collisions this way are reported too late (when the planet circle is wrongly drawn!)
-
+  
     beq yes_hit 
     cmp #SHIP_DEBRIS+1
     bcc no_hit  ; Not with debris nor missiles
@@ -1013,6 +1119,7 @@ no_hit
 ; Perform damage of ships and explodes them, if necessary
 ; Params: Reg X is ship ID, Reg A is damage amount.
 ; Reg Y who is making the damage
+#ifdef 0
 damage_ship
 .(
 
@@ -1038,7 +1145,8 @@ damage_ship
 	bne noinckills
 	; The player killed this...
 	; Reg X already contains the ship's ID
-	jsr increment_kills
+	jmp increment_kills
+
 noinckills
     jmp end 
 
@@ -1059,38 +1167,49 @@ noplayer
 
 .)
 
-;; make_angry
-;; Makes a ship angry at another.
-;; but first checks if this is possible
-;; and the reaction is logical.
-;; Params: reg A is the ship ID
-;;         reg X is the bad guy
-make_angry
+
+#endif
+
+
+damage_ship
 .(
+	; If damaging the player, behave differently
+	cpx #1
+	beq damage_player
 
-   ; Check for pressence of FLAG_DEFENCELESS
-   ; and behave also depending on type of ship (FLAG)
-   ; police allways get angry, pirates and bounty may
-   ; and others may with a smaller probability...
-   ; and depending on their ammo.
-
-
-    cmp #2  ; Don't make player angry
-    bcc cannot
-
-    tay
-
-    ; If he is already angry, he might not change his mind
-    lda _target,y
-    bmi cannot  ; IS_ANGRY is the 7th bit
-    
-    txa
-    ora #IS_ANGRY
-    sta _target,y
-
-cannot
-    rts
-
+	; Making damage to another ship
+	sta tmp
+    lda _flags,x
+	and #IS_EXPLODING
+	beq dodam	
+	; Can't do damage here, has already been killed
+elrts
+	rts
+dodam
+	; We perform damage
+    lda _energy,x
+    sec
+    sbc tmp
+    sta _energy,x
+    bcs nokill
+killit
+	; Target destroyed
+	lda #0
+dbug beq dbug
+    lda _flags,x
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags,x
+    lda #0
+    sta _ttl,x
+	cpy #1
+	bne nokill
+	; The player killed this...
+	; Reg X already contains the ship's ID
+	jsr increment_kills
+nokill
+    ; Make a nice sound
+    jmp _shoot	; this is jsr/rts
 .)
 
 
@@ -1098,10 +1217,10 @@ cannot
 ; Perform damage of player
 ; Params: Reg A is damage amount. Reg X equals 1
 
+#ifdef 0
 damage_player
 .(
- 
-    lda _flags+1
+      lda _flags+1
     and #%IS_EXPLODING
     beq nokill    
    
@@ -1152,6 +1271,116 @@ nokill
     ; Just update screen indicators and such...
     rts
 .)
+#endif
+
+damage_player
+.(
+	sta tmp
+    lda _energy+1
+    sec
+    sbc tmp
+    sta _energy+1
+    bcs nokill
+	; maybe take hull into account here?
+    
+    ; Player killed - uh oh
+   ; Make it still
+    lda #0
+    sta _speed+1 
+    sta _rotx+1
+    sta _roty+1
+    sta _rotz+1   
+    sta _accel+1
+#ifndef OLDROLLS
+    sta a_y
+    sta a_p
+    sta a_r
+#endif
+    lda _flags+1
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags+1
+
+    ; Delay explosion a bit
+    lda #3
+    sta _ttl+1
+    
+    jsr SetCurOb
+    lda #DEBRIS	; Anything would do...
+    jsr LaunchShipFromOther
+
+    ; Set it as view object
+    stx VOB
+
+	; make it rotate and move
+	;lda #4
+	;sta _rotz,x
+	;lda #2
+	;sta _speed,x
+	
+    ; Push it a bit
+    jsr SetCurOb
+    lda #$9c     ; -100
+    jsr MoveForwards
+
+    ; Disable keyboard...
+    lda #0
+    sta player_in_control
+
+nokill
+    ; Player not killed
+    ; Just update screen indicators and such...
+    ; Make a nice sound
+    jsr _shoot	; this is jsr/rts
+
+    rts
+.)
+
+
+
+;; make_angry
+;; Makes a ship angry at another.
+;; but first checks if this is possible
+;; and the reaction is logical.
+;; Params: reg A is the ship ID
+;;         reg X is the bad guy
+make_angry
+.(
+
+   ; Check for pressence of FLAG_DEFENCELESS
+   ; and behave also depending on type of ship (FLAG)
+   ; police allways get angry, pirates and bounty may
+   ; and others may with a smaller probability...
+   ; and depending on their ammo.
+
+    cmp #2  ; Don't make player angry
+    bcc cannot
+
+    tay
+
+	; If it is not ai-controleld, leave it
+	lda _ai_state,y
+	bpl cannot
+
+	; If the ship is defenceless, he cannot be angry, but should make police angry
+	lda _flags,y
+	and #FLG_DEFENCELESS 
+	bne cannot
+
+    ; If he is already angry, he might not change his mind
+    lda _target,y
+    bmi cannot  ; IS_ANGRY is the 7th bit
+    
+    txa
+    ora #IS_ANGRY
+    sta _target,y
+
+cannot
+    rts
+
+.)
+
+
 
 .byt count
 handle_collisions
@@ -1167,6 +1396,7 @@ loop
     sta enemy_energy+1
     lda _energy+1   ; Get player's energy/2
     lsr
+	ldy #1
     jsr damage_ship ; Damage enemy
 
    ; Make him angry at us
@@ -1197,27 +1427,49 @@ _Lasers
 loop
     ldy _numlasers
 
+	lda _laser_source-1,y
+	tax
+	lda _vertexXLO,x
+	ora _vertexXHI,x
+	ora _vertexYLO,x
+	ora _vertexYHI,x
+	pha
+	lda _laser_target-1,y
+	tax
+	pla
+	ora _vertexXLO,x
+	ora _vertexXHI,x
+	ora _vertexYLO,x
+	ora _vertexYHI,x
+	beq nextl
+
     lda _laser_source-1,y
     tax
     lda _vertexXLO,x
     sta X1        
     lda _vertexXHI,x
+#ifdef 0
     bmi neg1
     lda #0
-    beq post1
+	.byt $2c
+    ;beq post1
 neg1
     lda #$ff
 post1
+#endif
     sta X1+1        
     lda _vertexYLO,x
     sta Y1        
     lda _vertexYHI,x
+#ifdef 0
     bmi neg2
     lda #0
-    beq post2
+	.byt $2c
+    ;beq post2
 neg2
     lda #$ff
 post2
+#endif
     sta Y1+1        
 
     lda _laser_target-1,y
@@ -1225,27 +1477,33 @@ post2
     lda _vertexXLO,x
     sta X2   
     lda _vertexXHI,x
+#ifdef 0
     bmi neg3
     lda #0
-    beq post3
+    ;beq post3
+	.byt $2c
 neg3
     lda #$ff
 post3
+#endif
     sta X2+1        
     lda _vertexYLO,x
     sta Y2        
     lda _vertexYHI,x
+#ifdef 0
     bmi neg4
     lda #0
-    beq post4
+    ;beq post4
+	.byt $2c
 neg4
     lda #$ff
 post4
+#endif
     sta Y2+1        
 
     
     jsr _DrawClippedLine
-
+nextl
     dec _numlasers
     bne loop
 end
@@ -1339,9 +1597,13 @@ Coords
 ; Params: reg X is destroyed ship's ID
 increment_kills
 .(
+
+	stx saveid+1
 	jsr GetShipType
 	; Remove cloacking bit
 	and #%01111111
+	cmp #2
+	beq nobounty	; Nothing for debris (?)
 	asl
 	tax
 	lda ShipKillValue-2,x
@@ -1354,6 +1616,49 @@ increment_kills
 	bcc all
 	inc _score+1
 all
+
+saveid
+	ldy #0	;SMC
+	lda _flags,y
+	and #FLG_INNOCENT
+	beq bounty
+	
+	; Man, he was innocent, should pay consequencies for that
+	lda _ai_state,y
+	and #FLG_DEFENCELESS
+	bne nodefense
+	; He was asking for it
+	lda #1
+	bne addfine ; This is a jmp
+nodefense
+	; You coward!
+	lda #($40*2)
+loopfine
+	lsr 
+	bit _legal_status
+	bne loopfine
+addfine
+	clc
+	adc _legal_status
+	bcs noadd
+	sta _legal_status
+noadd
+	rts
+bounty
+	; Now the bounty, if any
+	txa
+	lsr
+	tax
+	lda ShipBountyLo-1,x
+	sta op2
+	ora ShipBountyHi-1,x
+	beq nobounty
+	lda ShipBountyHi-1,x
+	sta op2+1
+	jsr inc_cash
+	jsr flight_message_bounty 
+	
+nobounty
 	rts
 .)
 

@@ -1,3 +1,5 @@
+#ifndef PARAMS_H
+#define PARAMS_H
 
 #define CLIP_BORDER	1
 //40
@@ -41,6 +43,10 @@
 
 
 #define USE_ACCURATE_CLIPPING
+
+#endif
+
+
 
 
 
