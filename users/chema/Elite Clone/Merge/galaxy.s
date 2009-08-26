@@ -3329,17 +3329,17 @@ loop2
     jsr perform_CRLF
     sec
 noitem 
-    ror equip_flags
     ror equip_flags+1
+    ror equip_flags
     inc count2
     lda count2
     cmp #13
     bne loop2  
     
-    ldx #3
+    ldx #3	; Items not implemented 
 loop
-    lsr equip_flags
-    ror equip_flags+1    
+    lsr equip_flags+1
+    ror equip_flags    
     dex
     bne loop
 
@@ -3370,14 +3370,7 @@ print_equ_item
     jsr gotoX    
     lda count2
     bne cont
-    ; It is fuel, put the price to get 7.0 LY of travel...
-    lda #70
-    sec
-    sbc _fuel
-    asl ; Fuel is 0.2 Cr/LY
-    sta op2
-    lda #0
-    sta op2+1
+	jsr fuel_price
     jmp cont2
 cont
     tax
@@ -3393,22 +3386,204 @@ cont2
 .)
 
 
-;;;; Changing galaxy
+; Calculate price for fuel and store in op2, op2+1
+; to get 7.0 LY of travel...
 
-;Rotate reg A left once. Carry is put in bit 0.
-crol
+fuel_price
 .(
-    asl
-    adc #0
+    lda #70
+    sec
+    sbc _fuel
+    asl ; Fuel is 0.2 Cr/LY
+    sta op2
+    lda #0
+    sta op2+1
+	rts
+.)
+
+;; Buy new equipment
+buy_equip
+.(
+
+;	lda #0
+;dbug beq dbug
+	ldx _cur_sel
+	cpx #$ff
+	bne valid
+	rts
+valid
+    ; check if there is something for sale
+    ldx _cur_sel
+    bne nofuel
+	; It is fuel, calculate price
+	jsr fuel_price
+    jmp cont
+nofuel
+    ; check for cash
+    ; Get price in op2
+    lda priceseqLO,x
+    sta op2
+    lda priceseqHI,x
+    sta op2+1
+cont
+    jsr enough_cash
+    bcs cash
+	jmp nocash
+cash
+	; Need flag position
+	jsr find_flag_equip
+
+	; Check if it is fuel or missile
+	lda tmp0
+	and #%11
+	beq normal
+	
+	; Fuel or missile?
+	ror
+	bcc missile
+
+	; Buy fuel	
+	lda #70
+	sta _fuel
+	jmp payfor 
+missile
+	; Buy missile
+	; Can we fit a missile?
+	; Do we have room for it?
+	jmp payfor
+
+normal	
+	; Remove fuel and missile
+	lsr tmp0+1
+	ror tmp0
+	lsr tmp0+1
+	ror tmp0
+
+    ; Can our ship fit this item?
+
+	; Do we have it equipped already?
+
+	lda tmp0
+	and _equip
+	bne alreadyfit
+	lda tmp0+1
+	and _equip+1
+	bne alreadyfit
+
+	; And ad it to our equipment
+	lda tmp0+1
+	and #%00000100	; Beam laser?
+	beq nobeam
+	lda _equip+1
+	and #%11110111
+	sta _equip+1
+	lda _equip
+	and #%11111110
+	sta _equip
+	jmp setflag
+nobeam
+	lda tmp0+1
+	and #%00001000	; Military laser?
+	beq nomil
+	lda _equip+1
+	and #%11111011
+	sta _equip+1
+	lda _equip
+	and #%11111110
+	sta _equip
+	jmp setflag
+nomil
+	lda tmp0
+	and #%00000001	; Pulse laser?
+	beq nopulse
+	lda _equip+1
+	and #%11110011
+	sta _equip+1
+	jmp setflag
+nopulse
+
+	lda tmp0
+	and #%00001000 ; Large cargo bay
+	bne nocargo
+	lda _holdspace
+	clc
+	adc #10
+	sta _holdspace
+	jmp setflag
+nocargo
+
+
+setflag
+	lda tmp0
+	ora _equip
+	sta _equip
+	lda tmp0+1
+	ora _equip+1
+	sta _equip+1
+
+payfor
+    jsr dec_cash
+    jmp _displayequip
+
+	;jmp mkt_status	; Update cash
+nofit
+alreadyfit
+nocash
+end
     rts
 .)
+
+find_flag_equip
+.(
+
+	lda equip_flags+1
+	sta tmp
+	lda equip_flags
+
+	ldx #1
+	stx tmp0
+	dex
+	stx tmp0+1
+
+	ldy #16
+	;ldx #0
+loop
+	lsr tmp
+	ror 
+	bcc no_item
+	; This item exists
+	cpx _cur_sel
+	beq end
+	inx
+no_item
+	asl tmp0
+	rol tmp0+1
+	dey
+	bne loop
+end
+	rts
+.)
+
+
+;;;; Changing galaxy
+
+
+;Rotate reg A left once. Carry is put in bit 0.
+;crol
+;.(
+;    asl
+;    adc #0
+;    rts
+;.)
 
 _enter_next_galaxy
 .(
     ldx #5
 loop
     lda _base0,x
-    jsr crol
+    ;jsr crol
+	asl
+	adc #0
     sta _base0,x
     dex
     bpl loop

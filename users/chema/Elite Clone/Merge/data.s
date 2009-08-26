@@ -23,19 +23,19 @@
 _name			.asc "Jameson"          ; Commander's name
 				.byt 00 
 				.dsb 24 
-_shipshold		.dsb 17;34                 ; Contents of cargo bay
+_shipshold		.dsb 17;34              ; Contents of cargo bay
 _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
 _cash			.byt $d0,$07            ; Four bytes for cash
-				.byt $00,$00
+				.byt $10,$00
 _fuel			.byt 50                 ; Amount of fuel
 _fluct			.byt 0                  ; Price fluctuation
-_holdspace		.word 20                ; Current space left in cargo bay
+_holdspace		.byt 20 ;.word 20       ; Current space left in cargo bay
 _legal_status	.byt 50                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 _score_rem		.byt 00					; Score, remainder
 _score			.word 00000             ; Current score
 _mission		.byt 0                  ; Current mission
-_equip			.word $000f             ; Equipment flags
+_equip			.word $0009             ; Equipment flags
 _ship_type      .byt SHIP_COBRA3        ; Current player's ship
 
 

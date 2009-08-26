@@ -4,7 +4,7 @@
 /* Some defines for TINE */
 /* Maximum number of simultaneous ships */
 
-#define MAXSHIPS 10
+#define MAXSHIPS 15
 
 //#define OLDROLLS
 
