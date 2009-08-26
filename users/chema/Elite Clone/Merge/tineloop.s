@@ -260,6 +260,7 @@ _InitTestCode
          stx savid+1   
          lda _ai_state,x
          ;ora #(IS_AICONTROLLED | FLG_BOUNTYHUNTER)   
+		 ;ora #(IS_AICONTROLLED | FLG_POLICE)   
 		 ora #(IS_AICONTROLLED)   
          sta _ai_state,x
 
@@ -720,10 +721,6 @@ nolock
 fireL   jmp FireLaser
         
 
-;setdbg  
-;        jsr save_frame
-;        jmp _nospace_loop
-
 ;H
 galhyper
         lda #SCR_FRONT
@@ -817,20 +814,12 @@ gal_chart
 
 ;6
 market
-;    lda _docked
-;    bne cont
-;    rts
-;cont
     lda #SCR_MARKET
     sta _current_screen
     jmp _displaymarket
 
 ;7
 equip
-;    lda _docked
-;    bne cont2
-;    rts
-;cont2
     lda #SCR_EQUIP
     sta _current_screen
     jmp _displayequip
@@ -959,6 +948,7 @@ sele
     cmp #SCR_EQUIP
     bne ret
     ; Jump to acquire equipment
+	jmp buy_equip
 ret
     rts
 doit2

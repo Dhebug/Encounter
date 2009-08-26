@@ -62,6 +62,7 @@ loopi
 	bcc loopi
 
     ; Call routine for each flag kind...
+
     lda dis_tab_lo,y
     sta jump+1
     lda dis_tab_hi,y
@@ -120,6 +121,8 @@ end
 
 AIMain
 .(
+	; Save some variables for later access
+
     stx AIShipID
     lda _target,x
     sta AIIsAngry
@@ -127,6 +130,9 @@ AIMain
     sta AITarget
     jsr GetShipType
     sta AIShipType
+
+	; Are we dealing with a missile?
+
     cmp #SHIP_MISSILE
     bne nomissile
     
@@ -138,7 +144,9 @@ AIMain
     ; ;Incrementamos kills y eliminamos el misil
     ; rts
 ;noecm
+
     ; Get vector to target
+
     lda AITarget
     bne cont1
     rts
@@ -146,6 +154,7 @@ cont1
     tax
  
     jsr substract_positions
+
     ;if ( (abs(x)< 256) && (abs(y) < 256) && abs(z) < 256) {
     ldy #4
 loop
@@ -158,9 +167,9 @@ loop
     lda op1+1
     bne nohit
 ; The original is <256, so this is all
-;    lda op1
-;    cmp #70
-;    bcs nohit
+;   lda op1
+;   cmp #100
+;   bcs nohit
     dey
     dey
     bpl loop
@@ -169,6 +178,7 @@ loop
  
     
     ; Missile explodes
+
     ldx AIShipID
     lda _flags,x
     and #%11110000  ; Remove older flags...
@@ -181,6 +191,7 @@ loop
     sta _accel,x
 
     ; Make ship angry at who fired the missile
+
     lda _missiles,x
     tax
 	stx savy+1	; Save it for later
@@ -188,6 +199,7 @@ loop
     jsr make_angry 
  
     ;Perform damage
+
     ldx AITarget
     lda _speed,x
     lsr
@@ -205,7 +217,8 @@ nohit
     jmp approach
 
 nomissile
-    ;; It was NOT a missile, but another kind of ship
+ 
+   ;; It was NOT a missile, but another kind of ship
 
     ; Update energy
 	ldy AIShipType
@@ -217,11 +230,28 @@ maxen
 
     ; If it is a THARGON and there are no THARGOIDS
     ; halve speed and set ai_state=0 and rts
+
+	; If it is a Hermit (?) and rand>200 launch a Sidewinder+rand&3 angry
+	; at us and with ECM and leave Hermit inactive
     
     ; Get a random number
+
     jsr _gen_rnd_number
 	ldx AIShipID	; Get back X with ship ID, as it was destroyed by gen_rnd_number
 
+	; If it is police and legal_status>=64 make it angry at us. Why not simplify this and check the same
+	; for Bounty Hunters and police? See below...
+
+	; If it is slow and rand > 50 rts
+
+	lda _ai_state,x
+	and #FLG_SLOW 
+	beq notslow
+	lda _rnd_seed+1
+	cmp #50
+	bcc notslow
+	rts
+notslow
     ; If FLG_TRADER and r1>100 rts
 	lda _ai_state,x
 	and #FLG_TRADER
@@ -231,10 +261,13 @@ maxen
 	bcc approach	; if <100 continue and no rts
 	rts
 notrader
+
     ; If FLG_BOUNTYHUNTER and our legal status >=40 set angry flag and target us (=1)
+
 	lda _ai_state,x
-	and #FLG_BOUNTYHUNTER
+	and #(FLG_BOUNTYHUNTER|FLG_POLICE)
 	beq nobounty
+
 	; If already targetting someone, keep it
 	lda AITarget
 	bne approach
@@ -246,10 +279,13 @@ notrader
 	lda #1
 	sta AITarget
 nobounty
+
     ; If FLG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
+	; If FLG_BOLD keep on trying!
 	
 
 approach
+
     ; If a moving ship has a target, make her go
     ; for it!
     
@@ -320,6 +356,16 @@ noroll
     bne areangry
     jmp toofar
 areangry    
+
+	; If BOLD he might want to launch a missile
+	ldx AIShipID
+	lda _ai_state,x
+	and #FLG_BOLD
+	beq nobold
+	lda _rnd_seed+1
+	bmi nocriten	; Launch a missile if possible
+nobold
+
     ; Check ship's energy. If it is max/2
     ; check if also less than max/8
     ; if it is
@@ -340,6 +386,7 @@ areangry
 	jsr GetShipEquip
 	and #(HAS_ESCAPEPOD)
 	beq nocriten
+
 	; fitted, launch it and leave ship without management
 	lda _speed,x
 	lsr
@@ -364,11 +411,18 @@ noerror
 	sta _ai_state,x
 	rts
 nocriten
+
     ; Can we launch a missile?
     lda _missiles,x
     and #%00000011
     beq nolowen
+
     ; Launch missile
+
+	; If it is a Thargoid, launch a Targlet (FLG_BOLD set)
+	; else launch a missile. The logic is the same, but launches another
+	; ship, so we defer this to LaunchMissile
+
     jsr SetCurOb
     jsr LaunchMissile   
     beq nolowen ; Could not fire missile
@@ -388,6 +442,7 @@ nolowen
     ; Check if greater (or equal) than $2000 (maximum firing -and visibile- distance)
     ; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
     ; BEWARE! Bug. VectX,Y,Z are now normalized!
+
     lda A1+1
     and #>FIRING_DISTANCE
     bne toofar  
@@ -434,6 +489,7 @@ nolowen
  
 
     ; Make ship angry at who shoots
+
     ldx AIShipID
     lda AITarget
     jsr make_angry
@@ -446,6 +502,7 @@ nolowen
     sta op2+1
     jsr cmp16
     bmi toofar
+
 
     ; We hit!
 
@@ -506,6 +563,7 @@ notneg2
     bne approach
 
     ; What if our target is a planet? Then if want to dock, dock
+
 	ldx AIShipID
 	;lda _ai_state,x
 	lda _flags,x
@@ -521,6 +579,7 @@ notneg2
 nodock
     
 	; On collision course, invert everything
+
 	ldx #4
 loopinv
     lda #0
@@ -719,6 +778,10 @@ _ID .byt $0
 ;; launches a missile
 LaunchMissile
 .(
+
+	; Check ship type. If it is a Thargoid, then launch
+	; Targlet with FLG_BOLD set!
+
     stx savx+1
     lda #SHIP_MISSILE   ; Ship to launch
     jsr LaunchShipFromOther
@@ -1194,8 +1257,8 @@ dodam
     bcs nokill
 killit
 	; Target destroyed
-	lda #0
-dbug beq dbug
+;	lda #0
+;dbug beq dbug
     lda _flags,x
     and #%11110000  ; Remove older flags...
     ora #IS_EXPLODING
