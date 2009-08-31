@@ -133,8 +133,13 @@ negmove3
     jsr STARROTM
 
 nowtheta
+	lda invert
+	beq normal
+	jsr STARSUBZ
+	jmp more
+normal
     jsr STARADDZ  ; This can't be negative...
-
+more
     lda #0
     sta g_alpha
     sta g_beta
@@ -388,7 +393,7 @@ NEGY     CMP #157
          RTS
 .)
 
-#ifdef 0
+
 
 STARSUBZ
 .(          
@@ -412,9 +417,9 @@ LOOP
 
          LDX #0 ; sign
          LDA STARX,Y
-         bpl C2
+         bpl C1
          dex
-C2
+C1
          STX TEMP2
          ldx tmp
 
@@ -474,7 +479,7 @@ NEGY     CMP #240
          BPL LOOP
          RTS
 .)
-#endif
+
 
 
 ;

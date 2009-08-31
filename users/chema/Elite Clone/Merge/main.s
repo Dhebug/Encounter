@@ -57,6 +57,8 @@ _main
 	lda #1
 	sta $24f
 
+	jsr InitPlayerShip
+
 	jsr _hires
 	jsr _init_tine
 	jsr _init_print

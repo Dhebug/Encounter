@@ -37,7 +37,13 @@ _score			.word 00000             ; Current score
 _mission		.byt 0                  ; Current mission
 _equip			.word $0009             ; Equipment flags
 _ship_type      .byt SHIP_COBRA3        ; Current player's ship
+_missiles_left	.byt 3					; Number of missiles
 
+; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
+_p_maxspeed		.byt 0
+_p_maxenergy	.byt 0	
+_p_maxmissiles	.byt 0
+_p_laserdamage	.byt 0
 
 ;typedef struct
 ;{ char a,b,c,d;
