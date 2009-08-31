@@ -667,12 +667,13 @@ FireLaser
     ldx _ID
     beq nohit
 
-    lda _missiles+1; #10 ; Current laser strength. SHOULD CHANGE   
+    ;lda _missiles+1  ;Current laser strength. 
     ; bits 7-3 = Lasers, 0-2 # missiles
-    lsr
-    lsr
-	lsr
+    ;lsr
+    ;lsr
+	;lsr
 	;lsr	; do laser damage/2 (according to elite agb)
+	lda _p_laserdamage
 	ldy #1	; Player does damage
     jsr damage_ship
     

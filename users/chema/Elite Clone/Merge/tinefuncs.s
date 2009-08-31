@@ -349,6 +349,65 @@ SetShipEquip
 .)
 
 
+#define PULSE_LASER		3
+#define BEAM_LASER		5
+#define MILITARY_LASER	8
+
+;; Get the initial stats for player's ship
+InitPlayerShip
+.(
+	ldx _ship_type
+    lda ShipMaxSpeed-1,x
+    sta _p_maxspeed
+	lda ShipEnergy-1,x
+	sta _p_maxenergy
+	lda ShipAmmo+1,x
+	and #%11
+	sta _p_maxmissiles
+
+	; Depending on ship's equipment...
+	
+	lda _equip
+	ror
+	bcc	nopulse
+	;Pulse laser
+	ldx #PULSE_LASER
+nopulse
+	lda _equip+1
+	ror
+	bcc nobeam
+	ldx #BEAM_LASER
+nobeam
+	ror
+	bcc nomil
+	ldx #MILITARY_LASER
+nomil
+
+afterlaser
+	stx _p_laserdamage
+
+	ror 
+	bcc nospeed
+	lda _p_maxspeed
+	clc
+	adc #5
+	sta _p_maxspeed
+
+nospeed
+	lda _equip
+	and #%01000000	; Extra energy
+	beq noenergy
+	clc
+	lda _p_maxenergy
+	adc #10
+	sta _p_maxenergy
+noenergy
+	
+	rts
+.)
+
+
+
 ;; For moving ships
 
 _MoveShips
@@ -426,18 +485,11 @@ g_beta  .byt 0  ; Total rotation in Y (Yaw)
 g_delta .byt 0  ; Total rotation in Z (Roll)
 g_theta .byt 0  ; Total speed?
 
-maxspeed .byt 0
 
 MovePlayer
 .(
     ldx #1
     jsr SetCurOb
-
-    jsr GetShipType
-    and #%01111111
-    tax
-    lda ShipMaxSpeed-1,x
-    sta maxspeed
 
     lda _rotx+1
     cmp #$80
@@ -525,9 +577,9 @@ nadaz
     lda #0
     beq nomax
 noneg    
-    cmp maxspeed
+    cmp _p_maxspeed
     bcc nomax
-    lda maxspeed  
+    lda _p_maxspeed  
 nomax
     sta _speed+1
     sta g_theta
@@ -547,6 +599,7 @@ end
 
 
 ; Needs reg A loaded with field ID of obj3D record
+maxspeed .byt 0
 
 MoveCurrent
 .(

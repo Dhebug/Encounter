@@ -37,11 +37,11 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Check and manage fuel
 
-+ Buy/manage equipment
+- Buy/manage equipment
 
 + Create enemies dynamically
 
-+ Missiles should not destroy planets... (should never target them!). Is this solved now?
+- Missiles should not destroy planets... (should never target them!). Is this solved now?
 
 + Complete AI
 
@@ -54,15 +54,15 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + Bounties added, but it is quite a waste to use 2 bytes for just a couple of cases... Anyway the inflight message with
 the bounty appears maybe too fast? Maybe even before the ship explodes!
 
-+ Scooping is implemented, but it seems that randomly creating the loot harldy creates anything (not even plates). 
+- Scooping is implemented, but it seems that randomly creating the loot harldy creates anything (not even plates). 
 Don't know what is going on here... should check. UPDATE: Seems OK now (but still prob is low).
 
-+ When your ship is destroyed, sometimes everything seems to hung. No apparent reason, but maybe too many objects? 
+- When your ship is destroyed, sometimes everything seems to hung. No apparent reason, but maybe too many objects? 
 Seems not quite probable. Hard to make this repeatable.
 
-+ damage_ship needs a look... it is quite a disaster. DONE. Also modified damage_player to be sure to decouple it...
+- damage_ship needs a look... it is quite a disaster. DONE. Also modified damage_player to be sure to decouple it...
 
-+ I am not sure when, but sometimes increment_kills is called with wrong parameters and fails... Target the ADDER and destroy it when nearby to see. Maybe it was because of the lack of memory? reducing MAXSHIPS to 10 seems to have solved this.
+- I am not sure when, but sometimes increment_kills is called with wrong parameters and fails... Target the ADDER and destroy it when nearby to see. Maybe it was because of the lack of memory? reducing MAXSHIPS to 10 seems to have solved this. SOLVED?
 
 + After moving the laser origin and destination points for drawing to page 4, as they are not initialized, four erroneous lines appear at the first time space is draw.
 
@@ -70,6 +70,8 @@ Seems not quite probable. Hard to make this repeatable.
 
 + Check the escape pod flags. When killing the ADDER it seems that _flags FLG_INNOCENT is not set (?)
 
-+ Our explosion is not quite good... be sure to launch splinters, at least... Ok now it allways launches splinters, but need more MAXOBJS to work. 10 are too low.
+- Our explosion is not quite good... be sure to launch splinters, at least... Ok now it allways launches splinters, but need more MAXOBJS to work. 10 are too low.
 
-
++ If we are to use Fore and Aft shields, we need to modify damage_ship so something (like the carry flag)
+indicates if the damaging ship is in front or not. It is necessary because of missiles (in which the register Y
+indicates the launcher).

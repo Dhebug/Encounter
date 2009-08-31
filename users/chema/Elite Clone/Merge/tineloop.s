@@ -17,6 +17,8 @@ OCEN2    .word -1000            ;X-coord
          .word 1000            ;Y-coord
          .word 1300            ;Z-coord
 
+invert .byt 00
+
 _init_tine
 .(
 
@@ -82,7 +84,7 @@ createship
 	
 	; Set our ship as view object
     stx VOB          
- 
+
     lda _docked
     beq norot
     
@@ -100,7 +102,12 @@ norot
     sta _speed+1
     ;lda #3
     ;sta a_r
-    
+
+   	; And initialize all the stuff (equipment...)
+	jsr InitPlayerShip
+	
+
+
 
     jsr planetpos
     lda #<ONEPLANET
@@ -340,6 +347,33 @@ player_in_control .byt $ff
 #define COUNTER $276
 
 
+invertZ
+.(
+	ldx VOB
+	jsr GetObj
+	clc
+	adc #ObjMat
+    bcc cont
+    iny
+cont
+	sta tmp0
+	sty tmp0+1
+
+	ldy #6
+	ldx #3
+loop
+	sec
+	lda #0
+	sbc (tmp0),y
+	sta (tmp0),y
+	iny
+	dex
+	bne loop
+
+	rts
+.)
+
+
 _TineLoop
 .(
     lda _docked
@@ -379,10 +413,18 @@ nodock
     jsr SetCurOb
     jsr move_stars
     jsr ProcessKeyboard
+
+	lda invert
+	beq noinvert
+	jsr invertZ
+noinvert
+
     ldx VOB
     jsr SetRadar
+
     jsr CalcView
     jsr SortVis   
+
 
     lda _current_screen
     cmp #SCR_FRONT
@@ -391,8 +433,16 @@ nodock
 
     jsr clr_hires2
     jsr DrawAllVis   ;Draw objects
+
     jsr EraseRadar   ; Erase radar
     jsr DrawRadar
+
+	lda invert
+	beq noinvert2
+	jsr invertZ
+noinvert2
+
+
     jsr PlotStars
     jsr _Lasers
     lda _laser_fired
@@ -474,7 +524,7 @@ nodraw
 	jsr print_num_tab	
 #endif
 
-    lda NUMOBJS
+    lda _speed+1
     sta op2
     lda #0
     sta op2+1
@@ -483,6 +533,17 @@ nodraw
 	jsr gotoXY
 	ldx #5
 	jsr print_num_tab	
+
+/*
+    lda NUMOBJS
+    sta op2
+    lda #0
+    sta op2+1
+	ldx #47+48+48+48
+	ldy #0
+	jsr gotoXY
+	ldx #5
+	jsr print_num_tab	*/
 
 
 nofr	 
@@ -709,13 +770,21 @@ deccel
 ;         jmp MoveDown
 
 fireM   
+		; Shoud this be defered to LaunchMissile??
+	    ;lda _missiles+1
+        ;and #%00000011
+		lda _missiles_left
+		beq nolock
+
         jsr FindTarget
         lda _ID
         beq nolock
         sta AITarget
         ldx #1
         jsr SetCurOb
-        jmp LaunchMissile
+        jsr LaunchMissile
+		beq nolock
+		dec _missiles_left
 nolock
         rts
 fireL   jmp FireLaser
@@ -723,6 +792,12 @@ fireL   jmp FireLaser
 
 ;H
 galhyper
+
+		lda invert
+		eor #$ff
+		sta invert
+		rts
+
         lda #SCR_FRONT
         cmp _current_screen
         bne nothing

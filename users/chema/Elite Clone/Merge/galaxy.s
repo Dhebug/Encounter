@@ -1,5 +1,7 @@
 #include "main.h"
 
+
+
 #define itoa itoa2
 
 ; Functions to re-create galaxy and market of Elite
@@ -3314,7 +3316,7 @@ _displayequip
     ;lda #(A_FWWHITE+A_FWCYAN*16+128)
     ;jsr put_code
     dec capson    
-    
+
     ; Loop thru the equip items (16 max, but only 13 implemented for now)
     lda #0
     sta count2    
@@ -3405,8 +3407,6 @@ fuel_price
 buy_equip
 .(
 
-;	lda #0
-;dbug beq dbug
 	ldx _cur_sel
 	cpx #$ff
 	bne valid
@@ -3430,6 +3430,8 @@ cont
     bcs cash
 	jmp nocash
 cash
+
+
 	; Need flag position
 	jsr find_flag_equip
 
@@ -3450,6 +3452,12 @@ missile
 	; Buy missile
 	; Can we fit a missile?
 	; Do we have room for it?
+
+	lda _missiles_left
+	cmp _p_maxmissiles
+	;beq nofit
+	bcs nofit
+	inc _missiles_left
 	jmp payfor
 
 normal	
@@ -3470,37 +3478,10 @@ normal
 	and _equip+1
 	bne alreadyfit
 
-	; And ad it to our equipment
-	lda tmp0+1
-	and #%00000100	; Beam laser?
-	beq nobeam
-	lda _equip+1
-	and #%11110111
-	sta _equip+1
-	lda _equip
-	and #%11111110
-	sta _equip
-	jmp setflag
-nobeam
-	lda tmp0+1
-	and #%00001000	; Military laser?
-	beq nomil
-	lda _equip+1
-	and #%11111011
-	sta _equip+1
-	lda _equip
-	and #%11111110
-	sta _equip
-	jmp setflag
-nomil
-	lda tmp0
-	and #%00000001	; Pulse laser?
-	beq nopulse
-	lda _equip+1
-	and #%11110011
-	sta _equip+1
-	jmp setflag
-nopulse
+	jsr upgrade_lasers
+	bcs setflag
+
+	; Not lasers...
 
 	lda tmp0
 	and #%00001000 ; Large cargo bay
@@ -3532,6 +3513,66 @@ nocash
 end
     rts
 .)
+
+
+upgrade_lasers
+.(
+	; And add it to our equipment
+	lda tmp0+1
+	and #%00000001	; Beam laser?
+	beq nobeam
+	lda _equip+1
+	and #%11111101
+	sta _equip+1
+	lda _equip
+	and #%11111110
+	sta _equip
+
+	; Update laser damage
+	lda _missiles+1
+	ora #(MILITARY_LASER*8)
+	sta _missiles+1
+
+	sec
+	rts
+nobeam
+	lda tmp0+1
+	and #%00000010	; Military laser?
+	beq nomil
+	lda _equip+1
+	and #%11111110
+	sta _equip+1
+	lda _equip
+	and #%11111110
+	sta _equip
+
+	; Update laser damage
+	lda _missiles+1
+	ora #(MILITARY_LASER*8)
+	sta _missiles+1
+
+	sec
+	rts
+nomil
+	lda tmp0
+	and #%00000001	; Pulse laser?
+	beq nopulse
+	lda _equip+1
+	and #%11111100
+	sta _equip+1
+
+	; Update laser damage
+	lda _missiles+1
+	ora #(PULSE_LASER*8)
+	sta _missiles+1
+	sec
+	rts
+nopulse
+	
+	clc
+	rts
+.)
+
 
 find_flag_equip
 .(
@@ -3637,9 +3678,6 @@ savex
     ldx #0  ;SMC
 fits
     jsr write_word
-
-;    lda #0
-;dbug beq dbug
 
     jmp loop
 end
