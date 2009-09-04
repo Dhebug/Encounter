@@ -78,6 +78,8 @@ _main
 	sta _current_screen
 	jsr _displayinfo
 
+	jsr _init_irq_routine 
+
 	jsr _TineLoop
 
 	rts

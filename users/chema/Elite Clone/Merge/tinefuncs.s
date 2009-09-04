@@ -583,6 +583,7 @@ noneg
 nomax
     sta _speed+1
     sta g_theta
+	beq end
  
     ; Move forwards actually moves 4 times the amount in A
     ; Original Elite moves 3/2 (96*4/256) times this amount.
@@ -592,6 +593,10 @@ nomax
     cmp #$80
     ror
     jsr MoveForwards    
+
+    lda #0
+    sta _accel+1
+
 end
     rts
 

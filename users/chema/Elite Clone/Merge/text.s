@@ -203,11 +203,9 @@ nocarry
 next
     jmp looprows
 end
-    ;jsr _init_print
-
+    ;jmp _init_print
     ;rts
 .)
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -550,9 +548,13 @@ gets
     lda #>str_buffer
 	sta tmp+1
 	ldy #0
-
 getsloop
-	jsr $023B
+	sty savy+1
+readloop
+	jsr ReadKeyNoBounce;$023B
+	beq readloop
+savy
+	ldy #0 ;SMC
 	cmp #$0D
 	beq endgets
 	cmp #$20

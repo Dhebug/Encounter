@@ -383,8 +383,9 @@ _TineLoop
 
 loop
 	lda #0
-	sta COUNTER
-	sta COUNTER+1
+	;sta COUNTER
+	;sta COUNTER+1
+	sta counter
 
 	lda #0
 	ldx NUMOBJS
@@ -481,10 +482,11 @@ nodraw
 
 	lda #$ff
 	sec
-    sbc COUNTER
+    sbc counter ;COUNTER
 	sta op2
-	lda #$ff
-	sbc COUNTER+1
+	;lda #$ff
+	;sbc COUNTER+1
+	lda #0
 	sta op2+1
 	ldx #0
 	ldy #0
@@ -557,11 +559,12 @@ dbg3 .word $0000
 
 
 ;; Now the keyboard map table
-#define MAX_KEY 19
+#define MAX_KEY 14
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "R", "H", "J", "1"
-    .byt     "O",     "L",       "B",     "Q",      "W",        "S",      "X",       "N",     "M",      "A"
+    .byt     "S",      "X",       "N",     "M",      "A"
 
+	/*
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
     .byt >(accel), >(deccel), >(fireM), >(rolll), >(rollr), >(pitchdn), >(pitchup), >(yawl), >(yawr), >(fireL) 
@@ -573,6 +576,62 @@ alt_key_routh
     .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele) 
 alt_key_routl
     .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele)  
+*/
+
+key_routh
+    .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele) 
+key_routl
+    .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele)  
+
+
+/* M= byte 3 val 1
+   N= byte 1 val 2
+   X= byte 1 val 64
+   S= byte 7 val 64
+   A= byte 7 val 32
+   Q= byte 2 val 64
+   W= byte 7 val 128
+   O= byte 6 val 4
+   L= byte 8 val 2
+   B= byte 3 val 4 */
+
+tab_ship_control_byte
+	.byt 2,0,0,6,6,1,6,5,7,2
+tab_ship_control_val
+	.byt 1,2,64,64,32,64,128,4,2,4
+
+tab_ship_control_routh
+    .byt >yawr,>yawl,>pitchup,>pitchdn,>fireL,>rolll,>rollr,>accel,>deccel,>fireM
+tab_ship_control_routl
+    .byt <yawr,<yawl,<pitchup,<pitchdn,<fireL,<rolll,<rollr,<accel,<deccel,<fireM
+
+
+ShipControl
+.(	
+    ldx #9
+loop
+	lda tab_ship_control_byte,x
+	tay
+	lda tab_ship_control_val,x
+	and KeyBank,y
+	beq skip
+	stx savx+1
+	lda tab_ship_control_routl,x
+	sta rout+1
+	lda tab_ship_control_routh,x
+	sta rout+2
+rout
+	jsr $1234
+savx
+	ldx #0
+skip
+	dex
+	bpl loop
+
+	rts
+.)
 
 
 ProcessKeyboard
@@ -580,15 +639,22 @@ ProcessKeyboard
         lda player_in_control
         beq end         
 
-        jsr $023B ; Get key
-       	bpl return
+        lda _current_screen
+        cmp #SCR_FRONT
+        bne nocontrol
+		jsr ShipControl
+nocontrol
+        jsr ReadKeyNoBounce ;$023B ; Get key
+		beq return       	;bpl return
+
+
         ; Ok a key was pressed, let's check
         ldx #MAX_KEY
 loop    
         cmp user_keys,x
         bne next
 
-        cpx #(MAX_KEY-4)
+/*        cpx #(MAX_KEY-4)
         bcc norm_key
         lda _current_screen
         cmp #SCR_FRONT
@@ -601,7 +667,7 @@ loop
         sta routine+2   
         jmp cont    
 
-norm_key
+norm_key*/
         lda key_routl,x
         sta routine+1
         lda key_routh,x
@@ -635,8 +701,8 @@ next
         dex
         bpl loop
 return
-        lda #0
-        sta _accel+1
+        ;lda #0
+        ;sta _accel+1
 
 end
         rts
@@ -674,8 +740,8 @@ a_y .byt 0
 a_p .byt 0
 a_r .byt 0
 
-#define MAXR 3  ;4
-#define MINR $fd    ;fc
+#define MAXR 3		;6	;3  ;4
+#define MINR $fd	;$fa; $fd    ;fc
 
 yawr
 .(     
@@ -746,7 +812,8 @@ end
 .)
 
 #endif
-accel   ; Accelerate
+accel
+       ; Accelerate
         lda #1
         .byt $2C
 deccel   
