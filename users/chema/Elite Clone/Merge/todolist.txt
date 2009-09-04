@@ -75,3 +75,16 @@ Seems not quite probable. Hard to make this repeatable.
 + If we are to use Fore and Aft shields, we need to modify damage_ship so something (like the carry flag)
 indicates if the damaging ship is in front or not. It is necessary because of missiles (in which the register Y
 indicates the launcher).
+
+
+Dbugs idea here:
+let say that from a particular orientation and velocity you can compute a vector
+
+[13:55] <_Dbug_> this vector is a fixed point signed thing, that represents the increment in X/Y/Z to apply to a particular position to get to the new position in this particular direction at this particular speed
+[13:56] <Chema> That is what it must be doing, if I am not wrong, for adding that vector to the object's centre position.
+[13:56] <_Dbug_> Then there is no need for computing this vector if the angle or velocity does not change
+[13:56] <_Dbug_> just need to add it each frame
+[13:56] <_Dbug_> newpos=oldpos+incrementpos
+[13:57] <_Dbug_> you need to recompute the move vector only if the orientation or the velocity changes
+[13:58] <Chema> Something like keeping the vector for each ship and a flag indicating if it is still valid or not. If a ship rotates or accelerates/deccelerates it will become invalid. Else you apply the same calculation again.
+[13:58] <_Dbug_> and if the velocity only changes, you can probably just scale the vector
