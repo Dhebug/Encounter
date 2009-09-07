@@ -620,7 +620,7 @@ MoveCurrent
     and #$7f
     beq nadax
     jsr check_maxman
-    ;sta _rotx,x
+    sta _rotx,x
 
 loopx
     plp
@@ -638,7 +638,7 @@ nadax
     and #$7f
     beq naday
     jsr check_maxman
-    ;sta _roty,x
+    sta _roty,x
 loopy
     plp
     php
@@ -655,7 +655,7 @@ naday
     and #$7f
     beq nadaz
     jsr check_maxman
-    ;sta _rotz,x
+    sta _rotz,x
 loopz
     plp
     php

@@ -88,3 +88,10 @@ let say that from a particular orientation and velocity you can compute a vector
 [13:57] <_Dbug_> you need to recompute the move vector only if the orientation or the velocity changes
 [13:58] <Chema> Something like keeping the vector for each ship and a flag indicating if it is still valid or not. If a ship rotates or accelerates/deccelerates it will become invalid. Else you apply the same calculation again.
 [13:58] <_Dbug_> and if the velocity only changes, you can probably just scale the vector
+
+
+- Modified back tinefuncs.s MoveCurrent so it does
+    jsr check_maxman
+    sta _rotXXXX,x
+
+	This was commented out, I don't know why. This is the preferred behaviour in Elite (from TNK: rotate 1 amount per turn, and keep track of how much is left).
