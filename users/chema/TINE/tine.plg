@@ -1,0 +1,129 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: cockpit - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP2D8.bat" with contents
+[
+@echo off
+osdk_build.bat
+]
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP2D8.bat"
+<h3>Output Window</h3>
+Performing Custom Build Step on .\Debug\tine.exe
+Compressing file...dict.s
+-----------------
+lib3d: Tables
+tab_multLO=tab_multLO=4096
+tab_cosdelta=tab_cosdelta=6144
+tab_cosdeltarem=tab_cosdeltarem=6400
+tab_sindelta=tab_sindelta=5632
+tab_sindeltarem=tab_sindeltarem=5888
+tab_projtab =tab_projtab =7680
+tab_projtabrem=tab_projtabrem=7936
+tab_sin=tab_sin=8704
+tab_cos=tab_cos=8736
+tab_rotmath=tab_rotmath=8192
+-----------------
+lib3d: Total size:
+(__lib3d_tables_end - __lib3d_tables_start)=(__lib3d_tables_end - __lib3d_tables_start)=4768
+Size of models in bytes:
+(__models_end - __models_start)=(__models_end - __models_start)=4199
+
+File 'overlay.tap' is 8981 bytes long (14 bytes header and 8967 bytes of data)
+Presione una tecla para continuar . . . 
+Building the program TINE at adress $500
+Assembling main.S
+Assembling oobj3d\lib3d.S
+Assembling oobj3d\obj3d.S
+Assembling oobj3d\filler.S
+Assembling oobj3d\LineDraw.S
+Assembling oobj3d\clip.S
+Assembling oobj3d\mextra.S
+Assembling oobj3d\circle.S
+Assembling oobj3d\debris.S
+Assembling data.S
+Assembling ships.S
+Assembling radar.S
+Assembling stars.S
+Assembling random.S
+Assembling tinefuncs.S
+Assembling dictc.S
+Assembling text.S
+Assembling tineinc.S
+Assembling galaxy.S
+Assembling cockpit.S
+Assembling graphics.S
+Assembling tactics.S
+Assembling universe.S
+Assembling tineloop.S
+Assembling keyboard.S
+Assembling disk.S
+Assembling tail.S
+Assembling oobj3d\lib3dtab.S
+Assembling models.S
+Linking
+Assembling
+lib3d: Memory usage
+lib3d: Zero page:
+(__lib3d_zeropage_end - __lib3d_zeropage_start)=(__lib3d_zeropage_end - __lib3d_zeropage_start)=109
+lib3d: Normal memory:
+(__lib3d_end - __lib3d_start)=(__lib3d_end - __lib3d_start)=1591
+obj3d: Memory usage
+obj3d: Zero page:
+(__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
+obj3d: Normal memory:
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3443
+Size of ship data tables in bytes:
+(__shiptables_end - __shiptables_start)=(__shiptables_end - __shiptables_start)=416
+
+Size of texts in bytes:
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=1850
+
+Size of grammar in bytes:
+(__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
+
+**** Free space:
+($a000-osdk_end)=($a000-osdk_end)=6401
+
+-----------------
+lib3d: Tables
+tab_multLO=tab_multLO=49152
+tab_cosdelta=tab_cosdelta=51200
+tab_cosdeltarem=tab_cosdeltarem=51456
+tab_sindelta=tab_sindelta=50688
+tab_sindeltarem=tab_sindeltarem=50944
+tab_projtab =tab_projtab =52736
+tab_projtabrem=tab_projtabrem=52992
+tab_sin=tab_sin=53760
+tab_cos=tab_cos=53792
+tab_rotmath=tab_rotmath=53248
+-----------------
+lib3d: Total size:
+(__lib3d_tables_end - __lib3d_tables_start)=(__lib3d_tables_end - __lib3d_tables_start)=4768
+Size of models in bytes:
+(__models_end - __models_start)=(__models_end - __models_start)=4199
+
+Creating final program TINE.TAP
+File 'build\TINE.tap' is 33293 bytes long (14 bytes header and 33279 bytes of data)
+Build of TINE.tap finished
+Tap2dsk V2.1
+Reading oobj3d\overlay.tap
+Found DATA
+Storing DATA.BIN
+Reading build\TINE.tap
+Found TINE
+Storing TINE.COM
+Oric -> MFM v1.1
+Presione una tecla para continuar . . . 
+
+
+
+<h3>Results</h3>
+tine.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
