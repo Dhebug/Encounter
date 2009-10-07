@@ -481,7 +481,8 @@ put_char_direct
         sta (screen),y 
         rts 
 
-;73 Characters + 7 for special chars (Not defined yet) [CHEMA: 73=', 74=-, 75=ç (put *), 76==, 77=<-, 78=->, 79=/]
+;73 Characters + 7 for special chars (Not defined yet) [CHEMA: 73=', 74=-, 
+;75=space (for deleting), 76==, 77=<-, 78=->, 79=/]
 ;80 Characters == 400($190) Bytes 
 
 character_bitmap_row0   ;80 Bytes 
@@ -489,31 +490,31 @@ character_bitmap_row0   ;80 Bytes
     .byt $40,$40,$40,$44,$40,$40,$40,$40,$40,$40,$7e,$7e,$7e,$7e,$7e,$7e 
     .byt $7e,$72,$5c,$5c,$72,$5c,$7e,$7e,$7e,$7e,$7e,$7e,$7e,$7e,$72,$72 
     .byt $6a,$72,$72,$7e,$7c,$7e,$7e,$7c,$7e,$7e,$7e,$7e,$7e,$7e,$58,$7e 
-    .byt $5c,$7e,$5c,$5c,$40,$40,$40,$40,$5f,$4c,$40,$5e,$40,%01001000,%01000100,%01000010 
+    .byt $5c,$7e,$5c,$5c,$40,$40,$40,$40,$5f,$4c,$40,$40,$40,%01001000,%01000100,%01000010 
 character_bitmap_row1   ;80 Bytes 
     .byt $5e,$7e,$5e,$7e,$5e,$50,$72,$7e,$40,$40,$5a,$58,$76,$7e,$5e,$7e 
     .byt $7e,$7e,$5e,$7e,$72,$72,$6a,$72,$72,$7e,$66,$72,$66,$66,$70,$70 
     .byt $60,$72,$5c,$5c,$72,$5c,$7e,$66,$72,$72,$72,$72,$70,$5c,$72,$72 
     .byt $6a,$72,$72,$74,$5c,$42,$66,$6c,$60,$60,$66,$72,$72,$72,$72,$72 
-    .byt $5c,$68,$58,$4c,$40,$40,$4c,$4c,$53,$46,$40,$66,$7e,%01011111,%01111110,%01000110
+    .byt $5c,$68,$58,$4c,$40,$40,$4c,$4c,$53,$46,$40,$40,$7e,%01011111,%01111110,%01000110
 character_bitmap_row2   ;80 Bytes 
     .byt $66,$66,$66,$66,$66,$7e,$7e,$66,$58,$4c,$5c,$58,$7e,$66,$72,$72 
     .byt $72,$70,$78,$5c,$72,$72,$6a,$5e,$72,$6c,$7e,$7e,$60,$66,$7e,$7e 
     .byt $6e,$7e,$5c,$5c,$7c,$5c,$6a,$66,$72,$72,$72,$7c,$7e,$5c,$72,$72 
     .byt $6a,$5c,$7e,$48,$5c,$7e,$5e,$6c,$7e,$7e,$4c,$7e,$7e,$72,$5e,$4e 
-    .byt $48,$7e,$58,$4c,$40,$40,$40,$40,$7c,$40,$7e,$60,$40,%01111111,%01111111,%01001100 
+    .byt $48,$7e,$58,$4c,$40,$40,$40,$40,$7c,$40,$7e,$40,$40,%01111111,%01111111,%01001100 
 character_bitmap_row3   ;80 Bytes 
     .byt $66,$66,$60,$66,$78,$5c,$46,$66,$58,$4c,$56,$58,$6a,$66,$72,$7e 
     .byt $7e,$70,$4e,$5c,$72,$5c,$7e,$7c,$7e,$5a,$66,$72,$66,$66,$70,$70 
     .byt $66,$72,$5c,$5c,$66,$5c,$6a,$66,$72,$7e,$72,$66,$46,$5c,$72,$5c 
     .byt $7e,$66,$5c,$56,$5c,$70,$66,$7e,$46,$66,$4c,$66,$46,$72,$72,$40 
-    .byt $40,$4a,$58,$4c,$4c,$4c,$4c,$4c,$53,$40,$40,$7e,$7e,%01011111,%01111110,%01011000
+    .byt $40,$4a,$58,$4c,$4c,$4c,$4c,$4c,$53,$40,$40,$40,$7e,%01011111,%01111110,%01011000
 character_bitmap_row4   ;80 Bytes 
     .byt $7f,$7e,$7e,$7e,$7e,$5c,$7e,$66,$58,$5c,$56,$58,$6a,$66,$7e,$70 
     .byt $46,$70,$7c,$5c,$7e,$48,$5c,$66,$46,$7e,$66,$7e,$7e,$7e,$7e,$70 
     .byt $7e,$72,$5c,$7c,$66,$5e,$6a,$66,$7e,$70,$7f,$66,$7e,$5c,$7e,$48 
     .byt $5c,$66,$5c,$7e,$5c,$7e,$7e,$4c,$7e,$7e,$58,$7e,$7e,$7e,$7e,$4c 
-    .byt $48,$7e,$5c,$5c,$4c,$46,$46,$40,$5f,$40,$40,$44,$40,%01001000,%01000100,%01010000
+    .byt $48,$7e,$5c,$5c,$4c,$46,$46,$40,$5f,$40,$40,$40,$40,%01001000,%01000100,%01010000
 
 
 colour_0 
@@ -533,7 +534,7 @@ del_char
     sbc #6    
     tax
     jsr relocate_cursor
-    lda #79
+    lda #75
     jsr put_char_direct
 savy
     ldy #0  ;SMC
@@ -551,7 +552,7 @@ gets
 getsloop
 	sty savy+1
 readloop
-	jsr ReadKeyNoBounce;$023B
+	jsr ReadKeyNoBounce
 	beq readloop
 savy
 	ldy #0 ;SMC
@@ -561,13 +562,11 @@ savy
 	bcc getsloop
 	cmp #$7f
 	beq backspace
-	cpy #$ff
+	cpy #$a
 	beq getsloop
 	sta (tmp),y
 	iny
 echochar
-	;tax
-	;jsr $0238
     jsr put_char
 	jmp getsloop
 backspace
@@ -575,10 +574,8 @@ backspace
 	beq getsloop
 	dey
     jsr del_char
-	jmp getsloop;echochar
+	jmp getsloop
 endgets
-    ;lda #$0A
-    ;jsr putchar
 	lda #0
 	sta (tmp),y
 	

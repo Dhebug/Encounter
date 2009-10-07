@@ -189,7 +189,7 @@ str_mktunit
             .asc "unit"
             .byt 0
 
-str_mktin   .asc "in"
+str_mktin   .asc "on"
             .byt 0
 
 str_mktprice
@@ -199,7 +199,7 @@ str_mktsale
             .asc "for sale"
             .byt 0             
 str_mktcargo 
-            .asc "ship"
+            .asc "hold"
             .byt 0
 
 ; For market buying/selling
