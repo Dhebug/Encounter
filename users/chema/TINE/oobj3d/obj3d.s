@@ -1123,8 +1123,8 @@ ccall
 
         ldx RTEMPA
 
-        lda HCZ,x
-        sta _planet_dist
+        ;lda HCZ,x
+        ;sta _planet_dist
 	
 		rts
 

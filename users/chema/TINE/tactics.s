@@ -231,7 +231,16 @@ maxen
 
     ; If it is a THARGON and there are no THARGOIDS
     ; halve speed and set ai_state=0 and rts
-
+	lda AIShipType
+	cmp #SHIP_THARGLET
+	bne nothargon
+	lda thargoid_counter
+	bne nothargon
+	lsr _speed,x
+	lda #0
+	sta _ai_state,x
+	rts
+nothargon
 	; If it is a Hermit (?) and rand>200 launch a Sidewinder+rand&3 angry
 	; at us and with ECM and leave Hermit inactive
     
@@ -275,7 +284,7 @@ notrader
 	lda _legal_status
 	cmp #40
 	bcc approach ; if <40 continue and don't target us
-	lda #%10000001
+	lda #(1|IS_ANGRY)
 	sta _target,x
 	lda #1
 	sta AITarget
@@ -378,7 +387,9 @@ nobold
     lsr
     ldx AIShipID
     cmp _energy,x
-    bcc nolowen  
+    bcs continue
+	jmp nolowen  
+continue
     lsr
     lsr
     cmp _energy,x
@@ -423,9 +434,32 @@ nocriten
     ; Launch missile
 
 	; If it is a Thargoid, launch a Targlet (FLG_BOLD set)
-	; else launch a missile. The logic is the same, but launches another
-	; ship, so we defer this to LaunchMissile
+	lda AIShipType
+	cmp #SHIP_THARGOID
+	bne domissile
+	jsr SetCurOb
+    lda #SHIP_THARGLET   ; Ship to launch
+    jsr LaunchShipFromOther
+    cpx #0
+    beq nolowen	; Couldn't create object
+    lda #IS_AICONTROLLED|FLG_BOLD 
+    sta _ai_state,x
+        
+    ; Get objective
+    lda AITarget  
+	ora #IS_ANGRY
+    sta _target,x 
 
+    ; Push it a bit
+    jsr SetCurOb
+    lda #20
+    jsr MoveForwards
+    lda #20
+    jsr MoveSide
+    ldx AIShipID
+	dec _missiles,x
+	rts	
+domissile
     jsr SetCurOb
     jsr LaunchMissile   
     beq nolowen ; Could not fire missile
@@ -787,10 +821,6 @@ _ID .byt $0
 ;; launches a missile
 LaunchMissile
 .(
-
-	; Check ship type. If it is a Thargoid, then launch
-	; Targlet with FLG_BOLD set!
-
     stx savx+1
     lda #SHIP_MISSILE   ; Ship to launch
     jsr LaunchShipFromOther
@@ -896,6 +926,15 @@ loop
     and #%01111111   
     cmp #SHIP_VIPER
     bcc nomore  ; if it is space junk nothing more...
+	bne nopolice
+	dec police_counter
+nopolice
+
+	; If it is a thargoid, decrement counter of thargoids
+	cmp #SHIP_THARGOID
+	bne nothargoid
+	dec thargoid_counter
+nothargoid
 
 	lda #SHIP_ALLOY
 	jsr ReleaseRandom

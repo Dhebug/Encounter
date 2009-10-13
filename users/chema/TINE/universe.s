@@ -142,7 +142,7 @@ savpZ
 
 moonsdone
     ; Create ships and others... for now, just testing
-    jsr _InitTestCode
+    ;jsr _InitTestCode
     rts
 
 
@@ -223,9 +223,10 @@ noinvert2
 
 
 ;;;;;;;;;;;;;;; TEST CODE
-
+#ifdef 0
 _InitTestCode 
 .(
+		rts	
          ; Add some ships
 
          lda #<OCEN
@@ -280,4 +281,246 @@ savid   lda #0  ;SMC
 
         rts
 .)
+
+#endif
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Create random encounters
+; Extracted and adapted from Elite TNK
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;void random_encounter (void)
+
+random_encounter
+.(
+
+;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))
+;		return;
+
+		; If near the planet, then return
+		lda _planet_dist
+		cmp #10
+		bcs cont
+		rts
+cont
+
+;	if (rand255() == 136)
+;	{
+;		if (((int)(universe[0].location.z) & 0x3e) != 0)
+;			create_thargoid ();
+;		else
+;			create_cougar();			
+;
+;		return;
+;	}		
+
+		; Create new random
+		jsr _gen_rnd_number
+		cmp #136
+		bne nothargoid
+		; Create thargoid or cougar and return
+		; Thargoid is created if far from planet
+		lda _planet_dist
+		cmp #80
+		bcs thargoid
+		jmp create_cougar
+thargoid
+		jmp create_thargoid
+nothargoid
+
+;	if ((rand255() & 7) == 0)
+;	{
+;		create_trader();
+;		return;
+;	}
+
+		lda _rnd_seed
+		and #7
+		bne notrader
+		jmp create_trader
+notrader
+
+;	check_for_asteroids();
+
+;	check_for_cops();	
+
+;	if (ship_count[SHIP_VIPER] != 0)
+;		return;
+
+;	if (in_battle)
+;		return;
+
+;	if ((cmdr.mission == 5) && (rand255() >= 200))
+;		create_thargoid ();
+		
+;	check_for_others();	
+
+		rts
+.)
+
+create_cougar
+create_thargoid
+.(
+		lda #SHIP_THARGOID
+		jsr create_other_ship
+		cpx #0
+		beq end	; Could not create ship
+
+		lda #1
+		ora #IS_ANGRY ; set angry flag
+		sta _target,x
+
+		lda #(IS_AICONTROLLED|FLG_BOLD)
+		sta _ai_state,x
+
+		; Should add missiles (tharglets) here. Maybe depending on environment stats.
+
+		lda #(HAS_ECM)
+		jsr SetShipEquip
+
+		; note that there are thargoids on system
+		inc thargoid_counter
+end
+		rts
+.)
+create_trader
+.(
+	
+	; 	type = SHIP_COBRA3 + (rand255() & 3);
+		jsr _gen_rnd_number
+		and #3
+		clc
+		adc #SHIP_BOA
+		jsr create_other_ship
+		cpx #0
+		beq end	; Could not create ship
+		
+;	if (newship != -1)
+;	{
+;		universe[newship].rotmat[2].z = -FRAC_ONE;
+;		universe[newship].rotz = rand255() & 7;
+;		
+;		rnd = rand255();
+;		universe[newship].velocity = (rnd & 31) | 16;
+;		universe[newship].bravery = rnd / 2;
+;
+;		if (rnd & 1)
+;			universe[newship].flags |= FLG_HAS_ECM;
+;
+;//		if (rnd & 2)
+;//			universe[newship].flags |= FLG_ANGRY; 
+;	}
+		lda _rnd_seed+2
+		bmi noptarget
+		lda #2
+		sta _target,x
+noptarget
+		lda _rnd_seed+2
+		and #%111
+		ora #%100
+		asl
+		sta _speed,x
+
+		; Equip
+		lda _rnd_seed+2
+		lsr
+		bcc noecm
+
+		;lda #HAS_ECM
+		;and #%1111	; Limit possible equipment
+
+		; Equip is random, but this includes advanced equipment
+		; Maybe it is a good idea to limit, for instance, anti-radar.
+		jsr SetShipEquip
+noecm
+		; change its orientation
+		jsr SetCurOb
+		lda _rnd_seed
+		ldx _rnd_seed+1
+		ldy _rnd_seed+3
+		jsr SetMat
+		;BEWARE X is no more the object's id
+end
+		rts
+.)
+
+
+
+check_for_asteroids
+check_for_cops
+check_for_others
+		rts
+
+
+; Create a ship of type passed in reg A
+; Returns X with the new ship ID. Zero in X if error.
+create_other_ship
+.(
+	pha
+	; Get player's position
+	ldx #1
+	jsr GetShipPos
+
+	; Generate new ship a bit far away
+	lda _PosX+1
+	eor #$17
+	sta _PosX+1
+
+	lda _PosY+1
+	eor #$17
+	sta _PosY+1
+
+	lda _PosZ+1
+	eor #$17
+	sta _PosZ+1
+
+	lda _rnd_seed+1
+	bmi noinvertX
+	sec
+	lda #0
+	sbc _PosX
+	sta _PosX
+	lda #0
+	sbc _PosX+1
+	sta _PosX+1
+noinvertX
+
+	lda _rnd_seed+2
+	bmi noinvertY
+	sec
+	lda #0
+	sbc _PosY
+	sta _PosY
+	lda #0
+	sbc _PosY+1
+	sta _PosY+1
+noinvertY
+
+	lda _rnd_seed+2
+	bmi noinvertZ
+	sec
+	lda #0
+	sbc _PosZ
+	sta _PosZ
+	lda #0
+	sbc _PosZ+1
+	sta _PosZ+1
+noinvertZ
+
+
+    lda #<_PosX
+    sta tmp0
+    lda #>_PosX+1   
+    sta tmp0+1
+    pla
+    jsr AddSpaceObject
+
+    lda #(IS_AICONTROLLED)   
+    sta _ai_state,x
+	rts	
+.)
+
+
+
 
