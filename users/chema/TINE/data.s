@@ -146,6 +146,8 @@ _vertexYHI	.dsb MAXSHIPS
 
 ; Some more variables
 
+thargoid_counter	.byt 00
+police_counter		.byt 00
 
 ; Digrams
 

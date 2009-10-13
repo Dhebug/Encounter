@@ -344,10 +344,21 @@ cont
 
 	; Perform timely checks
 	
-    lda #1
-    eor frame_number
+    ;lda #1
+    ;eor frame_number
+	lda frame_number
 	and #7
 	bne cont2
+
+	; Check distance to planet
+    ldx VOB
+    jsr SetCurOb
+	ldx #2	;Planet
+	jsr substract_positions
+	jsr getnorm	; Calc distance as A=abs(x)|abs(y)|abs(z)
+	lda op1+1	; Get high byte
+	sta _planet_dist
+
 
 	; Start with energy and shields
 
@@ -402,6 +413,12 @@ notemp
 	; ...
 
 cont2
+	; Check for new encounters
+	lda frame_number
+	;and #%1111111
+	bne cont3
+	jsr random_encounter
+cont3
 	; Increment the counter of frames
     inc frame_number
 
@@ -882,6 +899,11 @@ frontview
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
         ; to decide if we are exitting hyper or leaving planet.
         inc _docked     ; docked is either ff or 0, this gets it back to 0,
+
+		; No thargoids, no police and no convoys
+		lda #0
+		sta thargoid_counter
+		sta police_counter
 notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing
@@ -957,8 +979,6 @@ check_scr
     beq retz
     sec
     rts
-;retnz
-;    lda #$ff
 retz
     clc
     rts
@@ -971,10 +991,6 @@ keydn
     bcc do
     rts
 do
-;    beq sel
-;    lda a_p;#(254)
-;    jmp _move_cross_v
-;sel
     jmp _dec_sel
 
 .)
@@ -986,10 +1002,6 @@ keyup
     bcc do
     rts
 do
-;    beq sel
-;    lda a_p;#(2)
-;    jmp _move_cross_v
-;sel
     jmp _inc_sel
 
 .)
@@ -1005,10 +1017,6 @@ keyl
 ret
     rts
 do
-;    beq sel
-;    lda a_y;#(254)
-;    jmp _move_cross_h
-;sel
     jmp _sell
 
 .)
@@ -1024,10 +1032,6 @@ keyr
 ret
     rts
 do  
-;    beq sel
-;    lda a_y;#(2)
-;    jmp _move_cross_h
-;sel
     jmp _buy
 
 .)

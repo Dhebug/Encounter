@@ -30,6 +30,3 @@ SET OSDKDISK=oobj3d\overlay.tap
 SET OSDKDNAME=" -- ELITE --"
 SET OSDKINIST="HIRES:TINE.COM"
 
-
-SET OSDKDOSBOX=c:\archivos de programa\DOSBox-0.65\dosbox.exe
-
