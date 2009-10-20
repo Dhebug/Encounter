@@ -75,7 +75,7 @@ jump
 
 noflags    
     lda _ai_state,x
-    and #IS_AICONTROLLED
+    and #IS_AICONTROLED
     beq noai
     
     ldy #ObjID
@@ -278,11 +278,25 @@ notrader
 	and #(FLG_BOUNTYHUNTER|FLG_POLICE)
 	beq nobounty
 
-	; If already targetting someone, keep it
-	lda AITarget
+	; If already targetting someone and angry, keep it
+	;lda AITarget
+	lda _target,x
+	and #IS_ANGRY
 	bne approach
-	lda _legal_status
-	cmp #40
+	lda #0
+dbug beq dbug
+
+	ldy _legal_status
+	; Add value for carrying contraband
+	lda _shipshold+3	; Slaves
+	ora _shipshold+6	; Narcotics
+	ora _shipshold+10	; Firearms
+	beq nocontraband
+	lda _rnd_seed+3
+	and #%111111
+	tay
+nocontraband
+	cpy #40
 	bcc approach ; if <40 continue and don't target us
 	lda #(1|IS_ANGRY)
 	sta _target,x
@@ -373,7 +387,8 @@ areangry
 	and #FLG_BOLD
 	beq nobold
 	lda _rnd_seed+1
-	bmi nocriten	; Launch a missile if possible
+	cmp #64
+	bcc nocriten	; Launch a missile if possible
 nobold
 
     ; Check ship's energy. If it is max/2
@@ -419,7 +434,7 @@ noerror
 	sta _target,x
 	lda #(FLG_FLY_TO_PLANET|FLG_INNOCENT)
 	sta _flags,x
-	lda #(IS_AICONTROLLED|FLG_DEFENCELESS)
+	lda #(IS_AICONTROLED|FLG_DEFENCELESS)
 	sta _ai_state,x
 	lda #5
 	sta _speed,x
@@ -442,7 +457,7 @@ nocriten
     jsr LaunchShipFromOther
     cpx #0
     beq nolowen	; Couldn't create object
-    lda #IS_AICONTROLLED|FLG_BOLD 
+    lda #IS_AICONTROLED|FLG_BOLD 
     sta _ai_state,x
         
     ; Get objective
@@ -836,7 +851,7 @@ LaunchMissile
 
     ; Set ai_controlled
     lda _ai_state,x
-    ora #IS_AICONTROLLED 
+    ora #IS_AICONTROLED 
     sta _ai_state,x
         
     ; Get objective
@@ -923,7 +938,22 @@ loop
     ; Now some loot, if exploding
     ; object is a ship
     jsr GetShipType
-    and #%01111111   
+    and #%01111111 
+	
+	; What if it is an asteroid????
+	cmp #SHIP_ASTEROID
+	bne noasteroid
+	lda #SHIP_BOULDER
+	jsr ReleaseRandom
+	jmp nomore
+noasteroid
+
+	cmp #SHIP_BOULDER
+	bne noboulder
+	lda #SHIP_SPLINTER
+	jsr ReleaseRandom
+	jmp nomore
+noboulder
     cmp #SHIP_VIPER
     bcc nomore  ; if it is space junk nothing more...
 	bne nopolice
@@ -963,23 +993,23 @@ ReleaseRandom
 	lda #%01111111
 	sta _rnd_seed+1
 noplayer
-    lda _rnd_seed+1
-	bmi nomore
+    ;lda _rnd_seed+1
+	;bmi nomore
 
-;	cpx #1
-;	bne cont
-;	lda #2
-;	sta tmp3
-;	lda #SHIP_ALLOY
-;	sta type+1
-;	jmp loop2
-;cont
+	lda type+1	; Get back type
+	cmp #SHIP_CARGO
+	beq cargo
+	lda _rnd_seed+1
+	and #%11
+	jmp relloop
+cargo	
     jsr GetShipType
     and #%01111111   
 	tax
     lda _rnd_seed+1
  	and ShipCargo-1,x
     and #$0f
+relloop
 	beq nomore
     sta tmp3
 	ldx _ID

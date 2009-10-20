@@ -1,10 +1,11 @@
 #ifndef TINE_H
 #define TINE_H
 
+#include "oobj3d/obj3d.h"
 /* Some defines for TINE */
 /* Maximum number of simultaneous ships */
 
-#define MAXSHIPS 32
+#define MAXSHIPS MAXOBJS
 
 //#define OLDROLLS
 
@@ -21,7 +22,7 @@
 
 // Values for the _ai_state field
 
-#define IS_AICONTROLLED     128
+#define IS_AICONTROLED     128
 
 #define FLG_SLOW              1
 #define FLG_BOLD              2

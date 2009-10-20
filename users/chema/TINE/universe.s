@@ -239,9 +239,9 @@ _InitTestCode
          jsr AddSpaceObject   
          stx savid+1   
          lda _ai_state,x
-         ;ora #(IS_AICONTROLLED | FLG_BOUNTYHUNTER)   
-		 ;ora #(IS_AICONTROLLED | FLG_POLICE)   
-		 ora #(IS_AICONTROLLED)   
+         ;ora #(IS_AICONTROLED | FLG_BOUNTYHUNTER)   
+		 ;ora #(IS_AICONTROLED | FLG_POLICE)   
+		 ora #(IS_AICONTROLED)   
          sta _ai_state,x
 
 		 ;lda #2 ; Planet
@@ -269,7 +269,7 @@ savid   lda #0  ;SMC
         ora #IS_ANGRY
         sta _target,x        
         lda _ai_state,x
-        ora #IS_AICONTROLLED   
+        ora #IS_AICONTROLED   
         sta _ai_state,x
 
   		 lda #(HAS_ESCAPEPOD)
@@ -342,11 +342,17 @@ nothargoid
 notrader
 
 ;	check_for_asteroids();
+		jsr check_for_asteroids
 
 ;	check_for_cops();	
-
 ;	if (ship_count[SHIP_VIPER] != 0)
 ;		return;
+
+		jsr check_for_cops
+		lda police_counter
+		beq nocops
+		rts
+nocops
 
 ;	if (in_battle)
 ;		return;
@@ -360,8 +366,34 @@ notrader
 .)
 
 create_cougar
+.(
+		lda #SHIP_COUGAR
+		jsr create_other_ship
+		cpx #0
+		beq end	; Could not create ship
+
+		lda #(IS_AICONTROLED|FLG_BOLD)
+		sta _ai_state,x
+
+		lda #(HAS_ECM)	; Cloaking?
+		jsr SetShipEquip
+
+		jmp set_speed
+	
+end
+		rts
+.)
+
+
+
+
+
 create_thargoid
 .(
+		; No more than 4 Thargoids, please
+		lda thargoid_counter
+		cmp #5			
+		bcs end
 		lda #SHIP_THARGOID
 		jsr create_other_ship
 		cpx #0
@@ -371,10 +403,14 @@ create_thargoid
 		ora #IS_ANGRY ; set angry flag
 		sta _target,x
 
-		lda #(IS_AICONTROLLED|FLG_BOLD)
+		;lda #(IS_AICONTROLED|FLG_BOLD)
+		lda #(IS_AICONTROLED)
 		sta _ai_state,x
 
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
+		lda _missiles,x
+		ora #%10
+		sta _missiles,x
 
 		lda #(HAS_ECM)
 		jsr SetShipEquip
@@ -384,6 +420,8 @@ create_thargoid
 end
 		rts
 .)
+
+
 create_trader
 .(
 	
@@ -411,44 +449,138 @@ create_trader
 ;//		if (rnd & 2)
 ;//			universe[newship].flags |= FLG_ANGRY; 
 ;	}
-		lda _rnd_seed+2
-		bmi noptarget
-		lda #2
-		sta _target,x
-noptarget
-		lda _rnd_seed+2
-		and #%111
-		ora #%100
-		asl
-		sta _speed,x
-
 		; Equip
 		lda _rnd_seed+2
 		lsr
 		bcc noecm
 
-		;lda #HAS_ECM
+		lda #HAS_ECM
 		;and #%1111	; Limit possible equipment
 
 		; Equip is random, but this includes advanced equipment
 		; Maybe it is a good idea to limit, for instance, anti-radar.
 		jsr SetShipEquip
 noecm
-		; change its orientation
-		jsr SetCurOb
-		lda _rnd_seed
-		ldx _rnd_seed+1
-		ldy _rnd_seed+3
-		jsr SetMat
-		;BEWARE X is no more the object's id
+		jmp set_speed
 end
 		rts
 .)
 
 
+set_speed
+.(
+		; Set destination and speed
+		lda _rnd_seed+2
+		bmi noptarget
+		lda #2
+		sta _target,x
+		lda _flags,x
+		ora #FLG_FLY_TO_PLANET
+		sta _flags,x
+noptarget
+		lda _rnd_seed+2
+		and #%111
+		ora #%100
+		asl
+		sta _speed,x
++set_orient
+		; change its orientation
+		jsr SetCurOb
+		lda _rnd_seed
+		ldx _rnd_seed+1
+		ldy _rnd_seed+3
+		jmp SetMat
+		;BEWARE X is no more the object's id
+.)
+
 
 check_for_asteroids
+.(
+	;if ((rand255() >= 35) || (ship_count[SHIP_ASTEROID] >= 3))
+	;	return;
+
+		lda asteroid_counter
+		cmp #3
+		bcs end
+		lda _rnd_seed+3
+		cmp #35
+		bcs end
+
+	;if (rand255() > 253)
+	;	type = SHIP_HERMIT;
+	;else
+	;	type = SHIP_ASTEROID;
+
+;		lda _rnd_seed
+;		cmp #254
+;		bcs hermit
+		lda #SHIP_ASTEROID
+;		.byt $2c
+;hermit
+;		lda #SHIP_HERMIT
+
+		jsr create_other_ship
+		cpx #0
+		beq end
+
+		lda _ai_state,x
+		and #%01111111 ;~(IS_AICONTROLED)  
+		sta _ai_state,x
+
+		inc asteroid_counter
+
+		jmp set_speed
+end
+		rts
+
+.)
+
+
+
 check_for_cops
+.(
+	lda police_counter
+	cmp #3
+	bcs end
+
+	; Check 
+	; if rnd and 7 >= _cpl_system+GOVTYPE
+	; then rts
+
+	; Send cops from planet
+	; They should automatically target you if needed
+
+	lda _rnd_seed+1
+	and #7
+	cmp _cpl_system+GOVTYPE
+	bcs end
+
+	ldx #2	; Planet
+	jsr SetCurOb
+    lda #SHIP_VIPER   ; Ship to launch
+    jsr LaunchShipFromOther
+    cpx #0
+    beq end	; Couldn't create object
+
+	lda #IS_AICONTROLED|FLG_BOLD|FLG_POLICE
+    sta _ai_state,x
+	lda #20
+	sta _speed,x
+
+	lda _rnd_seed+2
+	bmi notarp
+	lda #1
+	sta _target,x
+
+notarp
+	jmp set_orient
+
+	inc police_counter
+end
+	rts
+
+.)
+
 check_for_others
 		rts
 
@@ -516,7 +648,7 @@ noinvertZ
     pla
     jsr AddSpaceObject
 
-    lda #(IS_AICONTROLLED)   
+    lda #(IS_AICONTROLED)   
     sta _ai_state,x
 	rts	
 .)

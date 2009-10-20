@@ -17,7 +17,7 @@ Goodnames  .asc "Food"
            .byt 0
            .asc "Slaves"
            .byt 0
-           .asc "Liquors"   ;/Wines
+           .asc "Liquors/Wines"   
            .byt 0
            .asc "Luxuries"
            .byt 0

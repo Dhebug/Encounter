@@ -315,7 +315,7 @@ nofire
 	jsr print_inflight_message
 nomessage
 
-//#define DBGVALUES
+#define DBGVALUES
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
@@ -904,6 +904,7 @@ frontview
 		lda #0
 		sta thargoid_counter
 		sta police_counter
+		sta asteroid_counter
 notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing

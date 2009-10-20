@@ -64,7 +64,7 @@ _default_commander
 				.byt 00					; Score, remainder
 				.word 00000             ; Current score
 				.byt 0                  ; Current mission
-				.word $0001             ; Equipment flags
+				.word $00ff             ; Equipment flags
 			    .byt SHIP_COBRA3        ; Current player's ship
 				.byt 4					; Number of missiles
 
@@ -148,6 +148,7 @@ _vertexYHI	.dsb MAXSHIPS
 
 thargoid_counter	.byt 00
 police_counter		.byt 00
+asteroid_counter    .byt 00
 
 ; Digrams
 
