@@ -7,6 +7,8 @@
 
 #define MAXSHIPS MAXOBJS
 
+#define MAXCOPS	3
+
 //#define OLDROLLS
 
 // Values for the _flags field

@@ -294,6 +294,12 @@ savid   lda #0  ;SMC
 
 random_encounter
 .(
+		; If already too many objects, return
+;		lda NUMOBJ
+;		cmp #8
+;		bcc cont1
+;		rts
+;cont1
 
 ;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))
 ;		return;
@@ -361,8 +367,8 @@ nocops
 ;		create_thargoid ();
 		
 ;	check_for_others();	
+		jmp check_for_others 
 
-		rts
 .)
 
 create_cougar
@@ -372,13 +378,14 @@ create_cougar
 		cpx #0
 		beq end	; Could not create ship
 
-		lda #(IS_AICONTROLED|FLG_BOLD)
+		lda #(IS_AICONTROLED)
 		sta _ai_state,x
+		jsr set_boldness
 
 		lda #(HAS_ECM)	; Cloaking?
 		jsr SetShipEquip
 
-		jmp set_speed
+		jmp set_speed_and_target
 	
 end
 		rts
@@ -403,9 +410,9 @@ create_thargoid
 		ora #IS_ANGRY ; set angry flag
 		sta _target,x
 
-		;lda #(IS_AICONTROLED|FLG_BOLD)
 		lda #(IS_AICONTROLED)
 		sta _ai_state,x
+		jsr set_boldness
 
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
 		lda _missiles,x
@@ -449,6 +456,7 @@ create_trader
 ;//		if (rnd & 2)
 ;//			universe[newship].flags |= FLG_ANGRY; 
 ;	}
+
 		; Equip
 		lda _rnd_seed+2
 		lsr
@@ -461,13 +469,15 @@ create_trader
 		; Maybe it is a good idea to limit, for instance, anti-radar.
 		jsr SetShipEquip
 noecm
-		jmp set_speed
+		lda #FLG_INNOCENT
+		sta _flags,x
+		jmp set_speed_and_target
 end
 		rts
 .)
 
 
-set_speed
+set_speed_and_target
 .(
 		; Set destination and speed
 		lda _rnd_seed+2
@@ -477,7 +487,15 @@ set_speed
 		lda _flags,x
 		ora #FLG_FLY_TO_PLANET
 		sta _flags,x
+		bne set_speed	; allways branches
 noptarget
+		lsr
+		bcc set_speed
+		; Set Hyper as target
+		lda _flags,x
+		ora #FLG_FLY_TO_HYPER
+		sta _flags,x
++set_speed
 		lda _rnd_seed+2
 		and #%111
 		ora #%100
@@ -540,8 +558,8 @@ end
 check_for_cops
 .(
 	lda police_counter
-	cmp #3
-	bcs end
+	cmp #(MAXCOPS)
+	beq end
 
 	; Check 
 	; if rnd and 7 >= _cpl_system+GOVTYPE
@@ -562,8 +580,17 @@ check_for_cops
     cpx #0
     beq end	; Couldn't create object
 
-	lda #IS_AICONTROLED|FLG_BOLD|FLG_POLICE
+	; Note it down on cop list
+	lda police_counter
+	tay
+	txa
+	sta police_ids,y
+	inc police_counter
+
+
+	lda #IS_AICONTROLED|FLG_POLICE
     sta _ai_state,x
+	jsr set_boldness
 	lda #20
 	sta _speed,x
 
@@ -573,16 +600,72 @@ check_for_cops
 	sta _target,x
 
 notarp
+	lda #FLG_INNOCENT
+	sta _flags,x
 	jmp set_orient
-
-	inc police_counter
 end
 	rts
 
 .)
 
 check_for_others
-		rts
+.(
+	; Here goes everything else
+	; Pirates, Bounties, shuttles...
+	; Should be based on game internals and some randomizing
+
+	lda #0
+dbug beq dbug
+
+	jsr _gen_rnd_number
+	lda _rnd_seed+2
+	cmp #190;90
+	bcc doit
+	rts
+doit
+	lda _cpl_system+GOVTYPE
+	beq pirates
+	sta tmp
+	lda _rnd_seed
+	and #7
+	cmp tmp
+	bcs nopirates
+
+pirates
+	; Generate pirates 
+	jmp generate_pirate
+
+nopirates
+	and #%11
+	bne shuttle
+	; Gererate Bounty Hunter
+	jmp generate_bounty
+
+shuttle
+	; Generate some junk	
+	jmp generate_shuttle
+.)
+
+
+generate_pirate
+.(
+	lda #0
+dbug beq dbug
+	rts
+.)
+generate_bounty
+.(
+	lda #0
+dbug beq dbug
+	rts
+.)
+
+generate_shuttle
+.(
+	lda #0
+dbug beq dbug
+	rts
+.)
 
 
 ; Create a ship of type passed in reg A
@@ -653,6 +736,18 @@ noinvertZ
 	rts	
 .)
 
+set_boldness
+.(
+	lda _score+1
+	cmp #02
+	bcc end
 
+	; We are really dangerous, so make enemies bold
+	lda _ai_state,x
+	ora #FLG_BOLD
+	sta _ai_state,x
+end
+	rts
+.)
 
 

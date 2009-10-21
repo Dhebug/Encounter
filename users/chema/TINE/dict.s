@@ -737,7 +737,7 @@ str_dangerous
     .asc "Dangerous"
     .byt 0
 str_deadly
-    .asc "Deadly"
+    .asc "Lethal"
     .byt 0
 str_elite
     .asc "---- E L I T E ----"

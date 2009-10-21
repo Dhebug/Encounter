@@ -150,6 +150,8 @@ thargoid_counter	.byt 00
 police_counter		.byt 00
 asteroid_counter    .byt 00
 
+police_ids			.dsb MAXCOPS
+
 ; Digrams
 
 _pairs0 .asc "ABOUSEITILETSTONLONUTHNO"

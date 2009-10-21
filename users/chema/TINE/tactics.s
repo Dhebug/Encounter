@@ -283,8 +283,6 @@ notrader
 	lda _target,x
 	and #IS_ANGRY
 	bne approach
-	lda #0
-dbug beq dbug
 
 	ldy _legal_status
 	; Add value for carrying contraband
@@ -314,15 +312,33 @@ approach
     ; for it!
     
     lda AITarget
-    beq end
+    beq notarget
     tax
-    jsr fly_to_ship    
-
+    jmp fly_to_ship    
+notarget
+	lda _flags,x
+	and #FLG_FLY_TO_HYPER 
+	beq end
+	; Wants to go hyper
+	jmp fly_to_pos
 end
     rts
 
 .)
 
+
+; Hack to make a ship travel to a given position. In this case 0,0,0
+fly_to_pos
+.(
+	lda #0
+	ldy #5
+loop
+	sta _VectX,y
+	dey
+	bpl loop
+	jsr substract_positions2
+	jmp fly_to_ship2
+.)
 
 
 ;; fly_to_ship
@@ -334,7 +350,8 @@ fly_to_ship
     ; Get the vector towards the target
     jsr substract_positions
     
-    ; Need to save some data for later on... :(
++fly_to_ship2
+	; Need to save some data for later on... :(
     jsr getnorm
     lda op1
     sta A1
@@ -629,7 +646,16 @@ notneg2
 	rts
 	
 nodock
-    
+	; If we wants to go hyper, go hyper
+	lda _flags,x
+	and #FLG_FLY_TO_HYPER 
+	beq nohyper
+	; Go Hyper
+	lda #IS_HYPERSPACING
+	ora _flags,x
+	sta _flags,x
+	rts
+nohyper    
 	; On collision course, invert everything
 
 	ldx #4
@@ -672,6 +698,7 @@ loop
     dey
     bpl loop
 
++substract_positions2
     jsr GetCurOb
     jsr GetShipPos
 
@@ -1291,6 +1318,12 @@ damage_ship
 elrts
 	rts
 dodam
+	; If innocent, alert the cops
+	lda _flags,x 
+	and #(FLG_INNOCENT)
+	beq noinnocent
+	jsr alert_cops
+noinnocent
 	; We perform damage
     lda _energy,x
     sec
@@ -1317,6 +1350,36 @@ nokill
 .)
 
 
+
+alert_cops
+.(
+	; Need to save X and Y
+	stx savx+1 
+	sty savy+1
+	ldx police_counter
+	beq end
+loop
+	lda police_ids-1,x
+	tay
+	lda _target,y
+	and #%01111111
+	bne next
+	lda savy+1	; Get back Y
+	ora #IS_ANGRY
+	sta _target,y
+next
+	dex
+	bne loop
+end
+savx
+	ldx #00	; SMC
+savy
+	ldy #00	; SMC
+	rts
+.)
+
+
+
 ;;; damage_player
 ; Perform damage of player
 ; Params: Reg A is damage amount. Reg X equals 1
@@ -1325,6 +1388,15 @@ damage_player
 .(
 	sta tmp+1
 
+	; Alert the cops?
+	lda _legal_status
+	cmp #50
+	bcs nohelp
+	lda _ai_state,y
+	and #FLG_PIRATE
+	beq nohelp
+	jsr alert_cops
+nohelp
 	; See if it is in front or behind us
 	lda tmp
 	bpl notmissile

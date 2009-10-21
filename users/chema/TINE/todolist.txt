@@ -111,3 +111,6 @@ let say that from a particular orientation and velocity you can compute a vector
 - Had to set HIRES mode from the INIST, as the copy of the charset was destroying data.
 
 - Check missiles. When fired they seem to jump quite far from the launcher. Maybe speed is too high or they are moved too far.
+
++ Change alert_cops in tactics to make_angry to save some CPU cycles. Now it is on damage_ship and damage_player. However this is less realistic,
+  as it would only alert cops the first time you shot, and they may appear later.
