@@ -142,10 +142,14 @@ savpZ
 
 moonsdone
     ; Create ships and others... for now, just testing
+	; No thargoids, no police and no convoys
+	lda #0
+	sta thargoid_counter
+	sta police_counter
+	sta asteroid_counter
     ;jsr _InitTestCode
-    rts
-
-
+	jmp random_encounter
+    ;rts
 .)
 
 
@@ -341,9 +345,13 @@ nothargoid
 ;		return;
 ;	}
 
-		lda _rnd_seed
+		lda _rnd_seed+3
 		and #7
 		bne notrader
+	; Change this so more traders on secure systems
+	;	and #7
+	;	cmp _cpl_system+GOVTYPE
+	;	bcs notrader
 		jmp create_trader
 notrader
 
@@ -355,10 +363,10 @@ notrader
 ;		return;
 
 		jsr check_for_cops
-		lda police_counter
-		beq nocops
-		rts
-nocops
+;		lda police_counter
+;		beq nocops
+;		rts
+;nocops
 
 ;	if (in_battle)
 ;		return;
@@ -520,7 +528,7 @@ check_for_asteroids
 		lda asteroid_counter
 		cmp #3
 		bcs end
-		lda _rnd_seed+3
+		jsr _gen_rnd_number
 		cmp #35
 		bcs end
 
@@ -568,7 +576,7 @@ check_for_cops
 	; Send cops from planet
 	; They should automatically target you if needed
 
-	lda _rnd_seed+1
+	jsr _gen_rnd_number
 	and #7
 	cmp _cpl_system+GOVTYPE
 	bcs end
@@ -614,12 +622,9 @@ check_for_others
 	; Pirates, Bounties, shuttles...
 	; Should be based on game internals and some randomizing
 
-	lda #0
-dbug beq dbug
-
 	jsr _gen_rnd_number
-	lda _rnd_seed+2
-	cmp #190;90
+	;lda _rnd_seed+2
+	cmp #90
 	bcc doit
 	rts
 doit
@@ -627,16 +632,17 @@ doit
 	beq pirates
 	sta tmp
 	lda _rnd_seed
-	and #7
+	and #3
 	cmp tmp
-	bcs nopirates
+	bcc nopirates
 
 pirates
 	; Generate pirates 
 	jmp generate_pirate
 
 nopirates
-	and #%11
+	lda _rnd_seed
+	and #%11000000
 	bne shuttle
 	; Gererate Bounty Hunter
 	jmp generate_bounty
@@ -662,8 +668,43 @@ dbug beq dbug
 
 generate_shuttle
 .(
+
 	lda #0
 dbug beq dbug
+
+    lda _rnd_seed+3
+	and #%1
+	clc
+	adc #SHIP_SHUTTLE   ; Ship to launch
+	sta tmp
+	
+    lda _rnd_seed
+    bmi from_planet
+to_planet
+	lda tmp
+	jsr create_other_ship
+	lda #2
+	sta _target,x
+	lda _flags,x
+	ora #FLG_FLY_TO_PLANET|FLG_INNOCENT
+	sta _flags,x
+	bne finish ; allways branches
+from_planet
+	ldx #2	; Planet
+	jsr SetCurOb
+	lda tmp
+    jsr LaunchShipFromOther
+    cpx #0
+    beq end	; Couldn't create object
+
+	lda _flags,x
+	ora #FLG_FLY_TO_HYPER|FLG_INNOCENT
+	sta _flags,x	
+
+finish
+	lda #IS_AICONTROLED|FLG_DEFENCELESS
+    sta _ai_state,x
+end
 	rts
 .)
 
