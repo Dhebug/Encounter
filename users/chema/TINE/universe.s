@@ -655,23 +655,108 @@ shuttle
 
 generate_pirate
 .(
-	lda #0
-dbug beq dbug
+	jsr gen_ship_type
+	clc
+	adc #SHIP_BOA
+	jsr generate_pirate_bounty		
+	cpx #0
+	bne cont
 	rts
+cont
+	; Flag as pirate
+	lda _ai_state,x
+	ora #FLG_PIRATE
+	sta _ai_state,x
+
+	; Assign target
+	lda #1|IS_ANGRY
+	sta _target,x
+
+	jmp set_boldness
 .)
+
 generate_bounty
 .(
+	jsr gen_ship_type
+	lsr
+	clc
+	adc #SHIP_MORAY
+	jsr generate_pirate_bounty		
+	cpx #0
+	bne cont
+	rts
+
+cont
+	; Flag as Bounty
+	lda _ai_state,x
+	ora #FLG_BOUNTYHUNTER
+	sta _ai_state,x
+
+	jmp set_boldness
+.)
+
+
+generate_pirate_bounty
+.(
+	; Set cloacking device
+	tax
+	lda _galaxynum
+	cmp #1
+	beq nocloack
+	lda _rnd_seed+3
+	and #%1111
+	bne nocloack
+	txa
+	ora #SHIP_NORADAR	; Not visible
+	tax
+nocloack
+	txa
+
+	jsr create_other_ship
+	jmp gen_ship_equipment	
+.)
+
+
+gen_ship_type
+.(
+	jsr _gen_rnd_number
+	and #%1111			; a=0..15	
+	tax
+	lda _score
+	bne l1
+	dex
+	lda _score+1
+	cmp #80
+	bcc l1
+	dex
+	dex
+l1						; a=0..15 - 0..3
+	lda _galaxynum
+	cmp #1
+	bne l2
+	dex
+	dex
+l2						; a=0..15 - 0..3 - 0..2
+	txa
+	bpl correct
 	lda #0
-dbug beq dbug
+correct
+	cmp #11
+	bcc correct2
+	lda #10
+correct2
+	rts
+.)
+
+
+gen_ship_equipment
+.(
+	; Must preserve reg X!!!
 	rts
 .)
 
 generate_shuttle
 .(
-
-	lda #0
-dbug beq dbug
-
     lda _rnd_seed+3
 	and #%1
 	clc
