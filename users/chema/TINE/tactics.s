@@ -948,9 +948,10 @@ ExplodeObject
 
     ; Generate some debris
 
-    lda _rnd_seed+1
-    and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly :/
-    ora #%00000100
+    ;lda _rnd_seed+1
+    ;and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly :/
+    ;ora #%00000100
+	lda #7
     sta tmp3
 loop
     jsr SetCurOb

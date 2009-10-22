@@ -260,6 +260,7 @@ nochange
     cmp #06
     bcs nodock    
 
+	; Docking ship... must call docking sequence
     dec _docked
     jsr _DoubleBuffOff
     jsr save_frame
@@ -899,12 +900,6 @@ frontview
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
         ; to decide if we are exitting hyper or leaving planet.
         inc _docked     ; docked is either ff or 0, this gets it back to 0,
-
-		; No thargoids, no police and no convoys
-		lda #0
-		sta thargoid_counter
-		sta police_counter
-		sta asteroid_counter
 notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing
