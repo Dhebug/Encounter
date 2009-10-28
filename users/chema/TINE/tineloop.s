@@ -261,9 +261,13 @@ nochange
     bcs nodock    
 
 	; Docking ship... must call docking sequence
-    dec _docked
+	lda _current_screen
+	cmp #SCR_FRONT
+	bne l1
     jsr _DoubleBuffOff
     jsr save_frame
+l1
+    dec _docked
     jsr info
     jmp _TineLoop
     
@@ -455,10 +459,20 @@ doit
 	sta dbg1+1
 
 	; Debug a_y
-	lda a_y
-	sta dbg2
-	lda #0
-	sta dbg2+1
+	;lda a_y
+	;sta dbg2
+	;lda #0
+	;sta dbg2+1
+
+	; Debug ship pos
+	ldx #1
+	jsr GetShipPos
+	ldx #5
+loop
+	lda _PosX,x
+	sta dbg1,x
+	dex
+	bpl loop
 
 	lda counter 
 	sta op2

@@ -536,9 +536,9 @@ nolowen
     lda our_ang0+1
     sta op1+1
  
-    lda #<$e38-250; $f1c8 ;$e38
+    lda #<$e38-150; $f1c8 ;$e38
     sta op2
-    lda #>$e38-250; ;$e38
+    lda #>$e38-150; ;$e38
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -565,9 +565,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<($f8e-250-250);f07d ;$f8e
+    lda #<($f8e-150);f07d ;$f8e
     sta op2
-    lda #>($f8e-250-250);f07d ;$f8e
+    lda #>($f8e-150);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar
