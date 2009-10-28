@@ -359,15 +359,6 @@ long
     jmp print_distinfo  
 
 notfound
-    ;jsr perform_CRLF
-    ;jsr perform_CRLF
-    ;ldy #1
-    ;lda (sp),y
-    ;tax
-    ;dey
-    ;lda (sp),y
-    ;jsr print
-    ;jsr put_space
     jsr prepare_area
     lda #<str_notfound
     ldx #>str_notfound
