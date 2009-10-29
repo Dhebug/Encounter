@@ -1714,8 +1714,8 @@ saveid
 	lda _flags,y
 	and #FLG_INNOCENT
 	beq bounty
-	
-	; Man, he was innocent, should pay consequencies for that
+
+	; Man, he was innocent, should pay consequences for that
 	lda _ai_state,y
 	and #FLG_DEFENCELESS
 	bne nodefense
