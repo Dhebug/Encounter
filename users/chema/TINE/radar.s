@@ -711,10 +711,27 @@ sdy .byt 0
 
 set_compass
 .(
+
+    ldx compass_index
+
+    jsr GetObj
+    sta tmp1
+    sty tmp1+1
+    ldy #ObjCenPos
+
+    lda (tmp1),Y
+    tax
+
+    lda HCZ,x
+    sta _VectZ+1
+
     lda #189;#171
 	sta compass_x
+	sta sdx
     lda #148;#155
 	sta compass_y
-    rts
+	sta sdy
+	jmp compass_dot
+    ;rts
 .)
 

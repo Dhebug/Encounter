@@ -122,6 +122,6 @@ let say that from a particular orientation and velocity you can compute a vector
 + Compass is only updated if x,y changed, which is incorrect if changing from hollow to filled and
  viceversa. Also when comming from other screens it is sometimes not updated. Same reason?
 
-+ Refilling energy and shields in hyper jump is not a good idea... maybe filing shields or x2 to both could do
+- Refilling energy and shields in hyper jump is not a good idea... maybe filing shields or x2 to both could do
 
-+ Need to /2 the legal status at each jump or something...
+- Need to /2 the legal status at each jump or something...

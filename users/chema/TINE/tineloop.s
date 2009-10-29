@@ -186,12 +186,12 @@ _FirstFrame
 
          LDX VOB          ;Calculate view
          jsr SetRadar
-         jsr set_compass
          JSR CalcView
          JSR SortVis      ;Sort objects
          JSR DrawAllVis   ;Draw objects
         
          jsr DrawRadar
+         jsr set_compass
 
          jmp dump_buf
 .)
@@ -892,10 +892,17 @@ good
 		; Should start sequence, but not perform the jump right now... 
 
 endjump
+		; Perform the jumping
         jsr _jump
+		; Clear legal status a bit
+		lda _legal_status
+		lsr
+		sta _legal_status
+		; Erase radar and compass and create environment
         jsr EraseRadar
         jsr clear_compass
         jsr CreateEnvironment
+		; Draw first frame
         jsr _FirstFrame
         rts
 

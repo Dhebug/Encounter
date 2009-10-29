@@ -26,7 +26,7 @@ NUMCENTS .byt 00           ;Number of object senter
 CUROBJ   .byt 00           ;Current object
 LASTOBJ  .byt 00
 ZMAX     .word $2000       ;Maximum range
-ZMIN     .byt 100          ;Minimum range
+ZMIN     .byt 50          ;Minimum range
 OBJECTS  .word $0800       ;Object records 1227 = 3456 bytes = $0D80
 
 
@@ -613,11 +613,11 @@ ViewObj  .byt 00             ;Viewpoint object
 ;           .X  = Minimum object range
 ;
 
-SetVisParms
-         STA ZMAX
-         STY ZMAX+1
-         STX ZMIN
-         RTS
+;SetVisParms
+;         STA ZMAX
+;         STY ZMAX+1
+;         STX ZMIN
+;         RTS
 
 ;
 ; CalcView -- Calculate view (Set viewpoint, translate and rotate centers)
