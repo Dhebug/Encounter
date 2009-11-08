@@ -48,6 +48,10 @@ tmp		.dsb 2
 
 _main
 .(
+
+  	jsr SndPing
+
+
 	lda #<osdk_stack
 	sta sp
 	lda #>osdk_stack
@@ -60,6 +64,7 @@ _main
 	jsr _init_irq_routine 
 	jsr _init_tine
 	jsr _init_print
+	
 restart
 	jsr _init_screen
 	jsr _init_screen2

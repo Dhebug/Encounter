@@ -20,9 +20,10 @@
 ;unsigned int   equip=0xfff;             /* Equipment flags */
 
 
-_name			.asc "Jameson"          ; Commander's name
+__commander_data_start
+_name			.asc "Jameson"          ; Commander's name (10 chars plus ending 0)
 				.byt 00 
-				.dsb 24 
+				.dsb 3 
 _shipshold		.dsb 17		            ; Contents of cargo bay
 _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
@@ -44,14 +45,14 @@ _p_maxspeed		.byt 0
 _p_maxenergy	.byt 0	
 _p_maxmissiles	.byt 0
 _p_laserdamage	.byt 0
-
+__commander_data_end
 
 
 ; Default commander's data
 _default_commander
 				.asc "Jameson"          ; Commander's name
 				.byt 00 
-				.dsb 24 
+				.dsb 3 
 				.dsb 17		            ; Contents of cargo bay
 				.byt 7                  ; Current planet
 				.byt 1                  ; Galaxy number (1-8)
@@ -303,6 +304,14 @@ mkstrshi
 
 positionsX  
     .byt 20*6, 26*6, 35*6, 2*6, 14*6, 20*6, 26*6, 35*6
+
+
+
+#echo Commander's data:
+#print (__commander_data_end - __commander_data_start)
+
+
+
 
 
 

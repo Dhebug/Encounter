@@ -822,7 +822,8 @@ flight_message_base
 	.byt 0
 	.asc "Target Lost"
 	.byt 0
-
+	.asc "Mass Locked"
+	.byt 0
 
 __texts_end
 

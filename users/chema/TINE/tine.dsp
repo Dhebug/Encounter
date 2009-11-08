@@ -243,6 +243,10 @@ SOURCE=.\ships.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\sound.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\stars.s
 # End Source File
 # Begin Source File

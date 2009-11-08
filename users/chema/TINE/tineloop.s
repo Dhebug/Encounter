@@ -324,9 +324,18 @@ nomessage
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
-
     jsr dump_buf
+
+
+	lda _planet_dist
+	cmp #PDIST_TOOFAR2
+	bcs nocompass
     jsr update_compass
+	jmp endcompass
+nocompass
+	jsr clear_compass
+endcompass
+
 nodraw
 
 	lda player_in_control
@@ -353,8 +362,11 @@ cont
     ;eor frame_number
 	lda frame_number
 	and #7
-	bne cont2
+	;beq cont2
+	bne checkthings
+	jmp cont2
 
+checkthings
 	; Check distance to planet
     ldx VOB
     jsr SetCurOb
@@ -364,7 +376,10 @@ cont
 	lda op1+1	; Get high byte
 	sta _planet_dist
 
+	; Setup planet distance light indicator
 
+	jsr planet_light
+	
 	; Start with energy and shields
 
 	lda _energy+1
@@ -433,6 +448,41 @@ nofr
     jmp loop
 
 .)
+
+; Sets the planet distance light indicator.
+; Needs A=planet_dist
+planet_light
+.(
+	cmp #PDIST_DOCK
+	bcs noneardock
+	ldx #INV_MAGENTA
+	bmi set
+noneardock
+	cmp #PDIST_MASSLOCK
+	bcs nonearplanet
+	ldx #INV_YELLOW
+	bmi set
+nonearplanet
+	cmp #PDIST_TOOFAR
+	bcc nofar
+	ldx #INV_RED
+	bmi set
+nofar
+	ldx #INV_GREEN
+set	
+	cpx warnlight_colour
+	beq end
+	stx warnlight_colour
+	cpx #INV_GREEN
+	beq noflash
+	jmp flash_warning_on
+noflash
+	jmp flash_warning_off
+end
+	rts
+.)
+
+
 
 #ifdef DBGVALUES
 dbg1 .word $0000
@@ -892,6 +942,13 @@ good
 		; Should start sequence, but not perform the jump right now... 
 
 endjump
+		; If too close to planet cannot jump
+		lda _planet_dist
+		cmp #PDIST_MASSLOCK
+		bcs canjump
+		ldx #STR_MASS_LOCKED
+		jmp flight_message
+canjump
 		; Perform the jumping
         jsr _jump
 		; Clear legal status a bit
