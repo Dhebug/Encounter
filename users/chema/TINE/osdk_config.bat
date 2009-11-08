@@ -18,7 +18,7 @@ SET OSDKFILE=%OSDKFILE% oobj3d\lib3d oobj3d\obj3d oobj3d\filler oobj3d\LineDraw
 SET OSDKFILE=%OSDKFILE% oobj3d\clip oobj3d\mextra oobj3d\circle oobj3d\debris
 SET OSDKFILE=%OSDKFILE% data ships radar stars random tinefuncs
 SET OSDKFILE=%OSDKFILE% dictc text tineinc galaxy cockpit graphics
-SET OSDKFILE=%OSDKFILE% tactics universe tineloop keyboard disk tail
+SET OSDKFILE=%OSDKFILE% tactics universe tineloop keyboard disk sound tail
 SET OSDKFILE=%OSDKFILE% oobj3d\lib3dtab models
 
 

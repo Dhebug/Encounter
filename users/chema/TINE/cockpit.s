@@ -209,12 +209,14 @@ end
 .)
 
 
-;****** Warning Light(Missile Incoming) ******
+;****** Warning Light ******
 ;Version sent has green flashing light
 ;To set colour poke $A073,$A09B,$A0C3 with Inversed colour (see above for values)
 ;To Set Flashing, poke $A074,$A09C,$A0C4 with $8C
 ;To Disable flashing, poke $A074,$A09C,$A0C4 with $88
 
+
+warnlight_colour .byt INV_GREEN
 
 flash_warning_off
 .(
@@ -231,7 +233,8 @@ flash_warning_off
 	sta $a09c
 	sta $a0c4
 
-	lda #$82
++set_warning_light
+	lda warnlight_colour
 	sta $a073
 	sta $a09b
 	sta $a0c3
@@ -380,28 +383,29 @@ vector2	sta $dead
 skip1	rts
 .)
 
+
 TemperatureIndicatorScreenLocLo
- .byt $10
- .byt $60
- .byt $B0
- .byt $00
- .byt $50
- .byt $A0
- .byt $F0
- .byt $40
- .byt $90
  .byt $E0
+ .byt $90
+ .byt $40
+ .byt $F0
+ .byt $A0
+ .byt $50
+ .byt $00
+ .byt $B0
+ .byt $60
+ .byt $10
 TemperatureIndicatorScreenLocHi
- .byt $BB
- .byt $BB
- .byt $BB
- .byt $BC
- .byt $BC
- .byt $BC
- .byt $BC
  .byt $BD
  .byt $BD
  .byt $BD
+ .byt $BC
+ .byt $BC
+ .byt $BC
+ .byt $BC
+ .byt $BB
+ .byt $BB
+ .byt $BB
 
 
 

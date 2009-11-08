@@ -11,6 +11,14 @@
 
 //#define OLDROLLS
 
+
+// Values for planet distance various thresholds
+
+#define PDIST_DOCK		$0a
+#define PDIST_MASSLOCK	$10
+#define PDIST_TOOFAR	$60
+#define PDIST_TOOFAR2	$70
+
 // Values for the _flags field
 
 #define IS_EXPLODING        1 

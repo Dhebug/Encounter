@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP110.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP29A.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP110.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP29A.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -62,6 +62,7 @@ Assembling universe.S
 Assembling tineloop.S
 Assembling keyboard.S
 Assembling disk.S
+Assembling sound.S
 Assembling tail.S
 Assembling oobj3d\lib3dtab.S
 Assembling models.S
@@ -76,18 +77,20 @@ obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3620
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3617
+Commander's data:
+(__commander_data_end - __commander_data_start)=(__commander_data_end - __commander_data_start)=50
 Size of ship data tables in bytes:
 (__shiptables_end - __shiptables_start)=(__shiptables_end - __shiptables_start)=416
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=1855
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=1862
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 **** Free space:
-($a000-osdk_end)=($a000-osdk_end)=4447
+($a000-osdk_end)=($a000-osdk_end)=4203
 
 -----------------
 lib3d: Tables
@@ -108,7 +111,7 @@ Size of models in bytes:
 (__models_end - __models_start)=(__models_end - __models_start)=4199
 
 Creating final program TINE.TAP
-File 'build\TINE.tap' is 35247 bytes long (14 bytes header and 35233 bytes of data)
+File 'build\TINE.tap' is 35491 bytes long (14 bytes header and 35477 bytes of data)
 Build of TINE.tap finished
 Tap2dsk V2.1
 Reading oobj3d\overlay.tap

@@ -890,7 +890,6 @@ LaunchMissile
 	bne notus
 	ldx #STR_INCOMING_MISSILE
 	jsr flight_message 
-	jsr flash_warning_on
 notus
     ; Set who is launching at _missiles field
 savx
@@ -938,7 +937,7 @@ DisappearObject
 ExplodeObject
 .(
     stx _ID
-    ;jsr _explode
+    jsr SndExplosion
 	lda #A_FWRED
 	jsr set_ink
 	inc attr_changed
@@ -1346,8 +1345,8 @@ killit
 	jsr increment_kills
 nokill
     ; Make a nice sound
-    ;jmp _shoot	; this is jsr/rts
-	rts
+    jmp SndShoot	; this is jsr/rts
+	;rts
 .)
 
 
