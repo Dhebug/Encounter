@@ -147,6 +147,9 @@ moonsdone
 	sta thargoid_counter
 	sta police_counter
 	sta asteroid_counter
+	sta _ecm_counter
+	sta message_delay
+
     ;jsr _InitTestCode
 	jmp random_encounter
     ;rts
@@ -299,11 +302,11 @@ savid   lda #0  ;SMC
 random_encounter
 .(
 		; If already too many objects, return
-;		lda NUMOBJ
-;		cmp #8
-;		bcc cont1
-;		rts
-;cont1
+		lda NUMOBJS
+		cmp #12
+		bcc cont1
+		rts
+cont1
 
 ;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))
 ;		return;

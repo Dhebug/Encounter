@@ -140,6 +140,7 @@ noY
 	bne loop
 	jsr LoadDefaultCommander
 end
+	jsr SndPic
 	jsr NewPlayerShip
 	jmp end_intro
 
@@ -161,7 +162,7 @@ loop
 	jsr ReadKeyNoBounce
 	cmp #" "  
 	bne loop
-
+	jsr SndPic
 	jmp end_intro
 .)
 
@@ -179,7 +180,7 @@ init_front_view
 
 _FirstFrame
 .(
-         lda #$ff
+         lda #PDIST_MASSLOCK
          sta _planet_dist
 
          jsr clr_hires2
@@ -362,8 +363,8 @@ cont
     ;eor frame_number
 	lda frame_number
 	and #7
-	;beq cont2
-	bne checkthings
+	;bne cont2
+	beq checkthings
 	jmp cont2
 
 checkthings
@@ -429,6 +430,10 @@ notarget
 	stx LaserTemperature
 	jsr update_temperature_panel
 notemp
+	lda _ecm_counter
+	beq noecm
+	dec _ecm_counter
+noecm
 
 	; ...
 
@@ -444,42 +449,10 @@ cont3
 
 	; Update everything that needs to be
 	jsr update_speed_panel
+	jsr update_energy_panel
 nofr	 
     jmp loop
 
-.)
-
-; Sets the planet distance light indicator.
-; Needs A=planet_dist
-planet_light
-.(
-	cmp #PDIST_DOCK
-	bcs noneardock
-	ldx #INV_MAGENTA
-	bmi set
-noneardock
-	cmp #PDIST_MASSLOCK
-	bcs nonearplanet
-	ldx #INV_YELLOW
-	bmi set
-nonearplanet
-	cmp #PDIST_TOOFAR
-	bcc nofar
-	ldx #INV_RED
-	bmi set
-nofar
-	ldx #INV_GREEN
-set	
-	cpx warnlight_colour
-	beq end
-	stx warnlight_colour
-	cpx #INV_GREEN
-	beq noflash
-	jmp flash_warning_on
-noflash
-	jmp flash_warning_off
-end
-	rts
 .)
 
 
@@ -586,17 +559,17 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 17
+#define MAX_KEY 18
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U"
+    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E"
 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
-    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm) 
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
-    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm)  
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on)  
 
 
 /* M= byte 3 val 1
@@ -670,8 +643,8 @@ cross
 cont1
         jsr ReadKeyNoBounce
 		beq end       	
-
-
+		
+		
         ; Ok a key was pressed, let's check
         ldx #MAX_KEY
 loop    
@@ -869,6 +842,7 @@ target
 		lda _missile_armed
 		bne no_arm
 		; Arm missile and start target procedure
+		jsr SndBell1
 		dec _missile_armed	; This sets it to $ff
 		jsr update_missile_panel
 no_arm
@@ -908,6 +882,23 @@ nolock
 fireL   jmp FireLaser
         
 
+ecm_on
+		; player sets ECM on.
+		; Check if he has ECM equipped
+		lda _equip
+		and #%10000
+		beq noecm
+		; It needs energy
+		lda _energy+1
+		cmp #11
+		bcc noecm
+		sec
+		sbc #10
+		sta _energy+1
+		jmp SetECMOn
+noecm
+		rts
+
 ;H
 galhyper
 
@@ -938,8 +929,20 @@ jumphyper
         rts
 good
 		; Compare distance and check it is not a "hyperspace range?"
-
-		; Should start sequence, but not perform the jump right now... 
+		; 16-bit unsigned comparison... inlined
+		lda _fuel ; op1-op2
+	    cmp _dest_dist
+		lda #0
+		sbc _dest_dist+1
+.(
+	    bvc ret ; N eor V
+	    eor #$80
+ret
+.)
+		bcs endjump
+		; Cannot jump
+		ldx #STR_HYPRANGE
+		jmp flight_message
 
 endjump
 		; If too close to planet cannot jump
@@ -949,20 +952,9 @@ endjump
 		ldx #STR_MASS_LOCKED
 		jmp flight_message
 canjump
-		; Perform the jumping
-        jsr _jump
-		; Clear legal status a bit
-		lda _legal_status
-		lsr
-		sta _legal_status
-		; Erase radar and compass and create environment
-        jsr EraseRadar
-        jsr clear_compass
-        jsr CreateEnvironment
-		; Draw first frame
-        jsr _FirstFrame
-        rts
-
+		; Should start sequence, but not perform the jump right now... 
+		jmp do_jump
+		
 ;1
 frontview
         lda #SCR_FRONT
@@ -984,40 +976,47 @@ nothing
         rts
 ;2
 info    
+	jsr SndPic
     lda #SCR_INFO
     sta _current_screen
     jmp _displayinfo
 ;3
 sysinfo    
+	jsr SndPic
     lda #SCR_SYSTEM
     sta _current_screen
     jmp _printsystem
 
 ;4
 short_chart
+	jsr SndPic
     lda #SCR_CHART
     sta _current_screen
     jmp _plot_chart
 ;5
 gal_chart
+	jsr SndPic
     lda #SCR_GALAXY
     sta _current_screen
     jmp _plot_galaxy
 
 ;6
 market
+	jsr SndPic
     lda #SCR_MARKET
     sta _current_screen
     jmp _displaymarket
 
 ;7
 equip
+	jsr SndPic
     lda #SCR_EQUIP
     sta _current_screen
     jmp _displayequip
 
 ;R
 splanet
+	jsr SndPic
     lda _current_screen
     cmp #SCR_GALAXY
     beq doit
@@ -1039,6 +1038,34 @@ doit
 
 
 ;;;; END OF TABLE
+
+
+
+do_jump
+.(
+		; Remove fuel
+		lda _fuel
+		sec
+		sbc _dest_dist
+		sta _fuel
+		lda _fuel+1
+		sbc _dest_dist+1
+		sta _fuel+1
+		
+		; Perform the jumping
+        jsr _jump
+		; Clear legal status a bit
+		lda _legal_status
+		lsr
+		sta _legal_status
+		; Erase radar and compass and create environment
+        jsr EraseRadar
+        jsr clear_compass
+        jsr CreateEnvironment
+		; Draw first frame
+        jmp _FirstFrame
+        ;rts
+.)
 
 check_scr
 .(

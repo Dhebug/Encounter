@@ -134,16 +134,27 @@ AIMain
 	; Are we dealing with a missile?
 
     cmp #SHIP_MISSILE
-    bne nomissile
+    ;bne nomissile
+	beq missile
+	jmp nomissile
+missile
     
     ; It is a missile. If the target is 0 then there is no target
     ; so should do nothing or explode? OR should this never happen? 
 
-    ; lda _ecm_counter
-    ; beq noecm
-    ; ;Incrementamos kills y eliminamos el misil
-    ; rts
-;noecm
+    lda _ecm_counter
+    beq noecm
+
+    ; make missile explode
+    ;ldx AIShipID
+    lda _flags,x
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags,x
+	lda #0
+	sta _ttl,x
+    rts
+noecm
 
     ; Get vector to target
 
@@ -215,6 +226,29 @@ savy
 nohit
     ;; Mirar a ver si se activa ECM (si no es el jugador)
     ;; Si no lo activa entonces seguimos la persecución (?)
+
+	; See if ecm is already active
+	lda _ecm_counter
+	bne noacecm
+
+	; See chance
+	jsr _gen_rnd_number
+	cmp #ECM_CHANCE
+	bcs noacecm; if >= ECM_CHANCE, then don't
+
+	; Check it is not the player
+	ldx AITarget
+	cpx #1 ; player
+	beq noacecm
+
+	; See if ECM equipped
+	jsr GetShipEquip
+	and #(HAS_ECM)
+	beq noacecm
+	; Target has ECM system, will he activate it?
+	jmp SetECMOn
+
+noacecm
     jmp approach
 
 nomissile
@@ -536,9 +570,9 @@ nolowen
     lda our_ang0+1
     sta op1+1
  
-    lda #<$e38-150; $f1c8 ;$e38
+    lda #<$e38-350; $f1c8 ;$e38
     sta op2
-    lda #>$e38-150; ;$e38
+    lda #>$e38-350; ;$e38
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -556,6 +590,7 @@ nolowen
     sta _laser_target,x
     inc _numlasers
  
+	jsr SndShoot
 
     ; Make ship angry at who shoots
 
@@ -565,9 +600,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<($f8e-150);f07d ;$f8e
+    lda #<($f8e-450);f07d ;$f8e
     sta op2
-    lda #>($f8e-150);f07d ;$f8e
+    lda #>($f8e-450);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -744,6 +779,8 @@ FireLaser
 	cmp #9
 	beq nohit
 
+    jsr SndShoot
+
 	inc LaserTemperature
 	jsr update_temperature_panel
 
@@ -873,8 +910,8 @@ LaunchMissile
     sta _accel,x
     ;lda #3
     ;sta _rotz,x
-    ;lda #30
-    ;sta _speed,x       
+    lda #40
+    sta _speed,x       
 
     ; Set ai_controlled
     lda _ai_state,x
@@ -888,8 +925,11 @@ LaunchMissile
 	; If we are the objective, set inflight message
 	cmp #1
 	bne notus
+	stx savx2+1
 	ldx #STR_INCOMING_MISSILE
 	jsr flight_message 
+savx2
+	ldx #0	; SMC
 notus
     ; Set who is launching at _missiles field
 savx
@@ -1221,6 +1261,9 @@ loopd
 noscoop
     lda theobject
     ldx _num_collisions
+	; Some defensive programming...
+	cpx #4
+	beq no_hit
     sta _collision_list,x
     inc _num_collisions
     
@@ -1345,7 +1388,7 @@ killit
 	jsr increment_kills
 nokill
     ; Make a nice sound
-    jmp SndShoot	; this is jsr/rts
+    jmp SndHit	; this is jsr/rts
 	;rts
 .)
 
@@ -1503,7 +1546,7 @@ nokill
     ; Just update screen indicators and such...
 	jsr update_shields_panel
     ; Make a nice sound
-    ;jsr _shoot	
+    jsr SndHitNoShields
 	lda #A_FWYELLOW
 	jsr set_ink
 	inc attr_changed
@@ -1584,12 +1627,11 @@ loop
 enemy_energy
     lda #0  ; SMC
     jsr damage_player   ; Damage player
-
     dec count
     bne loop
-
-    ;jsr _prcolls
-    rts
+    
+	jmp SndCrash
+    ;rts
 .)
 
 
@@ -1754,7 +1796,15 @@ nobounty
 .)
 
 
-
+SetECMOn
+.(
+	; Set cockpit signal to ecm detected
+	
+	; Set ecm counter
+	lda #5
+	sta _ecm_counter
+	rts
+.)
 
 
 

@@ -363,6 +363,7 @@ notfound
     lda #<str_notfound
     ldx #>str_notfound
     jsr printnl
+	jsr SndBell2
     jsr _infoplanet
     jmp _makesystem
 
@@ -378,6 +379,7 @@ prepare_area
 
 print_distinfo
 .(
+	jsr SndBell2
     jsr prepare_area
     ;jsr put_space
     lda #>_hyp_system+NAME
@@ -2323,6 +2325,10 @@ sav_a
     asl
     rol op2+1
     sta op2
+	lda op2
+	sta _dest_dist
+	lda op2+1
+	sta _dest_dist+1
     jsr print_float  
     ldx #STR_LY
     jsr printtail   ; This is jsr/rts
@@ -2846,6 +2852,7 @@ set_sel
 .(
     stx _cur_sel
     jsr set_hilite
+	jsr SndPoc
  .)
 mkt_status
 .(
@@ -3009,6 +3016,7 @@ space
     inc _shipshold,x    
 
     jsr dec_cash
+	jsr SndPocLow
     jmp update_mkt
 nosell
 nospace
@@ -3041,7 +3049,7 @@ space
     sta op2+1
     
     jsr inc_cash
-     
+    jsr SndPocLow
     jmp update_mkt
 
 nosell
@@ -3483,9 +3491,9 @@ normal
 	clc
 	adc #10
 	sta _holdspace
-	jmp setflag
+	;jmp setflag
 nocargo
-
+	; Should not arrive here?
 
 setflag
 	lda tmp0
@@ -3497,6 +3505,7 @@ setflag
 
 payfor
     jsr dec_cash
+	jsr SndPocLow
     jmp _displayequip
 
 	;jmp mkt_status	; Update cash

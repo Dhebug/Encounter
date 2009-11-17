@@ -82,6 +82,8 @@ _front_shield	.byt 22
 _rear_shield	.byt 22
 _missile_armed	.byt 0
 
+;Is ECM active?
+_ecm_counter	.byt 0
 
 ;typedef struct
 ;{ char a,b,c,d;
@@ -121,6 +123,7 @@ _quantities		.dsb 17
 
 
 _dest_num		.byt 7	; So we start at LAVE 
+_dest_dist		.word 0	; Distance to target planet
 _current_screen	.byt 0 
 _docked			.byt 255 
 _planet_dist    .byt 255
