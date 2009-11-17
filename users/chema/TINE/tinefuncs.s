@@ -626,8 +626,10 @@ nomax
     ; Let's see if halving down this is enough...
     ;cmp #$80
     ;ror
-    cmp #$80
-    ror
+    ;cmp #$80
+    ;ror
+	lsr
+	lsr
     jsr MoveForwards    
 
     lda #0
@@ -656,7 +658,8 @@ MoveCurrent
 .(
     and #%01111111
     tax
-    lda ShipMaxSpeed-1,x
+
+	lda ShipMaxSpeed-1,x
     sta maxspeed
 
     ldx CUROBJ
@@ -667,7 +670,6 @@ MoveCurrent
     beq nadax
     jsr check_maxman
     ;sta _rotx,x
-
 loopx
     plp
     php
@@ -676,7 +678,6 @@ loopx
     bne loopx
 nadax
     plp
-
     ldx CUROBJ
     lda _roty,x
     cmp #$80
@@ -693,7 +694,6 @@ loopy
     bne loopy
 naday
     plp
-
     ldx CUROBJ
     lda _rotz,x
     cmp #$80
@@ -710,7 +710,6 @@ loopz
     bne loopz
 nadaz
     plp
-
     ldx CUROBJ
     lda _accel,x
     ;ora _speed,x
@@ -736,10 +735,14 @@ move
 	; Move forwards actually moves 4 times the amount in A
     ; Original Elite moves 3/2 (96*4/256) times this amount.
     ; Let's see if halving down this is enough...
-    cmp #$80
-    ror
-    cmp #$80
-    ror
+    
+	; Speed should allways be possitive
+	;cmp #$80
+    ;ror
+    ;cmp #$80
+    ;ror
+	lsr
+	lsr
     jsr MoveForwards    
 end
     rts

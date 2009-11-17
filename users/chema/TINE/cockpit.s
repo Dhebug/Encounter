@@ -123,7 +123,9 @@ loop
 	; Now setup the counter to delete the string at the main loop
 	lda #HUD_MESSAGE_DELAY
 	sta message_delay
-	rts
+
+	jmp SndMsg
+	;rts
 .)
 
 
@@ -147,6 +149,11 @@ print_inflight_message
 
 update_all_controls
 .(
+	lda #0
+	sta warnlight_colour
+	lda _planet_dist
+	jsr planet_light
+	jsr update_energy_panel
     jsr update_temperature_panel
 	jsr update_speed_panel
 	jsr update_shields_panel
@@ -204,17 +211,93 @@ loop2
 	cpx _missiles_left
 	bne loop2
 end
+
+	jsr update_ship_id
 	rts
 
 .)
 
+;****** 8 character Text row(System) *******
+;$A060 - Top Left of first character of 8
+
+
+update_ship_id
+.(
+	lda #$60
+	sta screen
+	lda #$a0
+	sta screen+1
+	
+	lda _missile_armed
+	bmi clear
+	beq clear
+
+	tax
+	jsr GetShipType
+	and #%01111111
+	tax
+
+	lda #<str_ship_names
+	sta tmp0
+	lda #>str_ship_names
+	sta tmp0+1
+
+	dex
+
+	; Print message id to buffer
+	inc capson
+	jsr search_string_and_print
+	dec capson
+	rts
+clear
+	lda #<str_blank
+	ldx #>str_blank
+	jmp print
+.)
+
 
 ;****** Warning Light ******
+
+; Sets the planet distance light indicator.
+; Needs A=planet_dist
+planet_light
+.(
+	cmp #PDIST_DOCK
+	bcs noneardock
+	ldx #INV_MAGENTA
+	bmi set
+noneardock
+	cmp #PDIST_MASSLOCK
+	bcs nonearplanet
+	ldx #INV_YELLOW
+	bmi set
+nonearplanet
+	cmp #PDIST_TOOFAR
+	bcc nofar
+	ldx #INV_RED
+	bmi set
+nofar
+	ldx #INV_GREEN
+set	
+	cpx warnlight_colour
+	beq end
+	stx warnlight_colour
+	cpx #INV_GREEN
+	beq noflash
+	jmp flash_warning_on
+noflash
+	jmp flash_warning_off
+end
+	rts
+.)
+
+
+
+
 ;Version sent has green flashing light
 ;To set colour poke $A073,$A09B,$A0C3 with Inversed colour (see above for values)
 ;To Set Flashing, poke $A074,$A09C,$A0C4 with $8C
 ;To Disable flashing, poke $A074,$A09C,$A0C4 with $88
-
 
 warnlight_colour .byt INV_GREEN
 
@@ -408,7 +491,187 @@ TemperatureIndicatorScreenLocHi
  .byt $BB
 
 
+ ;****** Power Redirection *******
+;$B742 - Top left corner of plotted graphic
+;This requires three 4x5 graphics (60 Bytes) to represent the three positions the switch may be in.
 
+
+SelectorLeft
+ .byt $5F,$4F,$7F,$7E
+ .byt $E1,$D8,$C0,$C1
+ .byt $5D,$73,$7F,$7E
+ .byt $E4,$78,$FF,$F1
+ .byt $58,$41,$7F,$7E
+SelectorMiddle
+ .byt $5F,$7E,$5F,$7E
+ .byt $E0,$C2,$F0,$C1
+ .byt $5F,$7B,$67,$7E
+ .byt $E3,$F8,$70,$F1
+ .byt $5F,$70,$43,$7E
+SelectorRight
+ .byt $5F,$7F,$7C,$7E
+ .byt $E0,$C0,$C5,$E1
+ .byt $5F,$7F,$77,$4E
+ .byt $E3,$FF,$4F,$D9
+ .byt $5F,$7F,$40,$46
+
+;******* Energy Banks *******
+;Again i would use similar table to horizontal bar since there are only 5 positions(0-5)
+;Didn't get time tonight to sort u out a routine, though i suspect you won't have a problem with that
+;$BB4E $BB50 $BB52 $BB54
+;$BB9E $BBA0 $BBA2 $BBA4
+;$BBEE $BBF0 $BBF2 $BBF4
+;$BC3E $BC40 $BC42 $BC44
+;$BC8E $BC90 $BC92 $BC94
+
+update_energy_panel
+.(
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq correct
+	rts
+correct
+	lda _energy+1
+	bpl doit
+	lda #0
+doit
+	lsr
+	lsr
+	sta tmp
+
+	cmp #6
+	bcc l6a
+	ldx #6
+	bne conta
+l6a
+	tax
+conta
+	lda table1,x
+	sta $bb4e
+	lda table2,x
+	sta $bb4e+80
+	lda table3,x
+	sta $bb4e+80*1
+	lda table3,x
+	sta $bb4e+80*2
+	lda table4,x
+	sta $bb4e+80*3
+	lda table5,x
+	sta $bb4e+80*4
+	lda table6,x
+	sta $bb4e+80*4
+
+	lda tmp
+	sec
+	sbc #6
+	sta tmp
+	bpl normalb
+	lda #0
+	beq l6b
+normalb
+	cmp #6
+	bcc l6b
+	ldx #6
+	bne contb
+l6b
+	tax
+contb		
+		
+	lda table1,x
+	sta $BB50
+	lda table2,x
+	sta $BB50+80
+	lda table3,x
+	sta $BB50+80*1
+	lda table3,x
+	sta $BB50+80*2
+	lda table4,x
+	sta $BB50+80*3
+	lda table5,x
+	sta $BB50+80*4
+	lda table6,x
+	sta $BB50+80*4
+
+	lda tmp
+	sec
+	sbc #6
+	sta tmp
+	bpl normalc
+	lda #0
+	beq l6c
+normalc
+
+	cmp #6
+	bcc l6c
+	ldx #6
+	bne contc
+l6c
+	tax
+contc		
+		
+	lda table1,x
+	sta $BB52
+	lda table2,x
+	sta $BB52+80
+	lda table3,x
+	sta $BB52+80*1
+	lda table3,x
+	sta $BB52+80*2
+	lda table4,x
+	sta $BB52+80*3
+	lda table5,x
+	sta $BB52+80*4
+	lda table6,x
+	sta $BB52+80*4
+
+	lda tmp
+	sec
+	sbc #6
+	sta tmp
+	bpl normald
+	lda #0
+	beq l6d
+normald
+	cmp #6
+	bcc l6d
+	ldx #6
+	bne contd
+l6d
+	tax
+contd		
+		
+	lda table1,x
+	sta $BB54
+	lda table2,x
+	sta $BB54+80
+	lda table3,x
+	sta $BB54+80*1
+	lda table3,x
+	sta $BB54+80*2
+	lda table4,x
+	sta $BB54+80*3
+	lda table5,x
+	sta $BB54+80*4
+	lda table6,x
+	sta $BB54+80*4
+	
+	rts
+
+.)
+
+
+table1
+	.byt $40
+table2
+	.byt $40
+table3
+	.byt $40
+table4
+	.byt $40
+table5
+	.byt $40
+table6
+	.byt $40,$f3,$f3,$f3,$f3,$f3,$f3
 
 
 

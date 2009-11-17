@@ -11,10 +11,11 @@
 #define STR_TARGET_LOCKED		4
 #define STR_TARGET_LOST			5
 #define STR_MASS_LOCKED			6
-#define STR_GALACTIC_HYPER		7
-#define STR_RIGHTONCOMMANDER	8
-#define STR_ENERGY_LOW			9
-#define STR_HYPERSPACE			10
+#define STR_HYPRANGE			7
+#define STR_GALACTIC_HYPER		8
+#define STR_RIGHTONCOMMANDER	9
+#define STR_ENERGY_LOW			10
+#define STR_HYPERSPACE			12
 
 
 /* These have parameterers */

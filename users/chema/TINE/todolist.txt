@@ -38,7 +38,7 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Implement a save/load screen
 
-+ Check and manage fuel
+- Check and manage fuel
 
 - Buy/manage equipment
 
@@ -48,9 +48,9 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Complete AI
 
-+ Implement ECM for missiles
+- Implement ECM for missiles
 
-+ Remove inflight messages afer jumping/docking...
+- Remove inflight messages afer jumping/docking...
 
 - Update ship's energy, in a timely manner and to maximum when dock (or before leaving the planet)
 
@@ -117,11 +117,18 @@ let say that from a particular orientation and velocity you can compute a vector
 + Change alert_cops in tactics to make_angry to save some CPU cycles. Now it is on damage_ship and damage_player. However this is less realistic,
   as it would only alert cops the first time you shot, and they may appear later.
 
-+ player-launched Missiles are too near sometimes, models are incorrectly drawn
+- player-launched Missiles are too near sometimes, models are incorrectly drawn
 
-+ Compass is only updated if x,y changed, which is incorrect if changing from hollow to filled and
+-Compass is only updated if x,y changed, which is incorrect if changing from hollow to filled and
  viceversa. Also when comming from other screens it is sometimes not updated. Same reason?
 
 - Refilling energy and shields in hyper jump is not a good idea... maybe filing shields or x2 to both could do
 
 - Need to /2 the legal status at each jump or something...
+
++ Energy seems to get a value >128, which becomes negative confusing the cockpit panel
+
+- Bad initialization of planet-dist, permits a jump inmediately after launching
+
++ Front shield (maybe rear too?) is not updated correctly (after jump). Going to another screen and getting
+  back updates it.

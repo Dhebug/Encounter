@@ -809,6 +809,80 @@ str_missile
     .asc "Missile"
     .byt 0
 
+
+str_blank 
+	.asc "        "
+	.byt 0
+str_ship_names
+	.asc "Missile "
+	.byt 0
+	.asc " Debris "
+	.byt 0
+	.asc "  Pod   "
+	.byt 0
+	.asc " Alloys "
+	.byt 0
+	.asc " Cargo  "
+	.byt 0
+	.asc "Boulder "
+	.byt 0
+	.asc "Asteroid"
+	.byt 0
+	.asc "Splinter"
+	.byt 0
+	.asc "Shuttle "
+	.byt 0
+	.asc "Shuttle "
+	.byt 0
+	.asc " Viper  "
+	.byt 0
+	.asc "  Boa   "
+	.byt 0
+	.asc "Cobra-3 "
+	.byt 0
+	.asc " Python "
+	.byt 0
+	.asc "Anaconda"
+	.byt 0
+	.asc "  Worm  "
+	.byt 0
+	.asc "Cobra-1 "
+	.byt 0
+	.asc " Gecko  "
+	.byt 0
+	.asc " Krait  "
+	.byt 0
+	.asc " Mamba  "
+	.byt 0
+	.asc " Winder "
+	.byt 0
+	.asc " Adder  "
+	.byt 0
+	.asc " Moray  "
+	.byt 0
+	.asc " Lance  "
+	.byt 0
+	.asc "  Asp   "
+	.byt 0
+	.asc "Cobra-3 "
+	.byt 0
+	.asc " Python "
+	.byt 0
+	.asc "  Boa   "
+	.byt 0
+	.asc "Thargon "
+	.byt 0
+	.asc "Tharglet"
+	.byt 0
+	.asc "Unknown "
+	.byt 0
+	.asc " Cougar "
+	.byt 0
+ 
+
+
+
+
 flight_message_base
 	.asc "Incoming Missile"
 	.byt 0
@@ -824,6 +898,9 @@ flight_message_base
 	.byt 0
 	.asc "Mass Locked"
 	.byt 0
+	.asc "Destination too far"
+	.byt 0
+
 
 __texts_end
 

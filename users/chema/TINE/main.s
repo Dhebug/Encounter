@@ -49,9 +49,8 @@ tmp		.dsb 2
 _main
 .(
 
-  	jsr SndPing
-
-
+  	jsr InitSound
+	jsr SndTest	
 	lda #<osdk_stack
 	sta sp
 	lda #>osdk_stack
