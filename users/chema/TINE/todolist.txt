@@ -132,3 +132,5 @@ let say that from a particular orientation and velocity you can compute a vector
 
 + Front shield (maybe rear too?) is not updated correctly (after jump). Going to another screen and getting
   back updates it.
+
++ Are shields recharging?

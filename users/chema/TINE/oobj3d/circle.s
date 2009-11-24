@@ -606,7 +606,9 @@ _circlePoints
 
 .)
 
+#define VERSION2
 
+#ifdef VERSION1
 plotpoint
 .(
  
@@ -665,7 +667,118 @@ end
     rts
 
 .)
+#endif
 
+#ifdef VERSION2
+plotpoint
+.(
+ 
+/*
+    lda X1
+    sta op1
+    lda X1+1
+    sta op1+1
+
+    lda #(CLIP_RIGHT)
+    sta op2
+    lda #0
+    sta op2+1
+    jsr cmp16
+    bpl end
+    lda #(CLIP_LEFT)
+    sta op2
+    jsr cmp16
+    bmi end
+*/
+
+.(
+    lda X1
+    cmp #(CLIP_RIGHT)
+    lda X1+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bpl end
+.(
+    lda X1
+    cmp #(CLIP_LEFT)
+    lda X1+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi end
+
+/*
+    lda Y1
+    sta op1
+    lda Y1+1
+    sta op1+1
+
++patch_circleclip
+    lda #(CLIP_BOTTOM)
+    sta op2
+    lda #0
+    sta op2+1
+    jsr cmp16
+    bpl end
+    lda #(CLIP_TOP)
+    sta op2
+    jsr cmp16
+    bmi end
+
+*/
+.(
+    lda Y1
++patch_circleclip
+    cmp #(CLIP_BOTTOM)
+    lda Y1+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bpl end
+.(
+    lda Y1
+    cmp #(CLIP_TOP)
+    lda Y1+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi end
+
+
+
+plot 
+    ldx X1
+    ldy Y1
+
+    ;jsr pixel_address
+
+    lda _HiresAddrLow,y			; 4
+	sta tmp0+0					; 3
+	lda _HiresAddrHigh,y		; 4
+	sta tmp0+1					; 3 => Total 14 cycles
+
+  	ldy _TableDiv6,x
+	lda _TableBit6Reverse,x		; 4
+  
+
+    ora (tmp0),y
+    sta (tmp0),y
+
+end
+    rts
+
+.)
+
+#endif
 
 
 ; Variables for circlepoints

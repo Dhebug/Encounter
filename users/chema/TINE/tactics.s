@@ -307,7 +307,6 @@ notslow
 notrader
 
     ; If FLG_BOUNTYHUNTER and our legal status >=40 set angry flag and target us (=1)
-
 	lda _ai_state,x
 	and #(FLG_BOUNTYHUNTER|FLG_POLICE)
 	beq nobounty
@@ -338,7 +337,32 @@ nobounty
 
     ; If FLG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
 	; If FLG_BOLD keep on trying!
-	
+	lda _ai_state,x
+	and #(FLG_BOLD)
+	bne approach
+
+	lda _ai_state,x
+	and #(FLG_PIRATE)
+	beq approach
+	lda _planet_dist
+	cmp #PDIST_DOCK
+	bcc flee
+	lda police_counter
+	beq approach
+	stx savx+1
+	jsr _gen_rnd_number
+	cmp #100
+	bcs approach
+savx
+	ldx #0	;SMC
+flee
+	lda #0
+	sta _target,x
+	lda _flags,x
+	ora #FLG_FLY_TO_HYPER
+	sta _flags,x
+	;rts
+	jmp fly_to_pos
 
 approach
 
@@ -546,9 +570,16 @@ nolowen
     ; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
     ; BEWARE! Bug. VectX,Y,Z are now normalized!
 
+    ;lda A1+1
+    ;and #>FIRING_DISTANCE
+    ;bne toofar  
+	
+	lda A1
+    cmp #00
     lda A1+1
-    and #>FIRING_DISTANCE
-    bne toofar  
+    sbc #$20       ;Greater than $2000?
+    bcs toofar     ;(or negative)
+
 
     ; Check if laser is fitted... check FLAG_DEFENCELESS?
     ; if none goto toofar
@@ -966,7 +997,6 @@ HyperObject
 DockObject
 DisappearObject
 .(
-    
     stx _ID
     jmp RemoveObject
 .)
@@ -1593,6 +1623,11 @@ make_angry
     ora #IS_ANGRY
     sta _target,y
 
+	; Remove older flags
+	lda _flags,y
+	and #%11001111
+	sta _flags,y
+
 cannot
     rts
 
@@ -1803,7 +1838,10 @@ SetECMOn
 	; Set ecm counter
 	lda #5
 	sta _ecm_counter
-	rts
+
+	jmp update_ecm_panel
+
+	;rts
 .)
 
 

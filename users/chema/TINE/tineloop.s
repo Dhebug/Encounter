@@ -172,7 +172,7 @@ init_front_view
 .(
 	jsr clr_hires
 	jsr load_frame
-	jsr update_all_controls
+	;jsr update_all_controls
 	;jsr _DrawFrameBorder   
 	jsr _DoubleBuffOn
 	;jmp _FirstFrame	; Let the program flow...
@@ -180,6 +180,9 @@ init_front_view
 
 _FirstFrame
 .(
+
+ 	 	 jsr update_all_controls
+
          lda #PDIST_MASSLOCK
          sta _planet_dist
 
@@ -433,6 +436,8 @@ notemp
 	lda _ecm_counter
 	beq noecm
 	dec _ecm_counter
+	bne noecm
+	jsr update_ecm_panel
 noecm
 
 	; ...

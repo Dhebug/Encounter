@@ -157,6 +157,7 @@ update_all_controls
     jsr update_temperature_panel
 	jsr update_speed_panel
 	jsr update_shields_panel
+	jsr update_ecm_panel
 	jmp update_missile_panel
 .)
 
@@ -672,6 +673,71 @@ table5
 	.byt $40
 table6
 	.byt $40,$f3,$f3,$f3,$f3,$f3,$f3
+
+
+update_ecm_panel
+.(
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq correct
+	rts
+correct
+	lda #<$A095+40*5
+	sta loop+3
+	lda #>$A095+40*5
+	sta loop+3+1
+
+	lda _ecm_counter
+	beq no_ecm_active
+	lda #<panel_ecm_on
+	ldx #>panel_ecm_on
+	bne done	; Trick that assumes high byte cannot be zero!
+no_ecm_active
+	lda #<panel_ecm_off
+	ldx #>panel_ecm_off
+done
+	sta tmp1
+	stx tmp1+1
+
+	ldy #23
+loopo
+	ldx #3
+loop
+	lda (tmp1),y
+	sta $dead,x
+	dey
+	bmi end
+	dex
+	bpl loop
+
+	lda loop+3
+	sec
+	sbc #40
+	sta loop+3
+	bcs nocarry
+	dec loop+3+1
+nocarry
+	jmp loopo
+end
+	rts
+
+.)
+
+panel_ecm_on
+ .byt $D7,$FC,$CF,$FA
+ .byt $6A,$60,$41,$55
+ .byt $D5,$D6,$DA,$EA
+ .byt $6A,$69,$65,$55
+ .byt $D5,$DF,$FE,$EA
+ .byt $68,$43,$70,$45
+panel_ecm_off
+ .byt $FF,$FF,$FF,$FF
+ .byt $40,$40,$40,$40
+ .byt $FF,$FF,$FF,$FF
+ .byt $40,$40,$40,$40
+ .byt $FF,$FF,$FF,$FF
+ .byt $40,$40,$40,$40
+
 
 
 
