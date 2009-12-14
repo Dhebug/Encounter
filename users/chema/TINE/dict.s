@@ -898,9 +898,32 @@ flight_message_base
 	.byt 0
 	.asc "Mass Locked"
 	.byt 0
+	.asc "Path Locked"
+	.byt 0
 	.asc "Destination too far"
 	.byt 0
+	.asc "Right on, Commander!"
+	.byt 0
+	.asc "Energy Low"
+	.byt 0
 
+
+;; For load/save
+str_loadsavetitle
+	.asc "LOAD/SAVE Commander"
+	.byt 0
+str_loadsaveempty
+	.asc "-- Empty Slot --"
+	.byt 0
+str_doloadsave
+	.asc "(S)ave, (L)oad, (Q)uit"
+	.byt 0
+str_galslot
+	.asc "Gal: "
+	.byt 0
+str_sysslot
+	.asc "Sys: "
+	.byt 0
 
 __texts_end
 

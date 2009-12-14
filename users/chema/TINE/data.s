@@ -309,7 +309,6 @@ positionsX
     .byt 20*6, 26*6, 35*6, 2*6, 14*6, 20*6, 26*6, 35*6
 
 
-
 #echo Commander's data:
 #print (__commander_data_end - __commander_data_start)
 
