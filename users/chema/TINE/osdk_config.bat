@@ -27,6 +27,6 @@ SET OSDKFILE=%OSDKFILE% oobj3d\lib3dtab models
 SET OSDKTAPNAME="TINE"
 SET OSDKDISK=oobj3d\overlay.tap  
 ::run99.tap ..\intro\build\intro.tap 
-SET OSDKDNAME=" -- ELITE --"
-SET OSDKINIST="HIRES:TINE.COM"
+SET OSDKDNAME=" -- 1337 --"
+SET OSDKINIST="PAPER0:INK0:HIRES:TINE.COM"
 

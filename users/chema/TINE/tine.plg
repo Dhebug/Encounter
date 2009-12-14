@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP1E0.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP3A9.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP1E0.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP3A9.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -33,11 +33,12 @@ lib3d: Total size:
 Size of models in bytes:
 (__models_end - __models_start)=(__models_end - __models_start)=4199
 
-File 'overlay.tap' is 8981 bytes long (14 bytes header and 8967 bytes of data)
+File 'overlay.tap' is 9998 bytes long (14 bytes header and 9984 bytes of data)
 Presione una tecla para continuar . . . 
 Building the program TINE at adress $500
 Assembling main.S
-Assembling oobj3d\lib3d.S
+¨Desea sobrescribir C:\Docume~1\Chema\Misdoc~1\personal\oric\osdk\TMP\main.s (S¡/No/Todo)? ?
+¨Desea sobrescribir C:\Docume~1\Chema\Misdoc~1\personal\oric\osdk\TMP\main.s (S¡/No/Todo)? Assembling oobj3d\lib3d.S
 Assembling oobj3d\obj3d.S
 Assembling oobj3d\filler.S
 Assembling oobj3d\LineDraw.S
@@ -77,20 +78,20 @@ obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3614
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3606
 Commander's data:
 (__commander_data_end - __commander_data_start)=(__commander_data_end - __commander_data_start)=50
 Size of ship data tables in bytes:
 (__shiptables_end - __shiptables_start)=(__shiptables_end - __shiptables_start)=416
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2093
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2173
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 **** Free space:
-($a000-osdk_end)=($a000-osdk_end)=2992
+($a000-osdk_end)=($a000-osdk_end)=2251
 
 -----------------
 lib3d: Tables
@@ -111,7 +112,7 @@ Size of models in bytes:
 (__models_end - __models_start)=(__models_end - __models_start)=4199
 
 Creating final program TINE.TAP
-File 'build\TINE.tap' is 36702 bytes long (14 bytes header and 36688 bytes of data)
+File 'build\TINE.tap' is 37443 bytes long (14 bytes header and 37429 bytes of data)
 Build of TINE.tap finished
 Tap2dsk V2.1
 Reading oobj3d\overlay.tap

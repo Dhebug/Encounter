@@ -455,7 +455,8 @@ nocarry
 
 .)
 
-plot_frame_title
+
+draw_red_frame
 .(
     ldx #13
     lda #<$a000
@@ -478,10 +479,18 @@ nocarry
 
     lda #A_BGCYAN
     sta $a208
-   
-    ldy #4
-    ldx #48
-    jsr gotoXY
+
+	rts
+.)
+
+plot_frame_title
+.(
+	jsr draw_red_frame   
+    ;ldy #4
+    ;ldx #48
+    ;jsr gotoXY
+	jsr put_space
+	jsr put_space
     lda _current_screen
     cmp #SCR_CHART
     bne long
@@ -530,7 +539,9 @@ nodanger
 noscroll
     jsr plot_galaxy_with_scroll
 
-    rts
+	jsr _infoplanet
+	jmp _makesystem
+    ;rts
 
 .)
 
@@ -2346,9 +2357,19 @@ _printsystem
 
     ; Print title: Data on <planetname>
     inc capson
+	jsr draw_red_frame
+
+
+	jsr put_space
+	jsr put_space
 
     ldx #STR_DATA
-    jsr printtitle
+    ;jsr printtitle
+    lda #(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+    jsr printtail
+    jsr pr_colon
+
     jsr gs_planet_name
     ;jsr print_planet_name    
 
@@ -2497,6 +2518,8 @@ _displaymarket
     
     ; Clear hires and draw frame
     jsr clr_hires
+
+	jsr draw_red_frame
 
     inc capson
 
@@ -2822,6 +2845,13 @@ _inc_sel
     ldx #0
     beq cont
 notmarket
+	cmp #SCR_LOADSAVE
+	bne notsave
+	cpx #8
+	bne cont
+	ldx #0
+	beq cont
+notsave
     cpx equip_items
     bne cont
     ldx #0
@@ -2841,6 +2871,11 @@ _dec_sel
     ldx #16
     bne cont
 notmarket
+    cmp #SCR_LOADSAVE
+    bne notsave
+    ldx #7
+    bne cont
+notsave
     ldx equip_items
     dex
 cont
@@ -2853,6 +2888,10 @@ set_sel
     stx _cur_sel
     jsr set_hilite
 	jsr SndPoc
+	lda _current_screen
+	cmp #SCR_LOADSAVE
+	bne mkt_status
+	rts
  .)
 mkt_status
 .(
@@ -3078,6 +3117,7 @@ update_mkt
 _displayinfo
 .(
     jsr clr_hires
+	jsr draw_red_frame
     inc capson
     jsr put_space
     jsr put_space
@@ -3300,6 +3340,7 @@ _displayequip
     
     ; Clear hires and draw frame
     jsr clr_hires
+	jsr draw_red_frame
 
     inc capson
 
@@ -3648,6 +3689,365 @@ more
 
 
 
+_displayloadsave
+.(
+
+	; Load directory
+    ; Sector to read    
+    lda #NUM_SECT_OVL+OVERLAY_INIT
+    ldy #0
+    sta (sp),y
+    tya
+    iny
+    sta (sp),y
+
+    ; Address of buffer
+    iny
+    lda #<_disk_buffer
+    sta (sp),y
+    lda #>_disk_buffer
+    iny
+    sta (sp),y
+
+    jsr _init_disk
+    jsr _sect_read
+	jsr _init_irq_routine 
+
+    ; clear selection
+    lda #$ff
+    sta _cur_sel
+    
+    ; Clear hires and draw frame
+    jsr clr_hires
+	jsr draw_red_frame
+
+    inc capson
+
+    jsr put_space
+    jsr put_space
+    lda #(A_FWWHITE+A_FWCYAN*16+128)
+	jsr put_code
+    ldx #>str_loadsavetitle
+	lda #<str_loadsavetitle
+    jsr print
+
+    ;jsr perform_CRLF
+    ;jsr perform_CRLF
+
+    lda #A_FWCYAN
+    ;lda #(A_FWWHITE+A_FWCYAN*16+128)
+    jsr put_code
+
+    jsr perform_CRLF
+    lda #A_FWCYAN
+    
+    jsr perform_CRLF
+
+    dec capson    
+    
+    ; Loop thru the 8 slots
+    lda #0
+    sta count2    
+loop2
+    jsr print_slot
+    inc count2
+    lda count2
+    cmp #8
+    bne loop2  
+ 
+    rts
+.)	
+
+ps_count
+	 .byt 00
+ps_st
+.(
+	lda #0
+	sta ps_count
+loop
+	lda _disk_buffer,x
+	beq end1
+	jsr put_code
+	inc ps_count
+	inx
+	bne loop
+end1
+	inx
+	lda _disk_buffer,x
+	beq end1
+	rts
+
+.)
+
+
+fill_spaces
+.(
+  	sec
+	sbc ps_count
+	tax
+loopfill1
+	jsr put_space
+	dex
+	bpl loopfill1
+	rts
+.)
+
+print_slot
+.(
+	lda count2
+	asl
+	asl
+	asl
+	asl
+	asl
+	tax
+	lda _disk_buffer,x
+	beq emptyslot
+	; Print slot info
+    lda #(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+	; Commander...
+	inx
+	jsr ps_st
+	stx savex1+1
+	lda #"."
+	jsr put_code
+	lda #12
+	jsr fill_spaces
+
+	ldx #>str_sysslot
+	lda #<str_sysslot
+    jsr print
+savex1
+	ldx #0	; SMC
+
+	jsr ps_st
+	stx saveme+1
+	lda #"."
+	jsr put_code
+	lda #7
+	jsr fill_spaces
+
+    ldx #>str_galslot
+	lda #<str_galslot
+    jsr print
+saveme
+	ldx #0 ;SMC
+	lda _disk_buffer,x
+	clc
+	adc #"0"
+	jsr put_code
+
+	; META
+	jmp perform_CRLF
+emptyslot
+	lda #(A_FWWHITE+A_FWCYAN*16+128)
+    jsr put_code
+    ldx #>str_loadsaveempty
+	lda #<str_loadsaveempty
+    jmp printnl
+.)
+
+
+slot_sector
+	.byt NUM_SECT_OVL+OVERLAY_INIT+1
+	.byt NUM_SECT_OVL+OVERLAY_INIT+1
+	.byt NUM_SECT_OVL+OVERLAY_INIT+1
+	.byt NUM_SECT_OVL+OVERLAY_INIT+1
+	.byt NUM_SECT_OVL+OVERLAY_INIT+1
+	.byt NUM_SECT_OVL+OVERLAY_INIT+2
+	.byt NUM_SECT_OVL+OVERLAY_INIT+2
+	.byt NUM_SECT_OVL+OVERLAY_INIT+2
+
+slot_offset
+	.byt (__commander_data_end-__commander_data_start)*1-1
+	.byt (__commander_data_end-__commander_data_start)*2-1
+	.byt (__commander_data_end-__commander_data_start)*3-1
+	.byt (__commander_data_end-__commander_data_start)*4-1
+	.byt (__commander_data_end-__commander_data_start)*5-1
+	.byt (__commander_data_end-__commander_data_start)*1-1
+	.byt (__commander_data_end-__commander_data_start)*2-1
+	.byt (__commander_data_end-__commander_data_start)*3-1
+
+
+do_loadsave
+.(
+	jsr prepare_area
+    lda #(A_FWRED)
+    jsr put_code
+	ldx #>str_doloadsave
+	lda #<str_doloadsave
+	jsr printnl
+
+readloop
+	jsr ReadKeyNoBounce
+	beq readloop
+
+	cmp #"S"
+	bne notsave
+	; Save slot
+	jsr save_slot
+	jmp info
+notsave
+	cmp #"L"
+	bne notload
+	;Load slot
+	jsr load_slot
+	beq readloop
+	jmp info
+notload
+	cmp #"Q"
+	bne readloop
+
+	jmp prepare_area
+	;rts
+.)
+
+
+dir_entry
+.(
+	lda _cur_sel
+	asl
+	asl
+	asl
+	asl
+	asl
+	tax
+	rts	
+.)
+
+set_dparms
+.(
+    ldy #0
+    sta (sp),y
+    tya
+    iny
+    sta (sp),y
+
+    ; Address of buffer
+    iny
+    lda #<_disk_buffer
+    sta (sp),y
+    lda #>_disk_buffer
+    iny
+    sta (sp),y
+
+	rts
+.)
+
+save_slot
+.(
+
+	; Update directory
+	jsr dir_entry
+
+	; Set entry as used
+	lda #$ff
+	sta _disk_buffer,x
+	
+	inx
+	ldy #0
+loop1
+	lda _name,y
+	sta _disk_buffer,x
+	beq end1
+	iny
+	inx
+	bne loop1
+end1
+
+	inx
+	ldy #0
+loop2
+	lda _cpl_system+NAME,y
+	cmp #"."
+	beq skip
+	sta _disk_buffer,x
+skip
+	cmp #0
+	beq end2
+	iny
+	inx
+	bne loop2
+end2
+
+	inx
+	lda _galaxynum
+	sta _disk_buffer,x
+
+    ; write dir to disk
+	jsr _init_disk
+
+	lda #NUM_SECT_OVL+OVERLAY_INIT
+	jsr set_dparms
+    jsr _sect_write
+
+	; Load correct sector in buffer
+	ldx _cur_sel
+	lda slot_sector,x
+	jsr set_dparms
+	jsr _sect_read
+
+	; Copy data to buffer
+	ldx _cur_sel
+	lda slot_offset,x
+	tay
+	ldx #(__commander_data_end-__commander_data_start)-1
+loop
+	lda __commander_data_start,x
+	sta _disk_buffer,y
+	dey
+	dex
+	bpl loop
+
+	; Save buffer
+	ldx _cur_sel
+	lda slot_sector,x
+	jsr set_dparms
+	jsr _sect_write
+
+	jmp _init_irq_routine 
+	;rts
+.)
+
+
+load_slot
+.(
+	; Check in directory if slot is used
+	jsr dir_entry
+	lda _disk_buffer,x
+	beq cannot
+
+	; Load correct sector in buffer
+	jsr _init_disk
+
+	ldx _cur_sel
+	lda slot_sector,x
+	jsr set_dparms
+	jsr _sect_read
+
+	; Copy data to buffer
+	ldx _cur_sel
+	lda slot_offset,x
+	tay
+	ldx #(__commander_data_end-__commander_data_start)-1
+loop
+	lda _disk_buffer,y
+	sta __commander_data_start,x
+	dey
+	dex
+	bpl loop
+
+	; Go to current planet 
+	jsr InitPlayerPos
+
+	jsr _init_irq_routine 
+
+	; return with Z=0
+	lda #1
+cannot	
+	rts
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Print goatsoup correctly
@@ -3659,7 +4059,7 @@ print_goatsoup
     ; Initialize stuff
     lda #0
     sta counter
-    tax
+ 8   tax
 loop
     jsr get_word  ; Jumps over spaces until a char is found. Returns pos in string in reg X. Z=1 if end of string (0) is reached
     beq end

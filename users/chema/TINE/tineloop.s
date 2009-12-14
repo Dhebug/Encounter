@@ -26,12 +26,12 @@ _init_tine
 
 LoadDefaultCommander
 .(
-	ldx #(_default_commander_end - _default_commander)
+	ldx #(_default_commander_end - _default_commander)-1
 loop
 	lda _default_commander,x
 	sta _name,x
 	dex
-	bne loop
+	bpl loop
 
 	ldx #7
 	stx _dest_num
@@ -564,16 +564,16 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 18
+#define MAX_KEY 19
 user_keys
-    .byt     "2", "3", "4", "5", "6", "7", "R", "H", "J", "1"
+    .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
     .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E"
 
 key_routh
-    .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
+    .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
     .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on)
 key_routl
-    .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
+    .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
     .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on)  
 
 
@@ -662,16 +662,18 @@ loop
         sta routine+2   
 
 cont
-        cpx #7  
+        cpx #8  
         bcs skip
                 
-        ; No market or equip if not docked
+        ; No market or equip or save if not docked
         lda _docked
         bne isdock
         cpx #4
         beq end
         cpx #5 
-        beq end      
+        beq end 
+		cpx #6
+		beq end
 isdock
         lda double_buff
         beq skip
@@ -958,6 +960,12 @@ endjump
 		jmp flight_message
 canjump
 		; Should start sequence, but not perform the jump right now... 
+		jsr init_hyper_seq
+		bcc dojump
+		ldx #STR_PATH_LOCKED
+		jmp flight_message
+
+dojump
 		jmp do_jump
 		
 ;1
@@ -1018,6 +1026,13 @@ equip
     lda #SCR_EQUIP
     sta _current_screen
     jmp _displayequip
+
+;0
+loadsave
+	jsr SndPic
+	lda #SCR_LOADSAVE
+	sta _current_screen
+	jmp _displayloadsave
 
 ;R
 splanet
@@ -1083,6 +1098,9 @@ check_scr
     beq retz
     cmp #SCR_EQUIP
     beq retz
+    cmp #SCR_LOADSAVE
+    beq retz
+
     sec
     rts
 retz
@@ -1118,6 +1136,8 @@ keyl
     lda _current_screen
     cmp #SCR_EQUIP
     beq ret
+	cmp #SCR_LOADSAVE
+	beq ret
     jsr check_scr
     bcc do
 ret
@@ -1133,6 +1153,8 @@ keyr
     lda _current_screen
     cmp #SCR_EQUIP
     beq ret
+	cmp #SCR_LOADSAVE
+	beq ret
     jsr check_scr
     bcc do
 ret
@@ -1150,7 +1172,12 @@ sele
     cmp #SCR_CHART
     beq doit2
     cmp #SCR_EQUIP
-    bne ret
+    beq bequip
+	cmp #SCR_LOADSAVE
+	bne ret
+	; Jump to load/save
+	jmp do_loadsave
+bequip
     ; Jump to acquire equipment
 	jmp buy_equip
 ret
@@ -1272,6 +1299,53 @@ end
         rts
 .)
 
+
+init_hyper_seq
+.(
+
+	; Check if path is locked (collision danger)
+    jsr FindTarget
+    lda _ID
+	beq pathfree
+
+	; path is locked!
+	;return with C=1
+	sec
+	rts
+
+pathfree
+
+    lda #20
+	sta co
+loop
+	ldx #1
+	jsr SetCurOb
+	lda #50
+	jsr MoveForwards
+
+	ldx #1
+    jsr CalcView
+    jsr SortVis   
+    ;jsr clr_hires2
+    jsr DrawAllVis   ;Draw objects
+
+	lda #20
+    sta g_theta
+	jsr move_stars    
+    jsr PlotStars
+	;jsr _DrawCrosshair
+
+	jsr dump_buf
+
+	dec co
+	bne loop
+
+	; Return with C=0 to continue jump
+	clc	
+	rts
+
+co .byt $00
+.)
 
 
 VOB      .byt 00           ;View object

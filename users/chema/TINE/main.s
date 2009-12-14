@@ -73,36 +73,7 @@ restart
 	stx _docked
 	stx _planet_dist
 
-	; Update galaxy and planet
-
-	; Setup seed for galaxy 1
-	ldx #5
-loop
-	lda base0,x
-	sta _base0,x
-	dex
-	bpl loop
-
-	; Init seed
-	jsr _init_rand
-
-	; Go to current galaxy
-	ldx _galaxynum
-	dex
-	beq donegal
-	stx galcount
-loop2
-	jsr _enter_next_galaxy
-	dec galcount
-	bne loop2
-donegal
-
-	; And now go to current planet
-	lda _currentplanet
-	sta _dest_num
-	jsr _infoplanet
-	jsr _makesystem
-	jsr _jump
+	jsr InitPlayerPos
 	jsr InitPlayerShip
 
 	jsr _DoubleBuffOff
@@ -126,6 +97,43 @@ base0 .word $5a4a
 base1 .word $0248
 base2 .word $b753
 galcount .byt 0
+
+
+InitPlayerPos
+.(
+	; Update galaxy and planet based on player's position
+	; Setup seed for galaxy 1
+	ldx #5
+loop
+	lda base0,x
+	sta _base0,x
+	dex
+	bpl loop
+
+	; Init seed
+	jsr _init_rand
+
+	; Go to current galaxy
+	ldx _galaxynum
+	dex
+	beq donegal
+	stx galcount
+	ldx #1
+	stx _galaxynum
+loop2
+	jsr _enter_next_galaxy
+	dec galcount
+	bne loop2
+donegal
+
+	; And now go to current planet
+	lda _currentplanet
+	sta _dest_num
+	jsr _infoplanet
+	jsr _makesystem
+	jmp _jump
+	;rts
+.)
 
 
 #define OVERLAY_INIT 100
