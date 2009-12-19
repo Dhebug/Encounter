@@ -288,6 +288,14 @@ next
          eor (tmp0),y
          sta (tmp0),y
 
+         ldx tmp
+         ldy tmp+1
+         inx
+		 inx
+         jsr pixel_address_real
+         eor (tmp0),y
+         sta (tmp0),y
+
        
 skip
          dec countobjs;DEC RADOBJ+1
@@ -346,7 +354,15 @@ next
          eor (tmp0),y
          sta (tmp0),y
 
-       
+
+         ldx tmp
+         ldy tmp+1
+         inx
+		 inx
+         jsr pixel_address_real
+         eor (tmp0),y
+         sta (tmp0),y
+
 skip
          dec countobjs;DEC RADOBJ+1
          dec countobjs;dec RADOBJ+1 
