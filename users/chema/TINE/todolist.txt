@@ -46,7 +46,7 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 - Missiles should not destroy planets... (should never target them!). Is this solved now?
 
-+ Complete AI
+- Complete AI
 
 - Implement ECM for missiles
 
@@ -133,6 +133,16 @@ let say that from a particular orientation and velocity you can compute a vector
 + Front shield (maybe rear too?) is not updated correctly (after jump). Going to another screen and getting
   back updates it.
 
-+ Are shields recharging?
++ Are shields recharging?. Nope. If energy is negative (greater than 128) they don't recharge. Keep player maxen<128 is mandatory
 
 - After galmap population race is wrong (change between galchart and sysinfo)
+
+- At XEESLE you appear too far from planet (problems with wrapping). Seems solved now Zhigh is between $5 and $35, instead of $10 and $40
+
+- Make stick tops larger 
+
++ Optimizing drawing of radar? It is calling pixel_address several times, also code is shared between erase and draw and it is inlined...
+
++ Again after destroying player system hangs... not enough memory to create ships?
+
++ Still can jump right after launching...

@@ -167,13 +167,14 @@ planetpos
     lda _cpl_system+SEED+1   
     and #%00110000
     clc
-    adc #%00010000      ; result number between $10 and $40
+    adc #$5      ; result number between $5 and $35
     sta _PosZ+1
-    lsr
+	lsr
     tax
     lda _cpl_system+SEED+1
-    and #1
-    beq noinvert
+    ;and #1
+	;beq noinvert
+	bcc noinvert
     txa
     eor #%11110000
     tax
@@ -384,7 +385,11 @@ notrader
 
 create_cougar
 .(
-		lda #SHIP_COUGAR
+  		lda #SHIP_COUGAR
+		ldx _rnd_seed+3
+		bpl nocloack
+		ora #SHIP_NORADAR
+nocloack
 		jsr create_other_ship
 		cpx #0
 		beq end	; Could not create ship
@@ -755,6 +760,17 @@ correct2
 gen_ship_equipment
 .(
 	; Must preserve reg X!!!
+	stx savx+1
+	; What is to be added here? Maybe ECM
+	lda _rnd_seed+3
+	bpl noecm
+
+	lda #(HAS_ECM)	; Cloaking?
+    jsr SetShipEquip
+noecm
+
+savx
+	ldx #0 ; SMC
 	rts
 .)
 
