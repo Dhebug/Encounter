@@ -73,7 +73,7 @@ norot
     ;lda ShipMaxSpeed-1,y
     ;lsr
     ;sta _speed+1
- 
+
    	; And initialize all the stuff (equipment...)
 	jsr InitPlayerShip
 

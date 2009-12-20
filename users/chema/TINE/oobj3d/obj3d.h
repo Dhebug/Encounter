@@ -7,7 +7,8 @@
 #include "params.h"
 
 // Maximum number of objects that can be handled
-#define MAXOBJS     32*2  
+// Was  32*2  
+#define MAXOBJS     60
 #define MAXVERTEX   64
 
 /*

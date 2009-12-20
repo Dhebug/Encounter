@@ -361,12 +361,10 @@ cont
 	
 
 	; Perform timely checks
-	
     ;lda #1
     ;eor frame_number
 	lda frame_number
 	and #7
-	;bne cont2
 	beq checkthings
 	jmp cont2
 
@@ -393,14 +391,30 @@ checkthings
 	inc _energy+1
 	bne done_energy ; branches allways
 noinc_energy
+	; If redirecting power to lasers, don't recharge
+	lda _ptla
+	bne done_energy
+
 	lda _front_shield
 	cmp #22
+	beq done_front
+	inc _front_shield
+	cmp #21
+	beq done_front
+	; If redirecting power to shields, double recharge
+	lda _ptsh
 	beq done_front
 	inc _front_shield
 done_front
 	lda _rear_shield
 	cmp #22
 	beq done_rear
+	inc _rear_shield
+	cmp #21
+	beq done_rear
+	; If redirecting power to shields, double recharge
+	lda _ptsh
+	beq done_front
 	inc _rear_shield
 done_rear
 	jsr update_shields_panel
@@ -427,10 +441,20 @@ locking
 	jsr flight_message 
 	jsr update_missile_panel
 notarget
+	; If redirecting power to shields, don't cool
+	lda _ptsh
+	bne notemp
 	ldx LaserTemperature
 	beq notemp
 	dex
+	beq nodoubl
+	; If redirecting power to laser cooling, double cooling
+	lda _ptla
+	beq nodoubl
+	dex
+nodoubl
 	stx LaserTemperature
+donelaser
 	jsr update_temperature_panel
 notemp
 	lda _ecm_counter
@@ -564,17 +588,17 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 19
+#define MAX_KEY 20
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E"
+    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P"
 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
-    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on)
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
-    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on)  
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir)  
 
 
 /* M= byte 3 val 1
@@ -674,6 +698,10 @@ cont
         beq end 
 		cpx #6
 		beq end
+		; No planet search either
+		cpx #7
+		beq end
+		
 isdock
         lda double_buff
         beq skip
@@ -906,13 +934,39 @@ ecm_on
 noecm
 		rts
 
+; P
+power_redir
+.(
+		lda _ptla
+		beq step2
+		lda #0
+		sta _ptla
+		lda #1
+		sta _ptsh
+		jmp update_redirection
+step2
+		lda _ptsh
+		beq step3
+		lda #0
+		sta _ptsh
+		jmp update_redirection
+step3
+		lda #0
+		sta _ptsh
+		lda #1
+		sta _ptla
+		jmp update_redirection
+.)
 ;H
 galhyper
 
+		; A test for a rear view
 		lda invert
 		eor #$ff
 		sta invert
+		jsr INITSTAR
 		rts
+		; End of test
 
         lda #SCR_FRONT
         cmp _current_screen
@@ -978,7 +1032,6 @@ frontview
         lda _docked
         beq notdocked 
         ; Exit to space...
-		jsr InitPlayerShip
 		jsr CreateEnvironment
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
         ; to decide if we are exitting hyper or leaving planet.
@@ -1040,8 +1093,8 @@ splanet
     lda _current_screen
     cmp #SCR_GALAXY
     beq doit
-    cmp #SCR_CHART
-    beq doit
+;    cmp #SCR_CHART
+;    beq doit
     rts
 doit
     ; ask for planet and search it
