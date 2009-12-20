@@ -363,9 +363,12 @@ NewPlayerShip
 	and #%111
 	sta _p_maxmissiles
 	sta _missiles_left
-    lda ShipMaxSpeed-1,x
++PreInit
+    ;lda ShipMaxSpeed-1,x
+	lda #23
     sta _p_maxspeed
-	lda ShipEnergy-1,x
+	;lda ShipEnergy-1,x
+	lda #72
 	sta _p_maxenergy
 	
 	rts
@@ -375,8 +378,11 @@ NewPlayerShip
 ;; Get the initial stats for player's ship
 InitPlayerShip
 .(
+
+	jsr PreInit
+
 	; Depending on ship's equipment...
-	
+
 	lda _equip
 	ror
 	bcc	nopulse
@@ -409,7 +415,7 @@ nospeed
 	beq noenergy
 	clc
 	lda _p_maxenergy
-	adc #10
+	adc #24
 	sta _p_maxenergy
 noenergy
 
@@ -429,6 +435,8 @@ noenergy
 	; Missile armed
 	lda #0
 	sta _missile_armed
+	sta _ptla
+	sta _ptsh
 
 	rts
 .)

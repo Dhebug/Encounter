@@ -69,13 +69,6 @@ flight_message_bounty
 
 flight_message
 .(
-/*	; If not in front view, return
-	lda _current_screen
-	cmp #SCR_FRONT
-	beq cont
-	rts
-cont*/
-	
 	lda #<flight_message_base
 	sta tmp0
 	lda #>flight_message_base
@@ -125,7 +118,6 @@ loop
 	sta message_delay
 
 	jmp SndMsg
-	;rts
 .)
 
 
@@ -158,6 +150,7 @@ update_all_controls
 	jsr update_speed_panel
 	jsr update_shields_panel
 	jsr update_ecm_panel
+	jsr update_redirection
 	jmp update_missile_panel
 .)
 
@@ -495,6 +488,53 @@ TemperatureIndicatorScreenLocHi
  ;****** Power Redirection *******
 ;$B742 - Top left corner of plotted graphic
 ;This requires three 4x5 graphics (60 Bytes) to represent the three positions the switch may be in.
+
+update_redirection
+.(
+
+	lda #<$b742+(40*4)	
+	sta tmp
+	lda #>$b742+(40*4)	
+	sta tmp+1
+
+	lda _ptsh
+	beq nosh
+	lda #<SelectorLeft
+	ldx #>SelectorLeft
+	jmp setit
+nosh
+	lda _ptla
+	beq nola
+	lda #<SelectorRight
+	ldx #>SelectorRight
+	jmp setit
+nola
+	lda #<SelectorMiddle
+	ldx #>SelectorMiddle
+setit
+	sta loop1+1
+	stx loop1+2
+
+	ldx #19
+	ldy #3
+loop1
+	lda SelectorLeft,x
+dest_p
+	sta (tmp),y
+	dey
+	bpl cont
+	ldy #3
+	sec
+	lda tmp
+	sbc #40
+	sta tmp
+	bcs cont
+	dec tmp+1
+cont
+	dex
+	bpl loop1
+	rts
+.)
 
 
 SelectorLeft

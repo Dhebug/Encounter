@@ -29,7 +29,7 @@ _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
 _cash			.byt $d0,$07            ; Four bytes for cash
 				.byt $10,$00
-_fuel			.byt 50                 ; Amount of fuel
+_fuel			.byt 70                 ; Amount of fuel
 _fluct			.byt 0                  ; Price fluctuation
 _holdspace		.byt 20				    ; Current space left in cargo bay
 _legal_status	.byt 00                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
@@ -65,7 +65,7 @@ _default_commander
 				.byt 00					; Score, remainder
 				.word 00000             ; Current score
 				.byt 0                  ; Current mission
-				.word $00ff             ; Equipment flags
+				.word $0001             ; Equipment flags
 			    .byt SHIP_COBRA3        ; Current player's ship
 				.byt 4					; Number of missiles
 
@@ -81,6 +81,8 @@ _default_commander_end
 _front_shield	.byt 22
 _rear_shield	.byt 22
 _missile_armed	.byt 0
+_ptla			.byt 0
+_ptsh			.byt 0
 
 ;Is ECM active?
 _ecm_counter	.byt 0
