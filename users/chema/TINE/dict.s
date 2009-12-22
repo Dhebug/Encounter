@@ -888,7 +888,7 @@ flight_message_base
 	.byt 0
 	.asc "Game Over"
 	.byt 0
-	.asc "Load New Commander (Y/N)?"
+	.asc "Load Saved Commander (Y/N)?"
 	.byt 0
 	.asc "Press Space Commander"
 	.byt 0

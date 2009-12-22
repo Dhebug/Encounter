@@ -197,6 +197,8 @@ _FirstFrame
          jsr DrawRadar
          jsr set_compass
 
+		 jsr set_planet_distance
+
          jmp dump_buf
 .)
 
@@ -231,6 +233,19 @@ loop
 	rts
 .)
 
+
+set_planet_distance
+.(
+	; Check distance to planet
+    ldx VOB
+    jsr SetCurOb
+	ldx #2	;Planet
+	jsr substract_positions
+	jsr getnorm	; Calc distance as A=abs(x)|abs(y)|abs(z)
+	lda op1+1	; Get high byte
+	sta _planet_dist
+	rts
+.)
 
 _TineLoop
 .(
@@ -369,14 +384,7 @@ cont
 	jmp cont2
 
 checkthings
-	; Check distance to planet
-    ldx VOB
-    jsr SetCurOb
-	ldx #2	;Planet
-	jsr substract_positions
-	jsr getnorm	; Calc distance as A=abs(x)|abs(y)|abs(z)
-	lda op1+1	; Get high byte
-	sta _planet_dist
+	jsr set_planet_distance
 
 	; Setup planet distance light indicator
 
@@ -872,6 +880,7 @@ deccel
         rts
 
 target
+.(
 		lda _missiles_left
 		beq no_arm
 		lda _missile_armed
@@ -882,8 +891,9 @@ target
 		jsr update_missile_panel
 no_arm
 		rts
-
+.)
 unarm
+.(
 		; This could simply set it to 0
 		; and save memory and CPU, but as it also may
 		; produce some sfx and panel changes, it may be worth a check
@@ -894,8 +904,9 @@ unarm
 		jsr update_missile_panel
 no_unarm
 		rts
-
+.)
 fireM   
+.(
 		; Shoud this be defered to LaunchMissile??
 		lda _missiles_left
 		beq nolock
@@ -913,11 +924,18 @@ fireM
 		jsr update_missile_panel
 nolock
         rts
-
-fireL   jmp FireLaser
-        
+.)
+fireL   
+.(
+		lda invert
+		beq dofire
+		rts
+dofire
+		jmp FireLaser
+.)        
 
 ecm_on
+.(
 		; player sets ECM on.
 		; Check if he has ECM equipped
 		lda _equip
@@ -933,7 +951,7 @@ ecm_on
 		jmp SetECMOn
 noecm
 		rts
-
+.)
 ; P
 power_redir
 .(
@@ -964,8 +982,9 @@ galhyper
 		lda invert
 		eor #$ff
 		sta invert
-		jsr INITSTAR
-		rts
+		jsr update_compass
+		jmp INITSTAR
+		
 		; End of test
 
         lda #SCR_FRONT
@@ -981,6 +1000,9 @@ jumphyper
         lda #SCR_FRONT
         cmp _current_screen
         bne nothing
+
+		lda invert
+		bne nothing
 
 		; Compare current_planet with dest_planet too see if it is a "bad jump"
 		; and simply ignore
@@ -1028,6 +1050,9 @@ frontview
         cmp _current_screen
         beq nothing
         sta _current_screen
+
+		lda #0
+		sta invert
 
         lda _docked
         beq notdocked 

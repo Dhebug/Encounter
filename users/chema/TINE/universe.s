@@ -151,6 +151,9 @@ moonsdone
 	sta message_delay
 
     ;jsr _InitTestCode
+
+	jsr set_planet_distance
+
 	jmp random_encounter
     ;rts
 .)
@@ -394,12 +397,12 @@ nocloack
 		cpx #0
 		beq end	; Could not create ship
 
+		lda #(HAS_ECM)	; Cloaking?
+		jsr SetShipEquip
+
 		lda #(IS_AICONTROLED)
 		sta _ai_state,x
 		jsr set_boldness
-
-		lda #(HAS_ECM)	; Cloaking?
-		jsr SetShipEquip
 
 		jmp set_speed_and_target
 	
@@ -415,7 +418,7 @@ create_thargoid
 .(
 		; No more than 4 Thargoids, please
 		lda thargoid_counter
-		cmp #5			
+		cmp #4			
 		bcs end
 		lda #SHIP_THARGOID
 		jsr create_other_ship
@@ -426,17 +429,22 @@ create_thargoid
 		ora #IS_ANGRY ; set angry flag
 		sta _target,x
 
+		
+		lda #(HAS_ECM)
+		jsr SetShipEquip
+
 		lda #(IS_AICONTROLED)
 		sta _ai_state,x
 		jsr set_boldness
 
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
-		lda _missiles,x
-		ora #%10
+		;lda _missiles,x
+		;ora #%10
+		stx savx+1
+		jsr _gen_rnd_number
+		and #%11
+savx	ldx #0 ;SMC
 		sta _missiles,x
-
-		lda #(HAS_ECM)
-		jsr SetShipEquip
 
 		; note that there are thargoids on system
 		inc thargoid_counter

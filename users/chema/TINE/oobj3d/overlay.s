@@ -66,7 +66,7 @@ __overlay_end
 				.byt 00					; Score, remainder
 				.word 10000             ; Current score
 				.byt 0                  ; Current mission
-				.word $0fff             ; Equipment flags
+				.word $0efe             ; Equipment flags
 			    .byt 13			        ; Current player's ship
 				.byt 4					; Number of missiles
 
@@ -78,7 +78,7 @@ __overlay_end
 .dsb 256-150
 .dsb 256
 
-#echo Size of models in bytes:
+#echo ***** Used space in overlay:
 #print (__overlay_end - __overlay_start)
 #echo
 
