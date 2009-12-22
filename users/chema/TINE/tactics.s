@@ -1490,6 +1490,13 @@ kk
 
 	; We got it, at last
 	sta tmp
+	lda invert
+	beq nothing
+	sec
+	lda #0
+	sbc tmp
+	sta tmp
+nothing
 
 	bmi deplete_rear
 	lda _front_shield

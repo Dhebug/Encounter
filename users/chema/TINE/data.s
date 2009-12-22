@@ -187,13 +187,13 @@ gs_jump_lo .byt <gs_planet_name,<gs_planet_nameian,<gs_random_name
 gs_jump_hi .byt >gs_planet_name,>gs_planet_nameian,>gs_random_name
 
 
+#define USEPAGE4
+#ifdef USEPAGE4
+.bss
+*=$400
+#endif
+
 ; From galaxy.s
-
-
-;.bss
-
-;*=$400
-
 
 ; Some vars for loops, etc...
 count2 .byt 0 ; used in genmarket & displaymarket
@@ -238,11 +238,6 @@ _cur_sel .byt $ff
 equip_items .byt 0 ; Number of possible items (for selection)
 equip_flags .word 00   ; Flags with 1's when an item is available
 
-;From radar.s
-; To store objects for plotting the radar
-savX .dsb MAXSHIPS
-savY .dsb MAXSHIPS
-
 
 ;From tinefuncs.s
 ;; Some Global Variables
@@ -265,13 +260,6 @@ _PosZ  .byt 0,0
 
 
 ; From tactics.s
-
-;; Some variables to decouple firing and drawing the lasers
-_numlasers .byt 00
-_laser_source .dsb 4
-_laser_target .dsb 4
-
-
 ; fly_to_ship
 A1   .word 0
 oX   .word 0
@@ -284,8 +272,22 @@ AIShipType  .byt 00 ; Current ship's type
 AITarget    .byt 00 ; Current ship's target
 AIIsAngry   .byt 00 ; Angry status (with target)
 
-
+#ifdef USEPAGE4
 .text
+#endif
+
+;From radar.s
+; To store objects for plotting the radar
+savX .dsb MAXSHIPS
+savY .dsb MAXSHIPS
+
+; From tactics.s
+
+;; Some variables to decouple firing and drawing the lasers
+_numlasers .byt 00
+_laser_source .dsb 4
+_laser_target .dsb 4
+
 
 ; For displaying the market
 mkstrslo

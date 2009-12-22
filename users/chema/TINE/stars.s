@@ -102,6 +102,16 @@ bypass
 move_stars
 .(
 
+	lda invert
+	beq normal1
+	lda g_alpha
+	eor #$80
+	sta g_alpha
+	lda g_beta
+	eor #$80
+	sta g_beta
+normal1
+
     lda g_alpha
     beq nowbeta
     cmp #$80    ; Get sign into carry
@@ -453,7 +463,7 @@ POSCHK   cmp #16          ;if abs(x)<16 then need a new star
          BCS ADDY
 NEW      JSR NEWSTAR
          JMP NEXT
-NEGCHK   cmp #136
+NEGCHK   cmp #240
          ;SBC #$FF
          BCS NEW
 

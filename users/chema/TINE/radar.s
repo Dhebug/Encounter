@@ -624,6 +624,14 @@ compass_dot
 .(
     jsr outer_dot
     lda _VectZ+1
+	php
+	ldx invert
+	beq nothing
+	plp
+	lda #$ff
+	php
+nothing
+	plp
     bmi end
     jsr inner_dot
 end

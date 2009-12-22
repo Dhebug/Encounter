@@ -67,8 +67,13 @@ flight_message_bounty
 
 ; Pass X=message id
 
+patchmsg .byt 0
 flight_message
 .(
+	cpx #STR_ENERGY_LOW
+	bne nopatch
+	inc patchmsg
+nopatch
 	lda #<flight_message_base
 	sta tmp0
 	lda #>flight_message_base
@@ -117,6 +122,11 @@ loop
 	lda #HUD_MESSAGE_DELAY
 	sta message_delay
 
+	lda patchmsg
+	beq normal
+	dec patchmsg
+	rts
+normal
 	jmp SndMsg
 .)
 
