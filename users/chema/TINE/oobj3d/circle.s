@@ -495,7 +495,7 @@ _circlePoints
     ; Calculate cx+x
     
     lda cx
-    clc
+;    clc
     adc sx
     sta X1
     lda cx+1
@@ -519,7 +519,7 @@ _circlePoints
    ; Calculate cy-y
     
     lda cy
-    sec
+;    sec
     sbc sy
     sta Y1
     lda cy+1
@@ -544,7 +544,7 @@ _circlePoints
     ; Calculate cy+x
     
     lda cy
-    clc
+ ;   clc
     adc sx
     sta Y1
     lda cy+1
@@ -554,7 +554,7 @@ _circlePoints
    ; Calculate cx+y
     
     lda cx
-    clc
+ ;   clc
     adc sy
     sta X1
     lda cx+1
@@ -579,7 +579,7 @@ _circlePoints
     ; Calculate cy-x
     
     lda cy
-    sec
+ ;   sec
     sbc sx
     sta Y1
     lda cy+1
@@ -598,99 +598,14 @@ _circlePoints
     adc sy+1
     sta X1+1
     
-    jsr plotpoint    ; cx+y,cy-x
-  
-
-    rts
-
-
+    jmp plotpoint    ; cx+y,cy-x
+ 	;rts
 .)
 
-#define VERSION2
-
-#ifdef VERSION1
 plotpoint
 .(
- 
-    lda X1
-    sta op1
-    lda X1+1
-    sta op1+1
-
-    lda #(CLIP_RIGHT)
-    sta op2
-    lda #0
-    sta op2+1
-    jsr cmp16
-    bpl end
-    lda #(CLIP_LEFT)
-    sta op2
-    jsr cmp16
-    bmi end
-
-
-    lda Y1
-    sta op1
-    lda Y1+1
-    sta op1+1
-
-+patch_circleclip
-    lda #(CLIP_BOTTOM)
-    sta op2
-    lda #0
-    sta op2+1
-    jsr cmp16
-    bpl end
-    lda #(CLIP_TOP)
-    sta op2
-    jsr cmp16
-    bmi end
-plot 
-    ldx X1
-    ldy Y1
-
-    jsr pixel_address
-
-    ;lda _HiresAddrLow,y			; 4
-	;sta tmp0+0					; 3
-	;lda _HiresAddrHigh,y		; 4
-	;sta tmp0+1					; 3 => Total 14 cycles
-
-  	;ldy _TableDiv6,x
-	;lda _TableBit6Reverse,x		; 4
-  
-
-    ora (tmp0),y
-    sta (tmp0),y
-
-end
-    rts
-
-.)
-#endif
-
-#ifdef VERSION2
-plotpoint
-.(
- 
-/*
-    lda X1
-    sta op1
-    lda X1+1
-    sta op1+1
-
-    lda #(CLIP_RIGHT)
-    sta op2
-    lda #0
-    sta op2+1
-    jsr cmp16
-    bpl end
-    lda #(CLIP_LEFT)
-    sta op2
-    jsr cmp16
-    bmi end
-*/
-
+	lda tmp3
+	bne plot
 .(
     lda X1
     cmp #(CLIP_RIGHT)
@@ -711,26 +626,6 @@ ret
 ret
 .)
 	bmi end
-
-/*
-    lda Y1
-    sta op1
-    lda Y1+1
-    sta op1+1
-
-+patch_circleclip
-    lda #(CLIP_BOTTOM)
-    sta op2
-    lda #0
-    sta op2+1
-    jsr cmp16
-    bpl end
-    lda #(CLIP_TOP)
-    sta op2
-    jsr cmp16
-    bmi end
-
-*/
 .(
     lda Y1
 +patch_circleclip
@@ -778,15 +673,13 @@ end
 
 .)
 
-#endif
-
 
 ; Variables for circlepoints
 sy    .word 0
 sx    .word 0
 
 
-
+#ifdef 0
 _circleMidpoint
 .(
 
@@ -977,6 +870,294 @@ p .word 0
 .)
 
 #endif
+
+xpr	.word 0
+xmr .word 0
+ypr .word 0
+ymr .word 0
+
+
+_circleMidpoint
+.(
+
+    ; Check if circle is visible
+    ;;  cx + rad < lhs of screen fails
+    lda cx
+    clc
+    adc rad
+    sta xpr
+    lda cx+1
+    adc rad+1
+    sta xpr+1
+.(
+    lda xpr 
+    cmp #(CLIP_LEFT)
+    lda xpr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bpl next1
+    rts
+next1
+    ;;  x - size > rhs of screen fails 
+    lda cx
+    sec
+    sbc rad
+    sta xmr
+    lda cx+1
+    sbc rad+1
+    sta xmr+1
+.(
+    lda xmr 
+    cmp #(CLIP_RIGHT-1)
+    lda xmr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi next2
+    rts
+next2
+    ;;  y + size < top of screen fails
+    lda cy
+    clc
+    adc rad
+    sta ypr
+    lda cy+1
+    adc rad+1
+    sta ypr+1
+.(
+    lda ypr 
+    cmp #(CLIP_TOP)
+    lda ypr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+    
+	bpl next3
+    rts
+next3
+    ;;  y - size > bot of screen fails
+    lda cy
+    sec
+    sbc rad
+    sta ymr
+    lda cy+1
+    sbc rad+1
+    sta ymr+1
+.(
+    lda ymr 
+    cmp #(CLIP_BOTTOM-1)
+    lda ymr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi next4
+    rts
+next4
+
+	; Check if clipping is needed
+	lda #1
+	sta tmp3
+	
+	;cx+r<CLIP_RIGHT
+.(
+    lda xpr 
+    cmp #(CLIP_RIGHT-1)
+    lda xpr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi nextb1
+    lda #0
+	sta tmp3
+	beq drawit
+nextb1
+
+	;cx-r>CLIP_LEFT
+.(
+    lda xmr 
+    cmp #(CLIP_LEFT)
+    lda xmr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bpl nextb2
+    lda #0
+	sta tmp3
+	beq drawit
+nextb2
+
+	
+	;cy+r<CLIP_BOTTOM
+.(
+    lda ypr 
+    cmp #(CLIP_BOTTOM-1)
+    lda ypr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bmi nextb3
+    lda #0
+	sta tmp3
+	beq drawit
+nextb3
+
+	;cy-r>CLIP_TOP
+.(
+    lda ymr 
+    cmp #(CLIP_TOP)
+    lda ymr+1
+    sbc #0
+    bvc ret ; N eor V
+    eor #$80
+ret
+.)
+	bpl drawit
+    lda #0
+	sta tmp3
+
+drawit
+     ;x=0;y=radius
+    lda #0
+    sta sx
+    sta sx+1
+    lda rad
+    sta sy
+    lda rad+1
+    sta sy+1   
+ 
+    ; p=1-radius
+    lda #1
+    sec
+    sbc rad
+    sta p
+    lda #0
+    sbc rad+1
+    sta p+1
+    
+draw
+   ; circlePoints (xCenter, yCenter, x, y);
+    jsr _circlePoints
+
+
+    ;while (x < y) {
+    ;    x++;
+    ;    if (p < 0) 
+    ;      p += 2 * x + 1;
+    ;    else {
+    ;      y--;
+    ;      p += 2 * (x - y) + 1;
+    ;    }
+    ;    circlePoints (xCenter, yCenter, x, y);
+    ;  }
+
+loop
+    lda sx
+    sta op1
+    lda sx+1
+    sta op1+1
+    lda sy
+    sta op2
+    lda sy+1
+    sta op2+1
+    jsr cmp16
+    bpl end
+    
+
+    inc sx
+    bne noinc
+    inc sx+1
+noinc
+
+    lda p+1
+    bpl positivep
+
+    lda sx
+    asl
+    sta tmp
+    lda sx+1
+    rol
+    sta tmp+1
+
+    inc tmp
+    bne noinc2
+    inc tmp+1
+noinc2    
+    lda p
+    clc
+    adc tmp
+    sta p
+    lda p+1
+    adc tmp+1
+    sta p+1
+    
+    jsr _circlePoints
+    jmp loop
+
+positivep    
+
+    lda sy
+    bne nodec
+    dec sy+1
+nodec
+    dec sy
+
+    lda sx
+    sec
+    sbc sy
+    sta tmp
+    lda sx+1
+    sbc sy+1
+    sta tmp+1
+
+    asl tmp
+    rol tmp+1
+
+    inc tmp
+    bne noinc3
+    inc tmp+1
+noinc3   
+
+    lda p
+    clc
+    adc tmp
+    sta p
+    lda p+1
+    adc tmp+1
+    sta p+1
+   
+    jsr _circlePoints
+    jmp loop
+
+end
+
+    rts
+
+
+p .word 0
+
+.)
+
+
+
+
+
+
+#endif //FILLEDPOLYS
 
 
 

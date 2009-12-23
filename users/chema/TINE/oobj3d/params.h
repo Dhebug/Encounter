@@ -44,7 +44,7 @@
 #define TOP 11
 #define BOTTOM 133
 
-#define USE_ACCURATE_CLIPPING
+//#define USE_ACCURATE_CLIPPING
 
 #endif
 

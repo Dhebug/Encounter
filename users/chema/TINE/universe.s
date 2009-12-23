@@ -416,9 +416,9 @@ end
 
 create_thargoid
 .(
-		; No more than 4 Thargoids, please
+		; No more than MAXTHARG Thargoids, please
 		lda thargoid_counter
-		cmp #4			
+		cmp #(MAXTHARG)			
 		bcs end
 		lda #SHIP_THARGOID
 		jsr create_other_ship
@@ -433,7 +433,7 @@ create_thargoid
 		lda #(HAS_ECM)
 		jsr SetShipEquip
 
-		lda #(IS_AICONTROLED)
+		lda #(IS_AICONTROLED|FLG_PIRATE)
 		sta _ai_state,x
 		jsr set_boldness
 

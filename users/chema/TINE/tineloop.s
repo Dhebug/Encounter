@@ -6,14 +6,16 @@
 #include "main.h"
 
 
-#define OBS  osdk_end
-
+// define where the space for object records starts...
+#define OBS ($fffa-MAXOBJS*ObjSize)
+#echo Object records start at
+#print OBS
+#echo
 
 invert .byt 00
 
 _init_tine
 .(
-
     lda #<OBS        ;Object records
     ldy #>OBS
     jsr Init3D
@@ -955,6 +957,7 @@ noecm
 ; P
 power_redir
 .(
+		jsr SndPic
 		lda _ptla
 		beq step2
 		lda #0
