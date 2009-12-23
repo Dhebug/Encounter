@@ -73,19 +73,24 @@ __obj3d_start
 ; 100 bytes instead of $67.
 
 #define MAXLINES 39;100
-LINELO   .dsb 39;100         
-LINEHI   .dsb 39;100          
+LINELO   .dsb 40;100         
+LINEHI   .dsb 40;100          
 
-
+#ifdef USEOBLETS
 #define OBHEAD  $2F-1       ;Head of list = $55FF Oric port: Just the size of OBLETS
 OBLETS   .dsb OBHEAD+1      ;Oblet list
+#endif
 
 .dsb 256-(*&255)
+PLISTX   .dsb (MAXVERTEX*2)         ;Point lists (projected)
+PLISTY   .dsb (MAXVERTEX*2)
+PLISTZ   .dsb (MAXVERTEX*2)
 
 
-VISOBJS  .dsb 129
-OBCEN    .dsb 127         ;Center object #
-                          ;Note: will bug if 128 vis objs
+// META
+VISOBJS  .dsb MAXOBJS+1	;129
+OBCEN    .dsb MAXOBJS   ;127   ;Center object #
+							   ;Note: will bug if 128 vis objs
 
 OBJLO    .dsb MAXOBJS         ;Object pointers
 OBJHI    .dsb MAXOBJS         ;if 0 then empty
@@ -97,11 +102,6 @@ HCY      .dsb MAXOBJS
 CZ       .dsb MAXOBJS
 HCZ      .dsb MAXOBJS
 
-PLISTX   .dsb (MAXVERTEX*2)         ;Point lists (projected)
-PLISTY   .dsb (MAXVERTEX*2)
-PLISTZ   .dsb (MAXVERTEX*2)
-
-;PQ       .dsb 120         ;Point queue. Just used in filled polygon drawing...
 
 ; Some stuff from lib3D
 
@@ -1071,8 +1071,10 @@ c3       STX P0Z+1
          LDA FACEPTR
          LDY FACEPTR+1
          LDX OBTYPE     ; Draw depending on object type.
-		 
+
+#ifdef USEOBLETS		 
          BMI Compound
+#endif
          beq dloop
   
          cpx #PLANET   ; Sun or planet object
@@ -1171,6 +1173,8 @@ SmallDot
 
 .)
 
+
+#ifdef USEOBLETS
 ;
 ; Compound objects are made up of
 ; a smaller number of "oblets",
@@ -1268,7 +1272,7 @@ dloop    JSR DrawFace
 done     RTS
 
 .)
-
+#endif
 
 
 CirclePrepare

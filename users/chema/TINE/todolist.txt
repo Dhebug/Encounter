@@ -146,3 +146,10 @@ let say that from a particular orientation and velocity you can compute a vector
 + Again after destroying player system hangs... not enough memory to create ships?
 
 - Still can jump right after launching...
+
++ Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
+a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
+If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
+size again.
+
++ Fuel circle seems somewhat wrong, when it is 3.0LY planets at 2.4LY are outside. (?)

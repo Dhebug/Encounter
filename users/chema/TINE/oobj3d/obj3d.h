@@ -6,9 +6,11 @@
 
 #include "params.h"
 
+//#define USEOBLETS
+
 // Maximum number of objects that can be handled
 // Was  32*2  
-#define MAXOBJS     60
+#define MAXOBJS     64
 #define MAXVERTEX   64
 
 /*

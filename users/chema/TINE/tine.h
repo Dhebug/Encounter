@@ -7,10 +7,10 @@
 
 #define MAXSHIPS MAXOBJS
 
-#define MAXCOPS	3
+#define MAXCOPS	 2
+#define MAXTHARG 2
 
 //#define OLDROLLS
-
 
 // Values for planet distance various thresholds
 

@@ -769,6 +769,8 @@ checkY
 nonegy
     jsr abs
 
+    lda #0
+    sta op2+1
     lda #$26
     sta op2
     jsr cmp16

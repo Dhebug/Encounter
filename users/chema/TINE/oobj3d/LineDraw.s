@@ -73,56 +73,10 @@ _ClipYc         .dsb 2
 	
 	.text
 
-
-_DoubleBuffOn
-.(
-    lda double_buff
-    beq _SwitchDoubleBuff
-    rts
-.)
-
-_DoubleBuffOff
-.(
-    lda double_buff
-    bne _SwitchDoubleBuff
-    rts
-.)
-
-
-_SwitchDoubleBuff
-.(
-
-    ; Patch the circle routine
-    lda patch_circleclip+1
-    cmp #199
-    beq clip1
-    lda #199
-    jmp cont
-clip1
-    lda #(CLIP_BOTTOM)
-
-cont    
-    sta patch_circleclip+1
-    lda double_buff
-    eor #$ff
-    sta double_buff
-    jmp _GenerateTables
-.)
-
-
-
+; Have 4 free bytes here :)
 
 ;; To include double-buffer (on and off)
 double_buff .byt $ff
-
-
-	
-_Break
-	jmp _Break
-	rts
-
-
-
 
 
 	.dsb 256-(*&255)
@@ -1249,6 +1203,46 @@ clip_second_point
 	; Not supposed to arrive here :p
 	rts
 .)
+
+
+_DoubleBuffOn
+.(
+    lda double_buff
+    beq _SwitchDoubleBuff
+    rts
+.)
+
+_DoubleBuffOff
+.(
+    lda double_buff
+    bne _SwitchDoubleBuff
+    rts
+.)
+
+
+_SwitchDoubleBuff
+.(
+
+    ; Patch the circle routine
+    lda patch_circleclip+1
+    cmp #199
+    beq clip1
+    lda #199
+    jmp cont
+clip1
+    lda #(CLIP_BOTTOM)
+
+cont    
+    sta patch_circleclip+1
+    lda double_buff
+    eor #$ff
+    sta double_buff
+    jmp _GenerateTables
+.)
+
+
+
+
 
 
 #undef e	
