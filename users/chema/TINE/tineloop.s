@@ -514,11 +514,12 @@ print_dbgval
 doit
 	dec print2dbuffer
 
+#ifdef 0
 	; Debug our energy value
-	lda _energy+1
-	sta dbg1
-	lda #0
-	sta dbg1+1
+	;lda _energy+1
+	;sta dbg1
+	;lda #0
+	;sta dbg1+1
 
 	; Debug a_y
 	;lda a_y
@@ -535,7 +536,7 @@ loop
 	sta dbg1,x
 	dex
 	bpl loop
-
+#endif
 	lda counter 
 	sta op2
 	lda #0
@@ -548,7 +549,7 @@ loop
 
 	lda #0
 	sta counter
-
+#ifdef 0
     lda dbg1
     sta op2
     lda dbg1+1
@@ -589,7 +590,7 @@ loop
 	jsr gotoXY
 	ldx #5
 	jsr print_num_tab	
-
+#endif
 	inc print2dbuffer
 
 end
@@ -921,6 +922,7 @@ fireM
         ldx #1
         jsr SetCurOb
         jsr LaunchMissile
+		jsr SndMissile
 		beq nolock
 		dec _missiles_left
 		jsr update_missile_panel

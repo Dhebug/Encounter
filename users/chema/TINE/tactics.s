@@ -1779,7 +1779,6 @@ savy
 ; Params: reg X is destroyed ship's ID
 increment_kills
 .(
-
 	stx saveid+1
 	jsr GetShipType
 	; Remove cloacking bit
@@ -1828,9 +1827,9 @@ noadd
 	rts
 bounty
 	; Now the bounty, if any
-	txa
-	lsr
-	tax
+;	txa
+;	asl
+;	tax
 	lda ShipBountyLo-1,x
 	sta op2
 	ora ShipBountyHi-1,x

@@ -251,17 +251,6 @@ msg
 .)
 
 
-SndTest
-.(
-  	ldx #<msg
-	ldy #>msg
-	jmp AYRegDump
-msg
-	.byt $10,0,$10,1,$10,2,0,$78,$10,$10,$10,0,$08,0
-
-.)
-
-
 SndBell1
 .(
   	ldx #<bell
@@ -278,6 +267,25 @@ SndBell2
 	jmp AYRegDump
 bell
 	.byt $fa,0,0,3,$fb,0,0,$78,$10,$10,$10,0,$a,0
+.)
+
+SndMissile
+.(
+  	ldx #<missile
+	ldy #>missile
+	jmp AYRegDump
+missile
+	.byt 0,0,0,0,0,0,$6c,$41,$10,0,0,0,$10,9
+.)
+
+SndTest
+.(
+  	ldx #<msg
+	ldy #>msg
+	jmp AYRegDump
+msg
+	.byt $10,0,$10,1,$10,2,0,$78,$10,$10,$10,0,$08,0
+
 .)
 
 

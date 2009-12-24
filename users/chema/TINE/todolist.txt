@@ -106,7 +106,7 @@ let say that from a particular orientation and velocity you can compute a vector
 
 - Flahses in red and yellow also happen when in screens different than FRONT_VIEW. This is buggy.
 
-+ Models seem too big. The first intro screen with the rotating COBRA starts overflowing after several minutes!
+- Models seem too big. The first intro screen with the rotating COBRA starts overflowing after several minutes!
 
 - After adding energy refill, speed gets back > 0 when dying. Need to add a game_over or player_dead variable to keep track of all this.
 
@@ -143,13 +143,20 @@ let say that from a particular orientation and velocity you can compute a vector
 
 + Optimizing drawing of radar? It is calling pixel_address several times, also code is shared between erase and draw and it is inlined...
 
-+ Again after destroying player system hangs... not enough memory to create ships?
+- Again after destroying player system hangs... not enough memory to create ships? Seems corrected again.
 
 - Still can jump right after launching...
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
-size again.
+size again. This was not ocurring before????
 
-+ Fuel circle seems somewhat wrong, when it is 3.0LY planets at 2.4LY are outside. (?)
+- Fuel circle seems somewhat wrong, when it is 3.0LY planets at 2.4LY are outside. (?)
+
++ Snapping to planet not allways work in short chart
+
++ When frame rate goes too low, skip frame drawing
+
++ When frame rate goes too high don't simulate all the time, or make a waiting loop
+
