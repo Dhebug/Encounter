@@ -353,7 +353,7 @@ nothargoid
 ;	}
 
 		lda _rnd_seed+3
-		and #7
+		and #3
 		bne notrader
 	; Change this so more traders on secure systems
 	;	and #7
@@ -640,7 +640,7 @@ check_for_others
 
 	jsr _gen_rnd_number
 	;lda _rnd_seed+2
-	cmp #90
+	cmp #$90
 	bcc doit
 	rts
 doit
@@ -648,7 +648,7 @@ doit
 	beq pirates
 	sta tmp
 	lda _rnd_seed
-	and #3
+	and #7
 	cmp tmp
 	bcc nopirates
 
@@ -658,7 +658,7 @@ pirates
 
 nopirates
 	lda _rnd_seed
-	and #%11000000
+	and #%10000000
 	bne shuttle
 	; Gererate Bounty Hunter
 	jmp generate_bounty
