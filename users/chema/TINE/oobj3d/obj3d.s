@@ -25,7 +25,7 @@ NUMOBJS  .byt 00           ;Number of objects
 NUMCENTS .byt 00           ;Number of object senter
 CUROBJ   .byt 00           ;Current object
 LASTOBJ  .byt 00
-ZMAX     .word $2100       ;Maximum range
+ZMAX     .word $2300       ;Maximum range
 ZMIN     .byt 50          ;Minimum range
 OBJECTS  .word $0800       ;Object records 1227 = 3456 bytes = $0D80
 
