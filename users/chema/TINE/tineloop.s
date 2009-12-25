@@ -174,34 +174,40 @@ init_front_view
 .(
 	jsr clr_hires
 	jsr load_frame
-	;jsr update_all_controls
 	;jsr _DrawFrameBorder   
 	jsr _DoubleBuffOn
 	;jmp _FirstFrame	; Let the program flow...
 .)
-
 _FirstFrame
 .(
 
- 	 	 jsr update_all_controls
+	jsr update_all_controls
 
-         lda #PDIST_MASSLOCK
-         sta _planet_dist
+    lda #PDIST_MASSLOCK
+    sta _planet_dist
 
-         jsr clr_hires2
+    jsr clr_hires2
 
-         LDX VOB          ;Calculate view
-         jsr SetRadar
-         JSR CalcView
-         JSR SortVis      ;Sort objects
-         JSR DrawAllVis   ;Draw objects
-        
-         jsr DrawRadar
-         jsr set_compass
+	lda invert
+	beq noinvert
+	jsr invertZ
+noinvert
 
-		 jsr set_planet_distance
+    ldx VOB          ;Calculate view
+    jsr SetRadar
+    jsr CalcView
+    jsr SortVis      ;Sort objects
+    jsr DrawAllVis   ;Draw objects
+    jsr DrawRadar
+    jsr set_compass
+	jsr set_planet_distance
 
-         jmp dump_buf
+	lda invert
+	beq noinvert2
+	jsr invertZ
+noinvert2
+
+    jmp dump_buf
 .)
 
 
@@ -293,9 +299,7 @@ l1
     jmp _TineLoop
     
 nodock
-    ldx VOB
-    jsr SetCurOb
-    jsr move_stars
+
     jsr ProcessKeyboard
 
 	lda invert
@@ -304,30 +308,26 @@ nodock
 noinvert
 
     ldx VOB
+    jsr SetCurOb
+    ;ldx VOB
     jsr SetRadar
 
     jsr CalcView
     jsr SortVis   
 
-
     lda _current_screen
     cmp #SCR_FRONT
     bne nodraw
-	
 
+;;;;; START OF DRAWING SECTION
+
+    jsr move_stars
     jsr clr_hires2
     jsr DrawAllVis   ;Draw objects
-
     jsr EraseRadar   ; Erase radar
     jsr DrawRadar
-
-	lda invert
-	beq noinvert2
-	jsr invertZ
-noinvert2
     jsr PlotStars
 	jsr _DrawCrosshair
-
     jsr _Lasers
     lda _laser_fired
     beq nofire
@@ -341,12 +341,26 @@ nofire
 	jsr print_inflight_message
 nomessage
 
-#define DBGVALUES
+//#define DBGVALUES
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
+	dec print2dbuffer
+	ldx #(15*6)
+	ldy #0
+	jsr gotoXY
+	lda invert
+	beq noinv
+    lda #<str_rearview
+    ldx #>str_rearview
+	jmp doinv
+noinv
+    lda #<str_frontview
+    ldx #>str_frontview
+doinv
+    jsr print
+	inc print2dbuffer
     jsr dump_buf
-
 
 	lda _planet_dist
 	cmp #PDIST_TOOFAR2
@@ -357,7 +371,14 @@ nocompass
 	jsr clear_compass
 endcompass
 
+;;;;;;;;;;;;;;;;;;;;;;;;; END OF DRAWING SECTION
+
+
 nodraw
+	lda invert
+	beq noinvert2
+	jsr invertZ
+noinvert2
 
 	lda player_in_control
 	beq cont
@@ -376,7 +397,6 @@ nodraw
 cont
     jsr _MoveShips
 	
-
 	; Perform timely checks
     ;lda #1
     ;eor frame_number
@@ -494,6 +514,13 @@ nofr
 
 .)
 
+str_rearview
+.asc "Rear  View"
+.byt 0
+
+str_frontview
+.asc "Front View"
+.byt 0
 
 
 #ifdef DBGVALUES
@@ -889,7 +916,10 @@ target
 		lda _missile_armed
 		bne no_arm
 		; Arm missile and start target procedure
-		jsr SndBell1
+		;jsr SndBell1
+		jsr SndPoc
+		ldx #STR_TARGET_ARMED
+		jsr flight_message
 		dec _missile_armed	; This sets it to $ff
 		jsr update_missile_panel
 no_arm
@@ -902,6 +932,9 @@ unarm
 		; produce some sfx and panel changes, it may be worth a check
 		lda _missile_armed
 		beq no_unarm
+		jsr SndPocLow
+		ldx #STR_TARGET_UNARMED
+		jsr flight_message
 		lda #UNARMED		; Set it to 0
 		sta _missile_armed
 		jsr update_missile_panel
@@ -982,7 +1015,6 @@ step3
 .)
 ;H
 galhyper
-
 		; A test for a rear view
 		lda invert
 		eor #$ff
@@ -1056,11 +1088,10 @@ frontview
         beq nothing
         sta _current_screen
 
-		lda #0
-		sta invert
-
         lda _docked
         beq notdocked 
+		lda #0
+		sta invert
         ; Exit to space...
 		jsr CreateEnvironment
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used

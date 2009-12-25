@@ -896,15 +896,19 @@ flight_message_base
 	.byt 0
 	.asc "Target Lost"
 	.byt 0
+	.asc "Missile Armed"
+	.byt 0
+	.asc "Missile Unarmed"
+	.byt 0
 	.asc "Mass Locked"
 	.byt 0
 	.asc "Path Locked"
 	.byt 0
 	.asc "Destination too far"
 	.byt 0
-	.asc "Right on, Commander!"
-	.byt 0
 	.asc "Energy Low"
+	.byt 0
+	.asc "Right on, Commander!"
 	.byt 0
 
 

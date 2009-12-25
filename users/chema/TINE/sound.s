@@ -251,6 +251,8 @@ msg
 .)
 
 
+// SndBell1 is beautiful, but never used
+
 SndBell1
 .(
   	ldx #<bell
@@ -278,6 +280,8 @@ missile
 	.byt 0,0,0,0,0,0,$6c,$41,$10,0,0,0,$10,9
 .)
 
+
+// SndTest is beautiful, but never used
 SndTest
 .(
   	ldx #<msg

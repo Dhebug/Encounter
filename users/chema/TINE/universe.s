@@ -152,10 +152,21 @@ moonsdone
 
     ;jsr _InitTestCode
 
-	jsr set_planet_distance
+	; Encounters are not created if too close to planet, so 
+	; set_planet_distance should be called afterwards...
+	lda #$ff
+	sta _planet_dist
 
-	jmp random_encounter
-    ;rts
+	ldx #4
+	stx count ; Hope it is not used here
+loopen
+	jsr random_encounter
+	dec count
+	bpl loopen
+
+	jmp set_planet_distance
+
+	;rts
 .)
 
 
@@ -658,8 +669,9 @@ pirates
 
 nopirates
 	lda _rnd_seed
-	and #%10000000
-	bne shuttle
+	;and #%10000000
+	;bne shuttle
+	bmi shuttle
 	; Gererate Bounty Hunter
 	jmp generate_bounty
 
@@ -883,6 +895,15 @@ noinvertZ
     sta tmp0+1
     pla
     jsr AddSpaceObject
+
+	; Set number of missiles
+	stx savx+1
+	jsr _gen_rnd_number
+	ora #%11111000
+savx
+	ldx #0 ;SMC
+	and _missiles,x
+	sta _missiles,x
 
     lda #(IS_AICONTROLED)   
     sta _ai_state,x

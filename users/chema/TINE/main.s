@@ -50,7 +50,6 @@ _main
 .(
 
   	jsr InitSound
-	jsr SndTest	
 	lda #<osdk_stack
 	sta sp
 	lda #>osdk_stack
