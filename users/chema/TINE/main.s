@@ -41,6 +41,8 @@ tmp		.dsb 2
 ;reg6	.dsb 2
 ;reg7	.dsb 2
 
+#define        via_t1cl                $0304 
+
 
 .text
 
@@ -76,6 +78,13 @@ restart
 	jsr InitPlayerShip
 
 	jsr _DoubleBuffOff
+
+	; Loop for initialization of random numbers
+	ldy via_t1cl 
+looprnd
+	jsr _gen_rnd_number
+	dey 
+	bne looprnd
 
 
 	lda #SCR_INFO

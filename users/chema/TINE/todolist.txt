@@ -119,7 +119,7 @@ let say that from a particular orientation and velocity you can compute a vector
 
 - player-launched Missiles are too near sometimes, models are incorrectly drawn
 
--Compass is only updated if x,y changed, which is incorrect if changing from hollow to filled and
+- Compass is only updated if x,y changed, which is incorrect if changing from hollow to filled and
  viceversa. Also when comming from other screens it is sometimes not updated. Same reason?
 
 - Refilling energy and shields in hyper jump is not a good idea... maybe filing shields or x2 to both could do
@@ -160,3 +160,6 @@ size again. This was not ocurring before????
 
 + When frame rate goes too high don't simulate all the time, or make a waiting loop
 
++ Ships still attack from too far. Lasers incorrectly drawn.
+
++ Missiles still eat up CPU cycles. Too many of them, I think.

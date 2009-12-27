@@ -318,7 +318,7 @@ random_encounter
 .(
 		; If already too many objects, return
 		lda NUMOBJS
-		cmp #12
+		cmp #10;12
 		bcc cont1
 		rts
 cont1
@@ -328,7 +328,7 @@ cont1
 
 		; If near the planet, then return
 		lda _planet_dist
-		cmp #10
+		cmp #PDIST_DOCK
 		bcs cont
 		rts
 cont
@@ -506,6 +506,11 @@ create_trader
 noecm
 		lda #FLG_INNOCENT
 		sta _flags,x
+		
+		lda _ai_state,x
+		ora #FLG_TRADER
+		sta _ai_state,x
+
 		jmp set_speed_and_target
 end
 		rts
@@ -651,17 +656,16 @@ check_for_others
 
 	jsr _gen_rnd_number
 	;lda _rnd_seed+2
-	cmp #$90
+	cmp #90
 	bcc doit
 	rts
 doit
-	lda _cpl_system+GOVTYPE
-	beq pirates
-	sta tmp
 	lda _rnd_seed
 	and #7
+	sta tmp
+	lda _cpl_system+GOVTYPE
 	cmp tmp
-	bcc nopirates
+	bcs nopirates ; govtype >= rnd &7  then no pirates
 
 pirates
 	; Generate pirates 
@@ -669,8 +673,6 @@ pirates
 
 nopirates
 	lda _rnd_seed
-	;and #%10000000
-	;bne shuttle
 	bmi shuttle
 	; Gererate Bounty Hunter
 	jmp generate_bounty
@@ -697,7 +699,30 @@ cont
 	sta _ai_state,x
 
 	; Assign target
-	lda #1|IS_ANGRY
+	stx savx+1
+	ldx NUMOBJS
+	dex
+loop
+	cpx savx+1
+	beq next
+	lda _ai_state,x
+	and #%01111111
+	sta tmp+1
+	lda _rnd_seed+1
+	ora _rnd_seed+2
+	;ora _rnd_seed+3
+	and tmp+1
+	bne chosen
+next
+	dex
+	bne loop
+	; Nothing chosen, track the player
+	ldx #1
+chosen
+	txa
+savx 
+	ldx #0 ; SMC
+	ora #IS_AICONTROLED
 	sta _target,x
 
 	jmp set_boldness
@@ -776,19 +801,39 @@ correct2
 	rts
 .)
 
+eq_tmp .byt 0
 
 gen_ship_equipment
 .(
+	lda #0
+	sta eq_tmp
+
 	; Must preserve reg X!!!
 	stx savx+1
+
 	; What is to be added here? Maybe ECM
+	lda _score+1
+	bne nocheckscore
+    lda _score
+    cmp _rnd_seed+2
+	bcc noecm
+nocheckscore
 	lda _rnd_seed+3
 	bpl noecm
-
 	lda #(HAS_ECM)	; Cloaking?
-    jsr SetShipEquip
+	sta eq_tmp
 noecm
+	; And escape pod
+	lda _rnd_seed+1
+	bpl nopod
+	lda eq_tmp
+	ora #(HAS_ESCAPEPOD)
+	sta eq_tmp
+nopod
 
+	; Equip with selected items
+	lda eq_tmp
+    jsr SetShipEquip
 savx
 	ldx #0 ; SMC
 	rts
@@ -844,15 +889,15 @@ create_other_ship
 
 	; Generate new ship a bit far away
 	lda _PosX+1
-	eor #$17
+	eor #%1111; $17
 	sta _PosX+1
 
 	lda _PosY+1
-	eor #$17
+	eor #%1111;$17
 	sta _PosY+1
 
 	lda _PosZ+1
-	eor #$17
+	eor #%1111;$17
 	sta _PosZ+1
 
 	lda _rnd_seed+1

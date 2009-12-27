@@ -563,23 +563,22 @@ nolowen
     ; Try to shoot at target
     
     ; Check distance... as A=abs(x)|abs(y)|abs(z)..
-    ;jsr getnorm ; Does precisely this with x,y,z being VectX,Y,Z (see tinefuncs.s)
     ; Now precalculated in A1
 
     ; Check if greater (or equal) than $2000 (maximum firing -and visibile- distance)
-    ; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
-    ; BEWARE! Bug. VectX,Y,Z are now normalized!
-
+    
+	
+	; we can do this with an and over $e000 (the inverse of $1fff), and check for zero.
     ;lda A1+1
     ;and #>FIRING_DISTANCE
     ;bne toofar  
-	
+
+	; Seems the $2000 is too much... try with someting smaller.
 	lda A1
     cmp #00
     lda A1+1
-    sbc #$20       ;Greater than $2000?
-    bcs toofar     ;(or negative)
-
+    sbc #$15       ;Greater than $2000?
+    bcs toofar     
 
     ; Check if laser is fitted... check FLAG_DEFENCELESS?
     ; if none goto toofar
@@ -695,7 +694,7 @@ notneg1
     sbc oY+1
 notneg2
     ora tmp    
-    and #$fe
+    and #$fd	; Change from fe to fc to avoid occasional collisions. But combat suffers...
     bne approach
 
     ; What if our target is a planet? Then if want to dock, dock
@@ -1105,7 +1104,8 @@ cargo
 	tax
     lda _rnd_seed+1
  	and ShipCargo-1,x
-    and #$0f
+    ;and #$0f
+	and #%11
 relloop
 	beq nomore
     sta tmp3
@@ -1785,6 +1785,7 @@ increment_kills
 	and #%01111111
 	cmp #2
 	beq nobounty	; Nothing for debris (?)
+	sta savetype+1
 	asl
 	tax
 	lda ShipKillValue-2,x
@@ -1830,6 +1831,9 @@ bounty
 ;	txa
 ;	asl
 ;	tax
+savetype
+	ldx #0 ; SMC
+
 	lda ShipBountyLo-1,x
 	sta op2
 	ora ShipBountyHi-1,x
