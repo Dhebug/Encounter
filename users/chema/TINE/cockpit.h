@@ -28,7 +28,7 @@
 
 
 /* Frames a message should stay in the HUD */
-#define HUD_MESSAGE_DELAY		40
+#define HUD_MESSAGE_DELAY		20
 
 /* Row where HUD messages are printed */
 #define HUD_MSG_Y				110

@@ -1809,11 +1809,11 @@ SPLINTER
 	.byt 4	;Number of faces
 
 ;Normals List - X coordinate
-	.byt $C5,$00,$C0,$A2
+	.byt $B7,$D9,$53,$02
 ;Normals List - Y coordinate
-	.byt $C5,$A2,$C0,$00
+	.byt $04,$F7,$2A,$CB
 ;Normals List - Z coordinate
-	.byt $2B,$05,$1C,$05;
+	.byt $3C,$AB,$10,$4E;
 
 ;Vertices List - X coordinate
 	.byt $E8,$00,$0B,$0C
@@ -1827,22 +1827,22 @@ SPLINTER
 ; Face data
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 2,1,0,2
+	.byt 3,2,1,3
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 2,3,0,2
+	.byt 0,2,3,0
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 0,3,0,0
+	.byt 3,1,0,3
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 0,1,1,0
+	.byt 0,1,2,0
 
 
 ; End of ship SPLINTER data

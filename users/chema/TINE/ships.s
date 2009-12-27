@@ -8,6 +8,7 @@ __shiptables_start
 
 ShipModelLo 
     .byt  <(MISSILE), <(ONEDOT), <(CAPSULE), <(PLATELET), <(BARREL), <(BOULDER), <(ASTEROID)
+	;.byt  <(CAPSULE), <(ONEDOT), <(CAPSULE), <(PLATELET), <(BARREL), <(BOULDER), <(ASTEROID)
     .byt  <(SPLINTER), <(SHUTTLE), <(TRANSPORTER), <(VIPER), <(BOA), <(COBRA)
     .byt  <(PYTHON), <(ANACONDA), <(WORM), <(COBRAMK1), <(GECKO), <(KRAIT)
     .byt  <(MAMBA), <(SIDEWINDER), <(ADDER), <(MORAY), <(FERDELANCE), <(ASP)
@@ -16,6 +17,7 @@ ShipModelLo
 
 ShipModelHi 
     .byt  >(MISSILE), >(ONEDOT), >(CAPSULE), >(PLATELET), >(BARREL), >(BOULDER), >(ASTEROID)
+    ;.byt  >(CAPSULE), >(ONEDOT), >(CAPSULE), >(PLATELET), >(BARREL), >(BOULDER), >(ASTEROID)
     .byt  >(SPLINTER), >(SHUTTLE), >(TRANSPORTER), >(VIPER), >(BOA), >(COBRA)
     .byt  >(PYTHON), >(ANACONDA), >(WORM), >(COBRAMK1), >(GECKO), >(KRAIT)
     .byt  >(MAMBA), >(SIDEWINDER), >(ADDER), >(MORAY), >(FERDELANCE), >(ASP)
@@ -74,7 +76,7 @@ ShipBountyLo
 	.byt 40, 50, 250, 194, 144, 244, 94, 244, 50, 0, 0
 
 ShipBountyHi
-	.byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 
+	.byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0 
 
 
 __shiptables_end
