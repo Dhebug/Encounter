@@ -1329,6 +1329,7 @@ MAMBA
 
 ; Model of ship MISSILE
 MISSILE
+#ifdef ELITEMISSILE
 	.byt 0	; Ship type
 	.byt 17	;Number of vertices
 	.byt 17	;Number of faces
@@ -1433,6 +1434,48 @@ MISSILE
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
 	.byt 8,12,16,8
+
+#else
+	.byt 0	; Ship type
+	.byt 4	;Number of vertices
+	.byt 4	;Number of faces
+
+;Normals List - X coordinate
+	.byt $00,$AC,$00,$54
+;Normals List - Y coordinate
+	.byt $00,$2A,$A2,$2A
+;Normals List - Z coordinate
+	.byt $5F,$FD,$F9,$FD;
+
+;Vertices List - X coordinate
+	.byt $00,$FC,$00,$04
+
+;Vertices List - Y coordinate
+	.byt $00,$04,$FC,$04
+
+;Vertices List - Z coordinate
+	.byt $24,$F4,$F4,$F4
+
+; Face data
+	.byt 3	;Number of points
+	.byt 0	;Fill pattern
+	.byt 1,2,3,1
+
+
+	.byt 3	;Number of points
+	.byt 0	;Fill pattern
+	.byt 0,3,2,0
+
+
+	.byt 3	;Number of points
+	.byt 0	;Fill pattern
+	.byt 3,0,1,3
+
+
+	.byt 3	;Number of points
+	.byt 0	;Fill pattern
+	.byt 1,0,2,1
+#endif
 
 
 ; End of ship MISSILE data

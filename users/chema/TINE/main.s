@@ -148,7 +148,7 @@ donegal
 
 ;Number of sectors to read: Just the original tables and the models now 
 
-#define NUM_SECT_OVL 15+4+17	 
+#define NUM_SECT_OVL 35	 
 
 LoadOverlay
 .(

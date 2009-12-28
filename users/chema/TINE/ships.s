@@ -8,7 +8,6 @@ __shiptables_start
 
 ShipModelLo 
     .byt  <(MISSILE), <(ONEDOT), <(CAPSULE), <(PLATELET), <(BARREL), <(BOULDER), <(ASTEROID)
-	;.byt  <(CAPSULE), <(ONEDOT), <(CAPSULE), <(PLATELET), <(BARREL), <(BOULDER), <(ASTEROID)
     .byt  <(SPLINTER), <(SHUTTLE), <(TRANSPORTER), <(VIPER), <(BOA), <(COBRA)
     .byt  <(PYTHON), <(ANACONDA), <(WORM), <(COBRAMK1), <(GECKO), <(KRAIT)
     .byt  <(MAMBA), <(SIDEWINDER), <(ADDER), <(MORAY), <(FERDELANCE), <(ASP)
@@ -17,7 +16,6 @@ ShipModelLo
 
 ShipModelHi 
     .byt  >(MISSILE), >(ONEDOT), >(CAPSULE), >(PLATELET), >(BARREL), >(BOULDER), >(ASTEROID)
-    ;.byt  >(CAPSULE), >(ONEDOT), >(CAPSULE), >(PLATELET), >(BARREL), >(BOULDER), >(ASTEROID)
     .byt  >(SPLINTER), >(SHUTTLE), >(TRANSPORTER), >(VIPER), >(BOA), >(COBRA)
     .byt  >(PYTHON), >(ANACONDA), >(WORM), >(COBRAMK1), >(GECKO), >(KRAIT)
     .byt  >(MAMBA), >(SIDEWINDER), >(ADDER), >(MORAY), >(FERDELANCE), >(ASP)
@@ -27,7 +25,8 @@ ShipModelHi
 #define SCALED
 #ifndef SCALED
 ShipSize
-    .word 1576, 25, 256, 100*4, 400, 900, 6400, 256, 2500, 2500, 5625, 4900, 9025
+    ;.word 1576, 25, 256, 100*4, 400, 900, 6400, 256, 2500, 2500, 5625, 4900, 9025
+	.word 200, 25, 256, 100*4, 400, 900, 6400, 256, 2500, 2500, 5625, 4900, 9025
     .word 6400, 10000, 9801, 9801, 9801, 3600, 4900, 4225, 2500, 900, 1600
     .word 3600, 9025, 6400, 4900, 9801, 1600, 4225, 4900
 #else
