@@ -157,7 +157,7 @@ moonsdone
 	lda #$ff
 	sta _planet_dist
 
-	ldx #4
+	ldx #3
 	stx count ; Hope it is not used here
 loopen
 	jsr random_encounter
