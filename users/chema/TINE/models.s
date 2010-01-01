@@ -1445,16 +1445,16 @@ MISSILE
 ;Normals List - Y coordinate
 	.byt $00,$2A,$A2,$2A
 ;Normals List - Z coordinate
-	.byt $5F,$FD,$F9,$FD;
+	.byt $5F,$FD,$F8,$FD;
 
 ;Vertices List - X coordinate
-	.byt $00,$FC,$00,$04
+	.byt $00,$F6,$00,$0A
 
 ;Vertices List - Y coordinate
-	.byt $00,$04,$FC,$04
+	.byt $00,$0A,$F6,$0A
 
 ;Vertices List - Z coordinate
-	.byt $24,$F4,$F4,$F4
+	.byt $44,$D4,$D4,$D4
 
 ; Face data
 	.byt 3	;Number of points
