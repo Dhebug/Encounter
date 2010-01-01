@@ -88,9 +88,9 @@ PLISTZ   .dsb (MAXVERTEX*2)
 
 
 // META
-VISOBJS  .dsb MAXOBJS+1	;129
-OBCEN    .dsb MAXOBJS   ;127   ;Center object #
-							   ;Note: will bug if 128 vis objs
+VISOBJS  .dsb 129
+OBCEN    .dsb MAXOBJS		 ;Center object #
+							 ;Note: will bug if 128 vis objs
 
 OBJLO    .dsb MAXOBJS         ;Object pointers
 OBJHI    .dsb MAXOBJS         ;if 0 then empty

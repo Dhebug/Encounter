@@ -341,7 +341,7 @@ nofire
 	jsr print_inflight_message
 nomessage
 
-//#define DBGVALUES
+#define DBGVALUES
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
@@ -396,7 +396,12 @@ noinvert2
     jsr dorolls
 cont
     jsr _MoveShips
-	
+
+	; remove energy bomb launched if active
+	lda _energy_bomb
+	beq contbomb
+	dec _energy_bomb
+contbomb
 	; Perform timely checks
     ;lda #1
     ;eor frame_number
@@ -460,6 +465,8 @@ no_energy
 
 locking	
 	; Locking computer
+	lda player_in_control
+	beq notarget
 	lda _missile_armed
 	bpl notarget	; Nothing to do if already locked or unarmed
     jsr FindTarget
@@ -626,17 +633,17 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 20
+#define MAX_KEY 21
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P"
+    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B"
 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
-    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir)
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
-    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir)  
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb) 
 
 
 /* M= byte 3 val 1
@@ -970,6 +977,31 @@ fireL
 dofire
 		jmp FireLaser
 .)        
+
+energy_bomb
+.(
+		; Player launches energy bomb
+		; Check if equipped
+		lda _equip
+		and #%100000
+		beq nobomb
+		; It needs energy
+		lda _energy+1
+		cmp #21
+		bcc nobomb
+		sec
+		sbc #20
+		sta _energy+1
+		; Remove equip
+		lda _equip
+		and #%11011111
+		sta _equip
+		; Activate bomb
+		inc _energy_bomb
+nobomb
+		rts
+
+.)
 
 ecm_on
 .(

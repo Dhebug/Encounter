@@ -853,7 +853,7 @@ FindTarget
 loop
     sta POINT
     sty POINT+1
-
+	
     ldy #ObjID
     lda (POINT),y
     ; Remove flags to get Object's type
@@ -1404,6 +1404,7 @@ noinnocent
     sta _energy,x
     bcs nokill
 killit
+
 	; Target destroyed
     lda _flags,x
     and #%11110000  ; Remove older flags...
@@ -1779,6 +1780,9 @@ savy
 ; Params: reg X is destroyed ship's ID
 increment_kills
 .(
+;  	lda #0
+;dbug beq dbug
+
 	stx saveid+1
 	jsr GetShipType
 	; Remove cloacking bit

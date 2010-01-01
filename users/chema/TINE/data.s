@@ -87,6 +87,9 @@ _ptsh			.byt 0
 ;Is ECM active?
 _ecm_counter	.byt 0
 
+;Is Energy Bomb active?
+_energy_bomb	.byt 0
+
 ;typedef struct
 ;{ char a,b,c,d;
 ;} fastseedtype;  /* four byte random number used for planet description */

@@ -141,17 +141,18 @@ savpZ
     bne loop
 
 moonsdone
-    ; Create ships and others... for now, just testing
-	; No thargoids, no police and no convoys
+	; Initialize variables
 	lda #0
 	sta thargoid_counter
 	sta police_counter
 	sta asteroid_counter
 	sta _ecm_counter
+	sta _energy_bomb
 	sta message_delay
 
     ;jsr _InitTestCode
 
+	; Create initial encounters
 	; Encounters are not created if too close to planet, so 
 	; set_planet_distance should be called afterwards...
 	lda #$ff
