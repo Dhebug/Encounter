@@ -820,7 +820,9 @@ gen_ship_equipment
 	bcc noecm
 nocheckscore
 	lda _rnd_seed+3
-	bpl noecm
+	;bpl noecm
+	and #%11
+	bne noecm
 	lda #(HAS_ECM)	; Cloaking?
 	sta eq_tmp
 noecm
