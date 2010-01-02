@@ -418,9 +418,10 @@ checkthings
 	jsr planet_light
 	
 	; Start with energy and shields
-
 	lda _energy+1
 	bmi no_energy
+	beq no_energy
+
 	cmp _p_maxenergy
 	bcs noinc_energy
 	inc _energy+1
@@ -790,8 +791,8 @@ yawing .byt 0
 pitching .byt 0
 rolling .byt 0
 
-#define MAXR 6 ;9		;6	;3  ;4
-#define MINR $fa ;$f7	;$fa; $fd    ;fc
+#define MAXR 7 ;6  ;9		;6	;3  ;4
+#define MINR $f8 ;$fa ;$f7	;$fa; $fd    ;fc
 
 yawr
 .(     
@@ -987,7 +988,7 @@ energy_bomb
 		beq nobomb
 		; It needs energy
 		lda _energy+1
-		cmp #21
+		cmp #21+5 ; Some securiy margin
 		bcc nobomb
 		sec
 		sbc #20
@@ -1012,7 +1013,7 @@ ecm_on
 		beq noecm
 		; It needs energy
 		lda _energy+1
-		cmp #11
+		cmp #11+5 ; Some security margin
 		bcc noecm
 		sec
 		sbc #10
@@ -1333,6 +1334,8 @@ doit2
 .)
 
 
+tab_rolls .byt 0,1,1,1,2,2,3,4,6
+
 dorolls
 .(
 .(
@@ -1342,8 +1345,15 @@ dorolls
         lda #0
         sec
         sbc a_y
+		tax
+		lda tab_rolls,x
         ora #%10000000
+		bmi store
 notneg
+		tax
+		lda tab_rolls,x
+
+store
         sta _roty+1
 .)
 
@@ -1354,8 +1364,14 @@ notneg
         lda #0
         sec
         sbc a_p
+		tax
+		lda tab_rolls,x
         ora #%10000000
+		bmi store
 notneg
+		tax
+		lda tab_rolls,x
+store
         sta _rotx+1
 .)
 
@@ -1366,8 +1382,14 @@ notneg
         lda #0
         sec
         sbc a_r
+		tax
+		lda tab_rolls,x
         ora #%10000000
+		bmi store
 notneg
+		tax
+		lda tab_rolls,x
+store
         sta _rotz+1
 .)
 

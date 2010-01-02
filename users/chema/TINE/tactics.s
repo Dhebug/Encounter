@@ -12,6 +12,7 @@
 #define ECM_CHANCE          $10
 #define HERMIT_CHANCE       $fc
 
+#define CHECK_VALID_TYPES
 
 ;; Function table for ships that are
 ;; hyperspacing, docking, exploding or disappearing...
@@ -517,6 +518,11 @@ noerror
 nocriten
 
     ; Can we launch a missile?
+	; If ECM active, dont'
+	lda _ecm_counter
+	bne nolowen
+	
+	; Do we have missiles left?
     lda _missiles,x
     and #%00000111
     beq nolowen
@@ -851,6 +857,8 @@ FindTarget
     jsr GetNextVis
     bmi end
 loop
+	;cpy #0
+	beq next	; Object has just been deleted, but CalcVis has not been called.
     sta POINT
     sty POINT+1
 	
@@ -918,7 +926,6 @@ next
     bpl loop
 
 end
-
     rts
 .)
 
@@ -996,7 +1003,7 @@ HyperObject
 DockObject
 DisappearObject
 .(
-    stx _ID
+;    stx _ID
     jmp RemoveObject
 .)
 
@@ -1096,7 +1103,7 @@ noplayer
 	cmp #SHIP_CARGO
 	beq cargo
 	lda _rnd_seed+1
-	and #%11
+	and #%10
 	jmp relloop
 cargo	
     jsr GetShipType
@@ -1104,8 +1111,7 @@ cargo
 	tax
     lda _rnd_seed+1
  	and ShipCargo-1,x
-    ;and #$0f
-	and #%11
+	and #%10
 relloop
 	beq nomore
     sta tmp3
@@ -1219,12 +1225,8 @@ end
 no_target_lost
 
     ldx _ID
-    jsr DelObj
-
-    rts
-
-
-
+    jmp DelObj
+    ;rts
 .)
 
 _collision_list .dsb 4
@@ -1364,8 +1366,6 @@ yes_hit
 no_hit
     lda #0
     rts
-
-
 .)
 
 
@@ -1518,7 +1518,6 @@ notneg
 deplete_rear2
 	sta _rear_shield
 cont
-	
 	lda tmp+1
 	bpl nokill
 
@@ -1529,8 +1528,9 @@ cont
     adc tmp+1
     sta _energy+1
     bcs nokill
+
 	; maybe take hull into account here?
-    
+
     ; Player killed - uh oh
    ; Make it still
     lda #0
@@ -1780,13 +1780,20 @@ savy
 ; Params: reg X is destroyed ship's ID
 increment_kills
 .(
-;  	lda #0
-;dbug beq dbug
-
 	stx saveid+1
 	jsr GetShipType
 	; Remove cloacking bit
 	and #%01111111
+
+#ifdef CHECK_VALID_TYPES
+    cmp #33
+	bcc valid
+	ldy #0
+dbug beq dbug
+	ldx saveid+1
+	rts
+valid
+#endif
 	cmp #2
 	beq nobounty	; Nothing for debris (?)
 	sta savetype+1
