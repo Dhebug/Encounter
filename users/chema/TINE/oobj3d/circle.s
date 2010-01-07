@@ -473,6 +473,7 @@ _circlePoints
 
     ; Now fill the MaxMin array
 
+	/*
 ;MaxX[cy+y]=(cx+x>CLIP_RIGHT?CLIP_RIGHT:cx+x); 
 ;MinX[cy+y]=(cx-x<CLIP_LEFT?CLIP_LEFT:cx-x); 
 ;MaxX[cy-y]=(cx+x>CLIP_RIGHT?CLIP_RIGHT:cx+x); 
@@ -481,7 +482,7 @@ _circlePoints
 ;MinX[cy+x]=(cx-y<CLIP_LEFT?CLIP_LEFT:cx-y); 
 ;MaxX[cy-x]=(cx+y>CLIP_RIGHT?CLIP_RIGHT:cx+y); 
 ;MinX[cy-x]=(cx-y<CLIP_LEFT?CLIP_LEFT:cx-y);
-
+*/
     ; Calculate cy+y
     
     lda cy

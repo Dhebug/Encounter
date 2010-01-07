@@ -382,10 +382,10 @@ notrader
 ;		return;
 
 		jsr check_for_cops
-;		lda police_counter
-;		beq nocops
-;		rts
-;nocops
+		lda police_counter
+		beq nocops
+		rts
+nocops
 
 ;	if (in_battle)
 ;		return;
@@ -661,7 +661,7 @@ check_for_others
 	bcc doit
 	rts
 doit
-	lda _rnd_seed
+	;lda _rnd_seed
 	and #7
 	sta tmp
 	lda _cpl_system+GOVTYPE
@@ -752,6 +752,7 @@ cont
 
 generate_pirate_bounty
 .(
+	sta shiptype+1
 	; Set cloacking device
 	tax
 	lda _galaxynum
@@ -765,9 +766,27 @@ generate_pirate_bounty
 	tax
 nocloack
 	txa
-
 	jsr create_other_ship
+	cpx #0
+	beq end
+
+	; See if it is to be flagged as slow
+shiptype
+	lda #0 ; SMC
+	cmp #SHIP_ANACONDA
+	beq slowme
+	cmp #SHIP_WORM
+	bne noslow
+slowme
+	lda #0
+dbug beq dbug
+	lda _ai_state,x
+	ora #FLG_SLOW
+	sta _ai_state,x
+noslow
 	jmp gen_ship_equipment	
+end
+	rts
 .)
 
 
@@ -874,7 +893,7 @@ from_planet
 	sta _flags,x	
 
 finish
-	lda #IS_AICONTROLED|FLG_DEFENCELESS
+	lda #IS_AICONTROLED|FLG_DEFENCELESS|FLG_SLOW
     sta _ai_state,x
 end
 	rts

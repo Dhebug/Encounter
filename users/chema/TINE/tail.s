@@ -133,7 +133,7 @@ osdk_end
 #echo
 
 
-; Here will go everything that will be put in overlay ram: Check osdk_config.bat
+; Here will go everything that will be put in overlay ram Check osdk_config.bat
 
 .bss
 *=$c000

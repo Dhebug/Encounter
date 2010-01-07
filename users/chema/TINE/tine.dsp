@@ -231,6 +231,10 @@ SOURCE=.\models.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\music.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\radar.s
 # End Source File
 # Begin Source File

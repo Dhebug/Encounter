@@ -8,10 +8,10 @@
 ; SLJ March/April 1999
 ;
 ; Obj3d
-; Oric port: Chema 2008
+; Oric port Chema 2008
 ;
 ;
-; Idea: Maintain a list of objects.
+; Idea Maintain a list of objects.
 
 ; Get constants in an include file..
 #include "obj3d.h"
@@ -69,7 +69,7 @@ __obj3d_start
 
 ;Lines drawn
 ;speeds up wireframe
-; Oric port: This is the same I already used. 
+; Oric port This is the same I already used. 
 ; 100 bytes instead of $67.
 
 #define MAXLINES 39;100
@@ -77,7 +77,7 @@ LINELO   .dsb 40;100
 LINEHI   .dsb 40;100          
 
 #ifdef USEOBLETS
-#define OBHEAD  $2F-1       ;Head of list = $55FF Oric port: Just the size of OBLETS
+#define OBHEAD  $2F-1       ;Head of list = $55FF Oric port Just the size of OBLETS
 OBLETS   .dsb OBHEAD+1      ;Oblet list
 #endif
 
@@ -90,7 +90,7 @@ PLISTZ   .dsb (MAXVERTEX*2)
 // META
 VISOBJS  .dsb 129
 OBCEN    .dsb MAXOBJS		 ;Center object #
-							 ;Note: will bug if 128 vis objs
+							 ;Note will bug if 128 vis objs
 
 OBJLO    .dsb MAXOBJS         ;Object pointers
 OBJHI    .dsb MAXOBJS         ;if 0 then empty
@@ -115,7 +115,7 @@ HCZ      .dsb MAXOBJS
 ;
 ; Initialize lib3d pointers, variables
 ;
-; On entry: .AY = pointer to object records
+; On entry .AY = pointer to object records
 ;
 
 Init3D   
@@ -186,7 +186,7 @@ Init3D
          ;LDX #159         ;(0,0) = center of screen
          ;LDY #99
         
-         ; Oric port: Let's put center in center :)
+         ; Oric port Let's put center in center )
 
          ldx #CENTER_X
          ldy #CENTER_Y
@@ -216,10 +216,10 @@ L1       STA OBJHI,Y
 ;
 ; AddObj -- Add object to object list
 ;
-; On entry: .AY = pointer to object point data
+; On entry .AY = pointer to object point data
 ;           .X  = optional ID byte
 ;
-; On exit: .AY = pointer to object
+; On exit .AY = pointer to object
 ;          .X  = object number
 ;          C set indicates an error
 ;
@@ -296,7 +296,7 @@ l2       sta (POINT),y
 ; DelObj -- Remove object from list
 ;           by setting high byte=0
 ;
-; On entry: .X = object number
+; On entry .X = object number
 ;           C set means serious error!
 ;
 
@@ -323,7 +323,7 @@ end      RTS
 ;
 ; GetNextOb -- Get next object in list
 ;
-; On exit: .X = object number
+; On exit .X = object number
 ;          .AY= object pointer
 ;          C set indicates error
 ;          Current object set to .X
@@ -360,7 +360,7 @@ ERR      SEC
 ;
 ; SetMat -- Calculate matrix for current object
 ;
-; On entry: .A = Angle around z-axis
+; On entry .A = Angle around z-axis
 ;           .Y = Angle around y-axis
 ;           .X = Angle around x-axis
 ;
@@ -396,7 +396,7 @@ done     RTS
 ;
 ; Yaw/Pitch/Roll -- Accumulate a rotation on current object
 ;
-; On entry: C clear -> positive rotation
+; On entry C clear -> positive rotation
 ;           C set -> negative rotation
 ;
 
@@ -429,7 +429,7 @@ save_P   PLP
 ;
 ; Note that orientation matrix is inverse of object matrix
 ;
-; On entry: .A = velocity (signed)
+; On entry .A = velocity (signed)
 ;
 
 .(
@@ -540,8 +540,8 @@ POSA     TYA
 ; GetDown/Side/FrontVec
 ;
 ; Get orientation vector
-; On entry: Current object set
-; On exit: (.X,.Y,.A) = (X,Y,Z) signed
+; On entry Current object set
+; On exit (.X,.Y,.A) = (X,Y,Z) signed
 ;          direction vector, length=64
 ;
 
@@ -587,13 +587,13 @@ done     RTS
 ViewObj  .byt 00             ;Viewpoint object
 ;SOLIDPOL .byt 00             ;Solid/wireframe polygons
 
-; Oric Port: There is NO Pattern table, so point anywhere...
+; Oric Port There is NO Pattern table, so point anywhere...
 ;PATTAB   .word $1000         ;Pattern table
 
 ;
 ; SetParms -- Set rendering parameters
 ;
-; On entry: .AY = Pointer to pattern table
+; On entry .AY = Pointer to pattern table
 ;           .X  = Bitmap page
 ;            C set   -> solid polygons
 ;            C clear -> wireframe
@@ -609,7 +609,7 @@ ViewObj  .byt 00             ;Viewpoint object
 ;
 ; SetVisParms -- Set visibility parms
 ;
-; On entry: .AY = Maximum object range
+; On entry .AY = Maximum object range
 ;           .X  = Minimum object range
 ;
 
@@ -622,7 +622,7 @@ ViewObj  .byt 00             ;Viewpoint object
 ;
 ; CalcView -- Calculate view (Set viewpoint, translate and rotate centers)
 ;
-; On entry: .X = viewpoint object
+; On entry .X = viewpoint object
 ;
 ; On exit: translated rotated centers
 ;          in CX/CY/CZ
@@ -707,12 +707,12 @@ done
 ;
 ; SortVis -- Compute and sort all visible objects
 ;
-; On entry: centers stored in CX etc.
+; On entry centers stored in CX etc.
 ;
-; On exit: VisObjs = linked list of visible objects
+; On exit VisObjs = linked list of visible objects
 ;   (farthest objects at start of list)
 ;
-; Visibility conditions:
+; Visibility conditions
 ;   x+z>0, x-z<0 (within view area)
 ;   same for x+y/x-y
 ;   z > 8192 will be treated as too far away to see
@@ -857,7 +857,7 @@ DrawLoop
 
          ; Save the (projected) laser vertex for each visible ship
          ; I hate this, because uses information and routines out of
-         ; oobj3d, but this saves time and space, so... :( 
+         ; oobj3d, but this saves time and space, so... ( 
 
          ldy COB
          ldx OBCEN,y
@@ -906,7 +906,7 @@ DrawRTS  RTS
 ; GetNextVis -- Get next object in
 ;   visible list.
 ;
-; On exit: N set indicates end of list
+; On exit N set indicates end of list
 ;
 +GetNextVis
          LDX COB
@@ -928,7 +928,7 @@ DrawRTS  RTS
 ;
 ; RotDraw -- Rotate and draw an object
 ;
-; On entry: Object number in .X
+; On entry Object number in .X
 ;   SetParms already called.
 ;
 DATAP    .word 0             ;Temp pointer
@@ -1341,10 +1341,10 @@ CircleCall
 ;
 ; DrawFace -- Draw a polygon
 ;
-; On entry: .AY points to face data
-; On exit: .AY points to next face
+; On entry .AY points to face data
+; On exit .AY points to next face
 ;
-; Wireframe: C clear -> face not drawn
+; Wireframe C clear -> face not drawn
 ;
 
 NVERTS   .byt 00           ;Number of vertices
@@ -1545,14 +1545,6 @@ l2       LDA (POINT),Y
 #endif
 
 
-
-
-
-
-
-
-
-
 #define cx_	tmp3
 #define cy_	tmp4
 #define cz_	tmp5
@@ -1630,7 +1622,7 @@ endloop
     ; We need one more adjustment
     ; To be sure the amount is 7-bit plus bit 8 for sign.
 
-    ; For instance:
+    ; For instance
     ; $00ff (255). If we get the low byte it is a negative number
     ; $ff00 (-256).If we get the low byte, it is a positive number
     ; After rotation we get $ff80 (-128), which is an 8-bit signed amount.
@@ -1681,7 +1673,7 @@ cont
     ; <cx_,cy_,cz_>*<nx,ny,nz>=
     ; cx_*nx+cy_*ny+cz_*nz.
     ; All 8-bit signed amounts.
-    ; But, to avoid overflows, we are doing:
+    ; But, to avoid overflows, we are doing
     ; (cx_*nx)/256+(cy_*ny)/256+(cz_*nz)/256   
     ; op1 (2-byte) will store the 16-bit result
 
@@ -1689,7 +1681,7 @@ cont
     sta op1
     sta op1+1
 
-    ; We are using MULTAY, so we need unsigned 8-bit numbers
+    ; We are using the fast multi we need unsigned 8-bit numbers
     ; also need to check for zeros, to special-case them.
 
     ; Unsign px. Save sign and store in reg X

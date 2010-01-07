@@ -2,7 +2,7 @@
 ;;; and C interface callers
 
 
-#define DIVXLO   op1           ;Division: DIVX/DIVY
+#define DIVXLO   op1           ;Division DIVX/DIVY
 #define DIVXHI   op1+1
 #define DIVY     op2
 #define DIVTEMP  op2+1           ;High byte of DY
@@ -121,7 +121,7 @@ notneg
 ;; Performs signed and unsigned comparisions at the same time.
 ;; If the N flag is 1, then op1 (signed) < op2 (signed) and BMI will branch
 ;; If the N flag is 0, then op1 (signed) >= op2 (signed) and BPL will branch 
-;; For unsigned comparisions ,the behaviour is the usual with the carry flag:
+;; For unsigned comparisions ,the behaviour is the usual with the carry flag
 ;; If the C flag is 0, then op1 (unsigned) < op2 (unsigned) and BCC will branch 
 ;; If the C flag is 1, then op1 (unsigned) >= op2 (unsigned) and BCS will branch 
 ;; The Z flag DOES NOT indicate equality...
@@ -143,12 +143,12 @@ ret
 
 
 
-;;; Here goes mul16.  It takes two 16-bit parameters and multiplies them to a 32-bit signed number. The assignments are:
-;;;	op1:	multiplier
-;;;	op2:	multiplicand
-;;; Results go:
-;;;	op1:	result LSW
-;;;	tmp1:	result HSW
+;;; Here goes mul16.  It takes two 16-bit parameters and multiplies them to a 32-bit signed number. The assignments are
+;;;	op1	multiplier
+;;;	op2	multiplicand
+;;; Results go
+;;;	op1	result LSW
+;;;	tmp1	result HSW
 ;;; The algorithm used is classical shift-&-add, so the timing depends largely on the number of 1 bits on the multiplier.
 ;;; This is based on Leventhal / Saville, "6502 Assembly Language Subroutines", as it's compact and general enough, but
 ;;; it's optimized for speed, sacrificing generality instead.
@@ -468,7 +468,7 @@ Next
 ; in both directions.  Both X and Y must be positive.
 ; X is assumed to be 9-bits and Y is 8-bits.
 ;
-; Inputs: .X=dx/2 .A=dy/2, dx and dy are in xdivlo etc.
+; Inputs .X=dx/2 .A=dy/2, dx and dy are in xdivlo etc.
 ;
 ; Result is returned in X=integer part, A=remainder
 ;
@@ -480,7 +480,7 @@ Next
 
 ;.zero
 
-;DIVXLO   .byt 00           ;Division: DIVX/DIVY
+;DIVXLO   .byt 00           ;Division DIVX/DIVY
 ;DIVXHI   .byt 00
 ;DIVY     .byt 00
 ;DIVTEMP  .byt 00           ;High byte of DY

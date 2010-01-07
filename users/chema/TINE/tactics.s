@@ -115,7 +115,7 @@ end
 ; in _ai_state flag.
 ; Corresponds to tactics() in tactics.c in
 ; Elite AGB
-; Parameters: Reg X contains ship ID
+; Parameters Reg X contains ship ID
 ; for which we are running the AI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -410,7 +410,7 @@ fly_to_ship
     jsr substract_positions
     
 +fly_to_ship2
-	; Need to save some data for later on... :(
+	; Need to save some data for later on... 
     jsr getnorm
     lda op1
     sta A1
@@ -1024,7 +1024,7 @@ ExplodeObject
     ; Generate some debris
 
     ;lda _rnd_seed+1
-    ;and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly :/
+    ;and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly 
     ;ora #%00000100
 	lda #7
     sta tmp3
@@ -1087,31 +1087,25 @@ nomore
 
 ReleaseRandom
 .(
+	cpx #1
+	beq ReleaseRandomPlayer
     sta type+1	
 	jsr _gen_rnd_number
 	ldx _ID
-	cpx #1	; if it is the player's ship, release allways
-	bne noplayer
-	; Cheat random...
-	lda #%01111111
-	sta _rnd_seed+1
-noplayer
-    ;lda _rnd_seed+1
-	;bmi nomore
-
 	lda type+1	; Get back type
 	cmp #SHIP_CARGO
 	beq cargo
 	lda _rnd_seed+1
-	and #%10
+	and #%11
 	jmp relloop
 cargo	
     jsr GetShipType
     and #%01111111   
 	tax
+	lda ShipCargo-1,x
+	beq nomore
     lda _rnd_seed+1
- 	and ShipCargo-1,x
-	and #%10
+	and #%1
 relloop
 	beq nomore
     sta tmp3
@@ -1126,6 +1120,33 @@ type
     dec tmp3
     bne loop2
 
+nomore
+	rts
+.)
+
+
+ReleaseRandomPlayer
+.(
+	sta type+1
+	cmp #SHIP_CARGO
+	beq cargo
+	lda #%10
+	jmp relloop
+cargo	
+    lda #%11
+relloop
+	beq nomore
+    sta tmp3
+	ldx _ID
+loop2
+    jsr SetCurOb
+type
+    lda #0	;SMC
+    jsr CreatePart
+    
+    ldx _ID
+    dec tmp3
+    bne loop2
 nomore
 	rts
 .)
@@ -1330,7 +1351,7 @@ saveme
 	jmp RemoveObject ; This is jsr/rts
 .)
 
-;; Check if an object is too near: collision or scoop
+;; Check if an object is too near collision or scoop
 ;; X is obj ID, POINT does have the pointer to object record pre-loaded
 hit_check
 .(
@@ -1349,7 +1370,7 @@ hit_check
     bcs no_hit
 
 hit
-    ;; Check if it is just debris:
+    ;; Check if it is just debris
     ldy #ObjID
     lda (POINT),y
     ; Remove flags to get Object's type
@@ -1371,7 +1392,7 @@ no_hit
 
 ;;; damage_ship
 ; Perform damage of ships and explodes them, if necessary
-; Params: Reg X is ship ID, Reg A is damage amount.
+; Params Reg X is ship ID, Reg A is damage amount.
 ; Reg Y who is making the damage
 ; Carry set indicates that it is a missile, and we need to 
 ; change a bit what we do in damage_player
@@ -1456,7 +1477,7 @@ savy
 
 ;;; damage_player
 ; Perform damage of player
-; Params: Reg A is damage amount. Reg X equals 1
+; Params Reg A is damage amount. Reg X equals 1
 ; Reg Y is the ship making damage
 damage_player
 .(
@@ -1605,7 +1626,7 @@ nolow
 ;; Makes a ship angry at another.
 ;; but first checks if this is possible
 ;; and the reaction is logical.
-;; Params: reg A is the ship ID
+;; Params reg A is the ship ID
 ;;         reg X is the bad guy
 make_angry
 .(
@@ -1777,7 +1798,7 @@ savy
 
 
 ; Increment player's killpoints
-; Params: reg X is destroyed ship's ID
+; Params reg X is destroyed ship's ID
 increment_kills
 .(
 	stx saveid+1

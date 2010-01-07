@@ -73,7 +73,7 @@ _ClipYc         .dsb 2
 	
 	.text
 
-; Have 4 free bytes here :)
+; Have 4 free bytes here )
 
 ;; To include double-buffer (on and off)
 double_buff .byt $ff
