@@ -53,7 +53,7 @@
 ; However it is usually a good idea to keep everything into separate lists. This is how 
 ; I will do it. I am wasting 1 byte per record (17 bytes total), but will keep code smaller and easier
 ; to follow. In addition, we can add more things if necessary.
-; Contets of the table are:
+; Contets of the table are
 
 ;tradegood commodities[]=
 ;                   {
@@ -803,35 +803,6 @@ loopnames
     jsr plot_frame_title
 
    ; Draw fuel circle
-#ifdef FILLEDPOLYS
-    ldy #0
-    lda #SHORT_CENTRE_X
-    sta (sp),y
-    iny
-    lda #0
-    sta (sp),y
-    iny
-    lda #SHORT_CENTRE_Y
-    sta (sp),y
-    iny
-    lda #0
-    sta (sp),y
-    iny
-    lda #1
-    sta (sp),y
-    lda #0
-    sta (sp),y
-    jsr _curset
-
-    lda #70
-    ldy #0
-    sta (sp),y
-    iny
-    iny
-    lda #1
-    sta (sp),y
-    jsr _circle   
-#else
     ldy #0
     lda #SHORT_CENTRE_X
     sta cx
@@ -843,8 +814,6 @@ loopnames
     sta rad
     sty rad+1
     jsr _circleMidpoint
-
-#endif
 
     ; Initialize seed for this galaxy
     jsr init_seed
@@ -2179,6 +2148,7 @@ less32
     jmp next
 code_str
     ; It is an string code
+#ifdef 0
 ;   			else switch(c)
 ;   			{ case 0xB0: /* planet name */
 ;  		 		{
@@ -2209,6 +2179,7 @@ code_str
 ;   				}	break;
 ;   				default: printf("<bad char in data [%X]>",c); return;
 ;   			}	/* endswitch */
+#endif
     ; Implement this as a jump table
     sec
     sbc #$7b
@@ -2357,7 +2328,7 @@ _printsystem
     ; Clear hires and draw frame
     jsr clr_hires
 
-    ; Print title: Data on <planetname>
+    ; Print title Data on <planetname>
     inc capson
 	jsr draw_red_frame
 
@@ -2897,7 +2868,7 @@ set_sel
  .)
 mkt_status
 .(
-    ; Print player status:
+    ; Print player status
     ; Cash & free cargo space
 
     jsr prepare_area

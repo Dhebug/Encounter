@@ -1,7 +1,7 @@
 ; lib3d
 ; Stephen L. Judd	sjudd@nwu.edu
-; Oric version: José María Enguita (2008)
-; Based on  Version 2.0: 2/99
+; Oric version José María Enguita (2008)
+; Based on  Version 2.0.2/99
 
 
 ; Some zero-page addresses
@@ -190,7 +190,7 @@ __lib3d_zeropage_end
 ; If Mij<0 subtract 256*C
 ; If C<0 subtract 2^16*Mij
 ;.A, .Y = final result
-; Oric: inlined
+; Oric inlined
 
 
 
@@ -204,12 +204,12 @@ __lib3d_start
 ;
 ; The multiplication multiplies to get a 24-bit result
 ; and then divides the result by 64 (mult by 4).  To
-; perform the signed multiplication:
+; perform the signed multiplication
 ;   - multiply C*y as normal
 ;   - if y<0 then subtract 256*C
 ;   - if C<0 then subtract 2^16*y
 ;
-; Parameters: .Y = number of points to rotate
+; Parameters .Y = number of points to rotate
 ;
 ; v2 -- rewritten for efficiency.  Old version computed
 ;              1/64 row1*(cx,cy,cz) + 1/64 row2*(cx,cy,cz) + ...
@@ -279,16 +279,16 @@ done     rts
 
 ; Calculate the local matrix
 ;
-; Pass in: A,X,Y = angles around z,x,y axis
+; Pass in A,X,Y = angles around z,x,y axis
 ;
-; Stuff to set up: Nothing.
+; Stuff to set up Nothing.
 ;
-; On entry: .X .Y .A = theta_x theta_y theta_z
-; On exit: Rotation matrix is contained in 
-; Cycle count: 390 cycles, worst case.
-; Strategy: M = Ry Rx Rz where Rz=roll, Rx=pitch, Ry=yaw
+; On entry .X .Y .A = theta_x theta_y theta_z
+; On exit Rotation matrix is contained in 
+; Cycle count 390 cycles, worst case.
+; Strategy M = Ry Rx Rz where Rz=roll, Rx=pitch, Ry=yaw
 ;
-; Idea: Given
+; Idea Given
 ;   t1 = tx+ty
 ;   t2 = tx-ty
 ;   t3 = tx+tz
@@ -312,7 +312,7 @@ done     rts
 ;   I33=.5(cos(t1)+cos(t2))
 ;
         
-; sin and cos tables; originally as:
+; sin and cos tables; originally as
 ; $CF00-$CFFF	TRIG, table of 32*sin(2*pi*x/128) -- 160 bytes.
 ; SIN      EQU $CF00
 ; COS      EQU $CF20
@@ -357,7 +357,7 @@ CALCMAT
          clc
          adc tab_sin,y
          cmp #$80         ;set c if negative, clear otw.
-                          ;(pretty sneaky, eh? :)
+                          ;(pretty sneaky, eh? )
          ror              ;.25(sin(t5)+...)
          sta A11          ;partial result
          lda tab_cos,y
@@ -480,7 +480,7 @@ CALCMAT
 ; Carry clear means rotate by positive amount, clear
 ; means rotate by negative amount.
 ;
-; On entry: (.A,.Y) = (lo,hi) pointer to matrix
+; On entry (.A,.Y) = (lo,hi) pointer to matrix
 ;   (bytes 0-8 = integer, 9-17=remainder)
 ;
 
@@ -884,7 +884,7 @@ zero     ldx TM1
 ;
 ; ROTPROJ -- Perform local rotation and project points.
 ;
-; Setup needs:
+; Setup needs
 ;   Rotation matrix
 ;   Pointer to math table (MATMULT = $AF-$B0)
 ;   Pointers to point list (P0X-P0Z = $69-$6E)
@@ -894,12 +894,12 @@ zero     ldx TM1
 ;   .Y = Number of points to rotate (0..N-1)
 ;   .X = Object center index (index to center of object)
 ;
-; New addition:
+; New addition
 ;   C set means rotate and project, but C clear means just
 ;   rotate.  If C=0 then need pointers to rotation
 ;   destinations ROTPX,ROTPY,ROTPZ=$59-$5E.
 ;
-; v2: Now two rotation matrices, local and viewpoint.
+; v2 Now two rotation matrices, local and viewpoint.
 ;     Points are rotated by local matrix; if projecting,
 ;     points are now rotated by viewpoint matrix, then
 ;     projected.
@@ -1116,7 +1116,7 @@ EASY1    ldy TEMPX
 C1c      cmp #1
          beq EASY1
 
-         ;stx savx+1 ; Oric port: Need to save X
+         ;stx savx+1 ; Oric port Need to save X
 
          ldy TEMPX
          MULTAY(TM1)

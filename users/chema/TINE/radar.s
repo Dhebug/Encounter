@@ -478,7 +478,7 @@ IsInLimit
          ; if (d&0xc000) {
          ; return; // far away
          ;}   
-         ; PROBLEM: List of pointers needs the number of points, before this loop...!
+         ; PROBLEM List of pointers needs the number of points, before this loop...!
          ; So a loop checking is run twice
 
          lda HCX,x

@@ -95,7 +95,7 @@ Coords
 #endif
 
 ; Places an attribute control in the first column of the screen
-; params: regA = attribute to set
+; params regA = attribute to set
 
 set_ink
 .(

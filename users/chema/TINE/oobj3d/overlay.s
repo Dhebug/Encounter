@@ -7,11 +7,15 @@ __overlay_start
 
 ;.dsb 256-(*&255)
 
-; Include sound and sfx routines and data
-;#include "..\sound.s"
-
 #include "lib3dtab.s"
 #include "..\models.s"
+
+/*
+//#define INCLUDEMUSIC
+#ifdef INCLUDEMUSIC
+#include "..\music.s"
+#endif
+*/
 
 __overlay_end
 
@@ -75,6 +79,8 @@ __overlay_end
 				.byt 190	
 				.byt 4
 				.byt 7
+
+
 .dsb 256-150
 .dsb 256
 

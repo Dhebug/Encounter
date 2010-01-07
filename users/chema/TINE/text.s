@@ -481,9 +481,11 @@ put_char_direct
         sta (screen),y 
         rts 
 
+/*
 ;73 Characters + 7 for special chars (Not defined yet) [CHEMA: 73=', 74=-, 
 ;75=space (for deleting), 76==, 77=<-, 78=->, 79=/]
 ;80 Characters == 400($190) Bytes 
+*/
 
 character_bitmap_row0   ;80 Bytes 
     .byt $40,$70,$40,$46,$40,$5c,$7e,$70,$58,$4c,$58,$58,$40,$40,$40,$40 

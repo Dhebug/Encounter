@@ -30,7 +30,7 @@ tmprow				.byt 0
 counter				.byt 0
 .text 
 
-sav_old_rout .word $0000
+;sav_old_rout .word $0000
 
 #ifdef ROM
 #define IRQ_ADDRLO $0245
@@ -47,26 +47,21 @@ _init_irq_routine
         ;setup, we need not worry about ensuring one irq event and/or right 
         ;timer period, only redirecting irq vector to our own irq handler. 
         sei
-        lda $0245
-        sta sav_old_rout
-        lda $0246
-        sta sav_old_rout+1
+        ;lda $0245
+        ;sta sav_old_rout
+        ;lda $0246
+        ;sta sav_old_rout+1
         lda #<irq_routine 
         sta IRQ_ADDRLO
         lda #>irq_routine 
         sta IRQ_ADDRHI
 
-        ;Turn off music and sfx
-    	;lda #128
-    	;sta MusicStatus
-    	;sta EffectNumber
-    	;sta EffectNumber+1
-    	;sta EffectNumber+2
         cli 
         rts 
 .)
 
 
+/*
 _disable_irq_routine
 .(
     sei
@@ -78,7 +73,7 @@ _disable_irq_routine
     rts
 
 .)
-
+*/
 
 ;The IRQ routine will run (Like Oric) at 100Hz. 
 irq_routine 

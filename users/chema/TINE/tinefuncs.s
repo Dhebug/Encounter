@@ -14,8 +14,8 @@
 
 
 ;; Gets the pixel address and scan.
-;; Params X: reg X, Y: reg Y
-;; Returns:
+;; Params X reg X, Y reg Y
+;; Returns
 ;; tmp0 address of line
 ;; reg Y scan in line (tmp0),y is the pointer to the actual scan
 ;; reg A scan code with the pixel to ora or eor in screen...
@@ -679,7 +679,7 @@ cont
 	cpx #SHIP_COUGAR
 	beq nobomb
 
-	; Ok, not protected, so make it explode :)
+	; Ok, not protected, so make it explode 
 	ldy CUROBJ
 	lda _flags,y
 	and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)

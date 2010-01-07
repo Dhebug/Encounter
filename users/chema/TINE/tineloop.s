@@ -41,8 +41,7 @@ loop
 	rts
 .)
 
-
-init_intro
+init_view_ship
 .(
 	jsr _EmptyObj3D
 	; Create our ship
@@ -61,17 +60,21 @@ init_intro
     jsr AddSpaceObject
 
 	; Create the ship to watch	
-	lda #<1300
+	lda #<4000
 	sta _PosZ
-	lda #>1300
+	lda #>4000
 	sta _PosZ+1
 	jsr _gen_rnd_number
 	and #%1111
 	clc
 	adc #15
 	;lda #SHIP_COBRA3
-	jsr AddSpaceObject
+	jmp AddSpaceObject
+.)
 
+init_intro
+.(
+	jsr init_view_ship
 	; initialize front view
 	jsr _DoubleBuffOff
 	jsr clr_hires
@@ -100,15 +103,30 @@ animate
 	clc
     jsr Roll
 
-	lda frame_number
-	beq nonearer
+	inc frame_number
 
-	dec frame_number
+	lda frame_number
+	cmp #30
+	bcs nonearer
 	ldx #0
 	jsr SetCurOb
-	lda #8*2
+	lda #32
 	jmp MoveForwards
 nonearer
+	cmp #(30+150)
+	bcc keep
+	cmp #(30+150+30)
+	bcc further
+	lda #0
+	sta frame_number
+	jmp init_view_ship
+further
+	ldx #0
+	jsr SetCurOb
+	lda #$e0
+	jmp MoveForwards
+
+keep
 	rts
 .)
 
@@ -127,7 +145,7 @@ _init_screen
 	jsr flight_message
 	jsr init_intro
 
-	lda #15
+	lda #0
 	sta frame_number
 loop
 	jsr animate
@@ -156,7 +174,7 @@ _init_screen2
 
 	jsr init_intro
 
-	lda #15
+	lda #0
 	sta frame_number
 loop
 	jsr animate
@@ -457,7 +475,7 @@ done_rear
 done_energy
 	jmp locking
 no_energy
-	; We should be dead here :)
+	; We should be dead here 
 
 	lda message_delay
 	ora player_in_control

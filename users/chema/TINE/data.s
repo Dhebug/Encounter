@@ -251,12 +251,12 @@ _VX .byt 0
 _VY .byt 0
 _VZ .byt 0
 
-;; A vector definition: Should be contiguous!
+;; A vector definition Should be contiguous!
 _VectX .byt 0,0
 _VectY .byt 0,0
 _VectZ .byt 0,0
 
-;; Position of a ship: Should be contiguous!
+;; Position of a ship Should be contiguous!
 _PosX  .byt 0,0
 _PosY  .byt 0,0
 _PosZ  .byt 0,0

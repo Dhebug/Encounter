@@ -1,6 +1,7 @@
 ; sound file
 
 
+
 ; Routine for dumping registers to AY
 
 #define ayc_Register $FF
@@ -26,91 +27,6 @@
 #define AY_EnvelopeMSB	12
 #define AY_EnvelopeCy	13
 
-#ifdef 0
-AYRegDump
-.(
-	sei
-
-    LDX #13
-loop 
-	LDA RegisterBlock,X
-	cpx #13
-	beq skip2
-    CMP ReferenceBlock,X
-    BEQ skip
-skip2
-    STA ReferenceBlock,X
-    STX via_porta
-    LDY #ayc_Register
-    STY via_pcr
-    LDY #ayc_Inactive
-    STY via_pcr
-    STA via_porta  
-    LDA #ayc_Write
-    STA via_pcr
-    STY via_pcr
-skip
-	DEX
-    BPL loop
-	
-	cli
-    RTS
-.)
-		 
-		 
-RegisterBlock
-	.dsb 7,0
-	.byt %1110000
-	.byt $10
-	.dsb 5,0
-ReferenceBlock
-	.dsb 14,128
-
-
-InitSound
-.(
-	jmp AYRegDump
-.)
-
-SndExplosion
-.(
-	ldx #AY_Noise
-	lda #%00010
-	sta RegisterBlock,x
-	ldx #AY_EnvelopeMSB
-	lda #$28
-	sta RegisterBlock,x
-	jmp AYRegDump
-
-.)
-
-
-SndShoot
-
-SndHit
-.(
-	ldx #AY_EnvelopeMSB
-	lda #$05
-	sta RegisterBlock,x
-	jmp AYRegDump
-.)
-
-SndHitNoShields
-.(
-  	ldx #AY_AToneMSB
-	lda #2
-	sta RegisterBlock,x
-	ldx #AY_EnvelopeMSB
-	lda #$05
-	sta RegisterBlock,x
-	jsr AYRegDump
-  	ldx #AY_AToneMSB
-	lda #0
-	sta RegisterBlock,x
-	rts
-.)
-
-#else
 
 ; Needs X and Y with the low and high bytes of the
 ; table with register values
@@ -291,9 +207,6 @@ msg
 	.byt $10,0,$10,1,$10,2,0,$78,$10,$10,$10,0,$08,0
 
 .)
-
-
-#endif
 
 
 
