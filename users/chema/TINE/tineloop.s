@@ -60,9 +60,9 @@ init_view_ship
     jsr AddSpaceObject
 
 	; Create the ship to watch	
-	lda #<4000
+	lda #<4100
 	sta _PosZ
-	lda #>4000
+	lda #>4100
 	sta _PosZ+1
 	jsr _gen_rnd_number
 	and #%1111

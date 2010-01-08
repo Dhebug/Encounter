@@ -61,16 +61,19 @@ _main
     jsr _init_disk
 	jsr LoadOverlay
 
-	jsr _init_irq_routine
-	;jsr InitMusic
+	;jsr _init_irq_routine
 	jsr _init_tine
 	jsr _init_print
 	
 restart
+	inc silence_sfx
+	jsr InitMusic
+
 	jsr _init_screen
 	jsr _init_screen2
 
-	;jsr _init_irq_routine 
+	dec silence_sfx
+	jsr _init_irq_routine 
 
 	ldx #$ff
 	stx player_in_control
@@ -151,8 +154,7 @@ donegal
 
 ;Number of sectors to read Just the original tables and the models now 
 
-#define NUM_SECT_OVL 35
-//+5	 
+#define NUM_SECT_OVL 35+9	 
 
 LoadOverlay
 .(

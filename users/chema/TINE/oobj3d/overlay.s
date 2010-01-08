@@ -9,13 +9,7 @@ __overlay_start
 
 #include "lib3dtab.s"
 #include "..\models.s"
-
-/*
-//#define INCLUDEMUSIC
-#ifdef INCLUDEMUSIC
 #include "..\music.s"
-#endif
-*/
 
 __overlay_end
 

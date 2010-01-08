@@ -106,13 +106,18 @@ lback    LDA IDENTITY,X
          jsr GetNextOb
          cpx #0  
          beq end2 
-         ;bcs end2   
-
 loop2    
          sta tmp1
          sty tmp1+1
-         jsr IsAppearing
-         beq skip2
+         ;jsr IsAppearing
+         ;beq skip2		
+
+		 ; Is Invisible ship?
+	     ; Check ship ID byte...
+		 ldy #ObjID
+		 lda (tmp1),y
+		 bmi skip2  ; Not visible object 
+
          jsr IsInLimit  
          beq skip2
          inc tmp1c
@@ -120,8 +125,6 @@ skip2
          jsr GetNextOb
          cpx #0
          bne loop2
-         ;bcc loop2
-
 end2
          lda tmp1c
          asl
@@ -141,9 +144,6 @@ end2
          ADC #00
          STA POINT+1
 
-         ;LDX NUMOBJS
-         ;DEX
-
          LDY #00          ;Order doesn't matter
          sty tmp1c
          ldx #1 
@@ -151,13 +151,17 @@ end2
          jsr GetNextOb
          cpx #0
          beq end
-         ;bcs end
-
 loop    
          sta tmp1
          sty tmp1+1
-         jsr IsAppearing
-         beq skip
+         ;jsr IsAppearing
+         ;beq skip
+		 ; Is Invisible ship?
+	     ; Check ship ID byte...
+		 ldy #ObjID
+		 lda (tmp1),y
+		 bmi skip  ; Not visible object 
+
          jsr IsInLimit
          beq skip
 
@@ -199,9 +203,6 @@ skip
          jsr GetNextOb
          cpx #0
          BNE loop        ;0 is radar object
-         ;bcc loop   
-
-;         STY RADOBJ+1     ;Number of points
 end
          LDA XOFFSET      ;Change coordinate offsets
          PHA
@@ -219,9 +220,7 @@ end
          STA YOFFSET
          PLA
          STA XOFFSET
-
-        jmp DrawLollipops
-
+         jmp DrawLollipops
 .)
 
 
@@ -245,14 +244,12 @@ countobjs .byt 00
 
 EraseRadar
 .(
-         ;rts
-
          lda RADOBJ+1
          sta countobjs
          beq elrts
  
-loop2    ldy countobjs ;LDY RADOBJ+1     ;Now plot each point
-         DEY
+loop2    ldy countobjs      ;Now plot each point
+         dey
 
          lda savX,y   ; X1 the same as X2
          tax        
@@ -288,14 +285,14 @@ next
          eor (tmp0),y
          sta (tmp0),y
 
-         ldx tmp
+ /*        ldx tmp
          ldy tmp+1
          inx
 		 inx
          jsr pixel_address_real
          eor (tmp0),y
          sta (tmp0),y
-
+*/
        
 skip
          dec countobjs;DEC RADOBJ+1
@@ -306,6 +303,15 @@ elrts    RTS              ;Whew!
 
 
 .)
+
+
+; Heads
+; a=%000001 (1), plot, iny, a=%110000, plot
+; a=%000010 (2), a=%000011 (3), plot, iny, a=%100000, plot
+; a=%000100 (4), a=%000111 (7), plot
+; a=%001000 (8), a=%001110 (14), plot
+; a=%010000 (16),a=%011100 (28), plot
+; a=%100000 (32),a=%111000 (56), plot
 
 
 DrawLollipops
@@ -355,14 +361,14 @@ next
          sta (tmp0),y
 
 
-         ldx tmp
+ /*        ldx tmp
          ldy tmp+1
          inx
 		 inx
          jsr pixel_address_real
          eor (tmp0),y
          sta (tmp0),y
-
+*/
 skip
          dec countobjs;DEC RADOBJ+1
          dec countobjs;dec RADOBJ+1 
@@ -374,61 +380,57 @@ elrts    RTS              ;Whew!
 .)
 
 DrawUp
-
 .(
- 
          sta tmp1
          jsr pixel_address_real
-         ;sta tmp1+1
-         tax
+		 sta loop_draw+1
+		 ldx tmp1
+		 sec
 loop_draw
-         txa ;lda tmp1+1     ; get scancode
+		 lda #0	; SMC	get scancode
          eor (tmp0),y   ; Put pixel
          sta (tmp0),y
         
          lda tmp0       ; Decrement pointer
-         sec
          sbc #40
          sta tmp0
          bcs nodec
          dec tmp0+1   
+		 sec
 nodec   
-         dec tmp1       ; Next pixel up
+		 dex		; Next pixel up
          bne loop_draw
-
-    rts
-
+	     rts
 .)
 
 
 DrawDown
-
 .(
          sta tmp1
          lda #0
          sec
          sbc tmp1
          sta tmp1
-        
-         jsr pixel_address_real
-         tax ;sta tmp1+1
+ 
+		 jsr pixel_address_real
+         sta loop_draw+1
+		 ldx tmp1
+		 clc
 loop_draw
-         txa ;lda tmp1+1     ; get scancode
+		 lda #0			; SMC get scancode
          eor (tmp0),y   ; Put pixel
          sta (tmp0),y
         
          lda tmp0       ; Decrement pointer
-         clc
          adc #40
          sta tmp0
          bcc noinc
          inc tmp0+1   
+		 clc
 noinc   
-         dec tmp1       ; Next pixel up
+         dex	       ; Next pixel up
          bne loop_draw
-
-    rts
-
+	     rts
 .)
 
 
@@ -436,6 +438,8 @@ noinc
 ; is to be displayed... Checks for planets, debris, ECMS...
 ; Returns Z=0 if it is or Z=1 else.
 
+#ifdef 0
+// inlined
 IsAppearing
 .(
  
@@ -460,6 +464,7 @@ skip
 
 .)
 
+#endif
 
 
 ; This function checks if the object whose pos in the list is in
