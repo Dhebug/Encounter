@@ -154,12 +154,12 @@ size again. This was not ocurring before????
 
 - Fuel circle seems somewhat wrong, when it is 3.0LY planets at 2.4LY are outside. (?)
 
-+ Snapping to planet not allways work in short chart
++ Snapping to planet does not allways work in short chart
 
 + When frame rate goes too low, skip frame drawing
 
 + When frame rate goes too high don't simulate all the time, or make a waiting loop
 
-+ Ships still attack from too far. Lasers incorrectly drawn.
+- Ships still attack from too far. Lasers incorrectly drawn.
 
 + Missiles still eat up CPU cycles. Too many of them, I think.
