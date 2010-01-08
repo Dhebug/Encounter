@@ -160,7 +160,7 @@ noY
 	bne loop
 	jsr LoadDefaultCommander
 end
-	jsr SndPic
+	;jsr SndPic
 	jsr NewPlayerShip
 	jmp end_intro
 
@@ -182,7 +182,7 @@ loop
 	jsr ReadKeyNoBounce
 	cmp #" "  
 	bne loop
-	jsr SndPic
+	;jsr SndPic
 	jmp end_intro
 .)
 

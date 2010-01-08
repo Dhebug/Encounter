@@ -66,6 +66,8 @@ _main
 	jsr _init_print
 	
 restart
+	;jsr SndStop
+
 	inc silence_sfx
 	jsr InitMusic
 
@@ -74,6 +76,8 @@ restart
 
 	dec silence_sfx
 	jsr _init_irq_routine 
+
+	jsr SndStop
 
 	ldx #$ff
 	stx player_in_control
@@ -103,6 +107,7 @@ looprnd
 	jsr _DoubleBuffOff
     jsr save_frame
 
+	jsr SndStop	
 	jmp restart
 	;rts
 .)
@@ -152,9 +157,9 @@ donegal
 
 #define OVERLAY_INIT 100
 
-;Number of sectors to read Just the original tables and the models now 
+;Number of sectors to read Just the original tables, models, music and dictionary now 
 
-#define NUM_SECT_OVL 35+9	 
+#define NUM_SECT_OVL 35+9+9	 
 
 LoadOverlay
 .(
