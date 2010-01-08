@@ -10,6 +10,7 @@ __overlay_start
 #include "lib3dtab.s"
 #include "..\models.s"
 #include "..\music.s"
+#include "..\dictc.s"
 
 __overlay_end
 

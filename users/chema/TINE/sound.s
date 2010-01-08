@@ -73,8 +73,19 @@ ReferenceBlock
 
 InitSound
 .(
-	;jmp AYRegDump
+	;jmp SndStop
 	rts
+.)
+
+
+SndStop
+.(
+	ldx #<explosion
+	ldy #>explosion
+	jmp AYRegDump
+explosion
+	.byt 0,0,0,0,0,0,$40,$0,$0,$0,$0,0,$0,0
+
 .)
 
 SndExplosion

@@ -235,6 +235,10 @@ SOURCE=.\music.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\oobj3d\overlay.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\radar.s
 # End Source File
 # Begin Source File
