@@ -1520,6 +1520,7 @@ kk
 	sta tmp
 nothing
 
+	lda tmp
 	bmi deplete_rear
 	lda _front_shield
 	jmp cont4
