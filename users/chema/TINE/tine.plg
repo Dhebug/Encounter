@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP572.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP55F.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP572.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP55F.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -90,7 +90,7 @@ obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3365
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3362
 Commander's data:
 (__commander_data_end - __commander_data_start)=(__commander_data_end - __commander_data_start)=50
 Size of ship data tables in bytes:
@@ -100,7 +100,7 @@ Object records start at
 OBS=($fffa-64*32)=63482
 
 **** Free space:
-($a000-osdk_end)=($a000-osdk_end)=3246
+($a000-osdk_end)=($a000-osdk_end)=2222
 
 -----------------
 lib3d: Tables
@@ -130,7 +130,7 @@ Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 Creating final program TINE.TAP
-File 'build\TINE.tap' is 36448 bytes long (14 bytes header and 36434 bytes of data)
+File 'build\TINE.tap' is 37472 bytes long (14 bytes header and 37458 bytes of data)
 Build of TINE.tap finished
 Tap2dsk V2.1
 Reading oobj3d\overlay.tap

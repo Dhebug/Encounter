@@ -85,6 +85,7 @@ init_intro
 animate
 .(
     ldx #0
+	stx counter
     jsr CalcView
     jsr SortVis   
     jsr clr_hires2
@@ -337,6 +338,19 @@ noinvert
     cmp #SCR_FRONT
     bne nodraw
 
+#ifdef ALTSCANS
+	ldx #0
+	stx counter
+#else
+	lda counter
+	sta val_pr+1
+	ldx #0
+	stx counter
+	cmp #25
+	bcs nodraw
+#endif
+
+
 ;;;;; START OF DRAWING SECTION
 
     jsr move_stars
@@ -535,7 +549,7 @@ cont3
 	; Update everything that needs to be
 	jsr update_speed_panel
 	jsr update_energy_panel
-nofr	 
+nofr
     jmp loop
 
 .)
@@ -590,7 +604,8 @@ loop
 	dex
 	bpl loop
 #endif
-	lda counter 
++val_pr
+	lda #0
 	sta op2
 	lda #0
 	sta op2+1
@@ -599,9 +614,6 @@ loop
 	jsr gotoXY
 	ldx #5
 	jsr print_num_tab	
-
-	lda #0
-	sta counter
 #ifdef 0
     lda dbg1
     sta op2
@@ -652,17 +664,17 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 21
+#define MAX_KEY 22
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B"
+    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V"
 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
-    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb)
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
-    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb) 
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb), <(rearview)
 
 
 /* M= byte 3 val 1
@@ -742,8 +754,12 @@ cont1
         ldx #MAX_KEY
 loop    
         cmp user_keys,x
-        bne next
+        beq found
+        dex
+        bpl loop
+		bmi end
 
+found
         lda key_routl,x
         sta routine+1
         lda key_routh,x
@@ -778,13 +794,10 @@ savx
 skip
  
 routine
+		; Call the routine
         jsr $1234   ; SMC                
-		jmp end
-next
-        dex
-        bpl loop
-end
 
+end
 		lda _current_screen
 		cmp #SCR_FRONT
 		bne ret
@@ -1064,28 +1077,61 @@ step3
 		sta _ptla
 		jmp update_redirection
 .)
-;H
-galhyper
-		; A test for a rear view
+;V
+rearview
+.(
+        lda #SCR_FRONT
+        cmp _current_screen
+        beq lookrear
+		rts
+lookrear
 		lda invert
 		eor #$ff
 		sta invert
 		jsr update_compass
 		jmp INITSTAR
-		
-		; End of test
-
+.)
+;H
+galhyper
+.(
         lda #SCR_FRONT
         cmp _current_screen
-        bne nothing
+        bne end
+		lda invert
+		bne end
 		
 		; Test if we have the Galactic Hyperspace equipped
+		lda _equip
+		and #%10000000
+		beq end
 
-        jsr _enter_next_galaxy
-        jmp endjump
+ 		; If too close to planet cannot jump
+		lda _planet_dist
+		cmp #PDIST_MASSLOCK
+		bcs canjump
+		ldx #STR_MASS_LOCKED
+		jmp flight_message
+canjump
+		; Should start sequence, but not perform the jump right now... 
+		jsr init_hyper_seq
+		bcc dojump
+		ldx #STR_PATH_LOCKED
+		jmp flight_message
+
+dojump
+		; Remove Galactic Hyperspace
+		lda _equip
+		and #%01111111
+		sta _equip
+		jmp do_galjump
+end
+		rts
+.)
+
 ;J
 jumphyper
-        lda #SCR_FRONT
+.(
+		lda #SCR_FRONT
         cmp _current_screen
         bne nothing
 
@@ -1131,7 +1177,7 @@ canjump
 
 dojump
 		jmp do_jump
-		
+.)		
 ;1
 frontview
         lda #SCR_FRONT
@@ -1238,6 +1284,7 @@ do_jump
 		sta _fuel+1
 		
 		; Perform the jumping
++tailjump
         jsr _jump
 		; Clear legal status a bit
 		lda _legal_status
@@ -1250,6 +1297,14 @@ do_jump
 		; Draw first frame
         jmp _FirstFrame
         ;rts
+.)
+
+do_galjump
+.(
+	jsr _enter_next_galaxy
+	lda #0
+	sta _legal_status
+	jmp tailjump
 .)
 
 check_scr

@@ -125,10 +125,13 @@ end
 	rts	
 .)
 
-#define NOALTSCANS
-#ifdef NOALTSCANS
 
+
+#ifdef ALTSCANS
+dump_buf2
+#else
 dump_buf
+#endif
 .(
 	ldx #WIDTH
 loop
@@ -518,27 +521,24 @@ end
 	rts
 .)
 
-#else
+#ifdef ALTSCANS
 
 dump_buf
 .(
+  	lda counter
+	sta val_pr+1
+
+	cmp #17
+	bcs half
+	jmp dump_buf2
+half
 	lda frame_number
 	and #1
-	beq even
+	beq odd
+	;jmp dump_buffeven
+	jmp dump_buf2
+odd
 	jmp dump_buffodd
-even
-	jmp dump_buffeven
-.)
-
-
-clr_hires2
-.(
-	lda frame_number
-	and #1
-	beq even
-	jmp clr_hires2odd
-even
-	jmp clr_hires2even
 .)
 
 
@@ -675,79 +675,6 @@ end
 	rts
 .)
 
-clr_hires2odd
-.(
-	ldx #WIDTH
-	lda #$40
-loop
-	sta buffer+LEFT+40*1,x
-	sta buffer+LEFT+40*3,x
-	sta buffer+LEFT+40*5,x
-	sta buffer+LEFT+40*7,x
-	sta buffer+LEFT+40*9,x
-	sta buffer+LEFT+40*11,x
-	sta buffer+LEFT+40*13,x
-	sta buffer+LEFT+40*15,x
-	sta buffer+LEFT+40*17,x
-	sta buffer+LEFT+40*19,x
-	sta buffer+LEFT+40*21,x
-	sta buffer+LEFT+40*23,x
-	sta buffer+LEFT+40*25,x
-	sta buffer+LEFT+40*27,x
-	sta buffer+LEFT+40*29,x
-	sta buffer+LEFT+40*31,x
-	sta buffer+LEFT+40*33,x
-	sta buffer+LEFT+40*35,x
-	sta buffer+LEFT+40*37,x
-	sta buffer+LEFT+40*39,x
-	sta buffer+LEFT+40*41,x
-	sta buffer+LEFT+40*43,x
-	sta buffer+LEFT+40*45,x
-	sta buffer+LEFT+40*47,x
-	sta buffer+LEFT+40*49,x
-	sta buffer+LEFT+40*51,x
-	sta buffer+LEFT+40*53,x
-	sta buffer+LEFT+40*55,x
-	sta buffer+LEFT+40*57,x
-	sta buffer+LEFT+40*59,x
-	sta buffer+LEFT+40*61,x
-	sta buffer+LEFT+40*63,x
-	sta buffer+LEFT+40*65,x
-	sta buffer+LEFT+40*67,x
-	sta buffer+LEFT+40*69,x
-	sta buffer+LEFT+40*71,x
-	sta buffer+LEFT+40*73,x
-	sta buffer+LEFT+40*75,x
-	sta buffer+LEFT+40*77,x
-	sta buffer+LEFT+40*79,x
-	sta buffer+LEFT+40*81,x
-	sta buffer+LEFT+40*83,x
-	sta buffer+LEFT+40*85,x
-	sta buffer+LEFT+40*87,x
-	sta buffer+LEFT+40*89,x
-	sta buffer+LEFT+40*91,x
-	sta buffer+LEFT+40*93,x
-	sta buffer+LEFT+40*95,x
-	sta buffer+LEFT+40*97,x
-	sta buffer+LEFT+40*99,x
-	sta buffer+LEFT+40*101,x
-	sta buffer+LEFT+40*103,x
-	sta buffer+LEFT+40*105,x
-	sta buffer+LEFT+40*107,x
-	sta buffer+LEFT+40*109,x
-	sta buffer+LEFT+40*111,x
-	sta buffer+LEFT+40*113,x
-	sta buffer+LEFT+40*115,x
-	sta buffer+LEFT+40*117,x
-	sta buffer+LEFT+40*119,x
-	sta buffer+LEFT+40*121,x
-	dex
-	bmi end
-	jmp loop
-end
-	rts
-.)
-
 
 
 dump_buffeven
@@ -876,79 +803,6 @@ loop
 	sta $a000+LEFT+40*(118+TOP),x
 	lda buffer+LEFT+40*120,x
 	sta $a000+LEFT+40*(120+TOP),x
-	dex
-	bmi end
-	jmp loop
-end
-	rts
-.)
-
-clr_hires2even
-.(
-	ldx #WIDTH
-	lda #$40
-loop
-	sta buffer+LEFT+40*0,x
-	sta buffer+LEFT+40*2,x
-	sta buffer+LEFT+40*4,x
-	sta buffer+LEFT+40*6,x
-	sta buffer+LEFT+40*8,x
-	sta buffer+LEFT+40*10,x
-	sta buffer+LEFT+40*12,x
-	sta buffer+LEFT+40*14,x
-	sta buffer+LEFT+40*16,x
-	sta buffer+LEFT+40*18,x
-	sta buffer+LEFT+40*20,x
-	sta buffer+LEFT+40*22,x
-	sta buffer+LEFT+40*24,x
-	sta buffer+LEFT+40*26,x
-	sta buffer+LEFT+40*28,x
-	sta buffer+LEFT+40*30,x
-	sta buffer+LEFT+40*32,x
-	sta buffer+LEFT+40*34,x
-	sta buffer+LEFT+40*36,x
-	sta buffer+LEFT+40*38,x
-	sta buffer+LEFT+40*40,x
-	sta buffer+LEFT+40*42,x
-	sta buffer+LEFT+40*44,x
-	sta buffer+LEFT+40*46,x
-	sta buffer+LEFT+40*48,x
-	sta buffer+LEFT+40*50,x
-	sta buffer+LEFT+40*52,x
-	sta buffer+LEFT+40*54,x
-	sta buffer+LEFT+40*56,x
-	sta buffer+LEFT+40*58,x
-	sta buffer+LEFT+40*60,x
-	sta buffer+LEFT+40*62,x
-	sta buffer+LEFT+40*64,x
-	sta buffer+LEFT+40*66,x
-	sta buffer+LEFT+40*68,x
-	sta buffer+LEFT+40*70,x
-	sta buffer+LEFT+40*72,x
-	sta buffer+LEFT+40*74,x
-	sta buffer+LEFT+40*76,x
-	sta buffer+LEFT+40*78,x
-	sta buffer+LEFT+40*80,x
-	sta buffer+LEFT+40*82,x
-	sta buffer+LEFT+40*84,x
-	sta buffer+LEFT+40*86,x
-	sta buffer+LEFT+40*88,x
-	sta buffer+LEFT+40*90,x
-	sta buffer+LEFT+40*92,x
-	sta buffer+LEFT+40*94,x
-	sta buffer+LEFT+40*96,x
-	sta buffer+LEFT+40*98,x
-	sta buffer+LEFT+40*100,x
-	sta buffer+LEFT+40*102,x
-	sta buffer+LEFT+40*104,x
-	sta buffer+LEFT+40*106,x
-	sta buffer+LEFT+40*108,x
-	sta buffer+LEFT+40*110,x
-	sta buffer+LEFT+40*112,x
-	sta buffer+LEFT+40*114,x
-	sta buffer+LEFT+40*116,x
-	sta buffer+LEFT+40*118,x
-	sta buffer+LEFT+40*120,x
 	dex
 	bmi end
 	jmp loop

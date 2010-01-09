@@ -163,3 +163,7 @@ size again. This was not ocurring before????
 - Ships still attack from too far. Lasers incorrectly drawn.
 
 + Missiles still eat up CPU cycles. Too many of them, I think.
+
+- Seems to be an error where a shield may become less than 0 or something like that, and is never decremented again. Load saved game and let the viper hit you. You should see it.
+
+

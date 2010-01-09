@@ -319,9 +319,13 @@ MusicIRQ
 	stx RegX+1
 	sty RegY+1
 
+//    lda TimerCounter 
+//	and #1
+//	beq avoid
+
 	jsr ProcMusic
 	jsr SendAY
-
+avoid
        ;Clear IRQ event 
         lda via_t1cl 
 

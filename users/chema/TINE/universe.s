@@ -778,8 +778,6 @@ shiptype
 	cmp #SHIP_WORM
 	bne noslow
 slowme
-	lda #0
-dbug beq dbug
 	lda _ai_state,x
 	ora #FLG_SLOW
 	sta _ai_state,x

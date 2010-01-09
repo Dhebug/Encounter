@@ -12,6 +12,9 @@
 
 //#define OLDROLLS
 
+#define ALTSCANS
+
+
 // Values for planet distance various thresholds
 
 #define PDIST_DOCK		$0a
