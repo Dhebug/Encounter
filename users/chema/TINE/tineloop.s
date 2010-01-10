@@ -206,6 +206,10 @@ _FirstFrame
     lda #PDIST_MASSLOCK
     sta _planet_dist
 
+	lda #0
+	sta frame_time
+	sta counter
+
     jsr clr_hires2
 
 	lda invert
@@ -344,10 +348,10 @@ noinvert
 	ldx #0
 	stx counter
 
-#ifndef ALTSCANS
-	cmp #MAXFRAMETIME
+//#ifndef ALTSCANS
+	cmp #MAXFRAMETIME+5
 	bcs nodraw
-#endif
+//#endif
 
 
 ;;;;; START OF DRAWING SECTION
