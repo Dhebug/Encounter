@@ -71,22 +71,40 @@ ReferenceBlock
 	.dsb 14,128
 
 
-InitSound
-.(
-	;jmp SndStop
-	rts
-.)
-
-
 SndStop
 .(
-	ldx #<explosion
-	ldy #>explosion
-	jmp AYRegDump
-explosion
-	.byt 0,0,0,0,0,0,$40,$0,$0,$0,$0,0,$0,0
+	sei
 
+    LDX #13
+loop 
+	LDA #0
+    STA ReferenceBlock,X
+    STX via_porta
+    LDY #ayc_Register
+    STY via_pcr
+    LDY #ayc_Inactive
+    STY via_pcr
+    STA via_porta  
+    LDA #ayc_Write
+    STA via_pcr
+    STY via_pcr
+skip
+	DEX
+    BPL loop
+	
+	cli
+    RTS
 .)
+
+
+
+InitSound
+.(
+	jmp SndStop
+	;rts
+.)
+
+
 
 SndExplosion
 .(
