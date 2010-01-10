@@ -13,6 +13,8 @@
 //#define OLDROLLS
 
 #define ALTSCANS
+#define DBGVALUES
+#define MAXFRAMETIME 17 
 
 
 // Values for planet distance various thresholds

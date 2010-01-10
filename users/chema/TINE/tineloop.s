@@ -13,6 +13,7 @@
 #echo
 
 invert .byt 00
+frame_time .byt 00
 
 _init_tine
 .(
@@ -85,7 +86,7 @@ init_intro
 animate
 .(
     ldx #0
-	stx counter
+	stx frame_time
     jsr CalcView
     jsr SortVis   
     jsr clr_hires2
@@ -338,26 +339,25 @@ noinvert
     cmp #SCR_FRONT
     bne nodraw
 
-#ifdef ALTSCANS
-	ldx #0
-	stx counter
-#else
 	lda counter
-	sta val_pr+1
+	sta frame_time
 	ldx #0
 	stx counter
-	cmp #25
+
+#ifndef ALTSCANS
+	cmp #MAXFRAMETIME
 	bcs nodraw
 #endif
 
 
 ;;;;; START OF DRAWING SECTION
-
     jsr move_stars
+	sei
     jsr clr_hires2
     jsr DrawAllVis   ;Draw objects
     jsr EraseRadar   ; Erase radar
     jsr DrawRadar
+	cli
     jsr PlotStars
 	jsr _DrawCrosshair
     jsr _Lasers
@@ -373,7 +373,6 @@ nofire
 	jsr print_inflight_message
 nomessage
 
-#define DBGVALUES
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
@@ -392,8 +391,9 @@ noinv
 doinv
     jsr print
 	inc print2dbuffer
+	sei
     jsr dump_buf
-
+	cli	
 	lda _planet_dist
 	cmp #PDIST_TOOFAR2
 	bcs nocompass
@@ -402,7 +402,6 @@ doinv
 nocompass
 	jsr clear_compass
 endcompass
-
 ;;;;;;;;;;;;;;;;;;;;;;;;; END OF DRAWING SECTION
 
 
@@ -604,8 +603,7 @@ loop
 	dex
 	bpl loop
 #endif
-+val_pr
-	lda #0
+	lda frame_time
 	sta op2
 	lda #0
 	sta op2+1
@@ -1407,6 +1405,7 @@ doit2
 .)
 
 
+#ifdef TABBEDROLLS
 tab_rolls .byt 0,1,1,1,2,2,3,4,6
 
 dorolls
@@ -1469,6 +1468,57 @@ store
     rts
 .)
 
+#else
+dorolls
+.(
+.(
+        ; Transform a_whatever in rot_whatever
+        lda a_y
+        bpl notneg
+        lda #0
+        sec
+        sbc a_y
+        ora #%10000000
+		bmi store
+notneg
+store
+        sta _roty+1
+.)
+
+.(
+        ; Transform a_whatever in rot_whatever
+        lda a_p
+        bpl notneg
+        lda #0
+        sec
+        sbc a_p
+        ora #%10000000
+		bmi store
+notneg
+store
+        sta _rotx+1
+.)
+
+.(
+        ; Transform a_whatever in rot_whatever
+        lda a_r
+        bpl notneg
+        lda #0
+        sec
+        sbc a_r
+        ora #%10000000
+		bmi store
+notneg
+store
+        sta _rotz+1
+.)
+
+    rts
+.)
+
+
+
+#endif
 
 
 
@@ -1492,7 +1542,6 @@ next1
 next2
 	rts
 .)
-
 
 
 damp
@@ -1539,7 +1588,6 @@ end
 .)
         rts
 .)
-
 
 init_hyper_seq
 .(
