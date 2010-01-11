@@ -66,7 +66,7 @@ _main
 	jsr _init_print
 	
 restart
-	;jsr SndStop
+	jsr SndStop
 
 	inc silence_sfx
 	jsr InitMusic

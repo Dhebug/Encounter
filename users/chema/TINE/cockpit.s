@@ -240,7 +240,7 @@ update_ship_id
 	jsr GetShipType
 	and #%01111111
 	tax
-
++name_ship
 	lda #<str_ship_names
 	sta tmp0
 	lda #>str_ship_names

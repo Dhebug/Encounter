@@ -152,6 +152,9 @@ a roundoff error that actually makes the model smaller with time. Not sure what 
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
 size again. This was not ocurring before????
 
+Ok. There are roundoff errors. With the original sindelta/cosdelta tables, effects are different, but
+exist. Should check if normalizing matrices is needed.
+
 - Fuel circle seems somewhat wrong, when it is 3.0LY planets at 2.4LY are outside. (?)
 
 + Snapping to planet does not allways work in short chart
@@ -166,4 +169,12 @@ size again. This was not ocurring before????
 
 - Seems to be an error where a shield may become less than 0 or something like that, and is never decremented again. Load saved game and let the viper hit you. You should see it.
 
++ Implement Escape Pod
 
++ Maybe implement dumping cargo?
+
++ Mission scripting
+
++ Use of changing the viewpoint?
+
++ Buying other ships?
