@@ -69,18 +69,24 @@ init_view_ship
 	and #%1111
 	clc
 	adc #15
-	;lda #SHIP_COBRA3
-	jmp AddSpaceObject
+	sta shiptype+1
+	jsr AddSpaceObject
+	lda #$60
+	sta screen
+	lda #$a0
+	sta screen+1
+shiptype
+	ldx #0 ; SMC
+	jmp name_ship
 .)
 
 init_intro
 .(
-	jsr init_view_ship
-	; initialize front view
 	jsr _DoubleBuffOff
 	jsr clr_hires
 	jsr load_frame
-	jmp _DoubleBuffOn
+	jsr _DoubleBuffOn
+	jmp init_view_ship
 .)
 
 animate
