@@ -4014,6 +4014,10 @@ loop
 	; Go to current planet 
 	jsr InitPlayerPos
 
+	; Initialize ship
+	jsr NewPlayerShip
+	jsr InitPlayerShip
+
 	jsr _init_irq_routine 
 
 	; return with Z=0

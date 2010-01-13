@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP453.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP25.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP453.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP25.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -37,19 +37,20 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2184
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2183
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13543
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13542
 
 File 'overlay.tap' is 14350 bytes long (14 bytes header and 14336 bytes of data)
 Presione una tecla para continuar . . . 
 Building the program TINE at adress $500
 Assembling main.S
-Assembling oobj3d\lib3d.S
+¨Desea sobrescribir C:\Docume~1\Chema\Misdoc~1\personal\oric\osdk\TMP\main.s (S¡/No/Todo)? ?
+¨Desea sobrescribir C:\Docume~1\Chema\Misdoc~1\personal\oric\osdk\TMP\main.s (S¡/No/Todo)? Assembling oobj3d\lib3d.S
 Assembling oobj3d\obj3d.S
 Assembling oobj3d\filler.S
 Assembling oobj3d\LineDraw.S
@@ -124,7 +125,7 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2184
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2183
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256

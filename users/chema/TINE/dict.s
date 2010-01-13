@@ -870,9 +870,9 @@ str_ship_names
 	.byt 0
 	.asc "  Boa   "
 	.byt 0
-	.asc "Thargon "
+	.asc "Thargoid"
 	.byt 0
-	.asc "Tharglet"
+	.asc "Thargon "
 	.byt 0
 	.asc "Unknown "
 	.byt 0

@@ -13,8 +13,8 @@
 //#define OLDROLLS
 
 #define ALTSCANS
-#define DBGVALUES
-#define MAXFRAMETIME 15 
+//#define DBGVALUES
+#define MAXFRAMETIME 12 
 #define TABBEDROLLS
 
 
