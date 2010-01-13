@@ -170,6 +170,7 @@ noY
 end
 	;jsr SndPic
 	jsr NewPlayerShip
+	jsr InitPlayerShip
 	jmp end_intro
 
 .)
