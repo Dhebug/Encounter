@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP25.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP1F3.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP25.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP1F3.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -37,13 +37,13 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2183
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2174
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13542
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13533
 
 File 'overlay.tap' is 14350 bytes long (14 bytes header and 14336 bytes of data)
 Presione una tecla para continuar . . . 
@@ -91,7 +91,7 @@ obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3359
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3357
 Commander's data:
 (__commander_data_end - __commander_data_start)=(__commander_data_end - __commander_data_start)=50
 Size of ship data tables in bytes:
@@ -125,7 +125,7 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2183
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2174
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256

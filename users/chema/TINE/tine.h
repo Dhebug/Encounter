@@ -2,30 +2,41 @@
 #define TINE_H
 
 #include "oobj3d/obj3d.h"
-/* Some defines for TINE */
-/* Maximum number of simultaneous ships */
 
+/* Some defines for TINE */
+
+/* Maximum number of simultaneous ships */
 #define MAXSHIPS MAXOBJS
 
+/* Maximum number of simultaneous Vipers and Thargoids */
 #define MAXCOPS	 2
 #define MAXTHARG 2
 
-//#define OLDROLLS
-
+/* Some definitions for frameskipping when rate ges too low */
+/* Use the technique of drawing odd/all/odd/all... scans    */
 #define ALTSCANS
+/* Threshold for alternate scan technique, the lower one	*/
+#define MAXFRAMETIME1 12 
+/* Threshold for complete frame skipping, the higher one    */
+#define MAXFRAMETIME2 12+5
+
+/* Uncomment to have debug values plotted on screen. 
+   Default is frame duration */
+
 //#define DBGVALUES
-#define MAXFRAMETIME 12 
+
+/* Use rolls based on a table, instead of directly the a_* values. 
+   This permits a kind of exponential behaviour  */
 #define TABBEDROLLS
 
-
-// Values for planet distance various thresholds
+/* Values for planet distance various thresholds */
 
 #define PDIST_DOCK		$0a
 #define PDIST_MASSLOCK	$10
 #define PDIST_TOOFAR	$60
 #define PDIST_TOOFAR2	$70
 
-// Values for the _flags field
+/* Values for the _flags field */
 
 #define IS_EXPLODING        1 
 #define IS_DISAPPEARING     2 
@@ -36,7 +47,7 @@
 #define FLG_INNOCENT		64
 
 
-// Values for the _ai_state field
+/* Values for the _ai_state field */
 
 #define IS_AICONTROLED     128
 
@@ -51,11 +62,11 @@
 
 
 
-// Values for _target field
+/* Values for _target field */
 
 #define IS_ANGRY            128
 
-// Values for equipment (user Byte in OBJ3D record)
+/* Values for equipment (user Byte in OBJ3D record) */
 #define HAS_ECM             1
 #define HAS_MILLASER        2
 #define HAS_ESCAPEPOD       4
@@ -66,7 +77,7 @@
 #define HAS_ITEM3           128
 
 
-// Values for the _missile_armed variable
+/* Values for the _missile_armed variable */
 #define ARMED				$ff
 #define UNARMED				0
 

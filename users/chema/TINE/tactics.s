@@ -1554,45 +1554,7 @@ cont
 	; maybe take hull into account here?
 
     ; Player killed - uh oh
-   ; Make it still
-    lda #0
-    sta _speed+1 
-    sta _rotx+1
-    sta _roty+1
-    sta _rotz+1   
-    sta _accel+1
-    sta a_y
-    sta a_p
-    sta a_r
-	lda #$ff
-	sta _energy+1
-    lda _flags+1
-    and #%11110000  ; Remove older flags...
-    ora #IS_EXPLODING
-    sta _flags+1
-
-    ; Delay explosion a bit
-    lda #3
-    sta _ttl+1
-    
-	ldx #1
-    jsr SetCurOb
-    lda #DEBRIS	; Anything would do...
-    jsr LaunchShipFromOther
-
-    ; Set it as view object
-    stx VOB
-
-	; make it rotate and move
-	;lda #4
-	;sta _rotz,x
-	;lda #2
-	;sta _speed,x
-	
-    ; Push it a bit
-    jsr SetCurOb
-    lda #$9c     ; -100
-    jsr MoveForwards
+	jsr ViewPlayerShip
 
     ; Disable keyboard...
     lda #0
@@ -1724,11 +1686,12 @@ loop
 	ora _vertexYLO,x
 	ora _vertexYHI,x
 	pha
-	lda player_in_control
-	beq plkilled
 	lda _laser_target-1,y
 	cmp #1
-	beq set_random_border
+	bne plkilled
+	lda player_in_control
+	bne set_random_border
+	lda _laser_target-1,y
 plkilled
 	tax
 	pla

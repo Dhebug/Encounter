@@ -6,8 +6,8 @@
 
 #define STR_INCOMING_MISSILE	0
 #define STR_GAME_OVER			1
-#define STR_PRESSSPACE			2
-#define STR_LOADNEW				3
+#define STR_PODLAUNCHED			2
+#define STR_PRESSSPACE			3
 #define STR_TARGET_LOCKED		4
 #define STR_TARGET_LOST			5
 #define STR_TARGET_ARMED		6
@@ -19,6 +19,7 @@
 #define STR_GALACTIC_HYPER		12
 #define STR_HYPERSPACE			13
 #define STR_RIGHTONCOMMANDER	14
+#define STR_LOADNEW				15
 
 
 /* These have parameterers */
