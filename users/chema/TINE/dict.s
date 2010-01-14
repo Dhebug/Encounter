@@ -888,7 +888,7 @@ flight_message_base
 	.byt 0
 	.asc "Game Over"
 	.byt 0
-	.asc "Load Saved Commander (Y/N)?"
+	.asc "Escape Pod Launched"
 	.byt 0
 	.asc "Press Space Commander"
 	.byt 0
@@ -908,13 +908,15 @@ flight_message_base
 	.byt 0
 	.asc "Energy Low"
 	.byt 0
-	.asc "Right on, Commander!"
-	.byt 0
+;	.asc "Right on, Commander!"
+;	.byt 0
+;	.asc "Load Saved Commander (Y/N)?"
+;	.byt 0
 
 
 ;; For load/save
 str_loadsavetitle
-	.asc "LOAD/SAVE Commander"
+	.asc "LOAD/SAVE Game"
 	.byt 0
 str_loadsaveempty
 	.asc "-- Empty Slot --"

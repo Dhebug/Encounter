@@ -1,19 +1,19 @@
-; Test code for TINE
+; main loop and other high-level functions
 
 #include "ships.h"
 #include "params.h"
 #include "tine.h"
 #include "main.h"
 
+invert .byt 00
+frame_time .byt 00
 
-// define where the space for object records starts...
+
+// select where the space for object records starts...
 #define OBS ($fffa-MAXOBJS*ObjSize)
 #echo Object records start at
 #print OBS
 #echo
-
-invert .byt 00
-frame_time .byt 00
 
 _init_tine
 .(
@@ -147,6 +147,7 @@ end_intro
 	jmp _EmptyObj3D
 .)
 
+/*
 _init_screen
 .(
 	ldx #2
@@ -175,9 +176,13 @@ end
 
 .)
 
+*/
 
 _init_screen2
 .(
+
+  	jsr LoadDefaultCommander
+
 	ldx #3
 	jsr flight_message
 
@@ -244,6 +249,7 @@ noinvert2
 
 frame_number .byt 0
 player_in_control .byt $0
+escape_pod_launched .byt 0
 attr_changed .byt 0
 
 invertZ
@@ -318,6 +324,7 @@ nochange
     cmp #06
     bcs nodock    
 
+dock
 	; Docking ship... must call docking sequence
 	lda _current_screen
 	cmp #SCR_FRONT
@@ -355,11 +362,8 @@ noinvert
 	ldx #0
 	stx counter
 
-//#ifndef ALTSCANS
-	cmp #MAXFRAMETIME+5
+	cmp #MAXFRAMETIME2
 	bcs nodraw
-//#endif
-
 
 ;;;;; START OF DRAWING SECTION
     jsr move_stars
@@ -453,6 +457,18 @@ contbomb
 	jmp cont2
 
 checkthings
+	; Check escape pod
+	lda escape_pod_launched
+	beq next
+
+	lda player_in_control
+	ora message_delay
+	bne next
+
+	dec player_in_control
+	inc escape_pod_launched
+	jmp dock
+next
 	jsr set_planet_distance
 
 	; Setup planet distance light indicator
@@ -673,17 +689,17 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 22
+#define MAX_KEY 23
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V"
+    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V", $1b
 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
-    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview)
+    .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview), >(launch_pod)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
-    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb), <(rearview)
+    .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb), <(rearview), <(launch_pod)
 
 
 /* M= byte 3 val 1
@@ -1277,6 +1293,67 @@ doit
     jmp _search_planet    ; This is jsr/rts
 
 
+launch_pod
+.(
+    lda #SCR_FRONT
+    cmp _current_screen
+    beq doit1
+ret
+	rts
+doit1
+
+	lda _equip
+	and #%100 ; Escape Pod
+	beq ret
+
+    inc player_in_control
+	dec escape_pod_launched
+
+	; Empty player's cargo
+	ldx #16
+	lda #0
+loop
+	sta _shipshold,x
+	dex
+	bpl loop
+
+	lda #20
+	sta _holdspace
+	lda _equip
+	and #%10 ; Large cargo bay
+	beq nocargo
+	lda _holdspace
+	clc
+	adc #10
+	sta _holdspace
+nocargo
+
+	; clears hyperspace destination
+	lda _currentplanet
+    sta _dest_num
+    jsr _infoplanet
+    jsr _makesystem
+
+	; Launch us
+	ldx #1
+    jsr SetCurOb
+    lda #DEBRIS	; Anything would do...
+    jsr LaunchShipFromOther
+    ; Set it as view object
+    stx VOB
+	lda #0
+	sta _speed,x
+
+    ; Push it a bit
+    jsr SetCurOb
+	lda #10
+	jsr MoveSide
+
+	; Inform player
+	ldx #STR_PODLAUNCHED
+	jmp flight_message 
+.)
+
 ;;;; END OF TABLE
 
 
@@ -1647,6 +1724,50 @@ loop
 co .byt $00
 .)
 
+
+ViewPlayerShip
+.(
+   ; Make it still
+    lda #0
+    sta _speed+1 
+    sta _rotx+1
+    sta _roty+1
+    sta _rotz+1   
+    sta _accel+1
+    sta a_y
+    sta a_p
+    sta a_r
+	lda #$ff
+	sta _energy+1
+    lda _flags+1
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags+1
+
+    ; Delay explosion a bit
+    lda #3
+    sta _ttl+1
+    
+	ldx #1
+    jsr SetCurOb
+    lda #DEBRIS	; Anything would do...
+    jsr LaunchShipFromOther
+
+    ; Set it as view object
+    stx VOB
+
+	; make it rotate and move
+	;lda #4
+	;sta _rotz,x
+	;lda #2
+	;sta _speed,x
+	
+    ; Push it a bit
+    jsr SetCurOb
+    lda #$9c     ; -100
+    jmp MoveForwards
+	;rts
+.)
 
 VOB      .byt 00           ;View object
 

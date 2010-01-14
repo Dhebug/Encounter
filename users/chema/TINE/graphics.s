@@ -131,7 +131,7 @@ dump_buf
 .(
 #ifdef ALTSCANS
   lda frame_time
-  cmp #MAXFRAMETIME
+  cmp #MAXFRAMETIME1
   bcc all
   lda frame_number
   and #1
@@ -398,7 +398,7 @@ clr_hires2
 
 #ifdef ALTSCANS
   lda frame_time
-  cmp #MAXFRAMETIME
+  cmp #MAXFRAMETIME1
   bcc all
   lda frame_number
   and #1

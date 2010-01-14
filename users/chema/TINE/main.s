@@ -71,7 +71,7 @@ restart
 	inc silence_sfx
 	jsr InitMusic
 
-	jsr _init_screen
+	//jsr _init_screen
 	jsr _init_screen2
 
 	dec silence_sfx
@@ -79,10 +79,13 @@ restart
 
 	jsr SndStop
 
+	ldx #00
+	stx escape_pod_launched
 	ldx #$ff
 	stx player_in_control
 	stx _docked
 	stx _planet_dist
+
 
 	jsr InitPlayerPos
 	jsr InitPlayerShip
