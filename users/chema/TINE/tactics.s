@@ -218,7 +218,7 @@ loop
     sta _speed,x
     lda #0
     sta _accel,x
-    lda #$40
+    lda #MISSILE_DAMAGE
 savy
 	ldy #0	;SMC
 	sec ; A missile
@@ -1773,8 +1773,8 @@ increment_kills
 #ifdef CHECK_VALID_TYPES
     cmp #33
 	bcc valid
-	ldy #0
-dbug beq dbug
+;	ldy #0
+;dbug beq dbug
 	ldx saveid+1
 	rts
 valid

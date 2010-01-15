@@ -81,6 +81,15 @@
 #define ARMED				$ff
 #define UNARMED				0
 
+
+/* Damage for lasers (only player lasers) & missiles */
+#define PULSE_LASER		5
+#define BEAM_LASER		8
+#define MILITARY_LASER	15
+
+// This was $40 in the code ?
+#define MISSILE_DAMAGE  40
+
 #endif
 
 

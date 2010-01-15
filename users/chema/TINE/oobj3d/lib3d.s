@@ -1021,8 +1021,6 @@ PROJ
 ;;;;;
          ldy ROTFLAG
          bmi ROT2
-;		 ldy #0
-;dbug	 beq dbug
          ldy count        ;If just rotating, then just
 	     sta (PLISTZLO),y ;store!
          lda TEMPY

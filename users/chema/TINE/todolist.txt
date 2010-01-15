@@ -36,7 +36,7 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Implement a Cargo screen
 
-+ Implement a save/load screen
+- Implement a save/load screen
 
 - Check and manage fuel
 
@@ -159,7 +159,7 @@ exist. Should check if normalizing matrices is needed.
 
 + Snapping to planet does not allways work in short chart
 
-+ When frame rate goes too low, skip frame drawing
+- When frame rate goes too low, skip frame drawing
 
 + When frame rate goes too high don't simulate all the time, or make a waiting loop
 
@@ -169,7 +169,7 @@ exist. Should check if normalizing matrices is needed.
 
 - Seems to be an error where a shield may become less than 0 or something like that, and is never decremented again. Load saved game and let the viper hit you. You should see it.
 
-+ Implement Escape Pod
+- Implement Escape Pod
 
 + Maybe implement dumping cargo?
 
@@ -178,3 +178,13 @@ exist. Should check if normalizing matrices is needed.
 + Use of changing the viewpoint?
 
 + Buying other ships?
+
++ Check prices... ECM and Escape pod seem interchanged, according to what is 
+said on the manual.
+
++ In the manual it is said that we start with 100 Cr, as in the original version.
+However I am starting with 200, such as in the speccy version?
+
++ Need some feedback of danger!!!
+
++ 
