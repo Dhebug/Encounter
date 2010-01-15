@@ -349,9 +349,6 @@ SetShipEquip
 .)
 
 
-#define PULSE_LASER		3
-#define BEAM_LASER		5
-#define MILITARY_LASER	8
 
 ; Basic stats for a new ship for the player
 NewPlayerShip
