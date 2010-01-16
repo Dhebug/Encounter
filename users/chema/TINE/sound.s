@@ -490,7 +490,17 @@ ProcPattern
 skip4	lda #00
 	sta BarFlag
 	sta ChannelID
+	;We don't want any new note to adopt the previous effect/ornament if not specified
 	sta NewActivity
+;	;Reset Music Activity for ornaments and Effects
+;	lda MusicActivity
+;	and #%11000000
+;	sta MusicActivity
+	ldy #00
+	lda (pattern),y
+	cmp #166
+	bne loop1
+	jsr ProcList
 loop1	ldy #00
 	lda (pattern),y
 	inc pattern
@@ -513,9 +523,7 @@ vector1	jsr $dead
 
 skip3	dec PatternRow
 .)
-	beq ProcList
-	lda BarFlag
-	beq AvoidList
+	bne AvoidList
 	
 ProcList	;Get next List PatternID
 	ldy ListIndex	;Offset by $0B
@@ -574,18 +582,18 @@ PatternRangeThreshhold
 ;The above loop searches and exits on 0 defaulting to Sample so we can save
 ;a massive one byte here!
 ; .byt 0	;00 prcSample      
- .byt 6   ;01 prcEGPeriod    
- .byt 69  ;02 prcCycle       
- .byt 72  ;03 prcNoise       
- .byt 103 ;04 prcNote        
- .byt 165 ;05 prcRest        
- .byt 166 ;06 prcBar         
- .byt 167 ;07 prcVolume      
- .byt 171 ;08 prcEffect      
- .byt 186 ;09 prcOrnament    
- .byt 201 ;10 prcCommand     
- .byt 208 ;11 prcLongRowRest 
- .byt 209 ;12 prcShortRowRest
+ .byt 6   ;06 01 prcEGPeriod    
+ .byt 69  ;45 02 prcCycle       
+ .byt 72  ;48 03 prcNoise       
+ .byt 103 ;67 04 prcNote        
+ .byt 165 ;A5 05 prcRest        
+ .byt 166 ;A6 06 prcBar         
+ .byt 167 ;A7 07 prcVolume      
+ .byt 171 ;AB 08 prcEffect      
+ .byt 186 ;BA 09 prcOrnament    
+ .byt 201 ;C9 10 prcCommand     
+ .byt 208 ;D0 11 prcLongRowRest 
+ .byt 209 ;D1 12 prcShortRowRest
 
 PatternRangeCommandLo
  .byt <prcSample
@@ -672,10 +680,12 @@ prcEffect
 	sta EffectID,x
 	lda #01
 	sta EffectIndex,x
+	lda NewActivity
+	ora ToneBit,x
+	sta NewActivity
 	lda MusicActivity
 	ora ToneBit,x
 	sta MusicActivity
-	sta NewActivity
 	rts
 	
 prcOrnament
@@ -685,10 +695,12 @@ prcOrnament
 	sta OrnamentID,x
 	lda #01
 	sta OrnamentIndex,x
+	lda NewActivity
+	ora NoiseBit,x
+	sta NewActivity
 	lda MusicActivity
 	ora NoiseBit,x
 	sta MusicActivity
-	sta NewActivity
 	rts
 
 prcCommand
@@ -737,26 +749,10 @@ CommandVectorHi
  .byt >prcCom_CopyLeftSibling
 
 
-prcCom_Tempo
-	sta MusicTempoCount
-	;Also store into compiled header
-	ldy #01
-	sta (header),y
-	rts
 	
 prcCom_TriggerOut
 	sta MUSICTRIGGERLOC
 	rts
-	
-PatternNote
- .dsb 3,0
-PatternVolume
- .dsb 3,0
-EffectID
- .dsb 3,0
-EffectIndex
- .dsb 3,0
-
 
 ayw_Bank
 ayw_PitchLo	.byt 0,0,0
@@ -776,6 +772,8 @@ ayr_Volume	.byt 128,128,128
 ayr_EGPeriod	.byt 128,128
 ayr_Cycle		.byt 128
 
+BarFlag		.byt 0
+Temp01		.byt 0
 
 ;These routines(pme) have calculated low addresses
 ;So are page alligned and spaced 16 bytes apart.
@@ -808,7 +806,7 @@ prcBar	inc BarFlag
 	sec
 	rts
 	
-	nop
+PatternRow	.byt 0
 
 pmeEGOff		;XX20
 	lda ayw_Volume,x	;3
@@ -907,8 +905,16 @@ EndEffect	lda MusicActivity
 	clc
 	rts
 
+PatternNote
+ .dsb 3,0
+PatternVolume
+ .dsb 3,0
+EffectID
+ .dsb 3,0
 ayRealRegister
  .byt 0,2,4,1,3,5,6,7,8,9,10,11,12,13
+EffectIndex
+ .dsb 3,0
 
 NoiseOn	lda ayw_Status        
 	and NoiseMask,x   
@@ -922,6 +928,14 @@ EGOn	lda ayw_Volume,x
 	clc                 
 	rts                 
 
+prcCom_Tempo
+	sta MusicTempoCount
+	;Also store into compiled header
+	ldy #01
+	sta (header),y
+	rts
+CycleCode
+ .byt 8,10,0
 OrnamentMask
 NoiseMask
  .byt %11110111
@@ -935,13 +949,8 @@ RealVolume
  .byt 0,4,8,15
 EGActiveFlag
  .byt 0,0,0
-PatternRow	.byt 0
 IntermediatePitchLo	.byt 0
 IntermediatePitchHi	.byt 0
-CycleCode
- .byt 8,10,0
-BarFlag		.byt 0
-Temp01		.byt 0
 ;The following Commands are not supported
 prcSample
 prcCom_Pitchbend
@@ -991,8 +1000,6 @@ PitchTableHi
  .byt 0,0,0,0,0,0,0,0
 EndOfPlayer
  .byt 0
-
-
 
 
 

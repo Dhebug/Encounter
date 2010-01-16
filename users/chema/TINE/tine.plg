@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPBC.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP2B8.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPBC.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP2B8.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -34,7 +34,7 @@ Size of models in bytes:
 (__models_end - __models_start)=(__models_end - __models_start)=4038
 
 Size of music in bytes:
-(MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
+(MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2220
 
 Size of texts in bytes:
 (__texts_end - __texts_start)=(__texts_end - __texts_start)=2174
@@ -43,7 +43,7 @@ Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13533
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13456
 
 File 'overlay.tap' is 14350 bytes long (14 bytes header and 14336 bytes of data)
 Presione una tecla para continuar . . . 
@@ -101,7 +101,7 @@ Object records start at
 OBS=($fffa-64*32)=63482
 
 **** Free space:
-($a000-osdk_end)=($a000-osdk_end)=2478
+($a000-osdk_end)=($a000-osdk_end)=2205
 
 -----------------
 lib3d: Tables
@@ -122,7 +122,7 @@ Size of models in bytes:
 (__models_end - __models_start)=(__models_end - __models_start)=4038
 
 Size of music in bytes:
-(MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2297
+(MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2220
 
 Size of texts in bytes:
 (__texts_end - __texts_start)=(__texts_end - __texts_start)=2174
@@ -131,7 +131,7 @@ Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 Creating final program TINE.TAP
-File 'build\TINE.tap' is 37216 bytes long (14 bytes header and 37202 bytes of data)
+File 'build\TINE.tap' is 37489 bytes long (14 bytes header and 37475 bytes of data)
 Build of TINE.tap finished
 Tap2dsk V2.1
 Reading oobj3d\overlay.tap

@@ -508,7 +508,7 @@ done_front
 	beq done_rear
 	; If redirecting power to shields, double recharge
 	lda _ptsh
-	beq done_front
+	beq done_rear
 	inc _rear_shield
 done_rear
 	jsr update_shields_panel
@@ -1302,12 +1302,24 @@ ret
 	rts
 doit1
 
+	; Look front
+	lda invert
+	beq nothing2
+	eor #$ff
+	sta invert
+	jsr update_compass
+	jsr INITSTAR
+nothing2	
 	lda _equip
 	and #%100 ; Escape Pod
 	beq ret
 
     inc player_in_control
 	dec escape_pod_launched
+
+	; Clear legal status
+	lda #0
+	sta _legal_status
 
 	; Empty player's cargo
 	ldx #16
@@ -1727,6 +1739,15 @@ co .byt $00
 
 ViewPlayerShip
 .(
+	; Look front
+	lda invert
+	beq nothing2
+	eor #$ff
+	sta invert
+	jsr update_compass
+	jsr INITSTAR
+nothing2
+
    ; Make it still
     lda #0
     sta _speed+1 

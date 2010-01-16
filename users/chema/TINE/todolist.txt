@@ -167,7 +167,9 @@ exist. Should check if normalizing matrices is needed.
 
 + Missiles still eat up CPU cycles. Too many of them, I think.
 
-- Seems to be an error where a shield may become less than 0 or something like that, and is never decremented again. Load saved game and let the viper hit you. You should see it.
+- Seems to be an error where a shield may become less than 0 or something like that,
+and is never decremented again. Load saved game and let the viper hit you. You should
+see it.
 
 - Implement Escape Pod
 
@@ -187,4 +189,10 @@ However I am starting with 200, such as in the speccy version?
 
 + Need some feedback of danger!!!
 
-+ 
+- Escape pod should clean your status
+
++ Adding rear laser should be piece of cake
+
++ Limit possible missiles at the same time, moreover for enemis, 
+which launch 3-4 missiles in a row. "Missile Jammed".
+
