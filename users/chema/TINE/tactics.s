@@ -1493,6 +1493,7 @@ damage_player
 	jsr alert_cops
 nohelp
 	; See if it is in front or behind us
+
 	lda tmp
 	bpl notmissile
 	; It was a missile and Y stores the
@@ -1509,8 +1510,8 @@ notmissile
 kk
     ldx $1234,y
 	lda HCZ,x
-
 	; We got it, at last
+/*
 	sta tmp
 	lda invert
 	beq nothing
@@ -1520,7 +1521,11 @@ kk
 	sta tmp
 nothing
 
-	lda tmp
+	lda tmp */
+
+	eor invert	; Invert sign if invert=$ff, leave if invert=$00
+	sta tmp		; Needed sign for later
+
 	bmi deplete_rear
 	lda _front_shield
 	jmp cont4
