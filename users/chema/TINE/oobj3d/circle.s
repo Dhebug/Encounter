@@ -9,6 +9,12 @@
 #define cxpx cypy+6
 #define cxmx cypy+7
 
+/*.zero
+clipme	.byt 0
+*/
+
+#define clipme plotpoint+1
+
 /*
 .zero
 cypy .byt 0
@@ -605,7 +611,7 @@ _circlePoints
 
 plotpoint
 .(
-	lda tmp3
+	lda #0	;SMC
 	bne plot
 .(
     lda X1
@@ -679,198 +685,6 @@ end
 sy    .word 0
 sx    .word 0
 
-
-#ifdef 0
-_circleMidpoint
-.(
-
-    ; Check if circle is visible
-    ;;  cx + rad < lhs of screen fails
-    lda #CLIP_LEFT
-    sta op2
-    lda #0
-    sta op2+1
-    lda cx
-    clc
-    adc rad
-    sta op1
-    lda cx+1
-    adc rad+1
-    sta op1+1
-    jsr cmp16
-    bpl next1
-    rts
-next1
-    ;;  x - size > rhs of screen fails 
-    lda #CLIP_RIGHT-1
-    sta op2
-    lda #0
-    sta op2+1
-    lda cx
-    sec
-    sbc rad
-    sta op1
-    lda cx+1
-    sbc rad+1
-    sta op1+1
-    jsr cmp16
-    bmi next2
-    rts
-next2
-    ;;  y + size < top of screen fails
-    lda #CLIP_TOP
-    sta op2
-    lda #0
-    sta op2+1
-    lda cy
-    clc
-    adc rad
-    sta op1
-    lda cy+1
-    adc rad+1
-    sta op1+1
-    jsr cmp16
-    bpl next3
-    rts
-next3
-    ;;  y - size > bot of screen fails
-    lda #CLIP_BOTTOM-1
-    sta op2
-    lda #0
-    sta op2+1
-    lda cy
-    sec
-    sbc rad
-    sta op1
-    lda cy+1
-    sbc rad+1
-    sta op1+1
-    jsr cmp16
-    bmi next4
-    rts
-next4
-     ;x=0;y=radius
-    lda #0
-    sta sx
-    sta sx+1
-    lda rad
-    sta sy
-    lda rad+1
-    sta sy+1   
- 
-    ; p=1-radius
-    lda #1
-    sec
-    sbc rad
-    sta p
-    lda #0
-    sbc rad+1
-    sta p+1
-    
-draw
-   ; circlePoints (xCenter, yCenter, x, y);
-    jsr _circlePoints
-
-
-    ;while (x < y) {
-    ;    x++;
-    ;    if (p < 0) 
-    ;      p += 2 * x + 1;
-    ;    else {
-    ;      y--;
-    ;      p += 2 * (x - y) + 1;
-    ;    }
-    ;    circlePoints (xCenter, yCenter, x, y);
-    ;  }
-
-loop
-    lda sx
-    sta op1
-    lda sx+1
-    sta op1+1
-    lda sy
-    sta op2
-    lda sy+1
-    sta op2+1
-    jsr cmp16
-    bpl end
-    
-
-    inc sx
-    bne noinc
-    inc sx+1
-noinc
-
-    lda p+1
-    bpl positivep
-
-    lda sx
-    asl
-    sta tmp
-    lda sx+1
-    rol
-    sta tmp+1
-
-    inc tmp
-    bne noinc2
-    inc tmp+1
-noinc2    
-    lda p
-    clc
-    adc tmp
-    sta p
-    lda p+1
-    adc tmp+1
-    sta p+1
-    
-    jsr _circlePoints
-    jmp loop
-
-positivep    
-
-    lda sy
-    bne nodec
-    dec sy+1
-nodec
-    dec sy
-
-    lda sx
-    sec
-    sbc sy
-    sta tmp
-    lda sx+1
-    sbc sy+1
-    sta tmp+1
-
-    asl tmp
-    rol tmp+1
-
-    inc tmp
-    bne noinc3
-    inc tmp+1
-noinc3   
-
-    lda p
-    clc
-    adc tmp
-    sta p
-    lda p+1
-    adc tmp+1
-    sta p+1
-   
-    jsr _circlePoints
-    jmp loop
-
-end
-
-    rts
-
-
-p .word 0
-
-.)
-
-#endif
 
 xpr	.word 0
 xmr .word 0
@@ -966,7 +780,7 @@ next4
 
 	; Check if clipping is needed
 	lda #1
-	sta tmp3
+	sta clipme
 	
 	;cx+r<CLIP_RIGHT
 .(
@@ -980,7 +794,7 @@ ret
 .)
 	bmi nextb1
     lda #0
-	sta tmp3
+	sta clipme
 	beq drawit
 nextb1
 
@@ -996,7 +810,7 @@ ret
 .)
 	bpl nextb2
     lda #0
-	sta tmp3
+	sta clipme
 	beq drawit
 nextb2
 
@@ -1013,7 +827,7 @@ ret
 .)
 	bmi nextb3
     lda #0
-	sta tmp3
+	sta clipme
 	beq drawit
 nextb3
 
@@ -1029,7 +843,7 @@ ret
 .)
 	bpl drawit
     lda #0
-	sta tmp3
+	sta clipme
 
 drawit
      ;x=0;y=radius
@@ -1067,7 +881,7 @@ draw
     ;  }
 
 loop
-    lda sx
+/*    lda sx
     sta op1
     lda sx+1
     sta op1+1
@@ -1077,7 +891,18 @@ loop
     sta op2+1
     jsr cmp16
     bpl end
-    
+  */  
+
+  .(
+    lda sx 
+    cmp sy
+    lda sx+1
+    sbc sy+1
+    bvc ret ; N eor V
+    eor #$80
+ret
+  .)
+	bpl end
 
     inc sx
     bne noinc

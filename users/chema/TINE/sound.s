@@ -67,8 +67,10 @@ skip
     RTS
 .)
 		 
+/*
 ReferenceBlock
 	.dsb 14,128
+*/
 
 SndStop
 .(
@@ -76,8 +78,9 @@ SndStop
 
     LDX #13
 loop 
-	LDA #0
+	LDA #128
     STA ReferenceBlock,X
+	lda #0
     STX via_porta
     LDY #ayc_Register
     STY via_pcr
@@ -763,6 +766,7 @@ ayw_Volume	.byt 0,0,0
 ayw_EGPeriod	.byt 0,0
 ayw_Cycle		.byt 0
 
+ReferenceBlock
 ayr_Bank
 ayr_PitchLo	.byt 128,128,128
 ayr_PitchHi	.byt 128,128,128

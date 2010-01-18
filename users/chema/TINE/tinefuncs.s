@@ -358,9 +358,9 @@ NewPlayerShip
 	ldx _ship_type
 	lda ShipAmmo-1,x
 	and #%111
+	sta _p_maxmissiles
 	sec
 	sbc #1
-	sta _p_maxmissiles
 	sta _missiles_left
 +PreInit
     ;lda ShipMaxSpeed-1,x
@@ -382,7 +382,7 @@ InitPlayerShip
 
 	; Depending on ship's equipment...
 
-	lda _equip
+/*	lda _equip
 	and #%10 ; Large cargo bay
 	beq nocargo
 	lda _holdspace
@@ -390,6 +390,8 @@ InitPlayerShip
 	adc #10
 	sta _holdspace
 nocargo
+
+*/
 	lda _equip
 	ror
 	bcc	nopulse

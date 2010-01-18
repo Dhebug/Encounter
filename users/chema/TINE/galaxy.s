@@ -3866,12 +3866,12 @@ notsave
 	bne notload
 	;Load slot
 	jsr load_slot
-	beq readloop
+	beq quit
 	jmp info
 notload
 	cmp #"Q"
 	bne readloop
-
+quit
 	jmp prepare_area
 	;rts
 .)
@@ -4015,7 +4015,7 @@ loop
 	jsr InitPlayerPos
 
 	; Initialize ship
-	jsr NewPlayerShip
+	;jsr NewPlayerShip
 	jsr InitPlayerShip
 
 	jsr _init_irq_routine 

@@ -78,7 +78,6 @@ rts2     RTS
 tmp1c .byt 0
 
 +DrawRadar
-         ;rts
          LDX #00
          JSR GetObj
          STA POINT

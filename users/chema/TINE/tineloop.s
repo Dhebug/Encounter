@@ -143,6 +143,9 @@ end_intro
 	lda #0
 	sta message_delay
 	jsr _DoubleBuffOff
+	; KLUDGE
+	lda #0
+    sta RADOBJ+1
     jsr save_frame
 	jmp _EmptyObj3D
 .)
@@ -182,6 +185,8 @@ _init_screen2
 .(
 
   	jsr LoadDefaultCommander
+	jsr NewPlayerShip
+	;jsr InitPlayerShip
 
 	ldx #3
 	jsr flight_message

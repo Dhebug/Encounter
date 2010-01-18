@@ -382,10 +382,12 @@ notrader
 ;		return;
 
 		jsr check_for_cops
+/*
 		lda police_counter
 		beq nocops
 		rts
 nocops
+*/
 
 ;	if (in_battle)
 ;		return;

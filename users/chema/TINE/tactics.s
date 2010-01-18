@@ -700,7 +700,7 @@ notneg1
     sbc oY+1
 notneg2
     ora tmp    
-    and #$fd	; Change from fe to fc to avoid occasional collisions. But combat suffers...
+    and #$fc	; Change from fe to fc to avoid occasional collisions. But combat suffers...
     bne approach
 
     ; What if our target is a planet? Then if want to dock, dock
