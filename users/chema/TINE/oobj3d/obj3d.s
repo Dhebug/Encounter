@@ -1108,16 +1108,16 @@ FilledCircle
         sta TEMP
         lda tab_projtab,x
         
-        cmp #64
+        cmp #64*2
         bcc nooverflow
         ;; rotations will make it overflow
         lda #255
         bne ccall   ; allways jump
 nooverflow
-        asl TEMP
-        rol
         ;asl TEMP
         ;rol
+        asl TEMP
+        rol
         bne ccall
         lda #2
 ccall

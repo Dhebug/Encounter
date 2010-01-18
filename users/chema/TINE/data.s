@@ -34,11 +34,11 @@ _fluct			.byt 0                  ; Price fluctuation
 _holdspace		.byt 20				    ; Current space left in cargo bay
 _legal_status	.byt 00                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 _score_rem		.byt 00					; Score, remainder
-_score			.word 00000             ; Current score
+_score			.word 0000              ; Current score
 _mission		.byt 0                  ; Current mission
 _equip			.word $0001             ; Equipment flags
 _ship_type      .byt SHIP_COBRA3        ; Current player's ship
-_missiles_left	.byt 4					; Number of missiles
+_missiles_left	.byt 3					; Number of missiles
 
 ; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
 _p_maxspeed		.byt 0
@@ -67,7 +67,7 @@ _default_commander
 				.byt 0                  ; Current mission
 				.word $0001             ; Equipment flags
 			    .byt SHIP_COBRA3        ; Current player's ship
-				.byt 4					; Number of missiles
+				.byt 3					; Number of missiles
 
 ; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
 				.byt 0
