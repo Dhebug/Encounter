@@ -223,7 +223,6 @@ _init_print
 .(
   ldx #INITIALX_TEXT
   ldy #INITIALY_TEXT
-+gotoXY
   jmp relocate_cursor
   ;rts  
 
@@ -303,6 +302,7 @@ perform_CRLF
 ;Pass: 
 ;X X position on screen (Byte alligned 0 to 39) 
 ;Y Y position on screen (Row alligned 0 to 195) 
+gotoXY
 relocate_cursor
 .( 
         pha 
