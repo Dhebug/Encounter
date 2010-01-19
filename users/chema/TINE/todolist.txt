@@ -156,9 +156,11 @@ a galactic chart or to find a planet), I will use the system's seed of 4 bytes (
          bcc checkmin    ; skip max check
 normal
 
-+ When drawing planets, if they are too close, maybe it is better not to draw them // if 0x6000/Z > 0xff then return  (too close to draw?)
+- When drawing planets, if they are too close, maybe it is better not to draw them // if 0x6000/Z > 0xff then return  (too close to draw?)
+Now they can't be
 
-+ A certain hysteresis would be needed to avoid planets appearing and disappearing as we rotate.
+- A certain hysteresis would be needed to avoid planets appearing and disappearing as we rotate.
+Changed to $ffff/(Z/2).
 
 + Look in tineloop.s
 notdocked
@@ -199,5 +201,14 @@ However I am starting with 200, such as in the speccy version?
  Now pirates are created even with police around.
 
 + Force deleting a slot before being able to save to it ?
+
++ Add prepare for landing at Diso, launching off messages to the cockpit.
+
++ Arrows for lists?
+
++ snow on the scanner when readings erratic
+
+
+
 
 

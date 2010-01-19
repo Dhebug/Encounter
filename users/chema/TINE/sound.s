@@ -339,9 +339,9 @@ MusicIRQ
 	stx RegX+1
 	sty RegY+1
 
-//    lda TimerCounter 
-//	and #1
-//	beq avoid
+;	lda TimerCounter 
+;	and #%11
+;	bne avoid
 
 	jsr ProcMusic
 	jsr SendAY

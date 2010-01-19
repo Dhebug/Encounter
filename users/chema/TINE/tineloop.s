@@ -374,10 +374,11 @@ noinvert
     jsr move_stars
 	sei
     jsr clr_hires2
+	cli
     jsr DrawAllVis   ;Draw objects
+	sei
     jsr EraseRadar   ; Erase radar
     jsr DrawRadar
-	cli
     jsr PlotStars
 	jsr _DrawCrosshair
     jsr _Lasers
@@ -386,6 +387,7 @@ noinvert
     inc _laser_fired ; Set back to 0
     jsr _DrawLaser
 nofire
+	cli
 
 	lda message_delay
 	beq nomessage
@@ -694,17 +696,19 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 23
+#define MAX_KEY 23+5
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
     .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V", $1b
-
+	.byt	 1,2,3,4,13	 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
     .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview), >(launch_pod)
+	.byt >(keydn), >(keyl), >(keyup), >(keyr), >(sele)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
     .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb), <(rearview), <(launch_pod)
+	.byt <(keydn), <(keyl), <(keyup), <(keyr), <(sele)
 
 
 /* M= byte 3 val 1

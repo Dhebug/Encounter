@@ -654,9 +654,6 @@ ret
 ret
 .)
 	bmi end
-
-
-
 plot 
     ldx X1
     ldy Y1

@@ -1104,6 +1104,26 @@ FilledCircle
   
 		jsr CirclePrepare
 
+
+        ldx RTEMPA
+        lda HCZ,x
+		lsr
+		sta op2+1
+		lda CZ,x
+		ror
+		sta op2
+
+		lda #$ff
+		sta op1
+		;lda #$ff
+		sta op1+1
+		jsr divu
+		txa
+		bne notzero
+		lda #1
+notzero
+		
+#ifdef 0
         lda tab_projtabrem,x
         sta TEMP
         lda tab_projtab,x
@@ -1121,13 +1141,13 @@ nooverflow
         bne ccall
         lda #2
 ccall
+#endif
         jsr CircleCall
 
-        ldx RTEMPA
-
+        ;ldx RTEMPA
         ;lda HCZ,x
         ;sta _planet_dist
-	
+
 		rts
 
 .)
@@ -1137,6 +1157,7 @@ SmallFilledCircle
 .(
         jsr CirclePrepare
 
+#ifdef 0
         lda tab_projtab,x
         lsr
         lsr
@@ -1144,6 +1165,25 @@ SmallFilledCircle
         bne ccall
         lda #1
 ccall
+#endif
+
+        ldx RTEMPA
+        lda HCZ,x
+		sta op2+1
+		lda CZ,x
+		sta op2
+
+		lda #$00
+		sta op1
+		lda #$40
+		sta op1+1
+		jsr divu
+		txa
+		bne notzero
+		lda #1
+notzero
+
+
         jmp CircleCall    
 .)
 
@@ -1308,13 +1348,14 @@ CirclePrepare
         lda PLISTY+MAXVERTEX,x
         sta cy+1
 
+#ifdef 0
         ldx RTEMPA
         lda HCZ,x
         tax
         bne done
         inx
-    
 done
+#endif
          rts
 
 

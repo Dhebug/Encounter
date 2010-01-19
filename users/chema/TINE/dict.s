@@ -189,7 +189,7 @@ str_mktunit
             .asc "unit"
             .byt 0
 
-str_mktin   .asc "on"
+str_mktin   .asc "in"
             .byt 0
 
 str_mktprice
@@ -199,7 +199,7 @@ str_mktsale
             .asc "for sale"
             .byt 0             
 str_mktcargo 
-            .asc "hold"
+            .asc "ship"
             .byt 0
 
 ; For market buying/selling
@@ -940,6 +940,31 @@ str_galslot
 	.byt 0
 str_sysslot
 	.asc "Sys: "
+	.byt 0
+
+;; For in-screen instructions
+/*
+#define SCR_FRONT   0
+#define SCR_INFO    1
+#define SCR_MARKET  2
+#define SCR_SYSTEM  3
+#define SCR_GALAXY  4
+#define SCR_CHART   5
+#define SCR_EQUIP   6
+#define SCR_LOADSAVE 7
+*/
+str_instr
+	.asc "up/down: select, right/left: buy/sell"
+	.byt 0
+	.asc " "
+	.byt 0
+	.asc "Move cursor, A: select, R: search"
+	.byt 0
+	.asc "Move cursor, A: select destination"
+	.byt 0
+	.asc "up/down: select, A or ENTER to buy"
+	.byt 0
+	.asc "up/down then A or ENTER: select slot"
 	.byt 0
 
 __texts_end

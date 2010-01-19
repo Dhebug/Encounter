@@ -520,13 +520,23 @@ STARADDX
          ;asl
          tax     
          LDA ADDTAB,X
-
+/*
          STA TEMP
 LOOP     LDA STARX,Y
          CLC
          ADC TEMP
          STA STARX,Y
          BMI NEXT
+*/
+         STA _smc_add+1
+LOOP     LDA STARX,Y
+         CLC
+_smc_add
+         ADC #$00 ; SMC
+         STA STARX,Y
+         BMI NEXT
+
+
 
 POSCHK   cmp #120         ;if x>=160 then need a new star
          BCC NEXT
@@ -546,13 +556,22 @@ STARSUBX
          ;asl
          tax     
          LDA ADDTAB,X
-
+/*
          STA TEMP
 LOOP     LDA STARX,Y
          SEC
          SBC TEMP
          STA STARX,Y
          BPL NEXT
+*/
+         STA _smc_sub+1
+LOOP     LDA STARX,Y
+         SEC
+_smc_sub
+         SBC #$00	; SMC
+         STA STARX,Y
+         BPL NEXT
+
 
 POSCHK   cmp #136          ;if x<-160 then need a new star
          BCS NEXT

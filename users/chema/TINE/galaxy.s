@@ -372,6 +372,7 @@ notfound
 prepare_area
 .(
     jsr clear_frame_data 
+	jsr instructions
     ldy #(200-6*4)
     ldx #12
     jmp gotoXY
@@ -538,6 +539,9 @@ nodanger
     inc scroll
 noscroll
     jsr plot_galaxy_with_scroll
+
+	; Print instructions
+	jsr instructions
 
 	jsr _infoplanet
 	jmp _makesystem
@@ -783,7 +787,6 @@ _plot_chart
 .(
 
    ; jsr save_seed
-
     ; init names
     ldx #23
     lda #0
@@ -799,8 +802,10 @@ loopnames
     ;jsr _ink
 
     ; Plot title   
- 
     jsr plot_frame_title
+
+	; Print instructions
+	jsr instructions
 
    ; Draw fuel circle
     ldy #0
@@ -2494,6 +2499,9 @@ _displaymarket
 
 	jsr draw_red_frame
 
+	; Print instructions
+	jsr instructions
+
     inc capson
 
     jsr put_space
@@ -3315,6 +3323,9 @@ _displayequip
     jsr clr_hires
 	jsr draw_red_frame
 
+	; Print instructions
+	jsr instructions
+
     inc capson
 
     jsr put_space
@@ -3693,6 +3704,9 @@ _displayloadsave
     ; Clear hires and draw frame
     jsr clr_hires
 	jsr draw_red_frame
+
+	; Print instructions
+	jsr instructions
 
     inc capson
 
@@ -4114,5 +4128,46 @@ end
 .)
 
 
+/*
+#define SCR_FRONT   0
+#define SCR_INFO    1
+#define SCR_MARKET  2
+#define SCR_SYSTEM  3
+#define SCR_GALAXY  4
+#define SCR_CHART   5
+#define SCR_EQUIP   6
+#define SCR_LOADSAVE 7
+*/
 
+instructions
+.(
+	lda Cursor_origin_x
+	sta PX+1
+	lda Cursor_origin_y
+	sta PY+1
+
+	ldx #0
+	ldy #200-6
+	jsr gotoXY
+    lda #(A_FWRED)
+    jsr put_code
+	ldx _current_screen
+	dex
+	dex
+	bpl inst
+	rts
+inst
+    lda #<str_instr
+    sta tmp0
+    lda #>str_instr
+    sta tmp0+1
+	jsr search_string_and_print
+
+PX
+	ldx #0
+PY
+	ldy #0
+	jmp gotoXY
+
+.)
 

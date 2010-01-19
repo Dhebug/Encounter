@@ -123,16 +123,33 @@ skip1
 .)
 
 
+/* Usually it is a good idea to keep 0 all the entries
+   possible, as it speeds up things. Z=1 means no key
+   pressed and there is no need to look in tables */
+
+#define ARROW_UP	1
+#define ARROW_LEFT	2
+#define ARROW_DOWN	3
+#define ARROW_RIGHT 4
+
+#define LCTRL		0
+#define LSHIFT		0
+#define RSHIFT		0
+#define FUNCT		0
+
+#define KEY_RETURN		$0d
+#define KEY_ESC			$1b
+#define KEY_DEL			$7f
 
 tab_ascii
     .asc "7","N","5","V",0,"1","X","3"
-    .asc "J","T","R","F",0,$1b,"Q","D"
-    .asc "M","6","B","4",0,"Z","2","C"
+    .asc "J","T","R","F",0,KEY_ESC,"Q","D"
+    .asc "M","6","B","4",LCTRL,"Z","2","C"
     .asc "K","9",0,0,0,0,0,0
-    .asc " ",0,0,0,0,0,0,0
-    .asc "U","I","O","P",0,$7f,0,0
+    .asc " ",0,0,ARROW_UP,LSHIFT,ARROW_LEFT,ARROW_DOWN,ARROW_RIGHT
+    .asc "U","I","O","P",FUNCT,KEY_DEL,0,0
     .asc "Y","H","G","E",0,"A","S","W"
-    .asc "8","L","0",0,0,$0d,0,0
+    .asc "8","L","0",0,0,KEY_RETURN,0,0
 
 
 
