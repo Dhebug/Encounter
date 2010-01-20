@@ -3,7 +3,7 @@
 ; Twilighte's IRQ routine!
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; key read and timer irq 
-#define        via_portb                $0300 
+#define        via_portb               $0300 
 #define        via_t1cl                $0304 
 #define        via_t1ch                $0305 
 #define        via_t1ll                $0306 
@@ -19,18 +19,16 @@
 
 
 .zero
-;*=$ec
 irq_A               .byt 0
 irq_X               .byt 0
 irq_Y               .byt 0
-TimerCounter        .byt 40        ;Slows key read to 25Hz 
+TimerCounter        .byt 40        ;Used in music
 zpTemp01			.byt 0
 zpTemp02			.byt 0
 tmprow				.byt 0
 counter				.byt 0
-.text 
 
-;sav_old_rout .word $0000
+.text 
 
 #ifdef ROM
 #define IRQ_ADDRLO $0245
@@ -47,35 +45,20 @@ _init_irq_routine
         ;setup, we need not worry about ensuring one irq event and/or right 
         ;timer period, only redirecting irq vector to our own irq handler. 
         sei
-        ;lda $0245
-        ;sta sav_old_rout
-        ;lda $0246
-        ;sta sav_old_rout+1
+		lda #<9984*4
+		sta via_t1ll 
+		lda #>9984*4
+		sta via_t1lh 
         lda #<irq_routine 
         sta IRQ_ADDRLO
         lda #>irq_routine 
         sta IRQ_ADDRHI
-
         cli 
         rts 
 .)
 
 
-/*
-_disable_irq_routine
-.(
-    sei
-    lda sav_old_rout
-    sta $0245
-    lda sav_old_rout+1
-    sta $0246
-    cli
-    rts
-
-.)
-*/
-
-;The IRQ routine will run (Like Oric) at 100Hz. 
+;The IRQ routine will run at 25Hz
 irq_routine 
 .(
 		; Genaral purpose counter (counting fps)
@@ -86,32 +69,11 @@ irq_routine
     	stx irq_X
     	sty irq_Y
 
-        ;Protect against Decimal mode 
-        cld 
-
         ;Clear IRQ event 
         lda via_t1cl 
 
-    	;Process Music
-    	;jsr ProcMusic
-    	;Process Effects
-    	;jsr ProcEffect
-
-        ;Process timer event 
-        dec TimerCounter 
-        lda TimerCounter 
-        and #3        ;Essentially, every 4th irq, call key read 
-        bne skip1 
         ;Process keyboard 
         jsr ReadKeyboard 
-
-skip1        
-        ;Process controller (Joysticks) 
-;        jsr proc_controller 
-
-
-        ;Send Sound Bank 
-;        jsr send_ay 
 
         ;Restore Registers 
         lda irq_A
@@ -230,14 +192,8 @@ ReadKeyboard
         lda #$FF 
         sta via_pcr 
 
-        ;Setup PB read pulsing CB2 
-        ;ldy #%10111100 
-        ;sty via_pcr 
-
-        ;sta via_pcr 
         ldy #$dd 
         sty via_pcr 
-
 
         ldx #7 
 
@@ -249,13 +205,10 @@ loop2   ;Clear relevant bank
 
 		jsr SenseKeyPrep
         
-		;Send Column and write Row 
-        ;stx via_portb 
-
         ;Wait 10 cycles for curcuit to settle on new row 
         ;Use time to load inner loop counter and load Bit 
-        ldy #$80 
-        nop 
+        ldy #$80
+		nop 
         nop 
         nop 
         lda #8 
@@ -268,8 +221,6 @@ loop1   ;Store Column
         tya 
         eor #$FF 
 		jsr SenseKeyPrep
-
-        ;stx via_portb 
 
         ;Use delay(10 cycles) for setting up bit in Keybank and loading Bit 
         tya 
@@ -294,10 +245,6 @@ skip1   ;Proceed to next column
 skip2   ;Proceed to next row 
         dex 
         bpl loop2 
-
-        ;Disable Pulse mode in PCR 
-        ;lda #$DD 
-        ;sta via_pcr
 
         rts 
 .)  
