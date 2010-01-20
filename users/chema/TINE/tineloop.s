@@ -209,6 +209,11 @@ loop
 
 init_front_view
 .(
+	lda #0
+	sta yawing
+	sta pitching
+	sta rolling
+
 	jsr clr_hires
 	jsr load_frame
 	;jsr _DrawFrameBorder   
@@ -297,39 +302,9 @@ set_planet_distance
 	rts
 .)
 
-_TineLoop
-.(
-    lda _docked
-    beq loop
-    jsr ProcessKeyboard
-    jmp _TineLoop
-
-loop
-	lda #0
-	ldx NUMOBJS
-loopcl
-	sta _vertexXLO-1,x
-	sta _vertexXHI-1,x
-	sta _vertexYLO-1,x
-	sta _vertexYHI-1,x
-	dex
-	bne loopcl
-
-
-	lda attr_changed
-	beq nochange
-	lda #A_FWWHITE
-	jsr set_ink
-	lda #0
-	sta attr_changed
-nochange
-    jsr _Tactics
-    
-    lda _planet_dist
-    cmp #06
-    bcs nodock    
 
 dock
+.(
 	; Docking ship... must call docking sequence
 	lda _current_screen
 	cmp #SCR_FRONT
@@ -340,9 +315,46 @@ l1
     dec _docked
     jsr info
     jmp _TineLoop
-    
-nodock
+.)
 
+_TineLoop
+.(
+    lda _docked
+    beq loop
+    jsr ProcessKeyboard
+    jmp _TineLoop
+
+loop
+	
+	; Clear vertices where lasers start/end in each object
+	ldx NUMOBJS ; Can't be zero. At least the radar, the player's ship and one planet created.
+	lda #0
+loopcl
+	sta _vertexXLO-1,x
+	sta _vertexXHI-1,x
+	sta _vertexYLO-1,x
+	sta _vertexYHI-1,x
+	dex
+	bne loopcl
+
+	; If we have changed ink color, put it back to white
+	lda attr_changed
+	beq nochange
+	lda #A_FWWHITE
+	jsr set_ink
+	lda #0
+	sta attr_changed
+nochange
+
+	; Call ship tactics
+    jsr _Tactics
+ 
+	; If distance with planet is short, then dock player
+    lda _planet_dist
+    cmp #06
+    bcc dock    
+
+    ; Process user's controls
     jsr ProcessKeyboard
 
 	lda invert
@@ -350,25 +362,30 @@ nodock
 	jsr invertZ
 noinvert
 
+	; Set the radar
     ldx VOB
     jsr SetCurOb
-    ;ldx VOB
     jsr SetRadar
 
+	; Calculate visible ships
     jsr CalcView
     jsr SortVis   
 
+	; If not in front view, don't draw
     lda _current_screen
     cmp #SCR_FRONT
     bne nodraw
 
+	; Prepare counter for frame time and get last value
 	lda counter
 	sta frame_time
 	ldx #0
 	stx counter
 
+	; If too high, skip frame
 	cmp #MAXFRAMETIME2
 	bcs nodraw
+
 
 ;;;;; START OF DRAWING SECTION
     jsr move_stars
@@ -433,31 +450,35 @@ nodraw
 	jsr invertZ
 noinvert2
 
+	; If player is in control, check collisions
 	lda player_in_control
 	beq cont
     jsr _CheckHits  ; Should be called after DrawAllVis!!!!
 
+	; Dampen rotations
     jsr damp   
 	lda #0
 	sta yawing
 	sta pitching
 	sta rolling
 
+	; If in front view, perform rolls
 	lda _current_screen
 	cmp #SCR_FRONT
 	bne cont
     jsr dorolls
 cont
+
+	; Move other ships
     jsr _MoveShips
 
-	; remove energy bomb launched if active
+	; Remove energy bomb launched if active 
 	lda _energy_bomb
 	beq contbomb
 	dec _energy_bomb
 contbomb
-	; Perform timely checks
-    ;lda #1
-    ;eor frame_number
+
+	; Perform timely checks. Every 8 frames, basically
 	lda frame_number
 	and #7
 	beq checkthings
@@ -476,13 +497,14 @@ checkthings
 	inc escape_pod_launched
 	jmp dock
 next
+
+	; Calculate planet distance
 	jsr set_planet_distance
 
 	; Setup planet distance light indicator
-
 	jsr planet_light
 	
-	; Start with energy and shields
+	; Start with energy and shields: recharge
 	lda _energy+1
 	bmi no_energy
 	beq no_energy
@@ -522,8 +544,8 @@ done_rear
 done_energy
 	jmp locking
 no_energy
-	; We should be dead here 
 
+	; We should be dead here 
 	lda message_delay
 	ora player_in_control
 	bne locking
@@ -539,12 +561,14 @@ locking
     lda _ID
 	beq notarget
 	sta _missile_armed
+
 	; Print Target Locked message
 	ldx #STR_TARGET_LOCKED
 	jsr flight_message 
 	jsr update_missile_panel
 notarget
-	; If redirecting power to shields, don't cool
+
+	; Cooling lasers. If redirecting power to shields, don't cool
 	lda _ptsh
 	bne notemp
 	ldx LaserTemperature
@@ -576,10 +600,11 @@ cont2
 	bne cont3
 	jsr random_encounter
 cont3
+
 	; Increment the counter of frames
     inc frame_number
 
-	; Update everything that needs to be
+	; Update everything that needs be
 	jsr update_speed_panel
 	jsr update_energy_panel
 nofr
@@ -751,10 +776,10 @@ loop
 	beq skip
 	stx savx+1
 	lda tab_ship_control_routl,x
-	sta rout+1
+	sta _smc_rout+1
 	lda tab_ship_control_routh,x
-	sta rout+2
-rout
+	sta _smc_rout+2
+_smc_rout
 	jsr $1234
 savx
 	ldx #0
@@ -795,9 +820,9 @@ loop
 
 found
         lda key_routl,x
-        sta routine+1
+        sta _smc_routine+1
         lda key_routh,x
-        sta routine+2   
+        sta _smc_routine+2   
 
 cont
         cpx #8  
@@ -827,7 +852,7 @@ savx
          
 skip
  
-routine
+_smc_routine
 		; Call the routine
         jsr $1234   ; SMC                
 
@@ -847,11 +872,12 @@ ret
 .)   
 
 
-
+; KEEP CONSECUTIVE
 a_y .byt 0
 a_p .byt 0
 a_r .byt 0
 
+; KEEP CONSECUTIVE
 yawing .byt 0
 pitching .byt 0
 rolling .byt 0
@@ -859,117 +885,75 @@ rolling .byt 0
 #define MAXR 7 ;6  ;9		;6	;3  ;4
 #define MINR $f8 ;$fa ;$f7	;$fa; $fd    ;fc
 
-yawr
+
+ParamInc
 .(     
-		 lda a_y
-		 bpl doinc
-		 lda #0
-		 sta a_y
-		 beq end
+	lda a_y,x
+	bpl doinc
+	lda #0
+	sta a_y,x
+	beq end
 doinc
-         inc a_y
-         lda #MAXR
-         cmp a_y
-         bpl end
-         sta a_y
+    inc a_y,x
+    lda #MAXR
+    cmp a_y,x
+    bpl end
+    sta a_y,x
 end
-		 lda #1
-		 sta yawing
-         rts
+	lda #1
+	sta yawing,x
+    rts
+.)
+
+ParamDec
+.(     
+	lda a_y,x
+	bmi doinc
+	beq doinc
+	lda #0
+	sta a_y,x
+	beq end
+doinc
+    dec a_y,x
+    lda #MINR
+    cmp a_y,x
+    bmi end
+    sta a_y,x
+end
+	lda #1
+	sta yawing,x
+    rts
+.)
+
+yawr
+.( 
+	ldx #0
+	jmp ParamInc
 .)
 yawl     
 .(
-  		 lda a_y
-		 bmi doinc
-		 beq doinc
-		 lda #0
-		 sta a_y
-		 beq end
-doinc
-         dec a_y
-         lda #MINR
-         cmp a_y
-         bmi end
-         sta a_y
-end
-		 lda #1
-		 sta yawing
-         rts
+	ldx #0
+	jmp ParamDec
 .)
 pitchdn
-.(  
-  		 lda a_p
-		 bmi doinc
-		 beq doinc
-		 lda #0
-		 sta a_p
- 		 beq end
-doinc
-         dec a_p
-         lda #MINR
-         cmp a_p
-         bmi end
-         sta a_p
-end
-		 lda #1
-		 sta pitching
-         rts
-
+.(
+   	ldx #1
+	jmp ParamDec
 .)
 pitchup  
 .(
-    	 lda a_p
-		 bpl doinc
-		 lda #0
-		 sta a_p
-		 beq end
-doinc
-         inc a_p
-         lda #MAXR
-         cmp a_p
-         bpl end
-         sta a_p
-end
-		 lda #1
-		 sta pitching
-         rts
+  	ldx #1
+	jmp ParamInc
 .)
 rolll
-.(   
-    	 lda a_r
-		 bmi doinc
-		 beq doinc
-		 lda #0
-		 sta a_r
-		 beq end
-doinc
-         dec a_r
-         lda #MINR
-         cmp a_r
-         bmi end
-         sta a_r
-end
-		 lda #1
-		 sta rolling
-         rts
+.(  
+    ldx #2
+	jmp ParamDec
 .)
 rollr
-.(   
-      	 lda a_r
-		 bpl doinc
-		 lda #0
-		 sta a_r
-		 beq end
-doinc
-         inc a_r
-         lda #MAXR
-         cmp a_r
-         bpl end
-         sta a_r
-end
-		 lda #1
-		 sta rolling
-         rts
+.(
+  	ldx #2
+	jmp ParamInc
 .)
 
 
@@ -1652,51 +1636,26 @@ next2
 	rts
 .)
 
-
 damp
 .(
-    ; Dampen rotations
-
-.(
-		lda yawing
-		bne end
-        lda a_y
-        bmi neg
-        beq end
-        dec a_y
-        bpl end
+	ldx #2
+loop
+	lda yawing,x
+	bne end
+    lda a_y,x
+    bmi neg
+    beq end
+    dec a_y,x
+    bpl end
 neg
-        inc a_y
+    inc a_y,x
 end
-.)
-
-.(
-  		lda rolling
-		bne end
-        lda a_r
-        bmi neg
-        beq end
-        dec a_r
-        bpl end
-neg
-        inc a_r
-end
+	dex
+	bpl loop
+	rts
 .)
 
-.(
-  		lda pitching
-		bne end
-        lda a_p
-        bmi neg
-        beq end
-        dec a_p
-        bpl end
-neg
-        inc a_p
-end
-.)
-        rts
-.)
+
 
 init_hyper_seq
 .(

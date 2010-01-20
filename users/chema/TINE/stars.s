@@ -31,6 +31,7 @@ LOOP
     bpl LOOP
 
 	lda invert
+	sta move_stars+1
 	beq normal
 	ldx #<STARSUBZ
 	ldy #>STARSUBZ
@@ -168,7 +169,7 @@ bypass
 
 move_stars
 .(
-	lda invert
+	lda #$00 ; SMC invert
 	beq normal1
 	lda g_alpha
 	eor #$80
