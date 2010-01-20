@@ -33,9 +33,7 @@
 #define CLIP_LEFT	6
 #define CLIP_RIGHT	(239-6)
 #define CLIP_TOP	0 
-//6+5
 #define CLIP_BOTTOM	121
-// (127+5)
 
 // This is for the screen
 

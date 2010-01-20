@@ -14,7 +14,8 @@ STARYREM .dsb NSTARS+1
 #define TEMP1 tmp1
 #define TEMP2 tmp2
 
-      
+
+
 ;
 ; INITSTAR -- Initialize starfield, etc.
 ;
@@ -22,72 +23,138 @@ STARYREM .dsb NSTARS+1
 ;
 INITSTAR 
 .(
-         JSR _init_rand
-         LDY #NSTARS
-LOOP     JSR NEWSTAR
-         DEY
-         BPL LOOP
-         RTS
+    jsr _init_rand
+    ldy #NSTARS
+LOOP
+    jsr NEWSTAR
+    dey
+    bpl LOOP
+
+	lda invert
+	beq normal
+	ldx #<STARSUBZ
+	ldy #>STARSUBZ
+	jmp patch
+normal
+	ldx #<STARADDZ
+	ldy #>STARADDZ
+patch
+	stx patch_staraddz+1
+	sty patch_staraddz+2
+    rts
 .)
 
 NEWSTAR
-.(                   ;.Y contains index into star table
-         JSR _gen_rnd_number
-		 CMP #100
-         BCC SETY
-         CMP #156         ;-100
-         BCS SETY
-         AND #%10111111   ;-65..63
+.(       
+	     ;.Y contains index into star table
+         jsr _gen_rnd_number
+loop1
+		 cmp #(CLIP_BOTTOM-CENTER_Y)  ;100
+         bcc SETY
+         cmp #(256-(CENTER_Y-CLIP_TOP))		;156         ;-100
+         bcs SETY
+         ;and #%10111111   ;-65..63
+		 cmp #$80
+		 ror
+		 jmp loop1
 SETY     STA STARY,Y
 
          lda _rnd_seed
-         cmp #120
+loop2
+         cmp #(CLIP_RIGHT-CENTER_X)		;120
+         bcc SETX
+         cmp #(256-(CENTER_X-CLIP_LEFT))			;136
          bcs SETX
-         cmp #136
-         bcs SETX
-         and #%10111111   ;-65..63
+         ;and #%10111111   ;-65..63
+		 cmp #$80
+		 ror
+		 jmp loop2
 SETX     sta STARX,Y
-         RTS
+         rts
 .)
 
+/*
+tabnrs1 .byt (CLIP_BOTTOM-CENTER_Y)-1, (256-(CENTER_Y-CLIP_TOP-1))
+tabnrs2	.byt (CLIP_RIGHT-CENTER_X)-1, (256-(CENTER_X-CLIP_LEFT)-1)
+
+NEWREARSTAR 
+.(       
+	     ;.Y contains index into star table
+         jsr _gen_rnd_number
+		 cmp #(CLIP_BOTTOM-CENTER_Y)  ;100
+         bcc SETY
+         cmp #(256-(CENTER_Y-CLIP_TOP))		;156         ;-100
+         bcs SETY
+         ;and #%10111111   ;-65..63
+		 and #1
+		 tax
+		 lda tabnrs1,x
+SETY     STA STARY,Y
+
+         lda _rnd_seed
+         cmp #(CLIP_RIGHT-CENTER_X)		;120
+         bcc SETX
+         cmp #(256-(CENTER_X-CLIP_LEFT))			;136
+         bcs SETX
+         ;and #%10111111   ;-65..63
+		 and #1
+		 tax
+		 lda tabnrs2,x
+SETX     sta STARX,Y
+         rts
+.)
+
+*/
 
 ;
 ; PLOTSTAR -- Plot stars into bitmap!
 ;
 PlotStars
 .(
-         LDY #NSTARS
-LOOP     STY TEMP
-         LDA STARX,Y
-         CLC
-         ADC #CENTER_X
+         ldy #NSTARS
+LOOP     sty TEMP
+         lda STARX,y
+         clc
+         adc #CENTER_X
+/*
          cmp #CLIP_RIGHT
          bcs bypass
          cmp #CLIP_LEFT
          bcc bypass
+*/
          tax
-
-         LDA STARY,Y
-         CLC
-         ADC #CENTER_Y
+         lda STARY,y
+         clc
+         adc #CENTER_Y
+/*
          cmp #CLIP_BOTTOM
          bcs bypass
          cmp #CLIP_TOP
          bcc bypass
-         TAY
+*/
+
+         tay
 PLOT    
         ; Now plot the star!
 
+		; Inline this?
         jsr pixel_address
-    	;eor (tmp0),y				; 5
+#ifdef 0
+	    lda _HiresAddrLow,y			; 4
+		sta tmp0+0					; 3
+		lda _HiresAddrHigh,y		; 4
+		sta tmp0+1					; 3 => Total 14 cycles
+	  	ldy _TableDiv6,x
+		lda _TableBit6Reverse,x		; 4
+#endif
         ora (tmp0),y				; 5
     	sta (tmp0),y   
  
 bypass   
-         LDY TEMP
-         DEY
-         BPL LOOP
-         RTS
+         ldy TEMP
+         dey
+         bpl LOOP
+         rts
 .)
 
 
@@ -101,7 +168,6 @@ bypass
 
 move_stars
 .(
-
 	lda invert
 	beq normal1
 	lda g_alpha
@@ -114,8 +180,7 @@ normal1
 
     lda g_alpha
     beq nowbeta
-    cmp #$80    ; Get sign into carry
-    bcs negmove1
+	bmi negmove1
     jsr STARADDY
     jmp nowbeta
 negmove1
@@ -124,8 +189,7 @@ negmove1
 nowbeta
     lda g_beta
     beq nowdelta
-    cmp #$80    ; Get sign into carry
-    bcs negmove2
+	bmi negmove2
     jsr STARSUBX
     jmp nowdelta
 negmove2
@@ -134,8 +198,7 @@ negmove2
 nowdelta
     lda g_delta
     beq nowtheta
-    cmp #$80    ; Get sign into carry
-    bcs negmove3
+	bmi negmove3
 	and #$7f
 	sta tmp
 loop1
@@ -153,12 +216,18 @@ loop2
 	bne loop2
 
 nowtheta
+/*
 	lda invert
 	beq normal
 	jsr STARSUBZ
 	jmp more
 normal
     jsr STARADDZ  ; This can't be negative...
+*/
+
++patch_staraddz
+	jsr STARADDZ
+	
 more
     lda #0
     sta g_alpha
@@ -199,7 +268,7 @@ POSY     LDA STARXREM,Y
          BMI NEGCHK
 
 POSCHK   
-         cmp #120
+         cmp #(CLIP_RIGHT-CENTER_X)
          BCS NEW
 YCHK     LDA STARY,Y
          BMI NEGYCHK
@@ -209,14 +278,14 @@ YCHK     LDA STARY,Y
          BPL LOOP
          RTS
 
-NEGYCHK  CMP #192	;#156         ;-100
+NEGYCHK  CMP #(256-(CENTER_Y-CLIP_TOP))
          BCS NOTNEW
 NEW      JSR NEWSTAR
 NOTNEW   DEY
          BPL LOOP
          RTS
 
-NEGCHK   cmp #136          ;-120
+NEGCHK   cmp #(256-(CENTER_X-CLIP_LEFT))
          BCS YCHK
          BCC NEW
 
@@ -279,24 +348,24 @@ POSY     LDA STARXREM,Y
          BMI NEGCHK
 POSCHK   
 
-         cmp #136
+         cmp #(256-(CENTER_X-CLIP_LEFT))
          BCS NEW
 YCHK     LDA STARY,Y
          BMI NEGYCHK
-         CMP #100
+         CMP #(CLIP_BOTTOM-CENTER_Y) 
          BCS NEW
          DEY
          BPL LOOP
          RTS
 
-NEGYCHK  CMP #156         ;-100
+NEGYCHK  CMP #(256-(CENTER_Y-CLIP_TOP))
          BCS NOTNEW
 NEW      JSR NEWSTAR
 NOTNEW   DEY
          BPL LOOP
          RTS
 
-NEGCHK   cmp #136
+NEGCHK   cmp #(256-(CENTER_X-CLIP_LEFT))
          BCS YCHK
          BCC NEW
 
@@ -373,13 +442,12 @@ L1
          BMI NEGCHK
          ;BNE NEW         ;valid high = either 00 or $FF
 
-POSCHK   cmp #120         ;if x>=160 then need a new star
+POSCHK   cmp #(CLIP_RIGHT-CENTER_X)         ;if x>=max_x then need a new star
          BCC ADDY
 NEW      JSR NEWSTAR
          JMP NEXT
 NEGCHK  
-         cmp #136          ;and if x<=-160
-         ;SBC #$FF         ;(Subtract $FF + 97)
+         cmp #(256-(CENTER_X-CLIP_LEFT))          ;and if x<=min_x
          BCC NEW
 
 ADDY     LDX #00          ;Sign
@@ -387,7 +455,7 @@ ADDY     LDX #00          ;Sign
          BPL C1
          DEX
 C1       STX TEMP1
-         LDX tmp; g_theta    ;THETSTEP
+         LDX tmp; g_theta 
 L2       ASL
          ROL TEMP1
          DEX
@@ -401,12 +469,12 @@ L2       ASL
          STA STARY,Y
          BMI NEGY
 
-POSY     CMP #100         ;if abs(y)>100 then new
+POSY     CMP #(CLIP_BOTTOM-CENTER_Y)          ;if abs(y)>max_y then new
          BCS NEW
 NEXT     DEY
          BPL LOOP
 ELRTS    RTS
-NEGY     CMP #157
+NEGY     CMP #(256-(CENTER_Y-CLIP_TOP))
          BCC NEW
          DEY
          BPL LOOP
@@ -432,9 +500,6 @@ STARSUBZ
         ;Same thing but subtract
          LDY #NSTARS
 LOOP    
-         ;ldx THETSTEP
-         ;BEQ OTRORTS
-
          LDX #0 ; sign
          LDA STARX,Y
          bpl C1
@@ -463,8 +528,7 @@ POSCHK   cmp #16          ;if abs(x)<16 then need a new star
          BCS ADDY
 NEW      JSR NEWSTAR
          JMP NEXT
-NEGCHK   cmp #240
-         ;SBC #$FF
+NEGCHK   cmp #(256-16)
          BCS NEW
 
 ADDY     LDX #00          ;Sign
@@ -488,12 +552,12 @@ L2       ASL
          STA STARY,Y
          BMI NEGY
 
-POSY     CMP #16          ;if abs(y)<6 then new
+POSY     CMP #16          ;if abs(y)<16 then new
          BCC NEW
 NEXT     DEY
          BPL LOOP
 OTRORTS  RTS
-NEGY     CMP #240
+NEGY     CMP #(256-16)
          BCS NEW
          DEY
          BPL LOOP
@@ -511,23 +575,12 @@ NEGY     CMP #240
 ADDTAB   .byt 0,4,8,12,16,20,24,28,32,36,40,44,52,60
 STARADDX 
 .(
-         LDY #NSTARS
-         LDX g_beta    ;THETSTEP
-         BEQ ELRTS
-         
-         txa
+		 lda g_beta
+		 ldy #NSTARS
          and #$7f   ; Get absolute value  
-         ;asl
          tax     
          LDA ADDTAB,X
-/*
-         STA TEMP
-LOOP     LDA STARX,Y
-         CLC
-         ADC TEMP
-         STA STARX,Y
-         BMI NEXT
-*/
+
          STA _smc_add+1
 LOOP     LDA STARX,Y
          CLC
@@ -536,9 +589,7 @@ _smc_add
          STA STARX,Y
          BMI NEXT
 
-
-
-POSCHK   cmp #120         ;if x>=160 then need a new star
+POSCHK   cmp #(CLIP_RIGHT-CENTER_X)         ;if x>=max_x then need a new star
          BCC NEXT
 NEW      JSR NEWSTAR
 NEXT     DEY
@@ -548,22 +599,12 @@ ELRTS    RTS
 
 STARSUBX
 .( 
-         LDY #NSTARS
-         LDX g_beta   ;THETSTEP
-         BEQ ELRTS
-         txa
+         lda g_beta
+		 ldy #NSTARS
          and #$7f   ; Get absolute value  
-         ;asl
          tax     
          LDA ADDTAB,X
-/*
-         STA TEMP
-LOOP     LDA STARX,Y
-         SEC
-         SBC TEMP
-         STA STARX,Y
-         BPL NEXT
-*/
+
          STA _smc_sub+1
 LOOP     LDA STARX,Y
          SEC
@@ -573,7 +614,7 @@ _smc_sub
          BPL NEXT
 
 
-POSCHK   cmp #136          ;if x<-160 then need a new star
+POSCHK   cmp #(256-(CENTER_X-CLIP_LEFT+1))     ;if x<min_x then need a new star
          BCS NEXT
 NEW      JSR NEWSTAR
 NEXT     DEY
@@ -584,23 +625,21 @@ ELRTS    RTS
 
 STARADDY 
 .(
-         LDY #NSTARS
-         LDX g_alpha ;THETSTEP
-         BEQ ELRTS
-         txa
+		 lda g_alpha
+		 ldy #NSTARS
          and #$7f   ; Get absolute value 
-         ;asl 
          tax     
          LDA ADDTAB,X
 
-         STA TEMP
+         STA _smc_add+1
 LOOP     LDA STARY,Y
          CLC
-         ADC TEMP
+_smc_add
+         ADC #$00 ;SMC
          BVS NEW         ;might happen for large temp
          STA STARY,Y
          BMI NEXT
-         CMP #100
+         CMP #(CLIP_BOTTOM-CENTER_Y)
          BCC NEXT
 NEW      JSR NEWSTAR
 NEXT     DEY
@@ -610,23 +649,21 @@ ELRTS    RTS
 
 STARSUBY 
 .(
-         LDY #NSTARS
-         LDX g_alpha ;THETSTEP
-         BEQ ELRTS
-         txa
+         lda g_alpha
+		 ldy #NSTARS
          and #$7f   ; Get absolute value  
-;         asl
          tax     
          LDA ADDTAB,X
 
-         STA TEMP
+         STA _smc_sub+1
 LOOP     LDA STARY,Y
          SEC
-         SBC TEMP
+_smc_sub
+         SBC #$00 ; SMC
          BVS NEW
          STA STARY,Y
          BPL NEXT
-         CMP #156
+         CMP #(256-(CENTER_Y-CLIP_TOP))
          BCS NEXT
 NEW      JSR NEWSTAR
 NEXT     DEY
