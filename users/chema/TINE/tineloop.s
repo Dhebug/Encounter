@@ -389,11 +389,8 @@ noinvert
 
 ;;;;; START OF DRAWING SECTION
     jsr move_stars
-	sei
     jsr clr_hires2
-	cli
     jsr DrawAllVis   ;Draw objects
-	sei
     jsr EraseRadar   ; Erase radar
     jsr DrawRadar
     jsr PlotStars
@@ -404,7 +401,6 @@ noinvert
     inc _laser_fired ; Set back to 0
     jsr _DrawLaser
 nofire
-	cli
 
 	lda message_delay
 	beq nomessage
@@ -430,9 +426,7 @@ noinv
 doinv
     jsr print
 	inc print2dbuffer
-	sei
     jsr dump_buf
-	cli	
 	lda _planet_dist
 	cmp #PDIST_TOOFAR2
 	bcs nocompass

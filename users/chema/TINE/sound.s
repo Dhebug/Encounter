@@ -278,6 +278,11 @@ InitMusic
 	lda #>MusicIRQ
 	sta SYS_IRQPATCH+1
 	
+	lda #<9984
+	sta via_t1ll 
+	lda #>9984
+	sta via_t1lh
+	
 	lda #<MUSICBASEADDRESS
 	sta header
 	lda #>MUSICBASEADDRESS

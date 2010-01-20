@@ -15,10 +15,11 @@
 /* Some definitions for frameskipping when rate ges too low */
 /* Use the technique of drawing odd/all/odd/all... scans    */
 #define ALTSCANS
+/* The next thresholds are in units of IRQs... now at 25hz  */
 /* Threshold for alternate scan technique, the lower one	*/
-#define MAXFRAMETIME1 18 
+#define MAXFRAMETIME1 7 
 /* Threshold for complete frame skipping, the higher one    */
-#define MAXFRAMETIME2 18+5
+#define MAXFRAMETIME2 8
 
 /* Uncomment to have debug values plotted on screen. 
    Default is frame duration */
