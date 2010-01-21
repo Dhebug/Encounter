@@ -459,6 +459,11 @@ areangry
 	cmp #200
 	bcc notanaconda
 
+	; No more than 2 worms
+	lda worm_counter
+	cmp #3
+	bcs notanaconda
+
 	; Launch WORM
 	ldx AIShipID
 	jsr SetCurOb
@@ -466,13 +471,14 @@ areangry
     jsr LaunchShipFromOther
     cpx #0
     beq notanaconda	; Couldn't create object
-    lda #(IS_AICONTROLED|FLG_BOLD|FLG_SLOW)
+    lda #(IS_AICONTROLED|FLG_BOLD) ;|FLG_SLOW)
     sta _ai_state,x
         
     ; Get objective
     lda AITarget  
 	ora #IS_ANGRY
     sta _target,x 
+	inc worm_counter
 	rts
 
 notanaconda
@@ -579,6 +585,11 @@ nocriten
 	dec _missiles,x
 	rts	
 domissile
+	; No more than MAX_MISSILES missiles
+	lda missile_counter
+	cmp #(MAX_MISSILES+1)
+	bcs nolowen
+
     jsr SetCurOb
     jsr LaunchMissile   
     beq nolowen ; Could not fire missile
@@ -966,6 +977,8 @@ LaunchMissile
     cpx #0
     beq failure
 
+	inc missile_counter
+
     lda #4;11
     sta _accel,x
     ;lda #3
@@ -997,7 +1010,7 @@ savx
     sta _missiles,x
 
     ; Make it disappear soon
-    lda #( IS_DISAPPEARING )
+    lda #(IS_EXPLODING) ;IS_DISAPPEARING )
     ora _flags,x
     sta _flags,x
 
@@ -1026,7 +1039,6 @@ HyperObject
 DockObject
 DisappearObject
 .(
-;    stx _ID
     jmp RemoveObject
 .)
 
@@ -1065,7 +1077,7 @@ loop
     ; object is a ship
     jsr GetShipType
     and #%01111111 
-	
+
 	; What if it is an asteroid????
 	cmp #SHIP_ASTEROID
 	bne noasteroid
@@ -1080,17 +1092,32 @@ noasteroid
 	jsr ReleaseRandom
 	jmp nomore
 noboulder
+ 
+	; If a missile, decrement counter
+	cmp #SHIP_MISSILE
+	bne nomissile
+	dec missile_counter
+nomissile
+
+	; If police idem
     cmp #SHIP_VIPER
     bcc nomore  ; if it is space junk nothing more...
 	bne nopolice
 	dec police_counter
 nopolice
 
-	; If it is a thargoid, decrement counter of thargoids
+	; If it is a thargoid, the same thing
 	cmp #SHIP_THARGOID
 	bne nothargoid
 	dec thargoid_counter
 nothargoid
+
+	; If a worm, idem
+	cmp #SHIP_WORM
+	bne noworm
+	dec worm_counter
+noworm
+
 
 	lda #SHIP_ALLOY
 	jsr ReleaseRandom

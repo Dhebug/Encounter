@@ -678,34 +678,15 @@ MoveCurrent
 	bne cont
 	rts ; This is a planet or a moon... 
 cont
-/*
-	; Check if due to energy bomb being launched,
-	; we have to destroy the ship
-	lda _energy_bomb
-	beq nobomb
-
-	cpx #SHIP_CONSTRICTOR
-	beq nobomb
-	cpx #SHIP_COUGAR
-	beq nobomb
-
-	; Ok, not protected, so make it explode 
-	ldy CUROBJ
-	lda _flags,y
-	and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
-	bne nobomb
-
-    lda _flags,y
-    and #%11110000  ; Remove older flags...
-    ora #IS_EXPLODING
-    sta _flags,y
-    lda #0
-    sta _ttl,y
-	rts 
-nobomb
-*/
 	lda ShipMaxSpeed-1,x
     sta maxspeed
+
+	; If an asteroid, make it rotate
+	cpx #SHIP_ASTEROID
+	bne noasteroid
+	jsr Roll
+	jmp forwards
+noasteroid
 
     ldx CUROBJ
     lda _rotx,x
@@ -755,6 +736,8 @@ loopz
     bne loopz
 nadaz
     plp
+
+forwards
     ldx CUROBJ
     lda _accel,x
     ;ora _speed,x

@@ -87,9 +87,6 @@ _ptsh			.byt 0
 ;Is ECM active?
 _ecm_counter	.byt 0
 
-;Is Energy Bomb active?
-;_energy_bomb	.byt 0
-
 ;typedef struct
 ;{ char a,b,c,d;
 ;} fastseedtype;  /* four byte random number used for planet description */
@@ -158,6 +155,8 @@ _vertexYHI	.dsb MAXSHIPS
 thargoid_counter	.byt 00
 police_counter		.byt 00
 asteroid_counter    .byt 00
+worm_counter		.byt 00
+missile_counter		.byt 00
 
 police_ids			.dsb MAXCOPS
 

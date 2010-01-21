@@ -146,8 +146,10 @@ moonsdone
 	sta thargoid_counter
 	sta police_counter
 	sta asteroid_counter
+	sta worm_counter
+	sta missile_counter
+
 	sta _ecm_counter
-	;sta _energy_bomb
 	sta message_delay
 
     ;jsr _InitTestCode
