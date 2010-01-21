@@ -88,7 +88,7 @@ _ptsh			.byt 0
 _ecm_counter	.byt 0
 
 ;Is Energy Bomb active?
-_energy_bomb	.byt 0
+;_energy_bomb	.byt 0
 
 ;typedef struct
 ;{ char a,b,c,d;

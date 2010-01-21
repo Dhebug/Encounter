@@ -204,11 +204,16 @@ However I am starting with 200, such as in the speccy version?
 
 + Add prepare for landing at Diso, launching off messages to the cockpit.
 
-+ Arrows for lists?
+- Arrows for lists?
 
 + snow on the scanner when readings erratic
 
++ Make Anacondas launch worms, instead of missiles. 
 
++ energy_bomb code is dumb. Maybe run through the object list setting EXPLODE as
+  needed inside the routine energy_bomb (inside tineloop.s)
+
++ Make asteroids rotate! MoveCurrent in tinefuncs.s
 
 
 

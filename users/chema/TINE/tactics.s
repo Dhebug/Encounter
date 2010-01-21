@@ -36,7 +36,6 @@ _Tactics
     jsr GetNextOb
     cpx #0
     beq end
-    ;bcs end
 
 loop
     sta POINT        ;Object pointer
@@ -65,10 +64,10 @@ loopi
     ; Call routine for each flag kind...
 
     lda dis_tab_lo,y
-    sta jump+1
+    sta _smc_jump+1
     lda dis_tab_hi,y
-    sta jump+2
-jump
+    sta _smc_jump+2
+_smc_jump
     jsr $1234   ; SMC
 
     jmp nomove
@@ -100,7 +99,6 @@ nomove
     jsr GetNextOb
     cpx #0
     bne loop
-    ;bcc loop
 end
     rts
 
@@ -225,9 +223,6 @@ savy
     jmp damage_ship ; This is JSR/RTS
 
 nohit
-    ;; Mirar a ver si se activa ECM (si no es el jugador)
-    ;; Si no lo activa entonces seguimos la persecución (?)
-
 	; See if ecm is already active
 	lda _ecm_counter
 	bne noacecm
@@ -336,7 +331,8 @@ nocontraband
 	sta AITarget
 nobounty
 
-    ; If FLG_PIRATE and planet nearby or police and r1>100 , remove angry status and target hyperspace point 
+    ; If FLG_PIRATE and planet nearby or police and r1>100 , 
+	; remove angry status and target hyperspace point 
 	; If FLG_BOLD keep on trying!
 	lda _ai_state,x
 	and #(FLG_BOLD)
@@ -363,7 +359,7 @@ flee
 	ora #FLG_FLY_TO_HYPER
 	sta _flags,x
 	;rts
-	jmp fly_to_pos
+	jmp fly_to_zero
 
 approach
 
@@ -379,15 +375,15 @@ notarget
 	and #FLG_FLY_TO_HYPER 
 	beq end
 	; Wants to go hyper
-	jmp fly_to_pos
+	jmp fly_to_zero
 end
     rts
 
 .)
 
 
-; Hack to make a ship travel to a given position. In this case 0,0,0
-fly_to_pos
+; Hack to make a ship travel to position 0,0,0
+fly_to_zero
 .(
 	lda #0
 	ldy #5
@@ -436,11 +432,6 @@ loop
     bne cont
     jmp approach
 cont
-
-    ; if it is an Anaconda and there are less than 3 worms
-    ; launch one randomly. As _gen_rnd_number has already
-    ; been called, just use _rnd_seed (+1,+2,+3)
-
     ; Randomly roll a bit to throw away anyone tracking me
     lda _rnd_seed
     cmp #BREAK_CHANCE
@@ -456,6 +447,36 @@ noroll
     bne areangry
     jmp toofar
 areangry    
+
+    ; if it is an Anaconda it may launch worms.
+	; As _gen_rnd_number has already
+    ; been called, just use _rnd_seed (+1,+2,+3)
+
+	lda AIShipType
+	cmp #SHIP_ANACONDA
+	bne notanaconda
+	lda _rnd_seed
+	cmp #200
+	bcc notanaconda
+
+	; Launch WORM
+	ldx AIShipID
+	jsr SetCurOb
+	lda #SHIP_WORM
+    jsr LaunchShipFromOther
+    cpx #0
+    beq notanaconda	; Couldn't create object
+    lda #(IS_AICONTROLED|FLG_BOLD|FLG_SLOW)
+    sta _ai_state,x
+        
+    ; Get objective
+    lda AITarget  
+	ora #IS_ANGRY
+    sta _target,x 
+	rts
+
+notanaconda
+
 
 	; If BOLD he might want to launch a missile
 	ldx AIShipID
@@ -546,13 +567,15 @@ nocriten
 	ora #IS_ANGRY
     sta _target,x 
 
+	/*
     ; Push it a bit
     jsr SetCurOb
     lda #20
     jsr MoveForwards
     lda #20
-    jsr MoveSide
-    ldx AIShipID
+    jsr MoveSide*/
+
+    ldx AIShipID 
 	dec _missiles,x
 	rts	
 domissile
