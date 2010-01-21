@@ -147,7 +147,7 @@ moonsdone
 	sta police_counter
 	sta asteroid_counter
 	sta _ecm_counter
-	sta _energy_bomb
+	;sta _energy_bomb
 	sta message_delay
 
     ;jsr _InitTestCode

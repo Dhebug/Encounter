@@ -214,10 +214,13 @@ init_front_view
 	sta pitching
 	sta rolling
 
+	jsr patch_invert_code
+
 	jsr clr_hires
 	jsr load_frame
 	;jsr _DrawFrameBorder   
 	jsr _DoubleBuffOn
+
 	;jmp _FirstFrame	; Let the program flow...
 .)
 _FirstFrame
@@ -357,10 +360,12 @@ nochange
     ; Process user's controls
     jsr ProcessKeyboard
 
-	lda invert
-	beq noinvert
+	; Trick to invert object's Z in case of rear view
+;	lda invert
+;	beq noinvert
++_patch_invertZa
 	jsr invertZ
-noinvert
+;noinvert
 
 	; Set the radar
     ldx VOB
@@ -386,13 +391,22 @@ noinvert
 	cmp #MAXFRAMETIME2
 	bcs nodraw
 
-
-;;;;; START OF DRAWING SECTION
+	; Move the stars, only if we are drawing, as they are fake
     jsr move_stars
-    jsr clr_hires2
-    jsr DrawAllVis   ;Draw objects
-    jsr EraseRadar   ; Erase radar
-    jsr DrawRadar
+
+;****** START OF DRAWING SECTION ******
+
+	; Clear the off-screen buffer
+	jsr clr_hires2
+
+	; Draw all objects
+    jsr DrawAllVis   
+
+ ;   ; Erase & Draw radar
+ ;   jsr EraseRadar   
+ ;   jsr DrawRadar
+
+	; Plot the starfield, the crosshair and any lasers (ours and from others)
     jsr PlotStars
 	jsr _DrawCrosshair
     jsr _Lasers
@@ -402,6 +416,7 @@ noinvert
     jsr _DrawLaser
 nofire
 
+	; Print any HUD message
 	lda message_delay
 	beq nomessage
 	dec message_delay
@@ -411,6 +426,10 @@ nomessage
 #ifdef DBGVALUES
 	jsr print_dbgval
 #endif
+
+	; Print either front or rear view message on top
+	; This should be in a subroutine to keep code structured,
+	; but...
 	dec print2dbuffer
 	ldx #(15*6)
 	ldy #0
@@ -426,7 +445,21 @@ noinv
 doinv
     jsr print
 	inc print2dbuffer
+
+	; Everything drawn, now dump the buffer
     jsr dump_buf
+
+;****** END OF DRAWING SECTION ******
+
+; Here we update radar and compass. This is outside the drawing section
+; because we are not double buffering, but if we are not drawing we should not 
+; update these also
+
+    ; Erase & Draw radar
+    jsr EraseRadar   
+    jsr DrawRadar
+
+	; Update compass
 	lda _planet_dist
 	cmp #PDIST_TOOFAR2
 	bcs nocompass
@@ -435,14 +468,19 @@ doinv
 nocompass
 	jsr clear_compass
 endcompass
-;;;;;;;;;;;;;;;;;;;;;;;;; END OF DRAWING SECTION
 
+
+; If not drawing (screens different than front/rear views, or frame skipping)
+; Jump here.
 
 nodraw
-	lda invert
-	beq noinvert2
+
+	; Trick to invert object's Z in case of rear view
+;	lda invert
+;	beq noinvert2
++_patch_invertZb
 	jsr invertZ
-noinvert2
+;noinvert2
 
 	; If player is in control, check collisions
 	lda player_in_control
@@ -467,10 +505,10 @@ cont
     jsr _MoveShips
 
 	; Remove energy bomb launched if active 
-	lda _energy_bomb
-	beq contbomb
-	dec _energy_bomb
-contbomb
+;	lda _energy_bomb
+;	beq contbomb
+;	dec _energy_bomb
+;contbomb
 
 	; Perform timely checks. Every 8 frames, basically
 	lda frame_number
@@ -540,10 +578,16 @@ done_energy
 no_energy
 
 	; We should be dead here 
+
+	; Check message has been displayed for some time
+	; and that we are not in control of the ship
 	lda message_delay
 	ora player_in_control
 	bne locking
+
+	; Return from main loop here. 
 	rts	
+
 
 locking	
 	; Locking computer
@@ -1041,10 +1085,57 @@ energy_bomb
 		and #%11011111
 		sta _equip
 		; Activate bomb
-		inc _energy_bomb
+		;inc _energy_bomb
+		jsr explode_others
 nobomb
 		rts
 
+.)
+
+
+explode_others
+.(
+
+    ldx #2  ; 0 and 1 are radar and player
+    jsr SetCurOb
+
+    jsr GetNextOb
+    cpx #0
+    beq end
+loop
+    sta POINT        ;Object pointer
+    sty POINT+1
+
+    ; Get ship ID byte...
+    ldy #ObjID
+    lda (POINT),y
+
+	and #%01111111
+	beq next ; a planet, as sun or a moon
+	
+	cmp #SHIP_CONSTRICTOR
+	beq next
+	cmp #SHIP_COUGAR
+	beq next
+
+	; Ok, not protected, so make it explode, if it is not
+	; already exploding, hyperspacing or docking
+	lda _flags,x
+	and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
+	bne next
+
+    lda _flags,x
+    and #%11110000  ; Remove older flags...
+    ora #IS_EXPLODING
+    sta _flags,x
+    lda #0
+    sta _ttl,x
+next
+    jsr GetNextOb
+    cpx #0
+    bne loop
+end
+	rts
 .)
 
 ecm_on
@@ -1100,9 +1191,12 @@ lookrear
 		lda invert
 		eor #$ff
 		sta invert
+
+		jsr patch_invert_code
 		jsr update_compass
 		jmp INITSTAR
 .)
+
 ;H
 galhyper
 .(
@@ -1751,6 +1845,45 @@ nothing2
     jmp MoveForwards
 	;rts
 .)
+
+
+
+
+patch_invert_code
+.(
+	lda invert
+	beq setnops
+	; Some code patches
+	lda #$20	; jsr opcode
+	sta _patch_invertZa
+	sta _patch_invertZb
+	lda	#<invertZ
+	sta	_patch_invertZa+1
+	sta	_patch_invertZb+1
+	lda	#>invertZ
+	sta	_patch_invertZa+2
+	sta	_patch_invertZb+2
+	jmp end
+setnops
+	lda #$ea	; nop opcode
+	ldx #2
+loop
+	sta _patch_invertZa,x
+	sta _patch_invertZb,x
+	dex
+	bpl loop
+end
+	rts
+.)
+
+
+
+
+
+
+
+
+
 
 VOB      .byt 00           ;View object
 

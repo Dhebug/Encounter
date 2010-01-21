@@ -678,6 +678,7 @@ MoveCurrent
 	bne cont
 	rts ; This is a planet or a moon... 
 cont
+/*
 	; Check if due to energy bomb being launched,
 	; we have to destroy the ship
 	lda _energy_bomb
@@ -702,6 +703,7 @@ cont
     sta _ttl,y
 	rts 
 nobomb
+*/
 	lda ShipMaxSpeed-1,x
     sta maxspeed
 
