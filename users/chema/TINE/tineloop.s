@@ -455,6 +455,10 @@ doinv
 ; because we are not double buffering, but if we are not drawing we should not 
 ; update these also
 
+	lda frame_number
+	lsr
+	bcc nodraw
+
     ; Erase & Draw radar
     jsr EraseRadar   
     jsr DrawRadar
@@ -503,12 +507,6 @@ cont
 
 	; Move other ships
     jsr _MoveShips
-
-	; Remove energy bomb launched if active 
-;	lda _energy_bomb
-;	beq contbomb
-;	dec _energy_bomb
-;contbomb
 
 	; Perform timely checks. Every 8 frames, basically
 	lda frame_number
@@ -1072,11 +1070,15 @@ energy_bomb
 		; Check if equipped
 		lda _equip
 		and #%100000
-		beq nobomb
+		bne equipped 
+dorts
+		rts		
+
+equipped
 		; It needs energy
 		lda _energy+1
 		cmp #21+5 ; Some securiy margin
-		bcc nobomb
+		bcc dorts
 		sec
 		sbc #20
 		sta _energy+1
@@ -1084,59 +1086,52 @@ energy_bomb
 		lda _equip
 		and #%11011111
 		sta _equip
+
 		; Activate bomb
-		;inc _energy_bomb
-		jsr explode_others
-nobomb
-		rts
 
-.)
+		ldx #2  ; 0 and 1 are radar and player
+		jsr SetCurOb
 
-
-explode_others
-.(
-
-    ldx #2  ; 0 and 1 are radar and player
-    jsr SetCurOb
-
-    jsr GetNextOb
-    cpx #0
-    beq end
+	    jsr GetNextOb
+		cpx #0
+		beq end
 loop
-    sta POINT        ;Object pointer
-    sty POINT+1
-
-    ; Get ship ID byte...
-    ldy #ObjID
-    lda (POINT),y
-
-	and #%01111111
-	beq next ; a planet, as sun or a moon
+	    sta POINT        ;Object pointer
+	    sty POINT+1
 	
-	cmp #SHIP_CONSTRICTOR
-	beq next
-	cmp #SHIP_COUGAR
-	beq next
+	    ; Get ship ID byte...
+	    ldy #ObjID
+	    lda (POINT),y
 
-	; Ok, not protected, so make it explode, if it is not
-	; already exploding, hyperspacing or docking
-	lda _flags,x
-	and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
-	bne next
+		and #%01111111
+		beq next ; a planet, as sun or a moon
+		
+		cmp #SHIP_CONSTRICTOR
+		beq next
+		cmp #SHIP_COUGAR
+		beq next
 
-    lda _flags,x
-    and #%11110000  ; Remove older flags...
-    ora #IS_EXPLODING
-    sta _flags,x
-    lda #0
-    sta _ttl,x
+		; Ok, not protected, so make it explode, if it is not
+		; already exploding, hyperspacing or docking
+		lda _flags,x
+		and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
+		bne next
+	
+	    lda _flags,x
+	    and #%11110000  ; Remove older flags...
+	    ora #IS_EXPLODING
+	    sta _flags,x
+	    lda #0
+	    sta _ttl,x
 next
-    jsr GetNextOb
-    cpx #0
-    bne loop
+	    jsr GetNextOb
+	    cpx #0
+	    bne loop
 end
-	rts
+		rts
 .)
+
+
 
 ecm_on
 .(

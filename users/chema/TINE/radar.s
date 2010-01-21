@@ -14,7 +14,7 @@ RADOBJ
 
 ; Point list
 
-RADDAT   .dsb MAXSHIPS*2
+RADDAT   .dsb MAXSHIPS*3*2
 
 
 
@@ -101,6 +101,8 @@ lback    LDA IDENTITY,X
          sty tmp1c
          ldx #1
          jsr SetCurOb
+
+
          ; Now iterate through object list 
          jsr GetNextOb
          cpx #0  
@@ -108,9 +110,7 @@ lback    LDA IDENTITY,X
 loop2    
          sta tmp1
          sty tmp1+1
-         ;jsr IsAppearing
-         ;beq skip2		
-
+  
 		 ; Is Invisible ship?
 	     ; Check ship ID byte...
 		 ldy #ObjID
@@ -153,8 +153,7 @@ end2
 loop    
          sta tmp1
          sty tmp1+1
-         ;jsr IsAppearing
-         ;beq skip
+
 		 ; Is Invisible ship?
 	     ; Check ship ID byte...
 		 ldy #ObjID

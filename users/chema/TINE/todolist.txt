@@ -208,12 +208,18 @@ However I am starting with 200, such as in the speccy version?
 
 + snow on the scanner when readings erratic
 
-+ Make Anacondas launch worms, instead of missiles. 
+- Make Anacondas launch worms, instead of missiles. 
+  Also missiles :)
 
-+ energy_bomb code is dumb. Maybe run through the object list setting EXPLODE as
+- energy_bomb code is dumb. Maybe run through the object list setting EXPLODE as
   needed inside the routine energy_bomb (inside tineloop.s)
 
-+ Make asteroids rotate! MoveCurrent in tinefuncs.s
+- Make asteroids rotate! MoveCurrent in tinefuncs.s
+
++ RADDAT was wrong. It needs 3 bytes per ship in radar (x,y,z) and double this size 
+ for the second coordinate (x,0,z). This is a waste, as there won't be ever more than
+ a bunch of detected objects at the same time.
+
 
 
 
