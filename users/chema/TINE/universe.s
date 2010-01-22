@@ -586,12 +586,17 @@ check_for_asteroids
 		cpx #0
 		beq end
 
+		inc asteroid_counter
+
 		lda _ai_state,x
 		and #%01111111 ;~(IS_AICONTROLED)  
 		sta _ai_state,x
 
-		inc asteroid_counter
-
+		; Make it rotate
+		lda #3
+		sta _rotz,x
+	
+		;Set speed and random orientation
 		jmp set_speed
 end
 		rts

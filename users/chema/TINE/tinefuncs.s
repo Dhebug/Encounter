@@ -681,13 +681,13 @@ cont
 	lda ShipMaxSpeed-1,x
     sta maxspeed
 
-	; If an asteroid, make it rotate
+/*	; If an asteroid, make it rotate
 	cpx #SHIP_ASTEROID
 	bne noasteroid
 	jsr Roll
 	jmp forwards
 noasteroid
-
+*/
     ldx CUROBJ
     lda _rotx,x
     cmp #$80

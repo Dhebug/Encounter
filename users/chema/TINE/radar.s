@@ -14,21 +14,19 @@ RADOBJ
 
 ; Point list
 
-RADDAT   .dsb MAXSHIPS*3*2
+RADDAT   .dsb MAXSHIPS*6
 
 
 
 CreateRadar
 .(
         lda #0
-        ;sta RADOBJ
         sta RADOBJ+1
-        ;sta RADOBJ+2
-
-        LDA #<RADOBJ
-        LDY #>RADOBJ
-        LDX #$FF
-        JSR AddObj     ;Radar object = object 0
+  
+        lda #<RADOBJ
+        ldy #>RADOBJ
+        ldx #$FF
+        jsr AddObj     ;Radar object = object 0
         jsr SetCurOb
         
         lda #0
@@ -45,8 +43,10 @@ CreateRadar
 ; (scaled) object centers.
 ;
 
-#define   RADOFFX         116;120            ;Size of radar
-#define   RADOFFY         163;175-5-3-3;199-56+30;128+36-2  
+; Radar position
+
+#define   RADOFFX         116
+#define   RADOFFY         163
 
 IDENTITY .byt 64,0,0       ;Identity matrix
          .byt 0,64,0
@@ -56,171 +56,181 @@ IDENTITY .byt 64,0,0       ;Identity matrix
 ; Needs X loaded with the Player's ship ID (Or the Viewpoint object)
 SetRadar
 .( 
-         ;LDX VOB
-         ;LDX ROB
          stx savx+1
-         JSR SetCurOb
-         STA TEMP
-         STY TEMP+1
-         LDX #00
-         JSR GetObj;SetCurOb
-         STA POINT
-         STY POINT+1
-         LDY #5
-l        LDA (TEMP),Y
-         STA (POINT),Y
-         DEY
-         BPL l
+         jsr SetCurOb
+         sta l+1
+         sty l+2
+         ldx #00
+         jsr GetObj
+         sta l2+1
+         sty l2+2
+         ldy #5
+l        lda $1234,y	; SMC
+l2       sta $1234,y	; SMC
+         dey
+         bpl l
 savx
          ldx #0 ; Get back X (SMC)
-rts2     RTS
+	     rts
+.)
 
+.zero
 tmp1c .byt 0
 
-+DrawRadar
-         LDX #00
-         JSR GetObj
-         STA POINT
-         STY POINT+1
 
-         LDY #ObjCenPos
-         LDA (POINT),Y
-         TAX
-         LDA #$d0          ;First, cheat the center
-         STA CZ,X         ;by putting it at (0,0,200); note radar is object 0
-         LDA #$00          ; WAS 03! ;(so projection will work out correctly -- don't want
-         STA HCZ,X        ;negative points!)
+.text
 
-         LDX #8
-lback    LDA IDENTITY,X
-         STA VIEWMAT,X    ;Don't add any extra viewpoint rotation
-         DEX
-         BPL lback
+bufferY .dsb MAXSHIPS*2
+bufferZ .dsb MAXSHIPS*2
+
+DrawRadar
+.(
+	; First, cheat the center by putting it at (0,0,208)
+	; (so projection will work out correctly -- don't want
+	; negative points!)
+
+		 ldx #00	; note radar is object 0
+         jsr GetObj
+         sta POINT
+         sty POINT+1
+
+         ldy #ObjCenPos
+         lda (POINT),y
+         tax
+         lda #$d0         
+         sta CZ,X         
+         lda #$00         
+         sta HCZ,X        
+
+		 ;Don't add any extra viewpoint rotation
+
+         ldx #8
+lback    lda IDENTITY,x
+         sta VIEWMAT,X    
+         dex
+         bpl lback
+
 
          ldy #0
          sty tmp1c
          ldx #1
          jsr SetCurOb
 
-
          ; Now iterate through object list 
          jsr GetNextOb
-         cpx #0  
-         beq end2 
-loop2    
+		 ; There must be at least one planet, unless we implement witchspace
+         ;cpx #0  
+         ;beq end 
+loop    
          sta tmp1
          sty tmp1+1
   
 		 ; Is Invisible ship?
+		 ; Check if this object is not to appear on scanners:
+		 ; Basically if this is the Viewpoint Object or if it
+		 ; is some type of "invisible" object (ECMs or planets...)
+
 	     ; Check ship ID byte...
 		 ldy #ObjID
 		 lda (tmp1),y
-		 bmi skip2  ; Not visible object 
+		 bmi skip	  ; Not visible object 
 
          jsr IsInLimit  
-         beq skip2
-         inc tmp1c
-skip2
-         jsr GetNextOb
-         cpx #0
-         bne loop2
-end2
-         lda tmp1c
-         asl
-         tax
-         STX RADOBJ+1     ;Number of points
-         TXA
-         CLC
-         ADC #<RADDAT
-         STA TEMP         ;y-coords
-         LDA #>RADDAT
-         ADC #00
-         STA TEMP+1
-         TXA
-         ADC TEMP
-         STA POINT        ;z-coords
-         LDA TEMP+1
-         ADC #00
-         STA POINT+1
-
-         LDY #00          ;Order doesn't matter
-         sty tmp1c
-         ldx #1 
-         jsr SetCurOb
-         jsr GetNextOb
-         cpx #0
-         beq end
-loop    
-         sta tmp1
-         sty tmp1+1
-
-		 ; Is Invisible ship?
-	     ; Check ship ID byte...
-		 ldy #ObjID
-		 lda (tmp1),y
-		 bmi skip  ; Not visible object 
-
-         jsr IsInLimit
          beq skip
 
          ldy #ObjCenPos
-         lda (tmp1),Y
+         lda (tmp1),y
          tax
         
          ldy tmp1c
         
-         LDA HCX,X
-         STA RADDAT,Y
+         lda HCX,x
+         sta RADDAT,y
+		 sta RADDAT+1,y ; Add a second point to simulate Elite's radar at (x,0,z)
 
-         LDA HCY,X      ; Y is divided by 4 (avoid long stalks)
+         lda HCY,x      ; Y is divided by 4 (avoid long stalks)
          cmp #80
          ror
          ;cmp #80
          ;ror
-         STA (TEMP),Y
-         
-
-         LDA HCZ,X
-         STA (POINT),Y
-
-         ; Add a second point to simulate Elite's radar at (x,0,z)
-         
-         lda RADDAT,Y
-         sta RADDAT+1,Y
-         lda (POINT),Y
-         iny
-         sta (POINT),Y
-         
+         sta bufferY,y
          lda #0
-         sta (TEMP),Y 
+         sta bufferY+1,y ; Add a second point to simulate Elite's radar at (x,0,z)
+         
+
+         lda HCZ,x
+         sta bufferZ,y
+		 sta bufferZ+1,y	; Add a second point to simulate Elite's radar at (x,0,z)
 
          inc tmp1c
          inc tmp1c
 
-skip         
+		 ; Should check we are not getting out of buffer space, if we are to limit it
+		 ; which would be a good idea, since we have many possible objects
+		 ; but should not have much visible in radar.
+skip
          jsr GetNextOb
          cpx #0
-         BNE loop        ;0 is radar object
+         bne loop
 end
-         LDA XOFFSET      ;Change coordinate offsets
-         PHA
-         LDA YOFFSET
-         PHA
-         LDA #RADOFFX
-         STA XOFFSET      ;Upper-left cornerof screen
-         LDA #RADOFFY
-         STA YOFFSET
 
-         LDX #00
-         JSR RotDraw
+		; Copy the points to the Radar Data Points.
+		; This is needed as we don't know in advance
+		; how many points it will have and they should be
+		; stored in the data consecutively X1..Xn,Y1..Yn,Z1..Zn
 
-         PLA
-         STA YOFFSET
-         PLA
-         STA XOFFSET
-         jmp DrawLollipops
-.)
 
+		ldy tmp1c		; Number of points
+		sty RADOBJ+1    ; Store in Radar data
+		tya
+		clc
+		adc #<RADDAT
+        sta _smc_destY+1        ;y-coords
+        lda #>RADDAT
+        adc #00
+        sta _smc_destY+2
+        tya
+        adc _smc_destY+1
+        sta _smc_destZ+1        ;z-coords
+        lda _smc_destY+2
+        adc #00
+        sta _smc_destZ+2
+
+		dey
+loopcopy
+		lda bufferY,y
+_smc_destY
+		sta $dead,y
+		lda bufferZ,y
+_smc_destZ
+		sta $dead,y
+		dey
+		bpl loopcopy
+	
+
+		 ; Cheat the coordinate offsets to the 
+		 ; position where the radar is.
+         lda XOFFSET      
+         pha
+         lda YOFFSET
+         pha
+         lda #RADOFFX
+         sta XOFFSET      
+         lda #RADOFFY
+         sta YOFFSET
+
+		 ; Rotate and project!	
+         ldx #00
+         jsr RotDraw
+
+		 ; Get position of the centre of the screen
+		 ; back.
+         pla
+         sta YOFFSET
+         pla
+         sta XOFFSET
+
+		 ; Draw the hockey sticks !!
 
 ; Draws lollipops at rotated center positions
 ; It seems that a further check should see if
@@ -234,6 +244,79 @@ end
 ;
 ; We know x is in the interval -94..95 and maybe
 ; that height of stalk is also in that range?
+
+
+         ; Heads
+; a=%000001 (1), plot, iny, a=%110000, plot
+; a=%000010 (2), a=%000011 (3), plot, iny, a=%100000, plot
+; a=%000100 (4), a=%000111 (7), plot
+; a=%001000 (8), a=%001110 (14), plot
+; a=%010000 (16),a=%011100 (28), plot
+; a=%100000 (32),a=%111000 (56), plot
+
+         lda RADOBJ+1
+         sta countobjs
+         beq elrts
+ 
+		 ;Now plot each point
+loop2    ldy countobjs 
+         dey
+
+         lda PLISTX,y   ; X1 the same as X2
+         sta savX,y
+         tax        
+         stx tmp       ; Save X2 for later use (head)
+
+         lda PLISTY-1,y   ; Y2
+         sta savY-1,y    
+         sta tmp+1     ; Save Y2 for later use (head)
+
+         lda PLISTY,y   ; Y1
+         sta savY,y
+         tay
+         sec
+         sbc tmp+1      ; Y1-Y2 (heigth)
+
+         beq next       ; Just draw the head...
+         bmi DD
+         jsr DrawUp
+         jmp next  
+DD       jsr DrawDown     
+         
+next
+         ; Draw the head
+         ldx tmp
+         ldy tmp+1
+         jsr pixel_address_real
+         eor (tmp0),y
+         sta (tmp0),y
+
+         ldx tmp
+         ldy tmp+1
+         inx
+         jsr pixel_address_real
+         eor (tmp0),y
+         sta (tmp0),y
+
+
+ /*        ldx tmp
+         ldy tmp+1
+         inx
+		 inx
+         jsr pixel_address_real
+         eor (tmp0),y
+         sta (tmp0),y
+*/
+         dec countobjs	
+         dec countobjs	
+         bne loop2
+elrts    
+		 rts              ;Whew!
+
+
+.)
+
+
 
 
 ;savX .dsb MAXSHIPS	; defined in data.s
@@ -292,90 +375,16 @@ next
          sta (tmp0),y
 */
        
-skip
          dec countobjs;DEC RADOBJ+1
          dec countobjs;dec RADOBJ+1 
          bne loop2
-elrts    RTS              ;Whew!
-
-
+elrts    
+		 rts              ;Whew!
 
 .)
 
 
-; Heads
-; a=%000001 (1), plot, iny, a=%110000, plot
-; a=%000010 (2), a=%000011 (3), plot, iny, a=%100000, plot
-; a=%000100 (4), a=%000111 (7), plot
-; a=%001000 (8), a=%001110 (14), plot
-; a=%010000 (16),a=%011100 (28), plot
-; a=%100000 (32),a=%111000 (56), plot
 
-
-DrawLollipops
-.(
-         lda RADOBJ+1
-         sta countobjs
-         beq elrts
- 
-loop2    ldy countobjs ;LDY RADOBJ+1     ;Now plot each point
-         DEY
-
-         lda PLISTX,y   ; X1 the same as X2
-         sta savX,y
-         tax        
-         stx tmp       ; Save X2 for later use (head)
-
-         lda PLISTY-1,y   ; Y2
-         sta savY-1,y    
-         sta tmp+1     ; Save Y2 for later use (head)
-
-         lda PLISTY,y   ; Y1
-         sta savY,y
-         tay
-         sec
-         sbc tmp+1      ; Y1-Y2 (heigth)
-
-         beq next       ; Just draw the head...
-         bmi DD
-         jsr DrawUp
-         jmp next  
-DD       jsr DrawDown     
-         
-next
-                         
-         ; Draw the head
-         ldx tmp
-         ldy tmp+1
-         jsr pixel_address_real
-         eor (tmp0),y
-         sta (tmp0),y
-
-         ldx tmp
-         ldy tmp+1
-         inx
-         jsr pixel_address_real
-         eor (tmp0),y
-         sta (tmp0),y
-
-
- /*        ldx tmp
-         ldy tmp+1
-         inx
-		 inx
-         jsr pixel_address_real
-         eor (tmp0),y
-         sta (tmp0),y
-*/
-skip
-         dec countobjs;DEC RADOBJ+1
-         dec countobjs;dec RADOBJ+1 
-         bne loop2
-elrts    RTS              ;Whew!
-
-
-
-.)
 
 DrawUp
 .(
@@ -432,48 +441,18 @@ noinc
 .)
 
 
-; This function checks if the object whose id is in reg X 
-; is to be displayed... Checks for planets, debris, ECMS...
-; Returns Z=0 if it is or Z=1 else.
 
-#ifdef 0
-// inlined
-IsAppearing
-.(
- 
-   ; Check if this object is not to appear on scanners:
-   ; Basically if this is the Viewpoint Object or if it
-   ; is some type of "invisible" object (ECMs or planets...)
-   ;cpx #1        ; Check if this object is the viewpoint object (our ship)
-   ;beq skip
-
-    ; Invisible ship
-    ; Check ship ID byte...
-    ldy #ObjID
-    lda (tmp1),y
-    bmi skip  ; Not visible object 
-
-   lda #$ff
-   rts
-skip
-   lda #0
-   rts    
-
-
-.)
-
-#endif
-
-
-; This function checks if the object whose pos in the list is in
-; reg X is near enough to be displayed on the radar.
+; This function checks if the object whose pointer is in tmp1
+; is near enough to be displayed on the radar.
+; In reg X we have the object's index.
 ; Returns Z=0 if it is or Z=1 else.
 
 
 IsInLimit
 .(
+		stx savindex+1
         ldy #ObjCenPos
-        lda (tmp1),Y
+        lda (tmp1),y
         tax
  
          ; Check if it is out of range. BBC Code is
@@ -481,9 +460,7 @@ IsInLimit
          ; if (d&0xc000) {
          ; return; // far away
          ;}   
-         ; PROBLEM List of pointers needs the number of points, before this loop...!
-         ; So a loop checking is run twice
-
+ 
          lda HCX,x
          bpl nothingX
          eor #$ff
@@ -530,13 +507,18 @@ nothingZ
          bcs skip   
 
          lda #$ff
-         bne afters
+         rts		; Returns with Z=0 (it is in limit)
 skip
-         lda #0
-afters  
-   
-         rts    
-
+		 ; Would be nice to take this opportunity to make it
+		 ; dissappear from the 3D world.
+savindex
+		ldx #00	; SMC
+		lda _flags,x
+		ora #IS_DISAPPEARING
+		sta _flags,x
+		lda #0
+		sta _ttl,x	
+        rts			; Returns with Z=1 due to the lda #0...
 .)
 
 
@@ -629,14 +611,14 @@ compass_dot
     lda _VectZ+1
 	php
 	ldx invert
-	beq nothing
+	beq nothing2do
 	plp
 	lda #$ff
 	php
-nothing
+nothing2do
 	plp
     bmi end
-    jsr inner_dot
+    jmp inner_dot
 end
     rts
 .)
@@ -752,10 +734,10 @@ set_compass
     lda HCZ,x
     sta _VectZ+1
 
-    lda #189;#171
+    lda #189
 	sta compass_x
 	sta sdx
-    lda #148;#155
+    lda #148
 	sta compass_y
 	sta sdy
 	jmp compass_dot

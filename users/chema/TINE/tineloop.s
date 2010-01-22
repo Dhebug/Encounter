@@ -402,10 +402,6 @@ nochange
 	; Draw all objects
     jsr DrawAllVis   
 
- ;   ; Erase & Draw radar
- ;   jsr EraseRadar   
- ;   jsr DrawRadar
-
 	; Plot the starfield, the crosshair and any lasers (ours and from others)
     jsr PlotStars
 	jsr _DrawCrosshair
@@ -1197,14 +1193,14 @@ galhyper
 .(
         lda #SCR_FRONT
         cmp _current_screen
-        bne end
+        bne global_end
 		lda invert
-		bne end
+		bne global_end
 		
 		; Test if we have the Galactic Hyperspace equipped
 		lda _equip
 		and #%10000000
-		beq end
+		beq global_end
 
  		; If too close to planet cannot jump
 		lda _planet_dist
@@ -1225,7 +1221,7 @@ dojump
 		and #%01111111
 		sta _equip
 		jmp do_galjump
-end
++global_end
 		rts
 .)
 
@@ -1234,10 +1230,10 @@ jumphyper
 .(
 		lda #SCR_FRONT
         cmp _current_screen
-        bne nothing
+        bne global_end
 
 		lda invert
-		bne nothing
+		bne global_end
 
 		; Compare current_planet with dest_planet too see if it is a "bad jump"
 		; and simply ignore
@@ -1281,6 +1277,7 @@ dojump
 .)		
 ;1
 frontview
+.(
         lda #SCR_FRONT
         cmp _current_screen
         beq nothing
@@ -1299,55 +1296,66 @@ notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing
         rts
+.)
 ;2
-info    
+info
+.(    
 	jsr SndPic
     lda #SCR_INFO
     sta _current_screen
     jmp _displayinfo
+.)
 ;3
-sysinfo    
+sysinfo
+.(    
 	jsr SndPic
     lda #SCR_SYSTEM
     sta _current_screen
     jmp _printsystem
-
+.)
 ;4
 short_chart
+.(
 	jsr SndPic
     lda #SCR_CHART
     sta _current_screen
     jmp _plot_chart
+.)
 ;5
 gal_chart
+.(
 	jsr SndPic
     lda #SCR_GALAXY
     sta _current_screen
     jmp _plot_galaxy
-
+.)
 ;6
 market
+.(
 	jsr SndPic
     lda #SCR_MARKET
     sta _current_screen
     jmp _displaymarket
-
+.)
 ;7
 equip
+.(
 	jsr SndPic
     lda #SCR_EQUIP
     sta _current_screen
     jmp _displayequip
-
+.)
 ;0
 loadsave
+.(
 	jsr SndPic
 	lda #SCR_LOADSAVE
 	sta _current_screen
 	jmp _displayloadsave
-
+.)
 ;R
 splanet
+.(
 	jsr SndPic
     lda _current_screen
     cmp #SCR_GALAXY
@@ -1367,7 +1375,7 @@ doit
     jsr put_code
     jsr gets
     jmp _search_planet    ; This is jsr/rts
-
+.)
 
 launch_pod
 .(
