@@ -27,7 +27,7 @@ _name			.asc "Jameson"          ; Commander's name (10 chars plus ending 0)
 _shipshold		.dsb 17		            ; Contents of cargo bay
 _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
-_cash			.byt $d0,$07            ; Four bytes for cash
+_cash			.byt $e8,$03            ; Four bytes for cash
 				.byt $10,$00
 _fuel			.byt 70                 ; Amount of fuel
 _fluct			.byt 0                  ; Price fluctuation
@@ -56,7 +56,7 @@ _default_commander
 				.dsb 17		            ; Contents of cargo bay
 				.byt 7                  ; Current planet
 				.byt 1                  ; Galaxy number (1-8)
-				.byt $d0,$07            ; Four bytes for cash (200.0)
+				.byt $e8,$03            ; Four bytes for cash (100.0)
 				.byt $00,$00
 				.byt 70                 ; Amount of fuel
 				.byt 0                  ; Price fluctuation

@@ -16,10 +16,10 @@ SET OSDKLINK=-B
 SET OSDKFILE=main
 SET OSDKFILE=%OSDKFILE% oobj3d\lib3d oobj3d\obj3d oobj3d\filler oobj3d\LineDraw 
 SET OSDKFILE=%OSDKFILE% oobj3d\clip oobj3d\mextra oobj3d\circle oobj3d\debris
-SET OSDKFILE=%OSDKFILE% data ships radar stars random tinefuncs
-SET OSDKFILE=%OSDKFILE% text tineinc galaxy cockpit graphics
-SET OSDKFILE=%OSDKFILE% tactics universe tineloop keyboard disk sound tail
-SET OSDKFILE=%OSDKFILE% oobj3d\lib3dtab models music dictc
+SET OSDKFILE=%OSDKFILE% graphics random ships data stars  radar tinefuncs
+SET OSDKFILE=%OSDKFILE% text tineinc galaxy cockpit keyboard disk 
+SET OSDKFILE=%OSDKFILE% tactics universe tineloop sound
+SET OSDKFILE=%OSDKFILE% tail oobj3d\lib3dtab models music dictc
 
 
 :: List of files to put in the DSK file.
