@@ -280,8 +280,8 @@ AIIsAngry   .byt 00 ; Angry status (with target)
 
 ;From radar.s
 ; To store objects for plotting the radar
-savX .dsb MAXSHIPS
-savY .dsb MAXSHIPS
+radar_savX .dsb MAX_RADAR_POINTS*2
+radar_savY .dsb MAX_RADAR_POINTS*2
 
 ; From tactics.s
 

@@ -14,8 +14,7 @@ RADOBJ
 
 ; Point list
 
-RADDAT   .dsb MAXSHIPS*6
-
+RADDAT   .dsb MAX_RADAR_POINTS*6
 
 
 CreateRadar
@@ -80,8 +79,11 @@ tmp1c .byt 0
 
 .text
 
-bufferY .dsb MAXSHIPS*2
-bufferZ .dsb MAXSHIPS*2
+;bufferY .dsb MAX_RADAR_POINTS*2
+;bufferZ .dsb MAX_RADAR_POINTS*2
+
+#define bufferY str_buffer
+#define bufferZ str_buffer+MAX_RADAR_POINTS*2
 
 DrawRadar
 .(
@@ -119,8 +121,8 @@ lback    lda IDENTITY,x
          ; Now iterate through object list 
          jsr GetNextOb
 		 ; There must be at least one planet, unless we implement witchspace
-         ;cpx #0  
-         ;beq end 
+         cpx #0  
+         beq end 
 loop    
          sta tmp1
          sty tmp1+1
@@ -168,6 +170,9 @@ loop
 		 ; Should check we are not getting out of buffer space, if we are to limit it
 		 ; which would be a good idea, since we have many possible objects
 		 ; but should not have much visible in radar.
+		 lda tmp1c
+		 cmp #(MAX_RADAR_POINTS*2)
+		 beq end
 skip
          jsr GetNextOb
          cpx #0
@@ -182,6 +187,9 @@ end
 
 		ldy tmp1c		; Number of points
 		sty RADOBJ+1    ; Store in Radar data
+		bne cont 
+		rts
+cont
 		tya
 		clc
 		adc #<RADDAT
@@ -255,24 +263,24 @@ _smc_destZ
 ; a=%100000 (32),a=%111000 (56), plot
 
          lda RADOBJ+1
-         sta countobjs
          beq elrts
- 
+         sta countobjs
+  
 		 ;Now plot each point
 loop2    ldy countobjs 
          dey
 
          lda PLISTX,y   ; X1 the same as X2
-         sta savX,y
+         sta radar_savX,y
          tax        
          stx tmp       ; Save X2 for later use (head)
 
          lda PLISTY-1,y   ; Y2
-         sta savY-1,y    
+         sta radar_savY-1,y    
          sta tmp+1     ; Save Y2 for later use (head)
 
          lda PLISTY,y   ; Y1
-         sta savY,y
+         sta radar_savY,y
          tay
          sec
          sbc tmp+1      ; Y1-Y2 (heigth)
@@ -332,14 +340,14 @@ EraseRadar
 loop2    ldy countobjs      ;Now plot each point
          dey
 
-         lda savX,y   ; X1 the same as X2
+         lda radar_savX,y   ; X1 the same as X2
          tax        
          stx tmp       ; Save X2 for later use (head)
 
-         lda savY-1,y   ; Y2
+         lda radar_savY-1,y   ; Y2
          sta tmp+1     ; Save Y2 for later use (head)
 
-         lda savY,y   ; Y1
+         lda radar_savY,y   ; Y1
          tay
          sec
          sbc tmp+1      ; Y1-Y2 (heigth)
