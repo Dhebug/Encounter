@@ -3115,8 +3115,8 @@ _displayinfo
     jsr perform_CRLF
     jsr perform_CRLF
 
-    lda #A_FWCYAN
-    jsr put_code
+    ;lda #A_FWCYAN
+    ;jsr put_code
     lda #<str_present
     ldx #>str_present
     jsr print
@@ -3129,8 +3129,8 @@ loop
     bne loop
     jsr print_planet_name
     jsr perform_CRLF
-    lda #A_FWCYAN
-    jsr put_code
+    ;lda #A_FWCYAN
+    ;jsr put_code
     lda #<str_hyper
     ldx #>str_hyper
     jsr print
@@ -3164,8 +3164,8 @@ loop
     jsr pr_cash
     jsr perform_CRLF
 
-    lda #A_FWCYAN
-    jsr put_code
+    ;lda #A_FWCYAN
+    ;jsr put_code
     lda #<str_status
     ldx #>str_status
     jsr print
@@ -3174,8 +3174,8 @@ loop
     jsr print2
     jsr perform_CRLF
 
-    lda #A_FWCYAN
-    jsr put_code
+    ;lda #A_FWCYAN
+    ;jsr put_code
     lda #<str_rating
     ldx #>str_rating
     jsr print
@@ -3238,9 +3238,9 @@ pr_colon
 .(
     lda #<str_colon
     ldx #>str_colon
-    jsr print
-    lda #A_FWWHITE
-    jmp put_code
+    jmp print
+    ;lda #A_FWWHITE
+    ;jmp put_code
 .)
 pr_sys
 .(
@@ -3716,8 +3716,9 @@ _displayloadsave
 	jsr put_code
     ldx #>str_loadsavetitle
 	lda #<str_loadsavetitle
-    jsr print
+    jsr printnl
 
+/*
     ;jsr perform_CRLF
     ;jsr perform_CRLF
 
@@ -3727,9 +3728,8 @@ _displayloadsave
 
     jsr perform_CRLF
     lda #A_FWCYAN
-    
+*/    
     jsr perform_CRLF
-
     dec capson    
     
     ; Loop thru the 8 slots
@@ -3860,8 +3860,8 @@ slot_offset
 do_loadsave
 .(
 	jsr prepare_area
-    lda #(A_FWRED)
-    jsr put_code
+    ;lda #(A_FWRED)
+    ;jsr put_code
 	ldx #>str_doloadsave
 	lda #<str_doloadsave
 	jsr printnl
@@ -4149,7 +4149,7 @@ instructions
 	ldx #0
 	ldy #200-6
 	jsr gotoXY
-    lda #(A_FWRED)
+    lda #(A_FWMAGENTA)
     jsr put_code
 	ldx _current_screen
 	dex

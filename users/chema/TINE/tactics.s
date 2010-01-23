@@ -670,9 +670,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<($f8e-450);f07d ;$f8e
+    lda #<$f8e-400;-500);f07d ;$f8e
     sta op2
-    lda #>($f8e-450);f07d ;$f8e
+    lda #>$f8e-400;-500);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar

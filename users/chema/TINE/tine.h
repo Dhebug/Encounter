@@ -15,16 +15,19 @@
 /* Maximum number of simultaneous missiles (for AI ships)   */
 #define MAX_MISSILES 2
 
+/* Maximum number of objects in radar */
+#define MAX_RADAR_POINTS 10
+
 /* Some definitions for frameskipping when rate ges too low */
 /* Use the technique of drawing odd/all/odd/all... scans    */
-//#define ALTSCANS
+#define ALTSCANS
 
 /* The next thresholds are in units of IRQs... now at 25hz  */
 /* Threshold for alternate scan technique, the lower one	*/
 #define MAXFRAMETIME1 7 
 /* Threshold for complete frame skipping, the higher one    */
 #ifdef ALTSCANS
-#define MAXFRAMETIME2 MAXFRAMETIME+1
+#define MAXFRAMETIME2 MAXFRAMETIME1+1
 #else
 #define MAXFRAMETIME2 MAXFRAMETIME1
 #endif

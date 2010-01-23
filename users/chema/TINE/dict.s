@@ -1,4 +1,24 @@
 
+
+
+#define A_FWBLACK        0
+#define A_FWRED          1
+#define A_FWGREEN        2
+#define A_FWYELLOW       3
+#define A_FWBLUE         4
+#define A_FWMAGENTA      5
+#define A_FWCYAN         6
+#define A_FWWHITE        7
+#define A_BGBLACK       16
+#define A_BGRED         17
+#define A_BGGREEN       18
+#define A_BGYELLOW      19
+#define A_BGBLUE        20
+#define A_BGMAGENTA     21
+#define A_BGCYAN        22
+#define A_BGWHITE       23
+
+
 __texts_start
 
 
@@ -682,25 +702,31 @@ str_commander
     .asc "Commander"
     .byt 0
 str_present
+	.byt A_FWCYAN
     .asc "Present"
     .byt 0
 str_hyper
+	.byt A_FWCYAN
     .asc "Hyperspace"
     .byt 0
 str_system
+	.byt A_FWCYAN
     .asc "System"
     .byt 0
 ;str_fuel 
 ;    .asc "Fuel"
 ;    .byt 0
 str_status
+	.byt A_FWCYAN
     .asc "Legal Status"
     .byt 0
 str_rating
+	.byt A_FWCYAN
     .asc "Rating"
     .byt 0
 str_colon
     .asc ": "
+	.byt A_FWWHITE
     .byt 0
 
 ; Legal status
@@ -933,7 +959,9 @@ str_loadsaveempty
 	.asc "-- Empty Slot --"
 	.byt 0
 str_doloadsave
-	.asc "(S)ave, (L)oad, (Q)uit"
+	.byt $0c
+	.byt (A_FWRED)
+	.asc "(S)ave, (L)oad or (Q)uit?"
 	.byt 0
 str_galslot
 	.asc "Gal: "
@@ -941,6 +969,19 @@ str_galslot
 str_sysslot
 	.asc "Sys: "
 	.byt 0
+
+; Other informative messages
+str_land
+	.byt $0c
+	.byt (A_FWGREEN)
+	.asc "  Prepare for landing, Commander    "
+	.byt 0
+str_launch
+	.byt $0c
+	.byt (A_FWGREEN)
+	.asc " Prepare for launching, Commander   "
+	.byt 0
+
 
 ;; For in-screen instructions
 /*

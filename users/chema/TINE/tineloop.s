@@ -218,7 +218,22 @@ init_front_view
 
 	jsr clr_hires
 	jsr load_frame
-	;jsr _DrawFrameBorder   
+
++_patch_launch_msg
+	lda #0			;SMC
+	bne nomsg
+
+	ldx #6
+	ldy #40
+	jsr gotoXY
+	ldx #>str_launch
+	lda #<str_launch
+	jsr print
+	jsr wait
+nomsg
+	lda #1
+	sta _patch_launch_msg+1
+
 	jsr _DoubleBuffOn
 
 	;jmp _FirstFrame	; Let the program flow...
@@ -306,6 +321,17 @@ set_planet_distance
 .)
 
 
+wait
+.(
+	lda #0
+	sta counter
+loop
+	lda counter
+	cmp #25*4
+	bcc loop
+	rts
+.)
+
 dock
 .(
 	; Docking ship... must call docking sequence
@@ -316,6 +342,14 @@ dock
     jsr save_frame
 l1
     dec _docked
+
+	ldx #6
+	ldy #40
+	jsr gotoXY
+	ldx #>str_land
+	lda #<str_land
+	;jsr print
+	jsr wait
     jsr info
     jmp _TineLoop
 .)
@@ -1287,11 +1321,14 @@ frontview
         beq notdocked 
 		lda #0
 		sta invert
+
         ; Exit to space...
 		jsr CreateEnvironment
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
         ; to decide if we are exitting hyper or leaving planet.
         inc _docked     ; docked is either ff or 0, this gets it back to 0,
+		lda #0
+		sta _patch_launch_msg+1
 notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing
@@ -1956,3 +1993,7 @@ ONEMOON
     .byt 1            ;Number of vertices
     .byt 5        ;Fill pattern
     .byt 0      ;Vertices
+
+
+
+
