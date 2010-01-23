@@ -53,8 +53,6 @@ unsigned char Header[]=
 
 
 
-#define NB_ARG	3
-
 
 /**
  * argv[1] - Original filename (headerless raw binary)
@@ -83,7 +81,8 @@ void main(int argc,char *argv[])
 		"\r\n"
 		"Parameters:\r\n" 
 		"  <options> <sourcefile> <destinationfile> <loadadress>\r\n"
-		"  hexadecimal adress should be prefixed by a $ symbol\r\n"
+		"  hexadecimal address should be prefixed by a $ symbol\r\n"
+		"  and should not be present in -h0 mode\r\n"
 		"\r\n"
 		"Options:\r\n" 
 		"  -a[0/1] for autorun (1) or non autorun (0)\r\n"
@@ -92,6 +91,7 @@ void main(int argc,char *argv[])
 		"\r\n"
 		"Exemple:\r\n"
 		"  {ApplicationName} -a1 final.out osdk.tap $500\r\n"
+		"  {ApplicationName} -a1 h0 final.out osdk.tap\r\n"
 		);
 
 	bool flag_auto=true;
@@ -128,10 +128,10 @@ void main(int argc,char *argv[])
 	}
 
 
-	int	adress_start;
+	int	adress_start=0;
 	if (flag_header)
 	{
-		if (cArgumentParser.GetParameterCount()!=NB_ARG)
+		if (cArgumentParser.GetParameterCount()!=3)
 		{
 			//
 			// Wrong number of arguments
@@ -146,7 +146,7 @@ void main(int argc,char *argv[])
 	}
 	else
 	{
-		if (cArgumentParser.GetParameterCount()!=NB_ARG)
+		if (cArgumentParser.GetParameterCount()!=2)
 		{
 			//
 			// Wrong number of arguments
@@ -162,14 +162,6 @@ void main(int argc,char *argv[])
 	//
 	const char *filename_src=cArgumentParser.GetParameter(0);
 
-	const char	*filename_dst;
-
-	int		handle_src;
-	int		handle_dst;
-
-	int		adress_end;
-
-	void	*ptr_buf;
 
 	struct _finddata_t 	file_info;
 
@@ -177,12 +169,13 @@ void main(int argc,char *argv[])
 	{
 		ShowError("file not found");
 	}   
-    if (!(handle_src=_open(filename_src,O_BINARY|O_RDONLY,0)))	   
+	int handle_src=_open(filename_src,O_BINARY|O_RDONLY,0);
+    if (handle_src==-1)
 	{
 		ShowError("unable to open source file");
 	}
 
-	ptr_buf=malloc(file_info.size);
+	void *ptr_buf=malloc(file_info.size);
 	if (!ptr_buf)
 	{
 		ShowError("not enough memory");
@@ -197,20 +190,20 @@ void main(int argc,char *argv[])
 	//
 	// Write file
 	//
-	filename_dst=cArgumentParser.GetParameter(1);
-    if (!(handle_dst=_open(filename_dst,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE )))
+	const char *filename_dst=cArgumentParser.GetParameter(1);
+	int handle_dst=_open(filename_dst,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE);
+    if (handle_dst==-1)
 	{
 		ShowError("unable to create destination file");
 	}
 
-	size_t	size_header;
-
+	size_t size_header;
 	if (flag_header)
 	{
 		size_header=sizeof(Header);
 
 		//adress_start=0x800;
-		adress_end	=adress_start+file_info.size-1;
+		int adress_end	=adress_start+file_info.size-1;
 		//flag_auto=true;
 
 		if (flag_auto)	Header[7]=0xC7;

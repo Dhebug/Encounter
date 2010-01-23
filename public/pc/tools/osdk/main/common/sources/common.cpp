@@ -53,7 +53,7 @@ void ShowError(const char *message)
 	}
 
 	// Show the resulting message on screen
-	printf("%s",cErrorMessage.c_str());
+	printf("\r\n%s\r\n",cErrorMessage.c_str());
  	getch();
 	exit(1);
 }
@@ -73,7 +73,7 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
 	// open the file
 	cBufferSize=file_info.size;
 	int nHandle=_open(pcFileName,O_BINARY|O_RDONLY,0);
-    if (!nHandle)
+    if (nHandle==-1)
 	{
 		return false;
 	}
@@ -105,8 +105,7 @@ bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize)
 {
 	// Open file
 	int nHandle=_open(pcFileName,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE);
-
-    if (!nHandle)
+    if (nHandle==-1)
 	{
 		return false;
 	}
@@ -155,7 +154,52 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
 	while (1)
 	{
 		char car=*ptr_read++;
+		switch (car)
+		{
+		case 0:
+		case 0x0D:
+		case 0x0A:
+			{
+				//
+				// Find a end of line.
+				// Patch it with a "0"
+				// and insert the line in the container
+				//
+				int size_line=ptr_read-ptr_line-1;
+				std::string	new_line(ptr_line,size_line);
+				cTextData.push_back(new_line);
 
+				line_count++;
+
+				if (size_line>longest_line)
+				{
+					longest_line=size_line;
+				}
+
+				if (!car)
+				{
+					//
+					// Finished parsing
+					//
+					free(ptr_buffer_void);
+					return true;
+				}
+				if ( (car==0x0D) && ((*ptr_read)==0x0A) )
+				{
+					// If we have a \r\n sequence, we skip the \n
+					ptr_read++;
+				}
+				ptr_line=ptr_read;
+				flag_new_line=true;
+			}
+			break;
+
+		default:
+			flag_new_line=false;
+			break;
+		}
+
+		/*
 		switch (car)
 		{
 		case 0:
@@ -204,6 +248,7 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
 			flag_new_line=false;
 			break;
 		}
+		*/
 	}
 }
 
@@ -226,6 +271,20 @@ int StringReplace(std::string& cMainString,const std::string& cSearchedString,co
 	return nReplaceCount;
 }
 
+std::string StringTrim(const std::string& cInputString,const std::string& cFilteredOutCharacterList)
+{
+	size_t nStartPos=cInputString.find_first_not_of(cFilteredOutCharacterList);
+	if (nStartPos!=std::string::npos)
+	{
+		size_t nEndPos=cInputString.find_last_not_of(cFilteredOutCharacterList);
+		if (nEndPos!=std::string::npos) 
+		{
+			return cInputString.substr(nStartPos,(nEndPos-nStartPos)+1);
+		}
+	}
+	// Returns an empty string: This case means that basically the input string contains ONLY characters that needed to be filtered out
+	return "";
+}
 
 
 ArgumentParser::ArgumentParser(int argc,char *argv[]) :

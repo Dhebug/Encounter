@@ -4,6 +4,7 @@
 	Version="8,00"
 	Name="PictConv"
 	ProjectGUID="{D5286405-B7D1-427E-8933-832A9D27DF8D}"
+	RootNamespace="PictConv"
 	SccProjectName="&quot;$/sources/pc/tools/oric/PictConv&quot;, TIAAAAAA"
 	SccLocalPath="."
 	SccProvider="MSSCCI:Perforce SCM"
@@ -18,8 +19,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Build\Debug"
-			IntermediateDirectory=".\Build\Debug"
+			OutputDirectory="$(SolutionDir)\Build\$(ProjectName)\Debug"
+			IntermediateDirectory="$(SolutionDir)\Build\$(ProjectName)\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -46,16 +47,16 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="includes,../common/includes"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="includes;../common/includes;sources"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;FREEIMAGE_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile=".\Build\Debug/PictConv.pch"
-				AssemblerListingLocation=".\Build\Debug/"
-				ObjectFile=".\Build\Debug/"
-				ProgramDataBaseFileName=".\Build\Debug/"
-				WarningLevel="3"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
+				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
 			/>
@@ -72,13 +73,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libs\freeimage.lib"
+				AdditionalOptions="&#x0D;&#x0A;"
+				AdditionalDependencies="libs\freeimaged.lib"
 				OutputFile="Build\Debug\PictConv_debug.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				IgnoreDefaultLibraryNames="LIBCMT "
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Build\Debug/PictConv_debug.pdb"
+				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -111,13 +113,13 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Build\Release"
-			IntermediateDirectory=".\Build\Release"
+			OutputDirectory="$(SolutionDir)\Build\$(ProjectName)\Release"
+			IntermediateDirectory="$(SolutionDir)\Build\$(ProjectName)\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -140,15 +142,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="includes,../common/includes"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="includes;../common/includes;sources"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;FREEIMAGE_LIB"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\Build\Release/PictConv.pch"
-				AssemblerListingLocation=".\Build\Release/"
-				ObjectFile=".\Build\Release/"
-				ProgramDataBaseFileName=".\Build\Release/"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -170,7 +172,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames=""
-				ProgramDatabaseFile=".\Build\Release/PictConv.pdb"
+				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -206,9 +208,13 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="Sources"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
+			<File
+				RelativePath="includes\defines.h"
+				>
+			</File>
 			<File
 				RelativePath="sources\dither_riemersma.cpp"
 				>
@@ -254,6 +260,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="includes\dithering.h"
+				>
+			</File>
+			<File
+				RelativePath="includes\FreeImage.h"
+				>
+			</File>
+			<File
 				RelativePath="sources\getpixel.cpp"
 				>
 				<FileConfiguration
@@ -276,26 +290,20 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="sources\hires.cpp"
+				RelativePath="includes\getpixel.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\sources\image.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sources\image.h"
+				>
+			</File>
+			<File
+				RelativePath="includes\infos.h"
+				>
 			</File>
 			<File
 				RelativePath="sources\pictconv.cpp"
@@ -319,39 +327,76 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
-			<File
-				RelativePath="includes\defines.h"
-				>
-			</File>
-			<File
-				RelativePath="includes\dithering.h"
-				>
-			</File>
-			<File
-				RelativePath="includes\FreeImage.h"
-				>
-			</File>
-			<File
-				RelativePath="includes\getpixel.h"
-				>
-			</File>
-			<File
-				RelativePath="includes\hires.h"
-				>
-			</File>
-			<File
-				RelativePath="includes\infos.h"
-				>
-			</File>
 			<File
 				RelativePath="includes\resource.h"
 				>
 			</File>
+			<File
+				RelativePath=".\sources\shifter_color.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sources\shifter_color.h"
+				>
+			</File>
+			<Filter
+				Name="Tests"
+				>
+				<File
+					RelativePath=".\sources\Tests\colortest.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sources\Tests\maintest.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="converters"
+				>
+				<File
+					RelativePath=".\sources\atari_converter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sources\atari_converter.h"
+					>
+				</File>
+				<File
+					RelativePath="sources\hires.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="includes\hires.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sources\oric_converter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sources\oric_converter.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="misc"

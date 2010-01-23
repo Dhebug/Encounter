@@ -108,7 +108,7 @@ bool ParseFile(const char* filename);
 
 
 
-std::string FilterLine(std::string cSourceLine)
+std::string FilterLine(const std::string& cSourceLine)
 {
 	char inpline[MAX_LINE_SIZE+1];
 	assert(sizeof(inpline)>cSourceLine.size());
@@ -245,12 +245,13 @@ int parseline(const std::string cInputLine)
 				//
 				// Read define name
 				const char* pcFilename=strtok(NULL," \"*+-;\\\n/\t,()");
-
+				/*
 				if (!stricmp(pcFilename,"GenericEditorRoutines.s"))
 				{
 					printf("toto");
 				}
 				ParseFile(pcFilename);
+				*/
 				return 0;
 			}
 			//
@@ -476,11 +477,11 @@ bool LoadLibrary(const std::string& path_library_files)
 	while (cItText!=cTextData.end())
 	{			
 		//  Get line file and parse it
-		const std::string& cCurrentLine=*cItText;
+		std::string cCurrentLine=StringTrim(*cItText);
 
 		// Lines that indicate files start with - 
-		if (cCurrentLine[0] < 32)
-			break;
+		//if (cCurrentLine[0] < 32)
+		//	break;
 
 		// Found a file indicator. Check if already used, if not start using it in table
 		if (cCurrentLine[0] == '-') 
@@ -497,7 +498,8 @@ bool LoadLibrary(const std::string& path_library_files)
                 }
 			}
 		}
-		else 
+		else
+		if (!cCurrentLine.empty())
 		{
 			// Found a label. Check if already used, if not put it in table
 			if (cLabelEntry.file_name.size()<2) 
@@ -529,86 +531,11 @@ bool LoadLibrary(const std::string& path_library_files)
 }
 
 
-/*
-unsigned char SquareTable[6100];
-
-// 0 0
-// 1 1*1 = 1
-// 2 2*2 = 4
-// 3 3*3 = 9
-
-// The nth square number can be calculated from the previous two by adding the (n - 1)th square to itself, 
-// subtracting the (n - 2)th square number, and adding 2 (n2 = 2(n - 1)2 - (n - 2)2 + 2). 
-// For example, 2×52 - 42 + 2 = 2×25 - 16 + 2 = 50 - 16 + 2 = 36 = 62.
-
-void GenerateSquareTables()
-{
-	int sq0=0;
-	int sq1=1;
-	int squared_index=2;
-	int n=2;
-
-	SquareTable[0]=0;
-	SquareTable[1]=1;
-
-	while (1)
-	{		
-		int sq2=2*sq1-sq0+2;	// n2 = 2(n-1)2 - (n-2)2 + 2
-		if (sq2>=6100)
-		{
-			break;
-		}
-
-		while (squared_index<=sq2)
-		{
-			SquareTable[squared_index++]=n;
-		}
-		n++;
-		sq0=sq1;
-		sq1=sq2;
-	}
-}
-*/
-
-unsigned char 	SquareRootTable[6100];
-unsigned int 	SquareTable[60];
-
-void GenerateSquareTables()
-{
-	unsigned int nOddValue=1;
-	unsigned int squared_index=1;
-	unsigned int squared_value=0;
-	unsigned int n=1;
-
-	SquareRootTable[0]=0;
-	SquareTable[0]=0;
-	
-	while (squared_value<6100)
-	{		
-		squared_value+=nOddValue;
-		while (squared_index<=squared_value)
-		{
-			SquareRootTable[squared_index++]=n;
-		}
-		
-		if (n<60)
-		{
-			SquareTable[n]=squared_value;
-		}
-		
-		nOddValue+=2;
-		n++;
-	}	 
-
-	printf("toto\n");
-}
 
 
 
 int main(int argc,char **argv)
 {
-	GenerateSquareTables();
-
 	//
 	// Some initialization for the common library
 	//
@@ -645,7 +572,7 @@ int main(int argc,char **argv)
 
 		
 	// Init the path_library_files variable with default library directory and the output_file_name var with the default go.s	
-	std::string path_library_files("lib6502/");
+	std::string path_library_files("lib6502\\");
 	std::string path_source_files("");
 	std::string output_file_name("go.s");
 	
@@ -928,7 +855,7 @@ int main(int argc,char **argv)
 	{
 		if (gFlagVerbose)
 		{
-			printf("Linking %s\n",gInputFileList[k]);
+			printf("Linking %s\n",gInputFileList[k].m_cFileName.c_str());
 		}
 		
 		//

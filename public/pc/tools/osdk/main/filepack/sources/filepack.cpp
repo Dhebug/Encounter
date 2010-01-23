@@ -19,6 +19,7 @@ long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
 void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
 long LZ77_ComputeDelta(void *buf_comp,long size_uncomp,long size_comp);
 
+extern unsigned char gLZ77_XorMask;
 
 
 #define NB_ARG	2
@@ -51,11 +52,17 @@ void main(int argc,char *argv[])
 		"Switches:\r\n"
 		" -pn   Packing mode\r\n"
 		"       -p0 => No header\r\n"
-		"       -p1 => Save with header\r\n"
+		"       -p1 => Save with short header [default]\r\n"
+		"       -p2 => Save with long header\r\n"
+		"\r\n"
+		" -mn   Mask type\r\n"
+		"       -m0 => 0=copy bytes / 1=new byte [default]\r\n"
+		"       -m1 => 0=new byte   / 1=copy bytes\r\n"
 		);
 
-	bool	flag_save_header=true;
-	bool	flag_pack=true;
+	int headerType=1;
+	bool flag_pack=true;
+	gLZ77_XorMask=0;
 
 	ArgumentParser cArgumentParser(argc,argv);
 
@@ -69,7 +76,19 @@ void main(int argc,char *argv[])
 		if (cArgumentParser.IsSwitch("-p"))	// Pack data
 		{
 			flag_pack=true;
-			flag_save_header=cArgumentParser.GetBooleanValue(true);
+			headerType=cArgumentParser.GetIntegerValue(1);
+		}
+		else 
+		if (cArgumentParser.IsSwitch("-m"))	// Pack data
+		{
+			if (cArgumentParser.GetBooleanValue(true))
+			{
+				gLZ77_XorMask=255;	// Invert the bitmask
+			}
+			else
+			{
+				gLZ77_XorMask=0;
+			}
 		}
 	}
 
@@ -111,10 +130,10 @@ void main(int argc,char *argv[])
 		printf("\n");
 		exit(1);
 	}
-	char *ptr_buffer=(char*)ptr_buffer_void;
+	unsigned char *ptr_buffer=(unsigned char*)ptr_buffer_void;
 
 	unsigned char *ptr_buffer_dst;
-	int size_buffer_dst;
+	unsigned int size_buffer_dst;
 
 	if (flag_pack)
 	{
@@ -122,9 +141,17 @@ void main(int argc,char *argv[])
 		// Pack file
 		//
 		int data_offset;
-		if (flag_save_header)
+		if (headerType)
 		{
-			data_offset=8;
+			if (headerType==1)
+			{
+				data_offset=4+2+2;
+			}
+			else
+			if (headerType==2)
+			{
+				data_offset=4+4+4;
+			}
 		}
 		else
 		{
@@ -141,20 +168,43 @@ void main(int argc,char *argv[])
 		//
 		// Create file header
 		//
-		if (flag_save_header)
+		if (headerType)
 		{
-			ptr_buffer_dst[0]='L';
-			ptr_buffer_dst[1]='Z';
-			ptr_buffer_dst[2]='7';
-			ptr_buffer_dst[3]='7';
+			if (headerType==1)
+			{
+				ptr_buffer_dst[0]='L';
+				ptr_buffer_dst[1]='Z';
+				ptr_buffer_dst[2]='7';
+				ptr_buffer_dst[3]='7';
 
-			ptr_buffer_dst[4]=(size_buffer_src&255);
-			ptr_buffer_dst[5]=(size_buffer_src>>8)&255;
+				ptr_buffer_dst[4]=(size_buffer_src&255);
+				ptr_buffer_dst[5]=(size_buffer_src>>8)&255;
 
-			ptr_buffer_dst[6]=(size_buffer_dst&255);   
-			ptr_buffer_dst[7]=(size_buffer_dst>>8)&255;
+				ptr_buffer_dst[6]=(size_buffer_dst&255);   
+				ptr_buffer_dst[7]=(size_buffer_dst>>8)&255;
 
-			size_buffer_dst+=8;
+				size_buffer_dst+=8;
+			}
+			else
+			if (headerType==2)
+			{
+				ptr_buffer_dst[0]='l';
+				ptr_buffer_dst[1]='Z';
+				ptr_buffer_dst[2]='7';
+				ptr_buffer_dst[3]='7';
+
+				ptr_buffer_dst[4]=(size_buffer_src&255);
+				ptr_buffer_dst[5]=(size_buffer_src>>8)&255;
+				ptr_buffer_dst[6]=(size_buffer_src>>16)&255;
+				ptr_buffer_dst[7]=(size_buffer_src>>24)&255;
+
+				ptr_buffer_dst[8]=(size_buffer_dst&255);   
+				ptr_buffer_dst[9]=(size_buffer_dst>>8)&255;
+				ptr_buffer_dst[10]=(size_buffer_dst>>16)&255;
+				ptr_buffer_dst[11]=(size_buffer_dst>>24)&255;
+
+				size_buffer_dst+=12;
+			}
 		}
 		else
 		{
@@ -176,20 +226,46 @@ void main(int argc,char *argv[])
 		//
 		// Unpack file
 		//
-		if ((ptr_buffer[0]!='L') ||
-			(ptr_buffer[1]!='Z') ||
-			(ptr_buffer[2]!='7') ||
-			(ptr_buffer[3]!='7'))
+		unsigned int size_unpacked	=0;
+		unsigned int size_packed	=0;
+		unsigned int start_offset	=0;
+
+		if ((ptr_buffer[0]=='L') && // upper case 'L'
+			(ptr_buffer[1]=='Z') &&
+			(ptr_buffer[2]=='7') &&
+			(ptr_buffer[3]=='7'))
 		{
+			// File with short header
+			size_unpacked	=ptr_buffer[4] | (ptr_buffer[5]<<8);
+			size_packed		=ptr_buffer[6] | (ptr_buffer[7]<<8);
+			start_offset	=4+2+2;
+		}
+		else
+		if ((ptr_buffer[0]=='l') &&	// lower case 'l'
+			(ptr_buffer[1]=='Z') &&
+			(ptr_buffer[2]=='7') &&
+			(ptr_buffer[3]=='7'))
+		{
+			// File with long header
+			size_unpacked	=ptr_buffer[4] | (ptr_buffer[5]<<8) | (ptr_buffer[6]<<16) | (ptr_buffer[7]<<24);
+			size_packed		=ptr_buffer[8] | (ptr_buffer[9]<<8) | (ptr_buffer[10]<<16) | (ptr_buffer[11]<<24);
+			start_offset	=4+4+4;
+		}
+		else
+		{
+			// File without header
+			size_unpacked	=size_buffer_src*3;	// random, have to be fixed somewhat...
+			size_packed		=size_buffer_src;
+			start_offset	=0;
+			/*
 			printf("\nNot a LZ77 packed file'%s'",source_name);
 			printf("\n");
 			exit(1);
+			*/
 		}
 
-		int size_unpacked	=ptr_buffer[4] | (ptr_buffer[5]<<8);
-		int size_packed		=ptr_buffer[6] | (ptr_buffer[7]<<8);
 
-		if ((size_packed+8)!=size_buffer_src)
+		if ((size_packed+start_offset)!=size_buffer_src)
 		{
 			printf("\nInvalid size in packed file'%s'",source_name);
 			printf("\n");
@@ -198,8 +274,15 @@ void main(int argc,char *argv[])
 
 		size_buffer_dst=size_unpacked;
 
+		if (size_buffer_dst>(size_buffer_src*100))
+		{
+			printf("\nInvalid depacked size in file'%s', possibly corrupted data",source_name);
+			printf("\n");
+			exit(1);
+		}
+
 		ptr_buffer_dst=new unsigned char[size_buffer_dst];
-		LZ77_UnCompress(ptr_buffer+8,ptr_buffer_dst,size_buffer_dst);
+		LZ77_UnCompress(ptr_buffer+start_offset,ptr_buffer_dst,size_buffer_dst);
 	}
 
 	if (!SaveFile(dest_name,ptr_buffer_dst,size_buffer_dst))

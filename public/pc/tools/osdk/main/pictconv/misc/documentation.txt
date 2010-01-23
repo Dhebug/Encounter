@@ -50,32 +50,48 @@ A: Actually PictConv simply tries all the possible combinations of paper, ink,
 
 Historic:
 ---------
-0.008
+
+Version 0.011
+ - Added the -o7 format to generate BASIC source codes.<br>
+ - Removed the constraints in the -f1 mode, pictures just need to be multiple of 6 in width, and no more than 240 pixel wide.
+
+Version 0.010
+ - If there is something specified after -o3 or -o4 modes, it's used as a label name to use when generating source code data.<br>
+ - If there is a 'z' specified after -f0 mode (monochrome conversion), it means that bit 6 should not be set in converted bytes<br>
+ - Added -n switch to set the number of values per line (stolen from Bin2Txt !)<br>
+
+Version 0.009
+ - New option for generating 'masks' in bits 6 and 7 based on what is presents in bits 0/1/2 and 3/4/5.<br>
+   (Twilighte's request for his new games)<br>
+ - Added a way to convert pictures to something that can be used on an Atari ST.<br>
+   (needed that for my entry to the 20 years anniversary Atari ST compo)<br>
+
+Version 0.008
  - Not finished version that try to supported inversed dithering patterns.
 
-0.007
+Version 0.007
  - Removed the timer check in the colored conversion mode. It was producing bad 
    conversion on slow computers. Anyway, if you are unlucky, a conversion could
    now take hours to perform if the tool has to perform ALL possible combinations.
 
-0.006
+Version 0.006
  - A message is given if the picture is not found or invalid.
  - Colored mode had some bugs: all now corrected ???
 
-0.005
+Version 0.005
  - Debugged the -o6 format.
  - Debugged the -f1 mode.
 
-0.004
+Version 0.004
  - Allow free size pictures (bigger than screen size except for colored mode)
 
-0.003
+Version 0.003
  - Riemersman dithering implemented 
 
-0.002
+Version 0.002
  - New version with basic dithering
 
-0.001
+Version 0.001
  - First beta release
 						
 
