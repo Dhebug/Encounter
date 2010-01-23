@@ -8,14 +8,11 @@
 * large memory model. For other compilers, you may have to replace the
 * calls to malloc() and _ffree() with straight malloc() and free() calls.
 */
-#include <malloc.h>     /* for malloc() and _ffree() */
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <malloc.h>     // for malloc() and _ffree()
+#include <math.h>		// for exp() and log()
 
-#include "freeimage.h"
 #include "getpixel.h"
+#include "image.h"
 
 
 #define max(a,b)	(((a)>(b))?(a):(b))
@@ -36,16 +33,15 @@ enum
 
 
 
-/* variables needed for the Riemersma dither algorithm */
+// variables needed for the Riemersma dither algorithm
 static int cur_x=0, cur_y=0;
 static int img_width=0, img_height=0;
 static unsigned char *img_ptr;
 
-#define SIZE 16                 /* queue size: number of pixels remembered */
-#define MAX  16                 /* relative weight of youngest pixel in the
-* queue, versus the oldest pixel */
+#define SIZE 16				// queue size: number of pixels remembered
+#define MAX  16				// relative weight of youngest pixel in the queue, versus the oldest pixel
 
-static int weights[SIZE];       /* weights for the errors of recent pixels */
+static int weights[SIZE];	// weights for the errors of recent pixels
 
 static void init_weights(int a[],int size,int max)
 {
@@ -55,8 +51,8 @@ static void init_weights(int a[],int size,int max)
 	
 	for (i=0, v=1.0; i<size; i++) 
 	{
-		a[i]=(int)(v+0.5);  /* store rounded value */
-		v*=m;               /* next value */
+		a[i]=(int)(v+0.5);  // store rounded value
+		v*=m;               // next value
 	} 
 }
 
@@ -64,14 +60,14 @@ static void init_weights(int a[],int size,int max)
 
 static void dither_pixel(unsigned char *pixel)
 {
-	static int error[SIZE]; /* queue with error values of recent pixels */
+	static int error[SIZE]; // queue with error values of recent pixels
 	int i,pvalue,err;
 	
 	for (i=0,err=0L; i<SIZE; i++)
 		err+=error[i]*weights[i];
 	pvalue=*pixel + err/MAX;
 	pvalue = (pvalue>=128) ? 255 : 0;
-	memmove(error,error+1,(SIZE-1)*sizeof error[0]);    /* shift queue */
+	memmove(error,error+1,(SIZE-1)*sizeof error[0]);    // shift queue
 	error[SIZE-1] = *pixel - pvalue;
 	*pixel=(unsigned char)pvalue;
 }
@@ -80,13 +76,13 @@ static void dither_pixel(unsigned char *pixel)
 
 static void move(int direction)
 {
-	/* dither the current pixel */
+	// dither the current pixel
 	if (cur_x>=0 && cur_x<img_width && cur_y>=0 && cur_y<img_height)
 	{
 		dither_pixel(img_ptr);
 	}
 	
-	/* move to the next pixel */
+	// move to the next pixel
 	switch (direction) 
 	{
 	case LEFT:
@@ -222,27 +218,22 @@ void dither_riemersma_2(unsigned char *image,int width,int height)
 
 
 
-void dither_riemersma_monochrom(FIBITMAP *dib,int width,int height)
+void dither_riemersma_monochrom(ImageContainer& sourceImage,int width,int height)
 {
-	unsigned char	*ptr_image;
-	unsigned char	*image;
-	int				x,y;
-	RGB				rgb;
-
-	image=(unsigned char*)malloc(width*height);
+	unsigned char *image=(unsigned char*)malloc(width*height);
 
 	//
 	// Create a mono buffer
 	//
-	ptr_image=image;
-	for (y=0;y<height;y++)
+	unsigned char *ptr_image=image;
+	for (int y=0;y<height;y++)
 	{
-		for (x=0;x<width;x++)
+		for (int x=0;x<width;x++)
 		{
-			GetColor(dib,&rgb,x,y);
-			*ptr_image++=(rgb.red+rgb.green+rgb.blue)/3;
+			RgbColor rgb=sourceImage.ReadColor(x,y);
+			*ptr_image++=(rgb.m_red+rgb.m_green+rgb.m_blue)/3;
 			/*
-			if (((rgb.red+rgb.green+rgb.blue)/3)>127)
+			if (((rgb.m_red+rgb.m_green+rgb.m_blue)/3)>127)
 			{
 				*ptr_image++=255;				
 			}
@@ -263,24 +254,25 @@ void dither_riemersma_monochrom(FIBITMAP *dib,int width,int height)
 	// Convert again
 	//
 	ptr_image=image;
-	for (y=0;y<height;y++)
+	for (int y=0;y<height;y++)
 	{
-		for (x=0;x<width;x++)
+		for (int x=0;x<width;x++)
 		{
+			RgbColor rgb;
 			if ((*ptr_image)>127)
 			{
-				rgb.red		=255;
-				rgb.green	=255;
-				rgb.blue	=255;
+				rgb.m_red		=255;
+				rgb.m_green	=255;
+				rgb.m_blue	=255;
 			}
 			else
 			{
-				rgb.red		=0;
-				rgb.green	=0;
-				rgb.blue	=0;
+				rgb.m_red		=0;
+				rgb.m_green	=0;
+				rgb.m_blue	=0;
 			}
 			ptr_image++;
-			WriteColor(dib,&rgb,x,y);
+			sourceImage.WriteColor(rgb,x,y);
 		}
 	}
 
@@ -290,38 +282,30 @@ void dither_riemersma_monochrom(FIBITMAP *dib,int width,int height)
 
 
 
-void dither_riemersma_rgb(FIBITMAP *dib,int width,int height)
+void dither_riemersma_rgb(ImageContainer& sourceImage,int width,int height)
 {
-	unsigned char	*ptr_image;
-	unsigned char	*image;
-	int				pass;
-	int				x,y;
+	RgbColor rgb1;
+	RgbColor rgb2;
+	RgbColor rgb3;
 
-	RGB				rgb1;
-	RGB				rgb2;
-	RGB				rgb3;
-	unsigned char	*prgb1;
-	unsigned char	*prgb2;
-	unsigned char	*prgb3;
+	unsigned char *image=(unsigned char*)malloc(width*height);
 
-	image=(unsigned char*)malloc(width*height);
-
-	prgb1=&rgb1.red;
-	prgb2=&rgb2.red;
-	prgb3=&rgb3.red;
-	for (pass=0;pass<3;pass++)
+	unsigned char* prgb1=&rgb1.m_red;
+	unsigned char* prgb2=&rgb2.m_red;
+	unsigned char* prgb3=&rgb3.m_red;
+	for (int pass=0;pass<3;pass++)
 	{
 		//
 		// Create a mono buffer
 		//
-		ptr_image=image;
-		for (y=pass;y<height;y+=3)
+		unsigned char *ptr_image=image;
+		for (int y=pass;y<height;y+=3)
 		{
-			for (x=0;x<width;x++)
+			for (int x=0;x<width;x++)
 			{
-				GetColor(dib,&rgb1,x,y+0);
-				GetColor(dib,&rgb2,x,y+1);
-				GetColor(dib,&rgb3,x,y+2);
+				rgb1=sourceImage.ReadColor(x,y+0);
+				rgb2=sourceImage.ReadColor(x,y+1);
+				rgb3=sourceImage.ReadColor(x,y+2);
 				*ptr_image++=(prgb1[pass]+prgb2[pass]+prgb3[pass])/3;
 			}
 		}
@@ -335,13 +319,13 @@ void dither_riemersma_rgb(FIBITMAP *dib,int width,int height)
 		// Convert again
 		//
 		ptr_image=image;
-		for (y=pass;y<height;y+=3)
+		for (int y=pass;y<height;y+=3)
 		{
-			for (x=0;x<width;x++)
+			for (int x=0;x<width;x++)
 			{
-				GetColor(dib,&rgb1,x,y+0);
-				GetColor(dib,&rgb2,x,y+1);
-				GetColor(dib,&rgb3,x,y+2);
+				rgb1=sourceImage.ReadColor(x,y+0);
+				rgb2=sourceImage.ReadColor(x,y+1);
+				rgb3=sourceImage.ReadColor(x,y+2);
 
 				if ((*ptr_image)>127)
 				{
@@ -356,9 +340,9 @@ void dither_riemersma_rgb(FIBITMAP *dib,int width,int height)
 					prgb3[pass]=0;
 				}
 				ptr_image++;
-				WriteColor(dib,&rgb1,x,y+0);
-				WriteColor(dib,&rgb2,x,y+1);
-				WriteColor(dib,&rgb3,x,y+2);
+				sourceImage.WriteColor(rgb1,x,y+0);
+				sourceImage.WriteColor(rgb2,x,y+1);
+				sourceImage.WriteColor(rgb3,x,y+2);
 			}
 		}
 	}

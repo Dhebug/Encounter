@@ -13,6 +13,19 @@
 #include <string>
 #include <vector>
 
+
+//
+// Debugging macros
+//
+#ifdef  _DEBUG
+#define _BREAK_					__asm { int 3 }
+#define _BREAK_IF_(cond)		if (cond) __asm { int 3 } else ((void)0)
+#else
+#define _BREAK_					((void)0)
+#define _BREAK_IF_(cond)		((void)0)
+#endif
+
+
 //
 // Argument parsing, error handling
 //
@@ -68,11 +81,11 @@ bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize);
 bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
 
 
-
 //
 // Preprocessing and filtering
 //
 int StringReplace(std::string& cMainString,const std::string& cSearchedString,const std::string& cReplaceString);
+std::string StringTrim(const std::string& cInputString,const std::string& cFilteredOutCharacterList=" \t\f\v\n\r");
 std::string StringFormat(const char* pFormatString,...);
 
 int ConvertAdress(const char *ptr_value);

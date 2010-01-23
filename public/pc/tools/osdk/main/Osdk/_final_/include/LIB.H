@@ -93,11 +93,11 @@ int  lprintf(const char *format,...);
 
 void file_unpack(void *ptr_dst,void *ptr_src);
 
-#define peek(address)		( *((unsigned char*)adress) )
-#define poke(address,value)	( *((unsigned char*)adress)=(unsigned char)value )
+#define peek(address)		( *((unsigned char*)address) )
+#define poke(address,value)	( *((unsigned char*)address)=(unsigned char)value )
 
-#define deek(address)		( *((unsigned int*)adress) )
-#define doke(address,value)	( *((unsigned int*)adress)=(unsigned int)value )
+#define deek(address)		( *((unsigned int*)address) )
+#define doke(address,value)	( *((unsigned int*)address)=(unsigned int)value )
 
 
 /* System data */

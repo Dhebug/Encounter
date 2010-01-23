@@ -13,11 +13,8 @@ unsigned short	DitherMask[9];
 
 void ComputeDitherMask(long position,char *chaine)
 {
-	long			i;
-	unsigned short	value;
-
-	value=0;
-	for (i=0;i<16;i++)
+	unsigned short value=0;
+	for (long i=0;i<16;i++)
 	{
 		if (chaine[i]!=' ')
 		{

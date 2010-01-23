@@ -32,7 +32,7 @@ typedef struct
 
 LZ77_TREE	BigTree[_LZ77_MAX_OFFSET+2];
 
-
+unsigned char gLZ77_XorMask=0;
 
 long LZ77_Compress(void* buf_src_void,void *buf_dest_void,long size_buf_src)
 {
@@ -306,6 +306,7 @@ long LZ77_Compress(void* buf_src_void,void *buf_dest_void,long size_buf_src)
 			*buf_dest++=(unsigned char)(value_short & 255);
 			*buf_dest++=(unsigned char)(value_short>>8);
 			size+=2;
+			if (gLZ77_XorMask)	*ptr_decoding_mask|=andvalue;
 		}
 		else
 		{
@@ -313,7 +314,7 @@ long LZ77_Compress(void* buf_src_void,void *buf_dest_void,long size_buf_src)
 			// Just put the byte, without compression
 			// and put '1' in the encoding mask
 			//
-			*ptr_decoding_mask|=andvalue;
+			if (!gLZ77_XorMask)	*ptr_decoding_mask|=andvalue;
 
 			*buf_dest++=*buf_src;
 			size++;
@@ -349,9 +350,9 @@ void LZ77_UnCompress(void* buf_src_void,void* buf_dest_void, long size)
 		if (!andvalue)
 		{
 			andvalue=1;
-			value=*buf_src++;
+			value=(*buf_src++);
 		}
-		if (value & andvalue)
+		if ((value^gLZ77_XorMask) & andvalue)
 		{ 
 			//
 			// Copy 1 unsigned char

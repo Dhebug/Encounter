@@ -60,7 +60,7 @@ public:
 	{
 	}
 
-	void Generate(std::string &ref_html);
+	void Generate(std::string &ref_html) const;
 
 	std::map<int,std::string> &GetMap()
 	{
@@ -78,7 +78,7 @@ public:
 };
 
 
-void Section::Generate(std::string &html)
+void Section::Generate(std::string &html)  const
 {
 	html+="<a name=\""+m_anchor_name+"\"></a>\r\n";
 
@@ -89,7 +89,7 @@ void Section::Generate(std::string &html)
 	html+="<th>Adress</th><th>Size</th><th>Name</th>\r\n";
 	html+="</tr>\r\n";
 
-	std::map<int,std::string>::iterator it=m_map_data.begin();
+	std::map<int,std::string>::const_iterator it=m_map_data.begin();
 	while (it!=m_map_data.end())
 	{
 		int value              =(*it).first;
@@ -126,6 +126,11 @@ void Section::Generate(std::string &html)
 
 
 
+enum INPUT_FORMAT
+{
+	INPUT_FORMAT_ORIC_XA,
+	INPUT_FORMAT_ATARI_DEVPAC,
+};
 
 
 #define NB_ARG	4
@@ -146,6 +151,8 @@ int main(int argc,char *argv[])
 		"\r\n"
 		);
 
+
+	INPUT_FORMAT inputFormat=INPUT_FORMAT_ATARI_DEVPAC;		// 0=XA / 1=Devpac
 
 	ArgumentParser cArgumentParser(argc,argv);
 
@@ -193,50 +200,122 @@ int main(int argc,char *argv[])
 	//
 	// Parse the file, and generate the list of values
 	//
-	Section section_zeropage;
+	std::map<std::string,Section>	Sections;
 
-	section_zeropage.m_anchor_name	="Zero";
-	section_zeropage.m_section_name	="Zero page";
-	section_zeropage.m_adress_size	=2;
-	section_zeropage.m_begin_adress	=0x0;
-	section_zeropage.m_end_adress	=0xFF;
+	switch (inputFormat)
+	{
+	case INPUT_FORMAT_ORIC_XA:
+		{
+			Section& section_zeropage=Sections["Zero"];
+			section_zeropage.m_anchor_name	="Zero";
+			section_zeropage.m_section_name	="Zero page";
+			section_zeropage.m_adress_size	=2;
+			section_zeropage.m_begin_adress	=0x0;
+			section_zeropage.m_end_adress	=0xFF;
 
-	Section section_normal;
-	section_normal.m_anchor_name	="Normal";
-	section_normal.m_section_name	="Normal memory";
-	section_normal.m_adress_size	=4;
-	section_normal.m_begin_adress	=0x400;
-	section_normal.m_end_adress		=0xBFFF;
+			Section& section_normal=Sections["Normal"];
+			section_normal.m_anchor_name	="Normal";
+			section_normal.m_section_name	="Normal memory";
+			section_normal.m_adress_size	=4;
+			section_normal.m_begin_adress	=0x400;
+			section_normal.m_end_adress		=0xBFFF;
 
-	Section section_overlay;
-	section_overlay.m_anchor_name	="Overlay";
-	section_overlay.m_section_name	="Overlay memory";
-	section_overlay.m_adress_size	=4;
-	section_overlay.m_begin_adress	=0xC000;
-	section_overlay.m_end_adress	=0xFFFF;
+			Section& section_overlay=Sections["Overlay"];
+			section_overlay.m_anchor_name	="Overlay";
+			section_overlay.m_section_name	="Overlay memory";
+			section_overlay.m_adress_size	=4;
+			section_overlay.m_begin_adress	=0xC000;
+			section_overlay.m_end_adress	=0xFFFF;
+		}
+		break;
+
+	case INPUT_FORMAT_ATARI_DEVPAC:
+		{
+			Section& section_zeropage=Sections["Text"];
+			section_zeropage.m_anchor_name	="Text";
+			section_zeropage.m_section_name	="Section TEXT";
+			section_zeropage.m_adress_size	=4;
+			section_zeropage.m_begin_adress	=0x00;
+			section_zeropage.m_end_adress	=0xFFFFFF;
+
+			Section& section_normal=Sections["Data"];
+			section_normal.m_anchor_name	="Data";
+			section_normal.m_section_name	="Section DATA";
+			section_normal.m_adress_size	=4;
+			section_normal.m_begin_adress	=0x00;
+			section_normal.m_end_adress		=0xFFFFFF;
+
+			Section& section_overlay=Sections["Bss"];
+			section_overlay.m_anchor_name	="Bss";
+			section_overlay.m_section_name	="Section BSS";
+			section_overlay.m_adress_size	=4;
+			section_overlay.m_begin_adress	=0x00;
+			section_overlay.m_end_adress	=0xFFFFFF;
+
+			Section& section_rs=Sections["RS"];
+			section_rs.m_anchor_name	="RS";
+			section_rs.m_section_name	="RS offsets";
+			section_rs.m_adress_size	=4;
+			section_rs.m_begin_adress	=0x00;
+			section_rs.m_end_adress	=0xFFFFFF;
+		}
+		break;
+	}
+
 
 	char *ptr_tok=strtok((char*)ptr_buffer," \r\n");
 	while (ptr_tok)
 	{
 		// Address
 		int value=strtol(ptr_tok,0,16);
-		ptr_tok=strtok(0," \r\n");
 
-		// Name
-		if (value<256)
+		switch (inputFormat)
 		{
-			// Zero page
-			section_zeropage.GetMap()[value]=ptr_tok;
-		}
-		else
-		if (value>=0xc000)
-		{
-			// Overlay memory
-			section_overlay.GetMap()[value]=ptr_tok;
-		}
-		else
-		{
-			section_normal.GetMap()[value]=ptr_tok;
+		case INPUT_FORMAT_ORIC_XA:
+			{
+				ptr_tok=strtok(0," \r\n");
+				// Name
+				if (value<256)
+				{
+					// Zero page
+					Sections["Zero"].GetMap()[value]=ptr_tok;
+				}
+				else
+				if (value>=0xc000)
+				{
+					// Overlay memory
+					Sections["Overlay"].GetMap()[value]=ptr_tok;
+				}
+				else
+				{
+					Sections["Normal"].GetMap()[value]=ptr_tok;
+				}
+			}
+			break;
+		case INPUT_FORMAT_ATARI_DEVPAC:
+			{
+				// ptr_tok:
+				// A=Absolute (rs/offsets/computations)
+				// R=Relocatable (addresses)
+				// T=TEXT
+				// D=DATA
+				// B=BSS
+				std::string section="Text";
+
+				std::string token;
+				do
+				{
+					ptr_tok=strtok(0," \r\n");
+					token=ptr_tok;
+					if (token=="A")			section="RS";
+					else if (token=="B")	section="Bss";
+					else if (token=="T")	section="Text";
+					else if (token=="D")	section="Data";
+				}
+				while (token.size()==1);
+
+				Sections[section].GetMap()[value]=token;
+			}
 		}
 		ptr_tok=strtok(0," \r\n");
 	}
@@ -259,17 +338,15 @@ int main(int argc,char *argv[])
 	html+="<table>\r\n";
 	html+="<tr>\r\n";
 
-	html+="<td valign=top>\r\n";
-	section_zeropage.Generate(html);
-	html+="</td>\r\n";
-
-	html+="<td valign=top>\r\n";
-	section_normal.Generate(html);
-	html+="</td>\r\n";
-
-	html+="<td valign=top>\r\n";
-	section_overlay.Generate(html);
-	html+="</td>\r\n";
+	std::map<std::string,Section>::const_iterator it(Sections.begin());
+	while (it!=Sections.end())
+	{
+		const Section& section=it->second;
+		html+="<td valign=top>\r\n";
+		section.Generate(html);
+		html+="</td>\r\n";
+		++it;
+	}
 
 	html+="</tr>\r\n";
 	html+="</table>\r\n";

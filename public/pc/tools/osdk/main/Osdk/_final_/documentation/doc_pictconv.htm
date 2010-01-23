@@ -31,34 +31,35 @@ PC paint program (PaintShopPro, PhotoShop, ...), in a format displayable on the 
 <pre>
 	%OSDK%\bin\PictConv [switches] source_picture destination_file 
 </pre>
-<p>Supported formats for the source picture are BMP, PCX, PNG, TGA and TIFF.
+<p>Supported formats for the source picture is everything that FreeImage supports (BMP, PCX, PNG, TGA and TIFF among other).
 </p>
 
 
 <p id=chapter>Switches</p>
-
 <ul>
-<li>The -f switch control the type of picture conversion that will be performed:
+
+<li>The -m switch is used to define what the target machine is:
 <p>
 <pre>
--f0[z] => output a MONOCHROME picture
--f1 => output a COLORED picture
--f2 => output a RGB picture
--f3 => output a picture using Twilight's embeded masks
--f4 => output a RB picture
--f5 => output a Shifter picture (Atari ST)
+-m0 => Oric [Default]
+-m1 => Atari ST
 </pre>
-For f0, 'z' is used to disable setting the bit 6
 </p>
 </li>
 
-<li>The -d switch controls the dithering operation:
+<li>The -f switch control the type of picture conversion that will be performed. This is machine dependent:
 <p>
 <pre>
--d0 => No dithering (0/1)
--d1 => Alternate dithering  (0/0.5/1)
--d2 => Ordered dithering (4x4 matrix, 8 levels)
--d3 => Riemersma dithering (based on hilbert curves)
+<b>Oric</b>:
+  -f0 => to hires monochrom format [default]
+  -f0z => to hires monochrom format (do not set bit 6) *** Not working in this version ***
+  -f1 => precolored picture
+  -f2 => RVB conversion
+  -f3 => Twilight masks
+  -f4 => RB conversion
+<b>Atari ST</b>:
+  -f0 => Single palette format [default]
+  -f1 => Multi palette format
 </pre>
 </p>
 </li>
@@ -73,12 +74,71 @@ For f0, 'z' is used to disable setting the bit 6
 -o4[label name] => assembler source code
 -o5 => Output a PC picture format
 -o6 => 2 bytes (dx,dy) size followed by RAW picture
--o7 => RAW palette mode
+-o7 => palette followed by picture
 -o8[line:step] => BASIC source code
 </pre>
-For o3 and o4, if "label name" is not defined, the default "LabelPicture" is used.<br>
-For o5, supported formats are BMP, PNG and TIFF
-For o7 you can specify to values that will be taken respectively as the first line number and the step between lines
+For <b>-o3</b> and <b>-o4</b>, if <i>"label name"</i> is not defined, the default <i>"LabelPicture"</i> is used.<br>
+For <b>-o8</b> you can specify two values that will be taken respectively as the first line number and the step between lines.
+</p>
+
+<p>One very useful feature is the <b>-o5</b> mode which instead of saving to the Oric or Atari format, will save the result of the conversion to a pc format.
+This is very practical when experimenting with multi-palette or dithering options, because you do not have to try on the real machine, you can just check the
+result directly on your pc.
+</p>
+
+<p>When doing Atari conversion, you typically want to use the <b>-o7</b> mode, which will save the palette (or palettes) followed by the bitmap. 
+You don't really want to try other formats because they will not work well in this version for the atari conversions (they were made for the Oric and I did not update the code yet.</p>
+
+</li>
+
+<li>The -p switch controls the way palettes are managed:
+<p>
+<pre>
+-p0 => Generate a palette automatically [default]
+-p1 => Last line of the picture contains the palette
+-p2 => Last pixels of each line of the picture contains the palette
+</pre>
+</p>
+
+<p>When using <b>-p0</b>, PictConv will automatically perform the palette generation, using the STe enhanced palettes, eventually reducing the color depth if more than 16 colors are used.
+If the color conversion is done with the <b>-f0</b> format, one single palette will be generated in the final picture. If the <b>-f1</b> format is used, then one palette will be generated for each scanline.
+</p>
+<p>If you want to use <b>-p1</b> or <b>-p2</b>, you need to modify your input picture to include palette data. An important point to miss, is that you can use <b>-p1</b> with <b>-f1</b>. 
+At first glance it would look like you would use the same single palette repeated for every scanline, which seems to be of dubious interest, but it makes sense when you will learn that the 
+palettes you specify do not have to be complete. Only the color indexes defined in the palette will be used in the conversion process, the free indexes will be used by the color reduction routine.</p>
+
+<p>When using <b>-p1</b>, you need to add two scanlines at the bottom of your picture. So if your picture is 320x200, you will have to make it 320x202, the two last lines will be used by PictConv to figure out which colors to use.
+(Of course the exported picture will be 320x200). The way it works, is that these two additional lines will contains colors that will be interpreted as either "not set" colors, or "fixed colors". 
+The first pixel of the first additional line will be used as "not set" color, the 16 first pixels of the second additional line will be the palette itself. 
+Each of these 16 pixels that are of the same color as the "not set" color will be ignored. Others will be interpreted as colors that have to be kept at this particular position in the palette.
+That's particularly useful to make sure that your background color is at index 0, and that this particular sprite is using the color 8 of the palette.
+</p>
+<p>Some examples will make it easier to understand:
+<br>
+<img SRC="pics/osdk_rasters.png" WIDTH=159 HEIGHT=53 alt="Original logo, 1632 colors">
+=>
+<img SRC="pics/osdk_atari_f0.png" WIDTH=159 HEIGHT=53 alt="Converted with -m1 -f0">
+=>
+<img SRC="pics/osdk_atari_p0.png" WIDTH=159 HEIGHT=53 alt="Converted with -m1 -f1 -p0">
+<br>
+<img SRC="pics/osdk_rasters_p1.png" WIDTH=159 HEIGHT=53 alt="Original logo, 1632 colors, with palette at the bottom">
+=>
+<img SRC="pics/osdk_atari_p1_multipalette.png" WIDTH=159 HEIGHT=53 alt="Converted with -m1 -f1 -p1">
+<br>
+<img SRC="pics/osdk_rasters_p2.png" WIDTH=159 HEIGHT=53 alt="Original logo, 1632 colors, with palettes at the right">
+=>
+<img SRC="pics/osdk_atari_p2_multipalette.png" WIDTH=159 HEIGHT=53 alt="Converted with -m1 -f1 -p2">
+</p>
+</li>
+
+<li>The -d switch controls the dithering operation:
+<p>
+<pre>
+-d0 => No dithering (0/1)
+-d1 => Alternate dithering  (0/0.5/1)
+-d2 => Ordered dithering (4x4 matrix, 8 levels)
+-d3 => Riemersma dithering (based on hilbert curves)
+</pre>
 </p>
 </li>
 
@@ -89,13 +149,6 @@ For o7 you can specify to values that will be taken respectively as the first li
 </pre>
 </li>
 
-<li>The -m switch defines the type of machine:
-<pre>
--m0 => Oric
--m1 => Atari ST
-</pre>
-</li>
-
 <li>The -n switch defines the number of entries per line when generating text format:
 <pre>
 -n16 => Output 16 values each line
@@ -103,7 +156,6 @@ For o7 you can specify to values that will be taken respectively as the first li
 </pre>
 </li>
 </ul>
-
 
 <p id=chapter>Some picture samples</p>
 
@@ -302,6 +354,14 @@ Lena
 
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
+
+<p id=dateentry>Version 0.013</p>
+ - It is now possible to lock some colors index to some particular values.<br>
+
+<p id=dateentry>Version 0.012</p>
+ - Lot of modifications in the codebase to handle more cleanly the various types of machines.<br>
+ - The Atari ST now can generate multi-palette pictures.<br>
+ - Color reduction is now done by PictConv, no need to reduce to 16 colors manually.<br>
 
 <p id=dateentry>Version 0.011</p>
  - Added the -o7 format to generate BASIC source codes.<br>

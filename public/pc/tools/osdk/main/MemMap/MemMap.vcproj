@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Build\Release"
-			IntermediateDirectory=".\Build\Release"
+			OutputDirectory="$(SolutionDir)\Build\$(ProjectName)\Release"
+			IntermediateDirectory="$(SolutionDir)\Build\$(ProjectName)\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -53,9 +53,9 @@
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\Build\Release/MemMap.pch"
-				AssemblerListingLocation=".\Build\Release/"
-				ObjectFile=".\Build\Release/"
-				ProgramDataBaseFileName=".\Build\Release/"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -75,7 +75,7 @@
 				OutputFile="..\Osdk\_final_\Bin\MemMap.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Build\Release/MemMap.pdb"
+				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -108,8 +108,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Build\Debug"
-			IntermediateDirectory=".\Build\Debug"
+			OutputDirectory="$(SolutionDir)\Build\$(ProjectName)\Debug"
+			IntermediateDirectory="$(SolutionDir)\Build\$(ProjectName)\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -142,9 +142,9 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile=".\Build\Debug/MemMap.pch"
-				AssemblerListingLocation=".\Build\Debug/"
-				ObjectFile=".\Build\Debug/"
-				ProgramDataBaseFileName=".\Build\Debug/"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -166,7 +166,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Build\Debug/MemMap_debug.pdb"
+				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
