@@ -789,17 +789,17 @@ priceseqHI
 
 priceseqLO
    .byt <2,<300,<2000
-   .byt <4000,<10000,<5250,<6000,<9000,<15000,<50000,<10000,<60000,<30000;,<45000
+   .byt <4000,<10000,<5250,<6000,<9000,<15000,<50000,<10000,<60000,<30000,<45000
 priceseqHI
    .byt >2,>300,>2000
-   .byt >4000,>10000,>5250,>6000,>9000,>15000,>50000,>10000,>60000,>30000;,>45000
+   .byt >4000,>10000,>5250,>6000,>9000,>15000,>50000,>10000,>60000,>30000,>45000
 
 
 ; Techlevel min
 
 eq_tech
     .byt 1,1,1
-    .byt 1,6,5,2,7,8,10,4,10,10;,10
+    .byt 1,6,5,2,7,8,10,4,10,10,10
 
 str_equipment
     .asc "equipment"
@@ -832,8 +832,8 @@ str_equip
     .byt 0
     .asc "Extra Speed Unit"
     .byt 0
-;    .asc "Extra Maneuvrability Unit"
-;    .byt 0
+    .asc "Extra Maneuverability Unit"
+    .byt 0
 
 str_selleq
     .asc "Equip Ship"
@@ -845,7 +845,6 @@ str_item
 str_missile
     .asc "Missile"
     .byt 0
-
 
 str_blank 
 	.asc "        "
@@ -915,10 +914,6 @@ str_ship_names
 	.byt 0
 	.asc " Cougar "
 	.byt 0
- 
-
-
-
 
 flight_message_base
 	.asc "Incoming Missile"
@@ -970,16 +965,23 @@ str_sysslot
 	.asc "Sys: "
 	.byt 0
 
+
+str_namechange
+	.asc "Change commander's name"
+	.byt 0
+str_namechange2
+	.asc "Enter new name: "
+	.byt 0
+
 ; Other informative messages
+; Add 	.byt $0c for flashing
 str_land
-	.byt $0c
 	.byt (A_FWGREEN)
-	.asc "  Prepare for landing, Commander    "
+	.asc "    Welcome to "
 	.byt 0
 str_launch
-	.byt $0c
 	.byt (A_FWGREEN)
-	.asc " Prepare for launching, Commander   "
+	.asc "Prepare for launching"
 	.byt 0
 
 
@@ -1007,6 +1009,16 @@ str_instr
 	.byt 0
 	.asc "up/down then A or ENTER: select slot"
 	.byt 0
+
+
+; Missions
+str_mi_success
+	.asc "Mission accomplished"
+	.byt 0
+str_mi_fail
+	.asc "Mission failed"
+	.byt 0
+
 
 __texts_end
 

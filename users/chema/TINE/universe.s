@@ -69,11 +69,6 @@ createship
     jsr SetMat
 
 norot
-    ;ldy _ship_type
-    ;lda ShipMaxSpeed-1,y
-    ;lsr
-    ;sta _speed+1
-
    	; And initialize all the stuff (equipment...)
 	jsr InitPlayerShip
 
@@ -94,7 +89,6 @@ norot
     sta savpY+1
     lda _PosZ+1
     sta savpZ+1
-
 
 loop
     lda _cpl_system+SEED
