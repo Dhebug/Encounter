@@ -3343,7 +3343,7 @@ _displayequip
     ;jsr put_code
     dec capson    
 
-    ; Loop thru the equip items (16 max, but only 13 implemented for now)
+    ; Loop thru the equip items (16 max, but only 14 implemented for now)
     lda #0
     sta count2    
 loop2
@@ -3361,10 +3361,10 @@ noitem
     ror equip_flags
     inc count2
     lda count2
-    cmp #13
+    cmp #14
     bne loop2  
     
-    ldx #3	; Items not implemented 
+    ldx #2	; Items not implemented 
 loop
     lsr equip_flags+1
     ror equip_flags    

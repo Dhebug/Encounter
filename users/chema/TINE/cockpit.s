@@ -67,13 +67,16 @@ flight_message_bounty
 
 ; Pass X=message id
 
-patchmsg .byt 0
+//patchmsg .byt 0
+
 flight_message
 .(
-	cpx #STR_ENERGY_LOW
+/*
+    cpx #STR_ENERGY_LOW
 	bne nopatch
 	inc patchmsg
 nopatch
+*/
 	lda #<flight_message_base
 	sta tmp0
 	lda #>flight_message_base
@@ -122,11 +125,11 @@ loop
 	lda #HUD_MESSAGE_DELAY
 	sta message_delay
 
-	lda patchmsg
+/*	lda patchmsg
 	beq normal
 	dec patchmsg
 	rts
-normal
+normal*/
 	jmp SndMsg
 .)
 
@@ -215,9 +218,8 @@ loop2
 	cpx _missiles_left
 	bne loop2
 end
-
-	jsr update_ship_id
-	rts
+	;jmp update_ship_id	; let the program flow
+	;rts
 
 .)
 
@@ -233,9 +235,9 @@ update_ship_id
 	sta screen+1
 	
 	lda _missile_armed
-	bmi clear
 	beq clear
-
+	bmi clear
+setname
 	tax
 	jsr GetShipType
 	and #%01111111
@@ -256,7 +258,7 @@ update_ship_id
 clear
 	lda #<str_blank
 	ldx #>str_blank
-	jmp print
+	jmp print ;This is jsr/rts
 .)
 
 

@@ -1627,13 +1627,6 @@ nokill
 	lda #A_FWYELLOW
 	jsr set_ink
 	inc attr_changed
-
-	; "Energy Low" message
-	lda _energy+1
-	cmp #30
-	bcs nolow
-	ldx #STR_ENERGY_LOW
-	jmp flight_message
 nolow
     rts
 .)

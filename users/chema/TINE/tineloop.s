@@ -223,7 +223,7 @@ init_front_view
 	lda #0			;SMC
 	bne nomsg
 
-	ldx #6
+	ldx #6*8
 	ldy #40
 	jsr gotoXY
 	ldx #>str_launch
@@ -240,7 +240,6 @@ nomsg
 .)
 _FirstFrame
 .(
-
 	jsr update_all_controls
 
     lda #PDIST_MASSLOCK
@@ -327,7 +326,7 @@ wait
 	sta counter
 loop
 	lda counter
-	cmp #25*4
+	cmp #25*2
 	bcc loop
 	rts
 .)
@@ -343,12 +342,13 @@ dock
 l1
     dec _docked
 
-	ldx #6
+	ldx #6*8
 	ldy #40
 	jsr gotoXY
 	ldx #>str_land
 	lda #<str_land
-	;jsr print
+	jsr print
+	jsr gs_planet_name
 	jsr wait
     jsr info
     jmp _TineLoop
@@ -395,8 +395,6 @@ nochange
     jsr ProcessKeyboard
 
 	; Trick to invert object's Z in case of rear view
-;	lda invert
-;	beq noinvert
 +_patch_invertZa
 	jsr invertZ
 ;noinvert
@@ -505,13 +503,10 @@ endcompass
 
 
 ; If not drawing (screens different than front/rear views, or frame skipping)
-; Jump here.
+; jump here.
 
 nodraw
-
 	; Trick to invert object's Z in case of rear view
-;	lda invert
-;	beq noinvert2
 +_patch_invertZb
 	jsr invertZ
 ;noinvert2
@@ -538,9 +533,25 @@ cont
 	; Move other ships
     jsr _MoveShips
 
-	; Perform timely checks. Every 8 frames, basically
+	; Perform timely checks
+	; Seldom checks. Every 32 frames
+	
 	lda frame_number
-	and #7
+	and #%11111
+	ora message_delay
+	bne noenmsg
+
+	; "Energy Low" message
+	lda _energy+1
+	cmp #30
+	bcs noenmsg
+	ldx #STR_ENERGY_LOW
+	jsr flight_message
+noenmsg
+
+	; More often checks. Every 8 frames, basically
+	lda frame_number
+	and #%111
 	beq checkthings
 	jmp cont2
 
@@ -948,8 +959,8 @@ yawing .byt 0
 pitching .byt 0
 rolling .byt 0
 
-#define MAXR 7 ;6  ;9		;6	;3  ;4
-#define MINR $f8 ;$fa ;$f7	;$fa; $fd    ;fc
+#define MAXR 8 
+#define MINR $f8 
 
 
 ParamInc
@@ -1627,8 +1638,10 @@ doit2
 
 
 #ifdef TABBEDROLLS
-tab_rolls .byt 0,1,1,1,2,2,3,4,6
+tab_rolls_fast .byt 0,1,1,1,2,2,3,4,6
+tab_rolls_slow .byt 0,1,1,1,1,2,2,2,3
 
+tab_rolls .byt 0,1,1,1,2,2,3,4,6
 dorolls
 .(
 .(
@@ -1919,12 +1932,6 @@ end
 
 
 
-
-
-
-
-
-
 VOB      .byt 00           ;View object
 
 ;Pattern table
@@ -1945,53 +1952,46 @@ VOB      .byt 00           ;View object
 
 
 ONEDOT
-    .byt DEBRIS       ;Debris object
-    .byt 1            ;Number of points
-    .byt 1            ;Number of faces
-	.byt 0,0,0		 ;Normal (unused)
-
+    .byt DEBRIS	;Debris object
+    .byt 1		;Number of points
+    .byt 1		;Number of faces
+	.byt 0,0,0  ;Normal (unused)
 ; Point list
     .byt 0
     .byt 0
     .byt 0
-
 ; Face list
-    .byt 1      ;Number of vertices
+    .byt 1		;Number of vertices
     .byt 0      ;Fill pattern
     .byt 0      ;Vertices
 
 
-
 ONEPLANET
-   .byt PLANET       ;Sun or planet Object
-   .byt 1            ;Number of points
-   .byt 1            ;Number of faces
-   .byt 0,0,0		 ;Normal (unused)
+    .byt PLANET	;Sun or planet Object
+    .byt 1      ;Number of points
+    .byt 1      ;Number of faces
+    .byt 0,0,0	;Normal (unused)
 ; Point list
-   
     .byt 0
     .byt 0
     .byt 0
-
 ; Face list
-    .byt 1            ;Number of vertices
-    .byt SOLID ;5        ;Fill pattern
+    .byt 1      ;Number of vertices
+    .byt SOLID	;Fill pattern
     .byt 0      ;Vertices
 
 ONEMOON
-    .byt MOON         ;Moon Object
-    .byt 1            ;Number of points
-    .byt 1            ;Number of faces
-	.byt 0,0,0		 ;Normal (unused)
-
+    .byt MOON   ;Moon Object
+    .byt 1      ;Number of points
+    .byt 1      ;Number of faces
+	.byt 0,0,0	;Normal (unused)
 ; Point list
     .byt 0
     .byt 0
     .byt 0
-
 ; Face list
-    .byt 1            ;Number of vertices
-    .byt 5        ;Fill pattern
+    .byt 1		;Number of vertices
+    .byt SOLID  ;Fill pattern
     .byt 0      ;Vertices
 
 

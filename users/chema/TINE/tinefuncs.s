@@ -369,7 +369,14 @@ NewPlayerShip
 	;lda ShipEnergy-1,x
 	lda #72
 	sta _p_maxenergy
-	
+
+	ldx #8
+loop
+	lda tab_rolls_slow,x
+	sta tab_rolls,x
+	dex
+	bpl loop
+
 	rts
 
 .)
@@ -413,12 +420,25 @@ afterlaser
 
 	ror 
 	bcc nospeed
+	tax
 	lda _p_maxspeed
 	clc
 	adc #5
 	sta _p_maxspeed
-
+	txa
 nospeed
+
+	ror
+	bcc noman
+
+	ldx #8
+loop
+	lda tab_rolls_fast,x
+	sta tab_rolls,x
+	dex
+	bpl loop
+noman
+
 	lda _equip
 	and #%01000000	; Extra energy
 	beq noenergy
@@ -428,7 +448,6 @@ nospeed
 	sta _p_maxenergy
 noenergy
 
-	; Initializations after launching from station
 	; Shields
 	lda #22
 	sta _front_shield

@@ -148,7 +148,8 @@ size again. This was not ocurring before????
 Ok. There are roundoff errors. With the original sindelta/cosdelta tables, effects are different, but
 exist. Should check if normalizing matrices is needed.
 
-+ Optimizing drawing of radar? It is calling pixel_address several times, also code is shared between erase and draw and it is inlined...
++ Optimizing drawing of radar? It is calling pixel_address several times, also code is shared between 
+erase and draw and it is inlined...
 
 + Bounties added, but it is quite a waste to use 2 bytes for just a couple of cases... Anyway the inflight message with
 the bounty appears maybe too fast? Maybe even before the ship explodes!
@@ -201,11 +202,22 @@ which launch 3-4 missiles in a row. "Missile Jammed".
 
 + Force deleting a slot before being able to save to it ?
 
-+ Add prepare for landing at Diso, launching off messages to the cockpit.
++ Add option to change commander's name
+
+- Add Extra maneuvrability item. If equipped, overwrite the table for rotation accelerations.
+Current values are good, maybe start with something a bit slower.
+
++ Add circle at galactic chart too?
+
+- Add prepare for landing at Diso, launching off messages to the cockpit.
 
 + Snow on the scanner when readings erratic
 
-+ Optimize radar space. It needs 3 bytes per ship in radar (x,y,z) and double this size 
+- Move Energy Low message to a case in tineloop, and remove code to avoid sound.
+
++ Add right on commander messages.
+
+- Optimize radar space. It needs 3 bytes per ship in radar (x,y,z) and double this size 
  for the second coordinate (x,0,z). Also 2 temporary buffers with the max ship number*2.
  This is a waste, as there won't be ever more than a bunch of detected objects at the 
  same time. Also move the temporary buffers to str_buffer, or something similar to save space.
