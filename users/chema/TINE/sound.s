@@ -234,6 +234,7 @@ missile
 
 
 // SndTest is beautiful, but never used
+/*
 SndTest
 .(
   	ldx #<msg
@@ -243,7 +244,7 @@ msg
 	.byt $10,0,$10,1,$10,2,0,$78,$10,$10,$10,0,$08,0
 
 .)
-
+*/
 
 
 ; For WAVE compiled music

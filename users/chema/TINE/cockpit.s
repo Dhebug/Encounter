@@ -600,18 +600,14 @@ l6a
 	tax
 conta
 	lda table1,x
-	sta $bb4e
+	sta $bb4e+80*0
 	lda table2,x
-	sta $bb4e+80
-	lda table3,x
 	sta $bb4e+80*1
 	lda table3,x
 	sta $bb4e+80*2
 	lda table4,x
 	sta $bb4e+80*3
 	lda table5,x
-	sta $bb4e+80*4
-	lda table6,x
 	sta $bb4e+80*4
 
 	lda tmp
@@ -631,18 +627,14 @@ l6b
 contb		
 		
 	lda table1,x
-	sta $BB50
+	sta $BB50+80*0
 	lda table2,x
-	sta $BB50+80
-	lda table3,x
 	sta $BB50+80*1
 	lda table3,x
 	sta $BB50+80*2
 	lda table4,x
 	sta $BB50+80*3
 	lda table5,x
-	sta $BB50+80*4
-	lda table6,x
 	sta $BB50+80*4
 
 	lda tmp
@@ -663,18 +655,14 @@ l6c
 contc		
 		
 	lda table1,x
-	sta $BB52
+	sta $BB52+80*0
 	lda table2,x
-	sta $BB52+80
-	lda table3,x
 	sta $BB52+80*1
 	lda table3,x
 	sta $BB52+80*2
 	lda table4,x
 	sta $BB52+80*3
 	lda table5,x
-	sta $BB52+80*4
-	lda table6,x
 	sta $BB52+80*4
 
 	lda tmp
@@ -694,10 +682,8 @@ l6d
 contd		
 		
 	lda table1,x
-	sta $BB54
+	sta $BB54+80*0
 	lda table2,x
-	sta $BB54+80
-	lda table3,x
 	sta $BB54+80*1
 	lda table3,x
 	sta $BB54+80*2
@@ -705,13 +691,10 @@ contd
 	sta $BB54+80*3
 	lda table5,x
 	sta $BB54+80*4
-	lda table6,x
-	sta $BB54+80*4
 	
 	rts
 
 .)
-
 
 table1
 	.byt $40
@@ -722,8 +705,6 @@ table3
 table4
 	.byt $40
 table5
-	.byt $40
-table6
 	.byt $40,$f3,$f3,$f3,$f3,$f3,$f3
 
 

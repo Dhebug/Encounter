@@ -976,8 +976,8 @@ str_namechange2
 ; Other informative messages
 ; Add 	.byt $0c for flashing
 str_land
-	.byt (A_FWGREEN)
-	.asc "    Welcome to "
+	;.byt (A_FWGREEN)
+	.asc "Welcome to "
 	.byt 0
 str_launch
 	.byt (A_FWGREEN)

@@ -670,9 +670,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<$f8e-400;-500);f07d ;$f8e
+    lda #<$f8e-450	;-500);f07d ;$f8e
     sta op2
-    lda #>$f8e-400;-500);f07d ;$f8e
+    lda #>$f8e-450	;-500);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -1051,7 +1051,7 @@ ExplodeObject
     jsr SndExplosion
 	lda #A_FWRED
 	jsr set_ink
-	inc attr_changed
+	;inc attr_changed
 
     jsr _gen_rnd_number
     ldx _ID
@@ -1599,10 +1599,9 @@ cont
 	bpl nokill
 
 	; Shield gone. Deplete energy
-
-    lda _energy+1
-    clc
-    adc tmp+1
+	;asl		; double damage
+	clc
+	adc _energy+1
     sta _energy+1
     bcs nokill
 
@@ -1624,9 +1623,9 @@ nokill
 	jsr update_shields_panel
     ; Make a nice sound
     jsr SndHitNoShields
-	lda #A_FWYELLOW
+	lda #A_FWMAGENTA; A_FWYELLOW
 	jsr set_ink
-	inc attr_changed
+	;inc attr_changed
 nolow
     rts
 .)
