@@ -838,13 +838,8 @@ loop
 
 
 
-_laser_fired .byt 00
-
 FireLaser
 .(
-
-    ;jsr _DrawLaser
-
 	lda LaserTemperature
 	cmp #9
 	beq nohit
@@ -854,7 +849,14 @@ FireLaser
 	inc LaserTemperature
 	jsr update_temperature_panel
 
-    dec _laser_fired
+	;Patch main loop code so it draws laser
+	lda #$20	; jsr opcode
+	sta _patch_laser_fired
+	lda #<_DrawLaser
+	sta _patch_laser_fired+1
+	lda #>_DrawLaser
+	sta _patch_laser_fired+2
+
 
     ; Check to see if we hit
     jsr FindTarget

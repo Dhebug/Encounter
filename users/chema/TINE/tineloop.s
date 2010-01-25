@@ -273,6 +273,7 @@ noinvert
 	jsr invertZ
 noinvert2
 
+	jsr PatchLaserDraw
     jmp dump_buf
 .)
 
@@ -367,7 +368,8 @@ _TineLoop
     jmp _TineLoop
 
 loop
-	
+
+/*	
 	; Clear vertices where lasers start/end in each object
 	ldx NUMOBJS ; Can't be zero. At least the radar, the player's ship and one planet created.
 	lda #0
@@ -378,7 +380,7 @@ loopcl
 	sta _vertexYHI-1,x
 	dex
 	bne loopcl
-
+*/
 	; If we have changed ink color, put it back to white
 +_patch_set_ink
 	nop
@@ -438,12 +440,12 @@ loopcl
 	; Plot the starfield, the crosshair and any lasers (ours and from others)
     jsr PlotStars
 	jsr _DrawCrosshair
-    jsr _Lasers
-    lda _laser_fired
-    beq nofire
-    inc _laser_fired ; Set back to 0
-    jsr _DrawLaser
-nofire
+	jsr _Lasers
+	
++_patch_laser_fired
+	nop
+	nop
+	nop
 
 	; Print any HUD message
 	lda message_delay
@@ -506,7 +508,6 @@ nodraw
 	; Trick to invert object's Z in case of rear view
 +_patch_invertZb
 	jsr invertZ
-;noinvert2
 
 	; If player is in control, check collisions
 	lda player_in_control
@@ -1945,7 +1946,15 @@ end
 	rts
 .)
 
-
+PatchLaserDraw
+.(
+  	; Pacth main loop code
+	lda #$ea	; nop opcode
+	sta _patch_laser_fired
+	sta _patch_laser_fired+1
+	sta _patch_laser_fired+2
+	rts
+.)
 
 
 VOB      .byt 00           ;View object
