@@ -20,14 +20,14 @@
 
 /* Some definitions for frameskipping when rate ges too low */
 /* Use the technique of drawing odd/all/odd/all... scans    */
-#define ALTSCANS
+//#define ALTSCANS
 
 /* The next thresholds are in units of IRQs... now at 25hz  */
 /* Threshold for alternate scan technique, the lower one	*/
 #define MAXFRAMETIME1 7 
 /* Threshold for complete frame skipping, the higher one    */
 #ifdef ALTSCANS
-#define MAXFRAMETIME2 MAXFRAMETIME1+1
+#define MAXFRAMETIME2 (MAXFRAMETIME1+1)
 #else
 #define MAXFRAMETIME2 MAXFRAMETIME1
 #endif
@@ -41,6 +41,10 @@
 /* Use rolls based on a table, instead of directly the a_* values. 
    This permits a kind of exponential behaviour  */
 #define TABBEDROLLS
+
+
+/* Define to perform automatic RAMSAVE */
+#define RAMSAVE
 
 /* Values for planet distance various thresholds */
 
@@ -96,9 +100,9 @@
 
 
 /* Damage for lasers (only player lasers) & missiles */
-#define PULSE_LASER		5
-#define BEAM_LASER		8
-#define MILITARY_LASER	15
+#define PULSE_LASER		4
+#define BEAM_LASER		7
+#define MILITARY_LASER	10
 
 // This was $40 in the code ?
 #define MISSILE_DAMAGE  40

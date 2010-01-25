@@ -47,7 +47,7 @@ Goodnames  .asc "FÖd"
            .byt 0
            .asc "M”h„€y"
            .byt 0
-           .asc "Al¦ys"
+           .asc "Al¨ys"
            .byt 0
            .asc "Fi“Ûs"
            .byt 0
@@ -75,9 +75,9 @@ Unitnames
 
 ; Inhabitants... Large Green Bug-eyed Rodents
 Fierce 
-    .asc "L«e"
+    .asc "L¬e"
     .byt 0
-    .asc "Fi€ë"
+    .asc "Fi€ê"
     .byt 0
     .asc "Sm‹l"
     .byt 0
@@ -86,7 +86,7 @@ Type
     .byt 0
     .asc "R‰"
     .byt 0
-    .asc "Y¼¦w"
+    .asc "Y¼¨w"
     .byt 0
     .asc "Blue"
     .byt 0
@@ -109,25 +109,25 @@ Bugeyed
     .byt 0
 
 Race
-    .asc "Rod¢"
+    .asc "Rod£"
     .byt 0
     .asc "F×g"
     .byt 0
     .asc "Liz‚d"
     .byt 0
-    .asc "LïŠ€"
+    .asc "LîŠ€"
     .byt 0
     .asc "Bird"
     .byt 0
-    .asc "Hu¾ğ"
+    .asc "Hu¾ï"
     .byt 0
     .asc "F¼„e"
     .byt 0
-    .asc "Â¨°"
+    .asc "Âª°"
     .byt 0
 
 HumanCol
-    .byt "Hu¾¬Æ‡i‹"
+    .byt "Hu¾­Æ‡i‹"
     .byt 0
 
 
@@ -139,15 +139,15 @@ govnames
             .byt 0
             .asc "Feud‹"
             .byt 0
-            .asc "MËi-goªnm¢"
+            .asc "MËi-go¢nm£"
             .byt 0
-            .asc "Dtˆ†ò½"
+            .asc "Dtˆ†ñ½"
             .byt 0
-            .asc "Ğm©iŠ"
+            .asc "Ğm«iŠ"
             .byt 0
             .asc "C‡f‰€”y"
             .byt 0
-            .asc "DÅ²‘cy"
+            .asc "DÅ²’cy"
             .byt 0
             .asc "C†p†ˆŒStˆe"
             .byt 0
@@ -155,17 +155,17 @@ govnames
 econnames
             .asc "Rh ÿ"
             .byt 0
-            .asc "æŒÿ"
+            .asc "åŒÿ"
             .byt 0
             .asc "¸Ÿÿ"
             .byt 0
-            .asc "Mêl´ÿ"
+            .asc "Mél´ÿ"
             .byt 0
-            .asc "MêÕ£ş"
+            .asc "MéÕ¤ş"
             .byt 0
-            .asc "Rh£ş"
+            .asc "Rh¤ş"
             .byt 0
-            .asc "æŒAş"
+            .asc "åŒAş"
             .byt 0
             .asc "¸ŸAş"
             .byt 0
@@ -173,40 +173,40 @@ econnames
 
 str_data    .asc "Dˆa ‡"
             .byt 0
-str_dist    .asc "DiŠë"
+str_dist    .asc "DiŠê"
             .byt 0
 str_eco     .asc "Ec‡•y"
             .byt 0
-str_gov     .asc "Goªnm¢"
+str_gov     .asc "Go¢nm£"
             .byt 0
 str_tech    .asc "TeÄ.˜ev¼"
             .byt 0
-str_gross   .asc "G×s§P×¤°Ôy"
+str_gross   .asc "G×s©P×¦°Ôy"
             .byt 0
-str_rad     .asc "æŒR¹iô"
+str_rad     .asc "åŒR¹ió"
             .byt 0
-str_pop     .asc "¸p—Ş"
+str_pop     .asc "¸p—İ"
             .byt 0
 str_km      .asc " Km."
             .byt 0
-str_bill    .asc " B¥l›"
+str_bill    .asc " B§l›"
             .byt 0
-str_ly      .asc "˜iìØYe‚s"
+str_ly      .asc "˜iëØYe‚s"
             .byt 0
-str_cr      .asc "è¬r."
+str_cr      .asc "ç­r."
             .byt 0
 
 ; These are for market
-str_mkt     .asc "m‚k’ p³š"
+str_mkt     .asc "m‚k‘ p³š"
             .byt 0
 str_mktquant
             .asc "ÈÀy"
             .byt 0    
 str_mktlist 
-            .asc "p×¤°"
+            .asc "p×¦°"
             .byt 0
 str_mktunit
-            .asc "©"
+            .asc "«"
             .byt 0
 
 str_mktin   .asc "„"
@@ -219,7 +219,7 @@ str_mktsale
             .asc "fŸsaƒ"
             .byt 0             
 str_mktcargo 
-            .asc "ò½"
+            .asc "ñ½"
             .byt 0
 
 ; For market buying/selling
@@ -227,7 +227,7 @@ str_mktcargo
 str_cash    .asc "C h"
             .byt 0
 str_freespace
-            .asc "SñŒƒft"
+            .asc "SğŒƒft"
             .byt 0
 str_credits
             .asc "Cr."
@@ -241,26 +241,26 @@ desc_list
     .byt 0
     .asc "n¿ú"
     .byt 0
-    .asc "w¼l knä"
+    .asc "w¼l knã"
     .byt 0
-    .asc "f»ß"
+    .asc "f»Ş"
     .byt 0
     .asc "n¿‰"
     .byt 0
 ;82
-    .asc "ªy"
+    .asc "¢y"
     .byt 0
-    .asc "m¥dÕ"
+    .asc "m§dÕ"
     .byt 0
     .asc "moŠ"
     .byt 0
-    .asc "“ ‡¯Õ"
+    .asc "“ ‡¥Õ"
     .byt 0
     .asc " "
     .byt 0
 
 ;83	
-    .asc "ci¢"
+    .asc "ci£"
     .byt 0
     .byt $15,0
     .asc "g“ˆ"
@@ -272,9 +272,9 @@ desc_list
 
 ;84
     .byt $1E," ", $1D," ",
-    .asc "œÀŞs"
+    .asc "œÀİs"
     .byt 0
-    .asc "m–ntês"
+    .asc "m–ntés"
     .byt 0
     .byt $1C, 0
     .byt $14
@@ -283,22 +283,22 @@ desc_list
     .asc "²es"
     .byt 0
 ;85	
-    .asc "òynšs"
+    .asc "ñynšs"
     .byt 0
-    .asc "s¥l„šs"
+    .asc "s§l„šs"
     .byt 0
-    .asc "mˆÁ‘d›s"
+    .asc "mˆÁ’d›s"
     .byt 0
-    .asc "¦ˆh of "
+    .asc "¨ˆh of "
     .byt $06, 0
-    .asc "¦õfŸ"
+    .asc "¨ôfŸ"
     .byt $06,0
 ;86
     .asc "fÖd¶ƒn¡s"
     .byt 0
     .asc "t–ÉŠs"
     .byt 0
-    .asc "po’ry"
+    .asc "po‘ry"
     .byt 0
     .asc  "dcos"
     .byt 0
@@ -308,21 +308,21 @@ desc_list
 ;87
     .asc "t‹kÁ“e"
     .byt 0
-    .asc "c‘b"
+    .asc "c’b"
     .byt 0
     .asc "bˆ"
     .byt 0
-    .asc "¦bŠ"
+    .asc "¨bŠ"
     .byt 0
     .byt $7D
     .byt 0
 
 ;88
-    .asc "bš’"
+    .asc "bš‘"
     .byt 0
     .asc "œºu‰"
     .byt 0
-    .asc "‘vº‰"
+    .asc "’vº‰"
     .byt 0
     .asc "cø‰"
     .byt 0
@@ -331,7 +331,7 @@ desc_list
 
 ;89
     .byt $16
-    .asc " cÔ¥ w‚"
+    .asc " cÔ§ w‚"
     .byt 0
     .byt $1B," ", $18," ", $19
     .asc "s"
@@ -341,7 +341,7 @@ desc_list
     .asc " de e"
     .byt 0
     .byt $16
-    .asc " e‚ÙÈéš"
+    .asc " e‚ÙÈèš"
     .byt 0
     .byt $16
     .asc " sÆ‚ ”tÔy"
@@ -354,7 +354,7 @@ desc_list
     .asc "ÙŒ"
     .byt $7C," ", $18," ", $19
     .byt 0
-    .asc "÷„h¯Às' "
+    .asc "÷„h¥Às' "
     .byt $1A," ", $05
     .byt 0
     .byt $22, 0
@@ -371,7 +371,7 @@ desc_list
     .byt 0
     .asc "b“w"
     .byt 0
-    .asc "g«ƒ¶laŠÊ"
+    .asc "g¬ƒ¶laŠÊ"
     .byt 0
 
 ;8C
@@ -382,13 +382,13 @@ desc_list
     .byt $1B," ", $7D, 0
 
 ;8D	
-    .asc "f¯—ß"
+    .asc "f¥—Ş"
     .byt 0
     .asc "Ó¿"
     .byt 0
     .asc "hÖpy"
     .byt 0
-    .asc "©ôu‹"
+    .asc "«óu‹"
     .byt 0
     .asc "Óc"
     .byt 0
@@ -396,7 +396,7 @@ desc_list
 ;8E	
     .asc "cu„e"
     .byt 0
-    .asc "niìØlife"
+    .asc "niëØlife"
     .byt 0
     .asc "c „os"
     .byt 0
@@ -406,37 +406,37 @@ desc_list
 
 ;8F
     .asc $7b, 0
-    .asc "ÃŒà "
+    .asc "ÃŒß "
     .byt $7b, 0
     .asc "ÃŒw†ld "
     .byt $7b, 0
-    .asc "Ã à"
+    .asc "Ã ß"
     .byt 0
     .asc "Ã w†ld"
     .byt 0
 
 ;90
-    .asc "n ©“m‚kú"
+    .asc "n «“m‚kú"
     .byt 0
     .asc "¶†"
     .byt 0
     .asc " d—l"
     .byt 0
-    .asc "Á‰iß"
+    .asc "Á‰iŞ"
     .byt 0
     .asc " “vÆt"
     .byt 0
 
 ;91
-    .asc "à"
+    .asc "ß"
     .byt 0
     .asc "w†ld"
     .byt 0
     .asc "œ”e"
     .byt 0
-    .asc "ló à"
+    .asc "lò ß"
     .byt 0
-    .asc "¤mp"
+    .asc "¦mp"
     .byt 0
 
 ;92
@@ -452,13 +452,13 @@ desc_list
     .byt 0
 
 ;93
-    .asc "po’"
+    .asc "po‘"
     .byt 0
-    .asc "‚t§g‘¤ˆe"
+    .asc "‚t©g’¦ˆe"
     .byt 0
-    .asc "yé"
+    .asc "yè"
     .byt 0
-    .asc "sna¥"
+    .asc "sna§"
     .byt 0
     .asc "slug"
     .byt 0
@@ -466,21 +466,21 @@ desc_list
 ;94
     .asc "t×p‹"
     .byt 0
-    .asc "d¨"
+    .asc "dª"
     .byt 0
-    .asc "‘„"
+    .asc "’„"
     .byt 0
-    .asc "imp’‘bƒ"
+    .asc "imp‘’bƒ"
     .byt 0
     .asc "Óub€À"
     .byt 0
 
 ;95
-    .asc "f©ny"
+    .asc "f«ny"
     .byt 0
     .asc "wi€d"
     .byt 0
-    .asc "©ôu‹"
+    .asc "«óu‹"
     .byt 0
     .asc "Šrge"
     .byt 0
@@ -488,11 +488,11 @@ desc_list
     .byt 0
 
 ;96
-    .asc "f“È¢"
+    .asc "f“È£"
     .byt 0
     .asc "²c ›‹"
     .byt 0
-    .asc "©pr‰tú"
+    .asc "«pr‰tú"
     .byt 0
     .asc "d“¹f—"
     .byt 0
@@ -524,7 +524,7 @@ desc_list
 ;98
     .byt $1B
     .byt 0
-    .asc "m–ntê"
+    .asc "m–nté"
     .byt 0
     .asc "‰ibƒ"
     .byt 0
@@ -539,7 +539,7 @@ desc_list
     .byt $21
     .byt 0
     .byt $07
-    .asc "ğ"
+    .asc "ï"
     .byt 0
     .byt $13
     .byt 0
@@ -547,37 +547,37 @@ desc_list
     .byt 0
 
 ;9A
-    .asc "ci¢"
+    .asc "ci£"
     .byt 0
-    .asc "Óëpt›‹"
+    .asc "Óêpt›‹"
     .byt 0
-    .asc "ecc¢³"
+    .asc "ecc£³"
     .byt 0
-    .asc "‘„‰"
+    .asc "’„‰"
     .byt 0
     .byt $15
     .byt 0
 
 ;9B
-    .asc "k¥l€"
+    .asc "k§l€"
     .byt 0
     .asc "de¹Õ"
     .byt 0
-    .asc "ev¥"
+    .asc "ev§"
     .byt 0
     .asc "ƒÙ‹"
     .byt 0
-    .asc "viß"
+    .asc "viŞ"
     .byt 0
 
 ;9C
-    .asc "p‚k m’Ê"
+    .asc "p‚k m‘Ê"
     .byt 0
-    .asc "á cl–ds"
+    .asc "à cl–ds"
     .byt 0
-    .asc "Œbös"
+    .asc "Œbõs"
     .byt 0
-    .asc "râ·†mŞs"
+    .asc "rá·†mİs"
     .byt 0
     .asc "vÆcoš"
     .byt 0
@@ -600,18 +600,18 @@ desc_list
     .byt 0
     .byt $7C," ", $7D, 0
     .byt $7C," ", $1B, 0
-    .asc "„h¯À"
+    .asc "„h¥À"
     .byt 0
     .byt $7C, " ", $7D, 0
 
 ;9F
-    .asc "ò“w"
+    .asc "ñ“w"
     .byt 0
     .asc "beaŠ"
     .byt 0
     .asc "b‡"
     .byt 0
-    .asc "snée"
+    .asc "snèe"
     .byt 0
     .asc "wÆf"
     .byt 0
@@ -639,9 +639,9 @@ desc_list
 ;A2
     .asc "meˆ"
     .byt 0
-    .asc "cuót"
+    .asc "cuòt"
     .byt 0
-    .asc "Šeé"
+    .asc "Šeè"
     .byt 0
     .asc "bgÊ"
     .byt 0
@@ -658,17 +658,17 @@ desc_list
     .asc "v”uum"
     .byt 0
     .byt $7C
-    .asc " Ë‘"
+    .asc " Ë’"
     .byt 0
 
 ;A4
-    .asc "hâey"
+    .asc "háey"
     .byt 0
-    .asc "c³k’"
+    .asc "c³k‘"
     .byt 0
     .asc "k‚ˆe"
     .byt 0
-    .asc "po¦"
+    .asc "po¨"
     .byt 0
     .asc "tn"
     .byt 0
@@ -677,19 +677,19 @@ desc_list
 ; For charts
 str_galactic_chart
     .byt 6 ;A_FWCYAN
-    .asc "GALACTIC¬HART"
+    .asc "GALACTIC­HART"
     .byt 0
 
 str_short_chart
     .byt 6 ;A_FWCYAN
-    .asc "SHORT RANGE¬HART"
+    .asc "SHORT RANGE­HART"
     .byt 0
 
 
 ; For searching planets
 
 str_searchplanet
-    .asc "Se‚Ä à:"
+    .asc "Se‚Ä ß:"
     .byt 0
 
 str_notfound
@@ -699,15 +699,15 @@ str_notfound
 
 ; For main screen
 str_commander
-    .asc "Ğã"
+    .asc "Ğâ"
     .byt 0
 str_present
 	.byt A_FWCYAN
-    .asc "P“s¢"
+    .asc "P“s£"
     .byt 0
 str_hyper
 	.byt A_FWCYAN
-    .asc "HypÊñe"
+    .asc "HypÊğe"
     .byt 0
 str_system
 	.byt A_FWCYAN
@@ -718,7 +718,7 @@ str_system
 ;    .byt 0
 str_status
 	.byt A_FWCYAN
-    .asc "Leg‹Îtˆô"
+    .asc "Leg‹Îtˆó"
     .byt 0
 str_rating
 	.byt A_FWCYAN
@@ -751,22 +751,22 @@ str_poor
     .asc "¸†"
     .byt 0
 str_average
-    .asc "æe"
+    .asc "åe"
     .byt 0
 str_above
-    .asc "Aboõæe"
+    .asc "Aboôåe"
     .byt 0
 str_competent
-    .asc "Ğp’¢"
+    .asc "Ğp‘£"
     .byt 0
 str_dangerous
-    .asc "Dg€ß"
+    .asc "Dg€Ş"
     .byt 0
 str_deadly
-    .asc "L’h‹"
+    .asc "L‘h‹"
     .byt 0
 str_elite
-    .asc "­­ç˜ I Tç ­­"
+    .asc "®®æ˜ I Tæ ®®"
     .byt 0
 
 
@@ -802,7 +802,7 @@ eq_tech
     .byt 1,6,5,2,7,8,10,4,10,10,10
 
 str_equipment
-    .asc "eÈ½m¢"
+    .asc "eÈ½m£"
     .byt 0
 str_fuel
 str_equip
@@ -812,7 +812,7 @@ str_equip
     .byt 0
     .asc "P—sŒl €"
     .byt 0
-    .asc "L«ŒC«o Bay"
+    .asc "L¬ŒC¬o Bay"
     .byt 0
     .asc "EscapŒ¸d"
     .byt 0
@@ -820,19 +820,19 @@ str_equip
     .byt 0
     .asc "E.C.M.ÎyŠÅ"
     .byt 0
-    .asc "Enö´B•b"
+    .asc "Enõ´B•b"
     .byt 0
-    .asc "Ext‘çnö´Ñ"
+    .asc "Ext’ænõ´Ñ"
     .byt 0
-    .asc "G‹”t HypÊñe"
+    .asc "G‹”t HypÊğe"
     .byt 0
     .asc "Be»˜ €"
     .byt 0
-    .asc "M¥‚y˜ €"
+    .asc "M§‚y˜ €"
     .byt 0
-    .asc "Ext‘Îpe‰ Ñ"
+    .asc "Ext’Îpe‰ Ñ"
     .byt 0
-    .asc "Ext‘èeuv‘b¥´Ñ"
+    .asc "Ext’çeu¢¥§´Ñ"
     .byt 0
 
 str_selleq
@@ -854,27 +854,27 @@ str_ship_names
 	.byt 0
 	.asc " Debr "
 	.byt 0
-	.asc "…¸dİ"
+	.asc "…¸dö"
 	.byt 0
-	.asc "£l¦y§"
+	.asc "¤l¨y©"
 	.byt 0
-	.asc "¬«o…"
+	.asc "­¬o…"
 	.byt 0
 	.asc "B–l¡ "
 	.byt 0
-	.asc "AŠ€ğ"
+	.asc "AŠ€ï"
 	.byt 0
 	.asc "Sœ„t€"
 	.byt 0
-	.asc "Shutó "
+	.asc "Shutò "
 	.byt 0
-	.asc "Shutó "
+	.asc "Shutò "
 	.byt 0
 	.asc " V½€…"
 	.byt 0
-	.asc "…Boaİ"
+	.asc "…Boaö"
 	.byt 0
-	.asc "Cï‘-3 "
+	.asc "Cî’-3 "
 	.byt 0
 	.asc " PyÙ‡ "
 	.byt 0
@@ -882,67 +882,67 @@ str_ship_names
 	.byt 0
 	.asc "…W†m…"
 	.byt 0
-	.asc "Cï‘-1 "
+	.asc "Cî’-1 "
 	.byt 0
 	.asc " Gecko…"
 	.byt 0
-	.asc " K‘…"
+	.asc " K’…"
 	.byt 0
-	.asc "è»ba…"
+	.asc "ç»ba…"
 	.byt 0
 	.asc " W„¡ "
 	.byt 0
-	.asc "£d¡…"
+	.asc "¤d¡…"
 	.byt 0
-	.asc "è†ay…"
+	.asc "ç†ay…"
 	.byt 0
-	.asc "˜ë…"
+	.asc "˜ê…"
 	.byt 0
-	.asc "…Aspİ"
+	.asc "…Aspö"
 	.byt 0
-	.asc "Cï‘-3 "
+	.asc "Cî’-3 "
 	.byt 0
 	.asc " PyÙ‡ "
 	.byt 0
-	.asc "…Boaİ"
+	.asc "…Boaö"
 	.byt 0
-	.asc "Ã«ğ"
+	.asc "Ã¬ï"
 	.byt 0
-	.asc "Ã«‡ "
+	.asc "Ã¬‡ "
 	.byt 0
-	.asc "Ñknä "
+	.asc "Ñknã "
 	.byt 0
-	.asc "¬–g‚ "
+	.asc "­–g‚ "
 	.byt 0
 
 flight_message_base
 	.asc "ÂÒ Í"
 	.byt 0
-	.asc "G»ŒOª"
+	.asc "G»ŒO¢"
 	.byt 0
-	.asc "EscapŒ¸d˜a©Ä‰"
+	.asc "EscapŒ¸d˜a«Ä‰"
 	.byt 0
-	.asc "P“s§SñŒĞã"
+	.asc "P“s©SğŒĞâ"
 	.byt 0
-	.asc "T«’˜â‰"
+	.asc "T¬‘˜á‰"
 	.byt 0
-	.asc "T«’˜oŠ"
+	.asc "T¬‘˜oŠ"
 	.byt 0
-	.asc "Í£rm‰"
+	.asc "Í¤rm‰"
 	.byt 0
 	.asc "Í ÑÛ‰"
 	.byt 0
-	.asc "M s˜â‰"
+	.asc "M s˜á‰"
 	.byt 0
-	.asc "Pˆh˜â‰"
+	.asc "Pˆh˜á‰"
 	.byt 0
-	.asc "DeŠ„ŞÁÖ·‚"
+	.asc "DeŠ„İÁÖ·‚"
 	.byt 0
-	.asc "Enöy˜Ç"
+	.asc "Enõy˜Ç"
 	.byt 0
-;	.asc "RiìØ‡,¬•ã!"
+;	.asc "RiëØ‡,­•â!"
 ;	.byt 0
-;	.asc "Lo¹Îav‰¬•ã (Y/N)?"
+;	.asc "Lo¹Îav‰­•â (Y/N)?"
 ;	.byt 0
 
 
@@ -951,7 +951,7 @@ str_loadsavetitle
 	.asc "LOAD/SAVE G»e"
 	.byt 0
 str_loadsaveempty
-	.asc "­çmpt´S¦Ø­"
+	.asc "®æmpt´S¨Ø®"
 	.byt 0
 str_doloadsave
 	.byt $0c
@@ -967,7 +967,7 @@ str_sysslot
 
 
 str_namechange
-	.asc "ChgŒÒã'§n»e"
+	.asc "ChgŒÒâ'©n»e"
 	.byt 0
 str_namechange2
 	.asc "Ent€ new n»e™"
@@ -976,12 +976,12 @@ str_namechange2
 ; Other informative messages
 ; Add 	.byt $0c for flashing
 str_land
-	.byt (A_FWGREEN)
-	.asc "İW¼ÒŒto "
+	;.byt (A_FWGREEN)
+	.asc "W¼ÒŒto "
 	.byt 0
 str_launch
 	.byt (A_FWGREEN)
-	.asc "P“p‚ŒfŸla©Ä"
+	.asc "P“p‚ŒfŸla«Ä"
 	.byt 0
 
 
@@ -997,17 +997,17 @@ str_launch
 #define SCR_LOADSAVE 7
 */
 str_instr
-	.asc "up/däå, Éìt/ƒft™buy/¨ll"
+	.asc "up/dãä, Éët/ƒft™buy/ªll"
 	.byt 0
 	.asc " "
 	.byt 0
-	.asc "Moõcø†,£å, RÌ‚Ä"
+	.asc "Moôcø†,¤ä, RÌ‚Ä"
 	.byt 0
-	.asc "Moõcø†,£å deŠ„Ş"
+	.asc "Moôcø†,¤ä deŠ„İ"
 	.byt 0
-	.asc "up/däå,£ ŸENTERÁo¶uy"
+	.asc "up/dãä,¤ ŸENTERÁo¶uy"
 	.byt 0
-	.asc "up/däÁh£ ŸENTERå s¦t"
+	.asc "up/dãÁh¤ ŸENTERä s¨t"
 	.byt 0
 
 
@@ -1049,8 +1049,8 @@ Grammar
 .byt 105, 99
 .byt 105, 115
 .byt 101, 110
-.byt 114, 97
 .byt 101, 116
+.byt 114, 97
 .byt 114, 101
 .byt 97, 99
 .byt 111, 109
@@ -1066,26 +1066,26 @@ Grammar
 .byt 134, 32
 .byt 97, 115
 .byt 100, 128
+.byt 118, 128
 .byt 144, 116
 .byt 32, 65
+.byt 97, 98
 .byt 100, 117
 .byt 105, 108
 .byt 108, 111
 .byt 115, 32
 .byt 115, 101
 .byt 117, 110
-.byt 118, 128
 .byt 130, 103
 .byt 32, 67
 .byt 45, 45
 .byt 77, 143
-.byt 97, 98
 .byt 99, 116
 .byt 105, 131
 .byt 111, 99
 .byt 114, 142
 .byt 121, 32
-.byt 174, 115
+.byt 175, 115
 .byt 32, 98
 .byt 32, 102
 .byt 80, 111
@@ -1108,10 +1108,10 @@ Grammar
 .byt 114, 105
 .byt 128, 115
 .byt 151, 116
-.byt 153, 168
+.byt 153, 170
 .byt 181, 177
 .byt 32, 83
-.byt 65, 170
+.byt 65, 162
 .byt 67, 149
 .byt 85, 110
 .byt 99, 149
@@ -1122,14 +1122,13 @@ Grammar
 .byt 114, 111
 .byt 116, 32
 .byt 116, 104
-.byt 129, 146
+.byt 129, 145
 .byt 130, 109
 .byt 131, 176
-.byt 133, 32
 .byt 136, 155
 .byt 150, 115
 .byt 156, 218
-.byt 164, 138
+.byt 166, 138
 .byt 178, 107
 .byt 190, 161
 .byt 199, 110
@@ -1144,21 +1143,22 @@ Grammar
 .byt 103, 179
 .byt 105, 100
 .byt 111, 98
-.byt 111, 238
+.byt 111, 237
 .byt 112, 148
 .byt 115, 104
 .byt 116, 131
 .byt 117, 115
 .byt 118, 140
 .byt 128, 103
-.byt 141, 167
+.byt 133, 32
+.byt 141, 169
 .byt 157, 115
 .byt 157, 139
-.byt 175, 131
-.byt 194, 225
+.byt 165, 131
+.byt 194, 224
 .byt 201, 139
 .byt 203, 249
-.byt 237, 253
+.byt 236, 253
 .byt 251, 252
 __grammar_end
 

@@ -660,10 +660,6 @@ nomax
     ; Move forwards actually moves 4 times the amount in A
     ; Original Elite moves 3/2 (96*4/256) times this amount.
     ; Let's see if halving down this is enough...
-    ;cmp #$80
-    ;ror
-    ;cmp #$80
-    ;ror
 	lsr
 	lsr
     jsr MoveForwards    
@@ -1168,7 +1164,7 @@ end
     rts
 .)
 
-;; Square of the contents of reg A
+;; Square of the contents of reg A. Accumulate over op1
 do_square
 .(
     beq end

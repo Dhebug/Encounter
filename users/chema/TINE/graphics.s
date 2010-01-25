@@ -6,6 +6,8 @@
 
 #include "oobj3d\params.h"
 #include "main.h"
+#include "tine.h"
+
 
 #define pzero tmp
 
@@ -122,9 +124,64 @@ nocarry
 	dex
 	bne loop
 end
+
+	;Patch loop code
+	lda #$20	; jsr opcode
+	sta _patch_set_ink
+	lda #<set_ink2
+	sta _patch_set_ink+1
+	lda #>set_ink2
+	sta _patch_set_ink+2
+
 	rts	
 .)
 
+set_ink2
+.(
+	ldy _current_screen
+	cpy #SCR_FRONT
+	bne end
+	ldy #<($a000+(TOP)*40)
+	sty tmp
+	ldy #>($a000+(TOP)*40)
+	sty tmp+1
+	ldy #0
+	ldx #(122/2)
+loop
+	lda #$03
+	sta (tmp),y
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+
+	lda #$06
+	sta (tmp),y
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry2
+	inc tmp+1
+nocarry2
+
+	dex
+	bne loop
+end
+
+	; Remove patch in main loop
+	lda #$ea	; nop opcode
+	ldx #2
+loop2
+	sta _patch_set_ink,x
+	dex
+	bpl loop2
+
+	rts	
+.)
 
 
 dump_buf

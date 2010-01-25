@@ -85,6 +85,7 @@ init_intro
 	jsr _DoubleBuffOff
 	jsr clr_hires
 	jsr load_frame
+	jsr set_ink2
 	jsr _DoubleBuffOn
 	jmp init_view_ship
 .)
@@ -219,6 +220,8 @@ init_front_view
 	jsr clr_hires
 	jsr load_frame
 
+	jsr set_ink2
+
 +_patch_launch_msg
 	lda #0			;SMC
 	bne nomsg
@@ -326,7 +329,7 @@ wait
 	sta counter
 loop
 	lda counter
-	cmp #25*2
+	cmp #25
 	bcc loop
 	rts
 .)
@@ -336,19 +339,21 @@ dock
 	; Docking ship... must call docking sequence
 	lda _current_screen
 	cmp #SCR_FRONT
-	bne l1
+	beq l1
+	jsr frontview
+l1
     jsr _DoubleBuffOff
     jsr save_frame
-l1
     dec _docked
 
-	ldx #6*8
+	ldx #6*12
 	ldy #40
 	jsr gotoXY
 	ldx #>str_land
 	lda #<str_land
 	jsr print
 	jsr gs_planet_name
+	jsr wait
 	jsr wait
     jsr info
     jmp _TineLoop
@@ -375,13 +380,10 @@ loopcl
 	bne loopcl
 
 	; If we have changed ink color, put it back to white
-	lda attr_changed
-	beq nochange
-	lda #A_FWWHITE
-	jsr set_ink
-	lda #0
-	sta attr_changed
-nochange
++_patch_set_ink
+	nop
+	nop
+	nop
 
 	; Call ship tactics
     jsr _Tactics
@@ -397,7 +399,6 @@ nochange
 	; Trick to invert object's Z in case of rear view
 +_patch_invertZa
 	jsr invertZ
-;noinvert
 
 	; Set the radar
     ldx VOB
@@ -462,15 +463,11 @@ nomessage
 	ldx #(15*6)
 	ldy #0
 	jsr gotoXY
-	lda invert
-	beq noinv
-    lda #<str_rearview
-    ldx #>str_rearview
-	jmp doinv
-noinv
+
++_patch_invert_msg	
     lda #<str_frontview
     ldx #>str_frontview
-doinv
+
     jsr print
 	inc print2dbuffer
 
@@ -1183,10 +1180,10 @@ ecm_on
 		beq noecm
 		; It needs energy
 		lda _energy+1
-		cmp #11+5 ; Some security margin
+		cmp #6+2 ; Some security margin
 		bcc noecm
 		sec
-		sbc #10
+		sbc #5
 		sta _energy+1
 		jmp SetECMOn
 noecm
@@ -1340,6 +1337,16 @@ frontview
         inc _docked     ; docked is either ff or 0, this gets it back to 0,
 		lda #0
 		sta _patch_launch_msg+1
+
+#ifdef RAMSAVE
+		ldx #(__commander_data_end-__commander_data_start)-1
+loop
+		lda __commander_data_start,x
+		sta _default_commander,x
+		dex
+		bpl loop
+#endif
+
 notdocked
 		jmp init_front_view	; This is jsr/rts
 nothing
@@ -1916,6 +1923,9 @@ patch_invert_code
 	lda	#>invertZ
 	sta	_patch_invertZa+2
 	sta	_patch_invertZb+2
+
+	lda #<str_rearview
+	ldx #>str_rearview
 	jmp end
 setnops
 	lda #$ea	; nop opcode
@@ -1925,7 +1935,13 @@ loop
 	sta _patch_invertZb,x
 	dex
 	bpl loop
+
+	lda #<str_frontview
+	ldx #>str_frontview
 end
+	; Patch front/rear view message
+	sta _patch_invert_msg+1
+	stx _patch_invert_msg+3
 	rts
 .)
 

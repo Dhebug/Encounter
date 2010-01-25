@@ -64,8 +64,8 @@ createship
     ; Rotate it 180 deg
     jsr SetCurOb
     lda #0
-    tay           ; z and y angles 0 deg of rotation
-    ldx #50;     ; rotate 180 deg
+    tax           ; z and x angles 0 deg of rotation
+    ldy #64;     ; rotate 180 deg in y
     jsr SetMat
 
 norot
