@@ -41,6 +41,8 @@ savy
 
 _DrawLaser
 .(
+	jsr PatchLaserDraw
+
     lda #<Coords
     sta pzero
     lda #>Coords
