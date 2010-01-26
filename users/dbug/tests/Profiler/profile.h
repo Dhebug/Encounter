@@ -11,9 +11,10 @@
 #define ROUTINE_DOSOMETHING			1
 #define ROUTINE_DOSOMETHINGELSE		2
 #define ROUTINE_SUBROUTINE			3
+#define ROUTINE_GLOBAL				4
 
 // Should be the number of routines to profile
-#define PROFILER_ROUTINE_COUNT   	4	
+#define PROFILER_ROUTINE_COUNT   	5	
 
 #define PROFILER_MAX_CALLDEPTH		10
 
@@ -31,7 +32,7 @@ extern unsigned char ProfilerRoutineCount[PROFILER_ROUTINE_COUNT];
 extern unsigned char ProfilerRoutineTimeLow[PROFILER_ROUTINE_COUNT];
 extern unsigned char ProfilerRoutineTimeHigh[PROFILER_ROUTINE_COUNT];
 extern unsigned int ProfilerFrameCount;
-extern unsigned char ProfilerFunctionId;
+extern unsigned char profiler_function_id;
 
 void ProfilerInitialize();
 void ProfilerTerminate();
@@ -40,8 +41,8 @@ void ProfilerDisplay();
 void ProfilerEnterFunction();
 void ProfilerLeaveFunction();
 
-#define PROFILE_ENTER(id) {ProfilerFunctionId=id;ProfilerEnterFunction();}
-#define PROFILE_LEAVE(id) {ProfilerFunctionId=id;ProfilerLeaveFunction();}
+#define PROFILE_ENTER(id) {profiler_function_id=id;ProfilerEnterFunction();}
+#define PROFILE_LEAVE(id) {profiler_function_id=id;ProfilerLeaveFunction();}
 #define PROFILE(id)
 
 #endif
