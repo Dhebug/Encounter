@@ -676,13 +676,11 @@ desc_list
 
 ; For charts
 str_galactic_chart
-    .byt 6 ;A_FWCYAN
-    .asc "GALACTIC CHART"
+    .asc "Galactic chart"
     .byt 0
 
 str_short_chart
-    .byt 6 ;A_FWCYAN
-    .asc "SHORT RANGE CHART"
+    .asc "Short range chart"
     .byt 0
 
 
@@ -977,7 +975,7 @@ str_namechange2
 ; Add 	.byt $0c for flashing
 str_land
 	;.byt (A_FWGREEN)
-	.asc "Welcome to "
+	.asc "Prepare  for  landing"
 	.byt 0
 str_launch
 	.byt (A_FWGREEN)

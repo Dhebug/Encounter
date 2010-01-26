@@ -347,13 +347,14 @@ l1
     jsr save_frame
     dec _docked
 
-	ldx #6*12
+	ldx #6*8;12
 	ldy #40
 	jsr gotoXY
 	ldx #>str_land
 	lda #<str_land
 	jsr print
-	jsr gs_planet_name
+	; This prints the wrong name... the destination hypersystem
+;	jsr gs_planet_name
 	jsr wait
 	jsr wait
     jsr info
@@ -368,8 +369,6 @@ _TineLoop
     jmp _TineLoop
 
 loop
-
-/*	
 	; Clear vertices where lasers start/end in each object
 	ldx NUMOBJS ; Can't be zero. At least the radar, the player's ship and one planet created.
 	lda #0
@@ -380,7 +379,7 @@ loopcl
 	sta _vertexYHI-1,x
 	dex
 	bne loopcl
-*/
+
 	; If we have changed ink color, put it back to white
 +_patch_set_ink
 	nop
@@ -581,7 +580,7 @@ next
 	cmp _p_maxenergy
 	bcs noinc_energy
 	inc _energy+1
-	bne done_energy ; branches allways
+	;bne done_energy ; branches allways
 noinc_energy
 	; If redirecting power to lasers, don't recharge
 	lda _ptla
@@ -913,8 +912,8 @@ cont
 		cpx #6
 		beq end
 		; No planet search either
-		cpx #7
-		beq end
+		;cpx #7
+		;beq end
 		
 isdock
         lda double_buff
@@ -1471,6 +1470,13 @@ loop
 
 	lda #20
 	sta _holdspace
+
+	; Empty equipment
+	lda #01
+	sta _equip
+	lda #00
+	sta _equip+1
+/*	
 	lda _equip
 	and #%10 ; Large cargo bay
 	beq nocargo
@@ -1479,7 +1485,7 @@ loop
 	adc #10
 	sta _holdspace
 nocargo
-
+*/
 	; clears hyperspace destination
 	lda _currentplanet
     sta _dest_num
