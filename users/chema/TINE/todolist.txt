@@ -140,6 +140,26 @@ However I am starting with 200, such as in the speccy version?
 
 - Ships that go too far, are made disappear. This is done in radar.s
 
+- Missiles still eat up CPU cycles. Too many of them, I think.
+Limit possible missiles at the same time, moreover for enemies, 
+which launch 3-4 missiles in a row. "Missile Jammed".
+
+- Add Extra maneuvrability item. If equipped, overwrite the table for rotation accelerations.
+ Current values are good, maybe start with something a bit slower.
+
+- Add prepare for landing at Diso, launching off messages to the cockpit.
+
+- Move Energy Low message to a case in tineloop, and remove code to avoid sound.
+
+- Optimize radar space. It needs 3 bytes per ship in radar (x,y,z) and double this size 
+ for the second coordinate (x,0,z). Also 2 temporary buffers with the max ship number*2.
+ This is a waste, as there won't be ever more than a bunch of detected objects at the 
+ same time. Also move the temporary buffers to str_buffer, or something similar to save space.
+
+- Added color.
+
+- Sorted out text screens and organized code.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -186,10 +206,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Buying other ships?
 
-- Missiles still eat up CPU cycles. Too many of them, I think.
-Limit possible missiles at the same time, moreover for enemies, 
-which launch 3-4 missiles in a row. "Missile Jammed".
-
 + When frame rate goes too high don't simulate all the time, or make a waiting loop
 
 + Snapping to planet does not always work in short chart
@@ -204,23 +220,11 @@ which launch 3-4 missiles in a row. "Missile Jammed".
 
 + Add option to change commander's name
 
-- Add Extra maneuvrability item. If equipped, overwrite the table for rotation accelerations.
-Current values are good, maybe start with something a bit slower.
-
 + Add circle at galactic chart too?
-
-- Add prepare for landing at Diso, launching off messages to the cockpit.
 
 + Snow on the scanner when readings erratic
 
-- Move Energy Low message to a case in tineloop, and remove code to avoid sound.
-
 + Add right on commander messages.
-
-- Optimize radar space. It needs 3 bytes per ship in radar (x,y,z) and double this size 
- for the second coordinate (x,0,z). Also 2 temporary buffers with the max ship number*2.
- This is a waste, as there won't be ever more than a bunch of detected objects at the 
- same time. Also move the temporary buffers to str_buffer, or something similar to save space.
 
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.
@@ -228,6 +232,12 @@ Current values are good, maybe start with something a bit slower.
 + Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
 
 + Shuttles seem to be very hard to draw... need to check this.
+
++ Experienced two bugs, difficult to reproduce: one is somebody shooting at me out of sight, but 
+ lasers comming from the screen center (due to the removal of the zeroing routine?). The
+ second is that, after dying, once the game crashed with corrupted radar data and more...
+
++ Is size of Vipers too high? Seems so... check.
 
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector

@@ -1053,16 +1053,11 @@ ExplodeObject
     jsr SndExplosion
 	lda #A_FWRED
 	jsr set_ink
-	;inc attr_changed
 
     jsr _gen_rnd_number
     ldx _ID
 
     ; Generate some debris
-
-    ;lda _rnd_seed+1
-    ;and #%00000111	; Yeah, these are too few, but else we ran out of objects quickly 
-    ;ora #%00000100
 	lda #7
     sta tmp3
 loop
@@ -1170,7 +1165,9 @@ type
     
     ldx _ID
     dec tmp3
-    bne loop2
+	dec tmp3
+	bpl loop2
+    ;bne loop2
 
 nomore
 	rts

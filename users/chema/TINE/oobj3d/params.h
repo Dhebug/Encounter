@@ -6,34 +6,13 @@
 
 #define CENTER_X	119
 #define CENTER_Y	61
-//63
 
 #define CLIP_BORDER	1
-//40
-
-//#define CLIP_LEFT	(CLIP_BORDER)
-//#define CLIP_RIGHT	(239-CLIP_BORDER)
-//#define CLIP_TOP	(CLIP_BORDER)
-//#define CLIP_BOTTOM	(199-CLIP_BORDER)
-
-//#define CLIP_LEFT	(CLIP_BORDER)
-//#define CLIP_RIGHT	(239-CLIP_BORDER)
-//#define CLIP_TOP	100
-//#define CLIP_BOTTOM	(199-CLIP_BORDER)
-
-
-
-/*
-#define CLIP_LEFT	5
-#define CLIP_RIGHT	(239-5)
-#define CLIP_TOP	5
-#define CLIP_BOTTOM	(127-1)
-*/
 
 #define CLIP_LEFT	6
 #define CLIP_RIGHT	(239-6)
 #define CLIP_TOP	0 
-#define CLIP_BOTTOM	121
+#define CLIP_BOTTOM	122
 
 // This is for the screen
 

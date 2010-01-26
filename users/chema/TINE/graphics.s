@@ -147,28 +147,23 @@ set_ink2
 	sty tmp
 	ldy #>($a000+(TOP)*40)
 	sty tmp+1
-	ldy #0
+
 	ldx #(122/2)
 loop
 	lda #$03
+	ldy #0
 	sta (tmp),y
+	lda #$06
+	ldy #40
+	sta (tmp),y
+	
 	lda tmp
 	clc
-	adc #40
+	adc #80
 	sta tmp
 	bcc nocarry
 	inc tmp+1
 nocarry
-
-	lda #$06
-	sta (tmp),y
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry2
-	inc tmp+1
-nocarry2
 
 	dex
 	bne loop

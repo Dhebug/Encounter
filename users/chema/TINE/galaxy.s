@@ -459,6 +459,10 @@ nocarry
 
 draw_red_frame
 .(
+
+    ; Clear hires and draw frame
+    jsr clr_hires
+ 
     ldx #13
     lda #<$a000
     sta tmp
@@ -481,17 +485,18 @@ nocarry
     lda #A_BGCYAN
     sta $a208
 
-	rts
+    lda #(A_FWWHITE+A_FWCYAN*16+128) ;(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+	jsr put_space
+	jmp put_space
+  	;rts
 .)
 
 plot_frame_title
 .(
 	jsr draw_red_frame   
-    ;ldy #4
-    ;ldx #48
-    ;jsr gotoXY
-	jsr put_space
-	jsr put_space
+	inc capson
+
     lda _current_screen
     cmp #SCR_CHART
     bne long
@@ -501,6 +506,30 @@ plot_frame_title
 long
     lda #A_BGCYAN
     sta $b680
+
+	lda #<$a230
+	sta tmp
+	lda #>$a230
+	sta tmp+1
+	ldx #(128/2)
+loop2
+	lda #$03
+	ldy #0
+	sta (tmp),y
+	lda #$06
+	ldy #40
+	sta (tmp),y
+	
+	lda tmp
+	clc
+	adc #80
+	sta tmp
+	bcc nocarry2
+	inc tmp+1
+nocarry2
+
+	dex
+	bne loop2
     lda #<str_galactic_chart
     ldx #>str_galactic_chart
     jsr print   
@@ -553,13 +582,15 @@ noscroll
 
 plot_galaxy_with_scroll
 .(
-    jsr clr_hires
+    ;jsr clr_hires
     jsr plot_frame_title
+	dec capson
+
 
     lda scroll
     beq right
     lda #"<"
-    ldx #18
+    ldx #12
     bne plotarrow
 right
     lda #">"
@@ -803,7 +834,7 @@ loopnames
 
     ; Plot title   
     jsr plot_frame_title
-
+	dec capson
 	; Print instructions
 	jsr instructions
 
@@ -2329,27 +2360,14 @@ same
 
 _printsystem
 .(
-
-    ; Clear hires and draw frame
-    jsr clr_hires
-
-    ; Print title Data on <planetname>
-    inc capson
 	jsr draw_red_frame
-
-
-	jsr put_space
-	jsr put_space
+	inc capson
 
     ldx #STR_DATA
-    ;jsr printtitle
-    lda #(A_FWGREEN+A_FWYELLOW*16+128)
-    jsr put_code
     jsr printtail
     jsr pr_colon
 
     jsr gs_planet_name
-    ;jsr print_planet_name    
 
     dec capson
 
@@ -2493,22 +2511,9 @@ _displaymarket
     ; clear selection
     lda #$ff
     sta _cur_sel
-    
-    ; Clear hires and draw frame
-    jsr clr_hires
-
 	jsr draw_red_frame
+	inc capson
 
-	; Print instructions
-	jsr instructions
-
-    inc capson
-
-    jsr put_space
-    jsr put_space
-    ;lda #A_FWCYAN
-    lda #(A_FWWHITE+A_FWCYAN*16+128)
-    jsr put_code
     jsr print_planet_name ; jsr gs_planet_name 
     jsr put_space   
     ldx #STR_MKT
@@ -2566,8 +2571,10 @@ loop2
     lda count2
     cmp #17
     bne loop2  
-    
-    rts
+
+	; Print instructions
+    jmp instructions
+    ;rts
 .)	
 
 print_mkt_item
@@ -3097,13 +3104,8 @@ update_mkt
 ;;;; Information screen
 _displayinfo
 .(
-    jsr clr_hires
 	jsr draw_red_frame
-    inc capson
-    jsr put_space
-    jsr put_space
-    lda #(A_FWWHITE+A_FWCYAN*16+128)
-    jsr put_code
+	inc capson
     lda #<str_commander
     ldx #>str_commander
     jsr print
@@ -3115,8 +3117,6 @@ _displayinfo
     jsr perform_CRLF
     jsr perform_CRLF
 
-    ;lda #A_FWCYAN
-    ;jsr put_code
     lda #<str_present
     ldx #>str_present
     jsr print
@@ -3129,8 +3129,6 @@ loop
     bne loop
     jsr print_planet_name
     jsr perform_CRLF
-    ;lda #A_FWCYAN
-    ;jsr put_code
     lda #<str_hyper
     ldx #>str_hyper
     jsr print
@@ -3164,8 +3162,6 @@ loop
     jsr pr_cash
     jsr perform_CRLF
 
-    ;lda #A_FWCYAN
-    ;jsr put_code
     lda #<str_status
     ldx #>str_status
     jsr print
@@ -3174,8 +3170,6 @@ loop
     jsr print2
     jsr perform_CRLF
 
-    ;lda #A_FWCYAN
-    ;jsr put_code
     lda #<str_rating
     ldx #>str_rating
     jsr print
@@ -3320,27 +3314,13 @@ _displayequip
     sta _cur_sel
     
     ; Clear hires and draw frame
-    jsr clr_hires
 	jsr draw_red_frame
+	inc capson
 
-	; Print instructions
-	jsr instructions
-
-    inc capson
-
-    jsr put_space
-    jsr put_space
-    ;lda #A_FWCYAN
-    lda #(A_FWWHITE+A_FWCYAN*16+128)
-    jsr put_code
     lda #<str_selleq
     ldx #>str_selleq
     jsr printnl        
     jsr perform_CRLF
-
-    ;lda #A_FWCYAN
-    ;lda #(A_FWWHITE+A_FWCYAN*16+128)
-    ;jsr put_code
     dec capson    
 
     ; Loop thru the equip items (16 max, but only 14 implemented for now)
@@ -3371,7 +3351,9 @@ loop
     dex
     bne loop
 
-    rts
+	; Print instructions
+	jmp instructions
+    ;rts
 .)	
 
 
@@ -3675,7 +3657,6 @@ more
 
 _displayloadsave
 .(
-
 	; Load directory
     ; Sector to read    
     lda #NUM_SECT_OVL+OVERLAY_INIT
@@ -3702,33 +3683,14 @@ _displayloadsave
     sta _cur_sel
     
     ; Clear hires and draw frame
-    jsr clr_hires
+	
 	jsr draw_red_frame
+	inc capson
 
-	; Print instructions
-	jsr instructions
-
-    inc capson
-
-    jsr put_space
-    jsr put_space
-    lda #(A_FWWHITE+A_FWCYAN*16+128)
-	jsr put_code
     ldx #>str_loadsavetitle
 	lda #<str_loadsavetitle
     jsr printnl
 
-/*
-    ;jsr perform_CRLF
-    ;jsr perform_CRLF
-
-    lda #A_FWCYAN
-    ;lda #(A_FWWHITE+A_FWCYAN*16+128)
-    jsr put_code
-
-    jsr perform_CRLF
-    lda #A_FWCYAN
-*/    
     jsr perform_CRLF
     dec capson    
     
@@ -3742,7 +3704,9 @@ loop2
     cmp #8
     bne loop2  
  
-    rts
+	; Print instrcutions
+	jmp instructions
+    ;rts
 .)	
 
 ps_count
