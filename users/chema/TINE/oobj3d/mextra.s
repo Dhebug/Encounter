@@ -157,8 +157,9 @@ ret
 
 ; Subroutine starts here.
 
+.zero
 sign .byt 0
-
+.text
 
 mul16
 .(

@@ -3,6 +3,8 @@
 ; Oric version José María Enguita (2008)
 ; Based on  Version 2.0.2/99
 
+#include "obj3d.h"
+#include "params.h"
 
 ; Some zero-page addresses
 .zero
@@ -119,6 +121,7 @@ P0X      .word 00         ;Points to be rotprojed
 P0Y      .word 00         ;(pointers)
 P0Z      .word 00
 
+/*
 PLISTZLO .word 00         ;Place to store rotated z-coords
 PLISTZHI .word 00         ;used for depth-sorting, etc.
 
@@ -126,6 +129,7 @@ PLISTXLO .word 00         ;Place to store rotprojed
 PLISTXHI .word 00         ;point (same as used by POLYFILL)
 PLISTYLO .word 00
 PLISTYHI .word 00
+*/
 
 __lib3d_zeropage_end
 
@@ -916,6 +920,22 @@ zero     ldx TM1
 
 ROTPROJ
 .(  
+		 lda P0Z
+		 sta _smc_pz+1
+		 lda P0Z+1
+		 sta _smc_pz+2
+
+		 lda P0Y
+		 sta _smc_py+1
+		 lda P0Y+1
+		 sta _smc_py+2
+
+		 lda P0X
+		 sta _smc_px+1
+		 lda P0X+1
+		 sta _smc_px+2
+
+
          lda MATMULT+1
          sta AUXP+1
          stx INDEX
@@ -943,11 +963,18 @@ ROTLOOP  ldy count
          sty count
 
          ldx #00          ;Use local matrix
-         lda (P0Z),y      ;This way, can re-use routine
+         ;lda (P0Z),y      ;This way, can re-use routine
+_smc_pz
+		lda $dead,y
          pha
-         lda (P0Y),y
+         ;lda (P0Y),y
+_smc_py
+		lda $dead,y
          pha
-         lda (P0X),y
+_smc_px
+        ; lda (P0X),y
+		lda $dead,y
+
 ROTLOOP2 bne C1
          sta TEMPX
          sta TEMPY
@@ -1022,11 +1049,11 @@ PROJ
          ldy ROTFLAG
          bmi ROT2
          ldy count        ;If just rotating, then just
-	     sta (PLISTZLO),y ;store!
+	     sta PLISTZ,y ;store!
          lda TEMPY
-         sta (PLISTYLO),y
+         sta PLISTY,y
          lda TEMPX
-         sta (PLISTXLO),y
+         sta PLISTX,y
          jmp ROTLOOP
 ROT2 
 ;;;;;;    
@@ -1074,9 +1101,9 @@ C2b      stx CXSGN
 
          ldy count
          lda TEMPZ
-         sta (PLISTZLO),y
+         sta PLISTZ,y
          lda TEMPZ+1
-         sta (PLISTZHI),y
+         sta PLISTZ+MAXVERTEX,y
          beq PROJb
 BLAH     lsr              ;Shift everything until
          ror TEMPZ        ;Z=8-bits
@@ -1192,10 +1219,10 @@ POSREM   tay
          clc
          adc TM2          ;Add remainder
          ldy count
-         sta (PLISTYLO),y
+         sta PLISTY,y
          lda TM2+1        ;and sign+carry
          adc #00
-         sta (PLISTYHI),y
+         sta PLISTY+MAXVERTEX,y
 
 ; Do the same for x
 
@@ -1227,22 +1254,22 @@ POSXREM  tay
          clc
          adc TM1          ;Add remainder
          ldy count        ;and store
-         sta (PLISTXLO),y
+         sta PLISTX,y
          lda TM1+1
          adc #00
-         sta (PLISTXHI),y
+         sta PLISTX+MAXVERTEX,y
 
          jmp ROTLOOP      ;And on to the next point!
 NOREM   
          ldy count
          lda TM1
-         sta (PLISTXLO),y
+         sta PLISTX,y
          lda TM1+1
-         sta (PLISTXHI),y
+         sta PLISTX+MAXVERTEX,y
          lda TM2
-         sta (PLISTYLO),y
+         sta PLISTY,y
          lda TM2+1
-         sta (PLISTYHI),y
+         sta PLISTY+MAXVERTEX,y
          jmp ROTLOOP
 .)
 

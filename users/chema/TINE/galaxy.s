@@ -3045,9 +3045,17 @@ space
     jsr dec_cash
 	jsr SndPocLow
     jmp update_mkt
-nosell
 nospace
-nocash
+	jsr prepare_area
+	lda #<str_nospace
+	ldx #>str_nospace
+	jmp print
++nocash
+	jsr prepare_area
+	lda #<str_nocash
+	ldx #>str_nocash
+	jmp print
+nosell
 end
     rts
 .)
@@ -3300,7 +3308,6 @@ end
 
 ;equip_items .byt 0
 ;equip_flags .word 00
-
 _displayequip
 .(
     ; initialize number of possible equip items
@@ -3414,7 +3421,6 @@ fuel_price
 ;; Buy new equipment
 buy_equip
 .(
-
 	ldx _cur_sel
 	cpx #$ff
 	bne valid
@@ -3452,8 +3458,12 @@ cash
 	ror
 	bcc missile
 
-	; Buy fuel	
 	lda #70
+	cmp _fuel
+	beq alreadyfit
+
+	; Buy fuel	
+	;lda #70
 	sta _fuel
 	jmp payfor 
 missile
@@ -3463,8 +3473,7 @@ missile
 
 	lda _missiles_left
 	cmp _p_maxmissiles
-	;beq nofit
-	bcs nofit
+	bcs alreadyfit
 	inc _missiles_left
 	jmp payfor
 
@@ -3514,32 +3523,72 @@ payfor
     jsr dec_cash
 	jsr SndPocLow
     jmp _displayequip
-
-	;jmp mkt_status	; Update cash
-nofit
 alreadyfit
-nocash
+	jsr prepare_area
+	lda #<str_equipped
+	ldx #>str_equipped
+	jmp print
+nofit
 end
     rts
 .)
 
+sell_laser
+.(
+	; Do we have pulse lasers?
+	lda _equip
+	and #%1
+	beq nopulse
+	lda _equip
+	and #%11111110
+	sta _equip
+	ldx #2
+	bne doit
+nopulse
+	; Do we have beam lasers?
+	lda _equip+1
+	and #%1
+	beq nobeam
+	lda _equip+1
+	and #%11111110
+	sta _equip+1
+	ldx #10
+	bne doit
+nobeam
+	; Then it should be military
+	lda _equip+1
+	and #%11111101
+	sta _equip+1
+	ldx #11
+doit
+	lda op2
+	pha
+	lda op2+1
+	pha
+    lda priceseqLO,x
+    sta op2
+    lda priceseqHI,x
+    sta op2+1
+	jsr inc_cash
+	pla
+	sta op2+1
+	pla
+	sta op2
+	rts
+.)
 
 upgrade_lasers
 .(
+	jsr sell_laser
+
 	; And add it to our equipment
 	lda tmp0+1
 	and #%00000001	; Beam laser?
 	beq nobeam
-	lda _equip+1
-	and #%11111101
-	sta _equip+1
-	lda _equip
-	and #%11111110
-	sta _equip
 
 	; Update laser damage
 	lda _missiles+1
-	ora #(MILITARY_LASER*8)
+	ora #(BEAM_LASER*8)
 	sta _missiles+1
 
 	sec
@@ -3548,12 +3597,6 @@ nobeam
 	lda tmp0+1
 	and #%00000010	; Military laser?
 	beq nomil
-	lda _equip+1
-	and #%11111110
-	sta _equip+1
-	lda _equip
-	and #%11111110
-	sta _equip
 
 	; Update laser damage
 	lda _missiles+1
@@ -3566,9 +3609,6 @@ nomil
 	lda tmp0
 	and #%00000001	; Pulse laser?
 	beq nopulse
-	lda _equip+1
-	and #%11111100
-	sta _equip+1
 
 	; Update laser damage
 	lda _missiles+1

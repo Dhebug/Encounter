@@ -844,6 +844,20 @@ str_missile
     .asc "Missile"
     .byt 0
 
+
+str_nocash
+	.byt (A_FWRED)
+	.asc "No cash"
+	.byt 0
+str_nospace
+	.byt (A_FWRED)
+	.asc "No cargo space"
+	.byt 0
+str_equipped
+	.byt (A_FWRED)
+	.asc "Already fitted"
+	.byt 0
+
 str_blank 
 	.asc "        "
 	.byt 0
