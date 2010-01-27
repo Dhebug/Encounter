@@ -1119,8 +1119,8 @@ clip_loop
 		lda _LargeY1
 		sta _OtherPixelY
 				
-		jsr _DrawLine
-		rts
+		jmp _DrawLine
+		;rts
 	.)
 end_trivial_draw	
 

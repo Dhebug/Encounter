@@ -124,7 +124,7 @@ Init3D
          STY OBJECTS+1
 
          jsr _lib3dInit ; Initialize lib3D Oric Version
-         
+/*         
          lda #<PLISTX
          sta PLISTXLO
          lda #<PLISTY
@@ -153,7 +153,7 @@ Init3D
          sta PLISTYHI+1
          lda #>(PLISTZ+MAXVERTEX)
          sta PLISTZHI+1
-
+*/
          LDX #<CX
          STX CXLO
          LDX #<CY
@@ -1031,7 +1031,7 @@ cc2
 cc3
 		 stx P0Z+1
 		 
-		 jsr prepare_normals
+ 		 jsr prepare_normals
 
 
 		 lda NFACES	; Point pointers
@@ -1407,6 +1407,7 @@ DrawFace
          STA TEMP
          ADC POINT+1
          STA FACEPTR+1
+
 #ifdef FILLEDPOLYS
          LDY #1           ;Fill pattern
          LDA (POINT),Y    ;index
@@ -1418,48 +1419,17 @@ DrawFace
          ROL TEMP
          sta _CurrentPattern
 
-
-         ;ADC PATTAB
-         ;STA FILLPAT
-         ;LDA TEMP
-         ;ADC PATTAB+1
-         ;STA FILLPAT+1
-
-  
-
-         ;LDX SOLIDPOL
-         ;BPL Wire
-        
-;         LDX #$FF
-;pq       INX
-;         INY
-;         LDA (POINT),Y    ;Copy to queue
-;         STA PQ,X
-;         CPX NVERTS
-;         BNE pq
-;         TXA              ;Empty face
          lda NVERTS
          BEQ exit           ; Empty face
 
-         ;JSR IsVis
-         ;bmi exit
-	 	lsr facevis+2
-		ror facevis+1
-		ror facevis
-		bcc exit
-
+ 	 	 lsr facevis+2
+		 ror facevis+1
+		 ror facevis
+		 bcc exit
 
          JSR POLYFILL
 
 #else 
-		 jmp Wire
-
-#endif
-
-exit     LDA FACEPTR
-         LDY FACEPTR+1
-         RTS
-#ifndef FILLEDPOLYS
 ;Wireframe routine                          
 Wire
          ;JSR IsVis
@@ -1493,7 +1463,6 @@ l2       LDA (POINT),Y
          STA Y2
          LDA PLISTY+MAXVERTEX,X
          STA Y2+1
-
          STY RTEMPY
         
 
@@ -1521,7 +1490,7 @@ store    LDA RTEMPA
 
 godraw  
          JSR _DrawClippedLine
-
+	
 skip     LDY RTEMPY
          DEC NVERTS
          BNE l2
@@ -1537,6 +1506,10 @@ test2    CMP LINEHI,Y
          BNE incy
          BEQ skip
 #endif
+
+exit     LDA FACEPTR
+         LDY FACEPTR+1
+         RTS
 .)
 
 
@@ -1725,7 +1698,7 @@ cont
     ; We are using the fast multi we need unsigned 8-bit numbers
     ; also need to check for zeros, to special-case them.
 
-    ; Unsign px. Save sign and store in reg X
+    ; Unsign nx. Save sign and store in reg X
     lda #0
     sta sign
     ;ldx tempx Done above
@@ -1742,10 +1715,10 @@ positivex1
     tax
 
     ; Unsign cx_. Invert sign and store in reg Y
-    lda cx_
+    ldy cx_
     beq doY     ; If zero jump to next component
     bpl positivex2
-    tay
+    ;tay
     lda sign
     eor #$ff
     sta sign
@@ -1753,8 +1726,9 @@ positivex1
     eor #$ff
     clc
     adc #1
+	tay
 positivex2
-    tay
+    ;tay
 
     ; Get back the first operand to reg A and multiply. Result in op1 (high byte in A).
     txa
@@ -1777,7 +1751,7 @@ nores1
     sta op1
 
 doY
-    ; Unsign py. Save sign and store in reg X
+    ; Unsign ny. Save sign and store in reg X
     lda #0
     sta sign
     ldx tempx
@@ -1793,10 +1767,10 @@ positivey1
     tax
 
     ; Unsign cx_. Save sign and store in reg Y
-    lda cy_
+    ldy cy_
     beq doZ
     bpl positivey2
-    tay
+    ;tay
     lda sign
     eor #$ff
     sta sign
@@ -1804,8 +1778,9 @@ positivey1
     eor #$ff
     clc
     adc #1
+	tay
 positivey2
-    tay
+    ;tay
 
     ; Get back the first operand to reg A and multiply. Result in tmp.
     txa
@@ -1834,7 +1809,7 @@ nores2
 
 
 doZ
-    ; Unsign pz. Save sign and store in reg X
+    ; Unsign nz. Save sign and store in reg X
     lda #0
     sta sign
     ldx tempx
@@ -1850,10 +1825,10 @@ positivez1
     tax
 
     ; Unsign cz_. Save sign and store in reg Y
-    lda cz_
+    ldy cz_
     beq doneall
     bpl positivez2
-    tay
+    ;tay
     lda sign
     eor #$ff
     sta sign
@@ -1861,8 +1836,9 @@ positivez1
     eor #$ff
     clc
     adc #1
+	tay
 positivez2
-    tay
+    ;tay
 
     ; Get back the first operand to reg A and multiply. Result in tmp.
     txa
@@ -1910,10 +1886,9 @@ end
 
 .)
 
+.zero
 facevis .dsb 3
-
-
-
+.text
 
 
 

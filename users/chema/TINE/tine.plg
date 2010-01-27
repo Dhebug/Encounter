@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPBE.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP22A.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPBE.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP22A.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -37,13 +37,13 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2376
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2407
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13860
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13891
 
 File 'overlay.tap' is 14862 bytes long (14 bytes header and 14848 bytes of data)
 Presione una tecla para continuar . . . 
@@ -83,14 +83,14 @@ Linking
 Assembling
 lib3d: Memory usage
 lib3d: Zero page:
-(__lib3d_zeropage_end - __lib3d_zeropage_start)=(__lib3d_zeropage_end - __lib3d_zeropage_start)=109
+(__lib3d_zeropage_end - __lib3d_zeropage_start)=(__lib3d_zeropage_end - __lib3d_zeropage_start)=97
 lib3d: Normal memory:
-(__lib3d_end - __lib3d_start)=(__lib3d_end - __lib3d_start)=1591
+(__lib3d_end - __lib3d_start)=(__lib3d_end - __lib3d_start)=1637
 obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3082
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=2979
 Size of ship data tables in bytes:
 (__shiptables_end - __shiptables_start)=(__shiptables_end - __shiptables_start)=416
 
@@ -124,7 +124,7 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2376
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2407
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
