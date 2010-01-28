@@ -24,7 +24,7 @@
 
 /* The next thresholds are in units of IRQs... now at 25hz  */
 /* Threshold for alternate scan technique, the lower one	*/
-#define MAXFRAMETIME1 7 
+#define MAXFRAMETIME1 8 
 /* Threshold for complete frame skipping, the higher one    */
 #ifdef ALTSCANS
 #define MAXFRAMETIME2 (MAXFRAMETIME1+1)

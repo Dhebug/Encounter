@@ -984,10 +984,23 @@ ml       LDA (POINT),Y    ;Take transpose to get
 
 		 and #%01111111
 		 bne normalmodel
+
 		 ldx RTEMPA
 		 lda HCZ,x
-		 cmp #15
+		 cmp #11
 		 bcc normalmodel
+		 cmp #17
+		 bcc easymodel
+ 		 lda #DEBRIS
+		 sta OBTYPE
+		 lda #<ONEDOT
+		 sta DATAP
+		 sta POINT
+		 lda #>ONEDOT
+		 sta DATAP+1
+		 sta POINT+1
+		 jmp normalmodel
+easymodel
 		 lda #<CAPSULE
 		 sta DATAP
 		 sta POINT
@@ -1209,9 +1222,65 @@ SmallDot
         lda PLISTY+MAXVERTEX,x
         sta Y1+1
 
-        jmp draw_debris
+        ;; Plots debris (a point) at given X1,Y1 position (signed 16-bit)
+	    ;; after clipping
 
+	    lda Y1
+	    sta op1
+	    lda Y1+1
+	    sta op1+1
+
+	    lda #(CLIP_BOTTOM)
+	    sta op2
+	    lda #0
+	    sta op2+1
+	    jsr cmp16
+		bmi cont1
+		rts
+cont1
+	    lda #(CLIP_TOP)
+	    sta op2
+	    jsr cmp16
+	 	bpl cont2
+		rts
+cont2
+	    jsr draw_dot
+	    inc X1
+	    bne plot
+	    inc X1+1
+plot
+		; Let the program flow
 .)
+
+draw_dot
+.(
+		lda X1
+		sta op1
+		lda X1+1
+		sta op1+1
+	
+	    lda #(CLIP_RIGHT)
+	    sta op2
+	    lda #0
+	    sta op2+1
+	    jsr cmp16
+	    bpl end
+
+	    lda #(CLIP_LEFT)
+	    sta op2
+	    jsr cmp16
+	    bmi end
+
+	    ldx X1
+	    ldy Y1
+
+	    jsr pixel_address
+	    eor (tmp0),y
+	    sta (tmp0),y
+end
+	    rts    
+.)
+
 
 
 #ifdef USEOBLETS
@@ -1315,70 +1384,6 @@ done     RTS
 #endif
 
 
-CirclePrepare
-.(
-        STA POINT
-        STY POINT+1
-
-#ifdef FILLEDPOLYS
-        lda #0
-        sta TEMP
-        LDY #1           ;Fill pattern
-        LDA (POINT),Y    ;index
-        ASL
-        ROL TEMP
-        ASL
-        ROL TEMP
-        ASL
-        ROL TEMP
-        sta _CurrentPattern
-#endif
-        ldy #2
-        lda (POINT),y
-
-        tax
-        ldy #0
-        lda PLISTX,x
-        sta cx
-        lda PLISTX+MAXVERTEX,x
-        sta cx+1        
-
-        lda PLISTY,x
-        sta cy
-        lda PLISTY+MAXVERTEX,x
-        sta cy+1
-
-#ifdef 0
-        ldx RTEMPA
-        lda HCZ,x
-        tax
-        bne done
-        inx
-done
-#endif
-         rts
-
-
-.)
-
-
-CircleCall
-.(
-
-        ;sta (sp),y
-        ;iny
-        ;lda #0
-        ;sta (sp),y
-        sta rad
-        lda #0
-        sta rad+1
-
-        jmp _circleMidpoint
-
-.)
-
-
-
 ;
 ; DrawFace -- Draw a polygon
 ;
@@ -1468,7 +1473,6 @@ l2       LDA (POINT),Y
 
 ; Check for line connections
 ; Points in RTEMPA and .X
-
          LDY #00
 loop     CPY NUMLINES
          BEQ store
@@ -1498,13 +1502,13 @@ skip     LDY RTEMPY
            
          SEC
          BCS exit
-
 test2    CMP LINEHI,Y
          BNE incy
          LDA RTEMPA
          CMP LINELO,Y
          BNE incy
          BEQ skip
+
 #endif
 
 exit     LDA FACEPTR
@@ -1559,6 +1563,65 @@ l2       LDA (POINT),Y
 #endif
 
 
+CirclePrepare
+.(
+        STA POINT
+        STY POINT+1
+
+#ifdef FILLEDPOLYS
+        lda #0
+        sta TEMP
+        LDY #1           ;Fill pattern
+        LDA (POINT),Y    ;index
+        ASL
+        ROL TEMP
+        ASL
+        ROL TEMP
+        ASL
+        ROL TEMP
+        sta _CurrentPattern
+#endif
+        ldy #2
+        lda (POINT),y
+
+        tax
+        ldy #0
+        lda PLISTX,x
+        sta cx
+        lda PLISTX+MAXVERTEX,x
+        sta cx+1        
+
+        lda PLISTY,x
+        sta cy
+        lda PLISTY+MAXVERTEX,x
+        sta cy+1
+
+#ifdef 0
+        ldx RTEMPA
+        lda HCZ,x
+        tax
+        bne done
+        inx
+done
+#endif
+         rts
+.)
+
+
+CircleCall
+.(
+        ;sta (sp),y
+        ;iny
+        ;lda #0
+        ;sta (sp),y
+        sta rad
+        lda #0
+        sta rad+1
+
+        jmp _circleMidpoint
+.)
+
+
 #define cx_	tmp3
 #define cy_	tmp4
 #define cz_	tmp5
@@ -1572,6 +1635,9 @@ prepare_normals
     LDX RTEMPA       ;Center index
     CLC              ;Rot and NOT proj
     JSR ROTPROJ
+
+	lda #0
+	sta cont+1
 
     ; Save center coordinates in cx_, cy_, cz_ for later.
     ldx RTEMPA
@@ -1589,9 +1655,14 @@ prepare_normals
     sta cz_
     lda HCZ,x
     sta cz_+1
+	cmp #$4
+	bcc loopadj
+	inc cont+1
+	jmp startcheck
 
     ; Adjust center coordinates, so they are 8-bit signed
 loopadj
+
     lda cx_+1
     ora cy_+1
     ora cz_+1
@@ -1610,7 +1681,6 @@ conty
     bne shift
 contz
     lda cz_+1
-    ;bne shift
     beq endloop
 shift
     lda cx_+1
@@ -1621,7 +1691,7 @@ shift
     lda cy_+1
     cmp #$80    
     ror cy_+1
-    ror cy_
+    ror cy_ 
 
     ; Z is allways positive (or it won't be visible)
     ; This check can be avoided
@@ -1641,17 +1711,16 @@ endloop
     ; $ff00 (-256).If we get the low byte, it is a positive number
     ; After rotation we get $ff80 (-128), which is an 8-bit signed amount.
 
-
     lda cx_+1
     cmp #$80    
-    ror cx_+1
+    ;ror cx_+1
     ror cx_
  
     lda cy_+1
     cmp #$80    
-    ror cy_+1
-    ror cy_
-
+    ;ror cy_+1
+    ror cy_ 
+ 
     ; Z is allways positive (or it won't be visible)
     ; This check can be avoided
     ;lda cz_+1
@@ -1660,6 +1729,7 @@ endloop
     ror cz_
 
 
+startcheck
     ; Prepare facevis bitfield.
 
 	lda #0
@@ -1681,7 +1751,19 @@ loop
     bne cont
     sec
     jmp vis
+
 cont
+	lda #0	;SMC
+	beq cont2
+	lda PLISTZ,x
+	bpl noneg
+	clc
+	jmp vis
+noneg
+	sec
+	jmp vis
+cont2
+
     ; For each face we need to calculate the dot-product
     ; of the center and the normal.
     ; <cx_,cy_,cz_>*<nx,ny,nz>=
@@ -1705,8 +1787,6 @@ cont
 	lda PLISTX,x
     beq doY     ; If zero jump to next component
     bpl positivex1
-    ;ldy #$ff
-    ;sty sign
     dec sign
     eor #$ff
     clc
@@ -1886,9 +1966,11 @@ end
 
 .)
 
+
 .zero
 facevis .dsb 3
 .text
+
 
 
 

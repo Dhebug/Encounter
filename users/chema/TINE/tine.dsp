@@ -146,10 +146,6 @@ SOURCE=.\oobj3d\clip.s
 # End Source File
 # Begin Source File
 
-SOURCE=.\oobj3d\debris.s
-# End Source File
-# Begin Source File
-
 SOURCE=.\oobj3d\filler.s
 # End Source File
 # Begin Source File
