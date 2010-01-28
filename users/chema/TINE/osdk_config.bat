@@ -14,8 +14,8 @@ SET OSDKLINK=-B
 
 
 SET OSDKFILE=main
-SET OSDKFILE=%OSDKFILE% oobj3d\lib3d oobj3d\obj3d oobj3d\filler oobj3d\LineDraw 
-SET OSDKFILE=%OSDKFILE% oobj3d\clip oobj3d\mextra oobj3d\circle oobj3d\debris
+SET OSDKFILE=%OSDKFILE% oobj3d\lib3d oobj3d\LineDraw oobj3d\obj3d oobj3d\filler  
+SET OSDKFILE=%OSDKFILE% oobj3d\clip oobj3d\mextra oobj3d\circle 
 SET OSDKFILE=%OSDKFILE% graphics random ships data stars  radar tinefuncs
 SET OSDKFILE=%OSDKFILE% text tineinc galaxy cockpit keyboard disk 
 SET OSDKFILE=%OSDKFILE% tactics universe tineloop sound

@@ -82,17 +82,17 @@ noflags
     lda (POINT),y
     and #%01111111
     cmp #SHIP_MISSILE
-    beq doai
+    beq AIMain	;doai
 
     ;if (i^g_mcount)&7==0  
 
     txa
     eor frame_number
     and #7
-    bne noai    
-
-doai
-    jsr AIMain
+    ;bne noai    
+	beq AIMain
+;doai
+;    jsr AIMain
 noai
 
 nomove
@@ -464,6 +464,11 @@ areangry
 	cmp #3
 	bcs notanaconda
 
+	; Not many ships around
+	lda NUMOBJS
+	cmp #10
+	bcs notanaconda
+
 	; Launch WORM
 	ldx AIShipID
 	jsr SetCurOb
@@ -670,9 +675,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<$f8e-450	;-500);f07d ;$f8e
+    lda #<$f8e-500	;-500);f07d ;$f8e
     sta op2
-    lda #>$f8e-450	;-500);f07d ;$f8e
+    lda #>$f8e-500	;-500);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar
