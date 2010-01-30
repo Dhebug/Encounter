@@ -28,6 +28,7 @@
 
 
 void Test_20000();
+void TestAsm();
 
 
 void TestSpeed()
@@ -112,6 +113,7 @@ void main()
 		
 		PROFILE_ENTER(ROUTINE_GLOBAL);
 		TestSpeed();
+		TestAsm();
 		DoSomething();
 		DoSomethingElse();
 		PROFILE_LEAVE(ROUTINE_GLOBAL);

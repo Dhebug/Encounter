@@ -16,7 +16,9 @@ CALL osdk_config.bat
 ::
 :: Run Euphoric using the common batch
 ::
+del %OSDK%\Euphoric\printer.txt
 CALL %OSDK%\Euphoric\osdk_euphoric.bat
+copy %OSDK%\Euphoric\printer.txt profile.txt
 GOTO End
 
 
@@ -32,3 +34,4 @@ IF "%OSDKBRIEF%"=="" PAUSE
 GOTO End
 
 :End
+
