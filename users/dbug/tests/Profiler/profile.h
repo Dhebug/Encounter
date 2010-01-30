@@ -1,22 +1,40 @@
-
 //
 // User settings
 //
-#define PROFILER_ENABLE		// Comment out to disable profiling
+#define PROFILER_ENABLE			// Comment out to disable profiling
+#define PROFILER_USE_PRINTER	// Comment out to disable the usage of printer
+#define PROFILER_USE_NAMES		// Comment out to disable the usage of function names
+
+#ifdef PROFILER_MAIN
+#define FUNCTIONNAME(function_id,function_name)	.byte function_id,function_name,0
+#else
+#define FUNCTIONNAME(function_id,function_name)
+#endif
+
 
 //
 // List of routines (need an enum !)
+// Should have incrementing numbers, finishing by PROFILER_ROUTINE_COUNT as the number of routines to profile
 //
 #define ROUTINE_TEST20000			0
 #define ROUTINE_DOSOMETHING			1
 #define ROUTINE_DOSOMETHINGELSE		2
 #define ROUTINE_SUBROUTINE			3
 #define ROUTINE_GLOBAL				4
+#define ROUTINE_ASM					5
+#define PROFILER_ROUTINE_COUNT   	6	
 
-// Should be the number of routines to profile
-#define PROFILER_ROUTINE_COUNT   	5	
 
-#define PROFILER_MAX_CALLDEPTH		10
+FUNCTIONNAME(ROUTINE_TEST20000,"Test20000")
+FUNCTIONNAME(ROUTINE_DOSOMETHING,"DoSomething")
+FUNCTIONNAME(ROUTINE_DOSOMETHINGELSE,"DoSomethingElse")
+FUNCTIONNAME(ROUTINE_SUBROUTINE,"SubRoutine")
+FUNCTIONNAME(ROUTINE_GLOBAL,"Global")
+FUNCTIONNAME(ROUTINE_ASM,"Asm")
+FUNCTIONNAME(PROFILER_ROUTINE_COUNT,0)	// End marker
+	
+
+
 
 //
 // Profiler API
@@ -26,8 +44,15 @@
 
 #ifdef PROFILER_ASM
 // Assembler API
+#define PROFILE_ENTER(id)	.byte $08,$48,$a9,id,$20,<_ProfilerEnterFunctionAsm,>_ProfilerEnterFunctionAsm,$68,$28
+#define PROFILE_LEAVE(id)	.byte $08,$48,$a9,id,$20,<_ProfilerLeaveFunctionAsm,>_ProfilerLeaveFunctionAsm,$68,$28
+#define PROFILE(id)         .byte $08,$08,$08,$48,$a9,id,$20,<_ProfilerEnterFunctionStack,>_ProfilerEnterFunctionStack,$68,$28
+
 #else
 // C API
+#define PROFILE_ENTER(id) {profiler_function_id=id;ProfilerEnterFunctionC();}
+#define PROFILE_LEAVE(id) {profiler_function_id=id;ProfilerLeaveFunctionC();}
+
 extern unsigned char ProfilerRoutineCount[PROFILER_ROUTINE_COUNT];
 extern unsigned char ProfilerRoutineTimeLow[PROFILER_ROUTINE_COUNT];
 extern unsigned char ProfilerRoutineTimeHigh[PROFILER_ROUTINE_COUNT];
@@ -40,11 +65,6 @@ void ProfilerNextFrame();
 void ProfilerDisplay();
 void ProfilerEnterFunction();
 void ProfilerLeaveFunction();
-
-#define PROFILE_ENTER(id) {profiler_function_id=id;ProfilerEnterFunction();}
-#define PROFILE_LEAVE(id) {profiler_function_id=id;ProfilerLeaveFunction();}
-#define PROFILE(id)
-
 #endif
 
 
@@ -154,10 +174,29 @@ Frame:0123
  
 
 0123456789012345678901234567890123456789
+Frame:0123
+ 0x01    1x01    2x01    3x01    4x01 
+ 012345  012345  012345  012345  012345 
+
+0123456789012345678901234567890123456789
+Frame:0123
+ 0x01    1x01    2x01    3x01    4x01 
+ 12345 12345 12345 12345 12345 12345 12345 
+
+
+
+ 
+0123456789012345678901234567890123456789
 Frame:0123 Cycles:012345 Fps:23
  0:012345 1:012345 2:012345 3:012345 
  4:012345 5:012345 6:012345 7:012345 
- 
+
+0123456789012345678901234567890123456789
+Frame:0123 Cycles:012345 Fps:23
+0:0123451:0123452:0123453:0123454:012345 
+5:0123456:0123457:0123458:0123459:012345 
+
+   
 012345 012345 012345 012345 012345 
 
 Infos for each profile group:
