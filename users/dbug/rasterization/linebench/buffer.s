@@ -341,6 +341,10 @@ _path_e_dx_1
 
 end_inner_loop
 
+	dec i
+	beq done
+
+	.(
 	; Update screen adress
 	;clc					; 2
 	lda tmp0+0			; 3
@@ -351,6 +355,7 @@ end_inner_loop
 	clc
 skip
 	; ------------------Min=13 Max=17
+	.)
 
 	; e=e+2*dy
 	lda e
@@ -361,20 +366,17 @@ _path_e_dy_0
 _path_e_dy_1
 	adc #0
 	sta 1+e
-	bmi end_inner_loop2	; n=1 ?
-
-	dec i
-	bne outer_loop
-	rts
+	bpl outer_loop
 
 end_inner_loop2		
 	lda _TableBit6Reverse,x		; 4
 	eor (tmp0),y				; 5
 	sta (tmp0),y				; 6
 	; --------------------------=15
-
-	dec i						; 5
+	
 	bne end_inner_loop
+	
+done	
 	rts
 .)
 

@@ -47,6 +47,8 @@ extern unsigned char OtherPixelY;		// Coordinate Y of other edited pixel/byte
 // ===== Buffer.s =====
 //
 void DrawLine();
+void DrawLine8();
+void DrawLine8_toptobottomandlefttoright();
 
 //
 // ===== Clip.s =====
@@ -63,6 +65,105 @@ extern int LargeX;
 extern int LargeY;
 
 
+void test0()
+{
+	int i;
+	
+	// Testing all positions from top left
+	for (i=0;i<=239;i++)
+	{
+		CurrentPixelX=0;
+		CurrentPixelY=0;
+		OtherPixelX=i;
+		OtherPixelY=199;
+
+		DrawLine8();
+		//DrawLine8_toptobottomandlefttoright();
+	}
+	
+	/*
+	// TopLeft to BottomRight		
+	CurrentPixelX=0;
+	CurrentPixelY=0;
+	OtherPixelX=239;
+	OtherPixelY=199;
+	*/
+
+	/*
+	// TopLeft to BottomRight - diagonal
+	CurrentPixelX=1;
+	CurrentPixelY=0;
+	OtherPixelX=199;
+	OtherPixelY=199;
+	*/
+	
+	/*
+	// BottomLeft to TopRight
+	CurrentPixelX=0;
+	CurrentPixelY=199;
+	OtherPixelX=239;
+	OtherPixelY=0;
+	*/
+
+	/*
+	// TopRight to BottomLeft
+	CurrentPixelX=239;
+	CurrentPixelY=0;
+	OtherPixelX=0;
+	OtherPixelY=199;
+	*/
+		
+	//DrawLine();
+	//DrawLine8();
+	
+	while (1);
+}
+
+
+void line_mike_8()
+{
+	int i;
+	
+	for (i=0;i<239;i++)
+	{
+		OtherPixelX=i;
+		OtherPixelY=0;
+		CurrentPixelX=239-i;
+		CurrentPixelY=199;
+
+		DrawLine8();
+	}
+	for (i=0;i<199;i++)
+	{
+		OtherPixelX=0;
+		OtherPixelY=i;
+		CurrentPixelX=239;
+		CurrentPixelY=199-i;
+
+		DrawLine8();
+	}
+	/*
+	for (i=0;i<239;i++)
+	{
+		CurrentPixelX=i;
+		CurrentPixelY=0;
+		OtherPixelX=239-i;
+		OtherPixelY=199;
+
+		DrawLine8();
+	}
+	for (i=0;i<199;i++)
+	{
+		CurrentPixelX=0;
+		CurrentPixelY=i;
+		OtherPixelX=239;
+		OtherPixelY=199-i;
+
+		DrawLine8();
+	}
+	*/	
+}
+
 
 void line_mike()
 {
@@ -76,8 +177,23 @@ void line_mike()
 
 		DrawLine();
 		*/
+
+		/*
+	while (1)
+	{
+		LargeX0=0;
+		LargeY0=0;
+		LargeX1=239;
+		LargeY1=199;
 		
-	for (i=0;i<239;i++)
+		DrawClippedLine();		
+	}		
+	*/
+		
+	/*		
+	while (1)
+	{
+	for (i=30;i<50;i++)
 	{
 		LargeX0=i;
 		LargeY0=0;
@@ -85,6 +201,7 @@ void line_mike()
 		LargeY1=199;
 		
 		DrawClippedLine();
+	}
 	}
 	for (i=0;i<199;i++)
 	{
@@ -95,7 +212,8 @@ void line_mike()
 		
 		DrawClippedLine();
 	}
-	/*
+	*/
+	
 	for (i=0;i<239;i++)
 	{
 		OtherPixelX=i;
@@ -114,7 +232,27 @@ void line_mike()
 
 		DrawLine();
 	}
+	/*
+	for (i=0;i<239;i++)
+	{
+		CurrentPixelX=i;
+		CurrentPixelY=0;
+		OtherPixelX=239-i;
+		OtherPixelY=199;
+
+		DrawLine();
+	}
+	for (i=0;i<199;i++)
+	{
+		CurrentPixelX=0;
+		CurrentPixelY=i;
+		OtherPixelX=239;
+		OtherPixelY=199-i;
+
+		DrawLine();
+	}
 	*/
+	
 }
 
 
@@ -140,21 +278,31 @@ void test()
 		
 	while (1)
 	{
+		// Judd routine first
+		printf("\nMike 8bit: ");
+		*(unsigned int*)0x276=0;
+		line_mike_8();
+		delay=65536-(*(unsigned int*)0x276);
+		printf(" duration: %d",delay);
+		/*
 		// Mike routine first
-		printf("\nMike test: ");
+		printf("\nMike 16bit: ");
 		*(unsigned int*)0x276=0;
 		line_mike();
 		delay=65536-(*(unsigned int*)0x276);
-		printf(" duration (in 100th of second): %d",delay);
-						
+		printf(" duration: %d",delay);
+		
 		// Basic routine second
 		printf("\nBasic: ");
 		*(unsigned int*)0x276=0;
 		line_basic();
 		delay=65536-(*(unsigned int*)0x276);
-		printf(" duration (in 100th of second): %d",delay);
+		printf(" duration: %d",delay);
+		*/
 	}
 }
+
+
 
 
 void main()
@@ -163,6 +311,7 @@ void main()
 	hires();
 
 	test();
+	//test0();
 }
 
 
