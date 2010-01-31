@@ -26,9 +26,7 @@ save_y			.dsb 1
 ; dex $ca 11001010
 ; iny $c8 11001000
 ; dey $88 10001000
-
 	
-
 draw_nearly_horizontal_8 
 	.(
 	; here we have DY in Y, and the OPCODE in A
@@ -43,11 +41,8 @@ draw_nearly_horizontal_8
 	
 	ldx _CurrentPixelX   	;Plotting coordinates
 	ldy _CurrentPixelY   	;in X and Y
-	
-	lda #00     			;Saves us a CMP
-	sec
-	sbc dy					; -DY
-	
+	sty save_y
+		
 	; Draw the first pixel
 	sta save_a
 	sty save_y
@@ -58,41 +53,46 @@ draw_nearly_horizontal_8
 	lda save_a
 	ldy save_y
 	
+	lda #00     			;Saves us a CMP
+	sec
+	sbc dy					; -DY
+	sta save_a				; 3
+	
 	clc
 	beq test_done
+		
 loop 
 __auto_stepx
 	inx             		; Step in x
+	lda save_a				; 3
 __auto_ady
-	adc #00					; +DY
+	adc #00					; 2 +DY
+	sta save_a				; 3
 	bcc NOPE    			; Time to step in y?
-	iny            			; Step in y
-	
-	; Set the new screen adress
-	sta save_a
-	lda _HiresAddrLow,y
-	sta tmp0+0
-	lda _HiresAddrHigh,y
-	sta tmp0+1
-	lda save_a
 	
 __auto_dx   
-	sbc #00     			; -DX
- 
+	sbc #00     			; 2 -DX
+	sta save_a				; 3
+
+	inc save_y				; 5 Steps in y
+	ldy save_y				; 3
+	
+	; Set the new screen adress
+	lda _HiresAddrLow,y		; 4
+	sta tmp0+0				; 3
+	lda _HiresAddrHigh,y	; 4
+	sta tmp0+1				; 3
+	 
 NOPE 
 	; Draw the pixel
-	sta save_a
-	sty save_y
 	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x
 	eor (tmp0),y
 	sta (tmp0),y
-	lda save_a
-	ldy save_y
   
 test_done	
 __auto_cpx
-	cpx #00				; At the endpoint yet?
+	cpx #00					; At the endpoint yet?
 	bne loop
 	rts	
 	.)
@@ -106,7 +106,6 @@ __auto_cpx
 ; _OtherPixelY
 ;	
 _DrawLine8
-	;jmp _DrawLine
 	;
 	; Compute deltas and signs
 	;
