@@ -1,5 +1,6 @@
 @ECHO OFF
 
+set osdk=c:\osdk
 
 ::
 :: Initial check.
