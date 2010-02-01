@@ -8,7 +8,8 @@ __shiptables_start
 
 ShipModelLo 
     .byt  <(MISSILE), <(ONEDOT), <(CAPSULE), <(PLATELET), <(BARREL), <(BOULDER), <(ASTEROID)
-    .byt  <(SPLINTER), <(SHUTTLE), <(TRANSPORTER), <(VIPER), <(BOA), <(COBRA)
+    ;.byt  <(SPLINTER), <(SHUTTLE), <(/*TRANSPORTER*/ SHUTTLE), <(VIPER), <(BOA), <(COBRA)
+	.byt  <(SPLINTER), <(SHUTTLE), <(SHUTTLE), <(VIPER), <(BOA), <(COBRA)
     .byt  <(PYTHON), <(ANACONDA), <(WORM), <(COBRAMK1), <(GECKO), <(KRAIT)
     .byt  <(MAMBA), <(SIDEWINDER), <(ADDER), <(MORAY), <(FERDELANCE), <(ASP)
     .byt  <(COBRA), <(PYTHON), <(BOA), <(THARGOID), <(THARGLET), <(CONSTRICTOR)
@@ -16,7 +17,8 @@ ShipModelLo
 
 ShipModelHi 
     .byt  >(MISSILE), >(ONEDOT), >(CAPSULE), >(PLATELET), >(BARREL), >(BOULDER), >(ASTEROID)
-    .byt  >(SPLINTER), >(SHUTTLE), >(TRANSPORTER), >(VIPER), >(BOA), >(COBRA)
+    ;.byt  >(SPLINTER), >(SHUTTLE), >(/*TRANSPORTER*/ SHUTTLE), >(VIPER), >(BOA), >(COBRA)
+	.byt  >(SPLINTER), >(SHUTTLE), >(SHUTTLE), >(VIPER), >(BOA), >(COBRA)
     .byt  >(PYTHON), >(ANACONDA), >(WORM), >(COBRAMK1), >(GECKO), >(KRAIT)
     .byt  >(MAMBA), >(SIDEWINDER), >(ADDER), >(MORAY), >(FERDELANCE), >(ASP)
     .byt  >(COBRA), >(PYTHON), >(BOA), >(THARGOID), >(THARGLET), >(CONSTRICTOR)
@@ -64,7 +66,8 @@ ShipKillValue
 
 ShipLaserVertex
     .byt  $00, $00, $00, $00, $00, $00, $00
-    .byt  $00, $00, $0c, $00, $00, $15
+    ;.byt  $00, $00, $0 /*$0c*/, $00, $00, $15
+	.byt  $00, $00, $00, $00, $00, $15
     .byt  $00, $0c, $00, $0a, $00, $00
     .byt  $00, $00, $00, $00, $00, $08
     .byt  $15, $00, $00, $0f, $00, $00
