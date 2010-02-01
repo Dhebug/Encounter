@@ -14,7 +14,6 @@
 ;_OtherPixelY	.dsb 1
 	
 save_a			.dsb 1
-save_x			.dsb 1
 save_y			.dsb 1
 
 	.text
@@ -26,76 +25,41 @@ save_y			.dsb 1
 ; dex $ca 11001010
 ; iny $c8 11001000
 ; dey $88 10001000
-	
-draw_nearly_horizontal_8 
-	.(
-	; here we have DY in Y, and the OPCODE in A
-	sta __auto_stepx	; Write a (dex / nop / inx) instruction
-	sty __auto_ady+1
-	
-	lda dx
-	sta __auto_dx+1
-	
-	lda _OtherPixelX
-	sta __auto_cpx+1
-	
-	ldx _CurrentPixelX   	;Plotting coordinates
-	ldy _CurrentPixelY   	;in X and Y
-	sty save_y
-		
-	; Draw the first pixel
-	sta save_a
-	sty save_y
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x
-	eor (tmp0),y
-	sta (tmp0),y
-	lda save_a
-	ldy save_y
-	
-	lda #00     			;Saves us a CMP
-	sec
-	sbc dy					; -DY
-	sta save_a				; 3
-	
-	clc
-	beq test_done
-		
-loop 
-__auto_stepx
-	inx             		; Step in x
-	lda save_a				; 3
-__auto_ady
-	adc #00					; 2 +DY
-	sta save_a				; 3
-	bcc NOPE    			; Time to step in y?
-	
-__auto_dx   
-	sbc #00     			; 2 -DX
-	sta save_a				; 3
 
-	inc save_y				; 5 Steps in y
-	ldy save_y				; 3
-	
-	; Set the new screen adress
-	lda _HiresAddrLow,y		; 4
-	sta tmp0+0				; 3
-	lda _HiresAddrHigh,y	; 4
-	sta tmp0+1				; 3
-	 
-NOPE 
-	; Draw the pixel
+
+
+draw_totaly_vertical_8
+.(
+	ldx _CurrentPixelX
 	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x
-	eor (tmp0),y
-	sta (tmp0),y
-  
-test_done	
-__auto_cpx
-	cpx #00					; At the endpoint yet?
+	lda _TableBit6Reverse,x		; 4
+	sta _mask_patch+1
+	
+	ldx dy
+	inx
+	
+	clc							; 2
+loop
+_mask_patch
+	lda #0						; 2
+	eor (tmp0),y				; 5
+	sta (tmp0),y				; 6 => total = 13 cycles
+
+	; Update screen adress
+	lda tmp0+0					; 3
+	adc #40						; 2
+	sta tmp0+0					; 3
+	bcc skip					; 2 (+1 if taken)
+	inc tmp0+1					; 5
+	clc							; 2
+skip
+	; ------------------Min=13 Max=17
+
+	dex
 	bne loop
-	rts	
-	.)
+	rts
+.)
+	
 
 	
 ;
@@ -115,21 +79,20 @@ _DrawLine8
 	sec
 	lda _CurrentPixelY
 	sbc _OtherPixelY
-	sta dy
 	beq end
 	bcc cur_smaller
 
 cur_bigger					; y1>y2
 	; Swap X and Y
 	; So we always draw from top to bottom
-	lda _CurrentPixelY
+	ldy _CurrentPixelY
 	ldx _OtherPixelY
-	sta _OtherPixelY
+	sty _OtherPixelY
 	stx _CurrentPixelY
 
-	lda _CurrentPixelX
+	ldy _CurrentPixelX
 	ldx _OtherPixelX
-	sta _OtherPixelX
+	sty _OtherPixelX
 	stx _CurrentPixelX
 		
 	jmp end
@@ -138,8 +101,8 @@ cur_smaller					; y1<y2
 	; Absolute value
 	eor #$ff
 	adc #1
-	sta dy
 end
+	sta dy
 .)
 	
 	;
@@ -179,19 +142,72 @@ end
 	beq draw_totaly_horizontal_8
 	cpy dx
 	bcs draw_nearly_vertical_8
-	jmp draw_nearly_horizontal_8
 
+draw_nearly_horizontal_8 
+	.(
+	; here we have DY in Y, and the OPCODE in A
+	sta __auto_stepx	; Write a (dex / nop / inx) instruction
+	sty __auto_ady+1
+	
+	lda dx
+	sta __auto_dx+1
+	
+	lda _OtherPixelX
+	sta __auto_cpx+1
+	
+	ldx _CurrentPixelX   	;Plotting coordinates
+	ldy _CurrentPixelY   	;in X and Y
+	sty save_y
+			
+	lda #00     			;Saves us a CMP
+	sec
+	sbc dy					; -DY
+	sta save_a				; 3
+	
+	jmp draw_pixel
+		
+loop 
+__auto_stepx
+	inx             		; Step in x
+	lda save_a				; 3
+__auto_ady
+	adc #00					; 2 +DY
+	sta save_a				; 3
+	bcc draw_pixel 			; Time to step in y?
+	
+__auto_dx   
+	sbc #00     			; 2 -DX
+	sta save_a				; 3
+
+	inc save_y				; 5 Steps in y
+	ldy save_y				; 3
+	
+	; Set the new screen adress
+	lda _HiresAddrLow,y		; 4
+	sta tmp0+0				; 3
+	lda _HiresAddrHigh,y	; 4
+	sta tmp0+1				; 3
+	 
+draw_pixel
+	; Draw the pixel
+	ldy _TableDiv6,x
+	lda _TableBit6Reverse,x
+	eor (tmp0),y
+	sta (tmp0),y
+  
+__auto_cpx
+	cpx #00					; At the endpoint yet?
+	bne loop
+	rts	
+	.)			
+	
 draw_totaly_horizontal_8
 .(
 	; here we have DY in Y, and the OPCODE in A
 	sta _outer_patch	; Write a (dex / nop / inx) instruction
 	
-	;
-	; Initialize counter to dx+1
-	;
-	ldx dx
-	inx
-	stx i
+	ldx _OtherPixelX
+	sta __auto_cpx+1
 	
 	ldx _CurrentPixelX
 	
@@ -207,44 +223,12 @@ outer_loop
 _outer_patch
 	inx
 
-	dec i
+__auto_cpx	
+	cpx #00					; At the endpoint yet?
 	bne outer_loop
 	rts
 .)	
 	
-draw_totaly_vertical_8
-.(
-	ldx _CurrentPixelX
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x		; 4
-	sta _mask_patch+1
-	
-	ldx dy
-	inx
-	
-	clc							; 2
-loop
-_mask_patch
-	lda #0						; 2
-	eor (tmp0),y				; 5
-	sta (tmp0),y				; 6 => total = 13 cycles
-
-	; Update screen adress
-	lda tmp0+0					; 3
-	adc #40						; 2
-	sta tmp0+0					; 3
-	bcc skip					; 2 (+1 if taken)
-	inc tmp0+1					; 5
-	clc							; 2
-skip
-	; ------------------Min=13 Max=17
-
-	dex
-	bne loop
-	rts
-.)
-		
-	;.dsb 256-(*&255)
 	
 ;
 ; This code is used when the things are moving faster
@@ -256,9 +240,7 @@ draw_nearly_vertical_8
 	.(
 	; here we have DY in Y, and the OPCODE in A
 	sta __auto_stepx	; Write a (dex / nop / inx) instruction
-	
-	lda dy
-	sta __auto_dy+1
+	sty __auto_dy+1
 
 	lda dx
 	sta __auto_adx+1
@@ -272,24 +254,14 @@ draw_nearly_vertical_8
 	lda #00     			;Saves us a CMP
 	sec
 	sbc dx					; -DX
+		
+	jmp draw_pixel
 	
-	; Draw the first pixel
-	sta save_a
-	sty save_y
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x
-	eor (tmp0),y
-	sta (tmp0),y
-	lda save_a
-	ldy save_y
-	
-	clc
-	beq test_done
 loop 
 	iny             		; Step in y
 __auto_adx
 	adc #00					; +DX
-	bcc NOPE    			; Time to step in x?
+	bcc skip    			; Time to step in x?
 	
 __auto_stepx
 	inx            			; Step in x
@@ -297,7 +269,7 @@ __auto_stepx
 __auto_dy  
 	sbc #00     			; -DY
  
-NOPE 
+skip 
 	; Set the new screen adress
 	sta save_a
 	lda _HiresAddrLow,y
@@ -305,6 +277,7 @@ NOPE
 	lda _HiresAddrHigh,y
 	sta tmp0+1
 
+draw_pixel	
 	; Draw the pixel
 	sty save_y
 	ldy _TableDiv6,x
@@ -314,7 +287,6 @@ NOPE
 	lda save_a
 	ldy save_y
   
-test_done	
 __auto_cpy
 	cpy #00				; At the endpoint yet?
 	bne loop
