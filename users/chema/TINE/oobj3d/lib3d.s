@@ -962,7 +962,7 @@ ROTLOOP  ldy count
          dey
          sty count
 
-         ldx #00          ;Use local matrix
+         ;ldx #00          ;Use local matrix
          ;lda (P0Z),y      ;This way, can re-use routine
 _smc_pz
 		lda $dead,y
@@ -975,20 +975,22 @@ _smc_px
         ; lda (P0X),y
 		lda $dead,y
 
-ROTLOOP2 bne C1
+ROTLOOP2 
+.(
+		 bne C1
          sta TEMPX
          sta TEMPY
          sta TEMPZ
          beq C2
-C1       ldy A11,x        ;Column 1
+C1       ldy A11;,x        ;Column 1
          SMULT
          sta TEMPX
          
-         ldy D21,x
+         ldy D21;,x
          QMULT
          sta TEMPY
 
-         ldy G31,x
+         ldy G31;,x
          QMULT
          sta TEMPZ
 
@@ -996,19 +998,19 @@ C1       ldy A11,x        ;Column 1
 C2       pla              ;Py
          beq C3
 
-         ldy B12,x
+         ldy B12;,x
          SMULT
          clc   
          adc TEMPX
          sta TEMPX
 
-         ldy E22,x
+         ldy E22;,x
          QMULT
          clc     
          adc TEMPY
          sta TEMPY
 
-         ldy H32,x
+         ldy H32;,x
          QMULT
          clc     
          adc TEMPZ
@@ -1018,31 +1020,97 @@ C2       pla              ;Py
 C3       pla              ;Pz
          beq ADDC
          
-         ldy C13,x
+         ldy C13;,x
          SMULT
          clc     
          adc TEMPX
          sta TEMPX
 
-         ldy F23,x
+         ldy F23;,x
          QMULT
          clc     
          adc TEMPY
          sta TEMPY
 
-         ldy I33,x
+         ldy I33;,x
          QMULT
 ADDC     clc
          adc TEMPZ
+.)
 
+/*
          cpx #9
          beq PROJ
          ldx #9           ;Use viewpoint matrix
+*/
          pha
          lda TEMPY
          pha
          lda TEMPX
-         jmp ROTLOOP2
+//         jmp ROTLOOP2
+
+.(
+		 bne C1
+         sta TEMPX
+         sta TEMPY
+         sta TEMPZ
+         beq C2
+C1       ldy A11+9;,x        ;Column 1
+         SMULT
+         sta TEMPX
+         
+         ldy D21+9;,x
+         QMULT
+         sta TEMPY
+
+         ldy G31+9;,x
+         QMULT
+         sta TEMPZ
+
+                          ;Column 2
+C2       pla              ;Py
+         beq C3
+
+         ldy B12+9;,x
+         SMULT
+         clc   
+         adc TEMPX
+         sta TEMPX
+
+         ldy E22+9;,x
+         QMULT
+         clc     
+         adc TEMPY
+         sta TEMPY
+
+         ldy H32+9;,x
+         QMULT
+         clc     
+         adc TEMPZ
+         sta TEMPZ
+
+                          ;Column 3
+C3       pla              ;Pz
+         beq ADDC
+         
+         ldy C13+9;,x
+         SMULT
+         clc     
+         adc TEMPX
+         sta TEMPX
+
+         ldy F23+9;,x
+         QMULT
+         clc     
+         adc TEMPY
+         sta TEMPY
+
+         ldy I33+9;,x
+         QMULT
+ADDC     clc
+         adc TEMPZ
+.)
+
 
 PROJ
 ;;;;;
@@ -1100,10 +1168,10 @@ POS3     clc
 C2b      stx CXSGN
 
          ldy count
-         lda TEMPZ
-         sta PLISTZ,y
+         ;lda TEMPZ
+         ;sta PLISTZ,y
          lda TEMPZ+1
-         sta PLISTZ+MAXVERTEX,y
+         ;sta PLISTZ+MAXVERTEX,y
          beq PROJb
 BLAH     lsr              ;Shift everything until
          ror TEMPZ        ;Z=8-bits
