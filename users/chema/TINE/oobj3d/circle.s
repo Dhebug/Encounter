@@ -27,13 +27,16 @@ cxpx .byt 0
 cxmx .byt 0
 */
 
-.text
 
+.zero
 
 ; Circle centre and radius
 cy   .word 0
 cx   .word 0
 rad  .word 0
+
+.text
+
 
 #ifdef FILLEDPOLYS
 
@@ -476,19 +479,6 @@ p .word 0
 #else
 _circlePoints
 .(
-
-    ; Now fill the MaxMin array
-
-	/*
-;MaxX[cy+y]=(cx+x>CLIP_RIGHT?CLIP_RIGHT:cx+x); 
-;MinX[cy+y]=(cx-x<CLIP_LEFT?CLIP_LEFT:cx-x); 
-;MaxX[cy-y]=(cx+x>CLIP_RIGHT?CLIP_RIGHT:cx+x); 
-;MinX[cy-y]=(cx-x<CLIP_LEFT?CLIP_LEFT:cx-x); 
-;MaxX[cy+x]=(cx+y>CLIP_RIGHT?CLIP_RIGHT:cx+y); 
-;MinX[cy+x]=(cx-y<CLIP_LEFT?CLIP_LEFT:cx-y); 
-;MaxX[cy-x]=(cx+y>CLIP_RIGHT?CLIP_RIGHT:cx+y); 
-;MinX[cy-x]=(cx-y<CLIP_LEFT?CLIP_LEFT:cx-y);
-*/
     ; Calculate cy+y
     
     lda cy
@@ -497,19 +487,22 @@ _circlePoints
     sta Y1
     lda cy+1
     adc sy+1
+	;bne skip2
     sta Y1+1
     
     ; Calculate cx+x
     
     lda cx
-;    clc
+    clc
     adc sx
     sta X1
     lda cx+1
     adc sx+1
+	;bne skip1
     sta X1+1
 
     jsr plotpoint   ; cx+x,cy+y
+skip1
 
    ; Calculate cx-x
     
@@ -519,22 +512,24 @@ _circlePoints
     sta X1
     lda cx+1
     sbc sx+1
+	;bne skip3
     sta X1+1
     
     jsr plotpoint ; cx-x,cy+y
-
+skip2
    ; Calculate cy-y
     
     lda cy
-;    sec
+    sec
     sbc sy
     sta Y1
     lda cy+1
     sbc sy+1
+	;bne skip4
     sta Y1+1
     
     jsr plotpoint ; cx-x,cy-y
-
+skip3
   ; Calculate cx+x
     
     lda cx
@@ -543,58 +538,23 @@ _circlePoints
     sta X1
     lda cx+1
     adc sx+1
+	;bne skip4
     sta X1+1
     
     jsr plotpoint ; cx+x,cy-y
-
+skip4
 
     ; Calculate cy+x
     
     lda cy
- ;   clc
+    clc
     adc sx
     sta Y1
     lda cy+1
     adc sx+1
+	;bne skip6
     sta Y1+1
     
-   ; Calculate cx+y
-    
-    lda cx
- ;   clc
-    adc sy
-    sta X1
-    lda cx+1
-    adc sy+1
-    sta X1+1
-    
-    jsr plotpoint  ; cx+y,cy+x
-
-    ; Calculate cx-y
-    
-    lda cx
-    sec
-    sbc sy
-    sta X1
-    lda cx+1
-    sbc sy+1
-    sta X1+1
-    
-    jsr plotpoint  ; cx-y,cy+x
-
-
-    ; Calculate cy-x
-    
-    lda cy
- ;   sec
-    sbc sx
-    sta Y1
-    lda cy+1
-    sbc sx+1
-    sta Y1+1
-    
-    jsr plotpoint   ; cx-y,cy-x
-
    ; Calculate cx+y
     
     lda cx
@@ -603,12 +563,55 @@ _circlePoints
     sta X1
     lda cx+1
     adc sy+1
+	;bne skip5
+    sta X1+1
+    
+    jsr plotpoint  ; cx+y,cy+x
+skip5
+    ; Calculate cx-y
+    
+    lda cx
+    sec
+    sbc sy
+    sta X1
+    lda cx+1
+    sbc sy+1
+	;bne skip7
+    sta X1+1
+    
+    jsr plotpoint  ; cx-y,cy+x
+skip6
+
+    ; Calculate cy-x
+    
+    lda cy
+    sec
+    sbc sx
+    sta Y1
+    lda cy+1
+    sbc sx+1
+	;bne skip8
+    sta Y1+1
+    
+    jsr plotpoint   ; cx-y,cy-x
+skip7
+   ; Calculate cx+y
+    
+    lda cx
+    clc
+    adc sy
+    sta X1
+    lda cx+1
+    adc sy+1
+	;bne skip8
     sta X1+1
     
     jmp plotpoint    ; cx+y,cy-x
- 	;rts
+skip8
+ 	rts
 .)
 
+#ifdef 0
 plotpoint
 .(
 	lda #0	;SMC
@@ -676,8 +679,56 @@ end
     rts
 
 .)
+#endif
+
+plotpoint
+.(
+	lda #0	;SMC
+	bne plot
+
+	lda X1+1
+	ora Y1+1
+	bne end
+
+    lda X1
+    cmp #(CLIP_RIGHT)
+	bcs end
+    cmp #(CLIP_LEFT)
+	bcc end
+
+    lda Y1
++patch_circleclip
+    cmp #(CLIP_BOTTOM)
+	bcs end
+    cmp #(CLIP_TOP)
+	bcc end
+plot 
+    ldx X1
+    ldy Y1
+
+    ;jsr pixel_address
+
+    lda _HiresAddrLow,y			; 4
+	sta tmp0+0					; 3
+	lda _HiresAddrHigh,y		; 4
+	sta tmp0+1					; 3 => Total 14 cycles
+
+  	ldy _TableDiv6,x
+	lda _TableBit6Reverse,x		; 4
+  
+
+    ora (tmp0),y
+    sta (tmp0),y
+
+end
+    rts
+
+.)
 
 
+
+
+.zero
 ; Variables for circlepoints
 sy    .word 0
 sx    .word 0
@@ -687,7 +738,9 @@ xpr	.word 0
 xmr .word 0
 ypr .word 0
 ymr .word 0
+p .word 0
 
+.text
 
 _circleMidpoint
 .(
@@ -878,18 +931,6 @@ draw
     ;  }
 
 loop
-/*    lda sx
-    sta op1
-    lda sx+1
-    sta op1+1
-    lda sy
-    sta op2
-    lda sy+1
-    sta op2+1
-    jsr cmp16
-    bpl end
-  */  
-
   .(
     lda sx 
     cmp sy
@@ -967,12 +1008,7 @@ noinc3
     jmp loop
 
 end
-
     rts
-
-
-p .word 0
-
 .)
 
 

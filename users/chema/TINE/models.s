@@ -2025,6 +2025,7 @@ THARGOID
 
 ; End of ship THARGOID data
 
+/*
 ; Model of ship TRANSPORTER
 TRANSPORTER
 	.byt 0	; Ship type
@@ -2124,7 +2125,7 @@ TRANSPORTER
 
 
 ; End of ship TRANSPORTER data
-
+*/
 ; Model of ship VIPER
 VIPER
 	.byt 0	; Ship type

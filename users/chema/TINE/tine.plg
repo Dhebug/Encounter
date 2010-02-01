@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPFF.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP282.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSPFF.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP282.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -31,7 +31,7 @@ tab_rotmath=tab_rotmath=8192
 lib3d: Total size:
 (__lib3d_tables_end - __lib3d_tables_start)=(__lib3d_tables_end - __lib3d_tables_start)=4768
 Size of models in bytes:
-(__models_end - __models_start)=(__models_end - __models_start)=4038
+(__models_end - __models_start)=(__models_end - __models_start)=3774
 
 Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
@@ -43,9 +43,9 @@ Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13891
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13627
 
-File 'overlay.tap' is 14862 bytes long (14 bytes header and 14848 bytes of data)
+File 'overlay.tap' is 14606 bytes long (14 bytes header and 14592 bytes of data)
 Presione una tecla para continuar . . . 
 Building the program TINE at adress $500
 Assembling main.S
@@ -90,7 +90,7 @@ obj3d: Memory usage
 obj3d: Zero page:
 (__obj3d_zeropage_end - __obj3d_zeropage_start)=(__obj3d_zeropage_end - __obj3d_zeropage_start)=15
 obj3d: Normal memory:
-(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3099
+(__obj3d_end - __obj3d_start)=(__obj3d_end - __obj3d_start)=3142
 Size of ship data tables in bytes:
 (__shiptables_end - __shiptables_start)=(__shiptables_end - __shiptables_start)=416
 
@@ -118,7 +118,7 @@ tab_rotmath=tab_rotmath=53248
 lib3d: Total size:
 (__lib3d_tables_end - __lib3d_tables_start)=(__lib3d_tables_end - __lib3d_tables_start)=4768
 Size of models in bytes:
-(__models_end - __models_start)=(__models_end - __models_start)=4038
+(__models_end - __models_start)=(__models_end - __models_start)=3774
 
 Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
