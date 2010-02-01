@@ -160,6 +160,14 @@ which launch 3-4 missiles in a row. "Missile Jammed".
 
 - Sorted out text screens and organized code.
 
+- Experienced two bugs, difficult to reproduce: one is somebody shooting at me out of sight, but 
+ lasers comming from the screen center (due to the removal of the zeroing routine?). The
+ second is that, after dying, once the game crashed with corrupted radar data and more...
+
+- Unroll the 2 calls in ROTPROJ. Remove saving Z coords, only used in drawing compound
+objects (for sorting oblets). 
+Done but seems not too much of a gain.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -233,11 +241,9 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Shuttles seem to be very hard to draw... need to check this.
 
-+ Experienced two bugs, difficult to reproduce: one is somebody shooting at me out of sight, but 
- lasers comming from the screen center (due to the removal of the zeroing routine?). The
- second is that, after dying, once the game crashed with corrupted radar data and more...
-
 + Is size of Vipers too high? Seems so... check.
+
++ BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
 
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector

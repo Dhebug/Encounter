@@ -77,11 +77,20 @@ norot
     ldy #>ONEPLANET
     jsr addmoonplanet
     
+	; Update number of fixed objects: radar+player+planet ids 0,1 and 2
+	lda #2
+	sta fixed_objects+1
+
     ; Now create some moons (between 0 and 3)      
     lda _cpl_system+SEED+1
     and #%00000011
     beq moonsdone
     sta tmp1
+
+	; Add number of moons to fixed objects
+	clc
+	adc fixed_objects+1
+	sta fixed_objects+1
     
     lda _PosX+1
     sta savpX+1

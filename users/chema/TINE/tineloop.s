@@ -370,7 +370,7 @@ _TineLoop
 
 loop
 	; Clear vertices where lasers start/end in each object
-	ldx NUMOBJS ; Can't be zero. At least the radar, the player's ship and one planet created.
+	ldx NUMOBJS 
 	lda #0
 loopcl
 	sta _vertexXLO-1,x
@@ -378,6 +378,8 @@ loopcl
 	sta _vertexYLO-1,x
 	sta _vertexYHI-1,x
 	dex
++fixed_objects
+	cpx #3	; SMC
 	bne loopcl
 
 	; If we have changed ink color, put it back to white
@@ -535,7 +537,8 @@ cont
 	
 	lda frame_number
 	and #%11111
-	ora message_delay
+	bne qchecks
+	lda message_delay
 	bne noenmsg
 
 	; "Energy Low" message
@@ -546,6 +549,16 @@ cont
 	jsr flight_message
 noenmsg
 
+	lda bounty_am
+	ora bounty_am+1
+	beq nomsgbounty
+	jsr flight_message_bounty 
+	lda #0
+	sta bounty_am
+	sta bounty_am+1
+nomsgbounty
+
+qchecks
 	; More often checks. Every 8 frames, basically
 	lda frame_number
 	and #%111

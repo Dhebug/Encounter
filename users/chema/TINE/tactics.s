@@ -1887,9 +1887,18 @@ savetype
 	beq nobounty
 	lda ShipBountyHi-1,x
 	sta op2+1
-	jsr inc_cash
-	jsr flight_message_bounty 
-	
+
+	lda op2
+	clc
+	adc bounty_am
+	sta bounty_am
+	lda op2+1
+	adc bounty_am+1
+	sta bounty_am+1
+
+	jmp inc_cash
+
+	;jsr flight_message_bounty 
 nobounty
 	rts
 .)

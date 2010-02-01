@@ -20,34 +20,6 @@
 ;unsigned int   equip=0xfff;             /* Equipment flags */
 
 
-__commander_data_start
-_name			.asc "Jameson"          ; Commander's name (10 chars plus ending 0)
-				.byt 00 
-				.dsb 3 
-_shipshold		.dsb 17		            ; Contents of cargo bay
-_currentplanet	.byt 7                  ; Current planet
-_galaxynum		.byt 1                  ; Galaxy number (1-8)
-_cash			.byt $e8,$03            ; Four bytes for cash
-				.byt $10,$00
-_fuel			.byt 70                 ; Amount of fuel
-_fluct			.byt 0                  ; Price fluctuation
-_holdspace		.byt 20				    ; Current space left in cargo bay
-_legal_status	.byt 00                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
-_score_rem		.byt 00					; Score, remainder
-_score			.word 0000              ; Current score
-_mission		.byt 0                  ; Current mission
-_equip			.word $0001             ; Equipment flags
-_ship_type      .byt SHIP_COBRA3        ; Current player's ship
-_missiles_left	.byt 3					; Number of missiles
-
-; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
-_p_maxspeed		.byt 0
-_p_maxenergy	.byt 0	
-_p_maxmissiles	.byt 0
-_p_laserdamage	.byt 0
-__commander_data_end
-
-
 ; Default commander's data
 _default_commander
 				.asc "Jameson"          ; Commander's name
@@ -194,6 +166,35 @@ gs_jump_hi .byt >gs_planet_name,>gs_planet_nameian,>gs_random_name
 .bss
 *=$400
 #endif
+
+
+__commander_data_start
+_name			.asc "Jameson"          ; Commander's name (10 chars plus ending 0)
+				.byt 00 
+				.dsb 3 
+_shipshold		.dsb 17		            ; Contents of cargo bay
+_currentplanet	.byt 7                  ; Current planet
+_galaxynum		.byt 1                  ; Galaxy number (1-8)
+_cash			.byt $e8,$03            ; Four bytes for cash
+				.byt $10,$00
+_fuel			.byt 70                 ; Amount of fuel
+_fluct			.byt 0                  ; Price fluctuation
+_holdspace		.byt 20				    ; Current space left in cargo bay
+_legal_status	.byt 00                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
+_score_rem		.byt 00					; Score, remainder
+_score			.word 0000              ; Current score
+_mission		.byt 0                  ; Current mission
+_equip			.word $0001             ; Equipment flags
+_ship_type      .byt SHIP_COBRA3        ; Current player's ship
+_missiles_left	.byt 3					; Number of missiles
+
+; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
+_p_maxspeed		.byt 0
+_p_maxenergy	.byt 0	
+_p_maxmissiles	.byt 0
+_p_laserdamage	.byt 0
+__commander_data_end
+
 
 ; From galaxy.s
 

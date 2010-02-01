@@ -44,7 +44,7 @@ flight_message_loot
 	jmp flight_message_end
 .)
 
-
+bounty_am .byt 0,0
 
 flight_message_bounty
 .(
@@ -53,6 +53,10 @@ flight_message_bounty
 	inc print2buffer
 	lda #0
     sta buffercounter
+	lda bounty_am
+	sta op2
+	lda bounty_am+1
+	sta op2+1
 	jsr print_float
 	jsr put_space
 	lda #<str_credits
@@ -60,23 +64,14 @@ flight_message_bounty
 	jsr print
 	dec print2buffer
 	dec capson
-
 	jmp flight_message_end
 .)
 
 
 ; Pass X=message id
 
-//patchmsg .byt 0
-
 flight_message
 .(
-/*
-    cpx #STR_ENERGY_LOW
-	bne nopatch
-	inc patchmsg
-nopatch
-*/
 	lda #<flight_message_base
 	sta tmp0
 	lda #>flight_message_base
@@ -125,11 +120,6 @@ loop
 	lda #HUD_MESSAGE_DELAY
 	sta message_delay
 
-/*	lda patchmsg
-	beq normal
-	dec patchmsg
-	rts
-normal*/
 	jmp SndMsg
 .)
 
