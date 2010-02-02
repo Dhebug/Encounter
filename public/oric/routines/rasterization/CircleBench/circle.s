@@ -7,7 +7,7 @@
 ;840
 ;820
 ;801
-
+;785
 
 #include "params.h"
 
@@ -274,7 +274,6 @@ _circlePoints
 	tax
     lda _CentreX+1
     adc sx+1
-    sta X1
 	ora Y1
 	bne skip1
 
@@ -372,7 +371,6 @@ skip2
 	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
 	ldy save_y
@@ -417,9 +415,7 @@ end
 .)
 
 skip4
-
-    ; Calculate _CentreY+x
-    
+    ; Calculate _CentreY+x 
     lda _CentreY
     clc
     adc sx
@@ -428,15 +424,13 @@ skip4
     adc sx+1
     sta Y1
     
-   ; Calculate _CentreX+y
-    
+    ; Calculate _CentreX+y    
     lda _CentreX
     clc
     adc sy
 	tax
     lda _CentreX+1
     adc sy+1
-    sta X1
  	ora Y1
 	bne skip5
    
@@ -458,7 +452,6 @@ skip4
 	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
 	ldy save_y
@@ -467,6 +460,7 @@ end
 .)
 
 skip5
+    ; Calculate _CentreX+y (already done)
     ; Calculate _CentreX-y
     lda _CentreX
     sec
@@ -496,7 +490,6 @@ skip5
 	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
 	ldy save_y
@@ -505,9 +498,8 @@ end
 .)
 
 skip6
-
-    ; Calculate _CentreY-x
-    
+    ; Calculate _CentreX-y (already done)
+    ; Calculate _CentreY-x    
     lda _CentreY
     sec
     sbc sx
@@ -536,7 +528,6 @@ skip6
 	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
 	ldy save_y
@@ -545,15 +536,14 @@ end
 .)
 
 skip7
-   ; Calculate _CentreX+y
-    
+    ; Calculate _CentreY-x (already done)
+    ; Calculate _CentreX+y
     lda _CentreX
     clc
     adc sy
 	tax
     lda _CentreX+1
     adc sy+1
-    sta X1
 	ora Y1
 	bne skip8
     
@@ -574,7 +564,6 @@ skip7
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
 end
