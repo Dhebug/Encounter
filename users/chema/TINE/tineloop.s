@@ -1102,7 +1102,7 @@ fireM
 		jsr SndMissile
 		beq nolock
 		dec _missiles_left
-		jsr update_missile_panel
+		jmp update_missile_panel
 nolock
         rts
 .)

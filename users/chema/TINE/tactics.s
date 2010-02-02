@@ -82,17 +82,16 @@ noflags
     lda (POINT),y
     and #%01111111
     cmp #SHIP_MISSILE
-    beq AIMain	;doai
+    beq doai
 
     ;if (i^g_mcount)&7==0  
 
     txa
     eor frame_number
     and #7
-    ;bne noai    
-	beq AIMain
-;doai
-;    jsr AIMain
+    bne noai    
+doai
+    jsr AIMain
 noai
 
 nomove
@@ -1000,8 +999,9 @@ LaunchMissile
         
     ; Get objective
     lda AITarget  
-    sta _target,x ;Seems you don't need to set the ANGRY flag... Then what is target is 0 ??? Maybe check first and beq to failure (and maybe
-                  ; print a message?
+	ora #$80
+    sta _target,x 
+
 	; If we are the objective, set inflight message
 	cmp #1
 	bne notus

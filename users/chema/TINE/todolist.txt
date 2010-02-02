@@ -168,6 +168,10 @@ which launch 3-4 missiles in a row. "Missile Jammed".
 objects (for sorting oblets). 
 Done but seems not too much of a gain.
 
+- BUG: Check... launching all 4 missiles makes only the first work... the rest do not pursue
+their objective (at least when loading game). Then, after it hits, then the second and
+so forth. Even ttls were wong afterwards...
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct

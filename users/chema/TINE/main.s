@@ -162,7 +162,7 @@ donegal
 
 ;Number of sectors to read Just the original tables, models, music and dictionary now 
 
-#define NUM_SECT_OVL 35+10+10	 
+#define NUM_SECT_OVL 34+10+10	 
 
 LoadOverlay
 .(
