@@ -6,6 +6,7 @@
 ;874
 ;840
 ;820
+;801
 
 
 #include "params.h"
@@ -37,6 +38,8 @@ cxmx .byt 0
 
 X1			.byt 0
 Y1			.byt 0
+
+save_y			.dsb 1
 
 ; Circle centre and radius
 _CentreY	.word 0
@@ -256,7 +259,6 @@ noinc3
 _circlePoints
 .(
     ; Calculate _CentreY+y
-    
     lda _CentreY
     clc
     adc sy
@@ -265,8 +267,7 @@ _circlePoints
     adc sy+1
     sta Y1
     
-    ; Calculate _CentreX+x
-    
+    ; Calculate _CentreX+x    
     lda _CentreX
     clc
     adc sx
@@ -276,7 +277,6 @@ _circlePoints
     sta X1
 	ora Y1
 	bne skip1
-    ;jsr plotpoint   ; _CentreX+x,_CentreY+y
 
 .(
 	cpx #(CLIP_RIGHT)
@@ -288,29 +288,25 @@ _circlePoints
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
+	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
+	ldy save_y
 end
 
 .)
 
 
 skip1
-
-   ; Calculate _CentreX-x
-    
+    ; Calculate _CentreY+y (already done)    
+    ; Calculate _CentreX-x    
     lda _CentreX
     sec
     sbc sx
@@ -321,7 +317,6 @@ skip1
 	ora Y1
 	bne skip2
     
- ;   jsr plotpoint ; _CentreX-x,_CentreY+y
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -332,27 +327,21 @@ skip1
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
 end
 
 .)
 
 skip2
-   ; Calculate _CentreY-y
-    
+    ; Calculate _CentreY-y
     lda _CentreY
     sec
     sbc sy
@@ -362,8 +351,9 @@ skip2
     sta Y1
    	ora X1
 	bne skip3
- 
-;    jsr plotpoint ; _CentreX-x,_CentreY-y
+
+    ; Calculate _CentreX-x (already done)
+	 
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -374,27 +364,25 @@ skip2
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
+	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
 
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
+	ldy save_y
 end
 
 .)
 
 skip3
-  ; Calculate _CentreX+x
-    
+    ; Calculate _CentreY-y (already done)
+    ; Calculate _CentreX+x
     lda _CentreX
     clc
     adc sx
@@ -405,7 +393,6 @@ skip3
    	ora Y1
 	bne skip4
  
-;    jsr plotpoint ; _CentreX+x,_CentreY-y
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -416,20 +403,15 @@ skip3
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
 end
 
 .)
@@ -458,7 +440,6 @@ skip4
  	ora Y1
 	bne skip5
    
-;    jsr plotpoint  ; _CentreX+y,_CentreY+x
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -469,20 +450,18 @@ skip4
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
+	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
 
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
+	ldy save_y
 end
 
 .)
@@ -499,7 +478,6 @@ skip5
  	ora Y1
 	bne skip6
    
-;    jsr plotpoint  ; _CentreX-y,_CentreY+x
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -510,20 +488,18 @@ skip5
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
+	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
 
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
+	ldy save_y
 end
 
 .)
@@ -542,7 +518,6 @@ skip6
  	ora X1
 	bne skip7
    
-;    jsr plotpoint   ; _CentreX-y,_CentreY-x
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -553,20 +528,18 @@ skip6
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
+	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
 
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
+	ldy save_y
 end
 
 .)
@@ -584,7 +557,6 @@ skip7
 	ora Y1
 	bne skip8
     
-;    jmp plotpoint    ; _CentreX+y,_CentreY-x
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -595,20 +567,16 @@ skip7
     cpy #(CLIP_TOP)
 	bcc end
 
-plot 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
 
-	sty _savy+1
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
 
     ora (tmp0),y
     sta (tmp0),y
-_savy
-	ldy #0 ;SMC	
 end
 
 .)
