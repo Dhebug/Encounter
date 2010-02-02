@@ -5,6 +5,7 @@
 ;949
 ;874
 ;840
+;820
 
 
 #include "params.h"
@@ -55,7 +56,7 @@ p .word 0
 
 
 .text
-
+ 
 _circleMidpoint
 .(
 
@@ -77,9 +78,8 @@ _circleMidpoint
     eor #$80
 ret
 .)
-	bpl next1
-    rts
-next1
+	bmi circleExit 
+
     ;;  x - size > rhs of screen fails 
     lda _CentreX
     sec
@@ -97,9 +97,8 @@ next1
     eor #$80
 ret
 .)
-	bmi next2
-    rts
-next2
+	bpl circleExit 
+
     ;;  y + size < top of screen fails
     lda _CentreY
     clc
@@ -118,9 +117,8 @@ next2
 ret
 .)
     
-	bpl next3
-    rts
-next3
+	bmi circleExit 
+
     ;;  y - size > bot of screen fails
     lda _CentreY
     sec
@@ -138,9 +136,7 @@ next3
     eor #$80
 ret
 .)
-	bmi next4
-    rts
-next4
+	bpl circleExit 
 
 drawit
      ;x=0;y=radius
@@ -163,9 +159,13 @@ drawit
     
 draw
    ; circlePoints (xCenter, yCenter, x, y);
-    jsr _circlePoints
+    jmp _circlePoints
+.)
 
+circleExit
+ rts
 
+ 
     ;while (x < y) {
     ;    x++;
     ;    if (p < 0) 
@@ -177,17 +177,16 @@ draw
     ;    circlePoints (xCenter, yCenter, x, y);
     ;  }
 
+	;.dsb 256-(*&255) 825 with, 822 without Oo
+    
 loop
-  .(
+.(
+    sec
     lda sx 
-    cmp sy
+    sbc sy
     lda sx+1
     sbc sy+1
-    bvc ret ; N eor V
-    eor #$80
-ret
-  .)
-	bpl end
+	bpl circleExit
 
     inc sx
     bne noinc
@@ -216,8 +215,7 @@ noinc2
     adc tmp+1
     sta p+1
     
-    jsr _circlePoints
-    jmp loop
+    jmp _circlePoints
 
 positivep    
 
@@ -251,14 +249,9 @@ noinc3
     adc tmp+1
     sta p+1
    
-    jsr _circlePoints
-    jmp loop
+    ;jmp _circlePoints
 
-end
-    rts
 .)
-
-
 
 _circlePoints
 .(
@@ -621,7 +614,7 @@ end
 .)
 
 skip8
- 	rts
+    jmp loop
 .)
 
 
