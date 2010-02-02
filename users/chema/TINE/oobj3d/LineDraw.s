@@ -1506,7 +1506,7 @@ _SwitchDoubleBuff
 .(
 
     ; Patch the circle routine
-    lda patch_circleclip+1
+    lda patch_circleclip1+1
     cmp #199
     beq clip1
     lda #199
@@ -1515,7 +1515,15 @@ clip1
     lda #(CLIP_BOTTOM)
 
 cont    
-    sta patch_circleclip+1
+    sta patch_circleclip1+1
+    sta patch_circleclip2+1
+    sta patch_circleclip3+1
+    sta patch_circleclip4+1
+    sta patch_circleclip5+1
+    sta patch_circleclip6+1
+    sta patch_circleclip7+1
+    sta patch_circleclip8+1
+    sta patch_circleclip9+1
     lda double_buff
     eor #$ff
     sta double_buff
