@@ -46,8 +46,8 @@ void circleMidpoint();
 
 void circle_Chema()
 {
-	CentreX=10;
-	CentreY=160;
+	CentreX=120;
+	CentreY=100;
 	for (Radius=1;Radius<200;Radius++)
 	{
 		circleMidpoint();

@@ -1,4 +1,5 @@
 ; History of timings...
+; Using (10,160)
 ;1186
 ;1136
 ;993
@@ -8,6 +9,9 @@
 ;820
 ;801
 ;785
+;....
+; Using (120,100)
+;845
 
 #include "params.h"
 
