@@ -1,3 +1,4 @@
+; History of timings...
 ;1186
 ;1136
 ;993
