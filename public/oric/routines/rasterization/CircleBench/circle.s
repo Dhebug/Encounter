@@ -12,38 +12,19 @@
 ;....
 ; Using (120,100)
 ;845
+; Using clipping to 10/190 vertically
+;827
+
 
 #include "params.h"
 
-#define cypy tmp0
-#define cymy cypy+1
-#define cypx cypy+2
-#define cymx cypy+3
-#define cxpy cypy+4
-#define cxmy cypy+5
-#define cxpx cypy+6
-#define cxmx cypy+7
 
-
-/*
-.zero
-cypy .byt 0
-cymy .byt 0
-cypx .byt 0
-cymx .byt 0
-cxpy .byt 0
-cxmy .byt 0
-cxpx .byt 0
-cxmx .byt 0
-*/
-
-
-.zero
+	.zero
 
 X1			.byt 0
 Y1			.byt 0
 
-save_y			.dsb 1
+save_y		.dsb 1
 
 ; Circle centre and radius
 _CentreY	.word 0
@@ -51,18 +32,13 @@ _CentreX	.word 0
 _Radius		.word 0
 
 ; Variables for circlepoints
-sy    .word 0
-sx    .word 0
+sy    		.word 0
+sx    		.word 0
+
+p 			.word 0
 
 
-xpr	.word 0
-xmr .word 0
-ypr .word 0
-ymr .word 0
-p .word 0
-
-
-.text
+	.text
  
 _circleMidpoint
 .(
@@ -72,14 +48,14 @@ _circleMidpoint
     lda _CentreX
     clc
     adc _Radius
-    sta xpr
+    sta tmp
     lda _CentreX+1
     adc _Radius+1
-    sta xpr+1
+    sta tmp+1
 .(
-    lda xpr 
+    lda tmp 
     cmp #(CLIP_LEFT)
-    lda xpr+1
+    lda tmp+1
     sbc #0
     bvc ret ; N eor V
     eor #$80
@@ -91,14 +67,14 @@ ret
     lda _CentreX
     sec
     sbc _Radius
-    sta xmr
+    sta tmp
     lda _CentreX+1
     sbc _Radius+1
-    sta xmr+1
+    sta tmp+1
 .(
-    lda xmr 
+    lda tmp 
     cmp #(CLIP_RIGHT-1)
-    lda xmr+1
+    lda tmp+1
     sbc #0
     bvc ret ; N eor V
     eor #$80
@@ -110,14 +86,14 @@ ret
     lda _CentreY
     clc
     adc _Radius
-    sta ypr
+    sta tmp
     lda _CentreY+1
     adc _Radius+1
-    sta ypr+1
+    sta tmp+1
 .(
-    lda ypr 
+    lda tmp 
     cmp #(CLIP_TOP)
-    lda ypr+1
+    lda tmp+1
     sbc #0
     bvc ret ; N eor V
     eor #$80
@@ -130,14 +106,14 @@ ret
     lda _CentreY
     sec
     sbc _Radius
-    sta ymr
+    sta tmp
     lda _CentreY+1
     sbc _Radius+1
-    sta ymr+1
+    sta tmp+1
 .(
-    lda ymr 
+    lda tmp 
     cmp #(CLIP_BOTTOM-1)
-    lda ymr+1
+    lda tmp+1
     sbc #0
     bvc ret ; N eor V
     eor #$80
