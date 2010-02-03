@@ -20,7 +20,6 @@
 
 
 	.zero
-
 X1			.byt 0
 Y1			.byt 0
 
@@ -34,67 +33,57 @@ _Radius		.word 0
 ; Variables for circlepoints
 sy    		.word 0
 sx    		.word 0
-
 p 			.word 0
-
 
 	.text
  
 _circleMidpoint
 .(
-
     ; Check if circle is visible
     ;;  _CentreX + _Radius < lhs of screen fails
     lda _CentreX
     clc
     adc _Radius
-    sta tmp
-    lda _CentreX+1
-    adc _Radius+1
-    sta tmp+1
+	tay
+	lda _CentreX+1
+	adc _Radius+1
+	cpy #(CLIP_LEFT)
+	sbc #0
 .(
-    lda tmp 
-    cmp #(CLIP_LEFT)
-    lda tmp+1
-    sbc #0
-    bvc ret ; N eor V
-    eor #$80
+	bvc ret
+	eor #$80
 ret
 .)
+
 	bmi circleExit 
 
     ;;  x - size > rhs of screen fails 
     lda _CentreX
     sec
     sbc _Radius
-    sta tmp
+	tay
     lda _CentreX+1
     sbc _Radius+1
-    sta tmp+1
-.(
-    lda tmp 
-    cmp #(CLIP_RIGHT-1)
-    lda tmp+1
+    cpy #(CLIP_RIGHT-1)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
 .)
+
 	bpl circleExit 
 
     ;;  y + size < top of screen fails
     lda _CentreY
     clc
     adc _Radius
-    sta tmp
-    lda _CentreY+1
+	tay
+	lda _CentreY+1
     adc _Radius+1
-    sta tmp+1
-.(
-    lda tmp 
-    cmp #(CLIP_TOP)
-    lda tmp+1
+    cpy #(CLIP_TOP)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
@@ -106,15 +95,12 @@ ret
     lda _CentreY
     sec
     sbc _Radius
-    sta tmp
+	tay
     lda _CentreY+1
     sbc _Radius+1
-    sta tmp+1
-.(
-    lda tmp 
-    cmp #(CLIP_BOTTOM-1)
-    lda tmp+1
+    cpy #(CLIP_BOTTOM-1)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
