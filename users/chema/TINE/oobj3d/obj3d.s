@@ -1655,7 +1655,7 @@ prepare_normals
     sta cz_
     lda HCZ,x
     sta cz_+1
-	cmp #$4
+	cmp #$5
 	bcc loopadj
 	inc cont+1
 	jmp startcheck

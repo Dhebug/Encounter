@@ -1408,6 +1408,7 @@ scoop_item
 saveme
 	ldx #0 ; SMC
 	inc _shipshold,x
+	dec _holdspace
 	ldx theobject
 	jmp RemoveObject ; This is jsr/rts
 .)

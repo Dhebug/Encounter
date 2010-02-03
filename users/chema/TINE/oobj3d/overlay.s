@@ -60,7 +60,7 @@ __overlay_end
 		.byt $10,$00
 		.byt 70                 ; Amount of fuel
 		.byt 0                  ; Price fluctuation
-		.byt 30				    ; Current space left in cargo bay
+		.byt 35				    ; Current space left in cargo bay
 		.byt 60                 ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00					; Score, remainder
 		.word 10000             ; Current score

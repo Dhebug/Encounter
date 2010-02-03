@@ -56,12 +56,6 @@ rad		.word 0
 ; Variables for circlepoints
 sy    .word 0
 sx    .word 0
-
-
-xpr	.word 0
-xmr .word 0
-ypr .word 0
-ymr .word 0
 p .word 0
 
 
@@ -75,53 +69,46 @@ p .word 0
     lda _CentreX
     clc
     adc _Radius
-    sta xpr
-    lda _CentreX+1
-    adc _Radius+1
-    sta xpr+1
+	tay
+	lda _CentreX+1
+	adc _Radius+1
+	cpy #(CLIP_LEFT)
+	sbc #0
 .(
-    lda xpr 
-    cmp #(CLIP_LEFT)
-    lda xpr+1
-    sbc #0
-    bvc ret ; N eor V
-    eor #$80
+	bvc ret
+	eor #$80
 ret
 .)
+
 	bmi circleExit 
 
     ;;  x - size > rhs of screen fails 
     lda _CentreX
     sec
     sbc _Radius
-    sta xmr
+	tay
     lda _CentreX+1
     sbc _Radius+1
-    sta xmr+1
-.(
-    lda xmr 
-    cmp #(CLIP_RIGHT-1)
-    lda xmr+1
+    cpy #(CLIP_RIGHT-1)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
 .)
+
 	bpl circleExit 
 
     ;;  y + size < top of screen fails
     lda _CentreY
     clc
     adc _Radius
-    sta ypr
-    lda _CentreY+1
+	tay
+	lda _CentreY+1
     adc _Radius+1
-    sta ypr+1
-.(
-    lda ypr 
-    cmp #(CLIP_TOP)
-    lda ypr+1
+    cpy #(CLIP_TOP)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
@@ -133,16 +120,14 @@ ret
     lda _CentreY
     sec
     sbc _Radius
-    sta ymr
+	tay
     lda _CentreY+1
     sbc _Radius+1
-    sta ymr+1
-.(
-    lda ymr 
+
 +patch_circleclip1
-    cmp #(CLIP_BOTTOM-1)
-    lda ymr+1
+    cpy #(CLIP_BOTTOM-1)
     sbc #0
+.(
     bvc ret ; N eor V
     eor #$80
 ret
