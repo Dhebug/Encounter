@@ -369,19 +369,6 @@ _TineLoop
     jmp _TineLoop
 
 loop
-	; Clear vertices where lasers start/end in each object
-	ldx NUMOBJS 
-	lda #0
-loopcl
-	sta _vertexXLO-1,x
-	sta _vertexXHI-1,x
-	sta _vertexYLO-1,x
-	sta _vertexYHI-1,x
-	dex
-+fixed_objects
-	cpx #3	; SMC
-	bne loopcl
-
 	; If we have changed ink color, put it back to white
 +_patch_set_ink
 	nop
@@ -427,10 +414,23 @@ loopcl
 	cmp #MAXFRAMETIME2
 	bcs nodraw
 
-	; Move the stars, only if we are drawing, as they are fake
+	; Move the stars, even if not drawing, as they are fake
     jsr move_stars
 
 ;****** START OF DRAWING SECTION ******
+
+	; Clear vertices where lasers start/end in each object
+	ldx NUMOBJS 
+	lda #0
+loopcl
+	sta _vertexXLO-1,x
+	sta _vertexXHI-1,x
+	sta _vertexYLO-1,x
+	sta _vertexYHI-1,x
+	dex
++fixed_objects
+	cpx #3	; SMC
+	bne loopcl
 
 	; Clear the off-screen buffer
 	jsr clr_hires2
