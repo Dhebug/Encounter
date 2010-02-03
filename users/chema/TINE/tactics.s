@@ -1003,11 +1003,18 @@ LaunchMissile
     sta _target,x 
 
 	; If we are the objective, set inflight message
-	cmp #1
+	cmp #$81
 	bne notus
 	stx savx2+1
 	ldx #STR_INCOMING_MISSILE
 	jsr flight_message 
+
+	; If not in front view, alert player
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq savx2
+    ldx #2
+	jsr alarm
 savx2
 	ldx #0	; SMC
 notus
@@ -1565,17 +1572,6 @@ kk
     ldx $1234,y
 	lda HCZ,x
 	; We got it, at last
-/*
-	sta tmp
-	lda invert
-	beq nothing
-	sec
-	lda #0
-	sbc tmp
-	sta tmp
-nothing
-
-	lda tmp */
 
 	eor invert	; Invert sign if invert=$ff, leave if invert=$00
 	sta tmp		; Needed sign for later
@@ -1629,9 +1625,15 @@ nokill
     jsr SndHitNoShields
 	lda #A_FWMAGENTA; A_FWYELLOW
 	jsr set_ink
-	;inc attr_changed
-nolow
-    rts
+
+	; If not in front view, alert player
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq end
+    ldx #0
+	jmp alarm
+end	
+	rts
 .)
 
 

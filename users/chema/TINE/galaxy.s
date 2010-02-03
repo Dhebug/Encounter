@@ -4145,11 +4145,7 @@ end
 
 instructions
 .(
-	lda Cursor_origin_x
-	sta PX+1
-	lda Cursor_origin_y
-	sta PY+1
-
+	jsr savpos
 	ldx #0
 	ldy #200-6
 	jsr gotoXY
@@ -4166,12 +4162,57 @@ inst
     lda #>str_instr
     sta tmp0+1
 	jsr search_string_and_print
+	jmp restorepos
+.)
 
+
+savpos
+.(
+	lda Cursor_origin_x
+	sta PX+1
+	lda Cursor_origin_y
+	sta PY+1
+	rts
++restorepos
 PX
 	ldx #0
 PY
 	ldy #0
-	jmp gotoXY
-
+	jmp gotoXY	
 .)
+
+; Alarm message when in text screens
+alarm
+.(
+	stx savx+1
+	jsr savpos
+
+	ldx #0
+	ldy #200-6
+	jsr gotoXY
+
+	; Clear line
+	ldy #239
+	lda #$40
+loop
+	sta (screen),y 
+	dey
+	bne loop	; Leaves 1 scan without clearing, but that does not matter
+
+    lda #(A_FWRED)
+    jsr put_code
+	inc capson
+savx	
+	ldx #0	;SMC
+    lda #<str_alarm
+    sta tmp0
+    lda #>str_alarm
+    sta tmp0+1
+	jsr search_string_and_print
+	dec capson
+	jmp restorepos
+.)
+
+
+
 

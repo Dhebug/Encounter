@@ -476,11 +476,17 @@ noenergy
 _MoveShips
 .(
     jsr MovePlayer ; Start moving player
-
        
     ; Now iterate through object list moving the rest
+
+	; Avoid fixed objects
+	ldx fixed_objects+1
+	dex
+	;jsr SetCurOb
+	stx CUROBJ
     jsr GetNextOb
-    ; Carry shoubd be clear, unless error
+ 
+	; Carry shoubd be clear, unless error
     ;bcs end
     ; Check if we got back to object 0 (radar)
     cpx #0  
@@ -509,33 +515,6 @@ end
 
 .)
 
-
-
-mancount .byt 0
-
-; Checks maximum maneuvrability
-; and updates reg A (the amount to rotate in total)
-; and mancount (the amount to rotate this frame)
-#define MAXMAN 1    ; This is the default in Elite!!!
-
-check_maxman
-.(
-    sta mancount
-    sec
-    sbc #MAXMAN
-    bmi notmax
-    pha
-    lda #MAXMAN ; Max man
-    sta mancount
-    pla
-    rts
-notmax
-    lda #0
-    rts
-.)
-
-
-
 ;; Routines to perform movement of ships. They are
 ;; separated in two, one for the player and other
 ;; for the rest of ships, as different things should be performed
@@ -548,6 +527,7 @@ g_beta  .byt 0  ; Total rotation in Y (Yaw)
 g_delta .byt 0  ; Total rotation in Z (Roll)
 g_theta .byt 0  ; Total speed?
 
+#define mancount tmp
 
 MovePlayer
 .(
@@ -568,7 +548,6 @@ MovePlayer
     php
     and #$7f
     beq nadax
-    ;jsr check_maxman
     sta mancount
     lda #0
     sta _rotx+1
@@ -594,7 +573,6 @@ nadax
     php
     and #$7f
     beq naday
-    ;jsr check_maxman
     sta mancount
     lda #0
     sta _roty+1
@@ -620,7 +598,6 @@ naday
     php
     and #$7f
     beq nadaz
-    ;jsr check_maxman
     sta mancount
     lda #0
     sta _rotz+1
@@ -631,7 +608,6 @@ naday
     ror
     ora mancount
     sta g_delta
-
 
 loopz
     plp
@@ -677,93 +653,55 @@ end
 	lda #>ROTXY
 	sta patch_rot1+2
 	sta patch_rot2+2
-
++globalrts
     rts
 
 .)
 
 
-; Needs reg A loaded with field ID of obj3D record
 maxspeed .byt 0
 
+; Needs reg A loaded with field ID of obj3D record
 MoveCurrent
 .(
     and #%01111111
     tax
-	bne cont
-	rts ; This is a planet or a moon... 
-cont
+	beq globalrts ; This is a planet or a moon... 
+
 	lda ShipMaxSpeed-1,x
     sta maxspeed
 
-/*	; If an asteroid, make it rotate
-	cpx #SHIP_ASTEROID
-	bne noasteroid
-	jsr Roll
-	jmp forwards
-noasteroid
-*/
     ldx CUROBJ
     lda _rotx,x
-    cmp #$80
-    php
-    and #$7f
+	tay
+	and #%01111111
     beq nadax
-    jsr check_maxman
-    ;sta _rotx,x
-loopx
-    plp
-    php
+    cpy #$80
     jsr Pitch
-    dec mancount
-    bne loopx
 nadax
-    plp
     ldx CUROBJ
     lda _roty,x
-    cmp #$80
-    php
-    and #$7f
+	tay
+	and #%01111111
     beq naday
-    jsr check_maxman
-    ;sta _roty,x
-loopy
-    plp
-    php
+    cpy #$80
     jsr Yaw
-    dec mancount
-    bne loopy
 naday
-    plp
     ldx CUROBJ
     lda _rotz,x
-    cmp #$80
-    php
-    and #$7f
+	tay
+	and #%01111111
     beq nadaz
-    jsr check_maxman
-    ;sta _rotz,x
-loopz
-    plp
-    php
+    cpy #$80
     jsr Roll
-    dec mancount
-    bne loopz
 nadaz
-    plp
 
 forwards
     ldx CUROBJ
     lda _accel,x
-    ;ora _speed,x
     beq move
     clc
     adc _speed,x
-    ;; Don't let them ever stop
-    ;cmp #3
-    ;bcs noneg
-    ;lda #2
-    ;bne nomax ;allways branch
     bpl noneg
     lda #0
     beq nomax ; allways branch
@@ -789,9 +727,7 @@ move
     jsr MoveForwards    
 end
     rts
-
 .)
-
 
 
 

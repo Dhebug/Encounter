@@ -6,12 +6,12 @@
 --------------------Configuration: cockpit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP14A.bat" with contents
+Creating temporary file "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP206.bat" with contents
 [
 @echo off
 osdk_build.bat
 ]
-Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP14A.bat"
+Creating command line "C:\DOCUME~1\Chema\CONFIG~1\Temp\RSP206.bat"
 <h3>Output Window</h3>
 Performing Custom Build Step on .\Debug\tine.exe
 Compressing file...dict.s
@@ -37,13 +37,13 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2407
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2447
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 ***** Used space in overlay:
-(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13627
+(__overlay_end - __overlay_start)=(__overlay_end - __overlay_start)=13667
 
 File 'overlay.tap' is 14606 bytes long (14 bytes header and 14592 bytes of data)
 Presione una tecla para continuar . . . 
@@ -100,7 +100,7 @@ Object records start at
 OBS=($fffa-32*32)=64506
 
 **** Free space:
-($a000-osdk_end)=($a000-osdk_end)=3741
+($a000-osdk_end)=($a000-osdk_end)=3485
 
 -----------------
 lib3d: Tables
@@ -124,13 +124,13 @@ Size of music in bytes:
 (MusicDataEnd - MusicData)=(MusicDataEnd - MusicData)=2422
 
 Size of texts in bytes:
-(__texts_end - __texts_start)=(__texts_end - __texts_start)=2407
+(__texts_end - __texts_start)=(__texts_end - __texts_start)=2447
 
 Size of grammar in bytes:
 (__grammar_end - __grammar_start)=(__grammar_end - __grammar_start)=256
 
 Creating final program TINE.TAP
-File 'build\TINE.tap' is 35953 bytes long (14 bytes header and 35939 bytes of data)
+File 'build\TINE.tap' is 36209 bytes long (14 bytes header and 36195 bytes of data)
 Build of TINE.tap finished
 Tap2dsk V2.1
 Reading oobj3d\overlay.tap

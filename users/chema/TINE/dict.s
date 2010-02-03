@@ -996,7 +996,6 @@ str_launch
 	.asc "Prepare for launching"
 	.byt 0
 
-
 ;; For in-screen instructions
 /*
 #define SCR_FRONT   0
@@ -1022,6 +1021,17 @@ str_instr
 	.asc "up/down then A or ENTER: select slot"
 	.byt 0
 
+;; For alarms when in text screens
+str_alarm
+ 	.byt $0c
+	.asc "alarm: under attack"
+	.byt 0
+	.byt $0c
+	.asc "alarm: planet signal weak"
+	.byt 0
+	.byt $0c
+	.asc "alarm: incoming missile"
+	.byt 0
 
 ; Missions
 str_mi_success

@@ -270,6 +270,14 @@ noneardock
 nonearplanet
 	cmp #PDIST_TOOFAR
 	bcc nofar
+
+	; If not in front view, alert player
+	ldy _current_screen
+	cpy #SCR_FRONT
+	beq noal
+    ldx #1
+	jsr alarm
+noal
 	ldx #INV_RED
 	bmi set
 nofar
