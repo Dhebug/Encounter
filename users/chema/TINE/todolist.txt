@@ -172,6 +172,10 @@ Done but seems not too much of a gain.
 their objective (at least when loading game). Then, after it hits, then the second and
 so forth. Even ttls were wong afterwards...
 
+- Need some feedback of danger!!!
+
+- Shuttles seem to be very hard to draw... need to check this.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -214,15 +218,13 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Mission scripting
 
-+ Use of changing the object that sets the point of view?
++ Use for changing the object that sets the point of view?
 
 + Buying other ships?
 
 + When frame rate goes too high don't simulate all the time, or make a waiting loop
 
 + Snapping to planet does not always work in short chart
-
-+ Need some feedback of danger!!!
 
 + Adding rear laser should be piece of cake
 
@@ -236,14 +238,12 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Snow on the scanner when readings erratic
 
-+ Add right on commander messages.
++ Add "right on commander" messages.
 
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.
 
 + Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
-
-+ Shuttles seem to be very hard to draw... need to check this.
 
 + Is size of Vipers too high? Seems so... check.
 
