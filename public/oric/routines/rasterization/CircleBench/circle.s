@@ -14,7 +14,7 @@
 ;845
 ; Using clipping to 10/190 vertically
 ;827
-
+;754
 
 #include "params.h"
 
@@ -35,8 +35,21 @@ sy    		.word 0
 sx    		.word 0
 p 			.word 0
 
+cxmx		.dsb 2
+cxpx		.dsb 2
+cxmy		.dsb 2
+cxpy		.dsb 2
+cymx		.dsb 2
+cypx		.dsb 2
+cymy		.dsb 2
+cypy		.dsb 2
+
+
 	.text
- 
+
+circleExit
+ rts
+	 
 _circleMidpoint
 .(
     ; Check if circle is visible
@@ -126,12 +139,61 @@ drawit
     sbc _Radius+1
     sta p+1
     
+    
+    ; Init cx and co
+    lda _CentreX
+    sta cxmx
+    sta cxpx
+    lda _CentreX+1
+    sta cxmx+1
+    sta cxpx+1
+
+    lda _CentreY
+    sta cymx
+    sta cypx
+    lda _CentreY+1
+    sta cymx+1
+    sta cypx+1
+
+    clc
+    lda _CentreX
+    adc _Radius
+    sta cxpy
+    lda _CentreX+1
+    adc _Radius+1
+    sta cxpy+1
+        
+    sec
+    lda _CentreX
+    sbc _Radius
+    sta cxmy
+    lda _CentreX+1
+    sbc _Radius+1
+    sta cxmy+1
+
+    clc
+    lda _CentreY
+    adc _Radius
+    sta cypy
+    lda _CentreY+1
+    adc _Radius+1
+    sta cypy+1
+        
+    sec
+    lda _CentreY
+    sbc _Radius
+    sta cymy
+    lda _CentreY+1
+    sbc _Radius+1
+    sta cymy+1
+        
+    
 draw
    ; circlePoints (xCenter, yCenter, x, y);
     jmp _circlePoints
 .)
 
-circleExit
+circleExit2
  rts
 
  
@@ -147,7 +209,7 @@ circleExit
     ;  }
 
 	;.dsb 256-(*&255) 825 with, 822 without Oo
-    
+  
 loop
 .(
     sec
@@ -155,8 +217,45 @@ loop
     sbc sy
     lda sx+1
     sbc sy+1
-	bpl circleExit
+	bpl circleExit2
 
+	/*  
+	cxmx		.dsb 2
+	cymx		.dsb 2
+	cxpx		.dsb 2
+	cypx		.dsb 2
+	*/
+
+	.(
+	inc cxpx
+	bne skip
+	inc cxpx+1
+skip	
+	.)	
+	
+	.(
+	inc cypx
+	bne skip
+	inc cypx+1
+skip
+	.)	
+
+	.(
+	lda cxmx
+	bne skip
+	dec cxmx+1
+skip
+	dec cxmx
+	.)	
+	
+	.(
+	lda cymx
+	bne skip
+	dec cymx+1
+skip
+	dec cymx
+	.)	
+			
     inc sx
     bne noinc
     inc sx+1
@@ -164,7 +263,7 @@ noinc
 
     lda p+1
     bpl positivep
-
+    
     lda sx
     asl
     sta tmp
@@ -187,7 +286,43 @@ noinc2
     jmp _circlePoints
 
 positivep    
+	/*
+	cymy		.dsb 2
+	cypy		.dsb 2
+	cxmy		.dsb 2
+	cxpy		.dsb 2
+	*/	
 
+	.(
+	inc cymy
+	bne skip
+	inc cymy+1
+skip	
+	.)	
+	
+	.(
+	inc cxmy
+	bne skip
+	inc cxmy+1
+skip
+	.)	
+
+	.(
+	lda cypy
+	bne skip
+	dec cypy+1
+skip
+	dec cypy
+	.)	
+	
+	.(
+	lda cxpy
+	bne skip
+	dec cxpy+1
+skip
+	dec cxpy
+	.)	
+	
     lda sy
     bne nodec
     dec sy+1
@@ -225,21 +360,13 @@ noinc3
 _circlePoints
 .(
     ; Calculate _CentreY+y
-    lda _CentreY
-    clc
-    adc sy
-	tay
-    lda _CentreY+1
-    adc sy+1
+    ldy cypy
+    lda cypy+1
     sta Y1
     
     ; Calculate _CentreX+x    
-    lda _CentreX
-    clc
-    adc sx
-	tax
-    lda _CentreX+1
-    adc sx+1
+    ldx cxpx
+    lda cxpx+1
 	ora Y1
 	bne skip1
 
@@ -271,17 +398,14 @@ end
 
 skip1
     ; Calculate _CentreY+y (already done)    
-    ; Calculate _CentreX-x    
-    lda _CentreX
-    sec
-    sbc sx
-	tax
-    lda _CentreX+1
-    sbc sx+1
+    ; Calculate _CentreX-x  
+    
+    ldx cxmx
+    lda cxmx+1
+	ora Y1
     sta X1
 	ora Y1
 	bne skip2
-    
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -307,12 +431,8 @@ end
 
 skip2
     ; Calculate _CentreY-y
-    lda _CentreY
-    sec
-    sbc sy
-	tay
-    lda _CentreY+1
-    sbc sy+1
+    ldy cymy
+    lda cymy+1
     sta Y1
    	ora X1
 	bne skip3
@@ -347,16 +467,11 @@ end
 skip3
     ; Calculate _CentreY-y (already done)
     ; Calculate _CentreX+x
-    lda _CentreX
-    clc
-    adc sx
-	tax
-    lda _CentreX+1
-    adc sx+1
+    ldx cxpx
+    lda cxpx+1
     sta X1
    	ora Y1
 	bne skip4
- 
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -382,24 +497,15 @@ end
 
 skip4
     ; Calculate _CentreY+x 
-    lda _CentreY
-    clc
-    adc sx
-	tay
-    lda _CentreY+1
-    adc sx+1
+    ldy cypx
+    lda cypx+1
     sta Y1
     
     ; Calculate _CentreX+y    
-    lda _CentreX
-    clc
-    adc sy
-	tax
-    lda _CentreX+1
-    adc sy+1
- 	ora Y1
+    ldx cxpy
+    lda cxpy+1
+    ORA Y1
 	bne skip5
-   
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -428,16 +534,11 @@ end
 skip5
     ; Calculate _CentreX+y (already done)
     ; Calculate _CentreX-y
-    lda _CentreX
-    sec
-    sbc sy
-	tax
-    lda _CentreX+1
-    sbc sy+1
+    ldx cxmy
+    lda cxmy+1
     sta X1
  	ora Y1
 	bne skip6
-   
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -465,17 +566,12 @@ end
 
 skip6
     ; Calculate _CentreX-y (already done)
-    ; Calculate _CentreY-x    
-    lda _CentreY
-    sec
-    sbc sx
-	tay
-    lda _CentreY+1
-    sbc sx+1
+    ; Calculate _CentreY-x  
+    ldy cymx
+    lda cymx+1
     sta Y1
  	ora X1
 	bne skip7
-   
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -504,15 +600,10 @@ end
 skip7
     ; Calculate _CentreY-x (already done)
     ; Calculate _CentreX+y
-    lda _CentreX
-    clc
-    adc sy
-	tax
-    lda _CentreX+1
-    adc sy+1
+    ldx cxpy
+    lda cxpy+1
 	ora Y1
 	bne skip8
-    
 .(
 	cpx #(CLIP_RIGHT)
 	bcs end
@@ -539,12 +630,4 @@ end
 skip8
     jmp loop
 .)
-
-
-
-
-
-
-
-
 
