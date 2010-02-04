@@ -808,6 +808,7 @@ str_equip
     .byt 0
     .asc "Missile"
     .byt 0
+str_equip2
     .asc "Pulse laser"
     .byt 0
     .asc "Large Cargo Bay"
@@ -1031,6 +1032,11 @@ str_alarm
 	.byt 0
 	.byt $0c
 	.asc "alarm: incoming missile"
+	.byt 0
+
+;; For losing equipment
+str_destroyed
+	.asc " destroyed"
 	.byt 0
 
 ; Missions

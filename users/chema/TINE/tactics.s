@@ -1604,9 +1604,7 @@ cont
 	clc
 	adc _energy+1
     sta _energy+1
-    bcs nokill
-
-	; maybe take hull into account here?
+    bcs losesmthing
 
     ; Player killed - uh oh
 	jsr ViewPlayerShip
@@ -1618,6 +1616,35 @@ cont
 	; Inform player
 	ldx #STR_GAME_OVER
 	jmp flight_message 
+losesmthing
+	; If reached here, energy was depleted... check
+	; if we are to lose equipment
+	jsr _gen_rnd_number
+	cpx #(22+1)
+	bcs nokill	; Don't lose anything
+	cpx #(16+1)
+	bcs loseequip
+	; Lose an item?
+	lda _shipshold,x
+	beq nokill ; We don't have it
+	; Does it take cargo space
+	sta tmp
+	lda Units,x
+	bne nospace
+	lda tmp
+	clc
+	adc _holdspace
+	sta _holdspace
+nospace
+	; Lose it	
+	lda #0
+	sta _shipshold,x
+	; Print message
+	jsr flight_message_itemlost
+	jmp nokill
+loseequip
+	; Lose equipment
+	jsr lose_equip
 nokill
     ; Player not killed
     ; Just update screen indicators and such...
@@ -1638,6 +1665,54 @@ end
 .)
 
 
+;; lose_equip
+;; A subroutine just for clarity.
+;; Makes the player lose some of its equipment
+;; depending on the value of reg X
+
+lose_equip
+.(
+	// rand -= 17;
+    // rand = 0 means ECM,
+    //        1       FUEL SCOOPS
+    //        6       GALACTIC_HYPER
+	; Valid numbers (bit values in _equip)
+	; are:
+	; 2	Escape Pod
+	; 3 Scoops
+	; 4 ECM
+	; 5 Bomb
+	; 7 Galactic Hyper
+
+	txa	; a is 17..22
+	sec
+	sbc #15
+	; Now a is =2..7
+	cmp #6
+	beq end
+	; now just 2,3,4,5, or 7
+	; prepare bitflag
+	tax
+	stx savx+1
+	lda #1
+loop
+	asl
+	dex
+	bne loop
+	; Do we have it equipped?
+	and _equip
+	beq end	; No, return
+	; Clear it
+	eor #$ff
+	and _equip
+	sta _equip
+	; Let the player know
+savx
+	ldx #0	;SMC
+	jmp flight_message_eqlost	
+end
+	rts
+.)
 
 ;; make_angry
 ;; Makes a ship angry at another.
@@ -1669,10 +1744,13 @@ make_angry
 	bne cannot
 
     ; If he is already angry, he might not change his mind
-    lda _target,y
+	stx savx+1
+	jsr _gen_rnd_number
+    and _target,y
     bmi cannot  ; IS_ANGRY is the 7th bit
-    
-    txa
+savx
+    ;txa
+	lda #0 ;SMC
     ora #IS_ANGRY
     sta _target,y
 
