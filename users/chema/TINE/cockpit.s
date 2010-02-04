@@ -24,6 +24,44 @@ loop
 .)
 
 
+flight_message_itemlost
+.(
+	inc capson
+	inc print2buffer
+	lda #0
+	sta buffercounter
+    lda #<Goodnames
+	sta tmp0
+    lda #>Goodnames
+    sta tmp0+1
+    jsr search_string_and_print
+	lda #<str_destroyed
+	ldx #>str_destroyed
+	jsr print
+	dec print2buffer
+	dec capson
+	jmp flight_message_end
+.)
+
+flight_message_eqlost
+.(
+	inc capson
+	inc print2buffer
+	lda #0
+	sta buffercounter
+    lda #<str_equip2
+	sta tmp0
+    lda #>str_equip2
+    sta tmp0+1
+    jsr search_string_and_print
+	lda #<str_destroyed
+	ldx #>str_destroyed
+	jsr print
+	dec print2buffer
+	dec capson
+	jmp flight_message_end
+.)
+
 
 flight_message_loot
 .(
