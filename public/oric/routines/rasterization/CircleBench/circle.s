@@ -15,6 +15,7 @@
 ; Using clipping to 10/190 vertically
 ;827
 ;754
+;603
 
 #include "params.h"
 
@@ -208,7 +209,7 @@ circleExit2
     ;    circlePoints (xCenter, yCenter, x, y);
     ;  }
 
-	;.dsb 256-(*&255) 825 with, 822 without Oo
+	.dsb 256-(*&255) 
   
 loop
 .(
@@ -218,13 +219,6 @@ loop
     lda sx+1
     sbc sy+1
 	bpl circleExit2
-
-	/*  
-	cxmx		.dsb 2
-	cymx		.dsb 2
-	cxpx		.dsb 2
-	cypx		.dsb 2
-	*/
 
 	.(
 	inc cxpx
@@ -286,13 +280,6 @@ noinc2
     jmp _circlePoints
 
 positivep    
-	/*
-	cymy		.dsb 2
-	cypy		.dsb 2
-	cxmy		.dsb 2
-	cxpy		.dsb 2
-	*/	
-
 	.(
 	inc cymy
 	bne skip
@@ -359,152 +346,123 @@ noinc3
 
 _circlePoints
 .(
-    ; Calculate _CentreY+y
-    ldy cypy
-    lda cypy+1
-    sta Y1
-    
-    ; Calculate _CentreX+x    
-    ldx cxpx
-    lda cxpx+1
-	ora Y1
-	bne skip1
+	; +Y -----------------------------------
+	lda cypy+1
+	bne end_line_1
 
-.(
-	cpx #(CLIP_RIGHT)
-	bcs end
-	cpx #(CLIP_LEFT)
-	bcc end
+    ldy cypy 
     cpy #(CLIP_BOTTOM)
-	bcs end
+	bcs end_line_1
     cpy #(CLIP_TOP)
-	bcc end
+	bcc end_line_1
 
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
+		
+    ; (_CentreX+x,_CentreY+y)
+.(
+    lda cxpx+1
+	bne end
+    ldx cxpx
+	cpx #(CLIP_RIGHT)
+	bcs end
+	cpx #(CLIP_LEFT)
+	bcc end
 
-	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
     ora (tmp0),y
     sta (tmp0),y
-	ldy save_y
 end
 
 .)
 
 
 skip1
-    ; Calculate _CentreY+y (already done)    
-    ; Calculate _CentreX-x  
-    
-    ldx cxmx
+    ; (_CentreX-x,_CentreY+y)
+.(
     lda cxmx+1
-	ora Y1
-    sta X1
-	ora Y1
-	bne skip2
-.(
+	bne end
+    ldx cxmx	
 	cpx #(CLIP_RIGHT)
 	bcs end
 	cpx #(CLIP_LEFT)
 	bcc end
-    cpy #(CLIP_BOTTOM)
-	bcs end
-    cpy #(CLIP_TOP)
-	bcc end
-
-    lda _HiresAddrLow,y			; 4
-	sta tmp0+0					; 3
-	lda _HiresAddrHigh,y		; 4
-	sta tmp0+1					; 3 => Total 14 cycles
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
     ora (tmp0),y
     sta (tmp0),y
 end
-
 .)
+end_line_1
 
+
+	; -Y -----------------------------------
 skip2
-    ; Calculate _CentreY-y
-    ldy cymy
+    ; (_CentreX-x,_CentreY-y)
     lda cymy+1
-    sta Y1
-   	ora X1
-	bne skip3
-
-    ; Calculate _CentreX-x (already done)
-	 
-.(
-	cpx #(CLIP_RIGHT)
-	bcs end
-	cpx #(CLIP_LEFT)
-	bcc end
+	bne end_line_2
+	
+    ldy cymy
     cpy #(CLIP_BOTTOM)
-	bcs end
+	bcs end_line_2
     cpy #(CLIP_TOP)
-	bcc end
-
+	bcc end_line_2
+    
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
+	
+.(
+    lda cxmx+1
+	bne end
+    ldx cxmx
+	cpx #(CLIP_RIGHT)
+	bcs end
+	cpx #(CLIP_LEFT)
+	bcc end
 
-	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
     ora (tmp0),y
     sta (tmp0),y
-	ldy save_y
 end
-
 .)
 
 skip3
-    ; Calculate _CentreY-y (already done)
-    ; Calculate _CentreX+x
-    ldx cxpx
-    lda cxpx+1
-    sta X1
-   	ora Y1
-	bne skip4
+    ; (_CentreX+x,_CentreY-y)
+
 .(
+   	lda cxpx+1
+	bne end
+    ldx cxpx
 	cpx #(CLIP_RIGHT)
 	bcs end
 	cpx #(CLIP_LEFT)
 	bcc end
-    cpy #(CLIP_BOTTOM)
-	bcs end
-    cpy #(CLIP_TOP)
-	bcc end
-
-    lda _HiresAddrLow,y			; 4
-	sta tmp0+0					; 3
-	lda _HiresAddrHigh,y		; 4
-	sta tmp0+1					; 3 => Total 14 cycles
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
     ora (tmp0),y
     sta (tmp0),y
 end
-
 .)
+end_line_2
 
+
+
+	; +X -----------------------------------
 skip4
-    ; Calculate _CentreY+x 
-    ldy cypx
-    lda cypx+1
-    sta Y1
-    
-    ; Calculate _CentreX+y    
+    ; (_CentreX+y,_CentreY+x)
     ldx cxpy
+    ldy cypx  
+    
     lda cxpy+1
-    ORA Y1
+    ora cypx+1
 	bne skip5
 .(
 	cpx #(CLIP_RIGHT)
@@ -532,12 +490,11 @@ end
 .)
 
 skip5
-    ; Calculate _CentreX+y (already done)
-    ; Calculate _CentreX-y
+    ; (_CentreX-y,_CentreX+y)
     ldx cxmy
+    
     lda cxmy+1
-    sta X1
- 	ora Y1
+ 	ora cxpy+1
 	bne skip6
 .(
 	cpx #(CLIP_RIGHT)
@@ -564,60 +521,49 @@ end
 
 .)
 
+	; -X -----------------------------------
 skip6
-    ; Calculate _CentreX-y (already done)
-    ; Calculate _CentreY-x  
-    ldy cymx
+    ; (_CentreX-y,_CentreY-x)
     lda cymx+1
-    sta Y1
- 	ora X1
-	bne skip7
-.(
-	cpx #(CLIP_RIGHT)
-	bcs end
-	cpx #(CLIP_LEFT)
-	bcc end
+	bne skip8
+	
+    ldy cymx
     cpy #(CLIP_BOTTOM)
-	bcs end
+	bcs skip8
     cpy #(CLIP_TOP)
-	bcc end
-
+	bcc skip8
+	
     lda _HiresAddrLow,y			; 4
 	sta tmp0+0					; 3
 	lda _HiresAddrHigh,y		; 4
 	sta tmp0+1					; 3 => Total 14 cycles
+	
+.(
+    lda cxmy+1
+	bne end
+	cpx #(CLIP_RIGHT)
+	bcs end
+	cpx #(CLIP_LEFT)
+	bcc end
 
-	sty save_y
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
     ora (tmp0),y
     sta (tmp0),y
-	ldy save_y
 end
 
 .)
 
 skip7
-    ; Calculate _CentreY-x (already done)
-    ; Calculate _CentreX+y
+    ; (_CentreX+y,_CentreY-x)
     ldx cxpy
-    lda cxpy+1
-	ora Y1
-	bne skip8
 .(
+    lda cxpy+1
+	bne end
 	cpx #(CLIP_RIGHT)
 	bcs end
 	cpx #(CLIP_LEFT)
 	bcc end
-    cpy #(CLIP_BOTTOM)
-	bcs end
-    cpy #(CLIP_TOP)
-	bcc end
-
-    lda _HiresAddrLow,y			; 4
-	sta tmp0+0					; 3
-	lda _HiresAddrHigh,y		; 4
-	sta tmp0+1					; 3 => Total 14 cycles
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
