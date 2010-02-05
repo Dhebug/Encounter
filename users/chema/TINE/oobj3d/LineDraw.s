@@ -1520,10 +1520,10 @@ cont
     sta patch_circleclip3+1
     sta patch_circleclip4+1
     sta patch_circleclip5+1
-    sta patch_circleclip6+1
+/*    sta patch_circleclip6+1
     sta patch_circleclip7+1
     sta patch_circleclip8+1
-    sta patch_circleclip9+1
+    sta patch_circleclip9+1*/
     lda double_buff
     eor #$ff
     sta double_buff
