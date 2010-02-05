@@ -1,4 +1,7 @@
-
+; History of timings...
+;649
+;614 (replacing the update of tmp0)
+;607
 
 	.zero
 	
@@ -46,6 +49,7 @@ _mask_patch
 	sta (tmp0),y				; 6 => total = 13 cycles
 
 	; Update screen adress
+	.(
 	lda tmp0+0					; 3
 	adc #40						; 2
 	sta tmp0+0					; 3
@@ -53,6 +57,7 @@ _mask_patch
 	inc tmp0+1					; 5
 	clc							; 2
 skip
+	.)
 	; ------------------Min=13 Max=17
 
 	dex
@@ -157,7 +162,6 @@ draw_nearly_horizontal_8
 	
 	ldx _CurrentPixelX   	;Plotting coordinates
 	ldy _CurrentPixelY   	;in X and Y
-	sty save_y
 			
 	lda #00     			;Saves us a CMP
 	sec
@@ -178,15 +182,16 @@ __auto_ady
 __auto_dx   
 	sbc #00     			; 2 -DX
 	sta save_a				; 3
-
-	inc save_y				; 5 Steps in y
-	ldy save_y				; 3
 	
 	; Set the new screen adress
-	lda _HiresAddrLow,y		; 4
-	sta tmp0+0				; 3
-	lda _HiresAddrHigh,y	; 4
-	sta tmp0+1				; 3
+	.(
+	lda tmp0+0			; 3
+	adc #40				; 2
+	sta tmp0+0			; 3
+	bcc skip			; 2 (+1 if taken)
+	inc tmp0+1			; 5
+skip
+	.)
 	 
 draw_pixel
 	; Draw the pixel
@@ -272,10 +277,16 @@ __auto_dy
 skip 
 	; Set the new screen adress
 	sta save_a
-	lda _HiresAddrLow,y
-	sta tmp0+0
-	lda _HiresAddrHigh,y
-	sta tmp0+1
+	.(
+	; Update screen adress
+	lda tmp0+0					; 3
+	adc #40						; 2
+	sta tmp0+0					; 3
+	bcc skip2					; 2 (+1 if taken)
+	inc tmp0+1					; 5
+	clc							; 2
+skip2
+	.)
 
 draw_pixel	
 	; Draw the pixel
