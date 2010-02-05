@@ -18,15 +18,12 @@
 ;754
 ;603
 ;588
+;573
 
 #include "params.h"
 
 
 	.zero
-X1			.byt 0
-Y1			.byt 0
-
-save_y		.dsb 1
 
 ; Circle centre and radius
 _CentreY	.word 0
@@ -49,7 +46,7 @@ cypy		.dsb 2
 
 
 	.text
-
+	
 circleExit
  rts
 	 
@@ -128,6 +125,7 @@ drawit
     lda #0
     sta sx
     sta sx+1
+    
     lda _Radius
     sta sy
     lda _Radius+1
@@ -212,7 +210,66 @@ circleExit2
     ;  }
 
 	.dsb 256-(*&255) 
-  
+
+positivep    
+	.(
+	inc cymy
+	bne skip
+	inc cymy+1
+skip	
+	.)	
+	
+	.(
+	inc cxmy
+	bne skip
+	inc cxmy+1
+skip
+	.)	
+
+	.(
+	lda cypy
+	bne skip
+	dec cypy+1
+skip
+	dec cypy
+	.)	
+	
+	.(
+	lda cxpy
+	bne skip
+	dec cxpy+1
+skip
+	dec cxpy
+	.)	
+	
+    lda sy
+    bne nodec
+    dec sy+1
+nodec
+    dec sy
+
+    lda sx
+    sec
+    sbc sy
+    sta tmp
+    lda sx+1
+    sbc sy+1
+    sta tmp+1
+
+    asl tmp
+    rol tmp+1
+
+    sec			; +1
+    lda p
+    adc tmp
+    sta p
+    lda p+1
+    adc tmp+1
+    sta p+1
+   
+    jmp _circlePoints	  
+    
+    
 loop
 .(
     sec
@@ -267,81 +324,14 @@ noinc
     rol
     sta tmp+1
 
-    inc tmp
-    bne noinc2
-    inc tmp+1
-noinc2    
+    sec			; +1
     lda p
-    clc
     adc tmp
     sta p
     lda p+1
     adc tmp+1
     sta p+1
     
-    jmp _circlePoints
-
-positivep    
-	.(
-	inc cymy
-	bne skip
-	inc cymy+1
-skip	
-	.)	
-	
-	.(
-	inc cxmy
-	bne skip
-	inc cxmy+1
-skip
-	.)	
-
-	.(
-	lda cypy
-	bne skip
-	dec cypy+1
-skip
-	dec cypy
-	.)	
-	
-	.(
-	lda cxpy
-	bne skip
-	dec cxpy+1
-skip
-	dec cxpy
-	.)	
-	
-    lda sy
-    bne nodec
-    dec sy+1
-nodec
-    dec sy
-
-    lda sx
-    sec
-    sbc sy
-    sta tmp
-    lda sx+1
-    sbc sy+1
-    sta tmp+1
-
-    asl tmp
-    rol tmp+1
-
-    inc tmp
-    bne noinc3
-    inc tmp+1
-noinc3   
-
-    lda p
-    clc
-    adc tmp
-    sta p
-    lda p+1
-    adc tmp+1
-    sta p+1
-   
     ;jmp _circlePoints
 
 .)
