@@ -1114,9 +1114,7 @@ done     RTS
 
 FilledCircle
 .(
-  
 		jsr CirclePrepare
-
 
         ldx RTEMPA
         lda HCZ,x
@@ -1126,59 +1124,30 @@ FilledCircle
 		ror
 		sta op2
 
+		; Check div 0
+		ora op2+1
+		beq small
+
 		lda #$ff
 		sta op1
-		;lda #$ff
 		sta op1+1
 		jsr divu
 		txa
-		bne notzero
-		lda #1
-notzero
-		
-#ifdef 0
-        lda tab_projtabrem,x
-        sta TEMP
-        lda tab_projtab,x
-        
-        cmp #64*2
-        bcc nooverflow
-        ;; rotations will make it overflow
-        lda #255
-        bne ccall   ; allways jump
-nooverflow
-        ;asl TEMP
-        ;rol
-        asl TEMP
-        rol
-        bne ccall
-        lda #2
-ccall
-#endif
-        jsr CircleCall
-
-        ;ldx RTEMPA
-        ;lda HCZ,x
-        ;sta _planet_dist
-
-		rts
-
+		cmp #2
+		bcs normal
+small
+		lda #2
+normal
+        sta rad
+        lda #0
+        sta rad+1
+        jmp _circleMidpoint
 .)
 
 
 SmallFilledCircle
 .(
         jsr CirclePrepare
-
-#ifdef 0
-        lda tab_projtab,x
-        lsr
-        lsr
-        ;ora #1
-        bne ccall
-        lda #1
-ccall
-#endif
 
         ldx RTEMPA
         lda HCZ,x
@@ -1195,9 +1164,10 @@ ccall
 		bne notzero
 		lda #1
 notzero
-
-
-        jmp CircleCall    
+        sta rad
+        lda #0
+        sta rad+1
+        jmp _circleMidpoint
 .)
 
 
@@ -1209,70 +1179,47 @@ SmallDot
 
         ldy #2
         lda (POINT),y
-
         tax
-        ldy #0
+
+        lda PLISTX+MAXVERTEX,x
+        ;sta X1+1        
+		ora PLISTY+MAXVERTEX,x
+		beq test2
+end
+		rts
+test2
         lda PLISTX,x
         sta X1
-        lda PLISTX+MAXVERTEX,x
-        sta X1+1        
-
         lda PLISTY,x
         sta Y1
-        lda PLISTY+MAXVERTEX,x
-        sta Y1+1
 
         ;; Plots debris (a point) at given X1,Y1 position (signed 16-bit)
 	    ;; after clipping
+		
+	    ldy Y1
+		cpy #(CLIP_BOTTOM)
+		bcs end
+		cpy #(CLIP_TOP)
+		bcc end
 
-	    lda Y1
-	    sta op1
-	    lda Y1+1
-	    sta op1+1
-
-	    lda #(CLIP_BOTTOM)
-	    sta op2
-	    lda #0
-	    sta op2+1
-	    jsr cmp16
-		bmi cont1
-		rts
-cont1
-	    lda #(CLIP_TOP)
-	    sta op2
-	    jsr cmp16
-	 	bpl cont2
-		rts
-cont2
-	    jsr draw_dot
-	    inc X1
-	    bne plot
-	    inc X1+1
-plot
+		ldx X1
+		jsr draw_dot
+		ldy Y1
+	    ldx X1
+		inx
+	    beq end
+	    ;inc X1+1
 		; Let the program flow
 .)
 
 draw_dot
 .(
-		lda X1
-		sta op1
-		lda X1+1
-		sta op1+1
-	
-	    lda #(CLIP_RIGHT)
-	    sta op2
-	    lda #0
-	    sta op2+1
-	    jsr cmp16
-	    bpl end
-
-	    lda #(CLIP_LEFT)
-	    sta op2
-	    jsr cmp16
-	    bmi end
-
-	    ldx X1
-	    ldy Y1
+		;lda X1+1
+		;bne end
+	    cpx #(CLIP_RIGHT)
+		bcs end
+	    cpx #(CLIP_LEFT)
+		bcc end
 
 	    jsr pixel_address
 	    eor (tmp0),y
@@ -1437,8 +1384,6 @@ DrawFace
 #else 
 ;Wireframe routine                          
 Wire
-         ;JSR IsVis
-         ;bmi exit
 	 	lsr facevis+2
 		ror facevis+1
 		ror facevis
@@ -1608,20 +1553,6 @@ done
 .)
 
 
-CircleCall
-.(
-        ;sta (sp),y
-        ;iny
-        ;lda #0
-        ;sta (sp),y
-        sta rad
-        lda #0
-        sta rad+1
-
-        jmp _circleMidpoint
-.)
-
-
 #define cx_	tmp3
 #define cy_	tmp4
 #define cz_	tmp5
@@ -1657,7 +1588,11 @@ prepare_normals
     sta cz_+1
 	cmp #$5
 	bcc loopadj
-	inc cont+1
+
+	; If too far we patch code below and avoid calculating the
+	; dot product between the normal and the view vector.
+	; Just will use the normal Z sign.
+	inc cont+1	; This changes an inmediate value loaded in A below
 	jmp startcheck
 
     ; Adjust center coordinates, so they are 8-bit signed
@@ -1713,20 +1648,15 @@ endloop
 
     lda cx_+1
     cmp #$80    
-    ;ror cx_+1
     ror cx_
  
     lda cy_+1
     cmp #$80    
-    ;ror cy_+1
     ror cy_ 
  
     ; Z is allways positive (or it won't be visible)
-    ; This check can be avoided
-    ;lda cz_+1
-    ;cmp #$80    
-    lsr cz_+1
-    ror cz_
+    ; So no check for sign
+    lsr cz_
 
 
 startcheck

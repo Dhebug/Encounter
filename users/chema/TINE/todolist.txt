@@ -179,6 +179,8 @@ so forth. Even ttls were wong afterwards...
 - Bounties added, but it is quite a waste to use 2 bytes for just a couple of cases... Anyway the inflight message with
 the bounty appears maybe too fast? Maybe even before the ship explodes!
 
+- Optimize routines in cockpit messages... they use a lot of similar code.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -246,8 +248,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
 
 + Is size of Vipers too high? Seems so... check.
-
-+ Optimize routines in cockpit messages... they use a lot of similar code.
 
 + BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
 

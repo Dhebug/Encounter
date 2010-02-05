@@ -324,7 +324,9 @@ random_encounter
 .(
 		; If already too many objects, return
 		lda NUMOBJS
-		cmp #10;12
+		sec
+		sbc fixed_objects+1
+		cmp #5
 		bcc cont1
 		rts
 cont1
@@ -668,12 +670,11 @@ check_for_others
 	; Should be based on game internals and some randomizing
 
 	jsr _gen_rnd_number
-	;lda _rnd_seed+2
-	cmp #90
+	cpx #90		; X contains one part of the seed
 	bcc doit
 	rts
 doit
-	;lda _rnd_seed
+	; A contains the other part of the seed
 	and #7
 	sta tmp
 	lda _cpl_system+GOVTYPE
@@ -686,7 +687,8 @@ pirates
 
 nopirates
 	lda _rnd_seed
-	bmi shuttle
+	cmp #90
+	bcc shuttle
 	; Gererate Bounty Hunter
 	jmp generate_bounty
 

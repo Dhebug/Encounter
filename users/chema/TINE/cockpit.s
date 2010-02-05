@@ -24,61 +24,63 @@ loop
 .)
 
 
-flight_message_itemlost
+; Some helpers to reduce code size
+
+fm_prepare
 .(
 	inc capson
 	inc print2buffer
 	lda #0
 	sta buffercounter
-    lda #<Goodnames
-	sta tmp0
-    lda #>Goodnames
-    sta tmp0+1
+	rts
+.)
+
+fm_printdestroyed
+.(
     jsr search_string_and_print
 	lda #<str_destroyed
 	ldx #>str_destroyed
+.)
+fm_print
+.(
 	jsr print
 	dec print2buffer
 	dec capson
 	jmp flight_message_end
 .)
 
+flight_message_itemlost
+.(
+	jsr fm_prepare
+	lda #<Goodnames
+	sta tmp0
+    lda #>Goodnames
+    sta tmp0+1
+	jmp fm_printdestroyed
+.)
+
 flight_message_eqlost
 .(
-	inc capson
-	inc print2buffer
-	lda #0
-	sta buffercounter
+  	jsr fm_prepare
     lda #<str_equip2
 	sta tmp0
     lda #>str_equip2
     sta tmp0+1
-    jsr search_string_and_print
-	lda #<str_destroyed
-	ldx #>str_destroyed
-	jsr print
-	dec print2buffer
-	dec capson
-	jmp flight_message_end
+	jmp fm_printdestroyed
 .)
 
 
 flight_message_loot
 .(
 
-	inc capson
-	inc print2buffer
-	lda #0
-	sta buffercounter
+	jsr fm_prepare
     lda #<Goodnames
 	sta tmp0
     lda #>Goodnames
     sta tmp0+1
     jsr search_string_and_print
-	
 	dec print2buffer
 	dec capson
-
 	jmp flight_message_end
 .)
 
@@ -86,11 +88,7 @@ bounty_am .byt 0,0
 
 flight_message_bounty
 .(
-
-	inc capson
-	inc print2buffer
-	lda #0
-    sta buffercounter
+	jsr fm_prepare
 	lda bounty_am
 	sta op2
 	lda bounty_am+1
@@ -99,10 +97,7 @@ flight_message_bounty
 	jsr put_space
 	lda #<str_credits
 	ldx #>str_credits
-	jsr print
-	dec print2buffer
-	dec capson
-	jmp flight_message_end
+	jmp fm_print
 .)
 
 
@@ -116,10 +111,7 @@ flight_message
 	sta tmp0+1
 
 	; Print message id to buffer
-	inc print2buffer
-	inc capson
-	lda #0
-    sta buffercounter
+	jsr fm_prepare
 	jsr search_string_and_print
 	dec print2buffer
 	dec capson

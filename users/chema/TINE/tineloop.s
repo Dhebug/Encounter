@@ -343,6 +343,10 @@ dock
 	beq l1
 	jsr frontview
 l1
+	lda invert
+	beq l2
+	jsr rearview
+l2
     jsr _DoubleBuffOff
     jsr save_frame
     dec _docked
@@ -429,7 +433,7 @@ loopcl
 	sta _vertexYHI-1,x
 	dex
 +fixed_objects
-	cpx #3	; SMC
+	cpx #0	; SMC
 	bne loopcl
 
 	; Clear the off-screen buffer
