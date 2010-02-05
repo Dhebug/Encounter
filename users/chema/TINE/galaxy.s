@@ -3012,8 +3012,10 @@ _buy
 .(
     ; check if there is something for sale
     ldx _cur_sel
+	cpx #$ff
+	beq nobuy
     lda _quantities,x
-    beq nosell
+    beq nobuy
     
     ; check for cash
     ; Get price in op2
@@ -3055,7 +3057,7 @@ nospace
 	lda #<str_nocash
 	ldx #>str_nocash
 	jmp print
-nosell
+nobuy
 end
     rts
 .)
@@ -3064,6 +3066,8 @@ _sell
 .(
     ; check if there is something for sale
     ldx _cur_sel
+	cpx #$ff
+	beq nosell
     lda _shipshold,x
     beq nosell
     
