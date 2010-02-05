@@ -60,7 +60,9 @@ void circle_basic()
 	unsigned int i;
 	curset(120,100,0);
 	for (i=1;i<99;i++)
+	{
 		circle(i,1);
+	}
 }
 
 
@@ -76,6 +78,7 @@ void test()
 		circle_Chema();
 		delay=65536-(*(unsigned int*)0x276);
 		printf(" duration (in 100th of second): %d",delay);
+				
 						
 		// Basic routine second
 		/*
