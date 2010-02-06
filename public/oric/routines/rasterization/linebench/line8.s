@@ -21,6 +21,7 @@
 
 save_a          .dsb 1
 save_y          .dsb 1
+curBit          .dsb 1
 
     .text
 
@@ -31,6 +32,16 @@ save_y          .dsb 1
 ; dex $ca 11001010
 ; iny $c8 11001000
 ; dey $88 10001000
+
+#define _NOP    $ea
+#define _INX    $e8
+#define _DEX    $ca
+#define _INY    $c8
+#define _DEY    $88
+#define _ASL    $0a
+#define _LSR    $4a
+#define _INC_ZP $e6
+#define _DEC_ZP $c6
 
 
 
@@ -154,9 +165,9 @@ alignIt
     ldy dy
     beq draw_totaly_horizontal_8
     cpy dx
-    bcs draw_nearly_vertical_8
+    bcs draw_mainly_vertical_8
 
-draw_nearly_horizontal_8
+draw_mainly_horizontal_8
     .(
     ; here we have DY in Y, and the OPCODE in A
     sta __auto_stepx        ; Write a (dex / nop / inx) instruction
@@ -175,7 +186,7 @@ skipDex
     ldx _CurrentPixelX      ;Plotting coordinates
     ldy _CurrentPixelY      ;in X and Y
 
-    lda dy
+    lda dx
     lsr
     eor #$ff
 ;    clc
@@ -257,66 +268,143 @@ __auto_cpx
 ;
 ; dy>dx
 ;
-draw_nearly_vertical_8
+draw_mainly_vertical_8
+; here we have DY in Y, and the OPCODE in A
     .(
-    ; here we have DY in Y, and the OPCODE in A
-    sta __auto_stepx        ; Write a (dex / nop / inx) instruction
+; setup bresenham values:
     sty __auto_dy+1
+    ldx dx
+    stx __auto_dx+1
 
-    lda dx
-    sta __auto_adx+1
+; setup direction:
+;    sta __auto_stepx        ;       Write a (dex / nop / inx) instruction
+    cmp #_DEX               ;       which direction
+    bne doInx
+; dex, moving left:
+    lda #%00100000
+    sta __auto_cpBit+1
+    lda #_ASL               ;
+    sta __auto_shBit
+    lda #%00000001
+    sta __auto_ldBit+1
+    lda #_DEY
+    sta __auto_yLo
+    lda #$ff
+    sta __auto_cpY+1
+    lda #_DEC_ZP
+    sta __auto_yHi
+    bne endX
 
-    lda _OtherPixelY
-    sta __auto_cpy+1
-
-    ldx _CurrentPixelX      ; Plotting coordinates
-    ldy _CurrentPixelY      ; in X and Y
-
-    lda dx
+doInx
+; inx, moving right
+    lda #%00000001
+    sta __auto_cpBit+1
+    lda #_LSR
+    sta __auto_shBit
+    lda #%00100000
+    sta __auto_ldBit+1
+    lda #_INY
+    sta __auto_yLo
+    lda #$00
+    sta __auto_cpY+1
+    lda #_INC_ZP
+    sta __auto_yHi
+endX
+; setup X
+    tya                     ;       y = dY
+    tax
+    inx                     ;       x = dY+1
+; setup current bit:
+    ldy _CurrentPixelX
+    lda _TableBit6Reverse,y ; 4
+    sta curBit
+; setup pointer and Y:
+; TODO: self-modyfing code?
+    lda _TableDiv6,y
+    clc
+    adc tmp0
+    tay
+    lda #0
+    sta tmp0
+    bcc skipTmp0
+    inc tmp0+1
+skipTmp0
+; calculate initial bresenham sum:
+    lda dy
     lsr
     eor #$ff                ; -DX/2
-    sta save_a              ;
-;    clc
+    clc                     ; 2
+    bcc loopY               ; 3
+; a = sum, y = tmp0, x = dY+1, tmp0 = 0
 
-loop
-    ; Draw the pixel
-    sty save_y              ; 3
-    ldy _TableDiv6,x        ; 4
-    lda _TableBit6Reverse,x ; 4
-    eor (tmp0),y            ; 5*
-    sta (tmp0),y            ; 6*
-    lda save_a              ; 3
-    ldy save_y              ; 3 = 28
-
-__auto_cpy
-    cpy #00                 ; 2         At the endpoint yet?
-    beq exitLoop            ; 2/3
-
-    iny                     ; 2         Step in y
-__auto_adx
-    adc #00                 ; 2         +DX
-    bcc skipX               ; 2/3=10/11 ~50% taken
-    ; Time to step in x
-__auto_stepx
-    inx                     ; 2         Step in x
-__auto_dy
-    sbc #00                 ; 2 =  4    -DY
-skipX
-    ; Set the new screen adress
-    sta save_a              ; 3 =  3
-
-    ; Update screen adress
-    lda tmp0+0              ; 3
-    adc #40                 ; 2
-    sta tmp0+0              ; 3
-    bcc loop                ; 2/3       ~84% taken
+incHiPtr                    ; 9
     inc tmp0+1              ; 5
-    bcs loop                ; 3
-                            ;   = 12.12 average
+    clc                     ; 2
+    bcc contHiPtr           ; 3
 
-; x  ,y++: 54.12
-; x++,y++: 57.12
-; average: 55.62
+loopY
+    sta save_a              ; 3 =  3
+    ; Draw the pixel
+    lda curBit              ; 3
+    eor (tmp0),y            ; 5*
+    sta (tmp0),y            ; 6*= 14**
+
+    dex                     ; 2         At the endpoint yet?
+    beq exitLoop            ; 2/3= 4/5
+loopX
+    ; Update screen adress
+    tya                     ; 2
+    adc #40                 ; 2
+    tay                     ; 2
+    bcs incHiPtr            ; 2/13      ~16% taken
+contHiPtr                   ;   =  9.76 average
+
+    lda save_a              ; 3
+__auto_dx
+    adc #00                 ; 2         +DX
+    bcc loopY               ; 2/3= 7/8  ~50% taken
+
+    ; Time to step in x
+__auto_dy
+    sbc #00                 ; 2         -DY
+    sta save_a              ; 3 =  5
+
+    lda curBit              ; 3
+__auto_cpBit
+    cmp #%00100000          ; 2         %00100000/%00000001
+    beq nextColumn          ; 2/14.07   ~17% taken
+__auto_shBit
+    asl                     ; 2         asl/lsr, clears carry
+contNextColumn
+    sta curBit              ; 3 =~13.71
+
+    ; Draw the pixel
+    eor (tmp0),y            ; 5*
+    sta (tmp0),y            ; 6*= 11**
+    dex                     ; 2         At the endpoint yet?
+    bne loopX               ; 2/3= 4/5
 exitLoop
     rts
+
+nextColumn
+__auto_ldBit
+    lda #%00000001          ; 2         %00000001/%00100000
+__auto_yLo
+    dey                     ; 2
+__auto_cpY
+    cpy #$ff                ; 2
+    clc                     ; 2         TODO: optimize
+    bne contNextColumn      ; 2/3       ~99% taken
+__auto_yHi
+    dec tmp0+1              ; 5
+    bcc contNextColumn      ; 3
+
+; x  ,y++: 38.76** (50%)
+; x++,y++: 51.47** (50%)
+; average: 45.11**
+
+
+; x  ,y++: 54.12**
+; x++,y++: 57.12**
+; average: 55.62**
     .)
