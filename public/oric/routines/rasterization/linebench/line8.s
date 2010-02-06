@@ -6,7 +6,7 @@
 ;583 after alignment
 ;579
 ;534 redid mainly vertical
-
+;529 removed page penalty
 
     .zero
 
@@ -25,27 +25,21 @@ save_a          .dsb 1
 save_y          .dsb 1
 curBit          .dsb 1
 
+#define ROW_SIZE    40
+
+#define _NOP        $ea
+#define _INX        $e8
+#define _DEX        $ca
+#define _INY        $c8
+#define _DEY        $88
+#define _ASL        $0a
+#define _LSR        $4a
+#define _INC_ZP     $e6
+#define _DEC_ZP     $c6
+
     .text
 
     .dsb 256-(*&255)
-
-; nop $ea
-; inx $e8 11101000
-; dex $ca 11001010
-; iny $c8 11001000
-; dey $88 10001000
-
-#define _NOP    $ea
-#define _INX    $e8
-#define _DEX    $ca
-#define _INY    $c8
-#define _DEY    $88
-#define _ASL    $0a
-#define _LSR    $4a
-#define _INC_ZP $e6
-#define _DEC_ZP $c6
-
-
 
 draw_totaly_vertical_8
 .(
@@ -67,7 +61,7 @@ _mask_patch
     ; Update screen adress
     .(
     lda tmp0+0                  ; 3
-    adc #40                     ; 2
+    adc #ROW_SIZE               ; 2
     sta tmp0+0                  ; 3
     bcc skip                    ; 2 (+1 if taken)
     inc tmp0+1                  ; 5
@@ -145,7 +139,7 @@ end
     bcc cur_smaller
 
 cur_bigger                  ; x1>x2
-    lda #$ca                ; dex
+    lda #_DEX               ; dex
     bne end
 
 cur_smaller                 ; x1<x2
@@ -154,7 +148,7 @@ cur_smaller                 ; x1<x2
     adc #1
     sta dx
 
-    lda #$e8                ; inx
+    lda #_INX               ; inx
 end
 .)
 
@@ -167,20 +161,18 @@ alignIt
     ldy dy
     beq draw_totaly_horizontal_8
     cpy dx
-    bcs draw_mainly_vertical_8
+    bcc draw_mainly_horizontal_8
+    jmp draw_mainly_vertical_8
 
 draw_mainly_horizontal_8
     .(
     ; here we have DY in Y, and the OPCODE in A
     sta __auto_stepx        ; Write a (dex / nop / inx) instruction
-    cmp #$ca                ; dex?
+    cmp #_DEX               ; dex?
     bne skipDex
     dey                     ; adjust for carry being set in loop
 skipDex
     sty __auto_ady+1
-
-    lda dx
-    sta __auto_dx+1
 
     lda _OtherPixelX
     sta __auto_cpx+1
@@ -189,6 +181,7 @@ skipDex
     ldy _CurrentPixelY      ;in X and Y
 
     lda dx
+    sta __auto_dx+1
     lsr
     eor #$ff
 ;    clc
@@ -211,8 +204,8 @@ __auto_stepx
     inx                     ; 2         Step in x
     lda save_a              ; 3
 __auto_ady
-    adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3=13/14
+    adc #00                 ; 2         +DY         TODO: bugfix carry
+    bcc loopX               ; 2/3=13/14 ~50% taken
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
@@ -220,9 +213,9 @@ __auto_dx
 
     ; Set the new screen adress
     lda tmp0+0              ; 3
-    adc #40                 ; 2
+    adc #ROW_SIZE           ; 2
     sta tmp0+0              ; 3
-    bcc loopY               ; 2/3=10/11 ~84 taken
+    bcc loopY               ; 2/3=10/11 ~84% taken
     inc tmp0+1              ; 5
     bcs loopY               ; 3 =  8
 ; average: 12.12
@@ -263,6 +256,7 @@ __auto_cpx
     rts
 .)
 
+    .dsb 256-(*&255)
 
 ;
 ; This code is used when the things are moving faster
@@ -278,11 +272,11 @@ draw_mainly_vertical_8
     ldx dx
     stx __auto_dx+1
 
+; TODO: two separate branches depending on x-direction
 ; setup direction:
-;    sta __auto_stepx        ;       Write a (dex / nop / inx) instruction
-    cmp #_DEX               ;       which direction
+    cmp #_DEX               ;           which direction?
     bne doInx
-; dex, moving left:
+; dex -> moving left:
     lda #%00100000
     sta __auto_cpBit+1
     lda #_ASL               ;
@@ -291,14 +285,12 @@ draw_mainly_vertical_8
     sta __auto_ldBit+1
     lda #_DEY
     sta __auto_yLo
-    lda #$ff
-    sta __auto_cpY+1
+    ldx #$ff
     lda #_DEC_ZP
-    sta __auto_yHi
     bne endX
 
 doInx
-; inx, moving right
+; inx -> moving right:
     lda #%00000001
     sta __auto_cpBit+1
     lda #_LSR
@@ -307,15 +299,15 @@ doInx
     sta __auto_ldBit+1
     lda #_INY
     sta __auto_yLo
-    lda #$00
-    sta __auto_cpY+1
+    ldx #$00
     lda #_INC_ZP
-    sta __auto_yHi
 endX
+    stx __auto_cpY+1
+    sta __auto_yHi
 ; setup X
-    tya                     ;       y = dY
+    tya                     ;           y = dY
     tax
-    inx                     ;       x = dY+1
+    inx                     ;           x = dY+1
 ; setup current bit:
     ldy _CurrentPixelX
     lda _TableBit6Reverse,y ; 4
@@ -334,7 +326,7 @@ skipTmp0
 ; calculate initial bresenham sum:
     lda dy
     lsr
-    eor #$ff                ; -DX/2
+    eor #$ff                ;           -DY/2
     clc                     ; 2
     bcc loopY               ; 3
 ; a = sum, y = tmp0, x = dY+1, tmp0 = 0
@@ -343,20 +335,20 @@ incHiPtr                    ; 9
     inc tmp0+1              ; 5
     clc                     ; 2
     bcc contHiPtr           ; 3
-
+;----------------------------------------------------------
 loopY
     sta save_a              ; 3 =  3
     ; Draw the pixel
     lda curBit              ; 3
-    eor (tmp0),y            ; 5*
-    sta (tmp0),y            ; 6*= 14**
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 14
 
     dex                     ; 2         At the endpoint yet?
     beq exitLoop            ; 2/3= 4/5
 loopX
     ; Update screen adress
     tya                     ; 2
-    adc #40                 ; 2
+    adc #ROW_SIZE           ; 2
     tay                     ; 2
     bcs incHiPtr            ; 2/13      ~16% taken
 contHiPtr                   ;   =  9.76 average
@@ -372,7 +364,7 @@ __auto_dy
     sta save_a              ; 3 =  5
 
     lda curBit              ; 3
-__auto_cpBit
+__auto_cpBit                ;           TODO: optimize
     cmp #%00100000          ; 2         %00100000/%00000001
     beq nextColumn          ; 2/14.07   ~17% taken
 __auto_shBit
@@ -381,32 +373,27 @@ contNextColumn
     sta curBit              ; 3 =~13.71
 
     ; Draw the pixel
-    eor (tmp0),y            ; 5*
-    sta (tmp0),y            ; 6*= 11**
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 11
     dex                     ; 2         At the endpoint yet?
     bne loopX               ; 2/3= 4/5
 exitLoop
     rts
-
+;----------------------------------------------------------
 nextColumn
 __auto_ldBit
     lda #%00000001          ; 2         %00000001/%00100000
 __auto_yLo
-    dey                     ; 2
+    dey                     ; 2         dey/iny
 __auto_cpY
-    cpy #$ff                ; 2
+    cpy #$ff                ; 2         $ff/$00
     clc                     ; 2         TODO: optimize
     bne contNextColumn      ; 2/3       ~99% taken
 __auto_yHi
-    dec tmp0+1              ; 5
+    dec tmp0+1              ; 5         dec/inc
     bcc contNextColumn      ; 3
 
-; x  ,y++: 38.76** (50%)
-; x++,y++: 51.47** (50%)
-; average: 45.11**
-
-
-; x  ,y++: 54.12**
-; x++,y++: 57.12**
-; average: 55.62**
+; x  ,y++: 38.76 (50%)
+; x++,y++: 51.47 (50%)
+; average: 45.11
     .)
