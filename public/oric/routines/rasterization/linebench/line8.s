@@ -275,6 +275,7 @@ draw_nearly_vertical_8
     lda dx
     lsr
     eor #$ff                ; -DX/2
+    sta save_a              ;
 ;    clc
 
 loop
