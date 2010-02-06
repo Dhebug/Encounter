@@ -5,6 +5,8 @@
 ;588
 ;583 after alignment
 ;579
+;534 redid mainly vertical
+
 
     .zero
 
