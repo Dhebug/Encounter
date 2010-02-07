@@ -124,6 +124,76 @@ void line_mike_8()
 {
         int i;
 
+        /*// mainly horizontal
+        CurrentPixelX   =  20;
+        CurrentPixelY   =  10;
+        OtherPixelX     = 220;
+        OtherPixelY     =  48;
+        //DrawLine8();
+
+        // mainly horizontal
+        CurrentPixelX   =  20;
+        CurrentPixelY   =  10;
+        OtherPixelX     = 220;
+        OtherPixelY     =  50;
+        DrawLine8();
+
+        // mainly horizontal
+        CurrentPixelX   =  20;
+        CurrentPixelY   =  10;
+        OtherPixelX     = 220;
+        OtherPixelY     =  52;
+        //DrawLine8();
+
+        // mainly horizontal
+        CurrentPixelX   =  20;
+        CurrentPixelY   =  10;
+        OtherPixelX     = 220;
+        OtherPixelY     =  54;
+        //DrawLine8();*/
+
+        /*// mainly horizontal
+        CurrentPixelX   = 220;
+        CurrentPixelY   =  40;
+        OtherPixelX     =  70;
+        OtherPixelY     = 140;
+        DrawLine8();
+
+        // mainly vertical
+        CurrentPixelX   =  20;
+        CurrentPixelY   =  10;
+        OtherPixelX     =  70;
+        OtherPixelY     = 140;
+        DrawLine8();*/
+
+        /*// very horizontal
+        CurrentPixelX   = 220;
+        CurrentPixelY   =  40;
+        OtherPixelX     =  21;
+        OtherPixelY     =  10;
+        DrawLine8();
+
+        // very horizontal
+        CurrentPixelX   = 220;
+        CurrentPixelY   =  10;
+        OtherPixelX     =  21;
+        OtherPixelY     =  40;
+        DrawLine8();
+
+        // vertical
+        CurrentPixelX   =  21;
+        CurrentPixelY   =  15;
+        OtherPixelX     =  21;
+        OtherPixelY     =  35;
+        DrawLine8();
+
+        // vertical
+        CurrentPixelX   = 220;
+        CurrentPixelY   =  15;
+        OtherPixelX     = 220;
+        OtherPixelY     =  35;
+        DrawLine8();*/
+
         for (i=0;i<239;i++)
         {
                 OtherPixelX=i;
@@ -142,6 +212,7 @@ void line_mike_8()
 
                 DrawLine8();
         }
+
         /*
         for (i=0;i<239;i++)
         {
