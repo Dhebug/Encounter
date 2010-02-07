@@ -5,8 +5,9 @@
 ;588
 ;583 after alignment
 ;579
-;534 redid mainly vertical
+;534 redid mainly_vertical
 ;529 removed page penalty
+;517 final optimization at mainly_horizontal
 
     .zero
 
@@ -25,7 +26,8 @@ save_a          .dsb 1
 save_y          .dsb 1
 curBit          .dsb 1
 
-#define ROW_SIZE    40
+#define X_SIZE      240
+#define ROW_SIZE    X_SIZE/6
 
 #define _NOP        $ea
 #define _INX        $e8
@@ -36,6 +38,7 @@ curBit          .dsb 1
 #define _LSR        $4a
 #define _INC_ZP     $e6
 #define _DEC_ZP     $c6
+
 
     .text
 
@@ -139,7 +142,7 @@ end
     bcc cur_smaller
 
 cur_bigger                  ; x1>x2
-    lda #_DEX               ; dex
+    lda #_DEX
     bne end
 
 cur_smaller                 ; x1<x2
@@ -148,7 +151,7 @@ cur_smaller                 ; x1<x2
     adc #1
     sta dx
 
-    lda #_INX               ; inx
+    lda #_INX
 end
 .)
 
@@ -161,8 +164,36 @@ alignIt
     ldy dy
     beq draw_totaly_horizontal_8
     cpy dx
-    bcc draw_mainly_horizontal_8
+    bcc draw_mainly_horizontal_8_new
     jmp draw_mainly_vertical_8
+
+draw_totaly_horizontal_8
+    .(
+    ; here we have DY in Y, and the OPCODE in A
+    sta _outer_patch    ; Write a (dex / nop / inx) instruction
+
+    ldx _OtherPixelX
+    sta __auto_cpx+1
+
+    ldx _CurrentPixelX
+
+    ;
+    ; Draw loop
+    ;
+outer_loop
+    ldy _TableDiv6,x
+    lda _TableBit6Reverse,x     ; 4
+    eor (tmp0),y                ; 5
+    sta (tmp0),y                ; 6
+
+_outer_patch
+    inx
+
+__auto_cpx
+    cpx #00                 ; At the endpoint yet?
+    bne outer_loop
+    rts
+.)
 
 draw_mainly_horizontal_8
     .(
@@ -178,7 +209,7 @@ skipDex
     sta __auto_cpx+1
 
     ldx _CurrentPixelX      ;Plotting coordinates
-    ldy _CurrentPixelY      ;in X and Y
+;    ldy _CurrentPixelY      ;in X and Y
 
     lda dx
     sta __auto_dx+1
@@ -228,33 +259,92 @@ exitLoop
 ; average: 42.56
     .)
 
-draw_totaly_horizontal_8
-.(
-    ; here we have DY in Y, and the OPCODE in A
-    sta _outer_patch    ; Write a (dex / nop / inx) instruction
 
-    ldx _OtherPixelX
-    sta __auto_cpx+1
+draw_mainly_horizontal_8_new
+    .(
+; here we have DY in Y, and the OPCODE (inx, dex) in A
+    sty __auto_dy+1
 
-    ldx _CurrentPixelX
+    cmp #_INX
+    beq doInx
 
-    ;
-    ; Draw loop
-    ;
-outer_loop
-    ldy _TableDiv6,x
-    lda _TableBit6Reverse,x     ; 4
-    eor (tmp0),y                ; 5
-    sta (tmp0),y                ; 6
+    lda #<_TableDiv6-1          ; == 0
+;    clc                        ; _DEX < _INX
+    adc _OtherPixelX
+    sta __auto_div6+1
+    lda #<_TableBit6Reverse-1   ; == 0
+;    clc
+    adc _OtherPixelX
 
-_outer_patch
+    ldx #>_TableDiv6
+    ldy #>_TableBit6Reverse ;
+    bne endPatch
+
+doInx
+    lda #X_SIZE-1
+;    sec
+    sbc _OtherPixelX
+    sta __auto_div6+1
+    lda #X_SIZE-1
+;    sec
+    sbc _OtherPixelX
+
+    ldx #>_TableDiv6Rev
+    ldy #>_TableBit6        ;
+endPatch
+    sta __auto_bit6+1
+    stx __auto_div6+2
+    sty __auto_bit6+2
+
+    lda dx
+    tax
     inx
+    sta __auto_dx+1
+    lsr
+    eor #$ff
+    clc
+; a = sum, x = dX+1
 
-__auto_cpx
-    cpx #00                 ; At the endpoint yet?
-    bne outer_loop
+loopX
+    sta save_a              ; 3 =  3
+loopY
+    ; Draw the pixel
+__auto_div6
+    ldy _TableDiv6-1,x      ; 4
+__auto_bit6
+    lda _TableBit6Reverse-1,x;4
+    eor (tmp0),y            ; 5*
+    sta (tmp0),y            ; 6*= 19
+
+    dex                     ; 2         Step in x
+    beq exitLoop            ; 2/3       At the endpoint yet?
+    lda save_a              ; 3
+__auto_dy
+    adc #00                 ; 2         +DY         TODO: bugfix carry
+    bcc loopX               ; 2/3=11/12 ~50% taken
+    ; Time to step in y
+__auto_dx
+    sbc #00                 ; 2         -DX
+    sta save_a              ; 3 =  5
+
+    ; Set the new screen adress
+    lda tmp0+0              ; 3
+    adc #ROW_SIZE           ; 2
+    sta tmp0+0              ; 3
+    bcc loopY               ; 2/3=10/11 ~84% taken
+    inc tmp0+1              ; 5
+    clc                     ; 2
+    bcc loopY               ; 3 = 10
+; average: 12.44
+
+exitLoop
     rts
-.)
+; Timings:
+; x++/y  : 34
+; x++/y++: 47.12
+; average: 40.56
+    .)
+
 
     .dsb 256-(*&255)
 
@@ -287,7 +377,7 @@ draw_mainly_vertical_8
     sta __auto_yLo
     ldx #$ff
     lda #_DEC_ZP
-    bne endX
+    bne endPatch
 
 doInx
 ; inx -> moving right:
@@ -301,7 +391,7 @@ doInx
     sta __auto_yLo
     ldx #$00
     lda #_INC_ZP
-endX
+endPatch
     stx __auto_cpY+1
     sta __auto_yHi
 ; setup X
@@ -397,3 +487,7 @@ __auto_yHi
 ; x++,y++: 51.47 (50%)
 ; average: 45.11
     .)
+
+
+
+
