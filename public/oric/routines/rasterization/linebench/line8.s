@@ -1,4 +1,4 @@
-; History of timings...
+; History of linebench timings...
 ;649
 ;614 (replacing the update of tmp0)
 ;607
@@ -9,6 +9,15 @@
 ;529 removed page penalty
 ;517 final optimization at mainly_horizontal
 ;501 chunking, initial version
+;482 optimized chunking (avg: 38.91 cylces)
+
+
+; TODOs:
+; + chunking
+; - two separate branches instead of patching?
+; - countdown minor
+;   - mainly horizontal
+;   - mainly vertical
 
     .zero
 
@@ -24,9 +33,10 @@
 ;_OtherPixelY   .dsb 1
 
 save_a          .dsb 1
-save_y          .dsb 1
 curBit          .dsb 1
 chunk           .dsb 1
+lastSum         .dsb 1
+
 
 #define BYTE_PIXEL  6
 #define X_SIZE      240
@@ -295,55 +305,74 @@ draw_very_horizontal_8
 ; dX > 2*dY, here we use "chunking"
 ; here we have DY in Y, and the OPCODE (inx, dex) in A
     sty __auto_dy+1
+    sty __auto_dy2+1
     cpx #_INX
-    beq doInx
+    php
 
     ldx _CurrentPixelX
-    ldy _TableDiv6-1,x
+    lda _TableDiv6,x
+    clc
+    adc tmp0
+    tay
+    bcc skipHi
+    inc tmp0+1
+skipHi
+    lda #0
+    sta tmp0
+
+    plp
+    beq doInx
+; negative x-direction
     lda _TableMod6,x
     tax
 
     lda #_DEY
     sta __auto_stepx
+    sta __auto_stepx2
     lda #$ff
-    sta __auto_cpY+1
+    sta __auto_cpy+1
+    sta __auto_cpy2+1
     lda #_DEC_ZP
     sta __auto_yHi
+    sta __auto_yHi2
     lda Pot2NTbl,x
     sta chunk
-    lda #<Pot2NCTbl
+    lda #<Pot2NTbl
     bne endPatch
 
 doInx
-    ldx _CurrentPixelX
-    ldy _TableDiv6-1,x
+; positive x-direction
     lda #BYTE_PIXEL-1
-    sec
+;    sec
     sbc _TableMod6,x
     tax
 
     lda #_INY
     sta __auto_stepx
+    sta __auto_stepx2
     lda #$00
-    sta __auto_cpY+1
+    sta __auto_cpy+1
+    sta __auto_cpy2+1
     lda #_INC_ZP
     sta __auto_yHi
+    sta __auto_yHi2
     lda Pot2PTbl,x
     sta chunk
-    lda #<Pot2PCTbl
+    lda #<Pot2PTbl
 endPatch
-    sta __auto_pot_1+1
-    sta __auto_pot_2+1
-    sta __auto_pot_3+1
+    sta __auto_pot1+1
+    sta __auto_pot2+1
+    sta __auto_pot3+1
 
     lda dx
     sta __auto_dx+1
+; calculate initial bresenham sum
     lsr
-    eor #$ff
+    sta lastSum             ; 3         this is used for the last line segment
+    eor #$ff                ;           = -dx/2
     clc
-    inc dx                  ; 5         +1 since we count to 0
-    bcc loopX
-; a = sum, x = dX+1
+    jmp loopX
+; a = sum, x = dX+1, y = ptr-offset
 
     .dsb 256-(*&255)
 
@@ -358,7 +387,7 @@ nextColumn                  ;
     ldx #BYTE_PIXEL-1       ; 2
 __auto_stepx
     iny                     ; 2         next column
-__auto_cpY
+__auto_cpy
     cpy #00                 ; 2
     clc                     ; 2
     bne contColumn          ; 2/3=33/34 99% taken
@@ -366,29 +395,29 @@ __auto_yHi
     inc tmp0+1              ; 5         dec/inc
     bcc contColumn          ; 3 =  8
 
-loopX
 loopY
+    dec dy                  ; 5         all but one vertical segments drawn?
+    beq exitLoop            ; 2/3= 7/8  yes, exit loop
+loopX
     dex                     ; 2
-    bmi nextColumn          ; 2/37.03   ~17% taken
-contColumn                  ;   =  9.84
-    dec dx                  ; 5         Step in x       TODO: move into loopY
-    beq exitLoop            ; 2/3       At the endpoint yet?
+    bmi nextColumn          ; 2/37.03   ~16.7% taken
+contColumn                  ;   =  9.85
 __auto_dy
     adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3=11/12 ~50% taken
+    bcc loopX               ; 2/3= 4/5  ~50% taken
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
     sta save_a              ; 3 =  5
 
 ; plot the last bits of current row:
-__auto_pot_1
-    lda Pot2PCTbl,x         ; 4
+__auto_pot1
+    lda Pot2PTbl,x          ; 4
     eor chunk               ; 3
     eor (tmp0),y            ; 5
     sta (tmp0),y            ; 6
-__auto_pot_2
-    lda Pot2PCTbl,x         ; 4
+__auto_pot2
+    lda Pot2PTbl,x          ; 4
     sta chunk               ; 3 = 25
 
 ; update the screen address:
@@ -396,33 +425,59 @@ __auto_pot_2
     adc #ROW_SIZE           ; 2
     tay                     ; 2
     lda save_a              ; 3
-    bcc loopY               ; 2/3=11/12 ~84% taken
+    bcc loopY               ; 2/3=11/12 ~84.4% taken
     inc tmp0+1              ; 5
     clc                     ; 2
     bcc loopY               ; 3 = 10
-; average: 13.44
+; average: 13.40
+
+; Timings:
+; x++/y  : 14.85 (75%)
+; x++/y++: 64.25 (25%)
+; average: 27.20
 
 exitLoop
-; plot last byte:
-__auto_pot_3
-    lda Pot2PCTbl,x         ; 4
+; draw the last horizontal line segment:
+    adc lastSum             ; 3
+loopXEnd
+    dex                     ; 2
+    bmi nextColumnEnd       ; 2/37.03   ~16.7% taken
+contColumnEnd               ;   =  9.85
+__auto_dy2
+    adc #00                 ; 2         +DY
+    bcc loopXEnd            ; 2/3=11/12 ~50% taken
+
+; plot last chunk:
+__auto_pot3
+    lda Pot2PTbl,x          ; 4
     eor chunk               ; 3
     eor (tmp0),y            ; 5
     sta (tmp0),y            ; 6 = 18
     rts
-; Timings:
-; x++/y  : 21.84 (75%)
-; x++/y++: 64.28 (25%)
-; average: 32.45
+
+nextColumnEnd                  ;
+    tax                     ; 2
+    lda chunk               ; 3
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6
+    lda #%00111111          ; 2
+    sta chunk               ; 3
+    txa                     ; 2
+    ldx #BYTE_PIXEL-1       ; 2
+__auto_stepx2
+    iny                     ; 2         next column
+__auto_cpy2
+    cpy #00                 ; 2
+    clc                     ; 2
+    bne contColumnEnd       ; 2/3=33/34 99% taken
+__auto_yHi2
+    inc tmp0+1              ; 5         dec/inc
+    bcc contColumnEnd       ; 3 =  8
 
 Pot2PTbl
-;    .byte   %00000001, %00000011, %00000111, %00001111
-;    .byte   %00011111, %00111111
-Pot2PCTbl
     .byte   %00000001, %00000011, %00000111, %00001111
     .byte   %00011111, %00111111
 Pot2NTbl
-Pot2NCTbl
     .byte   %00100000, %00110000
     .byte   %00111000, %00111100, %00111110, %00111111
 .)
@@ -443,7 +498,6 @@ draw_mainly_vertical_8
     ldx dx
     stx __auto_dx+1
 
-; TODO: two separate branches depending on x-direction
 ; setup direction:
     cmp #_DEX               ;           which direction?
     bne doInx
@@ -569,6 +623,12 @@ __auto_yHi
 ; average: 45.11
 .)
 
+; *** total timings: ***
+; draw_very_horizontal_8   (29.6%): 27.20
+; draw_mainly_horizontal_8 (20.4%): 40.72
+; draw_mainly_vertical_8   (50.0%): 45.11
+;----------------------------------------
+; total average           (100.0%): 38.91
 
 
 
