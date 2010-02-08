@@ -11,6 +11,7 @@
 ;501 chunking, initial version
 ;482 optimized chunking (avg: 38.91 cylces)
 ;473 final optimization for mainly_vertical (37.89 -> 38.34 corrected)
+;468 a weird stunt on mainly_horizontal (38.07)
 
 ; TODOs:
 ; + chunking (-35)
@@ -63,6 +64,7 @@ draw_totaly_vertical_8
     ldx _CurrentPixelX
     ldy _TableDiv6,x
     lda _TableBit6Reverse,x     ; 4
+    and #$7f
     sta _mask_patch+1
     ldx dy
     inx
@@ -165,11 +167,11 @@ cur_smaller                 ; x1<x2
 end
 .)
 
-;    jmp alignIt
-;
-;    .dsb 256-(*&255)
-;
-;alignIt
+    jmp alignIt
+
+    .dsb 256-(*&255)
+
+alignIt
     ; Compute slope and call the specialized code for mostly horizontal or vertical lines
     ldy dy
     beq draw_totaly_horizontal_8
@@ -194,6 +196,7 @@ draw_totaly_horizontal_8
 outer_loop
     ldy _TableDiv6,x
     lda _TableBit6Reverse,x     ; 4
+    and #$7f
     eor (tmp0),y                ; 5
     sta (tmp0),y                ; 6
 
@@ -213,7 +216,9 @@ draw_mainly_horizontal_8
     lda dx
     lsr
     cmp dy
-    bcs draw_very_horizontal_8
+    bcc contMainly
+    jmp draw_very_horizontal_8
+contMainly
 
 ; here we have DY in Y, and the OPCODE (inx, dex) in A
     sty __auto_dy+1
@@ -222,7 +227,14 @@ draw_mainly_horizontal_8
     cpx #_INX
     beq doInx
 
-    lda #<_TableDiv6-1          ; == 0
+    lda #_DEY
+    sta __auto_stepx
+    lda #$ff
+    sta __auto_cpy+1
+    lda #_DEC_ZP
+    sta __auto_yHi
+
+    lda #<_TableDiv6            ; == 1
 ;    clc                        ; _DEX < _INX
     adc _OtherPixelX
     sta __auto_div6+1
@@ -230,12 +242,19 @@ draw_mainly_horizontal_8
 ;    clc
     adc _OtherPixelX
 
-    ldx #>_TableDiv6
-    ldy #>_TableBit6Reverse ;
+    ldy #>_TableDiv6
+    ldx #>_TableBit6Reverse ;
     bne endPatch
 
 doInx
-    lda #X_SIZE-1
+    lda #_INY
+    sta __auto_stepx
+    lda #$00
+    sta __auto_cpy+1
+    lda #_INC_ZP
+    sta __auto_yHi
+
+    lda #X_SIZE
 ;    sec
     sbc _OtherPixelX
     sta __auto_div6+1
@@ -243,32 +262,52 @@ doInx
 ;    sec
     sbc _OtherPixelX
 
-    ldx #>_TableDiv6Rev
-    ldy #>_TableBit6        ;
+    ldy #>_TableDiv6Rev
+    ldx #>_TableBit6        ;
 endPatch
     sta __auto_bit6+1
-    stx __auto_div6+2
-    sty __auto_bit6+2
+    sta __auto_bit6_0+1
+    stx __auto_bit6+2
+    stx __auto_bit6_0+2
+    sty __auto_div6+2
+
+    ldx dx
+__auto_div6
+    lda _TableDiv6,x
+    clc
+    adc tmp0
+    tay
+    bcc skipInc
+    inc tmp0+1
+skipInc
+    lda #0
+    sta tmp0
 
     lda dx
-    tax
+;    tax
     inx                     ; 2         +1 since we count to 0
     sta __auto_dx+1
     lsr
     eor #$ff
     clc
+
+    sta save_a              ; 3 =  3
+__auto_bit6_0
+    lda _TableBit6Reverse-1,x;4
+    and #$7f
+    bcc contColumn
+
 ; a = sum, x = dX+1
 ;----------------------------------------------------------
 loopX
     sta save_a              ; 3 =  3
 loopY
-    ; Draw the pixel
-__auto_div6
-    ldy _TableDiv6-1,x      ; 4
 __auto_bit6
     lda _TableBit6Reverse-1,x;4
-    eor (tmp0),y            ; 5*
-    sta (tmp0),y            ; 6*= 19
+    bmi nextColumn          ; 2/14      16.7% taken
+contColumn
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 19
 
     dex                     ; 2         Step in x
     beq exitLoop            ; 2/3       At the endpoint yet?
@@ -282,21 +321,34 @@ __auto_dx
     sta save_a              ; 3 =  5
 
 ; update the screen address:
-    lda tmp0+0              ; 3
+    tya                     ; 2
     adc #ROW_SIZE           ; 2
-    sta tmp0+0              ; 3
-    bcc loopY               ; 2/3=10/11 ~84.4% taken
+    tay                     ; 2
+    bcc loopY               ; 2/3= 8/9  ~84.4% taken
     inc tmp0+1              ; 5
     clc                     ; 2
     bcc loopY               ; 3 = 10
-; average: 12.40
+; average: 10.40
 
 exitLoop
     rts
+
+nextColumn
+    and #$7f                ; 2         remove signal bit
+__auto_stepx
+    iny                     ; 2
+__auto_cpy
+    cpy #$00                ; 2
+    clc                     ; 2
+    bne contColumn          ; 2/3=10/11
+__auto_yHi
+    inc tmp0+1              ; 5
+    bcc contColumn          ; 3
+
 ; Timings:
-; x++/y  : 34    (33.3%)
-; x++/y++: 47.40 (66.7%)
-; average: 42.94
+; x++/y  : 34.00 (33.3%)
+; x++/y++: 45.40 (66.7%)
+; average: 41.61
 .)
 
     .dsb 256-(*&255)
@@ -371,7 +423,7 @@ endPatch
     sta lastSum             ; 3         this is used for the last line segment
     eor #$ff                ;           = -dx/2
     clc
-    jmp loopX
+    bcc loopX
 ; a = sum, x = dX+1, y = ptr-offset
 
 ;----------------------------------------------------------
@@ -533,6 +585,7 @@ endPatch
 ; setup current bit:
     ldy _CurrentPixelX
     lda _TableBit6Reverse,y ; 4
+    and #$7f
     sta curBit
 ; setup pointer and Y:
 ; TODO: self-modyfing code for the ptrs?
@@ -640,10 +693,7 @@ incHiPtrEnd                 ; 9
 
 ; *** total timings: ***
 ; draw_very_horizontal_8   (29.6%): 27.20
-; draw_mainly_horizontal_8 (20.4%): 42.94 <- corrected!
+; draw_mainly_horizontal_8 (20.4%): 41.61 <- corrected!
 ; draw_mainly_vertical_8   (50.0%): 43.06
 ;----------------------------------------
-; total average           (100.0%): 38.34
-
-
-
+; total average           (100.0%): 38.07
