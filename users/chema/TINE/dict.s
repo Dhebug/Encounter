@@ -1013,9 +1013,9 @@ str_instr
 	.byt 0
 	.asc " "
 	.byt 0
-	.asc "Move cursor, A: select, R: search"
+	.asc "SXNM: move , A: select, R: search"
 	.byt 0
-	.asc "Move cursor, A: select destination"
+	.asc "SXNM: move , A: select destination"
 	.byt 0
 	.asc "up/down: select, A or ENTER to buy"
 	.byt 0

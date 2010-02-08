@@ -635,6 +635,13 @@ CalcView
          JSR SetCurOb
          STA POINT
          STY POINT+1
+
+		 lda #0
+		 sta _vertexXLO,x
+		 sta _vertexXHI,x
+		 sta _vertexYLO,x
+		 sta _vertexYHI,x
+
          LDX #8
          LDY #ObjMat+8
 loop     LDA (POINT),Y    ;Viewpoint matrix
@@ -642,6 +649,7 @@ loop     LDA (POINT),Y    ;Viewpoint matrix
          DEY
          DEX
          BPL loop
+
 
          LDX #11          ;Set up pointers
 cl       LDA CXLO,X

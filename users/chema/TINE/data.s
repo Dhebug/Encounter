@@ -124,6 +124,7 @@ _vertexYHI	.dsb MAXSHIPS
 
 ; Some more variables
 
+fixed_objects		.byt 00
 thargoid_counter	.byt 00
 police_counter		.byt 00
 asteroid_counter    .byt 00

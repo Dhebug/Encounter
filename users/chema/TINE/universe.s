@@ -79,7 +79,7 @@ norot
     
 	; Update number of fixed objects: radar+player+planet ids 0,1 and 2
 	lda #2
-	sta fixed_objects+1
+	sta fixed_objects
 
     ; Now create some moons (between 0 and 3)      
     lda _cpl_system+SEED+1
@@ -89,8 +89,8 @@ norot
 
 	; Add number of moons to fixed objects
 	clc
-	adc fixed_objects+1
-	sta fixed_objects+1
+	adc fixed_objects
+	sta fixed_objects
     
     lda _PosX+1
     sta savpX+1
@@ -325,7 +325,7 @@ random_encounter
 		; If already too many objects, return
 		lda NUMOBJS
 		sec
-		sbc fixed_objects+1
+		sbc fixed_objects
 		cmp #5
 		bcc cont1
 		rts

@@ -244,7 +244,7 @@ nomsg
 _FirstFrame
 .(
 	jsr update_all_controls
-
+	
     lda #PDIST_MASSLOCK
     sta _planet_dist
 
@@ -274,6 +274,7 @@ noinvert
 noinvert2
 
 	jsr PatchLaserDraw
+	jsr clear_vertex
     jmp dump_buf
 .)
 
@@ -422,20 +423,6 @@ loop
     jsr move_stars
 
 ;****** START OF DRAWING SECTION ******
-
-	; Clear vertices where lasers start/end in each object
-	ldx NUMOBJS 
-	lda #0
-loopcl
-	sta _vertexXLO-1,x
-	sta _vertexXHI-1,x
-	sta _vertexYLO-1,x
-	sta _vertexYHI-1,x
-	dex
-+fixed_objects
-	cpx #0	; SMC
-	bne loopcl
-
 	; Clear the off-screen buffer
 	jsr clr_hires2
 
@@ -933,6 +920,8 @@ cont
 		;beq end
 		
 isdock
+		cpx #7	; Hack with planet search
+		beq skip
         lda double_buff
         beq skip
         stx savx+1
@@ -1209,6 +1198,11 @@ noecm
 ; P
 power_redir
 .(
+        lda #SCR_FRONT
+        cmp _current_screen
+        beq doredir
+		rts
+doredir
 		jsr SndPic
 		lda _ptla
 		beq step2
@@ -1242,6 +1236,7 @@ lookrear
 		eor #$ff
 		sta invert
 
+		jsr clear_vertex
 		jsr patch_invert_code
 		jsr update_compass
 		jmp INITSTAR
@@ -1428,7 +1423,6 @@ loadsave
 ;R
 splanet
 .(
-	jsr SndPic
     lda _current_screen
     cmp #SCR_GALAXY
     beq doit
@@ -1436,6 +1430,7 @@ splanet
 ;    beq doit
     rts
 doit
+	jsr SndPic
     ; ask for planet and search it
     jsr prepare_area    
     lda #(A_FWGREEN+A_FWYELLOW*16+128)
@@ -1979,6 +1974,21 @@ PatchLaserDraw
 	rts
 .)
 
+
+clear_vertex
+.(
+	; Clear vertices where lasers start/end in each object
+	ldx #(MAXSHIPS)
+	lda #0
+loopcl
+	sta _vertexXLO-1,x
+	sta _vertexXHI-1,x
+	sta _vertexYLO-1,x
+	sta _vertexYHI-1,x
+	dex
+	bne loopcl
+	rts
+.)
 
 VOB      .byt 00           ;View object
 

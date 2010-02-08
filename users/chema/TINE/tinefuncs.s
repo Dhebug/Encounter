@@ -480,7 +480,7 @@ _MoveShips
     ; Now iterate through object list moving the rest
 
 	; Avoid fixed objects
-	ldx fixed_objects+1
+	ldx fixed_objects
 	dex
 	;jsr SetCurOb
 	stx CUROBJ
