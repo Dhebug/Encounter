@@ -19,6 +19,11 @@ _TableDiv6              .dsb X_SIZE
     .dsb 256-(*&255)
 
     .byt 0
+_TableMod6              .dsb X_SIZE
+
+    .dsb 256-(*&255)
+
+    .byt 0
 _TableDiv6Rev           .dsb X_SIZE
 
     .dsb 256-(*&255)
@@ -154,6 +159,10 @@ loop
     tax
 loop
     sta _TableDiv6,x
+    pha
+    tya
+    sta _TableMod6,x
+    pla
 
     iny
     cpy #6
