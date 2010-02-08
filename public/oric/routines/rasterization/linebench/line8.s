@@ -10,13 +10,13 @@
 ;517 final optimization at mainly_horizontal
 ;501 chunking, initial version
 ;482 optimized chunking (avg: 38.91 cylces)
-;473 final optimization for mainly_vertical (37.89)
+;473 final optimization for mainly_vertical (37.89 -> 38.34 corrected)
 
 ; TODOs:
 ; + chunking (-35)
 ; - two separate branches instead of patching?
-; - countdown minor
-;   - mainly_horizontal
+; + countdown minor
+;   x mainly_horizontal (won't work)
 ;   + mainly_vertical (-9)
 
     .zero
@@ -64,31 +64,27 @@ draw_totaly_vertical_8
     ldy _TableDiv6,x
     lda _TableBit6Reverse,x     ; 4
     sta _mask_patch+1
-
     ldx dy
     inx
-
     clc                         ; 2
 loop
 _mask_patch
     lda #0                      ; 2
-    eor (tmp0),y                ; 5
-    sta (tmp0),y                ; 6 => total = 13 cycles
+    eor (tmp0),y                ; 5*
+    sta (tmp0),y                ; 6*= 13**
 
 ; update the screen address:
     .(
-    lda tmp0+0                  ; 3
+    tya                         ; 2
     adc #ROW_SIZE               ; 2
-    sta tmp0+0                  ; 3
-    bcc skip                    ; 2 (+1 if taken)
+    tay                         ; 2
+    bcc skip                    ; 2/3= 8/9
     inc tmp0+1                  ; 5
-    clc                         ; 2
-skip
+    clc                         ; 2 =  7
+skip                            ;
     .)
-    ; ------------------Min=13 Max=17
-
-    dex
-    bne loop
+    dex                         ; 2
+    bne loop                    ; 2/3=4/5
     rts
 .)
 
@@ -279,7 +275,7 @@ __auto_bit6
     lda save_a              ; 3
 __auto_dy
     adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3=11/12 ~50% taken
+    bcc loopX               ; 2/3=11/12 ~33.3% taken (not 50% due do to special code for very horizontal lines)
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
@@ -298,9 +294,9 @@ __auto_dx
 exitLoop
     rts
 ; Timings:
-; x++/y  : 34
-; x++/y++: 47.40
-; average: 40.70
+; x++/y  : 34    (33.3%)
+; x++/y++: 47.40 (66.7%)
+; average: 42.94
 .)
 
     .dsb 256-(*&255)
@@ -407,7 +403,7 @@ loopX
 contColumn                  ;   =  9.85
 __auto_dy
     adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3= 4/5  ~50% taken
+    bcc loopX               ; 2/3= 4/5  ~75% taken
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
@@ -448,7 +444,7 @@ loopXEnd
 contColumnEnd               ;   =  9.85
 __auto_dy2
     adc #00                 ; 2         +DY
-    bcc loopXEnd            ; 2/3= 4/5  ~25% taken
+    bcc loopXEnd            ; 2/3= 4/5  ~50% taken
 
 ; plot last chunk:
 __auto_pot3
@@ -644,10 +640,10 @@ incHiPtrEnd                 ; 9
 
 ; *** total timings: ***
 ; draw_very_horizontal_8   (29.6%): 27.20
-; draw_mainly_horizontal_8 (20.4%): 40.70
+; draw_mainly_horizontal_8 (20.4%): 42.94 <- corrected!
 ; draw_mainly_vertical_8   (50.0%): 43.06
 ;----------------------------------------
-; total average           (100.0%): 37.89
+; total average           (100.0%): 38.34
 
 
 
