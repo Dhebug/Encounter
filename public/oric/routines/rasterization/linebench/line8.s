@@ -10,14 +10,14 @@
 ;517 final optimization at mainly_horizontal
 ;501 chunking, initial version
 ;482 optimized chunking (avg: 38.91 cylces)
-
+;473 final optimization for mainly_vertical
 
 ; TODOs:
-; + chunking
+; + chunking (-35)
 ; - two separate branches instead of patching?
 ; - countdown minor
-;   - mainly horizontal
-;   - mainly vertical
+;   - mainly_horizontal
+;   + mainly_vertical (-9)
 
     .zero
 
@@ -308,7 +308,7 @@ draw_very_horizontal_8
     sty __auto_dy2+1
     cpx #_INX
     php
-
+; setup pointer and Y:
     ldx _CurrentPixelX
     lda _TableDiv6,x
     clc
@@ -319,7 +319,7 @@ draw_very_horizontal_8
 skipHi
     lda #0
     sta tmp0
-
+; patch the code:
     plp
     beq doInx
 ; negative x-direction
@@ -363,7 +363,6 @@ endPatch
     sta __auto_pot1+1
     sta __auto_pot2+1
     sta __auto_pot3+1
-
     lda dx
     sta __auto_dx+1
 ; calculate initial bresenham sum
@@ -394,7 +393,7 @@ __auto_cpy
 __auto_yHi
     inc tmp0+1              ; 5         dec/inc
     bcc contColumn          ; 3 =  8
-
+;----------------------------------------------------------
 loopY
     dec dy                  ; 5         all but one vertical segments drawn?
     beq exitLoop            ; 2/3= 7/8  yes, exit loop
@@ -435,7 +434,7 @@ __auto_pot2
 ; x++/y  : 14.85 (75%)
 ; x++/y++: 64.25 (25%)
 ; average: 27.20
-
+;----------------------------------------------------------
 exitLoop
 ; draw the last horizontal line segment:
     adc lastSum             ; 3
@@ -454,7 +453,7 @@ __auto_pot3
     eor (tmp0),y            ; 5
     sta (tmp0),y            ; 6 = 18
     rts
-
+;----------------------------------------------------------
 nextColumnEnd                  ;
     tax                     ; 2
     lda chunk               ; 3
@@ -495,8 +494,6 @@ draw_mainly_vertical_8
 .(
 ; setup bresenham values:
     sty __auto_dy+1
-    ldx dx
-    stx __auto_dx+1
 
 ; setup direction:
     cmp #_DEX               ;           which direction?
@@ -530,9 +527,12 @@ endPatch
     stx __auto_cpY+1
     sta __auto_yHi
 ; setup X
-    tya                     ;           y = dY
-    tax
-    inx                     ;           x = dY+1
+;    tya                     ;           y = dY
+;    tax
+    ldx dx
+    stx __auto_dx1+1
+    stx __auto_dx2+1
+;    inx                     ;           x = dY+1
 ; setup current bit:
     ldy _CurrentPixelX
     lda _TableBit6Reverse,y ; 4
@@ -551,38 +551,34 @@ skipTmp0
 ; calculate initial bresenham sum:
     lda dy
     lsr
+    sta lastSum
     eor #$ff                ;           -DY/2
     clc                     ; 2
     bcc loopY               ; 3
 ; a = sum, y = tmp0, x = dY+1, tmp0 = 0
 
-incHiPtr                    ; 9
+incHiPtr                    ;
     inc tmp0+1              ; 5
     clc                     ; 2
     bcc contHiPtr           ; 3
 ;----------------------------------------------------------
 loopY
-    sta save_a              ; 3 =  3
-    ; Draw the pixel
-    lda curBit              ; 3
-    eor (tmp0),y            ; 5
-    sta (tmp0),y            ; 6 = 14
-
-    dex                     ; 2         At the endpoint yet?
-    beq exitLoop            ; 2/3= 4/5
+    sta save_a              ; 3
+    lda curBit              ; 3 =  6
 loopX
+    ; Draw the pixel
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 11
 ; update the screen address:
     tya                     ; 2
     adc #ROW_SIZE           ; 2
     tay                     ; 2
-    bcs incHiPtr            ; 2/13      ~16% taken
-contHiPtr                   ;   =  9.76 average
-
+    bcs incHiPtr            ; 2/13      ~15.6% taken
+contHiPtr                   ;   =  9.72 average
     lda save_a              ; 3
-__auto_dx
+__auto_dx1
     adc #00                 ; 2         +DX
     bcc loopY               ; 2/3= 7/8  ~50% taken
-
     ; Time to step in x
 __auto_dy
     sbc #00                 ; 2         -DY
@@ -591,18 +587,38 @@ __auto_dy
     lda curBit              ; 3
 __auto_cpBit                ;           TODO: optimize
     cmp #%00100000          ; 2         %00100000/%00000001
-    beq nextColumn          ; 2/14.07   ~17% taken
+    beq nextColumn          ; 2/14.07   ~16.7% taken
 __auto_shBit
     asl                     ; 2         asl/lsr, clears carry
 contNextColumn
-    sta curBit              ; 3 =~13.71
-
-    ; Draw the pixel
-    eor (tmp0),y            ; 5
-    sta (tmp0),y            ; 6 = 11
+    sta curBit              ; 3 =~13.68
+; step in x:
     dex                     ; 2         At the endpoint yet?
     bne loopX               ; 2/3= 4/5
-exitLoop
+
+; x  ,y++: 34.72 (50%)
+; x++,y++: 51.40 (50%)
+; average: 43.06
+
+; draw the last vertical line segment:
+    lda save_a              ; 3
+    adc lastSum             ; 3
+loopYEnd
+    tax                     ; 2 =  2
+    ; Draw the pixel
+    lda curBit              ; 3
+    eor (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 14
+; update the screen address:
+    tya                     ; 2
+    adc #ROW_SIZE           ; 2
+    tay                     ; 2
+    bcs incHiPtrEnd         ; 2/13      ~15.6% taken
+contHiPtrEnd                ;   =  9.72 average
+    txa                     ; 2
+__auto_dx2
+    adc #00                 ; 2         +DX
+    bcc loopYEnd            ; 2/3= 6/7  ~50% taken
     rts
 ;----------------------------------------------------------
 nextColumn
@@ -618,17 +634,19 @@ __auto_yHi
     dec tmp0+1              ; 5         dec/inc
     bcc contNextColumn      ; 3
 
-; x  ,y++: 38.76 (50%)
-; x++,y++: 51.47 (50%)
-; average: 45.11
+incHiPtrEnd                 ; 9
+    inc tmp0+1              ; 5
+    clc                     ; 2
+    bcc contHiPtrEnd        ; 3
+;----------------------------------------------------------
 .)
 
 ; *** total timings: ***
 ; draw_very_horizontal_8   (29.6%): 27.20
 ; draw_mainly_horizontal_8 (20.4%): 40.72
-; draw_mainly_vertical_8   (50.0%): 45.11
+; draw_mainly_vertical_8   (50.0%): 43.06
 ;----------------------------------------
-; total average           (100.0%): 38.91
+; total average           (100.0%): 38.89
 
 
 
