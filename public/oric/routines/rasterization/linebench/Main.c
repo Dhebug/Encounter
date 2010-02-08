@@ -122,117 +122,100 @@ void test0()
 
 void line_mike_8()
 {
-        int i;
+    int i, j;
 
-        /*// mainly horizontal
-        CurrentPixelX   =  20;
-        CurrentPixelY   =  10;
-        OtherPixelX     = 220;
-        OtherPixelY     =  48;
-        //DrawLine8();
+    // test correctness:
+    /*for (j=0; j<8; j++)
+    {
+        for (i=2; i<=99; i+=5)
+        {
+            // very horizontal
+            CurrentPixelX   = 160+j;
+            CurrentPixelY   = 100-i;
+            OtherPixelX     =  80-j;
+            OtherPixelY     = 100+i;
+            DrawLine8();
 
-        // mainly horizontal
-        CurrentPixelX   =  20;
-        CurrentPixelY   =  10;
-        OtherPixelX     = 220;
-        OtherPixelY     =  50;
-        DrawLine8();
-
-        // mainly horizontal
-        CurrentPixelX   =  20;
-        CurrentPixelY   =  10;
-        OtherPixelX     = 220;
-        OtherPixelY     =  52;
-        //DrawLine8();
-
-        // mainly horizontal
-        CurrentPixelX   =  20;
-        CurrentPixelY   =  10;
-        OtherPixelX     = 220;
-        OtherPixelY     =  54;
-        //DrawLine8();*/
-
-        /*// mainly horizontal
-        CurrentPixelX   = 220;
-        CurrentPixelY   =  40;
-        OtherPixelX     =  70;
-        OtherPixelY     = 140;
-        DrawLine8();
-
-        // mainly vertical
-        CurrentPixelX   =  20;
-        CurrentPixelY   =  10;
-        OtherPixelX     =  70;
-        OtherPixelY     = 140;
-        DrawLine8();*/
-
-        /*// very horizontal
-        CurrentPixelX   = 220;
-        CurrentPixelY   =  40;
-        OtherPixelX     =  21;
-        OtherPixelY     =  10;
-        DrawLine8();
-
-        // very horizontal
-        CurrentPixelX   = 220;
-        CurrentPixelY   =  10;
-        OtherPixelX     =  21;
-        OtherPixelY     =  40;
+            // very horizontal
+            CurrentPixelX   = 160+j;
+            CurrentPixelY   = 100+i;
+            OtherPixelX     =  80-j;
+            OtherPixelY     = 100-i;
+            DrawLine8();
+        }
+        // vertical
+        CurrentPixelX   =  80-j;
+        CurrentPixelY   =   0;
+        OtherPixelX     = CurrentPixelX;
+        OtherPixelY     = 200;
         DrawLine8();
 
         // vertical
-        CurrentPixelX   =  21;
-        CurrentPixelY   =  15;
-        OtherPixelX     =  21;
-        OtherPixelY     =  35;
+        CurrentPixelX   = 160+j;
+        CurrentPixelY   =   0;
+        OtherPixelX     = CurrentPixelX;
+        OtherPixelY     = 200;
+        DrawLine8();
+
+        for (i=0; i<50; i++)
+        {
+            // vertical
+            CurrentPixelX   =   0;
+            CurrentPixelY   = 199;
+            OtherPixelX     = 239;
+            OtherPixelY     = 199;
+            DrawLine8();
+        }
+
+        // vertical
+        CurrentPixelX   =  80-j;
+        CurrentPixelY   =   0;
+        OtherPixelX     = CurrentPixelX;
+        OtherPixelY     = 200;
         DrawLine8();
 
         // vertical
-        CurrentPixelX   = 220;
-        CurrentPixelY   =  15;
-        OtherPixelX     = 220;
-        OtherPixelY     =  35;
-        DrawLine8();*/
+        CurrentPixelX   = 160+j;
+        CurrentPixelY   =   0;
+        OtherPixelX     = CurrentPixelX;
+        OtherPixelY     = 200;
+        DrawLine8();
 
-        for (i=0;i<239;i++)
+        for (i=2; i<=99; i+=5)
         {
-                OtherPixelX=i;
-                OtherPixelY=0;
-                CurrentPixelX=239-i;
-                CurrentPixelY=199;
+            // very horizontal
+            CurrentPixelX   = 160+j;
+            CurrentPixelY   = 100-i;
+            OtherPixelX     =  80-j;
+            OtherPixelY     = 100+i;
+            DrawLine8();
 
-                DrawLine8();
+            // very horizontal
+            CurrentPixelX   = 160+j;
+            CurrentPixelY   = 100+i;
+            OtherPixelX     =  80-j;
+            OtherPixelY     = 100-i;
+            DrawLine8();
         }
-        for (i=0;i<199;i++)
-        {
-                OtherPixelX=0;
-                OtherPixelY=i;
-                CurrentPixelX=239;
-                CurrentPixelY=199-i;
+    }*/
 
-                DrawLine8();
-        }
-
-        /*
-        for (i=0;i<239;i++)
-        {
-                CurrentPixelX=i;
-                CurrentPixelY=0;
-                OtherPixelX=239-i;
-                OtherPixelY=199;
-
-                DrawLine8();
-        }
-        for (i=0;i<199;i++)
-        {
-                CurrentPixelX=0;
-                CurrentPixelY=i;
-                OtherPixelX=239;
-                OtherPixelY=199-i;
-
-                DrawLine8();
-        }
-        */
+    // benchmark
+    for (i=0;i<239;i++)
+    {
+        OtherPixelX=i;
+        OtherPixelY=0;
+        CurrentPixelX=239-i;
+        CurrentPixelY=199;
+        DrawLine8();
+    }
+    for (i=198;i>=0;i--)
+    {
+        OtherPixelX=0;
+        OtherPixelY=i;
+        CurrentPixelX=239;
+        CurrentPixelY=199-i;
+        DrawLine8();
+    }
 }
 
 
