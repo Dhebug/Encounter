@@ -36,7 +36,7 @@
 /* Uncomment to have debug values plotted on screen. 
    Default is frame duration */
 
-#define DBGVALUES
+//#define DBGVALUES
 
 /* Use rolls based on a table, instead of directly the a_* values. 
    This permits a kind of exponential behaviour  */

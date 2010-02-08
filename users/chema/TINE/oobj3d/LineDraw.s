@@ -5,9 +5,6 @@
 
 .zero
 
-#ifdef OLDLINES	
-e				.dsb 2	; Error decision factor (slope) 2 bytes in zero page
-#endif
 i				.dsb 1	; Number of pixels to draw (iteration counter) 1 byte in zp
 dx				.dsb 1	; Width
 dy				.dsb 1	; Height
@@ -53,741 +50,740 @@ _ClipXc         .dsb 2
 #endif				
 _ClipYc         .dsb 2
 
+
+save_a          .dsb 1
+curBit          .dsb 1
+chunk           .dsb 1
+lastSum         .dsb 1
+
+
+#define BYTE_PIXEL  6
+#define X_SIZE      240
+#define ROW_SIZE    X_SIZE/BYTE_PIXEL
+
+#define _NOP        $ea
+#define _INX        $e8
+#define _DEX        $ca
+#define _INY        $c8
+#define _DEY        $88
+#define _ASL        $0a
+#define _LSR        $4a
+#define _INC_ZP     $e6
+#define _DEC_ZP     $c6
+
+
+
 .text
 
 ;; To include double-buffer (on and off)
 double_buff .byt $ff
 
 
-.dsb 256-(*&255)
+#define X_SIZE      240
+#define Y_SIZE      200
+#define ROW_SIZE    X_SIZE/6
 
-_HiresAddrLow			.dsb 201
+    .dsb 256-(*&255)
 
-	.dsb 256-(*&255)
+_HiresAddrLow           .dsb Y_SIZE
 
-_HiresAddrHigh			.dsb 201
-						
-	.dsb 256-(*&255)
+    .dsb 256-(*&255)
 
-_TableDiv6				.dsb 256
+_HiresAddrHigh          .dsb Y_SIZE
 
-_TableBit6Reverse		
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
+    .dsb 256-(*&255)
 
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
+    .byt 0
+_TableDiv6              .dsb X_SIZE
 
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
+    .dsb 256-(*&255)
 
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
-	.byt 32,16,8,4,2,1
+    .byt 0
+_TableMod6              .dsb X_SIZE
 
-#ifdef OLDLINES
-	
-.dsb 256-(*&255)
+    .dsb 256-(*&255)
 
+    .byt 0
+_TableDiv6Rev           .dsb X_SIZE
 
-;
-; This code is used when the things are moving faster
-; horizontally than vertically 
-;
-; dx<dy
-;
-draw_nearly_horizontal
-.(
-	; here we have DY in Y, and the OPCODE in A
-	sta _outer_patch	; Write a (dex / nop / inx) instruction
-	
-	;
-	; Initialize counter to dx+1
-	;
-	ldx dx
-	inx
-	stx i
+    .dsb 256-(*&255)
 
-	; Initialise e=dy*2-dx
-	lda dy
-	asl
-	sta _path_e_dy_0+1	; dy
-	sta e
-	lda #0
-	rol
-	sta _path_e_dy_1+1	; dy+1
-	sta 1+e
+    .byt 0
+_TableBit6Reverse
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
 
-	sec
-	lda e
-	sbc dx
-	sta e
-	lda 1+e
-	sbc #0
-	sta 1+e
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
 
-	; Compute dx*2
-	lda dx
-	asl
-	sta _path_e_dx_0+1	;dx
-	lda #0
-	rol
-	sta _path_e_dx_1+1	;dx+1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
 
-	;
-	; Draw loop
-	;
-	ldx _CurrentPixelX
-	ldy _TableDiv6,x
-	sec
-outer_loop
-	lda _TableBit6Reverse,x		; 4
-	;eor (tmp0),y				; 5
-    ora (tmp0),y				; 5
-	sta (tmp0),y				; 6
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
+    .byt 32,16,8,4,2,1
 
-	lda 1+e
-	bmi end_inner_loop
+    .dsb 256-(*&255)
 
-	; e=e-2*dx
-	;sec
-	lda e
-_path_e_dx_0
-	sbc #0
-	sta e
-	lda 1+e
-_path_e_dx_1
-	sbc #0
-	sta 1+e
-	
-	; Update screen adress
-	;clc					; 2
-	lda tmp0+0			; 3
-	adc #40				; 2
-	sta tmp0+0			; 3
-	bcc skip			; 2 (+1 if taken)
-	inc tmp0+1			; 5
-skip
-	; ------------------Min=13 Max=17
+    .byt 0
+_TableBit6
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
+    .byt 1,2,4,8,16,32
 
 
-end_inner_loop
-
-_outer_patch
-	inx
-	ldy _TableDiv6,x
-
-	; e=e+2*dy
-	clc
-	lda e
-_path_e_dy_0
-	adc #0
-	sta e
-	lda 1+e
-_path_e_dy_1
-	adc #0
-	sta 1+e
-
-	dec i
-	bne outer_loop
-	rts
-.)
+/////////////////////////////////////
 
 
-	
-	
-_DrawLine
-	;jmp _DrawLine
-	;
-	; Compute deltas and signs
-	;
-	
-  	; Test Y value
-.(
-	sec
-	lda _CurrentPixelY
-	sbc _OtherPixelY
-	sta dy
-	beq end
-	bcc cur_smaller
-
-cur_bigger					; y1>y2
-	; Swap X and Y
-	; So we always draw from top to bottom
-	lda _CurrentPixelY
-	ldx _OtherPixelY
-	sta _OtherPixelY
-	stx _CurrentPixelY
-
-	lda _CurrentPixelX
-	ldx _OtherPixelX
-	sta _OtherPixelX
-	stx _CurrentPixelX
-		
-	jmp end
-	
-cur_smaller					; y1<y2
-	; Absolute value
-	eor #$ff
-	adc #1
-	sta dy
-end
-.)
-	
-	;
-	; Initialise screen pointer
-	;
-	ldy _CurrentPixelY
-	lda _HiresAddrLow,y			; 4
-	sta tmp0+0					; 3
-	lda _HiresAddrHigh,y		; 4
-	sta tmp0+1					; 3 => Total 14 cycles
-
-  	; Test X value
-.(
-	sec
-	lda _CurrentPixelX
-	sbc _OtherPixelX
-	sta dx
-	beq draw_totaly_vertical
-	bcc cur_smaller
-
-cur_bigger					; x1>x2
-	lda #$ca	; 0 DEC
-	bne end
-
-cur_smaller					; x1<x2
-	; Absolute value
-	eor #$ff
-	adc #1
-	sta dx
-	
-	lda #$e8	; 2 INC
-end
-.)
-
-	; Compute slope and call the specialized code for mostly horizontal or vertical lines
-	ldy dy
-	beq draw_totaly_horizontal
-	cpy dx
-	bcs draw_nearly_vertical
-	jmp draw_nearly_horizontal
-
-draw_totaly_horizontal
-.(
-	; here we have DY in Y, and the OPCODE in A
-	sta _outer_patch	; Write a (dex / nop / inx) instruction
-	
-	;
-	; Initialize counter to dx+1
-	;
-	ldx dx
-	inx
-	stx i
-
-	
-	ldx _CurrentPixelX
-	
-	;
-	; Draw loop
-	;
-outer_loop
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x		; 4
-	;eor (tmp0),y				; 5
-    ora (tmp0),y				; 5
-	sta (tmp0),y				; 6
-
-_outer_patch
-	inx
-
-	dec i
-	bne outer_loop
-	rts
-.)	
-	
-draw_totaly_vertical
-.(
-	ldx _CurrentPixelX
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x		; 4
-	sta _mask_patch+1
-	
-	ldx dy
-	inx
-	
-	clc							; 2
-loop
-_mask_patch
-	lda #0						; 2
-	;eor (tmp0),y				; 5
-    ora (tmp0),y
-	sta (tmp0),y				; 6 => total = 13 cycles
-
-	; Update screen adress
-	lda tmp0+0					; 3
-	adc #40						; 2
-	sta tmp0+0					; 3
-	bcc skip					; 2 (+1 if taken)
-	inc tmp0+1					; 5
-	clc							; 2
-skip
-	; ------------------Min=13 Max=17
-
-	dex
-	bne loop
-	rts
-.)
-		
-.dsb 256-(*&255)
-	
-;
-; This code is used when the things are moving faster
-; vertically than horizontally
-;
-; dy>dx
-;
-draw_nearly_vertical
-	;jmp draw_nearly_vertical
-.(	
-	; here we have DY in Y, and the OPCODE in A
-	sta _inner_patch	; Write a (dex / nop / inx) instruction
-	; just increment en store to know the number of iterations
-	iny
-	sty i
-
-
-	; Compute dx*2	
-	lda dy
-	asl
-	sta _path_e_dx_0+1	;dx
-	lda #0
-	rol
-	sta _path_e_dx_1+1	;dx+1
-	
-		
-	; Normaly we should have swapped DX and DY, but instead just swap in the usage is more efficient
-	; Initialise e
-	lda dx
-	asl
-	sta _path_e_dy_0+1	; dy
-	sta e
-	lda #0
-	rol
-	sta _path_e_dy_1+1	; dy+1
-	sta 1+e
-
-	ldx _CurrentPixelX
-	ldy _TableDiv6,x
-	
-	sec
-	lda e
-	sbc dy
-	sta e
-	lda 1+e
-	sbc #0
-	sta 1+e
-	bmi end_inner_loop2	; n=1 ?
-	
-	;
-	; Draw loop
-	;
-outer_loop
-	lda _TableBit6Reverse,x		; 4
-	;eor (tmp0),y				; 5
-    ora (tmp0),y				; 5
-	sta (tmp0),y				; 6
-	; --------------------------=15
-
-_inner_patch
-	inx
-
-	ldy _TableDiv6,x
-
-	; e=e-2*dx
-	sec
-	lda e
-_path_e_dx_0
-	sbc #0
-	sta e
-	lda 1+e
-_path_e_dx_1
-	sbc #0
-	sta 1+e
-
-end_inner_loop
-
-;;;;;;;;; SOLVING EXTRA PIXEL BUG
-	dec i
-	beq done
-
-.(
-	; Update screen adress
-	;clc					; 2
-	lda tmp0+0			; 3
-	adc #40				; 2
-	sta tmp0+0			; 3
-	bcc skip			; 2 (+1 if taken)
-	inc tmp0+1			; 5
-	clc
-skip
-	; ------------------Min=13 Max=17
-.)
-
-	; e=e+2*dy
-	lda e
-_path_e_dy_0
-	adc #0
-	sta e
-	lda 1+e
-_path_e_dy_1
-	adc #0
-	sta 1+e
-	
-;;;;;;;;; SOLVING EXTRA PIXEL BUG
-
-;	bmi end_inner_loop2	; n=1 ?
-
-	bpl outer_loop
-
-;	dec i
-;	bne outer_loop
-;	rts
-
-end_inner_loop2		
-	lda _TableBit6Reverse,x		; 4
-	;eor (tmp0),y				; 5
-    ora (tmp0),y				; 5
-	sta (tmp0),y				; 6
-	; --------------------------=15
-
-;	dec i						; 5
-	bne end_inner_loop
-
-done	
-	rts
-.)
-
-#else
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-.zero
-save_a			.dsb 1
-save_y			.dsb 1
-
-	.text
-	
-	.dsb 256-(*&255)
-
-; nop $ea
-; inx $e8 11101000
-; dex $ca 11001010
-; iny $c8 11001000
-; dey $88 10001000
-
-
+    .dsb 256-(*&255)
 
 draw_totaly_vertical_8
 .(
-	ldx _CurrentPixelX
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x		; 4
-	sta _mask_patch+1
-	
-	ldx dy
-	inx
-	
-	clc							; 2
+    ldx _CurrentPixelX
+    ldy _TableDiv6,x
+    lda _TableBit6Reverse,x     ; 4
+    sta _mask_patch+1
+
+    ldx dy
+    inx
+
+    clc                         ; 2
 loop
 _mask_patch
-	lda #0						; 2
-	ora (tmp0),y				; 5
-	sta (tmp0),y				; 6 => total = 13 cycles
+    lda #0                      ; 2
+    ora (tmp0),y                ; 5
+    sta (tmp0),y                ; 6 => total = 13 cycles
 
-	; Update screen adress
-	lda tmp0+0					; 3
-	adc #40						; 2
-	sta tmp0+0					; 3
-	bcc skip					; 2 (+1 if taken)
-	inc tmp0+1					; 5
-	clc							; 2
+; update the screen address:
+    .(
+    lda tmp0+0                  ; 3
+    adc #ROW_SIZE               ; 2
+    sta tmp0+0                  ; 3
+    bcc skip                    ; 2 (+1 if taken)
+    inc tmp0+1                  ; 5
+    clc                         ; 2
 skip
-	; ------------------Min=13 Max=17
+    .)
+    ; ------------------Min=13 Max=17
 
-	dex
-	bne loop
-	rts
+    dex
+    bne loop
+    rts
 .)
-	
 
-	
+
+
 ;
 ; Expects the following variables to be set when called:
 ; _CurrentPixelX
 ; _CurrentPixelY
 ; _OtherPixelX
 ; _OtherPixelY
-;	
+;
 _DrawLine
-	;
-	; Compute deltas and signs
-	;
-	
-  	; Test Y value
+    ;
+    ; Compute deltas and signs
+    ;
+
+    ; Test Y value
 .(
-	sec
-	lda _CurrentPixelY
-	sbc _OtherPixelY
-	beq end
-	bcc cur_smaller
+    sec
+    lda _CurrentPixelY
+    sbc _OtherPixelY
+    beq end
+    bcc cur_smaller
 
-cur_bigger					; y1>y2
-	; Swap X and Y
-	; So we always draw from top to bottom
-	ldy _CurrentPixelY
-	ldx _OtherPixelY
-	sty _OtherPixelY
-	stx _CurrentPixelY
+cur_bigger                  ; y1>y2
+    ; Swap X and Y
+    ; So we always draw from top to bottom
+    ldy _CurrentPixelY
+    ldx _OtherPixelY
+    sty _OtherPixelY
+    stx _CurrentPixelY
 
-	ldy _CurrentPixelX
-	ldx _OtherPixelX
-	sty _OtherPixelX
-	stx _CurrentPixelX
-		
-	jmp end
-	
-cur_smaller					; y1<y2
-	; Absolute value
-	eor #$ff
-	adc #1
+    ldy _CurrentPixelX
+    ldx _OtherPixelX
+    sty _OtherPixelX
+    stx _CurrentPixelX
+
+    jmp end
+
+cur_smaller                 ; y1<y2
+    ; Absolute value
+    eor #$ff
+    adc #1
 end
-	sta dy
-.)
-	
-	;
-	; Initialise screen pointer
-	;
-	ldy _CurrentPixelY
-	lda _HiresAddrLow,y			; 4
-	sta tmp0+0					; 3
-	lda _HiresAddrHigh,y		; 4
-	sta tmp0+1					; 3 => Total 14 cycles
-
-  	; Test X value
-.(
-	sec
-	lda _CurrentPixelX
-	sbc _OtherPixelX
-	sta dx
-	beq draw_totaly_vertical_8
-	bcc cur_smaller
-
-cur_bigger					; x1>x2
-	lda #$ca				; dex
-	bne end
-
-cur_smaller					; x1<x2
-	; Absolute value
-	eor #$ff
-	adc #1
-	sta dx
-	
-	lda #$e8				; inx
-end
+    sta dy
 .)
 
-	; Compute slope and call the specialized code for mostly horizontal or vertical lines
-	ldy dy
-	beq draw_totaly_horizontal_8
-	cpy dx
-	bcs draw_nearly_vertical_8
+    ;
+    ; Initialise screen pointer
+    ;
+    ldy _CurrentPixelY
+    lda _HiresAddrLow,y         ; 4
+    sta tmp0+0                  ; 3
+    lda _HiresAddrHigh,y        ; 4
+    sta tmp0+1                  ; 3 => Total 14 cycles
 
-draw_nearly_horizontal_8 
-	.(
-	; here we have DY in Y, and the OPCODE in A
-	sta __auto_stepx	; Write a (dex / nop / inx) instruction
-	sty __auto_ady+1
-	
-	lda dx
-	sta __auto_dx+1
-	
-	lda _OtherPixelX
-	sta __auto_cpx+1
-	
-	ldx _CurrentPixelX   	;Plotting coordinates
-	ldy _CurrentPixelY   	;in X and Y
-	sty save_y
-			
-	lda #00     			;Saves us a CMP
-	sec
-	sbc dy					; -DY
-	sta save_a				; 3
+    ; Test X value
+.(
+    sec
+    lda _CurrentPixelX
+    sbc _OtherPixelX
+    sta dx
+    beq draw_totaly_vertical_8
+    bcc cur_smaller
 
-	jmp draw_pixel
-		
-loop 
-__auto_stepx
-	inx             		; Step in x
-	lda save_a				; 3
-__auto_ady
-	adc #00					; 2 +DY
-	sta save_a				; 3
-	bcc draw_pixel 			; Time to step in y?
-	
-__auto_dx   
-	sbc #00     			; 2 -DX
-	sta save_a				; 3
+cur_bigger                  ; x1>x2
+    lda #_DEX
+    bne end
 
-	inc save_y				; 5 Steps in y
-	ldy save_y				; 3
-	
-	; Set the new screen adress
-	lda _HiresAddrLow,y		; 4
-	sta tmp0+0				; 3
-	lda _HiresAddrHigh,y	; 4
-	sta tmp0+1				; 3
-	 
-draw_pixel
-	; Draw the pixel
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x
-	ora (tmp0),y
-	sta (tmp0),y
-  
-__auto_cpx
-	cpx #00					; At the endpoint yet?
-	bne loop
-	rts	
-	.)			
-	
+cur_smaller                 ; x1<x2
+    ; Absolute value
+    eor #$ff
+    adc #1
+    sta dx
+
+    lda #_INX
+end
+.)
+
+    jmp alignIt
+
+    .dsb 256-(*&255)
+
+alignIt
+    ; Compute slope and call the specialized code for mostly horizontal or vertical lines
+    ldy dy
+    beq draw_totaly_horizontal_8
+    cpy dx
+    bcc draw_mainly_horizontal_8
+    jmp draw_mainly_vertical_8
+
 draw_totaly_horizontal_8
 .(
-	; here we have DY in Y, and the OPCODE in A
-	sta _outer_patch	; Write a (dex / nop / inx) instruction
-	
-	ldx _OtherPixelX
-	stx __auto_cpx+1
-	
-	ldx _CurrentPixelX
-	
-	;
-	; Draw loop
-	;
+    ; here we have DY in Y, and the OPCODE in A
+    sta _outer_patch    ; Write a (dex / nop / inx) instruction
+
+    ldx _OtherPixelX
+    stx __auto_cpx+1
+
+    ldx _CurrentPixelX
+
+    ;
+    ; Draw loop
+    ;
 outer_loop
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x		; 4
-	ora (tmp0),y				; 5
-	sta (tmp0),y				; 6
+    ldy _TableDiv6,x
+    lda _TableBit6Reverse,x     ; 4
+    ora (tmp0),y                ; 5
+    sta (tmp0),y                ; 6
 
 _outer_patch
-	inx
+    inx
 
-__auto_cpx	
-	cpx #00					; At the endpoint yet?
-	bne outer_loop
-	rts
-.)	
-	
-	
+__auto_cpx
+    cpx #00                 ; At the endpoint yet?
+    bne outer_loop
+    rts
+.)
+
+draw_mainly_horizontal_8
+.(
+    tax
+    lda dx
+    lsr
+    cmp dy
+    bcs draw_very_horizontal_8
+
+; here we have DY in Y, and the OPCODE (inx, dex) in A
+    sty __auto_dy+1
+
+; all this stress to be able to use dex, beq :)
+    cpx #_INX
+    beq doInx
+
+    lda #<_TableDiv6-1          ; == 0
+;    clc                        ; _DEX < _INX
+    adc _OtherPixelX
+    sta __auto_div6+1
+    lda #<_TableBit6Reverse-1   ; == 0
+;    clc
+    adc _OtherPixelX
+
+    ldx #>_TableDiv6
+    ldy #>_TableBit6Reverse ;
+    bne endPatch
+
+doInx
+    lda #X_SIZE-1
+;    sec
+    sbc _OtherPixelX
+    sta __auto_div6+1
+    lda #X_SIZE-1
+;    sec
+    sbc _OtherPixelX
+
+    ldx #>_TableDiv6Rev
+    ldy #>_TableBit6        ;
+endPatch
+    sta __auto_bit6+1
+    stx __auto_div6+2
+    sty __auto_bit6+2
+
+    lda dx
+    tax
+    inx                     ; 2         +1 since we count to 0
+    sta __auto_dx+1
+    lsr
+    eor #$ff
+    clc
+; a = sum, x = dX+1
+
+loopX
+    sta save_a              ; 3 =  3
+loopY
+    ; Draw the pixel
+__auto_div6
+    ldy _TableDiv6-1,x      ; 4
+__auto_bit6
+    lda _TableBit6Reverse-1,x;4
+    ora (tmp0),y            ; 5*
+    sta (tmp0),y            ; 6*= 19
+
+    dex                     ; 2         Step in x
+    beq exitLoop            ; 2/3       At the endpoint yet?
+    lda save_a              ; 3
+__auto_dy
+    adc #00                 ; 2         +DY
+    bcc loopX               ; 2/3=11/12 ~50% taken
+    ; Time to step in y
+__auto_dx
+    sbc #00                 ; 2         -DX
+    sta save_a              ; 3 =  5
+
+; update the screen address:
+    lda tmp0+0              ; 3
+    adc #ROW_SIZE           ; 2
+    sta tmp0+0              ; 3
+    bcc loopY               ; 2/3=10/11 ~84% taken
+    inc tmp0+1              ; 5
+    clc                     ; 2
+    bcc loopY               ; 3 = 10
+; average: 12.44
+
+exitLoop
+    rts
+; Timings:
+; x++/y  : 34
+; x++/y++: 47.44
+; average: 40.72
+.)
+
+draw_very_horizontal_8
+.(
+; dX > 2*dY, here we use "chunking"
+; here we have DY in Y, and the OPCODE (inx, dex) in A
+    sty __auto_dy+1
+    sty __auto_dy2+1
+    cpx #_INX
+    php
+
+    ldx _CurrentPixelX
+    lda _TableDiv6,x
+    clc
+    adc tmp0
+    tay
+    bcc skipHi
+    inc tmp0+1
+skipHi
+    lda #0
+    sta tmp0
+
+    plp
+    beq doInx
+; negative x-direction
+    lda _TableMod6,x
+    tax
+
+    lda #_DEY
+    sta __auto_stepx
+    sta __auto_stepx2
+    lda #$ff
+    sta __auto_cpy+1
+    sta __auto_cpy2+1
+    lda #_DEC_ZP
+    sta __auto_yHi
+    sta __auto_yHi2
+    lda Pot2NTbl,x
+    sta chunk
+    lda #<Pot2NTbl
+    bne endPatch
+
+doInx
+; positive x-direction
+    lda #BYTE_PIXEL-1
+;    sec
+    sbc _TableMod6,x
+    tax
+
+    lda #_INY
+    sta __auto_stepx
+    sta __auto_stepx2
+    lda #$00
+    sta __auto_cpy+1
+    sta __auto_cpy2+1
+    lda #_INC_ZP
+    sta __auto_yHi
+    sta __auto_yHi2
+    lda Pot2PTbl,x
+    sta chunk
+    lda #<Pot2PTbl
+endPatch
+    sta __auto_pot1+1
+    sta __auto_pot2+1
+    sta __auto_pot3+1
+
+    lda dx
+    sta __auto_dx+1
+; calculate initial bresenham sum
+    lsr
+    sta lastSum             ; 3         this is used for the last line segment
+    eor #$ff                ;           = -dx/2
+    clc
+    jmp loopX
+; a = sum, x = dX+1, y = ptr-offset
+
+    .dsb 256-(*&255)
+
+nextColumn                  ;
+    tax                     ; 2
+    lda chunk               ; 3
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6
+    lda #%00111111          ; 2
+    sta chunk               ; 3
+    txa                     ; 2
+    ldx #BYTE_PIXEL-1       ; 2
+__auto_stepx
+    iny                     ; 2         next column
+__auto_cpy
+    cpy #00                 ; 2
+    clc                     ; 2
+    bne contColumn          ; 2/3=33/34 99% taken
+__auto_yHi
+    inc tmp0+1              ; 5         dec/inc
+    bcc contColumn          ; 3 =  8
+
+loopY
+    dec dy                  ; 5         all but one vertical segments drawn?
+    beq exitLoop            ; 2/3= 7/8  yes, exit loop
+loopX
+    dex                     ; 2
+    bmi nextColumn          ; 2/37.03   ~16.7% taken
+contColumn                  ;   =  9.85
+__auto_dy
+    adc #00                 ; 2         +DY
+    bcc loopX               ; 2/3= 4/5  ~50% taken
+    ; Time to step in y
+__auto_dx
+    sbc #00                 ; 2         -DX
+    sta save_a              ; 3 =  5
+
+; plot the last bits of current row:
+__auto_pot1
+    lda Pot2PTbl,x          ; 4
+    eor chunk               ; 3
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6
+__auto_pot2
+    lda Pot2PTbl,x          ; 4
+    sta chunk               ; 3 = 25
+
+; update the screen address:
+    tya                     ; 2
+    adc #ROW_SIZE           ; 2
+    tay                     ; 2
+    lda save_a              ; 3
+    bcc loopY               ; 2/3=11/12 ~84.4% taken
+    inc tmp0+1              ; 5
+    clc                     ; 2
+    bcc loopY               ; 3 = 10
+; average: 13.40
+
+; Timings:
+; x++/y  : 14.85 (75%)
+; x++/y++: 64.25 (25%)
+; average: 27.20
+
+exitLoop
+; draw the last horizontal line segment:
+    adc lastSum             ; 3
+loopXEnd
+    dex                     ; 2
+    bmi nextColumnEnd       ; 2/37.03   ~16.7% taken
+contColumnEnd               ;   =  9.85
+__auto_dy2
+    adc #00                 ; 2         +DY
+    bcc loopXEnd            ; 2/3=11/12 ~50% taken
+
+; plot last chunk:
+__auto_pot3
+    lda Pot2PTbl,x          ; 4
+    eor chunk               ; 3
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 18
+    rts
+
+nextColumnEnd                  ;
+    tax                     ; 2
+    lda chunk               ; 3
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6
+    lda #%00111111          ; 2
+    sta chunk               ; 3
+    txa                     ; 2
+    ldx #BYTE_PIXEL-1       ; 2
+__auto_stepx2
+    iny                     ; 2         next column
+__auto_cpy2
+    cpy #00                 ; 2
+    clc                     ; 2
+    bne contColumnEnd       ; 2/3=33/34 99% taken
+__auto_yHi2
+    inc tmp0+1              ; 5         dec/inc
+    bcc contColumnEnd       ; 3 =  8
+
+Pot2PTbl
+    .byte   %00000001, %00000011, %00000111, %00001111
+    .byte   %00011111, %00111111
+Pot2NTbl
+    .byte   %00100000, %00110000
+    .byte   %00111000, %00111100, %00111110, %00111111
+.)
+
+
+    .dsb 256-(*&255)
 ;
 ; This code is used when the things are moving faster
 ; vertically than horizontally
 ;
 ; dy>dx
 ;
-draw_nearly_vertical_8 
-	.(
-	; here we have DY in Y, and the OPCODE in A
-	sta __auto_stepx	; Write a (dex / nop / inx) instruction
-	sty __auto_dy+1
+draw_mainly_vertical_8
+; here we have DY in Y, and the OPCODE in A
+.(
+; setup bresenham values:
+    sty __auto_dy+1
+    ldx dx
+    stx __auto_dx+1
 
-	lda dx
-	sta __auto_adx+1
-		
-	lda _OtherPixelY
-	sta __auto_cpy+1
-	
-	ldx _CurrentPixelX   	;Plotting coordinates
-	ldy _CurrentPixelY   	;in X and Y
-	
-	lda #00     			;Saves us a CMP
-	sec
-	sbc dx					; -DX
-		
-	jmp draw_pixel
-	
-loop 
-	iny             		; Step in y
-__auto_adx
-	adc #00					; +DX
-	bcc skip    			; Time to step in x?
-	
-__auto_stepx
-	inx            			; Step in x
-		
-__auto_dy  
-	sbc #00     			; -DY
- 
-skip 
-	; Set the new screen adress
-	sta save_a
-	lda _HiresAddrLow,y
-	sta tmp0+0
-	lda _HiresAddrHigh,y
-	sta tmp0+1
+; setup direction:
+    cmp #_DEX               ;           which direction?
+    bne doInx
+; dex -> moving left:
+    lda #%00100000
+    sta __auto_cpBit+1
+    lda #_ASL               ;
+    sta __auto_shBit
+    lda #%00000001
+    sta __auto_ldBit+1
+    lda #_DEY
+    sta __auto_yLo
+    ldx #$ff
+    lda #_DEC_ZP
+    bne endPatch
 
-draw_pixel	
-	; Draw the pixel
-	sty save_y
-	ldy _TableDiv6,x
-	lda _TableBit6Reverse,x
-	ora (tmp0),y
-	sta (tmp0),y
-	lda save_a
-	ldy save_y
-  
-__auto_cpy
-	cpy #00				; At the endpoint yet?
-	bne loop
-	rts	
-	.)
+doInx
+; inx -> moving right:
+    lda #%00000001
+    sta __auto_cpBit+1
+    lda #_LSR
+    sta __auto_shBit
+    lda #%00100000
+    sta __auto_ldBit+1
+    lda #_INY
+    sta __auto_yLo
+    ldx #$00
+    lda #_INC_ZP
+endPatch
+    stx __auto_cpY+1
+    sta __auto_yHi
+; setup X
+    tya                     ;           y = dY
+    tax
+    inx                     ;           x = dY+1
+; setup current bit:
+    ldy _CurrentPixelX
+    lda _TableBit6Reverse,y ; 4
+    sta curBit
+; setup pointer and Y:
+; TODO: self-modyfing code?
+    lda _TableDiv6,y
+    clc
+    adc tmp0
+    tay
+    lda #0
+    sta tmp0
+    bcc skipTmp0
+    inc tmp0+1
+skipTmp0
+; calculate initial bresenham sum:
+    lda dy
+    lsr
+    eor #$ff                ;           -DY/2
+    clc                     ; 2
+    bcc loopY               ; 3
+; a = sum, y = tmp0, x = dY+1, tmp0 = 0
+
+incHiPtr                    ; 9
+    inc tmp0+1              ; 5
+    clc                     ; 2
+    bcc contHiPtr           ; 3
+;----------------------------------------------------------
+loopY
+    sta save_a              ; 3 =  3
+    ; Draw the pixel
+    lda curBit              ; 3
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 14
+
+    dex                     ; 2         At the endpoint yet?
+    beq exitLoop            ; 2/3= 4/5
+loopX
+; update the screen address:
+    tya                     ; 2
+    adc #ROW_SIZE           ; 2
+    tay                     ; 2
+    bcs incHiPtr            ; 2/13      ~16% taken
+contHiPtr                   ;   =  9.76 average
+
+    lda save_a              ; 3
+__auto_dx
+    adc #00                 ; 2         +DX
+    bcc loopY               ; 2/3= 7/8  ~50% taken
+
+    ; Time to step in x
+__auto_dy
+    sbc #00                 ; 2         -DY
+    sta save_a              ; 3 =  5
+
+    lda curBit              ; 3
+__auto_cpBit                ;           TODO: optimize
+    cmp #%00100000          ; 2         %00100000/%00000001
+    beq nextColumn          ; 2/14.07   ~17% taken
+__auto_shBit
+    asl                     ; 2         asl/lsr, clears carry
+contNextColumn
+    sta curBit              ; 3 =~13.71
+
+    ; Draw the pixel
+    ora (tmp0),y            ; 5
+    sta (tmp0),y            ; 6 = 11
+    dex                     ; 2         At the endpoint yet?
+    bne loopX               ; 2/3= 4/5
+exitLoop
+    rts
+;----------------------------------------------------------
+nextColumn
+__auto_ldBit
+    lda #%00000001          ; 2         %00000001/%00100000
+__auto_yLo
+    dey                     ; 2         dey/iny
+__auto_cpY
+    cpy #$ff                ; 2         $ff/$00
+    clc                     ; 2         TODO: optimize
+    bne contNextColumn      ; 2/3       ~99% taken
+__auto_yHi
+    dec tmp0+1              ; 5         dec/inc
+    bcc contNextColumn      ; 3
+
+; x  ,y++: 38.76 (50%)
+; x++,y++: 51.47 (50%)
+; average: 45.11
+.)
+
+; *** total timings: ***
+; draw_very_horizontal_8   (29.6%): 27.20
+; draw_mainly_horizontal_8 (20.4%): 40.72
+; draw_mainly_vertical_8   (50.0%): 45.11
+;----------------------------------------
+; total average           (100.0%): 38.91
 
 
 
-#endif
-
+////////////////////////////////////////
 
 
 _GenerateTables
@@ -816,7 +812,7 @@ loop
 	clc
 	lda tmp0+0
 	sta _HiresAddrLow,x
-	adc #40
+	adc #ROW_SIZE
 	sta tmp0+0
 	lda tmp0+1
 	sta _HiresAddrHigh,x
@@ -824,37 +820,54 @@ loop
 	sta tmp0+1
 
 	inx
-	cpx #201
+	cpx #Y_SIZE
 	bne loop
 .)
 
 
-	; Generate multiple of 6 data table
+   ; Generate multiple of 6 data table
 .(
-	lda #0
-	sta tmp0+1	; cur div
-	sta tmp0+2	; cur mod
-
-	ldx #0
+    lda #0      ; cur div
+    tay         ; cur mod
+    tax
 loop
-	lda tmp0+1
-	sta _TableDiv6,x
+    sta _TableDiv6,x
+    pha
+    tya
+    sta _TableMod6,x
+    pla
 
-	ldy tmp0+2
-	iny
-	cpy #6
-	bne skip_mod
-	ldy #0
-	inc tmp0+1
+    iny
+    cpy #6
+    bne skip_mod
+    ldy #0
+    adc #0      ; carry = 1!
 skip_mod
-	sty tmp0+2
 
-	inx
-	bne loop
+    inx
+    cpx #X_SIZE
+    bne loop
 .)
+.(
+    lda #0      ; cur div
+    tay         ; cur mod
+    ldx #X_SIZE
+loop
+    dex
+    sta _TableDiv6Rev,x
 
+    iny
+    cpy #6
+    bne skip_mod
+    ldy #0
+    adc #0      ; carry = 1!
+skip_mod
+
+    cpx #0
+    bne loop
 .)
-	rts
+.)
+    rts
 
 
 

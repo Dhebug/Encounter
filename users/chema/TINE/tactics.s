@@ -1543,6 +1543,8 @@ savy
 ; Reg Y is the ship making damage
 damage_player
 .(
+	; Hack to make enemies more deadly
+	;asl 
 	sta tmp+1
 
 	; Alert the cops?
@@ -1562,6 +1564,8 @@ nohelp
 	; id of the ship which launched it, so
 	; need to get that information back
 	ldy AIShipID
+	; Hack to make enemies more deadly, but not with missiles
+	;lsr tmp+1
 notmissile
 	tya
 	tax
