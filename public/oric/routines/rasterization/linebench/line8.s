@@ -10,7 +10,7 @@
 ;517 final optimization at mainly_horizontal
 ;501 chunking, initial version
 ;482 optimized chunking (avg: 38.91 cylces)
-;473 final optimization for mainly_vertical
+;473 final optimization for mainly_vertical (37.89)
 
 ; TODOs:
 ; + chunking (-35)
@@ -57,6 +57,7 @@ lastSum         .dsb 1
 
     .dsb 256-(*&255)
 
+;**********************************************************
 draw_totaly_vertical_8
 .(
     ldx _CurrentPixelX
@@ -92,7 +93,7 @@ skip
 .)
 
 
-
+;**********************************************************
 ;
 ; Expects the following variables to be set when called:
 ; _CurrentPixelX
@@ -168,11 +169,11 @@ cur_smaller                 ; x1<x2
 end
 .)
 
-    jmp alignIt
-
-    .dsb 256-(*&255)
-
-alignIt
+;    jmp alignIt
+;
+;    .dsb 256-(*&255)
+;
+;alignIt
     ; Compute slope and call the specialized code for mostly horizontal or vertical lines
     ldy dy
     beq draw_totaly_horizontal_8
@@ -180,13 +181,14 @@ alignIt
     bcc draw_mainly_horizontal_8
     jmp draw_mainly_vertical_8
 
+;**********************************************************
 draw_totaly_horizontal_8
 .(
     ; here we have DY in Y, and the OPCODE in A
     sta _outer_patch    ; Write a (dex / nop / inx) instruction
 
     ldx _OtherPixelX
-    sta __auto_cpx+1
+    stx __auto_cpx+1
 
     ldx _CurrentPixelX
 
@@ -203,11 +205,12 @@ _outer_patch
     inx
 
 __auto_cpx
-    cpx #00                 ; At the endpoint yet?
+    cpx #00                     ; At the endpoint yet?
     bne outer_loop
     rts
 .)
 
+;**********************************************************
 draw_mainly_horizontal_8
 .(
     tax
@@ -259,7 +262,7 @@ endPatch
     eor #$ff
     clc
 ; a = sum, x = dX+1
-
+;----------------------------------------------------------
 loopX
     sta save_a              ; 3 =  3
 loopY
@@ -286,20 +289,22 @@ __auto_dx
     lda tmp0+0              ; 3
     adc #ROW_SIZE           ; 2
     sta tmp0+0              ; 3
-    bcc loopY               ; 2/3=10/11 ~84% taken
+    bcc loopY               ; 2/3=10/11 ~84.4% taken
     inc tmp0+1              ; 5
     clc                     ; 2
     bcc loopY               ; 3 = 10
-; average: 12.44
+; average: 12.40
 
 exitLoop
     rts
 ; Timings:
 ; x++/y  : 34
-; x++/y++: 47.44
-; average: 40.72
+; x++/y++: 47.40
+; average: 40.70
 .)
 
+    .dsb 256-(*&255)
+;**********************************************************
 draw_very_horizontal_8
 .(
 ; dX > 2*dY, here we use "chunking"
@@ -373,8 +378,7 @@ endPatch
     jmp loopX
 ; a = sum, x = dX+1, y = ptr-offset
 
-    .dsb 256-(*&255)
-
+;----------------------------------------------------------
 nextColumn                  ;
     tax                     ; 2
     lda chunk               ; 3
@@ -444,7 +448,7 @@ loopXEnd
 contColumnEnd               ;   =  9.85
 __auto_dy2
     adc #00                 ; 2         +DY
-    bcc loopXEnd            ; 2/3=11/12 ~50% taken
+    bcc loopXEnd            ; 2/3= 4/5  ~25% taken
 
 ; plot last chunk:
 __auto_pot3
@@ -481,8 +485,8 @@ Pot2NTbl
     .byte   %00111000, %00111100, %00111110, %00111111
 .)
 
-
     .dsb 256-(*&255)
+;**********************************************************
 ;
 ; This code is used when the things are moving faster
 ; vertically than horizontally
@@ -527,18 +531,15 @@ endPatch
     stx __auto_cpY+1
     sta __auto_yHi
 ; setup X
-;    tya                     ;           y = dY
-;    tax
-    ldx dx
+    ldx dx                  ;           X = dx
     stx __auto_dx1+1
     stx __auto_dx2+1
-;    inx                     ;           x = dY+1
 ; setup current bit:
     ldy _CurrentPixelX
     lda _TableBit6Reverse,y ; 4
     sta curBit
 ; setup pointer and Y:
-; TODO: self-modyfing code?
+; TODO: self-modyfing code for the ptrs?
     lda _TableDiv6,y
     clc
     adc tmp0
@@ -555,8 +556,8 @@ skipTmp0
     eor #$ff                ;           -DY/2
     clc                     ; 2
     bcc loopY               ; 3
-; a = sum, y = tmp0, x = dY+1, tmp0 = 0
-
+; a = sum, y = tmp0, x = dX, tmp0 = 0
+;----------------------------------------------------------
 incHiPtr                    ;
     inc tmp0+1              ; 5
     clc                     ; 2
@@ -618,7 +619,7 @@ contHiPtrEnd                ;   =  9.72 average
     txa                     ; 2
 __auto_dx2
     adc #00                 ; 2         +DX
-    bcc loopYEnd            ; 2/3= 6/7  ~50% taken
+    bcc loopYEnd            ; 2/3= 6/7  ~25% taken
     rts
 ;----------------------------------------------------------
 nextColumn
@@ -643,10 +644,10 @@ incHiPtrEnd                 ; 9
 
 ; *** total timings: ***
 ; draw_very_horizontal_8   (29.6%): 27.20
-; draw_mainly_horizontal_8 (20.4%): 40.72
+; draw_mainly_horizontal_8 (20.4%): 40.70
 ; draw_mainly_vertical_8   (50.0%): 43.06
 ;----------------------------------------
-; total average           (100.0%): 38.89
+; total average           (100.0%): 37.89
 
 
 
