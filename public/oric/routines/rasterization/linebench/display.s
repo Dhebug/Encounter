@@ -24,11 +24,6 @@ _TableMod6              .dsb X_SIZE
     .dsb 256-(*&255)
 
     .byt 0
-_TableDiv6Rev           .dsb X_SIZE
-
-    .dsb 256-(*&255)
-
-    .byt 0
 _TableBit6Reverse
     .byt 32,16,8,4,2,1|$80
     .byt 32,16,8,4,2,1|$80
@@ -173,24 +168,6 @@ skip_mod
 
     inx
     cpx #X_SIZE
-    bne loop
-.)
-.(
-    lda #0      ; cur div
-    tay         ; cur mod
-    ldx #X_SIZE
-loop
-    dex
-    sta _TableDiv6Rev,x
-
-    iny
-    cpy #6
-    bne skip_mod
-    ldy #0
-    adc #0      ; carry = 1!
-skip_mod
-
-    cpx #0
     bne loop
 .)
 .)
