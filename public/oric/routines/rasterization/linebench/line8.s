@@ -269,7 +269,7 @@ skipInc
     sta tmp0
 
     lda dx
-  tax
+    tax
     inx                     ; 2         +1 since we count to 0
     sta __auto_dx+1
     lsr
@@ -355,13 +355,18 @@ draw_very_horizontal_8
     bcc skipHi
     inc tmp0+1
 skipHi
-    lda #0
+    lda _TableDiv6,x
+    asl
+    adc _TableDiv6,x
+    asl
     sta tmp0
+    lda _CurrentPixelX
+    sec
+    sbc tmp0
 ; patch the code:
     plp
     beq doInx
 ; negative x-direction
-    lda _TableMod6,x
     tax
 
     lda #_DEY
@@ -380,9 +385,9 @@ skipHi
 
 doInx
 ; positive x-direction
+    sta tmp0
     lda #BYTE_PIXEL-1
-;    sec
-    sbc _TableMod6,x
+    sbc tmp0
     tax
 
     lda #_INY
@@ -401,6 +406,10 @@ endPatch
     sta __auto_pot1+1
     sta __auto_pot2+1
     sta __auto_pot3+1
+
+    lda #0
+    sta tmp0
+
     lda dx
     sta __auto_dx+1
 ; calculate initial bresenham sum
@@ -510,6 +519,8 @@ __auto_yHi2
     inc tmp0+1              ; 5         dec/inc
     bcc contColumnEnd       ; 3 =  8
 
+    .dsb 256-(*&255)
+
 Pot2PTbl
     .byte   %00000001, %00000011, %00000111, %00001111
     .byte   %00011111, %00111111
@@ -518,7 +529,6 @@ Pot2NTbl
     .byte   %00111000, %00111100, %00111110, %00111111
 .)
 
-    .dsb 256-(*&255)
 ;**********************************************************
 ;
 ; This code is used when the things are moving faster
