@@ -56,7 +56,7 @@ lastSum         .dsb 1
 
     .text
 
-    .dsb 256-(*&255)
+;    .dsb 256-(*&255)
 
 ;**********************************************************
 draw_totaly_vertical_8
@@ -231,18 +231,11 @@ contMainly
     sta __auto_stepx
     lda #$ff
     sta __auto_cpy+1
-    lda #_DEC_ZP
-    sta __auto_yHi
+    ldy #_DEC_ZP
 
-    lda #<_TableDiv6            ; == 1
-;    clc                        ; _DEX < _INX
-    adc _OtherPixelX
-    sta __auto_div6+1
     lda #<_TableBit6Reverse-1   ; == 0
 ;    clc
     adc _OtherPixelX
-
-    ldy #>_TableDiv6
     ldx #>_TableBit6Reverse ;
     bne endPatch
 
@@ -251,28 +244,20 @@ doInx
     sta __auto_stepx
     lda #$00
     sta __auto_cpy+1
-    lda #_INC_ZP
-    sta __auto_yHi
+    ldy #_INC_ZP
 
-    lda #X_SIZE
-;    sec
-    sbc _OtherPixelX
-    sta __auto_div6+1
     lda #X_SIZE-1
 ;    sec
     sbc _OtherPixelX
-
-    ldy #>_TableDiv6Rev
     ldx #>_TableBit6        ;
 endPatch
+    sty __auto_yHi
     sta __auto_bit6+1
     sta __auto_bit6_0+1
     stx __auto_bit6+2
     stx __auto_bit6_0+2
-    sty __auto_div6+2
 
-    ldx dx
-__auto_div6
+    ldx _CurrentPixelX
     lda _TableDiv6,x
     clc
     adc tmp0
@@ -284,7 +269,7 @@ skipInc
     sta tmp0
 
     lda dx
-;    tax
+  tax
     inx                     ; 2         +1 since we count to 0
     sta __auto_dx+1
     lsr
