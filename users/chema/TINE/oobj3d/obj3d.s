@@ -731,8 +731,6 @@ NUMVIS   .byt 00
 
 SortVis  
 .(
-
-
          LDA #00
          STA NUMVIS
          LDA #$80
@@ -748,7 +746,6 @@ loop
          STA TEMP+1
          LDA CZ,X         ;low byte
          STA TEMP
-         
      
          ; Check if object is not affected
          ; by distance skipping
@@ -1052,8 +1049,8 @@ cc2
 cc3
 		 stx P0Z+1
 		 
- 		 jsr prepare_normals
-
+ 		 jmp prepare_normals
++end_prepare_normals
 
 		 lda NFACES	; Point pointers
  		 clc
@@ -1111,7 +1108,9 @@ c3       STX P0Z+1
          ; or it is normal (0), so branching to dloop, or one of the above
          ; options. All those branches end with RTS.            
 
-dloop    JSR DrawFace
+dloop    ;JSR DrawFace
+		 jmp DrawFace
++draw_face_end
          DEC NFACES
          BNE dloop
 done     RTS
@@ -1466,7 +1465,8 @@ test2    CMP LINEHI,Y
 
 exit     LDA FACEPTR
          LDY FACEPTR+1
-         RTS
+         ;RTS
+		 jmp draw_face_end
 .)
 
 
@@ -1566,6 +1566,7 @@ done
 #define cz_	tmp5
 #define tempx op2
 
+#ifdef 0
 
 prepare_normals
 .(
@@ -1903,6 +1904,220 @@ end
 	rts
 
 .)
+
+#else
+
+prepare_normals
+.(
+    ; Prepare call to ROTPROJ in mode "Rotation only"
+    ldy NFACES
+    ldx RTEMPA       ;Center index
+    clc              ;Rot and NOT proj
+    jsr ROTPROJ
+
+    ; Save center coordinates in cx_, cy_, cz_ for later.
+    ldx RTEMPA
+    lda CX,x
+    sta cx_
+    lda HCX,x
+    sta cx_+1
+
+    lda CY,x
+    sta cy_
+    lda HCY,x
+    sta cy_+1
+
+    lda CZ,x
+    sta cz_
+    lda HCZ,x
+    sta cz_+1
+
+	; If too far we patch code below and avoid calculating the
+	; dot product between the normal and the view vector.
+	; Just will use the normal Z sign.
+
+	cmp #5
+	bcc nopatch
+
+	lda #$18	; clc opcode
+	sta _patch_code
+	jmp startcheck
+
+nopatch
+	lda #$38	; sec opcode
+	sta _patch_code
+
+    ; Adjust center coordinates, so they are 7-bit signed and SMULT can be used
+loopadj
+    lda cx_+1
+    beq conty
+    bpl shift
+    eor #$ff
+    bne shift
+conty
+    lda cy_+1
+    beq contz
+    bpl shift
+    eor #$ff
+    bne shift
+contz
+    lda cz_+1
+    beq endloop
+shift
+    lda cx_+1
+    cmp #$80    
+    ror cx_+1
+    ror cx_
+ 
+    lda cy_+1
+    cmp #$80    
+    ror cy_+1
+    ror cy_
+
+    ; Z is allways positive (or it won't be visible)
+    lsr cz_+1
+    ror cz_
+
+    jmp loopadj
+endloop
+
+    ; We need two more adjustments
+    ; To be sure the amount is 7-bit signed (-64..64).
+ 
+    lda cx_+1
+    cmp #$80 
+	ror
+	ror cx_
+	cmp #$80
+	ror
+	ror cx_
+	sta cx_+1
+
+    lda cy_+1
+    cmp #$80    
+	ror
+    ror cy_
+    cmp #$80    
+	ror
+    ror cy_
+	sta cy_+1
+
+    ; Z is allways positive (or it wouldn't be visible)
+    lsr cz_+1
+    ror cz_
+    lsr cz_+1
+    ror cz_
+
+startcheck
+    ; Prepare facevis bitfield.
+
+	lda #0
+	sta facevis
+	sta facevis+1
+	sta facevis+2
+
+
+    ; Loop through face list
+ 	ldx NFACES
+	dex
+    stx tempx
+loop
+    ; First check. If all normals are zero, face is visible
+    ldx tempx
+    lda PLISTX,x
+    ora PLISTY,x
+    ora PLISTZ,x
+    bne cont
+    sec
+    jmp vis
+cont
+
+_patch_code
+	sec	; This is patched to clc or sec
+	bcs cont2
+	lda PLISTZ,x
+	bpl noneg
+	clc
+	jmp vis
+noneg
+	sec
+	jmp vis
+cont2
+
+
+    ; For each face we need to calculate the dot-product
+    ; of the center and the normal.
+    ; <cx_,cy_,cz_>*<nx,ny,nz>=
+    ; cx_*nx+cy_*ny+cz_*nz.
+    ; All within range of SMULT
+    ; op1 (2-byte) will store the 16-bit result
+
+    lda #0
+    sta op1+1
+
+	lda PLISTX,x
+	ldy cx_
+	SMULT
+	sta op1
+	bpl doY
+	dec op1+1
+doY
+	lda #0
+	sta tmp
+	lda PLISTY,x
+	ldy cy_
+	SMULT
+	bpl noneg1
+	dec tmp
+noneg1
+	clc 
+	adc op1
+	sta op1
+	lda tmp
+	adc op1+1
+	sta op1+1
+
+doZ
+	lda #0
+	sta tmp
+	lda PLISTZ,x
+	ldy cz_
+	SMULT
+	bpl noneg2
+	dec tmp
+noneg2
+	clc 
+	adc op1
+	sta op1
+	lda tmp
+	adc op1+1
+	sta op1+1
+
+doneall
+    sec
+    bmi novis
+    lda op1+1
+    ora op1
+    bne vis
+	;bpl	vis
+    ;beq vis
+novis
+	clc
+vis
+	rol facevis
+	rol facevis+1
+	rol facevis+2
+	dec tempx
+	bmi end
+    jmp loop
+end
+	;rts
+	jmp end_prepare_normals
+.)
+
+
+#endif
+
 
 
 .zero

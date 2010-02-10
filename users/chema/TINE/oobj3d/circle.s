@@ -223,7 +223,7 @@ circleExit2
     ;    circlePoints (xCenter, yCenter, x, y);
     ;  }
 
-	.dsb 256-(*&255) 
+;	.dsb 256-(*&255) 
   
 loop
 .(
