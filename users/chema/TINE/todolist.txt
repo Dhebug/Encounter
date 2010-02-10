@@ -251,6 +251,9 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
 
+- optimization in prepare_normals... cx, cy and cz are unsigned inside the loop. Can be done outside and sign saved in signcx, signcy signcz.
+Done, now using SMULT
+
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector
 
