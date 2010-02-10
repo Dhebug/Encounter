@@ -12,6 +12,7 @@
 ;482 optimized chunking (avg: 38.91 cylces)
 ;473 final optimization for mainly_vertical (37.89 -> 38.34 corrected)
 ;468 a weird stunt on mainly_horizontal (38.07)
+;467 minor very_horizontal optimization
 
 ; TODOs:
 ; + chunking (-35)
@@ -19,6 +20,9 @@
 ; + countdown minor
 ;   x mainly_horizontal (won't work)
 ;   + mainly_vertical (-9)
+; o optimizing for space
+; - optimize horizontal
+; - optimize vertical
 
     .zero
 
@@ -80,14 +84,15 @@ _mask_patch
     tya                         ; 2
     adc #ROW_SIZE               ; 2
     tay                         ; 2
-    bcc skip                    ; 2/3= 8/9
+    bcc skip                    ; 2/3       84.4% taken
     inc tmp0+1                  ; 5
-    clc                         ; 2 =  7
-skip                            ;
+    clc                         ; 2
+skip                            ;   = 9.94
     .)
     dex                         ; 2
     bne loop                    ; 2/3=4/5
     rts
+; average: 27.94
 .)
 
 
@@ -109,8 +114,8 @@ _DrawLine8
     sec
     lda _CurrentPixelY
     sbc _OtherPixelY
-    beq end
     bcc cur_smaller
+    beq end
 
 cur_bigger                  ; y1>y2
     ; Swap X and Y
@@ -125,7 +130,7 @@ cur_bigger                  ; y1>y2
     sty _OtherPixelX
     stx _CurrentPixelX
 
-    jmp end
+    bcs end
 
 cur_smaller                 ; y1<y2
     ; Absolute value
@@ -149,13 +154,9 @@ end
     sec
     lda _CurrentPixelX
     sbc _OtherPixelX
-    sta dx
     beq draw_totaly_vertical_8
-    bcc cur_smaller
-
-cur_bigger                  ; x1>x2
-    lda #_DEX
-    bne end
+    ldx #_DEX
+    bcs cur_bigger
 
 cur_smaller                 ; x1<x2
     ; Absolute value
@@ -163,8 +164,9 @@ cur_smaller                 ; x1<x2
     adc #1
     sta dx
 
-    lda #_INX
-end
+    ldx #_INX
+cur_bigger                  ; x1>x2
+    sta dx
 .)
 
     jmp alignIt
@@ -182,8 +184,8 @@ alignIt
 ;**********************************************************
 draw_totaly_horizontal_8
 .(
-    ; here we have DY in Y, and the OPCODE in A
-    sta _outer_patch    ; Write a (dex / nop / inx) instruction
+    ; here we have DY in Y, and the OPCODE in X
+    stx _outer_patch    ; Write a (dex / inx) instruction
 
     ldx _OtherPixelX
     stx __auto_cpx+1
@@ -194,33 +196,32 @@ draw_totaly_horizontal_8
     ; Draw loop
     ;
 outer_loop
-    ldy _TableDiv6,x
+    ldy _TableDiv6,x            ; 4
     lda _TableBit6Reverse,x     ; 4
-    and #$7f
+    and #$7f                    ; 2
     eor (tmp0),y                ; 5
-    sta (tmp0),y                ; 6
+    sta (tmp0),y                ; 6 = 19
 
 _outer_patch
-    inx
+    inx                         ; 2
 
 __auto_cpx
-    cpx #00                     ; At the endpoint yet?
-    bne outer_loop
+    cpx #00                     ; 2     At the endpoint yet?
+    bne outer_loop              ; 2
     rts
 .)
 
 ;**********************************************************
 draw_mainly_horizontal_8
 .(
-    tax
-    lda dx
+; A = DX, Y = DY, X = opcode
+;    lda dx
     lsr
     cmp dy
     bcc contMainly
     jmp draw_very_horizontal_8
-contMainly
 
-; here we have DY in Y, and the OPCODE (inx, dex) in A
+contMainly
     sty __auto_dy+1
 
 ; all this stress to be able to use dex, beq :)
@@ -342,7 +343,8 @@ draw_very_horizontal_8
 .(
 ; dX > 2*dY, here we use "chunking"
 ; here we have DY in Y, and the OPCODE (inx, dex) in A
-    sty __auto_dy+1
+    sty __auto_dy0+1
+    sty __auto_dy1+1
     sty __auto_dy2+1
     cpx #_INX
     php
@@ -359,7 +361,7 @@ skipHi
     asl
     adc _TableDiv6,x
     asl
-    sta tmp0
+    sta tmp0                ; tmp0 = _CurrentPixelX % 6
     lda _CurrentPixelX
     sec
     sbc tmp0
@@ -418,7 +420,7 @@ endPatch
     eor #$ff                ;           = -dx/2
     clc
     bcc loopX
-; a = sum, x = dX+1, y = ptr-offset
+; a = sum, x = _CurrentPixelX % 6, y = ptr-offset
 
 ;----------------------------------------------------------
 nextColumn                  ;
@@ -442,12 +444,16 @@ __auto_yHi
 ;----------------------------------------------------------
 loopY
     dec dy                  ; 5         all but one vertical segments drawn?
-    beq exitLoop            ; 2/3= 7/8  yes, exit loop
+    beq exitLoop            ; 2/3= 7/8   yes, exit loop
+    dex                     ; 2
+    bmi nextColumn          ; 2/40.03   ~16.7% taken (this will continue below)
+__auto_dy0
+    adc #00                 ; 2 = 12.34 +DY, no check necessary here!
 loopX
     dex                     ; 2
     bmi nextColumn          ; 2/37.03   ~16.7% taken
-contColumn                  ;   =  9.85
-__auto_dy
+contColumn                  ;   =  9.84
+__auto_dy1
     adc #00                 ; 2         +DY
     bcc loopX               ; 2/3= 4/5  ~75% taken
     ; Time to step in y
@@ -477,9 +483,9 @@ __auto_pot2
 ; average: 13.40
 
 ; Timings:
-; x++/y  : 14.85 (75%)
-; x++/y++: 64.25 (25%)
-; average: 27.20
+; x++/y  : 14.84 (75%)
+; x++/y++: 61.74 (25%)
+; average: 26.57
 ;----------------------------------------------------------
 exitLoop
 ; draw the last horizontal line segment:
@@ -543,7 +549,7 @@ draw_mainly_vertical_8
     sty __auto_dy+1
 
 ; setup direction:
-    cmp #_DEX               ;           which direction?
+    cpx #_DEX               ;           which direction?
     bne doInx
 ; dex -> moving left:
     lda #%00100000
@@ -687,8 +693,8 @@ incHiPtrEnd                 ; 9
 .)
 
 ; *** total timings: ***
-; draw_very_horizontal_8   (29.6%): 27.20
+; draw_very_horizontal_8   (29.6%): 26.57
 ; draw_mainly_horizontal_8 (20.4%): 41.61 <- corrected!
 ; draw_mainly_vertical_8   (50.0%): 43.06
 ;----------------------------------------
-; total average           (100.0%): 38.07
+; total average           (100.0%): 37.88
