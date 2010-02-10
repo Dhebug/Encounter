@@ -12,7 +12,9 @@
 ;482 optimized chunking (avg: 38.91 cylces)
 ;473 final optimization for mainly_vertical (37.89 -> 38.34 corrected)
 ;468 a weird stunt on mainly_horizontal (38.07)
-;467 minor very_horizontal optimization
+;467 minor very_horizontal optimization (37.88 -> 38.56 corrected)
+;463 self modifying pointer in mainly horizontal (38.35)
+;459 self modifying pointer in mainly vertical (37.99)
 
 ; TODOs:
 ; + chunking (-35)
@@ -20,9 +22,10 @@
 ; + countdown minor
 ;   x mainly_horizontal (won't work)
 ;   + mainly_vertical (-9)
-; o optimizing for space
+; o optimizing for space (-2 tables and one alignment page)
 ; - optimize horizontal
 ; - optimize vertical
+; + correct branch taken percentages
 
     .zero
 
@@ -56,6 +59,8 @@ lastSum         .dsb 1
 #define _LSR        $4a
 #define _INC_ZP     $e6
 #define _DEC_ZP     $c6
+#define _INC_ABS    $ee
+#define _DEC_ABS    $ce
 
 
     .text
@@ -232,7 +237,7 @@ contMainly
     sta __auto_stepx
     lda #$ff
     sta __auto_cpy+1
-    ldy #_DEC_ZP
+    ldy #_DEC_ABS
 
     lda #<_TableBit6Reverse-1   ; == 0
 ;    clc
@@ -245,14 +250,15 @@ doInx
     sta __auto_stepx
     lda #$00
     sta __auto_cpy+1
-    ldy #_INC_ZP
+    ldy #_INC_ABS
 
     lda #X_SIZE-1
 ;    sec
     sbc _OtherPixelX
     ldx #>_TableBit6        ;
 endPatch
-    sty __auto_yHi
+    sty __auto_yHi0
+    sty __auto_yHi1
     sta __auto_bit6+1
     sta __auto_bit6_0+1
     stx __auto_bit6+2
@@ -263,11 +269,10 @@ endPatch
     clc
     adc tmp0
     tay
-    bcc skipInc
-    inc tmp0+1
-skipInc
-    lda #0
-    sta tmp0
+    lda tmp0+1
+    adc #0
+    sta __auto_ptr0+2
+    sta __auto_ptr1+2
 
     lda dx
     tax
@@ -280,7 +285,7 @@ skipInc
     sta save_a              ; 3 =  3
 __auto_bit6_0
     lda _TableBit6Reverse-1,x;4
-    and #$7f
+    and #$7f                 ;          remove signal bit
     bcc contColumn
 
 ; a = sum, x = dX+1
@@ -292,15 +297,17 @@ __auto_bit6
     lda _TableBit6Reverse-1,x;4
     bmi nextColumn          ; 2/14      16.7% taken
 contColumn
-    eor (tmp0),y            ; 5
-    sta (tmp0),y            ; 6 = 19
+__auto_ptr0
+    eor $a000,y             ; 4
+__auto_ptr1
+    sta $a000,y             ; 5 = 17.06
 
     dex                     ; 2         Step in x
     beq exitLoop            ; 2/3       At the endpoint yet?
     lda save_a              ; 3
 __auto_dy
     adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3=11/12 ~33.3% taken (not 50% due do to special code for very horizontal lines)
+    bcc loopX               ; 2/3=11/12 ~28.0% taken (not 50% due do to special code for very horizontal lines)
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
@@ -311,10 +318,11 @@ __auto_dx
     adc #ROW_SIZE           ; 2
     tay                     ; 2
     bcc loopY               ; 2/3= 8/9  ~84.4% taken
-    inc tmp0+1              ; 5
+    inc __auto_ptr0+2       ; 6
+    inc __auto_ptr1+2       ; 6
     clc                     ; 2
-    bcc loopY               ; 3 = 10
-; average: 10.40
+    bcc loopY               ; 3 = 17
+; average: 11.83
 
 exitLoop
     rts
@@ -326,15 +334,17 @@ __auto_stepx
 __auto_cpy
     cpy #$00                ; 2
     clc                     ; 2
-    bne contColumn          ; 2/3=10/11
-__auto_yHi
-    inc tmp0+1              ; 5
+    bne contColumn          ; 2/3=10/11 99% taken
+__auto_yHi0
+    inc __auto_ptr0+2       ; 6
+__auto_yHi1
+    inc __auto_ptr1+2       ; 6
     bcc contColumn          ; 3
 
 ; Timings:
-; x++/y  : 34.00 (33.3%)
-; x++/y++: 45.40 (66.7%)
-; average: 41.61
+; x++/y  : 32.06 (28.0%) <- corrected!
+; x++/y++: 44.89 (72.0%) <- corrected!
+; average: 41.30
 .)
 
     .dsb 256-(*&255)
@@ -455,13 +465,13 @@ loopX
 contColumn                  ;   =  9.84
 __auto_dy1
     adc #00                 ; 2         +DY
-    bcc loopX               ; 2/3= 4/5  ~75% taken
+    bcc loopX               ; 2/3= 4/5  ~76.4% taken
     ; Time to step in y
 __auto_dx
     sbc #00                 ; 2         -DX
     sta save_a              ; 3 =  5
 
-; plot the last bits of current row:
+; plot the last bits of current segment:
 __auto_pot1
     lda Pot2PTbl,x          ; 4
     eor chunk               ; 3
@@ -483,9 +493,9 @@ __auto_pot2
 ; average: 13.40
 
 ; Timings:
-; x++/y  : 14.84 (75%)
-; x++/y++: 61.74 (25%)
-; average: 26.57
+; x++/y  : 14.84 (76.4%)
+; x++/y++: 61.74 (23.6%)
+; average: 25.91
 ;----------------------------------------------------------
 exitLoop
 ; draw the last horizontal line segment:
@@ -496,7 +506,7 @@ loopXEnd
 contColumnEnd               ;   =  9.85
 __auto_dy2
     adc #00                 ; 2         +DY
-    bcc loopXEnd            ; 2/3= 4/5  ~50% taken
+    bcc loopXEnd            ; 2/3= 4/5  ~38.2% taken
 
 ; plot last chunk:
 __auto_pot3
@@ -561,7 +571,7 @@ draw_mainly_vertical_8
     lda #_DEY
     sta __auto_yLo
     ldx #$ff
-    lda #_DEC_ZP
+    lda #_DEC_ABS
     bne endPatch
 
 doInx
@@ -575,10 +585,11 @@ doInx
     lda #_INY
     sta __auto_yLo
     ldx #$00
-    lda #_INC_ZP
+    lda #_INC_ABS
 endPatch
     stx __auto_cpY+1
-    sta __auto_yHi
+    sta __auto_yHi0
+    sta __auto_yHi1
 ; setup X
     ldx dx                  ;           X = dx
     stx __auto_dx1+1
@@ -596,9 +607,13 @@ endPatch
     tay
     lda #0
     sta tmp0
-    bcc skipTmp0
-    inc tmp0+1
-skipTmp0
+    lda tmp0+1
+    adc #0
+    sta __auto_ptr0+2
+    sta __auto_ptr1+2
+;    bcc skipTmp0
+;    inc tmp0+1
+;skipTmp0
 ; calculate initial bresenham sum:
     lda dy
     lsr
@@ -609,7 +624,8 @@ skipTmp0
 ; a = sum, y = tmp0, x = dX, tmp0 = 0
 ;----------------------------------------------------------
 incHiPtr                    ;
-    inc tmp0+1              ; 5
+    inc __auto_ptr0+2       ; 6
+    inc __auto_ptr1+2       ; 6
     clc                     ; 2
     bcc contHiPtr           ; 3
 ;----------------------------------------------------------
@@ -618,18 +634,20 @@ loopY
     lda curBit              ; 3 =  6
 loopX
     ; Draw the pixel
-    eor (tmp0),y            ; 5
-    sta (tmp0),y            ; 6 = 11
+__auto_ptr0
+    eor $a000,y             ; 4
+__auto_ptr1
+    sta $a000,y             ; 5 =  9
 ; update the screen address:
     tya                     ; 2
     adc #ROW_SIZE           ; 2
     tay                     ; 2
-    bcs incHiPtr            ; 2/13      ~15.6% taken
-contHiPtr                   ;   =  9.72 average
+    bcs incHiPtr            ; 2/20      ~15.6% taken
+contHiPtr                   ;   = 11.00 average
     lda save_a              ; 3
 __auto_dx1
     adc #00                 ; 2         +DX
-    bcc loopY               ; 2/3= 7/8  ~50% taken
+    bcc loopY               ; 2/3= 7/8  ~41.4% taken
     ; Time to step in x
 __auto_dy
     sbc #00                 ; 2         -DY
@@ -638,7 +656,7 @@ __auto_dy
     lda curBit              ; 3
 __auto_cpBit                ;           TODO: optimize
     cmp #%00100000          ; 2         %00100000/%00000001
-    beq nextColumn          ; 2/14.07   ~16.7% taken
+    beq nextColumn          ; 2/14.05   ~16.7% taken
 __auto_shBit
     asl                     ; 2         asl/lsr, clears carry
 contNextColumn
@@ -647,11 +665,13 @@ contNextColumn
     dex                     ; 2         At the endpoint yet?
     bne loopX               ; 2/3= 4/5
 
-; x  ,y++: 34.72 (50%)
-; x++,y++: 51.40 (50%)
-; average: 43.06
+; x  ,y++: 34.00 (41.4%) <- corrected!
+; x++,y++: 50.68 (58.6%) <- corrected!
+; average: 43.77
 
 ; draw the last vertical line segment:
+    ldx __auto_ptr0+2       ; 4
+    stx tmp0+1              ; 3
     lda save_a              ; 3
     adc lastSum             ; 3
 loopYEnd
@@ -669,7 +689,7 @@ contHiPtrEnd                ;   =  9.72 average
     txa                     ; 2
 __auto_dx2
     adc #00                 ; 2         +DX
-    bcc loopYEnd            ; 2/3= 6/7  ~25% taken
+    bcc loopYEnd            ; 2/3= 6/7  ~20.7% taken
     rts
 ;----------------------------------------------------------
 nextColumn
@@ -681,8 +701,10 @@ __auto_cpY
     cpy #$ff                ; 2         $ff/$00
     clc                     ; 2         TODO: optimize
     bne contNextColumn      ; 2/3       ~99% taken
-__auto_yHi
-    dec tmp0+1              ; 5         dec/inc
+__auto_yHi0
+    dec __auto_ptr0+2       ; 6         dec/inc
+__auto_yHi1
+    dec __auto_ptr1+2       ; 6         dec/inc
     bcc contNextColumn      ; 3
 
 incHiPtrEnd                 ; 9
@@ -693,8 +715,8 @@ incHiPtrEnd                 ; 9
 .)
 
 ; *** total timings: ***
-; draw_very_horizontal_8   (29.6%): 26.57
-; draw_mainly_horizontal_8 (20.4%): 41.61 <- corrected!
-; draw_mainly_vertical_8   (50.0%): 43.06
+; draw_very_horizontal_8   (29.5%): 25.91
+; draw_mainly_horizontal_8 (20.5%): 41.30
+; draw_mainly_vertical_8   (50.0%): 43.77
 ;----------------------------------------
-; total average           (100.0%): 37.88
+; total average           (100.0%): 37.99
