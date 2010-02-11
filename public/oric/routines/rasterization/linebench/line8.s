@@ -13,8 +13,9 @@
 ;473 final optimization for mainly_vertical (37.89 -> 38.34 corrected)
 ;468 a weird stunt on mainly_horizontal (38.07)
 ;467 minor very_horizontal optimization (37.88 -> 38.56 corrected)
-;463 self modifying pointer in mainly horizontal (38.35)
-;459 self modifying pointer in mainly vertical (37.99)
+;463 self modifying pointer in mainly_horizontal (38.35)
+;459 self modifying pointer in mainly_vertical (37.99)
+;459 a little tweak to very_horizontal (37.94)
 
 ; TODOs:
 ; + chunking (-35)
@@ -61,6 +62,8 @@ lastSum         .dsb 1
 #define _DEC_ZP     $c6
 #define _INC_ABS    $ee
 #define _DEC_ABS    $ce
+#define _STA_ZP     $85
+#define _CPY_IMM    $c0
 
 
     .text
@@ -347,7 +350,7 @@ __auto_yHi1
 ; average: 41.30
 .)
 
-    .dsb 256-(*&255)
+;    .dsb 256-(*&255)
 ;**********************************************************
 draw_very_horizontal_8
 .(
@@ -364,6 +367,8 @@ draw_very_horizontal_8
     clc
     adc tmp0
     tay
+    lda #0
+    sta tmp0
     bcc skipHi
     inc tmp0+1
 skipHi
@@ -371,10 +376,10 @@ skipHi
     asl
     adc _TableDiv6,x
     asl
-    sta tmp0                ; tmp0 = _CurrentPixelX % 6
+    sta save_a              ; save_a = _CurrentPixelX % 6
     lda _CurrentPixelX
     sec
-    sbc tmp0
+    sbc save_a
 ; patch the code:
     plp
     beq doInx
@@ -384,6 +389,9 @@ skipHi
     lda #_DEY
     sta __auto_stepx
     sta __auto_stepx2
+    lda #_CPY_IMM
+    sta __auto_cpy
+    sta __auto_cpy2
     lda #$ff
     sta __auto_cpy+1
     sta __auto_cpy2+1
@@ -397,7 +405,7 @@ skipHi
 
 doInx
 ; positive x-direction
-    sta tmp0
+    sta save_a
     lda #BYTE_PIXEL-1
     sbc tmp0
     tax
@@ -405,7 +413,10 @@ doInx
     lda #_INY
     sta __auto_stepx
     sta __auto_stepx2
-    lda #$00
+    lda #_STA_ZP
+    sta __auto_cpy
+    sta __auto_cpy2
+    lda #<save_a            ; 2
     sta __auto_cpy+1
     sta __auto_cpy2+1
     lda #_INC_ZP
@@ -418,9 +429,6 @@ endPatch
     sta __auto_pot1+1
     sta __auto_pot2+1
     sta __auto_pot3+1
-
-    lda #0
-    sta tmp0
 
     lda dx
     sta __auto_dx+1
@@ -446,23 +454,23 @@ __auto_stepx
     iny                     ; 2         next column
 __auto_cpy
     cpy #00                 ; 2
-    clc                     ; 2
-    bne contColumn          ; 2/3=33/34 99% taken
+    bne contColumn          ; 2/3=31/32 99% taken
 __auto_yHi
     inc tmp0+1              ; 5         dec/inc
-    bcc contColumn          ; 3 =  8
+    clc                     ; 2
+    bcc contColumn          ; 3 = 10
 ;----------------------------------------------------------
 loopY
     dec dy                  ; 5         all but one vertical segments drawn?
     beq exitLoop            ; 2/3= 7/8   yes, exit loop
     dex                     ; 2
-    bmi nextColumn          ; 2/40.03   ~16.7% taken (this will continue below)
+    bmi nextColumn          ; 2/38.04   ~16.7% taken (this will continue below)
 __auto_dy0
-    adc #00                 ; 2 = 12.34 +DY, no check necessary here!
+    adc #00                 ; 2 = 11.67 +DY, no check necessary here!
 loopX
     dex                     ; 2
-    bmi nextColumn          ; 2/37.03   ~16.7% taken
-contColumn                  ;   =  9.84
+    bmi nextColumn          ; 2/35.04   ~16.7% taken
+contColumn                  ;   =  9.51
 __auto_dy1
     adc #00                 ; 2         +DY
     bcc loopX               ; 2/3= 4/5  ~76.4% taken
@@ -493,9 +501,9 @@ __auto_pot2
 ; average: 13.40
 
 ; Timings:
-; x++/y  : 14.84 (76.4%)
-; x++/y++: 61.74 (23.6%)
-; average: 25.91
+; x++/y  : 14.51 (76.4%)
+; x++/y++: 62.07 (23.6%)
+; average: 25.73
 ;----------------------------------------------------------
 exitLoop
 ; draw the last horizontal line segment:
@@ -529,11 +537,11 @@ __auto_stepx2
     iny                     ; 2         next column
 __auto_cpy2
     cpy #00                 ; 2
-    clc                     ; 2
-    bne contColumnEnd       ; 2/3=33/34 99% taken
+    bne contColumnEnd       ; 2/3=31/32 99% taken
 __auto_yHi2
     inc tmp0+1              ; 5         dec/inc
-    bcc contColumnEnd       ; 3 =  8
+    clc                     ; 2
+    bcc contColumnEnd       ; 3 = 10
 
     .dsb 256-(*&255)
 
@@ -715,8 +723,8 @@ incHiPtrEnd                 ; 9
 .)
 
 ; *** total timings: ***
-; draw_very_horizontal_8   (29.5%): 25.91
+; draw_very_horizontal_8   (29.5%): 25.73
 ; draw_mainly_horizontal_8 (20.5%): 41.30
 ; draw_mainly_vertical_8   (50.0%): 43.77
 ;----------------------------------------
-; total average           (100.0%): 37.99
+; total average           (100.0%): 37.94
