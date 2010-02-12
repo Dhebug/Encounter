@@ -226,7 +226,7 @@ init_front_view
 	lda #0			;SMC
 	bne nomsg
 
-	ldx #6*8
+	ldx #6*10
 	ldy #40
 	jsr gotoXY
 	ldx #>str_launch
@@ -352,7 +352,7 @@ l2
     jsr save_frame
     dec _docked
 
-	ldx #6*8;12
+	ldx #6*10
 	ldy #40
 	jsr gotoXY
 	ldx #>str_land
@@ -615,8 +615,9 @@ done_rear
 	jsr update_shields_panel
 done_energy
 	jmp locking
-no_energy
 
+	
+no_energy
 	; We should be dead here 
 
 	; Check message has been displayed for some time

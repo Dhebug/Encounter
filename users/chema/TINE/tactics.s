@@ -1825,7 +1825,7 @@ loop
 	lda _laser_target-1,y
 	cmp #1
 	bne plkilled
-	lda player_in_control
+	lda player_in_control	;;; GAMEOVER VAR!!!
 	bne set_random_border
 	lda _laser_target-1,y
 plkilled
