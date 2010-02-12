@@ -81,6 +81,8 @@ restart
 
 	ldx #00
 	stx escape_pod_launched
+	stx game_over
+
 	ldx #$ff
 	stx player_in_control
 	stx _docked

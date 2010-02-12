@@ -1136,6 +1136,10 @@ noworm
 nomore
 
 	ldx _ID
+	cpx #1	; Is it the player's ship?
+	bne noplayer
+	dec game_over
+noplayer
 	jsr SetCurOb	; Without this destroying player's ship does NOT work!!!
     jmp RemoveObject
 .)
@@ -1825,8 +1829,8 @@ loop
 	lda _laser_target-1,y
 	cmp #1
 	bne plkilled
-	lda player_in_control	;;; GAMEOVER VAR!!!
-	bne set_random_border
+	lda escape_pod_launched ;player_in_control	
+	beq set_random_border
 	lda _laser_target-1,y
 plkilled
 	tax

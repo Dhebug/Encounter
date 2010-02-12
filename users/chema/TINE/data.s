@@ -276,9 +276,18 @@ AIShipType  .byt 00 ; Current ship's type
 AITarget    .byt 00 ; Current ship's target
 AIIsAngry   .byt 00 ; Angry status (with target)
 
+; TineLoop
+frame_number		.byt 0
+player_in_control	.byt 0
+escape_pod_launched .byt 0
+attr_changed		.byt 0
+game_over			.byt 0
+
+
 #ifdef USEPAGE4
 .text
 #endif
+
 
 ;From radar.s
 ; To store objects for plotting the radar

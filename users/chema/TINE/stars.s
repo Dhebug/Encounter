@@ -117,36 +117,25 @@ LOOP     sty TEMP
          lda STARX,y
          clc
          adc #CENTER_X
-/*
-         cmp #CLIP_RIGHT
-         bcs bypass
-         cmp #CLIP_LEFT
-         bcc bypass
-*/
          tax
          lda STARY,y
          clc
          adc #CENTER_Y
-/*
-         cmp #CLIP_BOTTOM
-         bcs bypass
-         cmp #CLIP_TOP
-         bcc bypass
-*/
-
          tay
 PLOT    
         ; Now plot the star!
 
 		; Inline this?
-        jsr pixel_address
 #ifdef 0
+        jsr pixel_address
+#else
 	    lda _HiresAddrLow,y			; 4
 		sta tmp0+0					; 3
 		lda _HiresAddrHigh,y		; 4
 		sta tmp0+1					; 3 => Total 14 cycles
 	  	ldy _TableDiv6,x
 		lda _TableBit6Reverse,x		; 4
+		and #$7f
 #endif
         ora (tmp0),y				; 5
     	sta (tmp0),y   
