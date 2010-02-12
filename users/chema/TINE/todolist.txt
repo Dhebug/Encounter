@@ -250,6 +250,10 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + Is size of Vipers too high? Seems so... check.
 
 + BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
+Need to add a GAMEOVER var... check for a comment saying GAMEOVER
+
++ Vertices are initialized wrongly. Check CalcView in obj3d. Anyway it might be a good idea to create
+a IsValid field, which could be set as invalid in CalcView and update it in DrawAllVis
 
 - optimization in prepare_normals... cx, cy and cz are unsigned inside the loop. Can be done outside and sign saved in signcx, signcy signcz.
 Done, now using SMULT

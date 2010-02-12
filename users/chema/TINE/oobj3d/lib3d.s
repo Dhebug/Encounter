@@ -962,18 +962,14 @@ ROTLOOP  ldy count
          dey
          sty count
 
-         ;ldx #00          ;Use local matrix
-         ;lda (P0Z),y      ;This way, can re-use routine
 _smc_pz
-		lda $dead,y
+		 lda $dead,y
          pha
-         ;lda (P0Y),y
 _smc_py
-		lda $dead,y
+		 lda $dead,y
          pha
 _smc_px
-        ; lda (P0X),y
-		lda $dead,y
+		 lda $dead,y
 
 ROTLOOP2 
 .(
@@ -1038,16 +1034,10 @@ ADDC     clc
          adc TEMPZ
 .)
 
-/*
-         cpx #9
-         beq PROJ
-         ldx #9           ;Use viewpoint matrix
-*/
          pha
          lda TEMPY
          pha
          lda TEMPX
-//         jmp ROTLOOP2
 
 .(
 		 bne C1
@@ -1209,11 +1199,8 @@ EASY1    ldy TEMPX
 C1c      cmp #1
          beq EASY1
 
-         ;stx savx+1 ; Oric port Need to save X
-
          ldy TEMPX
          MULTAY(TM1)
-         ;stx TM1   
 
          ldy TEMPX+1
          clc
@@ -1224,10 +1211,6 @@ C1c      cmp #1
 
          ldy TEMPY
          QMULTAY(TM2)
-         ;stx TM2
-
-;savx
-;         ldx #00
 
 
          ldy TEMPY+1

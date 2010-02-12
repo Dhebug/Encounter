@@ -26,7 +26,7 @@ NUMCENTS .byt 00           ;Number of object senter
 CUROBJ   .byt 00           ;Current object
 LASTOBJ  .byt 00
 ZMAX     .word $2300       ;Maximum range
-ZMIN     .byt 50          ;Minimum range
+ZMIN     .byt 50           ;Minimum range
 OBJECTS  .word $0800       ;Object records 1227 = 3456 bytes = $0D80
 
 
@@ -330,10 +330,10 @@ end      RTS
 ;
 GetNextOb
 .(
-         LDA NUMOBJS
-         BEQ ERR
+         ;LDA NUMOBJS
+         ;BEQ ERR
          LDX CUROBJ
-         BMI ERR
+         ;BMI ERR
          CPX LASTOBJ
          BCC C1
          LDX #$FF
@@ -342,11 +342,12 @@ C1       INX
          BEQ C1
          LDA OBJLO,X
          STX CUROBJ
-         CLC
+         ;CLC
          RTS
-
+/*
 ERR      SEC
          RTS
+*/
 .)
 
 
@@ -630,17 +631,10 @@ ViewObj  .byt 00             ;Viewpoint object
 
 CalcView 
 .(
-
          STX ViewObj
          JSR SetCurOb
          STA POINT
          STY POINT+1
-
-		 lda #0
-		 sta _vertexXLO,x
-		 sta _vertexXHI,x
-		 sta _vertexYLO,x
-		 sta _vertexYHI,x
 
          LDX #8
          LDY #ObjMat+8
@@ -709,7 +703,6 @@ done
          LDY RTEMPX        ;# of objects
          STY NUMCENTS
          JMP GLOBROT      ;off she goes!
-
 .)
 
 ;
@@ -737,7 +730,6 @@ SortVis
          STA VISOBJS+$80
          LDX NUMCENTS
          DEX
-         ;BMI done
          bpl loop
          rts
 loop
@@ -761,18 +753,19 @@ loop
          iny
          lda (tmp3),y
          sta pdata+2
-         ;ldy #0
 pdata
-         lda $1234;,y     ; Get ObjType
+         lda $1234	      ; Get ObjType
          beq normal
          cmp #5           ; is it 1,2 or 4 ? Then planet, sun or moon
+/*
          bcs normal
+
          lda TEMP+1
-         ;bmi SKIP
-         ;bpl n4;checkmin    ; skip max check
          cmp #$60
          bcs SKIP
-         bcc checkmin   ;n4
+         bcc checkmin  */
+
+		 bcc checkmin
 
 normal
          lda TEMP
@@ -793,31 +786,27 @@ checkmin
          ADC CX,X
          LDA TEMP+1
          ADC HCX,X
-         ;bcc n1
          BMI SKIP
-n1
+
          LDA TEMP         ;z-x>0
          CMP CX,X
          LDA TEMP+1
          SBC HCX,X
-         ;bcc n2
          BMI SKIP
-n2
+
          LDA TEMP         ;y+z>0
          CLC
          ADC CY,X
          LDA TEMP+1
          ADC HCY,X
-         ;bcc n3
          BMI SKIP
-n3
+
          LDA TEMP         ;z-y>0
          CMP CY,X
          LDA TEMP+1
          SBC HCY,X
-         ;bcc n4
          BMI SKIP
-n4
+
          LDY #$80         ;Head of list
 l1       LDA VISOBJS,Y    ;Linked list of objects
          BMI link
@@ -835,8 +824,19 @@ l1       LDA VISOBJS,Y    ;Linked list of objects
 link     STA VISOBJS,X    ;X -> rest of list
          TXA
          STA VISOBJS,Y    ;beginning of list -> X
-SKIP     DEX
-         ;BPL loop
+		 dex
+		 bmi next
+		 jmp loop
+SKIP     
+		 lda CX,x
+		 sta _vertexXLO,x
+		 lda HCX,x
+		 sta _vertexXHI,x
+		 lda CY,x
+		 sta _vertexYLO,x
+		 lda HCY,x,
+		 sta _vertexYHI,x
+		 dex
          bmi next
          jmp loop
 next
@@ -860,10 +860,6 @@ DrawLoop
         
          JSR RotDraw
 
-         ; Save the (projected) laser vertex for each visible ship
-         ; I hate this, because uses information and routines out of
-         ; oobj3d, but this saves time and space, so... ( 
-
          ldy COB
          ldx OBCEN,y
     
@@ -886,6 +882,11 @@ normal
          lda (POINT),y
          tay
          
+		 ; Save the (projected) laser vertex for each visible ship
+         ; I hate this, because uses information and routines out of
+         ; oobj3d, but this saves time and space, so... ( 
+         
+
          lda ShipLaserVertex-1,y
 patch
          tay
@@ -1130,10 +1131,6 @@ FilledCircle
 		lda CZ,x
 		ror
 		sta op2
-
-		; Check div 0
-		ora op2+1
-		beq small
 
 		lda #$ff
 		sta op1
