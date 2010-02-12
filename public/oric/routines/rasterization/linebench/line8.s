@@ -407,7 +407,7 @@ doInx
 ; positive x-direction
     sta save_a
     lda #BYTE_PIXEL-1
-    sbc tmp0
+    sbc save_a
     tax
 
     lda #_INY
