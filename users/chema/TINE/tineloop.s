@@ -226,7 +226,7 @@ init_front_view
 	lda #0			;SMC
 	bne nomsg
 
-	ldx #6*10
+	ldx #6*(10-1) ; this string has an attibute setting
 	ldy #40
 	jsr gotoXY
 	ldx #>str_launch
@@ -279,10 +279,6 @@ noinvert2
 .)
 
 
-frame_number .byt 0
-player_in_control .byt $0
-escape_pod_launched .byt 0
-attr_changed .byt 0
 
 invertZ
 .(
@@ -577,6 +573,10 @@ next
 	jsr planet_light
 	
 	; Start with energy and shields: recharge
+
+	lda game_over
+	bne no_energy
+
 	lda _energy+1
 	bmi no_energy
 	beq no_energy

@@ -42,6 +42,7 @@ pixel_address_real
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
+	and #$7f
     
     rts
 
@@ -57,7 +58,8 @@ pixel_address
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-    
+    and #$7f
+
     rts
 
 .)
@@ -353,7 +355,6 @@ SetShipEquip
 ; Basic stats for a new ship for the player
 NewPlayerShip
 .(
-
   	; Initializations for first-time usage
 	ldx _ship_type
 	lda ShipAmmo-1,x
@@ -475,6 +476,11 @@ noenergy
 
 _MoveShips
 .(
+    lda game_over
+	beq normal
+	ldx #0
+	beq p1
+normal
     jsr MovePlayer ; Start moving player
        
     ; Now iterate through object list moving the rest
@@ -482,16 +488,12 @@ _MoveShips
 	; Avoid fixed objects
 	ldx fixed_objects
 	dex
-	;jsr SetCurOb
+p1
 	stx CUROBJ
     jsr GetNextOb
- 
-	; Carry shoubd be clear, unless error
-    ;bcs end
     ; Check if we got back to object 0 (radar)
     cpx #0  
     beq end 
-
 loop
     sta POINT        ;Object pointer
     sty POINT+1

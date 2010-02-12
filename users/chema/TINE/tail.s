@@ -2,7 +2,7 @@
 ; Tail for program... Let's put some BIG buffers here
 
 
-//.dsb 256-(*&255)
+;.dsb 256-(*&255)
 
 buffer
 _controls
