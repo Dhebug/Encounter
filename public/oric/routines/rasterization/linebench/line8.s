@@ -16,7 +16,7 @@
 ;463 self modifying pointer in mainly_horizontal (38.35)
 ;459 self modifying pointer in mainly_vertical (37.99)
 ;459 a little tweak to very_horizontal (37.94)
-;451 refactored to make x-direction always positive (37.16)
+;451 refactored to make x-direction always positive (37.07)
 
 ; TODOs:
 ; + chunking (-35)
@@ -25,7 +25,7 @@
 ;   x mainly_horizontal (won't work)
 ;   + mainly_vertical (-9)
 ; o optimizing for space (-2 tables and one alignment page)
-; - optimize horizontal (merge with very_horizontal)
+; + optimize horizontal (merge with very_horizontal)
 ; o optimize vertical
 ; + correct branch taken percentages
 ; + always draw left to right and patch y-direction (-8)
@@ -57,19 +57,12 @@ lastSum         .dsb 1
 #define X_SIZE      240
 #define ROW_SIZE    X_SIZE/BYTE_PIXEL
 
-#define _NOP        $ea
-#define _INX        $e8
-#define _DEX        $ca
 #define _INY        $c8
 #define _DEY        $88
-#define _ASL        $0a
-#define _LSR        $4a
 #define _INC_ZP     $e6
 #define _DEC_ZP     $c6
 #define _INC_ABS    $ee
 #define _DEC_ABS    $ce
-#define _STA_ZP     $85
-#define _CPY_IMM    $c0
 #define _ADC_IMM    $69
 #define _SBC_IMM    $e9
 #define _BCC        $90
@@ -81,30 +74,6 @@ lastSum         .dsb 1
     .text
 
 ;    .dsb 256-(*&255)
-
-;**********************************************************
-draw_totaly_horizontal_8
-.(
-; here we have DY in Y, and the OPCODE in X
-    ldx _OtherPixelX
-    inx
-    stx _patch_cpx+1
-    ldx _CurrentPixelX
-;
-; draw loop
-;
-outer_loop
-    ldy _TableDiv6,x            ; 4
-    lda _TableBit6Reverse,x     ; 4
-    OPP (tmp0),y                ; 5
-    sta (tmp0),y                ; 6 = 19
-
-    inx                         ; 2
-_patch_cpx
-    cpx #00                     ; 2     At the endpoint yet?
-    bne outer_loop              ; 2
-    rts
-.)
 
 ;**********************************************************
 ;
@@ -158,7 +127,7 @@ end
     sec
     lda _CurrentPixelY
     sbc _OtherPixelY
-    beq draw_totaly_horizontal_8
+;    beq horizontal
     ldx #_DEY
     bcs cur_bigger
 
@@ -173,6 +142,9 @@ cur_bigger                  ; x1>x2
 .)
     tay
     jmp alignIt
+
+;horizontal
+;    jmp draw_totally_horizontal_8
 
     .dsb 256-(*&255)
 
@@ -394,13 +366,10 @@ skipHi
     asl
     adc _TableDiv6,x
     asl
-    sta save_a              ; save_a = _CurrentPixelX % 6
-    lda _CurrentPixelX
-    sec
-    sbc save_a
-    sta save_a
-    lda #BYTE_PIXEL-1
-    sbc save_a
+;    clc
+    adc #BYTE_PIXEL;-1
+;    sec
+    sbc _CurrentPixelX
     tax
     lda Pot2PTbl,x
     sta chunk
@@ -408,6 +377,9 @@ skipHi
 ; patch the code:
     plp
     beq doIny
+; no y-direction?
+    lda dy
+    beq draw_totally_horizontal_8
 ; negative y-direction
     dec _patch_dy0+1
 
@@ -464,6 +436,14 @@ nextColumn                  ;
     bne contColumn          ; 3 =  8
 ; average: 30.03
 ;----------------------------------------------------------
+draw_totally_horizontal_8
+    lda #1
+    sta _patch_dy2+1
+    lda dx
+    eor #$ff                ;           = -dx
+    clc
+    bcc loopXEnd
+;----------------------------------------------------------
 loopY
     lda save_a              ; 3
     dec dy                  ; 5         all but one vertical segments drawn?
@@ -485,12 +465,10 @@ _patch_dx
     sta save_a              ; 3 =  5
 
 ; plot the last bits of current segment:
-_patch_pot1
     lda Pot2PTbl,x          ; 4
     eor chunk               ; 3
     OPP (tmp0),y            ; 5
     sta (tmp0),y            ; 6
-_patch_pot2
     lda Pot2PTbl,x          ; 4
     sta chunk               ; 3 = 25
 
@@ -515,7 +493,7 @@ _patch_clc
 ;----------------------------------------------------------
 exitLoop
 ; draw the last horizontal line segment:
-  clc
+    clc
     adc lastSum             ; 3
 loopXEnd
     dex                     ; 2
@@ -526,7 +504,6 @@ _patch_dy2
     bcc loopXEnd            ; 2/3= 4/5  ~38.2% taken
 
 ; plot last chunk:
-_patch_pot3
     lda Pot2PTbl,x          ; 4
     eor chunk               ; 3
     OPP (tmp0),y            ; 5
@@ -645,7 +622,7 @@ _patch_inc1
     inc _patch_ptr1+2       ; 6
 _patch_clc1
     clc                     ; 2
-    bne contHiPtr           ; 3
+    bne contHiPtr           ; 3 = 17
 ;----------------------------------------------------------
 loopY
     sta save_a              ; 3
@@ -663,7 +640,7 @@ _patch_adc1
     tay                     ; 2
 _patch_bcs1
     bcs incHiPtr            ; 2/20      ~15.6% taken
-contHiPtr                   ;   = 11.00 average
+contHiPtr                   ;   = 10.81 average
     lda save_a              ; 3
 _patch_dx1
     adc #00                 ; 2         +DX
@@ -682,9 +659,9 @@ contNextColumn
     dex                     ; 2         At the endpoint yet?
     bne loopX               ; 2/3= 4/5
 
-; x  ,y++: 34.00 (41.4%)
-; x++,y++: 48.68 (58.6%)
-; average: 42.60
+; x  ,y++: 33.81 (41.4%)
+; x++,y++: 48.49 (58.6%)
+; average: 42.41
 
 ; draw the last vertical line segment:
     ldx _patch_ptr0+2       ; 4
@@ -732,6 +709,6 @@ _patch_clc2
 ; *** total timings: ***
 ; draw_very_horizontal_8   (29.5%): 25.55 (was 25.73)
 ; draw_mainly_horizontal_8 (20.5%): 40.62 (was 41.30)
-; draw_mainly_vertical_8   (50.0%): 42.60 (was 43.77)
+; draw_mainly_vertical_8   (50.0%): 42.41 (was 43.77)
 ;----------------------------------------
-; total average           (100.0%): 37.16 (was 37.94)
+; total average           (100.0%): 37.07 (was 37.94)
