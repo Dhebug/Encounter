@@ -7,16 +7,17 @@
 
     .zero
 
+; 5 bytes for point 0
 _LargeX0        .dsb 2
 _LargeY0        .dsb 2
+_ClipCode0      .dsb 1
+; 5 bytes for point 1
 _LargeX1        .dsb 2
 _LargeY1        .dsb 2
+_ClipCode1      .dsb 1
 
 _LargeX         .dsb 2
 _LargeY         .dsb 2
-;_ClipCode       .dsb 1
-_ClipCode0      .dsb 1
-_ClipCode1      .dsb 1
 
 #ifdef USE_ACCURATE_CLIPPING
                 .dsb 1
@@ -432,6 +433,8 @@ done
 ; the resolution of an Oric screen, so they will never be out
 ; of a 240x200 screen resolution, fit in an unsigned byte.
 ;
+_ClipFindRegion0
+    ldx #0
 _ClipFindRegion
 .(
 ; yHi >= $01 -> clip_bottom
@@ -484,6 +487,7 @@ clip_right
 clip_left
     ora #8              ;       means (x < CLIP_LEFT)
 end_left_right
+    sta _ClipCode0,x
     rts
 .)
 
@@ -491,14 +495,11 @@ _DrawClippedLine
 .(
 ; The region outcodes for the the endpoints
 ; Compute the outcode for the first point
-    ldx #0                      ; XY0
-    jsr _ClipFindRegion
-    sta _ClipCode0
+    jsr _ClipFindRegion0
 ; Compute the outcode for the second point
 clip_loop1
     ldx #_LargeY1-_LargeY0      ; XY1
     jsr _ClipFindRegion
-    sta _ClipCode1
 
     ; In theory, this can never end up in an infinite loop, it'll always come in one of the trivial cases eventually
 clip_loop
@@ -588,9 +589,7 @@ clip_first_point
     lda _LargeY+1
     sta _LargeY0+1
 
-    ldx #0                      ; XY0
-    jsr _ClipFindRegion
-    sta _ClipCode0
+    jsr _ClipFindRegion0
 
     jmp clip_loop
 
@@ -605,10 +604,6 @@ clip_second_point
     sta _LargeY1+0
     lda _LargeY+1
     sta _LargeY1+1
-
-;    ldx #_LargeY1-_LargeY0      ; XY1
-;    jsr _ClipFindRegion
-;    sta _ClipCode1
 
     jmp clip_loop1
 
