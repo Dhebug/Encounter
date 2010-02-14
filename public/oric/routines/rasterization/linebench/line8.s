@@ -160,16 +160,21 @@ alignIt
 draw_totaly_vertical_8
 .(
     cpx #_INY
-    beq doIny
-
-; dey -> moving down:
-    ldx _OtherPixelX
-    bcc endPatch
-
-doIny
-; inx -> moving up:
+    bne doDey
+; iny -> moving up:
     clc
     ldx _CurrentPixelX
+    bcc endPatch
+
+; dey -> moving down:
+doDey                           ;       _DEY < _INY -> C==0!
+    ldy _OtherPixelY
+    lda _HiresAddrLow,y         ; 4
+    sta tmp0+0                  ; 3
+    lda _HiresAddrHigh,y        ; 4
+    sta tmp0+1                  ; 3 => Total 14 cycles
+    ldx _OtherPixelX
+
 endPatch
     ldy _TableDiv6,x
     lda _TableBit6Reverse,x     ; 4
