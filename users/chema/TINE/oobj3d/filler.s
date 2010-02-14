@@ -1,5 +1,11 @@
 
 #include "params.h"
+#include "oobj3d/obj3d.h"
+
+#define X1 _LargeX0	
+#define Y1 _LargeY0
+#define X2 _LargeX1	
+#define Y2 _LargeY1
 
 
 #ifdef FILLEDPOLYS
@@ -50,6 +56,7 @@ _NEW			.dsb 1	; tmp3
 LinePattern		.dsb 1
 	
 	*= tmp4
+
 
 #define _X0     X1
 #define _X1     X2

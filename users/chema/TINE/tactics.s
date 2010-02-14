@@ -3,6 +3,7 @@
 #include "tine.h"
 #include "cockpit.h"
 
+
 #define SHUTTLE_CHANCE      $fc
 #define VIPER_CHANCE        $ef
 #define ANACONDA_CHANCE     $c7
