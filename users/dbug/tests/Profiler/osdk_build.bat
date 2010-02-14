@@ -1,6 +1,5 @@
 @ECHO OFF
 
-
 ::
 :: Initial check.
 :: Verify if the SDK is correctly configurated
