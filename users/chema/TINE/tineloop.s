@@ -252,6 +252,8 @@ _FirstFrame
 	sta frame_time
 	sta counter
 
+	jsr clear_vertex
+
     jsr clr_hires2
 
 	lda invert
@@ -274,7 +276,6 @@ noinvert
 noinvert2
 
 	jsr PatchLaserDraw
-	jsr clear_vertex
     jmp dump_buf
 .)
 
