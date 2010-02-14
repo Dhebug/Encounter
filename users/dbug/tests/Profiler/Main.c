@@ -102,10 +102,10 @@ void DoSomethingElse()
 
 void main()
 {
-	printf("Profile\n");
+	printf("If you see this message, you probably need to enable the PRINTER output when booting - F3 in Euphoric -\nResults are in PROFILE.TXT");
+	ProfilerInitialize();
 
 	hires();
-	ProfilerInitialize();
 	
 	while (1)
 	{
