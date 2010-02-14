@@ -65,53 +65,53 @@ _ClipFindRegion
 ; yHi <= $ff -> clip_top
 
 ; top/bottom test
-    ldy _LargeY0+1,x    ;
-    bmi clip_top        ;       if Y-Hi <= -1, clip top
-    bne clip_bottom     ;       else, if Y-Hi != 0, clip bottom
+    ldy _LargeY0+1,x    ; 4
+    bmi clip_top        ; 2/3       if Y-Hi <= -1, clip top
+    bne clip_bottom     ; 2/3       else, if Y-Hi != 0, clip bottom
 
 ; initialize with 'not clipped'
-    lda #0
+    lda #0              ; 2
 
-    ldy _LargeY0+0,x
+    ldy _LargeY0+0,x    ; 4
 #if CLIP_TOP <> 0
-    cpy #CLIP_TOP       ;       = 5
-    bcc clip_top
+    cpy #CLIP_TOP       ; 2         == 0
+    bcc clip_top        ; 2/3
 #endif
-    cpy #(CLIP_BOTTOM+1);       = 194
-    bcc end_top_bottom
+    cpy #(CLIP_BOTTOM+1); 2
+    bcc end_top_bottom  ; 2/3
 clip_bottom
-    lda #1              ;       means (y > CLIP_BOTTOM)
-    bne end_top_bottom
+    lda #1              ; 2         means (y > CLIP_BOTTOM)
+    bne end_top_bottom  ; 3
 
 clip_top
-    lda #2              ;       means (y < CLIP_TOP)
-end_top_bottom
+    lda #2              ; 2         means (y < CLIP_TOP)
+end_top_bottom          ;   = 23    (A==0)
 
 ; xHi >= $01 -> clip_right
 ; xHi == $00 -> check xLo
 ; xHi <= $ff -> clip_left
 
 ; left/right test
-    ldy _LargeX0+1,x
-    bmi clip_left       ;       if X-Hi <=- 1, clip left
-    bne clip_right      ;       else, if X-Hi != 0, clip bottom
+    ldy _LargeX0+1,x    ; 4
+    bmi clip_left       ; 2/3       if X-Hi <=- 1, clip left
+    bne clip_right      ; 2/3       else, if X-Hi != 0, clip bottom
 
-    ldy _LargeX0+0,x
+    ldy _LargeX0+0,x    ; 4
 #if CLIP_LEFT <> 0
-    cpy #CLIP_LEFT
-    bcc clip_left
+    cpy #CLIP_LEFT      ; 2
+    bcc clip_left       ; 2/3
 #endif
-    cpy #(CLIP_RIGHT+1)
-    bcc end_left_right
+    cpy #(CLIP_RIGHT+1) ; 2
+    bcc end_left_right  ; 2/3
 clip_right
-    ora #4              ;       means (x > CLIP_RIGHT)
+    ora #4              ; 2         means (x > CLIP_RIGHT)
     bne end_left_right  ; 3
 
 clip_left
-    ora #8              ;       means (x < CLIP_LEFT)
-end_left_right
-    sta _ClipCode0,x
-    rts
+    ora #8              ; 2         means (x < CLIP_LEFT)
+end_left_right          ;   = 21    (A==0)
+    sta _ClipCode0,x    ; 4
+    rts                 ; 6 = 10
 .)
 
 
@@ -120,47 +120,48 @@ _ClipComputeMidPoint
     ;   xc=(x0+x1)>>1;
     clc
 #ifdef USE_ACCURATE_CLIPPING
-    lda _ClipX0-1
-    adc _ClipX1-1
-    sta _ClipXc-1
+    lda _ClipX0-1       ; 3
+    adc _ClipX1-1       ; 3
+    sta _ClipXc-1       ; 3
 #endif
-    lda _ClipX0+0
-    adc _ClipX1+0
-    sta _ClipXc+0
+    lda _ClipX0+0       ; 3
+    adc _ClipX1+0       ; 3
+    sta _ClipXc+0       ; 3
 
-    lda _ClipX0+1
-    adc _ClipX1+1
+    lda _ClipX0+1       ; 3
+    adc _ClipX1+1       ; 3
 ; divide by 2:
-    cmp #$80
-    ror
-    sta _ClipXc+1
-    ror _ClipXc+0
+    cmp #$80            ; 2
+    ror                 ; 2
+    sta _ClipXc+1       ; 3
+    ror _ClipXc+0       ; 5
 #ifdef USE_ACCURATE_CLIPPING
-    ror _ClipXc-1
+    ror _ClipXc-1       ; 5 = 41
 #endif
 
     ;   yc=(y0+y1)>>1;
     clc
 #ifdef USE_ACCURATE_CLIPPING
-    lda _ClipY0-1
-    adc _ClipY1-1
-    sta _ClipYc-1
+    lda _ClipY0-1       ; 3
+    adc _ClipY1-1       ; 3
+    sta _ClipYc-1       ; 3
 #endif
-    lda _ClipY0+0
-    adc _ClipY1+0
-    sta _ClipYc+0
+    lda _ClipY0+0       ; 3
+    adc _ClipY1+0       ; 3
+    sta _ClipYc+0       ; 3
 
-    lda _ClipY0+1
-    adc _ClipY1+1
+    lda _ClipY0+1       ; 3
+    adc _ClipY1+1       ; 3
 ; divide by 2:
-    cmp #$80
-    ror
-    sta _ClipYc+1
-    ror _ClipYc+0
+    cmp #$80            ; 2
+    ror                 ; 2
+    sta _ClipYc+1       ; 3
+    ror _ClipYc+0       ; 5
 #ifdef USE_ACCURATE_CLIPPING
-    ror _ClipYc-1
+    ror _ClipYc-1       ; 5 = 41
 #endif
-    rts
+    rts                 ; 6 =  6
+; total: 88
 .)
 
 
@@ -226,25 +227,25 @@ _ClipSetInvertedStartPoints
 _ClipMoveP1
 .(
     ; x1=xc;
-    lda _ClipXc+0
-    sta _ClipX1+0
-    lda _ClipXc+1
-    sta _ClipX1+1
+    lda _ClipXc+0       ; 3
+    sta _ClipX1+0       ; 3
+    lda _ClipXc+1       ; 3
+    sta _ClipX1+1       ; 3
 #ifdef USE_ACCURATE_CLIPPING
-    lda _ClipXc-1
-    sta _ClipX1-1
+    lda _ClipXc-1       ; 3
+    sta _ClipX1-1       ; 3
 #endif
 
     ; y1=yc;
-    lda _ClipYc+0
-    sta _ClipY1+0
-    lda _ClipYc+1
-    sta _ClipY1+1
+    lda _ClipYc+0       ; 3
+    sta _ClipY1+0       ; 3
+    lda _ClipYc+1       ; 3
+    sta _ClipY1+1       ; 3
 #ifdef USE_ACCURATE_CLIPPING
-    lda _ClipYc-1
-    sta _ClipY1-1
+    lda _ClipYc-1       ; 3
+    sta _ClipY1-1       ; 3
 #endif
-    rts
+    rts                 ; 6
 ; total: 42
 .)
 
@@ -282,7 +283,13 @@ _ClipDichoTopBottom
     bne skip
     lda _LargeY0+1
     bne skip
+    cpx #OFS_PT0
+    bne copy
     rts
+
+copy:
+; special case: XY0 == XY1
+    jmp _ClipReturnP0
 skip
     .)
 
@@ -292,7 +299,13 @@ skip
     bne skip
     lda _LargeY1+1
     bne skip
+    cpx #OFS_PT1
+    bne copy
     rts
+
+copy:
+; special case: XY0 == XY1
+    jmp _ClipReturnP1
 skip
     .)
 
@@ -323,7 +336,7 @@ end_swap
 #endif
 
 loop
-    jsr _ClipComputeMidPoint ; (ClipXY0+ClipXY1)/2
+    jsr _ClipComputeMidPoint; 94        (ClipXY0+ClipXY1)/2
 
     ;   if (yc==CLIP_TOP/BOTTOM)
     sec
@@ -337,13 +350,13 @@ not_done_hi
 
 replace_second
     ; if (yc<CLIP_TOP/BOTTOM)
-    jsr _ClipMoveP0
-    jmp loop
+    jsr _ClipMoveP0         ;48
+    jmp loop                ; 3
 
 replace_first
     ; if (yc>CLIP_TOP/BOTTOM)
-    jsr _ClipMoveP1
-    jmp loop
+    jsr _ClipMoveP1         ;48
+    jmp loop                ; 3
 
 done_lo
     lda #0
@@ -361,7 +374,13 @@ _ClipDichoLeftRight
     bne skip
     lda _LargeX0+1
     bne skip
+    cpx #OFS_PT0
+    bne copy
     rts
+
+copy:
+; special case: XY0 == XY1
+    jmp _ClipReturnP0
 skip
     .)
 
@@ -371,7 +390,13 @@ skip
     bne skip
     lda _LargeX1+1
     bne skip
+    cpx #OFS_PT1
+    bne copy
     rts
+
+copy:
+; special case: XY0 == XY1
+    jmp _ClipReturnP1
 skip
     .)
 
@@ -403,33 +428,34 @@ end_swap
 
 ; loop until clip point reached:
 loop
-    jsr _ClipComputeMidPoint
+    jsr _ClipComputeMidPoint    ;94
 
     ;   if (xc==CLIP_LEFT/RIGHT)
-    sec
-    tya
-    sbc _ClipXc+0
-    beq done_lo
-    lda #0
-    sbc _ClipXc+1
+    sec                         ; 2
+    tya                         ; 2
+    sbc _ClipXc+0               ; 3
+    beq done_lo                 ; 2/3= 9/10
+    lda #0                      ; 2
+    sbc _ClipXc+1               ; 3
 not_done_hi
-    bmi replace_first
+    bmi replace_first           ; 2/3= 7/8
 
 replace_second
     ; if (xc<CLIP_LEFT/RIGHT)
-    jsr _ClipMoveP0
-    jmp loop
+    jsr _ClipMoveP0             ;48
+    jmp loop                    ; 3
 
 replace_first
     ; if (xc>CLIP_LEFT/RIGHT)
-    jsr _ClipMoveP1
-    jmp loop
+    jsr _ClipMoveP1             ;48
+    jmp loop                    ; 3
+; loop total: 161.5
 
 done_lo
-    lda #0
-    sbc _ClipXc+1
-    bne not_done_hi
-    jmp _ClipReturnPc
+    lda #0                      ; 2
+    sbc _ClipXc+1               ; 3
+    bne not_done_hi             ; 2/3
+    jmp _ClipReturnPc           ; 3
 .)
 
 _ClipReturnPc
@@ -449,16 +475,51 @@ _ClipReturnPc
     rts
 .)
 
+_ClipReturnP0
+.(
+    ; LargeX=LargeX0;
+    lda _LargeX0+0
+    sta _LargeX1+0
+    lda _LargeX0+1
+    sta _LargeX1+1
+
+    ; LargeY=LargeY0;
+    lda _LargeY0+0
+    sta _LargeY1+0
+    lda _LargeY0+1
+    sta _LargeY1+1
+
+    rts
+.)
+
+_ClipReturnP1
+.(
+    ; LargeX=LargeX1;
+    lda _LargeX1+0
+    sta _LargeX0+0
+    lda _LargeX1+1
+    sta _LargeX0+1
+
+    ; LargeY=LargeY1;
+    lda _LargeY1+0
+    sta _LargeY0+0
+    lda _LargeY1+1
+    sta _LargeY0+1
+
+    rts
+.)
+
+
 _DrawClippedLine
 .(
 ; The region outcodes for the the endpoints
 ; Compute the outcode for the first point
-    ldx #OFS_PT0        ; XY0
-    jsr _ClipFindRegion
+    ldx #OFS_PT0            ; 2     XY0
+    jsr _ClipFindRegion     ;60     A==0
 ; Compute the outcode for the second point
-    ldx #OFS_PT1        ; XY1
+    ldx #OFS_PT1            ; 2     XY1
 clip_loop
-    jsr _ClipFindRegion
+    jsr _ClipFindRegion     ;60     A==0
 
 ; In theory, this can never end up in an infinite loop,
 ; it'll always come in one of the trivial cases eventually
