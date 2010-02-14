@@ -6,6 +6,13 @@
 
 #include "params.h"
 
+#define X1 _LargeX0	
+#define Y1 _LargeY0
+#define X2 _LargeX1	
+#define Y2 _LargeY1
+
+
+
 //#define USEOBLETS
 
 // Maximum number of objects that can be handled

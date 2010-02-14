@@ -49,11 +49,11 @@ POINT    .word 00           ;two bytes
 ; This is for the line-plotting routine
 ; Coordinates are 16-bit
 
-X1       .word 00            ;Line x-coord
+/*X1       .word 00            ;Line x-coord
 Y1       .word 00
 X2       .word 00
 Y2       .word 00
-
+*/
 
 ; This is for polygon drawing or C64 specific ???
 
