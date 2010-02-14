@@ -649,7 +649,7 @@ CAPSULE
 ; Model of ship COBRA
 COBRA
 	.byt 0	; Ship type
-	.byt 28	;Number of vertices
+	.byt 28-2	;Number of vertices
 	.byt 17	;Number of faces
 
 ;Normals List - X coordinate
@@ -660,13 +660,16 @@ COBRA
 	.byt $D6,$E7,$E7,$E9,$E9,$00,$00,$00,$00,$5F,$ED,$EE,$ED,$5F,$5F,$5F,$5F;
 
 ;Vertices List - X coordinate
-	.byt $16,$E9,$00,$AC,$53,$C2,$3D,$59,$A6,$00,$E9,$16,$E6,$FA,$05,$19,$19,$05,$FA,$E6,$00,$00,$C8,$C8,$C2,$37,$3D,$37
+	;.byt $16,$E9,$00,$AC,$53,$C2,$3D,$59,$A6,$00,$E9,$16,$E6,$FA,$05,$19,$19,$05,$FA,$E6,$00,$00,$C8,$C8,$C2,$37,$3D,$37
+	.byt $16,$E9,$00,$AC,$53,$C2,$3D,$59,$A6,$00,$E9,$16,$E6,$FA,$05,$19,$19,$05,$FA,$E6,$C8,$C8,$C2,$37,$3D,$37
 
 ;Vertices List - Y coordinate
-	.byt $00,$00,$EE,$03,$03,$F5,$F5,$06,$06,$EE,$11,$11,$FB,$F8,$F8,$FB,$09,$0C,$0C,$09,$00,$00,$05,$FC,$00,$FC,$00,$05
+	;.byt $00,$00,$EE,$03,$03,$F5,$F5,$06,$06,$EE,$11,$11,$FB,$F8,$F8,$FB,$09,$0C,$0C,$09,$00,$00,$05,$FC,$00,$FC,$00,$05
+	.byt $00,$00,$EE,$03,$03,$F5,$F5,$06,$06,$EE,$11,$11,$FB,$F8,$F8,$FB,$09,$0C,$0C,$09,$05,$FC,$00,$FC,$00,$05
 
 ;Vertices List - Z coordinate
-	.byt $35,$35,$10,$FA,$FA,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$35,$3E,$E4,$E4,$E4,$E4,$E4,$E4
+	;.byt $35,$35,$10,$FA,$FA,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$35,$3E,$E4,$E4,$E4,$E4,$E4,$E4
+	.byt $35,$35,$10,$FA,$FA,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4,$E4
 
 ; Face data
 	.byt 3	;Number of points
@@ -746,12 +749,12 @@ COBRA
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 23,22,24,23
+	.byt 23-2,22-2,24-2,23-2
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 27,25,26,27
+	.byt 27-2,25-2,26-2,27-2
 
 
 ; End of ship COBRA data
@@ -759,7 +762,7 @@ COBRA
 ; Model of ship COBRAMK1
 COBRAMK1
 	.byt 0	; Ship type
-	.byt 11	;Number of vertices
+	.byt 11-2	;Number of vertices
 	.byt 10	;Number of faces
 
 ;Normals List - X coordinate
@@ -770,13 +773,13 @@ COBRAMK1
 	.byt $EA,$F6,$F0,$ED,$F0,$ED,$00,$5F,$21,$21;
 
 ;Vertices List - X coordinate
-	.byt $EE,$12,$BE,$42,$E0,$20,$CA,$36,$00,$00,$00
+	.byt $EE,$12,$BE,$42,$E0,$20,$CA,$36,$00;,$00,$00
 
 ;Vertices List - Y coordinate
-	.byt $01,$01,$00,$00,$F4,$F4,$0C,$0C,$F4,$01,$01
+	.byt $01,$01,$00,$00,$F4,$F4,$0C,$0C,$F4;,$01,$01
 
 ;Vertices List - Z coordinate
-	.byt $32,$32,$07,$07,$DA,$DA,$DA,$DA,$FA,$32,$3C
+	.byt $32,$32,$07,$07,$DA,$DA,$DA,$DA,$FA;,$32,$3C
 
 ; Face data
 	.byt 3	;Number of points
@@ -834,7 +837,7 @@ COBRAMK1
 ; Model of ship CONSTRICTOR
 CONSTRICTOR
 	.byt 0	; Ship type
-	.byt 17	;Number of vertices
+	.byt 17-1	;Number of vertices
 	.byt 12	;Number of faces
 
 ;Normals List - X coordinate
@@ -845,13 +848,13 @@ CONSTRICTOR
 	.byt $E8,$E9,$E9,$00,$00,$00,$00,$00,$5F,$00,$00,$00;
 
 ;Vertices List - X coordinate
-	.byt $14,$EC,$CA,$CA,$EC,$14,$36,$36,$14,$EC,$14,$EC,$19,$E7,$0F,$F1,$00
+	.byt $14,$EC,$CA,$CA,$EC,$14,$36,$36,$14,$EC,$14,$EC,$19,$E7,$0F,$F1;,$00
 
 ;Vertices List - Y coordinate
-	.byt $07,$07,$07,$07,$F3,$F3,$07,$07,$F3,$F3,$07,$07,$07,$07,$07,$07,$07
+	.byt $07,$07,$07,$07,$F3,$F3,$07,$07,$F3,$F3,$07,$07,$07,$07,$07,$07;,$07
 
 ;Vertices List - Z coordinate
-	.byt $50,$50,$28,$D8,$D8,$D8,$D8,$28,$05,$05,$3E,$3E,$E7,$E7,$F1,$F1,$00
+	.byt $50,$50,$28,$D8,$D8,$D8,$D8,$28,$05,$05,$3E,$3E,$E7,$E7,$F1,$F1;,$00
 
 ; Face data
 	.byt 4	;Number of points
@@ -1105,7 +1108,7 @@ FERDELANCE
 ; Model of ship GECKO
 GECKO
 	.byt 0	; Ship type
-	.byt 12	;Number of vertices
+	.byt 12-4	;Number of vertices
 	.byt 9	;Number of faces
 
 ;Normals List - X coordinate
@@ -1116,13 +1119,13 @@ GECKO
 	.byt $F1,$F0,$F0,$F3,$F0,$F0,$57,$5F,$57;
 
 ;Vertices List - X coordinate
-	.byt $F6,$0A,$F0,$10,$BE,$42,$EC,$14,$F8,$08,$F8,$08
+	.byt $F6,$0A,$F0,$10,$BE,$42,$EC,$14;,$F8,$08,$F8,$08
 
 ;Vertices List - Y coordinate
-	.byt $04,$04,$F8,$F8,$00,$00,$0E,$0E,$06,$06,$0D,$0D
+	.byt $04,$04,$F8,$F8,$00,$00,$0E,$0E;,$06,$06,$0D,$0D
 
 ;Vertices List - Z coordinate
-	.byt $2F,$2F,$E9,$E9,$FD,$FD,$E9,$E9,$21,$21,$F0,$F0
+	.byt $2F,$2F,$E9,$E9,$FD,$FD,$E9,$E9;,$21,$21,$F0,$F0
 
 ; Face data
 	.byt 4	;Number of points
@@ -1175,7 +1178,7 @@ GECKO
 ; Model of ship KRAIT
 KRAIT
 	.byt 0	; Ship type
-	.byt 17	;Number of vertices
+	.byt 17-2	;Number of vertices
 	.byt 10	;Number of faces
 
 ;Normals List - X coordinate
@@ -1186,13 +1189,16 @@ KRAIT
 	.byt $F5,$F5,$F5,$F5,$55,$55,$55,$55,$F5,$F5;
 
 ;Vertices List - X coordinate
-	.byt $00,$00,$00,$43,$BC,$43,$BC,$00,$00,$F2,$0D,$0D,$0D,$1B,$F2,$F2,$E4
+	;.byt $00,$00,$00,$43,$BC,$43,$BC,$00,$00,$F2,$0D,$0D,$0D,$1B,$F2,$F2,$E4
+	.byt $00,$00,$00,$43,$BC,$00,$00,$F2,$0D,$0D,$0D,$1B,$F2,$F2,$E4
 
 ;Vertices List - Y coordinate
-	.byt $00,$F3,$0E,$00,$00,$00,$00,$FD,$FB,$FB,$FB,$F8,$09,$00,$F8,$09,$00
+	;.byt $00,$F3,$0E,$00,$00,$00,$00,$FD,$FB,$FB,$FB,$F8,$09,$00,$F8,$09,$00
+	.byt $00,$F3,$0E,$00,$00,$FD,$FB,$FB,$FB,$F8,$09,$00,$F8,$09,$00
 
 ;Vertices List - Z coordinate
-	.byt $48,$DB,$DB,$FD,$FD,$41,$41,$27,$1C,$0E,$0E,$E2,$E2,$E9,$E2,$E2,$E9
+	;.byt $48,$DB,$DB,$FD,$FD,$41,$41,$27,$1C,$0E,$0E,$E2,$E2,$E9,$E2,$E2,$E9
+	.byt $48,$DB,$DB,$FD,$FD,$27,$1C,$0E,$0E,$E2,$E2,$E9,$E2,$E2,$E9
 
 ; Face data
 	.byt 3	;Number of points
@@ -1227,22 +1233,22 @@ KRAIT
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 12,11,13,12
+	.byt 12-2,11-2,13-2,12-2
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 16,14,15,16
+	.byt 16-2,14-2,15-2,16-2
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 8,10,7,8
+	.byt 8-2,10-2,7-2,8-2
 
 
 	.byt 3	;Number of points
 	.byt 0	;Fill pattern
-	.byt 7,9,8,7
+	.byt 7-2,9-2,8-2,7-2
 
 
 ; End of ship KRAIT data
@@ -1483,7 +1489,7 @@ MISSILE
 ; Model of ship MORAY
 MORAY
 	.byt 0	; Ship type
-	.byt 14	;Number of vertices
+	.byt 10	;Number of vertices
 	.byt 10	;Number of faces
 
 ;Normals List - X coordinate
@@ -1494,13 +1500,13 @@ MORAY
 	.byt $F1,$F3,$F3,$4F,$4F,$4F,$DD,$E0,$DD,$4F;
 
 ;Vertices List - X coordinate
-	.byt $0F,$F1,$00,$C4,$3C,$1E,$E2,$F7,$09,$00,$0D,$06,$F3,$FA
+	.byt $0F,$F1,$00,$C4,$3C,$1E,$E2,$F7,$09,$00;,$0D,$06,$F3,$FA
 
 ;Vertices List - Y coordinate
-	.byt $00,$00,$EE,$00,$00,$1B,$1B,$04,$04,$12,$FD,$00,$FD,$00
+	.byt $00,$00,$EE,$00,$00,$1B,$1B,$04,$04,$12;,$FD,$00,$FD,$00
 
 ;Vertices List - Z coordinate
-	.byt $41,$41,$D8,$00,$00,$F6,$F6,$E7,$E7,$F0,$31,$41,$31,$41
+	.byt $41,$41,$D8,$00,$00,$F6,$F6,$E7,$E7,$F0;,$31,$41,$31,$41
 
 ; Face data
 	.byt 3	;Number of points
@@ -1953,7 +1959,7 @@ THARGLET
 ; Model of ship THARGOID
 THARGOID
 	.byt 0	; Ship type
-	.byt 20	;Number of vertices
+	.byt 16;20	;Number of vertices
 	.byt 10	;Number of faces
 
 ;Normals List - X coordinate
@@ -1964,13 +1970,13 @@ THARGOID
 	.byt $ED,$13,$2E,$2E,$00,$13,$ED,$D2,$D2,$00;
 
 ;Vertices List - X coordinate
-	.byt $12,$12,$12,$12,$12,$12,$12,$12,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2
+	.byt $12,$12,$12,$12,$12,$12,$12,$12,$F2,$F2,$F2,$F2,$F2,$F2,$F2,$F2;,$F2,$F2,$F2,$F2
 
 ;Vertices List - Y coordinate
-	.byt $1C,$27,$1C,$00,$E5,$DA,$E5,$00,$42,$5D,$42,$00,$BF,$A4,$BF,$00,$DC,$DC,$25,$25
+	.byt $1C,$27,$1C,$00,$E5,$DA,$E5,$00,$42,$5D,$42,$00,$BF,$A4,$BF,$00;,$DC,$DC,$25,$25
 
 ;Vertices List - Z coordinate
-	.byt $1B,$00,$E4,$D9,$E4,$00,$1B,$26,$41,$00,$BE,$A3,$BE,$00,$41,$5C,$2D,$D2,$D2,$2D
+	.byt $1B,$00,$E4,$D9,$E4,$00,$1B,$26,$41,$00,$BE,$A3,$BE,$00,$41,$5C;,$2D,$D2,$D2,$2D
 
 ; Face data
 	.byt 4	;Number of points
@@ -2025,11 +2031,10 @@ THARGOID
 
 ; End of ship THARGOID data
 
-/*
 ; Model of ship TRANSPORTER
 TRANSPORTER
 	.byt 0	; Ship type
-	.byt 37	;Number of vertices
+	.byt 20 ;37	;Number of vertices
 	.byt 15	;Number of faces
 
 ;Normals List - X coordinate
@@ -2040,13 +2045,16 @@ TRANSPORTER
 	.byt $5F,$05,$10,$00,$10,$05,$F8,$F8,$E4,$BE,$BE,$E4,$DA,$A1,$5F;
 
 ;Vertices List - X coordinate
-	.byt $00,$E7,$E4,$E7,$1A,$1D,$1A,$00,$E2,$DF,$21,$1E,$F5,$F3,$0E,$0B,$FB,$EE,$FB,$EE,$F5,$F5,$05,$12,$0B,$05,$12,$0B,$0B,$F0,$F0,$11,$11,$F3,$0D,$09,$F8
+	;.byt $00,$E7,$E4,$E7,$1A,$1D,$1A,$00,$E2,$DF,$21,$1E,$F5,$F3,$0E,$0B,$FB,$EE,$FB,$EE,$F5,$F5,$05,$12,$0B,$05,$12,$0B,$0B,$F0,$F0,$11,$11,$F3,$0D,$09,$F8
+	.byt $00,$E7,$E4,$E7,$1A,$1D,$1A,$00,$E2,$DF,$21,$1E,$F5,$F3,$0E,$0B,$F3,$0D,$09,$F8
 
 ;Vertices List - Y coordinate
-	.byt $F6,$FC,$03,$08,$08,$03,$FC,$FA,$01,$08,$08,$01,$02,$08,$08,$02,$FA,$FD,$F9,$FC,$FA,$FB,$F9,$FC,$FB,$FA,$FD,$FC,$FB,$08,$08,$08,$08,$03,$03,$FD,$FD
+	;.byt $F6,$FC,$03,$08,$08,$03,$FC,$FA,$01,$08,$08,$01,$02,$08,$08,$02,$FA,$FD,$F9,$FC,$FA,$FB,$F9,$FC,$FB,$FA,$FD,$FC,$FB,$08,$08,$08,$08,$03,$03,$FD,$FD
+	.byt $F6,$FC,$03,$08,$08,$03,$FC,$FA,$01,$08,$08,$01,$02,$08,$08,$02,$03,$03,$FD,$FD
 
 ;Vertices List - Z coordinate
-	.byt $E6,$E6,$E6,$E6,$E6,$E6,$E6,$0C,$0C,$0C,$0C,$0C,$1E,$1E,$1E,$1E,$02,$02,$F9,$F9,$F2,$F9,$F2,$F2,$F9,$FD,$FD,$08,$FD,$F3,$10,$F3,$10,$E6,$E6,$E6,$E6
+	;.byt $E6,$E6,$E6,$E6,$E6,$E6,$E6,$0C,$0C,$0C,$0C,$0C,$1E,$1E,$1E,$1E,$02,$02,$F9,$F9,$F2,$F9,$F2,$F2,$F9,$FD,$FD,$08,$FD,$F3,$10,$F3,$10,$E6,$E6,$E6,$E6
+	.byt $E6,$E6,$E6,$E6,$E6,$E6,$E6,$0C,$0C,$0C,$0C,$0C,$1E,$1E,$1E,$1E,$E6,$E6,$E6,$E6
 
 ; Face data
 	.byt 7	;Number of points
@@ -2121,11 +2129,11 @@ TRANSPORTER
 
 	.byt 4	;Number of points
 	.byt 0	;Fill pattern
-	.byt 36,33,34,35,36
+	.byt 36-17,33-17,34-17,35-17,36-17
 
 
 ; End of ship TRANSPORTER data
-*/
+
 ; Model of ship VIPER
 VIPER
 	.byt 0	; Ship type
@@ -2268,6 +2276,5 @@ __models_end
 #echo Size of models in bytes:
 #print (__models_end - __models_start)
 #echo
-
 
 
