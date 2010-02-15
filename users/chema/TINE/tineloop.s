@@ -1353,12 +1353,12 @@ frontview
 		sta _patch_launch_msg+1
 
 #ifdef RAMSAVE
-		ldx #(__commander_data_end-__commander_data_start)-1
+		ldx #(__commander_data_end-__commander_data_start)
 loop
-		lda __commander_data_start,x
-		sta _default_commander,x
+		lda __commander_data_start-1,x
+		sta _default_commander-1,x
 		dex
-		bpl loop
+		bne loop
 #endif
 
 notdocked
@@ -1980,13 +1980,13 @@ PatchLaserDraw
 clear_vertex
 .(
 	; Clear vertices where lasers start/end in each object
-	ldx #(MAXSHIPS)
+	ldx #(MAXSHIPS-1)
 	lda #0
 loopcl
-	sta _vertexXLO-1,x
-	sta _vertexXHI-1,x
-	sta _vertexYLO-1,x
-	sta _vertexYHI-1,x
+	sta _vertexXLO,x
+	sta _vertexXHI,x
+	sta _vertexYLO,x
+	sta _vertexYHI,x
 	dex
 	bne loopcl
 	rts

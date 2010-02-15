@@ -42,7 +42,6 @@ pixel_address_real
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     
     rts
 
@@ -58,8 +57,7 @@ pixel_address
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-    and #$7f
-
+    
     rts
 
 .)

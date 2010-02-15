@@ -259,6 +259,8 @@ Done, but not sure if it has some bugs yet.
 - optimization in prepare_normals... cx, cy and cz are unsigned inside the loop. Can be done outside and sign saved in signcx, signcy signcz.
 Done, now using SMULT
 
++ Planet's radius seem wrong, according to planet's data... Some are very big, with radius of 3.7Km
+
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector
 
