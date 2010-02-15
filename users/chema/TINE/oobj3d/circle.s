@@ -387,8 +387,7 @@ _circlePoints
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
-    ora (tmp0),y
+	ora (tmp0),y
     sta (tmp0),y
 end
 .)
@@ -406,7 +405,6 @@ end
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -441,7 +439,6 @@ end_line_1
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -460,7 +457,6 @@ end
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -496,7 +492,6 @@ end_line_2
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -515,7 +510,6 @@ end
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -552,7 +546,6 @@ skip6
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end
@@ -570,7 +563,6 @@ end
 
   	ldy _TableDiv6,x
 	lda _TableBit6Reverse,x		; 4
-	and #$7f
     ora (tmp0),y
     sta (tmp0),y
 end

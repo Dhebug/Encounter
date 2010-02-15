@@ -135,7 +135,6 @@ PLOT
 		sta tmp0+1					; 3 => Total 14 cycles
 	  	ldy _TableDiv6,x
 		lda _TableBit6Reverse,x		; 4
-		and #$7f
 #endif
         ora (tmp0),y				; 5
     	sta (tmp0),y   

@@ -65,13 +65,79 @@ ShipKillValue
     .word $063B
 
 ShipLaserVertex
-    ;.byt  $00, $00, $00, $00, $00, $00, $00
+/*    .byt  $00, $00, $00, $00, $00, $00, $00
     .byt  $00, $00, $0c, $00, $00, $15
-	.byt  $00, $00, $00, $00, $00, $15
     .byt  $00, $0c, $00, $0a, $00, $00
     .byt  $00, $00, $00, $00, $00, $08
     .byt  $15, $00, $00, $0f, $00, $00
     .byt  $00
+*/
+; Missile
+.byt 0
+; Dot
+.byt 0
+; Capsule
+.byt 0
+; Platelet
+.byt 0
+; Barrel
+.byt 0
+; Boulder
+.byt 0
+; Asteroid
+.byt 0
+; Splinter
+.byt 0
+; Shuttle
+.byt 0
+; Transporter
+.byt $0c
+; Viper
+.byt 0
+; Boa
+.byt 0
+; Cobra
+.byt 21
+; Python
+.byt 0
+; Anaconda
+.byt $0c
+; Worm
+.byt 0
+; Cobra I
+.byt $0a
+; Gecko
+.byt 0
+; Krait
+.byt 0
+; Mamba
+.byt 0
+; SideWinder
+.byt 0
+; Adder
+.byt 0
+; Moray
+.byt 0
+; Fer-de-Lance
+.byt 0
+; Asp
+.byt $08
+; Cobra
+.byt 21
+; Python
+.byt 0
+; Boa
+.byt 0
+; Thargoid
+.byt $0f
+; Tharglet
+.byt 0
+; Constrictor
+.byt 0
+; Cougar
+.byt 0
+
+
 
 ShipBountyLo
 	.byt 0, 0, 0, 1, 1, 1, 15, 1, 0, 0, 0, 250, 200, 44, 84, 0, 75, 55, 100, 150, 100
