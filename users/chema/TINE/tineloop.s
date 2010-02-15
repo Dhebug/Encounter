@@ -471,10 +471,11 @@ nomessage
 ; because we are not double buffering, but if we are not drawing we should not 
 ; update these also
 
-	lda frame_number
-	lsr
-	bcc nodraw
-
+	lda game_over
+	bne nodraw
+//	lda frame_number
+//	lsr
+//	bcc nodraw
     ; Erase & Draw radar
     jsr EraseRadar   
     jsr DrawRadar
