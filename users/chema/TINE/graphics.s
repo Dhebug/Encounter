@@ -50,15 +50,16 @@ _DrawLaser
     jmp Draw4Lines
 
 Coords 
-    .byt 10,  121, (120-1), (61+1)
-    .byt 57+3,  121, (120-1), (61+1)
-    .byt 230, 121, (120+1), (61+1)
-    .byt 183-3, 121, (120+1), (61+1) 
+    .byt 10,  121, (120-1), (61)
+    .byt 57+2,  121, (120-1), (61)
+    .byt 230, 121, (120+1), (61)
+    .byt 183-2, 121, (120+1), (61) 
 .)
 
 
 _DrawCrosshair
 .(
+#ifdef 0
     lda #<Coords
     sta pzero
     lda #>Coords
@@ -70,8 +71,67 @@ Coords
     .byt 129, 61, 136, 61
     .byt 120, 46, 120, 53
     .byt 120, 69, 120, 76 
+#endif
+
+	lda #%11101100
+	sta buffer+61*40+17
+	lda #%11111000
+	sta buffer+61*40+17+1
+	lda #%11000111
+	sta buffer+61*40+17+4
+	lda #%11001101
+	sta buffer+61*40+17+5
+
+
+	lda #<buffer+(45+2)*40+20
+	sta tmp
+	lda #>buffer+(45+2)*40+20
+	sta tmp+1
+
+	ldx #5
+	ldy #0
+loop1
+	lda (tmp),y
+	ora #%01100000
+	sta (tmp),y
+	lda tab_crosshair,x
+	clc
+	adc tmp
+	sta tmp
+	bcc noc1
+	inc tmp+1
+noc1
+	dex
+	bpl loop1
+
+	lda #<buffer+(45+10+12+8)*40+20
+	sta tmp
+	lda #>buffer+(45+10+12+8)*40+20
+	sta tmp+1
+
+	ldx #5
+	ldy #0
+loop2
+	lda (tmp),y
+	ora #%01100000
+	sta (tmp),y
+	lda tmp
+	sec
+	sbc tab_crosshair,x
+	sta tmp
+	bcs noc2
+	dec tmp+1
+noc2
+	dex
+	bpl loop2
+
+	rts
 
 .)
+
+tab_crosshair
+.byt 40,40,40,80,80,80
+
 
 
 #ifdef 0

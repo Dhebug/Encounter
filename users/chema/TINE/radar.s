@@ -254,14 +254,6 @@ _smc_destZ
 ; that height of stalk is also in that range?
 
 
-         ; Heads
-; a=%000001 (1), plot, iny, a=%110000, plot
-; a=%000010 (2), a=%000011 (3), plot, iny, a=%100000, plot
-; a=%000100 (4), a=%000111 (7), plot
-; a=%001000 (8), a=%001110 (14), plot
-; a=%010000 (16),a=%011100 (28), plot
-; a=%100000 (32),a=%111000 (56), plot
-
          lda RADOBJ+1
          beq elrts
          sta countobjs
@@ -296,25 +288,19 @@ next
          ldx tmp
          ldy tmp+1
          jsr pixel_address_real
-         eor (tmp0),y
-         sta (tmp0),y
 
-         ldx tmp
-         ldy tmp+1
-         inx
-         jsr pixel_address_real
-         eor (tmp0),y
+		 sta tmp
+		 lsr
+		 ora tmp
+		 eor (tmp0),y
          sta (tmp0),y
-
-
- /*        ldx tmp
-         ldy tmp+1
-         inx
-		 inx
-         jsr pixel_address_real
-         eor (tmp0),y
+ 		 bcc normal		; Carry set above, on the lsr
+		 lda #%100000
+		 iny
+		 eor (tmp0),y
          sta (tmp0),y
-*/
+normal
+
          dec countobjs	
          dec countobjs	
          bne loop2
@@ -359,32 +345,24 @@ loop2    ldy countobjs      ;Now plot each point
 DD       jsr DrawDown     
          
 next
-                         
          ; Draw the head
          ldx tmp
          ldy tmp+1
          jsr pixel_address_real
-         eor (tmp0),y
-         sta (tmp0),y
 
-         ldx tmp
-         ldy tmp+1
-         inx
-         jsr pixel_address_real
-         eor (tmp0),y
+		 sta tmp
+		 lsr
+		 ora tmp
+		 eor (tmp0),y
          sta (tmp0),y
-
- /*        ldx tmp
-         ldy tmp+1
-         inx
-		 inx
-         jsr pixel_address_real
-         eor (tmp0),y
+ 		 bcc normal		; Carry set above, on the lsr
+		 lda #%100000
+		 iny
+		 eor (tmp0),y
          sta (tmp0),y
-*/
-       
-         dec countobjs;DEC RADOBJ+1
-         dec countobjs;dec RADOBJ+1 
+normal
+         dec countobjs
+         dec countobjs
          bne loop2
 elrts    
 		 rts              ;Whew!
@@ -436,7 +414,7 @@ loop_draw
          eor (tmp0),y   ; Put pixel
          sta (tmp0),y
         
-         lda tmp0       ; Decrement pointer
+         lda tmp0       ; Increment pointer
          adc #40
          sta tmp0
          bcc noinc
@@ -575,7 +553,7 @@ update_compass
     ror
  
     clc
-    adc #189
+    adc #188
     tax
     lda _VectY
     cmp #$80
@@ -586,7 +564,7 @@ update_compass
     ror
  
     clc
-    adc #148
+    adc #147
     tay
 
     cpx compass_x
@@ -604,8 +582,6 @@ savy
     ldy #0
     stx compass_x
     sty compass_y
-    stx sdx
-    sty sdy
     jsr compass_dot
 end    
     rts
@@ -615,8 +591,7 @@ end
 
 compass_dot
 .(
-    jsr outer_dot
-    lda _VectZ+1
+	lda _VectZ+1
 	php
 	ldx invert
 	beq nothing2do
@@ -625,106 +600,171 @@ compass_dot
 	php
 nothing2do
 	plp
-    bmi end
-    jmp inner_dot
-end
-    rts
-.)
-
-inner_dot
+    bmi hollow
+	lda dot_patt2
+	ldx dot_patt2+1
+	jmp plotit
+hollow
+	lda dot_patt
+	ldx dot_patt+1
+plotit
+	sta tmp1
+	stx tmp2
+	lda #0
+	sta tmp1+1
+	sta tmp2+1
+	; Let the program flow
+.)	
+plot_dot
 .(
-    jsr pdot        
-    
-    inc sdx
-    jsr pdot         
-    
-    inc sdy
-    jsr pdot
-    
-    dec sdx
-    jmp pdot
-.)
-
-
-pdot
-.(
-    ldx sdx
-    ldy sdy
+    ldx compass_x
+    ldy compass_y
     jsr pixel_address_real
-    eor (tmp0),y
-    sta (tmp0),y 
-    rts
+
+	asl
+	asl
+	asl
+	bcs plot_dot_norot
+loop
+	lsr tmp1
+	ror tmp1+1
+	lsr tmp2
+	ror tmp2+1
+	asl
+	bcc loop
+	lsr tmp1+1
+	lsr tmp1+1
+	lsr tmp2+1
+	lsr tmp2+1
+
++plot_dot_norot
+	lda (tmp0),y
++patch_ora1
+	ora tmp1
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
++patch_ora2
+	ora tmp1+1
+	sta (tmp0),y
+
+	tya
+	clc
+	adc #39
+	tay
+	lda (tmp0),y
++patch_ora3
+	ora tmp2
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
++patch_ora4
+	ora tmp2+1
+	sta (tmp0),y
+
+	tya
+	clc
+	adc #39
+	tay
+	lda (tmp0),y
++patch_ora5
+	ora tmp2
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
++patch_ora6
+	ora tmp2+1
+	sta (tmp0),y
+
+	tya
+	clc
+	adc #39
+	tay
+	lda (tmp0),y
++patch_ora7
+	ora tmp1
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
++patch_ora8
+	ora tmp1+1
+	sta (tmp0),y
+
+	rts
 .)
 
-
-outer_dot
-.(
-    dec sdx
-    jsr pdot
-    inc sdy
-    jsr pdot
-    inc sdy
-    inc sdx       
-    jsr pdot
-    inc sdx
-    jsr pdot
-    inc sdx
-    dec sdy
-    jsr pdot
-    dec sdy
-    jsr pdot
-    dec sdy
-    dec sdx
-    jsr pdot
-    dec sdx
-    jsr pdot
-    inc sdy
-    rts
-.)
+dot_patt
+	.byt %00011000
+	.byt %00100100
+dot_patt2
+	.byt %00011000
+	.byt %00111100
 
 clear_compass
 .(
+
+  	lda #$ff
+	sta tmp1+1
+	sta tmp2+1
+
+	lda dot_patt2
+	eor #$ff
+	sta tmp1
+	lda dot_patt2+1
+	eor #$ff
+	sta tmp2
+
     ldx compass_x
-    dex
-    stx sdx
     ldy compass_y
-    dey
-    sty sdy
-
-    lda #4
-    sta county
-loop2
-    lda #4
-    sta countx
-loop1
-    ldx sdx
-    ldy sdy
     jsr pixel_address_real
-    eor #$ff
-    and (tmp0),y
-    sta (tmp0),y  
-    inc sdx
-    dec countx
-    bne loop1    
 
-    lda sdx
-    sec
-    sbc #4
-    sta sdx
+	asl
+	asl
+	asl
+	bcs norot
+loop
+	sec
+	ror tmp1
+	ror tmp1+1
+	sec
+	ror tmp2
+	ror tmp2+1
+	asl
+	bcc loop
 
-    inc sdy
-    dec county
-    bne loop2
+	sec
+	ror tmp1+1
+	sec
+	ror tmp1+1
+	sec
+	ror tmp2+1
+	sec
+	ror tmp2+1
+norot
+	lda #$25	; AND zp opcode
+	sta patch_ora1
+	sta patch_ora2
+	sta patch_ora3
+	sta patch_ora4
+	sta patch_ora5
+	sta patch_ora6
+	sta patch_ora7
+	sta patch_ora8
+	jsr plot_dot_norot
 
-    rts
+	lda #$05	; ORA zp opcode
+	sta patch_ora1
+	sta patch_ora2
+	sta patch_ora3
+	sta patch_ora4
+	sta patch_ora5
+	sta patch_ora6
+	sta patch_ora7
+	sta patch_ora8
 
-countx .byt 0
-county .byt 0
-
+	rts
 .)
 
-sdx .byt 0
-sdy .byt 0
 
 set_compass
 .(
@@ -742,12 +782,10 @@ set_compass
     lda HCZ,x
     sta _VectZ+1
 
-    lda #189
+    lda #188
 	sta compass_x
-	sta sdx
-    lda #148
+    lda #147
 	sta compass_y
-	sta sdy
 	jmp compass_dot
     ;rts
 .)
