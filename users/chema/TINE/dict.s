@@ -863,6 +863,8 @@ str_blank
 	.asc "        "
 	.byt 0
 str_ship_names
+	.asc "  Moon  "
+	.byt 0
 	.asc "Missile "
 	.byt 0
 	.asc " Debris "

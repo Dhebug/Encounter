@@ -57,9 +57,9 @@ Goodnames  .asc "FÙd"
            .byt 0
            .asc "GÇd"
            .byt 0
-           .asc "Pl‰ƒum"
+           .asc "PlŠƒum"
            .byt 0
-           .asc "GÆ-StŠ"
+           .asc "GÆ-St‰"
            .byt 0
            .asc "Ali‘ ItÆs"
            .byt 0
@@ -101,9 +101,9 @@ Bugeyed
     .byt 0
     .asc "H‡nˆ"
     .byt 0
-    .asc "BŠy"
+    .asc "B‰y"
     .byt 0
-    .asc "F‰"
+    .asc "FŠ"
     .byt 0
     .asc "F¬ry"
     .byt 0
@@ -127,7 +127,7 @@ Race
     .byt 0
 
 HumanCol
-    .byt "HuÀåÇŠi†"
+    .byt "HuÀåÇ‰i†"
     .byt 0
 
 
@@ -141,15 +141,15 @@ govnames
             .byt 0
             .asc "MÎi-go¢nm¥"
             .byt 0
-            .asc "Dt‰‡ö¿"
+            .asc "DtŠ‡ö¿"
             .byt 0
             .asc "»m¡i‹"
             .byt 0
-            .asc "CŠfˆ€y"
+            .asc "C‰fˆ€y"
             .byt 0
             .asc "DÆµry"
             .byt 0
-            .asc "C‡p‡‰St‰e"
+            .asc "C‡p‡ŠStŠe"
             .byt 0
 
 econnames
@@ -171,11 +171,11 @@ econnames
             .byt 0
 
 
-str_data    .asc "D‰a Š"
+str_data    .asc "DŠa ‰"
             .byt 0
 str_dist    .asc "Di‹‚ë"
             .byt 0
-str_eco     .asc "EcŠ–y"
+str_eco     .asc "Ec‰–y"
             .byt 0
 str_gov     .asc "Go¢nm¥"
             .byt 0
@@ -254,7 +254,7 @@ desc_list
     .byt 0
     .asc "ò‹"
     .byt 0
-    .asc "“ Š¦ñ"
+    .asc "“ ‰¦ñ"
     .byt 0
     .asc " "
     .byt 0
@@ -263,7 +263,7 @@ desc_list
     .asc "‚ci¥"
     .byt 0
     .byt $15,0
-    .asc "g“‰"
+    .asc "g“Š"
     .byt 0
     .asc "va‹"
     .byt 0
@@ -287,9 +287,9 @@ desc_list
     .byt 0
     .asc "œllƒs"
     .byt 0
-    .asc "m‰ÏødŒ´s"
+    .asc "mŠÏødŒ´s"
     .byt 0
-    .asc "¨‰hÏof "
+    .asc "¨ŠhÏof "
     .byt $06, 0
     .asc "¨úfŸ"
     .byt $06,0
@@ -310,7 +310,7 @@ desc_list
     .byt 0
     .asc "c•b"
     .byt 0
-    .asc "b‰"
+    .asc "bŠ"
     .byt 0
     .asc "¨b‹"
     .byt 0
@@ -367,7 +367,7 @@ desc_list
     .byt 0
     .asc "br‚dy"
     .byt 0
-    .asc "w‰€"
+    .asc "wŠ€"
     .byt 0
     .asc "b“w"
     .byt 0
@@ -454,7 +454,7 @@ desc_list
 ;93
     .asc "po’"
     .byt 0
-    .asc "t©g•§‰e"
+    .asc "t©g•§Še"
     .byt 0
     .asc "yÖ"
     .byt 0
@@ -490,7 +490,7 @@ desc_list
 ;96
     .asc "f“É¥"
     .byt 0
-    .asc "µcaœŠ†"
+    .asc "µcaœ‰†"
     .byt 0
     .asc "¡prˆt¦„"
     .byt 0
@@ -609,7 +609,7 @@ desc_list
     .byt 0
     .asc "bea‹"
     .byt 0
-    .asc "bŠ"
+    .asc "b‰"
     .byt 0
     .asc "snÖe"
     .byt 0
@@ -619,11 +619,11 @@ desc_list
 ;A0
     .asc "„oõd"
     .byt 0
-    .asc "c‰"
+    .asc "cŠ"
     .byt 0
-    .asc "mŠkey"
+    .asc "m‰key"
     .byt 0
-    .asc "go‰"
+    .asc "goŠ"
     .byt 0
     .asc "fh"
     .byt 0
@@ -637,7 +637,7 @@ desc_list
     .byt $0C, " ", $0B, 0
 
 ;A2
-    .asc "me‰"
+    .asc "meŠ"
     .byt 0
     .asc "cu÷t"
     .byt 0
@@ -666,7 +666,7 @@ desc_list
     .byt 0
     .asc "c¶k’"
     .byt 0
-    .asc "k‰e"
+    .asc "kŠe"
     .byt 0
     .asc "po¨"
     .byt 0
@@ -716,11 +716,11 @@ str_system
 ;    .byt 0
 str_status
 	.byt A_FWCYAN
-    .asc "Leg†Òt‰ù"
+    .asc "Leg†ÒtŠù"
     .byt 0
 str_rating
 	.byt A_FWCYAN
-    .asc "R‰™"
+    .asc "RŠ™"
     .byt 0
 str_colon
     .asc "”"
@@ -863,6 +863,8 @@ str_blank
 	.asc "…………"
 	.byt 0
 str_ship_names
+	.asc "…Mo‰…"
+	.byt 0
 	.asc "Ğ "
 	.byt 0
 	.asc " Debr "
@@ -891,7 +893,7 @@ str_ship_names
 	.byt 0
 	.asc " PyÁÿ"
 	.byt 0
-	.asc "AnŠda"
+	.asc "An‰da"
 	.byt 0
 	.asc "…W‡m…"
 	.byt 0
@@ -947,13 +949,13 @@ flight_message_base
 	.byt 0
 	.asc "M sšàˆ"
 	.byt 0
-	.asc "P‰hšàˆ"
+	.asc "PŠhšàˆ"
 	.byt 0
 	.asc "De‹ƒİ tÙº"
 	.byt 0
 	.asc "EnûyšÈ"
 	.byt 0
-;	.asc "Riî«Šè»á!"
+;	.asc "Riî«‰è»á!"
 ;	.byt 0
 ;	.asc "Lo±Òavˆ »á (Y/N)?"
 ;	.byt 0
@@ -1025,7 +1027,7 @@ str_instr
 ;; For alarms when in text screens
 str_alarm
  	.byt $0c
-	.asc "†·”¡ ‰tk"
+	.asc "†·”¡ Štk"
 	.byt 0
 	.byt $0c
 	.asc "†·”Ñ œgn† weÖ"
@@ -1044,7 +1046,7 @@ str_mi_success
 	.asc "°ÿì›hˆ"
 	.byt 0
 str_mi_fail
-	.asc "°Šºai„d"
+	.asc "°‰ºai„d"
 	.byt 0
 
 
@@ -1069,8 +1071,8 @@ Grammar
 .byt 97, 108
 .byt 111, 114
 .byt 101, 100
-.byt 97, 116
 .byt 111, 110
+.byt 97, 116
 .byt 115, 116
 .byt 105, 116
 .byt 101, 32
@@ -1112,7 +1114,7 @@ Grammar
 .byt 97, 100
 .byt 99, 104
 .byt 105, 108
-.byt 105, 138
+.byt 105, 137
 .byt 111, 99
 .byt 114, 142
 .byt 129, 109
@@ -1153,7 +1155,7 @@ Grammar
 .byt 111, 116
 .byt 112, 144
 .byt 130, 116
-.byt 137, 180
+.byt 138, 180
 .byt 151, 115
 .byt 167, 139
 .byt 181, 107
@@ -1187,7 +1189,7 @@ Grammar
 .byt 130, 103
 .byt 132, 115
 .byt 133, 32
-.byt 138, 32
+.byt 137, 32
 __grammar_end
 
 

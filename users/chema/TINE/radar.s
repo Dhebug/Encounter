@@ -768,7 +768,8 @@ norot
 set_compass
 .(
 
-    ldx compass_index
+    ldx #2
+	stx compass_index
 
     jsr GetObj
     sta tmp1
@@ -785,7 +786,36 @@ set_compass
 	sta compass_x
     lda #147
 	sta compass_y
-	jmp compass_dot
+	jsr compass_dot
+	jmp update_ship_id
     ;rts
 .)
 
+reinit_compass
+.(
+	ldx #2
+	stx compass_index
+	jsr update_ship_id
+	jmp update_compass
+.)
+
+compass_next
+.(
+	ldx compass_index
+loop
+	jsr SetCurOb
+	jsr GetNextOb
+	cpx #0
+	bne c1
+	ldx #2
+c1
+	stx compass_index
+	jsr GetShipType
+	bpl fine
+	cmp #$80
+	beq fine
+	jmp loop
+fine
+	jsr update_ship_id
+	jmp update_compass
+.)
