@@ -481,9 +481,13 @@ nomessage
     jsr DrawRadar
 
 	; Update compass
+	lda fixed_objects
+	cmp compass_index
+	bcc noplcom
 	lda _planet_dist
 	cmp #PDIST_TOOFAR2
 	bcs nocompass
+noplcom
     jsr update_compass
 	jmp endcompass
 nocompass
@@ -802,19 +806,19 @@ end
 #endif
 
 ;; Now the keyboard map table
-#define MAX_KEY 23+5
+#define MAX_KEY 23+5+1
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
     .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V", $1b
-	.byt	 1,2,3,4,13	 
+	.byt	 1,2,3,4,13," "	 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
     .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview), >(launch_pod)
-	.byt >(keydn), >(keyl), >(keyup), >(keyr), >(sele)
+	.byt >(keydn), >(keyl), >(keyup), >(keyr), >(sele),>(obj_com)
 key_routl
     .byt <(info), <(sysinfo), <(short_chart), <(gal_chart), <(market), <(equip), <(loadsave), <(splanet), <(galhyper), <(jumphyper), <(frontview)     
     .byt <(keydn), <(keyup), <(keyl), <(keyr), <(sele), <(target), <(fireM), <(unarm), <(ecm_on), <(power_redir), <(energy_bomb), <(rearview), <(launch_pod)
-	.byt <(keydn), <(keyl), <(keyup), <(keyr), <(sele)
+	.byt <(keydn), <(keyl), <(keyup), <(keyr), <(sele),<(obj_com)
 
 
 /* M= byte 3 val 1
@@ -1590,12 +1594,18 @@ retz
 
 keydn
 .(
+/*
+	lda _current_screen
+	cmp #SCR_FRONT
+	bne cont
+	jmp compass_prev
+cont
+*/
     jsr check_scr
     bcc do
     rts
 do
     jmp _dec_sel
-
 .)
 
 
@@ -1606,7 +1616,6 @@ keyup
     rts
 do
     jmp _inc_sel
-
 .)
 
 
@@ -1623,7 +1632,6 @@ ret
     rts
 do
     jmp _sell
-
 .)
 
 
@@ -1640,7 +1648,6 @@ ret
     rts
 do  
     jmp _buy
-
 .)
 
 sele
@@ -1665,6 +1672,15 @@ doit2
     jmp _find_planet
 .)
 
+obj_com
+.(
+  	lda _current_screen
+	cmp #SCR_FRONT
+	bne cont
+	jmp compass_next
+cont
+	rts
+.)
 
 #ifdef TABBEDROLLS
 tab_rolls_fast .byt 0,1,1,1,2,2,3,4,6

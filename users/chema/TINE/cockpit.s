@@ -238,6 +238,8 @@ loop2
 	cpx _missiles_left
 	bne loop2
 end
+	rts
+
 	;jmp update_ship_id	; let the program flow
 	;rts
 
@@ -254,11 +256,15 @@ update_ship_id
 	lda #$a0
 	sta screen+1
 	
-	lda _missile_armed
+	lda compass_index ;_missile_armed
 	beq clear
 	bmi clear
 setname
 	tax
+	cpx #2
+	bne next_test
+	jmp pname
+next_test
 	jsr GetShipType
 	and #%01111111
 	tax
@@ -268,7 +274,7 @@ setname
 	lda #>str_ship_names
 	sta tmp0+1
 
-	dex
+	;dex
 
 	; Print message id to buffer
 	inc capson
@@ -279,6 +285,49 @@ clear
 	lda #<str_blank
 	ldx #>str_blank
 	jmp print ;This is jsr/rts
+.)
+
+
+pname
+.(
+    ldx #0
+	ldy #0
+loop
+    lda _cpl_system+NAME,x
+    beq end
+    cmp #"."
+    beq noprint
+	iny
+noprint
+    inx
+    jmp loop
+end
+	sty tmp
+	sec
+	lda #8
+	sbc tmp
+	pha
+	lsr
+	sta tmp
+	pla
+	sec
+	sbc tmp
+	beq doprint
+	tax
+loop2
+	jsr put_space
+	dex
+	bne loop2
+doprint
+	jsr print_planet_name
+	ldx tmp
+	beq end2
+loop3
+	jsr put_space
+	dex
+	bne loop3
+end2
+	rts
 .)
 
 

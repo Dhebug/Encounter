@@ -1311,6 +1311,11 @@ end
 	jsr flight_message 
 no_target_lost
 
+	lda compass_index
+	cmp _ID
+	bne no_compass_lost
+	jsr reinit_compass
+no_compass_lost
     ldx _ID
     jmp DelObj
     ;rts

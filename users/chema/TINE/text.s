@@ -259,6 +259,10 @@ Cursor_origin_y .dsb 1
 #define res_x tmp4
 #define res_y tmp4+1
 
+//res_x .dsb 1
+//res_y .dsb 1
+
+
 ascii2code 
         cmp #97 
 .( 
@@ -390,11 +394,11 @@ increment_cursor
         clc
         adc #6
         sta Cursor_origin_x
-        cmp #FINALX_TEXT
+/*        cmp #FINALX_TEXT
         bne cont
         jsr perform_CRLF
         jmp skipme
-cont
+cont*/
         inc screen 
         bne skipme 
         inc screen+1 
