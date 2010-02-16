@@ -601,8 +601,8 @@ compass_dot
 nothing2do
 	plp
     bmi hollow
-	lda dot_patt2
-	ldx dot_patt2+1
+	lda dot_patt
+	ldx dot_patt2
 	jmp plotit
 hollow
 	lda dot_patt
@@ -697,7 +697,6 @@ dot_patt
 	.byt %00011000
 	.byt %00100100
 dot_patt2
-	.byt %00011000
 	.byt %00111100
 
 clear_compass
@@ -707,10 +706,10 @@ clear_compass
 	sta tmp1+1
 	sta tmp2+1
 
-	lda dot_patt2
+	lda dot_patt
 	eor #$ff
 	sta tmp1
-	lda dot_patt2+1
+	lda dot_patt2
 	eor #$ff
 	sta tmp2
 
