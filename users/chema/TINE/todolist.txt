@@ -245,7 +245,7 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.
 
-+ Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
+- Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
 
 + Is size of Vipers too high? Seems so... check.
 

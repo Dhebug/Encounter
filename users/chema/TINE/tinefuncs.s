@@ -1286,17 +1286,24 @@ _norm_big
     jsr getnorm ; Result in op1
  
    ; This makes no sense, just some deffensive programming
+   /*
     lda op1
     ora op1+1
     bne nozero
     inc op1
 nozero
+	*/
 
     lda #>$2000
     sta op2+1
     lda #<$2000  
     sta op2
-    jsr cmp16
+    ;jsr cmp16
+    lda op1 ; op1-op2
+    cmp op2
+    lda op1+1
+    sbc op2+1
+
     bcs finloop    
     
     lda #>$4000
@@ -1313,7 +1320,13 @@ loopw
     asl op1
     rol op1+1
     
-    jsr cmp16
+    ;jsr cmp16
+    lda op1 ; op1-op2
+    cmp op2
+    lda op1+1
+    sbc op2+1
+
+
     bcc loopw
 
 finloop
