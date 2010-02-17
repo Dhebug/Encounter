@@ -160,7 +160,7 @@ moonsdone
 	; Create initial encounters
 	; Encounters are not created if too close to planet, so 
 	; set_planet_distance should be called afterwards...
-	lda #$ff
+	lda #70
 	sta _planet_dist
 
 	ldx #3
@@ -254,18 +254,17 @@ noinvert2
 #ifdef 0
 _InitTestCode 
 .(
-		rts	
          ; Add some ships
 
          lda #<OCEN
          sta tmp0
          lda #>OCEN
          sta tmp0+1   
-         lda #SHIP_ADDER
+         lda #SHIP_COBRA1
 		 ;lda #SHIP_ANACONDA
 		 ;lda #SHIP_COUGAR
          jsr AddSpaceObject   
-         stx savid+1   
+         ;stx savid+1   
          lda _ai_state,x
          ;ora #(IS_AICONTROLED | FLG_BOUNTYHUNTER)   
 		 ;ora #(IS_AICONTROLED | FLG_POLICE)   
@@ -853,7 +852,8 @@ nocheckscore
 	lda _rnd_seed+3
 	;bpl noecm
 	and #%11
-	bne noecm
+	;bne noecm
+	beq noecm
 	lda #(HAS_ECM)	; Cloaking?
 	sta eq_tmp
 noecm

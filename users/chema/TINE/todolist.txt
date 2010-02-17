@@ -181,6 +181,20 @@ the bounty appears maybe too fast? Maybe even before the ship explodes!
 
 - Optimize routines in cockpit messages... they use a lot of similar code.
 
+- Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
+
+- BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
+Need to add a GAMEOVER var... check for a comment saying GAMEOVER
+
+- Vertices are initialized wrongly. Check CalcView in obj3d. Anyway it might be a good idea to create
+a IsValid field, which could be set as invalid in CalcView and update it in DrawAllVis
+Done, but not sure if it has some bugs yet.
+
+- optimization in prepare_normals... cx, cy and cz are unsigned inside the loop. Can be done outside and sign saved in signcx, signcy signcz.
+Done, now using SMULT
+
+- When selecting planet or moon in compass and out of range, the dot appears for one frame.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -245,23 +259,9 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.
 
-- Compass code used to plot the dot is not the world's fastest.. a kind of bitmap would do MUCH better.
-
 + Is size of Vipers too high? Seems so... check.
 
-- BUG: After dying, if more objects are created after deleting the COBRA, then they get id=1, so treated as the player and probably fail there.
-Need to add a GAMEOVER var... check for a comment saying GAMEOVER
-
-- Vertices are initialized wrongly. Check CalcView in obj3d. Anyway it might be a good idea to create
-a IsValid field, which could be set as invalid in CalcView and update it in DrawAllVis
-Done, but not sure if it has some bugs yet.
-
-- optimization in prepare_normals... cx, cy and cz are unsigned inside the loop. Can be done outside and sign saved in signcx, signcy signcz.
-Done, now using SMULT
-
 + Planet's radius seem wrong, according to planet's data... Some are very big, with radius of 3.7Km
-
-+ When selecting planet or moon in compass and out of range, the dot appears for one frame.
 
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector

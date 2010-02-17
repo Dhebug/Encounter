@@ -521,6 +521,13 @@ compass_index .byt 02   ; Planet
 update_compass
 .(
     ldx compass_index
+	cpx #2
+	bne noplcom
+	lda _planet_dist
+	cmp #PDIST_TOOFAR2
+	bcc noplcom
+	jmp clear_compass
+noplcom
 
     jsr GetObj
     sta tmp1
@@ -808,14 +815,13 @@ loop
 	cpx #0
 	bne c1
 	ldx #2
+	jmp setit
 c1
-	stx compass_index
 	jsr GetShipType
-	bpl fine
-	cmp #$80
-	beq fine
-	jmp loop
-fine
+	bmi loop
+setit
+	stx compass_index
 	jsr update_ship_id
+	jsr SndCompass
 	jmp update_compass
 .)

@@ -2778,7 +2778,7 @@ printtail
 .)
 
 ;;; Selection of items
-; Start at row 36 and add 6 per item
+; Start at row 30 and add 6 per item
 
 get_p
 .(
@@ -2786,7 +2786,7 @@ get_p
     lda _current_screen
     cmp #SCR_MARKET
     bne notmarket
-    lda #30
+    lda #24
     .byt $2C
 notmarket
     lda #12

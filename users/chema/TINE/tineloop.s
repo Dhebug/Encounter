@@ -401,6 +401,15 @@ loop
     jsr CalcView
     jsr SortVis   
 
+	; If game is over, be sure to be in front view
+	lda game_over
+	beq no_game_over
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq no_game_over
+	jsr frontview
+no_game_over
+
 	; If not in front view, don't draw
     lda _current_screen
     cmp #SCR_FRONT
@@ -481,18 +490,7 @@ nomessage
     jsr DrawRadar
 
 	; Update compass
-	lda fixed_objects
-	cmp compass_index
-	bcc noplcom
-	lda _planet_dist
-	cmp #PDIST_TOOFAR2
-	bcs nocompass
-noplcom
-    jsr update_compass
-	jmp endcompass
-nocompass
-	jsr clear_compass
-endcompass
+	jsr update_compass
 
 
 ; If not drawing (screens different than front/rear views, or frame skipping)
@@ -585,7 +583,7 @@ next
 
 	lda _energy+1
 	bmi no_energy
-	beq no_energy
+	;beq no_energy
 
 	cmp _p_maxenergy
 	bcs noinc_energy
@@ -627,14 +625,10 @@ no_energy
 	; We should be dead here 
 
 	; Check message has been displayed for some time
-	; and that we are not in control of the ship
 	lda message_delay
-	ora player_in_control
-	bne locking
-
+	bne nofr
 	; Return from main loop here. 
 	rts	
-
 
 locking	
 	; Locking computer
@@ -679,16 +673,12 @@ noecm
 	; ...
 
 cont2
+	; Increment the counter of frames
+    inc frame_number
 	; Check for new encounters
-	lda frame_number
-	;and #%1111111
 	bne cont3
 	jsr random_encounter
 cont3
-
-	; Increment the counter of frames
-    inc frame_number
-
 	; Update everything that needs be
 	jsr update_speed_panel
 	jsr update_energy_panel
@@ -1683,10 +1673,10 @@ cont
 .)
 
 #ifdef TABBEDROLLS
-tab_rolls_fast .byt 0,1,1,1,2,2,3,4,6
+tab_rolls_fast .byt 0,1,1,1,2,2,3,3,4
 tab_rolls_slow .byt 0,1,1,1,1,2,2,2,3
 
-tab_rolls .byt 0,1,1,1,2,2,3,4,6
+tab_rolls .byt 0,1,1,1,1,2,2,2,3
 dorolls
 .(
 .(

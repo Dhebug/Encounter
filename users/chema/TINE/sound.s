@@ -232,10 +232,7 @@ missile
 	.byt 0,0,0,0,0,0,$6c,$41,$10,0,0,0,$10,9
 .)
 
-
-// SndTest is beautiful, but never used
-/*
-SndTest
+SndCompass
 .(
   	ldx #<msg
 	ldy #>msg
@@ -244,7 +241,8 @@ msg
 	.byt $10,0,$10,1,$10,2,0,$78,$10,$10,$10,0,$08,0
 
 .)
-*/
+
+
 
 
 ; For WAVE compiled music

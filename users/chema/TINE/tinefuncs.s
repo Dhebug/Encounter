@@ -770,8 +770,28 @@ ang_lim .byt 00
 _fly_to_vector
 .(
     jsr get_attack_angle
+  ; If very behind us, make sure we rotate...
+  ; if (our_ang0 < -0xa38)//-0x1700/2)
+  ;      ang_lim=0;
+  ; else
+  ;      ang_lim=3;
+    ; already in op1
+    ;sta op1+1
+    ;stx op1
+    lda #<(-$a38)
+    sta op2
+    lda #>(-$a38)
+    sta op2+1
+    jsr cmp16
+    bpl limnorm  
+    lda #0
+    .byt $2c ;beq store ; allways jump
+limnorm
+    lda #50      ; Force 0 for aggresive following... maybe when ANGRY?
+store
+    sta ang_lim
     jmp fly_to_vector_final
-.)
+ .)
 
 
 
@@ -789,27 +809,6 @@ get_attack_angle
     ldx op1
     sta our_ang0+1
     stx our_ang0
-    
-  ; If very behind us, make sure we rotate...
-  ; if (our_ang0 < -0xa38)//-0x1700/2)
-  ;      ang_lim=0;
-  ; else
-  ;      ang_lim=3;
-    ; already in op1
-    ;sta op1+1
-    ;stx op1
-    lda #<(-$a38)
-    sta op2
-    lda #>(-$a38)
-    sta op2+1
-    jsr cmp16
-    bpl limnorm  
-    lda #0
-    beq store ; allways jump
-limnorm
-    lda #50      ; Force 0 for aggresive following... maybe when ANGRY?
-store
-    sta ang_lim
     rts
 .)
 
@@ -1286,13 +1285,13 @@ _norm_big
     jsr getnorm ; Result in op1
  
    ; This makes no sense, just some deffensive programming
-   /*
+   
     lda op1
     ora op1+1
     bne nozero
     inc op1
 nozero
-	*/
+	
 
     lda #>$2000
     sta op2+1
