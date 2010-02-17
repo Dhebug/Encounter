@@ -465,6 +465,9 @@ update_speed_panel
 
 
 	ldx _speed+1
+	cpx #29
+	bcs end
+
 	lda BarSegment0,x
 	and #%01010101
 	sta $B954

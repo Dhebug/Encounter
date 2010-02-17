@@ -619,8 +619,8 @@ nolowen
     ;bne toofar  
 
 	; Seems the $2000 is too much... try with someting smaller.
-	lda A1
-    cmp #00
+	;lda A1
+    ;cmp #00
     lda A1+1
     sbc #$15       ;Greater than $2000?
     bcs toofar     
@@ -639,15 +639,15 @@ nolowen
     ; According to Elite-AGB if greater than $2000 fire, if greater than $2300 fire and hit.
     ; Scaling down approprately $2000 is 0.888 times the max value ($2400). The 88 percent of
     ; our max value ($1000) is $e38. $2300 is equivalent to $f8e.
-
++debugme
     lda our_ang0
     sta op1
     lda our_ang0+1
     sta op1+1
  
-    lda #<$e38-350; $f1c8 ;$e38
+    lda #<3200		;$e38-550; $f1c8 ;$e38
     sta op2
-    lda #>$e38-350; ;$e38
+    lda #>3200		;$e38-550; ;$e38
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -675,9 +675,9 @@ nolowen
 
    
     ; Do we hit or miss?
-    lda #<$f8e-500	;-500);f07d ;$f8e
+    lda #<3250		;$f8e-500	;-500);f07d ;$f8e
     sta op2
-    lda #>$f8e-500	;-500);f07d ;$f8e
+    lda #>3250			;$f8e-500	;-500);f07d ;$f8e
     sta op2+1
     jsr cmp16
     bmi toofar
@@ -1553,8 +1553,6 @@ savy
 ; Reg Y is the ship making damage
 damage_player
 .(
-	; Hack to make enemies more deadly
-	;asl 
 	sta tmp+1
 
 	; Alert the cops?
@@ -1574,8 +1572,6 @@ nohelp
 	; id of the ship which launched it, so
 	; need to get that information back
 	ldy AIShipID
-	; Hack to make enemies more deadly, but not with missiles
-	;lsr tmp+1
 notmissile
 	tya
 	tax
@@ -1833,11 +1829,12 @@ loop
 	ora _vertexYHI,x
 	pha
 	lda _laser_target-1,y
-	cmp #1
-	bne plkilled
-	lda escape_pod_launched ;player_in_control	
+	;cmp #1
+	;bne plkilled
+	;lda player_in_control ;escape_pod_launched 
+	cmp VOB	; Is this the view object?
 	beq set_random_border
-	lda _laser_target-1,y
+	;lda #1
 plkilled
 	tax
 	pla

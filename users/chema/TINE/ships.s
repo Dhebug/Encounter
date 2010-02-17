@@ -49,9 +49,17 @@ ShipMaxSpeed
     .byt 44, 20, 8, 20, 20, 30, 30, 10, 8, 10, 32, 24, 28, 20, 14, 23, 26, 30, 30
     .byt 30, 37, 24, 25, 30, 40, 28, 20, 24, 39, 30, 36, 40
 
+#define EX_DAM 3
+//#define EX_DAM 0
+
 ShipAmmo    ; bits 7-3 = Lasers, 0-2 # missiles
-    .byt 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 41, 42, 36, 44, 79, 24, 34, 32, 32, 34, 32
-    .byt 33, 42, 50, 73, 44, 52, 50, 56, 32, 71, 71
+    .byt 0, 0,  0, 0, 0, 0, 0, 0, 0, 0
+	.byt 41+(EX_DAM*8), 42+(EX_DAM*8), 36+(EX_DAM*8), 44+(EX_DAM*8)
+	.byt 79+(EX_DAM*8), 24+(EX_DAM*8), 34+(EX_DAM*8), 32+(EX_DAM*8), 32+(EX_DAM*8)
+	.byt 34+(EX_DAM*8), 32+(EX_DAM*8)
+    .byt 33+(EX_DAM*8), 42+(EX_DAM*8), 50+(EX_DAM*8), 73+(EX_DAM*8)
+	.byt 44+(EX_DAM*8), 52+(EX_DAM*8), 50+(EX_DAM*8), 56+(EX_DAM*8)
+	.byt 32+(EX_DAM*8), 71+(EX_DAM*8), 71+(EX_DAM*8)
 
 ShipCargo   ; In tons. High nibble Cargo when scooped, low nibble = cargo carrying (?)
     .byt 0, 0, 32, 128, 0, 0, 0, 176, 15, 0, 0, 5, 3, 5, 7, 0, 3, 0, 1, 1, 0, 0, 1
@@ -105,7 +113,7 @@ ShipLaserVertex
 ; Worm
 .byt 0
 ; Cobra I
-.byt $0a
+.byt 8 ;$0a
 ; Gecko
 .byt 0
 ; Krait
