@@ -792,7 +792,8 @@ loopinv
  
     
 approach
-    jmp fly_to_vector_final
+    ;jmp fly_to_vector_final
+	jmp fly_to_vector
 
 .)
 
