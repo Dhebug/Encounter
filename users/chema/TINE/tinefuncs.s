@@ -731,6 +731,22 @@ end
 
 
 
+get_attack_angle
+.(
+
+  ; norm_big();
+  ; GetFrontVector();
+  ; our_ang0=dot_product();
+
+    jsr _norm_big
+    jsr _GetFrontVector
+    jsr dot_product
+    lda op1+1
+    ldx op1
+    sta our_ang0+1
+    stx our_ang0
+    rts
+.)
 
 
 
@@ -767,9 +783,9 @@ our_ang2 .word 00
 ang_lim .byt 00
 
 
-_fly_to_vector
+
+fly_to_vector
 .(
-    jsr get_attack_angle
   ; If very behind us, make sure we rotate...
   ; if (our_ang0 < -0xa38)//-0x1700/2)
   ;      ang_lim=0;
@@ -787,34 +803,9 @@ _fly_to_vector
     lda #0
     .byt $2c ;beq store ; allways jump
 limnorm
-    lda #50      ; Force 0 for aggresive following... maybe when ANGRY?
+    lda #1      ; Force 0 for aggresive following... maybe when ANGRY?
 store
     sta ang_lim
-    jmp fly_to_vector_final
- .)
-
-
-
-get_attack_angle
-.(
-
-  ; norm_big();
-  ; GetFrontVector();
-  ; our_ang0=dot_product();
-
-    jsr _norm_big
-    jsr _GetFrontVector
-    jsr dot_product
-    lda op1+1
-    ldx op1
-    sta our_ang0+1
-    stx our_ang0
-    rts
-.)
-
-fly_to_vector_final
-.(
-  ;  // Fly_to_vector_final
  
   ; // NES addition 
   ;if (our_ang0 < -0xdc7){//-0x1000) {
@@ -1285,13 +1276,11 @@ _norm_big
     jsr getnorm ; Result in op1
  
    ; This makes no sense, just some deffensive programming
-   
     lda op1
     ora op1+1
     bne nozero
     inc op1
 nozero
-	
 
     lda #>$2000
     sta op2+1

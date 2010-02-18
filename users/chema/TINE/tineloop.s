@@ -379,7 +379,18 @@ loop
 
 	; Call ship tactics
     jsr _Tactics
- 
+
+	lda game_over
+	beq no_game_over
+
+	; If game is over, be sure to be in front view
+	lda _current_screen
+	cmp #SCR_FRONT
+	beq no_game_over
+	jsr frontview
+	jmp _patch_invertZa
+no_game_over
+
 	; If distance with planet is short, then dock player
     lda _planet_dist
     cmp #06
@@ -401,14 +412,6 @@ loop
     jsr CalcView
     jsr SortVis   
 
-	; If game is over, be sure to be in front view
-	lda game_over
-	beq no_game_over
-	lda _current_screen
-	cmp #SCR_FRONT
-	beq no_game_over
-	jsr frontview
-no_game_over
 
 	; If not in front view, don't draw
     lda _current_screen
@@ -523,6 +526,16 @@ cont
 	; Move other ships
     jsr _MoveShips
 
+	; If game is over skip next sections
++_patch_game_over
+	nop
+	nop
+	nop
+
+	lda game_over
+	beq ngo1
+	jmp no_energy
+ngo1
 	; Perform timely checks
 	; Seldom checks. Every 32 frames
 	
@@ -577,9 +590,6 @@ next
 	jsr planet_light
 	
 	; Start with energy and shields: recharge
-
-	lda game_over
-	bne no_energy
 
 	lda _energy+1
 	bmi no_energy
@@ -1228,11 +1238,11 @@ rearview
         cmp _current_screen
         beq lookrear
 		rts
-lookrear
++lookrear
 		lda invert
 		eor #$ff
 		sta invert
-
++viewchanged
 		jsr clear_vertex
 		jsr patch_invert_code
 		jsr update_compass
@@ -1886,10 +1896,7 @@ ViewPlayerShip
 	; Look front
 	lda invert
 	beq nothing2
-	eor #$ff
-	sta invert
-	jsr update_compass
-	jsr INITSTAR
+	jsr lookrear ; or front, in this case... this just inverts
 nothing2
 
    ; Make it still
@@ -1913,6 +1920,11 @@ nothing2
     lda #3
     sta _ttl+1
     
+	lda escape_pod_launched
+	beq cont
+	rts
+cont
+
 	ldx #1
     jsr SetCurOb
     lda #DEBRIS	; Anything would do...
