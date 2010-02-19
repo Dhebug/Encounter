@@ -990,8 +990,7 @@ end
     stx tmp2
     sty tmp2+1
     jsr in_range2
-    ;bcc inside
-	bpl inside
+  	bmi inside
 
     ldx #SHORT_CENTRE_X
     ldy #SHORT_CENTRE_Y

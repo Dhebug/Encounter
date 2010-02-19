@@ -10,7 +10,7 @@
 
 /* Maximum number of simultaneous Vipers and Thargoids */
 #define MAXCOPS	 2
-#define MAXTHARG 2
+#define MAXTHARG 1
 
 /* Maximum number of simultaneous missiles (for AI ships)   */
 #define MAX_MISSILES 2
