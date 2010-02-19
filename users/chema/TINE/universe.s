@@ -458,14 +458,15 @@ create_thargoid
 		jsr set_boldness
 
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
-		;lda _missiles,x
-		;ora #%10
+
 		stx savx+1
 		jsr _gen_rnd_number
-		and #%11
+		and #%1
+		clc
+		adc #1
 savx	ldx #0 ;SMC
+		ora _missiles,x
 		sta _missiles,x
-
 		; note that there are thargoids on system
 		inc thargoid_counter
 end
@@ -924,49 +925,39 @@ create_other_ship
 	; Generate new ship a bit far away
 	lda _PosX+1
 	eor #%1111; $17
+	ldx _rnd_seed+1
+	bmi noinvertX
+	sta tmp
+	lda _PosX+1
+	asl
+	sec
+	sbc tmp
+noinvertX
 	sta _PosX+1
 
 	lda _PosY+1
 	eor #%1111;$17
+	ldx _rnd_seed+2
+	bmi noinvertY
+	sta tmp
+	lda _PosY+1
+	asl
+	sec
+	sbc tmp
+noinvertY
 	sta _PosY+1
 
 	lda _PosZ+1
 	eor #%1111;$17
-	sta _PosZ+1
-
-	lda _rnd_seed+1
-	bmi noinvertX
-	sec
-	lda #0
-	sbc _PosX
-	sta _PosX
-	lda #0
-	sbc _PosX+1
-	sta _PosX+1
-noinvertX
-
-	lda _rnd_seed+2
-	bmi noinvertY
-	sec
-	lda #0
-	sbc _PosY
-	sta _PosY
-	lda #0
-	sbc _PosY+1
-	sta _PosY+1
-noinvertY
-
-	lda _rnd_seed+2
+	ldx _rnd_seed+3
 	bmi noinvertZ
+	sta tmp
+	lda _PosZ+1
+	asl
 	sec
-	lda #0
-	sbc _PosZ
-	sta _PosZ
-	lda #0
-	sbc _PosZ+1
-	sta _PosZ+1
+	sbc tmp
 noinvertZ
-
+	sta _PosZ+1
 
     lda #<_PosX
     sta tmp0

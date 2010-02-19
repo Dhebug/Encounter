@@ -495,7 +495,7 @@ notanaconda
 	and #FLG_BOLD
 	beq nobold
 	lda _rnd_seed+1
-	cmp #64
+	cmp #10 ;64
 	bcc nocriten	; Launch a missile if possible
 nobold
 
@@ -684,9 +684,7 @@ nolowen
 
 
     ; We hit!
-
-    ldx AIShipID
-    dec _accel,x
+	ldx AIShipID
     lda _missiles,x
 	; bits 7-3 = Lasers, 0-2 # missiles
     lsr
@@ -694,6 +692,9 @@ nolowen
 	lsr
 	;lsr	; do laser damage/2 (according to elite agb)
     ldx AITarget
+    dec _accel,x
+	dec _speed,x
+
 	ldy AIShipID
 	clc ; Not a missile
     jmp damage_ship ; This is jsr/rts
@@ -1103,32 +1104,10 @@ noasteroid
 	jsr ReleaseRandom
 	jmp nomore
 noboulder
- 
-	; If a missile, decrement counter
-	cmp #SHIP_MISSILE
-	bne nomissile
-	dec missile_counter
-nomissile
 
-	; If police idem
+	; if it is space junk nothing more...
     cmp #SHIP_VIPER
-    bcc nomore  ; if it is space junk nothing more...
-	bne nopolice
-	dec police_counter
-nopolice
-
-	; If it is a thargoid, the same thing
-	cmp #SHIP_THARGOID
-	bne nothargoid
-	dec thargoid_counter
-nothargoid
-
-	; If a worm, idem
-	cmp #SHIP_WORM
-	bne noworm
-	dec worm_counter
-noworm
-
+    bcc nomore  
 
 	lda #SHIP_ALLOY
 	jsr ReleaseRandom
@@ -1317,7 +1296,42 @@ no_target_lost
 	bne no_compass_lost
 	jsr reinit_compass
 no_compass_lost
+
     ldx _ID
+    jsr GetShipType
+    and #%01111111 
+
+	; What if it is an asteroid????
+	cmp #SHIP_ASTEROID
+	bne noasteroid
+	dec asteroid_counter
+noasteroid
+
+	; If a missile, decrement counter
+	cmp #SHIP_MISSILE
+	bne nomissile
+	dec missile_counter
+nomissile
+
+	; If it is a thargoid, the same thing
+	cmp #SHIP_THARGOID
+	bne nothargoid
+	dec thargoid_counter
+nothargoid
+
+	; If a worm, idem
+	cmp #SHIP_WORM
+	bne noworm
+	dec worm_counter
+noworm
+
+	; If police idem
+    cmp #SHIP_VIPER
+	bne nopolice
+	dec police_counter
+nopolice
+
+nomore
     jmp DelObj
     ;rts
 .)
