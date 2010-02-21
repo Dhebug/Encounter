@@ -42,9 +42,9 @@ hyper
     sta _PosX+1
     sta _PosY
     sta _PosY+1
-    lda #<(-16384+6000)
+    lda #<(-16384+7000)
     sta _PosZ
-    lda #>(-16384+6000)
+    lda #>(-16384+7000)
     sta _PosZ+1
 
 createship    
