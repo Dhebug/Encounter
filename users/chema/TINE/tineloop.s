@@ -251,6 +251,9 @@ _FirstFrame
 	lda #0
 	sta frame_time
 	sta counter
+	lda #0
+	sta bounty_am
+	sta bounty_am+1
 
 	jsr clear_vertex
 
@@ -2008,6 +2011,7 @@ loopcl
 	sta _vertexYHI,x
 	dex
 	bne loopcl
+
 	rts
 .)
 

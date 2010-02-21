@@ -962,6 +962,15 @@ ROTLOOP  ldy count
          dey
          sty count
 
+#ifdef AVOID_INVISBLEVERTICES
+		 lda ROTFLAG
+		 bpl skipthis
+		 lda vertex2proj,y
+		 beq ROTLOOP
+skipthis
+
+#endif
+
 _smc_pz
 		 lda $dead,y
          pha

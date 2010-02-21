@@ -86,7 +86,6 @@ PLISTX   .dsb (MAXVERTEX*2)         ;Point lists (projected)
 PLISTY   .dsb (MAXVERTEX*2)
 PLISTZ   .dsb (MAXVERTEX*2)
 
-
 // META
 VISOBJS  .dsb 129
 OBCEN    .dsb MAXOBJS		 ;Center object #
@@ -101,6 +100,11 @@ CY       .dsb MAXOBJS
 HCY      .dsb MAXOBJS
 CZ       .dsb MAXOBJS
 HCZ      .dsb MAXOBJS
+
+#ifdef AVOID_INVISBLEVERTICES
+#define MAXV 28
+vertex2proj .dsb MAXV
+#endif
 
 
 ; Some stuff from lib3D
@@ -880,13 +884,21 @@ normal
          ; Get ship ID byte...
          ldy #ObjID
          lda (POINT),y
+		 and #%01111111
+		 beq DrawAllVis
          tay
+/*
+		 ; Why does this not work?
+		 lda OBTYPE
+ 		 and #%01111111
+		 beq DrawAllVis
+		 tay  
+*/		 
          
 		 ; Save the (projected) laser vertex for each visible ship
          ; I hate this, because uses information and routines out of
          ; oobj3d, but this saves time and space, so... ( 
          
-
          lda ShipLaserVertex-1,y
 patch
          tay
@@ -1049,8 +1061,25 @@ cc2
 		 clc
 cc3
 		 stx P0Z+1
-		 
- 		 jmp prepare_normals
+
+		 lda NFACES
+#ifdef AVOID_INVISBLEVERTICES
+		 bne skipthis 
+.(
+	 	 ldx #(MAXV-1)
+		 lda #1
+l3
+		 sta vertex2proj,x
+		 dex
+		 bpl l3
+.)
+		 jmp end_prepare_normals
+skipthis
+#else
+		 beq end_prepare_normals
+#endif
+
+		 jmp prepare_normals
 +end_prepare_normals
 
 		 lda NFACES	; Point pointers
@@ -1563,8 +1592,11 @@ done
 #define cz_	tmp5
 #define tempx op2
 
-#ifdef 0
+#ifdef AVOID_INVISBLEVERTICES
+.zero
+pface	.word 0000
 
+.text
 prepare_normals
 .(
     ; Prepare call to ROTPROJ in mode "Rotation only"
@@ -1573,8 +1605,28 @@ prepare_normals
     CLC              ;Rot and NOT proj
     JSR ROTPROJ
 
+	; Initialize the information about vertices
+	; which belong to a visible face at least
+
+	ldx #(MAXV-1)
 	lda #0
-	sta cont+1
+l3
+	sta vertex2proj,x
+	dex
+	bpl l3
+
+	; Initialize pointer to face data 
+	lda NPOINTS
+	asl
+	adc NPOINTS
+	adc NFACES
+
+	adc P0Z
+	sta pface
+	ldx P0Z+1
+	bcc c1
+	inx
+c1	stx pface+1
 
     ; Save center coordinates in cx_, cy_, cz_ for later.
     ldx RTEMPA
@@ -1592,23 +1644,25 @@ prepare_normals
     sta cz_
     lda HCZ,x
     sta cz_+1
-	cmp #$5
-	bcc loopadj
 
 	; If too far we patch code below and avoid calculating the
 	; dot product between the normal and the view vector.
 	; Just will use the normal Z sign.
-	inc cont+1	; This changes an inmediate value loaded in A below
+
+	cmp #5
+	bcc nopatch
+
+	lda #$18	; clc opcode
+	sta _patch_code
 	jmp startcheck
 
-    ; Adjust center coordinates, so they are 8-bit signed
+nopatch
+	lda #$38	; sec opcode
+	sta _patch_code
+
+
+    ; Adjust center coordinates, so they are 7-bit signed and SMULT can be used
 loopadj
-
-    lda cx_+1
-    ora cy_+1
-    ora cz_+1
-    beq endloop
-
     lda cx_+1
     beq conty
     bpl shift
@@ -1632,40 +1686,44 @@ shift
     lda cy_+1
     cmp #$80    
     ror cy_+1
-    ror cy_ 
+    ror cy_
 
     ; Z is allways positive (or it won't be visible)
-    ; This check can be avoided
-    ;lda cz_+1
-    ;cmp #$80    
     lsr cz_+1
     ror cz_
 
     jmp loopadj
 endloop
 
-    ; We need one more adjustment
-    ; To be sure the amount is 7-bit plus bit 8 for sign.
-
-    ; For instance
-    ; $00ff (255). If we get the low byte it is a negative number
-    ; $ff00 (-256).If we get the low byte, it is a positive number
-    ; After rotation we get $ff80 (-128), which is an 8-bit signed amount.
-
-    lda cx_+1
-    cmp #$80    
-    ror cx_
+    ; We need two more adjustments
+    ; To be sure the amount is 7-bit signed (-64..64).
  
+    lda cx_+1
+    cmp #$80 
+	ror
+	ror cx_
+	cmp #$80
+	ror
+	ror cx_
+	sta cx_+1
+
     lda cy_+1
     cmp #$80    
-    ror cy_ 
- 
-    ; Z is allways positive (or it won't be visible)
-    ; So no check for sign
-    lsr cz_
+	ror
+    ror cy_
+    cmp #$80    
+	ror
+    ror cy_
+	sta cy_+1
 
+    ; Z is allways positive (or it wouldn't be visible)
+    lsr cz_+1
+    ror cz_
+    lsr cz_+1
+    ror cz_
 
 startcheck
+
     ; Prepare facevis bitfield.
 
 	lda #0
@@ -1674,9 +1732,9 @@ startcheck
 	sta facevis+2
 
 
-    ; Loop through face list
- 	ldx NFACES
-	dex
+    ; Loop through face list. Can't do this backwards, as pointer to face has to be updated
+	; and we don't know where it ends...
+	ldx #0
     stx tempx
 loop
     ; First check. If all normals are zero, face is visible
@@ -1685,18 +1743,16 @@ loop
     ora PLISTY,x
     ora PLISTZ,x
     bne cont
-    sec
     jmp vis
-
 cont
-	lda #0	;SMC
-	beq cont2
+
+_patch_code
+	sec	; This is patched to clc or sec
+	bcs cont2
 	lda PLISTZ,x
 	bpl noneg
-	clc
-	jmp vis
+	jmp novis
 noneg
-	sec
 	jmp vis
 cont2
 
@@ -1704,184 +1760,51 @@ cont2
     ; of the center and the normal.
     ; <cx_,cy_,cz_>*<nx,ny,nz>=
     ; cx_*nx+cy_*ny+cz_*nz.
-    ; All 8-bit signed amounts.
-    ; But, to avoid overflows, we are doing
-    ; (cx_*nx)/256+(cy_*ny)/256+(cz_*nz)/256   
+    ; All within range of SMULT
     ; op1 (2-byte) will store the 16-bit result
 
     lda #0
-    sta op1
     sta op1+1
 
-    ; We are using the fast multi we need unsigned 8-bit numbers
-    ; also need to check for zeros, to special-case them.
-
-    ; Unsign nx. Save sign and store in reg X
-    lda #0
-    sta sign
-    ;ldx tempx Done above
 	lda PLISTX,x
-    beq doY     ; If zero jump to next component
-    bpl positivex1
-    dec sign
-    eor #$ff
-    clc
-    adc #1
-positivex1
-    tax
-
-    ; Unsign cx_. Invert sign and store in reg Y
-    ldy cx_
-    beq doY     ; If zero jump to next component
-    bpl positivex2
-    ;tay
-    lda sign
-    eor #$ff
-    sta sign
-    tya
-    eor #$ff
-    clc
-    adc #1
-	tay
-positivex2
-    ;tay
-
-    ; Get back the first operand to reg A and multiply. Result in op1 (high byte in A).
-    txa
-    MULTAY(op1)
-
-    ; Get high byte and put correct sign back
-    ; Save result from dividing by 256 in op1,op1+1
-    ; This is already 0
-    ;ldx #0
-    ;stx op1+1
-
-    ldx sign
-    beq nores1
-    eor #$ff
-    clc
-    adc #1
-    beq nores1
-    dec op1+1
-nores1
-    sta op1
-
+	ldy cx_
+	SMULT
+	sta op1
+	bpl doY
+	dec op1+1
 doY
-    ; Unsign ny. Save sign and store in reg X
-    lda #0
-    sta sign
-    ldx tempx
+	lda #0
+	sta tmp
 	lda PLISTY,x
-    beq doZ
-    bpl positivey1
-    ldy #$ff
-    sty sign
-    eor #$ff
-    clc
-    adc #1
-positivey1
-    tax
-
-    ; Unsign cx_. Save sign and store in reg Y
-    ldy cy_
-    beq doZ
-    bpl positivey2
-    ;tay
-    lda sign
-    eor #$ff
-    sta sign
-    tya
-    eor #$ff
-    clc
-    adc #1
-	tay
-positivey2
-    ;tay
-
-    ; Get back the first operand to reg A and multiply. Result in tmp.
-    txa
-    MULTAY(tmp)
-
-    ; Get high byte and put correct sign back
-    ; Add result from dividing by 256 to op1
-    ldx #0
-    stx tmp+1
-
-    ldx sign
-    beq nores2
-    eor #$ff
-    clc
-    adc #1
-    beq nores2
-    dec tmp+1
-nores2
-
-    clc
-    adc op1
-    sta op1
-    lda tmp+1
-    adc op1+1
-    sta op1+1
-
+	ldy cy_
+	SMULT
+	bpl noneg1
+	dec tmp
+noneg1
+	clc 
+	adc op1
+	sta op1
+	lda tmp
+	adc op1+1
+	sta op1+1
 
 doZ
-    ; Unsign nz. Save sign and store in reg X
-    lda #0
-    sta sign
-    ldx tempx
+	lda #0
+	sta tmp
 	lda PLISTZ,x
-    beq doneall
-    bpl positivez1
-    ldy #$ff
-    sty sign
-    eor #$ff
-    clc
-    adc #1
-positivez1
-    tax
-
-    ; Unsign cz_. Save sign and store in reg Y
-    ldy cz_
-    beq doneall
-    bpl positivez2
-    ;tay
-    lda sign
-    eor #$ff
-    sta sign
-    tya
-    eor #$ff
-    clc
-    adc #1
-	tay
-positivez2
-    ;tay
-
-    ; Get back the first operand to reg A and multiply. Result in tmp.
-    txa
-    MULTAY(tmp)
-
-    ; Get high byte and put correct sign back
-    ; Add result from dividing by 256 to op1
-    ldx #0
-    stx tmp+1
-
-    ldx sign
-    beq nores3
-    eor #$ff
-    clc
-    adc #1
-    beq nores3
-    dec tmp+1
-nores3
-    clc
-    adc op1
-    sta op1
-    lda tmp+1
-    adc op1+1
-    sta op1+1
+	ldy cz_
+	SMULT
+	bpl noneg2
+	dec tmp
+noneg2
+	clc 
+	adc op1
+	sta op1
+	lda tmp
+	adc op1+1
+	sta op1+1
 
 doneall
-    sec
     bmi novis
     lda op1+1
     ora op1
@@ -1890,20 +1813,73 @@ doneall
     ;beq vis
 novis
 	clc
+	ror facevis+2
+	ror facevis+1
+	ror facevis
+	jmp next
 vis
-	rol facevis
-	rol facevis+1
-	rol facevis+2
-	dec tempx
-	bmi end
+	sec
+	ror facevis+2
+	ror facevis+1
+	ror facevis
+
+	; Iterate through face points, marking those
+	; which are used in this (visible) face
+	ldy #0
+	lda (pface),y
+	clc
+	adc #2
+	tay
+loopf
+	;lda $dead,y
+	lda (pface),y
+	tax
+	inc vertex2proj,x
+	dey
+	cpy #2
+	bne loopf
+
+next
+	ldx tempx
+	inx
+	cpx NFACES
+	beq end
+	
+	stx tempx
+
+	ldy #0
+	lda (pface),y
+	clc
+	adc #3
+	adc pface
+	sta pface
+	bcc upface
+	inc pface+1
+upface
     jmp loop
 end
-	rts
+	; Rotate what is left
+	lda #24
+	sec
+	sbc NFACES
+	tax
+	lda facevis
+loopend
+	lsr facevis+2
+	ror facevis+1
+	ror ;facevis
+	dex
+	bne loopend
+	sta facevis
 
+	ldy OBTYPE
+	ldx ShipLaserVertex-1,y
+	inc vertex2proj,x
+
+	jmp end_prepare_normals
 .)
 
 #else
-
 prepare_normals
 .(
     ; Prepare call to ROTPROJ in mode "Rotation only"
@@ -2114,7 +2090,6 @@ end
 
 
 #endif
-
 
 
 .zero
