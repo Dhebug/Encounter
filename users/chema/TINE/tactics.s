@@ -685,6 +685,8 @@ nolowen
 
     ; We hit!
 	ldx AIShipID
+    dec _accel,x
+
     lda _missiles,x
 	; bits 7-3 = Lasers, 0-2 # missiles
     lsr
@@ -692,8 +694,6 @@ nolowen
 	lsr
 	;lsr	; do laser damage/2 (according to elite agb)
     ldx AITarget
-    dec _accel,x
-	dec _speed,x
 
 	ldy AIShipID
 	clc ; Not a missile
@@ -1214,16 +1214,17 @@ nofailure
     sta _rotz,x
 
 
+    ; Make it disappear soon
+    lda #IS_DISAPPEARING
+    ora _flags,x
+    sta _flags,x
+	lda #255
+	sta _ttl,x
 savA
     lda #0  ;SMC
     and #%01111111  ; Remove flag
     cmp #SHIP_DEBRIS
     bne nodeb
-
-    ; Make it disappear soon
-    lda #IS_DISAPPEARING
-    ora _flags,x
-    sta _flags,x
 
     lda _rnd_seed
     and #%00000111

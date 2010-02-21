@@ -415,9 +415,7 @@ LOOP
 C2
          STX TEMP2
          ldx tmp
-
 L1      
-
          ASL
          ROL TEMP2
          DEX
