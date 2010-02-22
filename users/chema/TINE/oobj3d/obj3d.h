@@ -15,7 +15,7 @@
 
 //#define USEOBLETS
 
-#define AVOID_INVISBLEVERTICES
+//#define AVOID_INVISBLEVERTICES
 
 // Maximum number of objects that can be handled
 // Was  32*2  

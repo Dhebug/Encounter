@@ -840,6 +840,19 @@ SKIP
 		 sta _vertexYLO,x
 		 lda HCY,x,
 		 sta _vertexYHI,x
+		 lda TEMP+1 ;HCZ,x
+		 bpl isok
+		 stx savx+1
+		 jsr _gen_rnd_number
+savx	
+		 ldx #0 ;SMC
+		 ora #%1
+		 sta _vertexXHI,x
+		 lda _rnd_seed+3
+ 		 ora #%1
+		 sta _vertexYHI,x
+
+isok
 		 dex
          bmi next
          jmp loop
@@ -887,13 +900,6 @@ normal
 		 and #%01111111
 		 beq DrawAllVis
          tay
-/*
-		 ; Why does this not work?
-		 lda OBTYPE
- 		 and #%01111111
-		 beq DrawAllVis
-		 tay  
-*/		 
          
 		 ; Save the (projected) laser vertex for each visible ship
          ; I hate this, because uses information and routines out of
@@ -1062,9 +1068,13 @@ cc2
 cc3
 		 stx P0Z+1
 
-		 lda NFACES
 #ifdef AVOID_INVISBLEVERTICES
-		 bne skipthis 
+		 lda OBTYPE
+		 and #%01111111
+		 bne patchme
+		 lda NFACES
+		 bne skipthis
+patchme		 
 .(
 	 	 ldx #(MAXV-1)
 		 lda #1
@@ -1076,6 +1086,7 @@ l3
 		 jmp end_prepare_normals
 skipthis
 #else
+	     lda NFACES
 		 beq end_prepare_normals
 #endif
 
@@ -1872,10 +1883,13 @@ loopend
 	bne loopend
 	sta facevis
 
-	ldy OBTYPE
+	; Get ship ID byte...
+    ldy #ObjID
+    lda (POINT),y
+	and #%01111111
+    tay
 	ldx ShipLaserVertex-1,y
 	inc vertex2proj,x
-
 	jmp end_prepare_normals
 .)
 

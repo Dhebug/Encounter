@@ -448,6 +448,7 @@ noroll
     jmp toofar
 areangry    
 
+/*	Actually this creates too many ships in the same place :(
     ; if it is an Anaconda it may launch worms.
 	; As _gen_rnd_number has already
     ; been called, just use _rnd_seed (+1,+2,+3)
@@ -487,7 +488,7 @@ areangry
 	rts
 
 notanaconda
-
+*/
 
 	; If BOLD he might want to launch a missile
 	ldx AIShipID
@@ -1893,27 +1894,12 @@ end
 
 set_random_border
 	pla ;Get rid of saved A
-//	sty savy+1
 	lda _rnd_seed
+	ora #%1
 	ldx _rnd_seed+2
-/*	ldy _rnd_seed+1
-	bmi rndY
-	; Random X, fixed Y
-	sta _vertexYHI+1
-	stx _vertexXLO+1
-	lda #0
-	sta _vertexXHI+1
-	jmp savy
-rndY
-	; Random Y, fixed X
-	sta _vertexXHI+1
-	stx _vertexYLO+1
-	lda #0
-	sta _vertexYHI+1*/
+	inx
 	sta _vertexYHI+1
 	stx _vertexXHI+1
-savy
-//	ldy #0
 	jmp cont
 
 .)
