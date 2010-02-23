@@ -48,8 +48,8 @@
 
 /* Values for planet distance various thresholds */
 
-#define PDIST_DOCK		$0a
-#define PDIST_MASSLOCK	$10
+#define PDIST_DOCK		$09
+#define PDIST_MASSLOCK	$12
 #define PDIST_TOOFAR	$60
 #define PDIST_TOOFAR2	$70
 

@@ -184,7 +184,8 @@ LoadOverlay
     iny
     sta (sp),y
 
-    lda #NUM_SECT_OVL
+	; Load everything into overlay, except grammar that goes to page 2
+    lda #NUM_SECT_OVL-1
     sta tmp
 loop
     jsr _sect_read
@@ -192,7 +193,15 @@ loop
 
     dec tmp
     bne loop
-	rts
+
+	; Load grammar file in page 2
+	ldy #2
+	sta (sp),y
+	iny
+	lda #$02
+	sta (sp),y
+	jmp _sect_read
+	;rts
 .)
     
     

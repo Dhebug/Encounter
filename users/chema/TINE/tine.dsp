@@ -211,6 +211,10 @@ SOURCE=.\galaxy.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\grammar.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\graphics.s
 # End Source File
 # Begin Source File

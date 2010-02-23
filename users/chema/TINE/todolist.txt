@@ -276,3 +276,14 @@ let say that from a particular orientation and velocity you can compute a vector
 [13:58] <_Dbug_> and if the velocity only changes, you can probably just scale the vector
 
 
+If you had the list of ships distances relative to you, and the angle, you could just do a sin/cos rotation, like for drawing a circle 
+[21:23] <_Dbug_> Actually if you had the angle, you could eliminate all the ships that cannot be seen trivially
+[21:23] <Chema> The angle to all the ships? Don't have that. Should calculate it.
+[21:23] <_Dbug_> and these two information could even be used by the onboard computer to select the nearest target
+[21:24] <_Dbug_> advantage of that, is that you can for example just recompute one set of value for one ship at each frame
+[21:24] <Chema> I have the position (16-bit integers) relative to me for each object.
+[21:24] <_Dbug_> and then you could just easily draw that as pixels on the radar
+[21:24] <_Dbug_> since the center of the radar is yourself
+[21:24] <_Dbug_> all you have to do is x=cx+sin(angle_ship)*distanceship
+[21:25] <_Dbug_> and y=cy+cos(angle_ship)*distanceship
+[21:25] <Chema> I also need a second point at heigth 0, but it is doable. Problem is calculating the angle.
