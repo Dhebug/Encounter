@@ -2,15 +2,13 @@
 
 __overlay_start
 
-; Grammar for text decompressing
-;#include"..\grammar.s"
-
-;.dsb 256-(*&255)
-
 #include "lib3dtab.s"
 #include "..\models.s"
 #include "..\music.s"
 #include "..\dictc.s"
+; Grammar for text decompressing
+.dsb 256-(*&255)
+#include "..\grammar.s"
 
 __overlay_end
 
@@ -26,7 +24,6 @@ __overlay_end
 ;		  4 bytes (cash)
 ;		  1 byte empty
 	
-.dsb 256-(*&255)		  	 
 .dsb 32,00
 .dsb 32,00
 .byt $ff

@@ -1,5 +1,7 @@
 ;;; Code for printing texts in hires screen
 
+#define Grammar $200
+
 ; in pixels
 #define INITIALX_TEXT   6 
 #define INITIALY_TEXT   6
