@@ -18,6 +18,9 @@
 /* Maximum number of objects in radar */
 #define MAX_RADAR_POINTS 10
 
+/* Number of stars (-1) */
+#define NSTARS 15
+
 /* Some definitions for frameskipping when rate ges too low */
 /* Use the technique of drawing odd/all/odd/all... scans    */
 //#define ALTSCANS
@@ -78,7 +81,6 @@
 
 
 
-
 /* Values for _target field */
 
 #define IS_ANGRY            128
@@ -106,6 +108,12 @@
 
 // This was $40 in the code ?
 #define MISSILE_DAMAGE  40
+
+
+// Position for some needed buffers
+
+/* select where the space for object records starts...*/
+#define OBS ($fffa-MAXOBJS*ObjSize)
 
 #endif
 

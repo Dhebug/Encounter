@@ -1,12 +1,8 @@
 
 #include "oobj3d\params.h"
+#include "tine.h"
 
-#define NSTARS 15
 
-STARX    .dsb NSTARS+1
-STARXREM .dsb NSTARS+1
-STARY    .dsb NSTARS+1
-STARYREM .dsb NSTARS+1
 
 ;THETSTEP .byt 2
 

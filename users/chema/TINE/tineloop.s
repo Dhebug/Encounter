@@ -9,12 +9,7 @@ invert .byt 00
 frame_time .byt 00
 
 
-// select where the space for object records starts...
 #define OBS ($fffa-MAXOBJS*ObjSize)
-#echo Object records start at
-#print OBS
-#echo
-
 _init_tine
 .(
     lda #<OBS        ;Object records
