@@ -56,6 +56,19 @@ _missile_armed	.byt 0
 _ptla			.byt 0
 _ptsh			.byt 0
 
+
+_dest_num		.byt 7	; So we start at LAVE 
+_dest_dist		.word 0	; Distance to target planet
+_current_screen	.byt 0 
+_docked			.byt 255 
+_planet_dist    .byt 255
+
+
+.bss
+
+*=(OBS-(15*MAXSHIPS)-15-MAX_RADAR_POINTS*4-MAXCOPS-(NSTARS+1)*4-104)
+
+
 ;Is ECM active?
 _ecm_counter	.byt 0
 
@@ -96,15 +109,7 @@ _prices			.dsb 34
 _quantities		.dsb 17 
 
 
-_dest_num		.byt 7	; So we start at LAVE 
-_dest_dist		.word 0	; Distance to target planet
-_current_screen	.byt 0 
-_docked			.byt 255 
-_planet_dist    .byt 255
-
-
 ; Variables to mantain for each space object
-
 _rotx		.dsb MAXSHIPS
 _roty		.dsb MAXSHIPS
 _rotz		.dsb MAXSHIPS
@@ -132,6 +137,37 @@ worm_counter		.byt 00
 missile_counter		.byt 00
 
 police_ids			.dsb MAXCOPS
+
+; From tactics.s
+
+;; Some variables to decouple firing and drawing the lasers
+_numlasers .byt 00
+_laser_source .dsb 4
+_laser_target .dsb 4
+
+
+;From radar.s
+; To store objects for plotting the radar
+radar_savX .dsb MAX_RADAR_POINTS*2
+radar_savY .dsb MAX_RADAR_POINTS*2
+
+; From stars.s
+
+STARX    .dsb NSTARS+1
+STARXREM .dsb NSTARS+1
+STARY    .dsb NSTARS+1
+STARYREM .dsb NSTARS+1
+
+
+object_records		.dsb MAXOBJS*ObjSize
+
+nmi_vect	.dsb 2
+reset_vect  .dsb 2
+irq_vect	.dsb 2
+
+.text
+
+
 
 ; Digrams
 
@@ -288,18 +324,6 @@ game_over			.byt 0
 .text
 #endif
 
-
-;From radar.s
-; To store objects for plotting the radar
-radar_savX .dsb MAX_RADAR_POINTS*2
-radar_savY .dsb MAX_RADAR_POINTS*2
-
-; From tactics.s
-
-;; Some variables to decouple firing and drawing the lasers
-_numlasers .byt 00
-_laser_source .dsb 4
-_laser_target .dsb 4
 
 
 ; For displaying the market

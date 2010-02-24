@@ -82,6 +82,8 @@ restart
 	ldx #00
 	stx escape_pod_launched
 	stx game_over
+	stx _numlasers
+	stx _ecm_counter
 
 	ldx #$ff
 	stx player_in_control
