@@ -76,6 +76,11 @@
 #define EQ_EXTRAMAN		 4
  
 
+/* Missions */
+#define HAVE_MISSIONS
+#define MISSION_CODE_START $9c00
+
+
 #endif
 
 

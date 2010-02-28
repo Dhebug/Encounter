@@ -155,6 +155,7 @@ ReadKeyNoBounce
 	jsr ReadKey
 	cmp oldKey
 	beq retz
+	tax
 	sta oldKey
 	rts
 retz

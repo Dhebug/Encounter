@@ -343,6 +343,7 @@ l1
 	beq l2
 	jsr rearview
 l2
+
     jsr _DoubleBuffOff
     jsr save_frame
     dec _docked
@@ -357,6 +358,13 @@ l2
 ;	jsr gs_planet_name
 	jsr wait
 	jsr wait
+
+#ifdef HAVE_MISSIONS
+	jsr OnPlayerDock
+	beq nomiss
+	jsr print_mission_message
+nomiss
+#endif
     jsr info
     jmp _TineLoop
 .)
@@ -1347,6 +1355,13 @@ frontview
 		lda #0
 		sta invert
 
+#ifdef HAVE_MISSIONS
+		jsr OnPlayerLaunch
+		beq nomiss
+		jsr print_mission_message
+nomiss
+#endif
+
         ; Exit to space...
 		jsr CreateEnvironment
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
@@ -1547,6 +1562,14 @@ do_jump
 		; Perform the jumping
 +tailjump
         jsr _jump
+
+
+#ifdef HAVE_MISSIONS
+		jsr OnPlayerHyper
+		beq nomiss
+		jsr print_mission_message
+nomiss
+#endif
 		; Clear legal status a bit
 		lda _legal_status
 		lsr

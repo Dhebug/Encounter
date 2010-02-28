@@ -163,6 +163,11 @@ moonsdone
 	lda #70
 	sta _planet_dist
 
+
+#ifdef HAVE_MISSIONS
+	jsr CheckMissionEncounters
+#endif
+
 	ldx #3
 	stx count ; Hope it is not used here
 loopen
@@ -329,6 +334,10 @@ random_encounter
 		bcc cont1
 		rts
 cont1
+
+#ifdef HAVE_MISSIONS
+	jsr CheckMissionEncounters
+#endif
 
 ;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))
 ;		return;

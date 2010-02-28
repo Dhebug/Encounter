@@ -741,7 +741,7 @@ notneg1
     sbc oY+1
 notneg2
     ora tmp    
-    and #$fc	; Change from fe to fc to avoid occasional collisions. But combat suffers...
+    and #$fe	; Change from fe to fc to avoid occasional collisions. But combat suffers...
     bne approach
 
     ; What if our target is a planet? Then if want to dock, dock
@@ -1049,12 +1049,20 @@ failure
 
 
 
-
-
-
-
 HyperObject
+#ifdef HAVE_MISSIONS
+.(
+	jsr OnHyperShip
+	jmp RemoveObject
+.)
+#endif
 DockObject
+#ifdef HAVE_MISSIONS
+.(
+	jsr OnDockedShip
+	jmp RemoveObject
+.)
+#endif
 DisappearObject
 .(
     jmp RemoveObject
@@ -1123,6 +1131,13 @@ nomore
 	dec game_over
 noplayer
 	jsr SetCurOb	; Without this destroying player's ship does NOT work!!!
+
+#ifdef HAVE_MISSIONS
+.(
+	ldx _ID
+	jsr OnExplodeShip
+.)
+#endif
     jmp RemoveObject
 .)
 
@@ -1771,6 +1786,10 @@ make_angry
 	bne cannot
 
     ; If he is already angry, he might not change his mind
+	lda _flags,y
+	ora #FLG_BOLD
+	bne cannot
+
 	stx savx+1
 	jsr _gen_rnd_number
     and _target,y
