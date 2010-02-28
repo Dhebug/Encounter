@@ -1,3 +1,4 @@
+#include "main.h"
 
 ; Tail for program... Let's put some BIG buffers here
 
@@ -127,16 +128,16 @@ osdk_end
 
 ; End of program
 
-
+#ifdef HAVE_MISSIONS
+#echo **** Free space:
+#print (MISSION_CODE_START-osdk_end)
+#echo
+#else
 #echo **** Free space:
 #print ($a000-osdk_end)
 #echo
+#endif
 
-
-; Here will go everything that will be put in overlay ram Check osdk_config.bat
-
-.bss
-*=$c000
 
 
 
