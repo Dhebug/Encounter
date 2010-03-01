@@ -121,11 +121,9 @@ _freebuffer
 	.dsb 184+40
 	.dsb 40
 
+
 osdk_stack .dsb 4
-
-
 osdk_end 
-
 ; End of program
 
 #ifdef HAVE_MISSIONS
@@ -137,6 +135,8 @@ osdk_end
 #print ($a000-osdk_end)
 #echo
 #endif
+
+
 
 
 

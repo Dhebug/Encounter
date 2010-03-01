@@ -227,6 +227,10 @@ SOURCE=.\main.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\missions.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\models.s
 # End Source File
 # Begin Source File

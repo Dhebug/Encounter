@@ -1,6 +1,4 @@
 
-
-
 #define A_FWBLACK        0
 #define A_FWRED          1
 #define A_FWGREEN        2
@@ -1042,13 +1040,10 @@ str_destroyed
 	.byt 0
 
 ; Missions
-str_mi_success
-	.asc "Mission accomplished"
+str_missiondesctitle
+	.byt (A_FWMAGENTA)
+	.asc "Current mission:"
 	.byt 0
-str_mi_fail
-	.asc "Mission failed"
-	.byt 0
-
 
 __texts_end
 

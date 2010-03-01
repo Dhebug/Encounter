@@ -1052,14 +1052,24 @@ failure
 HyperObject
 #ifdef HAVE_MISSIONS
 .(
+	stx nothing+1
 	jsr OnHyperShip
+	bcc nothing
+	jsr print_mission_message
+nothing
+	ldx #0 ;SMC
 	jmp RemoveObject
 .)
 #endif
 DockObject
 #ifdef HAVE_MISSIONS
 .(
+	stx nothing+1
 	jsr OnDockedShip
+	bcc nothing
+	jsr print_mission_message
+nothing
+	ldx #0 ;SMC
 	jmp RemoveObject
 .)
 #endif
@@ -1135,7 +1145,12 @@ noplayer
 #ifdef HAVE_MISSIONS
 .(
 	ldx _ID
+	stx nothing+1
 	jsr OnExplodeShip
+	bcc nothing
+	jsr print_mission_message
+nothing
+	ldx #0 ;SMC
 .)
 #endif
     jmp RemoveObject

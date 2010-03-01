@@ -77,7 +77,7 @@
  
 
 /* Missions */
-#define HAVE_MISSIONS
+#define HAVE_MISSIONS	
 #define MISSION_CODE_START $9c00
 
 

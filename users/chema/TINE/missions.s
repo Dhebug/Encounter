@@ -1,7 +1,8 @@
 
-#ifdef HAVE_MISSIONS
 #include "main.h"
 #include "tine.h"
+
+#ifdef HAVE_MISSIONS
 
 #define TXTPTRLO $fe
 #define TXTPTRHI $ff
@@ -16,12 +17,15 @@ print_mission_message
 	jsr clr_hires2
 	jsr set_ink2
 	jsr dump_buf
+	ldx #6
+	ldy #25
 	jmp cont
 nodb
 	jsr clr_hires
+	jsr set_ink2
+	ldx #6
+	ldy #(25+11)
 cont
-	ldx #12
-	ldy #25
 	jsr gotoXY
 	lda $fe
 	ldx $ff
@@ -29,26 +33,20 @@ cont
 rkey
 	jsr ReadKeyNoBounce
 	beq rkey
+
+	lda NeedsDiskLoad
 	rts
 .)
-
 
 
 .dsb MISSION_CODE_START-*
 
 __start_mission_code
 
-/* Jump table to main functions */
-
-
-/* CheckMissionEncounters. The idea is call this whenever random encounters could
-   exist and return Z=0 if encounters occur. */
-
-CheckMissionEncounters
-	jmp MissionEncounters
-
-/* OnPlayerXXX. The idea is patching these with the necessary jumps. If returns Z=0 it means
-   that text is to be plotted to screen (brief or debrief). */
+// Jump table to mission functions    
+// These are kind of event handlers   
+// OnPlayerXXX. The idea is patching these with the necessary jumps. If returns C=1 it means
+// that text is to be plotted to screen (brief or debrief). 
 
 OnPlayerLaunch
 	jmp MissionStart
@@ -56,22 +54,29 @@ OnPlayerDock
 	jmp MissionSuccess
 OnPlayerHyper
 	jmp MissionSuccess
-	;lda #0
-	;rts
 OnExplodeShip
-	lda #0
-	rts
+	jmp ShipKilled
 OnDockedShip
 	jmp ShipDocked
 OnHyperShip
-	lda #0
+	clc
 	rts
+	.byt 00
+OnEnteringSystem
+	jmp MissionEncounters
+OnNewEncounter
+	clc
+	rts
+	.byt 00
+	
+// Some public variables 
+NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
+MissionSummary		.word str_Summary
 
-NextMission	.byt 4
+// Some internal variables and code 
 
-
-ShipToProtect .byt 00
-Succeeded	  .byt 00
+ShipToProtect	.byt 00
+Succeeded		.byt 00
 
 MissionStart
 .(
@@ -87,10 +92,10 @@ MissionStart
 	lda #>str_MissionBrief
 	sta TXTPTRHI
 
-	lda #$ff
+	sec
 	rts
 nolaunch
-	lda #0
+	clc
 	rts
 .)
 
@@ -107,10 +112,10 @@ MissionEncounters
 	bne nolaunch
 	jsr CreateMissionShips
 	inc _mission
-	lda #$ff
+	clc
 	rts
 nolaunch
-	lda #00
+	clc
 	rts
 .)
 
@@ -123,7 +128,7 @@ MissionSuccess
 	lda Succeeded
 	beq failure
 
-	lda NextMission
+	lda #4
 	sta _mission
 
 	lda #<str_MissionDebrief
@@ -131,7 +136,7 @@ MissionSuccess
 	lda #>str_MissionDebrief
 	sta TXTPTRHI
 
-	lda #$ff
+	sec
 	rts
 
 failure
@@ -141,12 +146,12 @@ failure
 	sta TXTPTRHI
 
 	lda #$ff
-	sta NextMission
-
+	sta _mission
+	sec
 	rts
 
 notlaunched
-	lda #00
+	clc
 	rts
 .)
 
@@ -235,7 +240,7 @@ CreateMissionShips
 	lda #%11111000
 	and _missiles,x
 	sta _missiles,x
-
+	clc
 	rts
 
 .)
@@ -244,49 +249,97 @@ ShipDocked
 .(
 	lda _mission
 	cmp #2
-	bne cont
-
-	cpx ShipToProtect
-	bne cont
-	dec Succeeded	
+	beq cont
+nothing
+	clc
+	rts
 cont
+	cpx ShipToProtect
+	bne nothing
+	dec Succeeded	
+	lda #<str_hedocked
+	sta TXTPTRLO
+	lda #>str_hedocked
+	sta TXTPTRHI
+	sec
 	rts
 .)
 
 
+ShipKilled
+.(
+	lda _mission
+	cmp #2
+	beq cont
+nothing
+	clc
+	rts
+cont
+	cpx ShipToProtect
+	bne nothing
+	lda #<str_hekilled
+	sta TXTPTRLO
+	lda #>str_hekilled
+	sta TXTPTRHI
+	sec
+	rts
+.)
+
 str_MissionBrief
-	.asc "Greetings Commander, I am 
+	.asc "   MAYDAY -- MAYDAY "
 	.byt 13
-	.asc "Captain Curruthers of Her"
+	.asc "My Cobra-I ship is damaged and"
 	.byt 13
-	.asc "Majesty's Space Navy and I beg"
+	.asc "I am pursued by pirates on Beanen."
 	.byt 13
-	.asc "a moment of your valuable time.
 	.byt 13
-	.asc "We would like you to do a little 
+	.asc "Please help me!."
 	.byt 13
-	.asc "job for us. ---MESSAGE ENDS."
+	.asc "---MESSAGE ENDS."
 	.byt 0
 
 str_MissionDebrief
-	.asc "You have served us well and we shall"
+	.asc "You have saved my life and I shall"
 	.byt 13
 	.asc "remember. ---MESSAGE ENDS."
 	.byt 0
 
 str_MissionFailure
-	.asc "Thanks for your attempt. Sadly we did"
+	.asc "Thanks for your attempt. Sadly you did"
 	.byt 13
 	.asc "not succeed. It was clearly too much"
 	.byt 13
 	.asc "for your skills. ---MESSAGE ENDS."
 	.byt 0
+str_hedocked
+	.asc "Zantor docked safely!"
+	.byt 13
+	.asc "Mission successful"
+	.byt 0
+str_hekilled
+	.asc "Zantor has been killed!"
+	.byt 13
+	.asc "Mission failed"
+	.byt 0
+str_Summary
+	.byt 2
+	.asc "Current mission:"
+	.byt 13
+	.byt 2 
+	.asc "Go to Beanen. Save Zantor from pirates"
+	.byt 13
+	.byt 2
+	.asc "so he can land safely."
+	.byt 0
+
 
 __end_mission_code
-#endif //HAVE_MISSIONS
+#endif 
 
 
 ; Here will go everything that will be put in overlay ram Check osdk_config.bat
 
 .bss
 *=$c000
+
+
