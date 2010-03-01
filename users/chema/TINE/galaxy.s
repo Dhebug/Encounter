@@ -1,6 +1,5 @@
+
 #include "main.h"
-
-
 
 #define itoa itoa2
 
@@ -3233,10 +3232,30 @@ no_fit
     inx
     cpx #16
     bne loope
-    
-    rts
 
-;tmp4b .word 0000
+#ifdef HAVE_MISSIONS
+	; If mission has been briefed, then check for short
+	; description
+	lda _mission
+	bmi ret
+	and #%11
+	beq ret
+
+	ldx #12
+	ldy #160
+	jsr gotoXY
+	;lda #(A_FWMAGENTA)
+    ;jsr put_code
+    ;lda #<str_missiondesctitle
+    ;ldx #>str_missiondesctitle
+    ;jsr print
+	;jsr perform_CRLF
+	lda MissionSummary
+	ldx MissionSummary+1
+	jmp print
+#endif
+ret
+    rts
 .)
 
 pr_colon

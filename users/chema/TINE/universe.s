@@ -165,7 +165,10 @@ moonsdone
 
 
 #ifdef HAVE_MISSIONS
-	jsr CheckMissionEncounters
+	jsr OnEnteringSystem
+	bcc nothing
+	jsr print_mission_message
+nothing
 #endif
 
 	ldx #3
@@ -336,7 +339,10 @@ random_encounter
 cont1
 
 #ifdef HAVE_MISSIONS
-	jsr CheckMissionEncounters
+	jsr OnNewEncounter
+	bcc nothing
+	jsr print_mission_message
+nothing
 #endif
 
 ;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))

@@ -361,7 +361,7 @@ l2
 
 #ifdef HAVE_MISSIONS
 	jsr OnPlayerDock
-	beq nomiss
+	bcc nomiss
 	jsr print_mission_message
 nomiss
 #endif
@@ -1355,13 +1355,6 @@ frontview
 		lda #0
 		sta invert
 
-#ifdef HAVE_MISSIONS
-		jsr OnPlayerLaunch
-		beq nomiss
-		jsr print_mission_message
-nomiss
-#endif
-
         ; Exit to space...
 		jsr CreateEnvironment
         ; We update the _docked variable AFTER CreateEnvironment, so it can be used
@@ -1379,8 +1372,17 @@ loop
 		bne loop
 #endif
 
+#ifdef HAVE_MISSIONS
+		jsr init_front_view	
+		jsr OnPlayerLaunch
+		bcc nomiss
+		jsr print_mission_message
+nomiss
+		rts
+#endif
+
 notdocked
-		jmp init_front_view	; This is jsr/rts
+		jmp init_front_view	
 nothing
         rts
 .)
@@ -1566,7 +1568,7 @@ do_jump
 
 #ifdef HAVE_MISSIONS
 		jsr OnPlayerHyper
-		beq nomiss
+		bcc nomiss
 		jsr print_mission_message
 nomiss
 #endif
