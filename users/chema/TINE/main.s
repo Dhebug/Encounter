@@ -75,9 +75,14 @@ restart
 	jsr _init_screen2
 
 	dec silence_sfx
+
 	jsr _init_irq_routine 
 
 	jsr SndStop
+
+	; Load mission code
+	jsr load_mission
+
 
 	ldx #00
 	stx escape_pod_launched
@@ -203,7 +208,6 @@ loop
 	lda #$02
 	sta (sp),y
 	jmp _sect_read
-	;rts
 .)
     
     

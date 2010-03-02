@@ -78,7 +78,9 @@ __overlay_end
 #echo
 
 
-
+; Missions
+;.dsb 256-(*&255)
+#include "..\missions.s"
 
 
 

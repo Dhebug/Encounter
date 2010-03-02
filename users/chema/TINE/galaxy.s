@@ -4058,6 +4058,9 @@ loop
 	;jsr NewPlayerShip
 	jsr InitPlayerShip
 
+	; Load mission code
+	jsr load_mission
+
 	jsr _init_irq_routine 
 
 	; return with Z=0
