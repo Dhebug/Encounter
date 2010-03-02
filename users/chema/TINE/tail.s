@@ -122,22 +122,154 @@ _freebuffer
 	.dsb 40
 
 
+#ifdef HAVE_MISSIONS
+
+#define TXTPTRLO $fe
+#define TXTPTRHI $ff
+
+/* General routines for missions, which are fixed and NOT
+   loaded from disk */
+
+print_mission_message
+.(
+	lda double_buff
+	beq nodb
+	jsr clr_hires2
+	jsr set_ink2
+	jsr dump_buf
+	ldx #6
+	ldy #25
+	jmp cont
+nodb
+	jsr clr_hires
+	jsr set_ink2
+	ldx #6
+	ldy #(25+11)
+cont
+	jsr gotoXY
+	lda $fe
+	ldx $ff
+	jsr print
+rkey
+	jsr ReadKeyNoBounce
+	beq rkey
+
+	lda NeedsDiskLoad
+	beq end
+	dec NeedsDiskLoad
+	jmp load_mission
+end
+	rts
+.)
+
+#define OVERLAY_MISSION 100+NUM_SECT_OVL+3
+
+#define MISSION_CODE_START $9c00
+
+load_mission
+.(
+	jsr _init_disk
+    ; Sector to read    
+	lda _mission
+	lsr
+	lsr
+	asl
+	asl
+	clc
+	adc #<OVERLAY_MISSION
+    ldy #0
+    sta (sp),y
+	lda #>OVERLAY_MISSION
+	adc #0
+    iny
+    sta (sp),y
+
+    ; Address of buffer
+    iny
+    lda #<(MISSION_CODE_START)
+    sta (sp),y
+    lda #>(MISSION_CODE_START)
+    iny
+    sta (sp),y
+
+	; Load mission code
+    lda #NUM_SECT_MISSION_CODE
+    sta tmp
+loop
+    jsr _sect_read
+    jsr inc_disk_params
+
+    dec tmp
+    bne loop
+
+	jsr _init_irq_routine
+	rts
+
+.)
+
+#endif
+
 osdk_stack .dsb 4
 osdk_end 
 ; End of program
 
+
+#ifdef HAVE_MISSIONS
+
+.dsb MISSION_CODE_START-*-18
+
+_mission_callbacks
+
+// Jump table for routines accessible from mission code
+
+IndAddSpaceObject	
+	jmp AddSpaceObject
+IndSetShipEquip
+	jmp SetShipEquip
+IndRnd
+	jmp _gen_rnd_number
+IndSetCurOb
+	jmp SetCurOb
+IndLaunchShip
+	jmp LaunchShipFromOther
+IndGetShipPos
+	jmp GetShipPos
+
+__start_mission_code
+
+// Jump table to mission functions    
+// These are kind of event handlers   
+// OnPlayerXXX. The idea is patching these with the necessary jumps. If returns C=1 it means
+// that text is to be plotted to screen (brief or debrief). 
+
+OnPlayerLaunch			.dsb 3
+OnPlayerDock			.dsb 3
+OnPlayerHyper			.dsb 3
+OnExplodeShip			.dsb 3
+OnDockedShip			.dsb 3
+OnHyperShip				.dsb 3
+OnEnteringSystem		.dsb 3
+OnNewEncounter			.dsb 3
+	
+// Some public variables 
+NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
+MissionSummary		.word 0
+
+#endif
+
+; Here will go everything that will be put in overlay ram Check osdk_config.bat
+
+.bss
+*=$c000
+
+
+
 #ifdef HAVE_MISSIONS
 #echo **** Free space:
-#print (MISSION_CODE_START-osdk_end)
+#print (_mission_callbacks-osdk_end)
 #echo
 #else
 #echo **** Free space:
 #print ($a000-osdk_end)
 #echo
 #endif
-
-
-
-
-
-
