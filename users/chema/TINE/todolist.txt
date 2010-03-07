@@ -287,3 +287,15 @@ If you had the list of ships distances relative to you, and the angle, you could
 [21:24] <_Dbug_> all you have to do is x=cx+sin(angle_ship)*distanceship
 [21:25] <_Dbug_> and y=cy+cos(angle_ship)*distanceship
 [21:25] <Chema> I also need a second point at heigth 0, but it is doable. Problem is calculating the angle.
+
+
+Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/achievements/
+[19:59] <_Dbug_> "Law Abiding: Complete the game without attacking the police"
+[19:59] <_Dbug_> "Merchant: Made 500 credits by trading"
+[19:59] <_Dbug_> "Tech addict: Bought all the possible equipment for the cobra"
+[20:00] <_Dbug_> "Discoverer: Travelled to more than 10 systems"
+[20:00] <_Dbug_> etc
+[20:00] <_Dbug_> etc
+[20:00] <Chema> hehe sounds quite good. At first sight I thought they were like missions completed or milestones reached... but this one is quite fun.
+[20:00] <_Dbug_> On the status page you can even use that to compute some kind of 'game achievement percentage'
+[20:02] <_Dbug_> Basically it's really just a matter of maintaining some counter and flags 
