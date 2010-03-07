@@ -54,6 +54,7 @@
 
 // Jump table for routines accessible from mission code
 
+#define IndFlightMessage	MISSION_CODE_START-3*7
 #define IndAddSpaceObject	MISSION_CODE_START-3*6
 #define IndSetShipEquip     MISSION_CODE_START-3*5
 #define IndRnd				MISSION_CODE_START-3*4
@@ -111,7 +112,7 @@
 .(
 __start_mission1_code
 // Jump table to mission functions    
-// These are kind of event handlers   
+// These are kind of event handlers  
 // OnPlayerXXX. The idea is patching these with the necessary jumps. If returns C=1 it means
 // that text is to be plotted to screen (brief or debrief). 
 
@@ -135,10 +136,20 @@ OnNewEncounter
 	clc
 	rts
 	.byt 00
+
+// OnScoopObject return with carry =1 if it has handled the scooping, so the main program
+// avoids doing so.
+
+OnScoopObject		
+	clc
+	rts 
+	.byt 00
+
 	
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word str_Summary
+MissionCargo		.byt 0	; Cargo for this mission
 
 // Some internal variables and code 
 
@@ -327,10 +338,13 @@ cont
 	bne nothing
 	dec Succeeded	
 	lda #<str_hedocked
-	sta TXTPTRLO
+	sta tmp0
 	lda #>str_hedocked
-	sta TXTPTRHI
-	sec
+	sta tmp0+1
+	ldx #0
+	jsr IndFlightMessage
+
+	clc
 	rts
 .)
 
@@ -347,10 +361,13 @@ cont
 	cpx ShipToProtect
 	bne nothing
 	lda #<str_hekilled
-	sta TXTPTRLO
+	sta tmp0
 	lda #>str_hekilled
-	sta TXTPTRHI
-	sec
+	sta tmp0+1
+	ldx #0
+	jsr IndFlightMessage
+
+	clc
 	rts
 .)
 
@@ -382,12 +399,12 @@ str_MissionFailure
 	.byt 0
 str_hedocked
 	.asc "Zantor docked safely!"
-	.byt 13
+	.byt 0
 	.asc "Mission successful"
 	.byt 0
 str_hekilled
 	.asc "Zantor has been killed!"
-	.byt 13
+	.byt 0
 	.asc "Mission failed"
 	.byt 0
 str_Summary
@@ -451,10 +468,19 @@ OnNewEncounter
 	clc
 	rts
 	.byt 00
+
+// OnScoopObject return with carry =1 if it has handled the scooping, so the main program
+// avoids doing so.
+
+OnScoopObject		
+	clc
+	rts 
+	.byt 00
 	
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word str_Summary
+MissionCargo		.byt 0	; Cargo for this mission
 
 // Some internal variables and code 
 

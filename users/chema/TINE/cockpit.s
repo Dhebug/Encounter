@@ -110,6 +110,7 @@ flight_message
 	lda #>flight_message_base
 	sta tmp0+1
 
++fligth_message_b
 	; Print message id to buffer
 	jsr fm_prepare
 	jsr search_string_and_print

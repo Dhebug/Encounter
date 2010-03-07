@@ -164,7 +164,7 @@ end
 
 #define OVERLAY_MISSION 100+NUM_SECT_OVL+3
 
-#define MISSION_CODE_START $9c00
+#define MISSION_CODE_START	$a000-NUM_SECT_MISSION_CODE*256
 
 load_mission
 .(
@@ -173,9 +173,15 @@ load_mission
 	lda _mission
 	lsr
 	lsr
+
+	; Multiply by 6
 	asl
+	sta tmp
 	asl
 	clc
+	adc tmp
+	
+	;clc
 	adc #<OVERLAY_MISSION
     ldy #0
     sta (sp),y
@@ -216,12 +222,13 @@ osdk_end
 
 #ifdef HAVE_MISSIONS
 
-.dsb MISSION_CODE_START-*-18
+.dsb MISSION_CODE_START-*-21
 
 _mission_callbacks
 
 // Jump table for routines accessible from mission code
-
+IndFlightMessage
+	jmp fligth_message_b
 IndAddSpaceObject	
 	jmp AddSpaceObject
 IndSetShipEquip
@@ -250,10 +257,12 @@ OnDockedShip			.dsb 3
 OnHyperShip				.dsb 3
 OnEnteringSystem		.dsb 3
 OnNewEncounter			.dsb 3
+OnScoopObject			.dsb 3
 	
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word 0
+MissionCargo		.byt 0	; Tons in cargo for mission
 
 #endif
 

@@ -1458,6 +1458,18 @@ theobject .byt 0
 
 scoop_item
 .(
+
+#ifdef HAVE_MISSIONS
+	pha
+	ldx theobject
+	jsr OnScoopObject
+	bcc nomiss
+	;jsr print_mission_message
+	jmp finish
+nomiss
+	pla
+#endif
+
 	tax
 	stx saveme+1
 	jsr flight_message_loot
@@ -1466,6 +1478,7 @@ saveme
 	ldx #0 ; SMC
 	inc _shipshold,x
 	dec _holdspace
+finish
 	ldx theobject
 	jmp RemoveObject ; This is jsr/rts
 .)
