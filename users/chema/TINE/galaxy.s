@@ -2906,11 +2906,6 @@ mkt_status
     ldx #>Unitnames
     lda #<Unitnames
     jsr printnl
-;    ldx #4
-;loop
-;    jsr put_space
-;    dex
-;    bne loop
 notmarket
     lda #(A_FWCYAN|A_FWWHITE*16+128)
     jsr put_code      
@@ -2920,7 +2915,38 @@ notmarket
     jsr print
     jsr put_space
 
-    jmp pr_cash
+	; jmp pr_cash is not necessary
+	; as it is right beyond this routine
+
+#ifdef HAVE_MISSIONS
+    jsr pr_cash
+
+	lda MissionCargo
+	beq end
+	cmp _holdspace
+	bcc roomok
+	beq roomok
+
+    ldx #>str_missionspace
+    lda #<str_missionspace
+    jmp print
+/*
+	lda Missioncargo
+    sta op2
+    lda #0
+    sta op2+1
+    ldx #3
+    jmp print_num_tab
+*/
+
+roomok
+    ldx #>str_missionspaced
+    lda #<str_missionspaced
+    jmp print
+
+end
+	rts
+#endif
 
 .)
 
@@ -2938,7 +2964,7 @@ loop
     jsr put_space
     ldx #>str_credits
     lda #<str_credits
-    jmp print
+    jmp printnl
 .)
 
 
