@@ -1045,6 +1045,30 @@ str_missiondesctitle
 	.asc "Current mission:"
 	.byt 0
 
+str_missionspace
+	.byt $0c
+	.byt A_FWRED
+	.asc "No room for mission cargo"
+	.byt 0
+str_missionspaced
+	.asc "                           "
+	.byt 0
+
+
+; Transmission
+str_inctrans
+	.byt $0c
+	.asc "--- INCOMING TRANSMISSION"
+	.byt 0
+str_endtrans
+	.asc " --- MESAGE ENDS."
+	.byt 13
+	.byt 13
+	.byt A_FWRED
+	.asc "   (press SPACE)"
+	.byt 0
+
+
 __texts_end
 
 #echo Size of texts in bytes:

@@ -115,10 +115,238 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Mission minus one
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+*=MISSION_CODE_START
+
+.(
+__start_mission0_code
+// Jump table to mission functions    
+// These are kind of event handlers  
+// OnPlayerXXX. The idea is patching these with the necessary jumps. If returns C=1 it means
+// that text is to be plotted to screen (brief or debrief). 
+
+OnPlayerLaunch
+	jmp MissionStart
+OnPlayerDock
+	jmp MissionSuccess
+OnPlayerHyper
+	clc
+	rts
+	.byt 00
+OnExplodeShip
+	clc
+	rts
+	.byt 00
+OnDockedShip
+	clc
+	rts
+	.byt 00
+OnHyperShip
+	clc
+	rts
+	.byt 00
+OnEnteringSystem
+	clc
+	rts
+	.byt 00
+OnNewEncounter
+	jmp CreateItemForScoop
+
+// OnScoopObject return with carry =1 if it has handled the scooping, so the main program
+// avoids doing so.
+
+OnScoopObject		
+	jmp CheckScoop
+
+	
+// Some public variables 
+NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
+MissionSummary		.word str_Summary
+MissionCargo		.byt 0	; Cargo for this mission
+
+// Some internal variables and code 
+
+Success				.byt 0
+IdItem				.byt 0
+
+MissionStart
+.(
+	lda _mission
+	cmp #THISMISSION
+	bne nolaunch
+	lda _score+1
+	beq nolaunch
+
+	; launch mission
+	inc _mission
+	lda #<str_MissionBrief
+	sta TXTPTRLO
+	lda #>str_MissionBrief
+	sta TXTPTRHI
+
+	sec
+	rts
+nolaunch
+	clc
+	rts
+.)
+
+
+MissionSuccess
+.(
+/*
+	lda _mission
+	cmp #THISMISSION+2
+	bne notfinished
+	lda _galaxynum
+	cmp #2
+	bne notlaunched
+	lda _currentplanet
+	cmp #$8
+	bne notfinished
+
+	lda Success
+	beq failure
+
+	; Remove cargo
+	ldx #3
+	lda _shipshold,x
+	cmp #3 
+	bcs okcargo
+
+	lda #NEXTMISSIONFAIL
+	sta _mission
+	lda #<str_MissionFailed
+	sta TXTPTRLO
+	lda #>str_MissionFailed
+	sta TXTPTRHI
+	sec
+	rts
+
+okcargo
+	sec
+	sbc #3
+	sta _shipshold,x
+	clc
+	lda #3
+	adc _holdspace
+	sta _holdspace
+
+	lda #<10000
+	clc
+	adc _cash
+	sta _cash
+	lda #>10000
+	adc _cash+1
+	sta _cash+1
+	
+
+	lda #NEXTMISSION
+	sta _mission
+
+	lda #<str_MissionDebrief
+	sta TXTPTRLO
+	lda #>str_MissionDebrief
+	sta TXTPTRHI
+
+	dec NeedsDiskLoad
+
+	sec
+	rts
+
+*/
+notlaunched
+	clc
+	rts
+.)
+
+CreateItemForScoop
+.(
+
+	rts
+.)
+
+
+CheckScoop
+.(
+
+	rts
+.)
+
+
+str_MissionBrief
+	.asc "I have a profitable bussiness for you."
+	.byt 13
+	.asc "Come to GEMA for a transport."
+	.byt 0
+
+
+str_MissionDebrief
+	.asc "Good job. I have sent the credits."
+	.byt 0
+
+str_MissionFailed
+	.asc "What did you do with my cargo?"
+	.byt 13
+	.asc "I will make sure nobody else hires you!"
+	.byt 0
+
+str_Summary
+	.byt 2
+	.asc "Current mission:"
+	.byt 13
+	.byt 2 
+	.asc "Get cannister at Gema. Bring it to"
+	.byt 13
+	.byt 2 
+	.asc "Esrasoce."
+	.byt 0
+
+
+__end_mission0_code
+
+#echo ***** Missions start:
+#print (__start_mission0_code)
+#echo ***** Mission memory:
+#print (__end_mission0_code - __start_mission0_code)
+#echo
+
+
+.)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Mission zero
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+.dsb $a000-*
+
+
+
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$ff
+
+
 
 *=MISSION_CODE_START
 
@@ -170,7 +398,7 @@ OnScoopObject
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word str_Summary1
-MissionCargo		.byt 3	; Cargo for this mission
+MissionCargo		.byt 0	; Cargo for this mission
 
 // Some internal variables and code 
 
@@ -212,6 +440,9 @@ doit
 	sbc #3
 	sta _holdspace
 
+	lda #0
+	sta MissionCargo
+
 	clc
 	rts
 
@@ -229,6 +460,9 @@ firststart
 	sta TXTPTRLO
 	lda #>str_MissionBrief
 	sta TXTPTRHI
+
+	lda #3
+	sta MissionCargo
 
 	sec
 	rts
@@ -303,11 +537,11 @@ okcargo
 	adc _holdspace
 	sta _holdspace
 
-	lda #<1000
+	lda #<10000
 	clc
 	adc _cash
 	sta _cash
-	lda #>1000
+	lda #>10000
 	adc _cash+1
 	sta _cash+1
 	
@@ -333,31 +567,21 @@ notlaunched
 
 
 str_MissionBrief
-	.asc "---INCOMING TRANSMISION"
-	.byt 13
 	.asc "I have a profitable bussiness for you."
 	.byt 13
 	.asc "Come to GEMA for a transport."
-	.byt 13
-	.asc "---MESSAGE ENDS."
 	.byt 0
 
 str_MissionBrief2
-	.asc "---INCOMING TRANSMISION"
-	.byt 13
 	.asc "Transport 3 tons of slaves to Maisso."
 	.byt 13
 	.asc "Be sure to have such space free before"
 	.byt 13
 	.asc "leaving. You will be paid 1000 Cr."
-	.byt 13
-	.asc "---MESSAGE ENDS."
 	.byt 0
 
 str_MissionDebrief
 	.asc "Good job. I have sent the credits."
-	.byt 13
-	.asc "remember. ---MESSAGE ENDS."
 	.byt 0
 
 str_MissionProblem

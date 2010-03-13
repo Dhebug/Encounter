@@ -4,6 +4,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; key read and timer irq 
 #define        via_portb               $0300 
+#define		   via_ddrb				   $0302	
+#define		   via_ddra				   $0303
 #define        via_t1cl                $0304 
 #define        via_t1ch                $0305 
 #define        via_t1ll                $0306 
@@ -165,7 +167,7 @@ retz
 
 ;ChemaRead.s 
 
-
+/*
 SenseKeyPrep
 .(
        sta via_porta 
@@ -181,7 +183,7 @@ SenseKeyPrep
 
 	   rts
 .)
-
+*/
 
 ReadKeyboard
 .(
@@ -193,6 +195,8 @@ ReadKeyboard
         lda #$FF 
         sta via_pcr 
 
+		; Clear CB2, as keeping it high hangs on some orics.
+		; Pitty, as all this code could be run only once, otherwise
         ldy #$dd 
         sty via_pcr 
 
@@ -204,14 +208,30 @@ loop2   ;Clear relevant bank
 
         ;Write 0 to Column Register 
 
-		jsr SenseKeyPrep
+		;jsr SenseKeyPrep
+		sta via_porta 
+	    lda #$fd 
+	    sta via_pcr 
+        sty via_pcr 
+
+        lda via_portb 
+        and #%11111000
+        stx zpTemp02
+        ora zpTemp02 
+        sta via_portb 
+
         
-        ;Wait 10 cycles for curcuit to settle on new row 
+        ;Wait 10 cycles for circuit to settle on new row 
         ;Use time to load inner loop counter and load Bit 
+
+		; CHEMA: Fabrice Broche uses 4 cycles (lda #8:inx) plus
+		; the four cycles of the and absolute. That is 8 cycles.
+		; So I guess that I could do the same here (ldy,lda)
+
         ldy #$80
-		nop 
-        nop 
-        nop 
+		;nop 
+        ;nop 
+        ;nop 
         lda #8 
 
         ;Sense Row activity 
@@ -221,7 +241,19 @@ loop2   ;Clear relevant bank
 loop1   ;Store Column 
         tya 
         eor #$FF 
-		jsr SenseKeyPrep
+
+		;jsr SenseKeyPrep
+		sta via_porta 
+	    lda #$fd 
+	    sta via_pcr 
+        sty via_pcr 
+
+        lda via_portb 
+        and #%11111000
+        stx zpTemp02
+        ora zpTemp02 
+        sta via_portb 
+
 
         ;Use delay(10 cycles) for setting up bit in Keybank and loading Bit 
         tya 

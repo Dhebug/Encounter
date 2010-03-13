@@ -146,13 +146,42 @@ nodb
 	ldx #6
 	ldy #(25+11)
 cont
+	stx savx+1
+	sty savy+1
 	jsr gotoXY
+
+	lda #<str_inctrans
+	ldx #>str_inctrans
+	jsr print
+
+	jsr wait
+	jsr wait
+savx
+	ldx #0 ;SMC
+savy
+	ldy #0
+	jsr gotoXY
+	jsr put_space
+
+	jsr perform_CRLF
+	jsr perform_CRLF
+
 	lda $fe
 	ldx $ff
 	jsr print
+
+	jsr perform_CRLF
+	jsr perform_CRLF
+
+	lda #<str_endtrans
+	ldx #>str_endtrans
+	jsr print
+
+
 rkey
 	jsr ReadKeyNoBounce
-	beq rkey
+	cmp #" "; Using ESC ($1b) may accidentaly make player launch the escape pod!
+	bne rkey
 
 	lda NeedsDiskLoad
 	beq end
@@ -161,6 +190,8 @@ rkey
 end
 	rts
 .)
+
+
 
 #define OVERLAY_MISSION 100+NUM_SECT_OVL+3
 
@@ -257,6 +288,9 @@ OnDockedShip			.dsb 3
 OnHyperShip				.dsb 3
 OnEnteringSystem		.dsb 3
 OnNewEncounter			.dsb 3
+
+// In OnScoopObject returning with C=1 means that the main program is not to handle
+// the object scooped (generating and storing items in bay
 OnScoopObject			.dsb 3
 	
 // Some public variables 
