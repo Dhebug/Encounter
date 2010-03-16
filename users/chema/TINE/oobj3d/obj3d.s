@@ -772,11 +772,15 @@ pdata
 		 bcc checkmin
 
 normal
+		/*
          lda TEMP
          CMP ZMAX
          LDA TEMP+1
          SBC ZMAX+1       ;Greater than 8192?
          BCS SKIP        ;(or negative)
+		 */
+		 lda TEMP+1
+		 bmi SKIP
 
 checkmin
          LDA TEMP
@@ -1220,6 +1224,12 @@ SmallDot
 .(
         STA POINT
         STY POINT+1
+
+        ldx RTEMPA
+        lda HCZ,x
+		bmi end
+		cmp ZMAX+1
+		bcs end
 
         ldy #2
         lda (POINT),y
