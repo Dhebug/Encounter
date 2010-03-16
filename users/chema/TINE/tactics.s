@@ -1815,7 +1815,7 @@ make_angry
 
     ; If he is already angry, he might not change his mind
 	lda _flags,y
-	ora #FLG_BOLD
+	and #FLG_BOLD
 	bne cannot
 
 	stx savx+1

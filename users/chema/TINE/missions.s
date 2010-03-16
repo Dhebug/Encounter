@@ -931,7 +931,7 @@ str_MissionBrief
 str_MissionDebrief
 	.asc "You have saved my life and I shall"
 	.byt 13
-	.asc "remember. ---MESSAGE ENDS."
+	.asc "remember."
 	.byt 0
 
 str_MissionFailure
@@ -939,7 +939,7 @@ str_MissionFailure
 	.byt 13
 	.asc "not succeed. It was clearly too much"
 	.byt 13
-	.asc "for your skills. ---MESSAGE ENDS."
+	.asc "for your skills."
 	.byt 0
 str_hedocked
 	.asc "Zantor docked safely!"
@@ -1252,22 +1252,19 @@ cont
 .)
 
 str_MissionBrief
-	.asc "   MAYDAY -- MAYDAY "
+	.asc "MAYDAY -- MAYDAY "
 	.byt 13
 	.asc "My Cobra-I ship is damaged and"
 	.byt 13
 	.asc "I am pursued by pirates on Esrasoce."
 	.byt 13
-	.byt 13
 	.asc "Please help me!."
-	.byt 13
-	.asc "---MESSAGE ENDS."
 	.byt 0
 
 str_MissionDebrief
 	.asc "You have saved my life and I shall"
 	.byt 13
-	.asc "remember. ---MESSAGE ENDS."
+	.asc "remember."
 	.byt 0
 
 str_MissionFailure
@@ -1275,7 +1272,7 @@ str_MissionFailure
 	.byt 13
 	.asc "not succeed. It was clearly too much"
 	.byt 13
-	.asc "for your skills. ---MESSAGE ENDS."
+	.asc "for your skills."
 	.byt 0
 str_hedocked
 	.asc "Zantor docked safely!"
