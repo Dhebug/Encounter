@@ -518,6 +518,15 @@ compass_x .byt 00
 compass_y .byt 00
 compass_index .byt 02   ; Planet
 
+/*
+update_compass_forced
+.(
+	lda #$00
+	sta compass_x
+	sta compass_y
+.)
+*/
+
 update_compass
 .(
     ldx compass_index
@@ -574,11 +583,11 @@ noplcom
     adc #147
     tay
 
-    cpx compass_x
-    bne update
-    cpy compass_y
-    beq end
-
+    ;cpx compass_x
+    ;bne update
+    ;cpy compass_y
+    ;bne update
+	;rts
 update    
     stx savx+1
     sty savy+1
@@ -589,24 +598,20 @@ savy
     ldy #0
     stx compass_x
     sty compass_y
-    jsr compass_dot
-end    
-    rts
-
+    ;jsr compass_dot
+	; Let the program flow
 .)
-
-
 compass_dot
 .(
 	lda _VectZ+1
-	php
-	ldx invert
-	beq nothing2do
-	plp
-	lda #$ff
-	php
-nothing2do
-	plp
+;	php
+;	ldx invert
+;	beq nothing2do
+;	plp
+;	lda #$ff
+;	php
+;nothing2do
+;	plp
     bmi hollow
 	lda dot_patt
 	ldx dot_patt2
