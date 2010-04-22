@@ -45,6 +45,8 @@
    This permits a kind of exponential behaviour  */
 #define TABBEDROLLS
 
+/* Uncomment to have a real random generator */
+#define REALRANDOM
 
 /* Define to perform automatic RAMSAVE */
 #define RAMSAVE

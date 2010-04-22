@@ -1,6 +1,6 @@
 ;;;;; Functions to create objects and initialize universe.
 
-
+#include "tine.h"
 
 OCEN     .word 0000            ;X-coord
          .word 0000            ;Y-coord
@@ -366,7 +366,11 @@ cont
 ;	}		
 
 		; Create new random
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		jsr _gen_rnd_number
+#endif
 		cmp #136
 		bne nothargoid
 		; Create thargoid or cougar and return
@@ -385,7 +389,11 @@ nothargoid
 ;		return;
 ;	}
 
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		lda _rnd_seed+3
+#endif
 		and #3
 		bne notrader
 	; Change this so more traders on secure systems
@@ -424,7 +432,11 @@ nocops
 create_cougar
 .(
   		lda #SHIP_COUGAR
+#ifdef REALRANDOM
+		ldx randseed+1
+#else
 		ldx _rnd_seed+3
+#endif
 		bpl nocloack
 		ora #SHIP_NORADAR
 nocloack
@@ -475,7 +487,11 @@ create_thargoid
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
 
 		stx savx+1
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		jsr _gen_rnd_number
+#endif
 		and #%1
 		clc
 		adc #1
@@ -493,7 +509,11 @@ create_trader
 .(
 	
 	; 	type = SHIP_COBRA3 + (rand255() & 3);
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		jsr _gen_rnd_number
+#endif
 		and #3
 		clc
 		adc #SHIP_BOA
@@ -518,7 +538,11 @@ create_trader
 ;	}
 
 		; Equip
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		lda _rnd_seed+2
+#endif
 		lsr
 		bcc noecm
 
@@ -545,7 +569,11 @@ end
 set_speed_and_target
 .(
 		; Set destination and speed
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		lda _rnd_seed+2
+#endif
 		bmi noptarget
 		lda #2
 		sta _target,x
@@ -554,14 +582,18 @@ set_speed_and_target
 		sta _flags,x
 		bne set_speed	; allways branches
 noptarget
-		lsr
-		bcc set_speed
+		;lsr
+		;bcc set_speed
 		; Set Hyper as target
 		lda _flags,x
 		ora #FLG_FLY_TO_HYPER
 		sta _flags,x
 +set_speed
+#ifdef REALRANDOM
+		lda randseed
+#else
 		lda _rnd_seed+2
+#endif
 		and #%111
 		ora #%100
 		asl
@@ -585,7 +617,11 @@ check_for_asteroids
 		lda asteroid_counter
 		cmp #3
 		bcs end
+#ifdef REALRANDOM
+		jsr randgen
+#else
 		jsr _gen_rnd_number
+#endif
 		cmp #35
 		bcs end
 
@@ -638,7 +674,11 @@ check_for_cops
 	; Send cops from planet
 	; They should automatically target you if needed
 
-	jsr _gen_rnd_number
+#ifdef REALRANDOM
+		jsr randgen
+#else
+		jsr _gen_rnd_number
+#endif
 	and #7
 	cmp _cpl_system+GOVTYPE
 	bcs end
@@ -663,8 +703,11 @@ check_for_cops
 	jsr set_boldness
 	lda #20
 	sta _speed,x
-
-	lda _rnd_seed+2
+#ifdef REALRANDOM
+		lda randseed
+#else
+		lda _rnd_seed+2
+#endif
 	bmi notarp
 	lda #1
 	sta _target,x
@@ -684,7 +727,12 @@ check_for_others
 	; Pirates, Bounties, shuttles...
 	; Should be based on game internals and some randomizing
 
-	jsr _gen_rnd_number
+#ifdef REALRANDOM
+		jsr randgen
+		ldx randseed
+#else
+		jsr _gen_rnd_number
+#endif
 	cpx #90		; X contains one part of the seed
 	bcc doit
 	rts
@@ -701,7 +749,11 @@ pirates
 	jmp generate_pirate
 
 nopirates
-	lda _rnd_seed
+#ifdef REALRANDOM
+		jsr randgen
+#else
+		lda _rnd_seed
+#endif
 	cmp #90
 	bcc shuttle
 	; Gererate Bounty Hunter
@@ -736,11 +788,16 @@ loop
 	cpx savx+1
 	beq next
 	lda _ai_state,x
-	and #%01111111
+	and #%01111111	; Why am I doing this???
 	sta tmp+1
+#ifdef REALRANDOM
+	lda randseed+1
+	ora randseed
+#else
 	lda _rnd_seed+1
 	ora _rnd_seed+2
 	;ora _rnd_seed+3
+#endif
 	and tmp+1
 	bne chosen
 next
@@ -787,7 +844,11 @@ generate_pirate_bounty
 	lda _galaxynum
 	cmp #1
 	beq nocloack
-	lda _rnd_seed+3
+#ifdef REALRANDOM
+		lda randseed
+#else
+		lda _rnd_seed+3
+#endif
 	and #%1111
 	bne nocloack
 	txa
@@ -819,7 +880,12 @@ end
 
 gen_ship_type
 .(
+#ifdef REALRANDOM
+	jsr randgen
+#else
 	jsr _gen_rnd_number
+#endif
+
 	and #%1111			; a=0..15	
 	tax
 	lda _score
@@ -858,14 +924,25 @@ gen_ship_equipment
 	; Must preserve reg X!!!
 	stx savx+1
 
+#ifdef REALRANDOM
+	jsr randgen
+#endif
 	; What is to be added here? Maybe ECM
 	lda _score+1
 	bne nocheckscore
     lda _score
-    cmp _rnd_seed+2
+#ifdef REALRANDOM
+	cmp randseed
+#else
+	cmp _rnd_seed+2
+#endif
 	bcc noecm
 nocheckscore
+#ifdef REALRANDOM
+	lda randseed+1
+#else
 	lda _rnd_seed+3
+#endif
 	;bpl noecm
 	and #%11
 	;bne noecm
@@ -874,7 +951,11 @@ nocheckscore
 	sta eq_tmp
 noecm
 	; And escape pod
+#ifdef REALRANDOM
+	jsr randgen
+#else
 	lda _rnd_seed+1
+#endif
 	bpl nopod
 	lda eq_tmp
 	ora #(HAS_ESCAPEPOD)
@@ -891,13 +972,20 @@ savx
 
 generate_shuttle
 .(
-    lda _rnd_seed+3
+#ifdef REALRANDOM
+	lda randseed
+#else
+	lda _rnd_seed+3
+#endif
 	and #%1
 	clc
 	adc #SHIP_SHUTTLE   ; Ship to launch
 	sta tmp
-	
-    lda _rnd_seed
+#ifdef REALRANDOM
+	lda randseed+1
+#else
+	lda _rnd_seed
+#endif
     bmi from_planet
 to_planet
 	lda tmp
@@ -940,7 +1028,11 @@ create_other_ship
 	; Generate new ship a bit far away
 	lda _PosX+1
 	eor #%1111; $17
+#ifdef REALRANDOM
+	ldx randseed
+#else
 	ldx _rnd_seed+1
+#endif
 	bmi noinvertX
 	sta tmp
 	lda _PosX+1
@@ -952,7 +1044,11 @@ noinvertX
 
 	lda _PosY+1
 	eor #%1111;$17
+#ifdef REALRANDOM
+	ldx randseed+1
+#else
 	ldx _rnd_seed+2
+#endif
 	bmi noinvertY
 	sta tmp
 	lda _PosY+1
@@ -962,9 +1058,16 @@ noinvertX
 noinvertY
 	sta _PosY+1
 
+#ifdef REALRANDOM
+	jsr randgen
+#endif
 	lda _PosZ+1
 	eor #%1111;$17
+#ifdef REALRANDOM
+	ldx randseed+1
+#else
 	ldx _rnd_seed+3
+#endif
 	bmi noinvertZ
 	sta tmp
 	lda _PosZ+1
@@ -983,7 +1086,11 @@ noinvertZ
 
 	; Set number of missiles
 	stx savx+1
+#ifdef REALRANDOM
+	jsr randgen
+#else
 	jsr _gen_rnd_number
+#endif
 	ora #%11111000
 savx
 	ldx #0 ;SMC

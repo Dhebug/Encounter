@@ -288,8 +288,9 @@ nothargon
 	and #FLG_SLOW 
 	beq notslow
 	lda _rnd_seed+1
-	cmp #50
-	bcc notslow
+	cmp #50*2
+	;bcc notslow ; This is UNSIGNED comparision!
+	bmi notslow
 	rts
 notslow
     ; If FLG_TRADER and r1>100 rts

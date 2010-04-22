@@ -229,9 +229,9 @@ loop2   ;Clear relevant bank
 		; So I guess that I could do the same here (ldy,lda)
 
         ldy #$80
-		;nop 
-        ;nop 
-        ;nop 
+		nop 
+        nop 
+        nop 
         lda #8 
 
         ;Sense Row activity 

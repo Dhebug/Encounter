@@ -1251,7 +1251,7 @@ rearview
 +viewchanged
 		jsr clear_vertex
 		jsr patch_invert_code
-		jsr update_compass
+		;jsr update_compass
 		jmp INITSTAR
 .)
 
