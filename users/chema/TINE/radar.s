@@ -807,8 +807,13 @@ reinit_compass
 .(
 	ldx #2
 	stx compass_index
+	lda _current_screen
+	cmp #SCR_FRONT
+	bne dont
 	jsr update_ship_id
 	jmp update_compass
+dont
+	rts
 .)
 
 compass_next

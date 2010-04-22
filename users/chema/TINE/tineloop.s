@@ -1087,7 +1087,10 @@ unarm
 		jsr flight_message
 		lda #UNARMED		; Set it to 0
 		sta _missile_armed
-		jsr update_missile_panel
+		lda _current_screen
+		cmp #SCR_FRONT
+		bne no_unarm
+		jmp update_missile_panel
 no_unarm
 		rts
 .)
