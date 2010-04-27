@@ -263,6 +263,11 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Planet's radius seem wrong, according to planet's data... Some are very big, with radius of 3.7Km
 
++ Avoid landing if planet is not just ahead... maybe calculate real distance when too near? Maybe just check X and Y?
+
++ NO enemy is created with anti-radar randomly...
+
+
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector
 

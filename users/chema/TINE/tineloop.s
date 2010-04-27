@@ -815,8 +815,8 @@ end
 #define MAX_KEY 23+5+1
 user_keys
     .byt     "2", "3", "4", "5", "6", "7", "0", "R", "H", "J", "1"
-    .byt     "S",      "X",       "N",     "M",      "A", "T", "F", "U", "E", "P", "B", "V", $1b
-	.byt	 1,2,3,4,13," "	 
+    .byt     "S", "X", "N", "M", "A", "T", "F", "U", "E", "P", "B", "V", $1b
+	.byt	  1, 2, 3, 4, 13, " "	 
 key_routh
     .byt >(info), >(sysinfo), >(short_chart), >(gal_chart), >(market), >(equip), >(loadsave), >(splanet), >(galhyper), >(jumphyper), >(frontview)    
     .byt >(keydn), >(keyup), >(keyl), >(keyr), >(sele), >(target), >(fireM), >(unarm), >(ecm_on), >(power_redir), >(energy_bomb), >(rearview), >(launch_pod)
@@ -865,6 +865,7 @@ loop
 	lda tab_ship_control_val,x
 	and KeyBank,y
 	beq skip
+
 	stx savx+1
 	lda tab_ship_control_routl,x
 	sta _smc_rout+1
@@ -874,6 +875,7 @@ _smc_rout
 	jsr $1234
 savx
 	ldx #0
+
 skip
 	dex
 	bpl loop

@@ -47,6 +47,14 @@ _init_irq_routine
         ;setup, we need not worry about ensuring one irq event and/or right 
         ;timer period, only redirecting irq vector to our own irq handler. 
         sei
+		; Setup DDRA, DDRB and ACR
+        lda #%11111111
+        sta via_ddra
+		lda #%11110111 ; PB0-2 outputs, PB3 input.
+		sta via_ddrb
+		lda #%1000000
+		sta via_acr
+
 		lda #<9984*4
 		sta via_t1ll 
 		lda #>9984*4
@@ -212,7 +220,8 @@ loop2   ;Clear relevant bank
 		sta via_porta 
 	    lda #$fd 
 	    sta via_pcr 
-        sty via_pcr 
+        lda #$dd
+        sta via_pcr
 
         lda via_portb 
         and #%11111000
@@ -231,22 +240,23 @@ loop2   ;Clear relevant bank
         ldy #$80
 		nop 
         nop 
-        nop 
         lda #8 
 
         ;Sense Row activity 
         and via_portb 
         beq skip2 
-
-loop1   ;Store Column 
+		
+		;Store Column 
         tya 
+loop1   
         eor #$FF 
 
 		;jsr SenseKeyPrep
 		sta via_porta 
 	    lda #$fd 
 	    sta via_pcr 
-        sty via_pcr 
+        lda #$dd
+        sta via_pcr
 
         lda via_portb 
         and #%11111000
