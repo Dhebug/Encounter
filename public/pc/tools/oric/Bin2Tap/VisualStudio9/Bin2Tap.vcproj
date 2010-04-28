@@ -62,6 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Winmm.lib"
+				OutputFile="$(SolutionDir)\..\Bin\$(ProjectName)D.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -135,6 +136,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Winmm.lib"
+				OutputFile="$(SolutionDir)\..\Bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -174,23 +177,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Bin2Tap.cpp"
+				RelativePath="..\Source\Bin2Tap.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CommandLine.cpp"
+				RelativePath="..\Source\CommandLine.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\OricBinaryTapeImage.cpp"
+				RelativePath="..\Source\OricBinaryTapeImage.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PulseWaveWriter.cpp"
+				RelativePath="..\Source\PulseWaveWriter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp"
+				RelativePath="..\Source\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -210,7 +213,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\TapeWriter.cpp"
+				RelativePath="..\Source\TapeWriter.cpp"
 				>
 			</File>
 		</Filter>
@@ -220,44 +223,44 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Bin2Tap.h"
+				RelativePath="..\Source\Bin2Tap.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CommandLine.h"
+				RelativePath="..\Source\CommandLine.h"
 				>
 			</File>
 			<File
-				RelativePath=".\OricBinaryTapeImage.h"
+				RelativePath="..\Source\OricBinaryTapeImage.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PulseWaveWriter.h"
+				RelativePath="..\Source\PulseWaveWriter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\stdafx.h"
+				RelativePath="..\Source\stdafx.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TapeWriter.h"
+				RelativePath="..\Source\TapeWriter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\targetver.h"
+				RelativePath="..\Source\targetver.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\History.txt"
+			RelativePath="..\History.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\ReadMe.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\TODO.txt"
+			RelativePath="..\TODO.txt"
 			>
 		</File>
 	</Files>
