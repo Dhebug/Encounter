@@ -99,30 +99,43 @@ irq_routine
    possible, as it speeds up things. Z=1 means no key
    pressed and there is no need to look in tables */
 
-#define ARROW_UP	1
-#define ARROW_LEFT	2
-#define ARROW_DOWN	3
-#define ARROW_RIGHT 4
+#define KEY_UP			1
+#define KEY_LEFT		2
+#define KEY_DOWN		3
+#define KEY_RIGHT		4
 
-#define LCTRL		0
-#define LSHIFT		0
-#define RSHIFT		0
-#define FUNCT		0
+#define KEY_LCTRL		0
+#define KET_RCTRL		0
+#define KEY_LSHIFT		0
+#define KEY_RSHIFT		0
+#define KEY_FUNCT		0
 
 #define KEY_RETURN		$0d
 #define KEY_ESC			$1b
 #define KEY_DEL			$7f
 
+//#define COMPLETE_ASCII_TABLE
+
 tab_ascii
-    .asc "7","N","5","V",0,"1","X","3"
+#ifdef COMPLETE_ASCII_TABLE
+    .asc "7","N","5","V",KET_RCTRL,"1","X","3"
     .asc "J","T","R","F",0,KEY_ESC,"Q","D"
-    .asc "M","6","B","4",LCTRL,"Z","2","C"
-    .asc "K","9",0,0,0,0,0,0
-    .asc " ",0,0,ARROW_UP,LSHIFT,ARROW_LEFT,ARROW_DOWN,ARROW_RIGHT
-    .asc "U","I","O","P",FUNCT,KEY_DEL,0,0
+    .asc "M","6","B","4",KEY_LCTRL,"Z","2","C"
+    .asc "K","9",59,"-",0,0,92,39
+    .asc " ",",",".",KEY_UP,KEY_LSHIFT,KEY_LEFT,KEY_DOWN,KEY_RIGHT
+    .asc "U","I","O","P",KEY_FUNCT,KEY_DEL,"]","["
+    .asc "Y","H","G","E",0,"A","S","W"
+    .asc "8","L","0","/",KEY_RSHIFT,KEY_RETURN,0,"="
+#else
+    .asc "7","N","5","V",KET_RCTRL,"1","X","3"
+    .asc "J","T","R","F",0,KEY_ESC,"Q","D"
+    .asc "M","6","B","4",KEY_LCTRL,"Z","2","C"
+	.asc "K","9",0,0,0,0,0,0
+    .asc " ",0,0,KEY_UP,KEY_LSHIFT,KEY_LEFT,KEY_DOWN,KEY_RIGHT
+    .asc "U","I","O","P",KEY_FUNCT,KEY_DEL,0,0
     .asc "Y","H","G","E",0,"A","S","W"
     .asc "8","L","0",0,0,KEY_RETURN,0,0
-
+#endif
 
 
 ReadKey
@@ -130,8 +143,14 @@ ReadKey
 	ldx #7
 loop
 	lda KeyBank,x
-	beq skip
+	bne getbit
+	dex
+	bpl loop
+	
+	lda #0
+	rts
 
+getbit
 	ldy #$ff
 loop2
 	iny
@@ -142,19 +161,14 @@ loop2
 	asl
 	asl
 	sty tmprow
-	clc
+	; Carry should be clear here
+	;clc
 	adc tmprow
 	tax
 	lda tab_ascii,x
 	;pha
 	;jsr ClearBank
 	;pla
-	rts
-skip
-	dex
-	bpl loop
-
-	lda #0
 	rts
 .)
 
@@ -165,33 +179,14 @@ ReadKeyNoBounce
 	jsr ReadKey
 	cmp oldKey
 	beq retz
-	tax
 	sta oldKey
+	tax	 ; Set Z flag correctly Z=0
 	rts
 retz
 	lda #0
 	rts
 .)
 
-;ChemaRead.s 
-
-/*
-SenseKeyPrep
-.(
-       sta via_porta 
-	   lda #$fd 
-	   sta via_pcr 
-       sty via_pcr 
-
-       lda via_portb 
-       and #%11111000
-       stx zpTemp02
-       ora zpTemp02 
-       sta via_portb 
-
-	   rts
-.)
-*/
 
 ReadKeyboard
 .(
@@ -216,7 +211,6 @@ loop2   ;Clear relevant bank
 
         ;Write 0 to Column Register 
 
-		;jsr SenseKeyPrep
 		sta via_porta 
 	    lda #$fd 
 	    sta via_pcr 
@@ -238,8 +232,8 @@ loop2   ;Clear relevant bank
 		; So I guess that I could do the same here (ldy,lda)
 
         ldy #$80
-		nop 
-        nop 
+		;nop 
+        ;nop 
         lda #8 
 
         ;Sense Row activity 
@@ -251,7 +245,6 @@ loop2   ;Clear relevant bank
 loop1   
         eor #$FF 
 
-		;jsr SenseKeyPrep
 		sta via_porta 
 	    lda #$fd 
 	    sta via_pcr 
