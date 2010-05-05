@@ -185,6 +185,14 @@ SOURCE=.\oobj3d\params.h
 SOURCE=.\todolist.txt
 # End Source File
 # End Group
+# Begin Group "missions"
+
+# PROP Default_Filter "*.s"
+# Begin Source File
+
+SOURCE=.\missions\mission0.s
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\cockpit.s

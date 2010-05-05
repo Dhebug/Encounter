@@ -111,6 +111,49 @@
 #define NEXTMISSIONFAIL		$ff
 
 
+*=MISSION_CODE_START
+
+#include "../missions/mission0.s"
+
+
+.dsb $a000-*
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$ff
+
+
+*=MISSION_CODE_START
+
+__start_mission0_code
+
+#include "../missions/mission0.s"
+
+__end_mission0_code
+
+#echo ***** Missions start:
+#print (__start_mission0_code)
+#echo ***** Mission memory:
+#print (__end_mission0_code - __start_mission0_code)
+#echo
+
+
+
+#ifdef TESTINGMISSIONS
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -171,8 +214,9 @@ MissionCargo		.byt 0	; Cargo for this mission
 
 // Some internal variables and code 
 
-Success				.byt 0
-IdItem				.byt 0
+Success				.byt 0	; Cannot use Success here, as it is not saved. Better inc _mission
+IdItem				.byt 0	
+ItemCreated			.byt 0	; Should get this to zero at hyper or launch, if not gotten. Else inconsistent if loading after saved game.
 
 MissionStart
 .(
@@ -199,43 +243,18 @@ nolaunch
 
 MissionSuccess
 .(
-/*
 	lda _mission
-	cmp #THISMISSION+2
-	bne notfinished
+	cmp #THISMISSION+1
+	bne notlaunched
 	lda _galaxynum
 	cmp #2
 	bne notlaunched
 	lda _currentplanet
 	cmp #$8
-	bne notfinished
+	bne notlaunched
 
 	lda Success
-	beq failure
-
-	; Remove cargo
-	ldx #3
-	lda _shipshold,x
-	cmp #3 
-	bcs okcargo
-
-	lda #NEXTMISSIONFAIL
-	sta _mission
-	lda #<str_MissionFailed
-	sta TXTPTRLO
-	lda #>str_MissionFailed
-	sta TXTPTRHI
-	sec
-	rts
-
-okcargo
-	sec
-	sbc #3
-	sta _shipshold,x
-	clc
-	lda #3
-	adc _holdspace
-	sta _holdspace
+	beq notlaunched
 
 	lda #<10000
 	clc
@@ -244,7 +263,7 @@ okcargo
 	lda #>10000
 	adc _cash+1
 	sta _cash+1
-	
+
 
 	lda #NEXTMISSION
 	sta _mission
@@ -259,41 +278,85 @@ okcargo
 	sec
 	rts
 
-*/
 notlaunched
 	clc
 	rts
 .)
+POS1
+	.word 0
+	.word 0
+	.word 0
 
 CreateItemForScoop
 .(
 
+  	lda _mission
+	cmp #THISMISSION+1
+	bne nolaunch
+
+	lda Success
+	bne nolaunch
+
+	ldx ItemCreated
+	bne nolaunch
+	inx
+	stx ItemCreated
+
+	lda _galaxynum
+	cmp #2
+	bne nolaunch
+	lda _currentplanet
+	cmp #$a5
+	bne nolaunch
+
+    lda #<POS1
+    sta tmp0
+    lda #>POS1   
+    sta tmp0+1
+    lda #SHIP_CARGO
+    jsr IndAddSpaceObject
+	stx IdItem
+	clc
+	rts
+
+nolaunch
+	clc
 	rts
 .)
 
 
 CheckScoop
 .(
-
+	lda Success
+	bne itsnot
+	cpx IdItem
+	bne itsnot
+	inc Success
+	lda #<str_gotit
+	sta tmp0
+	lda #>str_gotit
+	sta tmp0+1
+	ldx #0
+	jsr IndFlightMessage
+itsnot
 	rts
 .)
 
 
+str_gotit
+	.asc "Stolen Hi-Tech"
+	.byt 0
+
 str_MissionBrief
 	.asc "I have a profitable bussiness for you."
 	.byt 13
-	.asc "Come to GEMA for a transport."
+	.asc "Get cannister at GEMA and bring it"
+	.byt 13
+	.asc "to ESRASOCE"
 	.byt 0
-
 
 str_MissionDebrief
 	.asc "Good job. I have sent the credits."
-	.byt 0
-
-str_MissionFailed
-	.asc "What did you do with my cargo?"
-	.byt 13
-	.asc "I will make sure nobody else hires you!"
 	.byt 0
 
 str_Summary
@@ -1304,6 +1367,9 @@ __end_mission2_code
 #echo
 
 .)
+
+
+#endif  // TESTINGMISSIONS
 
 
 

@@ -1466,6 +1466,7 @@ scoop_item
 	jsr OnScoopObject
 	bcc nomiss
 	;jsr print_mission_message
+	pla
 	jmp finish
 nomiss
 	pla

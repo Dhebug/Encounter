@@ -4084,8 +4084,9 @@ loop
 	;jsr NewPlayerShip
 	jsr InitPlayerShip
 
-	; Load mission code
+	; Load mission code and initialize mission
 	jsr load_mission
+	jsr OnGameLoaded
 
 	jsr _init_irq_routine 
 

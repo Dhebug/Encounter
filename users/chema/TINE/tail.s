@@ -293,6 +293,9 @@ OnNewEncounter			.dsb 3
 // the object scooped (generating and storing items in bay
 OnScoopObject			.dsb 3
 	
+// OnGameLoadad called whenever a game is loaded from disk (for initializing things)
+OnGameLoaded			.dsb 3
+
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word 0
