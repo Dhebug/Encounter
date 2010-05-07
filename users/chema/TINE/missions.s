@@ -116,8 +116,6 @@
 #include "../missions/mission0.s"
 
 
-.dsb $a000-*
-
 ; This is fixed... each mission included has a number which is the previous
 ; plus 4.
 #define MISSIONTEMP THISMISSION+4 
@@ -134,14 +132,17 @@
 #undef NEXTMISSIONFAIL
 #define NEXTMISSIONFAIL		$ff
 
+.dsb $a000-*
+
 
 *=MISSION_CODE_START
 
 __start_mission0_code
 
-#include "../missions/mission0.s"
+#include "../missions/mission1.s"
 
 __end_mission0_code
+
 
 #echo ***** Missions start:
 #print (__start_mission0_code)

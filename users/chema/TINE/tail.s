@@ -239,8 +239,8 @@ loop
     dec tmp
     bne loop
 
-	jsr _init_irq_routine
-	rts
+	jmp _init_irq_routine
+	;rts
 
 .)
 

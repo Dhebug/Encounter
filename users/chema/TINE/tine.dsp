@@ -192,6 +192,10 @@ SOURCE=.\todolist.txt
 
 SOURCE=.\missions\mission0.s
 # End Source File
+# Begin Source File
+
+SOURCE=.\missions\mission1.s
+# End Source File
 # End Group
 # Begin Source File
 
