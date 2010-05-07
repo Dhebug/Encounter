@@ -29,8 +29,10 @@ __overlay_end
 .byt $ff
 .asc "ChemaEn"
 .byt 0,0,0,0,0,0
-.asc "MAREGEIS"
+;.asc "MAREGEIS"
+.asc "LAENIN"
 .byt 0
+.byt 0,0
 .byt 1
 .byt 0,0,0,0,0,0,0
 .dsb 1
@@ -51,7 +53,8 @@ __overlay_end
 		.byt 00 
 		.dsb 3 
 		.dsb 17		            ; Contents of cargo bay
-		.byt 64                 ; Current planet
+		;.byt 64                 ; Current planet
+		.byt 101
 		.byt 1                  ; Galaxy number (1-8)
 		.byt $d0,$07            ; Four bytes for cash (200.0)
 		.byt $10,$00
@@ -61,7 +64,7 @@ __overlay_end
 		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00		 			; Score, remainder
 		.word 10000             ; Current score
-		.byt 0                  ; Current mission
+		.byt 4                  ; Current mission
 		.word $0efe             ; Equipment flags
 		.byt 13			        ; Current player's ship
 		.byt 4					; Number of missiles
