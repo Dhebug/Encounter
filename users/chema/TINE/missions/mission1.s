@@ -342,6 +342,10 @@ okcargo2
 	bne nomore
 	inc _cash+3
 
+	; Clear legal status
+	lda #0
+	sta _legal_status
+	
 	; Set next mission
 	lda #NEXTMISSION_LEGAL
 	sta _mission
