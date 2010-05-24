@@ -653,12 +653,25 @@ end
     sty plotY
     stx plotX
    
-    lda #12    ;lda #6
-    ;jsr plot_cross
+    lda #12  
     jsr plot_cross
 
-    ;lda #6
-    ;jsr plot_cross
+    ; Draw fuel circle
+    ldy #0
+    lda plotX
+    sta cx
+    sty cx+1
+    lda plotY
+    sta cy
+    sty cy+1
+    lda _fuel
+	lsr
+	lsr
+    sta rad
+    sty rad+1
+    jsr _circleMidpoint
+
+
     pla
     sta plotX
     pla
@@ -669,6 +682,7 @@ postdraw2
     ; Draw the cursor
     lda #6
     jsr plot_cross
+
     rts
 
 .)
@@ -774,12 +788,11 @@ in_range
     lda tmp2  ; HI part of seed.w1 is sys X
     sec
     sbc _cpl_system+SYSX
-    ;sta tmp
     sta op1
     bcs nonegx
     dec op1+1
-nonegx
     jsr abs
+nonegx
     
     lda #0
     sta op2+1
@@ -789,7 +802,6 @@ nonegx
     ;bcs end
 	bpl end
 
-
 checkY    
     lda #0
     sta op1+1
@@ -797,17 +809,15 @@ checkY
     sec
     sbc _cpl_system+SYSY
     sta op1
-   ;sta tmp+1
     bcs nonegy
     dec op1+1
-nonegy
     jsr abs
-
+nonegy
     lda #0
     sta op2+1
     lda #$26
     sta op2
-    jsr cmp16
+    jmp cmp16	; This is jsr/rts
 
 end
     rts
@@ -861,8 +871,7 @@ loop3
     inc num
 
     jsr in_range
-    ;bcs next
-	bpl next
+    bpl next
    
 
     ; Ok it is in range, prepare where to place the name
@@ -1273,19 +1282,17 @@ short_chart_to_universe
     txa
     sec
     sbc #SHORT_CENTRE_X
-    bmi by4
-    clc
-    bcc by4b
-by4
-    sec
-    ror
-    sec
-    ror
-    jmp by4end
-by4b    
-    ror
-    ror
+    bmi by4b
+	lsr
+	lsr
+	jmp by4end
+by4b
+	sec
+	ror
+	sec
+	ror
 by4end
+
     clc
     adc _cpl_system+SYSX
     tax
@@ -1340,7 +1347,6 @@ loop3
     cmp #SCR_CHART
     bne nocheck
     jsr in_range    ; BEWARE. In long-chart this should not be called!!
-    ;bcs next
 	bpl next
 
 nocheck
