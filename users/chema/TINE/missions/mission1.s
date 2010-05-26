@@ -302,10 +302,10 @@ nomore
 
 legalway
 	; Check if player acted the legal way
-	lda _galaxynum
-	cmp #1
-	bne notlaunched
-	lda _currentplanet
+	;lda _galaxynum
+	;cmp #1
+	;bne notlaunched
+	;lda _currentplanet
 	cmp #109 ;Usatqura
 	bne notlaunched
 
@@ -337,11 +337,12 @@ okcargo2
 	lda #>1000
 	adc _cash+1
 	sta _cash+1
-	bcc nomore
+	bcc nomore2
 	inc _cash+2
-	bne nomore
+	bne nomore2
 	inc _cash+3
 
+nomore2
 	; Clear legal status
 	lda #0
 	sta _legal_status
@@ -431,9 +432,9 @@ str_MissionDebrief2
 	.byt 13
 	.asc "For your help to the GalCop police,"
 	.byt 13
-	.asc "your legal status has been cleaerd and"
+	.asc "your legal status has been cleared"
 	.byt 13
-	.asc "a reward of 100 Cr has been sent to you."
+	.asc "and a reward of 100 Cr has been sent."
 	.byt 0
 
 
