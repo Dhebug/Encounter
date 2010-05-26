@@ -199,6 +199,8 @@ Done, now using SMULT
 
 - Add circle at galactic chart too?
 
+- Add option to change commander's name
+
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
@@ -248,8 +250,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + Add a new sfx for hit when no shields?
 
 + Force deleting a slot before being able to save to it ?
-
-+ Add option to change commander's name
 
 + Snow on the scanner when readings erratic
 
