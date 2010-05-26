@@ -553,15 +553,16 @@ savy
 gets
 .(
     lda #<str_buffer
-	sta tmp
+	sta tmp2
     lda #>str_buffer
-	sta tmp+1
+	sta tmp2+1
 	ldy #0
 getsloop
 	sty savy+1
 readloop
 	jsr ReadKeyNoBounce
 	beq readloop
+
 savy
 	ldy #0 ;SMC
 	cmp #$0D
@@ -572,7 +573,7 @@ savy
 	beq backspace
 	cpy #$a
 	beq getsloop
-	sta (tmp),y
+	sta (tmp2),y
 	iny
 echochar
     jsr put_char
@@ -585,7 +586,7 @@ backspace
 	jmp getsloop
 endgets
 	lda #0
-	sta (tmp),y
+	sta (tmp2),y
 	
 	rts
 

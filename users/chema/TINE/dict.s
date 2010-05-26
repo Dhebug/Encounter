@@ -978,12 +978,8 @@ str_sysslot
 	.asc "Sys: "
 	.byt 0
 
-
 str_namechange
-	.asc "Change commander's name"
-	.byt 0
-str_namechange2
-	.asc "Enter new name: "
+	.asc "Enter Commander's name: "
 	.byt 0
 
 ; Other informative messages

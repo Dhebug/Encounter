@@ -393,12 +393,6 @@ print_distinfo
 
 compare_names
 .(
-   ; ldy #0
-   ; lda (sp),y
-   ; sta st1+1
-   ; iny
-   ; lda (sp),y
-   ; sta st1+2
     ldx #$ff
 loop
     inx
@@ -568,9 +562,6 @@ nodanger
 noscroll
     jsr plot_galaxy_with_scroll
 
-	; Print instructions
-	jsr instructions
-
 	jsr _infoplanet
 	jmp _makesystem
     ;rts
@@ -683,8 +674,8 @@ postdraw2
     lda #6
     jsr plot_cross
 
-    rts
-
+	; Print instructions
+	jmp instructions ; This is jsr/rts
 .)
 
 
@@ -721,6 +712,9 @@ long_chart_to_universe
     beq noscroll
     clc
     adc #SCROLL_AMOUNT
+	bvc nooverflow
+	lda #$ff
+nooverflow
 noscroll
     tax
 
@@ -1170,7 +1164,7 @@ _move_cross_v
     lda #168
     bne save
 long
-    lda #145
+    lda #144
 save
     sta amount+3
 
@@ -1185,7 +1179,7 @@ amount
     adc #0  ;SMC
     cmp #199 ; SMC
     bcs outside
-    cmp #14
+    cmp #LONG_START_Y
     bcc outside
     sta plotY
 outside
@@ -1213,7 +1207,7 @@ amount
     adc #0  ;SMC
     cmp #239
     bcs outside1
-    cmp #12
+    cmp #LONG_START_X
     bcc outside2
     sta plotX
     jmp plot
@@ -1353,11 +1347,20 @@ nocheck
     lda tmp0
     sec
     sbc _seed+3 ; Get X
-    bpl noneg
+	bcs noneg
+
     eor #$ff
     clc 
     adc #1
+
+
+/*	sta op1
+	lda #$ff
+	sta op1+1
+	jsr abs
+	lda op1*/
 noneg
+
     cmp #10
     bcs next
     sta tmp
@@ -1365,11 +1368,21 @@ noneg
     lda tmp0+1
     sec
     sbc _seed+1 ; Get Y
-    bpl noneg2
+
+	bcs noneg2
+
     eor #$ff
     clc 
     adc #1
+/*
+	sta op1
+	lda #$ff
+	sta op1+1
+	jsr abs
+	lda op1
+*/
 noneg2
+
     cmp #10
     bcs next
 
@@ -3982,6 +3995,34 @@ set_dparms
 
 save_slot
 .(
+	; Ask for commander's name
+	jsr SndPic
+    jsr prepare_area    
+    lda #(A_FWGREEN+A_FWYELLOW*16+128)
+    jsr put_code
+    lda #<str_namechange
+    ldx #>str_namechange
+    jsr print
+    lda #A_FWWHITE
+    jsr put_code
+
+	/*
+	; Put current name
+	lda #<_name
+	ldx #>_name
+	jsr print
+	*/
+    jsr gets
+
+	; Copy name
+	ldy #0
+loopname
+	lda str_buffer,y
+	sta _name,y
+	beq endname
+	iny
+	bne loopname ; This branches always
+endname
 
 	; Update directory
 	jsr dir_entry
