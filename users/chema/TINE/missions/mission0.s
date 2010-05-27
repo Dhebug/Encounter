@@ -153,8 +153,11 @@ launch
 	; Check preconditions
 
 	lda _score+1
-	beq nolaunch
-
+	bne prec
+	lda _score
+	cmp #$12
+	bcc nolaunch
+prec
 	; Launch mission, increment state to 1
 	inc _mission
 
@@ -330,7 +333,7 @@ str_MissionProblem
 str_MissionFailed
 	.asc "What did you do with my cargo?"
 	.byt 13
-	.asc "I will make sure nobody else hires you!"
+	.asc "I'll make sure nobody else hires you!"
 	.byt 0
 
 str_Summary1
