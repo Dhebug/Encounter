@@ -1,5 +1,5 @@
 
-;; Mission 1. Transportation of concealed illegal cargo from Xexedi (250) to Teen (209)
+;; Mission 2. Transportation of narcotics (6) from Teraed (99) to Xeenle (213)
 
 
 .(
@@ -56,9 +56,7 @@ MissionCargo		.byt 0	; Cargo for this mission
 
 // Some internal variables and code 
 
-#define CARGO_AMOUNT 15
-
-#define NEXTMISSION_LEGAL 16
+#define CARGO_AMOUNT 5
 
 tab_sumlo
 	.byt <str_Summary1,<str_Summary
@@ -100,7 +98,7 @@ PlayerLaunch
 	cmp #1
 	bne nolaunch
 	lda _currentplanet
-	cmp #250 ;Xexedi
+	cmp #99 ;Teraed
 	bne nolaunch
 
 	; We are at origin, therefor load cargo
@@ -120,10 +118,10 @@ PlayerLaunch
 
 doit
 	lda #CARGO_AMOUNT
-	;ldx #3
+	ldx #6
 	clc
-	adc _shipshold	;,x
-	sta _shipshold	;,x
+	adc _shipshold,x
+	sta _shipshold,x
 	lda _holdspace
 	sec
 	sbc #CARGO_AMOUNT
@@ -135,13 +133,8 @@ doit
 
 	inc _mission
 
-	; Issue the alert message from the police
-	lda #<str_CargoRevealed
-	sta TXTPTRLO
-	lda #>str_CargoRevealed
-	sta TXTPTRHI
 end
-	sec
+	clc
 	rts
 
 
@@ -163,8 +156,9 @@ launch
 	lda _score+1
 	bne prec
 	lda _score
-	cmp #$16
+	cmp #$1a
 	bcc nolaunch
+
 prec
 	; Launch mission, increment state to 1
 	inc _mission
@@ -200,7 +194,7 @@ PlayerDock
 	cmp #1
 	bne notlaunched
 	lda _currentplanet
-	cmp #250 ;Xexedi
+	cmp #99 ;Teraed
 	bne notlaunched
 
 	; Increment mission state to 2
@@ -242,13 +236,13 @@ checksuccess
 	cmp #1
 	bne notlaunched
 	lda _currentplanet
-	cmp #209 ;Teen
-	bne legalway
+	cmp #213 ; Xeenle
+	bne notlaunched
 
 	; Remove cargo
 	; Do we have it?
-	;ldx #3
-	lda _shipshold ;,x
+	ldx #6
+	lda _shipshold,x
 	cmp #CARGO_AMOUNT 
 	bcs okcargo
 
@@ -266,7 +260,7 @@ okcargo
 	; Remove cargo from ship
 	sec
 	sbc #CARGO_AMOUNT
-	sta _shipshold   ;,x
+	sta _shipshold,x
 	clc
 	lda #CARGO_AMOUNT
 	adc _holdspace
@@ -302,88 +296,23 @@ nomore
 	; Return with message to be printed.
 	sec
 	rts
-
-legalway
-	; Check if player acted the legal way
-	;lda _galaxynum
-	;cmp #1
-	;bne notlaunched
-	;lda _currentplanet
-	cmp #109 ;Usatqura
-	bne notlaunched
-
-	; Remove cargo
-	; Do we have it?
-	;ldx #3
-	lda _shipshold ;,x
-	cmp #CARGO_AMOUNT 
-	bcs okcargo2
-
-	clc
-	rts
-
-okcargo2
-	; Remove cargo from ship
-	sec
-	sbc #CARGO_AMOUNT
-	sta _shipshold   ;,x
-	clc
-	lda #CARGO_AMOUNT
-	adc _holdspace
-	sta _holdspace
-
-	; Pay the player
-	lda #<1000
-	clc
-	adc _cash
-	sta _cash
-	lda #>1000
-	adc _cash+1
-	sta _cash+1
-	bcc nomore2
-	inc _cash+2
-	bne nomore2
-	inc _cash+3
-
-nomore2
-	; Clear legal status
-	lda #0
-	sta _legal_status
-	
-	; Set next mission
-	lda #NEXTMISSION_LEGAL
-	sta _mission
-
-	; Prepare debriefing
-	lda #<str_MissionDebrief2
-	sta TXTPTRLO
-	lda #>str_MissionDebrief2
-	sta TXTPTRHI
-
-	; Flag that we need to load mission from disk
-	dec NeedsDiskLoad
-
-	; Return with message to be printed.
-	sec
-	rts
-	
 .)
 
 
 str_MissionBrief
 	.asc "Greetings Commander."
 	.byt 13
-	.asc "This is Milto Zaxx again and I have a"
+	.asc "Milto Zaxx again. I have a"
 	.byt 13
-	.asc "another bussiness of your interest."
+	.asc "profitable bussiness for you."
 	.byt 13
-	.asc "Come to Xexedi for a transport."
+	.asc "Come to Teraed for a transport."
 	.byt 0
 
 str_MissionBrief2
-	.asc "Welcome to Xexedi, Commander."
+	.asc "Welcome to Teraed, Commander."
 	.byt 13
-	.asc "Transport 15 tons of food to Teen."
+	.asc "Carry 5 tons of narcotics to Xeenle."
 	.byt 13
 	.asc "Be sure to have such space free before"
 	.byt 13
@@ -392,10 +321,6 @@ str_MissionBrief2
 
 str_MissionDebrief
 	.asc "Good job. I have sent the credits."
-	.byt 13
-	.asc "I see you like risky bussiness."
-	.byt 13
-	.asc "I will contact you again soon..."
 	.byt 0
 
 str_MissionProblem
@@ -404,7 +329,7 @@ str_MissionProblem
 	.asc "our cargo!"
 	.byt 13
 	.byt 13
-	.asc "Get back to Xexedi inmediately!"
+	.asc "Get back to Teraed inmediately!"
 	.byt 0
 
 str_MissionFailed
@@ -413,40 +338,12 @@ str_MissionFailed
 	.asc "I'll make sure nobody else hires you!"
 	.byt 0
 
-
-str_CargoRevealed
-	.asc "ATTENTION Message from GalCop Police."
-	.byt 13
-	.asc "We have heard that a smuggler called"
-	.byt 13
-	.asc "Milto Zaxx has concealed illegal"
-	.byt 13
-	.asc "cargo as food in one ship leaving"
-	.byt 13
-	.asc "this system. If you suspect you are"
-	.byt 13
-	.asc "transporting this, come inmediately"
-	.byt 13
-	.asc "to Usatqura for interrogation."
-	.byt 0
-
-str_MissionDebrief2
-	.asc "Thanks commander."
-	.byt 13
-	.asc "For your help to the GalCop police,"
-	.byt 13
-	.asc "your legal status has been cleared"
-	.byt 13
-	.asc "and a reward of 100 Cr has been sent."
-	.byt 0
-
-
 str_Summary1
 	.byt 2
 	.asc "Current mission:"
 	.byt 13
 	.byt 2 
-	.asc "Go to Xexedi for a transport."
+	.asc "Go to Teraed for a transport."
 	.byt 13
 	.byt 0
 
@@ -455,7 +352,7 @@ str_Summary
 	.asc "Current mission:"
 	.byt 13
 	.byt 2 
-	.asc "Transport food to Teen."
+	.asc "Transport narcotics to Xeenle."
 	.byt 13
 	.byt 0
 

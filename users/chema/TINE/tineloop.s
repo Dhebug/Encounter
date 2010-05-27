@@ -399,7 +399,7 @@ no_game_over
 
 	; If distance with planet is short, then dock player
     lda _planet_dist
-    cmp #06
+    cmp #05
     bcc dock    
 
     ; Process user's controls
