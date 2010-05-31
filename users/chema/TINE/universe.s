@@ -335,6 +335,7 @@ random_encounter
 		sbc fixed_objects
 		cmp #5
 		bcc cont1
+retme
 		rts
 cont1
 
@@ -343,6 +344,8 @@ cont1
 	bcc nothing
 	jsr print_mission_message
 nothing
+	lda AvoidOtherShips
+	bne retme
 #endif
 
 ;	if ((ship_count[SHIP_CORIOLIS] != 0) || (ship_count[SHIP_DODEC] != 0))

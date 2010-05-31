@@ -213,7 +213,7 @@ _shipshold		.dsb 17		            ; Contents of cargo bay
 _currentplanet	.byt 7                  ; Current planet
 _galaxynum		.byt 1                  ; Galaxy number (1-8)
 _cash			.byt $e8,$03            ; Four bytes for cash
-				.byt $10,$00
+				.byt $00,$00
 _fuel			.byt 70                 ; Amount of fuel
 _fluct			.byt 0                  ; Price fluctuation
 _holdspace		.byt 20				    ; Current space left in cargo bay
