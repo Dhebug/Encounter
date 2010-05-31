@@ -54,13 +54,14 @@
 
 // Jump table for routines accessible from mission code
 
-#define IndFlightMessage	MISSION_CODE_START-3*7
-#define IndAddSpaceObject	MISSION_CODE_START-3*6
-#define IndSetShipEquip     MISSION_CODE_START-3*5
-#define IndRnd				MISSION_CODE_START-3*4
-#define IndSetCurOb			MISSION_CODE_START-3*3
-#define IndLaunchShip		MISSION_CODE_START-3*2
-#define IndGetShipPos		MISSION_CODE_START-3*1
+#define IndFlightMessage	MISSION_CODE_START-3*8
+#define IndAddSpaceObject	MISSION_CODE_START-3*7
+#define IndSetShipEquip     MISSION_CODE_START-3*6
+#define IndRnd				MISSION_CODE_START-3*5
+#define IndSetCurOb			MISSION_CODE_START-3*4
+#define IndLaunchShip		MISSION_CODE_START-3*3
+#define IndGetShipPos		MISSION_CODE_START-3*2
+#define IndGetShipType		MISSION_CODE_START-3*1
 
 // Variables accessible from mission code
 
@@ -115,6 +116,7 @@
 
 #include "../missions/mission0.s"
 
+;---
 
 ; This is fixed... each mission included has a number which is the previous
 ; plus 4.
@@ -140,6 +142,57 @@
 
 #include "../missions/mission1.s"
 
+;---
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$ff
+
+.dsb $a000-*
+
+
+*=MISSION_CODE_START
+
+#include "../missions/mission2.s"
+
+;---
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$ff
+
+.dsb $a000-*
+
+
+*=MISSION_CODE_START
+
+#include "../missions/tutorial0.s"
+
+;---
 
 ; This is fixed... each mission included has a number which is the previous
 ; plus 4.
@@ -164,7 +217,7 @@
 
 __start_mission0_code
 
-#include "../missions/mission2.s"
+#include "../missions/tutorial1.s"
 
 __end_mission0_code
 

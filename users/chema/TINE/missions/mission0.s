@@ -52,6 +52,7 @@ OnGameLoaded
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word str_Summary1
 MissionCargo		.byt 0	; Cargo for this mission
+AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 
 // Some internal variables and code 
 

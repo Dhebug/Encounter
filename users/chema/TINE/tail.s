@@ -253,7 +253,7 @@ osdk_end
 
 #ifdef HAVE_MISSIONS
 
-.dsb MISSION_CODE_START-*-21
+.dsb MISSION_CODE_START-*-24
 
 _mission_callbacks
 
@@ -272,7 +272,8 @@ IndLaunchShip
 	jmp LaunchShipFromOther
 IndGetShipPos
 	jmp GetShipPos
-
+IndGetShipType
+	jmp GetShipType
 __start_mission_code
 
 // Jump table to mission functions    
@@ -300,7 +301,7 @@ OnGameLoaded			.dsb 3
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
 MissionSummary		.word 0
 MissionCargo		.byt 0	; Tons in cargo for mission
-
+AvoidOtherShips		.byt 0  ; if not zero, no encounters.
 #endif
 
 ; Here will go everything that will be put in overlay ram Check osdk_config.bat
