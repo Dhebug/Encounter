@@ -155,7 +155,7 @@
 ; could not be the next in list, but any other...
 
 #define MISSIONTEMP NEXTMISSION+4
-#define NEXTMISSION MISSIONTEMP
+#define NEXTMISSION 28
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
 #define NEXTMISSIONFAIL		$ff
@@ -179,7 +179,7 @@
 ; This should vary, as the next mission both in case of success or failure
 ; could not be the next in list, but any other...
 
-#define MISSIONTEMP NEXTMISSION+4
+#define MISSIONTEMP 16
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
@@ -265,11 +265,43 @@
 
 *=MISSION_CODE_START
 
-__start_mission0_code
 
 #include "../missions/tutorial3.s"
 
+
+
+;;;;;;;;;;;;;; MISSION NUMBER 28 ;;;;;;;;;;;;;;;
+
+
+;---
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP 0
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$ff
+
+.dsb $a000-*
+
+
+*=MISSION_CODE_START
+
+__start_mission0_code
+
+//#include "../missions/mission3.s"
+
 __end_mission0_code
+
 
 
 #echo ***** Missions start:
@@ -277,6 +309,7 @@ __end_mission0_code
 #echo ***** Mission memory:
 #print (__end_mission0_code - __start_mission0_code)
 #echo
+
 
 
 

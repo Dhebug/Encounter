@@ -183,11 +183,11 @@ str_MissionBrief2
 
 
 str_MissionDebrief
-	.asc "Sell the food in the market (5)"
+	.asc "Sell the food in the market (6)"
 	.byt 13
 	.asc "and check your earnings, but"
 	.byt 13 
-	.asc "remember the hyper jump needs fuel"
+	.asc "remember the hyperjump needs fuel."
 	.byt 13 
 	.asc "Check your current fuel in the"
 	.byt 13 
