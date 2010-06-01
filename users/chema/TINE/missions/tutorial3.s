@@ -1,5 +1,5 @@
 
-;; Tutorial 0. Flying
+;; Tutorial 3. basic trade
 
 .(
 // Jump table to mission functions    
@@ -28,11 +28,11 @@ OnHyperShip
 	rts
 	.byt 00
 OnEnteringSystem
+	jmp PlayerJumped
+OnNewEncounter
 	clc
 	rts
 	.byt 00
-OnNewEncounter
-	jmp HelpMessage
 
 // OnScoopObject return with carry =1 if it has handled the scooping, so the main program
 // avoids doing so.
@@ -44,34 +44,17 @@ OnScoopObject
 
 // OnGameLoaded, called whenever the game has been loaded from disk, for initializing things...
 OnGameLoaded
-	jmp InitMission
+	clc
+	rts
+	.byt 00
 	
 // Some public variables 
 NeedsDiskLoad		.byt 0	; Will be set to $ff when a new mission needs to be loaded from disk
-MissionSummary		.word str_Summary1
+MissionSummary		.word str_Summary
 MissionCargo		.byt 0	; Cargo for this mission
-AvoidOtherShips		.byt $ff	; If not zero, no other ships are created
+AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 
 // Some internal variables and code 
-
-
-tab_sumlo
-	.byt <str_Summary,<str_Summary1
-tab_sumhi
-	.byt >str_Summary,>str_Summary1
-
-InitMission
-.(
-	lda _mission
-	and #%1
-	tax
-	lda tab_sumlo,x
-	sta MissionSummary
-	lda tab_sumhi,x
-	sta MissionSummary+1
-	rts
-.)
-
 
 PlayerLaunch
 .(
@@ -80,11 +63,10 @@ PlayerLaunch
 
 	; Check mission state
 	lda _mission
-	cmp #THISMISSION+1
+	cmp #THISMISSION
 	beq firststart
 	clc
 	rts
-
 
 firststart
 	lda _galaxynum
@@ -97,13 +79,6 @@ firststart
 	; Launch mission, increment state to 1
 	inc _mission
 
-	; Change summary which prints on status page
-	lda #<str_Summary
-	sta MissionSummary
-	lda #>str_Summary
-	sta MissionSummary+1
-
-
 	; Prepare brief message
 	lda #<str_MissionBrief
 	sta TXTPTRLO
@@ -114,10 +89,30 @@ firststart
 	sec
 	rts
 .)
+
 nolaunch
 	clc
 	rts
 
+PlayerJumped
+.(
+	lda _galaxynum
+	cmp #1
+	bne nolaunch
+	lda _currentplanet
+	cmp #129 ;Zaonce
+	bne nolaunch
+
+	; Prepare brief message
+	lda #<str_MissionBrief2
+	sta TXTPTRLO
+	lda #>str_MissionBrief2
+	sta TXTPTRHI
+
+	; Return with message to be printed
+	sec
+	rts
+.)
 
 PlayerDock
 .(
@@ -125,7 +120,11 @@ PlayerDock
 	cmp #1
 	bne nolaunch
 	lda _currentplanet
-	cmp #7 ;Lave
+	cmp #129 ;Zaonce
+	bne nolaunch
+
+	lda _mission
+	cmp #THISMISSION+1
 	bne nolaunch
 
 	; Set next mission
@@ -147,96 +146,64 @@ PlayerDock
 .)
 
 
-HelpMessage
-.(
-	lda _mission
-	cmp #THISMISSION+2
-	beq doit
-	clc
-	rts
-doit
-	lda #<str_msg
-	sta tmp0
-	lda #>str_msg
-	sta tmp0+1
-	ldx #0
-	jsr IndFlightMessage
-	clc
-	rts
-.)
 
 str_MissionBrief
-    .asc "First of all let's practice flying."
+    .asc "Be sure you have Zaonce as your"
+	.byt 13
+	.asc "target system (2) or do so now (4)."
+	.byt 13
+	.asc "Fly away from Lave until the mass"
+	.byt 13
+	.asc "indicator (upper right) turns green."
+	.byt 13
+	.asc "Then you can hyper jump (J)."
 	.byt 13
 	.byt 13
-	.asc "Roll: Q,W Yaw: N,M Pitch: X,S"
+	.asc "Avoid combat or smuggling until you"
 	.byt 13
-	.asc "Accelerate O, deccelerate L"
-	.byt 13
-	.asc "Change front/rear views with V"
-	.byt 13
-	.byt 13
-	.asc "Use the compass to find the planet"
-	.byt 13
-	.asc "  Filled = in front of you"
-	.byt 13
-	.asc "  Hollow = at your back."
-	.byt 13
-	.asc "When done, land in Lave again."
+	.asc "are ready for it."
 	.byt 0
 
-str_msg
-	.asc "To land, fly to the planet"
+str_MissionBrief2
+    .asc "Quickly locate the planet in your"
+	.byt 13
+	.asc "compass and fly towards it at full"
+	.byt 13
+	.asc "speed (O). Watch your scanner and"
+	.byt 13
+	.asc "identify any potential dangers."
+	.byt 13
+	.byt 13
+	.asc "Watch the mass indcator and how it"
+	.byt 13
+	.asc "changes when you enter the planet's"
+	.byt 13
+	.asc "area or when about to dock."
 	.byt 0
-	
-	
-#ifdef 0	
-	.asc "This is the main cockpit. At the top"
-	.byt 13
-	.asc "you can see the Missile indicators"
-	.byt 13
-	.asc "The ID of your target (SPACE to"
-	.byt 13
-	.asc "change), ECM detection, and Mass"
-	.byt 13
-	.asc "pressence indicators."
-	.byt 13
-	.asc "
-	.byt 13
-	.asc ""
-	.byt 13
-	.asc "Shields               Compass Power"
-	.byt 13
-	.asc "Speed      Scanner            redir"
-    .byt 13
-	.asc "Laser temp            Energy banks"
-#endif
+
 
 str_MissionDebrief
-	.asc "Well done Commander."
+	.asc "Sell the food in the market (5)"
 	.byt 13
-	.asc "Next tutorial will train you in basic"
+	.asc "and check your earnings, but"
+	.byt 13 
+	.asc "remember the hyper jump needs fuel"
+	.byt 13 
+	.asc "Check your current fuel in the"
+	.byt 13 
+	.asc "status screen (2) and refill tanks"
 	.byt 13
-	.asc "targetting and firing."
+	.asc "at the equip ship screen (7)."
 	.byt 13
-	.asc "Launch again (1) when ready."
-	.byt 0
-
-str_Summary1
-	.byt 2
-	.asc "Tutorial 1:"
-	.byt 13
-	.byt 2 
-	.asc "Launch (press 1) to start"
-	.byt 13
+	.asc "The tutorial is over. Good luck."
 	.byt 0
 
 str_Summary
 	.byt 2
-	.asc "Tutorial 1:"
+	.asc "Tutorial 4:"
 	.byt 13
 	.byt 2 
-	.asc "Land in Lave for next tutorial"
+	.asc "Carry food to Zaonce"
 	.byt 13
 	.byt 0
 

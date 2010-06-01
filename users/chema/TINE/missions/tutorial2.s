@@ -1,5 +1,5 @@
 
-;; Tutorial 1. basic firing
+;; Tutorial 2. basic combat
 
 .(
 // Jump table to mission functions    
@@ -54,32 +54,12 @@ AvoidOtherShips		.byt $ff	; If not zero, no other ships are created
 
 // Some internal variables and code 
 
-nTargets .byt  5
+enemy .byt 00
 
 POS1
 	.word 0
 	.word 0
 	.word -2000
-POS2
-	.word -2000
-	.word 0
-	.word -2000
-POS3
-	.word 2000
-	.word 0
-	.word -2000
-POS4
-	.word -2000
-	.word 0
-	.word -1000
-POS5
-	.word 2000
-	.word 0
-	.word -1000
-POS6
-	.word 0
-	.word 0
-	.word 0
 
 
 PlayerLaunch
@@ -106,29 +86,26 @@ firststart
 	inc _mission
 
 	; Create targets
-	lda #6
-	sta nTargets
 	lda #<POS1
 	sta tmp0
 	lda #>POS1
 	sta tmp0+1
-loop
-    lda #SHIP_SPLINTER
+
+    lda #SHIP_ADDER
     jsr IndAddSpaceObject
+	stx enemy
 
-	lda tmp0
-	clc
-	adc #6
-	sta tmp0
-	bcc nocarry
-	inc tmp0+1
-nocarry
-	dec nTargets
-	bne loop
+	lda #(IS_AICONTROLED|FLG_BOLD|FLG_PIRATE)
+	sta _ai_state,x
+	lda #(1|IS_ANGRY)
+	sta _target,x
 
-	lda #6
-	sta nTargets
-
+	; Set number of missiles to zero
+	lda #%11111000
+	and _missiles,x
+	sta _missiles,x
+	
+	
 	; Prepare brief message
 	lda #<str_MissionBrief
 	sta TXTPTRLO
@@ -154,7 +131,8 @@ PlayerDock
 	cmp #7 ;Lave
 	bne nolaunch
 
-	lda nTargets
+	lda _mission
+	cmp #THISMISSION+2
 	beq success
 
 	lda #THISMISSION
@@ -189,18 +167,27 @@ success
 .)
 
 
+
+CheckTarget
+.(
+	cpx enemy
+	bne ret
+	inc _mission
+ret
+	clc
+	rts
+.)
+
+
 HelpMessage
 .(
 	lda _mission
-	cmp #THISMISSION+1
+	cmp #THISMISSION+2
 	beq doit
 retme
 	clc
 	rts
 doit
-	lda nTargets
-	beq retme
-
 	lda #<str_msg
 	sta tmp0
 	lda #>str_msg
@@ -211,74 +198,46 @@ doit
 	rts
 .)
 
-
-CheckTarget
-.(
-	jsr IndGetShipType
-	cmp #SHIP_SPLINTER
-	bne ret
-	dec nTargets
-	bne onemore
-	lda #<str_all
-	ldy #>str_all
-	jmp printit
-onemore
-	lda #<str_hit
-	ldy #>str_hit
-printit
-	sty tmp0+1
-	sta tmp0
-	ldx #0
-	jsr IndFlightMessage
-ret
-	clc
-	rts
-.)
-
 str_MissionBrief
-    .asc "Let's practice targetting now."
+    .asc "Let's practice simple combat now."
 	.byt 13
-	.asc "Use the scanner to locate ships"
+	.asc "Use the scanner and compass to locate"
 	.byt 13
-	.asc "around you. You can target them"
+	.asc "the enemy ship. Watch out your"
 	.byt 13
-	.asc "with your compass using SPACE,"
+	.asc "shields and energy as well as your"
 	.byt 13
-	.asc "which is vital in dogfighting."
+	.asc "laser temperature, and use Power"
+	.byt 13
+	.asc "redirection (P) wisely."
 	.byt 13
 	.byt 13
-	.asc "Fire with A and destroy all the"
-	.byt 13
-	.asc "targets. Then land back in Lave."
-	.byt 13
-;	.asc "Watch the laser temperature, and use"
-;	.byt 13
-;	.asc "Power redir (P) to cool them quicker."
+	.asc "When finished, land back in Lave."
 	.byt 0
 
 str_msg
-	.asc "Destroy all targets"
-	.byt 0
-str_hit
-	.asc "Good shot, commander!"
-	.byt 0
-str_all
 	.asc "Well done! Now land"
 	.byt 0
 	
 
 str_MissionDebrief
-	.asc "Well done Commander."
+	.asc "Now we will focus on trading. Press"
+	.byt 13 
+	.asc "2-7 and get used to the different"
 	.byt 13
-	.asc "Next tutorial will train you in basic"
+	.asc "screens of your console. As Lave is"
+	.byt 13 
+	.asc "an agricultural planet we'll buy (6)"
+	.byt 13 
+	.asc "food. Then select Zaonce (4) and"
 	.byt 13
-	.asc "combat, so review the ship main"
+	.asc "check it is an industrial system (3)"
 	.byt 13
-	.asc "controls and launch again when ready."
+	.asc "We will sell those goods there."
 	.byt 0
 
 str_MissionDebrief2
-	.asc "You have not destroyed all the targets."
+	.asc "You have not destroyed the enemy ship."
 	.byt 13
 	.asc "Launch and try again."
 	.byt 0
@@ -286,10 +245,10 @@ str_MissionDebrief2
 
 str_Summary
 	.byt 2
-	.asc "Tutorial 2:"
+	.asc "Tutorial 3:"
 	.byt 13
 	.byt 2 
-	.asc "Destroy all targets"
+	.asc "Destroy enemy ship"
 	.byt 13
 	.byt 0
 
