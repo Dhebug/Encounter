@@ -195,7 +195,15 @@ loop
 	jsr animate
 	; Check keyboard press
 	jsr ReadKeyNoBounce
-	cmp #" "  
+	cmp #"Y"
+	bne noY
+
+	lda #13
+	sta _mission
+	jsr load_mission
+	jmp end_intro
+noY
+	cmp #"N"  
 	bne loop
 	;jsr SndPic
 	jmp end_intro

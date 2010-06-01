@@ -935,7 +935,8 @@ flight_message_base
 	.byt 0
 	.asc "Escape Pod Launched"
 	.byt 0
-	.asc "Press Space Commander"
+;	.asc "Press Space Commander"
+	.asc "Launch Tutorial (Y/N)?"
 	.byt 0
 	.asc "Target Locked"
 	.byt 0
