@@ -75,7 +75,7 @@ __overlay_end
 		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00		 			; Score, remainder
 		.word 00000             ; Current score
-		.byt 16                 ; Current mission
+		.byt 24                 ; Current mission
 		.word $0001             ; Equipment flags
 		.byt 13			        ; Current player's ship
 		.byt 3					; Number of missiles

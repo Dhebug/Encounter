@@ -208,6 +208,14 @@ SOURCE=.\missions\tutorial0.s
 
 SOURCE=.\missions\tutorial1.s
 # End Source File
+# Begin Source File
+
+SOURCE=.\missions\tutorial2.s
+# End Source File
+# Begin Source File
+
+SOURCE=.\missions\tutorial3.s
+# End Source File
 # End Group
 # Begin Source File
 
