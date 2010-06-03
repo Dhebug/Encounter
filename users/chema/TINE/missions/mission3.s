@@ -1,5 +1,5 @@
 
-;; Mission 3. narcotics from Teraed to Xeenle
+;; Mission 4. Galactic transportation from Zadies (131) to Beveri (181)
 
 
 .(
@@ -57,7 +57,7 @@ AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 
 // Some internal variables and code 
 
-#define CARGO_AMOUNT 5
+#define CARGO_AMOUNT 15
 
 tab_sumlo
 	.byt <str_Summary1,<str_Summary
@@ -99,7 +99,7 @@ PlayerLaunch
 	cmp #1
 	bne nolaunch
 	lda _currentplanet
-	cmp #99 ;Teraed
+	cmp #131 ;Zadies
 	bne nolaunch
 
 	; We are at origin, therefor load cargo
@@ -119,7 +119,7 @@ PlayerLaunch
 
 doit
 	lda #CARGO_AMOUNT
-	ldx #6
+	ldx #8
 	clc
 	adc _shipshold,x
 	sta _shipshold,x
@@ -153,13 +153,17 @@ nolaunch
 launch
 	; Ok, we are about to launch mission here.
 	; Check preconditions
+	; Galactic Hyperspace fitted?
+	lda _equip
+	and #%10000000
+	bne prec
 
+	; Or score is high
 	lda _score+1
 	bne prec
 	lda _score
-	cmp #$1a
+	cmp #$50
 	bcc nolaunch
-
 prec
 	; Launch mission, increment state to 1
 	inc _mission
@@ -195,7 +199,7 @@ PlayerDock
 	cmp #1
 	bne notlaunched
 	lda _currentplanet
-	cmp #99 ;Teraed
+	cmp #131 ;Zadies
 	bne notlaunched
 
 	; Increment mission state to 2
@@ -234,15 +238,15 @@ notlaunched
 	
 checksuccess
 	lda _galaxynum
-	cmp #1
+	cmp #2
 	bne notlaunched
 	lda _currentplanet
-	cmp #213 ; Xeenle
+	cmp #181 ; Beveri
 	bne notlaunched
 
 	; Remove cargo
 	; Do we have it?
-	ldx #6
+	ldx #8
 	lda _shipshold,x
 	cmp #CARGO_AMOUNT 
 	bcs okcargo
@@ -268,11 +272,11 @@ okcargo
 	sta _holdspace
 
 	; Pay the player
-	lda #<5000
+	lda #<10000
 	clc
 	adc _cash
 	sta _cash
-	lda #>5000
+	lda #>10000
 	adc _cash+1
 	sta _cash+1
 	bcc nomore
@@ -303,21 +307,27 @@ nomore
 str_MissionBrief
 	.asc "Greetings Commander."
 	.byt 13
-	.asc "Milto Zaxx again. I have a"
+	.asc "My name is Untha Banhath. I heard"
 	.byt 13
-	.asc "profitable bussiness for you."
+	.asc "you are someone I can trust on."
 	.byt 13
-	.asc "Come to Teraed for a transport."
+	.asc "I have a very profitable bussiness."
+	.byt 13
+	.asc "Come to Zadies for a transport to "
+	.byt 13
+	.asc "Galaxy 2."
 	.byt 0
 
 str_MissionBrief2
-	.asc "Welcome to Teraed, Commander."
+	.asc "Welcome to Zadies, Commander."
 	.byt 13
-	.asc "Carry 5 tons of narcotics to Xeenle."
+	.asc "Carry 15 tons of machinery to 
+	.byt 13
+	.asc "Beveri, in Galaxy 2."
 	.byt 13
 	.asc "Be sure to have such space free before"
 	.byt 13
-	.asc "leaving. You will be paid 500 Cr."
+	.asc "leaving. You will be paid 1000 Cr."
 	.byt 0
 
 str_MissionDebrief
@@ -330,7 +340,7 @@ str_MissionProblem
 	.asc "our cargo!"
 	.byt 13
 	.byt 13
-	.asc "Get back to Teraed inmediately!"
+	.asc "Get back to Zadies inmediately!"
 	.byt 0
 
 str_MissionFailed
@@ -344,7 +354,7 @@ str_Summary1
 	.asc "Current mission:"
 	.byt 13
 	.byt 2 
-	.asc "Go to Teraed for a transport."
+	.asc "Go to Zadies for a transport."
 	.byt 13
 	.byt 0
 
@@ -353,7 +363,7 @@ str_Summary
 	.asc "Current mission:"
 	.byt 13
 	.byt 2 
-	.asc "Transport narcotics to Xeenle."
+	.asc "Carry machinery to Beveri (gal 2)."
 	.byt 13
 	.byt 0
 

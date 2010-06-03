@@ -266,6 +266,7 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + NO enemy is created with anti-radar randomly...
 
++ Add patch_circle_clip for TOP positions and make it work for long-chart too!
 
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector

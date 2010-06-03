@@ -265,7 +265,11 @@ IndAddSpaceObject
 IndSetShipEquip
 	jmp SetShipEquip
 IndRnd
-	jmp _gen_rnd_number
+#ifdef REALRANDOM
+		jmp randgen
+#else
+		jmp _gen_rnd_number
+#endif
 IndSetCurOb
 	jmp SetCurOb
 IndLaunchShip
@@ -291,7 +295,7 @@ OnEnteringSystem		.dsb 3
 OnNewEncounter			.dsb 3
 
 // In OnScoopObject returning with C=1 means that the main program is not to handle
-// the object scooped (generating and storing items in bay
+// the object scooped (generating and storing items in bay)
 OnScoopObject			.dsb 3
 	
 // OnGameLoadad called whenever a game is loaded from disk (for initializing things)
