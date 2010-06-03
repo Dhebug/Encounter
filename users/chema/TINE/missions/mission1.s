@@ -334,11 +334,11 @@ okcargo2
 	sta _holdspace
 
 	; Pay the player
-	lda #<1000
+	lda #<3000
 	clc
 	adc _cash
 	sta _cash
-	lda #>1000
+	lda #>3000
 	adc _cash+1
 	sta _cash+1
 	bcc nomore2
@@ -438,7 +438,7 @@ str_MissionDebrief2
 	.byt 13
 	.asc "your legal status has been cleared"
 	.byt 13
-	.asc "and a reward of 100 Cr has been sent."
+	.asc "and a reward of 300 Cr has been sent."
 	.byt 0
 
 

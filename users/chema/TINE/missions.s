@@ -285,7 +285,7 @@
 ; This should vary, as the next mission both in case of success or failure
 ; could not be the next in list, but any other...
 
-#define MISSIONTEMP 0
+#define MISSIONTEMP 32
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
@@ -298,7 +298,7 @@
 
 __start_mission0_code
 
-//#include "../missions/mission3.s"
+#include "../missions/mission3.s"
 
 __end_mission0_code
 

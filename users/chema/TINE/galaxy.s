@@ -4131,10 +4131,11 @@ loop
 	;jsr NewPlayerShip
 	jsr InitPlayerShip
 
+#ifdef HAVE_MISSIONS
 	; Load mission code and initialize mission
 	jsr load_mission
 	jsr OnGameLoaded
-
+#endif
 	jsr _init_irq_routine 
 
 	; return with Z=0
