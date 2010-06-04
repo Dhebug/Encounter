@@ -201,6 +201,7 @@ Done, now using SMULT
 
 - Add option to change commander's name
 
+- Add patch_circle_clip for TOP positions and make it work for long-chart too!
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
@@ -265,8 +266,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + Avoid landing if planet is not just ahead... maybe calculate real distance when too near? Maybe just check X and Y?
 
 + NO enemy is created with anti-radar randomly...
-
-+ Add patch_circle_clip for TOP positions and make it work for long-chart too!
 
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector

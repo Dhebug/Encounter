@@ -108,6 +108,7 @@ ret
 	tay
 	lda _CentreY+1
     adc _Radius+1
++patch_circleclipT1
     cpy #(CLIP_TOP)
     sbc #0
 .(
@@ -367,6 +368,7 @@ _circlePoints
 +patch_circleclip5
     cpy #(CLIP_BOTTOM)
 	bcs end_line_1
++patch_circleclipT5
     cpy #(CLIP_TOP)
 	bcc end_line_1
 
@@ -419,6 +421,7 @@ end_line_1
 +patch_circleclip2
     cpy #(CLIP_BOTTOM)
 	bcs end_line_2
++patch_circleclipT2
     cpy #(CLIP_TOP)
 	bcc end_line_2
     
@@ -472,6 +475,7 @@ end_line_2
 +patch_circleclip3
     cpy #(CLIP_BOTTOM)
 	bcs end_line_3
++patch_circleclipT3
     cpy #(CLIP_TOP)
 	bcc end_line_3
 	
@@ -526,6 +530,7 @@ skip6
 +patch_circleclip4
     cpy #(CLIP_BOTTOM)
 	bcs end_line_4
++patch_circleclipT4
     cpy #(CLIP_TOP)
 	bcc end_line_4
 	

@@ -1421,6 +1421,21 @@ short_chart
 	jsr SndPic
     lda #SCR_CHART
     sta _current_screen
+
+    lda #(175)
+    sta patch_circleclip1+1
+    sta patch_circleclip2+1
+    sta patch_circleclip3+1
+    sta patch_circleclip4+1
+    sta patch_circleclip5+1
+
+    lda #(14)
+    sta patch_circleclipT1+1
+    sta patch_circleclipT2+1
+    sta patch_circleclipT3+1
+    sta patch_circleclipT4+1
+    sta patch_circleclipT5+1
+
     jmp _plot_chart
 .)
 ;5
@@ -1429,6 +1444,21 @@ gal_chart
 	jsr SndPic
     lda #SCR_GALAXY
     sta _current_screen
+
+    lda #(143)
+    sta patch_circleclip1+1
+    sta patch_circleclip2+1
+    sta patch_circleclip3+1
+    sta patch_circleclip4+1
+    sta patch_circleclip5+1
+
+    lda #(14)
+    sta patch_circleclipT1+1
+    sta patch_circleclipT2+1
+    sta patch_circleclipT3+1
+    sta patch_circleclipT4+1
+    sta patch_circleclipT5+1
+
     jmp _plot_galaxy
 .)
 ;6
