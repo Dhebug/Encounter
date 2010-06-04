@@ -206,6 +206,10 @@ SOURCE=.\missions\mission3.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\missions\mission4.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\missions\tutorial0.s
 # End Source File
 # Begin Source File
