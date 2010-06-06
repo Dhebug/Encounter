@@ -309,7 +309,7 @@ str_MissionBrief
 	.byt 13
 	.asc "My name is Untha Banhath. I heard"
 	.byt 13
-	.asc "you are someone I can trust on."
+	.asc "you are someone I can trust."
 	.byt 13
 	.asc "I have a very profitable bussiness."
 	.byt 13
