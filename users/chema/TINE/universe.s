@@ -171,7 +171,7 @@ moonsdone
 nothing
 #endif
 
-	ldx #3
+	ldx #2
 	stx count ; Hope it is not used here
 loopen
 	jsr random_encounter
@@ -736,7 +736,7 @@ check_for_others
 #else
 		jsr _gen_rnd_number
 #endif
-	cpx #90		; X contains one part of the seed
+	cpx #$90		; X contains one part of the seed
 	bcc doit
 	rts
 doit

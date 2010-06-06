@@ -186,7 +186,7 @@ CreateMissionShips
     sta tmp0+1
 	lda #SHIP_MAMBA
     jsr IndAddSpaceObject
-	lda #(IS_AICONTROLED|FLG_PIRATE)
+	lda #(IS_AICONTROLED|FLG_BOLD|FLG_PIRATE)
 	sta _ai_state,x
 	lda #1
 	ora #IS_ANGRY
@@ -256,10 +256,13 @@ str_Summary1
 
 str_Summary
 	.byt 2
+	.asc "Current mission:"
+	.byt 13
+	.byt 2 
 	.byt "Go to Resori to find out"
 	.byt 13
 	.byt 2
-	.byt "what is going on"
+	.byt " what is going on"
 	.byt 0
 
 .)
