@@ -13,7 +13,7 @@ OnPlayerLaunch
 OnPlayerDock
 	jmp MissionSuccess
 OnPlayerHyper
-	jmp MissionSuccess
+	jmp HyperJump
 OnExplodeShip
 	jmp ShipKilled
 OnDockedShip
@@ -23,7 +23,7 @@ OnHyperShip
 	rts
 	.byt 00
 OnEnteringSystem
-	jmp MissionStart
+	jmp MissionLaunch
 OnNewEncounter
 	clc
 	rts
@@ -54,8 +54,41 @@ AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 ShipToProtect	.byt 00
 Succeeded		.byt 00
 
+
+HyperJump
+.(
+	lda AvoidOtherShips
+	beq checklaunch
+
+	; It was already launched!
+	jmp MissionSuccess
+
+checklaunch
+	jmp MissionStart
+
+.)
+
 MissionStart
 .(
+	lda _mission
+	cmp #THISMISSION
+	bne nolaunch
+
+	lda _galaxynum
+	cmp #2 
+	bne nolaunch
+
+	jsr IndRnd
+	cmp #$50
+	bcs nolaunch
+
+	inc AvoidOtherShips
+	rts
+.)
+
+MissionLaunch
+.(
+/*
 	lda _mission
 	cmp #THISMISSION
 	bne nolaunch
@@ -63,6 +96,9 @@ MissionStart
 	jsr IndRnd
 	cmp #$50
 	bcs nolaunch
+*/
+	lda AvoidOtherShips
+	beq nolaunch
 
 	; launch mission
 	inc _mission
@@ -87,6 +123,8 @@ MissionSuccess
 	lda _mission
 	cmp #THISMISSION+1
 	bne nolaunch
+
+	dec AvoidOtherShips
 
 	lda Succeeded
 	beq failure
@@ -119,19 +157,19 @@ failure
 POS1
 	.word 0
 	.word 0
-	.word 0
+	.word -2000
 POS2
 	.word 4500
 	.word 0
-	.word -6000
+	.word -8000
 POS3
 	.word -4500
 	.word 0
-	.word -6000
+	.word -8000
 POS4
 	.word -4500
 	.word -4500
-	.word -6000
+	.word -7000
 
 CreateMissionShips
 .(

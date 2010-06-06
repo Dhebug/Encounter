@@ -1811,7 +1811,7 @@ make_angry
 	bpl cannot
 
 	; If the ship is defenceless, he cannot be angry, but should make police angry
-	lda _flags,y
+	;lda _flags,y
 	and #FLG_DEFENCELESS 
 	bne cannot
 
