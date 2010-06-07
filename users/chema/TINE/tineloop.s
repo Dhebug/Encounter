@@ -1183,9 +1183,12 @@ loop
 
 		; Ok, not protected, so make it explode, if it is not
 		; already exploding, hyperspacing or docking
-		lda _flags,x
-		and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
-		bne next
+
+		; Let's comment this out and see if this serves for making
+		; missiles explode.
+		;lda _flags,x
+		;and #(IS_EXPLODING|IS_HYPERSPACING|IS_DOCKING)
+		;bne next
 	
 	    lda _flags,x
 	    and #%11110000  ; Remove older flags...

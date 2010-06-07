@@ -85,9 +85,9 @@ MissionStart
 	cmp #2 
 	bne nolaunch
 
-	;jsr IndRnd
-	;cmp #$50
-	;bcs nolaunch
+	jsr IndRnd
+	cmp #$50
+	bcs nolaunch
 
 	inc AvoidOtherShips
 	inc _mission
@@ -262,7 +262,7 @@ str_Summary
 	.byt "Go to Resori to find out"
 	.byt 13
 	.byt 2
-	.byt " what is going on"
+	.byt "what is going on"
 	.byt 0
 
 .)
