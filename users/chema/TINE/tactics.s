@@ -1408,6 +1408,7 @@ loop
 	; Look at ship's type
 	ldx theobject
 	jsr GetShipType
+	and #%01111111
 	cmp #SHIP_CARGO
 	bne nocannister
 	jsr _gen_rnd_number
@@ -1465,7 +1466,6 @@ scoop_item
 	ldx theobject
 	jsr OnScoopObject
 	bcc nomiss
-	;jsr print_mission_message
 	pla
 	jmp finish
 nomiss
