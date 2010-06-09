@@ -2940,6 +2940,9 @@ notmarket
 #ifdef HAVE_MISSIONS
     jsr pr_cash
 
+	lda _mission
+	bmi end
+
 	lda MissionCargo
 	beq end
 	cmp _holdspace
@@ -3289,12 +3292,6 @@ no_fit
 	ldx #12
 	ldy #160
 	jsr gotoXY
-	;lda #(A_FWMAGENTA)
-    ;jsr put_code
-    ;lda #<str_missiondesctitle
-    ;ldx #>str_missiondesctitle
-    ;jsr print
-	;jsr perform_CRLF
 	lda MissionSummary
 	ldx MissionSummary+1
 	jmp print

@@ -254,7 +254,7 @@ str_MissionDebriefFail
 	.byt 13
 	.asc "instructions. Our deal is"
 	.byt 13
-	.asc "over. Good luck.
+	.asc "over. Good luck."
 	.byt 0
 
 
