@@ -100,6 +100,7 @@
 #define frame_number	$4f9
 
 // From overlay ram, ship data
+#define _rotz			$f9e1
 #define _target			$fa41
 #define _flags			$fa61
 #define _ttl			$fa81
@@ -109,7 +110,7 @@
 
 #define THISMISSION			0
 #define NEXTMISSION			4
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 
 *=MISSION_CODE_START
@@ -132,7 +133,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -158,7 +159,7 @@
 #define NEXTMISSION 28
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -183,7 +184,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -208,7 +209,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -233,7 +234,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -258,7 +259,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -289,7 +290,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -314,7 +315,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -339,7 +340,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -366,7 +367,7 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -391,7 +392,32 @@
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
-#define NEXTMISSIONFAIL		$ff
+#define NEXTMISSIONFAIL		$fc
+
+.dsb $a000-*
+
+
+*=MISSION_CODE_START
+
+#include "../missions/mission7.s"
+
+;---
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION MISSIONTEMP
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$fc
 
 .dsb $a000-*
 
@@ -400,7 +426,7 @@
 
 __start_mission0_code
 
-#include "../missions/mission7.s"
+#include "../missions/mission8.s"
 
 __end_mission0_code
 
