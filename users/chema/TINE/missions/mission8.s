@@ -55,7 +55,8 @@ AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 // Some internal variables and code 
 
 Asteroids			.dsb 3
-NAsteroids			.byt 3
+NAsteroids			.byt 5
+DAsteroids			.byt 8
 Failure				.byt 0
 
 LaunchMission
@@ -166,17 +167,42 @@ CheckAsteroid
 
 	jsr IsAsteroid
 	beq isnot
+
+	dec DAsteroids
+	beq last
+
+	lda NAsteroids
+	beq isnot
+
+	; Not the last one... create
+	sty sav_y+1
+	jsr IndRnd
+	and #%11
+	tay
+	lda pos_tabhi,y
+	tax
+	lda pos_tablo,y
+	jsr Create1Asteroid
+	txa
+	beq isnot
+sav_y
+	ldy #0	; SMC
+	sta Asteroids,y
 	dec NAsteroids
-	bne isnot
+	clc
+	rts
+
+last
 	inc _mission
 	lda #<str_Done
 	sta tmp0
 	lda #>str_Done
 	sta tmp0+1
 	ldx #0
-	jmp IndFlightMessage
+	jsr IndFlightMessage
 
 isnot
+	clc
 	rts
 .)
 
@@ -190,30 +216,29 @@ CheckImpact
 	lda #>str_Impact
 	sta tmp0+1
 	ldx #0
-	jmp IndFlightMessage
+	jsr IndFlightMessage
 isnot
+	clc
 	rts
 .)
 
 IsAsteroid
 .(
 	txa
-	ldx #2
+	ldy #2
 loop
-	cmp Asteroids,x
+	cmp Asteroids,y
 	beq positive
-	dex
+	dey
 	bpl loop
 negative
 	tax
 	lda #0
 	rts
 positive
-	tay
-	lda #0
-	sta Asteroids,x
-	tya
 	tax
+	lda #0
+	sta Asteroids,y
 	lda #$ff
 	rts
 .)
@@ -231,24 +256,29 @@ POS3
 	.word 4000
 	.word 4000
 	.word -9000
+POS4
+	.word -4000
+	.word 4000
+	.word -9000
 
+pos_tablo 
+	.byt <POS1,<POS2,<POS3,<POS4
+pos_tabhi 
+	.byt >POS1,>POS2,>POS3,>POS4
 
 
 CreateAsteroids
 .(
     lda #<POS1
     ldx #>POS1   
-    sta tmp0+1
 	jsr Create1Asteroid
 	stx Asteroids
     lda #<POS2
     ldx #>POS2   
-    sta tmp0+1
 	jsr Create1Asteroid
 	stx Asteroids+1
     lda #<POS3
     ldx #>POS3   
-    sta tmp0+1
 	jsr Create1Asteroid
 	stx Asteroids+2
 	rts
@@ -262,18 +292,18 @@ Create1Asteroid
 
     lda #(SHIP_ASTEROID)
     jsr IndAddSpaceObject
+	cpx #0
 	beq end
 
 	lda #(FLG_FLY_TO_PLANET)
 	sta _flags,x
-	lda #(IS_AICONTROLED)
+	lda #(IS_AICONTROLED|FLG_DEFENCELESS)
 	sta _ai_state,x
 	lda #2
 	sta _target,x
 	; Make it rotate
 	lda #3
 	sta _rotz,x
-
 end
 	rts
 .)
@@ -336,23 +366,19 @@ str_MissionDebriefFail
 
 
 str_MissionDebrief
-	.asc "Zantor worked in a project for"
+	.asc "Dr. Thaid here. What you saw was"
 	.byt 13
-	.asc "the GalCop Navy. Torjan is said"
+	.asc "a deliberate attack! And they"
 	.byt 13
-	.asc "to sell secrets. I am sure he"
+	.asc "used our tech! but Zantor was not"
 	.byt 13
-	.asc "got something from Zantor's"
+	.asc "a traitor, for sure. I found a"
 	.byt 13
-	.asc "research. Zantor is not a traitor"
+	.asc "possible countermeasure for these"
 	.byt 13
-	.asc "so there must be another link."
+	.asc "attacks. Carry this data to the"
 	.byt 13
-	.asc "I'll try to find out more and"
-	.byt 13
-	.asc "let you know soon. Stay around."
+	.asc "intel center at Usaorer (gal 5)." 
 	.byt 0
 .)
-
-
 
