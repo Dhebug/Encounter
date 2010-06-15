@@ -1,5 +1,5 @@
 
-;; Mission 8. Asteroid sower at Edorqu (10) in galaxy 4
+;; Mission 8. Asteroid shower at Edorqu (10) in galaxy 4
 
 
 .(
@@ -27,9 +27,7 @@ OnHyperShip
 OnEnteringSystem
 	jmp LaunchMission
 OnNewEncounter
-	clc
-	rts
-	.byt 00
+	jmp InformPlayer
 
 
 // OnScoopObject return with carry =1 if it has handled the scooping, so the main program
@@ -58,6 +56,7 @@ Asteroids			.dsb 3
 NAsteroids			.byt 5
 DAsteroids			.byt 8
 Failure				.byt 0
+Success				.byt 0
 
 LaunchMission
 .(
@@ -194,6 +193,7 @@ sav_y
 
 last
 	inc _mission
+	dec Success
 	lda #<str_Done
 	sta tmp0
 	lda #>str_Done
@@ -309,6 +309,34 @@ end
 .)
 
 
+InformPlayer
+.(
+	lda Failure
+	beq notfail
+
+	lda #<str_Impact
+	sta tmp0
+	lda #>str_Impact
+	sta tmp0+1
+	ldx #0
+	jsr IndFlightMessage
+	clc
+	rts
+notfail
+
+	lda Success
+	beq ret
+	lda #<str_Done
+	sta tmp0
+	lda #>str_Done
+	sta tmp0+1
+	ldx #0
+	jsr IndFlightMessage
+ret
+	clc
+	rts
+.)
+
 str_Done
 	.asc "Well done! You saved us"
 	.byt 0
@@ -367,28 +395,34 @@ str_MissionDebriefFail
 
 
 str_MissionDebrief
-	.asc "Dr. Thaid here. What you saw was"
+	.asc "My name is Dr. Thaid, commander." 
 	.byt 13
-	.asc "a deliberate attack! And they"
+	.asc "What you saw was a deliberate"
 	.byt 13
-	.asc "used our tech! but Zantor was not"
+	.asc "attack! Our enemy has found a breach"
 	.byt 13
-	.asc "a traitor, for sure. I found a"
+	.asc "in our perimeter defences, so they"
 	.byt 13
-	.asc "possible countermeasure for these"
+	.asc "can open paths into our space."
 	.byt 13
-	.asc "attacks. Carry this data to the"
 	.byt 13
-	.asc "intel center at Usaorer (gal 5)." 
+	.asc "That is what Zantor and I were"
+	.byt 13
+	.asc "working on. He was not the traitor."
 	.byt 11
-	.asc "More things here..."
+	.asc "Fortunately, analyzing the data of"
 	.byt 13
-	.asc "More things here..."
+	.asc "this attack, I found a possible"
 	.byt 13
-	.asc "More things here..."
+	.asc "solution. I don't trust anybody now,"
 	.byt 13
-	.asc "More things here..."
-
+	.asc "except you. Carry this plans to the"
+	.byt 13
+	.asc "intel center in this galaxy at"
+	.byt 13
+	.asc "Rianxe and meet Admiral Curruthers"	; 154
+	.byt 13
+	.asc "there. He will know what to do."
 	.byt 0
 .)
 
