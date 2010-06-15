@@ -130,7 +130,8 @@ _freebuffer
 /* General routines for missions, which are fixed and NOT
    loaded from disk */
 
-print_mission_message
+
+clear_msg
 .(
 	lda double_buff
 	beq nodb
@@ -146,19 +147,23 @@ nodb
 	ldx #6
 	ldy #(25+11)
 cont
-	stx savx+1
-	sty savy+1
-	jsr gotoXY
+	stx pm_savx+1
+	sty pm_savy+1
+	jmp gotoXY
+.)
 
+print_mission_message
+.(
+	jsr clear_msg
 	lda #<str_inctrans
 	ldx #>str_inctrans
 	jsr print
 
 	jsr wait
 	jsr wait
-savx
++pm_savx
 	ldx #0 ;SMC
-savy
++pm_savy
 	ldy #0
 	jsr gotoXY
 	jsr put_space
@@ -170,27 +175,52 @@ savy
 	ldx $ff
 	jsr print
 
+	; Do we exit with end of string or newpage?
+	cmp #11
+	bne endtrans
+	
+	; new page
+	txa
+	sec
+	adc $fe
+	sta $fe
+	bcc nocarry
+	inc $ff
+nocarry
+	jsr perform_CRLF
+	jsr perform_CRLF
+
+	lda #<str_moretrans
+	ldx #>str_moretrans
+	jsr print
+	jsr rkey
+	jsr clear_msg
+	jmp pm_savx
+
+endtrans
 	jsr perform_CRLF
 	jsr perform_CRLF
 
 	lda #<str_endtrans
 	ldx #>str_endtrans
 	jsr print
-
-
-rkey
-	jsr ReadKeyNoBounce
-	cmp #" "; Using ESC ($1b) may accidentaly make player launch the escape pod!
-	bne rkey
+	jsr rkey
 
 	lda NeedsDiskLoad
 	beq end
 	dec NeedsDiskLoad
-	jmp load_mission
+	jmp load_mission	; This is jsr/rts
 end
 	rts
 .)
 
+rkey
+.(
+	jsr ReadKeyNoBounce
+	cmp #" "; Using ESC ($1b) may accidentaly make player launch the escape pod!
+	bne rkey
+	rts
+.)
 
 
 #define OVERLAY_MISSION 100+NUM_SECT_OVL+3

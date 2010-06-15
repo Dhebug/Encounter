@@ -166,6 +166,27 @@ doit
 .)
 
 str_MissionBrief
+	.asc "This is the main cockpit. At the top"
+	.byt 13
+	.asc "you can see the Missile indicators"
+	.byt 13
+	.asc "The ID of your target (SPACE to"
+	.byt 13
+	.asc "change), ECM detection, and Mass"
+	.byt 13
+	.asc "pressence indicators."
+	.byt 11	
+	.byt 13
+	.asc "The bottom pannels are as follows:"
+	.byt 13
+	.byt 13
+	.byt 13
+	.asc "Shields               Compass  Power"
+	.byt 13
+	.asc "Speed        Scanner           redir"
+    .byt 13
+	.asc "Laser temp            Energy banks"
+	.byt 11	
     .asc "First of all let's practice flying."
 	.byt 13
 	.byt 13
@@ -190,27 +211,6 @@ str_msg
 	.byt 0
 	
 	
-#ifdef 0	
-	.asc "This is the main cockpit. At the top"
-	.byt 13
-	.asc "you can see the Missile indicators"
-	.byt 13
-	.asc "The ID of your target (SPACE to"
-	.byt 13
-	.asc "change), ECM detection, and Mass"
-	.byt 13
-	.asc "pressence indicators."
-	.byt 13
-	.asc "
-	.byt 13
-	.asc ""
-	.byt 13
-	.asc "Shields               Compass Power"
-	.byt 13
-	.asc "Speed      Scanner            redir"
-    .byt 13
-	.asc "Laser temp            Energy banks"
-#endif
 
 str_MissionDebrief
 	.asc "Well done Commander."

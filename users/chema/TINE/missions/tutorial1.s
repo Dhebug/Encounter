@@ -251,9 +251,9 @@ str_MissionBrief
 	.byt 13
 	.asc "targets. Then land back in Lave."
 	.byt 13
-;	.asc "Watch the laser temperature, and use"
-;	.byt 13
-;	.asc "Power redir (P) to cool them quicker."
+	.asc "Watch the laser temperature, and use"
+	.byt 13
+	.asc "Power redir (P) to cool them quicker."
 	.byt 0
 
 str_msg
