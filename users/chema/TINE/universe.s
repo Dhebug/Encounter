@@ -489,6 +489,10 @@ create_thargoid
 
 		; Should add missiles (tharglets) here. Maybe depending on environment stats.
 
+		lda _missiles,x
+		and #%11111000
+		sta _missiles,x
+
 		stx savx+1
 #ifdef REALRANDOM
 		jsr randgen

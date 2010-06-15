@@ -267,9 +267,10 @@ str_MissionDebrief
 	.byt 13
 	.asc "got something from Zantor's"
 	.byt 13
-	.asc "research. Zantor is not a traitor"
+	.asc "research. Zantor is not a traitor,"
 	.byt 13
 	.asc "so there must be another link."
+	.byt 13
 	.byt 13
 	.asc "I'll try to find out more and"
 	.byt 13

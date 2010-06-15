@@ -572,7 +572,7 @@ nocriten
     jsr LaunchShipFromOther
     cpx #0
     beq nolowen	; Couldn't create object
-    lda #IS_AICONTROLED|FLG_BOLD 
+    lda #(IS_AICONTROLED|FLG_BOLD|FLG_SLOW);
     sta _ai_state,x
         
     ; Get objective
