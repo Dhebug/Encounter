@@ -65,15 +65,22 @@ loop
 text
     lda 1234,x		; Get Next letter
     beq end         ; if 0, we are finished
+
+	; If it is a newpage, do as if 0
+	cmp #11
+	beq end
+
     stx savx+1
     jsr decomp
 savx
     ldx #0  ;SMC
     inx
+	bne cont
+	inc text+2
+cont
     jmp loop
 
 end
-
     rts
 .)
 
@@ -106,6 +113,7 @@ loop
     pla
     ; If it is 0, we are done
     beq end
+
     ; If it is a token, expand it, else print and continue
     bpl printit
 

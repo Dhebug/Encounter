@@ -1059,12 +1059,12 @@ str_inctrans
 	.byt 0
 str_endtrans
 	.asc " --- MESAGE ENDS."
+str_moretrans
 	.byt 13
 	.byt 13
 	.byt A_FWRED
 	.asc "   (press SPACE)"
 	.byt 0
-
 
 __texts_end
 

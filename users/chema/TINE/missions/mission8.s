@@ -356,6 +356,7 @@ str_MissionBrief
 	.asc "Destroy them before their impact!"
 	.byt 0
 
+
 str_MissionDebriefFail
 	.asc "Due to the impact, millions"
 	.byt 13
@@ -379,6 +380,15 @@ str_MissionDebrief
 	.asc "attacks. Carry this data to the"
 	.byt 13
 	.asc "intel center at Usaorer (gal 5)." 
+	.byt 11
+	.asc "More things here..."
+	.byt 13
+	.asc "More things here..."
+	.byt 13
+	.asc "More things here..."
+	.byt 13
+	.asc "More things here..."
+
 	.byt 0
 .)
 
