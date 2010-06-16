@@ -44,7 +44,7 @@ ShipSize
 
 ShipEnergy
     .byt 2, 2, 8, 8, 8, 16, 56, 16, 32, 32, 91, 164, 98, 125, 252, 32, 81, 65, 73
-    .byt 80, 73, 72, 89, 83, 109, 106, 133, 164, 253, 33, 115, 115 
+    .byt 80, 73, 72, 89, 83, 109, 106, 133, 164, 253, 33, 115+140, 115 
 
 ShipMaxSpeed
     ;.byt 44, 16, 8, 16, 15, 30, 30, 10, 8, 10, 32, 24, 28, 20, 14, 23, 26, 30, 30
@@ -60,8 +60,8 @@ ShipAmmo    ; bits 7-3 = Lasers, 0-2 # missiles
 	.byt 79+(EX_DAM*8), 24+(EX_DAM*8), 34+(EX_DAM*8), 32+(EX_DAM*8), 32+(EX_DAM*8)
 	.byt 34+(EX_DAM*8), 32+(EX_DAM*8)
     .byt 33+(EX_DAM*8), 42+(EX_DAM*8), 50+(EX_DAM*8), 73+(EX_DAM*8)
-	.byt 44+(EX_DAM*8), 52+(EX_DAM*8), 50+(EX_DAM*8), 56+(EX_DAM*8)
-	.byt 32+(EX_DAM*8), 71+(EX_DAM*8), 71+(EX_DAM*8)
+	.byt 44+(EX_DAM*8), 52+(EX_DAM*8), 50+(EX_DAM*8), 56+16+(EX_DAM*8)
+	.byt 32+(EX_DAM*8), 71+16+(EX_DAM*8), 71+(EX_DAM*8)
 
 ShipCargo   ; In tons. High nibble Cargo when scooped, low nibble = cargo carrying (?)
     .byt 0, 0, 32, 128, 0, 0, 0, 176, 15, 0, 0, 5, 3, 5, 7, 0, 3, 0, 1, 1, 0, 0, 1

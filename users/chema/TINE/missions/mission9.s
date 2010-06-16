@@ -206,9 +206,9 @@ str_MissionDebrief
 	.byt 13
 	.asc "I will let you know as soon as I have"
 	.byt 13
-	.asc "news about this matter. Thanks again."
+	.asc "news about this matter. Stay in this"
 	.byt 13
-	.asc "You've saved millions of lives."
+	.asc "galaxy. You saved millions of lives."
 	.byt 0
 .)
 

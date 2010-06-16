@@ -449,9 +449,35 @@
 
 *=MISSION_CODE_START
 
-__start_mission0_code
 
 #include "../missions/mission9.s"
+
+;---
+
+; This is fixed... each mission included has a number which is the previous
+; plus 4.
+#define MISSIONTEMP THISMISSION+4 
+#undef THISMISSION 
+#define THISMISSION MISSIONTEMP
+#undef MISSIONTEMP
+
+; This should vary, as the next mission both in case of success or failure
+; could not be the next in list, but any other...
+
+#define MISSIONTEMP NEXTMISSION+4
+#define NEXTMISSION $f8
+#undef MISSIONTEMP
+#undef NEXTMISSIONFAIL
+#define NEXTMISSIONFAIL		$fc
+
+.dsb $a000-*
+
+
+*=MISSION_CODE_START
+
+__start_mission0_code
+
+#include "../missions/mission10.s"
 
 __end_mission0_code
 
