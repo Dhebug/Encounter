@@ -1066,6 +1066,39 @@ str_moretrans
 	.asc "   (press SPACE)"
 	.byt 0
 
+
+; Mission pack messages
+str_successpack
+	.byt A_FWRED
+	.asc "You have successfuly completed"
+	.byt 13
+	.byt A_FWRED
+	.asc "this mission pack."
+	.byt 13
+	.byt 13
+	.byt A_FWRED
+	.asc "Congratulations!"
+	.byt 13
+	.byt A_FWRED
+	.asc "   (press SPACE)"
+	.byt 0
+
+str_failpack
+	.byt A_FWRED
+	.asc "You have failed to complete"
+	.byt 13
+	.byt A_FWRED
+	.asc "this mission pack."
+	.byt 13
+	.byt 13
+	.byt A_FWRED
+	.asc "Try again!"
+	.byt 13
+	.byt A_FWRED
+	.asc "   (press SPACE)"
+	.byt 0
+
+
 __texts_end
 
 #echo Size of texts in bytes:

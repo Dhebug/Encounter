@@ -242,6 +242,45 @@ msg
 
 .)
 
+InitSndGalHyper
+.(
+	ldx #<explosion
+	ldy #>explosion
+	jmp AYRegDump
+explosion
+;7==77, 8==10, 12==F
+	.byt 0,0,0,0,0,0,0,$77,$10,0,0,0,$50,0
+.)
+
+SndGalHyper
+.(
+	pha
+
+	; Register number
+	lda #AY_Noise
+    sta via_porta
+	
+	;Set AY Control lines to Register Number 
+	lda #ayc_Register
+	sta via_pcr
+	
+	;Set AY Control lines to inactive 
+	lda #ayc_Inactive
+	sta via_pcr
+	
+	;Place the Register value into VIA Port A.
+    pla
+	sta via_porta
+	
+	;Set AY Control lines to Write 
+	lda #ayc_Write
+	sta via_pcr
+	
+	;Set AY Control lines to inactive again 
+	lda #ayc_Inactive
+	sta via_pcr
+	rts
+.)
 
 
 

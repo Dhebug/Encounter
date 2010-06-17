@@ -49,7 +49,7 @@
 #define REALRANDOM
 
 /* Define to perform automatic RAMSAVE */
-#define RAMSAVE
+//#define RAMSAVE
 
 /* Values for planet distance various thresholds */
 

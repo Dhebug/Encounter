@@ -24,23 +24,13 @@ __overlay_end
 ;		  4 bytes (cash)
 ;		  1 byte empty
 	
-; Tutorial slot
-
-#ifdef TUTORIAL SLOT
-.byt $ff
-.asc "Tutorial"
-.byt 0,0,0,0,0
-.asc "LAVE"
-.byt 0, 0,0,0,0
-.byt 1
-.byt 0,0,0,0,0,0,0
-.dsb 1
-#endif
-
 
 .dsb 32,00
 .dsb 32,00
 
+#define TESTSLOT
+
+#ifdef TESTSLOT
 
 .byt $ff
 .asc "ChemaEn"
@@ -53,7 +43,9 @@ __overlay_end
 .byt 2
 .byt 0,0,0,0,0,0,0
 .dsb 1
-
+#else
+.dsb 32,00
+#endif
 .dsb 32,00
 .dsb 32,00
 .dsb 32,00
@@ -63,36 +55,9 @@ __overlay_end
 
 ; Two sectors for 8 slots (400 bytes)
 
-#ifdef TUTORIAL SLOT
-; Tutorial slot
-
-		.asc "Tutorial"          ; Commander's name
-		.byt 00 
-		.dsb 2 
-		.dsb 17		            ; Contents of cargo bay
-		.byt 7                 ; Current planet
-		.byt 1                  ; Galaxy number (1-8)
-		.byt $e8,$03            ; Four bytes for cash (200.0)
-		.byt $00,$00
-		.byt 70                 ; Amount of fuel
-		.byt 0                  ; Price fluctuation
-		.byt 35				    ; Current space left in cargo bay
-		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
-		.byt 00		 			; Score, remainder
-		.word 00000             ; Current score
-		.byt 13                 ; Current mission
-		.word $0001             ; Equipment flags
-		.byt 13			        ; Current player's ship
-		.byt 3					; Number of missiles
-; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
-		.byt 23					; Ship speed
-		.byt 72		  		    ; Ship energy
-		.byt 4					; Maximum number of missiles
-		.byt 4					; Laser damage
-#endif
-
 .dsb 50
 .dsb 50
+#ifdef TESTSLOT
 ; This is for test... should be deleted in the end
 ; 50 bytes
 		.asc "ChemaEn"          ; Commander's name
@@ -124,6 +89,10 @@ __overlay_end
 		.byt 190				; Ship energy
 		.byt 4					; Maximum number of missiles
 		.byt 10					; Laser damage
+#else
+.dsb 50
+#endif
+
 .dsb 256-150
 .dsb 256
 

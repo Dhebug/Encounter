@@ -382,6 +382,12 @@ _TineLoop
     lda _docked
     beq loop
     jsr ProcessKeyboard
+	; Need a waiting loop, or it goes too fast
+	ldy #0
+loopwait
+	dey
+	bne loopwait
+
     jmp _TineLoop
 
 loop
@@ -1300,6 +1306,7 @@ canjump
 
 dojump
 		; Remove Galactic Hyperspace
+		jsr galhyper_effect
 		lda _equip
 		and #%01111111
 		sta _equip
@@ -1957,6 +1964,309 @@ loop
 	rts
 
 co .byt $00
+.)
+
+
+cycle_count
+	.byt 2,3,5,8,10,12,14
+static_ic	
+	.byt 8
+static_noiseval
+	.byt 0
+
+#define GHYMIN	71
+#define GHYMAX	75
+#define GHYRANGE 54
+
+cycle_color
+.(
+	lda static_noiseval
+	lsr
+	lsr
+	lsr
+	jsr SndGalHyper
+	inc static_noiseval
+
+	lda #<($a000+40*GHYMIN)
+	sta tmp0
+	lda #>($a000+40*GHYMIN)
+	sta tmp0+1
+
+	lda #<($a000+40*GHYMAX)
+	sta tmp1
+	lda #>($a000+40*GHYMAX)
+	sta tmp1+1
+
+
+	ldx #0
+loopx
+	ldy #0
+	sty op2
+loopy
+	;*p=((ic+i)&7)
+	txa
+	clc
+	adc static_ic	
+	and #7
+	sta (tmp0),y
+	pha
+
+	;p-=40
+	lda tmp0
+	sec
+	sbc #40
+	bcs nocarry1
+	dec tmp0+1
+nocarry1
+	sta tmp0
+		
+	;*p2=((ic+i)&7)
+	pla
+	sta (tmp1),y
+
+	;p2+=40
+	lda #40
+	clc
+	adc tmp1
+	bcc nocarry2
+	inc tmp1+1
+nocarry2
+	sta tmp1
+
+	inc op2
+	lda op2
+	cmp cycle_count,x
+	bcc loopy
+
+	inx
+	cpx #7
+	bcc loopx
+
+	dec static_ic	
+	lda static_ic	
+	and #7
+	sta static_ic	
+
+	rts
+
+.)
+
+gal_wait
+.(
+loopwait
+	dey
+	bne loopwait
+	rts
+.)
+
+//#define GHINVERTED
+
+galhyper_effect
+.(
+	jsr clr_hires2
+	jsr dump_buf
+
+	jsr _DoubleBuffOff
+
+	lda #0
+	jsr set_ink
+
+	jsr InitSndGalHyper
+
+
+	; Entering
+#ifdef GHINVERTED
+	lda #2*(GHYRANGE-1)+8
+	sta thek
+	lda #GHYRANGE-1
+	sta thei
+#else
+	lda #8
+	sta thek
+	lda #0
+	sta thei
+#endif	
+
+loopenter
+	jsr cycle_color
+	ldy #0
+	jsr gal_wait
+
+	;curset(120-k,GHYMIN-i,0)
+	;draw(k<<1,0,1)
+
+	lda #120
+	sec
+	sbc thek
+	sta _CurrentPixelX
+	sta tmp
+	lda thek
+	asl
+	clc
+	adc tmp
+	sec
+	sbc #1
+	sta _OtherPixelX
+
+
+	lda #GHYMIN
+	sec
+	sbc thei
+	sta _CurrentPixelY
+	sta _OtherPixelY
+	jsr _DrawLine
+
+
+	;curset(120-k,GHYMAX+i,0)
+	;draw(k<<1,0,1)
+	lda #GHYMAX
+	clc
+	adc thei
+	sta _CurrentPixelY
+	sta _OtherPixelY
+	jsr _DrawLine
+
+#ifdef GHINVERTED
+	lda thek
+	sec
+	sbc #2
+	sta thek
+	
+	dec thei
+	bpl loopenter
+#else
+	lda thek
+	clc
+	adc #2
+	sta thek
+	
+	inc thei
+	lda thei
+	cmp #GHYRANGE
+	bcc loopenter
+#endif
+
+
+	; cycling
+
+	lda #0
+	sta thei
+loopcy
+	lda #2
+	sta thek
+	lda #$ff
+	sec
+	sbc thei
+	sta savy+1
+loopck
+	jsr cycle_color
+savy
+	ldy #0
+	jsr gal_wait
+	dec thek
+	bne loopck
+
+	dec thei
+	bne loopcy
+
+	; Exitting
+
+ 	lda #8
+	sta thek
+	lda #0
+	sta thei
+loopexit
+	jsr cycle_color
+	ldx #8
+loopwait
+	ldy #0
+	jsr gal_wait
+	dex
+	bne loopwait
+
+	;curset(120-k,GHYMIN-i,0)
+	;draw(k<<1,0,0)
+
+	lda #120
+	sec
+	sbc thek
+	sta _CurrentPixelX
+	sta tmp
+	lda thek
+	asl
+	clc
+	adc tmp
+	sec
+	sbc #1
+	sta _OtherPixelX
+
+
+	lda #GHYMIN
+	sec
+	sbc thei
+	tay
+	lda _HiresAddrLow,y			; 4
+	sta tmp0+0					; 3
+	lda _HiresAddrHigh,y		; 4
+	sta tmp0+1					; 3 => Total 14 cycles
+
+.(
+	ldy #38
+	lda #$40
+loop
+	sta (tmp0),y
+	dey
+	bne loop
+.)
+	;curset(120-k,GHYMAX+i,0)
+	;draw(k<<1,0,1)
+	lda #GHYMAX
+	clc
+	adc thei
+	tay
+	lda _HiresAddrLow,y			; 4
+	sta tmp0+0					; 3
+	lda _HiresAddrHigh,y		; 4
+	sta tmp0+1					; 3 => Total 14 cycles
+
+.(
+	ldy #38
+	lda #$40
+loop
+	sta (tmp0),y
+	dey
+	bne loop
+.)
+
+
+	lda thek
+	clc
+	adc #2
+	sta thek
+	
+	inc thei
+	lda thei
+	cmp #GHYRANGE
+	bcc loopexit
+	
+	;Clear and setup
+
+	lda #0
+	jsr set_ink
+
+	jsr clr_hires2
+	jsr dump_buf
+	jsr _DoubleBuffOn
+	jsr set_ink2
+
+	jmp SndStop
+
+	;rts
+
+thek
+	.byt 0
+thei
+	.byt 0
 .)
 
 
