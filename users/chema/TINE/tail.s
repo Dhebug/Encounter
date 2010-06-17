@@ -206,6 +206,12 @@ endtrans
 	jsr print
 	jsr rkey
 
+	lda _mission
+	cmp #$fc	; Failed
+	beq FailMissionPack
+	cmp #$f8	; Success
+	beq FinishMissionPack
+
 	lda NeedsDiskLoad
 	beq end
 	dec NeedsDiskLoad
@@ -222,6 +228,58 @@ rkey
 	rts
 .)
 
+FailMissionPack
+.(
+	lda #<str_failpack
+	pha
+	lda #>str_failpack
+	pha
+	jmp EmptyMission
+.)
+
+FinishMissionPack
+.(
+	lda #<str_successpack
+	pha
+	lda #>str_successpack
+	pha
+.)
+EmptyMission
+.(
+  	jsr clear_msg
+	pla
+	tax
+	pla
+  	jsr print
+	jsr rkey
+
+	; Put clc/rts/00 at all jump vectors
+	ldy #0
+	sty NeedsDiskLoad
+	sty AvoidOtherShips
+	sty MissionCargo
+
+	lda #<OnPlayerLaunch
+	sta tmp0
+	lda #>OnPlayerLaunch
+	sta tmp0+1
+loop
+	lda #$18
+	sta (tmp0),y
+	iny
+	lda #$60
+	sta (tmp0),y
+	iny
+	lda #$00
+	sta (tmp0),y
+
+	iny
+	cpy #30
+	bcc loop
+
+	rts
+
+.)
 
 #define OVERLAY_MISSION 100+NUM_SECT_OVL+3
 
