@@ -19,6 +19,7 @@ __overlay_end
 ;		  13 chars (Commander's name)
 ;		  9 bytes (System's name, 0 ended)
 ;		  1 byte (Current galaxy)
+; These are not used???
 ;		  2 bytes (score)
 ;		  1 byte (status)
 ;		  4 bytes (cash)
@@ -32,15 +33,14 @@ __overlay_end
 
 #ifdef TESTSLOT
 
-.byt $ff
-.asc "ChemaEn"
-.byt 0,0,0,0,0,0
-;.asc "MAREGEIS"
-;.asc "LAENIN"
-.asc "BEVERI"
+.byt $ff				; Used slot
+.asc "ChemaEn"			; Commander's name 12 chars - zero terminated (too big? below it is 10 plus zero)
+.byt 0,0,0,0,0
 .byt 0
-.byt 0,0
-.byt 2
+.asc "LAVE"				; Current planet's name, 8 chars- zero terminated
+.byt 0,0,0,0
+.byt 0	
+.byt 1					; Current galaxy
 .byt 0,0,0,0,0,0,0
 .dsb 1
 #else
@@ -63,15 +63,15 @@ __overlay_end
 		.asc "ChemaEn"          ; Commander's name
 		.byt 00 
 		.dsb 3 
-		.dsb 17		            ; Contents of cargo bay
-		;.byt 64                 ; Current planet
+		.dsb 17,0	            ; Contents of cargo bay
+		.byt 7					; Current planet
 		;.byt 101
 		;.byt 60
 		;.byt 181
 		;.byt 31
 		;.byt $22
-		.byt 183
-		.byt 5                  ; Galaxy number (1-8)
+		;.byt 183
+		.byt 1                  ; Galaxy number (1-8)
 		.byt $d0,$07            ; Four bytes for cash (200.0)
 		.byt $10,$00
 		.byt 70                 ; Amount of fuel
@@ -80,7 +80,7 @@ __overlay_end
 		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00		 			; Score, remainder
 		.word 10000             ; Current score
-		.byt 28+8+5+4+4+4+4     ; Current mission
+		.byt 0					; Current mission
 		.word $0efe             ; Equipment flags
 		.byt 13			        ; Current player's ship
 		.byt 4					; Number of missiles
