@@ -1,84 +1,36 @@
 
-;// --------------------------------------
-;// 256b moving backgound (Working title)
-;// --------------------------------------
-;// (c) 2006 Mickael Pointier
-;// This code is provided as-is.
-;// I do not assume any responsability
-;// concerning the fact this is a bug-free
-;// software !!!
-;// Except that, you can use this example
-;// without any limitation !
-;// If you manage to do something with that
-;// please, contact me.
-;// --------------------------------------
-;// Note: This text was typed with a Win32
-;// editor. So perhaps the text will not be
-;// displayed correctly with other OS.
+; --------------------------------------
+;  256 bytes moving backgound mini demo
+; --------------------------------------
+; (c) 2006 Mickael Pointier
 
-
-;#define DEBUGMODE
-
-
-
-;//
-;// ROM system defines
-;// (Works only on ROM 1.1)
-;//
+;
+; ROM & RAM system defines
+; (Works only on ROM 1.1)
+;
 #define _rom_hires		$ec33
-//#define _rom_text		$ec21
-
-#define _rom_ink		$f210
-#define _rom_paper		$f204
-
-#define _rom_ping		$fa9f
-#define _rom_shoot		$fab5
-#define _rom_zap		$fae1
-#define _rom_explode	$facb
-
-#define _rom_kbdclick1	$fb14
-#define _rom_kbdclick2	$fb2a
-
-//#define _rom_cls		$ccce
-//#define _rom_lores0		$d9ed
-//#define _rom_lores1		$d9ea
-
 #define _rom_curset		$f0c8
-#define _rom_curmov		$f0fd
-#define _rom_draw		$f110
-#define _rom_fill		$f268
 #define _rom_circle		$f37f
 
-#define _rom_redef_chars	$f8d0
+#define ROM_PARAMS		$2e0
+#define ROM_PATTERN		$213
+#define ROM_CURX		$219
+#define ROM_CURY		$21a
 
-#define	KEY_NONE	$38
-#define KEY_UP		11	//$9c
-#define	KEY_DOWN	10	//$b4
-#define KEY_LEFT	8	//$ac
-#define KEY_RIGHT	9	//$bc
-#define KEY_SPACE	32	//$84
-#define KEY_P		80	//$9d
-#define KEY_DELETE	127
-#define KEY_ESCAPE	27	//$a9
-#define KEY_ENTER	13
+#define INK_BLUE		4
 
+#define FB_DRAW			1
 
-;//
-;// Page two definition
-;//
-#define ROM_CURX	$219
-#define ROM_CURY	$21a
+#define SCREEN_HIRES	$a000
+#define CHARSET_TEXT	$b400+8*"@"
+#define SCREEN_TEXT		$bb80
+#define SCREEN_LAST		$bfdf
 
-;//
-;// Zero page definition
-;//
+#define SCREEN_SRC_OFFSET	(-40*24)+1
 
 	.zero
 
 	*= $50
-
-;// Some two byte values
-_zp_start_
 
 circle_ray			.dsb 1
 
@@ -90,51 +42,25 @@ ptr_src2			.dsb 2
 
 ptr_dst				.dsb 2
 
-
-param				.dsb 1
-param_x				.dsb 2
-param_y				.dsb 2
-param_fb			.dsb 2
-
-
-
-_zp_end_
-
-
-
-
 	.text
 
 _main
-	;
 	; Switch to hires
-	;
-#ifndef DEBUGMODE	
 	jsr _rom_hires
-#endif
 
-	;
 	; Erase the parameter area
-	;
-	.(
 	lda #0
 	ldx #7
 loop
-	sta $2e0-1,x
+	sta ROM_PARAMS-1,x
 	dex 
 	bne loop
-    .)
- 
 		
-	;
-	; Force "manualy" text mode
-	;
-	lda #26		; 50hz TEXT switch
-	sta $bfdf
+	; Force "manualy" the text mode by setting a 50hz TEXT switch attribute 
+	lda #26
+	sta SCREEN_LAST
 	
-	;
 	; More CPU time, and no more blinking cursor !
-	;
 	sei
 	
 	.(
@@ -149,9 +75,9 @@ loop
 	sta tmp0
 	sta tmp1
 	
-	lda #<$bb80
+	lda #<SCREEN_TEXT
 	sta ptr_src+0
-	lda #>$bb80
+	lda #>SCREEN_TEXT
 	sta ptr_src+1
 	
 	ldx #28
@@ -184,7 +110,7 @@ skip
 	
 	; End of line, we write the color attribute at the begining,
 	; and update line pointers...
-	lda #4	; BLUE INK
+	lda #INK_BLUE
 	sta (ptr_src),y
 	
 	.(
@@ -203,28 +129,19 @@ skip
 	dex
 	bne loop_y
 	.)
-
-#ifdef DEBUGMODE	
-Breakkk
-	jmp Breakkk	
-#endif	
 	
-	lda #1	
-    sta $2e0+3			; Set the FB parameter to "draw"    
+	lda #FB_DRAW
+    sta ROM_PARAMS+3			; Set the FB parameter to "draw"    
 BigLoop		
 	.(
-	;
 	; Draw a first animated circle
-	;
 	ldx circle_ray
 	inx
 	txa
 	and #15
 	sta circle_ray
 	
-	;
 	; Draw two circles
-	;
 	ldx #2
 loop_circle
 	stx tmp0
@@ -235,7 +152,7 @@ loop_circle
 	
 	ldx circle_ray
 	inx
-    stx $2e0+1
+    stx ROM_PARAMS+1
         
 	jsr _rom_circle
 	
@@ -246,25 +163,20 @@ loop_circle
 	.)
 	
 	; Pattern register
-	inc $213
+	inc ROM_PATTERN
 			
 	.(
 	;
 	; Let's dump a 24x24 pixels area of the HIRES screen to the redefined characters area :D
 	;
-#define SCREEN_SRC $a000
-#define SCREEN_DST $b400+8*"@"
-
-#define SCREEN_SRC_OFFSET	(-40*24)+1
-	
-	lda #<SCREEN_SRC
+	lda #<SCREEN_HIRES
 	sta ptr_src+0
-	lda #>SCREEN_SRC
+	lda #>SCREEN_HIRES
 	sta ptr_src+1
 	
-	lda #<SCREEN_DST
+	lda #<CHARSET_TEXT
 	sta ptr_dst+0
-	lda #>SCREEN_DST
+	lda #>CHARSET_TEXT
 	sta ptr_dst+1
 
 	ldx #4
@@ -273,8 +185,7 @@ loop_x
 	
 	ldx #24
 loop_y
-	; Compute the secondary pointer to access the tiled versions 
-	; of HIRES bitmap
+	; Compute the secondary pointer to create the mirror picture
 	clc
 	lda ptr_src+0
 	adc #<40*24
@@ -284,11 +195,11 @@ loop_y
 	sta ptr_src2+1
 		
 	ldy #4
-	lda (ptr_src),y
-	ora (ptr_src2),y
+	lda (ptr_src),y		; Top right
+	ora (ptr_src2),y	; Bottom right
 	ldy #0
-	ora (ptr_src),y
-	ora (ptr_src2),y
+	ora (ptr_src),y		; Top left
+	ora (ptr_src2),y	; Bottom left
 	
 	; Update the char map
 	sta (ptr_dst),y
@@ -313,7 +224,6 @@ skip
 	dex
 	bne loop_y
 
-	.(
 	clc
 	lda ptr_src+0
 	adc #<SCREEN_SRC_OFFSET
@@ -321,7 +231,6 @@ skip
 	lda ptr_src+1
 	adc #>SCREEN_SRC_OFFSET
 	sta ptr_src+1
-	.)	
 		
 	ldx tmp0
 	dex
@@ -342,5 +251,6 @@ skip
 	.)
 	rts
 
-CircleData	.byt 12,24
-				
+CircleData	
+	.byt 12,24
+	.byt "-DBUG-"
