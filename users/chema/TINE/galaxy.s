@@ -3475,11 +3475,16 @@ fuel_price
     lda #70
     sec
     sbc _fuel
+	bmi exception
     asl ; Fuel is 0.2 Cr/LY
+save
     sta op2
     lda #0
     sta op2+1
 	rts
+exception
+	lda #0
+	beq save	; allways branches
 .)
 
 ;; Buy new equipment
@@ -3522,12 +3527,16 @@ cash
 	ror
 	bcc missile
 
-	lda #70
-	cmp _fuel
-	beq alreadyfit
-
-	; Buy fuel	
 	;lda #70
+	;cmp _fuel
+	;beq alreadyfit
+
+	lda _fuel
+	cmp #70
+	bcs alreadyfit
+	
+	; Buy fuel	
+	lda #70
 	sta _fuel
 	jmp payfor 
 missile

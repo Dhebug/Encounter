@@ -16,7 +16,8 @@ _init_tine
     ldy #>OBS
     jsr Init3D
 
-    jsr INITSTAR
+    ;jsr INITSTAR
+	jsr _init_rand
     jmp _GenerateTables ;; /* For Wireframe*/
 
 .)
@@ -63,7 +64,7 @@ init_view_ship
 	jsr _gen_rnd_number
 	and #%1111
 	clc
-	adc #15
+	adc #15+2
 	sta shiptype+1
 	jsr AddSpaceObject
 	lda #$60
@@ -100,12 +101,20 @@ animate
 	jsr SetCurOb
     sec
     jsr Pitch
+    sec
+    jsr Pitch
+    clc
+    jsr Yaw
     clc
     jsr Yaw
     clc
     jsr Roll
 	clc
     jsr Roll
+    jsr Roll
+	clc
+    jsr Roll
+
 
 	inc frame_number
 
@@ -262,9 +271,9 @@ _FirstFrame
 
     jsr clr_hires2
 
-	lda invert
-	beq noinvert
-	jsr invertZ
+	;lda invert
+	;beq noinvert
+	;jsr invertZ
 noinvert
 
     ldx VOB          ;Calculate view
@@ -276,9 +285,9 @@ noinvert
     jsr set_compass
 	jsr set_planet_distance
 
-	lda invert
-	beq noinvert2
-	jsr invertZ
+	;lda invert
+	;beq noinvert2
+	;jsr invertZ
 noinvert2
 
 	jsr PatchLaserDraw
@@ -286,7 +295,7 @@ noinvert2
 .)
 
 
-
+/*
 invertZ
 .(
 	ldx VOB
@@ -312,6 +321,45 @@ loop
 
 	rts
 .)
+
+invertZ
+.(
+	ldx VOB
+	jsr GetObj
+
+	sta tmp0
+	sty tmp0+1
+
+.(
+	ldy #ObjMat+8
+	ldx #3
+loop
+	sec
+	lda #0
+	sbc (tmp0),y
+	sta (tmp0),y
+	dey
+	dex
+	bne loop
+.)
+
+.(
+	ldy #ObjMat+2
+	ldx #3
+loop
+	sec
+	lda #0
+	sbc (tmp0),y
+	sta (tmp0),y
+	dey
+	dex
+	bne loop
+.)
+
+	rts
+.)
+
+*/
 
 
 set_planet_distance
@@ -421,7 +469,7 @@ no_game_over
 
 	; Trick to invert object's Z in case of rear view
 +_patch_invertZa
-	jsr invertZ
+	;jsr invertZ
 
 	; Set the radar
     ldx VOB
@@ -522,7 +570,7 @@ nomessage
 nodraw
 	; Trick to invert object's Z in case of rear view
 +_patch_invertZb
-	jsr invertZ
+	;jsr invertZ
 
 	; If player is in control, check collisions
 	lda player_in_control
@@ -2327,7 +2375,7 @@ cont
 
 
 
-
+/*
 patch_invert_code
 .(
 	lda invert
@@ -2363,6 +2411,40 @@ end
 	stx _patch_invert_msg+3
 	rts
 .)
+
+*/
+patch_invert_code
+.(
+	lda invert
+	beq setnops
+	; Some code patches
+	lda #$20	; jsr opcode
+	sta _patch_invertZ
+	lda	#<invertZmat
+	sta	_patch_invertZ+1
+	lda	#>invertZmat
+	sta	_patch_invertZ+2
+
+	lda #<str_rearview
+	ldx #>str_rearview
+	jmp end
+setnops
+	lda #$ea	; nop opcode
+	ldx #2
+loop
+	sta _patch_invertZ,x
+	dex
+	bpl loop
+
+	lda #<str_frontview
+	ldx #>str_frontview
+end
+	; Patch front/rear view message
+	sta _patch_invert_msg+1
+	stx _patch_invert_msg+3
+	rts
+.)
+
 
 PatchLaserDraw
 .(

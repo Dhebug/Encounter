@@ -642,12 +642,19 @@ CalcView
 
          LDX #8
          LDY #ObjMat+8
-loop     LDA (POINT),Y    ;Viewpoint matrix
+loop     
+		 LDA (POINT),Y    ;Viewpoint matrix
          STA VIEWMAT,X
          DEY
          DEX
          BPL loop
 
+
++_patch_invertZ
+		;jsr invertZmat
+		nop
+		nop
+		nop
 
          LDX #11          ;Set up pointers
 cl       LDA CXLO,X
@@ -706,8 +713,41 @@ getloop  JSR GetNextOb
 done    
          LDY RTEMPX        ;# of objects
          STY NUMCENTS
+
          JMP GLOBROT      ;off she goes!
 .)
+
+
+invertZmat
+.(
+.(
+	ldy #8
+	ldx #3
+loop
+	sec
+	lda #0
+	sbc VIEWMAT,y
+	sta VIEWMAT,y
+	dey
+	dex
+	bne loop
+.)
+
+.(
+	ldy #2
+loop
+	sec
+	lda #0
+	sbc VIEWMAT,y
+	sta VIEWMAT,y
+	dey
+	bpl loop
+.)
+
+	rts
+.)
+
+
 
 ;
 ; SortVis -- Compute and sort all visible objects
