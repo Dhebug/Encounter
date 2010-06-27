@@ -19,7 +19,7 @@ CALL osdk_config.bat
 ::
 :: Display the HTML file
 ::
-explorer build\map.htm
+build\map.htm
 
 GOTO End
 

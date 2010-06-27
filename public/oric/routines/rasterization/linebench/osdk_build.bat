@@ -1,7 +1,5 @@
 @ECHO OFF
 
-::set osdk=c:\osdk
-
 ::
 :: Initial check.
 :: Verify if the SDK is correctly configurated
