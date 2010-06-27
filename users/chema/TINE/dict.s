@@ -927,6 +927,9 @@ str_ship_names
 	.byt 0
 	.asc " Cougar "
 	.byt 0
+	.asc "Asteroid"
+	.byt 0
+
 
 flight_message_base
 	.asc "Incoming Missile"

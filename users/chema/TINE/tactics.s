@@ -449,6 +449,50 @@ noroll
     jmp toofar
 areangry    
 
+	lda AIShipType
+	cmp #SHIP_HERMIT
+	bne nothermit
+
+	ldx AIShipID
+	lda #0
+	sta _target,x
+
+	; Not many ships around
+	lda NUMOBJS
+	cmp #10
+	bcs nothermit
+
+	; Launch Sidewinder+rand&3
+
+	lda hermit_counter
+	bne nothermit
+
+	inc hermit_counter
+
+	ldx AIShipID
+	jsr SetCurOb
+	lda _rnd_seed+2
+	and #%11
+	clc
+	adc #SHIP_SIDEWINDER
+
+    jsr LaunchShipFromOther
+    cpx #0
+    beq nothermit	; Couldn't create object
+
+	lda #(HAS_ECM)	
+	jsr SetShipEquip
+
+    lda #(IS_AICONTROLED|FLG_BOLD)
+    sta _ai_state,x
+        
+    ; Get objective
+    lda AITarget  
+	ora #IS_ANGRY
+    sta _target,x 
+	rts
+
+nothermit
 /*	Actually this creates too many ships in the same place :(
     ; if it is an Anaconda it may launch worms.
 	; As _gen_rnd_number has already
