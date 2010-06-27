@@ -135,6 +135,7 @@ police_counter		.byt 00
 asteroid_counter    .byt 00
 worm_counter		.byt 00
 missile_counter		.byt 00
+hermit_counter		.byt 00
 
 police_ids			.dsb MAXCOPS
 

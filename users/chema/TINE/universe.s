@@ -151,6 +151,7 @@ moonsdone
 	sta asteroid_counter
 	sta worm_counter
 	sta missile_counter
+	sta hermit_counter
 
 	sta _ecm_counter
 	sta message_delay
@@ -637,23 +638,29 @@ check_for_asteroids
 	;else
 	;	type = SHIP_ASTEROID;
 
-;		lda _rnd_seed
-;		cmp #254
-;		bcs hermit
+		lda _rnd_seed
+		cmp #254
+		bcs hermit
 		lda #SHIP_ASTEROID
-;		.byt $2c
-;hermit
-;		lda #SHIP_HERMIT
 
 		jsr create_other_ship
 		cpx #0
 		beq end
 
-		inc asteroid_counter
-
 		lda _ai_state,x
 		and #%01111111 ;~(IS_AICONTROLED)  
 		sta _ai_state,x
+		jmp finish
+
+hermit
+		lda #SHIP_HERMIT
+
+		jsr create_other_ship
+		cpx #0
+		beq end
+
+finish
+		inc asteroid_counter
 
 		; Make it rotate
 		lda #3
