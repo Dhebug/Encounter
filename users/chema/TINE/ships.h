@@ -47,5 +47,6 @@
 #define SHIP_CONSTRICTOR    31
 #define SHIP_COUGAR         32
 
+#define SHIP_HERMIT			33
 
 #endif

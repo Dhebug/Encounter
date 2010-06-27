@@ -19,8 +19,7 @@
 ;
 INITSTAR 
 .(
-    jsr _init_rand
-    ldy #NSTARS
+	ldy #NSTARS
 LOOP
     jsr NEWSTAR
     dey
@@ -44,7 +43,11 @@ patch
 NEWSTAR
 .(       
 	     ;.Y contains index into star table
-         jsr _gen_rnd_number
+#ifdef REALRANDOM
+		jsr randgen
+#else
+		jsr _gen_rnd_number
+#endif
 loop1
 		 cmp #(CLIP_BOTTOM-CENTER_Y)  ;100
          bcc SETY
@@ -56,7 +59,11 @@ loop1
 		 jmp loop1
 SETY     STA STARY,Y
 
+#ifdef REALRANDOM
+		lda randseed
+#else
          lda _rnd_seed
+#endif
 loop2
          cmp #(CLIP_RIGHT-CENTER_X)		;120
          bcc SETX
@@ -158,9 +165,12 @@ move_stars
 	lda g_alpha
 	eor #$80
 	sta g_alpha
-	lda g_beta
+	;lda g_beta
+	;eor #$80
+	;sta g_beta
+	lda g_delta
 	eor #$80
-	sta g_beta
+	sta g_delta
 normal1
 
     lda g_alpha
@@ -184,7 +194,7 @@ nowdelta
     lda g_delta
     beq nowtheta
 	bmi negmove3
-	and #$7f
+	;and #$7f
 	sta tmp
 loop1
     jsr STARROTP
@@ -194,6 +204,7 @@ loop1
     jmp nowtheta
 negmove3
 	and #$7f
+	beq nowtheta
 	sta tmp
 loop2
     jsr STARROTM

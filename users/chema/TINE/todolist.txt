@@ -305,6 +305,17 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 [20:02] <_Dbug_> Basically it's really just a matter of maintaining some counter and flags 
 
 
+
+POSSIBLE NEW ADD-ONS:
++Add Rock Hermits
++Add something to jump further than 7 LY (maybe a new equipment + some mineral from asteroids --dilithyum?) so we can reach
+unreachable worlds
++ Remove face fill-pattern from models and oobj3d... saving space.
++ Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
+
+
+
+
 cash
 score (rank)
 galaxy
