@@ -205,6 +205,10 @@ Done, now using SMULT
 
 - When frame rate goes too high don't simulate all the time, or make a waiting loop
 
+- Add Rock Hermits
+
+- Is size of Vipers too high? Seems so... check. Changed, but not fully tested.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -259,8 +263,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.
 
-+ Is size of Vipers too high? Seems so... check.
-
 + Planet's radius seem wrong, according to planet's data... Some are very big, with radius of 3.7Km
 
 + Avoid landing if planet is not just ahead... maybe calculate real distance when too near? Maybe just check X and Y?
@@ -307,7 +309,6 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 
 
 POSSIBLE NEW ADD-ONS:
-+Add Rock Hermits
 +Add something to jump further than 7 LY (maybe a new equipment + some mineral from asteroids --dilithyum?) so we can reach
 unreachable worlds
 + Remove face fill-pattern from models and oobj3d... saving space.

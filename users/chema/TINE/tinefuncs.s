@@ -591,6 +591,18 @@ loopy
     dec mancount
     bne loopy
 naday
+
+
+	; Patch ACCROTX, etc.
+	lda #<ROTXY
+	sta patch_rot1+1
+	sta patch_rot2+1
+
+	lda #>ROTXY
+	sta patch_rot1+2
+	sta patch_rot2+2
+
+
     plp
 
     lda _rotz+1
@@ -644,7 +656,7 @@ nomax
     sta _accel+1
 
 end
-
+/*
 	; Patch ACCROTX, etc.
 	lda #<ROTXY
 	sta patch_rot1+1
@@ -653,6 +665,7 @@ end
 	lda #>ROTXY
 	sta patch_rot1+2
 	sta patch_rot2+2
+*/
 +globalrts
     rts
 

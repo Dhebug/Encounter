@@ -2503,7 +2503,7 @@ ONEDOT
     .byt 0
 ; Face list
     .byt 1		;Number of vertices
-    .byt 0      ;Fill pattern
+    ;.byt 0      ;Fill pattern
     .byt 0      ;Vertices
 
 
@@ -2518,7 +2518,7 @@ ONEPLANET
     .byt 0
 ; Face list
     .byt 1      ;Number of vertices
-    .byt SOLID	;Fill pattern
+    ;.byt SOLID	;Fill pattern
     .byt 0      ;Vertices
 
 ONEMOON
@@ -2532,7 +2532,7 @@ ONEMOON
     .byt 0
 ; Face list
     .byt 1		;Number of vertices
-    .byt SOLID  ;Fill pattern
+    ;.byt SOLID  ;Fill pattern
     .byt 0      ;Vertices
 
 

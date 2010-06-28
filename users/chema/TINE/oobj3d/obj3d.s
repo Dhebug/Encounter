@@ -1270,8 +1270,11 @@ SmallDot
 		bmi end
 		cmp ZMAX+1
 		bcs end
-
+#ifdef FILLEDPOLYS
         ldy #2
+#else
+		ldy #1
+#endif
         lda (POINT),y
         tax
 
@@ -1410,7 +1413,11 @@ draw     LDY #1
          LDY POINT+1
          LDA POINT
          CLC
+#ifdef FILLEDPOLYS
          ADC #2
+#else
+		 adc #1
+#endif
          BCC dloop
          INY
 dloop    JSR DrawFace
@@ -1446,7 +1453,11 @@ DrawFace
          LDA (POINT),Y
          STA NVERTS
          SEC              ;N+1 in list
+#ifdef FILLEDPOLYS
          ADC #2           ;(closes on itself)
+#else
+		 ADC #1           ;(closes on itself)
+#endif
          ADC POINT
          STA FACEPTR      ;Next face
          LDA #00
@@ -1455,7 +1466,7 @@ DrawFace
          STA FACEPTR+1
 
 #ifdef FILLEDPOLYS
-         LDY #1           ;Fill pattern
+         LDY #2           ;Fill pattern
          LDA (POINT),Y    ;index
          ASL
          ROL TEMP
@@ -1483,7 +1494,8 @@ Wire
 		ror facevis
 		bcc exit
 
-         LDY #2           ;Connect the dots...
+         ;LDY #2           ;Connect the dots...
+		 ldy #1
 l2       LDA (POINT),Y
          TAX
          LDA PLISTX,X
@@ -1620,8 +1632,10 @@ CirclePrepare
         ASL
         ROL TEMP
         sta _CurrentPattern
+		ldy #2
+#else
+		ldy #1
 #endif
-        ldy #2
         lda (POINT),y
 
         tax
