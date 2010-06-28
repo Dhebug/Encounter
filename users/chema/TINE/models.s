@@ -35,72 +35,72 @@ ADDER
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,0,1,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 13,12,0,1,13
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,11,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,13,1,2
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,11,2,3,9
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,13,2,3,4
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,4,5,6,8,9,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,8,6,7,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,5,6,7,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,7,0,10
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,7,0,12
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,11,9,8,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,13,4,5,12
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 17,14,15,16,17
 
 
@@ -130,62 +130,62 @@ ANACONDA
 
 ; Face data
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,2,3,4
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,10,5,0,1,6
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,11,6,1,2,7
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,12,7,2,3,8
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,13,8,3,4,9
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 14,5,0,4,9,14
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,14,5,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,11,6,10,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,12,7,11
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,13,8,12
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,14,9,13,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 14,12,10,14
 
 
@@ -215,67 +215,67 @@ ASP
 
 ; Face data
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,7,0,4,8
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,4,0,1,2,3
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,7,0,1,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,12,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,8,9,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,11,12,5,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,10,12,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,4,3,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,7,6,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,10,3,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,11,6,9
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,5,1,2,12
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 16,13,15,14,16
 
 
@@ -305,72 +305,72 @@ ASTEROID
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,5,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,2,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,1,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,6,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,5,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,5,3,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,5,0,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,0,1,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,1,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,8,3,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,8,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,2,3,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,3,4,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,7,0,4
 
 
@@ -400,37 +400,37 @@ BARREL
 
 ; Face data
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,2,3,4
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,0,1,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,1,2,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,2,3,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,3,4,9
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,5,0,4,9
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,5,6,7,8,9
 
 
@@ -460,67 +460,67 @@ BOA
 
 ; Face data
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,1,5,6,2,11
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,11,2,7,8,3,12
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,10,1,4,9,3,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,1,4,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,2,6,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,8,9,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,4,0,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,0,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,0,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,4,0,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,8,0,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,0,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,10,11,12
 
 
@@ -550,52 +550,52 @@ BOULDER
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,4,0,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,5,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,5,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,5,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,5,3,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,6,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,6,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,6,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,6,3,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,4,0,6
 
 
@@ -625,22 +625,22 @@ CAPSULE
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,1,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,2,3,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,3,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,0,1,2
 
 
@@ -673,87 +673,87 @@ COBRA
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,0,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,1,2,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,2,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,1,3,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,4,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,2,5,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,2,6,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,3,8,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,4,7,6
 
 
 	.byt 7	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,11,10,8,5,9,6,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,1,3,8,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,11,0,1,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,0,4,7,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 17,14,15,16,17
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 19,12,13,18,19
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 23-2,22-2,24-2,23-2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 27-2,25-2,26-2,27-2
 
 
@@ -783,52 +783,52 @@ COBRAMK1
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,1,0,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,7,1,0,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,8,0,2,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,2,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,5,3,1,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,7,3,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,8,4,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,4,6,7,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,4,2,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,7,3,5
 
 
@@ -858,62 +858,62 @@ CONSTRICTOR
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,0,1,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,9,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,0,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,6,7,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,3,2,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,4,9,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,4,5,8,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,8,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,3,4,5,6
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,6,7,0,1,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 14,10,12,14
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 13,11,15,13
 
 
@@ -944,72 +944,72 @@ COUGAR
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,0,1,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,1,2,4
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,5,0,1,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,4,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,3,6,5,0
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,4,2,3,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,8,7,1
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,8,7,1
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,10,9,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,10,9,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,16,19,15
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 19,18,17,19
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,13,12,11
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,14,12,11
 
 
@@ -1039,67 +1039,67 @@ FERDELANCE
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,0,5,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,5,0,1
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,1,2,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,2,3,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,3,4,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,8,0,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,9,5,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,9,6,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,7,8
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,2,3,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 17,18,16,17
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,10,11,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,13,14,15
 
 
@@ -1129,47 +1129,47 @@ GECKO
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,2,0,1,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,1,5,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,1,5,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,0,1,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,6,4,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,2,4,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,2,4,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,7,3,2,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,7,5,3
 
 
@@ -1202,52 +1202,52 @@ KRAIT
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,3,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,3,0,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,4,0,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,4,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,3,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,1,4,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12-2,11-2,13-2,12-2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 16-2,14-2,15-2,16-2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8-2,10-2,7-2,8-2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7-2,9-2,8-2,7-2
 
 
@@ -1277,57 +1277,57 @@ MAMBA
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,4,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,0,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,0,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,0,4,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,3,2,1,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,12,9,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 17,18,15,16,17
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,5,6,7,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 13,14,10,13
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 21,24,20,21
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 22,23,19,22
 
 
@@ -1358,87 +1358,87 @@ MISSILE
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,1,4,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,1,2,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,2,3,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,3,4,0
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,5,8,4,1
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,6,5,1
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,6,7,3,2
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,7,8,4,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,7,8,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,9,13,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,9,13,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,10,14,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,10,14,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,11,15,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,11,15,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,12,16,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,12,16,8
 
 #else
@@ -1464,22 +1464,22 @@ MISSILE
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,3,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,3,2,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,0,1,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,0,2,1
 #endif
 
@@ -1510,52 +1510,52 @@ MORAY
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,2,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,2,1,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,2,0,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,2,3,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,2,5,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,2,4,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,1,3,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,0,1,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,0,4,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,7,8
 
 
@@ -1585,7 +1585,7 @@ PLATELET
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,1,2,3,0
 
 
@@ -1615,67 +1615,67 @@ PYTHON
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,1,0,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,1,0,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,3,0,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,2,0,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,1,3,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,1,2,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,3,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,2,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,6,5,4,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,7,5,4,2
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,7,10,9,2
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,6,10,9,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,10,7,5,6
 
 
@@ -1705,42 +1705,42 @@ SIDEWINDER
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,3,0,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,4,1,2
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,5,3,4,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,0,3,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,0,1,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,1,2,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,6,7,8
 
 
@@ -1770,82 +1770,82 @@ SHUTTLE
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,12,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,4,0,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 1,4,0,1
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,5,1,4
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,5,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,2,5
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,6,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,7,3,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,7,0,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,4,5,6,7
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,12,1,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,12,2,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,12,0,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,8,9,10,11
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,13,14,15
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 18,16,17,18
 
 
@@ -1875,22 +1875,22 @@ SPLINTER
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,2,1,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,2,3,0
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,1,0,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 0,1,2,0
 
 
@@ -1920,37 +1920,37 @@ THARGLET
 
 ; Face data
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,2,3,4
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,0,1,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,1,2,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,2,3,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,3,4,9
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,5,0,4,9
 
 
 	.byt 5	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,5,6,7,8,9
 
 
@@ -1980,52 +1980,52 @@ THARGOID
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,0,1,9
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 10,9,1,2,10
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,2,3,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,11,3,4,12
 
 
 	.byt 8	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,6,5,4,3,2,1,0,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 13,12,4,5,13
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 14,13,5,6,14
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,14,6,7,15
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,8,0,7,15
 
 
 	.byt 8	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,14,13,12,11,10,9,8,15
 
 
@@ -2058,77 +2058,77 @@ TRANSPORTER
 
 ; Face data
 	.byt 7	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,0,1,2,3,4,5,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,8,1,2,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,9,2,3
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 14,13,9,3,4,10,14
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,10,4,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,10,5,6,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,7,0,6,11
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,7,0,1,8
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,12,7,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 13,12,8,9,13
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,14,10,11,15
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,15,7,11
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,12,7,15
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 15,12,13,14,15
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 36-17,33-17,34-17,35-17,36-17
 
 
@@ -2158,47 +2158,47 @@ VIPER
 
 ; Face data
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,8,1,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,4,0,1,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,7,1,0,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,4,0,2,6
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,5,2,0,3
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,6,2,5
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 6,5,3,7,8,4,6
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 12,13,9,12
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 11,14,10,11
 
 
@@ -2228,42 +2228,42 @@ WORM
 
 ; Face data
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 3,2,0,1,3
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 9,3,2,8,9
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 2,4,0,2
 
 
 	.byt 3	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 5,3,1,5
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,6,4,2,8
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 7,9,3,5,7
 
 
 	.byt 4	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 8,9,7,6,8
 
 
 	.byt 6	;Number of points
-	.byt 0	;Fill pattern
+	;.byt 0	;Fill pattern
 	.byt 4,0,1,5,7,6,4
 
 
