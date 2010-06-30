@@ -171,7 +171,8 @@ donegal
 
 ;Number of sectors to read Just the original tables, models, music and dictionary now 
 
-#define NUM_SECT_OVL 34+8+11-1	//11+10	 
+#define NUM_SECT_OVL 34+8+11-1+4	//11+10	 
+//#define NUM_SECT_OVL 34+8+11-1	//11+10	 
 
 LoadOverlay
 .(
@@ -203,6 +204,7 @@ loop
 
 	; Load grammar file in page 2
 	ldy #2
+	lda #0
 	sta (sp),y
 	iny
 	lda #$02
@@ -214,7 +216,6 @@ loop
 ; Routine to increment disk reading/writting parameters
 inc_disk_params
 .(
-
     ; Increment address in 256 bytes
     ldy #3
     lda (sp),y
@@ -228,13 +229,26 @@ inc_disk_params
     clc
     adc #1
     sta (sp),y
-    iny
-    lda (sp),y
-    adc #0
-    sta (sp),y
+//#ifdef 0
+	pha
+//#endif
+	iny
+	lda (sp),y
+	adc #0
+	sta (sp),y
+//#ifdef 0
+    ;Sedoric bug workaround 
+	pla
+	cmp #225 ;$f3
+	bne nosedbug
+	dey
+	lda #226; $f4
+	sta (sp),y	
+	iny
+nosedbug
+//#endif
 
     rts
-
 .)
 
 

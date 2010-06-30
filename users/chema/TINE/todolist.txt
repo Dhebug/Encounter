@@ -209,6 +209,8 @@ Done, now using SMULT
 
 - Is size of Vipers too high? Seems so... check. Changed, but not fully tested.
 
+- Remove face fill-pattern from models and oobj3d... saving space.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -309,9 +311,8 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 
 
 POSSIBLE NEW ADD-ONS:
-+Add something to jump further than 7 LY (maybe a new equipment + some mineral from asteroids --dilithyum?) so we can reach
-unreachable worlds
-+ Remove face fill-pattern from models and oobj3d... saving space.
++Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
+asteroids -- dilithyum?) so we can reach unreachable worlds
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
 
 
