@@ -288,6 +288,10 @@ loop
 load_mission
 .(
 	jsr _init_disk
+
+;	lda #0
+;dbug beq dbug
+
     ; Sector to read    
 	lda _mission
 	lsr
@@ -299,17 +303,35 @@ load_mission
 	asl
 	clc
 	adc tmp
-	
+
 	;clc
 	adc #<OVERLAY_MISSION
     ldy #0
     sta (sp),y
+	pha
+	iny
 	lda #>OVERLAY_MISSION
 	adc #0
-    iny
     sta (sp),y
 
-    ; Address of buffer
+    ;Sedoric bug workaround 
+	beq testbug
+	pla
+	jmp dobug
+testbug
+	pla
+	cmp #225 ;$f3
+	bcc nosedbug
+dobug
+	dey
+	lda (sp),y
+	clc
+	adc #1
+	sta (sp),y
+	iny
+nosedbug
+
+	; Address of buffer
     iny
     lda #<(MISSION_CODE_START)
     sta (sp),y
