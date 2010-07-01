@@ -14,6 +14,7 @@
 #define FLG_FLY_TO_PLANET   16
 #define FLG_FLY_TO_HYPER    32
 #define FLG_INNOCENT		64
+#define FLG_HARD		   128	
 
 
 /* Values for the _ai_state field */

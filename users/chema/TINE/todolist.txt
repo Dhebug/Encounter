@@ -314,7 +314,7 @@ POSSIBLE NEW ADD-ONS:
 +Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
 asteroids -- dilithyum?) so we can reach unreachable worlds
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
-
++ Only mil lasers should damage Cougar or Constrictor, and damage/4.
 
 
 
