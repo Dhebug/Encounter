@@ -110,6 +110,9 @@ CheckConstrictor
 	lda #(IS_AICONTROLED|FLG_PIRATE|FLG_BOLD)
 	sta _ai_state,x
 
+	lda #FLG_HARD
+	sta _flags,x
+
 	; Should add missiles (tharglets) here. Maybe depending on environment stats.
 	lda #%10
 	ora _missiles,x

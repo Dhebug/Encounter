@@ -1596,6 +1596,16 @@ dodam
 	beq noinnocent
 	jsr alert_cops
 noinnocent
+	lda _flags,x 
+	and #(FLG_HARD)
+	beq nohard
+	lda tmp
+	cmp #MILITARY_LASER
+	bcs cando
+	rts
+cando
+	lsr
+nohard
 	; We perform damage
     lda _energy,x
     sec

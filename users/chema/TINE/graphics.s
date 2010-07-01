@@ -43,6 +43,31 @@ _DrawLaser
 .(
 	jsr PatchLaserDraw
 
+#ifdef REALRANDOM
+	jsr randgen
+	lsr
+	and #%1
+	;clc
+	adc #(120-1-1)
+	tax
+	lda randseed
+	lsr
+	and #%1
+	;clc
+	adc #(61-1)
+
+	stx Coords+2
+	sta Coords+3
+	stx Coords+6
+	sta Coords+7
+	inx
+	inx
+	stx Coords+10
+	sta Coords+11
+	stx Coords+14
+	sta Coords+15
+#endif
+
     lda #<Coords
     sta pzero
     lda #>Coords
