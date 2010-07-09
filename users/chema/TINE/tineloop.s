@@ -431,8 +431,8 @@ rr		.byt 00
 
 hypership
 .(
-	lda #0
-dbug beq dbug
+;	lda #0
+;dbug beq dbug
 	stx savx+1
 	;ldx #1
 	jsr GetObj
@@ -478,8 +478,9 @@ end
 hyp_rad_tbl 
 	;.byt 250, 210, 170, 130 
 	;.byt 130,170,210,250
-	.byt 100,120,150,200
+	;.byt 100,120,150,200
 	;.byt 5, 10, 18, 28 
+	.byt $1e*2, $23*2, $2b*2, $35*2
 
 hyp_cir
 .(

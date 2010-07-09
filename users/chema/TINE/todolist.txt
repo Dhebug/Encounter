@@ -211,6 +211,8 @@ Done, now using SMULT
 
 - Remove face fill-pattern from models and oobj3d... saving space.
 
+- Only mil lasers should damage Cougar or Constrictor, and damage/4.
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -314,8 +316,8 @@ POSSIBLE NEW ADD-ONS:
 +Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
 asteroids -- dilithyum?) so we can reach unreachable worlds
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
-+ Only mil lasers should damage Cougar or Constrictor, and damage/4.
-
++ Asteroids should not appear from hyperspace.
++ Takes too long for ships to go to hyper... sometimes.
 
 
 cash
