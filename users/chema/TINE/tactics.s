@@ -811,6 +811,11 @@ nodock
 	lda #IS_HYPERSPACING
 	ora _flags,x
 	sta _flags,x
+
+	lda #3
+	sta _ttl,x
+	stx ship_to_hyper
+
 	rts
 nohyper    
 	; On collision course, invert everything
@@ -1097,11 +1102,14 @@ failure
 HyperObject
 #ifdef HAVE_MISSIONS
 .(
-	stx nothing+1
+	stx savx+1
 	jsr OnHyperShip
 	bcc nothing
 	jsr print_mission_message
 nothing
+	lda #0
+	sta ship_to_hyper
+savx
 	ldx #0 ;SMC
 	jmp RemoveObject
 .)

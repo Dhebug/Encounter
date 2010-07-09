@@ -2,14 +2,20 @@
 
 #include "tine.h"
 
+//#define TESTCODE
+
+#ifdef TESTCODE
+
 OCEN     .word 0000            ;X-coord
          .word 0000            ;Y-coord
          .word 1300            ;Z-coord
-
+/*
 OCEN2    .word -1000            ;X-coord
          .word 1000            ;Y-coord
          .word 1300            ;Z-coord
+*/
 
+#endif
 
 ; Creates the environment, based on the data from cpl_system, so
 ; should be called after _jump on galaxy.s
@@ -156,7 +162,9 @@ moonsdone
 	sta _ecm_counter
 	sta message_delay
 
-    ;jsr _InitTestCode
+#ifdef TESTCODE
+    jsr _InitTestCode
+#endif
 
 	; Create initial encounters
 	; Encounters are not created if too close to planet, so 
@@ -259,8 +267,9 @@ noinvert2
 .)
 
 
+#ifdef TESTCODE
+
 ;;;;;;;;;;;;;;; TEST CODE
-#ifdef 0
 _InitTestCode 
 .(
          ; Add some ships
@@ -274,47 +283,15 @@ _InitTestCode
 		 ;lda #SHIP_COUGAR
          jsr AddSpaceObject   
          ;stx savid+1   
-         lda _ai_state,x
-         ;ora #(IS_AICONTROLED | FLG_BOUNTYHUNTER)   
-		 ;ora #(IS_AICONTROLED | FLG_POLICE)   
 		 ora #(IS_AICONTROLED)   
          sta _ai_state,x
 
 		 ;lda #2 ; Planet
 		 ;sta _target,x
-         ;lda _flags,x
-		 ;ora #FLG_FLY_TO_PLANET
-		 ;sta _flags,x
+         lda _flags,x
+		 ora #FLG_FLY_TO_HYPER
+		 sta _flags,x
 		
-		 lda #(HAS_ESCAPEPOD)
-		 jsr SetShipEquip
-
-         lda #<OCEN2
-         sta tmp0
-         lda #>OCEN2
-         sta tmp0+1   
-         lda #SHIP_ASP
-		 ;lda #SHIP_ANACONDA
-		 ;lda #SHIP_COUGAR
-         jsr AddSpaceObject   
-
-        ; This one will pursue the other :)
-savid   lda #0  ;SMC
-
-        ; make it angry
-        ora #IS_ANGRY
-        sta _target,x        
-        lda _ai_state,x
-        ora #IS_AICONTROLED   
-        sta _ai_state,x
-
-  		 lda #(HAS_ESCAPEPOD)
-		 jsr SetShipEquip
-
-
-        ;ldx VOB
-        ;sta _target,x
-
         rts
 .)
 

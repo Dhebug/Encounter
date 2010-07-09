@@ -425,6 +425,88 @@ nomiss
     jmp _TineLoop
 .)
 
+ship_to_hyper .byt 00
+hyper_vis	.byt 00
+rr		.byt 00
+
+hypership
+.(
+	lda #0
+dbug beq dbug
+	stx savx+1
+	;ldx #1
+	jsr GetObj
+    sta POINT        ;Object pointer
+    sty POINT+1
+
+    ldy #ObjCenPos
+    lda (POINT),y
+	tax
+ 	;lda _PosZ+1
+	lda HCZ,x
+	bpl doit
+	rts
+doit
+	sta hsav_hz+1
+	lda CZ,x
+	sta hsav_lz+1
+savx
+	ldx #0	;SMC
+	lda _vertexXLO,x
+	sta cx
+	lda _vertexXHI,x
+	sta cx+1
+	lda _vertexYLO,x
+	sta cy
+	lda _vertexYHI,x
+	sta cy+1
+
+	lda _ttl,x
+	eor #$ff
+	and #%11
+	sta rr
+	;beq end
+loop
+	jsr hyp_cir
+	dec rr
+	bpl loop
+
+end
+	rts
+.)
+
+hyp_rad_tbl 
+	;.byt 250, 210, 170, 130 
+	;.byt 130,170,210,250
+	.byt 100,120,150,200
+	;.byt 5, 10, 18, 28 
+
+hyp_cir
+.(
+	;lda _PosZ+1
++hsav_hz
+	lda #0	;SMC
+	sta op2+1
+	;lda _PosZ
++hsav_lz
+	lda #0	; SMC
+	sta op2
+	lda #$00
+	sta op1
+	ldx rr
+	lda hyp_rad_tbl,x
+	sta op1+1
+	jsr divu
+	txa
+	bne notzero
+	lda #1
+notzero
+    sta rad
+    lda #0
+    sta rad+1
+	jmp _circleMidpoint
+.)
+
 _TineLoop
 .(
     lda _docked
@@ -439,6 +521,9 @@ loopwait
     jmp _TineLoop
 
 loop
+	lda #0
+	sta hyper_vis
+
 	; If we have changed ink color, put it back to white
 +_patch_set_ink
 	nop
@@ -462,7 +547,10 @@ no_game_over
 	; If distance with planet is short, then dock player
     lda _planet_dist
     cmp #05
-    bcc dock    
+    ;bcc dock    
+	bcs nodock
+	jmp dock
+nodock
 
     ; Process user's controls
     jsr ProcessKeyboard
@@ -510,7 +598,14 @@ no_game_over
     jsr PlotStars
 	jsr _DrawCrosshair
 	jsr _Lasers
-	
+
+	ldx ship_to_hyper
+	beq nohs
+	lda hyper_vis
+	beq nohs
+	jsr hypership
+nohs
+
 +_patch_laser_fired
 	nop
 	nop

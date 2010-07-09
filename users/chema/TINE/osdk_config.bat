@@ -25,8 +25,8 @@ SET OSDKFILE=%OSDKFILE% tail oobj3d\lib3dtab models music dictc
 :: List of files to put in the DSK file.
 :: Implicitely includes BUILD/%OSDKNAME%.TAP
 SET OSDKTAPNAME="TINE"
-SET OSDKDISK=oobj3d\overlay.tap  
+SET OSDKDISK=oobj3d\overlay.tap ..\logo\logo.tap
 ::run99.tap ..\intro\build\intro.tap 
 SET OSDKDNAME=" -- 1337 --"
-SET OSDKINIST="PAPER 0:INK 0:HIRES:TINE.COM"
+SET OSDKINIST="INK0:HIRES:LOAD\"L.BIN\":TINE.COM"
 
