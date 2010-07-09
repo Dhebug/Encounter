@@ -897,6 +897,10 @@ savx
 		 sta _vertexYHI,x
 
 isok
+		 cpx ship_to_hyper
+		 bne conth
+		 inc hyper_vis
+conth
 		 dex
          bmi next
          jmp loop
