@@ -1018,6 +1018,24 @@ default
 
 box
 .(
+#ifdef USECIRCLESFORPLANETS
+   ; Get the size
+    lda _seed+5
+    and #1
+    clc
+    adc #1
+    sta rad
+
+	lda plotX
+	sta cx
+	lda plotY
+	sta cy
+	lda #0
+	sta cx+1
+	sta cy+1
+
+	jmp _circleMidpoint
+#else
     ; Draws a box at planet's position (plotX and plotY) with the 
     ; size depending on the size of the planet
 
@@ -1069,7 +1087,7 @@ loopcols
     bpl looprows
 
     rts
-
+#endif
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3758,7 +3776,13 @@ loop
     ldy #1
 more
     sty _galaxynum    
-    lda _currentplanet
+
+
+	;; Instead of current planet number, use snap_to_planet with 96x96
+    ;lda _currentplanet
+	ldx #96
+	ldy #96
+	jsr snap_to_planet
     sta _dest_num
     jsr _infoplanet
     jsr _makesystem
