@@ -213,6 +213,10 @@ Done, now using SMULT
 
 - Only mil lasers should damage Cougar or Constrictor, and damage/4.
 
+- NO enemy is created with anti-radar randomly...
+
+- When jumping to next galaxy, jump to planet closest to 96,96 (as in classic Elite)
+
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
 If you make the orientation matrix again $40 0 0 0 $40 0 0 0 $40 0 0 0 0 0 0 0 0 0 it gets the correct
@@ -271,8 +275,6 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Avoid landing if planet is not just ahead... maybe calculate real distance when too near? Maybe just check X and Y?
 
-+ NO enemy is created with anti-radar randomly...
-
 + Dbugs idea here:
 let say that from a particular orientation and velocity you can compute a vector
 
@@ -313,11 +315,13 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 
 
 POSSIBLE NEW ADD-ONS:
-+Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
++ Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
 asteroids -- dilithyum?) so we can reach unreachable worlds
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
-+ Asteroids should not appear from hyperspace.
++ Add an interdicting equip item?
++ Asteroids should not appear from hyperspace. Seems thet do.
 + Takes too long for ships to go to hyper... sometimes.
+
 
 
 cash

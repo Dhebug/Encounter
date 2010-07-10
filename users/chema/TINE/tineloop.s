@@ -268,13 +268,7 @@ _FirstFrame
 	sta bounty_am+1
 
 	jsr clear_vertex
-
     jsr clr_hires2
-
-	;lda invert
-	;beq noinvert
-	;jsr invertZ
-noinvert
 
     ldx VOB          ;Calculate view
     jsr SetRadar
@@ -285,81 +279,10 @@ noinvert
     jsr set_compass
 	jsr set_planet_distance
 
-	;lda invert
-	;beq noinvert2
-	;jsr invertZ
-noinvert2
-
 	jsr PatchLaserDraw
     jmp dump_buf
 .)
 
-
-/*
-invertZ
-.(
-	ldx VOB
-	jsr GetObj
-	clc
-	adc #ObjMat
-    bcc cont
-    iny
-cont
-	sta tmp0
-	sty tmp0+1
-
-	ldy #6
-	ldx #3
-loop
-	sec
-	lda #0
-	sbc (tmp0),y
-	sta (tmp0),y
-	iny
-	dex
-	bne loop
-
-	rts
-.)
-
-invertZ
-.(
-	ldx VOB
-	jsr GetObj
-
-	sta tmp0
-	sty tmp0+1
-
-.(
-	ldy #ObjMat+8
-	ldx #3
-loop
-	sec
-	lda #0
-	sbc (tmp0),y
-	sta (tmp0),y
-	dey
-	dex
-	bne loop
-.)
-
-.(
-	ldy #ObjMat+2
-	ldx #3
-loop
-	sec
-	lda #0
-	sbc (tmp0),y
-	sta (tmp0),y
-	dey
-	dex
-	bne loop
-.)
-
-	rts
-.)
-
-*/
 
 
 set_planet_distance
@@ -502,6 +425,11 @@ hyp_cir
 	bne notzero
 	lda #1
 notzero
+	;bpl notbig
+	cmp #100
+	bcc notbig
+	lsr
+notbig
     sta rad
     lda #0
     sta rad+1
@@ -542,7 +470,7 @@ loop
 	cmp #SCR_FRONT
 	beq no_game_over
 	jsr frontview
-	jmp _patch_invertZa
+	jmp avoiddock
 no_game_over
 
 	; If distance with planet is short, then dock player
@@ -556,10 +484,7 @@ nodock
     ; Process user's controls
     jsr ProcessKeyboard
 
-	; Trick to invert object's Z in case of rear view
-+_patch_invertZa
-	;jsr invertZ
-
+avoiddock
 	; Set the radar
     ldx VOB
     jsr SetCurOb
@@ -664,10 +589,6 @@ nomessage
 ; jump here.
 
 nodraw
-	; Trick to invert object's Z in case of rear view
-+_patch_invertZb
-	;jsr invertZ
-
 	; If player is in control, check collisions
 	lda player_in_control
 	beq cont
@@ -2471,44 +2392,6 @@ cont
 
 
 
-/*
-patch_invert_code
-.(
-	lda invert
-	beq setnops
-	; Some code patches
-	lda #$20	; jsr opcode
-	sta _patch_invertZa
-	sta _patch_invertZb
-	lda	#<invertZ
-	sta	_patch_invertZa+1
-	sta	_patch_invertZb+1
-	lda	#>invertZ
-	sta	_patch_invertZa+2
-	sta	_patch_invertZb+2
-
-	lda #<str_rearview
-	ldx #>str_rearview
-	jmp end
-setnops
-	lda #$ea	; nop opcode
-	ldx #2
-loop
-	sta _patch_invertZa,x
-	sta _patch_invertZb,x
-	dex
-	bpl loop
-
-	lda #<str_frontview
-	ldx #>str_frontview
-end
-	; Patch front/rear view message
-	sta _patch_invert_msg+1
-	stx _patch_invert_msg+3
-	rts
-.)
-
-*/
 patch_invert_code
 .(
 	lda invert

@@ -807,6 +807,11 @@ nodock
 	lda _flags,x
 	and #FLG_FLY_TO_HYPER 
 	beq nohyper
+
+	; Check if conditions are met (no other hypers, no interdictors...)
+	lda ship_to_hyper
+	bne nohyper
+
 	; Go Hyper
 	lda #IS_HYPERSPACING
 	ora _flags,x

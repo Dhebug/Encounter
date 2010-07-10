@@ -836,9 +836,9 @@ generate_pirate_bounty
 	cmp #1
 	beq nocloack
 #ifdef REALRANDOM
-		lda randseed
+	lda randseed
 #else
-		lda _rnd_seed+3
+	lda _rnd_seed+3
 #endif
 	and #%1111
 	bne nocloack
