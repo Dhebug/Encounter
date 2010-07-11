@@ -89,6 +89,7 @@ restart
 	stx game_over
 	stx _numlasers
 	stx _ecm_counter
+	stx righton
 
 	ldx #$ff
 	stx player_in_control

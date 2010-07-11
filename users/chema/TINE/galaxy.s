@@ -3777,12 +3777,14 @@ loop
 more
     sty _galaxynum    
 
-
+#ifdef CLASSICELITEGALHYPER
 	;; Instead of current planet number, use snap_to_planet with 96x96
-    ;lda _currentplanet
 	ldx #96
 	ldy #96
 	jsr snap_to_planet
+#else
+	lda _currentplanet
+#endif
     sta _dest_num
     jsr _infoplanet
     jsr _makesystem

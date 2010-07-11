@@ -319,7 +319,7 @@ player_in_control	.byt 0
 escape_pod_launched .byt 0
 attr_changed		.byt 0
 game_over			.byt 0
-
+righton				.byt 0	
 
 #ifdef USEPAGE4
 .text
