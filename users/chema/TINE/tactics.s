@@ -2054,6 +2054,7 @@ valid
 	sta _score
 	bcc all
 	inc _score+1
+	inc righton
 all
 
 saveid

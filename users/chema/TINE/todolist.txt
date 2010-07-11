@@ -215,7 +215,8 @@ Done, now using SMULT
 
 - NO enemy is created with anti-radar randomly...
 
-- When jumping to next galaxy, jump to planet closest to 96,96 (as in classic Elite)
+- Add "right on commander" messages.
+
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
@@ -266,7 +267,8 @@ If DrawFrameBorder is called before load_frame there is a bug the second time we
 
 + Snow on the scanner when readings erratic
 
-+ Add "right on commander" messages.
++ When jumping to next galaxy, jump to planet closest to 96,96 (as in classic Elite)
+ This destroyed the planet set for Constrictor mission.. Need to check this again.
 
 + More on radar code. Now it is generating the two points for the auxiliar buffer. This is a waste,
   as could be done within the copying loop.

@@ -636,8 +636,20 @@ ngo1
 	bcs noenmsg
 	ldx #STR_ENERGY_LOW
 	jsr flight_message
+	jmp qchecks
 noenmsg
 
+	; "Right On Commander" message
+	lda righton
+	beq norighton
+	lda #0
+	sta righton
+	ldx #STR_RIGHTONCOMMANDER
+	jsr flight_message
+	jmp qchecks
+norighton
+
+	; Bounty messages
 	lda bounty_am
 	ora bounty_am+1
 	beq nomsgbounty

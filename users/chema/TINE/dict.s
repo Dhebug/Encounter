@@ -957,8 +957,8 @@ flight_message_base
 	.byt 0
 	.asc "Energy Low"
 	.byt 0
-;	.asc "Right on, Commander!"
-;	.byt 0
+	.asc "Right on, Commander!"
+	.byt 0
 ;	.asc "Load Saved Commander (Y/N)?"
 ;	.byt 0
 

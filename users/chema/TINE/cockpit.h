@@ -16,10 +16,10 @@
 #define STR_PATH_LOCKED			9
 #define STR_HYPRANGE			10
 #define STR_ENERGY_LOW			11
-#define STR_GALACTIC_HYPER		12
-#define STR_HYPERSPACE			13
-#define STR_RIGHTONCOMMANDER	14
-#define STR_LOADNEW				15
+#define STR_RIGHTONCOMMANDER	12
+#define STR_LOADNEW				13
+#define STR_GALACTIC_HYPER		14
+#define STR_HYPERSPACE			15
 
 
 /* These have parameterers */
