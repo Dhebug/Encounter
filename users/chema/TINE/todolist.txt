@@ -318,11 +318,12 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 
 POSSIBLE NEW ADD-ONS:
 + Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
-asteroids -- dilithyum?) so we can reach unreachable worlds
+asteroids -- dilithyum?) so we can reach unreachable worlds. 7.2 LY is enough in galaxy 5, for instance.
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
 + Add an interdicting equip item?
 + Asteroids should not appear from hyperspace. Seems thet do.
 + Takes too long for ships to go to hyper... sometimes.
+
 
 
 

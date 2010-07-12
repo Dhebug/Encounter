@@ -897,10 +897,12 @@ savx
 		 sta _vertexYHI,x
 
 isok
+/*
 		 cpx ship_to_hyper
 		 bne conth
 		 inc hyper_vis
 conth
+*/
 		 dex
          bmi next
          jmp loop
@@ -964,6 +966,12 @@ patch
          sta _vertexYLO,x
          lda PLISTY+MAXVERTEX,y
          sta _vertexYHI,x
+
+		 cpx ship_to_hyper
+		 bne conth
+		 inc hyper_vis
+conth
+
 
 +DrawAllVis
          LDX COB          ;Head = #$80
