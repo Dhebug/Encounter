@@ -217,6 +217,13 @@ Done, now using SMULT
 
 - Add "right on commander" messages.
 
+- Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
+asteroids -- dilithyum?) so we can reach unreachable worlds. 7.2 LY is enough in galaxy 5, for instance.
+	Two new items (not for sale): a fuel optimizer (7.5ly) and dilithium processing to refuel from 
+	splinters from asteroids.
+
+
++ With new items, update missions so they appear as a price.
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.
@@ -317,8 +324,6 @@ Something like that: http://www.xbox360achievements.org/game/dragon-age-origins/
 
 
 POSSIBLE NEW ADD-ONS:
-+ Add something to jump further than 7 LY (maybe a new equipment + some mineral from 
-asteroids -- dilithyum?) so we can reach unreachable worlds. 7.2 LY is enough in galaxy 5, for instance.
 + Add joystic support (IJK) http://wiki.defence-force.org/doku.php?id=oric:hardware:ijk_drivers
 + Add an interdicting equip item?
 + Asteroids should not appear from hyperspace. Seems thet do.

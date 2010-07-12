@@ -74,7 +74,8 @@
 #define EQ_BEAMLASER	 1
 #define EQ_EXTRASPEED	 2
 #define EQ_EXTRAMAN		 4
- 
+#define EQ_EXTRAFUEL	 8
+#define EQ_FUELPROCESSOR 16 
 
 // Missions
 #define HAVE_MISSIONS	
