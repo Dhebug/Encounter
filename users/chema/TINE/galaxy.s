@@ -2340,7 +2340,7 @@ print_distance
     sta op1+1
     sta op2+1
     lda op1
-    lsr
+    ;lsr
     sta op1
     sta op2
     jsr mul16
@@ -2352,7 +2352,7 @@ print_distance
 sav_a    
     lda #0
     lsr
-    lsr
+    ;lsr
     sta op1
     sta op2
     lda #0
@@ -2377,10 +2377,10 @@ sav_a
     rol op2+1
     asl
     rol op2+1
-    asl
-    rol op2+1
+    ;asl
+    ;rol op2+1
     sta op2
-	lda op2
+	;lda op2
 	sta _dest_dist
 	lda op2+1
 	sta _dest_dist+1
@@ -3490,7 +3490,14 @@ cont2
 
 fuel_price
 .(
+	lda _equip+1
+	and #EQ_EXTRAFUEL
+	beq normal
+	lda #75
+	.byt $2c
+normal
     lda #70
+
     sec
     sbc _fuel
 	bmi exception
@@ -3545,16 +3552,21 @@ cash
 	ror
 	bcc missile
 
-	;lda #70
-	;cmp _fuel
-	;beq alreadyfit
-
+	lda _equip+1
+	and #EQ_EXTRAFUEL
+	beq normalfuel
+	lda #75
+	.byt $2c
+normalfuel
+    lda #70
+	sta patch_fuel1+1
 	lda _fuel
-	cmp #70
+patch_fuel1
+	cmp #70	; This is SMC
 	bcs alreadyfit
 	
 	; Buy fuel	
-	lda #70
+	lda patch_fuel1+1
 	sta _fuel
 	jmp payfor 
 missile

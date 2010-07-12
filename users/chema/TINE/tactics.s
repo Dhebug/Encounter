@@ -1517,17 +1517,55 @@ theobject .byt 0
 
 scoop_item
 .(
-
-#ifdef HAVE_MISSIONS
 	pha
+#ifdef HAVE_MISSIONS
 	ldx theobject
 	jsr OnScoopObject
 	bcc nomiss
 	pla
 	jmp finish
 nomiss
-	pla
 #endif
+
+	lda _equip+1
+	and #EQ_FUELPROCESSOR
+	beq noprocessor
+
+	pla
+	pha
+	cmp #$0c ; minerals
+	bne noprocessor
+
+#ifdef REALRANDOM
+	jsr randgen
+#else
+	jsr _gen_rnd_number
+#endif
+	cmp #60
+	bcs noprocessor
+
+	lda _equip+1
+	and #EQ_EXTRAFUEL
+	beq normal
+	lda #75
+	.byt $2c
+normal
+    lda #70
+	sta tmp
+	lda _fuel
+	cmp tmp
+	bcs noprocessor
+	
+	; Got dilithyum... create fuel
+	lda tmp
+	sta _fuel
+	ldx #17
+	jsr flight_message_loot
+	pla
+	jmp finish
+
+noprocessor
+	pla
 
 	tax
 	stx saveme+1
