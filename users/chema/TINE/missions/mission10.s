@@ -259,6 +259,10 @@ doit
 	inc _score+1
 nocarry
 
+	lda _equip+1
+	ora #EQ_EXTRAFUEL
+	sta _equip+1
+
   	lda #<str_MissionDebrief
 	sta TXTPTRLO
 	lda #>str_MissionDebrief
@@ -305,7 +309,7 @@ str_MissionBrief
 	.byt 13
 	.asc "through its experimental shields"
 	.byt 13
-	.asc "Good Luck, Commander."
+	.asc "Good luck."
 	.byt 0
 
 str_MissionDebrief 
@@ -314,7 +318,11 @@ str_MissionDebrief
 	.asc "in Her Majesty's Space Navy."
 	.byt 13
 	.byt 13
-	.asc "And maybe sooner than you think..."
+;	.asc "And maybe sooner than you think..."
+;	.byt 13
+	.asc "Accept this fuel optimizer unit"
+	.byt 13
+	.asc "as a present."
 	.byt 0
 
 

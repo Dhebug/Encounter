@@ -285,6 +285,10 @@ okcargo
 	inc _cash+3
 nomore	
 
+	lda _equip+1
+	ora #EQ_FUELPROCESSOR
+	sta _equip+1
+
 	; Set next mission
 	lda #NEXTMISSION
 	sta _mission
@@ -327,11 +331,22 @@ str_MissionBrief2
 	.byt 13
 	.asc "Be sure to have such space free before"
 	.byt 13
-	.asc "leaving. You will be paid 1000 Cr."
+	.asc "leaving. You will be paid 1000 Cr and"
+	.byt 13
+	.asc "an exclusive equipment for your ship."
 	.byt 0
 
 str_MissionDebrief
 	.asc "Good job. I have sent the credits."
+	.byt 13
+	.byt 13
+	.asc "I have installed a fuel processor"
+	.byt 13
+	.asc "in your ship, which will explore any"
+	.byt 13
+	.asc "scooped minerals for dilithyum to"
+	.byt 13
+	.asc "refill your fuel tanks."
 	.byt 0
 
 str_MissionProblem

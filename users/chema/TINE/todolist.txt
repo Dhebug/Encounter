@@ -330,7 +330,8 @@ POSSIBLE NEW ADD-ONS:
 + Takes too long for ships to go to hyper... sometimes.
 
 
-
+Fuel processing: mission 5, Untha gives. Would be better in a GalNavy mission, but I think there is no space.
+Fuel optimizer, mission 10, Navy gives.
 
 cash
 score (rank)
