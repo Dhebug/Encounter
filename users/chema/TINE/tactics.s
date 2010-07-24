@@ -1556,7 +1556,7 @@ normal
 	cmp tmp
 	bcs noprocessor
 	
-	; Got dilithyum... create fuel
+	; Got Quirium... create fuel
 	lda tmp
 	sta _fuel
 	ldx #17

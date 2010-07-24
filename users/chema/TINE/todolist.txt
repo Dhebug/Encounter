@@ -222,8 +222,12 @@ asteroids -- dilithyum?) so we can reach unreachable worlds. 7.2 LY is enough in
 	Two new items (not for sale): a fuel optimizer (7.5ly) and dilithium processing to refuel from 
 	splinters from asteroids.
 
+- With new items, update missions so they appear as a price.
 
-+ With new items, update missions so they appear as a price.
+
++ Zantor mission seems very easy when started at launching from planet. 
+Maybe put Zantor and bad guys nearer each other?
+
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.

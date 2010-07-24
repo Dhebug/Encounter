@@ -59,7 +59,7 @@ AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 
 #define CARGO_AMOUNT 15
 
-#define NEXTMISSION_LEGAL 16
+#define NEXTMISSION_LEGAL 28
 
 tab_sumlo
 	.byt <str_Summary1,<str_Summary

@@ -72,10 +72,11 @@
 
 // High byte
 #define EQ_BEAMLASER	 1
-#define EQ_EXTRASPEED	 2
-#define EQ_EXTRAMAN		 4
-#define EQ_EXTRAFUEL	 8
-#define EQ_FUELPROCESSOR 16 
+#define EQ_MILLASER		 2
+#define EQ_EXTRASPEED	 4
+#define EQ_EXTRAMAN		 8
+#define EQ_EXTRAFUEL	 16
+#define EQ_FUELPROCESSOR 32 
 
 // Missions
 #define HAVE_MISSIONS	
