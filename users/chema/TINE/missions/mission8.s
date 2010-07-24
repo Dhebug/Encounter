@@ -361,9 +361,9 @@ str_MissionBrief1
 	.byt 13
 	.asc "I got some more info for you."
 	.byt 13
-	.asc "I know where the secret lab where"
+	.asc "I know where the secret lab"
 	.byt 13
-	.asc "Dr. Zantor worked is located."
+	.asc "Dr. Zantor worked at is located."
 	.byt 13
 	.asc "You should go to Edorqu (gal 4),"
 	.byt 13

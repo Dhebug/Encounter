@@ -61,7 +61,7 @@ Goodnames  .asc "Food"
            .byt 0
            .asc "Alien Items"
            .byt 0
-		   .asc "Dilithium found: refueling"
+		   .asc "Quirium found: refueling"
 		   .byt 0
 
 Unitnames
@@ -835,7 +835,7 @@ str_equip2
     .byt 0
 	.asc "Fuel Optimizing Unit"
 	.byt 0
-	.asc "Dilithium Processing Unit"
+	.asc "Quirium Processing Unit"
 	.byt 0
 
 

@@ -344,7 +344,7 @@ str_MissionDebrief
 	.byt 13
 	.asc "in your ship, which will explore any"
 	.byt 13
-	.asc "scooped minerals for dilithyum to"
+	.asc "scooped minerals for Quirium to"
 	.byt 13
 	.asc "refill your fuel tanks."
 	.byt 0
