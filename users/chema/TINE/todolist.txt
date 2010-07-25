@@ -228,6 +228,11 @@ asteroids -- dilithyum?) so we can reach unreachable worlds. 7.2 LY is enough in
 + Zantor mission seems very easy when started at launching from planet. 
 Maybe put Zantor and bad guys nearer each other?
 
++ Info on status page for mission 9 (generated at the end of mission 8 so the commander goes to Rianxe)
+is not shown
+
++ Constrictor mission is wrong. There is a missing string (3) as you end up in gal 5
+at the same planet number than in gal 4...
 
 + Model in the init screens get further and further slowly... ? Ok. No. The accumulation routines make
 a roundoff error that actually makes the model smaller with time. Not sure what routine, should check.

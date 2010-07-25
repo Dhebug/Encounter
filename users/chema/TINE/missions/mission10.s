@@ -307,7 +307,7 @@ str_MissionBrief
 	.byt 13
 	.asc "that only Military Lasers will get"
 	.byt 13
-	.asc "through its experimental shields"
+	.asc "through its experimental shields."
 	.byt 13
 	.asc "Good luck."
 	.byt 0
@@ -347,7 +347,7 @@ str_Summary1
 	.byt 2
 	.asc "while back. Looked bound for Veteerza."
 	.byt 0
-
+#ifdef 0
 str_Summary2
 ;	.byt 2
 ;	.asc "Local Rumours:"
@@ -361,6 +361,19 @@ str_Summary2
 	.byt 2
 	.asc "used it too."
 	.byt 0
+#endif
+
+str_Summary2
+;	.byt 2
+;	.asc "Local Rumours:"
+;	.byt 13
+	.byt 2
+	.asc "Yep, an unusual new ship just"
+	.byt 13
+	.byt 2
+	.asc "jumped to galaxy five."
+	.byt 0
+
 
 str_Summary3
 ;	.byt 2
