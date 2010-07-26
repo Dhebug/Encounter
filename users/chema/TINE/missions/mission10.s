@@ -60,12 +60,10 @@ CheckSuccess
 	cmp #THISMISSION+2
 	bne no
 	cpx idConstrictor
-	beq yes
-no
-	clc
-	rts
+	bne no
 yes
 	inc _mission	
++no
 	clc
 	rts
 .)
@@ -75,20 +73,17 @@ POS1
 	.word 4000
 	.word -4000
 
-retme
-	clc
-	rts
 
 CheckConstrictor
 .(
 
 	lda _galaxynum
 	cmp #5
-	bne retme
+	bne no
 
 	lda _currentplanet
 	cmp #111
-	bne retme
+	bne no
 
 	lda #<POS1
 	ldx #>POS1
@@ -113,7 +108,7 @@ CheckConstrictor
 	lda #FLG_HARD
 	sta _flags,x
 
-	; Should add missiles (tharglets) here. Maybe depending on environment stats.
+	; Should add missiles here
 	lda #%10
 	ora _missiles,x
 	sta _missiles,x
@@ -127,10 +122,10 @@ end
 
 str_rumlo4	.byt <str_Summary0,<str_Summary1,<str_Summary2
 str_rumhi4	.byt >str_Summary0,>str_Summary1,>str_Summary2
-str_rumlo5	.byt <str_Summary4,<str_Summary5,<str_Summary6,<str_Summary7,<str_Summary8
-str_rumhi5	.byt >str_Summary4,>str_Summary5,>str_Summary6,>str_Summary7,>str_Summary8
+str_rumlo5	.byt <str_Summary9,<str_Summary4,<str_Summary5,<str_Summary6,<str_Summary7,<str_Summary8
+str_rumhi5	.byt >str_Summary9,>str_Summary4,>str_Summary5,>str_Summary6,>str_Summary7,>str_Summary8
 pnum4		.byt 114,13,29
-pnum5		.byt 18,186,222,183,111
+pnum5		.byt 29,18,186,222,183,111
 
 SetMissionText
 .(
@@ -157,7 +152,7 @@ found
 .)
 gal5
 .(
-   	ldx #4
+   	ldx #5
 	lda _currentplanet
 loop
 	cmp pnum5,x
@@ -181,14 +176,13 @@ hint
 .(
     jsr IndRnd
     cmp #20
-    bcc doit
-    clc
-    rts
+    bcs dontdoit
 doit
 	lda #<str_Summary3
 	sta MissionSummary
 	lda #>str_Summary3
 	sta MissionSummary+1
+dontdoit
 	clc
 	rts
 .)
@@ -214,15 +208,15 @@ dolaunch
 	; Galaxy must be 4
 	lda _galaxynum
 	cmp #4
-	bne end
+	bne nothing
 
 	lda _currentplanet
 	cmp #114
-	beq end
+	beq nothing
 
 	jsr IndRnd
 	cmp #50
-	bcs end
+	bcs nothing
 
 	; Launch
 	inc _mission
@@ -234,10 +228,6 @@ dolaunch
 	sta TXTPTRHI
 	sec
 	rts
-end
-	clc
-	rts
-
 .)
 
 SuccessMsg
@@ -327,9 +317,6 @@ str_MissionDebrief
 
 
 str_Summary0
-;	.byt 2
-;	.asc "Naval info:"
-;	.byt 13
 	.byt 2
 	.asc "The Constrictor was last seen at"
 	.byt 13
@@ -338,47 +325,23 @@ str_Summary0
 	.byt 0
 
 str_Summary1
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "A strange looking ship left here a"
 	.byt 13
 	.byt 2
 	.asc "while back. Looked bound for Veteerza."
 	.byt 0
-#ifdef 0
-str_Summary2
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
-	.byt 2
-	.asc "Yep, an unusual new ship had a"
-	.byt 13
-	.byt 2
-	.asc "Galactic Hyperdrive fitted here,"
-	.byt 13
-	.byt 2
-	.asc "used it too."
-	.byt 0
-#endif
 
 str_Summary2
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "Yep, an unusual new ship just"
 	.byt 13
 	.byt 2
-	.asc "jumped to galaxy five."
+	.asc "jumped to galaxy 5."
 	.byt 0
 
 
 str_Summary3
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "I hear a weird looking ship was"
 	.byt 13
@@ -387,9 +350,6 @@ str_Summary3
 	.byt 0
 
 str_Summary4
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "This strange ship dehyped here and"
 	.byt 13
@@ -401,9 +361,6 @@ str_Summary4
 	.byt 0
 
 str_Summary5
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "Rogue ship went for me at Veedri."
 	.byt 13
@@ -415,9 +372,6 @@ str_Summary5
 	.byt 0
 
 str_Summary6
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "Oh dear me yes. A frightful rogue"
 	.byt 13
@@ -429,9 +383,6 @@ str_Summary6
 	.byt 0
 
 str_Summary7
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "You can tackle the vicious scoundrel"
 	.byt 13
@@ -440,24 +391,17 @@ str_Summary7
 	.byt 0
 
 str_Summary8
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
 	.byt 2
 	.asc "There's a real deadly pirate"
 	.byt 13
 	.byt 2
-	.asc " out there!"
+	.asc "out there!"
 	.byt 0
 
 str_Summary9
-;	.byt 2
-;	.asc "Local Rumours:"
-;	.byt 13
-;	.byt 2
-;	.asc "Boy are you in the wrong galaxy!"
-;	.byt 0
-
+	.byt 2
+	.asc "The ship entered this galaxy here."
+	.byt 0
 
 
 str_Summary

@@ -67,7 +67,7 @@ __overlay_end
 		.byt 7					; Current planet
 		;.byt 192				; Testing unreachable cluster on galaxy 7
 		;.byt $68
-		.byt 3                  ; Galaxy number (1-8)
+		.byt 4                  ; Galaxy number (1-8)
 		.byt $d0,$07            ; Four bytes for cash (200.0)
 		.byt $10,$00
 		.byt 70                 ; Amount of fuel
@@ -77,7 +77,7 @@ __overlay_end
 		.byt 00		 			; Score, remainder
 		.word 10000             ; Current score
 		;.byt 0					; Current mission
-		.byt 48
+		.byt 48+1
 		;.word $06fe             ; Equipment flags
 		.word $2efe
 		.byt 13			        ; Current player's ship
