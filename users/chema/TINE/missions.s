@@ -414,7 +414,7 @@
 ; This should vary, as the next mission both in case of success or failure
 ; could not be the next in list, but any other...
 
-#define MISSIONTEMP NEXTMISSION+4
+#define MISSIONTEMP NEXTMISSION+4+1
 #define NEXTMISSION MISSIONTEMP
 #undef MISSIONTEMP
 #undef NEXTMISSIONFAIL
@@ -431,7 +431,7 @@
 
 ; This is fixed... each mission included has a number which is the previous
 ; plus 4.
-#define MISSIONTEMP THISMISSION+4+1 
+#define MISSIONTEMP THISMISSION+4 
 #undef THISMISSION 
 #define THISMISSION MISSIONTEMP
 #undef MISSIONTEMP
