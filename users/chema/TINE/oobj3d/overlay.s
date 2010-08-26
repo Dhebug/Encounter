@@ -29,7 +29,7 @@ __overlay_end
 .dsb 32,00
 .dsb 32,00
 
-#define TESTSLOT
+//#define TESTSLOT
 
 #ifdef TESTSLOT
 
@@ -67,7 +67,7 @@ __overlay_end
 		.byt 7					; Current planet
 		;.byt 192				; Testing unreachable cluster on galaxy 7
 		;.byt $68
-		.byt 4                  ; Galaxy number (1-8)
+		.byt 1                  ; Galaxy number (1-8)
 		.byt $d0,$07            ; Four bytes for cash (200.0)
 		.byt $10,$00
 		.byt 70                 ; Amount of fuel
@@ -76,10 +76,8 @@ __overlay_end
 		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00		 			; Score, remainder
 		.word 10000             ; Current score
-		;.byt 0					; Current mission
-		.byt 48+1
-		;.word $06fe             ; Equipment flags
-		.word $2efe
+		.byt 0					; Current mission
+		.word $06fe             ; Equipment flags
 		.byt 13			        ; Current player's ship
 		.byt 4					; Number of missiles
 ; Stats for player's ship. Initially the basic for the ship, but may vary with equipment
