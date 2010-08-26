@@ -7,7 +7,7 @@
 SET XAINPUT=%XAINPUT%,OOBJ3D
 
 SET OSDKADDR=$500
-SET OSDKNAME=TINE
+SET OSDKNAME=1337
 SET OSDKCOMP=
 SET OSDKLINK=-B
 
@@ -24,9 +24,9 @@ SET OSDKFILE=%OSDKFILE% tail oobj3d\lib3dtab models music dictc
 
 :: List of files to put in the DSK file.
 :: Implicitely includes BUILD/%OSDKNAME%.TAP
-SET OSDKTAPNAME="TINE"
-SET OSDKDISK=oobj3d\overlay.tap ..\logo\logo.tap
+SET OSDKTAPNAME="1337"
+SET OSDKDISK=oobj3d\overlay.tap runme.tap intro.tap
 ::run99.tap ..\intro\build\intro.tap 
 SET OSDKDNAME=" -- 1337 --"
-SET OSDKINIST="INK0:HIRES:LOAD\"L.BIN\":TINE.COM"
+SET OSDKINIST="!RUNME.COM"
 
