@@ -32,21 +32,21 @@ _InitTestCode
 .)
 
 
-OCEN10   .word $FFFF-60         ;X-coord
+OCEN10   .word $FFFF-45         ;X-coord
          .word $0		        ;Y-coord
-         .word 50		        ;Z-coord
+         .word 50-1		        ;Z-coord
 
-OCEN11   .word $FFFF-20         ;X-coord
+OCEN11   .word $FFFF-15         ;X-coord
          .word $0		        ;Y-coord
-         .word 50		        ;Z-coord
+         .word 50-1		        ;Z-coord
 
-OCEN12   .word 20				;X-coord
+OCEN12   .word 15				;X-coord
          .word $0		        ;Y-coord
-         .word 50		        ;Z-coord
+         .word 50-1		        ;Z-coord
 
-OCEN13   .word 60				;X-coord
+OCEN13   .word 45				;X-coord
          .word $0		        ;Y-coord
-         .word 50		        ;Z-coord
+         .word 50-1		        ;Z-coord
 
 
 goforit
@@ -151,7 +151,7 @@ loop
 
 	ldx #0
 	jsr SetCurOb
-	lda #$ff-1
+	lda #$ff-2
 	jsr MoveForwards
 	
     dec frame_count
