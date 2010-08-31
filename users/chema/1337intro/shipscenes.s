@@ -1,4 +1,5 @@
 #define OBS  osdk_end
+#define DODBUG
 
 
  // Positions 
@@ -31,6 +32,25 @@ _InitTestCode
          jmp _DoubleBuffOn
 .)
 
+#ifdef DODBUG
+OCEN10   .word $FFFF-51         ;X-coord
+         .word $0		        ;Y-coord
+         .word 50-1		        ;Z-coord
+
+OCEN11   .word $FFFF-17         ;X-coord
+         .word $0		        ;Y-coord
+         .word 50-1		        ;Z-coord
+
+OCEN12   .word 17				;X-coord
+         .word $0		        ;Y-coord
+         .word 50-1		        ;Z-coord
+
+OCEN13   .word 51				;X-coord
+         .word $0		        ;Y-coord
+         .word 50-1		        ;Z-coord
+
+
+#else
 
 OCEN10   .word $FFFF-45         ;X-coord
          .word $0		        ;Y-coord
@@ -48,6 +68,7 @@ OCEN13   .word 45				;X-coord
          .word $0		        ;Y-coord
          .word 50-1		        ;Z-coord
 
+#endif
 
 goforit
 .(
@@ -133,9 +154,152 @@ l1  lda OCEN13,Y
 
     jsr set_ink2
 
-   ; Advance sequence, first the mamba, then the thargoid
+#ifdef DODBUG
+
+;;;;;;;;;;; PREROTATIONS ;;;;;;;;;;;;;;	
 .(
-    lda #$40
+    lda #$10
+    sta frame_count
+loop
+	;jsr _UpdateFrame
+
+	ldx #4
+
+  .(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	clc
+	jsr Pitch
+	dec tmp
+	bne loopp
+.)
+	
+	
+	ldx #3
+
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	clc
+	jsr Yaw
+	dec tmp
+	bne loopp
+.)
+	
+	
+	ldx #2
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	sec
+	jsr Pitch
+	dec tmp
+	bne loopp
+.)
+
+	ldx #1
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	sec
+	jsr Yaw
+	dec tmp
+	bne loopp
+.)
+
+    dec frame_count
+    bne loop
+    
+.)
+
+;;;; DIFFERENT ROTATIONS
+
+.(
+    lda #$10
+    sta frame_count
+loop
+	jsr _UpdateFrame
+
+	ldx #4
+
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	sec
+	jsr Pitch
+	dec tmp
+	bne loopp
+.)
+	
+	
+	ldx #3
+
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	sec
+	jsr Yaw
+	dec tmp
+	bne loopp
+.)
+	
+	
+	ldx #2
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	clc
+	jsr Pitch
+	dec tmp
+	bne loopp
+.)
+
+	ldx #1
+.(
+  	jsr SetCurOb
+	lda #4
+	sta tmp
+loopp
+	clc
+	jsr Yaw
+	dec tmp
+	bne loopp
+.)
+
+	ldx #0
+	jsr SetCurOb
+	lda #$ff-2
+	jsr MoveForwards
+	
+    dec frame_count
+    bne loop
+    
+.)
+
+#endif
+
+;;;;;; SYNCRONIZED ROTATIONS
+
+.(
+#ifdef DODBUG
+    lda #$40-$10
+#else
+	lda #$40
+#endif
     sta frame_count
 loop
 	jsr _UpdateFrame

@@ -181,7 +181,7 @@ main()
 
 
 	ShowLogo();
-	Wait(10);//20);
+	Wait(10-5);//20);
 	BurnText();
 	clr_all();
 	//Wait(5);
