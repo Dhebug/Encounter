@@ -828,7 +828,7 @@ _MessageElite
 	.byt 1,0,"          special thanks to",10,15
 	.byt 1,71,"   D. Braben and I. Bell",10,25
 	.byt 2,4,1,0, "  for one of the best games ever",10,40
-	.byt 1,0, "    Press ESC to skip this intro"
+	.byt 1,0, "     Press ESC to skip this intro"
 	.byt DONE
 
 _MessageMusic
