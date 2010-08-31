@@ -505,11 +505,15 @@ _Credits1
 	lda #<_MessageChema
 	ldx #>_MessageChema
 	jsr _DrawTextAsm
+	lda #<_MessageTwilighte
+	ldx #>_MessageTwilighte
+	jsr _DrawTextAsm
 	lda #$03
 	ldx #$06
 	jmp set_ink
 .)
 
+/*
 _Credits2
 .(
 	jsr _clr_all
@@ -523,7 +527,7 @@ _Credits2
 	ldx #$06
 	jmp set_ink
 .)
-
+*/
 _Credits4
 .(
 	jsr _clr_all
@@ -841,7 +845,7 @@ _MessageMusic2
 	.byt DONE
 
 _MessageChema
-	.byt 30,45
+	.byt 6,25
 	.byt 1,0,"designer/programmer",10,15
 	.byt 1,71,"   Jose Maria",10,21
 	.byt 1,0,"         'Chema'",10,11
@@ -861,7 +865,7 @@ _MessageHelp
 	.byt 1,71,"Thrust26"
 	.byt DONE
 _MessageTwilighte
-	.byt 110,100-20
+	.byt 150-16,100-10
 	.byt 1,0,"additional graphics",10,15
 	.byt 1,71,"Jonathan",10,21
 	.byt 1,0,"'Twilighte'",10,11

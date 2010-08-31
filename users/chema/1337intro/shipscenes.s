@@ -32,6 +32,136 @@ _InitTestCode
 .)
 
 
+OCEN10   .word $FFFF-60         ;X-coord
+         .word $0		        ;Y-coord
+         .word 50		        ;Z-coord
+
+OCEN11   .word $FFFF-20         ;X-coord
+         .word $0		        ;Y-coord
+         .word 50		        ;Z-coord
+
+OCEN12   .word 20				;X-coord
+         .word $0		        ;Y-coord
+         .word 50		        ;Z-coord
+
+OCEN13   .word 60				;X-coord
+         .word $0		        ;Y-coord
+         .word 50		        ;Z-coord
+
+
+goforit
+.(
+  .(
+  	jsr SetCurOb
+	lda #6
+	sta tmp
+loopp
+	sec
+	jsr Pitch
+	dec tmp
+	bne loopp
+.)
+	rts
+.)
+
+
+_Test1337
+.(
+
+    lda #<MAMBA     ;Object data
+    ldy #>MAMBA
+    ldx #1          ;ID
+    jsr AddObj
+    stx VOB          ;View object
+
+    lda #<ONE     ;Object data
+    ldy #>ONE
+    ldx #2
+    jsr AddObj
+    sta POINT        ;Object pointer
+    sty POINT+1
+.(
+    ldy #5           ;Set center
+l1  lda OCEN10,Y
+    sta (POINT),Y
+    dey
+    bpl l1
+.)
+
+    lda #<THREE     ;Object data
+    ldy #>THREE
+    ldx #3
+    jsr AddObj
+    sta POINT        ;Object pointer
+    sty POINT+1
+.(
+    ldy #5           ;Set center
+l1  lda OCEN11,Y
+    sta (POINT),Y
+    dey
+    bpl l1
+.)
+
+    lda #<THREE     ;Object data
+    ldy #>THREE
+    ldx #3
+    jsr AddObj
+    sta POINT        ;Object pointer
+    sty POINT+1
+.(
+    ldy #5           ;Set center
+l1  lda OCEN12,Y
+    sta (POINT),Y
+    dey
+    bpl l1
+.)
+
+    lda #<SEVEN     ;Object data
+    ldy #>SEVEN
+    ldx #3
+    jsr AddObj
+    sta POINT        ;Object pointer
+    sty POINT+1
+.(
+    ldy #5           ;Set center
+l1  lda OCEN13,Y
+    sta (POINT),Y
+    dey
+    bpl l1
+.)
+
+
+    jsr set_ink2
+
+   ; Advance sequence, first the mamba, then the thargoid
+.(
+    lda #$40
+    sta frame_count
+loop
+	jsr _UpdateFrame
+
+	ldx #4
+	jsr goforit
+	ldx #3
+	jsr goforit
+	ldx #2
+	jsr goforit
+	ldx #1
+	jsr goforit
+
+	ldx #0
+	jsr SetCurOb
+	lda #$ff-1
+	jsr MoveForwards
+	
+    dec frame_count
+    bne loop
+    
+.)
+
+	rts
+.)
+
 
 _FirstScene
 .(
