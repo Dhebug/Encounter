@@ -66,6 +66,17 @@ main()
 
 	InitMusic();
 
+	clr_all();
+	p=(char *)(0xa000+40*49);
+	*p=A_BGBLUE;
+	p=(char *)(0xa000+40*151);
+	*p=A_BGBLUE;
+	DoubleBuffOn();
+    InitTestCode();
+    Test1337();
+	DoubleBuffOff();
+
+
 	ShowStory();
 	Wait(20);
 	BurnText();
@@ -81,6 +92,7 @@ main()
 	*p=A_BGBLUE;
 	p=(char *)(0xa000+40*151);
 	*p=A_BGBLUE;
+
 
  	FirstText();
 	Wait(8);
@@ -144,11 +156,12 @@ main()
 	Wait(6-2);
 	BurnText();
 
+/*
 	Credits2();
 	Wait(2);
 	BurnText();
 	Wait(3-1);
-
+*/
 	Credits3();
 	Wait(5-1);
 	BurnText();
@@ -162,13 +175,13 @@ main()
 	BurnText();
 
 	CreditsEnd();
-	Wait(7);
+	Wait(5);
 	BurnText();
 	clr_all();
 
 
 	ShowLogo();
-	Wait(10+3);//20);
+	Wait(10);//20);
 	BurnText();
 	clr_all();
 	//Wait(5);

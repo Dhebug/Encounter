@@ -23,7 +23,7 @@
 #define X2 _LargeX1	
 #define Y2 _LargeY1
 
-#define MAXOBJS     4
+#define MAXOBJS     8
 #define MAXVERTEX   64
 
 
