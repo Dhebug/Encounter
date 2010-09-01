@@ -852,7 +852,7 @@ _MessageChema
 	.byt 1,71,"        Enguita"
 	.byt DONE
 _MessageChema2
-	.byt 10,10
+	.byt 10,10+6
 	.byt 1,0,"3D engine adapted from lib3d",10,15
 	.byt 1,71,"   Stephen L. Judd"
 	.byt DONE
@@ -862,7 +862,7 @@ _MessageHelp
 	.byt 1,0,"additional code",10,15
 	.byt 1,71,"Twilighte",10,26
 	.byt 1,71,"Dbug",10,26
-	.byt 1,71,"Thrust26"
+	.byt 1,71,"Thrust"
 	.byt DONE
 _MessageTwilighte
 	.byt 150-16,100-10

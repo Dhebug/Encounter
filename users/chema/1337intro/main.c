@@ -153,7 +153,7 @@ main()
 	BurnText();
 
 	Credits1();
-	Wait(6-2);
+	Wait(6-4);
 	BurnText();
 
 /*
@@ -163,7 +163,7 @@ main()
 	Wait(3-1);
 */
 	Credits3();
-	Wait(5-1);
+	Wait(5-3);
 	BurnText();
 
 	Credits4();
@@ -171,11 +171,11 @@ main()
 	BurnText();
 
 	Credits5();
-	Wait(5-1);
+	Wait(5-3);
 	BurnText();
 
 	CreditsEnd();
-	Wait(5);
+	Wait(5-3);
 	BurnText();
 	clr_all();
 
