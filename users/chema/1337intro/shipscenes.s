@@ -296,7 +296,7 @@ loopp
 
 .(
 #ifdef DODBUG
-    lda #$40-$10
+    lda #$40
 #else
 	lda #$40
 #endif
@@ -656,13 +656,13 @@ _FinalScene
 .(
 
 ; The Thargoid leaves
-	lda #$30
+	lda #$30-15
 	sta frame_count
 loop
 	jsr _UpdateFrame
 	ldx #2
 	jsr SetCurOb
-	lda #$32
+	lda #$32-15
 	sec
 	sbc frame_count
 	jsr MoveForwards
