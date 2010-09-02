@@ -514,42 +514,52 @@ loop
 	jsr SetCurOb
 	clc
 	jsr Pitch
+	
+	jsr BalanceMamba
+	
+	dec frame_count
+	bne loop
 
-	ldx #1
-	jsr SetCurOb
+
 #if 0
-;	lda frame_count
-;	and #%11
-;	bne end
-
-	jsr randgen
-	;bmi side
-	; Move up/down
-	ror
-	bcc up
-	lda #1
-	.byt $2c
-up
-	lda #$ff
-	jsr MoveDown
-/*
-	jmp end
-side
-	rol
-	bmi left
-	lda #1
-	.byt $2c
-left
-	lda #$ff
-	jsr MoveSide
-*/
-
-end
-
-#endif
++patch_clc
+	clc
+	jsr Roll
 
 	dec frame_count
 	bne loop
+
+	lda patch_clc
+	cmp #$18
+	beq setit
+	lda #$18
+	.byt $2c
+setit
+	lda #$38
+	sta patch_clc
+#endif
+
+	rts
+.)
+
+BalanceMamba
+.(
+	ldx #1
+	jsr SetCurOb
+	
+	lda frame_count
+	ror
+	bcc avoid
+
+	cmp #9
+	bcs setit
+	clc
+	bcc doit
+setit
+	sec
+doit
+	jmp Roll
+avoid
 	rts
 .)
 
@@ -666,6 +676,7 @@ loop
 	sec
 	sbc frame_count
 	jsr MoveForwards
+	jsr BalanceMamba
 	dec frame_count
 	bne loop
 
