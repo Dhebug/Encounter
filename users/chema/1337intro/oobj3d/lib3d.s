@@ -37,7 +37,7 @@ thetaz  .byt 00
 thetay  .byt 00
 thetax  .byt 00
 
-*=$14   ; Keep $12,$13 untouched
+;*=$14   ; Keep $12,$13 untouched
 
 ; Local rotation matrix
 A11     .byt 00          
@@ -68,7 +68,7 @@ VI33    .byt 00
 count    .byt 00
 SIGN     .byt 00
 
-*=$35            ; Keep some locations used by ROM routines untouched
+;*=$35            ; Keep some locations used by ROM routines untouched
 
 tCX      .byt 00,00       ;Temporary variables for centers
 CXSGN	 .byt 00

@@ -919,7 +919,7 @@ _MessageStory2
 	.byt 1,0,"and transportation risky activities.",0
 
 _MessageStory2b
-	.byt 6,70	
+	.byt 6,100	
 	.byt 1,0,"Do you have what it takes to make a",10,13
 	.byt 1,0,"living in this universe, tough but",10,13
 	.byt 1,0,"full of opportunities?",10,30

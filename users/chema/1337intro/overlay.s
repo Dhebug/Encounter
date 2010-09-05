@@ -47,4 +47,10 @@ buffer
 _TableMod6	 .dsb 256
 _TableDiv6b	 .dsb 256
 
+BitMaskTable			.dsb 256
+BitShiftTable			.dsb 256
+_Patterns				.dsb 256
+_XIncTableLow			.dsb 256
+_XIncTableHigh			.dsb 256
+
     .text
