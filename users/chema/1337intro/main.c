@@ -112,6 +112,9 @@ main()
 	InitMusic();
 
 	clr_all();
+
+	//goto kk;
+
 	p=(char *)(0xa000+40*49);
 	*p=A_BGBLUE;
 	p=(char *)(0xa000+40*151);
@@ -126,7 +129,7 @@ main()
 	ComputeDivTable();
 	RasterizeInitScanlineBuffer();
 	position=0;
-	while (position<299 /*323*/)
+	while (position<323)
 	{
 		RasterizeScroller();
 		position++;
@@ -156,7 +159,7 @@ main()
 	*/
 
  	FirstText();
-	Wait(8-1);
+	Wait(8);
 	
 	DoubleBuffOn();
     InitTestCode();
@@ -179,16 +182,16 @@ main()
 	ShowThargoid();
 	////RotateThargoid();
 	Dialogue3();
-	Wait(15);
+	Wait(15-1);
 	////RotateThargoid();
 	Dialogue3b();
-	Wait(15);
+	Wait(15-1);
 
 
 	ShowBadguy();
 	DoubleBuffOff();
 	Dialogue4();
-	Wait(25);
+	Wait(25-3);
 	//Dialogue5();
 
 	ClearWideBuff();
@@ -206,8 +209,12 @@ main()
 	clr_toparea();
 	FinalScene();
 
+
+kk:
 	FontUnpack();
 	DoubleBuffOff();
+
+#ifdef OLDCREDITS
 
 /*
 	ShowStory2();
@@ -241,9 +248,24 @@ main()
 	BurnText();
 	clr_all();
 
+#else
+	Credits1();
+	Wait(20+3);
+	BurnText();
+
+	Credits2();
+	Wait(20+3);
+	BurnText();
+
+	CreditsEnd();
+	Wait(16);
+	BurnText();
+	clr_all();
+
+#endif
 
 	ShowLogo();
-	Wait(10-5);//20);
+	Wait(10+3);//20);
 	BurnText();
 	clr_all();
 	//Wait(5);

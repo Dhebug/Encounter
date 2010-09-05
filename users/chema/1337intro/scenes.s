@@ -496,6 +496,9 @@ _CreditsElite
 	jmp _DrawTextAsm
 .)
 
+
+#ifdef OLDCREDITS
+
 _Credits1
 .(
 	jsr _clr_all
@@ -632,6 +635,63 @@ _ShowStory2
 .)
 
 */
+
+
+#else
+
+
+_Credits1
+.(
+	jsr _clr_all
+	lda #$0
+	ldx #$0
+	jsr set_ink
+	lda #<_MessageCode
+	ldx #>_MessageCode
+	jsr _DrawTextAsm
+	;lda #<_MessageIntro
+	;ldx #>_MessageIntro
+	;jsr _DrawTextAsm
+	lda #$03
+	ldx #$06
+	jmp set_ink
+.)
+
+_Credits2
+.(
+	jsr _clr_all
+	lda #$0
+	ldx #$0
+	jsr set_ink
+	lda #<_MessageMusicandGraphics
+	ldx #>_MessageMusicandGraphics
+	jsr _DrawTextAsm
+	lda #$02
+	ldx #$06
+	jmp set_ink
+.)
+
+_CreditsEnd
+.(
+	jsr _clr_all
+	lda #$0
+	ldx #$0
+	jsr set_ink
+
+	lda #<_MessageExclusive
+	ldx #>_MessageExclusive
+	jsr _DrawTextAsm
+	lda #<_MessageWebsite
+	ldx #>_MessageWebsite
+	jsr _DrawTextAsm
+	lda #$06
+	ldx #$06
+	jmp set_ink
+.)
+
+
+#endif
+
 _SequenceDefenceForceLogo
 .(
 	jsr _clr_all
@@ -800,7 +860,7 @@ _MessageDialogue3b
 	.byt 6,156
 	;.byt FONT,0, "what you ask for: your credits",10,15
 	.byt FONT,0, "and a Governor position once",10,15
-	.byt FONT,0, "the eigth galaxies are assimilated."
+	.byt FONT,0, "the eight galaxies are assimilated."
 	.byt DONE
 
 _MessageDialogue4
@@ -832,6 +892,35 @@ _MessageElite
 	.byt 2,4,1,0, "  for one of the best games ever",10,40
 	.byt 1,0, "     Press ESC to skip this intro"
 	.byt DONE
+
+_MessageExclusive
+	.byt 20,82
+	.byt 1,0,"An exclusive space adventure for",10,13
+	.byt 1,0,"   your Oric Microdisc system.",10,15
+	.byt 1,0,"       -september 2010-"
+	.byt DONE
+			
+_MessageWebsite
+	.byt 35,120+15
+	.byt 1,0,"http",58,"/","/","1337.defence-force.org",0
+
+#ifdef OLDCREDITS
+
+_MessageStory
+	.byt 6,12
+	.byt 1,0,"It is year 1337 after the foundation",10,13
+	.byt 1,0,"of the Galactic Cooperative",10,13
+	.byt 1,0,"of Worlds, comprising more than",10,13
+	.byt 1,0,"2000 systems spread throughout",10,13
+	.byt 1,0,"eigth galaxies.",0
+	
+_MessageStoryb
+	.byt 6,90	
+	.byt 1,0,"The last thirty-five years have",10,13
+	.byt 1,0,"been dominated by the menace of the",10,13
+	.byt 1,0,"Thargoid, an insectoid alien race who is",10,13
+	.byt 1,0,"trying to conquer the planets and",10,13
+	.byt 1,0,"enslave their inhabitants.",0
 
 _MessageMusic
 	.byt 12,60
@@ -886,6 +975,52 @@ _MessageDbug
 	.byt 1,71,"  Enguita"
 	.byt DONE
 
+#else
+_MessageCode
+	.byt 6,6
+	.byt 1,0,"designer/programmer",10,15
+	.byt 1,71,"   Chema",10,21+10
+	.byt 2,10
+	.byt 1,0,"3D engine adapted from lib3d",10,15
+	.byt 2,10,1,71,"   Stephen L. Judd",10,31+10
+	.byt 2,45
+	.byt 1,0,"additional code",10,15
+	.byt 2,20,1,71,"Twilighte, Dbug",10,26
+	.byt 2,20,1,71,"   and Thrust"
+	;.byt 2,30,1,71,"   Dbug",10,26
+	;.byt 2,30,1,71,"   Thrust"
+	.byt DONE
+
+/*
+_MessageIntro
+	.byt 120,120
+	.byt 1,0,"intro",10,15
+	.byt 1,71," Dbug",10,26
+	.byt 1,0,"and",10,15
+	.byt 1,71," Chema"
+	.byt DONE
+*/
+
+_MessageMusicandGraphics
+	.byt 10,6
+	.byt 1,0,"additional graphics",10,15
+	.byt 1,71,"  Twilighte",10,31+10
+	.byt 2,10
+	.byt 1,0,"original music theme",10,15
+	.byt 2,10,1,71,"   Vangelis",10,21+5
+	.byt 2,20
+	.byt 1,0,"adapted by",10,15
+	.byt 2,20,1,71,"     Chema",10,31
+	.byt 2,40
+	.byt 1,0,"intro",10,15
+	.byt 2,40,1,71," Chema and Dbug"
+	.byt DONE
+
+
+#endif
+
+
+/*
 _MessageExclusive
 	.byt 20,82
 	.byt 1,0,"An exclusive space adventure for",10,13
@@ -912,14 +1047,13 @@ _MessageStoryb
 	.byt 1,0,"Thargoid, an insectoid alien race who is",10,13
 	.byt 1,0,"trying to conquer the planets and",10,13
 	.byt 1,0,"enslave their inhabitants.",0
-/*
+
 _MessageStory2
 	.byt 6,12
 	.byt 1,0,"Unstability in some local governments",10,13
 	.byt 1,0,"has increased, and piracy is becoming",10,13
 	.byt 1,0,"a common bussiness, making commerce",10,13
 	.byt 1,0,"and transportation risky activities.",0
-*/
 _MessageStory2b
 	.byt 6,100	
 	.byt 1,0,"Do you have what it takes to make a",10,13
@@ -928,134 +1062,4 @@ _MessageStory2b
 	.byt 1,0,"Come and show you can become one",10,13
 	.byt 1,0,"of the Elite...",0
 
-/*
-
-_Message_StarringMartinLandau
-	.byt 50,72
-	.byt 1,0,"starring",10,15,1,71,"Martin",10,21,"Landau"
-	.byt DONE
-_Message_StarringBarbaraBain
-	.byt 160,51
-	.byt 1,0,"starring",10,13,1,71,"Barbara",10,20,"Bain"
-	.byt DONE
-	
-_Message_StarringBarryMorse
-	.byt 152,17
-	.byt 1,0,"also starring",10,15,1,71,"Barry",10,21,"Morse"
-	.byt DONE
-
-_Message_SylviaAnderson
-	.byt 72,117
-	.byt 1,0,"producer",10,15,1,71,"Sylvia",10,21,"Anderson"
-	.byt DONE
-	
-_Message_GerryAnderson
-	.byt 126,27
-	.byt 1,0,"executive producer",10,15,1,71," Gerry",10,21," Anderson"
-	.byt DONE
-	
-_Message_Music
-	.byt 12,80
-	.byt 1,0,"original theme",10,15
-	.byt 1,71,"Barry",10,21
-	.byt "Gray"
-	.byt DONE
-	
-_Message_Chema
-	.byt 120,10
-	.byt 1,0,"designer/programmer",10,15
-	.byt 1,71,"   Jose Maria",10,21
-	.byt 1,0,"         'Chema'",10,11
-	.byt 1,71,"        Enguita"
-	.byt DONE
-	
-_Message_Twilighte
-	.byt 110,130
-	.byt 1,0,"adaptation",10,15
-	.byt 1,71,"Jonathan",10,21
-	.byt 1,0,"'Twilighte'",10,11
-	.byt 1,71,"Bristow"
-	.byt DONE
-	
-_Message_Dbug
-	.byt 126,20
-	.byt 1,0,"intro",10,15
-	.byt 1,71," Mickael",10,22
-	.byt 1,0,"  'Dbug'",10,13
-	.byt 1,71,"  Pointier"
-	.byt DONE
-
-_Message_ProducedBy
-	.byt 90,40
-	.byt 1,0,"produced by"
-	.byt DONE
-	
-_Message_Title
-	.byt 20,60
-	.byt 1,71,"'OUT OF MEMORY'"
-	.byt DONE
-
-_Message_Exclusive
-	.byt 20,82
-	.byt 1,0,"An exclusive Space:1999 episode for",10,13
-	.byt 1,0,"    your Oric Microdisc system.",10,15
-	.byt DONE
-			
-_Message_Website
-	.byt 30,120
-	.byt 1,0,"     Download it today on:",10,13
-	.byt 1,0,"http",58,"/","/","space1999.defence-force.org",0
-
-_Message_Quote1
-	.byt 6,0
-	.byt 1,0,"'Cult 1970s sci-fi plus obscure 1980s 8-bit",10,13
-	.byt 1,0,"computer",58," something beautifully obscure.'",10,13
-	.byt 1,0,"                           Malevolent"
-	.byt DONE
-
-_Message_Quote2
-	.byt 6,50
-	.byt 1,0,"'For modern gaming, check out Space",10,13
-	.byt 1,0,"1999, a very nifty isometric adventure.'",10,13
-	.byt 1,0,"                           Retrogamer"
-	.byt DONE
-
-_Message_Quote3
-	.byt 6,100
-	.byt 1,0,"'If only games like this were out for the",10,13
-	.byt 1,0,"machine in the 80s.  I might not have",10,13
-	.byt 1,0,"been quite so gutted when I got one of ",10,13
-	.byt 1,0,"these for Christmas.'        Caffeinekid"
-	.byt DONE
-		
-_Message_Quote4
-	.byt 6,170
-	.byt 1,0,"'Ay, caramba!'",10,13
-	.byt 1,0,"                           Bart Simpson"
-	.byt DONE
-		
-
-_Message_Rating
-	.byt 12,20
-	.byt 1,0,"THE FOLLOWING",1,71,MOVY,256-6,"PREVIEW",MOVY,6,1,0,"HAS BEEN",10,14
-	.byt 1,0,"APPROVED FOR",10,16
-	.byt 1,71,"      ALL AUDIENCES",10,28
-	.byt 1,0," BY THE MOVING PIXELS ASSOCIATION",10,30
-	.byt 1,0,"THE FILM ADVERTISED HAS BEEN RATED",10,20
-	.byt DONE
-	
-_Message_Rating_Bottom	
-	.byt 12,123
-	.byt 1,71,MOVX,2,"G",1,0,MOVX,40,MOVY,3,"GENERAL AUDIENCES",10,22-3
-	.byt 1,0,MOVX,3,"Some Material May Be Slow Or Ugly",10,15
-	.byt 1,0,MOVX,3,"Isometric 3D does not require glasses"
-	.byt DONE
-	
-_Message_EmergencyRedAlert
-	.byt 55,80
-	.byt 1,71
-	.byt "EMERGENCY",10,40
-	.byt MOVX,45,"RED",10,25
-	.byt MOVX,35,"ALERT",10,30
-	.byt DONE
-*/	
+*/
