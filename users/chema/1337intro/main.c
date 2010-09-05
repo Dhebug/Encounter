@@ -19,6 +19,51 @@
 #define A_BGWHITE       23
 
 
+
+// tables.s
+void TablesInit();
+
+// -------------
+
+// Starwars.s
+
+extern unsigned int  position;
+
+void RasterizeInitScanlineBuffer();
+void RasterizeNextLineMapping();
+void RasterizeScroller();
+
+// -------------
+
+extern unsigned char XIncTableLow[256];
+extern unsigned char XIncTableHigh[256];
+
+extern unsigned char EmptyTextureLine[16];
+
+
+
+void ComputeDivTable()
+{
+	int	y;
+	unsigned char dst_w;
+	unsigned int x_inc;
+
+	dst_w=2;
+	for (y=1;y<128;y++)
+	{
+		x_inc=((((unsigned int)(128)<<8))/dst_w);
+		
+		XIncTableLow[y] =(x_inc&255);
+		XIncTableHigh[y]=(x_inc>>8);
+						
+		dst_w+=2;
+	}
+}
+
+
+
+
+
 /* Prototipes */
 
 typedef struct t_obj
@@ -74,18 +119,33 @@ main()
 	DoubleBuffOn();
     InitTestCode();
     Test1337();
+	EmptyObj3D();
 	DoubleBuffOff();
 
+	SWTablesInit();
+	ComputeDivTable();
+	RasterizeInitScanlineBuffer();
+	position=0;
+	while (position<323)
+	{
+		RasterizeScroller();
+		position++;
+	}
 
+
+	/*
 	ShowStory();
 	Wait(20);
 	BurnText();
+	*/
 
 	/*
 	ShowStory2();
 	Wait(20);
 	BurnText();
 	*/
+
+	FontUnpack();
 
 	clr_all();
 	p=(char *)(0xa000+40*49);
