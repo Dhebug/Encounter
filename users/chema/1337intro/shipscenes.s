@@ -226,7 +226,15 @@ loopp
     lda #$10
     sta frame_count
 loop
-	jsr _UpdateFrame
+	;jsr _UpdateFrame
+	ldx VOB
+	jsr SetCurOb
+    jsr CalcView
+    jsr SortVis
+    jsr clr_hires2
+    jsr DrawAllVis   ;Draw objects
+    jsr dump_buf
+
 
 	ldx #4
 
@@ -296,13 +304,21 @@ loopp
 
 .(
 #ifdef DODBUG
-    lda #$40+10
+    lda #$40;+10
 #else
-	lda #$40+10
+	lda #$40;+10
 #endif
     sta frame_count
 loop
-	jsr _UpdateFrame
+	;jsr _UpdateFrame
+	ldx VOB
+	jsr SetCurOb
+    jsr CalcView
+    jsr SortVis
+    jsr clr_hires2
+    jsr DrawAllVis   ;Draw objects
+    jsr dump_buf
+
 
 	ldx #4
 	jsr goforit

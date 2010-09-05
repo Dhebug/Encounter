@@ -147,15 +147,16 @@ main()
 
 	FontUnpack();
 
+	/*
 	clr_all();
 	p=(char *)(0xa000+40*49);
 	*p=A_BGBLUE;
 	p=(char *)(0xa000+40*151);
 	*p=A_BGBLUE;
-
+	*/
 
  	FirstText();
-	Wait(8-3);
+	Wait(8-1);
 	
 	DoubleBuffOn();
     InitTestCode();
