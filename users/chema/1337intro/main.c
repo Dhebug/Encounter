@@ -126,7 +126,7 @@ main()
 	ComputeDivTable();
 	RasterizeInitScanlineBuffer();
 	position=0;
-	while (position<323)
+	while (position<299 /*323*/)
 	{
 		RasterizeScroller();
 		position++;
@@ -155,7 +155,7 @@ main()
 
 
  	FirstText();
-	Wait(8);
+	Wait(8-3);
 	
 	DoubleBuffOn();
     InitTestCode();
@@ -208,10 +208,11 @@ main()
 	FontUnpack();
 	DoubleBuffOff();
 
+/*
 	ShowStory2();
 	Wait(20);
 	BurnText();
-
+*/
 	Credits1();
 	Wait(6-4);
 	BurnText();

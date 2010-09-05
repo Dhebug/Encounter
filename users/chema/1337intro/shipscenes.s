@@ -296,9 +296,9 @@ loopp
 
 .(
 #ifdef DODBUG
-    lda #$40+20
+    lda #$40+10
 #else
-	lda #$40+20
+	lda #$40+10
 #endif
     sta frame_count
 loop

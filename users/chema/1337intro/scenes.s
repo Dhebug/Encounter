@@ -611,15 +611,17 @@ _ShowStory
 	ldx #$06
 	jmp set_ink
 .)
+
+/*
 _ShowStory2
 .(
 	jsr _clr_all
 	lda #$0
 	ldx #$0
 	jsr set_ink
-	lda #<_MessageStory2
-	ldx #>_MessageStory2
-	jsr _DrawTextAsm
+;	lda #<_MessageStory2
+;	ldx #>_MessageStory2
+;	jsr _DrawTextAsm
 	lda #<_MessageStory2b
 	ldx #>_MessageStory2b
 	jsr _DrawTextAsm
@@ -629,7 +631,7 @@ _ShowStory2
 	jmp set_ink
 .)
 
-
+*/
 _SequenceDefenceForceLogo
 .(
 	jsr _clr_all
@@ -910,14 +912,14 @@ _MessageStoryb
 	.byt 1,0,"Thargoid, an insectoid alien race who is",10,13
 	.byt 1,0,"trying to conquer the planets and",10,13
 	.byt 1,0,"enslave their inhabitants.",0
-
+/*
 _MessageStory2
 	.byt 6,12
 	.byt 1,0,"Unstability in some local governments",10,13
 	.byt 1,0,"has increased, and piracy is becoming",10,13
 	.byt 1,0,"a common bussiness, making commerce",10,13
 	.byt 1,0,"and transportation risky activities.",0
-
+*/
 _MessageStory2b
 	.byt 6,100	
 	.byt 1,0,"Do you have what it takes to make a",10,13
