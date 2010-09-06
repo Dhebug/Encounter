@@ -135,7 +135,7 @@ main()
 	while (position<323)
 	{
 		RasterizeScroller();
-		position++;
+		position+=2;
 	}
 
 
@@ -162,9 +162,9 @@ main()
 	DoubleBuffOff();
 	ShowThargoid();
 	Dialogue3();
-	Wait(15-1);
-	Dialogue3b();
-	Wait(15-1);
+	Wait(15-1+5);
+	//Dialogue3b();
+	//Wait(15-1);
 
 
 	ShowBadguy();
@@ -217,15 +217,15 @@ kk:
 
 #else
 	Credits1();
-	Wait(20+3);
+	Wait(20+3-3);
 	BurnText();
 
 	Credits2();
-	Wait(20+3);
+	Wait(20+3-3);
 	BurnText();
 
 	CreditsEnd();
-	Wait(16);
+	Wait(16-3);
 	BurnText();
 	clr_all();
 

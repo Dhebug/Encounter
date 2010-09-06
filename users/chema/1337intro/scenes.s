@@ -130,7 +130,7 @@ loop2
 
 	stx sav_x+1
 
-	ldy #$40
+	ldy #$40/4
 loopw
 	ldx #$ff
 loopw1
@@ -454,6 +454,7 @@ _Dialogue3
 	ldx #>_MessageDialogue3
 	jmp _DrawTextAsm
 .)
+/*
 _Dialogue3b
 .(
 	jsr _clr_bottomarea
@@ -462,7 +463,7 @@ _Dialogue3b
 	ldx #>_MessageDialogue3b
 	jmp _DrawTextAsm
 .)
-
+*/
 _Dialogue4
 .(
 	jsr _clr_bottomarea
@@ -854,15 +855,16 @@ _MessageDialogue3
 	;.byt FONT,0, "Thargoid:",10,15
 	.byt FONT,0, "Just bring us that technical",10,15
 	.byt FONT,0, "information, and you will have",10,15
-	.byt FONT,0, "what you ask for: your credits...",10,15
+	.byt FONT,0, "what you ask for.";,10,15
 	.byt DONE
+/*
 _MessageDialogue3b
 	.byt 6,156
 	;.byt FONT,0, "what you ask for: your credits",10,15
 	.byt FONT,0, "and a Governor position once",10,15
 	.byt FONT,0, "the eight galaxies are assimilated."
 	.byt DONE
-
+*/
 _MessageDialogue4
 	;.byt 6,156
 	.byt 6,6+15

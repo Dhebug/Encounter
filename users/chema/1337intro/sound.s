@@ -64,8 +64,8 @@ _InitMusic
 	sei
 
 	;Patch Music Speed
-	lda #25-2
-	sta MusicData+1
+	;lda #25-2
+	;sta MusicData+1
 
 	lda #<MUSICBASEADDRESS
 	sta header
