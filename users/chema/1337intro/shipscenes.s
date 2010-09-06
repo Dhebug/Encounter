@@ -1,6 +1,6 @@
 #define OBS  osdk_end
 #define DODBUG
-
+//#define NOSTARSINLOGO
 
  // Positions 
 
@@ -25,10 +25,11 @@ frame_count .byt 00
 
 _InitTestCode 
 .(
+  		 jsr INITSTAR
++_ReInit3D
          lda #<OBS        ;Object records
          ldy #>OBS
          jsr Init3D
-		 jsr INITSTAR
          jmp _DoubleBuffOn
 .)
 
@@ -84,6 +85,7 @@ loopp
 .)
 	rts
 .)
+
 
 
 _Test1337
@@ -161,8 +163,6 @@ l1  lda OCEN13,Y
     lda #$10
     sta frame_count
 loop
-	;jsr _UpdateFrame
-
 	ldx #4
 
   .(
@@ -226,14 +226,11 @@ loopp
     lda #$10
     sta frame_count
 loop
-	;jsr _UpdateFrame
-	ldx VOB
-	jsr SetCurOb
-    jsr CalcView
-    jsr SortVis
-    jsr clr_hires2
-    jsr DrawAllVis   ;Draw objects
-    jsr dump_buf
+#ifndef NOSTARSINLOGO
+	jsr _UpdateFrame
+#else
+	jsr _UpdateFrameNoStars
+#endif
 
 
 	ldx #4
@@ -310,16 +307,11 @@ loopp
 #endif
     sta frame_count
 loop
-	;jsr _UpdateFrame
-	ldx VOB
-	jsr SetCurOb
-    jsr CalcView
-    jsr SortVis
-    jsr clr_hires2
-    jsr DrawAllVis   ;Draw objects
-    jsr dump_buf
-
-
+#ifndef NOSTARSINLOGO
+	jsr _UpdateFrame
+#else
+	jsr _UpdateFrameNoStars
+#endif
 	ldx #4
 	jsr goforit
 	ldx #3
@@ -341,6 +333,21 @@ loop
 
 	rts
 .)
+
+
+#ifdef NOSTARSINLOGO
+_UpdateFrameNoStars
+.(
+	ldx VOB
+	jsr SetCurOb
+    jsr CalcView
+    jsr SortVis
+    jsr clr_hires2
+    jsr DrawAllVis   ;Draw objects
+    jmp dump_buf
+.)
+#endif
+
 
 
 _FirstScene

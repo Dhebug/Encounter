@@ -121,8 +121,9 @@ main()
 	*p=A_BGBLUE;
 	p=(char *)(0xa000+40*151);
 	*p=A_BGBLUE;
-	DoubleBuffOn();
+
     InitTestCode();
+
     Test1337();
 	EmptyObj3D();
 	DoubleBuffOff();
@@ -138,33 +139,12 @@ main()
 	}
 
 
-	/*
-	ShowStory();
-	Wait(20);
-	BurnText();
-	*/
-
-	/*
-	ShowStory2();
-	Wait(20);
-	BurnText();
-	*/
-
 	FontUnpack();
-
-	/*
-	clr_all();
-	p=(char *)(0xa000+40*49);
-	*p=A_BGBLUE;
-	p=(char *)(0xa000+40*151);
-	*p=A_BGBLUE;
-	*/
-
  	FirstText();
 	Wait(8+3);
 	
-	DoubleBuffOn();
-    InitTestCode();
+    //InitTestCode();
+	ReInit3D();
 	clr_toparea();
     FirstScene();
 	RotateThargoid();
@@ -178,14 +158,11 @@ main()
 	
 	DoubleBuffOn();
 	RotateThargoid();
-	////RotateThargoid();
 
 	DoubleBuffOff();
 	ShowThargoid();
-	////RotateThargoid();
 	Dialogue3();
 	Wait(15-1);
-	////RotateThargoid();
 	Dialogue3b();
 	Wait(15-1);
 
@@ -194,7 +171,6 @@ main()
 	DoubleBuffOff();
 	Dialogue4();
 	Wait(25-1);
-	//Dialogue5();
 
 	ClearWideBuff();
 	Dialogue5();
@@ -218,21 +194,10 @@ kk:
 
 #ifdef OLDCREDITS
 
-/*
-	ShowStory2();
-	Wait(20);
-	BurnText();
-*/
 	Credits1();
 	Wait(6-4);
 	BurnText();
 
-/*
-	Credits2();
-	Wait(2);
-	BurnText();
-	Wait(3-1);
-*/
 	Credits3();
 	Wait(5-3);
 	BurnText();
