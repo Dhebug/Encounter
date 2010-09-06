@@ -145,7 +145,7 @@ main()
 	
     //InitTestCode();
 	ReInit3D();
-	clr_toparea();
+	//clr_toparea();
     FirstScene();
 	RotateThargoid();
 
@@ -232,7 +232,7 @@ kk:
 #endif
 
 	ShowLogo();
-	Wait(10+3);//20);
+	Wait(10+10);//20);
 	BurnText();
 	clr_all();
 	//Wait(5);
