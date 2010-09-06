@@ -408,6 +408,8 @@ loop
 .)
 
 
+	jsr _clr_toparea
+
 	; Advance sequence, first the mamba, then the thargoid
 .(
     lda #80
