@@ -895,13 +895,15 @@ _MessageElite
 
 _MessageExclusive
 	.byt 20,82
-	.byt 1,0,"An exclusive space adventure for",10,13
-	.byt 1,0,"   your Oric Microdisc system.",10,15
-	.byt 1,0,"       -september 2010-"
+	;.byt 1,0,"An exclusive space adventure for",10,13
+	;.byt 1,0,"   your Oric Microdisc system.",10,15
+	.byt 1,0,"Come and show you can become",10,13
+	.byt 1,0,2,40," one of the ELITE...",10,18
+	.byt 1,0,2,40," -september 2010-"
 	.byt DONE
 			
 _MessageWebsite
-	.byt 35,120+15
+	.byt 35,120+20
 	.byt 1,0,"http",58,"/","/","1337.defence-force.org",0
 
 #ifdef OLDCREDITS
