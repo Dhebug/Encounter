@@ -86,6 +86,8 @@ char X,Y,x,y;
 char * p;
 
 
+void launch_game();
+
 main()
 {
 	switch_ovl();
@@ -159,7 +161,7 @@ main()
 	*/
 
  	FirstText();
-	Wait(8);
+	Wait(8+3);
 	
 	DoubleBuffOn();
     InitTestCode();
@@ -191,7 +193,7 @@ main()
 	ShowBadguy();
 	DoubleBuffOff();
 	Dialogue4();
-	Wait(25-3);
+	Wait(25-1);
 	//Dialogue5();
 
 	ClearWideBuff();

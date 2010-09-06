@@ -854,7 +854,7 @@ _MessageDialogue3
 	;.byt FONT,0, "Thargoid:",10,15
 	.byt FONT,0, "Just bring us that technical",10,15
 	.byt FONT,0, "information, and you will have",10,15
-	.byt FONT,0, "what you ask for: your credits",10,15
+	.byt FONT,0, "what you ask for: your credits...",10,15
 	.byt DONE
 _MessageDialogue3b
 	.byt 6,156
@@ -1013,7 +1013,7 @@ _MessageMusicandGraphics
 	.byt 2,20,1,71,"     Chema",10,31
 	.byt 2,40
 	.byt 1,0,"intro",10,15
-	.byt 2,40,1,71," Chema and Dbug"
+	.byt 2,40,1,71," Dbug and Chema"
 	.byt DONE
 
 
