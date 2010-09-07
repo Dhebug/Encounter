@@ -830,9 +830,12 @@ _reboot_oric
 
 
 _MessageEncounter
-	.byt 6,6
-	.byt FONT,0, "Gelesoma system. Galactic Sector 7.",10,15
-	.byt FONT,0, "An unusual encounter takes place..."
+	.byt 6,6-3
+	;.byt FONT,0, "Gelesoma system. Galactic Sector 7.",10,15
+	;.byt FONT,0, "An unusual encounter takes place...",10,15
+	.byt FONT,0, "Far from Lave, where you start your",10,15
+	.byt FONT,0, "career, a secret encounter takes place.",10,15+3
+	.byt FONT,0, "Gelesoma system. Galactic Sector 7."
 	.byt DONE
 
 _MessageDialogue1
