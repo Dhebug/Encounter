@@ -1637,6 +1637,8 @@ damage_ship
     lda _flags,x
 	and #IS_EXPLODING
 	beq dodam	
+	lda _ttl,x
+	bne dodam
 	; Can't do damage here, has already been killed
 elrts
 	rts
