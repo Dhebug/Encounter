@@ -253,6 +253,7 @@ EmptyMission
   	jsr print
 	jsr rkey
 
++EmptyVectors
 	; Put clc/rts/00 at all jump vectors
 	ldy #0
 	sty NeedsDiskLoad
@@ -287,10 +288,13 @@ loop
 
 load_mission
 .(
-	jsr _init_disk
+	lda _mission
+	cmp #$fc	; Failed
+	beq EmptyVectors
+	cmp #$f8	; Success
+	beq EmptyVectors
 
-;	lda #0
-;dbug beq dbug
+	jsr _init_disk
 
     ; Sector to read    
 	lda _mission
