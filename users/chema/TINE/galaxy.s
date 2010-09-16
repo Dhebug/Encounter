@@ -3527,7 +3527,17 @@ valid
 	jsr fuel_price
     jmp cont
 nofuel
+
     ; check for cash
+
+	; Need flag position
+	jsr find_flag_equip
+	sty tmp
+	lda #16
+	sec
+	sbc tmp
+	tax
+
     ; Get price in op2
     lda priceseqLO,x
     sta op2
@@ -3590,6 +3600,7 @@ normal
     ; Can our ship fit this item?
 
 	; Do we have it equipped already?
+
 
 	lda tmp0
 	and _equip
@@ -3682,6 +3693,15 @@ doit
 
 upgrade_lasers
 .(
+
+	; Are we buying lasers?
+	lda tmp0+1
+	and #%11
+	bne doit
+	lda tmp0
+	and #%00000001	
+	beq nopulse
+doit
 	jsr sell_laser
 
 	; And add it to our equipment
