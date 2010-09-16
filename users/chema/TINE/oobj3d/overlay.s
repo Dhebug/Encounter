@@ -64,10 +64,10 @@ __overlay_end
 		.byt 00 
 		.dsb 3 
 		.dsb 17,0	            ; Contents of cargo bay
-		.byt 7					; Current planet
+		.byt 31					; Current planet
 		;.byt 192				; Testing unreachable cluster on galaxy 7
 		;.byt $68
-		.byt 7                  ; Galaxy number (1-8)
+		.byt 3                  ; Galaxy number (1-8)
 		.byt $d0,$07            ; Four bytes for cash (200.0)
 		.byt $10,$00
 		.byt 70                 ; Amount of fuel
@@ -76,7 +76,7 @@ __overlay_end
 		.byt 0                  ; Legal status 0=Clean, <50=Offender, >50=Fugitive
 		.byt 00		 			; Score, remainder
 		.word 10000             ; Current score
-		.byt 60					; Current mission
+		.byt 45;60					; Current mission
 		.word $06fe             ; Equipment flags
 		.byt 13			        ; Current player's ship
 		.byt 4					; Number of missiles

@@ -93,6 +93,9 @@ nolaunch
 CheckSuccess
 .(
  	lda _mission
+	cmp #THISMISSION+2
+	beq fail
+
 	cmp #THISMISSION+3
 	bne nolaunch
 
@@ -102,8 +105,11 @@ CheckSuccess
 
 	lda _currentplanet
 	; 0 is Riave
-	bne fail
-
+	;bne fail
+	beq done
+	clc
+	rts
+done
 	lda #NEXTMISSION
 	sta _mission
 
