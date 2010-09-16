@@ -53,6 +53,7 @@ AvoidOtherShips		.byt 0	; If not zero, no other ships are created
 
 ShipToProtect	.byt 00
 Succeeded		.byt 00
+Failed			.byt 00
 
 
 HyperJump
@@ -128,6 +129,9 @@ MissionSuccess
 
 	lda Succeeded
 	beq failure
+
+	lda Failed
+	bne failure
 
 	lda #NEXTMISSION
 	sta _mission
@@ -279,6 +283,9 @@ nothing
 cont
 	cpx ShipToProtect
 	bne nothing
+
+	dec Failed
+
 	lda #<str_hekilled
 	sta tmp0
 	lda #>str_hekilled
