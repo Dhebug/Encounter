@@ -796,7 +796,7 @@ priceseqHI
 ; Techlevel min
 
 eq_tech
-    .byt 1,1,1
+    .byt 0,0,3
     .byt 1,6,5,2,7,8,10,4,10,10,10
 
 str_equipment
