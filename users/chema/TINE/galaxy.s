@@ -3615,15 +3615,16 @@ normal
 	; Not lasers...
 
 	lda tmp0
-	and #%00001000 ; Large cargo bay
-	bne nocargo
+	and #EQ_LARGECARGO	;#%00001000 ; Large cargo bay
+	beq nocargo
 	lda _holdspace
 	clc
 	adc #10
 	sta _holdspace
-	;jmp setflag
+	jmp setflag
 nocargo
-	; Should not arrive here?
+	
+	; Any other equipment... just set the flag.
 
 setflag
 	lda tmp0

@@ -28,5 +28,5 @@ SET OSDKTAPNAME="1337"
 SET OSDKDISK=oobj3d\overlay.tap runme.tap intro.tap
 ::run99.tap ..\intro\build\intro.tap 
 SET OSDKDNAME=" -- 1337 --"
-SET OSDKINIST="?\"V1.04\":WAIT20:!RUNME.COM"
+SET OSDKINIST="?\"V1.05\":WAIT20:!RUNME.COM"
 
