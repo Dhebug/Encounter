@@ -3995,6 +3995,12 @@ slot_offset
 
 do_loadsave
 .(
+	ldx _cur_sel
+	cpx #$ff
+	bne valid
+	rts
+valid
+
 	jsr prepare_area
     ;lda #(A_FWRED)
     ;jsr put_code
