@@ -2,6 +2,7 @@
 #define PICTURE_CONVERTER_H
 
 #include <map>
+#include <string>
 
 class TextFileGenerator;
 class ImageContainer;
@@ -27,15 +28,27 @@ public:
 		_DITHER_MAX_
 	};
 
+	enum BLOCKMODE
+	{
+		BLOCKMODE_DISABLED,
+		BLOCKMODE_ENABLED,
+		_BLOCKMODE_MAX_
+	};
+
 public:
 	static PictureConverter* GetConverter(MACHINE machine);
 	static void DeleteConverter(PictureConverter* pConverter);
 
-	MACHINE GetMachine() const			{ return m_machine; }
-	void SetDebug(bool flag_debug)		{ m_flag_debug=flag_debug; }
+	MACHINE GetMachine() const				{ return m_machine; }
+	void SetDebug(bool flag_debug)			{ m_flag_debug=flag_debug; }
 
-	DITHER GetDither() const 			{ return m_dither; }
+	DITHER GetDither() const 				{ return m_dither; }
 	void SetDither(DITHER dither);
+
+	BLOCKMODE GetBlockMode() const 			{ return m_blockmode; }
+	void SetBlockMode(BLOCKMODE blockmode)	{ m_blockmode=blockmode; }
+
+	std::string GetBlockData() const		{ return m_block_data; }
 
 	virtual int GetFormat() const=0;
 	virtual bool SetFormat(int format)=0;
@@ -59,9 +72,12 @@ protected:
 	virtual ~PictureConverter();
 
 protected:
-	MACHINE			m_machine;
-	DITHER			m_dither;
-	bool			m_flag_debug;
+	MACHINE				m_machine;
+	DITHER				m_dither;
+	BLOCKMODE			m_blockmode;
+	bool				m_flag_debug;
+
+	std::string			m_block_data;
 };
 
 #endif

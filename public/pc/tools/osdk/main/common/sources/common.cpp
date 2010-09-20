@@ -123,6 +123,11 @@ bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize)
 	return true;
 }
 
+bool DeleteFile(const char* pcFileName)
+{
+	return _unlink(pcFileName);
+}
+
 
 /**
  * Transforms a raw ascii buffer (0 terminated)

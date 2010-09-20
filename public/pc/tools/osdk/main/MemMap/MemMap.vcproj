@@ -233,7 +233,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\filepack\includes\infos.h"
+				RelativePath=".\includes\infos.h"
 				>
 			</File>
 		</Filter>

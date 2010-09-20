@@ -4,6 +4,8 @@
 #include <io.h>
 #include <conio.h>
 #include <fcntl.h>
+#include <iostream>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -34,7 +36,7 @@ char BufferSpaces[]="                                                           
 int gcur_line=0;
 int	gmax_count=0;
 
-bool FlagDebug=false;
+bool FlagDebug=true;
 
 
 // ============================================================================
@@ -121,7 +123,7 @@ void OricPictureConverter::clear_screen()
 
 
 
-ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& sourcePicture,int x,int y)
+ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& sourcePicture,unsigned int x,unsigned int y)
 {
 	RgbColor rgb=sourcePicture.ReadColor(x,y);
 
@@ -235,15 +237,15 @@ ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& s
 
 
 
-ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourcePicture,int x,int y)
+ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y)
 {
 	RgbColor rgb1=sourcePicture.ReadColor(x,y+0);
 	RgbColor rgb2=sourcePicture.ReadColor(x,y+1);
 	RgbColor rgb3=sourcePicture.ReadColor(x,y+2);
 
-	unsigned char r=(rgb1.m_red+rgb2.m_red	+rgb3.m_red)/3;
+	unsigned char r=(rgb1.m_red  +rgb2.m_red  +rgb3.m_red )/3;
 	unsigned char g=(rgb1.m_green+rgb2.m_green+rgb3.m_green)/3;
-	unsigned char b=(rgb1.m_blue+rgb2.m_blue	+rgb3.m_blue)/3;
+	unsigned char b=(rgb1.m_blue +rgb2.m_blue +rgb3.m_blue )/3;
 
 	int	c;
 
@@ -295,7 +297,7 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
 			if (r>170)	r=255;
 			else
 			if (r<85)	r=0;
-			else		r=255*((x^y)&1);
+			else		r=(unsigned char)(255*((x^y)&1));
 			g=0;
 			b=0;
 			break;
@@ -303,7 +305,7 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
 			if (g>170)	g=255;
 			else
 			if (g<85)	g=0;
-			else		g=255*((x^y)&1);
+			else		g=(unsigned char)(255*((x^y)&1));
 			r=0;
 			b=0;
 			break;
@@ -311,7 +313,7 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
 			if (b>170)	b=255;
 			else
 			if (b<85)	b=0;
-			else		b=255*((x^y)&1);
+			else		b=(unsigned char)(255*((x^y)&1));
 			r=0;
 			g=0;
 			break;
@@ -370,7 +372,7 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
 
 
 
-ORIC_COLOR OricPictureConverter::convert_pixel_rb(const ImageContainer& sourcePicture,int x,int y)
+ORIC_COLOR OricPictureConverter::convert_pixel_rb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y)
 {
 	RgbColor rgb1=sourcePicture.ReadColor(x,y+0);
 	RgbColor rgb2=sourcePicture.ReadColor(x,y+1);
@@ -417,14 +419,14 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rb(const ImageContainer& sourcePi
 			if (r>170)	r=255;
 			else
 			if (r<85)	r=0;
-			else		r=255*((x^y)&1);
+			else		r=(unsigned char)(255*((x^y)&1));
 			gb=0;
 			break;
 		case 1:
 			if (gb>170)	gb=255;
 			else
 			if (gb<85)	gb=0;
-			else		gb=255*((x^y)&1);
+			else		gb=(unsigned char)(255*((x^y)&1));
 			r=0;
 			break;
 		}
@@ -497,7 +499,7 @@ void OricPictureConverter::convert_monochrom(const ImageContainer& sourcePicture
 		int	x=0;
 		for (int col=0;col<m_buffer_cols;col++)
 		{
-			int	val=0;
+			unsigned char val=0;
 			for (int bit=0;bit<6;bit++)
 			{
 				val<<=1;
@@ -543,9 +545,9 @@ void OricPictureConverter::convert_twilighte_mask(const ImageContainer& sourcePi
 		int x=0;
 		for (int col=0;col<m_buffer_cols;col++)
 		{
-			int mask=0;
-			int mask_control=0;
-			int val=0;
+			unsigned char mask=0;
+			unsigned char mask_control=0;
+			unsigned char val=0;
 			for (int bit=0;bit<6;bit++)
 			{
 				val<<=1;
@@ -648,7 +650,7 @@ void OricPictureConverter::convert_rgb(const ImageContainer& sourcePicture)
 		int x=0;
 		for (int col=1;col<m_buffer_cols;col++)
 		{
-			int val=0;
+			unsigned char val=0;
 			for (int bit=0;bit<6;bit++)
 			{
 				val<<=1;
@@ -714,7 +716,7 @@ void OricPictureConverter::convert_rb(const ImageContainer& sourcePicture)
 		int x=0;
 		for (int col=0;col<39;col++)
 		{
-			int val=0;
+			unsigned char val=0;
 			for (int bit=0;bit<6;bit++)
 			{
 				val<<=1;
@@ -856,8 +858,7 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
 			}
 
 			// Try each of the 8 possible ink colors
-			int	color;
-			for (color=0;color<8;color++)
+			for (unsigned char color=0;color<8;color++)
 			{
 				if (FlagDebug)	printf("\r\n %sUse paper color (%d) while changing ink color to (%d)",PtrSpaces,cur_paper,color);
 				if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
@@ -895,8 +896,7 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
 			}
 
 			// Try each of the 8 possible ink colors
-			int	color;
-			for (color=0;color<8;color++)
+			for (unsigned char color=0;color<8;color++)
 			{
 				if (FlagDebug)	printf("\r\n %sUse inverted paper color (%d => %d) while changing ink color to (%d)",PtrSpaces,cur_paper,7-cur_paper,color);
 				if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
@@ -1005,10 +1005,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 {
 	ImageContainer convertedPicture(sourcePicture);
 
-	int				x;
 	int				col,bit;
-	int				color;
-	int				val;
 
 	//
 	// Phase 1: Create a buffer with infos
@@ -1031,7 +1028,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 		//
 		// Create a buffer for the scanline
 		//
-		x=0;
+		int x=0;
 		for (col=0;col<m_buffer_cols;col++)
 		{
 			bool error_in_bloc=false;
@@ -1048,7 +1045,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 
 				// Get the original pixel color 
 				BYTE *ptr_byte=FreeImage_GetBitsRowCol(convertedPicture.GetBitmap(),x,y);
-				color=0;
+				unsigned char color=0;
 				if ((*ptr_byte++)>128)	color|=4;
 				if ((*ptr_byte++)>128)	color|=2;
 				if ((*ptr_byte++)>128)	color|=1;
@@ -1115,10 +1112,12 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 		//gLastTimer=time(0);
 		ptr_bloc6=Bloc6Buffer;
 
+		unsigned char val;
+
 		PtrSpaces=BufferSpaces+strlen(BufferSpaces);
 		gcur_line=y;
 		gmax_count=m_buffer_cols;
-		if (RecurseLine(m_buffer_cols,ptr_bloc6,ptr_hires,0,7))
+		if (RecurseLine((unsigned char)m_buffer_cols,ptr_bloc6,ptr_hires,0,7))
 		//if (RecurseLine(7,ptr_bloc6,ptr_hires,0,7))
 		{
 			//
@@ -1180,6 +1179,14 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 
 bool OricPictureConverter::Convert(const ImageContainer& sourcePicture)
 {
+	if (m_blockmode==BLOCKMODE_ENABLED)
+	{
+		// Find the blocks, and then continue the conversion
+		sourcePicture.FindBlocks(m_block_data);
+		//std::cout << "-b1 (block mode) not supported on this machine";
+		//return false;
+	}
+
 	if ( (m_format==OricPictureConverter::FORMAT_COLORED) &&
 		((sourcePicture.GetWidth()%6)==0) &&
 		(sourcePicture.GetWidth()>240))
@@ -1329,10 +1336,10 @@ void OricPictureConverter::save_header(long handle,int adress_begin)
 	};
 
 	int adress_end=adress_begin+m_buffer_size;
-	Header[ 8]=(adress_end>>8)&255;
-	Header[ 9]= adress_end&255;
-	Header[10]=(adress_begin>>8)&255;
-	Header[11]= adress_begin&255;
+	Header[ 8]=(unsigned char)((adress_end>>8)&255);
+	Header[ 9]=(unsigned char)( adress_end&255);
+	Header[10]=(unsigned char)((adress_begin>>8)&255);
+	Header[11]=(unsigned char)( adress_begin&255);
 	_write(handle,Header,13);
 }
 

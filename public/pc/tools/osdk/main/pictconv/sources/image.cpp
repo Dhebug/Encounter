@@ -4,6 +4,7 @@
 #include <io.h>
 #include <conio.h>
 #include <set>
+#include <sstream>
 
 #include "common.h"
 
@@ -187,6 +188,42 @@ bool ImageContainer::SavePicture(const std::string& fileName) const
 	return true;
 }
 
+void ImageContainer::FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth)
+{
+	if (m_pBitmap)
+	{
+		unsigned int dx=FreeImage_GetWidth(m_pBitmap);
+		unsigned int dy=FreeImage_GetHeight(m_pBitmap);
+
+		if (x0<0)	return;
+		if (y0<0)	return;
+		
+		if (x0>=dx)	return;
+		if (y0>=dy)	return;
+
+		unsigned int x1=(x0+width)-1;
+		unsigned int y1=(y0+heigth)-1;
+
+		if (x1<0)	return;
+		if (y1<0)	return;
+
+		if (x1>=dx)	return;
+		if (y1>=dy)	return;
+
+		for (unsigned int y=y0;y<=y1;y++)
+		{
+			for (unsigned int x=x0;x<=x1;x++)
+			{
+				BYTE *ptr_byte=FreeImage_GetBitsRowCol(m_pBitmap,x,y);
+
+				*ptr_byte++=rgb.m_blue;
+				*ptr_byte++=rgb.m_green;
+				*ptr_byte++=rgb.m_red;
+			}
+		}
+	}
+
+}
 
 void ImageContainer::WriteColor(const RgbColor& rgb,int x,int y)
 {
@@ -381,6 +418,112 @@ bool ImageContainer::CreateFromImage(const ImageContainer& otherImage,unsigned i
 	return true;
 }
 
+
+
+
+
+
+int ImageContainer::FindBlocks(std::string& block_data) const
+{
+	//
+	// Phase one: Find a pixel that is not of the color of the background
+	//
+	ImageContainer image_copy(*this);
+
+	std::stringstream out_x0;
+	std::stringstream out_y0;
+	std::stringstream out_width;
+	std::stringstream out_height;
+
+	out_x0 << "_FontTableX0";
+	out_y0 << "_FontTableY0";
+	out_width << "_FontTableWidth";
+	out_height << "_FontTableHeight";
+
+	RgbColor backgroundColor=image_copy.ReadColor(0,0);
+
+	unsigned int picture_width=GetWidth();
+	unsigned int picture_heigth=GetHeight();
+
+	unsigned int first_x,first_y;
+	unsigned int sprite_id=0;
+
+	for (first_y=0;first_y<200;first_y++)
+	{
+		for (first_x=0;first_x<240;first_x++)
+		{
+			RgbColor pixelColor=image_copy.ReadColor(first_x,first_y);
+
+			if (pixelColor!=backgroundColor)
+			{
+				//
+				// We've got one !!!
+				//
+				//printf("Found sprite %d at (%d,%d)\n",sprite_id,first_x,first_y);
+
+				unsigned int min_x=first_x;
+				unsigned int min_y=first_y;
+				unsigned int max_x=first_x;
+				unsigned int max_y=first_y;
+
+				// Find the width
+				while (((max_x+1)<picture_width) && (image_copy.ReadColor(max_x+1,min_y)!=backgroundColor))
+				{
+					max_x++;
+				}
+
+				// Find the heigth
+				while (((max_y+1)<picture_heigth) && (image_copy.ReadColor(min_x,max_y+1)!=backgroundColor))
+				{
+					max_y++;
+				}
+
+				unsigned int width =(max_x-min_x)+1;
+				unsigned int heigth=(max_y-min_y)+1;
+
+				// Erase the block
+				image_copy.FillRectangle(backgroundColor,min_x,min_y,width,heigth);
+
+				if ((sprite_id&15)==0)
+				{
+					// Every 16 characters, back to the start with a new .byt line
+					out_x0 << "\r\n\t.byt ";
+					out_y0 << "\r\n\t.byt ";
+					out_width << "\r\n\t.byt ";
+					out_height << "\r\n\t.byt ";
+				}
+				else
+				{
+					out_x0 << ",";
+					out_y0 << ",";
+					out_width << ",";
+					out_height << ",";
+				}
+
+				out_x0 << min_x;
+				out_y0 << min_y;
+				out_width << width;
+				out_height << heigth;
+
+				//printf("\tBounding box: (%d,%d)-(%d,%d)\n",min_x,min_y,max_x,max_y);
+
+				//getch();
+
+				// Increment sprite ID
+				sprite_id++;
+			}
+		}
+	}
+	block_data+=out_x0.str();
+	block_data+="\r\n";
+	block_data+=out_y0.str();
+	block_data+="\r\n";
+	block_data+=out_width.str();
+	block_data+="\r\n";
+	block_data+=out_height.str();
+	block_data+="\r\n";
+	return true;			
+}
 
 
 

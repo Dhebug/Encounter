@@ -15,9 +15,9 @@
 
 int gDsbLen = 0;
 
-static int t_conv(signed char*,signed char*,int*,int,int*,int*,int*,int);
-static int t_keyword(signed char*,int*,int*);
-static int ParseQuotedString(signed char*,signed char*,int*,int*,int*,int*);
+static ErrorCode t_conv(signed char*,signed char*,int*,int,int*,int*,int*,int);
+static ErrorCode t_keyword(signed char *ptr_src, int *keyword_lenght, int *keyword_index);
+static ErrorCode ParseQuotedString(signed char*,signed char*,int*,int*,int*,int*);
 static void ParseDecimalValue(signed char*,int*,int*);
 static void ParseHexadecimalValue(signed char*,int*,int*);
 static void ParseOctalValue(signed char*,int*,int*);
@@ -87,7 +87,6 @@ static char *kt[] =
 
 };
 
-static int lp[]= { 0,1,1,1,1,2,2,1,1,1,2,2,2,1,1,1,2,2 };
 
 #define   Lastbef   93
 #define   Anzkey    125
@@ -344,22 +343,22 @@ int is_end_of_line(const char *ptr)
 
 
 /* pass 1 */
-int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_written)
+ErrorCode t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_written)
 {
-	static int er,l,n,v,nk,na1,na2,bl,am,sy,i,label; /*,j,v2 ;*/
+	static int written_bytes,n,v,nk,number_quoted_strings,size_quoted_strings,bl,am,sy,i,label; /*,j,v2 ;*/
 	int afl = 0;
 	
 	bl=0;
 	*ptr_size_written = 0;
 	
-	er=t_conv(ptr_text,ptr_output,&l,TablePcSegment[segment],&nk,&na1,&na2,0);
+	ErrorCode er=t_conv(ptr_text,ptr_output,&written_bytes,TablePcSegment[gCurrentSegment],&nk,&number_quoted_strings,&size_quoted_strings,0);
 	
-	*ll=l;
+	*ll=written_bytes;
 	
 	// if text/data produced, then no more fopt allowed in romable mode
 	if ((romable>1) && (ptr_output[0]<Kopen || ptr_output[0]==Kbyte || ptr_output[0]==Kpcdef)) 
 	{
-		afile->base[eSEGMENT_TEXT] = TablePcSegment[eSEGMENT_TEXT] = romadr + h_length();
+		afile->SetSegmentBase(eSEGMENT_TEXT,romadr + afile->h_length());
 		romable=1;
 	}
 	
@@ -371,7 +370,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		if (n==Kdft) 
 		{
 			i=1;
-			evaluate_expression(ptr_output+1,&dft,&l,TablePcSegment[segment],&afl,&label,0);
+			evaluate_expression(ptr_output+1,&dft,&written_bytes,TablePcSegment[gCurrentSegment],&afl,&label,0);
 			ptr_output[i++]=T_VALUE;
 			ptr_output[i++]=((dft)>>0)&255;
 			ptr_output[i++]=((dft)>>8)&255;
@@ -392,14 +391,14 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		{
 			if (romable==1) er=E_ROMOPT;
 			ptr_output[0] = Kbyt;
-			set_fopt(l,ptr_output,nk+1-na1+na2);
+			afile->set_fopt(written_bytes,ptr_output,nk+1-number_quoted_strings+size_quoted_strings);
 			*ll = 0;
 		} 
 		else
 		if (n==Kpcdef)
 		{
 			int tmp;
-			if (!(er=evaluate_expression(ptr_output+1,&tmp,&l,TablePcSegment[segment],&afl,&label,0)))
+			if (!(er=evaluate_expression(ptr_output+1,&tmp,&written_bytes,TablePcSegment[gCurrentSegment],&afl,&label,0)))
 			{
 				i=1;
 				ptr_output[i++]=T_VALUE;
@@ -410,7 +409,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 				ptr_output[i++]=T_END;
 				*ll=7;
 				er=E_OKDEF;
-				if (segment==eSEGMENT_TEXT) 
+				if (gCurrentSegment==eSEGMENT_TEXT) 
 				{
 					TablePcSegment[eSEGMENT_ABS] = tmp;
 					r_mode(RMODE_ABS);
@@ -419,7 +418,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 				{
 					if (!relmode) 
 					{
-						TablePcSegment[segment] = tmp;
+						TablePcSegment[gCurrentSegment] = tmp;
 					} 
 					else 
 					{
@@ -430,7 +429,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 			else 
 			{			
 				/* TODO: different error code */
-				if ((segment==eSEGMENT_ABS) && (er==E_SYNTAX && l==0)) 
+				if ((gCurrentSegment==eSEGMENT_ABS) && (er==E_SYNTAX && written_bytes==0)) 
 				{
 					ptr_output[0]=Kreloc;
 					i=1;
@@ -451,7 +450,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		{
 			if (gFlag_ShowBlocks) 
 			{
-				fprintf(stderr,"%s line %d: .(\n", PreprocessorFile_c::GetCurrentFile()->m_file_name.c_str(),PreprocessorFile_c::GetCurrentFile()->m_current_line);
+				fprintf(stderr,"%s line %d: .(\n", PreprocessorFile_c::GetCurrentFile()->GetCurrentFileName().c_str(),PreprocessorFile_c::GetCurrentFile()->GetCurrentLine());
 			}
 			b_open();
 			er=E_NOLINE;
@@ -461,7 +460,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		{
 			if (gFlag_ShowBlocks) 
 			{
-				fprintf(stderr,"%s line %d: .)\n", PreprocessorFile_c::GetCurrentFile()->m_file_name.c_str(),PreprocessorFile_c::GetCurrentFile()->m_current_line);
+				fprintf(stderr,"%s line %d: .)\n", PreprocessorFile_c::GetCurrentFile()->GetCurrentFileName().c_str(),PreprocessorFile_c::GetCurrentFile()->GetCurrentLine());
 			}
 			er=b_close();
 			if (!er) er=E_NOLINE;
@@ -502,7 +501,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		if (n==Kdsb)
 		{
 			gDsbLen = 1;
-			if (!(er=evaluate_expression(ptr_output+1,&bl,&l,TablePcSegment[segment],&afl,&label,0))) 
+			if (!(er=evaluate_expression(ptr_output+1,&bl,&written_bytes,TablePcSegment[gCurrentSegment],&afl,&label,0))) 
 			{
 				er=E_OKDEF;
 			}
@@ -511,16 +510,16 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		else
 		if (n==Ktext) 
 		{
-			segment = relmode ? eSEGMENT_TEXT : eSEGMENT_ABS;
+			gCurrentSegment = relmode ? eSEGMENT_TEXT : eSEGMENT_ABS;
 			ptr_output[0]=Ksegment;
-			ptr_output[1]=segment;
+			ptr_output[1]=gCurrentSegment;
 			*ll=2;
 			er=E_OKDEF;
 		} 
 		else
 		if (n==Kdata) 
 		{
-			segment = eSEGMENT_DATA;
+			gCurrentSegment = eSEGMENT_DATA;
 			ptr_output[0]=Ksegment;
 			ptr_output[1]=eSEGMENT_DATA;
 			*ll=2;
@@ -529,7 +528,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		else
 		if (n==Kbss) 
 		{
-			segment = eSEGMENT_BSS;
+			gCurrentSegment = eSEGMENT_BSS;
 			ptr_output[0]=Ksegment;
 			ptr_output[1]=eSEGMENT_BSS;
 			*ll=2;
@@ -538,7 +537,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		else
 		if (n==Kzero) 
 		{
-			segment = eSEGMENT_ZERO;
+			gCurrentSegment = eSEGMENT_ZERO;
 			ptr_output[0]=Ksegment;
 			ptr_output[1]=eSEGMENT_ZERO;
 			*ll=2;
@@ -548,20 +547,20 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		if (n==Kalign) 
 		{
 			int tmp;
-			if (segment!=eSEGMENT_ABS) 
+			if (gCurrentSegment!=eSEGMENT_ABS) 
 			{
-				if (!(er=evaluate_expression(ptr_output+1,&tmp,&l,TablePcSegment[segment],&afl,&label,0))) 
+				if (!(er=evaluate_expression(ptr_output+1,&tmp,&written_bytes,TablePcSegment[gCurrentSegment],&afl,&label,0))) 
 				{
 					if (tmp == 1 || tmp == 2 || tmp == 4 || tmp == 256) 
 					{
 						set_align(tmp);
-						if (TablePcSegment[segment] & (tmp-1)) 
+						if (TablePcSegment[gCurrentSegment] & (tmp-1)) 
 						{ 
 							/* not aligned */
 							int tmp2;
 							ptr_output[0]=Kdsb;
 							i=1;
-							bl=tmp=(tmp - (TablePcSegment[segment] & (tmp-1))) & (tmp-1);
+							bl=tmp=(tmp - (TablePcSegment[gCurrentSegment] & (tmp-1))) & (tmp-1);
 							ptr_output[i++]=T_VALUE;
 							ptr_output[i++]=((tmp)>>0)&255;
 							ptr_output[i++]=((tmp)>>8)&255;
@@ -658,7 +657,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 				}
 			}
 			
-			if (ptr_output[l-1]!='@')
+			if (ptr_output[written_bytes-1]!='@')
 			{
 				if (bl && !er && opt[am]>=0 && am>16)
 				{
@@ -685,7 +684,7 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		else
 		if (n==Kbyt || n==Kasc || n==Kpsc || n==Kscr)
 		{
-			bl=nk+1-na1+na2;
+			bl=nk+1-number_quoted_strings+size_quoted_strings;
 		} 
 		else
 		if (n==Kword)
@@ -700,12 +699,12 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 		else
 		if (n==Kdsb)
 		{
-			er=evaluate_expression(ptr_output+1,&bl,&l,TablePcSegment[segment],&afl,&label,0);
+			er=evaluate_expression(ptr_output+1,&bl,&written_bytes,TablePcSegment[gCurrentSegment],&afl,&label,0);
 		} 
 		else
 		if (n==Kfopt) 
 		{
-			set_fopt(l-1,ptr_output+1, nk+1-na1+na2);
+			afile->set_fopt(written_bytes-1,ptr_output+1, nk+1-number_quoted_strings+size_quoted_strings);
 			*ll = 0;
 		} 
 		else
@@ -726,14 +725,16 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 
 	if (er==E_NOLINE)
 	{
+		// This line happens to contain nothing, either no text, or possibly just a commented out line.
+		// Anyway, it's no an error cause.
 		er=E_OK;
 		*ll=0;
 	}
 
 	*ptr_size_written += bl;
-	TablePcSegment[segment]+=bl;
-	if (segment==eSEGMENT_TEXT)	TablePcSegment[eSEGMENT_ABS]+=bl;
-	if (segment==eSEGMENT_ABS)	TablePcSegment[eSEGMENT_TEXT]+=bl;
+	TablePcSegment[gCurrentSegment]+=bl;
+	if (gCurrentSegment==eSEGMENT_TEXT)	TablePcSegment[eSEGMENT_ABS]+=bl;
+	if (gCurrentSegment==eSEGMENT_ABS)	TablePcSegment[eSEGMENT_TEXT]+=bl;
 
 	return er;
 }
@@ -745,13 +746,13 @@ int t_p1(signed char *ptr_text,signed char *ptr_output,int *ll,int *ptr_size_wri
 
 
 
-int t_p2(signed char *t,int *ll,int fl,int *al)
+ErrorCode t_p2(signed char *t,int *ll,int fl,int *al)
 {
-	static int afl,nafl,i,j,k,er,v,n,l,bl,sy,am,c,vv[3],v2,label;
+	static int afl,nafl,i,j,k,v,n,l,bl,sy,am,c,vv[3],v2,label;
 	static int rlt[3];	/* relocation table */
 	static int lab[3];	/* undef. label table */
 	
-	er=E_OK;
+	ErrorCode er=E_OK;
 	bl=0;
 	if (*ll<0) /* <0 bei E_OK, >0 bei E_OKDEF     */
 	{
@@ -765,7 +766,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 		if (n==T_OP)
 		{
 			n=cval(t+1);
-			er=evaluate_expression(t+4,&v,&l,TablePcSegment[segment],&nafl,&label,0);
+			er=evaluate_expression(t+4,&v,&l,TablePcSegment[gCurrentSegment],&nafl,&label,0);
 			
 			if (!er)
 			{
@@ -775,7 +776,8 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 				} 
 				else 
 				{
-					if ( (!(er=l_get(n,&v2, &afl))) && ((afl & A_FMASK)!=(eSEGMENT_UNDEF<<8)) )
+					SymbolEntry& symbol_entry=afile->m_cSymbolData.GetSymbolEntry(n);
+					if ( (!(er=symbol_entry.Get(&v2,&afl))) && ((afl & A_FMASK)!=(eSEGMENT_UNDEF<<8)) )
 					{
 						if (t[3]=='+')
 						{
@@ -846,8 +848,9 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 						}
 					}
 				}
-				l_set(n,v2,(SEGMENT_e)(nafl>>8));
-				
+				SymbolEntry& symbol_entry=afile->m_cSymbolData.GetSymbolEntry(n);
+				symbol_entry.Set(v2,(SEGMENT_e)(nafl>>8));
+
 				*ll=0;
 				if (!er)
 				{
@@ -862,9 +865,9 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			j=0;
 			while (!er && t[i]!=T_END)
 			{
-				if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{   
-					if (afl) u_set(TablePcSegment[segment]+j, afl, label, 2);
+					if (afl) afile->u_set(TablePcSegment[gCurrentSegment]+j, afl, label, 2);
 					t[j++]=v&255;
 					t[j++]=(v>>8)&255;
 					
@@ -887,9 +890,9 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			j=0;
 			while (!er && t[i]!=T_END)
 			{
-				if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{   
-					if (afl) u_set(TablePcSegment[segment]+j, afl, label, 2);
+					if (afl) afile->u_set(TablePcSegment[gCurrentSegment]+j, afl, label, 2);
 					t[j++]=v&255;
 					t[j++]=(v>>8)&255;
 					t[j++]=(v>>16)&255;
@@ -926,9 +929,9 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 				} 
 				else
 				{
-					if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[segment],&afl,&label,1)))
+					if (!(er=evaluate_expression(t+i,&v,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 					{
-						if (afl) u_set(TablePcSegment[segment]+j, afl, label, 1);
+						if (afl) afile->u_set(TablePcSegment[gCurrentSegment]+j, afl, label, 1);
 						if (v&0xff00)
 							er=E_OVERFLOW;
 						else
@@ -950,7 +953,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 		else
 		if (n==Kdft)
 		{
-			er=evaluate_expression(t+1,&dft,&l,TablePcSegment[segment],&afl,&label,0);
+			er=evaluate_expression(t+1,&dft,&l,TablePcSegment[gCurrentSegment],&afl,&label,0);
 			*ll=0;
 		} 
 		else
@@ -981,29 +984,29 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 		if (n==Kpcdef)
 		{
 			int npc;
-			er=evaluate_expression(t+1,&npc,&l,TablePcSegment[segment],&afl,&label,0);
+			er=evaluate_expression(t+1,&npc,&l,TablePcSegment[gCurrentSegment],&afl,&label,0);
 			bl=0;     
 			*ll=0;
-			if (segment==eSEGMENT_TEXT) 
+			if (gCurrentSegment==eSEGMENT_TEXT) 
 			{
 				r_mode(RMODE_ABS);
 			}
-			TablePcSegment[segment] = npc;
+			TablePcSegment[gCurrentSegment] = npc;
 		} 
 		else
 		if (n==Kreloc) 
 		{
 			int npc;
-			er=evaluate_expression(t+1,&npc,&l,TablePcSegment[segment],&afl,&label,0);
+			er=evaluate_expression(t+1,&npc,&l,TablePcSegment[gCurrentSegment],&afl,&label,0);
 			bl=0;     
 			*ll=0;
 			r_mode(RMODE_RELOC);
-			TablePcSegment[segment] = npc;
+			TablePcSegment[gCurrentSegment] = npc;
 		} 
 		else
 		if (n==Ksegment) 
 		{
-			segment = (SEGMENT_e)t[1];
+			gCurrentSegment = (SEGMENT_e)t[1];
 			*ll=0;
 			bl =0;
 		} 
@@ -1011,14 +1014,14 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 		if (n==Kdsb)
 		{
 			gDsbLen = 1;
-			if (!(er=evaluate_expression(t+1,&j,&i,TablePcSegment[segment],&afl,&label,0)))
+			if (!(er=evaluate_expression(t+1,&j,&i,TablePcSegment[gCurrentSegment],&afl,&label,0)))
 			{
 				{
 					gDsbLen = 0;
 					
 					if (t[i+1]==',') 
 					{
-						er=evaluate_expression(t+2+i,&v,&l,TablePcSegment[segment],&afl,&label,0);
+						er=evaluate_expression(t+2+i,&v,&l,TablePcSegment[gCurrentSegment],&afl,&label,0);
 					} 
 					else 
 					{
@@ -1046,7 +1049,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			{
 				i=2;
 				sy=1;
-				if (!(er=evaluate_expression(t+i,vv,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+i,vv,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{
 					rlt[0] = afl;
 					lab[0] = label;
@@ -1059,7 +1062,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 						{
 							i++;
 							sy++;
-							if (!(er=evaluate_expression(t+i,vv+1,&l,TablePcSegment[segment],&afl,&label,1)))
+							if (!(er=evaluate_expression(t+i,vv+1,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 							{
 								rlt[1] = afl;
 								lab[1] = label;
@@ -1072,7 +1075,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 									{
 										i++;
 										sy++;
-										if (!(er=evaluate_expression(t+i,vv+2,&l,TablePcSegment[segment],&afl,&label,1)))
+										if (!(er=evaluate_expression(t+i,vv+2,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 										{
 											rlt[2] = afl;
 											lab[2] = label;
@@ -1096,7 +1099,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			if (c=='(')
 			{
 				sy=7;
-				if (!(er=evaluate_expression(t+2,vv,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+2,vv,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{
 					rlt[0] = afl;
 					lab[0] = label;
@@ -1133,7 +1136,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			if (c=='[')
 			{
 				sy=10;
-				if (!(er=evaluate_expression(t+2,vv,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+2,vv,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{
 					rlt[0] = afl;
 					lab[0] = label;
@@ -1161,7 +1164,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			else
 			{
 				sy=4;
-				if (!(er=evaluate_expression(t+1,vv,&l,TablePcSegment[segment],&afl,&label,1)))
+				if (!(er=evaluate_expression(t+1,vv,&l,TablePcSegment[gCurrentSegment],&afl,&label,1)))
 				{
 					rlt[0] = afl;
 					lab[0] = label;
@@ -1267,7 +1270,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 							er=E_OVERFLOW;
 						else
 							t[1]=vv[0];
-						if (rlt[0]) u_set(TablePcSegment[segment]+1, rlt[0], lab[0], 1);
+						if (rlt[0]) afile->u_set(TablePcSegment[gCurrentSegment]+1, rlt[0], lab[0], 1);
 					} 
 					else
 					if (((am<14 || am==23) && (am!=11)) || (am==7))
@@ -1278,19 +1281,19 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 						{
 							t[1]=vv[0]&255;
 							t[2]=(vv[0]>>8)&255;
-							if (rlt[0]) u_set(TablePcSegment[segment]+1, rlt[0], lab[0], 2);
+							if (rlt[0]) afile->u_set(TablePcSegment[gCurrentSegment]+1, rlt[0], lab[0], 2);
 						}
 					} 
 					else
 					if (am==11 || am==16) 
 					{
-						if ((segment!=eSEGMENT_ABS) && (!rlt[0])) 
+						if ((gCurrentSegment!=eSEGMENT_ABS) && (!rlt[0])) 
 						{
 							er=E_ILLPOINTER;
 						} 
 						else 
 						{
-							v=vv[0]-TablePcSegment[segment]-le[am];
+							v=vv[0]-TablePcSegment[gCurrentSegment]-le[am];
 							if (((v&0xff80)!=0xff80) && (v&0xff80) && (am==11))
 								er=E_RANGE;
 							else 
@@ -1306,16 +1309,16 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 						if (vv[0]&0xfff8 || vv[1]&0xff00)
 							er=E_RANGE;
 						else
-						if ((segment!=eSEGMENT_ABS) && (rlt[0] || !rlt[2])) 
+						if ((gCurrentSegment!=eSEGMENT_ABS) && (rlt[0] || !rlt[2])) 
 						{
 							er=E_ILLPOINTER;
 						} 
 						else 
 						{
-							if (rlt[1]) u_set(TablePcSegment[segment]+1, rlt[1], lab[1], 1);
+							if (rlt[1]) afile->u_set(TablePcSegment[gCurrentSegment]+1, rlt[1], lab[1], 1);
 							t[0]=t[0]|(vv[0]<<4);
 							t[1]=vv[1];
-							v=vv[2]-TablePcSegment[segment]-3;
+							v=vv[2]-TablePcSegment[gCurrentSegment]-3;
 							if ((v&0xff80) && ((v&0xff80)!=0xff80))
 								er=E_OVERFLOW;
 							else
@@ -1325,7 +1328,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 					else
 					if (am==15)
 					{
-						if (rlt[1]) u_set(TablePcSegment[segment]+1, rlt[1], lab[1], 1);
+						if (rlt[1]) afile->u_set(TablePcSegment[gCurrentSegment]+1, rlt[1], lab[1], 1);
 						if (vv[0]&0xfff8 || vv[1]&0xff00)
 							er=E_OVERFLOW;
 						else
@@ -1343,7 +1346,7 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 						if (rlt[0]) 
 						{
 							rlt[0]|=A_LONG;
-							u_set(TablePcSegment[segment]+1, rlt[0], lab[0], 3);
+							afile->u_set(TablePcSegment[gCurrentSegment]+1, rlt[0], lab[0], 3);
 						}
 						
 					} 
@@ -1357,9 +1360,9 @@ int t_p2(signed char *t,int *ll,int fl,int *al)
 			er=E_SYNTAX;
 		}
 	}
-	TablePcSegment[segment]+=bl;
-	if (segment==eSEGMENT_TEXT)	TablePcSegment[eSEGMENT_ABS]+=bl;
-	if (segment==eSEGMENT_ABS)	TablePcSegment[eSEGMENT_TEXT]+=bl;
+	TablePcSegment[gCurrentSegment]+=bl;
+	if (gCurrentSegment==eSEGMENT_TEXT)	TablePcSegment[eSEGMENT_ABS]+=bl;
+	if (gCurrentSegment==eSEGMENT_ABS)	TablePcSegment[eSEGMENT_TEXT]+=bl;
 	*al = bl;
 	return er;
 }
@@ -1381,38 +1384,40 @@ int b_term(char *s, int *v, int *l, int pc)
 
 
 
-static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,int *na1,int *na2,int af)  /* Pass1 von s nach t */
+static ErrorCode t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *number_commas,int *number_quoted_strings,int *size_quoted_strings,int af)  /* Pass1 von s nach t */
 {
-	static int p,q,ud,n,v,mk,er,f;
-	static int operand,o,fl,afl;
-	static unsigned char cast;
-	static int ll;
+	static int v;
+	static int operand;
 	
-	*nk=0;         /* Anzahl Komma               */
-	*na1=0;        /* Anzahl "asc-texte"         */
-	*na2=0;        /* und Anzahl Byte in diesen  */
-	ll=0;			// Token lenght
-	er=E_OK;
-	p=0;
-	q=0;
-	ud=0;
-	mk=0;          /* 0 = mehrere Kommas erlaubt */
-	fl=0;          /* 1 = text einfach weitergeben */
-	afl=0;			/* pointer flag for label */
+	*number_commas=0;			// Anzahl Komma               
+	*number_quoted_strings=0;	// Anzahl "asc-texte"         
+	*size_quoted_strings=0;		// und Anzahl Byte in diesen  
+	int ll=0;					// Token lenght
+	ErrorCode er=E_OK;
+	int p=0;
+	int q=0;
+	bool flag_undefined_label=false;
+	int mk=0;					// 0 = more commas allowed (mehrere Kommas erlaubt)
+	int fl=0;					// 1 = text einfach weitergeben
+	int afl=0;					// pointer flag for label
 	
 	while (s[p]==' ') p++;
 	
-	n=T_END;
-	cast=0;
+	int n=T_END;
+	unsigned char cast=0;
 	
 	if (!af)
 	{
 		//while (s[p]!=0 && s[p]!=';')
 		while (!is_end_of_line( ((char*)(s+p)) ))
 		{
+			// Test if the line starts by a keyword
 			if (!(er=t_keyword(s+p,&ll,&n)))		break;
 			if (er && er!=E_NOKEY)					break;
-			if ((er=DefineLabel((char*)s+p,&ll,&n,&f)))	break;
+
+			// Test if the line starts by a label definition
+			bool flag_redefine_label;
+			if ((er=afile->m_cSymbolData.DefineLabel((char*)s+p,&ll,&n,&flag_redefine_label)))	break;
 			
 			p+=ll;
 			
@@ -1429,7 +1434,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 				break;
 			}
 			else
-			if (f && s[p]!=0 && s[p+1]=='=')
+			if (flag_redefine_label && s[p]!=0 && s[p+1]=='=')
 			{
 				ptr_output[q++]=T_OP;
 				ptr_output[q++]=n&255;
@@ -1441,7 +1446,8 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 			} 
 			else
 			{
-				l_set(n,pc,segment);	/* set as address value */
+				SymbolEntry& symbol_entry=afile->m_cSymbolData.GetSymbolEntry(n);
+				symbol_entry.Set(pc,gCurrentSegment);	// set as address value
 				n=0;
 			}
 		}
@@ -1449,7 +1455,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 		
 		if (n<=Lastbef)
 		{
-			mk=1;     /* 1= nur 1 Komma erlaubt     */
+			mk=1;     // 1=only one comma allowed (nur 1 Komma erlaubt)
 		}
 	}
 
@@ -1511,7 +1517,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 					if (isalpha(s[p]) || s[p]=='_')
 					{
 						// This token is alphanumeric, we have to check if it exists in the list of known labels
-						er=l_such((char*)s+p,&ll,&n,&v,&afl);
+						er=afile->m_cSymbolData.l_such((char*)s+p,&ll,&n,&v,&afl);
 						if (!er)
 						{
 							// No error, store the label information
@@ -1538,7 +1544,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 							ptr_output[q++]=T_LABEL;
 							ptr_output[q++]=n & 255;
 							ptr_output[q++]=(n>>8) & 255;
-							ud++;
+							flag_undefined_label=true;
 							er=E_OK;
 						}
 						p+=ll;
@@ -1606,7 +1612,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 
 						case '\"':
 							curr=n;
-							er=ParseQuotedString(s+p,ptr_output+q,&q,&p,na1,na2);
+							er=ParseQuotedString(s+p,ptr_output+q,&q,&p,number_quoted_strings,size_quoted_strings);
 							break;
 
 						case ',':
@@ -1616,13 +1622,13 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 								while (!is_end_of_line( (char*)s+p))
 								{
 									while (s[p]==' ') p++;
-									*nk+=(s[p]==',');
+									*number_commas+=(s[p]==',');
 									ptr_output[q++]=s[p++];
 								}
 							}
 							else
 							{
-								*nk+=1;
+								*number_commas+=1;
 								ptr_output[q++]=s[p++];
 							}
 							break;
@@ -1637,7 +1643,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 				else    
 				{ 
 					// operator    
-					o=eOPERATOR_NONE;
+					OPERATOR_e o=eOPERATOR_NONE;
 					if (s[p]==')' || s[p]==']')
 					{
 						ptr_output[q++]=s[p++];
@@ -1649,7 +1655,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 						ptr_output[q++]=s[p++];
 						if (mk)
 							fl++;
-						*nk+=1;
+						*number_commas+=1;
 					} 
 					else
 					switch (s[p]) 
@@ -1735,8 +1741,9 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 					}
 					if (o)
 					{
+						int gOperatorStringLength[]= { 0,1,1,1,1,2,2,1,1,1,2,2,2,1,1,1,2,2 };
 						ptr_output[q++]=o;
-						p+=lp[o];
+						p+=gOperatorStringLength[o];
 					}
 					operand= -operand+1;
 				}
@@ -1748,7 +1755,7 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 	if (!er)
 	{
 		ptr_output[q++]=T_END;
-		if (ud)
+		if (flag_undefined_label)
 		{
 			er=ERR_UNDEFINED_LABEL;
 		}
@@ -1757,32 +1764,31 @@ static int t_conv(signed char *s,signed char *ptr_output,int *l,int pc,int *nk,i
 	ptr_output[q++]=cast;
 	*l=q;
 
-	return (er);
+	return er;
 }
 
 
 
-static int t_keyword(signed char *s, int *l, int *n)
+static ErrorCode t_keyword(signed char *ptr_src, int *keyword_lenght, int *keyword_index)
 {
-
-	if (!isalpha(s[0]) && s[0]!='.' && s[0]!='*' )
+	if (!isalpha(ptr_src[0]) && ptr_src[0]!='.' && ptr_src[0]!='*' )
 		return E_NOKEY;
 
 	int hash=0;
 
-	if (isalpha(s[0]))
-		hash=tolower(s[0])-'a';
+	if (isalpha(ptr_src[0]))
+		hash=tolower(ptr_src[0])-'a';
 	else
 		hash=26;
 
 	int i=0;
 	int j=0;
 
-	if (s[0]=='*') 
+	if (ptr_src[0]=='*') 
 	{
 		j=1;
-		while (s[j] && isspace(s[j])) j++;
-		if (s[j]=='=') 
+		while (ptr_src[j] && isspace(ptr_src[j])) j++;
+		if (ptr_src[j]=='=') 
 		{
 			i=Kpcdef;
 			j++;
@@ -1796,10 +1802,10 @@ static int t_keyword(signed char *s, int *l, int *n)
 		while (i<hash)
 		{
 			j=0;
-			while (kt[i][j]!=0 && kt[i][j]==tolower(s[j]))
+			while (kt[i][j]!=0 && kt[i][j]==tolower(ptr_src[j]))
 				j++;
 			
-			if ((kt[i][j]==0) && ((i==Kpcdef) || ((s[j]!='_') && !isalnum(s[j]))))
+			if ((kt[i][j]==0) && ((i==Kpcdef) || ((ptr_src[j]!='_') && !isalnum(ptr_src[j]))))
 				break;
 			i++;
 		}
@@ -1813,8 +1819,8 @@ static int t_keyword(signed char *s, int *l, int *n)
 	if (i==Kbend)	i=Kclose;
 	
 	
-	*l=j;
-	*n=i;
+	*keyword_lenght=j;
+	*keyword_index=i;
 	return i==hash ? E_NOKEY : E_OK;
 }
 
@@ -1872,22 +1878,23 @@ static void ParseHexadecimalValue(signed char *ptr_source_string, int *l, int *p
      *ptr_output_value=val;
 }
 
-static int ParseQuotedString(signed char *s, signed char *t, int *q, int *p, int *na1, int *na2)
+static ErrorCode ParseQuotedString(signed char *ptr_src, signed char *ptr_dst, int *size_dst, int *size_src, int *number_quoted_strings, int *size_quoted_strings)
 {
-	int er=E_OK,i=0,j=0;
+	ErrorCode er=E_OK;
+	int i=0,j=0;
 	
-	t[j++]=s[i++];      /* " */
-	j++;
-	while (s[i]!=0 && s[i]!='\"')
+	ptr_dst[j++]=ptr_src[i++];      // " 
+	j++;							// Place holder for the String size (up to 256 characters)
+	while (ptr_src[i]!=0 && ptr_src[i]!='\"')
 	{
 #ifdef C64_ASCII
 		//
 		// PET/C64 special ascii codes
 		//
-		if (s[i]!='^') 
+		if (ptr_src[i]!='^') 
 		{
 			int ch;
-			ch=s[i];
+			ch=ptr_src[i];
 			if (curr!=Kpsc && curr!=Kscr && curr!=Kasc) 
 			{
 				if (dft==1)
@@ -1902,22 +1909,22 @@ static int ParseQuotedString(signed char *s, signed char *t, int *q, int *p, int
 				ch = Asc2Pet(ch);
 			else if (curr==Kscr)
 				ch = Asc2Scr(ch);
-			t[j++]=ch;
+			ptr_dst[j++]=ch;
 		}		
 		else
 		{
-			switch (s[i+1]) 
+			switch (ptr_src[i+1]) 
 			{
 			case 0:
 			case '\"':
 				er=E_SYNTAX;
 				break;
 			case '^':
-				t[j++]='^';
+				ptr_dst[j++]='^';
 				i++;
 				break;
 			default:
-				t[j++]=s[i+1]&0x1f;
+				ptr_dst[j++]=ptr_src[i+1]&0x1f;
 				i++;
 				break;
 			}
@@ -1928,31 +1935,32 @@ static int ParseQuotedString(signed char *s, signed char *t, int *q, int *p, int
 		// that do not need special codes
 		// handling
 		//
-		t[j++]=s[i];
+		ptr_dst[j++]=ptr_src[i];
 #endif
 		i++;
 	}
 	if (j==3)
 	{
-		t[0]=T_VALUE;
-		t[1]=t[2];
-		t[2]=0;
-		t[3]=0;
-		t[4]=0;
+		// Literal character, like in lda #"A"
+		ptr_dst[0]=T_VALUE;
+		ptr_dst[1]=ptr_dst[2];
+		ptr_dst[2]=0;
+		ptr_dst[3]=0;
+		ptr_dst[4]=0;
 		j+=2;
 	} 
 	else
 	{
-		t[1]=j-2;
-		*na1 +=1;
-		*na2 +=j-2;
+		ptr_dst[1]=j-2;
+		*number_quoted_strings +=1;
+		*size_quoted_strings   +=j-2;
 	}
-	if (s[i]=='\"')
+	if (ptr_src[i]=='\"')
 	{
 		i++;
 	}
-	*q +=j;
-	*p +=i;
+	*size_dst +=j;
+	*size_src +=i;
 	return er;
 }
 

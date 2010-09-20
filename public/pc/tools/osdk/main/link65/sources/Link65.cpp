@@ -7,7 +7,20 @@ List of modifications:
 
   Originaly created by Vagelis Blathras
   
-	2003-05-27 [Mike] Handling of lines that have more than 180 characters
+    2009-02-14 [Mike]   Version 0.63 
+	                    (WIP) The old linked filtered out comments, need to implement this feature as well
+
+						Fixed a number of issues in the linker:
+						- removed some test code
+						- fixed the loading of symbols from the library index  file
+
+						Fixed a problem of text file parsings. Mixed unix/dos cariage return would result in very long lines (containing many lines), leading to some crashes later on.
+						Also fixed a problem in reporting the parsed files.
+
+	2003-05-27 [Mike]   Handling of lines that have more than 180 characters
+
+	2003-09-13 [Mike] 	Version 0.59
+						Corrected a bug that made it impossible to "link" only one source file
 
 	2003-09-13 [Mike] 	Version 0.57
 						Added '-B' option to suppress inclusion of HEADER and TAIL
@@ -80,9 +93,9 @@ public:
 };
 
 
+bool gFlagKeepComments=false;			// Use -C option to control
 bool gFlagIncludeHeader=true;			// Use -B option to force to 0
 bool gFlagEnableFileDirective=false;	// Use -F option to enable (force to one)
-bool gFlagInCommentBloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
 bool gFlagVerbose=false;				// Use -V option to enable
 bool gFlagQuiet=false;					// Use -Q option to enable (note: seems to work the other way arround !)
 bool gFlagLibrarian=false;				// Use -L option to enable
@@ -107,9 +120,75 @@ bool ParseFile(const char* filename);
 
 
 
-
 std::string FilterLine(const std::string& cSourceLine)
 {
+	static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
+
+	std::string outline;
+	outline.reserve(MAX_LINE_SIZE);
+
+	const char* source_line=cSourceLine.c_str();
+	while (char car=*source_line++)
+	{
+		if (flag_in_comment_bloc)						// In a C block comment - that one may have been started on another line
+		{			
+			if ( (car=='*') && (*source_line=='/') )
+			{
+				// Found end of C block comment
+				source_line++;
+				flag_in_comment_bloc=false;
+			}
+		}
+		else
+		{
+			if (car=='\"')
+			{
+				// Found start of quoted string
+				do
+				{
+					outline+=car;
+					car=*source_line++;
+				}
+				while (car && (car!='\"'));
+				if (car)
+				{
+					outline+=car;
+				}
+			}
+			else
+			if (car==';')
+			{
+				// Found start of assembler line comment - just stop here
+				return outline;
+			}
+			else
+			if ( (car=='/') && (*source_line=='*') )
+			{
+				// Found start of C block comment
+				source_line++;
+				flag_in_comment_bloc=true;
+			}
+			else
+			if ( (car=='/') && (*source_line=='/') )
+			{
+				// Found start of C++ line comment - just stop here
+				return outline;
+			}
+			else
+			{
+				// Any other character
+				outline+=car;
+			}
+		}
+	}
+	return outline;
+}
+
+#if 0
+std::string FilterLine(const std::string& cSourceLine)
+{
+	static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
+
 	char inpline[MAX_LINE_SIZE+1];
 	assert(sizeof(inpline)>cSourceLine.size());
 	strcpy(inpline,cSourceLine.c_str());
@@ -117,7 +196,7 @@ std::string FilterLine(const std::string& cSourceLine)
 	//
 	// Checking for a end of C bloc comment 
 	//
-	if (gFlagInCommentBloc)
+	if (flag_in_comment_bloc)
 	{
 		char *ptr_line=strstr(inpline,"*/");
 		if (ptr_line)
@@ -127,7 +206,7 @@ std::string FilterLine(const std::string& cSourceLine)
 			//
 			*ptr_line=0;
 			strcpy(inpline+2,ptr_line);
-			gFlagInCommentBloc=false;
+			flag_in_comment_bloc=false;
 		}
 		else
 		{
@@ -161,21 +240,21 @@ std::string FilterLine(const std::string& cSourceLine)
 	}
 	
 	//
-	// Checking for a begining of C bloc comment 
+	// Checking for a beginning of C bloc comment 
 	//
-	if (!gFlagInCommentBloc)
+	if (!flag_in_comment_bloc)
 	{
 		char *ptr_line=strstr(inpline,"/*");
 		if (ptr_line)
 		{
 			*ptr_line=0;
-			gFlagInCommentBloc=true;
+			flag_in_comment_bloc=true;
 		}
 	}
 
 	return std::string(inpline);
 }
-
+#endif
 
 
 /*
@@ -568,6 +647,7 @@ int main(int argc,char **argv)
 		"  -q : Quiet mode.\r\n"
 		"  -b : Bare linking (don't include header and tail).\r\n"
 		"  -f : Insert #file directives (require expanded XA assembler).\r\n"
+		"  -cn: Defines if comments should be kept (-c1) or removed (-c0) [Default]. \r\n"
 		);
 
 		
@@ -665,6 +745,14 @@ int main(int argc,char **argv)
 			cFileEntry.m_cFileName   +=cArgumentParser.GetStringValue();
 			cFileEntry.m_nSortPriority=1;
 			gInputFileList.push_back(cFileEntry);
+		}
+		else
+		if (cArgumentParser.IsSwitch("-c"))
+		{
+			//comments: [-c]
+			//	0 => remove comments
+			// 	1 => keep comments
+			gFlagKeepComments=cArgumentParser.GetBooleanValue(false);
 		}
 		else
 		{
@@ -872,6 +960,7 @@ int main(int argc,char **argv)
 			fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
 		}
 		
+		// Mike: The code should really reuse the previously loaded/parsed files
 		std::vector<std::string> cTextData;
 		if (!LoadText(gInputFileList[k].m_cFileName.c_str(),cTextData))
 		{
@@ -885,7 +974,15 @@ int main(int argc,char **argv)
 		{			
 			//  Get line file and parse it
 			const std::string& cCurrentLine=*cItText;
-			fprintf(gofile,"%s\r\n",cCurrentLine.c_str());
+			if (gFlagKeepComments)
+			{
+				fprintf(gofile,"%s\r\n",cCurrentLine.c_str());
+			}
+			else
+			{
+				std::string cFilteredLine=FilterLine(cCurrentLine);
+				fprintf(gofile,"%s\r\n",cFilteredLine.c_str());
+			}
 			++cItText;
 		}
 	}

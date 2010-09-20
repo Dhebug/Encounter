@@ -77,6 +77,7 @@ std::string get_string(const char *&ptr_arg);
 //
 bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize);
 bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize);
+bool DeleteFile(const char* pcFileName);
 
 bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
 

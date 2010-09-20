@@ -390,9 +390,84 @@ void LZ77_UnCompress(void* buf_src_void,void* buf_dest_void, long size)
 }
 
 
-
-
 long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp)
+{
+	unsigned char *buf_src =(unsigned char*)buf_comp;
+	unsigned char *buf_dest=(unsigned char*)buf_comp+size_comp-size_uncomp;
+
+	unsigned char	value;
+	unsigned char	andvalue;
+	long	offset,nb;
+
+	long	max_delta_space;
+
+	max_delta_space=0;
+	andvalue=0;
+	while (size_uncomp>0)
+	{
+		//
+		// Reload encoding type mask
+		//
+		if (!andvalue)
+		{
+			andvalue=1;
+			value=(*buf_src++);
+		}
+		if ((value^gLZ77_XorMask) & andvalue)
+		{ 
+			//
+			// Copy 1 unsigned char
+			//
+			//*buf_dest++=*buf_src++;
+			if (buf_dest>=buf_src)
+			{
+				max_delta_space=max(max_delta_space,buf_dest-buf_src);
+			}
+			buf_dest++;
+			buf_src++;
+
+			size_uncomp--;
+		}
+		else
+		{
+			//
+			// Copy with offset
+			//
+			// At this point, the source pointer points to a two byte
+			// value that actually contains a 4 bits counter, and a 
+			// 12 bit offset to point back into the depacked stream.
+			// The counter is in the 4 high order bits.
+			//
+			offset = buf_src[0];			// Read 16 bits non alligned datas...
+			offset|=(buf_src[1]&0x0F)<<8;
+			offset+=1;
+
+			nb	   =(buf_src[1]>>4)+3;
+
+			buf_src+=2;
+
+			size_uncomp-=nb;
+			while (nb>0)
+			{
+				//*buf_dest++=*(buf_dest-offset);
+				if (buf_dest>=buf_src)
+				{
+					max_delta_space=max(max_delta_space,buf_dest-buf_src);
+				}
+				buf_dest++;
+
+				nb--;
+			}
+		}
+		andvalue<<=1;
+	}
+	return max_delta_space;
+}
+
+
+
+
+long LZ77_ComputeDeltaOld(unsigned char *buf_comp,long size_uncomp,long size_comp)
 {
 	unsigned char	value;
 	unsigned char	andvalue;
@@ -456,5 +531,6 @@ long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp)
 	}
 	return((max_delta_space+3)&(~3)); // padd to four.
 }
+
 
 

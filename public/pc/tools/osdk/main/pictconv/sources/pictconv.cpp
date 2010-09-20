@@ -70,7 +70,7 @@ int __cdecl main(int argc,char *argv[])
 		"         -p2 => Last pixels of each line of the picture contains the palette\r\n"
 		"\r\n"
 		" -dn   Dithering mode\r\n"
-		"       -d0 => no dithering\r\n"
+		"       -d0 => no dithering [default]\r\n"
 		"       -d1 => alternate (01010101) dithering\r\n"
 		"       -d2 => ordered dither\r\n"
 		"       -d3 => riemersma\r\n"
@@ -87,8 +87,12 @@ int __cdecl main(int argc,char *argv[])
 		"       -o8[line:step] => .BAS format \r\n"
 		"\r\n"
 		" -tn   Testing mode\r\n"
-		"       -t0 => Testing disabled\r\n"
+		"       -t0 => Testing disabled [default]\r\n"
 		"       -t1 => Testing enabled\r\n"
+		"\r\n"
+		" -bn   Block mode\r\n"
+		"       -b0 => Block mode disabled [default]\r\n"
+		"       -b1 => Block mode enabled\r\n"
 		"\r\n"
 		" -nn   Defines the number of entries per line.\r\n"
 		"       -n16 => Output 16 values each line\r\n"
@@ -116,6 +120,7 @@ int __cdecl main(int argc,char *argv[])
 	int switchFormat=0;		
 	int switchDither=0;
 	int switchPalette=0;		// Default 0=automatically generate the palette
+	int switchBlock=0;			// Default 0=no block mode (full picture)
 
 	ArgumentParser cArgumentParser(argc,argv);
 
@@ -154,6 +159,14 @@ int __cdecl main(int argc,char *argv[])
 			//	0 => Oric
 			// 	1 => Atari ST
 			switchMachine=cArgumentParser.GetIntegerValue(0);
+		}
+		else
+		if (cArgumentParser.IsSwitch("-b"))
+		{
+			//block mode: [-b]
+			//	0 => No blocs (simple picture)
+			// 	1 => Blocks enabled
+			switchBlock=cArgumentParser.GetIntegerValue(0);
 		}
 		else
 		if (cArgumentParser.IsSwitch("-p"))
@@ -273,6 +286,8 @@ int __cdecl main(int argc,char *argv[])
 	PictureConverter& Hires(*pPictureConverter);
 
 	Hires.SetDither((PictureConverter::DITHER)switchDither);
+	Hires.SetBlockMode((PictureConverter::BLOCKMODE)switchBlock);
+
 	if (!Hires.SetFormat(switchFormat))
 	{
 		ShowError("Invalid format (-f) for the selected machine (-m)");

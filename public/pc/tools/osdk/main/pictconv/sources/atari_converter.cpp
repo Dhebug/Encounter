@@ -306,6 +306,11 @@ bool AtariPictureConverter::Convert(const ImageContainer& sourcePicture)
 	std::cout << "AtariPictureConverter::Convert:PaletteMode" << m_palette_mode << "\r\n";
 #endif
 
+	if (m_blockmode!=BLOCKMODE_DISABLED)
+	{
+		std::cout << "-b1 (block mode) not supported on this machine";
+		return false;
+	}
 
 	if (m_format==FORMAT_SINGLE_PALETTE)
 	{

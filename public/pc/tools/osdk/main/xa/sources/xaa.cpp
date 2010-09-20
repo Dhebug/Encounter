@@ -36,18 +36,18 @@ static int pp;
 static int pcc;
 static int fundef;
 
-static int evaluate_term(signed char*,int operator_priority,int*,int*,int*);
-static int get_code_operator(signed char*,OPERATOR_e* ptr_code_operator);
-static int perform_operation(int*,int,OPERATOR_e code_operator);
+static ErrorCode evaluate_term(signed char*,int operator_priority,int*,int*,int*);
+static ErrorCode get_code_operator(signed char*,OPERATOR_e* ptr_code_operator);
+static ErrorCode perform_operation(int*,int,OPERATOR_e code_operator);
 
 #define   cval(s)   256*((s)[1]&255)+((s)[0]&255)
 #define   lval(s)   (65536*256)*((s)[3]&255)+65536*((s)[2]&255)+256*((s)[1]&255)+((s)[0]&255)
 
 /* s=source string, v=value to return, l= len xpc=segment+offs, pfl=which seg, label=???, f=allow undefined refernces */
 
-int evaluate_expression(signed char *s,int *v,int *l,int xpc,int *pfl,int *label,int f)
+ErrorCode evaluate_expression(signed char *s,int *v,int *l,int xpc,int *pfl,int *label,int f)
 {
-	int er=E_OK;
+	ErrorCode er=E_OK;
 	int afl = 0;
 	int bfl;
 	
@@ -110,9 +110,9 @@ int evaluate_expression(signed char *s,int *v,int *l,int xpc,int *pfl,int *label
 	return er;
 }
 
-static int evaluate_term(signed char *s,int operator_priority, int *v, int *nafl, int *label)
+static ErrorCode evaluate_term(signed char *s,int operator_priority, int *v, int *nafl, int *label)
 {
-	int er=E_OK;
+	ErrorCode er=E_OK;
 	OPERATOR_e o;
 	int w;
 	int mf=1;
@@ -138,8 +138,9 @@ static int evaluate_term(signed char *s,int operator_priority, int *v, int *nafl
 	else
 	if (s[pp]==T_LABEL)
 	{
-		er=l_get(cval(s+pp+1),v, &afl);
-		if (er==ERR_UNDEFINED_LABEL && (segment!=eSEGMENT_ABS) && fundef ) 
+		SymbolEntry& symbol_entry=afile->m_cSymbolData.GetSymbolEntry(cval(s+pp+1));
+		er=symbol_entry.Get(v,&afl);
+		if (er==ERR_UNDEFINED_LABEL && (gCurrentSegment!=eSEGMENT_ABS) && fundef ) 
 		{
 			if ( nolink || (afl==eSEGMENT_UNDEF)) 
 			{
@@ -171,7 +172,7 @@ static int evaluate_term(signed char *s,int operator_priority, int *v, int *nafl
 	{
 		*v=pcc;
 		pp++;
-		afl = segment;
+		afl = gCurrentSegment;
 	}
 	else
 	{
@@ -212,7 +213,7 @@ static int evaluate_term(signed char *s,int operator_priority, int *v, int *nafl
 					} 
 					else 
 					{
-						if (segment!=eSEGMENT_ABS) 
+						if (gCurrentSegment!=eSEGMENT_ABS) 
 						{ 
 							if (!gDsbLen)
 							{
@@ -240,9 +241,9 @@ static int evaluate_term(signed char *s,int operator_priority, int *v, int *nafl
 }
 
 
-static int get_code_operator(signed char *s,OPERATOR_e *ptr_code_operator)
+static ErrorCode get_code_operator(signed char *s,OPERATOR_e *ptr_code_operator)
 {
-     int er;
+     ErrorCode er;
 
 	 OPERATOR_e code_operator=(OPERATOR_e)(s[pp]);
 
@@ -256,9 +257,9 @@ static int get_code_operator(signed char *s,OPERATOR_e *ptr_code_operator)
 }
     
      
-static int perform_operation(int *w,int w2,OPERATOR_e code_operator)
+static ErrorCode perform_operation(int *w,int w2,OPERATOR_e code_operator)
 {
-     int er=E_OK;
+     ErrorCode er=E_OK;
      switch (code_operator) 
 	 {
      case eOPERATOR_ADD:

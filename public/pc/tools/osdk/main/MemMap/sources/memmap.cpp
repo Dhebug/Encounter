@@ -149,15 +149,27 @@ int main(int argc,char *argv[])
 		"Author:\r\n"
 		"  Pointier Mickael\r\n"
 		"\r\n"
+		"Switches:\r\n"
+		" -f   Format\r\n"
+		"       -f0 => XA (Oric) [default]\r\n"
+		"       -f1 => Devpac (Atari ST)\r\n"
+		"\r\n"
 		);
 
 
-	INPUT_FORMAT inputFormat=INPUT_FORMAT_ATARI_DEVPAC;		// 0=XA / 1=Devpac
+	INPUT_FORMAT inputFormat=INPUT_FORMAT_ORIC_XA;		// 0=XA / 1=Devpac
 
 	ArgumentParser cArgumentParser(argc,argv);
 
 	while (cArgumentParser.ProcessNextArgument())
 	{
+		if (cArgumentParser.IsSwitch("-f"))
+		{
+			//format: [-f]
+			//	0 => XA (Oric)
+			// 	1 => Devpac (Atari)
+			inputFormat=(INPUT_FORMAT)cArgumentParser.GetIntegerValue(INPUT_FORMAT_ORIC_XA);
+		}
 	}
 
 

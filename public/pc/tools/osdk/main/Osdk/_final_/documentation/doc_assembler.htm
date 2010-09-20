@@ -350,6 +350,9 @@ concatenated to it.
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
+<p id=dateentry>2.2.1</p>
+- hopefully fixed a problem of data corruption happening when a line parsed during pass1 generated more than 127 bytes of tokens for the pass2 to decode.
+
 <p id=dateentry>2.1.7</p>
 - removed the '-x' switch from XA code. I will progressively remove all the legacy stuff when replacement features already exist, in this case -o, -e and -l
 
