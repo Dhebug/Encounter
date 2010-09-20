@@ -1798,6 +1798,8 @@ cont
 losesmthing
 	; If reached here, energy was depleted... check
 	; if we are to lose equipment
+;	lda #0
+;dbug beq dbug
 	jsr _gen_rnd_number
 	cpx #(22+1)
 	bcs nokill	; Don't lose anything
