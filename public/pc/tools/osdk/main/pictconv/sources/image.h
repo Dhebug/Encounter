@@ -36,10 +36,16 @@ public:
 	void WriteColor(const RgbColor& rgb,int x,int y);
 	RgbColor ReadColor(int x,int y) const;
 
+	// Painting functions
+	void FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth);
+
+
 	// Utility functions
 	bool ConvertToGrayScale();	// Pure grey scale conversion
 	bool ReduceColorDepth(const AtariClut* pClut=0);
 	bool ReduceColorDepthPerScanline(const std::map<int,AtariClut>* pCluts=0);
+
+	int FindBlocks(std::string& block_data) const;
 
 	// Block copy functions
 	bool CreateFromImage(const ImageContainer& otherImage,unsigned int x,unsigned int y,unsigned int width,unsigned int height);	// Accepts itself as a valid source, can use that to crop a picture

@@ -17,7 +17,7 @@
 
 long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
 void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
-long LZ77_ComputeDelta(void *buf_comp,long size_uncomp,long size_comp);
+long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp);
 
 extern unsigned char gLZ77_XorMask;
 
@@ -165,6 +165,13 @@ void main(int argc,char *argv[])
 			printf("\n");
 			exit(1);
 		}
+
+		// Compute delta
+		//long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp)
+		int delta=LZ77_ComputeDelta(ptr_buffer_dst,size_buffer_src,size_buffer_dst);
+		printf("\nDelta value: %d",delta);
+
+
 		//
 		// Create file header
 		//

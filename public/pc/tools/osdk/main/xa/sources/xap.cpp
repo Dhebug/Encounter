@@ -18,9 +18,6 @@
 
 
 
-
-#define hashcode(n,l)  (n[0]&0x0f)|(((l-1)?(n[1]&0x0f):0)<<4)
-
 #define VALBEF    6
 
 
@@ -56,9 +53,9 @@ Preprocessor			gPreprocessor;
 
 // This function is called with a pointer on the first character of the 
 // preprocessor directive, minus the starting # symbol
-int Preprocessor::HandleCommand(char *ptr_preprocessor_directive)
+ErrorCode Preprocessor::HandleCommand(char *ptr_preprocessor_directive)
 {
-	int er=1;
+	ErrorCode er=(ErrorCode)1;
 	int command_id=CheckForPreprocessorCommand(ptr_preprocessor_directive);
 	if (command_id>=0)
 	{
@@ -73,7 +70,7 @@ int Preprocessor::HandleCommand(char *ptr_preprocessor_directive)
 		
 		if (m_LogicalOpcodesStack && (command_id<VALBEF))
 		{
-			er=0;
+			er=E_OK;
 		}
 		else
 		{
@@ -132,35 +129,35 @@ int Preprocessor::HandleCommand(char *ptr_preprocessor_directive)
 	return er;
 }
 
-int Preprocessor::command_ifdef(char *t)
+ErrorCode Preprocessor::command_ifdef(char *t)
 {
      m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( suchdef(t) ? 0 : 1 );
      return E_OK;
 }
 
-int Preprocessor::command_ifndef(char *t)
+ErrorCode Preprocessor::command_ifndef(char *t)
 {
      m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( suchdef(t) ? 1 : 0 );
      return E_OK;
 }
 
-int Preprocessor::command_ifldef(char *t)
+ErrorCode Preprocessor::command_ifldef(char *t)
 {
-	m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( ll_pdef(t) ? 1 : 0 );
+	m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( afile->m_cSymbolData.ll_pdef(t) ? 1 : 0 );
 	return E_OK;
 }
 
-int Preprocessor::command_iflused(char *t)
+ErrorCode Preprocessor::command_iflused(char *t)
 {
 	int n;
 
-	m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( LabelTableLookUp(t,&n) ? 1 : 0 );
+	m_LogicalOpcodesStack=(m_LogicalOpcodesStack<<1)+( afile->m_cSymbolData.SearchSymbol(t,&n) ? 1 : 0 );
 	return E_OK;
 }
 
-int Preprocessor::command_echo(char *t)
+ErrorCode Preprocessor::command_echo(char *t)
 {
-	int er;
+	ErrorCode er;
 	
 	if ((er=pp_replace(BufferLine,t,-1,m_CurrentListIndex)))
 	{
@@ -174,7 +171,7 @@ int Preprocessor::command_echo(char *t)
 	return E_OK;
 }
 
-int Preprocessor::command_print(char *t)
+ErrorCode Preprocessor::command_print(char *t)
 {
 	int f,a,er;
 	
@@ -189,7 +186,7 @@ int Preprocessor::command_print(char *t)
 		logout("=");
 		logout(BufferLine);
 		logout("=");
-		er=b_term(BufferLine,&a,&f,TablePcSegment[segment]);
+		er=b_term(BufferLine,&a,&f,TablePcSegment[gCurrentSegment]);
 		if (er)
 		{
 			logout("\n");
@@ -205,7 +202,7 @@ int Preprocessor::command_print(char *t)
 	return E_OK;
 }
 
-int Preprocessor::command_if(char *t)
+ErrorCode Preprocessor::command_if(char *t)
 {
 	int a,f,l,er;
 	
@@ -216,7 +213,7 @@ int Preprocessor::command_if(char *t)
 	else
 	{
 		gDsbLen = 1;
-		f=b_term(BufferLine,&a,&l,TablePcSegment[segment]);
+		f=b_term(BufferLine,&a,&l,TablePcSegment[gCurrentSegment]);
 		gDsbLen = 0;
 		
 		if ((!m_LogicalOpcodesStack) && f)     
@@ -231,20 +228,20 @@ int Preprocessor::command_if(char *t)
 	return E_OK;
 }
 
-int Preprocessor::command_else(char *t)
+ErrorCode Preprocessor::command_else(char *t)
 {
      m_LogicalOpcodesStack ^=1;
      return E_OK;
 }
 
-int Preprocessor::command_endif(char *t)
+ErrorCode Preprocessor::command_endif(char *t)
 {
      m_LogicalOpcodesStack=m_LogicalOpcodesStack>>1;
      return E_OK;
 }
 
 /* pp_undef is a great hack to get it working fast... */
-int Preprocessor::command_undef(char *t) 
+ErrorCode Preprocessor::command_undef(char *t) 
 {
 #ifdef PROCESSOR_USES_MAP
 	std::map<std::string,List>::iterator it=gPreprocessor_ReplaceMap.find(t);
@@ -264,7 +261,7 @@ int Preprocessor::command_undef(char *t)
 	return E_OK;
 }
 
-int Preprocessor::command_prdef(char *t)
+ErrorCode Preprocessor::command_prdef(char *t)
 {
 #ifdef PROCESSOR_USES_MAP
 	std::map<std::string,List>::iterator it=gPreprocessor_ReplaceMap.find(t);
@@ -358,7 +355,7 @@ int Preprocessor::suchdef(char *t)
 }
 
     
-int Preprocessor::command_define(char *k)
+ErrorCode Preprocessor::command_define(char *k)
 {
 #ifdef PROCESSOR_USES_MAP
 	//std::map<std::string,List>::iterator it=gPreprocessor_ReplaceMap.find(t);
@@ -409,7 +406,7 @@ int Preprocessor::command_define(char *k)
 	return E_OK;
 
 #else
-	int er=E_OK;
+	ErrorCode er=E_OK;
 	int i,hash,rl;
 	char h[MAXLINE*2],*t;
 	unsigned int j;
@@ -517,7 +514,7 @@ int Preprocessor::CheckForPreprocessorCommand(char s[])
 	return (i==_e_command_max_)? -1 : i;
 }
 
-int Preprocessor::pp_replace(char *ptr_output,char *ptr_input,int a,int b)
+ErrorCode Preprocessor::pp_replace(char *ptr_output,char *ptr_input,int a,int b)
 {
 #ifdef PROCESSOR_USES_MAP
 	/*
@@ -698,7 +695,7 @@ int Preprocessor::pp_replace(char *ptr_output,char *ptr_input,int a,int b)
 #else
 
      char *t=ptr_output;
-	 int er=E_OK;
+	 ErrorCode er=E_OK;
 
      strcpy(t,ptr_input);
 
@@ -915,7 +912,7 @@ void Preprocessor::Close(void)
 {
 	if (PreprocessorFile_c::CurrentFile->m_block_depth != b_depth()) 
 	{
-		fprintf(stderr, "Blocks not consistent in file %s: start depth=%d, end depth=%d\n",PreprocessorFile_c::CurrentFile->m_file_name.c_str(), PreprocessorFile_c::CurrentFile->m_block_depth, b_depth());
+		fprintf(stderr, "Blocks not consistent in file %s: start depth=%d, end depth=%d\n",PreprocessorFile_c::CurrentFile->GetCurrentFileName().c_str(), PreprocessorFile_c::CurrentFile->m_block_depth, b_depth());
 	}
 	fclose(PreprocessorFile_c::CurrentFile->m_pfile_handle);
 }
@@ -925,13 +922,13 @@ void Preprocessor::Terminate(void)
 }
 
 
-int icl_close(int *c)
+ErrorCode icl_close(int *c)
 {
 	if (!PreprocessorFile_c::CurrentFileNum)	return E_EOF;
 	
 	if (PreprocessorFile_c::CurrentFile->m_block_depth != b_depth()) 
 	{
-		fprintf(stderr, "Blocks not consistent in file %s: start depth=%d, end depth=%d\n",PreprocessorFile_c::CurrentFile->m_file_name.c_str(),PreprocessorFile_c::CurrentFile->m_block_depth, b_depth());
+		fprintf(stderr, "Blocks not consistent in file %s: start depth=%d, end depth=%d\n",PreprocessorFile_c::CurrentFile->GetCurrentFileName().c_str(),PreprocessorFile_c::CurrentFile->m_block_depth, b_depth());
 	}
 	
 	fclose(PreprocessorFile_c::CurrentFile->m_pfile_handle);
@@ -946,13 +943,13 @@ int icl_close(int *c)
 }
 
 
-int Preprocessor::command_include(char *ptr_included_filename)
+ErrorCode Preprocessor::command_include(char *ptr_included_filename)
 {
 	pp_replace(BufferLine,ptr_included_filename,-1,m_CurrentListIndex);
 	
 	if (PreprocessorFile_c::CurrentFileNum>=MAXFILE)
 	{
-		return -1;
+		return E_SYNTAX;
 	}
 	
 	// Locate starting quotes or < symbols around the filename
@@ -987,12 +984,12 @@ int Preprocessor::command_include(char *ptr_included_filename)
 
 	m_FlagNewFileFound=true;
 	
-	return 0;
+	return E_OK;
 }
 
 // tmp\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt $600
 // C:\osdk\tmp\linked.s -o C:\osdk\tmp\final.out -e C:\osdk\tmp\xaerr.txt -l C:\osdk\tmp\symbols -bt $600
-int Preprocessor::command_file(char *tt)
+ErrorCode Preprocessor::command_file(char *tt)
 {
 	int		j,i=0;
 	
@@ -1000,7 +997,7 @@ int Preprocessor::command_file(char *tt)
 	
 	if (PreprocessorFile_c::CurrentFileNum>=MAXFILE)
 	{
-		return -1;
+		return E_SYNTAX;
 	}
 	
 	if (BufferLine[i]=='<' || BufferLine[i]=='"')
@@ -1016,8 +1013,8 @@ int Preprocessor::command_file(char *tt)
 		}
 	}
 		
-	PreprocessorFile_c::CurrentFile->m_file_name=BufferLine+i;
-	PreprocessorFile_c::CurrentFile->m_current_line=0;
+	PreprocessorFile_c::CurrentFile->SetCurrentFileName(BufferLine+i);
+	PreprocessorFile_c::CurrentFile->SetCurrentLine(0);
 
 	// To force the assembler to take these parameters into consideration...
 	// ...else we will have correct error messages during pass 1, but not during pass 2 !!!
@@ -1034,9 +1031,10 @@ int Preprocessor::command_file(char *tt)
 
 
 
-int Preprocessor::GetLine(char *ptr_destination_line)
+ErrorCode Preprocessor::GetLine(char *ptr_destination_line)
 {
-	int c,er=E_OK;
+	ErrorCode er=E_OK;
+	int c;
 	int read_lenght;
 	int total_line_lenght;
 	
@@ -1074,7 +1072,7 @@ int Preprocessor::GetLine(char *ptr_destination_line)
 		} 
 		else
 		{
-			er=1;
+			er=(ErrorCode)1;
 		}
 		
 		if(c==EOF)
@@ -1141,14 +1139,33 @@ int PreprocessorFile_c::ReadNextFilteredCharacter()
 {
 	int c;
 	int flag_in_c_bloc_comment=0;
+	bool flag_in_line_comment=false;
+	static bool flag_in_quoted_string=false;
 	
 	do
 	{
 		// Skip ^M codes
 		while ((c=getc(m_pfile_handle))==13);
-		
-		// Check for end of C style bloc comment
-		if (flag_in_c_bloc_comment && (c=='*'))
+
+		if ((c=='\n') || (c==EOF))												// Check for end of line/file
+		{
+			PreprocessorFile_c::CurrentFile->m_current_line++;
+			gPreprocessor.m_FlagNewLineFound=true;
+			flag_in_line_comment=false;
+			flag_in_quoted_string=false;
+		} 
+		else
+		if (flag_in_quoted_string && (c=='\"'))									// Check for end of quoted string
+		{
+			flag_in_quoted_string=false;
+		}
+		else				
+		if (!flag_in_c_bloc_comment && !flag_in_c_bloc_comment && (c=='\"'))	// Check for start of quoted string
+		{
+			flag_in_quoted_string=true;
+		}
+		else				
+		if (flag_in_c_bloc_comment && (c=='*'))									// Check for end of C style bloc comment
 		{
 			int temp_car=getc(m_pfile_handle);
 			if (temp_car!='/')
@@ -1162,28 +1179,37 @@ int PreprocessorFile_c::ReadNextFilteredCharacter()
 				while ((c=getc(m_pfile_handle))==13);
 			}
 		}
-		
-		if (c=='\n')
-		{
-			PreprocessorFile_c::CurrentFile->m_current_line++;
-			gPreprocessor.m_FlagNewLineFound=true;
-		} 
 		else
-		if (c=='/')
+		if (!flag_in_quoted_string)
 		{
-			// Check for beginning of C style bloc comment
-			int temp_car=getc(m_pfile_handle);
-			if (temp_car!='*')
+			if (c=='/')															// Check for start of C/C++ comment
 			{
-                ungetc(temp_car,m_pfile_handle);
+				// Check for beginning of C style bloc comment
+				int temp_car=getc(m_pfile_handle);
+				if (temp_car=='*')
+				{
+					flag_in_c_bloc_comment++;
+				}
+				else
+				if ( (temp_car=='/') && (!flag_in_c_bloc_comment) )
+				{
+					// Entered a C++ comment section
+					flag_in_line_comment=true;
+				}
+				else
+				{
+					ungetc(temp_car,m_pfile_handle);
+				}
 			}
 			else
+			if (c==';')															// Check for start of asm line comment
 			{
-                flag_in_c_bloc_comment++;
+				// Entered an ASM comment section
+				flag_in_line_comment=true;
 			}
 		}			
 	} 
-	while (flag_in_c_bloc_comment && (c!=EOF));
+	while ((flag_in_c_bloc_comment || flag_in_line_comment) && (c!=EOF));
 	
 	if (c=='\t')
 	{

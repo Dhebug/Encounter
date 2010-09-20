@@ -5,59 +5,79 @@
 #include "xau.h"
 #include "xah.h"
 #include "xal.h"
+//#include "xah.h"
 
-/*
-static int *ulist = NULL;
-static int un = 0;
-static int um = 0;
-*/
 
 #define fputw(a,fp)     fputc((a)&255,fp);fputc((a>>8)&255,fp)
 
-int u_label(int labnr) 
+
+// -----------------------------------------------------------------------------
+//
+//								UndefinedLabels
+//
+// -----------------------------------------------------------------------------
+
+UndefinedLabels::UndefinedLabels()
+{
+	m_ulist = NULL;
+	m_un = 0;
+	m_um = 0;
+}
+
+UndefinedLabels::~UndefinedLabels()
+{
+	Clear();
+}
+
+void UndefinedLabels::Clear()
+{
+	free(m_ulist);
+	m_ulist=NULL;
+	m_um = m_un = 0;
+}
+
+
+int UndefinedLabels::u_label(int labnr) 
 {
 	int i;
 	// printf("u_label: %d\n",labnr);
-	if(!afile->ud.ulist) 
+	if (!m_ulist) 
 	{
-		afile->ud.ulist = (int*)malloc(200*sizeof(int));
-		if(afile->ud.ulist) afile->ud.um=200;
+		m_ulist = (int*)malloc(200*sizeof(int));
+		if(m_ulist) m_um=200;
 	}
 	
-	for(i=0;i<afile->ud.un;i++) 
+	for(i=0;i<m_un;i++) 
 	{
-		if(afile->ud.ulist[i] == labnr) return i;
+		if(m_ulist[i] == labnr) return i;
 	}
-	if(afile->ud.un>=afile->ud.um) 
+	if(m_un>=m_um) 
 	{
-		afile->ud.um    = (int)(afile->ud.um*1.5);
-		afile->ud.ulist = (int*)realloc(afile->ud.ulist, afile->ud.um * sizeof(int));
-		if(!afile->ud.ulist) 
+		m_um    = (int)(m_um*1.5);
+		m_ulist = (int*)realloc(m_ulist, m_um * sizeof(int));
+		if(!m_ulist) 
 		{
 			fprintf(stderr, "Panic: No memory!\n");
 			exit(1); 
 		}
 	}
-	afile->ud.ulist[afile->ud.un] = labnr;
-	return afile->ud.un++;
+	m_ulist[m_un] = labnr;
+	return m_un++;
 }
 
 
-void u_write(FILE *fp) 
+void UndefinedLabels::u_write(FILE *fp) 
 {
-	int i, d;
-	char *s;
-	// printf("u_write: un=%d\n",afile->ud.un);
-	fputw(afile->ud.un, fp);
+	// printf("u_write: un=%d\n",un);
+	fputw(m_un,fp);
 	
-	for(i=0;i<afile->ud.un;i++) 
+	for(int i=0;i<m_un;i++) 
 	{
-		LabelGetInformations(afile->ud.ulist[i], &d, &s);
+		SymbolEntry& symbol_entry=afile->m_cSymbolData.GetSymbolEntry(m_ulist[i]);
+		const char *s=symbol_entry.GetSymbolName();
 		fprintf(fp,"%s", s);
 		fputc(0,fp);
 	}
-	free(afile->ud.ulist);
-	afile->ud.ulist=NULL;
-	afile->ud.um = afile->ud.un = 0;
+	Clear();
 }
 

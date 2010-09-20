@@ -55,9 +55,9 @@ public:
 	void convert_rb(const ImageContainer& sourcePicture);
 	void convert_twilighte_mask(const ImageContainer& sourcePicture);
 
-	ORIC_COLOR convert_pixel_monochrom(const ImageContainer& sourcePicture,int x,int y);
-	ORIC_COLOR convert_pixel_rgb(const ImageContainer& sourcePicture,int x,int y);
-	ORIC_COLOR convert_pixel_rb(const ImageContainer& sourcePicture,int x,int y);
+	ORIC_COLOR convert_pixel_monochrom(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
+	ORIC_COLOR convert_pixel_rgb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
+	ORIC_COLOR convert_pixel_rb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
 
 	void save_header(long handle,int adress_begin);
 

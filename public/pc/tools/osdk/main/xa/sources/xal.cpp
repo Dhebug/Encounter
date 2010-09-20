@@ -24,14 +24,11 @@ char   *gError_LabelNamePointer;
 static int b_fget(int*,int);
 static int b_ltest(int,int);
 static int b_get(int*);
-static int b_test(int);
-static int ll_def(char *s, int *n, int b);     
+int b_test(int);
 
 static SEGMENT_e bt[MAXBLK];
 static SEGMENT_e blk;
 static int bi;
-
-#define   hashcode(n,l)  (n[0]&0x0f)|(((l-1)?(n[1]&0x0f):0)<<4)
 
 
 
@@ -51,349 +48,150 @@ long ga_labm(void)
 }
 
 
-int DefineGlobalLabel(char *s ) 
-{
-	int n;
-	int er = LabelTableLookUp(s,&n);
-	if (er==E_OK) 
-	{
-		fprintf(stderr,"Warning: global label doubly defined!\n");
-	}
-	else 
-	{
-		if (!(er=ll_def(s,&n,0))) 
-		{
-			SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-			ptr_symbol_entry->symbol_status		=eSYMBOLSTATUS_GLOBAL;
-			ptr_symbol_entry->program_section	=eSEGMENT_UNDEF;
-		}
-	}
-	return er;
-}
-
           
-int DefineLabel(char *s,int *l,int *x,int *f)
+ErrorCode SymbolData::DefineLabel(char *ptr_src,int *size_read,int *x,bool *flag_redefine_label)
 {     
-    int		n,er,b,i=0;
+	*flag_redefine_label=false;
+
+	int block_level=0;
+	int n=0;
+	int	i=0;
 	
-	*f=0;
-	b=0;
-	n=0;
-	
-	if (s[0]=='-')
+	if (ptr_src[0]=='-')
 	{
-		*f+=1;
+		// Allows label redefinition
+		*flag_redefine_label=true;
 		i++;
 	} 
 	else
-	if (s[0]=='+')
+	if (ptr_src[0]=='+')
 	{
+		// Defines a global label
 		i++;
 		n++;
-		b=0;
+		block_level=0;
 	} 
-	while (s[i]=='&')
+	while (ptr_src[i]=='&')
 	{
+		// If a label is proceeded by a '&', this label is defined one level 'up' in the block hierarchy, and you can use more than one '&'.
 		n=0;     
 		i++;
-		b++;
+		block_level++;
 	}
 	if (!n)
 	{
-		b_fget(&b,b);
+		b_fget(&block_level,block_level);
 	}
 		
 		
-	if (!isalpha(s[i]) && s[i]!='_')
+	if (!isalpha(ptr_src[i]) && ptr_src[i]!='_')
 	{
-		er=E_SYNTAX;
+		return E_SYNTAX;
 	}
-	else
+
+	ErrorCode er=SearchSymbol(ptr_src+i,&n);	
+	if (er==E_OK)
 	{
-		er=LabelTableLookUp(s+i,&n);
+		SymbolEntry& symbol_entry=GetSymbolEntry(n);
 		
-		if (er==E_OK)
+		if (*flag_redefine_label)
 		{
-			SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-			
-			if (*f)
-			{
-                *l=ptr_symbol_entry->label_name_lenght+i;
-			} 
-			else
-			if (ptr_symbol_entry->symbol_status==eSYMBOLSTATUS_UNKNOWN)
-			{
-				*l=ptr_symbol_entry->label_name_lenght+i;
-				if (b_ltest(ptr_symbol_entry->blk,b))
-				{
-					er=E_LABDEF;
-				}
-				else
-				{
-					ptr_symbol_entry->blk=b;
-				}
-				
-			} 
-			else
+            *size_read=symbol_entry.label_name_lenght+i;
+		} 
+		else
+		if (symbol_entry.symbol_status==eSYMBOLSTATUS_UNKNOWN)
+		{
+			*size_read=symbol_entry.label_name_lenght+i;
+			if (b_ltest(symbol_entry.GetBlockLevel(),block_level))
 			{
 				er=E_LABDEF;
 			}
+			else
+			{
+				symbol_entry.SetBlockLevel(block_level);
+			}
+			
 		} 
 		else
-		if (er==ERR_UNDEFINED_LABEL)
 		{
-			//
-			// Add a new label in the global table
-			//
-			if (!(er=ll_def(s+i,&n,b))) /* ll_def(...,*f) */
-			{
-				SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-				*l=ptr_symbol_entry->label_name_lenght+i;
-				ptr_symbol_entry->symbol_status=eSYMBOLSTATUS_UNKNOWN;
-			}
-		} 
-		
-		*x=n;
-	}
+			er=E_LABDEF;
+		}
+	} 
+	else
+	if (er==ERR_UNDEFINED_LABEL)
+	{
+		//
+		// Add a new label in the global table
+		//
+		if (!(er=DefineSymbol(ptr_src+i,&n,block_level))) /* ll_def(...,*flag_redefine_label) */
+		{
+			SymbolEntry& symbol_entry=GetSymbolEntry(n);
+			*size_read=symbol_entry.label_name_lenght+i;
+			symbol_entry.symbol_status=eSYMBOLSTATUS_UNKNOWN;
+		}
+	} 	
+	*x=n;
 	return er;
 }
 
-int l_such(char *s, int *l, int *x, int *v, int *afl)
+ErrorCode SymbolData::l_such(char *s, int *l, int *x, int *v, int *afl)
 {
-	int		n,er,b;
-	SymbolEntry	*ptr_symbol_entry;
+	ErrorCode er;
+	int	n,b;
 	
 	*afl=0;
 	
-	er=LabelTableLookUp(s,&n);
+	er=SearchSymbol(s,&n);
 	if (er==E_OK)
 	{
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-		*l=ptr_symbol_entry->label_name_lenght;
-		if (ptr_symbol_entry->symbol_status==eSYMBOLSTATUS_VALID)
+		SymbolEntry& symbol_entry=GetSymbolEntry(n);
+		*l=symbol_entry.label_name_lenght;
+		if (symbol_entry.symbol_status==eSYMBOLSTATUS_VALID)
 		{
-			l_get(n,v,afl);
+			SymbolEntry& symbol_entry=GetSymbolEntry(n);
+			er=symbol_entry.Get(v,afl);
 			*x=n;
 		} 
 		else
 		{
 			er=ERR_UNDEFINED_LABEL;
-			gError_LabelNamePointer=ptr_symbol_entry->ptr_label_name;
+			gError_LabelNamePointer=symbol_entry.ptr_label_name;
 			*x=n;
 		}
 	}
 	else
 	{
 		b_get(&b);
-		er=ll_def(s,x,b); /* ll_def(...,*v); */
+		er=DefineSymbol(s,x,b); /* ll_def(...,*v); */
 		
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+(*x);
+		SymbolEntry& symbol_entry=GetSymbolEntry(*x);
 		
-		*l=ptr_symbol_entry->label_name_lenght;
+		*l=symbol_entry.label_name_lenght;
 		
 		if (!er) 
 		{
 			er=ERR_UNDEFINED_LABEL;
-			gError_LabelNamePointer=ptr_symbol_entry->ptr_label_name;   
+			gError_LabelNamePointer=symbol_entry.ptr_label_name;   
 		}
 	}
 	return er;
 }
 
-int LabelGetInformations(int index,int *ptr_value, char **ptr_label_name)
+
+
+
+ErrorCode SymbolData::ll_pdef(char *t)
 {
-	SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+index;
-	(*ptr_value)=ptr_symbol_entry->value;
-	*ptr_label_name=ptr_symbol_entry->ptr_label_name;
-	return 0;
-}
-
-int l_get(int n, int *v, int *afl)
-{
-	SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-	(*v)=ptr_symbol_entry->value;
-	gError_LabelNamePointer=ptr_symbol_entry->ptr_label_name;
-	*afl = ptr_symbol_entry->program_section;
-	return ( (ptr_symbol_entry->symbol_status==eSYMBOLSTATUS_VALID) ? E_OK : ERR_UNDEFINED_LABEL);
-}
-
-void l_set(int n,int v,SEGMENT_e afl)
-{
-	SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-	ptr_symbol_entry->value = v;
-	ptr_symbol_entry->symbol_status		=eSYMBOLSTATUS_VALID;
-	ptr_symbol_entry->program_section	=afl;
-}
-
-static void ll_exblk(SEGMENT_e a,SEGMENT_e b)
-{
-	int	label_index;
-	for (label_index=0;label_index<afile->m_cSymbolData.nb_labels;label_index++)
-	{
-		SymbolEntry	*ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+label_index;
-		if ((!ptr_symbol_entry->symbol_status) && (ptr_symbol_entry->blk==a))
-		{
-			ptr_symbol_entry->blk=b;
-		}
-	}
-}
-
-
-// definiert naechstes Label  nr->n
-static int ll_def(char *s, int *n, int b)          
-{
-	int		j=0,er=E_OUT_OF_MEMORY,hash;
-	char	*s2;
-	SymbolEntry	*ptr_symbol_entry;
-		
-	// Check if the label table has been created
-	if (!afile->m_cSymbolData.ptr_table_entries) 
-	{
-		// Not yet created, then create a new one
-		afile->m_cSymbolData.nb_labels = 0;
-		afile->m_cSymbolData.max_labels = 1000;
-		afile->m_cSymbolData.ptr_table_entries = (SymbolEntry*)malloc(afile->m_cSymbolData.max_labels * sizeof(SymbolEntry));
-	} 
-
-	// Check if the label table has enough room for a new label
-	if (afile->m_cSymbolData.nb_labels>=afile->m_cSymbolData.max_labels) 
-	{
-		// Not enough memory, let reallocate the data
-		afile->m_cSymbolData.max_labels = (int)(afile->m_cSymbolData.max_labels*1.5);
-		afile->m_cSymbolData.ptr_table_entries = (SymbolEntry*)realloc(afile->m_cSymbolData.ptr_table_entries, afile->m_cSymbolData.max_labels * sizeof(SymbolEntry));
-	}
-
-	// Eventually abort the program if we ran out of memory
-	if (!afile->m_cSymbolData.ptr_table_entries) 
-	{
-		fprintf(stderr, "Oops: no memory!\n");
-		exit(1);
-	}
-
-	// We now allocate room for a new symbol entry
-	ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+afile->m_cSymbolData.nb_labels;
-	while ((s[j]!=0) && (isalnum(s[j]) || (s[j]=='_'))) j++;
-	s2 = (char*)malloc(j+1);
-	if (!s2) 
-	{
-		fprintf(stderr,"Oops: no memory!\n");
-		exit(1);
-	}
-	strncpy(s2,s,j);
-	s2[j]=0;
-	er=E_OK;
-	ptr_symbol_entry->label_name_lenght=j;
-	ptr_symbol_entry->ptr_label_name = s2;
-	ptr_symbol_entry->blk=b;
-	ptr_symbol_entry->symbol_status		=eSYMBOLSTATUS_UNKNOWN;
-	ptr_symbol_entry->program_section	=eSEGMENT_ABS;
-	hash=hashcode(s,j); 
-	ptr_symbol_entry->nextindex=afile->m_cSymbolData.hashindex[hash];
-	afile->m_cSymbolData.hashindex[hash]=afile->m_cSymbolData.nb_labels;
-	*n=afile->m_cSymbolData.nb_labels;
-	afile->m_cSymbolData.nb_labels++;
-	return er;
-}
-
-
-// such Label in Tabelle ,nr->n 
-int LabelTableLookUp(char *s,int *n)          
-{
-	SymbolEntry	*ptr_symbol_entry;
-	int i,j=0,k,er=ERR_UNDEFINED_LABEL,hash;
-	
-	while (s[j] && (isalnum(s[j])||(s[j]=='_')))  j++;
-	
-	hash=hashcode(s,j);
-	i=afile->m_cSymbolData.hashindex[hash];
-	
-	if (i>=afile->m_cSymbolData.max_labels) 
-	{
-		return ERR_UNDEFINED_LABEL;
-	}
-	
-	do
-	{
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+i;
-		
-		if (j==ptr_symbol_entry->label_name_lenght)
-		{
-			for (k=0;(k<j)&&(ptr_symbol_entry->ptr_label_name[k]==s[k]);k++);
-			
-			if ((j==k)&&(!b_test(ptr_symbol_entry->blk)))
-			{
-				er=E_OK;
-				break;
-			}
-		}
-		
-		if (!i)
-		{
-			break;
-		}		
-		i=ptr_symbol_entry->nextindex;		
-	}
-	while (1);
-	
-	*n=i;
-	return er;
-}
-
-int ll_pdef(char *t)
-{
-	SymbolEntry	*ptr_symbol_entry;
 	int n;
-	
-	if (LabelTableLookUp(t,&n)==E_OK)
+	if (SearchSymbol(t,&n)==E_OK)
 	{
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+n;
-		if (ptr_symbol_entry->symbol_status)
+		SymbolEntry& symbol_entry=GetSymbolEntry(n);
+		if (symbol_entry.symbol_status)
 		{
 			return E_OK;
 		}
 	}
 	return ERR_UNDEFINED_LABEL;
-}
-
-int l_write(FILE *fp)
-{
-	SymbolEntry	*ptr_symbol_entry;
-	int		i, afl, n=0;
-	
-	if (noglob) 
-	{
-		fputc(0, fp);
-		fputc(0, fp);
-		return 0;
-	}
-	for (i=0;i<afile->m_cSymbolData.nb_labels;i++) 
-	{
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+i;
-		if ((!ptr_symbol_entry->blk) && ptr_symbol_entry->symbol_status) 
-		{
-			n++;
-		}
-	}
-	fputc(n&255, fp);
-	fputc((n>>8)&255, fp);
-	for (i=0;i<afile->m_cSymbolData.nb_labels;i++)
-	{
-		ptr_symbol_entry=afile->m_cSymbolData.ptr_table_entries+i;
-		if ((!ptr_symbol_entry->blk) && (ptr_symbol_entry->symbol_status==eSYMBOLSTATUS_VALID)) 
-		{
-			fprintf(fp, "%s",ptr_symbol_entry->ptr_label_name);
-			fputc(0,fp);
-			afl = ptr_symbol_entry->program_section;
-			if ( (afl & (A_FMASK>>8)) < eSEGMENT_TEXT) 
-			{
-				afl^=1;
-			}
-			fputc(afl,fp);
-			fputc(ptr_symbol_entry->value&255, fp);
-			fputc((ptr_symbol_entry->value>>8)&255, fp);
-		}
-	}
-	return 0;
 }
 
 
@@ -430,12 +228,11 @@ int b_open(void)
 	return er;
 }
 
-int b_close(void)
-{
-	
+ErrorCode b_close(void)
+{	
 	if (bi)
 	{
-		ll_exblk(bt[bi],bt[bi-1]);
+		afile->m_cSymbolData.ExitBlock(bt[bi],bt[bi-1]);
 		bi--;
 	} 
 	else 
@@ -462,7 +259,7 @@ static int b_fget(int *n, int i)
 	return E_OK;
 }
 
-static int b_test(int n)
+int b_test(int n)
 {
      int i=bi;
 
@@ -492,5 +289,52 @@ static int b_ltest(int a, int b)    /* testet ob bt^-1(b) in intervall [0,bt^-1(
           }
      }
      return er;
+}
+
+
+
+// -----------------------------------------------------------------------------
+//
+//								SymbolEntry
+//
+// -----------------------------------------------------------------------------
+
+
+void SymbolEntry::Set(int v,SEGMENT_e afl)
+{
+	value			= v;
+	symbol_status	=eSYMBOLSTATUS_VALID;
+	program_section	=afl;
+}
+
+ErrorCode SymbolEntry::Get(int *v,int *afl)
+{
+	(*v)=value;
+	gError_LabelNamePointer=ptr_label_name;
+	*afl = program_section;
+	return ( (symbol_status==eSYMBOLSTATUS_VALID) ? E_OK : ERR_UNDEFINED_LABEL);
+}
+
+int SymbolEntry::DefineSymbol(char *ptr_src,int block_level)
+{
+	int	j=0;
+	while ((ptr_src[j]!=0) && (isalnum(ptr_src[j]) || (ptr_src[j]=='_'))) j++;
+	char *label_name = (char*)malloc(j+1);
+	if (!label_name) 
+	{
+		fprintf(stderr,"Oops: no memory!\nlabel_index");
+		exit(1);
+	}
+	strncpy(label_name,ptr_src,j);
+	label_name[j]=0;
+	ErrorCode er=E_OK;
+	value				=0;
+	label_name_lenght	=j;
+	ptr_label_name		=label_name;
+	m_block_level		=block_level;
+	symbol_status		=eSYMBOLSTATUS_UNKNOWN;
+	program_section		=eSEGMENT_ABS;
+	int hash=hashcode(ptr_src,j); 
+	return hash;
 }
 

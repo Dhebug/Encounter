@@ -3,8 +3,13 @@
 #include <string>
 #include <vector>
 
-//#define		C64_ASCII
+#include "xau.h"		// UndefinedLabels
+#include "xao.h"		// Options
+#include "xar.h"		// Relocation
 
+
+//#define		C64_ASCII
+extern char *gError_LabelNamePointer;
 
 #define   ANZLAB    5000       /* mal 14 -> Byte   */
 #define   LABMEM    40000L
@@ -61,17 +66,6 @@ enum SYMBOLSTATUS_e
 };
 
 
-struct SymbolEntry
-{
-     int			blk;
-     int			value;
-     SYMBOLSTATUS_e	symbol_status;   	// 0 = label value not valid/known, 1 = label value known
-     SEGMENT_e		program_section;	// 0 = no address (no relocation), 1 = address label, 5=ZERO
-     int			nextindex;
-     char			*ptr_label_name;
-     int			label_name_lenght;
-};
-
 
 
 
@@ -86,68 +80,76 @@ struct SymbolEntry
 
 #define	BUFSIZE	4096		/* File-Puffegroesse (wg Festplatte)	*/
 	
-#define   E_OK      0         /* Fehlernummern                   */
-#define   E_SYNTAX  -1        /* Syntax Fehler                   */
-#define   E_LABDEF  -2        /* Label definiert                 */
-#define   ERR_UNDEFINED_LABEL   -3        /* Label nicht definiert           */
-#define   E_LABFULL -4        /* Labeltabelle voll               */
-#define   E_LABEXP  -5        /* Label erwartet                  */
-#define   E_OUT_OF_MEMORY   -6        /* kein Speicher mehr              */
-#define   E_ILLCODE -7        /* Illegaler Opcode                */
-#define   E_ADRESS  -8        /* Illegale Adressierung           */
-#define   E_RANGE   -9        /* Branch out of range             */
-#define   E_OVERFLOW -10      /* Ueberlauf                       */
-#define   E_DIV     -11       /* Division durch Null             */
-#define   E_PSOEXP  -12       /* Pseudo-Opcode erwartet          */
-#define   E_BLKOVR  -13       /* Block-Stack Uebergelaufen       */
-#define   ERR_FILE_NOT_FOUND     -14       /* File not found (pp)             */
-#define   E_EOF     -15       /* End of File                     */
-#define   E_BLOCK   -16       /* Block inkonsistent              */
-#define   E_NOBLK   -17
-#define   E_NOKEY   -18
-#define   E_NOLINE  -19
-#define   E_OKDEF   -20	      /* okdef */
-#define   E_DSB     -21
-#define   E_NEWLINE -22
-#define   E_NEWFILE -23
-#define   E_CMOS    -24
-#define   E_PARENTHESIS_MISMATCH  -25
-#define	  E_ILLPOINTER -26    /* illegal pointer arithmetic! */
-#define	  E_ILLSEGMENT -27    /* illegal pointer arithmetic! */
-#define	  E_OPTLEN  -28       /* file header option too long */
-#define	  E_ROMOPT  -29       /* header option not directly after file start in romable mode */
-#define	  E_ILLALIGN -30      /* illegal align value */
+enum ErrorCode
+{
+	E_OK				=0,         // Fehlernummern                   
+	E_SYNTAX			=-1,        // Syntax Fehler                   
+	E_LABDEF			=-2,        // Label definiert                 
+	ERR_UNDEFINED_LABEL	=-3,        // Label nicht definiert           
+	E_LABFULL			=-4,        // Labeltabelle voll               
+	E_LABEXP			=-5,        // Label erwartet                  
+	E_OUT_OF_MEMORY		=-6,        // kein Speicher mehr              
+	E_ILLCODE			=-7,        // Illegaler Opcode                
+	E_ADRESS			=-8,        // Illegale Adressierung           
+	E_RANGE				=-9,        // Branch out of range             
+	E_OVERFLOW			=-10,       // Ueberlauf                       
+	E_DIV				=-11,       // Division durch Null             
+	E_PSOEXP			=-12,       // Pseudo=-Opcode erwartet         
+	E_BLKOVR			=-13,       // Block=-Stack Uebergelaufen      
+	ERR_FILE_NOT_FOUND  =-14,       // File not found (pp)             
+	E_EOF				=-15,       // End of File
+	E_BLOCK				=-16,       // Block inkonsistent
+	E_NOBLK   			=-17,
+	E_NOKEY   			=-18,
+	E_NOLINE  			=-19,
+	E_OKDEF   			=-20,	    // okdef 
+	E_DSB     			=-21,
+	E_NEWLINE 			=-22,
+	E_NEWFILE 			=-23,
+	E_CMOS    			=-24,
+	E_PARENTHESIS_MISMATCH=-25,
+	E_ILLPOINTER 		=-26,		// illegal pointer arithmetic! 
+	E_ILLSEGMENT 		=-27,		// illegal pointer arithmetic! 
+	E_OPTLEN 			=-28,       // file header option too long 
+	E_ROMOPT 			=-29,       // header option not directly after file start in romable mode 
+	E_ILLALIGN			=-30,		// illegal align value 
+	E_65816				=-31,
+	W_ADRRELOC			=-32,		// word relocation in byte value 
+	W_BYTRELOC			=-33,		// byte relocation in word value 
+	E_WPOINTER 			=-34,		// illegal pointer arithmetic!   
+	W_ADDRACC			=-35,		// addr access to low or high byte pointer 
+	W_HIGHACC			=-36,		// high byte access to low byte pointer 
+	W_LOWACC			=-37		// low byte access to high byte pointer 
+};
 
-#define	  W_ADRRELOC	-32	/* word relocation in byte value */
-#define	  W_BYTRELOC	-33	/* byte relocation in word value */
-#define	  E_WPOINTER 	-34     /* illegal pointer arithmetic!   */
-#define	  W_ADDRACC	-35	/* addr access to low or high byte pointer */
-#define	  W_HIGHACC	-36	/* high byte access to low byte pointer */
-#define	  W_LOWACC	-37	/* low byte access to high byte pointer */
 
-#define   E_65816   -31
+enum Tokens
+{
+	T_VALUE   =-1,
+	T_LABEL   =-2, 
+	T_OP      =-3,
+	T_END     =-4,
+	T_LINE    =-5,
+	T_FILE    =-6,
+	T_POINTER =-7
+};
 
+enum OperatorPriority
+{
+	P_START   =0,         // Prioritaeten fuer Arithmetik    
+	P_LOR     =1,         // Von zwei Operationen wird immer
+	P_LAND    =2,         // die mit der hoeheren Prioritaet 
+	P_OR      =3,         // zuerst ausgefuehrt             
+	P_XOR     =4,
+	P_AND     =5,
+	P_EQU     =6,
+	P_CMP     =7,
+	P_SHIFT   =8,
+	P_ADD     =9,
+	P_MULT    =10,
+	P_INV     =11
+};
 
-#define   T_VALUE   -1
-#define   T_LABEL   -2 
-#define   T_OP      -3
-#define   T_END     -4
-#define   T_LINE    -5
-#define   T_FILE    -6
-#define   T_POINTER -7
-
-#define   P_START   0         /* Prioritaeten fuer Arithmetik    */
-#define   P_LOR     1         /* Von zwei Operationen wird immer */
-#define   P_LAND    2         /* die mit der hoeheren Prioritaet */
-#define   P_OR      3         /* zuerst ausgefuehrt              */
-#define   P_XOR     4
-#define   P_AND     5
-#define   P_EQU     6
-#define   P_CMP     7
-#define   P_SHIFT   8
-#define   P_ADD     9
-#define   P_MULT    10
-#define   P_INV     11
 
 #define	  A_ADR	    0x8000	/* all are or'd with (afl = segment type)<<8 */
 #define   A_HIGH    0x4000	/* or'd with the low byte */
@@ -166,116 +168,159 @@ struct SymbolEntry
 #define   FM_CPU    0x8000
 
 
-struct Fopt 
+
+class SymbolEntry
 {
-    signed char 	*text;          /* text after pass1 */
-    int     		len;
+	friend class SymbolData;
+
+public:
+	void Set(int v,SEGMENT_e afl);
+	ErrorCode Get(int *v,int *afl);
+
+	void SetBlockLevel(int block_level)	{ m_block_level=block_level; }
+	int GetBlockLevel() const			{ return m_block_level; }
+
+	const char* GetSymbolName() const	{ return ptr_label_name; }
+
+	int DefineSymbol(char *ptr_src,int block_level);		// Returns hash
+
+private:
+	int				m_block_level;
+	int				value;
+	SYMBOLSTATUS_e	symbol_status;   	// 0 = label value not valid/known, 1 = label value known
+	SEGMENT_e		program_section;	// 0 = no address (no relocation), 1 = address label, 5=ZERO
+	int				nextindex;
+	char			*ptr_label_name;
+	int				label_name_lenght;
 };
 
-struct relocateInfo 
-{
-    int             next;
-    int             adr;
-    int             afl;			
-    int             lab;
-};
 
 
-
-class MnData_c
+class MnData
 {
 public:
-	MnData_c();
+	MnData();
 
 	int ReadByte(bool bMoveReadPosition=true);
+	int ReadUByte(bool bMoveReadPosition=true);
 	int ReadShort(bool bMoveReadPosition=true);
+	unsigned int ReadUShort(bool bMoveReadPosition=true);
 	std::string ReadString(bool bMoveReadPosition=true);
 
-public:
+	ErrorCode WriteByte(int c);
+	ErrorCode WriteShort(int c);
+	ErrorCode WriteUShort(unsigned int c);
+	ErrorCode WriteString(signed char *s, int l);
+
+	void ResetReadPos()					{ m_read_pos=0; }
+	unsigned long GetReadPos() const	{ return m_read_pos; }
+	unsigned long GetWritePos() const	{ return m_write_pos; }
+	void MoveReadPos(int offset)		{ m_read_pos+=offset; }
+
+	bool CanReadMore() const			{ return m_read_pos<m_write_pos; }
+
+	signed char *GetReadPointer()  { return m_ptr_tmp+m_read_pos; }				// Mike: Should be const, but t_p2 modifies the buffer
+
+private:
 	signed char 	*m_ptr_tmp;
-	unsigned long	tmpz;
-	unsigned long	tmpe;
+	unsigned long	m_write_pos;
+	unsigned long	m_read_pos;
 };
 
 
-class SymbolData_c
+class SymbolData
 {
 public:
-	SymbolData_c();
-	~SymbolData_c();
+	SymbolData();
+	~SymbolData();
 
-public:
-	int 			hashindex[256];
-	SymbolEntry*	ptr_table_entries;
-	int				nb_labels;
-	int				max_labels;
-} ;
+	ErrorCode DefineGlobalLabel(char *s);
+	ErrorCode DefineLabel(char *ptr_src,int *size_read,int *x,bool *flag_redefine_label);
+
+	ErrorCode DefineSymbol(char *ptr_src,int *label_index,int block_level);
+	ErrorCode SearchSymbol(char *ptr_src,int *label_index);
+
+	SymbolEntry& GetSymbolEntry(int index)
+	{
+		SymbolEntry	*ptr_symbol_entry=m_ptr_table_entries+index;
+		return *ptr_symbol_entry;
+	}
+
+	int GetLabelCount() const
+	{
+		return m_nb_labels;
+	}
+
+	int SaveSymbols(FILE *fp);
+	void PrintSymbols(FILE *fp);
+
+	void ExitBlock(SEGMENT_e a,SEGMENT_e b);
+
+	ErrorCode l_such(char *s, int *l, int *x, int *v, int *afl);
+	ErrorCode ll_pdef(char *t);
+
+private:
+	SymbolEntry*	m_ptr_table_entries;
+	int				m_max_labels;
+	int 			m_hashindex[256];
+	int				m_nb_labels;
+};
 
 
 
-class FileData_c
+
+class FileData
 {
 public:
-	FileData_c();
-	~FileData_c();
+	FileData();
+	~FileData();
 	
 	long ga_p1();
 	long gm_p1();
+
+	int pass2();
 		
 	//
 	// Mn Stuff
 	//
-	int MnDataPushCharacter(int c);
-	int MnDataPushString(signed char *s,int l);
+	ErrorCode WriteByte(int c);
+	ErrorCode WriteShort(int c);
+	ErrorCode WriteUShort(unsigned int c);
+	ErrorCode WriteSequence(signed char *s,int l);
 
-	//
-	// label stuff
-	//
-	int Label_GetUsedCount();
-	void Label_PrintList(FILE *fp);
+	void StartSegment(int fmode,int t_base,int d_base,int b_base,int z_base,int stacklen,int relmode);
+	void SegmentPass2();
+	void SegmentEnd(FILE *fpout);
+
+	int WriteRelocatableHeader(FILE *fp,int mode,int tlen,int dlen,int blen,int zlen,int stack);
+
+	void SetSegmentBase(SEGMENT_e segment,int base);
+
+	int u_set(int pc,int afl,int label,int l);
+	int r_set(int pc,int afl,int l);
+
+	void set_fopt(int l, signed char *buf, int reallen);
+
+	int h_length();
+
+private:
+	int					m_fmode;
+	int 				m_slen;
+	int					m_relmode;
+	int					m_old_abspc;
+	int					m_base[_eSEGMENT_MAX_];
+	int					m_len[_eSEGMENT_MAX_];
+	UndefinedLabels		m_undefined_labels;
+	Relocation			m_relocation_text;
+	Relocation			m_relocation_data;
+	Options				m_options;
+	MnData				m_cMnData;
 
 public:
-	int	fmode;
-	int slen;
-	int	relmode;
-	int	old_abspc;
-	int	base[_eSEGMENT_MAX_];
-	int	len[_eSEGMENT_MAX_];
 
-	struct 
-	{
-		int		*ulist;
-		int 	un;
-		int 	um;
-	} ud;
-
-	struct 
-	{
-		relocateInfo 	*rlist;
-		int 			mlist;
-		int				nlist;
-		int			first;
-	} rt;
-
-	struct 
-	{
-		relocateInfo 	*rlist;
-		int 			mlist;
-		int				nlist;
-		int				first;
-	} rd;
-
-	struct 
-	{
-		Fopt	*olist;
-		int		mlist;
-		int		nlist;
-	} fo;
-
-	MnData_c			m_cMnData;
-	SymbolData_c		m_cSymbolData;
+	SymbolData			m_cSymbolData;
 };
 
-extern FileData_c *afile;
+extern FileData *afile;
 
 

@@ -24,6 +24,7 @@ PictureConverter::PictureConverter(MACHINE machine)	:
 {
 	m_dither	=DITHER_NONE;
 	m_flag_debug=false;
+	m_block_data="";
 }
 
 PictureConverter::~PictureConverter()

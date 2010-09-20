@@ -2,9 +2,12 @@
 #ifndef XAH2_H
 #define XAH2_H
 
-#include  <string.h>
+#include <assert.h>
+#include <string.h>
 
 #include "xam.h"
+
+extern FILE *gErrorFileHandle;
 
 class PreprocessorFile_c
 {
@@ -20,6 +23,29 @@ public:
 
 	int ReadNextFilteredCharacter();
 	int GetLine(char *ptr_destination_line,int max_buffer_size,int *returned_lenght);
+
+	unsigned int GetCurrentLine() const
+	{
+		return m_current_line;
+	}
+
+	void SetCurrentLine(unsigned int line)
+	{
+		//assert(line<5000);			// Mike: Debug
+		m_current_line=line;
+		fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentLine:%u\r\n",line);
+	}
+
+	const std::string& GetCurrentFileName() const
+	{
+		return m_file_name;
+	}
+
+	void SetCurrentFileName(const std::string& filename)
+	{
+		m_file_name=filename;
+		fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentFileName:%s (%u)\r\n",filename.c_str(),m_current_line);
+	}
 
 	//
 	// Static methods
@@ -54,12 +80,14 @@ public:
 		return CurrentFile;
 	}
 
+private:
+	std::string		m_file_name;
+	unsigned int	m_current_line;
+
 public:
-	std::string	m_file_name;
-	int		m_current_line;
-	int		m_block_depth;
-	FILE	*m_pfile_handle;
-	char	*m_p_line_buffer;
+	int				m_block_depth;
+	FILE			*m_pfile_handle;
+	char			*m_p_line_buffer;
 
 	//
 	// Static methods

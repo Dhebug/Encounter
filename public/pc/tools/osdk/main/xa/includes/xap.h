@@ -61,28 +61,28 @@ public:
 	void Close(void);
 	void Terminate(void);
 
-	int GetLine(char *t);
+	ErrorCode GetLine(char *t);
 
 	int suchdef(char *t);
 	int CheckForPreprocessorCommand(char s[]);
 
-	int pp_replace(char *ptr_output,char *ptr_input,int a,int b);
-	int HandleCommand(char *ptr_preprocessor_directive);
+	ErrorCode pp_replace(char *ptr_output,char *ptr_input,int a,int b);
+	ErrorCode HandleCommand(char *ptr_preprocessor_directive);
 
-	int command_define(char *k);
-	int command_include(char*);
-	int command_ifdef(char*);
-	int command_ifndef(char*);
-	int command_else(char*);
-	int command_endif(char*);
-	int command_echo(char*);
-	int command_if(char*);
-	int command_print(char*);
-	int command_prdef(char*);
-	int command_ifldef(char*);
-	int command_iflused(char*);
-	int command_undef(char*);
-	int command_file(char*);
+	ErrorCode command_define(char *k);
+	ErrorCode command_include(char*);
+	ErrorCode command_ifdef(char*);
+	ErrorCode command_ifndef(char*);
+	ErrorCode command_else(char*);
+	ErrorCode command_endif(char*);
+	ErrorCode command_echo(char*);
+	ErrorCode command_if(char*);
+	ErrorCode command_print(char*);
+	ErrorCode command_prdef(char*);
+	ErrorCode command_ifldef(char*);
+	ErrorCode command_iflused(char*);
+	ErrorCode command_undef(char*);
+	ErrorCode command_file(char*);
 
 	int ga_pp(void)
 	{

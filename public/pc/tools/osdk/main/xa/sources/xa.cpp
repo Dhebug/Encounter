@@ -12,6 +12,8 @@
 #include <time.h>
 /* structs and defs */
 
+#include "common.h"
+
 #include "xah.h"
 #include "xah2.h"
 
@@ -28,7 +30,7 @@
 /* exported globals */
 
 
-FileData_c *afile = NULL;
+FileData *afile = NULL;
 
 int gFlag_ncmos;
 int gFlag_cmosfl;
@@ -44,22 +46,14 @@ int gFlag_ShowBlocks = 0;
 
 /* local variables */
 
-static const char *copyright=
-{
-	"Cross-Assembler 65xx V2.2.0 ("__TIME__" / "__DATE__") \r\n"
-	"(c) 1989-98 by A.Fachat\r\n"
-	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
-	"Oric C adaptation and debugging by Mickael Pointier\r\n"
-	"Clean Linux port by Jean-Yves Lamoureux\r\n"
-};
 
 
 static char out[MAXLINE];
 static time_t tim1;
 static time_t tim2;
-static FILE *ptr_output_handle;
-static FILE *ptr_error_handle;
-static FILE *ptr_symbols_handle;
+static FILE *gOutputFileHandle;
+FILE *gErrorFileHandle;
+static FILE *gSymbolsFileHandle;
 static int ner = 0;
 
 static int align = 1;
@@ -68,9 +62,7 @@ static void printstat(void);
 static void usage(void);
 static int	setfext(char*,char*);
 static int	pass1(void);
-static int	pass2(void);
-static void chrput(int);
-static int	getline(char*);
+static ErrorCode getline(char*);
 static void lineout(void);
 static long ga_p1(void);
 static long gm_p1(void);
@@ -80,7 +72,7 @@ int unlink(const char *);
 int memode;
 int xmode;
 
-SEGMENT_e segment;
+SEGMENT_e gCurrentSegment;
 int SectionTextLenght=0;
 int SectionTextBase=0x1000;
 int SectionDataLenght=0;
@@ -97,6 +89,15 @@ int relmode=0;
 int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 
 
+
+static const char *copyright=
+{
+	"Cross-Assembler 65xx V2.2.2 ("__TIME__" / "__DATE__") \r\n"
+	"(c) 1989-98 by A.Fachat\r\n"
+	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
+	"Oric C adaptation and debugging by Mickael Pointier\r\n"
+	"Clean Linux port by Jean-Yves Lamoureux\r\n"
+};
 
 static void usage(void)
 {
@@ -131,89 +132,6 @@ static void usage(void)
 }
 
 
-void error(const char *message)
-{
-	if (message)
-	{
-		printf("XA.EXE: %s\n",message);
-	}
-	else
-	{
-		usage();
-	}
-
-	exit(1);
-}
-
-
-
-int ConvertAdress(const char *ptr_value)
-{
-	int		adress;
-	int		base;
-	char	car;
-
-	if (ptr_value[0]=='$')
-	{
-		// Hexadecimal (assembler syntax)
-		base=16;
-		ptr_value++;
-	}
-	else
-	if ((ptr_value[0]=='0') && (ptr_value[1]=='x'))
-	{
-		// Hexadecimal (C/C++ syntax)
-		base=16;
-		ptr_value+=2;
-	}
-	else
-	{
-		// Decimal
-		base=10;
-	}
-
-	adress=0;
-	while ((car=(*ptr_value++)))
-	{
-		if ((car>='0') && (car<='9'))
-		{
-			adress*=base;
-			adress+=car-'0';
-		}
-		else
-		if ((car>='a') && (car<='f'))
-		{
-			if (base!=16)
-			{
-				error("Only hexadecimal values prefixed by a '$' or '0x' can contain letters");
-			}
-			adress*=base;
-			adress+=car-'a';
-		}
-		else
-		if ((car>='A') && (car<='F'))
-		{
-			if (base!=16)
-			{
-				error("Only hexadecimal values prefixed by a '$' or '0x' can contain letters");
-			}
-			adress*=base;
-			adress+=car-'A';
-		}
-		else
-		{
-			error("Unknow character in the adress value");
-		}
-	}
-
-	if ((adress<0x0000) || (adress>0xFFFF))
-	{
-		error("authorized adress range is $0000 to $FFFF");
-	}
-
-	return adress;
-}
-
 
 
 int main(int argc,char *argv[])
@@ -232,7 +150,7 @@ int main(int argc,char *argv[])
 	gFlag_cmosfl=1;
 	gFlag_w65816=1;
 
-	afile = new FileData_c;
+	afile = new FileData;
 	if (!afile)
 	{
 		return 1;
@@ -294,7 +212,7 @@ int main(int argc,char *argv[])
 				// define global label
 				if (argv[i][2])
 				{
-					DefineGlobalLabel(argv[i]+2);
+					afile->m_cSymbolData.DefineGlobalLabel(argv[i]+2);
 				}
 				break;
 
@@ -425,18 +343,18 @@ int main(int argc,char *argv[])
 		 exit(0);
 	 }
 
-	 ptr_symbols_handle	=xfopen(ptr_symbols_filename,"w");
-	 ptr_error_handle	=xfopen(ptr_error_filename,"w");
+	 gSymbolsFileHandle	=xfopen(ptr_symbols_filename,"w");
+	 gErrorFileHandle	=xfopen(ptr_error_filename,"w");
 	 if (!strcmp(ptr_output_filename,"-"))
 	 {
 		 ptr_output_filename=NULL;
-		 ptr_output_handle = stdout;
+		 gOutputFileHandle = stdout;
 	 }
 	 else
 	 {
-		 ptr_output_handle= xfopen(ptr_output_filename,"wb");
+		 gOutputFileHandle= xfopen(ptr_output_filename,"wb");
 	 }
-	 if (!ptr_output_handle)
+	 if (!gOutputFileHandle)
 	 {
 		 fprintf(stderr, "Couldn't open output file!\n");
 		 exit(1);
@@ -444,26 +362,26 @@ int main(int argc,char *argv[])
 
 	 if (bFlagVerbose)		fprintf(stderr, "%s",copyright);
 
-	 if (ptr_error_handle)	fprintf(ptr_error_handle,"%s",copyright);
+	 if (gErrorFileHandle)	fprintf(gErrorFileHandle,"%s",copyright);
 	 if (bFlagVerbose)		logout(ctime(&tim1));
 
 	 //
 	 // Pass 1
 	 //
 	 TablePcSegment[eSEGMENT_ABS]= 0;		/* abs addressing */
-	 seg_start(fmode,SectionTextBase,SectionDataBase,SectionBssBase,SectionZeroBase,0,relmode);
+	 afile->StartSegment(fmode,SectionTextBase,SectionDataBase,SectionBssBase,SectionZeroBase,0,relmode);
 
 	 if (relmode)
 	 {
 		 r_mode(RMODE_RELOC);
-		 segment = eSEGMENT_TEXT;
+		 gCurrentSegment = eSEGMENT_TEXT;
 	 }
 	 else
 	 {
 		 r_mode(RMODE_ABS);
 	 }
 
-	 for (i=0;i<cInputFileList.size();i++)
+	 for (unsigned int i=0;i<cInputFileList.size();i++)
 	 {
 		 const std::string& cSourceFilename=cInputFileList[i];
 
@@ -529,7 +447,7 @@ int main(int argc,char *argv[])
 
 	 if ((!er) && relmode)
 	 {
-		 h_write(ptr_output_handle, fmode,SectionTextLenght,SectionDataLenght,SectionBssLenght,SectionZeroLenght, 0);
+		 afile->WriteRelocatableHeader(gOutputFileHandle, fmode,SectionTextLenght,SectionDataLenght,SectionBssLenght,SectionZeroLenght, 0);
 	 }
 
 
@@ -540,7 +458,7 @@ int main(int argc,char *argv[])
 	 {
 		 if (bFlagVerbose) logout("xAss65: Pass 2:\n");
 
-		 seg_pass2();
+		 afile->SegmentPass2();
 
 		 if (!relmode)
 		 {
@@ -549,14 +467,14 @@ int main(int argc,char *argv[])
 		 else
 		 {
 			 r_mode(RMODE_RELOC);
-			 segment = eSEGMENT_TEXT;
+			 gCurrentSegment = eSEGMENT_TEXT;
 		 }
-		 er=pass2();
+		 er=afile->pass2();
 	 }
 
-	 if (ptr_symbols_handle)
+	 if (gSymbolsFileHandle)
 	 {
-		 afile->Label_PrintList(ptr_symbols_handle);
+		 afile->m_cSymbolData.PrintSymbols(gSymbolsFileHandle);
 	 }
 
 	 tim2=time(NULL);
@@ -565,11 +483,11 @@ int main(int argc,char *argv[])
 		 printstat();
 	 }
 
-	 if ((!er) && relmode) seg_end(ptr_output_handle);	/* write reloc/label info */
+	 if ((!er) && relmode) afile->SegmentEnd(gOutputFileHandle);	// write reloc/label info
 
-	 if (ptr_error_handle)		fclose(ptr_error_handle);
-	 if (ptr_symbols_handle)	fclose(ptr_symbols_handle);
-	 if (ptr_output_handle)		fclose(ptr_output_handle);
+	 if (gErrorFileHandle)		fclose(gErrorFileHandle);
+	 if (gSymbolsFileHandle)	fclose(gSymbolsFileHandle);
+	 if (gOutputFileHandle)		fclose(gOutputFileHandle);
 
 	 gPreprocessor.Terminate();
 
@@ -579,7 +497,7 @@ int main(int argc,char *argv[])
 		 /*unlink();*/
 		 if (ptr_output_filename)
 		 {
-			 unlink(ptr_output_filename);
+			 DeleteFile(ptr_output_filename);
 		 }
 	 }
 
@@ -589,7 +507,7 @@ int main(int argc,char *argv[])
 static void printstat(void)
 {
 	logout("Statistics:\n");
-	sprintf(out," %8d of %8d label used\n",afile->Label_GetUsedCount(),gm_lab());
+	sprintf(out," %8d of %8d label used\n",afile->m_cSymbolData.GetLabelCount(),gm_lab());
 	logout(out);
 	sprintf(out," %8ld of %8ld byte label-memory used\n",ga_labm(),gm_labm());
 	logout(out);
@@ -606,11 +524,6 @@ static void printstat(void)
 }
 
 #define fputw(a,fp) fputc((a)&255,fp);fputc((a>>8)&255,fp)
-
-int h_length(void)
-{
-	return 26+o_length();
-}
 
 
 static int setfext(char *s, char *ext)
@@ -646,7 +559,7 @@ static int setfext(char *s, char *ext)
 #define abs(a) ((a)>=0 ? a : -a)
 #endif
 
-static int pass2(void)
+int FileData::pass2()
 {
 	int					c,er,l,ll,i,al;
 	signed char			*dataseg=NULL;
@@ -666,30 +579,35 @@ static int pass2(void)
 
 	PreprocessorFile_c datei;
 	gPreprocessor.m_CurrentFile=&datei;
-	afile->m_cMnData.tmpe=0L;
+	m_cMnData.ResetReadPos();
 
-	while (ner<20 && afile->m_cMnData.tmpe<afile->m_cMnData.tmpz)
+	while (ner<20 && m_cMnData.CanReadMore())
 	{
-		l=afile->m_cMnData.ReadByte();
+		l=m_cMnData.ReadShort();
 		ll=l;
 
 		if (!l)
 		{
-			int nType=afile->m_cMnData.ReadByte();
+			Tokens nType=(Tokens)m_cMnData.ReadByte();
 			if (nType==T_LINE)
 			{
-				datei.m_current_line=afile->m_cMnData.ReadShort();
+				datei.SetCurrentLine(m_cMnData.ReadUShort());
 			}
 			else
 			if (nType==T_FILE)
 			{
-				datei.m_current_line=afile->m_cMnData.ReadShort();
-				datei.m_file_name=afile->m_cMnData.ReadString();
+				datei.SetCurrentLine(m_cMnData.ReadUShort());
+				datei.SetCurrentFileName(m_cMnData.ReadString());
+			}
+			else
+			{
+				printf("Invalid type: %u",nType);
 			}
 		}
 		else
 		{
-			er=t_p2(afile->m_cMnData.m_ptr_tmp+afile->m_cMnData.tmpe,&ll,0,&al);
+			signed char* ptr=m_cMnData.GetReadPointer();
+			er=t_p2(ptr,&ll,0,&al);
 
 			if (er==E_NOLINE)
 			{
@@ -697,33 +615,35 @@ static int pass2(void)
 			else
 			if (er==E_OK)
 			{
-				if (segment<eSEGMENT_DATA)
+				if (gCurrentSegment<eSEGMENT_DATA)
 				{
+					const signed char* ptr=m_cMnData.GetReadPointer();
 					for(i=0;i<ll;i++)
 					{
-						chrput(afile->m_cMnData.m_ptr_tmp[afile->m_cMnData.tmpe+i]);
+						putc(ptr[i],gOutputFileHandle);
 					}
 				}
 				else
-				if (segment==eSEGMENT_DATA && datap)
+				if (gCurrentSegment==eSEGMENT_DATA && datap)
 				{
-					memcpy(datap,afile->m_cMnData.m_ptr_tmp+afile->m_cMnData.tmpe,ll);
+					memcpy(datap,m_cMnData.GetReadPointer(),ll);
 					datap+=ll;
 				}
 			}
 			else
 			if (er==E_DSB)
 			{
-				c=afile->m_cMnData.m_ptr_tmp[afile->m_cMnData.tmpe];
-				if (segment<eSEGMENT_DATA)
+				const signed char* ptr=m_cMnData.GetReadPointer();
+				c=ptr[0];
+				if (gCurrentSegment<eSEGMENT_DATA)
 				{
 					for(i=0;i<ll;i++)
 					{
-						chrput(c);
+						putc(c&255,gOutputFileHandle);
 					}
 				}
 				else
-				if (segment==eSEGMENT_DATA && datap)
+				if (gCurrentSegment==eSEGMENT_DATA && datap)
 				{
 					memset(datap, c, ll);
 					datap+=ll;
@@ -733,12 +653,12 @@ static int pass2(void)
 			{
 				errout(er);
 			}
-			afile->m_cMnData.tmpe+=abs(l);
+			m_cMnData.MoveReadPos(abs(l));
 		}
 	}
 	if (relmode)
 	{
-		if ((ll=fwrite(dataseg, 1,SectionDataLenght, ptr_output_handle))<SectionDataLenght)
+		if ((ll=fwrite(dataseg, 1,SectionDataLenght, gOutputFileHandle))<SectionDataLenght)
 		{
 			fprintf(stderr, "Problems writing %d bytes, return gives %d\n",SectionDataLenght,ll);
 		}
@@ -751,7 +671,8 @@ static int pass2(void)
 static int pass1(void)
 {
 	signed char out[MAXLINE];
-	int l,er, outlen;
+	int l,outlen;
+	ErrorCode er;
 
 	memode=0;
 	xmode=0;
@@ -767,7 +688,7 @@ static int pass1(void)
 		*/
 		er=t_p1((signed char*)BufferLine,out,&l,&outlen);
 
-		switch (segment)
+		switch (gCurrentSegment)
 		{
 		case eSEGMENT_ABS:
 		case eSEGMENT_TEXT:
@@ -790,9 +711,9 @@ static int pass1(void)
 			{
 				if (er==E_OKDEF)
 				{
-					if (!(er=afile->MnDataPushCharacter(l)))
+					if (!(er=afile->WriteShort(l)))
 					{
-						er=afile->MnDataPushString(out,l);
+						er=afile->WriteSequence(out,l);
 					}
 				}
 				else
@@ -803,9 +724,9 @@ static int pass1(void)
 			}
 			else
 			{
-				if (!(er=afile->MnDataPushCharacter(-l)))
+				if (!(er=afile->WriteShort(-l)))
 				{
-					er=afile->MnDataPushString(out,l);
+					er=afile->WriteSequence(out,l);
 				}
 			}
 		}
@@ -890,14 +811,13 @@ static int gFlagLineOutTest;
 
 static char GetLineBuffer[MAXLINE];
 
-static int getline(char *s)
+static ErrorCode getline(char *s)
 {
-	static int ec;
 	static int i,c;
 
 	int j=0;
 	int bFlagInQuotedString=0;
-	ec=E_OK;
+	ErrorCode ec=E_OK;
 
 	if (!gFlagMasmCompatibilityWeirdSwitch)
 	{
@@ -920,20 +840,22 @@ static int getline(char *s)
 
 			if (ec==E_NEWLINE)
 			{
-				afile->MnDataPushCharacter(0);
-				afile->MnDataPushCharacter(T_LINE);
-				afile->MnDataPushCharacter((gPreprocessor.m_CurrentFile->m_current_line)&255);
-				afile->MnDataPushCharacter(((gPreprocessor.m_CurrentFile->m_current_line)>>8)&255);
+				unsigned int line=gPreprocessor.m_CurrentFile->GetCurrentLine();
+				fprintf(gErrorFileHandle,"getline Line:%u\r\n",line);
+				afile->WriteShort(0);
+				afile->WriteByte(T_LINE);
+				afile->WriteUShort(line);
 				ec=E_OK;
 			}
 			else
 			if (ec==E_NEWFILE)
 			{
-				afile->MnDataPushCharacter(0);
-				afile->MnDataPushCharacter(T_FILE);
-				afile->MnDataPushCharacter((gPreprocessor.m_CurrentFile->m_current_line)&255);
-				afile->MnDataPushCharacter(((gPreprocessor.m_CurrentFile->m_current_line)>>8)&255);
-				afile->MnDataPushString((signed char*)gPreprocessor.m_CurrentFile->m_file_name.c_str(),gPreprocessor.m_CurrentFile->m_file_name.size()+1);
+				unsigned int line=gPreprocessor.m_CurrentFile->GetCurrentLine();
+				fprintf(gErrorFileHandle,"getline File:%s (%u)\r\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),line);
+				afile->WriteShort(0);
+				afile->WriteByte(T_FILE);
+				afile->WriteUShort(line);
+				afile->WriteSequence((signed char*)gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),gPreprocessor.m_CurrentFile->GetCurrentFileName().size()+1);
 				ec=E_OK;
 			}
 		}
@@ -993,38 +915,34 @@ void errout(int er)
 	{
 		if (er>=-(ANZERR+ANZWARN) && er < -ANZERR)
 		{
-			sprintf(out,"%s(%d):  %04x: Warning - %s\n",gPreprocessor.m_CurrentFile->m_file_name.c_str(), gPreprocessor.m_CurrentFile->m_current_line, TablePcSegment[segment], ertxt[-er-1]);
+			sprintf(out,"%s(%u):  %04x: Warning - %s\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(), gPreprocessor.m_CurrentFile->GetCurrentLine(), TablePcSegment[gCurrentSegment], ertxt[-er-1]);
 		}
 		else
 		{
 			/* sprintf(out,"%s:Zeile %d: %04x:Unbekannter Fehler Nr.: %d\n",*/
-			sprintf(out,"%s(%d):  %04x: Unknown error # %d\n",gPreprocessor.m_CurrentFile->m_file_name.c_str(),gPreprocessor.m_CurrentFile->m_current_line,TablePcSegment[segment],er);
+			sprintf(out,"%s(%u):  %04x: Unknown error # %d\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),gPreprocessor.m_CurrentFile->GetCurrentLine(),TablePcSegment[gCurrentSegment],er);
 			ner++;
 		}
 	}
 	else
 	{
 		if (er==ERR_UNDEFINED_LABEL)
-			sprintf(out,"%s(%d):  %04x:Label '%s' not defined\n",gPreprocessor.m_CurrentFile->m_file_name.c_str(),gPreprocessor.m_CurrentFile->m_current_line,TablePcSegment[segment],gError_LabelNamePointer);
+			sprintf(out,"%s(%u):  %04x:Label '%s' not defined\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),gPreprocessor.m_CurrentFile->GetCurrentLine(),TablePcSegment[gCurrentSegment],gError_LabelNamePointer);
 		else
-			sprintf(out,"%s(%d):  %04x:%s error\n",gPreprocessor.m_CurrentFile->m_file_name.c_str(),gPreprocessor.m_CurrentFile->m_current_line,TablePcSegment[segment],ertxt[-er-1]);
+			sprintf(out,"%s(%u):  %04x:%s error\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),gPreprocessor.m_CurrentFile->GetCurrentLine(),TablePcSegment[gCurrentSegment],ertxt[-er-1]);
 
 		ner++;
 	}
 	logout(out);
 }
 
-static void chrput(int c)
-{
-	/* 	printf(" %02x",c&255);*/
-
-	putc( c&0x00ff,ptr_output_handle);
-}
 
 void logout(char *s)
 {
 	fprintf(stderr, "%s",s);
-	if (ptr_error_handle)
-		fprintf(ptr_error_handle,"%s",s);
+	if (gErrorFileHandle)
+	{
+		fprintf(gErrorFileHandle,"%s",s);
+	}
 }
 
