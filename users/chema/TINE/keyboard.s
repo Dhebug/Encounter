@@ -19,11 +19,16 @@
 #define        via_ier                 $030E 
 #define        via_porta               $030f 
 
+#define ayc_Register $FF
+#define ayc_Write    $FD
+#define ayc_Read	 $FE
+#define ayc_Inactive $DD
+
 
 .zero
-irq_A               .byt 0
-irq_X               .byt 0
-irq_Y               .byt 0
+;irq_A               .byt 0
+;irq_X               .byt 0
+;irq_Y               .byt 0
 TimerCounter        .byt 40        ;Used in music
 zpTemp01			.byt 0
 zpTemp02			.byt 0
@@ -31,6 +36,7 @@ tmprow				.byt 0
 counter				.byt 0
 
 .text 
+
 
 #ifdef ROM
 #define IRQ_ADDRLO $0245
@@ -40,6 +46,24 @@ counter				.byt 0
 #define IRQ_ADDRHI $ffff
 #endif
 
+//#define DEBUG_REAL_ATMOS
+#define KB_SENSE_ALL_FIRST
+//#define KB_DO_SOMETHING_WITH_AY
+//#define KB_EXTRA_NOPS
+
+#ifdef DEBUG_REAL_ATMOS
+patch1press
+.(
+	sei
+	sta sav_A+1
+	lda #%00100000
+	sta KeyBank
+sav_A
+	lda #00
+	rti
+.)
+
+#endif
 
 _init_irq_routine 
 .(
@@ -47,6 +71,7 @@ _init_irq_routine
         ;setup, we need not worry about ensuring one irq event and/or right 
         ;timer period, only redirecting irq vector to our own irq handler. 
         sei
+
 		; Setup DDRA, DDRB and ACR
         lda #%11111111
         sta via_ddra
@@ -55,14 +80,22 @@ _init_irq_routine
 		lda #%1000000
 		sta via_acr
 
-		lda #<9984*4
-		sta via_t1ll 
-		lda #>9984*4
-		sta via_t1lh 
         lda #<irq_routine 
         sta IRQ_ADDRLO
         lda #>irq_routine 
         sta IRQ_ADDRHI
+
+#ifdef DEBUG_REAL_ATMOS
+		lda #<patch1press
+		sta $fffa
+		lda #>patch1press
+		sta $fffb
+#endif
+		lda #<9984*4
+		sta via_t1ll 
+		lda #>9984*4
+		sta via_t1lh 
+  
         cli 
         rts 
 .)
@@ -75,9 +108,9 @@ irq_routine
 		inc counter
 
         ;Preserve registers 
-      	sta irq_A
-    	stx irq_X
-    	sty irq_Y
+      	sta sav_A+1
+    	stx sav_X+1
+    	sty sav_Y+1
 
         ;Clear IRQ event 
         lda via_t1cl 
@@ -85,10 +118,15 @@ irq_routine
         ;Process keyboard 
         jsr ReadKeyboard 
 
+#ifdef KB_DO_SOMETHING_WITH_AY
+		jsr SndStop  ;AYRegDump
+#endif
+
+
         ;Restore Registers 
-        lda irq_A
-    	ldx irq_X
-    	ldy irq_Y
+sav_A   lda #00
+sav_X 	ldx #00
+sav_Y  	ldy #00
 
         ;End of IRQ 
         rti 
@@ -209,6 +247,7 @@ loop2   ;Clear relevant bank
         lda #00 
         sta KeyBank,x 
 
+#ifdef KB_SENSE_ALL_FIRST
         ;Write 0 to Column Register 
 
 		sta via_porta 
@@ -232,14 +271,18 @@ loop2   ;Clear relevant bank
 		; So I guess that I could do the same here (ldy,lda)
 
         ldy #$80
-		;nop 
-        ;nop 
+#ifdef KB_EXTRA_NOPS
+		nop 
+        nop 
+#endif
         lda #8 
 
         ;Sense Row activity 
         and via_portb 
         beq skip2 
-		
+#else
+		ldy #$80
+#endif
 		;Store Column 
         tya 
 loop1   
