@@ -6,6 +6,7 @@
 
 #define ayc_Register $FF
 #define ayc_Write    $FD
+#define ayc_Read	 $FE
 #define ayc_Inactive $DD
      
 #define via_pcr      $030C
@@ -80,6 +81,11 @@ SndStop
 loop 
 	LDA #128
     STA ReferenceBlock,X
+	cpx #7
+	bne not7
+	lda #$40
+	.byt $2c
+not7
 	lda #0
     STX via_porta
     LDY #ayc_Register
@@ -378,13 +384,12 @@ InitMusic
 
 MusicIRQ
 .(
+	; Genaral purpose counter (counting fps)
+	inc counter
+
 	sta RegA+1
 	stx RegX+1
 	sty RegY+1
-
-;	lda TimerCounter 
-;	and #%11
-;	bne avoid
 
 	jsr ProcMusic
 	jsr SendAY
