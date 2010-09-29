@@ -150,6 +150,19 @@ nosedbug
 
 
 _switch_ovl 
+    php
+    pha
+	sei
+ 	lda diskcntrl
+	eor #2
+	sta diskcntrl
+    sta $0314
+    lda #0
+    sta $032F
+    pla
+    plp
+    rts	
+#if 0
 	php
 	pha
 	sei
@@ -160,7 +173,7 @@ _switch_ovl
 	pla
 	plp
 	rts
-
+#endif
 
 _init_disk 
    php 
