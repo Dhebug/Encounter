@@ -808,10 +808,15 @@ _reboot_oric
     and #%01111101
     sta $0314
     
-    ldx #0
-    txs
+    lda #7
+    sta $032F
 
-    jmp $eb7e 
+    ;ldx #0
+    ;txs
+
+    ;jmp $eb7e 
+
+	jmp ($fffc)
 .)
 
 
