@@ -804,18 +804,33 @@ nocarry
 
 _reboot_oric
 .(
-    lda $0314
-    and #%01111101
+	; Activate Microdisc Eprom (ATMOS)
+
+	; This was not working as the meaning of $314 is not the
+	; same when reading and writting. When read, it returns bits
+	; 0-6 set to 1 and bit 7 with the value of te FDC INTRQ signal.
+	; In this case the result was sta a value which changed the drive
+	; to D. At least this happened when run on a Telestrat.
+    ;lda $0314
+    ;and #%01111101
+
+	lda #4
     sta $0314
-    
+
+    ; Activate bank 7 (Telestrat)
     lda #7
     sta $032F
 
+	; This worked only for ATMOS, so changing it
     ;ldx #0
     ;txs
-
     ;jmp $eb7e 
 
+	; Force total reset in Telestrat
+	lda #0
+	sta $0247
+
+	; Jump to reset handler
 	jmp ($fffc)
 .)
 
