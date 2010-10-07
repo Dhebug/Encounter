@@ -1,4 +1,5 @@
 @ECHO OFF
+ECHO ON
 
 ::
 :: Set the build paremeters
@@ -26,5 +27,5 @@ SET OSDKDNAME=" -- 1337 --"
 SET OSDKINIST="HIRES:!INTRO.COM"
 
 
-SET OSDKDOSBOX=c:\archivos de programa\DOSBox-0.73\dosbox.exe
+::SET OSDKDOSBOX=c:\archivos de programa\DOSBox-0.73\dosbox.exe
 
