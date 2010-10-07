@@ -1,4 +1,5 @@
 @ECHO OFF
+ECHO ON
 
 
 ::

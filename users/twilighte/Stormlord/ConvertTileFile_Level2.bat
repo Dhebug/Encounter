@@ -1,0 +1,1 @@
+c:\osdk\bin\bin2txt -s1 -f2 -h1 tiles\stormlord_map2.bin stormlord_map.s stormlord_map
