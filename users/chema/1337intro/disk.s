@@ -21,6 +21,9 @@ pbufh .byt 0
 
 _load_overlay
 .(
+	php
+	cli
+
     ; Sector to read    
     lda #100
     ldy #0
@@ -104,6 +107,7 @@ loop
     bne loop
 
 
+	plp
 	rts
 .)
 
@@ -162,26 +166,16 @@ _switch_ovl
     pla
     plp
     rts	
-#if 0
-	php
-	pha
-	sei
-	lda diskcntrl
-	eor #2
-	sta diskcntrl
-	sta $0314
-	pla
-	plp
-	rts
-#endif
 
 _init_disk 
    php 
    sei 
+#ifdef OLDROUTINES
    lda #LOW(irq_handler) 
    sta $fffe 
    lda #HIGH(irq_handler) 
    sta $ffff 
+#endif
    jsr restore_track0 
    plp 
    rts 
@@ -312,7 +306,9 @@ __select_sector
    rts 
 
 readwrite_data 
+#ifdef OLDROUTINES
    cli 
+#endif
    lda #0 
    sta pbufl 
    lda __buffer+1 
@@ -321,7 +317,9 @@ readwrite_data
    lda readwrite 
    cmp #$a0 
    beq write_data 
-read_data 
+
+#ifdef OLDROUTINES  
+ read_data 
    lda $0318 
    bmi read_data 
    lda $0313 
@@ -330,7 +328,8 @@ read_data
    bne read_data 
    inc pbufh 
    jmp read_data 
-   
+
+
 write_data 
    lda $0318 
    bmi write_data 
@@ -341,13 +340,93 @@ write_data
    inc pbufh 
    jmp write_data 
 
+#else
 
-    
+ 
+read_data
+/*   
+     lda $0310
+     lsr
+     bcc end_read
+     lda $0318
+     bmi read_data
+*/
+
+	 bit $0314
+	 bpl end_read
+     bit $0318
+     bmi read_data
+
+     lda $0313
+     sta (pbufl),y
+     iny
+     bne read_data
+     inc pbufh
+     jmp read_data
+end_read
+     lda $0310
+     rts
+
+write_data
+/*
+     lda $0310
+     lsr
+     bcc end_write
+     lda $0318
+     bmi write_data
+*/
+
+     bit $0314
+     bpl end_write
+     bit $0318
+     bmi write_data
+
+     lda (pbufl),y
+     sta $0313
+     iny
+     bne write_data
+     inc pbufh
+     jmp write_data
+end_write
+     rts
+
+
+#endif    
+__sector_readwrite 
+   php 
+   sei 
+   jsr save_ier 
+   ldy #8 
+   sty restart_counter 
+again 
+   jsr __select_sector 
+   lda readwrite 
+   sta $0310 
+   jsr readwrite_data 
+
+#ifdef OLDROUTINES
+   /* As there is no more IRQ, we have to do this differently  */
+   /* instead of simply lda __status, we need to read it here. */
+   lda $0310   ; gets status
+   and #$7c 
+   sta __status 
+#else
+   lda __status
+#endif
+
+   beq success 
+   dec restart_counter 
+   bne again 
+success 
+
+   jsr restore_ier 
+   plp 
+   rts 
+
+
 irq_handler
 .(
-   ;bit $0314 
-   ;bpl fdc_irq 
-   ;jmp $04f5 
+#ifdef OLDROUTINES
   bit $030D
   bpl fdc_irq
   pha             ; cancel any VIA interrupt when overlay ram is active
@@ -365,28 +444,17 @@ fdc_irq
    and #$7c 
    sta __status 
    rts 
+#else
+  bit $030D
+  bpl fdc_irq
+  pha             ; cancel any VIA interrupt when overlay ram is active
+  lda #$7F
+  sta $030D
+  pla
+  rti
+fdc_irq 
+   lda $0310   ; gets status and resets irq 
+   rti 
+#endif
 .)
-    
-__sector_readwrite 
-   php 
-   sei 
-   jsr save_ier 
-   ldy #8 
-   sty restart_counter 
-again 
-   jsr __select_sector 
-   lda readwrite 
-   sta $0310 
-   jsr readwrite_data 
-   lda __status 
-   beq success 
-   dec restart_counter 
-   bne again 
-success 
-
-   jsr restore_ier 
-   plp 
-   rts 
-
-
 
