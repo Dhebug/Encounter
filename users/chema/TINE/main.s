@@ -177,6 +177,8 @@ donegal
 
 LoadOverlay
 .(
+	php
+	cli
     ; Sector to read    
     lda #OVERLAY_INIT
     ldy #0
@@ -210,7 +212,10 @@ loop
 	iny
 	lda #$02
 	sta (sp),y
-	jmp _sect_read
+	jsr _sect_read
+
+	plp
+	rts
 .)
     
     
