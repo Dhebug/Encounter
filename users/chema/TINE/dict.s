@@ -1068,7 +1068,7 @@ str_inctrans
 	.asc "--- INCOMING TRANSMISSION"
 	.byt 0
 str_endtrans
-	.asc " --- MESAGE ENDS."
+	.asc " --- MESSAGE ENDS."
 str_moretrans
 	.byt 13
 	.byt 13
