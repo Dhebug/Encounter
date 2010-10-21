@@ -22,7 +22,7 @@ pbufh .byt 0
 _load_overlay
 .(
 	php
-	cli
+	sei
 
     ; Sector to read    
     lda #100
@@ -170,12 +170,12 @@ _switch_ovl
 _init_disk 
    php 
    sei 
-#ifdef OLDROUTINES
+//#ifdef OLDROUTINES
    lda #LOW(irq_handler) 
    sta $fffe 
    lda #HIGH(irq_handler) 
    sta $ffff 
-#endif
+//#endif
    jsr restore_track0 
    plp 
    rts 
@@ -265,12 +265,16 @@ restore_ier
 wait_completion 
    lda $0314 
    bmi wait_completion 
-   lda $0310 
+.dsb (($0310&3)-((*+3)&3))&3,$ea
+   lda $0310
+_chk_310a
    rts 
 
 restore_track0 
    lda #$0C 
-   sta $0310 
+.dsb (($0310&3)-((*+3)&3))&3,$ea
+   sta $0310
+_chk_310b
    jsr wait_completion 
    and #$10   ; seek error ? 
    bne restore_track0 
@@ -279,7 +283,9 @@ restore_track0
 seek_track 
    lda #$1C 
    ora __stepping_rate 
-   sta $0310 
+.dsb (($0310&3)-((*+3)&3))&3,$ea   
+	sta $0310
+_chk_310c
    jsr wait_completion 
    and #$18   ; seek error or CRC error ? 
    beq seek_ok 
@@ -293,16 +299,22 @@ __select_sector
    and #$ef 
    ora __side 
    sta diskcntrl	; side updated 
-   ora #$01   ; enables FDC interrupts 
+   ;ora #$01   ; enables FDC interrupts 
    sta $0314 
 
    lda __cylinder 
+.dsb (($0313&3)-((*+3)&3))&3,$ea
    sta $0313 
-   cmp $0311 
+_chk_313a
+.dsb (($0311&3)-((*+3)&3))&3,$ea
+   cmp $0311
+_chk_311a
    beq *+5 
    jsr seek_track 
    lda __sector 
-   sta $0312 
+.dsb (($0312&3)-((*+3)&3))&3,$ea
+   sta $0312
+_chk_312a
    rts 
 
 readwrite_data 
@@ -322,7 +334,9 @@ readwrite_data
  read_data 
    lda $0318 
    bmi read_data 
-   lda $0313 
+.dsb (($0313&3)-((*+3)&3))&3,$ea
+   lda $0313
+_chk_313b
    sta (pbufl),y 
    iny 
    bne read_data 
@@ -334,7 +348,9 @@ write_data
    lda $0318 
    bmi write_data 
    lda (pbufl),y 
-   sta $0313 
+.dsb (($0313&3)-((*+3)&3))&3,$ea
+   sta $0313
+_chk_313c
    iny 
    bne write_data 
    inc pbufh 
@@ -357,14 +373,18 @@ read_data
      bit $0318
      bmi read_data
 
+.dsb (($0313&3)-((*+3)&3))&3,$ea
      lda $0313
+_chk_313d
      sta (pbufl),y
      iny
      bne read_data
      inc pbufh
      jmp read_data
 end_read
+.dsb (($0310&3)-((*+3)&3))&3,$ea
      lda $0310
+_chk_al_2
      rts
 
 write_data
@@ -382,16 +402,18 @@ write_data
      bmi write_data
 
      lda (pbufl),y
+.dsb (($0313&3)-((*+3)&3))&3,$ea
      sta $0313
+_chk_313e
      iny
      bne write_data
      inc pbufh
      jmp write_data
 end_write
      rts
-
-
 #endif    
+
+	 
 __sector_readwrite 
    php 
    sei 
@@ -401,13 +423,17 @@ __sector_readwrite
 again 
    jsr __select_sector 
    lda readwrite 
-   sta $0310 
+.dsb (($0310&3)-((*+3)&3))&3,$ea
+   sta $0310
+_chk_310d
    jsr readwrite_data 
 
-#ifdef OLDROUTINES
+#ifndef OLDROUTINES
    /* As there is no more IRQ, we have to do this differently  */
    /* instead of simply lda __status, we need to read it here. */
+.dsb (($0310&3)-((*+3)&3))&3,$ea
    lda $0310   ; gets status
+_chk_310e
    and #$7c 
    sta __status 
 #else
@@ -432,6 +458,9 @@ irq_handler
   pha             ; cancel any VIA interrupt when overlay ram is active
   lda #$7F
   sta $030D
+  lda #2 
+  sta $031F
+  lda $031D		  ; clear any pending ACIA interrupt
   pla
   rti
 fdc_irq 
@@ -440,21 +469,39 @@ fdc_irq
    pla 
    lda diskcntrl 
    sta $0314   ; disables disk irq 
+.dsb (($0310&3)-((*+3)&3))&3,$ea
    lda $0310   ; gets status and resets irq 
+_chk_310f
    and #$7c 
    sta __status 
    rts 
 #else
-  bit $030D
-  bpl fdc_irq
-  pha             ; cancel any VIA interrupt when overlay ram is active
-  lda #$7F
-  sta $030D
-  pla
-  rti
-fdc_irq 
-   lda $0310   ; gets status and resets irq 
-   rti 
+     pha
+test_via1
+     bit $030D
+     bpl test_via2
+     lda #$7F
+     sta $030D    ; cancel any VIA interrupt
+test_via2
+     bit $032D        ; on the Oric1/Atmos, this will test via1 again
+     bpl test_acia
+     lda #$7F
+     sta $032D    ; cancel any VIA2 interrupt (VIA1 on the Atmos)
+test_acia
+     bit $031D    ; on the Oric1/Atmos, this will test via1 again !
+     bpl test_fdc
+                         ; reading the ACIA status has already cleared the interrupt, so no need to do anything
+                         ; if it is a VIA interrupt on the Atmos, it has happened between the first via test and now,
+                         ; so we ignore it: it will raise another interrupt that will be cleared during the second interrupt handler test_fdc
+     bit $0314           ; $0314 reflects INTRQ state in negative logic
+     bmi all_tests_done
+test_fdc
+.dsb (($0310&3)-((*+3)&3))&3,$ea
+     lda $0310    ; read FDC status and clears interrupt request
+_chk_310g
+all_tests_done
+     pla
+     rti
 #endif
 .)
 
