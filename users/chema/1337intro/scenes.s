@@ -1013,7 +1013,8 @@ _MessageCode
 	.byt 2,45
 	.byt 1,0,"additional code",10,15
 	.byt 2,20,1,71,"Twilighte, Dbug",10,26
-	.byt 2,20,1,71,"   and Thrust"
+	;.byt 2,20,1,71,"and T. Jentzsch"
+    .byt 2,20,1,71,"  and thrust26"
 	;.byt 2,30,1,71,"   Dbug",10,26
 	;.byt 2,30,1,71,"   Thrust"
 	.byt DONE
