@@ -178,7 +178,7 @@ donegal
 LoadOverlay
 .(
 	php
-	cli
+	sei
     ; Sector to read    
     lda #OVERLAY_INIT
     ldy #0
