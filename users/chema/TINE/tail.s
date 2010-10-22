@@ -346,12 +346,14 @@ nosedbug
 	; Load mission code
     lda #NUM_SECT_MISSION_CODE
     sta tmp
+	sei
 loop
     jsr _sect_read
     jsr inc_disk_params
 
     dec tmp
     bne loop
+	cli
 
 	jmp _init_irq_routine
 	;rts
