@@ -225,14 +225,6 @@ _chk_313c
 
  
 read_data
-/*   
-     lda $0310
-     lsr
-     bcc end_read
-     lda $0318
-     bmi read_data
-*/
-
 	 bit $0314
 	 bpl end_read
      bit $0318
@@ -247,27 +239,22 @@ _chk_313d
      inc pbufh
      jmp read_data
 end_read
-.dsb (($0310&3)-((*+3)&3))&3,$ea
+/*.dsb (($0310&3)-((*+3)&3))&3,$ea
      lda $0310
 _chk_al_2
+*/
      rts
 
-write_data
-/*
-     lda $0310
-     lsr
-     bcc end_write
-     lda $0318
-     bmi write_data
-*/
+.dsb (($0313&3)-((*+15)&3))&3,$ea
 
+write_data
+     lda (pbufl),y
+loop_wait_fdc
      bit $0314
      bpl end_write
      bit $0318
-     bmi write_data
+     bmi loop_wait_fdc
 
-     lda (pbufl),y
-.dsb (($0313&3)-((*+3)&3))&3,$ea
      sta $0313
 _chk_313e
      iny
