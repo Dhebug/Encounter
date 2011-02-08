@@ -148,10 +148,7 @@ uint8_t card_init(void)
 
 	/* Send CMD0 */
 	if (card_command(0x40, 0x0000, 0x0000, 0x95) != 0x01) 
-	{
-		n6610_debug_message((const far rom char*) "Card Init Error (1)");
 		return 0;
-	}
 
 	card_type = CARD_TYPE_SD;	
 	if ((card_command(0x48, 0x0000, 0x1AA, 0x87) & 4) == 0)	
@@ -159,15 +156,9 @@ uint8_t card_init(void)
 		SPI(0xFF);
 		SPI(0xFF);		
 		if ((SPI(0xFF) & 1) == 0)
-		{
-			n6610_debug_message((const far rom char*) "Card Init Error (2)");
 			return 0;
-		}
 		if (SPI(0xFF) != 0xAA)
-		{
-			n6610_debug_message((const far rom char*) "Card Init Error (3)");
 			return 0;
-		}
 			
 		/* Send ACMD41 */ 	
 		timeout_cntr = 0;
@@ -182,24 +173,15 @@ uint8_t card_init(void)
 		
 			timeout_cntr ++;		
 			if (timeout_cntr > 20000)		
-			{
-				n6610_debug_message((const far rom char*) "Card Init Error (4)");
 				return 0;									
-			}
 		}
 	
 		/* Send CMD58 */
 		if (card_command(0x7A, 0x0000, 0x0000, 0xFF))
-		{
-			n6610_debug_message((const far rom char*) "Card Init Error (5)");
 			return 0;			
-		}
 		  
 		if(SPI(0xFF) & 0x40)
-		{
-			n6610_debug_message((const far rom char*) "Card Type SDHC");		
 			card_type = CARD_TYPE_SDHC;
-		}
 
 		SPI(0xFF);
 		SPI(0xFF);
@@ -213,19 +195,13 @@ uint8_t card_init(void)
 		{
 			timeout_cntr ++;		
 			if (timeout_cntr > 20000)
-			{
-				n6610_debug_message((const far rom char*) "Card Init Error (6)");
 				return 0;		
-			}
 		}
 	}
 		
 	/* Set default block length of 512 */
 	if (!card_set_block_length(512))
-	{
-		n6610_debug_message((const far rom char*) "Card Init Error (7)");
 		return 0;	
-	}
 
 	/* Raise Chip Select */
 	PORTCbits.RC2 = 1;
@@ -264,10 +240,7 @@ uint8_t card_read(uint32_t sector, uint8_t* buffer)
 		result = SPI(0xFF);
 		timeout_cntr ++;
 		if (timeout_cntr > 48000)
-		{
-			n6610_debug_message((const far rom char*) "Card Read Fail (1)");		
 			return 0;			
-		}	
 	}
 			
 	/* Wait until 0xFE is received */
@@ -276,18 +249,11 @@ uint8_t card_read(uint32_t sector, uint8_t* buffer)
 	{		
 		timeout_cntr ++;
 		if (timeout_cntr > 48000)
-		{
-			n6610_debug_message((const far rom char*) "Card Read Fail (2)");		
 			return 0;					
-		}
 	}
 		
 	if (card_response != 0xFE)	
-	{
-		n6610_debug_message((const far rom char*) "Card Read Fail (3)");		
-		n6610_debug((const far rom char*) "Card Response", card_response);		
 		return 0;						
-	}
 	
 	/* Read data */
 	for(i = 0; i < 512; i ++) 
@@ -326,10 +292,7 @@ uint8_t card_verify(uint32_t sector, uint8_t* buffer)
 		result = SPI(0xFF);
 		timeout_cntr ++;
 		if (timeout_cntr > 48000)
-		{
-			n6610_debug_message((const far rom char*) "Card Read Fail (1)");		
 			return 0;			
-		}	
 	}
 			
 	/* Wait until 0xFE is received */
@@ -338,18 +301,11 @@ uint8_t card_verify(uint32_t sector, uint8_t* buffer)
 	{		
 		timeout_cntr ++;
 		if (timeout_cntr > 48000)
-		{
-			n6610_debug_message((const far rom char*) "Card Read Fail (2)");		
 			return 0;					
-		}
 	}
 		
 	if (card_response != 0xFE)	
-	{
-		n6610_debug_message((const far rom char*) "Card Read Fail (3)");		
-		n6610_debug((const far rom char*) "Card Response", card_response);		
 		return 0;						
-	}
 	
 	/* Read data */
 	match = 1;

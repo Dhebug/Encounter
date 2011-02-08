@@ -605,9 +605,9 @@ static uint8_t check_buttons(void)
 		return BUTTON_RIGHT_2;
 	else if (PORTAbits.RA4 == 0)
 		return BUTTON_FIRE;
-	else if (PORTEbits.RE1 == 0)
-		return BUTTON_LEFT_1;
 	else if (PORTEbits.RE2 == 0)
+		return BUTTON_LEFT_1;
+	else if (PORTEbits.RE1 == 0)
 		return BUTTON_LEFT_2;
 	else
 		return BUTTON_NONE;
