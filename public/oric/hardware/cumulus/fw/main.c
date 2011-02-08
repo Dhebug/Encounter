@@ -58,7 +58,16 @@ fat32_dir dir;
 fat32_dir_entry root_dir;
 fat32_dir_entry image_file;
 
-void main (void) 
+/* Vector Remapping */
+extern void _startup(void);        
+#pragma code _RESET_INTERRUPT_VECTOR = 0x002000
+void _reset (void)
+{
+    _asm goto _startup _endasm
+}
+
+#pragma code
+void main(void) 
 {
 	uint8_t i, j, file_cnt;	
 

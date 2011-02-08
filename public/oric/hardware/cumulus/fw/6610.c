@@ -136,40 +136,27 @@ void n6610_init(void)
 	TRISCbits.TRISC1 = 0;
 
 	/* Reset */
-/*	PORTCbits.RC0 = 0;
-	Delay1KTCYx(20);
-	PORTCbits.RC0 = 1;
-	Delay1KTCYx(20);*/
-
 	PORTCbits.RC1 = 0;
 	Delay1KTCYx(1000);
 	PORTCbits.RC1 = 1;
 	Delay1KTCYx(1000);
 
 	/* Chip Select */
-/*	PORTCbits.RC1 = 0; */
 	PORTCbits.RC0 = 0;
 	
  	/* Sleep out  (command 0x11) */
  	n6610_write_command(SLEEPOUT); 
 
-	/* Inversion on  (command 0x20) */
- 	//n6610_write_command(INVON);  
-
 	/* Color Interface Pixel Format  (command 0x3A) */
  	n6610_write_command(COLMOD); 
- 	//n6610_write_data(0x03);   /* 0x03 = 12 bits-per-pixel */
  	n6610_write_data(0xC0);   /* 0x03 = 12 bits-per-pixel */
 
 	/* Memory access controller  (command 0x36).   */
  	n6610_write_command(MADCTL); 
-	//n6610_write_data(0x03);   /* 0xC0 = mirror x and y, reverse rgb */
 	n6610_write_data(0x06);   /* 0xE0 = mirror y, vertical, reverse rgb */
 
 	/* Write contrast  (command 0x25) */
  	n6610_write_command(SETCON); 
- 	//n6610_write_data(0x30);   /* contrast 0x30  */
-	//n6610_write_data(0x0C);   /* contrast 0x30  */
 	n6610_write_data(0x22);   /* contrast 0x40  */
 	Delay1KTCYx(2); 
 
@@ -185,6 +172,79 @@ void n6610_init(void)
 	n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x0);
 	n6610_set_font(FONT_6X8);
 }
+#endif
+
+
+#ifdef S1D15G10
+/* Initialize LCD controller */
+void n6610_init(void)
+{
+	/* Initialize EUSART module for 9-bit synchronous transmission */
+	init_EUSART();
+
+	/* Setup RST and CS pins */
+	TRISCbits.TRISC0 = 0;
+	TRISCbits.TRISC1 = 0;
+
+	/* Reset */
+	PORTCbits.RC1 = 0;
+	Delay1KTCYx(1000);
+	PORTCbits.RC1 = 1;
+	Delay1KTCYx(1000);
+
+	/* Chip Select */
+	PORTCbits.RC0 = 0;
+
+	/* Display control */
+ 	n6610_write_command(DISCTL); 
+ 	n6610_write_data(0x00); // P1: 0x00 = 2 divisions, switching period=8 (default) 
+	n6610_write_data(0x04); // P2: 0x20 = nlines/4 - 1 = 132/4 - 1 = 32) 
+ 	n6610_write_data(0x00); // P3: 0x00 = no inversely highlighted lines 
+	
+ 	/* COM scan */
+ 	n6610_write_command(COMSCN); 
+	n6610_write_data(0x80);  // P1: 0x01 = Scan 1->80, 160<-81 
+
+	/* Internal oscilator ON */
+ 	n6610_write_command(OSCON); 
+ 
+ 	/* Sleep out */
+ 	n6610_write_command(SLPOUT); 
+
+	/* Power control */
+ 	n6610_write_command(PWRCTR); 
+	n6610_write_data(0xF0);   // reference voltage regulator on, circuit voltage follower on, BOOST ON 
+ 
+ 	/* Inverse display */
+ 	n6610_write_command(DISINV);
+
+	/* Data control */
+ 	n6610_write_command(DATCTL); 
+	n6610_write_data(0x60); // P1: 0x05 = page address normal, col address inverted, address scan in page direction 
+	n6610_write_data(0x00); // P2: 0x00 = RGB sequence (default value) 
+	n6610_write_data(0x40); // P3: 0x02 = Grayscale -> 16 (selects 12-bit color, type A) 
+
+	/* Voltage control (contrast setting) */
+ 	n6610_write_command(VOLCTR); 
+	n6610_write_data(0x24); // P1 = 32  volume value  (adjust this setting for your display  0 .. 63) 
+	n6610_write_data(0xC0); // P2 = 3    resistance ratio  (determined by experiment) 
+ 
+	/* allow power supply to stabilize */
+ 	Delay1KTCYx(100); 
+ 
+ 	/* turn on the display */
+ 	n6610_write_command(DISON); 
+
+	/* Debugging */
+	debug_line_cntr = 0;
+	debug_msg_cntr = 0;
+
+	/* Text attributes */
+	n6610_set_invert_mode(0);
+	n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x0);
+	n6610_set_font(FONT_6X8);
+}
+#endif
 
 static uint8_t reverse_bits(uint8_t value)
 {
@@ -201,14 +261,15 @@ void n6610_fill_area(uint8_t x, uint8_t y, uint8_t w, uint8_t h)
 { 
 	uint8_t i, j, v1, v2, v3;
 
+	x = (x & 0xFE);
+	w = (w & 0xFE);
+
   	/* Page address set */
- 	//n6610_write_command(PASET); 
 	n6610_write_command(CASET); 
 	n6610_write_data(reverse_bits(x)); 
 	n6610_write_data(reverse_bits(x + w - 1)); 
 
 	/* Column address set */
- 	//n6610_write_command(CASET); 
 	n6610_write_command(PASET); 
  	n6610_write_data(reverse_bits(y)); 
 	n6610_write_data(reverse_bits(y + h - 1)); 
@@ -233,14 +294,14 @@ void n6610_draw_char(uint8_t x, uint8_t y, char c)
 
 	c -= 31;
 
+	x = (x & 0xFE) | 0x01;
+
   	/* Page address set */
- 	//n6610_write_command(PASET); 
 	n6610_write_command(CASET); 
 	n6610_write_data(reverse_bits(x + 1)); 
 	n6610_write_data(reverse_bits(x + font_width)); 
 
 	/* Column address set */
- 	//n6610_write_command(CASET); 
 	n6610_write_command(PASET); 
  	n6610_write_data(reverse_bits(y)); 
 	n6610_write_data(reverse_bits(y + font_height - 1)); 
@@ -285,145 +346,6 @@ void n6610_draw_char(uint8_t x, uint8_t y, char c)
 		}
 	}
 } 
-
-#endif
-
-#ifdef EPSON
-/* Initialize LCD controller */
-void n6610_init(void)
-{
-	/* Initialize EUSART module for 9-bit synchronous transmission */
-	init_EUSART();
-
-	/* Setup RST and CS pins */
-	TRISCbits.TRISC0 = 0;
-	TRISCbits.TRISC1 = 0;
-
-	/* Reset */
-	PORTCbits.RC0 = 0;
-	Delay1KTCYx(20);
-	PORTCbits.RC0 = 1;
-	Delay1KTCYx(20);
-
-	/* Chip Select */
-	PORTCbits.RC1 = 0;
-
-	/* Display control */
- 	n6610_write_command(DISCTL); 
- 	n6610_write_data(0x00); // P1: 0x00 = 2 divisions, switching period=8 (default) 
- 	//n6610_write_data(0x20); // P2: 0x20 = nlines/4 - 1 = 132/4 - 1 = 32) 
-	n6610_write_data(0x04); // P2: 0x20 = nlines/4 - 1 = 132/4 - 1 = 32) 
- 	n6610_write_data(0x00); // P3: 0x00 = no inversely highlighted lines 
-	
- 	/* COM scan */
- 	n6610_write_command(COMSCN); 
- 	//n6610_write_data(0x01);  // P1: 0x01 = Scan 1->80, 160<-81 
-	n6610_write_data(0x80);  // P1: 0x01 = Scan 1->80, 160<-81 
-
-	/* Internal oscilator ON */
- 	n6610_write_command(OSCON); 
- 
- 	/* Sleep out */
- 	n6610_write_command(SLPOUT); 
-
-	/* Power control */
- 	n6610_write_command(PWRCTR); 
- 	//n6610_write_data(0x0f);   // reference voltage regulator on, circuit voltage follower on, BOOST ON 
-	n6610_write_data(0xF0);   // reference voltage regulator on, circuit voltage follower on, BOOST ON 
- 
- 	/* Inverse display */
- 	n6610_write_command(DISINV);
-
-	/* Data control */
- 	n6610_write_command(DATCTL); 
- 	//n6610_write_data(0x01); // P1: 0x01 = page address inverted, col address normal, address scan in col direction 
- 	n6610_write_data(0x80); // P1: 0x01 = page address inverted, col address normal, address scan in col direction 
- 	//n6610_write_data(0x00); // P2: 0x00 = RGB sequence (default value) 
-	n6610_write_data(0x00); // P2: 0x00 = RGB sequence (default value) 
- 	//n6610_write_data(0x02); // P3: 0x02 = Grayscale -> 16 (selects 12-bit color, type A) 
-	n6610_write_data(0x40); // P3: 0x02 = Grayscale -> 16 (selects 12-bit color, type A) 
-
-	/* Voltage control (contrast setting) */
- 	n6610_write_command(VOLCTR); 
- 	//n6610_write_data(32); // P1 = 32  volume value  (adjust this setting for your display  0 .. 63) 
-	n6610_write_data(0x24); // P1 = 32  volume value  (adjust this setting for your display  0 .. 63) 
-	//n6610_write_data(0x00); // P1 = 32  volume value  (adjust this setting for your display  0 .. 63) 
- 	//n6610_write_data(3); // P2 = 3    resistance ratio  (determined by experiment) 
-	n6610_write_data(0xC0); // P2 = 3    resistance ratio  (determined by experiment) 
- 
-	/* allow power supply to stabilize */
- 	Delay1KTCYx(100); 
- 
- 	/* turn on the display */
- 	n6610_write_command(DISON); 
-
-	/* Debugging */
-	debug_line_cntr = 0;
-}
-
-/* Clears the screen  */
-void n6610_clear_screen(void)
-{ 
-	uint16_t x;
-	uint16_t y;
-	uint16_t c, cs;
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-
-	/* Column address set  (command 0x2A) */
- 	n6610_write_command(CASET); 
- 	n6610_write_data(0x00); 
- 	//n6610_write_data(131); 
-	n6610_write_data(0xC1); 
- 
-  	/* Page address set  (command 0x2B) */
- 	n6610_write_command(PASET); 
-	n6610_write_data(0x00); 
- 	//n6610_write_data(131); 
-	n6610_write_data(0xC1); 
-   
-	cs = 1;
-	//while (1)
-	{
-		cs = cs << 1;
-		if (cs == 0x1000)
-			cs = 1;	
-		c = cs;
-
-	 	/* Fill memory */
-	 	n6610_write_command(RAMWR); 
-		
-		for (y = 0; y < 132; y ++)
-		{
-			for (x = 0; x < 132; x ++)
-			{		
-				/*r = (c >> 8) & 0x0F;
-				g = (c >> 4) & 0x0F;
-				b = (c >> 0) & 0x0F;
-
-				n6610_write_data((g << 4) + r);
-				n6610_write_data((r << 4) + b);
-				n6610_write_data((b << 4) + g);*/
-
-				n6610_write_data(0);
-				n6610_write_data(0);
-				n6610_write_data(0);
-
-				/*n6610_write_data((r << 4));
-				n6610_write_data((b << 4) + g);*/
-		 	}
-
-			c = c << 1;
-			if (c == 0x1000)
-				c = 1;		
-		}
-
-		Delay1KTCYx(200);
-	}
-} 
-
-#endif
 
 /* Draws given string in b/w using the 6x8 font */
 void n6610_draw_rom_str(uint8_t x, uint8_t y, const far rom char* c)

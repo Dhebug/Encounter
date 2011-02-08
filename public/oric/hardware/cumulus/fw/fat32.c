@@ -58,11 +58,7 @@ uint8_t fat32_init(void)
 
 	/* Read sector 0 into the sector buffer */
 	if (!fat32_card_read(0))
-	{
-		n6610_debug_message((const far rom char*) "FAT32 Init Error (1)");
 		return 0;
-	}
-	
 
 	/* Depending on whether SD Card controller firmware reports 
 	 * itself as removable media or not, it may or may not have an
@@ -78,10 +74,7 @@ uint8_t fat32_init(void)
 
 		/* Read FAT32 Volume ID into the sector buffer */
 		if (!fat32_card_read(fpp_begin_lba))
-		{
-			n6610_debug_message((const far rom char*) "FAT32 Init Error (2)");
 			return 0;
-		}		
 	}
 	else
 		fpp_begin_lba = 0; 			
@@ -362,10 +355,7 @@ uint8_t fat32_file_from_dir_entry(fat32_file* file, fat32_dir_entry* dir_entry)
 			/* Read FAT32 sector into the sector buffer */
 			fat_sector_index = cluster >> 7;
 			if (!fat32_card_read(fat_sector_index + fat_begin_lba))
-			{	
-				n6610_debug_message((const far rom char*) "Cluster table read error");
 				return 0;
-			}
 		}
 
 		next_cluster = LE32(fat32_sector_buffer, (cluster & 0x7F) << 2); 
@@ -377,10 +367,7 @@ uint8_t fat32_file_from_dir_entry(fat32_file* file, fat32_dir_entry* dir_entry)
 			/* Discontinuity, create new range */
 			range ++;
 			if (range >= MAX_RANGES)
-			{
-				n6610_debug_message((const far rom char*) "File too fragmented");	
 				return 0;
-			}	
 	
 			file->ranges[range].start = file->ranges[range - 1].end;		 
 			file->ranges[range].end = file->ranges[range].start + 1;
