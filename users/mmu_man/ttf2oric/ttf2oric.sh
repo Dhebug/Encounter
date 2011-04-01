@@ -41,7 +41,7 @@ gen_bitmap()
 	x=2
 	y=6
 	TMPSC=/tmp/imsc.txt
-	out="$(basename "$ttf")"
+	out="$(basename "$ttf" | tr '$ -' '___')"
 	out="${out/.ttf/}"
 
 	convert_args="-background $BG -fill $FG -size $size xc:$BG -colors 2"
@@ -79,10 +79,16 @@ gen_bitmap()
 	echo "Generating $size bitmap '$out.png' ..."
 	convert $convert_args "$out.png"
 	echo "Generating header file '$out.h'..."
-	 # convert to an hex dump...
-	 # the XBM format seems to have bits in reverse order
-	 # so we flop.
-	 convert "$out.png" -flop xbm:"$out.h"
+	# convert to an hex dump...
+	# the XBM format seems to have bits in reverse order
+	# so we flop.
+	convert "$out.png" -flop xbm:"$out.h"
+	# fixup: remove static keyword
+	mv "$out.h" "$out.h_"
+	sed 's/^static //' < "$out.h_" > "$out.h"
+	rm "$out.h_"
+	# 
+	
 	return 0
 }
 
