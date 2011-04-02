@@ -1,0 +1,36 @@
+#!/bin/sh
+
+state=n
+name=
+addr=
+
+while read tok arg; do
+	#echo "[$tok][$arg]"
+	case "$tok" in
+		'};')
+			state=n
+			case "$name" in
+				sedoric|ZP|STACK|VIA|'')
+					# filter out
+					;;
+				*)
+					# print the symbol
+					echo "$addr $name"
+					;;
+			esac
+			name=
+			addr=
+			;;
+		LABEL)
+			state=l
+			;;
+		NAME)
+			name="${arg#\"}"
+			name="${name%\";}"
+			;;
+		START|ADDR)
+			addr="${arg#$}"
+			addr="${addr%;}"
+	esac
+done < "$1"
+
