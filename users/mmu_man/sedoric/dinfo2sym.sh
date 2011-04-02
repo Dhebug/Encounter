@@ -31,6 +31,7 @@ while read tok arg; do
 		START|ADDR)
 			addr="${arg#$}"
 			addr="${addr%;}"
+			test "${#addr}" -eq 3 && addr="0$addr"
 	esac
 done < "$1"
 
