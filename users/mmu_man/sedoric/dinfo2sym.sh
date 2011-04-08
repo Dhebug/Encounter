@@ -13,6 +13,12 @@ while read tok arg; do
 				sedoric|ZP|STACK|VIA|'')
 					# filter out
 					;;
+				MICRODISC_*)
+					# shorten them
+					name="Md_${name#MICRODISC_}"
+					# print the symbol
+					echo "$addr $name"
+					;;
 				*)
 					# print the symbol
 					echo "$addr $name"
