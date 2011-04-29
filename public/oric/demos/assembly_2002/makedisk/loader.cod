@@ -1,0 +1,13 @@
+datas_lecteur
+.byt 0,0,0,0
+nb_prgm
+datas_secteur
+.byt 13,4,2,5
+datas_piste
+.byt 1,2,4,0
+nombre_secteur
+.byt 8,32,125,3
+adresse_chargement_low
+.byt $00,$00,$00
+adresse_chargement_high
+.byt $c0,$10,$06

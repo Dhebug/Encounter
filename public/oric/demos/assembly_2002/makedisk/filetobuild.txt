@@ -1,0 +1,13 @@
+1 13
+#load it at c000
+music.o
+#load it at 1000
+picture.o
+#load it at 0600
+final.out
+#new position on disk
+0 5
+#load it at fc00
+loader.o
+#bootsector
+bootsector.o
