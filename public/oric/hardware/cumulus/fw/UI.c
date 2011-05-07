@@ -118,7 +118,12 @@ static uint32_t blink_cntr;
 static uint8_t status;
 static uint8_t log_line_cntr;
 static uint8_t log_msg_cntr;
+static const far rom char* log_msg;
+static uint8_t log_val1;
+static uint8_t log_val2;
+static uint8_t log_val3;
 static fat32_dir_entry file_list[FILE_LIST_SIZE];
+
 
 #pragma code
 
@@ -208,9 +213,12 @@ static void draw_status(void)
 /* Sets the status */
 void ui_set_status(ui_status s)
 {
-	status = s;
-	if (state == ui_state_emulation)
-		draw_status();
+	if (status != s)
+	{
+		status = s;
+		if (state == ui_state_emulation)
+			draw_status();
+	}
 }
 
 /* Displays emulation screen. */
@@ -349,6 +357,13 @@ static void enter_command_log(void)
 	log_msg_cntr = 0;
 	log_line_cntr = 0;
 	state = ui_state_command_log;
+
+	if (log_msg)
+	{
+		ui_log_command(log_msg, log_val1, log_val2, log_val3);
+		log_msg = 0;
+		log_val1 = log_val2 = log_val3 = 0;
+	}
 }
 
 static uint8_t change_card(void)
@@ -500,7 +515,13 @@ void ui_log_command(const far rom char* msg, uint8_t val1, uint8_t val2, uint8_t
 	int8_t j;
 	
 	if (state != ui_state_command_log)
+	{
+		log_msg = msg;
+		log_val1 = val1;
+		log_val2 = val2;
+		log_val3 = val3;
 		return;
+	}
 
 	// Draw string.
 	y = log_line_cntr * 8 + 12;
@@ -546,7 +567,13 @@ void ui_log_status(uint8_t val)
 	int8_t j;
 	
 	if (state != ui_state_command_log)
+	{
+		log_msg = (const far rom char*) str_log_status;
+		log_val1 = val;
+		log_val2 = 0;
+		log_val3 = 0;
 		return;
+	}
 
 	// Draw string.
 	y = log_line_cntr * 8 + 12;
@@ -592,6 +619,9 @@ void ui_init(void)
 	ui_wd1793_command_done();
 	card_initialized = 0;
 	ui_set_status(ui_status_ok);
+
+	log_msg = 0;
+ 	log_val1 = log_val2 = log_val3 = 0;
 
 	/* Go to the main menu */
 	enter_emulation();
@@ -753,6 +783,8 @@ static void handle_image_select(void)
 
 static void handle_reset_oric(void)
 {
+	int i;
+
 	if (pressed_button == BUTTON_LEFT_1 || pressed_button == BUTTON_LEFT_2)
 	{
 	    if (selection == 1)
@@ -769,12 +801,16 @@ static void handle_reset_oric(void)
 			PORTAbits.RA6 = 0;
 
 			/* Wait */
-			Delay10KTCYx(200);	
+			for (i = 0; i < 5; i ++)
+				Delay10KTCYx(200);	
 
 			/* Do something for the WD179X? */
 
 			/* UI */
 			enter_emulation();	
+			//state = ui_state_reset_oric;
+			//enter_command_log();	
+		
 
 			/* Reset high */
 			PORTAbits.RA6 = 1;

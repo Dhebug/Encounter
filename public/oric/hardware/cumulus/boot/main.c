@@ -21,8 +21,10 @@
 #include "p18f46K20.h" 
 #include "delays.h" 
 
+#ifdef TEXT_SUPPORT
 #define NOFONT8X16
 #include "fonts.h" 
+#endif
 
 /* Config */
 #pragma config FOSC = ECIO6
@@ -71,9 +73,9 @@ uint16_t reserved_sector_count;
 #pragma udata sector_buffer_section
 uint8_t sector_buffer[512];
 
-#define RM_RESET_VECTOR 			0x002000
-#define RM_HIGH_INTERRUPT_VECTOR    0x002008 
-#define RM_LOW_INTERRUPT_VECTOR     0x002018 
+#define RM_RESET_VECTOR 			0x001000
+#define RM_HIGH_INTERRUPT_VECTOR    0x001008 
+#define RM_LOW_INTERRUPT_VECTOR     0x001018 
 
 /* Vector remapping */
 #pragma code _HIGH_INTERRUPT_VECTOR = 0x000008
@@ -91,7 +93,7 @@ void _low_ISR (void)
 #pragma code
 far rom char str_cumulus_bin[] = "CUMULUS BIN";
 
-void erase_program_page(uint16_t address, uint8_t* buf)
+uint8_t erase_program_verify_page(uint16_t address, uint8_t* buf)
 {
 	uint8_t i;
 	far rom uint8_t* rom_ptr;
@@ -113,7 +115,7 @@ void erase_program_page(uint16_t address, uint8_t* buf)
 
 	/* Write 64 bytes */
     for (i = 0; i < 64; i++) 
-        *rom_ptr++ = buf[i];    
+        rom_ptr[i] = buf[i];    
 
     EECON1bits.EEPGD = 1;               
     EECON1bits.CFGS = 0;                
@@ -124,11 +126,18 @@ void erase_program_page(uint16_t address, uint8_t* buf)
     EECON2 = 0xAA; 
     EECON1bits.WR = 1;      
     INTCONbits.GIE = 1;     
-    EECON1bits.WREN = 0;                          
+    EECON1bits.WREN = 0;           
+
+	/* Verify 64 bytes */
+    for (i = 0; i < 64; i++) 
+        if (rom_ptr[i] != buf[i])
+			return 0;
+
+	return 1;          
 }
 
-//#define PCF8833
-#define S1D15G10
+#define PCF8833
+//#define S1D15G10
 
 #ifdef PCF8833
 
@@ -290,6 +299,7 @@ static void n6610_fill_area(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t 
 		}
 } 
 
+#ifdef TEXT_SUPPORT
 /* Draws given character in b/w using the 6x8 Font. */
 void n6610_draw_char(uint8_t x, uint8_t y, char c)
 { 
@@ -385,7 +395,7 @@ void n6610_debug_message_short(uint8_t y, const far rom char* msg, uint16_t val)
 		val = val >> 4;
 	}
 }
-
+#endif
 #endif
 
 #ifdef PCF8833
@@ -708,13 +718,13 @@ void update_firmware(void)
 	uint32_t sector;
 
 	if (!card_init())
-		return;			
+		goto error;			
 	if (!fat32_init())
-		return;	
+		goto error;			
 
 	/* Read directory first sector into the sector buffer */
 	if (!card_read(LBA(root_dir_first_cluster), sector_buffer))
-		return;	
+		goto error;			
 
 	size = 0;
 	dir_entry = sector_buffer;
@@ -742,9 +752,11 @@ void update_firmware(void)
 		dir_entry += 0x20;
 	}
 												
-	if (size)
+	if (size && size < 65536)
 	{
+#ifdef TEXT_SUPPORT
 		n6610_draw_rom_str(2, 48, (const far rom char*) "Updating firmware");
+#endif
 
 		s = 0;
 		address = 0;
@@ -761,10 +773,11 @@ void update_firmware(void)
 				if (bytes_left <= 0)		
 					break;
 		
-				if (address >= 0x2000)
+				if (address >= 0x1000)
 				{
 					//n6610_debug_message_short(18 + i * 8, (const far rom char*) "Writing Block", address);
-					erase_program_page(address, sector_buffer + ((uint16_t) i) * 64);
+					if (!erase_program_verify_page(address, sector_buffer + ((uint16_t) i) * 64))
+						goto error;
 				}
 
 				address += 64;
@@ -780,7 +793,19 @@ void update_firmware(void)
 		}
 	}	
 	else
-		n6610_draw_rom_str(2, 48, (const far rom char*) "Firmware not found");			
+		goto error;
+
+	n6610_fill_area(0, 0, 132, 132, 0xF0, 0x00, 0x0F);
+	return;
+
+error:
+
+	/* Turn screen to red */
+	n6610_fill_area(0, 0, 132, 132, 0x0F, 0xF0, 0x00);
+
+#ifdef TEXT_SUPPORT
+		n6610_draw_rom_str(2, 48, (const far rom char*) "Update failed!");			
+#endif
 }
 	
 void main(void) 
@@ -796,9 +821,12 @@ void main(void)
 	if (PORTEbits.RE2 == 0 && PORTEbits.RE1 == 0)
 	{
 		n6610_init();
-		n6610_fill_area(0, 0, 132, 132, 0x00, 0x00, 0x00);
+		n6610_fill_area(0, 0, 132, 132, 0x00, 0x0F, 0xF0);
 
 		update_firmware();		
+
+		/* Halt */
+		while (1);
 	}
 
 	_asm goto RM_RESET_VECTOR _endasm

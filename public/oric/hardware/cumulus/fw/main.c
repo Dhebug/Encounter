@@ -60,7 +60,7 @@ fat32_dir_entry image_file;
 
 /* Vector Remapping */
 extern void _startup(void);        
-#pragma code _RESET_INTERRUPT_VECTOR = 0x002000
+#pragma code _RESET_INTERRUPT_VECTOR = 0x001000
 void _reset (void)
 {
     _asm goto _startup _endasm

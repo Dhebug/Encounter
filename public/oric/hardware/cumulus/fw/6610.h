@@ -22,8 +22,8 @@
 #ifndef _6610_H
 #define _6610_H
 
-//#define PCF8833
-#define S1D15G10
+#define PCF8833
+//#define S1D15G10
 
 #ifdef PCF8833
 

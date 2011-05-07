@@ -39,8 +39,8 @@ LIBPATH .
 
 #FI
 
-CODEPAGE   NAME=boot       START=0x0            END=0x1FFF          PROTECTED
-CODEPAGE   NAME=vectors    START=0x2000          END=0x0x2029  
+CODEPAGE   NAME=boot       START=0x0            END=0x0FFF          PROTECTED
+CODEPAGE   NAME=vectors    START=0x1000          END=0x0x1029  
 #IFDEF _DEBUGCODESTART
   CODEPAGE   NAME=page       START=0x0               END=_CODEEND
   CODEPAGE   NAME=debug      START=_DEBUGCODESTART   END=_CEND        PROTECTED
