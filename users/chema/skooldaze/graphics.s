@@ -1,0 +1,3962 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -----------------------------------
+;;            Skool Daze
+;;         The Oric Version
+;; -----------------------------------
+;;			(c) Chema 2011
+;;         enguita@gmail.com
+;; -----------------------------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Graphics
+;; --------------------
+
+
+; tile graphics for skool data
+.dsb 256-(*&255)
+udg_skool 
+/*
+#ifdef AIC_SUPPORT
+	.byt %01101010
+	.byt %11101010
+	.byt %01101010
+	.byt %11101010
+	.byt %01101010
+	.byt %11101010
+	.byt %01101010
+	.byt %11101010
+	
+	;.dsb 8,64
+
+#else
+	.byt %01101010
+	.byt %01010101
+	.byt %01101010
+	.byt %01010101
+	.byt %01101010
+	.byt %01010101
+	.byt %01101010
+	.byt %01010101
+
+#endif
+*/
+
+
+; Tile data for Skool (cols 0-31)
+; Tile skool 1
+.byt $7f, $77, $6a, $75, $6a, $75, $6a, $75
+; Tile skool 2
+.byt $7f, $7f, $7f, $57, $6a, $55, $6a, $55
+; Tile skool 3
+.byt $7f, $7f, $7f, $7f, $7f, $57, $6a, $55
+; Tile skool 4
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $57
+; Tile skool 5
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 6
+.byt $7f, $7f, $7e, $7f, $7e, $7f, $7e, $7f
+; Tile skool 7
+.byt $7f, $7f, $6f, $55, $6a, $55, $6a, $55
+; Tile skool 8
+.byt $7f, $7f, $7a, $7d, $7a, $7d, $7a, $7d
+; Tile skool 9
+.byt $7f, $7f, $7f, $5f, $6b, $55, $6a, $55
+; Tile skool 10
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $57
+; Tile skool 11
+.byt $6a, $75, $6a, $75, $6a, $75, $6a, $75
+; Tile skool 12
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $55
+; Tile skool 13
+.byt $7f, $57, $6a, $55, $6a, $55, $6a, $55
+; Tile skool 14
+.byt $7e, $7f, $7e, $7f, $7f, $7f, $7f, $7f
+; Tile skool 15
+.byt $6a, $55, $6a, $75, $7e, $7f, $7f, $7f
+; Tile skool 16
+.byt $6a, $55, $6a, $55, $6a, $75, $7a, $75
+; Tile skool 17
+.byt $7f, $57, $6b, $55, $6a, $55, $6a, $55
+; Tile skool 18
+.byt $7f, $7f, $7f, $7f, $7f, $5f, $6f, $55
+; Tile skool 19
+.byt $7a, $7d, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 20
+.byt $6a, $55, $6a, $7d, $7f, $7f, $7f, $7f
+; Tile skool 21
+.byt $7f, $5f, $6b, $55, $6a, $55, $6a, $55
+; Tile skool 22
+.byt $7f, $7f, $7f, $7f, $6f, $57, $6a, $55
+; Tile skool 23
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $5f
+; Tile skool 24
+.byt $6a, $55, $6a, $55, $6b, $55, $6b, $55
+; Tile skool 25
+.byt $6a, $55, $6a, $75, $4f, $41, $41, $41
+; Tile skool 26
+.byt $6a, $55, $6a, $55, $6a, $5d, $43, $43
+; Tile skool 27
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $5d
+; Tile skool 28
+.byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
+; Tile skool 29
+.byt $60, $50, $60, $50, $60, $50, $60, $50
+; Tile skool 30
+.byt $43, $43, $43, $43, $43, $43, $43, $43
+; Tile skool 31
+.byt $68, $54, $68, $54, $68, $54, $68, $54
+; Tile skool 32
+.byt $7f, $60, $60, $60, $60, $60, $60, $7f
+; Tile skool 33
+.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 34
+.byt $7c, $44, $44, $44, $44, $44, $44, $7c
+; Tile skool 35
+.byt $6b, $55, $6b, $55, $6b, $55, $6b, $55
+; Tile skool 36
+.byt $41, $41, $41, $79, $47, $41, $41, $41
+; Tile skool 37
+.byt $43, $43, $43, $43, $63, $5f, $43, $43
+; Tile skool 38
+.byt $43, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 39
+.byt $7a, $5f, $4e, $4f, $4e, $4f, $4e, $4f
+; Tile skool 40
+.byt $6b, $54, $6b, $57, $6a, $57, $6b, $57
+; Tile skool 41
+.byt $7f, $40, $7f, $7f, $7e, $52, $6a, $76
+; Tile skool 42
+.byt $7f, $40, $7f, $6b, $6b, $6b, $6a, $6a
+; Tile skool 43
+.byt $7f, $40, $7f, $6b, $6a, $6a, $6a, $6a
+; Tile skool 44
+.byt $7f, $40, $7f, $7f, $6b, $6b, $6b, $6b
+; Tile skool 45
+.byt $7f, $40, $7f, $7e, $4a, $4a, $4a, $4a
+; Tile skool 46
+.byt $7f, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 47
+.byt $7f, $43, $43, $43, $43, $43, $43, $7f
+; Tile skool 48
+.byt $6f, $58, $6b, $5b, $6b, $5a, $6b, $5a
+; Tile skool 49
+.byt $7f, $40, $7f, $7f, $7f, $5e, $63, $5f
+; Tile skool 50
+.byt $7f, $40, $7f, $7f, $7f, $40, $7f, $40
+; Tile skool 51
+.byt $7f, $40, $7f, $7f, $7f, $42, $75, $5b
+; Tile skool 52
+.byt $7f, $40, $7f, $7f, $7f, $75, $75, $75
+; Tile skool 53
+.byt $7f, $40, $7f, $7f, $7f, $55, $55, $55
+; Tile skool 54
+.byt $7f, $40, $7f, $7f, $7f, $7a, $75, $6b
+; Tile skool 55
+.byt $6b, $55, $6b, $55, $6b, $55, $6a, $55
+; Tile skool 56
+.byt $41, $41, $41, $41, $41, $7d, $6b, $55
+; Tile skool 57
+.byt $43, $43, $43, $43, $43, $43, $7f, $57
+; Tile skool 58
+.byt $40, $40, $40, $40, $40, $40, $40, $7c
+; Tile skool 59
+.byt $4e, $4f, $4e, $4f, $4e, $4f, $4e, $4f
+; Tile skool 60
+.byt $6b, $54, $6b, $56, $6a, $56, $6a, $56
+; Tile skool 61
+.byt $7f, $40, $7f, $7f, $6a, $6a, $6a, $6a
+; Tile skool 62
+.byt $7f, $40, $7f, $6f, $6a, $6a, $6a, $6a
+; Tile skool 63
+.byt $7f, $40, $7f, $7a, $6a, $6a, $6a, $6a
+; Tile skool 64
+.byt $7f, $40, $7f, $7b, $7b, $7b, $6b, $6b
+; Tile skool 65
+.byt $6b, $58, $6b, $5b, $6a, $5a, $6a, $5a
+; Tile skool 66
+.byt $7f, $40, $7f, $7d, $55, $55, $55, $55
+; Tile skool 67
+.byt $7f, $40, $7f, $55, $55, $55, $55, $55
+; Tile skool 68
+.byt $7f, $40, $7f, $7f, $52, $59, $5c, $5e
+; Tile skool 69
+.byt $7f, $40, $7f, $7f, $5f, $4f, $67, $73
+; Tile skool 70
+.byt $6a, $55, $7f, $47, $42, $41, $42, $43
+; Tile skool 71
+.byt $6b, $55, $41, $7f, $6b, $57, $6b, $55
+; Tile skool 72
+.byt $7e, $55, $6a, $55, $6a, $55, $6a, $75
+; Tile skool 73
+.byt $6a, $55, $6a, $55, $6b, $56, $6a, $56
+; Tile skool 74
+.byt $40, $7f, $6a, $55, $7f, $40, $40, $40
+; Tile skool 75
+.byt $40, $7f, $40, $40, $7f, $45, $46, $45
+; Tile skool 76
+.byt $40, $7f, $40, $40, $40, $7f, $6a, $55
+; Tile skool 77
+.byt $40, $7f, $40, $40, $40, $60, $60, $60
+; Tile skool 78
+.byt $40, $7f, $40, $40, $40, $40, $40, $40
+; Tile skool 79
+.byt $6b, $58, $6b, $5b, $6b, $5b, $6b, $5b
+; Tile skool 80
+.byt $7f, $40, $7f, $7f, $75, $6d, $7d, $5d
+; Tile skool 81
+.byt $7f, $40, $7f, $77, $55, $55, $55, $55
+; Tile skool 82
+.byt $7f, $40, $7f, $7e, $52, $52, $52, $52
+; Tile skool 83
+.byt $6b, $55, $6a, $55, $6a, $55, $6a, $55
+; Tile skool 84
+.byt $42, $67, $68, $68, $67, $60, $60, $50
+; Tile skool 85
+.byt $6a, $7f, $43, $45, $7f, $41, $41, $41
+; Tile skool 86
+.byt $6a, $7f, $60, $55, $7f, $5d, $6a, $5d
+; Tile skool 87
+.byt $6a, $7e, $4e, $56, $7e, $76, $6e, $76
+; Tile skool 88
+.byt $46, $45, $46, $45, $46, $45, $46, $45
+; Tile skool 89
+.byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 90
+.byt $6b, $58, $68, $58, $68, $58, $68, $58
+; Tile skool 91
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 92
+.byt $7f, $7f, $6a, $75, $6a, $75, $6a, $75
+; Tile skool 93
+.byt $7f, $7f, $7f, $55, $6a, $55, $6a, $55
+; Tile skool 94
+.byt $7f, $7f, $7f, $5f, $6a, $55, $6a, $55
+; Tile skool 95
+.byt $7f, $7f, $7f, $7f, $6f, $55, $6a, $55
+; Tile skool 96
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6b, $55
+; Tile skool 97
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $55
+; Tile skool 98
+.byt $7f, $7f, $7f, $7f, $7c, $57, $6a, $55
+; Tile skool 99
+.byt $7f, $7f, $7f, $7f, $40, $78, $6f, $55
+; Tile skool 100
+.byt $7f, $7f, $7f, $7f, $40, $40, $70, $5f
+; Tile skool 101
+.byt $7f, $7f, $7f, $7f, $40, $40, $40, $78
+; Tile skool 102
+.byt $7f, $7f, $7f, $7f, $40, $40, $40, $40
+; Tile skool 103
+.byt $7f, $7f, $7f, $7f, $43, $40, $40, $40
+; Tile skool 104
+.byt $7f, $7f, $7f, $7f, $7f, $41, $40, $40
+; Tile skool 105
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $43, $40
+; Tile skool 106
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $47
+; Tile skool 107
+.byt $7f, $75, $7a, $75, $7a, $75, $7a, $75
+; Tile skool 108
+.byt $6a, $55, $6a, $55, $6a, $55, $7f, $5f
+; Tile skool 109
+.byt $6a, $55, $6a, $55, $6a, $55, $7f, $7f
+; Tile skool 110
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $7f
+; Tile skool 111
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $7d
+; Tile skool 112
+.byt $42, $43, $42, $43, $42, $43, $43, $43
+; Tile skool 113
+.byt $6a, $55, $6a, $55, $6a, $55, $7a, $7f
+; Tile skool 114
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $75
+; Tile skool 115
+.byt $6f, $54, $6c, $54, $6c, $54, $6c, $54
+; Tile skool 116
+.byt $7f, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 117
+.byt $58, $78, $5c, $6b, $55, $6a, $55, $6a
+; Tile skool 118
+.byt $40, $40, $40, $60, $60, $60, $60, $60
+; Tile skool 119
+.byt $5a, $55, $5a, $55, $5a, $55, $5a, $5f
+; Tile skool 120
+.byt $70, $50, $70, $50, $70, $50, $70, $5f
+; Tile skool 121
+.byt $40, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 122
+.byt $41, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 123
+.byt $7e, $4d, $4e, $4d, $4e, $4d, $4e, $7d
+; Tile skool 124
+.byt $4f, $48, $48, $48, $48, $48, $48, $4f
+; Tile skool 125
+.byt $7f, $50, $50, $50, $50, $50, $50, $7f
+; Tile skool 126
+.byt $77, $54, $54, $55, $54, $54, $54, $77
+; Tile skool 127
+.byt $7f, $46, $66, $56, $66, $46, $46, $7f
+; Tile skool 128
+.byt $6f, $57, $6a, $55, $6a, $55, $6a, $55
+; Tile skool 129
+.byt $7f, $7f, $7f, $7f, $6f, $5f, $6b, $57
+; Tile skool 130
+.byt $7c, $5b, $55, $5a, $55, $5a, $55, $5a
+; Tile skool 131
+.byt $40, $70, $50, $70, $50, $70, $50, $70
+; Tile skool 132
+.byt $43, $42, $42, $42, $42, $42, $42, $43
+; Tile skool 133
+.byt $7f, $44, $44, $44, $44, $44, $44, $7f
+; Tile skool 134
+.byt $7f, $47, $47, $47, $47, $47, $47, $7f
+; Tile skool 135
+.byt $7f, $50, $70, $50, $70, $50, $70, $50
+; Tile skool 136
+.byt $7f, $60, $60, $60, $60, $60, $7f, $7f
+; Tile skool 137
+.byt $7f, $40, $40, $40, $40, $40, $7f, $7f
+; Tile skool 138
+.byt $7e, $4d, $4e, $4d, $4e, $4d, $7e, $7d
+; Tile skool 139
+.byt $70, $50, $50, $50, $50, $50, $50, $70
+; Tile skool 140
+.byt $6b, $55, $6b, $55, $6a, $55, $6a, $55
+; Tile skool 141
+.byt $7f, $78, $78, $58, $68, $58, $68, $58
+; Tile skool 142
+.byt $7f, $50, $50, $50, $50, $50, $50, $50
+; Tile skool 143
+.byt $7f, $45, $46, $45, $46, $45, $46, $47
+; Tile skool 144
+.byt $7c, $54, $6c, $54, $6c, $54, $6f, $60
+; Tile skool 145
+.byt $40, $40, $40, $40, $40, $40, $7e, $4e
+; Tile skool 146
+.byt $6a, $75, $6a, $75, $68, $75, $6b, $76
+; Tile skool 147
+.byt $7f, $55, $6a, $50, $4f, $75, $6a, $75
+; Tile skool 148
+.byt $7f, $55, $6a, $55, $4a, $75, $6a, $65
+; Tile skool 149
+.byt $7f, $71, $62, $65, $6a, $65, $6a, $65
+; Tile skool 150
+.byt $6a, $75, $6a, $77, $6c, $74, $6c, $74
+; Tile skool 151
+.byt $6a, $55, $6a, $7f, $6e, $57, $6a, $57
+; Tile skool 152
+.byt $6a, $5f, $78, $51, $72, $51, $72, $51
+; Tile skool 153
+.byt $6a, $75, $5a, $5d, $6a, $5d, $6a, $5d
+; Tile skool 154
+.byt $41, $42, $44, $44, $44, $44, $44, $44
+; Tile skool 155
+.byt $7e, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 156
+.byt $40, $60, $50, $68, $50, $68, $50, $68
+; Tile skool 157
+.byt $40, $40, $40, $40, $40, $40, $41, $41
+; Tile skool 158
+.byt $68, $58, $68, $58, $68, $58, $68, $58
+; Tile skool 159
+.byt $5f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 160
+.byt $7f, $44, $44, $44, $44, $44, $44, $44
+; Tile skool 161
+.byt $76, $6a, $56, $6a, $56, $6b, $5c, $60
+; Tile skool 162
+.byt $40, $40, $40, $40, $40, $7f, $41, $4f
+; Tile skool 163
+.byt $40, $40, $40, $40, $40, $60, $60, $60
+; Tile skool 164
+.byt $6a, $76, $6a, $76, $6a, $75, $6b, $75
+; Tile skool 165
+.byt $6a, $75, $6a, $55, $5a, $55, $5a, $5d
+; Tile skool 166
+.byt $6a, $55, $7a, $55, $6a, $5d, $6f, $50
+; Tile skool 167
+.byt $6a, $65, $60, $60, $60, $60, $7f, $40
+; Tile skool 168
+.byt $6c, $7f, $40, $7f, $41, $41, $7d, $7d
+; Tile skool 169
+.byt $6b, $7f, $40, $7d, $7d, $55, $6d, $55
+; Tile skool 170
+.byt $72, $79, $7f, $70, $48, $4d, $4a, $4d
+; Tile skool 171
+.byt $6a, $5f, $78, $4f, $4b, $5f, $6b, $5f
+; Tile skool 172
+.byt $40, $78, $45, $5d, $7d, $7d, $65, $45
+; Tile skool 173
+.byt $44, $7f, $40, $40, $7f, $46, $45, $46
+; Tile skool 174
+.byt $40, $7f, $40, $40, $7f, $6a, $55, $6a
+; Tile skool 175
+.byt $41, $7f, $47, $47, $7f, $6f, $55, $6f
+; Tile skool 176
+.byt $50, $68, $50, $68, $50, $68, $5f, $70
+; Tile skool 177
+.byt $41, $41, $41, $42, $42, $42, $7e, $40
+; Tile skool 178
+.byt $47, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 179
+.byt $7a, $55, $5a, $55, $5a, $55, $5a, $55
+; Tile skool 180
+.byt $6a, $75, $6a, $75, $6a, $75, $6f, $7f
+; Tile skool 181
+.byt $6a, $67, $60, $50, $70, $57, $77, $7f
+; Tile skool 182
+.byt $40, $7f, $43, $43, $6e, $7e, $7f, $7f
+; Tile skool 183
+.byt $40, $40, $40, $57, $7f, $7f, $5f, $7f
+; Tile skool 184
+.byt $59, $55, $59, $5d, $5d, $6f, $7f, $7f
+; Tile skool 185
+.byt $6d, $55, $7d, $7d, $7f, $7f, $7f, $7f
+; Tile skool 186
+.byt $6a, $7d, $7b, $7f, $7f, $7f, $7f, $7f
+; Tile skool 187
+.byt $67, $57, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 188
+.byt $7a, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 189
+.byt $7b, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 190
+.byt $6f, $60, $6d, $5b, $5b, $5f, $7f, $7f
+; Tile skool 191
+.byt $7f, $40, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 192
+.byt $7a, $75, $7a, $75, $7b, $7f, $7f, $7f
+; Tile skool 193
+.byt $6a, $55, $6a, $57, $7f, $7f, $7f, $7f
+; Tile skool 194
+.byt $6a, $55, $6f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 195
+.byt $6a, $5f, $7f, $7e, $75, $7f, $7f, $7f
+; Tile skool 196
+.byt $7f, $7f, $75, $6a, $55, $7f, $7f, $7f
+; Tile skool 197
+.byt $7e, $78, $58, $68, $58, $7f, $7f, $7f
+; Tile skool 198
+.byt $40, $40, $40, $40, $7f, $7f, $7f, $7f
+; Tile skool 199
+.byt $41, $41, $40, $4f, $7f, $7f, $7f, $7f
+; Tile skool 200
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 201
+.byt $5b, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 202
+.byt $6a, $55, $6b, $5f, $7f, $7f, $7f, $7f
+; Tile skool 203
+.byt $46, $46, $46, $46, $46, $46, $46, $46
+; Tile skool 204
+.byt $4c, $4c, $4c, $4c, $4c, $4c, $4c, $4c
+; Tile skool 205
+.byt $5f, $50, $50, $50, $50, $50, $50, $50
+; Tile skool 206
+.byt $7d, $46, $45, $46, $45, $46, $45, $47
+; Tile skool 207
+.byt $55, $6a, $55, $6a, $55, $6b, $7e, $40
+; Tile skool 208
+.byt $55, $6a, $55, $6a, $57, $7c, $40, $5f
+; Tile skool 209
+.byt $45, $6a, $55, $6b, $7c, $43, $7d, $6a
+; Tile skool 210
+.byt $58, $68, $58, $7f, $43, $7e, $55, $6a
+; Tile skool 211
+.byt $40, $40, $40, $7c, $7c, $6c, $54, $6c
+; Tile skool 212
+.byt $5a, $55, $5a, $55, $5a, $55, $5a, $55
+; Tile skool 213
+.byt $46, $46, $46, $46, $46, $46, $46, $47
+; Tile skool 214
+.byt $40, $40, $40, $40, $40, $40, $5f, $60
+; Tile skool 215
+.byt $4c, $4c, $4c, $4c, $4c, $4f, $7c, $4c
+; Tile skool 216
+.byt $40, $40, $40, $40, $47, $78, $40, $40
+; Tile skool 217
+.byt $43, $43, $43, $43, $7f, $43, $43, $43
+; Tile skool 218
+.byt $75, $6a, $55, $6a, $55, $6b, $5c, $60
+; Tile skool 219
+.byt $55, $6a, $55, $6b, $5e, $70, $41, $47
+; Tile skool 220
+.byt $55, $6a, $5f, $70, $41, $4f, $7a, $55
+; Tile skool 221
+.byt $54, $7f, $41, $4f, $7a, $55, $6a, $55
+; Tile skool 222
+.byt $40, $7c, $7c, $54, $6c, $54, $6c, $54
+; Tile skool 223
+.byt $5a, $55, $5a, $55, $5a, $55, $5a, $57
+; Tile skool 224
+.byt $6a, $55, $6a, $55, $6b, $57, $7f, $7f
+; Tile skool 225
+.byt $60, $7f, $60, $60, $60, $60, $60, $60
+; Tile skool 226
+.byt $5f, $60, $40, $40, $40, $40, $40, $40
+; Tile skool 227
+.byt $7e, $46, $46, $46, $46, $46, $46, $46
+; Tile skool 228
+.byt $7a, $55, $5a, $55, $5a, $55, $5a, $5f
+; Tile skool 229
+.byt $6a, $55, $6a, $55, $6a, $57, $7c, $41
+; Tile skool 230
+.byt $6a, $55, $6a, $57, $7c, $60, $4f, $75
+; Tile skool 231
+.byt $6c, $54, $7f, $60, $43, $7d, $6a, $55
+; Tile skool 232
+.byt $40, $40, $7e, $5e, $6a, $56, $6a, $56
+; Tile skool 233
+.byt $4c, $4c, $4c, $4c, $4c, $4c, $4c, $4f
+; Tile skool 234
+.byt $40, $40, $40, $40, $40, $40, $4f, $70
+; Tile skool 235
+.byt $43, $43, $43, $43, $43, $5f, $63, $43
+; Tile skool 236
+.byt $41, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 237
+.byt $7e, $45, $46, $45, $46, $45, $46, $47
+; Tile skool 238
+.byt $6a, $55, $6a, $55, $6a, $55, $6f, $70
+; Tile skool 239
+.byt $6a, $55, $6a, $55, $6f, $78, $43, $5d
+; Tile skool 240
+.byt $6a, $56, $6f, $70, $41, $4f, $7a, $55
+; Tile skool 241
+.byt $40, $40, $7f, $4f, $7b, $55, $6b, $55
+; Tile skool 242
+.byt $60, $60, $60, $60, $60, $7f, $60, $60
+; Tile skool 243
+.byt $40, $40, $40, $40, $7f, $40, $40, $40
+; Tile skool 244
+.byt $46, $46, $46, $7f, $46, $46, $46, $46
+; Tile skool 245
+.byt $40, $41, $7e, $40, $40, $40, $40, $40
+; Tile skool 246
+.byt $43, $7c, $40, $40, $40, $40, $40, $40
+; Tile skool 247
+.byt $7c, $4c, $4c, $4c, $4c, $4c, $4c, $4c
+; Tile skool 248
+.byt $6a, $55, $6a, $55, $6a, $55, $6b, $5e
+; Tile skool 249
+.byt $6a, $55, $6a, $55, $6b, $56, $78, $47
+; Tile skool 250
+.byt $6b, $55, $6b, $5c, $71, $47, $7a, $55
+; Tile skool 251
+.byt $40, $40, $40, $40, $40, $40, $47, $7f
+; Tile skool 252
+.byt $4c, $4c, $4c, $4c, $4f, $7f, $7f, $7f
+; Tile skool 253
+.byt $40, $40, $47, $7f, $7f, $7f, $7f, $7f
+; Tile skool 254
+.byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+/*
+; Tile skool 255
+.byt $7a, $55, $5a, $55, $5a, $55, $5b, $5f
+; Tile skool 256
+.byt $6a, $55, $6b, $57, $6f, $7f, $7f, $7f
+; Tile skool 257
+.byt $6f, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 258
+.byt $6a, $55, $6a, $55, $6a, $55, $6b, $57
+; Tile skool 259
+.byt $60, $60, $60, $60, $60, $60, $67, $7f
+; Tile skool 260
+.byt $40, $40, $40, $40, $47, $7f, $7f, $7f
+; Tile skool 261
+.byt $46, $46, $4f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 262
+.byt $6f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+*/
+end_udg_skool
+
+.dsb 256-(*&255)
+udg_skool2
+
+; Tile data for Skool (cols 32-63)
+; Tile skool 1
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 2
+.byt $7f, $6f, $77, $6f, $77, $6b, $77, $6b
+; Tile skool 3
+.byt $75, $6a, $75, $6a, $75, $6a, $75, $7a
+; Tile skool 4
+.byt $7f, $7f, $7f, $7f, $5f, $7f, $5f, $6f
+; Tile skool 5
+.byt $7f, $60, $60, $60, $60, $60, $60, $7f
+; Tile skool 6
+.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 7
+.byt $7c, $44, $44, $44, $44, $44, $44, $7c
+; Tile skool 8
+.byt $7d, $4e, $47, $43, $43, $43, $43, $7f
+; Tile skool 9
+.byt $54, $6c, $54, $6c, $54, $6c, $54, $6c
+; Tile skool 10
+.byt $7f, $40, $7f, $7b, $71, $63, $47, $6f
+; Tile skool 11
+.byt $7f, $40, $7f, $5f, $5b, $5d, $5e, $5f
+; Tile skool 12
+.byt $7f, $40, $7f, $7e, $7a, $4a, $6a, $5a
+; Tile skool 13
+.byt $7f, $40, $7f, $6e, $6e, $6e, $6a, $6a
+; Tile skool 14
+.byt $7f, $40, $7f, $6f, $6a, $6a, $6a, $6a
+; Tile skool 15
+.byt $7f, $40, $7f, $7e, $6a, $6a, $6a, $6a
+; Tile skool 16
+.byt $7f, $40, $7f, $7a, $6a, $6a, $6a, $6a
+; Tile skool 17
+.byt $7f, $40, $7f, $7d, $65, $65, $65, $65
+; Tile skool 18
+.byt $7f, $40, $7f, $57, $55, $55, $55, $55
+; Tile skool 19
+.byt $7f, $40, $7f, $77, $55, $55, $55, $55
+; Tile skool 20
+.byt $7e, $43, $7e, $57, $52, $5b, $5a, $5f
+; Tile skool 21
+.byt $40, $40, $60, $50, $70, $50, $70, $50
+; Tile skool 22
+.byt $43, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 23
+.byt $7f, $40, $7f, $7f, $50, $48, $64, $72
+; Tile skool 24
+.byt $7f, $40, $7f, $7e, $45, $4a, $55, $6a
+; Tile skool 25
+.byt $7f, $40, $7f, $7a, $56, $6e, $5e, $7e
+; Tile skool 26
+.byt $7f, $40, $7f, $7f, $6a, $6a, $6a, $6a
+; Tile skool 27
+.byt $7f, $40, $7f, $6b, $6b, $6b, $6a, $6a
+; Tile skool 28
+.byt $7f, $40, $7f, $6f, $6c, $6c, $6c, $6c
+; Tile skool 29
+.byt $7f, $43, $7f, $7b, $6b, $6b, $6b, $6b
+; Tile skool 30
+.byt $7f, $40, $7f, $6a, $6a, $6a, $6a, $6a
+; Tile skool 31
+.byt $7f, $40, $7f, $6f, $69, $69, $69, $69
+; Tile skool 32
+.byt $7f, $40, $7f, $73, $53, $53, $53, $53
+; Tile skool 33
+.byt $7f, $40, $7f, $6f, $47, $62, $71, $7a
+; Tile skool 34
+.byt $7f, $40, $7f, $7f, $7f, $40, $40, $40
+; Tile skool 35
+.byt $7e, $43, $7e, $7f, $7e, $43, $42, $43
+; Tile skool 36
+.byt $70, $50, $70, $50, $70, $50, $70, $50
+; Tile skool 37
+.byt $42, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 38
+.byt $7f, $40, $7f, $75, $75, $75, $75, $75
+; Tile skool 39
+.byt $7f, $40, $7f, $6e, $65, $6a, $65, $6a
+; Tile skool 40
+.byt $7f, $40, $7f, $7b, $56, $6f, $5f, $7f
+; Tile skool 41
+.byt $7f, $40, $7f, $7f, $5d, $4d, $65, $75
+; Tile skool 42
+.byt $7f, $40, $7f, $7f, $6c, $6c, $6c, $6c
+; Tile skool 43
+.byt $7f, $40, $7f, $7f, $69, $6c, $6e, $6f
+; Tile skool 44
+.byt $7f, $40, $7f, $7d, $75, $75, $55, $55
+; Tile skool 45
+.byt $7f, $40, $7f, $75, $55, $55, $55, $55
+; Tile skool 46
+.byt $7f, $40, $7f, $7e, $52, $52, $52, $52
+; Tile skool 47
+.byt $7f, $40, $7f, $6f, $69, $6c, $6e, $6f
+; Tile skool 48
+.byt $7f, $40, $7f, $7f, $40, $60, $51, $4a
+; Tile skool 49
+.byt $7f, $40, $7f, $7b, $55, $6a, $55, $6b
+; Tile skool 50
+.byt $7f, $40, $7f, $6f, $5b, $7a, $7a, $7a
+; Tile skool 51
+.byt $7e, $43, $7e, $7f, $6e, $6f, $6e, $6f
+; Tile skool 52
+.byt $7f, $40, $7f, $7a, $7a, $7a, $6a, $6a
+; Tile skool 53
+.byt $7f, $43, $7f, $7f, $77, $77, $57, $57
+; Tile skool 54
+.byt $7f, $7f, $7e, $7e, $7e, $7e, $7e, $7e
+; Tile skool 55
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 56
+.byt $7e, $43, $42, $43, $42, $43, $42, $43
+; Tile skool 57
+.byt $7f, $43, $43, $43, $43, $43, $43, $43
+; Tile skool 58
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $55
+; Tile skool 59
+.byt $7f, $77, $7b, $75, $7a, $75, $7a, $75
+; Tile skool 60
+.byt $7f, $7f, $7f, $7f, $7f, $5f, $6f, $57
+; Tile skool 61
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $55
+; Tile skool 62
+.byt $60, $50, $60, $50, $60, $50, $60, $50
+; Tile skool 63
+.byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
+; Tile skool 64
+.byt $6a, $56, $6a, $56, $6a, $56, $6a, $56
+; Tile skool 65
+.byt $43, $43, $43, $43, $43, $43, $43, $43
+; Tile skool 66
+.byt $70, $70, $70, $70, $70, $70, $70, $70
+; Tile skool 67
+.byt $70, $70, $70, $70, $70, $70, $70, $7e
+; Tile skool 68
+.byt $40, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 69
+.byt $40, $40, $40, $40, $40, $40, $40, $78
+; Tile skool 70
+.byt $40, $40, $40, $40, $40, $40, $40, $43
+; Tile skool 71
+.byt $40, $40, $40, $40, $40, $40, $40, $60
+; Tile skool 72
+.byt $40, $43, $43, $43, $43, $43, $43, $42
+; Tile skool 73
+.byt $40, $7f, $7f, $7f, $7f, $7c, $70, $60
+; Tile skool 74
+.byt $58, $68, $68, $68, $70, $43, $44, $4f
+; Tile skool 75
+.byt $40, $4f, $4f, $4f, $4f, $7f, $4f, $7a
+; Tile skool 76
+.byt $41, $7e, $7e, $7e, $7f, $70, $40, $40
+; Tile skool 77
+.byt $60, $60, $60, $60, $40, $4f, $50, $7f
+; Tile skool 78
+.byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
+; Tile skool 79
+.byt $46, $7a, $7a, $7a, $7c, $40, $41, $43
+; Tile skool 80
+.byt $41, $43, $43, $43, $43, $7f, $43, $7e
+; Tile skool 81
+.byt $44, $4f, $4f, $4f, $4f, $7f, $4f, $7a
+; Tile skool 82
+.byt $44, $4f, $4f, $4f, $4f, $4f, $4f, $4a
+; Tile skool 83
+.byt $41, $7f, $7f, $7f, $7f, $7c, $70, $40
+; Tile skool 84
+.byt $6b, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 85
+.byt $7d, $7d, $7d, $7d, $7d, $7e, $7f, $7f
+; Tile skool 86
+.byt $5f, $5f, $5f, $60, $7f, $40, $7f, $7f
+; Tile skool 87
+.byt $70, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 88
+.byt $45, $65, $65, $46, $67, $58, $7f, $7f
+; Tile skool 89
+.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 90
+.byt $40, $7e, $7e, $40, $7e, $41, $7f, $7f
+; Tile skool 91
+.byt $57, $57, $57, $58, $5f, $60, $7f, $7f
+; Tile skool 92
+.byt $7c, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 93
+.byt $41, $79, $79, $41, $79, $46, $7f, $7f
+; Tile skool 94
+.byt $7a, $75, $7a, $75, $7a, $75, $7b, $77
+; Tile skool 95
+.byt $6b, $57, $6f, $5f, $7f, $7f, $7f, $7f
+; Tile skool 96
+.byt $75, $75, $75, $76, $77, $78, $7f, $7f
+; Tile skool 97
+.byt $41, $79, $79, $40, $79, $46, $7f, $7f
+; Tile skool 98
+.byt $47, $46, $47, $46, $47, $46, $47, $46
+; Tile skool 99
+.byt $55, $6a, $55, $6a, $55, $6a, $55, $6a
+; Tile skool 100
+.byt $56, $6a, $56, $6a, $56, $6a, $56, $6a
+; Tile skool 101
+.byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 102
+.byt $40, $40, $40, $40, $40, $41, $42, $44
+; Tile skool 103
+.byt $44, $44, $4c, $54, $64, $44, $44, $44
+; Tile skool 104
+.byt $60, $60, $60, $61, $62, $64, $68, $70
+; Tile skool 105
+.byt $48, $50, $60, $40, $40, $40, $40, $40
+; Tile skool 106
+.byt $44, $44, $44, $44, $44, $44, $44, $44
+; Tile skool 107
+.byt $55, $6a, $55, $6a, $55, $6a, $54, $68
+; Tile skool 108
+.byt $57, $68, $50, $60, $40, $40, $40, $40
+; Tile skool 109
+.byt $60, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 110
+.byt $47, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 111
+.byt $55, $6a, $55, $6a, $54, $68, $50, $60
+; Tile skool 112
+.byt $50, $60, $40, $40, $40, $40, $40, $40
+; Tile skool 113
+.byt $55, $6a, $54, $68, $50, $60, $40, $40
+; Tile skool 114
+.byt $40, $40, $40, $40, $40, $40, $41, $41
+; Tile skool 115
+.byt $40, $40, $5f, $60, $60, $60, $40, $40
+; Tile skool 116
+.byt $40, $40, $7f, $40, $40, $40, $40, $40
+; Tile skool 117
+.byt $6a, $55, $6b, $57, $7f, $7f, $7f, $7f
+; Tile skool 118
+.byt $40, $40, $7b, $7b, $7c, $7c, $78, $7e
+; Tile skool 119
+.byt $40, $40, $7f, $7f, $40, $40, $40, $7f
+; Tile skool 120
+.byt $40, $40, $6f, $6f, $40, $40, $40, $7f
+; Tile skool 121
+.byt $40, $40, $7d, $7d, $41, $41, $41, $7d
+; Tile skool 122
+.byt $7a, $7a, $7a, $7e, $7e, $7e, $7f, $7f
+; Tile skool 123
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 124
+.byt $45, $75, $75, $77, $77, $77, $7f, $7f
+end_udg_skool2
+
+.dsb 256-(*&255)
+udg_skool3
+
+
+
+; Tile data for Skool (cols 64-95)
+; Tile skool 1
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 2
+.byt $7f, $7e, $7c, $78, $70, $60, $40, $40
+; Tile skool 3
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7e
+; Tile skool 4
+.byt $7e, $7c, $78, $70, $70, $60, $40, $40
+; Tile skool 5
+.byt $7f, $60, $60, $60, $60, $60, $60, $7f
+; Tile skool 6
+.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 7
+.byt $7c, $44, $44, $44, $44, $44, $44, $7c
+; Tile skool 8
+.byt $7e, $46, $46, $46, $46, $46, $46, $7e
+; Tile skool 9
+.byt $7f, $70, $70, $70, $70, $70, $70, $7f
+; Tile skool 10
+.byt $7f, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 11
+.byt $4f, $48, $48, $48, $48, $48, $48, $4f
+; Tile skool 12
+.byt $4f, $40, $40, $40, $40, $40, $40, $4f
+; Tile skool 13
+.byt $7c, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile skool 14
+.byt $42, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 15
+.byt $70, $70, $70, $70, $70, $70, $70, $70
+; Tile skool 16
+.byt $4b, $47, $4f, $4f, $7f, $7f, $7f, $47
+; Tile skool 17
+.byt $46, $7c, $7e, $7c, $7c, $7f, $7e, $7c
+; Tile skool 18
+.byt $5f, $7f, $4f, $4f, $4e, $44, $40, $40
+; Tile skool 19
+.byt $60, $60, $40, $40, $40, $51, $71, $60
+; Tile skool 20
+.byt $40, $40, $4d, $59, $73, $7f, $7f, $7f
+; Tile skool 21
+.byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 22
+.byt $43, $43, $43, $49, $40, $40, $40, $43
+; Tile skool 23
+.byt $7c, $70, $60, $62, $60, $51, $72, $78
+; Tile skool 24
+.byt $40, $44, $4c, $46, $48, $40, $40, $40
+; Tile skool 25
+.byt $7f, $7f, $7f, $5e, $58, $50, $48, $47
+; Tile skool 26
+.byt $77, $67, $62, $72, $59, $40, $40, $43
+; Tile skool 27
+.byt $50, $50, $60, $50, $50, $60, $40, $70
+; Tile skool 28
+.byt $40, $7f, $7f, $7f, $7f, $7c, $60, $60
+; Tile skool 29
+.byt $4f, $78, $78, $78, $60, $40, $40, $47
+; Tile skool 30
+.byt $7c, $5f, $6f, $6f, $6f, $6f, $6e, $7e
+; Tile skool 31
+.byt $40, $7f, $7f, $7f, $7e, $70, $40, $40
+; Tile skool 32
+.byt $40, $61, $62, $62, $42, $42, $42, $5f
+; Tile skool 33
+.byt $70, $7f, $7f, $7f, $7f, $7f, $78, $78
+; Tile skool 34
+.byt $40, $7e, $7e, $7e, $78, $40, $40, $41
+; Tile skool 35
+.byt $43, $47, $4b, $4b, $4b, $4b, $4b, $7f
+; Tile skool 36
+.byt $40, $78, $78, $78, $60, $40, $40, $47
+; Tile skool 37
+.byt $4c, $5f, $6f, $6f, $6f, $6f, $6e, $7e
+; Tile skool 38
+.byt $47, $47, $47, $43, $43, $43, $46, $44
+; Tile skool 39
+.byt $78, $78, $70, $70, $60, $50, $40, $40
+; Tile skool 40
+.byt $43, $41, $41, $40, $40, $40, $40, $40
+; Tile skool 41
+.byt $7f, $7f, $7f, $7f, $5f, $5e, $4e, $44
+; Tile skool 42
+.byt $60, $6f, $6f, $4f, $4f, $4f, $4f, $48
+; Tile skool 43
+.byt $40, $7e, $7e, $7e, $7e, $70, $40, $41
+; Tile skool 44
+.byt $40, $41, $42, $42, $42, $42, $42, $7f
+; Tile skool 45
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7e, $60
+; Tile skool 46
+.byt $40, $78, $78, $78, $78, $60, $40, $47
+; Tile skool 47
+.byt $40, $47, $4b, $4b, $4b, $4b, $4b, $7e
+; Tile skool 48
+.byt $40, $7f, $7f, $7f, $7f, $7f, $78, $40
+; Tile skool 49
+.byt $40, $60, $60, $60, $60, $40, $40, $5f
+; Tile skool 50
+.byt $40, $5f, $6f, $6f, $6f, $6f, $6f, $78
+; Tile skool 51
+.byt $40, $7e, $7e, $7e, $7e, $78, $40, $41
+; Tile skool 52
+.byt $40, $41, $46, $44, $44, $44, $44, $7f
+; Tile skool 53
+.byt $60, $60, $60, $60, $60, $60, $60, $5f
+; Tile skool 54
+.byt $4f, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 55
+.byt $7e, $5e, $5e, $5e, $5e, $5e, $5e, $6d
+; Tile skool 56
+.byt $40, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 57
+.byt $7f, $45, $45, $45, $45, $45, $45, $7e
+; Tile skool 58
+.byt $78, $78, $78, $78, $78, $78, $78, $77
+; Tile skool 59
+.byt $43, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 60
+.byt $7f, $57, $57, $57, $57, $57, $57, $7b
+; Tile skool 61
+.byt $48, $48, $48, $48, $48, $48, $48, $47
+; Tile skool 62
+.byt $4f, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 63
+.byt $7e, $56, $56, $56, $56, $56, $56, $79
+; Tile skool 64
+.byt $78, $58, $58, $58, $58, $58, $58, $67
+; Tile skool 65
+.byt $7f, $49, $49, $49, $49, $49, $49, $7e
+; Tile skool 66
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
+; Tile skool 67
+.byt $7f, $7f, $7f, $7f, $7f, $7e, $60, $40
+; Tile skool 68
+.byt $7f, $7f, $7f, $7e, $70, $40, $40, $40
+; Tile skool 69
+.byt $7f, $7f, $71, $41, $41, $41, $41, $41
+; Tile skool 70
+.byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 71
+.byt $40, $40, $40, $40, $40, $40, $40, $47
+; Tile skool 72
+.byt $41, $41, $41, $41, $41, $41, $47, $7f
+; Tile skool 73
+.byt $47, $44, $44, $44, $44, $44, $44, $47
+; Tile skool 74
+.byt $44, $44, $44, $44, $44, $44, $44, $47
+; Tile skool 75
+.byt $41, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 76
+.byt $70, $70, $70, $70, $70, $70, $70, $7f
+; Tile skool 77
+.byt $40, $40, $40, $40, $40, $40, $40, $78
+; Tile skool 78
+.byt $40, $40, $40, $40, $40, $40, $40, $60
+; Tile skool 79
+.byt $40, $40, $40, $40, $40, $40, $40, $5f
+; Tile skool 80
+.byt $40, $40, $40, $40, $40, $40, $40, $7e
+; Tile skool 81
+.byt $40, $40, $40, $40, $40, $40, $40, $43
+; Tile skool 82
+.byt $40, $40, $40, $40, $40, $40, $40, $70
+; Tile skool 83
+.byt $40, $40, $40, $40, $40, $40, $40, $5d
+; Tile skool 84
+.byt $40, $40, $40, $40, $40, $40, $40, $41
+; Tile skool 85
+.byt $40, $40, $40, $40, $40, $40, $40, $7c
+; Tile skool 86
+.byt $60, $60, $60, $60, $60, $60, $40, $40
+; Tile skool 87
+.byt $44, $44, $44, $44, $44, $44, $44, $44
+; Tile skool 88
+.byt $41, $61, $61, $61, $61, $5f, $48, $47
+; Tile skool 89
+.byt $60, $5f, $5f, $5f, $5f, $5f, $5f, $78
+; Tile skool 90
+.byt $44, $7e, $7e, $7e, $7e, $71, $40, $40
+; Tile skool 91
+.byt $46, $45, $45, $45, $45, $7d, $61, $5f
+; Tile skool 92
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7c, $60
+; Tile skool 93
+.byt $50, $78, $78, $78, $78, $47, $42, $41
+; Tile skool 94
+.byt $58, $57, $57, $57, $57, $77, $47, $7e
+; Tile skool 95
+.byt $41, $7f, $7f, $7f, $7f, $7c, $70, $40
+; Tile skool 96
+.byt $60, $50, $50, $50, $50, $50, $50, $70
+; Tile skool 97
+.byt $43, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 98
+.byt $60, $5f, $5f, $5f, $5f, $5f, $58, $78
+; Tile skool 99
+.byt $42, $7e, $7e, $7e, $78, $47, $42, $41
+; Tile skool 100
+.byt $46, $45, $45, $45, $45, $7d, $41, $7f
+; Tile skool 101
+.byt $48, $78, $78, $78, $60, $5f, $48, $47
+; Tile skool 102
+.byt $58, $57, $57, $57, $57, $77, $46, $7e
+; Tile skool 103
+.byt $40, $7f, $7f, $7f, $7e, $71, $40, $40
+; Tile skool 104
+.byt $61, $61, $61, $61, $41, $7f, $60, $5f
+; Tile skool 105
+.byt $78, $7e, $7e, $41, $7f, $40, $7f, $7f
+; Tile skool 106
+.byt $47, $67, $67, $60, $67, $58, $7f, $7f
+; Tile skool 107
+.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 108
+.byt $60, $7a, $7a, $46, $7e, $41, $7f, $7f
+; Tile skool 109
+.byt $5f, $5f, $5f, $40, $5f, $60, $7f, $7f
+; Tile skool 110
+.byt $7e, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 111
+.byt $41, $69, $69, $58, $79, $46, $7f, $7f
+; Tile skool 112
+.byt $4f, $6f, $6f, $6f, $6f, $5f, $7f, $7f
+; Tile skool 113
+.byt $7d, $7d, $7d, $7e, $7f, $7f, $7f, $7f
+; Tile skool 114
+.byt $40, $7a, $7a, $46, $7e, $41, $7f, $7f
+; Tile skool 115
+.byt $78, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 116
+.byt $60, $7e, $7e, $41, $7f, $40, $7f, $7f
+; Tile skool 117
+.byt $40, $60, $6c, $6f, $6f, $5f, $7f, $7f
+; Tile skool 118
+.byt $47, $47, $47, $67, $7f, $7f, $7f, $7f
+; Tile skool 119
+.byt $50, $50, $50, $50, $50, $50, $50, $50
+; Tile skool 120
+.byt $41, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 121
+.byt $40, $40, $40, $40, $40, $44, $47, $47
+; Tile skool 122
+.byt $41, $41, $41, $41, $41, $41, $41, $71
+; Tile skool 123
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 124
+.byt $7f, $40, $41, $41, $41, $40, $40, $40
+; Tile skool 125
+.byt $7f, $40, $7f, $40, $40, $60, $60, $60
+; Tile skool 126
+.byt $7f, $40, $7f, $40, $40, $40, $40, $40
+; Tile skool 127
+.byt $7f, $40, $7e, $41, $41, $40, $40, $40
+; Tile skool 128
+.byt $7f, $40, $40, $40, $40, $60, $60, $50
+; Tile skool 129
+.byt $7f, $40, $41, $41, $41, $41, $41, $41
+; Tile skool 130
+.byt $7f, $40, $40, $60, $50, $48, $48, $44
+; Tile skool 131
+.byt $70, $48, $44, $42, $41, $40, $40, $40
+; Tile skool 132
+.byt $40, $40, $40, $40, $40, $60, $50, $48
+; Tile skool 133
+.byt $4f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 134
+.byt $60, $70, $50, $50, $50, $48, $48, $48
+; Tile skool 135
+.byt $48, $4f, $44, $44, $42, $42, $41, $41
+; Tile skool 136
+.byt $41, $7f, $40, $40, $40, $40, $40, $40
+; Tile skool 137
+.byt $42, $61, $61, $50, $48, $48, $44, $42
+; Tile skool 138
+.byt $40, $40, $40, $60, $50, $48, $48, $44
+; Tile skool 139
+.byt $44, $42, $41, $40, $40, $40, $40, $40
+; Tile skool 140
+.byt $40, $40, $40, $60, $50, $48, $44, $42
+; Tile skool 141
+.byt $40, $40, $43, $43, $43, $42, $43, $42
+; Tile skool 142
+.byt $40, $40, $40, $60, $60, $60, $60, $60
+; Tile skool 143
+.byt $48, $44, $44, $44, $44, $44, $44, $47
+; Tile skool 144
+.byt $40, $40, $40, $40, $40, $40, $40, $6f
+; Tile skool 145
+.byt $60, $60, $50, $50, $48, $48, $44, $78
+; Tile skool 146
+.byt $42, $41, $40, $40, $40, $40, $40, $40
+; Tile skool 147
+.byt $42, $41, $61, $61, $51, $49, $49, $45
+; Tile skool 148
+.byt $41, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 149
+.byt $40, $60, $50, $48, $44, $42, $41, $40
+; Tile skool 150
+.byt $50, $50, $50, $50, $50, $50, $50, $70
+; Tile skool 151
+.byt $44, $44, $45, $45, $45, $45, $45, $45
+; Tile skool 152
+.byt $43, $42, $7f, $78, $56, $6b, $55, $6a
+; Tile skool 153
+.byt $6f, $6f, $6f, $60, $6f, $6f, $6f, $6f
+; Tile skool 154
+.byt $7f, $7f, $7f, $40, $7f, $7f, $7f, $7f
+; Tile skool 155
+.byt $7e, $7e, $7e, $40, $7e, $7e, $7e, $7e
+; Tile skool 156
+.byt $7c, $7f, $7e, $7e, $7e, $7e, $7e, $7e
+; Tile skool 157
+.byt $40, $7f, $7f, $7f, $7f, $40, $7f, $7f
+; Tile skool 158
+.byt $43, $7f, $7d, $7d, $7d, $41, $7d, $7d
+; Tile skool 159
+.byt $60, $70, $7c, $7e, $7f, $7f, $7f, $7f
+; Tile skool 160
+.byt $40, $40, $40, $40, $60, $7c, $7f, $7f
+; Tile skool 161
+.byt $47, $47, $47, $47, $47, $47, $47, $77
+; Tile skool 162
+.byt $75, $7a, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 163
+.byt $6f, $6f, $6f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 164
+.byt $7e, $7e, $7e, $7f, $7f, $7f, $7f, $7f
+; Tile skool 165
+.byt $7d, $7d, $7d, $7f, $7f, $7f, $7f, $7f
+end_udg_skool3
+
+.dsb 256-(*&255)
+udg_skool4
+
+; Tile data for Skool (cols 96-127)
+; Tile skool 1
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 2
+.byt $7f, $7f, $7f, $7f, $7f, $7c, $70, $40
+; Tile skool 3
+.byt $7f, $7f, $7c, $70, $40, $40, $40, $40
+; Tile skool 4
+.byt $7f, $5f, $5f, $5f, $5f, $5f, $5f, $5f
+; Tile skool 5
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7c, $60
+; Tile skool 6
+.byt $7f, $7f, $7f, $7e, $78, $60, $40, $40
+; Tile skool 7
+.byt $7f, $7d, $71, $41, $41, $41, $41, $41
+; Tile skool 8
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7c, $70
+; Tile skool 9
+.byt $7f, $7f, $7f, $7c, $70, $40, $40, $40
+; Tile skool 10
+.byt $7c, $70, $40, $40, $40, $40, $40, $40
+; Tile skool 11
+.byt $40, $40, $40, $40, $43, $43, $43, $43
+; Tile skool 12
+.byt $40, $40, $47, $7f, $7f, $7f, $7f, $7f
+; Tile skool 13
+.byt $5f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 14
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7e
+; Tile skool 15
+.byt $7f, $7f, $7f, $7f, $7f, $78, $70, $40
+; Tile skool 16
+.byt $7f, $7f, $7e, $78, $40, $40, $40, $40
+; Tile skool 17
+.byt $7c, $60, $40, $40, $40, $40, $40, $40
+; Tile skool 18
+.byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 19
+.byt $43, $43, $43, $43, $43, $43, $43, $43
+; Tile skool 20
+.byt $48, $48, $48, $48, $48, $48, $48, $48
+; Tile skool 21
+.byt $4c, $4c, $4c, $4c, $4c, $4c, $4c, $4c
+; Tile skool 22
+.byt $42, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 23
+.byt $7f, $42, $42, $42, $42, $42, $42, $7f
+; Tile skool 24
+.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 25
+.byt $7c, $44, $44, $44, $44, $44, $44, $7c
+; Tile skool 26
+.byt $4c, $4d, $4d, $4d, $4d, $4d, $4d, $4c
+; Tile skool 27
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $40
+; Tile skool 28
+.byt $40, $5f, $5f, $5f, $5f, $5f, $5f, $40
+; Tile skool 29
+.byt $40, $60, $60, $60, $60, $60, $60, $40
+; Tile skool 30
+.byt $60, $7f, $7f, $7f, $7f, $7e, $70, $70
+; Tile skool 31
+.byt $40, $78, $78, $78, $60, $40, $40, $47
+; Tile skool 32
+.byt $40, $4c, $74, $64, $64, $64, $64, $7c
+; Tile skool 33
+.byt $4f, $4e, $4e, $4e, $4e, $4e, $4e, $4e
+; Tile skool 34
+.byt $7f, $48, $48, $48, $48, $48, $48, $48
+; Tile skool 35
+.byt $7f, $62, $62, $62, $62, $62, $62, $62
+; Tile skool 36
+.byt $7f, $51, $51, $51, $51, $51, $51, $51
+; Tile skool 37
+.byt $7f, $44, $44, $44, $44, $44, $44, $44
+; Tile skool 38
+.byt $70, $5e, $51, $51, $51, $51, $51, $51
+; Tile skool 39
+.byt $40, $40, $60, $50, $48, $44, $46, $45
+; Tile skool 40
+.byt $70, $70, $70, $70, $70, $70, $70, $6f
+; Tile skool 41
+.byt $4f, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 42
+.byt $7c, $44, $44, $44, $44, $44, $44, $78
+; Tile skool 43
+.byt $4e, $4e, $4e, $4e, $4e, $4e, $4e, $4e
+; Tile skool 44
+.byt $62, $62, $62, $62, $62, $62, $62, $62
+; Tile skool 45
+.byt $51, $51, $51, $51, $51, $51, $51, $51
+; Tile skool 46
+.byt $44, $44, $44, $44, $44, $44, $44, $44
+; Tile skool 47
+.byt $60, $50, $58, $54, $52, $51, $51, $51
+; Tile skool 48
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $60
+; Tile skool 49
+.byt $7f, $7f, $7f, $7f, $7f, $7e, $40, $40
+; Tile skool 50
+.byt $7f, $7f, $7f, $7f, $7f, $40, $40, $40
+; Tile skool 51
+.byt $7f, $7f, $7f, $7f, $40, $40, $40, $40
+; Tile skool 52
+.byt $7f, $7f, $7f, $7f, $40, $40, $40, $5f
+; Tile skool 53
+.byt $7f, $7f, $7f, $7f, $40, $40, $4f, $78
+; Tile skool 54
+.byt $7f, $7f, $7f, $7f, $40, $5f, $70, $40
+; Tile skool 55
+.byt $7f, $7f, $7f, $7f, $7c, $60, $40, $40
+; Tile skool 56
+.byt $7f, $7f, $7f, $78, $40, $40, $40, $40
+; Tile skool 57
+.byt $7f, $7f, $71, $41, $41, $41, $41, $41
+; Tile skool 58
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $78, $7f
+; Tile skool 59
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $40, $7f
+; Tile skool 60
+.byt $7f, $7f, $7f, $40, $7f, $7f, $40, $7f
+; Tile skool 61
+.byt $7f, $7f, $7f, $40, $7f, $7e, $42, $7e
+; Tile skool 62
+.byt $7f, $7f, $7f, $40, $7f, $7f, $7f, $7f
+; Tile skool 63
+.byt $7f, $7f, $7f, $40, $7f, $7d, $7d, $7d
+; Tile skool 64
+.byt $7f, $7f, $7f, $40, $7f, $7b, $7a, $4a
+; Tile skool 65
+.byt $7f, $7f, $7f, $40, $7f, $54, $54, $54
+; Tile skool 66
+.byt $7f, $7f, $7f, $44, $40, $40, $40, $40
+; Tile skool 67
+.byt $7f, $7f, $7f, $40, $40, $40, $40, $40
+; Tile skool 68
+.byt $7f, $7f, $40, $40, $40, $40, $40, $40
+; Tile skool 69
+.byt $7f, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 70
+.byt $40, $40, $40, $47, $46, $45, $46, $45
+; Tile skool 71
+.byt $5b, $5e, $7a, $56, $6a, $56, $6a, $56
+; Tile skool 72
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 73
+.byt $41, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 74
+.byt $78, $78, $78, $78, $78, $78, $78, $7f
+; Tile skool 75
+.byt $47, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 76
+.byt $70, $50, $50, $50, $50, $50, $50, $70
+; Tile skool 77
+.byt $46, $46, $46, $46, $46, $46, $46, $46
+; Tile skool 78
+.byt $7e, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 79
+.byt $45, $45, $45, $45, $45, $45, $45, $45
+; Tile skool 80
+.byt $4a, $4a, $4a, $4a, $4a, $4a, $4a, $4a
+; Tile skool 81
+.byt $54, $54, $54, $54, $54, $54, $54, $54
+; Tile skool 82
+.byt $40, $4f, $4a, $4d, $4a, $4d, $4a, $4d
+; Tile skool 83
+.byt $7f, $58, $68, $58, $68, $58, $68, $58
+; Tile skool 84
+.byt $7f, $43, $43, $43, $43, $43, $43, $42
+; Tile skool 85
+.byt $7f, $7f, $7c, $7c, $70, $70, $40, $40
+; Tile skool 86
+.byt $60, $60, $40, $40, $40, $40, $40, $40
+; Tile skool 87
+.byt $70, $50, $50, $50, $50, $50, $50, $50
+; Tile skool 88
+.byt $70, $70, $70, $70, $70, $50, $50, $50
+; Tile skool 89
+.byt $40, $40, $40, $40, $40, $40, $41, $41
+; Tile skool 90
+.byt $40, $40, $40, $40, $40, $40, $7f, $70
+; Tile skool 91
+.byt $7f, $6a, $75, $6a, $75, $6a, $75, $47
+; Tile skool 92
+.byt $7f, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 93
+.byt $7e, $5c, $58, $50, $50, $50, $50, $50
+; Tile skool 94
+.byt $40, $40, $40, $40, $40, $40, $40, $41
+; Tile skool 95
+.byt $40, $40, $40, $40, $40, $40, $60, $50
+; Tile skool 96
+.byt $50, $50, $50, $50, $50, $50, $50, $70
+; Tile skool 97
+.byt $50, $50, $50, $50, $50, $50, $50, $50
+; Tile skool 98
+.byt $40, $40, $40, $40, $40, $47, $46, $47
+; Tile skool 99
+.byt $41, $41, $41, $41, $41, $7f, $40, $70
+; Tile skool 100
+.byt $6f, $56, $6a, $56, $6a, $56, $7a, $46
+; Tile skool 101
+.byt $78, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 102
+.byt $41, $7f, $40, $7f, $41, $7f, $40, $7f
+; Tile skool 103
+.byt $50, $5f, $50, $5f, $50, $5f, $50, $5f
+; Tile skool 104
+.byt $40, $7f, $40, $7f, $40, $7f, $40, $7f
+; Tile skool 105
+.byt $41, $7f, $40, $7f, $40, $7f, $40, $7f
+; Tile skool 106
+.byt $68, $68, $48, $68, $68, $68, $48, $68
+; Tile skool 107
+.byt $45, $46, $45, $46, $45, $46, $45, $46
+; Tile skool 108
+.byt $5f, $68, $58, $68, $58, $68, $58, $68
+; Tile skool 109
+.byt $7f, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 110
+.byt $60, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 111
+.byt $46, $47, $47, $47, $47, $47, $47, $47
+; Tile skool 112
+.byt $58, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 113
+.byt $42, $7e, $7c, $7f, $7f, $7f, $7f, $7f
+; Tile skool 114
+.byt $40, $40, $40, $70, $7f, $7f, $7f, $7f
+; Tile skool 115
+.byt $41, $40, $40, $40, $7c, $7f, $7f, $7f
+; Tile skool 116
+.byt $7f, $5f, $5a, $55, $5a, $7f, $7f, $7f
+; Tile skool 117
+.byt $7c, $7f, $6f, $55, $6a, $7f, $7f, $7f
+; Tile skool 118
+.byt $40, $78, $7f, $7f, $6f, $7f, $7f, $7f
+; Tile skool 119
+.byt $40, $40, $70, $7f, $7f, $7f, $7f, $7f
+; Tile skool 120
+.byt $40, $40, $40, $60, $7f, $7f, $7f, $7f
+; Tile skool 121
+.byt $40, $40, $40, $40, $40, $78, $7e, $7f
+; Tile skool 122
+.byt $41, $41, $41, $41, $41, $41, $41, $7f
+; Tile skool 123
+.byt $47, $47, $47, $47, $47, $47, $47, $47
+; Tile skool 124
+.byt $50, $50, $50, $50, $50, $68, $68, $68
+; Tile skool 125
+.byt $54, $52, $4a, $4a, $4a, $4a, $4a, $4a
+; Tile skool 126
+.byt $40, $40, $40, $7f, $7f, $75, $6a, $75
+; Tile skool 127
+.byt $5a, $55, $5a, $7f, $40, $7f, $6a, $55
+; Tile skool 128
+.byt $6a, $55, $6a, $55, $7f, $40, $7c, $57
+; Tile skool 129
+.byt $6a, $55, $6a, $55, $6a, $7f, $41, $78
+; Tile skool 130
+.byt $6a, $55, $6a, $55, $6a, $55, $7e, $43
+; Tile skool 131
+.byt $44, $47, $44, $47, $44, $47, $44, $47
+; Tile skool 132
+.byt $68, $68, $68, $68, $68, $68, $54, $54
+; Tile skool 133
+.byt $45, $42, $42, $42, $42, $42, $42, $42
+; Tile skool 134
+.byt $4a, $6a, $6a, $6a, $6a, $69, $65, $65
+; Tile skool 135
+.byt $40, $7f, $7e, $6b, $75, $6a, $75, $6a
+; Tile skool 136
+.byt $6a, $7d, $43, $70, $5e, $6b, $55, $6a
+; Tile skool 137
+.byt $6a, $55, $7a, $4f, $41, $70, $5e, $6b
+; Tile skool 138
+.byt $6a, $55, $6a, $55, $7a, $4f, $40, $60
+; Tile skool 139
+.byt $54, $54, $54, $54, $54, $4a, $4a, $4a
+; Tile skool 140
+.byt $42, $42, $42, $42, $42, $41, $41, $41
+; Tile skool 141
+.byt $65, $65, $65, $65, $65, $55, $55, $55
+; Tile skool 142
+.byt $40, $40, $41, $41, $41, $41, $41, $41
+; Tile skool 143
+.byt $40, $40, $7f, $78, $57, $6a, $55, $6a
+; Tile skool 144
+.byt $75, $6a, $7d, $47, $40, $7c, $57, $6a
+; Tile skool 145
+.byt $55, $6a, $55, $6a, $7d, $47, $70, $6e
+; Tile skool 146
+.byt $55, $6a, $55, $6a, $55, $6a, $7d, $43
+; Tile skool 147
+.byt $5f, $68, $58, $68, $58, $68, $58, $78
+; Tile skool 148
+.byt $40, $40, $40, $40, $47, $4f, $5f, $51
+; Tile skool 149
+.byt $40, $40, $40, $40, $7f, $7f, $7f, $7f
+; Tile skool 150
+.byt $40, $40, $40, $40, $70, $7c, $7e, $7e
+; Tile skool 151
+.byt $4a, $45, $45, $42, $42, $41, $41, $40
+; Tile skool 152
+.byt $41, $41, $40, $60, $60, $50, $50, $68
+; Tile skool 153
+.byt $55, $55, $75, $6d, $5d, $4d, $46, $46
+; Tile skool 154
+.byt $4a, $4a, $4a, $4a, $4a, $49, $65, $65
+; Tile skool 155
+.byt $40, $40, $40, $40, $40, $40, $4c, $58
+; Tile skool 156
+.byt $41, $41, $7f, $70, $5e, $6b, $55, $6a
+; Tile skool 157
+.byt $55, $6a, $75, $4e, $43, $70, $5f, $6a
+; Tile skool 158
+.byt $55, $6a, $55, $6a, $75, $5e, $43, $78
+; Tile skool 159
+.byt $55, $6a, $55, $6a, $55, $6a, $75, $4f
+; Tile skool 160
+.byt $7e, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 161
+.byt $44, $47, $44, $47, $44, $44, $44, $44
+; Tile skool 162
+.byt $40, $7f, $40, $7f, $40, $40, $40, $40
+; Tile skool 163
+.byt $41, $7f, $40, $7f, $41, $41, $41, $41
+; Tile skool 164
+.byt $50, $5f, $50, $5f, $50, $50, $50, $50
+; Tile skool 165
+.byt $68, $68, $48, $68, $68, $68, $68, $68
+; Tile skool 166
+.byt $50, $50, $50, $60, $60, $60, $60, $60
+; Tile skool 167
+.byt $50, $50, $50, $50, $50, $60, $60, $60
+; Tile skool 168
+.byt $64, $53, $4c, $43, $40, $40, $40, $40
+; Tile skool 169
+.byt $43, $43, $71, $4f, $70, $4f, $40, $40
+; Tile skool 170
+.byt $54, $53, $7f, $7e, $76, $76, $76, $7e
+; Tile skool 171
+.byt $70, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 172
+.byt $55, $6a, $55, $7a, $4f, $61, $5c, $6b
+; Tile skool 173
+.byt $55, $6a, $55, $6a, $55, $6a, $5f, $61
+; Tile skool 174
+.byt $57, $6a, $56, $6a, $56, $6a, $56, $7a
+; Tile skool 175
+.byt $6f, $6e, $7e, $7c, $7e, $7f, $7f, $7f
+; Tile skool 176
+.byt $40, $40, $41, $41, $41, $62, $7a, $7e
+; Tile skool 177
+.byt $41, $41, $40, $40, $40, $40, $40, $40
+; Tile skool 178
+.byt $41, $41, $61, $61, $61, $51, $5f, $5f
+; Tile skool 179
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $5f
+; Tile skool 180
+.byt $55, $6a, $55, $6a, $75, $7e, $7f, $7f
+; Tile skool 181
+.byt $40, $40, $7c, $7f, $7f, $7f, $7f, $7f
+; Tile skool 182
+.byt $40, $40, $40, $40, $40, $7c, $7f, $7f
+; Tile skool 183
+.byt $5f, $5f, $5f, $5f, $49, $40, $70, $7f
+; Tile skool 184
+.byt $60, $60, $60, $60, $40, $40, $40, $40
+; Tile skool 185
+.byt $7c, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 186
+.byt $40, $70, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 187
+.byt $40, $40, $40, $7c, $7f, $7f, $7f, $7f
+; Tile skool 188
+.byt $41, $41, $41, $41, $71, $7f, $7f, $7f
+
+end_skool_udgs
+
+.dsb 256-(*&255)
+.dsb 8
+children_tiles
+; Tile graphic 1
+.byt $0, $f, $7, $5, $0, $7, $2, $7
+; Tile graphic 2
+.byt $0, $20, $30, $30, $10, $38, $3c, $3e
+; Tile graphic 3
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 4
+.byt $f, $f, $f, $f, $f, $1f, $2f, $17
+; Tile graphic 5
+.byt $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3a
+; Tile graphic 6
+.byt $7, $7, $2, $2, $2, $3, $3, $7
+; Tile graphic 7
+.byt $3c, $38, $28, $28, $28, $38, $38, $38
+; Tile graphic 8
+.byt $0, $1, $3, $3, $2, $7, $f, $1f
+; Tile graphic 9
+.byt $0, $3c, $38, $28, $0, $38, $10, $38
+; Tile graphic 10
+.byt $1f, $1f, $1f, $1f, $1f, $1f, $1f, $17
+; Tile graphic 11
+.byt $3c, $3c, $3c, $3c, $3c, $3e, $3d, $3a
+; Tile graphic 12
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 13
+.byt $f, $7, $5, $5, $5, $7, $7, $7
+; Tile graphic 14
+.byt $38, $38, $10, $10, $10, $30, $30, $38
+; Tile graphic 15
+.byt $0, $3, $1, $1, $0, $1, $0, $1
+; Tile graphic 16
+.byt $0, $38, $3c, $1c, $4, $3e, $2f, $3f
+; Tile graphic 17
+.byt $0, $0, $0, $0, $0, $0, $0, $20
+; Tile graphic 18
+.byt $3, $3, $3, $3, $3, $7, $b, $5
+; Tile graphic 19
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3e
+; Tile graphic 20
+.byt $20, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 21
+.byt $1, $0, $0, $1, $1, $3, $3, $f
+; Tile graphic 22
+.byt $3f, $32, $24, $a, $1d, $25, $23, $7
+; Tile graphic 23
+.byt $0, $0, $0, $0, $0, $0, $20, $20
+; Tile graphic 24
+.byt $0, $0, $0, $0, $0, $0, $0, $1
+; Tile graphic 25
+.byt $0, $7, $f, $e, $8, $1f, $3d, $3f
+; Tile graphic 26
+.byt $0, $30, $20, $20, $0, $20, $0, $20
+; Tile graphic 27
+.byt $1, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 28
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $3f, $1f
+; Tile graphic 29
+.byt $30, $30, $30, $30, $30, $38, $34, $28
+; Tile graphic 30
+.byt $0, $0, $0, $0, $0, $0, $1, $1
+; Tile graphic 31
+.byt $3f, $13, $9, $14, $2e, $29, $31, $38
+; Tile graphic 32
+.byt $20, $0, $0, $20, $20, $30, $30, $3c
+; Tile graphic 33
+.byt $7, $7, $2, $2, $1, $1, $0, $1
+; Tile graphic 34
+.byt $38, $38, $10, $10, $20, $20, $0, $20
+; Tile graphic 35
+.byt $1, $2, $2, $5, $5, $7, $e, $1e
+; Tile graphic 36
+.byt $3f, $3d, $35, $4, $2, $1, $0, $1
+; Tile graphic 37
+.byt $0, $0, $0, $20, $10, $30, $30, $30
+; Tile graphic 38
+.byt $0, $0, $0, $1, $2, $3, $3, $3
+; Tile graphic 39
+.byt $3f, $2f, $2b, $8, $10, $20, $0, $20
+; Tile graphic 40
+.byt $20, $10, $10, $28, $28, $38, $1c, $1e
+; Tile graphic 41
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 42
+.byt $7, $3, $7, $5, $f, $11, $27, $28
+; Tile graphic 43
+.byt $3e, $3e, $3e, $3e, $3e, $3e, $3c, $0
+; Tile graphic 44
+.byt $0, $0, $0, $1, $0, $0, $0, $0
+; Tile graphic 45
+.byt $28, $38, $38, $38, $0, $0, $0, $0
+; Tile graphic 46
+.byt $1f, $1f, $1f, $1f, $1f, $1f, $f, $0
+; Tile graphic 47
+.byt $38, $30, $38, $28, $3c, $22, $39, $5
+; Tile graphic 48
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 49
+.byt $5, $7, $7, $7, $0, $0, $0, $0
+; Tile graphic 50
+.byt $0, $0, $0, $20, $0, $0, $0, $0
+; Tile graphic 51
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 52
+.byt $0, $0, $1f, $f, $b, $0, $f, $5
+; Tile graphic 53
+.byt $0, $0, $0, $20, $20, $30, $30, $38
+; Tile graphic 54
+.byt $0, $0, $0, $0, $5, $7, $7, $7
+; Tile graphic 55
+.byt $6, $9, $10, $24, $3a, $3f, $39, $30
+; Tile graphic 56
+.byt $3, $3, $2f, $1f, $f, $2f, $3f, $1f
+; Tile graphic 57
+.byt $38, $38, $3c, $3c, $3c, $2c, $2a, $e
+; Tile graphic 58
+.byt $0, $0, $0, $1, $1, $3, $3, $7
+; Tile graphic 59
+.byt $0, $0, $3e, $3c, $34, $0, $3c, $28
+; Tile graphic 60
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 61
+.byt $7, $7, $f, $f, $f, $d, $15, $1c
+; Tile graphic 62
+.byt $30, $30, $3d, $3e, $3c, $3d, $3f, $3e
+; Tile graphic 63
+.byt $18, $24, $2, $9, $17, $3f, $27, $3
+; Tile graphic 64
+.byt $0, $0, $0, $0, $28, $38, $38, $38
+; Tile graphic 65
+.byt $0, $0, $0, $0, $10, $1f, $1c, $1f
+; Tile graphic 66
+.byt $0, $0, $0, $0, $1f, $3f, $1b, $31
+; Tile graphic 67
+.byt $0, $0, $0, $3f, $3e, $3f, $3f, $3f
+; Tile graphic 68
+.byt $0, $2, $2e, $26, $2e, $2e, $3c, $20
+; Tile graphic 69
+.byt $0, $10, $1d, $19, $1d, $1d, $f, $1
+; Tile graphic 70
+.byt $0, $0, $0, $3f, $1f, $3f, $3f, $3f
+; Tile graphic 71
+.byt $0, $0, $0, $0, $3e, $3f, $36, $23
+; Tile graphic 72
+.byt $0, $0, $0, $0, $2, $3e, $e, $3e
+; Tile graphic 73
+.byt $5, $7, $1, $0, $0, $0, $0, $0
+; Tile graphic 74
+.byt $7, $3f, $3f, $27, $1f, $3, $3, $3
+; Tile graphic 75
+.byt $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3e
+; Tile graphic 76
+.byt $4, $9, $a, $a, $a, $e, $e, $1e
+; Tile graphic 77
+.byt $3e, $e, $a, $a, $a, $e, $e, $1e
+; Tile graphic 78
+.byt $1f, $1f, $1f, $1f, $1f, $1f, $1f, $1f
+; Tile graphic 79
+.byt $38, $3f, $3f, $39, $3e, $30, $30, $30
+; Tile graphic 80
+.byt $28, $38, $20, $0, $0, $0, $0, $0
+; Tile graphic 81
+.byt $1f, $1c, $14, $14, $14, $1c, $1c, $1e
+; Tile graphic 82
+.byt $8, $24, $14, $14, $14, $1c, $1c, $1e
+; Tile graphic 83
+.byt $0, $0, $0, $0, $0, $0, $1f, $17
+; Tile graphic 84
+.byt $0, $f, $7, $5, $0, $7, $3e, $3f
+; Tile graphic 85
+.byt $1f, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 86
+.byt $3f, $27, $3f, $7, $3, $3, $3, $3
+; Tile graphic 87
+.byt $0, $3c, $38, $28, $0, $38, $1f, $3f
+; Tile graphic 88
+.byt $0, $0, $0, $0, $0, $0, $3e, $3a
+; Tile graphic 89
+.byt $3f, $39, $3f, $38, $30, $30, $30, $30
+; Tile graphic 90
+.byt $3e, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 91
+.byt $4, $a, $e, $c, $c, $e, $7, $3
+; Tile graphic 92
+.byt $0, $f, $7, $5, $0, $7, $2, $37
+; Tile graphic 93
+.byt $1, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 94
+.byt $3f, $3f, $1f, $f, $f, $f, $f, $7
+; Tile graphic 95
+.byt $7, $7, $2, $2, $2, $3, $3, $7
+; Tile graphic 96
+.byt $0, $3c, $38, $28, $0, $38, $10, $3b
+; Tile graphic 97
+.byt $8, $14, $1c, $c, $c, $1c, $38, $30
+; Tile graphic 98
+.byt $3f, $3f, $3e, $3c, $3c, $3c, $3c, $38
+; Tile graphic 99
+.byt $20, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 100
+.byt $38, $38, $10, $10, $10, $30, $30, $38
+; Tile graphic 101
+.byt $0, $0, $0, $0, $0, $0, $0, $1
+; Tile graphic 102
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 103
+.byt $2, $3, $3, $3, $3, $3, $3, $3
+; Tile graphic 104
+.byt $20, $2f, $7, $5, $20, $27, $22, $37
+; Tile graphic 105
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 106
+.byt $0, $0, $0, $0, $0, $0, $0, $20
+; Tile graphic 107
+.byt $1, $3d, $38, $28, $1, $39, $11, $3b
+; Tile graphic 108
+.byt $10, $30, $30, $30, $30, $30, $30, $30
+; Tile graphic 109
+.byt $0, $1, $2, $3, $4, $3, $0, $0
+; Tile graphic 110
+.byt $1f, $3f, $3f, $3f, $3f, $f, $7, $7
+; Tile graphic 111
+.byt $3e, $3f, $3f, $3c, $3c, $3c, $3c, $3c
+; Tile graphic 112
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 113
+.byt $3c, $38, $28, $28, $28, $38, $38, $38
+; Tile graphic 114
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 115
+.byt $1f, $3f, $3f, $f, $f, $f, $f, $f
+; Tile graphic 116
+.byt $3e, $3f, $3f, $3f, $3f, $3c, $38, $38
+; Tile graphic 117
+.byt $0, $20, $10, $30, $8, $30, $0, $0
+; Tile graphic 118
+.byt $f, $7, $5, $5, $5, $7, $7, $7
+; Tile graphic 119
+.byt $0, $0, $0, $0, $f, $8, $f, $13
+; Tile graphic 120
+.byt $0, $f, $7, $5, $3f, $4, $3e, $3f
+; Tile graphic 121
+.byt $0, $20, $30, $30, $10, $18, $1c, $3e
+; Tile graphic 122
+.byt $1f, $8, $0, $0, $0, $0, $0, $0
+; Tile graphic 123
+.byt $3f, $f, $f, $f, $f, $f, $7, $7
+; Tile graphic 124
+.byt $3f, $3f, $3c, $3c, $3c, $3c, $3c, $3c
+; Tile graphic 125
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 126
+.byt $0, $1, $3, $3, $2, $6, $e, $1f
+; Tile graphic 127
+.byt $0, $3c, $38, $28, $3f, $8, $1f, $3f
+; Tile graphic 128
+.byt $0, $0, $0, $0, $3c, $4, $3c, $32
+; Tile graphic 129
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 130
+.byt $3f, $3f, $f, $f, $f, $f, $f, $f
+; Tile graphic 131
+.byt $3f, $3c, $3c, $3c, $3c, $3c, $38, $38
+; Tile graphic 132
+.byt $3e, $4, $0, $0, $0, $0, $0, $0
+; Tile graphic 133
+.byt $0, $3, $4, $4, $6, $0, $7, $1
+; Tile graphic 134
+.byt $0, $30, $3c, $2c, $c, $38, $10, $1c
+; Tile graphic 135
+.byt $3e, $2e, $3e, $3e, $3e, $3e, $3e, $3a
+; Tile graphic 136
+.byt $0, $3, $f, $d, $c, $7, $2, $e
+; Tile graphic 137
+.byt $0, $30, $8, $8, $18, $0, $38, $20
+; Tile graphic 138
+.byt $1f, $1d, $1f, $1f, $1f, $1f, $1f, $17
+; Tile graphic 139
+.byt $0, $0, $1, $1, $1, $0, $1, $0
+; Tile graphic 140
+.byt $0, $3c, $f, $b, $23, $e, $34, $17
+; Tile graphic 141
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 142
+.byt $3f, $3b, $3f, $3f, $3f, $3f, $3f, $3e
+; Tile graphic 143
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 144
+.byt $0, $f, $3c, $34, $31, $1c, $b, $3a
+; Tile graphic 145
+.byt $0, $0, $20, $20, $20, $0, $20, $0
+; Tile graphic 146
+.byt $3f, $37, $3f, $3f, $3f, $3f, $3f, $1f
+; Tile graphic 147
+.byt $0, $0, $7, $9, $9, $c, $1, $e
+; Tile graphic 148
+.byt $0, $0, $20, $38, $18, $18, $30, $30
+; Tile graphic 149
+.byt $0, $0, $1, $7, $6, $6, $3, $3
+; Tile graphic 150
+.byt $0, $0, $38, $24, $24, $c, $20, $1c
+; Tile graphic 151
+.byt $0, $0, $0, $3d, $3d, $3f, $3e, $3d
+; Tile graphic 152
+.byt $0, $0, $c, $12, $2, $e, $26, $3c
+; Tile graphic 153
+.byt $0, $0, $c, $12, $10, $1c, $19, $f
+; Tile graphic 154
+.byt $0, $0, $0, $2f, $2f, $3f, $1f, $2f
+; Tile graphic 155
+.byt $0, $7, $f, $9, $1, $8, $f, $7
+; Tile graphic 156
+.byt $0, $20, $30, $30, $10, $18, $3c, $3e
+; Tile graphic 157
+.byt $0, $1, $3, $3, $2, $6, $f, $1f
+; Tile graphic 158
+.byt $0, $38, $3c, $24, $20, $4, $3c, $38
+; Tile graphic 159
+.byt $0, $1, $3, $2, $0, $2, $3, $1
+; Tile graphic 160
+.byt $0, $38, $3c, $1c, $14, $6, $3f, $3f
+; Tile graphic 161
+.byt $1, $0, $0, $1, $1, $3, $3, $f
+; Tile graphic 162
+.byt $0, $7, $f, $e, $a, $18, $3f, $3f
+; Tile graphic 163
+.byt $0, $20, $30, $10, $0, $10, $30, $20
+; Tile graphic 164
+.byt $20, $0, $0, $20, $20, $30, $30, $3c
+; Tile graphic 165
+.byt $0, $0, $f, $1f, $13, $2, $10, $1f
+; Tile graphic 166
+.byt $0, $0, $0, $20, $20, $20, $30, $38
+; Tile graphic 167
+.byt $0, $0, $0, $1, $1, $1, $3, $7
+; Tile graphic 168
+.byt $0, $0, $3c, $3e, $32, $10, $2, $3e
+; Tile graphic 169
+.byt $0, $0, $1, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 170
+.byt $0, $0, $2c, $6, $6, $1e, $e, $3c
+; Tile graphic 171
+.byt $0, $0, $d, $18, $18, $1e, $1c, $f
+; Tile graphic 172
+.byt $0, $0, $20, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 173
+.byt $0, $7, $f, $9, $1, $8, $3f, $3f
+; Tile graphic 174
+.byt $0, $38, $3c, $24, $20, $4, $3f, $3f
+; Tile graphic 175
+.byt $0, $7, $f, $9, $1, $8, $f, $37
+; Tile graphic 176
+.byt $0, $38, $3c, $24, $20, $4, $3c, $3b
+; Tile graphic 177
+.byt $20, $27, $f, $9, $21, $28, $2f, $37
+; Tile graphic 178
+.byt $1, $39, $3c, $24, $21, $5, $3d, $3b
+; Tile graphic 179
+.byt $0, $7, $8, $6, $5, $0, $7, $7
+; Tile graphic 180
+.byt $0, $30, $8, $8, $28, $10, $38, $3e
+; Tile graphic 181
+.byt $0, $3, $4, $4, $5, $2, $7, $1f
+; Tile graphic 182
+.byt $0, $38, $4, $18, $28, $0, $38, $38
+; Tile graphic 183
+.byt $0, $1, $2, $1, $1, $0, $1, $1
+; Tile graphic 184
+.byt $0, $3c, $2, $22, $1a, $4, $3e, $3f
+; Tile graphic 185
+.byt $0, $f, $10, $11, $16, $8, $1f, $3f
+; Tile graphic 186
+.byt $0, $20, $10, $20, $20, $0, $20, $20
+; Tile graphic 187
+.byt $0, $0, $f, $10, $c, $b, $0, $f
+; Tile graphic 188
+.byt $0, $0, $20, $10, $10, $10, $30, $38
+; Tile graphic 189
+.byt $0, $0, $1, $2, $2, $2, $3, $7
+; Tile graphic 190
+.byt $0, $0, $3c, $2, $c, $34, $0, $3c
+; Tile graphic 191
+.byt $0, $0, $1, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 192
+.byt $0, $2, $1a, $a, $1a, $12, $3c, $0
+; Tile graphic 193
+.byt $0, $10, $16, $14, $16, $12, $f, $0
+; Tile graphic 194
+.byt $0, $0, $20, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 195
+.byt $0, $7, $8, $6, $5, $0, $7, $37
+; Tile graphic 196
+.byt $0, $38, $4, $18, $28, $0, $38, $3b
+; Tile graphic 197
+.byt $20, $27, $8, $6, $25, $20, $27, $37
+; Tile graphic 198
+.byt $1, $39, $4, $18, $29, $1, $39, $3b
+; Tile graphic 199
+.byt $0, $7, $8, $6, $3e, $4, $3e, $3f
+; Tile graphic 200
+.byt $0, $30, $8, $8, $18, $18, $14, $3e
+; Tile graphic 201
+.byt $0, $3, $4, $4, $6, $6, $a, $1f
+; Tile graphic 202
+.byt $0, $38, $4, $18, $1f, $8, $1f, $3f
+; Tile graphic 203
+.byt $0, $0, $0, $0, $7, $5, $0, $7
+; Tile graphic 204
+.byt $0, $0, $0, $0, $20, $30, $10, $38
+; Tile graphic 205
+.byt $2, $7, $7, $7, $7, $f, $17, $f
+; Tile graphic 206
+.byt $3c, $3e, $2e, $3e, $3e, $3e, $3e, $3a
+; Tile graphic 207
+.byt $0, $0, $0, $0, $1, $3, $2, $7
+; Tile graphic 208
+.byt $0, $0, $0, $0, $38, $28, $0, $38
+; Tile graphic 209
+.byt $f, $1f, $1d, $1f, $1f, $1f, $1f, $17
+; Tile graphic 210
+.byt $10, $38, $38, $38, $38, $3c, $3a, $3c
+; Tile graphic 211
+.byt $0, $0, $0, $0, $1, $1, $0, $1
+; Tile graphic 212
+.byt $0, $0, $0, $0, $38, $1c, $4, $3e
+; Tile graphic 213
+.byt $0, $1, $1, $1, $1, $3, $5, $3
+; Tile graphic 214
+.byt $2f, $3f, $3b, $3f, $3f, $3f, $3f, $3e
+; Tile graphic 215
+.byt $0, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 216
+.byt $1, $0, $0, $1, $1, $3, $3, $f
+; Tile graphic 217
+.byt $0, $0, $0, $0, $7, $e, $8, $1f
+; Tile graphic 218
+.byt $0, $0, $0, $0, $20, $20, $0, $20
+; Tile graphic 219
+.byt $0, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 220
+.byt $3d, $3f, $37, $3f, $3f, $3f, $3f, $1f
+; Tile graphic 221
+.byt $0, $20, $20, $20, $20, $30, $28, $30
+; Tile graphic 222
+.byt $20, $0, $0, $20, $20, $30, $30, $3c
+; Tile graphic 223
+.byt $7, $7, $2, $2, $1, $1, $0, $1
+; Tile graphic 224
+.byt $38, $38, $10, $10, $20, $20, $0, $20
+; Tile graphic 225
+.byt $0, $0, $0, $0, $20, $30, $10, $30
+; Tile graphic 226
+.byt $3, $1, $3, $5, $7, $9, $13, $14
+; Tile graphic 227
+.byt $38, $3c, $3c, $3c, $3c, $3c, $38, $0
+; Tile graphic 228
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 229
+.byt $14, $1c, $1c, $3c, $0, $0, $0, $0
+; Tile graphic 230
+.byt $0, $0, $0, $0, $1, $3, $2, $3
+; Tile graphic 231
+.byt $7, $f, $f, $f, $f, $f, $7, $0
+; Tile graphic 232
+.byt $30, $20, $30, $28, $38, $24, $32, $a
+; Tile graphic 233
+.byt $a, $e, $e, $f, $0, $0, $0, $0
+; Tile graphic 234
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 235
+.byt $0, $7, $5, $0, $7, $2, $33, $f
+; Tile graphic 236
+.byt $0, $20, $30, $10, $30, $30, $38, $38
+; Tile graphic 237
+.byt $0, $0, $1, $1, $3, $f, $7, $3
+; Tile graphic 238
+.byt $3f, $27, $3, $13, $13, $37, $3f, $27
+; Tile graphic 239
+.byt $38, $38, $38, $38, $38, $38, $30, $20
+; Tile graphic 240
+.byt $0, $1, $3, $2, $3, $3, $7, $7
+; Tile graphic 241
+.byt $0, $38, $28, $0, $38, $10, $33, $3c
+; Tile graphic 242
+.byt $7, $7, $7, $7, $7, $7, $3, $1
+; Tile graphic 243
+.byt $3f, $39, $30, $32, $32, $3b, $3f, $39
+; Tile graphic 244
+.byt $0, $0, $20, $20, $30, $3c, $38, $30
+; Tile graphic 245
+.byt $0, $0, $0, $0, $4, $7, $7, $7
+; Tile graphic 246
+.byt $0, $0, $0, $0, $7, $3f, $6, $3c
+; Tile graphic 247
+.byt $0, $0, $0, $0, $3f, $3f, $3f, $1f
+; Tile graphic 248
+.byt $0, $0, $16, $32, $16, $36, $3e, $30
+; Tile graphic 249
+.byt $0, $0, $1a, $13, $1a, $1b, $1f, $3
+; Tile graphic 250
+.byt $0, $0, $0, $0, $3f, $3f, $3f, $3e
+; Tile graphic 251
+.byt $0, $0, $0, $0, $38, $3f, $18, $f
+; Tile graphic 252
+.byt $0, $0, $0, $0, $8, $38, $38, $38
+; Tile graphic 253
+.byt $0, $4, $a, $4, $0, $0, $0, $0
+; Tile graphic 254
+.byt $0, $8, $14, $8, $0, $0, $0, $0
+
+end_children_tiles
+
+.dsb 256-(*&255)
+.dsb 8
+children_masks
+; Tile mask 1
+.byt $70, $60, $60, $70, $70, $70, $78, $70
+; Tile mask 2
+.byt $5f, $4f, $47, $47, $47, $43, $41, $40
+; Tile mask 3
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7f
+; Tile mask 4
+.byt $60, $60, $60, $60, $60, $40, $40, $40
+; Tile mask 5
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 6
+.byt $60, $70, $78, $78, $78, $78, $78, $70
+; Tile mask 7
+.byt $41, $43, $43, $43, $43, $43, $43, $43
+; Tile mask 8
+.byt $7e, $7c, $78, $78, $78, $70, $60, $40
+; Tile mask 9
+.byt $43, $41, $41, $43, $43, $43, $47, $43
+; Tile mask 10
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 11
+.byt $41, $41, $41, $41, $41, $40, $40, $40
+; Tile mask 12
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $7f
+; Tile mask 13
+.byt $60, $70, $70, $70, $70, $70, $70, $70
+; Tile mask 14
+.byt $41, $43, $47, $47, $47, $47, $47, $43
+; Tile mask 15
+.byt $7c, $78, $78, $7c, $7c, $7c, $7e, $7c
+; Tile mask 16
+.byt $47, $43, $41, $41, $41, $40, $40, $40
+; Tile mask 17
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $4f
+; Tile mask 18
+.byt $78, $78, $78, $78, $78, $70, $60, $70
+; Tile mask 19
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 20
+.byt $4f, $4f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 21
+.byt $78, $7e, $7e, $7c, $7c, $78, $60, $60
+; Tile mask 22
+.byt $40, $40, $41, $40, $40, $40, $48, $50
+; Tile mask 23
+.byt $5f, $7f, $7f, $7f, $5f, $5f, $4f, $4f
+; Tile mask 24
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7c
+; Tile mask 25
+.byt $78, $70, $60, $60, $60, $40, $40, $40
+; Tile mask 26
+.byt $4f, $47, $47, $4f, $4f, $4f, $5f, $4f
+; Tile mask 27
+.byt $7c, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 28
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 29
+.byt $47, $47, $47, $47, $47, $43, $41, $43
+; Tile mask 30
+.byt $7e, $7f, $7f, $7f, $7e, $7e, $7c, $7c
+; Tile mask 31
+.byt $40, $40, $60, $40, $40, $40, $44, $42
+; Tile mask 32
+.byt $47, $5f, $5f, $4f, $4f, $47, $41, $41
+; Tile mask 33
+.byt $60, $70, $78, $78, $7c, $7c, $7e, $7c
+; Tile mask 34
+.byt $41, $43, $47, $47, $4f, $4f, $5f, $4f
+; Tile mask 35
+.byt $78, $78, $78, $70, $70, $70, $60, $40
+; Tile mask 36
+.byt $40, $40, $40, $50, $58, $5c, $7e, $7c
+; Tile mask 37
+.byt $5f, $5f, $5f, $4f, $47, $47, $47, $47
+; Tile mask 38
+.byt $7e, $7e, $7e, $7c, $78, $78, $78, $78
+; Tile mask 39
+.byt $40, $40, $40, $42, $46, $4e, $5f, $4f
+; Tile mask 40
+.byt $47, $47, $47, $43, $43, $43, $41, $40
+; Tile mask 41
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7e
+; Tile mask 42
+.byt $70, $78, $70, $70, $60, $40, $40, $40
+; Tile mask 43
+.byt $40, $40, $40, $40, $40, $40, $41, $43
+; Tile mask 44
+.byt $7e, $7e, $7e, $7c, $7e, $7f, $7f, $7f
+; Tile mask 45
+.byt $43, $43, $43, $43, $47, $7f, $7f, $7f
+; Tile mask 46
+.byt $40, $40, $40, $40, $40, $40, $60, $70
+; Tile mask 47
+.byt $43, $47, $43, $43, $41, $40, $40, $40
+; Tile mask 48
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $5f
+; Tile mask 49
+.byt $70, $70, $70, $70, $78, $7f, $7f, $7f
+; Tile mask 50
+.byt $5f, $5f, $5f, $4f, $5f, $7f, $7f, $7f
+; Tile mask 51
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $79
+; Tile mask 52
+.byt $7f, $60, $40, $40, $60, $60, $60, $70
+; Tile mask 53
+.byt $7f, $7f, $5f, $4f, $4f, $47, $47, $43
+; Tile mask 54
+.byt $7f, $7f, $7f, $7a, $70, $70, $70, $70
+; Tile mask 55
+.byt $70, $60, $40, $40, $40, $40, $40, $40
+; Tile mask 56
+.byt $78, $50, $40, $40, $40, $40, $40, $40
+; Tile mask 57
+.byt $43, $43, $41, $41, $41, $41, $40, $40
+; Tile mask 58
+.byt $7f, $7f, $7e, $7c, $7c, $78, $78, $70
+; Tile mask 59
+.byt $7f, $41, $40, $40, $41, $41, $41, $43
+; Tile mask 60
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $67
+; Tile mask 61
+.byt $70, $70, $60, $60, $60, $60, $40, $40
+; Tile mask 62
+.byt $47, $42, $40, $40, $40, $40, $40, $40
+; Tile mask 63
+.byt $43, $41, $40, $40, $40, $40, $40, $40
+; Tile mask 64
+.byt $7f, $7f, $7f, $57, $43, $43, $43, $43
+; Tile mask 65
+.byt $7f, $7f, $7f, $6f, $40, $40, $40, $40
+; Tile mask 66
+.byt $7f, $7f, $7f, $60, $40, $40, $40, $40
+; Tile mask 67
+.byt $7f, $7f, $40, $40, $40, $40, $40, $40
+; Tile mask 68
+.byt $7d, $40, $40, $40, $40, $40, $40, $41
+; Tile mask 69
+.byt $6f, $40, $40, $40, $40, $40, $40, $60
+; Tile mask 70
+.byt $7f, $7f, $40, $40, $40, $40, $40, $40
+; Tile mask 71
+.byt $7f, $7f, $7f, $41, $40, $40, $40, $40
+; Tile mask 72
+.byt $7f, $7f, $7f, $7d, $40, $40, $40, $40
+; Tile mask 73
+.byt $70, $70, $78, $7e, $7f, $7f, $7f, $7f
+; Tile mask 74
+.byt $40, $40, $40, $40, $40, $68, $78, $78
+; Tile mask 75
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 76
+.byt $70, $60, $60, $60, $60, $60, $60, $40
+; Tile mask 77
+.byt $40, $40, $60, $60, $60, $60, $60, $40
+; Tile mask 78
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 79
+.byt $40, $40, $40, $40, $40, $45, $47, $47
+; Tile mask 80
+.byt $43, $43, $47, $5f, $7f, $7f, $7f, $7f
+; Tile mask 81
+.byt $40, $40, $41, $41, $41, $41, $41, $40
+; Tile mask 82
+.byt $43, $41, $41, $41, $41, $41, $41, $40
+; Tile mask 83
+.byt $7f, $7f, $7f, $7f, $7f, $60, $40, $40
+; Tile mask 84
+.byt $70, $60, $60, $70, $70, $40, $40, $40
+; Tile mask 85
+.byt $40, $60, $7e, $7f, $7f, $7f, $7f, $7f
+; Tile mask 86
+.byt $40, $40, $40, $40, $78, $78, $78, $78
+; Tile mask 87
+.byt $43, $41, $41, $43, $43, $40, $40, $40
+; Tile mask 88
+.byt $7f, $7f, $7f, $7f, $7f, $41, $40, $40
+; Tile mask 89
+.byt $40, $40, $40, $40, $47, $47, $47, $47
+; Tile mask 90
+.byt $40, $41, $5f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 91
+.byt $71, $60, $60, $61, $61, $60, $70, $78
+; Tile mask 92
+.byt $70, $60, $60, $70, $70, $70, $48, $40
+; Tile mask 93
+.byt $7c, $7e, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 94
+.byt $40, $40, $40, $60, $60, $60, $60, $70
+; Tile mask 95
+.byt $70, $70, $78, $78, $78, $78, $78, $70
+; Tile mask 96
+.byt $43, $41, $41, $43, $43, $43, $44, $40
+; Tile mask 97
+.byt $63, $41, $41, $61, $61, $41, $43, $47
+; Tile mask 98
+.byt $40, $40, $40, $41, $41, $41, $41, $43
+; Tile mask 99
+.byt $4f, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 100
+.byt $43, $43, $47, $47, $47, $47, $47, $43
+; Tile mask 101
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
+; Tile mask 102
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $4f
+; Tile mask 103
+.byt $78, $78, $78, $78, $78, $78, $78, $78
+; Tile mask 104
+.byt $40, $40, $40, $40, $40, $40, $48, $40
+; Tile mask 105
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
+; Tile mask 106
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $4f
+; Tile mask 107
+.byt $40, $40, $40, $40, $40, $40, $44, $40
+; Tile mask 108
+.byt $47, $47, $47, $47, $47, $47, $47, $47
+; Tile mask 109
+.byt $7e, $7c, $78, $78, $70, $78, $7c, $7f
+; Tile mask 110
+.byt $40, $40, $40, $40, $40, $40, $70, $70
+; Tile mask 111
+.byt $40, $40, $40, $40, $41, $41, $41, $41
+; Tile mask 112
+.byt $7f, $5f, $5f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 113
+.byt $43, $43, $43, $43, $43, $43, $43, $43
+; Tile mask 114
+.byt $7f, $7e, $7e, $7f, $7f, $7f, $7f, $7f
+; Tile mask 115
+.byt $40, $40, $40, $40, $60, $60, $60, $60
+; Tile mask 116
+.byt $40, $40, $40, $40, $40, $40, $43, $43
+; Tile mask 117
+.byt $5f, $4f, $47, $47, $43, $47, $4f, $7f
+; Tile mask 118
+.byt $70, $70, $70, $70, $70, $70, $70, $70
+; Tile mask 119
+.byt $7f, $7f, $7f, $70, $60, $60, $60, $40
+; Tile mask 120
+.byt $70, $60, $60, $40, $40, $40, $40, $40
+; Tile mask 121
+.byt $5f, $4f, $47, $47, $47, $43, $41, $40
+; Tile mask 122
+.byt $40, $60, $77, $7f, $7f, $7f, $7f, $7f
+; Tile mask 123
+.byt $40, $40, $60, $60, $60, $60, $60, $60
+; Tile mask 124
+.byt $40, $40, $40, $41, $41, $41, $41, $41
+; Tile mask 125
+.byt $5f, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 126
+.byt $7e, $7c, $78, $78, $78, $70, $60, $40
+; Tile mask 127
+.byt $43, $41, $41, $40, $40, $40, $40, $40
+; Tile mask 128
+.byt $7f, $7f, $7f, $43, $41, $41, $41, $40
+; Tile mask 129
+.byt $7e, $7e, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 130
+.byt $40, $40, $40, $60, $60, $60, $60, $60
+; Tile mask 131
+.byt $40, $40, $41, $41, $41, $41, $41, $41
+; Tile mask 132
+.byt $40, $41, $7b, $7f, $7f, $7f, $7f, $7f
+; Tile mask 133
+.byt $7c, $78, $70, $70, $70, $70, $70, $70
+; Tile mask 134
+.byt $4f, $43, $41, $41, $41, $43, $43, $41
+; Tile mask 135
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 136
+.byt $7c, $70, $60, $60, $60, $70, $70, $60
+; Tile mask 137
+.byt $4f, $47, $43, $43, $43, $43, $43, $43
+; Tile mask 138
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 139
+.byt $7f, $7e, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 140
+.byt $43, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 141
+.byt $7f, $7f, $5f, $5f, $5f, $7f, $7f, $5f
+; Tile mask 142
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 143
+.byt $7f, $7f, $7e, $7e, $7e, $7f, $7f, $7e
+; Tile mask 144
+.byt $70, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 145
+.byt $7f, $5f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 146
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 147
+.byt $7f, $78, $70, $60, $60, $60, $60, $60
+; Tile mask 148
+.byt $7f, $5f, $47, $43, $43, $43, $43, $47
+; Tile mask 149
+.byt $7f, $7e, $78, $70, $70, $70, $70, $78
+; Tile mask 150
+.byt $7f, $47, $43, $41, $41, $41, $41, $41
+; Tile mask 151
+.byt $7f, $7f, $42, $40, $40, $40, $40, $40
+; Tile mask 152
+.byt $7f, $73, $41, $40, $40, $40, $40, $41
+; Tile mask 153
+.byt $7f, $73, $60, $40, $40, $40, $40, $60
+; Tile mask 154
+.byt $7f, $7f, $50, $40, $40, $40, $40, $40
+; Tile mask 155
+.byt $78, $60, $60, $60, $60, $60, $60, $70
+; Tile mask 156
+.byt $5f, $4f, $47, $47, $47, $43, $41, $40
+; Tile mask 157
+.byt $7e, $7c, $78, $78, $78, $70, $60, $40
+; Tile mask 158
+.byt $47, $41, $41, $41, $41, $41, $41, $43
+; Tile mask 159
+.byt $7e, $7c, $78, $78, $78, $78, $78, $7c
+; Tile mask 160
+.byt $47, $43, $41, $41, $41, $40, $40, $40
+; Tile mask 161
+.byt $78, $7e, $7e, $7c, $7c, $78, $70, $60
+; Tile mask 162
+.byt $78, $70, $60, $60, $60, $40, $40, $40
+; Tile mask 163
+.byt $5f, $4f, $47, $47, $47, $47, $47, $4f
+; Tile mask 164
+.byt $47, $5f, $5f, $4f, $4f, $47, $43, $41
+; Tile mask 165
+.byt $7f, $70, $60, $40, $40, $40, $40, $40
+; Tile mask 166
+.byt $7f, $7f, $5f, $4f, $4f, $4f, $47, $43
+; Tile mask 167
+.byt $7f, $7f, $7e, $7c, $7c, $7c, $78, $70
+; Tile mask 168
+.byt $7f, $43, $41, $40, $40, $40, $40, $40
+; Tile mask 169
+.byt $7f, $7e, $40, $40, $40, $40, $40, $40
+; Tile mask 170
+.byt $7f, $43, $41, $40, $40, $40, $40, $41
+; Tile mask 171
+.byt $7f, $70, $60, $40, $40, $40, $40, $60
+; Tile mask 172
+.byt $7f, $5f, $40, $40, $40, $40, $40, $40
+; Tile mask 173
+.byt $78, $60, $60, $60, $60, $40, $40, $40
+; Tile mask 174
+.byt $47, $41, $41, $41, $41, $40, $40, $40
+; Tile mask 175
+.byt $78, $60, $60, $60, $60, $60, $40, $40
+; Tile mask 176
+.byt $47, $41, $41, $41, $41, $41, $40, $40
+; Tile mask 177
+.byt $48, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 178
+.byt $44, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 179
+.byt $78, $60, $60, $70, $70, $70, $70, $70
+; Tile mask 180
+.byt $4f, $47, $43, $43, $43, $47, $41, $40
+; Tile mask 181
+.byt $7c, $78, $70, $70, $70, $78, $60, $40
+; Tile mask 182
+.byt $47, $41, $41, $43, $43, $43, $43, $43
+; Tile mask 183
+.byt $7e, $78, $78, $7c, $7c, $7c, $7c, $7c
+; Tile mask 184
+.byt $43, $41, $40, $40, $40, $41, $40, $40
+; Tile mask 185
+.byt $70, $60, $40, $40, $40, $60, $40, $40
+; Tile mask 186
+.byt $5f, $47, $47, $4f, $4f, $4f, $4f, $4f
+; Tile mask 187
+.byt $7f, $70, $60, $40, $60, $60, $60, $60
+; Tile mask 188
+.byt $7f, $5f, $4f, $47, $47, $47, $47, $43
+; Tile mask 189
+.byt $7f, $7e, $7c, $78, $78, $78, $78, $70
+; Tile mask 190
+.byt $7f, $43, $41, $40, $41, $41, $41, $41
+; Tile mask 191
+.byt $7f, $7c, $40, $40, $40, $40, $40, $40
+; Tile mask 192
+.byt $7d, $40, $40, $40, $40, $40, $41, $41
+; Tile mask 193
+.byt $6f, $40, $40, $40, $40, $40, $60, $60
+; Tile mask 194
+.byt $7f, $4f, $40, $40, $40, $40, $40, $40
+; Tile mask 195
+.byt $78, $60, $60, $60, $60, $60, $40, $40
+; Tile mask 196
+.byt $47, $41, $41, $41, $41, $41, $40, $40
+; Tile mask 197
+.byt $48, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 198
+.byt $44, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 199
+.byt $78, $60, $60, $40, $40, $40, $40, $40
+; Tile mask 200
+.byt $4f, $47, $43, $43, $43, $43, $41, $40
+; Tile mask 201
+.byt $7c, $78, $70, $70, $70, $70, $60, $40
+; Tile mask 202
+.byt $47, $41, $41, $40, $40, $40, $40, $40
+; Tile mask 203
+.byt $7f, $7f, $7f, $78, $70, $70, $70, $70
+; Tile mask 204
+.byt $7f, $7f, $7f, $5f, $4f, $47, $47, $43
+; Tile mask 205
+.byt $78, $70, $70, $70, $70, $60, $40, $60
+; Tile mask 206
+.byt $41, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 207
+.byt $7f, $7f, $7f, $7e, $7c, $78, $78, $70
+; Tile mask 208
+.byt $7f, $7f, $7f, $47, $43, $43, $43, $43
+; Tile mask 209
+.byt $60, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 210
+.byt $47, $43, $43, $43, $43, $41, $40, $41
+; Tile mask 211
+.byt $7f, $7f, $7f, $7e, $7c, $7c, $7c, $7c
+; Tile mask 212
+.byt $7f, $7f, $7f, $47, $43, $41, $41, $40
+; Tile mask 213
+.byt $7e, $7c, $7c, $7c, $7c, $78, $70, $78
+; Tile mask 214
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 215
+.byt $5f, $4f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 216
+.byt $7c, $7e, $7e, $7c, $7c, $78, $70, $60
+; Tile mask 217
+.byt $7f, $7f, $7f, $78, $70, $60, $60, $40
+; Tile mask 218
+.byt $7f, $7f, $7f, $5f, $4f, $4f, $4f, $4f
+; Tile mask 219
+.byt $7e, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 220
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 221
+.byt $5f, $4f, $4f, $4f, $4f, $47, $43, $47
+; Tile mask 222
+.byt $4f, $5f, $5f, $4f, $4f, $47, $43, $41
+; Tile mask 223
+.byt $70, $70, $78, $78, $7c, $7c, $7e, $7c
+; Tile mask 224
+.byt $43, $43, $47, $47, $4f, $4f, $5f, $4f
+; Tile mask 225
+.byt $7f, $7f, $7f, $5f, $4f, $47, $47, $47
+; Tile mask 226
+.byt $78, $7c, $78, $70, $70, $60, $40, $40
+; Tile mask 227
+.byt $43, $41, $41, $41, $41, $41, $43, $47
+; Tile mask 228
+.byt $7f, $7f, $7f, $7e, $7f, $7f, $7f, $7f
+; Tile mask 229
+.byt $41, $41, $41, $41, $43, $7f, $7f, $7f
+; Tile mask 230
+.byt $7f, $7f, $7f, $7e, $7c, $78, $78, $78
+; Tile mask 231
+.byt $70, $60, $60, $60, $60, $60, $70, $78
+; Tile mask 232
+.byt $47, $4f, $47, $43, $43, $41, $40, $40
+; Tile mask 233
+.byt $60, $60, $60, $60, $70, $7f, $7f, $7f
+; Tile mask 234
+.byt $7f, $7f, $7f, $5f, $7f, $7f, $7f, $7f
+; Tile mask 235
+.byt $78, $70, $70, $70, $70, $40, $40, $40
+; Tile mask 236
+.byt $5f, $4f, $47, $47, $47, $47, $43, $43
+; Tile mask 237
+.byt $7e, $7e, $7c, $7c, $70, $60, $60, $78
+; Tile mask 238
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 239
+.byt $43, $43, $43, $43, $43, $43, $43, $47
+; Tile mask 240
+.byt $7e, $7c, $78, $78, $78, $78, $70, $70
+; Tile mask 241
+.byt $47, $43, $43, $43, $43, $40, $40, $40
+; Tile mask 242
+.byt $70, $70, $70, $70, $70, $70, $70, $78
+; Tile mask 243
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 244
+.byt $5f, $5f, $4f, $4f, $43, $41, $41, $47
+; Tile mask 245
+.byt $7f, $7f, $7f, $7b, $70, $70, $70, $70
+; Tile mask 246
+.byt $7f, $7f, $7f, $78, $40, $40, $40, $40
+; Tile mask 247
+.byt $7f, $7f, $7f, $40, $40, $40, $40, $40
+; Tile mask 248
+.byt $7f, $61, $40, $40, $40, $40, $40, $41
+; Tile mask 249
+.byt $7f, $61, $40, $40, $40, $40, $40, $60
+; Tile mask 250
+.byt $7f, $7f, $7f, $40, $40, $40, $40, $40
+; Tile mask 251
+.byt $7f, $7f, $7f, $47, $40, $40, $40, $40
+; Tile mask 252
+.byt $7f, $7f, $7f, $77, $43, $43, $43, $43
+; Tile mask 253
+.byt $7b, $71, $60, $71, $7b, $7f, $7f, $7f
+; Tile mask 254
+.byt $77, $63, $41, $63, $77, $7f, $7f, $7f
+end_children_masks
+
+.dsb 256-(*&255)
+.dsb 8
+; teachers, group 1
+teacher_tiles 
+; Tile graphic 1
+.byt $0, $1, $2, $4, $6, $4, $3, $2
+; Tile graphic 2
+.byt $0, $38, $4, $e, $2a, $e, $17, $7
+; Tile graphic 3
+.byt $0, $0, $0, $0, $0, $0, $30, $38
+; Tile graphic 4
+.byt $3, $7, $7, $7, $7, $7, $7, $5
+; Tile graphic 5
+.byt $33, $37, $3b, $b, $23, $23, $33, $33
+; Tile graphic 6
+.byt $3c, $34, $34, $24, $26, $26, $26, $26
+; Tile graphic 7
+.byt $5, $7, $7, $1, $1, $1, $1, $1
+; Tile graphic 8
+.byt $3b, $34, $38, $37, $35, $35, $35, $35
+; Tile graphic 9
+.byt $6, $2e, $1e, $3e, $1e, $1e, $1e, $1e
+; Tile graphic 10
+.byt $1, $1, $1, $1, $0, $0, $0, $0
+; Tile graphic 11
+.byt $35, $35, $3d, $3d, $d, $5, $5, $d
+; Tile graphic 12
+.byt $1e, $1e, $1c, $1c, $8, $8, $38, $38
+; Tile graphic 13
+.byt $0, $0, $0, $0, $0, $0, $3, $7
+; Tile graphic 14
+.byt $0, $7, $8, $1c, $15, $1c, $3a, $38
+; Tile graphic 15
+.byt $0, $20, $10, $8, $18, $8, $30, $10
+; Tile graphic 16
+.byt $f, $b, $b, $9, $19, $19, $19, $19
+; Tile graphic 17
+.byt $33, $3b, $37, $34, $31, $31, $33, $33
+; Tile graphic 18
+.byt $30, $38, $38, $38, $38, $38, $38, $28
+; Tile graphic 19
+.byt $18, $1d, $1e, $1f, $1e, $1e, $1e, $1e
+; Tile graphic 20
+.byt $37, $b, $7, $3b, $2b, $2b, $2b, $2b
+; Tile graphic 21
+.byt $28, $38, $38, $20, $20, $20, $20, $20
+; Tile graphic 22
+.byt $1e, $1e, $e, $e, $4, $4, $7, $7
+; Tile graphic 23
+.byt $2b, $2b, $2f, $2f, $2c, $28, $28, $2c
+; Tile graphic 24
+.byt $20, $20, $20, $20, $0, $0, $0, $0
+; Tile graphic 25
+.byt $0, $0, $0, $1, $1, $1, $0, $0
+; Tile graphic 26
+.byt $0, $1e, $21, $3, $2a, $3, $35, $21
+; Tile graphic 27
+.byt $0, $0, $0, $20, $20, $20, $3c, $3e
+; Tile graphic 28
+.byt $0, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 29
+.byt $3c, $3d, $3e, $32, $38, $38, $3c, $1c
+; Tile graphic 30
+.byt $3f, $3d, $3d, $39, $39, $39, $39, $39
+; Tile graphic 31
+.byt $0, $0, $0, $0, $20, $20, $20, $20
+; Tile graphic 32
+.byt $1, $1, $1, $0, $0, $0, $0, $0
+; Tile graphic 33
+.byt $1e, $3d, $3e, $1d, $1d, $1d, $1d, $1d
+; Tile graphic 34
+.byt $31, $b, $7, $3f, $17, $17, $17, $17
+; Tile graphic 35
+.byt $20, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 36
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 37
+.byt $1b, $19, $19, $19, $9, $9, $1f, $3f
+; Tile graphic 38
+.byt $17, $1f, $17, $16, $12, $11, $13, $17
+; Tile graphic 39
+.byt $20, $20, $20, $10, $10, $30, $20, $0
+; Tile graphic 40
+.byt $0, $0, $0, $1, $1, $1, $f, $1f
+; Tile graphic 41
+.byt $0, $1e, $21, $30, $15, $30, $2b, $21
+; Tile graphic 42
+.byt $0, $0, $0, $20, $20, $20, $0, $0
+; Tile graphic 43
+.byt $0, $0, $0, $0, $1, $1, $1, $1
+; Tile graphic 44
+.byt $3f, $2f, $2f, $27, $27, $27, $27, $27
+; Tile graphic 45
+.byt $f, $2f, $1f, $13, $7, $7, $f, $e
+; Tile graphic 46
+.byt $0, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 47
+.byt $1, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 48
+.byt $23, $34, $38, $3f, $3a, $3a, $3a, $3a
+; Tile graphic 49
+.byt $1e, $2f, $1f, $2e, $2e, $2e, $2e, $2e
+; Tile graphic 50
+.byt $20, $20, $20, $0, $0, $0, $0, $0
+; Tile graphic 51
+.byt $1, $1, $1, $2, $2, $3, $1, $0
+; Tile graphic 52
+.byt $3a, $3e, $3a, $1a, $12, $22, $32, $3a
+; Tile graphic 53
+.byt $36, $26, $26, $26, $24, $24, $3e, $3f
+; Tile graphic 54
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 55
+.byt $1, $1, $1, $1, $0, $0, $1, $3
+; Tile graphic 56
+.byt $35, $25, $25, $25, $25, $25, $3d, $3d
+; Tile graphic 57
+.byt $1e, $1e, $1c, $1c, $8, $8, $30, $30
+; Tile graphic 58
+.byt $1e, $1e, $e, $e, $4, $4, $3, $3
+; Tile graphic 59
+.byt $2b, $29, $29, $29, $29, $29, $2f, $2f
+; Tile graphic 60
+.byt $20, $20, $20, $20, $0, $0, $20, $30
+; Tile graphic 61
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 62
+.byt $0, $1, $2, $4, $6, $4, $3, $22
+; Tile graphic 63
+.byt $13, $f, $1f, $37, $13, $9, $9, $5
+; Tile graphic 64
+.byt $7, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 65
+.byt $0, $20, $10, $8, $18, $8, $30, $11
+; Tile graphic 66
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 67
+.byt $32, $3c, $3e, $3b, $32, $24, $24, $28
+; Tile graphic 68
+.byt $38, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 69
+.byt $0, $0, $0, $20, $10, $8, $4, $2
+; Tile graphic 70
+.byt $0, $0, $0, $0, $0, $0, $0, $1
+; Tile graphic 71
+.byt $0, $0, $0, $0, $0, $1e, $21, $3
+; Tile graphic 72
+.byt $0, $0, $0, $0, $0, $0, $0, $20
+; Tile graphic 73
+.byt $1, $1, $1, $0, $0, $1, $0, $0
+; Tile graphic 74
+.byt $31, $9, $8, $34, $35, $12, $8, $7
+; Tile graphic 75
+.byt $2a, $3, $35, $21, $3e, $3e, $3b, $3b
+; Tile graphic 76
+.byt $20, $20, $20, $30, $10, $8, $8, $28
+; Tile graphic 77
+.byt $0, $0, $10, $18, $1f, $1c, $1c, $1f
+; Tile graphic 78
+.byt $0, $0, $0, $3, $3c, $3, $f, $3f
+; Tile graphic 79
+.byt $1a, $1b, $3a, $36, $e, $1f, $3f, $3f
+; Tile graphic 80
+.byt $24, $24, $34, $32, $2a, $2e, $29, $1e
+; Tile graphic 81
+.byt $0, $0, $0, $0, $0, $0, $0, $1
+; Tile graphic 82
+.byt $0, $0, $0, $0, $0, $1e, $21, $30
+; Tile graphic 83
+.byt $0, $0, $0, $0, $0, $0, $0, $20
+; Tile graphic 84
+.byt $0, $0, $0, $1, $2, $4, $8, $10
+; Tile graphic 85
+.byt $1, $1, $1, $3, $2, $4, $4, $5
+; Tile graphic 86
+.byt $15, $30, $2b, $21, $1f, $1f, $37, $37
+; Tile graphic 87
+.byt $23, $24, $4, $b, $2b, $12, $4, $38
+; Tile graphic 88
+.byt $20, $20, $20, $0, $0, $20, $0, $0
+; Tile graphic 89
+.byt $9, $9, $b, $13, $15, $1d, $25, $1e
+; Tile graphic 90
+.byt $16, $36, $17, $1b, $1c, $3e, $3f, $3f
+; Tile graphic 91
+.byt $0, $0, $0, $30, $f, $30, $3c, $3f
+; Tile graphic 92
+.byt $0, $0, $2, $6, $3e, $e, $e, $3e
+; Tile graphic 93
+.byt $0, $1, $0, $2, $5, $2, $2, $3
+; Tile graphic 94
+.byt $0, $30, $c, $2e, $1a, $22, $4, $36
+; Tile graphic 95
+.byt $1, $3, $6, $4, $4, $4, $4, $6
+; Tile graphic 96
+.byt $2f, $3e, $38, $12, $17, $11, $31, $15
+; Tile graphic 97
+.byt $0, $20, $10, $8, $8, $8, $28, $8
+; Tile graphic 98
+.byt $4, $4, $6, $2, $2, $2, $3, $3
+; Tile graphic 99
+.byt $12, $22, $21, $11, $30, $38, $18, $17
+; Tile graphic 100
+.byt $18, $10, $30, $10, $10, $10, $10, $20
+; Tile graphic 101
+.byt $1, $1, $1, $1, $1, $3, $6, $4
+; Tile graphic 102
+.byt $8, $8, $8, $8, $8, $2e, $3b, $10
+; Tile graphic 103
+.byt $0, $3, $c, $1d, $16, $11, $8, $1b
+; Tile graphic 104
+.byt $0, $20, $0, $10, $28, $10, $10, $30
+; Tile graphic 105
+.byt $0, $1, $2, $4, $4, $4, $5, $4
+; Tile graphic 106
+.byt $3d, $1f, $7, $12, $3a, $22, $23, $2a
+; Tile graphic 107
+.byt $20, $30, $18, $8, $8, $8, $8, $18
+; Tile graphic 108
+.byt $6, $2, $3, $2, $2, $2, $2, $1
+; Tile graphic 109
+.byt $12, $11, $21, $22, $3, $7, $6, $3a
+; Tile graphic 110
+.byt $8, $8, $18, $10, $10, $10, $30, $30
+; Tile graphic 111
+.byt $4, $4, $4, $4, $4, $1d, $37, $2
+; Tile graphic 112
+.byt $20, $20, $20, $20, $20, $30, $18, $8
+; Tile graphic 113
+.byt $0, $0, $0, $0, $1, $0, $0, $0
+; Tile graphic 114
+.byt $0, $1c, $3, $2b, $16, $29, $21, $3d
+; Tile graphic 115
+.byt $0, $0, $0, $20, $20, $0, $0, $20
+; Tile graphic 116
+.byt $0, $0, $1, $1, $1, $1, $1, $1
+; Tile graphic 117
+.byt $1b, $3f, $2e, $4, $5, $4, $c, $25
+; Tile graphic 118
+.byt $30, $28, $4, $22, $32, $12, $1a, $12
+; Tile graphic 119
+.byt $1, $1, $1, $0, $0, $0, $0, $0
+; Tile graphic 120
+.byt $4, $9, $28, $24, $2c, $2e, $3c, $35
+; Tile graphic 121
+.byt $26, $4, $1c, $14, $4, $4, $4, $38
+; Tile graphic 122
+.byt $0, $1, $1, $1, $1, $3, $6, $4
+; Tile graphic 123
+.byt $25, $8, $8, $8, $10, $30, $10, $10
+; Tile graphic 124
+.byt $8, $24, $22, $11, $9, $7, $5, $8
+; Tile graphic 125
+.byt $0, $0, $0, $0, $20, $20, $20, $20
+; Tile graphic 126
+.byt $0, $0, $0, $1, $1, $0, $0, $1
+; Tile graphic 127
+.byt $0, $e, $30, $35, $1a, $25, $21, $2f
+; Tile graphic 128
+.byt $0, $0, $0, $0, $20, $0, $0, $0
+; Tile graphic 129
+.byt $3, $5, $8, $11, $13, $12, $16, $12
+; Tile graphic 130
+.byt $36, $3f, $1d, $8, $28, $8, $c, $29
+; Tile graphic 131
+.byt $0, $0, $20, $20, $20, $20, $20, $20
+; Tile graphic 132
+.byt $19, $8, $e, $a, $8, $8, $8, $7
+; Tile graphic 133
+.byt $8, $24, $5, $9, $d, $1d, $f, $2b
+; Tile graphic 134
+.byt $20, $20, $20, $0, $0, $0, $0, $0
+; Tile graphic 135
+.byt $0, $0, $0, $0, $1, $1, $1, $1
+; Tile graphic 136
+.byt $4, $9, $11, $22, $24, $38, $28, $4
+; Tile graphic 137
+.byt $29, $4, $4, $4, $2, $3, $2, $2
+; Tile graphic 138
+.byt $0, $20, $20, $20, $20, $30, $18, $8
+; Tile graphic 139
+.byt $2, $1, $1, $1, $0, $1, $3, $4
+; Tile graphic 140
+.byt $11, $11, $11, $11, $31, $3d, $17, $21
+; Tile graphic 141
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 142
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 143
+.byt $22, $22, $22, $22, $23, $2f, $3a, $21
+; Tile graphic 144
+.byt $10, $20, $20, $20, $0, $20, $30, $8
+; Tile graphic 145
+.byt $14, $18, $8, $8, $9, $1d, $17, $21
+; Tile graphic 146
+.byt $10, $30, $38, $34, $3e, $12, $14, $38
+; Tile graphic 147
+.byt $2, $3, $7, $b, $1f, $12, $a, $7
+; Tile graphic 148
+.byt $a, $6, $4, $4, $24, $2e, $3a, $21
+; Tile graphic 149
+.byt $1, $2, $2, $2, $1, $1, $0, $0
+; Tile graphic 150
+.byt $1, $27, $18, $38, $2a, $2a, $22, $22
+; Tile graphic 151
+.byt $16, $e, $2, $2, $2, $2, $3, $3
+; Tile graphic 152
+.byt $20, $39, $6, $7, $15, $15, $11, $11
+; Tile graphic 153
+.byt $20, $10, $10, $10, $20, $20, $0, $0
+; Tile graphic 154
+.byt $1a, $1c, $10, $10, $10, $10, $30, $30
+; Tile graphic 155
+.byt $0, $0, $0, $0, $0, $1, $6, $4
+; Tile graphic 156
+.byt $0, $0, $0, $e, $1a, $3e, $11, $15
+; Tile graphic 157
+.byt $0, $0, $0, $0, $0, $0, $20, $30
+; Tile graphic 158
+.byt $4, $4, $4, $2, $2, $1, $0, $0
+; Tile graphic 159
+.byt $2b, $15, $10, $1d, $a, $c, $3d, $3f
+; Tile graphic 160
+.byt $10, $10, $20, $30, $10, $8, $8, $8
+; Tile graphic 161
+.byt $0, $0, $0, $0, $0, $0, $1, $3
+; Tile graphic 162
+.byt $0, $0, $0, $1c, $16, $1f, $22, $2a
+; Tile graphic 163
+.byt $0, $0, $0, $0, $0, $20, $18, $8
+; Tile graphic 164
+.byt $2, $2, $1, $3, $2, $4, $4, $4
+; Tile graphic 165
+.byt $35, $2a, $2, $2e, $14, $c, $2f, $3f
+; Tile graphic 166
+.byt $8, $8, $8, $10, $10, $20, $0, $0
+; Tile graphic 167
+.byt $0, $3, $4, $4, $6, $4, $6, $7
+; Tile graphic 168
+.byt $0, $30, $8, $1c, $3c, $1c, $3c, $38
+; Tile graphic 169
+.byt $b, $f, $16, $16, $16, $16, $10, $1e
+; Tile graphic 170
+.byt $27, $3f, $3b, $3b, $3b, $3b, $1b, $23
+; Tile graphic 171
+.byt $0, $20, $10, $10, $10, $10, $10, $30
+; Tile graphic 172
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 173
+.byt $2e, $26, $1e, $f, $e, $e, $e, $e
+; Tile graphic 174
+.byt $39, $3a, $3b, $7, $3, $13, $13, $13
+; Tile graphic 175
+.byt $8, $8, $34, $34, $30, $30, $30, $30
+; Tile graphic 176
+.byt $e, $e, $e, $6, $2, $3, $7, $f
+; Tile graphic 177
+.byt $13, $11, $11, $39, $11, $37, $3f, $3f
+; Tile graphic 178
+.byt $30, $30, $30, $30, $0, $0, $0, $0
+; Tile graphic 179
+.byt $0, $3, $4, $e, $f, $e, $f, $7
+; Tile graphic 180
+.byt $0, $30, $8, $8, $18, $8, $18, $38
+; Tile graphic 181
+.byt $0, $1, $2, $2, $2, $2, $2, $3
+; Tile graphic 182
+.byt $39, $3f, $37, $37, $37, $37, $36, $31
+; Tile graphic 183
+.byt $34, $3c, $1a, $1a, $1a, $1a, $2, $1e
+; Tile graphic 184
+.byt $4, $4, $b, $b, $3, $3, $3, $3
+; Tile graphic 185
+.byt $27, $17, $37, $38, $30, $32, $32, $32
+; Tile graphic 186
+.byt $1d, $19, $1e, $3c, $1c, $1c, $1c, $1c
+; Tile graphic 187
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 188
+.byt $3, $3, $3, $3, $0, $0, $0, $0
+; Tile graphic 189
+.byt $32, $22, $22, $27, $22, $3b, $3f, $3f
+; Tile graphic 190
+.byt $1c, $1c, $1c, $18, $10, $30, $38, $3c
+; Tile graphic 191
+.byt $0, $3c, $2, $7, $2f, $7, $2f, $3e
+; Tile graphic 192
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 193
+.byt $2, $3, $5, $5, $5, $5, $5, $7
+; Tile graphic 194
+.byt $39, $3f, $e, $2e, $26, $2a, $2c, $2e
+; Tile graphic 195
+.byt $30, $38, $34, $34, $34, $34, $34, $3c
+; Tile graphic 196
+.byt $f, $9, $7, $3, $3, $3, $3, $3
+; Tile graphic 197
+.byt $2e, $2e, $2e, $31, $20, $24, $24, $24
+; Tile graphic 198
+.byt $12, $22, $3d, $3d, $3c, $3c, $3c, $3c
+; Tile graphic 199
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 200
+.byt $3, $3, $2, $2, $2, $7, $f, $1f
+; Tile graphic 201
+.byt $e, $f, $1f, $17, $10, $20, $20, $20
+; Tile graphic 202
+.byt $1c, $c, $4, $22, $12, $a, $e, $1e
+; Tile graphic 203
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 204
+.byt $0, $f, $10, $38, $3d, $38, $3d, $1f
+; Tile graphic 205
+.byt $3, $7, $b, $b, $b, $b, $b, $f
+; Tile graphic 206
+.byt $27, $3f, $1c, $1d, $19, $15, $d, $1d
+; Tile graphic 207
+.byt $10, $30, $28, $28, $28, $28, $28, $38
+; Tile graphic 208
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 209
+.byt $12, $11, $2f, $2f, $f, $f, $f, $f
+; Tile graphic 210
+.byt $1d, $1d, $1d, $23, $1, $9, $9, $9
+; Tile graphic 211
+.byt $3c, $24, $38, $30, $30, $30, $30, $30
+; Tile graphic 212
+.byt $e, $c, $8, $11, $12, $14, $1c, $1e
+; Tile graphic 213
+.byt $1c, $3c, $3e, $3a, $2, $1, $1, $1
+; Tile graphic 214
+.byt $30, $30, $10, $10, $10, $38, $3c, $3e
+; Tile graphic 215
+.byt $e, $f, $f, $7, $0, $1, $3, $7
+; Tile graphic 216
+.byt $13, $11, $11, $11, $31, $37, $3f, $3f
+; Tile graphic 217
+.byt $32, $22, $22, $22, $23, $3b, $3f, $3f
+; Tile graphic 218
+.byt $1c, $3c, $3c, $38, $0, $20, $30, $38
+; Tile graphic 219
+.byt $3, $3, $3, $1, $0, $0, $1, $1
+; Tile graphic 220
+.byt $28, $38, $39, $31, $11, $3e, $3c, $3c
+; Tile graphic 221
+.byt $3c, $3c, $3c, $1c, $3c, $1c, $18, $30
+; Tile graphic 222
+.byt $f, $f, $f, $e, $f, $e, $6, $3
+; Tile graphic 223
+.byt $5, $7, $27, $23, $22, $1f, $f, $f
+; Tile graphic 224
+.byt $30, $30, $30, $20, $0, $0, $20, $20
+; Tile graphic 225
+.byt $0, $0, $0, $0, $0, $0, $0, $2
+; Tile graphic 226
+.byt $5, $4, $5, $3, $2, $2, $1, $1
+; Tile graphic 227
+.byt $b, $2f, $36, $16, $16, $16, $0, $e
+; Tile graphic 228
+.byt $0, $0, $0, $0, $0, $0, $0, $10
+; Tile graphic 229
+.byt $34, $3d, $1b, $1a, $1a, $1a, $0, $1c
+; Tile graphic 230
+.byt $28, $8, $28, $30, $10, $10, $20, $20
+; Tile graphic 231
+.byt $0, $0, $0, $0, $1, $2, $4, $4
+; Tile graphic 232
+.byt $0, $0, $c, $12, $3f, $10, $11, $3b
+; Tile graphic 233
+.byt $0, $0, $0, $0, $0, $20, $30, $30
+; Tile graphic 234
+.byt $5, $4, $4, $2, $2, $1, $0, $0
+; Tile graphic 235
+.byt $31, $3b, $1e, $1f, $e, $1e, $3b, $3b
+; Tile graphic 236
+.byt $10, $10, $20, $30, $10, $8, $8, $28
+; Tile graphic 237
+.byt $0, $0, $0, $0, $0, $1, $3, $3
+; Tile graphic 238
+.byt $0, $0, $c, $12, $3f, $2, $22, $37
+; Tile graphic 239
+.byt $0, $0, $0, $0, $20, $10, $8, $8
+; Tile graphic 240
+.byt $2, $2, $1, $3, $2, $4, $4, $5
+; Tile graphic 241
+.byt $23, $37, $1e, $3e, $1c, $1e, $37, $37
+; Tile graphic 242
+.byt $28, $8, $8, $10, $10, $20, $0, $0
+end_teacher_tiles
+
+.dsb 256-(*&255)
+.dsb 8
+teacher_masks
+; Tile mask 1
+.byt $7e, $7c, $78, $70, $70, $70, $78, $78
+; Tile mask 2
+.byt $47, $43, $41, $40, $40, $40, $40, $40
+; Tile mask 3
+.byt $7f, $7f, $7f, $7f, $7f, $4f, $47, $43
+; Tile mask 4
+.byt $78, $70, $70, $70, $70, $70, $70, $70
+; Tile mask 5
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 6
+.byt $41, $41, $41, $41, $40, $40, $40, $40
+; Tile mask 7
+.byt $70, $70, $70, $78, $7c, $7c, $7c, $7c
+; Tile mask 8
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 9
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 10
+.byt $7c, $7c, $7c, $7c, $7e, $7f, $7f, $7f
+; Tile mask 11
+.byt $40, $40, $40, $40, $40, $70, $70, $60
+; Tile mask 12
+.byt $40, $40, $41, $41, $43, $43, $43, $43
+; Tile mask 13
+.byt $7f, $7f, $7f, $7f, $7f, $7c, $78, $70
+; Tile mask 14
+.byt $78, $70, $60, $40, $40, $40, $40, $40
+; Tile mask 15
+.byt $5f, $4f, $47, $43, $43, $43, $47, $47
+; Tile mask 16
+.byt $60, $60, $60, $60, $40, $40, $40, $40
+; Tile mask 17
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 18
+.byt $47, $43, $43, $43, $43, $43, $43, $43
+; Tile mask 19
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 20
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 21
+.byt $43, $43, $43, $47, $4f, $4f, $4f, $4f
+; Tile mask 22
+.byt $40, $40, $60, $60, $70, $70, $70, $70
+; Tile mask 23
+.byt $40, $40, $40, $40, $40, $43, $43, $41
+; Tile mask 24
+.byt $4f, $4f, $4f, $4f, $5f, $7f, $7f, $7f
+; Tile mask 25
+.byt $7f, $7f, $7e, $7c, $7c, $7c, $7e, $7e
+; Tile mask 26
+.byt $61, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 27
+.byt $7f, $7f, $5f, $4f, $4f, $43, $41, $40
+; Tile mask 28
+.byt $7e, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 29
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 30
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 31
+.byt $5f, $5f, $5f, $5f, $4f, $4f, $4f, $4f
+; Tile mask 32
+.byt $7c, $7c, $7c, $7e, $7f, $7f, $7f, $7f
+; Tile mask 33
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 34
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 35
+.byt $4f, $4f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 36
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7e
+; Tile mask 37
+.byt $40, $40, $40, $40, $60, $60, $40, $40
+; Tile mask 38
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 39
+.byt $4f, $4f, $4f, $47, $47, $47, $4f, $5f
+; Tile mask 40
+.byt $7f, $7f, $7e, $7c, $7c, $70, $60, $40
+; Tile mask 41
+.byt $61, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 42
+.byt $7f, $7f, $5f, $4f, $4f, $4f, $5f, $5f
+; Tile mask 43
+.byt $7e, $7e, $7e, $7e, $7c, $7c, $7c, $7c
+; Tile mask 44
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 45
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 46
+.byt $5f, $4f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 47
+.byt $7c, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 48
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 49
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 50
+.byt $4f, $4f, $4f, $5f, $7f, $7f, $7f, $7f
+; Tile mask 51
+.byt $7c, $7c, $7c, $78, $78, $78, $7c, $7e
+; Tile mask 52
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 53
+.byt $40, $40, $40, $40, $41, $41, $40, $40
+; Tile mask 54
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $5f
+; Tile mask 55
+.byt $7c, $7c, $7c, $7c, $7e, $7e, $7c, $78
+; Tile mask 56
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 57
+.byt $40, $40, $41, $41, $43, $43, $47, $47
+; Tile mask 58
+.byt $40, $40, $60, $60, $70, $70, $78, $78
+; Tile mask 59
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 60
+.byt $4f, $4f, $4f, $4f, $5f, $5f, $4f, $47
+; Tile mask 61
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
+; Tile mask 62
+.byt $7e, $7c, $78, $70, $70, $70, $58, $48
+; Tile mask 63
+.byt $40, $40, $40, $40, $40, $60, $60, $70
+; Tile mask 64
+.byt $70, $78, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 65
+.byt $5f, $4f, $47, $43, $43, $43, $46, $44
+; Tile mask 66
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $4f
+; Tile mask 67
+.byt $40, $40, $40, $40, $40, $41, $41, $43
+; Tile mask 68
+.byt $43, $47, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 69
+.byt $7f, $7f, $5f, $4f, $47, $63, $71, $78
+; Tile mask 70
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $4c
+; Tile mask 71
+.byt $7f, $7f, $7f, $7f, $61, $40, $40, $40
+; Tile mask 72
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $4f
+; Tile mask 73
+.byt $7c, $7c, $7c, $7e, $7e, $7c, $7e, $7f
+; Tile mask 74
+.byt $44, $40, $40, $40, $40, $40, $60, $70
+; Tile mask 75
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 76
+.byt $4f, $4f, $4f, $47, $47, $43, $43, $43
+; Tile mask 77
+.byt $7f, $6f, $47, $40, $40, $40, $40, $40
+; Tile mask 78
+.byt $7f, $7f, $7c, $40, $40, $40, $40, $40
+; Tile mask 79
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 80
+.byt $41, $41, $41, $40, $40, $40, $40, $40
+; Tile mask 81
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7c
+; Tile mask 82
+.byt $7f, $7f, $7f, $7f, $61, $40, $40, $40
+; Tile mask 83
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $4c
+; Tile mask 84
+.byt $7f, $7f, $7e, $7c, $78, $71, $63, $47
+; Tile mask 85
+.byt $7c, $7c, $7c, $78, $78, $70, $70, $70
+; Tile mask 86
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 87
+.byt $48, $40, $40, $40, $40, $40, $41, $43
+; Tile mask 88
+.byt $4f, $4f, $4f, $5f, $5f, $4f, $5f, $7f
+; Tile mask 89
+.byt $60, $60, $60, $40, $40, $40, $40, $40
+; Tile mask 90
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 91
+.byt $7f, $7f, $4f, $40, $40, $40, $40, $40
+; Tile mask 92
+.byt $7f, $7d, $78, $40, $40, $40, $40, $40
+; Tile mask 93
+.byt $7e, $7c, $7c, $78, $70, $78, $78, $78
+; Tile mask 94
+.byt $4f, $43, $41, $40, $40, $40, $41, $40
+; Tile mask 95
+.byt $7c, $78, $70, $70, $70, $70, $70, $70
+; Tile mask 96
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 97
+.byt $5f, $4f, $47, $43, $43, $43, $43, $43
+; Tile mask 98
+.byt $70, $70, $70, $78, $78, $78, $78, $78
+; Tile mask 99
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 100
+.byt $43, $47, $47, $47, $47, $47, $47, $4f
+; Tile mask 101
+.byt $7c, $7c, $7c, $7c, $7c, $78, $70, $70
+; Tile mask 102
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 103
+.byt $7c, $70, $60, $40, $40, $40, $60, $40
+; Tile mask 104
+.byt $5f, $4f, $4f, $47, $43, $47, $47, $47
+; Tile mask 105
+.byt $7e, $7c, $78, $70, $70, $70, $70, $70
+; Tile mask 106
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 107
+.byt $4f, $47, $43, $43, $43, $43, $43, $43
+; Tile mask 108
+.byt $70, $78, $78, $78, $78, $78, $78, $7c
+; Tile mask 109
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 110
+.byt $43, $43, $43, $47, $47, $47, $47, $47
+; Tile mask 111
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 112
+.byt $4f, $4f, $4f, $4f, $4f, $47, $43, $43
+; Tile mask 113
+.byt $7f, $7f, $7f, $7e, $7c, $7e, $7e, $7e
+; Tile mask 114
+.byt $63, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 115
+.byt $7f, $7f, $5f, $4f, $4f, $4f, $5f, $4f
+; Tile mask 116
+.byt $7f, $7e, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 117
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 118
+.byt $47, $43, $41, $40, $40, $40, $40, $40
+; Tile mask 119
+.byt $7c, $7c, $7c, $7e, $7e, $7e, $7e, $7e
+; Tile mask 120
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 121
+.byt $40, $41, $41, $41, $41, $41, $41, $43
+; Tile mask 122
+.byt $7e, $7c, $7c, $7c, $7c, $78, $70, $70
+; Tile mask 123
+.byt $40, $40, $42, $43, $47, $47, $47, $47
+; Tile mask 124
+.byt $43, $41, $40, $40, $60, $70, $70, $60
+; Tile mask 125
+.byt $7f, $7f, $7f, $5f, $4f, $4f, $4f, $4f
+; Tile mask 126
+.byt $7f, $7f, $7e, $7c, $7c, $7c, $7e, $7c
+; Tile mask 127
+.byt $71, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 128
+.byt $7f, $7f, $7f, $5f, $4f, $5f, $5f, $5f
+; Tile mask 129
+.byt $78, $70, $60, $40, $40, $40, $40, $40
+; Tile mask 130
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 131
+.byt $7f, $5f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 132
+.byt $40, $60, $60, $60, $60, $60, $60, $70
+; Tile mask 133
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 134
+.byt $4f, $4f, $4f, $5f, $5f, $5f, $5f, $5f
+; Tile mask 135
+.byt $7f, $7f, $7f, $7e, $7c, $7c, $7c, $7c
+; Tile mask 136
+.byt $70, $60, $40, $40, $41, $43, $43, $41
+; Tile mask 137
+.byt $40, $40, $50, $70, $78, $78, $78, $78
+; Tile mask 138
+.byt $5f, $4f, $4f, $4f, $4f, $47, $43, $43
+; Tile mask 139
+.byt $78, $7c, $7c, $7c, $7e, $7c, $78, $70
+; Tile mask 140
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 141
+.byt $5f, $5f, $5f, $5f, $5f, $5f, $5f, $5f
+; Tile mask 142
+.byt $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e
+; Tile mask 143
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 144
+.byt $47, $4f, $4f, $4f, $5f, $4f, $47, $43
+; Tile mask 145
+.byt $40, $40, $60, $60, $60, $40, $40, $40
+; Tile mask 146
+.byt $47, $47, $43, $41, $40, $40, $41, $43
+; Tile mask 147
+.byt $78, $78, $70, $60, $40, $40, $60, $70
+; Tile mask 148
+.byt $40, $40, $41, $41, $41, $40, $40, $40
+; Tile mask 149
+.byt $78, $78, $78, $78, $7c, $7c, $7e, $7e
+; Tile mask 150
+.byt $58, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 151
+.byt $40, $60, $70, $78, $78, $78, $78, $78
+; Tile mask 152
+.byt $46, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 153
+.byt $47, $47, $47, $47, $4f, $4f, $5f, $5f
+; Tile mask 154
+.byt $40, $41, $43, $47, $47, $47, $47, $47
+; Tile mask 155
+.byt $7f, $7f, $7f, $7f, $7e, $78, $70, $70
+; Tile mask 156
+.byt $7f, $7f, $71, $60, $40, $40, $40, $40
+; Tile mask 157
+.byt $7f, $7f, $7f, $7f, $7f, $5f, $4f, $47
+; Tile mask 158
+.byt $70, $70, $70, $78, $78, $7c, $7e, $7e
+; Tile mask 159
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 160
+.byt $47, $47, $4f, $47, $47, $43, $43, $43
+; Tile mask 161
+.byt $7f, $7f, $7f, $7f, $7f, $7e, $7c, $78
+; Tile mask 162
+.byt $7f, $7f, $63, $41, $40, $40, $40, $40
+; Tile mask 163
+.byt $7f, $7f, $7f, $7f, $5f, $47, $43, $43
+; Tile mask 164
+.byt $78, $78, $7c, $78, $78, $70, $70, $70
+; Tile mask 165
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 166
+.byt $43, $43, $43, $47, $47, $4f, $5f, $5f
+; Tile mask 167
+.byt $7c, $78, $70, $70, $70, $70, $70, $70
+; Tile mask 168
+.byt $4f, $47, $43, $41, $41, $41, $41, $40
+; Tile mask 169
+.byt $60, $60, $40, $40, $40, $40, $40, $40
+; Tile mask 170
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 171
+.byt $5f, $4f, $47, $47, $47, $47, $47, $47
+; Tile mask 172
+.byt $7e, $7e, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 173
+.byt $40, $40, $40, $60, $60, $60, $60, $60
+; Tile mask 174
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 175
+.byt $43, $43, $41, $41, $43, $47, $47, $47
+; Tile mask 176
+.byt $60, $60, $60, $70, $78, $78, $70, $60
+; Tile mask 177
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 178
+.byt $47, $47, $47, $47, $4f, $5f, $5f, $5f
+; Tile mask 179
+.byt $7c, $78, $70, $60, $60, $60, $60, $40
+; Tile mask 180
+.byt $4f, $47, $43, $43, $43, $43, $43, $43
+; Tile mask 181
+.byt $7e, $7c, $78, $78, $78, $78, $78, $78
+; Tile mask 182
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 183
+.byt $41, $41, $40, $40, $40, $40, $40, $40
+; Tile mask 184
+.byt $70, $70, $60, $60, $70, $78, $78, $78
+; Tile mask 185
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 186
+.byt $40, $40, $40, $41, $41, $41, $41, $41
+; Tile mask 187
+.byt $5f, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile mask 188
+.byt $78, $78, $78, $78, $7c, $7e, $7e, $7e
+; Tile mask 189
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 190
+.byt $41, $41, $41, $43, $47, $47, $43, $41
+; Tile mask 191
+.byt $43, $41, $40, $40, $40, $40, $40, $40
+; Tile mask 192
+.byt $7f, $7f, $7f, $5f, $5f, $5f, $5f, $4f
+; Tile mask 193
+.byt $78, $78, $70, $70, $70, $70, $70, $70
+; Tile mask 194
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 195
+.byt $47, $43, $43, $41, $41, $41, $41, $40
+; Tile mask 196
+.byt $60, $60, $70, $78, $78, $78, $78, $78
+; Tile mask 197
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 198
+.byt $40, $40, $40, $40, $40, $41, $41, $41
+; Tile mask 199
+.byt $7f, $7f, $5f, $5f, $5f, $7f, $7f, $7f
+; Tile mask 200
+.byt $78, $78, $78, $78, $78, $70, $60, $40
+; Tile mask 201
+.byt $40, $40, $40, $40, $40, $4f, $4f, $4f
+; Tile mask 202
+.byt $43, $43, $41, $40, $40, $60, $60, $40
+; Tile mask 203
+.byt $7f, $7f, $7f, $7e, $7e, $7e, $7e, $7c
+; Tile mask 204
+.byt $70, $60, $40, $40, $40, $40, $40, $40
+; Tile mask 205
+.byt $78, $70, $70, $60, $60, $60, $60, $40
+; Tile mask 206
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 207
+.byt $47, $47, $43, $43, $43, $43, $43, $43
+; Tile mask 208
+.byt $7f, $7f, $7e, $7e, $7e, $7f, $7f, $7f
+; Tile mask 209
+.byt $40, $40, $40, $40, $40, $60, $60, $60
+; Tile mask 210
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 211
+.byt $41, $41, $43, $47, $47, $47, $47, $47
+; Tile mask 212
+.byt $70, $70, $60, $40, $40, $41, $41, $40
+; Tile mask 213
+.byt $40, $40, $40, $40, $40, $7c, $7c, $7c
+; Tile mask 214
+.byt $47, $47, $47, $47, $47, $43, $41, $40
+; Tile mask 215
+.byt $60, $60, $60, $70, $78, $7c, $78, $60
+; Tile mask 216
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 217
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 218
+.byt $41, $41, $41, $43, $47, $4f, $47, $41
+; Tile mask 219
+.byt $78, $78, $78, $7c, $7e, $7e, $7c, $7c
+; Tile mask 220
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 221
+.byt $41, $41, $41, $41, $41, $41, $43, $47
+; Tile mask 222
+.byt $60, $60, $60, $60, $60, $60, $70, $78
+; Tile mask 223
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 224
+.byt $47, $47, $47, $4f, $5f, $5f, $4f, $4f
+; Tile mask 225
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7d, $70
+; Tile mask 226
+.byt $70, $70, $70, $78, $78, $78, $7c, $7c
+; Tile mask 227
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 228
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $43
+; Tile mask 229
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 230
+.byt $43, $43, $43, $47, $47, $47, $4f, $4f
+; Tile mask 231
+.byt $7f, $7f, $7f, $7e, $7c, $78, $70, $70
+; Tile mask 232
+.byt $7f, $73, $61, $40, $40, $40, $40, $40
+; Tile mask 233
+.byt $7f, $7f, $7f, $7f, $5f, $4f, $47, $47
+; Tile mask 234
+.byt $70, $70, $70, $78, $78, $7c, $7e, $7e
+; Tile mask 235
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 236
+.byt $47, $47, $47, $47, $47, $43, $43, $43
+; Tile mask 237
+.byt $7f, $7f, $7f, $7f, $7e, $7c, $78, $78
+; Tile mask 238
+.byt $7f, $73, $61, $40, $40, $40, $40, $40
+; Tile mask 239
+.byt $7f, $7f, $7f, $5f, $4f, $47, $43, $43
+; Tile mask 240
+.byt $78, $78, $78, $78, $78, $70, $70, $70
+; Tile mask 241
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 242
+.byt $43, $43, $43, $47, $47, $4f, $5f, $5f
+end_teacher_masks
+
+.dsb 256-(*&255)
+.dsb 8
+teacher2_tiles
+; Tile graphic 1
+.byt $0, $1, $0, $1, $1, $1, $1, $0
+; Tile graphic 2
+.byt $0, $3e, $3f, $1, $2b, $1, $39, $20
+; Tile graphic 3
+.byt $0, $0, $20, $30, $30, $10, $10, $20
+; Tile graphic 4
+.byt $3, $4, $8, $8, $a, $a, $a, $a
+; Tile graphic 5
+.byt $23, $3f, $17, $16, $16, $16, $16, $d
+; Tile graphic 6
+.byt $3c, $2, $2, $2, $12, $12, $12, $3a
+; Tile graphic 7
+.byt $b, $a, $c, $8, $9, $7, $3, $3
+; Tile graphic 8
+.byt $0, $d, $1e, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 9
+.byt $32, $14, $c, $4, $28, $38, $20, $20
+; Tile graphic 10
+.byt $1, $1, $1, $1, $1, $3, $4, $7
+; Tile graphic 11
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $8, $3f
+; Tile graphic 12
+.byt $0, $0, $0, $0, $0, $0, $20, $20
+; Tile graphic 13
+.byt $0, $0, $1, $3, $3, $2, $2, $1
+; Tile graphic 14
+.byt $0, $1f, $3f, $20, $35, $20, $27, $1
+; Tile graphic 15
+.byt $0, $20, $0, $20, $20, $20, $20, $0
+; Tile graphic 16
+.byt $f, $10, $10, $10, $12, $12, $12, $17
+; Tile graphic 17
+.byt $31, $3f, $3a, $1a, $1a, $1a, $1a, $2c
+; Tile graphic 18
+.byt $30, $8, $4, $4, $14, $14, $14, $14
+; Tile graphic 19
+.byt $13, $a, $c, $8, $5, $7, $1, $1
+; Tile graphic 20
+.byt $0, $2c, $1e, $3f, $3f, $3f, $3f, $3f
+; Tile graphic 21
+.byt $34, $14, $c, $4, $24, $38, $30, $30
+; Tile graphic 22
+.byt $0, $0, $0, $0, $0, $0, $1, $1
+; Tile graphic 23
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $4, $3f
+; Tile graphic 24
+.byt $20, $20, $20, $20, $20, $30, $8, $38
+; Tile graphic 25
+.byt $0, $1f, $f, $10, $1a, $10, $1e, $8
+; Tile graphic 26
+.byt $0, $20, $38, $1c, $3c, $14, $14, $8
+; Tile graphic 27
+.byt $0, $1, $2, $2, $2, $2, $2, $2
+; Tile graphic 28
+.byt $38, $f, $5, $5, $25, $25, $25, $23
+; Tile graphic 29
+.byt $3f, $30, $30, $20, $24, $24, $24, $1e
+; Tile graphic 30
+.byt $0, $20, $20, $20, $20, $20, $20, $20
+; Tile graphic 31
+.byt $2, $2, $3, $2, $2, $1, $0, $0
+; Tile graphic 32
+.byt $30, $23, $7, $f, $1f, $3f, $3f, $3f
+; Tile graphic 33
+.byt $c, $15, $23, $31, $3a, $3e, $38, $38
+; Tile graphic 34
+.byt $20, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 35
+.byt $0, $0, $1, $1, $1, $7, $c, $3
+; Tile graphic 36
+.byt $3d, $3c, $3c, $38, $38, $38, $8, $38
+; Tile graphic 37
+.byt $38, $3c, $3e, $1e, $d, $5, $b, $1e
+; Tile graphic 38
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 39
+.byt $0, $1, $7, $e, $f, $a, $a, $4
+; Tile graphic 40
+.byt $0, $3e, $3c, $2, $16, $2, $1e, $4
+; Tile graphic 41
+.byt $0, $1, $1, $1, $1, $1, $1, $1
+; Tile graphic 42
+.byt $3f, $3, $3, $1, $9, $9, $9, $1e
+; Tile graphic 43
+.byt $7, $3c, $28, $28, $29, $29, $29, $31
+; Tile graphic 44
+.byt $0, $20, $10, $10, $10, $10, $10, $10
+; Tile graphic 45
+.byt $1, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 46
+.byt $c, $2a, $31, $23, $17, $1f, $7, $7
+; Tile graphic 47
+.byt $3, $31, $38, $3c, $3e, $3f, $3f, $3f
+; Tile graphic 48
+.byt $10, $10, $30, $10, $10, $20, $0, $0
+; Tile graphic 49
+.byt $0, $0, $0, $0, $0, $0, $0, $0
+; Tile graphic 50
+.byt $7, $f, $1f, $1e, $2c, $28, $34, $1e
+; Tile graphic 51
+.byt $2f, $f, $f, $7, $7, $7, $4, $7
+; Tile graphic 52
+.byt $0, $0, $20, $20, $20, $38, $c, $30
+; Tile graphic 53
+.byt $3, $1, $1, $1, $0, $1, $2, $7
+; Tile graphic 54
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $10, $3f
+; Tile graphic 55
+.byt $3f, $3f, $3f, $3f, $3f, $3f, $2, $3f
+; Tile graphic 56
+.byt $30, $20, $20, $20, $0, $20, $10, $38
+; Tile graphic 57
+.byt $0, $0, $0, $0, $0, $0, $0, $1
+; Tile graphic 58
+.byt $1f, $f, $7, $f, $f, $1f, $21, $3f
+; Tile graphic 59
+.byt $30, $30, $38, $3e, $3e, $1a, $12, $1e
+; Tile graphic 60
+.byt $3, $3, $7, $1f, $1f, $16, $12, $1e
+; Tile graphic 61
+.byt $3e, $3c, $38, $3c, $3c, $3e, $21, $3f
+; Tile graphic 62
+.byt $0, $0, $0, $0, $0, $0, $0, $20
+; Tile graphic 63
+.byt $2, $5, $4, $5, $7, $1, $0, $0
+; Tile graphic 64
+.byt $3, $4, $28, $28, $18, $8, $20, $12
+; Tile graphic 65
+.byt $e, $3, $2, $2, $2, $2, $3, $3
+; Tile graphic 66
+.byt $0, $2d, $e, $f, $f, $3f, $3f, $3f
+; Tile graphic 67
+.byt $30, $8, $5, $5, $6, $4, $1, $12
+; Tile graphic 68
+.byt $10, $28, $8, $28, $38, $20, $0, $0
+; Tile graphic 69
+.byt $0, $2d, $1c, $3c, $3c, $3f, $3f, $3f
+; Tile graphic 70
+.byt $1c, $30, $10, $10, $10, $10, $30, $30
+; Tile graphic 71
+.byt $0, $0, $0, $0, $1, $2, $5, $5
+; Tile graphic 72
+.byt $0, $0, $1c, $22, $3e, $3f, $1, $2b
+; Tile graphic 73
+.byt $0, $0, $0, $0, $0, $20, $30, $30
+; Tile graphic 74
+.byt $5, $4, $4, $2, $2, $1, $0, $0
+; Tile graphic 75
+.byt $1, $39, $20, $23, $1e, $1c, $3d, $3d
+; Tile graphic 76
+.byt $10, $10, $20, $30, $10, $8, $8, $28
+; Tile graphic 77
+.byt $0, $0, $10, $18, $1f, $1c, $1c, $1f
+; Tile graphic 78
+.byt $0, $0, $0, $3, $3c, $3, $f, $3f
+; Tile graphic 79
+.byt $1a, $1b, $3a, $36, $e, $1f, $3f, $3f
+; Tile graphic 80
+.byt $24, $24, $34, $32, $2a, $2e, $29, $1e
+; Tile graphic 81
+.byt $0, $0, $0, $0, $0, $1, $3, $3
+; Tile graphic 82
+.byt $0, $0, $e, $11, $1f, $3f, $20, $35
+; Tile graphic 83
+.byt $0, $0, $0, $0, $20, $10, $28, $28
+; Tile graphic 84
+.byt $2, $2, $1, $3, $2, $4, $4, $5
+; Tile graphic 85
+.byt $20, $27, $1, $31, $1e, $e, $2f, $2f
+; Tile graphic 86
+.byt $28, $8, $8, $10, $10, $20, $0, $0
+; Tile graphic 87
+.byt $9, $9, $b, $13, $15, $1d, $25, $1e
+; Tile graphic 88
+.byt $16, $36, $17, $1b, $1c, $3e, $3f, $3f
+; Tile graphic 89
+.byt $0, $0, $0, $30, $f, $30, $3c, $3f
+; Tile graphic 90
+.byt $0, $0, $2, $6, $3e, $e, $e, $3e
+end_teacher2_tiles
+
+.dsb 256-(*&255)
+.dsb 8
+teacher2_masks
+
+; Tile mask 1
+.byt $7e, $7c, $7e, $7c, $7c, $7c, $7c, $7c
+; Tile mask 2
+.byt $41, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 3
+.byt $7f, $5f, $4f, $47, $47, $47, $47, $43
+; Tile mask 4
+.byt $78, $70, $60, $60, $60, $60, $60, $60
+; Tile mask 5
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 6
+.byt $41, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 7
+.byt $60, $60, $60, $60, $60, $60, $78, $78
+; Tile mask 8
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 9
+.byt $40, $41, $41, $41, $43, $43, $47, $4f
+; Tile mask 10
+.byt $7c, $7c, $7c, $7c, $7c, $78, $70, $70
+; Tile mask 11
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 12
+.byt $5f, $5f, $5f, $5f, $5f, $5f, $4f, $4f
+; Tile mask 13
+.byt $7f, $7e, $7c, $78, $78, $78, $78, $70
+; Tile mask 14
+.byt $60, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 15
+.byt $5f, $4f, $5f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 16
+.byt $60, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 17
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 18
+.byt $47, $43, $41, $41, $41, $41, $41, $41
+; Tile mask 19
+.byt $40, $60, $60, $60, $70, $70, $78, $7c
+; Tile mask 20
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 21
+.byt $41, $41, $41, $41, $41, $41, $47, $47
+; Tile mask 22
+.byt $7e, $7e, $7e, $7e, $7e, $7e, $7c, $7c
+; Tile mask 23
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 24
+.byt $4f, $4f, $4f, $4f, $4f, $47, $43, $43
+; Tile mask 25
+.byt $60, $40, $60, $40, $40, $40, $40, $40
+; Tile mask 26
+.byt $5f, $47, $43, $41, $41, $41, $41, $40
+; Tile mask 27
+.byt $7e, $7c, $78, $78, $78, $78, $78, $78
+; Tile mask 28
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 29
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 30
+.byt $5f, $4f, $4f, $4f, $4f, $4f, $4f, $4f
+; Tile mask 31
+.byt $78, $78, $78, $78, $78, $7c, $7e, $7e
+; Tile mask 32
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 33
+.byt $40, $40, $40, $40, $40, $40, $41, $43
+; Tile mask 34
+.byt $4f, $5f, $5f, $5f, $7f, $7f, $7f, $7f
+; Tile mask 35
+.byt $7e, $7e, $7c, $7c, $78, $70, $60, $60
+; Tile mask 36
+.byt $40, $40, $40, $43, $43, $43, $43, $43
+; Tile mask 37
+.byt $43, $41, $40, $40, $60, $70, $60, $40
+; Tile mask 38
+.byt $7f, $7f, $7f, $7f, $5f, $5f, $5f, $7f
+; Tile mask 39
+.byt $7e, $78, $70, $60, $60, $60, $60, $40
+; Tile mask 40
+.byt $41, $40, $41, $40, $40, $40, $40, $40
+; Tile mask 41
+.byt $7e, $7c, $7c, $7c, $7c, $7c, $7c, $7c
+; Tile mask 42
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 43
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 44
+.byt $5f, $4f, $47, $47, $47, $47, $47, $47
+; Tile mask 45
+.byt $7c, $7e, $7e, $7e, $7f, $7f, $7f, $7f
+; Tile mask 46
+.byt $40, $40, $40, $40, $40, $40, $60, $70
+; Tile mask 47
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 48
+.byt $47, $47, $47, $47, $47, $4f, $5f, $5f
+; Tile mask 49
+.byt $7f, $7f, $7f, $7f, $7e, $7e, $7e, $7f
+; Tile mask 50
+.byt $70, $60, $40, $40, $41, $43, $41, $40
+; Tile mask 51
+.byt $40, $40, $40, $70, $70, $70, $70, $70
+; Tile mask 52
+.byt $5f, $5f, $4f, $4f, $47, $43, $41, $41
+; Tile mask 53
+.byt $78, $7c, $7c, $7c, $7e, $7c, $78, $70
+; Tile mask 54
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 55
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 56
+.byt $47, $4f, $4f, $4f, $5f, $4f, $47, $43
+; Tile mask 57
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7c
+; Tile mask 58
+.byt $40, $60, $70, $60, $60, $40, $40, $40
+; Tile mask 59
+.byt $47, $47, $41, $40, $40, $40, $40, $40
+; Tile mask 60
+.byt $78, $78, $60, $40, $40, $40, $40, $40
+; Tile mask 61
+.byt $40, $41, $43, $41, $41, $40, $40, $40
+; Tile mask 62
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $5f, $4f
+; Tile mask 63
+.byt $78, $70, $70, $70, $70, $78, $7e, $7f
+; Tile mask 64
+.byt $78, $50, $40, $40, $40, $40, $40, $40
+; Tile mask 65
+.byt $70, $70, $78, $78, $78, $78, $78, $78
+; Tile mask 66
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 67
+.byt $47, $42, $40, $40, $40, $40, $40, $40
+; Tile mask 68
+.byt $47, $43, $43, $43, $43, $47, $5f, $7f
+; Tile mask 69
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 70
+.byt $43, $43, $47, $47, $47, $47, $47, $47
+; Tile mask 71
+.byt $7f, $7f, $7f, $7e, $7c, $78, $70, $70
+; Tile mask 72
+.byt $7f, $63, $41, $40, $40, $40, $40, $40
+; Tile mask 73
+.byt $7f, $7f, $7f, $7f, $5f, $4f, $47, $47
+; Tile mask 74
+.byt $70, $70, $70, $78, $78, $7c, $7e, $7e
+; Tile mask 75
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 76
+.byt $47, $47, $4f, $47, $47, $43, $43, $43
+; Tile mask 77
+.byt $7f, $6f, $47, $40, $40, $40, $40, $40
+; Tile mask 78
+.byt $7f, $7f, $7c, $40, $40, $40, $40, $40
+; Tile mask 79
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 80
+.byt $41, $41, $41, $40, $40, $40, $40, $40
+; Tile mask 81
+.byt $7f, $7f, $7f, $7f, $7e, $7c, $78, $78
+; Tile mask 82
+.byt $7f, $71, $60, $40, $40, $40, $40, $40
+; Tile mask 83
+.byt $7f, $7f, $7f, $5f, $4f, $47, $43, $43
+; Tile mask 84
+.byt $78, $78, $7c, $78, $78, $70, $70, $70
+; Tile mask 85
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 86
+.byt $43, $43, $43, $47, $47, $4f, $5f, $5f
+; Tile mask 87
+.byt $60, $60, $60, $40, $40, $40, $40, $40
+; Tile mask 88
+.byt $40, $40, $40, $40, $40, $40, $40, $40
+; Tile mask 89
+.byt $7f, $7f, $4f, $40, $40, $40, $40, $40
+; Tile mask 90
+.byt $7f, $7d, $78, $40, $40, $40, $40, $40
+end_teacher2_masks
+
+
+speech_bubble
+	.byt $46,$5e,$5e,$5e,$5e,$5e,$5e,$58
+	.byt $49,$61,$61,$61,$61,$61,$61,$64
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+	.byt $50,$40,$40,$40,$40,$40,$40,$42
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $60,$40,$40,$40,$40,$40,$40,$41
+	.byt $61,$61,$61,$61,$61,$61,$61,$61
+	.byt $5e,$5e,$5e,$5e,$5e,$5e,$5e,$5e
+
+speech_bubble_lip	
+	.byt $61
+	.byt $61
+	.byt $51
+	.byt $51
+	.byt $51
+	.byt $4a
+	.byt $4a
+	.byt $44
+
+
+
+
+
+
+
