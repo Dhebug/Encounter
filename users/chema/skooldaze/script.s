@@ -33,13 +33,21 @@ s_make_char_speak
 	lda tmp0+1
 	sta var4,x
 
+	lda #0
+	sta cur_command_high,x
+/*
 	lda #<s_isc_speak1
 	sta i_subcom_low,x
-	sta tmp0
 	lda #>s_isc_speak1
 	sta i_subcom_high,x
+	jmp s_isc_speak1
+*/
+
+	lda #<s_isc_speak1
+	sta tmp0
+	lda #>s_isc_speak1
 	sta tmp0+1
-	jmp (tmp0)
+	jmp call_subcommand 
 .)
 
 ; Make a character stand up, if he is not already
@@ -340,7 +348,46 @@ notyet
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Terminate an interrubtible subcommand
+; Call an interruptible subcommand. This 
+; is quite complex. It drops the return address
+; from the stack and places it into the character's
+; buffer (at cur_command). The speccy version only
+; copies the LSB. This ensures that the original
+; routine keeps running from the point it was
+; interrupted by this call, when the subcommand
+; is finished. Then it takes the address stored
+; in tmp0 and store it as the interruptible_subcommand
+; and jump to it.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+call_subcommand
+.(
+	; Get the return address...
+	pla	; get LSB
+	sta tmp
+	pla	; get HSB
+	sta tmp+1
+	inc tmp
+	bne noadj
+	inc tmp+1
+noadj
+	; And place it as the current command address...
+	lda tmp
+	sta cur_command_low,x
+	lda tmp+1
+	sta cur_command_high,x
+
+	; Place the subcommand and jump to it
+	lda tmp0
+	sta i_subcom_low,x
+	lda tmp0+1
+	sta i_subcom_high,x
+	jmp (tmp0)
+.)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Terminate an interruptible subcommand
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terminate_subcommand
 .(
@@ -380,12 +427,6 @@ s_write_bl
 	rts
 .)
 
-
-
-s_do_class
-.(
-	rts
-.)
 s_write_bl_c
 .(
 	inc pcommand,x
@@ -417,9 +458,6 @@ tab_sit_msg
 
 s_msg_sitdown
 .(
-	; Move to the next command
-  	inc pcommand,x
-
 	; Get the appropriate message
 	lda #<sit_messages
 	sta tmp0
@@ -433,10 +471,131 @@ s_msg_sitdown
 	lda tab_sit_msg,y
 
 	jsr search_string
+	jsr s_make_char_speak
 
-	jmp s_make_char_speak
+	; Move to the next command
+  	inc pcommand,x
+
+	lda #0
+	sta cur_command_high,x
+	jmp int_subcommand
 .)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Control teacher when during class
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+table_teacher_codes
+	.byt CHAR_ROCKITT, CHAR_WACKER, CHAR_WITHIT, CHAR_CREAK, 0
+
+
+s_do_class
+.(
+	; No need to increment pointer to command here, as this
+	; command is finished when the class ends...
+	
+	; First determine wether he is teaching Eric and Einstein
+	; in ths period.
+	lda lesson_descriptor
+
+	; Keep only the teacher bits (4-6)
+	and #%01110000
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda table_teacher_codes,y
+	sta tmp
+	cpx tmp
+	beq teachingEric	
+
+	; The teacher is not teaching Eric, prepare the new
+	; address for the current command and jump there
+	lda #<s_class_no_Eric
+	sta cur_command_low,x
+	lda #>s_class_no_Eric
+	sta cur_command_high,x
+	jmp s_class_no_Eric
+teachingEric
+	; We are teaching Eric, prepare the routine
+	; and jump there, but first clear the lesson
+	; status flags.
+	lda #0
+	sta lesson_status
+	lda #<s_class_with_Eric
+	sta cur_command_low,x
+	lda #>s_class_with_Eric
+	sta cur_command_high,x
+	jmp s_class_with_Eric
+.)
+
+s_class_no_Eric
+.(
+	; If the class has a blackboard, make
+	; the teacher clean it.
+	
+	; Get the identifier of the blackboard next to 
+	; the teacher. If we are in the Map room jump
+	; tell the kids to go to a certain page of their
+	; books.
+	
+	; Use call_subcommand to hand control
+	; over the s_clear_blackboard routine
+
+	; Make the teacher walk to the middle of the blackboard
+	; also using call_subcommand
+
+	; Randomly make the teacher ask the kids to write an
+	; essay or go to a page of their books
+
+	jsr randgen
+	cmp #160
+	bcc page_in_book
+	
+	lda #<st_write_essay
+	sta tmp0
+	lda #>st_write_essay
+	sta tmp0+1
+	jsr s_make_char_speak
+	jmp teacher_waits
+page_in_book
+	; This code is temporary...
+	jsr randgen
+	bcs questions
+	lda #<st_page_book
+	sta tmp0
+	lda #>st_page_book
+	sta tmp0+1
+	jsr s_make_char_speak
+	jmp teacher_waits
+questions
+	lda #<st_question_book
+	sta tmp0
+	lda #>st_question_book
+	sta tmp0+1
+	jsr s_make_char_speak
+
+teacher_waits
+	; Makes the teacher walk up&down
+	lda pos_col,x
+	eor #3
+	sta var3,x
+
+	; And var4???
+	lda #<s_isc_int_dest
+	sta tmp0
+	lda #>s_isc_int_dest
+	sta tmp0+1
+	jsr call_subcommand
+	jmp teacher_waits
+.)
+
+s_class_with_Eric
+.(
+	rts
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make a character find a seat
@@ -445,12 +604,10 @@ s_find_seat
 .(
 	lda #<s_usc_lchair
 	sta uni_subcom_low,x
-	sta tmp0
 	lda #>s_usc_lchair
 	sta uni_subcom_high,x
-	sta tmp0+1
 	inc pcommand,x
-	jmp (tmp0)
+	jmp s_usc_lchair
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -667,12 +824,9 @@ miniw
 	; Place the interruptible subcommand
 	lda #<s_isc_int_dest
 	sta i_subcom_low,x
-	sta tmp0
 	lda #>s_isc_int_dest
 	sta i_subcom_high,x
-	sta tmp0+1
-
-	jmp (tmp0)
+	jmp s_isc_int_dest
 cont
 	; The signal has not been raised yet, so it's time for another mini-walkabout.
 	jsr randgen
@@ -765,13 +919,11 @@ wasmiddle
 	; Tell him to go upstairs
 	lda #<s_isc_up_stair
 	sta i_subcom_low,x
-	sta tmp0
 	lda #>s_isc_up_stair
 	sta i_subcom_high,x
-	sta tmp0+1
 	lda #15	; 15 movements to deal with a stair
 	sta var4,x
-	jmp (tmp0)
+	jmp s_isc_up_stair
 
 notatstair1
 	; Send it there
@@ -793,13 +945,11 @@ rightside
 	; Tell him to go upstairs
 	lda #<s_isc_up_stair
 	sta i_subcom_low,x
-	sta tmp0
 	lda #>s_isc_up_stair
 	sta i_subcom_high,x
-	sta tmp0+1
 	lda #15	; 15 movements to deal with a stair
 	sta var4,x
-	jmp (tmp0)
+	jmp s_isc_up_stair
 notatstair2
 	; Send it there
 	lda #STAIRRBOTTOM
@@ -821,13 +971,11 @@ gobottomfloor
 	; Tell him to go downstairs
 	lda #<s_isc_down_stair
 	sta i_subcom_low,x
-	sta tmp0
 	lda #>s_isc_down_stair
 	sta i_subcom_high,x
-	sta tmp0+1
 	lda #15	; 15 movements to deal with a stair
 	sta var4,x
-	jmp (tmp0)
+	jmp s_isc_down_stair
 notatstair3
 	; Send it there
 	jmp setdest
@@ -970,11 +1118,9 @@ s_usc_dethroned1
 	; Place the correspondant uninterruptible subcommand
 	lda #<s_usc_dethroned2
 	sta uni_subcom_low,x
-	sta tmp0
 	lda #>s_usc_dethroned2
 	sta uni_subcom_high,x
-	sta tmp0+1
-	jmp (tmp0)
+	jmp s_usc_dethroned2
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

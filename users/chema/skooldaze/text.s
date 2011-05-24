@@ -125,3 +125,23 @@ sit_messages
 	.asc "SILENCE! OR I'LL CANE THE LOT OF YOU"
 	.byt SPACES_8
 	.byt 0
+
+class_messages
+st_write_essay
+	.byt "WRITE AN ESSAY WITH THIS TITLE"
+	.byt SPACES_8
+	.byt 0
+st_page_book
+	.byt "TURN TO PAGE "
+st_page_template
+	.byt "123 OF YOUR BOOKS, BE SILENT AND START READING"
+	.byt SPACES_8
+	.byt 0
+st_question_book
+	.byt "ANSWER THE QUESTIONS ON PAGE "
+st_question_template
+	.byt "123 OF YOUR LOVELY TEXTBOOK"
+	.byt SPACES_8
+	.byt 0
+
+
