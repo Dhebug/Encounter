@@ -173,14 +173,8 @@ dontmove
 new_pace
 	jsr randgen
 
-/*	rol tmp ; Save the carry flag
-	and #61
-	clc
-	adc #4
-	ror*/
-
-	asl
-	rol tmp
+	;asl
+	rol tmp ; Save the carry flag
 	and #61
 	clc
 	adc #4
@@ -194,8 +188,12 @@ new_pace
 	lda #%10000000
 	ora flags,x
 	sta flags,x
+	jmp end
 noset
-
+	lda #%01111111
+	and flags,x
+	sta flags,x
+end
 #else
 	asl flags,x
 	ror tmp

@@ -263,25 +263,6 @@ _smc_routine
 .)
 
 
-; A real random generator... trying to enhance this...
-randgen 
-.(
-   php				; INTERRUPTS MUST BE ENABLED!  We store the state of flags. 
-   cli 
-   lda randseed     ; get old lsb of seed. 
-   ora $308			; lsb of VIA T2L-L/T2C-L. 
-   rol				; this is even, but the carry fixes this. 
-   adc $304			; lsb of VIA TK-L/T1C-L.  This is taken mod 256. 
-   sta randseed     ; random enough yet. 
-   sbc randseed+1   ; minus the hsb of seed... 
-   rol				; same comment than before.  Carry is fairly random. 
-   sta randseed+1   ; we are set. 
-   plp 
-   rts				; see you later alligator. 
-.)
-randseed 
-  .word $dead       ; will it be $dead again? 
-
 
 
 ;; Change the current lesson
@@ -330,13 +311,11 @@ cont
 	; Ring the bell
 	jsr _ping
 nobell
-	; Clear all game flags & other matters
 
-	jsr reset_flags
-
-	; Get the lesson descriptor (teacher+place) from the table
 	; Put the name of teacher and place it in the lesson box
 
+	; Clear all game flags & other matters
+	jsr reset_flags
 
 	; Now update all characters
 	ldx #MAX_CHARACTERS-3
@@ -455,6 +434,27 @@ printit2
 
 	rts
 .)
+
+
+
+; A real random generator... trying to enhance this...
+randgen 
+.(
+   ;php				; INTERRUPTS MUST BE ENABLED!  We store the state of flags. 
+   ;cli 
+   lda randseed     ; get old lsb of seed. 
+   ora $308			; lsb of VIA T2L-L/T2C-L. 
+   rol				; this is even, but the carry fixes this. 
+   adc $304			; lsb of VIA TK-L/T1C-L.  This is taken mod 256. 
+   sta randseed     ; random enough yet. 
+   sbc randseed+1   ; minus the hsb of seed... 
+   rol				; same comment than before.  Carry is fairly random. 
+   sta randseed+1   ; we are set. 
+   ;plp 
+   rts				; see you later alligator. 
+.)
+randseed 
+  .word $dead       ; will it be $dead again? 
 
 
 
