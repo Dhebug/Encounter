@@ -19,6 +19,17 @@
 
 ; Token for 8 spaces
 #define SPACES_8		3
+#define ERIC_NAME		4
+#define BOYW_NAME		5
+#define ANG_NAME		6
+#define EINST_NAME		7
+#define ROCKITT_NAME	8
+#define WACKER_NAME		9
+#define WITHIT_NAME		10
+#define CREAK_NAME		11
+#define PLEASESIR		12
+#define REVISION		13
+#define NUM_TEMPLATE	14
 
 ; Names and some extras...
 #define EN_SPACES_8		0
@@ -32,5 +43,6 @@
 #define EN_CREAK		8
 #define EN_PLEASESIR	9	
 #define EN_REVISION		10
+#define EN_NUMTEMPLATE  11
 
 
