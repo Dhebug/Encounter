@@ -405,8 +405,6 @@ terminate_subcommand
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_dinner_duty
 s_end_game
-s_ctrl_einstein1
-s_ctrl_einstein2
 s_end
 .(
   rts
@@ -531,10 +529,16 @@ teachingEric
 	jmp s_class_with_Eric
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher conduct a class when he is not
+; teaching Eric (and Einstein).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 s_class_no_Eric
 .(
 	; If the class has a blackboard, make
-	; the teacher clean it.
+	; the teacher clean it. The following steps
+	; are made:
 	
 	; Get the identifier of the blackboard next to 
 	; the teacher. If we are in the Map room jump
@@ -561,41 +565,322 @@ s_class_no_Eric
 	jsr s_make_char_speak
 	jmp teacher_waits
 page_in_book
-	; This code is temporary...
+	jsr s_goto_page
+teacher_waits
+	; Makes the teacher walk up&down, while
+	; the students work...
+
+	lda pos_col,x
+	eor #3
+	sta var3,x
+	; And var4???
+
+	lda #<s_isc_int_dest
+	sta tmp0
+	lda #>s_isc_int_dest
+	sta tmp0+1
+	jsr call_subcommand
+
+	; Jump back again. The command is terminated
+	; automatically when the class is over...
+	jmp teacher_waits
+.)
+
+
+s_goto_page
+.(
+  	; Prepare a random number for the book's page
+	; TODO: This has the effect of repeating the page
+	; if two teachers do this at the same time!
+
+	ldy #2
+loop
+	jsr randgen
+	and #%111
+	adc #"0"
+	sta number_template,y
+	dey
+	bpl loop
+
 	jsr randgen
 	bcs questions
 	lda #<st_page_book
 	sta tmp0
 	lda #>st_page_book
 	sta tmp0+1
-	jsr s_make_char_speak
-	jmp teacher_waits
+	jmp s_make_char_speak
 questions
 	lda #<st_question_book
 	sta tmp0
 	lda #>st_question_book
 	sta tmp0+1
+	jmp s_make_char_speak
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher conduct a class when he is 
+; teaching Eric (and Einstein).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_class_with_Eric
+.(
+	; This one is quite tricky... there are many things to 
+	; take into acount, let's analyze them...
+
+	; First wait until Einstein sits down and check
+	; if Eric is in class.
+	jsr s_Einstein_seated
+	beq Ericisin
+Ericnotin
+	; Eric is not in the class
+	; Here Einstein could grass on Eric's absence
+	; and the teacher may decide track him down
+	; and give lines...
+Ericisin
+	; Set bit 7 (indicating that the next absence 
+	; lines message should be 'AND STAY THIS TIME')
+	; and bit 6 (indicating that the lesson has started)
+	lda #%11000000
+	ora lesson_status
+	sta lesson_status
+
+	; Check if Eric is still in class
+	jsr s_Einstein_seated
+	bne Ericnotin
+
+	; This is EINSTEIN's opportunity to tell tales 
+	; about hitting and blackboard defacement.
+
+	; With EINSTEIN's tales now safely told, it's 
+	; time to wipe the blackboard.
+
+	; Control returns here when the teacher has 
+	; wiped the blackboard and walked to the middle 
+	; of it.
+
+	; Make the teacher write on the blackboard
+	; 180 times out of 256 using call_subcommand
+
+	jsr randgen
+	cmp #160
+	bcc no_essay
+	bcs no_essay	; TESTING
+	
+	lda #<st_write_essay
+	sta tmp0
+	lda #>st_write_essay
+	sta tmp0+1
 	jsr s_make_char_speak
+	jmp teacher_waits
+no_essay
+	jsr randgen
+	cmp #240
+	bcc s_questions
+
+	jsr s_goto_page
 
 teacher_waits
-	; Makes the teacher walk up&down
+	; Is Eric in class?
+	jsr s_Einstein_seated
+	bne Ericnotin
+
+	; Makes the teacher walk up&down, while
+	; the students work...
+
 	lda pos_col,x
 	eor #3
 	sta var3,x
-
 	; And var4???
+
 	lda #<s_isc_int_dest
 	sta tmp0
 	lda #>s_isc_int_dest
 	sta tmp0+1
 	jsr call_subcommand
+
+	; Jump back again. The command is terminated
+	; automatically when the class is over...
 	jmp teacher_waits
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher conduct a 
+; question-and-answer session
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_questions
+	; Make this routine the current command
+	lda #<s_questions
+	sta cur_command_low,x
+	lda #>s_questions
+	sta cur_command_high,x
+
+checkEricagain
+	; Check if Eric is present
+	jsr s_Einstein_seated
+	beq Ericstillin
+
+	; Eric went absent, deal with it
+	lda #<s_class_with_Eric
+	sta cur_command_low,x
+	lda #>s_class_with_Eric
+	sta cur_command_high,x
+	jmp Ericnotin
+Ericstillin
+	; ERIC is in class, so fire off a question and answer.
+	jsr s_prepare_question
+	lda #<s_isc_speak1
+	sta tmp0
+	lda #>s_isc_speak1
+	sta tmp0+1
+	jsr call_subcommand 
+
+	; Control returns here when the teacher has finished asking the question.
+
+	; Make the teacher wait for Einstein to answer
+	; Put the answer in Einstein's buffer
+	; TEMPORARY FOR TESTING
+	ldy #CHAR_EINSTEIN
+	lda #<st_ans
+	sta var3,y
+	lda #>st_ans
+	sta var4,y
+
+	; Signal that it is Einstein's turn to speak
+	lda lesson_signals
+	ora #%1
+	sta lesson_signals
+
+	; Set the interruptible subcommand for this teacher
+	; to s_isc_waitEinstein
+	lda #<s_isc_waitEinstein
+	sta i_subcom_low,x
+	lda #>s_isc_waitEinstein
+	sta i_subcom_high,x
+
+	lda #<checkEricagain
+	sta cur_command_low,x
+	lda #>checkEricagain
+	sta cur_command_high,x
+	rts
+
+	; And loop back
+	;jmp checkEricagain
 .)
 
-s_class_with_Eric
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check whether ERIC and EINSTEIN are in class
+; Used by the routines at 62208 and 62464. If 
+; EINSTEIN is in class, this routine returns to the 
+; caller with the zero flag set if and only if ERIC 
+; is present too. If EINSTEIN is not yet sitting down 
+; in class, it makes the teacher wait until he shows up. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_Einstein_seated
 .(
+	ldy #CHAR_EINSTEIN
+	lda anim_state,y
+	cmp #4
+	beq s_check_Eric_loc
+
+	; Place the return address into the cur_command of 
+	; the teacher, so control keeps calling this...
+
+	; Get the return address...
+	pla	; get LSB
+	sta tmp
+	pla	; get HSB
+	sta tmp+1
+	inc tmp
+	bne noadj
+	inc tmp+1
+noadj
+	; And place it as the current command address...
+	lda tmp
+	sta cur_command_low,x
+	lda tmp+1
+	sta cur_command_high,x
 	rts
 .)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check whether ERIC is where he should be
+; Used by the routines at 31648, 31854, 31895,
+; 31952 and 62208. Returns with the zero flag 
+; set if and only if ERIC is where he should 
+; be during dinner or class. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_check_Eric_loc
+.(
+	lda #0
+	rts
+.)
+
+s_prepare_question
+.(
+	; Temporary, just for testing
+	lda #<st_questions
+	sta var3,x
+	lda #>st_questions
+	sta var4,x
+
+	lda #<s_isc_speak1
+	sta i_subcom_low,x
+	lda #>s_isc_speak1
+	sta i_subcom_high,x
+
+	rts
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Control EINSTEIN during class (1)
+; Used by command lists 144, 152, 160 and 168.
+; Makes EINSTEIN wait for his turn to speak, and 
+; then hands over control to the interruptible 
+; subcommand routine at s_isc_speak1_ex; when EINSTEIN has 
+; finished speaking, control returns to the 
+; primary command routine at s_ctrl_einstein2. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_ctrl_einstein1
+.(
+	; Pick up the lesson flags and check
+	; if it is Einstein turn to speak
+	lda lesson_signals
+	lsr
+	bcs doit
+	rts
+doit
+	lda #<s_ctrl_einstein2
+	sta cur_command_low,x
+	lda #>s_ctrl_einstein2
+	sta cur_command_high,x
+
+	lda #<s_isc_speak1_ex
+	sta i_subcom_low,x
+	lda #>s_isc_speak1_ex
+	sta i_subcom_high,x
+
+	jmp s_isc_speak1
+.)
+
+s_ctrl_einstein2
+.(
+	lda #<s_ctrl_einstein1
+	sta cur_command_low,x
+	lda #>s_ctrl_einstein1
+	sta cur_command_high,x
+
+	; Signal Einstein has just spoken
+	lda lesson_signals
+	and #%11111110
+	sta lesson_signals
+	
+	rts
+.)
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make a character find a seat
@@ -684,8 +969,8 @@ s_flag_event
 	jsr s_get_flagbyte
 
 	; Set it
-	ora lesson_status,y
-	sta lesson_status,y
+	ora lesson_signals,y
+	sta lesson_signals,y
 
 	; Advance the command pointer 
 	inc pcommand,x
@@ -708,8 +993,8 @@ s_unflag_event
 	eor #$ff
 
 	; Reset it
-	and lesson_status,y
-	sta lesson_status,y
+	and lesson_signals,y
+	sta lesson_signals,y
 
 	; Advance the command pointer 
 	inc pcommand,x
@@ -799,7 +1084,7 @@ s_move_until
 	lda dest_y,x	; Get the event identifier
 	beq cont		; If it is event 0, just move until command is restarted	
 	jsr s_get_flagbyte
-	and lesson_status,y
+	and lesson_signals,y
 	beq cont
 	
 	; The time has come to stop moving about. However, 
@@ -1404,13 +1689,28 @@ goeson
 	rts
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher wait for EINSTEIN to finish
+; speaking.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_isc_waitEinstein
+.(
+	lda lesson_signals
+	lsr
+	bcc end
+	rts
+end
+	jmp terminate_subcommand
+.)
+
+
 s_isc_wipe1
 s_isc_wipe2
 s_isc_write
 
 s_isc_findEric
 s_isc_movemidstride
-s_isc_waitEinstein
 .(
 	rts
 .)

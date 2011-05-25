@@ -35,11 +35,13 @@ current_lesson_index	.byt 0			; Index of the current lesson in the main timetabl
 current_lesson			.byt PLAYTIME1	; Current lesson from the main timetable
 last_char_moved			.byt 0			; Last character we have moved
 
-; Keep the next 4 contiguous!
+; Keep the next 5 contiguous!
 lesson_status			.byt 0			; Lesson status flags
+lesson_signals			.byt 0			; Lesson signal flags
 game_status				.byt 0			; Game status flags
 stampede_signals		.byt 0			; Stampede control signals
 special_playtime		.byt 0			; Special playtime flags
+
 
 game_mode				.byt 0			; Game mode indicator (0 demo, 1 shields need to be flashed, 2 combination, 3 shields need to be unflashed)
 lesson_descriptor		.byt 0			; Indicates who is teaching Eric and where

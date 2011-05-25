@@ -65,30 +65,31 @@ empty_st
 	.dsb 9,0
 	.asc "BOY WANDER"
 	.byt 0
-	.dsb 9,0
+	.dsb 3,0
 	.asc "ANGELFACE"
 	.byt 0
-	.dsb 9,0
+	.dsb 4,0
 	.asc "EINSTEIN"
 	.byt 0
-	.dsb 9,0
+	.dsb 5,0
 	.asc "MR ROCKITT"
 	.byt 0
-	.dsb 9,0
+	.dsb 3,0
 	.asc "MR WACKER"
 	.byt 0
-	.dsb 9,0
+	.dsb 4,0
 	.asc "MR WITHIT"
 	.byt 0
-	.dsb 9,0
+	.dsb 4,0
 	.asc "MR CREAK"
 	.byt 0
-	.dsb 9,0
-	.asc "Please Sir - I cannot tell a lie . ."
-	.byt SPACES_8
+	.dsb 5,0
+	.asc "Please Sir - I cannot tell a lie . . "
 	.byt 0
 	.asc "REVISION"
 	.byt 0
+number_template
+	.byt "000",0
 
 class_names
 	.asc "READING ROOM"
@@ -133,15 +134,167 @@ st_write_essay
 	.byt 0
 st_page_book
 	.byt "TURN TO PAGE "
-st_page_template
-	.byt "123 OF YOUR BOOKS, BE SILENT AND START READING"
+	.byt NUM_TEMPLATE
+	.byt " OF YOUR BOOKS, BE SILENT AND START READING"
 	.byt SPACES_8
 	.byt 0
 st_question_book
 	.byt "ANSWER THE QUESTIONS ON PAGE "
-st_question_template
-	.byt "123 OF YOUR LOVELY TEXTBOOK"
+	.byt NUM_TEMPLATE
+	.byt " OF YOUR LOVELY TEXTBOOK"
 	.byt SPACES_8
 	.byt 0
 
+st_chemical_name
+	.asc "Tin",0
+	.asc "Mercury",0
+	.asc "Gold",0
+	.asc "Silver",0
+	.asc "Platinum",0
+	.asc "Copper",0
+	.asc "Magnesium",0
+	.asc "Lead",0
+	.asc "Manganese",0
+	.asc "Antimony",0
+	.asc "Arsenic",0
+	.asc "Potassium",0
+	.asc "Sodium",0
+	.asc "Chlorine",0
+	.asc "Zinc",0
+	.asc "Tungsten",0
+	.asc "Caesium",0
+	.asc "Silicon",0
+	.asc "Phosphorus",0
+	.asc "Bromine",0
+	.asc "Hyrogen",0
+st_chemical_sym
+	.asc "Sn",0
+	.asc "Hg",0
+	.asc "Au",0
+	.asc "Ag",0
+	.asc "Pt",0
+	.asc "Cu",0
+	.asc "Mg",0
+	.asc "Pb",0
+	.asc "Mn",0
+	.asc "Sb",0
+	.asc "As",0
+	.asc "K",0
+	.asc "Na",0
+	.asc "Cl",0
+	.asc "Zn",0
+	.asc "W",0
+	.asc "Cs",0
+	.asc "Si",0
+	.asc "P",0
+	.asc "Br",0
+	.asc "H",0
 
+st_capitals
+	.asc "Berne",0       
+	.asc "Helsinki",0    
+	.asc "Reykjavik",0   
+	.asc "Budapest",0
+	.asc "Bucharest",0  
+	.asc "Tirana",0 
+	.asc "Jakarta",0    
+	.asc "Pyongyang",0   
+	.asc "Vientiane",0   
+	.asc "Islamabad",0   
+	.asc "Rangoon",0     
+	.asc "Ankara",0      	
+	.asc "Amman",0       
+	.asc "Gabarone",0    
+	.asc "Lusaka",0      
+	.asc "Monrovia",0    
+	.asc "La Paz",0      
+	.asc "Caracas",0     
+	.asc "Quito",0       
+	.asc "Paramaribo",0  
+	.asc "Santiago",0    
+
+st_countries
+	.asc "Switzerland",0
+	.asc "Finland",0
+	.asc "Iceland",0     
+	.asc "Hungary",0     
+	.asc "Romania",0     
+	.asc "Albania",0     
+	.asc "Indonesia",0   
+	.asc "North Korea",0 
+	.asc "Laos",0        
+	.asc "Pakistan",0    
+	.asc "Burma",0       
+	.asc "Turkey",0      
+	.asc "Jordan",0      
+	.asc "Botswana",0    
+	.asc "Zambia",0      
+	.asc "Liberia",0     
+	.asc "Bolivia",0     
+	.asc "Venezuela",0   
+	.asc "Ecuador",0     
+	.asc "Surinam",0     
+	.asc "Chile",0       
+
+st_years
+	.asc "1066",0       
+	.asc "1265",0       
+	.asc "1314",0       
+	.asc "1346",0       
+	.asc "1356",0       
+	.asc "1403",0       
+	.asc "1415",0       
+	.asc "1485",0       
+	.asc "1513",0       
+	.asc "1571",0       
+	.asc "1014",0       
+	.asc "1685",0       
+	.asc "1746",0       
+	.asc "1775",0       
+	.asc "1781",0       
+	.asc "1805",0       
+	.asc "1815",0       
+	.asc "1812",0       
+	.asc "1836",0       
+	.asc "1863",0       
+	.asc "1854",0       
+st_battles
+	.asc "Hastings",0   
+	.asc "Evesham",0    
+	.asc "Bannockburn",0
+	.asc "Crecy",0      
+	.asc "Poitiers",0   
+	.asc "Shrewsbury",0 
+	.asc "Agincourt",0  
+	.asc "Bosworth",0   
+	.asc "Flodden",0    
+	.asc "Lepanto",0    
+	.asc "Clontarf",0   
+	.asc "Sedgemoor",0  
+	.asc "Culloden",0   
+	.asc "Lexington",0  
+	.asc "Yorktown",0   
+	.asc "Trafalgar",0  
+	.asc "Waterloo",0   
+	.asc "Borodino",0   
+	.asc "San Jacinto",0
+	.asc "Gettysburg",0 
+	.asc "Balaclava",0  
+
+st_questions
+	.asc "WHAT IS 12 x 34?", SPACES_8,0
+st_ans
+	.asc PLEASESIR, "It's ", SPACES_8,0
+	.asc "WHAT ELEMENT HAS THE SYMBOL", "?",SPACES_8,0
+	.asc "WHAT IS THE CHEMICAL SYMBOL FOR ","?",SPACES_8,0
+	.asc "WHAT'S THE CAPITAL OF ","?",SPACES_8,0
+ 	.asc PLEASESIR, "It is ", SPACES_8,0
+	.asc "WHICH COUNTRY'S CAPITAL IS ","?",SPACES_8,0
+	.asc "WHEN WAS THE BATTLE OF ","?",SPACES_8,0
+	.asc "WHICH BATTLE OCCURRED IN ","?",SPACES_8,0
+	.asc PLEASESIR, "It was in ", SPACES_8,0
+	.asc PLEASESIR, "It was the BATTLE OF ", SPACES_8,0
+	.asc "WHAT HAPPENED IN THE YEAR THAT I WAS BORN?", SPACES_8,0
+
+
+	

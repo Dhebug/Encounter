@@ -21,7 +21,7 @@
 reset_flags
 .(
 	; Reset all the game flags
-	ldy #3
+	ldy #4
 	lda #0
 loopf
 	sta lesson_status,y
