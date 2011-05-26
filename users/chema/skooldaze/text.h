@@ -30,6 +30,8 @@
 #define PLEASESIR		12
 #define REVISION		13
 #define NUM_TEMPLATE	14
+#define MUL_QUESTION	15
+#define MUL_ANSWER		16
 
 ; Names and some extras...
 #define EN_SPACES_8		0

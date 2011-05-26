@@ -90,6 +90,10 @@ empty_st
 	.byt 0
 number_template
 	.byt "000",0
+number_question
+	.byt "12 X 32",0
+number_answer
+	.byt "1234",0
 
 class_names
 	.asc "READING ROOM"
@@ -282,19 +286,19 @@ st_battles
 	.asc "Balaclava",0  
 
 st_questions
-	.asc "WHAT IS 12 x 34?", SPACES_8,0
-st_ans
-	.asc PLEASESIR, "It's ", SPACES_8,0
+	.asc "WHAT IS ", MUL_QUESTION, "?", SPACES_8,0
 	.asc "WHAT ELEMENT HAS THE SYMBOL", "?",SPACES_8,0
 	.asc "WHAT IS THE CHEMICAL SYMBOL FOR ","?",SPACES_8,0
 	.asc "WHAT'S THE CAPITAL OF ","?",SPACES_8,0
- 	.asc PLEASESIR, "It is ", SPACES_8,0
 	.asc "WHICH COUNTRY'S CAPITAL IS ","?",SPACES_8,0
 	.asc "WHEN WAS THE BATTLE OF ","?",SPACES_8,0
 	.asc "WHICH BATTLE OCCURRED IN ","?",SPACES_8,0
+	.asc "WHAT HAPPENED IN THE YEAR THAT I WAS BORN?", SPACES_8,0
+st_ans
+	.asc PLEASESIR, "It's ", MUL_ANSWER, SPACES_8,0
+ 	.asc PLEASESIR, "It is ", SPACES_8,0
 	.asc PLEASESIR, "It was in ", SPACES_8,0
 	.asc PLEASESIR, "It was the BATTLE OF ", SPACES_8,0
-	.asc "WHAT HAPPENED IN THE YEAR THAT I WAS BORN?", SPACES_8,0
 
 
 	

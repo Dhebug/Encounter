@@ -231,10 +231,10 @@ okcol
 okcolm
 	sty bubble_lip_col
 	ldy pos_row,x
+	dey
 	cpx #CHAR_EINSTEIN
-	dey
 	bne nodec
-	dey
+	iny
 nodec
 	sty bubble_lip_row
 	
