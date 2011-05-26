@@ -817,9 +817,81 @@ s_check_Eric_loc
 	rts
 .)
 
+s_domath
+.(
+	sty savy+1
+	sta op2
+	lda #0
+	sta op2+1
+	jsr utoa
+savy
+	ldy #0
+
+	ldx #0
+loop
+	lda bufconv,x
+	sta number_question,y
+	beq end
+	inx
+	iny
+	jmp loop
+end
+	rts
+
+.)
+
 s_prepare_question
 .(
 	; Temporary, just for testing
+
+	; Prepare a multiplication
+	stx savx+1
+
+	jsr randgen
+	and #%00011111
+	ora #%00000100
+	sta tmp0
+
+	; Prepare the question
+	ldy #0
+	jsr s_domath
+
+	lda #" "
+	sta  number_question,y
+	iny
+	lda #"X"
+	sta  number_question,y
+	iny
+	lda #" "
+	sta  number_question,y
+	iny
+
+	jsr randgen
+	and #%00011111
+	ora #%00000100
+	sta tmp0+1
+
+	jsr s_domath
+
+	jsr mul8
+	lda tmp0
+	sta op2
+	lda tmp1
+	sta op2+1
+	jsr utoa
+	ldx #0
+loop
+	lda bufconv,x
+	sta number_answer,x
+	beq end
+	inx
+	jmp loop
+end
+
+
+savx
+	ldx #0
+
 	lda #<st_questions
 	sta var3,x
 	lda #>st_questions

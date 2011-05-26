@@ -457,6 +457,80 @@ randseed
   .word $dead       ; will it be $dead again? 
 
 
+bufconv
+	.byt 0,0,0,0,0,0
+utoa
+.( 
+    ldy#0
+    sty bufconv
+itoaloop
+	jsr udiv10
+	pha
+	iny
+	lda op2
+	ora op2+1
+	bne itoaloop
+	
+	ldx #0
+	lda bufconv
+	beq poploop
+	inx
+poploop
+	pla
+	clc
+	adc #$30
+	sta bufconv,x
+	inx
+	dey
+	bne poploop
+	lda #0
+	sta bufconv,x
+	rts
+			
+;
+; udiv10 op2= op2 / 10 and A= op2 % 10
+;
+udiv10
+	lda #0
+	ldx #16
+	clc
+udiv10lp
+	rol op2
+	rol op2+1
+	rol 
+	cmp #10
+	bcc contdiv
+	sbc #10
+contdiv
+	dex
+	bne udiv10lp
+	rol op2
+	rol op2+1
+    rts
+.)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Multiplies 2 8-bit numbers
+; in tmp0 and tmp0+1 and gets a 16-bit
+; result in tmp0,tmp1 using the
+; classical shift&add method
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+mul8
+.(
+	sta tmp1
+	ldx #9
+_m8_loop
+	lsr tmp1
+	ror tmp0
+	bcc _m8_deccnt
+	clc
+	lda tmp0+1
+	adc tmp1
+	sta tmp1
+_m8_deccnt
+	dex
+	bne _m8_loop
+	rts
+.)
 

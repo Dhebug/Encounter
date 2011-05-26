@@ -70,7 +70,11 @@ _main
 	sty $2e2
 	jsr $f210      ;ink
 
-
+	lda #10
+	sta tmp0
+	sta tmp0+1
+	jsr mul8
+	
 	jsr _init_irq_routine 
 	jsr _init
 	jmp _test_loop
