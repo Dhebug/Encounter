@@ -656,12 +656,28 @@ smc_pchar
 	; which refers to an entry in one of 
 	; the symbol/element, capital city/country 
 	; and date/battle question-and-answer pairs
-	
+
 	bpl nottoken
-	and #127
 	; Look up the pointer in the question/answer tables
 	; Store it in the var5/var6 pair and jump back to the
 	; submessage processing (getting in A the first char)
+	cmp #TEMPLATE_QUESTION
+	bne isanswer
+	lda p_question
+	ldy p_question+1
+	bne placeit
+isanswer
+	lda p_answer
+	ldy p_answer+1
+placeit
+	sta var5,x
+	sta smc_pchar2+1
+	tya
+	sta var6,x
+	sta smc_pchar2+2
+smc_pchar2
+	lda $1234
+
 	jmp process_subm
 
 nottoken
