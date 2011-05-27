@@ -484,9 +484,6 @@ s_msg_sitdown
 ; Control teacher when during class
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-table_teacher_codes
-	.byt CHAR_ROCKITT, CHAR_WACKER, CHAR_WITHIT, CHAR_CREAK, 0
-
 
 s_do_class
 .(
@@ -1029,34 +1026,6 @@ sava
 	rts
 .)
 
-creak_table
-	.byt 5,2
-	.byt 6,3
-rockitt_table
-	.byt 1,1
-	.byt 2,1
-p_question
-	.dsb 2
-p_answer
-	.dsb 2
-withit_table
-	.byt 3,1
-	.byt 4,1
-
-qa_tables
-	.byt <st_battles
-	.byt >st_battles
-	.byt <st_years
-	.byt >st_years
-	.byt <st_chemical_sym
-	.byt >st_chemical_sym
-	.byt <st_chemical_name
-	.byt >st_chemical_name
-	.byt 0,0,0,0
-	.byt <st_countries
-	.byt >st_countries
-	.byt <st_capitals
-	.byt >st_capitals
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Control EINSTEIN during class (1)
