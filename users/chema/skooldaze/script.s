@@ -736,15 +736,7 @@ Ericstillin
 
 	; Control returns here when the teacher has finished asking the question.
 
-	; Make the teacher wait for Einstein to answer
-	; Put the answer in Einstein's buffer
-	; TEMPORARY FOR TESTING
-	ldy #CHAR_EINSTEIN
-	lda #<st_ans
-	sta var3,y
-	lda #>st_ans
-	sta var4,y
-
+	
 	; Signal that it is Einstein's turn to speak
 	lda lesson_signals
 	ora #%1
@@ -752,6 +744,7 @@ Ericstillin
 
 	; Set the interruptible subcommand for this teacher
 	; to s_isc_waitEinstein
+
 	lda #<s_isc_waitEinstein
 	sta i_subcom_low,x
 	lda #>s_isc_waitEinstein
@@ -786,15 +779,19 @@ s_Einstein_seated
 	; Place the return address into the cur_command of 
 	; the teacher, so control keeps calling this...
 
-	; Get the return address...
-	pla	; get LSB
+	; Get the return address... and substract 2 to get the
+	; address of the instruction that called this...
+	pla ; get LSB
+	sec
+	sbc #2	; size of jsr inmediate + 1
 	sta tmp
-	pla	; get HSB
+	pla ; get MSB
 	sta tmp+1
-	inc tmp
-	bne noadj
-	inc tmp+1
-noadj
+	bcs nocarry
+	dec tmp+1
+nocarry
+
+
 	; And place it as the current command address...
 	lda tmp
 	sta cur_command_low,x
@@ -817,6 +814,13 @@ s_check_Eric_loc
 	rts
 .)
 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Auxiliary, to save some
+; memory...
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_domath
 .(
 	sty savy+1
@@ -840,11 +844,18 @@ end
 
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Prepare a question and answer pair
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 s_prepare_question
 .(
-	; Temporary, just for testing
+	; Is Mr Wacker the teacher?
+	cpx #CHAR_WACKER
+	bne not_wacker
 
-	; Prepare a multiplication
+	; It is Mr Wacker who is teaching... prepare a multiplication
+	; question...
 	stx savx+1
 
 	jsr randgen
@@ -888,6 +899,12 @@ loop
 	jmp loop
 end
 
+	; Place the corresponding answer in Einstein's buffer
+	ldy #CHAR_EINSTEIN
+	lda #<st_ans
+	sta var3,y
+	lda #>st_ans
+	sta var4,y
 
 savx
 	ldx #0
@@ -896,14 +913,150 @@ savx
 	sta var3,x
 	lda #>st_questions
 	sta var4,x
-
+/*
 	lda #<s_isc_speak1
 	sta i_subcom_low,x
 	lda #>s_isc_speak1
 	sta i_subcom_high,x
+*/
+	rts
+
+not_wacker
+	; Prepare base pointer
+	lda #<st_questions
+	sta tmp0
+	lda #>st_questions
+	sta tmp0+1
+
+	; Get the table of questions&answers for the current teacher
+	txa
+	sec
+	sbc #CHAR_FIRST_TEACHER
+	asl
+	asl
+	tay
+
+	; Get the random q&a pair
+	lda qa_tables,y
+	sta tmp1
+	lda qa_tables+1,y
+	sta tmp1+1
+	lda qa_tables+2,y
+	sta tmp2
+	lda qa_tables+3,y
+	sta tmp2+1
+
+	; Get a random number
+	jsr randgen
+	; Carry is random here...
+	bcc firstq
+	iny
+	iny
+	; Swap pointers
+	lda tmp1
+	pha
+	lda tmp2
+	sta tmp1
+	pla
+	sta tmp2
+	lda tmp1+1
+	pha
+	lda tmp2+1
+	sta tmp1+1
+	pla
+	sta tmp2+1
+firstq
+	lda creak_table,y
+	sty savy+1
+
+	; Now get the string
+	jsr search_string
+	
+	; and put it into the character's buffer
+	lda tmp0
+	sta var3,x
+	lda tmp0+1
+	sta var4,x
+
+	; Now for the answer
+	; Prepare base pointer
+	lda #<st_ans
+	sta tmp0
+	lda #>st_ans
+	sta tmp0+1
+savy
+	ldy #0
+	iny
+	lda creak_table,y
+	; Now get the string
+	jsr search_string
+	
+	; and put it into the Einstein's buffer
+	ldy #CHAR_EINSTEIN
+	lda tmp0
+	sta var3,y
+	lda tmp0+1
+	sta var4,y
+
+	; Put the corresponding question/answer pair in the pointers
+	lda tmp1
+	sta tmp0
+	lda tmp1+1
+	sta tmp0+1
+getqa
+	jsr randgen
+	and #%11111
+	cmp #21
+	bcs getqa
+	sta sava+1
+	jsr search_string
+	lda tmp0
+	sta p_question
+	lda tmp0+1
+	sta p_question+1
+	lda tmp2
+	sta tmp0
+	lda tmp2+1
+	sta tmp0+1
+sava
+	lda #0
+	jsr search_string
+	lda tmp0
+	sta p_answer
+	lda tmp0+1
+	sta p_answer+1
 
 	rts
 .)
+
+creak_table
+	.byt 5,2
+	.byt 6,3
+rockitt_table
+	.byt 1,1
+	.byt 2,1
+p_question
+	.dsb 2
+p_answer
+	.dsb 2
+withit_table
+	.byt 3,1
+	.byt 4,1
+
+qa_tables
+	.byt <st_battles
+	.byt >st_battles
+	.byt <st_years
+	.byt >st_years
+	.byt <st_chemical_sym
+	.byt >st_chemical_sym
+	.byt <st_chemical_name
+	.byt >st_chemical_name
+	.byt 0,0,0,0
+	.byt <st_countries
+	.byt >st_countries
+	.byt <st_capitals
+	.byt >st_capitals
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Control EINSTEIN during class (1)
