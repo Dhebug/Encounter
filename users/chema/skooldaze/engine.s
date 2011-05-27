@@ -433,7 +433,7 @@ change_direction
 	and #IS_FACING_RIGHT	; Direction
 	beq r2l
 	
-	; For children this code is correct...
+	; Update the base pointers
 
 	lda base_as_pointer_low,x
 	sec
@@ -1003,32 +1003,6 @@ nocarry
 .)
 
 
-_GenerateTables
-.(
-	; Generate screen offset data
-    lda #<$a000
-    sta tmp0+0
-	lda #>$a000
-    sta tmp0+1
-
-	ldx #0
-loop
-	; generate two bytes screen adress
-	clc
-	lda tmp0+0
-	sta _HiresAddrLow,x
-	adc #40
-	sta tmp0+0
-	lda tmp0+1
-	sta _HiresAddrHigh,x
-	adc #0
-	sta tmp0+1
-
-	inx
-	cpx #200
-	bne loop
-	rts
-.)
 
 
 
