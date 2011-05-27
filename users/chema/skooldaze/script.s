@@ -919,6 +919,12 @@ savx
 	rts
 
 not_wacker
+	; The teacher is no Mr Wacker. We first check if it is
+	; Mr Creak and it is time to give the Year of Birth quesion
+
+	; It is not, then prepare a question and an answer depending
+	; on the teacher.
+
 	; Prepare base pointer
 	lda #<st_questions
 	sta tmp0
@@ -950,18 +956,18 @@ not_wacker
 	iny
 	iny
 	; Swap pointers
+	sty savyb+1
 	lda tmp1
-	pha
-	lda tmp2
-	sta tmp1
-	pla
+	ldy tmp2
 	sta tmp2
+	sty tmp1
 	lda tmp1+1
-	pha
-	lda tmp2+1
-	sta tmp1+1
-	pla
+	ldy tmp2+1
 	sta tmp2+1
+	sty tmp1+1
+savyb
+	ldy #0
+	
 firstq
 	lda creak_table,y
 	sty savy+1
