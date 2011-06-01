@@ -125,6 +125,7 @@ command_completed
 	lda #0
 	sta cont_subcom_high,x
 
++next_command
 	;; Step 7
 	lda command_list_high,x
 	beq nocommandlist

@@ -725,7 +725,7 @@ lesson_descriptors
 
 ; Animatory states for children
 Eric_anim_states
-; Animatory state 0 (1-Eric00.png)sa
+; Animatory state 0 (1-Eric00.png)
 .byt 0, 0, 0, 0
 .byt 0, 1, 2, 0
 .byt 3, 4, 5, 0
@@ -2288,8 +2288,8 @@ tab_bit8
 
 ;;;;;; Main timetable (see script.h)
 main_timetable
-	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
-	.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
+	.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
 	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
 	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
 	.byt WITHIT_WHITEROOM, REV_LIBRARY1, PLAYTIME4, ROCKITT_WHITEROOM
