@@ -19,6 +19,36 @@
 ; Auxiliar functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+; Update anim state (passed in A) for the 
+; character passed in X and also update SRB
+update_animstate
+.(
+	sta anim_state,x
+
+	; Prepare offset for the pointers
+	; which is anim_state*16
+	asl
+	asl
+	asl
+	asl
+	sta smc_offset+1
+
+	jsr update_SRB_sp
+	lda base_as_pointer_low,x
+	clc
+smc_offset
+	adc #0
+	sta as_pointer_low,x
+	lda base_as_pointer_high,x
+	adc #0
+	sta as_pointer_high,x
+
+	jmp update_SRB_sp
+.)
+
+
+
 ; Make a character speak the message
 ; pointed by tmp0
 
@@ -64,14 +94,7 @@ s_stand_up
 doit
 	; Change animatory state
 	lda #0
-	sta anim_state,x
-
-	jsr update_SRB_sp
-	lda base_as_pointer_low,x
-	sta as_pointer_low,x
-	lda base_as_pointer_high,x
-	sta as_pointer_high,x
-	jmp update_SRB_sp
+	jmp update_animstate
 .)
 
 ; Get flag byte and bitmask for a given event ID
@@ -198,18 +221,7 @@ s_sit_char
 isEric	
 	; Change animatory state
 	lda #4
-	sta anim_state,x
-
-	jsr update_SRB_sp
-	lda base_as_pointer_low,x
-	clc
-	adc #64
-	sta as_pointer_low,x
-	lda base_as_pointer_high,
-	adc #0
-	sta as_pointer_high,x
-
-	jmp update_SRB_sp
+	jmp update_animstate
 .)
 
 
@@ -453,8 +465,11 @@ s_set_csubcom
 	
 	inc pcommand,x
 
+	; This is important, so the main loop does not find an empty
+	; primary command pointer and clears the continuous subcommand
+	; without executing it.
+
 	jmp next_command
-	;rts
 .)
 
 
@@ -879,7 +894,7 @@ s_prepare_question
 	lda #" "
 	sta  number_question,y
 	iny
-	lda #"X"
+	lda #"x"
 	sta  number_question,y
 	iny
 	lda #" "
@@ -1603,6 +1618,61 @@ in bytes 111 and 112 of a character's buffer
 */
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Deal with a character who has been knocked over
+;; Knocks the character to the floor, makes him give lines to 
+;; any nearby kids or reveal his safe combination letter 
+;; (if he's a teacher), and then makes him get up. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_usc_knocked
+.(
+
+	; Check if it is time to get up
+	dec var7,x
+	bne cont
+	jmp terminate_unisubcom
+cont
+
+	; Has the character just been hit?
+	lda var7,x
+	cmp #19
+	beq justhit
+	
+	; If the character is a teacher make him reveal his
+	; safe combination letter or give lines (as appropriate)
+	; and exit or else return here
+
+	; jsr teacher_hit
+
+	; decrement again and check if it is time to
+	; get up (this is what the speccy version does)
+	
+	ldy var7,x
+	dey
+	beq getup
+	rts
+getup
+	; Get back the animatory state
+	lda var8,x
+	jmp update_animstate
+
+justhit
+	; The character has just been hit
+	; Save the anim state in var8
+	lda anim_state,x
+	sta var8,x
+
+	; And put the character lying on the floor
+	cpx #CHAR_FIRST_TEACHER
+	bcc kid
+	lda #5
+	.byt $2c
+kid
+	lda #6
+	jmp update_animstate
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make ANGELFACE throw a punch (1) 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1620,19 +1690,7 @@ s_usc_apunch1
 	
 	; Adjust animatory state
 	lda #7
-	sta anim_state,x
-
-	jsr update_SRB_sp
-	lda base_as_pointer_low,x
-	clc
-	adc #(7*16)
-	sta as_pointer_low,x
-	lda base_as_pointer_high,x
-	adc #0
-	sta as_pointer_high,x
-
-	jmp update_SRB_sp
-
+	jmp update_animstate
 .)
 
 
@@ -1664,7 +1722,58 @@ nocarry
 	; Check if somebody has been hit by Eric or Angelface (as this
 	; is also an entry point when Eric hits
 +check_hit
+	; First see if somebody is in range...
+	; Prepare the position where it would be hit
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq left
+	lda pos_col,x
+	clc
+	adc #3
+	jmp done
+left
+	lda pos_col,x
+	sec
+	sbc #3
+done
+	sta smc_tpos+1
+	
+	ldy #0
+	sty tmp
+loop
+	;cpy #CHAR_ANGELFACE
+	;beq skip
+smc_tpos
+	lda #0
+	jsr punchable_victim
+	bcs victimok
+skip
+	inc tmp
+	ldy tmp
+	cpy #CHAR_BOY8
+	bne loop
 
+	; We found no victim, return
+	rts
+
+victimok
+	cpx #CHAR_ERIC
+	bne notEric
+	lda Eric_flags
+	ora #ERIC_DOWN
+	sta Eric_flags
+	rts
+notEric
+	; Place the corresponding uninterruptible
+	; subcommand
+	lda #<s_usc_knocked
+	sta uni_subcom_low,y
+	lda #>s_usc_knocked
+	sta uni_subcom_high,y
+
+	; Initialize timer to be laid down
+	lda #20
+	sta var7,y
 
 	rts
 
@@ -1684,34 +1793,13 @@ s_usc_apunch3
 
 	; Get back animatory state
 	lda var7,x
-	sta anim_state,x
-	beq cont
-
-	cmp #2
-dbug bne dbug
-
-
-	; Anim state is 2
-	lda #(2*16)
-cont
-	sta smc_offset+1
-
-	jsr update_SRB_sp
-	lda base_as_pointer_low,x
-	clc
-smc_offset
-	adc #0
-	sta as_pointer_low,x
-	lda base_as_pointer_high,x
-	adc #0
-	sta as_pointer_high,x
-
-	jmp update_SRB_sp
+	jmp update_animstate
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make ANGELFACE throw a punch (4) 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+terminate_unisubcom		; This also serves for this purpose
 s_usc_apunch4
 .(
 	; We are done, terminate this uninterruptible subcommand
