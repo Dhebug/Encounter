@@ -440,9 +440,21 @@ s_write_bl_c
 s_set_csubcom
 .(
 	inc pcommand,x
+
+	ldy pcommand,x
+	lda (tmp0),y
+	sta cont_subcom_low,x
+
 	inc pcommand,x
+
+	ldy pcommand,x
+	lda (tmp0),y
+	sta cont_subcom_high,x
+	
 	inc pcommand,x
-	rts
+
+	jmp next_command
+	;rts
 .)
 
 
@@ -1315,9 +1327,9 @@ miniw
 cont
 	; The signal has not been raised yet, so it's time for another mini-walkabout.
 	jsr randgen
-	and #7
+	and #15;7
 	sec
-	sbc #7	; -7<= a <=0
+	sbc #15;7	; -7<= a <=0
 	clc
 	adc dest_x,x
 	jmp miniw
@@ -1591,6 +1603,125 @@ in bytes 111 and 112 of a character's buffer
 */
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make ANGELFACE throw a punch (1) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_apunch1
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_apunch2
+	sta uni_subcom_low,x
+	lda #>s_usc_apunch2
+	sta uni_subcom_high,x
+
+	; Save animatory state
+	lda anim_state,x
+	sta var7,x
+	
+	; Adjust animatory state
+	lda #7
+	sta anim_state,x
+
+	jsr update_SRB_sp
+	lda base_as_pointer_low,x
+	clc
+	adc #(7*16)
+	sta as_pointer_low,x
+	lda base_as_pointer_high,x
+	adc #0
+	sta as_pointer_high,x
+
+	jmp update_SRB_sp
+
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make ANGELFACE throw a punch (2) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_apunch2
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_apunch3
+	sta uni_subcom_low,x
+	lda #>s_usc_apunch3
+	sta uni_subcom_high,x
+	
+	; Adjust animatory state
+	inc anim_state,x
+
+	jsr update_SRB_sp
+	lda as_pointer_low,x
+	clc
+	adc #(16)
+	sta as_pointer_low,x
+	bcc nocarry
+	inc as_pointer_high,x
+nocarry
+
+	jsr update_SRB_sp
+	
+	; Check if somebody has been hit by Eric or Angelface (as this
+	; is also an entry point when Eric hits
++check_hit
+
+
+	rts
+
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make ANGELFACE throw a punch (3) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_apunch3
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_apunch4
+	sta uni_subcom_low,x
+	lda #>s_usc_apunch4
+	sta uni_subcom_high,x
+
+	; Get back animatory state
+	lda var7,x
+	sta anim_state,x
+	beq cont
+
+	cmp #2
+dbug bne dbug
+
+
+	; Anim state is 2
+	lda #(2*16)
+cont
+	sta smc_offset+1
+
+	jsr update_SRB_sp
+	lda base_as_pointer_low,x
+	clc
+smc_offset
+	adc #0
+	sta as_pointer_low,x
+	lda base_as_pointer_high,x
+	adc #0
+	sta as_pointer_high,x
+
+	jmp update_SRB_sp
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make ANGELFACE throw a punch (4) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_apunch4
+.(
+	; We are done, terminate this uninterruptible subcommand
+	lda #0
+	sta uni_subcom_high,x
+	;jmp check_reset_cl
+	rts
+.)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Deal with a character who has been dethroned (1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1657,7 +1788,51 @@ noturn
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check whether a character was or can be punched by ERIC or ANGELFACE
+; Used by the routines at 28446 and 28569. 
+; On entry, E holds the x-coordinate of the spot three spaces in front 
+; of ANGELFACE to check whether it's worth raising his fist (28446),
+; or the x-coordinate of the spot two spaces in front of ERIC or ANGELFACE 
+; when he has already raised his fist (28569). Returns with the carry flag 
+; set if the potential victim is at the target coordinates and is facing the 
+; right way.
+; Gets the Id of the victim in reg Y and the position where it should be in
+; order to be hit in reg A. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+punchable_victim
+.(
+	; Is the victim at the correct position?
+	; First check column
+	cmp pos_col,y
+	beq col_valid
+retnc
+	clc
+	rts
+
+col_valid
+	; Now check row
+	lda pos_row,x
+	cmp pos_row,y
+	bne retnc
+
+	; It is at the right coordinates, but is it facing the right way (that is
+	; one facing the other?
+	lda flags,x
+	eor flags,y
+	and #IS_FACING_RIGHT
+	beq retnc
+
+	; Finally let's make sure that the victim does not have an interruptible subcommand
+	; active at the moment
+	lda uni_subcom_high,y
+	bne retnc
+
+	; Ok, the victim is ready...
+	sec
+	rts
+.)
 
 
 /*
@@ -1670,6 +1845,78 @@ present in bytes 124 and 125 of a character's buffer:
 32234 Make a character walk fast 
 64042 Check whether ANGELFACE is touching ERIC 
 */
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make ANGELFACE hit now and then
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+csc_angelhit
+.(
+	; Return if Angelface is busy...
+	lda uni_subcom_high,x
+	beq cont
+retme
+	rts
+cont
+	; Return if he is not midstride
+	lda anim_state,x
+	ror
+	bcc retme
+
+	; Check if he is on a staircase
+	jsr is_on_staircase
+	bne retme
+
+	; Check if he can be seen by a teacher
+	;jsr can_be_seen
+	;bne retme
+
+	; Check for potential victims...
+
+	; Prepare the position where it would be hit
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq left
+	lda pos_col,x
+	clc
+	adc #4
+	jmp done
+left
+	lda pos_col,x
+	sec
+	sbc #4
+done
+	sta smc_tpos+1
+	
+	ldy #0
+	sty tmp
+loop
+	cpy #CHAR_ANGELFACE
+	beq skip
+smc_tpos
+	lda #0
+	jsr punchable_victim
+	bcs victimok
+skip
+	inc tmp
+	ldy tmp
+	cpy #CHAR_BOY8
+	bne loop
+
+	; We found no victim, return
+	rts
+
+victimok
+	; We found a possible victim, let's punch him!
+	; Put the uninterruptable subcommand
+	; Make ANGELFACE throw a punch (1)
+
+	lda #<s_usc_apunch1
+	sta uni_subcom_low,x
+	lda #>s_usc_apunch1
+	sta uni_subcom_high,x
+	rts
+.)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -238,12 +238,12 @@ character's buffer:
 #define E_ERIC_MUMPS		29
 
 
-;; Subcommands
-;; -----------
+;; Continuous Subcommands
+;; -----------------------
 
 #define CS_WALKFAST		00,00
 #define CS_FIRECATAPULT	00,00
 #define CS_CHECKTOUCH	00,00
-#define CS_HITNOWTHEN	00,00
+#define CS_HITNOWTHEN	<csc_angelhit,>csc_angelhit
 
 
