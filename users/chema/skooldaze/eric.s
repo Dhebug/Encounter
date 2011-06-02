@@ -346,31 +346,224 @@ jump_Eric
 .(
 
 
-
+	rts
 .)
 
-fire_Eric
-.(
-
-
-.)
 
 write_Eric
 .(
 
+	rts
+.)
 
+fire_Eric
+.(
+	; Is Eric's catpult pellet already fired?
+	ldy #CHAR_EPELLET
+	lda pos_col,y
+	bpl notfired
+	; It is already flying, so return
+	rts
+notfired
+	; Prepare the flag number to set
+	lda #ERIC_FIRING
+	sta tmp
+	; And the animatory state
+	lda #11
+	sta tmp+1
+	; And the action timer
+	lda #24
+	sta tmp0
+
+	; This entry point is used when Eric is hitting, writting or firing
++realize_Eric_action
+	lda Eric_flags
+	bmi exit	; Eric is lying down or sitting
+	
+	; Set the appropriate flag
+	lda tmp
+	sta Eric_flags
+
+	; Set the action timer
+	lda tmp0
+	sta Eric_timer
+
+	; Save Eric's animatory state into byte 102 (dest_x variable)
+	lda anim_state
+	sta dest_x
+
+	; Now set the animatory state
+	lda tmp+1
+	stx savx+1
+
+	ldx #0
+	jsr update_animstate
+savx
+	ldx #0
+
+exit
+	rts
 .)
 
 hit_Eric
 .(
-
-
+	lda #7
+	sta tmp+1
+	lda #ERIC_HITTING
+	sta tmp
+	lda #18
+	sta tmp0
+	jmp realize_Eric_action
 .)
 
+hit_Eric2
+.(
+	; Check if Eric has finished the punch
+	dec Eric_timer
+	beq endpunch
+	
+	lda Eric_timer
+	; Is it 12? then next step of punch
+	cmp #12
+	bne nonext
+	; First stage
+	lda #8
+	stx savx+1
+	ldx #0
+	jsr update_animstate
+savx
+	ldx #0
+	rts
+nonext
+	; is it time to see if anybody was hit?
+	cmp #11
+	beq completed
+	rts
+completed
+	stx savx2+1
+
+	; Check if anyone was hit
+	ldx #CHAR_ERIC
+	jsr check_hit
+	bmi nobody
+	
+savx2
+	ldx #0
+
+	; We can check here if it was
+	; angelface and increase in 30
+	; the score
+
+nobody
+	; Make a sound effect
+	; Check for reprimands
+
+endpunch
+	; This should go to a subroutine?
+	lda #0
+	sta tmp
+	lda #4
+	sta tmp0
+	lda dest_x	; Old animatory state
+	sta tmp+1
+
+	jmp realize_Eric_action
+.)
+
+knock_Eric
+.(
+	lda Eric_knockout
+	beq justknocked
+
+	; Time to decrement timer
+	dec Eric_knockout
+	beq cangetup
+	; Jump to make a sound if Eric
+	; has jut been knocked down
+	; then return
+	rts
+cangetup
+	; Reset bit 4, wo we don't keep
+	; visiting this routine, but also
+	; keep bit 7 (Eric is lying).
+	; It is better to do it this way, than with
+	; an and and an or.
+	lda #128
+	sta Eric_flags
+	rts
+justknocked
+	; Eric has jut been kocked. Initialize everything
+	; First the counter
+	lda #40
+	sta Eric_knockout
+	; Then the status flags (set bits 7 and 4)
+	lda #144
+	sta Eric_flags
+	
+	; Get anim state to differentiate between
+	; beking knocked down from a chair or by a
+	; punch/pellet
+	lda anim_state
+	cmp #4
+	beq sat
+	lda #6
+	.byt $2c
+sat
+	lda #5
+	stx savx+1
+	ldx #CHAR_ERIC
+	jsr update_animstate
+savx
+	ldx #0
+	rts
+.)
+
+; Deal with ERIC
+; Called from the main loop.
+; Deals with ERIC when any of bits 0-4 at ERIC's status flags are set. 
+; Returns with the carry flag set if and only if ERIC was dealt with, 
+; indicating that there is no need to check keypresses in the main loop.  
 
 deal_with_Eric
 .(
+	;Make any nearby teachers give ERIC lines if he's 
+	;not where he should be, or standing or sitting 
+	;when or where he shouldn't be 
 
+	;Check ERIC's status flags and return with 
+	;the carry flag reset unless ERIC has been 
+	;knocked over, or he is firing, hitting, 
+	;jumping, or being spoken to 
 
+	lda Eric_flags
+	and #%00011111
+	bne takecare
+	clc
+	rts
+
+takecare
+	;Is ERIC being spoken to by a little boy? 
+	
+	;Has ERIC been knocked over? 
+	lda Eric_flags
+	and #ERIC_DOWN
+	beq noknock
+	jsr knock_Eric
+	sec
+	rts
+noknock
+	;Is ERIC firing a catapult? 
+
+	;Is ERIC hitting? 
+	lda Eric_flags
+	and #ERIC_HITTING
+	beq nohit
+	jsr hit_Eric2
+	sec
+	rts
+nohit
+	;ERIC is jumping; deal with him accordingly 
+
+	sec
 	rts
 .)
