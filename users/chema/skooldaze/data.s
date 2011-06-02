@@ -59,6 +59,7 @@ lesson_descriptor		.byt 0			; Indicates who is teaching Eric and where
 Eric_flags				.byt 0
 Eric_timer				.byt 0
 Eric_mid_timer			.byt 0
+Eric_knockout			.byt 0
 
 ; For the speech bubble
 bubble_on				.byt 0		; There is a bubble onscreen

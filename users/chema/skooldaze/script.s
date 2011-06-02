@@ -65,13 +65,6 @@ s_make_char_speak
 
 	lda #0
 	sta cur_command_high,x
-/*
-	lda #<s_isc_speak1
-	sta i_subcom_low,x
-	lda #>s_isc_speak1
-	sta i_subcom_high,x
-	jmp s_isc_speak1
-*/
 
 	lda #<s_isc_speak1
 	sta tmp0
@@ -1729,35 +1722,32 @@ nocarry
 	beq left
 	lda pos_col,x
 	clc
-	adc #3
+	adc #2
 	jmp done
 left
 	lda pos_col,x
 	sec
-	sbc #3
+	sbc #2
 done
 	sta smc_tpos+1
 	
-	ldy #0
+	ldy #CHAR_BOY11
 	sty tmp
 loop
-	;cpy #CHAR_ANGELFACE
-	;beq skip
 smc_tpos
 	lda #0
+	ldy tmp
 	jsr punchable_victim
 	bcs victimok
 skip
-	inc tmp
-	ldy tmp
-	cpy #CHAR_BOY8
-	bne loop
+	dec tmp
+	bpl loop
 
 	; We found no victim, return
 	rts
 
 victimok
-	cpx #CHAR_ERIC
+	cpy #CHAR_ERIC
 	bne notEric
 	lda Eric_flags
 	ora #ERIC_DOWN
@@ -1967,12 +1957,12 @@ cont
 	beq left
 	lda pos_col,x
 	clc
-	adc #4
+	adc #3
 	jmp done
 left
 	lda pos_col,x
 	sec
-	sbc #4
+	sbc #3
 done
 	sta smc_tpos+1
 	
