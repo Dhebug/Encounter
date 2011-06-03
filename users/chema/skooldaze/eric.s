@@ -361,7 +361,7 @@ fire_Eric
 	; Is Eric's catpult pellet already fired?
 	ldy #CHAR_EPELLET
 	lda pos_col,y
-	bpl notfired
+	bmi notfired
 	; It is already flying, so return
 	rts
 notfired
@@ -378,8 +378,10 @@ notfired
 	; This entry point is used when Eric is hitting, writting or firing
 +realize_Eric_action
 	lda Eric_flags
-	bmi exit	; Eric is lying down or sitting
-	
+	bpl cont
+	; Eric is lying down or sitting
+	rts
+cont
 	; Set the appropriate flag
 	lda tmp
 	sta Eric_flags
@@ -394,16 +396,40 @@ notfired
 
 	; Now set the animatory state
 	lda tmp+1
-	stx savx+1
+	jmp setEric_state
+.)
 
-	ldx #0
-	jsr update_animstate
-savx
-	ldx #0
 
-exit
+fire_Eric2
+.(
+
+	; Check if Eric has finished firing the catpult?
+	dec Eric_timer
+	beq endpunch	; Re-use this entry point
+
+	lda Eric_timer
+	; Is it 18? then next step of fire
+	cmp #18
+	bne nonext
+	; First stage
+	lda #12
+	jmp setEric_state
+nonext
+	; Stat lowering the catpult?
+	cmp #6	
+	bne nolower
+	lda #11
+	jmp setEric_state
+nolower
+	; Time to launch the pellet?
+	cmp #12
+	beq launch
+	rts
+launch
+	; Launch the pellet, reprimands, etc.
 	rts
 .)
+
 
 hit_Eric
 .(
@@ -428,8 +454,12 @@ hit_Eric2
 	bne nonext
 	; First stage
 	lda #8
+
+	; Entry point from other routines...
+	; such as firing with the catpult.
++setEric_state
 	stx savx+1
-	ldx #0
+	ldx #CHAR_ERIC
 	jsr update_animstate
 savx
 	ldx #0
@@ -458,11 +488,12 @@ nobody
 	; Make a sound effect
 	; Check for reprimands
 
-endpunch
+	rts
++endpunch
 	; This should go to a subroutine?
 	lda #0
 	sta tmp
-	lda #4
+	lda #1	; Can't be zero, or it will be decremented to $ff!
 	sta tmp0
 	lda dest_x	; Old animatory state
 	sta tmp+1
@@ -510,12 +541,7 @@ justknocked
 	.byt $2c
 sat
 	lda #5
-	stx savx+1
-	ldx #CHAR_ERIC
-	jsr update_animstate
-savx
-	ldx #0
-	rts
+	jmp setEric_state
 .)
 
 ; Deal with ERIC
@@ -553,6 +579,13 @@ takecare
 	rts
 noknock
 	;Is ERIC firing a catapult? 
+	lda Eric_flags
+	and #ERIC_FIRING
+	beq nofire
+	jsr fire_Eric2
+	sec
+	rts
+nofire
 
 	;Is ERIC hitting? 
 	lda Eric_flags
