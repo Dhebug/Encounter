@@ -280,17 +280,17 @@ loop
 	jmp _test_loop
 .)
 
-#define NUM_KEYS 6
+#define NUM_KEYS 7
 ; Keymap table
 user_keys 
 	.byt	 1, 2, 3, 4
-	.byt	"S", "H"				;, "J", "F", "W", "H"	
+	.byt	"S", "H", "F"				;, "J", "W"
 key_routh
     .byt >(up_Eric), >(left_Eric), >(down_Eric), >(right_Eric)
-	.byt >(sit_Eric), >(hit_Eric)
+	.byt >(sit_Eric), >(hit_Eric), >(fire_Eric)
 key_routl
 	.byt <(up_Eric), <(left_Eric), <(down_Eric), <(right_Eric)
-    .byt <(sit_Eric), <(hit_Eric)
+    .byt <(sit_Eric), <(hit_Eric), <(fire_Eric)
 
 process_user_input
 .(
