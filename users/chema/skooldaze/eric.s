@@ -405,8 +405,9 @@ fire_Eric2
 
 	; Check if Eric has finished firing the catpult?
 	dec Eric_timer
-	beq endpunch	; Re-use this entry point
-
+	bne cont
+	jmp endpunch	; Re-use this entry point
+cont
 	lda Eric_timer
 	; Is it 18? then next step of fire
 	cmp #18
@@ -427,6 +428,35 @@ nolower
 	rts
 launch
 	; Launch the pellet, reprimands, etc.
+
+
+	; this entry point is used when Boy Wander fires his catapult too
++launch_pellet
+	lda pos_col
+	sta pos_col+CHAR_EPELLET
+	lda pos_row
+	sta pos_row+CHAR_EPELLET
+
+	lda #<s_usc_pelleth
+	sta uni_subcom_low+CHAR_EPELLET
+	lda #>s_usc_pelleth
+	sta uni_subcom_high+CHAR_EPELLET
+
+	; Initialize distance to travel
+	lda #18
+	sta var7+CHAR_EPELLET
+
+	; Initialize animatory state
+	lda flags
+	eor flags+CHAR_EPELLET
+	and #IS_FACING_RIGHT
+	beq s1
+	stx savx+1
+	ldx #CHAR_EPELLET
+	jsr change_direction
+savx
+	ldx #1
+s1
 	rts
 .)
 
