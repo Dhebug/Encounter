@@ -360,10 +360,13 @@ tab_offset_invh
 	.dsb 1,  >(t2_inverted_anim_states-Withit_anim_states)
 	.dsb 2,  >(Inverted_anim_states-Eric_anim_states)
 
-in_pos_col
-	.dsb MAX_CHARACTERS,0
-in_pos_row
-	.dsb MAX_CHARACTERS,0
+ini_pos_col
+	.byt 64,94,94,34,57,58,59,60,61,62,63,64,65,66,67,13,13,13,13,255,255
+ini_flags
+	.byt IS_FACING_RIGHT,IS_FACING_RIGHT,IS_FACING_RIGHT,IS_FACING_RIGHT
+	.byt 0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0
+	.byt IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK
+	.byt IS_FAST_WALK,IS_FAST_WALK
 
 free_r8
 .dsb (256-32)-(*&255)

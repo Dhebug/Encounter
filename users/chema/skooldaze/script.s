@@ -1611,6 +1611,68 @@ in bytes 111 and 112 of a character's buffer
 */
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Control the horizontal flight of a catapult pellet
+;; Controls the pellet from the beginning of its horizontal 
+;; flight to the end, handing over to the routine s_usc_pelletv
+;; if the pellet bounces upwards off some obstacle. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_pelleth
+.(
+	; Check if the pellet has finished travelling
+	dec var7,x
+	bne travel
+terminate_pellet
+	; Finished the travel, remove the pellet
+	jsr update_SRB_sp
+	lda #255
+	sta pos_col,x
+	lda #0
+	sta uni_subcom_high,x
+	rts 
+travel
+	; The pellet continues travelling
+	; Check if it will get offscreen
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq facingl
+	lda #LAST_VIS_COL+1
+	cmp pos_col,x
+	bcs terminate_pellet
+	bcc next1
+facingl
+	lda #FIRST_VIS_COL
+	cmp pos_col,x
+	bcs terminate_pellet
+next1
+	; It does not get offscreen... but will it collide with a wall?
+	lda pos_row,x
+	; is it on the bottom floor?
+	cmp #17
+	beq moveit
+	; is it on the middle floor?
+	cmp #10
+	beq middlefloor
+	; It is on the top floor... did it hit the wall?
+	lda #WALLTOPFLOOR+1
+	cmp pos_col,x
+	beq terminate_pellet
+	bne moveit
+middlefloor
+	; We have to check for two walls here
+	lda pos_col,x
+	cmp #WALLMIDDLEFLOOR+1
+	beq terminate_pellet
+	cmp #WALLMIDDLEFLOOR2+1
+	beq terminate_pellet
+moveit
+	; Ok the pellet may move... time to check if it hits somebody
+	jsr step_character
+
+	rts
+.)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Deal with a character who has been knocked over
 ;; Knocks the character to the floor, makes him give lines to 

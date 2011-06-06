@@ -100,9 +100,26 @@ _init
 	; Reset game flags
 	jsr reset_flags
 
-
 	ldx #20
 loop
+	; Set initial positions
+	lda ini_pos_col,x
+	sta pos_col,x
+	lda #17
+	sta pos_row,x
+
+	; And direction and flags
+	lda ini_flags,x
+	pha
+	and #IS_FACING_RIGHT^$ff
+	sta flags,x
+	pla
+	and #IS_FACING_RIGHT
+	beq noright
+	jsr change_direction
+noright
+	
+/*
 	; Set flags for each character
 
 	cpx #19
@@ -118,7 +135,7 @@ boy
 	lda #0	
 doit
 	sta flags,x
-
+*/
 	; Now the commands
 	lda #0
 	sta uni_subcom_high,x
@@ -141,6 +158,14 @@ doit
 
 	; First screen render
 	jsr render_screen
+
+	; Scroll the screen
+	lda #5
+	sta tmp4
+loops
+	jsr _scroll_left
+	dec tmp4
+	bne loops
 
 	; Initialize the lesson
 	lda #$ff
