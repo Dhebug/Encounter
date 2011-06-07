@@ -1611,6 +1611,40 @@ in bytes 111 and 112 of a character's buffer
 */
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Control the vertical flight of a catapult pellet
+;; Controls the pellet from the beginning of its vertical 
+;; flight to the end, including any collision with a shield. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_pelletv
+.(
+	; Get y coord of the pellet
+	lda pos_row,x
+
+	; Has the pellet hit the ceiling of the top floor
+	; (is this really necessary?)
+	beq terminate_pellet
+
+	; Has it finished travelling?
+	dec var7,x
+	beq terminate_pellet
+
+	; Move it up
+	jsr update_SRB_sp
+	dec pos_row,x
+	jsr update_SRB_sp
+
+	; Entry points to check if a pellet hit a shield
+
+	; Entry point to check if Eric touched a shield
+
+
+	rts
+.)
+ 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Control the horizontal flight of a catapult pellet
 ;; Controls the pellet from the beginning of its horizontal 
@@ -1622,7 +1656,7 @@ s_usc_pelleth
 	; Check if the pellet has finished travelling
 	dec var7,x
 	bne travel
-terminate_pellet
++terminate_pellet
 	; Finished the travel, remove the pellet
 	jsr update_SRB_sp
 	lda #255
@@ -1633,18 +1667,28 @@ terminate_pellet
 travel
 	; The pellet continues travelling
 	; Check if it will get offscreen
+
+	; first calculate the destination column
 	lda flags,x
 	and #IS_FACING_RIGHT
 	beq facingl
-	lda #LAST_VIS_COL+1
-	cmp pos_col,x
-	bcs terminate_pellet
-	bcc next1
+	lda pos_col,x
+	clc
+	adc #(1+2)
+	jmp next
 facingl
-	lda #FIRST_VIS_COL
-	cmp pos_col,x
-	bcs terminate_pellet
-next1
+	lda pos_col,x
+	sec
+	sbc #(1)
+next
+	sta tmp
+	; Is it offscreen?
+
+	cmp #LAST_VIS_COL
+	beq terminate_pellet
+	cmp #FIRST_VIS_COL
+	beq terminate_pellet
+
 	; It does not get offscreen... but will it collide with a wall?
 	lda pos_row,x
 	; is it on the bottom floor?
@@ -1653,23 +1697,90 @@ next1
 	; is it on the middle floor?
 	cmp #10
 	beq middlefloor
-	; It is on the top floor... did it hit the wall?
-	lda #WALLTOPFLOOR+1
-	cmp pos_col,x
+	; It is on the top floor... will it hit the wall?
+	lda tmp
+	cmp #WALLTOPFLOOR+2
 	beq terminate_pellet
 	bne moveit
 middlefloor
 	; We have to check for two walls here
-	lda pos_col,x
-	cmp #WALLMIDDLEFLOOR+1
+	lda tmp
+	cmp #WALLMIDDLEFLOOR+2
 	beq terminate_pellet
-	cmp #WALLMIDDLEFLOOR2+1
+	cmp #WALLMIDDLEFLOOR2+2
 	beq terminate_pellet
 moveit
 	; Ok the pellet may move... time to check if it hits somebody
+
 	jsr step_character
 
+	lda pos_col,x
+	sta smc_xpos+1
+	lda pos_row,x
+	sta smc_ypos+1
+
+	ldy #CHAR_WITHIT	
+loop
+smc_xpos
+	lda #0
+	cmp pos_col,y
+	bne skip
+smc_ypos
+	lda #0
+	cmp pos_row,y
+	beq victimok
+
+skip
+	cpy #CHAR_FIRST_TEACHER
+	bne nokludge
+	ldy #CHAR_BOYWANDER+1
+nokludge
+	dey
+	bpl loop
+	; We found no victim, return
 	rts
+
+victimok
+	; Yeah, somebody was hit!
+
+	; Is the objective already on the floor and it is not a teacher?
+	lda anim_state,y
+	cmp #6
+	beq skip
+
+	; If it is already on the floor and it is a teacher
+	; then start moving the pellet up.
+
+	cmp #5
+	bne noteacher
+	
+	; Put the uninterruptible command to make the pellet
+	; travel upwards
+	lda #<s_usc_pelletv
+	sta uni_subcom_low,x
+	lda #>s_usc_pelletv
+	sta uni_subcom_high,x
+	; Set remaining distance to 5 spaces
+	lda #5
+	sta var7,x
+	rts
+
+noteacher
+	; Is there an untinterruptible subcommand for the
+	; objective?
+	lda uni_subcom_high,y
+	bne skip
+
+	; Make the pellet stop travelling next time
+	lda #1
+	sta var7,x
+
+	; If Angelface was hit, add points
+
+	
+notEric
+	jmp knock_him
+
 .)
 
 
@@ -1800,7 +1911,7 @@ smc_tpos
 	lda #0
 	ldy tmp
 	jsr punchable_victim
-	bcs victimok
+	bcs knock_him
 skip
 	dec tmp
 	bpl loop
@@ -1808,7 +1919,9 @@ skip
 	; We found no victim, return
 	rts
 
-victimok
+
+	; this entry point is used also with pellets
++knock_him
 	cpy #CHAR_ERIC
 	bne notEric
 	lda Eric_flags
@@ -1816,6 +1929,7 @@ victimok
 	sta Eric_flags
 	rts
 notEric
+
 	; Place the corresponding uninterruptible
 	; subcommand
 	lda #<s_usc_knocked
