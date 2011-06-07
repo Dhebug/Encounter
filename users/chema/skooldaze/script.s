@@ -1610,6 +1610,95 @@ in bytes 111 and 112 of a character's buffer
 63390 Make a character find ERIC 
 */
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make BOY WANDER fire his catapult (2)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_bfire1
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_bfire2
+	sta uni_subcom_low,x
+	lda #>s_usc_bfire2
+	sta uni_subcom_high,x
+
+	; Save animatory state
+	lda anim_state,x
+	sta var7,x
+	
+	; Adjust animatory state
+	lda #11
+	jmp update_animstate
+
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make BOY WANDER fire his catapult (3)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_bfire2
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_bfire3
+	sta uni_subcom_low,x
+	lda #>s_usc_bfire3
+	sta uni_subcom_high,x
+
+	; Adjust animatory state
+	lda anim_state,x
+	clc
+	adc #1
+	jmp update_animstate
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make BOY WANDER fire his catapult (4)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_bfire3
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_bfire4
+	sta uni_subcom_low,x
+	lda #>s_usc_bfire4
+	sta uni_subcom_high,x
+
+	; Prepare the calling to the routine entry point in eric.s
+	ldy #CHAR_BPELLET
+	jmp launch_pellet
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make BOY WANDER fire his catapult (5)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_bfire4
+.(
+	; Prepare next step in the subcommand
+	lda #<s_usc_bfire5
+	sta uni_subcom_low,x
+	lda #>s_usc_bfire5
+	sta uni_subcom_high,x
+
+	; Adjust animatory state
+	lda anim_state,x
+	sec
+	sbc #1
+	jmp update_animstate
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make BOY WANDER fire his catapult (6)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_bfire5
+.(
+	; Prepare next step in the subcommand
+	lda #<terminate_unisubcom
+	sta uni_subcom_low,x
+	lda #>terminate_unisubcom
+	sta uni_subcom_high,x
+
+	; Get back animatory state
+	lda var7,x
+	jmp update_animstate
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Control the vertical flight of a catapult pellet
@@ -1872,6 +1961,7 @@ s_usc_apunch2
 	sta uni_subcom_high,x
 	
 	; Adjust animatory state
+/*
 	inc anim_state,x
 
 	jsr update_SRB_sp
@@ -1884,6 +1974,12 @@ s_usc_apunch2
 nocarry
 
 	jsr update_SRB_sp
+*/
+	lda anim_state,x
+	clc
+	adc #1
+	jsr update_animstate
+	
 	
 	; Check if somebody has been hit by Eric or Angelface (as this
 	; is also an entry point when Eric hits
@@ -2100,6 +2196,56 @@ present in bytes 124 and 125 of a character's buffer:
 64042 Check whether ANGELFACE is touching ERIC 
 */
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make BOY WANDER fire his catapult now and then 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+csc_bwander_fire
+.(
+	; Check if his coordinate is divisible by 4
+	lda pos_col,x
+	and #%11
+	bne cont
+	; Return if not
+retme
+	rts
+cont
+	; Check he is midstride
+	lda anim_state,x
+	ror
+	bcs retme
+
+	; Check he does not have an uninteruptible subcommand already
+	lda uni_subcom_high,x
+	bne retme
+
+	; Generate a random number
+	jsr randgen
+	bcc retme	; return half the time
+
+	; Check if he is on a staircase
+	jsr is_on_staircase
+	bne retme
+
+	; Check if he can be seen by a teacher
+	;jsr can_be_seen
+	;bne retme
+
+	; Is the pellet already fired
+	ldy #CHAR_BPELLET
+	lda pos_col,y
+	bpl retme
+
+	; Ok he is about to fire...
+	lda #<s_usc_bfire1
+	sta uni_subcom_low,x
+	lda #>s_usc_bfire1
+	sta uni_subcom_high,x
+
+	; Drop the return address and consider moving the next character
+	pla
+	pla
+	rts
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make ANGELFACE hit now and then
@@ -2169,6 +2315,10 @@ victimok
 	sta uni_subcom_low,x
 	lda #>s_usc_apunch1
 	sta uni_subcom_high,x
+
+	; Pop the return address to consider moving next char
+	;pla
+	;pla
 	rts
 .)
 

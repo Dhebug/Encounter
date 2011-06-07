@@ -431,28 +431,34 @@ launch
 
 
 	; this entry point is used when Boy Wander fires his catapult too
+	; the ID of the pellet (Boy Wander's or Eric's) is passed on reg Y
+	; and the ID of the character in reg X
+	ldy #CHAR_EPELLET
+	ldx #0
+
 +launch_pellet
-	lda pos_col
-	sta pos_col+CHAR_EPELLET
-	lda pos_row
-	sta pos_row+CHAR_EPELLET
+	lda pos_col,x
+	sta pos_col,y
+	lda pos_row,x
+	sta pos_row,y
 
 	lda #<s_usc_pelleth
-	sta uni_subcom_low+CHAR_EPELLET
+	sta uni_subcom_low,y
 	lda #>s_usc_pelleth
-	sta uni_subcom_high+CHAR_EPELLET
+	sta uni_subcom_high,y
 
 	; Initialize distance to travel
 	lda #18
-	sta var7+CHAR_EPELLET
+	sta var7,y
 
 	; Initialize animatory state
-	lda flags
-	eor flags+CHAR_EPELLET
+	lda flags,x
+	eor flags,y
 	and #IS_FACING_RIGHT
 	beq s1
 	stx savx+1
-	ldx #CHAR_EPELLET
+	tya
+	tax
 	jsr change_direction
 savx
 	ldx #1
