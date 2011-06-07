@@ -242,7 +242,7 @@ character's buffer:
 ;; -----------------------
 
 #define CS_WALKFAST		00,00
-#define CS_FIRECATAPULT	00,00
+#define CS_FIRECATAPULT	<csc_bwander_fire,>csc_bwander_fire
 #define CS_CHECKTOUCH	00,00
 #define CS_HITNOWTHEN	<csc_angelhit,>csc_angelhit
 
