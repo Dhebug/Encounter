@@ -1,0 +1,10 @@
+TODO LIST AND BUGS
+
+* Einstein sometimes is sat along with a small child
+* Pellets are corrupting bubbles
+* Angelface hits always and too quickly. If we put back
+  the pla's then it doesn't but tries to hit Eric forever
+  if you don't move
+* Boy Wander fires too much?
+* Pellet collision is not correct against teachers or walls
+* Does Boy Wander pellet bounce?
