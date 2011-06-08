@@ -1,10 +1,25 @@
 TODO LIST AND BUGS
 
 * Einstein sometimes is sat along with a small child
-* Pellets are corrupting bubbles
+-> This is because when a kid is knocked down by a punch or
+pellet, when he gets up, he recovers his old animatory state
+Occurs because Angelface and Boy Wander hit with the teacher
+present, but I guess Eric can do this too!
+
+Punch a seated kid, while others look for a seat. Someone finds 
+the seat empty and sits down. Then the punched kid gets up and sits
+along with the new one.
+
 * Angelface hits always and too quickly. If we put back
   the pla's then it doesn't but tries to hit Eric forever
   if you don't move
+
 * Boy Wander fires too much?
+
 * Pellet collision is not correct against teachers or walls
-* Does Boy Wander pellet bounce?
+
+* It is sometimes difficult to fire a pellet
+
+* Does Boy Wander's pellet bounce?
+
+* Pellets sometimes do not hit teachers?
