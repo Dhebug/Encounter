@@ -204,6 +204,7 @@ end
 	lda flags,x
 	and #IS_FAST_WALK
 	beq normal
+
 	lda flags,x
 	and #(IS_SLOW_WALK^$ff) ;#%01111111 ????
 	sta flags,x	

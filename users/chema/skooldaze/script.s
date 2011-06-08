@@ -1947,20 +1947,7 @@ s_usc_apunch2
 	sta uni_subcom_high,x
 	
 	; Adjust animatory state
-/*
-	inc anim_state,x
 
-	jsr update_SRB_sp
-	lda as_pointer_low,x
-	clc
-	adc #(16)
-	sta as_pointer_low,x
-	bcc nocarry
-	inc as_pointer_high,x
-nocarry
-
-	jsr update_SRB_sp
-*/
 	lda anim_state,x
 	clc
 	adc #1

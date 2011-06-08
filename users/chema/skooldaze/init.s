@@ -111,7 +111,7 @@ loop
 	; And direction and flags
 	lda ini_flags,x
 	pha
-	and #IS_FACING_RIGHT^$ff
+	and #(IS_FACING_RIGHT^$ff)
 	sta flags,x
 	pla
 	and #IS_FACING_RIGHT
