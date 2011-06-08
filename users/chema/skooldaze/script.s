@@ -120,7 +120,7 @@ smc_bitmask
 s_knock_and_sit
 .(
 	; check if there is someone sat, and knock him
-	ldy #CHAR_FIRST_TEACHER-1	; Start with little boy 11
+	ldy #(CHAR_FIRST_TEACHER-1)	; Start with little boy 11
 loop
 	lda pos_col,x
 	cmp pos_col,y
@@ -133,8 +133,15 @@ loop
 	cmp #4
 	bne next	; He was not sat.
 	; There is one already at this seat
-	; Dethrone him!
 
+	lda uni_subcom_high,y
+	beq tofloor
+
+	;Make the character  search for another chair
+	jmp step_character
+	
+tofloor
+	; Dethrone him!
 	; Put the character index in X temporary
 	stx savx+1
 	sty savy+1
@@ -160,28 +167,7 @@ savy
 	beq isEric
 
 	; A character was dethroned and it was not Eric
-	; Check if it has an uninterruptible subcommand
 
-
-	lda uni_subcom_high,y
-	beq tofloor
-	
-	; Seek for another chair
-	lda #<s_usc_lchair
-	sta uni_subcom_low,y
-	lda #>s_usc_lchair
-	sta uni_subcom_high,y
-	stx savx2+1
-	sty savy2+1
-	ldx savy2+1
-	jsr step_character
-savx2
-	ldx #0
-savy2
-	ldy #0
-
-	
-tofloor
 	; Place the correspondant uninterruptible subcommand
 	lda #<s_usc_dethroned1
 	sta uni_subcom_low,y
@@ -2114,7 +2100,7 @@ standup
 	bne stepit
 	rts
 stepit	
-	jsr step_character
+	;jsr step_character
 	jmp step_character
 .)
 
@@ -2124,10 +2110,15 @@ stepit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_usc_lchair
 .(
+	; If the character is midstride, then simply step him
+	lda anim_state,x
+	lsr
+	bcs noturn
+
 	jsr s_check_chair	; Returns Z=1 if there is a chair and C=1 if the 
 						; character needs to turn round
 	bne notyet
-	jmp s_knock_and_sit; s_sit_char
+	jmp s_knock_and_sit	
 notyet
 	bcc noturn
 	; Turn him round...

@@ -277,7 +277,7 @@ avoidEric
 	sta SRB,y
 
 	lda SRB+5,y
-	and srb_bitmask2
+	and srb_bitmask
 	sta SRB+5,y
 
 	lda SRB+1,y
@@ -289,7 +289,6 @@ avoidEric
 	sta SRB+6,y
 
 	ldy srb_offset_lip
-	ora srb_bitmask_lip
 	lda SRB,y
 	and srb_bitmask_lip
 	sta SRB,y

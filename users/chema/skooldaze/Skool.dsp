@@ -140,6 +140,10 @@ SOURCE=.\script.h
 
 SOURCE=.\text.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\todo.txt
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
