@@ -402,7 +402,6 @@ cont
 
 fire_Eric2
 .(
-
 	; Check if Eric has finished firing the catpult?
 	dec Eric_timer
 	bne cont
@@ -428,7 +427,7 @@ nolower
 	rts
 launch
 	; Launch the pellet, reprimands, etc.
-
+	jsr punish_Eric
 
 	; this entry point is used when Boy Wander fires his catapult too
 	; the ID of the pellet (Boy Wander's or Eric's) is passed on reg Y
@@ -523,6 +522,8 @@ savx2
 nobody
 	; Make a sound effect
 	; Check for reprimands
+
+	jsr punish_Eric
 
 	rts
 +endpunch
@@ -636,3 +637,37 @@ nohit
 	sec
 	rts
 .)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Checks if a teacher must give Eric
+;; lines. The reason is passed in reg A
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+punish_Eric
+.(
+	; Save the reprimand message identifier
+	sta sava+1
+
+	; Can Eric be seen by a teacher?
+	stx savx+1
+	ldx #CHAR_ERIC
+	jsr can_be_seen
+	bcs punish_him
+savx
+	ldx #0
+	rts
+punish_him
+	; Time for lines and reprimands
+
+	; Get back the reprimad message identifier
+sava
+	lda #0
+	; Use search_string and write_message
+
+	ldx savx+1
+	rts
+.)
+
+
+

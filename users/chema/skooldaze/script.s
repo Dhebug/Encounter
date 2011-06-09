@@ -2214,8 +2214,8 @@ cont
 	bne retme
 
 	; Check if he can be seen by a teacher
-	;jsr can_be_seen
-	;bne retme
+	jsr can_be_seen
+	bcs retme
 
 	; Is the pellet already fired
 	ldy #CHAR_BPELLET
@@ -2255,8 +2255,8 @@ cont
 	bne retme
 
 	; Check if he can be seen by a teacher
-	;jsr can_be_seen
-	;bne retme
+	jsr can_be_seen
+	bcs retme
 
 	; Check for potential victims...
 
