@@ -23,3 +23,5 @@ along with the new one.
 * Does Boy Wander's pellet bounce?
 
 * Pellets sometimes do not hit teachers?
+
+* For some reason it seems like Angelface cannot hit anybody now

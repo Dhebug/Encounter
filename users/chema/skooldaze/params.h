@@ -62,6 +62,11 @@
 ; Value of the high byte that marks when the teacher tells the kids to sit down (originally 15)
 #define CLASS_START		15	  		
 
+; Visibility ranges for characters
+#define VIS_RANGE_X		14
+#define VIS_RANGE_Y		14
+
+
 ; Eric's main timer constants
 #define INITIAL_ERIC_TIMER	17
 #define NORMAL_ERIC_TIMER	9-4

@@ -11,8 +11,10 @@
 ;; Text strings
 ;; --------------------
 
-
-; Searches for a string. tmp0 holds pointer to base and A holds offset (in strings).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Searches for a string. tmp0 holds pointer
+;; to base and A holds offset (in strings).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 search_string
 .(
 	stx savex+1	; Preserve reg x
