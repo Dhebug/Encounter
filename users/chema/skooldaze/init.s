@@ -77,6 +77,10 @@ _main
 	jsr $f210      ;ink
 
 	jsr _init_irq_routine 
+
+	; Set demo mode
+	jsr set_demo_mode
+
 	jsr _init
 	jmp _test_loop
 .)
@@ -86,6 +90,7 @@ _main
 reset_flags
 .(
 	; Reset all the game flags
+	; after lesson change
 	ldy #4
 	lda #0
 loopf
@@ -93,12 +98,22 @@ loopf
 	dey
 	bpl loopf
 	rts
+
 .)
 
 _init
 .(
 	; Reset game flags
-	jsr reset_flags
+	;jsr reset_flags
+
+	; Initialize other game flags
+	lda #0
+	sta vis_col
+	sta vis_row 
+	sta tile_col
+	sta first_col
+	sta current_lesson_index
+
 
 	ldx #20
 loop
@@ -108,40 +123,28 @@ loop
 	lda #17
 	sta pos_row,x
 
-	; And direction and flags
+	; And animatory state, direction and flags
+
+	lda #0
+	jsr update_animstate
+
 	lda ini_flags,x
-	pha
-	and #(IS_FACING_RIGHT^$ff)
-	sta flags,x
-	pla
+	eor flags,x
 	and #IS_FACING_RIGHT
 	beq noright
 	jsr change_direction
 noright
-	
-/*
-	; Set flags for each character
 
-	cpx #19
-	bcc nopellet
-	lda #IS_FAST_WALK
-	bne doit
-nopellet
-	cpx #15
-	bcc boy
-	lda #(IS_TEACHER|IS_SLOW_WALK)
-	bne doit
-boy
-	lda #0	
-doit
+	lda ini_flags,x
 	sta flags,x
-*/
+
 	; Now the commands
 	lda #0
 	sta uni_subcom_high,x
 	sta cont_subcom_high,x
 	sta i_subcom_high,x
 	sta command_list_high,x
+	sta cur_command_high,x
 
 	dex
 	bpl loop
@@ -155,6 +158,26 @@ doit
 	sta Eric_timer
 	lda #0
 	sta Eric_mid_timer
+
+	; Initialize SRB
+
+	ldx #(21*5-1)
+loopsrb
+	lda #$fc
+	sta SRB,x
+	dex
+	lda #$ff
+	ldy #2
+loopsrb2
+	sta SRB,x
+	dex
+	dey
+	bpl loopsrb2
+	lda #$3f
+	sta SRB,x
+	dex
+	bpl loopsrb
+
 
 	; First screen render
 	jsr render_screen
@@ -183,6 +206,40 @@ loops
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set and unset demo mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+set_demo_mode
+.(
+	lda #0
+	sta game_mode
+
+	lda #$ff
+	sta demo_ff_00+1
+	sta demo_ff_002+1
+
+	lda #$10	; $d0 for normal mode
+	sta demo_bpl_bne
+
+	rts
+.)
+
+
+unset_demo_mode
+.(
+	lda #1
+	sta game_mode
+
+	lda #$00
+	sta demo_ff_00+1
+	sta demo_ff_002+1
+
+	lda #$d0	; $10 for demo mode
+	sta demo_bpl_bne
+
+	rts
+.)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -229,6 +286,20 @@ notzero
 
 	; Now move the characters
 	jsr move_chars
+
+	; If in demo mode we are finished
+	lda game_mode
+	bne play_mode
+
+	jsr ReadKey
+	beq avoidEric
+	
+	; A key was pressed, exit demo mode.
+	jsr unset_demo_mode
+	jsr _init
+	jmp _test_loop
+
+play_mode
 
 	; Now move Eric, if it needs be
 	jsr deal_with_Eric
@@ -436,14 +507,33 @@ smc_ptimetable
 	sta command_list_high,x
 
 	dex
-	;bpl loop	; We are dealing with Eric here, just for testing
-	bne loop
++demo_bpl_bne
+	bne loop	; Avoid dealing with Eric
 	
-
 
 	; Print the teacher's name and the room
 	lda game_mode
 	bne notdemo
+
+	; We are in demo mode... print that.
+	lda #<demo_msg2
+	sta tmp0
+	lda #>demo_msg2
+	sta tmp0+1
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1+1
+
+	jsr write_text
+
+	lda #<demo_msg
+	sta tmp0
+	lda #>demo_msg
+	sta tmp0+1
+
+	jmp printit2 
 
 notdemo
 	; Get the room's name

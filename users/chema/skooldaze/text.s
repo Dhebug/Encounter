@@ -112,9 +112,10 @@ class_names
 	.byt 0
 
 demo_msg
-	.asc "DEMO. - PRESS"
+	.asc "DEMO - PRESS"
 	.byt 0
-	.asc "A KEY TO PLAY"
+demo_msg2
+	.asc "KEY TO PLAY"
 	.byt 0
 
 sit_messages
