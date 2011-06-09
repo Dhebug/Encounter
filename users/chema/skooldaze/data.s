@@ -162,9 +162,11 @@ as_pointer_low
 
 free_r0
 .dsb (256)-(*&255)-32
-; Personal timetable for Eric (temporary)
+; Personal timetable for Eric (same as little boy 11)
 per_timet_eric
-	.byt 170,170,160,160,176,176,176,144,152,152,152,168,168,168,168,144,144,168,152,196,212,196,196,196,196,196,196,196,196,196,196,196
+	.byt 170,170,154,154,176,176,176,136,146,146,146,162,162,162,162,136,136,162,146,196,196,196,176,202,196,196,176,196,206,206,176,196
+
+	;.byt 170,170,160,160,176,176,176,144,152,152,152,168,168,168,168,144,144,168,152,196,212,196,196,196,196,196,196,196,196,196,196,196
 	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;.dsb 256-(*&255)
@@ -218,7 +220,7 @@ skool_r03 ;.dsb SKOOL_COLS,1
 cont_subcom_high
 	.dsb MAX_CHARACTERS,0
 command_list_high
-	.byt >command_list1
+	.byt >command_list200
 	.byt >command_list212
 	.byt >command_list220
 	.byt >command_list216
@@ -228,7 +230,7 @@ command_list_high
 	.byt >command_list218
 	.dsb 3,0
 command_list_low
-	.byt <command_list1
+	.byt <command_list200
 	.byt <command_list212
 	.byt <command_list220
 	.byt <command_list216
@@ -2661,11 +2663,6 @@ command_list222			; Mumps duty
 	.byt SC_FINDERIC						; Find Eric
 	.byt SC_ENDGAME							; Tell him to go home and end the game
 
-command_list1			
-	.byt SC_GOTO, 10, 74+10
-	.byt SC_GOTO, 3, 10
-	.byt SC_GOTO, 17,80
-	.byt SC_END
 
 
 

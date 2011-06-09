@@ -794,7 +794,8 @@ loopc
 	lda #0
 	jsr slide_col
 	dex 
-	bpl loopc
+	;bpl loopc
+	bne loopc
 
 savx
 	ldx #0

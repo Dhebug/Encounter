@@ -36,7 +36,8 @@ move_chars
 +move_char
 	cpx #20
 	bne notend
-	ldx #0;$ff	; Don't move Eric here
++demo_ff_00
+	ldx #0	; Don't move Eric here
 notend
 	inx
 	stx last_char_moved
@@ -156,7 +157,8 @@ nocommandlist
 
 must_move
 .(
-	cpx #0
++demo_ff_002
+	cpx #CHAR_ERIC	; If it is ERIC move always
 	beq finish
 
 	dec speed_counter,x
@@ -168,9 +170,13 @@ must_move
 dontmove
 	lda flags,x	; If not walking slowly, return and move
 	bpl finish
+
+	; For not moving the trick is get rid of the
+	; return address and then rts.
 	pla
 	pla
 	rts
+
 new_pace
 	jsr randgen
 

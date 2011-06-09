@@ -167,7 +167,7 @@ savy
 	beq isEric
 
 	; A character was dethroned and it was not Eric
-
+dethrone
 	; Place the correspondant uninterruptible subcommand
 	lda #<s_usc_dethroned1
 	sta uni_subcom_low,y
@@ -180,6 +180,10 @@ isEric
 	lda Eric_flags
 	ora #ERIC_SITTINGLYING
 	sta Eric_flags
+	
+	; If in demo mode, make Eric get up
+	lda game_mode
+	beq dethrone
 	bne thatsall
 next
 	dey
@@ -1996,6 +2000,11 @@ skip
 	lda Eric_flags
 	ora #ERIC_DOWN
 	sta Eric_flags
+
+	; If in demo, put the subcommand for Eric too!
+	lda game_mode
+	beq notEric
+
 	rts
 notEric
 
