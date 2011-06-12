@@ -94,6 +94,10 @@ SOURCE=.\charset.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\common.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\data.s
 # End Source File
 # Begin Source File

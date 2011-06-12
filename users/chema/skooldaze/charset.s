@@ -180,21 +180,21 @@ notnewscan
 ch_count	 .byt 00
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Used by the s_isc_speak1 routine. Returns 
-; with the carry flag set if the character 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check if a character is onscreen so he can
+; speak.
+; Returns with the carry flag set if tha char 
 ; about to speak is off-screen. Returns with
 ; the zero flag reset if somebody else is 
 ; speaking at the moment.
 ; The character is passed on reg x
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-print_speech_bubble
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+is_on_screen
 .(
 	; Check if the character is on-screen
 	lda pos_col,x
-	;clc
-	;adc #1	; First column does not matter
 	sec
 	sbc first_col
 	bcs maybe1
@@ -205,15 +205,19 @@ maybe1
 	cmp #VISIBLE_COLS+1	; Last one either
 	bcs returnme
 	; The character is onscreen
-
+	; Check if somebody else is speaking
 	lda bubble_on
-	bne returnme
+	rts
+.)
 
-	; Noone is speaking so let's do it
 
-	inc bubble_on
-
-	; Get spot's above character's head
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Get's the speech bubble coordinates
+; setting bubble_col, bubble_row 
+; and bubble_lip_col and bubble_lip_row
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+bubble_coords
+.(
 
 	lda pos_col,x
 	sec
@@ -253,6 +257,30 @@ smc_colcorr
 	sbc #4
 nothing
 	sta bubble_col
+	rts
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Used by the s_isc_speak1 routine. Returns 
+; with the carry flag set if the character 
+; about to speak is off-screen. Returns with
+; the zero flag reset if somebody else is 
+; speaking at the moment.
+; The character is passed on reg x
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+print_speech_bubble
+.(
+	jsr is_on_screen
+	bcc cont
+	beq cont
+	rts
+cont
+	inc bubble_on
+
+	; Get spot's above character's head
+
+	jsr bubble_coords
 
 	stx savx+1		; Save register X
 
@@ -785,6 +813,8 @@ endw
 	; Now center the message
 	; See how many columns we have left
 	lda tmp2
+	bmi savx
+
 	; Divide it by 2
 	lsr
 	beq savx	; If we used them all, then do nothing
