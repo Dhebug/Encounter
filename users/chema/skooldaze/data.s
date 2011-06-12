@@ -121,6 +121,23 @@ buffer_text
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 
+; Temporary buffer for screen contents.
+; Used when giving lines
+temp_buffer
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+
+; Table for calculating the number of lines
+; to give.
+tab_lines
+	.byt 10,20,30,40,50,60,70,80,90
+
+; Table with the identifiers of messages to
+; tell the children to sit down
+tab_sit_msg
+	.byt SIT_NASTY, SIT_CHERUBS, SIT_CANE, SIT_CHAPS
+
 
 ; Table to relate teacher codes and identifiers. Used in s_do_class
 table_teacher_codes

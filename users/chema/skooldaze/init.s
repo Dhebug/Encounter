@@ -512,6 +512,9 @@ smc_ptimetable
 	
 
 	; Print the teacher's name and the room
+
+	jsr uncolor_box
+
 	lda game_mode
 	bne notdemo
 

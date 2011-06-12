@@ -461,8 +461,6 @@ s_set_csubcom
 ; Make a teacher tell the kids to sit down
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-tab_sit_msg
-	.byt SIT_NASTY, SIT_CHERUBS, SIT_CANE, SIT_CHAPS
 
 s_msg_sitdown
 .(
@@ -671,7 +669,6 @@ Ericisin
 	jsr randgen
 	cmp #160
 	bcc no_essay
-	bcs no_essay	; TESTING
 	
 	lda #<st_write_essay
 	sta tmp0
