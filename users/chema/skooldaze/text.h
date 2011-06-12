@@ -33,6 +33,25 @@
 #define MUL_QUESTION	15
 #define MUL_ANSWER		16
 
+; Identifiers for reprimands
+#define SIT_STAIRS		0
+#define ROOM_PRIVATE	2
+#define GO_CLASS		4
+#define FIND_SEAT		6
+#define OFF_FLOOR		8
+#define COME_ME			10
+#define HURRY_UP		12
+#define PATIENCE		14
+#define DO_AGAIN		16
+#define TELL_TALES		18
+#define NEVER_LATE		20
+#define STAY_THISTIME	22
+#define TOUCH_BLACKBOARDS 24
+#define NO_CATAPULTS	26
+#define NO_HITTING		28
+#define NO_JUMPING		30
+#define LINES_2000		32
+
 ; Tokens for quesions/answers
 #define TEMPLATE_QUESTION	128
 #define TEMPLATE_ANSWER		129

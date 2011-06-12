@@ -427,6 +427,7 @@ nolower
 	rts
 launch
 	; Launch the pellet, reprimands, etc.
+	lda #NO_CATAPULTS
 	jsr punish_Eric
 
 	; this entry point is used when Boy Wander fires his catapult too
@@ -523,6 +524,7 @@ nobody
 	; Make a sound effect
 	; Check for reprimands
 
+	lda #NO_HITTING
 	jsr punish_Eric
 
 	rts
@@ -660,10 +662,13 @@ savx
 punish_him
 	; Time for lines and reprimands
 
+	ldy #CHAR_ERIC
+	tax
 	; Get back the reprimad message identifier
 sava
 	lda #0
-	; Use search_string and write_message
+	jsr give_lines
+
 
 	ldx savx+1
 	rts

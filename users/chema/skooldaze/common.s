@@ -209,5 +209,302 @@ done
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make a teacher give lines to somebody
+;; The teacher is passed in reg X and the recipient
+;; in reg Y. The reprimand message is passed on
+;; reg A.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+give_lines
+.(
+	; Save reprimand message identifier
+	sta sava+1
 
+	; Checck if the teacher is onscreen
+	jsr is_on_screen
+	bcc cont
+	beq cont
+	rts
+cont
+	; Get spot's above character's head
+	; This uses the bubble variables, so I will
+	; save them first
+	sty savy+1
+	ldy #3
+.(
+loop
+	lda bubble_lip_col,y
+	pha
+	dey
+	bpl loop
+.)
+	
+	jsr bubble_coords
+	lda bubble_row
+	
+	stx savx+1		; Save register X
+
+	; Calculate the pointer
+	ldx bubble_row
+	ldy tab_mul8,x			
+	lda _HiresAddrHigh,y    
+	sta tmp3+1				
+	lda _HiresAddrLow,y 
+	clc						
+	adc bubble_col
+	sta tmp3					
+	bcc skip				
+	inc tmp3+1				
+skip
+	; We have in tmp3 the pointer to the
+	; screen where the message will go.
+
+	; Now get the bubble variables back
+	ldy #0
+.(
+loop
+	pla
+	sta bubble_lip_col,y
+	iny
+	cpy #4
+	bne loop
+.)
+	; Save the screen data
+	jsr save_buffer
+
+	; Ok now write the lines...
+	; Start by determining the number of lines that
+	; will be given (divided by 10).
+
+	jsr randgen
+	and #%111
+	tay
+	lda tab_lines,y
+
+	sta op2
+	lda #0
+	sta op2+1
+	jsr utoa
+
+	lda bufconv
+	sta st_lines
+
+	lda bufconv+1
+	sta st_lines+1
+	
+	lda #<st_lines
+	sta tmp0
+	lda #>st_lines
+	sta tmp0+1
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1+1
+
+	jsr write_text
+
+	lda #<names_extras
+	sta tmp0
+	lda #>names_extras
+	sta tmp0+1
+	lda savy+1
+	clc
+	adc #1
+	jsr search_string
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1+1
+
+	jsr write_text
+
+	lda #<buffer_text
+	sta tmp0
+	lda #>buffer_text
+	sta tmp0+1
+
+	lda tmp3
+	sta tmp1
+	lda tmp3+1
+	sta tmp1+1
+
+	; Let's try to add some temporary color
+	jsr color_box
+	jsr dump_text_buffer
+	jsr wait
+
+	; Now the reprimand
+	lda #<reprimands
+	sta tmp0
+	lda #>reprimands
+	sta tmp0+1
+sava
+	lda #0
+	jsr search_string
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1+1
+
+	jsr write_text
+
+	lda #<reprimands
+	sta tmp0
+	lda #>reprimands
+	sta tmp0+1
+	lda sava+1
+	clc
+	adc #1
+	jsr search_string
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1+1
+
+	jsr write_text
+
+	lda #<buffer_text
+	sta tmp0
+	lda #>buffer_text
+	sta tmp0+1
+
+	lda tmp3
+	sta tmp1
+	lda tmp3+1
+	sta tmp1+1
+
+	; Let's try to add some temporary color
+	jsr color_box
+	jsr dump_text_buffer
+	jsr wait
+
+	; Restore the screen data
+	jsr restore_buffer
+
+	; Restore registers back
+savx
+	ldx #0
+savy 
+	ldy #0
+
+
+	rts
+.)
+
+
+wait
+.(
+	lda counter
+	pha
+	lda #$e0
+	sta counter
+loop
+	lda counter
+	bne loop
+	pla 
+	sta counter
+	rts
+
+.)
+
+color_box
+.(
+	lda #<buffer_text
+	sta tmp
+	lda #>buffer_text
+	sta tmp+1
+
+	ldx #3
+loop2
+	ldy #(BUFFER_TEXT_WIDTH*8-1)
+loop
+	lda (tmp),y
+	ora #%10000000
+	sta (tmp),y
+	dey
+	bpl loop
+
+	lda tmp
+	clc
+	adc #BUFFER_TEXT_WIDTH*8
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+	dex
+	bne loop2
+	
+	rts
+.)
+
+
+restore_buffer
+.(
+
+	lda #<tmp1
+	ldy #<tmp2
+	jmp common_save_res
+.)
+
+save_buffer
+.(
+
+	lda #<tmp2
+	ldy #<tmp1
+
++common_save_res
+	sta loopscans+1
+	sty loopscans+3
+
+	lda #<temp_buffer
+	sta tmp1
+	lda #>temp_buffer
+	sta tmp1+1
+
+	lda tmp3
+	sta tmp2
+	lda tmp3+1
+	sta tmp2+1
+
+
+	ldx #8*3
+looprows
+	ldy #BUFFER_TEXT_WIDTH-1									
+loopscans
+	lda (tmp2),y
+	sta (tmp1),y
+	dey
+	bpl loopscans
+
+	lda tmp1
+	clc
+	adc #BUFFER_TEXT_WIDTH
+	sta tmp1
+	bcc nocarry
+	inc tmp1+1
+nocarry
+
+	lda tmp2
+	clc
+	adc #40
+	sta tmp2
+	bcc nocarry2
+	inc tmp2+1
+nocarry2
+	dex
+	bne looprows
+	rts
+.)
+
+temp_buffer
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+
+tab_lines
+	.byt 10,20,30,40,50,60,70,80,90
 

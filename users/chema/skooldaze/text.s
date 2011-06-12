@@ -120,6 +120,29 @@ demo_msg2
 	.asc "KEY TO PLAY"
 	.byt 0
 
+reprimands
+	.asc "DON'T SIT ON",0, "THE STAIRS",0 
+	.asc "THE ROOM",0, "IS PRIVATE",0 
+	.asc "GET TO WHERE",0, "YOU SHOULD BE",0 
+	.asc "NOW FIND",0, "A SEAT",0 
+	.asc "GET OFF",0, "THE FLOOR",0 
+	.asc "COME ALONG",0, "WITH ME BOY",0 
+	.asc "HURRY UP",0, "YOU HORROR",0 
+	.asc "DON'T TRY MY",0, "PATIENCE BOY",0 
+	.asc "NOW DON'T",0, "DO IT AGAIN",0 
+	.asc "DON'T TELL",0, "TALES",0 
+	.asc "NEVER BE",0, "LATE AGAIN",0 
+	.asc "AND STAY",0, "THIS TIME",0 
+	.asc "DON'T TOUCH",0, "BLACKBOARDS",0 
+	.asc "CATAPULTS",0, "ARE FORBIDDEN",0 
+	.asc "DON'T HIT",0, "YOUR MATES",0 
+	.asc "YOU ARE NOT",0, "A KANGAROO",0 
+	.asc "TAKE 2000 LINES YOU NASTY BOY",SPACES_8,0 
+
+st_lines
+	.asc "000 lines"
+	.byt 0
+
 sit_messages
 	.asc "RIGHT! SIT DOWN MY LITTLE CHERUBS"
 	.byt SPACES_8

@@ -53,7 +53,7 @@
 #define SRB_SIZE		105
 
 ; Buffer width for lesson/lines box.
-#define BUFFER_TEXT_WIDTH 10	
+#define BUFFER_TEXT_WIDTH 11	
 
 
 ; Ticks to change the lesson (originally $1500=5376)
