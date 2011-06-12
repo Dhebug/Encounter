@@ -411,8 +411,23 @@ loop
 
 .)
 
+
+uncolor_box
+.(
+	lda #$29	; and opcode
+	sta smc_col
+	lda #%01111111
+	sta smc_col+1
+	jmp common_col_box
+.)
+
 color_box
 .(
+	lda #$09	; ora opcode
+	sta smc_col
+	lda #%10000000
+	sta smc_col+1
++common_col_box
 	lda #<buffer_text
 	sta tmp
 	lda #>buffer_text
@@ -423,6 +438,7 @@ loop2
 	ldy #(BUFFER_TEXT_WIDTH*8-1)
 loop
 	lda (tmp),y
++smc_col
 	ora #%10000000
 	sta (tmp),y
 	dey
@@ -499,12 +515,4 @@ nocarry2
 	bne looprows
 	rts
 .)
-
-temp_buffer
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-
-tab_lines
-	.byt 10,20,30,40,50,60,70,80,90
 
