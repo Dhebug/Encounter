@@ -229,15 +229,14 @@ cont
 	; Get spot's above character's head
 	; This uses the bubble variables, so I will
 	; save them first
-	sty savy+1
-	ldy #3
-.(
-loop
-	lda bubble_lip_col,y
+	lda bubble_col
 	pha
-	dey
-	bpl loop
-.)
+	lda bubble_lip_col
+	pha
+	lda bubble_row
+	pha
+	lda bubble_lip_row
+	pha
 	
 	jsr bubble_coords
 	lda bubble_row
@@ -260,15 +259,17 @@ skip
 	; screen where the message will go.
 
 	; Now get the bubble variables back
-	ldy #0
-.(
-loop
+
 	pla
-	sta bubble_lip_col,y
-	iny
-	cpy #4
-	bne loop
-.)
+	lda bubble_lip_row
+	pla
+	lda bubble_row
+	pla
+	lda bubble_lip_col
+	pla
+	lda bubble_col
+
+	
 	; Save the screen data
 	jsr save_buffer
 
@@ -515,4 +516,115 @@ nocarry2
 	bne looprows
 	rts
 .)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make a stricken teacher give lines 
+;; or reveal his safe combination letter
+;; Used by the routine s_usc_knocked. 
+;; If the character who has been knocked 
+;; over is a teacher, this routine makes 
+;; him reveal his safe combination letter 
+;; (if all the shields are flashing but 
+;; the safe has not been opened yet) and 
+;; give lines the nearest main kid (if any 
+;; are close enough). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ 
+teacher_knocked
+.(
+	; First check if the character is a teacher
+	cpx #CHAR_FIRST_TEACHER
+	bcs cont
+	rts
+cont
+	; Time for what?
+	lda var7,x
+	cmp #18
+	beq reveal
+	cmp #9
+	beq lines
+	rts
+lines
+	; Get rid of context
+	pla
+	pla
+
+	; Make the teacher give lines
+	; First get the visibility range of the teacher
+	; in tmp0, tmp0+1
+	jsr visibility_range
+	
+	txa
+	tay
+
+	;Loop through the main kids
+	lda #100
+	sta tmp1
+	lda #$ff
+	sta tmp1+1
+
+	ldx #CHAR_BOYWANDER
+loopchars
+	; Is the kid on the same floor as the teacher?
+	jsr nearest_floor
+	cmp pos_row,y
+	bne nextkid
+
+	; A kid on the same floor... check the
+	; x-coordinate
+	lda pos_col,x
+	cmp tmp0
+	bcc nextkid
+	cmp tmp0+1
+	bcs nextkid
+	
+	; He is in the visible range, check if he is closer
+	; than the previous one
+	sec
+	sbc pos_col,y
+	bpl noabs
+	sta tmp
+	lda #0
+	sec
+	sbc tmp
+noabs
+	cmp tmp1
+	bcs nextkid
+	; He is closer, save his ID and distance
+	sta tmp1
+	stx tmp1+1
+nextkid
+	dex
+	bpl loopchars
+
+	; get back register X
+	tya
+	tax
+
+	; Who was the nearest one?
+	ldy tmp1+1
+	bpl givelines
+	; Nobody, just return
+	rts
+givelines
+	
+	lda #DO_AGAIN
+	jmp give_lines
+
+reveal
+	; Check if it is time to reveal the combination
+	; letter
+	lda game_status
+	cmp #2
+	beq reveal_letter
+	rts
+reveal_letter
+
+	; TODO... everything here
+	rts
+.)
+
 

@@ -1322,9 +1322,9 @@ miniw
 cont
 	; The signal has not been raised yet, so it's time for another mini-walkabout.
 	jsr randgen
-	and #15;7
+	and #7
 	sec
-	sbc #15;7	; -7<= a <=0
+	sbc #7	; -7<= a <=0
 	clc
 	adc dest_x,x
 	jmp miniw
@@ -1885,7 +1885,7 @@ cont
 	; safe combination letter or give lines (as appropriate)
 	; and exit or else return here
 
-	; jsr teacher_hit
+	jsr teacher_knocked
 
 	; decrement again and check if it is time to
 	; get up (this is what the speccy version does)
