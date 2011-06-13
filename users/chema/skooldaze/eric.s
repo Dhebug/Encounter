@@ -324,22 +324,51 @@ doit2
 
 sit_Eric
 .(
+	; Flip Eric flag...
 	lda Eric_flags
-	bmi standup
+	eor #(ERIC_SITTINGLYING)
+	sta Eric_flags
+	bmi dosit
+	; Eric must stand up
+	jmp s_stand_up
+dosit
+	; Eric is going to sit down... even on the floor
+
+	jsr is_on_staircase
+	beq notstairs
+
+	; Eric is on a staircase...
+	; sit him down...
+	lda pos_col
+	cmp #64
+	; Carry is set if Eric is on the right side of the school
+	lda flags
+	and #IS_FACING_RIGHT
+	; Zero is clear if eric is facing right
+	bcs rightside
+	; Eric is at the left side, must he turn around?
+	bne noturn
+turn
+	jsr change_direction
+noturn
+	lda #4
+	jmp update_animstate
+rightside
+	; Eric is at the right side, turn if Z is clear
+	bne turn 
+	beq noturn
+
+notstairs
+	; Eric is not at a staircase... so sit down
+
   	jsr s_check_chair	; Returns Z=1 if there is a chair and C=1 if the 
 						; character needs to turn round
 	bne notyet
-	lda Eric_flags
-	ora #ERIC_SITTINGLYING
-	sta Eric_flags
 	jmp s_knock_and_sit; s_sit_char
 notyet
-	rts
-standup
-	lda Eric_flags
-	and #(ERIC_SITTINGLYING^$ff)
-	sta Eric_flags
-	jmp s_stand_up
+	; Then sit on the floor
+	lda #5
+	jmp update_animstate
 .)
 
 jump_Eric

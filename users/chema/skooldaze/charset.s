@@ -250,13 +250,19 @@ smc_colcorr
 	lda #0 
 	and #%11111000	; At the border of 8-tile chunks
 	clc
-	adc #FIRST_VIS_COL	; Protecting the first two
-	cmp #LAST_VIS_COL-8	; And the last two
+	adc #FIRST_VIS_COL		; Protecting the first two
+	cmp #LAST_VIS_COL-11		; And the last two
 	bcc nothing
-	sec
-	sbc #4
+	lda #LAST_VIS_COL-11
 nothing
 	sta bubble_col
+
+	; Correct lip col position
+	lda bubble_lip_col
+	cmp bubble_col
+	bcs nocorr
+	inc bubble_lip_col
+nocorr
 	rts
 .)
 

@@ -65,15 +65,15 @@ empty_st
 	.asc "ERIC"
 	.byt 0
 	.dsb 9,0
-	.asc "BOY WANDER"
-	.byt 0
-	.dsb 3,0
-	.asc "ANGELFACE"
-	.byt 0
-	.dsb 4,0
 	.asc "EINSTEIN"
 	.byt 0
 	.dsb 5,0
+	.asc "ANGELFACE"
+	.byt 0
+	.dsb 4,0
+	.asc "BOY WANDER"
+	.byt 0
+	.dsb 3,0
 	.asc "MR ROCKITT"
 	.byt 0
 	.dsb 3,0
