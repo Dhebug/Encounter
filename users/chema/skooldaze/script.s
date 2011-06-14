@@ -1852,9 +1852,13 @@ noteacher
 	lda #1
 	sta var7,x
 
-	; If Angelface was hit, add points
-
-	
+	; If Angelface was hit, add 10 points
+	cpy #CHAR_ANGELFACE
+	bne notEric
+	cpx #CHAR_EPELLET
+	bne notEric
+	lda #1
+	jsr add_score
 notEric
 	jmp knock_him
 

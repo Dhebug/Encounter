@@ -238,6 +238,9 @@ cont
 	lda bubble_lip_row
 	pha
 	
+	; Save register Y
+	sty savy+1
+
 	jsr bubble_coords
 	
 	; Adjust the position, if the teacher is down
@@ -289,6 +292,17 @@ skip
 	lda tab_lines,y
 
 	sta op2
+
+	; Deal with the lines given...
+	ldy savy+1
+	beq toEric
+	; They are not given to Eric... add to the score
+	jsr add_score
+	bne linesend	; Always jump
+toEric
+	jsr add_lines
+
+linesend
 	lda #0
 	sta op2+1
 	jsr utoa
@@ -401,6 +415,42 @@ savy
 
 	rts
 .)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add content of reg A to score
+;; or lines and update scorebox
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+add_score
+.(
+	clc
+	adc score
+	sta score
+	bcc nocarry
+	inc score+1
+nocarry
+	jmp update_scorebox
+.)
+
+add_lines
+.(
+	clc
+	adc lines
+	sta lines
+	bcc nocarry
+	inc lines+1
+nocarry
+	jmp update_scorebox
+.)
+
+update_scorebox
+.(
+
+  rts
+
+.)
+
 
 
 wait
@@ -551,9 +601,9 @@ cont
 	cmp #18
 	beq reveal
 	cmp #9
-	beq lines
+	beq glines
 	rts
-lines
+glines
 	; Get rid of context
 	pla
 	pla

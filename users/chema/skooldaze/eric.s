@@ -548,15 +548,16 @@ savx2
 	; We can check here if it was
 	; angelface and increase in 30
 	; the score
-
+	cpy #CHAR_ANGELFACE
+	bne nobody
+	lda #3
+	jsr add_score
 nobody
 	; Make a sound effect
 	; Check for reprimands
 
 	lda #NO_HITTING
-	jsr punish_Eric
-
-	rts
+	jmp punish_Eric
 +endpunch
 	; This should go to a subroutine?
 	lda #0
