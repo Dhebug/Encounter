@@ -278,8 +278,11 @@ nocorr
 print_speech_bubble
 .(
 	jsr is_on_screen
+	; Be careful. Check first
+	; if there is anybody speaking
+	bne retme
 	bcc cont
-	beq cont
+retme
 	rts
 cont
 	inc bubble_on

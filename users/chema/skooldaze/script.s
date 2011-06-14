@@ -959,6 +959,7 @@ not_wacker
 	; Get a random number
 	jsr randgen
 	; Carry is random here...
+	asl
 	bcc firstq
 	iny
 	iny
@@ -1760,7 +1761,7 @@ next
 	sta tmp
 	; Is it offscreen?
 
-	cmp #LAST_VIS_COL
+	cmp #SKOOL_COLS-2
 	beq terminate_pellet
 	cmp #FIRST_VIS_COL
 	beq terminate_pellet
@@ -2204,6 +2205,7 @@ cont
 
 	; Generate a random number
 	jsr randgen
+	asl
 	bcc retme	; return half the time
 
 	; Check if he is on a staircase
@@ -2287,10 +2289,15 @@ skip
 	cpy #CHAR_BOY8
 	bne loop
 
+exit
 	; We found no victim, return
 	rts
 
 victimok
+	lda anim_state,y
+	cmp #5
+	bcs exit
+
 	; We found a possible victim, let's punch him!
 	; Put the uninterruptable subcommand
 	; Make ANGELFACE throw a punch (1)
