@@ -89,9 +89,9 @@ visibility_range
 	; Get the nearest floor back, to take walls
 	; into account
 	lda tmp
-	cmp #3
-	beq upperbound
 	cmp #17
+	beq upperbound
+	cmp #3
 	bne middlefloor
 	; The character is on the top floor
 	lda #WALLTOPFLOOR
@@ -100,13 +100,13 @@ middlefloor
 	; The character is on the middle floor
 	lda #WALLMIDDLEFLOOR
 	cmp tmp0
-	bcs upperbound
+	bcc upperbound
 	; The character is less than 10 
 	; paces to the right of a wall or
 	; to its left
 	; Is he to the left of a wall?
 	cmp pos_col,x
-	bcc upperbound
+	bcs upperbound
 	; Ok the wall is limitting his field of view
 	sta tmp0
 upperbound
@@ -124,11 +124,10 @@ cont
 	sta tmp0+1
 	; Get the floor
 	lda tmp
-	cmp #3
-	beq retme	; Return if in the bottom floor
 	cmp #17
+	beq retme	; Return if in the bottom floor
+	cmp #3
 	bne middlefloor2
-	bne middlefloor
 	; The character is on the top floor
 	lda #WALLTOPFLOOR
 	.byt $2c
@@ -250,6 +249,14 @@ cont
 	inc bubble_row
 skipthis
 
+	; Adjust the position if the bubble is in the right border
+	lda bubble_col
+	cmp #LAST_VIS_COL-8
+	bne skipthistoo
+	sec
+	sbc #3		; this is 3 squares bigger
+	sta bubble_col
+skipthistoo
 	stx savx+1		; Save register X
 
 	; Calculate the pointer
