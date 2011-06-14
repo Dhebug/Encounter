@@ -25,3 +25,7 @@ along with the new one.
 * Pellets sometimes do not hit teachers?
 
 * For some reason it seems like Angelface cannot hit anybody now
+
+* Rockitt sometimes ask to write an essay with a title, but he is
+  in the map room... Maybe this is corrected when the
+  routines to write on blackboards are done?

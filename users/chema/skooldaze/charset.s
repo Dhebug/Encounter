@@ -251,9 +251,9 @@ smc_colcorr
 	and #%11111000	; At the border of 8-tile chunks
 	clc
 	adc #FIRST_VIS_COL		; Protecting the first two
-	cmp #LAST_VIS_COL-11		; And the last two
+	cmp #LAST_VIS_COL-8		; And the last two
 	bcc nothing
-	lda #LAST_VIS_COL-11
+	lda #LAST_VIS_COL-8
 nothing
 	sta bubble_col
 
