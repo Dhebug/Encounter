@@ -239,8 +239,14 @@ cont
 	pha
 	
 	jsr bubble_coords
-	lda bubble_row
 	
+	; Adjust the position, if the teacher is down
+	lda anim_state,x
+	cmp #5
+	bne skipthis
+	inc bubble_row
+skipthis
+
 	stx savx+1		; Save register X
 
 	; Calculate the pointer
@@ -261,13 +267,13 @@ skip
 	; Now get the bubble variables back
 
 	pla
-	lda bubble_lip_row
+	sta bubble_lip_row
 	pla
-	lda bubble_row
+	sta bubble_row
 	pla
-	lda bubble_lip_col
+	sta bubble_lip_col
 	pla
-	lda bubble_col
+	sta bubble_col
 
 	
 	; Save the screen data
