@@ -641,6 +641,20 @@ Ericnotin
 	; Here Einstein could grass on Eric's absence
 	; and the teacher may decide track him down
 	; and give lines...
+	lda #<st_grass
+	sta tmp0
+	lda #>st_grass
+	sta tmp0+1
+	jsr s_make_Einstein_speak
+	
+	; Make the teacher give lines to Einstein for
+	; telling tales (if he is in the moood)
+
+	; Tell the kids to read their books
+
+	; Check for Eric again and maybe send him
+	; after Eric... (use s_check_Eric_loc)
+
 Ericisin
 	; Set bit 7 (indicating that the next absence 
 	; lines message should be 'AND STAY THIS TIME')
@@ -740,28 +754,10 @@ Ericstillin
 
 	; Control returns here when the teacher has finished asking the question.
 
-	
-	; Signal that it is Einstein's turn to speak
-	lda lesson_signals
-	ora #%1
-	sta lesson_signals
-
-	; Set the interruptible subcommand for this teacher
-	; to s_isc_waitEinstein
-
-	lda #<s_isc_waitEinstein
-	sta i_subcom_low,x
-	lda #>s_isc_waitEinstein
-	sta i_subcom_high,x
-
-	lda #<checkEricagain
-	sta cur_command_low,x
-	lda #>checkEricagain
-	sta cur_command_high,x
-	rts
+	jsr Einstein_turn
 
 	; And loop back
-	;jmp checkEricagain
+	jmp checkEricagain
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -814,7 +810,46 @@ nocarry
 
 s_check_Eric_loc
 .(
-	lda #0
+	; Check the floor he is at
+	ldy #0
+	lda pos_row
+	cmp #3
+	beq cont
+notop
+	iny
+	cmp #10
+	beq cont
+nomiddle
+	iny
+	cmp #17
+	beq cont
+	; Return with zero flag reset
+	rts
+cont
+	; Prepare pointer to region table
+	lda tab_regionslo,y
+	sta tmp0
+	lda tab_regionshi,y
+	sta tmp0+1
+	lda tab_ridslo,y
+	sta tmp1
+	lda tab_ridshi,y
+	sta tmp1+1
+	
+	; Check col
+	lda pos_col
+	ldy #0
+loop
+	cmp (tmp0),y
+	iny
+	bcs loop
+	; Point at the correct entry
+	dey
+	; Get lesson descriptor
+	lda lesson_descriptor
+	and #%111
+	; Are we in the correct region?
+	cmp (tmp1),y
 	rts
 .)
 
@@ -959,7 +994,6 @@ not_wacker
 	; Get a random number
 	jsr randgen
 	; Carry is random here...
-	asl
 	bcc firstq
 	iny
 	iny
@@ -2209,8 +2243,10 @@ cont
 
 	; Generate a random number
 	jsr randgen
-	asl
-	bcc retme	; return half the time
+	; This seems too often in the Oric ?
+	;bcc retme	; return half the time
+	cmp #200
+	bcc retme
 
 	; Check if he is on a staircase
 	jsr is_on_staircase
@@ -2548,6 +2584,47 @@ s_isc_waitEinstein
 	rts
 end
 	jmp terminate_subcommand
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make Einstein speak
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_make_Einstein_speak
+.(
+	ldy #CHAR_EINSTEIN
+	lda tmp0
+	sta var3,y
+	lda tmp0+1
+	sta var4,y
+
++Einstein_turn	
+	; Signal that it is Einstein's turn to speak
+	lda lesson_signals
+	ora #%1
+	sta lesson_signals
+
+	; Set the interruptible subcommand for this teacher
+	; to s_isc_waitEinstein
+
+	lda #<s_isc_waitEinstein
+	sta i_subcom_low,x
+	lda #>s_isc_waitEinstein
+	sta i_subcom_high,x
+
+	;lda #<checkEricagain
+	;sta cur_command_low,x
+	;lda #>checkEricagain
+	;sta cur_command_high,x
+
+	; Put the return address in the current command
+	; of the teacher, so control resume there when he
+	; finishes waiting for Einstein to speak
+	pla
+	sta cur_command_low,x
+	pla
+	sta cur_command_high,x
+	rts
 .)
 
 

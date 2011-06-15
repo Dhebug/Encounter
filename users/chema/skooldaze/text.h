@@ -71,3 +71,7 @@
 #define EN_NUMTEMPLATE  11
 
 
+; Identifiers for Einstein's grasses and others
+#define ERICNOTHERE		0	
+
+

@@ -120,6 +120,9 @@ demo_msg2
 	.asc "KEY TO PLAY"
 	.byt 0
 
+st_grass
+	.asc PLEASESIR,ERIC_NAME," is not here", SPACES_8,0
+
 reprimands
 	.asc "DON'T SIT ON",0, "THE STAIRS",0 
 	.asc "THE ROOM",0, "IS PRIVATE",0 

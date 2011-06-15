@@ -30,9 +30,6 @@ tile_col .byt 00
 .text
 ; Some game variables
 
-score					.word 0			; Current score
-hiscore					.word 0			; Highest score
-lines					.word 0			; Number of lines
 
 first_col				.byt 0			; Leftmost visible column
 lesson_clock			.word 5376		; Lesson clock
@@ -84,12 +81,18 @@ srb_offset				.byt 0		; Offset of the first byte in the SRB
 srb_offset_lip			.byt 0		; Offset of the lip's byte
 srb_bitmask_lip			.byt 0		; Bitmask for the lip
 
+
 ; Locations for goto random location script
 tab_locs
 	.byt D_LIBRARY
 	.byt D_FIRE_ESCAPE
 	.byt D_GYM
 	.byt D_BIG_WINDOW
+
+
+; Backbuffer, just one tile..
+backbuffer .dsb 8
+
 
 ; Screen refresh buffer
 SRB 
@@ -116,37 +119,11 @@ SRB
 	.byt $3f,$ff,$ff,$ff,$fc
 
 
-; Backbuffer, just one tile..
-
-backbuffer .dsb 8
-
 ; Buffer for lesson box
 buffer_text
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
-
-; Temporary buffer for screen contents.
-; Used when giving lines
-temp_buffer
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-
-; Table for calculating the number of lines
-; to give.
-tab_lines
-	.byt 10,20,30,40,50,60,70,80,90
-
-; Table with the identifiers of messages to
-; tell the children to sit down
-tab_sit_msg
-	.byt SIT_NASTY, SIT_CHERUBS, SIT_CANE, SIT_CHAPS
-
-
-; Table to relate teacher codes and identifiers. Used in s_do_class
-table_teacher_codes
-	.byt CHAR_ROCKITT, CHAR_WACKER, CHAR_WITHIT, CHAR_CREAK, 0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -478,8 +455,75 @@ qa_tables
 	.byt <st_capitals
 	.byt >st_capitals
 
-free_r12
-.dsb (256-32)-(*&255)
+
+; Table for calculating the number of lines
+; to give.
+tab_lines
+	.byt 10,20,30,40,50,60,70,80,90
+
+; Table with the identifiers of messages to
+; tell the children to sit down
+tab_sit_msg
+	.byt SIT_NASTY, SIT_CHERUBS, SIT_CANE, SIT_CHAPS
+
+
+; Table to relate teacher codes and identifiers. Used in s_do_class
+table_teacher_codes
+	.byt CHAR_ROCKITT, CHAR_WACKER, CHAR_WITHIT, CHAR_CREAK, 0
+
+
+; Skool region data tables
+rgn_topfloor_walls
+	.byt 11
+	.byt 22
+	.byt 54
+	.byt 76
+	.byt 99
+	.byt 130
+rgn_topfloor_ids
+	.byt 0	; Head's study
+	.byt 7	; Between the study and the Revision Library
+	.byt 5	; Revision library
+	.byt 1	; Reading room
+	.byt 2	; Map room
+	.byt 7	; Map room door to the fire escape
+
+rgn_midfloor_walls
+	.byt 14
+	.byt 30
+	.byt 51
+	.byt 94
+	.byt 130
+rgn_midfloor_ids
+	.byt 0	; Forbidden region
+	.byt 7	; Between the staff room and the white room
+	.byt 3	; White room
+	.byt 4	; Exam room
+	.byt 7	; Outside the Exam room door
+rgn_botfloor_walls
+	.byt 46
+	.byt 68
+	.byt 130
+rgn_botfloor_ids
+	.byt 7	; Left of the dinner hall
+	.byt 6	; Dinner hall
+	.byt 7	; Right of the dinner hall
+tab_regionshi
+	.byt >rgn_topfloor_walls, >rgn_midfloor_walls, >rgn_botfloor_walls
+tab_regionslo
+	.byt <rgn_topfloor_walls, <rgn_midfloor_walls, <rgn_botfloor_walls
+tab_ridshi
+	.byt >rgn_topfloor_ids, >rgn_midfloor_ids, >rgn_botfloor_ids
+tab_ridslo
+	.byt <rgn_topfloor_ids, <rgn_midfloor_ids, <rgn_botfloor_ids
+
+score					.word 0			; Current score
+hiscore					.word 0			; Highest score
+lines					.word 0			; Number of lines
+
+;free_r12
+;.dsb (256-32)-(*&255)
+
 ; Personal timetable for little boy 9
 per_timet_lb9
 	.byt 170,170,154,154,154,136,162,154,136,136,162,154,154,146,154,146,146,154,136,196,196,196,202,200,196,176,198,196,206,206,176,200
@@ -666,6 +710,8 @@ command_low
 	.byt <s_tell_boywander		; SC_TELLBOYWANDER
 	.byt <s_2000lines_eric		; SC_2000LINESERIC
 	.byt <s_end_game			; SC_ENDGAME
+free_r19
+.dsb (256-32)-(*&255)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .dsb 256-(*&255)
@@ -1564,10 +1610,11 @@ end_anim_states
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Tables
 ;;;;;;;;;;;;;;;;;;;;;;;;;
-.dsb 256-(*&255)
+;.dsb 256-(*&255)
 _HiresAddrLow           .dsb 240
-.dsb 256-(*&255)
+;.dsb 256-(*&255)
 _HiresAddrHigh          .dsb 200
+
 .dsb 256-(*&255)
 #ifdef FULLTABLEMUL8
 tab_mul8hi
@@ -2687,5 +2734,11 @@ command_list222			; Mumps duty
 
 
 
+; Temporary buffer for screen contents.
+; Used when giving lines
+temp_buffer
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
 
 
