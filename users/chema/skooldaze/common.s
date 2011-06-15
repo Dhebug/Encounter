@@ -152,7 +152,11 @@ can_be_seen
 .(
 	; Get the visibility rage in tmp0, tmp0+1
 	jsr visibility_range
-	
+
+	; Get floor
+	jsr nearest_floor
+	sta smc_floor+1
+
 	; Loop through teachers
 	ldy #3
 loop
@@ -176,7 +180,8 @@ foundit
 	; in nearest_floor!
 	lda pos_row+CHAR_FIRST_TEACHER,y
 	jsr nearest_floor_ex
-	cmp pos_row,x
+smc_floor
+	cmp #0		;pos_row,x
 	bne next	; Try another teacher
 
 	; The teacher is close, but is he facing

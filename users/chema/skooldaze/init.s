@@ -58,8 +58,8 @@ tmp		.dsb 2
 
 _main
 .(
-
 	jsr _GenerateTables 
+
 	jsr _hires
 	//paper(6);ink(0);
 

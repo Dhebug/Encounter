@@ -843,11 +843,17 @@ loop2
 
 draw_sprites
 .(
+	lda tile_col
+	sta smc_tilecol+1
+	lda tile_row
+	sta smc_tilerow+1
+
 	ldx #MAX_CHARACTERS-1	
 loop
 	; Check if the character overlaps the current tile
 	; start with the col
-	lda tile_col
+smc_tilecol
+	lda #0	;tile_col
 	sec
 	sbc pos_col,x
 	bmi skip
@@ -856,7 +862,8 @@ loop
 	sta smc_row+1
 
 	; now the row
-	lda tile_row
+smc_tilerow
+	lda #0	;tile_row
 	sec
 	sbc pos_row,x
 	bmi skip
@@ -875,10 +882,12 @@ smc_row
 
 	; Get the UDG number
 	lda as_pointer_low,x
-	sta tmp
+	sta smc_udgp+1	;tmp
 	lda as_pointer_high,x
-	sta tmp+1
-	lda (tmp),y
+	sta	smc_udgp+2	;tmp tmp+1
+smc_udgp
+	lda $1234,y
+	;lda (tmp),y
 	beq skip	; If it is 0, then don't do anything
 
 	; Good, now get the pointer to the graphic and mask, that is multiplying index by 8
@@ -897,9 +906,7 @@ smc_row
 	asl			
 	rol tmp+1
 #endif
-	
-				
-				
+
 	; If tiles are arranged smartly, we can do this...
 
 	; Carry must be clear here

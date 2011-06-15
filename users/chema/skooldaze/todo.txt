@@ -29,3 +29,34 @@ along with the new one.
 * Rockitt sometimes ask to write an essay with a title, but he is
   in the map room... Maybe this is corrected when the
   routines to write on blackboards are done?
+
+
+
+	a b c d e f... x y z
+    ^			       ^
+
+Move_back(i)
+	list(i)->list(p2)
+	list(p2)->list(i)
+	p1++
+	p2--
+
+	a b c z e f... x y d
+	  ^              ^
+	 	
+
+	a z c d e f... x y b
+	  ^              ^
+	a z y d e f... x c b
+	    ^          ^ 
+
+
+Move_front(i)
+	list(i)->list(p1)
+	list(p1)->list(i)
+	p1--
+	p2++
+
+	a z b d e f... x c y
+	  ^              ^
+				     
