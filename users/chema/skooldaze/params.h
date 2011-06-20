@@ -184,37 +184,37 @@
 
 
 ;;; Collision map
-#define WALLTOPFLOOR		76-2
-#define WALLMIDDLEFLOOR		52-2
-#define WALLMIDDLEFLOOR2	106-2	
+#define WALLTOPFLOOR		77
+#define WALLMIDDLEFLOOR		53
+#define WALLMIDDLEFLOOR2	107
 
 ;; Stairs
 
 ; The bottom and top cols are all equal
-#define STAIRLBOTTOM		26-1
-#define STAIRLTOP			17
-#define STAIRRBOTTOM		96-1
-#define STAIRRTOP			104
+#define STAIRLBOTTOM		24
+#define STAIRLTOP			STAIRLBOTTOM-7
+#define STAIRRBOTTOM		96
+#define STAIRRTOP			STAIRRBOTTOM+7
 
 
 ; Position of chairs
 ; Reading room
-#define CH_READR			76-2-2
-#define CH_READL			64-2
+#define CH_READR			74	;76-2-2
+#define CH_READL			62	;64-2
 
 ; Map room
-#define CH_MAPR				96-2
-#define CH_MAPL				86-2
+#define CH_MAPR				96	;96-2
+#define CH_MAPL				84	;86-2
 
 ; White room
-#define CH_WHITER			52-2-2
-#define CH_WHITEL			38-2
+#define CH_WHITER			50	;52-2-2
+#define CH_WHITEL			38	;38-2
 
 ; Exam room
-#define CH_EXAMAR			92-2
-#define CH_EXAMAL			80-2
-#define CH_EXAMBR			72-2
-#define CH_EXAMBL			58-2
+#define CH_EXAMAR			87	;92-2
+#define CH_EXAMAL			75	;80-2
+#define CH_EXAMBR			70	;72-2
+#define CH_EXAMBL			58	;58-2
 
 
 

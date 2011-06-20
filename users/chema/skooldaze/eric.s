@@ -100,7 +100,7 @@ left
 	; Is he on the top floor
 	cmp #3
 	bne middle
-	cpy #WALLTOPFLOOR+2
+	cpy #WALLTOPFLOOR+1
 	bne proceed
 	rts
 middle
@@ -108,7 +108,7 @@ middle
 	bne otherwall
 	rts
 otherwall
-	cpy #WALLMIDDLEFLOOR2+2
+	cpy #WALLMIDDLEFLOOR2+1
 	bne proceed
 	rts
 proceed
@@ -162,15 +162,15 @@ left
 	; Is he on the top floor
 	cmp #3
 	bne middle
-	cpy #WALLTOPFLOOR
+	cpy #WALLTOPFLOOR-3
 	bne proceed
 	rts
 middle
-	cpy #WALLMIDDLEFLOOR-1
+	cpy #WALLMIDDLEFLOOR-3
 	bne otherwall
 	rts
 otherwall
-	cpy #WALLMIDDLEFLOOR2
+	cpy #WALLMIDDLEFLOOR2-3
 	bne proceed
 	rts
 proceed
@@ -361,11 +361,14 @@ rightside
 notstairs
 	; Eric is not at a staircase... so sit down
 
+	sty tmp7
   	jsr s_check_chair	; Returns Z=1 if there is a chair and C=1 if the 
 						; character needs to turn round
 	bne notyet
+	ldy tmp7
 	jmp s_knock_and_sit; s_sit_char
 notyet
+	ldy tmp3
 	; Then sit on the floor
 	lda #5
 	jmp update_animstate

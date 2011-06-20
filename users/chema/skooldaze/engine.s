@@ -780,7 +780,14 @@ smc_p
 	; If UDG data is alinged to a page for each section
 	; we only need the high part of the pointer.
 	; We may move this to a table, but it would use 512 bytes.
+	; BEWARE: NOW ONLY 3 Sections
+	; Sec 1: 1-33 (226 tiles)
+	; Sec 2: 34-74 (101 tiles, blackboards are here)
+	; Sec 3: 75-128 (216 tiles)
+	; Shields are missing...
 
+
+	/*
 	cpy #32
 	bcs sec2
 	lda #>udg_skool
@@ -797,6 +804,18 @@ sec3
 	bne gotit
 sec4
 	lda #>udg_skool4
+	*/
+	cpy #33
+	bcs sec2
+	lda #>udg_skool
+	bne gotit
+sec2
+	cpy #74
+	bcs sec3
+	lda #>udg_skool2
+	bne gotit
+sec3
+	lda #>udg_skool3
 gotit
 	clc
 #ifdef FULLTABLEMUL8
