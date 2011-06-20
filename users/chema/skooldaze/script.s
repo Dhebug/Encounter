@@ -236,9 +236,11 @@ s_check_chair
 	bcs rmp	; We are to the right of the map room wall
 
 	; We are in the reading room
+	ldy #CH_READL	; For later search
 	cmp #CH_READL	; x-coord of the leftomst chair
 	bcs noret1
 	; Return with the carry set
+ret_cs
 	sec
 	rts
 noret1
@@ -246,15 +248,32 @@ noret1
 ppp
 	bcc maybe1
 	; Return with carry clear
+ret_cc
 	clc
 	rts
 maybe1
+	; NOT TRUE ANYMORE
 	; Valid seats in even coords..
-	and #%00000001
+	;and #%00000001
+
+.(
+	sta tmp7+1
+loopchair
+	cpy tmp7+1
+	bcs foundit		; Or not...
+	iny
+	iny
+	iny
+	bne loopchair	; jumps always
+.)
+foundit
+	clc	; Return with carry flag clear (if C=1 the char must turn, which has already been tested)
 	rts	; Return with zero flag set if we are beside a chair
 rmp
 	; We are in the map room
+	ldy #CH_MAPL	; For later search
 	cmp #CH_MAPL
+	;bcc ret_cs
 	bcs notyet2
 	sec
 	rts
@@ -268,7 +287,10 @@ middle_floor
 	cmp #WALLMIDDLEFLOOR
 	bcs exam_room
 	; We are in the white room
+
+	ldy #CH_WHITEL	; For later search
 	cmp #CH_WHITEL
+	;bcc ret_cs
 	bcs noret2
 	sec
 	; Return with carry set
@@ -282,6 +304,7 @@ noret2
 exam_room
 	; Ok we are in the exam room
 	cmp #CH_EXAMBL
+	;bcc ret_cs
 	bcs notyet3
 	sec
 	rts
@@ -289,11 +312,12 @@ notyet3
 	cmp #CH_EXAMAL
 	bcc otherset
 
+	ldy #CH_EXAMAL	; For later search
 	cmp #CH_EXAMAR
-/*	bcs notyet4
-	sec
-	rts
-notyet4*/
+;	bcs notyet4
+;	sec
+;	rts
+;notyet4
 	jmp ppp
 
 otherset
@@ -301,6 +325,7 @@ otherset
 	; Trick to reuse code... Unnecessary here?
 	;clc
 	;adc #1
+	;ldy #CH_EXAMBL	; For later search
 	cmp #CH_EXAMBR
 	jmp ppp
 .)
@@ -790,7 +815,6 @@ s_Einstein_seated
 	bcs nocarry
 	dec tmp+1
 nocarry
-
 
 	; And place it as the current command address...
 	lda tmp
@@ -1810,15 +1834,15 @@ next
 	beq middlefloor
 	; It is on the top floor... will it hit the wall?
 	lda tmp
-	cmp #WALLTOPFLOOR+2
+	cmp #WALLTOPFLOOR
 	beq terminate_pellet
 	bne moveit
 middlefloor
 	; We have to check for two walls here
 	lda tmp
-	cmp #WALLMIDDLEFLOOR+2
+	cmp #WALLMIDDLEFLOOR
 	beq terminate_pellet
-	cmp #WALLMIDDLEFLOOR2+2
+	cmp #WALLMIDDLEFLOOR2
 	beq terminate_pellet
 moveit
 	; Ok the pellet may move... time to check if it hits somebody
@@ -2147,11 +2171,14 @@ s_usc_lchair
 	lsr
 	bcs noturn
 
+	sty tmp7
 	jsr s_check_chair	; Returns Z=1 if there is a chair and C=1 if the 
 						; character needs to turn round
 	bne notyet
+	ldy tmp7
 	jmp s_knock_and_sit	
 notyet
+	ldy tmp3
 	bcc noturn
 	; Turn him round...
 	jmp change_direction
@@ -2618,11 +2645,20 @@ s_make_Einstein_speak
 	;sta cur_command_high,x
 
 	; Put the return address in the current command
-	; of the teacher, so control resume there when he
+	; of the teacher, so control resumes there when he
 	; finishes waiting for Einstein to speak
-	pla
+	pla	; get LSB
+	sta tmp
+	pla	; get HSB
+	sta tmp+1
+	inc tmp
+	bne noadj
+	inc tmp+1
+noadj
+	; And place it as the current command address...
+	lda tmp
 	sta cur_command_low,x
-	pla
+	lda tmp+1
 	sta cur_command_high,x
 	rts
 .)

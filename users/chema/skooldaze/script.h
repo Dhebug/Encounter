@@ -179,39 +179,39 @@ character's buffer:
 ;;; --------------------------------------
 
 #define D_FIRE_ESCAPE		3,124
-#define D_HEAD_STUDY		3,6+1
+#define D_HEAD_STUDY		3,7
 #define D_HEAD_DOORWAY		3,10
 #define D_LIBRARY_LEFT		3,21
-#define D_READING_ENTRANCE	3,56		
+#define D_READING_ENTRANCE	3,54		
 #define D_STAFF_ROOM		10,12
 #define D_GYM				17,124
-#define	D_BIG_WINDOW		17,6+2
-#define D_EXAM_BOARD		10,60
-#define D_WHITE_BOARD		10,40
-#define D_READING_BOARD		3,60
-#define D_DINNER_TABLE		17,72
+#define	D_BIG_WINDOW		17,8
+#define D_EXAM_BOARD		10,55
+#define D_WHITE_BOARD		10,34
+#define D_READING_BOARD		3,56
+#define D_DINNER_TABLE		17,75
 #define D_DINNER_BENCH		17,56
 #define D_DINNER_HALL		17,60
-#define D_LIBRARY			3,46
-#define D_WHITE_ROOM		10,45
+#define D_LIBRARY			3,35
+#define D_WHITE_ROOM		10,40
 #define D_EXAM_ROOM			10,77
-#define D_READING_ROOM		3,73-2
-#define D_MAP_ROOM			3,96-2;89
+#define D_READING_ROOM		3,71
+#define D_MAP_ROOM			3,90
 
 #define D_WHITE_DOORWAY		10,30
-#define D_ABOARD_WHITE		10,47
-#define D_ABOARD1_WHITE		10,46
+#define D_ABOARD_WHITE		10,45
+#define D_ABOARD1_WHITE		10,44
 
-#define D_EXAM_DOORWAY		10,93
+#define D_EXAM_DOORWAY		10,90
 #define D_POS_EXAM			10,65
 
 #define D_LIBRARY_INT		3,40
-#define D_READING_DOORWAY	3,54
+#define D_READING_DOORWAY	3,53
 #define D_POS_READING1		3,69
 #define D_POS_READING2		3,66
 
 #define D_MAP_DOORWAY		3,98
-#define D_MAP_MAP			3,80
+#define D_MAP_MAP			3,79
 #define D_POS_MAP			3,83
 
 ;;; Script event identifiers
