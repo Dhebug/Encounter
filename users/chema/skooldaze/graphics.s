@@ -495,7 +495,7 @@ udg_skool
 
 end_udg_skool
 
-.dsb 256-(*&255)
+;.dsb 256-(*&255)
 udg_skool2
 
 ; Tile data for Skool (cols 34-74)
@@ -705,6 +705,16 @@ udg_skool2
 .byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 103
 .byt $4b, $6b, $6b, $6f, $6f, $6f, $7f, $7f
+
+
+; For the blackboards we need
+board_read
+	.dsb 11*2*8, %01111111
+board_white
+	.dsb 11*2*8, %01111111
+board_exam
+	.dsb 11*2*8, %01111111
+
 end_udg_skool2
 
 .dsb 256-(*&255)

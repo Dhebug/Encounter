@@ -17,7 +17,8 @@
 #define SIT_NASTY		2
 #define SIT_CANE		3
 
-; Token for 8 spaces
+; Tokens
+#define NEWLINE			2
 #define SPACES_8		3
 #define ERIC_NAME		4
 #define BOYW_NAME		5

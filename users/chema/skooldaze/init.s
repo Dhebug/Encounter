@@ -159,6 +159,12 @@ noright
 	lda #0
 	sta Eric_mid_timer
 
+	lda #0
+	sta pos_test
+loopkk
+	jsr write_char_board
+	bne loopkk
+
 	; Initialize SRB
 
 	ldx #(21*5-1)
