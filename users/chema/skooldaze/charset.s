@@ -510,6 +510,201 @@ cont
 	rts
 .)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Write a message character into the 
+; blackboard closest to a character
+; Returns with the zero flag set if we are 
+; finished
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Temporary variables for testing
+bboard_p	.word board_read
+bboard_col	.byt 0
+bboard_tile	.byt 0
+bboard_who	.byt $ff	
+
+toggle_line_board
+.(
+	lda bboard_tile
+	cmp #(11)
+	bcc top_line
+	; We are on bottom line, change
+	lda #0
+	sta bboard_tile
+	bne finish
+top_line
+	; We are on top line, change
+	lda #11
+	sta bboard_tile
+finish
+	; Store the coordinates of the next free col and return with Z=0
+	lda #0
+	sta bboard_col
+	rts
+.)
+
+inc_col_counter
+.(
+	ldy bboard_col
+	iny
+	cpy #6
+	bne retme
+	ldy #0
+	inc bboard_tile
+retme	
+	sty bboard_col
+	rts
+.)
+
+
+testb .asc "Hello ORIC",2,"Chema",0
+pos_test	.byt 0
+get_nc
+.(
+	ldx pos_test
+	inc pos_test
+	lda testb,x
+	rts
+.)
+
+write_char_board
+.(
+	;jsr get_next_char
+	jsr get_nc
+	bne notzero
+	; The speccy version sets the pixel coordinates of
+	; the next char to be written to $ff here before returning
+	rts
+notzero
+	; Save register X
+	stx savx+1
+
+	; Save the character code briefly
+	pha
+
+	; Get the identifier of the blackboard being written to
+
+	; Get back the character code
+	pla
+	cmp #NEWLINE
+	bne nonl
+	; It is a newline change the row where we are writting
+	jsr toggle_line_board
+	lda #$ff	
+	rts
+nonl
+
+	;This entry point is used by the routine at 63146 when ERIC is writing on a blackboard with BC=32684 (Reading Room blackboard), 32690 (White Room blackboard), or 32696 (Exam Room blackboard).
++write_char_board_ex
+	; Set the pointers
+	ldx bboard_p
+	stx tmp1
+	ldx bboard_p+1
+	stx tmp1+1
+	
+	; Get the character's width
+  	sec
+	sbc #32
+	tax
+	
+	; As char bitmaps rely on different pages, it is enough 
+	; to update this...
+
+	lda #>charset_col1
+	sta smc_pcol+2
+	
+	lda char_widths,x
+	sta ch_count
+
+	; Is there enough space to print it?
+	ldy bboard_tile
+	cpy #10
+	bne goon
+	; We are in the last tile... check
+	clc
+	adc bboard_col
+	cmp #6
+	bcc goon
+	; Toggle line
+	jsr toggle_line_board
+goon
+	
+loop_char
+smc_pcol
+	lda charset_col1,x
+	jsr slide_col_board
+
+	; Prepare pointer to the next column
+	; as char bitmaps rely on different pages, it is enough 
+	; to increment this...
+	inc smc_pcol+2
+
+	; Increment column counter
+	jsr inc_col_counter
+
+	dec ch_count
+	bne loop_char
+
+	; Add one blank column
+	jsr inc_col_counter
+
+
+savx
+	ldx #0
+	; We are not finished
+	lda #$ff
+	rts
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Slide a pixel column into a blackboard
+; buffer (this is to save a little
+; memory).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+slide_col_board
+.(
+	pha
+	; Get byte and col number
+
+	ldy bboard_col
+	lda tab_bit8,y
+	lsr
+	lsr
+	eor #$ff
+	sta tmp+1
+	lda bboard_tile
+	asl
+	asl
+	asl
+	tay
+
+	; Now "chalk" the pixels
+	stx savx+1
+	pla
+	sta tmp
+	ldx #8
+loop2
+	lda tmp+1
+	asl tmp
+	bcs setit
+	lda #$ff
+setit
+	and (tmp1),y
+	sta (tmp1),y
+
+	iny
+	dex
+	bne loop2
+savx
+	ldx #0
+
+	rts
+.)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Slide a message character into the 
 ; speech bubble text window
@@ -639,14 +834,14 @@ nocarry1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Get the next character of a message being 
-; spoken or written. Used by the routines at
-; 28994 and 29706. Returns with the next 
+; spoken or written. Used by the routines 
+; slide_char_bubble and write_char_board. 
+; Returns with the next 
 ; character in A 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 get_next_char
 .(
-	; TODO -- THIS IS INCOMPLETE!!!
 	; Check if we are in a submessage at this moment
 	lda var6,x
 	beq notsubm
@@ -731,6 +926,10 @@ end
 	rts	
 	
 token2
+	; Check if is < 3 (2 means newline)
+	cmp #3
+	bcc end
+
 	; Look up the pointer in the names/extras table.
 	; Store it in the var5/var6 pair and jump back to the
 	; submessage processing (getting in A the first char)
