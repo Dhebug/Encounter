@@ -439,16 +439,42 @@ s_tell_boywander
 s_find_eric
 s_follow_boy1
 s_goto_random_trip
-s_write_bl
 .(
 	inc pcommand,x
 	rts
 .)
 
-s_write_bl_c
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make BOY WANDER write on a blackboard
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_write_bl
 .(
 	inc pcommand,x
+	lda #<s_isc_write
+	sta i_subcom_low,x
+	lda #>s_isc_write
+	sta i_subcom_high,x
+	jmp s_isc_write
+.)
+
+s_write_bl_c
+.(
+	; Get event to check
+	ldy pcommand,x
+	iny
+
+	lda (tmp0),y
+
+	; Get byte and bitmask
+	jsr s_get_flagbyte
+
+	; Check if it is flagged
+	and lesson_signals,y
+	bne notyet
 	inc pcommand,x
+	jmp s_write_bl
+notyet
 	rts
 .)
 
@@ -2663,11 +2689,66 @@ noadj
 	rts
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a character write on a blackboard
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_isc_write
+.(
+	; Get the nearest blackboard in tmp3
+	jsr get_blackboard
+	ldy #4
+	lda (tmp3),y	; Who wrote there?
+	bmi cont
+	jmp terminate_subcommand
+cont
+	; The board is clean... go and write on it
+	; Store the id of the character who is writting
+	txa
+	sta (tmp3),y
+	; Zero out submessages
+	lda #0
+	sta var5,x
+	sta var6,x
+	cpx #CHAR_FIRST_TEACHER
+	bcc isbwander
+	; We are dealing with a teacher
+	rts	
+isbwander
+	; It is Boy Wander get a message
+	lda #<st_bwboard
+	sta tmp0
+	lda #>st_bwboard
+	sta tmp0+1
+	jsr randgen
+	and #%111
+	jsr search_string
+	lda tmp0
+	sta var3,x
+	lda tmp0+1
+	sta var4,x
+
+	; And set the next address to his subcommand pointer (below)
+	lda #<make_him_write
+	sta i_subcom_low,x
+	lda #>make_him_write
+	sta i_subcom_high,x
+make_him_write
+	jsr write_char_board
+	bne notfinished
+	jsr update_animstate
+	jmp terminate_subcommand
+notfinished
+	lda #9
+	cmp anim_state,x
+	beq flop
+	.byt $2c
+flop
+	lda #10
+	jmp update_animstate
+.)
 
 s_isc_wipe1
 s_isc_wipe2
-s_isc_write
-
 s_isc_findEric
 s_isc_movemidstride
 .(

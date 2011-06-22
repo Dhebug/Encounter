@@ -667,6 +667,58 @@ end
 	rts
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Updates the SRB, marking the tile at coords
+; X,Y as invalid
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+update_SRB
+.(
+	; Is the tile visible?
+	txa
+	sec
+	sbc first_col
+	cmp #$FD ; (-3)
+	bmi endme		
+	cmp #LAST_VIS_COL+1
+	bmi doit
+endme
+	rts
+doit
+	; It is and the corrected coordinate is in reg A now
+	; save it for a moment
+	pha
+
+	; Get pointer to the correct row of SRB
+	tya
+	sta tmp
+	asl
+	asl
+	adc tmp
+	adc #<SRB
+	sta tmp4
+	lda #>SRB	
+	adc #0
+	sta tmp4+1
+
+	; Get the correct byte of the SRB row
+	pla
+	pha
+	lsr 
+	lsr 
+	lsr
+	clc
+	tay
+	; Reg Y holds the offset of inside the SRB
+	; Now get the bitmask
+	pla
+	and #%00000111
+	tax
+	lda tab_bit8,x
+	ora (tmp4),y
+	sta (tmp4),y
+	rts
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Renders the screen, only redrawing tiles set in the SRB
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
