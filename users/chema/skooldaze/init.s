@@ -114,7 +114,7 @@ _init
 	sta first_col
 	sta current_lesson_index
 
-
+.(
 	ldx #20
 loop
 	; Set initial positions
@@ -148,7 +148,7 @@ noright
 
 	dex
 	bpl loop
-
+.)
 	; Initialize game variables
 	lda #0
 	sta last_char_moved
@@ -159,12 +159,41 @@ noright
 	lda #0
 	sta Eric_mid_timer
 
-	lda #0
-	sta pos_test
-loopkk
-	jsr write_char_board
-	bne loopkk
+	; Clear blackboards
+.(
+	ldx #2
+loopbb
+	lda tab_bboards_high,x
+	sta tmp+1
+	lda tab_bboards_low,x
+	sta tmp
 
+	ldy #0
+	lda (tmp),y
+	sta loop+1
+	iny
+	lda (tmp),y
+	sta loop+2
+	iny
+	lda #1
+	sta (tmp),y
+	ldy #4
+	lda #$ff
+	sta (tmp),y
+	
+
+	dec loop+1
+
+	ldy #11*2*8
+	lda #$7f
+loop
+	sta board_white,y
+	dey 
+	bne loop
+		
+	dex
+	bpl loopbb
+.)
 	; Initialize SRB
 
 	ldx #(21*5-1)

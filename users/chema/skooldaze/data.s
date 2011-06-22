@@ -314,6 +314,16 @@ cur_command_low
 pcommand
 	.dsb MAX_CHARACTERS,0
 
+bexam_desc
+	.word board_exam	; Pointer to board UDGs
+	.byt 0				; Column inside tile which is the first one clean
+	.byt 0				; Current tile being written
+	.byt $ff			; Who last wrote here? $ff=empty
+	.byt 55,9			; Tile coordinates of this board
+
+tab_bboards_low
+	.byt <bread_desc, <bwhite_desc, <bexam_desc
+
 free_r6
 .dsb (256-32)-(*&255)
 ; Personal timetable for little boy 3
@@ -343,6 +353,16 @@ tab_masks
 	.dsb 3,  >(teacher_masks-8)
 	.dsb 1,  >(teacher2_masks-8)
 	.dsb 2,  >(children_masks-8)
+
+bwhite_desc
+	.word board_white	; Pointer to board UDGs
+	.byt 0				; Column inside tile which is the first one clean
+	.byt 0				; Current tile being written
+	.byt $ff			; Who last wrote here? $ff=empty
+	.byt 34,9			; Tile coordinates of this board
+
+tab_bboards_high
+	.byt >bread_desc, >bwhite_desc, >bexam_desc
 
 free_r7
 .dsb (256-32)-(*&255)
@@ -375,6 +395,13 @@ ini_flags
 	.byt 0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0,IS_FACING_RIGHT,0
 	.byt IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK,IS_TEACHER|IS_SLOW_WALK
 	.byt IS_FAST_WALK,IS_FAST_WALK
+
+bread_desc
+	.word board_read	; Pointer to board UDGs
+	.byt 0				; Column inside tile which is the first one clean
+	.byt 0				; Current tile being written
+	.byt $ff			; Who last wrote here? $ff=empty
+	.byt 56,3			; Tile coordinates of this board
 
 free_r8
 .dsb (256-32)-(*&255)
@@ -2382,8 +2409,8 @@ tab_bit8
 
 ;;;;;; Main timetable (see script.h)
 main_timetable
-	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
-	.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
+	.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
 	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
 	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
 	.byt WITHIT_WHITEROOM, REV_LIBRARY1, PLAYTIME4, ROCKITT_WHITEROOM

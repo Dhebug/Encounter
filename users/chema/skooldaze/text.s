@@ -329,4 +329,46 @@ st_ans
 	.asc PLEASESIR, "It was in ", TEMPLATE_ANSWER, SPACES_8,0
 	.asc PLEASESIR, "It was the BATTLE OF ", TEMPLATE_ANSWER, SPACES_8,0
 
+st_bwboard
+	.asc "i hate",NEWLINE,"fizziks",0
+	.asc "i hate sums",0
+	.asc "skool rools",NEWLINE,"o k",0
+	.asc "i hate skool",0
+	.asc "speling iz",NEWLINE,"boaring",0
+	.asc "i love",NEWLINE,"SPACE:1999",0
+	.asc "1337",NEWLINE,"is grate",0 
+	.asc "skool dinners",NEWLINE,"are orrible",0
+st_teachboard
+	.asc "THE 47 TIMES",NEWLINE,"TABLE",0
+	.asc "QUADRATIC",NEWLINE,"EQUATIONS",0
+	.asc "WHY SUMS ARE",NEWLINE,"FUN",0
+	.asc "VECTORS AND",NEWLINE,"MATRICES",0
+	.asc "ISOSCELES",NEWLINE,"TRIANGLES",0
+	.asc "PYTHAGORAS",NEWLINE,"THEOREM",0
+	.asc "FACTORS",0
+	.asc "THE AREA OF",NEWLINE,"A CIRCLE",0
+	.asc "The Periodic",NEWLINE,"Table",0
+	.asc "Splitting",NEWLINE,"The Atom",0
+	.asc "Explosions I",NEWLINE,"have known",0
+	.asc "How to blow",NEWLINE,"yourself up",0
+	.asc "Things to do",NEWLINE,"with TNT",0
+	.asc "Chemistry",NEWLINE,"of dynamite",0
+	.asc "First aid",NEWLINE,"for chemists",0
+	.asc "Fast ways to",NEWLINE,"open doors",0
+	.asc "MANCHESTER",NEWLINE,"MONSOONS",0
+	.asc "THE CLIMATE",NEWLINE,"OF CLAPHAM",0
+	.asc "THE PEAKS",NEWLINE,"OF PERU",0
+	.asc "THE GLASGOW",NEWLINE,"RAIN-FOREST",0
+	.asc "THE EXPORTS",NEWLINE,"OF FIJI",0
+	.asc "ACTIVE",NEWLINE,"VOLCANOES",0
+	.asc "POP MUSIC IN",NEWLINE,"ANTARCTICA",0
+	.asc "THE UPLANDS",NEWLINE,"OF RUTLAND",0
+	.asc "Industrial",NEWLINE,"Revolution",0
+	.asc "The Norman",NEWLINE,"Conquest",0
+	.asc "The Wars of",NEWLINE,"the Roses",0
+	.asc "The Spanish",NEWLINE,"Armada",0
+	.asc "The First",NEWLINE,"Crusade",0
+	.asc "Magna Carta",0
+	.asc "The Boston",NEWLINE,"Tea Party",0
+	.asc "The Black",NEWLINE,"Death",0
 

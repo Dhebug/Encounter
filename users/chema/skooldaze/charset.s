@@ -512,6 +512,94 @@ cont
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Auxiliar routines for writting 
+; on blackboards... used below
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+toggle_line_board
+.(
+	ldy #3
+	lda (tmp3),y
+	cmp #(11)
+	bcc top_line
+	; We are on bottom line, change
+	lda #0
+	sta (tmp3),y
+	bne finish
+top_line
+	; We are on top line, change
+	lda #11
+	sta (tmp3),y
+finish
+	; Store the coordinates of the next free col and return with Z=0
+	lda #0
+	dey
+	sta (tmp3),y
+	rts
+.)
+
+inc_col_counter
+.(
+	ldy #2
+	lda (tmp3),y
+	clc
+	adc #1
+	cmp #6
+	bne retme
+	jsr mark_tile_dirty
+	ldy #3
+	lda (tmp3),y
+	clc
+	adc #1
+	sta (tmp3),y
+	dey
+	lda #0
+retme	
+	sta (tmp3),y
+	rts
+.)
+
+mark_tile_dirty
+.(
+	; Save registers
+	pha
+	stx savx+1
+	sty savy+1
+
+	; Mark the tile in the SRB...
+	lda #0
+	sta tmp
+	ldy #3
+	lda (tmp3),y
+	cmp #11
+	bcc first_row
+	; We are on the second row
+	sec
+	sbc #11
+	ldy #1
+	sty tmp
+first_row
+	clc
+	ldy #5
+	adc (tmp3),y
+	tax
+	ldy #6
+	lda (tmp3),y
+	adc tmp
+	tay	
+	jsr update_SRB
+	
+	; Recover registers
+	pla
+savx	
+	ldx #0
+savy
+	ldy #0
+	rts
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Write a message character into the 
 ; blackboard closest to a character
@@ -519,60 +607,9 @@ cont
 ; finished
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Temporary variables for testing
-bboard_p	.word board_read
-bboard_col	.byt 0
-bboard_tile	.byt 0
-bboard_who	.byt $ff	
-
-toggle_line_board
-.(
-	lda bboard_tile
-	cmp #(11)
-	bcc top_line
-	; We are on bottom line, change
-	lda #0
-	sta bboard_tile
-	bne finish
-top_line
-	; We are on top line, change
-	lda #11
-	sta bboard_tile
-finish
-	; Store the coordinates of the next free col and return with Z=0
-	lda #0
-	sta bboard_col
-	rts
-.)
-
-inc_col_counter
-.(
-	ldy bboard_col
-	iny
-	cpy #6
-	bne retme
-	ldy #0
-	inc bboard_tile
-retme	
-	sty bboard_col
-	rts
-.)
-
-
-testb .asc "Hello ORIC",2,"Chema",0
-pos_test	.byt 0
-get_nc
-.(
-	ldx pos_test
-	inc pos_test
-	lda testb,x
-	rts
-.)
-
 write_char_board
 .(
-	;jsr get_next_char
-	jsr get_nc
+	jsr get_next_char
 	bne notzero
 	; The speccy version sets the pixel coordinates of
 	; the next char to be written to $ff here before returning
@@ -585,6 +622,7 @@ notzero
 	pha
 
 	; Get the identifier of the blackboard being written to
+	jsr get_blackboard
 
 	; Get back the character code
 	pla
@@ -596,18 +634,21 @@ notzero
 	rts
 nonl
 
-	;This entry point is used by the routine at 63146 when ERIC is writing on a blackboard with BC=32684 (Reading Room blackboard), 32690 (White Room blackboard), or 32696 (Exam Room blackboard).
+	;This entry point is used by the routine at 63146 when ERIC is writing on a blackboard 
+	;with tmp3 pointing to the board control buffer and A with the character to be written.
 +write_char_board_ex
-	; Set the pointers
-	ldx bboard_p
-	stx tmp1
-	ldx bboard_p+1
-	stx tmp1+1
-	
 	; Get the character's width
   	sec
 	sbc #32
 	tax
+	
+	; Setup pointer tmp1
+	ldy #0
+	lda (tmp3),y
+	sta tmp1
+	iny
+	lda (tmp3),y
+	sta tmp1+1
 	
 	; As char bitmaps rely on different pages, it is enough 
 	; to update this...
@@ -619,12 +660,15 @@ nonl
 	sta ch_count
 
 	; Is there enough space to print it?
-	ldy bboard_tile
-	cpy #10
+	ldy #3
+	lda (tmp3),y
+	cmp #10
 	bne goon
 	; We are in the last tile... check
+	ldy #2
+	lda ch_count
 	clc
-	adc bboard_col
+	adc (tmp3),y
 	cmp #6
 	bcc goon
 	; Toggle line
@@ -649,7 +693,7 @@ smc_pcol
 
 	; Add one blank column
 	jsr inc_col_counter
-
+	jsr mark_tile_dirty
 
 savx
 	ldx #0
@@ -666,16 +710,18 @@ savx
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 slide_col_board
 .(
-	pha
+	sta tmp
 	; Get byte and col number
-
-	ldy bboard_col
+	ldy #2
+	lda (tmp3),y
+	tay
 	lda tab_bit8,y
 	lsr
 	lsr
 	eor #$ff
 	sta tmp+1
-	lda bboard_tile
+	ldy #3
+	lda (tmp3),y
 	asl
 	asl
 	asl
@@ -683,8 +729,6 @@ slide_col_board
 
 	; Now "chalk" the pixels
 	stx savx+1
-	pla
-	sta tmp
 	ldx #8
 loop2
 	lda tmp+1
@@ -701,6 +745,35 @@ setit
 savx
 	ldx #0
 
+	rts
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Get the identifier of the blackboard
+; closest to a character, return a pointer 
+; to the id block in tmp3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+get_blackboard
+.(
+	; Assume it is the reading room
+	ldy	#0
+	lda pos_row,x
+	cmp #3
+	beq found
+	; Distinguish from white and exam rooms 
+	lda pos_col,y
+	cmp #WALLMIDDLEFLOOR
+	bcc white
+	ldy #2
+	bne found	; Jumps always		
+white
+	ldy #1
+found
+	lda tab_bboards_low,y
+	sta tmp3
+	lda tab_bboards_high,y
+	sta tmp3+1
 	rts
 .)
 
