@@ -26,6 +26,9 @@ along with the new one.
 
 * Exam room not visible completely
 
+* Sometimes (hardly) the attributes of first and second column
+ are messed up (around row 17)... surely related with blackboard writting
+
 	a b c d e f... x y z
     ^			       ^
 

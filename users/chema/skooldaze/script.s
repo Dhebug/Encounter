@@ -634,8 +634,14 @@ s_class_no_Eric
 	; essay or go to a page of their books
 
 	jsr randgen
-	cmp #160
-	bcc page_in_book
+	cmp #180
+	bcs page_in_book
+
+	lda #<s_isc_write
+	sta tmp0
+	lda #>s_isc_write
+	sta tmp0+1
+	jsr call_subcommand
 	
 	lda #<st_write_essay
 	sta tmp0
@@ -785,7 +791,7 @@ Ericisin
 	; 180 times out of 256 using call_subcommand
 	jsr randgen
 	cmp #180
-	bcc no_essay
+	bcs no_essay
 	lda #<s_isc_write
 	sta tmp0
 	lda #>s_isc_write
