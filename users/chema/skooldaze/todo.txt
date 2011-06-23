@@ -24,14 +24,7 @@ along with the new one.
 
 * Pellets sometimes do not hit teachers?
 
-* The bubble lip gets at the wrong place when teacher next to the right border 
-(seems the bubble is one tile left, but the lip is not)
-
-* Blackboards are not erased properly
-
-* Second set of chairs in exam room wrong
-
-* exam room not visible completely
+* Exam room not visible completely
 
 	a b c d e f... x y z
     ^			       ^

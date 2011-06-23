@@ -325,7 +325,7 @@ otherset
 	; Trick to reuse code... Unnecessary here?
 	;clc
 	;adc #1
-	;ldy #CH_EXAMBL	; For later search
+	ldy #CH_EXAMBL	; For later search
 	cmp #CH_EXAMBR
 	jmp ppp
 .)
@@ -697,15 +697,6 @@ questions
 .)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Helper to perform the wiping of blackboard routine
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-wiping_routine
-.(
-
-.)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make a teacher conduct a class when he is 
 ; teaching Eric (and Einstein).
@@ -787,14 +778,22 @@ Ericisin
 	sta tmp0+1
 	jsr call_subcommand
 .)
-
 	; Control returns here when the teacher has 
 	; wiped the blackboard and walked to the middle 
 	; of it.
-
 	; Make the teacher write on the blackboard
 	; 180 times out of 256 using call_subcommand
+	jsr randgen
+	cmp #180
+	bcc no_essay
+	lda #<s_isc_write
+	sta tmp0
+	lda #>s_isc_write
+	sta tmp0+1
+	jsr call_subcommand
 
+	; Should the teacher tell the kids to write an essay?
+	; 10 times out of 16
 	jsr randgen
 	cmp #160
 	bcc no_essay
@@ -2776,7 +2775,23 @@ cont
 	cpx #CHAR_FIRST_TEACHER
 	bcc isbwander
 	; We are dealing with a teacher
-	rts	
+	lda #<st_teachboard
+	sta tmp0
+	lda #>st_teachboard
+	sta tmp0+1
+	jsr randgen
+	and #%111
+	sta tmp
+	; Select the set depending on the teacher
+	txa
+	sec
+	sbc #CHAR_FIRST_TEACHER
+	asl
+	asl
+	asl
+	clc
+	adc tmp
+	jmp continue
 isbwander
 	; It is Boy Wander get a message
 	lda #<st_bwboard
@@ -2785,6 +2800,7 @@ isbwander
 	sta tmp0+1
 	jsr randgen
 	and #%111
+continue
 	jsr search_string
 	lda tmp0
 	sta var3,x
@@ -2802,12 +2818,24 @@ make_him_write
 	jsr update_animstate
 	jmp terminate_subcommand
 notfinished
+	cpx #CHAR_FIRST_TEACHER
+	bcs teacheranim
+	; Animating Boy Wander
 	lda #9
 	cmp anim_state,x
 	beq flop
 	.byt $2c
 flop
 	lda #10
+	jmp update_animstate
+teacheranim
+	; Get animatory state
+	lda anim_state,x
+	beq rise_arm
+	lda #0
+	.byt $2c
+rise_arm
+	lda #4
 	jmp update_animstate
 .)
 
@@ -2882,13 +2910,19 @@ wipe
 	lda (tmp3),y
 	sta tmp0+1
 
-	lda #0
-dbug beq dbug
-
-	lda var5,x	; Y pos
+	; Now need to set up several things...
+	; First need to get the x coord of the blackboard
+	ldy #5
+	lda (tmp3),y
+	sta tmp
+	; Now calculate the XY of the tile to be wiped
+	lda var5,x	; Y pos of the blackboard tile
 	sta y_coord+1	; Store for later
-	lda var4,x	; X pos
+	lda var4,x	; X pos of blackboard tile
 	sta x_coord+1	; Store for later
+	sec
+	sbc tmp		; Relative X coordinate
+	; Now point to the correct UDG
 	asl
 	asl
 	asl
@@ -2899,28 +2933,22 @@ dbug beq dbug
 	inc tmp0+1
 nocarry1
 
+	lda #11*8
+	clc
+	adc tmp0
+	sta tmp1
+	lda #0
+	adc tmp0+1
+	sta tmp1+1
+
 	; Clear the udg data
 .(
 	ldy #7
 	lda #$7f
 wipeloop
 	sta (tmp0),y
+	sta (tmp1),y
 	dey
-	bpl wipeloop
-.)
-	lda #11*8
-	clc
-	adc tmp0
-	sta tmp0
-	bcc nocarry2
-	inc tmp0+1
-nocarry2
-.(
-	ldy #7
-	lda #$7f
-wipeloop
-	sta (tmp0),y
-	dey 
 	bpl wipeloop
 .)
 
@@ -2945,10 +2973,10 @@ savx
 finished
 	; Set tile=0 and col=1
 	ldy #2
-	lda #0
+	lda #1
 	sta (tmp3),y
 	iny
-	lda #1
+	lda #0
 	sta (tmp3),y
 	; Mark the board as wiped
 	iny

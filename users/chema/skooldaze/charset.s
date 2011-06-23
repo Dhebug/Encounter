@@ -218,7 +218,6 @@ maybe1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 bubble_coords
 .(
-
 	lda pos_col,x
 	sec
 	sbc first_col
@@ -256,14 +255,35 @@ smc_colcorr
 	lda #LAST_VIS_COL-8
 nothing
 	sta bubble_col
+	cmp bubble_lip_col
+	bcc nocor1
+	sta bubble_lip_col
+	rts
+nocor1
+	clc
+	adc #7
+	cmp bubble_lip_col
+	bcs nocor2
+	sta bubble_lip_col
+nocor2
+	rts
 
+/*
 	; Correct lip col position
 	lda bubble_lip_col
 	cmp bubble_col
 	bcs nocorr
 	inc bubble_lip_col
-nocorr
 	rts
+nocorr
+	sec
+	sbc #8
+	cmp bubble_col
+	bcc nocorr2
+	dec bubble_lip_col
+nocorr2
+	rts
+*/
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -288,11 +308,9 @@ cont
 	inc bubble_on
 
 	; Get spot's above character's head
-
 	jsr bubble_coords
 
 	stx savx+1		; Save register X
-
 	; Calculate the pointer
 	ldx bubble_row
 	ldy tab_mul8,x			
@@ -534,7 +552,7 @@ top_line
 	sta (tmp3),y
 finish
 	; Store the coordinates of the next free col and return with Z=0
-	lda #0
+	lda #1
 	dey
 	sta (tmp3),y
 	rts
