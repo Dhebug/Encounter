@@ -677,8 +677,8 @@ update_SRB
 	txa
 	sec
 	sbc first_col
-	cmp #$FD ; (-3)
-	bmi endme		
+	cmp #FIRST_VIS_COL
+	bcc endme
 	cmp #LAST_VIS_COL+1
 	bmi doit
 endme

@@ -600,13 +600,36 @@ s_class_no_Eric
 	; the teacher. If we are in the Map room jump
 	; tell the kids to go to a certain page of their
 	; books.
-	
+
+	lda pos_col,x
+	cmp #WALLTOPFLOOR
+	bcs page_in_book
+
+	jsr get_blackboard
+.(
 	; Use call_subcommand to hand control
-	; over the s_clear_blackboard routine
+	; over the s_isc_wipe1 routine
+
+	lda #<s_isc_wipe1
+	sta tmp0
+	lda #>s_isc_wipe1
+	sta tmp0+1
+	jsr call_subcommand
 
 	; Make the teacher walk to the middle of the blackboard
 	; also using call_subcommand
 
+	lda pos_col,x	; Get the teacher x coordinate (now left edge of blackboard)
+	clc
+	adc #6			; Position in the middle of the blackboard
+	sta var3,x	
+	sta var4,x		; This ensures control does not come here before he reaches the destination
+	lda #<s_isc_int_dest
+	sta tmp0
+	lda #>s_isc_int_dest
+	sta tmp0+1
+	jsr call_subcommand
+.)
 	; Randomly make the teacher ask the kids to write an
 	; essay or go to a page of their books
 
@@ -673,6 +696,16 @@ questions
 	jmp s_make_char_speak
 .)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Helper to perform the wiping of blackboard routine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+wiping_routine
+.(
+
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make a teacher conduct a class when he is 
 ; teaching Eric (and Einstein).
@@ -721,8 +754,39 @@ Ericisin
 	; This is EINSTEIN's opportunity to tell tales 
 	; about hitting and blackboard defacement.
 
+	; Check if we are in the map room and avoid doing all this
+	lda pos_col,x
+	cmp #WALLTOPFLOOR
+	bcs no_essay
+
 	; With EINSTEIN's tales now safely told, it's 
 	; time to wipe the blackboard.
+
+	jsr get_blackboard
+.(
+	; Use call_subcommand to hand control
+	; over the s_isc_wipe1 routine
+
+	lda #<s_isc_wipe1
+	sta tmp0
+	lda #>s_isc_wipe1
+	sta tmp0+1
+	jsr call_subcommand
+
+	; Make the teacher walk to the middle of the blackboard
+	; also using call_subcommand
+
+	lda pos_col,x	; Get the teacher x coordinate (now left edge of blackboard)
+	clc
+	adc #6			; Position in the middle of the blackboard
+	sta var3,x	
+	sta var4,x		; This ensures control does not come here before he reaches the destination
+	lda #<s_isc_int_dest
+	sta tmp0
+	lda #>s_isc_int_dest
+	sta tmp0+1
+	jsr call_subcommand
+.)
 
 	; Control returns here when the teacher has 
 	; wiped the blackboard and walked to the middle 
@@ -2747,8 +2811,157 @@ flop
 	jmp update_animstate
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher wipe a blackboard (1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_isc_wipe1
+.(
+	jsr get_blackboard
+.)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher wipe a blackboard (2)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_isc_wipe2
+.(
+	; Check if the board is clean
+	ldy #4
+	lda (tmp3),y
+	bpl cont
+	jmp terminate_subcommand	; If it is $ff then terminate
+cont
+	; Set the address if the command to after_prepare, once
+	; this initialization has been done
+	lda #<after_prepare
+	sta i_subcom_low,x
+	lda #>after_prepare
+	sta i_subcom_high,x
+
+	; Wiping requires 11*3 steps, put that value in var3
+	lda #33
+	sta var3,x
+	; Store the y coordinate of the top row/left col of the blackboard
+	ldy #5
+	lda (tmp3),y
+	clc
+	adc #10
+	sta var4,x
+	iny
+	lda (tmp3),y
+	sta var5,x
+after_prepare
+	; Each subsequent call enters at this point
+	; Decrement the number of steps to be done
+	dec var3,x
+	bmi finished
+
+	; Check if the teacher has his arm raised or not
+	lda anim_state,x
+	cmp #4
+	beq wipe
+	lsr
+	bcs check2
+	; Time to rise hand
+	lda #4
+	jmp update_animstate
+check2
+	; He must perform a step
+	jmp step_character
+wipe
+	; Lower his arm
+	lda #0
+	jsr update_animstate
+	jsr step_character
+
+	; Ready to clean column var4
+	jsr get_blackboard
+	; Get pointer to base tile
+	ldy #0
+	lda (tmp3),y
+	sta tmp0
+	iny
+	lda (tmp3),y
+	sta tmp0+1
+
+	lda #0
+dbug beq dbug
+
+	lda var5,x	; Y pos
+	sta y_coord+1	; Store for later
+	lda var4,x	; X pos
+	sta x_coord+1	; Store for later
+	asl
+	asl
+	asl
+	clc
+	adc tmp0
+	sta tmp0
+	bcc nocarry1
+	inc tmp0+1
+nocarry1
+
+	; Clear the udg data
+.(
+	ldy #7
+	lda #$7f
+wipeloop
+	sta (tmp0),y
+	dey
+	bpl wipeloop
+.)
+	lda #11*8
+	clc
+	adc tmp0
+	sta tmp0
+	bcc nocarry2
+	inc tmp0+1
+nocarry2
+.(
+	ldy #7
+	lda #$7f
+wipeloop
+	sta (tmp0),y
+	dey 
+	bpl wipeloop
+.)
+
+	stx savx+1
+	; Tell the engine to redraw these tiles
+x_coord
+	ldx #0
+y_coord
+	ldy #0
+	jsr update_SRB
+	ldx x_coord+1
+	ldy y_coord+1
+	iny
+	jsr update_SRB
+
+savx
+	ldx #0
+	; Tell this column has been wiped
+	dec var4,x
+	rts
+
+finished
+	; Set tile=0 and col=1
+	ldy #2
+	lda #0
+	sta (tmp3),y
+	iny
+	lda #1
+	sta (tmp3),y
+	; Mark the board as wiped
+	iny
+	lda #$ff
+	sta (tmp3),y
+
+	; Put the teacher back at animstate 0
+	lda #0
+	jsr update_animstate
+	jmp terminate_subcommand
+.)
+
+
 s_isc_findEric
 s_isc_movemidstride
 .(

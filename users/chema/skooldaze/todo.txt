@@ -24,13 +24,14 @@ along with the new one.
 
 * Pellets sometimes do not hit teachers?
 
-* Rockitt sometimes ask to write an essay with a title, but he is
-  in the map room... Maybe this is corrected when the
-  routines to write on blackboards are done?
-
 * The bubble lip gets at the wrong place when teacher next to the right border 
 (seems the bubble is one tile left, but the lip is not)
 
+* Blackboards are not erased properly
+
+* Second set of chairs in exam room wrong
+
+* exam room not visible completely
 
 	a b c d e f... x y z
     ^			       ^

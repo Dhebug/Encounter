@@ -177,6 +177,9 @@ loopbb
 	iny
 	lda #1
 	sta (tmp),y
+	iny
+	lda #0
+	sta (tmp),y
 	ldy #4
 	lda #$ff
 	sta (tmp),y
