@@ -762,7 +762,7 @@ get_blackboard
 	cmp #3
 	beq found
 	; Distinguish from white and exam rooms 
-	lda pos_col,y
+	lda pos_col,x
 	cmp #WALLMIDDLEFLOOR
 	bcc white
 	ldy #2
