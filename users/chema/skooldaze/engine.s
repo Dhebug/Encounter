@@ -24,6 +24,11 @@
 
 move_chars
 .(
+	ldx last_char_moved
+	jsr move_char
+	ldx last_char_moved
+	jsr move_char
+
   	ldx last_char_moved
 	jsr move_char
 	ldx last_char_moved
@@ -677,6 +682,7 @@ update_SRB
 	txa
 	sec
 	sbc first_col
+	bmi endme
 	cmp #FIRST_VIS_COL
 	bcc endme
 	cmp #LAST_VIS_COL+1

@@ -296,12 +296,12 @@ _test_loop
 	lda pos_col
 	sec
 	sbc first_col
-	cmp #10-4
+	cmp #10;-4
 	bne noscrollr
 	jsr _scroll_right
 	jmp noscroll
 noscrollr
-	cmp #28+4
+	cmp #28;+4
 	bne noscroll
 	jsr _scroll_left
 noscroll
