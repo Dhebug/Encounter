@@ -26,8 +26,16 @@ along with the new one.
 
 * Exam room not visible completely
 
-* Sometimes (hardly) the attributes of first and second column
- are messed up (around row 17)... surely related with blackboard writting
+* Mr withit in the reading room walks outside the right side
+
+* I saw Mr Wacker writting on the exam blackboard from the middle
+  of the class... Maybe when no need to erase the blackboard?
+  Also happened in the white room after Einstein grassing on Eric's absence
+  and then the teacher changing the schema of the class, writting someting on 
+  the blackboard.
+* It is a bit strange that the teacher writes someting, then
+  starts asking unrelated questions.
+
 
 	a b c d e f... x y z
     ^			       ^
