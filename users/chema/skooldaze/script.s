@@ -732,7 +732,8 @@ Ericnotin
 	; telling tales (if he is in the moood)
 
 	; Tell the kids to read their books
-
+	jsr s_goto_page
+	
 	; Check for Eric again and maybe send him
 	; after Eric... (use s_check_Eric_loc)
 
@@ -815,6 +816,7 @@ no_essay
 	cmp #240
 	bcc s_questions
 
+read_book
 	jsr s_goto_page
 
 teacher_waits
@@ -2857,12 +2859,14 @@ s_isc_wipe1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_isc_wipe2
 .(
+/*
 	; Check if the board is clean
 	ldy #4
 	lda (tmp3),y
 	bpl cont
 	jmp terminate_subcommand	; If it is $ff then terminate
 cont
+*/
 	; Set the address if the command to after_prepare, once
 	; this initialization has been done
 	lda #<after_prepare

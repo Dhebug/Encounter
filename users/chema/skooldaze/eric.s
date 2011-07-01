@@ -38,7 +38,8 @@ set_Eric_timer
 	ldy #7
 	lda #%00010000
 	and KeyBank,y
-	bne quick
+	;bne quick
+	beq quick
 	lda #NORMAL_ERIC_TIMER
 	.byt $2c
 quick
