@@ -712,7 +712,6 @@ doit
 	lsr 
 	lsr 
 	lsr
-	clc
 	tay
 	; Reg Y holds the offset of inside the SRB
 	; Now get the bitmask
