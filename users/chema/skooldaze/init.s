@@ -113,6 +113,8 @@ _init
 	sta tile_col
 	sta first_col
 	sta current_lesson_index
+	sta Eric_flags
+	sta Eric_knockout
 
 .(
 	ldx #20
@@ -511,8 +513,6 @@ cont
 	jsr _ping
 nobell
 
-	; Put the name of teacher and place it in the lesson box
-
 	; Clear all game flags & other matters
 	jsr reset_flags
 
@@ -523,6 +523,8 @@ loop
 	lda flags,x
 	ora #RESET_COMMAND_LIST
 	sta flags,x
+
+	; Put the name of teacher and place it in the lesson box
 
 	; Pick up the command list number for this lesson 
 	; from the character's personal timetable. As they lie in the

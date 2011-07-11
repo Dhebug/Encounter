@@ -29,7 +29,7 @@
 #define WITHIT_NAME		10
 #define CREAK_NAME		11
 #define PLEASESIR		12
-#define REVISION		13
+#define REVISION_ST		13
 #define NUM_TEMPLATE	14
 #define MUL_QUESTION	15
 #define MUL_ANSWER		16
