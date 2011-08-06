@@ -14,6 +14,7 @@ extern unsigned char OverlayAvailable;
 
 unsigned int ProfilerTimerMin=0xFFFF;
 unsigned int ProfilerTimerMax=0;
+unsigned int ProfilerTimerOffset=0;
 
 unsigned char Hexdigits[]="0123456789ABCDEF";
 
@@ -85,16 +86,33 @@ void Benchmark(unsigned int offset)
     PrintString(offset+80,"\1MAX:");
     PrintHex(-1,ProfilerTimerMax);
     PrintChar(-1,0);
+    
+    PrintString(offset+80+10,"\3DIFF:");
+    PrintHex(-1,ProfilerTimerMax-ProfilerTimerMin);
+    PrintChar(-1,0);
+    
+}
+
+
+void BenchmarkLoop(unsigned int offset)
+{
+	unsigned int counter;
+	ProfilerTimerMin=0xFFFF;
+	ProfilerTimerMax=0;
+    counter=50;
+	while (counter--)
+	{
+      Benchmark(offset);
+	}
 }
 
 
 void main()
 {
-	unsigned int counter;
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.0");
+    PrintString(0,"\4IRQ Benchmark 1.1");
 		
 	DetectOverlay();
     if (OverlayAvailable)
@@ -106,9 +124,36 @@ void main()
 	    PrintString(40-4,"\1ROM");
     }
 
-        
-    // Benchmark 1: All interruptions disabled
     offset=80;
+        
+    // Compute the timer minimum delay
+    Sei();
+	ProfilerReset();
+	ProfilerRead();
+	ProfilerTimerOffset=65535-ProfilerTimer;
+	
+    PrintChar(offset,5);
+    PrintString(-1,"TIMER2 OFFSET:");
+    PrintHex(-1,ProfilerTimerOffset);
+    PrintChar(-1,0);
+    offset+=40*2;
+    Cli();
+    
+
+
+    // Benchmark 1: Normal Oric interruptions 
+    PrintChar(offset,17);
+    PrintString(-1,"Normal ORIC boot with IRQ");
+    PrintChar(-1,0);
+    offset+=40;
+    
+    Cli();
+    
+    BenchmarkLoop(offset);
+    offset+=40*4;
+
+	
+    // Benchmark 2: All interruptions disabled
     PrintChar(offset,17);
     PrintString(-1,"SEI");
     PrintChar(-1,0);
@@ -116,14 +161,11 @@ void main()
     
     Sei();
     
-    counter=50;
-	while (counter--)
-	{
-      Benchmark(offset);
-	}
-
-    // Benchmark 2: All interruptions disabled + sample player enabled
+    BenchmarkLoop(offset);
     offset+=40*4;
+
+    
+    // Benchmark 3: All interruptions disabled + sample player enabled
     PrintChar(offset,17);
     PrintString(-1,"SEI+Initialised IRQ");
     PrintChar(-1,0);
@@ -132,14 +174,11 @@ void main()
     DigiPlayer_InstallIrq();		// Install the irq handler
     Sei();
     
-    counter=50;
-	while (counter--)
-	{
-      Benchmark(offset);
-	}
-	    	
-    // Benchmark 3: All interruptions authorised + sample player enabled
+    BenchmarkLoop(offset);
     offset+=40*4;
+
+    	    	
+    // Benchmark 4: All interruptions authorised + sample player enabled
     PrintChar(offset,17);
     PrintString(-1,"CLI+Initialised IRQ");
     PrintChar(-1,0);
@@ -147,15 +186,13 @@ void main()
     
     Cli();
     
-    counter=50;
-	while (counter--)
-	{
-      Benchmark(offset);
-	}  
-
-	// Done	
+    BenchmarkLoop(offset);
     offset+=40*4;
+
+    
+	// Done	
     PrintString(offset,"\2Done");
+    offset+=40*2;
 	while (1)
 	{
 	}

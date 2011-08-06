@@ -236,36 +236,81 @@ _ProfilerRead
   stx _ProfilerTimer+1
   rts
 .)
+  
+_ProfilerTest_20000_cycles  
+Wait20000Cycles  
+  jsr Wait5000Cycles	; 5000
+  jsr Wait5000Cycles	; 5000
+  jsr Wait5000Cycles	; 5000
+  jsr Wait4000Cycles    ; 4000
+  jsr Wait900Cycles  	; 900
+  jsr Wait80Cycles  ; 80
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  rts  					; 6
+  ;                  	 +6 for jsr
 
-
-
-	.dsb 256-(*&255)
-
-_ProfilerTest_20000_cycles
-  ldy #11-1			; 2 cycles
-outer_loop
-  .(
-  ldx #0			; 2 cycles
-inner_loop
-  nop				; 2 cycles
-  dex				; 2 cycles
-  bne inner_loop	; 2+1 cycles
-  ;   1*  2    = 2
-  ; 255* 2+2+3 = 255*7 = 1785
-  ;   1*  2    = 2
-  ; Total inner loop  = 1789 cycles
-  .)
+Wait5000Cycles  
+  jsr Wait1000Cycles	; 1000
+Wait4000Cycles  
+  jsr Wait1000Cycles	; 1000
+  jsr Wait1000Cycles	; 1000
+  jsr Wait1000Cycles	; 1000
+  jsr Wait900Cycles  	; 900
+  jsr Wait80Cycles  ; 80
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  rts  					; 6
+  ;                  	 +6 for jsr
+  
     
-  dey				; 2 cycles
-  bne outer_loop	; 2+1 cycles
-  ;   1* 2
-  ;   n* 1789
-  ;   n* 2
-  ;   n* 3
-  ; 20000/1794=11
+Wait1000Cycles  
+  jsr Wait100Cycles	; 100
+Wait900Cycles  
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait100Cycles	; 100
+  jsr Wait80Cycles  ; 80
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  rts  				; 6
+  ;                  +6 for jsr
+  
+Wait100Cycles  
+  jsr Wait20Cycles	; 20
+Wait80Cycles  
+  jsr Wait20Cycles	; 20
+Wait60Cycles  
+  jsr Wait20Cycles	; 20
+Wait40Cycles  
+  jsr Wait20Cycles	; 20
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  rts  				; 6
+  ;                  +6 for jsr
 
-  rts
-
+Wait20Cycles
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  nop  				; 2
+  rts  				; 6
+  ;                  +6 for jsr
+  
+  
 
 _MakeSound
 	// Canal settings
