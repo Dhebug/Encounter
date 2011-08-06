@@ -82,35 +82,15 @@ void main(void)
 	PORTAbits.RA6 = 0;
 	TRISAbits.TRISA6 = 0;
 
-	// Initialize User Interface.
-	ui_init();
-	
 	// Initialize WD1793 emulation.
 	wd179x_init();
+
+	// Initialize User Interface.
+	ui_init();
 
 	// Initialize SD Card.
 	card_init();
 	fat32_init();
-
-	/* Mount first image found on card */
-	fat32_root_dir(&root_dir);		
-	file_cnt = 1;
-	fat32_dir_begin(&dir, &root_dir);	
-	i = 0;
-	do
-	{
-		if (!fat32_dir_next(&dir, &image_file, 0))
-		{
-			fat32_dir_begin(&dir, &root_dir);
-			file_cnt = 1;
-			i = 0;
-		}
-		else
-			i ++;
-	}
-	while (file_cnt != i);
-
-	wd179x_mount_image(0, &image_file);
 
 	/* Release RESET */
 	PORTAbits.RA6 = 1;
