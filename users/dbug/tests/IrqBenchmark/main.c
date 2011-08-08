@@ -9,12 +9,15 @@ void DigiPlayer_InstallIrq();
 
 extern unsigned int ProfilerTimer;
 extern unsigned char OverlayAvailable;
-
+extern unsigned int IrqCounter;
 
 
 unsigned int ProfilerTimerMin=0xFFFF;
 unsigned int ProfilerTimerMax=0;
 unsigned int ProfilerTimerOffset=0;
+
+unsigned int IrqCounterMin=0xFFFF;
+unsigned int IrqCounterMax=0;
 
 unsigned char Hexdigits[]="0123456789ABCDEF";
 
@@ -74,11 +77,14 @@ void Benchmark(unsigned int offset)
 	ProfilerTimer=65535-ProfilerTimer;
 	if (ProfilerTimer>ProfilerTimerMax)	ProfilerTimerMax=ProfilerTimer;
 	if (ProfilerTimer<ProfilerTimerMin)	ProfilerTimerMin=ProfilerTimer;
-			
+
+	if (IrqCounter>IrqCounterMax)		IrqCounterMax=IrqCounter;
+	if (IrqCounter<IrqCounterMin)		IrqCounterMin=IrqCounter;
+				
     PrintString(offset+0,"\7CUR:");
     PrintHex(-1,ProfilerTimer);
     PrintChar(-1,0);
-    
+
     PrintString(offset+40,"\2MIN:");
     PrintHex(-1,ProfilerTimerMin);
     PrintChar(-1,0);
@@ -90,7 +96,19 @@ void Benchmark(unsigned int offset)
     PrintString(offset+80+10,"\3DIFF:");
     PrintHex(-1,ProfilerTimerMax-ProfilerTimerMin);
     PrintChar(-1,0);
+
     
+    PrintString(offset+20,"\7IRQs:");
+    PrintHex(-1,IrqCounter);
+    PrintChar(-1,0);
+        
+    PrintString(offset+21+40,"\2MIN:");
+    PrintHex(-1,IrqCounterMin);
+    PrintChar(-1,0);
+    
+    PrintString(offset+21+80,"\1MAX:");
+    PrintHex(-1,IrqCounterMax);
+    PrintChar(-1,0);
 }
 
 
@@ -99,6 +117,10 @@ void BenchmarkLoop(unsigned int offset)
 	unsigned int counter;
 	ProfilerTimerMin=0xFFFF;
 	ProfilerTimerMax=0;
+	
+	IrqCounterMin=0xFFFF;
+	IrqCounterMax=0;
+	
     counter=50;
 	while (counter--)
 	{
@@ -112,7 +134,7 @@ void main()
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.1");
+    PrintString(0,"\4IRQ Benchmark 1.3");
 		
 	DetectOverlay();
     if (OverlayAvailable)
@@ -171,6 +193,7 @@ void main()
     PrintChar(-1,0);
     offset+=40;
     
+	OverlayUsesROM();
     DigiPlayer_InstallIrq();		// Install the irq handler
     Sei();
     
@@ -180,19 +203,36 @@ void main()
     	    	
     // Benchmark 4: All interruptions authorised + sample player enabled
     PrintChar(offset,17);
-    PrintString(-1,"CLI+Initialised IRQ");
+    PrintString(-1,"CLI+Initialised IRQ (from ROM)");
     PrintChar(-1,0);
     offset+=40;
     
+    Sei();
+	OverlayUsesROM();
+    DigiPlayer_InstallIrq();		// Install the irq handler
     Cli();
     
     BenchmarkLoop(offset);
     offset+=40*4;
 
+    // Benchmark 5: All interruptions authorised + sample player enabled
+    if (OverlayAvailable)
+    {
+	    PrintChar(offset,17);
+	    PrintString(-1,"CLI+Initialised IRQ (from RAM)");
+	    PrintChar(-1,0);
+	    offset+=40;
+	    
+	    Sei();
+		OverlayUsesRAM();
+	    DigiPlayer_InstallIrq();		// Install the irq handler
+	    Cli();
+	    
+	    BenchmarkLoop(offset);
+	    offset+=40*4;
+	}
     
 	// Done	
-    PrintString(offset,"\2Done");
-    offset+=40*2;
 	while (1)
 	{
 	}

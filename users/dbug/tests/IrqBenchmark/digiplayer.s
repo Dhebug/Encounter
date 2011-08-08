@@ -1,6 +1,4 @@
 
-	.zero
-
 /*	
 Registers
 	Reading/writing registers of the chip allows to control the powerful
@@ -111,22 +109,25 @@ Loading/storing irq:
 #define VIA_PCR     $30c
 #define VIA_ORA     $30f
 
-#define VIA_TIMER_DELAY 250          // 4Khz
-#define VBL_DECOUNT 80               // 80*50 => 4000 échantillons par seconde /2 => 2000 octets / seconde 
-
-;  4000 hz=80*50
-;  6400 hz=128*50
-; 12800 hz=256*50 -> 3.2 fois
+#define VIA_TIMER_DELAY 62          // 16000 hz
+;  4000 hz=1000000/4000 =250    4000/50= 80 times per frame
+;  8000 hz=1000000/8000 =125    8000/50=160 times per frame
+; 16000 hz=1000000/16000=62.5  16000/50=320 times per frame
 
 
 ; 20 kb = 10 seconds
 ; 30 kb = 30 seconds
-	
-digiplayer_nextsample		.dsb 1
+
+	.zero
+
+_irq_counter				.dsb 2
+
 
 	.text
 
 _OverlayAvailable			.byt 0
+_OverlayRAMSelected			.byt 0
+_IrqCounter					.word 0
 
 
 _Sei
@@ -143,7 +144,7 @@ _Cli
 _DetectOverlay
 .(
   sei
-  jmp end_overlay	; Force skip the detection
+  ;jmp end_overlay	; Force skip the detection
   ldy $314
   lda #%11111101
   sta $314
@@ -161,20 +162,32 @@ _DetectOverlay
   lda #$FF
   sta _OverlayAvailable
 end_overlay	
-  ;sty $314
+  sty $314
   cli
   rts
 .)
 
+_OverlayUsesROM
+  lda $314
+  ora #%00000010
+  sta $314
+  lda #0
+  sta _OverlayRAMSelected
+  rts
+
+_OverlayUsesRAM
+  lda #%11111101
+  sta $314
+  lda #$FF
+  sta _OverlayRAMSelected
+  rts
+  
 	
 _DigiPlayer_InstallIrq
 .(
 	;jmp _DigiPlayer_InstallIrq
 	sei
 	
-	// Prepare replay
-	jsr _MakeSound
-
 	// Set the VIA parameters
 	lda #<VIA_TIMER_DELAY
 	sta VIA_T1L_L
@@ -183,28 +196,20 @@ _DigiPlayer_InstallIrq
 	
 	// Install interrupt
 	.(
-	lda _OverlayAvailable
+	lda _OverlayRAMSelected
 	beq use_rom_irq
 use_fast_irq
-	lda #<_InterruptCode_Low
+	lda #<_InterruptCode
 	sta $fffe
-	lda #>_InterruptCode_Low
+	lda #>_InterruptCode
 	sta $ffff
-	
-	lda #$ff
-	sta IrqIncAddr+1
-	sta IrqDecAddr+1
-
-	lda #$ff
-	sta IrqIncAddr+2
-	sta IrqDecAddr+2
-		
+			
 	jmp end
 		
 use_rom_irq
-	lda #<_InterruptCode_Low
+	lda #<_InterruptCode
 	sta $245
-	lda #>_InterruptCode_Low
+	lda #>_InterruptCode
 	sta $246
 end
 	.)
@@ -222,6 +227,11 @@ _ProfilerTimer	.dsb 2
 
 _ProfilerReset
 .(
+  lda #$0
+  sta _irq_counter+0
+  sta _IrqCounter+0
+  sta _irq_counter+1
+  sta _IrqCounter+1
   lda #$ff
   sta VIA_T2C_L
   sta VIA_T2C_H  
@@ -234,6 +244,13 @@ _ProfilerRead
   ldx VIA_T2C_H
   sta _ProfilerTimer+0
   stx _ProfilerTimer+1
+  php
+  sei
+  lda _irq_counter+0
+  sta _IrqCounter+0
+  lda _irq_counter+1
+  sta _IrqCounter+1
+  plp
   rts
 .)
   
@@ -308,46 +325,7 @@ Wait20Cycles
   nop  				; 2
   nop  				; 2
   rts  				; 6
-  ;                  +6 for jsr
-  
-  
-
-_MakeSound
-	// Canal settings
-	ldy #7
-	ldx #%11111111
-	jsr _PsgSetRegister
-
-	// Volume
-	ldy #10
-	ldx #0
-	jsr _PsgSetRegister
-	rts
-
-
-// y=control register
-// x=data register
-_PsgSetRegister
-	sty	VIA_ORA
-
-	lda	VIA_PCR
-	ora	#$EE		; $EE	238	11101110
-	sta	VIA_PCR
-	lda #$CC		; $CC	204	11001100
-	sta	VIA_PCR
-
-	stx	VIA_ORA
-	lda	#$EC		; $EC	236	11101100
-	sta	VIA_PCR
-	lda #$CC		; $CC	204	11001100
-	sta	VIA_PCR
-	rts
-
-
-
-
-Counter .dsb 1
-
+  ;                  +6 for jsr  
 
 	.dsb 256-(*&255)
 
@@ -358,79 +336,11 @@ Counter .dsb 1
 // Interrupts article: http://www.6502.org/tutorials/interrupts.html
 // To copy to zero page: http://forum.defence-force.org/viewtopic.php?t=525
 // 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
-_InterruptCode_Low	
-	;jmp _InterruptCode_Low
-IrqIncAddr	
-	inc $246	; Switch to the second interrupt handler 
+_InterruptCode
 	bit VIA_T1C_L	; Clear IRQ event 
-
-	sta save_a+1	; 5
-    
-auto_sample_read	
-	lda _WelcomeSample			; 4
-	beq end_of_sample			; 2 (+1)
-	sta digiplayer_nextsample	; 3
-	and #$0F					; 2
-
-	sta	VIA_ORA
-	lda	#$EC		; $EC 11101100 or $FD 11111101
-	sta	VIA_PCR
-	lda #$CC		; $CC 11001100 or $DD 11011101
-	sta	VIA_PCR
-	
-	inc auto_sample_read+1		; 6
-	beq end_of_page				; 2 (+1)
-
-exit
-	; Early exit
-save_a	
-	lda #123	; 2
+	inc _irq_counter+0
+	bne skip
+	inc _irq_counter+1
+skip	
 	rti
 	
-end_of_page	
-	inc auto_sample_read+2		; 6
-	bne exit					; 2+1
-	
-end_of_sample	
-	lda #<_WelcomeSample
-	sta auto_sample_read+1
-	lda #>_WelcomeSample
-	sta auto_sample_read+2
-	bne exit
-_InterruptCode_Low_End
-	
-
-
-	.dsb 256-(*&255)
-
-_InterruptCode_High
-IrqDecAddr
-	dec $246	; Switch to the first interrupt handler 
-	bit VIA_T1C_L	; Clear IRQ event 
-	
-	sta save_a2+1	; 4
-
-	;
-	; Get sample high part 
-	;	
-	lda digiplayer_nextsample	; 3     (immediate=2)
-	lsr							; 2x4=8
-	lsr
-	lsr
-	lsr
-	
-	sta	VIA_ORA
-	lda	#$EC		; $EC	236	11101100
-	sta	VIA_PCR
-	lda #$CC		; $CC	204	11001100
-	sta	VIA_PCR
-
-save_a2	
-	lda #123	; 2
-	rti
-InterruptCode_High_End
-
-
-	.dsb 256-(*&255)
-; Here follow the sample file in memory
-; Not alligning the sample start adds +2 to the profiler counter...
