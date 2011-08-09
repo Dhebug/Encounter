@@ -337,10 +337,15 @@ Wait20Cycles
 // To copy to zero page: http://forum.defence-force.org/viewtopic.php?t=525
 // 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
 _InterruptCode
-	bit VIA_T1C_L	; Clear IRQ event 
-	inc _irq_counter+0
+	bit VIA_T1C_L			; 4
+	inc _irq_counter+0		; 5
 	bne skip
-	inc _irq_counter+1
-skip	
-	rti
-	
+increment					; 2 (skip taken)
+	inc _irq_counter+1		; 5
+	rti						; 6 -> 13
+		
+skip						; 2+1 (no_skip taken)
+	nop						; 2
+	nop						; 2
+	rti						; 6 -> 13
+;                             22 cycles (constent)

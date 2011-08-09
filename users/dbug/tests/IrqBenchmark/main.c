@@ -134,7 +134,7 @@ void main()
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.3");
+    PrintString(0,"\4IRQ Benchmark 1.4");
 		
 	DetectOverlay();
     if (OverlayAvailable)
