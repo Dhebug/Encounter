@@ -5,7 +5,7 @@
 ::
 SET OSDKADDR=$600
 SET OSDKNAME=IrqBench
-SET OSDKFILE=main digiplayer
+SET OSDKFILE=main digiplayer sample
 
 
 

@@ -121,6 +121,7 @@ Loading/storing irq:
 	.zero
 
 _irq_counter				.dsb 2
+digiplayer_nextsample		.dsb 1
 
 
 	.text
@@ -183,15 +184,17 @@ _OverlayUsesRAM
   rts
   
 	
-_DigiPlayer_InstallIrq
+_InstallCountingIrq
 .(
-	;jmp _DigiPlayer_InstallIrq
 	sei
 	
+	;  4000 hz=1000000/4000 =250    4000/50= 80 times per frame
+	;  8000 hz=1000000/8000 =125    8000/50=160 times per frame
+	; 16000 hz=1000000/16000=62.5  16000/50=320 times per frame
 	// Set the VIA parameters
-	lda #<VIA_TIMER_DELAY
+	lda #<62
 	sta VIA_T1L_L
-	lda #>VIA_TIMER_DELAY
+	lda #>62
 	sta VIA_T1L_H
 	
 	// Install interrupt
@@ -199,17 +202,17 @@ _DigiPlayer_InstallIrq
 	lda _OverlayRAMSelected
 	beq use_rom_irq
 use_fast_irq
-	lda #<_InterruptCode
+	lda #<_InterruptCountingCode
 	sta $fffe
-	lda #>_InterruptCode
+	lda #>_InterruptCountingCode
 	sta $ffff
 			
 	jmp end
 		
 use_rom_irq
-	lda #<_InterruptCode
+	lda #<_InterruptCountingCode
 	sta $245
-	lda #>_InterruptCode
+	lda #>_InterruptCountingCode
 	sta $246
 end
 	.)
@@ -218,6 +221,59 @@ end
 
 	rts
 .)
+
+
+
+_InstallSamplePlayerIrq
+.(
+	;jmp _DigiPlayer_InstallIrq
+	sei
+	
+	// Prepare replay
+	jsr _MakeSound
+
+	;  4000 hz=1000000/4000 =250    4000/50= 80 times per frame
+	;  8000 hz=1000000/8000 =125    8000/50=160 times per frame
+	; 16000 hz=1000000/16000=62.5  16000/50=320 times per frame
+	// Set the VIA parameters
+	lda #<250
+	sta VIA_T1L_L
+	lda #>250
+	sta VIA_T1L_H
+	
+	// Install interrupt
+	.(
+	lda _OverlayRAMSelected
+	beq use_rom_irq
+use_fast_irq
+	lda #<_InterruptCode_Low
+	sta $fffe
+	lda #>_InterruptCode_Low
+	sta $ffff
+	
+	lda #$ff
+	sta IrqIncAddr+1
+	sta IrqDecAddr+1
+
+	lda #$ff
+	sta IrqIncAddr+2
+	sta IrqDecAddr+2
+		
+	jmp end
+		
+use_rom_irq
+	lda #<_InterruptCode_Low
+	sta $245
+	lda #>_InterruptCode_Low
+	sta $246
+end
+	.)
+		
+	cli	
+
+	rts
+.)
+
 
 
 
@@ -336,8 +392,9 @@ Wait20Cycles
 // Interrupts article: http://www.6502.org/tutorials/interrupts.html
 // To copy to zero page: http://forum.defence-force.org/viewtopic.php?t=525
 // 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
-_InterruptCode
+_InterruptCountingCode
 	bit VIA_T1C_L			; 4
+	.(
 	inc _irq_counter+0		; 5
 	bne skip
 increment					; 2 (skip taken)
@@ -347,5 +404,183 @@ increment					; 2 (skip taken)
 skip						; 2+1 (no_skip taken)
 	nop						; 2
 	nop						; 2
+	.)
 	rti						; 6 -> 13
 ;                             22 cycles (constent)
+
+
+
+_MakeSound
+	// Canal settings
+	ldy #7
+	ldx #%11111111
+	jsr _PsgSetRegister
+
+	// Volume
+	ldy #10
+	ldx #0
+	jsr _PsgSetRegister
+	rts
+
+
+// y=control register
+// x=data register
+_PsgSetRegister
+	sty	VIA_ORA
+
+	lda	VIA_PCR
+	ora	#$EE		; $EE	238	111 0 111 0
+	sta	VIA_PCR
+	lda #$CC		; $CC	204	110 0 110 0
+	sta	VIA_PCR
+
+	stx	VIA_ORA
+	lda	#$EC		; $EC	236	111 0 110 0
+	sta	VIA_PCR
+	lda #$CC		; $CC	204	110 0 110 0
+	sta	VIA_PCR
+	rts
+
+
+.dsb 256-(*&255)
+
+
+; Timings:
+; - Normal Oric timings with IRQ enabled:	 $5049-$640C => 20553-25612
+; - All IRQ disabled:                      $4e33-$4e33 => 20019-20019 => Base reference 100% CPU time
+; - With the 4bit sample player from ROM:  $6806-$6853 => 26630-26707 => 6611/6688 cycles taken by IRQ (so about 83 cycles per IRQ)
+; - With the 4bit sample player from RAM:  $6693-$66DD => 26259-26333 => 6240/6314 cycles taken by IRQ (so about 78 cycles per IRQ) 5 cycles faster approximatively
+;
+; Interrupt code that replay a sample using volume
+;
+; Interrupts article: http://www.6502.org/tutorials/interrupts.html
+; To copy to zero page: http://forum.defence-force.org/viewtopic.php?t=525
+; 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
+;
+_InterruptCode_Low	
+	;jmp _InterruptCode_Low
+IrqIncAddr	
+	inc $246					; 6		Switch to the second interrupt handler 
+	bit VIA_T1C_L				; 4		Clear IRQ event 
+
+	sta save_a+1				; 5
+    
+auto_sample_read	
+	lda _WelcomeSample			; 4
+	beq end_of_sample			; 2 (+1)
+	sta digiplayer_nextsample	; 3
+	and #$0F					; 2
+
+	sta VIA_ORA					; 4
+	lda #$EC					; 2		$EC 111 0 110 0 or $FD 111 1 110 1
+	sta VIA_PCR					; 4     CB2 CONTROL=HIGH OUTPUT
+	lda #$CC					; 2		$CC 110 0 110 0 or $DD 110 1 110 1
+	sta VIA_PCR					; 4     CB2 CONTROL=LOW OUTPUT
+	
+	inc auto_sample_read+1		; 6
+	beq end_of_page				; 2 (+1)
+
+exit
+	; Early exit
+save_a	
+	lda #123					; 2
+
+	.(
+	inc _irq_counter+0		; 5
+	bne skip				; 2+1 (no_skip taken)
+	inc _irq_counter+1		; 5
+skip
+	.)						
+	rti							; 6
+	
+end_of_page	
+	inc auto_sample_read+2		; 6
+	bne exit					; 2+1
+	
+end_of_sample	
+	lda #<_WelcomeSample
+	sta auto_sample_read+1
+	lda #>_WelcomeSample
+	sta auto_sample_read+2
+	bne exit
+_InterruptCode_Low_End
+	
+/*
+                  REG 12 -- PERIPHERAL CONTROL REGISTER
+                    +---+---+---+---+---+---+---+---+
+                    | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+                    +---+---+---+---+---+---+---+---+
+                     |         |  |  |         |  |
+                     +----+----+  |  +----+----+  |
+                          |       |       |       |
+         CB2 CONTROL -----+       |       |       +- CA1 INTERRUPT CONTROL
++-+-+-+------------------------+  |       |   +--------------------------+
+|7|6|5| OPERATION              |  |       |   | 0 = NEGATIVE ACTIVE EDGE |
++-+-+-+------------------------+  |       |   | 1 = POSITIVE ACTIVE EDGE |
+|0|0|0| INPUT NEG. ACTIVE EDGE |  |       |   +--------------------------+
++-+-+-+------------------------+  |       +---- CA2 INTERRUPT CONTROL
+|0|0|1| INDEPENDENT INTERRUPT  |  |       +-+-+-+------------------------+
+| | | | INPUT NEGATIVE EDGE    |  |       |3|2|1| OPERATION              |
++-+-+-+------------------------+  |       +-+-+-+------------------------+
+|0|1|0| INPUT POS. ACTIVE EDGE |  |       |0|0|0| INPUT NEG. ACTIVE EDGE |
++-+-+-+------------------------+  |       +-+-+-+------------------------+
+|0|1|1| INDEPENDENT INTERRUPT  |  |       |0|0|1| INDEPENDENT INTERRUPT  |
+| | | | INPUT POSITIVE EDGE    |  |       | | | | INPUT NEGATIVE EDGE    |
++-+-+-+------------------------+  |       +-+-+-+------------------------+
+|1|0|0| HANDSHAKE OUTPUT       |  |       |0|1|0| INPUT POS. ACTIVE EDGE |
++-+-+-+------------------------+  |       +-+-+-+------------------------+
+|1|0|1| PULSE OUTPUT           |  |       |0|1|1| INDEPENDENT INTERRUPT  |
++-+-+-+------------------------+  |       | | | | INPUT POSITIVE EDGE    |
+|1|1|0| LOW OUTPUT             |  |       +-+-+-+------------------------+
++-+-+-+------------------------+  |       |1|0|0| HANDSHAKE OUTPUT       |
+|1|1|1| HIGH OUTPUT            |  |       +-+-+-+------------------------+
++-+-+-+------------------------+  |       |1|0|1| PULSE OUTPUT           |
+    CB1 INTERRUPT CONTROL --------+       +-+-+-+------------------------+
++--------------------------+              |1|1|0| LOW OUTPUT             |
+| 0 = NEGATIVE ACTIVE EDGE |              +-+-+-+------------------------+
+| 1 = POSITIVE ACTIVE EDGE |              |1|1|1| HIGH OUTPUT            |
++--------------------------+              +-+-+-+------------------------+
+*/
+
+	.dsb 256-(*&255)
+
+_InterruptCode_High
+IrqDecAddr
+	dec $246		; Switch to the first interrupt handler 
+	bit VIA_T1C_L	; Clear IRQ event 
+	
+	sta save_a2+1	; 4
+
+	;
+	; Get sample high part 
+	;	
+	lda digiplayer_nextsample	; 3     (immediate=2)
+	lsr							; 2x4=8
+	lsr
+	lsr
+	lsr
+	
+	sta VIA_ORA					; 4
+	lda #$EC					; 2		$EC 11101100 or $FD 11111101
+	sta VIA_PCR					; 4
+	lda #$CC					; 2		$CC 11001100 or $DD 11011101
+	sta VIA_PCR					; 4
+
+save_a2	
+	lda #123	; 2
+	
+	.(
+	inc _irq_counter+0		; 5
+	bne skip				; 2+1 (no_skip taken)
+	inc _irq_counter+1		; 5
+skip
+	.)						
+	rti
+InterruptCode_High_End
+
+
+	.dsb 256-(*&255)
+; Here follow the sample file in memory
+; Not alligning the sample start adds +2 to the profiler counter...	
+
+

@@ -5,7 +5,6 @@
 //
 // From 'digiplayer.s'
 //
-void DigiPlayer_InstallIrq();
 
 extern unsigned int ProfilerTimer;
 extern unsigned char OverlayAvailable;
@@ -134,9 +133,10 @@ void main()
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.4");
+    PrintString(0,"\4IRQ Benchmark 1.5");
 		
 	DetectOverlay();
+	/*
     if (OverlayAvailable)
     {
 	    PrintString(40-4,"\4OVR");
@@ -145,23 +145,22 @@ void main()
     {
 	    PrintString(40-4,"\1ROM");
     }
-
-    offset=80;
-        
+    */
+            
     // Compute the timer minimum delay
     Sei();
 	ProfilerReset();
 	ProfilerRead();
 	ProfilerTimerOffset=65535-ProfilerTimer;
 	
-    PrintChar(offset,5);
+    PrintChar(20,5);
     PrintString(-1,"TIMER2 OFFSET:");
     PrintHex(-1,ProfilerTimerOffset);
     PrintChar(-1,0);
-    offset+=40*2;
     Cli();
     
 
+    offset=40;
 
     // Benchmark 1: Normal Oric interruptions 
     PrintChar(offset,17);
@@ -172,7 +171,7 @@ void main()
     Cli();
     
     BenchmarkLoop(offset);
-    offset+=40*4;
+    offset+=40*3;
 
 	
     // Benchmark 2: All interruptions disabled
@@ -184,55 +183,72 @@ void main()
     Sei();
     
     BenchmarkLoop(offset);
-    offset+=40*4;
+    offset+=40*3;
 
     
-    // Benchmark 3: All interruptions disabled + sample player enabled
+    // Benchmark 3: All interruptions disabled + irq counter enabled
     PrintChar(offset,17);
-    PrintString(-1,"SEI+Initialised IRQ");
+    PrintString(-1,"SEI+16khz IRQ");
     PrintChar(-1,0);
     offset+=40;
     
 	OverlayUsesROM();
-    DigiPlayer_InstallIrq();		// Install the irq handler
+    InstallCountingIrq();		// Install the irq handler
     Sei();
     
     BenchmarkLoop(offset);
-    offset+=40*4;
+    offset+=40*3;
 
     	    	
-    // Benchmark 4: All interruptions authorised + sample player enabled
+    // Benchmark 4: All interruptions authorised + irq counter enabled
     PrintChar(offset,17);
-    PrintString(-1,"CLI+Initialised IRQ (from ROM)");
+    PrintString(-1,"CLI+16khz IRQ (from ROM)");
     PrintChar(-1,0);
     offset+=40;
     
     Sei();
 	OverlayUsesROM();
-    DigiPlayer_InstallIrq();		// Install the irq handler
+    InstallCountingIrq();		// Install the irq handler
     Cli();
     
     BenchmarkLoop(offset);
-    offset+=40*4;
+    offset+=40*3;
 
     // Benchmark 5: All interruptions authorised + sample player enabled
+    PrintChar(offset,17);
+    PrintString(-1,"CLI+4khz Sample IRQ (from ROM)");
+    PrintChar(-1,0);
+    offset+=40;
+    
+    Sei();
+	OverlayUsesROM();
+    InstallSamplePlayerIrq();		// Install the irq handler
+    Cli();
+    
+    BenchmarkLoop(offset);
+    offset+=40*3;
+
+    
+    // Benchmark 6: All interruptions authorised + irq counter enabled
     if (OverlayAvailable)
     {
-	    PrintChar(offset,17);
-	    PrintString(-1,"CLI+Initialised IRQ (from RAM)");
+	    offset+=40;
+	    PrintChar(offset,21);
+	    PrintString(-1,"BONUS: CLI+16khz IRQ (from RAM)");
 	    PrintChar(-1,0);
 	    offset+=40;
 	    
 	    Sei();
 		OverlayUsesRAM();
-	    DigiPlayer_InstallIrq();		// Install the irq handler
+	    InstallCountingIrq();		// Install the irq handler
 	    Cli();
 	    
 	    BenchmarkLoop(offset);
-	    offset+=40*4;
+	    offset+=40*3;
 	}
-    
+    	        
 	// Done	
+    Sei();
 	while (1)
 	{
 	}
