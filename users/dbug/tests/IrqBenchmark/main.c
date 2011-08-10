@@ -45,6 +45,15 @@ void PrintChar(int offset,unsigned char car)
 	*PrintStringScreen++=car;
 }
 
+void PrintHexByte(int offset,unsigned int value)
+{
+	char buffer[5];
+	buffer[0]=Hexdigits[(value>>4)&15];
+	buffer[1]=Hexdigits[(value)&15];
+	buffer[2]=0;
+	PrintString(offset,buffer);
+}
+
 void PrintHex(int offset,unsigned int value)
 {
 	char buffer[5];
@@ -130,22 +139,16 @@ void BenchmarkLoop(unsigned int offset)
 
 void main()
 {
+	unsigned char car;
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.5");
-		
+    PrintString(0,"\4IRQ Benchmark 1.6");
+
+    //
+    // Some basic setup and hardware detection
+    //
 	DetectOverlay();
-	/*
-    if (OverlayAvailable)
-    {
-	    PrintString(40-4,"\4OVR");
-    }
-    else
-    {
-	    PrintString(40-4,"\1ROM");
-    }
-    */
             
     // Compute the timer minimum delay
     Sei();
@@ -159,100 +162,147 @@ void main()
     PrintChar(-1,0);
     Cli();
     
-
-    offset=40;
-
-    // Benchmark 1: Normal Oric interruptions 
-    PrintChar(offset,17);
-    PrintString(-1,"Normal ORIC boot with IRQ");
-    PrintChar(-1,0);
-    offset+=40;
+    //
+    // Ask which test we want to perform
+    //    
+    PrintString(40,"PRESS (B) FOR BRK TEST");
+    PrintString(80,"PRESS (I) FOR IRQ TEST");
     
-    Cli();
-    
-    BenchmarkLoop(offset);
-    offset+=40*3;
-
-	
-    // Benchmark 2: All interruptions disabled
-    PrintChar(offset,17);
-    PrintString(-1,"SEI");
-    PrintChar(-1,0);
-    offset+=40;
-    
-    Sei();
-    
-    BenchmarkLoop(offset);
-    offset+=40*3;
-
-    
-    // Benchmark 3: All interruptions disabled + irq counter enabled
-    PrintChar(offset,17);
-    PrintString(-1,"SEI+16khz IRQ");
-    PrintChar(-1,0);
-    offset+=40;
-    
-	OverlayUsesROM();
-    InstallCountingIrq();		// Install the irq handler
-    Sei();
-    
-    BenchmarkLoop(offset);
-    offset+=40*3;
-
-    	    	
-    // Benchmark 4: All interruptions authorised + irq counter enabled
-    PrintChar(offset,17);
-    PrintString(-1,"CLI+16khz IRQ (from ROM)");
-    PrintChar(-1,0);
-    offset+=40;
-    
-    Sei();
-	OverlayUsesROM();
-    InstallCountingIrq();		// Install the irq handler
-    Cli();
-    
-    BenchmarkLoop(offset);
-    offset+=40*3;
-
-    // Benchmark 5: All interruptions authorised + sample player enabled
-    PrintChar(offset,17);
-    PrintString(-1,"CLI+4khz Sample IRQ (from ROM)");
-    PrintChar(-1,0);
-    offset+=40;
-    
-    Sei();
-	OverlayUsesROM();
-    InstallSamplePlayerIrq();		// Install the irq handler
-    Cli();
-    
-    BenchmarkLoop(offset);
-    offset+=40*3;
-
-    
-    // Benchmark 6: All interruptions authorised + irq counter enabled
-    if (OverlayAvailable)
+    do
     {
+	    car=toupper(get());
+    }
+    while ((car!='B') && (car!='I'));
+    
+       
+    
+    if (car=='B')
+    {
+	    //
+	    // BRK Test
+	    //
+	    int flag=0;
+		int counter=20*27;
+		
+		PrintStringScreen=(unsigned char*)0xbb80+40;
+		    
+	    // Compute the LOW and HIGH irq timings
+	    Sei();
+		OverlayUsesROM();
+	    InstallSamplePlayerIrq();		// Install the irq handler
+	    Sei();
+	    
+	    while (counter--)
+	    {
+			ProfilerReset();
+			TestLowIrq();
+			ProfilerRead();
+			ProfilerTimer=65535-ProfilerTimer;
+				    
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer>>4)&15] | (flag?128:0));
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer)&15] | (flag?128:0));
+		    
+		    flag=1-flag;
+	    }    
+	}
+	else
+	{
+		//
+		// IRQ Test
+		//    
+	    offset=40;
+	
+	    // Benchmark 1: Normal Oric interruptions 
+	    PrintChar(offset,17);
+	    PrintString(-1,"Normal ORIC boot with IRQ");
+	    PrintChar(-1,0);
 	    offset+=40;
-	    PrintChar(offset,21);
-	    PrintString(-1,"BONUS: CLI+16khz IRQ (from RAM)");
+	    
+	    Cli();
+	    
+	    BenchmarkLoop(offset);
+	    offset+=40*3;
+	
+		
+	    // Benchmark 2: All interruptions disabled
+	    PrintChar(offset,17);
+	    PrintString(-1,"SEI");
 	    PrintChar(-1,0);
 	    offset+=40;
 	    
 	    Sei();
-		OverlayUsesRAM();
+	    
+	    BenchmarkLoop(offset);
+	    offset+=40*3;
+	
+	    
+	    // Benchmark 3: All interruptions disabled + irq counter enabled
+	    PrintChar(offset,17);
+	    PrintString(-1,"SEI+16khz IRQ");
+	    PrintChar(-1,0);
+	    offset+=40;
+	    
+		OverlayUsesROM();
+	    InstallCountingIrq();		// Install the irq handler
+	    Sei();
+	    
+	    BenchmarkLoop(offset);
+	    offset+=40*3;
+	
+	    	    	
+	    // Benchmark 4: All interruptions authorised + irq counter enabled
+	    PrintChar(offset,17);
+	    PrintString(-1,"CLI+16khz IRQ (from ROM)");
+	    PrintChar(-1,0);
+	    offset+=40;
+	    
+	    Sei();
+		OverlayUsesROM();
 	    InstallCountingIrq();		// Install the irq handler
 	    Cli();
 	    
 	    BenchmarkLoop(offset);
 	    offset+=40*3;
+	
+	    // Benchmark 5: All interruptions authorised + sample player enabled
+	    PrintChar(offset,17);
+	    PrintString(-1,"CLI+4khz Sample IRQ (from ROM)");
+	    PrintChar(-1,0);
+	    offset+=40;
+	    
+	    Sei();
+		OverlayUsesROM();
+	    InstallSamplePlayerIrq();		// Install the irq handler
+	    Cli();
+	    
+	    BenchmarkLoop(offset);
+	    offset+=40*3;
+	
+	    
+	    // Benchmark 6: All interruptions authorised + irq counter enabled
+	    if (OverlayAvailable)
+	    {
+		    offset+=40;
+		    PrintChar(offset,21);
+		    PrintString(-1,"BONUS: CLI+16khz IRQ (from RAM)");
+		    PrintChar(-1,0);
+		    offset+=40;
+		    
+		    Sei();
+			OverlayUsesRAM();
+		    InstallCountingIrq();		// Install the irq handler
+		    Cli();
+		    
+		    BenchmarkLoop(offset);
+		    offset+=40*3;
+		}
 	}
     	        
 	// Done	
     Sei();
 	while (1)
 	{
-	}
-	  
+	}	 
 }
 
 
