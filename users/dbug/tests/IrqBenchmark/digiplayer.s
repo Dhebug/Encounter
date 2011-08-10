@@ -458,12 +458,11 @@ _PsgSetRegister
 ; 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
 ;
 _InterruptCode_Low	
-	;jmp _InterruptCode_Low
-IrqIncAddr	
+IrqIncAddr
 	inc $246					; 6		Switch to the second interrupt handler 
 	bit VIA_T1C_L				; 4		Clear IRQ event 
 
-	sta save_a+1				; 5
+	sta save_a+1				; 4
     
 auto_sample_read	
 	lda _WelcomeSample			; 4
@@ -486,9 +485,9 @@ save_a
 	lda #123					; 2
 
 	.(
-	inc _irq_counter+0		; 5
-	bne skip				; 2+1 (no_skip taken)
-	inc _irq_counter+1		; 5
+	inc _irq_counter+0			; 5
+	bne skip					; 2+1 (no_skip taken)
+	inc _irq_counter+1			; 5
 skip
 	.)						
 	rti							; 6
@@ -498,10 +497,10 @@ end_of_page
 	bne exit					; 2+1
 	
 end_of_sample	
-	lda #<_WelcomeSample
-	sta auto_sample_read+1
-	lda #>_WelcomeSample
-	sta auto_sample_read+2
+	lda #<_WelcomeSample		; 2
+	sta auto_sample_read+1		; 4
+	lda #>_WelcomeSample		; 2
+	sta auto_sample_read+2		; 4
 	bne exit
 _InterruptCode_Low_End
 	
@@ -546,10 +545,10 @@ _InterruptCode_Low_End
 
 _InterruptCode_High
 IrqDecAddr
-	dec $246		; Switch to the first interrupt handler 
-	bit VIA_T1C_L	; Clear IRQ event 
+	dec $246					; 6 Switch to the first interrupt handler 
+	bit VIA_T1C_L				; 4 Clear IRQ event 
 	
-	sta save_a2+1	; 4
+	sta save_a2+1				; 4
 
 	;
 	; Get sample high part 
@@ -567,15 +566,15 @@ IrqDecAddr
 	sta VIA_PCR					; 4
 
 save_a2	
-	lda #123	; 2
+	lda #123					; 2
 	
 	.(
-	inc _irq_counter+0		; 5
-	bne skip				; 2+1 (no_skip taken)
-	inc _irq_counter+1		; 5
+	inc _irq_counter+0			; 5
+	bne skip					; 2+1 (no_skip taken)
+	inc _irq_counter+1			; 5
 skip
 	.)						
-	rti
+	rti							; 6
 InterruptCode_High_End
 
 
