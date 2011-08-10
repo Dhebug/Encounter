@@ -268,13 +268,21 @@ use_rom_irq
 	sta $246
 end
 	.)
-		
-	cli	
+	
+	;cli	
 
 	rts
 .)
 
 
+
+
+_TestLowIrq	
+	sei			; 2
+	brk
+	nop
+	rts			; 6
+				; + 8 cycles	
 
 
 
@@ -457,7 +465,7 @@ _PsgSetRegister
 ; To copy to zero page: http://forum.defence-force.org/viewtopic.php?t=525
 ; 7 cycles to call interrupt + 6 cycles for rti = 13 cycles total
 ;
-_InterruptCode_Low	
+_InterruptCode_Low				; 75 cycles (fastest code path)
 IrqIncAddr
 	inc $246					; 6		Switch to the second interrupt handler 
 	bit VIA_T1C_L				; 4		Clear IRQ event 
@@ -543,7 +551,7 @@ _InterruptCode_Low_End
 
 	.dsb 256-(*&255)
 
-_InterruptCode_High
+_InterruptCode_High				; 67 cycles (fastest code path)
 IrqDecAddr
 	dec $246					; 6 Switch to the first interrupt handler 
 	bit VIA_T1C_L				; 4 Clear IRQ event 
