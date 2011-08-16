@@ -391,6 +391,79 @@ Wait20Cycles
   rts  				; 6
   ;                  +6 for jsr  
 
+  
+;
+; List of 'neutral' instructions by number of cycles
+; - 2 nop (0xEA) / and immediate   / clc,dex,dey
+; - 3 jmp abs      / pha,php
+; - 4 bit abs      / pla,plp
+; - 5 asl zp
+; - 6 asl abs
+;
+; Additional useful instructions
+; - 2+1 bcc
+; - 6 jsr
+; - 6 rts
+;  
+;
+;
+
+_TemporizationIncrease
+  ;jmp _TemporizationIncrease
+ .(
+  ; Make A goes from odd to even to odd to even
+  ; This gives us the +1 cycles thanks to AND #1 / BNE
+  lda _TemporizationPatchA+1
+  eor #1
+  sta _TemporizationPatchA+1
+  bne end
+ 
+  lda _TemporizationPatchAddress+1
+  bne skip
+  dec _TemporizationPatchAddress+2
+skip
+  dec _TemporizationPatchAddress+1
+end  
+  .)
+  rts
+
+_TemporizationRun
+  ;jmp _TemporizationRun
+_TemporizationPatchA
+  lda #0						; 2
+_TemporizationPatchAddress
+  jmp _TemporizationTableEnd 	; 3+2+2+6
+                            	; = 15 cycles
+                                                         
+                               
+
+	.dsb 256-(*&255)
+  
+_TemporizationTableStart
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+  .byt $ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea,$ea
+_TemporizationTableEnd
+  and #1			; 2
+  bne end_tempo		; 2/3 depending of A
+end_tempo  
+  rts				; 6
+
+
+  
 	.dsb 256-(*&255)
 
 

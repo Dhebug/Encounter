@@ -143,7 +143,7 @@ void main()
 	unsigned int offset;
 		
 	cls();
-    PrintString(0,"\4IRQ Benchmark 1.6");
+    PrintString(0,"\4IRQ Benchmark 1.7");
 
     //
     // Some basic setup and hardware detection
@@ -165,14 +165,15 @@ void main()
     //
     // Ask which test we want to perform
     //    
-    PrintString(40,"PRESS (B) FOR BRK TEST");
-    PrintString(80,"PRESS (I) FOR IRQ TEST");
+    PrintString(40*1,"PRESS (B) FOR BRK TEST");
+    PrintString(40*2,"PRESS (I) FOR IRQ TEST");
+    PrintString(40*3,"PRESS (T) FOR TIMER TEST");
     
     do
     {
 	    car=toupper(get());
     }
-    while ((car!='B') && (car!='I'));
+    while ((car!='B') && (car!='I') && (car!='T'));
     
        
     
@@ -202,6 +203,37 @@ void main()
 			*PrintStringScreen++=(Hexdigits[(ProfilerTimer>>4)&15] | (flag?128:0));
 			*PrintStringScreen++=(Hexdigits[(ProfilerTimer)&15] | (flag?128:0));
 		    
+		    flag=1-flag;
+	    }    
+	}
+	else
+    if (car=='T')
+    {
+	    //
+	    // TIMER Test
+	    //
+	    int flag=0;
+		int counter=10*27;
+		
+		PrintStringScreen=(unsigned char*)0xbb80+40;
+		    
+	    // Compute the LOW and HIGH irq timings
+	    Sei();
+	    
+	    while (counter--)
+	    {
+			ProfilerReset();
+			TemporizationRun();
+			ProfilerRead();
+			ProfilerTimer=65535-ProfilerTimer;
+				    
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer>>12)&15] | (flag?128:0));
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer>>8)&15] | (flag?128:0));
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer>>4)&15] | (flag?128:0));
+			*PrintStringScreen++=(Hexdigits[(ProfilerTimer)&15] | (flag?128:0));
+		    
+			TemporizationIncrease();
+			
 		    flag=1-flag;
 	    }    
 	}
