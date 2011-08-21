@@ -32,347 +32,284 @@ lc01a
 	lda #$d0 ; envoie la commande %1101000 au FDC
 	jsr lc4d1  ; soit interdiction d'interruption
 	lda $02fa ; le vecteur IRQ est OK ?
-	cmp #$4c
-	bne lc035
+	cmp #$4c 
+	bne lc035 ; non
 lc026
-	lda $026d
+	lda $026d ; oui, est-ce un DEL+RESET (reset a froid)
 	and #$20
-	bne lc035
+	bne lc035  ;non
 lc02d
-	lda $020d
+	lda $020d  ; oui, on isole b1 de FLGTEL (SED present?)
 	and #$01
 	clc
-	bcc lc038
+	bcc lc038 ; inconditionnel
 lc035
-	lda #$01
+	lda #$01  ; force SED présent
 	sec
 lc038
-	sta $020d
-	ror $02ee
-	bmi lc043
+	sta $020d ; dans FLGTEL
+	ror $02ee ; b7 de FLGRST a 1 si DEL+RESET
+	bmi lc043 ;pour 48
 lc040
 	jmp lc0ac
 lc043
 	ldx #$2f
 lc045
-	lda lc838,x
-	sta $02be,x
+	lda lc838,x ;déplacements. On installe les vecteurs
+	sta $02be,x ; D'E/S par défaut en ADIOB
 	dex
 	bpl lc045
 lc04e
 	ldx #$04
 lc050
-	lda lc45f,x
-	sta $02ef,x
+	lda lc45f,x ;on place la racine du générateur aléatoire
+	sta $02ef,x ; dans CSRND (réel 5 octets)
 	dex
 	bpl lc050
 lc059
-	nop
-	nop
+	nop  ;???
+	nop  ;???
 	ldx #$03
 lc05d
-	lda lc2dc,x
-	sta $0314
-	lda #$08
-	sta $0310
+	lda lc2dc,x ; les lecteurs A à D sont-ils branchés ?
+	sta $0314 
+	lda #$08 ;commande SEEK au FDC (placer la tête sur
+	sta $0310 ; piste 0) dans FDCCR
 	tay
 lc069
-	iny
-	bne lc069
+	iny  ; 248 boucles
+	bne lc069 ; pour attente de réponse
 lc06c
-	nop
+	nop ; ??? décidément
 	ldy #$40
 	stx $00
 lc071
-	lda $0310
+	lda $0310 ;si b1 de ACIACR = 0
 	lsr
-	bcc lc081
+	bcc lc081 ;on installe le drive
 lc077
-	inc $00
+	inc $00 ; on teste plus de 200 fois pour être sur
 	bne lc071
 lc07b
-	dey
+	dey ; mais alors vraiment, vraiment sur !
 	bne lc071
 lc07e
-	tya
+	tya ; y=0,le nombre de piste sera 0,drive absent
 lc07f
-	beq lc086
+	beq lc086 ;inconditionnel
 lc081	
-	lsr $020d
+	lsr $020d ;on indique SED présent
 lc084
-	lda #$aa
+	lda #$aa ;on indique 42 pistes double face
 lc086
-	sta $0208,x
+	sta $0208,x ;dans le drive trouvé
 lc089
 	dex
 lc08a
-	
-	bpl lc05d
-lc08c	nop
+	bpl lc05d  ;et on les teste tous
+lc08c
+	nop  ; ??? aie, aie, aie
 	inx
-lc08e	lda lc524,x
-	sta $0400,x
-	lda lc464,x
-	sta $b800,x
-	lda lc2e0,x
-	sta $0600,x
-	lda lc5eb,x
-	sta $0700,x
-
+lc08e
+	lda lc524,x ;on installe la gestion IRQ, BRK et banques
+	sta $0400,x ; en $0400
+	lda lc464,x ;routine de chargement du STRATSED
+	sta $b800,x ;routine d'installation de la routine des
+	lda lc2e0,x  ;buffers
+	sta $0600,x 
+	lda lc5eb,x ;routine des buffers qui sera en $C500
+	sta $0700,x ;  banque 0
+	INX
+	BNE $C08E
+	JSR $0603 ; installe la routine de gestion des buffers
+	LDA #$00 ;x=buffer clavier
+	PHA ;on sauve le numéro
+	TAX
+	JSR $C4EA ; on inisialise le buffer x
+	PLA
+	CLC
+	ADC #$0C ; on passé au buffer suivant
+	CMP #$30 ; est-ce après le buffer SORTIE PARALLELE ?
+	BNE $C0AE ;non, on passé au suivant
+	LDA #$00
+	STA $020E ; 0 Ko de ROM
+	LDA #$40 ; 64 Ko de RAM
+	STA $020F
+	LDX #$07
+	LDY $0200,X ;on lit le statut des banques
+	TYA
+	AND #$10 ; on ignore ?
 	
-/*	
+	    bne $C0EB ; oui 
+        tya  ; 2non, on sauve la valeur 
+        pha 
+        and #$0F ; combien de mï¿½moire ? 
+        tay 
+        iny  ; 2dans Y 
+        pla 
+        and #$20 ; est-ce une RAM ou une ROM 
+        clc 
+        beq $C0E4 ; 
+        tya  ; 2une ROM 
+        adc $020E ;  on ajoute ï¿½ la ROM totale 
+        sta $020E ;  
+        bcc $C0EB ; inconditionnel 
+        tya  ; 2une RAM 
+        adc $020F ;  on ajoute ï¿½ la RAM totale 
+        sta $020F ;  
+        dex  ; 2banque suivante 
+        bne $C0C7 ; 
+        bit $02EE ;  b7 de FLGRST = 1 
+        bpl $C101 ; non, c'est un RESET a chaud 
+        ldx #$0B ; oui, on place les vecteurs VNMI, VIRQ et 
+        lda $C386,X ;  VAPLIC 
+        sta $02F4,X ;  
+        dex 
+        bpl $C0F5 ; 
+        jsr $D9B1 ;  et installe les valeurs clavier 
+        lda $026C ;  
+        and #$90 ; a-t-on pressï¿½ SHIFT droit ? 
+        beq $C110 ; non 
+        lda $020D ;  oui, on force b6 de FLGTEL a 1 
+        ora #$40 ; pour indiquer le mode MINITEL 
+        sta $020D ;  
+        jsr $DF5B ;  initialise les valeurs ï¿½cran TEXT 
+        jsr $DA56 ;  initialise l'imprimante 
 
-C024 D0 0F BNE $C035 ; non
-C026 AD 6D 02 LDA $026D ; oui, est-ce un DEL+RESET (reset a froid)
-C029 29 20 AND #$20
-C02B D0 08 BNE $C035 ;non
-C02D AD 0D 02 LDA $020D ; oui, on isole b1 de FLGTEL (SED present?)
-C030 29 01 AND #$01
-C032 18 CLC C=0
-C033 90 03 BCC $C038 ; inconditionnel
-C035 A9 01 LDA #$01 ; force SED présent
-C037 38 SEC et C=1
-C038 8D 0D 02 STA $020D ; dans FLGTEL
-C03B 6E EE 02 ROR $02EE; b7 de FLGRST a 1 si DEL+RESET
-C03E 30 03 BMI $C043; DEL+RESET
-C040 4C AC C0 JMP $C0AC; RESET
-C043 A2 2F LDX #$2F ;pour 48
-C045 BD 38 C8 LDA $C838,X;déplacements. On installe les vecteurs
-C048 9D BE 02 STA $02BE,X; D'E/S par défaut en ADIOB
-C04B CA DEX
-C04C 10 F7 BPL $C045
-C04E A2 04 LDX #$04
-C050 BD 5F C4 LDA $C45F,X ;on place la racine du générateur aléatoire
-C050 BD 5F C4 LDA $C45F,X ; on place la racine du générateur aléatoire
-C053 9D EF 02 STA $02EF,X ;dans CSRND (réel 5 octets)
-C056 CA DEX
-C057 10 F7 BPL $C050 
-C059 EA NOP ;???
-C05A EA NOP ;???
-C05B A2 03 LDX #$03
-
-C05D BD DC C2 LDA $C2DC,X; les lecteurs A à D sont-ils branchés ?
-C060 8D 14 03 STA $0314
-C063 A9 08 LDA #$08 ;commande SEEK au FDC (placer la tête sur
-C065 8D 10 03 STA $0310 ; piste 0) dans FDCCR
-C068 A8 TAY
-C069 C8 INY ; 248 boucles
-C06A D0 FD BNE $C069 ; pour attente de réponse
-C06C EA NOP ??? décidément
-C06D A0 40 LDY #$40
-C06F 86 00 STX $00
-C071 AD 10 03 LDA $0310 ;si b1 de ACIACR = 0
-C074 4A LSR
-C075 90 0A BCC $C081 ;on installe le drive
-C077 E6 00 INC $00 ; on teste plus de 200 fois pour être sur
-C079 D0 F6 BNE $C071
-C07B 88 DEY ; mais alors vraiment, vraiment sur !
-C07C D0 F3 BNE $C071
-C07E 98 TYA ; y=0,le nombre de piste sera 0,drive absent
-C07F F0 05 BEQ $C086 ;inconditionnel
-C081 4E 0D 02 LSR $020D ;on indique SED présent
-C084 A9 AA LDA #$AA ;on indique 42 pistes double face
-C086 9D 08 02 STA $0208,X ;dans le drive trouvé
-C089 CA DEX
-C08A 10 D1 BPL $C05D ;et on les teste tous
-C08C EA NOP ; ??? aie, aie, aie
-C08D E8 INX ; x=0
-C08E BD 24 C5 LDA $C524,X ;on installe la gestion IRQ, BRK et banques
-C091 9D 00 04 STA $0400,X ; en $0400
-C094 BD 64 C4 LDA $C464,X ;routine de chargement du STRATSED
-C097 9D 00 B8 STA $B800,X
-C09A BD E0 C2 LDA $C2E0,X ;routine d'installation de la routine des
-C09D 9D 00 06 STA $0600,X ;buffers
-C0A0 BD EB C5 LDA $C5EB,X ;routine des buffers qui sera en $C500
-C0A3 9D 00 07 STA $0700,X;  banque 0
-*/
-
+       
+        
+        jsr $D5BD ;  initialise variables VDT 
+        jsr $DFAB ;  initialise JOYSTICK, SOURIS et TIMERs 
+        jsr $DB54 ;  initialise RS232 
+        lda $0275 ;  
+        lsr  ; 2on isole le mode clavier 
+        and #$03 ; dans B1-2-3 de FLGKBD 
+        .byt $00,$52 ; et on place le type de clavier 
+        lda #$80 ; 
+        .byt $00,$00 ; on ouvre le clavier en entrï¿½e sur canal 0 
+        lda #$88 ; 
+        .byt $00,$00 ; et l'ï¿½cran fenï¿½tre 0 en sortie 
+        .byt $00,$3C ; on met l'horloge a 0 
+        lda #$8F ; on ouvre le MINITEL en sortie 
+        .byt $00,$01 ; sur le canal 1 
+        lda #$13 ; indexe mode non rouleau et 
+        ldy #$C4 ; curseur ï¿½teint sur MINITEL 
+        bit $020D ;  est-on en mode MINITEL ? 
+        bvc $C146 ; non 
+        lda #$8F ; oui, on ouvre le MINITEL en sortie 
+        .byt $00,$00 ; sur le canal 1 
+        lda #$0D ; on indexe mode rouleau et curseur allumï¿½ 
+        ldy #$C4 ; 
+        .byt $00,$15 ; on envoie les codes au Minitel 
+        bit $02EE ;  RESET ï¿½ froid ? 
+        bpl $C173 ; non 
+        lda #$9B ; 
+        ldy #$C3 ; 
+        .byt $00,$14 ; on affiche TELESTRAT 
+        lda #$E1 ; 
+        ldy #$C3 ; 
+        .byt $00,$14 ; on affiche Copyrightï¿½ 
+        .byt $00,$25 ; on passï¿½ ï¿½ la ligne 
+        lda $020F ;  on affiche la RAM 
+        jsr $C29B ;  en dï¿½cimal deux chiffres 
+        lda #$B9 ; 
+        ldy #$C3 ; 
+        .byt $00,$14 ; Ko RAM 
+        lda $020E ;  puis la ROM 
+        jsr $C29B ;  
+        lda #$C2 ; Ko ROM 
+        ldy #$C3 ; 
+        .byt $00,$14 ; 
+        jsr $C6BF ;  l'imprimante est prï¿½te ? 
+        bne $C17D ; oui 
+        .byt $00,$25 ; non, on sautï¿½ une ligne 
+        jmp $C188 ;  BNE aurait ï¿½tï¿½ mieux 
+        bit $02EE ;  RESET ï¿½ froid ? 
+        bpl $C188 ; non 
+        lda #$01 ; oui, on affiche "Imprimante" 
+        ldy #$C4 ; 
+        .byt $00,$14 ; 
+        bit $02EE ;  RESET ï¿½ froid ? 
+       .byt $30,$0f ; FIXME   
+        jsr $C268 ;  on coupe l'entrï¿½e Minitel sur canal 1 
+        ldx $02F4 ;  et on exï¿½cute VNMI ï¿½ banque X 
+        lda $02F5 ;  adresse AY 
+        ldy $02F6 ;  
+        jmp $C25C ;  car changement de banque probable 
+        ldx #$00 ; on va afficher les drives 
+        lda $0208,X ;  le drive X est branchï¿½ ? 
+        bne $C1AA ; oui 
+        inx  ; 2non 
+        cpx #$04 ; on fait les quatre possibles 
+        bne $C19E ; 
+        beq $C1E0 ; inconditinnel 
+        txa 
+        pha 
+        lda $0220 ;  sommes-nous au dï¿½but de la ligne ? 
+        beq $C1B5 ; oui 
+        lda #$2C ; non, on affiche "," 
+        .byt $00,$10 ; 
+        lda #$CC ; on affiche "Drive :" 
+        ldy #$C3 ; 
+        .byt $00,$14 ; 
+        pla 
+        pha 
+        tax 
+        lda $C2DC,X ;  on indique au FDC la commande 1xx00100 
+        sta $0314 ;  soit activer le drive xx , face B 
+        stx $020C ;  et drive courant dans DRVDEF, drive par dï¿½faut 
+        pla 
+        tax 
+        txa  ; 2on prend le numï¿½ro du drive 
+        clc 
+        adc #$41 ; on ajoute "A" 
+        .byt $00,$10 ; et on affiche 
+        inx 
+        cpx #$04 ; pour tous les drives 
+        beq $C1E5 ; (4 maxi) 
+        lda $0208,X ;  on lit le drive X 
+        beq $C1CF ; vide ? 
+        lda #$2D ; non, on affiche "-" 
+        .byt $00,$10 ; et on continue 
+        jmp $C1C9 ;  pourquoi pas BNE ??? 
+        lda $0220 ;  on est au dï¿½but de la ligne ? 
+        beq $C1E7 ; oui 
+        .byt $00,$25 ; non on sautï¿½ une ligne 
+        lda #$D3 ; on affiche TELEMON V2.4 etcï¿½ 
+        ldy #$C3 ; 
+        .byt $00,$14 ; 
+        lda #$00 ; on met 0 en dï¿½finition pour la banque 0 (RAM) 
+        sta $0200 ;  
+        lda $020D ;  
+        lsr  ; 2STRATSED present ? 
+        bcs $C207 ; non 
+        lda #$19 ; oui, on affiche "Insï¿½rez une disquette" 
+        ldy #$C4 ; clignotant 
+        .byt $00,$14 ; 
+        jsr $B800 ;  on attend une dsk STRATSED, on charge le SED 
+        lda #$30 ; on arï¿½te de clignoter 
+        ldy #$C4 ; 
+        .byt $00,$14 ; 
+        ldx #$02 ; 
+        lda $C45C,X ;  on place l'extension COM 
+        sta $055D,X ;  dans l'extension par dï¿½faut 
+        dex 
+        bpl $C209 ; 
+        jsr $0600 ;  affiche le copyright des banques 
+        jsr $C268 ;  ferme le minitel sur le canal 1 
+        lda $020D ;  SED present ? 
+        lsr 
+        bcs $C24D ; non 
+        lda #$55 ; indexe BONJOUR 
+        ldy #$C4 ; 
+        ldx #$07 ; 
+        .byt $00,$24 ; dans BUFNOM 
+        ldx #$00 ; 
+	
 /*
 
-C0A6 E8 INX
-C0A7 D0 E5 BNE $C08E
-C0A9 20 03 06 JSR $0603 installe la routine de gestion des buffers
-C0AC A9 00 LDA #$00 x=buffer clavier
-C0AE 48 PHA on sauve le numéro
-C0AF AA TAX
-C0B0 20 EA C4 JSR $C4EA on inisialise le buffer x
-C0B3 68 PLA
-C0B4 18 CLC
-C0B5 69 0C ADC #$0C on passé au buffer suivant
-C0B7 C9 30 CMP #$30 est-ce après le buffer SORTIE PARALLELE ?
-C0B9 D0 F3 BNE $C0AE non, on passé au suivant
-C0BB A9 00 LDA #$00
-C0BD 8D 0E 02 STA $020E 0 Ko de ROM
-C0C0 A9 40 LDA #$40 64 Ko de RAM
-C0C2 8D 0F 02 STA $020F
-C0C5 A2 07 LDX #$07
-C0C7 BC 00 02 LDY $0200,X on lit le statut des banques
-C0CA 98 TYA
-C0CB 29 10 AND #$10 on ignore ?
 
-C0CD D0 1C BNE $C0EB oui
-C0CF 98 TYA non, on sauve la valeur
-C0D0 48 PHA
-C0D1 29 0F AND #$0F combien de mémoire ?
-C0D3 A8 TAY
-C0D4 C8 INY dans Y
-C0D5 68 PLA
-C0D6 29 20 AND #$20 est-ce une RAM ou une ROM
-C0D8 18 CLC
-C0D9 F0 09 BEQ $C0E4
-C0DB 98 TYA une ROM
-C0DC 6D 0E 02 ADC $020E on ajoute à la ROM totale
-C0DF 8D 0E 02 STA $020E
-C0E2 90 07 BCC $C0EB inconditionnel
-C0E4 98 TYA une RAM
-C0E5 6D 0F 02 ADC $020F on ajoute à la RAM totale
-C0E8 8D 0F 02 STA $020F
-C0EB CA DEX banque suivante
-C0EC D0 D9 BNE $C0C7
-C0EE 2C EE 02 BIT $02EE b7 de FLGRST = 1
-C0F1 10 0E BPL $C101 non, c'est un RESET a chaud
-C0F3 A2 0B LDX #$0B oui, on place les vecteurs VNMI, VIRQ et
-C0F5 BD 86 C3 LDA $C386,X VAPLIC
-C0F8 9D F4 02 STA $02F4,X
-C0FB CA DEX
-C0FC 10 F7 BPL $C0F5
-C0FE 20 B1 D9 JSR $D9B1 et installe les valeurs clavier
-C101 AD 6C 02 LDA $026C
-C104 29 90 AND #$90 a-t-on pressé SHIFT droit ?
-C106 F0 08 BEQ $C110 non
-C108 AD 0D 02 LDA $020D oui, on force b6 de FLGTEL a 1
-C10B 09 40 ORA #$40 pour indiquer le mode MINITEL
-C10D 8D 0D 02 STA $020D
-C110 20 5B DF JSR $DF5B initialise les valeurs écran TEXT
-C113 20 56 DA JSR $DA56 initialise l'imprimante
-C116 20 BD D5 JSR $D5BD initialise variables VDT
-C119 20 AB DF JSR $DFAB initialise JOYSTICK, SOURIS et TIMERs
-C11C 20 54 DB JSR $DB54 initialise RS232
-C11F AD 75 02 LDA $0275
-C122 4A LSR on isole le mode clavier
-C123 29 03 AND #$03 dans B1-2-3 de FLGKBD
-C125 00 52 BRK $52 et on place le type de clavier
-C127 A9 80 LDA #$80
-C129 00 00 BRK $00 on ouvre le clavier en entrée sur canal 0
-C12B A9 88 LDA #$88
-C12D 00 00 BRK $00 et l'écran fenêtre 0 en sortie
-C12F 00 3C BRK $3C on met l'horloge a 0
-C131 A9 8F LDA #$8F on ouvre le MINITEL en sortie
-C133 00 01 BRK $01 sur le canal 1
-C135 A9 13 LDA #$13 indexe mode non rouleau et
-C137 A0 C4 LDY #$C4 curseur éteint sur MINITEL
-C139 2C 0D 02 BIT $020D est-on en mode MINITEL ?
-C13C 50 08 BVC $C146 non
-C13E A9 8F LDA #$8F oui, on ouvre le MINITEL en sortie
-C140 00 00 BRK $00 sur le canal 1
-C142 A9 0D LDA #$0D on indexe mode rouleau et curseur allumé
-C144 A0 C4 LDY #$C4
-C146 00 15 BRK $15 on envoie les codes au Minitel
-C148 2C EE 02 BIT $02EE RESET à froid ?
-C14B 10 26 BPL $C173 non
-C14D A9 9B LDA #$9B
-C14F A0 C3 LDY #$C3
-C151 00 14 BRK $14 on affiche TELESTRAT
-C153 A9 E1 LDA #$E1
-C155 A0 C3 LDY #$C3
-C157 00 14 BRK $14 on affiche Copyright…
-C159 00 25 BRK $25 on passé à la ligne
-C15B AD 0F 02 LDA $020F on affiche la RAM
-C15E 20 9B C2 JSR $C29B en décimal deux chiffres
-C161 A9 B9 LDA #$B9
-C163 A0 C3 LDY #$C3
-C165 00 14 BRK $14 Ko RAM
-C167 AD 0E 02 LDA $020E puis la ROM
-C16A 20 9B C2 JSR $C29B
-C16D A9 C2 LDA #$C2 Ko ROM
-C16F A0 C3 LDY #$C3
-C171 00 14 BRK $14
-C173 20 BF C6 JSR $C6BF l'imprimante est prête ?
-C176 D0 05 BNE $C17D oui
-C178 00 25 BRK $25 non, on sauté une ligne
-C17A 4C 88 C1 JMP $C188 BNE aurait été mieux
-C17D 2C EE 02 BIT $02EE RESET à froid ?
-C180 10 06 BPL $C188 non
-C182 A9 01 LDA #$01 oui, on affiche "Imprimante"
-C184 A0 C4 LDY #$C4
-C186 00 14 BRK $14
-C188 2C EE 02 BIT $02EE RESET à froid ?
-C18D 20 68 C2 JSR $C268 on coupe l'entrée Minitel sur canal 1
-C190 AE F4 02 LDX $02F4 et on exécute VNMI – banque X
-C193 AD F5 02 LDA $02F5 adresse AY
-C196 AC F6 02 LDY $02F6
-C199 4C 5C C2 JMP $C25C car changement de banque probable
-C19C A2 00 LDX #$00 on va afficher les drives
-C19E BD 08 02 LDA $0208,X le drive X est branché ?
-C1A1 D0 07 BNE $C1AA oui
-C1A3 E8 INX non
-C1A4 E0 04 CPX #$04 on fait les quatre possibles
-C1A6 D0 F6 BNE $C19E
-C1A8 F0 36 BEQ $C1E0 inconditinnel
-C1AA 8A TXA
-C1AB 48 PHA
-C1AC AD 20 02 LDA $0220 sommes-nous au début de la ligne ?
-C1AF F0 04 BEQ $C1B5 oui
-C1B1 A9 2C LDA #$2C non, on affiche ","
-C1B3 00 10 BRK $10
-C1B5 A9 CC LDA #$CC on affiche "Drive :"
-C1B7 A0 C3 LDY #$C3
 
-C1B9 00 14 BRK $14
-C1BB 68 PLA
-C1BC 48 PHA
-C1BD AA TAX
-C1BE BD DC C2 LDA $C2DC,X on indique au FDC la commande 1xx00100
-C1C1 8D 14 03 STA $0314 soit activer le drive xx , face B
-C1C4 8E 0C 02 STX $020C et drive courant dans DRVDEF, drive par défaut
-C1C7 68 PLA
-C1C8 AA TAX
-C1C9 8A TXA on prend le numéro du drive
-C1CA 18 CLC
-C1CB 69 41 ADC #$41 on ajoute "A"
-C1CD 00 10 BRK $10 et on affiche
-C1CF E8 INX
-C1D0 E0 04 CPX #$04 pour tous les drives
-C1D2 F0 11 BEQ $C1E5 (4 maxi)
-C1D4 BD 08 02 LDA $0208,X on lit le drive X
-C1D7 F0 F6 BEQ $C1CF vide ?
-C1D9 A9 2D LDA #$2D non, on affiche "-"
-C1DB 00 10 BRK $10 et on continue
-C1DD 4C C9 C1 JMP $C1C9 pourquoi pas BNE ???
-C1E0 AD 20 02 LDA $0220 on est au début de la ligne ?
-C1E3 F0 02 BEQ $C1E7 oui
-C1E5 00 25 BRK $25 non on sauté une ligne
-C1E7 A9 D3 LDA #$D3 on affiche TELEMON V2.4 etc…
-C1E9 A0 C3 LDY #$C3
-C1EB 00 14 BRK $14
-C1ED A9 00 LDA #$00 on met 0 en définition pour la banque 0 (RAM)
-C1EF 8D 00 02 STA $0200
-C1F2 AD 0D 02 LDA $020D
-C1F5 4A LSR STRATSED present ?
-C1F6 B0 0F BCS $C207 non
-C1F8 A9 19 LDA #$19 oui, on affiche "Insérez une disquette"
-C1FA A0 C4 LDY #$C4 clignotant
-C1FC 00 14 BRK $14
-C1FE 20 00 B8 JSR $B800 on attend une dsk STRATSED, on charge le SED
-C201 A9 30 LDA #$30 on arête de clignoter
-C203 A0 C4 LDY #$C4
-C205 00 14 BRK $14
-C207 A2 02 LDX #$02
-C209 BD 5C C4 LDA $C45C,X on place l'extension COM
-C20C 9D 5D 05 STA $055D,X dans l'extension par défaut
-C20F CA DEX
-C210 10 F7 BPL $C209
-C212 20 00 06 JSR $0600 affiche le copyright des banques
-C215 20 68 C2 JSR $C268 ferme le minitel sur le canal 1
-C218 AD 0D 02 LDA $020D SED present ?
-C21B 4A LSR
-C21C B0 2F BCS $C24D non
-C21E A9 55 LDA #$55 indexe BONJOUR
-C220 A0 C4 LDY #$C4
-C222 A2 07 LDX #$07
-C224 00 24 BRK $24 dans BUFNOM
-C226 A2 00 LDX #$00
-19
 C228 A9 7D LDA #$7D appel a XTRVNM
 C22A A0 FF LDY #$FF
 C22C 20 5C C2 JSR $C25C BONJOUR.COM est-il présent ?
@@ -400,13 +337,59 @@ C25C 8D 15 04 STA $0415 et on exécute sur la banque X
 C25F 8C 16 04 STY $0416
 C262 8E 17 04 STX $0417
 C265 4C 0C 04 JMP $040C par EXBNK
+
+
+ETEINT L'ENTREE MINITEL SUR LE CANAL 1
+Action : vide le buffer d'entrée du Minitel et ferme l'entrée série sur le canal numéro 1.
+C268 58 CLI en $C268, on autorise les interruptions.
+C269 A9 02 LDA #$02 en $C269, on ne touché pas aux interruptions.
+C26B 85 44 STA $44
+C26D A5 44 LDA $44
+C26F D0 FC BNE $C26D on attend 3 dixièmes de secondes
+C271 A2 0C LDX #$0C on vide le buffer série ACIA entrée
+C273 00 57 BRK $57 par XVIDBU
+C275 AD 1E 03 LDA $031E
+C278 29 F3 AND #$F3 on force b2 à 0
+C27A 09 08 ORA #$08 et b3 à 1
+C27C 8D 1E 03 STA $031E dans le registre de commande de l'ACIA
+C27F A9 8F LDA #$8F on ferme le minitel en sortie sur le canal 1
+C281 00 05 BRK $05 pourquoi pas JMP $C723 ???
+C283 60 RTS
+
+????????
+Action : un code au clavier, si c'est CTRL-C, saute en $9000, si c'est CTRL-A, on se branche
+en $E000 sur la banque 0. Cette routine n'est en fait jamais appelée (il faut qu'aucun
+langage ne soit présent, ni aucune application) il s'agit donc probablement d'une
+routine de mise au point.
+C284 00 10 BRK $10 lit un code
+C286 00 0C BRK $0C demande une touché au clavier
+C288 C9 03 CMP #$03 CTRL-C ?
+C28A D0 03 BNE $C28F non, on saute
+C28C 20 00 90 JSR $9000 oui, on exécute en $9000
+C28F C9 01 CMP #$01 CTRL-A ?
+C291 D0 F1 BNE $C284 non, on insiste…
+C293 A9 00 LDA #$00 oui, on indexe $E000, banque 0 (RAM)
+C295 A0 E0 LDY #$E0
+C297 A2 00 LDX #$00
+C299 F0 C1 BEQ $C25C et on saute
+
+
+;AFFICHE A EN DECIMAL SUR 3 CHIFFRES
+Action: en entrée, A contient un nombre qui sera affiché sur le canal 0 par le biais de la routine
+XDECIM.
+En sortie, Y=0
+C29B A0 00 LDY #$00 AY contient A
+C29D A2 20 LDX #$20 le caractère par défaut est " "
+C29F 86 14 STX $14 dans DEFAFF
+C2A1 A2 01 LDX #$01 il faut afficher 3 caractères (X+2)
+C2A3 4C 39 CE JMP $CE39 on affiche par XDECIM
+
+
 */
 
 
-
-	.byt $e8,$d0,$e5,$20,$03,$06,$a9,$00,$48,$aa
-	.byt $20,$ea,$c4,$68,$18,$69,$0c,$c9,$30,$d0,$f3,$a9,$00,$8d,$0e,$02
-	.byt $a9,$40,$8d,$0f,$02,$a2,$07,$bc,$00,$02,$98,$29,$10,$d0,$1c,$98
+/*
+	.byt $d0,$1c,$98
 	.byt $48,$29,$0f,$a8,$c8,$68,$29,$20,$18,$f0,$09,$98,$6d,$0e,$02,$8d
 	.byt $0e,$02,$90,$07,$98,$6d,$0f,$02,$8d,$0f,$02,$ca,$d0,$d9,$2c,$ee
 	.byt $02,$10,$0e,$a2,$0b,$bd,$86,$c3,$9d,$f4,$02,$ca,$10,$f7,$20,$b1
@@ -417,7 +400,8 @@ C265 4C 0C 04 JMP $040C par EXBNK
 	.byt $00,$00,$a9,$0d,$a0,$c4,$00,$15,$2c,$ee,$02,$10,$26,$a9,$9b,$a0
 	.byt $c3,$00,$14,$a9,$e1,$a0,$c3,$00,$14,$00,$25,$ad,$0f,$02,$20,$9b
 	.byt $c2,$a9,$b9,$a0,$c3,$00,$14,$ad,$0e,$02,$20,$9b,$c2,$a9,$c2,$a0
-	.byt $c3,$00,$14,$20,$bf,$c6,$d0,$05,$00,$25,$4c,$88,$c1,$2c,$ee,$02
+	.byt $c3,$00,$14,$20,$bf,$c6,$d0,$05,$00,$25
+	.byt $4c,$88,$c1,$2c,$ee,$02
 	.byt $10,$06,$a9,$01,$a0,$c4,$00,$14,$2c,$ee,$02,$30,$0f,$20,$68,$c2
 	.byt $ae,$f4,$02,$ad,$f5,$02,$ac,$f6,$02,$4c,$5c,$c2,$a2,$00,$bd,$08
 	.byt $02,$d0,$07,$e8,$e0,$04,$d0,$f6,$f0,$36,$8a,$48,$ad,$20,$02,$f0
@@ -428,7 +412,10 @@ C265 4C 0C 04 JMP $040C par EXBNK
 	.byt $00,$02,$ad,$0d,$02,$4a,$b0,$0f,$a9,$19,$a0,$c4,$00,$14,$20,$00
 	.byt $b8,$a9,$30,$a0,$c4,$00,$14,$a2,$02,$bd,$5c,$c4,$9d,$5d,$05,$ca
 	.byt $10,$f7,$20,$00,$06,$20,$68,$c2,$ad,$0d,$02,$4a,$b0,$2f,$a9,$55
-	.byt $a0,$c4,$a2,$07,$00,$24,$a2,$00,$a9,$7d,$a0,$ff,$20,$5c,$c2,$f0
+	.byt $a0,$c4,$a2,$07,$00,$24
+	.byt $a2,$00
+	*/
+	.byt $a9,$7d,$a0,$ff,$20,$5c,$c2,$f0
 	.byt $1c,$ad,$0d,$02,$09,$04,$8d,$0d,$02,$a2,$06,$bd,$00,$02,$c9,$ef
 	.byt $f0,$05,$ca,$10,$f6,$30,$06,$a9,$00,$a0,$c0,$d0,$0f,$a2,$00,$00
 	.byt $35,$ae,$fd,$02,$30,$30,$ad,$fe,$02,$ac,$ff,$02,$8d,$15,$04,$8c
