@@ -26,42 +26,35 @@ along with the new one.
 
 * Exam room not visible completely
 
-* Mr withit in the reading room walks outside the right side
+* Mr Withit in the reading room walks outside the right side
 
-* I saw Mr Wacker writting on the exam blackboard from the middle
-  of the class... Maybe when no need to erase the blackboard?
-  Also happened in the white room after Einstein grassing on Eric's absence
-  and then the teacher changing the schema of the class, writting someting on 
-  the blackboard.
 * It is a bit strange that the teacher writes someting, then
   starts asking unrelated questions.
 
+* Eric can write on blackboard, but seems that only on CAPS
 
-	a b c d e f... x y z
-    ^			       ^
+* It seems that always the message is mumps duty in special playtime, though
+  the logic changes...
 
-Move_back(i)
-	list(i)->list(p2)
-	list(p2)->list(i)
-	p1++
-	p2--
+* Eric is flagged as inside the exam room when he is just near the entrance
 
-	a b c z e f... x y d
-	  ^              ^
-	 	
+- When ending game message is being told (10000 lines) sometimes, at the end
+  Mr Wacker teleports and the cycle starts again?
 
-	a z c d e f... x y b
-	  ^              ^
-	a z y d e f... x c b
-	    ^          ^ 
+- Jumping twice causes Eric to fall below the floor.
 
+- When jumping again over a boy teachers issue a "THIS ROOM IS PRIVATE" 
+punishment (as check Eric loc fails and the hack adjusting pos_row with the
+flag JUMPING does not do the tick).
+ 
+- When Eric jumps s_check_Eric_loc fails, so Einstein grasses on Eric's absence
+and other matters. I guess that modifying get_Eric_Ycoord so it returns the
+actual floor if Eric is jumping (as he cannot jump when on the staircase) could 
+do the trick.
 
-Move_front(i)
-	list(i)->list(p1)
-	list(p1)->list(i)
-	p1--
-	p2++
+- You can sit on the bank in dinner room??? 
+  (checking chairs from middle floor it seems)...
 
-	a z b d e f... x c y
-	  ^              ^
-				     
+- When looking for Eric which_way seems to fail on certain occasions
+  resulting in the teacher being lost?
+ ( Goes downstairs to first floor and continue into the depths of the unknown)

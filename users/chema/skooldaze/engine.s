@@ -280,12 +280,22 @@ skipbubble
 
 	dec first_col
 	; Scroll the screen data 1 scan right
+
 	ldx #(SKOOL_ROWS*8)
+
+#ifdef CENTER_PLAY_AREA
+	lda #<$a002+160
+	sta smc_sp1+1
+	lda #<$a003+160
+	sta smc_sp2+1
+	lda #>$a000+160
+#else
 	lda #<$a002
 	sta smc_sp1+1
 	lda #<$a003
 	sta smc_sp2+1
 	lda #>$a000
+#endif
 	sta smc_sp1+2
 	sta smc_sp2+2
 loop1
@@ -382,11 +392,19 @@ skipbubble
 	inc first_col
 	; Scroll the screen data 1 scan left
 	ldx #(SKOOL_ROWS*8)
+#ifdef CENTER_PLAY_AREA
+	lda #<$a003+160
+	sta smc_sp1+1
+	lda #<$a002+160
+	sta smc_sp2+1
+	lda #>$a000+160
+#else
 	lda #<$a003
 	sta smc_sp1+1
 	lda #<$a002
 	sta smc_sp2+1
 	lda #>$a000
+#endif
 	sta smc_sp1+2
 	sta smc_sp2+2
 loop1

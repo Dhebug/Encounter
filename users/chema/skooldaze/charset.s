@@ -545,7 +545,7 @@ toggle_line_board
 	; We are on bottom line, change
 	lda #0
 	sta (tmp3),y
-	bne finish
+	jmp finish
 top_line
 	; We are on top line, change
 	lda #11
@@ -681,13 +681,16 @@ nonl
 	ldy #3
 	lda (tmp3),y
 	cmp #10
+	beq lasttile
+	cmp #21
 	bne goon
+lasttile
 	; We are in the last tile... check
 	ldy #2
 	lda ch_count
 	clc
 	adc (tmp3),y
-	cmp #6
+	cmp #5
 	bcc goon
 	; Toggle line
 	jsr toggle_line_board
@@ -1043,6 +1046,32 @@ search_submessage
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Write a line of text into the upper part of
+; the text buffer.
+; The pointer to the text is passed on tmp0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+write_text_up
+.(
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
+	sta tmp1+1
+	bne write_text	; this always jumps
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Write a line of text into the lower part of
+; the text buffer.
+; The pointer to the text is passed on tmp0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+write_text_down
+.(
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
+	sta tmp1+1
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Write a line of text into a graphic buffer
@@ -1109,6 +1138,12 @@ savy
 	jmp loopw
 
 endw
+
+	; Kludge to turn-off centering
++patch_notcenter
+	lda #0
+	bne savx
+
 	; Now center the message
 	; See how many columns we have left
 	lda tmp2
@@ -1202,6 +1237,11 @@ nocarry1
 
 dump_text_buffer
 .(
+	lda #<buffer_text
+	sta tmp0
+	lda #>buffer_text
+	sta tmp0+1
+
 	stx savx+1	; Preserve register x
 	
 	ldx #8*3
@@ -1237,6 +1277,89 @@ savx
 .)
 
 
+update_scorepanel
+.(
+	lda #1
+	sta patch_notcenter+1
+
+	lda #0
+	sta bufconv
+
+	lda tab_spanel_add+1,y
+	pha
+	lda tab_spanel_add,y
+	pha
+
+	lda score,y
+	sta op2
+	lda score+1,y
+	sta op2+1
+	ora op2
+	beq skip
+	jsr utoa
+skip
+	lda #<bufconv
+	sta tmp0
+	lda #>bufconv
+	sta tmp0+1
+
+
+	jsr write_text_up
+
+	pla	
+	sta tmp0
+	pla
+	sta tmp0+1
+
+	lda #<buffer_text+BUFFER_TEXT_WIDTH*4+BUFFER_TEXT_WIDTH-4
+	sta tmp1
+	lda #>buffer_text+BUFFER_TEXT_WIDTH*4+BUFFER_TEXT_WIDTH-4
+	sta tmp1+1
+
+	ldx #8
+loop
+	ldy #3
+loop2
+	lda (tmp1),y
+	sta (tmp0),y
+	dey
+	bpl loop2
+
+	lda tmp1
+	clc
+	adc #BUFFER_TEXT_WIDTH
+	sta tmp1
+	bcc nocarry
+	inc tmp1+1
+nocarry
+
+	lda tmp0
+	clc
+	adc #40
+	sta tmp0
+	bcc nocarry2
+	inc tmp0+1
+nocarry2
+
+	dex
+	bne loop
+
+	lda #0
+	sta patch_notcenter+1
+	rts
+
+.)
+
+
+clear_scorepanel
+.(
+	ldy #0
+	jsr update_scorepanel
+	ldy #2
+	jsr update_scorepanel
+	ldy #4
+	jmp update_scorepanel
+.)
 
 
 

@@ -55,7 +55,6 @@
 ; Buffer width for lesson/lines box.
 #define BUFFER_TEXT_WIDTH 11	
 
-
 ; Ticks to change the lesson (originally $1500=5376)
 #define LESCLK_VAL		5376 
 
@@ -87,7 +86,8 @@
 ;; Avoid Oricutron's bug with ror addr,x
 #define AVOID_ORICUTRON_BUG
 
-
+;; Center play area
+#define CENTER_PLAY_AREA
 
 ;; Definitions for characters
 
@@ -162,7 +162,7 @@
 ; Lesson descriptors
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Each entry in this table defines the teacher for the period 
-; (if any), and the room. The teacher is identified by bits 4-5
+; (if any), and the room. The teacher is identified by bits 4-6
 ;
 ; Bits Teacher 
 #define DES_ROCKITT	%0000
@@ -216,7 +216,10 @@
 #define CH_EXAMBR			70	;72-2
 #define CH_EXAMBL			58	;58-2
 
-
+; Position of blackboards
+#define COL_EXAM_BOARD		55
+#define COL_WHITE_BOARD		34
+#define COL_READING_BOARD	56
 
 
 

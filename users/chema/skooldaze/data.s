@@ -26,8 +26,9 @@ vis_row .byt 00
 ; Same but in skool coordinates
 tile_col .byt 00
 
+; Backbuffer, just one tile..
+backbuffer .dsb 8
 
-.text
 ; Some game variables
 
 
@@ -37,16 +38,17 @@ current_lesson_index	.byt 0			; Index of the current lesson in the main timetabl
 current_lesson			.byt PLAYTIME1	; Current lesson from the main timetable
 last_char_moved			.byt 0			; Last character we have moved
 
-; Keep the next 5 contiguous!
+; Keep the next 6 contiguous!
 lesson_status			.byt 0			; Lesson status flags
 lesson_signals			.byt 0			; Lesson signal flags
 game_status				.byt 0			; Game status flags
+birthyear_ind			.byt 0			; Creak's birth year question indicator
 stampede_signals		.byt 0			; Stampede control signals
 special_playtime		.byt 0			; Special playtime flags
 
-
 game_mode				.byt 0			; Game mode indicator (0 demo, 1 shields need to be flashed, 2 combination, 3 shields need to be unflashed)
 lesson_descriptor		.byt 0			; Indicates who is teaching Eric and where
+lines_delay				.byt 0			; Delay between punishments by teachers (used by some routines like teacher_gives_lines).
 
 ; Eric's status flags
 ; 0 ERIC is firing the catapult
@@ -82,18 +84,6 @@ srb_offset_lip			.byt 0		; Offset of the lip's byte
 srb_bitmask_lip			.byt 0		; Bitmask for the lip
 
 
-; Locations for goto random location script
-tab_locs
-	.byt D_LIBRARY
-	.byt D_FIRE_ESCAPE
-	.byt D_GYM
-	.byt D_BIG_WINDOW
-
-
-; Backbuffer, just one tile..
-backbuffer .dsb 8
-
-
 ; Screen refresh buffer
 SRB 
 	.byt $3f,$ff,$ff,$ff,$fc
@@ -119,14 +109,33 @@ SRB
 	.byt $3f,$ff,$ff,$ff,$fc
 
 
-; Buffer for lesson box
-buffer_text
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
-	.dsb BUFFER_TEXT_WIDTH*8,$40
+.text
+
+; Locations for goto random location script
+tab_locs
+	.byt D_LIBRARY
+	.byt D_FIRE_ESCAPE
+	.byt D_GYM
+	.byt D_BIG_WINDOW
+
+; Probabilities (out of 256) that a teacher
+; punishes Einistein for telling tales
+tab_teachertales
+	.byt 48,16,0,16
+
+tab_safecodes
+	.dsb 4		; The safe combination letters for the teachers:
+
+creak_year		; Year of the birth of Mr Creak
+	.asc "0000"
+	.byt 0
+birthyear_id	; Identifier to the question of that year
+	.byt 0
+
 
 #define LAST_TILE 103
 
+free_before_rows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .dsb 256-(*&255)
 ; Tile map for background: row 0
@@ -205,6 +214,9 @@ i_subcom_high
 cont_subcom_low
 	.dsb MAX_CHARACTERS,0
 
+; For the keyboard routine
+KeyBank .dsb 8
+
 free_r2
 .dsb (256-32)-(*&255)
 ; Personal timetable for Angelface
@@ -246,8 +258,19 @@ command_list_low
 dest_x
 	.dsb MAX_CHARACTERS,0
 
-free_r3
-.dsb (256-32)-(*&255)
+	; Table for deal_with_Eric, routines
+tab_dE_routh
+	.byt >listen_Eric, >knock_Eric, >fire_Eric2, >hit_Eric2, >jump_Eric2
+tab_dE_routl
+	.byt <listen_Eric, <knock_Eric, <fire_Eric2, <hit_Eric2, <jump_Eric2
+
+
+; For the random routine
+randseed 
+  .word $dead       ; will it be $dead again? 
+
+;free_r3
+;.dsb (256-32)-(*&255)
 ; Personal timetable for Boy Wander
 per_timet_bwander
 	.byt 172,172,156,156,178,140,178,156,148,148,148,164,178,178,164,156,140,164,148,196,196,216,192,194,192,192,192,194,194,194,192,194
@@ -269,6 +292,17 @@ var2		; Byte 104
 	.dsb MAX_CHARACTERS,0
 var3		; Byte 107
 	.dsb MAX_CHARACTERS,0
+
+
+	; Table for deal_with_Eric, flagvalues
+tab_dE_flags
+	.byt ERIC_SPOKEN, ERIC_DOWN, ERIC_FIRING, ERIC_HITTING, ERIC_JUMPING
+	
+	; Table for updating the score panel
+tab_spanel_add
+	.word ($a000+(177*40+34))
+	.word ($a000+(185*40+34))
+	.word ($a000+(193*40+34))
 
 free_r4
 .dsb (256-32)-(*&255)
@@ -292,8 +326,18 @@ var6		; Byte 110
 var7		; Byte 113
 	.dsb MAX_CHARACTERS,0
 
-free_r5
-.dsb (256-32)-(*&255)
+tab_bboards_low
+	.byt <bread_desc, <bwhite_desc, <bexam_desc
+
+tab_bboards_high
+	.byt >bread_desc, >bwhite_desc, >bexam_desc
+
+; For utoa
+bufconv
+	.byt 0,0,0,0,0,0
+
+;free_r5
+;.dsb (256-32)-(*&255)
 ; Personal timetable for little boy 2
 per_timet_lb2
 	.byt 170,170,146,154,146,136,162,162,146,154,136,136,146,162,154,162,146,154,136,196,196,196,198,198,176,202,196,196,206,206,198,176
@@ -320,12 +364,11 @@ bexam_desc
 	.byt 0				; Current tile being written
 	.byt $ff			; Who last wrote here? $ff=empty
 	.byt 55,9			; Tile coordinates of this board
+	.byt 0,0,0,0		; Message written
+	.byt 0				; Message code
 
-tab_bboards_low
-	.byt <bread_desc, <bwhite_desc, <bexam_desc
-
-free_r6
-.dsb (256-32)-(*&255)
+;free_r6
+;.dsb (256-32)-(*&255)
 ; Personal timetable for little boy 3
 per_timet_lb3
 	.byt 170,170,146,154,146,136,154,146,136,154,162,154,136,154,136,154,136,154,162,196,196,196,198,200,198,202,196,196,206,206,200,196
@@ -360,12 +403,11 @@ bwhite_desc
 	.byt 0				; Current tile being written
 	.byt $ff			; Who last wrote here? $ff=empty
 	.byt 34,9			; Tile coordinates of this board
+	.byt 0,0,0,0		; Message written
+	.byt 0				; Message code
 
-tab_bboards_high
-	.byt >bread_desc, >bwhite_desc, >bexam_desc
-
-free_r7
-.dsb (256-32)-(*&255)
+;free_r7
+;.dsb (256-32)-(*&255)
 ; Personal timetable for little boy 4
 per_timet_lb4
 	.byt 170,170,146,162,146,146,154,162,154,162,154,146,146,136,136,162,146,154,136,196,196,196,200,176,198,198,200,196,206,206,202,198
@@ -402,9 +444,10 @@ bread_desc
 	.byt 0				; Current tile being written
 	.byt $ff			; Who last wrote here? $ff=empty
 	.byt 56,3			; Tile coordinates of this board
-
-free_r8
-.dsb (256-32)-(*&255)
+	.byt 0,0,0,0		; Message written
+	.byt 0				; Message code
+;free_r8
+;.dsb (256-32)-(*&255)
 ; Personal timetable for little boy 5
 per_timet_lb5
 	.byt 170,170,146,162,162,176,162,146,136,146,162,136,154,146,162,154,162,154,162,196,196,196,200,198,202,200,200,196,206,206,176,200
@@ -513,7 +556,7 @@ tab_sit_msg
 	.byt SIT_NASTY, SIT_CHERUBS, SIT_CANE, SIT_CHAPS
 
 
-; Table to relate teacher codes and identifiers. Used in s_do_class
+; Table to relate teacher codes and identifiers. Used in s_do_class and teacher_gives_lines
 table_teacher_codes
 	.byt CHAR_ROCKITT, CHAR_WACKER, CHAR_WITHIT, CHAR_CREAK, 0
 
@@ -564,8 +607,8 @@ tab_ridslo
 	.byt <rgn_topfloor_ids, <rgn_midfloor_ids, <rgn_botfloor_ids
 
 score					.word 0			; Current score
-hiscore					.word 0			; Highest score
 lines					.word 0			; Number of lines
+hiscore					.word 0			; Highest score
 
 ;free_r12
 ;.dsb (256-32)-(*&255)
@@ -722,7 +765,7 @@ command_high
 	.byt >s_goto_random_trip	; SC_GOTORANDOMTRIP	
 	.byt >s_follow_boy1			; SC_FOLLOWBOY1TRIP
 	.byt >s_find_eric			; SC_FINDERIC			
-	.byt >s_tell_enistein		; SC_TELLEINSTEIN
+	.byt >s_tell_einstein		; SC_TELLEINSTEIN
 	.byt >s_tell_angelface		; SC_TELLANGELFACE
 	.byt >s_tell_boywander		; SC_TELLBOYWANDER
 	.byt >s_2000lines_eric		; SC_2000LINESERIC
@@ -751,13 +794,57 @@ command_low
 	.byt <s_goto_random_trip	; SC_GOTORANDOMTRIP	
 	.byt <s_follow_boy1			; SC_FOLLOWBOY1TRIP
 	.byt <s_find_eric			; SC_FINDERIC			
-	.byt <s_tell_enistein		; SC_TELLEINSTEIN
+	.byt <s_tell_einstein		; SC_TELLEINSTEIN
 	.byt <s_tell_angelface		; SC_TELLANGELFACE
 	.byt <s_tell_boywander		; SC_TELLBOYWANDER
 	.byt <s_2000lines_eric		; SC_2000LINESERIC
 	.byt <s_end_game			; SC_ENDGAME
+
+
+/* Usually it is a good idea to keep 0 all the entries
+   possible, as it speeds up things. Z=1 means no key
+   pressed and there is no need to look in tables */
+
+#define KEY_UP			1
+#define KEY_LEFT		2
+#define KEY_DOWN		3
+#define KEY_RIGHT		4
+
+#define KEY_LCTRL		0
+#define KET_RCTRL		0
+#define KEY_LSHIFT		0
+#define KEY_RSHIFT		0
+#define KEY_FUNCT		0
+
+#define KEY_RETURN		$0d
+#define KEY_ESC			$1b
+#define KEY_DEL			$08
+
+//#define COMPLETE_ASCII_TABLE
+
+tab_ascii
+#ifdef COMPLETE_ASCII_TABLE
+    .asc "7","N","5","V",KET_RCTRL,"1","X","3"
+    .asc "J","T","R","F",0,KEY_ESC,"Q","D"
+    .asc "M","6","B","4",KEY_LCTRL,"Z","2","C"
+    .asc "K","9",59,"-",0,0,92,39
+    .asc " ",",",".",KEY_UP,KEY_LSHIFT,KEY_LEFT,KEY_DOWN,KEY_RIGHT
+    .asc "U","I","O","P",KEY_FUNCT,KEY_DEL,"]","["
+    .asc "Y","H","G","E",0,"A","S","W"
+    .asc "8","L","0","/",KEY_RSHIFT,KEY_RETURN,0,"="
+#else
+    .asc "7","N","5","V",0,"1","X","3"
+    .asc "J","T","R","F",0,0,"Q","D"
+    .asc "M","6","B","4",0,"Z","2","C"
+	.asc "K","9",0,0,0,0,0,0
+    .asc " ",0,0,KEY_UP,0,KEY_LEFT,KEY_DOWN,KEY_RIGHT
+    .asc "U","I","O","P",0,KEY_DEL,0,0
+    .asc "Y","H","G","E",0,"A","S","W"
+    .asc "8","L","0",0,0,KEY_RETURN,0,0
+#endif
+
+	
 free_r19
-.dsb (256-32)-(*&255)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .dsb 256-(*&255)
@@ -1656,9 +1743,133 @@ end_anim_states
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Tables
 ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+tab_div5
+	.byt 0
+	.byt 0
+	.byt 0
+	.byt 0
+	.byt 0
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 2
+	.byt 2
+	.byt 2
+	.byt 2
+	.byt 2
+	.byt 3
+	.byt 3
+	.byt 3
+	.byt 3
+	.byt 3
+	.byt 4
+	.byt 4
+	.byt 4
+	.byt 4
+	.byt 4
+	.byt 5
+	.byt 5
+	.byt 5
+	.byt 5
+	.byt 5
+	.byt 6
+	.byt 6
+	.byt 6
+	.byt 6
+	.byt 6
+	.byt 7
+	.byt 7
+	.byt 7
+	.byt 7
+	.byt 7
+	.byt 8
+	.byt 8
+	.byt 8
+	.byt 8
+	.byt 8
+	.byt 9
+	.byt 9
+	.byt 9
+	.byt 9
+	.byt 9
+	.byt 10
+	.byt 10
+	.byt 10
+	.byt 10
+	.byt 10
+	.byt 11
+	.byt 11
+	.byt 11
+	.byt 11
+	.byt 11
+	.byt 12
+	.byt 12
+	.byt 12
+	.byt 12
+	.byt 12
+	.byt 13
+	.byt 13
+	.byt 13
+	.byt 13
+	.byt 13
+	.byt 14
+	.byt 14
+	.byt 14
+	.byt 14
+	.byt 14
+	.byt 15
+	.byt 15
+	.byt 15
+	.byt 15
+	.byt 15
+	.byt 16
+	.byt 16
+	.byt 16
+	.byt 16
+	.byt 16
+	.byt 17
+	.byt 17
+	.byt 17
+	.byt 17
+	.byt 17
+	.byt 18
+	.byt 18
+	.byt 18
+	.byt 18
+	.byt 18
+	.byt 19
+	.byt 19
+	.byt 19
+	.byt 19
+	.byt 19
+	.byt 20
+	.byt 20
+	.byt 20
+	.byt 20
+	.byt 20
+
+	
+tab_bit8
+	.byt %10000000
+	.byt %01000000
+	.byt %00100000
+	.byt %00010000
+	.byt %00001000
+	.byt %00000100
+	.byt %00000010
+	.byt %00000001
+
 ;.dsb 256-(*&255)
+.bss
+*=$400
 _HiresAddrLow           .dsb 240
-;.dsb 256-(*&255)
+
+.text
+
+.dsb 256-(*&255)
 _HiresAddrHigh          .dsb 200
 
 .dsb 256-(*&255)
@@ -2181,113 +2392,6 @@ tab_mul8
 	.byt 248
 #endif
 
-tab_div5
-	.byt 0
-	.byt 0
-	.byt 0
-	.byt 0
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 2
-	.byt 2
-	.byt 2
-	.byt 2
-	.byt 2
-	.byt 3
-	.byt 3
-	.byt 3
-	.byt 3
-	.byt 3
-	.byt 4
-	.byt 4
-	.byt 4
-	.byt 4
-	.byt 4
-	.byt 5
-	.byt 5
-	.byt 5
-	.byt 5
-	.byt 5
-	.byt 6
-	.byt 6
-	.byt 6
-	.byt 6
-	.byt 6
-	.byt 7
-	.byt 7
-	.byt 7
-	.byt 7
-	.byt 7
-	.byt 8
-	.byt 8
-	.byt 8
-	.byt 8
-	.byt 8
-	.byt 9
-	.byt 9
-	.byt 9
-	.byt 9
-	.byt 9
-	.byt 10
-	.byt 10
-	.byt 10
-	.byt 10
-	.byt 10
-	.byt 11
-	.byt 11
-	.byt 11
-	.byt 11
-	.byt 11
-	.byt 12
-	.byt 12
-	.byt 12
-	.byt 12
-	.byt 12
-	.byt 13
-	.byt 13
-	.byt 13
-	.byt 13
-	.byt 13
-	.byt 14
-	.byt 14
-	.byt 14
-	.byt 14
-	.byt 14
-	.byt 15
-	.byt 15
-	.byt 15
-	.byt 15
-	.byt 15
-	.byt 16
-	.byt 16
-	.byt 16
-	.byt 16
-	.byt 16
-	.byt 17
-	.byt 17
-	.byt 17
-	.byt 17
-	.byt 17
-	.byt 18
-	.byt 18
-	.byt 18
-	.byt 18
-	.byt 18
-	.byt 19
-	.byt 19
-	.byt 19
-	.byt 19
-	.byt 19
-	.byt 20
-	.byt 20
-	.byt 20
-	.byt 20
-	.byt 20
-
 tab_mod5
 	.byt 0
 	.byt 8
@@ -2395,21 +2499,14 @@ tab_mod5
 	.byt 24
 	.byt 32
 	
-	
-tab_bit8
-	.byt %10000000
-	.byt %01000000
-	.byt %00100000
-	.byt %00010000
-	.byt %00001000
-	.byt %00000100
-	.byt %00000010
-	.byt %00000001
+
+
 
 
 ;;;;;; Main timetable (see script.h)
 main_timetable
-	.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	.byt PLAYTIMEPEASHOOTER, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
 	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
 	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
 	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
@@ -2775,10 +2872,17 @@ command_list220			; Mumps walkabout
 command_list222			; Mumps duty
 	.byt SC_GOTO, D_STAFF_ROOM				; Go to the staff room
 	.byt SC_MOVEUNTIL, E_ERIC_MUMPS			; Move about until Eric has mumps
+endgame_command_list
 	.byt SC_FINDERIC						; Find Eric
 	.byt SC_ENDGAME							; Tell him to go home and end the game
 
 
+
+; Buffer for lesson box
+buffer_text
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
+	.dsb BUFFER_TEXT_WIDTH*8,$40
 
 ; Temporary buffer for screen contents.
 ; Used when giving lines
@@ -2786,5 +2890,4 @@ temp_buffer
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
-
 

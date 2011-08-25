@@ -120,8 +120,21 @@ demo_msg2
 	.asc "KEY TO PLAY"
 	.byt 0
 
+end_game_wacker
+	.asc "YOU HAVE OVER 10000 LINES TO WRITE ", ERIC_NAME,". "
+	.asc "DON'T COME BACK TO SCHOOL TILL YOU HAVE DONE THEM ALL... "
+	.asc "PRESS A KEY TO PLAY AGAIN", SPACES_8,0
+
+end_game_rockitt
+	.asc "You have mumps ", ERIC_NAME,". Go home at once. This game is over"
+	.asc SPACES_8,0
+	
 st_grass
 	.asc PLEASESIR,ERIC_NAME," is not here", SPACES_8,0
+st_hitme
+	.asc PLEASESIR,ERIC_NAME," hit me", SPACES_8,0
+st_bboard
+	.asc PLEASESIR,ERIC_NAME," wrote on the blackboard", SPACES_8,0
 
 reprimands
 	.asc "DON'T SIT ON",0, "THE STAIRS",0 
@@ -140,6 +153,7 @@ reprimands
 	.asc "CATAPULTS",0, "ARE FORBIDDEN",0 
 	.asc "DON'T HIT",0, "YOUR MATES",0 
 	.asc "YOU ARE NOT",0, "A KANGAROO",0 
+reprimand_2000
 	.asc "TAKE 2000 LINES YOU NASTY BOY",SPACES_8,0 
 
 st_lines
@@ -322,11 +336,13 @@ st_questions
 	.asc "WHICH COUNTRY'S CAPITAL IS ",TEMPLATE_QUESTION,"?",SPACES_8,0
 	.asc "WHEN WAS THE BATTLE OF ",TEMPLATE_QUESTION,"?",SPACES_8,0
 	.asc "WHICH BATTLE OCCURRED IN ",TEMPLATE_QUESTION,"?",SPACES_8,0
+st_q_batt
 	.asc "WHAT HAPPENED IN THE YEAR THAT I WAS BORN?", SPACES_8,0
 st_ans
 	.asc PLEASESIR, "It's ", MUL_ANSWER, SPACES_8,0
  	.asc PLEASESIR, "It is ", TEMPLATE_ANSWER, SPACES_8,0
 	.asc PLEASESIR, "It was in ", TEMPLATE_ANSWER, SPACES_8,0
+st_ans_batt
 	.asc PLEASESIR, "It was the BATTLE OF ", TEMPLATE_ANSWER, SPACES_8,0
 
 st_bwboard
@@ -374,5 +390,18 @@ st_teachboard
 	.asc "ACTIVE",NEWLINE,"VOLCANOES",0
 	.asc "POP MUSIC IN",NEWLINE,"ANTARCTICA",0
 	.asc "THE UPLANDS",NEWLINE,"OF RUTLAND",0
+
+
+st_mumps
+	.asc "Don't let ", ANG_NAME, " touch you this playtime - He's got mumps", SPACES_8,0
+st_einstein
+	.asc EINST_NAME, " is going to tell ",WACKER_NAME, " what you're up to. "
+	.asc "You must stop him getting to his study this break", SPACES_8,0
+st_peashooter
+	.asc BOYW_NAME, " has hidden a pea-shooter with your name on it on the fire-escape."
+	.asc " If ", WACKER_NAME, " gets there before ", BOYW_NAME, " you'll get lines", SPACES_8,0
+
+st_pressU
+	.asc "Press 'U' if you understood", SPACES_8,0
 
 

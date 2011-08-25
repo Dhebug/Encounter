@@ -21,9 +21,9 @@
 #define NEWLINE			2
 #define SPACES_8		3
 #define ERIC_NAME		4
-#define BOYW_NAME		5
+#define EINST_NAME		5
 #define ANG_NAME		6
-#define EINST_NAME		7
+#define BOYW_NAME		7
 #define ROCKITT_NAME	8
 #define WACKER_NAME		9
 #define WITHIT_NAME		10
@@ -42,7 +42,7 @@
 #define OFF_FLOOR		8
 #define COME_ME			10
 #define HURRY_UP		12
-#define PATIENCE		14
+#define MY_PATIENCE		14
 #define DO_AGAIN		16
 #define TELL_TALES		18
 #define NEVER_LATE		20
