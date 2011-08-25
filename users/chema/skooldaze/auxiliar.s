@@ -18,10 +18,17 @@
 _GenerateTables
 .(
 	; Generate screen offset data
+#ifdef CENTER_PLAY_AREA
+    lda #<$a000+160
+    sta tmp0+0
+	lda #>$a000+160
+    sta tmp0+1
+#else
     lda #<$a000
     sta tmp0+0
 	lda #>$a000
     sta tmp0+1
+#endif
 
 	ldx #0
 loop
@@ -60,12 +67,7 @@ randgen
    ;plp 
    rts				; see you later alligator. 
 .)
-randseed 
-  .word $dead       ; will it be $dead again? 
 
-
-bufconv
-	.byt 0,0,0,0,0,0
 utoa
 .( 
     ldy#0
@@ -141,3 +143,28 @@ _m8_deccnt
 	rts
 .)
 
+/*
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Compares two 16-bit numbers in op1 and op2
+;; Performs signed and unsigned comparisions at the same time.
+;; If the N flag is 1, then op1 (signed) < op2 (signed) and BMI will branch
+;; If the N flag is 0, then op1 (signed) >= op2 (signed) and BPL will branch 
+;; For unsigned comparisions ,the behaviour is the usual with the carry flag
+;; If the C flag is 0, then op1 (unsigned) < op2 (unsigned) and BCC will branch 
+;; If the C flag is 1, then op1 (unsigned) >= op2 (unsigned) and BCS will branch 
+;; The Z flag DOES NOT indicate equality...
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+cmp16
+.(
+    lda op1 ; op1-op2
+    cmp op2
+    lda op1+1
+    sbc op2+1
+    bvc ret ; N eor V
+    eor #$80
+ret
+    rts
+ .)
+*/

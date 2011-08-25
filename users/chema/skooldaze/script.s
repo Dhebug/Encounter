@@ -15,6 +15,8 @@
 #include "script.h"
 #include "text.h"
 
+#define        via_t1cl                $0304
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Auxiliar functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -423,26 +425,374 @@ terminate_subcommand
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Terminate and stop there
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-s_dinner_duty
-s_end_game
 s_end
 .(
   rts
 .)
 
 
-
-s_2000lines_eric
-s_tell_enistein
-s_tell_angelface
-s_tell_boywander
-s_find_eric
 s_follow_boy1
 s_goto_random_trip
 .(
 	inc pcommand,x
 	rts
 .)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make little boy no. 10 give ERIC a message
+; Used by command lists 208 and 210. Makes little 
+; boy no. 210 tell ERIC about BOY WANDER having 
+; hidden a pea-shooter on the fire escape, 
+; EINSTEIN's intent to grass him up to MR WACKER, 
+; or ANGELFACE's medical condition.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+ 
+s_tell_einstein
+.(
+	lda #<s_tell_einstein
+	sta repeat+1
+	lda #>s_tell_einstein
+	sta repeat+2
+
+	lda #<st_einstein
+	ldy #>st_einstein
+	bne s_tell_common	; Jumps always
+.)
+
+s_tell_angelface
+.(
+	lda #<s_tell_angelface
+	sta repeat+1
+	lda #>s_tell_angelface
+	sta repeat+2
+
+	lda #<st_mumps
+	ldy #>st_mumps
+	bne s_tell_common	; Jumps always
+.)
+
+s_tell_boywander
+.(
+  	lda #<s_tell_boywander
+	sta repeat+1
+	lda #>s_tell_boywander
+	sta repeat+2
+
+	lda #<st_peashooter
+	ldy #>st_peashooter
+	;bne s_tell_common	; Jumps always
+.)
+s_tell_common
+.(
+	sta tmp0
+	sty tmp0+1
+
+	; Set bit 3 of Eric's status flags, indicating
+	; he is being spoken to
+	lda Eric_flags
+	ora #ERIC_SPOKEN	
+	sta Eric_flags
+
+
+	; Adjust the MSB of the lesson clock so that the 
+	; lesson will not end until the drama has played out
+
+	lda #255
+	sta lesson_clock+1
+
+	; Make the character say this...
+	jsr s_make_char_speak
+
+	; Initialize the repetition counter
+	lda #40
+	sta var2,x
+
+	lda #<st_pressU
+	sta tmp0
+	lda #>st_pressU
+	sta tmp0+1
+	jsr s_make_char_speak
+
+	; Set bit 0 of special_playtime flags to indicate
+	; that the little boy is waiting for the ack from Eric
+	lda special_playtime
+	ora #%10000000
+	sta special_playtime
+
+	; Check Eric's status flags to see if the player
+	; pressed U
+	lda Eric_flags
+	and #ERIC_SPOKEN	
+	bne notpressed
+
+	; The player pressed 'U'
+	; Set the MSB of the lesson clock to 12, giving 
+	; enough time for the ensuing drama to play out
+
+	lda #12
+	sta lesson_clock+1
+	inc pcommand,x
+	lda #0
+	sta cur_command_high,x
+	sta i_subcom_high,x
+	jmp int_subcommand
+	
+notpressed
+	; If in need, repeat the message
+	dec var4,x
+	bne repeat
+
+	; Else force ending
+	lda Eric_flags
+	and #(ERIC_SPOKEN^$ff)
+	sta Eric_flags
++repeat
+	jmp $1234
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make MR WACKER give ERIC 2000 lines
+; Used by command lists 214 (after EINSTEIN has
+; told MR WACKER what ERIC's up to) and 218 
+; (after MR WACKER has found the pea-shooter on 
+;the fire escape). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_2000lines_eric
+.(
+
+    lda #<reprimand_2000
+	sta tmp0
+    lda #>reprimand_2000
+	sta tmp0+1
+
+	; Make the character say this...
+	jsr s_make_char_speak
+
+	; Add 2000 lines to the Eric's total
+	lda #200
+	jsr add_lines
+
+	; Set the MSB of the lesson clock to 1
+	; so it ends soon
+	lda #1
+	sta lesson_clock+1
+
+	inc pcommand,x
+	rts
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher tell ERIC to go home, and end 
+; the game (1)
+; Used by command list 222 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_end_game
+.(
+	cpx #CHAR_WACKER
+	bne isrockitt
+	lda #<end_game_wacker
+	ldy #>end_game_wacker
+	bne msgdone
+isrockitt
+	lda #<end_game_rockitt
+	ldy #>end_game_rockitt
+
+msgdone	
+	sta tmp0
+	sty tmp0+1
+
+	; Patch code so the teacher does not give lines to anybody
+	lda #$60	;RTS_OPCODE
+	sta give_lines
+
+	; Make the character say this...
+	jsr s_make_char_speak
+
+	; Put the code back as it was
+	lda #$8d ;STA_OPCODE
+	sta give_lines
+	
+	; Restart the game
+	jmp restart_game
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a character find ERIC
+; Used by command lists 208, 210, 214, 218 and 
+; 222 to make little boy no. 10, MR WACKER or 
+; MR ROCKITT track down ERIC 
+; (to deliver a message). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_find_eric
+.(
+	; Adjust the length of the lesson to allow 
+	; the character enough time to find Eric
+	lda #255
+	sta lesson_clock+1
+
+	; Prepare call to the routine as uninterruoptible 
+	; subcommand
+
+	lda #<s_find_eric_ex
+	sta uni_subcom_low,x
+	lda #>s_find_eric_ex
+	sta uni_subcom_high,x
+
+	; Subsequent calls to this routine will enter 
+	; at this point, by virtue of its address 
+	; being placed as uninterruptible subcommand in 
+	; the character's buffer.
++s_find_eric_ex
+	; is Mr Wacker the one looking for Eric?
+	cpx #CHAR_WACKER	
+	bne nofast
+	; If it is, then make him walk fast
+	jsr csc_walk_fast
+nofast
+
+	; It seems that when on a staircase the
+	; character cannot find Eric
+	jsr is_on_staircase
+	bne toofar
+	
+	; Okay, now let's check the distance to Eric...
+	sec
+	lda pos_col,x
+	sbc pos_col
+	bpl noadjust1
+	sta tmp
+	lda #0
+	sec
+	sbc tmp
+noadjust1
+	cmp #5
+	bcs toofar
+
+	sec
+	lda pos_row,x
+	sbc pos_row
+	bpl noadjust2
+	sta tmp
+	lda #0
+	sec
+	sbc tmp
+noadjust2
+	cmp #4
+	bcs toofar
+
+	; Alright, Eric has been found	
+
+	; Check ERIC's status flags, and return if ERIC 
+	; is firing, hitting, jumping, being spoken to 
+	; by a little boy, knocked out, or writing on a 
+	; blackboard
+	lda Eric_flags
+	and #127
+	beq cont
+	rts
+cont
+	; a is already zero
+	sta uni_subcom_high,x
+	sta i_subcom_high,x
+	
+	inc pcommand,x
+	rts ;jmp next_command
+
+toofar
+	; Eric has not been found yet... keep on looking
+	; for him
+	ldy #CHAR_ERIC
+	jsr which_way
+	jmp do_move
+.)
+ 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher perform dinner duty (1)
+; Used by command list 184. Makes the teacher 
+; on dinner duty pace up and down the dinner 
+; hall, checking whether ERIC is present. If 
+; ERIC is absent, the teacher is sent to find 
+; him, after which the command list is 
+; restarted. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_dinner_duty
+.(
+	; Dinner has started. Signal it.
+	lda lesson_status  
+	ora #%1000000
+	sta lesson_status
+
+	; This entry point is used for subsequent calls
++s_dinner_duty_ex
+	
+	; Check if Eric is where he should be
+	jsr s_check_Eric_loc
+	
+	ldy #44	; left end of the teacher's dinner duty orbit
+	lda #<s_dinner_duty2
+	sta tmp0
+	lda #>s_dinner_duty2
+	sta tmp0+1
+
+	; Entry point from other routines to chase
+	; Eric if needed.
++s_track_down_Eric
+	beq nochase
+	lda #<s_isc_findEric
+	sta i_subcom_low,x
+	lda #>s_isc_findEric
+	sta i_subcom_high,x
+	jmp s_isc_findEric
+nochase
+	; Eric is where he should be, so no need
+	; to chase him.
+	; Guide the teacher to the opposite
+	; side of the dinner orbit
+	lda #<s_isc_int_dest
+	sta i_subcom_low,x
+	lda #>s_isc_int_dest
+	sta i_subcom_high,x
+	tya
+	sta var3,x
+	lda #0		; Give him plenty of time
+	sta var4,x
+
+	; Replace the current primary command
+	; with either s_dinner_duty2 or 
+	; s_dinner_duty_ex
+	lda tmp0
+	sta cur_command_low,x
+	lda tmp0+1
+	sta cur_command_high,x
+	jmp s_isc_int_dest
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher perform dinner duty (2)
+; The address of this primary command routine 
+; is placed into bytes 99 and 100 of the 
+; teacher's buffer by the routine s_dinner_duty
+; The teacher has walked to the left end of 
+; the dinner hall, so it's time to check 
+; whether ERIC is present.  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_dinner_duty2
+.(
+	lda #<s_dinner_duty_ex
+	sta tmp0
+	lda #>s_dinner_duty_ex
+	sta tmp0+1
+
+	; Prepare Z flag and destination
+	jsr s_check_Eric_loc
+	ldy #83	;  right end of the techer's dinner duty orbit
+	bne	s_track_down_Eric	; jumps always
+.)
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -475,6 +825,8 @@ s_write_bl_c
 	inc pcommand,x
 	jmp s_write_bl
 notyet
+	inc pcommand,x
+	inc pcommand,x
 	rts
 .)
 
@@ -723,19 +1075,41 @@ Ericnotin
 	; and the teacher may decide track him down
 	; and give lines...
 	lda #<st_grass
-	sta tmp0
-	lda #>st_grass
-	sta tmp0+1
+	ldy #>st_grass
 	jsr s_make_Einstein_speak
 	
 	; Make the teacher give lines to Einstein for
 	; telling tales (if he is in the moood)
+
+	jsr s_Einstein_tales
 
 	; Tell the kids to read their books
 	jsr s_goto_page
 	
 	; Check for Eric again and maybe send him
 	; after Eric... (use s_check_Eric_loc)
+	jsr s_check_Eric_loc
+	beq heisnow
+	
+	; Set bit 7, indicating that the next
+	; absence message should be 'AND STAY
+	; THIS TIME'
+	lda #%10000000
+	ora lesson_status
+	sta lesson_status
+
+	; Make the teacher track down Eric
+	jmp s_track_down_Eric
+heisnow
+	; Get the correct message to punish Eric
+	; Get the status flags
+	lda lesson_status
+	bmi stay
+	lda #NEVER_LATE
+	.byt $2c
+stay
+	lda #STAY_THISTIME
+	jsr punish_Eric
 
 Ericisin
 	; Set bit 7 (indicating that the next absence 
@@ -752,16 +1126,108 @@ Ericisin
 	; This is EINSTEIN's opportunity to tell tales 
 	; about hitting and blackboard defacement.
 
-	; Check if we are in the map room and avoid doing all this
+	jsr randgen
+	cmp #226 
+	bcc nohitmsg
+	; Make Einstein say "Please Sir... Eric hit me"
+	lda #<st_hitme
+	ldy #>st_hitme
+	jsr s_make_Einstein_speak
+
+	; Make the teacher give lines to Einstein for
+	; telling tales (if he is in the moood)
+	; or else do the following
+
+	jsr s_Einstein_tales
+	bcc	nohitmsg
+
+	; Check if Eric is still in class
+	jsr s_Einstein_seated
+	bne Ericnotin
+
+	; Punish him!
+	lda #DO_AGAIN
+	jsr punish_Eric
+
+nohitmsg
+	; Get the blackboard
+	lda pos_row,x
+	; Are we on the top floor?
+	cmp #3
+	bne nocheck
+	; We are, are we on the Map room?
 	lda pos_col,x
 	cmp #WALLTOPFLOOR
-	bcs no_essay
+	;bcs no_essay	;noblackboard
+.(
+	bcc cont
+	jmp no_essay
+cont
+.)
+nocheck
+	; Get the closest blackboard
+	jsr get_blackboard
+
+	; Who wrote here?
+	ldy #4
+	lda (tmp3),y
+	beq Ericwrote
+	cmp #CHAR_BOYWANDER
+	bne noblackboard
+	; Even so, Einstein may blame Eric
+	jsr randgen
+	cmp #200
+	bcs Ericwrote
+
+	lda #BOYW_NAME
+	.byt $2c
+Ericwrote
+	lda #ERIC_NAME
+	sta st_bboard+1
+
+	; Make Einstein say "Please Sir... X wrote on the blackboard"
+	lda #<st_bboard
+	ldy #>st_bboard
+	jsr s_make_Einstein_speak
+
+	; Make the teacher give lines to Einstein for
+	; telling tales (if he is in the moood)
+	; or else do the following
+
+	jsr s_Einstein_tales
+	bcc	noblackboard
+
+	; Check if Eric is still in class
+	jsr s_Einstein_seated
+	;bne Ericnotin
+.(
+	beq cont
+	jmp Ericnotin
+cont
+.)
+	; Punish him!
+	lda st_bboard+1
+	cmp #ERIC_NAME
+	bne boywander
+	ldy #CHAR_ERIC
+	beq dopunish	; This always jumps
+boywander
+	ldy #CHAR_BOYWANDER
+dopunish
+	lda #TOUCH_BLACKBOARDS
+	jsr give_lines
+
+noblackboard
+	; Check if we are in the map room and avoid doing all this
+	;lda pos_col,x
+	;cmp #WALLTOPFLOOR
+	;bcs no_essay
 
 	; With EINSTEIN's tales now safely told, it's 
 	; time to wipe the blackboard.
 
-	jsr get_blackboard
-.(
+	;jsr get_blackboard
+
 	; Use call_subcommand to hand control
 	; over the s_isc_wipe1 routine
 
@@ -784,7 +1250,7 @@ Ericisin
 	lda #>s_isc_int_dest
 	sta tmp0+1
 	jsr call_subcommand
-.)
+
 	; Control returns here when the teacher has 
 	; wiped the blackboard and walked to the middle 
 	; of it.
@@ -822,7 +1288,11 @@ read_book
 teacher_waits
 	; Is Eric in class?
 	jsr s_Einstein_seated
-	bne Ericnotin
+.(
+	beq cont
+	jmp Ericnotin
+cont
+.)
 
 	; Makes the teacher walk up&down, while
 	; the students work...
@@ -882,6 +1352,31 @@ Ericstillin
 	jmp checkEricagain
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a teacher decide whether to give EINSTEIN lines
+; for telling tales. Returns with C=0 if he did.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_Einstein_tales
+.(
+	txa
+	sec
+	sbc #CHAR_FIRST_TEACHER
+	tay
+	jsr randgen
+	cmp tab_teachertales,y
+	bcc doit
+	; Not this time
+	rts
+doit
+	; Okay, give lines
+	ldy #CHAR_EINSTEIN
+	lda #TELL_TALES
+	jsr give_lines
+	clc
+	rts
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Check whether ERIC and EINSTEIN are in class
 ; Used by the routines at 62208 and 62464. If 
@@ -932,8 +1427,10 @@ nocarry
 s_check_Eric_loc
 .(
 	; Check the floor he is at
+	; Get Eric's corrected Y-coordinate
+	jsr get_Eric_Ycoord
+	;lda pos_row
 	ldy #0
-	lda pos_row
 	cmp #3
 	beq cont
 notop
@@ -1085,6 +1582,8 @@ not_wacker
 	; The teacher is no Mr Wacker. We first check if it is
 	; Mr Creak and it is time to give the Year of Birth quesion
 
+	jsr s_birthyear_question
+
 	; It is not, then prepare a question and an answer depending
 	; on the teacher.
 
@@ -1195,6 +1694,73 @@ sava
 	rts
 .)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make MR CREAK ask the birth year question if 
+; appropriate.
+; Used by the routine s_prepare_question. 
+; Makes MR CREAK ask the birth year question if
+; (a) he hasn't asked it yet this lesson, and 
+; (b) ERIC hasn't opened the safe yet. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+s_birthyear_question
+.(
+	; Are we dealing with Mr Creak?
+	cpx #CHAR_CREAK
+	beq cont
+retme
+	rts
+cont
+	; Has Eric opened the safe yet or are we in demo mode?
+	lda game_mode
+	beq retme
+	cmp #3
+	beq retme
+
+	; Has Mr. Creak already asked this question?
+	lda birthyear_ind
+	bne retme
+
+
+	; MR CREAK hasn't asked the birth year question yet. Make him do so now.
+	; Get rid of context, we will be returning to the caller of the
+	; caller.
+	pla 
+	pla
+
+	; Signal Mr. Creak has already asked the question
+	inc birthyear_ind
+	
+	; Prepare the q/a pairs 
+	; For Einstein
+	ldy #CHAR_EINSTEIN
+	lda #<st_ans_batt
+	sta var3,y
+	lda #>st_ans_batt
+	sta var4,y
+
+	; and the corresponding pointer
+	lda #<st_battles
+	sta tmp0
+	lda #>st_battles
+	sta tmp0+1
+	lda birthyear_id
+	jsr search_string
+	lda tmp0
+	sta p_answer
+	lda tmp0+1
+	sta p_answer+1
+
+	; And for Mr. Creak
+	ldy #CHAR_CREAK
+	lda #<st_q_batt
+	sta var3,y
+	lda #>st_q_batt
+	sta var4,y
+	
+	rts
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Control EINSTEIN during class (1)
@@ -1866,6 +2432,7 @@ s_usc_pelletv
 	dec pos_row,x
 	jsr update_SRB_sp
 
+	; TODO
 	; Entry points to check if a pellet hit a shield
 
 	; Entry point to check if Eric touched a shield
@@ -2012,8 +2579,11 @@ noteacher
 	bne notEric
 	cpx #CHAR_EPELLET
 	bne notEric
+	sty savy+1
 	lda #1
 	jsr add_score
+savy
+	ldy #0
 notEric
 	jmp knock_him
 
@@ -2478,6 +3048,28 @@ victimok
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a character walk fast
+; The address of this continual subcommand routine
+; is placed into bytes 124 and 125 of a character's
+; buffer by command lists 214 and 218. This routine
+; is also used directly by the routines 
+; s_isc_find_Eric, and others
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+csc_walk_fast
+.(
+	; Set the speed change delay
+	; to 4, preventing any change by the routine
+	; which determines if a character should be moved
+	lda #4
+	sta speed_counter,x
+	; Reset but 7 of flags
+	lda flags,x
+	and #(IS_SLOW_WALK^$ff)
+	sta flags,x
+	rts
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Interruptible subcommand routines
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2713,9 +3305,14 @@ end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make Einstein speak
+; Pass the message in reg A (low) and Y 
+; (high)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_make_Einstein_speak
 .(
+	sta tmp0
+	sty tmp0+1
+
 	ldy #CHAR_EINSTEIN
 	lda tmp0
 	sta var3,y
@@ -2735,11 +3332,6 @@ s_make_Einstein_speak
 	sta i_subcom_low,x
 	lda #>s_isc_waitEinstein
 	sta i_subcom_high,x
-
-	;lda #<checkEricagain
-	;sta cur_command_low,x
-	;lda #>checkEricagain
-	;sta cur_command_high,x
 
 	; Put the return address in the current command
 	; of the teacher, so control resumes there when he
@@ -2992,6 +3584,9 @@ finished
 	iny
 	lda #$ff
 	sta (tmp3),y
+	ldy #11
+	lda #0
+	sta (tmp3),y
 
 	; Put the teacher back at animstate 0
 	lda #0
@@ -3000,11 +3595,384 @@ finished
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make a teacher find the truant ERIC
+;; Used by the routine s_dinner_duty, which also 
+;; places the address of this interruptible 
+;; subcommand routine into bytes 105 and 106 
+;; of the teacher's buffer when ERIC is absent 
+;; during dinner or class. It makes the teacher 
+;; run after and stalk ERIC until he goes to 
+;; wherever he should be (the dinner hall or the 
+;; classroom). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
 s_isc_findEric
+.(
+	; Make the teacher walk fast
+	jsr csc_walk_fast
+
+	; Determine which way the teacher needs
+	; to go to find Eric
+	ldy #CHAR_ERIC
+	jsr which_way
+	sta sav_retwhich+1
+	beq same_location
+	cmp #3
+	bcc on_staircase
+same_location
+	; If the teacher's list has been marked for a restart
+	; do so
+	lda flags,x
+	and #RESET_COMMAND_LIST
+	beq noreset
+	jmp terminate_subcommand
+noreset
+	jsr s_check_Eric_loc
+	bne notwhereshould 
+
+	; Eric is where he should be, so time to
+	; resume his clasroom duties
+
+	; This is quite tricky. It gets the command
+	; list back to the second-from-last occurrence
+	; of a SC_GOTO command.
+
+	ldy pcommand,x
+	lda command_list_high,x
+	sta tmp0+1
+	lda command_list_low,x
+	sta tmp0
+	
+	lda #2
+	sta tmp
+loop
+	dey
+	lda (tmp0),y
+	; BEWARE SC_GOTO is 1, which is never used as
+	; a parameter, or it will break!
+	cmp #SC_GOTO
+	beq done
+	dey
+	bpl loop
+done
+	dec tmp
+	bne loop
+
+	; Restart from this point
+	tya
+	sta pcommand,x
+	jmp next_command
+
+on_staircase
+notwhereshould
+	; Eric is not where he should, or the teacher
+	; is on a staircase
+sav_retwhich
+	lda #0
+	bne do_move
+	; They are at the same position
+	; Make the teacher turn round from time to time 
+	lda via_t1cl
+	bne skip
+	jmp change_direction
+skip
+	rts
+
+	; This entry point is used by the routine 
+	; at 63374 with X holding the number of a 
+	; character looking for ERIC (which will be 
+	; little boy no. 10 or a teacher), and A 
+	; holding 1, 2, 3 or 4 (indicating the 
+	; character's next move).
+
++do_move
+	; Here it calls the routine that moves a character
+	; looking for Eric from midstride position, at
+	; different places
+	
+	cmp #3
+	bcs s_isc_movemidstride_ex
+.)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Move a character looking for ERIC to the 
+; midstride position.
+; Continues from s_isc_findEric. 
+; Moves the character looking for ERIC to the 
+; midstride position in the appropriate direction. 
+; The main entry point is used when the character 
+; is on a staircase. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 s_isc_movemidstride
 .(
-	rts
+	cmp #1
+	beq upstairs
+	jmp down_a_stair
+upstairs
+	jmp up_a_stair
+
++s_isc_movemidstride_ex
+	cmp #3
+	beq going_left
+	lda flags,x
+	and #IS_FACING_RIGHT
+	bne doit
+turnround
+	jmp change_direction
+doit
+	jmp step_character
+going_left
+	lda flags,x
+	and #IS_FACING_RIGHT
+	bne turnround
+	beq doit
 .)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Determine the next move of a character following 
+; another character. The follower is passed in 
+; reg X and the objective in reg Y.
+; Used by several routines such as s_isc_findEric.
+; Returns with one of the following values in A 
+; depending on the relative locations of the 
+; follower and his target
+; 0 Follower is at the same coordinates as the target 
+; 1 Follower should go (or continue going) upstairs 
+; 2 Follower should go (or continue going) downstairs 
+; 3 Follower should go left 
+; 4 Follower should go right 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+which_way
+.(
+	; Check if the follower is on a staircase
+	jsr is_on_staircase
+	beq notonstaircase
+
+	; He is, find out whether he is going up or down,
+	; and set reg A accordingly.
+	lda pos_col,x
+	cmp #WALLTOPFLOOR
+	bcs rightstair
+	; We are at a staircase at the left of the school
+	lda flags,x
+	and #IS_FACING_RIGHT
+	bne going_down
+going_up
+	lda #1
+	rts
+going_down
+	lda #2
+retme
+	rts
+rightstair
+	; We are at a staircase at the right of the school
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq going_down
+	bne going_up
+
+notonstaircase
+	; The follower is not on a staircase, which way should
+	; he go?
+
+	; Get the objective coordinates
+	cpy #CHAR_ERIC
+	bne notEric
+	jsr get_Eric_Ycoord
+	sta tmp0
+	jmp cont 
+notEric
+	lda pos_row,y
+	sta tmp0
+cont
+	lda pos_col,y
+	sta tmp0+1
+
+	; Are the target and follower on the same floor?
+	lda tmp0
+	cmp pos_row,x
+	bne notsamefloor
+
+	; Ok, they are, but there may be a wall between them...
+	lda pos_col,x
+	sec
+	sbc tmp0+1
+	beq retme ; They are at the same spot.
+	
+	; Is the follower on the bottom floor?
+	lda pos_row,x
+	cmp #17
+	bne notbottom
+
+	; Both are on the bottom floor, so the follower
+	; must simply go either left or right
+compare
+	lda tmp0+1
+	cmp pos_col,x
+addandret
+	lda #3
+	adc #0
+	rts
+
+notbottom
+	; Follower and target both on the middle or 
+	; top floors.
+	cmp #10
+	bne topfloor
+	lda #WALLMIDDLEFLOOR
+	.byt $2c
+topfloor
+	lda #WALLTOPFLOOR
+	cmp pos_col,x
+	bcc follower_right
+	cmp tmp0+1
+	bcs compare
+
+follower_left
+	;The follower is on the left side of the 
+	;skool and must go downstairs to get to 
+	;the target on the other side of the skool.
+
+	lda #STAIRLTOP
+	cmp pos_col,x
+	bne addandret
+
+	; The follower is at the top of the staircase
+	lda flags,x
+	and #IS_FACING_RIGHT
+	bne facingright
+	lda #4	; Turn around
+	rts
+facingright
+	lda #2	; Go downstairs 
+	rts
+
+follower_right
+	; The follower is at the right side fo the skool. 
+	; Where is the target?
+	cmp tmp0+1
+	bcc compare
+
+follower_right2
+	; Need to take stairs...
+	lda #STAIRRTOP
+	cmp pos_col,x
+	bne addandret
+
+	; The follower is at the top of the staircase
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq facingleft
+	lda #3	; Turn around
+	rts
+facingleft
+	lda #2	; Go downstairs
+	rts
+
+notsamefloor
+	; The follower and target are on 
+	; different floors.
+
+	bcc above	; follower < objective, so above.
+	
+	; So the objective is below, we need to take a 
+	; staircase
+	lda pos_row,x
+	cmp #10
+	beq middlefloor2
+	lda #WALLTOPFLOOR
+	.byt $2c
+middlefloor2
+	lda #WALLMIDDLEFLOOR
+	cmp pos_col,x
+entrypoint2
+	bcs follower_left
+	bcc follower_right2
+
+above
+	; The target is on a floor above the follower. 
+	; Which staircase should the follower use?
+	lda tmp0
+	cmp #10
+	beq middlefloor3
+	lda #WALLTOPFLOOR
+	.byt $2c
+middlefloor3
+	lda #WALLMIDDLEFLOOR
+	cmp tmp0+1
+	bcc target_right
+target_left
+	; Signal target at the left
+	lda #1
+	.byt $2c
+target_right
+	; Signal target at the right
+	lda #128
+	sta tmp
+
+	; Check the floor the chaser is on
+	lda pos_row,x
+	cmp #17
+	bne chaseratmiddle
+entrypoint1
+	lda #STAIRLBOTTOM
+	; Was the target at the left?
+	dec tmp
+	beq wasleft
+	lda #STAIRRBOTTOM
+wasleft
+	cmp pos_col,x
+	beq cont1
+	jmp addandret
+cont1
+	;bne addandret
+	
+	cmp #STAIRLBOTTOM
+	beq upleftstair
+
+	lda flags,x
+	and #IS_FACING_RIGHT
+	bne facingright2
+	lda #4
+	rts
+facingright2
+	lda #1
+	rts
+
+upleftstair
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq facingleft2
+	lda #3
+	rts
+facingleft2
+	lda #1
+	rts
+
+chaseratmiddle
+	; The follower is on the middle floor, 
+	; and the target is on the top floor.	
+
+	lda #WALLMIDDLEFLOOR
+	cmp pos_col,x
+	lda #128
+	bcc skip2
+	lda #1
+skip2
+	cmp tmp
+	beq entrypoint1
+	jmp entrypoint2
+.)
+
+
+
 
 
 

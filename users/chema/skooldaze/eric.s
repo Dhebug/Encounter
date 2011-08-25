@@ -12,22 +12,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Check if a character is on a staircase
-; return with Z=0 if that is the case
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-is_on_staircase
-.(
-	lda pos_row,x
-	cmp #3
-	beq end
-	cmp #10
-	beq end
-	cmp #17
-end
-	rts
-.)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Set the Eric main action timer
@@ -48,6 +32,38 @@ quick
 	sta Eric_mid_timer
 	rts
 .)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Get Eric's Y coordinate (adjusted
+; if he is jumping) in reg A
+; This is used by s_check_Eric_loc
+; and TODO others.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+get_Eric_Ycoord
+.(
+	sty savy+1
+	ldy pos_row
+	lda Eric_flags
+	and #ERIC_JUMPING
+	beq noadjust
+	cpy #4
+	bcs nottop
+	ldy #3
+	bne noadjust
+nottop
+	cpy #11
+	bcs notbottom
+	ldy #10
+	bne noadjust
+notbottom
+	ldy #17
+noadjust
+	tya
+savy
+	ldy #0
+	rts
+.)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Move Eric left
@@ -77,6 +93,7 @@ facingleft
 	jsr set_Eric_timer
 
 	; Check if Eric is on a staircase
+	ldx #0
 	jsr is_on_staircase
 	beq notstaircasel
 	; Is he at the right of the school?
@@ -138,6 +155,7 @@ facingright
 	jsr set_Eric_timer
 
 	; Check if Eric is on a staircase
+	ldx #0
 	jsr is_on_staircase
 	beq notstaircaser
 	; Is he at the right of the school?
@@ -335,6 +353,7 @@ sit_Eric
 dosit
 	; Eric is going to sit down... even on the floor
 
+	ldx #0
 	jsr is_on_staircase
 	beq notstairs
 
@@ -361,6 +380,10 @@ rightside
 
 notstairs
 	; Eric is not at a staircase... so sit down
+	; but not on the bottom floor!
+	lda pos_row
+	cmp #17
+	beq notyet
 
 	sty tmp7
   	jsr s_check_chair	; Returns Z=1 if there is a chair and C=1 if the 
@@ -375,18 +398,410 @@ notyet
 	jmp update_animstate
 .)
 
-jump_Eric
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Deal with ERIC when he's being spoken to 
+; by a little boy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+listen_Eric
 .(
+	; Is the little boy still delivering the message?
+	lda special_playtime
+	ora #%10000000
+	bne cont
+retme
+	rts
+cont
+	; Check the keyboard
+	jsr ReadKeyNoBounce
+	beq retme
 
-
+	; Was 'U' pressed?
+	cmp #"U"
+	bne retme
+	
+	; Signal it
+	lda Eric_flags
+	and #(ERIC_SPOKEN^$ff)
+	sta Eric_flags
 	rts
 .)
 
 
+jump_Eric
+.(
+	ldx #0
+	jsr is_on_staircase
+	beq doit
+	; Eric cannot jump when on a staircase
+	rts
+doit
+	jsr update_SRB_sp
+	dec pos_row
+
+	lda #10
+	sta tmp+1
+	lda #ERIC_JUMPING
+	sta tmp
+	lda #16
+	sta tmp0
+	jmp realize_Eric_action
+.)
+
+jump_Eric2
+.(
+	; Decrement action timer
+	dec Eric_timer
+	bne cont
+	jmp endpunch	; Re-use this entry point
+cont
+
+	; Usual checks for reprimands, shields, etc.
+	; Time to get reprimands?
+	lda Eric_timer
+entrypoint1
+	cmp #12
+	bne noreprimand
+	lda #NO_JUMPING
+	jmp punish_Eric
+noreprimand
+	; Time to check if Eric touched a shield
+	cmp #13
+	bne noshieldcheck
+	;jmp shield_check_jump
+	rts
+noshieldcheck
+	; Time to make the jumping sound?
+	cmp #14
+	bne nojumpsfx
+	; jmp jump_sfx
+	rts
+nojumpsfx
+	; Time to move Eric's arm?
+	cmp #9
+	bne nomovearm
+	;lda #9
+	jmp setEric_state
+nomovearm
+	; Time to bring Eric back down to the floor?
+	cmp #3
+	bne nofall
+	ldx #CHAR_ERIC
+	jsr update_SRB_sp
+	inc pos_row
+	jmp update_SRB_sp
+nofall
+	cmp #6
+	bcc retme ; Nothing to do
+
+	; At this point A=6 (which means it's time 
+	; to check whether ERIC has jumped onto a boy,
+	; or ERIC is already standing on a boy), or A 
+	; is one of {7, 8, 10, 11, 15}, or A<128 
+	; (which means ERIC has jumped while standing 
+	; on a boy).
+
+	bne nocheckboy
+	
+	; Check if Eric jumped onto a knocked-down boy
+
+	ldy #CHAR_BOY11
+loop
+	jsr check_boy	
+	bcs found
+	dey
+	bne loop
+	; No boy found
+retme
+	rts	
+found
+	; Eric is standing on a kid!
+	; Read the keyboard
+	; Set the timer to value 7, so we keep visiting
+	; this code while Eric is standing on the boy
+	lda #7
+	sta Eric_timer
+	jsr ReadKeyNoBounce
+	beq retme
+
+	cmp #"J"
+	bne nopressJ
+	; Set the timer to 144 to indicate that we
+	; jumped while standing on a boy
+	lda #144
+	sta Eric_timer
+	; Return to the main loop, but with the
+	; carry flag reset, so the keypress is
+	; processed there
+/*	lda #0
+	sta oldKey
+	pla
+	pla
+	clc
+	rts*/
+
+	ldx #CHAR_ERIC
+	jsr update_SRB_sp
+	dec pos_row
+	jsr update_SRB_sp
+nopressJ
+	; Another key of interest was pressed
+	; maybe trying to turn Eric round
+	cmp #4	; KEY_RIGHT
+	bne noright
+	lda Eric_flags
+	and #IS_FACING_RIGHT
+	bne retme
+changedir
+	ldx #CHAR_ERIC
+	jmp change_direction
+noright
+	cmp #2	; KEY_LEFT
+	bne retme
+
+	lda Eric_flags
+	and #IS_FACING_RIGHT
+	beq retme
+	bne changedir
+	
+nocheckboy
+	; At this point A is one of {7, 8, 10, 11, 15}
+	; (which means there is nothing to do), 
+	; or A=128-143 (which means ERIC has jumped 
+	; while standing on a boy).	
+	cmp #134
+	beq retme
+	sec
+	sbc #128
+	bcc retme	; Return unless Eric jumped while over a boy
+	
+	; So ERIC has jumped while standing on a boy. 
+	; Now either A=0, meaning it's time to set the 
+	; jumping action timer at 32758 back to 7, so 
+	; we can deal with ERIC while he's standing on
+	; a boy; or A=1-15 (but not 6, because that 
+	; would lead us into the code at 62819 to 
+	; perform a redundant check on whether ERIC 
+	; is standing on a boy), meaning we need to run
+	; the usual checks while ERIC is in mid-air.
+	beq found
+	jmp entrypoint1
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check whether ERIC is standing on a boy who's 
+; been knocked out. Reg Y is the boy's id
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+check_boy
+.(
+	; Set limits (pos_x+-1)
+	ldx pos_col
+	dex
+	stx tmp0
+	inx
+	inx
+	stx tmp0+1
+	
+	; Check if the boy is at the same y-coordinate
+	ldx pos_row
+	inx
+	txa
+	cmp pos_row,y
+	bne notthis
+
+	; Get the boy's animatory state
+	lda anim_state,y
+	cmp #6
+	bne notthis
+
+	; Check the boy's x-coordinate
+	lda pos_col,y
+	cmp tmp0
+	bcc notthis
+	cmp tmp0+1
+	bcs notthis
+	sec
+	rts
+notthis
+	clc
+	rts
+.)
+
 write_Eric
 .(
-
+	; Is Eric sitting or lying down?
+	lda Eric_flags
+	bpl cont
+	; Eric is lying down or sitting
+retme
 	rts
+cont
+	; Is he on a staircase?
+	ldx #0
+	jsr is_on_staircase
+	bne retme
+	
+	; Is he on the bottom floor (no blackboards there)
+	; A holds the y position
+	cmp #17
+	beq retme
+
+	; Check if on top floor
+	cmp #3
+	beq topfloor
+
+	; Check if left or right to the white room wall
+	lda pos_col
+	cmp #WALLMIDDLEFLOOR
+	bcc left
+	; He is at the right
+	cmp #COL_EXAM_BOARD-2
+	bcc retme
+	cmp #COL_EXAM_BOARD-2+6
+	bcc posok
+	rts
+left
+	; He ia at the left
+	cmp #COL_WHITE_BOARD-2
+	bcc retme
+	cmp #COL_WHITE_BOARD-2+6
+	bcc posok
+	rts
+topfloor
+	lda pos_col
+	; He is on the top floor
+	cmp #COL_READING_BOARD-2
+	bcc retme
+	cmp #COL_READING_BOARD-2+6
+	bcc posok
+	rts
+posok
+	; Set appropriate bit on Eric's flags
+	lda Eric_flags
+	ora #ERIC_WRITTING
+	sta Eric_flags
+
+	; Get the blackboard identifier
+	; Reg x=0 has been set way before
+	ldx #0
+	jsr get_blackboard
+	ldy #4
+	lda (tmp3),y	; Who wrote there last?
+	bpl notclean
+	; Blackboard is clean, prepare
+	; everything to grab what Eric writes
+	lda #0	
+	.byt $2c
+notclean
+	lda #$ff
+	ldy #11
+	sta (tmp3),y
+
+	; Note Eric wrote here
+	ldy #4
+	lda #CHAR_ERIC
+	sta (tmp3),y
+
+	; Set tile=0 and col=1
+	ldy #2
+	lda #1
+	sta (tmp3),y
+	iny
+	lda #0
+	sta (tmp3),y
+
+	jmp risearm
+
+; Entry point from the main loop whenever we
+; deal with Eric when he is writting on a blackboard
+
++Eric_writting
+	jsr ReadKeyNoBounce
+	bne cont2
+retme2
+	rts
+cont2
+
+	; Check if it is RETURN  ($0d)
+	cmp #$0d
+	bne writechar
+
+	; Eric finished writting
+	lda Eric_flags
+	and #(ERIC_WRITTING^$ff)
+	sta Eric_flags
+	lda #0
+	jsr setEric_state
+
+writechar
+	sta tmp+1
+	; Check if it is a character
+	cmp #32
+	bcc retme2
+/*
+	beq uppercase
+
+	; Is it uppercase or not?
+	ldy #7
+	lda #%00010000
+	and KeyBank,y
+	sta tmp
+	ldy #4
+	lda #%00010000
+	and KeyBank,y
+	ora tmp
+	bne	uppercase
+
+	; Lowercase it
+	lda tmp+1
+	cmp #"A"
+	bcc uppercase
+	cmp #"Z"+1
+	bcs uppercase
+	ora #32
+	sta tmp+1
+uppercase
+*/
+	ldx #0
+	jsr get_blackboard
+
+	; Note what Eric writes down
+	ldy #11
+	lda (tmp3),y
+	sta tmp
+	bmi dowrite
+	cmp #4
+	beq dowrite
+	; Save the written char
+	; on the buffer
+	clc
+	adc #7
+	tay
+	lda tmp+1
+	cmp #32 ; If it is an space, ignore
+	beq dowrite
+	sta (tmp3),y
+	inc tmp
+	lda tmp
+	ldy #11
+	sta (tmp3),y
+dowrite
+	lda tmp+1
+	jsr write_char_board_ex
+risearm
+/*	lda #9
+	cmp anim_state
+	beq flop
+	.byt $2c
+flop
+	lda #10
+	jmp setEric_state
+*/
+	lda #9
+	jmp setEric_state
 .)
 
 fire_Eric
@@ -617,17 +1032,374 @@ sat
 	jmp setEric_state
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make any nearby teacher give ERIC lines if 
+; necessary.
+; Used by the routine deal_with_Eric. 
+; Checks whether ERIC is somewhere he 
+; shouldn't be, or sitting or standing 
+; when or where he shouldn't be, or lying down,
+; and makes any nearby teacher give lines 
+; accordingly.  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+teacher_gives_lines
+.(
+
+	; Check (and decrement) the lines-giving 
+	; delay counter, and proceed only if it was 
+	; <75 (the counter starts off at 0 for a new 
+	; game, and is set to 150 by this routine 
+	; after ERIC has been given lines)
+	lda lines_delay
+	beq proceed
+	dec lines_delay
+	; This is only if other teacher may give
+	; lines. For now we will comment this out
+	;cmp #75
+	;bcc proceed
+	rts
+proceed	
+
+/*
+	; It is time to give lines, go for it...
+	; Let's start checking if he is jumping
+	; as it may give trouble with Y coordinate
+	ldy pos_row
+
+	lda Eric_flags
+	and #ERIC_JUMPING
+	beq notjumping
+	iny
+notjumping
+	; Now we have in Y the Y coordinate
+	; (row) adjusted.
+	
+	; Get pointer to region table, and check
+	; if Eric is on a staircase at the same time.
+	tya
+	ldy #0
+	cmp #3
+	beq cont
+	; Not on the top floor
+	iny
+	cmp #10
+	beq cont
+	; Not on the middle floor
+	iny
+	cmp #17
+	beq cont
+	; Eric is on a staircase
+	; Put 7 in tmp for later
+	lda #7 
+	sta tmp
+
+	; Check if he is not sitting
+	lda Eric_flags
+	and #ERIC_SITTINGLYING
+	beq check_validity
+	
+	; He is sitting, make any nearby teacher
+	; punish him
+	lda #SIT_STAIRS
+	jmp do_punishment	; Branches always
+
+cont
+	; Prepare pointer to region table
+	lda tab_regionslo,y
+	sta tmp0
+	lda tab_regionshi,y
+	sta tmp0+1
+	lda tab_ridslo,y
+	sta tmp1
+	lda tab_ridshi,y
+	sta tmp1+1
+
+	; Check col
+	lda pos_col
+	ldy #0
+loop
+	cmp (tmp0),y
+	iny
+	bcs loop
+	; Point at the correct entry
+	dey
+	; Get the region ID
+	lda (tmp1),y
+	sta tmp
+*/
+	;;;  ***** THIS VERSION MAY BE SMALLER ******
+
+/*
+	; It is time to give lines, go for it...
+	; Let's start checking if he is jumping
+	; as it may give trouble with Y coordinate
+	lda Eric_flags
+	and #ERIC_JUMPING
+	sta smc_jumpflag+1
+	beq notjumping
+	inc pos_row
+*/
+
+
+	; If jumping, punishment would be 'YOU ARE NOT A KANGAROO'
+	lda Eric_flags
+	and #ERIC_JUMPING
+	beq notjumping
+	rts
+notjumping
+	; Now we have in Y the Y coordinate
+	; (row) adjusted.
+	; Is Eric on a staircase?
+	ldx #CHAR_ERIC
+	jsr is_on_staircase
+	beq not_on_stairs
+	; Put the region ID for later
+	lda #7
+	sta tmp
+	; Check if he is not sitting
+	lda Eric_flags
+	and #ERIC_SITTINGLYING
+	beq check_validity
+	
+	; He is sitting, make any nearby teacher
+	; punish him
+	lda #SIT_STAIRS
+	jmp do_punishment	; Branches always
+
+not_on_stairs
+	; Prepare pointer to region table
+	jsr s_check_Eric_loc
+	lda (tmp1),y
+	sta tmp
+
+/*
+	; Put the Y coordinate back as it was
+smc_jumpflag
+	lda #0
+	beq notjumping2
+	dec pos_row
+notjumping2
+*/
+
+check_validity
+	; At this point we have in tmp an ID of the
+	; region Eric is at (7 includes he is on a staircase).
+	lda tmp
+	bne notprivate
+
+	; The room is private.
+	lda #ROOM_PRIVATE
+	jmp do_punishment	; Branches always
+notprivate
+	; See if Einstein had a chance to grass on Eric for
+	; being absent, or dinner has started, or this is 
+	; PLAYTIME or REVISION LIBRARY
+	lda lesson_status
+	bpl nochanceyet
+
+check_location
+	; Compare region and lesson IDs
+	lda lesson_descriptor
+	and #%111
+	cmp tmp
+	beq iswhereshould
+	lda #GO_CLASS
+	jmp do_punishment
+iswhereshould
+	; Pick again the lesson status flags
+	lda lesson_status
+	; Set carry if Eric's lesson started with Eric
+	; being present
+	asl
+	asl
+strange_entry
+	lda anim_state
+	bcc notstarted
+	; Is Eric sitting in a chair?
+	cmp #4
+	bne notsitting
+	; He is, nothing to be done
+retme
+	rts
+notsitting
+	; Aha!, punish him
+	lda #FIND_SEAT
+	jmp do_punishment
+notstarted
+	;lda anim_state
+	cmp #5
+	bcc retme 
+	cmp #7
+	bcs retme
+	; He is on the floor
+	lda #OFF_FLOOR
+	jmp do_punishment
+nochanceyet
+	; Bit 7 of lesson_status is reset, which means
+	; EINSTEIN has not yet had a chance to grass 
+	; on ERIC for being absent at the start of the
+	; lesson, or dinner has not started yet, or 
+	; this is PLAYTIME or REVISION LIBRARY.
+
+	; Is Eric in a room?
+	lda #4
+	cmp tmp
+	bcc strange_entry
+	
+	; Have a look at the lesson_clock
+	lda #CLASS_START	
+	cmp lesson_clock+1
+	bcc strange_entry
+	bcs check_location
+
+do_punishment
+	; Time for a teacher to punish Eric. 
+	; A holds the message ID
+	sta smc_sav_msg+1
+
+/*
+	; Is it too soon for the same teacher to dish Eric?
+	lda #0
+	sta flag_kludge+1
+	lda lines_delay
+	beq notsoon
+	
+	; We need to patch so this teacher does not see
+	; Eric.
+	; Get the teacher who last gave lines to Eric
++smc_teachpun
+	ldy #0
+	lda pos_col,y
+	sta smc_savcol+1
+	lda #255
+	sta pos_col,y
+	inc flag_kludge
+
+	; Is a teacher in range?
+	stx savx+1
+	ldx #0
+	jsr can_be_seen
+savx
+	ldx #0
+	bcc finish_this
+
+	; Okay, time to give lines (at last!)
+notsoon
+	; Re-initialize the delay counter
+	ldy #150
+	sty lines_delay
+	; Get the reason code back
+smc_sav_msg
+	lda #0
+	jsr punish_Eric
+
+finish_this
+	; Put the teacher's coordinate back, if necessary
+flag_kludge
+	lda #0
+	beq noadjust
+smc_savcol
+	lda #0
+	ldy smc_teachpun+1
+	sta pos_col,y
+noadjust
+	rts
+*/
+	; Get the teacher who is to give lines to
+	; Eric and adjust message if he is his teacher
+	; for this period (so he must be chasing him 
+	; for being absent).
+
+	; Is the current punish message the GET TO WHERE
+	; YOU SHOULD BE? (GO_CLASS)
+
+	cmp #GO_CLASS
+	bne finishthis
+
+	; Get the teacher who may give lines in reg A
+	jsr can_be_seen
+	bcs proceed2
+
+	; No one saw Eric
+	rts
+
+proceed2
+	sta tmp
+
+	; Get Eric's current teacher
+	lda lesson_descriptor
+	lsr
+	lsr
+	lsr
+	lsr
+	tay
+	lda table_teacher_codes,y
+	cmp tmp
+	bne finishthis
+
+	; Okay it is his teacher, so the message may 
+	; change according to the lesson flags
+
+	lda #COME_ME
+	sta smc_sav_msg+1
+
+	lda lesson_status
+	and #%100000
+	bne notfirsttime
+
+	lda lesson_status
+	ora #%100000
+	sta lesson_status
+	jmp finishthis
+notfirsttime
+	lda lesson_status
+	and #%10000
+	bne notsecond
+
+	lda lesson_status
+	ora #%10000
+	sta lesson_status
+	lda #HURRY_UP
+	sta smc_sav_msg+1
+	jmp finishthis
+notsecond
+	lda #MY_PATIENCE
+	sta smc_sav_msg+1
+
+finishthis
+/*
+	; Re-initialize the delay counter
+	ldy #150
+	sty lines_delay
+	; Get the reason code back
+smc_sav_msg
+	lda #0
+	jmp punish_Eric
+*/
+
+	; Defer any punisment so it is issued
+	; after the screen has been updated.
+	; Else it will seem as given too early.
+
+	inc need_to_punish_Eric+1
+	rts
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Deal with ERIC
 ; Called from the main loop.
 ; Deals with ERIC when any of bits 0-4 at ERIC's status flags are set. 
 ; Returns with the carry flag set if and only if ERIC was dealt with, 
 ; indicating that there is no need to check keypresses in the main loop.  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 deal_with_Eric
 .(
 	;Make any nearby teachers give ERIC lines if he's 
 	;not where he should be, or standing or sitting 
 	;when or where he shouldn't be 
+
+	jsr teacher_gives_lines
 
 	;Check ERIC's status flags and return with 
 	;the carry flag reset unless ERIC has been 
@@ -641,8 +1413,16 @@ deal_with_Eric
 	rts
 
 takecare
+
+/*
 	;Is ERIC being spoken to by a little boy? 
-	
+	lda Eric_flags
+	and #ERIC_SPOKEN
+	beq notspoken
+
+	sec
+	rts
+notspoken
 	;Has ERIC been knocked over? 
 	lda Eric_flags
 	and #ERIC_DOWN
@@ -659,7 +1439,6 @@ noknock
 	sec
 	rts
 nofire
-
 	;Is ERIC hitting? 
 	lda Eric_flags
 	and #ERIC_HITTING
@@ -669,16 +1448,33 @@ nofire
 	rts
 nohit
 	;ERIC is jumping; deal with him accordingly 
-
+	jsr jump_Eric2	
 	sec
 	rts
+*/
+	ldy #4
+loop
+	lda Eric_flags
+	and tab_dE_flags,y
+	beq notthis
+	; Flag found
+	lda tab_dE_routl,y
+	sta smc_routine+1
+	lda tab_dE_routh,y
+	sta smc_routine+2
+smc_routine
+	jsr $1234
+	sec
+	rts
+notthis
+	dey
+	bpl loop
 .)
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Checks if a teacher must give Eric
-;; lines. The reason is passed in reg A
+;; lines. The reason is passed in reg A.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 punish_Eric
 .(
@@ -695,14 +1491,14 @@ savx
 	rts
 punish_him
 	; Time for lines and reprimands
-
+	; Save the teacher code (this is a kludge)
+	;sta smc_teachpun+1
 	ldy #CHAR_ERIC
 	tax
 	; Get back the reprimad message identifier
 sava
 	lda #0
 	jsr give_lines
-
 
 	ldx savx+1
 	rts

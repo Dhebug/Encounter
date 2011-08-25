@@ -49,7 +49,7 @@ tmp		.dsb 2
 ;reg6	.dsb 2
 ;reg7	.dsb 2
 
-#define        via_t1cl                $0304 
+
 
 
 .text
@@ -58,10 +58,12 @@ tmp		.dsb 2
 
 _main
 .(
-	jsr _GenerateTables 
-
-	jsr _hires
+	//jsr _hires
 	//paper(6);ink(0);
+/*
+	lda #30
+	;lda $f934
+	sta $bfdf
 
 	lda #6
 	ldy #0        
@@ -75,9 +77,22 @@ _main
 	sty $2e1
 	sty $2e2
 	jsr $f210      ;ink
+*/
 
+	jsr set_hires
+	jsr _GenerateTables 
 	jsr _init_irq_routine 
+	jsr wait
+	jsr clr_hires
 
+/*	lda #A_BGCYAN
+	sta smc_ink_1+1
+	lda #A_BGGREEN
+	sta smc_ink_2+1
+	jsr set_ink2
+*/
+
++restart_game
 	; Set demo mode
 	jsr set_demo_mode
 
@@ -86,12 +101,102 @@ _main
 .)
 
 
+set_hires
+.(
+	lda #30
+	;lda $f934
+	sta $bfdf
+	
+	lda #A_BGBLACK 
+	sta $bf68
+	sta $bf68+40
+	sta $bf68+40*2
+	rts
+.)
+
+clr_hires
+.(
+	ldy #<($a000)
+	sty tmp
+	ldy #>($a000)
+	sty tmp+1
+	ldx #176
+loop2
+	ldy #39
+	lda #$40
+loop
+	sta (tmp),y
+	dey
+	cpy #1
+	bne loop
+/*
+	lda #A_FWBLACK 
+	sta (tmp),y
+	dey
+	lda #A_BGCYAN
+	sta (tmp),y
+*/
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+	dex
+	bne loop2
+end
+	rts	
+.)
+
+
+set_ink2
+.(
+	ldy #<($a000)
+	sty tmp
+	ldy #>($a000)
+	sty tmp+1
+
+	ldx #(176/2)
+loop
+	ldy #0
++smc_ink_1
+	lda #A_BGCYAN
+	sta (tmp),y
+	iny
+	lda #A_FWBLACK 
+	sta (tmp),y
+	
+	ldy #40
++smc_ink_2
+	lda #A_BGGREEN
+	sta (tmp),y
+	iny
+	lda #A_FWBLACK
+	sta (tmp),y
+	
+	lda tmp
+	clc
+	adc #80
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+
+	dex
+	bne loop
+end
+	rts	
+.)
+
+
+
 ;; Resets the game flags
 reset_flags
 .(
 	; Reset all the game flags
 	; after lesson change
-	ldy #4
+	ldy #5
 	lda #0
 loopf
 	sta lesson_status,y
@@ -115,6 +220,11 @@ _init
 	sta current_lesson_index
 	sta Eric_flags
 	sta Eric_knockout
+	sta lines_delay
+	sta score
+	sta score+1
+	sta lines
+	sta lines+1
 
 .(
 	ldx #20
@@ -155,6 +265,45 @@ noright
 	lda #0
 	sta last_char_moved
 
+	; Generate new safe combination and Creak's birth year
+.(
+  	ldx #3
+loop
+	jsr randgen
+	and #15	; 0<=A<=15
+	clc
+	adc #65
+	sta tab_safecodes,x
+	dex
+	bpl loop
+.)
+
+	; Now for the year...
+generatey
+	jsr randgen
+	cmp #21
+	bcs generatey
+
+	;Store the identifier
+	sta birthyear_id
+
+	; Get the digits
+	sta tmp
+	asl
+	asl
+	adc tmp
+
+	tax
+.(
+	ldy #0
+loop
+	lda st_years,x
+	sta creak_year,y
+	inx
+	iny
+	cpy #4
+	bne loop
+.)
 	; Reset Eric's main action timer
 	lda #INITIAL_ERIC_TIMER
 	sta Eric_timer
@@ -186,6 +335,9 @@ loopbb
 	lda #$ff
 	sta (tmp),y
 	
+	ldy #11
+	lda #0
+	sta (tmp),y
 
 	dec loop+1
 
@@ -218,9 +370,20 @@ loopsrb2
 	dex
 	bpl loopsrb
 
-
 	; First screen render
+	lda #A_BGBLACK
+	sta smc_ink_1+1
+	sta smc_ink_2+1
+	jsr set_ink2
 	jsr render_screen
+	lda #A_BGCYAN
+	sta smc_ink_1+1
+	lda #A_BGGREEN
+	sta smc_ink_2+1
+	jsr set_ink2
+
+	; Clear scorepanel
+	jsr clear_scorepanel
 
 	; Scroll the screen
 	lda #5
@@ -353,6 +516,17 @@ play_mode
 	lda #NORMAL_ERIC_TIMER
 	sta Eric_timer
 
+
+	; Is Eric writting on a blackboard?
+	lda anim_state
+	cmp #9
+	bne nowritting
+	; Move his hand
+	lda #10
+	jsr setEric_state
+	jmp nomidstride
+
+nowritting
 	; Do we have to move Eric to the midstride position?
 	; Is Eric not midstride?
 	lda anim_state
@@ -362,7 +536,8 @@ play_mode
 	bcc nomidstride
 	ldx #0
 	jsr step_character
-	
+
+midtimer	
 	; Here the original version does something strange..
 	lda Eric_mid_timer
 	sta Eric_timer
@@ -374,8 +549,16 @@ play_mode
 nomidstride
 
 	; Time to check the keyboard input
+	; If Eric is writting, simply write 
+	; the character pressed.
+	lda Eric_flags
+	and #ERIC_WRITTING
+	beq notwritting
+	; He is...
+	jsr Eric_writting
+	jmp avoidEric
+notwritting
 	jsr process_user_input
-
 avoidEric
 
 	; Protect the speech bubble, if any
@@ -408,6 +591,21 @@ nobubble
 	; Render the screen
 	jsr render_screen
 
+	; Any defered punishment?
++need_to_punish_Eric
+	lda #0
+	beq nopunish
+	dec need_to_punish_Eric+1
+	
+	; Re-initialize the delay counter
+	ldy #150/2
+	sty lines_delay
+	; Get the reason code back
++smc_sav_msg
+	lda #0
+	jsr punish_Eric
+nopunish
+
 	; Time before next move...
 loop
 	lda counter
@@ -415,17 +613,19 @@ loop
 	jmp _test_loop
 .)
 
-#define NUM_KEYS 7
+#define NUM_KEYS 9
 ; Keymap table
 user_keys 
 	.byt	 1, 2, 3, 4
-	.byt	"S", "H", "F"				;, "J", "W"
+	.byt	"S", "H", "F", "W", "J"
 key_routh
     .byt >(up_Eric), >(left_Eric), >(down_Eric), >(right_Eric)
-	.byt >(sit_Eric), >(hit_Eric), >(fire_Eric)
+	.byt >(sit_Eric), >(hit_Eric), >(fire_Eric), >(write_Eric)
+	.byt >(jump_Eric)
 key_routl
 	.byt <(up_Eric), <(left_Eric), <(down_Eric), <(right_Eric)
-    .byt <(sit_Eric), <(hit_Eric), <(fire_Eric)
+    .byt <(sit_Eric), <(hit_Eric), <(fire_Eric), <(write_Eric)
+	.byt <(jump_Eric)
 
 process_user_input
 .(
@@ -453,7 +653,7 @@ found
 	cpx #4
 	bcs call
 	ldx #0
-	sta oldKey
+	stx oldKey
 
 call
 	ldx #0
@@ -462,7 +662,6 @@ _smc_routine
     jmp $1234   ; SMC     
 
 .)
-
 
 
 
@@ -564,12 +763,7 @@ smc_ptimetable
 	lda #>demo_msg2
 	sta tmp0+1
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1+1
-
-	jsr write_text
+	jsr write_text_down
 
 	lda #<demo_msg
 	sta tmp0
@@ -590,12 +784,7 @@ notdemo
 	sbc #1
 	jsr search_string
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1+1
-
-	jsr write_text
+	jsr write_text_down
 
 	; Now the teacher's name
 	lda lesson_descriptor
@@ -633,13 +822,7 @@ printit
 	jsr search_string
 
 printit2
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1+1
-
-	jsr write_text
-
+	jsr write_text_up
 
 	; Now dump the buffer into the screen
 
@@ -647,11 +830,6 @@ printit2
 	sta tmp1
 	lda #>22*8*40+15+$a000
 	sta tmp1+1
-
-	lda #<buffer_text
-	sta tmp0
-	lda #>buffer_text
-	sta tmp0+1
 
 	jsr dump_text_buffer
 

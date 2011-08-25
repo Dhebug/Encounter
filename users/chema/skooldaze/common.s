@@ -15,6 +15,23 @@
 #include "params.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check if a character is on a staircase
+; return with Z=0 if that is the case
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+is_on_staircase
+.(
+	lda pos_row,x
+	cmp #3
+	beq end
+	cmp #10
+	beq end
+	cmp #17
+end
+	rts
+.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Determine the floor nearest to 
 ;; a character passed in reg x
 ;; Returns the floor coordinate
@@ -303,18 +320,21 @@ skip
 	tay
 	lda tab_lines,y
 
-	sta op2
+	sta smc_savop2+1
 
 	; Deal with the lines given...
 	ldy savy+1
 	beq toEric
 	; They are not given to Eric... add to the score
 	jsr add_score
-	bne linesend	; Always jump
+	jmp linesend	; Always jump
 toEric
 	jsr add_lines
 
 linesend
+smc_savop2
+	lda #0
+	sta op2
 	lda #0
 	sta op2+1
 	jsr utoa
@@ -330,12 +350,7 @@ linesend
 	lda #>st_lines
 	sta tmp0+1
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1+1
-
-	jsr write_text
+	jsr write_text_up
 
 	lda #<names_extras
 	sta tmp0
@@ -346,17 +361,7 @@ linesend
 	adc #1
 	jsr search_string
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1+1
-
-	jsr write_text
-
-	lda #<buffer_text
-	sta tmp0
-	lda #>buffer_text
-	sta tmp0+1
+	jsr write_text_down
 
 	lda tmp3
 	sta tmp1
@@ -377,12 +382,7 @@ sava
 	lda #0
 	jsr search_string
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*4
-	sta tmp1+1
-
-	jsr write_text
+	jsr write_text_up
 
 	lda #<reprimands
 	sta tmp0
@@ -393,17 +393,7 @@ sava
 	adc #1
 	jsr search_string
 
-	lda #<buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1
-	lda #>buffer_text+BUFFER_TEXT_WIDTH*12
-	sta tmp1+1
-
-	jsr write_text
-
-	lda #<buffer_text
-	sta tmp0
-	lda #>buffer_text
-	sta tmp0+1
+	jsr write_text_down
 
 	lda tmp3
 	sta tmp1
@@ -431,7 +421,7 @@ savy
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add content of reg A to score
-;; or lines and update scorebox
+;; and update scorebox
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 add_score
@@ -442,8 +432,33 @@ add_score
 	bcc nocarry
 	inc score+1
 nocarry
-	jmp update_scorebox
+	ldy #0
+	jsr update_scorepanel
+
+	; are we in the pressence of a hi-score?
+    lda hiscore
+    cmp score
+    lda hiscore+1
+    sbc score+1
+    bvc ret ; N eor V
+    eor #$80
+ret
+	bcs nohiscore
+	; We are, update this...
+	lda score
+	sta hiscore
+	lda score+1
+	sta hiscore+1
+	ldy #4
+	jmp update_scorepanel
+nohiscore
+	rts
 .)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add content of reg A to lines
+;; and update scorebox
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 add_lines
 .(
@@ -453,16 +468,44 @@ add_lines
 	bcc nocarry
 	inc lines+1
 nocarry
-	jmp update_scorebox
+	ldy #2
+	jsr update_scorepanel
+
+	; Check if Eric went over the limit
+    lda lines
+    cmp #<1000
+    lda lines+1
+    sbc #>1000
+    bvc skip ; N eor V
+    eor #$80
+skip
+	bcs endgame
+retme
+	rts
+endgame
+	
+	; We have reached the limit. End
+	; the current game
+
+	; Make the command list of Mr Wacker
+	; be endgame_command_list
+	ldy #CHAR_WACKER
+	lda #<endgame_command_list
+	sta command_list_low,y
+	lda #>endgame_command_list
+	sta command_list_high,y
+
+	; Trigger a command list restart for
+	; Mr Wacker
+	lda #RESET_COMMAND_LIST
+	ora flags,y
+	sta flags,y
+
+	; Trick to avoid the lesson to change in a while...
+	lda #255
+	sta lesson_clock+1
+	rts
 .)
-
-update_scorebox
-.(
-
-  rts
-
-.)
-
 
 
 wait
@@ -614,6 +657,7 @@ cont
 	beq reveal
 	cmp #9
 	beq glines
+retme
 	rts
 glines
 	; Get rid of context
@@ -674,9 +718,7 @@ nextkid
 
 	; Who was the nearest one?
 	ldy tmp1+1
-	bpl givelines
-	; Nobody, just return
-	rts
+	bmi retme
 givelines
 	
 	lda #DO_AGAIN
@@ -687,9 +729,7 @@ reveal
 	; letter
 	lda game_status
 	cmp #2
-	beq reveal_letter
-	rts
-reveal_letter
+	bne retme
 
 	; TODO... everything here
 	rts

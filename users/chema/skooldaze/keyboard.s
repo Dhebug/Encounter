@@ -29,6 +29,7 @@
 ;irq_A               .byt 0
 ;irq_X               .byt 0
 ;irq_Y               .byt 0
+
 TimerCounter        .byt 40        ;Used in music
 zpTemp01			.byt 0
 zpTemp02			.byt 0
@@ -105,47 +106,6 @@ sav_Y  	ldy #00
 .)
 
 
-/* Usually it is a good idea to keep 0 all the entries
-   possible, as it speeds up things. Z=1 means no key
-   pressed and there is no need to look in tables */
-
-#define KEY_UP			1
-#define KEY_LEFT		2
-#define KEY_DOWN		3
-#define KEY_RIGHT		4
-
-#define KEY_LCTRL		0
-#define KET_RCTRL		0
-#define KEY_LSHIFT		0
-#define KEY_RSHIFT		0
-#define KEY_FUNCT		0
-
-#define KEY_RETURN		$0d
-#define KEY_ESC			$1b
-#define KEY_DEL			$7f
-
-//#define COMPLETE_ASCII_TABLE
-
-tab_ascii
-#ifdef COMPLETE_ASCII_TABLE
-    .asc "7","N","5","V",KET_RCTRL,"1","X","3"
-    .asc "J","T","R","F",0,KEY_ESC,"Q","D"
-    .asc "M","6","B","4",KEY_LCTRL,"Z","2","C"
-    .asc "K","9",59,"-",0,0,92,39
-    .asc " ",",",".",KEY_UP,KEY_LSHIFT,KEY_LEFT,KEY_DOWN,KEY_RIGHT
-    .asc "U","I","O","P",KEY_FUNCT,KEY_DEL,"]","["
-    .asc "Y","H","G","E",0,"A","S","W"
-    .asc "8","L","0","/",KEY_RSHIFT,KEY_RETURN,0,"="
-#else
-    .asc "7","N","5","V",0,"1","X","3"
-    .asc "J","T","R","F",0,0,"Q","D"
-    .asc "M","6","B","4",0,"Z","2","C"
-	.asc "K","9",0,0,0,0,0,0
-    .asc " ",0,0,KEY_UP,0,KEY_LEFT,KEY_DOWN,KEY_RIGHT
-    .asc "U","I","O","P",0,KEY_DEL,0,0
-    .asc "Y","H","G","E",0,"A","S","W"
-    .asc "8","L","0",0,0,KEY_RETURN,0,0
-#endif
 
 
 ReadKey
@@ -299,7 +259,6 @@ skip2   ;Proceed to next row
         rts 
 .)  
 
-KeyBank .dsb 8
 
 
 
