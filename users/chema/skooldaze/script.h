@@ -241,9 +241,9 @@ character's buffer:
 ;; Continuous Subcommands
 ;; -----------------------
 
-#define CS_WALKFAST		00,00
+#define CS_WALKFAST		<csc_walk_fast,>csc_walk_fast
 #define CS_FIRECATAPULT	<csc_bwander_fire,>csc_bwander_fire
-#define CS_CHECKTOUCH	00,00
+#define CS_CHECKTOUCH	<csc_check_touch,>csc_check_touch
 #define CS_HITNOWTHEN	<csc_angelhit,>csc_angelhit
 
 

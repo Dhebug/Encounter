@@ -16,6 +16,7 @@
 
 #include "params.h"
 #include "text.h"
+#include "script.h"
 
 ; Ticks to change the lesson (originally $1500=5376)
 ; Why is this particular define not included from params.h?
@@ -160,18 +161,20 @@ set_ink2
 	ldx #(176/2)
 loop
 	ldy #0
-+smc_ink_1
++smc_paper_1
 	lda #A_BGCYAN
 	sta (tmp),y
 	iny
++smc_ink_1
 	lda #A_FWBLACK 
 	sta (tmp),y
 	
 	ldy #40
-+smc_ink_2
++smc_paper_2
 	lda #A_BGGREEN
 	sta (tmp),y
 	iny
++smc_ink_2
 	lda #A_FWBLACK
 	sta (tmp),y
 	
@@ -372,14 +375,14 @@ loopsrb2
 
 	; First screen render
 	lda #A_BGBLACK
-	sta smc_ink_1+1
-	sta smc_ink_2+1
+	sta smc_paper_1+1
+	sta smc_paper_2+1
 	jsr set_ink2
 	jsr render_screen
 	lda #A_BGCYAN
-	sta smc_ink_1+1
+	sta smc_paper_1+1
 	lda #A_BGGREEN
-	sta smc_ink_2+1
+	sta smc_paper_2+1
 	jsr set_ink2
 
 	; Clear scorepanel
@@ -663,7 +666,8 @@ _smc_routine
 
 .)
 
-
+tab_patchcomm
+	.byt SC_TELLANGELFACE, SC_TELLEINSTEIN, SC_TELLBOYWANDER
 
 ;; Change the current lesson
 change_lesson
@@ -689,13 +693,27 @@ change_lesson
 	beq cont
 	; Select a 'special' playtime occasionally
 	tax
+
+	lda #0
+dbug beq dbug
+
 	jsr randgen
 	and #7
 	clc
 	adc #238
 	cmp #243
-	bcs cont
+	bcs cont2
 	txa	; Get the old identifier
+	bne cont	; jump always
+cont2
+	cmp #246
+	bcs cont
+	; This is a special playtime, patch the
+	; command list so the delivered message is correct
+	tay
+	lda tab_patchcomm-243,y
+	sta command_list210+1
+	tya
 cont
 	sta current_lesson
 
