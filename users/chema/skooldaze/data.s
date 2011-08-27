@@ -41,10 +41,10 @@ last_char_moved			.byt 0			; Last character we have moved
 ; Keep the next 6 contiguous!
 lesson_status			.byt 0			; Lesson status flags
 lesson_signals			.byt 0			; Lesson signal flags
-game_status				.byt 0			; Game status flags
-birthyear_ind			.byt 0			; Creak's birth year question indicator
 stampede_signals		.byt 0			; Stampede control signals
 special_playtime		.byt 0			; Special playtime flags
+game_status				.byt 0			; Game status flags
+birthyear_ind			.byt 0			; Creak's birth year question indicator
 
 game_mode				.byt 0			; Game mode indicator (0 demo, 1 shields need to be flashed, 2 combination, 3 shields need to be unflashed)
 lesson_descriptor		.byt 0			; Indicates who is teaching Eric and where
@@ -2505,8 +2505,7 @@ tab_mod5
 
 ;;;;;; Main timetable (see script.h)
 main_timetable
-	.byt PLAYTIMEPEASHOOTER, WACKER_EXAMROOM, WITHIT_MAPROOM 
-	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
 	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
 	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
 	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
@@ -2847,7 +2846,7 @@ command_list216				; Collect the pea-shooter
 	.byt SC_MOVEUNTIL, E_BEENTOLD_BOYW		; Move about until Eric has been told about Boy Wander
 	.byt SC_SETCONTSUB, CS_FIRECATAPULT		; Put a command making Boy Wander fire the catapult now and then
 	.byt SC_GOTO, D_FIRE_ESCAPE				; Go to the far end of the fire escape
-	.byt SC_FLAGEVENT, E_BOYW_GOTPEA		; Signal that Boy wander has collected the pea-shooter
+	.byt SC_UNFLAGEVENT, E_BOYW_GOTPEA		; Signal that Boy wander has collected the pea-shooter
 	.byt SC_GOTORANDOM						; Go to a random location
 	.byt SC_MOVEUNTIL, E_EMPTY				; Move about until playtime is over
 

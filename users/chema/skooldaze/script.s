@@ -531,11 +531,13 @@ s_tell_common
 
 	lda #12
 	sta lesson_clock+1
-	inc pcommand,x
 	lda #0
-	sta cur_command_high,x
 	sta i_subcom_high,x
-	jmp int_subcommand
+	/*
+	sta cur_command_high,x
+	inc pcommand,x
+	jmp int_subcommand*/
+	jmp next_com
 	
 notpressed
 	; If in need, repeat the message
@@ -543,9 +545,12 @@ notpressed
 	bne repeat
 
 	; Else force ending
-	lda Eric_flags
+	/*lda Eric_flags
 	and #(ERIC_SPOKEN^$ff)
-	sta Eric_flags
+	sta Eric_flags*/
+	lda special_playtime
+	and #%01111111
+	sta special_playtime
 +repeat
 	jmp $1234
 .)
@@ -559,7 +564,6 @@ notpressed
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_2000lines_eric
 .(
-
     lda #<reprimand_2000
 	sta tmp0
     lda #>reprimand_2000
@@ -568,17 +572,25 @@ s_2000lines_eric
 	; Make the character say this...
 	jsr s_make_char_speak
 
+	stx savx+1
 	; Add 2000 lines to the Eric's total
 	lda #200
 	jsr add_lines
+savx
+	ldx #0
 
 	; Set the MSB of the lesson clock to 1
 	; so it ends soon
 	lda #1
 	sta lesson_clock+1
 
+	jmp next_com
+/*
 	inc pcommand,x
-	rts
+	lda #0
+	sta cur_command_high,x
+	jmp int_subcommand
+*/
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -820,7 +832,7 @@ s_write_bl_c
 	jsr s_get_flagbyte
 
 	; Check if it is flagged
-	and lesson_signals,y
+	and lesson_status,y
 	bne notyet
 	inc pcommand,x
 	jmp s_write_bl
@@ -883,8 +895,8 @@ s_msg_sitdown
 	jsr s_make_char_speak
 
 	; Move to the next command
++next_com
   	inc pcommand,x
-
 	lda #0
 	sta cur_command_high,x
 	jmp int_subcommand
@@ -1898,8 +1910,8 @@ s_flag_event
 	jsr s_get_flagbyte
 
 	; Set it
-	ora lesson_signals,y
-	sta lesson_signals,y
+	ora lesson_status,y
+	sta lesson_status,y
 
 	; Advance the command pointer 
 	inc pcommand,x
@@ -1922,8 +1934,8 @@ s_unflag_event
 	eor #$ff
 
 	; Reset it
-	and lesson_signals,y
-	sta lesson_signals,y
+	and lesson_status,y
+	sta lesson_status,y
 
 	; Advance the command pointer 
 	inc pcommand,x
@@ -2013,7 +2025,7 @@ s_move_until
 	lda dest_y,x	; Get the event identifier
 	beq cont		; If it is event 0, just move until command is restarted	
 	jsr s_get_flagbyte
-	and lesson_signals,y
+	and lesson_status,y
 	beq cont
 	
 	; The time has come to stop moving about. However, 
@@ -2912,6 +2924,43 @@ present in bytes 124 and 125 of a character's buffer:
 32234 Make a character walk fast 
 64042 Check whether ANGELFACE is touching ERIC 
 */
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check whether ANGELFACE is touching ERIC 
+; The address of this continual subcommand routine is placed into 
+; bytes 124 and 125 of ANGELFACE's buffer by command list 220. 
+; It checks whether ERIC and ANGELFACE are in the same location; 
+; if they are, and ERIC has already been informed of ANGELFACE's 
+; medical condition, bit 5 at special_playtime is set, indicating 
+; that ERIC has mumps (whereupon MR ROCKITT will come looking for 
+; ERIC to send him home). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+csc_check_touch
+.(
+	; Has ERIC been told (and understood) that ANGELFACE has mumps?
+	lda special_playtime
+	and #%00001000
+	bne cont
+retme
+	rts
+cont
+	; Make Angelface walk fast
+	jsr csc_walk_fast
+	; Now compare positions
+	lda pos_col,x
+	cmp pos_col
+	bne retme
+	lda pos_row,x
+	cmp pos_row
+	bne retme
+	; They are, set bit 5 of special_playtime... beware they are
+	; numbered 01234567
+	lda special_playtime
+	ora #%00000100
+	sta special_playtime
+	rts
+.)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make BOY WANDER fire his catapult now and then 
