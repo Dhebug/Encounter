@@ -84,6 +84,7 @@ _main
 	jsr _GenerateTables 
 	jsr _init_irq_routine 
 	jsr wait
+	jsr wait
 	jsr clr_hires
 
 /*	lda #A_BGCYAN
@@ -98,6 +99,14 @@ _main
 	jsr set_demo_mode
 
 	jsr _init
+
+	lda #100
+	sta tmp+1
+loop
+	jsr set_border
+	dec tmp+1
+	bne loop
+
 	jmp _test_loop
 .)
 
@@ -193,6 +202,84 @@ end
 .)
 
 
+flash_border
+.(
+	stx savx+1
+	sty savy+1
+	jsr set_border
+	jsr set_border
+savx
+	ldx #0
+savy
+	ldy #0
+	rts
+.)
+set_border
+.(
+	; First 4 lines
+.(
+	ldx #40*4
+loop
+	lda $a000-1,x
+	eor #$80
+	sta $a000-1,x
+	dex
+	bne loop
+.)
+	; Middle 160 lines
+
+.(
+	lda #<($a000+(4*40))
+	sta tmp0
+	lda #>($a000+(4*40))
+	sta tmp0+1
+
+
+	ldx #168
+loopa
+	ldy #0
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	ldy #38
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	iny
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+
+
+	lda tmp0
+	clc
+	adc #40
+	sta tmp0
+	bcc nocarry
+	inc tmp0+1
+nocarry
+
+	dex
+	bne loopa
+.)
+
+
+	; Last 4 lines
+.(
+	ldx #40*4
+loop
+	lda $a000+(4+168)*40-1,x
+	eor #$80
+	sta $a000+(4+168)*40-1,x
+	dex
+	bne loop
+.)
+	rts
+.)
 
 ;; Resets the game flags
 reset_flags
@@ -693,9 +780,6 @@ change_lesson
 	beq cont
 	; Select a 'special' playtime occasionally
 	tax
-
-	lda #0
-dbug beq dbug
 
 	jsr randgen
 	and #7
