@@ -885,6 +885,10 @@ launch
 	ldx #0
 
 +launch_pellet
+	cpx #0
+	bne noteric
+	jsr flash_border
+noteric
 	lda pos_col,x
 	sta pos_col,y
 	lda pos_row,x
@@ -960,7 +964,6 @@ completed
 	ldx #CHAR_ERIC
 	jsr check_hit
 	bmi nobody
-	
 savx2
 	ldx #0
 
