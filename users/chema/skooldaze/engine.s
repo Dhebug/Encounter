@@ -24,13 +24,14 @@
 
 move_chars
 .(
-	ldx last_char_moved
-	jsr move_char
-	ldx last_char_moved
-	jsr move_char
 
+	ldx last_char_moved
+	jsr move_char
+	ldx last_char_moved
+	jsr move_char
   	ldx last_char_moved
 	jsr move_char
+
 	ldx last_char_moved
 	jsr move_char
 	ldx last_char_moved
