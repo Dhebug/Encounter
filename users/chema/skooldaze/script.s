@@ -430,13 +430,91 @@ s_end
   rts
 .)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a little boy find and follow 
+; little boy no. 1.
+; Used by command list 206 (which is used 
+; by little boys 2-11). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_follow_boy1
-s_goto_random_trip
 .(
 	inc pcommand,x
+
+	; Reset bit 6 (do not walk slowly continuously) 
+	; and bit 7 (walk fast) 
+	; and set bit 5 (walk fast continuously)
+
+	lda flags,x
+	and #31
+	ora #32
+	sta flags,x
+	
+	; Check if the continual subcommand of boy no. 1
+	; is csc_trip_people_up, and return otherwise
+	ldy #CHAR_BOY1
+	lda #>csc_trip_people_up
+	cmp cont_subcom_high,y
+	beq cont
+retme
 	rts
+cont
+	lda #<csc_trip_people_up
+	cmp cont_subcom_low,y
+	bne retme
+
+	; Set csc_trip_people_up as continual subcommand for this boy
+	;lda #<csc_trip_people_up
+	sta cont_subcom_low,x
+	lda #>csc_trip_people_up
+	sta cont_subcom_high,x
+
+	; Copy command and destination from boy no. 1
+	lda cur_command_high,y
+	sta cur_command_high,x
+	lda cur_command_low,y
+	sta cur_command_low,x
+	lda dest_x,y
+	sta dest_x,x
+	lda dest_y,y
+	sta dest_y,x
+
+	; Send him follow boy no. 1
+
+	jmp s_goto_ex2
 .)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make little boy no. 1 go to a place at random 
+; and trip people up on the way.
+; Used by command list 204 (which is used only 
+; by little boy no. 1). 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_goto_random_trip
+.(
+	;inc pcommand,x
+
+	; Reset bit 6 (do not walk slowly continuously) 
+	; and bit 7 (walk fast) 
+	; and set bit 5 (walk fast continuously)
+
+	lda flags,x
+	and #31
+	ora #32
+	sta flags,x
+	
+	; Place the address of the continual subcommand 
+	; routine csc_trip_people_up
+
+	lda #<csc_trip_people_up
+	sta cont_subcom_low,x
+	lda #>csc_trip_people_up
+	sta cont_subcom_high,x
+
+	jmp s_goto_random_ex
+.)
+ 
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make little boy no. 10 give ERIC a message
@@ -449,11 +527,11 @@ s_goto_random_trip
  
 s_tell_einstein
 .(
-	lda #<s_tell_einstein
+	lda #<s_tell_einstein_ex
 	sta repeat+1
-	lda #>s_tell_einstein
+	lda #>s_tell_einstein_ex
 	sta repeat+2
-
+s_tell_einstein_ex
 	lda #<st_einstein
 	ldy #>st_einstein
 	bne s_tell_common	; Jumps always
@@ -461,11 +539,11 @@ s_tell_einstein
 
 s_tell_angelface
 .(
-	lda #<s_tell_angelface
+	lda #<s_tell_angelface_ex
 	sta repeat+1
-	lda #>s_tell_angelface
+	lda #>s_tell_angelface_ex
 	sta repeat+2
-
+s_tell_angelface_ex
 	lda #<st_mumps
 	ldy #>st_mumps
 	bne s_tell_common	; Jumps always
@@ -473,11 +551,11 @@ s_tell_angelface
 
 s_tell_boywander
 .(
-  	lda #<s_tell_boywander
+  	lda #<s_tell_boywander_ex
 	sta repeat+1
-	lda #>s_tell_boywander
+	lda #>s_tell_boywander_ex
 	sta repeat+2
-
+s_tell_boywander_ex
 	lda #<st_peashooter
 	ldy #>st_peashooter
 	;bne s_tell_common	; Jumps always
@@ -642,7 +720,7 @@ s_find_eric
 	lda #255
 	sta lesson_clock+1
 
-	; Prepare call to the routine as uninterruoptible 
+	; Prepare call to the routine as uninterruptible 
 	; subcommand
 
 	lda #<s_find_eric_ex
@@ -2924,6 +3002,65 @@ present in bytes 124 and 125 of a character's buffer:
 32234 Make a character walk fast 
 64042 Check whether ANGELFACE is touching ERIC 
 */
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make a little boy trip people up
+; The address of this continual subcommand routine is placed into 
+; bytes 124 and 125 of little boy no. 1's character buffer by the 
+; routine s_goto_random_trip , and into bytes 124 and 125 of the 
+; character buffers of little boys 2-11 by the routine 
+; s_follow_boy1. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+csc_trip_people_up
+.(
+	; Check the character is not on a staircase
+	jsr is_on_staircase
+	beq cont
+retme
+	rts
+cont
+	; Check the main character's positions
+	lda #CHAR_BOYWANDER	
+	sta patch_uplim+1
+	lda #$ff
+	sta patch_lowlim+1
+
+patch_uplim
+	ldy #CHAR_BOYWANDER
+loop
+	lda pos_col,x
+	cmp pos_col,y
+	bne next
+	lda pos_row,x
+	cmp pos_row,y
+	beq found
+next
+	dey
+patch_lowlim
+	cpy #$ff
+	bne loop
+
+	; If already patched, we are done
+	lda patch_uplim+1
+	cmp #CHAR_WITHIT
+	beq retme 
+	; Now the teachers. Patch the above code
+	lda #CHAR_WITHIT	
+	sta patch_uplim+1
+	lda #CHAR_BOY11
+	sta patch_lowlim+1
+	jmp patch_uplim
+found
+	; This character is at the same position, make it fall
+	; Is there an uninterruptible subcommand for him?
+	lda uni_subcom_high,y
+	bne next
+	
+	jsr knock_him
+	jmp next
+.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Check whether ANGELFACE is touching ERIC 
