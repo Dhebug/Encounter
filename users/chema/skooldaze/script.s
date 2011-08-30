@@ -2548,7 +2548,7 @@ s_usc_pelleth
 +terminate_pellet
 	; Finished the travel, remove the pellet
 	jsr update_SRB_sp
-	lda #255
+	lda #OFFSCREEN_POS
 	sta pos_col,x
 	lda #0
 	sta uni_subcom_high,x

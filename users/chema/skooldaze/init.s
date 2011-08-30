@@ -302,6 +302,9 @@ _init
 	;jsr reset_flags
 
 	; Initialize other game flags
+	;lda #$fe
+	;sta first_col
+
 	lda #0
 	sta vis_col
 	sta vis_row 
@@ -492,9 +495,7 @@ loops
 	lda #>(LESCLK_VAL)
 	sta lesson_clock+1
 
-	jsr change_lesson
-
-	rts
+	jmp change_lesson
  .)
 
 
