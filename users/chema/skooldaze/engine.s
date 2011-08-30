@@ -24,20 +24,14 @@
 
 move_chars
 .(
+	lda #6
+	sta tmp7
+loop
+	ldx last_char_moved
+	jsr move_char
+	dec tmp7
+	bne loop
 
-	ldx last_char_moved
-	jsr move_char
-	ldx last_char_moved
-	jsr move_char
-  	ldx last_char_moved
-	jsr move_char
-
-	ldx last_char_moved
-	jsr move_char
-	ldx last_char_moved
-	jsr move_char
-	ldx last_char_moved
-	jsr move_char
 	ldx last_char_moved
 +move_char
 	cpx #20

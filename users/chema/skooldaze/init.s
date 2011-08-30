@@ -934,9 +934,7 @@ printit2
 	lda #>22*8*40+15+$a000
 	sta tmp1+1
 
-	jsr dump_text_buffer
-
-	rts
+	jmp dump_text_buffer
 .)
 
 
