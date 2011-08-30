@@ -197,13 +197,15 @@ is_on_screen
 	lda pos_col,x
 	sec
 	sbc first_col
-	bcs maybe1
+	;bcs maybe1
+	bpl maybe1
 	sec
 returnme
 	rts
 maybe1
 	cmp #VISIBLE_COLS+1	; Last one either
-	bcs returnme
+	;bcs returnme
+	bpl returnme
 	; The character is onscreen
 	; Check if somebody else is speaking
 	lda bubble_on
@@ -225,11 +227,13 @@ bubble_coords
 	tay
 	iny
 	cpy #FIRST_VIS_COL
-	bcs okcol
+	;bcs okcol
+	bpl okcol
 	iny
 okcol
 	cpy #LAST_VIS_COL+1
-	bcc	okcolm
+	;bcc	okcolm
+	bmi okcolm
 	dey
 okcolm
 	sty bubble_lip_col

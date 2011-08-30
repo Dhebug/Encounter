@@ -38,7 +38,7 @@ along with the new one.
 
 * Eric is flagged as inside the exam room when he is just near the entrance
 
-* First two column tiles are not shown (due to protecting the SRB)?
+- First two column tiles are not shown (due to protecting the SRB)?
 
 - When ending game message is being told (10000 lines) sometimes, at the end
   Mr Wacker teleports and the cycle starts again?

@@ -234,7 +234,7 @@ finish
 
 _scroll_right
 .(
-	lda #9	; Scroll 8 columns
+	lda #5	; Scroll 9 columns
 	sta count
 loop
   	jsr scroll1_right
@@ -248,6 +248,7 @@ count .byt 0
 scroll1_right
 .(
 	lda first_col
+	cmp #$fe
 	bne doit
 	rts
 doit
@@ -255,6 +256,7 @@ doit
 	lda bubble_on
 	beq skipbubble
 	ldy bubble_col
+	iny
 	iny
 	cpy #LAST_VIS_COL-7
 	bcc cont
@@ -269,16 +271,22 @@ doit
 	jmp skipbubble
 cont
 	sty bubble_col
-	inc bubble_loc_p
-	bne noinch
+	clc
+	lda bubble_loc_p
+	adc #2
+	bcc noinch
 	inc bubble_loc_p+1
 noinch
+	sta bubble_loc_p
 
 	inc bubble_lip_col
+	inc bubble_lip_col
+
 	jsr bitmask_bubble
 skipbubble
 
 
+	dec first_col
 	dec first_col
 	; Scroll the screen data 1 scan right
 
@@ -287,20 +295,20 @@ skipbubble
 #ifdef CENTER_PLAY_AREA
 	lda #<$a002+160
 	sta smc_sp1+1
-	lda #<$a003+160
+	lda #<$a004+160
 	sta smc_sp2+1
 	lda #>$a000+160
 #else
 	lda #<$a002
 	sta smc_sp1+1
-	lda #<$a003
+	lda #<$a004
 	sta smc_sp2+1
 	lda #>$a000
 #endif
 	sta smc_sp1+2
 	sta smc_sp2+2
 loop1
-	ldy #VISIBLE_COLS-2
+	ldy #VISIBLE_COLS-2-1
 loop2
 smc_sp1
 	lda $1234,y
@@ -332,7 +340,7 @@ skip
 	; Update the SRB
 	ldx #((SKOOL_ROWS-1)*5)
 loop3
-	lda #%00100000
+	lda #%00110000
 	sta SRB,x
 	dex
 	dex
@@ -348,7 +356,7 @@ loop3
 
 _scroll_left
 .(
-	lda #9	; Scroll 8 columns
+	lda #5	; Scroll 9 columns
 	sta count
 loop
   	jsr scroll1_left
@@ -364,7 +372,8 @@ scroll1_left
 .(
 	lda first_col
 	cmp #(SKOOL_COLS-VISIBLE_COLS-2)
-	bcc doit
+	;bcc doit
+	bmi doit
 	rts
 doit
 
@@ -372,35 +381,40 @@ doit
 	beq skipbubble
 	ldy bubble_col
 	dey
+	dey
 	cpy #FIRST_VIS_COL
-	bcs cont
+	;bcs cont
+	bpl cont
 	jmp rsp_bubble ; It got out of sight
 cont
 	sty bubble_col
 	lda bubble_loc_p
 	sec
-	sbc #1
+	sbc #2
 	bcs nodech
 	dec bubble_loc_p+1
 nodech
 	sta bubble_loc_p
 
 	dec bubble_lip_col
+	dec bubble_lip_col
 	jsr bitmask_bubble
 
 skipbubble
 
 	inc first_col
+	inc first_col
+
 	; Scroll the screen data 1 scan left
 	ldx #(SKOOL_ROWS*8)
 #ifdef CENTER_PLAY_AREA
-	lda #<$a003+160
+	lda #<$a004+160
 	sta smc_sp1+1
 	lda #<$a002+160
 	sta smc_sp2+1
 	lda #>$a000+160
 #else
-	lda #<$a003
+	lda #<$a004
 	sta smc_sp1+1
 	lda #<$a002
 	sta smc_sp2+1
@@ -416,7 +430,7 @@ smc_sp1
 smc_sp2
 	sta $1234,y
 	iny
-	cpy #(LAST_VIS_COL-2)
+	cpy #(LAST_VIS_COL-2-1)
 	bcc loop2
 
 	lda smc_sp1+1
@@ -442,7 +456,7 @@ skip
 	; Update the SRB
 	ldx #((SKOOL_ROWS-1)*5+4)
 loop3
-	lda #%00000100
+	lda #%00001100
 	sta SRB,x
 	dex
 	dex
