@@ -302,14 +302,14 @@ _init
 	;jsr reset_flags
 
 	; Initialize other game flags
-	;lda #$fe
-	;sta first_col
+	lda #$fe
+	sta first_col
 
 	lda #0
 	sta vis_col
 	sta vis_row 
 	sta tile_col
-	sta first_col
+	;sta first_col
 	sta current_lesson_index
 	sta Eric_flags
 	sta Eric_knockout
