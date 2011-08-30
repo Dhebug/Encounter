@@ -52,6 +52,9 @@
 #define VISIBLE_COLS	(LAST_VIS_COL-FIRST_VIS_COL+1)	
 #define SRB_SIZE		105
 
+; Offscreen position (for pellets). Keep it >128 and <255-3
+#define OFFSCREEN_POS	200
+
 ; Buffer width for lesson/lines box.
 #define BUFFER_TEXT_WIDTH 11	
 
