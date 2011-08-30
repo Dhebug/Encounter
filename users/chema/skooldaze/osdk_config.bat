@@ -8,5 +8,5 @@ SET OSDKCOMP=
 SET OSDKLINK=-B
 SET OSDKADDR=$500
 SET OSDKNAME=skooldaze
-SET OSDKFILE=init engine common auxiliar script eric keyboard charset graphics data text tail
+SET OSDKFILE=init graphics data text keyboard charset engine common auxiliar script eric tail
 

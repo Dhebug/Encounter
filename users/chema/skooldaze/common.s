@@ -229,25 +229,9 @@ done
 .)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Make a teacher give lines to somebody
-;; The teacher is passed in reg X and the recipient
-;; in reg Y. The reprimand message is passed on
-;; reg A.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-give_lines
+prepare_box
 .(
-	; Save reprimand message identifier
-	sta sava+1
-
-	; Checck if the teacher is onscreen
-	jsr is_on_screen
-	bcc cont
-	beq cont
-	rts
-cont
-	; Get spot's above character's head
+  	; Get spot's above character's head
 	; This uses the bubble variables, so I will
 	; save them first
 	lda bubble_col
@@ -259,8 +243,6 @@ cont
 	lda bubble_lip_row
 	pha
 	
-	; Save register Y
-	sty savy+1
 
 	jsr bubble_coords
 	
@@ -279,7 +261,6 @@ skipthis
 	sbc #3		; this is 3 squares bigger
 	sta bubble_col
 skipthistoo
-	stx savx+1		; Save register X
 
 	; Calculate the pointer
 	ldx bubble_row
@@ -309,7 +290,42 @@ skip
 
 	
 	; Save the screen data
-	jsr save_buffer
+	jmp save_buffer
+.)
+
+show_box
+.(
+  	lda tmp3
+	sta tmp1
+	lda tmp3+1
+	sta tmp1+1
+
+	; Let's try to add some temporary color
+	jsr color_box
+	jmp dump_text_buffer
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make a teacher give lines to somebody
+;; The teacher is passed in reg X and the recipient
+;; in reg Y. The reprimand message is passed on
+;; reg A.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+give_lines
+.(
+	; Save reprimand message identifier
+	sta sava+1
+
+	; Check if the teacher is onscreen
+	jsr is_on_screen
+	bcc cont
+	beq cont
+	rts
+cont
+	sty savy+1		; Save register Y
+	stx savx+1		; Save register X
+
+	jsr prepare_box
 
 	; Ok now write the lines...
 	; Start by determining the number of lines that
@@ -363,14 +379,7 @@ smc_savop2
 
 	jsr write_text_down
 
-	lda tmp3
-	sta tmp1
-	lda tmp3+1
-	sta tmp1+1
-
-	; Let's try to add some temporary color
-	jsr color_box
-	jsr dump_text_buffer
+	jsr show_box
 	jsr wait
 
 	; Now the reprimand
@@ -395,18 +404,13 @@ sava
 
 	jsr write_text_down
 
-	lda tmp3
-	sta tmp1
-	lda tmp3+1
-	sta tmp1+1
+	; Show the reprimand box
+	jsr show_box
 
-	; Let's try to add some temporary color
-	jsr color_box
-	jsr dump_text_buffer
 	jsr wait
 
 	; Restore the screen data
-	jsr restore_buffer
+	jmp restore_buffer
 
 	; Restore registers back
 savx
@@ -727,12 +731,55 @@ givelines
 reveal
 	; Check if it is time to reveal the combination
 	; letter
-	lda game_status
+	lda game_mode
 	cmp #2
 	bne retme
 
-	; TODO... everything here
+	; Is the character a teacher?
+	cpx #CHAR_FIRST_TEACHER
+	bcc retme
+	cpx #CHAR_WITHIT+1
+	bcs retme
+
+	; It is, prepare his combination letter
+
+	stx savx+1
+	sty savy+1
+
+	txa
+	sec
+	sbc #CHAR_CREAK
+	tay
+	lda tab_safecodes,y
+	sta st_safeletter
+
+	; And show it
+	jsr prepare_box
+
+	lda #<st_space
+	sta tmp0
+	lda #>st_space
+	sta tmp0+1
+	jsr write_text_up
+
+	lda #<st_safeletter
+	sta tmp0
+	lda #>st_safeletter
+	sta tmp0+1
+	jsr write_text_down
+
+	jsr show_box
+	jsr wait
+
+	; Restore the screen data
+	jsr restore_buffer
+savx
+	ldx #0
+savy
+	ldy #0
 	rts
 .)
+
+
 
 

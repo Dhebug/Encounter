@@ -404,4 +404,11 @@ st_peashooter
 st_pressU
 	.asc "Press 'U' if you understood", SPACES_8,0
 
+st_safeletter
+	.byt 0,0
+st_space
+	.asc " ",0
+
+
+
 
