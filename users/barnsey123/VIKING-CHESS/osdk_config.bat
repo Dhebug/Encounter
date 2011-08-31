@@ -3,6 +3,6 @@
 ::
 :: Set the build paremeters
 ::
-SET OSDKADDR=$800
+SET OSDKADDR=$600
 SET OSDKNAME=VIKING
-SET OSDKFILE=MAIN
+SET OSDKFILE=MAIN pic_tiles
