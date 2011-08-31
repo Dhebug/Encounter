@@ -55,6 +55,39 @@
 *** routine to detect stalemate (a side cannot move)
 */
 #include <lib.h>
+
+// ---------------------------
+extern unsigned char PictureTiles[];
+
+void DbugTestGraphics()
+{
+	hires();
+	
+	{
+		unsigned char x,y;
+		
+		unsigned char* ptr_screen=(unsigned char*)0xa000;
+		unsigned char* ptr_graph=PictureTiles;
+		
+		for (y=0;y<51;y++)
+		{
+			for (x=0;x<108/6;x++)
+			{
+				ptr_screen[x]=ptr_graph[x];
+			}
+			ptr_screen+=40;
+			ptr_graph+=18;			
+		}
+	}
+	
+	
+	
+	while (1);
+}
+
+// ---------------------------
+
+
 /******************* Function Declarations ************************/
 void drawbox();				// draws a box 
 void drawdiamond();			// draws diamond 
@@ -98,18 +131,9 @@ Tile types:
 2=defender square
 3=king square
 */
-const unsigned char tiles[11][11]={
-		{4,0,0,1,1,1,1,1,0,0,4},
-		{0,0,0,0,0,1,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0},
-		{1,0,0,0,0,2,0,0,0,0,1},
-		{1,0,0,0,2,2,2,0,0,0,1},
-		{1,1,0,2,2,3,2,2,0,1,1},
-		{1,0,0,0,2,2,2,0,0,0,1},
-		{1,0,0,0,0,2,0,0,0,0,1},
-		{0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,1,0,0,0,0,0},
-		{4,0,0,1,1,1,1,1,0,0,4}};
+extern const unsigned char tiles[11][11];
+
+
 /* populate array with places of players 
 Players:
 0=vacant
@@ -163,14 +187,17 @@ char desireatt[11][11]={
 		{3,4,2,2,3,2,3,3,2,4,3},
 		{0,3,4,2,2,1,2,2,3,3,0}};
 
-char target[11][11];			// uninitialized variable (will calc on fly) - target values of square
+extern unsigned char target[11][11];			// uninitialized variable (will calc on fly) - target values of square
+
 // ARRAY ENEMY unititialized variable (will calc on fly) - can enemy reach a square?
 // values:
 // +1 Can be reached from NORTH
 // +5 can be reached from SOUTH
 // +10 can be reached from EAST
 // +20 can be reached from WEST 
-char enemy[11][11];
+extern char enemy[11][11];
+
+
 //char enemy[122];	
 // TIGER
 const unsigned char boardx=22;	// starting x co-ord of board
@@ -221,6 +248,8 @@ char arrow=1;					// used in arrowsorblanks(and subarrows)
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
+	DbugTestGraphics();
+	
 paper(0);
 ink(5);
 drawboard();					// draw the board
@@ -257,14 +286,7 @@ void computerturn()
 //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
 printf("%c\nATTACKER IS THINKING..%c",19,19);
 // 1. initialize target array to zeroes
-for (ctns=0;ctns<11;ctns++)
-	{
-	for (ctew=0;ctew<11;ctew++) 
-		{
-		target[ctns][ctew]=0;
-		enemy[ctns][ctew]=0;
-		}
-	}
+ClearTargetAndEnemy();
 
 // 2. Loop through players array searching for enemy pieces - calculating where they can go
 for (ctns=0;ctns<11;ctns++)
@@ -905,39 +927,6 @@ void drawplayers() // DRAW ALL THE PIECES ON THE BOARD
 		}
 }
 /************************************************/
-void drawbox()
-{
-	// draws a box
-	curset(tilex,tiley,3);
-	draw(size,0,fb);
-	draw(0,size,fb);
-	draw(-size,0,fb);
-	draw(0,-size,fb);
-}
-/************************************************/
-void drawdiamond()
-{
-	// - draw a diamond at x,y size z, foreground or background
-	curset(tilex,tiley,fb);
-	draw(size,size,fb);
-	draw(-size,size,fb);
-	draw(-size,-size,fb);
-	draw(size,-size,fb);
-}
-/************************************************/
-void drawcursor()
-{
-	//	- draw the cursor at cx,cy size z, foreground/background color (1 or 0)
-	char z=boxsize-2;
-	pattern(170);
-	curset(cx,cy,fb);
-	draw(z,0,fb);
-	draw(0,z,fb);
-	draw(-z,0,fb);
-	draw(0,-z,fb);
-	pattern(255);
-}
-/************************************************/
 void blanksquare()	// blanks out a square, say when a piece has moved or has been taken
 {
 	// (erase a square)
@@ -951,11 +940,6 @@ void blanksquare()	// blanks out a square, say when a piece has moved or has bee
 		}
 }
 /************************************************/
-void drawattackertile()
-{
-	size=13;			// line length
-	drawbox();		// drawbox at x,y position
-}
 /* TILE2
 void drawtile2(unsigned char x, unsigned char y)
 {
@@ -1506,3 +1490,5 @@ if ( orientation==1 ) { enemy[xns][xew]+=1; }	// means enemy can get here from N
 if ( orientation==2 ) { enemy[xns][xew]+=20; }	// means enemy can get here from WEST
 if ( orientation==3 ) { enemy[xns][xew]+=10; }	// means enemy can get here from EAST
 }
+
+

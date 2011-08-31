@@ -5,4 +5,5 @@
 ::
 SET OSDKADDR=$600
 SET OSDKNAME=VIKING
-SET OSDKFILE=MAIN pic_tiles
+SET OSDKFILE=MAIN draw data pic_tiles
+
