@@ -84,10 +84,13 @@
 #define AVOID_JSRS
 
 ;; Substitutes the multiplying with a big (512) table, not much optimization though.
-#define FULLTABLEMUL8
+;#define FULLTABLEMUL8
 
 ;; Avoid Oricutron's bug with ror addr,x
 #define AVOID_ORICUTRON_BUG
+
+;; Inverse things to get white bubbles
+#define WHITE_BUBBLES
 
 ;; Center play area
 #define CENTER_PLAY_AREA

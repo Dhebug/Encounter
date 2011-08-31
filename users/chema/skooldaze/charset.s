@@ -344,6 +344,9 @@ loopr
 	ldy #7
 loop
 	lda speech_bubble,y
+#ifdef WHITE_BUBBLES
+	eor #%10111111
+#endif
 	sta (tmp),y
 	dey
 	bpl loop
@@ -393,6 +396,9 @@ skip2
 	sbc #0
 	sta smc_olip+2
 	lda #%01100001
+#ifdef WHITE_BUBBLES
+	eor #%10111111
+#endif
 smc_olip
 	sta $1234
 
@@ -400,6 +406,9 @@ smc_olip
 	ldy #0
 loop
 	lda speech_bubble_lip,x
+#ifdef WHITE_BUBBLES
+	eor #%10111111
+#endif
 	sta (tmp),y
 	cpx #7 
 	beq endl
@@ -898,6 +907,10 @@ savx
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 slide_col_bubble
 .(
+#ifdef WHITE_BUBBLES
+	eor #%11111111
+#endif
+
 	sta tmp+1
 	lda #8
 	sta tmp
@@ -910,7 +923,11 @@ loop_s_row
 	rol
 	cmp #192
 	and #%00111111
+#ifdef WHITE_BUBBLES
+	ora #%11000000
+#else
 	ora #%01000000
+#endif
 	sta (tmp1),y
 	dey
 	bne loop_s_row
