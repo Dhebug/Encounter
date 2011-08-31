@@ -820,12 +820,13 @@ s_dinner_duty
 	
 	; Check if Eric is where he should be
 	jsr s_check_Eric_loc
-	
+	php
 	ldy #44	; left end of the teacher's dinner duty orbit
 	lda #<s_dinner_duty2
 	sta tmp0
 	lda #>s_dinner_duty2
 	sta tmp0+1
+	plp
 
 	; Entry point from other routines to chase
 	; Eric if needed.
@@ -871,15 +872,16 @@ nochase
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_dinner_duty2
 .(
+	; Prepare Z flag and destination
+	jsr s_check_Eric_loc
+	php
 	lda #<s_dinner_duty_ex
 	sta tmp0
 	lda #>s_dinner_duty_ex
 	sta tmp0+1
-
-	; Prepare Z flag and destination
-	jsr s_check_Eric_loc
 	ldy #83	;  right end of the techer's dinner duty orbit
-	bne	s_track_down_Eric	; jumps always
+	plp
+	jmp	s_track_down_Eric	
 .)
 
 

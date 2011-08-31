@@ -42,11 +42,13 @@ along with the new one.
 
 * Write an essay when the teacher did not write anything
 
-* In demo mode, after some time (DINNER), Oricutron hangs... Euphoric too. Stack is corrupted and rti jumps to brk
+- In demo mode, after some time (DINNER), Oricutron hangs... Euphoric too. Stack is corrupted and rti jumps to brk
 	lda counter (which is 0 always?)
 	beq toldaagain
 
-* In demo mode score should not increase (hi-score too!)
+- In demo mode score should not increase (hi-score too!)
+
+- In demo mode, after some time (DINNER), Oricutron hangs... Euphoric too. Stack is corrupted and rti jumps to brk
 
 - First two column tiles are not shown (due to protecting the SRB)?
 
