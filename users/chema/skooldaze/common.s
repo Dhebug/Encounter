@@ -423,6 +423,10 @@ savy
 
 add_score
 .(
+	; If in demo mode, don't do anything
+	ldy game_mode
+	beq nohiscore
+
 	clc
 	adc score
 	sta score
