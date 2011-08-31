@@ -38,6 +38,16 @@ along with the new one.
 
 * Eric is flagged as inside the exam room when he is just near the entrance
 
+* Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
+
+* Write an essay when the teacher did not write anything
+
+* In demo mode, after some time (DINNER), Oricutron hangs... Euphoric too. Stack is corrupted and rti jumps to brk
+	lda counter (which is 0 always?)
+	beq toldaagain
+
+* In demo mode score should not increase (hi-score too!)
+
 - First two column tiles are not shown (due to protecting the SRB)?
 
 - When ending game message is being told (10000 lines) sometimes, at the end
