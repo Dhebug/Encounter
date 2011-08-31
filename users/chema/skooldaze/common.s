@@ -376,9 +376,7 @@ smc_savop2
 	clc
 	adc #1
 	jsr search_string
-
 	jsr write_text_down
-
 	jsr show_box
 	jsr wait
 
@@ -390,7 +388,6 @@ smc_savop2
 sava
 	lda #0
 	jsr search_string
-
 	jsr write_text_up
 
 	lda #<reprimands
@@ -401,24 +398,20 @@ sava
 	clc
 	adc #1
 	jsr search_string
-
 	jsr write_text_down
 
 	; Show the reprimand box
 	jsr show_box
-
 	jsr wait
 
 	; Restore the screen data
-	jmp restore_buffer
+	jsr restore_buffer
 
 	; Restore registers back
 savx
 	ldx #0
 savy 
 	ldy #0
-
-
 	rts
 .)
 

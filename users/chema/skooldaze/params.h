@@ -87,7 +87,7 @@
 #define FULLTABLEMUL8
 
 ;; Avoid Oricutron's bug with ror addr,x
-#define AVOID_ORICUTRON_BUG
+//#define AVOID_ORICUTRON_BUG
 
 ;; Center play area
 #define CENTER_PLAY_AREA
