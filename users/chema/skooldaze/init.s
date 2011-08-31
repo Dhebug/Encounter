@@ -100,13 +100,14 @@ _main
 
 	jsr _init
 
+/*
 	lda #100
 	sta tmp+1
 loop
 	jsr set_border
 	dec tmp+1
 	bne loop
-
+*/
 	jmp _test_loop
 .)
 

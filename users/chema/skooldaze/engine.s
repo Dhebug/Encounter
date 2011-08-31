@@ -25,11 +25,11 @@
 move_chars
 .(
 	lda #6
-	sta tmp7
+	sta tmp6
 loop
 	ldx last_char_moved
 	jsr move_char
-	dec tmp7
+	dec tmp6
 	bne loop
 
 	ldx last_char_moved
