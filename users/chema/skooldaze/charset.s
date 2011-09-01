@@ -999,6 +999,7 @@ smc_pchar
 	lda $1234	; Get char	
 	beq end		; If it is zero, just return
 	
+/*
 	; Check if it is a token (>=128)
 	; which refers to an entry in one of 
 	; the symbol/element, capital city/country 
@@ -1028,6 +1029,7 @@ smc_pchar2
 	jmp process_subm
 
 nottoken
+*/
 	; The character is <128, but is it >=32?
 	cmp #31
 	bcc token2 ; return if it is a normal character
@@ -1044,6 +1046,9 @@ token2
 	; Check if is < 3 (2 means newline)
 	cmp #3
 	bcc end
+
+	cmp #TEMPLATE_QUESTION
+	bcs token1
 
 	; Look up the pointer in the names/extras table.
 	; Store it in the var5/var6 pair and jump back to the
@@ -1064,6 +1069,35 @@ search_submessage
 	ldy #0
 	lda (tmp0),y
 	jmp process_subm
+
+token1
+	; It is a token 
+	; which refers to an entry in one of 
+	; the symbol/element, capital city/country 
+	; and date/battle question-and-answer pairs
+	
+	; Look up the pointer in the question/answer tables
+	; Store it in the var5/var6 pair and jump back to the
+	; submessage processing (getting in A the first char)
+	cmp #TEMPLATE_QUESTION
+	bne isanswer
+	lda p_question
+	ldy p_question+1
+	bne placeit
+isanswer
+	lda p_answer
+	ldy p_answer+1
+placeit
+	sta var5,x
+	sta smc_pchar2+1
+	tya
+	sta var6,x
+	sta smc_pchar2+2
+smc_pchar2
+	lda $1234
+
+	jmp process_subm
+
 .)
 
 
