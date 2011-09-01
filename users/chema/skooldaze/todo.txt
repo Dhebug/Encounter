@@ -33,14 +33,15 @@ along with the new one.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* It seems that always the message is mumps duty in special playtime, though
-  the logic changes...
-
 * Eric is flagged as inside the exam room when he is just near the entrance
 
-* Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
 
-* Write an essay when the teacher did not write anything
+- Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
+
+- Write an essay when the teacher did not write anything
+
+- It seems that always the message is mumps duty in special playtime, though
+  the logic changes...
 
 - In demo mode, after some time (DINNER), Oricutron hangs... Euphoric too. Stack is corrupted and rti jumps to brk
 	lda counter (which is 0 always?)

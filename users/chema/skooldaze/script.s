@@ -3761,6 +3761,8 @@ savx
 	rts
 
 finished
+	; get the blackboard
+	jsr get_blackboard
 	; Set tile=0 and col=1
 	ldy #2
 	lda #1
