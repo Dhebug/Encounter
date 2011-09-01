@@ -138,8 +138,9 @@ loop2
 loop
 	sta (tmp),y
 	dey
-	cpy #1
-	bne loop
+	;cpy #1
+	;bne loop
+	bpl loop
 /*
 	lda #A_FWBLACK 
 	sta (tmp),y
@@ -465,10 +466,13 @@ loopsrb2
 	bpl loopsrb
 
 	; First screen render
+	/*
 	lda #A_BGBLACK
 	sta smc_paper_1+1
 	sta smc_paper_2+1
-	jsr set_ink2
+	*/
+	jsr clr_hires
+	jsr set_ink2 
 	jsr render_screen
 	lda #A_BGCYAN
 	sta smc_paper_1+1
