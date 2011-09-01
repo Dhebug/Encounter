@@ -472,7 +472,7 @@ loopsrb2
 	jsr render_screen
 	lda #A_BGCYAN
 	sta smc_paper_1+1
-	lda #A_BGGREEN
+	lda #A_BGYELLOW
 	sta smc_paper_2+1
 	jsr set_ink2
 
