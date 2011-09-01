@@ -474,11 +474,14 @@ loopsrb2
 	jsr clr_hires
 	jsr set_ink2 
 	jsr render_screen
+
+	/*
 	lda #A_BGCYAN
 	sta smc_paper_1+1
 	lda #A_BGYELLOW
 	sta smc_paper_2+1
 	jsr set_ink2
+	*/
 
 	; Clear scorepanel
 	jsr clear_scorepanel
