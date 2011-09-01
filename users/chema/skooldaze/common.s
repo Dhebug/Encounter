@@ -14,6 +14,52 @@
 
 #include "params.h"
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Searches for a string. tmp0 holds pointer
+;; to base and A holds offset (in strings).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+search_string
+.(
+	stx savex+1	; Preserve reg x
+    tax
+    bne cont
+	ldx savex+1
+    rts
+cont
+    ldy #0
+loop
+    lda (tmp0),y
+    beq out    ; Search for zero
+    iny
+    bne loop
+
+out
+    ; Found the end. 
+	; Skip consecutive zeros
+loop2
+	iny
+	lda (tmp0),y
+	beq loop2
+	
+	;Add length to pointer    
+    tya
+    clc
+    adc tmp0
+    bcc nocarry
+    inc tmp0+1
+nocarry
+    sta tmp0    
+
+    dex
+    bne cont
+  
+savex
+	ldx #0	; restore reg x
+    rts
+.)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Check if a character is on a staircase
 ; return with Z=0 if that is the case

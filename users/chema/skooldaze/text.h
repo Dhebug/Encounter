@@ -34,6 +34,10 @@
 #define MUL_QUESTION	15
 #define MUL_ANSWER		16
 
+; Tokens for quesions/answers
+#define TEMPLATE_QUESTION	20
+#define TEMPLATE_ANSWER		21
+
 ; Identifiers for reprimands
 #define SIT_STAIRS		0
 #define ROOM_PRIVATE	2
@@ -53,9 +57,6 @@
 #define NO_JUMPING		30
 #define LINES_2000		32
 
-; Tokens for quesions/answers
-#define TEMPLATE_QUESTION	128
-#define TEMPLATE_ANSWER		129
 
 ; Names and some extras...
 #define EN_SPACES_8		0

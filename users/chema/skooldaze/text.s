@@ -11,52 +11,8 @@
 ;; Text strings
 ;; --------------------
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Searches for a string. tmp0 holds pointer
-;; to base and A holds offset (in strings).
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-search_string
-.(
-	stx savex+1	; Preserve reg x
-    tax
-    bne cont
-	ldx savex+1
-    rts
-cont
-    ldy #0
-loop
-    lda (tmp0),y
-    beq out    ; Search for zero
-    iny
-    bne loop
 
-out
-    ; Found the end. 
-	; Skip consecutive zeros
-loop2
-	iny
-	lda (tmp0),y
-	beq loop2
-	
-	;Add length to pointer    
-    tya
-    clc
-    adc tmp0
-    bcc nocarry
-    inc tmp0+1
-nocarry
-    sta tmp0    
-
-    dex
-    bne cont
-  
-savex
-	ldx #0	; restore reg x
-    rts
-
-.)
-
-
+__text_start
 
 names_extras
 	.asc "        "
@@ -409,6 +365,25 @@ st_safeletter
 st_space
 	.asc " ",0
 
+st_putnames
+	.asc "Do you want to put in your own names Y/N?",0
+st_castof
+	.asc "CAST OF CHARACTERS",0
+st_pressc
+	.asc "PRESS 'C' TO CHANGE NAME",0
+st_entername 
+	.asc "ENTER NEW NAME",0
+st_casttitles
+	.asc "OUR HERO",0
+	.asc "THE TEARAWAY",0
+	.asc "THE BULLY",0
+	.asc "THE SWOT",0
+	.asc "THE HEADMASTER",0
+	.asc "THE SCIENCE TEACHER",0
+	.asc "THE GEOGRAPHY TEACHER",0
+	.asc "THE HISTORY MASTER",0
+__text_end
 
-
+#echo **** Text:
+#print (__text_end-__text_start)
 
