@@ -18,6 +18,7 @@ names_extras
 	.asc "        "
 empty_st
 	.byt 0
+st_char_names
 	.asc "ERIC"
 	.byt 0
 	.dsb 9,0
@@ -30,6 +31,7 @@ empty_st
 	.asc "BOY WANDER"
 	.byt 0
 	.dsb 3,0
+st_teacher_names
 	.asc "MR ROCKITT"
 	.byt 0
 	.dsb 3,0
@@ -375,13 +377,19 @@ st_entername
 	.asc "ENTER NEW NAME",0
 st_casttitles
 	.asc "OUR HERO",0
-	.asc "THE TEARAWAY",0
-	.asc "THE BULLY",0
 	.asc "THE SWOT",0
-	.asc "THE HEADMASTER",0
-	.asc "THE SCIENCE TEACHER",0
-	.asc "THE GEOGRAPHY TEACHER",0
-	.asc "THE HISTORY MASTER",0
+	.asc "THE BULLY",0
+	.asc "THE TEARAWAY",0
+	.asc "TEACHER",0
+	.asc "HEADMASTER",0
+	.asc "TEACHER",0
+	.asc "MASTER",0 
+st_casttitles2
+	.asc "THE SCIENCE",0 
+	.asc "THE",0 
+	.asc "THE GEOGRAPHY",0 
+	.asc "THE HISTORY",0 
+
 __text_end
 
 #echo **** Text:

@@ -831,7 +831,7 @@ draw_skool_tile
 	adc tile_row
 	sta smc_p+2		
 	ldy tile_col
-smc_p
++smc_p
 	ldx $1200,y
 	beq blank_tile	; If the skool tile is blank...
 
@@ -925,7 +925,7 @@ smc_udgp
 #endif
 
 ; ...we need to empty the backbuffer and set the attributes, correctly.
-blank_tile
++blank_tile
 	ldx #7
 	lda #$40
 loop2
