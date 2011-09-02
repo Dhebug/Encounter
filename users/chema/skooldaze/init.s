@@ -598,6 +598,7 @@ notzero
 	
 	; A key was pressed, exit demo mode.
 	jsr unset_demo_mode
+	jsr change_names
 	jsr _init
 	jmp _test_loop
 
@@ -945,4 +946,256 @@ printit2
 	jmp dump_text_buffer
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Routines to change the character names
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+change_names
+.(
+	jsr clr_hires
 
+	lda #A_BGCYAN
+	sta smc_paper_2+1
+	jsr set_ink2 
+	lda #A_BGYELLOW
+	sta smc_paper_2+1
+
+	lda #<$a000+40*4+3
+	sta tmp0
+	lda #>$a000+40*4+3
+	sta tmp0+1
+	lda #<st_putnames
+	ldy #>st_putnames
+	jsr print_string
+looprk
+	jsr ReadKey
+	cmp #"Y"
+	beq start_catwalk
+	cmp #"N"
+	beq end
+	bne looprk
+end
+	rts
+.)
+
+start_catwalk
+.(
+	jsr clr_hires
+	jsr set_ink2 
+
+	; Print "CAST OF CHARACTERS"
+	lda #<$a000+40*4+13
+	sta tmp0
+	lda #>$a000+40*4+13
+	sta tmp0+1
+	lda #<st_castof
+	ldy #>st_castof
+	jsr print_string
+
+
+	; Patch the instruction at draw_skool_tile, so no
+	; background is drawn
+	; It was lda #>skool_r00,clc
+	; and we want jmp blank_tile
+	lda #$4C ;jmp
+	sta draw_skool_tile
+	lda #<blank_tile
+	sta draw_skool_tile+1
+	lda #>blank_tile
+	sta draw_skool_tile+2
+
+	; Draw the catwalk
+	lda #%11000000
+	ldy #35
+.(
+loop
+	sta $a000+(40*76)+2,y
+	dey
+	bne loop
+.)
+	; Put all the characters offscreen
+	ldx #MAX_CHARACTERS-1
+	lda #150
+.(
+loop
+	sta pos_col,x
+	dex
+	bpl loop
+.)
+	; Set the lefmost column of the skool to 5
+	lda #5
+	sta first_col
+
+	; Iterate through the main characters
+	lda #0
+	sta tmp7
+loopchars
+	; Prepare the character position
+	ldx tmp7
+	lda #5
+	sta pos_row,x
+	lda #0
+	sta pos_col,x
+
+	; and animatory state
+	jsr update_animstate
+
+	; Is he looking right?
+	lda flags,x
+	ora #IS_FACING_RIGHT
+	bne isok
+	jsr change_direction
+isok
+	; Start the catwalk
+	jsr walk_char_in
+	jsr print_title
+	jsr print_name
+
+	; Ask the user to change the name
+	;jsr print_pressC
+	jsr clear_name
+
+	; Walk the character out
+	ldx tmp7
+	jsr walk_char_out
+
+	; Proceed to the next character
+	; Beware to jump over the little kids
+	ldx tmp7
+	inx
+	cpx #4
+	bne notyet
+	ldx #15
+notyet
+	stx tmp7
+	cpx #CHAR_WITHIT+1
+	bne loopchars
+
+	; Put back the original code at draw_skool_tile
+	; to lda #>skool_r00,clc
+	lda #$A9 ;lda immediate
+	sta draw_skool_tile
+	lda #>skool_r00
+	sta draw_skool_tile+1
+	lda #$18	; clc
+	sta draw_skool_tile+2
+
+	; We are done
+	rts
+.)
+
+walk_char_out
+walk_char_in
+.(
+	lda #(3+20)*2
+	sta tmp7+1
+	stx loop+1
+loop
+	ldx #0	; SMC
+	jsr step_character
+	jsr render_screen
+
+	; Wait a bit, else they run too fast
+	ldy #50
+wlo
+	ldx #$ff
+wl	dex
+	bne wl
+	dey
+	bne wlo
+
+	dec tmp7+1
+	bne loop
+	rts
+.)
+
+table_teacher_order
+	.byt 3,0,1,2
+
+print_title
+.(
+	ldx tmp7
+	cpx #CHAR_FIRST_TEACHER
+	bcc noteacher
+	lda table_teacher_order-CHAR_FIRST_TEACHER,x
+	ldy #<st_casttitles2
+	sty tmp0
+	ldy #>st_casttitles2
+	sty tmp0+1
+	jsr search_string
+	jmp bottomline
+noteacher
+	lda #<st_space
+	sta tmp0
+	lda #>st_space
+	sta tmp0+1
+bottomline
+	jsr write_text_up
+	ldy #<st_casttitles
+	sty tmp0
+	ldy #>st_casttitles
+	sty tmp0+1
+	lda tmp7
+	cmp #CHAR_FIRST_TEACHER
+	bcc noteacher2
+	tax
+	lda table_teacher_order-CHAR_FIRST_TEACHER,x
+	clc
+	adc #4
+noteacher2
+	jsr search_string
+	jsr write_text_down
+
++dump_title
+	lda #<$a000+40*20+14
+	sta tmp1
+	lda #>$a000+40*20+14
+	sta tmp1+1
+	jmp dump_text_buffer
+.)
+
+
+print_name
+.(
+	ldx tmp7
+	cpx #CHAR_FIRST_TEACHER
+	bcc noteacher
+	lda table_teacher_order-CHAR_FIRST_TEACHER,x
+	ldy #<st_teacher_names
+	ldx #>st_teacher_names
+	jmp bottomline
+noteacher
+	txa
+	ldy #<st_char_names
+	ldx #>st_char_names
+bottomline
+	sty tmp0
+	stx tmp0+1
+	jsr search_string
+	jsr write_text_up
+
+	lda #<st_space
+	sta tmp0
+	lda #>st_space
+	sta tmp0+1
+	jsr write_text_down
+
++dump_title2
+	lda #<$a000+40*78+14
+	sta tmp1
+	lda #>$a000+40*78+14
+	sta tmp1+1
+	jmp dump_text_buffer
+.)
+
+
+clear_name
+.(
+	lda #<st_space
+	sta tmp0
+	lda #>st_space
+	sta tmp0+1
+	jsr write_text_up
+	jsr write_text_down
+	jsr dump_title
+	jmp dump_title2
+.)
