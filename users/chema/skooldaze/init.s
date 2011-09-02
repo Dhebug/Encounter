@@ -1051,7 +1051,7 @@ isok
 	jsr print_name
 
 	; Ask the user to change the name
-	;jsr print_pressC
+	jsr change_name
 	jsr clear_name
 
 	; Walk the character out
@@ -1171,6 +1171,12 @@ bottomline
 	sty tmp0
 	stx tmp0+1
 	jsr search_string
+	; Save pointer with SMC in case we want to edit it
+	lda tmp0
+	sta pchar_name+1
+	lda tmp0+1
+	sta pchar_name+3
+
 	jsr write_text_up
 
 	lda #<st_space
@@ -1198,4 +1204,118 @@ clear_name
 	jsr write_text_down
 	jsr dump_title
 	jmp dump_title2
+.)
+
+
+#define ADDR_LINE $a000+40*110
+
+change_name
+.(
+	; Print Print 'C' to change name
+	lda #<ADDR_LINE+11
+	sta tmp0
+	lda #>ADDR_LINE+11
+	sta tmp0+1
+	lda #<st_pressc
+	ldy #>st_pressc
+	jsr print_string
+
+	jsr read_key_block
+	cmp #"C"
+	bne end
+
+	jsr clear_msg_line
+	; Print ENTER NEW NAME
+	lda #<ADDR_LINE+14
+	sta tmp0
+	lda #>ADDR_LINE+14
+	sta tmp0+1
+	lda #<st_entername 
+	ldy #>st_entername 
+	jsr print_string
+
+	jsr read_new_name
+end
+	jmp clear_msg_line
+.)
+
+read_key_block
+.(
+loop
+	jsr ReadKeyNoBounce
+	beq loop
+	rts
+.)
+
+read_new_name
+.(
+	jsr clear_name
+
++pchar_name
+	ldy #$34
+	ldx #$12
+	sty tmp0
+	stx tmp0+1
+
+	; Empty name
+	lda #0
+	ldy #13
+loop
+	sta (tmp0),y
+	dey
+	bpl loop
+	iny
+	sty tmp6
+loop_read
+	jsr read_key_block
+	ldy tmp6
+	cmp #13	
+	beq end
+	cmp #$08	; delete?
+	bne nodel
+	cpy #0
+	beq loop_read
+	dey
+	sty tmp6
+	lda #0
+	sta (tmp0),y
+	beq skip	
+nodel
+	sta (tmp0),y
+	cpy #14
+	beq skip
+	inc tmp6
+skip
+	lda tmp0
+	pha
+	lda tmp0+1
+	pha
+	jsr write_text_up
+	jsr dump_title2
+	pla
+	sta tmp0+1
+	pla
+	sta tmp0
+	jmp loop_read
+end
+	rts
+	
+.)
+
+clear_msg_line
+.(
+	lda #$40
+	ldy #35
+loop
+	sta ADDR_LINE+2,y
+	sta ADDR_LINE+2+40,y
+	sta ADDR_LINE+2+40*2,y
+	sta ADDR_LINE+2+40*3,y
+	sta ADDR_LINE+2+40*4,y
+	sta ADDR_LINE+2+40*5,y
+	sta ADDR_LINE+2+40*6,y
+	sta ADDR_LINE+2+40*7,y
+	dey
+	bpl loop
+	rts
 .)
