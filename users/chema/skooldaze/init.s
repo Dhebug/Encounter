@@ -114,8 +114,8 @@ loop
 
 set_hires
 .(
-	lda #30
-	;lda $f934
+	;lda #30
+	lda $f934
 	sta $bfdf
 	
 	lda #A_BGBLACK 
@@ -450,17 +450,20 @@ loop
 
 	ldx #(21*5-1)
 loopsrb
-	lda #$fc
+	;lda #$fc
+	lda #0
 	sta SRB,x
 	dex
-	lda #$ff
+	;lda #$ff
+	lda #0
 	ldy #2
 loopsrb2
 	sta SRB,x
 	dex
 	dey
 	bpl loopsrb2
-	lda #$3f
+	;lda #$3f
+	lda #0
 	sta SRB,x
 	dex
 	bpl loopsrb
@@ -473,7 +476,7 @@ loopsrb2
 	*/
 	jsr clr_hires
 	jsr set_ink2 
-	jsr render_screen
+	;jsr render_screen
 
 	/*
 	lda #A_BGCYAN
@@ -486,11 +489,14 @@ loopsrb2
 	; Clear scorepanel
 	jsr clear_scorepanel
 
+	lda #$da
+	sta first_col
+
 	; Scroll the screen
-	lda #5
+	lda #42
 	sta tmp4
 loops
-	jsr _scroll_left
+	jsr scroll1_left
 	dec tmp4
 	bne loops
 
@@ -956,8 +962,6 @@ change_names
 	lda #A_BGCYAN
 	sta smc_paper_2+1
 	jsr set_ink2 
-	lda #A_BGYELLOW
-	sta smc_paper_2+1
 
 	lda #<$a000+40*4+3
 	sta tmp0
@@ -974,6 +978,8 @@ looprk
 	beq end
 	bne looprk
 end
+	lda #A_BGYELLOW
+	sta smc_paper_2+1
 	rts
 .)
 
@@ -981,6 +987,8 @@ start_catwalk
 .(
 	jsr clr_hires
 	jsr set_ink2 
+	lda #A_BGYELLOW
+	sta smc_paper_2+1
 
 	; Print "CAST OF CHARACTERS"
 	lda #<$a000+40*4+13
@@ -1041,7 +1049,7 @@ loopchars
 
 	; Is he looking right?
 	lda flags,x
-	ora #IS_FACING_RIGHT
+	and #IS_FACING_RIGHT
 	bne isok
 	jsr change_direction
 isok
@@ -1086,7 +1094,7 @@ notyet
 walk_char_out
 walk_char_in
 .(
-	lda #(3+20)*2
+	lda #(3+19)*2
 	sta tmp7+1
 	stx loop+1
 loop
@@ -1095,7 +1103,7 @@ loop
 	jsr render_screen
 
 	; Wait a bit, else they run too fast
-	ldy #50
+	ldy #30
 wlo
 	ldx #$ff
 wl	dex
@@ -1282,7 +1290,7 @@ loop_read
 	beq skip	
 nodel
 	sta (tmp0),y
-	cpy #14
+	cpy #12
 	beq skip
 	inc tmp6
 skip

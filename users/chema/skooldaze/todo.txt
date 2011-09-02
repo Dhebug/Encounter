@@ -35,9 +35,9 @@ along with the new one.
 
 * Eric is flagged as inside the exam room when he is just near the entrance
 
-* CAUTION: A pellet ending on the left side of the school is not removed (?)
+* Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids.
 
-* Teachers are drawn over seats (when they are on the blackboard, thus behind them) but behind seated kids.
+- CAUTION: A pellet ending on the left side of the school is not removed (?)
 
 - Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
 

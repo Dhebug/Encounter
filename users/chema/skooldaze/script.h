@@ -202,7 +202,7 @@ character's buffer:
 #define D_ABOARD_WHITE		10,45
 #define D_ABOARD1_WHITE		10,44
 
-#define D_EXAM_DOORWAY		10,90
+#define D_EXAM_DOORWAY		10,90-1
 #define D_POS_EXAM			10,65
 
 #define D_LIBRARY_INT		3,40
