@@ -1065,7 +1065,7 @@ s_class_no_Eric
 
 	lda pos_col,x	; Get the teacher x coordinate (now left edge of blackboard)
 	clc
-	adc #6			; Position in the middle of the blackboard
+	adc #6-2			; Position in the middle of the blackboard
 	sta var3,x	
 	sta var4,x		; This ensures control does not come here before he reaches the destination
 	lda #<s_isc_int_dest
@@ -2577,7 +2577,7 @@ next
 
 	cmp #SKOOL_COLS-2
 	beq terminate_pellet
-	cmp #FIRST_VIS_COL
+	cmp #FIRST_VIS_COL-2
 	beq terminate_pellet
 
 	; It does not get offscreen... but will it collide with a wall?
