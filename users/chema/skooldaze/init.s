@@ -182,7 +182,7 @@ loop
 	
 	ldy #40
 +smc_paper_2
-	lda #A_BGGREEN
+	lda #A_BGYELLOW
 	sta (tmp),y
 	iny
 +smc_ink_2
