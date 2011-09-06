@@ -16,66 +16,40 @@
 ; tile graphics for skool data
 .dsb 256-(*&255)
 udg_skool 
-/*
-#ifdef AIC_SUPPORT
-	.byt %01101010
-	.byt %11101010
-	.byt %01101010
-	.byt %11101010
-	.byt %01101010
-	.byt %11101010
-	.byt %01101010
-	.byt %11101010
-	
-	;.dsb 8,64
 
-#else
-	.byt %01101010
-	.byt %01010101
-	.byt %01101010
-	.byt %01010101
-	.byt %01101010
-	.byt %01010101
-	.byt %01101010
-	.byt %01010101
-
-#endif
-*/
-
-
-; Tile data for Skool (cols 0-33)
+; Tile data for Skool (cols 0-32)
 ; Tile skool 1
-.byt $7f, $77, $6a, $75, $6a, $75, $6a, $75
+.byt $7f, $7f, $6a, $7f, $6a, $7f, $6a, $7f
 ; Tile skool 2
-.byt $7f, $7f, $7f, $57, $6a, $55, $6a, $55
+.byt $7f, $7f, $7f, $7f, $6a, $7f, $6a, $7f
 ; Tile skool 3
-.byt $7f, $7f, $7f, $7f, $7f, $57, $6a, $55
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6a, $7f
 ; Tile skool 4
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $57
-; Tile skool 5
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 6
+; Tile skool 5
 .byt $7f, $7f, $7e, $7f, $7e, $7f, $7e, $7f
-; Tile skool 7
+; Tile skool 6
 .byt $7f, $7f, $6f, $55, $6a, $55, $6a, $55
+; Tile skool 7
+.byt $7f, $7f, $7f, $7f, $7f, $57, $6a, $55
 ; Tile skool 8
-.byt $7f, $7f, $7a, $7d, $7a, $7d, $7a, $7d
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $57
 ; Tile skool 9
-.byt $7f, $7f, $7f, $5f, $6b, $55, $6a, $55
+.byt $7f, $7f, $7a, $7d, $7a, $7d, $7a, $7d
 ; Tile skool 10
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $57
+.byt $7f, $7f, $7f, $5f, $6b, $55, $6a, $55
 ; Tile skool 11
-.byt $6a, $75, $6a, $75, $6a, $75, $6a, $75
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $57
 ; Tile skool 12
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $55
+.byt $6a, $7f, $6a, $7f, $6a, $7f, $6a, $7f
 ; Tile skool 13
-.byt $7f, $57, $6a, $55, $6a, $55, $6a, $55
-; Tile skool 14
 .byt $7e, $7f, $7e, $7f, $7f, $7f, $7f, $7f
-; Tile skool 15
+; Tile skool 14
 .byt $6a, $55, $6a, $75, $7e, $7f, $7f, $7f
-; Tile skool 16
+; Tile skool 15
 .byt $6a, $55, $6a, $55, $6a, $75, $7a, $75
+; Tile skool 16
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $55
 ; Tile skool 17
 .byt $7f, $57, $6b, $55, $6a, $55, $6a, $55
 ; Tile skool 18
@@ -89,623 +63,610 @@ udg_skool
 ; Tile skool 22
 .byt $7f, $7f, $7f, $7f, $6f, $57, $6a, $55
 ; Tile skool 23
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $5f
+.byt $6a, $7f, $6a, $7f, $6a, $7f, $6f, $61
 ; Tile skool 24
-.byt $6a, $55, $6a, $75, $6f, $61, $61, $61
+.byt $6a, $7f, $6a, $7f, $6a, $7f, $7e, $5f
 ; Tile skool 25
-.byt $6a, $55, $6a, $55, $6a, $5d, $43, $43
-; Tile skool 26
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $5d
-; Tile skool 27
+;Escudo
 .byt $40, $7f^$bf, $6f^$bf, $67^$bf, $63^$bf, $61^$bf, $52^$bf, $4c
+
+; Tile skool 26
+.byt $6a, $7f, $55, $7f, $6a, $7f, $55, $7f
+; Tile skool 27
+
+;Escudo
+.byt $40, $7f, $4f, $67, $73, $79, $5e, $4c
 ; Tile skool 28
-.byt $40, $7f^$bf, $4f, $67^$bf, $73, $79^$bf, $5e, $4c
-; Tile skool 29
 .byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
+; Tile skool 29
+.byt $7f, $6a, $7f, $55, $7f, $6a, $7f, $55
+
+; Ventana
 ; Tile skool 30
-.byt $68, $54, $68, $54, $68, $54, $68, $54
+.byt $7f, $60^$bf, $60, $60^$bf, $60, $60^$bf, $60, $7f
 ; Tile skool 31
-.byt $7f, $60, $60, $60, $60, $60, $60, $7f
+.byt $7f, $40^$bf, $40, $40^$bf, $40, $40^$bf, $40, $7f
 ; Tile skool 32
-.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+.byt $7f, $41^$bf, $41, $41^$bf, $41, $41^$bf, $41, $7f
+
 ; Tile skool 33
-.byt $7f, $41, $41, $41, $41, $41, $41, $7f
+.byt $61, $61, $61, $61, $61, $79, $6f, $61
 ; Tile skool 34
-.byt $61, $61, $61, $79, $67, $61, $61, $61
+.byt $43, $43, $43, $43, $43, $43, $63, $5f
 ; Tile skool 35
-.byt $43, $43, $43, $43, $63, $5f, $43, $43
+.byt $7f, $47, $40, $40, $40, $40, $40, $40
 ; Tile skool 36
-.byt $43, $40, $40, $40, $40, $40, $40, $40
+.byt $6a, $7f, $5e, $4f, $4e, $4f, $4e, $4f
 ; Tile skool 37
-.byt $7a, $5f, $4e, $4f, $4e, $4f, $4e, $4f
+.byt $7f, $40, $7f, $7f, $6f, $77, $7b, $7d
+
+
+;Libros
 ; Tile skool 38
-.byt $7f, $40, $7f, $7f, $6f, $74, $7a, $7d
+.byt $7f, $40, $7f^$bf, $75, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 39
-.byt $7f, $40, $7f, $75, $55, $55, $55, $55
+.byt $7f, $40, $7f, $6b^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 40
-.byt $7f, $40, $7f, $6b, $6a, $6a, $6a, $6a
+.byt $7f, $40, $7f, $7f^$bf, $6b, $6b^$bf, $6b, $6b^$bf
 ; Tile skool 41
-.byt $7f, $40, $7f, $7f, $6b, $6b, $6b, $6b
+.byt $7f, $40, $7f^$bf, $7e, $4a^$bf, $4a, $4a^$bf, $4a
 ; Tile skool 42
-.byt $7f, $40, $7f, $7e, $4a, $4a, $4a, $4a
-; Tile skool 43
 .byt $7f, $60, $6f, $6f, $6f, $69, $6e, $69
-; Tile skool 44
+; Tile skool 43
 .byt $7f, $40, $7f, $7f, $7f, $78, $4f, $7c
-; Tile skool 45
+; Tile skool 44
 .byt $7f, $40, $7f, $7f, $7f, $40, $7f, $41
-; Tile skool 46
+; Tile skool 45
 .byt $7f, $40, $7f, $7f, $7f, $4b, $57, $6f
+; Tile skool 46
+.byt $7f, $40, $7f^$bf, $77, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 47
-.byt $7f, $40, $7f, $7f, $7f, $55, $55, $55
+.byt $7f, $40, $7f, $7f^$bf, $7f, $57^$bf, $57, $56^$bf
 ; Tile skool 48
-.byt $7f, $40, $7f, $7f, $7f, $57, $57, $56
+.byt $7f, $40, $7f^$bf, $7f, $7f^$bf, $6a, $54^$bf, $6e
 ; Tile skool 49
-.byt $7f, $40, $7f, $7f, $7f, $6a, $54, $6e
-; Tile skool 50
 .byt $7f, $40, $7f, $6d, $45, $4d, $5d, $7d
+; Tile skool 50
+.byt $61, $61, $61, $61, $61, $7d, $6b, $7f
 ; Tile skool 51
-.byt $61, $61, $61, $61, $61, $7d, $6b, $55
+.byt $43, $43, $43, $43, $43, $43, $7f, $7f
 ; Tile skool 52
-.byt $43, $43, $43, $43, $43, $43, $7f, $57
+.byt $40, $40, $40, $40, $40, $40, $7e, $7f
 ; Tile skool 53
-.byt $40, $40, $40, $40, $40, $40, $40, $7c
+.byt $4e, $4f, $4e, $4f, $4e, $4f, $4e, $7f
 ; Tile skool 54
-.byt $4e, $4f, $4e, $4f, $4e, $4f, $4e, $4f
+.byt $7f, $40, $7f^$bf, $7f, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 55
-.byt $7f, $40, $7f, $7f, $6a, $6a, $6a, $6a
+.byt $7f, $40, $7f, $6f^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 56
-.byt $7f, $40, $7f, $6f, $6a, $6a, $6a, $6a
+.byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 57
-.byt $7f, $40, $7f, $7a, $6a, $6a, $6a, $6a
+.byt $7f, $40, $7f^$bf, $7b, $7b^$bf, $7b, $6b^$bf, $6b
 ; Tile skool 58
-.byt $7f, $40, $7f, $7b, $7b, $7b, $6b, $6b
-; Tile skool 59
 .byt $6f, $60, $6f, $6f, $69, $69, $69, $69
+; Tile skool 59
+.byt $7f, $40, $7f, $55^$bf, $55, $55^$bf, $55, $55^$bf
 ; Tile skool 60
-.byt $7f, $40, $7f, $55, $55, $55, $55, $55
+.byt $7f, $40, $7f^$bf, $57, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 61
-.byt $7f, $40, $7f, $57, $55, $55, $55, $55
+.byt $7f, $40, $7f, $7f^$bf, $49, $64^$bf, $72, $7b^$bf
 ; Tile skool 62
-.byt $7f, $40, $7f, $7f, $49, $64, $72, $7b
-; Tile skool 63
 .byt $7f, $40, $7f, $7f, $7c, $7c, $5c, $4c
+; Tile skool 63
+.byt $6a, $7f, $7f, $67, $62, $61, $62, $63
 ; Tile skool 64
-.byt $6a, $55, $5f, $67, $62, $61, $62, $63
+.byt $6a, $7f, $6a, $7f, $6b, $57, $6b, $55
 ; Tile skool 65
-.byt $6b, $55, $41, $7f, $6b, $57, $6b, $55
+.byt $6a, $7f, $6a, $7f, $6b, $7e, $6a, $7e
 ; Tile skool 66
-.byt $7e, $55, $6a, $55, $6a, $55, $6a, $75
+.byt $40, $7f, $6a, $7f, $7f, $40, $40, $40
 ; Tile skool 67
-.byt $6a, $55, $6a, $55, $6b, $56, $6a, $56
+.byt $40, $7f, $55, $7f, $7f, $45, $46, $45
 ; Tile skool 68
-.byt $40, $7f, $6a, $55, $7f, $40, $40, $40
+.byt $40, $7f, $55, $7f, $6a, $7f, $6b, $55
 ; Tile skool 69
-.byt $40, $7f, $40, $40, $7f, $45, $46, $45
+.byt $40, $7f, $55, $7f, $6a, $7f, $55, $7f
 ; Tile skool 70
-.byt $40, $7f, $40, $40, $40, $7f, $6b, $55
+.byt $6f, $60, $6f^$bf, $6f, $6e^$bf, $6e, $6e^$bf, $6e
 ; Tile skool 71
-.byt $40, $7f, $40, $40, $40, $40, $40, $40
+.byt $7f, $40, $7f, $7f^$bf, $67, $73^$bf, $79, $7d^$bf
 ; Tile skool 72
-.byt $6f, $60, $6f, $6f, $6e, $6e, $6e, $6e
+.byt $7f, $40, $7f^$bf, $5f, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 73
-.byt $7f, $40, $7f, $7f, $6f, $6e, $6f, $6d
+.byt $62, $67, $78, $78, $77, $70, $70, $78
 ; Tile skool 74
-.byt $7f, $40, $7f, $7f, $55, $75, $75, $75
-; Tile skool 75
-.byt $7f, $40, $7f, $5f, $55, $55, $55, $55
-; Tile skool 76
-.byt $7f, $40, $7f, $7a, $4a, $4a, $4a, $4a
-; Tile skool 77
-.byt $62, $67, $78, $58, $77, $50, $70, $58
-; Tile skool 78
 .byt $6a, $7f, $43, $45, $7f, $41, $41, $41
-; Tile skool 79
+; Tile skool 75
 .byt $6a, $7f, $60, $55, $7f, $5d, $6a, $5d
-; Tile skool 80
+; Tile skool 76
 .byt $6a, $7e, $4e, $56, $7e, $76, $6e, $76
-; Tile skool 81
+; Tile skool 77
 .byt $46, $45, $46, $45, $46, $45, $46, $45
-; Tile skool 82
+; Tile skool 78
 .byt $6b, $55, $6b, $55, $6b, $55, $6b, $55
-; Tile skool 83
+; Tile skool 79
 .byt $6f, $60, $60, $60, $60, $60, $60, $60
-; Tile skool 84
+; Tile skool 80
 .byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 81
+.byt $7f, $7f, $7f, $75, $7f, $75, $7f, $75
+; Tile skool 82
+.byt $7f, $7f, $7f, $55, $7f, $55, $7f, $55
+; Tile skool 83
+.byt $7f, $7f, $7f, $5f, $7f, $55, $7f, $55
+; Tile skool 84
+.byt $7f, $7f, $7f, $7f, $7f, $55, $7f, $55
 ; Tile skool 85
-.byt $7f, $7f, $6a, $75, $6a, $75, $6a, $75
+.byt $7f, $7f, $7f, $7f, $7f, $57, $7f, $55
 ; Tile skool 86
-.byt $7f, $7f, $7f, $55, $6a, $55, $6a, $55
-; Tile skool 87
-.byt $7f, $7f, $7f, $5f, $6a, $55, $6a, $55
-; Tile skool 88
-.byt $7f, $7f, $7f, $7f, $6f, $55, $6a, $55
-; Tile skool 89
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $6b, $55
-; Tile skool 90
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $55
-; Tile skool 91
+; Tile skool 87
 .byt $7f, $7f, $7f, $7f, $7c, $57, $6a, $55
-; Tile skool 92
+; Tile skool 88
 .byt $7f, $7f, $7f, $7f, $40, $78, $6f, $55
-; Tile skool 93
+; Tile skool 89
 .byt $7f, $7f, $7f, $7f, $40, $40, $70, $5f
-; Tile skool 94
+; Tile skool 90
 .byt $7f, $7f, $7f, $7f, $40, $40, $40, $40
-; Tile skool 95
+; Tile skool 91
 .byt $7f, $7f, $7f, $7f, $43, $40, $40, $40
-; Tile skool 96
+; Tile skool 92
 .byt $7f, $7f, $7f, $7f, $7f, $41, $40, $40
-; Tile skool 97
+; Tile skool 93
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $43, $40
-; Tile skool 98
+; Tile skool 94
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $47
-; Tile skool 99
+; Tile skool 95
 .byt $6f, $75, $6a, $75, $6a, $75, $6a, $75
-; Tile skool 100
+; Tile skool 96
+.byt $7f, $7f, $7f, $7f, $6f, $55, $6a, $55
+; Tile skool 97
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $6f, $55
+; Tile skool 98
+.byt $7f, $75, $7f, $75, $7f, $75, $7f, $75
+; Tile skool 99
+.byt $7f, $55, $7f, $55, $7f, $55, $7f, $5f
+; Tile skool 100
+.byt $7f, $55, $7f, $55, $7f, $55, $7f, $7f
 ; Tile skool 101
-.byt $6a, $55, $6a, $55, $6a, $55, $7f, $5f
+.byt $7f, $55, $7f, $55, $7f, $55, $7f, $55
 ; Tile skool 102
-.byt $6a, $55, $6a, $55, $6a, $55, $7f, $7f
+.byt $7e, $6b, $7e, $57, $7e, $6b, $7e, $57
 ; Tile skool 103
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $7f
-; Tile skool 104
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $7d
-; Tile skool 105
-.byt $42, $43, $42, $43, $42, $43, $43, $43
-; Tile skool 106
-.byt $6a, $55, $6a, $55, $6a, $55, $7a, $7f
-; Tile skool 107
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $75
-; Tile skool 108
 .byt $6f, $54, $6c, $54, $6c, $54, $6c, $57
-; Tile skool 109
+; Tile skool 104
 .byt $7f, $45, $46, $45, $46, $45, $46, $7d
-; Tile skool 110
+; Tile skool 105
 .byt $60, $5c, $6c, $54, $6c, $54, $6c, $7c
-; Tile skool 111
+; Tile skool 106
 .byt $6a, $75, $6a, $75, $6a, $7d, $47, $40
-; Tile skool 112
+; Tile skool 107
 .byt $6a, $55, $6a, $55, $6a, $55, $7a, $47
-; Tile skool 113
+; Tile skool 108
+.byt $6a, $55, $6a, $55, $6a, $55, $6a, $75
+; Tile skool 109
 .byt $70, $50, $70, $50, $70, $50, $70, $5f
-; Tile skool 114
+; Tile skool 110
 .byt $40, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 115
+; Tile skool 111
 .byt $41, $41, $41, $41, $41, $41, $41, $7f
-; Tile skool 116
-.byt $7e, $4d, $4e, $4d, $4e, $4d, $4e, $7d
-; Tile skool 117
-.byt $4f, $48, $49, $4a, $49, $48, $48, $4f
-; Tile skool 118
-.byt $7d, $4c, $4c, $6c, $4c, $4c, $4c, $7c
-; Tile skool 119
-.byt $6b, $55, $6a, $55, $6a, $55, $6a, $55
-; Tile skool 120
-.byt $7f, $7c, $7c, $7c, $7c, $5c, $7c, $5f
-; Tile skool 121
+; Tile skool 112
+.byt $7f, $68, $79, $52, $79, $68, $78, $57
+; Tile skool 113
+.byt $7f, $4e, $4f, $6d, $4f, $4e, $4f, $7d
+; Tile skool 114
+.byt $7f, $5c, $6c, $5c, $6c, $5c, $6c, $5f
+; Tile skool 115
 .byt $70, $58, $68, $58, $68, $58, $68, $78
-; Tile skool 122
+; Tile skool 116
 .byt $7f, $50, $70, $50, $70, $50, $70, $50
-; Tile skool 123
+; Tile skool 117
 .byt $7f, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 124
-.byt $7f, $60, $60, $60, $60, $60, $7f, $7f
-; Tile skool 125
-.byt $7f, $40, $40, $40, $40, $40, $7f, $7f
-; Tile skool 126
-.byt $7e, $4d, $4e, $4d, $4e, $4d, $7e, $7d
-; Tile skool 127
+; Tile skool 118
 .byt $68, $58, $68, $58, $68, $58, $68, $58
-; Tile skool 128
+; Tile skool 119
 .byt $47, $44, $44, $44, $44, $44, $44, $47
-; Tile skool 129
+; Tile skool 120
 .byt $70, $58, $68, $58, $68, $58, $6f, $40
-; Tile skool 130
+; Tile skool 121
 .byt $40, $40, $40, $40, $40, $40, $7c, $4c
-; Tile skool 131
-.byt $6a, $75, $6a, $75, $68, $75, $6b, $76
-; Tile skool 132
-.byt $7f, $55, $6a, $50, $4f, $75, $6a, $75
-; Tile skool 133
-.byt $7f, $55, $6a, $55, $4a, $75, $6a, $65
-; Tile skool 134
+; Tile skool 122
+.byt $7f, $75, $7f, $75, $7e, $75, $7f, $76
+; Tile skool 123
+.byt $7f, $55, $7f, $50, $4f, $75, $6a, $75
+; Tile skool 124
+.byt $7f, $55, $7f, $55, $4f, $75, $6f, $65
+; Tile skool 125
 .byt $7f, $71, $62, $65, $6a, $65, $6a, $65
-; Tile skool 135
-.byt $6a, $75, $6a, $77, $6c, $74, $6c, $74
-; Tile skool 136
-.byt $6a, $55, $6a, $7f, $6e, $57, $6a, $57
-; Tile skool 137
-.byt $6a, $5f, $78, $51, $72, $51, $72, $51
-; Tile skool 138
-.byt $6a, $75, $5a, $5d, $6a, $5d, $6a, $5d
-; Tile skool 139
-.byt $41, $42, $44, $44, $44, $44, $44, $44
-; Tile skool 140
+; Tile skool 126
+.byt $7f, $75, $7f, $77, $7c, $74, $7c, $74
+; Tile skool 127
+.byt $7f, $55, $7f, $7f, $6e, $57, $6a, $57
+; Tile skool 128
+.byt $7f, $5f, $78, $51, $72, $51, $72, $51
+; Tile skool 129
+.byt $7f, $75, $5f, $5d, $6f, $5d, $6f, $5d
+; Tile skool 130
+.byt $7f, $6a, $7c, $54, $7c, $6c, $7c, $54
+; Tile skool 131
 .byt $7e, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 141
-.byt $40, $60, $50, $68, $50, $68, $50, $68
-; Tile skool 142
-.byt $40, $40, $40, $40, $40, $40, $41, $41
-; Tile skool 143
+; Tile skool 132
+.byt $7f, $6a, $57, $6d, $57, $6a, $57, $6d
+; Tile skool 133
 .byt $7c, $54, $6c, $54, $6c, $54, $6f, $40
-; Tile skool 144
+; Tile skool 134
 .byt $40, $40, $40, $40, $40, $40, $7e, $46
-; Tile skool 145
-.byt $6a, $76, $6a, $76, $6a, $75, $6b, $75
-; Tile skool 146
+; Tile skool 135
+.byt $7e, $74, $7e, $74, $7e, $75, $7f, $75
+; Tile skool 136
 .byt $6a, $75, $6a, $55, $5a, $55, $5a, $5d
-; Tile skool 147
-.byt $6a, $55, $7a, $55, $6a, $5d, $6f, $50
-; Tile skool 148
+; Tile skool 137
+.byt $6f, $55, $7b, $55, $6b, $5d, $6f, $50
+; Tile skool 138
 .byt $6a, $65, $60, $60, $60, $60, $7f, $40
-; Tile skool 149
+; Tile skool 139
 .byt $6c, $7f, $40, $7f, $41, $41, $7d, $7d
-; Tile skool 150
+; Tile skool 140
 .byt $6b, $7f, $40, $7d, $7d, $55, $6d, $55
-; Tile skool 151
+; Tile skool 141
 .byt $72, $79, $7f, $70, $48, $4d, $4a, $4d
-; Tile skool 152
+; Tile skool 142
 .byt $6a, $5f, $78, $4f, $4b, $5f, $6b, $5f
-; Tile skool 153
-.byt $40, $78, $45, $5d, $7d, $7d, $65, $45
-; Tile skool 154
-.byt $44, $7f, $40, $40, $7f, $46, $45, $46
-; Tile skool 155
+; Tile skool 143
+.byt $7f, $78, $45, $5d, $7d, $6d, $7d, $55
+; Tile skool 144
+.byt $7c, $7f, $40, $40, $7f, $6a, $55, $6a
+; Tile skool 145
 .byt $40, $7f, $40, $40, $7f, $6a, $55, $6a
-; Tile skool 156
-.byt $41, $7f, $47, $47, $7f, $6f, $55, $6f
-; Tile skool 157
-.byt $50, $68, $50, $68, $50, $68, $5f, $70
-; Tile skool 158
+; Tile skool 146
+.byt $41, $7f, $43, $43, $7f, $6b, $51, $6b
+; Tile skool 147
+.byt $57, $6a, $57, $6d, $57, $6a, $5f, $70
+; Tile skool 148
 .byt $41, $41, $41, $42, $42, $42, $7e, $40
-; Tile skool 159
+; Tile skool 149
 .byt $7a, $56, $6a, $56, $6a, $56, $6a, $7e
-; Tile skool 160
-.byt $6a, $75, $6a, $75, $6a, $75, $6f, $7f
-; Tile skool 161
-.byt $6a, $67, $60, $50, $70, $57, $77, $7f
-; Tile skool 162
+; Tile skool 150
+.byt $7e, $75, $7f, $75, $7f, $75, $7f, $75
+; Tile skool 151
+.byt $6a, $67, $60, $70, $70, $57, $77, $5f
+; Tile skool 152
 .byt $40, $7f, $43, $43, $6e, $7e, $7f, $7f
-; Tile skool 163
+; Tile skool 153
 .byt $40, $40, $40, $57, $7f, $7f, $5f, $7f
-; Tile skool 164
+; Tile skool 154
 .byt $59, $55, $59, $5d, $5d, $6f, $7f, $7f
-; Tile skool 165
+; Tile skool 155
 .byt $6d, $55, $7d, $7d, $7f, $7f, $7f, $7f
-; Tile skool 166
+; Tile skool 156
 .byt $6a, $7d, $7b, $7f, $7f, $7f, $7f, $7f
-; Tile skool 167
+; Tile skool 157
 .byt $67, $57, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 168
+; Tile skool 158
 .byt $7a, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 169
+; Tile skool 159
 .byt $7b, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 170
+; Tile skool 160
 .byt $6f, $60, $6d, $5b, $5b, $5f, $7f, $7f
-; Tile skool 171
+; Tile skool 161
 .byt $7f, $40, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 172
+; Tile skool 162
 .byt $7a, $75, $7a, $75, $7b, $7f, $7f, $7f
-; Tile skool 173
+; Tile skool 163
 .byt $6a, $55, $6a, $57, $7f, $7f, $7f, $7f
-; Tile skool 174
+; Tile skool 164
 .byt $6a, $55, $6f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 175
+; Tile skool 165
 .byt $6a, $5f, $7f, $7e, $75, $7f, $7f, $7f
-; Tile skool 176
+; Tile skool 166
 .byt $7f, $7f, $75, $6a, $55, $7f, $7f, $7f
-; Tile skool 177
+; Tile skool 167
 .byt $7e, $78, $58, $68, $58, $7f, $7f, $7f
-; Tile skool 178
+; Tile skool 168
 .byt $40, $40, $40, $40, $40, $7f, $7f, $7f
-; Tile skool 179
+; Tile skool 169
 .byt $40, $40, $43, $4f, $7f, $7f, $7f, $7f
-; Tile skool 180
+; Tile skool 170
 .byt $4f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 181
+; Tile skool 171
 .byt $7a, $75, $7a, $77, $7f, $7f, $7f, $7f
-; Tile skool 182
+; Tile skool 172
 .byt $6b, $57, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 183
+; Tile skool 173
 .byt $60, $60, $60, $60, $60, $60, $60, $60
-; Tile skool 184
+; Tile skool 174
 .byt $41, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 185
+; Tile skool 175
 .byt $43, $43, $43, $43, $43, $43, $43, $43
-; Tile skool 186
-.byt $7f, $46, $45, $46, $45, $46, $45, $7f
-; Tile skool 187
-.byt $55, $6a, $55, $6a, $55, $6a, $57, $78
-; Tile skool 188
-.byt $55, $6a, $55, $6a, $57, $7c, $43, $7d
-; Tile skool 189
-.byt $54, $6c, $54, $6c, $7f, $4f, $7a, $55
-; Tile skool 190
-.byt $40, $40, $40, $40, $78, $58, $68, $58
-; Tile skool 191
-.byt $41, $41, $41, $41, $41, $41, $41, $43
-; Tile skool 192
-.byt $60, $60, $60, $60, $60, $60, $60, $7f
-; Tile skool 193
-.byt $40, $40, $40, $40, $40, $40, $5f, $60
-; Tile skool 194
-.byt $41, $41, $41, $41, $41, $47, $79, $41
-; Tile skool 195
-.byt $60, $60, $60, $60, $67, $78, $60, $60
-; Tile skool 196
-.byt $43, $43, $43, $43, $7f, $43, $43, $43
-; Tile skool 197
+; Tile skool 176
 .byt $6a, $55, $6a, $55, $6a, $55, $6f, $78
-; Tile skool 198
+; Tile skool 177
 .byt $6a, $55, $6a, $55, $6b, $7c, $43, $7d
-; Tile skool 199
+; Tile skool 178
 .byt $68, $58, $68, $58, $7f, $4f, $7a, $55
-; Tile skool 200
+; Tile skool 179
+.byt $40, $40, $40, $40, $78, $58, $68, $58
+; Tile skool 180
+.byt $41, $41, $41, $41, $41, $41, $41, $43
+; Tile skool 181
+.byt $60, $60, $60, $60, $60, $60, $60, $7f
+; Tile skool 182
+.byt $40, $40, $40, $40, $40, $40, $5f, $60
+; Tile skool 183
+.byt $41, $41, $41, $41, $41, $47, $79, $41
+; Tile skool 184
+.byt $60, $60, $60, $60, $67, $78, $60, $60
+; Tile skool 185
+.byt $43, $43, $43, $43, $7f, $43, $43, $43
+; Tile skool 186
 .byt $7a, $75, $7a, $75, $7a, $75, $7a, $7c
-; Tile skool 201
+; Tile skool 187
 .byt $6b, $57, $6e, $58, $70, $40, $40, $40
-; Tile skool 202
+; Tile skool 188
 .byt $60, $7f, $60, $60, $60, $60, $60, $60
-; Tile skool 203
+; Tile skool 189
 .byt $5f, $60, $40, $40, $40, $40, $40, $40
-; Tile skool 204
+; Tile skool 190
 .byt $7d, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 205
+; Tile skool 191
 .byt $41, $41, $41, $41, $41, $41, $41, $47
-; Tile skool 206
+; Tile skool 192
 .byt $60, $60, $60, $60, $60, $60, $6f, $70
-; Tile skool 207
+; Tile skool 193
 .byt $43, $43, $43, $43, $43, $5f, $63, $43
-; Tile skool 208
+; Tile skool 194
 .byt $60, $60, $60, $60, $60, $7f, $60, $60
-; Tile skool 209
+; Tile skool 195
 .byt $40, $40, $40, $40, $7f, $40, $40, $40
-; Tile skool 210
+; Tile skool 196
 .byt $41, $41, $41, $7f, $41, $41, $41, $41
-; Tile skool 211
+; Tile skool 197
 .byt $60, $61, $7e, $60, $60, $60, $60, $60
-; Tile skool 212
+; Tile skool 198
 .byt $43, $7c, $40, $40, $40, $40, $40, $40
-; Tile skool 213
+; Tile skool 199
 .byt $79, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 214
+; Tile skool 200
 .byt $40, $40, $40, $40, $40, $40, $47, $7f
-; Tile skool 215
+; Tile skool 201
 .byt $41, $41, $41, $41, $47, $7f, $7f, $7f
-; Tile skool 216
+; Tile skool 202
 .byt $60, $60, $67, $7f, $7f, $7f, $7f, $7f
-; Tile skool 217
+; Tile skool 203
 .byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 218
+; Tile skool 204
 .byt $7a, $55, $6a, $55, $6a, $55, $6b, $5f
-; Tile skool 219
+; Tile skool 205
 .byt $6a, $55, $6a, $55, $6a, $5f, $7f, $7f
-; Tile skool 220
+; Tile skool 206
 .byt $6f, $57, $6f, $57, $7f, $7f, $7f, $7f
-; Tile skool 221
+; Tile skool 207
 .byt $60, $60, $60, $60, $60, $60, $67, $7f
-; Tile skool 222
+; Tile skool 208
 .byt $40, $40, $40, $40, $47, $7f, $7f, $7f
-; Tile skool 223
+; Tile skool 209
 .byt $41, $41, $4f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 224
+; Tile skool 210
 .byt $67, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 
 end_udg_skool
 
-;.dsb 256-(*&255)
+.dsb 256-(*&255)
 udg_skool2
 
-; Tile data for Skool (cols 34-74)
+; Tile data for Skool (cols 33-74)
 ; Tile skool 1
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 2
-.byt $7f, $7b, $7d, $7b, $7d, $7a, $7d, $7a
+.byt $7f, $7f, $7d, $7f, $7d, $7f, $7d, $7f
 ; Tile skool 3
-.byt $7d, $7a, $7d, $7a, $7d, $7a, $7d, $7e
+.byt $7d, $7f, $7d, $7f, $7d, $7f, $7d, $7f
 ; Tile skool 4
-.byt $5f, $6f, $5f, $6f, $57, $6f, $57, $6b
+.byt $5f, $7f, $5f, $7f, $57, $7f, $57, $7f
 ; Tile skool 5
-.byt $7f, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 6
-.byt $7f, $41, $41, $41, $41, $41, $41, $7f
-; Tile skool 7
-.byt $7f, $60, $60, $60, $60, $60, $60, $7f
-; Tile skool 8
-.byt $7f, $43, $41, $40, $40, $40, $40, $7f
-; Tile skool 9
-.byt $55, $6b, $75, $7b, $75, $7b, $75, $7b
-; Tile skool 10
-.byt $40, $7f^$bf, $6f, $67^$bf, $63, $61^$bf, $52, $4c
-; Tile skool 11
-.byt $40, $7f, $79^$bf, $79, $67^$bf, $67, $56^$bf, $4c
-; Tile skool 12
-.byt $7f, $40, $7f, $7f, $6f, $74, $7a, $7d
-; Tile skool 13
-.byt $7f, $40, $7f, $7a, $6a, $6a, $6a, $6a
-; Tile skool 14
-.byt $7f, $40, $7f, $7a, $7a, $7a, $6a, $6a
-; Tile skool 15
-.byt $7f, $40, $7f, $7f, $6a, $6a, $6a, $6a
-; Tile skool 16
-.byt $7f, $40, $7f, $7b, $6a, $6a, $6a, $6a
-; Tile skool 17
-.byt $7f, $40, $7f, $6b, $6a, $6a, $6a, $6a
-; Tile skool 18
-.byt $7f, $40, $7f, $75, $55, $55, $55, $55
-; Tile skool 19
-.byt $7f, $40, $7f, $5f, $55, $55, $55, $55
-; Tile skool 20
-.byt $7f, $40, $7f, $5d, $55, $55, $55, $55
-; Tile skool 21
-.byt $7c, $4c, $7a, $5d, $4b, $6d, $6b, $7d
-; Tile skool 22
-.byt $7f, $60, $6f, $6b, $6a, $6a, $6a, $6a
-; Tile skool 23
-.byt $7f, $40, $7f, $7f, $64, $62, $69, $6c
-; Tile skool 24
-.byt $7f, $40, $7f, $7f, $41, $42, $45, $6a
-; Tile skool 25
-.byt $7f, $40, $7f, $6e, $55, $6b, $57, $6f
-; Tile skool 26
-.byt $7f, $40, $7f, $6f, $6a, $6a, $6a, $6a
-; Tile skool 27
-.byt $7f, $40, $7f, $7b, $7b, $7b, $6b, $6b
-; Tile skool 28
-.byt $7f, $40, $7f, $7e, $4a, $4a, $4a, $4a
-; Tile skool 29
-.byt $75, $7b, $75, $7b, $75, $7b, $75, $7b
-; Tile skool 30
-.byt $7f, $40, $7f, $6a, $6a, $6a, $6a, $6a
-; Tile skool 31
-.byt $7f, $40, $7f, $7f, $65, $65, $65, $65
-; Tile skool 32
-.byt $7f, $40, $7f, $4e, $4c, $4e, $4f, $4f
-; Tile skool 33
-.byt $7f, $40, $7f, $7f, $5f, $48, $44, $68
-; Tile skool 34
-.byt $7f, $40, $7f, $7f, $7f, $40, $40, $40
-; Tile skool 35
-.byt $7b, $4d, $7b, $7d, $7b, $4d, $4b, $4d
-; Tile skool 36
-.byt $6f, $60, $6f, $6d, $6d, $6d, $6d, $6d
-; Tile skool 37
-.byt $7f, $40, $7f, $5a, $5a, $5a, $5a, $5a
-; Tile skool 38
-.byt $7f, $40, $7f, $7b, $79, $7a, $69, $6a
-; Tile skool 39
-.byt $7f, $40, $7f, $7f, $67, $73, $79, $7d
-; Tile skool 40
-.byt $7f, $40, $7f, $7b, $5a, $5a, $5a, $5a
-; Tile skool 41
-.byt $7f, $40, $7f, $7f, $6b, $6b, $6b, $6b
-; Tile skool 42
-.byt $7f, $40, $7f, $77, $55, $55, $55, $55
-; Tile skool 43
-.byt $7f, $40, $7f, $57, $55, $55, $55, $55
-; Tile skool 44
-.byt $7f, $40, $7f, $7a, $4a, $4a, $4a, $4a
-; Tile skool 45
-.byt $7f, $40, $7f, $7e, $6a, $6a, $6a, $6a
-; Tile skool 46
-.byt $7f, $40, $7f, $7f, $64, $72, $79, $7c
-; Tile skool 47
-.byt $7f, $40, $7f, $7f, $6e, $6a, $6a, $6a
-; Tile skool 48
-.byt $7b, $4d, $7b, $7d, $7b, $7d, $7b, $7d
-; Tile skool 49
-.byt $6f, $60, $6f, $6a, $6a, $6a, $6a, $6a
-; Tile skool 50
-.byt $7f, $40, $7f, $6e, $6e, $6e, $6a, $6a
-; Tile skool 51
-.byt $7f, $40, $7f, $7b, $7a, $7b, $6b, $6b
-; Tile skool 52
-.byt $7f, $40, $7f, $7f, $5d, $4d, $65, $75
-; Tile skool 53
-.byt $60, $7f, $5f, $5f, $5f, $5f, $5c, $5c
-; Tile skool 54
-.byt $40, $7e, $7e, $7e, $7c, $60, $40, $40
-; Tile skool 55
-.byt $40, $40, $41, $41, $41, $41, $41, $4f
-; Tile skool 56
-.byt $40, $7f, $5f, $5f, $5f, $5f, $5c, $7c
-; Tile skool 57
-.byt $7f, $40, $40, $40, $40, $40, $40, $40
-; Tile skool 58
-.byt $7b, $4d, $4b, $4d, $4b, $4d, $4b, $4d
-; Tile skool 59
-.byt $6f, $60, $60, $60, $60, $60, $60, $60
-; Tile skool 60
-.byt $41, $41, $41, $41, $41, $41, $41, $41
-; Tile skool 61
-.byt $5c, $5c, $5c, $5c, $5c, $5c, $5c, $5b
-; Tile skool 62
-.byt $40, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 63
-.byt $5f, $42, $42, $42, $42, $42, $42, $7f
-; Tile skool 64
-.byt $7c, $7c, $7c, $7c, $7c, $7c, $7c, $5b
-; Tile skool 65
-.byt $7f, $77, $7b, $75, $7a, $75, $7a, $75
-; Tile skool 66
-.byt $7f, $7f, $7f, $7f, $7f, $5f, $6f, $57
-; Tile skool 67
-.byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
-; Tile skool 68
-.byt $6a, $56, $6a, $56, $6a, $56, $6a, $56
-; Tile skool 69
-.byt $40, $7f, $4f^$bf, $67, $73^$bf, $79, $5e^$bf, $4c
-; Tile skool 70
-.byt $40, $40, $40, $40, $40, $40, $40, $60
-; Tile skool 71
-.byt $40, $40, $40, $40, $40, $40, $40, $4f
-; Tile skool 72
-.byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
-; Tile skool 73
-.byt $41, $7e, $7e, $7e, $7f, $40, $40, $40
-; Tile skool 74
-.byt $60, $60, $60, $60, $40, $4f, $50, $7f
-; Tile skool 75
-.byt $70, $78, $68, $68, $68, $68, $58, $78
-; Tile skool 76
-.byt $57, $57, $57, $58, $5f, $60, $7f, $7f
-; Tile skool 77
-.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
-; Tile skool 78
-.byt $40, $7e, $7e, $40, $7e, $41, $7f, $7f
-; Tile skool 79
-.byt $7a, $75, $7a, $75, $7a, $75, $7b, $77
-; Tile skool 80
-.byt $6b, $57, $6f, $5f, $7f, $7f, $7f, $7f
-; Tile skool 81
-.byt $4f, $6f, $6f, $6f, $6f, $5f, $7f, $7f
-; Tile skool 82
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $55
-; Tile skool 83
-.byt $60, $60, $60, $60, $60, $60, $60, $60
-; Tile skool 84
-.byt $40, $40, $40, $40, $40, $41, $42, $44
-; Tile skool 85
-.byt $42, $44, $48, $50, $60, $40, $40, $40
-; Tile skool 86
-.byt $60, $60, $60, $61, $62, $64, $68, $70
-; Tile skool 87
-.byt $48, $50, $60, $40, $40, $40, $40, $40
-; Tile skool 88
-.byt $6a, $55, $6a, $54, $68, $50, $60, $40
-; Tile skool 89
-.byt $60, $40, $40, $40, $40, $40, $40, $40
-; Tile skool 90
-.byt $6a, $55, $6a, $55, $6a, $55, $6a, $54
-; Tile skool 91
-.byt $6a, $54, $68, $50, $60, $40, $40, $40
-; Tile skool 92
-.byt $7a, $75, $7a, $75, $7a, $74, $78, $70
-; Tile skool 93
-.byt $68, $50, $60, $40, $40, $40, $40, $40
-; Tile skool 94
-.byt $40, $40, $41, $41, $41, $41, $42, $42
-; Tile skool 95
-.byt $40, $7f, $40, $40, $40, $40, $40, $40
-; Tile skool 96
-.byt $40, $40, $60, $60, $60, $60, $60, $60
-; Tile skool 97
-.byt $40, $40, $77, $77, $78, $78, $70, $7d
-; Tile skool 98
-.byt $40, $40, $7f, $7f, $40, $40, $40, $7f
-; Tile skool 99
-.byt $40, $40, $5f, $5f, $40, $40, $40, $7f
-; Tile skool 100
-.byt $40, $40, $7b, $7b, $43, $43, $43, $7b
-; Tile skool 101
-.byt $74, $75, $75, $7d, $7d, $7d, $7f, $7f
-; Tile skool 102
-.byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $7f
-; Tile skool 103
-.byt $4b, $6b, $6b, $6f, $6f, $6f, $7f, $7f
 
+; Ventanas
+.byt $7f, $40^$bf, $40, $40^$bf, $40, $40^$bf, $40, $7f
+; Tile skool 6
+.byt $7f, $41^$bf, $41, $41^$bf, $41, $41^$bf, $41, $7f
+; Tile skool 7
+.byt $7f, $6a, $7f, $55, $7f, $6a, $7f, $55
+; Tile skool 8
+.byt $7f, $60^$bf, $60, $60^$bf, $60, $60^$bf, $60, $7f
+
+; Tile skool 9
+.byt $7f, $43, $41, $40, $40, $40, $40, $7f
+; Tile skool 10
+.byt $55, $7f, $75, $7f, $75, $7f, $75, $7f
+
+
+; Escudos
+; Tile skool 11
+.byt $40, $7f^$bf, $6f, $67^$bf, $63, $61^$bf, $52, $4c
+; Tile skool 12
+.byt $40, $7f, $79^$bf, $79^$bf, $67^$bf, $67^$bf, $56^$bf, $4c
+
+
+; Tile skool 13
+.byt $7f, $40, $7f^$bf, $7f, $67^$bf, $73, $79^$bf, $7d
+; Tile skool 14
+.byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a
+; Tile skool 15
+.byt $7f, $40, $7f, $7a^$bf, $7a, $7a^$bf, $6a, $6a^$bf
+; Tile skool 16
+.byt $7f, $40, $7f, $7f^$bf, $6a, $6a^$bf, $6a, $6a^$bf
+; Tile skool 17
+.byt $7f, $40, $7f^$bf, $7b, $6a^$bf, $6a, $6a^$bf, $6a
+; Tile skool 18
+.byt $7f, $40, $7f^$bf, $6b, $6a^$bf, $6a, $6a^$bf, $6a
+; Tile skool 19
+.byt $7f, $40, $7f, $75^$bf, $55, $55^$bf, $55, $55^$bf
+; Tile skool 20
+.byt $7f, $40, $7f^$bf, $5f, $55^$bf, $55, $55^$bf, $55
+; Tile skool 21
+.byt $7f, $40, $7f, $5d^$bf, $55, $55^$bf, $55, $55^$bf
+; Tile skool 22
+.byt $7f, $4e, $7b, $5d, $4b, $6d, $6b, $7d
+; Tile skool 23
+.byt $7f, $60, $6f, $6b, $6a, $6a, $6a, $6a
+; Tile skool 24
+.byt $7f, $40, $7f^$bf, $7f, $64^$bf, $62, $69^$bf, $6c
+; Tile skool 25
+.byt $7f, $40, $7f^$bf, $7f, $41^$bf, $42, $45^$bf, $6a
+; Tile skool 26
+.byt $7f, $40, $7f, $6e^$bf, $55, $6b^$bf, $57, $6f^$bf
+; Tile skool 27
+.byt $7f, $40, $7f^$bf, $6f, $6a^$bf, $6a, $6a^$bf, $6a
+; Tile skool 28
+.byt $7f, $40, $7f, $7b^$bf, $7b, $7b^$bf, $6b, $6b^$bf
+; Tile skool 29
+.byt $7f, $40, $7f^$bf, $7e, $4a^$bf, $4a, $4a, $4a
+; Tile skool 30
+.byt $75, $7f, $75^$bf, $7f, $75^$bf, $7f, $75^$bf, $7f
+; Tile skool 31
+.byt $7f, $40, $7f, $6a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
+; Tile skool 32
+.byt $7f, $40, $7f^$bf, $7f, $65^$bf, $65, $65^$bf, $65
+; Tile skool 33
+.byt $7f, $40, $7f^$bf, $4e, $4c^$bf, $4e, $4f^$bf, $4f
+; Tile skool 34
+.byt $7f, $40, $7f, $7f^$bf, $5f, $48^$bf, $44, $68^$bf
+; Tile skool 35
+.byt $7f, $40, $7f, $7f, $7f, $40, $40, $40
+; Tile skool 36
+.byt $7b, $4d, $7b, $7d, $7b, $4d, $4b, $4d
+; Tile skool 37
+.byt $6f, $60, $6f, $6d, $6d, $6d, $6d, $6d
+; Tile skool 38
+.byt $7f, $40, $7f^$bf, $5a, $5a^$bf, $5a, $5a^$bf, $5a
+; Tile skool 39
+.byt $7f, $40, $7f, $7b^$bf, $79, $7a^$bf, $69, $6a
+; Tile skool 40
+.byt $7f, $40, $7f^$bf, $7b, $5a^$bf, $5a, $5a^$bf, $5a
+; Tile skool 41
+.byt $7f, $40, $7f, $7f^$bf, $6b, $6b^$bf, $6b, $6b^$bf
+; Tile skool 42
+.byt $7f, $40, $7f^$bf, $77^$bf, $55, $55^$bf, $55, $55^$bf
+; Tile skool 43
+.byt $7f, $40, $7f^$bf, $57, $55^$bf, $55^$bf, $55, $55^$bf
+; Tile skool 44
+.byt $7f, $40, $7f^$bf, $7e, $6a^$bf, $6a, $6a^$bf, $6a
+; Tile skool 45
+.byt $7f, $40, $7f, $7f^$bf, $64, $72^$bf, $79, $7c^$bf
+; Tile skool 46
+.byt $7f, $40, $7f, $7f, $6e, $6a, $6a, $6a
+; Tile skool 47
+.byt $7b, $4d, $7b, $7d, $7b, $7d, $7b, $7d
+; Tile skool 48
+.byt $6f, $60, $6f^$bf, $6a, $6a^$bf, $6a, $6a^$bf, $6a
+; Tile skool 49
+.byt $7f, $40, $7f, $6e^$bf, $6e, $6e^$bf, $6a, $6a^$bf
+; Tile skool 50
+.byt $7f, $40, $7f^$bf, $7b, $7a^$bf, $7b, $6b^$bf, $6b
+; Tile skool 51
+.byt $7f, $40, $7f, $7f^$bf, $5d, $4d^$bf, $65, $75^$bf
+; Tile skool 52
+.byt $60, $7f, $5f, $5f, $5f, $5f, $5c, $5c
+; Tile skool 53
+.byt $40, $7c, $7c, $7c, $78, $60, $40, $40
+; Tile skool 54
+.byt $40, $40, $41, $41, $41, $41, $41, $4f
+; Tile skool 55
+.byt $40, $7f, $5f, $5f, $5f, $5f, $5c, $7c
+; Tile skool 56
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 57
+.byt $7b, $4d, $4b, $4d, $4b, $4d, $4b, $4d
+; Tile skool 58
+.byt $6f, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 59
+.byt $41, $41, $41, $41, $41, $41, $41, $41
+; Tile skool 60
+.byt $5c, $5c, $5c, $5c, $5c, $5c, $5c, $5b
+; Tile skool 61
+.byt $40, $40, $40, $40, $40, $40, $40, $7f
+; Tile skool 62
+.byt $5f, $42, $42, $42, $42, $42, $42, $7f
+; Tile skool 63
+.byt $7c, $7c, $7c, $7c, $7c, $7c, $7c, $5b
+; Tile skool 64
+.byt $7f, $77, $7b, $75, $7a, $75, $7a, $75
+; Tile skool 65
+.byt $7f, $7f, $7f, $7f, $7f, $5f, $6f, $57
+; Tile skool 66
+.byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
+; Tile skool 67
+.byt $6a, $56, $6a, $56, $6a, $56, $6a, $56
+
+
+; Escudo
+; Tile skool 68
+.byt $40, $7f, $4f^$bf, $67, $73^$bf, $79, $5e^$bf, $4c
+
+; Tile skool 69
+.byt $40, $40, $40, $40, $40, $40, $40, $7c
+; Tile skool 70
+.byt $40, $40, $40, $40, $40, $40, $40, $4f
+; Tile skool 71
+.byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
+; Tile skool 72
+.byt $4c, $74, $74, $74, $78, $40, $40, $40
+; Tile skool 73
+.byt $40, $40, $40, $40, $40, $4f, $50, $7f
+; Tile skool 74
+.byt $70, $78, $68, $68, $68, $68, $58, $78
+; Tile skool 75
+.byt $57, $57, $57, $58, $5f, $60, $7f, $7f
+; Tile skool 76
+.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
+; Tile skool 77
+.byt $40, $7e, $7e, $40, $7e, $41, $7f, $7f
+; Tile skool 78
+.byt $7a, $75, $7a, $75, $7a, $75, $7b, $77
+; Tile skool 79
+.byt $6b, $57, $6f, $5f, $7f, $7f, $7f, $7f
+; Tile skool 80
+.byt $4f, $6f, $6f, $6f, $6f, $5f, $7f, $7f
+; Tile skool 81
+.byt $55, $7f, $55, $7f, $55, $7f, $55, $7f
+; Tile skool 82
+.byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 83
+.byt $40, $40, $40, $40, $40, $41, $43, $47
+; Tile skool 84
+.byt $43, $47, $4f, $5f, $7f, $7f, $7f, $7f
+; Tile skool 85
+.byt $60, $60, $60, $61, $63, $67, $6f, $7f
+; Tile skool 86
+.byt $4f, $5f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 87
+.byt $55, $7f, $57, $7f, $5f, $7f, $7f, $7f
+; Tile skool 88
+.byt $55, $7f, $55, $7f, $55, $7f, $57, $7f
+; Tile skool 89
+.byt $57, $7f, $5f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 90
+.byt $75, $7f, $75, $7f, $77, $7f, $7f, $7f
+; Tile skool 91
+.byt $5f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 92
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7e
+; Tile skool 93
+.byt $7f, $7f, $40, $40, $40, $40, $40, $40
+; Tile skool 94
+.byt $40, $40, $77, $77, $78, $78, $70, $7d
+; Tile skool 95
+.byt $40, $40, $7f, $7f, $40, $40, $40, $7f
+; Tile skool 96
+.byt $40, $40, $5f, $5f, $40, $40, $40, $7f
+; Tile skool 97
+.byt $40, $40, $7b, $7b, $43, $43, $43, $7b
+; Tile skool 98
+.byt $74, $75, $75, $7d, $7d, $7d, $7f, $7f
+; Tile skool 99
+.byt $40, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+; Tile skool 100
+.byt $4b, $6b, $6b, $6f, $6f, $6f, $7f, $7f
 
 ; For the blackboards we need
 board_read
@@ -773,11 +734,11 @@ udg_skool3
 ; Tile skool 6
 .byt $7f, $5f, $5f, $5f, $5f, $5f, $5f, $5f
 ; Tile skool 7
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $75
 ; Tile skool 8
-.byt $7f, $7f, $7f, $7f, $7e, $70, $40, $40
+.byt $7f, $7f, $7f, $7d, $7f, $55, $7f, $55
 ; Tile skool 9
-.byt $7f, $7f, $7b, $63, $43, $43, $43, $43
+.byt $7f, $7f, $7f, $57, $7f, $57, $7f, $57
 ; Tile skool 10
 .byt $60, $58, $44, $42, $41, $40, $40, $40
 ; Tile skool 11
@@ -795,81 +756,87 @@ udg_skool3
 ; Tile skool 17
 .byt $40, $40, $40, $40, $43, $43, $43, $43
 ; Tile skool 18
-.byt $40, $40, $47, $7f, $7f, $7f, $7f, $7f
+.byt $40, $43, $4f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 19
-.byt $5f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7d
 ; Tile skool 20
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $7e, $78
+.byt $7f, $7f, $7f, $7f, $7f, $75, $7f, $55
 ; Tile skool 21
-.byt $7f, $7f, $7f, $7f, $7c, $60, $40, $40
+.byt $7f, $7d, $7f, $55, $7f, $55, $7f, $55
 ; Tile skool 22
-.byt $7f, $7e, $70, $40, $40, $40, $40, $40
+.byt $7f, $55, $7f, $55, $7f, $55, $7f, $55
 ; Tile skool 23
-.byt $60, $40, $40, $40, $40, $40, $40, $40
+.byt $7f, $57, $7f, $57, $7f, $57, $7f, $7f
 ; Tile skool 24
-.byt $43, $43, $43, $43, $43, $47, $5f, $7f
-; Tile skool 25
 .byt $40, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 26
+; Tile skool 25
 .byt $43, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 27
+; Tile skool 26
 .byt $40, $60, $50, $4c, $42, $41, $40, $7f
-; Tile skool 28
+; Tile skool 27
 .byt $40, $40, $40, $40, $40, $40, $70, $78
+
+
+; Ventanas
+; Tile skool 28
+.byt $7f, $41^$bf, $41, $41^$bf, $41, $41^$bf, $41, $7f
 ; Tile skool 29
-.byt $7f, $41, $41, $41, $41, $41, $41, $7f
-; Tile skool 30
 .byt $60, $60, $60, $60, $60, $60, $60, $60
+; Tile skool 30
+.byt $7f, $40^$bf, $40, $40^$bf, $40, $40^$bf, $40, $7f
 ; Tile skool 31
-.byt $7f, $40, $40, $40, $40, $40, $40, $7f
+.byt $7f, $60^$bf, $60, $60^$bf, $60, $60^$bf, $60, $7f
+
+;Escudo
 ; Tile skool 32
-.byt $7f, $60, $60, $60, $60, $60, $60, $7f
+.byt $40, $7f^$bf, $79^$bf, $79^$bf, $67^$bf, $67^$bf, $56^$bf, $4c
+
 ; Tile skool 33
-.byt $40, $7f^$bf, $79, $79^$bf, $67, $67^$bf, $56, $4c
+.byt $7f, $75, $7f, $75, $7f, $75, $7f, $75
 ; Tile skool 34
-.byt $4b, $47, $4f, $4f, $7f, $7f, $7f, $47
+.byt $7f, $57, $7f, $57, $7f, $57, $7f, $57
 ; Tile skool 35
-.byt $46, $7c, $7e, $7c, $7c, $7f, $7e, $7c
+.byt $4b, $47, $4f, $4f, $7f, $7f, $7f, $47
 ; Tile skool 36
-.byt $5f, $7f, $4f, $4f, $4e, $44, $40, $40
+.byt $46, $7c, $7e, $7c, $7c, $7f, $7e, $7c
 ; Tile skool 37
-.byt $60, $60, $40, $40, $40, $51, $71, $60
+.byt $5f, $7f, $4f, $4f, $4e, $44, $40, $40
 ; Tile skool 38
-.byt $40, $40, $4d, $59, $73, $7f, $7f, $7f
+.byt $60, $60, $40, $40, $40, $51, $71, $60
 ; Tile skool 39
-.byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+.byt $40, $40, $4d, $59, $73, $7f, $7f, $7f
 ; Tile skool 40
-.byt $40, $5f, $5f, $5f, $5f, $5f, $5f, $40
+.byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 41
-.byt $43, $43, $43, $49, $40, $40, $40, $43
+.byt $40, $5f, $5f, $5f, $5f, $5f, $5f, $40
 ; Tile skool 42
-.byt $7c, $70, $60, $62, $60, $51, $72, $78
+.byt $43, $43, $43, $49, $40, $40, $40, $43
 ; Tile skool 43
-.byt $40, $44, $4c, $46, $48, $40, $40, $40
+.byt $7c, $70, $60, $62, $60, $51, $72, $78
 ; Tile skool 44
-.byt $7f, $7f, $7f, $5e, $58, $50, $48, $47
+.byt $40, $44, $4c, $46, $48, $40, $40, $40
 ; Tile skool 45
-.byt $77, $67, $62, $72, $59, $40, $40, $43
+.byt $7f, $7f, $7f, $5e, $58, $50, $48, $47
 ; Tile skool 46
-.byt $40, $7f, $5f, $5f, $5f, $5f, $5c, $7c
+.byt $77, $67, $62, $72, $59, $40, $40, $43
 ; Tile skool 47
-.byt $40, $7e, $7e, $7e, $7c, $60, $40, $40
+.byt $40, $7f, $5f, $5f, $5f, $5f, $5c, $7c
 ; Tile skool 48
-.byt $40, $41, $42, $42, $42, $42, $42, $5f
+.byt $40, $7c, $7c, $7c, $78, $60, $40, $40
 ; Tile skool 49
-.byt $43, $43, $63, $63, $63, $63, $63, $63
+.byt $40, $41, $42, $42, $42, $42, $42, $5f
 ; Tile skool 50
-.byt $47, $47, $47, $43, $43, $43, $46, $44
+.byt $43, $43, $63, $63, $63, $63, $63, $63
 ; Tile skool 51
-.byt $78, $78, $70, $70, $60, $50, $40, $40
+.byt $47, $47, $47, $43, $43, $43, $46, $44
 ; Tile skool 52
-.byt $43, $41, $41, $40, $40, $40, $40, $40
+.byt $78, $78, $70, $70, $60, $50, $40, $40
 ; Tile skool 53
-.byt $7f, $7e, $7e, $7e, $5e, $5e, $4e, $44
+.byt $43, $41, $41, $40, $40, $40, $40, $40
 ; Tile skool 54
-.byt $40, $7f, $7f, $7f, $7f, $7f, $78, $78
+.byt $7f, $7e, $7e, $7e, $5e, $5e, $4e, $44
 ; Tile skool 55
-.byt $40, $7c, $7c, $7c, $78, $40, $40, $40
+.byt $40, $7f, $7f, $7f, $7f, $7f, $78, $78
 ; Tile skool 56
 .byt $40, $41, $46, $44, $44, $44, $44, $5f
 ; Tile skool 57
@@ -901,175 +868,181 @@ udg_skool3
 ; Tile skool 70
 .byt $60, $70, $48, $4c, $4a, $49, $49, $49
 ; Tile skool 71
-.byt $7f, $7f, $7f, $7f, $7f, $7e, $60, $40
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7c
 ; Tile skool 72
-.byt $7f, $7f, $7f, $7e, $70, $40, $40, $40
+.byt $7f, $7f, $7f, $7f, $7f, $7e, $60, $40
 ; Tile skool 73
-.byt $7f, $7f, $71, $41, $41, $41, $41, $41
+.byt $7f, $7f, $7f, $7e, $70, $40, $40, $40
 ; Tile skool 74
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $60
+.byt $7f, $7f, $71, $41, $41, $41, $41, $41
 ; Tile skool 75
-.byt $7f, $7f, $7f, $7f, $7f, $7e, $40, $40
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $60
 ; Tile skool 76
-.byt $7f, $7f, $7f, $7f, $7f, $40, $40, $40
+.byt $7f, $7f, $7f, $7f, $7f, $7e, $40, $40
 ; Tile skool 77
-.byt $7f, $7f, $7f, $7f, $40, $40, $40, $40
+.byt $7f, $7f, $7f, $7f, $7f, $40, $40, $40
 ; Tile skool 78
-.byt $7f, $7f, $7f, $7f, $40, $40, $4f, $78
+.byt $7f, $7f, $7f, $7f, $40, $40, $40, $40
 ; Tile skool 79
-.byt $7f, $7f, $7f, $7f, $40, $5f, $70, $40
+.byt $7f, $7f, $7f, $7f, $40, $40, $4f, $78
 ; Tile skool 80
-.byt $7f, $7f, $7f, $78, $40, $40, $40, $40
+.byt $7f, $7f, $7f, $7f, $40, $5f, $70, $40
 ; Tile skool 81
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $78, $7f
+.byt $7f, $7f, $7f, $7f, $7c, $60, $40, $40
 ; Tile skool 82
-.byt $7f, $7f, $7f, $7f, $7f, $7f, $40, $7f
+.byt $7f, $7f, $7f, $78, $40, $40, $40, $40
 ; Tile skool 83
-.byt $7f, $7f, $7f, $40, $7f, $7f, $40, $7f
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $78, $7f
 ; Tile skool 84
-.byt $7f, $7f, $7f, $40, $7f, $6f, $6f, $6f
+.byt $7f, $7f, $7f, $7f, $7f, $7f, $40, $7f
 ; Tile skool 85
-.byt $7f, $7f, $7f, $40, $7f, $68, $68, $68
+.byt $7f, $7f, $7f, $40, $7f, $7f, $40, $7f
 ; Tile skool 86
-.byt $7f, $7f, $7f, $44, $7c, $40, $40, $40
+.byt $7f, $7f, $7f, $40, $7f, $6f, $6f, $6f
 ; Tile skool 87
-.byt $7f, $7f, $7f, $40, $40, $40, $40, $40
+.byt $7f, $7f, $7f, $40, $7f, $68, $68, $68
 ; Tile skool 88
-.byt $7f, $7f, $40, $40, $40, $40, $40, $40
+.byt $7f, $7f, $7f, $44, $7c, $40, $40, $40
 ; Tile skool 89
-.byt $7f, $41, $41, $41, $41, $41, $41, $41
+.byt $7f, $7f, $7f, $40, $40, $40, $40, $40
 ; Tile skool 90
-.byt $40^$bf, $7f^$bf, $4f^$bf, $67^$bf, $73^$bf, $79^$bf, $5e^$bf, $4c
+.byt $7f, $7f, $40, $40, $40, $40, $40, $40
 ; Tile skool 91
-.byt $41, $41, $41, $41, $41, $41, $41, $7f
+.byt $7f, $41, $41, $41, $41, $41, $41, $41
+
+;Escudo
 ; Tile skool 92
-.byt $41, $4e, $4d, $4a, $4d, $4a, $4d, $4f
+.byt $40, $7f, $4f^$bf, $67, $73^$bf, $79, $5e^$bf, $4c
+
 ; Tile skool 93
-.byt $7f, $68, $58, $68, $58, $68, $58, $6f
+.byt $41, $41, $41, $41, $41, $41, $41, $7f
 ; Tile skool 94
-.byt $78, $48, $48, $48, $48, $48, $48, $78
+.byt $41, $4e, $4d, $4a, $4d, $4a, $4d, $4f
 ; Tile skool 95
-.byt $41, $41, $41, $41, $41, $41, $41, $41
+.byt $7f, $68, $58, $68, $58, $68, $58, $6f
 ; Tile skool 96
-.byt $78, $78, $78, $78, $78, $78, $78, $7f
+.byt $78, $48, $48, $48, $48, $48, $48, $78
 ; Tile skool 97
-.byt $68, $68, $68, $68, $68, $68, $68, $68
+.byt $41, $41, $41, $41, $41, $41, $41, $41
 ; Tile skool 98
-.byt $7f, $7c, $60, $60, $60, $60, $60, $60
+.byt $78, $78, $78, $78, $78, $78, $78, $7f
 ; Tile skool 99
-.byt $43, $46, $45, $46, $45, $46, $45, $47
+.byt $68, $68, $68, $68, $68, $68, $68, $68
 ; Tile skool 100
-.byt $7f, $4f, $4f, $4f, $4e, $4c, $48, $78
+.byt $7f, $7c, $60, $60, $60, $60, $60, $60
 ; Tile skool 101
-.byt $7f, $40, $40, $40, $40, $40, $40, $40
+.byt $43, $46, $45, $46, $45, $46, $45, $47
 ; Tile skool 102
-.byt $78, $78, $78, $78, $78, $68, $68, $68
+.byt $7f, $40, $40, $40, $40, $40, $40, $40
 ; Tile skool 103
-.byt $40, $40, $40, $40, $40, $40, $4f, $4c
+.byt $78, $78, $78, $78, $78, $68, $68, $68
 ; Tile skool 104
-.byt $43, $46, $45, $46, $45, $46, $7d, $40
+.byt $40, $40, $40, $40, $40, $40, $4f, $4c
 ; Tile skool 105
-.byt $40, $40, $40, $40, $40, $40, $50, $68
+.byt $43, $46, $45, $46, $45, $46, $7d, $40
 ; Tile skool 106
-.byt $40, $40, $40, $40, $40, $40, $40, $4f
+.byt $40, $40, $40, $40, $40, $40, $50, $68
 ; Tile skool 107
-.byt $40, $40, $40, $40, $40, $40, $40, $60
+.byt $40, $40, $40, $40, $40, $40, $40, $4f
 ; Tile skool 108
-.byt $40, $40, $40, $40, $40, $40, $5f, $58
+.byt $40, $40, $40, $40, $40, $40, $40, $7c
 ; Tile skool 109
-.byt $4f, $4a, $4d, $4a, $4d, $4a, $7d, $40
+.byt $40, $40, $40, $40, $40, $40, $5f, $58
 ; Tile skool 110
-.byt $40, $7f, $40, $7f, $40, $7f, $40, $7f
+.byt $4f, $4a, $4d, $4a, $4d, $4a, $7d, $40
 ; Tile skool 111
-.byt $68, $6f, $48, $6f, $68, $6f, $48, $6f
+.byt $40, $7f, $40, $7f, $40, $7f, $40, $7f
 ; Tile skool 112
-.byt $68, $68, $48, $68, $68, $68, $48, $68
+.byt $68, $6f, $48, $6f, $68, $6f, $48, $6f
 ; Tile skool 113
-.byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
+.byt $68, $68, $48, $68, $68, $68, $48, $68
 ; Tile skool 114
-.byt $41, $7e, $7e, $7e, $7f, $40, $40, $40
+.byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
 ; Tile skool 115
-.byt $60, $60, $60, $60, $40, $4f, $50, $7f
+.byt $4c, $74, $74, $74, $78, $40, $40, $40
 ; Tile skool 116
-.byt $70, $78, $68, $68, $68, $68, $58, $78
+.byt $40, $40, $40, $40, $40, $4f, $50, $7f
 ; Tile skool 117
-.byt $57, $5a, $55, $5a, $55, $5a, $55, $5f
+.byt $70, $78, $68, $68, $68, $68, $58, $78
 ; Tile skool 118
-.byt $54, $54, $54, $54, $54, $54, $54, $54
+.byt $57, $5a, $55, $5a, $55, $5a, $55, $5f
 ; Tile skool 119
-.byt $57, $57, $57, $58, $5f, $60, $7f, $7f
+.byt $54, $54, $54, $54, $54, $54, $54, $54
 ; Tile skool 120
-.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
+.byt $57, $57, $57, $58, $5f, $60, $7f, $7f
 ; Tile skool 121
-.byt $40, $7e, $7e, $40, $7e, $41, $7f, $7f
+.byt $7f, $7f, $7f, $40, $7f, $40, $7f, $7f
 ; Tile skool 122
-.byt $48, $6f, $6f, $6f, $6f, $5f, $7f, $7f
+.byt $40, $7e, $7e, $40, $7e, $41, $7f, $7f
 ; Tile skool 123
-.byt $40, $40, $7c, $7f, $7f, $7f, $7f, $7f
+.byt $48, $6f, $6f, $6f, $6f, $5f, $7f, $7f
 ; Tile skool 124
-.byt $7c, $7e, $7f, $7f, $7f, $7f, $7f, $7f
+.byt $40, $40, $7c, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 125
-.byt $40, $40, $60, $78, $7e, $7f, $7f, $7f
+.byt $7c, $7e, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 126
-.byt $4f, $43, $42, $43, $42, $7f, $7f, $7f
+.byt $40, $40, $60, $78, $7e, $7f, $7f, $7f
 ; Tile skool 127
-.byt $7f, $5f, $6b, $55, $6a, $7f, $7f, $7f
+.byt $4f, $43, $42, $43, $42, $7f, $7f, $7f
 ; Tile skool 128
-.byt $7c, $7e, $7f, $5f, $6b, $7f, $7f, $7f
+.byt $7f, $5f, $6a, $55, $6a, $7f, $7f, $7f
 ; Tile skool 129
-.byt $40, $40, $70, $7f, $7f, $7f, $7f, $7f
+.byt $7e, $7f, $7f, $57, $6a, $7f, $7f, $7f
 ; Tile skool 130
-.byt $40, $40, $40, $40, $7c, $7f, $7f, $7f
+.byt $40, $70, $7e, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 131
-.byt $40, $40, $40, $40, $40, $60, $7e, $7f
+.byt $40, $40, $40, $70, $7e, $7f, $7f, $7f
 ; Tile skool 132
-.byt $68, $68, $68, $68, $68, $74, $74, $74
+.byt $40, $40, $40, $40, $40, $70, $7e, $7f
 ; Tile skool 133
-.byt $68, $64, $54, $54, $54, $54, $54, $54
+.byt $68, $68, $68, $68, $68, $74, $74, $74
 ; Tile skool 134
-.byt $40, $7f, $6f^$bf, $67, $63^$bf, $61, $52^$bf, $4c
+.byt $68, $64, $54, $54, $54, $54, $54, $54
+
+;Escudo
 ; Tile skool 135
-.byt $40, $40, $40, $40, $47, $46, $45, $46
+.byt $40, $7f, $6f^$bf, $67, $63^$bf, $61, $52, $4c
+
 ; Tile skool 136
-.byt $4a, $4d, $4a, $4d, $7f, $7c, $57, $6a
+.byt $40, $40, $40, $40, $47, $46, $45, $46
 ; Tile skool 137
-.byt $6a, $55, $6a, $55, $7a, $4f, $70, $6f
+.byt $4a, $4d, $4a, $4d, $7f, $7c, $57, $6a
 ; Tile skool 138
-.byt $6a, $55, $6a, $55, $6a, $55, $7a, $47
+.byt $6a, $55, $6a, $55, $7a, $4f, $70, $6f
 ; Tile skool 139
-.byt $7f, $58, $68, $58, $68, $58, $68, $7f
+.byt $6a, $55, $6a, $55, $6a, $55, $7a, $47
 ; Tile skool 140
-.byt $74, $74, $74, $74, $74, $74, $6a, $6a
+.byt $7f, $58, $68, $58, $68, $58, $68, $7f
 ; Tile skool 141
-.byt $54, $4a, $4a, $4a, $4a, $4a, $4a, $4a
+.byt $74, $74, $74, $74, $74, $74, $6a, $6a
 ; Tile skool 142
-.byt $54, $54, $54, $54, $54, $52, $4a, $4a
+.byt $54, $4a, $4a, $4a, $4a, $4a, $4a, $4a
 ; Tile skool 143
-.byt $40, $40, $40, $40, $40, $60, $78, $7e
+.byt $54, $54, $54, $54, $54, $52, $4a, $4a
 ; Tile skool 144
-.byt $45, $46, $45, $46, $7f, $7c, $57, $6a
+.byt $40, $40, $40, $40, $40, $60, $78, $7e
 ; Tile skool 145
-.byt $55, $6a, $55, $6a, $75, $4f, $70, $6f
+.byt $45, $46, $45, $46, $7f, $7c, $57, $6a
 ; Tile skool 146
-.byt $55, $6a, $55, $6a, $55, $6a, $7d, $47
+.byt $55, $6a, $55, $6a, $75, $4f, $70, $6f
 ; Tile skool 147
-.byt $6a, $6a, $6a, $6a, $6a, $65, $65, $65
+.byt $55, $6a, $55, $6a, $55, $6a, $7d, $47
 ; Tile skool 148
-.byt $4a, $4a, $4a, $4a, $4a, $45, $45, $45
+.byt $6a, $6a, $6a, $6a, $6a, $65, $65, $65
 ; Tile skool 149
-.byt $4a, $4a, $4a, $4a, $4a, $4a, $4a, $4a
+.byt $4a, $4a, $4a, $4a, $4a, $45, $45, $45
 ; Tile skool 150
-.byt $7f, $40, $7f, $60, $60, $70, $50, $50
+.byt $4a, $4a, $4a, $4a, $4a, $4a, $4a, $4a
 ; Tile skool 151
-.byt $7f, $40, $7f, $40, $40, $40, $40, $40
+.byt $7f, $7f, $7f, $60, $60, $70, $70, $70
 ; Tile skool 152
-.byt $7f, $40, $40, $60, $60, $50, $50, $48
+.byt $7f, $7f, $7f, $7f, $7f, $5f, $5f, $4f
 ; Tile skool 153
-.byt $7f, $40, $60, $70, $68, $64, $64, $62
+.byt $7f, $7f, $7f, $7f, $6f, $67, $67, $63
 ; Tile skool 154
-.byt $60, $50, $48, $44, $42, $41, $40, $40
+.byt $60, $70, $78, $7c, $7e, $7f, $7f, $7f
 ; Tile skool 155
-.byt $40, $40, $40, $40, $40, $40, $60, $50
+.byt $40, $40, $40, $40, $40, $40, $60, $70
 ; Tile skool 156
 .byt $61, $60, $60, $60, $60, $60, $60, $60
 ; Tile skool 157
@@ -1091,51 +1064,51 @@ udg_skool3
 ; Tile skool 165
 .byt $54, $54, $54, $54, $54, $52, $4a, $4b
 ; Tile skool 166
-.byt $50, $58, $48, $48, $48, $44, $44, $44
+.byt $70, $78, $78, $78, $78, $7c, $7c, $7c
 ; Tile skool 167
 .byt $47, $44, $42, $42, $41, $41, $40, $40
 ; Tile skool 168
 .byt $7f, $40, $40, $40, $40, $40, $60, $60
 ; Tile skool 169
-.byt $61, $50, $50, $48, $44, $44, $42, $41
+.byt $61, $50, $48, $48, $44, $42, $42, $41
 ; Tile skool 170
-.byt $40, $60, $60, $50, $48, $44, $42, $41
+.byt $7f, $7f, $5f, $5f, $4f, $47, $43, $41
 ; Tile skool 171
-.byt $48, $44, $42, $41, $40, $40, $40, $40
+.byt $78, $7c, $7e, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 172
-.byt $40, $7f, $40, $7f, $40, $40, $40, $40
+.byt $40, $40, $40, $40, $60, $70, $78, $7c
 ; Tile skool 173
-.byt $68, $6f, $48, $6f, $68, $68, $68, $68
+.byt $40, $7f, $40, $7f, $40, $40, $40, $40
 ; Tile skool 174
-.byt $68, $68, $48, $68, $68, $68, $68, $68
+.byt $68, $6f, $48, $6f, $68, $68, $68, $68
 ; Tile skool 175
-.byt $70, $70, $70, $60, $60, $60, $60, $60
+.byt $68, $68, $48, $68, $68, $68, $68, $68
 ; Tile skool 176
-.byt $50, $50, $50, $50, $50, $60, $60, $60
+.byt $70, $70, $70, $60, $60, $60, $60, $60
 ; Tile skool 177
-.byt $42, $42, $42, $42, $42, $41, $41, $41
+.byt $50, $50, $50, $50, $50, $60, $60, $60
 ; Tile skool 178
-.byt $52, $4a, $45, $42, $41, $40, $40, $40
+.byt $42, $42, $42, $42, $42, $41, $41, $41
 ; Tile skool 179
-.byt $46, $46, $73, $4f, $70, $4f, $40, $40
+.byt $52, $4a, $45, $42, $41, $40, $40, $40
 ; Tile skool 180
-.byt $69, $67, $7f, $7d, $75, $75, $75, $7d
+.byt $46, $46, $73, $4f, $70, $4f, $40, $40
 ; Tile skool 181
-.byt $5c, $78, $60, $40, $40, $40, $40, $40
+.byt $69, $67, $7f, $7d, $75, $75, $75, $7d
 ; Tile skool 182
-.byt $44, $42, $42, $42, $42, $42, $42, $43
+.byt $5c, $78, $60, $40, $40, $40, $40, $40
 ; Tile skool 183
-.byt $40, $40, $40, $40, $40, $40, $40, $77
+.byt $7c, $7e, $7e, $7e, $7e, $7e, $7e, $7f
 ; Tile skool 184
-.byt $50, $50, $48, $48, $44, $44, $42, $5c
+.byt $40, $40, $40, $40, $40, $40, $40, $77
 ; Tile skool 185
-.byt $41, $40, $40, $40, $40, $40, $40, $40
+.byt $50, $50, $48, $48, $44, $44, $42, $5c
 ; Tile skool 186
-.byt $40, $60, $50, $50, $48, $44, $44, $42
+.byt $60, $60, $50, $48, $48, $44, $42, $42
 ; Tile skool 187
-.byt $42, $41, $40, $40, $40, $40, $40, $40
+.byt $7e, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 188
-.byt $40, $40, $60, $50, $48, $44, $42, $41
+.byt $40, $40, $60, $70, $78, $7c, $7e, $7f
 ; Tile skool 189
 .byt $6f, $6f, $7f, $7f, $7f, $7f, $7f, $7f
 ; Tile skool 190
@@ -1165,7 +1138,7 @@ udg_skool3
 ; Tile skool 202
 .byt $60, $70, $7c, $7e, $7f, $7f, $7f, $7f
 ; Tile skool 203
-.byt $40, $40, $40, $40, $60, $7c, $7f, $7f
+.byt $40, $40, $40, $40, $60, $78, $7e, $7f
 ; Tile skool 204
 .byt $7d, $7a, $7d, $7a, $7f, $7f, $7f, $7f
 ; Tile skool 205

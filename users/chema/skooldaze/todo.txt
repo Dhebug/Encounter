@@ -37,7 +37,15 @@ along with the new one.
 
 * Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids.
 
+* When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
+
+* Teachers should have a greater range of vision (tile size)
+
 - CAUTION: A pellet ending on the left side of the school is not removed (?)
+
+* When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
+
+* Teachers should have a greater range of vision (tile size)
 
 - Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
 
