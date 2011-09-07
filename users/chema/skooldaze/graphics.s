@@ -14,6 +14,7 @@
 
 
 ; tile graphics for skool data
+free_before_udgs
 .dsb 256-(*&255)
 udg_skool 
 
@@ -67,6 +68,7 @@ udg_skool
 ; Tile skool 24
 .byt $6a, $7f, $6a, $7f, $6a, $7f, $7e, $5f
 ; Tile skool 25
+
 ;Escudo
 .byt $40, $7f^$bf, $6f^$bf, $67^$bf, $63^$bf, $61^$bf, $52^$bf, $4c
 
@@ -75,7 +77,8 @@ udg_skool
 ; Tile skool 27
 
 ;Escudo
-.byt $40, $7f, $4f, $67, $73, $79, $5e, $4c
+.byt $40, $7f, $4f^$bf, $67, $73^$bf, $79, $5e^$bf, $4c
+
 ; Tile skool 28
 .byt $7a, $75, $7a, $75, $7a, $75, $7a, $75
 ; Tile skool 29
@@ -89,27 +92,29 @@ udg_skool
 ; Tile skool 32
 .byt $7f, $41^$bf, $41, $41^$bf, $41, $41^$bf, $41, $7f
 
+
+; Ventanal
 ; Tile skool 33
-.byt $61, $61, $61, $61, $61, $79, $6f, $61
+.byt $61, $61^$bf, $61, $61^$bf, $61, $79^$bf, $6f, $61^$bf
 ; Tile skool 34
-.byt $43, $43, $43, $43, $43, $43, $63, $5f
+.byt $43, $43^$bf, $43, $43^$bf, $43, $43^$bf, $63, $5f^$bf
 ; Tile skool 35
-.byt $7f, $47, $40, $40, $40, $40, $40, $40
+.byt $7f, $47, $40, $40^$bf, $40, $40^$bf, $40, $40^$bf
 ; Tile skool 36
-.byt $6a, $7f, $5e, $4f, $4e, $4f, $4e, $4f
-; Tile skool 37
-.byt $7f, $40, $7f, $7f, $6f, $77, $7b, $7d
+.byt $6a, $7f, $5e, $4f^$bf, $4e, $4f^$bf, $4e, $4f^$bf
 
 
 ;Libros
+; Tile skool 37
+.byt $7f, $40, $7f, $7f, $6f, $77, $7b, $7d
 ; Tile skool 38
-.byt $7f, $40, $7f^$bf, $75, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $75, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 39
 .byt $7f, $40, $7f, $6b^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 40
-.byt $7f, $40, $7f, $7f^$bf, $6b, $6b^$bf, $6b, $6b^$bf
+.byt $7f, $40, $7f, $7f, $6b, $6b^$bf, $6b, $6b^$bf
 ; Tile skool 41
-.byt $7f, $40, $7f^$bf, $7e, $4a^$bf, $4a, $4a^$bf, $4a
+.byt $7f, $40, $7f, $7e, $4a^$bf, $4a, $4a^$bf, $4a
 ; Tile skool 42
 .byt $7f, $60, $6f, $6f, $6f, $69, $6e, $69
 ; Tile skool 43
@@ -119,35 +124,38 @@ udg_skool
 ; Tile skool 45
 .byt $7f, $40, $7f, $7f, $7f, $4b, $57, $6f
 ; Tile skool 46
-.byt $7f, $40, $7f^$bf, $77, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $77, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 47
-.byt $7f, $40, $7f, $7f^$bf, $7f, $57^$bf, $57, $56^$bf
+.byt $7f, $40, $7f, $7f, $7f, $57^$bf, $57, $56^$bf
 ; Tile skool 48
-.byt $7f, $40, $7f^$bf, $7f, $7f^$bf, $6a, $54^$bf, $6e
+.byt $7f, $40, $7f, $7f, $7f, $6a, $54^$bf, $6e
 ; Tile skool 49
 .byt $7f, $40, $7f, $6d, $45, $4d, $5d, $7d
+
+; Ventanal
 ; Tile skool 50
-.byt $61, $61, $61, $61, $61, $7d, $6b, $7f
+.byt $61, $61^$bf, $61, $61^$bf, $61, $7d^$bf, $6b, $7f
 ; Tile skool 51
-.byt $43, $43, $43, $43, $43, $43, $7f, $7f
+.byt $43, $43^$bf, $43, $43^$bf, $43, $43^$bf, $7f, $7f
 ; Tile skool 52
-.byt $40, $40, $40, $40, $40, $40, $7e, $7f
+.byt $40, $40^$bf, $40, $40^$bf, $40, $40^$bf, $7e, $7f
 ; Tile skool 53
-.byt $4e, $4f, $4e, $4f, $4e, $4f, $4e, $7f
+.byt $4e, $4f^$bf, $4e, $4f^$bf, $4e, $4f^$bf, $4e, $7f
+
 ; Tile skool 54
-.byt $7f, $40, $7f^$bf, $7f, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $7f, $40, $7f, $7f, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 55
 .byt $7f, $40, $7f, $6f^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 56
 .byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 57
-.byt $7f, $40, $7f^$bf, $7b, $7b^$bf, $7b, $6b^$bf, $6b
+.byt $7f, $40, $7f, $7b, $7b^$bf, $7b, $6b^$bf, $6b
 ; Tile skool 58
 .byt $6f, $60, $6f, $6f, $69, $69, $69, $69
 ; Tile skool 59
 .byt $7f, $40, $7f, $55^$bf, $55, $55^$bf, $55, $55^$bf
 ; Tile skool 60
-.byt $7f, $40, $7f^$bf, $57, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $57, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 61
 .byt $7f, $40, $7f, $7f^$bf, $49, $64^$bf, $72, $7b^$bf
 ; Tile skool 62
@@ -169,9 +177,9 @@ udg_skool
 ; Tile skool 70
 .byt $6f, $60, $6f^$bf, $6f, $6e^$bf, $6e, $6e^$bf, $6e
 ; Tile skool 71
-.byt $7f, $40, $7f, $7f^$bf, $67, $73^$bf, $79, $7d^$bf
+.byt $7f, $40, $7f, $7f, $67, $73^$bf, $79, $7d^$bf
 ; Tile skool 72
-.byt $7f, $40, $7f^$bf, $5f, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $5f, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 73
 .byt $62, $67, $78, $78, $77, $70, $70, $78
 ; Tile skool 74
@@ -451,9 +459,10 @@ udg_skool
 
 end_udg_skool
 
+free_udg_skool1
 .dsb 256-(*&255)
-udg_skool2
 
+udg_skool2
 ; Tile data for Skool (cols 33-74)
 ; Tile skool 1
 .byt $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7f
@@ -474,8 +483,11 @@ udg_skool2
 ; Tile skool 8
 .byt $7f, $60^$bf, $60, $60^$bf, $60, $60^$bf, $60, $7f
 
+; Ventana con cacho de pared
 ; Tile skool 9
-.byt $7f, $43, $41, $40, $40, $40, $40, $7f
+.byt $7f, $43^$bf, $41, $40^$bf, $40, $40^$bf, $40, $7f
+
+
 ; Tile skool 10
 .byt $55, $7f, $75, $7f, $75, $7f, $75, $7f
 
@@ -487,22 +499,23 @@ udg_skool2
 .byt $40, $7f, $79^$bf, $79^$bf, $67^$bf, $67^$bf, $56^$bf, $4c
 
 
+;Libros
 ; Tile skool 13
-.byt $7f, $40, $7f^$bf, $7f, $67^$bf, $73, $79^$bf, $7d
+.byt $7f, $40, $7f, $7f, $67^$bf, $73, $79^$bf, $7d
 ; Tile skool 14
-.byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a
+.byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 15
-.byt $7f, $40, $7f, $7a^$bf, $7a, $7a^$bf, $6a, $6a^$bf
+.byt $7f, $40, $7f, $7a, $7a^$bf, $7a, $6a^$bf, $6a
 ; Tile skool 16
-.byt $7f, $40, $7f, $7f^$bf, $6a, $6a^$bf, $6a, $6a^$bf
+.byt $7f, $40, $7f, $7f, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 17
-.byt $7f, $40, $7f^$bf, $7b, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $7f, $40, $7f, $7b, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 18
-.byt $7f, $40, $7f^$bf, $6b, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $7f, $40, $7f, $6b, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 19
 .byt $7f, $40, $7f, $75^$bf, $55, $55^$bf, $55, $55^$bf
 ; Tile skool 20
-.byt $7f, $40, $7f^$bf, $5f, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $5f, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 21
 .byt $7f, $40, $7f, $5d^$bf, $55, $55^$bf, $55, $55^$bf
 ; Tile skool 22
@@ -510,27 +523,31 @@ udg_skool2
 ; Tile skool 23
 .byt $7f, $60, $6f, $6b, $6a, $6a, $6a, $6a
 ; Tile skool 24
-.byt $7f, $40, $7f^$bf, $7f, $64^$bf, $62, $69^$bf, $6c
+.byt $7f, $40, $7f, $7f, $64^$bf, $62, $69^$bf, $6c
 ; Tile skool 25
-.byt $7f, $40, $7f^$bf, $7f, $41^$bf, $42, $45^$bf, $6a
+.byt $7f, $40, $7f, $7f, $41^$bf, $42, $45^$bf, $6a
 ; Tile skool 26
 .byt $7f, $40, $7f, $6e^$bf, $55, $6b^$bf, $57, $6f^$bf
 ; Tile skool 27
-.byt $7f, $40, $7f^$bf, $6f, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $7f, $40, $7f, $6f, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 28
-.byt $7f, $40, $7f, $7b^$bf, $7b, $7b^$bf, $6b, $6b^$bf
+.byt $7f, $40, $7f, $7b, $7b, $7b, $6b, $6b^$bf
 ; Tile skool 29
-.byt $7f, $40, $7f^$bf, $7e, $4a^$bf, $4a, $4a, $4a
+.byt $7f, $40, $7f, $7e, $4a^$bf, $4a, $4a, $4a
+
+
 ; Tile skool 30
-.byt $75, $7f, $75^$bf, $7f, $75^$bf, $7f, $75^$bf, $7f
+.byt $75, $7f, $75, $7f, $75, $7f, $75, $7f
+
+; Mas libros
 ; Tile skool 31
 .byt $7f, $40, $7f, $6a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 32
-.byt $7f, $40, $7f^$bf, $7f, $65^$bf, $65, $65^$bf, $65
+.byt $7f, $40, $7f, $7f, $65^$bf, $65, $65^$bf, $65
 ; Tile skool 33
-.byt $7f, $40, $7f^$bf, $4e, $4c^$bf, $4e, $4f^$bf, $4f
+.byt $7f, $40, $7f, $4e^$bf, $4c, $4e^$bf, $4f, $4f^$bf
 ; Tile skool 34
-.byt $7f, $40, $7f, $7f^$bf, $5f, $48^$bf, $44, $68^$bf
+.byt $7f, $40, $7f, $7f, $5f, $48^$bf, $44, $68^$bf
 ; Tile skool 35
 .byt $7f, $40, $7f, $7f, $7f, $40, $40, $40
 ; Tile skool 36
@@ -538,33 +555,33 @@ udg_skool2
 ; Tile skool 37
 .byt $6f, $60, $6f, $6d, $6d, $6d, $6d, $6d
 ; Tile skool 38
-.byt $7f, $40, $7f^$bf, $5a, $5a^$bf, $5a, $5a^$bf, $5a
+.byt $7f, $40, $7f, $5a, $5a^$bf, $5a, $5a^$bf, $5a
 ; Tile skool 39
 .byt $7f, $40, $7f, $7b^$bf, $79, $7a^$bf, $69, $6a
 ; Tile skool 40
-.byt $7f, $40, $7f^$bf, $7b, $5a^$bf, $5a, $5a^$bf, $5a
+.byt $7f, $40, $7f, $7b, $5a^$bf, $5a, $5a^$bf, $5a
 ; Tile skool 41
-.byt $7f, $40, $7f, $7f^$bf, $6b, $6b^$bf, $6b, $6b^$bf
+.byt $7f, $40, $7f, $7f, $6b, $6b^$bf, $6b, $6b^$bf
 ; Tile skool 42
-.byt $7f, $40, $7f^$bf, $77^$bf, $55, $55^$bf, $55, $55^$bf
+.byt $7f, $40, $7f, $77^$bf, $55, $55^$bf, $55, $55^$bf
 ; Tile skool 43
-.byt $7f, $40, $7f^$bf, $57, $55^$bf, $55^$bf, $55, $55^$bf
+.byt $7f, $40, $7f, $57, $55^$bf, $55^$bf, $55, $55^$bf
 ; Tile skool 44
-.byt $7f, $40, $7f^$bf, $7e, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $7f, $40, $7f, $7e, $6a^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 45
-.byt $7f, $40, $7f, $7f^$bf, $64, $72^$bf, $79, $7c^$bf
+.byt $7f, $40, $7f, $7f, $64, $72^$bf, $79, $7c^$bf
 ; Tile skool 46
-.byt $7f, $40, $7f, $7f, $6e, $6a, $6a, $6a
+.byt $7f, $40, $7f, $7f, $6e^$bf, $6a, $6a^$bf, $6a
 ; Tile skool 47
 .byt $7b, $4d, $7b, $7d, $7b, $7d, $7b, $7d
 ; Tile skool 48
-.byt $6f, $60, $6f^$bf, $6a, $6a^$bf, $6a, $6a^$bf, $6a
+.byt $6f, $60, $6f, $6a, $6a, $6a, $6a, $6a
 ; Tile skool 49
 .byt $7f, $40, $7f, $6e^$bf, $6e, $6e^$bf, $6a, $6a^$bf
 ; Tile skool 50
-.byt $7f, $40, $7f^$bf, $7b, $7a^$bf, $7b, $6b^$bf, $6b
+.byt $7f, $40, $7f, $7b, $7a^$bf, $7b, $6b^$bf, $6b
 ; Tile skool 51
-.byt $7f, $40, $7f, $7f^$bf, $5d, $4d^$bf, $65, $75^$bf
+.byt $7f, $40, $7f, $7f, $5d, $4d^$bf, $65, $75^$bf
 ; Tile skool 52
 .byt $60, $7f, $5f, $5f, $5f, $5f, $5c, $5c
 ; Tile skool 53
@@ -717,7 +734,9 @@ speech_bubble
 	.byt %01011111,$7f,$7f,$7f,$7f,$7f,$7f,%01111110
 #endif
 
+free_udg_skool2
 .dsb 256-(*&255)
+
 udg_skool3
 
 ; Tile data for Skool (cols 75-128)
@@ -795,30 +814,37 @@ udg_skool3
 .byt $7f, $75, $7f, $75, $7f, $75, $7f, $75
 ; Tile skool 34
 .byt $7f, $57, $7f, $57, $7f, $57, $7f, $57
+
+;Mapa
 ; Tile skool 35
-.byt $4b, $47, $4f, $4f, $7f, $7f, $7f, $47
+.byt $4b, $47^$bf, $4f, $4f^$bf, $7f, $7f^$bf, $7f, $47^$bf
 ; Tile skool 36
-.byt $46, $7c, $7e, $7c, $7c, $7f, $7e, $7c
+.byt $46, $7c^$bf, $7e, $7c^$bf, $7c, $7f^$bf, $7e, $7c^$bf
 ; Tile skool 37
-.byt $5f, $7f, $4f, $4f, $4e, $44, $40, $40
+.byt $5f, $7f^$bf, $4f, $4f^$bf, $4e, $44^$bf, $40, $40^$bf
 ; Tile skool 38
-.byt $60, $60, $40, $40, $40, $51, $71, $60
+.byt $60, $60^$bf, $40, $40^$bf, $40, $51^$bf, $71, $60^$bf
 ; Tile skool 39
-.byt $40, $40, $4d, $59, $73, $7f, $7f, $7f
+.byt $40^$bf, $40, $4d^$bf, $59, $73^$bf, $7f, $7f^$bf, $7f
 ; Tile skool 40
-.byt $47, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+.byt $47^$bf, $7f, $7f^$bf, $7f, $7f^$bf, $7f, $7f^$bf, $7f
+
 ; Tile skool 41
 .byt $40, $5f, $5f, $5f, $5f, $5f, $5f, $40
+
+; Mapa
 ; Tile skool 42
-.byt $43, $43, $43, $49, $40, $40, $40, $43
+.byt $43, $43^$bf, $43, $49^$bf, $40, $40^$bf, $40, $43^$bf
 ; Tile skool 43
-.byt $7c, $70, $60, $62, $60, $51, $72, $78
+.byt $7c, $70^$bf, $60, $62^$bf, $60, $51^$bf, $72, $78^$bf
+
 ; Tile skool 44
-.byt $40, $44, $4c, $46, $48, $40, $40, $40
+.byt $40^$bf, $44, $4c^$bf, $46, $48^$bf, $40, $40^$bf, $40
 ; Tile skool 45
-.byt $7f, $7f, $7f, $5e, $58, $50, $48, $47
+.byt $7f^$bf, $7f, $7f^$bf, $5e, $58^$bf, $50, $48^$bf, $47
 ; Tile skool 46
-.byt $77, $67, $62, $72, $59, $40, $40, $43
+.byt $77^$bf, $67, $62^$bf, $72, $59^$bf, $40, $40^$bf, $43
+
 ; Tile skool 47
 .byt $40, $7f, $5f, $5f, $5f, $5f, $5c, $7c
 ; Tile skool 48
@@ -827,14 +853,17 @@ udg_skool3
 .byt $40, $41, $42, $42, $42, $42, $42, $5f
 ; Tile skool 50
 .byt $43, $43, $63, $63, $63, $63, $63, $63
+
+; Mapa
 ; Tile skool 51
-.byt $47, $47, $47, $43, $43, $43, $46, $44
+.byt $47, $47^$bf, $47, $43^$bf, $43, $43^$bf, $46, $44^$bf
 ; Tile skool 52
-.byt $78, $78, $70, $70, $60, $50, $40, $40
+.byt $78, $78^$bf, $70, $70^$bf, $60, $50^$bf, $40, $40^$bf
 ; Tile skool 53
-.byt $43, $41, $41, $40, $40, $40, $40, $40
+.byt $43^$bf, $41, $41^$bf, $40, $40^$bf, $40, $40^$bf, $40
 ; Tile skool 54
-.byt $7f, $7e, $7e, $7e, $5e, $5e, $4e, $44
+.byt $7f^$bf, $7e, $7e^$bf, $7e, $5e^$bf, $5e, $4e^$bf, $44
+
 ; Tile skool 55
 .byt $40, $7f, $7f, $7f, $7f, $7f, $78, $78
 ; Tile skool 56
@@ -1171,7 +1200,9 @@ end_udg_skool3
 
 end_skool_udgs
 
+_free_udg_skool3
 .dsb 256-(*&255)
+
 speech_bubble_lip	
 	.byt $61
 	.byt $61
