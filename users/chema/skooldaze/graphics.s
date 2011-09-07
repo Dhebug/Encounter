@@ -117,12 +117,15 @@ udg_skool
 .byt $7f, $40, $7f, $7e, $4a^$bf, $4a, $4a^$bf, $4a
 ; Tile skool 42
 .byt $7f, $60, $6f, $6f, $6f, $69, $6e, $69
+
+; Libros tumbados
 ; Tile skool 43
 .byt $7f, $40, $7f, $7f, $7f, $78, $4f, $7c
 ; Tile skool 44
 .byt $7f, $40, $7f, $7f, $7f, $40, $7f, $41
 ; Tile skool 45
 .byt $7f, $40, $7f, $7f, $7f, $4b, $57, $6f
+
 ; Tile skool 46
 .byt $7f, $40, $7f, $77, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 47
@@ -149,7 +152,7 @@ udg_skool
 ; Tile skool 56
 .byt $7f, $40, $7f, $7a^$bf, $6a, $6a^$bf, $6a, $6a^$bf
 ; Tile skool 57
-.byt $7f, $40, $7f, $7b, $7b^$bf, $7b, $6b^$bf, $6b
+.byt $7f, $40, $7f, $7b, $7b, $7b, $6b^$bf, $6b
 ; Tile skool 58
 .byt $6f, $60, $6f, $6f, $69, $69, $69, $69
 ; Tile skool 59
@@ -157,7 +160,7 @@ udg_skool
 ; Tile skool 60
 .byt $7f, $40, $7f, $57, $55^$bf, $55, $55^$bf, $55
 ; Tile skool 61
-.byt $7f, $40, $7f, $7f^$bf, $49, $64^$bf, $72, $7b^$bf
+.byt $7f, $40, $7f, $7f, $49, $64^$bf, $72, $7b^$bf
 ; Tile skool 62
 .byt $7f, $40, $7f, $7f, $7c, $7c, $5c, $4c
 ; Tile skool 63
@@ -175,11 +178,11 @@ udg_skool
 ; Tile skool 69
 .byt $40, $7f, $55, $7f, $6a, $7f, $55, $7f
 ; Tile skool 70
-.byt $6f, $60, $6f^$bf, $6f, $6e^$bf, $6e, $6e^$bf, $6e
+.byt $6f, $60, $6f, $6f, $6e, $6e, $6e, $6e
 ; Tile skool 71
 .byt $7f, $40, $7f, $7f, $67, $73^$bf, $79, $7d^$bf
 ; Tile skool 72
-.byt $7f, $40, $7f, $5f, $55^$bf, $55, $55^$bf, $55
+.byt $7f, $40, $7f, $5f, $55, $55, $55, $55
 ; Tile skool 73
 .byt $62, $67, $78, $78, $77, $70, $70, $78
 ; Tile skool 74
@@ -829,8 +832,9 @@ udg_skool3
 ; Tile skool 40
 .byt $47^$bf, $7f, $7f^$bf, $7f, $7f^$bf, $7f, $7f^$bf, $7f
 
+; Ventana exterior
 ; Tile skool 41
-.byt $40, $5f, $5f, $5f, $5f, $5f, $5f, $40
+.byt $40, $5f^$bf, $5f, $5f^$bf, $5f, $5f^$bf, $5f, $40
 
 ; Mapa
 ; Tile skool 42
