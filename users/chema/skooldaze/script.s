@@ -4156,7 +4156,9 @@ chaseratmiddle
 	bcc skip2
 	lda #1
 skip2
-	cmp tmp
+	sta tmp+1
+	lda tmp
+	cmp tmp+1
 	beq entrypoint1
 	jmp entrypoint2
 .)
