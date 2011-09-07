@@ -43,9 +43,7 @@ along with the new one.
 
 - CAUTION: A pellet ending on the left side of the school is not removed (?)
 
-* When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
-
-* Teachers should have a greater range of vision (tile size)
+- When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
 
 - Sometimes the blackboard is flagged as clean when it is not (teachers or BW write on it)
 
