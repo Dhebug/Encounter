@@ -41,6 +41,14 @@ along with the new one.
 
 * Teachers should have a greater range of vision (tile size)
 
+* Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
+
+* Why are there two red bands on the name and title of the character when changing names (some times)? The inverse
+bit is not unset in all the buffer?
+
+* Once it happened that the teacher started wiping the blackboard facing righ, which made him walk right and passed
+beyond the reading room wall...
+
 - CAUTION: A pellet ending on the left side of the school is not removed (?)
 
 - When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
