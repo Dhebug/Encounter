@@ -226,6 +226,17 @@ finish
 .)
 
 
+rsp_bubble
+.(
+	; It got out of sight, terminate the subcommand for the
+	; speaker and remove the speech bubble
+	jsr remove_speech_bubble	
+	ldx cur_speaking_char
+	lda #0
+	sta i_subcom_high,x
+	jmp render_screen
+.)
+
 _scroll_right
 .(
 	lda #5	; Scroll 9 columns
@@ -254,14 +265,7 @@ doit
 	iny
 	cpy #LAST_VIS_COL-7
 	bcc cont
-+rsp_bubble
-	; It got out of sight, terminate the subcommand for the
-	; speaker and remove the speech bubble
-	jsr remove_speech_bubble	
-	ldx cur_speaking_char
-	lda #0
-	sta i_subcom_high,x
-	jsr render_screen
+	jsr rsp_bubble
 	jmp skipbubble
 cont
 	sty bubble_col
@@ -379,7 +383,8 @@ doit
 	cpy #FIRST_VIS_COL
 	;bcs cont
 	bpl cont
-	jmp rsp_bubble ; It got out of sight
+	jsr rsp_bubble ; It got out of sight
+	jmp skipbubble
 cont
 	sty bubble_col
 	lda bubble_loc_p

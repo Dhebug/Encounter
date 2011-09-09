@@ -130,8 +130,11 @@ character's buffer:
 #define PLAYTIME4				249
 #define PLAYTIME5				250
 #define PLAYTIME6				251
-#define PLAYTIME7S				252	; (little boys stampede) 
-#define PLAYTIME8S				253	; (little boys stampede) 
+
+; (little boys stampede) 
+#define PLAYTIME7S				252	
+#define PLAYTIME8S				253	
+
 #define PLAYTIME9				254
 #define PLAYTIME10				255
 

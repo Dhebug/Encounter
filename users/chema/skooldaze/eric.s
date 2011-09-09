@@ -227,12 +227,12 @@ doit
 	; Is Eric facing left?
 	lda flags  ;,x
 	and #IS_FACING_RIGHT
-	bne facingright
+	bne doit2	;facingright
 	; If so turn him round
 	jmp change_direction
-facingright
+/*facingright
 	; Move him up a stair
-	jmp up_a_stair
+	jmp up_a_stair*/
 left
 	; His is at a left staircase
 	; Is Eric facing left?

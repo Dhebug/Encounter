@@ -87,7 +87,7 @@
 ;#define FULLTABLEMUL8
 
 ;; Avoid Oricutron's bug with ror addr,x
-#define AVOID_ORICUTRON_BUG
+//#define AVOID_ORICUTRON_BUG
 
 ;; Inverse things to get white bubbles
 #define WHITE_BUBBLES
@@ -197,30 +197,31 @@
 ;; Stairs
 
 ; The bottom and top cols are all equal
-#define STAIRLBOTTOM		24
+#define STAIRLBOTTOM		24+1
 #define STAIRLTOP			STAIRLBOTTOM-7
-#define STAIRRBOTTOM		96
+#define STAIRRBOTTOM		96-1
 #define STAIRRTOP			STAIRRBOTTOM+7
 
 
 ; Position of chairs
 ; Reading room
-#define CH_READR			74	;76-2-2
-#define CH_READL			62	;64-2
+
+#define CH_READR			74	
+#define CH_READL			62	
 
 ; Map room
-#define CH_MAPR				96	;96-2
-#define CH_MAPL				84	;86-2
+#define CH_MAPR				96	
+#define CH_MAPL				84	
 
 ; White room
-#define CH_WHITER			50	;52-2-2
-#define CH_WHITEL			38	;38-2
+#define CH_WHITER			50	
+#define CH_WHITEL			38	
 
 ; Exam room
-#define CH_EXAMAR			87	;92-2
-#define CH_EXAMAL			75	;80-2
-#define CH_EXAMBR			70	;72-2
-#define CH_EXAMBL			58	;58-2
+#define CH_EXAMAR			87	
+#define CH_EXAMAL			75	
+#define CH_EXAMBR			70	
+#define CH_EXAMBL			58	
 
 ; Position of blackboards
 #define COL_EXAM_BOARD		55
