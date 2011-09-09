@@ -114,8 +114,8 @@ loop
 
 set_hires
 .(
-	;lda #30
-	lda $f934
+	lda #30
+	;lda $f934
 	sta $bfdf
 	
 	lda #A_BGBLACK 
@@ -827,7 +827,7 @@ cont
 	cmp #254	; Second playtime in a row
 	bcs nobell
 	; Ring the bell
-	jsr _ping
+	;jsr _ping
 nobell
 
 	; Clear all game flags & other matters
@@ -958,6 +958,7 @@ printit2
 change_names
 .(
 	jsr clr_hires
+	jsr uncolor_box
 
 	lda #A_BGCYAN
 	sta smc_paper_2+1

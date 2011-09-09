@@ -20,34 +20,35 @@ along with the new one.
 
 * It is sometimes difficult to fire a pellet
 
-* Does Boy Wander's pellet bounce?
-
 * Pellets sometimes do not hit teachers?
 
 * Exam room not visible completely
-
-* Mr Withit in the reading room walks outside the right side
 
 * It is a bit strange that the teacher writes someting, then
   starts asking unrelated questions.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Eric is flagged as inside the exam room when he is just near the entrance
-
 * Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids.
-
-* When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
 
 * Teachers should have a greater range of vision (tile size)
 
 * Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
 
-* Why are there two red bands on the name and title of the character when changing names (some times)? The inverse
-bit is not unset in all the buffer?
 
-* Once it happened that the teacher started wiping the blackboard facing righ, which made him walk right and passed
+- Mr Withit in the reading room walks outside the right side
+
+- Does Boy Wander's pellet bounce?
+
+- Once it happened that the teacher started wiping the blackboard facing righ, which made him walk right and passed
 beyond the reading room wall...
+
+- Eric is flagged as inside the exam room when he is just near the entrance
+
+- When looking for absent Eric Mr Withit goes from Map room to reading room, using the middle floor and trespassing the middle wall.
+
+- Why are there two red bands on the name and title of the character when changing names (some times)? The inverse
+bit is not unset in all the buffer?
 
 - CAUTION: A pellet ending on the left side of the school is not removed (?)
 

@@ -341,7 +341,7 @@ facing_right
 	cmp #WALLTOPFLOOR
 	bcs rmp
 
-	cmp #CH_READR
+	cmp #CH_READR-3
 ppp2
 	clc
 	beq noret
@@ -352,7 +352,7 @@ noret
 	sec
 	rts
 rmp
-	cmp #CH_MAPR
+	cmp #CH_MAPR-3
 	jmp ppp2
 
 middle_floor
@@ -1049,7 +1049,7 @@ s_class_no_Eric
 	cmp #WALLTOPFLOOR
 	bcs page_in_book
 
-	jsr get_blackboard
+	;jsr get_blackboard
 .(
 	; Use call_subcommand to hand control
 	; over the s_isc_wipe1 routine
@@ -2644,6 +2644,11 @@ victimok
 
 	cmp #5
 	bne noteacher
+
+	; Unless it is Bow Wander's pellet
+	cpx #CHAR_BPELLET
+	beq skip
+
 	
 	; Put the uninterruptible command to make the pellet
 	; travel upwards
@@ -3391,14 +3396,8 @@ correct
 
 +down_a_stair
 	lda anim_state,x
-	cpx #0	; Are we dealing with Eric?
-	bne noteric
 	ror 
 	bcs onlystep
-	bcc step_and_up
-noteric
-	ror
-	bcc onlystep
 step_and_up
 	jsr update_SRB_sp
 	inc pos_row,x	
@@ -3632,6 +3631,13 @@ rise_arm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_isc_wipe1
 .(
+	; Make sure the teacher is facing left
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq heis
+	jsr change_direction
+heis
+
 	jsr get_blackboard
 .)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3639,14 +3645,6 @@ s_isc_wipe1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_isc_wipe2
 .(
-/*
-	; Check if the board is clean
-	ldy #4
-	lda (tmp3),y
-	bpl cont
-	jmp terminate_subcommand	; If it is $ff then terminate
-cont
-*/
 	; Set the address if the command to after_prepare, once
 	; this initialization has been done
 	lda #<after_prepare
