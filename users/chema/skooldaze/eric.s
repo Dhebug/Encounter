@@ -432,12 +432,17 @@ cont
 
 jump_Eric
 .(
+	lda Eric_flags
+	bpl cont
+cannot
+	; Eric is lying down or sitting
+	rts
+cont
+
 	ldx #0
 	jsr is_on_staircase
-	beq doit
-	; Eric cannot jump when on a staircase
-	rts
-doit
+	bne cannot ; Eric cannot jump when on a staircase
+
 	jsr update_SRB_sp
 	dec pos_row
 

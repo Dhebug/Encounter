@@ -69,9 +69,7 @@ s_make_char_speak
 	sta cur_command_high,x
 
 	lda #<s_isc_speak1
-	sta tmp0
-	lda #>s_isc_speak1
-	sta tmp0+1
+	ldy #>s_isc_speak1
 	jmp call_subcommand 
 .)
 
@@ -383,6 +381,9 @@ notyet
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 call_subcommand
 .(
+	sta tmp0
+	sty tmp0+1
+
 	; Get the return address...
 	pla	; get LSB
 	sta tmp
@@ -1055,9 +1056,7 @@ s_class_no_Eric
 	; over the s_isc_wipe1 routine
 
 	lda #<s_isc_wipe1
-	sta tmp0
-	lda #>s_isc_wipe1
-	sta tmp0+1
+	ldy #>s_isc_wipe1
 	jsr call_subcommand
 
 	; Make the teacher walk to the middle of the blackboard
@@ -1069,9 +1068,7 @@ s_class_no_Eric
 	sta var3,x	
 	sta var4,x		; This ensures control does not come here before he reaches the destination
 	lda #<s_isc_int_dest
-	sta tmp0
-	lda #>s_isc_int_dest
-	sta tmp0+1
+	ldy #>s_isc_int_dest
 	jsr call_subcommand
 .)
 	; Randomly make the teacher ask the kids to write an
@@ -1082,9 +1079,7 @@ s_class_no_Eric
 	bcs page_in_book
 
 	lda #<s_isc_write
-	sta tmp0
-	lda #>s_isc_write
-	sta tmp0+1
+	ldy #>s_isc_write
 	jsr call_subcommand
 	
 	lda #<st_write_essay
@@ -1105,9 +1100,7 @@ teacher_waits
 	; And var4???
 
 	lda #<s_isc_int_dest
-	sta tmp0
-	lda #>s_isc_int_dest
-	sta tmp0+1
+	ldy #>s_isc_int_dest
 	jsr call_subcommand
 
 	; Jump back again. The command is terminated
@@ -1318,15 +1311,11 @@ noblackboard
 	; With EINSTEIN's tales now safely told, it's 
 	; time to wipe the blackboard.
 
-	;jsr get_blackboard
-
 	; Use call_subcommand to hand control
 	; over the s_isc_wipe1 routine
 
 	lda #<s_isc_wipe1
-	sta tmp0
-	lda #>s_isc_wipe1
-	sta tmp0+1
+	ldy #>s_isc_wipe1
 	jsr call_subcommand
 
 	; Make the teacher walk to the middle of the blackboard
@@ -1338,9 +1327,7 @@ noblackboard
 	sta var3,x	
 	sta var4,x		; This ensures control does not come here before he reaches the destination
 	lda #<s_isc_int_dest
-	sta tmp0
-	lda #>s_isc_int_dest
-	sta tmp0+1
+	ldy #>s_isc_int_dest
 	jsr call_subcommand
 
 	; Control returns here when the teacher has 
@@ -1352,9 +1339,7 @@ noblackboard
 	cmp #180
 	bcs no_essay
 	lda #<s_isc_write
-	sta tmp0
-	lda #>s_isc_write
-	sta tmp0+1
+	ldy #>s_isc_write
 	jsr call_subcommand
 
 	; Should the teacher tell the kids to write an essay?
@@ -1395,9 +1380,7 @@ cont
 	; And var4???
 
 	lda #<s_isc_int_dest
-	sta tmp0
-	lda #>s_isc_int_dest
-	sta tmp0+1
+	ldy #>s_isc_int_dest
 	jsr call_subcommand
 
 	; Jump back again. The command is terminated
@@ -1431,9 +1414,7 @@ Ericstillin
 	; ERIC is in class, so fire off a question and answer.
 	jsr s_prepare_question
 	lda #<s_isc_speak1
-	sta tmp0
-	lda #>s_isc_speak1
-	sta tmp0+1
+	ldy #>s_isc_speak1
 	jsr call_subcommand 
 
 	; Control returns here when the teacher has finished asking the question.
