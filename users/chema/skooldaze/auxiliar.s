@@ -32,7 +32,7 @@ _GenerateTables
 
 	ldx #0
 loop
-	; generate two bytes screen adress
+	; generate two bytes screen address
 	clc
 	lda tmp0+0
 	sta _HiresAddrLow,x
@@ -140,6 +140,19 @@ _m8_loop
 _m8_deccnt
 	dex
 	bne _m8_loop
+	rts
+.)
+
+; Adds 40 to tmp
+add40tmp
+.(
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
 	rts
 .)
 

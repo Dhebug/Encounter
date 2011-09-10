@@ -112,13 +112,7 @@ loop_col
 	ora pat
 	sta (tmp),y
 noprint1
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry
-	inc tmp+1
-nocarry
+	jsr add40tmp
 	dex
 	bne loop_col
  
@@ -350,13 +344,7 @@ loop
 	bcc nocarry1
 	inc loop+2
 nocarry1
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry2
-	inc tmp+1
-nocarry2
+	jsr add40tmp
 	jmp loopr
 endl
 .)
@@ -402,13 +390,9 @@ loop
 	cpx #7 
 	beq endl
 	inx
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry2
-	inc tmp+1
-nocarry2
+
+	jsr add40tmp
+
 	jmp loop
 endl
 

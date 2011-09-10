@@ -59,27 +59,6 @@ tmp		.dsb 2
 
 _main
 .(
-	//jsr _hires
-	//paper(6);ink(0);
-/*
-	lda #30
-	;lda $f934
-	sta $bfdf
-
-	lda #6
-	ldy #0        
-    sty $2e0
-	sta $2e1
-	sty $2e2
-	jsr $f204      ;paper
-	
-	ldy #0 
-	sty $2e0
-	sty $2e1
-	sty $2e2
-	jsr $f210      ;ink
-*/
-
 	jsr set_hires
 	jsr _GenerateTables 
 	jsr _init_irq_routine 
@@ -87,27 +66,10 @@ _main
 	jsr wait
 	jsr clr_hires
 
-/*	lda #A_BGCYAN
-	sta smc_ink_1+1
-	lda #A_BGGREEN
-	sta smc_ink_2+1
-	jsr set_ink2
-*/
-
 +restart_game
 	; Set demo mode
 	jsr set_demo_mode
-
 	jsr _init
-
-/*
-	lda #100
-	sta tmp+1
-loop
-	jsr set_border
-	dec tmp+1
-	bne loop
-*/
 	jmp _test_loop
 .)
 
@@ -148,13 +110,7 @@ loop
 	lda #A_BGCYAN
 	sta (tmp),y
 */
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry
-	inc tmp+1
-nocarry
+	jsr add40tmp
 	dex
 	bne loop2
 end
@@ -476,7 +432,6 @@ loopsrb2
 	*/
 	jsr clr_hires
 	jsr set_ink2 
-	;jsr render_screen
 
 	/*
 	lda #A_BGCYAN
@@ -635,7 +590,7 @@ play_mode
 nowritting
 	; Do we have to move Eric to the midstride position?
 	; Is Eric not midstride?
-	lda anim_state
+	;lda anim_state
 	cmp #4
 	bcs nomidstride
 	lsr
@@ -1282,6 +1237,8 @@ loop_read
 	beq end
 	cmp #$08	; delete?
 	bne nodel
+	cmp #32		; not an alphanumeric character?
+	bcc end
 	cpy #0
 	beq loop_read
 	dey

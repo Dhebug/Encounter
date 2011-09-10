@@ -55,7 +55,8 @@ _init_irq_routine
         ;setup, we need not worry about ensuring one irq event and/or right 
         ;timer period, only redirecting irq vector to our own irq handler. 
         sei
-
+	
+/*
 		; Setup DDRA, DDRB and ACR
         lda #%11111111
         sta via_ddra
@@ -63,11 +64,27 @@ _init_irq_routine
 		sta via_ddrb
 		lda #%1000000
 		sta via_acr
+*/
 
+#ifdef ROM
+		; To be Oric-1 compatible, get the
+		; page 2 vector
+		lda $fffe
+		sta tmp
+		lda $ffff
+		sta tmp+1
+		ldy #1
         lda #<irq_routine 
-        sta IRQ_ADDRLO
+		sta (tmp),y
+		iny
         lda #>irq_routine 
-        sta IRQ_ADDRHI
+		sta (tmp),y
+#else
+        lda #<irq_routine 
+        sta $fffe
+        lda #>irq_routine 
+        sta $ffff
+#endif
 
 		lda #<9984*2
 		sta via_t1ll 
