@@ -592,7 +592,10 @@ loops
 	bne loops
 
 	; Initialize the lesson
-	lda #$ff
+	lda current_lesson_index
+	and #48
+	clc
+	adc #15
 	sta current_lesson_index
 
 	lda #<(LESCLK_VAL)
