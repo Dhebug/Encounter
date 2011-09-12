@@ -118,6 +118,22 @@ creak_year		; Year of the birth of Mr Creak
 birthyear_id	; Identifier to the question of the year
 	.byt 0
 
+; Keymap table
+user_keys 
+	.byt	 1, 2, 3, 4
+	.byt	"S", "H", "F", "W", "J"
+key_routh
+    .byt >(up_Eric), >(left_Eric), >(down_Eric), >(right_Eric)
+	.byt >(sit_Eric), >(hit_Eric), >(fire_Eric), >(write_Eric)
+	.byt >(jump_Eric)
+key_routl
+	.byt <(up_Eric), <(left_Eric), <(down_Eric), <(right_Eric)
+    .byt <(sit_Eric), <(hit_Eric), <(fire_Eric), <(write_Eric)
+	.byt <(jump_Eric)
+
+; Used in special playtimes to patch the command list (see change_lesson)
+tab_patchcomm
+	.byt SC_TELLANGELFACE, SC_TELLEINSTEIN, SC_TELLBOYWANDER
 
 #define LAST_TILE 100
 

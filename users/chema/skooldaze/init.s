@@ -675,18 +675,6 @@ loop
 .)
 
 #define NUM_KEYS 9
-; Keymap table
-user_keys 
-	.byt	 1, 2, 3, 4
-	.byt	"S", "H", "F", "W", "J"
-key_routh
-    .byt >(up_Eric), >(left_Eric), >(down_Eric), >(right_Eric)
-	.byt >(sit_Eric), >(hit_Eric), >(fire_Eric), >(write_Eric)
-	.byt >(jump_Eric)
-key_routl
-	.byt <(up_Eric), <(left_Eric), <(down_Eric), <(right_Eric)
-    .byt <(sit_Eric), <(hit_Eric), <(fire_Eric), <(write_Eric)
-	.byt <(jump_Eric)
 
 process_user_input
 .(
@@ -724,8 +712,7 @@ _smc_routine
 
 .)
 
-tab_patchcomm
-	.byt SC_TELLANGELFACE, SC_TELLEINSTEIN, SC_TELLBOYWANDER
+
 
 ;; Change the current lesson
 change_lesson
@@ -946,9 +933,9 @@ start_catwalk
 	sta smc_paper_2+1
 
 	; Print "CAST OF CHARACTERS"
-	lda #<$a000+40*4+13-1
+	lda #<$a000+40*4+13
 	sta tmp0
-	lda #>$a000+40*4+13-1
+	lda #>$a000+40*4+13
 	sta tmp0+1
 	lda #<st_castof
 	ldy #>st_castof
@@ -1109,9 +1096,10 @@ noteacher2
 	jsr write_text_down
 
 +dump_title
-	lda #<$a000+40*20+14
-	sta tmp1
+	ldy #<$a000+40*20+14
 	lda #>$a000+40*20+14
++do_dump
+	sty tmp1
 	sta tmp1+1
 	jmp dump_text_buffer
 .)
@@ -1149,11 +1137,9 @@ bottomline
 	jsr write_text_down
 
 +dump_title2
-	lda #<$a000+40*78+14
-	sta tmp1
+	ldy #<$a000+40*78+14
 	lda #>$a000+40*78+14
-	sta tmp1+1
-	jmp dump_text_buffer
+	jmp do_dump
 .)
 
 
@@ -1175,9 +1161,9 @@ clear_name
 change_name
 .(
 	; Print Print 'C' to change name
-	lda #<ADDR_LINE+11-1
+	lda #<ADDR_LINE+11
 	sta tmp0
-	lda #>ADDR_LINE+11-1
+	lda #>ADDR_LINE+11
 	sta tmp0+1
 	lda #<st_pressc
 	ldy #>st_pressc
