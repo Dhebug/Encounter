@@ -931,7 +931,6 @@ looprk
 	cmp #"Y"
 	beq start_catwalk
 	cmp #"N"
-	beq end
 	bne looprk
 end
 	lda #A_BGYELLOW
@@ -947,9 +946,9 @@ start_catwalk
 	sta smc_paper_2+1
 
 	; Print "CAST OF CHARACTERS"
-	lda #<$a000+40*4+13
+	lda #<$a000+40*4+13-1
 	sta tmp0
-	lda #>$a000+40*4+13
+	lda #>$a000+40*4+13-1
 	sta tmp0+1
 	lda #<st_castof
 	ldy #>st_castof
@@ -1176,9 +1175,9 @@ clear_name
 change_name
 .(
 	; Print Print 'C' to change name
-	lda #<ADDR_LINE+11
+	lda #<ADDR_LINE+11-1
 	sta tmp0
-	lda #>ADDR_LINE+11
+	lda #>ADDR_LINE+11-1
 	sta tmp0+1
 	lda #<st_pressc
 	ldy #>st_pressc

@@ -15,6 +15,19 @@
 #include "params.h"
 
 
+; Adds 40 to tmp
+add40tmp
+.(
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+	rts
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Searches for a string. tmp0 holds pointer
 ;; to base and A holds offset (in strings).

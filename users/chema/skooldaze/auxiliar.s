@@ -143,18 +143,7 @@ _m8_deccnt
 	rts
 .)
 
-; Adds 40 to tmp
-add40tmp
-.(
-	lda tmp
-	clc
-	adc #40
-	sta tmp
-	bcc nocarry
-	inc tmp+1
-nocarry
-	rts
-.)
+
 
 /*
 
