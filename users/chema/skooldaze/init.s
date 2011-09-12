@@ -67,12 +67,148 @@ _main
 	jsr clr_hires
 
 +restart_game
+	;jsr InitSound
+	;jsr sfx_shield_hit
+
 	; Set demo mode
 	jsr set_demo_mode
 	jsr _init
 	jmp _test_loop
 .)
 
+/*
+; Routine for dumping registers to AY
+
+#define ayc_Register $FF
+#define ayc_Write    $FD
+#define ayc_Read	 $FE
+#define ayc_Inactive $DD
+     
+#define via_pcr      $030C
+#define via_porta    $030F    
+
+
+#define AY_AToneLSB		0
+#define AY_AToneMSB		1
+#define AY_BToneLSB		2
+#define AY_BToneMSB		3
+#define AY_CToneLSB		4
+#define AY_CToneMSB		5
+#define AY_Noise		6
+#define AY_Status		7
+#define AY_AAmplitude	8
+#define AY_BAmplitude	9
+#define AY_CAmplitude	10
+#define AY_EnvelopeLSB	11
+#define AY_EnvelopeMSB	12
+#define AY_EnvelopeCy	13
+
+silence_sfx .byt 0
+
+; Needs X and Y with the low and high bytes of the
+; table with register values
+AYRegDump
+.(
+	lda silence_sfx
+	beq dosfx
+	rts
+dosfx
+	sei
+	stx loop+1
+	sty loop+2
+
+    LDX #13
+loop 
+	LDA $dead,X
+	cpx #13
+	beq skip2
+    CMP ReferenceBlock,X
+    BEQ skip
+skip2
+    STA ReferenceBlock,X
+    STX via_porta
+    LDY #ayc_Register
+    STY via_pcr
+    LDY #ayc_Inactive
+    STY via_pcr
+    STA via_porta  
+    LDA #ayc_Write
+    STA via_pcr
+    STY via_pcr
+skip
+	DEX
+    BPL loop
+	
+	cli
+    RTS
+.)
+		 
+
+ReferenceBlock
+	.dsb 14,128
+
+InitSound
+SndStop
+.(
+	sei
+
+    LDX #13
+loop 
+	LDA #128
+    STA ReferenceBlock,X
+	cpx #7
+	bne not7
+	lda #$40
+	.byt $2c
+not7
+	lda #0
+    STX via_porta
+    LDY #ayc_Register
+    STY via_pcr
+    LDY #ayc_Inactive
+    STY via_pcr
+    STA via_porta  
+    LDA #ayc_Write
+    STA via_pcr
+    STY via_pcr
+skip
+	DEX
+    BPL loop
+	
+	cli
+    RTS
+.)
+
+
+
+sfx_shield_hit
+.(
+	lda #16
+	sta tmp
+loop
+	jsr SndBell1
+	ldy #$ff
+loop2
+	dey
+	bne loop2
+	dec tmp
+	bne loop
+	rts
+.)
+
+
+SndBell1
+.(
+  	ldx #<bell
+	ldy #>bell
+	jmp AYRegDump
+bell
+	; POOONG
+	;.byt 0,1+5,0,2+5,0,1+5,0,$78,$10,$10,$10,0,$a,0
+	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
+.)
+
+*/
 
 set_hires
 .(
