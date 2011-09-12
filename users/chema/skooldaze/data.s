@@ -111,25 +111,11 @@ SRB
 
 .text
 
-; Locations for goto random location script
-tab_locs
-	.byt D_LIBRARY
-	.byt D_FIRE_ESCAPE
-	.byt D_GYM
-	.byt D_BIG_WINDOW
-
-; Probabilities (out of 256) that a teacher
-; punishes Einistein for telling tales
-tab_teachertales
-	.byt 48,16,0,16
-
-tab_safecodes
-	.dsb 4		; The safe combination letters for the teachers:
 
 creak_year		; Year of the birth of Mr Creak
 	.asc "0000"
 	.byt 0
-birthyear_id	; Identifier to the question of that year
+birthyear_id	; Identifier to the question of the year
 	.byt 0
 
 
@@ -216,8 +202,6 @@ i_subcom_high
 cont_subcom_low
 	.dsb MAX_CHARACTERS,0
 
-; For the keyboard routine
-KeyBank .dsb 8
 
 free_r2
 .dsb (256-32)-(*&255)
@@ -1849,16 +1833,113 @@ tab_div5
 	.byt 20
 	.byt 20
 
+tab_mod5
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
+	.byt 0
+	.byt 8
+	.byt 16
+	.byt 24
+	.byt 32
 	
-tab_bit8
-	.byt %10000000
-	.byt %01000000
-	.byt %00100000
-	.byt %00010000
-	.byt %00001000
-	.byt %00000100
-	.byt %00000010
-	.byt %00000001
 
 ;.dsb 256-(*&255)
 .bss
@@ -1866,11 +1947,34 @@ tab_bit8
 _HiresAddrLow           .dsb 240
 
 .text
+;;;;;; Main timetable (see script.h)
+main_timetable
+	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
+	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
+	.byt CREAK_READINGROOM,WACKER_EXAMROOM , ROCKITT_WHITEROOM
+	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
+	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
+	.byt WITHIT_WHITEROOM, REV_LIBRARY1, PLAYTIME4, ROCKITT_WHITEROOM
+	.byt PLAYTIME5, WACKER_WHITEROOM, PLAYTIME6, WACKER_READINGROOM
+	.byt CREAK_WHITEROOM, PLAYTIME3, PLAYTIME10, ROCKITT_READINGROOM
+	.byt WACKER_MAPROOM, PLAYTIME5, DINNER_WACKER, PLAYTIME8S
+	.byt CREAK_READINGROOM, ROCKITT_EXAMROOM, REV_LIBRARY2, PLAYTIME1
+	.byt WITHIT_WHITEROOM, ROCKITT_READINGROOM, PLAYTIME4, WITHIT_WHITEROOM
+	.byt ROCKITT_EXAMROOM, PLAYTIME4, WITHIT_MAPROOM, REV_LIBRARY3
+	.byt CREAK_WHITEROOM, PLAYTIME6, CREAK_READINGROOM, ROCKITT_WHITEROOM
+	.byt PLAYTIME2, DINNER_WITHIT, PLAYTIME1, PLAYTIME10, ROCKITT_WHITEROOM
+	.byt WACKER_EXAMROOM, PLAYTIME5, REV_LIBRARY1, WITHIT_MAPROOM
+	.byt PLAYTIME3, WITHIT_MAPROOM, WACKER_READINGROOM, PLAYTIME5, PLAYTIME9
+	.byt ROCKITT_WHITEROOM, CREAK_READINGROOM2, PLAYTIME2, DINNER_WACKER
+	.byt PLAYTIME7S,PLAYTIME9, WACKER_EXAMROOM, REV_LIBRARY2
+	.byt PLAYTIME4, WITHIT_WHITEROOM, WACKER_MAPROOM
 
-.dsb 256-(*&255)
+
+;.dsb 256-(*&255)
 _HiresAddrHigh          .dsb 200
 
-.dsb 256-(*&255)
+
+;.dsb 256-(*&255)
 #ifdef FULLTABLEMUL8
 tab_mul8hi
 	.byt 0
@@ -2389,139 +2493,6 @@ tab_mul8
 	.byt 240
 	.byt 248
 #endif
-
-tab_mod5
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	.byt 0
-	.byt 8
-	.byt 16
-	.byt 24
-	.byt 32
-	
-
-
-
-
-;;;;;; Main timetable (see script.h)
-main_timetable
-	;.byt PLAYTIME1, WACKER_EXAMROOM, WITHIT_MAPROOM 
-	;.byt WITHIT_MAPROOM , WACKER_EXAMROOM , ROCKITT_WHITEROOM
-	.byt CREAK_READINGROOM,WACKER_EXAMROOM , ROCKITT_WHITEROOM
-	.byt PLAYTIME2, ROCKITT_WHITEROOM, CREAK_READINGROOM
-	.byt PLAYTIME3, DINNER_WITHIT, PLAYTIME7S, PLAYTIME9
-	.byt WITHIT_WHITEROOM, REV_LIBRARY1, PLAYTIME4, ROCKITT_WHITEROOM
-	.byt PLAYTIME5, WACKER_WHITEROOM, PLAYTIME6, WACKER_READINGROOM
-	.byt CREAK_WHITEROOM, PLAYTIME3, PLAYTIME10, ROCKITT_READINGROOM
-	.byt WACKER_MAPROOM, PLAYTIME5, DINNER_WACKER, PLAYTIME8S
-	.byt CREAK_READINGROOM, ROCKITT_EXAMROOM, REV_LIBRARY2, PLAYTIME1
-	.byt WITHIT_WHITEROOM, ROCKITT_READINGROOM, PLAYTIME4, WITHIT_WHITEROOM
-	.byt ROCKITT_EXAMROOM, PLAYTIME4, WITHIT_MAPROOM, REV_LIBRARY3
-	.byt CREAK_WHITEROOM, PLAYTIME6, CREAK_READINGROOM, ROCKITT_WHITEROOM
-	.byt PLAYTIME2, DINNER_WITHIT, PLAYTIME1, PLAYTIME10, ROCKITT_WHITEROOM
-	.byt WACKER_EXAMROOM, PLAYTIME5, REV_LIBRARY1, WITHIT_MAPROOM
-	.byt PLAYTIME3, WITHIT_MAPROOM, WACKER_READINGROOM, PLAYTIME5, PLAYTIME9
-	.byt ROCKITT_WHITEROOM, CREAK_READINGROOM2, PLAYTIME2, DINNER_WACKER
-	.byt PLAYTIME7S,PLAYTIME9, WACKER_EXAMROOM, REV_LIBRARY2
-	.byt PLAYTIME4, WITHIT_WHITEROOM, WACKER_MAPROOM
 
 	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

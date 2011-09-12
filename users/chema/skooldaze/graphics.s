@@ -12,6 +12,7 @@
 ;; Graphics
 ;; --------------------
 
+#include "script.h"	; For destination D_ defines
 
 ; tile graphics for skool data
 free_before_udgs
@@ -1730,7 +1731,16 @@ children_tiles
 end_children_tiles
 
 .dsb 256-(*&255)
-.dsb 8
+tab_bit8
+	.byt %10000000
+	.byt %01000000
+	.byt %00100000
+	.byt %00010000
+	.byt %00001000
+	.byt %00000100
+	.byt %00000010
+	.byt %00000001
+
 children_masks
 ; Tile mask 1
 .byt $70, $60, $60, $70, $70, $70, $78, $70
@@ -2243,7 +2253,14 @@ children_masks
 end_children_masks
 
 .dsb 256-(*&255)
-.dsb 8
+; Locations for goto random location script
+tab_locs
+	.byt D_LIBRARY
+	.byt D_FIRE_ESCAPE
+	.byt D_GYM
+	.byt D_BIG_WINDOW
+
+
 ; teachers, group 1
 teacher_tiles 
 ; Tile graphic 1
@@ -2733,7 +2750,15 @@ teacher_tiles
 end_teacher_tiles
 
 .dsb 256-(*&255)
-.dsb 8
+
+; Probabilities (out of 256) that a teacher
+; punishes Einistein for telling tales
+tab_teachertales
+	.byt 48,16,0,16
+
+tab_safecodes
+	.dsb 4		; The safe combination letters for the teachers:
+
 teacher_masks
 ; Tile mask 1
 .byt $7e, $7c, $78, $70, $70, $70, $78, $78
@@ -3222,7 +3247,10 @@ teacher_masks
 end_teacher_masks
 
 .dsb 256-(*&255)
-.dsb 8
+
+; For the keyboard routine
+KeyBank .dsb 8
+
 teacher2_tiles
 ; Tile graphic 1
 .byt $0, $1, $0, $1, $1, $1, $1, $0
