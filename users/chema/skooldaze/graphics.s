@@ -689,6 +689,20 @@ udg_skool2
 ; Tile skool 100
 .byt $4b, $6b, $6b, $6f, $6f, $6f, $7f, $7f
 
+; Added tiles with repeated shields
+; Escudos
+; Tile skool 101
+.byt $40, $7f, $6f^$bf, $67, $63^$bf, $61, $52, $4c
+; Tile skool 102
+.byt $40, $7f^$bf, $79, $79, $67^$bf, $67, $56^$bf, $4c
+; Tile skool 103
+.byt $40, $7f^$bf, $4f^$bf, $67^$bf, $73^$bf, $79^$bf, $5e^$bf, $4c
+; Tile skool 104
+.byt $40, $7f^$bf, $6f^$bf, $67^$bf, $63^$bf, $61^$bf, $52^$bf, $4c^$bf
+;Tile skool 105
+.byt $40, $7f, $4f^$bf, $67, $73, $79^$bf, $5e, $4c
+
+
 ; For the blackboards we need
 board_read
 	.dsb 11*2*8, %01111111
@@ -1201,6 +1215,16 @@ udg_skool3
 .byt $40, $40, $40, $7c, $7f, $7f, $7f, $7f
 ; Tile skool 217
 .byt $41, $41, $41, $41, $71, $7f, $7f, $7f
+
+
+; Added shields which were repeated
+;Escudo
+; Tile skool 218
+.byt $40, $7f^$bf, $79, $79^$bf, $67, $67^$bf, $56, $4c
+; Tile skool 219
+.byt $40, $7f, $79^$bf, $79^$bf, $67^$bf, $67^$bf, $56^$bf, $4c
+
+
 end_udg_skool3
 
 end_skool_udgs
