@@ -823,5 +823,35 @@ savy
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Inverts the shield of ID passed
+; in reg Y
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+invert_shield
+.(
+	lda tab_sh_udgh,y
+	sta tmp+1
+	lda tab_sh_udgl,y
+	sta tmp
+
+	; Invert it
+.(
+	ldy #7
+loopi
+	lda (tmp),y
+	pha
+	dey
+	bpl loopi
+
+	ldy #7
+loopi2
+	pla
+	sta (tmp),y
+	dey
+	bpl loopi2
+.)
+	rts
+.)
+
 
 

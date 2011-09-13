@@ -538,6 +538,26 @@ loop
 	dex
 	bpl loopbb
 .)
+	; Unflash all shields
+	lda #0
+	sta flashed_shields
+
+	ldy #14
+.(
+loop
+	lda tab_sh_status,y
+	beq skip
+	lda #0
+	sta tab_sh_status,y
+	sty savy+1
+	jsr invert_shield
+savy
+	ldy #0
+skip
+	dey
+	bpl loop
+.)
+
 	; Initialize SRB
 
 	ldx #(21*5-1)
@@ -1197,8 +1217,6 @@ wl	dex
 	rts
 .)
 
-table_teacher_order
-	.byt 3,0,1,2
 
 print_title
 .(
