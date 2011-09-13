@@ -2482,40 +2482,6 @@ s_usc_bfire5
 	jmp update_animstate
 .)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Control the vertical flight of a catapult pellet
-;; Controls the pellet from the beginning of its vertical 
-;; flight to the end, including any collision with a shield. 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-s_usc_pelletv
-.(
-	; Get y coord of the pellet
-	lda pos_row,x
-
-	; Has the pellet hit the ceiling of the top floor
-	; (is this really necessary?)
-	beq terminate_pellet
-
-	; Has it finished travelling?
-	dec var7,x
-	beq terminate_pellet
-
-	; Move it up
-	jsr update_SRB_sp
-	dec pos_row,x
-	jsr update_SRB_sp
-
-	; TODO
-	; Entry points to check if a pellet hit a shield
-
-	; Entry point to check if Eric touched a shield
-
-
-	rts
-.)
- 
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Control the horizontal flight of a catapult pellet
@@ -2582,10 +2548,15 @@ middlefloor
 	cmp #WALLMIDDLEFLOOR2
 	beq terminate_pellet
 moveit
-	; Ok the pellet may move... time to check if it hits somebody
-
+	; Ok the pellet may move... 
 	jsr step_character
 
+	jsr is_on_staircase
+	beq notstairs
+	; It is, have to check if it hits a shield
+	jmp check_shield_hit
+notstairs
+	;... time to check if it hits somebody
 	lda pos_col,x
 	sta smc_xpos+1
 	lda pos_row,x
@@ -2666,6 +2637,123 @@ notEric
 	jmp knock_him
 
 .)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Control the vertical flight of a catapult pellet
+;; Controls the pellet from the beginning of its vertical 
+;; flight to the end, including any collision with a shield. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+s_usc_pelletv
+.(
+	; Get y coord of the pellet
+	lda pos_row,x
+
+	; Has the pellet hit the ceiling of the top floor
+	; (is this really necessary?)
+	bne cont
+jtp
+	jmp terminate_pellet
+cont
+
+	; Has it finished travelling?
+	dec var7,x
+	beq jtp
+
+	; Move it up
+	jsr update_SRB_sp
+	dec pos_row,x
+	jsr update_SRB_sp
+
+	; Entry point to check if a pellet hit a shield
+
+	; TODO
+	; Entry point to check if Eric touched a shield
++check_shield_hit
+	; First get the correct table
+	lda pos_row,x
+
+	ldy #2
+loop
+	cmp tab_ptablesidx,y
+	beq found
+	dey
+	bpl loop
+	rts
+found
+	lda tab_ptablesl,y
+	sta tmp
+	lda tab_ptablesh,y
+	sta tmp+1
+
+nextchecks
+	ldy #5*2-2
+	lda pos_col,x
+loop2
+	cmp (tmp),y
+	beq found2
+	bcs retme
+	dey
+	dey
+	bpl loop2
+retme
+	rts
+found2
+	; A shield was hit! Now let's put it upside down.
+	; Get the shield number
+	iny
+	lda (tmp),y
+	tay
+
+	; Is it already upside-down?
+	; Where upside-down depends on the game mode, of course
+	lda game_mode
+	cmp #1
+	bne unflash	
+	lda tab_sh_status,y
+	bne retme
+	beq doit
+unflash
+	cmp #3
+	bne retme
+	lda tab_sh_status,y
+	beq retme
+doit
+	eor #$ff
+	sta tab_sh_status,y
+	jsr invert_shield
+
+	; Add to the score
+.(
+	lda #10
+	cpy #5
+	bcc ads
+	lda #20
+	cpy #10
+	bcc ads
+	lda #40
+ads
+	stx savx+1
+	jsr add_score
+savx
+	ldx #0
+.)
+	; Increment the count of inverted shields
+	ldy flashed_shields
+	iny
+	cpy #15
+	bne skip
+	; We have flashed (or unflashed them all!)
+	inc game_status
+	ldy #0
+skip
+	sty flashed_shields
+
+	; And terminate the pellet
+	jmp terminate_pellet
+.)
+ 
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

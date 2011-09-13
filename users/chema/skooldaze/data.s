@@ -111,6 +111,9 @@ SRB
 
 .text
 
+; For the catwalk
+table_teacher_order
+	.byt 3,0,1,2
 
 creak_year		; Year of the birth of Mr Creak
 	.asc "0000"
@@ -137,9 +140,9 @@ tab_patchcomm
 
 #define LAST_TILE 105
 
-free_before_rows
+;free_before_rows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-.dsb 256-(*&255)
+;.dsb 256-(*&255)
 ; Tile map for background: row 0
 skool_r00 ;.dsb SKOOL_COLS,1
 	.byt $1,$2,$3,$4,$4,$4,$4,$4,$4,$4,$5,$6,$7,$8,$4,$4,$4,$4,$4,$4,$4,$9,$a,$b,$4,$4,$4,$4,$4,$4,$4,$4,$4,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$2,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$2,$3,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$4,$5,$6,$1,$1,$1,$1,$1,$1,$1,$7,$8,$9,$a,$b,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0
@@ -304,9 +307,13 @@ tab_spanel_add
 	.word ($a000+(177*40+34))
 	.word ($a000+(185*40+34))
 	.word ($a000+(193*40+34))
+	
+	; To keep count of flashed/unflashed shields
+flashed_shields
+	.byt 0
 
-free_r4
-.dsb (256-32)-(*&255)
+;free_r4
+;.dsb (256-32)-(*&255)
 ; Personal timetable for Little boy 1
 per_timet_lb1
 	.byt 170,170,146,154,176,136,154,146,162,154,146,146,136,146,136,154,146,154,162,196,196,196,198,176,176,202,196,196,204,204,176,196  
@@ -493,6 +500,57 @@ per_timet_lb7
 ; Tile map for background: row 11
 skool_r11 ;.dsb SKOOL_COLS,1
 	.byt $7a,$7b,$7c,$7d,$7e,$7f,$80,$81,$1d,$82,$50,$50,$50,$83,$84,$1d,$1c,$10,$10,$10,$76,$0,$77,$68,$85,$86,$0,$0,$0,$0,$0,$1c,$10,$0,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$45,$0,$46,$45,$0,$46,$45,$0,$42,$43,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$0,$46,$45,$0,$46,$45,$0,$0,$0,$6b,$6c,$0,$6b,$6c,$0,$6b,$6c,$0,$6b,$6c,$0,$6b,$6c,$0,$1d,$0,$1d,$0,$0,$0,$0,$0,$6d,$6e,$5f,$60,$0,$1d,$0,$0,$0,$61,$6f,$70,$6f,$6f,$6f,$71,$1d,$0,$0,$0,$63,$d,$63,$63,$63,$63,$0,$0,$0,$61
+; Tables with information of shields
+
+tab_ptablesidx
+	.byt 2-1
+	.byt 8-1
+	.byt 14-1
+tab_ptablesh
+	.byt >tab_sh_info_r2
+	.byt >tab_sh_info_r8
+	.byt >tab_sh_info_r14
+tab_ptablesl
+	.byt <tab_sh_info_r2
+	.byt <tab_sh_info_r8
+	.byt <tab_sh_info_r14
+
+
+; First byte is column, second is ID (index in the following tables)
+tab_sh_info_r2
+	.byt 8-1,0
+	.byt 10-1,1
+	.byt 63-1,2
+	.byt 67-1,3
+	.byt 104-1,4
+tab_sh_info_r8
+	.byt 61-1,5
+	.byt 67-1,6
+	.byt 73-1,7
+	.byt 79-1,8
+	.byt 85-1,9
+tab_sh_info_r14
+	.byt 35-1,10
+	.byt 38-1,11
+	.byt 41-1,12
+	.byt 87-1,13
+	.byt 90-1,14
+
+; Table with shield status 0=not inverted, $ff=inverted
+tab_sh_status
+	.dsb 15,0
+; Tables with pointers to UDGs
+tab_sh_udgh
+	.byt >(udg_skool+24*8), >(udg_skool+26*8), >(udg_skool2+10*8), > (udg_skool2+11*8)
+	.byt >(udg_skool3+31*8), >(udg_skool2+67*8), >(udg_skool2+100*8), >(udg_skool2+104*8)
+	.byt >(udg_skool3+217*8), >(udg_skool3+91*8), >(udg_skool2+101*8), >(udg_skool2+102*8)
+	.byt >(udg_skool2+103*8), >(udg_skool3+134*8), >(udg_skool3+218*8)
+	
+tab_sh_udgl
+	.byt <(udg_skool+24*8), <(udg_skool+26*8), <(udg_skool2+10*8), < (udg_skool2+11*8)
+	.byt <(udg_skool3+31*8), <(udg_skool2+67*8), <(udg_skool2+100*8), <(udg_skool2+104*8)
+	.byt <(udg_skool3+217*8), <(udg_skool3+91*8), <(udg_skool2+101*8), <(udg_skool2+102*8)
+	.byt <(udg_skool2+103*8), <(udg_skool3+134*8), <(udg_skool3+218*8)
 
 free_r11
 .dsb (256-32)-(*&255)
@@ -2873,4 +2931,9 @@ temp_buffer
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
 	.dsb BUFFER_TEXT_WIDTH*8,$40
+
+
+
+
+
 
