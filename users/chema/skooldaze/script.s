@@ -2557,6 +2557,10 @@ moveit
 	jmp check_shield_hit
 notstairs
 	;... time to check if it hits somebody
+	lda var7,x
+	cmp #16
+	bcs retme
+
 	lda pos_col,x
 	sta smc_xpos+1
 	lda pos_row,x
@@ -2564,9 +2568,19 @@ notstairs
 
 	ldy #CHAR_WITHIT	
 loop
+	; Kludge to adjust position
+	lda pos_col,y
+	sta tmp+1
+	lda flags,y
+	eor flags,x
+	and #IS_FACING_RIGHT
+	bne skip2
+
+	inc tmp+1
+skip2
 smc_xpos
 	lda #0
-	cmp pos_col,y
+	cmp tmp+1
 	bne skip
 smc_ypos
 	lda #0
@@ -2581,6 +2595,7 @@ nokludge
 	dey
 	bpl loop
 	; We found no victim, return
+retme
 	rts
 
 victimok
