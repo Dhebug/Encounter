@@ -2666,12 +2666,17 @@ cont
 	jsr update_SRB_sp
 
 	; Entry point to check if a pellet hit a shield
-
-	; TODO
-	; Entry point to check if Eric touched a shield
 +check_shield_hit
-	; First get the correct table
 	lda pos_row,x
+	sta op1
+	lda pos_col,x
+	sta op1+1
+
+	; Entry point to check if Eric touched a shield
+	; store in op, op+1 the row and col to check for
++check_shield_hit2
+	; First get the correct table
+	lda op1
 
 	ldy #2
 loop
@@ -2688,7 +2693,7 @@ found
 
 nextchecks
 	ldy #5*2-2
-	lda pos_col,x
+	lda op1+1
 loop2
 	cmp (tmp),y
 	beq found2
@@ -2723,6 +2728,16 @@ doit
 	sta tab_sh_status,y
 	jsr invert_shield
 
+	stx savx+1
+
+	ldx op1+1
+	inx
+	ldy op1
+	iny
+	jsr update_SRB
+
+	jsr _ping
+
 	; Add to the score
 .(
 	lda #10
@@ -2733,11 +2748,11 @@ doit
 	bcc ads
 	lda #40
 ads
-	stx savx+1
 	jsr add_score
+.)
 savx
 	ldx #0
-.)
+
 	; Increment the count of inverted shields
 	ldy flashed_shields
 	iny
@@ -2750,7 +2765,14 @@ skip
 	sty flashed_shields
 
 	; And terminate the pellet
-	jmp terminate_pellet
+	;  
+	; If it was a pellet that hit the shield, 
+	; this sets its remaining distance to travel to 1,
+	; so it will be terminated the next time this routine is called
+
+	lda #1
+	sta var7,x
+	rts
 .)
  
 

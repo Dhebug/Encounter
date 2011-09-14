@@ -475,8 +475,7 @@ noreprimand
 	; Time to check if Eric touched a shield
 	cmp #13
 	bne noshieldcheck
-	;jmp shield_check_jump
-	rts
+	jmp shield_check_jump
 noshieldcheck
 	; Time to make the jumping sound?
 	cmp #14
@@ -1512,4 +1511,26 @@ sava
 	rts
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Check if jumping Eric has touched
+; a shield or the safe.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+shield_check_jump
+.(
+	lda pos_row
+	sta op1
+	lda pos_col
+	sta op1+1
 
+	; Check if Eric is looking right
+	lda flags
+	and #IS_FACING_RIGHT
+	beq skip
+	inc op1+1
+	inc op1+1
+skip
+	dec op1
+	jsr check_shield_hit2
+	dec op1+1
+	jmp check_shield_hit2
+.)
