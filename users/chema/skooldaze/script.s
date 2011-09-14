@@ -813,12 +813,11 @@ s_dinner_duty
 .(
 	; Dinner has started. Signal it.
 	lda lesson_status  
-	ora #%1000000
+	ora #%10000000
 	sta lesson_status
 
 	; This entry point is used for subsequent calls
 +s_dinner_duty_ex
-	
 	; Check if Eric is where he should be
 	jsr s_check_Eric_loc
 	php
@@ -2575,7 +2574,12 @@ loop
 	eor flags,x
 	and #IS_FACING_RIGHT
 	bne skip2
-
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq skip3
+	dec tmp+1
+	jmp skip2
+skip3
 	inc tmp+1
 skip2
 smc_xpos
@@ -2751,8 +2755,6 @@ doit
 	iny
 	jsr update_SRB
 
-	jsr _ping
-
 	; Add to the score
 .(
 	lda #10
@@ -2780,13 +2782,16 @@ skip
 	sty flashed_shields
 
 	; And terminate the pellet
-	;  
+	cpx #CHAR_EPELLET
+	bne doret
+
 	; If it was a pellet that hit the shield, 
 	; this sets its remaining distance to travel to 1,
 	; so it will be terminated the next time this routine is called
 
 	lda #1
 	sta var7,x
+doret
 	rts
 .)
  
@@ -3925,6 +3930,7 @@ noreset
 	jsr s_check_Eric_loc
 	bne notwhereshould 
 
+
 	; Eric is where he should be, so time to
 	; resume his clasroom duties
 
@@ -3941,7 +3947,6 @@ noreset
 	lda #2
 	sta tmp
 loop
-	dey
 	lda (tmp0),y
 	; BEWARE SC_GOTO is 1, which is never used as
 	; a parameter, or it will break!

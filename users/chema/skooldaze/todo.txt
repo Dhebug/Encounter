@@ -16,12 +16,6 @@ along with the new one.
 
 * Boy Wander fires too much?
 
-* Pellet collision is not correct against teachers or walls
-
-* It is sometimes difficult to fire a pellet
-
-* Pellets sometimes do not hit teachers?
-
 * Exam room not visible completely
 
 * It is a bit strange that the teacher writes someting, then
@@ -35,6 +29,20 @@ along with the new one.
 
 * Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
 
+* Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
+
+* Observed corruption in the anim_state for a character. For a small boy delivering a message,
+  and also for Eric when jumping. Could be related to the code for detecting shiel hits?
+
+- Still hangs on Dinner.
+NOTE: PROBABLY SOLVED OTHER BUGS HERE... it was the kludge to 
+go to the second-to-last GOTO command in s_isc_findEric
+
+- Pellet collision is not correct against teachers or walls
+
+- It is sometimes difficult to fire a pellet
+
+- Pellets sometimes do not hit teachers?
 
 - Mr Withit in the reading room walks outside the right side
 
