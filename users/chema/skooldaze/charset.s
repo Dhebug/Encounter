@@ -222,8 +222,8 @@ okcolm
 	sty bubble_lip_col
 	ldy pos_row,x
 	dey
-	cpx #CHAR_EINSTEIN
-	bne nodec
+	cpx #CHAR_FIRST_TEACHER
+	bcs nodec
 	iny
 nodec
 	sty bubble_lip_row
