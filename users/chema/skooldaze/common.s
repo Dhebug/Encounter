@@ -778,12 +778,19 @@ reveal
 	bne retme
 
 	; Is the character a teacher?
-	cpx #CHAR_FIRST_TEACHER
+	cpx #CHAR_FIRST_TEACHER+1	; Add one to avoid checking Mr Creak.
 	bcc retme
 	cpx #CHAR_WITHIT+1
 	bcs retme
 
 	; It is, prepare his combination letter
+
+	; Entry point to make Mr Creak reveal his combination letter
+	; after seeing his birth year in a blackboard
++reveal_entry
+	
+	jsr is_on_screen
+	bcs retme
 
 	stx savx+1
 	sty savy+1
@@ -853,5 +860,33 @@ loopi2
 	rts
 .)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Get the identifier of the blackboard
+; closest to a character, return a pointer 
+; to the id block in tmp3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+get_blackboard
+.(
+	; Assume it is the reading room
+	ldy	#0
+	lda pos_row,x
+	cmp #3
+	beq found
+	; Distinguish from white and exam rooms 
+	lda pos_col,x
+	cmp #WALLMIDDLEFLOOR
+	bcc white
+	ldy #2
+	bne found	; Jumps always		
+white
+	ldy #1
+found
+	lda tab_bboards_low,y
+	sta tmp3
+	lda tab_bboards_high,y
+	sta tmp3+1
+	rts
+.)
 
 

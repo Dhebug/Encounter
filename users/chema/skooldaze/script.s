@@ -959,6 +959,9 @@ s_set_csubcom
 
 s_msg_sitdown
 .(
+	; Make MR CREAK reveal his safe combination letter if appropriate.
+	jsr creak_code_test
+
 	; Get the appropriate message
 	lda #<sit_messages
 	sta tmp0
@@ -980,6 +983,51 @@ s_msg_sitdown
 	lda #0
 	sta cur_command_high,x
 	jmp int_subcommand
+.)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make MR CREAK reveal his safe combination letter if 
+; appropriate.
+; Used by the routine s_msg_sitdown. A teacher is standing
+; at the doorway of a classroom, ready to tell the kids to
+; sit down; this routine checks whether the teacher is 
+; MR CREAK, and if it is, makes him reveal his safe 
+; combination letter if his birth year has been written 
+; on the blackboard by ERIC, and ERIC has not yet opened 
+; the safe. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+creak_code_test
+.(
+	; Are we dealing with Mr Creak?
+	cpx #CHAR_CREAK
+	beq heis
+retme
+	rts
+heis
+	; Are we in the appropriate game mode?
+	lda game_mode
+	cmp #2	; All shields flashing and safe not yet opened.
+	bne retme
+
+	; Get the nearest blackboard and who wrote here last.
+	jsr get_blackboard
+	ldy #4
+	lda (tmp3),y	; Who wrote there?
+	bne retme		; If not Eric, return
+
+	; Eric wrote here, but did he write the birth year of Mr Creak?
+	ldy #10
+loop
+	lda (tmp3),y
+	cmp creak_year-7,y
+	bne retme
+	dey
+	cpy #6
+	bne loop
+
+	; Codes match! Make him reveal the letter
+	jmp reveal_entry
 .)
 
 
@@ -1225,15 +1273,15 @@ Ericisin
 	jsr s_Einstein_tales
 	bcc	nohitmsg
 
-	; Check if Eric is still in class
-	jsr s_Einstein_seated
-	bne Ericnotin
-
 	; Punish him!
 	lda #DO_AGAIN
 	jsr punish_Eric
 
 nohitmsg
+	; Check if Eric is still in class
+	jsr s_Einstein_seated
+	bne Ericnotin
+
 	; Get the blackboard
 	lda pos_row,x
 	; Are we on the top floor?
@@ -2776,7 +2824,8 @@ savx
 	cpy #15
 	bne skip
 	; We have flashed (or unflashed them all!)
-	inc game_status
+
+	inc game_mode
 	ldy #0
 skip
 	sty flashed_shields
