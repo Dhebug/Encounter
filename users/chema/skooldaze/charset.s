@@ -756,34 +756,6 @@ savx
 .)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Get the identifier of the blackboard
-; closest to a character, return a pointer 
-; to the id block in tmp3
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-get_blackboard
-.(
-	; Assume it is the reading room
-	ldy	#0
-	lda pos_row,x
-	cmp #3
-	beq found
-	; Distinguish from white and exam rooms 
-	lda pos_col,x
-	cmp #WALLMIDDLEFLOOR
-	bcc white
-	ldy #2
-	bne found	; Jumps always		
-white
-	ldy #1
-found
-	lda tab_bboards_low,y
-	sta tmp3
-	lda tab_bboards_high,y
-	sta tmp3+1
-	rts
-.)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Slide a message character into the 

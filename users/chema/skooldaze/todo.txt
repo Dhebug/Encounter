@@ -27,12 +27,14 @@ along with the new one.
 
 * Teachers should have a greater range of vision (tile size)
 
-* Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
-
 * Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
 
 * Observed corruption in the anim_state for a character. For a small boy delivering a message,
   and also for Eric when jumping. Could be related to the code for detecting shiel hits?
+
+* Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
+
+- Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
 
 - Still hangs on Dinner.
 NOTE: PROBABLY SOLVED OTHER BUGS HERE... it was the kludge to 
