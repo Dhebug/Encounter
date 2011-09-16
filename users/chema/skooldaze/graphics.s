@@ -779,9 +779,11 @@ udg_skool3
 
 ; Tejado
 ; Tile skool 10
-.byt $60, $58, $44, $42, $41, $40, $40, $40
+;.byt $60, $58, $44, $42, $41, $40, $40, $40
+.byt $60, $60, $c1, $de, $c0, $df, $c0, $df 
 ; Tile skool 11
-.byt $40, $40, $40, $40, $60, $50, $48, $44
+;.byt $40, $40, $40, $40, $60, $50, $48, $44
+.byt $40, $40, $40, $40, $70, $f3, $c1, $fe
 
 ; Tile skool 12
 .byt $78, $78, $70, $60, $60, $60, $60, $60
@@ -807,17 +809,48 @@ udg_skool3
 .byt $7f, $55, $7f, $55, $7f, $55, $7f, $55
 ; Tile skool 23
 .byt $7f, $57, $7f, $57, $7f, $57, $7f, $7f
+
+
 ; Tile skool 24
 .byt $40, $40, $40, $40, $40, $40, $40, $7f
-; Tile skool 25
-.byt $43, $40, $40, $40, $40, $40, $40, $7f
 
 ; Tejado
-; Tile skool 26
-.byt $40, $60, $50, $4c, $42, $41, $40, $7f
 
+; Tile skool 25
+;.byt $43, $40, $40, $40, $40, $40, $40, $7f
+.byt $c0, $ff, $c0, $ff, $c0, $ff, $c0, $7f
+; Tile skool 26
+;.byt $40, $60, $50, $4c, $42, $41, $40, $7f 
+.byt $60, $50, $c3, $fd, $c0, $ff, $c0, $7f
 ; Tile skool 27
-.byt $40, $40, $40, $40, $40, $40, $70, $78
+.byt $40, $40, $40, $40, $40, $20, $70, $78
+
+
+;.byt $70, $60, $c1, $de, $c0, $df, $c0, $df 
+;.byt $40, $40, $40, $40, $70, $f3, $c1, $fe
+
+;.byt $c0, $df, $c0, $df, $c0, $df, $c0, $7f
+;.byt $c0, $ff, $c0, $ff, $c0, $ff, $c0, $7f
+;.byt $60, $50, $c3, $fd, $c0, $ff, $c0, $7f
+/*
+ .byt $70,$40,$40
+ .byt $6C,$40,$40
+ .byt $C1,$40,$40
+ .byt $DE,$40,$40
+ .byt $C0,$70,$40
+ .byt $DF,$F3,$40
+ .byt $C0,$C1,$40
+ .byt $DF,$FE,$40
+ 
+ .byt $C0,$C0,$60
+ .byt $DF,$FF,$50
+ .byt $C0,$C0,$C3
+ .byt $DF,$FF,$FD
+ .byt $C0,$C0,$C0
+ .byt $DF,$FF,$FF
+ .byt $C0,$C0,$C0
+ .byt $7F,$7F,$7F
+*/
 
 
 ; Ventanas
@@ -1007,12 +1040,15 @@ Espaldera
 .byt $40, $40, $40, $40, $40, $40, $5f, $58
 ; Tile skool 110
 .byt $4f, $4a, $4d, $4a, $4d, $4a, $7d, $40
+
+;Espalderas
 ; Tile skool 111
-.byt $40, $7f, $40, $7f, $40, $7f, $40, $7f
+.byt $40^$bf, $7f, $40^$bf, $7f, $40^$bf, $7f, $40^$bf, $7f
 ; Tile skool 112
-.byt $68, $6f, $48, $6f, $68, $6f, $48, $6f
+.byt $68^$bf, $6f, $48^$bf, $6f, $68^$bf, $6f, $48^$bf, $6f
 ; Tile skool 113
-.byt $68, $68, $48, $68, $68, $68, $48, $68
+.byt $68^$bf, $68, $48^$bf, $68, $68^$bf, $68, $48^$bf, $68
+
 ; Tile skool 114
 .byt $50, $7f, $7f, $7f, $7f, $7f, $7c, $68
 ; Tile skool 115
@@ -1137,11 +1173,11 @@ Espaldera
 
 ; Espalderas
 ; Tile skool 173
-.byt $40, $7f^$80, $40^$bf, $7f^$80, $40, $40, $40, $40
+.byt $40, $7f, $40^$bf, $7f, $40, $40, $40, $40
 ; Tile skool 174
-.byt $68^$bf, $6f^$80, $48^$bf, $6f^$80, $68^$bf, $68^$80, $68^$bf, $68^$80
+.byt $68^$bf, $6f, $48^$bf, $6f, $68^$bf, $68, $68^$bf, $68
 ; Tile skool 175
-.byt $68^$bf, $68^$80, $48^$bf, $68^$80, $68^$bf, $68^$80, $68^$bf, $68^$80
+.byt $68^$bf, $68, $48^$bf, $68, $68^$bf, $68, $68^$bf, $68
 
 ; Tile skool 176
 .byt $70, $70, $70, $60, $60, $60, $60, $60
@@ -1236,6 +1272,9 @@ Espaldera
 ; Tile skool 219
 .byt $40, $7f, $79^$bf, $79^$bf, $67^$bf, $67^$bf, $56^$bf, $4c
 
+;Tejado
+; Tile skool 220
+.byt $c0, $df, $c0, $df, $c0, $df, $c0, $7f
 
 end_udg_skool3
 

@@ -2742,6 +2742,12 @@ cont
 	; Entry point to check if Eric touched a shield
 	; store in op, op+1 the row and col to check for
 +check_shield_hit2
+	; Use this to check for opening the safe too
+	lda game_mode
+	cmp #2
+	bne shieldonly
+	jmp check_safe
+shieldonly
 	; First get the correct table
 	lda op1
 
@@ -2844,7 +2850,33 @@ doret
 	rts
 .)
  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Check if a character is trying to open the safe
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+check_safe
+.(
+	lda op1
+	cmp #9
+	bne retme
+	lda op1+1
+	cmp #13
+	beq rowfits
+	cmp #114
+	beq rowfits
+retme
+	rts
+rowfits
 
+	; Okay Eric is trying to open the safe
+	; TODO: CHECK COMBINATION IN ALL BLACKBOARDS bwrite, bread and bexam_desc
+
+	lda #0
+dbug
+	beq dbug
+	
+	; TODO: Play tune and show "WELL DONE UP ONE YEAR".
+	rts
+.)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
