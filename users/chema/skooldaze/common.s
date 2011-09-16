@@ -848,14 +848,14 @@ loopi
 	lda (tmp),y
 	pha
 	dey
-	bpl loopi
+	bne loopi
 
 	ldy #7
 loopi2
 	pla
 	sta (tmp),y
 	dey
-	bpl loopi2
+	bne loopi2
 .)
 	rts
 .)
