@@ -17,6 +17,25 @@
 #include "params.h"
 #include "script.h"
 
+
+; For music notes
+
+#define RST 0
+
+#define C_	0
+#define CS_	1
+#define D_	2
+#define DS_	3
+#define E_	4
+#define F_	5
+#define FS_	6
+#define G_	7
+#define GS_	8
+#define A_	9
+#define AS_	10
+#define B_	11
+
+
 .zero
 ; Column and row of tile in visible area coordinates
 vis_col .byt 00
@@ -479,6 +498,11 @@ skool_r09 ;.dsb SKOOL_COLS,1
 
 compp 
 	.dsb MAX_CHARACTERS,0
+_Tune2DataA
+	.byt 3*12+C_, 3*12+C_, 3*12+C_, 3*12+D_, 3*12+E_, 3*12+D_, 3*12+C_, 3*12+E_, 3*12+D_, 3*12+D_, 3*12+C_, $80 
+_Tune2DataB
+	.byt 5*12+F_, 5*12+F_, 5*12+F_, 5*12+G_, 5*12+A_, 5*12+G_, 5*12+F_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+F_
+
 free_r9
 .dsb (256-32)-(*&255)
 ; Personal timetable for little boy 6
@@ -499,20 +523,6 @@ skool_r10 ;.dsb SKOOL_COLS,1
 
 ; Music tune data
 
-#define RST 0
-
-#define C_	0
-#define CS_	1
-#define D_	2
-#define DS_	3
-#define E_	4
-#define F_	5
-#define FS_	6
-#define G_	7
-#define GS_	8
-#define A_	9
-#define AS_	10
-#define B_	11
 _TuneDataA
 	.byt 5*12+E_,RST,5*12+C_,5*12+D_,5*12+D_,4*12+B_
 	.byt 5*12+E_,RST,5*12+C_,4*12+A_,RST
@@ -531,6 +541,8 @@ _TuneDataB
 	.byt 3*12+F_,3*12+A_,3*12+B_,3*12+F_,3*12+A_,3*12+B_
 	.byt 3*12+E_,3*12+G_,3*12+B_,3*12+E_,RST		;,3*12+G_,3*12+B_
 _TuneDataBEnd
+
+
 
 free_r10
 .dsb (256-32)-(*&255)
