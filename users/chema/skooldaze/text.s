@@ -390,6 +390,10 @@ st_casttitles2
 	.asc "THE GEOGRAPHY",0 
 	.asc "THE HISTORY",0 
 
+st_gamefinished
+	.asc "WELL DONE! GO",0
+st_gamefinished2
+	.asc "UP A YEAR,0
 __text_end
 
 #echo **** Text:

@@ -2832,6 +2832,9 @@ savx
 	; We have flashed (or unflashed them all!)
 
 	inc game_mode
+
+	; TODO: If game_mode equals 4 here, then we have finished the game!
+
 	ldy #0
 skip
 	sty flashed_shields
@@ -2874,7 +2877,7 @@ rowfits
 dbug
 	beq dbug
 	
-	; TODO: Play tune and show "WELL DONE UP ONE YEAR".
+	; TODO: inc game_mode.
 	rts
 .)
 
