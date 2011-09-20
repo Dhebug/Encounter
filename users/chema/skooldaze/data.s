@@ -174,9 +174,12 @@ as_pointer_low
 	.byt <Boy_anim_states,<Creak_anim_states,<Rockitt_anim_states,<Wacker_anim_states,<Withit_anim_states
 	.byt <Pellet_anim_states,<Pellet_anim_states
 
+; Table with base pitchs for notes
+base_pitch_hi
+   .byt $0e,$0e,$0d,$0c,$0b,$0b,$0a,$09,$09,$08,$08,$07
 
-free_r0
-.dsb (256)-(*&255)-32
+;free_r0
+;.dsb (256)-(*&255)-32
 ; Personal timetable for Eric (same as little boy 11)
 per_timet_eric
 	.byt 170,170,154,154,176,176,176,136,146,146,146,162,162,162,162,136,136,162,146,196,196,196,176,202,196,196,176,196,206,206,176,196
@@ -199,8 +202,12 @@ speed_counter
 uni_subcom_low
 	.dsb MAX_CHARACTERS,0
 
-free_r1
-.dsb (256-32)-(*&255)
+; Table with base pitchs for notes
+base_pitch_lo
+   .byt $ee,$16,$4c,$8e,$d8,$2e,$8e,$f6,$66,$e0,$60,$e8
+
+;free_r1
+;.dsb (256-32)-(*&255)
 ; Personal timetable for Einstein
 per_timet_einstein
 	.byt 170,170,160,160,176,176,176,144,152,152,152,168,168,168,168,144,144,168,152,196,212,196,196,196,196,196,196,196,196,196,196,196
@@ -489,6 +496,41 @@ skool_r10 ;.dsb SKOOL_COLS,1
 	;$1,$1,$1,$1,$1,$1,$1,$1,$1,$1,$1
 	.byt LAST_TILE+56,LAST_TILE+57,LAST_TILE+58,LAST_TILE+59,LAST_TILE+60,LAST_TILE+61,LAST_TILE+62,LAST_TILE+63,LAST_TILE+64,LAST_TILE+65,LAST_TILE+66
 	.byt $0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$1d,$0,$1d,$0,$1f,$1e,$1f,$1e,$1d,$68,$69,$5f,$60,$1d,$0,$0,$0,$61,$0,$6a,$0,$0,$0,$6a,$1d,$0,$0,$0,$63,$d,$63,$63,$63,$63,$0,$0,$0,$61
+
+; Music tune data
+
+#define RST 0
+
+#define C_	0
+#define CS_	1
+#define D_	2
+#define DS_	3
+#define E_	4
+#define F_	5
+#define FS_	6
+#define G_	7
+#define GS_	8
+#define A_	9
+#define AS_	10
+#define B_	11
+_TuneDataA
+	.byt 5*12+E_,RST,5*12+C_,5*12+D_,5*12+D_,4*12+B_
+	.byt 5*12+E_,RST,5*12+C_,4*12+A_,RST
+	.byt 4*12+A_,4*12+B_,4*12+B_,5*12+C_,5*12+D_,5*12+C_
+	.byt 4*12+B_,5*12+E_,RST
+	.byt 5*12+C_,4*12+A_,RST,RST,4*12+B_,4*12+B_,4*12+G_,4*12+A_,4*12+A_,4*12+F_,4*12+B_,4*12+B_,4*12+G_,4*12+E_,0,4*12+E_,4*12+F_,4*12+F_,4*12+G_,4*12+A_
+	.byt 4*12+G_,4*12+F_,4*12+B_,RST,4*12+G_,4*12+E_,RST,$80	;,RST,RST
+_TuneDataAEnd
+_TuneDataB
+	.byt 3*12+A_,3*12+C_,3*12+E_,3*12+G_,3*12+B_
+	.byt 3*12+E_,3*12+A_,3*12+C_,3*12+E_,3*12+A_,3*12+C_
+	.byt 3*12+E_,3*12+G_,3*12+B_,3*12+E_,3*12+G_,3*12+B_
+	.byt 3*12+E_,3*12+A_,3*12+C_,3*12+E_,3*12+A_,3*12+C_
+	.byt 3*12+E_,3*12+E_,3*12+G_,3*12+B_,3*12+F_,3*12+A_,3*12+B_
+	.byt 3*12+E_,3*12+G_,3*12+B_, 3*12+E_,3*12+G_,3*12+C_
+	.byt 3*12+F_,3*12+A_,3*12+B_,3*12+F_,3*12+A_,3*12+B_
+	.byt 3*12+E_,3*12+G_,3*12+B_,3*12+E_,RST		;,3*12+G_,3*12+B_
+_TuneDataBEnd
 
 free_r10
 .dsb (256-32)-(*&255)

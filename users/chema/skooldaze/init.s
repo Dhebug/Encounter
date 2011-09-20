@@ -62,10 +62,10 @@ _main
 	jsr set_hires
 	jsr _GenerateTables 
 	jsr _init_irq_routine 
-	jsr wait
-	jsr wait
-	jsr clr_hires
 
+	; Play the main tune
+	jsr PlayTune
+	
 +restart_game
 	;jsr InitSound
 	;jsr sfx_shield_hit
@@ -384,9 +384,6 @@ loopf
 
 _init
 .(
-	; Reset game flags
-	;jsr reset_flags
-
 	; Initialize other game flags
 	lda #$fe
 	sta first_col
@@ -572,22 +569,10 @@ loopsrb2
 	dex
 	bpl loopsrb
 
+	
 	; First screen render
-	/*
-	lda #A_BGBLACK
-	sta smc_paper_1+1
-	sta smc_paper_2+1
-	*/
 	jsr clr_hires
 	jsr set_ink2 
-
-	/*
-	lda #A_BGCYAN
-	sta smc_paper_1+1
-	lda #A_BGYELLOW
-	sta smc_paper_2+1
-	jsr set_ink2
-	*/
 
 	; Clear scorepanel
 	jsr clear_scorepanel
@@ -711,6 +696,8 @@ notzero
 	; A key was pressed, exit demo mode.
 	jsr unset_demo_mode
 	jsr change_names
+	; Play the main tune
+	jsr PlayTune
 	jsr _init
 	jmp _main_loop
 

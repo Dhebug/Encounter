@@ -703,6 +703,9 @@ msgdone
 	lda #$8d ;STA_OPCODE
 	sta give_lines
 	
+	; Remove speech bubble if any
+	jsr remove_speech_bubble
+
 	; Restart the game
 	jmp restart_game
 .)
