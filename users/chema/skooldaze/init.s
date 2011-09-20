@@ -73,7 +73,7 @@ _main
 	; Set demo mode
 	jsr set_demo_mode
 	jsr _init
-	jmp _test_loop
+	jmp _main_loop
 .)
 
 /*
@@ -236,16 +236,8 @@ loop2
 loop
 	sta (tmp),y
 	dey
-	;cpy #1
-	;bne loop
 	bpl loop
-/*
-	lda #A_FWBLACK 
-	sta (tmp),y
-	dey
-	lda #A_BGCYAN
-	sta (tmp),y
-*/
+
 	jsr add40tmp
 	dex
 	bne loop2
@@ -665,11 +657,11 @@ unset_demo_mode
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Test for the main loop
+; Main loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-_test_loop
+_main_loop
 .(
 	; Time the frame...
 	lda #0
@@ -720,7 +712,7 @@ notzero
 	jsr unset_demo_mode
 	jsr change_names
 	jsr _init
-	jmp _test_loop
+	jmp _main_loop
 
 play_mode
 
@@ -830,7 +822,7 @@ nopunish
 loop
 	lda counter
 	beq loop
-	jmp _test_loop
+	jmp _main_loop
 .)
 
 #define NUM_KEYS 9

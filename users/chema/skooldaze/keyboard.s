@@ -19,22 +19,19 @@
 #define        via_ier                 $030E 
 #define        via_porta               $030f 
 
-#define ayc_Register $FF
-#define ayc_Write    $FD
-#define ayc_Read	 $FE
-#define ayc_Inactive $DD
+#define			ayc_Register			$FF
+#define			ayc_Write				$FD
+#define			ayc_Read				$FE
+#define			ayc_Inactive			$DD
 
 
 .zero
-;irq_A               .byt 0
-;irq_X               .byt 0
-;irq_Y               .byt 0
 
-TimerCounter        .byt 40        ;Used in music
 zpTemp01			.byt 0
 zpTemp02			.byt 0
 tmprow				.byt 0
 counter				.byt 0
+oldKey				.byt 0
 
 .text 
 
@@ -159,7 +156,6 @@ loop2
 .)
 
 
-oldKey .byt 0
 ReadKeyNoBounce
 .(
 	jsr ReadKey
