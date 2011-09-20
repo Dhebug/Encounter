@@ -14,13 +14,17 @@
 
 #include "params.h"
 
+.zero
+text_row		.byt 00
+text_col		.byt 00
+cur_char		.byt 00
+pat				.byt 00
+col_now			.byt 00
+ch_count		.byt 00
+buffercounter	.byt 0
+.text
 
-text_row .byt 00
-text_col .byt 00
-cur_char .byt 00
-pat		 .byt 00
-col_now	 .byt 00
-ch_count	 .byt 00
+#define str_buffer	$bfe0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,22 +40,6 @@ print_string
 	sta cur_char
 	lda #%00100000
 	sta pat
-
-/*
-	ldx text_row
-	ldy tab_mul8,x			; 4 (+1)
-	lda _HiresAddrHigh,y    ; 4 (+1)    
-	sta tmp1+1				; 3
-	lda _HiresAddrLow,y     ; 4 (+1)    
-	clc						; 2
-	adc text_col			; 3
-	sta tmp1					; 3
-	bcc skip				; 2/3
-	inc tmp0+1				; 5
-skip
-							;===============
-							; 33/34 (+3)
-*/
 
 loop_st
 	; Get the next character in string
@@ -81,8 +69,6 @@ end_st
 
 ;;;;;;;;;; Decompression routine ;;;;;;;;;;;;;;;;;;
 
-str_buffer .dsb 32
-buffercounter .byt 0
 
 decomp
 .(
