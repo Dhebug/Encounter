@@ -470,6 +470,8 @@ skool_r09 ;.dsb SKOOL_COLS,1
 	.byt LAST_TILE+45,LAST_TILE+46,LAST_TILE+47,LAST_TILE+48,LAST_TILE+49,LAST_TILE+50,LAST_TILE+51,LAST_TILE+52,LAST_TILE+53,LAST_TILE+54,LAST_TILE+55
 	.byt $0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$0,$1d,$0,$64,$0,$1f,$1e,$1f,$1e,$1d,$0,$0,$65,$5f,$60,$0,$0,$0,$61,$66,$66,$66,$66,$66,$66,$1d,$0,$0,$0,$67,$d,$63,$63,$63,$63,$0,$0,$0,$61
 
+compp 
+	.dsb MAX_CHARACTERS,0
 free_r9
 .dsb (256-32)-(*&255)
 ; Personal timetable for little boy 6

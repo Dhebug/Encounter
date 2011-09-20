@@ -17,7 +17,7 @@ CALL osdk_config.bat
 ::
 :: Compress the text strings
 ::
-::CALL txtcomp.bat
+CALL txtcomp.bat
 
 ::
 :: Launch the compilation of files
