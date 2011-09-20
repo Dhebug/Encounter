@@ -14,47 +14,6 @@
 
 __text_start
 
-names_extras
-	.asc "        "
-empty_st
-	.byt 0
-st_char_names
-	.asc "ERIC"
-	.byt 0
-	.dsb 9,0
-	.asc "EINSTEIN"
-	.byt 0
-	.dsb 5,0
-	.asc "ANGELFACE"
-	.byt 0
-	.dsb 4,0
-	.asc "BOY WANDER"
-	.byt 0
-	.dsb 3,0
-st_teacher_names
-	.asc "MR ROCKITT"
-	.byt 0
-	.dsb 3,0
-	.asc "MR WACKER"
-	.byt 0
-	.dsb 4,0
-	.asc "MR WITHIT"
-	.byt 0
-	.dsb 4,0
-	.asc "MR CREAK"
-	.byt 0
-	.dsb 5,0
-	.asc "Please Sir - I cannot tell a lie . . "
-	.byt 0
-	.asc "REVISION"
-	.byt 0
-number_template
-	.byt "000",0
-number_question
-	.byt "12 X 32",0
-number_answer
-	.byt "1234",0
-
 class_names
 	.asc "READING ROOM"
 	.byt 0
@@ -113,10 +72,6 @@ reprimands
 	.asc "YOU ARE NOT",0, "A KANGAROO",0 
 reprimand_2000
 	.asc "TAKE 2000 LINES YOU NASTY BOY",SPACES_8,0 
-
-st_lines
-	.asc "000 lines"
-	.byt 0
 
 sit_messages
 	.asc "RIGHT! SIT DOWN MY LITTLE CHERUBS"
@@ -362,11 +317,6 @@ st_peashooter
 st_pressU
 	.asc "Press 'U' if you understood", SPACES_8,0
 
-st_safeletter
-	.byt 0,0
-st_space
-	.asc " ",0
-
 st_putnames
 	.asc "Do you want to put in your own names Y/N?",0
 st_castof
@@ -393,7 +343,7 @@ st_casttitles2
 st_gamefinished
 	.asc "WELL DONE! GO",0
 st_gamefinished2
-	.asc "UP A YEAR,0
+	.asc "UP A YEAR",0
 __text_end
 
 #echo **** Text:
