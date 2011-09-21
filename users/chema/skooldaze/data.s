@@ -503,6 +503,9 @@ _Tune2DataA
 _Tune2DataB
 	.byt 5*12+F_, 5*12+F_, 5*12+F_, 5*12+G_, 5*12+A_, 5*12+G_, 5*12+F_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+F_
 
+zeros
+	.byt 0,0,0,0,0,0,0,%01111000,0,0,0,0,0,0
+
 free_r9
 .dsb (256-32)-(*&255)
 ; Personal timetable for little boy 6

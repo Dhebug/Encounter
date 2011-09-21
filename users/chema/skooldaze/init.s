@@ -64,8 +64,12 @@ _main
 	jsr _init_irq_routine 
 
 	; Play the main tune
-	jsr PlayTune
-	
+	jsr PlayTuneA
+
+	; Wait a bit
+	jsr wait
+	jsr wait
+
 +restart_game
 	;jsr InitSound
 	;jsr sfx_shield_hit
@@ -76,139 +80,6 @@ _main
 	jmp _main_loop
 .)
 
-/*
-; Routine for dumping registers to AY
-
-#define ayc_Register $FF
-#define ayc_Write    $FD
-#define ayc_Read	 $FE
-#define ayc_Inactive $DD
-     
-#define via_pcr      $030C
-#define via_porta    $030F    
-
-
-#define AY_AToneLSB		0
-#define AY_AToneMSB		1
-#define AY_BToneLSB		2
-#define AY_BToneMSB		3
-#define AY_CToneLSB		4
-#define AY_CToneMSB		5
-#define AY_Noise		6
-#define AY_Status		7
-#define AY_AAmplitude	8
-#define AY_BAmplitude	9
-#define AY_CAmplitude	10
-#define AY_EnvelopeLSB	11
-#define AY_EnvelopeMSB	12
-#define AY_EnvelopeCy	13
-
-silence_sfx .byt 0
-
-; Needs X and Y with the low and high bytes of the
-; table with register values
-AYRegDump
-.(
-	lda silence_sfx
-	beq dosfx
-	rts
-dosfx
-	sei
-	stx loop+1
-	sty loop+2
-
-    LDX #13
-loop 
-	LDA $dead,X
-	cpx #13
-	beq skip2
-    CMP ReferenceBlock,X
-    BEQ skip
-skip2
-    STA ReferenceBlock,X
-    STX via_porta
-    LDY #ayc_Register
-    STY via_pcr
-    LDY #ayc_Inactive
-    STY via_pcr
-    STA via_porta  
-    LDA #ayc_Write
-    STA via_pcr
-    STY via_pcr
-skip
-	DEX
-    BPL loop
-	
-	cli
-    RTS
-.)
-		 
-
-ReferenceBlock
-	.dsb 14,128
-
-InitSound
-SndStop
-.(
-	sei
-
-    LDX #13
-loop 
-	LDA #128
-    STA ReferenceBlock,X
-	cpx #7
-	bne not7
-	lda #$40
-	.byt $2c
-not7
-	lda #0
-    STX via_porta
-    LDY #ayc_Register
-    STY via_pcr
-    LDY #ayc_Inactive
-    STY via_pcr
-    STA via_porta  
-    LDA #ayc_Write
-    STA via_pcr
-    STY via_pcr
-skip
-	DEX
-    BPL loop
-	
-	cli
-    RTS
-.)
-
-
-
-sfx_shield_hit
-.(
-	lda #16
-	sta tmp
-loop
-	jsr SndBell1
-	ldy #$ff
-loop2
-	dey
-	bne loop2
-	dec tmp
-	bne loop
-	rts
-.)
-
-
-SndBell1
-.(
-  	ldx #<bell
-	ldy #>bell
-	jmp AYRegDump
-bell
-	; POOONG
-	;.byt 0,1+5,0,2+5,0,1+5,0,$78,$10,$10,$10,0,$a,0
-	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
-.)
-
-*/
 
 set_hires
 .(
@@ -367,20 +238,6 @@ loop
 	rts
 .)
 
-;; Resets the game flags
-reset_flags
-.(
-	; Reset all the game flags
-	; after lesson change
-	ldy #5
-	lda #0
-loopf
-	sta lesson_status,y
-	dey
-	bpl loopf
-	rts
-
-.)
 
 _init
 .(
@@ -588,6 +445,11 @@ loops
 	dec tmp4
 	bne loops
 
+	; Wait for the tune to finish
+wsong
+	lda Song+1
+	bne wsong
+
 	; Initialize the lesson
 	lda current_lesson_index
 	and #48
@@ -651,7 +513,10 @@ _main_loop
 	; Time the frame...
 	lda #0
 	sta counter
-
+	
+	; Some vars that must be zero for music and sfx
+	sta Song+1
+	sta Sfx
 
 	; Scroll if necessary...
 	lda pos_col
@@ -697,7 +562,7 @@ notzero
 	jsr unset_demo_mode
 	jsr change_names
 	; Play the main tune
-	jsr PlayTune
+	jsr PlayTuneA
 	jsr _init
 	jmp _main_loop
 
@@ -812,45 +677,6 @@ loop
 	jmp _main_loop
 .)
 
-#define NUM_KEYS 9
-
-process_user_input
-.(
-	jsr ReadKeyNoBounce
-	beq end       	
-		
-	; Ok a key was pressed, let's check
-    ldx #NUM_KEYS-1
-loop    
-    cmp user_keys,x
-    beq found
-    dex
-    bpl loop
-end
-	rts
-
-found
-
-    lda key_routl,x
-    sta _smc_routine+1
-    lda key_routh,x
-    sta _smc_routine+2   
-
-	; Some keys shall be read with repetitions
-	cpx #4
-	bcs call
-	ldx #0
-	stx oldKey
-
-call
-	ldx #0
-_smc_routine
-	; Call the routine
-    jmp $1234   ; SMC     
-
-.)
-
-
 
 ;; Change the current lesson
 change_lesson
@@ -911,7 +737,12 @@ cont
 nobell
 
 	; Clear all game flags & other matters
-	jsr reset_flags
+	ldy #5
+	lda #0
+loopf
+	sta lesson_status,y
+	dey
+	bpl loopf
 
 	; Now update all characters
 	ldx #MAX_CHARACTERS-3

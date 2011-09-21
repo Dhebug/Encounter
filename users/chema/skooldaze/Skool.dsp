@@ -126,6 +126,10 @@ SOURCE=.\script.s
 # End Source File
 # Begin Source File
 
+SOURCE=.\sound.s
+# End Source File
+# Begin Source File
+
 SOURCE=.\tail.s
 # End Source File
 # Begin Source File
