@@ -594,12 +594,12 @@ loops
 	clc
 	adc #15
 	sta current_lesson_index
-
+/*
 	lda #<(LESCLK_VAL)
 	sta lesson_clock
 	lda #>(LESCLK_VAL)
 	sta lesson_clock+1
-
+*/
 	jmp change_lesson
  .)
 
@@ -907,7 +907,7 @@ cont
 	cmp #254	; Second playtime in a row
 	bcs nobell
 	; Ring the bell
-	;jsr _ping
+	jsr PlayBell
 nobell
 
 	; Clear all game flags & other matters
