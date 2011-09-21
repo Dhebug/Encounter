@@ -30,6 +30,22 @@
 #define ayc_Inactive $DD
 
 
+#define AY_AToneLSB		0
+#define AY_AToneMSB		1
+#define AY_BToneLSB		2
+#define AY_BToneMSB		3
+#define AY_CToneLSB		4
+#define AY_CToneMSB		5
+#define AY_Noise		6
+#define AY_Status		7
+#define AY_AAmplitude	8
+#define AY_BAmplitude	9
+#define AY_CAmplitude	10
+#define AY_EnvelopeLSB	11
+#define AY_EnvelopeMSB	12
+#define AY_EnvelopeCy	13
+#define AY_IOPort		14
+
 .zero
 TimerCounter        .byt 0
 NoteCounter		    .byt 0
@@ -53,34 +69,15 @@ PlayTune
 	lda #0
 	sta NoteCounter
 
+	jsr InitSound
+
 	; Set volume
-	ldx #$f
-	lda #8
+	lda #$f
+	ldx #8
 	jsr SendAYReg
-	ldx #$f
-	lda #9
+	lda #$f
+	ldx #9
 	jsr SendAYReg
-
-	ldx #%01111100
-	lda #7
-	jsr SendAYReg
-
-	ldx #0
-	lda #$d
-	jsr SendAYReg
-
-	ldx #0
-	lda #$b
-	jsr SendAYReg
-
-	ldx #0
-	lda #$c
-	jsr SendAYReg
-
-	ldx #0
-	lda #6
-	jsr SendAYReg
-
 
 loop
 	ldy NoteCounter
@@ -88,22 +85,22 @@ loop
 	bmi endplay
 	beq restA
 	jsr Note2Pitch
-	ldx ay_Pitch_A_Low
-	lda #0
+	lda ay_Pitch_A_Low
+	ldx #0
 	jsr SendAYReg
-	ldx ay_Pitch_A_High
-	lda #1
+	lda ay_Pitch_A_High
+	ldx #1
 	jsr SendAYReg
 restA
 	ldy NoteCounter
 	lda (tmp1),y
 	beq restB
 	jsr Note2Pitch
-	ldx ay_Pitch_A_Low
-	lda #2
+	lda ay_Pitch_A_Low
+	ldx #2
 	jsr SendAYReg
-	ldx ay_Pitch_A_High
-	lda #3
+	lda ay_Pitch_A_High
+	ldx #3
 	jsr SendAYReg
 restB	
 	inc NoteCounter
@@ -120,41 +117,69 @@ loopp2
 	jmp loop
 
 endplay
-	; Set volume
-	ldx #$0
-	lda #8
-	jsr SendAYReg
-	lda #9
-	jsr SendAYReg
-	lda #10
-	jsr SendAYReg
+	jsr StopSound
 	cli
 	jmp wait
 .)
 
+StopSound
+InitSound
+.(
+	ldx #<zeros
+	ldy #>zeros
+	jmp AYRegDump
+zeros
+	.byt 0,0,0,0,0,0,0,%01111000,0,0,0,0,0,0
+.)
 
-
-; A=regnumber X=value
+; X=regnumber A=value
 SendAYReg
 .(
-	;Load the accumulator with the Register number and store in VIA Port A
-    STA via_porta
+	;Store register number VIA Port A
+    stx via_porta
+	pha
 	;Set AY Control lines to Register Number 
-    LDA #ayc_Register
-    STA via_pcr
+    lda #ayc_Register
+    sta via_pcr
 	;Set AY Control lines to inactive 
-    LDA #ayc_Inactive
-    STA via_pcr
+    lda #ayc_Inactive
+    sta via_pcr
 	;Place the Register value into VIA Port A
-    STX via_porta
+	pla
+    sta via_porta
 	;Set AY Control lines to Write 
-    LDA #ayc_Write
-    STA via_pcr
+    lda #ayc_Write
+    sta via_pcr
 	;Set AY Control lines to inactive again 
-    LDA #ayc_Inactive
-    STA via_pcr
-    RTS
+    lda #ayc_Inactive
+    sta via_pcr
+    rts
 .)
+
+
+
+; Needs X and Y with the low and high bytes of the
+; table with register values
+AYRegDump
+.(
+	stx loop+1
+	sty loop+2
+
+    ldx #13
+loop 
+	lda $dead,x
+
+	; Prevent anything nasty
+	cpx #AY_Status
+	bne skip
+	ora #%01000000
+skip
+	jsr SendAYReg
+  	dex
+    bpl loop
+    rts
+.)
+
 
 Note2Pitch
 .(
@@ -187,7 +212,21 @@ Note2Pitch
 
 
 
-
+PlayBell
+.(
+	ldx #<Bell1
+	ldy #>Bell1
+	jsr AYRegDump
+	jsr wait
+	jsr wait
+	ldx #<Bell2
+	ldy #>Bell2
+	jmp AYRegDump
+Bell1
+	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,$70,$01,$8
+Bell2
+	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,0,$04,0
+.)
 
 
 
