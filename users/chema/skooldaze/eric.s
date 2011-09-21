@@ -882,6 +882,8 @@ launch
 	lda #NO_CATAPULTS
 	jsr punish_Eric
 
+	jsr SndFire
+
 	; this entry point is used when Boy Wander fires his catapult too
 	; the ID of the pellet (Boy Wander's or Eric's) is passed on reg Y
 	; and the ID of the character in reg X
@@ -1019,6 +1021,8 @@ cangetup
 	rts
 justknocked
 	; Eric has jut been kocked. Initialize everything
+
+	jsr SndKnocked
 	; First the counter
 	lda #40
 	sta Eric_knockout

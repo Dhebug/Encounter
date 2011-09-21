@@ -46,26 +46,20 @@
 #define AY_EnvelopeCy	13
 #define AY_IOPort		14
 
-.zero
-TimerCounter        .byt 0
-NoteCounter		    .byt 0
-ay_Pitch_A_High		.byt 0
-ay_Pitch_A_Low		.byt 0
 .text 
 
 
-PlayTune
-.(
+PlayTuneA
 	sei
 	lda #<_TuneDataA
-	sta tmp0
+	sta Song
 	lda #>_TuneDataA
-	sta tmp0+1
+	sta Song+1
 	lda #<_TuneDataB
-	sta tmp1
+	sta Song2
 	lda #>_TuneDataB
-	sta tmp1+1
-
+	sta Song2+1
+PlayTuneCommon
 	lda #0
 	sta NoteCounter
 
@@ -79,48 +73,38 @@ PlayTune
 	ldx #9
 	jsr SendAYReg
 
-loop
-	ldy NoteCounter
-	lda (tmp0),y
-	bmi endplay
-	beq restA
-	jsr Note2Pitch
-	lda ay_Pitch_A_Low
-	ldx #0
-	jsr SendAYReg
-	lda ay_Pitch_A_High
-	ldx #1
-	jsr SendAYReg
-restA
-	ldy NoteCounter
-	lda (tmp1),y
-	beq restB
-	jsr Note2Pitch
-	lda ay_Pitch_A_Low
-	ldx #2
-	jsr SendAYReg
-	lda ay_Pitch_A_High
-	ldx #3
-	jsr SendAYReg
-restB	
-	inc NoteCounter
-
-	; Make a pause
-	ldx #40*3
-	ldy #0
-loopp1
-loopp2
-	dey
-	bne loopp2
-	dex
-	bne loopp1
-	jmp loop
-
-endplay
-	jsr StopSound
 	cli
-	jmp wait
-.)
+	rts
+PlayTuneB
+	sei
+	lda #<_Tune2DataA
+	sta Song
+	lda #>_Tune2DataA
+	sta Song+1
+	lda #<_Tune2DataB
+	sta Song2
+	lda #>_Tune2DataB
+	sta Song2+1
+	bne PlayTuneCommon
+
+/*
+_Tune2DataA
+	.byt 5*12+G_, 5*12+G_, 5*12+G_, 5*12+A_, 5*12+B_, 5*12+B_, 5*12+A_, 5*12+A_ 
+	.byt 5*12+G_, 5*12+B_, 5*12+A_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+G_, RST
+	.byt 5*12+G_, 5*12+G_, 5*12+G_, 5*12+A_, 5*12+B_, 5*12+B_, 5*12+A_, 5*12+A_ 
+	.byt 5*12+G_, 5*12+B_, 5*12+A_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+G_, RST 
+
+A A A A | E(2) E(2) | A G F E | D(3) - | G G G A | B(2) A(2) | G B A A | G(3) - |
+There is an accompaniment: 
+
+G D B D | G D C D | B D C D | G D G F | G D B D | G D C D | B D C D | B D G - | 
+
+C D C B | A B C A | D# B A G | F C B A | G D B D | G D C D | B D C D | B D B/G - |
+
+Read more: http://wiki.answers.com/Q/Where_can_you_get_notes_for_au_clarie_de_la_lune#ixzz1YbEKUZqp
+*/
+
+
 
 StopSound
 InitSound
@@ -128,8 +112,6 @@ InitSound
 	ldx #<zeros
 	ldy #>zeros
 	jmp AYRegDump
-zeros
-	.byt 0,0,0,0,0,0,0,%01111000,0,0,0,0,0,0
 .)
 
 ; X=regnumber A=value
@@ -183,7 +165,7 @@ skip
 
 Note2Pitch
 .(
-        ;Convert Large Note to Octave(X) and 12 value Note(A) (Divide by 12)
+       ;Convert Large Note to Octave(X) and 12 value Note(A) (Divide by 12)
         LDX #255
         SEC
   .(
@@ -211,6 +193,24 @@ Note2Pitch
 .)
 
 
+#define SFX_SHHIT		1
+#define SFX_PING		2
+#define SFX_TWANG		3
+
+
+SndHitShld
+	lda #SFX_SHHIT
+	sta Sfx
+	rts
+SndKnocked
+	lda #SFX_PING
+	sta Sfx
+	rts
+SndFire
+	lda #SFX_TWANG
+	sta Sfx
+	rts
+
 
 PlayBell
 .(
@@ -222,10 +222,6 @@ PlayBell
 	ldx #<Bell2
 	ldy #>Bell2
 	jmp AYRegDump
-Bell1
-	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,$70,$01,$8
-Bell2
-	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,0,$04,0
 .)
 
 

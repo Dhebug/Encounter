@@ -2806,6 +2806,8 @@ doit
 
 	stx savx+1
 
+	jsr SndHitShld
+
 	ldx op1+1
 	inx
 	ldy op1

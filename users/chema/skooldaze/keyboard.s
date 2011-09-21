@@ -33,6 +33,15 @@ tmprow				.byt 0
 counter				.byt 0
 oldKey				.byt 0
 
+; For music and sfx
+ay_Pitch_A_High		.byt 0
+ay_Pitch_A_Low		.byt 0
+Song				.word 0000
+Song2				.word 0000
+TimerCounter		.byt 00
+NoteCounter			.byt 00
+Sfx					.byt 00
+
 .text 
 
 #define ROM
@@ -110,6 +119,16 @@ irq_routine
         ;Process keyboard 
         jsr ReadKeyboard 
 
+		; Process music, if present
+		lda Song+1
+		bne ProcessMusic
+
+		; Process sfx if present
+		lda Sfx
+		bne ProcessSfx
+
+
++ret_isr
         ;Restore Registers 
 sav_A   lda #00
 sav_X 	ldx #00
@@ -119,8 +138,60 @@ sav_Y  	ldy #00
         rti 
 .)
 
+ProcessSfx
+.(
+	ldy Sfx
+	lda tab_sfx_hi-1,y
+	ldx tab_sfx_lo-1,y
+	tay
+	jsr AYRegDump
+	lda #0
+	sta Sfx
+	jmp ret_isr
+.)
 
+ProcessMusic
+.(
+	inc TimerCounter
+	lda TimerCounter
+	and #%111
+	bne ret_isr
 
+	ldy NoteCounter
+	lda (Song),y
+	bmi endplay
+	beq restA
+	jsr Note2Pitch
+	lda ay_Pitch_A_Low
+	ldx #0
+	jsr SendAYReg
+	lda ay_Pitch_A_High
+	ldx #1
+	jsr SendAYReg
+restA
+	ldy NoteCounter
+	lda (Song2),y
+	beq restB
+	jsr Note2Pitch
+	lda ay_Pitch_A_Low
+	ldx #2
+	jsr SendAYReg
+	lda ay_Pitch_A_High
+	ldx #3
+	jsr SendAYReg
+restB	
+	inc NoteCounter
+
+retme
+	jmp ret_isr
+
+endplay
+	jsr StopSound
+
+	lda #0
+	sta Song+1
+	beq retme
+.)
 
 ReadKey
 .(
@@ -273,6 +344,43 @@ skip2   ;Proceed to next row
 .)  
 
 
+#define NUM_KEYS 9
+
+process_user_input
+.(
+	jsr ReadKeyNoBounce
+	beq end       	
+		
+	; Ok a key was pressed, let's check
+    ldx #NUM_KEYS-1
+loop    
+    cmp user_keys,x
+    beq found
+    dex
+    bpl loop
+end
+	rts
+
+found
+
+    lda key_routl,x
+    sta _smc_routine+1
+    lda key_routh,x
+    sta _smc_routine+2   
+
+	; Some keys shall be read with repetitions
+	cpx #4
+	bcs call
+	ldx #0
+	stx oldKey
+
+call
+	ldx #0
+_smc_routine
+	; Call the routine
+    jmp $1234   ; SMC     
+
+.)
 
 
 

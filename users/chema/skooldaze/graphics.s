@@ -463,6 +463,26 @@ udg_skool
 
 end_udg_skool
 
+tab_sfx_hi
+	.byt >_shhit,>_pic,>_twang
+tab_sfx_lo
+	.byt <_shhit,<_pic,<_twang
+
+; little ping
+_pic
+	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
+; Little ping
+_shhit
+	.byt 0,1,0,3,0,0,0,$78,$10,$10,0,0,5,0
+; POOONG
+_twang
+	.byt 0,1+3,0,2+3,0,1+3,0,$78,$10,$10,$10,0,$a-5,0
+Bell1
+	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,$70,$01,$8
+Bell2
+	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,0,$04,0
+
+
 free_udg_skool1
 .dsb 256-(*&255)
 
