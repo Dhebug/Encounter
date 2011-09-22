@@ -197,17 +197,15 @@ Note2Pitch
 #define SFX_PING		2
 #define SFX_TWANG		3
 
-
 SndHitShld
 	lda #SFX_SHHIT
-	sta Sfx
-	rts
+	.byt $2c
 SndKnocked
 	lda #SFX_PING
-	sta Sfx
-	rts
+	.byt $2c
 SndFire
 	lda #SFX_TWANG
+SndCommon
 	sta Sfx
 	rts
 

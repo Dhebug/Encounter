@@ -34,6 +34,10 @@ along with the new one.
 
 * Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
 
+* Now "Sorry Sir... Eric hit me" has no response when the teacher *does* believe Einstein(?).
+
+* Once boy 10 got the wrong animstate, after a class when delivering a message to Eric
+
 - Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
 
 - Still hangs on Dinner.
