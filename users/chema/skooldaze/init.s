@@ -59,6 +59,11 @@ tmp		.dsb 2
 
 _main
 .(
+  	; Some vars that must be zero for music and sfx
+	lda #0
+	sta Song+1
+	sta Sfx
+
 	jsr set_hires
 	jsr _GenerateTables 
 	jsr _init_irq_routine 
@@ -514,10 +519,6 @@ _main_loop
 	lda #0
 	sta counter
 	
-	; Some vars that must be zero for music and sfx
-	sta Song+1
-	sta Sfx
-
 	; Scroll if necessary...
 	lda pos_col
 	sec

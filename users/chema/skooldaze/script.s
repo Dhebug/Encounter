@@ -2655,7 +2655,11 @@ retme
 
 victimok
 	; Yeah, somebody was hit!
-
+	cpx #CHAR_EPELLET
+	bne skipsnd
+	jsr SndHit
+skipsnd
+	
 	; Is the objective already on the floor and it is not a teacher?
 	lda anim_state,y
 	cmp #6

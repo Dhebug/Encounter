@@ -344,8 +344,12 @@ st_gamefinished
 	.asc "WELL DONE! GO",0
 st_gamefinished2
 	.asc "UP A YEAR",0
+
+	
 __text_end
 
 #echo **** Text:
 #print (__text_end-__text_start)
+
+
 

@@ -193,23 +193,6 @@ Note2Pitch
 .)
 
 
-#define SFX_SHHIT		1
-#define SFX_PING		2
-#define SFX_TWANG		3
-
-SndHitShld
-	lda #SFX_SHHIT
-	.byt $2c
-SndKnocked
-	lda #SFX_PING
-	.byt $2c
-SndFire
-	lda #SFX_TWANG
-SndCommon
-	sta Sfx
-	rts
-
-
 PlayBell
 .(
 	ldx #<Bell1
@@ -221,6 +204,43 @@ PlayBell
 	ldy #>Bell2
 	jmp AYRegDump
 .)
+
+#define SFX_SHHIT		1
+#define SFX_KNOCK		2
+#define SFX_TWANG		3
+#define SFX_STEP		4
+#define SFX_HIT			5
+#define SFX_LINES1		6
+#define SFX_LINES2		7
+#define SFX_SAFELETTER	8
+
+
+SndHitShld
+	lda #SFX_SHHIT
+	.byt $2c
+SndKnocked
+	lda #SFX_KNOCK
+	.byt $2c
+SndHit
+	lda #SFX_HIT
+	.byt $2c
+SndStep
+	lda #SFX_STEP
+	.byt $2c
+SndFire
+	lda #SFX_TWANG
+	.byt $2c
+SndLines1
+	lda #SFX_LINES1
+	.byt $2c
+SndLines2
+	lda #SFX_LINES2
+	.byt $2c
+SndSafeLetter
+	lda #SFX_SAFELETTER
+SndCommon
+	sta Sfx
+	rts
 
 
 
