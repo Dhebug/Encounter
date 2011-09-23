@@ -1,10 +1,6 @@
 TODO LIST AND BUGS
 
-* Einstein sometimes is sat along with a small child
--> This is because when a kid is knocked down by a punch or
-pellet, when he gets up, he recovers his old animatory state
-Occurs because Angelface and Boy Wander hit with the teacher
-present, but I guess Eric can do this too!
+* Children sometimes share a chair (bug in the original)
 
 Punch a seated kid, while others look for a seat. Someone finds 
 the seat empty and sits down. Then the punched kid gets up and sits
@@ -16,27 +12,33 @@ along with the new one.
 
 * Boy Wander fires too much?
 
+* Eric's punches too slowly
+
 * Exam room not visible completely
 
 * It is a bit strange that the teacher writes someting, then
-  starts asking unrelated questions.
+  starts asking unrelated questions (same in the original)
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids.
+* Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids 
+  (same in the original)
 
 * Teachers should have a greater range of vision (tile size)
 
 * Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
 
-* Observed corruption in the anim_state for a character. For a small boy delivering a message,
-  and also for Eric when jumping. Could be related to the code for detecting shiel hits?
-
 * Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
 
-* Now "Sorry Sir... Eric hit me" has no response when the teacher *does* believe Einstein(?).
-
 * Once boy 10 got the wrong animstate, after a class when delivering a message to Eric
+
+* White room is not white
+
+* Found difficulties for hitting a shield with a bouncing pellet... need to check if it is related to the direction
+  it is facing.
+
+- Observed corruption in the anim_state for a character. For a small boy delivering a message,
+  and also for Eric when jumping. Could be related to the code for detecting shield hits?
 
 - Most times "Sorry Sir... Eric hit me" has no response (when the teacher does not believe Einstein).
 
