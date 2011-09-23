@@ -707,7 +707,7 @@ msgdone
 	jsr remove_speech_bubble
 
 	; Restart the game
-	jmp restart_game
+	jmp do_restart
 .)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1244,7 +1244,9 @@ heisnow
 	.byt $2c
 stay
 	lda #STAY_THISTIME
-	jsr punish_Eric
+	ldy #CHAR_ERIC
+	;jsr punish_Eric
+	jsr give_lines
 
 Ericisin
 	; Set bit 7 (indicating that the next absence 
@@ -1278,7 +1280,10 @@ Ericisin
 
 	; Punish him!
 	lda #DO_AGAIN
-	jsr punish_Eric
+	ldy #CHAR_ERIC
+	;jsr punish_Eric
+	jsr give_lines
+
 
 nohitmsg
 	; Check if Eric is still in class
@@ -2841,9 +2846,48 @@ savx
 	; We have flashed (or unflashed them all!)
 
 	inc game_mode
+	jsr PlayTuneB
 
-	; TODO: If game_mode equals 4 here, then we have finished the game!
+	lda game_mode
+	cmp #4
+	bne nofinish
+	; We have finished the game
+	lda #<st_gamefinished
+	sta tmp0
+	lda #>st_gamefinished
+	sta tmp0+1
+	jsr write_text_up
+	lda #<st_gamefinished2
+	sta tmp0
+	lda #>st_gamefinished2
+	sta tmp0+1
+	jsr write_text_down
+	lda #<22*8*40+15+$a000
+	sta tmp1
+	lda #>22*8*40+15+$a000
+	sta tmp1+1
+	jsr dump_text_buffer
 
+.(
+loopwp
+	lda Song+1
+	bne loopwp
+.)
+	jsr PlayTuneA
+.(
+loopwp
+	lda Song+1
+	bne loopwp
+.)
+
+	; Restart the game
++do_restart
+	pla
+	pla
+	pla
+	pla
+	jmp restart_game
+nofinish
 	ldy #0
 skip
 	sty flashed_shields

@@ -224,25 +224,31 @@ SndKnocked
 SndHit
 	lda #SFX_HIT
 	.byt $2c
-SndStep
-	lda #SFX_STEP
-	.byt $2c
 SndFire
 	lda #SFX_TWANG
-	.byt $2c
+SndCommon
+	sta Sfx
+	jmp flash_border
+
+SndStep
+	lda #SFX_STEP
+	sta Sfx
+	rts
+	
 SndLines1
 	lda #SFX_LINES1
-	.byt $2c
+	sta Sfx
+	jmp wait
+
 SndLines2
 	lda #SFX_LINES2
 	.byt $2c
+
 SndSafeLetter
 	lda #SFX_SAFELETTER
-SndCommon
 	sta Sfx
-	rts
-
-
+	jsr wait
+	jmp StopSound
 
 
 
