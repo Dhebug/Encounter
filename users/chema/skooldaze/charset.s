@@ -975,10 +975,12 @@ smc_pchars
 	lda $1234	; Get next character
 	beq endsubm	; If we have finished...
 
+	bpl notcomp
 process_subm
 	jsr get_comp_char
 	bne nocarry	; Return if inside a compressed string
 
+notcomp
 	; Advance the pointer
 	inc var5,x
 	bne nocarry
@@ -1001,11 +1003,11 @@ smc_pchar
 	lda $1234	; Get char	
 	beq end		; If it is zero, just return
 	
-	bpl notcomp
+	bpl notcomp2
 	jsr get_comp_char
 	bne nocarry2
 
-notcomp
+notcomp2
 	; Move to the next character
 	inc var3,x
 	bne nocarry2

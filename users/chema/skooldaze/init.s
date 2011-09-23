@@ -296,6 +296,9 @@ noright
 	sta command_list_high,x
 	sta cur_command_high,x
 
+	; And the pointers to compressed substrings
+	sta compp,x
+
 	dex
 	bpl loop
 .)
@@ -410,27 +413,12 @@ skip
 .)
 
 	; Initialize SRB
-
 	ldx #(21*5-1)
+	lda #0
 loopsrb
-	;lda #$fc
-	lda #0
-	sta SRB,x
-	dex
-	;lda #$ff
-	lda #0
-	ldy #2
-loopsrb2
-	sta SRB,x
-	dex
-	dey
-	bpl loopsrb2
-	;lda #$3f
-	lda #0
 	sta SRB,x
 	dex
 	bpl loopsrb
-
 	
 	; First screen render
 	jsr clr_hires
