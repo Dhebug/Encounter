@@ -960,7 +960,7 @@ isok
 
 	; Ask the user to change the name
 	jsr change_name
-	jsr clear_name
+	jsr clear_name_and_title
 
 	; Walk the character out
 	ldx tmp7
@@ -1098,6 +1098,11 @@ bottomline
 	jmp do_dump
 .)
 
+clear_name_and_title
+.(
+	jsr clear_name
+	jmp dump_title
+.)
 
 clear_name
 .(
@@ -1107,7 +1112,6 @@ clear_name
 	sta tmp0+1
 	jsr write_text_up
 	jsr write_text_down
-	jsr dump_title
 	jmp dump_title2
 .)
 
@@ -1178,8 +1182,6 @@ loop_read
 	beq end
 	cmp #$08	; delete?
 	bne nodel
-	cmp #32		; not an alphanumeric character?
-	bcc end
 	cpy #0
 	beq loop_read
 	dey
@@ -1188,6 +1190,9 @@ loop_read
 	sta (tmp0),y
 	beq skip	
 nodel
+	cmp #32		; not an alphanumeric character?
+	bcc end
+
 	sta (tmp0),y
 	cpy #12
 	beq skip
