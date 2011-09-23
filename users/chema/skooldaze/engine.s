@@ -537,6 +537,10 @@ step_character
 
 +step_character_ex		; Entry point when update_SRB_sp has been called (e.g. up/down stairs)
 
+	cpx #CHAR_ERIC
+	bne skipsnd
+	jsr SndStep
+skipsnd
 	ldy anim_state,x
 	iny
 	cpy #4

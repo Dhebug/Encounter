@@ -422,8 +422,10 @@ smc_savop2
 	adc #1
 	jsr search_string
 	jsr write_text_down
+	jsr SndLines1
 	jsr show_box
 	jsr wait
+	;jsr StopSound
 
 	; Now the reprimand
 	lda #<reprimands
@@ -446,8 +448,10 @@ sava
 	jsr write_text_down
 
 	; Show the reprimand box
+	jsr SndLines2
 	jsr show_box
 	jsr wait
+	jsr StopSound
 
 	; Restore the screen data
 	jsr restore_buffer
@@ -817,8 +821,10 @@ reveal
 	sta tmp0+1
 	jsr write_text_down
 
+	jsr SndSafeLetter
 	jsr show_box
 	jsr wait
+	jsr StopSound
 
 	; Restore the screen data
 	jsr restore_buffer

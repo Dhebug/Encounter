@@ -14,6 +14,13 @@
 
 #include "script.h"	; For destination D_ defines
 
+
+_lines1
+	.byt 0,4,0,0,0,0,$ff,$78,$10,0,0,1,0,$e
+_lines2
+	.byt 0,4,0,0,0,0,$ff,$78,$10,0,0,3,0,$e
+
+
 ; tile graphics for skool data
 free_before_udgs
 .dsb 256-(*&255)
@@ -464,23 +471,29 @@ udg_skool
 end_udg_skool
 
 tab_sfx_hi
-	.byt >_shhit,>_pic,>_twang
+	.byt >_shhit,>_knock,>_twang,>_step,>_hit,>_lines1,>_lines2,>_safeletter
 tab_sfx_lo
-	.byt <_shhit,<_pic,<_twang
+	.byt <_shhit,<_knock,<_twang,<_step,<_hit,<_lines1,<_lines2,<_safeletter
 
-; little ping
-_pic
-	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
 ; Little ping
 _shhit
 	.byt 0,1,0,3,0,0,0,$78,$10,$10,0,0,5,0
 ; POOONG
 _twang
 	.byt 0,1+3,0,2+3,0,1+3,0,$78,$10,$10,$10,0,$a-5,0
-Bell1
-	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,$70,$01,$8
-Bell2
-	.byt $35,0,$2e,0,0,0,0,%1111100,$10,$10,0,0,$04,0
+_step
+	.byt 0,0,0,0,0,0,$ff,$7e,$10,0,0,$26,0,9
+_hit
+	.byt 0,0,0,0,0,0,$ff,$77,$10,0,0,$d0,0,9
+_knock
+	.byt 0,1,0,0,0,0,$76,$10,0,0,0,2,9
+
+; little ping
+;_pic
+;	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
+
+_safeletter
+	.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
 
 
 free_udg_skool1
