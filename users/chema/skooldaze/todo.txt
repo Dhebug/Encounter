@@ -37,6 +37,10 @@ along with the new one.
 * Found difficulties for hitting a shield with a bouncing pellet... need to check if it is related to the direction
   it is facing.
 
+- 6x6=2???
+
+- Does the bell sound between two consecutive playtimes? It shouldn't
+
 - Observed corruption in the anim_state for a character. For a small boy delivering a message,
   and also for Eric when jumping. Could be related to the code for detecting shield hits?
 
