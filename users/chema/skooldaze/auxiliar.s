@@ -127,6 +127,7 @@ contdiv
 
 mul8
 .(
+	lda #0
 	sta tmp1
 	ldx #9
 _m8_loop

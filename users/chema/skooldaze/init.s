@@ -713,11 +713,12 @@ cont
 	sta current_lesson
 
 	; Get the lesson descriptor
+	/*
 	sec
-	sbc #224
+	sbc #224*/
 	tax
-	lda lesson_descriptors,x
-	sta lesson_descriptor
+	ldy lesson_descriptors-224,x
+	sty lesson_descriptor
 
 	cmp #254	; Second playtime in a row
 	bcs nobell
