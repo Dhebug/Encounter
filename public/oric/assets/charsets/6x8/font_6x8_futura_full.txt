@@ -1,0 +1,12 @@
+;
+; This is a complete system font replacement, including numbers, symbols, upper case and lower case letters.
+; You simply replace the existing font from C doing this:
+;
+;   extern unsigned char Font_6x8_FuturaFull[1024];
+;
+; Then to set the HIRES font:
+;   memcpy((unsigned char*)0x9800+32*8,Font_6x8_FuturaFull,768);
+;
+; Or to set the TEXT font:
+;   memcpy((unsigned char*)0xb400+32*8,Font_6x8_FuturaFull,768);
+;
