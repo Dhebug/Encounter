@@ -878,6 +878,14 @@ nolower
 	beq launch
 	rts
 launch
+	; This code is to let the player decide *when* to launch
+	; the pellet, when he releases the F key.
+	lda KeyBank+1
+	and #%00001000
+	beq doit
+	inc Eric_timer
+	rts
+doit
 	; Launch the pellet, reprimands, etc.
 	lda #NO_CATAPULTS
 	jsr punish_Eric
@@ -931,7 +939,7 @@ hit_Eric
 	sta tmp+1
 	lda #ERIC_HITTING
 	sta tmp
-	lda #18
+	lda #18-8
 	sta tmp0
 	jmp realize_Eric_action
 .)
@@ -944,7 +952,7 @@ hit_Eric2
 	
 	lda Eric_timer
 	; Is it 12? then next step of punch
-	cmp #12
+	cmp #12-4
 	bne nonext
 	; First stage
 	lda #8
@@ -960,7 +968,7 @@ savx
 	rts
 nonext
 	; is it time to see if anybody was hit?
-	cmp #11
+	cmp #11-4
 	beq completed
 	rts
 completed

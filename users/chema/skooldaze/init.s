@@ -662,7 +662,8 @@ nopunish
 	; Time before next move...
 loop
 	lda counter
-	beq loop
+	cmp #2
+	bcc loop
 	jmp _main_loop
 .)
 

@@ -12,8 +12,6 @@ along with the new one.
 
 * Boy Wander fires too much?
 
-* Eric's punches too slowly
-
 * Exam room not visible completely
 
 * It is a bit strange that the teacher writes someting, then
@@ -34,8 +32,10 @@ along with the new one.
 
 * White room is not white
 
-* Found difficulties for hitting a shield with a bouncing pellet... need to check if it is related to the direction
+- Found difficulties for hitting a shield with a bouncing pellet... need to check if it is related to the direction
   it is facing.
+
+- Eric punches too slowly
 
 - 6x6=2???
 
