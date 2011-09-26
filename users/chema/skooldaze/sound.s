@@ -65,6 +65,7 @@ PlayTuneCommon
 
 	jsr InitSound
 
+/*
 	; Set volume
 	lda #$f
 	ldx #8
@@ -72,7 +73,7 @@ PlayTuneCommon
 	lda #$f
 	ldx #9
 	jsr SendAYReg
-
+*/
 	cli
 	rts
 PlayTuneB
@@ -109,6 +110,7 @@ Read more: http://wiki.answers.com/Q/Where_can_you_get_notes_for_au_clarie_de_la
 StopSound
 InitSound
 .(
+	jsr SendAYReg
 	ldx #<zeros
 	ldy #>zeros
 	jmp AYRegDump

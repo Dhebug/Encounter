@@ -182,6 +182,10 @@ restA
 	ldx #3
 	jsr SendAYReg
 restB	
+
+	lda NoteCounter
+	beq SetVolume
++contm
 	inc NoteCounter
 
 retme
@@ -193,6 +197,18 @@ endplay
 	lda #0
 	sta Song+1
 	beq retme
+.)
+
+SetVolume
+.(
+	; Set volume
+	lda #$f
+	ldx #8
+	jsr SendAYReg
+	lda #$f
+	ldx #9
+	jsr SendAYReg
+	jmp contm
 .)
 
 ReadKey

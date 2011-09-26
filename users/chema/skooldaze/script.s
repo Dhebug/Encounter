@@ -2175,6 +2175,13 @@ cont
 	and #7
 	sec
 	sbc #7	; -7<= a <=0
+	pha
+	lda randseed
+	and #%11
+	sta tmp
+	pla
+	sec
+	sbc tmp	; -10<= a <=0
 	clc
 	adc dest_x,x
 	jmp miniw
@@ -2750,7 +2757,12 @@ cont
 	sta op1
 	lda pos_col,x
 	sta op1+1
-
+	; Kludge to adjust position
+	lda flags,x
+	and #IS_FACING_RIGHT
+	beq skipk
+	inc op1+1
+skipk
 	; Entry point to check if Eric touched a shield
 	; store in op, op+1 the row and col to check for
 +check_shield_hit2
@@ -3717,8 +3729,8 @@ finished
 	jsr remove_speech_bubble
 	jmp terminate_subcommand
 goeson
-	;jsr slide_char_bubble
-	;bcs finished
+	jsr slide_char_bubble
+	bcs finished
 	rts
 .)
 

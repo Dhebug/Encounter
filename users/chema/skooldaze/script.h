@@ -182,13 +182,13 @@ character's buffer:
 ;;; --------------------------------------
 
 #define D_FIRE_ESCAPE		3,124
-#define D_HEAD_STUDY		3,7
+#define D_HEAD_STUDY		3,7+3
 #define D_HEAD_DOORWAY		3,10
 #define D_LIBRARY_LEFT		3,21
 #define D_READING_ENTRANCE	3,54		
 #define D_STAFF_ROOM		10,12
 #define D_GYM				17,124
-#define	D_BIG_WINDOW		17,8
+#define	D_BIG_WINDOW		17,8+3
 #define D_EXAM_BOARD		10,55
 #define D_WHITE_BOARD		10,34
 #define D_READING_BOARD		3,56
