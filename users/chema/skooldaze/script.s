@@ -78,12 +78,14 @@ s_stand_up
 .(
 	lda anim_state,x
 	cmp #4	; Is he sat on a chair?
-	beq doit
+	beq doit2
 	cmp #5	; Sat on the floor?
 	beq doit
 	cmp #6	; Lying on the floor?
 	beq doit
 	rts
+doit2
+	jsr to_front
 doit
 	; Change animatory state
 	lda #0
@@ -147,6 +149,7 @@ tofloor
 	sty savy+1
 	ldx savy+1
 
+	jsr to_front
 	inc anim_state,x
 	jsr update_SRB_sp
 	lda as_pointer_low,x
@@ -199,6 +202,7 @@ s_sit_char
 	; Avoid doing anything with Eric
 	;cpx #0
 	;beq isEric
+	jsr to_back
 	lda #0
 	sta uni_subcom_high,x
 isEric	
@@ -3609,15 +3613,17 @@ s_isc_up_stair
 	; The character must face right
 	lda flags,x
 	and #IS_FACING_RIGHT
-	bne correct
+	bne correct2
 	beq turnit
 mustfaceleft
 	lda flags,x
 	and #IS_FACING_RIGHT
 	bne turnit
+correct2
+	jsr to_back
 correct
 	dec var4,x
-	beq terminate_isc
+	beq terminate_isc2
 
 +up_a_stair
 	lda anim_state,x
@@ -3630,6 +3636,9 @@ onlystep
 	jmp step_character
 .)
 
+terminate_isc2
+	jsr to_front
+	jmp terminate_isc
 
 s_isc_down_stair
 .(
@@ -3644,15 +3653,17 @@ s_isc_down_stair
 	; The character must face left
 	lda flags,x
 	and #IS_FACING_RIGHT
-	beq correct
+	beq correct2
 	bne turnit
 mustfaceright
 	lda flags,x
 	and #IS_FACING_RIGHT
 	beq turnit
+correct2
+	jsr to_back
 correct
 	dec var4,x
-	beq terminate_isc
+	beq terminate_isc2
 
 +down_a_stair
 	lda anim_state,x
