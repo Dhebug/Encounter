@@ -264,6 +264,15 @@ _init
 	sta lines
 	sta lines+1
 
+	; Set drawing order
+.(
+	ldx #MAX_CHARACTERS-1
+loop
+	txa
+	sta tab_chars,x
+	dex
+	bpl loop
+.)
 .(
 	ldx #20
 loop

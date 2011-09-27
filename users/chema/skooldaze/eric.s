@@ -65,6 +65,12 @@ savy
 .)
 
 
+to_front_Eric
+.(
+	ldx #0
+	jmp to_front
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Move Eric left
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -246,6 +252,10 @@ facingright2
 	jmp change_direction
 +notstaircase
 	; He is not in a staircase
+	lda tab_chars
+	beq donothing
+	jsr to_front_Eric	
+donothing
 	lda flags
 	and #IS_FACING_RIGHT
 	bne notstaircaser
@@ -270,6 +280,7 @@ notleftstaircase
 	beq notstaircase
 	; Facing right
 doit2
+	jsr to_back
 	jmp up_a_stair
 .)
 
@@ -305,7 +316,7 @@ doit
 	and #IS_FACING_RIGHT
 	bne facingright
 	; Move him down a stair
-	jmp doit2
+	jmp doit22
 facingright
 	; If so turn him round
 	jmp change_direction
@@ -318,7 +329,7 @@ left
 	; If so turn him round
 	jmp change_direction
 facingright2
-	jmp doit2
+	jmp doit22
 middletop
 	; He is at the middle or top floors
 	lda pos_col
@@ -335,8 +346,11 @@ notleftstaircase
 	bne notstaircase
 	lda flags
 	and #IS_FACING_RIGHT
-	bne notstaircase
+	beq doit2 
+	jmp notstaircase
 doit2
+	jsr to_back
+doit22
 	jmp down_a_stair
 .)
 
@@ -390,7 +404,7 @@ notstairs
 						; character needs to turn round
 	bne notyet
 	ldy tmp7
-	jmp s_knock_and_sit; s_sit_char
+	jmp s_knock_and_sit
 notyet
 	ldy tmp3
 	; Then sit on the floor

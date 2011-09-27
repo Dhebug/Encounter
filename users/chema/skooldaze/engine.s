@@ -15,7 +15,6 @@
 
 #include "params.h"
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; This routine mimics the Speccy version, which apparently
 ; checks 3 characters in case they need moving at each
@@ -961,7 +960,13 @@ draw_sprites
 	sta smc_tilerow+1
 
 	ldx #MAX_CHARACTERS-1	
+	stx tmp7
 loop
+	; Get the character
+	ldx tmp7
+	lda tab_chars,x
+	tax
+
 	; Check if the character overlaps the current tile
 	; start with the col
 smc_tilecol
@@ -1052,7 +1057,7 @@ graphic_p
 	bpl loopcopy
 
 skip
-	dex
+	dec tmp7
 	;bpl loop
 	bmi end
 	jmp loop
@@ -1130,7 +1135,60 @@ nocarry
 .)
 
 
+to_back
+.(	
+	stx savx+1
+	jsr search_char
+	cpy #MAX_CHARACTERS-1
+	beq end
+loop
+	lda tab_chars+1,y
+	sta tab_chars,y
+	iny
+	cpy #MAX_CHARACTERS-1
+	bne loop
+savx
+	ldx #0
+	txa
+	sta tab_chars+MAX_CHARACTERS-1
+end
+	rts
+.)
 
+to_front
+.(
+	stx savx+1
+	jsr search_char
+	cpy savx+1
+	beq end
+	bcc end
+loop
+	lda tab_chars-1,y
+	sta tab_chars,y
+	dey
+savx
+	cpy #0
+	bne loop
+	;lda savx+1
+	txa
+	sta tab_chars,x
+end
+	rts
+.)
+
+
+search_char
+.(
+	ldy #MAX_CHARACTERS-1
+	txa
+loops
+	cmp tab_chars,y
+	beq found
+	dey
+	bpl loops
+found
+	rts
+.)
 
 
 
