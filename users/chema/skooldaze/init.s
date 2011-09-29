@@ -23,11 +23,6 @@
 #define LESCLK_VAL		5376 
 
 
-
-#define _hires		$ec33
-#define _text		$ec21
-#define _ping		$fa9f
-
 .zero
 
 tmp0	.dsb 2
@@ -76,13 +71,19 @@ _main
 	jsr wait
 
 +restart_game
-	;jsr InitSound
-	;jsr sfx_shield_hit
-
 	; Set demo mode
-	jsr set_demo_mode
-	jsr _init
-	jmp _main_loop
+	lda #0
+	sta game_mode
+
+	lda #$ff
+	sta demo_ff_00+1
+	sta demo_ff_002+1
+
+	lda #$10	; $d0 for normal mode
+	sta demo_bpl_bne
+
+	; Jump to initializations and main loop.
+	jmp _init
 .)
 
 
@@ -464,45 +465,10 @@ wsong
 	lda #>(LESCLK_VAL)
 	sta lesson_clock+1
 */
-	jmp change_lesson
+	jsr change_lesson
+	jmp _main_loop
  .)
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set and unset demo mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-set_demo_mode
-.(
-	lda #0
-	sta game_mode
-
-	lda #$ff
-	sta demo_ff_00+1
-	sta demo_ff_002+1
-
-	lda #$10	; $d0 for normal mode
-	sta demo_bpl_bne
-
-	rts
-.)
-
-
-unset_demo_mode
-.(
-	lda #1
-	sta game_mode
-
-	lda #$00
-	sta demo_ff_00+1
-	sta demo_ff_002+1
-
-	lda #$d0	; $10 for demo mode
-	sta demo_bpl_bne
-
-	rts
-.)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -557,12 +523,24 @@ notzero
 	beq avoidEric
 	
 	; A key was pressed, exit demo mode.
-	jsr unset_demo_mode
+	lda #1
+	sta game_mode
+
+	lda #$00
+	sta demo_ff_00+1
+	sta demo_ff_002+1
+
+	lda #$d0	; $10 for demo mode
+	sta demo_bpl_bne
+
+	; Ask the user to change names
 	jsr change_names
+
 	; Play the main tune
 	jsr PlayTuneA
-	jsr _init
-	jmp _main_loop
+
+	; Jump to initalizations and main loop
+	jmp _init
 
 play_mode
 
@@ -723,9 +701,6 @@ cont
 	sta current_lesson
 
 	; Get the lesson descriptor
-	/*
-	sec
-	sbc #224*/
 	tax
 	ldy lesson_descriptors-224,x
 	sty lesson_descriptor

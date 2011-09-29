@@ -85,6 +85,7 @@ s_stand_up
 	beq doit
 	rts
 doit2
+	; Put the character back to front
 	jsr to_front
 doit
 	; Change animatory state
@@ -149,6 +150,7 @@ tofloor
 	sty savy+1
 	ldx savy+1
 
+	; Put the character back to front
 	jsr to_front
 	inc anim_state,x
 	jsr update_SRB_sp
@@ -199,9 +201,7 @@ thatsall
 s_sit_char
 .(
 	; Terminate uninterruptible subcommand
-	; Avoid doing anything with Eric
-	;cpx #0
-	;beq isEric
+	; Send the character to the back (so he is drawn first)	
 	jsr to_back
 	lda #0
 	sta uni_subcom_high,x
@@ -2840,12 +2840,13 @@ doit
 	jsr update_SRB
 
 	; Add to the score
+	ldy op1
 .(
 	lda #10
-	cpy #5
+	cpy #5-1
 	bcc ads
 	lda #20
-	cpy #10
+	cpy #10-1
 	bcc ads
 	lda #40
 ads

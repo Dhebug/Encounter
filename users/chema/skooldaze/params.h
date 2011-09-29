@@ -65,7 +65,8 @@
 #define CLASS_START		15	  		
 
 ; Visibility ranges for characters
-#define VIS_RANGE_X		14
+#define VIS_RANGE_X		14+1
+; This is not used
 #define VIS_RANGE_Y		14
 
 

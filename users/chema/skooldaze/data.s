@@ -700,7 +700,7 @@ rgn_midfloor_walls
 	.byt 14
 	.byt 30
 	.byt 51
-	.byt 94
+	.byt 94-3
 	.byt 130
 rgn_midfloor_ids
 	.byt 0	; Forbidden region
