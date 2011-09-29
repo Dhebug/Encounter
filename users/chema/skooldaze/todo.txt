@@ -19,8 +19,6 @@ along with the new one.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Teachers should have a greater range of vision (tile size)
-
 * Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
 
 * Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
@@ -29,11 +27,13 @@ along with the new one.
 
 * White room is not white
 
-* Set the three lines of text to zeros
+* Eric is not correctly set back to front always after taking stairs (related to moving up/down using left/right keys).
 
-* Comment all the code related to correct rendering order
+- Teachers should have a greater range of vision (tile size related?)
 
-* Eric is not correctly set back to front always after taking stairs.
+- Set the three lines of text to zeros
+
+- Comment all the code related to correct rendering order
 
 - Teachers are drawn over seats (when they are at the blackboard, thus behind them) but behind seated kids 
   (same in the original)

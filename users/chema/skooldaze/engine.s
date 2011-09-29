@@ -1135,6 +1135,13 @@ nocarry
 .)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; The next routines change the order of
+; drawing of sprites, sending a particular one
+; to the back or to the front.
+; Character to send to back or front is passed
+; in register X, which is not modified.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 to_back
 .(	
 	stx savx+1
@@ -1176,7 +1183,10 @@ end
 	rts
 .)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Helper to search for a given character
+; inside the order-of-drawing list.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 search_char
 .(
 	ldy #MAX_CHARACTERS-1
