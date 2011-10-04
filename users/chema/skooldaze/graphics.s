@@ -495,6 +495,11 @@ _knock
 _safeletter
 	.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
 
+; Probabilities (out of 256) that a teacher
+; punishes Einistein for telling tales
+tab_teachertales
+	.byt 48,16,0,16
+
 
 free_udg_skool1
 .dsb 256-(*&255)
@@ -2862,11 +2867,8 @@ end_teacher_tiles
 
 .dsb 256-(*&255)
 
-; Probabilities (out of 256) that a teacher
-; punishes Einistein for telling tales
-tab_teachertales
-	.byt 48,16,0,16
-
+tab_safecode
+	.dsb 4		; The safe combination code
 tab_safecodes
 	.dsb 4		; The safe combination letters for the teachers:
 
