@@ -2861,6 +2861,10 @@ savx
 	cpy #15
 	bne skip
 	; We have flashed (or unflashed them all!)
+	; Add 2000 to the score
+	lda #200
+	jsr add_score
+
 
 	inc game_mode
 	jsr PlayTuneB
@@ -2887,6 +2891,7 @@ savx
 
 .(
 loopwp
+	jsr flash_border
 	lda Song+1
 	bne loopwp
 .)
@@ -2976,7 +2981,10 @@ loopf
 	jsr flash_border
 	dey 
 	bne loopf
-	rts
+
+	; Add 1000 to the score and return
+	lda #100
+	jmp add_score
 	
 notfound
 next
