@@ -14,8 +14,8 @@
 #include "params.h"
 #include "script.h"
 #include "text.h"
+#include "sound.h"
 
-#define        via_t1cl                $0304
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Auxiliar functions
@@ -2867,7 +2867,11 @@ savx
 
 
 	inc game_mode
+#ifdef USE_THREE_TUNES
 	jsr PlayTuneC
+#else
+	jsr PlayTuneB
+#endif
 
 	lda game_mode
 	cmp #4
@@ -2896,13 +2900,13 @@ loopwp
 	bne loopwp
 .)
 	jsr PlayTuneA
-/*
+#ifdef USE_THREE_TUNES
 .(
 loopwp
 	lda Song+1
 	bne loopwp
 .)
-*/
+#endif
 	; Restart the game
 +do_restart
 	pla
