@@ -65,15 +65,6 @@ PlayTuneCommon
 
 	jsr InitSound
 
-/*
-	; Set volume
-	lda #$f
-	ldx #8
-	jsr SendAYReg
-	lda #$f
-	ldx #9
-	jsr SendAYReg
-*/
 	cli
 	rts
 PlayTuneB
@@ -88,15 +79,44 @@ PlayTuneB
 	sta Song2+1
 	bne PlayTuneCommon
 
+PlayTuneC
+	sei
+	lda #<_Tune3DataA
+	sta Song
+	lda #>_Tune3DataA
+	sta Song+1
+	lda #<_Tune3DataB
+	sta Song2
+	lda #>_Tune3DataB
+	sta Song2+1
+	bne PlayTuneCommon
+
+_Tune3DataA
+	.byt 4*12+G_, 4*12+G_, 4*12+G_, 4*12+A_, 4*12+B_, 4*12+B_, 4*12+A_, 4*12+A_ 
+	.byt 4*12+G_, 4*12+B_, 4*12+A_, 4*12+A_, 4*12+G_, 4*12+G_, 4*12+G_, RST
+	.byt 4*12+G_, 4*12+G_, 4*12+G_, 4*12+A_, 4*12+B_, 4*12+B_, 4*12+A_, 4*12+A_ 
+	.byt 4*12+G_, 4*12+B_, 4*12+A_, 4*12+A_, 4*12+G_, 4*12+G_, 4*12+G_, RST
+	.byt 4*12+A_, 4*12+A_, 4*12+A_, 4*12+A_, 4*12+E_, 4*12+E_, 4*12+E_, 4*12+E_
+	.byt 4*12+A_, 4*12+G_, 4*12+F_, 4*12+E_, 4*12+D_, 4*12+D_, 4*12+D_, RST
+	.byt 4*12+G_, 4*12+G_, 4*12+G_, 4*12+A_, 4*12+B_, 4*12+B_, 4*12+A_, 4*12+A_
+	.byt 4*12+G_, 4*12+B_, 4*12+A_, 4*12+A_, 4*12+G_, 4*12+G_, 4*12+G_, RST,$80
+
+_Tune3DataB
+	.byt 3*12+G_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+G_, 3*12+D_, 3*12+C_, 3*12+D_
+	.byt 3*12+B_, 3*12+D_, 3*12+C_, 3*12+D_, 3*12+G_, 3*12+D_, 3*12+G_, 3*12+F_
+	.byt 3*12+G_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+G_, 3*12+D_, 3*12+C_, 3*12+D_
+	.byt 3*12+B_, 3*12+D_, 3*12+C_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+G_, RST
+	.byt 3*12+C_, 3*12+D_, 3*12+C_, 3*12+B_, 3*12+A_, 3*12+B_, 3*12+C_, 3*12+A_
+	.byt 3*12+DS_, 3*12+B_, 3*12+A_, 3*12+G_, 3*12+F_, 3*12+C_, 3*12+B_, 3*12+A_
+	.byt 3*12+G_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+G_, 3*12+D_, 3*12+C_, 3*12+D_
+	.byt 3*12+B_, 3*12+D_, 3*12+C_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+B_, RST
+
 /*
-_Tune2DataA
-	.byt 5*12+G_, 5*12+G_, 5*12+G_, 5*12+A_, 5*12+B_, 5*12+B_, 5*12+A_, 5*12+A_ 
-	.byt 5*12+G_, 5*12+B_, 5*12+A_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+G_, RST
-	.byt 5*12+G_, 5*12+G_, 5*12+G_, 5*12+A_, 5*12+B_, 5*12+B_, 5*12+A_, 5*12+A_ 
-	.byt 5*12+G_, 5*12+B_, 5*12+A_, 5*12+A_, 5*12+G_, 5*12+G_, 5*12+G_, RST 
+G G G A | B(2) A(2) | G B A A | G(3) - | G G G A | B(2) A(2) | G B A A | G(3) - | 
 
 A A A A | E(2) E(2) | A G F E | D(3) - | G G G A | B(2) A(2) | G B A A | G(3) - |
-There is an accompaniment: 
+
+ There is an accompaniment: 
 
 G D B D | G D C D | B D C D | G D G F | G D B D | G D C D | B D C D | B D G - | 
 

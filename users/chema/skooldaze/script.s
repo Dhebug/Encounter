@@ -2867,7 +2867,7 @@ savx
 
 
 	inc game_mode
-	jsr PlayTuneB
+	jsr PlayTuneC
 
 	lda game_mode
 	cmp #4
@@ -2896,12 +2896,13 @@ loopwp
 	bne loopwp
 .)
 	jsr PlayTuneA
+/*
 .(
 loopwp
 	lda Song+1
 	bne loopwp
 .)
-
+*/
 	; Restart the game
 +do_restart
 	pla
