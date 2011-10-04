@@ -2900,7 +2900,7 @@ loopwp
 	bne loopwp
 .)
 	jsr PlayTuneA
-#ifdef USE_THREE_TUNES
+#ifndef USE_THREE_TUNES
 .(
 loopwp
 	lda Song+1
