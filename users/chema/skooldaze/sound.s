@@ -11,40 +11,8 @@
 ;; Sound and sfx routines
 ;; ----------------------
 
-#define        via_portb                $0300 
-#define        via_t1cl                $0304 
-#define        via_t1ch                $0305 
-#define        via_t1ll                $0306 
-#define        via_t1lh                $0307 
-#define        via_t2ll                $0308 
-#define        via_t2ch                $0309 
-#define        via_sr                  $030A 
-#define        via_acr                 $030b 
-#define        via_pcr                 $030c 
-#define        via_ifr                 $030D 
-#define        via_ier                 $030E 
-#define        via_porta               $030f 
 
-#define ayc_Register $FF
-#define ayc_Write    $FD
-#define ayc_Inactive $DD
-
-
-#define AY_AToneLSB		0
-#define AY_AToneMSB		1
-#define AY_BToneLSB		2
-#define AY_BToneMSB		3
-#define AY_CToneLSB		4
-#define AY_CToneMSB		5
-#define AY_Noise		6
-#define AY_Status		7
-#define AY_AAmplitude	8
-#define AY_BAmplitude	9
-#define AY_CAmplitude	10
-#define AY_EnvelopeLSB	11
-#define AY_EnvelopeMSB	12
-#define AY_EnvelopeCy	13
-#define AY_IOPort		14
+#include "sound.h"
 
 .text 
 
@@ -79,6 +47,8 @@ PlayTuneB
 	sta Song2+1
 	bne PlayTuneCommon
 
+#ifdef USE_THREE_TUNES
+
 PlayTuneC
 	sei
 	lda #<_Tune3DataA
@@ -110,6 +80,8 @@ _Tune3DataB
 	.byt 3*12+DS_, 3*12+B_, 3*12+A_, 3*12+G_, 3*12+F_, 3*12+C_, 3*12+B_, 3*12+A_
 	.byt 3*12+G_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+G_, 3*12+D_, 3*12+C_, 3*12+D_
 	.byt 3*12+B_, 3*12+D_, 3*12+C_, 3*12+D_, 3*12+B_, 3*12+D_, 3*12+B_, RST
+
+#endif
 
 /*
 G G G A | B(2) A(2) | G B A A | G(3) - | G G G A | B(2) A(2) | G B A A | G(3) - | 

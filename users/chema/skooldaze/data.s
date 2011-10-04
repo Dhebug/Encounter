@@ -16,24 +16,8 @@
 
 #include "params.h"
 #include "script.h"
+#include "sound.h"
 
-
-; For music notes
-
-#define RST 0
-
-#define C_	0
-#define CS_	1
-#define D_	2
-#define DS_	3
-#define E_	4
-#define F_	5
-#define FS_	6
-#define G_	7
-#define GS_	8
-#define A_	9
-#define AS_	10
-#define B_	11
 
 
 .zero
