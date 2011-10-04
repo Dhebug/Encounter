@@ -252,10 +252,12 @@ facingright2
 	jmp change_direction
 +notstaircase
 	; He is not in a staircase
+/*
 	lda tab_chars
 	beq donothing
 	jsr to_front_Eric	
 donothing
+*/
 	lda flags
 	and #IS_FACING_RIGHT
 	bne notstaircaser

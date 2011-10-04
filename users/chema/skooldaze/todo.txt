@@ -21,13 +21,13 @@ along with the new one.
 
 * Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
 
-* Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
-
 * Once boy 10 got the wrong animstate, after a class when delivering a message to Eric
 
 * White room is not white
 
-* Eric is not correctly set back to front always after taking stairs (related to moving up/down using left/right keys).
+- Eric is not correctly set back to front always after taking stairs (related to moving up/down using left/right keys).
+
+- Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
 
 - Teachers should have a greater range of vision (tile size related?)
 
