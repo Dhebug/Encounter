@@ -150,6 +150,10 @@ SOURCE=.\script.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\sound.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\text.h
 # End Source File
 # Begin Source File
