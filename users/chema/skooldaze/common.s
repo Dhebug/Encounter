@@ -795,11 +795,14 @@ reveal
 	stx savx+1
 	sty savy+1
 
+/*
 	txa
 	sec
 	sbc #CHAR_CREAK
 	tay
 	lda tab_safecodes,y
+*/
+	lda tab_safecodes-CHAR_CREAK,x
 	sta st_safeletter
 
 	; And show it
@@ -887,6 +890,42 @@ found
 	lda tab_bboards_high,y
 	sta tmp3+1
 	rts
+.)
+
+
+set_hires
+.(
+	lda #30
+	;lda $f934
+	sta $bfdf
+	
+	lda #A_BGBLACK 
+	sta $bf68
+	sta $bf68+40
+	sta $bf68+40*2
+	rts
+.)
+
+clr_hires
+.(
+	ldy #<($a000)
+	sty tmp
+	ldy #>($a000)
+	sty tmp+1
+	ldx #176
+loop2
+	ldy #39
+	lda #$40
+loop
+	sta (tmp),y
+	dey
+	bpl loop
+
+	jsr add40tmp
+	dex
+	bne loop2
+end
+	rts	
 .)
 
 

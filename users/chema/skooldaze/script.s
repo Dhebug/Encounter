@@ -2929,25 +2929,60 @@ doret
 check_safe
 .(
 	lda op1
-	cmp #9
+	cmp #8
 	bne retme
 	lda op1+1
 	cmp #13
 	beq rowfits
-	cmp #114
+	cmp #14
 	beq rowfits
 retme
 	rts
 rowfits
 
 	; Okay Eric is trying to open the safe
-	; TODO: CHECK COMBINATION IN ALL BLACKBOARDS bwrite, bread and bexam_desc
 
-	lda #0
-dbug
-	beq dbug
+	ldy #2	; There are three blackboards
+	sty tmp1
+loop
+	; Get the blackboard descriptor
+	ldy tmp1
+	lda tab_bboards_low,y
+	sta tmp
+	lda tab_bboards_high,y
+	sta tmp+1
+	; Has Eric written here?
+	ldy #4
+	lda (tmp),y
+	bne next
+	; He did, but was the blackboard empty?
+	ldy #11
+	lda (tmp),y
+	bmi next
+	; It was, now check the safe code
+	ldy #7	; There are four characters to check starting in pos 7
+loopsc
+	lda (tmp),y
+	cmp tab_safecode-7,y
+	bne notfound
+	iny
+	cpy #11
+	bne loopsc
+	; It was the safe code!
+	inc game_mode
+	jsr PlayTuneB
+	ldy #40
+loopf
+	jsr flash_border
+	dey 
+	bne loopf
+	rts
 	
-	; TODO: inc game_mode.
+notfound
+next
+	dec tmp1
+	bpl loop
+
 	rts
 .)
 

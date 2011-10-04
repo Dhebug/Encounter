@@ -87,42 +87,6 @@ _main
 .)
 
 
-set_hires
-.(
-	lda #30
-	;lda $f934
-	sta $bfdf
-	
-	lda #A_BGBLACK 
-	sta $bf68
-	sta $bf68+40
-	sta $bf68+40*2
-	rts
-.)
-
-clr_hires
-.(
-	ldy #<($a000)
-	sty tmp
-	ldy #>($a000)
-	sty tmp+1
-	ldx #176
-loop2
-	ldy #39
-	lda #$40
-loop
-	sta (tmp),y
-	dey
-	bpl loop
-
-	jsr add40tmp
-	dex
-	bne loop2
-end
-	rts	
-.)
-
-
 set_ink2
 .(
 	ldy #<($a000)
@@ -201,22 +165,9 @@ loop
 	ldx #168
 loopa
 	ldy #0
-	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
-	iny
-	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
+	jsr inv_scan
 	ldy #38
-	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
-	iny
-	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
-
+	jsr inv_scan
 
 	lda tmp0
 	clc
@@ -241,6 +192,20 @@ loop
 	dex
 	bne loop
 .)
+	rts
+.)
+
+
+inv_scan
+.(
+  	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	iny
+
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
 	rts
 .)
 
@@ -325,10 +290,35 @@ loop
 	clc
 	adc #65
 	sta tab_safecodes,x
+	sta tab_safecode,x
 	dex
 	bpl loop
 .)
+.(
+	; Put the safe code in order
+	ldx #(CHAR_WACKER-CHAR_FIRST_TEACHER)
+	ldy #0
+	jsr swap
 
+	ldx #1
+	ldy #2
+	jsr randgen
+	asl
+	bcc skip1
+	jsr swap
+skip1
+	inx
+	iny
+	asl
+	bcc skip2
+	jsr swap
+skip2
+	asl
+	bcc skip3
+	ldx #1
+	jsr swap
+skip3
+.)
 	; Now for the year...
 generatey
 	jsr randgen
@@ -469,6 +459,19 @@ wsong
 	jmp _main_loop
  .)
 
+
+swap
+.(
+	pha
+	lda tab_safecode,x
+	pha
+	lda tab_safecode,y
+	sta tab_safecode,x
+	pla
+	sta tab_safecode,y
+	pla
+	rts
+.)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
