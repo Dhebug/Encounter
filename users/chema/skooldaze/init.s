@@ -580,6 +580,15 @@ nowritting
 	ldx #0
 	jsr step_character
 
+	lda tab_chars
+	beq donothing
+	ldx #0
+	jsr is_on_staircase
+	bne donothing
+	jsr to_front_Eric	
+donothing
+
+
 midtimer	
 	; Here the original version does something strange..
 	lda Eric_mid_timer
