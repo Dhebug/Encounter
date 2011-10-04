@@ -25,6 +25,10 @@ along with the new one.
 
 * White room is not white
 
+* Check battle years (some might be wrong)
+
+- Bonus for opening the safe and hitting the 15 shields
+
 - Eric is not correctly set back to front always after taking stairs (related to moving up/down using left/right keys).
 
 - Need to sort tab_safecodes correctly to generate the password (Mr Wacker comes first)
