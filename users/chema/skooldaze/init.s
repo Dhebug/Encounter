@@ -881,6 +881,11 @@ end
 	rts
 .)
 
+
+.zero
+charid .byt 00,00
+.text
+
 start_catwalk
 .(
 	jsr clr_hires
@@ -933,10 +938,10 @@ loop
 
 	; Iterate through the main characters
 	lda #0
-	sta tmp7
+	sta charid
 loopchars
 	; Prepare the character position
-	ldx tmp7
+	ldx charid
 	lda #5
 	sta pos_row,x
 	lda #0
@@ -961,18 +966,18 @@ isok
 	jsr clear_name_and_title
 
 	; Walk the character out
-	ldx tmp7
+	ldx charid
 	jsr walk_char_out
 
 	; Proceed to the next character
 	; Beware to jump over the little kids
-	ldx tmp7
+	ldx charid
 	inx
 	cpx #4
 	bne notyet
 	ldx #15
 notyet
-	stx tmp7
+	stx charid
 	cpx #CHAR_WITHIT+1
 	bne loopchars
 
@@ -993,7 +998,7 @@ walk_char_out
 walk_char_in
 .(
 	lda #(3+19)*2
-	sta tmp7+1
+	sta charid+1
 	stx loop+1
 loop
 	ldx #0	; SMC
@@ -1009,7 +1014,7 @@ wl	dex
 	dey
 	bne wlo
 
-	dec tmp7+1
+	dec charid+1
 	bne loop
 	rts
 .)
@@ -1017,7 +1022,7 @@ wl	dex
 
 print_title
 .(
-	ldx tmp7
+	ldx charid
 	cpx #CHAR_FIRST_TEACHER
 	bcc noteacher
 	lda table_teacher_order-CHAR_FIRST_TEACHER,x
@@ -1038,7 +1043,7 @@ bottomline
 	sty tmp0
 	ldy #>st_casttitles
 	sty tmp0+1
-	lda tmp7
+	lda charid
 	cmp #CHAR_FIRST_TEACHER
 	bcc noteacher2
 	tax
@@ -1061,7 +1066,7 @@ noteacher2
 
 print_name
 .(
-	ldx tmp7
+	ldx charid
 	cpx #CHAR_FIRST_TEACHER
 	bcc noteacher
 	lda table_teacher_order-CHAR_FIRST_TEACHER,x
