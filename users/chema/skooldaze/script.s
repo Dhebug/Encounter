@@ -3018,7 +3018,7 @@ cont
 
 	; Has the character just been hit?
 	lda var7,x
-	cmp #19
+	cmp #19+10
 	beq justhit
 	
 	; If the character is a teacher make him reveal his
@@ -3153,7 +3153,7 @@ notEric
 	sta uni_subcom_high,y
 
 	; Initialize timer to be laid down
-	lda #20
+	lda #20+10
 	sta var7,y
 
 	rts
