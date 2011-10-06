@@ -573,7 +573,7 @@ nopressJ
 	bne noright
 	lda Eric_flags
 	and #IS_FACING_RIGHT
-	bne retme
+	beq retme
 changedir
 	ldx #CHAR_ERIC
 	jmp change_direction
