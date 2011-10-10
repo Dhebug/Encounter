@@ -221,7 +221,7 @@ _init
 	sta vis_row 
 	sta tile_col
 	;sta first_col
-	sta current_lesson_index
+	;sta current_lesson_index
 	sta Eric_flags
 	sta Eric_knockout
 	sta lines_delay
@@ -870,6 +870,7 @@ change_names
 	ldy #>st_putnames
 	jsr print_string
 looprk
+	jsr randgen
 	jsr ReadKey
 	cmp #"Y"
 	beq start_catwalk
