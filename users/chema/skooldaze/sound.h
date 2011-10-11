@@ -12,9 +12,6 @@
 ;;----------------
 
 
-#define USE_THREE_TUNES
-
-
 #define        via_portb                $0300 
 #define        via_t1cl                $0304 
 #define        via_t1ch                $0305 

@@ -1288,10 +1288,15 @@ nocarry1
 
 dump_text_buffer
 .(
+#ifdef BRK2SETTMP0
+	brk
+	.word buffer_text
+#else
 	lda #<buffer_text
 	sta tmp0
 	lda #>buffer_text
 	sta tmp0+1
+#endif
 
 	stx savx+1	; Preserve register x
 	
@@ -1349,11 +1354,15 @@ update_scorepanel
 	beq skip
 	jsr utoa
 skip
+#ifdef BRK2SETTMP0
+	brk
+	.word bufconv
+#else
 	lda #<bufconv
 	sta tmp0
 	lda #>bufconv
 	sta tmp0+1
-
+#endif
 
 	jsr write_text_up
 

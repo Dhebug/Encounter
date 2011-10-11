@@ -1,7 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -----------------------------------
+;;            Skool Daze
+;;         The Oric Version
+;; -----------------------------------
+;;			(c) Chema 2011
+;;         enguita@gmail.com
+;; -----------------------------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Twilighte's IRQ routine!
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IRQ and keyboard routines
+;; --------------------------
+
+#include "params.h"
+
 ; key read and timer irq 
 #define        via_portb               $0300 
 #define		   via_ddrb				   $0302	
@@ -103,20 +114,63 @@ _init_irq_routine
         rts 
 .)
 
+#ifdef BRK2SETTMP0
+set_tmp0
+.(
+	; Get data using the stored
+	; ret addr in stack
+	tsx
+	lda $103,x
+	sta zpTemp01+1
+	lda $102,x
+	sta zpTemp01
+	bne skip2
+	dec zpTemp01+1
+skip2
+	dec zpTemp01
 
-;The IRQ routine will run at 25Hz
+	ldy #0
+	lda (zpTemp01),y
+	sta tmp0
+	iny
+	lda (zpTemp01),y
+	sta tmp0+1
+
+	; Increment the return address to
+	; jump over the two byte data
+	; (the address was already +1).
+	inc $102,x
+	bne skip
+	inc $103,x
+skip
+
+	; Restore registers
+	; and return 
+	bne ret_isr	; this always jumps
+.)
+#endif
+
+
+;The IRQ routine will run at 25Hz or 50Hz...
 irq_routine 
 .(
-		; Genaral purpose counter (counting fps)
-		inc counter
-
         ;Preserve registers 
       	sta sav_A+1
     	stx sav_X+1
     	sty sav_Y+1
 
+#ifdef BRK2SETTMP0
+		; Check if it was a brk which caused this interrupt
+		pla
+		pha
+		and #%00010000
+		bne set_tmp0
+#endif
         ;Clear IRQ event 
         lda via_t1cl 
+
+  		; Genaral purpose counter (counting fps)
+		inc counter
 
         ;Process keyboard 
         jsr ReadKeyboard 

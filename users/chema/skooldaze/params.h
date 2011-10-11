@@ -85,7 +85,7 @@
 #define AVOID_JSRS
 
 ;; Substitutes the multiplying with a big (512) table, not much optimization though.
-;#define FULLTABLEMUL8
+//#define FULLTABLEMUL8
 
 ;; Avoid Oricutron's bug with ror addr,x
 #define AVOID_ORICUTRON_BUG
@@ -95,6 +95,12 @@
 
 ;; Center play area
 #define CENTER_PLAY_AREA
+
+;; Use the brk trick to set tmp0 and save some memory
+#define BRK2SETTMP0
+
+;; Use a long version of Au Claire...
+#define USE_THREE_TUNES
 
 ;; Definitions for characters
 

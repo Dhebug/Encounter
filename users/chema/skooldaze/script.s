@@ -590,10 +590,15 @@ s_tell_common
 	lda #40
 	sta var2,x
 
+#ifdef BRK2SETTMP0
+	brk
+	.word st_pressU
+#else
 	lda #<st_pressU
 	sta tmp0
 	lda #>st_pressU
 	sta tmp0+1
+#endif
 	jsr s_make_char_speak
 
 	; Set bit 0 of special_playtime flags to indicate
@@ -647,11 +652,15 @@ notpressed
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 s_2000lines_eric
 .(
+#ifdef BRK2SETTMP0
+	brk
+	.word reprimand_2000
+#else
     lda #<reprimand_2000
 	sta tmp0
     lda #>reprimand_2000
 	sta tmp0+1
-
+#endif
 	; Make the character say this...
 	jsr s_make_char_speak
 
@@ -829,10 +838,15 @@ s_dinner_duty
 	jsr s_check_Eric_loc
 	php
 	ldy #44	; left end of the teacher's dinner duty orbit
+#ifdef BRK2SETTMP0
+	brk
+	.word s_dinner_duty2
+#else
 	lda #<s_dinner_duty2
 	sta tmp0
 	lda #>s_dinner_duty2
 	sta tmp0+1
+#endif
 	plp
 
 	; Entry point from other routines to chase
@@ -882,10 +896,15 @@ s_dinner_duty2
 	; Prepare Z flag and destination
 	jsr s_check_Eric_loc
 	php
+#ifdef BRK2SETTMP0
+	brk
+	.word s_dinner_duty_ex
+#else
 	lda #<s_dinner_duty_ex
 	sta tmp0
 	lda #>s_dinner_duty_ex
 	sta tmp0+1
+#endif
 	ldy #83	;  right end of the techer's dinner duty orbit
 	plp
 	jmp	s_track_down_Eric	
@@ -970,11 +989,15 @@ s_msg_sitdown
 	jsr creak_code_test
 
 	; Get the appropriate message
+#ifdef BRK2SETTMP0
+	brk
+	.word sit_messages
+#else
 	lda #<sit_messages
 	sta tmp0
 	lda #>sit_messages
 	sta tmp0+1
-
+#endif
 	txa
 	sec
 	sbc #CHAR_FIRST_TEACHER
@@ -1136,10 +1159,15 @@ s_class_no_Eric
 	ldy #>s_isc_write
 	jsr call_subcommand
 	
+#ifdef BRK2SETTMP0
+	brk
+	.word st_write_essay
+#else
 	lda #<st_write_essay
 	sta tmp0
 	lda #>st_write_essay
 	sta tmp0+1
+#endif
 	jsr s_make_char_speak
 	jmp teacher_waits
 page_in_book
@@ -1180,16 +1208,26 @@ loop
 
 	jsr randgen
 	bcs questions
+#ifdef BRK2SETTMP0
+	brk
+	.word st_page_book
+#else
 	lda #<st_page_book
 	sta tmp0
 	lda #>st_page_book
 	sta tmp0+1
+#endif
 	jmp s_make_char_speak
 questions
+#ifdef BRK2SETTMP0
+	brk
+	.word st_question_book
+#else
 	lda #<st_question_book
 	sta tmp0
 	lda #>st_question_book
 	sta tmp0+1
+#endif
 	jmp s_make_char_speak
 .)
 
@@ -1407,10 +1445,15 @@ noblackboard
 	cmp #160
 	bcc no_essay
 	
+#ifdef BRK2SETTMP0
+	brk
+	.word st_write_essay
+#else
 	lda #<st_write_essay
 	sta tmp0
 	lda #>st_write_essay
 	sta tmp0+1
+#endif
 	jsr s_make_char_speak
 	jmp teacher_waits
 no_essay
@@ -1720,10 +1763,15 @@ not_wacker
 	; on the teacher.
 
 	; Prepare base pointer
+#ifdef BRK2SETTMP0
+	brk
+	.word st_questions
+#else
 	lda #<st_questions
 	sta tmp0
 	lda #>st_questions
 	sta tmp0+1
+#endif
 
 	; Get the table of questions&answers for the current teacher
 	txa
@@ -1777,10 +1825,15 @@ firstq
 
 	; Now for the answer
 	; Prepare base pointer
+#ifdef BRK2SETTMP0
+	brk
+	.word st_ans
+#else
 	lda #<st_ans
 	sta tmp0
 	lda #>st_ans
 	sta tmp0+1
+#endif
 savy
 	ldy #0
 	iny
@@ -1873,10 +1926,15 @@ cont
 	sta var4,y
 
 	; and the corresponding pointer
+#ifdef BRK2SETTMP0
+	brk
+	.word st_battles
+#else
 	lda #<st_battles
 	sta tmp0
 	lda #>st_battles
 	sta tmp0+1
+#endif
 	lda birthyear_id
 	jsr search_string
 	lda tmp0
@@ -2877,15 +2935,25 @@ savx
 	cmp #4
 	bne nofinish
 	; We have finished the game
+#ifdef BRK2SETTMP0
+	brk
+	.word st_gamefinished
+#else
 	lda #<st_gamefinished
 	sta tmp0
 	lda #>st_gamefinished
 	sta tmp0+1
+#endif
 	jsr write_text_up
+#ifdef BRK2SETTMP0
+	brk
+	.word st_gamefinished2
+#else
 	lda #<st_gamefinished2
 	sta tmp0
 	lda #>st_gamefinished2
 	sta tmp0+1
+#endif
 	jsr write_text_down
 	lda #<22*8*40+15+$a000
 	sta tmp1
@@ -3882,10 +3950,15 @@ cont
 	cpx #CHAR_FIRST_TEACHER
 	bcc isbwander
 	; We are dealing with a teacher
+#ifdef BRK2SETTMP0
+	brk
+	.word st_teachboard
+#else
 	lda #<st_teachboard
 	sta tmp0
 	lda #>st_teachboard
 	sta tmp0+1
+#endif
 	jsr randgen
 	and #%111
 	sta tmp
@@ -3901,10 +3974,15 @@ cont
 	jmp continue
 isbwander
 	; It is Boy Wander get a message
+#ifdef BRK2SETTMP0
+	brk
+	.word st_bwboard
+#else
 	lda #<st_bwboard
 	sta tmp0
 	lda #>st_bwboard
 	sta tmp0+1
+#endif
 	jsr randgen
 	and #%111
 continue

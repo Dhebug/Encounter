@@ -405,18 +405,28 @@ smc_savop2
 
 	lda bufconv+1
 	sta st_lines+1
-	
+
+#ifdef BRK2SETTMP0
+	brk
+	.word st_lines
+#else
 	lda #<st_lines
 	sta tmp0
 	lda #>st_lines
 	sta tmp0+1
+#endif
 
 	jsr write_text_up
 
+#ifdef BRK2SETTMP0
+	brk
+	.word names_extras
+#else
 	lda #<names_extras
 	sta tmp0
 	lda #>names_extras
 	sta tmp0+1
+#endif
 	lda savy+1
 	clc
 	adc #1
@@ -426,19 +436,29 @@ smc_savop2
 	jsr SndLines1
 
 	; Now the reprimand
+#ifdef BRK2SETTMP0
+	brk
+	.word reprimands
+#else
 	lda #<reprimands
 	sta tmp0
 	lda #>reprimands
 	sta tmp0+1
+#endif
 sava
 	lda #0
 	jsr search_string
 	jsr write_text_up
 
+#ifdef BRK2SETTMP0
+	brk
+	.word reprimands
+#else
 	lda #<reprimands
 	sta tmp0
 	lda #>reprimands
 	sta tmp0+1
+#endif
 	lda sava+1
 	clc
 	adc #1
@@ -807,17 +827,26 @@ reveal
 
 	; And show it
 	jsr prepare_box
-
+#ifdef BRK2SETTMP0
+	brk
+	.word st_space
+#else
 	lda #<st_space
 	sta tmp0
 	lda #>st_space
 	sta tmp0+1
+#endif
 	jsr write_text_up
 
+#ifdef BRK2SETTMP0
+	brk
+	.word st_safeletter
+#else
 	lda #<st_safeletter
 	sta tmp0
 	lda #>st_safeletter
 	sta tmp0+1
+#endif
 	jsr write_text_down
 
 	jsr show_box
@@ -892,7 +921,7 @@ found
 	rts
 .)
 
-
+#ifndef BRK2SETTMP0
 set_hires
 .(
 	lda #30
@@ -927,5 +956,5 @@ loop
 end
 	rts	
 .)
-
+#endif
 

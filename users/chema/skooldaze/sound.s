@@ -11,7 +11,7 @@
 ;; Sound and sfx routines
 ;; ----------------------
 
-
+#include "params.h"
 #include "sound.h"
 
 .text 

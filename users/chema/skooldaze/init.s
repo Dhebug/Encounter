@@ -156,11 +156,16 @@ loop
 	; Middle 160 lines
 
 .(
+
+#ifdef BRK2SETTMP0
+	brk
+	.word ($a000+(4*40))
+#else
 	lda #<($a000+(4*40))
 	sta tmp0
 	lda #>($a000+(4*40))
 	sta tmp0+1
-
+#endif
 
 	ldx #168
 loopa
@@ -774,26 +779,39 @@ smc_ptimetable
 	bne notdemo
 
 	; We are in demo mode... print that.
+#ifdef BRK2SETTMP0 
+	brk
+	.word demo_msg2
+#else
 	lda #<demo_msg2
 	sta tmp0
 	lda #>demo_msg2
 	sta tmp0+1
-
+#endif
 	jsr write_text_down
 
+#ifdef BRK2SETTMP0 
+	brk
+	.word demo_msg
+#else
 	lda #<demo_msg
 	sta tmp0
 	lda #>demo_msg
 	sta tmp0+1
-
+#endif
 	jmp printit2 
 
 notdemo
 	; Get the room's name
+#ifdef BRK2SETTMP0 
+	brk
+	.word class_names
+#else
 	lda #<class_names
 	sta tmp0
 	lda #>class_names
 	sta tmp0+1
+#endif
 	lda lesson_descriptor
 	and #%1111
 	sec
@@ -820,11 +838,17 @@ notdemo
 	bne printit	; This always jumps
 	
 isplaytime
+#ifdef BRK2SETTMP0
+	brk 
+	.word empty_st
+	jmp printit2
+#else
 	lda #<empty_st
 	sta tmp0
 	lda #>empty_st
 	sta tmp0+1
 	bne printit2	; This always jumps
+#endif
 
 notnone	
 	and #%11
@@ -862,10 +886,15 @@ change_names
 	sta smc_paper_2+1
 	jsr set_ink2 
 
+#ifdef BRK2SETTMP0
+	brk
+	.word $a000+40*4+3
+#else
 	lda #<$a000+40*4+3
 	sta tmp0
 	lda #>$a000+40*4+3
 	sta tmp0+1
+#endif
 	lda #<st_putnames
 	ldy #>st_putnames
 	jsr print_string
@@ -895,10 +924,15 @@ start_catwalk
 	sta smc_paper_2+1
 
 	; Print "CAST OF CHARACTERS"
+#ifdef BRK2SETTMP0
+	brk
+	.word $a000+40*4+13
+#else
 	lda #<$a000+40*4+13
 	sta tmp0
 	lda #>$a000+40*4+13
 	sta tmp0+1
+#endif
 	lda #<st_castof
 	ldy #>st_castof
 	jsr print_string
@@ -1034,16 +1068,26 @@ print_title
 	jsr search_string
 	jmp bottomline
 noteacher
+#ifdef BRK2SETTMP0
+	brk
+	.word st_space
+#else
 	lda #<st_space
 	sta tmp0
 	lda #>st_space
 	sta tmp0+1
+#endif
 bottomline
 	jsr write_text_up
+#ifdef BRK2SETTMP0
+	brk
+	.word st_casttitles
+#else
 	ldy #<st_casttitles
 	sty tmp0
 	ldy #>st_casttitles
 	sty tmp0+1
+#endif
 	lda charid
 	cmp #CHAR_FIRST_TEACHER
 	bcc noteacher2
@@ -1090,10 +1134,15 @@ bottomline
 
 	jsr write_text_up
 
+#ifdef BRK2SETTMP0
+	brk
+	.word st_space
+#else
 	lda #<st_space
 	sta tmp0
 	lda #>st_space
 	sta tmp0+1
+#endif
 	jsr write_text_down
 
 +dump_title2
@@ -1110,10 +1159,15 @@ clear_name_and_title
 
 clear_name
 .(
+#ifdef BRK2SETTMP0
+	brk
+	.word st_space
+#else
 	lda #<st_space
 	sta tmp0
 	lda #>st_space
 	sta tmp0+1
+#endif
 	jsr write_text_up
 	jsr write_text_down
 	jmp dump_title2
@@ -1125,10 +1179,15 @@ clear_name
 change_name
 .(
 	; Print Print 'C' to change name
+#ifdef BRK2SETTMP0
+	brk
+	.word ADDR_LINE+11
+#else
 	lda #<ADDR_LINE+11
 	sta tmp0
 	lda #>ADDR_LINE+11
 	sta tmp0+1
+#endif
 	lda #<st_pressc
 	ldy #>st_pressc
 	jsr print_string
@@ -1139,10 +1198,15 @@ change_name
 
 	jsr clear_msg_line
 	; Print ENTER NEW NAME
+#ifdef BRK2SETTMP0
+	brk
+	.word ADDR_LINE+14
+#else
 	lda #<ADDR_LINE+14
 	sta tmp0
 	lda #>ADDR_LINE+14
 	sta tmp0+1
+#endif
 	lda #<st_entername 
 	ldy #>st_entername 
 	jsr print_string
@@ -1235,3 +1299,43 @@ loop
 	bpl loop
 	rts
 .)
+
+
+
+#ifdef BRK2SETTMP0
+set_hires
+.(
+	lda #30
+	;lda $f934
+	sta $bfdf
+	
+	lda #A_BGBLACK 
+	sta $bf68
+	sta $bf68+40
+	sta $bf68+40*2
+	rts
+.)
+
+clr_hires
+.(
+	ldy #<($a000)
+	sty tmp
+	ldy #>($a000)
+	sty tmp+1
+	ldx #176
+loop2
+	ldy #39
+	lda #$40
+loop
+	sta (tmp),y
+	dey
+	bpl loop
+
+	jsr add40tmp
+	dex
+	bne loop2
+end
+	rts	
+.)
+#endif
+
