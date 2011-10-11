@@ -742,24 +742,24 @@ udg_skool2
 
 ; Clock
 ; Tile skool 106
-.byt %11111000
-.byt %11110011
-.byt %11100111
-.byt %11100100
-.byt %11100111
-.byt %11100111
-.byt %11110011
-.byt %11111000
-
-; Tile skool 107
-.byt %11001111
+.byt %11111100
+.byt %11111011
+.byt %11110111
+.byt %11110100
+.byt %11110111
 .byt %11110111
 .byt %11111011
-.byt %11011011
-.byt %11011011
-.byt %11011011
-.byt %11110111
-.byt %11001111
+.byt %11111100
+
+; Tile skool 107
+.byt %11000111
+.byt %11110011
+.byt %11111001
+.byt %11011001
+.byt %11011001
+.byt %11011001
+.byt %11110011
+.byt %11000111
 
 ; For the blackboards we need
 board_read
