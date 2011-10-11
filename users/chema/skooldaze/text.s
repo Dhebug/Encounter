@@ -19,7 +19,7 @@ class_names
 	.byt 0
 	.asc "MAP ROOM"
 	.byt 0
-	.asc "WHITE ROOM"
+	.asc "CLOCK ROOM"
 	.byt 0
 	.asc "EXAM ROOM"
 	.byt 0

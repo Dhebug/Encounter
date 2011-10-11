@@ -740,6 +740,26 @@ udg_skool2
 ;Tile skool 105
 .byt $40, $7f, $4f^$bf, $67, $73, $79^$bf, $5e, $4c
 
+; Clock
+; Tile skool 106
+.byt %11111000
+.byt %11110011
+.byt %11100111
+.byt %11100100
+.byt %11100111
+.byt %11100111
+.byt %11110011
+.byt %11111000
+
+; Tile skool 107
+.byt %11001111
+.byt %11110111
+.byt %11111011
+.byt %11011011
+.byt %11011011
+.byt %11011011
+.byt %11110111
+.byt %11001111
 
 ; For the blackboards we need
 board_read
