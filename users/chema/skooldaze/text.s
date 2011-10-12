@@ -126,7 +126,7 @@ st_chemical_name
 	.asc "Silicon",0
 	.asc "Phosphorus",0
 	.asc "Bromine",0
-	.asc "Hyrogen",0
+	.asc "Hydrogen",0
 st_chemical_sym
 	.asc "Sn",0
 	.asc "Hg",0

@@ -3808,6 +3808,7 @@ s_isc_speak1
 	lda #0
 	sta var5,x
 	sta var6,x
+	sta compp,x
 	
 	; This entry point is used while the 
 	; character is waiting for someone else 
@@ -3947,6 +3948,7 @@ cont
 	lda #0
 	sta var5,x
 	sta var6,x
+	sta compp,x
 	cpx #CHAR_FIRST_TEACHER
 	bcc isbwander
 	; We are dealing with a teacher
