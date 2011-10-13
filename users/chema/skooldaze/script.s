@@ -21,36 +21,6 @@
 ; Auxiliar functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-; Update anim state (passed in A) for the 
-; character passed in X and also update SRB
-update_animstate
-.(
-	sta anim_state,x
-
-	; Prepare offset for the pointers
-	; which is anim_state*16
-	asl
-	asl
-	asl
-	asl
-	sta smc_offset+1
-
-	jsr update_SRB_sp
-	lda base_as_pointer_low,x
-	clc
-smc_offset
-	adc #0
-	sta as_pointer_low,x
-	lda base_as_pointer_high,x
-	adc #0
-	sta as_pointer_high,x
-
-	jmp update_SRB_sp
-.)
-
-
-
 ; Make a character speak the message
 ; pointed by tmp0
 
@@ -2875,13 +2845,13 @@ found2
 	cmp #1
 	bne unflash	
 	lda tab_sh_status,y
-	bne retme
+	bne tpellet ; retme
 	beq doit
 unflash
 	cmp #3
 	bne retme
 	lda tab_sh_status,y
-	beq retme
+	beq tpellet ; retme
 doit
 	eor #$ff
 	sta tab_sh_status,y
@@ -2922,19 +2892,35 @@ savx
 	; Add 2000 to the score
 	lda #200
 	jsr add_score
-
-
 	inc game_mode
-#ifdef USE_THREE_TUNES
-	jsr PlayTuneC
-#else
-	jsr PlayTuneB
-#endif
-
 	lda game_mode
 	cmp #4
-	bne nofinish
+	beq finish_game
+
+nofinish
+	jsr PlayTuneB
+	ldy #0
+skip
+	sty flashed_shields
+
+tpellet
+	; And terminate the pellet
+	cpx #CHAR_EPELLET
+	bne doret
+
+	; If it was a pellet that hit the shield, 
+	; this sets its remaining distance to travel to 1,
+	; so it will be terminated the next time this routine is called
+
+	lda #1
+	sta var7,x
+doret
+	rts
+
+
+finish_game
 	; We have finished the game
+	jsr uncolor_box
 #ifdef BRK2SETTMP0
 	brk
 	.word st_gamefinished
@@ -2960,7 +2946,9 @@ savx
 	lda #>22*8*40+15+$a000
 	sta tmp1+1
 	jsr dump_text_buffer
-
+#ifdef USE_THREE_TUNES
+	jsr PlayTuneC
+#endif
 .(
 loopwp
 	jsr flash_border
@@ -2982,23 +2970,6 @@ loopwp
 	pla
 	pla
 	jmp restart_game
-nofinish
-	ldy #0
-skip
-	sty flashed_shields
-
-	; And terminate the pellet
-	cpx #CHAR_EPELLET
-	bne doret
-
-	; If it was a pellet that hit the shield, 
-	; this sets its remaining distance to travel to 1,
-	; so it will be terminated the next time this routine is called
-
-	lda #1
-	sta var7,x
-doret
-	rts
 .)
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3086,7 +3057,7 @@ cont
 
 	; Has the character just been hit?
 	lda var7,x
-	cmp #19+10
+	cmp #19+5
 	beq justhit
 	
 	; If the character is a teacher make him reveal his
@@ -3221,7 +3192,7 @@ notEric
 	sta uni_subcom_high,y
 
 	; Initialize timer to be laid down
-	lda #20+10
+	lda #20+5
 	sta var7,y
 
 	rts

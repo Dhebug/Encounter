@@ -759,6 +759,35 @@ doit
 	rts
 .)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Update anim state (passed in A) for the 
+; character passed in X and also update SRB
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+update_animstate
+.(
+	sta anim_state,x
+
+	; Prepare offset for the pointers
+	; which is anim_state*16
+	asl
+	asl
+	asl
+	asl
+	sta smc_offset+1
+
+	jsr update_SRB_sp
+	lda base_as_pointer_low,x
+	clc
+smc_offset
+	adc #0
+	sta as_pointer_low,x
+	lda base_as_pointer_high,x
+	adc #0
+	sta as_pointer_high,x
+
+	jmp update_SRB_sp
+.)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Renders the screen, only redrawing tiles set in the SRB
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1176,7 +1205,6 @@ loop
 savx
 	cpy #0
 	bne loop
-	;lda savx+1
 	txa
 	sta tab_chars,x
 end
