@@ -20,7 +20,7 @@
 
 ; Ticks to change the lesson (originally $1500=5376)
 ; Why is this particular define not included from params.h?
-#define LESCLK_VAL		5376 
+#define LESCLK_VAL		(5376-$400)
 
 
 .zero
@@ -454,12 +454,7 @@ wsong
 	clc
 	adc #15
 	sta current_lesson_index
-/*
-	lda #<(LESCLK_VAL)
-	sta lesson_clock
-	lda #>(LESCLK_VAL)
-	sta lesson_clock+1
-*/
+
 	jsr change_lesson
 	jmp _main_loop
  .)
@@ -676,9 +671,9 @@ loop
 change_lesson
 .(
 	; Reset the lesson clock
-	lda #>LESCLK_VAL
+	lda #>(LESCLK_VAL)
 	sta lesson_clock+1
-	lda #<LESCLK_VAL
+	lda #<(LESCLK_VAL)
 	sta lesson_clock
 
 	; Increment current lesson

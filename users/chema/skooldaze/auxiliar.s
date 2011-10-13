@@ -49,8 +49,6 @@ loop
 	rts
 .)
 
-
-
 ; A real random generator... trying to enhance this...
 randgen 
 .(

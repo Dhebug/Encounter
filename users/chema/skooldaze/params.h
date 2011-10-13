@@ -59,10 +59,10 @@
 #define BUFFER_TEXT_WIDTH 11	
 
 ; Ticks to change the lesson (originally $1500=5376)
-#define LESCLK_VAL		5376 
+#define LESCLK_VAL		(5376-$400)
 
 ; Value of the high byte that marks when the teacher tells the kids to sit down (originally 15)
-#define CLASS_START		15	  		
+#define CLASS_START		(15-4)	  		
 
 ; Visibility ranges for characters
 #define VIS_RANGE_X		14+1
