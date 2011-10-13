@@ -87,8 +87,8 @@
 ;; Substitutes the multiplying with a big (512) table, not much optimization though.
 //#define FULLTABLEMUL8
 
-;; Avoid Oricutron's bug with ror addr,x
-#define AVOID_ORICUTRON_BUG
+;; Avoid Oricutron's bug with ror addr,x (version 0.7)
+//#define AVOID_ORICUTRON_BUG
 
 ;; Inverse things to get white bubbles
 #define WHITE_BUBBLES
