@@ -19,13 +19,19 @@ along with the new one.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
+* Creak's year should be decompressed before copied to creak_year
 
-* Once boy 10 got the wrong animstate, after a class when delivering a message to Eric
+* Twice erasing boards is wrong
 
-* White room is not white
+* Dinner position of kids is too lefty.
 
-* Check battle years (some might be wrong)
+- Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
+
+- Once boy 10 got the wrong animstate, after a class when delivering a message to Eric
+
+- Check battle years (some might be wrong)
+
+- White room is not white
 
 - Bonus for opening the safe and hitting the 15 shields
 
