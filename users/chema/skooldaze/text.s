@@ -196,28 +196,6 @@ st_countries
 	.asc "Surinam",0     
 	.asc "Chile",0       
 
-st_years
-	.asc "1066",0       
-	.asc "1265",0       
-	.asc "1314",0       
-	.asc "1346",0       
-	.asc "1356",0       
-	.asc "1403",0       
-	.asc "1415",0       
-	.asc "1485",0       
-	.asc "1513",0       
-	.asc "1571",0       
-	.asc "1014",0       
-	.asc "1685",0       
-	.asc "1746",0       
-	.asc "1775",0       
-	.asc "1781",0       
-	.asc "1805",0       
-	.asc "1815",0       
-	.asc "1812",0       
-	.asc "1836",0       
-	.asc "1863",0       
-	.asc "1854",0       
 st_battles
 	.asc "Hastings",0   
 	.asc "Evesham",0    
