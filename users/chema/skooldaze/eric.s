@@ -994,8 +994,9 @@ completed
 	ldx #CHAR_ERIC
 	jsr check_hit
 	bmi nobody
-
+#ifndef OTHERS_DOSND
 	jsr SndHit
+#endif
 
 savx2
 	ldx #0

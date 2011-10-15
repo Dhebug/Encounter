@@ -102,6 +102,9 @@
 ;; Use a long version of Au Claire...
 #define USE_THREE_TUNES
 
+;; Other characters may produce sfx when hitting
+#define OTHERS_DOSND
+
 ;; Definitions for characters
 
 #define CHAR_ERIC		 0
