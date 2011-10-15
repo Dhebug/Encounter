@@ -2699,8 +2699,10 @@ retme
 
 victimok
 	; Yeah, somebody was hit!
+#ifndef OTHERS_DOSND
 	cpx #CHAR_EPELLET
 	bne skipsnd
+#endif
 	jsr SndHit
 skipsnd
 	
@@ -3160,13 +3162,23 @@ smc_tpos
 	lda #0
 	ldy tmp
 	jsr punchable_victim
+#ifdef OTHERS_DOSND
+	bcs knock_him_snd
+#else
 	bcs knock_him
+#endif
 skip
 	dec tmp
 	bpl loop
 
 	; We found no victim, return
 	rts
+
+
+#ifdef OTHERS_DOSND
+knock_him_snd
+	jsr SndHit
+#endif
 
 
 	; this entry point is used also with pellets
