@@ -23,7 +23,7 @@
 
 move_chars
 .(
-	lda #6
+	lda #7
 	sta tmp6
 loop
 	ldx last_char_moved
@@ -163,8 +163,10 @@ must_move
 	dec speed_counter,x
 	beq new_pace
 	lda speed_counter,x
-	and #%00000001
-	bne dontmove
+	;and #%00000001
+	lsr
+	;bne dontmove
+	bcs dontmove
 	rts
 dontmove
 	lda flags,x	; If not walking slowly, return and move
