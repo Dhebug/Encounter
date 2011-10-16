@@ -2699,13 +2699,7 @@ retme
 
 victimok
 	; Yeah, somebody was hit!
-#ifndef OTHERS_DOSND
-	cpx #CHAR_EPELLET
-	bne skipsnd
-#endif
-	jsr SndHit
-skipsnd
-	
+
 	; Is the objective already on the floor and it is not a teacher?
 	lda anim_state,y
 	cmp #6
@@ -2743,6 +2737,13 @@ noteacher
 	lda #1
 	sta var7,x
 
+	; Make the hitting sound
+	#ifndef OTHERS_DOSND
+	cpx #CHAR_EPELLET
+	bne skipsnd
+#endif
+	jsr SndHit
+skipsnd
 	; If Angelface was hit, add 10 points
 	cpy #CHAR_ANGELFACE
 	bne notEric
