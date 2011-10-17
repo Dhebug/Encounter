@@ -2190,7 +2190,7 @@ s_move_until
 	rts
 miniw
 	; Fill in the new walkabout destination (either the origin or 
-	; some location within 7 spaces to the left of the origin)
+	; some location within 10 (orig.7) spaces to the left of the origin)
 	sta var3,x	; destination col for the subcommand s_isc_int_dest
 	lda #30		; counter with enough time
 	sta var4,x	; time during which the subcommand is under control
@@ -2738,7 +2738,7 @@ noteacher
 	sta var7,x
 
 	; Make the hitting sound
-	#ifndef OTHERS_DOSND
+#ifndef OTHERS_DOSND
 	cpx #CHAR_EPELLET
 	bne skipsnd
 #endif

@@ -194,7 +194,7 @@ character's buffer:
 #define D_READING_BOARD		3,56
 #define D_DINNER_TABLE		17,75
 #define D_DINNER_BENCH		17,56
-#define D_DINNER_HALL		17,60
+#define D_DINNER_HALL		17,70
 #define D_LIBRARY			3,35
 #define D_WHITE_ROOM		10,40
 #define D_EXAM_ROOM			10,77

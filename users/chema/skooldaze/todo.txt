@@ -19,11 +19,11 @@ along with the new one.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Creak's year should be decompressed before copied to creak_year
-
 * Twice erasing boards is wrong
 
-* Dinner position of kids is too lefty.
+- Dinner position of kids is too lefty.
+
+- Creak's year should be decompressed before copied to creak_year
 
 - Mr Wacker trespassed middle floor wall from the exam room (was too close to it?)
 
