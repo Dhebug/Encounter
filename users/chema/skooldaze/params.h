@@ -105,6 +105,10 @@
 ;; Other characters may produce sfx when hitting
 #define OTHERS_DOSND
 
+
+;; Einstein may lie sometimes about blackboard defacement and being hit
+//#define EINSTEIN_LIES
+
 ;; Definitions for characters
 
 #define CHAR_ERIC		 0

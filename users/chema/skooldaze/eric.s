@@ -1001,6 +1001,14 @@ completed
 savx2
 	ldx #0
 
+#ifndef EINSTEIN_LIES
+	; Check if we hit Einstein
+	cpy #CHAR_EINSTEIN
+	bne notEinstein
+	inc Einstein_was_hit
+	bne nobody	; Always jumps
+notEinstein
+#endif
 	; We can check here if it was
 	; angelface and increase in 30
 	; the score

@@ -36,17 +36,6 @@ tmp7	.dsb 2
 op1		.dsb 2
 op2		.dsb 2
 tmp		.dsb 2
-;reg0	.dsb 2
-;reg1	.dsb 2
-;reg2	.dsb 2
-;reg3	.dsb 2
-;reg4	.dsb 2
-;reg5	.dsb 2
-;reg6	.dsb 2
-;reg7	.dsb 2
-
-
-
 
 .text
 
@@ -234,6 +223,9 @@ _init
 	sta score+1
 	sta lines
 	sta lines+1
+#ifndef EINSTEIN_LIES
+	sta Einstein_was_hit
+#endif
 
 	; Set drawing order
 .(
