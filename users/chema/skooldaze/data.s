@@ -21,6 +21,7 @@
 
 
 .zero
+
 ; Column and row of tile in visible area coordinates
 vis_col .byt 00
 tile_row
@@ -85,6 +86,10 @@ srb_bitmask2			.byt 0		; Idem for second byte
 srb_offset				.byt 0		; Offset of the first byte in the SRB
 srb_offset_lip			.byt 0		; Offset of the lip's byte
 srb_bitmask_lip			.byt 0		; Bitmask for the lip
+
+#ifndef EINSTEIN_LIES
+Einstein_was_hit		.byt 0		; Flag to state if Eric hit Einstein
+#endif
 
 
 ; Screen refresh buffer

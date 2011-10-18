@@ -21,6 +21,12 @@ along with the new one.
 
 * Twice erasing boards is wrong
 
+* Try to use which_way (generating a which_way_ex) to indicate through arrows where Eric should move
+  This will be active only if Eric is not where he should be and it is not playtime and during the first minutes of
+  play to help newbies find the correct way to the classroom... Can this be done?
+
+- Be sure Einstein grasses on Eric only when it is true.
+
 - Dinner position of kids is too lefty.
 
 - Creak's year should be decompressed before copied to creak_year

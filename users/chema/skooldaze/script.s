@@ -1274,17 +1274,24 @@ Ericisin
 
 	; This is EINSTEIN's opportunity to tell tales 
 	; about hitting and blackboard defacement.
-
+#ifdef EINSTEIN_LIES
 	jsr randgen
 	cmp #226 
 	bcc nohitmsg
+#else
+	lda Einstein_was_hit
+	beq nohitmsg
+	jsr randgen
+	bmi nohitmsg
+#endif
+
 	; Make Einstein say "Please Sir... Eric hit me"
 	lda #<st_hitme
 	ldy #>st_hitme
 	jsr s_make_Einstein_speak
 
 	; Make the teacher give lines to Einstein for
-	; telling tales (if he is in the moood)
+	; telling tales (if he is in the mood)
 	; or else do the following
 
 	jsr s_Einstein_tales
@@ -1298,6 +1305,10 @@ Ericisin
 
 
 nohitmsg
+#ifndef EINSTEIN_LIES
+	lda #0
+	sta Einstein_was_hit
+#endif
 	; Check if Eric is still in class
 	jsr s_Einstein_seated
 	bne Ericnotin
@@ -1310,12 +1321,15 @@ nohitmsg
 	; We are, are we on the Map room?
 	lda pos_col,x
 	cmp #WALLTOPFLOOR
-	;bcs no_essay	;noblackboard
+#ifndef EINSTEIN_LIES
+	bcs no_essay	;noblackboard
+#else
 .(
 	bcc cont
 	jmp no_essay
 cont
 .)
+#endif
 nocheck
 	; Get the closest blackboard
 	jsr get_blackboard
@@ -1326,11 +1340,12 @@ nocheck
 	beq Ericwrote
 	cmp #CHAR_BOYWANDER
 	bne noblackboard
+#ifdef EINSTEIN_LIES
 	; Even so, Einstein may blame Eric
 	jsr randgen
 	cmp #200
 	bcs Ericwrote
-
+#endif
 	lda #BOYW_NAME
 	.byt $2c
 Ericwrote
