@@ -4234,13 +4234,14 @@ noreset
 	
 	lda #2
 	sta tmp
+	iny
 loop
+	dey
 	lda (tmp0),y
 	; BEWARE SC_GOTO is 1, which is never used as
 	; a parameter, or it will break!
 	cmp #SC_GOTO
 	beq done
-	dey
 	bpl loop
 done
 	dec tmp
