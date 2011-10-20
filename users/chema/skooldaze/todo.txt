@@ -19,11 +19,13 @@ along with the new one.
 
 * Eric can write on blackboard, but seems that only on CAPS
 
-* Twice erasing boards is wrong
+* Waiting for counter to reach 2 is too much. Only 1 is too little... What can I do?
 
 * Try to use which_way (generating a which_way_ex) to indicate through arrows where Eric should move
   This will be active only if Eric is not where he should be and it is not playtime and during the first minutes of
   play to help newbies find the correct way to the classroom... Can this be done?
+
+- Twice erasing boards is wrong
 
 - Be sure Einstein grasses on Eric only when it is true.
 
