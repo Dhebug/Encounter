@@ -17,6 +17,7 @@
 #include "params.h"
 #include "text.h"
 #include "script.h"
+#include "sound.h"
 
 ; Ticks to change the lesson (originally $1500=5376)
 ; Why is this particular define not included from params.h?
@@ -216,6 +217,7 @@ _init
 	sta tile_col
 	;sta first_col
 	;sta current_lesson_index
+	sta bubble_on
 	sta Eric_flags
 	sta Eric_knockout
 	sta lines_delay
@@ -470,12 +472,19 @@ swap
 ; Main loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+.zero
+old_count .byt 00
 
+.text
 _main_loop
 .(
 	; Time the frame...
+/*
 	lda #0
-	sta counter
+	sta counter */
+	lda via_t2ch
+	sta old_count
+
 	
 	; Scroll if necessary...
 	lda pos_col
@@ -651,10 +660,27 @@ nobubble
 nopunish
 
 	; Time before next move...
+/*
 loop
 	lda counter
 	cmp #2
 	bcc loop
+*/
+
+loop 
+	lda via_t2ch
+	sec
+	sbc old_count
+	bcs nocarryc
+	sta tmp
+	lda #0
+	sec
+	sbc tmp
+nocarryc
+	cmp #(140)
+	bcc loop
+
+
 	jmp _main_loop
 .)
 
