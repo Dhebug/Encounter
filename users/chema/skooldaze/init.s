@@ -472,19 +472,20 @@ swap
 ; Main loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-.zero
-old_count .byt 00
+//.zero
+//old_count .byt 00
 
 .text
 _main_loop
 .(
 	; Time the frame...
-/*
+
 	lda #0
-	sta counter */
+	sta counter 
+/*
 	lda via_t2ch
 	sta old_count
-
+*/
 	
 	; Scroll if necessary...
 	lda pos_col
@@ -660,13 +661,11 @@ nobubble
 nopunish
 
 	; Time before next move...
-/*
 loop
 	lda counter
 	cmp #2
 	bcc loop
-*/
-
+/*
 loop 
 	lda via_t2ch
 	sec
@@ -679,7 +678,7 @@ loop
 nocarryc
 	cmp #(140)
 	bcc loop
-
+*/
 
 	jmp _main_loop
 .)
