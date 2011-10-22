@@ -169,7 +169,7 @@ irq_routine
         ;Clear IRQ event 
         lda via_t1cl 
 
-  		; Genaral purpose counter (counting fps)
+  		; Genaral purpose counter
 		inc counter
 
         ;Process keyboard 
