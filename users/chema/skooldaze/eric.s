@@ -11,7 +11,7 @@
 ; Routines to deal with Eric
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+#include "params.h"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Set the Eric main action timer
@@ -1091,12 +1091,16 @@ sat
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 teacher_gives_lines
 .(
-
 	; Check (and decrement) the lines-giving 
 	; delay counter, and proceed only if it was 
 	; <75 (the counter starts off at 0 for a new 
 	; game, and is set to 150 by this routine 
 	; after ERIC has been given lines)
+
+
+	; This has changed, as giving lines has been defered
+	; to the main loop. Also the routine is simplified.
+
 	lda lines_delay
 	beq proceed
 	dec lines_delay
@@ -1106,7 +1110,6 @@ teacher_gives_lines
 	;bcc proceed
 	rts
 proceed	
-
 /*
 	; It is time to give lines, go for it...
 	; Let's start checking if he is jumping
@@ -1236,7 +1239,7 @@ check_validity
 
 	; The room is private.
 	lda #ROOM_PRIVATE
-	jmp do_punishment	; Branches always
+	jmp do_punishment	
 notprivate
 	; See if Einstein had a chance to grass on Eric for
 	; being absent, or dinner has started, or this is 
@@ -1546,6 +1549,10 @@ punish_him
 sava
 	lda #0
 	jsr give_lines
+
+	; Re-initialize the delay counter
+	ldy #LINES_DELAY_VAL
+	sty lines_delay
 
 	ldx savx+1
 	rts

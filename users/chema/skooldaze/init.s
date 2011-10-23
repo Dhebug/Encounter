@@ -21,7 +21,7 @@
 
 ; Ticks to change the lesson (originally $1500=5376)
 ; Why is this particular define not included from params.h?
-#define LESCLK_VAL		(5376-$400)
+#define LESCLK_VAL		(5376-$600)
 
 
 .zero
@@ -651,9 +651,6 @@ nobubble
 	beq nopunish
 	dec need_to_punish_Eric+1
 	
-	; Re-initialize the delay counter
-	ldy #150/2
-	sty lines_delay
 	; Get the reason code back
 +smc_sav_msg
 	lda #0
