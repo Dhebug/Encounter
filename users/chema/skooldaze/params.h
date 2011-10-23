@@ -59,10 +59,10 @@
 #define BUFFER_TEXT_WIDTH 11	
 
 ; Ticks to change the lesson (originally $1500=5376)
-#define LESCLK_VAL		(5376-$400)
+#define LESCLK_VAL		(5376-$600)
 
 ; Value of the high byte that marks when the teacher tells the kids to sit down (originally 15)
-#define CLASS_START		(15-4)	  		
+#define CLASS_START		(15-6)	  		
 
 ; Visibility ranges for characters
 #define VIS_RANGE_X		14+1
@@ -105,9 +105,14 @@
 ;; Other characters may produce sfx when hitting
 #define OTHERS_DOSND
 
-
 ;; Einstein may lie sometimes about blackboard defacement and being hit
 //#define EINSTEIN_LIES
+
+;; Ticks before a teacher may give lines to Eric after another teacher did so.
+;; Originally this was 150 and half of this value (75) was used if a different teacher was to give lines
+;; This has been simplified, but remember ticks here are quicker.
+
+#define LINES_DELAY_VAL 100
 
 ;; Definitions for characters
 
