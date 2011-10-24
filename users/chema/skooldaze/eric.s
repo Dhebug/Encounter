@@ -1581,3 +1581,41 @@ skip
 	dec op1+1
 	jmp check_shield_hit2
 .)
+
+
+
+audio_onof
+.(
+	lda audio_off
+	eor #$ff
+	sta audio_off
+	rts
+.)
+
+color_combination1
+	.byt A_BGCYAN, A_BGCYAN, A_BGWHITE
+color_combination2
+	.byt A_BGYELLOW, A_BGGREEN, A_BGWHITE
+cur_comb .byt 0
+
+change_colors
+.(
+	stx savx+1
+	ldx cur_comb
+	inx
+	cpx #3
+	bne skip
+	ldx #0
+skip
+	stx cur_comb
++change_colors_ex
+	lda color_combination1,x
+	sta smc_paper_1+1
+	lda color_combination2,x
+	sta smc_paper_2+1
+	jsr set_ink2 
+savx
+	ldx #0
+	rts
+.)
+

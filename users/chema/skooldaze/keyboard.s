@@ -52,7 +52,7 @@ Song2				.word 0000
 TimerCounter		.byt 00
 NoteCounter			.byt 00
 Sfx					.byt 00
-
+audio_off			.byt 00
 
 
 .text 
@@ -174,6 +174,9 @@ irq_routine
 
         ;Process keyboard 
         jsr ReadKeyboard 
+
+		lda audio_off
+		bne ret_isr
 
 		; Process music, if present
 		lda Song+1
@@ -416,7 +419,7 @@ skip2   ;Proceed to next row
 .)  
 
 
-#define NUM_KEYS 9
+#define NUM_KEYS 11
 
 process_user_input
 .(

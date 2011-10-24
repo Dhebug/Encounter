@@ -48,6 +48,7 @@ _main
 	lda #0
 	sta Song+1
 	sta Sfx
+	sta audio_off
 
 	jsr set_hires
 	jsr _GenerateTables 
@@ -915,9 +916,11 @@ looprk
 	cmp #"N"
 	bne looprk
 end
-	lda #A_BGYELLOW
-	sta smc_paper_2+1
-	rts
+	;lda #A_BGYELLOW
+	;sta smc_paper_2+1
+	ldx cur_comb
+	jmp change_colors_ex
+	;rts
 .)
 
 
