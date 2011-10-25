@@ -102,7 +102,7 @@ Read more: http://wiki.answers.com/Q/Where_can_you_get_notes_for_au_clarie_de_la
 StopSound
 InitSound
 .(
-	jsr SendAYReg
+	//jsr SendAYReg
 	ldx #<zeros
 	ldy #>zeros
 	jmp AYRegDump
@@ -189,6 +189,8 @@ Note2Pitch
 
 PlayBell
 .(
+	lda audio_off
+	bne end
 	ldx #<Bell1
 	ldy #>Bell1
 	jsr AYRegDump
@@ -197,6 +199,8 @@ PlayBell
 	ldx #<Bell2
 	ldy #>Bell2
 	jmp AYRegDump
+end
+	rts
 .)
 
 #define SFX_SHHIT		1
@@ -207,6 +211,7 @@ PlayBell
 #define SFX_LINES1		6
 #define SFX_LINES2		7
 #define SFX_SAFELETTER	8
+#define SFX_PIC			9
 
 
 SndHitShld
@@ -224,6 +229,9 @@ SndCommon
 	sta Sfx
 	jmp flash_border
 
+SndPic
+	lda #SFX_PIC
+	.byt $2c
 SndStep
 	lda #SFX_STEP
 	sta Sfx

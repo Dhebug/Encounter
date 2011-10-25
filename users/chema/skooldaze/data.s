@@ -603,6 +603,13 @@ tab_sh_udgl
 	.byt <(udg_skool3+217*8), <(udg_skool3+91*8), <(udg_skool2+101*8), <(udg_skool2+102*8)
 	.byt <(udg_skool2+103*8), <(udg_skool3+134*8), <(udg_skool3+218*8)
 
+; Tables for color combinations
+color_combination1
+	.byt A_BGCYAN, A_BGCYAN, A_BGWHITE
+color_combination2
+	.byt A_BGYELLOW, A_BGGREEN, A_BGWHITE
+cur_comb .byt 0
+
 free_r11
 .dsb (256-32)-(*&255)
 ; Personal timetable for little boy 8
@@ -779,7 +786,7 @@ free_r15
 .dsb (256-32)-(*&255)
 ; Personal timetable for Mr Creak
 per_timet_creak
-	.byt 188,188,188,188,134,130,188,130,134,134,130,134,130,130,130,134,134,188,130,190,190,190,188,188,188,188,188,188,196,196,188,188
+	.byt 188,188,188,134,134,130,188,130,134,134,130,134,130,130,130,134,134,188,130,190,190,190,188,188,188,188,188,188,196,196,188,188
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;.dsb 256-(*&255)

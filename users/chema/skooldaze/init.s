@@ -865,10 +865,15 @@ notnone
 	clc
 	adc #5
 printit
+#ifdef BRK2SETTMP0
+	brk 
+	.word names_extras
+#else
 	ldx #<names_extras
 	stx tmp0
 	ldx #>names_extras
 	stx tmp0+1
+#endif
 	jsr search_string
 
 printit2
@@ -930,6 +935,12 @@ charid .byt 00,00
 
 start_catwalk
 .(
+	; Supress footseps
+	lda audio_off
+	pha
+	lda #$ff
+	sta audio_off
+
 	jsr clr_hires
 	jsr set_ink2 
 	lda #A_BGYELLOW
@@ -1037,7 +1048,9 @@ notyet
 	lda #$18	; clc
 	sta draw_skool_tile+2
 
-	; We are done
+	; We are done, put back audio, if it was on
+	pla
+	sta audio_off
 	rts
 .)
 

@@ -471,9 +471,9 @@ udg_skool
 end_udg_skool
 
 tab_sfx_hi
-	.byt >_shhit,>_knock,>_twang,>_step,>_hit,>_lines1,>_lines2,>_safeletter
+	.byt >_shhit,>_knock,>_twang,>_step,>_hit,>_lines1,>_lines2,>_safeletter,>_pic
 tab_sfx_lo
-	.byt <_shhit,<_knock,<_twang,<_step,<_hit,<_lines1,<_lines2,<_safeletter
+	.byt <_shhit,<_knock,<_twang,<_step,<_hit,<_lines1,<_lines2,<_safeletter,<_pic
 
 ; Little ping
 _shhit
@@ -1340,6 +1340,11 @@ Espaldera
 end_udg_skool3
 
 end_skool_udgs
+
+; little ping
+_pic
+;	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
+	.byt $b,0,0,0,0,0,0,$78,$10,0,0,0,$01,0
 
 _free_udg_skool3
 .dsb 256-(*&255)

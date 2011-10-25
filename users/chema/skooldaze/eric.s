@@ -438,6 +438,7 @@ cont
 	cmp #"U"
 	bne retme
 	
+	jsr SndPic
 	; Signal it
 	lda Eric_flags
 	and #(ERIC_SPOKEN^$ff)
@@ -744,7 +745,9 @@ notclean
 retme2
 	rts
 cont2
-
+	pha
+	jsr SndStep
+	pla
 	; Check if it is RETURN  ($0d)
 	cmp #$0d
 	bne writechar
@@ -1589,14 +1592,10 @@ audio_onof
 	lda audio_off
 	eor #$ff
 	sta audio_off
-	rts
+	jmp SndPic
 .)
 
-color_combination1
-	.byt A_BGCYAN, A_BGCYAN, A_BGWHITE
-color_combination2
-	.byt A_BGYELLOW, A_BGGREEN, A_BGWHITE
-cur_comb .byt 0
+
 
 change_colors
 .(
@@ -1616,6 +1615,6 @@ skip
 	jsr set_ink2 
 savx
 	ldx #0
-	rts
+	jmp SndPic
 .)
 
