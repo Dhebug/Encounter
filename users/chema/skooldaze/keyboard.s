@@ -176,7 +176,7 @@ irq_routine
         jsr ReadKeyboard 
 
 		lda audio_off
-		bne ret_isr
+		bne Audioisoff
 
 		; Process music, if present
 		lda Song+1
@@ -196,6 +196,12 @@ sav_Y  	ldy #00
         ;End of IRQ 
         rti 
 .)
+
+Audioisoff
+	lda #0
+	sta Song+1
+	sta Sfx
+	beq ret_isr
 
 ProcessSfx
 .(
