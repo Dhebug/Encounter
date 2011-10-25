@@ -247,11 +247,14 @@ SndLines2
 	.byt $2c
 
 SndSafeLetter
-	lda #SFX_SAFELETTER
+	lda #SFX_LINES1	;#SFX_SAFELETTER
 	sta Sfx
 	jsr wait
 	jmp StopSound
 
 
+
+_safeletter
+	;.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
 
 

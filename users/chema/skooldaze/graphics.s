@@ -468,6 +468,14 @@ udg_skool
 ; Tile skool 210
 .byt $67, $7f, $7f, $7f, $7f, $7f, $7f, $7f
 
+; Escaleras nuevas
+; Tile skool 211
+.byt $47, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 212
+.byt $7f, $45, $46, $45, $46, $45, $46, $45
+
+
+
 end_udg_skool
 
 tab_sfx_hi
@@ -482,7 +490,7 @@ _shhit
 _twang
 	.byt 0,1+3,0,2+3,0,1+3,0,$78,$10,$10,$10,0,$a-3,0
 _step
-	.byt 0,0,0,0,0,0,$ff,$7e,$10,0,0,$26-$20,0,9
+	.byt 0,0,0,0,0,0,$ff,$7e,$10,0,0,$26-$1a,0,9
 _hit
 	.byt 0,0,0,0,0,0,$ff,$77,$10,0,0,$d0,0,9
 _knock
@@ -492,8 +500,8 @@ _knock
 ;_pic
 ;	.byt 5,0,10,0,5,0,0,$78,$10,$10,$10,0,$a,0
 
-_safeletter
-	.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
+;_safeletter
+;	.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
 
 ; Probabilities (out of 256) that a teacher
 ; punishes Einistein for telling tales
@@ -1166,7 +1174,8 @@ Espaldera
 ; Tile skool 139
 .byt $6a, $55, $6a, $55, $6a, $55, $7a, $47
 ; Tile skool 140
-.byt $7f, $58, $68, $58, $68, $58, $68, $7f
+;.byt $7f, $58, $68, $58, $68, $58, $68, $7f
+.byt $7f, $58, $68, $58, $68, $58, $68, $58
 ; Tile skool 141
 .byt $74, $74, $74, $74, $74, $74, $6a, $6a
 ; Tile skool 142
@@ -1336,6 +1345,15 @@ Espaldera
 ;Tejado
 ; Tile skool 220
 .byt $c0, $df, $c0, $df, $c0, $df, $c0, $7f
+
+
+; Nuevas escaleras
+; Tile skool 221
+.byt $7f, $68, $58, $68, $58, $68, $58, $68
+; Tile skool 222
+.byt $78, $40, $40, $40, $40, $40, $40, $40
+; Tile skool 223
+;.byt $7f, $58, $68, $58, $68, $58, $68, $58
 
 end_udg_skool3
 
