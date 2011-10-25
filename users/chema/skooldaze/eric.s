@@ -365,6 +365,21 @@ sit_Eric
 	sta Eric_flags
 	bmi dosit
 	; Eric must stand up
+	jsr is_on_staircase
+	beq notstairs2
+.(
+	jsr update_SRB_sp
+	lda pos_col
+	cmp #64
+	; Carry is set if Eric is on the right side of the school
+	bcs incx
+	inc pos_col
+	bne contit
+incx
+	dec pos_col
+contit
+.)
+notstairs2
 	jmp s_stand_up
 dosit
 	; Eric is going to sit down... even on the floor
@@ -387,6 +402,18 @@ dosit
 turn
 	jsr change_direction
 noturn
+.(
+	jsr update_SRB_sp
+	lda pos_col
+	cmp #64
+	; Carry is set if Eric is on the right side of the school
+	bcs incx
+	dec pos_col
+	bne contit
+incx
+	inc pos_col
+contit
+.)
 	lda #4
 	jmp update_animstate
 rightside
@@ -1607,6 +1634,7 @@ change_colors
 	ldx #0
 skip
 	stx cur_comb
+	jsr SndPic
 +change_colors_ex
 	lda color_combination1,x
 	sta smc_paper_1+1
@@ -1615,6 +1643,6 @@ skip
 	jsr set_ink2 
 savx
 	ldx #0
-	jmp SndPic
+	rts
 .)
 
