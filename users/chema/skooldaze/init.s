@@ -74,137 +74,8 @@ _main
 	sta demo_bpl_bne
 
 	; Jump to initializations and main loop.
-	jmp _init
+	;jmp _init
 .)
-
-
-set_ink2
-.(
-	ldy #<($a000)
-	sty tmp
-	ldy #>($a000)
-	sty tmp+1
-
-	ldx #(176/2)
-loop
-	ldy #0
-+smc_paper_1
-	lda #A_BGCYAN
-	sta (tmp),y
-	iny
-+smc_ink_1
-	lda #A_FWBLACK 
-	sta (tmp),y
-	
-	ldy #40
-+smc_paper_2
-	lda #A_BGYELLOW
-	sta (tmp),y
-	iny
-+smc_ink_2
-	lda #A_FWBLACK
-	sta (tmp),y
-	
-	lda tmp
-	clc
-	adc #80
-	sta tmp
-	bcc nocarry
-	inc tmp+1
-nocarry
-
-	dex
-	bne loop
-end
-	rts	
-.)
-
-
-flash_border
-.(
-	stx savx+1
-	sty savy+1
-	jsr set_border
-	jsr set_border
-savx
-	ldx #0
-savy
-	ldy #0
-	rts
-.)
-set_border
-.(
-	; First 4 lines
-.(
-	ldx #40*4
-loop
-	lda $a000-1,x
-	eor #$80
-	sta $a000-1,x
-	dex
-	bne loop
-.)
-	; Middle 160 lines
-
-.(
-
-#ifdef BRK2SETTMP0
-	brk
-	.word ($a000+(4*40))
-#else
-	lda #<($a000+(4*40))
-	sta tmp0
-	lda #>($a000+(4*40))
-	sta tmp0+1
-#endif
-
-	ldx #168
-loopa
-	ldy #0
-	jsr inv_scan
-	ldy #38
-	jsr inv_scan
-
-	lda tmp0
-	clc
-	adc #40
-	sta tmp0
-	bcc nocarry
-	inc tmp0+1
-nocarry
-
-	dex
-	bne loopa
-.)
-
-
-	; Last 4 lines
-.(
-	ldx #40*4
-loop
-	lda $a000+(4+168)*40-1,x
-	eor #$80
-	sta $a000+(4+168)*40-1,x
-	dex
-	bne loop
-.)
-	rts
-.)
-
-
-inv_scan
-.(
-  	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
-	iny
-
-	lda (tmp0),y
-	eor #$80
-	sta (tmp0),y
-	rts
-.)
-
 
 _init
 .(
@@ -451,32 +322,13 @@ wsong
 	sta current_lesson_index
 
 	jsr change_lesson
-	jmp _main_loop
+	;jmp _main_loop
  .)
-
-
-swap
-.(
-	pha
-	lda tab_safecode,x
-	pha
-	lda tab_safecode,y
-	sta tab_safecode,x
-	pla
-	sta tab_safecode,y
-	pla
-	rts
-.)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Main loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-//.zero
-//old_count .byt 00
-
-.text
 _main_loop
 .(
 	; Time the frame...
@@ -680,6 +532,152 @@ nocarryc
 
 	jmp _main_loop
 .)
+
+
+
+set_ink2
+.(
+	ldy #<($a000)
+	sty tmp
+	ldy #>($a000)
+	sty tmp+1
+
+	ldx #(176/2)
+loop
+	ldy #0
++smc_paper_1
+	lda #A_BGCYAN
+	sta (tmp),y
+	iny
++smc_ink_1
+	lda #A_FWBLACK 
+	sta (tmp),y
+	
+	ldy #40
++smc_paper_2
+	lda #A_BGYELLOW
+	sta (tmp),y
+	iny
++smc_ink_2
+	lda #A_FWBLACK
+	sta (tmp),y
+	
+	lda tmp
+	clc
+	adc #80
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+
+	dex
+	bne loop
+end
+	rts	
+.)
+
+
+flash_border
+.(
+	stx savx+1
+	sty savy+1
+	jsr set_border
+	jsr set_border
+savx
+	ldx #0
+savy
+	ldy #0
+	rts
+.)
+set_border
+.(
+	; First 4 lines
+.(
+	ldx #40*4
+loop
+	lda $a000-1,x
+	eor #$80
+	sta $a000-1,x
+	dex
+	bne loop
+.)
+	; Middle 160 lines
+
+.(
+
+#ifdef BRK2SETTMP0
+	brk
+	.word ($a000+(4*40))
+#else
+	lda #<($a000+(4*40))
+	sta tmp0
+	lda #>($a000+(4*40))
+	sta tmp0+1
+#endif
+
+	ldx #168
+loopa
+	ldy #0
+	jsr inv_scan
+	ldy #38
+	jsr inv_scan
+
+	lda tmp0
+	clc
+	adc #40
+	sta tmp0
+	bcc nocarry
+	inc tmp0+1
+nocarry
+
+	dex
+	bne loopa
+.)
+
+
+	; Last 4 lines
+.(
+	ldx #40*4
+loop
+	lda $a000+(4+168)*40-1,x
+	eor #$80
+	sta $a000+(4+168)*40-1,x
+	dex
+	bne loop
+.)
+	rts
+.)
+
+
+inv_scan
+.(
+  	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	iny
+
+	lda (tmp0),y
+	eor #$80
+	sta (tmp0),y
+	rts
+.)
+
+
+
+swap
+.(
+	pha
+	lda tab_safecode,x
+	pha
+	lda tab_safecode,y
+	sta tab_safecode,x
+	pla
+	sta tab_safecode,y
+	pla
+	rts
+.)
+
+
 
 
 ;; Change the current lesson
@@ -1363,4 +1361,15 @@ end
 	rts	
 .)
 #endif
+
+
+st_safeletter
+	.byt 0,0
+st_space
+	.asc " ",0
+
+
+st_lines
+	.asc "000 lines"
+	.byt 0
 

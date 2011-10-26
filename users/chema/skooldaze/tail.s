@@ -79,17 +79,6 @@ number_question
 number_answer
 	.byt "1234",0
 
-st_safeletter
-	.byt 0,0
-st_space
-	.asc " ",0
-
-
-st_lines
-	.asc "000 lines"
-	.byt 0
-
-
 
 freespace
 .dsb $a000-*

@@ -145,11 +145,13 @@ AYRegDump
 loop 
 	lda $dead,x
 
+//#ifdef 0
 	; Prevent anything nasty
 	cpx #AY_Status
 	bne skip
 	ora #%01000000
 skip
+//#endif
 	jsr SendAYReg
   	dex
     bpl loop
