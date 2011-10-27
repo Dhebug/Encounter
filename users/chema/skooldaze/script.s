@@ -707,6 +707,9 @@ s_find_eric
 	lda #255
 	sta lesson_clock+1
 
+	; Make the character stand up, if not already
+	jsr s_stand_up
+
 	; Prepare call to the routine as uninterruptible 
 	; subcommand
 
