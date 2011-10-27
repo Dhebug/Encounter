@@ -4253,6 +4253,8 @@ done
 	; Restart from this point
 	tya
 	sta pcommand,x
+	lda #0
+	sta i_subcom_high,x
 	jmp next_command
 
 on_staircase
