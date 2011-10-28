@@ -21,7 +21,7 @@
 
 ; Ticks to change the lesson (originally $1500=5376)
 ; Why is this particular define not included from params.h?
-#define LESCLK_VAL		(5376-$600)
+#define LESCLK_VAL		($d00)
 
 
 .zero
