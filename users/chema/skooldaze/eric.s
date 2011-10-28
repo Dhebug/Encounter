@@ -19,6 +19,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 set_Eric_timer
 .(
+/*
 	ldy #7
 	lda #%00010000
 	and KeyBank,y
@@ -27,6 +28,7 @@ set_Eric_timer
 	lda #NORMAL_ERIC_TIMER
 	.byt $2c
 quick
+*/
 	lda #FAST_ERIC_TIMER
 	sta Eric_timer
 	sta Eric_mid_timer
