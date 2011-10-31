@@ -25,6 +25,8 @@ along with the new one.
   This will be active only if Eric is not where he should be and it is not playtime and during the first minutes of
   play to help newbies find the correct way to the classroom... Can this be done?
 
+* Seems that when at Revision Library Eric can be where he wants...
+
 - Twice erasing boards is wrong
 
 - Be sure Einstein grasses on Eric only when it is true.

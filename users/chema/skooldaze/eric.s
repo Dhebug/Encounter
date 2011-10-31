@@ -1329,7 +1329,9 @@ nochanceyet
 	bcc strange_entry
 	
 	; Have a look at the lesson_clock
-	lda #CLASS_START	
+	; This one uses a higher value than the class start
+	; originaly 19
+	lda #11	
 	cmp lesson_clock+1
 	bcc strange_entry
 	bcs check_location
