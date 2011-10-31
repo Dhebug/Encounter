@@ -1063,7 +1063,7 @@ command_list_table
 ; Lesson descriptors
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Each entry in this table defines the teacher for the period 
-; (if any), and the room. The teacher is identified by bits 4-5
+; (if any), and the room. The teacher is identified by bits 4-6
 ; See params.h
 
 
