@@ -523,12 +523,14 @@ noreprimand
 	bne noshieldcheck
 	jmp shield_check_jump
 noshieldcheck
+/*
 	; Time to make the jumping sound?
 	cmp #14
 	bne nojumpsfx
 	; jmp jump_sfx
 	rts
 nojumpsfx
+*/
 	; Time to move Eric's arm?
 	cmp #9
 	bne nomovearm
@@ -872,7 +874,7 @@ notfired
 	lda #11
 	sta tmp+1
 	; And the action timer
-	lda #24
+	lda #24-12
 	sta tmp0
 
 	; This entry point is used when Eric is hitting, writting or firing
@@ -909,20 +911,20 @@ fire_Eric2
 cont
 	lda Eric_timer
 	; Is it 18? then next step of fire
-	cmp #18
+	cmp #18-9
 	bne nonext
 	; First stage
 	lda #12
 	jmp setEric_state
 nonext
 	; Stat lowering the catpult?
-	cmp #6	
+	cmp #6-3	
 	bne nolower
 	lda #11
 	jmp setEric_state
 nolower
 	; Time to launch the pellet?
-	cmp #12
+	cmp #12-7
 	beq launch
 	rts
 launch
@@ -987,7 +989,7 @@ hit_Eric
 	sta tmp+1
 	lda #ERIC_HITTING
 	sta tmp
-	lda #18-8
+	lda #18-10
 	sta tmp0
 	jmp realize_Eric_action
 .)
@@ -1000,7 +1002,7 @@ hit_Eric2
 	
 	lda Eric_timer
 	; Is it 12? then next step of punch
-	cmp #12-4
+	cmp #12-6
 	bne nonext
 	; First stage
 	lda #8
@@ -1016,7 +1018,7 @@ savx
 	rts
 nonext
 	; is it time to see if anybody was hit?
-	cmp #11-4
+	cmp #11-6
 	beq completed
 	rts
 completed
@@ -1092,7 +1094,7 @@ justknocked
 
 	jsr SndKnocked
 	; First the counter
-	lda #40
+	lda #40/2
 	sta Eric_knockout
 	; Then the status flags (set bits 7 and 4)
 	lda #144

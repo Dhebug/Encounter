@@ -71,8 +71,8 @@
 
 
 ; Eric's main timer constants
-#define INITIAL_ERIC_TIMER	17
-#define NORMAL_ERIC_TIMER	9-4
+#define INITIAL_ERIC_TIMER	17-4
+#define NORMAL_ERIC_TIMER	9-4-2
 #define FAST_ERIC_TIMER		4-2
 #define MIDS_ERIC_TIMER		5-2
 

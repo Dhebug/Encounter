@@ -587,7 +587,7 @@ s_tell_common
 	; Set the MSB of the lesson clock to 12, giving 
 	; enough time for the ensuing drama to play out
 
-	lda #12
+	lda #12/2
 	sta lesson_clock+1
 	lda #0
 	sta i_subcom_high,x
