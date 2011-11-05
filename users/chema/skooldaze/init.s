@@ -392,6 +392,11 @@ notzero
 	sta demo_bpl_bne
 
 	; Ask the user to change names
+
+	; Empty box
+	jsr empty_box
+	jsr printit2
+
 	jsr change_names
 
 	; Play the main tune
@@ -694,7 +699,12 @@ change_lesson
 
 	; Get lesson code from table
 	ldx current_lesson_index
-	lda main_timetable,x
+	cpx #64
+	bcc noend
+	ldx #0
+	stx current_lesson_index
+noend
+
 
 	; Is it playtime?
 	cmp #243
@@ -874,7 +884,7 @@ printit
 #endif
 	jsr search_string
 
-printit2
++printit2
 	jsr write_text_up
 
 	; Now dump the buffer into the screen
@@ -1182,6 +1192,14 @@ clear_name_and_title
 
 clear_name
 .(
+	jsr empty_box
+	jsr write_text_up
+	jmp dump_title2
+.)
+
+
+empty_box
+.(
 #ifdef BRK2SETTMP0
 	brk
 	.word st_space
@@ -1191,11 +1209,9 @@ clear_name
 	lda #>st_space
 	sta tmp0+1
 #endif
-	jsr write_text_up
-	jsr write_text_down
-	jmp dump_title2
+	jmp write_text_down
+	rts
 .)
-
 
 #define ADDR_LINE $a000+40*110
 
@@ -1362,14 +1378,4 @@ end
 .)
 #endif
 
-
-st_safeletter
-	.byt 0,0
-st_space
-	.asc " ",0
-
-
-st_lines
-	.asc "000 lines"
-	.byt 0
 
