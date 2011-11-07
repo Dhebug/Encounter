@@ -695,16 +695,16 @@ change_lesson
 	sta lesson_clock
 
 	; Increment current lesson
-	inc current_lesson_index
-
-	; Get lesson code from table
+	;inc current_lesson_index
 	ldx current_lesson_index
+	inx
 	cpx #64
 	bcc noend
 	ldx #0
-	stx current_lesson_index
 noend
-
+	stx current_lesson_index
+	; Get lesson code from table
+	lda main_timetable,x
 
 	; Is it playtime?
 	cmp #243
@@ -1210,7 +1210,7 @@ empty_box
 	sta tmp0+1
 #endif
 	jmp write_text_down
-	rts
+	;rts
 .)
 
 #define ADDR_LINE $a000+40*110
