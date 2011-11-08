@@ -383,9 +383,14 @@ cont
 
 	sta smc_savop2+1
 
+	; If in demo mode, don't do anything
+	ldy game_mode
+	beq linesend
+
 	; Deal with the lines given...
 	ldy savy+1
 	beq toEric
+
 	; They are not given to Eric... add to the score
 	jsr add_score
 	jmp linesend	; Always jump
@@ -489,8 +494,8 @@ savy
 add_score
 .(
 	; If in demo mode, don't do anything
-	ldy game_mode
-	beq nohiscore
+	;ldy game_mode
+	;beq nohiscore
 
 	clc
 	adc score
