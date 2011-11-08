@@ -27,7 +27,9 @@ along with the new one.
 
 * Seems that when at Revision Library Eric can be where he wants...
 
-* Adjust timings for actions and tweaks in duration of playtimes when in special playtimes.
+* In demo mode lines should not be added, as game does not restart.
+
+- Adjust timings for actions and tweaks in duration of playtimes when in special playtimes.
 
 - Twice erasing boards is wrong
 
