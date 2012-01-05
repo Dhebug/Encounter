@@ -472,7 +472,7 @@ if ( foundpiece == 0 )
 // TARGETSELECT - find the highest scoring TARGET
 void targetselect()
 {
-unsigned char xloop;
+//unsigned char xloop;
 NEWTARGET:
 hightarget=0;	// contains highest value target
 foundpiece=0;		// set findpiece to "piece not found"
