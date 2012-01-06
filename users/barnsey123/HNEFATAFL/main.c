@@ -578,7 +578,7 @@ while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
 		{	
 		if ((flag)&&(players[x][y]==0))	// if blank)
 			{
-			if (orientation<EAST) { subpacman();}else{subpacman2();} // if north/south
+			if (orientation<EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
 			}
 		}
 	decpoints();
@@ -1768,6 +1768,8 @@ target[10][10]=0;
 if (target[targetns][targetew])	// only if target is valid (i.e. not a king square)
 	{
 	if (enemy[targetns][targetew]){inctarget();}	// increase target if blocking an enemy	
+	if ((enemy[targetns][targetew]==6)||(enemy[targetns][targetew]==11)||(enemy[targetns][targetew]==21)||(enemy[targetns][targetew]==15)||(enemy[targetns][targetew]==25)||(enemy[targetns][targetew]==30)){inctarget();}
+	if ((enemy[targetns][targetew]==35)||(enemy[targetns][targetew]==16)||(enemy[targetns][targetew]==26)){target[targetns][targetew]+=2;}
 	calccantake();			// calculates how many takes can be made in this position (cantake)
 	calctakeweight();		// calculate weight that should be applied to takes	
 	y=cantake*takeweight;	// value to be added to target			
