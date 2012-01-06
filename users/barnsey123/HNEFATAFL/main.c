@@ -87,6 +87,7 @@
 // 05-01-2012 reduced memory requirements - using unsigned char where possible  (34457)
 // 05-01-2012 removed all local variables (replaced with globals) (34338)
 // 05-01-2012 got rid of LookBackInAnger (plus some other changes) (33670)
+// 06-01-2012 fixed bug in subcanbetaken2
 /* TODO LIST
 *** PROBLEM: Not blocking king under certain circumstances - related to changes in target selection...
 *** Continue with endgame function to return a value determining victory conditions etc
@@ -221,7 +222,7 @@ unsigned char tiletype;				// type of tile under inspection (used in arrows)
 unsigned char tpns,tpew;	// north-south board location of taken piece (also used for 3) NB:no idea 20/10/2011
 unsigned char flashcolor;			// color of ink to flash in
 unsigned char flashback;				// color of ink to return to
-unsigned char game;					// <=0 means endgame (see checkend for values), 1=GAMEON
+char game;					// *** MUST NOT BE UNSIGNED ***<=0 means endgame (see checkend for values), 1=GAMEON
 unsigned char gamestyle;				// 0=human vs human; 1=human king vs computer; ** NO!!! 2=human vs computer king**; 3=undefined
 unsigned char kingns,kingew;				// kings position North-South
 unsigned char kingattacker[4];	// number of attackers in all four directions from king
@@ -1645,15 +1646,27 @@ void subcanbetaken2()
 {
 if (players[takena][takenb]>1)
 		{
-		//if (( enemy[ns2][ew2]-xvalue > 0 )||(enemy[ns2][ew2]-50 > 50)) // 14-11-2011 
-		if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<enemyweight)||(enemy[takenc][takend]-enemyweight))) // 23-12-2011 
+		if (players[takenc][takend]==0)
 			{
-			compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+			if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<enemyweight)||(enemy[takenc][takend]-enemyweight))) // 23-12-2011 
+				{
+				compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+				}
 			}
-		//else
-		//	{
-		//	cannotbetaken++;
-		//	}
+		if (takena==ons)	// if potentially moved piece is on same plane as adjacent enemy piece North/South
+			{
+			if ((takena-ons==1)||(ons-takena==1))	// if only one space away
+				{
+				if (enemy[takenc][takend]-enemyweight) {compass[origorient]=1;}
+				}
+			}
+		if (takenb==oew)	// if potentially moved piece is on same plane as adjacent enemy piece EAST/WEST
+			{
+			if ((takenb-oew==1)||(oew-takenb==1))	// if only one space away
+				{
+				if (enemy[takenc][takend]-enemyweight) {compass[origorient]=1;}
+				}
+			}
 		}
 }
 /****************************/
