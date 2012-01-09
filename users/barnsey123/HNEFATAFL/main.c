@@ -89,9 +89,14 @@
 // 05-01-2012 got rid of LookBackInAnger (plus some other changes) (33670)
 // 06-01-2012 fixed bug in subcanbetaken2
 // 07-01-2012 found out why some pieces commit suicide but the fix don't work...perhaps other factors are at work
-
-/* TODO LIST
-*** 07/01/2012 - issue with suicide related to ns/ew and cantakepiece methinks...
+// 09-01-2012 HUZZAH! Fixed the suicide issue. 
+/* from subcanbetaken2...
+	NEW:	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
+	OLD:	if (players[takenc][takend]==0) 
+	in the OLD condition, if the piece was only one space away, players would always be 1
+*/
+// 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
+/* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
 *** routine to detect stalemate (a side cannot move)
@@ -104,7 +109,7 @@
 #define SOUTH 1
 #define EAST 2
 #define WEST 3
-//#define ENEMYWEIGHT 37
+#define ENEMYWEIGHT 37
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 /******************* Function Declarations ************************/
@@ -256,7 +261,7 @@ char uncounter;				// *** MUST BE SIGNED *** general purpose counter (can be neg
 //unsigned char lookcol,lookrow;	// used in lookbackinanger
 unsigned char origorient;			// original orientation of a piece under test (which way he is heading)
 unsigned char takerow,takecol;				// can I be taken if I stop here?
-unsigned char paclevel1,paclevel2;				// used in pacman/subpacmanx either ns/ew
+unsigned char paclevel1,paclevel2;			// used in pacman/subpacmanx either ns/ew
 unsigned char surns,surew;					// count of attackers surrounding king n/s used in surroundcount()
 unsigned char takena,takenb,takenc,takend,takene;		// used in canbetaken routines
 unsigned char ezns1,ezew1;			// used in surroundcount/enemyzero to reset enemy[][] to zero if surrounded=3
@@ -439,9 +444,9 @@ if ( foundpiece == 0 )
 		{
 		if (players[mkey][oew]==1)
 			{
-			orientation=origorient;calccantake();
+			ns=targetns;ew=targetew;orientation=origorient;calccantake();
 			if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-			//if ((mkey==kingns)&&(targetns!=kingns)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
+			//if ((mkey==kingns)&&(targetns!=kingns)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
 			if (compass[origorient]==0)
 				{
 				foundpiece=1;
@@ -458,9 +463,9 @@ if ( foundpiece == 0 )
 		{		
 		if (players[ons][mkey]==1)
 			{
-			orientation=origorient;calccantake();
+			ns=targetns;ew=targetew;orientation=origorient;calccantake();
 			if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-			//if ((mkey==kingew)&&(targetew!=kingew)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
+			//if ((mkey==kingew)&&(targetew!=kingew)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
 			if (compass[origorient]==0)
 				{
 				foundpiece=1;
@@ -835,58 +840,51 @@ arrow=1;
 //arrowsy=cy+1;
 // orientation 0,1,2,3 = N, S, E, W
 takerow=ns;takecol=ew; // will set below to be the opposite of the orientation
-if ( orientation == NORTH ) { a=xns-1;b=xew;xplayers=players[a][b];takerow=xns+1;} // check north
-if ( orientation == SOUTH ) { a=xns+1;b=xew;xplayers=players[a][b];takerow=xns-1;} // check south
-if ( orientation == EAST ) { a=xns;b=xew+1;xplayers=players[a][b];takecol=xew-1;} // check east
-if ( orientation == WEST ) { a=xns;b=xew-1;xplayers=players[a][b];takecol=xew+1;}  // check west
-//if ( xplayers == 0 )	// if adjacent square is OK mode
-//	{
-	while ( arrow == 1 ) // keep checking until cannot move
+if ( orientation == NORTH ) { xplayers=players[xns-1][xew];takerow=xns+1;} // check north
+if ( orientation == SOUTH ) { xplayers=players[xns+1][xew];takerow=xns-1;} // check south
+if ( orientation == EAST ) { xplayers=players[xns][xew+1];takecol=xew-1;} // check east
+if ( orientation == WEST ) { xplayers=players[xns][xew-1];takecol=xew+1;}  // check west
+while (( arrow == 1 )&&(fb!=7)) // keep checking until cannot move
+	{
+	if (( orientation == NORTH ) && ( xns ))  // check north
 		{
-		if (( orientation == NORTH ) && ( xns ))  // check north
-			{
-			xns--;			// decrement provisional north-south player position
-			subarrows();
-			}
-		if (( orientation == SOUTH ) && ( xns < 10 )) // check south
-			{
-			xns++;			// increment provisional north-south player position
-			subarrows();
-			}
-		if ((orientation == EAST ) && ( xew < 10 )) // check east
-			{
-			xew++;			// increment provisional east-west player position
-			subarrows();
-			}
-		if ((orientation == WEST ) && ( xew )) // check west
-			{
-			xew--;			// decrement provisional east-west player position
-			subarrows();
-			}
-		tiletodraw=tiles[xns][xew];				// obtain type of tile	
-		if ( arrow == 1 )						// if MODE is "draw an arrow" (aka: I can move here)
-			{
-			row=xns;
-			col=xew;
-			if (fb==1) {drawarrow();}		// draw and arrow
-			if (fb==4) {subarrows2();} 		// enemy can get here, update enemy array (direction specific)
-			if (fb==5) {computer[xns][xew]++;} // computer can get here, increment computer array 
-			if (fb==0) {drawarrow();}		// if MODE is "blank an arrow"
-			}	
-		// have we reached the end of the board?
-		if (( orientation == NORTH ) && ( xns == 0 )) 	{ arrow=0;}	// check north
-		if (( orientation == SOUTH ) && ( xns == 10 )) 	{ arrow=0;}	// check south
-		if (( orientation == EAST ) && ( xew == 10 )) 	{ arrow=0;}	// check east
-		if (( orientation == WEST ) && ( xew == 0 )) 	{ arrow=0;}	// check west
-		}			
-	//}
-//else
-//	{
-//	if ((fb==4)&&(xplayers==1)){enemy[a][b]+=37;}	// update enemy array if attacker one square away from defender
-//	}
+		xns--;			// decrement provisional north-south player position
+		subarrows();
+		}
+	if (( orientation == SOUTH ) && ( xns < 10 )) // check south
+		{
+		xns++;			// increment provisional north-south player position
+		subarrows();
+		}
+	if ((orientation == EAST ) && ( xew < 10 )) // check east
+		{
+		xew++;			// increment provisional east-west player position
+		subarrows();
+		}
+	if ((orientation == WEST ) && ( xew )) // check west
+		{
+		xew--;			// decrement provisional east-west player position
+		subarrows();
+		}
+	tiletodraw=tiles[xns][xew];				// obtain type of tile	
+	if ( arrow == 1 )						// if MODE is "draw an arrow" (aka: I can move here)
+		{
+		row=xns;
+		col=xew;
+		if (fb==1) {drawarrow();}		// draw and arrow
+		if (fb==4) {subarrows2();} 		// enemy can get here, update enemy array (direction specific)
+		if (fb==5) {computer[xns][xew]++;} // computer can get here, increment computer array 
+		if (fb==0) {drawarrow();}		// if MODE is "blank an arrow"
+		}	
+	// have we reached the end of the board?
+	if (( orientation == NORTH ) && ( xns == 0 )) 	{ arrow=0;}	// check north
+	if (( orientation == SOUTH ) && ( xns == 10 )) 	{ arrow=0;}	// check south
+	if (( orientation == EAST ) && ( xew == 10 )) 	{ arrow=0;}	// check east
+	if (( orientation == WEST ) && ( xew == 0 )) 	{ arrow=0;}	// check west
+	}			
 if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he stays where he is
 	{
-	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])&&(enemy[takerow][takecol]<37)) 
+	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
 		{
 		if (target[takerow][takecol]>1){target[takerow][takecol]+=4; } // update adjacent target to provide escape route or place for someone else to occupy
 		if (orientation < EAST)	// if heading north or south
@@ -1195,6 +1193,7 @@ players[ons][oew]=0;		// set original location to zero (unnocupied)
 players[ns][ew]=piecetype;	// update square with player info
 row=ns;
 col=ew;
+//printf("%cENEMY[%d][%d]=%d%c\n",19,ons,oew,enemy[ons][oew],19);getchar();
 drawpiece();				// draw piece at new location - 18-10-2011
 if (piecetype==3)	{ kingns=ns;kingew=ew;}	// update king position (used by AI)
 // having moved piece we now need to check for, and implement any TAKES
@@ -1390,7 +1389,7 @@ void subarrows()
 if (players[xns][xew]) 
 	{ 
 	arrow = 0;	// !ok if piece occupied or corner square
-	if ((fb==4)&&(players[xns][xew]==1)) {enemy[xns][xew]+=37;}	// means enemy could get here if attacker moved elsewhere
+	if ((fb==4)&&(players[xns][xew]==1)) {enemy[xns][xew]+=ENEMYWEIGHT;}	// means enemy could get here if attacker moved elsewhere
 	}
 if (( players[ns][ew] == 3)&&(tiles[xns][xew] == 4)) { arrow = 1; } // corner ok if king	
 }
@@ -1574,7 +1573,7 @@ if (points==0) points=1;	// suggested by JamesD
 /****************************/
 void setpoints()
 {
-points=10;
+points=10;	
 }
 /****************************/
 void doublepoints()
@@ -1655,30 +1654,22 @@ void subcanbetaken2()
 {
 if (players[takena][takenb]>1)
 		{
-		if (players[takenc][takend]==0)
+		if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
 			{
-			if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<37)||(enemy[takenc][takend]-37))) // 23-12-2011 
+			if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))) // 23-12-2011 
 				{
 				compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
 				}
 			}
 		/*
-		if ((flag==0)&&(takena==mkey))	// if potentially moved piece is on same plane as adjacent enemy piece North/South
+		if (players[takenc][takend]>0)
 			{
-			if ((takena-ons==1)||(ons-takena==1))	// if only one space away
-				{
-				if (enemy[takenc][takend]-37) {compass[origorient]=1;}
-				}
-			}
-		if ((flag==1)&&(takenb==mkey))	// if potentially moved piece is on same plane as adjacent enemy piece EAST/WEST
-			{
-			if ((takenb-oew==1)||(oew-takenb==1))	// if only one space away
-				{
-				if (enemy[takenc][takend]-37) {compass[origorient]=1;}
-				}
+			if (origorient<EAST) {if((mkey!=takena)&&(oew!=takenb)) {compass[origorient]=0;}}
+			else {if((ons!=takena)&&(mkey!=takenb)) {compass[origorient]=0;}}
 			}
 		*/
 		}
+		//if ((players[takenc][takend]>0)&&(((mkey!=takena)&&(oew!=takenb))||((ons!=takena)&&(mkey!=takenb)))){compass[origorient]=0;}
 }
 /****************************/
 void inctarget()
