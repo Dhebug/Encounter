@@ -96,11 +96,11 @@
 	in the OLD condition, if the piece was only one space away, players would always be 1
 */
 // 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
+// 10-01-2012 HUZZAH - above issue resolved (not such a bastard after all but took 24 hrs thinking! 34865)
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
 *** routine to detect stalemate (a side cannot move)
-*** Improve the hightarget routine to select the BEST piece to move (rather than the 1st it finds)
 */
 #include <lib.h>
 //#include <math.h>
@@ -871,7 +871,7 @@ while (( arrow == 1 )&&(fb!=7)) // keep checking until cannot move
 		{
 		row=xns;
 		col=xew;
-		if (fb==1) {drawarrow();}		// draw and arrow
+		if (fb==1) {drawarrow();}		// draw arrow
 		if (fb==4) {subarrows2();} 		// enemy can get here, update enemy array (direction specific)
 		if (fb==5) {computer[xns][xew]++;} // computer can get here, increment computer array 
 		if (fb==0) {drawarrow();}		// if MODE is "blank an arrow"
@@ -1650,26 +1650,23 @@ if ( (flag==0)&&((players[lookrow][lookcol]==2)||(players[lookrow][lookcol]==3))
 }
 */
 /****************************/
-void subcanbetaken2()
+void subcanbetaken2()	// DO NOT MESS with this (NBARNES 10-01-2012)
 {
 if (players[takena][takenb]>1)
+	{
+	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
 		{
-		if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
+		if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))) // 23-12-2011 
 			{
-			if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))) // 23-12-2011 
+			compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+			if (enemy[takenc][takend]>ENEMYWEIGHT) // THIS is the business!!!
 				{
-				compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+				if ((origorient<EAST)&&(mkey!=takenc)&&(oew!=takend)) {compass[origorient]=0;}
+				if ((origorient>SOUTH)&&(ons!=takenc)&&(mkey!=takend)) {compass[origorient]=0;}
 				}
 			}
-		/*
-		if (players[takenc][takend]>0)
-			{
-			if (origorient<EAST) {if((mkey!=takena)&&(oew!=takenb)) {compass[origorient]=0;}}
-			else {if((ons!=takena)&&(mkey!=takenb)) {compass[origorient]=0;}}
-			}
-		*/
 		}
-		//if ((players[takenc][takend]>0)&&(((mkey!=takena)&&(oew!=takenb))||((ons!=takena)&&(mkey!=takenb)))){compass[origorient]=0;}
+	}
 }
 /****************************/
 void inctarget()
