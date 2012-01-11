@@ -97,7 +97,7 @@
 */
 // 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
 // 10-01-2012 HUZZAH - above issue resolved (not such a bastard after all but took 24 hrs thinking! 34865)
-// 11-01-2012 TITLE SCREEN
+// 11-01-2012 TITLE SCREEN (36743)
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -319,7 +319,6 @@ paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
 printtitles();
-/*
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -370,7 +369,6 @@ while (gamekey==89)
 		printf("%c",19);	// turn output ON
 		}
 	}
-*/
 }
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn()
