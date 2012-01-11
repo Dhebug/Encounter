@@ -97,6 +97,7 @@
 */
 // 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
 // 10-01-2012 HUZZAH - above issue resolved (not such a bastard after all but took 24 hrs thinking! 34865)
+// 11-01-2012 TITLE SCREEN
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -112,6 +113,8 @@
 #define ENEMYWEIGHT 37
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
+extern unsigned char BorderTiles[];		// border on title screens/version screens etc
+extern unsigned char TitleTiles[];		// Defence-Force presents...
 /******************* Function Declarations ************************/
 void drawcursor();			// draws cursor 
 void inverse();				// inverse the color in the square
@@ -181,8 +184,9 @@ void inckingdefender();		// increments count of defenders round king
 void incdefatt();			// increments count of attacker/defenders round king (calls incking...)
 void cursormodezero();		// set cursor mode to 1 if 0
 void cursormodevalid();		// sets modevalid to 1
-void ischeckroutezero();	// is checkroute zero?
 void calccantake();			// can take be made (how many)
+void printborder();			// print the border screen (used in titles/menus etc)
+void printtitles();			// print the border screen and titles 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -193,6 +197,7 @@ Tile types:
 */
 extern const unsigned char tiles[11][11];	// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
+extern const unsigned char border[9][9];	// border (of title screens/menus etc)
 /* populate array with places of players 
 Players:
 0=vacant
@@ -303,6 +308,8 @@ unsigned char compass[4];	// used in cantake (if compass[NORTH]=1 then means can
 //unsigned char funca,funcb,funcc,funcd,funce,funcf;	// general purpose variables used in functions
 /* end of playerturn variables */
 unsigned char xplayers;
+unsigned char tileheight;	// height of tile in pixles
+unsigned char tilewidth;	// width of tile in 6 pixel chunks
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
@@ -311,6 +318,8 @@ main()
 paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
+printtitles();
+/*
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -361,6 +370,7 @@ while (gamekey==89)
 		printf("%c",19);	// turn output ON
 		}
 	}
+*/
 }
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn()
@@ -886,7 +896,7 @@ if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he st
 	{
 	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
 		{
-		if (target[takerow][takecol]>1){target[takerow][takecol]+=4; } // update adjacent target to provide escape route or place for someone else to occupy
+		target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
 		if (orientation < EAST)	// if heading north or south
 			{
 			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
@@ -1245,30 +1255,22 @@ cy=kingew;
 for (counter=0;counter<kingns;inccounter()) 	
 	{ 
 	cx=counter;incdefatt();
-	//if (players[counter][kingew]==1) {inckingattacker();}
-	//if (players[counter][kingew]==2) {inckingdefender();}
 	}
 orientation=SOUTH;
 for (counter=kingns+1;counter<11;inccounter()) 
 	{ 
 	cx=counter; incdefatt();
-	//if (players[counter][kingew]==1) {inckingattacker();}
-	//if (players[counter][kingew]==2) {inckingdefender();}
 	}
 orientation=EAST;
 cx=kingns;
 for (counter=kingew+1;counter<11;inccounter())	
 	{ 
 	cy=counter; incdefatt();
-	//if (players[kingns][counter]==1) {inckingattacker();}
-	//if (players[kingns][counter]==2) {inckingdefender();}
 	}
 orientation=WEST;
 for (counter=0;counter<kingew;inccounter()) 	
 	{ 
 	cy=counter; incdefatt();
-	//if (players[kingns][counter]==1) {inckingattacker();}
-	//if (players[kingns][counter]==2) {inckingdefender();}
 	}
 }
 
@@ -1296,8 +1298,6 @@ target[targetns][targetew]=1;
 /************************************************/
 void canbetaken() // can I be taken after moving here? 
 {
-//cannotbetaken=0;
-//icanbetaken=0;
 if ((targetns>0)&&(targetns<10))
 	{
 	takena=targetns-1;takenb=targetew;takenc=targetns+1;takend=targetew;takene=1;
@@ -1313,18 +1313,14 @@ if ((targetew>0)&&(targetew<10))
 	takena=targetns;takenb=targetew-1;takenc=targetns;takend=targetew+1;takene=20;
 	subcanbetaken2();	
 	}
-//if (cannotbetaken==0) {target[targetns][targetew]=1;}		
 }
 /************************************************/
 // Will return a value (take) who's values will be: 0= no, 1=yes
 char cantakepiece()
 {
-//char take=0;
-//char p1=1;	// piece type comparison (lower) - used for determining takes - default=attacker
-//char p2=4;	// piece type comparison (upper) - used for determining takes - default=attacker
 take=0;
-p1=1;
-p2=4;
+p1=1;			// piece type comparison (lower) - used for determining takes - default=attacker
+p2=4;			// piece type comparison (upper) - used for determining takes - default=attacker
 pcheckns1=ns-1;	// defaults to north
 pcheckns2=ns-2;
 pcheckew1=ew;
@@ -1404,8 +1400,6 @@ if ( orientation==WEST ) { enemy[xns][xew]+=10; }	// means enemy can get here fr
 /*****************************/
 void inccantake()
 {
-//unsigned char take;
-//cantake+=cantakepiece();
 z=cantakepiece();
 if (z)
 	{
@@ -1427,8 +1421,6 @@ route--;
 void drawtile()	// draws a board tile, player piece or "arrow"
 {
 ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
-//ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
-//ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
 startpos=(tiletodraw*54);			// 54=3*18 calc how many lines "down" in the graphic file to print from
 ptr_graph+=startpos;				// set start position in graphic file
 tileloop();
@@ -1452,13 +1444,17 @@ void tileloop()
 //unsigned char a;
 ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
 ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
-for (counter=0;counter<18;inccounter())					// nn = tile height in pixels (e.g. 18)
+for (counter=0;counter<tileheight;inccounter())					//tileheight=pixels (e.g. 18)
 	{
-	ptr_draw[0]=ptr_graph[0];
-	ptr_draw[1]=ptr_graph[1];
-	ptr_draw[2]=ptr_graph[2];
+	for (x=0;x<tilewidth;x++)
+		{
+		ptr_draw[x]=ptr_graph[x];
+		}
+	//ptr_draw[0]=ptr_graph[0];
+	//ptr_draw[1]=ptr_graph[1];
+	//ptr_draw[2]=ptr_graph[2];
 	ptr_draw+=40;	// number of 6pixel "units" to advance (+40=next line down, same position across)
-	ptr_graph+=3;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
+	ptr_graph+=tilewidth;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
 	}
 }
 /**************************************/
@@ -1486,18 +1482,7 @@ void drawarrow()
 /**************************************/
 void printmessage()
 {
-//char c;
-//PrintChr();	// turn output ON
-/*
-for (c=0;message[c]!='\0';c++)
-		{
-		putchar(c);
-		}
-*/
-//printf("%c\n\n\n%s%c",19,message,19);
 printf("%c\n\n\n%s%c",19,message,19);
-
-//PrintChr();	// TURN OUTPUT off
 }
 /**************************************/
 void printturnprompt()
@@ -1568,7 +1553,6 @@ void decpoints()
 {
 points--;
 if (points==0) points=1;	// suggested by JamesD
-//if ((points-1)==0) {points=1;}else{points--;}
 }
 /****************************/
 void setpoints()
@@ -1586,7 +1570,6 @@ points+=10;	// not really double anymore (10/12/2011)
 /******************************/
 void surroundpoints()
 {
-//printf("%c* %d *%c",19,(points+(points*surrounded)),19);
 points+=10*surrounded;	// multiply the points around king depending on the "surrounded" figure
 }
 /****************************/
@@ -1682,7 +1665,6 @@ if (tiles[surns][surew]>2)			{incsurround();}	// is king square n,s,e,w
 /****************************/
 void calctakeweight()			// calculate the weight that should be applied to TAKES
 {
-//unsigned char x;
 takeweight=5;		// default
 // don't worry about TAKES if the king has unbroken line of sight to edge of board
 for (x=0;x<4;x++)
@@ -1703,9 +1685,6 @@ if (( players[ezns1][ezew1] == 0 )&&(target[ezns1][ezew1]))	// if adjacent squar
 /******************************/
 char checkroute()	// returns number of pieces on a given route
 {
-//char start=cx;
-//char dest=kingns;
-//unsigned char x;
 z=0;
 if (orientation<EAST) 			// if checking ROWS (crossing the T) (used for NORTH SOUTH checks)
 	{
@@ -1751,13 +1730,7 @@ if ((playertype==1)&&(gamestyle==1))	// if computer playing as attacker and his 
 /*************************/
 void updatetarget()
 {
-//unsigned char x;
-//unsigned char y;
 targetns=ctns;targetew=ctew;
-//char orient=1;	// 0=north, 1=south, 2=east, 3=west
-//char orientA;
-//char orientB;
-//char z;
 target[targetns][targetew]=2;	// set target to 2
 target[5][5]=0;		// set "illegal" squares to zero
 target[0][10]=0;
@@ -1773,28 +1746,8 @@ if (target[targetns][targetew])	// only if target is valid (i.e. not a king squa
 	calctakeweight();		// calculate weight that should be applied to takes	
 	y=cantake*takeweight;	// value to be added to target			
 	target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
-	/*
-	if ((ctew==1)||(ctew==9))
-		{
-		orientation=1;	// check south for number of pieces
-		startcol=ctew;startrow=0;destcol=ctew;destrow=10;
-		ischeckroutezero();	// if so inctarget
-		}
-	if ((ctns==1)||(ctns==9))
-		{
-		orientation=2;	// check east for number of pieces
-		startcol=0;startrow=ctns;destcol=10;destrow=ctns;
-		ischeckroutezero();	// if so inctarget
-		}
-	*/
 	//if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
 	}
-}
-/******************/
-void ischeckroutezero()
-{
-//char a=checkroute();
-if ((checkroute())==0) {inctarget();}	// if nobody on column, inctarget
 }
 /********************/
 void calccantake()			// calculate how many takes can be made
@@ -1815,4 +1768,39 @@ for (x=0;x<4;x++)
 		orientation=SOUTH; inccantake();
 		}
 	}
+}
+/***********************/
+void printborder()		// print the border around title screen/menus etc
+{
+ink(3);	// yellow, erm...gold
+row=1;
+for (a=0;a<9;a++)
+	{
+	col=1;
+	for(b=0;b<9;b++)
+		{
+		tiletodraw=border[a][b];
+		if ( tiletodraw<12)
+			{
+			ptr_graph=BorderTiles;		// pointer to Border Tiles graphics
+			startpos=(tiletodraw*54);	// 54=3*18 calc how many lines "down" in the graphic file to print from
+			ptr_graph+=startpos;		// set start position in graphic file
+			tileloop();					// draw tile
+			}
+		col++;
+		}
+	row++;
+	}
+}
+/*****************************/
+void printtitles()				// print the title screen
+{
+tileheight=18;tilewidth=3;
+printborder();
+row=3;col=2;
+startpos=0;
+ptr_graph=TitleTiles;
+tileheight=36;tilewidth=21;
+tileloop();
+tileheight=18;tilewidth=3;
 }

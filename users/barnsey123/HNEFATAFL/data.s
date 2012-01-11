@@ -1,5 +1,5 @@
 /* Populate array with tile types
-Tile types:
+Tile types (for board) from tiles.png:
 0=blank
 1=attacker square
 2=defender square
@@ -17,6 +17,23 @@ _tiles
 	.byt 0,0,0,0,0,0,0,0,0,0,0
 	.byt 0,0,0,0,0,1,0,0,0,0,0
 	.byt 4,0,0,1,1,1,1,1,0,0,4
+/* Tile types (from bordertiles.png)
+0=topleft, 1=top right, 2=bottoml eft, 3=bottom right
+4,5,6 = top row
+7,8,9 = bottom row
+10,11 = left/right columns
+12=blank
+*/
+_border
+	.byt 0,4,5,4,6,4,5,4,1
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 10,12,12,12,12,12,12,12,11
+	.byt 2,7,8,7,9,7,8,7,3
 /*
 _baseplayers
 	.byt 4,0,0,1,1,1,1,1,0,0,4
