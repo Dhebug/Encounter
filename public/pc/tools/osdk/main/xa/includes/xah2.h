@@ -33,7 +33,7 @@ public:
 	{
 		//assert(line<5000);			// Mike: Debug
 		m_current_line=line;
-		fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentLine:%u\r\n",line);
+		//if (gErrorFileHandle)	fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentLine:%u\r\n",line);
 	}
 
 	const std::string& GetCurrentFileName() const
@@ -44,7 +44,7 @@ public:
 	void SetCurrentFileName(const std::string& filename)
 	{
 		m_file_name=filename;
-		fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentFileName:%s (%u)\r\n",filename.c_str(),m_current_line);
+		//if (gErrorFileHandle)	fprintf(gErrorFileHandle,"PreprocessorFile_c::SetCurrentFileName:%s (%u)\r\n",filename.c_str(),m_current_line);
 	}
 
 	//

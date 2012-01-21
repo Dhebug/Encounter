@@ -49,8 +49,9 @@ ECHO mount c %osdk%\Euphoric >> %OSDK%\Euphoric\dosbox.conf
 ECHO c:  >> %OSDK%\Euphoric\dosbox.conf
 ECHO SET ORIC=c:\ >> %OSDK%\Euphoric\dosbox.conf
 ECHO %OSDKEUPHORIC%  >> %OSDK%\Euphoric\dosbox.conf
-CD %OSDK%\Euphoric
+pushd %OSDK%\Euphoric
 "%OSDKDOSBOX%"
+popd
 GOTO End
 
 

@@ -3,5 +3,5 @@
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	2
+#define TOOL_VERSION_MINOR	4
 
