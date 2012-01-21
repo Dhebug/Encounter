@@ -30,8 +30,6 @@ UnpackLetters	.byt "LZ77"
 
 _file_unpack
 .(
-	//jmp _file_unpack
-
 	ldy #0
 	lda (sp),y
 	sta ptr_destination

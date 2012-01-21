@@ -92,7 +92,7 @@ int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 
 static const char *copyright=
 {
-	"Cross-Assembler 65xx V2.2.2 ("__TIME__" / "__DATE__") \r\n"
+	"Cross-Assembler 65xx V2.2.3 ("__TIME__" / "__DATE__") \r\n"
 	"(c) 1989-98 by A.Fachat\r\n"
 	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
 	"Oric C adaptation and debugging by Mickael Pointier\r\n"
@@ -841,7 +841,7 @@ static ErrorCode getline(char *s)
 			if (ec==E_NEWLINE)
 			{
 				unsigned int line=gPreprocessor.m_CurrentFile->GetCurrentLine();
-				fprintf(gErrorFileHandle,"getline Line:%u\r\n",line);
+				//if (gErrorFileHandle) fprintf(gErrorFileHandle,"getline Line:%u\r\n",line);
 				afile->WriteShort(0);
 				afile->WriteByte(T_LINE);
 				afile->WriteUShort(line);
@@ -851,7 +851,7 @@ static ErrorCode getline(char *s)
 			if (ec==E_NEWFILE)
 			{
 				unsigned int line=gPreprocessor.m_CurrentFile->GetCurrentLine();
-				fprintf(gErrorFileHandle,"getline File:%s (%u)\r\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),line);
+				//if (gErrorFileHandle) fprintf(gErrorFileHandle,"getline File:%s (%u)\r\n",gPreprocessor.m_CurrentFile->GetCurrentFileName().c_str(),line);
 				afile->WriteShort(0);
 				afile->WriteByte(T_FILE);
 				afile->WriteUShort(line);
@@ -939,10 +939,7 @@ void errout(int er)
 
 void logout(char *s)
 {
-	fprintf(stderr, "%s",s);
-	if (gErrorFileHandle)
-	{
-		fprintf(gErrorFileHandle,"%s",s);
-	}
+  fprintf(stderr, "%s",s);
+  if (gErrorFileHandle) fprintf(gErrorFileHandle,"%s",s);
 }
 

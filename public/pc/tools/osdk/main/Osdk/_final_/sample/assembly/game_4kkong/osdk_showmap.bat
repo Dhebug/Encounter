@@ -1,4 +1,4 @@
-::@ECHO OFF
+@ECHO OFF
 
 ::
 :: Initial check.
@@ -36,3 +36,4 @@ GOTO End
 
 
 :End
+

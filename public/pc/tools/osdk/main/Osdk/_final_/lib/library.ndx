@@ -104,6 +104,11 @@
 	mult1
 	mult2
 	mul16i
+-mult32.s
+	mul32u
+	_randseed16
+	_randseed32
+	_rand32
 -oric.s
 	_peek
 	_deek

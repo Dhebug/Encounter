@@ -2,6 +2,7 @@
 ; new VERY FAST version 8-)
 
 _memcpy
+.(
 	jsr get_2ptr
 	ldy #4
 	sec
@@ -43,3 +44,5 @@ memcpyloop
 	bne memcpyloop
 return
 	rts
+.)
+	

@@ -40,6 +40,49 @@ Anyway, if you need to do it, you can still go into the osdk\euphoric directory 
 </p>
 
 
+
+<p id=dateentry>Version 1014</p>
+<ul>
+	<li>it is now possible to manually insert .tap tapes with the menu interface (it was previously only possible to insert .wav tapes when in hardware tape mode).</li>
+	<li>recording a program on a .tap now writes four synchronisation bytes ($16) instead of three. But the emulator is still able to read files with one, two or three synchronisation bytes.</li>
+	<li>in .tap mode, a trap has been added on the "bit read" routine in rom, so that more programs that use a copy-protection routine can be used in .tap mode without having to resort to .wav tapes.</li>
+</ul>
+
+<p id=dateentry>Version 1013</p>
+<ul>
+	<li>thanks to Dbug who spotted a bug when timers reach zero (a fraction of last instruction's cycles were not counted). This should now be fixed. There's also a simple fix of the duration of the initial countdown of VIA timers.</li>
+</ul>
+
+<p id=dateentry>Version 1012</p>
+<ul>
+	<li>thanks to Chema's latest game, we discovered a hardware bug of the real Telestrat's specific ULAs (HCS3119 and HCS3120) that affects the FDC access.This hardware bug is now emulated in Euphoric.</li>
+</ul>
+
+<p id=dateentry>Version 1011</p>
+<ul>
+	<li>now emulates the PSG IO-port direction bit. This is not useful (it prevents the keyboard to work), but it removes a difference between the emulator and the real thing.</li>
+	<li>also emulates the propagation of ground voltage through the keyboard matrix intersections when several keys are pressed simultaneously. Again it's not really useful (it will even make wrong key detection in some conditions), but at least it behaves like the real thing.</li>
+	<li>Euphoric was so strongly emulating the crash of a 6502 executing a column 2 opcode, that it was stucked in a tight loop... Now the reset key allows to regain control... </li>
+</ul>
+
+<p id=dateentry>Version 1010</p>
+<ul>
+	<li>added a specific option for the Pravetz (-p). Also, euphoric.ini has a specific Pravetz rom line: "PravetzRom=...", and "Computer=Pravetz" can be used. Last but not least, windows shortcuts for Pravetz with and without disk interface are provided.</li>
+	<li>added emulation of Borislav Zahariev's Overlay Ram Access add-on. This add-on enables access to the 16 KB of ram, as does the Microdisc controller. Borislav (aka. Bobby) has also tied this interface to his Apple DiskII Interface, allowing Bobby RDOS 2.10 to be loaded in the overlay ram, thus freeing the 48 KB of the Pravetz 8D.</li>
+	<li>updated the Configuratoric tool to select a rom for the pravetz and to use the Overlay Ram Access add-on. Also, two Pravetz shortcuts have been added to the Euphoric menu, and double-clicking .nib disks automatically starts a Pravetz with a DiskII interface. Thanks to Georges and the great Pravetz-8D fans for all the information on this computer, and the nice icons.</li>
+</ul>
+
+<p id=dateentry>Version 1009</p>
+<ul>
+	<li>I had inadvertantly broken the pravetz disk interface soon after adding it. It is back again : add line "DiskController=Apple" to euphoric.ini, and don't forget to provide the disk interface eprom with line "AppleInterfaceEprom=eprom8d.rom", and also use pravetzt.rom or pravetzd.rom as the internal oric rom. If you use the pravetzt rom, it won't automatically boot the floppy, you will have to issue a CALL#320.</li>
+	<li>also I only have partial information on the Apple interface hardware used by the Pravetz, so writing to disk didn't work. I have modified the value returned by a register, it seems it works now...</li>
+</ul>
+
+<p id=dateentry>Version 1008</p>
+<ul>
+	<li>modified the 6502 emulator in order to be able to detect a timer countdown before an interrupt is raised. Thanks to Simon for having spotted a bug in M.A.R.C that exploits this "feature"... Also, quite heavily changed the 6502 emulator at the same time to simplify it, and found that some undocumented opcodes are bogged... (not fixed yet)</li>
+</ul>
+
 <p id=dateentry>Version 1007</p>
 <ul>
 	<li>only a bugfix that caused Euphoric to crash under DOS when accessing the environment screen (F1).</li>

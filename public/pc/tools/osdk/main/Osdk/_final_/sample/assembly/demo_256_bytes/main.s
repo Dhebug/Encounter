@@ -1,7 +1,6 @@
 
 ;// --------------------------------------
 ;// 256b moving backgound (Working title)
-;// A TetraKnight Squad 348 production
 ;// --------------------------------------
 ;// (c) 2006 Mickael Pointier
 ;// This code is provided as-is.
@@ -11,12 +10,7 @@
 ;// Except that, you can use this example
 ;// without any limitation !
 ;// If you manage to do something with that
-;// please, contact me :)
-;// --------------------------------------
-;// For more information, please contact me
-;// on internet:
-;// e-mail: mike@defence-force.org
-;// URL: http://www.defence-force.org
+;// please, contact me.
 ;// --------------------------------------
 ;// Note: This text was typed with a Win32
 ;// editor. So perhaps the text will not be

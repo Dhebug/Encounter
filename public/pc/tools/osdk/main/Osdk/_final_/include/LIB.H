@@ -188,4 +188,12 @@ extern unsigned char OsdkTableMod6[];
 extern unsigned char OsdkTableDiv6[];
 
 
+//
+// Some 'pseudo standard' library stuff
+//
+extern unsigned int randseedLow;
+extern unsigned int randseedTop;
+extern unsigned int pcrand();
 
+#define srand(seed) if (0) {} else {randseedLow=(seed);randseedTop=0;}
+#define rand() 		(rand32()?(randseedTop & 0x7fff):(randseedTop & 0x7fff))

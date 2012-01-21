@@ -17,6 +17,22 @@
 
 		<h1>Version history</h1>
 
+<p id=dateentry>Version 0.019 - January the 18th 2011</p>
+	<ul>
+		<li>Upgraded <A href="doc_assembler.htm">XA</A> to the version 2.2.3</li>
+		<li>Added TapTool 1.0 - Should work as a drop-in replacement for Tap2CD, in the future will provide in one tool all the functionalities of Tap2Wav, Tap2CD and Tap2DSK.</li>
+		<li>Added DskTool 1.0 - Should work as a drop-in replacement for Old2Mfm, in the future will provide in one tool all the functionalities of Old2Mfm, Raw2Mfm, CRCFix, Init, MakeDsk, ...</li>
+	</ul>
+
+<p id=dateentry>Version 0.018 - January the 15th 2011</p>
+	<ul>
+		<li>Upgraded <A href="doc_euphoric.htm">Euphoric</A> to the version 1014</li>
+		<li>Upgraded <A href="doc_memmap.htm">MemMap</A> to the version 0.004</li>
+		<li>Upgraded <A href="doc_assembler.htm">XA</A> to the version 2.2.2</li>
+		<li>The handling of the stackframe should not be more robust, fixing the random variable corruption that happened in code using many functions calls and local variables.</li>
+		<li>The libraries now contains a 32 bit multiplication routine, and a Microsoft compatible random number generator.</li>
+	</ul>
+
 <p id=dateentry>Version 0.017 - November the 29th 2009</p>
 	<ul>
 		<li>It is now possible to indicate subfolders in the OSDK_CONFIG file list</li>
@@ -68,7 +84,7 @@
 <p id=dateentry>Version 0.012 - June the 4th 2006</p>
 	<ul>
 		<li>Corrected a bug in the linker that made it impossible to use the linker with only one source file</li>
-		<li>Corrected a bug in the #file command in XA, it now correctly displays the file and line if an error happens during the second pass</li>
+		<li>Corrected a bug in the #file command in <A href="doc_assembler.htm">XA</A>, it now correctly displays the file and line if an error happens during the second pass</li>
 		<li>Corrected a bug in the handling of static function pointer generating bad code (1.29 code generator by Fabrice)</li>
 		<li>Added an option to display the size of generated programs in Header</li>
 	</ul>
@@ -76,11 +92,11 @@
 <p id=dateentry>Version 0.011 - March 2006</p>
 	<ul>
 		<li>Corrected a bug in the data unpacking code (overflow when offset was equal to 4096 exactly)</li>
-		<li>Corrected a bug (hack) in XA that make it crash when processing too many levels of macro expansion</li>
+		<li>Corrected a bug (hack) in <A href="doc_assembler.htm">XA</A> that make it crash when processing too many levels of macro expansion</li>
 		<li>Added a way to generate masks from a bitmap in <A href="doc_pictconv.htm">PictConv</A></li>
 		<li>Added support for Atari ST compatible bitmap data in <A href="doc_pictconv.htm">PictConv</A></li>
 		<li>Added an option in <A href="doc_bin2txt.htm">Bin2Txt</A> to set the number of values per line of data</li>
-		<li>Added a new program in the OSDK, MemMap with the associated osdk_showmap.bat to show how memory is used</li>
+		<li>Added a new program in the OSDK, <A href="doc_memmap.htm">MemMap</A> with the associated osdk_showmap.bat to show how memory is used</li>
 	</ul>
 
 <p id=dateentry>Version 0.010 - January 2004</p>
@@ -95,7 +111,7 @@
 		<li>Corrected a bug in the EQW_DI macro instruction</li>
 		<li>Modified the linker to handle pure assembly code projects (SET OSDKLINK=-B in the configuration file)</li>
 		<li>Modified the linker to make it not complain about .( and .)</li>
-		<li>Modified the linker to add #file directives in order to get valid error messages (file/line) from XA assembler</li>
+		<li>Modified the linker to add #file directives in order to get valid error messages (file/line) from <A href="doc_assembler.htm">XA</A> assembler</li>
 		<li>Modified the linker to makes it accept /* */ comments (was previously crashing badly)</li>
 		<li>Modified the assembleur to accept the #file directive</li>
 		<li>Modified the makefile to accept a OSDKCOMP variable to handle compiler optimisation settings</li>
@@ -145,7 +161,7 @@
 		<li>Added two samples (picture display, and file decompression)</li>
 		<li>Added "file_unpack" function</li>
 		<li>Corrected bug in "clock" function</li>
-		<li>XA symbol table is now compatible with <A href="doc_euphoric.htm">Euphoric</A> debuger format</li>
+		<li><A href="doc_assembler.htm">XA</A> symbol table is now compatible with <A href="doc_euphoric.htm">Euphoric</A> debuger format</li>
 	</ul>
 
 <p id=dateentry>Version 0.003 - Jan 2002</p>
