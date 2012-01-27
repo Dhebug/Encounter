@@ -289,8 +289,8 @@ unsigned char kingdefender[4];	// number of defenders in all four directsions fr
 unsigned char surrounded;			// status of king "surrounded" status		//
 unsigned char ctns=0;				// Computer Turn north-south board position		
 unsigned char ctew=0;				// Computer Turn east-west   board position 
-char playertext[]="Attacker";
-char turntext[]=" Turn:Use cursor keys.\nX:Select Piece P:Possible Moves";
+char playertext[]="ATTACKER";
+char turntext[]=" TURN: USE CURSOR KEYS.\nX=SELECT PIECE P=POSSIBLE MOVES";
 char message[]="*";
 char foundpiece=0;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
 //char xloop=0;				// general purpose loop variable
@@ -320,7 +320,7 @@ unsigned char ezns1,ezew1;			// used in surroundcount/enemyzero to reset enemy[]
 //unsigned char enemyweight=37;		// >36. weight of "enemy could get here but piece occupied by attacker"
 //char defaulttakeweight=5;	// default weight assigned to a TAKE
 unsigned char takeweight;			// weight assigned to a TAKE (calculated in "calctakeweight") 
-unsigned char cbtweight=4;	// weight to be applied to escape position if can be taken
+//unsigned char cbtweight=4;	// weight to be applied to escape position if can be taken
 unsigned char pacpointsx,pacpointsy,pacpointsa,pacpointsb;		// used to calculate points in subpacmanx	
 unsigned char pcheckns1,pcheckns2;		// used in taking pieces and checking for takes
 unsigned char pcheckew1,pcheckew2;		// used in taking pieces and checking for takes			
@@ -375,7 +375,7 @@ while (gamekey==89)
 	printf("%c",19);			// turn off screen output (means cursor movement doesn't affect oric cursor
 	while (gamestyle==3)
 		{
-		strcpy(message,"Select Game Type:\nEnter number of humans:");
+		strcpy(message,"ENTER NUMBER OF HUMANS:");
 		printmessage();
 		gameinput=getchar();
 		if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
@@ -403,12 +403,12 @@ while (gamekey==89)
 		}	
 	if ( game == 0 ) 
 		{ 
-		strcpy(message,"KING ESCAPED! King Wins!\nPlay Again Y/N?"); 
+		strcpy(message,"KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?"); 
 		printmessage();
 		}
 	else 
 		{ 
-		strcpy(message,"KING CAPTURED! Attacker Wins!\nPlay Again Y/N?");
+		strcpy(message,"KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?");
 		printmessage();
 		}
 	gamekey=getchar();
@@ -423,7 +423,7 @@ void computerturn()
 {
 //unsigned int xrand=srandom(deek(630));	// seed random number generator
 //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-strcpy(message,"ORIC IS THINKING..");
+strcpy(message,"ORIC IS THINKING...");
 printmessage();
 //printf("\n\n\nORIC IS THINKING..");
 // 1. initialize target, enemy and computer array to zeroes
@@ -873,7 +873,7 @@ void printpossiblemoves()
 	char k;	// key entered
 	fb=1;
 	printdestinations();	// print arrows on all destinations	
-	strcpy(message,"* press any key to proceed *");
+	strcpy(message,"* PRESS ANY KEY TO PROCEED *");
 	printmessage();
 	k=getchar();
 	fb=0;
@@ -942,16 +942,16 @@ if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he st
 	{
 	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
 		{
-		target[takerow][takecol]+=cbtweight; // update adjacent target to provide escape route or place for someone else to occupy
+		target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
 		if (orientation < EAST)	// if heading north or south
 			{
-			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=cbtweight;}}
-			if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=cbtweight;}}
+			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
+			if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=4;}}
 			}
 		else					// if heading east or west
 			{
-			if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=cbtweight;}}
-			if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=cbtweight;}}	
+			if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=4;}}
+			if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=4;}}	
 			}
 		}
 	}
@@ -1116,11 +1116,11 @@ void playerturn()	// The human players turn : filter keyboard input
 	flashback=6;
 	if ( playertype == 2 )
 		{ 
-		strcpy(playertext,"King");
+		strcpy(playertext,"KING'S");
 		}
 	else
 		{
-		strcpy(playertext,"Attacker");
+		strcpy(playertext,"ATTACKER");
 		}
 	blinkcursor();
 	printturnprompt();			// display instructions
@@ -1171,7 +1171,7 @@ void playerturn()	// The human players turn : filter keyboard input
 				flashback=2;
 				//printmessage();
 				//strcpy(message,playertext);
-				strcpy(message,"Place cursor on destination\nX=Select Destination R=Reset/De-Select");
+				strcpy(message,"PLACE CURSOR\nX=SELECT DESTINATION R=RESET/DE-SELECT");
 				printmessage();
 				//printf("\n\n\n%s Turn X=Select R=Reset",playertext);
 				inversex=cx;
@@ -1712,7 +1712,7 @@ if (tiles[surns][surew]>2)			{incsurround();}	// is king square n,s,e,w
 /****************************/
 void calctakeweight()			// calculate the weight that should be applied to TAKES
 {
-takeweight=5;		// default
+takeweight=7;		// default
 // don't worry about TAKES if the king has unbroken line of sight to edge of board
 for (x=0;x<4;x++)
 	{
