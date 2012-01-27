@@ -100,6 +100,7 @@
 // 11-01-2012 TITLE SCREEN (36743)
 // 12-01-2012 Added RUNES
 // 17-01-2012 Made runes work! (37100)
+// 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -132,7 +133,7 @@ extern unsigned char RunicTiles[];		// Runic alphabet
 */
 extern unsigned char Font_6x8_runic1_full[1024]; // runic oric chars
 
-/* RUNIC Alphabet Tiles ordered as follows is as follows:
+/* RUNIC Alphabet Tiles (NOT the runic1 font) ordered as follows :
 0	F: Fehu			Cattle/Gold/General Wealth
 1	U: Uruz			Strength/Speed/Good Health
 2	TH:	Thurisaz	Norse Giants
