@@ -98,6 +98,8 @@
 // 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
 // 10-01-2012 HUZZAH - above issue resolved (not such a bastard after all but took 24 hrs thinking! 34865)
 // 11-01-2012 TITLE SCREEN (36743)
+// 12-01-2012 Added RUNES
+// 17-01-2012 Made runes work! (37100)
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -113,8 +115,49 @@
 #define ENEMYWEIGHT 37
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
-extern unsigned char BorderTiles[];		// border on title screens/version screens etc
-extern unsigned char TitleTiles[];		// Defence-Force presents...
+//extern unsigned char BorderTiles[];		// border on title screens/version screens etc
+//extern unsigned char TitleTiles[];		// Defence-Force logo
+extern unsigned char RunicTiles[];		// Runic alphabet
+/*
+; You simply replace the existing font from C doing this:
+;
+;  extern unsigned char Font_6x8_FuturaFull[1024];
+;
+; Then to set the HIRES font:
+;   memcpy((unsigned char*)0x9800+32*8,Font_6x8_FuturaFull,768);
+;
+; Or to set the TEXT font:
+;   memcpy((unsigned char*)0xb400+32*8,Font_6x8_FuturaFull,768);
+;
+*/
+extern unsigned char Font_6x8_runic1_full[1024]; // runic oric chars
+
+/* RUNIC Alphabet Tiles ordered as follows is as follows:
+0	F: Fehu			Cattle/Gold/General Wealth
+1	U: Uruz			Strength/Speed/Good Health
+2	TH:	Thurisaz	Norse Giants
+3	A:	Ansuz		The Gods, mostly Odin
+4	R:	Raido		A long Journey
+5	K/C: Kenaz		Torch/Light source
+6	G:	Gebo		sACRIFICE/OFFERING TO THE gODS
+7	W:	Wunjo		Comfort/Joy/Glory
+8	H:	Hagalaz		Hail/Missile
+9	N:	Nauthiz		Need/Necessity
+10	I:	Isa			ICE
+11	Y:	Jera		year/harvest
+12	EI:	Eithwaz		Sacred Yew tree
+13	P:	Perth		Unknown
+14	Z:	Algiz		Defence/Protection/Self-Preservation
+15	S:	Sowilo		The Sun
+16	T:	Tiwaz		The War God, TYR
+17	B: 	Berkano		Birch Tree/LDUN(goddess of spring/fertility)
+18	E:	Ehwaz		Horse
+19	M:	Mannaz		Man/Mankind
+20	L:	Laguz		Water
+21	NG:	Ingwaz		the Danes (and danish hero ING)
+22	D:	Dagaz		Day/Daylight
+23	O:	Othila		Inheritance (of property or knowledge)
+*/
 /******************* Function Declarations ************************/
 void drawcursor();			// draws cursor 
 void inverse();				// inverse the color in the square
@@ -186,7 +229,7 @@ void cursormodezero();		// set cursor mode to 1 if 0
 void cursormodevalid();		// sets modevalid to 1
 void calccantake();			// can take be made (how many)
 void printborder();			// print the border screen (used in titles/menus etc)
-void printtitles();			// print the border screen and titles 
+//void printtitles();			// print the border screen and titles 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -197,7 +240,9 @@ Tile types:
 */
 extern const unsigned char tiles[11][11];	// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
-extern const unsigned char border[9][9];	// border (of title screens/menus etc)
+extern const unsigned char border[7][11];	// border (of title screens/menus etc)
+//extern unsigned char presents[8];	// array of runic chars that spell "presents"
+//extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
 /* populate array with places of players 
 Players:
 0=vacant
@@ -274,7 +319,7 @@ unsigned char ezns1,ezew1;			// used in surroundcount/enemyzero to reset enemy[]
 //unsigned char enemyweight=37;		// >36. weight of "enemy could get here but piece occupied by attacker"
 //char defaulttakeweight=5;	// default weight assigned to a TAKE
 unsigned char takeweight;			// weight assigned to a TAKE (calculated in "calctakeweight") 
-//unsigned char cbtweight=4;	// weight to be applied to escape position if can be taken
+unsigned char cbtweight=4;	// weight to be applied to escape position if can be taken
 unsigned char pacpointsx,pacpointsy,pacpointsa,pacpointsb;		// used to calculate points in subpacmanx	
 unsigned char pcheckns1,pcheckns2;		// used in taking pieces and checking for takes
 unsigned char pcheckew1,pcheckew2;		// used in taking pieces and checking for takes			
@@ -308,17 +353,19 @@ unsigned char compass[4];	// used in cantake (if compass[NORTH]=1 then means can
 //unsigned char funca,funcb,funcc,funcd,funce,funcf;	// general purpose variables used in functions
 /* end of playerturn variables */
 unsigned char xplayers;
-unsigned char tileheight;	// height of tile in pixles
-unsigned char tilewidth;	// width of tile in 6 pixel chunks
+//unsigned char tileheight;	// height of tile in pixles
+//unsigned char tilewidth;	// width of tile in 6 pixel chunks
+
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
 //gamekey=89;	// controls "play again?"
 //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
+memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
 paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
-printtitles();
+printborder();
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -894,16 +941,16 @@ if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he st
 	{
 	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
 		{
-		target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
+		target[takerow][takecol]+=cbtweight; // update adjacent target to provide escape route or place for someone else to occupy
 		if (orientation < EAST)	// if heading north or south
 			{
-			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
-			if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=4;}}
+			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=cbtweight;}}
+			if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=cbtweight;}}
 			}
 		else					// if heading east or west
 			{
-			if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=4;}}
-			if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=4;}}	
+			if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=cbtweight;}}
+			if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=cbtweight;}}	
 			}
 		}
 	}
@@ -990,6 +1037,7 @@ void drawtiles() // DRAW ALL THE TILES ON THE BOARD
 		for (col=0;col<11;col++)
 			{
 			players[row][col]=tiles[row][col];	// populate players array
+			ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
 			tiletodraw=tiles[row][col];
 			if ( tiletodraw==4 ) { tiletodraw=3;}
 			drawtile();	
@@ -999,6 +1047,7 @@ void drawtiles() // DRAW ALL THE TILES ON THE BOARD
 /************************************************/
 void drawboard()	// DRAW THE BOARD
 {
+	//tileheight=18;tilewidth=3;
 	game=1;				// game=1 means PLAY GAME
 	gamestyle=3;		// 0=play against human, 1=play as DEFENDERS, 2=play as ATTACKERS, 3=nobody  
 	kingns=5;kingew=5;	// DEFAULT kings board position
@@ -1019,7 +1068,6 @@ void drawboard()	// DRAW THE BOARD
 	kingdefender[WEST]=2;			// count of defenders WEST of king
 	surrounded=0;		// reset surrounded back to zero
 	drawtiles();	// draw the background tiles
-	//drawborder();
 	curset(12,198,1);
 	draw(198,0,1);
 	draw(0,-198,1);
@@ -1196,7 +1244,7 @@ drawcursor();				// blank out cursor at new selected position
 row=ons;
 col=oew;
 tiletodraw=tiles[row][col];
-drawtile();					// draw tile at original location (blank out square)
+ptr_graph=PictureTiles;drawtile();					// draw tile at original location (blank out square)
 players[ons][oew]=0;		// set original location to zero (unnocupied)
 players[ns][ew]=piecetype;	// update square with player info
 row=ns;
@@ -1375,7 +1423,7 @@ col=tpew;
 ink(6);
 explodetile();					// plays animation to "kill" a tile
 tiletodraw=tiles[row][col];		// decide tile to draw
-drawtile();						// draw tile at location
+ptr_graph=PictureTiles;drawtile();						// draw tile at location
 }
 /*****************************/
 void subarrows()
@@ -1418,8 +1466,8 @@ route--;
 /*********************************/
 void drawtile()	// draws a board tile, player piece or "arrow"
 {
-ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
-startpos=(tiletodraw*54);			// 54=3*18 calc how many lines "down" in the graphic file to print from
+//ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
+startpos=tiletodraw*54;			// 54=3*18 calc how many lines "down" in the graphic file to print from
 ptr_graph+=startpos;				// set start position in graphic file
 tileloop();
 }
@@ -1442,17 +1490,17 @@ void tileloop()
 //unsigned char a;
 ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
 ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
-for (counter=0;counter<tileheight;inccounter())					//tileheight=pixels (e.g. 18)
+for (counter=0;counter<18;inccounter())					//tileheight=pixels (e.g. 18)
 	{
-	for (x=0;x<tilewidth;x++)
-		{
-		ptr_draw[x]=ptr_graph[x];
-		}
-	//ptr_draw[0]=ptr_graph[0];
-	//ptr_draw[1]=ptr_graph[1];
-	//ptr_draw[2]=ptr_graph[2];
+	//for (x=0;x<tilewidth;x++)
+	//	{
+	//	ptr_draw[x]=ptr_graph[x];
+	//	}
+	ptr_draw[0]=ptr_graph[0];
+	ptr_draw[1]=ptr_graph[1];
+	ptr_draw[2]=ptr_graph[2];
 	ptr_draw+=40;	// number of 6pixel "units" to advance (+40=next line down, same position across)
-	ptr_graph+=tilewidth;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
+	ptr_graph+=3;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
 	}
 }
 /**************************************/
@@ -1461,7 +1509,7 @@ void drawpiece()
 	tiletodraw=players[row][col];
 	if ( tiletodraw>0) { tiletodraw+=3;}
 	if ( tiles[row][col]>0 ) { tiletodraw+=3; }
-	drawtile();
+	ptr_graph=PictureTiles;drawtile();
 }
 /**************************************/
 void drawarrow()
@@ -1475,7 +1523,7 @@ void drawarrow()
 		{
 		tiletodraw=tiles[row][col];						// draw original tile (includes blank)
 		}
-	drawtile();
+	ptr_graph=PictureTiles;drawtile();
 }
 /**************************************/
 void printmessage()
@@ -1744,6 +1792,7 @@ if (target[targetns][targetew])	// only if target is valid (i.e. not a king squa
 	calctakeweight();		// calculate weight that should be applied to takes	
 	y=cantake*takeweight;	// value to be added to target			
 	target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
+	
 	//if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
 	}
 }
@@ -1771,34 +1820,60 @@ for (x=0;x<4;x++)
 void printborder()		// print the border around title screen/menus etc
 {
 ink(3);	// yellow, erm...gold
-row=1;
-for (a=0;a<9;a++)
+x=24;	// controls border printing 
+FRED:
+row=0;
+for (a=0;a<7;a++)
 	{
-	col=1;
-	for(b=0;b<9;b++)
+	col=0;
+	for(b=0;b<11;b++)
 		{
 		tiletodraw=border[a][b];
-		if ( tiletodraw<12)
+		if ( tiletodraw < 99)
 			{
-			ptr_graph=BorderTiles;		// pointer to Border Tiles graphics
-			startpos=(tiletodraw*54);	// 54=3*18 calc how many lines "down" in the graphic file to print from
-			ptr_graph+=startpos;		// set start position in graphic file
-			tileloop();					// draw tile
+			if (tiletodraw >= x) 			// if x=24 it will only print the border
+				{
+				ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
+				drawtile();					// draw tile
+				}
 			}
 		col++;
 		}
 	row++;
 	}
+if (x==24) {x=0;goto FRED;}
+
+
+pausetime=32000;pause();
 }
 /*****************************/
+/*
 void printtitles()				// print the title screen
 {
-tileheight=18;tilewidth=3;
+//tileheight=18;tilewidth=3;
+//printborder();
+//row=3;col=2;
+//ptr_graph=TitleTiles;
+//tileheight=36;tilewidth=21;
+//tileloop();
+//tileheight=18;tilewidth=3;
 printborder();
-row=3;col=2;
-startpos=0;
-ptr_graph=TitleTiles;
-tileheight=36;tilewidth=21;
-tileloop();
-tileheight=18;tilewidth=3;
+row=4;col=1;
+for(y=0;y<8;y++)	// print "presents"
+	{
+	tiletodraw=presents[y];
+	ptr_graph=RunicTiles;
+	drawtile();
+	col++;
+	}
+row=6;;col=1;
+for(y=0;y<9;y++)	// print "hnefatafl"
+	{
+	tiletodraw=hnefatafl[y];
+	ptr_graph=RunicTiles;
+	drawtile();
+	col++;
+	}
 }
+*/
+/****************************/
