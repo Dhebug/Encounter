@@ -291,9 +291,8 @@ unsigned char kingdefender[4];	// number of defenders in all four directsions fr
 unsigned char surrounded;			// status of king "surrounded" status		//
 unsigned char ctns=0;				// Computer Turn north-south board position		
 unsigned char ctew=0;				// Computer Turn east-west   board position 
-char playertext[]="ATTACKER";
-char turntext[]=" TURN: USE CURSOR KEYS.\nX=SELECT PIECE P=POSSIBLE MOVES";
-char message[]="*";
+extern char* playertext;
+extern char* message;
 char foundpiece=0;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
 //char xloop=0;				// general purpose loop variable
 char xns=0;					// copy of ns (arrows or blanks, and subarrows)
@@ -364,21 +363,22 @@ main()
 {
 //gamekey=89;	// controls "play again?"
 //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
-memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
+CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
 paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
+	setflags(0);	// No keyclick, no cursor, no nothing
 printborder();
-/*
+
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
 	playertype=0;				// set to 0 as inited later
 	drawboard();				// draw the board
-	printf("%c",19);			// turn off screen output (means cursor movement doesn't affect oric cursor
+	//printf("%c",19);			// turn off screen output (means cursor movement doesn't affect oric cursor
 	while (gamestyle==3)
 		{
-		strcpy(message,"ENTER NUMBER OF HUMANS:");
+		message="ENTER NUMBER OF HUMANS:";
 		printmessage();
 		gameinput=getchar();
 		if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
@@ -406,28 +406,28 @@ while (gamekey==89)
 		}	
 	if ( game == 0 ) 
 		{ 
-		strcpy(message,"KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?"); 
+		message="KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?";
 		printmessage();
 		}
 	else 
 		{ 
-		strcpy(message,"KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?");
+		message="KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?";
 		printmessage();
 		}
 	gamekey=getchar();
 	if (gamekey==89)	// if "Y"
 		{
-		printf("%c",19);	// turn output ON
+		//printf("%c",19);	// turn output ON
 		}
 	}
-*/
 }
+
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn()
 {
 //unsigned int xrand=srandom(deek(630));	// seed random number generator
 //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-strcpy(message,"ORIC IS THINKING...");
+message="ORIC IS THINKING...";
 printmessage();
 //printf("\n\n\nORIC IS THINKING..");
 // 1. initialize target, enemy and computer array to zeroes
@@ -877,7 +877,7 @@ void printpossiblemoves()
 	char k;	// key entered
 	fb=1;
 	printdestinations();	// print arrows on all destinations	
-	strcpy(message,"* PRESS ANY KEY TO PROCEED *");
+	message="* PRESS ANY KEY TO PROCEED *";
 	printmessage();
 	k=getchar();
 	fb=0;
@@ -1120,11 +1120,11 @@ void playerturn()	// The human players turn : filter keyboard input
 	flashback=6;
 	if ( playertype == 2 )
 		{ 
-		strcpy(playertext,"KING'S");
+		playertext="KING'S";
 		}
 	else
 		{
-		strcpy(playertext,"ATTACKER");
+		playertext="ATTACKER";
 		}
 	blinkcursor();
 	printturnprompt();			// display instructions
@@ -1175,7 +1175,7 @@ void playerturn()	// The human players turn : filter keyboard input
 				flashback=2;
 				//printmessage();
 				//strcpy(message,playertext);
-				strcpy(message,"PLACE CURSOR\nX=SELECT DESTINATION R=RESET/DE-SELECT");
+				message="PLACE CURSOR\nX=SELECT DESTINATION\nR=RESET/DE-SELECT";
 				printmessage();
 				//printf("\n\n\n%s Turn X=Select R=Reset",playertext);
 				inversex=cx;
@@ -1531,19 +1531,21 @@ void drawarrow()
 	ptr_graph=PictureTiles;drawtile();
 }
 /**************************************/
+/*
 void printmessage()
 {
-printf("%c\n\n\n%s%c",19,message,19);
+  printf("%c\n\n\n%s%c",19,message,19);
 }
+*/
 /**************************************/
+/*
 void printturnprompt()
 {
-strcpy(message,playertext);
-strcat(message,turntext);
-printmessage();
+  printf("%c\n\n\n%s%s%c",19,playertext,turntext,19);
 //printf("%c\n\n3/1=%d 7/1=%d%c",19,target[3][1],target[7][1],19);
 //printf("%cSURROUNDED=%d%c",19,surrounded,19);
 }
+*/
 /**************************************/
 void surroundcount()
 {

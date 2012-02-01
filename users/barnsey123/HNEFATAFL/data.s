@@ -74,8 +74,6 @@ _baseplayers
 	.byt 4,0,0,1,1,1,1,1,0,0,4
 */
 ; uninitialized variable (will calc on fly) - target values of square
-_baseplayers
-	.dsb 11*11
  
 _target
 	.dsb 11*11		
@@ -98,6 +96,26 @@ loop_clear
 	cpx #11*11
 	bne loop_clear	
 	rts
+.)
+
+
+_CopyFont
+.(
+	ldx #0
+loop
+	lda _Font_6x8_runic1_full+256*0,x
+	sta $b400+32*8+256*0,x
+	
+	lda _Font_6x8_runic1_full+256*1,x
+	sta $b400+32*8+256*1,x
+	
+	lda _Font_6x8_runic1_full+256*2,x
+	sta $b400+32*8+256*2,x
+	
+	inx 
+	
+	bne loop
+	rts	
 .)
 
 

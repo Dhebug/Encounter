@@ -4,9 +4,12 @@
 		<meta name="robots" content="noindex">
 		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
 		<title>VIKING</title>
-		<link href="c:\oricutron\osdk_0_017\documentation\documentation.css" rel="stylesheet" type="text/css">
+		<link href="c:\osdk_0_018\documentation\documentation.css" rel="stylesheet" type="text/css">
 	</HEAD>
 	<BODY>
+<hr>
+<center>VIKING</center>
+<hr>
 <table>
 <tr>
 <td valign=top>
@@ -14,2553 +17,1954 @@
 <h1>Normal memory</h1>
 <table border>
 <tr>
-<th>Adress</th><th>Size</th><th>Name</th>
+<th>Adress</th><th colspan="2">Size</th><th>Name</th>
 </tr>
 <tr>
-<td><b>$600</b></td><td>17</td><td>osdk_start</td></tr>
+<td><b>$500</b></td><td align="right">161</td><td align="right">17</td><td>osdk_start</td></tr>
 <tr>
-<td>$611</td><td>1</td><td>retstack</td></tr>
+<td>$511</td><td colspan="2" align="right">1</td><td>retstack</td></tr>
 <tr>
-<td>$612</td><td>10</td><td>enter</td></tr>
+<td>$512</td><td colspan="2" align="right">10</td><td>enter</td></tr>
 <tr>
-<td>$61c</td><td>8</td><td>savereg</td></tr>
+<td>$51c</td><td colspan="2" align="right">8</td><td>savereg</td></tr>
 <tr>
-<td>$624</td><td>61</td><td>noregstosave</td></tr>
+<td>$524</td><td colspan="2" align="right">61</td><td>noregstosave</td></tr>
 <tr>
-<td>$661</td><td>24</td><td>leave</td></tr>
+<td>$561</td><td colspan="2" align="right">24</td><td>leave</td></tr>
 <tr>
-<td>$679</td><td>8</td><td>restorereg</td></tr>
+<td>$579</td><td colspan="2" align="right">8</td><td>restorereg</td></tr>
 <tr>
-<td>$681</td><td>27</td><td>noregstorestore</td></tr>
+<td>$581</td><td colspan="2" align="right">29</td><td>noregstorestore</td></tr>
 <tr>
-<td>$69c</td><td>3</td><td>jsrvect</td></tr>
+<td>$59e</td><td colspan="2" align="right">3</td><td>jsrvect</td></tr>
 <tr>
-<td>$69f</td><td>5</td><td>_exit</td></tr>
+<td>$5a1</td><td align="right">26</td><td align="right">5</td><td>_exit</td></tr>
 <tr>
-<td>$6a4</td><td>4</td><td>reterr</td></tr>
+<td>$5a6</td><td colspan="2" align="right">4</td><td>reterr</td></tr>
 <tr>
-<td>$6a8</td><td>4</td><td>false</td></tr>
+<td>$5aa</td><td colspan="2" align="right">4</td><td>false, retzero</td></tr>
 <tr>
-<td>$6ac</td><td>5</td><td>true</td></tr>
+<td>$5ae</td><td colspan="2" align="right">5</td><td>true</td></tr>
 <tr>
-<td>$6b1</td><td>8</td><td>cfi</td></tr>
+<td>$5b3</td><td colspan="2" align="right">8</td><td>cfi</td></tr>
 <tr>
-<td>$6b9</td><td>121</td><td>_players</td></tr>
+<td>$5bb</td><td align="right">1</td><td align="right">1</td><td>_boardx</td></tr>
 <tr>
-<td>$732</td><td>121</td><td>_desireatt</td></tr>
+<td>$5bc</td><td align="right">1</td><td align="right">1</td><td>_boardy</td></tr>
 <tr>
-<td>$7ab</td><td>1</td><td>_boardx</td></tr>
+<td>$5bd</td><td align="right">1</td><td align="right">1</td><td>_boxsize</td></tr>
 <tr>
-<td>$7ac</td><td>1</td><td>_boardy</td></tr>
+<td>$5be</td><td align="right">1</td><td align="right">1</td><td>_fb</td></tr>
 <tr>
-<td>$7ad</td><td>1</td><td>_boxsize</td></tr>
+<td>$5bf</td><td align="right">1</td><td align="right">1</td><td>_ctns</td></tr>
 <tr>
-<td>$7ae</td><td>1</td><td>_playertype</td></tr>
+<td>$5c0</td><td align="right">1</td><td align="right">1</td><td>_ctew</td></tr>
 <tr>
-<td>$7af</td><td>1</td><td>_fb</td></tr>
+<td>$5c1</td><td align="right">1</td><td align="right">1</td><td>_foundpiece</td></tr>
 <tr>
-<td>$7b0</td><td>1</td><td>_game</td></tr>
+<td>$5c2</td><td align="right">1</td><td align="right">1</td><td>_xns</td></tr>
 <tr>
-<td>$7b1</td><td>1</td><td>_gamestyle</td></tr>
+<td>$5c3</td><td align="right">1</td><td align="right">1</td><td>_xew</td></tr>
 <tr>
-<td>$7b2</td><td>1</td><td>_kingns</td></tr>
+<td>$5c4</td><td align="right">1</td><td align="right">1</td><td>_arrow</td></tr>
 <tr>
-<td>$7b3</td><td>1</td><td>_kingew</td></tr>
+<td>$5c5</td><td align="right">1</td><td align="right">1</td><td>_flag</td></tr>
 <tr>
-<td>$7b4</td><td>1</td><td>_ctns</td></tr>
+<td>$5c6</td><td align="right">1</td><td align="right">1</td><td>_gamekey</td></tr>
 <tr>
-<td>$7b5</td><td>1</td><td>_ctew</td></tr>
+<td>$5c7</td><td align="right">1</td><td align="right">1</td><td>_gameinput</td></tr>
 <tr>
-<td>$7b6</td><td>9</td><td>_playertext</td></tr>
+<td>$5c8</td><td align="right">738</td><td align="right">71</td><td>_main</td></tr>
 <tr>
-<td>$7bf</td><td>66</td><td>_turntext</td></tr>
+<td>$60f</td><td colspan="2" align="right">13</td><td>LMAIN65</td></tr>
 <tr>
-<td>$801</td><td>2</td><td>_message</td></tr>
+<td>$61c</td><td colspan="2" align="right">64</td><td>LMAIN68</td></tr>
 <tr>
-<td>$803</td><td>1</td><td>_foundpiece</td></tr>
+<td>$65c</td><td colspan="2" align="right">35</td><td>LMAIN73</td></tr>
 <tr>
-<td>$804</td><td>1</td><td>_xns</td></tr>
+<td>$67f</td><td colspan="2" align="right">35</td><td>LMAIN75</td></tr>
 <tr>
-<td>$805</td><td>1</td><td>_xew</td></tr>
+<td>$6a2</td><td colspan="2" align="right">33</td><td>LMAIN69, LMAIN77</td></tr>
 <tr>
-<td>$806</td><td>1</td><td>_arrow</td></tr>
+<td>$6c3</td><td colspan="2" align="right">29</td><td>LMAIN79</td></tr>
 <tr>
-<td>$807</td><td>1</td><td>_flag</td></tr>
+<td>$6e0</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$808</td><td>2</td><td>_points</td></tr>
+<td>$6ef</td><td colspan="2" align="right">75</td><td>skip</td></tr>
 <tr>
-<td>$80a</td><td>78</td><td>_main</td></tr>
+<td>$73a</td><td colspan="2" align="right">73</td><td>skip</td></tr>
 <tr>
-<td>$858</td><td>29</td><td>LMAIN67</td></tr>
+<td>$783</td><td colspan="2" align="right">40</td><td>skip</td></tr>
 <tr>
-<td>$875</td><td>15</td><td>skip</td></tr>
+<td>$7ab</td><td colspan="2" align="right">69</td><td>LMAIN82</td></tr>
 <tr>
-<td>$884</td><td>17</td><td>skip</td></tr>
+<td>$7f0</td><td colspan="2" align="right">8</td><td>LMAIN86</td></tr>
 <tr>
-<td>$895</td><td>62</td><td>skip</td></tr>
+<td>$7f8</td><td colspan="2" align="right">5</td><td>LMAIN84</td></tr>
 <tr>
-<td>$8d3</td><td>15</td><td>skip</td></tr>
+<td>$7fd</td><td colspan="2" align="right">5</td><td>LMAIN85</td></tr>
 <tr>
-<td>$8e2</td><td>58</td><td>skip</td></tr>
+<td>$802</td><td colspan="2" align="right">15</td><td>LMAIN80</td></tr>
 <tr>
-<td>$91c</td><td>8</td><td>skip</td></tr>
+<td>$811</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$924</td><td>20</td><td>skip</td></tr>
+<td>$833</td><td colspan="2" align="right">29</td><td>skip</td></tr>
 <tr>
-<td>$938</td><td>24</td><td>skip</td></tr>
+<td>$850</td><td colspan="2" align="right">15</td><td>LMAIN87</td></tr>
 <tr>
-<td>$950</td><td>15</td><td>LMAIN70</td></tr>
+<td>$85f</td><td colspan="2" align="right">44</td><td>LMAIN88</td></tr>
 <tr>
-<td>$95f</td><td>43</td><td>skip</td></tr>
+<td>$88b</td><td colspan="2" align="right">31</td><td>LMAIN66, LMAIN93</td></tr>
 <tr>
-<td>$98a</td><td>19</td><td>skip</td></tr>
+<td>$8aa</td><td align="right">723</td><td align="right">28</td><td>_computerturn</td></tr>
 <tr>
-<td>$99d</td><td>8</td><td>LMAIN74</td></tr>
+<td>$8c6</td><td colspan="2" align="right">8</td><td>LMAIN97</td></tr>
 <tr>
-<td>$9a5</td><td>5</td><td>LMAIN72</td></tr>
+<td>$8ce</td><td colspan="2" align="right">8</td><td>LMAIN101</td></tr>
 <tr>
-<td>$9aa</td><td>5</td><td>LMAIN73</td></tr>
+<td>$8d6</td><td colspan="2" align="right">141</td><td>LMAIN105</td></tr>
 <tr>
-<td>$9af</td><td>15</td><td>LMAIN68</td></tr>
+<td>$963</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$9be</td><td>34</td><td>skip</td></tr>
+<td>$987</td><td colspan="2" align="right">5</td><td>LMAIN113</td></tr>
 <tr>
-<td>$9e0</td><td>46</td><td>skip</td></tr>
+<td>$98c</td><td colspan="2" align="right">47</td><td>LMAIN109, LMAIN111</td></tr>
 <tr>
-<td>$a0e</td><td>32</td><td>LMAIN75</td></tr>
+<td>$9bb</td><td colspan="2" align="right">91</td><td>LMAIN116</td></tr>
 <tr>
-<td>$a2e</td><td>6</td><td>LMAIN76</td></tr>
+<td>$a16</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$a34</td><td>42</td><td>_computerturn</td></tr>
+<td>$a2e</td><td colspan="2" align="right">121</td><td>LMAIN114, LMAIN117</td></tr>
 <tr>
-<td>$a5e</td><td>8</td><td>LMAIN83</td></tr>
+<td>$aa7</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$a66</td><td>8</td><td>LMAIN84</td></tr>
+<td>$ab7</td><td colspan="2" align="right">19</td><td>LMAIN106, LMAIN119, LMAIN121</td></tr>
 <tr>
-<td>$a6e</td><td>35</td><td>LMAIN88</td></tr>
+<td>$aca</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$a91</td><td>34</td><td>skip</td></tr>
+<td>$acf</td><td colspan="2" align="right">30</td><td>LMAIN108</td></tr>
 <tr>
-<td>$ab3</td><td>17</td><td>skip</td></tr>
+<td>$aed</td><td colspan="2" align="right">19</td><td>LMAIN102</td></tr>
 <tr>
-<td>$ac4</td><td>67</td><td>skip</td></tr>
+<td><b>$b00</b></td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$b07</td><td>36</td><td>skip</td></tr>
+<td>$b05</td><td colspan="2" align="right">30</td><td>LMAIN104</td></tr>
 <tr>
-<td>$b2b</td><td>8</td><td>LMAIN96</td></tr>
+<td>$b23</td><td colspan="2" align="right">19</td><td>LMAIN98</td></tr>
 <tr>
-<td>$b33</td><td>15</td><td>LMAIN92</td></tr>
+<td>$b36</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$b42</td><td>17</td><td>skip</td></tr>
+<td>$b3b</td><td colspan="2" align="right">66</td><td>LMAIN100</td></tr>
 <tr>
-<td>$b53</td><td>67</td><td>skip</td></tr>
+<td>$b7d</td><td align="right">449</td><td align="right">15</td><td>_findpiecens</td></tr>
 <tr>
-<td>$b96</td><td>24</td><td>skip</td></tr>
+<td>$b8c</td><td colspan="2" align="right">39</td><td>skip</td></tr>
 <tr>
-<td>$bae</td><td>15</td><td>LMAIN89</td></tr>
+<td>$bb3</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$bbd</td><td>8</td><td>skip</td></tr>
+<td>$bf6</td><td colspan="2" align="right">69</td><td>skip</td></tr>
 <tr>
-<td>$bc5</td><td>5</td><td>skip</td></tr>
+<td>$c3b</td><td colspan="2" align="right">46</td><td>skip</td></tr>
 <tr>
-<td>$bca</td><td>15</td><td>LMAIN91</td></tr>
+<td>$c69</td><td colspan="2" align="right">69</td><td>LMAIN127</td></tr>
 <tr>
-<td>$bd9</td><td>19</td><td>skip</td></tr>
+<td>$cae</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$bec</td><td>15</td><td>LMAIN85</td></tr>
+<td>$cb5</td><td colspan="2" align="right">28</td><td>LMAIN125, LMAIN129</td></tr>
 <tr>
-<td>$bfb</td><td>8</td><td>skip</td></tr>
+<td>$cd1</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$c03</td><td>5</td><td>skip</td></tr>
+<td>$d14</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$c08</td><td>15</td><td>LMAIN87</td></tr>
+<td>$d38</td><td colspan="2" align="right">5</td><td>LMAIN133</td></tr>
 <tr>
-<td>$c17</td><td>34</td><td>skip</td></tr>
+<td>$d3d</td><td colspan="2" align="right">1</td><td>LMAIN123, LMAIN131</td></tr>
 <tr>
-<td>$c39</td><td>27</td><td>skip</td></tr>
+<td>$d3e</td><td align="right">449</td><td align="right">15</td><td>_findpieceew</td></tr>
 <tr>
-<td>$c54</td><td>16</td><td>LMAIN99</td></tr>
+<td>$d4d</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$c64</td><td>15</td><td>_findpiecens</td></tr>
+<td>$d67</td><td colspan="2" align="right">80</td><td>skip</td></tr>
 <tr>
-<td>$c73</td><td>26</td><td>skip</td></tr>
+<td>$db7</td><td colspan="2" align="right">69</td><td>skip</td></tr>
 <tr>
-<td>$c8d</td><td>17</td><td>skip</td></tr>
+<td>$dfc</td><td colspan="2" align="right">46</td><td>skip</td></tr>
 <tr>
-<td>$c9e</td><td>67</td><td>skip</td></tr>
+<td>$e2a</td><td colspan="2" align="right">69</td><td>LMAIN138</td></tr>
 <tr>
-<td>$ce1</td><td>34</td><td>skip</td></tr>
+<td>$e6f</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$d03</td><td>15</td><td>LMAIN103</td></tr>
+<td>$e76</td><td colspan="2" align="right">15</td><td>LMAIN136, LMAIN140</td></tr>
 <tr>
-<td>$d12</td><td>17</td><td>skip</td></tr>
+<td>$e85</td><td colspan="2" align="right">80</td><td>skip</td></tr>
 <tr>
-<td>$d23</td><td>67</td><td>skip</td></tr>
+<td>$ed5</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$d66</td><td>24</td><td>skip</td></tr>
+<td>$ef9</td><td colspan="2" align="right">5</td><td>LMAIN144</td></tr>
 <tr>
-<td>$d7e</td><td>1</td><td>LMAIN105</td></tr>
+<td>$efe</td><td colspan="2" align="right">1</td><td>LMAIN134, LMAIN142</td></tr>
 <tr>
-<td>$d7f</td><td>15</td><td>_findpieceew</td></tr>
+<td>$eff</td><td align="right">1801</td><td align="right">13</td><td>LMAIN145, _targetselect</td></tr>
 <tr>
-<td>$d8e</td><td>26</td><td>skip</td></tr>
+<td>$f0c</td><td colspan="2" align="right">8</td><td>LMAIN146</td></tr>
 <tr>
-<td>$da8</td><td>17</td><td>skip</td></tr>
+<td>$f14</td><td colspan="2" align="right">235</td><td>LMAIN150</td></tr>
 <tr>
-<td>$db9</td><td>67</td><td>skip</td></tr>
+<td>$fff</td><td colspan="2" align="right">19</td><td>LMAIN151, LMAIN154</td></tr>
 <tr>
-<td>$dfc</td><td>34</td><td>skip</td></tr>
+<td>$1012</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$e1e</td><td>15</td><td>LMAIN109</td></tr>
+<td>$1017</td><td colspan="2" align="right">30</td><td>LMAIN153</td></tr>
 <tr>
-<td>$e2d</td><td>17</td><td>skip</td></tr>
+<td>$1035</td><td colspan="2" align="right">19</td><td>LMAIN147</td></tr>
 <tr>
-<td>$e3e</td><td>67</td><td>skip</td></tr>
+<td>$1048</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$e81</td><td>24</td><td>skip</td></tr>
+<td>$104d</td><td colspan="2" align="right">84</td><td>LMAIN149</td></tr>
 <tr>
-<td>$e99</td><td>1</td><td>LMAIN111</td></tr>
+<td>$10a1</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$e9a</td><td>28</td><td>_targetselect</td></tr>
+<td>$10ab</td><td colspan="2" align="right">5</td><td>LMAIN159</td></tr>
 <tr>
-<td>$eb6</td><td>8</td><td>LMAIN113</td></tr>
+<td>$10b0</td><td colspan="2" align="right">15</td><td>LMAIN160</td></tr>
 <tr>
-<td>$ebe</td><td>15</td><td>LMAIN117</td></tr>
+<td>$10bf</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$ecd</td><td>27</td><td>skip</td></tr>
+<td>$10c7</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$ee8</td><td>103</td><td>skip</td></tr>
+<td>$10ce</td><td colspan="2" align="right">15</td><td>LMAIN162</td></tr>
 <tr>
-<td>$f4f</td><td>27</td><td>skip</td></tr>
+<td>$10dd</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$f6a</td><td>91</td><td>skip</td></tr>
+<td>$10ff</td><td colspan="2" align="right">110</td><td>skip</td></tr>
 <tr>
-<td>$fc5</td><td>15</td><td>LMAIN118</td></tr>
+<td>$116d</td><td colspan="2" align="right">24</td><td>LMAIN163</td></tr>
 <tr>
-<td>$fd4</td><td>8</td><td>skip</td></tr>
+<td>$1185</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$fdc</td><td>5</td><td>skip</td></tr>
+<td>$118d</td><td colspan="2" align="right">5</td><td>LMAIN165</td></tr>
 <tr>
-<td>$fe1</td><td>15</td><td>LMAIN120</td></tr>
+<td>$1192</td><td colspan="2" align="right">15</td><td>LMAIN166</td></tr>
 <tr>
-<td>$ff0</td><td>19</td><td>skip</td></tr>
+<td>$11a1</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1003</td><td>15</td><td>LMAIN114</td></tr>
+<td>$11a9</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$1012</td><td>8</td><td>skip</td></tr>
+<td>$11ae</td><td colspan="2" align="right">15</td><td>LMAIN168</td></tr>
 <tr>
-<td>$101a</td><td>5</td><td>skip</td></tr>
+<td>$11bd</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$101f</td><td>15</td><td>LMAIN116</td></tr>
+<td>$11df</td><td colspan="2" align="right">110</td><td>skip</td></tr>
 <tr>
-<td>$102e</td><td>34</td><td>skip</td></tr>
+<td>$124d</td><td colspan="2" align="right">24</td><td>LMAIN169</td></tr>
 <tr>
-<td>$1050</td><td>8</td><td>skip</td></tr>
+<td>$1265</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1058</td><td>10</td><td>skip</td></tr>
+<td>$126d</td><td colspan="2" align="right">5</td><td>LMAIN171</td></tr>
 <tr>
-<td>$1062</td><td>5</td><td>LMAIN123</td></tr>
+<td>$1272</td><td colspan="2" align="right">15</td><td>LMAIN172</td></tr>
 <tr>
-<td>$1067</td><td>15</td><td>LMAIN124</td></tr>
+<td>$1281</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1076</td><td>8</td><td>skip</td></tr>
+<td>$1289</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$107e</td><td>7</td><td>skip</td></tr>
+<td>$128e</td><td colspan="2" align="right">15</td><td>LMAIN174</td></tr>
 <tr>
-<td>$1085</td><td>15</td><td>LMAIN126</td></tr>
+<td>$129d</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$1094</td><td>34</td><td>skip</td></tr>
+<td>$12bf</td><td colspan="2" align="right">110</td><td>skip</td></tr>
 <tr>
-<td>$10b6</td><td>24</td><td>skip</td></tr>
+<td>$132d</td><td colspan="2" align="right">24</td><td>LMAIN175</td></tr>
 <tr>
-<td>$10ce</td><td>15</td><td>LMAIN127</td></tr>
+<td>$1345</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$10dd</td><td>8</td><td>skip</td></tr>
+<td>$134f</td><td colspan="2" align="right">5</td><td>LMAIN177</td></tr>
 <tr>
-<td>$10e5</td><td>8</td><td>skip</td></tr>
+<td>$1354</td><td colspan="2" align="right">15</td><td>LMAIN178</td></tr>
 <tr>
-<td>$10ed</td><td>5</td><td>LMAIN129</td></tr>
+<td>$1363</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$10f2</td><td>15</td><td>LMAIN130</td></tr>
+<td>$136b</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$1101</td><td>8</td><td>skip</td></tr>
+<td>$1372</td><td colspan="2" align="right">15</td><td>LMAIN180</td></tr>
 <tr>
-<td>$1109</td><td>5</td><td>skip</td></tr>
+<td>$1381</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$110e</td><td>15</td><td>LMAIN132</td></tr>
+<td>$13a3</td><td colspan="2" align="right">103</td><td>skip</td></tr>
 <tr>
-<td>$111d</td><td>34</td><td>skip</td></tr>
+<td>$140a</td><td colspan="2" align="right">19</td><td>LMAIN181</td></tr>
 <tr>
-<td>$113f</td><td>24</td><td>skip</td></tr>
+<td>$141d</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$1157</td><td>15</td><td>LMAIN133</td></tr>
+<td>$142c</td><td colspan="2" align="right">75</td><td>skip</td></tr>
 <tr>
-<td>$1166</td><td>8</td><td>skip</td></tr>
+<td>$1477</td><td colspan="2" align="right">88</td><td>skip</td></tr>
 <tr>
-<td>$116e</td><td>8</td><td>skip</td></tr>
+<td>$14cf</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$1176</td><td>5</td><td>LMAIN135</td></tr>
+<td>$14de</td><td colspan="2" align="right">75</td><td>skip</td></tr>
 <tr>
-<td>$117b</td><td>15</td><td>LMAIN136</td></tr>
+<td>$1529</td><td colspan="2" align="right">78</td><td>skip</td></tr>
 <tr>
-<td>$118a</td><td>8</td><td>skip</td></tr>
+<td>$1577</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$1192</td><td>5</td><td>skip</td></tr>
+<td>$1586</td><td colspan="2" align="right">75</td><td>skip</td></tr>
 <tr>
-<td>$1197</td><td>15</td><td>LMAIN138</td></tr>
+<td>$15d1</td><td colspan="2" align="right">55</td><td>skip</td></tr>
 <tr>
-<td>$11a6</td><td>34</td><td>skip</td></tr>
+<td>$1608</td><td align="right">1874</td><td align="right">232</td><td>_subpacmanx</td></tr>
 <tr>
-<td>$11c8</td><td>24</td><td>skip</td></tr>
+<td>$16f0</td><td colspan="2" align="right">27</td><td>LMAIN185</td></tr>
 <tr>
-<td>$11e0</td><td>15</td><td>LMAIN139</td></tr>
+<td>$170b</td><td colspan="2" align="right">57</td><td>LMAIN183, LMAIN187</td></tr>
 <tr>
-<td>$11ef</td><td>8</td><td>skip</td></tr>
+<td>$1744</td><td colspan="2" align="right">27</td><td>LMAIN191</td></tr>
 <tr>
-<td>$11f7</td><td>10</td><td>skip</td></tr>
+<td>$175f</td><td colspan="2" align="right">47</td><td>LMAIN189, LMAIN193</td></tr>
 <tr>
-<td>$1201</td><td>5</td><td>LMAIN141</td></tr>
+<td>$178e</td><td colspan="2" align="right">5</td><td>LMAIN197</td></tr>
 <tr>
-<td>$1206</td><td>15</td><td>LMAIN142</td></tr>
+<td>$1793</td><td colspan="2" align="right">60</td><td>LMAIN195</td></tr>
 <tr>
-<td>$1215</td><td>8</td><td>skip</td></tr>
+<td>$17cf</td><td colspan="2" align="right">5</td><td>LMAIN200</td></tr>
 <tr>
-<td>$121d</td><td>7</td><td>skip</td></tr>
+<td>$17d4</td><td colspan="2" align="right">39</td><td>LMAIN198</td></tr>
 <tr>
-<td>$1224</td><td>15</td><td>LMAIN144</td></tr>
+<td>$17fb</td><td colspan="2" align="right">56</td><td>LMAIN203</td></tr>
 <tr>
-<td>$1233</td><td>38</td><td>skip</td></tr>
+<td>$1833</td><td colspan="2" align="right">53</td><td>LMAIN201</td></tr>
 <tr>
-<td>$1259</td><td>15</td><td>skip</td></tr>
+<td>$1868</td><td colspan="2" align="right">54</td><td>LMAIN202, LMAIN206</td></tr>
 <tr>
-<td>$1268</td><td>17</td><td>skip</td></tr>
+<td>$189e</td><td colspan="2" align="right">20</td><td>LMAIN208</td></tr>
 <tr>
-<td>$1279</td><td>62</td><td>skip</td></tr>
+<td>$18b2</td><td colspan="2" align="right">72</td><td>skip</td></tr>
 <tr>
-<td>$12b7</td><td>15</td><td>skip</td></tr>
+<td>$18fa</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$12c6</td><td>77</td><td>skip</td></tr>
+<td>$1901</td><td colspan="2" align="right">8</td><td>LMAIN210</td></tr>
 <tr>
-<td>$1313</td><td>15</td><td>skip</td></tr>
+<td>$1909</td><td colspan="2" align="right">91</td><td>LMAIN212</td></tr>
 <tr>
-<td>$1322</td><td>17</td><td>skip</td></tr>
+<td>$1964</td><td colspan="2" align="right">121</td><td>skip</td></tr>
 <tr>
-<td>$1333</td><td>62</td><td>skip</td></tr>
+<td>$19dd</td><td colspan="2" align="right">129</td><td>LMAIN222</td></tr>
 <tr>
-<td>$1371</td><td>15</td><td>skip</td></tr>
+<td>$1a5e</td><td colspan="2" align="right">200</td><td>LMAIN217</td></tr>
 <tr>
-<td>$1380</td><td>67</td><td>skip</td></tr>
+<td>$1b26</td><td colspan="2" align="right">15</td><td>LMAIN215</td></tr>
 <tr>
-<td>$13c3</td><td>15</td><td>skip</td></tr>
+<td>$1b35</td><td colspan="2" align="right">102</td><td>skip</td></tr>
 <tr>
-<td>$13d2</td><td>17</td><td>skip</td></tr>
+<td>$1b9b</td><td colspan="2" align="right">49</td><td>skip</td></tr>
 <tr>
-<td>$13e3</td><td>62</td><td>skip</td></tr>
+<td>$1bcc</td><td colspan="2" align="right">5</td><td>LMAIN227</td></tr>
 <tr>
-<td>$1421</td><td>15</td><td>skip</td></tr>
+<td>$1bd1</td><td colspan="2" align="right">44</td><td>LMAIN216, LMAIN225, LMAIN228</td></tr>
 <tr>
-<td>$1430</td><td>46</td><td>skip</td></tr>
+<td>$1bfd</td><td colspan="2" align="right">15</td><td>LMAIN231</td></tr>
 <tr>
-<td>$145e</td><td>20</td><td>_pacman</td></tr>
+<td>$1c0c</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1472</td><td>8</td><td>skip</td></tr>
+<td>$1c14</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$147a</td><td>52</td><td>skip</td></tr>
+<td>$1c1e</td><td colspan="2" align="right">15</td><td>LMAIN229</td></tr>
 <tr>
-<td>$14ae</td><td>16</td><td>skip</td></tr>
+<td>$1c2d</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$14be</td><td>15</td><td>LMAIN147</td></tr>
+<td>$1c35</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$14cd</td><td>36</td><td>skip</td></tr>
+<td>$1c3a</td><td colspan="2" align="right">45</td><td>LMAIN230</td></tr>
 <tr>
-<td>$14f1</td><td>5</td><td>LMAIN151</td></tr>
+<td>$1c67</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$14f6</td><td>15</td><td>LMAIN149</td></tr>
+<td>$1c71</td><td colspan="2" align="right">15</td><td>LMAIN232</td></tr>
 <tr>
-<td>$1505</td><td>24</td><td>skip</td></tr>
+<td>$1c80</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$151d</td><td>20</td><td>LMAIN152</td></tr>
+<td>$1c87</td><td colspan="2" align="right">91</td><td>LMAIN213, LMAIN233</td></tr>
 <tr>
-<td>$1531</td><td>8</td><td>skip</td></tr>
+<td>$1ce2</td><td colspan="2" align="right">68</td><td>skip</td></tr>
 <tr>
-<td>$1539</td><td>10</td><td>skip</td></tr>
+<td>$1d26</td><td colspan="2" align="right">15</td><td>LMAIN235</td></tr>
 <tr>
-<td>$1543</td><td>15</td><td>LMAIN154</td></tr>
+<td>$1d35</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$1552</td><td>118</td><td>skip</td></tr>
+<td>$1d59</td><td colspan="2" align="right">1</td><td>LMAIN236</td></tr>
 <tr>
-<td>$15c8</td><td>120</td><td>skip</td></tr>
+<td>$1d5a</td><td align="right">812</td><td align="right">69</td><td>_pacman</td></tr>
 <tr>
-<td>$1640</td><td>5</td><td>LMAIN158</td></tr>
+<td>$1d9f</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1645</td><td>19</td><td>LMAIN155</td></tr>
+<td>$1dc8</td><td colspan="2" align="right">51</td><td>skip</td></tr>
 <tr>
-<td>$1658</td><td>7</td><td>skip</td></tr>
+<td>$1dfb</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$165f</td><td>30</td><td>LMAIN157</td></tr>
+<td>$1e24</td><td colspan="2" align="right">61</td><td>skip</td></tr>
 <tr>
-<td>$167d</td><td>20</td><td>LMAIN145</td></tr>
+<td>$1e61</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1691</td><td>8</td><td>skip</td></tr>
+<td>$1e8a</td><td colspan="2" align="right">51</td><td>skip</td></tr>
 <tr>
-<td>$1699</td><td>50</td><td>skip</td></tr>
+<td>$1ebd</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$16cb</td><td>16</td><td>skip</td></tr>
+<td>$1ee6</td><td colspan="2" align="right">76</td><td>skip</td></tr>
 <tr>
-<td>$16db</td><td>15</td><td>LMAIN162</td></tr>
+<td>$1f32</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$16ea</td><td>36</td><td>skip</td></tr>
+<td>$1f5b</td><td colspan="2" align="right">51</td><td>skip</td></tr>
 <tr>
-<td>$170e</td><td>5</td><td>LMAIN166</td></tr>
+<td>$1f8e</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1713</td><td>15</td><td>LMAIN164</td></tr>
+<td>$1fb7</td><td colspan="2" align="right">61</td><td>skip</td></tr>
 <tr>
-<td>$1722</td><td>24</td><td>skip</td></tr>
+<td>$1ff4</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$173a</td><td>20</td><td>LMAIN167</td></tr>
+<td>$201d</td><td colspan="2" align="right">51</td><td>skip</td></tr>
 <tr>
-<td>$174e</td><td>8</td><td>skip</td></tr>
+<td>$2050</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1756</td><td>8</td><td>skip</td></tr>
+<td>$2079</td><td colspan="2" align="right">13</td><td>skip</td></tr>
 <tr>
-<td>$175e</td><td>15</td><td>LMAIN169</td></tr>
+<td>$2086</td><td align="right">203</td><td align="right">24</td><td>_subpacman</td></tr>
 <tr>
-<td>$176d</td><td>118</td><td>skip</td></tr>
+<td>$209e</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$17e3</td><td>120</td><td>skip</td></tr>
+<td>$20a8</td><td colspan="2" align="right">5</td><td>LMAIN237</td></tr>
 <tr>
-<td>$185b</td><td>5</td><td>LMAIN173</td></tr>
+<td>$20ad</td><td colspan="2" align="right">15</td><td>LMAIN238</td></tr>
 <tr>
-<td>$1860</td><td>19</td><td>LMAIN170</td></tr>
+<td>$20bc</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1873</td><td>5</td><td>skip</td></tr>
+<td>$20c4</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$1878</td><td>30</td><td>LMAIN172</td></tr>
+<td>$20cb</td><td colspan="2" align="right">15</td><td>LMAIN240</td></tr>
 <tr>
-<td>$1896</td><td>20</td><td>LMAIN160</td></tr>
+<td>$20da</td><td colspan="2" align="right">43</td><td>skip</td></tr>
 <tr>
-<td>$18aa</td><td>8</td><td>skip</td></tr>
+<td>$2105</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$18b2</td><td>50</td><td>skip</td></tr>
+<td>$210d</td><td colspan="2" align="right">5</td><td>LMAIN241</td></tr>
 <tr>
-<td>$18e4</td><td>16</td><td>skip</td></tr>
+<td>$2112</td><td colspan="2" align="right">15</td><td>LMAIN242</td></tr>
 <tr>
-<td>$18f4</td><td>15</td><td>LMAIN177</td></tr>
+<td>$2121</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1903</td><td>36</td><td>skip</td></tr>
+<td>$2129</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$1927</td><td>5</td><td>LMAIN181</td></tr>
+<td>$212e</td><td colspan="2" align="right">15</td><td>LMAIN244</td></tr>
 <tr>
-<td>$192c</td><td>15</td><td>LMAIN179</td></tr>
+<td>$213d</td><td colspan="2" align="right">20</td><td>skip</td></tr>
 <tr>
-<td>$193b</td><td>24</td><td>skip</td></tr>
+<td>$2151</td><td align="right">203</td><td align="right">24</td><td>_subpacman2</td></tr>
 <tr>
-<td>$1953</td><td>20</td><td>LMAIN182</td></tr>
+<td>$2169</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$1967</td><td>8</td><td>skip</td></tr>
+<td>$2173</td><td colspan="2" align="right">5</td><td>LMAIN245</td></tr>
 <tr>
-<td>$196f</td><td>8</td><td>skip</td></tr>
+<td>$2178</td><td colspan="2" align="right">15</td><td>LMAIN246</td></tr>
 <tr>
-<td>$1977</td><td>38</td><td>LMAIN184</td></tr>
+<td>$2187</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$199d</td><td>118</td><td>skip</td></tr>
+<td>$218f</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$1a13</td><td>97</td><td>skip</td></tr>
+<td>$2196</td><td colspan="2" align="right">15</td><td>LMAIN248</td></tr>
 <tr>
-<td>$1a74</td><td>5</td><td>LMAIN188</td></tr>
+<td>$21a5</td><td colspan="2" align="right">43</td><td>skip</td></tr>
 <tr>
-<td>$1a79</td><td>19</td><td>LMAIN185</td></tr>
+<td>$21d0</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1a8c</td><td>5</td><td>skip</td></tr>
+<td>$21d8</td><td colspan="2" align="right">5</td><td>LMAIN249</td></tr>
 <tr>
-<td>$1a91</td><td>30</td><td>LMAIN187</td></tr>
+<td>$21dd</td><td colspan="2" align="right">15</td><td>LMAIN250</td></tr>
 <tr>
-<td>$1aaf</td><td>20</td><td>LMAIN175</td></tr>
+<td>$21ec</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$1ac3</td><td>8</td><td>skip</td></tr>
+<td>$21f4</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$1acb</td><td>52</td><td>skip</td></tr>
+<td>$21f9</td><td colspan="2" align="right">15</td><td>LMAIN252</td></tr>
 <tr>
-<td>$1aff</td><td>16</td><td>skip</td></tr>
+<td>$2208</td><td colspan="2" align="right">20</td><td>skip</td></tr>
 <tr>
-<td>$1b0f</td><td>15</td><td>LMAIN192</td></tr>
+<td>$221c</td><td align="right">365</td><td align="right">15</td><td>_subpacman3</td></tr>
 <tr>
-<td>$1b1e</td><td>36</td><td>skip</td></tr>
+<td>$222b</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1b42</td><td>5</td><td>LMAIN196</td></tr>
+<td>$223c</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$1b47</td><td>15</td><td>LMAIN194</td></tr>
+<td>$227f</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$1b56</td><td>24</td><td>skip</td></tr>
+<td>$228f</td><td colspan="2" align="right">15</td><td>LMAIN253</td></tr>
 <tr>
-<td>$1b6e</td><td>20</td><td>LMAIN197</td></tr>
+<td>$229e</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$1b82</td><td>8</td><td>skip</td></tr>
+<td>$22b8</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1b8a</td><td>10</td><td>skip</td></tr>
+<td>$22c9</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$1b94</td><td>38</td><td>LMAIN199</td></tr>
+<td>$232a</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1bba</td><td>118</td><td>skip</td></tr>
+<td>$233b</td><td colspan="2" align="right">71</td><td>skip</td></tr>
 <tr>
-<td>$1c30</td><td>97</td><td>skip</td></tr>
+<td>$2382</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$1c91</td><td>5</td><td>LMAIN203</td></tr>
+<td>$2388</td><td colspan="2" align="right">1</td><td>LMAIN255</td></tr>
 <tr>
-<td>$1c96</td><td>19</td><td>LMAIN200</td></tr>
+<td>$2389</td><td align="right">365</td><td align="right">15</td><td>_subpacman4</td></tr>
 <tr>
-<td>$1ca9</td><td>7</td><td>skip</td></tr>
+<td>$2398</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1cb0</td><td>30</td><td>LMAIN202</td></tr>
+<td>$23a9</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$1cce</td><td>11</td><td>LMAIN190</td></tr>
+<td>$23ec</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$1cd9</td><td>20</td><td>_subpacman</td></tr>
+<td>$23fc</td><td colspan="2" align="right">15</td><td>LMAIN257</td></tr>
 <tr>
-<td>$1ced</td><td>8</td><td>skip</td></tr>
+<td>$240b</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$1cf5</td><td>10</td><td>skip</td></tr>
+<td>$2425</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1cff</td><td>5</td><td>LMAIN207</td></tr>
+<td>$2436</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$1d04</td><td>15</td><td>LMAIN208</td></tr>
+<td>$2497</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$1d13</td><td>8</td><td>skip</td></tr>
+<td>$24a8</td><td colspan="2" align="right">71</td><td>skip</td></tr>
 <tr>
-<td>$1d1b</td><td>7</td><td>skip</td></tr>
+<td>$24ef</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$1d22</td><td>15</td><td>LMAIN210</td></tr>
+<td>$24f5</td><td colspan="2" align="right">1</td><td>LMAIN259</td></tr>
 <tr>
-<td>$1d31</td><td>39</td><td>skip</td></tr>
+<td>$24f6</td><td align="right">845</td><td align="right">91</td><td>_checkend</td></tr>
 <tr>
-<td>$1d58</td><td>8</td><td>skip</td></tr>
+<td>$2551</td><td colspan="2" align="right">81</td><td>skip</td></tr>
 <tr>
-<td>$1d60</td><td>8</td><td>skip</td></tr>
+<td>$25a2</td><td colspan="2" align="right">91</td><td>LMAIN261</td></tr>
 <tr>
-<td>$1d68</td><td>5</td><td>LMAIN211</td></tr>
+<td>$25fd</td><td colspan="2" align="right">127</td><td>skip</td></tr>
 <tr>
-<td>$1d6d</td><td>15</td><td>LMAIN212</td></tr>
+<td>$267c</td><td colspan="2" align="right">19</td><td>skip</td></tr>
 <tr>
-<td>$1d7c</td><td>8</td><td>skip</td></tr>
+<td>$268f</td><td colspan="2" align="right">108</td><td>LMAIN270</td></tr>
 <tr>
-<td>$1d84</td><td>5</td><td>skip</td></tr>
+<td>$26fb</td><td colspan="2" align="right">19</td><td>skip</td></tr>
 <tr>
-<td>$1d89</td><td>15</td><td>LMAIN214</td></tr>
+<td>$270e</td><td colspan="2" align="right">36</td><td>LMAIN272</td></tr>
 <tr>
-<td>$1d98</td><td>20</td><td>skip</td></tr>
+<td>$2732</td><td colspan="2" align="right">78</td><td>skip</td></tr>
 <tr>
-<td>$1dac</td><td>20</td><td>_subpacman2</td></tr>
+<td>$2780</td><td colspan="2" align="right">19</td><td>skip</td></tr>
 <tr>
-<td>$1dc0</td><td>8</td><td>skip</td></tr>
+<td>$2793</td><td colspan="2" align="right">36</td><td>LMAIN274</td></tr>
 <tr>
-<td>$1dc8</td><td>10</td><td>skip</td></tr>
+<td>$27b7</td><td colspan="2" align="right">80</td><td>skip</td></tr>
 <tr>
-<td>$1dd2</td><td>5</td><td>LMAIN215</td></tr>
+<td>$2807</td><td colspan="2" align="right">19</td><td>skip</td></tr>
 <tr>
-<td>$1dd7</td><td>15</td><td>LMAIN216</td></tr>
+<td>$281a</td><td colspan="2" align="right">5</td><td>LMAIN273</td></tr>
 <tr>
-<td>$1de6</td><td>8</td><td>skip</td></tr>
+<td>$281f</td><td colspan="2" align="right">35</td><td>LMAIN265</td></tr>
 <tr>
-<td>$1dee</td><td>7</td><td>skip</td></tr>
+<td>$2842</td><td colspan="2" align="right">1</td><td>LMAIN263, LMAIN275</td></tr>
 <tr>
-<td>$1df5</td><td>15</td><td>LMAIN218</td></tr>
+<td>$2843</td><td align="right">28</td><td align="right">27</td><td>_cursormodezero</td></tr>
 <tr>
-<td>$1e04</td><td>39</td><td>skip</td></tr>
+<td>$285e</td><td colspan="2" align="right">1</td><td>LMAIN277</td></tr>
 <tr>
-<td>$1e2b</td><td>8</td><td>skip</td></tr>
+<td>$285f</td><td align="right">2545</td><td align="right">136</td><td>_movecursor2</td></tr>
 <tr>
-<td>$1e33</td><td>8</td><td>skip</td></tr>
+<td>$28e7</td><td colspan="2" align="right">22</td><td>skip</td></tr>
 <tr>
-<td>$1e3b</td><td>5</td><td>LMAIN219</td></tr>
+<td>$28fd</td><td colspan="2" align="right">60</td><td>skip</td></tr>
 <tr>
-<td>$1e40</td><td>15</td><td>LMAIN220</td></tr>
+<td>$2939</td><td colspan="2" align="right">43</td><td>skip</td></tr>
 <tr>
-<td>$1e4f</td><td>8</td><td>skip</td></tr>
+<td>$2964</td><td colspan="2" align="right">15</td><td>LMAIN279</td></tr>
 <tr>
-<td>$1e57</td><td>5</td><td>skip</td></tr>
+<td>$2973</td><td colspan="2" align="right">73</td><td>skip</td></tr>
 <tr>
-<td>$1e5c</td><td>15</td><td>LMAIN222</td></tr>
+<td>$29bc</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1e6b</td><td>20</td><td>skip</td></tr>
+<td>$29e5</td><td colspan="2" align="right">15</td><td>LMAIN281</td></tr>
 <tr>
-<td>$1e7f</td><td>15</td><td>_subpacman3</td></tr>
+<td>$29f4</td><td colspan="2" align="right">73</td><td>skip</td></tr>
 <tr>
-<td>$1e8e</td><td>80</td><td>skip</td></tr>
+<td>$2a3d</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$1ede</td><td>16</td><td>skip</td></tr>
+<td>$2a66</td><td colspan="2" align="right">15</td><td>LMAIN283</td></tr>
 <tr>
-<td>$1eee</td><td>15</td><td>LMAIN223</td></tr>
+<td>$2a75</td><td colspan="2" align="right">65</td><td>skip</td></tr>
 <tr>
-<td>$1efd</td><td>26</td><td>skip</td></tr>
+<td>$2ab6</td><td colspan="2" align="right">43</td><td>skip</td></tr>
 <tr>
-<td>$1f17</td><td>118</td><td>skip</td></tr>
+<td>$2ae1</td><td colspan="2" align="right">135</td><td>LMAIN285</td></tr>
 <tr>
-<td>$1f8d</td><td>92</td><td>skip</td></tr>
+<td>$2b68</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$1fe9</td><td>11</td><td>skip</td></tr>
+<td>$2b78</td><td colspan="2" align="right">111</td><td>LMAIN289</td></tr>
 <tr>
-<td>$1ff4</td><td>1</td><td>LMAIN225</td></tr>
+<td>$2be7</td><td colspan="2" align="right">141</td><td>LMAIN291</td></tr>
 <tr>
-<td>$1ff5</td><td>28</td><td>_subpacman4</td></tr>
+<td>$2c74</td><td colspan="2" align="right">91</td><td>LMAIN293</td></tr>
 <tr>
-<td>$2011</td><td>67</td><td>skip</td></tr>
+<td>$2ccf</td><td colspan="2" align="right">178</td><td>LMAIN295</td></tr>
 <tr>
-<td>$2054</td><td>16</td><td>skip</td></tr>
+<td>$2d81</td><td colspan="2" align="right">102</td><td>skip</td></tr>
 <tr>
-<td>$2064</td><td>15</td><td>LMAIN227</td></tr>
+<td>$2de7</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$2073</td><td>49</td><td>skip</td></tr>
+<td>$2dff</td><td colspan="2" align="right">86</td><td>LMAIN299</td></tr>
 <tr>
-<td>$20a4</td><td>118</td><td>skip</td></tr>
+<td>$2e55</td><td colspan="2" align="right">91</td><td>LMAIN304</td></tr>
 <tr>
-<td>$211a</td><td>69</td><td>skip</td></tr>
+<td>$2eb0</td><td colspan="2" align="right">11</td><td>skip</td></tr>
 <tr>
-<td>$215f</td><td>11</td><td>skip</td></tr>
+<td>$2ebb</td><td colspan="2" align="right">10</td><td>LMAIN303</td></tr>
 <tr>
-<td>$216a</td><td>1</td><td>LMAIN229</td></tr>
+<td>$2ec5</td><td colspan="2" align="right">47</td><td>LMAIN287, LMAIN297, LMAIN301</td></tr>
 <tr>
-<td>$216b</td><td>15</td><td>_subpacman5</td></tr>
+<td>$2ef4</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$217a</td><td>27</td><td>skip</td></tr>
+<td>$2f23</td><td colspan="2" align="right">56</td><td>skip</td></tr>
 <tr>
-<td>$2195</td><td>95</td><td>skip</td></tr>
+<td>$2f5b</td><td colspan="2" align="right">15</td><td>LMAIN307</td></tr>
 <tr>
-<td>$21f4</td><td>27</td><td>skip</td></tr>
+<td>$2f6a</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$220f</td><td>87</td><td>skip</td></tr>
+<td>$2f99</td><td colspan="2" align="right">56</td><td>skip</td></tr>
 <tr>
-<td>$2266</td><td>1</td><td>LMAIN231</td></tr>
+<td>$2fd1</td><td colspan="2" align="right">15</td><td>LMAIN309</td></tr>
 <tr>
-<td>$2267</td><td>15</td><td>_checkend</td></tr>
+<td>$2fe0</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$2276</td><td>17</td><td>skip</td></tr>
+<td>$300f</td><td colspan="2" align="right">56</td><td>skip</td></tr>
 <tr>
-<td>$2287</td><td>67</td><td>skip</td></tr>
+<td>$3047</td><td colspan="2" align="right">15</td><td>LMAIN311</td></tr>
 <tr>
-<td>$22ca</td><td>81</td><td>skip</td></tr>
+<td>$3056</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$231b</td><td>15</td><td>LMAIN233</td></tr>
+<td>$3085</td><td colspan="2" align="right">56</td><td>skip</td></tr>
 <tr>
-<td>$232a</td><td>17</td><td>skip</td></tr>
+<td>$30bd</td><td colspan="2" align="right">25</td><td>LMAIN313</td></tr>
 <tr>
-<td>$233b</td><td>67</td><td>skip</td></tr>
+<td>$30d6</td><td colspan="2" align="right">63</td><td>skip</td></tr>
 <tr>
-<td>$237e</td><td>34</td><td>skip</td></tr>
+<td>$3115</td><td colspan="2" align="right">15</td><td>LMAIN315</td></tr>
 <tr>
-<td>$23a0</td><td>34</td><td>skip</td></tr>
+<td>$3124</td><td colspan="2" align="right">63</td><td>skip</td></tr>
 <tr>
-<td>$23c2</td><td>67</td><td>skip</td></tr>
+<td>$3163</td><td colspan="2" align="right">15</td><td>LMAIN317</td></tr>
 <tr>
-<td>$2405</td><td>19</td><td>skip</td></tr>
+<td>$3172</td><td colspan="2" align="right">63</td><td>skip</td></tr>
 <tr>
-<td>$2418</td><td>15</td><td>LMAIN242</td></tr>
+<td>$31b1</td><td colspan="2" align="right">15</td><td>LMAIN319</td></tr>
 <tr>
-<td>$2427</td><td>34</td><td>skip</td></tr>
+<td>$31c0</td><td colspan="2" align="right">66</td><td>skip</td></tr>
 <tr>
-<td>$2449</td><td>67</td><td>skip</td></tr>
+<td>$3202</td><td colspan="2" align="right">37</td><td>LMAIN305</td></tr>
 <tr>
-<td>$248c</td><td>19</td><td>skip</td></tr>
+<td>$3227</td><td colspan="2" align="right">40</td><td>LMAIN323</td></tr>
 <tr>
-<td>$249f</td><td>15</td><td>LMAIN244</td></tr>
+<td>$324f</td><td colspan="2" align="right">1</td><td>LMAIN306, LMAIN325</td></tr>
 <tr>
-<td>$24ae</td><td>25</td><td>skip</td></tr>
+<td>$3250</td><td align="right">249</td><td align="right">22</td><td>_inverse</td></tr>
 <tr>
-<td>$24c7</td><td>15</td><td>skip</td></tr>
+<td>$3266</td><td colspan="2" align="right">27</td><td>skip</td></tr>
 <tr>
-<td>$24d6</td><td>67</td><td>skip</td></tr>
+<td>$3281</td><td colspan="2" align="right">78</td><td>LMAIN327</td></tr>
 <tr>
-<td>$2519</td><td>19</td><td>skip</td></tr>
+<td>$32cf</td><td colspan="2" align="right">59</td><td>skip</td></tr>
 <tr>
-<td>$252c</td><td>15</td><td>LMAIN246</td></tr>
+<td>$330a</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$253b</td><td>25</td><td>skip</td></tr>
+<td>$330f</td><td colspan="2" align="right">5</td><td>LMAIN328</td></tr>
 <tr>
-<td>$2554</td><td>17</td><td>skip</td></tr>
+<td>$3314</td><td colspan="2" align="right">15</td><td>LMAIN330</td></tr>
 <tr>
-<td>$2565</td><td>67</td><td>skip</td></tr>
+<td>$3323</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$25a8</td><td>19</td><td>skip</td></tr>
+<td>$3333</td><td colspan="2" align="right">22</td><td>skip</td></tr>
 <tr>
-<td>$25bb</td><td>5</td><td>LMAIN245</td></tr>
+<td>$3349</td><td align="right">60</td><td align="right">60</td><td>_printpossiblemoves</td></tr>
 <tr>
-<td>$25c0</td><td>15</td><td>LMAIN237</td></tr>
+<td>$3385</td><td align="right">3202</td><td align="right">93</td><td>_printarrowsorblanks</td></tr>
 <tr>
-<td>$25cf</td><td>24</td><td>skip</td></tr>
+<td>$33e2</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$25e7</td><td>1</td><td>LMAIN247</td></tr>
+<td>$33f3</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$25e8</td><td>76</td><td>_movecursor2</td></tr>
+<td>$3436</td><td colspan="2" align="right">25</td><td>skip</td></tr>
 <tr>
-<td>$2634</td><td>17</td><td>skip</td></tr>
+<td>$344f</td><td colspan="2" align="right">45</td><td>LMAIN333</td></tr>
 <tr>
-<td>$2645</td><td>77</td><td>skip</td></tr>
+<td>$347c</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2692</td><td>34</td><td>skip</td></tr>
+<td>$348d</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$26b4</td><td>34</td><td>skip</td></tr>
+<td>$34d0</td><td colspan="2" align="right">25</td><td>skip</td></tr>
 <tr>
-<td>$26d6</td><td>15</td><td>skip</td></tr>
+<td>$34e9</td><td colspan="2" align="right">45</td><td>LMAIN336</td></tr>
 <tr>
-<td>$26e5</td><td>14</td><td>LMAIN251</td></tr>
+<td>$3516</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$26f3</td><td>8</td><td>skip</td></tr>
+<td>$3534</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$26fb</td><td>22</td><td>skip</td></tr>
+<td>$3577</td><td colspan="2" align="right">13</td><td>skip</td></tr>
 <tr>
-<td>$2711</td><td>25</td><td>skip</td></tr>
+<td>$3584</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$272a</td><td>15</td><td>LMAIN249</td></tr>
+<td>$358b</td><td colspan="2" align="right">45</td><td>LMAIN339</td></tr>
 <tr>
-<td>$2739</td><td>34</td><td>skip</td></tr>
+<td>$35b8</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$275b</td><td>34</td><td>skip</td></tr>
+<td>$35d6</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$277d</td><td>15</td><td>skip</td></tr>
+<td>$3619</td><td colspan="2" align="right">13</td><td>skip</td></tr>
 <tr>
-<td>$278c</td><td>14</td><td>LMAIN255</td></tr>
+<td>$3626</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$279a</td><td>8</td><td>skip</td></tr>
+<td>$362e</td><td colspan="2" align="right">37</td><td>LMAIN343</td></tr>
 <tr>
-<td>$27a2</td><td>20</td><td>skip</td></tr>
+<td>$3653</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$27b6</td><td>25</td><td>skip</td></tr>
+<td>$366d</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$27cf</td><td>15</td><td>LMAIN253</td></tr>
+<td>$3675</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$27de</td><td>34</td><td>skip</td></tr>
+<td>$3681</td><td colspan="2" align="right">45</td><td>LMAIN346</td></tr>
 <tr>
-<td><b>$2800</b></td><td>34</td><td>skip</td></tr>
+<td>$36ae</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$2822</td><td>15</td><td>skip</td></tr>
+<td>$36d0</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2831</td><td>14</td><td>LMAIN259</td></tr>
+<td>$36d8</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$283f</td><td>8</td><td>skip</td></tr>
+<td>$36e2</td><td colspan="2" align="right">45</td><td>LMAIN348</td></tr>
 <tr>
-<td>$2847</td><td>20</td><td>skip</td></tr>
+<td>$370f</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$285b</td><td>25</td><td>skip</td></tr>
+<td>$3731</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2874</td><td>15</td><td>LMAIN257</td></tr>
+<td>$3739</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$2883</td><td>34</td><td>skip</td></tr>
+<td>$3743</td><td colspan="2" align="right">45</td><td>LMAIN350</td></tr>
 <tr>
-<td>$28a5</td><td>34</td><td>skip</td></tr>
+<td>$3770</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$28c7</td><td>15</td><td>skip</td></tr>
+<td>$378a</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$28d6</td><td>14</td><td>LMAIN263</td></tr>
+<td>$3792</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$28e4</td><td>8</td><td>skip</td></tr>
+<td>$379e</td><td colspan="2" align="right">15</td><td>LMAIN352</td></tr>
 <tr>
-<td>$28ec</td><td>22</td><td>skip</td></tr>
+<td>$37ad</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2902</td><td>25</td><td>skip</td></tr>
+<td>$37be</td><td colspan="2" align="right">77</td><td>skip</td></tr>
 <tr>
-<td>$291b</td><td>15</td><td>LMAIN261</td></tr>
+<td>$380b</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$292a</td><td>33</td><td>skip</td></tr>
+<td>$382d</td><td colspan="2" align="right">22</td><td>skip</td></tr>
 <tr>
-<td>$294b</td><td>25</td><td>skip</td></tr>
+<td>$3843</td><td colspan="2" align="right">42</td><td>skip</td></tr>
 <tr>
-<td>$2964</td><td>16</td><td>skip</td></tr>
+<td>$386d</td><td colspan="2" align="right">35</td><td>LMAIN356</td></tr>
 <tr>
-<td>$2974</td><td>67</td><td>skip</td></tr>
+<td>$3890</td><td colspan="2" align="right">45</td><td>LMAIN358</td></tr>
 <tr>
-<td>$29b7</td><td>15</td><td>skip</td></tr>
+<td>$38bd</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$29c6</td><td>14</td><td>LMAIN267</td></tr>
+<td>$38ce</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$29d4</td><td>16</td><td>skip</td></tr>
+<td>$3911</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$29e4</td><td>86</td><td>skip</td></tr>
+<td>$3919</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$2a3a</td><td>15</td><td>LMAIN269</td></tr>
+<td>$391f</td><td colspan="2" align="right">27</td><td>LMAIN360</td></tr>
 <tr>
-<td>$2a49</td><td>33</td><td>skip</td></tr>
+<td>$393a</td><td colspan="2" align="right">37</td><td>LMAIN354, LMAIN362</td></tr>
 <tr>
-<td>$2a6a</td><td>16</td><td>skip</td></tr>
+<td>$395f</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$2a7a</td><td>86</td><td>skip</td></tr>
+<td>$396f</td><td colspan="2" align="right">45</td><td>LMAIN364</td></tr>
 <tr>
-<td>$2ad0</td><td>14</td><td>LMAIN271</td></tr>
+<td>$399c</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$2ade</td><td>17</td><td>skip</td></tr>
+<td>$39b4</td><td colspan="2" align="right">45</td><td>LMAIN366</td></tr>
 <tr>
-<td>$2aef</td><td>33</td><td>skip</td></tr>
+<td>$39e1</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$2b10</td><td>17</td><td>skip</td></tr>
+<td>$39f9</td><td colspan="2" align="right">45</td><td>LMAIN368</td></tr>
 <tr>
-<td>$2b21</td><td>23</td><td>skip</td></tr>
+<td>$3a26</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$2b38</td><td>15</td><td>LMAIN273</td></tr>
+<td>$3a36</td><td colspan="2" align="right">15</td><td>LMAIN344, LMAIN370</td></tr>
 <tr>
-<td>$2b47</td><td>33</td><td>skip</td></tr>
+<td>$3a45</td><td colspan="2" align="right">49</td><td>skip</td></tr>
 <tr>
-<td>$2b68</td><td>16</td><td>skip</td></tr>
+<td>$3a76</td><td colspan="2" align="right">151</td><td>LMAIN372</td></tr>
 <tr>
-<td>$2b78</td><td>124</td><td>skip</td></tr>
+<td>$3b0d</td><td colspan="2" align="right">53</td><td>skip</td></tr>
 <tr>
-<td>$2bf4</td><td>27</td><td>skip</td></tr>
+<td>$3b42</td><td colspan="2" align="right">164</td><td>skip</td></tr>
 <tr>
-<td>$2c0f</td><td>18</td><td>skip</td></tr>
+<td>$3be6</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$2c21</td><td>67</td><td>skip</td></tr>
+<td>$3c08</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2c64</td><td>23</td><td>skip</td></tr>
+<td>$3c10</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$2c7b</td><td>16</td><td>LMAIN277</td></tr>
+<td>$3c1f</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$2c8b</td><td>17</td><td>skip</td></tr>
+<td>$3c80</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2c9c</td><td>35</td><td>skip</td></tr>
+<td>$3c88</td><td colspan="2" align="right">15</td><td>skip</td></tr>
 <tr>
-<td>$2cbf</td><td>17</td><td>skip</td></tr>
+<td>$3c97</td><td colspan="2" align="right">84</td><td>skip</td></tr>
 <tr>
-<td>$2cd0</td><td>19</td><td>skip</td></tr>
+<td>$3ceb</td><td colspan="2" align="right">15</td><td>LMAIN379, LMAIN381</td></tr>
 <tr>
-<td>$2ce3</td><td>16</td><td>LMAIN282</td></tr>
+<td>$3cfa</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$2cf3</td><td>18</td><td>skip</td></tr>
+<td>$3d14</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2d05</td><td>67</td><td>skip</td></tr>
+<td>$3d1c</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2d48</td><td>11</td><td>skip</td></tr>
+<td>$3d2d</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$2d53</td><td>10</td><td>LMAIN281</td></tr>
+<td>$3d8e</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$2d5d</td><td>14</td><td>LMAIN279</td></tr>
+<td>$3d96</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2d6b</td><td>36</td><td>skip</td></tr>
+<td>$3da7</td><td colspan="2" align="right">87</td><td>skip</td></tr>
 <tr>
-<td>$2d8f</td><td>47</td><td>skip</td></tr>
+<td>$3dfe</td><td colspan="2" align="right">15</td><td>LMAIN377</td></tr>
 <tr>
-<td>$2dbe</td><td>18</td><td>skip</td></tr>
+<td>$3e0d</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$2dd0</td><td>43</td><td>skip</td></tr>
+<td>$3e2f</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2dfb</td><td>15</td><td>LMAIN285</td></tr>
+<td>$3e40</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$2e0a</td><td>47</td><td>skip</td></tr>
+<td>$3ea1</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2e39</td><td>18</td><td>skip</td></tr>
+<td>$3eb2</td><td colspan="2" align="right">84</td><td>skip</td></tr>
 <tr>
-<td>$2e4b</td><td>43</td><td>skip</td></tr>
+<td>$3f06</td><td colspan="2" align="right">15</td><td>LMAIN387, LMAIN389</td></tr>
 <tr>
-<td>$2e76</td><td>15</td><td>LMAIN287</td></tr>
+<td>$3f15</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$2e85</td><td>47</td><td>skip</td></tr>
+<td>$3f2f</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2eb4</td><td>18</td><td>skip</td></tr>
+<td>$3f40</td><td colspan="2" align="right">97</td><td>skip</td></tr>
 <tr>
-<td>$2ec6</td><td>43</td><td>skip</td></tr>
+<td>$3fa1</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$2ef1</td><td>15</td><td>LMAIN289</td></tr>
+<td>$3fb2</td><td colspan="2" align="right">84</td><td>skip</td></tr>
 <tr>
-<td><b>$2f00</b></td><td>47</td><td>skip</td></tr>
+<td>$4006</td><td colspan="2" align="right">1</td><td>LMAIN373, LMAIN375, LMAIN378, LMAIN393, LMAIN395</td></tr>
 <tr>
-<td>$2f2f</td><td>18</td><td>skip</td></tr>
+<td>$4007</td><td align="right">145</td><td align="right">32</td><td>_printdestinations</td></tr>
 <tr>
-<td>$2f41</td><td>43</td><td>skip</td></tr>
+<td>$4027</td><td colspan="2" align="right">40</td><td>LMAIN399</td></tr>
 <tr>
-<td>$2f6c</td><td>25</td><td>LMAIN291</td></tr>
+<td>$404f</td><td colspan="2" align="right">40</td><td>LMAIN401</td></tr>
 <tr>
-<td>$2f85</td><td>34</td><td>skip</td></tr>
+<td>$4077</td><td colspan="2" align="right">32</td><td>LMAIN403</td></tr>
 <tr>
-<td>$2fa7</td><td>18</td><td>skip</td></tr>
+<td>$4097</td><td colspan="2" align="right">1</td><td>LMAIN405</td></tr>
 <tr>
-<td>$2fb9</td><td>20</td><td>skip</td></tr>
+<td>$4098</td><td align="right">1662</td><td align="right">96</td><td>_canpiecemove</td></tr>
 <tr>
-<td>$2fcd</td><td>15</td><td>LMAIN293</td></tr>
+<td>$40f8</td><td colspan="2" align="right">107</td><td>skip</td></tr>
 <tr>
-<td>$2fdc</td><td>34</td><td>skip</td></tr>
+<td>$4163</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$2ffe</td><td>18</td><td>skip</td></tr>
+<td>$4173</td><td colspan="2" align="right">121</td><td>LMAIN409</td></tr>
 <tr>
-<td>$3010</td><td>20</td><td>skip</td></tr>
+<td>$41ec</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$3024</td><td>15</td><td>LMAIN295</td></tr>
+<td>$4204</td><td colspan="2" align="right">121</td><td>LMAIN407, LMAIN412</td></tr>
 <tr>
-<td>$3033</td><td>34</td><td>skip</td></tr>
+<td>$427d</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$3055</td><td>18</td><td>skip</td></tr>
+<td>$428d</td><td colspan="2" align="right">121</td><td>LMAIN417</td></tr>
 <tr>
-<td>$3067</td><td>20</td><td>skip</td></tr>
+<td>$4306</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$307b</td><td>15</td><td>LMAIN297</td></tr>
+<td>$431e</td><td colspan="2" align="right">49</td><td>LMAIN415, LMAIN420</td></tr>
 <tr>
-<td>$308a</td><td>34</td><td>skip</td></tr>
+<td>$434f</td><td colspan="2" align="right">78</td><td>skip</td></tr>
 <tr>
-<td>$30ac</td><td>18</td><td>skip</td></tr>
+<td>$439d</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$30be</td><td>23</td><td>skip</td></tr>
+<td>$43ad</td><td colspan="2" align="right">49</td><td>LMAIN425</td></tr>
 <tr>
-<td>$30d5</td><td>20</td><td>LMAIN283</td></tr>
+<td>$43de</td><td colspan="2" align="right">78</td><td>skip</td></tr>
 <tr>
-<td>$30e9</td><td>21</td><td>skip</td></tr>
+<td>$442c</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$30fe</td><td>15</td><td>LMAIN301</td></tr>
+<td>$4444</td><td colspan="2" align="right">41</td><td>LMAIN423, LMAIN427</td></tr>
 <tr>
-<td>$310d</td><td>29</td><td>skip</td></tr>
+<td>$446d</td><td colspan="2" align="right">80</td><td>skip</td></tr>
 <tr>
-<td>$312a</td><td>3</td><td>LMAIN303</td></tr>
+<td>$44bd</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$312d</td><td>22</td><td>_inverse</td></tr>
+<td>$44cd</td><td colspan="2" align="right">49</td><td>LMAIN431</td></tr>
 <tr>
-<td>$3143</td><td>27</td><td>skip</td></tr>
+<td>$44fe</td><td colspan="2" align="right">80</td><td>skip</td></tr>
 <tr>
-<td>$315e</td><td>78</td><td>LMAIN305</td></tr>
+<td>$454e</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$31ac</td><td>59</td><td>skip</td></tr>
+<td>$4566</td><td colspan="2" align="right">45</td><td>LMAIN429, LMAIN433</td></tr>
 <tr>
-<td>$31e7</td><td>5</td><td>skip</td></tr>
+<td>$4593</td><td colspan="2" align="right">86</td><td>skip</td></tr>
 <tr>
-<td>$31ec</td><td>19</td><td>LMAIN306</td></tr>
+<td>$45e9</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$31ff</td><td>5</td><td>skip</td></tr>
+<td>$4601</td><td colspan="2" align="right">45</td><td>LMAIN441, LMAIN443</td></tr>
 <tr>
-<td>$3204</td><td>27</td><td>LMAIN308</td></tr>
+<td>$462e</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$321f</td><td>22</td><td>skip</td></tr>
+<td>$4646</td><td colspan="2" align="right">75</td><td>LMAIN439, LMAIN447, LMAIN449</td></tr>
 <tr>
-<td>$3235</td><td>77</td><td>_printpossiblemoves</td></tr>
+<td>$4691</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$3282</td><td>85</td><td>_printarrowsorblanks</td></tr>
+<td>$46a9</td><td colspan="2" align="right">45</td><td>LMAIN455, LMAIN457</td></tr>
 <tr>
-<td>$32d7</td><td>26</td><td>skip</td></tr>
+<td>$46d6</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$32f1</td><td>17</td><td>skip</td></tr>
+<td>$46ee</td><td colspan="2" align="right">15</td><td>LMAIN435, LMAIN453, LMAIN461, LMAIN463</td></tr>
 <tr>
-<td>$3302</td><td>61</td><td>skip</td></tr>
+<td>$46fd</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$333f</td><td>15</td><td>LMAIN311</td></tr>
+<td>$4715</td><td colspan="2" align="right">1</td><td>LMAIN467</td></tr>
 <tr>
-<td>$334e</td><td>34</td><td>skip</td></tr>
+<td>$4716</td><td align="right">257</td><td align="right">8</td><td>_drawplayers</td></tr>
 <tr>
-<td>$3370</td><td>17</td><td>skip</td></tr>
+<td>$471e</td><td colspan="2" align="right">8</td><td>LMAIN469</td></tr>
 <tr>
-<td>$3381</td><td>61</td><td>skip</td></tr>
+<td>$4726</td><td colspan="2" align="right">91</td><td>LMAIN473</td></tr>
 <tr>
-<td>$33be</td><td>15</td><td>LMAIN314</td></tr>
+<td>$4781</td><td colspan="2" align="right">41</td><td>skip</td></tr>
 <tr>
-<td>$33cd</td><td>34</td><td>skip</td></tr>
+<td>$47aa</td><td colspan="2" align="right">19</td><td>LMAIN474, LMAIN477</td></tr>
 <tr>
-<td>$33ef</td><td>8</td><td>skip</td></tr>
+<td>$47bd</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$33f7</td><td>15</td><td>skip</td></tr>
+<td>$47c2</td><td colspan="2" align="right">30</td><td>LMAIN476</td></tr>
 <tr>
-<td>$3406</td><td>61</td><td>skip</td></tr>
+<td>$47e0</td><td colspan="2" align="right">19</td><td>LMAIN470</td></tr>
 <tr>
-<td>$3443</td><td>15</td><td>LMAIN317</td></tr>
+<td>$47f3</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$3452</td><td>34</td><td>skip</td></tr>
+<td>$47f8</td><td colspan="2" align="right">31</td><td>LMAIN472</td></tr>
 <tr>
-<td>$3474</td><td>8</td><td>skip</td></tr>
+<td>$4817</td><td align="right">382</td><td align="right">8</td><td>_drawtiles</td></tr>
 <tr>
-<td>$347c</td><td>17</td><td>skip</td></tr>
+<td>$481f</td><td colspan="2" align="right">8</td><td>LMAIN479</td></tr>
 <tr>
-<td>$348d</td><td>61</td><td>skip</td></tr>
+<td>$4827</td><td colspan="2" align="right">252</td><td>LMAIN483</td></tr>
 <tr>
-<td>$34ca</td><td>14</td><td>LMAIN319</td></tr>
+<td>$4923</td><td colspan="2" align="right">5</td><td>LMAIN487</td></tr>
 <tr>
-<td>$34d8</td><td>14</td><td>skip</td></tr>
+<td>$4928</td><td colspan="2" align="right">19</td><td>LMAIN484</td></tr>
 <tr>
-<td>$34e6</td><td>15</td><td>LMAIN323</td></tr>
+<td>$493b</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$34f5</td><td>26</td><td>skip</td></tr>
+<td>$4940</td><td colspan="2" align="right">30</td><td>LMAIN486</td></tr>
 <tr>
-<td>$350f</td><td>26</td><td>skip</td></tr>
+<td>$495e</td><td colspan="2" align="right">19</td><td>LMAIN480</td></tr>
 <tr>
-<td>$3529</td><td>8</td><td>skip</td></tr>
+<td>$4971</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$3531</td><td>12</td><td>skip</td></tr>
+<td>$4976</td><td colspan="2" align="right">31</td><td>LMAIN482</td></tr>
 <tr>
-<td>$353d</td><td>15</td><td>LMAIN326</td></tr>
+<td>$4995</td><td align="right">190</td><td align="right">190</td><td>_drawboard</td></tr>
 <tr>
-<td>$354c</td><td>34</td><td>skip</td></tr>
+<td>$4a53</td><td align="right">98</td><td align="right">8</td><td>_blinkcursor</td></tr>
 <tr>
-<td>$356e</td><td>34</td><td>skip</td></tr>
+<td>$4a5b</td><td colspan="2" align="right">50</td><td>LMAIN495</td></tr>
 <tr>
-<td>$3590</td><td>8</td><td>skip</td></tr>
+<td>$4a8d</td><td colspan="2" align="right">5</td><td>LMAIN496</td></tr>
 <tr>
-<td>$3598</td><td>10</td><td>skip</td></tr>
+<td>$4a92</td><td colspan="2" align="right">15</td><td>LMAIN498</td></tr>
 <tr>
-<td>$35a2</td><td>15</td><td>LMAIN328</td></tr>
+<td>$4aa1</td><td colspan="2" align="right">20</td><td>skip</td></tr>
 <tr>
-<td>$35b1</td><td>34</td><td>skip</td></tr>
+<td>$4ab5</td><td align="right">74</td><td align="right">74</td><td>_flashscreen</td></tr>
 <tr>
-<td>$35d3</td><td>34</td><td>skip</td></tr>
+<td>$4aff</td><td align="right">1984</td><td align="right">98</td><td>_playerturn</td></tr>
 <tr>
-<td>$35f5</td><td>8</td><td>skip</td></tr>
+<td>$4b61</td><td colspan="2" align="right">10</td><td>LMAIN499</td></tr>
 <tr>
-<td>$35fd</td><td>10</td><td>skip</td></tr>
+<td>$4b6b</td><td colspan="2" align="right">13</td><td>LMAIN500</td></tr>
 <tr>
-<td>$3607</td><td>15</td><td>LMAIN330</td></tr>
+<td>$4b78</td><td colspan="2" align="right">80</td><td>LMAIN505</td></tr>
 <tr>
-<td>$3616</td><td>34</td><td>skip</td></tr>
+<td>$4bc8</td><td colspan="2" align="right">47</td><td>LMAIN508</td></tr>
 <tr>
-<td>$3638</td><td>26</td><td>skip</td></tr>
+<td>$4bf7</td><td colspan="2" align="right">126</td><td>LMAIN512</td></tr>
 <tr>
-<td>$3652</td><td>8</td><td>skip</td></tr>
+<td>$4c75</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$365a</td><td>12</td><td>skip</td></tr>
+<td>$4c8d</td><td colspan="2" align="right">121</td><td>LMAIN513</td></tr>
 <tr>
-<td>$3666</td><td>15</td><td>LMAIN332</td></tr>
+<td>$4d06</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$3675</td><td>34</td><td>skip</td></tr>
+<td>$4d2a</td><td colspan="2" align="right">5</td><td>LMAIN517</td></tr>
 <tr>
-<td>$3697</td><td>26</td><td>skip</td></tr>
+<td>$4d2f</td><td colspan="2" align="right">42</td><td>LMAIN515</td></tr>
 <tr>
-<td>$36b1</td><td>17</td><td>skip</td></tr>
+<td>$4d59</td><td colspan="2" align="right">64</td><td>skip</td></tr>
 <tr>
-<td>$36c2</td><td>67</td><td>skip</td></tr>
+<td>$4d99</td><td colspan="2" align="right">18</td><td>LMAIN520</td></tr>
 <tr>
-<td>$3705</td><td>24</td><td>skip</td></tr>
+<td>$4dab</td><td colspan="2" align="right">10</td><td>LMAIN518</td></tr>
 <tr>
-<td>$371d</td><td>15</td><td>LMAIN334</td></tr>
+<td>$4db5</td><td colspan="2" align="right">15</td><td>LMAIN519</td></tr>
 <tr>
-<td>$372c</td><td>17</td><td>skip</td></tr>
+<td>$4dc4</td><td colspan="2" align="right">106</td><td>skip</td></tr>
 <tr>
-<td>$373d</td><td>77</td><td>skip</td></tr>
+<td>$4e2e</td><td colspan="2" align="right">58</td><td>skip</td></tr>
 <tr>
-<td>$378a</td><td>34</td><td>skip</td></tr>
+<td>$4e68</td><td colspan="2" align="right">58</td><td>LMAIN528</td></tr>
 <tr>
-<td>$37ac</td><td>22</td><td>skip</td></tr>
+<td>$4ea2</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$37c2</td><td>22</td><td>skip</td></tr>
+<td>$4eba</td><td colspan="2" align="right">58</td><td>LMAIN531</td></tr>
 <tr>
-<td>$37d8</td><td>24</td><td>skip</td></tr>
+<td>$4ef4</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$37f0</td><td>15</td><td>LMAIN338</td></tr>
+<td>$4f0c</td><td colspan="2" align="right">91</td><td>LMAIN533</td></tr>
 <tr>
-<td>$37ff</td><td>24</td><td>skip</td></tr>
+<td>$4f67</td><td colspan="2" align="right">15</td><td>LMAIN535</td></tr>
 <tr>
-<td>$3817</td><td>15</td><td>LMAIN340</td></tr>
+<td>$4f76</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$3826</td><td>34</td><td>skip</td></tr>
+<td>$4f98</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$3848</td><td>27</td><td>skip</td></tr>
+<td>$4fbc</td><td colspan="2" align="right">5</td><td>LMAIN539</td></tr>
 <tr>
-<td>$3863</td><td>116</td><td>skip</td></tr>
+<td>$4fc1</td><td colspan="2" align="right">15</td><td>LMAIN537</td></tr>
 <tr>
-<td>$38d7</td><td>53</td><td>skip</td></tr>
+<td>$4fd0</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$390c</td><td>39</td><td>skip</td></tr>
+<td>$4ff2</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$3933</td><td>15</td><td>LMAIN344</td></tr>
+<td>$5016</td><td colspan="2" align="right">5</td><td>LMAIN542</td></tr>
 <tr>
-<td>$3942</td><td>39</td><td>skip</td></tr>
+<td>$501b</td><td colspan="2" align="right">15</td><td>LMAIN540</td></tr>
 <tr>
-<td>$3969</td><td>26</td><td>LMAIN346</td></tr>
+<td>$502a</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$3983</td><td>27</td><td>skip</td></tr>
+<td>$5044</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$399e</td><td>78</td><td>skip</td></tr>
+<td>$5068</td><td colspan="2" align="right">5</td><td>LMAIN545</td></tr>
 <tr>
-<td>$39ec</td><td>64</td><td>skip</td></tr>
+<td>$506d</td><td colspan="2" align="right">15</td><td>LMAIN543</td></tr>
 <tr>
-<td>$3a2c</td><td>16</td><td>skip</td></tr>
+<td>$507c</td><td colspan="2" align="right">26</td><td>skip</td></tr>
 <tr>
-<td>$3a3c</td><td>27</td><td>LMAIN348</td></tr>
+<td>$5096</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$3a57</td><td>15</td><td>LMAIN342</td></tr>
+<td>$50ba</td><td colspan="2" align="right">5</td><td>LMAIN548</td></tr>
 <tr>
-<td>$3a66</td><td>26</td><td>skip</td></tr>
+<td>$50bf</td><td colspan="2" align="right">15</td><td>LMAIN546</td></tr>
 <tr>
-<td>$3a80</td><td>22</td><td>skip</td></tr>
+<td>$50ce</td><td colspan="2" align="right">29</td><td>skip</td></tr>
 <tr>
-<td>$3a96</td><td>12</td><td>skip</td></tr>
+<td>$50eb</td><td colspan="2" align="right">15</td><td>LMAIN549</td></tr>
 <tr>
-<td>$3aa2</td><td>15</td><td>LMAIN350</td></tr>
+<td>$50fa</td><td colspan="2" align="right">29</td><td>skip</td></tr>
 <tr>
-<td>$3ab1</td><td>26</td><td>skip</td></tr>
+<td>$5117</td><td colspan="2" align="right">14</td><td>LMAIN551</td></tr>
 <tr>
-<td>$3acb</td><td>16</td><td>skip</td></tr>
+<td>$5125</td><td colspan="2" align="right">15</td><td>LMAIN529</td></tr>
 <tr>
-<td>$3adb</td><td>15</td><td>LMAIN352</td></tr>
+<td>$5134</td><td colspan="2" align="right">36</td><td>skip</td></tr>
 <tr>
-<td>$3aea</td><td>34</td><td>skip</td></tr>
+<td>$5158</td><td colspan="2" align="right">15</td><td>LMAIN553</td></tr>
 <tr>
-<td>$3b0c</td><td>24</td><td>skip</td></tr>
+<td>$5167</td><td colspan="2" align="right">98</td><td>skip</td></tr>
 <tr>
-<td>$3b24</td><td>15</td><td>LMAIN354</td></tr>
+<td>$51c9</td><td colspan="2" align="right">20</td><td>skip</td></tr>
 <tr>
-<td>$3b33</td><td>34</td><td>skip</td></tr>
+<td>$51dd</td><td colspan="2" align="right">15</td><td>LMAIN554</td></tr>
 <tr>
-<td>$3b55</td><td>24</td><td>skip</td></tr>
+<td>$51ec</td><td colspan="2" align="right">48</td><td>skip</td></tr>
 <tr>
-<td>$3b6d</td><td>15</td><td>LMAIN356</td></tr>
+<td>$521c</td><td colspan="2" align="right">104</td><td>skip</td></tr>
 <tr>
-<td>$3b7c</td><td>34</td><td>skip</td></tr>
+<td>$5284</td><td colspan="2" align="right">10</td><td>LMAIN558</td></tr>
 <tr>
-<td>$3b9e</td><td>16</td><td>skip</td></tr>
+<td>$528e</td><td colspan="2" align="right">26</td><td>LMAIN524, LMAIN556, LMAIN559</td></tr>
 <tr>
-<td>$3bae</td><td>15</td><td>LMAIN358</td></tr>
+<td>$52a8</td><td colspan="2" align="right">23</td><td>LMAIN506, LMAIN510</td></tr>
 <tr>
-<td>$3bbd</td><td>19</td><td>skip</td></tr>
+<td>$52bf</td><td align="right">1370</td><td align="right">101</td><td>_movepiece</td></tr>
 <tr>
-<td>$3bd0</td><td>3</td><td>LMAIN321</td></tr>
+<td>$5324</td><td colspan="2" align="right">388</td><td>skip</td></tr>
 <tr>
-<td>$3bd3</td><td>15</td><td>_printdestinations</td></tr>
+<td>$54a8</td><td colspan="2" align="right">40</td><td>LMAIN560</td></tr>
 <tr>
-<td>$3be2</td><td>29</td><td>skip</td></tr>
+<td>$54d0</td><td colspan="2" align="right">64</td><td>LMAIN562</td></tr>
 <tr>
-<td>$3bff</td><td>15</td><td>LMAIN360</td></tr>
+<td>$5510</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$3c0e</td><td>29</td><td>skip</td></tr>
+<td>$552e</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3c2b</td><td>15</td><td>LMAIN362</td></tr>
+<td>$553a</td><td colspan="2" align="right">54</td><td>LMAIN564, LMAIN566</td></tr>
 <tr>
-<td>$3c3a</td><td>29</td><td>skip</td></tr>
+<td>$5570</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$3c57</td><td>15</td><td>LMAIN364</td></tr>
+<td>$558e</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$3c66</td><td>29</td><td>skip</td></tr>
+<td>$5598</td><td colspan="2" align="right">64</td><td>LMAIN568, LMAIN570</td></tr>
 <tr>
-<td>$3c83</td><td>1</td><td>LMAIN366</td></tr>
+<td>$55d8</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$3c84</td><td>20</td><td>_canpiecemove</td></tr>
+<td>$55f6</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$3c98</td><td>17</td><td>skip</td></tr>
+<td><b>$5600</b></td><td colspan="2" align="right">54</td><td>LMAIN572, LMAIN574</td></tr>
 <tr>
-<td>$3ca9</td><td>86</td><td>skip</td></tr>
+<td>$5636</td><td colspan="2" align="right">30</td><td>skip</td></tr>
 <tr>
-<td>$3cff</td><td>17</td><td>skip</td></tr>
+<td>$5654</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3d10</td><td>67</td><td>skip</td></tr>
+<td>$5660</td><td colspan="2" align="right">63</td><td>LMAIN576, LMAIN578</td></tr>
 <tr>
-<td>$3d53</td><td>16</td><td>skip</td></tr>
+<td>$569f</td><td colspan="2" align="right">15</td><td>LMAIN586</td></tr>
 <tr>
-<td>$3d63</td><td>15</td><td>LMAIN370</td></tr>
+<td>$56ae</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3d72</td><td>34</td><td>skip</td></tr>
+<td>$56ba</td><td colspan="2" align="right">5</td><td>LMAIN587</td></tr>
 <tr>
-<td>$3d94</td><td>17</td><td>skip</td></tr>
+<td>$56bf</td><td colspan="2" align="right">15</td><td>LMAIN589</td></tr>
 <tr>
-<td>$3da5</td><td>67</td><td>skip</td></tr>
+<td>$56ce</td><td colspan="2" align="right">56</td><td>skip</td></tr>
 <tr>
-<td>$3de8</td><td>24</td><td>skip</td></tr>
+<td>$5706</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td><b>$3e00</b></td><td>15</td><td>LMAIN373</td></tr>
+<td>$570e</td><td colspan="2" align="right">15</td><td>LMAIN590</td></tr>
 <tr>
-<td>$3e0f</td><td>34</td><td>skip</td></tr>
+<td>$571d</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3e31</td><td>17</td><td>skip</td></tr>
+<td>$5729</td><td colspan="2" align="right">5</td><td>LMAIN591</td></tr>
 <tr>
-<td>$3e42</td><td>67</td><td>skip</td></tr>
+<td>$572e</td><td colspan="2" align="right">15</td><td>LMAIN593</td></tr>
 <tr>
-<td>$3e85</td><td>16</td><td>skip</td></tr>
+<td>$573d</td><td colspan="2" align="right">53</td><td>skip</td></tr>
 <tr>
-<td>$3e95</td><td>15</td><td>LMAIN378</td></tr>
+<td>$5772</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$3ea4</td><td>34</td><td>skip</td></tr>
+<td>$577a</td><td colspan="2" align="right">15</td><td>LMAIN594</td></tr>
 <tr>
-<td>$3ec6</td><td>17</td><td>skip</td></tr>
+<td>$5789</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3ed7</td><td>67</td><td>skip</td></tr>
+<td>$5795</td><td colspan="2" align="right">5</td><td>LMAIN595</td></tr>
 <tr>
-<td>$3f1a</td><td>24</td><td>skip</td></tr>
+<td>$579a</td><td colspan="2" align="right">15</td><td>LMAIN597</td></tr>
 <tr>
-<td>$3f32</td><td>15</td><td>LMAIN381</td></tr>
+<td>$57a9</td><td colspan="2" align="right">32</td><td>skip</td></tr>
 <tr>
-<td>$3f41</td><td>34</td><td>skip</td></tr>
+<td>$57c9</td><td colspan="2" align="right">15</td><td>LMAIN598</td></tr>
 <tr>
-<td>$3f63</td><td>8</td><td>skip</td></tr>
+<td>$57d8</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$3f6b</td><td>15</td><td>skip</td></tr>
+<td>$57e4</td><td colspan="2" align="right">5</td><td>LMAIN599</td></tr>
 <tr>
-<td>$3f7a</td><td>67</td><td>skip</td></tr>
+<td>$57e9</td><td colspan="2" align="right">15</td><td>LMAIN601</td></tr>
 <tr>
-<td>$3fbd</td><td>16</td><td>skip</td></tr>
+<td>$57f8</td><td colspan="2" align="right">33</td><td>skip</td></tr>
 <tr>
-<td>$3fcd</td><td>15</td><td>LMAIN386</td></tr>
+<td>$5819</td><td align="right">231</td><td align="right">91</td><td>_incdefatt</td></tr>
 <tr>
-<td>$3fdc</td><td>34</td><td>skip</td></tr>
+<td>$5874</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$3ffe</td><td>8</td><td>skip</td></tr>
+<td>$588c</td><td colspan="2" align="right">91</td><td>LMAIN602</td></tr>
 <tr>
-<td>$4006</td><td>15</td><td>skip</td></tr>
+<td>$58e7</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$4015</td><td>67</td><td>skip</td></tr>
+<td>$58ff</td><td colspan="2" align="right">1</td><td>LMAIN604</td></tr>
 <tr>
-<td>$4058</td><td>24</td><td>skip</td></tr>
+<td><b>$5900</b></td><td align="right">53</td><td align="right">46</td><td>_inckingdefender</td></tr>
 <tr>
-<td>$4070</td><td>15</td><td>LMAIN388</td></tr>
+<td>$592e</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$407f</td><td>26</td><td>skip</td></tr>
+<td>$5935</td><td align="right">53</td><td align="right">46</td><td>_inckingattacker</td></tr>
 <tr>
-<td>$4099</td><td>8</td><td>skip</td></tr>
+<td>$5963</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$40a1</td><td>17</td><td>skip</td></tr>
+<td>$596a</td><td align="right">379</td><td align="right">94</td><td>_canbetaken</td></tr>
 <tr>
-<td>$40b2</td><td>67</td><td>skip</td></tr>
+<td>$59c8</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$40f5</td><td>16</td><td>skip</td></tr>
+<td>$5a0b</td><td colspan="2" align="right">22</td><td>skip</td></tr>
 <tr>
-<td>$4105</td><td>15</td><td>LMAIN392</td></tr>
+<td>$5a21</td><td colspan="2" align="right">195</td><td>LMAIN606</td></tr>
 <tr>
-<td>$4114</td><td>34</td><td>skip</td></tr>
+<td>$5ae4</td><td colspan="2" align="right">1</td><td>LMAIN608</td></tr>
 <tr>
-<td>$4136</td><td>8</td><td>skip</td></tr>
+<td>$5ae5</td><td align="right">1419</td><td align="right">152</td><td>_cantakepiece</td></tr>
 <tr>
-<td>$413e</td><td>17</td><td>skip</td></tr>
+<td>$5b7d</td><td colspan="2" align="right">54</td><td>skip</td></tr>
 <tr>
-<td>$414f</td><td>67</td><td>skip</td></tr>
+<td>$5bb3</td><td colspan="2" align="right">5</td><td>LMAIN612</td></tr>
 <tr>
-<td>$4192</td><td>24</td><td>skip</td></tr>
+<td>$5bb8</td><td colspan="2" align="right">40</td><td>LMAIN610</td></tr>
 <tr>
-<td>$41aa</td><td>15</td><td>LMAIN394</td></tr>
+<td>$5be0</td><td colspan="2" align="right">79</td><td>LMAIN613</td></tr>
 <tr>
-<td>$41b9</td><td>34</td><td>skip</td></tr>
+<td>$5c2f</td><td colspan="2" align="right">173</td><td>LMAIN615</td></tr>
 <tr>
-<td>$41db</td><td>26</td><td>skip</td></tr>
+<td>$5cdc</td><td colspan="2" align="right">185</td><td>LMAIN617, LMAIN619</td></tr>
 <tr>
-<td>$41f5</td><td>34</td><td>skip</td></tr>
+<td>$5d95</td><td colspan="2" align="right">187</td><td>skip</td></tr>
 <tr>
-<td>$4217</td><td>34</td><td>skip</td></tr>
+<td>$5e50</td><td colspan="2" align="right">113</td><td>skip</td></tr>
 <tr>
-<td>$4239</td><td>24</td><td>skip</td></tr>
+<td>$5ec1</td><td colspan="2" align="right">19</td><td>LMAIN628</td></tr>
 <tr>
-<td>$4251</td><td>15</td><td>LMAIN404</td></tr>
+<td>$5ed4</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$4260</td><td>34</td><td>skip</td></tr>
+<td>$5ed9</td><td colspan="2" align="right">91</td><td>LMAIN625</td></tr>
 <tr>
-<td>$4282</td><td>24</td><td>skip</td></tr>
+<td>$5f34</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$429a</td><td>15</td><td>LMAIN410</td></tr>
+<td>$5f44</td><td colspan="2" align="right">121</td><td>LMAIN621, LMAIN623, LMAIN629</td></tr>
 <tr>
-<td>$42a9</td><td>34</td><td>skip</td></tr>
+<td>$5fbd</td><td colspan="2" align="right">144</td><td>skip</td></tr>
 <tr>
-<td>$42cb</td><td>34</td><td>skip</td></tr>
+<td>$604d</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$42ed</td><td>24</td><td>skip</td></tr>
+<td>$6052</td><td colspan="2" align="right">23</td><td>LMAIN631, LMAIN633</td></tr>
 <tr>
-<td>$4305</td><td>15</td><td>LMAIN418</td></tr>
+<td>$6069</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$4314</td><td>34</td><td>skip</td></tr>
+<td>$6070</td><td align="right">224</td><td align="right">224</td><td>_takepiece</td></tr>
 <tr>
-<td>$4336</td><td>24</td><td>skip</td></tr>
+<td>$6150</td><td align="right">613</td><td align="right">15</td><td>_subarrows</td></tr>
 <tr>
-<td>$434e</td><td>15</td><td>LMAIN424</td></tr>
+<td>$615f</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$435d</td><td>24</td><td>skip</td></tr>
+<td>$6170</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$4375</td><td>1</td><td>LMAIN428</td></tr>
+<td>$61b3</td><td colspan="2" align="right">61</td><td>skip</td></tr>
 <tr>
-<td>$4376</td><td>8</td><td>_drawplayers</td></tr>
+<td>$61f0</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$437e</td><td>8</td><td>LMAIN430</td></tr>
+<td>$6201</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$4386</td><td>91</td><td>LMAIN434</td></tr>
+<td>$6244</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$43e1</td><td>41</td><td>skip</td></tr>
+<td>$6266</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$440a</td><td>19</td><td>LMAIN435</td></tr>
+<td>$6277</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$441d</td><td>5</td><td>skip</td></tr>
+<td>$62ba</td><td colspan="2" align="right">21</td><td>skip</td></tr>
 <tr>
-<td>$4422</td><td>30</td><td>LMAIN437</td></tr>
+<td>$62cf</td><td colspan="2" align="right">91</td><td>LMAIN635, LMAIN637</td></tr>
 <tr>
-<td>$4440</td><td>19</td><td>LMAIN431</td></tr>
+<td>$632a</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$4453</td><td>5</td><td>skip</td></tr>
+<td>$634c</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$4458</td><td>31</td><td>LMAIN433</td></tr>
+<td>$635d</td><td colspan="2" align="right">87</td><td>skip</td></tr>
 <tr>
-<td>$4477</td><td>8</td><td>_drawtiles</td></tr>
+<td>$63b4</td><td colspan="2" align="right">1</td><td>LMAIN639</td></tr>
 <tr>
-<td>$447f</td><td>8</td><td>LMAIN440</td></tr>
+<td>$63b5</td><td align="right">586</td><td align="right">37</td><td>_subarrows2</td></tr>
 <tr>
-<td>$4487</td><td>121</td><td>LMAIN444</td></tr>
+<td>$63da</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td><b>$4500</b></td><td>5</td><td>LMAIN448</td></tr>
+<td>$63eb</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$4505</td><td>19</td><td>LMAIN445</td></tr>
+<td>$642e</td><td colspan="2" align="right">21</td><td>skip</td></tr>
 <tr>
-<td>$4518</td><td>5</td><td>skip</td></tr>
+<td>$6443</td><td colspan="2" align="right">45</td><td>LMAIN641</td></tr>
 <tr>
-<td>$451d</td><td>30</td><td>LMAIN447</td></tr>
+<td>$6470</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$453b</td><td>19</td><td>LMAIN441</td></tr>
+<td>$6481</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$454e</td><td>5</td><td>skip</td></tr>
+<td>$64c4</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$4553</td><td>31</td><td>LMAIN443</td></tr>
+<td>$64cc</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$4572</td><td>146</td><td>_drawboard</td></tr>
+<td>$64d2</td><td colspan="2" align="right">45</td><td>LMAIN643</td></tr>
 <tr>
-<td>$4604</td><td>8</td><td>_blinkcursor</td></tr>
+<td>$64ff</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$460c</td><td>50</td><td>LMAIN450</td></tr>
+<td>$6510</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$463e</td><td>19</td><td>LMAIN451</td></tr>
+<td>$6553</td><td colspan="2" align="right">21</td><td>skip</td></tr>
 <tr>
-<td>$4651</td><td>5</td><td>skip</td></tr>
+<td>$6568</td><td colspan="2" align="right">45</td><td>LMAIN645</td></tr>
 <tr>
-<td>$4656</td><td>31</td><td>LMAIN453</td></tr>
+<td>$6595</td><td colspan="2" align="right">17</td><td>skip</td></tr>
 <tr>
-<td>$4675</td><td>15</td><td>_flashscreen</td></tr>
+<td>$65a6</td><td colspan="2" align="right">67</td><td>skip</td></tr>
 <tr>
-<td>$4684</td><td>48</td><td>skip</td></tr>
+<td>$65e9</td><td colspan="2" align="right">21</td><td>skip</td></tr>
 <tr>
-<td>$46b4</td><td>19</td><td>skip</td></tr>
+<td>$65fe</td><td colspan="2" align="right">1</td><td>LMAIN647</td></tr>
 <tr>
-<td>$46c7</td><td>75</td><td>_playerturn</td></tr>
+<td>$65ff</td><td align="right">102</td><td align="right">19</td><td>_inccantake</td></tr>
 <tr>
-<td>$4712</td><td>49</td><td>skip</td></tr>
+<td>$6612</td><td colspan="2" align="right">44</td><td>skip</td></tr>
 <tr>
-<td>$4743</td><td>27</td><td>LMAIN454</td></tr>
+<td>$663e</td><td colspan="2" align="right">38</td><td>skip</td></tr>
 <tr>
-<td>$475e</td><td>13</td><td>LMAIN455</td></tr>
+<td>$6664</td><td colspan="2" align="right">1</td><td>LMAIN649</td></tr>
 <tr>
-<td>$476b</td><td>78</td><td>LMAIN460</td></tr>
+<td>$6665</td><td align="right">29</td><td align="right">15</td><td>_incroute</td></tr>
 <tr>
-<td>$47b9</td><td>46</td><td>LMAIN463</td></tr>
+<td>$6674</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$47e7</td><td>19</td><td>LMAIN467</td></tr>
+<td>$667c</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$47fa</td><td>34</td><td>skip</td></tr>
+<td>$6682</td><td align="right">31</td><td align="right">15</td><td>_decroute</td></tr>
 <tr>
-<td>$481c</td><td>17</td><td>skip</td></tr>
+<td>$6691</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$482d</td><td>67</td><td>skip</td></tr>
+<td>$6699</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$4870</td><td>23</td><td>skip</td></tr>
+<td>$66a1</td><td align="right">95</td><td align="right">95</td><td>_drawtile</td></tr>
 <tr>
-<td>$4887</td><td>15</td><td>LMAIN468</td></tr>
+<td><b>$6700</b></td><td align="right">133</td><td align="right">18</td><td>_explodetile</td></tr>
 <tr>
-<td>$4896</td><td>34</td><td>skip</td></tr>
+<td>$6712</td><td colspan="2" align="right">55</td><td>LMAIN651</td></tr>
 <tr>
-<td>$48b8</td><td>17</td><td>skip</td></tr>
+<td>$6749</td><td colspan="2" align="right">5</td><td>LMAIN655</td></tr>
 <tr>
-<td>$48c9</td><td>67</td><td>skip</td></tr>
+<td>$674e</td><td colspan="2" align="right">19</td><td>LMAIN652</td></tr>
 <tr>
-<td>$490c</td><td>36</td><td>skip</td></tr>
+<td>$6761</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$4930</td><td>4</td><td>LMAIN472</td></tr>
+<td>$6766</td><td colspan="2" align="right">31</td><td>LMAIN654</td></tr>
 <tr>
-<td>$4934</td><td>41</td><td>LMAIN470</td></tr>
+<td>$6785</td><td align="right">376</td><td align="right">136</td><td>_tileloop</td></tr>
 <tr>
-<td>$495d</td><td>63</td><td>skip</td></tr>
+<td>$680d</td><td colspan="2" align="right">48</td><td>LMAIN657</td></tr>
 <tr>
-<td>$499c</td><td>17</td><td>LMAIN475</td></tr>
+<td>$683d</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$49ad</td><td>10</td><td>LMAIN473</td></tr>
+<td>$684d</td><td colspan="2" align="right">136</td><td>skip</td></tr>
 <tr>
-<td>$49b7</td><td>15</td><td>LMAIN474</td></tr>
+<td>$68d5</td><td colspan="2" align="right">5</td><td>LMAIN658</td></tr>
 <tr>
-<td>$49c6</td><td>122</td><td>skip</td></tr>
+<td>$68da</td><td colspan="2" align="right">15</td><td>LMAIN660</td></tr>
 <tr>
-<td>$4a40</td><td>58</td><td>skip</td></tr>
+<td>$68e9</td><td colspan="2" align="right">20</td><td>skip</td></tr>
 <tr>
-<td>$4a7a</td><td>15</td><td>LMAIN483</td></tr>
+<td>$68fd</td><td align="right">312</td><td align="right">91</td><td>_drawpiece</td></tr>
 <tr>
-<td>$4a89</td><td>17</td><td>skip</td></tr>
+<td>$6958</td><td colspan="2" align="right">68</td><td>skip</td></tr>
 <tr>
-<td>$4a9a</td><td>33</td><td>skip</td></tr>
+<td>$699c</td><td colspan="2" align="right">137</td><td>LMAIN661</td></tr>
 <tr>
-<td>$4abb</td><td>23</td><td>skip</td></tr>
+<td>$6a25</td><td colspan="2" align="right">16</td><td>LMAIN663</td></tr>
 <tr>
-<td>$4ad2</td><td>15</td><td>LMAIN486</td></tr>
+<td>$6a35</td><td align="right">270</td><td align="right">160</td><td>_drawarrow</td></tr>
 <tr>
-<td>$4ae1</td><td>17</td><td>skip</td></tr>
+<td>$6ad5</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$4af2</td><td>33</td><td>skip</td></tr>
+<td>$6add</td><td colspan="2" align="right">86</td><td>LMAIN665</td></tr>
 <tr>
-<td>$4b13</td><td>23</td><td>skip</td></tr>
+<td>$6b33</td><td colspan="2" align="right">16</td><td>LMAIN666</td></tr>
 <tr>
-<td>$4b2a</td><td>15</td><td>LMAIN488</td></tr>
+<td>$6b43</td><td align="right">649</td><td align="right">93</td><td>_surroundcount</td></tr>
 <tr>
-<td>$4b39</td><td>17</td><td>skip</td></tr>
+<td>$6ba0</td><td colspan="2" align="right">5</td><td>LMAIN673</td></tr>
 <tr>
-<td>$4b4a</td><td>34</td><td>skip</td></tr>
+<td>$6ba5</td><td colspan="2" align="right">59</td><td>LMAIN669</td></tr>
 <tr>
-<td>$4b6c</td><td>17</td><td>skip</td></tr>
+<td>$6be0</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$4b7d</td><td>23</td><td>skip</td></tr>
+<td>$6bec</td><td colspan="2" align="right">49</td><td>LMAIN674</td></tr>
 <tr>
-<td>$4b94</td><td>14</td><td>LMAIN490</td></tr>
+<td>$6c1d</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$4ba2</td><td>34</td><td>skip</td></tr>
+<td>$6c27</td><td colspan="2" align="right">59</td><td>LMAIN676</td></tr>
 <tr>
-<td>$4bc4</td><td>36</td><td>skip</td></tr>
+<td>$6c62</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$4be8</td><td>4</td><td>LMAIN494</td></tr>
+<td>$6c6e</td><td colspan="2" align="right">49</td><td>LMAIN678</td></tr>
 <tr>
-<td>$4bec</td><td>14</td><td>LMAIN492</td></tr>
+<td>$6c9f</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$4bfa</td><td>34</td><td>skip</td></tr>
+<td>$6ca9</td><td colspan="2" align="right">89</td><td>LMAIN680</td></tr>
 <tr>
-<td>$4c1c</td><td>36</td><td>skip</td></tr>
+<td>$6d02</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$4c40</td><td>4</td><td>LMAIN497</td></tr>
+<td>$6d0e</td><td colspan="2" align="right">49</td><td>LMAIN684</td></tr>
 <tr>
-<td>$4c44</td><td>14</td><td>LMAIN495</td></tr>
+<td>$6d3f</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$4c52</td><td>26</td><td>skip</td></tr>
+<td>$6d49</td><td colspan="2" align="right">59</td><td>LMAIN686</td></tr>
 <tr>
-<td>$4c6c</td><td>36</td><td>skip</td></tr>
+<td>$6d84</td><td colspan="2" align="right">12</td><td>skip</td></tr>
 <tr>
-<td>$4c90</td><td>4</td><td>LMAIN500</td></tr>
+<td>$6d90</td><td colspan="2" align="right">49</td><td>LMAIN688</td></tr>
 <tr>
-<td>$4c94</td><td>14</td><td>LMAIN498</td></tr>
+<td>$6dc1</td><td colspan="2" align="right">10</td><td>skip</td></tr>
 <tr>
-<td>$4ca2</td><td>26</td><td>skip</td></tr>
+<td>$6dcb</td><td colspan="2" align="right">1</td><td>LMAIN682, LMAIN690</td></tr>
 <tr>
-<td>$4cbc</td><td>36</td><td>skip</td></tr>
+<td>$6dcc</td><td align="right">25</td><td align="right">19</td><td>_incsurround</td></tr>
 <tr>
-<td>$4ce0</td><td>4</td><td>LMAIN503</td></tr>
+<td>$6ddf</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$4ce4</td><td>14</td><td>LMAIN501</td></tr>
+<td>$6de5</td><td align="right">78</td><td align="right">18</td><td>_pause</td></tr>
 <tr>
-<td>$4cf2</td><td>29</td><td>skip</td></tr>
+<td>$6df7</td><td colspan="2" align="right">14</td><td>LMAIN692, LMAIN693</td></tr>
 <tr>
-<td>$4d0f</td><td>14</td><td>LMAIN504</td></tr>
+<td>$6e05</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$4d1d</td><td>29</td><td>skip</td></tr>
+<td>$6e0d</td><td colspan="2" align="right">38</td><td>LMAIN695</td></tr>
 <tr>
-<td>$4d3a</td><td>14</td><td>LMAIN506</td></tr>
+<td>$6e33</td><td align="right">25</td><td align="right">19</td><td>_incpoints</td></tr>
 <tr>
-<td>$4d48</td><td>15</td><td>LMAIN484</td></tr>
+<td>$6e46</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$4d57</td><td>36</td><td>skip</td></tr>
+<td>$6e4c</td><td align="right">54</td><td align="right">19</td><td>_decpoints</td></tr>
 <tr>
-<td>$4d7b</td><td>15</td><td>LMAIN508</td></tr>
+<td>$6e5f</td><td colspan="2" align="right">34</td><td>skip</td></tr>
 <tr>
-<td>$4d8a</td><td>98</td><td>skip</td></tr>
+<td>$6e81</td><td colspan="2" align="right">1</td><td>LMAIN696</td></tr>
 <tr>
-<td>$4dec</td><td>20</td><td>skip</td></tr>
+<td>$6e82</td><td align="right">6</td><td align="right">6</td><td>_setpoints</td></tr>
 <tr>
-<td><b>$4e00</b></td><td>15</td><td>LMAIN509</td></tr>
+<td>$6e88</td><td align="right">32</td><td align="right">32</td><td>_doublepoints</td></tr>
 <tr>
-<td>$4e0f</td><td>48</td><td>skip</td></tr>
+<td>$6ea8</td><td align="right">68</td><td align="right">68</td><td>_surroundpoints</td></tr>
 <tr>
-<td>$4e3f</td><td>25</td><td>skip</td></tr>
+<td>$6eec</td><td align="right">29</td><td align="right">15</td><td>_inccounter</td></tr>
 <tr>
-<td>$4e58</td><td>17</td><td>skip</td></tr>
+<td>$6efb</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$4e69</td><td>34</td><td>skip</td></tr>
+<td>$6f03</td><td colspan="2" align="right">6</td><td>skip</td></tr>
 <tr>
-<td>$4e8b</td><td>17</td><td>skip</td></tr>
+<td>$6f09</td><td align="right">6</td><td align="right">6</td><td>_zerocounter</td></tr>
 <tr>
-<td>$4e9c</td><td>27</td><td>skip</td></tr>
+<td>$6f0f</td><td align="right">887</td><td align="right">91</td><td>_subcanbetaken2</td></tr>
 <tr>
-<td>$4eb7</td><td>9</td><td>LMAIN513</td></tr>
+<td>$6f6a</td><td colspan="2" align="right">110</td><td>skip</td></tr>
 <tr>
-<td>$4ec0</td><td>26</td><td>LMAIN514</td></tr>
+<td>$6fd8</td><td colspan="2" align="right">53</td><td>skip</td></tr>
 <tr>
-<td>$4eda</td><td>14</td><td>LMAIN465</td></tr>
+<td>$700d</td><td colspan="2" align="right">19</td><td>skip</td></tr>
 <tr>
-<td>$4ee8</td><td>14</td><td>skip</td></tr>
+<td>$7020</td><td colspan="2" align="right">91</td><td>LMAIN702</td></tr>
 <tr>
-<td>$4ef6</td><td>34</td><td>_movepiece</td></tr>
+<td>$707b</td><td colspan="2" align="right">76</td><td>skip</td></tr>
 <tr>
-<td>$4f18</td><td>17</td><td>skip</td></tr>
+<td>$70c7</td><td colspan="2" align="right">123</td><td>LMAIN705</td></tr>
 <tr>
-<td>$4f29</td><td>87</td><td>skip</td></tr>
+<td>$7142</td><td colspan="2" align="right">64</td><td>skip</td></tr>
 <tr>
-<td>$4f80</td><td>22</td><td>skip</td></tr>
+<td>$7182</td><td colspan="2" align="right">107</td><td>skip</td></tr>
 <tr>
-<td>$4f96</td><td>113</td><td>skip</td></tr>
+<td>$71ed</td><td colspan="2" align="right">88</td><td>LMAIN708</td></tr>
 <tr>
-<td>$5007</td><td>17</td><td>skip</td></tr>
+<td>$7245</td><td colspan="2" align="right">64</td><td>skip</td></tr>
 <tr>
-<td>$5018</td><td>72</td><td>skip</td></tr>
+<td>$7285</td><td colspan="2" align="right">1</td><td>LMAIN698, LMAIN700, LMAIN703, LMAIN706, LMAIN710</td></tr>
 <tr>
-<td>$5060</td><td>17</td><td>skip</td></tr>
+<td>$7286</td><td align="right">109</td><td align="right">109</td><td>_inctarget</td></tr>
 <tr>
-<td>$5071</td><td>77</td><td>skip</td></tr>
+<td>$72f3</td><td align="right">227</td><td align="right">91</td><td>_surroundcheck</td></tr>
 <tr>
-<td>$50be</td><td>22</td><td>skip</td></tr>
+<td>$734e</td><td colspan="2" align="right">24</td><td>skip</td></tr>
 <tr>
-<td>$50d4</td><td>27</td><td>skip</td></tr>
+<td>$7366</td><td colspan="2" align="right">111</td><td>LMAIN712</td></tr>
 <tr>
-<td>$50ef</td><td>39</td><td>skip</td></tr>
+<td>$73d5</td><td colspan="2" align="right">1</td><td>LMAIN714</td></tr>
 <tr>
-<td>$5116</td><td>15</td><td>LMAIN515</td></tr>
+<td>$73d6</td><td align="right">158</td><td align="right">13</td><td>_calctakeweight</td></tr>
 <tr>
-<td>$5125</td><td>31</td><td>skip</td></tr>
+<td>$73e3</td><td colspan="2" align="right">90</td><td>LMAIN716</td></tr>
 <tr>
-<td>$5144</td><td>25</td><td>LMAIN517</td></tr>
+<td>$743d</td><td colspan="2" align="right">19</td><td>LMAIN717, LMAIN720</td></tr>
 <tr>
-<td>$515d</td><td>43</td><td>skip</td></tr>
+<td>$7450</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$5188</td><td>26</td><td>skip</td></tr>
+<td>$7455</td><td colspan="2" align="right">31</td><td>LMAIN719</td></tr>
 <tr>
-<td>$51a2</td><td>8</td><td>skip</td></tr>
+<td>$7474</td><td align="right">238</td><td align="right">91</td><td>_enemyzero</td></tr>
 <tr>
-<td>$51aa</td><td>12</td><td>skip</td></tr>
+<td>$74cf</td><td colspan="2" align="right">146</td><td>skip</td></tr>
 <tr>
-<td>$51b6</td><td>15</td><td>LMAIN521</td></tr>
+<td>$7561</td><td colspan="2" align="right">1</td><td>LMAIN722</td></tr>
 <tr>
-<td>$51c5</td><td>43</td><td>skip</td></tr>
+<td>$7562</td><td align="right">514</td><td align="right">48</td><td>_checkroute</td></tr>
 <tr>
-<td>$51f0</td><td>26</td><td>skip</td></tr>
+<td>$7592</td><td colspan="2" align="right">91</td><td>LMAIN726</td></tr>
 <tr>
-<td>$520a</td><td>8</td><td>skip</td></tr>
+<td>$75ed</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$5212</td><td>10</td><td>skip</td></tr>
+<td>$761c</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$521c</td><td>25</td><td>LMAIN525</td></tr>
+<td>$7621</td><td colspan="2" align="right">19</td><td>LMAIN727, LMAIN730</td></tr>
 <tr>
-<td>$5235</td><td>43</td><td>skip</td></tr>
+<td>$7634</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$5260</td><td>26</td><td>skip</td></tr>
+<td>$7639</td><td colspan="2" align="right">46</td><td>LMAIN729</td></tr>
 <tr>
-<td>$527a</td><td>8</td><td>skip</td></tr>
+<td>$7667</td><td colspan="2" align="right">13</td><td>LMAIN724</td></tr>
 <tr>
-<td>$5282</td><td>10</td><td>skip</td></tr>
+<td>$7674</td><td colspan="2" align="right">91</td><td>LMAIN732</td></tr>
 <tr>
-<td>$528c</td><td>15</td><td>LMAIN529</td></tr>
+<td>$76cf</td><td colspan="2" align="right">47</td><td>skip</td></tr>
 <tr>
-<td>$529b</td><td>43</td><td>skip</td></tr>
+<td>$76fe</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$52c6</td><td>26</td><td>skip</td></tr>
+<td>$7703</td><td colspan="2" align="right">19</td><td>LMAIN733, LMAIN736</td></tr>
 <tr>
-<td>$52e0</td><td>8</td><td>skip</td></tr>
+<td>$7716</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$52e8</td><td>12</td><td>skip</td></tr>
+<td>$771b</td><td colspan="2" align="right">43</td><td>LMAIN735</td></tr>
 <tr>
-<td>$52f4</td><td>28</td><td>LMAIN533</td></tr>
+<td>$7746</td><td colspan="2" align="right">23</td><td>LMAIN725</td></tr>
 <tr>
-<td>$5310</td><td>15</td><td>LMAIN535</td></tr>
+<td>$775d</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$531f</td><td>80</td><td>skip</td></tr>
+<td>$7764</td><td align="right">427</td><td align="right">164</td><td>_cantakeadjust</td></tr>
 <tr>
-<td>$536f</td><td>34</td><td>skip</td></tr>
+<td>$7808</td><td colspan="2" align="right">5</td><td>LMAIN742</td></tr>
 <tr>
-<td>$5391</td><td>8</td><td>skip</td></tr>
+<td>$780d</td><td colspan="2" align="right">99</td><td>LMAIN740, LMAIN743</td></tr>
 <tr>
-<td>$5399</td><td>5</td><td>skip</td></tr>
+<td>$7870</td><td colspan="2" align="right">5</td><td>LMAIN746</td></tr>
 <tr>
-<td>$539e</td><td>19</td><td>LMAIN536</td></tr>
+<td>$7875</td><td colspan="2" align="right">15</td><td>LMAIN744, LMAIN747</td></tr>
 <tr>
-<td>$53b1</td><td>5</td><td>skip</td></tr>
+<td>$7884</td><td colspan="2" align="right">123</td><td>skip</td></tr>
 <tr>
-<td>$53b6</td><td>28</td><td>LMAIN538</td></tr>
+<td>$78ff</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$53d2</td><td>34</td><td>skip</td></tr>
+<td>$7907</td><td colspan="2" align="right">7</td><td>skip</td></tr>
 <tr>
-<td>$53f4</td><td>8</td><td>skip</td></tr>
+<td>$790e</td><td colspan="2" align="right">1</td><td>LMAIN738, LMAIN748, LMAIN750</td></tr>
 <tr>
-<td>$53fc</td><td>8</td><td>skip</td></tr>
+<td>$790f</td><td align="right">973</td><td align="right">315</td><td>_updatetarget</td></tr>
 <tr>
-<td>$5404</td><td>15</td><td>LMAIN541</td></tr>
+<td>$7a4a</td><td colspan="2" align="right">16</td><td>skip</td></tr>
 <tr>
-<td>$5413</td><td>80</td><td>skip</td></tr>
+<td>$7a5a</td><td colspan="2" align="right">91</td><td>LMAIN760</td></tr>
 <tr>
-<td>$5463</td><td>34</td><td>skip</td></tr>
+<td>$7ab5</td><td colspan="2" align="right">104</td><td>skip</td></tr>
 <tr>
-<td>$5485</td><td>8</td><td>skip</td></tr>
+<td>$7b1d</td><td colspan="2" align="right">5</td><td>LMAIN768</td></tr>
 <tr>
-<td>$548d</td><td>5</td><td>skip</td></tr>
+<td>$7b22</td><td colspan="2" align="right">91</td><td>LMAIN762</td></tr>
 <tr>
-<td>$5492</td><td>19</td><td>LMAIN542</td></tr>
+<td>$7b7d</td><td colspan="2" align="right">53</td><td>skip</td></tr>
 <tr>
-<td>$54a5</td><td>5</td><td>skip</td></tr>
+<td>$7bb2</td><td colspan="2" align="right">108</td><td>LMAIN772</td></tr>
 <tr>
-<td>$54aa</td><td>38</td><td>LMAIN544</td></tr>
+<td>$7c1e</td><td colspan="2" align="right">25</td><td>LMAIN769</td></tr>
 <tr>
-<td>$54d0</td><td>28</td><td>LMAIN547</td></tr>
+<td>$7c37</td><td colspan="2" align="right">164</td><td>skip</td></tr>
 <tr>
-<td>$54ec</td><td>67</td><td>skip</td></tr>
+<td>$7cdb</td><td colspan="2" align="right">1</td><td>LMAIN758</td></tr>
 <tr>
-<td>$552f</td><td>34</td><td>skip</td></tr>
+<td>$7cdc</td><td align="right">173</td><td align="right">18</td><td>_calccantake</td></tr>
 <tr>
-<td>$5551</td><td>8</td><td>skip</td></tr>
+<td>$7cee</td><td colspan="2" align="right">50</td><td>LMAIN773</td></tr>
 <tr>
-<td>$5559</td><td>5</td><td>skip</td></tr>
+<td>$7d20</td><td colspan="2" align="right">50</td><td>LMAIN777</td></tr>
 <tr>
-<td>$555e</td><td>19</td><td>LMAIN548</td></tr>
+<td>$7d52</td><td colspan="2" align="right">19</td><td>LMAIN774, LMAIN779</td></tr>
 <tr>
-<td>$5571</td><td>5</td><td>skip</td></tr>
+<td>$7d65</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$5576</td><td>28</td><td>LMAIN550</td></tr>
+<td>$7d6a</td><td colspan="2" align="right">31</td><td>LMAIN776</td></tr>
 <tr>
-<td>$5592</td><td>34</td><td>skip</td></tr>
+<td>$7d89</td><td align="right">643</td><td align="right">55</td><td>_printborder</td></tr>
 <tr>
-<td>$55b4</td><td>8</td><td>skip</td></tr>
+<td>$7dc0</td><td colspan="2" align="right">13</td><td>LMAIN781</td></tr>
 <tr>
-<td>$55bc</td><td>8</td><td>skip</td></tr>
+<td>$7dcd</td><td colspan="2" align="right">20</td><td>LMAIN785</td></tr>
 <tr>
-<td>$55c4</td><td>28</td><td>LMAIN553</td></tr>
+<td>$7de1</td><td colspan="2" align="right">21</td><td>skip</td></tr>
 <tr>
-<td>$55e0</td><td>67</td><td>skip</td></tr>
+<td>$7df6</td><td colspan="2" align="right">13</td><td>LMAIN789</td></tr>
 <tr>
-<td>$5623</td><td>34</td><td>skip</td></tr>
+<td>$7e03</td><td colspan="2" align="right">134</td><td>LMAIN791</td></tr>
 <tr>
-<td>$5645</td><td>8</td><td>skip</td></tr>
+<td>$7e89</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$564d</td><td>5</td><td>skip</td></tr>
+<td>$7e8e</td><td colspan="2" align="right">45</td><td>LMAIN795</td></tr>
 <tr>
-<td>$5652</td><td>19</td><td>LMAIN554</td></tr>
+<td>$7ebb</td><td colspan="2" align="right">19</td><td>LMAIN797</td></tr>
 <tr>
-<td>$5665</td><td>5</td><td>skip</td></tr>
+<td>$7ece</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$566a</td><td>33</td><td>LMAIN556</td></tr>
+<td>$7ed3</td><td colspan="2" align="right">19</td><td>LMAIN792</td></tr>
 <tr>
-<td>$568b</td><td>15</td><td>_subcanbetaken</td></tr>
+<td>$7ee6</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$569a</td><td>27</td><td>skip</td></tr>
+<td>$7eeb</td><td colspan="2" align="right">62</td><td>LMAIN794</td></tr>
 <tr>
-<td>$56b5</td><td>63</td><td>skip</td></tr>
+<td>$7f29</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$56f4</td><td>15</td><td>_canbetaken</td></tr>
+<td>$7f2e</td><td colspan="2" align="right">19</td><td>LMAIN786</td></tr>
 <tr>
-<td>$5703</td><td>51</td><td>skip</td></tr>
+<td>$7f41</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$5736</td><td>17</td><td>skip</td></tr>
+<td>$7f46</td><td colspan="2" align="right">96</td><td>LMAIN788</td></tr>
 <tr>
-<td>$5747</td><td>67</td><td>skip</td></tr>
+<td>$7fa6</td><td colspan="2" align="right">37</td><td>skip</td></tr>
 <tr>
-<td>$578a</td><td>61</td><td>skip</td></tr>
+<td>$7fcb</td><td colspan="2" align="right">15</td><td>LMAIN782, LMAIN799</td></tr>
 <tr>
-<td>$57c7</td><td>19</td><td>skip</td></tr>
+<td>$7fda</td><td colspan="2" align="right">8</td><td>skip</td></tr>
 <tr>
-<td>$57da</td><td>15</td><td>LMAIN565</td></tr>
+<td>$7fe2</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$57e9</td><td>17</td><td>skip</td></tr>
+<td>$7fe7</td><td colspan="2" align="right">15</td><td>LMAIN784</td></tr>
 <tr>
-<td>$57fa</td><td>67</td><td>skip</td></tr>
+<td>$7ff6</td><td colspan="2" align="right">22</td><td>skip</td></tr>
 <tr>
-<td>$583d</td><td>8</td><td>skip</td></tr>
+<td>$800c</td><td align="right">261</td><td align="right">8</td><td>_fliprune</td></tr>
 <tr>
-<td>$5845</td><td>16</td><td>skip</td></tr>
+<td>$8014</td><td colspan="2" align="right">8</td><td>LMAIN801</td></tr>
 <tr>
-<td>$5855</td><td>15</td><td>LMAIN566</td></tr>
+<td>$801c</td><td colspan="2" align="right">136</td><td>LMAIN805</td></tr>
 <tr>
-<td>$5864</td><td>17</td><td>skip</td></tr>
+<td>$80a4</td><td colspan="2" align="right">19</td><td>LMAIN806, LMAIN809</td></tr>
 <tr>
-<td>$5875</td><td>67</td><td>skip</td></tr>
+<td>$80b7</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$58b8</td><td>61</td><td>skip</td></tr>
+<td>$80bc</td><td colspan="2" align="right">30</td><td>LMAIN808</td></tr>
 <tr>
-<td>$58f5</td><td>19</td><td>skip</td></tr>
+<td>$80da</td><td colspan="2" align="right">19</td><td>LMAIN802</td></tr>
 <tr>
-<td>$5908</td><td>15</td><td>LMAIN573</td></tr>
+<td>$80ed</td><td colspan="2" align="right">5</td><td>skip</td></tr>
 <tr>
-<td>$5917</td><td>17</td><td>skip</td></tr>
+<td>$80f2</td><td colspan="2" align="right">31</td><td>LMAIN804</td></tr>
 <tr>
-<td>$5928</td><td>67</td><td>skip</td></tr>
+<td>$8111</td><td align="right">1</td><td align="right">1</td><td>_xplayers</td></tr>
 <tr>
-<td>$596b</td><td>29</td><td>skip</td></tr>
+<td>$8112</td><td align="right">4</td><td align="right">4</td><td>_compass</td></tr>
 <tr>
-<td>$5988</td><td>15</td><td>LMAIN574</td></tr>
+<td>$8116</td><td align="right">1</td><td align="right">1</td><td>_turn</td></tr>
 <tr>
-<td>$5997</td><td>51</td><td>skip</td></tr>
+<td>$8117</td><td align="right">1</td><td align="right">1</td><td>_cursormovetype</td></tr>
 <tr>
-<td>$59ca</td><td>8</td><td>skip</td></tr>
+<td>$8118</td><td align="right">1</td><td align="right">1</td><td>_canselect</td></tr>
 <tr>
-<td>$59d2</td><td>15</td><td>skip</td></tr>
+<td>$8119</td><td align="right">1</td><td align="right">1</td><td>_xkey</td></tr>
 <tr>
-<td>$59e1</td><td>67</td><td>skip</td></tr>
+<td>$811a</td><td align="right">1</td><td align="right">1</td><td>_p2</td></tr>
 <tr>
-<td>$5a24</td><td>36</td><td>skip</td></tr>
+<td>$811b</td><td align="right">1</td><td align="right">1</td><td>_p1</td></tr>
 <tr>
-<td>$5a48</td><td>15</td><td>LMAIN581</td></tr>
+<td>$811c</td><td align="right">1</td><td align="right">1</td><td>_take</td></tr>
 <tr>
-<td>$5a57</td><td>8</td><td>skip</td></tr>
+<td>$811d</td><td align="right">2</td><td align="right">2</td><td>_startpos</td></tr>
 <tr>
-<td>$5a5f</td><td>17</td><td>skip</td></tr>
+<td>$811f</td><td align="right">1</td><td align="right">1</td><td>_modeonevalid</td></tr>
 <tr>
-<td>$5a70</td><td>67</td><td>skip</td></tr>
+<td>$8120</td><td align="right">1</td><td align="right">1</td><td>_skipew</td></tr>
 <tr>
-<td>$5ab3</td><td>29</td><td>skip</td></tr>
+<td>$8121</td><td align="right">1</td><td align="right">1</td><td>_skipns</td></tr>
 <tr>
-<td>$5ad0</td><td>15</td><td>LMAIN582</td></tr>
+<td>$8122</td><td align="right">1</td><td align="right">1</td><td>_xptrew</td></tr>
 <tr>
-<td>$5adf</td><td>8</td><td>skip</td></tr>
+<td>$8123</td><td align="right">1</td><td align="right">1</td><td>_xptrns</td></tr>
 <tr>
-<td>$5ae7</td><td>17</td><td>skip</td></tr>
+<td>$8124</td><td align="right">1</td><td align="right">1</td><td>_multiple</td></tr>
 <tr>
-<td>$5af8</td><td>67</td><td>skip</td></tr>
+<td>$8125</td><td align="right">1</td><td align="right">1</td><td>_d</td></tr>
 <tr>
-<td>$5b3b</td><td>36</td><td>skip</td></tr>
+<td>$8126</td><td align="right">1</td><td align="right">1</td><td>_c</td></tr>
 <tr>
-<td>$5b5f</td><td>15</td><td>LMAIN586</td></tr>
+<td>$8127</td><td align="right">1</td><td align="right">1</td><td>_b</td></tr>
 <tr>
-<td>$5b6e</td><td>8</td><td>skip</td></tr>
+<td>$8128</td><td align="right">1</td><td align="right">1</td><td>_a</td></tr>
 <tr>
-<td>$5b76</td><td>15</td><td>skip</td></tr>
+<td>$8129</td><td align="right">1</td><td align="right">1</td><td>_z</td></tr>
 <tr>
-<td>$5b85</td><td>67</td><td>skip</td></tr>
+<td>$812a</td><td align="right">1</td><td align="right">1</td><td>_y</td></tr>
 <tr>
-<td>$5bc8</td><td>29</td><td>skip</td></tr>
+<td>$812b</td><td align="right">1</td><td align="right">1</td><td>_x</td></tr>
 <tr>
-<td>$5be5</td><td>1</td><td>LMAIN587</td></tr>
+<td>$812c</td><td align="right">1</td><td align="right">1</td><td>_targetew</td></tr>
 <tr>
-<td>$5be6</td><td>46</td><td>_cantakepiece</td></tr>
+<td>$812d</td><td align="right">1</td><td align="right">1</td><td>_targetns</td></tr>
 <tr>
-<td>$5c14</td><td>8</td><td>skip</td></tr>
+<td>$812e</td><td align="right">1</td><td align="right">1</td><td>_hightarget</td></tr>
 <tr>
-<td>$5c1c</td><td>21</td><td>skip</td></tr>
+<td>$812f</td><td align="right">1</td><td align="right">1</td><td>_canmovecursor</td></tr>
 <tr>
-<td>$5c31</td><td>52</td><td>skip</td></tr>
+<td>$8130</td><td align="right">1</td><td align="right">1</td><td>_destcol</td></tr>
 <tr>
-<td>$5c65</td><td>17</td><td>skip</td></tr>
+<td>$8131</td><td align="right">1</td><td align="right">1</td><td>_destrow</td></tr>
 <tr>
-<td>$5c76</td><td>77</td><td>skip</td></tr>
+<td>$8132</td><td align="right">1</td><td align="right">1</td><td>_startcol</td></tr>
 <tr>
-<td>$5cc3</td><td>24</td><td>skip</td></tr>
+<td>$8133</td><td align="right">1</td><td align="right">1</td><td>_startrow</td></tr>
 <tr>
-<td>$5cdb</td><td>15</td><td>LMAIN589</td></tr>
+<td>$8134</td><td align="right">1</td><td align="right">1</td><td>_pcheckew2</td></tr>
 <tr>
-<td>$5cea</td><td>31</td><td>skip</td></tr>
+<td>$8135</td><td align="right">1</td><td align="right">1</td><td>_pcheckew1</td></tr>
 <tr>
-<td>$5d09</td><td>15</td><td>LMAIN591</td></tr>
+<td>$8136</td><td align="right">1</td><td align="right">1</td><td>_pcheckns2</td></tr>
 <tr>
-<td>$5d18</td><td>34</td><td>skip</td></tr>
+<td>$8137</td><td align="right">1</td><td align="right">1</td><td>_pcheckns1</td></tr>
 <tr>
-<td>$5d3a</td><td>36</td><td>skip</td></tr>
+<td>$8138</td><td align="right">1</td><td align="right">1</td><td>_pacpointsb</td></tr>
 <tr>
-<td>$5d5e</td><td>15</td><td>LMAIN593</td></tr>
+<td>$8139</td><td align="right">1</td><td align="right">1</td><td>_pacpointsa</td></tr>
 <tr>
-<td>$5d6d</td><td>47</td><td>skip</td></tr>
+<td>$813a</td><td align="right">1</td><td align="right">1</td><td>_pacpointsy</td></tr>
 <tr>
-<td>$5d9c</td><td>51</td><td>skip</td></tr>
+<td>$813b</td><td align="right">1</td><td align="right">1</td><td>_pacpointsx</td></tr>
 <tr>
-<td>$5dcf</td><td>34</td><td>skip</td></tr>
+<td>$813c</td><td align="right">1</td><td align="right">1</td><td>_takeweight</td></tr>
 <tr>
-<td>$5df1</td><td>36</td><td>skip</td></tr>
+<td>$813d</td><td align="right">1</td><td align="right">1</td><td>_ezew1</td></tr>
 <tr>
-<td>$5e15</td><td>14</td><td>LMAIN597</td></tr>
+<td>$813e</td><td align="right">1</td><td align="right">1</td><td>_ezns1</td></tr>
 <tr>
-<td>$5e23</td><td>50</td><td>skip</td></tr>
+<td>$813f</td><td align="right">1</td><td align="right">1</td><td>_takene</td></tr>
 <tr>
-<td>$5e55</td><td>50</td><td>skip</td></tr>
+<td>$8140</td><td align="right">1</td><td align="right">1</td><td>_takend</td></tr>
 <tr>
-<td>$5e87</td><td>16</td><td>skip</td></tr>
+<td>$8141</td><td align="right">1</td><td align="right">1</td><td>_takenc</td></tr>
 <tr>
-<td>$5e97</td><td>67</td><td>skip</td></tr>
+<td>$8142</td><td align="right">1</td><td align="right">1</td><td>_takenb</td></tr>
 <tr>
-<td>$5eda</td><td>35</td><td>skip</td></tr>
+<td>$8143</td><td align="right">1</td><td align="right">1</td><td>_takena</td></tr>
 <tr>
-<td>$5efd</td><td>35</td><td>skip</td></tr>
+<td>$8144</td><td align="right">1</td><td align="right">1</td><td>_surew</td></tr>
 <tr>
-<td>$5f20</td><td>50</td><td>skip</td></tr>
+<td>$8145</td><td align="right">1</td><td align="right">1</td><td>_surns</td></tr>
 <tr>
-<td>$5f52</td><td>16</td><td>skip</td></tr>
+<td>$8146</td><td align="right">1</td><td align="right">1</td><td>_paclevel2</td></tr>
 <tr>
-<td>$5f62</td><td>67</td><td>skip</td></tr>
+<td>$8147</td><td align="right">1</td><td align="right">1</td><td>_paclevel1</td></tr>
 <tr>
-<td>$5fa5</td><td>18</td><td>skip</td></tr>
+<td>$8148</td><td align="right">1</td><td align="right">1</td><td>_takecol</td></tr>
 <tr>
-<td>$5fb7</td><td>35</td><td>skip</td></tr>
+<td>$8149</td><td align="right">1</td><td align="right">1</td><td>_takerow</td></tr>
 <tr>
-<td>$5fda</td><td>19</td><td>skip</td></tr>
+<td>$814a</td><td align="right">1</td><td align="right">1</td><td>_origorient</td></tr>
 <tr>
-<td>$5fed</td><td>14</td><td>LMAIN605</td></tr>
+<td>$814b</td><td align="right">1</td><td align="right">1</td><td>_uncounter</td></tr>
 <tr>
-<td>$5ffb</td><td>16</td><td>skip</td></tr>
+<td>$814c</td><td align="right">1</td><td align="right">1</td><td>_counter</td></tr>
 <tr>
-<td>$600b</td><td>67</td><td>skip</td></tr>
+<td>$814d</td><td align="right">1</td><td align="right">1</td><td>_points</td></tr>
 <tr>
-<td>$604e</td><td>35</td><td>skip</td></tr>
+<td>$814e</td><td align="right">2</td><td align="right">2</td><td>_ptr_graph</td></tr>
 <tr>
-<td>$6071</td><td>8</td><td>skip</td></tr>
+<td>$8150</td><td align="right">2</td><td align="right">2</td><td>_ptr_draw</td></tr>
 <tr>
-<td>$6079</td><td>6</td><td>skip</td></tr>
+<td>$8152</td><td align="right">2</td><td align="right">2</td><td>_pausetime</td></tr>
 <tr>
-<td>$607f</td><td>15</td><td>LMAIN603</td></tr>
+<td>$8154</td><td align="right">1</td><td align="right">1</td><td>_tiletodraw</td></tr>
 <tr>
-<td>$608e</td><td>33</td><td>skip</td></tr>
+<td>$8155</td><td align="right">1</td><td align="right">1</td><td>_col</td></tr>
 <tr>
-<td>$60af</td><td>16</td><td>skip</td></tr>
+<td>$8156</td><td align="right">1</td><td align="right">1</td><td>_row</td></tr>
 <tr>
-<td>$60bf</td><td>67</td><td>skip</td></tr>
+<td>$8157</td><td align="right">1</td><td align="right">1</td><td>_route</td></tr>
 <tr>
-<td>$6102</td><td>33</td><td>skip</td></tr>
+<td>$8158</td><td align="right">1</td><td align="right">1</td><td>_cantake</td></tr>
 <tr>
-<td>$6123</td><td>16</td><td>skip</td></tr>
+<td>$8159</td><td align="right">1</td><td align="right">1</td><td>_surrounded</td></tr>
 <tr>
-<td>$6133</td><td>98</td><td>skip</td></tr>
+<td>$815a</td><td align="right">4</td><td align="right">4</td><td>_kingdefender</td></tr>
 <tr>
-<td>$6195</td><td>8</td><td>skip</td></tr>
+<td>$815e</td><td align="right">4</td><td align="right">4</td><td>_kingattacker</td></tr>
 <tr>
-<td>$619d</td><td>6</td><td>skip</td></tr>
+<td>$8162</td><td align="right">1</td><td align="right">1</td><td>_kingew</td></tr>
 <tr>
-<td>$61a3</td><td>16</td><td>LMAIN608</td></tr>
+<td>$8163</td><td align="right">1</td><td align="right">1</td><td>_kingns</td></tr>
 <tr>
-<td>$61b3</td><td>9</td><td>skip</td></tr>
+<td>$8164</td><td align="right">1</td><td align="right">1</td><td>_gamestyle</td></tr>
 <tr>
-<td>$61bc</td><td>15</td><td>_takepiece</td></tr>
+<td>$8165</td><td align="right">1</td><td align="right">1</td><td>_game</td></tr>
 <tr>
-<td>$61cb</td><td>17</td><td>skip</td></tr>
+<td>$8166</td><td align="right">1</td><td align="right">1</td><td>_flashback</td></tr>
 <tr>
-<td>$61dc</td><td>72</td><td>skip</td></tr>
+<td>$8167</td><td align="right">1</td><td align="right">1</td><td>_flashcolor</td></tr>
 <tr>
-<td>$6224</td><td>22</td><td>skip</td></tr>
+<td>$8168</td><td align="right">1</td><td align="right">1</td><td>_tpew</td></tr>
 <tr>
-<td>$623a</td><td>120</td><td>skip</td></tr>
+<td>$8169</td><td align="right">1</td><td align="right">1</td><td>_tpns</td></tr>
 <tr>
-<td>$62b2</td><td>15</td><td>_subarrows</td></tr>
+<td>$816a</td><td align="right">1</td><td align="right">1</td><td>_tiletype</td></tr>
 <tr>
-<td>$62c1</td><td>17</td><td>skip</td></tr>
+<td>$816b</td><td align="right">1</td><td align="right">1</td><td>_orientation</td></tr>
 <tr>
-<td>$62d2</td><td>67</td><td>skip</td></tr>
+<td>$816c</td><td align="right">1</td><td align="right">1</td><td>_ocy</td></tr>
 <tr>
-<td>$6315</td><td>16</td><td>skip</td></tr>
+<td>$816d</td><td align="right">1</td><td align="right">1</td><td>_ocx</td></tr>
 <tr>
-<td>$6325</td><td>15</td><td>LMAIN610</td></tr>
+<td>$816e</td><td align="right">1</td><td align="right">1</td><td>_oew</td></tr>
 <tr>
-<td>$6334</td><td>17</td><td>skip</td></tr>
+<td>$816f</td><td align="right">1</td><td align="right">1</td><td>_ons</td></tr>
 <tr>
-<td>$6345</td><td>67</td><td>skip</td></tr>
+<td>$8170</td><td align="right">1</td><td align="right">1</td><td>_cursormode</td></tr>
 <tr>
-<td>$6388</td><td>34</td><td>skip</td></tr>
+<td>$8171</td><td align="right">1</td><td align="right">1</td><td>_mkey</td></tr>
 <tr>
-<td>$63aa</td><td>17</td><td>skip</td></tr>
+<td>$8172</td><td align="right">1</td><td align="right">1</td><td>_inversey</td></tr>
 <tr>
-<td>$63bb</td><td>87</td><td>skip</td></tr>
+<td>$8173</td><td align="right">1</td><td align="right">1</td><td>_inversex</td></tr>
 <tr>
-<td>$6412</td><td>1</td><td>LMAIN612</td></tr>
+<td>$8174</td><td align="right">1</td><td align="right">1</td><td>_cy</td></tr>
 <tr>
-<td>$6413</td><td>15</td><td>_subarrows2</td></tr>
+<td>$8175</td><td align="right">1</td><td align="right">1</td><td>_cx</td></tr>
 <tr>
-<td>$6422</td><td>26</td><td>skip</td></tr>
+<td>$8176</td><td align="right">1</td><td align="right">1</td><td>_ew</td></tr>
 <tr>
-<td>$643c</td><td>17</td><td>skip</td></tr>
+<td>$8177</td><td align="right">1</td><td align="right">1</td><td>_ns</td></tr>
 <tr>
-<td>$644d</td><td>67</td><td>skip</td></tr>
+<td>$8178</td><td align="right">1</td><td align="right">1</td><td>_piecetype</td></tr>
 <tr>
-<td>$6490</td><td>21</td><td>skip</td></tr>
+<td>$8179</td><td align="right">1</td><td align="right">1</td><td>_playertype</td></tr>
 <tr>
-<td>$64a5</td><td>15</td><td>LMAIN614</td></tr>
+<td>$817a</td><td align="right">423</td><td align="right">121</td><td>_players</td></tr>
 <tr>
-<td>$64b4</td><td>34</td><td>skip</td></tr>
+<td>$81f3</td><td colspan="2" align="right">52</td><td>LMAIN527</td></tr>
 <tr>
-<td>$64d6</td><td>17</td><td>skip</td></tr>
+<td>$8227</td><td colspan="2" align="right">9</td><td>LMAIN504</td></tr>
 <tr>
-<td>$64e7</td><td>67</td><td>skip</td></tr>
+<td>$8230</td><td colspan="2" align="right">7</td><td>LMAIN502</td></tr>
 <tr>
-<td>$652a</td><td>8</td><td>skip</td></tr>
+<td>$8237</td><td colspan="2" align="right">29</td><td>LMAIN332</td></tr>
 <tr>
-<td>$6532</td><td>6</td><td>skip</td></tr>
+<td>$8254</td><td colspan="2" align="right">20</td><td>LMAIN96</td></tr>
 <tr>
-<td>$6538</td><td>15</td><td>LMAIN616</td></tr>
+<td>$8268</td><td colspan="2" align="right">46</td><td>LMAIN92</td></tr>
 <tr>
-<td>$6547</td><td>34</td><td>skip</td></tr>
+<td>$8296</td><td colspan="2" align="right">41</td><td>LMAIN90</td></tr>
 <tr>
-<td>$6569</td><td>17</td><td>skip</td></tr>
+<td>$82bf</td><td colspan="2" align="right">24</td><td>LMAIN72</td></tr>
 <tr>
-<td>$657a</td><td>67</td><td>skip</td></tr>
+<td>$82d7</td><td colspan="2" align="right">8</td><td>mul16u</td></tr>
 <tr>
-<td>$65bd</td><td>21</td><td>skip</td></tr>
+<td>$82df</td><td colspan="2" align="right">27</td><td>mult1</td></tr>
 <tr>
-<td>$65d2</td><td>15</td><td>LMAIN618</td></tr>
+<td>$82fa</td><td colspan="2" align="right">8</td><td>mult2</td></tr>
 <tr>
-<td>$65e1</td><td>34</td><td>skip</td></tr>
+<td>$8302</td><td colspan="2" align="right">31</td><td>mul16i</td></tr>
 <tr>
-<td>$6603</td><td>17</td><td>skip</td></tr>
+<td>$8321</td><td align="right">12</td><td align="right">12</td><td>_getchar</td></tr>
 <tr>
-<td>$6614</td><td>67</td><td>skip</td></tr>
+<td>$832d</td><td align="right">19</td><td align="right">4</td><td>_putchar</td></tr>
 <tr>
-<td>$6657</td><td>21</td><td>skip</td></tr>
+<td>$8331</td><td colspan="2" align="right">11</td><td>putchar</td></tr>
 <tr>
-<td>$666c</td><td>1</td><td>LMAIN620</td></tr>
+<td>$833c</td><td colspan="2" align="right">4</td><td>putchar2</td></tr>
 <tr>
-<td>$666d</td><td>24</td><td>_inccantake</td></tr>
+<td>$8340</td><td align="right">33</td><td align="right">13</td><td>_puts</td></tr>
 <tr>
-<td>$6685</td><td>12</td><td>skip</td></tr>
+<td>$834d</td><td colspan="2" align="right">15</td><td>putsloop</td></tr>
 <tr>
-<td>$6691</td><td>21</td><td>skip</td></tr>
+<td>$835c</td><td colspan="2" align="right">5</td><td>endputs</td></tr>
 <tr>
-<td>$66a6</td><td>15</td><td>_incroute</td></tr>
+<td>$8361</td><td align="right">64</td><td align="right">11</td><td>_gets</td></tr>
 <tr>
-<td>$66b5</td><td>8</td><td>skip</td></tr>
+<td>$836c</td><td colspan="2" align="right">2</td><td>gets</td></tr>
 <tr>
-<td>$66bd</td><td>6</td><td>skip</td></tr>
+<td>$836e</td><td colspan="2" align="right">22</td><td>getsloop</td></tr>
 <tr>
-<td>$66c3</td><td>15</td><td>_decroute</td></tr>
+<td>$8384</td><td colspan="2" align="right">7</td><td>echochar</td></tr>
 <tr>
-<td>$66d2</td><td>8</td><td>skip</td></tr>
+<td>$838b</td><td colspan="2" align="right">8</td><td>backspace</td></tr>
 <tr>
-<td>$66da</td><td>8</td><td>skip</td></tr>
+<td>$8393</td><td colspan="2" align="right">14</td><td>endgets</td></tr>
 <tr>
-<td>$66e2</td><td>116</td><td>_drawtile</td></tr>
+<td>$83a1</td><td align="right">11</td><td align="right">11</td><td>_curset</td></tr>
 <tr>
-<td>$6756</td><td>24</td><td>_explodetile</td></tr>
+<td>$83ac</td><td align="right">11</td><td align="right">11</td><td>_curmov</td></tr>
 <tr>
-<td>$676e</td><td>54</td><td>LMAIN622</td></tr>
+<td>$83b7</td><td align="right">11</td><td align="right">11</td><td>_draw</td></tr>
 <tr>
-<td>$67a4</td><td>5</td><td>LMAIN626</td></tr>
+<td>$83c2</td><td align="right">11</td><td align="right">11</td><td>_hchar</td></tr>
 <tr>
-<td>$67a9</td><td>18</td><td>LMAIN623</td></tr>
+<td>$83cd</td><td align="right">11</td><td align="right">11</td><td>_fill</td></tr>
 <tr>
-<td>$67bb</td><td>4</td><td>skip</td></tr>
+<td>$83d8</td><td align="right">11</td><td align="right">11</td><td>_paper</td></tr>
 <tr>
-<td>$67bf</td><td>32</td><td>LMAIN625</td></tr>
+<td>$83e3</td><td align="right">11</td><td align="right">11</td><td>_ink</td></tr>
 <tr>
-<td>$67df</td><td>136</td><td>_tileloop</td></tr>
+<td>$83ee</td><td align="right">11</td><td align="right">11</td><td>_circle</td></tr>
 <tr>
-<td>$6867</td><td>48</td><td>LMAIN628</td></tr>
+<td>$83f9</td><td align="right">14</td><td align="right">14</td><td>_point</td></tr>
 <tr>
-<td>$6897</td><td>16</td><td>skip</td></tr>
+<td>$8407</td><td align="right">46</td><td align="right">11</td><td>_pattern</td></tr>
 <tr>
-<td>$68a7</td><td>136</td><td>skip</td></tr>
+<td>$8412</td><td colspan="2" align="right">9</td><td>getXparm</td></tr>
 <tr>
-<td>$692f</td><td>19</td><td>LMAIN629</td></tr>
+<td>$841b</td><td colspan="2" align="right">19</td><td>getXloop</td></tr>
 <tr>
-<td>$6942</td><td>5</td><td>skip</td></tr>
+<td>$842e</td><td colspan="2" align="right">3</td><td>grexit</td></tr>
 <tr>
-<td>$6947</td><td>31</td><td>LMAIN631</td></tr>
+<td>$8431</td><td colspan="2" align="right">4</td><td>grexit2</td></tr>
 <tr>
-<td>$6966</td><td>91</td><td>_drawpiece</td></tr>
+<td>$8435</td><td align="right">153</td><td align="right">153</td><td>_drawcursor</td></tr>
 <tr>
-<td>$69c1</td><td>68</td><td>skip</td></tr>
+<td>$84ce</td><td align="right">121</td><td align="right">121</td><td>_tiles</td></tr>
 <tr>
-<td>$6a05</td><td>137</td><td>LMAIN632</td></tr>
+<td>$8547</td><td align="right">66</td><td align="right">66</td><td>_border</td></tr>
 <tr>
-<td>$6a8e</td><td>6</td><td>LMAIN634</td></tr>
+<td>$8589</td><td align="right">121</td><td align="right">121</td><td>_target</td></tr>
 <tr>
-<td>$6a94</td><td>15</td><td>_drawarrow</td></tr>
+<td>$8602</td><td align="right">121</td><td align="right">121</td><td>_enemy</td></tr>
 <tr>
-<td>$6aa3</td><td>149</td><td>skip</td></tr>
+<td>$867b</td><td align="right">121</td><td align="right">121</td><td>_computer</td></tr>
 <tr>
-<td>$6b38</td><td>8</td><td>skip</td></tr>
+<td>$86f4</td><td align="right">19</td><td align="right">4</td><td>_ClearArrays</td></tr>
 <tr>
-<td>$6b40</td><td>86</td><td>LMAIN636</td></tr>
+<td>$86f8</td><td colspan="2" align="right">15</td><td>loop_clear</td></tr>
 <tr>
-<td>$6b96</td><td>6</td><td>LMAIN637</td></tr>
+<td>$8707</td><td align="right">24</td><td align="right">2</td><td>_CopyFont</td></tr>
 <tr>
-<td>$6b9c</td><td>50</td><td>_printmessage</td></tr>
+<td>$8709</td><td colspan="2" align="right">22</td><td>loop</td></tr>
 <tr>
-<td>$6bce</td><td>60</td><td>_printturnprompt</td></tr>
+<td>$871f</td><td align="right">648</td><td align="right">648</td><td>_PictureTiles</td></tr>
 <tr>
-<td>$6c0a</td><td>41</td><td>_surroundcount</td></tr>
+<td>$89a7</td><td align="right">432</td><td align="right">432</td><td>_ExplodeTiles</td></tr>
 <tr>
-<td>$6c33</td><td>43</td><td>skip</td></tr>
+<td>$8b57</td><td align="right">1890</td><td align="right">1890</td><td>_RunicTiles</td></tr>
 <tr>
-<td>$6c5e</td><td>28</td><td>skip</td></tr>
+<td>$92b9</td><td align="right">2</td><td align="right">2</td><td>_playertext</td></tr>
 <tr>
-<td>$6c7a</td><td>5</td><td>LMAIN646</td></tr>
+<td>$92bb</td><td align="right">56</td><td align="right">56</td><td>_turntext</td></tr>
 <tr>
-<td>$6c7f</td><td>15</td><td>LMAIN642</td></tr>
+<td>$92f3</td><td align="right">11</td><td align="right">4</td><td>_erasetextarea</td></tr>
 <tr>
-<td>$6c8e</td><td>34</td><td>skip</td></tr>
+<td>$92f7</td><td colspan="2" align="right">7</td><td>loop_erase</td></tr>
 <tr>
-<td>$6cb0</td><td>17</td><td>skip</td></tr>
+<td>$92fe</td><td align="right">4</td><td align="right">2</td><td>_printline</td></tr>
 <tr>
-<td>$6cc1</td><td>67</td><td>skip</td></tr>
+<td><b>$9300</b></td><td colspan="2" align="right">2</td><td>loop_draw</td></tr>
 <tr>
-<td>$6d04</td><td>24</td><td>skip</td></tr>
+<td>$9302</td><td align="right">27</td><td align="right">14</td><td>_message</td></tr>
 <tr>
-<td>$6d1c</td><td>15</td><td>LMAIN649</td></tr>
+<td>$9310</td><td colspan="2" align="right">8</td><td>next_line</td></tr>
 <tr>
-<td>$6d2b</td><td>17</td><td>skip</td></tr>
+<td>$9318</td><td colspan="2" align="right">4</td><td>last_line</td></tr>
 <tr>
-<td>$6d3c</td><td>87</td><td>skip</td></tr>
+<td>$931c</td><td colspan="2" align="right">1</td><td>end</td></tr>
 <tr>
-<td>$6d93</td><td>15</td><td>LMAIN652</td></tr>
+<td>$931d</td><td align="right">8</td><td align="right">8</td><td>_printmessage</td></tr>
 <tr>
-<td>$6da2</td><td>34</td><td>skip</td></tr>
+<td>$9325</td><td align="right">33</td><td align="right">33</td><td>_printturnprompt</td></tr>
 <tr>
-<td>$6dc4</td><td>17</td><td>skip</td></tr>
+<td>$9346</td><td align="right">768</td><td align="right">768</td><td>_Font_6x8_runic1_full</td></tr>
 <tr>
-<td>$6dd5</td><td>67</td><td>skip</td></tr>
+<td>$9646</td><td align="right">256</td><td align="right">256</td><td>osdk_stack</td></tr>
 <tr>
-<td>$6e18</td><td>24</td><td>skip</td></tr>
+<td>$9746</td><td align="right">4</td><td align="right">4</td><td>osdk_check</td></tr>
 <tr>
-<td>$6e30</td><td>15</td><td>LMAIN657</td></tr>
-<tr>
-<td>$6e3f</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$6e50</td><td>87</td><td>skip</td></tr>
-<tr>
-<td>$6ea7</td><td>15</td><td>LMAIN660</td></tr>
-<tr>
-<td>$6eb6</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$6ed8</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$6ee0</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$6ef1</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$6f34</td><td>24</td><td>skip</td></tr>
-<tr>
-<td>$6f4c</td><td>15</td><td>LMAIN665</td></tr>
-<tr>
-<td>$6f5b</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$6f63</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$6f74</td><td>87</td><td>skip</td></tr>
-<tr>
-<td>$6fcb</td><td>15</td><td>LMAIN667</td></tr>
-<tr>
-<td>$6fda</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$6ffc</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7004</td><td>15</td><td>skip</td></tr>
-<tr>
-<td>$7013</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$7056</td><td>24</td><td>skip</td></tr>
-<tr>
-<td>$706e</td><td>15</td><td>LMAIN671</td></tr>
-<tr>
-<td>$707d</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7085</td><td>15</td><td>skip</td></tr>
-<tr>
-<td>$7094</td><td>87</td><td>skip</td></tr>
-<tr>
-<td>$70eb</td><td>15</td><td>LMAIN673</td></tr>
-<tr>
-<td>$70fa</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$711c</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$713e</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$714f</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$7192</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$71ac</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$71b4</td><td>10</td><td>skip</td></tr>
-<tr>
-<td>$71be</td><td>15</td><td>LMAIN682</td></tr>
-<tr>
-<td>$71cd</td><td>85</td><td>skip</td></tr>
-<tr>
-<td>$7222</td><td>80</td><td>skip</td></tr>
-<tr>
-<td>$7272</td><td>23</td><td>skip</td></tr>
-<tr>
-<td>$7289</td><td>14</td><td>LMAIN686</td></tr>
-<tr>
-<td>$7297</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$72b1</td><td>100</td><td>skip</td></tr>
-<tr>
-<td>$7315</td><td>19</td><td>LMAIN683</td></tr>
-<tr>
-<td>$7328</td><td>7</td><td>skip</td></tr>
-<tr>
-<td>$732f</td><td>30</td><td>LMAIN685</td></tr>
-<tr>
-<td>$734d</td><td>24</td><td>LMAIN679</td></tr>
-<tr>
-<td>$7365</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$7387</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$7398</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$73db</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$73f5</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$73fd</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7405</td><td>15</td><td>LMAIN695</td></tr>
-<tr>
-<td>$7414</td><td>85</td><td>skip</td></tr>
-<tr>
-<td>$7469</td><td>80</td><td>skip</td></tr>
-<tr>
-<td>$74b9</td><td>23</td><td>skip</td></tr>
-<tr>
-<td>$74d0</td><td>14</td><td>LMAIN699</td></tr>
-<tr>
-<td>$74de</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$74f8</td><td>100</td><td>skip</td></tr>
-<tr>
-<td>$755c</td><td>19</td><td>LMAIN696</td></tr>
-<tr>
-<td>$756f</td><td>5</td><td>skip</td></tr>
-<tr>
-<td>$7574</td><td>30</td><td>LMAIN698</td></tr>
-<tr>
-<td>$7592</td><td>24</td><td>LMAIN692</td></tr>
-<tr>
-<td>$75aa</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$75cc</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$75d4</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$75e5</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$7628</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$7642</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$764a</td><td>10</td><td>skip</td></tr>
-<tr>
-<td>$7654</td><td>28</td><td>LMAIN707</td></tr>
-<tr>
-<td>$7670</td><td>85</td><td>skip</td></tr>
-<tr>
-<td>$76c5</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$7708</td><td>23</td><td>skip</td></tr>
-<tr>
-<td>$771f</td><td>14</td><td>LMAIN711</td></tr>
-<tr>
-<td>$772d</td><td>49</td><td>skip</td></tr>
-<tr>
-<td>$775e</td><td>77</td><td>skip</td></tr>
-<tr>
-<td>$77ab</td><td>19</td><td>LMAIN708</td></tr>
-<tr>
-<td>$77be</td><td>7</td><td>skip</td></tr>
-<tr>
-<td>$77c5</td><td>30</td><td>LMAIN710</td></tr>
-<tr>
-<td>$77e3</td><td>24</td><td>LMAIN705</td></tr>
-<tr>
-<td>$77fb</td><td>34</td><td>skip</td></tr>
-<tr>
-<td>$781d</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$782e</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$7871</td><td>26</td><td>skip</td></tr>
-<tr>
-<td>$788b</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7893</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$789b</td><td>28</td><td>LMAIN719</td></tr>
-<tr>
-<td>$78b7</td><td>85</td><td>skip</td></tr>
-<tr>
-<td>$790c</td><td>67</td><td>skip</td></tr>
-<tr>
-<td>$794f</td><td>23</td><td>skip</td></tr>
-<tr>
-<td>$7966</td><td>14</td><td>LMAIN723</td></tr>
-<tr>
-<td>$7974</td><td>49</td><td>skip</td></tr>
-<tr>
-<td>$79a5</td><td>77</td><td>skip</td></tr>
-<tr>
-<td>$79f2</td><td>19</td><td>LMAIN720</td></tr>
-<tr>
-<td>$7a05</td><td>5</td><td>skip</td></tr>
-<tr>
-<td>$7a0a</td><td>30</td><td>LMAIN722</td></tr>
-<tr>
-<td>$7a28</td><td>3</td><td>LMAIN717</td></tr>
-<tr>
-<td>$7a2b</td><td>15</td><td>_incsurround</td></tr>
-<tr>
-<td>$7a3a</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7a42</td><td>6</td><td>skip</td></tr>
-<tr>
-<td>$7a48</td><td>18</td><td>_pause</td></tr>
-<tr>
-<td>$7a5a</td><td>14</td><td>LMAIN728</td></tr>
-<tr>
-<td>$7a68</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7a70</td><td>38</td><td>LMAIN730</td></tr>
-<tr>
-<td>$7a96</td><td>16</td><td>_incpoints</td></tr>
-<tr>
-<td>$7aa6</td><td>11</td><td>skip</td></tr>
-<tr>
-<td>$7ab1</td><td>16</td><td>_decpoints</td></tr>
-<tr>
-<td>$7ac1</td><td>13</td><td>skip</td></tr>
-<tr>
-<td>$7ace</td><td>11</td><td>_setpoints</td></tr>
-<tr>
-<td>$7ad9</td><td>20</td><td>_steeldiamond</td></tr>
-<tr>
-<td>$7aed</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$7afe</td><td>32</td><td>skip</td></tr>
-<tr>
-<td>$7b1e</td><td>20</td><td>LMAIN733</td></tr>
-<tr>
-<td>$7b32</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7b3a</td><td>25</td><td>skip</td></tr>
-<tr>
-<td>$7b53</td><td>22</td><td>skip</td></tr>
-<tr>
-<td>$7b69</td><td>20</td><td>LMAIN734</td></tr>
-<tr>
-<td>$7b7d</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$7b8e</td><td>32</td><td>skip</td></tr>
-<tr>
-<td>$7bae</td><td>20</td><td>LMAIN738</td></tr>
-<tr>
-<td>$7bc2</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7bca</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$7be5</td><td>22</td><td>skip</td></tr>
-<tr>
-<td>$7bfb</td><td>20</td><td>LMAIN739</td></tr>
-<tr>
-<td>$7c0f</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$7c20</td><td>32</td><td>skip</td></tr>
-<tr>
-<td>$7c40</td><td>20</td><td>LMAIN743</td></tr>
-<tr>
-<td>$7c54</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7c5c</td><td>25</td><td>skip</td></tr>
-<tr>
-<td>$7c75</td><td>22</td><td>skip</td></tr>
-<tr>
-<td>$7c8b</td><td>20</td><td>LMAIN744</td></tr>
-<tr>
-<td>$7c9f</td><td>17</td><td>skip</td></tr>
-<tr>
-<td>$7cb0</td><td>32</td><td>skip</td></tr>
-<tr>
-<td>$7cd0</td><td>20</td><td>LMAIN748</td></tr>
-<tr>
-<td>$7ce4</td><td>8</td><td>skip</td></tr>
-<tr>
-<td>$7cec</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$7d07</td><td>22</td><td>skip</td></tr>
-<tr>
-<td>$7d1d</td><td>1</td><td>LMAIN749</td></tr>
-<tr>
-<td>$7d1e</td><td>15</td><td>_steeldiamondew</td></tr>
-<tr>
-<td>$7d2d</td><td>60</td><td>skip</td></tr>
-<tr>
-<td>$7d69</td><td>53</td><td>skip</td></tr>
-<tr>
-<td>$7d9e</td><td>95</td><td>skip</td></tr>
-<tr>
-<td>$7dfd</td><td>53</td><td>skip</td></tr>
-<tr>
-<td>$7e32</td><td>69</td><td>skip</td></tr>
-<tr>
-<td>$7e77</td><td>11</td><td>skip</td></tr>
-<tr>
-<td>$7e82</td><td>15</td><td>LMAIN753</td></tr>
-<tr>
-<td>$7e91</td><td>60</td><td>skip</td></tr>
-<tr>
-<td>$7ecd</td><td>53</td><td>skip</td></tr>
-<tr>
-<td>$7f02</td><td>95</td><td>skip</td></tr>
-<tr>
-<td>$7f61</td><td>53</td><td>skip</td></tr>
-<tr>
-<td>$7f96</td><td>69</td><td>skip</td></tr>
-<tr>
-<td>$7fdb</td><td>11</td><td>skip</td></tr>
-<tr>
-<td>$7fe6</td><td>1</td><td>LMAIN757</td></tr>
-<tr>
-<td>$7fe7</td><td>15</td><td>_steeldiamondns</td></tr>
-<tr>
-<td>$7ff6</td><td>60</td><td>skip</td></tr>
-<tr>
-<td>$8032</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$804d</td><td>121</td><td>skip</td></tr>
-<tr>
-<td>$80c6</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$80e1</td><td>95</td><td>skip</td></tr>
-<tr>
-<td>$8140</td><td>11</td><td>skip</td></tr>
-<tr>
-<td>$814b</td><td>15</td><td>LMAIN761</td></tr>
-<tr>
-<td>$815a</td><td>60</td><td>skip</td></tr>
-<tr>
-<td>$8196</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$81b1</td><td>121</td><td>skip</td></tr>
-<tr>
-<td>$822a</td><td>27</td><td>skip</td></tr>
-<tr>
-<td>$8245</td><td>95</td><td>skip</td></tr>
-<tr>
-<td>$82a4</td><td>11</td><td>skip</td></tr>
-<tr>
-<td>$82af</td><td>1</td><td>LMAIN765</td></tr>
-<tr>
-<td>$82b0</td><td>26</td><td>_steeldiamondreset</td></tr>
-<tr>
-<td>$82ca</td><td>25</td><td>_surroundpoints</td></tr>
-<tr>
-<td>$82e3</td><td>49</td><td>skip</td></tr>
-<tr>
-<td>$8314</td><td>19</td><td>_inccounter</td></tr>
-<tr>
-<td>$8327</td><td>6</td><td>skip</td></tr>
-<tr>
-<td>$832d</td><td>6</td><td>_zerocounter</td></tr>
-<tr>
-<td>$8333</td><td>1</td><td>_counter</td></tr>
-<tr>
-<td>$8334</td><td>2</td><td>_ptr_graph</td></tr>
-<tr>
-<td>$8336</td><td>2</td><td>_ptr_draw</td></tr>
-<tr>
-<td>$8338</td><td>2</td><td>_pausetime</td></tr>
-<tr>
-<td>$833a</td><td>1</td><td>_tiletodraw</td></tr>
-<tr>
-<td>$833b</td><td>1</td><td>_col</td></tr>
-<tr>
-<td>$833c</td><td>1</td><td>_row</td></tr>
-<tr>
-<td>$833d</td><td>1</td><td>_route</td></tr>
-<tr>
-<td>$833e</td><td>1</td><td>_cantake</td></tr>
-<tr>
-<td>$833f</td><td>1</td><td>_surrounded</td></tr>
-<tr>
-<td>$8340</td><td>1</td><td>_kingwest</td></tr>
-<tr>
-<td>$8341</td><td>1</td><td>_kingeast</td></tr>
-<tr>
-<td>$8342</td><td>1</td><td>_kingsouth</td></tr>
-<tr>
-<td>$8343</td><td>1</td><td>_kingnorth</td></tr>
-<tr>
-<td>$8344</td><td>1</td><td>_flashback</td></tr>
-<tr>
-<td>$8345</td><td>1</td><td>_flashcolor</td></tr>
-<tr>
-<td>$8346</td><td>1</td><td>_tpew</td></tr>
-<tr>
-<td>$8347</td><td>1</td><td>_tpns</td></tr>
-<tr>
-<td>$8348</td><td>1</td><td>_tiletype</td></tr>
-<tr>
-<td>$8349</td><td>1</td><td>_orientation</td></tr>
-<tr>
-<td>$834a</td><td>1</td><td>_ocy</td></tr>
-<tr>
-<td>$834b</td><td>1</td><td>_ocx</td></tr>
-<tr>
-<td>$834c</td><td>1</td><td>_oew</td></tr>
-<tr>
-<td>$834d</td><td>1</td><td>_ons</td></tr>
-<tr>
-<td>$834e</td><td>1</td><td>_cursormode</td></tr>
-<tr>
-<td>$834f</td><td>1</td><td>_mkey</td></tr>
-<tr>
-<td>$8350</td><td>1</td><td>_inversey</td></tr>
-<tr>
-<td>$8351</td><td>1</td><td>_inversex</td></tr>
-<tr>
-<td>$8352</td><td>1</td><td>_cy</td></tr>
-<tr>
-<td>$8353</td><td>1</td><td>_cx</td></tr>
-<tr>
-<td>$8354</td><td>1</td><td>_ew</td></tr>
-<tr>
-<td>$8355</td><td>1</td><td>_ns</td></tr>
-<tr>
-<td>$8356</td><td>1</td><td>_piecetype</td></tr>
-<tr>
-<td>$8357</td><td>10</td><td>LMAIN641</td></tr>
-<tr>
-<td>$8361</td><td>67</td><td>LMAIN482</td></tr>
-<tr>
-<td>$83a4</td><td>9</td><td>LMAIN459</td></tr>
-<tr>
-<td>$83ad</td><td>5</td><td>LMAIN457</td></tr>
-<tr>
-<td>$83b2</td><td>29</td><td>LMAIN310</td></tr>
-<tr>
-<td>$83cf</td><td>19</td><td>LMAIN82</td></tr>
-<tr>
-<td>$83e2</td><td>30</td><td>LMAIN80</td></tr>
-<tr>
-<td><b>$8400</b></td><td>25</td><td>LMAIN78</td></tr>
-<tr>
-<td>$8419</td><td>5</td><td>LMAIN66</td></tr>
-<tr>
-<td>$841e</td><td>31</td><td>_strcat</td></tr>
-<tr>
-<td>$843d</td><td>14</td><td>strcat1</td></tr>
-<tr>
-<td>$844b</td><td>30</td><td>strcat1a</td></tr>
-<tr>
-<td>$8469</td><td>20</td><td>strcat2</td></tr>
-<tr>
-<td>$847d</td><td>5</td><td>strcat3</td></tr>
-<tr>
-<td>$8482</td><td>12</td><td>_getchar</td></tr>
-<tr>
-<td>$848e</td><td>4</td><td>_putchar</td></tr>
-<tr>
-<td>$8492</td><td>11</td><td>putchar</td></tr>
-<tr>
-<td>$849d</td><td>4</td><td>putchar2</td></tr>
-<tr>
-<td>$84a1</td><td>13</td><td>_puts</td></tr>
-<tr>
-<td>$84ae</td><td>15</td><td>putsloop</td></tr>
-<tr>
-<td>$84bd</td><td>5</td><td>endputs</td></tr>
-<tr>
-<td>$84c2</td><td>11</td><td>_gets</td></tr>
-<tr>
-<td>$84cd</td><td>2</td><td>gets</td></tr>
-<tr>
-<td>$84cf</td><td>22</td><td>getsloop</td></tr>
-<tr>
-<td>$84e5</td><td>7</td><td>echochar</td></tr>
-<tr>
-<td>$84ec</td><td>8</td><td>backspace</td></tr>
-<tr>
-<td>$84f4</td><td>14</td><td>endgets</td></tr>
-<tr>
-<td>$8502</td><td>3</td><td>_strcpy</td></tr>
-<tr>
-<td>$8505</td><td>14</td><td>_strcpymc</td></tr>
-<tr>
-<td>$8513</td><td>16</td><td>strcpyloop</td></tr>
-<tr>
-<td>$8523</td><td>5</td><td>strcpyend</td></tr>
-<tr>
-<td>$8528</td><td>23</td><td>get_2ptr</td></tr>
-<tr>
-<td>$853f</td><td>8</td><td>mul16u</td></tr>
-<tr>
-<td>$8547</td><td>27</td><td>mult1</td></tr>
-<tr>
-<td>$8562</td><td>8</td><td>mult2</td></tr>
-<tr>
-<td>$856a</td><td>31</td><td>mul16i</td></tr>
-<tr>
-<td>$8589</td><td>15</td><td>_printf</td></tr>
-<tr>
-<td>$8598</td><td>3</td><td>printvect</td></tr>
-<tr>
-<td>$859b</td><td>12</td><td>storechar</td></tr>
-<tr>
-<td>$85a7</td><td>24</td><td>_sprintf</td></tr>
-<tr>
-<td>$85bf</td><td>15</td><td>printf</td></tr>
-<tr>
-<td>$85ce</td><td>9</td><td>formloop</td></tr>
-<tr>
-<td>$85d7</td><td>6</td><td>charput</td></tr>
-<tr>
-<td>$85dd</td><td>1</td><td>endform</td></tr>
-<tr>
-<td>$85de</td><td>41</td><td>printfloat</td></tr>
-<tr>
-<td>$8607</td><td>26</td><td>formfield</td></tr>
-<tr>
-<td>$8621</td><td>20</td><td>printchar</td></tr>
-<tr>
-<td>$8635</td><td>22</td><td>printstr</td></tr>
-<tr>
-<td>$864b</td><td>16</td><td>prtsloop</td></tr>
-<tr>
-<td>$865b</td><td>6</td><td>endprts</td></tr>
-<tr>
-<td>$8661</td><td>19</td><td>printint</td></tr>
-<tr>
-<td>$8674</td><td>23</td><td>printhex</td></tr>
-<tr>
-<td>$868b</td><td>1</td><td>saveptrform</td></tr>
-<tr>
-<td>$868c</td><td>2</td><td>saveform</td></tr>
-<tr>
-<td>$868e</td><td>1</td><td>saveptrarg</td></tr>
-<tr>
-<td>$868f</td><td>11</td><td>hexbyte</td></tr>
-<tr>
-<td>$869a</td><td>6</td><td>nibble</td></tr>
-<tr>
-<td>$86a0</td><td>6</td><td>chiffre</td></tr>
-<tr>
-<td>$86a6</td><td>17</td><td>nextarg</td></tr>
-<tr>
-<td>$86b7</td><td>15</td><td>_itoa</td></tr>
-<tr>
-<td>$86c6</td><td>12</td><td>bufconv</td></tr>
-<tr>
-<td>$86d2</td><td>27</td><td>itoa</td></tr>
-<tr>
-<td>$86ed</td><td>19</td><td>itoaloop</td></tr>
-<tr>
-<td><b>$8700</b></td><td>21</td><td>poploop</td></tr>
-<tr>
-<td>$8715</td><td>5</td><td>udiv10</td></tr>
-<tr>
-<td>$871a</td><td>11</td><td>udiv10lp</td></tr>
-<tr>
-<td>$8725</td><td>8</td><td>contdiv</td></tr>
-<tr>
-<td>$872d</td><td>11</td><td>_curset</td></tr>
-<tr>
-<td>$8738</td><td>11</td><td>_curmov</td></tr>
-<tr>
-<td>$8743</td><td>11</td><td>_draw</td></tr>
-<tr>
-<td>$874e</td><td>11</td><td>_hchar</td></tr>
-<tr>
-<td>$8759</td><td>11</td><td>_fill</td></tr>
-<tr>
-<td>$8764</td><td>11</td><td>_paper</td></tr>
-<tr>
-<td>$876f</td><td>11</td><td>_ink</td></tr>
-<tr>
-<td>$877a</td><td>11</td><td>_circle</td></tr>
-<tr>
-<td>$8785</td><td>14</td><td>_point</td></tr>
-<tr>
-<td>$8793</td><td>11</td><td>_pattern</td></tr>
-<tr>
-<td>$879e</td><td>9</td><td>getXparm</td></tr>
-<tr>
-<td>$87a7</td><td>19</td><td>getXloop</td></tr>
-<tr>
-<td>$87ba</td><td>3</td><td>grexit</td></tr>
-<tr>
-<td>$87bd</td><td>4</td><td>grexit2</td></tr>
-<tr>
-<td>$87c1</td><td>153</td><td>_drawcursor</td></tr>
-<tr>
-<td>$885a</td><td>121</td><td>_tiles</td></tr>
-<tr>
-<td>$88d3</td><td>121</td><td>_target</td></tr>
-<tr>
-<td>$894c</td><td>121</td><td>_enemy</td></tr>
-<tr>
-<td>$89c5</td><td>4</td><td>_ClearTargetAndEnemy</td></tr>
-<tr>
-<td>$89c9</td><td>12</td><td>loop_clear</td></tr>
-<tr>
-<td>$89d5</td><td>648</td><td>_PictureTiles</td></tr>
-<tr>
-<td>$8c5d</td><td>432</td><td>_ExplodeTiles</td></tr>
-<tr>
-<td>$8e0d</td><td>256</td><td>osdk_stack</td></tr>
-<tr>
-<td>$8f0d</td><td>4</td><td>osdk_check</td></tr>
-<tr>
-<td>$8f11</td><td>12526</td><td>osdk_end</td></tr>
-</table>
-</td>
-<td valign=top>
-<a name="Overlay"></a>
-<h1>Overlay memory</h1>
-<table border>
-<tr>
-<th>Adress</th><th>Size</th><th>Name</th>
-</tr>
+<td>$974a</td><td align="right">10421</td><td align="right">10421</td><td>osdk_end</td></tr>
 </table>
 </td>
 <td valign=top>
@@ -2568,55 +1972,58 @@
 <h1>Zero page</h1>
 <table border>
 <tr>
-<th>Adress</th><th>Size</th><th>Name</th>
+<th>Adress</th><th colspan="2">Size</th><th>Name</th>
 </tr>
 <tr>
-<td>$50</td><td>2</td><td>ap</td></tr>
+<td>$50</td><td colspan="2" align="right">2</td><td>ap</td></tr>
 <tr>
-<td>$52</td><td>2</td><td>fp</td></tr>
+<td>$52</td><td colspan="2" align="right">2</td><td>fp</td></tr>
 <tr>
-<td>$54</td><td>2</td><td>sp</td></tr>
+<td>$54</td><td colspan="2" align="right">2</td><td>sp</td></tr>
 <tr>
-<td>$56</td><td>2</td><td>tmp0</td></tr>
+<td>$56</td><td colspan="2" align="right">2</td><td>tmp0</td></tr>
 <tr>
-<td>$58</td><td>2</td><td>tmp1</td></tr>
+<td>$58</td><td colspan="2" align="right">2</td><td>tmp1</td></tr>
 <tr>
-<td>$5a</td><td>2</td><td>tmp2</td></tr>
+<td>$5a</td><td colspan="2" align="right">2</td><td>tmp2</td></tr>
 <tr>
-<td>$5c</td><td>2</td><td>tmp3</td></tr>
+<td>$5c</td><td colspan="2" align="right">2</td><td>tmp3</td></tr>
 <tr>
-<td>$5e</td><td>2</td><td>tmp4</td></tr>
+<td>$5e</td><td colspan="2" align="right">2</td><td>tmp4</td></tr>
 <tr>
-<td>$60</td><td>2</td><td>tmp5</td></tr>
+<td>$60</td><td colspan="2" align="right">2</td><td>tmp5</td></tr>
 <tr>
-<td>$62</td><td>2</td><td>tmp6</td></tr>
+<td>$62</td><td colspan="2" align="right">2</td><td>tmp6</td></tr>
 <tr>
-<td>$64</td><td>2</td><td>tmp7</td></tr>
+<td>$64</td><td colspan="2" align="right">2</td><td>tmp7</td></tr>
 <tr>
-<td>$66</td><td>2</td><td>op1</td></tr>
+<td>$66</td><td colspan="2" align="right">2</td><td>op1</td></tr>
 <tr>
-<td>$68</td><td>2</td><td>op2</td></tr>
+<td>$68</td><td colspan="2" align="right">2</td><td>op2</td></tr>
 <tr>
-<td>$6a</td><td>2</td><td>tmp</td></tr>
+<td>$6a</td><td colspan="2" align="right">2</td><td>tmp</td></tr>
 <tr>
-<td>$6c</td><td>2</td><td>reg0</td></tr>
+<td>$6c</td><td colspan="2" align="right">2</td><td>reg0</td></tr>
 <tr>
-<td>$6e</td><td>2</td><td>reg1</td></tr>
+<td>$6e</td><td colspan="2" align="right">2</td><td>reg1</td></tr>
 <tr>
-<td>$70</td><td>2</td><td>reg2</td></tr>
+<td>$70</td><td colspan="2" align="right">2</td><td>reg2</td></tr>
 <tr>
-<td>$72</td><td>2</td><td>reg3</td></tr>
+<td>$72</td><td colspan="2" align="right">2</td><td>reg3</td></tr>
 <tr>
-<td>$74</td><td>2</td><td>reg4</td></tr>
+<td>$74</td><td colspan="2" align="right">2</td><td>reg4</td></tr>
 <tr>
-<td>$76</td><td>2</td><td>reg5</td></tr>
+<td>$76</td><td colspan="2" align="right">2</td><td>reg5</td></tr>
 <tr>
-<td>$78</td><td>2</td><td>reg6</td></tr>
+<td>$78</td><td colspan="2" align="right">2</td><td>reg6</td></tr>
 <tr>
-<td>$7a</td><td>133</td><td>reg7</td></tr>
+<td>$7a</td><td colspan="2" align="right">133</td><td>reg7</td></tr>
 </table>
 </td>
 </tr>
 </table>
+<hr>
+<center>Generated by MemMap version 0.4</center>
+<hr>
 	</BODY>
 </HTML>
