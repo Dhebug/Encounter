@@ -101,6 +101,7 @@
 // 12-01-2012 Added RUNES
 // 17-01-2012 Made runes work! (37100)
 // 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
+// 01-02-2012 Finished "fliprunes" routine and title scree
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -231,6 +232,7 @@ void cursormodevalid();		// sets modevalid to 1
 void calccantake();			// can take be made (how many)
 void printborder();			// print the border screen (used in titles/menus etc)
 //void printtitles();			// print the border screen and titles 
+void fliprune();			// flip the rune tiles in title screen
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -241,7 +243,7 @@ Tile types:
 */
 extern const unsigned char tiles[11][11];	// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
-extern const unsigned char border[7][11];	// border (of title screens/menus etc)
+extern const unsigned char border[6][11];	// border (of title screens/menus etc)
 //extern unsigned char presents[8];	// array of runic chars that spell "presents"
 //extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
 /* populate array with places of players 
@@ -329,7 +331,7 @@ unsigned char destrow,destcol;		// used in checkroute (returns no of pieces on a
 unsigned char canmovecursor;	// controls wether screen cursor can be moved or not
 unsigned char hightarget;	// contains highest value target
 unsigned char targetns,targetew;		// used to calc takes
-unsigned char x,y,z,a,b;						// general purpose variables
+unsigned char x,y,z,a,b,c,d;						// general purpose variables
 //char cannotbetaken,icanbetaken;			// used in canbetaken routine
 /* below used for cursor move routine */
 unsigned char multiple;	// concerning central square (how much to multiply the coords to SKIP the square
@@ -367,6 +369,7 @@ paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
 printborder();
+/*
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -417,6 +420,7 @@ while (gamekey==89)
 		printf("%c",19);	// turn output ON
 		}
 	}
+*/
 }
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn()
@@ -1820,61 +1824,44 @@ for (x=0;x<4;x++)
 /***********************/
 void printborder()		// print the border around title screen/menus etc
 {
+unsigned char f=0;
 ink(3);	// yellow, erm...gold
-x=24;	// controls border printing 
-FRED:
-row=0;
-for (a=0;a<7;a++)
-	{
-	col=0;
-	for(b=0;b<11;b++)
+row=0;c=6;d=11;col=0;
+for (mkey=0;mkey<5;mkey++)
+	{	
+	for (a=row;a<c;a++)
 		{
-		tiletodraw=border[a][b];
-		if ( tiletodraw < 99)
+		col=0;
+		if (mkey) {fliprune();col=1;}	// flip the row		
+		for(b=col;b<d;b++)
 			{
-			if (tiletodraw >= x) 			// if x=24 it will only print the border
+			tiletodraw=border[a][b];  // get runic chars
+			if (f==1) {tiletodraw++;} // get western chars on 2nd pass
+			if ( tiletodraw < 99)
 				{
 				ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
 				drawtile();					// draw tile
 				}
+			col++;
 			}
-		col++;
+		row++;
 		}
-	row++;
+	row=1;col=1;c=5;d=10;pausetime=26000;pause();
+	f++;if (f==2){f=0;}
 	}
-if (x==24) {x=0;goto FRED;}
-
-
-pausetime=32000;pause();
 }
-/*****************************/
-/*
-void printtitles()				// print the title screen
+/*******************************/
+void fliprune()
 {
-//tileheight=18;tilewidth=3;
-//printborder();
-//row=3;col=2;
-//ptr_graph=TitleTiles;
-//tileheight=36;tilewidth=21;
-//tileloop();
-//tileheight=18;tilewidth=3;
-printborder();
-row=4;col=1;
-for(y=0;y<8;y++)	// print "presents"
+for (tiletodraw=30;tiletodraw<35;tiletodraw++)
 	{
-	tiletodraw=presents[y];
-	ptr_graph=RunicTiles;
-	drawtile();
-	col++;
-	}
-row=6;;col=1;
-for(y=0;y<9;y++)	// print "hnefatafl"
-	{
-	tiletodraw=hnefatafl[y];
-	ptr_graph=RunicTiles;
-	drawtile();
-	col++;
+	for (col=1;col<10;col++)
+		{
+		if (border[row][col] < 99)
+			{
+			ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
+			drawtile();pausetime=35;pause(); 
+			}
+		}
 	}
 }
-*/
-/****************************/
