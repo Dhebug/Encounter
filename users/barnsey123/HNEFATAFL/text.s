@@ -2,7 +2,7 @@
 
 
 _playertext	.dsb 2
-_turntext	.byt " TURN: USE CURSOR KEYS.",10,"X=SELECT PIECE P=POSSIBLE MOVES",0
+_turntext	.byt " TURN: USE CURSOR KEYS.",10,"X=SELECT",10,"P=POSSIBILITIES",0
 
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen
