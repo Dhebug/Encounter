@@ -350,7 +350,7 @@ unsigned char modeonevalid;	// is OK for mode 1? 0=no, 1=yes
 /* above variables used in cursor move routine */
 unsigned char gamekey=89;	// controls "play again?"
 unsigned char gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
-unsigned int startpos;		// USED when drawing tiles (position in tile file from which to draw)
+//unsigned int startpos;		// USED when drawing tiles (position in tile file from which to draw)
 unsigned char take;
 unsigned char p1;	// piece type comparison (lower) - used for determining takes - default=attacker
 unsigned char p2;	// piece type comparison (upper) - used for determining takes - default=attacker
@@ -1050,6 +1050,8 @@ void drawplayers() // DRAW ALL THE PIECES ON THE BOARD
 		}
 }
 /************************************************/
+
+/*
 void drawtiles() // DRAW ALL THE TILES ON THE BOARD
 {
 	for (row=0;row<11;row++)
@@ -1064,6 +1066,8 @@ void drawtiles() // DRAW ALL THE TILES ON THE BOARD
 			}
 		}
 }
+*/
+
 /************************************************/
 void drawboard()	// DRAW THE BOARD
 {
@@ -1473,24 +1477,7 @@ if (z)
 	cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
 	}
 }
-/*****************************/
-void incroute()
-{
-route++;
-}
-/*****************************/
-void decroute()
-{
-route--;
-}
-/*********************************/
-void drawtile()	// draws a board tile, player piece or "arrow"
-{
-//ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
-startpos=tiletodraw*54;			// 54=3*18 calc how many lines "down" in the graphic file to print from
-ptr_graph+=startpos;				// set start position in graphic file
-tileloop();
-}
+
 /*********************************/
 void explodetile()	// Explodes a tile
 {
@@ -1505,24 +1492,8 @@ for (b=0;b<8;b++)
 	}	
 }
 /**************************************/
-void tileloop()
-{
-//unsigned char a;
-ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
-ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
-for (counter=0;counter<18;inccounter())					//tileheight=pixels (e.g. 18)
-	{
-	//for (x=0;x<tilewidth;x++)
-	//	{
-	//	ptr_draw[x]=ptr_graph[x];
-	//	}
-	ptr_draw[0]=ptr_graph[0];
-	ptr_draw[1]=ptr_graph[1];
-	ptr_draw[2]=ptr_graph[2];
-	ptr_draw+=40;	// number of 6pixel "units" to advance (+40=next line down, same position across)
-	ptr_graph+=3;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
-	}
-}
+
+
 /**************************************/
 void drawpiece()
 {
@@ -1601,62 +1572,15 @@ if (surrounded==3)	// unset any "enemy and target values"
 	}
 }
 /****************************/
-void incsurround()
-{
-	surrounded++;
-}
 /****************************/
 void pause()
 {
 int p;
 for (p=0; p<pausetime;p++){};
 }
-/****************************/
-void incpoints()
-{
-points++;
-}
-/****************************/
-void decpoints()
-{
-points--;
-if (points==0) points=1;	// suggested by JamesD
-}
-/****************************/
-void setpoints()
-{
-points=10;	
-}
-/****************************/
-void doublepoints()
-{
-points+=10;	// not really double anymore (10/12/2011)
-}
-/****************************/
 
 
 /******************************/
-void surroundpoints()
-{
-points+=10*surrounded;	// multiply the points around king depending on the "surrounded" figure
-}
-/****************************/
-void inccounter()
-{
-counter++;
-}
-/****************************/
-/*
-void deccounter()
-{
-counter--;
-}
-*/
-/****************************/
-void zerocounter()
-{
-counter=0;;
-}
 /****************************/
 /*
 void LookBackInAnger()		// returns the value of the piece "behind" an attacker
