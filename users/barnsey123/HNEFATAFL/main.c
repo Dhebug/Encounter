@@ -101,7 +101,10 @@
 // 12-01-2012 Added RUNES
 // 17-01-2012 Made runes work! (37100)
 // 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
-// 01-02-2012 Finished "fliprunes" routine and title scree
+// 01-02-2012 Finished "fliprunes" routine and title screen (38479)
+// 01-02-2012 DBUG replaced printf with the code in text.s saving memory. Loading from $500. Excellent! (37462)
+// 02-02-2012 Tided up some of the text displays (saving a few bytes) (37448)
+// 02-02-2012 Used partial runic1 font (no lower case chars)
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -132,9 +135,12 @@ extern unsigned char RunicTiles[];		// Runic alphabet
 ;   memcpy((unsigned char*)0xb400+32*8,Font_6x8_FuturaFull,768);
 ;
 */
-extern unsigned char Font_6x8_runic1_full[1024]; // runic oric chars
+extern unsigned char Font_6x8_runic1_partial[520]; // runic oric chars (was [1024] 02/02/2012)
 
 /* RUNIC Alphabet Tiles (NOT the runic1 font) ordered as follows :
+Actually, the numbers here are not true anymore due to changes in the runes.png file
+However, Have left the descriptions for educational purposes...
+The Viking "alphabet" begins with "F" and is rEferred to as "FUTHAR" rather than "Alphabet"
 0	F: Fehu			Cattle/Gold/General Wealth
 1	U: Uruz			Strength/Speed/Good Health
 2	TH:	Thurisaz	Norse Giants
@@ -233,6 +239,8 @@ void calccantake();			// can take be made (how many)
 void printborder();			// print the border screen (used in titles/menus etc)
 //void printtitles();			// print the border screen and titles 
 void fliprune();			// flip the rune tiles in title screen
+void subpacnorthsouth();		// subroutine of pacman
+
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -369,7 +377,11 @@ ink(5);				// color of TEXT in text box at bottom
 hires();
 	setflags(0);	// No keyclick, no cursor, no nothing
 printborder();
+/*<<<<<<< .mine
+=======
 
+>>>>>>> .r791
+*/
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -659,61 +671,63 @@ while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
 	}
 }
 /************************************************/
+void subpacnorthsouth()
+{
+startrow=a;startcol=0;destrow=a;destcol=kingew;
+pacpointsx=checkroute();
+startcol=kingew;destcol=10;
+pacpointsy=checkroute();
+startrow=d;startcol=0;destrow=d;destcol=kingew;
+pacpointsa=checkroute();
+startcol=kingew;destcol=10;
+pacpointsb=checkroute();
+}
+void subpaceastwest()
+{
+startrow=0;startcol=b;destrow=kingns;destcol=b;
+pacpointsx=checkroute();
+startrow=kingns;destrow=10;
+pacpointsy=checkroute();
+startrow=0;startcol=c;destrow=kingns;destcol=c;
+pacpointsa=checkroute();
+startrow=kingns;destrow=10;
+pacpointsb=checkroute();
+}
+
+/************************************************/
 void pacman()		// PACMAN	( increment target positions around king )	
 {
 //int xrand=random()/1000;	// random number between 0-32
 surroundcount();		// updates "surrounded"
+
 // NORTH
 orientation=NORTH;
 paclevel1=kingew;
 paclevel2=kingns;
-startrow=0;startcol=0;destrow=0;destcol=kingew;
-pacpointsx=checkroute();
-startcol=kingew;destcol=10;
-pacpointsy=checkroute();
-startrow=1;startcol=0;destrow=1;destcol=kingew;
-pacpointsa=checkroute();
-startcol=kingew;destcol=10;
-pacpointsb=checkroute();
+a=0; d=1;  
+subpacnorthsouth(); // check routes to escape positions
 subpacmanx();
 
 //SOUTH
 orientation=SOUTH;
-startrow=10;startcol=0;destrow=10;destcol=kingew;
-pacpointsx=checkroute();
-startcol=kingew;destcol=10;
-pacpointsy=checkroute();
-startrow=9;startcol=0;destrow=9;destcol=kingew;
-pacpointsa=checkroute();
-startcol=kingew;destcol=10;
-pacpointsb=checkroute();
+a=10; d=9; 
+subpacnorthsouth();
 subpacmanx();
 
 // EAST
 orientation=EAST;
 paclevel1=kingns;
 paclevel2=kingew;
-startrow=0;startcol=10;destrow=kingns;destcol=10;
-pacpointsx=checkroute();
-startrow=kingns;destrow=10;
-pacpointsy=checkroute();
-startrow=0;startcol=9;destrow=kingns;destcol=9;
-pacpointsa=checkroute();
-startrow=kingns;destrow=10;
-pacpointsb=checkroute();
+b=10;c=9;
+subpaceastwest();
 subpacmanx();
 
 // WEST
 orientation=WEST;
-startrow=0;startcol=0;destrow=kingns;destcol=0;
-pacpointsx=checkroute();
-startrow=kingns;destrow=10;
-pacpointsy=checkroute();
-startrow=0;startcol=1;destrow=kingns;destcol=1;
-pacpointsa=checkroute();
-startrow=kingns;destrow=10;
-pacpointsb=checkroute();
+b=0;c=1;
+subpaceastwest();
 subpacmanx();
+
 }
 
 /************************************************/
@@ -742,6 +756,7 @@ void subpacman4()
 {
 if ( players[mkey][counter]==0 ) { flag=1;}
 if ((flag==0)&&(target[mkey][counter]>1 )) { target[mkey][counter]++;}
+
 }
 /************************************************/
 void checkend()	// check for endgame conditions
@@ -1175,7 +1190,7 @@ void playerturn()	// The human players turn : filter keyboard input
 				flashback=2;
 				//printmessage();
 				//strcpy(message,playertext);
-				message="PLACE CURSOR\nX=SELECT DESTINATION\nR=RESET/DE-SELECT";
+				message="PLACE CURSOR ON DESTINATION\nX=SELECT\nR=RESET";
 				printmessage();
 				//printf("\n\n\n%s Turn X=Select R=Reset",playertext);
 				inversex=cx;
@@ -1862,7 +1877,7 @@ for (tiletodraw=30;tiletodraw<35;tiletodraw++)
 		if (border[row][col] < 99)
 			{
 			ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
-			drawtile();pausetime=35;pause(); 
+			drawtile();pausetime=50;pause(); 
 			}
 		}
 	}
