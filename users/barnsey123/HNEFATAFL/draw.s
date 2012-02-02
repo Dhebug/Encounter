@@ -292,3 +292,216 @@ _drawattackertile
 	jmp _drawbox	; drawbox at x,y position
 .)
 */
+
+
+
+/*
+void tileloop()
+{
+	ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
+	ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
+	for (counter=0;counter<18;inccounter())					//tileheight=pixels (e.g. 18)
+	{
+		//for (x=0;x<tilewidth;x++)
+		//	{
+		//	ptr_draw[x]=ptr_graph[x];
+		//	}
+		ptr_draw[0]=ptr_graph[0];
+		ptr_draw[1]=ptr_graph[1];
+		ptr_draw[2]=ptr_graph[2];
+		ptr_draw+=40;	// number of 6pixel "units" to advance (+40=next line down, same position across)
+		ptr_graph+=3;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
+	}
+}
+*/
+_tileloop
+.(
+	lda _ptr_graph+0
+	sta tmp0+0
+	lda _ptr_graph+1
+	sta tmp0+1
+		
+	lda #<$a002
+	sta tmp1+0
+	lda #>$a002
+	sta tmp1+1
+	
+	; +col*3	
+	.(
+	ldx _col
+loop
+	beq end
+	clc
+	lda tmp1+0
+	adc #3
+	sta tmp1+0
+	lda tmp1+1
+	adc #0
+	sta tmp1+1
+	dex
+	jmp loop
+end
+	.)
+	
+	; +row*720
+	.(
+	ldx _row
+loop
+	beq end
+	clc
+	lda tmp1+0
+	adc #<720
+	sta tmp1+0
+	lda tmp1+1
+	adc #>720
+	sta tmp1+1
+	dex
+	jmp loop
+end	
+	.)
+	
+	
+	; Draw loop
+	.(
+	ldx #18
+loop
+	ldy #0
+	lda (tmp0),y
+	sta (tmp1),y
+	iny
+	lda (tmp0),y
+	sta (tmp1),y
+	iny
+	lda (tmp0),y
+	sta (tmp1),y
+
+	.(
+	clc
+	lda tmp0+0
+	adc #3
+	sta tmp0+0
+	bcc skip
+	inc tmp0+1
+skip	
+	.)
+
+	.(
+	clc
+	lda tmp1+0
+	adc #40
+	sta tmp1+0
+	bcc skip
+	inc tmp1+1
+skip	
+	.)
+			
+	dex
+	bne loop
+	.)
+		
+	; Update ptr_graph (for animation purpose)
+	lda tmp0+0
+	sta _ptr_graph+0
+	lda tmp0+1
+	sta _ptr_graph+1
+	
+	rts
+.)
+
+
+
+/*
+void drawtile()	// draws a board tile, player piece or "arrow"
+{
+	startpos=tiletodraw*54;			// 54=3*18 calc how many lines "down" in the graphic file to print from
+	ptr_graph+=startpos;				// set start position in graphic file
+	tileloop();
+}
+*/
+_drawtile
+.(
+	; ptr_graph+=tiletodraw*54
+	.(
+	ldx _tiletodraw
+loop
+	beq end
+	clc
+	lda _ptr_graph+0
+	adc #<54
+	sta _ptr_graph+0
+	bcc skip
+	inc _ptr_graph+1
+skip	
+	dex
+	jmp loop
+end	
+	.)
+
+	jmp _tileloop
+.)
+
+
+
+/*
+void drawtiles() // DRAW ALL THE TILES ON THE BOARD
+{
+	for (row=0;row<11;row++)
+	{
+		for (col=0;col<11;col++)
+		{
+			players[row][col]=tiles[row][col];	// populate players array
+			ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
+			tiletodraw=tiles[row][col];
+			if ( tiletodraw==4 ) { tiletodraw=3;}
+			drawtile();	
+		}
+	}
+}
+*/
+_drawtiles
+.(
+	ldy #0
+	
+	ldx #0
+loop_row	
+	stx _row
+
+	ldx #0
+loop_col	
+	stx _col
+	
+	lda _tiles,y
+	sta _players,y
+	cmp #4
+	bne set_tile_to_draw
+	lda #3
+set_tile_to_draw	
+	sta _tiletodraw
+	
+	lda #<_PictureTiles
+	sta _ptr_graph+0
+	lda #>_PictureTiles
+	sta _ptr_graph+1
+	
+	tya 
+	pha
+	
+	jsr _drawtile
+	
+	pla
+	tay
+	iny
+
+	ldx _col
+	inx
+	cpx #11
+	bne loop_col
+	
+	ldx _row
+	inx
+	cpx #11
+	bne loop_row
+	
+	rts
+.)
+
