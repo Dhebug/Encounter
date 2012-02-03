@@ -278,9 +278,6 @@ Players:
 extern char enemy[11][11];		// where the defenders can get to
 extern char computer[11][11];	// where the attackers can get to
 char players[11][11];			// to be the working copy of baseplayers
-const unsigned char boardx=12;	// starting x co-ord of board (for cursor drawing purposes)
-const unsigned char boardy=0;	// starting y co-ord of board (for cursor drawing purposes)
-const char boxsize=18;			// set boxsize (for cursor drawing purposes)
 unsigned char playertype,piecetype;			// player 1=attacker, 2=defender 
 unsigned char ns,ew;		// default north/south position of central square 	(0-10)
 unsigned char cx,cy;			// cursor x screen position (pixels across)
@@ -382,11 +379,6 @@ ink(5);				// color of TEXT in text box at bottom
 hires();
 	setflags(0);	// No keyclick, no cursor, no nothing
 printborder();
-/*<<<<<<< .mine
-=======
-
->>>>>>> .r791
-*/
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
 	{
@@ -406,8 +398,8 @@ while (gamekey==89)
 		{
 		ns=5;						// default north/south position of central square
 		ew=5;						// default east/west position of central square
-		cx=1+boardx+(boxsize*ew);	// cursor x screen position
-		cy=1+boardy+(boxsize*ns);	// cursor y screen position
+		cx=ew;	// cursor x screen position
+		cy=ns;	// cursor y screen position
 		playertype++;				// playertype inited as 0 so ++ will make it 1 at start of game
 		if ( playertype == 3 ) { playertype = 1; } // was defender, set to attacker player
 		//if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))||((gamestyle==2)&&(playertype==1)))
@@ -592,15 +584,15 @@ origorient=WEST;
 for (mkey=oew-1; mkey>-1; mkey--){findpieceew();}	
 if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
 
-cx=1+boardx+(boxsize*oew);	// piece x screen position
-cy=1+boardy+(boxsize*ons);	// piece y screen position
+cx=oew;	// piece x screen position
+cy=ons;	// piece y screen position
 blinkcursor();			// draw cursor in foreground color at piece to move position cx,cy
 fb=0;drawcursor();		// blank cursor
-cx=1+boardx+(boxsize*targetew);	// target x screen position
-cy=1+boardy+(boxsize*targetns);	// target y screen position
+cx=targetew;	// target x screen position
+cy=targetns;	// target y screen position
 blinkcursor();			// draw cursor in foreground color at target position cx,cy
-ocx=1+boardx+(boxsize*oew);	// piece to move x screen position
-ocy=1+boardy+(boxsize*ons);	// piece to move y screen position
+ocx=oew;	// piece to move x screen position
+ocy=ons;	// piece to move y screen position
 //printf("%cNS=%d,EW=%d,ONS=%d,OEW=%d%c",19,ns,ew,ons,oew,19);
 //loop=getchar();
 }
@@ -864,10 +856,10 @@ if (canmovecursor)
 	{
 	fb=0;
 	drawcursor();				// print blank cursor (effect=remove dots)
-	if ( mkey == 8 ) {cx-=(boxsize*multiple);}	// left
-	if ( mkey == 9 ) {cx+=(boxsize*multiple);}	// right
-	if ( mkey == 10 ){cy+=(boxsize*multiple);}	// down
-	if ( mkey == 11 ){cy-=(boxsize*multiple);}	// up
+	if ( mkey == 8 ) {cx-=multiple;}	// left
+	if ( mkey == 9 ) {cx+=multiple;}	// right
+	if ( mkey == 10 ){cy+=multiple;}	// down
+	if ( mkey == 11 ){cy-=multiple;}	// up
 	fb=1;
 	drawcursor();				// print dotted cursor
 	if ( mkey == 8 ) {ew-=multiple;}		// left
@@ -882,21 +874,7 @@ else
 	if ( cursormode == 1 ) {flashback=2;flashscreen();}	// flash red: return to green:2)
 	}			
 }
-/************************************************/
-void inverse()
-{
-	/* Draw an inversed colr box to highlight selected box
-	ix=screen x position
-	iy=screen y position
-	*/
-	char iz=boxsize-3;
-	for (counter=0;counter<iz;inccounter())
-		{
-		curset(inversex,inversey,3);
-		draw(iz,0,2);		// draw inverse line
-		inversey++;
-		}
-}
+
 /************************************************/
 void printpossiblemoves()
 {
@@ -1072,24 +1050,6 @@ void drawplayers() // DRAW ALL THE PIECES ON THE BOARD
 			}
 		}
 }
-/************************************************/
-
-/*
-void drawtiles() // DRAW ALL THE TILES ON THE BOARD
-{
-	for (row=0;row<11;row++)
-		{
-		for (col=0;col<11;col++)
-			{
-			players[row][col]=tiles[row][col];	// populate players array
-			ptr_graph=PictureTiles;				// pointer to Picture Tiles graphics
-			tiletodraw=tiles[row][col];
-			if ( tiletodraw==4 ) { tiletodraw=3;}
-			drawtile();	
-			}
-		}
-}
-*/
 
 /************************************************/
 void drawboard()	// DRAW THE BOARD
@@ -1221,7 +1181,7 @@ void playerturn()	// The human players turn : filter keyboard input
 				printmessage();
 				//printf("\n\n\n%s Turn X=Select R=Reset",playertext);
 				inversex=cx;
-				inversey=cy+1;
+				inversey=cy;
 				inverse();				// highlight selected square (inverse color)
 				mkey=0;					// ensure mkey at known value
 				// set Original cursor and board position of selected square
@@ -1252,7 +1212,7 @@ void playerturn()	// The human players turn : filter keyboard input
 					ns=ons;
 					ew=oew;
 					inversex=cx;
-					inversey=cy+1;
+					inversey=cy;
 					inverse();		// inverse square
 					fb=1;
 					drawcursor();		// draw cursor at original selected position
@@ -1260,7 +1220,7 @@ void playerturn()	// The human players turn : filter keyboard input
 				if ( mkey == 88 )				// if X selected
 					{
 					inversex=ocx;
-					inversey=ocy+1;
+					inversey=ocy;
 					inverse();			// inverse original position
 					if (( ons == ns )&&( oew == ew))// X is in original position so return to cursor movement 
 						{
