@@ -105,6 +105,9 @@
 // 01-02-2012 DBUG replaced printf with the code in text.s saving memory. Loading from $500. Excellent! (37462)
 // 02-02-2012 Tided up some of the text displays (saving a few bytes) (37448)
 // 02-02-2012 Used partial runic1 font (no lower case chars)
+// 02-02-2012 Dbug adds some ASM to replace some c functions
+// 03-02-2012 Added checkincroute to replace some repetetive code (35414)
+// 03-02-2012 Replaced subpacman3/4 with subpacman5 (35141)
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -195,8 +198,9 @@ void subarrows();			// subroutine of arrows or blanks
 void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)
 void subpacman();			// subroutine of pacman
 void subpacman2();			// subroutine of pacman
-void subpacman3();			// sub of subpacman
-void subpacman4();			// sub of subpacman2
+//void subpacman3();			// sub of subpacman
+//void subpacman4();			// sub of subpacman2
+void subpacman5();
 void subpacmanx();			// grand sub of pacman
 //void subcanbetaken();		// sub of canbetaken
 void inccantake();			// increments cantake
@@ -240,7 +244,8 @@ void printborder();			// print the border screen (used in titles/menus etc)
 //void printtitles();			// print the border screen and titles 
 void fliprune();			// flip the rune tiles in title screen
 void subpacnorthsouth();		// subroutine of pacman
-
+void subpaceastwest();			// subroutine of pacman
+void checkincroute();			// check to see if OK to incroute
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -659,7 +664,7 @@ while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
 		}
 	else 
 		{	
-		if ((flag)&&(players[x][y]==0))	// if blank)
+		if ((flag > 0)&&(players[x][y]==0))	// if blank)
 			{
 			if (orientation<EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
 			}
@@ -733,30 +738,38 @@ subpacmanx();
 /************************************************/
 void subpacman()		// increase target positions that LEAD to a king target
 {
+	c=x;
 	flag=0;
-	for (mkey=kingew-1;mkey>-1;mkey--){subpacman3();}
+	for (mkey=kingew-1;mkey>-1;mkey--){d=mkey;subpacman5();} // subpacman3
 	flag=0;
-	for (mkey=kingew+1;mkey<11;mkey++){subpacman3();}
+	for (mkey=kingew+1;mkey<11;mkey++){d=mkey;subpacman5();} // subpacman3
 }
 /************************************************/
 void subpacman2()
 {
+	d=y;
 	flag=0;
-	for (mkey=kingns-1;mkey>-1;mkey--){subpacman4();}
+	for (mkey=kingns-1;mkey>-1;mkey--){c=mkey;subpacman5();} // subpacman4
 	flag=0;
-	for (mkey=kingns+1;mkey<11;mkey++){subpacman4();}	
+	for (mkey=kingns+1;mkey<11;mkey++){c=mkey;subpacman5();} // subpacman4	
 }
 /*****************************/
-void subpacman3()
+//void subpacman3()
+//{
+//if ( players[counter][mkey]==0 ) { flag=1;}
+//if ((flag==0)&&(target[counter][mkey]>1 )) { target[counter][mkey]++;}
+//}
+/******************************/
+//void subpacman4()
+//{
+//if ( players[mkey][counter]==0 ) { flag=1;}
+//if ((flag==0)&&(target[mkey][counter]>1 )) { target[mkey][counter]++;}
+//}
+/******************************/
+void subpacman5()
 {
-if ( players[counter][mkey]==0 ) { flag=1;}
-if ((flag==0)&&(target[counter][mkey]>1 )) { target[counter][mkey]++;}
-}
-void subpacman4()
-{
-if ( players[mkey][counter]==0 ) { flag=1;}
-if ((flag==0)&&(target[mkey][counter]>1 )) { target[mkey][counter]++;}
-
+if ( players[c][d] == 0) {flag=1;}
+if (( flag == 0)&&(target[c][d] > 1 )) { target[c][d]++;}
 }
 /************************************************/
 void checkend()	// check for endgame conditions
@@ -1000,23 +1013,27 @@ void canpiecemove() // CAN A SELECTED PIECE MOVE?
 	*/
 	if ( ns )		// check north
 		{
-		if ( players[ns-1][ew] == 0 ) incroute();
-		if (( piecetype == 3 )&&(players[ns-1][ew] == 4 )) incroute(); // KING: corner square OK 
+		a=ns-1;b=ew;checkincroute();
+		//if ( players[ns-1][ew] == 0 ) incroute();
+		//if (( piecetype == 3 )&&(players[ns-1][ew] == 4 )) incroute(); // KING: corner square OK 
 		}
 	if ( ns < 10 )		// check south
 		{
-		if ( players[ns+1][ew] == 0 ) incroute(); 
-		if (( piecetype == 3 )&&(players[ns+1][ew] == 4 )) incroute(); // KING: corner square OK 
+		a=ns+1;b=ew;checkincroute();
+		//if ( players[ns+1][ew] == 0 ) incroute(); 
+		//if (( piecetype == 3 )&&(players[ns+1][ew] == 4 )) incroute(); // KING: corner square OK 
 		}
 	if ( ew < 10 )		// check east
 		{
-		if ( players[ns][ew+1] == 0 ) incroute(); 
-		if (( piecetype == 3 )&&(players[ns][ew+1] == 4 )) incroute(); // KING: corner square OK 
+		a=ns;b=ew+1;checkincroute();
+		//if ( players[ns][ew+1] == 0 ) incroute(); 
+		//if (( piecetype == 3 )&&(players[ns][ew+1] == 4 )) incroute(); // KING: corner square OK 
 		}
 	if ( ew )		// check west
 		{
-		if ( players[ns][ew-1] == 0 ) incroute(); 
-		if (( piecetype == 3 )&&(players[ns][ew-1] == 4 )) incroute(); // KING: corner square OK 
+		a=ns;b=ew-1;checkincroute();
+		//if ( players[ns][ew-1] == 0 ) incroute(); 
+		//if (( piecetype == 3 )&&(players[ns][ew-1] == 4 )) incroute(); // KING: corner square OK 
 		}
 	/* In the case that the central square is unnocupied and a piece is adjacent to that square then - for
 	non-KING Pieces only - we need to check to see if the opposite square is occupied or not. 
@@ -1037,6 +1054,12 @@ void canpiecemove() // CAN A SELECTED PIECE MOVE?
 		}
 	if ( route > 0 ) route=1;
 	//return route;
+}
+/************************************************/
+void checkincroute()
+{
+if ( players[a][b] == 0 ) incroute();
+if (( piecetype == 3 )&&(players[a][b] == 4 )) incroute(); // KING: corner square OK 
 }
 /************************************************/
 void drawplayers() // DRAW ALL THE PIECES ON THE BOARD
@@ -1792,7 +1815,7 @@ for (mkey=0;mkey<5;mkey++)
 	}
 }
 /*******************************/
-void fliprune()
+void fliprune()		// performs the rune flipping sequence in title screen
 {
 for (tiletodraw=30;tiletodraw<35;tiletodraw++)
 	{
