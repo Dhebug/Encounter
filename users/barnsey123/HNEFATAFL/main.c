@@ -1,127 +1,15 @@
 // main.c by Neil Barnes (a.k.a. Barnsey123)
-// 22-03-2011 prog to draw a grid (for viking game)
-// 23-03-2011 create new drawgrid function
-// 01-04-2011 create new drawtile functions and use compact code (char instead of int etc)
-// 02-04-2011 routine to read keyboard
-// 06-04-2011 cursor drawing correct
-// 11-04-2011 request help from DBUG - bug in OSDK. Have banged head against wall for far too long!
-// 14-04-2011 DBUG fixed OSDK bug! :-)
-// 15-04-2011 tidied code up
-// 15-04-2011 tiles as a global variable, (will be used everywhere)
-// 16-04-2011 Changed numeric settings for board (0=blank, 1=attackers tile, 2=defenders tile, 3=kings tile)
-// 16-04-2011 drawing players
-// 17-04-2011 improving tile drawing (saving few bytes in each routine and having different styles)
-// 19-04-2011 added flashscreen (to flash screen with desired color - e.g. GREEN for OK, RED for !OK)
-// 19-04-2011 context sensitive piece selection
-// 19-04-2011 canpiecemove function (can a selected piece MOVE or not?) 
-// 21-04-2011 numerous bug-fixes to do with x,y co-ords vs north-south/east-west array positions
-// 21-04-2011 brilliant arrow printing function (hover over one of your pieces and press 'P')
-// 25-04-2011 fixed bugs in arrow printing routine and reduced code required (TOTAL 817 lines versus 957)
-// 27-04-2011 fixed some other (all?) bugs in arrow printing routines (new, neater routines)
-// 29-04-2011 saved a whole bunch of code (789 lines)
-// 29-04-2011 changed flashscreen so that color can be returned to previous color mode
-// 29-04-2011 Using POINTERS Huzzah! (never thought that would happen!) 786 lines! 
-// 01-05-2011 Once a piece is selected restrict cursor movement to legal destinations 
-// 02-05-2011 handle "skipping" of central square (if square beyond it is available)
-// 02-05-2011 900 lines of code (including comments) versus 917 (more efficient and more features)
-// 02-05-2011 907 lines including refinements
-// 02-05-2011 CAN now move pieces (taking turns between attacker/defender) 935 lines
-// 04-05-2011 Can now TAKE pieces (but king squares can't yet take part...) 1012 lines
-// 04-05-2011 Re-design to save memory/complexity (987 lines)
-// 05-05-2011 re-design to save memory/complexity (966 lines)
-// 05-05-2011 add the take rule (of King being able to take attackers with the aid of the king squares)
-// 06-05-2011 saved a few bytes
-// 07-05-2011 saved a few bytes (962 lines, 30311 bytes)
-// 10-05-2011 fixed bug in central square Skipping (could not return to self if adjacent to square)
-// 10-05-2011 fixed bug allowing defender to select corner square to move!
-// 10-05-2011 Continuing glabalization (few bugs sorted)
-// 11-05-2011 Finished Globalizing (23639 bytes)
-// 13-05-2011 Bug Hunt (23504 bytes) - some tidying up (not 100% byte efficient I'm sure)
-// 14-05-2011 Bug in printpossiblemoves resolved (arrow WILL print on corner square if piece is KING)
-// 14-05-2011 checkend function to check if king escapes or is captured (not complete) (26815)
-// 18-05-2011 developing attacker move (running out of memory! 31213!) hardly started
-// 26-05-2011 1st attempt at computer moving piece (since Amiga days! 1990/1991?)
-// 31-05-2011 fixed bug in board update position? (phantom attackers!)
-// 06-06-2011 incorporated printdestinations into computerturn saving wedges of code
-// 08-06-2011 fixed bug in computer targetselection (cantake wasn't resetting to 0)
-// 13-06-2011 fixed bug in canbetaken (mostly fixed)
-// 15-06-2011 fixed "blind spot"
-// 15-06-2011 changed checkend to enable "king surrounded against board edge" facility (works)
-// 15-06-2011 The AI will only be for ATTACKERS (for the moment)
-// 16-06-2011 various improvements
-// 17-06-2011-11-07-2011 various tomfoolery to reduce memory footprint
-// 12-07-2011 New variables to check for pieces NSEW of King
-// 31-08-2011 prevent attackers occupying corner squares
-// 12-10-2011 using 18x18 squares (unfinished...needs LOTS of work!!!)
-// 17-10-2011 using new routine to draw tiles
-// 18-10-2011 tidied up graphic routines (reduced size of code/executable)
-// 20-10-2011 Added expodetile function (playes animation to "kill" a piece) plus pause function (reduces executable size)
-// 20-10-2011 made graphics drawing more efficient (saved 300bytes)
-// 21-10-2011 added STEELDIAMOND function (create higher target values in a diamond shape around king)
-// 24-10-2011 Fixed bug with crashes at south-east corner of board (counter must be SIGNED)
-// 24-10-2011 Fixed a bug regarding counter - much stronger AI!
-// 24-10-2011 Play again? (needs work)
-// 27-10-2011 Fixing the "enemy one space away ENEMY UDATE issue" - set value=50
-// 31-10-2011 Added the COMPUTER array (where the computers's pieces can get to)
-// 02-11-2011 Added Select gamestyle (human vs computer or human vs human selection)
-// 02-11-2011 GONZO! the -50 behaviour is interesting - still crashing though...
-// 09-11-2011 LookBackInAnger routine (attackers to check behind their original position)
-// 10-11-2011 Now checks to see if a piece can be taken if it stays where it is (needs some finessing)
-// 14-11-2011 Improved the above routine
-// 16-11-2011 compress routines more (free up some memory)
-// 06-12-2011 fixed a couple of bugs (I think)
-// 08-12-2011 got rid of baseplayers as unnecessary (it's just a copy of tiles)
-// 08-12-2011 shrunk code still further - added calctakeweight routine
-// 08-12-2011 shrunk code again (33524) - added enemyzero routine and simplified surrounded routines
-// 08-12-2011 found/fixed bug in the previous surrounded routine during simplification
-// 10-12-2011 subpacmanx(made smaller), added checkroute function
-// 10-12-2011 enemyzero made more effective (and smaller) by zeroing entire enemy array
-// 12-12-2011 lots of changes (seperated out "updatetarget" from "printarrowsorblanks"
-// 14-12-2011 Test of replacing PACMAN with something else (see updatetarget)
-// 20-12-2011 Oh Christ!
-// 21-12-2011 Added nifty, don't take a defender if on same plane as king routine...
-// 22-12-2011 above, wont take if LAST defender on plane (added inckingattacker etc)
-// 22-12-2011 kingsouth/defsouth replaced by arrays (kingattacker, kingdefender)
-// 23-12-2011 reduced code, fixed a couple of bugs
-// 04-01-2012 introduced calcantake function (also beefed up the hightarget routines "findpiecens/findpieceew")
-// 05-01-2012 reduced memory requirements - using unsigned char where possible  (34457)
-// 05-01-2012 removed all local variables (replaced with globals) (34338)
-// 05-01-2012 got rid of LookBackInAnger (plus some other changes) (33670)
-// 06-01-2012 fixed bug in subcanbetaken2
-// 07-01-2012 found out why some pieces commit suicide but the fix don't work...perhaps other factors are at work
-// 09-01-2012 HUZZAH! Fixed the suicide issue. 
-/* from subcanbetaken2...
-	NEW:	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
-	OLD:	if (players[takenc][takend]==0) 
-	in the OLD condition, if the piece was only one space away, players would always be 1
-*/
-// 09-01-2012 BOOOOO!!! Above fix causing another issue...will be a bastard to fix.
-// 10-01-2012 HUZZAH - above issue resolved (not such a bastard after all but took 24 hrs thinking! 34865)
-// 11-01-2012 TITLE SCREEN (36743)
-// 12-01-2012 Added RUNES
-// 17-01-2012 Made runes work! (37100)
-// 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
-// 01-02-2012 Finished "fliprunes" routine and title screen (38479)
-// 01-02-2012 DBUG replaced printf with the code in text.s saving memory. Loading from $500. Excellent! (37462)
-// 02-02-2012 Tided up some of the text displays (saving a few bytes) (37448)
-// 02-02-2012 Used partial runic1 font (no lower case chars)
-// 02-02-2012 Dbug adds some ASM to replace some c functions
-// 03-02-2012 Added checkincroute to replace some repetetive code (35414)
-// 03-02-2012 Replaced subpacman3/4 with subpacman5 (35141)
-// 04-02-2012 added a few ASM routines of my own
-/* TO DO LIST
-*** Continue with endgame function to return a value determining victory conditions etc
-*** routine to detect if all attackers have been captured
-*** routine to detect stalemate (a side cannot move)
-*/
+
 #include <lib.h>
 //#include <math.h>
+
 //#define CHAR_BIT 8
 #define NORTH 0
 #define SOUTH 1
 #define EAST 2
 #define WEST 3
 #define ENEMYWEIGHT 37
+
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 //extern unsigned char BorderTiles[];		// border on title screens/version screens etc
@@ -374,379 +262,393 @@ unsigned char xplayers;
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
-//gamekey=89;	// controls "play again?"
-//gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
-CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
-paper(0);
-ink(5);				// color of TEXT in text box at bottom
-hires();
-setflags(0);	// No keyclick, no cursor, no nothing
-printborder();
-ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
-while (gamekey==89)
-	{
-	playertype=0;				// set to 0 as inited later
-	drawboard();				// draw the board
-	//printf("%c",19);			// turn off screen output (means cursor movement doesn't affect oric cursor
-	while (gamestyle==3)
-		{
-		message="ENTER NUMBER OF HUMANS:";
-		printmessage();
-		gameinput=getchar();
-		if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
-		if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
-		if ( gamestyle == 3 ) ping();
-		}
-	while (game>0)
-		{
-		ns=5;						// default north/south position of central square
-		ew=5;						// default east/west position of central square
-		cx=ew;	// cursor x screen position
-		cy=ns;	// cursor y screen position
-		playertype++;				// playertype inited as 0 so ++ will make it 1 at start of game
-		if ( playertype == 3 ) { playertype = 1; } // was defender, set to attacker player
-		//if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))||((gamestyle==2)&&(playertype==1)))
-		if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2)))
-			{
-			playerturn();			// player input
-			}
-		else
-			{
-			computerturn();			// computer has a go...
-			}				
-		checkend();					// check for end of game conditions
-		}	
-	if ( game == 0 ) 
-		{ 
-		message="KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?";
-		printmessage();
-		}
-	else 
-		{ 
-		message="KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?";
-		printmessage();
-		}
-	gamekey=getchar();
-	if (gamekey==89)	// if "Y"
-		{
-		//printf("%c",19);	// turn output ON
-		}
-	}
+  //gamekey=89;	// controls "play again?"
+  //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
+  CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
+  paper(0);
+  ink(5);				// color of TEXT in text box at bottom
+  hires();
+  setflags(0);	// No keyclick, no cursor, no nothing
+  printborder();
+  ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
+  while (gamekey==89)
+  {
+    playertype=0;				// set to 0 as inited later
+    drawboard();				// draw the board
+    //printf("%c",19);			// turn off screen output (means cursor movement doesn't affect oric cursor
+    while (gamestyle==3)
+    {
+      message="ENTER NUMBER OF HUMANS:";
+      printmessage();
+      gameinput=getchar();
+      if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
+      if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
+      if ( gamestyle == 3 ) ping();
+    }
+    while (game>0)
+    {
+      ns=5;						// default north/south position of central square
+      ew=5;						// default east/west position of central square
+      cx=ew;	// cursor x screen position
+      cy=ns;	// cursor y screen position
+      playertype++;				// playertype inited as 0 so ++ will make it 1 at start of game
+      if ( playertype == 3 ) { playertype = 1; } // was defender, set to attacker player
+      //if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))||((gamestyle==2)&&(playertype==1)))
+      if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2)))
+      {
+        playerturn();			// player input
+      }
+      else
+      {
+        computerturn();			// computer has a go...
+      }				
+      checkend();					// check for end of game conditions
+    }	
+    if ( game == 0 ) 
+    { 
+      message="KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?";
+      printmessage();
+    }
+    else 
+    { 
+      message="KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?";
+      printmessage();
+    }
+    gamekey=getchar();
+    if (gamekey==89)	// if "Y"
+    {
+      //printf("%c",19);	// turn output ON
+    }
+  }
 }
 
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn()
 {
-//unsigned int xrand=srandom(deek(630));	// seed random number generator
-//if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-message="ORIC IS THINKING...";
-printmessage();
-//printf("\n\n\nORIC IS THINKING..");
-// 1. initialize target, enemy and computer array to zeroes
-ClearArrays();	// clear target, enemy and computer arrays
-// 2. Loop through players array searching for enemy pieces - calculating where they can go
-//fb=5;
-//pacman1:
-for (fb=4;fb<8;fb++)
-	{
-	for (ctns=0;ctns<11;ctns++)
-		{
-		for (ctew=0;ctew<11;ctew++)
-			{
-			ns=ctns;ew=ctew;
-			if ( fb==4 )	// fb=4 means: don't print destinations, just update ENEMY
-				{	
-				if (( players[ctns][ctew]==2 )||(players[ctns][ctew]==3)) // if enemy found
-					{
-					printdestinations();	// update enemy array of possible locations
-					}
-				}
-			if ((fb==5)||(fb==7))			// fb=5 (+COMPUTER array):fb=7 (can I be taken) 
-				{
-				if ( players[ctns][ctew]==1) // if attacker found
-					{
-					printdestinations();		
-					}
-				}
-			if ( fb==6)	
-				{
-				if ( computer[ctns][ctew] > 0 ) // if computer piece can get here update target values
-					{
-					updatetarget();			// update target value
-					}
-				}
-			}
-		}
-	}
-// 3. Increment target positions around King (PACMAN)
-pacman();
-//if ( playertype == 1 ) {pacman();}
-// other routines to go here to update the target array
-// 4,5,6,7..N etc
-// 
-targetselect();	// Choose the highest value target 
-ns=targetns;ew=targetew;	// make computer move compatible with human move selection
-movepiece();	// make the move
+  //unsigned int xrand=srandom(deek(630));	// seed random number generator
+  //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
+  message="ORIC IS THINKING...";
+  printmessage();
+  //printf("\n\n\nORIC IS THINKING..");
+  // 1. initialize target, enemy and computer array to zeroes
+  ClearArrays();	// clear target, enemy and computer arrays
+  // 2. Loop through players array searching for enemy pieces - calculating where they can go
+  //fb=5;
+  //pacman1:
+  for (fb=4;fb<8;fb++)
+  {
+    for (ctns=0;ctns<11;ctns++)
+    {
+      for (ctew=0;ctew<11;ctew++)
+      {
+        ns=ctns;ew=ctew;
+        if ( fb==4 )	// fb=4 means: don't print destinations, just update ENEMY
+        {	
+          if (( players[ctns][ctew]==2 )||(players[ctns][ctew]==3)) // if enemy found
+          {
+            printdestinations();	// update enemy array of possible locations
+          }
+        }
+        if ((fb==5)||(fb==7))			// fb=5 (+COMPUTER array):fb=7 (can I be taken) 
+        {
+          if ( players[ctns][ctew]==1) // if attacker found
+          {
+            printdestinations();		
+          }
+        }
+        if ( fb==6)	
+        {
+          if ( computer[ctns][ctew] > 0 ) // if computer piece can get here update target values
+          {
+            updatetarget();			// update target value
+          }
+        }
+      }
+    }
+  }
+  // 3. Increment target positions around King (PACMAN)
+  pacman();
+  //if ( playertype == 1 ) {pacman();}
+  // other routines to go here to update the target array
+  // 4,5,6,7..N etc
+  // 
+  targetselect();	// Choose the highest value target 
+  ns=targetns;ew=targetew;	// make computer move compatible with human move selection
+  movepiece();	// make the move
 }
-/**************************************************/
+
+
 /*
 void findpiece()
 {
 if ( foundpiece == 0 )	
-		{		
-		if (players[funca][funcb]==1)
-			{
-			calccantake();
-			if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-			if ((funcc==funcd)&&(funce!=funcd)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
-			if (compass[origorient]==0)
-				{
-				foundpiece=1;
-				funcf=funcc;
-				}
-			}
-		if ((players[funca][funcb]==2)||(players[funca][funcb]==3)) {foundpiece=9;}
-		}
+{		
+if (players[funca][funcb]==1)
+{
+calccantake();
+if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
+if ((funcc==funcd)&&(funce!=funcd)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
+if (compass[origorient]==0)
+{
+foundpiece=1;
+funcf=funcc;
+}
+}
+if ((players[funca][funcb]==2)||(players[funca][funcb]==3)) {foundpiece=9;}
+}
 }
 */
-/*********************************************/
-void findpiecens()	// find piece NORTH-SOUTH
+
+
+// find piece NORTH-SOUTH
+void findpiecens()	
 {
-if ( foundpiece == 0 )	
-		{
-		if (players[mkey][oew]==1)
-			{
-			ns=targetns;ew=targetew;orientation=origorient;calccantake();
-			if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-			//if ((mkey==kingns)&&(targetns!=kingns)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
-			if (compass[origorient]==0)
-				{
-				foundpiece=1;
-				ons=mkey;
-				}
-			}
-		if ((players[mkey][oew]==2)||(players[mkey][oew]==3)) {foundpiece=9;}
-		}
+  if ( foundpiece == 0 )	
+  {
+    if (players[mkey][oew]==1)
+    {
+      ns=targetns;ew=targetew;orientation=origorient;calccantake();
+      if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
+      //if ((mkey==kingns)&&(targetns!=kingns)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
+      if (compass[origorient]==0)
+      {
+        foundpiece=1;
+        ons=mkey;
+      }
+    }
+    if ((players[mkey][oew]==2)||(players[mkey][oew]==3)) {foundpiece=9;}
+  }
 }
-/**************************************************/
-void findpieceew()	// find piece EAST-WEST
+
+
+// find piece EAST-WEST
+void findpieceew()	
 {
-if ( foundpiece == 0 )	
-		{		
-		if (players[ons][mkey]==1)
-			{
-			ns=targetns;ew=targetew;orientation=origorient;calccantake();
-			if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-			//if ((mkey==kingew)&&(targetew!=kingew)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
-			if (compass[origorient]==0)
-				{
-				foundpiece=1;
-				oew=mkey;
-				}
-			}
-		
-		if ((players[ons][mkey]==2)||(players[ons][mkey]==3)) {foundpiece=9;}		
-		}
+  if ( foundpiece == 0 )	
+  {		
+    if (players[ons][mkey]==1)
+    {
+      ns=targetns;ew=targetew;orientation=origorient;calccantake();
+      if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
+      //if ((mkey==kingew)&&(targetew!=kingew)&&(kingattacker[origorient]<3)) compass[origorient]=1;	// don't move from plane of king if less than 3 attackers
+      if (compass[origorient]==0)
+      {
+        foundpiece=1;
+        oew=mkey;
+      }
+    }
+
+    if ((players[ons][mkey]==2)||(players[ons][mkey]==3)) {foundpiece=9;}		
+  }
 }
-/*********************************************************/
+
+
 // TARGETSELECT - find the highest scoring TARGET
 void targetselect()
 {
-//unsigned char xloop;
+  //unsigned char xloop;
 NEWTARGET:
-hightarget=0;	// contains highest value target
-for (ctns=0;ctns<11;ctns++)	// find the highest value for target
-	{
-	for (ctew=0;ctew<11;ctew++)
-		{
-		if ( target[ctns][ctew] > hightarget )
-			{
-			hightarget=target[ctns][ctew];	// make hightarget the highest value
-			targetns=ctns;
-			targetew=ctew;		
-			ons=ctns;	// target is accessible so make ons/oew the default piece position to move
-			oew=ctew;	// the ACTUAL piece to move determined below (one of ons or oew will remain same)
-			ns=ctns;
-			ew=ctew;
-			}
-		}
-	}
-// having found target we need to select a piece to move
-compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
-fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
-origorient=NORTH;
-for (mkey=ons-1; mkey>-1; mkey--){findpiecens();}	
-if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
-origorient=SOUTH;														
-for (mkey=ons+1; mkey<11; mkey++){findpiecens();}	
-if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
-origorient=EAST;
-for (mkey=oew+1; mkey<11; mkey++){findpieceew();}	
-if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
-origorient=WEST;
-for (mkey=oew-1; mkey>-1; mkey--){findpieceew();}	
-if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
+  hightarget=0;	// contains highest value target
+  for (ctns=0;ctns<11;ctns++)	// find the highest value for target
+  {
+    for (ctew=0;ctew<11;ctew++)
+    {
+      if ( target[ctns][ctew] > hightarget )
+      {
+        hightarget=target[ctns][ctew];	// make hightarget the highest value
+        targetns=ctns;
+        targetew=ctew;		
+        ons=ctns;	// target is accessible so make ons/oew the default piece position to move
+        oew=ctew;	// the ACTUAL piece to move determined below (one of ons or oew will remain same)
+        ns=ctns;
+        ew=ctew;
+      }
+    }
+  }
+  // having found target we need to select a piece to move
+  compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
+  fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
+  origorient=NORTH;
+  for (mkey=ons-1; mkey>-1; mkey--){findpiecens();}	
+  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  origorient=SOUTH;														
+  for (mkey=ons+1; mkey<11; mkey++){findpiecens();}	
+  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  origorient=EAST;
+  for (mkey=oew+1; mkey<11; mkey++){findpieceew();}	
+  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  origorient=WEST;
+  for (mkey=oew-1; mkey>-1; mkey--){findpieceew();}	
+  if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
 
-cx=oew;	// piece x screen position
-cy=ons;	// piece y screen position
-blinkcursor();			// draw cursor in foreground color at piece to move position cx,cy
-fb=0;drawcursor();		// blank cursor
-cx=targetew;	// target x screen position
-cy=targetns;	// target y screen position
-blinkcursor();			// draw cursor in foreground color at target position cx,cy
-ocx=oew;	// piece to move x screen position
-ocy=ons;	// piece to move y screen position
-//printf("%cNS=%d,EW=%d,ONS=%d,OEW=%d%c",19,ns,ew,ons,oew,19);
-//loop=getchar();
+  cx=oew;	// piece x screen position
+  cy=ons;	// piece y screen position
+  blinkcursor();			// draw cursor in foreground color at piece to move position cx,cy
+  fb=0;drawcursor();		// blank cursor
+  cx=targetew;	// target x screen position
+  cy=targetns;	// target y screen position
+  blinkcursor();			// draw cursor in foreground color at target position cx,cy
+  ocx=oew;	// piece to move x screen position
+  ocy=ons;	// piece to move y screen position
+  //printf("%cNS=%d,EW=%d,ONS=%d,OEW=%d%c",19,ns,ew,ons,oew,19);
+  //loop=getchar();
 }
-/************************************************/
-void subpacmanx()		// subroutine of pacman
+
+
+// subroutine of pacman
+void subpacmanx()		
 {
-z=kingattacker[orientation]+kingdefender[orientation];	// count of pieces on route to edge (attackers&defenders)
-a=pacpointsx+pacpointsy; // count of pieces to two corners
-b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
-setpoints();
-//x=paccount1*3;	// x=number of attackers * 3
-//y=x+paccount2;	// y=(number of attackers *3)+(defenders * 1)
-//if ((points-y) < 0) {points=1;}else{points-=y;}	// subtract two points for every attacker and 1 point for every defender
-if ( z==0 )				// no pieces in the direction from king
-	{
-	doublepoints();							// double points if blank route to edge
-	if (pacpointsx==0){ doublepoints();}	// double if route to one corner
-	if (pacpointsy==0){ doublepoints();}	// double if route to two corners
-	}
-if ( z<2 )
-	{
-	if (pacpointsa==0){ doublepoints();}	// double if route to one square adjacent to corner
-	if (pacpointsb==0){ doublepoints();}	// double if route to two squares adjacent to corners
-	}
-if ((paclevel2<3)||(paclevel2>7)) { incpoints(); } // if close to an edge in orientation
-if ((paclevel1<2)||(paclevel2>8)) { incpoints(); } // if "left or rightside" in a "winning position"
-if ((orientation == NORTH) || (orientation == WEST))	// if north or west
-	{
-	uncounter=paclevel2-1;
-	if ( paclevel2 < 5 ) { incpoints();} // add weight to north or west if king in north or west side of board	
-	}
-else											// if south east
-	{ 
-	uncounter=paclevel2+1;
-	if ( paclevel2 > 5 ) { incpoints();} // add weight to south or east if king in south or east side of board
-	}
-if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
-surroundpoints();
-// default north/south
-x=uncounter;
-y=paclevel1;
-if ( orientation > SOUTH) // if east/west
-	{
-	x=paclevel1;
-	y=uncounter;
-	}
-flag=1;
-while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
-	{
-	if (computer[x][y] > 0)	// if accessible by attacker	
-		{ // only update target if cannot be taken OR king has clear route to corner
-		if ((a==0)||(pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
-			{
-			target[x][y]+=points;
-			flag=0;
-			}
-		else
-			{
-			if (target[x][y] > 1){target[x][y]=points;flag=0;}
-			}
-		}
-	else 
-		{	
-		if ((flag > 0)&&(players[x][y]==0))	// if blank)
-			{
-			if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
-			}
-		}
-	decpoints();
-	//if (z){decpoints();} // only decrement points if route to edge is blocked
-	if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
-	if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
-	}
+  z=kingattacker[orientation]+kingdefender[orientation];	// count of pieces on route to edge (attackers&defenders)
+  a=pacpointsx+pacpointsy; // count of pieces to two corners
+  b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
+  setpoints();
+  //x=paccount1*3;	// x=number of attackers * 3
+  //y=x+paccount2;	// y=(number of attackers *3)+(defenders * 1)
+  //if ((points-y) < 0) {points=1;}else{points-=y;}	// subtract two points for every attacker and 1 point for every defender
+  if ( z==0 )				// no pieces in the direction from king
+  {
+    doublepoints();							// double points if blank route to edge
+    if (pacpointsx==0){ doublepoints();}	// double if route to one corner
+    if (pacpointsy==0){ doublepoints();}	// double if route to two corners
+  }
+  if ( z<2 )
+  {
+    if (pacpointsa==0){ doublepoints();}	// double if route to one square adjacent to corner
+    if (pacpointsb==0){ doublepoints();}	// double if route to two squares adjacent to corners
+  }
+  if ((paclevel2<3)||(paclevel2>7)) { incpoints(); } // if close to an edge in orientation
+  if ((paclevel1<2)||(paclevel2>8)) { incpoints(); } // if "left or rightside" in a "winning position"
+  if ((orientation == NORTH) || (orientation == WEST))	// if north or west
+  {
+    uncounter=paclevel2-1;
+    if ( paclevel2 < 5 ) { incpoints();} // add weight to north or west if king in north or west side of board	
+  }
+  else											// if south east
+  { 
+    uncounter=paclevel2+1;
+    if ( paclevel2 > 5 ) { incpoints();} // add weight to south or east if king in south or east side of board
+  }
+  if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
+  surroundpoints();
+  // default north/south
+  x=uncounter;
+  y=paclevel1;
+  if ( orientation > SOUTH) // if east/west
+  {
+    x=paclevel1;
+    y=uncounter;
+  }
+  flag=1;
+  while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
+  {
+    if (computer[x][y] > 0)	// if accessible by attacker	
+    { // only update target if cannot be taken OR king has clear route to corner
+      if ((a==0)||(pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
+      {
+        target[x][y]+=points;
+        flag=0;
+      }
+      else
+      {
+        if (target[x][y] > 1){target[x][y]=points;flag=0;}
+      }
+    }
+    else 
+    {	
+      if ((flag > 0)&&(players[x][y]==0))	// if blank)
+      {
+        if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
+      }
+    }
+    decpoints();
+    //if (z){decpoints();} // only decrement points if route to edge is blocked
+    if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
+    if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
+  }
 }
-/************************************************/
+
+
 void subpacnorthsouth()
 {
-startrow=a;startcol=0;destrow=a;destcol=kingew;
-pacpointsx=checkroute();
-startcol=kingew;destcol=10;
-pacpointsy=checkroute();
-startrow=d;startcol=0;destrow=d;destcol=kingew;
-pacpointsa=checkroute();
-startcol=kingew;destcol=10;
-pacpointsb=checkroute();
+  startrow=a;startcol=0;destrow=a;destcol=kingew;
+  pacpointsx=checkroute();
+  startcol=kingew;destcol=10;
+  pacpointsy=checkroute();
+  startrow=d;startcol=0;destrow=d;destcol=kingew;
+  pacpointsa=checkroute();
+  startcol=kingew;destcol=10;
+  pacpointsb=checkroute();
 }
+
+
 void subpaceastwest()
 {
-startrow=0;startcol=b;destrow=kingns;destcol=b;
-pacpointsx=checkroute();
-startrow=kingns;destrow=10;
-pacpointsy=checkroute();
-startrow=0;startcol=c;destrow=kingns;destcol=c;
-pacpointsa=checkroute();
-startrow=kingns;destrow=10;
-pacpointsb=checkroute();
+  startrow=0;startcol=b;destrow=kingns;destcol=b;
+  pacpointsx=checkroute();
+  startrow=kingns;destrow=10;
+  pacpointsy=checkroute();
+  startrow=0;startcol=c;destrow=kingns;destcol=c;
+  pacpointsa=checkroute();
+  startrow=kingns;destrow=10;
+  pacpointsb=checkroute();
 }
 
-/************************************************/
-void pacman()		// PACMAN	( increment target positions around king )	
+
+// PACMAN	( increment target positions around king )	
+void pacman()		
 {
-//int xrand=random()/1000;	// random number between 0-32
-surroundcount();		// updates "surrounded"
+  //int xrand=random()/1000;	// random number between 0-32
+  surroundcount();		// updates "surrounded"
 
-// NORTH
-orientation=NORTH;
-paclevel1=kingew;
-paclevel2=kingns;
-a=0; d=1;  
-subpacnorthsouth(); // check routes to escape positions
-subpacmanx();
+  // NORTH
+  orientation=NORTH;
+  paclevel1=kingew;
+  paclevel2=kingns;
+  a=0; d=1;  
+  subpacnorthsouth(); // check routes to escape positions
+  subpacmanx();
 
-//SOUTH
-orientation=SOUTH;
-a=10; d=9; 
-subpacnorthsouth();
-subpacmanx();
+  //SOUTH
+  orientation=SOUTH;
+  a=10; d=9; 
+  subpacnorthsouth();
+  subpacmanx();
 
-// EAST
-orientation=EAST;
-paclevel1=kingns;
-paclevel2=kingew;
-b=10;c=9;
-subpaceastwest();
-subpacmanx();
+  // EAST
+  orientation=EAST;
+  paclevel1=kingns;
+  paclevel2=kingew;
+  b=10;c=9;
+  subpaceastwest();
+  subpacmanx();
 
-// WEST
-orientation=WEST;
-b=0;c=1;
-subpaceastwest();
-subpacmanx();
+  // WEST
+  orientation=WEST;
+  b=0;c=1;
+  subpaceastwest();
+  subpacmanx();
 
 }
 
-/************************************************/
-void subpacman()		// increase target positions that LEAD to a king target
+
+// increase target positions that LEAD to a king target
+void subpacman()		
 {
-	c=x;
-	flag=0;
-	for (mkey=kingew-1;mkey>-1;mkey--){d=mkey;subpacman5();} // subpacman3
-	flag=0;
-	for (mkey=kingew+1;mkey<11;mkey++){d=mkey;subpacman5();} // subpacman3
+  c=x;
+  flag=0;
+  for (mkey=kingew-1;mkey>-1;mkey--){d=mkey;subpacman5();} // subpacman3
+  flag=0;
+  for (mkey=kingew+1;mkey<11;mkey++){d=mkey;subpacman5();} // subpacman3
 }
-/************************************************/
+
+
 void subpacman2()
 {
-	d=y;
-	flag=0;
-	for (mkey=kingns-1;mkey>-1;mkey--){c=mkey;subpacman5();} // subpacman4
-	flag=0;
-	for (mkey=kingns+1;mkey<11;mkey++){c=mkey;subpacman5();} // subpacman4	
+  d=y;
+  flag=0;
+  for (mkey=kingns-1;mkey>-1;mkey--){c=mkey;subpacman5();} // subpacman4
+  flag=0;
+  for (mkey=kingns+1;mkey<11;mkey++){c=mkey;subpacman5();} // subpacman4	
 }
 /*****************************/
 //void subpacman3()
@@ -763,810 +665,825 @@ void subpacman2()
 /******************************/
 void subpacman5()
 {
-if ( players[c][d] == 0) {flag=1;}
-if (( flag == 0)&&(target[c][d] > 1 )) { target[c][d]++;}
+  if ( players[c][d] == 0) {flag=1;}
+  if (( flag == 0)&&(target[c][d] > 1 )) { target[c][d]++;}
 }
-/************************************************/
-void checkend()	// check for endgame conditions
+
+
+// check for endgame conditions
+void checkend()	
 {
-	/* Victory Conditions 
-	game=0 King escapes. 										// DONE
-	game=-1 King Surrounded in open play or by central square 	// DONE
-	game=-2 King surrounded by attackers and corner squares		// DONE
-	game=-3 King surrounded by attackers and edge of board		// DONE
-	game=-4 defenders cannot move (stalemate)					// TBD
-	game=-5 attackers cannot move (stalemate)					// TBD
-	game=-6 all attackers eliminated 							// TBD
-	*/
-	//char kingfound=0;	// 0=king not found 1=king found 
-	// ns and ew contains new board co-ords of last piece moved
-	if (( players[ns][ew] == 3 ) && ( tiles[ns][ew] == 4 )) { game=0; }		// king has escaped
-	// check to see if king is surrounded by attackers (first find king)
-	if ( players[ns][ew] == 1 )	// if attacker was last to move
-		{
-		if (((ns > 0 )&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew > 0 )&&(players[ns][ew-1]==3 ))) 
-			{
-			surroundcount();
-			}
-		if ( surrounded == 4 ) { game=-1;}	// king is surrounded on all sides by attackers or king squares
-		}
+  /* Victory Conditions 
+  game=0 King escapes. 										// DONE
+  game=-1 King Surrounded in open play or by central square 	// DONE
+  game=-2 King surrounded by attackers and corner squares		// DONE
+  game=-3 King surrounded by attackers and edge of board		// DONE
+  game=-4 defenders cannot move (stalemate)					// TBD
+  game=-5 attackers cannot move (stalemate)					// TBD
+  game=-6 all attackers eliminated 							// TBD
+  */
+  //char kingfound=0;	// 0=king not found 1=king found 
+  // ns and ew contains new board co-ords of last piece moved
+  if (( players[ns][ew] == 3 ) && ( tiles[ns][ew] == 4 )) { game=0; }		// king has escaped
+  // check to see if king is surrounded by attackers (first find king)
+  if ( players[ns][ew] == 1 )	// if attacker was last to move
+  {
+    if (((ns > 0 )&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew > 0 )&&(players[ns][ew-1]==3 ))) 
+    {
+      surroundcount();
+    }
+    if ( surrounded == 4 ) { game=-1;}	// king is surrounded on all sides by attackers or king squares
+  }
 }
-/************************************************/
+
+
 void cursormodezero()
 {
-if ( cursormode == 0 ) { canmovecursor=1;}
-}
-/***********************/
-void movecursor2() // routine to move the cursor
-{
-/*
-cursormode = [0 or 1] 0=unrestricted (move anywhere), 1= restricted (only move to possible destinations)
-*/
-multiple=1;	// concerning central square (how much to multiply the coords to SKIP the square
-xptrns=ns;		// copy of NS
-xptrew=ew;		// copy of EW
-skipns=ns;		// skip to north/south
-skipew=ew;		// skip to east/west 
-modeonevalid=0;	// is OK for mode 1? 0=no, 1=yes
-canmovecursor=0;	
-piecetype=players[ons][oew];	// determines the piece type that is currently selected (used in mode 1)
-if ((mkey == 8 )&&( ew))		// west
-	{
-	cursormodezero();
-	xptrew--;		// decrement copyew
-	skipew-=2;
-	incmodeone();
-	//modeonevalid=1;
-	}
-if ((mkey == 9 )&&( ew < 10))		// east
-	{
-	cursormodezero();
-	xptrew++;
-	skipew+=2;
-	incmodeone();
-	//modeonevalid=1;
-	}
-if ((mkey == 10)&&( ns < 10))		// south
-	{
-	cursormodezero();
-	xptrns++;
-	skipns+=2;
-	incmodeone();
-	//modeonevalid=1;
-	}
-if ((mkey == 11)&&( ns > 0))		// north
-	{
-	cursormodezero();
-	xptrns--;
-	skipns-=2;
-	incmodeone();
-	//modeonevalid=1;
-	}		
-if (( cursormode > 0 ) && ( modeonevalid > 0 ))	// if not at edge of board
-	{
-	if ( players[xptrns][xptrew] == 0 ) 					{canmovecursor=1;} // ok if square vacant
-	if ( tiles[xptrns][xptrew] == 4 ) 						{canmovecursor=0;}	// !ok if corner
-	if (( piecetype == 3 )&&( tiles[xptrns][xptrew] > 2 ))  {canmovecursor=1;} // ok if KING and corner/central
-	if (( xptrns == ons )&&( xptrew == oew )) 		 		{canmovecursor=1;} // ok if back to self
-	// need to check that for non-king pieces wether the central square is vacant and can be skipped
-	if (( piecetype < 3 )&&( tiles[xptrns][xptrew] == 3)&&(players[xptrns][xptrew] == 0 ))  // tiles=3(central), tiles=4(corner)
-		{	
-		if ( players[skipns][skipew] > 0 ) {canmovecursor=0;}	// cannot skip if otherside occupied
-		if ((( skipns == ons )&&( skipew == oew ))||(	players[skipns][skipew]==0))			// ok to skip to self
-			{
-			canmovecursor=1;
-			multiple=2; 
-			}			
-		}	
-	}
-if (canmovecursor)
-	{
-	fb=0;
-	drawcursor();				// print blank cursor (effect=remove dots)
-	if ( mkey == 8 ) {cx-=multiple;}	// left
-	if ( mkey == 9 ) {cx+=multiple;}	// right
-	if ( mkey == 10 ){cy+=multiple;}	// down
-	if ( mkey == 11 ){cy-=multiple;}	// up
-	fb=1;
-	drawcursor();				// print dotted cursor
-	if ( mkey == 8 ) {ew-=multiple;}		// left
-	if ( mkey == 9 ) {ew+=multiple;}		// right
-	if ( mkey == 10 ){ns+=multiple;}		// down
-	if ( mkey == 11 ){ns-=multiple;}		// up
-	}
-else
-	{
-	flashcolor=1;
-	if ( cursormode == 0 ) {flashback=6;flashscreen();}	// flash red: return to cyan:6
-	if ( cursormode == 1 ) {flashback=2;flashscreen();}	// flash red: return to green:2)
-	}			
+  if ( cursormode == 0 ) { canmovecursor=1;}
 }
 
-/************************************************/
+
+// routine to move the cursor
+void movecursor2() 
+{
+  /*
+  cursormode = [0 or 1] 0=unrestricted (move anywhere), 1= restricted (only move to possible destinations)
+  */
+  multiple=1;	// concerning central square (how much to multiply the coords to SKIP the square
+  xptrns=ns;		// copy of NS
+  xptrew=ew;		// copy of EW
+  skipns=ns;		// skip to north/south
+  skipew=ew;		// skip to east/west 
+  modeonevalid=0;	// is OK for mode 1? 0=no, 1=yes
+  canmovecursor=0;	
+  piecetype=players[ons][oew];	// determines the piece type that is currently selected (used in mode 1)
+  if ((mkey == 8 )&&( ew))		// west
+  {
+    cursormodezero();
+    xptrew--;		// decrement copyew
+    skipew-=2;
+    incmodeone();
+    //modeonevalid=1;
+  }
+  if ((mkey == 9 )&&( ew < 10))		// east
+  {
+    cursormodezero();
+    xptrew++;
+    skipew+=2;
+    incmodeone();
+    //modeonevalid=1;
+  }
+  if ((mkey == 10)&&( ns < 10))		// south
+  {
+    cursormodezero();
+    xptrns++;
+    skipns+=2;
+    incmodeone();
+    //modeonevalid=1;
+  }
+  if ((mkey == 11)&&( ns > 0))		// north
+  {
+    cursormodezero();
+    xptrns--;
+    skipns-=2;
+    incmodeone();
+    //modeonevalid=1;
+  }		
+  if (( cursormode > 0 ) && ( modeonevalid > 0 ))	// if not at edge of board
+  {
+    if ( players[xptrns][xptrew] == 0 ) 					{canmovecursor=1;} // ok if square vacant
+    if ( tiles[xptrns][xptrew] == 4 ) 						{canmovecursor=0;}	// !ok if corner
+    if (( piecetype == 3 )&&( tiles[xptrns][xptrew] > 2 ))  {canmovecursor=1;} // ok if KING and corner/central
+    if (( xptrns == ons )&&( xptrew == oew )) 		 		{canmovecursor=1;} // ok if back to self
+    // need to check that for non-king pieces wether the central square is vacant and can be skipped
+    if (( piecetype < 3 )&&( tiles[xptrns][xptrew] == 3)&&(players[xptrns][xptrew] == 0 ))  // tiles=3(central), tiles=4(corner)
+    {	
+      if ( players[skipns][skipew] > 0 ) {canmovecursor=0;}	// cannot skip if otherside occupied
+      if ((( skipns == ons )&&( skipew == oew ))||(	players[skipns][skipew]==0))			// ok to skip to self
+      {
+        canmovecursor=1;
+        multiple=2; 
+      }			
+    }	
+  }
+  if (canmovecursor)
+  {
+    fb=0;
+    drawcursor();				// print blank cursor (effect=remove dots)
+    if ( mkey == 8 ) {cx-=multiple;}	// left
+    if ( mkey == 9 ) {cx+=multiple;}	// right
+    if ( mkey == 10 ){cy+=multiple;}	// down
+    if ( mkey == 11 ){cy-=multiple;}	// up
+    fb=1;
+    drawcursor();				// print dotted cursor
+    if ( mkey == 8 ) {ew-=multiple;}		// left
+    if ( mkey == 9 ) {ew+=multiple;}		// right
+    if ( mkey == 10 ){ns+=multiple;}		// down
+    if ( mkey == 11 ){ns-=multiple;}		// up
+  }
+  else
+  {
+    flashcolor=1;
+    if ( cursormode == 0 ) {flashback=6;flashscreen();}	// flash red: return to cyan:6
+    if ( cursormode == 1 ) {flashback=2;flashscreen();}	// flash red: return to green:2)
+  }			
+}
+
+
+//  kicks off functions that print appropriate arrows at all possible 
+// destinations and blanks them out afterwards
 void printpossiblemoves()
 {
-	/*  kicks off functions that print appropriate arrows at all possible destinations and blanks
-	them out afterwards*/
-	char k;	// key entered
-	fb=1;
-	printdestinations();	// print arrows on all destinations	
-	message="* PRESS ANY KEY TO PROCEED *";
-	printmessage();
-	k=getchar();
-	fb=0;
-	printdestinations();	// blank out arrows on all destinations
-}
-/************************************************/
-void printarrowsorblanks()	// used in printdestinations
-{
-//char xplayers;		// player type at square under test 
-//zns=ns;		// another copy of ns (for computer turn)
-//zew=ew;		// another copy of ew (for computer turn)
-origorient=orientation; // original orientation (for computer turn)
-//char cantake=0;		// can I take?	(for computer turn)
-//unsigned char subloop=0;
-//cantake=0;
-xns=ns;	// copy of ns
-xew=ew;	// copy of ew
-arrow=1;
-//arrowsx=cx+1;
-//arrowsy=cy+1;
-// orientation 0,1,2,3 = N, S, E, W
-takerow=ns;takecol=ew; // will set below to be the opposite of the orientation
-if ( orientation == NORTH ) { xplayers=players[xns-1][xew];takerow=xns+1;} // check north
-if ( orientation == SOUTH ) { xplayers=players[xns+1][xew];takerow=xns-1;} // check south
-if ( orientation == EAST ) { xplayers=players[xns][xew+1];takecol=xew-1;} // check east
-if ( orientation == WEST ) { xplayers=players[xns][xew-1];takecol=xew+1;}  // check west
-while (( arrow == 1 )&&(fb!=7)) // keep checking until cannot move
-	{
-	if (( orientation == NORTH ) && ( xns ))  // check north
-		{
-		xns--;			// decrement provisional north-south player position
-		subarrows();
-		}
-	if (( orientation == SOUTH ) && ( xns < 10 )) // check south
-		{
-		xns++;			// increment provisional north-south player position
-		subarrows();
-		}
-	if ((orientation == EAST ) && ( xew < 10 )) // check east
-		{
-		xew++;			// increment provisional east-west player position
-		subarrows();
-		}
-	if ((orientation == WEST ) && ( xew )) // check west
-		{
-		xew--;			// decrement provisional east-west player position
-		subarrows();
-		}
-	tiletodraw=tiles[xns][xew];				// obtain type of tile	
-	if ( arrow == 1 )						// if MODE is "draw an arrow" (aka: I can move here)
-		{
-		row=xns;
-		col=xew;
-		if (fb==1) {drawarrow();}		// draw arrow
-		if (fb==4) {subarrows2();} 		// enemy can get here, update enemy array (direction specific)
-		if (fb==5) {computer[xns][xew]++;} // computer can get here, increment computer array 
-		if (fb==0) {drawarrow();}		// if MODE is "blank an arrow"
-		}	
-	// have we reached the end of the board?
-	if (( orientation == NORTH ) && ( xns == 0 )) 	{ arrow=0;}	// check north
-	if (( orientation == SOUTH ) && ( xns == 10 )) 	{ arrow=0;}	// check south
-	if (( orientation == EAST ) && ( xew == 10 )) 	{ arrow=0;}	// check east
-	if (( orientation == WEST ) && ( xew == 0 )) 	{ arrow=0;}	// check west
-	}			
-if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he stays where he is
-	{
-	if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
-		{
-		target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
-		if (orientation < EAST)	// if heading north or south
-			{
-			if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
-			if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=4;}}
-			}
-		else					// if heading east or west
-			{
-			if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=4;}}
-			if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=4;}}	
-			}
-		}
-	}
-}
-/************************************************/
-void printdestinations()
-{
-	// print appropriate arrows at all possible destinations (or blanks em out)
-	// check north
-	if ( ns ) { orientation=NORTH;printarrowsorblanks();}	// draws arrows/blanks em out (0=north)			
-	// check south
-	if ( ns < 10 ){ orientation=SOUTH;printarrowsorblanks();}	// draws arrows/blanks em out (1=south)
-	// check east
-	if ( ew < 10 ){ orientation=EAST;printarrowsorblanks();}	// draws arrows/blanks em out (2=east)
-	// check west
-	if ( ew ) { orientation=WEST;printarrowsorblanks();}	// draws arrows/blanks em out (3=west)	
-}
-/************************************************/
-void canpiecemove() // CAN A SELECTED PIECE MOVE?
-{
-	// returns 0 or 1 depending on wether a piece can move or not
-	// int route=0;				// number of possible routes
-	route=0;
-	piecetype=players[ns][ew];	// determine TYPE of selected piece (1=attacker, 2=defendr, 3=king)
-	/*  for all piece types determine if adjacent square in any direction is blank or not
-	it won't bother checking a particular direction if piece is at edge of board.
-	*/
-	if ( ns )		// check north
-		{
-		a=ns-1;b=ew;checkincroute();
-		//if ( players[ns-1][ew] == 0 ) incroute();
-		//if (( piecetype == 3 )&&(players[ns-1][ew] == 4 )) incroute(); // KING: corner square OK 
-		}
-	if ( ns < 10 )		// check south
-		{
-		a=ns+1;b=ew;checkincroute();
-		//if ( players[ns+1][ew] == 0 ) incroute(); 
-		//if (( piecetype == 3 )&&(players[ns+1][ew] == 4 )) incroute(); // KING: corner square OK 
-		}
-	if ( ew < 10 )		// check east
-		{
-		a=ns;b=ew+1;checkincroute();
-		//if ( players[ns][ew+1] == 0 ) incroute(); 
-		//if (( piecetype == 3 )&&(players[ns][ew+1] == 4 )) incroute(); // KING: corner square OK 
-		}
-	if ( ew )		// check west
-		{
-		a=ns;b=ew-1;checkincroute();
-		//if ( players[ns][ew-1] == 0 ) incroute(); 
-		//if (( piecetype == 3 )&&(players[ns][ew-1] == 4 )) incroute(); // KING: corner square OK 
-		}
-	/* In the case that the central square is unnocupied and a piece is adjacent to that square then - for
-	non-KING Pieces only - we need to check to see if the opposite square is occupied or not. 
-	ROUTE will be decremented if that piece is occupied (as no piece can occupy the central square except for
-	the King but all pieces can traverse it */
-	if (( piecetype < 3 ) && ( players[5][5] == 0 ))	// if not a king and central sqr unoccupied
-		{
-		if ( ns == 5 ) 				
-			{
-			if ( ew == 4 ) {if ( players[5][6] > 0 ) decroute();}	// check east +2	// east occupied, dec route
-			if ( ew == 6 ) {if ( players[5][4] > 0 ) decroute();}	// check west +2	// west occupied, dec route
-			}
-		if ( ew == 5 )
-			{
-			if ( ns == 4 ) { if ( players[6][5] > 0 ) decroute();}	// check south +2	// south occupied, dec route
-			if ( ns == 6 ) { if ( players[4][5] > 0 ) decroute();}	// check north +2	// north occupied, dec route
-			}
-		}
-	if ( route > 0 ) route=1;
-	//return route;
-}
-/************************************************/
-void checkincroute()
-{
-if ( players[a][b] == 0 ) incroute();
-if (( piecetype == 3 )&&(players[a][b] == 4 )) incroute(); // KING: corner square OK 
-}
-/************************************************/
-void drawplayers() // DRAW ALL THE PIECES ON THE BOARD
-{
-	for (row=0;row<11;row++)
-		{
-		for (col=0;col<11;col++)
-			{
-			if (( players[row][col] > 0 )&&(players[row][col] < 4)){drawpiece();}			
-			}
-		}
+  char k;	// key entered
+  fb=1;
+  printdestinations();	// print arrows on all destinations	
+  message="* PRESS ANY KEY TO PROCEED *";
+  printmessage();
+  k=getchar();
+  fb=0;
+  printdestinations();	// blank out arrows on all destinations
 }
 
-/************************************************/
-void drawboard()	// DRAW THE BOARD
+
+// used in printdestinations
+void printarrowsorblanks()	
 {
-	//tileheight=18;tilewidth=3;
-	game=1;				// game=1 means PLAY GAME
-	gamestyle=3;		// 0=play against human, 1=play as DEFENDERS, 2=play as ATTACKERS, 3=nobody  
-	kingns=5;kingew=5;	// DEFAULT kings board position
-	/*
-	for (counter=0;counter<4;counter++)	// this routine uses up more memory (100bytes extra)
-		{
-		kingattacker[counter]=2;
-		kingdefender[counter]=2;
-		}
-	*/
-	kingattacker[NORTH]=2;		// count of attackers NORTH of king
-	kingattacker[SOUTH]=2;		// count of attackers SOUTH of king
-	kingattacker[EAST]=2;			// count of attackers EAST of king
-	kingattacker[WEST]=2;			// count of attackers WEST of king
-	kingdefender[NORTH]=2;			// count of defenders NORTH of king
-	kingdefender[SOUTH]=2;			// count of defenders SOUTH of king
-	kingdefender[EAST]=2;			// count of defenders EAST of king
-	kingdefender[WEST]=2;			// count of defenders WEST of king
-	surrounded=0;		// reset surrounded back to zero
-	drawtiles();	// draw the background tiles
-	curset(12,198,1);
-	draw(198,0,1);
-	draw(0,-198,1);
-	drawplayers(); 	// draw the players
-	//printf("%c",19);// turn output to screen off
+  //char xplayers;		// player type at square under test 
+  //zns=ns;		// another copy of ns (for computer turn)
+  //zew=ew;		// another copy of ew (for computer turn)
+  origorient=orientation; // original orientation (for computer turn)
+  //char cantake=0;		// can I take?	(for computer turn)
+  //unsigned char subloop=0;
+  //cantake=0;
+  xns=ns;	// copy of ns
+  xew=ew;	// copy of ew
+  arrow=1;
+  //arrowsx=cx+1;
+  //arrowsy=cy+1;
+  // orientation 0,1,2,3 = N, S, E, W
+  takerow=ns;takecol=ew; // will set below to be the opposite of the orientation
+  if ( orientation == NORTH ) { xplayers=players[xns-1][xew];takerow=xns+1;} // check north
+  if ( orientation == SOUTH ) { xplayers=players[xns+1][xew];takerow=xns-1;} // check south
+  if ( orientation == EAST ) { xplayers=players[xns][xew+1];takecol=xew-1;} // check east
+  if ( orientation == WEST ) { xplayers=players[xns][xew-1];takecol=xew+1;}  // check west
+  while (( arrow == 1 )&&(fb!=7)) // keep checking until cannot move
+  {
+    if (( orientation == NORTH ) && ( xns ))  // check north
+    {
+      xns--;			// decrement provisional north-south player position
+      subarrows();
+    }
+    if (( orientation == SOUTH ) && ( xns < 10 )) // check south
+    {
+      xns++;			// increment provisional north-south player position
+      subarrows();
+    }
+    if ((orientation == EAST ) && ( xew < 10 )) // check east
+    {
+      xew++;			// increment provisional east-west player position
+      subarrows();
+    }
+    if ((orientation == WEST ) && ( xew )) // check west
+    {
+      xew--;			// decrement provisional east-west player position
+      subarrows();
+    }
+    tiletodraw=tiles[xns][xew];				// obtain type of tile	
+    if ( arrow == 1 )						// if MODE is "draw an arrow" (aka: I can move here)
+    {
+      row=xns;
+      col=xew;
+      if (fb==1) {drawarrow();}		// draw arrow
+      if (fb==4) {subarrows2();} 		// enemy can get here, update enemy array (direction specific)
+      if (fb==5) {computer[xns][xew]++;} // computer can get here, increment computer array 
+      if (fb==0) {drawarrow();}		// if MODE is "blank an arrow"
+    }	
+    // have we reached the end of the board?
+    if (( orientation == NORTH ) && ( xns == 0 )) 	{ arrow=0;}	// check north
+    if (( orientation == SOUTH ) && ( xns == 10 )) 	{ arrow=0;}	// check south
+    if (( orientation == EAST ) && ( xew == 10 )) 	{ arrow=0;}	// check east
+    if (( orientation == WEST ) && ( xew == 0 )) 	{ arrow=0;}	// check west
+  }			
+  if ((fb==7)&&(xplayers>1))	// check to see if an attacker can be caught if he stays where he is
+  {
+    if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) 
+    {
+      target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
+      if (orientation < EAST)	// if heading north or south
+      {
+        if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
+        if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=4;}}
+      }
+      else					// if heading east or west
+      {
+        if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=4;}}
+        if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=4;}}	
+      }
+    }
+  }
 }
-/************************************************/
-void blinkcursor() // blinks the cursor a number of times to attract attention
+
+
+// print appropriate arrows at all possible destinations (or blanks em out)
+void printdestinations()
 {
-//char curloop;
-//unsigned int subloop;
-for (counter=0;counter<5;inccounter())	// flash the cursor to draw attention to it
-	{
-	fb=0; drawcursor();					// draw cursor in background color at cx,cy
-	pausetime=250;pause();
-	fb=1; drawcursor();					// draw cursor in foreground color at cx,cy
-	pausetime=2000;pause();
-	}
+  
+  // check north
+  if ( ns ) { orientation=NORTH;printarrowsorblanks();}	// draws arrows/blanks em out (0=north)			
+  // check south
+  if ( ns < 10 ){ orientation=SOUTH;printarrowsorblanks();}	// draws arrows/blanks em out (1=south)
+  // check east
+  if ( ew < 10 ){ orientation=EAST;printarrowsorblanks();}	// draws arrows/blanks em out (2=east)
+  // check west
+  if ( ew ) { orientation=WEST;printarrowsorblanks();}	// draws arrows/blanks em out (3=west)	
 }
-/************************************************/
-void flashscreen() // flashes the screen in the selected ink color
+
+
+// CAN A SELECTED PIECE MOVE?
+void canpiecemove() 
 {
-	/* Colors are as follows:
-	0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
-	*/
-	ink(flashcolor);	// flash in color
-	pausetime=1500;pause();
-	ink(flashback);	// back to original
+  // returns 0 or 1 depending on wether a piece can move or not
+  // int route=0;				// number of possible routes
+  route=0;
+  piecetype=players[ns][ew];	// determine TYPE of selected piece (1=attacker, 2=defendr, 3=king)
+  /*  for all piece types determine if adjacent square in any direction is blank or not
+  it won't bother checking a particular direction if piece is at edge of board.
+  */
+  if ( ns )		// check north
+  {
+    a=ns-1;b=ew;checkincroute();
+    //if ( players[ns-1][ew] == 0 ) incroute();
+    //if (( piecetype == 3 )&&(players[ns-1][ew] == 4 )) incroute(); // KING: corner square OK 
+  }
+  if ( ns < 10 )		// check south
+  {
+    a=ns+1;b=ew;checkincroute();
+    //if ( players[ns+1][ew] == 0 ) incroute(); 
+    //if (( piecetype == 3 )&&(players[ns+1][ew] == 4 )) incroute(); // KING: corner square OK 
+  }
+  if ( ew < 10 )		// check east
+  {
+    a=ns;b=ew+1;checkincroute();
+    //if ( players[ns][ew+1] == 0 ) incroute(); 
+    //if (( piecetype == 3 )&&(players[ns][ew+1] == 4 )) incroute(); // KING: corner square OK 
+  }
+  if ( ew )		// check west
+  {
+    a=ns;b=ew-1;checkincroute();
+    //if ( players[ns][ew-1] == 0 ) incroute(); 
+    //if (( piecetype == 3 )&&(players[ns][ew-1] == 4 )) incroute(); // KING: corner square OK 
+  }
+  /* In the case that the central square is unnocupied and a piece is adjacent to that square then - for
+  non-KING Pieces only - we need to check to see if the opposite square is occupied or not. 
+  ROUTE will be decremented if that piece is occupied (as no piece can occupy the central square except for
+  the King but all pieces can traverse it */
+  if (( piecetype < 3 ) && ( players[5][5] == 0 ))	// if not a king and central sqr unoccupied
+  {
+    if ( ns == 5 ) 				
+    {
+      if ( ew == 4 ) {if ( players[5][6] > 0 ) decroute();}	// check east +2	// east occupied, dec route
+      if ( ew == 6 ) {if ( players[5][4] > 0 ) decroute();}	// check west +2	// west occupied, dec route
+    }
+    if ( ew == 5 )
+    {
+      if ( ns == 4 ) { if ( players[6][5] > 0 ) decroute();}	// check south +2	// south occupied, dec route
+      if ( ns == 6 ) { if ( players[4][5] > 0 ) decroute();}	// check north +2	// north occupied, dec route
+    }
+  }
+  if ( route > 0 ) route=1;
+  //return route;
 }
-/************************************************/
-void playerturn()	// The human players turn : filter keyboard input
+
+
+void checkincroute()
+{
+  if ( players[a][b] == 0 ) incroute();
+  if (( piecetype == 3 )&&(players[a][b] == 4 )) incroute(); // KING: corner square OK 
+}
+
+
+// DRAW ALL THE PIECES ON THE BOARD
+void drawplayers() 
+{
+  for (row=0;row<11;row++)
+  {
+    for (col=0;col<11;col++)
+    {
+      if (( players[row][col] > 0 )&&(players[row][col] < 4)){drawpiece();}			
+    }
+  }
+}
+
+
+// DRAW THE BOARD
+void drawboard()	
+{
+  //tileheight=18;tilewidth=3;
+  game=1;				// game=1 means PLAY GAME
+  gamestyle=3;		// 0=play against human, 1=play as DEFENDERS, 2=play as ATTACKERS, 3=nobody  
+  kingns=5;kingew=5;	// DEFAULT kings board position
+  /*
+  for (counter=0;counter<4;counter++)	// this routine uses up more memory (100bytes extra)
+  {
+  kingattacker[counter]=2;
+  kingdefender[counter]=2;
+  }
+  */
+  kingattacker[NORTH]=2;		// count of attackers NORTH of king
+  kingattacker[SOUTH]=2;		// count of attackers SOUTH of king
+  kingattacker[EAST]=2;			// count of attackers EAST of king
+  kingattacker[WEST]=2;			// count of attackers WEST of king
+  kingdefender[NORTH]=2;			// count of defenders NORTH of king
+  kingdefender[SOUTH]=2;			// count of defenders SOUTH of king
+  kingdefender[EAST]=2;			// count of defenders EAST of king
+  kingdefender[WEST]=2;			// count of defenders WEST of king
+  surrounded=0;		// reset surrounded back to zero
+  drawtiles();	// draw the background tiles
+  curset(12,198,1);
+  draw(198,0,1);
+  draw(0,-198,1);
+  drawplayers(); 	// draw the players
+  //printf("%c",19);// turn output to screen off
+}
+
+
+// blinks the cursor a number of times to attract attention
+void blinkcursor() 
+{
+  //char curloop;
+  //unsigned int subloop;
+  for (counter=0;counter<5;inccounter())	// flash the cursor to draw attention to it
+  {
+    fb=0; drawcursor();					// draw cursor in background color at cx,cy
+    pausetime=250;pause();
+    fb=1; drawcursor();					// draw cursor in foreground color at cx,cy
+    pausetime=2000;pause();
+  }
+}
+
+
+// flashes the screen in the selected ink color
+void flashscreen() 
+{
+  /* Colors are as follows:
+  0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
+  */
+  ink(flashcolor);	// flash in color
+  pausetime=1500;pause();
+  ink(flashback);	// back to original
+}
+
+
+// The human players turn : filter keyboard input
+void playerturn()	
 {	
-	/*
-	unsigned char key;			// code of key pressed	
-	unsigned char canselect;		// 0=no, 1=yes (is the piece selectable?)
-	char cursormovetype=-1;			// -1=no, 0=yes (n,s,e,w) 1=(north/south only), 2=(east/west only)
-	char turn=1;					// determines end of player turn 1=playerturn, 0=end of playerturn
-	*/
-	cursormovetype=-1;	// -1=no, 0=yes (n,s,e,w) 1=(north/south only), 2=(east/west only)
-	turn=1;					// determines end of player turn 1=playerturn, 0=end of playerturn
-	ons=ns;			// original ns board position
-	oew=ew;			// original ew board position
-	ocx=cx;			// original x screen position
-	ocy=cy;			// original y screen position
-	flashback=6;
-	if ( playertype == 2 )
-		{ 
-		playertext="KING'S";
-		}
-	else
-		{
-		playertext="ATTACKER";
-		}
-	blinkcursor();
-	printturnprompt();			// display instructions
-	while (turn)				// repeat until move is made
-		{
-		xkey=getchar();		// get code of pressed key
-		mkey=xkey;
-		if (( xkey > 7 ) && ( xkey < 12 ))  // 8-11 = cursor keys 
-			{
-			cursormode=0;  // freeform
-			movecursor2();  
-			}		
-		/*******************************************************/
-		/* determine if X or P is selected (to select a piece) */
-		/*******************************************************/
-		if (( xkey == 88) || ( xkey == 80))	// if 'X' or 'P' is selected (88=X, 80=P)
-			{
-			canselect=0;		// set piece to NOT SELECTABLE
-			if (( playertype == 1 )&&(players[ns][ew] == 1 )) { canselect=1;} // piece is selectable
-			if (( playertype == 2 )&&((players[ns][ew] == 2 )||(players[ns][ew] == 3 ))) { canselect=1;} // piece is selectable
-			if ( canselect )
-				{
-				canpiecemove();
-				if (route) 
-					{ 
-					//piecetype=players[ns][ew];
-					flashcolor=2;flashscreen();	// flash green
-					if ( xkey == 80 )		// if P is pressed
-						{ 
-						printpossiblemoves();	// Print possible moves
-						printturnprompt();
-						//strcpy(message,playertext);
-						//strcat(message,turntext);
-						//printmessage();
-						//printf ("\n\n\n* %s Turn:Use cursor keys.\nX:Select P:Possible",playertext);
-						}
-					}
-				else 
-					{ 
-					flashcolor=1;flashscreen();	// flash red
-					canselect=0;		// unselectable, cannot move
-					}				
-				}
-			else { flashcolor=1;flashscreen();}	// flash red			
-			if (( mkey == 88 )&&( canselect ))	// if piece is SELECTED and CAN move
-				{
-				ink(2); 				// green to indicate piece is selected
-				flashback=2;
-				//printmessage();
-				//strcpy(message,playertext);
-				message="PLACE CURSOR ON DESTINATION\nX=SELECT\nR=RESET";
-				printmessage();
-				//printf("\n\n\n%s Turn X=Select R=Reset",playertext);
-				inversex=cx;
-				inversey=cy;
-				inverse();				// highlight selected square (inverse color)
-				mkey=0;					// ensure mkey at known value
-				// set Original cursor and board position of selected square
-				ocx=cx; ocy=cy; ons=ns; oew=ew;
-				while (( mkey != 88 ) && ( mkey != 82)) // move cursor until X or R selected
-					{
-					if (( ons == ns )&&( cursormovetype<0)) { cursormovetype=1; }// cursor allowed north-south
-					if (( oew == ew )&&( cursormovetype<0)) { cursormovetype=2; }// cursor allowed east-west
-					if (( ons == ns )&&	(oew == ew )) { cursormovetype=0;} 	 	 // cursor can move 	
-					if (( cursormovetype == 2) && (( mkey == 8)	||(mkey == 9)))	{cursormovetype=-1;}//!move 
-					if (( cursormovetype == 1) && (( mkey == 10)||(mkey == 11))){cursormovetype=-1;}//!move
-					if (( cursormovetype == 0) && (( mkey == 8)	||(mkey == 9)))	{cursormovetype=1;}	//move
-					if (( cursormovetype == 0) && (( mkey == 10)||(mkey == 11))){cursormovetype=2;}	//move
-					if ( cursormovetype > 0 ) 
-						{
-						cursormode=1;	// restricted
-						movecursor2();
-						}
-					if ( cursormovetype < 0) { flashcolor=1;flashscreen();}	// flashscreen red
-					mkey=getchar();
-					}
-				if ( mkey == 82 ) // R has been selected, Reset cursor to original positions
-					{
-					fb=0;
-					drawcursor();		// blank out cursor at current position
-					cx=ocx;						// reset coords and board values to original positions
-					cy=ocy;
-					ns=ons;
-					ew=oew;
-					inversex=cx;
-					inversey=cy;
-					inverse();		// inverse square
-					fb=1;
-					drawcursor();		// draw cursor at original selected position
-					}
-				if ( mkey == 88 )				// if X selected
-					{
-					inversex=ocx;
-					inversey=ocy;
-					inverse();			// inverse original position
-					if (( ons == ns )&&( oew == ew))// X is in original position so return to cursor movement 
-						{
-						mkey=0;		// piece de-selected
-						} 
-					else{ 
-						movepiece();	// move selected piece				
-						turn=0;		// player has ended turn
-						}
-					}
-				}
-			ink(6);	// back to cyan	
-			flashback=6;
-			printturnprompt();		
-			}		// key = X or P
-		}	// While player turn		
+  /*
+  unsigned char key;			// code of key pressed	
+  unsigned char canselect;		// 0=no, 1=yes (is the piece selectable?)
+  char cursormovetype=-1;			// -1=no, 0=yes (n,s,e,w) 1=(north/south only), 2=(east/west only)
+  char turn=1;					// determines end of player turn 1=playerturn, 0=end of playerturn
+  */
+  cursormovetype=-1;	// -1=no, 0=yes (n,s,e,w) 1=(north/south only), 2=(east/west only)
+  turn=1;					// determines end of player turn 1=playerturn, 0=end of playerturn
+  ons=ns;			// original ns board position
+  oew=ew;			// original ew board position
+  ocx=cx;			// original x screen position
+  ocy=cy;			// original y screen position
+  flashback=6;
+  if ( playertype == 2 )
+  { 
+    playertext="KING'S";
+  }
+  else
+  {
+    playertext="ATTACKER";
+  }
+  blinkcursor();
+  printturnprompt();			// display instructions
+  while (turn)				// repeat until move is made
+  {
+    xkey=getchar();		// get code of pressed key
+    mkey=xkey;
+    if (( xkey > 7 ) && ( xkey < 12 ))  // 8-11 = cursor keys 
+    {
+      cursormode=0;  // freeform
+      movecursor2();  
+    }		
+    /*******************************************************/
+    /* determine if X or P is selected (to select a piece) */
+    /*******************************************************/
+    if (( xkey == 88) || ( xkey == 80))	// if 'X' or 'P' is selected (88=X, 80=P)
+    {
+      canselect=0;		// set piece to NOT SELECTABLE
+      if (( playertype == 1 )&&(players[ns][ew] == 1 )) { canselect=1;} // piece is selectable
+      if (( playertype == 2 )&&((players[ns][ew] == 2 )||(players[ns][ew] == 3 ))) { canselect=1;} // piece is selectable
+      if ( canselect )
+      {
+        canpiecemove();
+        if (route) 
+        { 
+          //piecetype=players[ns][ew];
+          flashcolor=2;flashscreen();	// flash green
+          if ( xkey == 80 )		// if P is pressed
+          { 
+            printpossiblemoves();	// Print possible moves
+            printturnprompt();
+            //strcpy(message,playertext);
+            //strcat(message,turntext);
+            //printmessage();
+            //printf ("\n\n\n* %s Turn:Use cursor keys.\nX:Select P:Possible",playertext);
+          }
+        }
+        else 
+        { 
+          flashcolor=1;flashscreen();	// flash red
+          canselect=0;		// unselectable, cannot move
+        }				
+      }
+      else { flashcolor=1;flashscreen();}	// flash red			
+      if (( mkey == 88 )&&( canselect ))	// if piece is SELECTED and CAN move
+      {
+        ink(2); 				// green to indicate piece is selected
+        flashback=2;
+        //printmessage();
+        //strcpy(message,playertext);
+        message="PLACE CURSOR ON DESTINATION\nX=SELECT\nR=RESET";
+        printmessage();
+        //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
+        inversex=cx;
+        inversey=cy;
+        inverse();				// highlight selected square (inverse color)
+        mkey=0;					// ensure mkey at known value
+        // set Original cursor and board position of selected square
+        ocx=cx; ocy=cy; ons=ns; oew=ew;
+        while (( mkey != 88 ) && ( mkey != 82)) // move cursor until X or R selected
+        {
+          if (( ons == ns )&&( cursormovetype<0)) { cursormovetype=1; }// cursor allowed north-south
+          if (( oew == ew )&&( cursormovetype<0)) { cursormovetype=2; }// cursor allowed east-west
+          if (( ons == ns )&&	(oew == ew )) { cursormovetype=0;} 	 	 // cursor can move 	
+          if (( cursormovetype == 2) && (( mkey == 8)	||(mkey == 9)))	{cursormovetype=-1;}//!move 
+          if (( cursormovetype == 1) && (( mkey == 10)||(mkey == 11))){cursormovetype=-1;}//!move
+          if (( cursormovetype == 0) && (( mkey == 8)	||(mkey == 9)))	{cursormovetype=1;}	//move
+          if (( cursormovetype == 0) && (( mkey == 10)||(mkey == 11))){cursormovetype=2;}	//move
+          if ( cursormovetype > 0 ) 
+          {
+            cursormode=1;	// restricted
+            movecursor2();
+          }
+          if ( cursormovetype < 0) { flashcolor=1;flashscreen();}	// flashscreen red
+          mkey=getchar();
+        }
+        if ( mkey == 82 ) // R has been selected, Reset cursor to original positions
+        {
+          fb=0;
+          drawcursor();		// blank out cursor at current position
+          cx=ocx;						// reset coords and board values to original positions
+          cy=ocy;
+          ns=ons;
+          ew=oew;
+          inversex=cx;
+          inversey=cy;
+          inverse();		// inverse square
+          fb=1;
+          drawcursor();		// draw cursor at original selected position
+        }
+        if ( mkey == 88 )				// if X selected
+        {
+          inversex=ocx;
+          inversey=ocy;
+          inverse();			// inverse original position
+          if (( ons == ns )&&( oew == ew))// X is in original position so return to cursor movement 
+          {
+            mkey=0;		// piece de-selected
+          } 
+          else{ 
+            movepiece();	// move selected piece				
+            turn=0;		// player has ended turn
+          }
+        }
+      }
+      ink(6);	// back to cyan	
+      flashback=6;
+      printturnprompt();		
+    }		// key = X or P
+  }	// While player turn		
 }
-/********************************************************/
+
+
 // Moves selected piece to new location - updating board arrays and re-drawing tiles where necessary
 void movepiece()
 { 
-p1=1;	// piece type comparison (lower) - used for determining takes - default=attacker
-p2=1;	// piece type comparison (upper) - used for determining takes - default=attacker
-piecetype=players[ons][oew];	// obtain type of piece
-// move piece
-fb=0;
-drawcursor();				// blank out cursor at new selected position
-row=ons;
-col=oew;
-tiletodraw=tiles[row][col];
-ptr_graph=PictureTiles;drawtile();					// draw tile at original location (blank out square)
-players[ons][oew]=0;		// set original location to zero (unnocupied)
-players[ns][ew]=piecetype;	// update square with player info
-row=ns;
-col=ew;
-//printf("%cENEMY[%d][%d]=%d%c\n",19,ons,oew,enemy[ons][oew],19);getchar();
-drawpiece();				// draw piece at new location - 18-10-2011
-if (piecetype==3)	{ kingns=ns;kingew=ew;}	// update king position (used by AI)
-// having moved piece we now need to check for, and implement any TAKES
-if (piecetype > 1 )	// if defender
-	{
-	p1=2;
-	p2=3;
-	}
-tpew=ew;
-if ( ns > 1 ) // check north
-	{
-	orientation=NORTH;
-	if ( cantakepiece() ) { tpns=ns-1; takepiece(); }
-	}
-if ( ns < 9 ) // check south
-	{
-	orientation=SOUTH;
-	if ( cantakepiece() ) { tpns=ns+1; takepiece(); }
-	}
-tpns=ns;
-if ( ew < 9 ) // check east
-	{
-	orientation=EAST;
-	if ( cantakepiece() ) { tpew=ew+1; takepiece(); }
-	}
-if ( ew > 1 ) // check west
-	{
-	orientation=WEST;
-	if ( cantakepiece() ) { tpew=ew-1; takepiece(); }
-	}
-// update count of attackers around king
-/*
-for (counter=0;counter<4;counter++)	// this routine uses 100 extra bytes than assigning manually
-	{
-	kingattacker[counter]=0;
-	kingdefender[counter]=0;
-	}
-*/
-kingattacker[NORTH]=0;		// count of attackers NORTH of king
-kingattacker[SOUTH]=0;		// count of attackers SOUTH of king
-kingattacker[EAST]=0;			// count of attackers EAST of king
-kingattacker[WEST]=0;			// count of attackers WEST of king
-kingdefender[NORTH]=0;			// count of defenders NORTH of king
-kingdefender[SOUTH]=0;			// count of defenders SOUTH of king
-kingdefender[EAST]=0;			// count of defenders EAST of king
-kingdefender[WEST]=0;			// count of defenders WEST of king
-orientation=NORTH;
-cy=kingew;
-for (counter=0;counter<kingns;inccounter()) 	
-	{ 
-	cx=counter;incdefatt();
-	}
-orientation=SOUTH;
-for (counter=kingns+1;counter<11;inccounter()) 
-	{ 
-	cx=counter; incdefatt();
-	}
-orientation=EAST;
-cx=kingns;
-for (counter=kingew+1;counter<11;inccounter())	
-	{ 
-	cy=counter; incdefatt();
-	}
-orientation=WEST;
-for (counter=0;counter<kingew;inccounter()) 	
-	{ 
-	cy=counter; incdefatt();
-	}
+  p1=1;	// piece type comparison (lower) - used for determining takes - default=attacker
+  p2=1;	// piece type comparison (upper) - used for determining takes - default=attacker
+  piecetype=players[ons][oew];	// obtain type of piece
+  // move piece
+  fb=0;
+  drawcursor();				// blank out cursor at new selected position
+  row=ons;
+  col=oew;
+  tiletodraw=tiles[row][col];
+  ptr_graph=PictureTiles;drawtile();					// draw tile at original location (blank out square)
+  players[ons][oew]=0;		// set original location to zero (unnocupied)
+  players[ns][ew]=piecetype;	// update square with player info
+  row=ns;
+  col=ew;
+  //printf("%cENEMY[%d][%d]=%d%c\n",19,ons,oew,enemy[ons][oew],19);getchar();
+  drawpiece();				// draw piece at new location - 18-10-2011
+  if (piecetype==3)	{ kingns=ns;kingew=ew;}	// update king position (used by AI)
+  // having moved piece we now need to check for, and implement any TAKES
+  if (piecetype > 1 )	// if defender
+  {
+    p1=2;
+    p2=3;
+  }
+  tpew=ew;
+  if ( ns > 1 ) // check north
+  {
+    orientation=NORTH;
+    if ( cantakepiece() ) { tpns=ns-1; takepiece(); }
+  }
+  if ( ns < 9 ) // check south
+  {
+    orientation=SOUTH;
+    if ( cantakepiece() ) { tpns=ns+1; takepiece(); }
+  }
+  tpns=ns;
+  if ( ew < 9 ) // check east
+  {
+    orientation=EAST;
+    if ( cantakepiece() ) { tpew=ew+1; takepiece(); }
+  }
+  if ( ew > 1 ) // check west
+  {
+    orientation=WEST;
+    if ( cantakepiece() ) { tpew=ew-1; takepiece(); }
+  }
+  // update count of attackers around king
+  /*
+  for (counter=0;counter<4;counter++)	// this routine uses 100 extra bytes than assigning manually
+  {
+  kingattacker[counter]=0;
+  kingdefender[counter]=0;
+  }
+  */
+  kingattacker[NORTH]=0;		// count of attackers NORTH of king
+  kingattacker[SOUTH]=0;		// count of attackers SOUTH of king
+  kingattacker[EAST]=0;			// count of attackers EAST of king
+  kingattacker[WEST]=0;			// count of attackers WEST of king
+  kingdefender[NORTH]=0;			// count of defenders NORTH of king
+  kingdefender[SOUTH]=0;			// count of defenders SOUTH of king
+  kingdefender[EAST]=0;			// count of defenders EAST of king
+  kingdefender[WEST]=0;			// count of defenders WEST of king
+  orientation=NORTH;
+  cy=kingew;
+  for (counter=0;counter<kingns;inccounter()) 	
+  { 
+    cx=counter;incdefatt();
+  }
+  orientation=SOUTH;
+  for (counter=kingns+1;counter<11;inccounter()) 
+  { 
+    cx=counter; incdefatt();
+  }
+  orientation=EAST;
+  cx=kingns;
+  for (counter=kingew+1;counter<11;inccounter())	
+  { 
+    cy=counter; incdefatt();
+  }
+  orientation=WEST;
+  for (counter=0;counter<kingew;inccounter()) 	
+  { 
+    cy=counter; incdefatt();
+  }
 }
 
-/*******************/
+
 void incdefatt()
 {
-if (players[cx][cy]==1) {inckingattacker();}
-if (players[cx][cy]==2) {inckingdefender();}
+  if (players[cx][cy]==1) {inckingattacker();}
+  if (players[cx][cy]==2) {inckingdefender();}
 }
+
+
 void inckingdefender()
 {
-kingdefender[orientation]++;
+  kingdefender[orientation]++;
 }
+
+
 void inckingattacker()
 {
-kingattacker[orientation]++;
+  kingattacker[orientation]++;
 }
-/************************************************/
+
 /*void subcanbetaken()
 {
 target[targetns][targetew]=1;
 //if ((ns==kingns)||(ew==kingew)) { target[ns][ew]=3;}  // means acceptable risk
 }
 */
-/************************************************/
-void canbetaken() // can I be taken after moving here? 
+// can I be taken after moving here? 
+void canbetaken() 
 {
-if ((targetns>0)&&(targetns<10))
-	{
-	takena=targetns-1;takenb=targetew;takenc=targetns+1;takend=targetew;takene=1;
-	subcanbetaken2();
-	takena=targetns+1;takenb=targetew;takenc=targetns-1;takend=targetew;takene=5;
-	subcanbetaken2();
-	}
-	
-if ((targetew>0)&&(targetew<10))
-	{
-	takena=targetns;takenb=targetew+1;takenc=targetns;takend=targetew-1;takene=10;
-	subcanbetaken2();
-	takena=targetns;takenb=targetew-1;takenc=targetns;takend=targetew+1;takene=20;
-	subcanbetaken2();	
-	}
+  if ((targetns>0)&&(targetns<10))
+  {
+    takena=targetns-1;takenb=targetew;takenc=targetns+1;takend=targetew;takene=1;
+    subcanbetaken2();
+    takena=targetns+1;takenb=targetew;takenc=targetns-1;takend=targetew;takene=5;
+    subcanbetaken2();
+  }
+
+  if ((targetew>0)&&(targetew<10))
+  {
+    takena=targetns;takenb=targetew+1;takenc=targetns;takend=targetew-1;takene=10;
+    subcanbetaken2();
+    takena=targetns;takenb=targetew-1;takenc=targetns;takend=targetew+1;takene=20;
+    subcanbetaken2();	
+  }
 }
-/************************************************/
+
+
 // Will return a value (take) who's values will be: 0= no, 1=yes
 char cantakepiece()
 {
-take=0;
-p1=1;			// piece type comparison (lower) - used for determining takes - default=attacker
-p2=4;			// piece type comparison (upper) - used for determining takes - default=attacker
-pcheckns1=ns-1;	// defaults to north
-pcheckns2=ns-2;
-pcheckew1=ew;
-pcheckew2=ew;
-piecetype=players[ns][ew];	// obtain type of piece
-//if ( fb==3) { piecetype=players[ctns][ctew];} // if computer turn set piecetype to piece being checked
-if ((fb==3)||(fb==9)) { piecetype=1;}	// default = ATTACKER
-if (piecetype > 1 )	// if defender
-	{
-	p1=2;
-	p2=3;
-	}
-if ( orientation == SOUTH)	// if south
-	{
-	pcheckns1=ns+1;
-	pcheckns2=ns+2;
-	}
-if ( orientation > SOUTH)	// if east or west
-	{
-	pcheckns1=ns;
-	pcheckns2=ns;
-	pcheckew1=ew+1;
-	pcheckew2=ew+2;
-	if ( orientation == WEST) // if west
-		{
-		pcheckew1=ew-1;
-		pcheckew2=ew-2;
-		}
-	}
-// if a take is possible increment the take counter - if values fall within bounds...
-if ((pcheckns2>-1)&&(pcheckns2<11)&&(pcheckew2>-1)&&(pcheckew2<11))
-	{
-	if (( players[pcheckns1][pcheckew1] > 0 )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2)&&(players[pcheckns1][pcheckew1] != 3))
-		{	
-		if ((( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == 4)&&(pcheckns2!=5)&&(pcheckew2!=5))) // the 5 is to EXCLUDE central square
-			{
-			take++;
-			} 
-		if ( computer[pcheckns2][pcheckew2] ) {inctarget();} // 31-10-2011 - can possibly take on next turn
-		}
-	}
-if ( piecetype == 3 ) // if king and next to attacker and opposite square is a king square
-	{
-	if ((players[pcheckns1][pcheckew1] == 1 )&&(tiles[pcheckns2][pcheckew2] > 2)) { take++;}
-	}
-return take;
+  take=0;
+  p1=1;			// piece type comparison (lower) - used for determining takes - default=attacker
+  p2=4;			// piece type comparison (upper) - used for determining takes - default=attacker
+  pcheckns1=ns-1;	// defaults to north
+  pcheckns2=ns-2;
+  pcheckew1=ew;
+  pcheckew2=ew;
+  piecetype=players[ns][ew];	// obtain type of piece
+  //if ( fb==3) { piecetype=players[ctns][ctew];} // if computer turn set piecetype to piece being checked
+  if ((fb==3)||(fb==9)) { piecetype=1;}	// default = ATTACKER
+  if (piecetype > 1 )	// if defender
+  {
+    p1=2;
+    p2=3;
+  }
+  if ( orientation == SOUTH)	// if south
+  {
+    pcheckns1=ns+1;
+    pcheckns2=ns+2;
+  }
+  if ( orientation > SOUTH)	// if east or west
+  {
+    pcheckns1=ns;
+    pcheckns2=ns;
+    pcheckew1=ew+1;
+    pcheckew2=ew+2;
+    if ( orientation == WEST) // if west
+    {
+      pcheckew1=ew-1;
+      pcheckew2=ew-2;
+    }
+  }
+  // if a take is possible increment the take counter - if values fall within bounds...
+  if ((pcheckns2>-1)&&(pcheckns2<11)&&(pcheckew2>-1)&&(pcheckew2<11))
+  {
+    if (( players[pcheckns1][pcheckew1] > 0 )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2)&&(players[pcheckns1][pcheckew1] != 3))
+    {	
+      if ((( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == 4)&&(pcheckns2!=5)&&(pcheckew2!=5))) // the 5 is to EXCLUDE central square
+      {
+        take++;
+      } 
+      if ( computer[pcheckns2][pcheckew2] ) {inctarget();} // 31-10-2011 - can possibly take on next turn
+    }
+  }
+  if ( piecetype == 3 ) // if king and next to attacker and opposite square is a king square
+  {
+    if ((players[pcheckns1][pcheckew1] == 1 )&&(tiles[pcheckns2][pcheckew2] > 2)) { take++;}
+  }
+  return take;
 }
-/************************************************/ 
-void takepiece() // performs taking/removing a piece
+
+
+// performs taking/removing a piece
+void takepiece() 
 {
-players[tpns][tpew]=0;			// zero players
-row=tpns;
-col=tpew;
-ink(6);
-explodetile();					// plays animation to "kill" a tile
-tiletodraw=tiles[row][col];		// decide tile to draw
-ptr_graph=PictureTiles;drawtile();						// draw tile at location
+  players[tpns][tpew]=0;			// zero players
+  row=tpns;
+  col=tpew;
+  ink(6);
+  explodetile();					// plays animation to "kill" a tile
+  tiletodraw=tiles[row][col];		// decide tile to draw
+  ptr_graph=PictureTiles;drawtile();						// draw tile at location
 }
-/*****************************/
+
+
 void subarrows()
 {
-if (players[xns][xew]) 
-	{ 
-	arrow = 0;	// !ok if piece occupied or corner square
-	if ((fb==4)&&(players[xns][xew]==1)) {enemy[xns][xew]+=ENEMYWEIGHT;}	// means enemy could get here if attacker moved elsewhere
-	}
-if (( players[ns][ew] == 3)&&(tiles[xns][xew] == 4)) { arrow = 1; } // corner ok if king	
+  if (players[xns][xew]) 
+  { 
+    arrow = 0;	// !ok if piece occupied or corner square
+    if ((fb==4)&&(players[xns][xew]==1)) {enemy[xns][xew]+=ENEMYWEIGHT;}	// means enemy could get here if attacker moved elsewhere
+  }
+  if (( players[ns][ew] == 3)&&(tiles[xns][xew] == 4)) { arrow = 1; } // corner ok if king	
 }
-/*****************************/
+
+
 void subarrows2()
 {
-if ( orientation==NORTH ) { enemy[xns][xew]+=5; }	// means enemy can get here from SOUTH
-if ( orientation==SOUTH ) { enemy[xns][xew]+=1; }	// means enemy can get here from NORTH
-if ( orientation==EAST ) { enemy[xns][xew]+=20; }	// means enemy can get here from WEST
-if ( orientation==WEST ) { enemy[xns][xew]+=10; }	// means enemy can get here from EAST
+  if ( orientation==NORTH ) { enemy[xns][xew]+=5; }	// means enemy can get here from SOUTH
+  if ( orientation==SOUTH ) { enemy[xns][xew]+=1; }	// means enemy can get here from NORTH
+  if ( orientation==EAST ) { enemy[xns][xew]+=20; }	// means enemy can get here from WEST
+  if ( orientation==WEST ) { enemy[xns][xew]+=10; }	// means enemy can get here from EAST
 }
-/*****************************/
+
+
 void inccantake()
 {
-z=cantakepiece();
-if (z)
-	{
-	cantake+=z;
-	cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
-	}
+  z=cantakepiece();
+  if (z)
+  {
+    cantake+=z;
+    cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
+  }
 }
 
-/*********************************/
-void explodetile()	// Explodes a tile
+// Explodes a tile
+void explodetile()	
 {
-//unsigned char b;
-ptr_graph=ExplodeTiles;					// pointer to byte values of loaded picture	
-for (b=0;b<8;b++)
-	{
-	tileloop();
-	pausetime=900;
-	if (b==5) {pausetime=3000;} // pause longer on skull&crossbones
-	pause();	// add a pause
-	}	
+  //unsigned char b;
+  ptr_graph=ExplodeTiles;					// pointer to byte values of loaded picture	
+  for (b=0;b<8;b++)
+  {
+    tileloop();
+    pausetime=900;
+    if (b==5) {pausetime=3000;} // pause longer on skull&crossbones
+    pause();	// add a pause
+  }	
 }
-/**************************************/
 
 
-/**************************************/
 void drawpiece()
 {
-	tiletodraw=players[row][col];
-	if ( tiletodraw>0) { tiletodraw+=3;}
-	if ( tiles[row][col]>0 ) { tiletodraw+=3; }
-	ptr_graph=PictureTiles;drawtile();
+  tiletodraw=players[row][col];
+  if ( tiletodraw>0) { tiletodraw+=3;}
+  if ( tiles[row][col]>0 ) { tiletodraw+=3; }
+  ptr_graph=PictureTiles;drawtile();
 }
-/**************************************/
+
+
 void drawarrow()
 {
-	if ( fb==1 )
-		{
-		tiletodraw=10;
-		if ( tiles[row][col] > 0 ) tiletodraw++;		// add another 1 for arrow with background
-		}
-	else
-		{
-		tiletodraw=tiles[row][col];						// draw original tile (includes blank)
-		}
-	ptr_graph=PictureTiles;drawtile();
+  if ( fb==1 )
+  {
+    tiletodraw=10;
+    if ( tiles[row][col] > 0 ) tiletodraw++;      // add another 1 for arrow with background
+  }
+  else
+  {
+    tiletodraw=tiles[row][col];			  // draw original tile (includes blank)
+  }
+  ptr_graph=PictureTiles;drawtile();
 }
-/**************************************/
-/*
-void printmessage()
-{
-  printf("%c\n\n\n%s%c",19,message,19);
-}
-*/
-/**************************************/
-/*
-void printturnprompt()
-{
-  printf("%c\n\n\n%s%s%c",19,playertext,turntext,19);
-//printf("%c\n\n3/1=%d 7/1=%d%c",19,target[3][1],target[7][1],19);
-//printf("%cSURROUNDED=%d%c",19,surrounded,19);
-}
-*/
-/**************************************/
+
+
 void surroundcount()
 {
-zerocounter();
-setpoints();
-surrounded=0;
-if (( kingns==0)||(kingns==10)||(kingew==0)||(kingew==10))	{incsurround();} // added 18/10/2011
-surew=kingew;
-if ( kingns > 0 )	{ surns=kingns-1;surroundcheck(); }
-if ( kingns < 10 )	{ surns=kingns+1;surroundcheck(); }
-surns=kingns;
-if ( kingew > 0 )	{ surew=kingew-1;surroundcheck(); }
-if ( kingew < 10 )	{ surew=kingew+1;surroundcheck(); }
-if (surrounded==3)	// unset any "enemy and target values" 
-	{
-	ezew1=kingew;
-	if ( kingns > 0 )
-		{
-		ezns1=kingns-1;
-		enemyzero();
-		}
-	if ( kingns < 10 )
-		{
-		ezns1=kingns+1;
-		enemyzero();
-		}
-	ezns1=kingns;
-	if ( kingew > 0 )
-		{
-		ezew1=kingew-1;
-		enemyzero();
-		}
-	if ( kingew < 10 )
-		{
-		ezew1=kingew+1;
-		enemyzero();
-		}
-	}
+  zerocounter();
+  setpoints();
+  surrounded=0;
+  if (( kingns==0)||(kingns==10)||(kingew==0)||(kingew==10))	{incsurround();} // added 18/10/2011
+  surew=kingew;
+  if ( kingns > 0 )	{ surns=kingns-1;surroundcheck(); }
+  if ( kingns < 10 )	{ surns=kingns+1;surroundcheck(); }
+  surns=kingns;
+  if ( kingew > 0 )	{ surew=kingew-1;surroundcheck(); }
+  if ( kingew < 10 )	{ surew=kingew+1;surroundcheck(); }
+  if (surrounded==3)	// unset any "enemy and target values" 
+  {
+    ezew1=kingew;
+    if ( kingns > 0 )
+    {
+      ezns1=kingns-1;
+      enemyzero();
+    }
+    if ( kingns < 10 )
+    {
+      ezns1=kingns+1;
+      enemyzero();
+    }
+    ezns1=kingns;
+    if ( kingew > 0 )
+    {
+      ezew1=kingew-1;
+      enemyzero();
+    }
+    if ( kingew < 10 )
+    {
+      ezew1=kingew+1;
+      enemyzero();
+    }
+  }
 }
-/****************************/
-/****************************/
+
 void pause()
 {
-int p;
-for (p=0; p<pausetime;p++){};
+  int p;
+  for (p=0; p<pausetime;p++){};
 }
 
 
@@ -1577,36 +1494,37 @@ void LookBackInAnger()		// returns the value of the piece "behind" an attacker
 {
 flag=0;			// status of foundpiece 0=no, 1=yes
 if ( origorient == 0 ) 
-	{
-	for ( lookrow=mkey-1;lookrow>-1;lookrow--)
-		{
-		subLookBackInAnger();
-		}
-	}
+{
+for ( lookrow=mkey-1;lookrow>-1;lookrow--)
+{
+subLookBackInAnger();
+}
+}
 if ( origorient == 1 ) 
-	{
-	for ( lookrow=mkey+1;lookrow<11;lookrow++)
-		{
-		subLookBackInAnger();
-		}
-	}
+{
+for ( lookrow=mkey+1;lookrow<11;lookrow++)
+{
+subLookBackInAnger();
+}
+}
 if ( origorient == 2 ) 
-	{
-	for ( lookcol=mkey+1;lookcol<11;lookcol++)
-		{
-		subLookBackInAnger();
-		}
-	}
+{
+for ( lookcol=mkey+1;lookcol<11;lookcol++)
+{
+subLookBackInAnger();
+}
+}
 if ( origorient == 3 ) 
-	{
-	for ( lookcol=mkey-1;lookcol>-1;lookcol--)
-		{
-		subLookBackInAnger();
-		}
-	}
+{
+for ( lookcol=mkey-1;lookcol>-1;lookcol--)
+{
+subLookBackInAnger();
+}
+}
 }
 */
-/****************************/
+
+
 /*
 void subLookBackInAnger()	// subroutine of LookBackInAnger
 {
@@ -1614,185 +1532,202 @@ if (players[lookrow][lookcol]==1) { flag=1;}
 if ( (flag==0)&&((players[lookrow][lookcol]==2)||(players[lookrow][lookcol]==3))) { target[ons][oew]=1;}
 }
 */
-/****************************/
 void subcanbetaken2()	// DO NOT MESS with this (NBARNES 10-01-2012)
 {
-if (players[takena][takenb]>1)
-	{
-	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
-		{
-		if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))) // 23-12-2011 
-			{
-			compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
-			if (enemy[takenc][takend]>ENEMYWEIGHT) // THIS is the business!!!
-				{
-				if ((origorient<EAST)&&(mkey!=takenc)&&(oew!=takend)) {compass[origorient]=0;}
-				if ((origorient>SOUTH)&&(ons!=takenc)&&(mkey!=takend)) {compass[origorient]=0;}
-				}
-			}
-		}
-	}
+  if (players[takena][takenb]>1)
+  {
+    if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
+    {
+      if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend]<ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))) // 23-12-2011 
+      {
+        compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+        if (enemy[takenc][takend]>ENEMYWEIGHT) // THIS is the business!!!
+        {
+          if ((origorient<EAST)&&(mkey!=takenc)&&(oew!=takend)) {compass[origorient]=0;}
+          if ((origorient>SOUTH)&&(ons!=takenc)&&(mkey!=takend)) {compass[origorient]=0;}
+        }
+      }
+    }
+  }
 }
-/****************************/
+
+
 void inctarget()
 {
-target[targetns][targetew]+=2;
+  target[targetns][targetew]+=2;
 }
-/****************************/
+
+
 void surroundcheck()
 {
-if (players[surns][surew]==1)		{incsurround();} 	// is attacker n,s,e,w
-if (tiles[surns][surew]>2)			{incsurround();}	// is king square n,s,e,w
+  if (players[surns][surew]==1)		{incsurround();} 	// is attacker n,s,e,w
+  if (tiles[surns][surew]>2)			{incsurround();}	// is king square n,s,e,w
 }
-/****************************/
-void calctakeweight()			// calculate the weight that should be applied to TAKES
-{
-takeweight=7;		// default
-// don't worry about TAKES if the king has unbroken line of sight to edge of board
-for (x=0;x<4;x++)
-	{
-	if ((kingattacker[x]==0)&&(kingdefender[x]==0)){takeweight=0;}
-	}
-//if (((kingnorth==0)&&(defnorth==0))||((kingsouth==0)&&(defsouth==0))||((kingeast==0)&&(defeast==0))||((kingwest==0)  && (defwest==0))) {takeweight=0;}
-}
-/******************************/
-void enemyzero()    // calling routine = surroundcount() 
-{
-if (( players[ezns1][ezew1] == 0 )&&(target[ezns1][ezew1]))	// if adjacent square n/s/e/w is blank and accessible
-		{
-		ClearArrays();				// set all arrays to zero (target, enemy, computer)
-		target[ezns1][ezew1]=100;	// set big target value to final space by king
-		}
-}
-/******************************/
-char checkroute()	// returns number of pieces on a given route
-{
-z=0;
-if (orientation<EAST) 			// if checking ROWS (crossing the T) (used for NORTH SOUTH checks)
-	{
-	for (x=startcol;x<=destcol;x++)	// check row
-		{
-		if ((players[startrow][x])&&(players[startrow][x]<3)) {z++;}
-		}
-	}
-else						// EAST WEST checks (crossing the T)
-	{
-	for (x=startrow;x<=destrow;x++) // check accross
-		{
-		if ((players[x][startcol])&&(players[x][startcol]<3)) {z++;}
-		}
-	}
-return z;
-}
-/*************************/
-void cantakeadjust()		// decrements cantake if taken piece is on same plane as king 
-{							// and attacking piece isn't AND only one defender on plane
-flag=0;
-if ((playertype==1)&&(gamestyle==1))	// if computer playing as attacker and his turn
-	{
-	if (pcheckns1==kingns)
-		{
-		flag=1;
-		if (ctew<kingew){orientation=WEST;}else{orientation=EAST;}
-		//if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
-		}
-	if (pcheckew1==kingew)
-		{
-		flag=1;
-		if (ctns<kingns){orientation=NORTH;}else{orientation=SOUTH;}
-		//if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
-		}
-	if (flag)		
-		{
-		if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
-		}
 
-	}
+
+// calculate the weight that should be applied to TAKES
+void calctakeweight()			
+{
+  takeweight=7;		// default
+  // don't worry about TAKES if the king has unbroken line of sight to edge of board
+  for (x=0;x<4;x++)
+  {
+    if ((kingattacker[x]==0)&&(kingdefender[x]==0)){takeweight=0;}
+  }
+  //if (((kingnorth==0)&&(defnorth==0))||((kingsouth==0)&&(defsouth==0))||((kingeast==0)&&(defeast==0))||((kingwest==0)  && (defwest==0))) {takeweight=0;}
 }
-/*************************/
+
+
+// called from "surroundcount()"
+void enemyzero()    
+{
+  if (( players[ezns1][ezew1] == 0 )&&(target[ezns1][ezew1]))	// if adjacent square n/s/e/w is blank and accessible
+  {
+    ClearArrays();				// set all arrays to zero (target, enemy, computer)
+    target[ezns1][ezew1]=100;	// set big target value to final space by king
+  }
+}
+
+
+// returns number of pieces on a given route
+char checkroute()	
+{
+  z=0;
+  if (orientation<EAST) 			// if checking ROWS (crossing the T) (used for NORTH SOUTH checks)
+  {
+    for (x=startcol;x<=destcol;x++)	// check row
+    {
+      if ((players[startrow][x])&&(players[startrow][x]<3)) {z++;}
+    }
+  }
+  else						// EAST WEST checks (crossing the T)
+  {
+    for (x=startrow;x<=destrow;x++) // check accross
+    {
+      if ((players[x][startcol])&&(players[x][startcol]<3)) {z++;}
+    }
+  }
+  return z;
+}
+
+
+// decrements cantake if taken piece is on same plane as king 
+// and attacking piece isn't AND only one defender on plane
+void cantakeadjust()		
+{							
+  flag=0;
+  if ((playertype==1)&&(gamestyle==1))	// if computer playing as attacker and his turn
+  {
+    if (pcheckns1==kingns)
+    {
+      flag=1;
+      if (ctew<kingew){orientation=WEST;}else{orientation=EAST;}
+      //if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
+    }
+    if (pcheckew1==kingew)
+    {
+      flag=1;
+      if (ctns<kingns){orientation=NORTH;}else{orientation=SOUTH;}
+      //if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
+    }
+    if (flag)		
+    {
+      if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
+    }
+
+  }
+}
+
+
 void updatetarget()
 {
-targetns=ctns;targetew=ctew;
-target[targetns][targetew]=2;	// set target to 2
-target[5][5]=0;		// set "illegal" squares to zero
-target[0][10]=0;
-target[0][0]=0;
-target[10][0]=0;
-target[10][10]=0;
-if (target[targetns][targetew])	// only if target is valid (i.e. not a king square)
-	{
-	if (enemy[targetns][targetew]){inctarget();}	// increase target if blocking an enemy	
-	if ((enemy[targetns][targetew]==6)||(enemy[targetns][targetew]==11)||(enemy[targetns][targetew]==21)||(enemy[targetns][targetew]==15)||(enemy[targetns][targetew]==25)||(enemy[targetns][targetew]==30)){inctarget();}
-	if ((enemy[targetns][targetew]==35)||(enemy[targetns][targetew]==16)||(enemy[targetns][targetew]==26)){target[targetns][targetew]+=2;}
-	calccantake();			// calculates how many takes can be made in this position (cantake)
-	calctakeweight();		// calculate weight that should be applied to takes	
-	y=cantake*takeweight;	// value to be added to target			
-	target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
-	
-	//if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
-	}
+  targetns=ctns;targetew=ctew;
+  target[targetns][targetew]=2;	// set target to 2
+  target[5][5]=0;		// set "illegal" squares to zero
+  target[0][10]=0;
+  target[0][0]=0;
+  target[10][0]=0;
+  target[10][10]=0;
+  if (target[targetns][targetew])	// only if target is valid (i.e. not a king square)
+  {
+    if (enemy[targetns][targetew]){inctarget();}	// increase target if blocking an enemy	
+    if ((enemy[targetns][targetew]==6)||(enemy[targetns][targetew]==11)||(enemy[targetns][targetew]==21)||(enemy[targetns][targetew]==15)||(enemy[targetns][targetew]==25)||(enemy[targetns][targetew]==30)){inctarget();}
+    if ((enemy[targetns][targetew]==35)||(enemy[targetns][targetew]==16)||(enemy[targetns][targetew]==26)){target[targetns][targetew]+=2;}
+    calccantake();			// calculates how many takes can be made in this position (cantake)
+    calctakeweight();		// calculate weight that should be applied to takes	
+    y=cantake*takeweight;	// value to be added to target			
+    target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
+
+    //if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
+  }
 }
-/********************/
-void calccantake()			// calculate how many takes can be made
+
+
+// calculate how many takes can be made
+void calccantake()			
 {
-//unsigned char x;
-cantake=0;	
-inccantake();	// inc cantake if can take in direction of travel
-for (x=0;x<4;x++)
-	{
-	if ( x<2 ) // heading north/south
-		{
-		orientation=EAST; inccantake();
-		orientation=WEST; inccantake();	
-		}
-	if ( x>1 ) // heading east/west
-		{
-		orientation=NORTH; inccantake();
-		orientation=SOUTH; inccantake();
-		}
-	}
+  //unsigned char x;
+  cantake=0;	
+  inccantake();	// inc cantake if can take in direction of travel
+  for (x=0;x<4;x++)
+  {
+    if ( x<2 ) // heading north/south
+    {
+      orientation=EAST; inccantake();
+      orientation=WEST; inccantake();	
+    }
+    if ( x>1 ) // heading east/west
+    {
+      orientation=NORTH; inccantake();
+      orientation=SOUTH; inccantake();
+    }
+  }
 }
-/***********************/
-void printborder()		// print the border around title screen/menus etc
+
+
+// print the border around title screen/menus etc
+void printborder()		
 {
-unsigned char f=0;
-ink(3);	// yellow, erm...gold
-row=0;c=6;d=11;col=0;
-for (mkey=0;mkey<5;mkey++)
-	{	
-	for (a=row;a<c;a++)
-		{
-		col=0;
-		if (mkey) {fliprune();col=1;}	// flip the row		
-		for(b=col;b<d;b++)
-			{
-			tiletodraw=border[a][b];  // get runic chars
-			if (f==1) {tiletodraw++;} // get western chars on 2nd pass
-			if ( tiletodraw < 99)
-				{
-				ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
-				drawtile();					// draw tile
-				}
-			col++;
-			}
-		row++;
-		}
-	row=1;col=1;c=5;d=10;pausetime=26000;pause();
-	f++;if (f==2){f=0;}
-	}
+  unsigned char f=0;
+  ink(3);	// yellow, erm...gold
+  row=0;c=6;d=11;col=0;
+  for (mkey=0;mkey<5;mkey++)
+  {	
+    for (a=row;a<c;a++)
+    {
+      col=0;
+      if (mkey) {fliprune();col=1;}   // flip the row		
+      for(b=col;b<d;b++)
+      {
+        tiletodraw=border[a][b];      // get runic chars
+        if (f==1) {tiletodraw++;}     // get western chars on 2nd pass
+        if ( tiletodraw < 99)
+        {
+          ptr_graph=RunicTiles;	      // pointer to Border Tiles graphics
+          drawtile();		      // draw tile
+        }
+        col++;
+      }
+      row++;
+    }
+    row=1;col=1;c=5;d=10;pausetime=26000;pause();
+    f++;if (f==2){f=0;}
+  }
 }
-/*******************************/
-void fliprune()		// performs the rune flipping sequence in title screen
+
+
+// performs the rune flipping sequence in title screen
+void fliprune()		
 {
-for (tiletodraw=30;tiletodraw<35;tiletodraw++)
-	{
-	for (col=1;col<10;col++)
-		{
-		if (border[row][col] < 99)
-			{
-			ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
-			drawtile();pausetime=50;pause(); 
-			}
-		}
-	}
+  for (tiletodraw=30;tiletodraw<35;tiletodraw++)
+  {
+    for (col=1;col<10;col++)
+    {
+      if (border[row][col] < 99)
+      {
+        ptr_graph=RunicTiles;		// pointer to Border Tiles graphics
+        drawtile();pausetime=50;pause(); 
+      }
+    }
+  }
 }
