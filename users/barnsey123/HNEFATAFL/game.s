@@ -1,8 +1,8 @@
 
-
-
-
-
+_incmodeone
+	inc _modeonevalid
+	rts
+	
 _incroute
 	inc _route
 	rts
@@ -10,7 +10,6 @@ _incroute
 _decroute
 	dec _route
 	rts
-
 
 _incpoints
 	inc _points
@@ -40,8 +39,6 @@ _doublepoints
 _incsurround
 	inc _surrounded
 	rts
-
-	
 	
 ; multiply the points around king depending on the "surrounded" figure	
 _surroundpoints
@@ -59,7 +56,6 @@ end
 	rts
 .)	
 	
-	
 _inccounter
 	inc _counter
 	rts
@@ -68,4 +64,8 @@ _zerocounter
 	lda #0
 	sta _counter
 	rts
-	
+
+_zerofoundpiece
+	lda #0
+	sta _foundpiece
+	rts

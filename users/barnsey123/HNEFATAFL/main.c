@@ -108,6 +108,7 @@
 // 02-02-2012 Dbug adds some ASM to replace some c functions
 // 03-02-2012 Added checkincroute to replace some repetetive code (35414)
 // 03-02-2012 Replaced subpacman3/4 with subpacman5 (35141)
+// 04-02-2012 added a few ASM routines of my own
 /* TO DO LIST
 *** Continue with endgame function to return a value determining victory conditions etc
 *** routine to detect if all attackers have been captured
@@ -246,6 +247,8 @@ void fliprune();			// flip the rune tiles in title screen
 void subpacnorthsouth();		// subroutine of pacman
 void subpaceastwest();			// subroutine of pacman
 void checkincroute();			// check to see if OK to incroute
+void incmodeone();			// increment the modeonevalid variable (from 0 to 1)
+void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -377,7 +380,7 @@ CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
 paper(0);
 ink(5);				// color of TEXT in text box at bottom
 hires();
-	setflags(0);	// No keyclick, no cursor, no nothing
+setflags(0);	// No keyclick, no cursor, no nothing
 printborder();
 ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
 while (gamekey==89)
@@ -467,7 +470,7 @@ for (fb=4;fb<8;fb++)
 				}
 			if ( fb==6)	
 				{
-				if ( computer[ctns][ctew] ) // if computer piece can get here update target values
+				if ( computer[ctns][ctew] > 0 ) // if computer piece can get here update target values
 					{
 					updatetarget();			// update target value
 					}
@@ -570,16 +573,16 @@ for (ctns=0;ctns<11;ctns++)	// find the highest value for target
 	}
 // having found target we need to select a piece to move
 compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
-fb=9;foundpiece=0;		// set findpiece to "piece not found"
+fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
 origorient=NORTH;
 for (mkey=ons-1; mkey>-1; mkey--){findpiecens();}	
-if ( foundpiece != 1 ) { foundpiece=0;target[targetns][targetew]=hightarget; }
+if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
 origorient=SOUTH;														
 for (mkey=ons+1; mkey<11; mkey++){findpiecens();}	
-if ( foundpiece != 1 ) { foundpiece=0;target[targetns][targetew]=hightarget; }
+if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
 origorient=EAST;
 for (mkey=oew+1; mkey<11; mkey++){findpieceew();}	
-if ( foundpiece != 1 ) { foundpiece=0;target[targetns][targetew]=hightarget; }
+if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
 origorient=WEST;
 for (mkey=oew-1; mkey>-1; mkey--){findpieceew();}	
 if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
@@ -622,19 +625,19 @@ if ((paclevel1<2)||(paclevel2>8)) { incpoints(); } // if "left or rightside" in 
 if ((orientation == NORTH) || (orientation == WEST))	// if north or west
 	{
 	uncounter=paclevel2-1;
-	if ( paclevel2<5 ) { incpoints();} // add weight to north or west if king in north or west side of board	
+	if ( paclevel2 < 5 ) { incpoints();} // add weight to north or west if king in north or west side of board	
 	}
 else											// if south east
 	{ 
 	uncounter=paclevel2+1;
-	if ( paclevel2>5 ) { incpoints();} // add weight to south or east if king in south or east side of board
+	if ( paclevel2 > 5 ) { incpoints();} // add weight to south or east if king in south or east side of board
 	}
-if ( kingattacker[orientation]==0 ) { incpoints();}		// inc points if no attackers on path	
+if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
 surroundpoints();
 // default north/south
 x=uncounter;
 y=paclevel1;
-if ( orientation>SOUTH) // if east/west
+if ( orientation > SOUTH) // if east/west
 	{
 	x=paclevel1;
 	y=uncounter;
@@ -642,7 +645,7 @@ if ( orientation>SOUTH) // if east/west
 flag=1;
 while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
 	{
-	if (computer[x][y])	// if accessible by attacker	
+	if (computer[x][y] > 0)	// if accessible by attacker	
 		{ // only update target if cannot be taken OR king has clear route to corner
 		if ((a==0)||(pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
 			{
@@ -651,20 +654,20 @@ while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
 			}
 		else
 			{
-			if (target[x][y]>1){target[x][y]=points;flag=0;}
+			if (target[x][y] > 1){target[x][y]=points;flag=0;}
 			}
 		}
 	else 
 		{	
 		if ((flag > 0)&&(players[x][y]==0))	// if blank)
 			{
-			if (orientation<EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
+			if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
 			}
 		}
 	decpoints();
 	//if (z){decpoints();} // only decrement points if route to edge is blocked
-	if ( (orientation==NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
-	if ( orientation <EAST ) {x=uncounter;}else{y=uncounter;}
+	if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
+	if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
 	}
 }
 /************************************************/
@@ -781,7 +784,7 @@ void checkend()	// check for endgame conditions
 	// check to see if king is surrounded by attackers (first find king)
 	if ( players[ns][ew] == 1 )	// if attacker was last to move
 		{
-		if (((ns>0 )&&(players[ns-1][ew]==3 ))||((ns<10 )&&(players[ns+1][ew]==3 ))||((ew<10 )&&(players[ns][ew+1]==3 ))||((ew>0 )&&(players[ns][ew-1]==3 ))) 
+		if (((ns > 0 )&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew > 0 )&&(players[ns][ew-1]==3 ))) 
 			{
 			surroundcount();
 			}
@@ -812,30 +815,34 @@ if ((mkey == 8 )&&( ew))		// west
 	cursormodezero();
 	xptrew--;		// decrement copyew
 	skipew-=2;
-	modeonevalid=1;
+	incmodeone();
+	//modeonevalid=1;
 	}
-if ((mkey == 9 )&&( ew<10))		// east
+if ((mkey == 9 )&&( ew < 10))		// east
 	{
 	cursormodezero();
 	xptrew++;
 	skipew+=2;
-	modeonevalid=1;
+	incmodeone();
+	//modeonevalid=1;
 	}
-if ((mkey == 10)&&( ns<10))		// south
+if ((mkey == 10)&&( ns < 10))		// south
 	{
 	cursormodezero();
 	xptrns++;
 	skipns+=2;
-	modeonevalid=1;
+	incmodeone();
+	//modeonevalid=1;
 	}
-if ((mkey == 11)&&( ns))		// north
+if ((mkey == 11)&&( ns > 0))		// north
 	{
 	cursormodezero();
 	xptrns--;
 	skipns-=2;
-	modeonevalid=1;
+	incmodeone();
+	//modeonevalid=1;
 	}		
-if (( cursormode ) && ( modeonevalid ))	// if not at edge of board
+if (( cursormode > 0 ) && ( modeonevalid > 0 ))	// if not at edge of board
 	{
 	if ( players[xptrns][xptrew] == 0 ) 					{canmovecursor=1;} // ok if square vacant
 	if ( tiles[xptrns][xptrew] == 4 ) 						{canmovecursor=0;}	// !ok if corner
