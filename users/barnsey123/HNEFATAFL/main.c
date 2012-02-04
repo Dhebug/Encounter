@@ -79,9 +79,9 @@ void checkend();			// check for end game conditions
 void computerturn();		// AI for computer
 void pacman();				// update target positions around king (need to develop further)
 void targetselect();		// choose a target square
-//void findpiece();
-void findpiecens();			// findpiece north-south
-void findpieceew();			// findpiece east-west
+void findpiece();
+//void findpiecens();			// findpiece north-south
+//void findpieceew();			// findpiece east-west
 void canbetaken(); 			// can I be taken after moving here? returns value (take) 0=no 1=yes
 void subarrows();			// subroutine of arrows or blanks
 void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)
@@ -241,7 +241,7 @@ unsigned char skipns;		// skip to north/south
 unsigned char skipew;		// skip to east/west 
 unsigned char modeonevalid;	// is OK for mode 1? 0=no, 1=yes
 /* above variables used in cursor move routine */
-unsigned char gamekey=89;	// controls "play again?"
+//unsigned char gamekey=89;	// controls "play again?"
 unsigned char gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
 //unsigned int startpos;		// USED when drawing tiles (position in tile file from which to draw)
 unsigned char take;
@@ -271,7 +271,8 @@ main()
   setflags(0);	// No keyclick, no cursor, no nothing
   printborder();
   ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
-  while (gamekey==89)
+  //while (gamekey==89)
+  for(;;)
   {
     playertype=0;				// set to 0 as inited later
     drawboard();				// draw the board
@@ -306,16 +307,16 @@ main()
     }	
     if ( game == 0 ) 
     { 
-      message="KING ESCAPED! KING WINS!\nPLAY AGAIN Y/N?";
+      message="KING ESCAPED! KING WINS!\nPRESS A KEY:";
       printmessage();
     }
     else 
     { 
-      message="KING CAPTURED! ATTACKER WINS!\nPLAY AGAIN Y/N?";
+      message="KING CAPTURED! ATTACKER WINS!\nPRESS A KEY:";
       printmessage();
     }
-    gamekey=getchar();
-    if (gamekey==89)	// if "Y"
+    getchar();
+    //if (gamekey==89)	// if "Y"
     {
       //printf("%c",19);	// turn output ON
     }
@@ -378,29 +379,28 @@ void computerturn()
 }
 
 
-/*
 void findpiece()
 {
-if ( foundpiece == 0 )	
-{		
-if (players[funca][funcb]==1)
-{
-calccantake();
-if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-if ((funcc==funcd)&&(funce!=funcd)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
-if (compass[origorient]==0)
-{
-foundpiece=1;
-funcf=funcc;
+  if ( foundpiece == 0 )	
+  {		
+	if (players[a][b]==1)
+	{
+	  calccantake();
+	  if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
+	//if ((funcc==funcd)&&(funce!=funcd)&&(kingattacker[origorient]==1)) compass[origorient]=1;	// don't move from plane of king
+	  if (compass[origorient]==0)
+	   {
+	   foundpiece=1;
+	   if (origorient < EAST) {ons=mkey;}else{oew=mkey;}
+	   }
+	}
+  if ((players[a][b]==2)||(players[a][b]==3)) {foundpiece=9;}
+  }
 }
-}
-if ((players[funca][funcb]==2)||(players[funca][funcb]==3)) {foundpiece=9;}
-}
-}
-*/
 
 
 // find piece NORTH-SOUTH
+/*
 void findpiecens()	
 {
   if ( foundpiece == 0 )	
@@ -419,8 +419,6 @@ void findpiecens()
     if ((players[mkey][oew]==2)||(players[mkey][oew]==3)) {foundpiece=9;}
   }
 }
-
-
 // find piece EAST-WEST
 void findpieceew()	
 {
@@ -441,6 +439,7 @@ void findpieceew()
     if ((players[ons][mkey]==2)||(players[ons][mkey]==3)) {foundpiece=9;}		
   }
 }
+*/
 
 
 // TARGETSELECT - find the highest scoring TARGET
@@ -469,16 +468,18 @@ NEWTARGET:
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
   fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
   origorient=NORTH;
-  for (mkey=ons-1; mkey>-1; mkey--){findpiecens();}	
+  b=oew;
+  for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}	
   if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
   origorient=SOUTH;														
-  for (mkey=ons+1; mkey<11; mkey++){findpiecens();}	
+  for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}	
   if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
   origorient=EAST;
-  for (mkey=oew+1; mkey<11; mkey++){findpieceew();}	
+  a=ons;
+  for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}	
   if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
   origorient=WEST;
-  for (mkey=oew-1; mkey>-1; mkey--){findpieceew();}	
+  for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
   if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
 
   cx=oew;	// piece x screen position
