@@ -126,7 +126,7 @@ void cantakeadjust();		// decrement cantake if taken piece is on same plane as k
 void inckingattacker();		// increments count of attackers round king		
 void inckingdefender();		// increments count of defenders round king
 void incdefatt();			// increments count of attacker/defenders round king (calls incking...)
-void cursormodezero();		// set cursor mode to 1 if 0
+void cursormodezero();		// set cursor mode to 0 if 1
 void cursormodevalid();		// sets modevalid to 1
 void calccantake();			// can take be made (how many)
 void printborder();			// print the border screen (used in titles/menus etc)
@@ -167,8 +167,8 @@ Players:
 // +10 can be reached from EAST
 // +20 can be reached from WEST 
 extern char enemy[11][11];		// where the defenders can get to
-extern char computer[11][11];	// where the attackers can get to
-char players[11][11];			// to be the working copy of baseplayers
+extern char unsigned computer[11][11];	// where the attackers can get to
+unsigned char players[11][11];			// to be the working copy of baseplayers
 unsigned char playertype,piecetype;			// player 1=attacker, 2=defender 
 unsigned char ns,ew;		// default north/south position of central square 	(0-10)
 unsigned char cx,cy;			// cursor x screen position (pixels across)
@@ -199,7 +199,7 @@ char foundpiece=0;	// has a piece been found (during computer move) that can mov
 char xns=0;					// copy of ns (arrows or blanks, and subarrows)
 char xew=0;					// copy of ew (arrows or blanks, and subarrows)
 char arrow=1;				// used in arrowsorblanks(and subarrows)
-char flag=0;
+unsigned char flag=0;
 char cantake;				// can I take?	(for computer turn)
 char route;
 unsigned char row,col;			// used in tile drawing routines and array navigation ( a row in 11x11 grid)
@@ -358,7 +358,7 @@ void computerturn()
         }
         if ( fb==6)	
         {
-          if ( computer[ctns][ctew] > 0 ) // if computer piece can get here update target values
+          if ( computer[ctns][ctew] ) // if computer piece can get here update target values
           {
             updatetarget();			// update target value
           }
@@ -541,7 +541,7 @@ void subpacmanx()
   flag=1;
   while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
   {
-    if (computer[x][y] > 0)	// if accessible by attacker	
+    if (computer[x][y] )	// if accessible by attacker	
     { // only update target if cannot be taken OR king has clear route to corner
       if ((a==0)||(pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
       {
@@ -555,7 +555,7 @@ void subpacmanx()
     }
     else 
     {	
-      if ((flag > 0)&&(players[x][y]==0))	// if blank)
+      if ((flag)&&(players[x][y]==0))	// if blank)
       {
         if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
       }
@@ -688,7 +688,7 @@ void checkend()
   // check to see if king is surrounded by attackers (first find king)
   if ( players[ns][ew] == 1 )	// if attacker was last to move
   {
-    if (((ns > 0 )&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew > 0 )&&(players[ns][ew-1]==3 ))) 
+    if (((ns)&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew)&&(players[ns][ew-1]==3 ))) 
     {
       surroundcount();
     }
@@ -741,7 +741,7 @@ void movecursor2()
     incmodeone();
     //modeonevalid=1;
   }
-  if ((mkey == 11)&&( ns > 0))		// north
+  if ((mkey == 11)&&( ns ))		// north
   {
     cursormodezero();
     xptrns--;
@@ -749,7 +749,7 @@ void movecursor2()
     incmodeone();
     //modeonevalid=1;
   }		
-  if (( cursormode > 0 ) && ( modeonevalid > 0 ))	// if not at edge of board
+  if (( cursormode ) && ( modeonevalid ))	// if not at edge of board
   {
     if ( players[xptrns][xptrew] == 0 ) 					{canmovecursor=1;} // ok if square vacant
     if ( tiles[xptrns][xptrew] == 4 ) 						{canmovecursor=0;}	// !ok if corner
@@ -758,7 +758,7 @@ void movecursor2()
     // need to check that for non-king pieces wether the central square is vacant and can be skipped
     if (( piecetype < 3 )&&( tiles[xptrns][xptrew] == 3)&&(players[xptrns][xptrew] == 0 ))  // tiles=3(central), tiles=4(corner)
     {	
-      if ( players[skipns][skipew] > 0 ) {canmovecursor=0;}	// cannot skip if otherside occupied
+      if ( players[skipns][skipew] ) {canmovecursor=0;}	// cannot skip if otherside occupied
       if ((( skipns == ons )&&( skipew == oew ))||(	players[skipns][skipew]==0))			// ok to skip to self
       {
         canmovecursor=1;
@@ -941,13 +941,13 @@ void canpiecemove()
   {
     if ( ns == 5 ) 				
     {
-      if ( ew == 4 ) {if ( players[5][6] > 0 ) decroute();}	// check east +2	// east occupied, dec route
-      if ( ew == 6 ) {if ( players[5][4] > 0 ) decroute();}	// check west +2	// west occupied, dec route
+      if ( ew == 4 ) {if ( players[5][6] ) decroute();}	// check east +2	// east occupied, dec route
+      if ( ew == 6 ) {if ( players[5][4] ) decroute();}	// check west +2	// west occupied, dec route
     }
     if ( ew == 5 )
     {
-      if ( ns == 4 ) { if ( players[6][5] > 0 ) decroute();}	// check south +2	// south occupied, dec route
-      if ( ns == 6 ) { if ( players[4][5] > 0 ) decroute();}	// check north +2	// north occupied, dec route
+      if ( ns == 4 ) { if ( players[6][5] ) decroute();}	// check south +2	// south occupied, dec route
+      if ( ns == 6 ) { if ( players[4][5] ) decroute();}	// check north +2	// north occupied, dec route
     }
   }
   if ( route > 0 ) route=1;
@@ -969,7 +969,7 @@ void drawplayers()
   {
     for (col=0;col<11;col++)
     {
-      if (( players[row][col] > 0 )&&(players[row][col] < 4)){drawpiece();}			
+      if (( players[row][col] )&&(players[row][col] < 4)){drawpiece();}			
     }
   }
 }
@@ -1342,7 +1342,7 @@ char cantakepiece()
   // if a take is possible increment the take counter - if values fall within bounds...
   if ((pcheckns2>-1)&&(pcheckns2<11)&&(pcheckew2>-1)&&(pcheckew2<11))
   {
-    if (( players[pcheckns1][pcheckew1] > 0 )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2)&&(players[pcheckns1][pcheckew1] != 3))
+    if (( players[pcheckns1][pcheckew1] )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2 )&&(players[pcheckns1][pcheckew1] != 3))
     {	
       if ((( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == 4)&&(pcheckns2!=5)&&(pcheckew2!=5))) // the 5 is to EXCLUDE central square
       {
@@ -1431,7 +1431,7 @@ void drawarrow()
   if ( fb==1 )
   {
     tiletodraw=10;
-    if ( tiles[row][col] > 0 ) tiletodraw++;      // add another 1 for arrow with background
+    if ( tiles[row][col] ) tiletodraw++;      // add another 1 for arrow with background
   }
   else
   {
@@ -1448,15 +1448,15 @@ void surroundcount()
   surrounded=0;
   if (( kingns==0)||(kingns==10)||(kingew==0)||(kingew==10))	{incsurround();} // added 18/10/2011
   surew=kingew;
-  if ( kingns > 0 )	{ surns=kingns-1;surroundcheck(); }
+  if ( kingns )			{ surns=kingns-1;surroundcheck(); }
   if ( kingns < 10 )	{ surns=kingns+1;surroundcheck(); }
   surns=kingns;
-  if ( kingew > 0 )	{ surew=kingew-1;surroundcheck(); }
+  if ( kingew )	{ surew=kingew-1;surroundcheck(); }
   if ( kingew < 10 )	{ surew=kingew+1;surroundcheck(); }
   if (surrounded==3)	// unset any "enemy and target values" 
   {
     ezew1=kingew;
-    if ( kingns > 0 )
+    if ( kingns )
     {
       ezns1=kingns-1;
       enemyzero();
@@ -1467,7 +1467,7 @@ void surroundcount()
       enemyzero();
     }
     ezns1=kingns;
-    if ( kingew > 0 )
+    if ( kingew )
     {
       ezew1=kingew-1;
       enemyzero();
