@@ -1,0 +1,6 @@
+
+// TO DO LIST
+*** Continue with endgame function to return a value determining victory conditions etc
+*** routine to detect if all attackers have been captured
+*** routine to detect stalemate (a side cannot move)
+
