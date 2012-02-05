@@ -20,7 +20,6 @@ skip
 	rts
 .)
 
-
 ; X=number of columns
 ; Out: update "tmp1"
 _AddCol
@@ -79,7 +78,28 @@ _SetScreenAddress
 	jsr _AddRow
 	rts
 .)
-	
+/*
+What INKASM is supposed to do:
+1. load x with value of 199 = Loop Counter (200 lines (0-199) and break out after doing the last line
+2. Load tmp1 with the address of the 2nd column of the hires screen (the ink attribute)
+3. Load y with the value of inkcolor (e.g. 6=cyan)
+4. Loop 200 times incrementing the value of tmp1 by 40 and storing the value of y(e.g. 6) there.
+*/
+_inkasm
+.(
+	ldx #199
+	lda #<$a001
+	sta tmp1+0
+	lda #>$a001
+	sta tmp1+1
+	ldy _inkcolor
+loop
+	sta (tmp1),y
+	jsr _Add40
+	dex
+	bne loop
+	rts
+.)	
 
 /*
 void tileloop()
@@ -100,6 +120,7 @@ void tileloop()
 	}
 }
 */
+
 _tileloop
 .(
 	lda _ptr_graph+0
