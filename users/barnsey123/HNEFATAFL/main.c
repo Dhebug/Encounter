@@ -129,8 +129,7 @@ void incdefatt();			// increments count of attacker/defenders round king (calls 
 void cursormodezero();		// set cursor mode to 0 if 1
 void cursormodevalid();		// sets modevalid to 1
 void calccantake();			// can take be made (how many)
-void printborder();			// print the border screen (used in titles/menus etc)
-//void printtitles();			// print the border screen and titles 
+void printtitles();			// print the title screen (used in titles/menus etc)
 void fliprune();			// flip the rune tiles in title screen
 void subpacnorthsouth();		// subroutine of pacman
 void subpaceastwest();			// subroutine of pacman
@@ -258,7 +257,7 @@ unsigned char compass[4];	// used in cantake (if compass[NORTH]=1 then means can
 unsigned char xplayers;
 //unsigned char tileheight;	// height of tile in pixles
 //unsigned char tilewidth;	// width of tile in 6 pixel chunks
-
+char inkcolor=6;	// default screen color (cyan)
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
@@ -269,8 +268,9 @@ main()
   ink(5);				// color of TEXT in text box at bottom
   hires();
   setflags(0);	// No keyclick, no cursor, no nothing
-  printborder();
-  ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
+  printtitles();
+  inkasm();
+  //ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
   //while (gamekey==89)
   for(;;)
   {
@@ -1686,13 +1686,13 @@ void calccantake()
 }
 
 
-// print the border around title screen/menus etc
-void printborder()		
+// print the title screen
+void printtitles()		
 {
   unsigned char f=0;
   ink(3);	// yellow, erm...gold
   row=0;c=6;d=11;col=0;
-  for (mkey=0;mkey<5;mkey++)
+  for (mkey=0;mkey<2;mkey++)
   {	
     for (a=row;a<c;a++)
     {
