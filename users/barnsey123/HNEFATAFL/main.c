@@ -264,9 +264,11 @@ main()
   //gamekey=89;	// controls "play again?"
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
-  paper(0);
+  //paper(0);
   //ink(5);				// color of TEXT in text box at bottom
   hires();
+  message="*** VERSION 0.1 ***\n*** BY BARNSEY123 ***\n*** ALSO: DBUG:CHEMA:JAMESD:XERON ***";
+  printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
   inkcolor=6;inkasm();
