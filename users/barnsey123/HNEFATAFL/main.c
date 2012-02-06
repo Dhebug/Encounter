@@ -257,7 +257,7 @@ unsigned char compass[4];	// used in cantake (if compass[NORTH]=1 then means can
 unsigned char xplayers;
 //unsigned char tileheight;	// height of tile in pixles
 //unsigned char tilewidth;	// width of tile in 6 pixel chunks
-char inkcolor=6;	// default screen color (cyan)
+char inkcolor;	// default screen color (cyan)
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
@@ -265,11 +265,11 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   paper(0);
-  ink(5);				// color of TEXT in text box at bottom
+  //ink(5);				// color of TEXT in text box at bottom
   hires();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
-  inkasm();
+  inkcolor=6;inkasm();
   //ink(6);				// boardcolor 0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
   //while (gamekey==89)
   for(;;)
@@ -1029,9 +1029,11 @@ void flashscreen()
   /* Colors are as follows:
   0=black, 1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan,7=white
   */
-  ink(flashcolor);	// flash in color
+  inkcolor=flashcolor;inkasm();
+  //ink(flashcolor);	// flash in color
   pausetime=1500;pause();
-  ink(flashback);	// back to original
+  inkcolor=flashback;inkasm();
+  //ink(flashback);	// back to original
 }
 
 
@@ -1104,7 +1106,7 @@ void playerturn()
       else { flashcolor=1;flashscreen();}	// flash red			
       if (( mkey == 88 )&&( canselect ))	// if piece is SELECTED and CAN move
       {
-        ink(2); 				// green to indicate piece is selected
+        inkcolor=2;inkasm(); 				// green to indicate piece is selected
         flashback=2;
         //printmessage();
         //strcpy(message,playertext);
@@ -1163,7 +1165,7 @@ void playerturn()
           }
         }
       }
-      ink(6);	// back to cyan	
+      inkcolor=6;inkasm();	// back to cyan	
       flashback=6;
       printturnprompt();		
     }		// key = X or P
@@ -1366,7 +1368,7 @@ void takepiece()
   players[tpns][tpew]=0;			// zero players
   row=tpns;
   col=tpew;
-  ink(6);
+  inkcolor=6;inkasm();
   explodetile();					// plays animation to "kill" a tile
   tiletodraw=tiles[row][col];		// decide tile to draw
   ptr_graph=PictureTiles;drawtile();						// draw tile at location
@@ -1690,7 +1692,7 @@ void calccantake()
 void printtitles()		
 {
   unsigned char f=0;
-  ink(3);	// yellow, erm...gold
+  inkcolor=3;inkasm();	// yellow, erm...gold
   row=0;c=6;d=11;col=0;
   for (mkey=0;mkey<2;mkey++)
   {	
