@@ -109,6 +109,7 @@
 // 03-06th Feb 2012 Various updates in C/ASM to reduce code size (Dbug/Barnsey)
 // 06-02-2012 v0.001 Created first proper ASM routine to replace ink(). Help from Dbug/Xeron.
 // 07-02-2012 v0.002 Fixed bug in subpacman5 routine (had the flag's inversed which entailed detection of central square)
+// 07-02-2012 v0.003 New routine zoneupdate and subzoneupdate to inc targets around edge of board if rows/cols unnocupied
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
