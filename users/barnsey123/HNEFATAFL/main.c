@@ -1,5 +1,114 @@
 // main.c by Neil Barnes (a.k.a. Barnsey123)
-
+// 22-03-2011 prog to draw a grid (for viking game)
+// 23-03-2011 create new drawgrid function
+// 01-04-2011 create new drawtile functions and use compact code (char instead of int etc)
+// 02-04-2011 routine to read keyboard
+// 06-04-2011 cursor drawing correct
+// 11-04-2011 request help from DBUG - bug in OSDK. Have banged head against wall for far too long!
+// 14-04-2011 DBUG fixed OSDK bug! :-)
+// 15-04-2011 tidied code up
+// 15-04-2011 tiles as a global variable, (will be used everywhere)
+// 16-04-2011 Changed numeric settings for board (0=blank, 1=attackers tile, 2=defenders tile, 3=kings tile)
+// 16-04-2011 drawing players
+// 17-04-2011 improving tile drawing (saving few bytes in each routine and having different styles)
+// 19-04-2011 added flashscreen (to flash screen with desired color - e.g. GREEN for OK, RED for !OK)
+// 19-04-2011 context sensitive piece selection
+// 19-04-2011 canpiecemove function (can a selected piece MOVE or not?) 
+// 21-04-2011 numerous bug-fixes to do with x,y co-ords vs north-south/east-west array positions
+// 21-04-2011 brilliant arrow printing function (hover over one of your pieces and press 'P')
+// 25-04-2011 fixed bugs in arrow printing routine and reduced code required (TOTAL 817 lines versus 957)
+// 27-04-2011 fixed some other (all?) bugs in arrow printing routines (new, neater routines)
+// 29-04-2011 saved a whole bunch of code (789 lines)
+// 29-04-2011 changed flashscreen so that color can be returned to previous color mode
+// 29-04-2011 Using POINTERS Huzzah! (never thought that would happen!) 786 lines! 
+// 01-05-2011 Once a piece is selected restrict cursor movement to legal destinations 
+// 02-05-2011 handle "skipping" of central square (if square beyond it is available)
+// 02-05-2011 900 lines of code (including comments) versus 917 (more efficient and more features)
+// 02-05-2011 907 lines including refinements
+// 02-05-2011 CAN now move pieces (taking turns between attacker/defender) 935 lines
+// 04-05-2011 Can now TAKE pieces (but king squares can't yet take part...) 1012 lines
+// 04-05-2011 Re-design to save memory/complexity (987 lines)
+// 05-05-2011 re-design to save memory/complexity (966 lines)
+// 05-05-2011 add the take rule (of King being able to take attackers with the aid of the king squares)
+// 06-05-2011 saved a few bytes
+// 07-05-2011 saved a few bytes (962 lines, 30311 bytes)
+// 10-05-2011 fixed bug in central square Skipping (could not return to self if adjacent to square)
+// 10-05-2011 fixed bug allowing defender to select corner square to move!
+// 10-05-2011 Continuing glabalization (few bugs sorted)
+// 11-05-2011 Finished Globalizing (23639 bytes)
+// 13-05-2011 Bug Hunt (23504 bytes) - some tidying up (not 100% byte efficient I'm sure)
+// 14-05-2011 Bug in printpossiblemoves resolved (arrow WILL print on corner square if piece is KING)
+// 14-05-2011 checkend function to check if king escapes or is captured (not complete) (26815)
+// 18-05-2011 developing attacker move (running out of memory! 31213!) hardly started
+// 26-05-2011 1st attempt at computer moving piece (since Amiga days! 1990/1991?)
+// 31-05-2011 fixed bug in board update position? (phantom attackers!)
+// 06-06-2011 incorporated printdestinations into computerturn saving wedges of code
+// 08-06-2011 fixed bug in computer targetselection (cantake wasn't resetting to 0)
+// 13-06-2011 fixed bug in canbetaken (mostly fixed)
+// 15-06-2011 fixed "blind spot"
+// 15-06-2011 changed checkend to enable "king surrounded against board edge" facility (works)
+// 15-06-2011 The AI will only be for ATTACKERS (for the moment)
+// 16-06-2011 various improvements
+// 17-06-2011-11-07-2011 various tomfoolery to reduce memory footprint
+// 12-07-2011 New variables to check for pieces NSEW of King
+// 31-08-2011 prevent attackers occupying corner squares
+// 12-10-2011 using 18x18 squares (unfinished...needs LOTS of work!!!)
+// 17-10-2011 using new routine to draw tiles
+// 18-10-2011 tidied up graphic routines (reduced size of code/executable)
+// 20-10-2011 Added expodetile function (playes animation to "kill" a piece) plus pause function (reduces executable size)
+// 20-10-2011 made graphics drawing more efficient (saved 300bytes)
+// 21-10-2011 added STEELDIAMOND function (create higher target values in a diamond shape around king)
+// 24-10-2011 Fixed bug with crashes at south-east corner of board (counter must be SIGNED)
+// 24-10-2011 Fixed a bug regarding counter - much stronger AI!
+// 24-10-2011 Play again? (needs work)
+// 27-10-2011 Fixing the "enemy one space away ENEMY UDATE issue" - set value=50
+// 31-10-2011 Added the COMPUTER array (where the computers's pieces can get to)
+// 02-11-2011 Added Select gamestyle (human vs computer or human vs human selection)
+// 02-11-2011 GONZO! the -50 behaviour is interesting - still crashing though...
+// 09-11-2011 LookBackInAnger routine (attackers to check behind their original position)
+// 10-11-2011 Now checks to see if a piece can be taken if it stays where it is (needs some finessing)
+// 14-11-2011 Improved the above routine
+// 16-11-2011 compress routines more (free up some memory)
+// 06-12-2011 fixed a couple of bugs (I think)
+// 08-12-2011 got rid of baseplayers as unnecessary (it's just a copy of tiles)
+// 08-12-2011 shrunk code still further - added calctakeweight routine
+// 08-12-2011 shrunk code again (33524) - added enemyzero routine and simplified surrounded routines
+// 08-12-2011 found/fixed bug in the previous surrounded routine during simplification
+// 10-12-2011 subpacmanx(made smaller), added checkroute function
+// 10-12-2011 enemyzero made more effective (and smaller) by zeroing entire enemy array
+// 12-12-2011 lots of changes (seperated out "updatetarget" from "printarrowsorblanks"
+// 14-12-2011 Test of replacing PACMAN with something else (see updatetarget)
+// 20-12-2011 Oh Christ!
+// 21-12-2011 Added nifty, don't take a defender if on same plane as king routine...
+// 22-12-2011 above, wont take if LAST defender on plane (added inckingattacker etc)
+// 22-12-2011 kingsouth/defsouth replaced by arrays (kingattacker, kingdefender)
+// 23-12-2011 reduced code, fixed a couple of bugs
+// 04-01-2012 introduced calcantake function (also beefed up the hightarget routines "findpiecens/findpieceew")
+// 05-01-2012 reduced memory requirements - using unsigned char where possible  (34457)
+// 05-01-2012 removed all local variables (replaced with globals) (34338)
+// 05-01-2012 got rid of LookBackInAnger (plus some other changes) (33670)
+// 06-01-2012 fixed bug in subcanbetaken2
+// 07-01-2012 found out why some pieces commit suicide but the fix don't work...perhaps other factors are at work
+// 09-01-2012 HUZZAH! Fixed the suicide issue. 
+/* from subcanbetaken2...
+	NEW:	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
+	OLD:	if (players[takenc][takend]==0) 
+	in the OLD condition, if the piece was only one space away, players would always be 1
+*/
+// 09-01-2012 BOOOOO!!! Above fix causing another issue..
+// 10-01-2012 HUZZAH - above issue resolved 34865)
+// 11-01-2012 TITLE SCREEN (36743)
+// 12-01-2012 Added RUNES
+// 17-01-2012 Made runes work! (37100)
+// 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
+// 01-02-2012 Finished "fliprunes" routine and title screen (38479)
+// 01-02-2012 DBUG replaced printf with the code in text.s saving memory. Loading from $500. Excellent! (37462)
+// 02-02-2012 Tided up some of the text displays (saving a few bytes) (37448)
+// 02-02-2012 Used partial runic1 font (no lower case chars)
+// 02-02-2012 Using subpacnorthsouth/subpaceastwest to reduce memory to 36924
+// 03-06th Feb 2012 Various updates in C/ASM to reduce code size (Dbug/Barnsey)
+// 06-02-2012 v0.001 Created first proper ASM routine to replace ink(). Help from Dbug/Xeron.
+// 07-02-2012 v0.002 Fixed bug in subpacman5 routine (had the flag's inversed which entailed detection of central square)
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -86,7 +195,7 @@ void subpacman();			// subroutine of pacman
 void subpacman2();			// subroutine of pacman
 //void subpacman3();			// sub of subpacman
 //void subpacman4();			// sub of subpacman2
-void subpacman5();
+void subpacman5();			// replaces subpacman3 + 4
 void subpacmanx();			// grand sub of pacman
 //void subcanbetaken();		// sub of canbetaken
 void inccantake();			// increments cantake
@@ -133,6 +242,8 @@ void subpaceastwest();			// subroutine of pacman
 void checkincroute();			// check to see if OK to incroute
 void incmodeone();			// increment the modeonevalid variable (from 0 to 1)
 void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)
+void zoneupdate();			// Increment target positions on unnocupied rows/columns (especially the "zone")
+void subzoneupdate();		// subroutine of zoneupdate
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -259,7 +370,7 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.002\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.003\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -356,9 +467,12 @@ void computerturn()
   }
   // 3. Increment target positions around King (PACMAN)
   pacman();
+  // 4. Increment target positions on unnocupied rows/columns (especially the "zone")
+  zoneupdate();
+  
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
-  // 4,5,6,7..N etc
+  // 5,6,7..N etc
   // 
   targetselect();	// Choose the highest value target 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
@@ -1594,4 +1708,40 @@ void fliprune()
       }
     }
   }
+}
+// ZONEUPDATE - increment target positions on unnocupied rows/columns/especially "the zone"
+void zoneupdate()
+{
+  orientation=SOUTH;startcol=0;destcol=10;
+  startrow=0;destrow=0;subzoneupdate();
+  startrow=1;destrow=1;subzoneupdate();subzoneupdate();
+  startrow=9;destrow=9;subzoneupdate();subzoneupdate();
+  startrow=10;destrow=10;subzoneupdate();
+  orientation=EAST;startrow=0;destrow=10;
+  startcol=0;destcol=0;subzoneupdate();
+  startcol=1;destcol=1;subzoneupdate();subzoneupdate();
+  startcol=9;destcol=9;subzoneupdate();subzoneupdate();
+  startcol=10;destcol=10;subzoneupdate();
+/*
+  for (row=0;row<11;row++)
+  	{
+	startrow=row;destrow=row;
+	checkroutemode=1;counter=checkroute();				// x=count of pieces on route
+	if (counter==0) { checkroutemode=2;checkroute();}		// if route unnocupied increment targets
+	}
+  orientation=EAST;startrow=0;destrow=10;
+  for (col=0;col<11;col++)
+  	{
+	startcol=col;destcol=col;
+	checkroutemode=1;counter=checkroute();				// x=count of pieces on route
+	if (counter==0) { checkroutemode=2;checkroute();}		// if route unnocupied increment targets
+	}	
+*/
+}
+void subzoneupdate()
+{
+  {
+	checkroutemode=1;counter=checkroute();				// x=count of pieces on route
+	if (counter==0) { checkroutemode=2;checkroute();}	// if route unnocupied increment targets
+	}
 }
