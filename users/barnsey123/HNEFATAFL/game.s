@@ -1,4 +1,14 @@
 
+_setcheckmode1
+	lda #1
+	sta _checkroutemode
+	rts
+	
+_setcheckmode2
+	lda #2
+	sta _checkroutemode
+	rts
+	
 _incmodeone
 	inc _modeonevalid
 	rts

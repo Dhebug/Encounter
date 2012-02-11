@@ -1,115 +1,4 @@
 // main.c by Neil Barnes (a.k.a. Barnsey123)
-// 22-03-2011 prog to draw a grid (for viking game)
-// 23-03-2011 create new drawgrid function
-// 01-04-2011 create new drawtile functions and use compact code (char instead of int etc)
-// 02-04-2011 routine to read keyboard
-// 06-04-2011 cursor drawing correct
-// 11-04-2011 request help from DBUG - bug in OSDK. Have banged head against wall for far too long!
-// 14-04-2011 DBUG fixed OSDK bug! :-)
-// 15-04-2011 tidied code up
-// 15-04-2011 tiles as a global variable, (will be used everywhere)
-// 16-04-2011 Changed numeric settings for board (0=blank, 1=attackers tile, 2=defenders tile, 3=kings tile)
-// 16-04-2011 drawing players
-// 17-04-2011 improving tile drawing (saving few bytes in each routine and having different styles)
-// 19-04-2011 added flashscreen (to flash screen with desired color - e.g. GREEN for OK, RED for !OK)
-// 19-04-2011 context sensitive piece selection
-// 19-04-2011 canpiecemove function (can a selected piece MOVE or not?) 
-// 21-04-2011 numerous bug-fixes to do with x,y co-ords vs north-south/east-west array positions
-// 21-04-2011 brilliant arrow printing function (hover over one of your pieces and press 'P')
-// 25-04-2011 fixed bugs in arrow printing routine and reduced code required (TOTAL 817 lines versus 957)
-// 27-04-2011 fixed some other (all?) bugs in arrow printing routines (new, neater routines)
-// 29-04-2011 saved a whole bunch of code (789 lines)
-// 29-04-2011 changed flashscreen so that color can be returned to previous color mode
-// 29-04-2011 Using POINTERS Huzzah! (never thought that would happen!) 786 lines! 
-// 01-05-2011 Once a piece is selected restrict cursor movement to legal destinations 
-// 02-05-2011 handle "skipping" of central square (if square beyond it is available)
-// 02-05-2011 900 lines of code (including comments) versus 917 (more efficient and more features)
-// 02-05-2011 907 lines including refinements
-// 02-05-2011 CAN now move pieces (taking turns between attacker/defender) 935 lines
-// 04-05-2011 Can now TAKE pieces (but king squares can't yet take part...) 1012 lines
-// 04-05-2011 Re-design to save memory/complexity (987 lines)
-// 05-05-2011 re-design to save memory/complexity (966 lines)
-// 05-05-2011 add the take rule (of King being able to take attackers with the aid of the king squares)
-// 06-05-2011 saved a few bytes
-// 07-05-2011 saved a few bytes (962 lines, 30311 bytes)
-// 10-05-2011 fixed bug in central square Skipping (could not return to self if adjacent to square)
-// 10-05-2011 fixed bug allowing defender to select corner square to move!
-// 10-05-2011 Continuing glabalization (few bugs sorted)
-// 11-05-2011 Finished Globalizing (23639 bytes)
-// 13-05-2011 Bug Hunt (23504 bytes) - some tidying up (not 100% byte efficient I'm sure)
-// 14-05-2011 Bug in printpossiblemoves resolved (arrow WILL print on corner square if piece is KING)
-// 14-05-2011 checkend function to check if king escapes or is captured (not complete) (26815)
-// 18-05-2011 developing attacker move (running out of memory! 31213!) hardly started
-// 26-05-2011 1st attempt at computer moving piece (since Amiga days! 1990/1991?)
-// 31-05-2011 fixed bug in board update position? (phantom attackers!)
-// 06-06-2011 incorporated printdestinations into computerturn saving wedges of code
-// 08-06-2011 fixed bug in computer targetselection (cantake wasn't resetting to 0)
-// 13-06-2011 fixed bug in canbetaken (mostly fixed)
-// 15-06-2011 fixed "blind spot"
-// 15-06-2011 changed checkend to enable "king surrounded against board edge" facility (works)
-// 15-06-2011 The AI will only be for ATTACKERS (for the moment)
-// 16-06-2011 various improvements
-// 17-06-2011-11-07-2011 various tomfoolery to reduce memory footprint
-// 12-07-2011 New variables to check for pieces NSEW of King
-// 31-08-2011 prevent attackers occupying corner squares
-// 12-10-2011 using 18x18 squares (unfinished...needs LOTS of work!!!)
-// 17-10-2011 using new routine to draw tiles
-// 18-10-2011 tidied up graphic routines (reduced size of code/executable)
-// 20-10-2011 Added expodetile function (playes animation to "kill" a piece) plus pause function (reduces executable size)
-// 20-10-2011 made graphics drawing more efficient (saved 300bytes)
-// 21-10-2011 added STEELDIAMOND function (create higher target values in a diamond shape around king)
-// 24-10-2011 Fixed bug with crashes at south-east corner of board (counter must be SIGNED)
-// 24-10-2011 Fixed a bug regarding counter - much stronger AI!
-// 24-10-2011 Play again? (needs work)
-// 27-10-2011 Fixing the "enemy one space away ENEMY UDATE issue" - set value=50
-// 31-10-2011 Added the COMPUTER array (where the computers's pieces can get to)
-// 02-11-2011 Added Select gamestyle (human vs computer or human vs human selection)
-// 02-11-2011 GONZO! the -50 behaviour is interesting - still crashing though...
-// 09-11-2011 LookBackInAnger routine (attackers to check behind their original position)
-// 10-11-2011 Now checks to see if a piece can be taken if it stays where it is (needs some finessing)
-// 14-11-2011 Improved the above routine
-// 16-11-2011 compress routines more (free up some memory)
-// 06-12-2011 fixed a couple of bugs (I think)
-// 08-12-2011 got rid of baseplayers as unnecessary (it's just a copy of tiles)
-// 08-12-2011 shrunk code still further - added calctakeweight routine
-// 08-12-2011 shrunk code again (33524) - added enemyzero routine and simplified surrounded routines
-// 08-12-2011 found/fixed bug in the previous surrounded routine during simplification
-// 10-12-2011 subpacmanx(made smaller), added checkroute function
-// 10-12-2011 enemyzero made more effective (and smaller) by zeroing entire enemy array
-// 12-12-2011 lots of changes (seperated out "updatetarget" from "printarrowsorblanks"
-// 14-12-2011 Test of replacing PACMAN with something else (see updatetarget)
-// 20-12-2011 Oh Christ!
-// 21-12-2011 Added nifty, don't take a defender if on same plane as king routine...
-// 22-12-2011 above, wont take if LAST defender on plane (added inckingattacker etc)
-// 22-12-2011 kingsouth/defsouth replaced by arrays (kingattacker, kingdefender)
-// 23-12-2011 reduced code, fixed a couple of bugs
-// 04-01-2012 introduced calcantake function (also beefed up the hightarget routines "findpiecens/findpieceew")
-// 05-01-2012 reduced memory requirements - using unsigned char where possible  (34457)
-// 05-01-2012 removed all local variables (replaced with globals) (34338)
-// 05-01-2012 got rid of LookBackInAnger (plus some other changes) (33670)
-// 06-01-2012 fixed bug in subcanbetaken2
-// 07-01-2012 found out why some pieces commit suicide but the fix don't work...perhaps other factors are at work
-// 09-01-2012 HUZZAH! Fixed the suicide issue. 
-/* from subcanbetaken2...
-	NEW:	if ((players[takenc][takend]==0)||(enemy[takenc][takend]>ENEMYWEIGHT))
-	OLD:	if (players[takenc][takend]==0) 
-	in the OLD condition, if the piece was only one space away, players would always be 1
-*/
-// 09-01-2012 BOOOOO!!! Above fix causing another issue..
-// 10-01-2012 HUZZAH - above issue resolved 34865)
-// 11-01-2012 TITLE SCREEN (36743)
-// 12-01-2012 Added RUNES
-// 17-01-2012 Made runes work! (37100)
-// 27-01-2012 Using my runic1 font for lores text. C code from Dbug.
-// 01-02-2012 Finished "fliprunes" routine and title screen (38479)
-// 01-02-2012 DBUG replaced printf with the code in text.s saving memory. Loading from $500. Excellent! (37462)
-// 02-02-2012 Tided up some of the text displays (saving a few bytes) (37448)
-// 02-02-2012 Used partial runic1 font (no lower case chars)
-// 02-02-2012 Using subpacnorthsouth/subpaceastwest to reduce memory to 36924
-// 03-06th Feb 2012 Various updates in C/ASM to reduce code size (Dbug/Barnsey)
-// 06-02-2012 v0.001 Created first proper ASM routine to replace ink(). Help from Dbug/Xeron.
-// 07-02-2012 v0.002 Fixed bug in subpacman5 routine (had the flag's inversed which entailed detection of central square)
-// 07-02-2012 v0.003 New routine zoneupdate and subzoneupdate to inc targets around edge of board if rows/cols unnocupied
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -151,7 +40,7 @@ The Viking "alphabet" begins with "F" and is rEferred to as "FUTHAR" rather than
 8	H:	Hagalaz		Hail/Missile
 9	N:	Nauthiz		Need/Necessity
 10	I:	Isa			ICE
-11	Y:	Jera		year/harvest
+11	Y/J:	Jera		year/harvest
 12	EI:	Eithwaz		Sacred Yew tree
 13	P:	Perth		Unknown
 14	Z:	Algiz		Defence/Protection/Self-Preservation
@@ -245,6 +134,7 @@ void incmodeone();			// increment the modeonevalid variable (from 0 to 1)
 void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)
 void zoneupdate();			// Increment target positions on unnocupied rows/columns (especially the "zone")
 void subzoneupdate();		// subroutine of zoneupdate
+void updateroutetarget();	// increment targets on a given route
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -297,12 +187,13 @@ unsigned char gamestyle;				// 0=human vs human; 1=human king vs computer; ** NO
 unsigned char kingns,kingew;				// kings position North-South
 unsigned char kingattacker[4];	// number of attackers in all four directions from king
 unsigned char kingdefender[4];	// number of defenders in all four directsions from king
+unsigned char kingpieces[4];	// number of pieces in all four directions around king (saves calculating it all the time)
 unsigned char surrounded;			// status of king "surrounded" status		//
 unsigned char ctns=0;				// Computer Turn north-south board position		
 unsigned char ctew=0;				// Computer Turn east-west   board position 
 extern char* playertext;
 extern char* message;
-char foundpiece=0;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
+char foundpiece;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
 //char xloop=0;				// general purpose loop variable
 char xns=0;					// copy of ns (arrows or blanks, and subarrows)
 char xew=0;					// copy of ew (arrows or blanks, and subarrows)
@@ -365,20 +256,21 @@ char inkcolor;	// screen color
 unsigned char checkroutemode;	// mode used for checkroute function 
 								// 1=count number of pieces on route
 								// 2=increment target values on route (if no pieces on route)
+unsigned char subpacc,subpacd;	// used in subpacman5 
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.003\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.005\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
   inkcolor=6;inkasm();
   for(;;)	// endless loop
   {
-    playertype=0;				// set to 0 as inited later
+    playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     drawboard();				// draw the board
     while (gamestyle==3)
     {
@@ -418,11 +310,7 @@ main()
       message="KING CAPTURED! ATTACKER WINS!\nPRESS A KEY:";
       printmessage();
     }
-    getchar();
-    //if (gamekey==89)	// if "Y"
-    {
-      //printf("%c",19);	// turn output ON
-    }
+   getchar();
   }
 }
 
@@ -468,12 +356,11 @@ void computerturn()
   }
   // 3. Increment target positions around King (PACMAN)
   pacman();
-  // 4. Increment target positions on unnocupied rows/columns (especially the "zone")
-  zoneupdate();
+  
   
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
-  // 5,6,7..N etc
+  // 4,5,6,7..N etc
   // 
   targetselect();	// Choose the highest value target 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
@@ -485,15 +372,50 @@ void findpiece()	// find a piece capable of moving to selected target
 {
   if ( foundpiece == 0 )	
   {		
-	if (players[a][b]==1)
+	if (players[a][b]==1)  // a=row, b=column
 	{
 	  calccantake();
-	  if (( cantake==0 )&&(surrounded<3)) canbetaken(); // if cannot take can I be taken?
-	  if (compass[origorient]==0)
-	   {
-	   foundpiece=1;
-	   if (origorient < EAST) {ons=mkey;}else{oew=mkey;}
-	   }
+	  if (( cantake==0 )&&(surrounded<3)) 	{ canbetaken(); }// if cannot take can I be taken?
+	  //if ( cantake==0 ) 			{ canbetaken(); }// if cannot take can I be taken?
+	  if (compass[origorient]==0)	{ foundpiece=1; }// can't be taken so we've found a candidate
+	  //see if by moving a piece we leave the way open for the king to escape
+	  setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
+	  if (foundpiece) // if a candidate is found
+	  	{
+	  	if (a != targetns)// target is not on same row as candidate
+		  	{
+			if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8)))
+				{
+				startrow=a;destrow=a;startcol=0;destcol=10;
+				x=checkroute();
+				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
+				}
+			if (a == kingns) // if candidate is on same row as king
+				{
+				printf("%d:",kingpieces[EAST]);
+				if ((b > kingew)&&(kingpieces[EAST]==1)) {zerofoundpiece();}
+				if ((b < kingew)&&(kingpieces[WEST]==1)) {zerofoundpiece();}
+				}
+			}
+		if ( b != targetew) // target is not on same column as candidate
+		  	{
+			if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8)))
+				{
+				startrow=0;destrow=10;startcol=b;destcol=b;
+				x=checkroute();
+				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
+				}
+			if (b == kingew) // if candidate is on same column as king
+				{
+				if ((a < kingns)&&(kingpieces[NORTH]==1)) {zerofoundpiece();}
+				if ((a > kingns)&&(kingpieces[SOUTH]==1)) {zerofoundpiece();}
+				}
+			}
+		}
+	if (foundpiece)
+		{
+		if (origorient < EAST) {ons=mkey;}else{oew=mkey;}
+		}	
 	}
   if ((players[a][b]==2)||(players[a][b]==3)) {foundpiece=9;}
   }
@@ -526,19 +448,20 @@ NEWTARGET:
   fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
   origorient=NORTH;
   b=oew;
-  for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}	
-  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}
+  //if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  if ( foundpiece != 1 ) { zerofoundpiece();}
   origorient=SOUTH;														
   for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}	
-  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  if ( foundpiece != 1 ) { zerofoundpiece();}
   origorient=EAST;
   a=ons;
   for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}	
-  if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
+  if ( foundpiece != 1 ) { zerofoundpiece();}
   origorient=WEST;
   for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
   if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
-
+  if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
   cy=ons;				// piece y screen position
   blinkcursor();		// draw cursor in foreground color at piece to move position cx,cy
@@ -554,20 +477,20 @@ NEWTARGET:
 // subroutine of pacman
 void subpacmanx()		
 {
-  z=kingattacker[orientation]+kingdefender[orientation];	// count of pieces on route to edge (attackers&defenders)
+  //z=kingpieces[orientation];	// count of pieces on route to edge (attackers&defenders)
   a=pacpointsx+pacpointsy; // count of pieces to two corners
   b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
   setpoints();
   //x=paccount1*3;	// x=number of attackers * 3
   //y=x+paccount2;	// y=(number of attackers *3)+(defenders * 1)
   //if ((points-y) < 0) {points=1;}else{points-=y;}	// subtract two points for every attacker and 1 point for every defender
-  if ( z==0 )				// no pieces in the direction from king
+  if ( kingpieces[orientation]==0 )				// no pieces in the direction from king
   {
     doublepoints();							// double points if blank route to edge
     if (pacpointsx==0){ doublepoints();}	// double if route to one corner
     if (pacpointsy==0){ doublepoints();}	// double if route to two corners
   }
-  if ( z<2 )
+  if ( kingpieces[orientation]<2 )
   {
     if (pacpointsa==0){ doublepoints();}	// double if route to one square adjacent to corner
     if (pacpointsb==0){ doublepoints();}	// double if route to two squares adjacent to corners
@@ -613,7 +536,9 @@ void subpacmanx()
     {	
       if ((flag)&&(players[x][y]==0))	// if blank)
       {
+	    origorient=orientation;
         if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
+        orientation=origorient;
       }
     }
     decpoints();
@@ -626,33 +551,39 @@ void subpacmanx()
 
 void subpacnorthsouth()
 {
-  checkroutemode=1;
+  setcheckmode1(); // count pieces on route
   startrow=a;startcol=0;destrow=a;destcol=e;
   pacpointsx=checkroute();
-  startcol=e;destcol=10;
+  //checkroutemode=3;
+  if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
+  setcheckmode1();startcol=e;destcol=10;
   pacpointsy=checkroute();
-  if ((pacpointsx+pacpointsy)==0) {checkroutemode=2;checkroute();}
-  startrow=d;startcol=0;destrow=d;destcol=e;
+  if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
+  setcheckmode1();startrow=d;startcol=0;destrow=d;destcol=e;
   pacpointsa=checkroute();
-  startcol=e;destcol=10;
+  if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
+  setcheckmode1();startcol=e;destcol=10;
   pacpointsb=checkroute();
-  if ((pacpointsa+pacpointsb)==0) {checkroutemode=2;checkroute();}
+  if ((kingpieces[orientation]==0)&&(pacpointsb==0)) {updateroutetarget();}
 }
 
 
 void subpaceastwest()
 {
-  checkroutemode=1;
+  setcheckmode1();
   startrow=0;startcol=b;destrow=e;destcol=b;
   pacpointsx=checkroute();
-  startrow=e;destrow=10;
+  if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
+  setcheckmode1();startrow=e;destrow=10;
   pacpointsy=checkroute();
+  if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
   if (pacpointsx+pacpointsy==0) {checkroutemode=2;checkroute();}
-  startrow=0;startcol=c;destrow=e;destcol=c;
+  setcheckmode1();startrow=0;startcol=c;destrow=e;destcol=c;
   pacpointsa=checkroute();
-  startrow=paclevel1;destrow=10;
+  if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
+  setcheckmode1();startrow=e;destrow=10;
   pacpointsb=checkroute();
-  if (pacpointsa+pacpointsb==0) {checkroutemode=2;checkroute();}
+  if ((kingpieces[orientation]==0)&&(pacpointsb==0)) {updateroutetarget();}
 }
 
 
@@ -695,20 +626,20 @@ void pacman()
 // increase target positions that LEAD to a king target
 void subpacman()		
 {
-  c=x;
+  subpacc=x;
   flag=0;
-  for (mkey=kingew-1;mkey>-1;mkey--){d=mkey;subpacman5();} // was subpacman3
+  for (mkey=kingew-1;mkey>-1;mkey--){subpacd=mkey;subpacman5();} // was subpacman3
   flag=0;
-  for (mkey=kingew+1;mkey<11;mkey++){d=mkey;subpacman5();} // was subpacman3
+  for (mkey=kingew+1;mkey<11;mkey++){subpacd=mkey;subpacman5();} // was subpacman3
 }
 
 void subpacman2()
 {
-  d=y;
+  subpacd=y;
   flag=0; // piece not found
-  for (mkey=kingns-1;mkey>-1;mkey--){c=mkey;subpacman5();} // was subpacman4
+  for (mkey=kingns-1;mkey>-1;mkey--){subpacc=mkey;subpacman5();} // was subpacman4
   flag=0;
-  for (mkey=kingns+1;mkey<11;mkey++){c=mkey;subpacman5();} // was subpacman4	
+  for (mkey=kingns+1;mkey<11;mkey++){subpacc=mkey;subpacman5();} // was subpacman4	
 }
 /*****************************/
 //void subpacman3()
@@ -725,8 +656,17 @@ void subpacman2()
 /******************************/
 void subpacman5()
 {
-  if ((players[c][d])&&(players[c][d]<4)) {flag=1;} // piece found
-  if (( flag == 0)&&(target[c][d] > 1 )) { target[c][d]++;}
+  if ((players[subpacc][subpacd])&&(players[subpacc][subpacd]<4)) {flag=1;} // piece found
+  if (( flag == 0)&&(target[subpacc][subpacd] > 1 )) 
+  	{ 
+	if (surrounded==3) {target[subpacc][subpacd]+=5;} else {target[subpacc][subpacd]++;}
+	// now see if king can escape if he gets to THIS position
+	//orientation=NORTH; a=0; 	d=1; e=mkey; subpacnorthsouth(); if((pacpointsx+pacpointsy)==0) {target[subpacc][subpacd]+=2;}if((pacpointsa+pacpointsa)==0) {target[subpacc][subpacd]+=2;}
+	//orientation=SOUTH; a=10; 	d=9; e=mkey; subpacnorthsouth(); if((pacpointsx+pacpointsy)==0) {target[subpacc][subpacd]+=2;}if((pacpointsa+pacpointsa)==0) {target[subpacc][subpacd]+=2;}
+	//orientation=EAST;  b=10;	c=9; e=mkey; subpaceastwest();if((pacpointsx+pacpointsy)==0) {target[subpacc][subpacd]+=2;}if((pacpointsa+pacpointsa)==0) {target[subpacc][subpacd]+=2;}
+	//orientation=WEST;  b=0;   c=1; e=mkey; subpaceastwest();if((pacpointsx+pacpointsy)==0) {target[subpacc][subpacd]+=2;}if((pacpointsa+pacpointsa)==0) {target[subpacc][subpacd]+=2;}
+	}
+	
 }
 
 
@@ -1244,10 +1184,14 @@ void movepiece()
   kingattacker[SOUTH]=0;		// count of attackers SOUTH of king
   kingattacker[EAST]=0;			// count of attackers EAST of king
   kingattacker[WEST]=0;			// count of attackers WEST of king
-  kingdefender[NORTH]=0;			// count of defenders NORTH of king
-  kingdefender[SOUTH]=0;			// count of defenders SOUTH of king
+  kingdefender[NORTH]=0;		// count of defenders NORTH of king
+  kingdefender[SOUTH]=0;		// count of defenders SOUTH of king
   kingdefender[EAST]=0;			// count of defenders EAST of king
   kingdefender[WEST]=0;			// count of defenders WEST of king
+  kingpieces[NORTH]=0;
+  kingpieces[SOUTH]=0;
+  kingpieces[EAST]=0;
+  kingpieces[WEST]=0;
   orientation=NORTH;
   cy=kingew;
   for (counter=0;counter<kingns;inccounter()) 	
@@ -1283,12 +1227,14 @@ void incdefatt()
 void inckingdefender()
 {
   kingdefender[orientation]++;
+  kingpieces[orientation]++;
 }
 
 
 void inckingattacker()
 {
   kingattacker[orientation]++;
+  kingpieces[orientation]++;
 }
 
 /*void subcanbetaken()
@@ -1543,7 +1489,9 @@ void calctakeweight()
   // don't worry about TAKES if the king has unbroken line of sight to edge of board
   for (x=0;x<4;x++)
   {
-    if ((kingattacker[x]==0)&&(kingdefender[x]==0)){takeweight=0;}
+    //if ((kingattacker[x]==0)&&(kingdefender[x]==0)){takeweight=0;}
+    if (kingpieces[x]==0){takeweight=0;}
+
   }
   //if (((kingnorth==0)&&(defnorth==0))||((kingsouth==0)&&(defsouth==0))||((kingeast==0)&&(defeast==0))||((kingwest==0)  && (defwest==0))) {takeweight=0;}
 }
@@ -1573,6 +1521,7 @@ char checkroute()
 	  	{
       	case 1:	if ((players[startrow][x])&&(players[startrow][x]<3)) {z++;}break;
       	case 2: if (target[startrow][x]){target[startrow][x]+=2;}break;
+      	case 3: if (target[startrow][x]){z++;}
   		}
     }
   }
@@ -1584,6 +1533,7 @@ char checkroute()
 	    {
       	case 1:if ((players[x][startcol])&&(players[x][startcol]<3)) {z++;}break;
       	case 2:if (target[x][startcol]) {target[x][startcol]+=2;}break;
+      	case 3:if (target[x][startcol]){z++;}
   		}
     }
   }
@@ -1612,7 +1562,8 @@ void cantakeadjust()
     }
     if (flag)		
     {
-      if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
+      //if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
+      if (kingpieces[orientation]<4){cantake--;}
     }
 
   }
@@ -1739,10 +1690,15 @@ void zoneupdate()
 	}	
 */
 }
-void subzoneupdate()
+void subzoneupdate()	// subroutine of zoneupdate (updates border targets)
 {
   {
 	checkroutemode=1;counter=checkroute();				// x=count of pieces on route
 	if (counter==0) { checkroutemode=2;checkroute();}	// if route unnocupied increment targets
 	}
+}
+void updateroutetarget()
+{
+setcheckmode2(); // set the mode of checkroute to 2 (update targets)
+checkroute();
 }

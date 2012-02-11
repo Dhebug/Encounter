@@ -108,4 +108,11 @@ in the OLD condition, if the piece was only one space away, players would always
 // 03-02-2012 Added checkincroute to replace some repetetive code (35414)
 // 03-02-2012 Replaced subpacman3/4 with subpacman5 (35141)
 // 04-02-2012 added a few ASM routines of my own
+// 03-06th Feb 2012 Various updates in C/ASM to reduce code size (Dbug/Barnsey)
+// 06-02-2012 v0.001 Created first proper ASM routine to replace ink(). Help from Dbug/Xeron.
+// 07-02-2012 v0.002 Fixed bug in subpacman5 routine (had the flag's inversed which entailed detection of central square)
+// 07-02-2012 v0.003 New routine zoneupdate and subzoneupdate to inc targets around edge of board if rows/cols unnocupied
+// 08-02-2012 v0.004 Changes to subpacman5 (not sure if working)
+// 11-02-2012 v0.005 Fixed bugs in findpiece(). Attacker won't "move out the way" for the king. Minor changes to fonts/messages
+
 
