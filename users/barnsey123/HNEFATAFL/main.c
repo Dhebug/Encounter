@@ -256,6 +256,7 @@ char inkcolor;	// screen color
 unsigned char checkroutemode;	// mode used for checkroute function 
 								// 1=count number of pieces on route
 								// 2=increment target values on route (if no pieces on route)
+								// 3=amount of targets on route
 unsigned char subpacc,subpacd;	// used in subpacman5 
 /****************** MAIN PROGRAM ***********************************/
 main()
@@ -263,7 +264,7 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.005\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.006\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -481,30 +482,29 @@ void subpacmanx()
   a=pacpointsx+pacpointsy; // count of pieces to two corners
   b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
   setpoints();
-  //x=paccount1*3;	// x=number of attackers * 3
-  //y=x+paccount2;	// y=(number of attackers *3)+(defenders * 1)
-  //if ((points-y) < 0) {points=1;}else{points-=y;}	// subtract two points for every attacker and 1 point for every defender
-  if ( kingpieces[orientation]==0 )				// no pieces in the direction from king
-  {
-    doublepoints();							// double points if blank route to edge
+  if ( kingpieces[orientation]==0 )	{doublepoints();}			// no pieces in the direction from king
+  //{
+    //doublepoints();							// double points if blank route to edge
     if (pacpointsx==0){ doublepoints();}	// double if route to one corner
     if (pacpointsy==0){ doublepoints();}	// double if route to two corners
-  }
-  if ( kingpieces[orientation]<2 )
-  {
+  //}
+  //if ( kingpieces[orientation]<2 )
+  //{
     if (pacpointsa==0){ doublepoints();}	// double if route to one square adjacent to corner
     if (pacpointsb==0){ doublepoints();}	// double if route to two squares adjacent to corners
-  }
-  if ((paclevel2<3)||(paclevel2>7)) { incpoints(); } // if close to an edge in orientation
-  if ((paclevel1<2)||(paclevel2>8)) { incpoints(); } // if "left or rightside" in a "winning position"
+  //}
+  //if ((paclevel2<3)||(paclevel2>7)) { incpoints(); } // if close to an edge in orientation
+  //if ((paclevel2<2)||(paclevel2>8)) { incpoints(); } // if "left or rightside" in a "winning position"
   if ((orientation == NORTH) || (orientation == WEST))	// if north or west
   {
     uncounter=paclevel2-1;
+    if (paclevel2<3) {doublepoints();doublepoints();doublepoints();}
     if ( paclevel2 < 5 ) { incpoints();} // add weight to north or west if king in north or west side of board	
   }
   else											// if south east
   { 
     uncounter=paclevel2+1;
+    if (paclevel2>7) {doublepoints();doublepoints();doublepoints();}
     if ( paclevel2 > 5 ) { incpoints();} // add weight to south or east if king in south or east side of board
   }
   if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
@@ -517,30 +517,23 @@ void subpacmanx()
     x=paclevel1;
     y=uncounter;
   }
-  flag=1;
   while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11)))
   {
     if (computer[x][y] )	// if accessible by attacker	
-    { // only update target if cannot be taken OR king has clear route to corner
-      if ((a==0)||(pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
-      {
-        target[x][y]+=points;
-        flag=0;
-      }
+    	{ // only update target if cannot be taken OR king has clear route to corner
+      if ((pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0))
+      	{
+      	target[x][y]+=points;
+      	}
       else
-      {
-        if (target[x][y] > 1){target[x][y]=points;flag=0;}
-      }
-    }
+      	{
+        if (target[x][y] > 1){target[x][y]=points;}
+      	}
+    	}
     else 
-    {	
-      if ((flag)&&(players[x][y]==0))	// if blank)
-      {
-	    origorient=orientation;
-        if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
-        orientation=origorient;
+    	{	
+      if (orientation < EAST) { subpacman();}else{subpacman2();} // if north/south else east/west
       }
-    }
     decpoints();
     //if (z){decpoints();} // only decrement points if route to edge is blocked
     if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
@@ -554,7 +547,6 @@ void subpacnorthsouth()
   setcheckmode1(); // count pieces on route
   startrow=a;startcol=0;destrow=a;destcol=e;
   pacpointsx=checkroute();
-  //checkroutemode=3;
   if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
   setcheckmode1();startcol=e;destcol=10;
   pacpointsy=checkroute();
@@ -577,7 +569,6 @@ void subpaceastwest()
   setcheckmode1();startrow=e;destrow=10;
   pacpointsy=checkroute();
   if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
-  if (pacpointsx+pacpointsy==0) {checkroutemode=2;checkroute();}
   setcheckmode1();startrow=0;startcol=c;destrow=e;destcol=c;
   pacpointsa=checkroute();
   if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
@@ -1521,7 +1512,7 @@ char checkroute()
 	  	{
       	case 1:	if ((players[startrow][x])&&(players[startrow][x]<3)) {z++;}break;
       	case 2: if (target[startrow][x]){target[startrow][x]+=2;}break;
-      	case 3: if (target[startrow][x]){z++;}
+      	//case 3: if (target[startrow][x]){z++;}
   		}
     }
   }
@@ -1533,7 +1524,8 @@ char checkroute()
 	    {
       	case 1:if ((players[x][startcol])&&(players[x][startcol]<3)) {z++;}break;
       	case 2:if (target[x][startcol]) {target[x][startcol]+=2;}break;
-      	case 3:if (target[x][startcol]){z++;}
+      	//case 3:if (target[x][startcol]){z++;}
+
   		}
     }
   }
@@ -1693,12 +1685,15 @@ void zoneupdate()
 void subzoneupdate()	// subroutine of zoneupdate (updates border targets)
 {
   {
-	checkroutemode=1;counter=checkroute();				// x=count of pieces on route
-	if (counter==0) { checkroutemode=2;checkroute();}	// if route unnocupied increment targets
+	setcheckmode1();counter=checkroute();				// COUNTER=count of pieces on route
+	if (counter==0) { updateroutetarget();}	// if route unnocupied increment targets
 	}
 }
 void updateroutetarget()
 {
+//setcheckmode3(); // set the mode of checkroute to 3 (count how many TARGETS are on route)
+//pacpointsz=checkroute();
+//pacpointsz=25-pacpointsz;	// 20 = max amount of targets on a given route to a corner
 setcheckmode2(); // set the mode of checkroute to 2 (update targets)
 checkroute();
 }
