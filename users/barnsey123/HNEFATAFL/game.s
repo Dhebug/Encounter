@@ -9,6 +9,11 @@ _setcheckmode2
 	sta _checkroutemode
 	rts
 	
+_setcheckmode3
+	lda #3
+	sta _checkroutemode
+	rts	
+	
 _incmodeone
 	inc _modeonevalid
 	rts
@@ -38,7 +43,7 @@ _setpoints
 	lda #10
 	sta _points
 	rts
-	
+; adds ten to points value and increments brokenarrow	
 _doublepoints
 	clc
 	lda _points
