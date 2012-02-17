@@ -264,7 +264,7 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.006\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.007\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -379,21 +379,20 @@ void findpiece()	// find a piece capable of moving to selected target
 	  if (( cantake==0 )&&(surrounded<3)) 	{ canbetaken(); }// if cannot take can I be taken?
 	  //if ( cantake==0 ) 			{ canbetaken(); }// if cannot take can I be taken?
 	  if (compass[origorient]==0)	{ foundpiece=1; }// can't be taken so we've found a candidate
-	  //see if by moving a piece we leave the way open for the king to escape
-	  setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
-	  if (foundpiece) // if a candidate is found
+	  if (foundpiece) 
 	  	{
 	  	if (a != targetns)// target is not on same row as candidate
 		  	{
 			if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8)))
 				{
 				startrow=a;destrow=a;startcol=0;destcol=10;
+				//see if by moving a piece we leave the way open for the king to escape
+				setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
 				x=checkroute();
 				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
-			if (a == kingns) // if candidate is on same row as king
+			if (a == kingns) // if candidate is on same row as king (don't move away if only one piece E/W)
 				{
-				printf("%d:",kingpieces[EAST]);
 				if ((b > kingew)&&(kingpieces[EAST]==1)) {zerofoundpiece();}
 				if ((b < kingew)&&(kingpieces[WEST]==1)) {zerofoundpiece();}
 				}
@@ -406,7 +405,7 @@ void findpiece()	// find a piece capable of moving to selected target
 				x=checkroute();
 				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
-			if (b == kingew) // if candidate is on same column as king
+			if (b == kingew) // if candidate is on same col as king (don't move away if only one piece N/S)
 				{
 				if ((a < kingns)&&(kingpieces[NORTH]==1)) {zerofoundpiece();}
 				if ((a > kingns)&&(kingpieces[SOUTH]==1)) {zerofoundpiece();}
@@ -507,7 +506,7 @@ void subpacmanx()
     if (paclevel2>7) {doublepoints();doublepoints();doublepoints();}
     if ( paclevel2 > 5 ) { incpoints();} // add weight to south or east if king in south or east side of board
   }
-  if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
+  //if ( kingattacker[orientation] == 0 ) { incpoints();}		// inc points if no attackers on path	
   surroundpoints();
   // default north/south
   x=uncounter;

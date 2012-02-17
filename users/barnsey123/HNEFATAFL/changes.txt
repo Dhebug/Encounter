@@ -115,4 +115,5 @@ in the OLD condition, if the piece was only one space away, players would always
 // 08-02-2012 v0.004 Changes to subpacman5 (not sure if working)
 // 11-02-2012 v0.005 Fixed bugs in findpiece(). Attacker won't "move out the way" for the king. Minor changes to fonts/messages
 // 16-02-2012 v0.006 Fixed major problem regarding corner scrambles (issues in subpacmanx)
+// 17-02-2012 v0.007 removed a coupel of useless lines of code. Rearranged others
 
