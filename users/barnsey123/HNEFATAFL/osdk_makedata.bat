@@ -5,4 +5,5 @@
 %OSDK%\bin\pictconv -m0 -f0 -o4_BorderTiles pics\bordertiles.png border.s
 %OSDK%\bin\pictconv -m0 -f0 -o4_TitleTiles pics\defence-force2.png defence.s
 %OSDK%\bin\pictconv -m0 -f0 -o4_RunicTiles pics\runes.png runes.s
+%OSDK%\bin\pictconv -m0 -f0 -o4_TimerTiles pics\timer.png timer.s
 pause
