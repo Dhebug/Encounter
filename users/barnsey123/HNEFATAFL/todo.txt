@@ -1,6 +1,6 @@
 
 // TO DO LIST
-*** 11/02/2012 If the "zone" is unpopulated and king can reach it on next turn (and surrounded <3) 
+*** 16/02/2012 If the "zone" is unpopulated and king can reach it on next turn 
 	then increase target values on the zone by LOADS!!!!
 *** routine to detect if all attackers have been captured
 *** routine to detect stalemate (a side cannot move)

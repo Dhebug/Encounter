@@ -75,6 +75,11 @@ _inccounter
 	inc _counter
 	rts
 
+_zeroarrow
+	lda #0
+	sta _arrow
+	rts
+	
 _zerocounter
 	lda #0
 	sta _counter
