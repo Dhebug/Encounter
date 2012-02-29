@@ -266,7 +266,7 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.008\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.009\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -400,10 +400,6 @@ void findpiece()	// find a piece capable of moving to selected target
 				}
 			if (a == kingns) // if candidate is on same row as king (don't move away if only one piece E/W)
 				{
-<<<<<<< .mine
-				//printf("%d:",kingpieces[EAST]);
-=======
->>>>>>> .r812
 				if ((b > kingew)&&(kingpieces[EAST]==1)) {zerofoundpiece();}
 				if ((b < kingew)&&(kingpieces[WEST]==1)) {zerofoundpiece();}
 				}
@@ -1160,7 +1156,7 @@ void playerturn()
 void movepiece()
 { 
   p1=1;	// piece type comparison (lower) - used for determining takes - default=attacker
-  p2=1;	// piece type comparison (upper) - used for determining takes - default=attacker
+  p2=4;	// piece type comparison (upper) - used for determining takes - default=attacker
   piecetype=players[ons][oew];	// obtain type of piece
   // move piece
   fb=0;
@@ -1341,6 +1337,9 @@ char cantakepiece()
       if (( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == 4)) // 
       	{
         take++;
+        //if ((players[pcheckns1][pcheckew1]==3)&&(surrounded<3))take--;	// if possible take is a king but not surrounded
+        if (players[pcheckns1][pcheckew1]==3)take--;	// if possible take is a king 
+
       	} 
       if ( computer[pcheckns2][pcheckew2] ) {inctarget();} // 31-10-2011 - can possibly take on next turn
     	}
@@ -1417,7 +1416,7 @@ void timertile()
 	for (timer=0;timer<8;timer++)
   {
 		tileloop();
-		pausetime=300;pause();
+		pausetime=250;pause();
 	}
 }
 
