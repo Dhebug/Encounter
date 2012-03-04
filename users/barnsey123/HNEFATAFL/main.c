@@ -266,7 +266,7 @@ main()
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.009\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.010\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -379,53 +379,56 @@ void computerturn()
 void findpiece()	// find a piece capable of moving to selected target
 {
   if ( foundpiece == 0 )	
-  {		
-	if (players[a][b]==1)  // a=row, b=column
-	{
-	  calccantake();
-	  if (( cantake==0 )&&(surrounded<3)) 	{ canbetaken(); }// if cannot take can I be taken?
-	  //if ( cantake==0 ) 			{ canbetaken(); }// if cannot take can I be taken?
-	  if (compass[origorient]==0)	{ foundpiece=1; }// can't be taken so we've found a candidate
-	  if (foundpiece) 
-	  	{
-	  	if (a != targetns)// target is not on same row as candidate
-		  	{
-			if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8)))
-				{
-				startrow=a;destrow=a;startcol=0;destcol=10;
-				//see if by moving a piece we leave the way open for the king to escape
-				setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
-				x=checkroute();
-				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
+  	{		
+		if (players[a][b]==1)  // a=row, b=column
+			{
+	  	calccantake();
+	  	if (( cantake==0 )&&(surrounded<3)) 	{ canbetaken(); }// if cannot take can I be taken?
+	  	//if ( cantake==0 ) 			{ canbetaken(); }// if cannot take can I be taken?
+	  	if (compass[origorient]==0)	{ foundpiece=1; }// can't be taken so we've found a candidate
+	  	if (foundpiece==1) 
+	  		{
+	  		if (a != targetns)// target is not on same row as candidate
+		  		{
+					if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8)))
+						{
+						startrow=a;destrow=a;startcol=0;destcol=10;
+						//see if by moving a piece we leave the way open for the king to escape
+						setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
+						x=checkroute();
+						if (x==1) {foundpiece=10;} // don't move piece (do NOT leave the "zone" unpopulated)			
+						}
+					if (a == kingns) // if candidate is on same row as king (don't move away if only one piece E/W)
+						{
+						if ((b > kingew)&&(kingpieces[EAST]==1)) {foundpiece=10;}
+						if ((b < kingew)&&(kingpieces[WEST]==1)) {foundpiece=10;}
+						}
+					}
 				}
-			if (a == kingns) // if candidate is on same row as king (don't move away if only one piece E/W)
+			if (foundpiece==1)
 				{
-				if ((b > kingew)&&(kingpieces[EAST]==1)) {zerofoundpiece();}
-				if ((b < kingew)&&(kingpieces[WEST]==1)) {zerofoundpiece();}
+				if ( b != targetew) // target is not on same column as candidate
+		 			{
+					if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8)))
+						{
+						startrow=0;destrow=10;startcol=b;destcol=b;
+						x=checkroute();
+						if (x==1) {foundpiece=10;} // don't move piece (do NOT leave the "zone" unpopulated)			
+						}
+					if (b == kingew) // if candidate is on same col as king (don't move away if only one piece N/S)
+						{
+						if ((a < kingns)&&(kingpieces[NORTH]==1)) {foundpiece=10;}
+						if ((a > kingns)&&(kingpieces[SOUTH]==1)) {foundpiece=10;}
+						}
+					}
 				}
+			if (foundpiece==1)
+				{
+				if (origorient < EAST) {ons=mkey;}else{oew=mkey;}
+				}	
 			}
-		if ( b != targetew) // target is not on same column as candidate
-		  	{
-			if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8)))
-				{
-				startrow=0;destrow=10;startcol=b;destcol=b;
-				x=checkroute();
-				if (x==1) {zerofoundpiece();} // don't move piece (do NOT leave the "zone" unpopulated)			
-				}
-			if (b == kingew) // if candidate is on same col as king (don't move away if only one piece N/S)
-				{
-				if ((a < kingns)&&(kingpieces[NORTH]==1)) {zerofoundpiece();}
-				if ((a > kingns)&&(kingpieces[SOUTH]==1)) {zerofoundpiece();}
-				}
-			}
-		}
-	if (foundpiece)
-		{
-		if (origorient < EAST) {ons=mkey;}else{oew=mkey;}
-		}	
-	}
-  if ((players[a][b]==2)||(players[a][b]==3)) {foundpiece=9;}
-  }
+  	if ((players[a][b]==2)||(players[a][b]==3)) {foundpiece=9;}
+  	}
 }
 
 // TARGETSELECT - find the highest scoring TARGET
@@ -457,16 +460,25 @@ NEWTARGET:
   b=oew;
   for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}
   //if ( foundpiece != 1 ) { zerofoundpiece();target[targetns][targetew]=hightarget; }
-  if ( foundpiece != 1 ) { zerofoundpiece();}
-  origorient=SOUTH;														
-  for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}	
-  if ( foundpiece != 1 ) { zerofoundpiece();}
-  origorient=EAST;
-  a=ons;
-  for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}	
-  if ( foundpiece != 1 ) { zerofoundpiece();}
-  origorient=WEST;
-  for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
+  if ( foundpiece != 1 ) 
+  	{ 
+	  zerofoundpiece();
+  	origorient=SOUTH;														
+  	for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}
+		}	
+  if ( foundpiece != 1 ) 
+  	{ 
+	  zerofoundpiece();
+  	origorient=EAST;
+  	a=ons;
+  	for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}
+		}	
+  if ( foundpiece != 1 ) 
+  	{ 
+	  zerofoundpiece();
+  	origorient=WEST;
+  	for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
+		}
   if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
