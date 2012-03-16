@@ -136,6 +136,7 @@ void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)
 void updateroutetarget();	// increment targets on a given route
 void targetplusfour();		// add 4 to target (used in escape routine)
 void timertile();					// print timer
+void enemytargetupdate();	// updates enemytargetcount
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -260,13 +261,14 @@ unsigned char checkroutemode;	// mode used for checkroute function
 								// 3=amount of targets on route
 unsigned char subpacc,subpacd;	// used in subpacman5 
 unsigned char turncount=0;			// used to count the number of turns
+unsigned char enemytargetcount;	// count of enemy targets on a route
 /****************** MAIN PROGRAM ***********************************/
 main()
 {
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.010\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  message="*** V 0.011\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -500,6 +502,7 @@ void subpacmanx()
   a=pacpointsx+pacpointsy; // count of pieces to two corners
   b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
   setpoints();
+  points+=enemytargetcount; // add the count of enemy targets on route to corners to points
   if ( kingpieces[orientation]==0 )	{doublepoints();}			// no pieces in the direction from king
   //{
     //doublepoints();							// double points if blank route to edge
@@ -559,22 +562,32 @@ void subpacmanx()
     if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
   }
 }
-
+/*****************************/
+void enemytargetupdate()
+{
+setcheckmode4();
+enemytargetcount+=checkroute();
+}
 
 void subpacnorthsouth()
 {
   setcheckmode1(); // count pieces on route
-  startrow=a;startcol=0;destrow=a;destcol=e;
+  startrow=a;startcol=0;destrow=a;destcol=e; 
   pacpointsx=checkroute();
+  enemytargetcount=0;
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
   setcheckmode1();startcol=e;destcol=10;
   pacpointsy=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
   setcheckmode1();startrow=d;startcol=0;destrow=d;destcol=e;
   pacpointsa=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
   setcheckmode1();startcol=e;destcol=10;
   pacpointsb=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsb==0)) {updateroutetarget();}
 }
 
@@ -584,15 +597,20 @@ void subpaceastwest()
   setcheckmode1();
   startrow=0;startcol=b;destrow=e;destcol=b;
   pacpointsx=checkroute();
+  enemytargetcount=0;
+	enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
   setcheckmode1();startrow=e;destrow=10;
   pacpointsy=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
   setcheckmode1();startrow=0;startcol=c;destrow=e;destcol=c;
   pacpointsa=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
   setcheckmode1();startrow=e;destrow=10;
   pacpointsb=checkroute();
+  enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsb==0)) {updateroutetarget();}
 }
 
@@ -606,7 +624,7 @@ void pacman()
   orientation=NORTH;
   paclevel1=kingew;
   paclevel2=kingns;
-  a=0; d=1; e=kingew;  
+  a=0; d=1; e=kingew;   
   subpacnorthsouth();	// check routes to escape positions
   subpacmanx();
   //SOUTH
@@ -618,13 +636,13 @@ void pacman()
   orientation=EAST;
   paclevel1=kingns;
   paclevel2=kingew;
-  b=10;c=9; e=kingns;
+  b=10;c=9; e=kingns; 
   subpaceastwest();		// check routes to escape positions
   subpacmanx();
 
   // WEST
   orientation=WEST;
-  b=0;c=1;
+  b=0;c=1; 
   subpaceastwest();		// check routes to escape positions
   subpacmanx();
 	timertile();
@@ -1565,7 +1583,9 @@ void enemyzero()
 
 
 // Checkroute:	checkroutemode=1 Returns number of pieces on a given route
-// 				checkroutemode=2 Increments the target values on route
+// 							checkroutemode=2 Increments the target values on route
+//							checkroutemode=3 Number of targets on route
+//							checkroutemode=4 Number of "enemy" targets on route (where enemies CAN go)
 unsigned char checkroute()	
 {
   z=0;
@@ -1577,7 +1597,8 @@ unsigned char checkroute()
 	  	{
       	case 1:	if ((players[startrow][x]==1)||(players[startrow][x]==2)) {z++;}break;
       	case 2: if (target[startrow][x]){target[startrow][x]+=2;}break;
-      	case 3: if (target[startrow][x]){z++;}
+      	case 3: if (target[startrow][x]){z++;}break;
+      	case 4: if (enemy[startrow][x]) {z+=10;}
   		}
     }
   }
@@ -1587,10 +1608,10 @@ unsigned char checkroute()
     {
 	  switch(checkroutemode)
 	    {
-      	case 1:if ((players[x][startcol]==1)||(players[x][startcol]==2)) {z++;}break;
-      	case 2:if (target[x][startcol]) {target[x][startcol]+=2;}break;
-      	case 3:if (target[x][startcol]){z++;}
-
+      	case 1: if ((players[x][startcol]==1)||(players[x][startcol]==2)) {z++;}break;
+      	case 2: if (target[x][startcol]) {target[x][startcol]+=2;}break;
+      	case 3: if (target[x][startcol]){z++;}break;
+      	case 4: if (enemy[x][startcol]){z++;}
   		}
     }
   }
