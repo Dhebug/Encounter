@@ -90,6 +90,18 @@ st_lines
 	.asc "000 lines"
 	.byt 0
 
+; Adds 40 to tmp
+add40tmp
+.(
+	lda tmp
+	clc
+	adc #40
+	sta tmp
+	bcc nocarry
+	inc tmp+1
+nocarry
+	rts
+.)
 
 freespace
 .dsb $a000-*

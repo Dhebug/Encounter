@@ -193,6 +193,7 @@ PlayBell
 .(
 	lda audio_off
 	bne end
+/*
 	ldx #<Bell1
 	ldy #>Bell1
 	jsr AYRegDump
@@ -201,6 +202,20 @@ PlayBell
 	ldx #<Bell2
 	ldy #>Bell2
 	jmp AYRegDump
+*/
+	lda #15
+	sta tmp7
+loop
+	ldx #<Bell2
+	ldy #>Bell2
+	jsr AYRegDump
+	lda #$ff-6
+	sta counter
+loopw
+	lda counter
+	bne loopw
+	dec tmp7
+	bne loop
 end
 	rts
 .)
@@ -249,14 +264,15 @@ SndLines2
 	.byt $2c
 
 SndSafeLetter
-	lda #SFX_LINES1	;#SFX_SAFELETTER
+	;lda #SFX_LINES1	;
+	lda #SFX_SAFELETTER
 	sta Sfx
 	jsr wait
 	jmp StopSound
 
 
-
+/*
 _safeletter
 	;.byt 0,4,0,0,0,0,$ff,$78,10,0,0,2,0,$e
-
+*/
 
