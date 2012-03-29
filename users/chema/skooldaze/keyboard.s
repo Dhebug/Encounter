@@ -265,10 +265,10 @@ endplay
 SetVolume
 .(
 	; Set volume
-	lda #$f
+	lda #$9
 	ldx #8
 	jsr SendAYReg
-	lda #$f
+	lda #$9
 	ldx #9
 	jsr SendAYReg
 	jmp contm

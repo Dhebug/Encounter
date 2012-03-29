@@ -143,7 +143,7 @@ _m8_deccnt
 .)
 
 
-
+/* Moved to tail.s to open space 
 ; Adds 40 to tmp
 add40tmp
 .(
@@ -156,7 +156,7 @@ add40tmp
 nocarry
 	rts
 .)
-
+*/
 /*
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
