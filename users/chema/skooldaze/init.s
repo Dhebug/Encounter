@@ -1344,6 +1344,9 @@ loop
 #ifdef BRK2SETTMP0
 set_hires
 .(
+	lda $21f
+	bne end
+
 	lda #30
 	;lda $f934
 	sta $bfdf
@@ -1352,6 +1355,7 @@ set_hires
 	sta $bf68
 	sta $bf68+40
 	sta $bf68+40*2
+end
 	rts
 .)
 
