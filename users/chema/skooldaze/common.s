@@ -926,6 +926,7 @@ found
 	rts
 .)
 
+/*
 #ifndef BRK2SETTMP0
 set_hires
 .(
@@ -963,3 +964,4 @@ end
 .)
 #endif
 
+*/
