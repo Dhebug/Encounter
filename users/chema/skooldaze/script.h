@@ -192,9 +192,9 @@ character's buffer:
 #define D_EXAM_BOARD		10,55
 #define D_WHITE_BOARD		10,34
 #define D_READING_BOARD		3,56
-#define D_DINNER_TABLE		17,75
-#define D_DINNER_BENCH		17,56
-#define D_DINNER_HALL		17,70
+#define D_DINNER_TABLE		17,68-1 //75
+#define D_DINNER_BENCH		17,46+1 //56
+#define D_DINNER_HALL		17,57 //70
 #define D_LIBRARY			3,35
 #define D_WHITE_ROOM		10,40
 #define D_EXAM_ROOM			10,77
