@@ -724,7 +724,7 @@ rgn_midfloor_ids
 	.byt 7	; Outside the Exam room door
 rgn_botfloor_walls
 	.byt 46
-	.byt 68
+	.byt 68-3
 	.byt 130
 rgn_botfloor_ids
 	.byt 7	; Left of the dinner hall
