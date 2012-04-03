@@ -1291,11 +1291,16 @@ loop_read
 	bne nodel
 	cpy #0
 	beq loop_read
-	dey
-	sty tmp6
 	lda #0
 	sta (tmp0),y
-	beq skip	
+;    cpy #12
+;    beq skip2
+	dey
+	sty tmp6
+    sta (tmp0),y
+skip2
+    jmp skip
+	;bpl skip	; Jumps always
 nodel
 	cmp #32		; not an alphanumeric character?
 	bcc end
