@@ -33,6 +33,32 @@ just due to slightly different code. Anyway the gaming experience should
 be the same than in the original Spectrum version.
 
 
+LOADING SKOOL DAZE
+==================
+
+If you want to load Skool Daze on a real Oric, just convert it to wav
+first, using tap2wav or tap2cd (Check for those on Fabrice France's site
+and read the instructions).
+
+However, along with the release of this game, you should find a 
+pre-generated wav file with a custom fast loader. It is only valid for 
+1.1 ROMS, beware.
+
+We have tested the loading process on different machines and with different
+tools and it is quite reliable once the appropriate volume setting is found.
+
+If the loading is aborted (usually with an 'Errors found' message, though it
+might not be visible if already in HIRES mode, just the Ready prompt) try
+altering the volume until the game loads and auto starts. 
+
+If you are using a modified ROM with 60Hz and you want to generate the wav
+file from the tape image yourself, you should get to HIRES mode *before*
+loading the game, so it does not set the HIRES 50Hz mode. Just issue a 
+HIRES:CLOAD"" command and it should work. As the pre-generated wav file
+switches to HIRES using a ROM call before loading the screen, it should 
+work with modified ROMs.
+
+
 INSTRUCTIONS
 ============
 
