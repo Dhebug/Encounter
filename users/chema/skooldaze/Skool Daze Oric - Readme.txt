@@ -28,6 +28,10 @@ I tried to keep it as faithful to the original as possible, which has been
 a really difficult task due to the Oric 6 pixels per byte display. You can
 follow the development progress in the Defence Force forums.
 
+Some small differences exist, though. A few of them are intentional, others 
+just due to slightly different code. Anyway the gaming experience should
+be the same than in the original Spectrum version.
+
 
 INSTRUCTIONS
 ============
