@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 FILE *fd, *fd2;
 struct {
 	char sig[4];
