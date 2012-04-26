@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int sync_ok=0;
 int offset;
