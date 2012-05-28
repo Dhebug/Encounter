@@ -16,7 +16,8 @@ CALL osdk_config.bat
 ::
 :: Run Euphoric using the common batch
 ::
-CALL %OSDK%\Euphoric\osdk_euphoric.bat
+::CALL %OSDK%\Euphoric\osdk_euphoric.bat
+CALL %OSDK%\bin\execute.bat
 GOTO End
 
 
