@@ -1,5 +1,8 @@
-
-
+;_hiresasm
+;.(
+;	jsr _hires
+;	rts
+;.)
 
 _playertext	.dsb 2
 _turntext	.byt " TURN: USE CURSOR KEYS.",10,"X=SELECT",10,"P=POSSIBLE MOVES",0

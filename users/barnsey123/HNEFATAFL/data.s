@@ -83,7 +83,10 @@ _enemy
 
 _computer
 	.dsb 11*11
-	  	
+
+_priority
+	.dsb 11*11
+		  	
 _ClearArrays	
 .(
 	lda #0
@@ -92,6 +95,7 @@ loop_clear
 	sta _target,x
 	sta _computer,x
 	sta _enemy,x
+	sta _priority,x
 	inx
 	cpx #11*11
 	bne loop_clear	
