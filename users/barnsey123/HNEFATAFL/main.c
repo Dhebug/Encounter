@@ -1,5 +1,6 @@
 // HNEFATAFL by Neil Barnes (a.k.a. Barnsey123)
 // 24-08-2012 NB: Tided up source (removed "bracket hell")
+// 27-08-2012 NB: v0.012 Minor changes to save memory
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -268,7 +269,8 @@ main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  message="*** V 0.011\n*** BY BARNSEY123\n*** ALSO: DBUG:CHEMA:JAMESD:XERON";
+  //hiresasm();
+  message="V0.012\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -277,7 +279,7 @@ main(){
     playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     drawboard();				// draw the board
     while (gamestyle==3){
-      message="ENTER NUMBER OF HUMANS:";
+      message="PLAYERS:1-2";	// number of players
       printmessage();
       gameinput=getchar();
       if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
@@ -315,7 +317,7 @@ main(){
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn(){
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-  message="ORIC IS THINKING...";
+  message="MY TURN...";
   printmessage();
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy and computer arrays
@@ -346,7 +348,8 @@ void computerturn(){
   // 3. Increment target positions around King (PACMAN)
   pacman();
   // draw central square (overwriting timer)
-  if (players[5][5]!=3) {tiletodraw=3;}else{tiletodraw=9;}
+  tiletodraw=9;
+  if (players[5][5]!=3) tiletodraw=3;
   row=5;col=5; ptr_graph=PictureTiles;drawtile(); 
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
