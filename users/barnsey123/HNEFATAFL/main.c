@@ -2,7 +2,9 @@
 // 24-08-2012 NB: Tided up source (removed "bracket hell")
 // 27-08-2012 NB: v0.012 Minor changes to save memory
 // 27-08-2012 NB: v0.013 Created Priority array and routine to populate it
+// 28-08-2012 NB: v0.014 Add hightarget to pacman checkroute (when route to corners are empty)
 // TODO: Need to implement the priority changes
+
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -142,6 +144,7 @@ void targetplusfour();		// add 4 to target (used in escape routine)
 void timertile();			// print timer
 void enemytargetupdate();	// updates enemytargetcount
 void prioritycalc();		// updates priority array
+void calchightarget();		// updates value of hightarget (the highest target so far)
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -275,7 +278,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.013\nBY BARNSEY123\n";
+  message="V0.014\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -332,7 +335,7 @@ void computerturn(){
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
   prioritycalc();	// calculates the priorities of pieces to move
-  // 2. Loop through players array searching for enemy pieces - calculating where they can go
+  // 2. Loop through players array searching for pieces - calculating where they can go
   for (fb=4;fb<8;fb++){
 	  timertile();
     for (ctns=0;ctns<11;ctns++){
@@ -366,7 +369,7 @@ void computerturn(){
   // other routines to go here to update the target array
   // 4,5,6,7..N etc
   // 
-  targetselect();			// Choose the highest value target 
+  targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
 }
@@ -414,24 +417,34 @@ void findpiece(){	// find a piece capable of moving to selected target
   	if ((players[a][b]==2)||(players[a][b]==3)) foundpiece=9;
   }
 }
+/*
+CalcHighTarget used to be part of targetselect (and is still called from it) but 
+it is also now used in PACMAN so that the kings escape route can always be blocked 
+by adding the highest score (so far) onto the necessary targets...
+It alters the values of ctns,ctew,targetns,targetew,ons,oew,ns,ew and of course,
+hightarget
+*/
+void calchightarget(){
 
-// TARGETSELECT - find the highest scoring TARGET
-void targetselect(){
-NEWTARGET:
-  hightarget=0;	// contains highest value target
+  hightarget=0;	// highest value target
   for (ctns=0;ctns<11;ctns++){	// find the highest value for target
     for (ctew=0;ctew<11;ctew++){
       if ( target[ctns][ctew] > hightarget ){
         hightarget=target[ctns][ctew];	// make hightarget the highest value
         targetns=ctns;
         targetew=ctew;		
-        ons=ctns;	// target is accessible so make ons/oew the default piece position to move
-        oew=ctew;	// the ACTUAL piece to move determined below (one of ons or oew will remain same)
+        ons=ctns;		// target is accessible so make ons/oew the default piece position to move
+        oew=ctew;		// the ACTUAL piece to move determined below (one of ons or oew will remain same)
         ns=ctns;
         ew=ctew;
       }
     }
   }
+}
+// TARGETSELECT - find the highest scoring TARGET
+void targetselect(){
+NEWTARGET:
+  calchightarget();
   // having found target we need to select a piece to move
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
   fb=9;zerofoundpiece();		// set findpiece to ZERO "piece not found"
@@ -469,24 +482,25 @@ NEWTARGET:
 // subroutine of pacman
 void subpacmanx(){
   //z=kingpieces[orientation];	// count of pieces on route to edge (attackers&defenders)
-  a=pacpointsx+pacpointsy; // count of pieces to two corners
-  b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
+  //a=pacpointsx+pacpointsy; // count of pieces to two corners
+  //b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
+  //points=hightarget;
   setpoints();
   points+=enemytargetcount; // add the count of enemy targets on route to corners to points
-  if ( kingpieces[orientation]==0 )	doublepoints();			// no pieces in the direction from king
-  if (pacpointsx==0) doublepoints();	// double if route to one corner
-  if (pacpointsy==0) doublepoints();	// double if route to two corners
-  if (pacpointsa==0) doublepoints();	// double if route to one square adjacent to corner
-  if (pacpointsb==0) doublepoints();	// double if route to two squares adjacent to corners
+  if ( kingpieces[orientation]==0 )	doublepoints();	// no pieces in the direction from king
+  if ((pacpointsx == 0)||(pacpointsy == 0)) doublepoints();	// double if route to one corner
+  if ((pacpointsx+pacpointsy) == 0) 		doublepoints();	// double if route to two corners
+  if ((pacpointsa == 0)||(pacpointsb == 0)) doublepoints();	// double if route to one square adjacent to corner
+  if ((pacpointsa+pacpointsb) == 0) 		doublepoints();	// double if route to two squares adjacent to corners
   if ((orientation == NORTH) || (orientation == WEST)){	// if north or west
     uncounter=paclevel2-1;
-    if (paclevel2<3) {doublepoints();doublepoints();doublepoints();}
-    if ( paclevel2 < 5 ) incpoints(); // add weight to north or west if king in north or west side of board	
+    //if (paclevel2<3) {doublepoints();doublepoints();doublepoints();}
+    //if ( paclevel2 < 5 ) incpoints(); // add weight to north or west if king in north or west side of board	
   }
   else	{										// if south east 
     uncounter=paclevel2+1;
-    if (paclevel2>7) {doublepoints();doublepoints();doublepoints();}
-    if ( paclevel2 > 5 ) incpoints(); // add weight to south or east if king in south or east side of board
+    //if (paclevel2>7) {doublepoints();doublepoints();doublepoints();}
+    //if ( paclevel2 > 5 ) incpoints(); // add weight to south or east if king in south or east side of board
   }
   surroundpoints();
   // default north/south
@@ -497,10 +511,14 @@ void subpacmanx(){
     x=paclevel1;
     y=uncounter;
   }
+  calchightarget();	// calc value of hightarget (highest so far)
   while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11))){
     if (computer[x][y] ){	// if accessible by attacker - only update target if cannot be taken OR king has clear route to corner
       if ((pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0)){
-      	if (target[x][y]) 		target[x][y]+=points;
+      	if (target[x][y]){
+	      	target[x][y]+=points;
+	      	target[x][y]+=hightarget;
+      	}
       }
       else {
         if (target[x][y] > 1)	target[x][y]=points;
@@ -517,10 +535,10 @@ void enemytargetupdate(){
   enemytargetcount+=checkroute();
 }
 
-void subpacnorthsouth(){
-  setcheckmode1(); // count pieces on route
+void subpacnorthsouth(){ 
+  setcheckmode1(); 
   startrow=a;startcol=0;destrow=a;destcol=e; 
-  pacpointsx=checkroute();
+  pacpointsx=checkroute(); // count pieces on route
   enemytargetcount=0;
   enemytargetupdate();
   if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
@@ -1349,9 +1367,11 @@ void inctarget(){
 }
 
 
-void surroundcheck(){
-  if (players[surns][surew]==1)	incsurround();	// is attacker n,s,e,w
-  if (tiles[surns][surew]>2)	incsurround();	// is king square n,s,e,w
+void surroundcheck(){ 
+  // if attacker or kingsquare n/s/e/w then inc surrounded
+  //if (players[surns][surew]==1)	incsurround();	// is attacker n,s,e,w
+  //if (tiles[surns][surew]>2)	incsurround();	// is king square n,s,e,w
+  if ((players[surns][surew]==1)||(tiles[surns][surew]>2)) incsurround();
 }
 
 
@@ -1376,9 +1396,9 @@ void enemyzero() {
   }
 }
 // Checkroute:	checkroutemode=1 Returns number of pieces on a given route
-// 							checkroutemode=2 Increments the target values on route
-//							checkroutemode=3 Number of targets on route
-//							checkroutemode=4 Number of "enemy" targets on route (where enemies CAN go)
+// 				checkroutemode=2 Increments the target values on route
+//				checkroutemode=3 Number of targets on route
+//				checkroutemode=4 Number of "enemy" targets on route (where enemies CAN go)
 unsigned char checkroute()	{
   z=0;
   if (orientation<EAST){			// if checking ROWS (crossing the T) (used for NORTH SOUTH checks)

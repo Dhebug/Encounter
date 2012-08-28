@@ -48,11 +48,12 @@ _setpoints
 	lda #10
 	sta _points
 	rts
-; adds ten to points value and increments brokenarrow	
+; adds ten to points value 	OR adds hightarget to points
 _doublepoints
 	clc
 	lda _points
 	adc #10
+	;adc _hightarget
 	sta _points
 	rts
 
