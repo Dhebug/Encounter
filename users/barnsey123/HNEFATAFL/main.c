@@ -338,7 +338,7 @@ main(){
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn(){
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-  message="MY TURN...";
+  message="ATTACKERS...";
   printmessage();
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
