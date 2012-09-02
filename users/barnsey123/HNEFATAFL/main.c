@@ -3,8 +3,13 @@
 // 27-08-2012 NB: v0.012 Minor changes to save memory
 // 27-08-2012 NB: v0.013 Created Priority array and routine to populate it
 // 28-08-2012 NB: v0.014 Add hightarget to pacman checkroute (when route to corners are empty)
-// TODO: Need to implement the priority changes
-
+// 30-08-2012 NB: V0.015 updated pacman routines - added brokenarrow
+// 01-09-2012 NB: V0.016 Fixed brokenarrow
+// 02-09-2012 NB: v0.017 Compressed - and fixed - checkroute()
+//				  Temp disable of timertile() to speed up testing
+/* TODO: Need to implement the priority changes (maybe not - the priority concept
+may cause more issues than it solves...
+*/
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -12,10 +17,8 @@
 #define WEST 3
 #define ENEMYWEIGHT 37
 
-extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
-//extern unsigned char BorderTiles[];	// border on title screens/version screens etc
-//extern unsigned char TitleTiles[];	// Defence-Force logo
+extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
 extern unsigned char TimerTiles[];		// display timer in central square when computer's turn
 /*
@@ -62,89 +65,91 @@ The Viking "alphabet" begins with "F" and is rEferred to as "FUTHAR" rather than
 23	O:	Othila		Inheritance (of property or knowledge)
 */
 /******************* Function Declarations ************************/
-void drawcursor();			// draws cursor 
-void inverse();				// inverse the color in the square
-void drawtiles();			// draws all tiles at board x,y boxsize z (uses draw*tile functions)
-void drawboard();			// kicks off drawgrid/drawtiles
-void playerturn();			// takes user input to move cursor
-void drawplayers();			// draw playing pieces
-void flashscreen();			// flashes screen in selected color for a second or so
-void canpiecemove();		// can a selected piece move? 0=no, 1=yes
-void printdestinations();	// print arrows on tiles where a piece can move
-void printpossiblemoves();	// Print possible moves
-void printarrowsorblanks();	// PRINT ARROWS/BLANK EM OUT	
-void movecursor2();			// move cursor routine
-void movepiece(); 			// move a piece
-char cantakepiece();		// returns 0=no, 1 yes
-void takepiece();			// takes specified piece
-void blinkcursor();			// blinks the cursor to attract attention
-void checkend();			// check for end game conditions 
-void computerturn();		// AI for computer
-void pacman();				// update target positions around king (need to develop further)
-void targetselect();		// choose a target square
-void findpiece();
-//void findpiecens();			// findpiece north-south
-//void findpieceew();			// findpiece east-west
-void canbetaken(); 			// can I be taken after moving here? returns value (take) 0=no 1=yes
-void subarrows();			// subroutine of arrows or blanks
-void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)
-//void subpacman();			// subroutine of pacman
-//void subpacman2();			// subroutine of pacman
-//void subpacman5();			// replaces subpacman3 + 4
-void subpacmanx();			// grand sub of pacman
-//void subcanbetaken();		// sub of canbetaken
-void inccantake();			// increments cantake
-void incroute();			// incs route
-void decroute();			// decs route
-void drawtile();			// draw a tile (subroutine of drawtiles)
-void drawpiece();			// draws piece
-void drawarrow();			// draws "arrow"
-void printmessage();		// prints message to screen
-void printturnprompt();		// prints "your turn" message
-void surroundcount();		// counts the number of attackers surrounding KING (or edges, or central square)
-void incsurround();			// increment "surrounded" variable
-void explodetile();			// explodes a piece (plays an animation)
-void pause();				// wait a certain period of time (pausetime)
-void tileloop();			// subfunction of explodetile and drawtile
-void surroundpoints();		// increment points around king depending on "surrounded" figure
-void incpoints();			// increment points variable
-void decpoints();			// decrement points variable
-void setpoints();			// set points to default value
-void zerocounter();			// set counter=0
-void inccounter();			// inc counter
-//void deccounter();			// decrement counter
-void doublepoints();		// doubles points
-//void LookBackInAnger();		// runs subcanbetaken if the piece "behind" an attacker is defender/king and prospective target adjacent to defender/king
-//void subLookBackInAnger();	// runs the various "lookbackinanger" checks
-void inctarget();			// inc target[xns][xew]
-void subcanbetaken2(); 		// attempt to reduce memory footprint
-void surroundcheck();		// inc surrounded under various conditions
-void calctakeweight();		// calculate the weight of "takeweight"
-void enemyzero();			// set enemy value to zero when surrounded=3 
-unsigned char checkroute(); // sets counter to be number of pieces on a given route
-void updatetarget();		// updates target array
-void cantakeadjust();		// decrement cantake if taken piece is on same plane as king
+//void brokenarrow();				
+//void deccounter();			// decrement counter	
+//void LookBackInAnger();		// runs subcanbetaken if the piece "behind" an attacker is defender/king and prospective target adjacent to defender/king		
+//void subLookBackInAnger();	// runs the various "lookbackinanger" checks			
+//void zoneupdate();		// Increment target positions on unnocupied rows/columns (especially the "zone")		
+char cantakepiece();		// returns 0=no, 1 yes		
+unsigned char checkroute(); // sets counter to be number of pieces on a given route				
+void blinkcursor();			// blinks the cursor to attract attention	
+void calccantake();			// can take be made (how many)	
+void calchightarget();		// updates value of hightarget (the highest target so far)		
+void calctakeweight();		// calculate the weight of "takeweight"		
+void canbetaken(); 			// can I be taken after moving here? returns value (take) 0=no 1=yes	
+void canpiecemove();		// can a selected piece move? 0=no, 1=yes		
+void cantakeadjust();		// decrement cantake if taken piece is on same plane as king	
+void checkbrokenarrow();	// check to see if brokenarrow can be incremented	
+void checkend();			// check for end game conditions 	
+void checkincroute();		// check to see if OK to incroute		
+void computerturn();		// AI for computer		
+void cursormodevalid();		// sets modevalid to 1		
+void cursormodezero();		// set cursor mode to 0 if 1		
+void decpoints();			// decrement points variable	
+void decroute();			// decs route	
+void doublepoints();		// doubles points		
+void drawarrow();			// draws "arrow"	
+void drawboard();			// kicks off drawgrid/drawtiles	
+void drawcursor();			// draws cursor 	
+void drawpiece();			// draws piece	
+void drawplayers();			// draw playing pieces	
+void drawtile();			// draw a tile (subroutine of drawtiles)	
+void drawtiles();			// draws all tiles at board x,y boxsize z (uses draw*tile functions)	
+void enemytargetupdate();	// updates enemytargetcount			
+void enemyzero();			// set enemy value to zero when surrounded=3 	
+void explodetile();			// explodes a piece (plays an animation)	
+void findpiece();				
+void flashscreen();			// flashes screen in selected color for a second or so	
+void fliprune();			// flip the rune tiles in title screen	
+void gspot();				// count no of targets from king to edge
+void incbrokenarrow();		// increments the value of brokenarrow
+void inccantake();			// increments cantake	
+void inccounter();			// inc counter	
+void incdefatt();			// increments count of attacker/defenders round king (calls incking...)	
 void inckingattacker();		// increments count of attackers round king		
-void inckingdefender();		// increments count of defenders round king
-void incdefatt();			// increments count of attacker/defenders round king (calls incking...)
-void cursormodezero();		// set cursor mode to 0 if 1
-void cursormodevalid();		// sets modevalid to 1
-void calccantake();			// can take be made (how many)
-void printtitles();			// print the title screen (used in titles/menus etc)
-void fliprune();			// flip the rune tiles in title screen
-void subpacnorthsouth();	// subroutine of pacman
-void subpaceastwest();		// subroutine of pacman
-void checkincroute();		// check to see if OK to incroute
-void incmodeone();			// increment the modeonevalid variable (from 0 to 1)
-void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)
-//void zoneupdate();		// Increment target positions on unnocupied rows/columns (especially the "zone")
-//void subzoneupdate();		// subroutine of zoneupdate
-void updateroutetarget();	// increment targets on a given route
-void targetplusfour();		// add 4 to target (used in escape routine)
-void timertile();			// print timer
-void enemytargetupdate();	// updates enemytargetcount
-void prioritycalc();		// updates priority array
-void calchightarget();		// updates value of hightarget (the highest target so far)
+void inckingdefender();		// increments count of defenders round king		
+void incmodeone();			// increment the modeonevalid variable (from 0 to 1)	
+void incpoints();			// increment points variable	
+void incroute();			// incs route	
+void incsurround();			// increment "surrounded" variable	
+void inctarget();			// inc target[xns][xew]	
+void inverse();				// inverse the color in the square
+void movecursor2();			// move cursor routine	
+void movepiece(); 			// move a piece	
+void pacman();				// update target positions around king (need to develop further)
+void pause();				// wait a certain period of time (pausetime)
+void playerturn();			// takes user input to move cursor	
+void printarrowsorblanks();	// PRINT ARROWS/BLANK EM OUT			
+void printdestinations();	// print arrows on tiles where a piece can move			
+void printmessage();		// prints message to screen		
+void printpossiblemoves();	// Print possible moves			
+void printtitles();			// print the title screen (used in titles/menus etc)	
+void printturnprompt();		// prints "your turn" message		
+void prioritycalc();		// updates priority array		
+void setpoints();			// set points to default value	
+void subarrows();			// subroutine of arrows or blanks	
+void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)	
+void subcanbetaken2(); 		// attempt to reduce memory footprint		
+void subpaceastwest();		// subroutine of pacman		
+void subpacmanx();			// grand sub of pacman	
+void subpacnorthsouth();	// subroutine of pacman	
+void subzoneupdate();		// subroutine of pacman				
+void surroundcheck();		// inc surrounded under various conditions		
+void surroundcount();		// counts the number of attackers surrounding KING (or edges, or central square)		
+void surroundpoints();		// increment points around king depending on "surrounded" figure		
+void takepiece();			// takes specified piece	
+void targetplusfour();		// add 4 to target (used in escape routine)		
+void targetselect();		// choose a target square		
+void tileloop();			// subfunction of explodetile and drawtile	
+void timertile();			// print timer	
+void updateroutehightarget();// adds hightarget to targets on route				
+void updateroutetarget();	// increment targets on a given route			
+void updatetarget();		// updates target array		
+void zerocounter();			// set counter=0	
+void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)		
+
+
+
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -242,7 +247,7 @@ unsigned char destrow,destcol;		// used in checkroute (returns no of pieces on a
 unsigned char canmovecursor;		// controls wether screen cursor can be moved or not
 unsigned char hightarget;			// contains highest value target
 unsigned char targetns,targetew;	// used to calc takes
-unsigned char x,y,z,a,b,c,d,e;		// general purpose variables
+unsigned char x,y,z,a,b,c,d,e,f,g;	// general purpose variables
 /* below used for cursor move routine */
 unsigned char multiple;		// concerning central square (how much to multiply the coords to SKIP the square
 unsigned char xptrns;		// copy of NS
@@ -268,17 +273,20 @@ unsigned char checkroutemode;	// mode used for checkroute function
 								// 1=count number of pieces on route
 								// 2=increment target values on route (if no pieces on route)
 								// 3=amount of targets on route
+								// 4=Number of "enemy" targets on route (where enemies CAN go)
+								// 5= Emergency! Make target=255
+unsigned char checkrouterow, checkroutecol, checkroutestart, checkroutedest; // used in checkroute routine
 unsigned char subpacc,subpacd;	// used in subpacman5 
 unsigned char turncount=0;			// used to count the number of turns
 unsigned char enemytargetcount;	// count of enemy targets on a route
-
+unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=route to one corner, 2=route to two corners
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.014\nBY BARNSEY123\n";
+  message="V0.017\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -388,8 +396,8 @@ void findpiece(){	// find a piece capable of moving to selected target
 					startrow=a;destrow=a;startcol=0;destcol=10;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
-					x=checkroute();
-					if (x==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
+					checkroute();
+					if (z==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
 					if ((b > kingew)&&(kingpieces[EAST]==1)) foundpiece=10;
@@ -401,8 +409,8 @@ void findpiece(){	// find a piece capable of moving to selected target
 			if ( b != targetew){// target is not on same column as candidate
 				if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8))){
 					startrow=0;destrow=10;startcol=b;destcol=b;
-					x=checkroute();
-					if (x==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
+					checkroute();
+					if (z==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
 					if ((a < kingns)&&(kingpieces[NORTH]==1)) foundpiece=10;
@@ -425,7 +433,6 @@ It alters the values of ctns,ctew,targetns,targetew,ons,oew,ns,ew and of course,
 hightarget
 */
 void calchightarget(){
-
   hightarget=0;	// highest value target
   for (ctns=0;ctns<11;ctns++){	// find the highest value for target
     for (ctew=0;ctew<11;ctew++){
@@ -481,28 +488,17 @@ NEWTARGET:
 }
 // subroutine of pacman
 void subpacmanx(){
-  //z=kingpieces[orientation];	// count of pieces on route to edge (attackers&defenders)
-  //a=pacpointsx+pacpointsy; // count of pieces to two corners
-  //b=pacpointsa+pacpointsb; // count of pieces to squares adjacent to corners
-  //points=hightarget;
-  setpoints();
-  points+=enemytargetcount; // add the count of enemy targets on route to corners to points
+  setpoints();		// Set points to 10
+  surroundpoints(); // add 10 * surrounded 
+  //points+=enemytargetcount; // add the count of enemy targets on route to corners 
   if ( kingpieces[orientation]==0 )	doublepoints();	// no pieces in the direction from king
-  if ((pacpointsx == 0)||(pacpointsy == 0)) doublepoints();	// double if route to one corner
-  if ((pacpointsx+pacpointsy) == 0) 		doublepoints();	// double if route to two corners
-  if ((pacpointsa == 0)||(pacpointsb == 0)) doublepoints();	// double if route to one square adjacent to corner
-  if ((pacpointsa+pacpointsb) == 0) 		doublepoints();	// double if route to two squares adjacent to corners
+  points+=(brokenarrow[orientation]*10);
   if ((orientation == NORTH) || (orientation == WEST)){	// if north or west
     uncounter=paclevel2-1;
-    //if (paclevel2<3) {doublepoints();doublepoints();doublepoints();}
-    //if ( paclevel2 < 5 ) incpoints(); // add weight to north or west if king in north or west side of board	
   }
-  else	{										// if south east 
+  else{										// if south east 
     uncounter=paclevel2+1;
-    //if (paclevel2>7) {doublepoints();doublepoints();doublepoints();}
-    //if ( paclevel2 > 5 ) incpoints(); // add weight to south or east if king in south or east side of board
   }
-  surroundpoints();
   // default north/south
   x=uncounter;
   y=paclevel1;
@@ -511,19 +507,23 @@ void subpacmanx(){
     x=paclevel1;
     y=uncounter;
   }
-  calchightarget();	// calc value of hightarget (highest so far)
+  if (brokenarrow[orientation]){
+	points+=(hightarget+11);	// set points to be HIGHER than the highest existing TARGET
+  }
   while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11))){
-    if (computer[x][y] ){	// if accessible by attacker - only update target if cannot be taken OR king has clear route to corner
-      if ((pacpointsx==0)||(pacpointsy==0)||(pacpointsa==0)||(pacpointsb==0)){
-      	if (target[x][y]){
-	      	target[x][y]+=points;
-	      	target[x][y]+=hightarget;
-      	}
-      }
-      else {
-        if (target[x][y] > 1)	target[x][y]=points;
-      }
-    }
+    if (computer[x][y] ){				// if accessible by computer
+	    if (brokenarrow[orientation]){	// if a broken arrow situation
+		    if (target[x][y]==1){		// if can be taken, make target=points
+		    	target[x][y]=points;
+	    	}
+	    	else{
+		    	target[x][y]+=points;	// ADD points to existing target if cannot be taken
+	    	}
+    	}
+    	else{
+	    	if (target[x][y] > 1) target[x][y]+=points;
+    	}
+	}
     decpoints();
     if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
     if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
@@ -535,68 +535,88 @@ void enemytargetupdate(){
   enemytargetcount+=checkroute();
 }
 
-void subpacnorthsouth(){ 
+void checkbrokenarrow(){
+	if ((kingpieces[orientation] == 0 )||((kingpieces[orientation]==1)&&(f))){
+		if (pacpointsa==0) incbrokenarrow();
+		if (pacpointsb==0) incbrokenarrow();
+		if ((brokenarrow[orientation]==2)&&(g==0)) subzoneupdate(); //BROKENARROW!
+		if (pacpointsx==0) incbrokenarrow();
+		if (pacpointsy==0) incbrokenarrow();
+		if ((brokenarrow[orientation]>=2)&&(g==0)) subzoneupdate(); //BROKENARROW!
+
+	}
+}
+void incbrokenarrow(){
+	brokenarrow[orientation]++;
+}
+void subpacnorthsouth(){ // cross the "T" from east to west
   setcheckmode1(); 
-  startrow=a;startcol=0;destrow=a;destcol=e; 
+  startrow=a;startcol=1;destrow=a;destcol=e; brokenarrow[orientation]=0;
   pacpointsx=checkroute(); // count pieces on route
   enemytargetcount=0;
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsx==0)) {updateroutetarget();}
-  setcheckmode1();startcol=e;destcol=10;
+  setcheckmode1();startcol=e;destcol=9;
   pacpointsy=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsy==0)) {updateroutetarget();}
   setcheckmode1();startrow=d;startcol=0;destrow=d;destcol=e;
   pacpointsa=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsa==0)) {updateroutetarget();}
   setcheckmode1();startcol=e;destcol=10;
   pacpointsb=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsb==0)) {updateroutetarget();}
+  f=players[a][kingew];	// check for piece at edge of board
+  checkbrokenarrow();
 }
 
 
-void subpaceastwest(){
+void subpaceastwest(){ // cross the "T" from North to South
   setcheckmode1();
-  startrow=0;startcol=b;destrow=e;destcol=b;
+  startrow=1;startcol=b;destrow=e;destcol=b; brokenarrow[orientation]=0;
   pacpointsx=checkroute();
   enemytargetcount=0;
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsx==0)) updateroutetarget();
-  setcheckmode1();startrow=e;destrow=10;
+  setcheckmode1();startrow=e;destrow=9;
   pacpointsy=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsy==0)) updateroutetarget();
   setcheckmode1();startrow=0;startcol=c;destrow=e;destcol=c;
   pacpointsa=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsa==0)) updateroutetarget();
   setcheckmode1();startrow=e;destrow=10;
   pacpointsb=checkroute();
   enemytargetupdate();
-  if ((kingpieces[orientation]==0)&&(pacpointsb==0)) updateroutetarget();
+  f=players[kingns][b]; // check for piece at edge of board
+  checkbrokenarrow();
 }
-
+void gspot(){
+	setcheckmode3();
+  	g=checkroute(); 		// count of targets from king to edge
+}
 
 // PACMAN	( increment target positions around king )	
 void pacman(){
   surroundcount();		// updates "surrounded"
-  timertile();
+  calchightarget();		// calc value of hightarget (highest so far)
+  timertile();			// print timer routine
   // NORTH
   orientation=NORTH;
+  startcol=kingew;destcol=kingew;startrow=0;  destrow=kingns;
+  gspot();	// count of targets from king to edge
   paclevel1=kingew;
   paclevel2=kingns;
-  a=0; d=1; e=kingew;   
+  a=0; d=1; e=kingew;  
   subpacnorthsouth();	// check routes to escape positions
   subpacmanx();
   //SOUTH
   orientation=SOUTH;
+  startcol=kingew;destcol=kingew;startrow=kingns;  destrow=10;
+  gspot();	// count of targets from king to edge
   a=10; d=9; 
   subpacnorthsouth();	// check routes to escape positions
   subpacmanx();
   // EAST
   orientation=EAST;
+  startcol=kingew;destcol=10;startrow=kingns; destrow=kingns;
+  gspot();	// count of targets from king to edge
   paclevel1=kingns;
   paclevel2=kingew;
   b=10;c=9; e=kingns; 
@@ -604,6 +624,8 @@ void pacman(){
   subpacmanx();
   // WEST
   orientation=WEST;
+  startcol=0;destcol=kingew;startrow=kingns; destrow=kingns;
+  gspot();	// count of targets from king to edge
   b=0;c=1; 
   subpaceastwest();		// check routes to escape positions
   subpacmanx();
@@ -817,20 +839,15 @@ void printarrowsorblanks()	{
   if ((fb==7)&&(xplayers>1)){	// check to see if an attacker can be caught if he stays where he is
     if ((players[takerow][takecol]==0)&&(enemy[takerow][takecol])) {
 	    a=takerow;b=takecol;targetplusfour();
-        //if (target[takerow][takecol]>1)target[takerow][takecol]+=4; // update adjacent target to provide escape route or place for someone else to occupy
       	if (orientation < EAST){	// if heading north or south
 	    	a=xns;
         	if ( xew<10 )	{b=xew+1;targetplusfour();}
         	if ( xew  )		{b=xew-1;targetplusfour();}
-        	//if ( xew<10 ){if (target[xns][xew+1]>1){target[xns][xew+1]+=4;}}
-        	//if ( xew  ){if (target[xns][xew-1]>1){target[xns][xew-1]+=4;}}
       	}
         else{					// if heading east or west
 	    	b=xew;
         	if ( xns<10 )	{a=xns+1;targetplusfour();}
         	if ( xns  )		{a=xns-1;targetplusfour();}
-        	//if ( xns<10 ){if (target[xns+1][xew]>1){target[xns+1][xew]+=4;}}
-        	//if ( xns  ){if (target[xns-1][xew]>1){target[xns-1][xew]+=4;}}	
       	}
     }
   }
@@ -1395,19 +1412,53 @@ void enemyzero() {
     target[ezns1][ezew1]=100;	// set big target value to final space by king
   }
 }
-// Checkroute:	checkroutemode=1 Returns number of pieces on a given route
+// Checkroute:	
+// Currently only works when "crossing the T" 
+// checkroutemode=1 Returns number of pieces on a given route
 // 				checkroutemode=2 Increments the target values on route
 //				checkroutemode=3 Number of targets on route
 //				checkroutemode=4 Number of "enemy" targets on route (where enemies CAN go)
-unsigned char checkroute()	{
+//				checkroutemode=5 Emergency! Make target=255
+
+unsigned char checkroute(){
+  z=0;
+  checkrouterow=startrow;
+  checkroutecol=startcol;
+  // Check COLUMNS by default
+  checkroutestart=startrow;
+  checkroutedest=destrow;
+  if ( startrow == destrow ){   // ELSE we are checking ROWS
+	  checkroutestart=startcol;
+	  checkroutedest=destcol;
+  }
+  for (x=checkroutestart;x<=checkroutedest;x++){
+  		if ( startrow==destrow ) {checkroutecol++;}else{checkrouterow++;}
+		switch(checkroutemode){
+    		case 1:	if ((players[checkrouterow][checkroutecol]==1)||(players[checkrouterow][checkroutecol]==2)) {z++;}break;
+      		case 2: if (target[checkrouterow][checkroutecol])	{target[checkrouterow][checkroutecol]+=2;}break;
+      		case 3: if (target[checkrouterow][checkroutecol])	{z++;}break;
+      		case 4: if (enemy[checkrouterow][checkroutecol])	{z+=10;}break;
+      		case 5: if (target[checkrouterow][checkroutecol]) 	
+      			{
+	      		//target[checkrouterow][checkroutecol]=255; // level 1
+	      		target[checkrouterow][checkroutecol]+=(hightarget+1); // level 2
+      			}
+  		}
+  }
+  return z;
+}
+/*
+// ORIGINAL 02/09/2012
+unsigned char checkroute(){ 
   z=0;
   if (orientation<EAST){			// if checking ROWS (crossing the T) (used for NORTH SOUTH checks)
     for (x=startcol;x<=destcol;x++){ // check row
 	  switch(checkroutemode){
       	case 1:	if ((players[startrow][x]==1)||(players[startrow][x]==2)) {z++;}break;
-      	case 2: if (target[startrow][x]){target[startrow][x]+=2;}break;
-      	case 3: if (target[startrow][x]){z++;}break;
-      	case 4: if (enemy[startrow][x]) {z+=10;}
+      	case 2: if (target[startrow][x])	{target[startrow][x]+=2;}break;
+      	case 3: if (target[startrow][x])	{z++;}break;
+      	case 4: if (enemy[startrow][x])		{z+=10;}break;
+      	case 5: if (target[startrow][x]) 	{target[startrow][x]=255;}
   	  }
     }
   }
@@ -1415,16 +1466,16 @@ unsigned char checkroute()	{
     for (x=startrow;x<=destrow;x++){ // check accross
 	  switch(checkroutemode){
       	case 1: if ((players[x][startcol]==1)||(players[x][startcol]==2)) {z++;}break;
-      	case 2: if (target[x][startcol]) {target[x][startcol]+=2;}break;
-      	case 3: if (target[x][startcol]){z++;}break;
-      	case 4: if (enemy[x][startcol]){z++;}
+      	case 2: if (target[x][startcol])	{target[x][startcol]+=2;}break;
+      	case 3: if (target[x][startcol])	{z++;}break;
+      	case 4: if (enemy[x][startcol])		{z++;}break;
+      	case 5: if (target[x][startcol]) 	{target[x][startcol]==255;}
   	  }
     }
   }
   return z;
 }
-
-
+*/
 // decrements cantake if taken piece is on same plane as king 
 // and attacking piece isn't AND only one defender on plane
 void cantakeadjust(){							
@@ -1554,22 +1605,30 @@ void fliprune()		{
 	}	
 */
 //}
-/*
-void subzoneupdate()	// subroutine of zoneupdate (updates border targets)
-{
-  {
-	setcheckmode1();z=checkroute();				// COUNTER=count of pieces on route
-	if (z==0) { updateroutetarget();}	// if route unnocupied increment targets
+
+void subzoneupdate(){	// subroutine of zoneupdate (updates border targets)
+	startcol=0;destcol=10;startrow=1;destrow=1; // default to NORTH
+	if (orientation==SOUTH) {startrow=9;destrow=9;}
+	if (orientation>SOUTH){	// if east or west
+		startcol=9;destcol=9;startrow=0;destrow=10; // default to EAST
+		if (orientation==WEST) {startrow=0;destrow=10;}
 	}
+	setcheckmode5();checkroute();		// COUNTER=count of pieces on route
 }
-*/
+
 void updateroutetarget(){
 //setcheckmode3(); // set the mode of checkroute to 3 (count how many TARGETS are on route)
 //pacpointsz=checkroute();
 //pacpointsz=25-pacpointsz;	// 20 = max amount of targets on a given route to a corner
-setcheckmode2(); // set the mode of checkroute to 2 (update targets)
-checkroute();
+	setcheckmode2(); // set the mode of checkroute to 2 (update targets)
+	checkroute();
 }
+
+void updateroutehightarget(){
+	setcheckmode5(); // add hightarget to "cross-t" targets
+	checkroute();
+}
+
 void prioritycalc(){ // calculates the priorities of moving a piece
 	for(a=0;a<11;a++){
 		for (b=0;b<11;b++){

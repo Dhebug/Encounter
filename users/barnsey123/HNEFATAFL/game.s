@@ -19,6 +19,11 @@ _setcheckmode4
 	sta _checkroutemode
 	rts
 	
+_setcheckmode5
+	lda #5
+	sta _checkroutemode
+	rts	
+	
 _incmodeone
 	inc _modeonevalid
 	rts
