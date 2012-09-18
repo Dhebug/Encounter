@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char *keywords[]= { 
 "END","EDIT","STORE","RECALL","TRON","TROFF","POP","PLOT",
