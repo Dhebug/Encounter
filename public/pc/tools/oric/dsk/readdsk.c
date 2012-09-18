@@ -121,7 +121,7 @@ store_sector(char buf[],int cyl,int head,int sect,int sectsize)
 	store_id(cyl,head,sect,sectsize);
 	store_crc();
 	store_gap(22,0x4E);
-	store_gap(12,0)
+	store_gap(12,0);
 	store_data(buf,sectsize);
 	store_crc();
 	store_gap(40,0x4E);
@@ -133,7 +133,7 @@ store_sector_bad_crc(char buf[],int cyl,int head,int sect,int sectsize)
 	store_id(cyl,head,sect,sectsize);
 	store_crc();
 	store_gap(22,0x4E);
-	store_gap(12,0)
+	store_gap(12,0);
 	store_data(buf,sectsize);
 	store_bad_crc();
 	store_gap(40,0x4E);
