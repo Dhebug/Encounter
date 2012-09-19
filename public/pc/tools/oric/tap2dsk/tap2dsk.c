@@ -257,6 +257,8 @@ int main(int argc, char *argv[])
 	for (track=0;track<tracks;track++)
 		for (sect=1;sect<=NBSECT;sect++)
 			fwrite(disk[track][sect-1],sizeof(sector),1,dsk);
+
+	return 0;
 }
 
 
