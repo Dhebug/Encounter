@@ -1,0 +1,198 @@
+#
+
+!message OSDK Makefile engine (nmake) v0.1
+
+OSDKB = $(OSDK)\bin
+SPC= 
+
+!if "$(NAME)" == ""
+!if !exist(osdk_config.mk)
+
+osdk_config.mk: osdk_config.bat
+	@<<genconfig.bat > $@
+@ECHO OFF
+call osdk_config.bat
+echo NAME=%OSDKNAME%
+echo ADDR=%OSDKADDR:$$=%
+echo FILES=%OSDKFILE%
+<<
+	@echo Generated osdk_config.mk from osdk_config.bat.
+	@echo Consider editing the makefile instead.
+	@echo Please rerun $(MAKE) now.
+
+all clean test: osdk_config.mk
+
+_skip_the_rest = 1
+!endif
+
+!if exist(osdk_config.mk)
+!include osdk_config.mk
+!endif
+!endif
+
+# avoid errors with empty variables when generating osdk_config.mk
+!ifndef _skip_the_rest
+
+!if "$(NAME)" == ""
+!error No NAME given in makefile and no osdk_config.bat
+!endif
+
+!if "$(TYPE)" == ""
+TYPE = TAPE
+!endif
+
+!if "$(TYPE)" == "TAPE"
+EXT=tap
+!elseif "$(TYPE)" == "DISK"
+EXT=dsk
+!else
+!error "Invalid TYPE $(TYPE)"
+!endif
+
+!if "$(EMULATOR)" == ""
+#EMULATOR = euphoric
+#!ifdef EUPHORIC
+#EMULATOR = euphoric
+#!endif
+EMULATOR = oricutron
+!message Using $(EMULATOR) as default emulator
+!endif
+
+# system defines
+# the -DATMOS is for Contiki
+SYSDEFINES = -D__16BIT__ -D__NOFLOAT__ -DATMOS
+CPPFLAGS = $(CPPFLAGS) -I $(OSDK)\include
+CPPFLAGS = $(CPPFLAGS) $(SYSDEFINES) $(DEFINES)
+OPTIMIZE = -O2
+CFLAGS = $(OPTIMIZE)
+
+REALTARGET=$(NAME).$(EXT)
+
+BUILDDIR=$(MAKEDIR)\BUILD
+
+#HACK: append suffixes to suffixless names in FILES
+#HACK: and relocate them to BUILD\
+#_FILES = $(FILES) $(EMPTY)
+# we always have at least 1 file anyway
+OBJS=BUILD\$(FILES: =.os BUILD\).os
+
+.SUFFIXES: .s
+
+# build rules
+#.os = output asm
+
+# from .c
+{.}.c{BUILD\}.os:
+	@echo Compiling $<
+	@echo   - preprocess
+	@$(OSDKB)\cpp.exe -lang-c++ $(CPPFLAGS) -nostdinc $(<) $@.c1
+	@echo   - compile
+	@$(OSDKB)\compiler.exe -N$(@B) $(CFLAGS) $@.c1 >$@.c2
+	@echo   - convert C to assembly code
+	@$(OSDKB)\cpp.exe -lang-c++ -imacros $(OSDK)\macro\macros.h -traditional -P $@.c2 $@.s1
+	@echo   - cleanup output
+	@$(OSDKB)\tr < $@.s1 > $@
+
+# from .s .asm
+
+{.}.asm{BUILD\}.os:
+	@echo Assembling $<
+	@copy $< $@ /Y >NUL
+
+{.}.s{BUILD\}.os:
+	@echo Assembling $<
+	@copy $< $@ /Y >NUL
+
+
+!message
+
+# targets
+
+all: $(BUILDDIR) $(BUILDDIR)\$(REALTARGET)
+
+$(BUILDDIR):
+	@echo Building the program $(@F) at address 0x$(ADDR)
+	@mkdir "$(BUILDDIR)"
+
+#buildmsg: makefile
+#	@echo Building the program $(@F) at address 0x$(ADDR)
+
+$(BUILDDIR)\$(REALTARGET): $(BUILDDIR) $(OBJS)
+	@echo Linking
+	@$(OSDKB)\link65.exe $(OSDKLINK) -d $(OSDK)\lib/ -o BUILD\linked.s -f -q $(OBJS)
+	@echo Assembling
+	@$(OSDKB)\xa.exe BUILD\linked.s -o BUILD\final.out -e BUILD\xaerr.txt -l BUILD\symbols -bt $$$(ADDR)
+	@$(OSDKB)\header.exe $(OSDKHEAD) build\final.out BUILD\$(@B).tap $$$(ADDR)
+!if "$(TYPE)" == "DISK"
+	@-$(OSDKB)\tap2dsk BUILD\$(@B).tap $@
+!endif
+	@echo Build of $(@F) finished
+
+#XXX: tap2dsk doesn't return anything so return value is random!!!
+
+#	echo > $@
+
+test-euphoric: $(BUILDDIR)\$(REALTARGET)
+	@$(OSDK)\Euphoric\Euphoric.exe $(BUILDDIR)\$(REALTARGET)
+	cls
+# Euphoric usually puts some garbage in the console when on white bg,
+# so clear the screen on exit
+
+test-oricutron: $(BUILDDIR)\$(REALTARGET)
+	@cd F:\oric\viendez\VIENDEZ\oricutron
+	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -t $(BUILDDIR)\$(REALTARGET)
+
+
+test: test-$(EMULATOR)
+
+
+release: $(BUILDDIR)\$(REALTARGET)
+	@echo Generating dist files
+	@-mkdir REL
+	@-mkdir "REL\$(NAME)"
+	@copy /Y $(BUILDDIR)\$(REALTARGET) "REL\$(NAME)\"
+#TODO: generate the .nfo
+
+zip: release
+#XXX: merge ?
+# http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
+
+
+clean:
+	@-del /f $(BUILDDIR)\*.os.c1
+	@-del /f $(BUILDDIR)\*.os.c2
+	@-del /f $(BUILDDIR)\*.os.s1
+	@-del /f $(BUILDDIR)\*.os
+	@-del /f $(BUILDDIR)\symbols
+	@-del /f $(BUILDDIR)\final.out
+	@-del /f $(BUILDDIR)\xaerr.txt
+	@-del /f $(BUILDDIR)\linked.s
+	@-del /f $(BUILDDIR)\$(NAME).tap
+	@-del /f $(BUILDDIR)\$(NAME).dsk
+	@-rd BUILD
+
+#DEBUG:
+dumpenv:
+	@echo CPPFLAGS=$(CPPFLAGS)
+	@echo OBJS=$(OBJS)
+
+#echo del osdk_config.mk
+
+# shortcuts
+te: test-euphoric
+to: test-oricutron
+
+
+help:
+	@echo possible targets:
+	@echo all (default): generate the binary
+	@echo clean: remove files
+	@echo test: test with the default emulator ($(EMULATOR))
+	@echo te, test-euphoric:	test with Euphoric
+	@echo to, test-oricutron:	test with Oricutron
+	@echo release:	generate a release zip file (TODO)
+
+
+
+!endif #_skip_the_rest
+
