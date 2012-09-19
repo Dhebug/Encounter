@@ -3,7 +3,6 @@
 !message OSDK Makefile engine (nmake) v0.1
 
 OSDKB = $(OSDK)\bin
-SPC= 
 
 !if "$(NAME)" == ""
 !if !exist(osdk_config.mk)
@@ -26,6 +25,8 @@ _skip_the_rest = 1
 !endif
 
 !if exist(osdk_config.mk)
+!message Including osdk_config.mk generated from osdk_config.bat.
+!message Consider editing the makefile instead.
 !include osdk_config.mk
 !endif
 !endif
@@ -91,7 +92,12 @@ OBJS=BUILD\$(FILES: =.os BUILD\).os
 	@echo   - convert C to assembly code
 	@$(OSDKB)\cpp.exe -lang-c++ -imacros $(OSDK)\macro\macros.h -traditional -P $@.c2 $@.s1
 	@echo   - cleanup output
-	@$(OSDKB)\tr < $@.s1 > $@
+	@type $@.s1 | $(OSDKB)\tr > $@
+
+# This causes a stale open file VirtualBox on shared folders
+# which can't be deleted until closing the cmd.
+# workaround is to pipe type's output
+#	@$(OSDKB)\tr < $@.s1 > $@
 
 # from .s .asm
 
@@ -116,6 +122,9 @@ $(BUILDDIR):
 
 #buildmsg: makefile
 #	@echo Building the program $(@F) at address 0x$(ADDR)
+
+# add headers as dependency
+#$(OBJS): *.h
 
 $(BUILDDIR)\$(REALTARGET): $(BUILDDIR) $(OBJS)
 	@echo Linking
