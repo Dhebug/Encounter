@@ -3,7 +3,9 @@
 # Directives for use:
 # - copy this template file to your project folder.
 # - fill in the variables below.
-#   - alternatively if you have an osdk_config.bat it can reuse it
+#   - alternatively if leave them blank but have an osdk_config.bat
+#     it will generate an osdk_config.mk file from it for later use.
+#     In this case run make once (or nmake in windows)
 # - you can now run make (or nmake in Windows)
 #   from the project folder at the command line:
 #   - make			without arguments will build the binary
