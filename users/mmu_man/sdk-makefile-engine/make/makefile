@@ -1,32 +1,43 @@
 ## OSDK Generic Makefile v0.1 ##
 
-# program name (no ext, no space)
+# specify the program name (without extension, no space)
+#
+# NAME=mydemo
 NAME=
 
-# target type
-# TAPE	(tape image, default)
-# DISK	(disk image)
+# specify the type of binary
+# 	TAPE:	Tape image (default)
+#	DISK:	Disk image
+#
+# TYPE=TAPE
 TYPE=
 
-# load address (in hex)
+# specify the load address (in hex, no prefix)
+#
+# ADDR=600
 ADDR=
 
-# source files (no ext)
+# specify the source files (without extension)
+#
+# FILES=main foo bar ...
 FILES=
 
-# optional defines (-Dfoo=bar)
+# specify extra preprocessor defines (optional)
+#
+# DEFINES=-Dfoo=bar -DUSE_BAR ...
 DEFINES=
+
 
 ## No user serviceable part beyond this point ##
 
 # MAGIC: DO NOT TOUCH
 #\
-!if "$(MAKE)" == "NMAKE"
+!if "$(MAKE)" == "NMAKE" || "$(MAKE)" == "nmake"
 #\
-!include $(OSDKMKENGINE)
+!include $(OSDK)\make\engine.nmk
 #\
 !else
-include $(OSDKMKENGINE)
+include $(OSDK)/make/engine.mk
 #\
 !endif
 
