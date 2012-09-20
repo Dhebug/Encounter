@@ -1,5 +1,17 @@
 ## OSDK Generic Makefile v0.1 ##
 
+# Directives for use:
+# - copy this template file to your project folder.
+# - fill in the variables below.
+#   - alternatively if you have an osdk_config.bat it can reuse it
+# - you can now run make (or nmake in Windows)
+#   from the project folder at the command line:
+#   - make			without arguments will build the binary
+#   - make clean	will clean the binary and temporary files
+#   - make test		will run the binary in the default emulator
+#   - make te		will run the binary in Euphoric if available
+#   - make to		will run the binary in Oricutron
+
 # specify the program name (without extension, no space)
 #
 # NAME=mydemo
