@@ -149,11 +149,20 @@ test-euphoric: $(BUILDDIR)\$(REALTARGET)
 
 test-oricutron: $(BUILDDIR)\$(REALTARGET)
 	@cd F:\oric\viendez\VIENDEZ\oricutron
-	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -t $(BUILDDIR)\$(REALTARGET)
+	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)"
 
 
 test: test-$(EMULATOR)
 
+!ifndef BREAKPOINT
+BREAKPOINT=_main
+!endif
+
+debug-oricutron: $(BUILDDIR)\$(REALTARGET)
+	@cd F:\oric\viendez\VIENDEZ\oricutron
+	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)" -r "$(BREAKPOINT)" -d
+
+debug: debug-oricutron
 
 release: $(BUILDDIR)\$(REALTARGET)
 	@echo Generating dist files
