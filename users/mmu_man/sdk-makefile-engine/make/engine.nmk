@@ -168,17 +168,18 @@ zip: release
 
 
 clean:
-	@-del /f $(BUILDDIR)\*.os.c1
-	@-del /f $(BUILDDIR)\*.os.c2
-	@-del /f $(BUILDDIR)\*.os.s1
-	@-del /f $(BUILDDIR)\*.os
-	@-del /f $(BUILDDIR)\symbols
-	@-del /f $(BUILDDIR)\final.out
-	@-del /f $(BUILDDIR)\xaerr.txt
-	@-del /f $(BUILDDIR)\linked.s
-	@-del /f $(BUILDDIR)\$(NAME).tap
-	@-del /f $(BUILDDIR)\$(NAME).dsk
-	@-rd BUILD
+	@echo Cleaning up...
+	@-del /f $(BUILDDIR)\*.os.c1 2>NUL
+	@-del /f $(BUILDDIR)\*.os.c2 2>NUL
+	@-del /f $(BUILDDIR)\*.os.s1 2>NUL
+	@-del /f $(BUILDDIR)\*.os 2>NUL
+	@-del /f $(BUILDDIR)\symbols 2>NUL
+	@-del /f $(BUILDDIR)\final.out 2>NUL
+	@-del /f $(BUILDDIR)\xaerr.txt 2>NUL
+	@-del /f $(BUILDDIR)\linked.s 2>NUL
+	@-del /f $(BUILDDIR)\$(NAME).tap 2>NUL
+	@-del /f $(BUILDDIR)\$(NAME).dsk 2>NUL
+	@-rd BUILD 2>NUL
 
 #DEBUG:
 dumpenv:
