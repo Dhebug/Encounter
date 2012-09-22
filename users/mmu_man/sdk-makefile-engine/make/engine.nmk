@@ -4,6 +4,9 @@
 
 OSDKB = $(OSDK)\bin
 
+# quiet if Q=@
+Q=@
+
 !if "$(NAME)" == ""
 !if !exist(osdk_config.mk)
 
@@ -47,7 +50,7 @@ EXT=tap
 !elseif "$(TYPE)" == "DISK"
 EXT=dsk
 !else
-!error "Invalid TYPE $(TYPE)"
+!error Invalid TYPE $(TYPE)"
 !endif
 
 !if "$(EMULATOR)" == ""
@@ -86,13 +89,13 @@ OBJS=BUILD\$(FILES: =.os BUILD\).os
 {.}.c{BUILD\}.os:
 	@echo Compiling $<
 	@echo   - preprocess
-	@$(OSDKB)\cpp.exe -lang-c++ $(CPPFLAGS) -nostdinc $(<) $@.c1
+	$(Q)$(OSDKB)\cpp.exe -lang-c++ $(CPPFLAGS) -nostdinc $(<) $@.c1
 	@echo   - compile
-	@$(OSDKB)\compiler.exe -N$(@B) $(CFLAGS) $@.c1 >$@.c2
+	$(Q)$(OSDKB)\compiler.exe -N$(@B) $(CFLAGS) $@.c1 >$@.c2
 	@echo   - convert C to assembly code
-	@$(OSDKB)\cpp.exe -lang-c++ -imacros $(OSDK)\macro\macros.h -traditional -P $@.c2 $@.s1
+	$(Q)$(OSDKB)\cpp.exe -lang-c++ -imacros $(OSDK)\macro\macros.h -traditional -P $@.c2 $@.s1
 	@echo   - cleanup output
-	@type $@.s1 | $(OSDKB)\tr > $@
+	$(Q)$(OSDKB)\macrosplitter $@.s1 $@
 
 # This causes a stale open file VirtualBox on shared folders
 # which can't be deleted until closing the cmd.
@@ -103,11 +106,11 @@ OBJS=BUILD\$(FILES: =.os BUILD\).os
 
 {.}.asm{BUILD\}.os:
 	@echo Assembling $<
-	@copy $< $@ /Y >NUL
+	$(Q)copy $< $@ /Y >NUL
 
 {.}.s{BUILD\}.os:
 	@echo Assembling $<
-	@copy $< $@ /Y >NUL
+	$(Q)copy $< $@ /Y >NUL
 
 
 !message
@@ -118,7 +121,7 @@ all: $(BUILDDIR) $(BUILDDIR)\$(REALTARGET)
 
 $(BUILDDIR):
 	@echo Building the program $(@F) at address 0x$(ADDR)
-	@mkdir "$(BUILDDIR)"
+	$(Q)mkdir "$(BUILDDIR)"
 
 #buildmsg: makefile
 #	@echo Building the program $(@F) at address 0x$(ADDR)
@@ -128,12 +131,12 @@ $(BUILDDIR):
 
 $(BUILDDIR)\$(REALTARGET): $(BUILDDIR) $(OBJS)
 	@echo Linking
-	@$(OSDKB)\link65.exe $(OSDKLINK) -d $(OSDK)\lib/ -o BUILD\linked.s -f -q $(OBJS)
+	$(Q)$(OSDKB)\link65.exe $(OSDKLINK) -d $(OSDK)\lib\ -o BUILD\linked.s -f -q $(OBJS)
 	@echo Assembling
-	@$(OSDKB)\xa.exe BUILD\linked.s -o BUILD\final.out -e BUILD\xaerr.txt -l BUILD\symbols -bt $$$(ADDR)
-	@$(OSDKB)\header.exe $(OSDKHEAD) build\final.out BUILD\$(@B).tap $$$(ADDR)
+	$(Q)$(OSDKB)\xa.exe BUILD\linked.s -o BUILD\final.out -e BUILD\xaerr.txt -l BUILD\symbols -bt $$$(ADDR)
+	$(Q)$(OSDKB)\header.exe $(OSDKHEAD) build\final.out BUILD\$(@B).tap $$$(ADDR)
 !if "$(TYPE)" == "DISK"
-	@-$(OSDKB)\tap2dsk BUILD\$(@B).tap $@
+	$(Q)-$(OSDKB)\tap2dsk BUILD\$(@B).tap $@
 !endif
 	@echo Build of $(@F) finished
 
@@ -142,14 +145,14 @@ $(BUILDDIR)\$(REALTARGET): $(BUILDDIR) $(OBJS)
 #	echo > $@
 
 test-euphoric: $(BUILDDIR)\$(REALTARGET)
-	@$(OSDK)\Euphoric\Euphoric.exe $(BUILDDIR)\$(REALTARGET)
+	$(Q)$(OSDK)\Euphoric\Euphoric.exe $(BUILDDIR)\$(REALTARGET)
 	cls
 # Euphoric usually puts some garbage in the console when on white bg,
 # so clear the screen on exit
 
 test-oricutron: $(BUILDDIR)\$(REALTARGET)
 	@cd F:\oric\viendez\VIENDEZ\oricutron
-	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)"
+	$(Q)F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)"
 
 
 test: test-$(EMULATOR)
@@ -160,7 +163,7 @@ BREAKPOINT=_main
 
 debug-oricutron: $(BUILDDIR)\$(REALTARGET)
 	@cd F:\oric\viendez\VIENDEZ\oricutron
-	@F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)" -r "$(BREAKPOINT)" -d
+	$(Q)F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)" -r "$(BREAKPOINT)" -d
 
 debug: debug-oricutron
 
@@ -209,7 +212,7 @@ help:
 	@echo test: test with the default emulator ($(EMULATOR))
 	@echo te, test-euphoric:	test with Euphoric
 	@echo to, test-oricutron:	test with Oricutron
-	@echo release:	generate a release zip file (TODO)
+#	@echo release:	generate a release zip file (TODO)
 
 
 
