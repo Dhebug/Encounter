@@ -1,3 +1,5 @@
+include ../../rules.mk
+
 BINS := old2mfm$(EXE)
 
 all: $(BINS)
