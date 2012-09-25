@@ -63,14 +63,43 @@ else
 $(error Invalid TYPE $(TYPE))
 endif
 
+
+# try to autodetect Euphoric
+ifeq ($(EUPHORIC),)
+ifneq ($(wildcard $(OSDK)/euphoric/euphoric.exe),)
+EUPHORIC = $(OSDK)/euphoric/euphoric.exe
+else
+ifneq ($(wildcard $(OSDK)/../euphoric/euphoric.exe),)
+EUPHORIC = $(OSDK)/../euphoric/euphoric.exe
+else
+ifneq ($(wildcard "C:/Program Files/euphoric/euphoric.exe"),)
+EUPHORIC = "C:/Program Files/euphoric/euphoric.exe"
+endif
+endif
+endif
+endif
+
+# try to autodetect Oricutron
+ifeq ($(ORICUTRON),)
+ifneq ($(wildcard $(OSDK)/oricutron/oricutron.exe),)
+ORICUTRON = $(OSDK)/oricutron/oricutron.exe
+else
+ifneq ($(wildcard $(OSDK)/../oricutron/oricutron.exe),)
+ORICUTRON = $(OSDK)/../oricutron/oricutron.exe
+else
+ifneq ($(wildcard "C:/Program Files/oricutron/oricutron.exe"),)
+ORICUTRON = "C:/Program Files/oricutron/oricutron.exe"
+endif
+endif
+endif
+endif
+
+
 ifeq ($(EMULATOR),)
-#EMULATOR = euphoric
-#!ifdef EUPHORIC
-#EMULATOR = euphoric
-#!endif
 EMULATOR = oricutron
 $(info Using $(EMULATOR) as default emulator)
 endif
+
 
 # system defines
 # the -DATMOS is for Contiki
@@ -156,13 +185,13 @@ endif
 #	echo > $@
 
 test-euphoric: $(BUILDDIR)/$(REALTARGET)
-	@$(OSDK)/Euphoric/Euphoric.exe $(BUILDDIR)/$(REALTARGET)
-	cls
+	$(Q)$(EUPHORIC) $(BUILDDIR)/$(REALTARGET)
+	@cls
 # Euphoric usually puts some garbage in the console when on white bg,
 # so clear the screen on exit
 
 test-oricutron: $(BUILDDIR)/$(REALTARGET)
-	cd $(call fixpath,F:/oric/viendez/VIENDEZ/oricutron) && $(call fixpath,F:/oric/viendez/VIENDEZ/oricutron/oricutron.exe) -s "$(call fixpath,$(BUILDDIR)/symbols)" -t "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
+	$(Q)cd $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(call fixpath,$(BUILDDIR)/symbols)" "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
 
 
 test: test-$(EMULATOR)
@@ -172,7 +201,7 @@ BREAKPOINT=_main
 endif
 
 debug-oricutron: $(BUILDDIR)/$(REALTARGET)
-	@cd $(call fixpath,F:/oric/viendez/VIENDEZ/oricutron) && F:/oric/viendez/VIENDEZ/oricutron/oricutron.exe -s "$(BUILDDIR)/symbols" -t "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)" -d
+	$(Q)cd $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(BUILDDIR)/symbols" "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)"
 
 debug: debug-oricutron
 
