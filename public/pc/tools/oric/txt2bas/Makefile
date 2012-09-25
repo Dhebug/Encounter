@@ -1,3 +1,5 @@
+include ../../rules.mk
+
 BINS := txt2bas$(EXE)
 
 all: $(BINS)
