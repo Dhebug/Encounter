@@ -1,12 +1,14 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "freeimage.h"
+#include "FreeImage.h"
 
-#include <io.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "defines.h"
 
@@ -67,9 +69,9 @@ bool PictureConverter::Save(int output_format,const std::string& output_filename
 	//
 	// Save the bitmap to TAP format
 	//
-	char name[_MAX_FNAME];
-	char ext[_MAX_EXT];
-	_splitpath(output_filename.c_str(),0,0,name,ext);
+	//char name[_MAX_FNAME];
+	//char ext[_MAX_EXT];
+	//_splitpath(output_filename.c_str(),0,0,name,ext);
 
 	//
 	// Save the hir buffer
@@ -82,7 +84,7 @@ bool PictureConverter::Save(int output_format,const std::string& output_filename
 	case DEVICE_FORMAT_RAWBUFFER_WITH_XYHEADER:
 	case DEVICE_FORMAT_RAWBUFFER_WITH_PALETTE:
 		{
-			long handle=_open(output_filename.c_str(),_O_TRUNC|O_BINARY|O_CREAT|O_WRONLY,_S_IREAD|_S_IWRITE);
+			long handle=open(output_filename.c_str(),O_TRUNC|O_BINARY|O_CREAT|O_WRONLY,S_IREAD|S_IWRITE);
 			if (handle==-1)
 			{
 				printf("_openErrorwrite");	 //write
@@ -91,7 +93,7 @@ bool PictureConverter::Save(int output_format,const std::string& output_filename
 
 			SaveToFile(handle,output_format);
 
-			_close(handle);
+			close(handle);
 			return true;
 		}
 		break;

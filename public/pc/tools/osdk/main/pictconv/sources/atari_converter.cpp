@@ -2,8 +2,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <assert.h>
-
-#include <io.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include <iostream>
 
@@ -17,7 +18,7 @@
 
 #include "image.h"
 
-#include "freeimage.h"
+#include "FreeImage.h"
 
 //#define ENABLE_PALETTE_TRACKING 
 
@@ -179,7 +180,7 @@ void AtariClut::SaveClut(long handle) const
 		}
 		++it;
 	}	
-	_write(handle,clut,32);
+	write(handle,clut,32);
 }
 
 
@@ -653,8 +654,8 @@ void AtariPictureConverter::SaveToFile(long handle,int output_format)
 			unsigned short x=static_cast<unsigned short>(get_buffer_width());
 			unsigned short y=static_cast<unsigned short>(get_buffer_height());
 
-			_write(handle,&x,2);
-			_write(handle,&y,2);
+			write(handle,&x,2);
+			write(handle,&y,2);
 		}
 		break;
 
@@ -688,6 +689,6 @@ void AtariPictureConverter::SaveToFile(long handle,int output_format)
 		// No header for raw
 		break;
 	}
-	_write(handle,(unsigned char*)m_buffer,GetBufferSize());
+	write(handle,(unsigned char*)m_buffer,GetBufferSize());
 }
 
