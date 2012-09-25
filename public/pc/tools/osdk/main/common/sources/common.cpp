@@ -5,8 +5,15 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifdef WIN32
+/* for getch() */
 #include <conio.h>
-#include <io.h>
+#else
+/* for getch() */
+#include <curses.h>
+#endif
+#include <stdio.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <stdarg.h>
@@ -63,16 +70,16 @@ void ShowError(const char *message)
 bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
 {
 	// get the size of the file
-	struct _finddata_t 	file_info;
+	struct stat file_info;
 
-	if (_findfirst(pcFileName, &file_info)== -1)
+	if (stat(pcFileName, &file_info)== -1)
 	{
 		return false;
 	}
 
 	// open the file
-	cBufferSize=file_info.size;
-	int nHandle=_open(pcFileName,O_BINARY|O_RDONLY,0);
+	cBufferSize=file_info.st_size;
+	int nHandle=open(pcFileName,O_BINARY|O_RDONLY,0);
     if (nHandle==-1)
 	{
 		return false;
@@ -86,12 +93,12 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
 	}
 
 	// read file content
-	if (_read(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
+	if (read(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
 	{
 		free(pcBuffer);
 		return false;
 	}
-	_close(nHandle);
+	close(nHandle);
 
 	// Add a null terminator in the additional byte
 	char *pcCharBuffer=(char*)pcBuffer;
@@ -104,28 +111,28 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
 bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize)
 {
 	// Open file
-	int nHandle=_open(pcFileName,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE);
+	int nHandle=open(pcFileName,O_BINARY|O_WRONLY|O_TRUNC|O_CREAT,S_IREAD|S_IWRITE);
     if (nHandle==-1)
 	{
 		return false;
 	}
 
 	// Save data
-	if (_write(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
+	if (write(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
 	{
-		_close(nHandle);
+		close(nHandle);
 		return false;
 	}
 
 	// close handle
-	_close(nHandle);
+	close(nHandle);
 
 	return true;
 }
 
 bool DeleteFile(const char* pcFileName)
 {
-	return _unlink(pcFileName);
+	return unlink(pcFileName);
 }
 
 
@@ -409,7 +416,7 @@ bool get_switch(const char *&ptr_arg,const char *ptr_switch)
 {
 	int	lenght=strlen(ptr_switch);
 
-	if ((!ptr_arg) || memicmp(ptr_arg,ptr_switch,lenght))
+	if ((!ptr_arg) || strncasecmp(ptr_arg,ptr_switch,lenght))
 	{
 		// Not a match
 		return false;
