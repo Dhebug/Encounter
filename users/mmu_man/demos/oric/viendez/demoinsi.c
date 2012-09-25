@@ -3,8 +3,8 @@
  *
  */
 
-#include "global.h"
 #include "stdlib.h"
+#include "global.h"
 
 
 static const char *sText = " Vous avez aime l'ALCHIMIE 111111...   ";

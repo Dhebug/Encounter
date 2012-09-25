@@ -3,8 +3,8 @@
  *
  */
 
-#include "global.h"
 #include "stdlib.h"
+#include "global.h"
 
 
 #define CLIP_TOP	(6*6)
