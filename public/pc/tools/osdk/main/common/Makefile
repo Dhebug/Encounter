@@ -6,6 +6,7 @@ VPATH = sources
 SOURCES := $(subst sources/,,$(wildcard sources/*.cpp))
 OBJS := $(subst .cpp,.o,$(SOURCES))
 CPPFLAGS += -I sources -I includes
+CPPFLAGS += -D_LIB
 
 all: libcommon.a
 
