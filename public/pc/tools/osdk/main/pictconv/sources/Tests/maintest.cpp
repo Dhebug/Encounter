@@ -1,4 +1,4 @@
-#include "E:\svn\public\pc\shared_libraries\unittestcpp\v1.4/src/UnitTest++.h"
+#include "../../../../shared_libraries/unittestcpp/v1.4/src/UnitTest++.h"
 
 /*
 TEST(FailSpectacularly)
