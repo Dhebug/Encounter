@@ -53,14 +53,35 @@ EXT=dsk
 !error Invalid TYPE $(TYPE)"
 !endif
 
+
+# try to autodetect Euphoric
+!if "$(EUPHORIC)" == ""
+!if exist($(OSDK)\euphoric\euphoric.exe)
+EUPHORIC = $(OSDK)\euphoric\euphoric.exe
+!else if exist($(OSDK)\..\euphoric\euphoric.exe)
+EUPHORIC = $(OSDK)\..\euphoric\euphoric.exe
+!else if exist("C:\Program Files\euphoric\euphoric.exe")
+EUPHORIC = "C:\Program Files\euphoric\euphoric.exe"
+!endif
+!endif
+
+# try to autodetect Oricutron
+!if "$(ORICUTRON)" == ""
+!if exist($(OSDK)\oricutron\oricutron.exe)
+ORICUTRON = $(OSDK)\oricutron\oricutron.exe
+!else if exist($(OSDK)\..\oricutron\oricutron.exe)
+ORICUTRON = $(OSDK)\..\oricutron\oricutron.exe
+!else if exist("C:\Program Files\oricutron\oricutron.exe")
+ORICUTRON = "C:\Program Files\oricutron\oricutron.exe"
+!endif
+!endif
+
+
 !if "$(EMULATOR)" == ""
-#EMULATOR = euphoric
-#!ifdef EUPHORIC
-#EMULATOR = euphoric
-#!endif
 EMULATOR = oricutron
 !message Using $(EMULATOR) as default emulator
 !endif
+
 
 # system defines
 # the -DATMOS is for Contiki
@@ -145,14 +166,14 @@ $(BUILDDIR)\$(REALTARGET): $(BUILDDIR) $(OBJS)
 #	echo > $@
 
 test-euphoric: $(BUILDDIR)\$(REALTARGET)
-	$(Q)$(OSDK)\Euphoric\Euphoric.exe $(BUILDDIR)\$(REALTARGET)
+	$(Q)$(EUPHORIC) $(BUILDDIR)\$(REALTARGET)
 	cls
 # Euphoric usually puts some garbage in the console when on white bg,
 # so clear the screen on exit
 
 test-oricutron: $(BUILDDIR)\$(REALTARGET)
-	@cd F:\oric\viendez\VIENDEZ\oricutron
-	$(Q)F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)"
+	@cd $(ORICUTRON:\oricutron.exe=)
+	$(Q)$(ORICUTRON) -s "$(BUILDDIR)\symbols" "$(BUILDDIR)\$(REALTARGET)"
 
 
 test: test-$(EMULATOR)
@@ -162,8 +183,8 @@ BREAKPOINT=_main
 !endif
 
 debug-oricutron: $(BUILDDIR)\$(REALTARGET)
-	@cd F:\oric\viendez\VIENDEZ\oricutron
-	$(Q)F:\oric\viendez\VIENDEZ\oricutron\oricutron.exe -s "$(BUILDDIR)\symbols" -t "$(BUILDDIR)\$(REALTARGET)" -r "$(BREAKPOINT)" -d
+	@cd $(ORICUTRON:\oricutron.exe=)
+	$(Q)$(ORICUTRON) -s "$(BUILDDIR)\symbols" "$(BUILDDIR)\$(REALTARGET)" -r "$(BREAKPOINT)"
 
 debug: debug-oricutron
 
