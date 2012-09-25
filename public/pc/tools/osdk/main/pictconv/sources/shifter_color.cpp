@@ -1,10 +1,11 @@
 
 
 #include <assert.h>
-#include <io.h>
-#include <conio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 
-#include "freeimage.h"
+#include "FreeImage.h"
 
 #include "defines.h"
 #include "getpixel.h"
