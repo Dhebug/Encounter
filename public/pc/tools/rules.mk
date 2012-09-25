@@ -29,4 +29,8 @@ CPPFLAGS += -DWIN32
 endif
 
 
+ifneq ($(PLATFORM),win32)
+COMMON_EXTRA_LDFLAGS += -lcurses
+CPPFLAGS += -D__cdecl=
+endif
 
