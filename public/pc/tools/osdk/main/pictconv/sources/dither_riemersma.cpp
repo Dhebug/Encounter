@@ -10,6 +10,7 @@
 */
 #include <malloc.h>     // for malloc() and _ffree()
 #include <math.h>		// for exp() and log()
+#include <string.h>		// memmove()
 
 #include "getpixel.h"
 #include "image.h"
