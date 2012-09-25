@@ -1,15 +1,16 @@
 
 
 #include <assert.h>
-#include <io.h>
-#include <conio.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <iostream>
+#include <string.h>
+#include <unistd.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "freeimage.h"
+#include "FreeImage.h"
 
 #include "defines.h"
 #include "getpixel.h"
@@ -1340,7 +1341,7 @@ void OricPictureConverter::save_header(long handle,int adress_begin)
 	Header[ 9]=(unsigned char)( adress_end&255);
 	Header[10]=(unsigned char)((adress_begin>>8)&255);
 	Header[11]=(unsigned char)( adress_begin&255);
-	_write(handle,Header,13);
+	write(handle,Header,13);
 }
 
 void OricPictureConverter::SaveToFile(long handle,int output_format)
@@ -1352,8 +1353,8 @@ void OricPictureConverter::SaveToFile(long handle,int output_format)
 			unsigned char x=static_cast<unsigned char>(get_buffer_width());
 			unsigned char y=static_cast<unsigned char>(get_buffer_height());
 
-			_write(handle,&x,1);
-			_write(handle,&y,1);
+			write(handle,&x,1);
+			write(handle,&y,1);
 		}
 		break;
 
@@ -1365,17 +1366,17 @@ void OricPictureConverter::SaveToFile(long handle,int output_format)
 		break;
 
 	case DEVICE_FORMAT_BASIC_TAPE:
-		_write(handle,BasicLoader,sizeof(BasicLoader));
+		write(handle,BasicLoader,sizeof(BasicLoader));
 	default:	// Fall trough
 		bool flag_header=true;
 		if (flag_header)
 		{
 			save_header(handle,0xa000);
-			//_write(handle,Header,13);	
-			_write(handle,"",1);	//_write(handle,name,strlen(name)+1);
+			//write(handle,Header,13);	
+			write(handle,"",1);	//write(handle,name,strlen(name)+1);
 		}
 		break;
 	}
-	_write(handle,(unsigned char*)m_buffer,GetBufferSize());
+	write(handle,(unsigned char*)m_buffer,GetBufferSize());
 }
 
