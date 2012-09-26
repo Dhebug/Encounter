@@ -4,8 +4,13 @@ CPPFLAGS += -I ../common/includes
 
 FI_PATH := ../../../../shared_libraries/freeimage/v3.12.0
 UT_PATH := ../../../../shared_libraries/unittestcpp/v1.4
+ifeq ($(PLATFORM),win32)
+CPPFLAGS += -I libs
+LDFLAGS += -L libs -lFreeImage
+else
 CPPFLAGS += -I $(FI_PATH)/Dist
 LDFLAGS += -L $(FI_PATH)/Dist -lfreeimage
+endif
 
 LDFLAGS += -lstdc++
 LDFLAGS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
