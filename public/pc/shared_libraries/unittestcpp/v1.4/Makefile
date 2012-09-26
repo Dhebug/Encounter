@@ -1,11 +1,19 @@
-CXX = g++
+#CXX = g++
 CXXFLAGS ?= -g -Wall -W -ansi # -pedantic
 LDFLAGS ?= 
+AR = ar
+RANLIB = ranlib
 SED = sed
 MV = mv
 RM = rm
 
+-include ../../../tools/rules.mk
+
 .SUFFIXES: .o .cpp
+
+ifeq ($(MSYSTEM), MINGW32)
+PLATFORM = win32
+endif
 
 lib = libUnitTest++.a
 test = TestUnitTest++
@@ -27,7 +35,7 @@ src = src/AssertException.cpp \
 	src/XmlTestReporter.cpp \
 	src/CurrentTest.cpp
 	
-ifeq ($(MSYSTEM), MINGW32)
+ifeq ($(PLATFORM),win32)
   src += src/Win32/TimeHelpers.cpp
 else
   src += src/Posix/SignalTranslator.cpp \
@@ -73,7 +81,8 @@ all: $(test)
 
 $(lib): $(objects) 
 	@echo Creating $(lib) library...
-	@ar cr $(lib) $(objects)
+	@$(AR) cr $(lib) $(objects)
+	@$(RANLIB) $(lib)
     
 $(test): $(lib) $(test_objects)
 	@echo Linking $(test)...
