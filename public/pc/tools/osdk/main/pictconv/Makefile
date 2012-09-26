@@ -4,6 +4,7 @@ CPPFLAGS += -I ../common/includes
 
 FI_PATH := ../../../../shared_libraries/freeimage/v3.12.0
 UT_PATH := ../../../../shared_libraries/unittestcpp/v1.4
+CPPFLAGS += -DFREEIMAGE_LIB
 ifeq ($(PLATFORM),win32)
 CPPFLAGS += -I libs
 LDFLAGS += -L libs -lFreeImage
