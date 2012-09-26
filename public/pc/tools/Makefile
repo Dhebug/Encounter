@@ -1,5 +1,4 @@
-SUBDIRS := oric 
-#osdk
+SUBDIRS := oric osdk
 
 all clean:
 	@for d in $(SUBDIRS); do \
