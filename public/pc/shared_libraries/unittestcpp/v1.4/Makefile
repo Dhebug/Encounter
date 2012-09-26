@@ -13,6 +13,11 @@ RM = rm
 
 ifeq ($(MSYSTEM), MINGW32)
 PLATFORM = win32
+RUNTEST := 1
+endif
+
+ifeq ($(PLATFORM),$(HOSTOS))
+RUNTEST := 1
 endif
 
 lib = libUnitTest++.a
@@ -87,8 +92,10 @@ $(lib): $(objects)
 $(test): $(lib) $(test_objects)
 	@echo Linking $(test)...
 	@$(CXX) $(LDFLAGS) -o $(test) $(test_objects) $(lib)
+ifeq ($(RUNTEST),1)
 	@echo Running unit tests...
 	@./$(test)
+endif
 
 clean:
 	-@$(RM) $(objects) $(test_objects) $(dependencies) $(test_dependencies) $(test) $(lib) 2> /dev/null
