@@ -1,4 +1,4 @@
-SUBDIRS := common
+SUBDIRS := common pictconv
 
 all clean:
 	@for d in $(SUBDIRS); do \
