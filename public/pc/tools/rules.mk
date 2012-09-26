@@ -1,4 +1,6 @@
 
+RANLIB ?= ranlib
+
 #HOSTOS := $(shell uname -s)
 #PLATFORM ?= $(HOSTOS)
 
@@ -16,7 +18,7 @@ CROSS_COMPILE ?= i586-mingw32msvc-
 CC := $(CROSS_COMPILE)$(CC)
 CXX := $(CROSS_COMPILE)$(CXX)
 AR :=  $(CROSS_COMPILE)$(AR)
-RANLIB :=  $(CROSS_COMPILE)ranlib
+RANLIB :=  $(CROSS_COMPILE)$(RANLIB)
 WINDRES := $(CROSS_COMPILE)windres
 CPPFLAGS += -DWIN32
 
