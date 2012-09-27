@@ -60,8 +60,8 @@ EXT=dsk
 EUPHORIC = $(OSDK)\euphoric\euphoric.exe
 !else if exist($(OSDK)\..\euphoric\euphoric.exe)
 EUPHORIC = $(OSDK)\..\euphoric\euphoric.exe
-!else if exist("C:\Program Files\euphoric\euphoric.exe")
-EUPHORIC = "C:\Program Files\euphoric\euphoric.exe"
+!else if exist(C:\PROGRA~1\euphoric\euphoric.exe)
+EUPHORIC = C:\PROGRA~1\euphoric\euphoric.exe
 !endif
 !endif
 
@@ -71,8 +71,8 @@ EUPHORIC = "C:\Program Files\euphoric\euphoric.exe"
 ORICUTRON = $(OSDK)\oricutron\oricutron.exe
 !else if exist($(OSDK)\..\oricutron\oricutron.exe)
 ORICUTRON = $(OSDK)\..\oricutron\oricutron.exe
-!else if exist("C:\Program Files\oricutron\oricutron.exe")
-ORICUTRON = "C:\Program Files\oricutron\oricutron.exe"
+!else if exist(C:\PROGRA~1\oricutron\oricutron.exe)
+ORICUTRON = C:\PROGRA~1\oricutron\oricutron.exe
 !endif
 !endif
 

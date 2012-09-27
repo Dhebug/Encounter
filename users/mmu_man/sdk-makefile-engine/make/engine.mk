@@ -72,8 +72,8 @@ else
 ifneq ($(wildcard $(OSDK)/../euphoric/euphoric.exe),)
 EUPHORIC = $(OSDK)/../euphoric/euphoric.exe
 else
-ifneq ($(wildcard "C:/Program Files/euphoric/euphoric.exe"),)
-EUPHORIC = "C:/Program Files/euphoric/euphoric.exe"
+ifneq ($(wildcard C:/PROGRA~1/euphoric/euphoric.exe),)
+EUPHORIC = C:/PROGRA~1/euphoric/euphoric.exe
 endif
 endif
 endif
@@ -87,8 +87,8 @@ else
 ifneq ($(wildcard $(OSDK)/../oricutron/oricutron.exe),)
 ORICUTRON = $(OSDK)/../oricutron/oricutron.exe
 else
-ifneq ($(wildcard "C:/Program Files/oricutron/oricutron.exe"),)
-ORICUTRON = "C:/Program Files/oricutron/oricutron.exe"
+ifneq ($(wildcard C:/PROGRA~1/oricutron/oricutron.exe),)
+ORICUTRON = C:/PROGRA~1/oricutron/oricutron.exe
 endif
 endif
 endif
@@ -191,7 +191,7 @@ test-euphoric: $(BUILDDIR)/$(REALTARGET)
 # so clear the screen on exit
 
 test-oricutron: $(BUILDDIR)/$(REALTARGET)
-	$(Q)cd $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(call fixpath,$(BUILDDIR)/symbols)" "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
+	$(Q)cd /d $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(call fixpath,$(BUILDDIR)/symbols)" "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
 
 
 test: test-$(EMULATOR)
@@ -201,7 +201,7 @@ BREAKPOINT=_main
 endif
 
 debug-oricutron: $(BUILDDIR)/$(REALTARGET)
-	$(Q)cd $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(BUILDDIR)/symbols" "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)"
+	$(Q)cd /d $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(BUILDDIR)/symbols" "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)"
 
 debug: debug-oricutron
 
