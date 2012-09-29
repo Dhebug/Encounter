@@ -1,0 +1,571 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="lib">
+      <UniqueIdentifier>{1e982fd8-af7d-4b31-b83c-1332417eb4d8}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{3895a6be-cd55-43d6-b24f-77f249658bc8}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="include\old">
+      <UniqueIdentifier>{3fa64c90-f4f0-49ad-8f2c-c006a518415c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\sys">
+      <UniqueIdentifier>{6ea7acae-8a3a-4779-a93f-81b9b6b75ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="documentation">
+      <UniqueIdentifier>{6229aed9-c93c-4297-83a7-1a770c0d0c88}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="documentation\pics">
+      <UniqueIdentifier>{15bef116-5fe9-4f54-b7d4-7c98d21ff77a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extra">
+      <UniqueIdentifier>{7d726e9b-aa2c-4890-b58c-68e472d460b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extra\UltraEdit">
+      <UniqueIdentifier>{b53f7ae9-4b16-4e9a-bf1f-6847295189f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extra\VisualC++6">
+      <UniqueIdentifier>{86ac9a57-4059-4797-b3cc-5295174ca531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extra\VisualC++6\OsdkSampleProject">
+      <UniqueIdentifier>{0bc23e2e-32f7-48f3-865d-2f99fdc8a237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bin">
+      <UniqueIdentifier>{14317f55-df60-40e5-b380-e290f47aab68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="macro">
+      <UniqueIdentifier>{fe3c85f4-68ad-4ca8-af72-c8de8898963d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_final_\lib\clock.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\ctype.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\div.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\free.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\ggeneral.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\gotoxy.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\gpchar.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\graphics.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\grsimple.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\header.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\irq.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\istring.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\itoa.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\library.ndx">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\lprintf.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\malloc.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\math.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\MEMCCPY.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\memcpy.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\memset.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\mult.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\oric.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\osdkdiv6.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\osdkmod6.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\printf.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\rand.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\random.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\realloc.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\scanf.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\SEDORIC.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\sound.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\sscanf.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCAT.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCHR.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCMP.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCMPI.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCPY.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRCSPN.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRDUP.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRLEN.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRLWR.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRNCAT.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRNCMP.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRNCMPI.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRNCPY.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRNSET.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRPBRK.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRRCHR.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRREV.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRSET.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRSPN.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRSTR.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRTOK.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\STRUPR.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\tail.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\tape.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\TSTRING.S">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\lib\unpack.s">
+      <Filter>lib</Filter>
+    </None>
+    <None Include="_final_\documentation\arrow_back.gif">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_6502_instruction.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_assembler.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_bas2tap.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_BASIC_instruction.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_bin2txt.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_compiler.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_copyright.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_creating_project.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_debugger.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_euphoric.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_filepack.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_glossary.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_header.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_historic.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_installation.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_issues.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_library.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_linker.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_memmap.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_memorymap.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_pictconv.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_presentation.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_samples.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_tap2wav.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_ultraedit.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_visualstudio.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_writedsk.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_zeropage.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\documentation.css">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\documentation.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\euphoric_menu.gif">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy.jpg">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_0_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_0_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_0_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_0_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_2_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_2_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_2_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\buffy_2_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\euphoric_boot.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\euphoric_debugging.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\euphoric_menu.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_0_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_0_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_0_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_0_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_2_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_2_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_2_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\lena_2_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\logo_dosbox.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\logo_winehq.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_0_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_0_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_0_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_0_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_2_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_2_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_2_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\mire2_2_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1.jpg">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_0_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_0_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_0_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_0_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_2_0.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_2_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_2_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\moxica1_2_3.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\osdk_logo_large.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\osdk_logo_small.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\system_properties_windows2000.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\system_properties_windowsxp.png">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\visualstudio_new_project.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\visualstudio_project_settings_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\visualstudio_project_settings_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\visualstudio_setup_1.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\documentation\pics\visualstudio_setup_2.gif">
+      <Filter>documentation\pics</Filter>
+    </None>
+    <None Include="_final_\extra\UltraEdit\WORDFILE.TXT">
+      <Filter>extra\UltraEdit</Filter>
+    </None>
+    <None Include="_final_\extra\VisualC++6\language.reg">
+      <Filter>extra\VisualC++6</Filter>
+    </None>
+    <None Include="_final_\extra\VisualC++6\usertype.dat">
+      <Filter>extra\VisualC++6</Filter>
+    </None>
+    <None Include="_final_\Bin\make.bat">
+      <Filter>bin</Filter>
+    </None>
+    <None Include="_final_\Bin\vc_execute.bat">
+      <Filter>bin</Filter>
+    </None>
+    <None Include="_final_\Bin\vc_make.bat">
+      <Filter>bin</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="_final_\include\6502.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\ALLOC.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\conio.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\CTYPE.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\LIB.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\MATH.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\ORIC.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\rs232.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\STDIO.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\STDLIB.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\STRING.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\STRINGS.H">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\time.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\OLD\ORIC.H">
+      <Filter>include\old</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\OLD\STDLIB.H">
+      <Filter>include\old</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\SYS\GRAPHICS.H">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\SYS\ORIC.H">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\include\SYS\SOUND.H">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="_final_\macro\MACROS.H">
+      <Filter>macro</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="_final_\extra\VisualC++6\OsdkSampleProject\Main.c">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\display.h">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\display.s">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\documentation.txt">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_build.bat">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_config.bat">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_execute.bat">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\OsdkSampleProject.dsp">
+      <Filter>extra\VisualC++6\OsdkSampleProject</Filter>
+    </CustomBuildStep>
+  </ItemGroup>
+</Project>

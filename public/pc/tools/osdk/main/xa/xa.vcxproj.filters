@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{7cf7bb8a-9602-469d-a612-861f70712d91}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{0b1869b2-d2dd-4af8-88f3-6f2e3089e703}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{8a2a23aa-4a42-4507-8239-4739e10a321a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\xa.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xaa.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xal.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xam.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xao.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xap.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xar.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xar2.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xat.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xau.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\xa.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xaa.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xah.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xah2.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xal.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xam.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xao.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xap.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xar.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xat.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xau.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\licence.txt" />
+  </ItemGroup>
+</Project>

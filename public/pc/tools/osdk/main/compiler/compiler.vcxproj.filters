@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{e85e6df7-ed4e-4e70-9dad-c794543b54f3}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{11041d53-9d6e-4aa4-b9a8-179f52178747}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{43cd7909-90d2-4e12-a998-2ec4fcad23f0}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\dag.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\debug.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\decl.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\enode.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\error.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\expr.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\gen.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\init.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\input.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\lex.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\main.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\output.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\profio.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\simp.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\stmt.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\string.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\sym.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\tree.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\types.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\c.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\config.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\keywords.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ops.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\token.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\version.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+</Project>

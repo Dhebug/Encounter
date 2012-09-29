@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{d051fc3e-70c5-4a72-9c3c-3aeebee55dde}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Sources\Tests">
+      <UniqueIdentifier>{bda41f0f-72ec-4f48-b303-73c737287483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\converters">
+      <UniqueIdentifier>{c2712be8-2922-496d-aa6e-fe36568a708d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{bdcdd27d-4ebc-41b6-9113-8b2df38210c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{4a9ed198-12a4-49d0-803d-2adb3eaba21a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs">
+      <UniqueIdentifier>{735fbc23-7b05-4041-bf26-7d6ac970d667}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\defines.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\dithering.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\FreeImage.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\getpixel.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\image.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\infos.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\resource.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\shifter_color.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\atari_converter.h">
+      <Filter>Sources\converters</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\hires.h">
+      <Filter>Sources\converters</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\oric_converter.h">
+      <Filter>Sources\converters</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\dither_riemersma.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\dithering.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\getpixel.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\image.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\pictconv.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\shifter_color.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Tests\colortest.cpp">
+      <Filter>Sources\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Tests\maintest.cpp">
+      <Filter>Sources\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\atari_converter.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\hires.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\oric_converter.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="misc\a.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\couleurs_sur_oric.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\documentation.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\KnownBugs.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\license-fi.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\license-gpl.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="misc\Whatsnew.txt">
+      <Filter>misc</Filter>
+    </None>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\FreeImage.lib">
+      <Filter>Libs</Filter>
+    </Library>
+  </ItemGroup>
+</Project>
