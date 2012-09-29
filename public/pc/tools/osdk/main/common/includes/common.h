@@ -19,6 +19,13 @@
 #define O_BINARY 0
 #endif
 
+#ifdef _WIN32
+#define strncasecmp _strnicmp
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
 
 //
 // Debugging macros
