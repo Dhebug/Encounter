@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{24bbba72-2ecf-45b6-947e-7bb13f7f1389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{018f522d-c115-4094-b59a-f417b267313c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{7739942a-c8c2-43b7-933b-07af440e7cb3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\TapTool.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\infos.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+    <None Include="data\readme.txt">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+</Project>

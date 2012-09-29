@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F14954FC-F923-4CF9-89C9-4119ACCB3BA8}</ProjectGuid>
+    <SccProjectName>osdk</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccProvider>MSSCCI:Perforce SCM</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Build\Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Build\Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Build\Release/osdk.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Build\Release/osdk.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Build\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Build\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Build\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040c</Culture>
+    </ResourceCompile>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Build\Release/osdk.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Build\Release/osdk.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Build\Debug/osdk.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Build\Debug/osdk.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Build\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Build\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Build\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040c</Culture>
+    </ResourceCompile>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Build\Debug/osdk_debug.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Build\Debug/osdk.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="_final_\lib\clock.s" />
+    <None Include="_final_\lib\ctype.s" />
+    <None Include="_final_\lib\div.s" />
+    <None Include="_final_\lib\free.s" />
+    <None Include="_final_\lib\ggeneral.s" />
+    <None Include="_final_\lib\gotoxy.s" />
+    <None Include="_final_\lib\gpchar.s" />
+    <None Include="_final_\lib\graphics.s" />
+    <None Include="_final_\lib\grsimple.s" />
+    <None Include="_final_\lib\header.s" />
+    <None Include="_final_\lib\irq.s" />
+    <None Include="_final_\lib\istring.s" />
+    <None Include="_final_\lib\itoa.s" />
+    <None Include="_final_\lib\library.ndx" />
+    <None Include="_final_\lib\lprintf.s" />
+    <None Include="_final_\lib\malloc.s" />
+    <None Include="_final_\lib\math.s" />
+    <None Include="_final_\lib\MEMCCPY.S" />
+    <None Include="_final_\lib\memcpy.s" />
+    <None Include="_final_\lib\memset.s" />
+    <None Include="_final_\lib\mult.s" />
+    <None Include="_final_\lib\oric.s" />
+    <None Include="_final_\lib\osdkdiv6.s" />
+    <None Include="_final_\lib\osdkmod6.s" />
+    <None Include="_final_\lib\printf.s" />
+    <None Include="_final_\lib\rand.S" />
+    <None Include="_final_\lib\random.s" />
+    <None Include="_final_\lib\realloc.s" />
+    <None Include="_final_\lib\scanf.s" />
+    <None Include="_final_\lib\SEDORIC.S" />
+    <None Include="_final_\lib\sound.s" />
+    <None Include="_final_\lib\sscanf.s" />
+    <None Include="_final_\lib\STRCAT.S" />
+    <None Include="_final_\lib\STRCHR.S" />
+    <None Include="_final_\lib\STRCMP.S" />
+    <None Include="_final_\lib\STRCMPI.S" />
+    <None Include="_final_\lib\STRCPY.S" />
+    <None Include="_final_\lib\STRCSPN.S" />
+    <None Include="_final_\lib\STRDUP.S" />
+    <None Include="_final_\lib\STRLEN.S" />
+    <None Include="_final_\lib\STRLWR.S" />
+    <None Include="_final_\lib\STRNCAT.S" />
+    <None Include="_final_\lib\STRNCMP.S" />
+    <None Include="_final_\lib\STRNCMPI.S" />
+    <None Include="_final_\lib\STRNCPY.S" />
+    <None Include="_final_\lib\STRNSET.S" />
+    <None Include="_final_\lib\STRPBRK.S" />
+    <None Include="_final_\lib\STRRCHR.S" />
+    <None Include="_final_\lib\STRREV.S" />
+    <None Include="_final_\lib\STRSET.S" />
+    <None Include="_final_\lib\STRSPN.S" />
+    <None Include="_final_\lib\STRSTR.S" />
+    <None Include="_final_\lib\STRTOK.S" />
+    <None Include="_final_\lib\STRUPR.S" />
+    <None Include="_final_\lib\tail.s" />
+    <None Include="_final_\lib\tape.s" />
+    <None Include="_final_\lib\TSTRING.S" />
+    <None Include="_final_\lib\unpack.s" />
+    <None Include="_final_\documentation\arrow_back.gif" />
+    <None Include="_final_\documentation\doc_6502_instruction.htm" />
+    <None Include="_final_\documentation\doc_assembler.htm" />
+    <None Include="_final_\documentation\doc_bas2tap.htm" />
+    <None Include="_final_\documentation\doc_BASIC_instruction.htm" />
+    <None Include="_final_\documentation\doc_bin2txt.htm" />
+    <None Include="_final_\documentation\doc_compiler.htm" />
+    <None Include="_final_\documentation\doc_copyright.htm" />
+    <None Include="_final_\documentation\doc_creating_project.htm" />
+    <None Include="_final_\documentation\doc_debugger.htm" />
+    <None Include="_final_\documentation\doc_euphoric.htm" />
+    <None Include="_final_\documentation\doc_filepack.htm" />
+    <None Include="_final_\documentation\doc_glossary.htm" />
+    <None Include="_final_\documentation\doc_header.htm" />
+    <None Include="_final_\documentation\doc_historic.htm" />
+    <None Include="_final_\documentation\doc_installation.htm" />
+    <None Include="_final_\documentation\doc_issues.htm" />
+    <None Include="_final_\documentation\doc_library.htm" />
+    <None Include="_final_\documentation\doc_linker.htm" />
+    <None Include="_final_\documentation\doc_memmap.htm" />
+    <None Include="_final_\documentation\doc_memorymap.htm" />
+    <None Include="_final_\documentation\doc_pictconv.htm" />
+    <None Include="_final_\documentation\doc_presentation.htm" />
+    <None Include="_final_\documentation\doc_samples.htm" />
+    <None Include="_final_\documentation\doc_tap2wav.htm" />
+    <None Include="_final_\documentation\doc_ultraedit.htm" />
+    <None Include="_final_\documentation\doc_visualstudio.htm" />
+    <None Include="_final_\documentation\doc_writedsk.htm" />
+    <None Include="_final_\documentation\doc_zeropage.htm" />
+    <None Include="_final_\documentation\documentation.css" />
+    <None Include="_final_\documentation\documentation.htm" />
+    <None Include="_final_\documentation\euphoric_menu.gif" />
+    <None Include="_final_\documentation\pics\buffy.jpg" />
+    <None Include="_final_\documentation\pics\buffy_0_0.gif" />
+    <None Include="_final_\documentation\pics\buffy_0_1.gif" />
+    <None Include="_final_\documentation\pics\buffy_0_2.gif" />
+    <None Include="_final_\documentation\pics\buffy_0_3.gif" />
+    <None Include="_final_\documentation\pics\buffy_2_0.gif" />
+    <None Include="_final_\documentation\pics\buffy_2_1.gif" />
+    <None Include="_final_\documentation\pics\buffy_2_2.gif" />
+    <None Include="_final_\documentation\pics\buffy_2_3.gif" />
+    <None Include="_final_\documentation\pics\euphoric_boot.gif" />
+    <None Include="_final_\documentation\pics\euphoric_debugging.gif" />
+    <None Include="_final_\documentation\pics\euphoric_menu.gif" />
+    <None Include="_final_\documentation\pics\lena.gif" />
+    <None Include="_final_\documentation\pics\lena_0_0.gif" />
+    <None Include="_final_\documentation\pics\lena_0_1.gif" />
+    <None Include="_final_\documentation\pics\lena_0_2.gif" />
+    <None Include="_final_\documentation\pics\lena_0_3.gif" />
+    <None Include="_final_\documentation\pics\lena_2_0.gif" />
+    <None Include="_final_\documentation\pics\lena_2_1.gif" />
+    <None Include="_final_\documentation\pics\lena_2_2.gif" />
+    <None Include="_final_\documentation\pics\lena_2_3.gif" />
+    <None Include="_final_\documentation\pics\logo_dosbox.png" />
+    <None Include="_final_\documentation\pics\logo_winehq.png" />
+    <None Include="_final_\documentation\pics\mire2.gif" />
+    <None Include="_final_\documentation\pics\mire2_0_0.gif" />
+    <None Include="_final_\documentation\pics\mire2_0_1.gif" />
+    <None Include="_final_\documentation\pics\mire2_0_2.gif" />
+    <None Include="_final_\documentation\pics\mire2_0_3.gif" />
+    <None Include="_final_\documentation\pics\mire2_2_0.gif" />
+    <None Include="_final_\documentation\pics\mire2_2_1.gif" />
+    <None Include="_final_\documentation\pics\mire2_2_2.gif" />
+    <None Include="_final_\documentation\pics\mire2_2_3.gif" />
+    <None Include="_final_\documentation\pics\moxica1.jpg" />
+    <None Include="_final_\documentation\pics\moxica1_0_0.gif" />
+    <None Include="_final_\documentation\pics\moxica1_0_1.gif" />
+    <None Include="_final_\documentation\pics\moxica1_0_2.gif" />
+    <None Include="_final_\documentation\pics\moxica1_0_3.gif" />
+    <None Include="_final_\documentation\pics\moxica1_2_0.gif" />
+    <None Include="_final_\documentation\pics\moxica1_2_1.gif" />
+    <None Include="_final_\documentation\pics\moxica1_2_2.gif" />
+    <None Include="_final_\documentation\pics\moxica1_2_3.gif" />
+    <None Include="_final_\documentation\pics\osdk_logo_large.png" />
+    <None Include="_final_\documentation\pics\osdk_logo_small.png" />
+    <None Include="_final_\documentation\pics\system_properties_windows2000.png" />
+    <None Include="_final_\documentation\pics\system_properties_windowsxp.png" />
+    <None Include="_final_\documentation\pics\visualstudio_new_project.gif" />
+    <None Include="_final_\documentation\pics\visualstudio_project_settings_1.gif" />
+    <None Include="_final_\documentation\pics\visualstudio_project_settings_2.gif" />
+    <None Include="_final_\documentation\pics\visualstudio_setup_1.gif" />
+    <None Include="_final_\documentation\pics\visualstudio_setup_2.gif" />
+    <None Include="_final_\extra\UltraEdit\WORDFILE.TXT" />
+    <None Include="_final_\extra\VisualC++6\language.reg" />
+    <None Include="_final_\extra\VisualC++6\usertype.dat" />
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\display.s">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\documentation.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_build.bat">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_config.bat">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\osdk_execute.bat">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\OsdkSampleProject.dsp">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <None Include="_final_\Bin\make.bat" />
+    <None Include="_final_\Bin\vc_execute.bat" />
+    <None Include="_final_\Bin\vc_make.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="_final_\include\6502.h" />
+    <ClInclude Include="_final_\include\ALLOC.H" />
+    <ClInclude Include="_final_\include\conio.h" />
+    <ClInclude Include="_final_\include\CTYPE.H" />
+    <ClInclude Include="_final_\include\LIB.H" />
+    <ClInclude Include="_final_\include\MATH.H" />
+    <ClInclude Include="_final_\include\ORIC.H" />
+    <ClInclude Include="_final_\include\rs232.h" />
+    <ClInclude Include="_final_\include\STDIO.H" />
+    <ClInclude Include="_final_\include\STDLIB.H" />
+    <ClInclude Include="_final_\include\STRING.H" />
+    <ClInclude Include="_final_\include\STRINGS.H" />
+    <ClInclude Include="_final_\include\time.h" />
+    <ClInclude Include="_final_\include\OLD\ORIC.H" />
+    <ClInclude Include="_final_\include\OLD\STDLIB.H" />
+    <ClInclude Include="_final_\include\SYS\GRAPHICS.H" />
+    <ClInclude Include="_final_\include\SYS\ORIC.H" />
+    <ClInclude Include="_final_\include\SYS\SOUND.H" />
+    <CustomBuildStep Include="_final_\extra\VisualC++6\OsdkSampleProject\display.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <ClInclude Include="_final_\macro\MACROS.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="_final_\extra\VisualC++6\OsdkSampleProject\Main.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\svn\public\pc\shared_libraries\unittestcpp\v1.4\UnitTest++.vsnet2005.vcxproj">
+      <Project>{64a4fefe-0461-4e95-8cc1-91ef5f57dbc6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\bas2tap\bas2tap.vcxproj">
+      <Project>{645966ba-5a15-4c5c-aa33-ba47477aeca4}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\bin2txt\bin2txt.vcxproj">
+      <Project>{8076bba6-e757-4dc3-99df-768ee684a1de}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\common\common.vcxproj">
+      <Project>{3f43c467-3ccf-4703-ab22-dd71f4361efa}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\compiler\compiler.vcxproj">
+      <Project>{ee1ba7ef-0164-4b52-bd05-305904483410}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\filepack\FilePack.vcxproj">
+      <Project>{836a55ed-32d1-47ab-b9d4-12d207205be6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\header\header.vcxproj">
+      <Project>{00ca4c9b-ce7f-460d-a951-66fa7181ffd1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\link65\link65.vcxproj">
+      <Project>{de7282f2-2482-4388-bd64-bd9373e99dd9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\macrosplitter\macrosplitter.vcxproj">
+      <Project>{8ef90fca-623b-4a23-ac11-f319b61e5748}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\MemMap\MemMap.vcxproj">
+      <Project>{4db442ed-88d5-460c-b3d1-9e07f1f6f4d2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\opt65\opt65.vcxproj">
+      <Project>{e665379b-2090-4cd7-93f9-f3d4b27f1fd3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\pictconv\PictConv.vcxproj">
+      <Project>{d5286405-b7d1-427e-8933-832a9d27df8d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\xa\xa.vcxproj">
+      <Project>{aba50b6b-5b5d-4a4a-8e57-9ec9fe7c94b5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

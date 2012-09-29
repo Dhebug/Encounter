@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{1ee397a0-988e-4429-999f-29924a79d642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{f35928db-f78c-4e30-9287-3d5fcd52ceba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{3297e9d2-369c-4249-a2a4-1cb1d668ab36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\bas2tap.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\infos.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

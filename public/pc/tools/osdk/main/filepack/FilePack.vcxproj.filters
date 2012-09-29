@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c59c8113-1fa4-46f2-9a99-8b5eda7ce299}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Batches">
+      <UniqueIdentifier>{a8344186-0866-431c-9917-28cf10009754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{1a7e8a22-0862-4ca5-9b10-49018d5b8d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{83393506-1814-49d9-aaea-e3ee48b61f7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\filepack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\lz_pack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tests\unpack.s">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="tests\convert_one.bat">
+      <Filter>Batches</Filter>
+    </None>
+    <None Include="tests\test.bat">
+      <Filter>Batches</Filter>
+    </None>
+    <None Include="data\normal.ico">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="data\icones.rc">
+      <Filter>data</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\infos.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
