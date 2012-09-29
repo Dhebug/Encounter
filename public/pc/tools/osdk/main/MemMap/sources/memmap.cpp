@@ -164,7 +164,7 @@ void Section::Generate(std::string &html)
     std::set<Block>::iterator it=m_map_data.begin();
     while (it!=m_map_data.end())
     {
-      Block& block=(*it);
+      Block& block=const_cast<Block&>(*it);
       if (block.IsMasterBlock())
       {
         ptr_master_block=&block;
@@ -200,7 +200,7 @@ void Section::Generate(std::string &html)
     std::set<Block>::iterator it=m_map_data.begin();
     while (it!=m_map_data.end())
     {
-      Block& block=(*it);
+      Block& block=const_cast<Block&>(*it);
       int address =block.m_address;
       const std::set<std::string>& labels=block.m_labels;
       ++it;
