@@ -6,9 +6,12 @@
 // 30-08-2012 NB: V0.015 updated pacman routines - added brokenarrow
 // 01-09-2012 NB: V0.016 Fixed brokenarrow
 // 02-09-2012 NB: v0.017 Compressed - and fixed - checkroute()
-//				  Temp disable of timertile() to speed up testing
-/* TODO: Need to implement the priority changes (maybe not - the priority concept
-may cause more issues than it solves...
+// 03-09-2012 NB: v0.018 Rejigged pacman (do a while...to edge)
+// 05-09-2012 NB: v0.019 pacman2
+// 21-10-2012 NB: v0.020 Fixed bug in gspot
+/* TODO: 
+Problem with ordering of brokenarrow/subpacman in pacman2
+Problem with AI getting a bit twitchy when king near the edge (does "stupid" moves)
 */
 #include <lib.h>
 #define NORTH 0
@@ -116,7 +119,8 @@ void inctarget();			// inc target[xns][xew]
 void inverse();				// inverse the color in the square
 void movecursor2();			// move cursor routine	
 void movepiece(); 			// move a piece	
-void pacman();				// update target positions around king (need to develop further)
+//void pacman();				// update target positions around king (need to develop further)
+void pacman2();
 void pause();				// wait a certain period of time (pausetime)
 void playerturn();			// takes user input to move cursor	
 void printarrowsorblanks();	// PRINT ARROWS/BLANK EM OUT			
@@ -130,9 +134,10 @@ void setpoints();			// set points to default value
 void subarrows();			// subroutine of arrows or blanks	
 void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)	
 void subcanbetaken2(); 		// attempt to reduce memory footprint		
-void subpaceastwest();		// subroutine of pacman		
+//void subpaceastwest();		// subroutine of pacman	
+void subpaccrosst();	
 void subpacmanx();			// grand sub of pacman	
-void subpacnorthsouth();	// subroutine of pacman	
+//void subpacnorthsouth();	// subroutine of pacman	
 void subzoneupdate();		// subroutine of pacman				
 void surroundcheck();		// inc surrounded under various conditions		
 void surroundcount();		// counts the number of attackers surrounding KING (or edges, or central square)		
@@ -146,7 +151,7 @@ void updateroutehightarget();// adds hightarget to targets on route
 void updateroutetarget();	// increment targets on a given route			
 void updatetarget();		// updates target array		
 void zerocounter();			// set counter=0	
-void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)		
+//void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)		
 
 
 
@@ -286,7 +291,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.017\nBY BARNSEY123\n";
+  message="V0.020\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -338,11 +343,11 @@ main(){
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn(){
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
-  message="ATTACKERS...";
+  message="THINKING...";
   printmessage();
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
-  prioritycalc();	// calculates the priorities of pieces to move
+  //prioritycalc();	// calculates the priorities of pieces to move
   // 2. Loop through players array searching for pieces - calculating where they can go
   for (fb=4;fb<8;fb++){
 	  timertile();
@@ -368,7 +373,7 @@ void computerturn(){
     }
   }
   // 3. Increment target positions around King (PACMAN)
-  pacman();
+  pacman2();
   // draw central square (overwriting timer)
   tiletodraw=9;
   if (players[5][5]!=3) tiletodraw=3;
@@ -396,12 +401,12 @@ void findpiece(){	// find a piece capable of moving to selected target
 					startrow=a;destrow=a;startcol=0;destcol=10;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
-					checkroute();
-					if (z==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
+					checkroute(); // returns z
+					if (z==1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
-					if ((b > kingew)&&(kingpieces[EAST]==1)) foundpiece=10;
-					if ((b < kingew)&&(kingpieces[WEST]==1)) foundpiece=10;
+					if ((b > kingew)&&(kingpieces[EAST]==1)) setfoundpiece10();
+					if ((b < kingew)&&(kingpieces[WEST]==1)) setfoundpiece10();
 				}
 			}
 		}
@@ -409,12 +414,12 @@ void findpiece(){	// find a piece capable of moving to selected target
 			if ( b != targetew){// target is not on same column as candidate
 				if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8))){
 					startrow=0;destrow=10;startcol=b;destcol=b;
-					checkroute();
-					if (z==1) foundpiece=10; // don't move piece (do NOT leave the "zone" unpopulated)			
+					checkroute(); // returns z
+					if (z==1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
-					if ((a < kingns)&&(kingpieces[NORTH]==1)) foundpiece=10;
-					if ((a > kingns)&&(kingpieces[SOUTH]==1)) foundpiece=10;
+					if ((a < kingns)&&(kingpieces[NORTH]==1)) setfoundpiece10();
+					if ((a > kingns)&&(kingpieces[SOUTH]==1)) setfoundpiece10();
 				}
 			}
 		}
@@ -492,7 +497,8 @@ void subpacmanx(){
   surroundpoints(); // add 10 * surrounded 
   //points+=enemytargetcount; // add the count of enemy targets on route to corners 
   if ( kingpieces[orientation]==0 )	doublepoints();	// no pieces in the direction from king
-  points+=(brokenarrow[orientation]*10);
+  if (brokenarrow[orientation]) points+=100;
+  //points+=(brokenarrow[orientation]*10);
   if ((orientation == NORTH) || (orientation == WEST)){	// if north or west
     uncounter=paclevel2-1;
   }
@@ -549,6 +555,64 @@ void checkbrokenarrow(){
 void incbrokenarrow(){
 	brokenarrow[orientation]++;
 }
+
+void subpaccrosst(){
+	setcheckmode1();
+	brokenarrow[orientation]=0;
+	// default= NORTH
+	a=0;b=kingew;
+	startrow=0;destrow=0;startcol=0;destcol=kingew;
+	if (orientation==SOUTH){
+		a=10;
+		startrow=10;destrow=10;
+	}
+	if (orientation>EAST){
+		a=kingns;b=10;
+		startrow=0; destrow=kingns;startcol=10;destcol=10;
+		if (orientation==WEST){
+			b=0;
+			startcol=0; destcol=0;
+		}
+	}
+	pacpointsx=checkroute();
+	enemytargetcount=0;
+	enemytargetupdate();
+	setcheckmode1();
+	if (startrow==destrow){
+		startcol=kingew;destcol=10;
+	}
+	else{
+		startrow=kingns;destrow=10;
+	}
+	pacpointsy=checkroute();
+	enemytargetupdate();
+	setcheckmode1();
+	// default=NORTH
+	startrow=1;destrow=1;startcol=0;destcol=kingew;
+	if (orientation==SOUTH){
+		startrow=9;destrow=9;startcol=0;destcol=kingew;
+	}
+	if (orientation>SOUTH){
+		startrow=0; destrow=kingns;startcol=9;destcol=9;
+		if (orientation==WEST){
+			startcol=1; destcol=1;
+		}
+	}
+	pacpointsa=checkroute();
+  	enemytargetupdate();
+  	setcheckmode1();
+  	if (startrow==destrow){
+		startcol=kingew;destcol=9;
+  	}
+  	else{
+		startrow=kingns;destrow=9;
+  	}
+  	pacpointsb=checkroute();
+  	enemytargetupdate();
+  	f=players[a][b];	// check for piece at edge of board
+  	checkbrokenarrow();
+}
+/*
 void subpacnorthsouth(){ // cross the "T" from east to west
   setcheckmode1(); 
   startrow=a;startcol=1;destrow=a;destcol=e; brokenarrow[orientation]=0;
@@ -568,7 +632,6 @@ void subpacnorthsouth(){ // cross the "T" from east to west
   checkbrokenarrow();
 }
 
-
 void subpaceastwest(){ // cross the "T" from North to South
   setcheckmode1();
   startrow=1;startcol=b;destrow=e;destcol=b; brokenarrow[orientation]=0;
@@ -587,20 +650,74 @@ void subpaceastwest(){ // cross the "T" from North to South
   f=players[kingns][b]; // check for piece at edge of board
   checkbrokenarrow();
 }
+*/
 void gspot(){
 	setcheckmode3();
+	// default=NORTH
+	startrow=0;destrow=kingns;startcol=kingew;destcol=kingew;
+	if (orientation==SOUTH){
+		startrow=kingns;destrow=10;
+	}
+	if (orientation>SOUTH){
+		// default=EAST;	
+		startrow=kingns;destrow=kingns;startcol=kingew;destcol=10;
+		if (orientation==WEST){
+			startcol=0;destcol=kingew;
+		}
+	}
   	g=checkroute(); 		// count of targets from king to edge
 }
 
+void pacman2(){
+// pacman2 - improved version of pacman
+	surroundcount();
+	calchightarget();
+	timertile();
+	for (orientation=0;orientation<4;orientation++){
+		printmessage();
+		gspot(); // g=count of targets from king to edge
+		if (orientation==NORTH){	// includes SOUTH
+		  	paclevel1=kingew;
+  			paclevel2=kingns;
+		}
+		if (orientation==EAST){     // includes WEST
+  			paclevel1=kingns;
+  			paclevel2=kingew;	
+		}
+		subpaccrosst();	
+  		subpacmanx();	
+	}
+}
+
 // PACMAN	( increment target positions around king )	
+/*
 void pacman(){
   surroundcount();		// updates "surrounded"
   calchightarget();		// calc value of hightarget (highest so far)
   timertile();			// print timer routine
   // NORTH
   orientation=NORTH;
-  startcol=kingew;destcol=kingew;startrow=0;  destrow=kingns;
-  gspot();	// count of targets from king to edge
+  if (kingns>0){
+	  flag=0;b=kingew;
+  	  for(a=kingns-1;a>=0;a--){
+	  	  if ((players[a][b]==1)||(players[a][b]==2)) flag=1; // piece found
+	  	  if (flag==0){
+		  	  startrow=a;destrow=a;startcol=0;destcol=10;
+		  	  setcheckmode1(); // count number of pieces on row
+		  	  c=checkroute();  // a=number of pieces on row
+		  	  if (c==0){
+			  	  setcheckmode2(); // inc targets on route
+			  	  checkroute();
+			  	  if ((a==1)||(a==9)){
+				  	  setcheckmode5();	// broken arrow
+				  	  checkroute();
+			  	  }
+		  	  }
+	  	  }
+  	  }
+  }
+  startcol=kingew; destcol=kingew; startrow=0; destrow=kingns;
+  gspot();	// g=count of targets from king to edge
   paclevel1=kingew;
   paclevel2=kingns;
   a=0; d=1; e=kingew;  
@@ -608,15 +725,53 @@ void pacman(){
   subpacmanx();
   //SOUTH
   orientation=SOUTH;
-  startcol=kingew;destcol=kingew;startrow=kingns;  destrow=10;
-  gspot();	// count of targets from king to edge
+  if (kingns<10){
+	  flag=0;b=kingew;
+  	  for(a=kingns+1;a<=10;a++){
+	  	  if ((players[a][b]==1)||(players[a][b]==2)) flag=1; // piece found
+	  	  if (flag==0){
+		  	  startrow=a;destrow=a;startcol=0;destcol=10;
+		  	  setcheckmode1(); // count number of pieces on row
+		  	  c=checkroute();  // a=number of pieces on row
+		  	  if (c==0){
+			  	  setcheckmode2(); // inc targets on route
+			  	  checkroute();
+			  	  if ((a==1)||(a==9)){
+				  	  setcheckmode5();	// broken arrow
+				  	  checkroute();
+			  	  }
+		  	  }
+	  	  }
+  	  }
+  }
+  startcol=kingew; destcol=kingew; startrow=kingns; destrow=10;
+  gspot();	// g=count of targets from king to edge
   a=10; d=9; 
   subpacnorthsouth();	// check routes to escape positions
   subpacmanx();
   // EAST
   orientation=EAST;
+  if (kingew<10){
+	  flag=0;a=kingns;
+  	  for(b=kingew+1;b<=10;b++){
+	  	  if ((players[a][b]==1)||(players[a][b]==2)) flag=1; // piece found
+	  	  if (flag==0){
+		  	  startrow=0;destrow=10;startcol=b;destcol=b;
+		  	  setcheckmode1(); // count number of pieces on row
+		  	  c=checkroute();  // a=number of pieces on row
+		  	  if (c==0){
+			  	  setcheckmode2(); // inc targets on route
+			  	  checkroute();
+			  	  if ((b==1)||(b==9)){
+				  	  setcheckmode5();	// broken arrow
+				  	  checkroute();
+			  	  }
+		  	  }
+	  	  }
+  	  }
+  }
   startcol=kingew;destcol=10;startrow=kingns; destrow=kingns;
-  gspot();	// count of targets from king to edge
+  gspot();	// g=count of targets from king to edge
   paclevel1=kingns;
   paclevel2=kingew;
   b=10;c=9; e=kingns; 
@@ -624,13 +779,33 @@ void pacman(){
   subpacmanx();
   // WEST
   orientation=WEST;
+  if (kingew>0){
+	  flag=0;b=kingns;
+  	  for(b=kingew-1;b>0;b--){
+	  	  if ((players[a][b]==1)||(players[a][b]==2)) flag=1; // piece found
+	  	  if (flag==0){
+		  	  startrow=0;destrow=10;startcol=b;destcol=b;
+		  	  setcheckmode1(); // count number of pieces on row
+		  	  c=checkroute();  // a=number of pieces on row
+		  	  if (c==0){
+			  	  setcheckmode2(); // inc targets on route
+			  	  checkroute();
+			  	  if ((b==1)||(b==9)){
+				  	  setcheckmode5();	// broken arrow
+				  	  checkroute();
+			  	  }
+		  	  }
+	  	  }
+  	  }
+  }
   startcol=0;destcol=kingew;startrow=kingns; destrow=kingns;
-  gspot();	// count of targets from king to edge
+  gspot();	// g=count of targets from king to edge
   b=0;c=1; 
   subpaceastwest();		// check routes to escape positions
   subpacmanx();
   timertile();
 }
+*/
 // increase target positions that LEAD to a king target
 /*
 void subpacman()		{
@@ -1419,20 +1594,19 @@ void enemyzero() {
 //				checkroutemode=3 Number of targets on route
 //				checkroutemode=4 Number of "enemy" targets on route (where enemies CAN go)
 //				checkroutemode=5 Emergency! Make target=255
-
 unsigned char checkroute(){
   z=0;
-  checkrouterow=startrow;
-  checkroutecol=startcol;
-  // Check COLUMNS by default
+  // a SINGLE COLUMN (North to South) so check each row on it
   checkroutestart=startrow;
   checkroutedest=destrow;
-  if ( startrow == destrow ){   // ELSE we are checking ROWS
-	  checkroutestart=startcol;
+  checkrouterow=startrow;	
+  checkroutecol=startcol;	
+  if ( startrow == destrow ){   // ELSE a single ROW (EAST to WEST)
+	  checkroutestart=startcol; 
 	  checkroutedest=destcol;
   }
   for (x=checkroutestart;x<=checkroutedest;x++){
-  		if ( startrow==destrow ) {checkroutecol++;}else{checkrouterow++;}
+	    //if ( startrow==destrow ) {checkroutecol++;}else{checkrouterow++;}
 		switch(checkroutemode){
     		case 1:	if ((players[checkrouterow][checkroutecol]==1)||(players[checkrouterow][checkroutecol]==2)) {z++;}break;
       		case 2: if (target[checkrouterow][checkroutecol])	{target[checkrouterow][checkroutecol]+=2;}break;
@@ -1440,13 +1614,17 @@ unsigned char checkroute(){
       		case 4: if (enemy[checkrouterow][checkroutecol])	{z+=10;}break;
       		case 5: if (target[checkrouterow][checkroutecol]) 	
       			{
-	      		//target[checkrouterow][checkroutecol]=255; // level 1
-	      		target[checkrouterow][checkroutecol]+=(hightarget+1); // level 2
+	      		target[checkrouterow][checkroutecol]=255; // level 1
+	      		//calchightarget();
+	      		//target[checkrouterow][checkroutecol]+=(hightarget+1); // level 2
       			}
   		}
+  		if ( startrow==destrow ) {checkroutecol++;}else{checkrouterow++;}
+
   }
   return z;
 }
+
 /*
 // ORIGINAL 02/09/2012
 unsigned char checkroute(){ 
@@ -1628,7 +1806,7 @@ void updateroutehightarget(){
 	setcheckmode5(); // add hightarget to "cross-t" targets
 	checkroute();
 }
-
+/*
 void prioritycalc(){ // calculates the priorities of moving a piece
 	for(a=0;a<11;a++){
 		for (b=0;b<11;b++){
@@ -1644,3 +1822,4 @@ void prioritycalc(){ // calculates the priorities of moving a piece
 		}
 	}
 }
+*/

@@ -1,4 +1,8 @@
-
+_setfoundpiece10
+	lda #10
+	sta _foundpiece
+	rts
+	
 _setcheckmode1
 	lda #1
 	sta _checkroutemode
