@@ -9,9 +9,11 @@
 // 03-09-2012 NB: v0.018 Rejigged pacman (do a while...to edge)
 // 05-09-2012 NB: v0.019 pacman2
 // 21-10-2012 NB: v0.020 Fixed bug in gspot
+// 22-10-2012 NB: v0.021 Fixed bugs in following:
+//						 pacman2 [not calculating hightarget in right place, not doing brokenarrow properly)
+//						 subpacmanx [not calcing points properly]
 /* TODO: 
-Problem with ordering of brokenarrow/subpacman in pacman2
-Problem with AI getting a bit twitchy when king near the edge (does "stupid" moves)
+
 */
 #include <lib.h>
 #define NORTH 0
@@ -291,7 +293,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.020\nBY BARNSEY123\n";
+  message="V0.021\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -497,7 +499,7 @@ void subpacmanx(){
   surroundpoints(); // add 10 * surrounded 
   //points+=enemytargetcount; // add the count of enemy targets on route to corners 
   if ( kingpieces[orientation]==0 )	doublepoints();	// no pieces in the direction from king
-  if (brokenarrow[orientation]) points+=100;
+  //if (brokenarrow[orientation]) points+=100;
   //points+=(brokenarrow[orientation]*10);
   if ((orientation == NORTH) || (orientation == WEST)){	// if north or west
     uncounter=paclevel2-1;
@@ -514,7 +516,7 @@ void subpacmanx(){
     y=uncounter;
   }
   if (brokenarrow[orientation]){
-	points+=(hightarget+11);	// set points to be HIGHER than the highest existing TARGET
+	points=(hightarget+11);	// set points to be HIGHER than the highest existing TARGET
   }
   while (((players[x][y]==0)||(tiles[x][y]==3))&&((uncounter>-1)&&(uncounter<11))){
     if (computer[x][y] ){				// if accessible by computer
@@ -558,7 +560,7 @@ void incbrokenarrow(){
 
 void subpaccrosst(){
 	setcheckmode1();
-	brokenarrow[orientation]=0;
+	//brokenarrow[orientation]=0;
 	// default= NORTH
 	a=0;b=kingew;
 	startrow=0;destrow=0;startcol=0;destcol=kingew;
@@ -671,11 +673,12 @@ void gspot(){
 void pacman2(){
 // pacman2 - improved version of pacman
 	surroundcount();
-	calchightarget();
-	timertile();
 	for (orientation=0;orientation<4;orientation++){
-		printmessage();
+		calchightarget();	// calc hightest target so far
+		timertile();
+		//printmessage();
 		gspot(); // g=count of targets from king to edge
+		brokenarrow[orientation]=0;	// clear broken arrow
 		if (orientation==NORTH){	// includes SOUTH
 		  	paclevel1=kingew;
   			paclevel2=kingns;
@@ -684,7 +687,10 @@ void pacman2(){
   			paclevel1=kingns;
   			paclevel2=kingew;	
 		}
-		subpaccrosst();	
+		// FLAW: When checking in any direction it only checks the "top" level (in theory there are two levels to check)
+		if (((( orientation == NORTH )||( orientation == EAST ))&&(paclevel2>1))||((( orientation == SOUTH )||( orientation == EAST )) && (paclevel2 < 9))){
+			subpaccrosst();
+		}
   		subpacmanx();	
 	}
 }
