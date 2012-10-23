@@ -12,6 +12,7 @@
 // 22-10-2012 NB: v0.021 Fixed bugs in following:
 //						 pacman2 [not calculating hightarget in right place, not doing brokenarrow properly)
 //						 subpacmanx [not calcing points properly]
+// 23-10-2012 NB: v0.022 Removed some redundant code (enemytargetupdate)
 /* TODO: 
 
 */
@@ -100,7 +101,7 @@ void drawpiece();			// draws piece
 void drawplayers();			// draw playing pieces	
 void drawtile();			// draw a tile (subroutine of drawtiles)	
 void drawtiles();			// draws all tiles at board x,y boxsize z (uses draw*tile functions)	
-void enemytargetupdate();	// updates enemytargetcount			
+//void enemytargetupdate();	// updates enemytargetcount			
 void enemyzero();			// set enemy value to zero when surrounded=3 	
 void explodetile();			// explodes a piece (plays an animation)	
 void findpiece();				
@@ -285,7 +286,7 @@ unsigned char checkroutemode;	// mode used for checkroute function
 unsigned char checkrouterow, checkroutecol, checkroutestart, checkroutedest; // used in checkroute routine
 unsigned char subpacc,subpacd;	// used in subpacman5 
 unsigned char turncount=0;			// used to count the number of turns
-unsigned char enemytargetcount;	// count of enemy targets on a route
+//unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=route to one corner, 2=route to two corners
 /****************** MAIN PROGRAM ***********************************/
 main(){
@@ -293,7 +294,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.021\nBY BARNSEY123\n";
+  message="V0.022\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -538,12 +539,14 @@ void subpacmanx(){
   }
 }
 /*****************************/
+/*
 void enemytargetupdate(){
   setcheckmode4();
   enemytargetcount+=checkroute();
 }
-
+*/
 void checkbrokenarrow(){
+	// f= value of player piece at edge of board (if any)
 	if ((kingpieces[orientation] == 0 )||((kingpieces[orientation]==1)&&(f))){
 		if (pacpointsa==0) incbrokenarrow();
 		if (pacpointsb==0) incbrokenarrow();
@@ -577,8 +580,8 @@ void subpaccrosst(){
 		}
 	}
 	pacpointsx=checkroute();
-	enemytargetcount=0;
-	enemytargetupdate();
+	//enemytargetcount=0;
+	//enemytargetupdate();
 	setcheckmode1();
 	if (startrow==destrow){
 		startcol=kingew;destcol=10;
@@ -587,7 +590,7 @@ void subpaccrosst(){
 		startrow=kingns;destrow=10;
 	}
 	pacpointsy=checkroute();
-	enemytargetupdate();
+	//enemytargetupdate();
 	setcheckmode1();
 	// default=NORTH
 	startrow=1;destrow=1;startcol=0;destcol=kingew;
@@ -601,7 +604,7 @@ void subpaccrosst(){
 		}
 	}
 	pacpointsa=checkroute();
-  	enemytargetupdate();
+  	//enemytargetupdate();
   	setcheckmode1();
   	if (startrow==destrow){
 		startcol=kingew;destcol=9;
@@ -610,7 +613,7 @@ void subpaccrosst(){
 		startrow=kingns;destrow=9;
   	}
   	pacpointsb=checkroute();
-  	enemytargetupdate();
+  	//enemytargetupdate();
   	f=players[a][b];	// check for piece at edge of board
   	checkbrokenarrow();
 }
@@ -673,9 +676,9 @@ void gspot(){
 void pacman2(){
 // pacman2 - improved version of pacman
 	surroundcount();
+	timertile();
 	for (orientation=0;orientation<4;orientation++){
 		calchightarget();	// calc hightest target so far
-		timertile();
 		//printmessage();
 		gspot(); // g=count of targets from king to edge
 		brokenarrow[orientation]=0;	// clear broken arrow
@@ -1620,9 +1623,10 @@ unsigned char checkroute(){
       		case 4: if (enemy[checkrouterow][checkroutecol])	{z+=10;}break;
       		case 5: if (target[checkrouterow][checkroutecol]) 	
       			{
-	      		target[checkrouterow][checkroutecol]=255; // level 1
-	      		//calchightarget();
+	      		//target[checkrouterow][checkroutecol]=255; // level 1
+	      		calchightarget();
 	      		//target[checkrouterow][checkroutecol]+=(hightarget+1); // level 2
+	      		target[checkrouterow][checkroutecol]=(hightarget+1); // level 2
       			}
   		}
   		if ( startrow==destrow ) {checkroutecol++;}else{checkrouterow++;}
@@ -1797,7 +1801,7 @@ void subzoneupdate(){	// subroutine of zoneupdate (updates border targets)
 		startcol=9;destcol=9;startrow=0;destrow=10; // default to EAST
 		if (orientation==WEST) {startrow=0;destrow=10;}
 	}
-	setcheckmode5();checkroute();		// COUNTER=count of pieces on route
+	setcheckmode5();checkroute();	
 }
 
 void updateroutetarget(){
