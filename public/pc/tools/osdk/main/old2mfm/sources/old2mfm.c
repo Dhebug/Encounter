@@ -1,15 +1,19 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 FILE *fd;
-char bigbuf[1024*1024];
+char *bigbuf;
 char header[256];
 char trackbuf[6400];
-int sides, tracks, sectors, geometry=1;
+int32_t sides, tracks, sectors, geometry=1;
 int gap1,gap2,gap3;
 char old_signature[]="ORICDISK";
 char new_signature[]="MFM_DISK";
 
+/* TODO:Fix endianness! */
 
-main(int argc,char *argv[])
+int main(int argc,char *argv[])
 {
         int i,s,t,offset;
 
@@ -17,22 +21,30 @@ main(int argc,char *argv[])
 	if (argc!=2) {
 		printf("Usage: oric2mfm <diskimage>\n");
 		printf("(converts old Euphoric disk image format to new MFM format)\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	fd=fopen(argv[1],"r+b");
 	if (fd==NULL) {
 		printf("Unable to open %s for read/write operation\n",argv[1]);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	fread(header,8,1,fd);
 	if (strncmp(header,old_signature,8)!=0) {
 		printf("%s is not an old disk image\n",argv[1]);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
-	fread(&sides,1,4,fd); fread(&tracks,1,4,fd); fread(&sectors,1,4,fd);
+	fread(&sides,1,sizeof(int32_t),fd);
+	fread(&tracks,1,sizeof(int32_t),fd);
+	fread(&sectors,1,sizeof(int32_t),fd);
 	fread(header+20,256-20,1,fd);
+	bigbuf = malloc(sides*tracks*sectors*256);
+	if (bigbuf==NULL) {
+		printf("Unable to allocate memory\n");
+		exit(EXIT_FAILURE);
+	}
 	fread(bigbuf,sides*tracks*sectors,256,fd);
 	fseek(fd,0,SEEK_SET);
+printf("read old.\n");
 
         switch (sectors) {
                 case 15: case 16: case 17:
@@ -43,18 +55,22 @@ main(int argc,char *argv[])
                         break;
                 default:
                         printf("unrealistic sectors per track number\n");
-                        exit(1);
+                        exit(EXIT_FAILURE);
         }
 	init_track(sectors);
 
+printf("writing header...\n");
 	fwrite(new_signature,8,1,fd);
-	fwrite(&sides,1,4,fd); fwrite(&tracks,1,4,fd); fwrite(&geometry,1,4,fd);
+	fwrite(&sides,1,sizeof(int32_t),fd);
+	fwrite(&tracks,1,sizeof(int32_t),fd);
+	fwrite(&geometry,1,sizeof(int32_t),fd);
 	fwrite(header+20,256-20,1,fd);
 
 	for(s=0;s<sides;s++)
 	  for(t=0;t<tracks;t++) {
             offset=gap1;
 	    for(i=0;i<sectors;i++) {
+printf("writing size %d track %d sector %d...\n", s, t, i);
               trackbuf[offset+4]=t;
               trackbuf[offset+5]=s;
               trackbuf[offset+6]=i+1;
@@ -69,6 +85,9 @@ main(int argc,char *argv[])
 	    }
 	    fwrite(trackbuf,6400,1,fd);
 	  }
+printf("done.\n");
+	free(bigbuf);
+	return EXIT_SUCCESS;
 }
 
 init_track(int n)
