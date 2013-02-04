@@ -3,7 +3,7 @@
 ::ECHO Convert Karhu bear picture
 %OSDK%\bin\PictConv -f1 -d0 -o2 data\karhu_240x200.png %OSDK%\tmp\picture.hir
 %OSDK%\bin\FilePack -p %OSDK%\tmp\picture.hir %OSDK%\tmp\picture.pak
-%OSDK%\bin\Bin2Txt -s1 -f2 %OSDK%\tmp\picture.pak karhu.s _Picture_Karhu
+%OSDK%\bin\Bin2Txt -s1 -f2 %OSDK%\tmp\picture.pak kahru.s _Picture_Karhu
 
 ::ECHO Convert VScroll border picture
 %OSDK%\bin\PictConv -f0 -d0 -o2 data\border_84x224.png %OSDK%\tmp\picture.hir
