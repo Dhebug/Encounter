@@ -13,6 +13,7 @@
 //						 pacman2 [not calculating hightarget in right place, not doing brokenarrow properly)
 //						 subpacmanx [not calcing points properly]
 // 23-10-2012 NB: v0.022 Removed some redundant code (enemytargetupdate)
+// 24-04-2013 NB: v0.023 starting to add DEADPILE
 /* TODO: 
 
 */
@@ -22,6 +23,8 @@
 #define EAST 2
 #define WEST 3
 #define ENEMYWEIGHT 37
+#define DEADPILEA 218
+#define DEADPILED 230
 
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
@@ -154,8 +157,8 @@ void updateroutehightarget();// adds hightarget to targets on route
 void updateroutetarget();	// increment targets on a given route			
 void updatetarget();		// updates target array		
 void zerocounter();			// set counter=0	
-//void zerofoundpiece();		// set foundpiece to 0 (PIECE NOT FOUND)		
-
+//void zerofoundpiece();	// set foundpiece to 0 (PIECE NOT FOUND)		
+void deadpile();			// draw deadpile
 
 
 /****************** GLOBAL VARIABLES *******************************/
@@ -288,13 +291,14 @@ unsigned char subpacc,subpacd;	// used in subpacman5
 unsigned char turncount=0;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=route to one corner, 2=route to two corners
+unsigned char deadattackers, deaddefenders, deadtoggle; // count of dead attackers or defenders
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.022\nBY BARNSEY123\n";
+  message="V0.023\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -1107,10 +1111,34 @@ void drawplayers() {
     }
   }
 }
-
-
+// update the deadpile
+void deadpile(){
+  //curset(212,0,0);
+  //hchar('X',0,1);
+  //curset(212+6,0,0);
+  //hchar('*',0,1);
+  //curset(212+12,0,0);
+  //hchar('0',0,1);
+  //curset(212+18,0,0);
+  //hchar('X',0,1);
+  if ( deadattackers ){
+  	for (x=0;x < deadattackers;x++){
+	  curset(DEADPILEA,x*8,0);
+	  hchar('*',0,deadtoggle);
+  	}
+  }
+  if ( deaddefenders ){
+  	for (x=0;x < deaddefenders;x++){
+	  curset(DEADPILED,x*8,0);
+	  hchar('0',0,deadtoggle);
+  	}
+  }
+}
 // DRAW THE BOARD
 void drawboard(){
+  deadtoggle=0;					// ensure deadpile chars drawn in background
+  deadpile();					// clear the deadpile
+  deadattackers=0;deaddefenders=0; // reset deadpile counts
   game=1;						// game=1 means PLAY GAME
   gamestyle=3;					// 0=play against human, 1=play as DEFENDERS, 2=play as ATTACKERS, 3=nobody  
   kingns=5;kingew=5;			// DEFAULT kings board position
@@ -1434,14 +1462,18 @@ char cantakepiece(){
 }
 
 // performs taking/removing a piece
-void takepiece() {
-  players[tpns][tpew]=0;			// zero players
+void takepiece() {		
+  if (playertype == 1) deaddefenders++;
+  if (playertype == 2) deadattackers++;
+  players[tpns][tpew]=0;			// zero board location
   row=tpns;
   col=tpew;
   inkcolor=6;inkasm();
   explodetile();					// plays animation to "kill" a tile
   tiletodraw=tiles[row][col];		// decide tile to draw
-  ptr_graph=PictureTiles;drawtile();						// draw tile at location
+  ptr_graph=PictureTiles;drawtile();// draw tile at location
+  deadtoggle=1; // ensure deadpiece is drawn in foreground color on deadpile 
+  deadpile();
 }
 
 void subarrows(){
