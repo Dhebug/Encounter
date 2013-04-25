@@ -14,6 +14,7 @@
 //						 subpacmanx [not calcing points properly]
 // 23-10-2012 NB: v0.022 Removed some redundant code (enemytargetupdate)
 // 24-04-2013 NB: v0.023 starting to add DEADPILE
+// 25-04-2013 NB: v0.024 Font Changes for deadpile, endgame detection improvements, some memory reduction
 /* TODO: 
 
 */
@@ -159,7 +160,7 @@ void updatetarget();		// updates target array
 void zerocounter();			// set counter=0	
 //void zerofoundpiece();	// set foundpiece to 0 (PIECE NOT FOUND)		
 void deadpile();			// draw deadpile
-
+void flashred();			// flash screen in red
 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
@@ -213,7 +214,7 @@ char game;					// *** MUST NOT BE UNSIGNED ***<=0 means endgame (see checkend fo
 unsigned char gamestyle;	// 0=human vs human; 1=human king vs computer; ** NO!!! 2=human vs computer king**; 3=undefined
 unsigned char kingns,kingew;// kings position North-South
 unsigned char kingattacker[4];	// number of attackers in all four directions from king
-unsigned char kingdefender[4];	// number of defenders in all four directsions from king
+unsigned char kingdefender[4];	// number of defenders in all four directions from king
 unsigned char kingpieces[4];	// number of pieces in all four directions around king (saves calculating it all the time)
 unsigned char surrounded;		// status of king "surrounded" status		//
 unsigned char ctns=0;			// Computer Turn north-south board position		
@@ -291,20 +292,20 @@ unsigned char subpacc,subpacd;	// used in subpacman5
 unsigned char turncount=0;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=route to one corner, 2=route to two corners
-unsigned char deadattackers, deaddefenders, deadtoggle; // count of dead attackers or defenders
+unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadchar; deadcurset; // count of dead attackers or defenders
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.023\nBY BARNSEY123\n";
+  message="V0.024\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
   inkcolor=6;inkasm();
   for(;;){	// endless loop
-    playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
+    //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     drawboard();				// draw the board
     while (gamestyle==3){
       message="PLAYERS:1-2";	// number of players
@@ -314,7 +315,7 @@ main(){
       if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
       if ( gamestyle == 3 ) ping();
     }
-    while (game>0){
+    while (game){
       ns=5;			// default north/south position of central square
       ew=5;			// default east/west position of central square
       cx=ew;		// cursor x screen position
@@ -330,20 +331,20 @@ main(){
       }				
       checkend();					// check for end of game conditions
     }
-    message="KING CAPTURED! ATTACKER WINS!\nPRESS A KEY:"; // default
-    if ( game == 0 ) message="KING ESCAPED! KING WINS!\nPRESS A KEY:"; // if king escapes
+/*
+    game=0  King Wins.
+    game=-1 Stalemate.
+    game=-2 Attacker wins. 																
+*/
+    message="ATTACKER WINS!"; // default (game=-2)
+    // king escapes or all attackers killed
+    if ( game == 0 ) message="KING WINS!"; 
+    // computer can't move
+    if ( game == -1 ) message="STALEMATE"; 
     printmessage();
-	/*
-    if ( game == 0 ) { 
-      message="KING ESCAPED! KING WINS!\nPRESS A KEY:";
-      printmessage();
-    }
-    else { 
-      message="KING CAPTURED! ATTACKER WINS!\nPRESS A KEY:";
-      printmessage();
-    }
-    */
-   getchar();
+    message="\nPRESS A KEY:";
+    printline();
+    getchar();
   }
 }
 
@@ -381,6 +382,10 @@ void computerturn(){
   }
   // 3. Increment target positions around King (PACMAN)
   pacman2();
+  if (hightarget == 0) {
+	  game=-1;	// signify END of game: computer cannot move: stalemate 
+	  return;
+  }
   // draw central square (overwriting timer)
   tiletodraw=9;
   if (players[5][5]!=3) tiletodraw=3;
@@ -683,6 +688,7 @@ void pacman2(){
 	timertile();
 	for (orientation=0;orientation<4;orientation++){
 		calchightarget();	// calc hightest target so far
+		if (hightarget == 0) return;	// cannot move...
 		//printmessage();
 		gspot(); // g=count of targets from king to edge
 		brokenarrow[orientation]=0;	// clear broken arrow
@@ -869,24 +875,22 @@ void subpacman5(){
 
 // check for endgame conditions
 void checkend()	{
-  /* Victory Conditions 
-  game=0 King escapes. 										// DONE
-  game=-1 King Surrounded in open play or by central square // DONE
-  game=-2 King surrounded by attackers and corner squares	// DONE
-  game=-3 King surrounded by attackers and edge of board	// DONE
-  game=-4 defenders cannot move (stalemate)					// TBD
-  game=-5 attackers cannot move (stalemate)					// TBD
-  game=-6 all attackers eliminated 							// TBD
-  */
+/* END OF GAME CONDITIONS
+  game=0  King Wins.
+  game=-1 Stalemate.
+  game=-2 Attacker wins. 																
+*/
   // ns and ew contains new board co-ords of last piece moved
-  if (( players[ns][ew] == 3 ) && ( tiles[ns][ew] == 4 )) game=0; 		// king has escaped
+  if ((( players[ns][ew] == 3 ) && ( tiles[ns][ew] == 4 ))||( deadattackers > 23)) game=0; // king has escaped
   // check to see if king is surrounded by attackers (first find king)
   if ( players[ns][ew] == 1 ){	// if attacker was last to move
     if (((ns)&&(players[ns-1][ew] == 3 ))||((ns < 10 )&&(players[ns+1][ew]==3 ))||((ew < 10 )&&(players[ns][ew+1]==3 ))||((ew)&&(players[ns][ew-1]==3 ))) {
       surroundcount();
     }
-    if ( surrounded == 4 )  game=-1;	// king is surrounded on all sides by attackers or king squares
+    if ( surrounded == 4 )  game=-2;	// king is surrounded on all sides by attackers or king squares
   }
+  // see if all attackers are taken
+  //if ( deadattackers > 23 ) game=0;
 }
 
 void cursormodezero() {
@@ -960,9 +964,8 @@ void movecursor2() {
     if ( mkey == 11 )ns-=multiple;	// up
   }
   else{
-    flashcolor=1;
-    if ( cursormode == 0 ) {flashback=6;flashscreen();}	// flash red: return to cyan:6
-    if ( cursormode == 1 ) {flashback=2;flashscreen();}	// flash red: return to green:2)
+    if ( cursormode == 0 ) {flashback=6;flashred();}	// flash red: return to cyan:6
+    if ( cursormode == 1 ) {flashback=2;flashred();}	// flash red: return to green:2)
   }			
 }
 
@@ -991,7 +994,7 @@ void printarrowsorblanks()	{
   if ( orientation == NORTH ) { xplayers=players[xns-1][xew];takerow=xns+1;} // check north
   if ( orientation == SOUTH ) { xplayers=players[xns+1][xew];takerow=xns-1;} // check south
   if ( orientation == EAST )  { xplayers=players[xns][xew+1];takecol=xew-1;} // check east
-  if ( orientation == WEST )  { xplayers=players[xns][xew-1];takecol=xew+1;}  // check west
+  if ( orientation == WEST )  { xplayers=players[xns][xew-1];takecol=xew+1;} // check west
   while (( arrow == 1 )&&(fb!=7)){ // keep checking until cannot move
     if (( orientation == NORTH ) && ( xns )){  // check north
       xns--;			// decrement provisional north-south player position
@@ -1121,23 +1124,45 @@ void deadpile(){
   //hchar('0',0,1);
   //curset(212+18,0,0);
   //hchar('X',0,1);
+  if (playertype == 1){
+	  deaddefenders++;
+	  deadplayers=deaddefenders;
+	  deadcurset=DEADPILED;
+	  deadchar='(';
+  }
+  if (playertype == 2){
+	  deadattackers++;
+	  deadplayers=deadattackers;
+	  deadcurset=DEADPILEA;
+	  deadchar=')';
+  }
+  
+  if ( deadplayers ){
+	  for (x=0;x<deadplayers;x++){
+		  curset(deadcurset,x*8,0);
+		  hchar(deadchar,0,deadtoggle);
+	  }
+  }
+  /*
   if ( deadattackers ){
   	for (x=0;x < deadattackers;x++){
 	  curset(DEADPILEA,x*8,0);
-	  hchar('*',0,deadtoggle);
+	  hchar(')',0,deadtoggle);
   	}
   }
   if ( deaddefenders ){
   	for (x=0;x < deaddefenders;x++){
 	  curset(DEADPILED,x*8,0);
-	  hchar('0',0,deadtoggle);
+	  hchar('(',0,deadtoggle);
   	}
   }
+  */
 }
 // DRAW THE BOARD
 void drawboard(){
   deadtoggle=0;					// ensure deadpile chars drawn in background
-  deadpile();					// clear the deadpile
+  playertype=1;deadpile();	// clear the deadpile of defenders
+  playertype=2;deadpile();  // clear the deadpile of attackers
   deadattackers=0;deaddefenders=0; // reset deadpile counts
   game=1;						// game=1 means PLAY GAME
   gamestyle=3;					// 0=play against human, 1=play as DEFENDERS, 2=play as ATTACKERS, 3=nobody  
@@ -1227,12 +1252,12 @@ void playerturn(){
           	}
         }
         else { 
-          flashcolor=1;flashscreen();	// flash red
+          flashred();
           canselect=0;		// unselectable, cannot move
         }				
       }
       else { 
-	     flashcolor=1;flashscreen();	// flash red	
+	     flashred();	
       }		
       if (( mkey == 88 )&&( canselect )){	// if piece is SELECTED and CAN move
         inkcolor=2;inkasm(); 				// green to indicate piece is selected
@@ -1260,7 +1285,7 @@ void playerturn(){
             	cursormode=1;	// restricted
             	movecursor2();
           	}
-          	if ( cursormovetype < 0) { flashcolor=1;flashscreen();}	// flashscreen red
+          	if ( cursormovetype < 0) { flashred();}	// flashscreen red
           	mkey=getchar();
         }
        	if ( mkey == 82 ){ // R has been selected, Reset cursor to original positions
@@ -1463,15 +1488,14 @@ char cantakepiece(){
 
 // performs taking/removing a piece
 void takepiece() {		
-  if (playertype == 1) deaddefenders++;
-  if (playertype == 2) deadattackers++;
-  players[tpns][tpew]=0;			// zero board location
+  players[tpns][tpew]=0;			// clear board location
   row=tpns;
   col=tpew;
   inkcolor=6;inkasm();
   explodetile();					// plays animation to "kill" a tile
   tiletodraw=tiles[row][col];		// decide tile to draw
   ptr_graph=PictureTiles;drawtile();// draw tile at location
+  // update deadpile
   deadtoggle=1; // ensure deadpiece is drawn in foreground color on deadpile 
   deadpile();
 }
@@ -1750,8 +1774,7 @@ void calccantake() {
     if ( x<2 ){ // heading north/south
       orientation=EAST; inccantake();
       orientation=WEST; inccantake();	
-    }
-    if ( x>1 ){ // heading east/west
+    }else{ // heading east/west
       orientation=NORTH; inccantake();
       orientation=SOUTH; inccantake();
     }
@@ -1847,6 +1870,11 @@ void updateroutetarget(){
 void updateroutehightarget(){
 	setcheckmode5(); // add hightarget to "cross-t" targets
 	checkroute();
+}
+// flashes the screen red (goes back to whatever flashback is set to)
+void flashred(){
+	flashcolor=1;
+	flashscreen();
 }
 /*
 void prioritycalc(){ // calculates the priorities of moving a piece
