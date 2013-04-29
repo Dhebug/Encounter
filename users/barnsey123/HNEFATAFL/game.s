@@ -57,7 +57,7 @@ _setpoints
 	lda #10
 	sta _points
 	rts
-; adds ten to points value 	OR adds hightarget to points
+	
 _doublepoints
 	clc
 	lda _points
@@ -70,7 +70,6 @@ _incsurround
 	inc _surrounded
 	rts
 	
-; multiply the points around king depending on the "surrounded" figure	
 _surroundpoints
 .(
 	lda _points
