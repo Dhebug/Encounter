@@ -106,7 +106,6 @@ loop_clear
 	rts
 .)
 
-
 _CopyFont
 .(
 	ldx #0
