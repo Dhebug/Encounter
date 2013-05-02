@@ -20,6 +20,7 @@
 // 29-04-2013 NB v0.027 adding kingtracker (all the spaces where the king can get to
 // 01-05-2013 NB v0.028 Brokenarrow fixed
 // 01-05-2013 NB v0.029 Potential Broken Arrow Situation
+// 02-05-2013 NB v0.030 Fixed central square "backbone" issue
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -212,7 +213,7 @@ char mkey;					// code of key pressed (plus loops)
 unsigned char cursormode;	// cursor movement mode 0=freeform 1=restricted
 unsigned char ons,oew;		// original north/south board pos
 unsigned char ocx,ocy;		// original xpos of piece
-unsigned char orientation;	// for arrows - 0=north, 1=south 2=east 3=west
+unsigned char orientation;	// 0=north, 1=south 2=east 3=west
 unsigned char tiletype;		// type of tile under inspection (used in arrows)
 unsigned char tpns,tpew;	// north-south board location of taken piece (also used for 3) NB:no idea 20/10/2011
 unsigned char flashcolor;	// color of ink to flash in
@@ -306,7 +307,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.028\nBY BARNSEY123\n";
+  message="V0.030\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -516,6 +517,7 @@ NEWTARGET:
 }
 // subroutine of pacman
 void subpacmanx(){
+  surroundcount();  // set surrounded value
   setpoints();		// Set points to 10
   surroundpoints(); // add 10 * surrounded 
   if (kingpieces[orientation] == 0){
@@ -628,7 +630,6 @@ void gspot(){
 
 void pacman2(){
 // improved version of pacman
-	surroundcount();	// surrounded=how surrounded the king is: 0-4
 	timertile();
 	calchightarget();	// calc highest target so far
 	if (hightarget == 0) return;	// cannot move...
@@ -836,7 +837,7 @@ void backbone()	{
   if ( orientation == SOUTH ) { xplayers=players[xns+1][xew];takerow=xns-1;} // check south
   if ( orientation == EAST )  { xplayers=players[xns][xew+1];takecol=xew-1;} // check east
   if ( orientation == WEST )  { xplayers=players[xns][xew-1];takecol=xew+1;} // check west
-  while (( arrow == 1 )&&(fb!=7)){ // keep checking until cannot move
+  while (( arrow > 0  )&&(fb != 7)){ // keep checking until cannot move
     if (( orientation == NORTH ) && ( xns > 0)){  // check north
       xns--;			// decrement provisional north-south player position
       subarrows();
@@ -854,14 +855,17 @@ void backbone()	{
       subarrows();
     }
     tiletodraw=tiles[xns][xew];	// obtain type of tile	
-    if ( arrow ){ // if MODE is "draw an arrow" (aka: I can move here) arrow==1
+    if ( arrow ){ // if MODE is "draw an arrow" (aka: I can move here) arrow=1 or 2
+      // NOTE: arrow=2 means piece can cross this square but not occupy it as in case with CASTLE squares
       row=xns;
       col=xew;
-      if (fb == 1) drawarrow();			// draw arrow
-      if (fb == 4) subarrows2(); 		// enemy can get here, update enemy array (direction specific)
-      if (fb == 5) computer[xns][xew]++;// computer can get here, increment computer array 
-      if (fb == 0) drawarrow();			// if MODE is "blank an arrow"
-      if (fb == 8) {kingtracker[xns][xew]=1;} // king can get here...
+      if ( arrow == 1 ){ // don't draw the arrow or update any array if arrow=2
+      	if (fb == 1) drawarrow();		// draw arrow
+      	if (fb == 4) subarrows2(); 		// enemy can get here, update enemy array (direction specific)
+      	if (fb == 5) computer[xns][xew]++;// computer can get here, increment computer array and set default target value
+      	if (fb == 0) drawarrow();			// if MODE is "blank an arrow"
+      	if (fb == 8) kingtracker[xns][xew]=1; // king can get here...
+  	  }
     }	
     // have we reached the end of the board?
     if (( orientation == NORTH ) && ( xns == 0 )) 	 zeroarrow();	// check north
@@ -1331,11 +1335,12 @@ void takepiece() {
 }
 
 void subarrows(){
-  if (players[xns][xew] ) { 
-    arrow = 0;	// !ok if piece occupied or corner square
+  if ( tiles[xns][xew] == CASTLE ) arrow=2;
+  if ((players[xns][xew])&&(players[xns][xew]<4)) { 
+    arrow=0;	// !ok if piece occupied 
     if ((fb == 4)&&(players[xns][xew] == ATTACKER)) enemy[xns][xew]+=ENEMYWEIGHT;	// means enemy could get here if attacker moved elsewhere
   }
-  if (( players[ns][ew] == KING )&&( tiles[xns][xew] == CASTLE )) arrow = 1;  // corner ok if king	
+  if (( players[ns][ew] == KING )&&( tiles[xns][xew] == CASTLE )) arrow = 1;  // CASTLE square ok if king	
 }
 
 void subarrows2(){
@@ -1473,7 +1478,7 @@ void surroundcheck(){
 
 // called from "surroundcount()"
 void enemyzero() {
-  if (( players[ezns1][ezew1] == 0 )&&(target[ezns1][ezew1])){	// if adjacent square n/s/e/w is blank and accessible
+  if (( players[ezns1][ezew1] == 0 )&&(target[ezns1][ezew1] > 0)){	// if adjacent square n/s/e/w is blank and accessible
     ClearArrays();				// set all arrays to zero (target, enemy, computer)
     target[ezns1][ezew1]=100;	// set big target value to final space by king
   }
