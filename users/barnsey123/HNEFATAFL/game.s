@@ -58,7 +58,7 @@ _setpoints
 	sta _points
 	rts
 	
-_doublepoints
+_pointsplusten
 	clc
 	lda _points
 	adc #10

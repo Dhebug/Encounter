@@ -21,6 +21,8 @@
 // 01-05-2013 NB v0.028 Brokenarrow fixed
 // 01-05-2013 NB v0.029 Potential Broken Arrow Situation
 // 02-05-2013 NB v0.030 Fixed central square "backbone" issue
+// 02-05-2013 NB v0.031 Added TRIGGER weighting and changes to brokenarrow
+// 04-05-2013 NB v0.032 Replecaed g variable in gspot with kingtoedge array
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -36,6 +38,8 @@
 #define CASTLE 4
 #define ENEMYBLOCK 3
 #define TAKEWEIGHT 5
+#define TRIGGERHIGH 3
+#define TRIGGERLOW 7
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
@@ -106,7 +110,7 @@ void cursormodevalid();		// sets modevalid to 1
 void cursormodezero();		// set cursor mode to 0 if 1		
 void decpoints();			// decrement points variable	
 void decroute();			// decs route	
-void doublepoints();		// doubles points		
+void pointsplusten();		// ADDS 10 TO POINTS		
 void drawarrow();			// draws "arrow"	
 void drawboard();			// kicks off drawgrid/drawtiles	
 void drawcursor();			// draws cursor 	
@@ -161,7 +165,7 @@ void sidestep();			// add SIDESTEP to target (used in escape routine)
 void targetselect();		// choose a target square		
 void tileloop();			// subfunction of explodetile and drawtile	
 void timertile();			// print timer	
-void updateroutehightarget();// adds hightarget to targets on route				
+//void updateroutehightarget();// adds hightarget to targets on route				
 void updateroutetarget();	// increment targets on a given route			
 void updatetarget();		// updates target array		
 void zerocounter();			// set counter=0	
@@ -267,7 +271,7 @@ unsigned char destrow,destcol;		// used in checkroute (returns no of pieces on a
 unsigned char canmovecursor;		// controls wether screen cursor can be moved or not
 unsigned char hightarget;			// contains highest value target
 unsigned char targetns,targetew;	// used to calc takes
-unsigned char x,y,z,a,b,c,d,e,f,g;	// general purpose variables
+unsigned char x,y,z,a,b,c,d,e,f;	// general purpose variables
 /* below used for cursor move routine */
 unsigned char multiple;		// concerning central square (how much to multiply the coords to SKIP the square
 unsigned char xptrns;		// copy of NS
@@ -301,13 +305,14 @@ unsigned char turncount=0;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
 unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadchar; deadcurset; // count of dead attackers or defenders
+unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.030\nBY BARNSEY123\n";
+  message="V0.032\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -517,19 +522,38 @@ NEWTARGET:
 }
 // subroutine of pacman
 void subpacmanx(){
+  unsigned char test;
+  // note pointsplusten adds 10 to points
   surroundcount();  // set surrounded value
   setpoints();		// Set points to 10
   surroundpoints(); // add 10 * surrounded 
+  /*
   if (kingpieces[orientation] == 0){
 	incpoints();
-  	if ((orientation<EAST)&&((kingew<2)||(kingew>8))) doublepoints();
-  	if ((orientation>SOUTH)&&((kingns<2)||(kingns>8))) doublepoints();
+  	if ((orientation<EAST)&&((kingew<2)||(kingew>8))) pointsplusten();
+  	if ((orientation>SOUTH)&&((kingns<2)||(kingns>8))) pointsplusten();
   }
-  //if (brokenarrow[orientation] == 2 ) doublepoints();
+  */
+  // TRIGGERHIGH/TRIGGERLOW = Weight to be added depending on kings closeness to border
+  if (( orientation == NORTH )&&(kingns <= TRIGGERLOW)) pointsplusten();
+  if (( orientation == SOUTH )&&(kingns >= TRIGGERHIGH)) pointsplusten();
+  if (( orientation == EAST ) &&(kingew >= TRIGGERHIGH)) pointsplusten();
+  if (( orientation == WEST ) &&(kingew <= TRIGGERLOW)) pointsplusten();
+  if (brokenarrow[orientation] == 2 ) pointsplusten();
+  // worst possible preventable case (
+  if ( orientation < EAST ){
+	  test=kingew;	// NORTH/SOUTH
+  }else{
+	  test=kingns;	// EAST/WEST
+  }
+  if ((kingpieces[orientation] == 0)&&((test<2)||(test>8))){	// if no pieces in given orientation
+	points=100;	
+  }
+
   /*
   if (( kingpieces[orientation] == 0 )||((kingpieces[orientation] == 1)&&(f))){
-  	if (( pacpointsa == 0 )||(pacpointsb == 0)) doublepoints();
-  	if (( pacpointsx == 0 )||(pacpointsy == 0)) doublepoints();
+  	if (( pacpointsa == 0 )||(pacpointsb == 0)) pointsplusten();
+  	if (( pacpointsx == 0 )||(pacpointsy == 0)) pointsplusten();
   }
   */
   if ((orientation == NORTH ) || ( orientation == WEST)){	
@@ -574,16 +598,15 @@ void checkbrokenarrow(){
 	// g= count of targets > 1 from king to edge
 	// kingpieces[]= count of pieces from king in a given orientation
 	unsigned char test=0;
+	unsigned char testreturn=0;
 	setcheckmode1(); c=checkroute(); // how many pieces on the route?
 	checkroutemode=6; d=checkroute();// can king get to a T-row 0-1
 	if (( c == 0 ) && ( d == 1 )) {
 		f=players[a][b];		// check for piece at edge of board
-	  	if ( target[a][b] > 0 ) g--; // decrement g (so maybe g=zero) - to trigger brokenarrow
-		//message="CHECK BROKEN ARROW\n";
-		//printline();
+	  	if ( target[a][b] > 0 ) kingtoedge[orientation]--; // decrement g (so maybe g=zero) - to trigger brokenarrow
 		if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test == 1 )){
-			if ( g == 0){	// no targets on route
+			if ( kingtoedge[orientation] == 0){	// no targets on route
 				brokenarrow[orientation]=1;
 				subzoneupdate(); //BROKENARROW!
 			}else{
@@ -612,6 +635,22 @@ return checkroute();
 }
 */
 void gspot(){
+	setcheckmode3();	// count number of targets on route
+	// NORTH
+	startrow=0;destrow=kingns;startcol=kingew;destcol=kingew;	
+	kingtoedge[NORTH]=checkroute();  // count of targets from king to edge
+	// SOUTH
+	startrow=kingns;destrow=10;
+	kingtoedge[SOUTH]=checkroute();  // count of targets from king to edge
+	// EAST
+	destrow=kingns;destcol=10;
+	kingtoedge[EAST]=checkroute();
+	// WEST
+	startcol=0;destcol=kingew;
+	kingtoedge[WEST]=checkroute();
+}
+/*
+void gspot(){
 	// default=NORTH
 	if (( orientation == NORTH )&&(kingns > 1)) {
 		startrow=0;destrow=kingns;startcol=kingew;destcol=kingew;
@@ -627,15 +666,16 @@ void gspot(){
 	}
 	setcheckmode3(); g=checkroute();  // count of targets from king to edge
 }
-
+*/
 void pacman2(){
 // improved version of pacman
 	timertile();
 	calchightarget();	// calc highest target so far
 	if (hightarget == 0) return;	// cannot move...
+	gspot(); // sets kingtoedge[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
-		gspot(); // sets g=count of targets from king to edge (no of pieces is found in kingpieces[])
+		//gspot(); // sets g=count of targets from king to edge (no of pieces is found in kingpieces[])
 		if (orientation < 2){	// NORTH AND SOUTH 
 		  	paclevel1=kingew;
   			paclevel2=kingns;
@@ -1664,10 +1704,6 @@ void updateroutetarget(){
 	checkroute();
 }
 
-void updateroutehightarget(){
-	setcheckmode5(); // add hightarget to "cross-t" targets
-	checkroute();
-}
 // flashes the screen red (goes back to whatever flashback is set to)
 void flashred(){
 	flashcolor=1;
