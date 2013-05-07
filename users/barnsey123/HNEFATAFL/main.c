@@ -24,6 +24,7 @@
 // 02-05-2013 NB v0.031 Added TRIGGER weighting and changes to brokenarrow
 // 04-05-2013 NB v0.032 Replecaed g variable in gspot with kingtoedge array
 // 04-05-2013 NB v0.033 Introduced pacman3 and some changes to subpacmanx
+// 07-05-2013 NB v0.040 Skip 03x coz of differnt versions floating about 
 /* TO DO:
 Still some issues where bizarre moves are made (not making much sense)
 */
@@ -143,6 +144,9 @@ void inverse();				// inverse the color in the square
 void movecursor2();			// move cursor routine	
 void movepiece(); 			// move a piece					
 void pacman2();				// update target positions around king (need to develop further)
+void pacman3();
+void pacman4();
+void pacman5();
 void pause();				// wait a certain period of time (pausetime)
 void playerturn();			// takes user input to move cursor	
 void backbone();			// renamed from "printarrowsorblanks"			
@@ -316,7 +320,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.033\nBY BARNSEY123\n";
+  message="V0.040\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -407,6 +411,7 @@ void computerturn(){
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
   }
+  pacman4(); 	// check for full broken arrow
   // draw central square (overwriting timer)
   tiletodraw=9;
   if (players[5][5] != 3) tiletodraw=3;
@@ -710,10 +715,7 @@ void checkbrokenarrowhead(){
 	startrow=kingns;destrow=10;
 	checkbrokenarrow();	// PARTIAL LEVEL 1 "RIGHT"
 }*/
-void pacman3(){
-	if ((( orientation == NORTH )||( orientation == WEST ))&&(paclevel2 > 1)) checkbrokenarrow();
-	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < 9)) checkbrokenarrow(); 
-}
+
 void pacman2(){
 // improved version of pacman
 	timertile();
@@ -723,13 +725,7 @@ void pacman2(){
 	//checkbrokenarrowhead();
 	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
-		if (orientation < 2){	// NORTH AND SOUTH (for pacman3) 
-		  	paclevel1=kingew;
-  			paclevel2=kingns;
-		}else{					// EAST AND WEST
-  			paclevel1=kingns;
-  			paclevel2=kingew;	
-		}
+		pacman5();
 		// count of pieces across the "T"
 		// PARTIAL LEVEL 1 "LEFT"
 		points=50;	// for level 1
@@ -779,29 +775,47 @@ void pacman2(){
 	  	else{
 			startrow=kingns;destrow=9;
 	  	}
-	  	pacman3();
-	  	
-		// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
-		// FULL LEVEL 2
-		points=150;
-		if ( orientation == NORTH ){
-			a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=10;
-		}
-		if ( orientation == SOUTH ){
-			a=10;b=kingew;startrow=9;destrow=9;startcol=0;destcol=10;
-		}
-		if ( orientation == EAST ){
-			a=kingns;b=10;startrow=0;destrow=10;startcol=9;destcol=9;
-		}
-		if ( orientation == WEST ){
-			a=kingns;b=0;startrow=0;destrow=10;startcol=1;destcol=1;
-		}
-		pacman3();
-  		subpacmanx();	
+	  	pacman3();	
+  		subpacmanx(); // add points to target in all directions from king 	
 	}
 }
+void pacman3(){
+	unsigned char test=0;
+	if ((( orientation == NORTH )||( orientation == WEST ))&&(paclevel2 > 1)) test++;
+	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < 9)) test++; 
+	if ((paclevel1 > 1)&&(paclevel1 < 9)) test++;
+	if ( test == 2 ) checkbrokenarrow(); 
+}
+void pacman4(){
+	// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
+	// FULL LEVEL 2
+	calchightarget();
+	points=(hightarget+1);
+	pacman5();	// NORTH+SOUTH
+	orientation = NORTH;
+	a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=10;
+	pacman3();
+	orientation = SOUTH;
+	a=10;b=kingew;startrow=9;destrow=9;startcol=0;destcol=10;
+	pacman3();
+	orientation = EAST;
+	pacman5();
+	a=kingns;b=10;startrow=0;destrow=10;startcol=9;destcol=9;
+	pacman3();
+	orientation = WEST;
+	a=kingns;b=0;startrow=0;destrow=10;startcol=1;destcol=1;
 
-
+	pacman3();
+}
+void pacman5(){
+	if (orientation < 2){	// NORTH AND SOUTH (for pacman3) 
+	  	paclevel1=kingew;
+  		paclevel2=kingns;
+	}else{					// EAST AND WEST
+  		paclevel1=kingns;
+  		paclevel2=kingew;	
+	}
+}
 // check for endgame conditions
 void checkend()	{
 /* END OF GAME CONDITIONS
