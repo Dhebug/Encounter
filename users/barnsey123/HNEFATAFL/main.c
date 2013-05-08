@@ -27,8 +27,12 @@
 // 07-05-2013 NB v0.040 Skip 03x coz of differnt versions floating about 
 // 07-05-2013 NB v0.041 Fixed a few bugs, reduced footprint
 // 08-05-2013 NB v0.042 resolving the vinegar strokes (trying)
+// 08-05-2013 NB v0.043 SHAZAM! One major bug rezolved
 /* TO DO:
-Still some issues where bizarre moves are made (not making much sense)
+Now need to apply a new tzonemode (PARTIAL1, PARTIAL2)
+PARTIAL2 to have higher score than PARTIAL1 when incing brokenarrow[orientation]
+some logic to say if brokenarrow[] == 2 ( brokenarrow=6)
++=3 for PARTIAL2. 
 */
 #include <lib.h>
 #define NORTH 0
@@ -47,6 +51,8 @@ Still some issues where bizarre moves are made (not making much sense)
 #define TAKEWEIGHT 5
 #define TRIGGERHIGH 3
 #define TRIGGERLOW 7
+#define PARTIAL 0
+#define FULL 1
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
@@ -316,13 +322,14 @@ unsigned char turncount=0;			// used to count the number of turns
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
 unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadchar; deadcurset; // count of dead attackers or defenders
 unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
+unsigned char tzonemode;		// 0=PARTIAL, 1=FULL
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.042\nBY BARNSEY123\n";
+  message="V0.043\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -617,7 +624,7 @@ void checkbrokenarrow(){
 	checkroutemode=6; d=checkroute();// can king get to a T-row 0-1
 	if (( c == 0 ) && ( d )) {
 		f=players[a][b];		// check for piece at edge of board
-	  	if ( target[a][b] ) kingtoedge[orientation]--; // decrement g (so maybe g=zero) - to trigger brokenarrow
+	  	if (( target[a][b] )&&(tzonemode==FULL)) kingtoedge[orientation]--; // decrement kingtoedge(so maybe kingtoedge=zero) - to trigger brokenarrow
 		if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
 			if ( kingtoedge[orientation] == 0){	// no targets on route
@@ -628,7 +635,6 @@ void checkbrokenarrow(){
 				printline();
 				getchar();
 				checkroutemode=5;checkroute();
-				//subzoneupdate(); //BROKENARROW!
 			}else{
 				brokenarrow[orientation]++; // POTENTIAL BROKEN ARROW
 			}
@@ -716,13 +722,14 @@ void checkbrokenarrowhead(){
 }*/
 
 void pacman2(){
+	tzonemode=PARTIAL;
 // improved version of pacman
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
 	gspot(); // sets kingtoedge[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	//checkbrokenarrowhead();
-	for (orientation = 0; orientation <= 3; orientation++){
+	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
 		pacman5();
 		// count of pieces across the "T"
@@ -747,10 +754,8 @@ void pacman2(){
 		else{
 			startrow=kingns;destrow=10;
 		}
-		pacman3();
-				
+		pacman3();	
 		// LEVEL 2
-		points = 100;
 		// PARTIAL LEVEL 2 "LEFT"
 		a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
 		if ( orientation ){
@@ -762,6 +767,7 @@ void pacman2(){
 				a=kingns;b=0;startrow=0; destrow=kingns;startcol=1; destcol=1;
 			}
 		}
+		//points = 100;
 		pacman3();
 	  	// PARTIAL LEVEL 2 "RIGHT"
 	  	if (startrow == destrow){
@@ -784,6 +790,7 @@ void pacman3(){
 void pacman4(){
 	// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
 	// FULL LEVEL 2
+	tzonemode=FULL;
 	points=hightarget+1;
 	orientation = NORTH;
 	pacman5();	// NORTH+SOUTH
