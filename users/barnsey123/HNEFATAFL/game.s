@@ -22,12 +22,7 @@ _setcheckmode4
 	lda #4
 	sta _checkroutemode
 	rts
-	
-_setcheckmode5
-	lda #5
-	sta _checkroutemode
-	rts	
-	
+		
 _incmodeone
 	inc _modeonevalid
 	rts
@@ -81,7 +76,7 @@ loop
 	dex
 	bne loop
 end	
-	sta _point
+	sta _points
 	rts
 .)	
 	
