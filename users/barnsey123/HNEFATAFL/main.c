@@ -28,6 +28,7 @@
 // 07-05-2013 NB v0.041 Fixed a few bugs, reduced footprint
 // 08-05-2013 NB v0.042 resolving the vinegar strokes (trying)
 // 08-05-2013 NB v0.043 SHAZAM! One major bug rezolved
+// 08-05-2013 NB v0.044 Exploiting tzonemode
 /* TO DO:
 Now need to apply a new tzonemode (PARTIAL1, PARTIAL2)
 PARTIAL2 to have higher score than PARTIAL1 when incing brokenarrow[orientation]
@@ -51,8 +52,9 @@ some logic to say if brokenarrow[] == 2 ( brokenarrow=6)
 #define TAKEWEIGHT 5
 #define TRIGGERHIGH 3
 #define TRIGGERLOW 7
-#define PARTIAL 0
-#define FULL 1
+#define PARTIAL1 0
+#define PARTIAL2 1
+#define FULL 2
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
@@ -322,14 +324,14 @@ unsigned char turncount=0;			// used to count the number of turns
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
 unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadchar; deadcurset; // count of dead attackers or defenders
 unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
-unsigned char tzonemode;		// 0=PARTIAL, 1=FULL
+unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.043\nBY BARNSEY123\n";
+  message="V0.044\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -556,8 +558,7 @@ void subpacmanx(){
   // unsigned char test=0;
   // note pointsplusten adds 10 to points
   setpoints();		// Set points to 10
-  //surroundcount();  // set surrounded value
-  //surroundpoints(); // add 10 * surrounded 
+  surroundpoints(); // add 10 * surrounded 
   /*
   if (kingpieces[orientation] == 0){
 	incpoints();
@@ -571,7 +572,7 @@ void subpacmanx(){
   if (( orientation == EAST ) &&(kingew >= TRIGGERHIGH)) pointsplusten();
   if (( orientation == WEST ) &&(kingew <= TRIGGERLOW)) pointsplusten();
   points=points+(brokenarrow[orientation]*10);
-  if (kingpieces[orientation] == 0) pointsplusten();
+  //if (kingpieces[orientation] == 0) pointsplusten();
   /*
   if (( kingpieces[orientation] == 0 )||((kingpieces[orientation] == 1)&&(f))){
   	if (( pacpointsa == 0 )||(pacpointsb == 0)) pointsplusten();
@@ -628,7 +629,7 @@ void checkbrokenarrow(){
 		if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
 			if ( kingtoedge[orientation] == 0){	// no targets on route
-				brokenarrow[orientation]=5;
+				//brokenarrow[orientation]=5;
 				message="BROKEN ARROW UPDATE";
 				printline();
 				message="\nPRESS A KEY";
@@ -637,6 +638,11 @@ void checkbrokenarrow(){
 				checkroutemode=5;checkroute();
 			}else{
 				brokenarrow[orientation]++; // POTENTIAL BROKEN ARROW
+				if (tzonemode){				// if tzonemode > PARTIAL1
+					brokenarrow[orientation]+=2;  // will be at LEAST 3 if PARTIAL2
+				}
+				// if we have two PARTIAL1s (possible escape) then brokenarrow will be 2 so need to elevate
+				if (brokenarrow[orientation] == 2) brokenarrow[orientation]=4; // 4 beats one PARTIAL2
 			}
 		}
 	}
@@ -722,15 +728,16 @@ void checkbrokenarrowhead(){
 }*/
 
 void pacman2(){
-	tzonemode=PARTIAL;
 // improved version of pacman
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
 	gspot(); // sets kingtoedge[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	//checkbrokenarrowhead();
+	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)
 	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
+		tzonemode=PARTIAL1;
 		pacman5();
 		// count of pieces across the "T"
 		// PARTIAL LEVEL 1 "LEFT"
@@ -757,6 +764,8 @@ void pacman2(){
 		pacman3();	
 		// LEVEL 2
 		// PARTIAL LEVEL 2 "LEFT"
+		tzonemode=PARTIAL2;
+
 		a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
 		if ( orientation ){
 			a=10;startrow=9;destrow=9; // SOUTH
@@ -781,11 +790,17 @@ void pacman2(){
 	}
 }
 void pacman3(){
-	unsigned char test=0;
-	if ((( orientation == NORTH )||( orientation == WEST ))&&(paclevel2 > 1)) test++;
-	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < 9)) test++; 
-	if ((paclevel1)&&(paclevel1 < 10)) test++;
-	if ( test==2 ) checkbrokenarrow(); 
+	//unsigned char test=0;
+	unsigned char lower=0;		// row/column lower bound
+	unsigned char upper=10;		// row/column upper bound
+	if (tzonemode){	// if PARTIAL2 or FULL
+		lower=1;
+		upper=9;
+	}
+	if ((( orientation == NORTH )||( orientation == WEST ))&&(paclevel2 > lower)) checkbrokenarrow();
+	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < upper)) checkbrokenarrow(); 
+	//if ((paclevel1 > 0 )&&(paclevel1 < 10)) test++;
+	//if ( test==2 ) checkbrokenarrow(); 
 }
 void pacman4(){
 	// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
