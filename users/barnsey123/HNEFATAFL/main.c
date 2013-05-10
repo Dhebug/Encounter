@@ -27,8 +27,9 @@
 // 07-05-2013 NB v0.040 Skip 03x coz of differnt versions floating about 
 // 07-05-2013 NB v0.041 Fixed a few bugs, reduced footprint
 // 08-05-2013 NB v0.042 resolving the vinegar strokes (trying)
-// 08-05-2013 NB v0.043 SHAZAM! One major bug rezolved
-// 08-05-2013 NB v0.044 Exploiting tzonemode
+// 08-05-2013 NB v0.043 SHAZAM! One major bug resolved
+// 09-05-2013 NB v0.044 Exploiting tzonemode
+// 10-05-2013 NB v0.045 
 /* TO DO:
 Now need to apply a new tzonemode (PARTIAL1, PARTIAL2)
 PARTIAL2 to have higher score than PARTIAL1 when incing brokenarrow[orientation]
@@ -55,6 +56,7 @@ some logic to say if brokenarrow[] == 2 ( brokenarrow=6)
 #define PARTIAL1 0
 #define PARTIAL2 1
 #define FULL 2
+//#define VINEGAR 3
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
@@ -157,6 +159,7 @@ void pacman2();				// update target positions around king (need to develop furth
 void pacman3();
 void pacman4();
 void pacman5();
+void pacman6();				// "vinegar strokes"
 void pause();				// wait a certain period of time (pausetime)
 void playerturn();			// takes user input to move cursor	
 void backbone();			// renamed from "printarrowsorblanks"			
@@ -173,6 +176,7 @@ void subcanbetaken2(); 		// attempt to reduce memory footprint
 //void subpaceastwest();		// subroutine of pacman	
 //unsigned char subpaccrosst();		// sub of pacman2
 void subpacmanx();			// grand sub of pacman2	
+void subpacmany();			// apply points from the pacman routines
 //void subpacnorthsouth();	// subroutine of pacman	
 //void subzoneupdate();		// subroutine of pacman				
 void surroundcheck();		// inc surrounded under various conditions		
@@ -190,7 +194,7 @@ void zerocounter();			// set counter=0
 //void zerofoundpiece();	// set foundpiece to 0 (PIECE NOT FOUND)		
 void deadpile();			// draw deadpile
 void flashred();			// flash screen in red
-void gethightarget();		// without upsetting any other variables
+//void gethightarget();		// without upsetting any other variables
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -220,7 +224,7 @@ Players:
 // +5 can be reached from SOUTH
 // +10 can be reached from EAST
 // +20 can be reached from WEST 
-extern char enemy[11][11];		// where the defenders can get to
+extern unsigned char enemy[11][11];		// where the defenders can get to
 extern unsigned char computer[11][11];	// where the attackers can get to
 extern unsigned char priority[11][11];	// holds the priority of a piece to move
 extern unsigned char kingtracker[11][11]; // where the king can get to
@@ -331,7 +335,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.044\nBY BARNSEY123\n";
+  message="V0.045\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -345,7 +349,7 @@ main(){
       gameinput=getchar();
       if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
       if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
-      if ( gamestyle == 3 ) ping();
+      if ( gamestyle == 3 ) {flashback=6;flashred();}
     }
     while (game > 0){
       ns=5;			// default north/south position of central square
@@ -418,13 +422,13 @@ void computerturn(){
   }
   // 3. Increment target positions around King (PACMAN)
   pacman2();
-  gethightarget();
+  calchightarget();
   if (hightarget == 0) {
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
   }
   pacman4(); 	// check for full broken arrow
-  
+  pacman6();	// "vinegar strokes"
   // draw central square (overwriting timer)
   tiletodraw=9;
   if (players[5][5] != 3) tiletodraw=3;
@@ -441,7 +445,7 @@ void computerturn(){
 
 void findpiece(){	// find a piece capable of moving to selected target
   if ( foundpiece == 0 ){		
-	if (players[a][b]==1){  // a=row, b=column
+	if (players[a][b]==ATTACKER){  // a=row, b=column
 		calccantake();
 		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
 		//if ( cantake==0 ) { canbetaken(); }		// if cannot take can I be taken?
@@ -479,7 +483,8 @@ void findpiece(){	// find a piece capable of moving to selected target
 			if (origorient < EAST) {ons = mkey;}else{oew = mkey;}
 		}	
 	}
-  	if ((players[a][b] == 2)||(players[a][b] == 3)) foundpiece=9;
+  	if ((players[a][b] == DEFENDER)||(players[a][b] == KING)) foundpiece=9;
+  	//if ((players[a][b] == CASTLE)&&(a!=5)) foundpiece=9;
   }
 }
 /*
@@ -505,6 +510,7 @@ void calchightarget(){
     }
   }
 }
+/*
 void gethightarget(){ // without upsetting anything else
 	hightarget=0;
 	for (ctns=0;ctns<11;ctns++){	// find the highest value for target
@@ -515,6 +521,16 @@ void gethightarget(){ // without upsetting anything else
   		}
 	}
 }
+*/
+
+void cleartarget(){ // nukes target array
+	for (ctns=0;ctns<11;ctns++){	
+    	for (ctew=0;ctew<11;ctew++){
+	      	if (target[ctns][ctew]) target[ctns][ctew]=1;	
+  		}
+	}
+}
+
 // TARGETSELECT - find the highest scoring TARGET
 void targetselect(){
 NEWTARGET:
@@ -555,8 +571,6 @@ NEWTARGET:
 }
 // subroutine of pacman
 void subpacmanx(){
-  // unsigned char test=0;
-  // note pointsplusten adds 10 to points
   setpoints();		// Set points to 10
   surroundpoints(); // add 10 * surrounded 
   /*
@@ -571,15 +585,19 @@ void subpacmanx(){
   if (( orientation == SOUTH )&&(kingns >= TRIGGERHIGH)) pointsplusten();
   if (( orientation == EAST ) &&(kingew >= TRIGGERHIGH)) pointsplusten();
   if (( orientation == WEST ) &&(kingew <= TRIGGERLOW)) pointsplusten();
-  points=points+(brokenarrow[orientation]*10);
-  //if (kingpieces[orientation] == 0) pointsplusten();
+  points+=brokenarrow[orientation]*10;
+  
   /*
   if (( kingpieces[orientation] == 0 )||((kingpieces[orientation] == 1)&&(f))){
   	if (( pacpointsa == 0 )||(pacpointsb == 0)) pointsplusten();
   	if (( pacpointsx == 0 )||(pacpointsy == 0)) pointsplusten();
   }
   */
-  // SET UNCOUNTER
+  subpacmany(); // apply the points
+}
+void subpacmany(){	// apply the points generated in pacman2-6
+// SET UNCOUNTER
+  pacman5();				// ensure correct paclevels are set
   uncounter=paclevel2+1;	// if south or east 
   if ((orientation == NORTH ) || ( orientation == WEST)){	
   	uncounter=paclevel2-1;
@@ -591,20 +609,13 @@ void subpacmanx(){
 	  x=uncounter;
   	  y=paclevel1;								
   }
-
-  /*
-  if ((brokenarrow[orientation]) && (g)){ // if brokenarrow and targets on route
-	calchightarget();
-	points=(hightarget+1);	// set points to be HIGHER than the highest existing TARGET
-  }
-  */
-  //while (((players[x][y] == 0)||( tiles[x][y] == 3 )) && ((uncounter > -1)&&(uncounter < 11))){
+  
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( computer[x][y] ){	// if accessible by attacker	
     	if ( target[x][y] > 1 ){	
-	      	target[x][y]=points;
+	      	target[x][y]+=points; 
       	}else{
-	      	target[x][y]+=points;
+	      	target[x][y]=points; // can be caught if i go here
       	}
     	decpoints();
     }
@@ -612,9 +623,12 @@ void subpacmanx(){
     if ( (orientation == NORTH) || (orientation==WEST) ) {uncounter--;}else{uncounter++;}
     if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
   }
-  
+  /*
+  if (tzonemode==VINEGAR){
+	  message="VINEGAR STROKES COMPLETE";
+	  printmessage();
+  }*/
 }
-
 void checkbrokenarrow(){
 	// f= value of player piece at edge of board (if any)
 	// kingtoedge[orientation]= count of targets from king to edge
@@ -625,8 +639,10 @@ void checkbrokenarrow(){
 	checkroutemode=6; d=checkroute();// can king get to a T-row 0-1
 	if (( c == 0 ) && ( d )) {
 		f=players[a][b];		// check for piece at edge of board
+		if (f == CASTLE) f=0;	// check for corner square
 	  	if (( target[a][b] )&&(tzonemode==FULL)) kingtoedge[orientation]--; // decrement kingtoedge(so maybe kingtoedge=zero) - to trigger brokenarrow
-		if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
+		//if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
+		if (( kingpieces[orientation] == 1) && (f)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
 			if ( kingtoedge[orientation] == 0){	// no targets on route
 				//brokenarrow[orientation]=5;
@@ -738,7 +754,7 @@ void pacman2(){
 	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
 		tzonemode=PARTIAL1;
-		pacman5();
+		//pacman5();
 		// count of pieces across the "T"
 		// PARTIAL LEVEL 1 "LEFT"
 		//points=50;	// for level 1
@@ -753,27 +769,25 @@ void pacman2(){
 				a=kingns;b=0; startrow=0; destrow=kingns;startcol=0; destcol=0;
 			}
 		}
-		pacman3();
 		// PARTIAL LEVEL 1 "RIGHT"
 		if (startrow == destrow){
 			startcol=kingew;destcol=10;
-		}
-		else{
+		}else{
 			startrow=kingns;destrow=10;
 		}
 		pacman3();	
 		// LEVEL 2
 		// PARTIAL LEVEL 2 "LEFT"
+		// a + b already set in PARTIAL LEVEL 1 
 		tzonemode=PARTIAL2;
-
-		a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
+		startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
 		if ( orientation ){
 			a=10;startrow=9;destrow=9; // SOUTH
 			if ( orientation == EAST ){
-				a=kingns;b=10;startrow=0; destrow=kingns;startcol=9;destcol=9;
+				startrow=0; destrow=kingns;startcol=9;destcol=9;
 			}
 			if ( orientation == WEST ){
-				a=kingns;b=0;startrow=0; destrow=kingns;startcol=1; destcol=1;
+				startrow=0; destrow=kingns;startcol=1; destcol=1;
 			}
 		}
 		//points = 100;
@@ -793,12 +807,13 @@ void pacman3(){
 	//unsigned char test=0;
 	unsigned char lower=0;		// row/column lower bound
 	unsigned char upper=10;		// row/column upper bound
+	pacman5();					// ensure correct paclevels are set
 	if (tzonemode){	// if PARTIAL2 or FULL
 		lower=1;
 		upper=9;
 	}
 	if ((( orientation == NORTH )||( orientation == WEST ))&&(paclevel2 > lower)) checkbrokenarrow();
-	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < upper)) checkbrokenarrow(); 
+	if ((( orientation == SOUTH )||( orientation == EAST ))&&(paclevel2 < upper)) checkbrokenarrow();
 	//if ((paclevel1 > 0 )&&(paclevel1 < 10)) test++;
 	//if ( test==2 ) checkbrokenarrow(); 
 }
@@ -808,14 +823,14 @@ void pacman4(){
 	tzonemode=FULL;
 	points=hightarget+1;
 	orientation = NORTH;
-	pacman5();	// NORTH+SOUTH
+	//pacman5();	// NORTH+SOUTH
 	a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=10;
 	pacman3();
 	orientation = SOUTH;
 	a=10;startrow=9;destrow=9;
 	pacman3();
 	orientation = EAST;
-	pacman5();
+	//pacman5();
 	a=kingns;b=10;startrow=0;destrow=10;startcol=9;destcol=9;
 	pacman3();
 	orientation = WEST;
@@ -831,6 +846,30 @@ void pacman5(){
   		paclevel2=kingew;	
 	}
 }
+
+void pacman6(){	// "vinegar strokes" OVERRIDES ALL other points if direct route to corner
+	unsigned char test;
+	for (orientation=0; orientation < 4; orientation++ ){
+		test=0;
+		//tzonemode=VINEGAR;
+		if ( kingpieces[orientation] == 0 ){
+			if (( orientation == NORTH ) && (kingns > 1) && ((kingew == 0)||(kingew == 10))) test++;
+			if (( orientation == SOUTH ) && (kingns < 9) && ((kingew == 0)||(kingew == 10))) test++;
+			if (( orientation == EAST ) && (kingew < 9) && ((kingns == 0)||(kingns == 10))) test++;
+			if (( orientation == WEST ) && (kingew > 1) && ((kingns == 0)||(kingns == 10))) test++;
+			if ( test ){
+				enemy[0][0]=0;
+				enemy[0][10]=0;
+				enemy[10][0]=0;
+				enemy[10][10]=0;
+				cleartarget();
+				points=100;
+				subpacmany();
+			}
+		}
+	}
+}
+
 // check for endgame conditions
 void checkend()	{
 /* END OF GAME CONDITIONS
@@ -1681,7 +1720,7 @@ void cantakeadjust(){
     }
     if (flag )		{
       //if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
-      if (kingpieces[orientation]<4) cantake--;
+      if (kingpieces[orientation]==1) cantake--; //10-05-2013 if no other pieces on plane
     }
 
   }
