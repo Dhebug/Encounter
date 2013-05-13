@@ -39,6 +39,10 @@ _incpoints
 	inc _points
 	rts
 	
+_incorientation
+	inc _orientation
+	rts
+		
 _decpoints
 .(
 	dec _points
