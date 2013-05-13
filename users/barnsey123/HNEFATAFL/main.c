@@ -438,8 +438,10 @@ void findpiece(){	// find a piece capable of moving to selected target
 		calccantake();
 		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
 		//if ( cantake==0 ) { canbetaken(); }		// if cannot take can I be taken?
-		if (compass[origorient] == 0)	foundpiece=1;	
-		if ((foundpiece==1)&&(redflag==NO)){ // can't be taken so we've found a candidate
+		if (compass[origorient] == 0)	foundpiece=1;
+		//if ((foundpiece==1)&&(redflag==NO)){ // can't be taken so we've found a candidate
+	
+		if (foundpiece==1){ // can't be taken so we've found a candidate
 	  		if (a != targetns) {// target is not on same row as candidate
 				if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8))){
 					startrow=a;destrow=a;startcol=0;destcol=10;
@@ -454,7 +456,8 @@ void findpiece(){	// find a piece capable of moving to selected target
 				}
 			}
 		}
-		if ((foundpiece == 1)&&(redflag==NO)){
+		//if ((foundpiece == 1)&&(redflag==NO)){
+		if (foundpiece == 1){
 			if ( b != targetew){// target is not on same column as candidate
 				if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8))){
 					startrow=0;destrow=10;startcol=b;destcol=b;
@@ -529,23 +532,42 @@ NEWTARGET:
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
   fb=9;zerofoundpiece();		// set foundpiece to ZERO "piece not found"
   origorient=NORTH;orientation=NORTH;
-  b=oew;
-  for (mkey=ons-1; mkey>-1; mkey--)	{a=mkey;findpiece();}
+  
+  //for (mkey=ons-1; mkey>-1; mkey--)	{
+  mkey=ons-1;a=mkey;b=oew;
+  while ( ( mkey >- 1 ) || ((players[a][b]==0)||(players[a][b]==CASTLE))){	
+  	findpiece();
+  	mkey--;a=mkey;
+  	}
   if ( foundpiece != 1 ){ 
 	zerofoundpiece();
-  	origorient=SOUTH;orientation=SOUTH;														
-  	for (mkey=ons+1; mkey<11; mkey++)	{a=mkey;findpiece();}
-  }	
-  a=ons;
+  	origorient=SOUTH;orientation=SOUTH;	
+  	mkey=ons+1;a=mkey;b=oew;													
+  	//for (mkey=ons+1; mkey<11; mkey++)	{a=mkey;findpiece();}
+  	while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+	  	findpiece();
+	  	mkey++;a=mkey;
+  	}
+  }	 
   if ( foundpiece != 1 ){ 
+	mkey=oew+1;a=ons;b=mkey;
 	zerofoundpiece();
   	origorient=EAST;orientation=EAST;
-  	for (mkey=oew+1; mkey<11; mkey++)	{b=mkey;findpiece();}
+  	//for (mkey=oew+1; mkey<11; mkey++)	{b=mkey;findpiece();}
+  	while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+	  	findpiece();
+	  	mkey++;b=mkey;
+  	}
   }	
   if ( foundpiece != 1 ) { 
 	zerofoundpiece();
 	origorient=WEST;orientation=WEST;
-  	for (mkey=oew-1; mkey>-1; mkey--)	{b=mkey;findpiece();}	
+	mkey=oew-1;a=ons;b=mkey;
+  	//for (mkey=oew-1; mkey>-1; mkey--)	{b=mkey;findpiece();}	
+  	while ( (mkey > -1) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+		findpiece();
+		mkey--;b=mkey;
+  	}
   }
   if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
@@ -579,24 +601,19 @@ void subpacmanx(){
   */
   points+=brokenarrow[orientation]*10;
   //message="NOT SET";
-  if ( kingpieces[orientation] == 0 ){
+  /*
+  if (( kingpieces[orientation] == 0 )&&(kingtoedge[orientation])){
 	  //calchightarget();
 	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) {
 		  redflag=YES;	// raise a red flag
 		  points=200;
-		  //message="NORTH-SOUTH ARRRRRRRRGGGGGGG";
-		  //printmessage();
-		  //getchar();
 	  }
 	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) {
 		  redflag=YES;	// raise a red flag
 		  points=200;
-		  //message="EAST-WEST ARRRRRRRRGGGGGGG";
-		  //printmessage();
-		  //getchar();
 	  }	  
   }
- 
+ */
   subpacmany(); // apply the points
 }
 void subpacmany(){	// apply the points generated in pacman2-6
@@ -750,7 +767,7 @@ void checkbrokenarrowhead(){
 
 void pacman2(){
 // improved version of pacman
-	redflag=NO;		// at this point no red flag to be waived
+	//redflag=NO;		// at this point no red flag to be waived
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
