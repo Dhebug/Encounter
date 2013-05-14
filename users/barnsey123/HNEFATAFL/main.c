@@ -29,9 +29,10 @@
 // 08-05-2013 NB v0.042 resolving the vinegar strokes (trying)
 // 08-05-2013 NB v0.043 SHAZAM! One major bug resolved (broken arrow issue)
 // 09-05-2013 NB v0.044 Exploiting tzonemode
-// 13-05-2013 NB v0.045 Introduction of RED FLAG (vinegar strokes issue 1 resolved)
+// 13-05-2013 NB v0.045 Introduction of RED FLAG (vinegar strokes issue 1 resolved) PROBLEM with illegal moves
+// 13-05-2013 NB v0.046 released not tested
+// 14-05-2013 NB v0.047 bugfix in enemy[][] array testing. Minor font change. Redflag disables full brokenarrow
 /* TO DO:
-Vinegar Strokes ISSUE 2: Don't run broken arrow in red flag situation
 */
 #include <lib.h>
 #define NORTH 0
@@ -336,7 +337,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.045\nBY BARNSEY123\n";
+  message="V0.047\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -416,11 +417,12 @@ void computerturn(){
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
   }
-  pacman4(); 	// check for full broken arrow
+  
+  if (redflag == NO ) pacman4(); 	// check for full broken arrow
   //pacman6();	// "vinegar strokes"
   // draw central square (overwriting timer)
-  tiletodraw=9;
-  if (players[5][5] != 3) tiletodraw=3;
+  tiletodraw=9;	// KING ON A TILE
+  if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
   row=5;col=5; ptr_graph=PictureTiles;drawtile(); 
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
@@ -439,11 +441,10 @@ void findpiece(){	// find a piece capable of moving to selected target
 		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
 		//if ( cantake==0 ) { canbetaken(); }		// if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
-		//if ((foundpiece==1)&&(redflag==NO)){ // can't be taken so we've found a candidate
-	
-		if (foundpiece==1){ // can't be taken so we've found a candidate
+		// check NORTH and SOUTH
+		if ((foundpiece == 1)&&(redflag == NO)&&(origorient<EAST)){ // can't be taken so we've found a candidate	
 	  		if (a != targetns) {// target is not on same row as candidate
-				if ((origorient < EAST)&&(targetns == kingns)&&((a < 2)||(a > 8))){
+				if ((targetns == kingns)&&((a < 2)||(a > 8))){
 					startrow=a;destrow=a;startcol=0;destcol=10;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
@@ -455,11 +456,11 @@ void findpiece(){	// find a piece capable of moving to selected target
 					if ((b < kingew)&&(kingpieces[WEST]==1)) setfoundpiece10();
 				}
 			}
-		}
-		//if ((foundpiece == 1)&&(redflag==NO)){
-		if (foundpiece == 1){
+		}	
+		// CHECK EAST AND WEST
+		if ((foundpiece == 1)&&(redflag == NO)&&(origorient > SOUTH)){ // can't be taken so we've found a candidate
 			if ( b != targetew){// target is not on same column as candidate
-				if ((origorient > SOUTH)&&(targetew == kingew)&&((b < 2)||(b > 8))){
+				if ((targetew == kingew)&&((b < 2)||(b > 8))){
 					startrow=0;destrow=10;startcol=b;destcol=b;
 					checkroute(); // returns z
 					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
@@ -530,41 +531,49 @@ NEWTARGET:
   calchightarget();
   // having found target we need to select a piece to move
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
-  fb=9;zerofoundpiece();		// set foundpiece to ZERO "piece not found"
+  fb=9;
+  // NORTH
+  zerofoundpiece();		// set foundpiece to ZERO "piece not found"
   origorient=NORTH;orientation=NORTH;
-  
   //for (mkey=ons-1; mkey>-1; mkey--)	{
-  mkey=ons-1;a=mkey;b=oew;
-  while ( ( mkey >- 1 ) || ((players[a][b]==0)||(players[a][b]==CASTLE))){	
+  mkey=ons;a=mkey;b=oew;
+  while (mkey >= 0 ){
+  //while ( ( mkey > -1 ) || ((players[a][b]==0)||(players[a][b]==CASTLE))){	
   	findpiece();
   	mkey--;a=mkey;
   	}
+  // SOUTH
   if ( foundpiece != 1 ){ 
 	zerofoundpiece();
   	origorient=SOUTH;orientation=SOUTH;	
-  	mkey=ons+1;a=mkey;b=oew;													
+  	mkey=ons;a=mkey;b=oew;													
   	//for (mkey=ons+1; mkey<11; mkey++)	{a=mkey;findpiece();}
-  	while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+  	while ( mkey <= 10 ){
+  	//while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
 	  	findpiece();
 	  	mkey++;a=mkey;
   	}
-  }	 
+  }	
+  // EAST 
   if ( foundpiece != 1 ){ 
-	mkey=oew+1;a=ons;b=mkey;
 	zerofoundpiece();
   	origorient=EAST;orientation=EAST;
+  	mkey=oew;a=ons;b=mkey;
   	//for (mkey=oew+1; mkey<11; mkey++)	{b=mkey;findpiece();}
-  	while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+  	//while ( (mkey < 11) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+	while ( mkey <= 10 ){
 	  	findpiece();
 	  	mkey++;b=mkey;
   	}
   }	
+  // WEST
   if ( foundpiece != 1 ) { 
 	zerofoundpiece();
 	origorient=WEST;orientation=WEST;
-	mkey=oew-1;a=ons;b=mkey;
+	mkey=oew;a=ons;b=mkey;
   	//for (mkey=oew-1; mkey>-1; mkey--)	{b=mkey;findpiece();}	
-  	while ( (mkey > -1) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+  	//while ( (mkey > -1) || ((players[a][b]==0)||(players[a][b]==CASTLE))){
+	while ( mkey >= 0 ){
 		findpiece();
 		mkey--;b=mkey;
   	}
@@ -601,7 +610,7 @@ void subpacmanx(){
   */
   points+=brokenarrow[orientation]*10;
   //message="NOT SET";
-  /*
+ 
   if (( kingpieces[orientation] == 0 )&&(kingtoedge[orientation])){
 	  //calchightarget();
 	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) {
@@ -613,7 +622,7 @@ void subpacmanx(){
 		  points=200;
 	  }	  
   }
- */
+
   subpacmany(); // apply the points
 }
 void subpacmany(){	// apply the points generated in pacman2-6
@@ -767,7 +776,7 @@ void checkbrokenarrowhead(){
 
 void pacman2(){
 // improved version of pacman
-	//redflag=NO;		// at this point no red flag to be waived
+	redflag=NO;		// at this point no red flag to be waived
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
@@ -782,7 +791,7 @@ void pacman2(){
 		//points=50;	// for level 1
 		a=0;b=kingew;startrow=0;destrow=0;startcol=0;destcol=kingew; // NORTH
 		if ( orientation ){
-			a=10;startrow=10;destrow=10; // SOUTH
+			a=10;b=kingew;startrow=10;destrow=10;startcol=0;destcol=kingew; // SOUTH
 			if ( orientation == EAST ){
 				a=kingns;b=10;startrow=0; destrow=kingns;startcol=10;destcol=10;
 			}
@@ -790,6 +799,7 @@ void pacman2(){
 				a=kingns;b=0; startrow=0; destrow=kingns;startcol=0; destcol=0;
 			}
 		}
+		pacman3();
 		// PARTIAL LEVEL 1 "RIGHT"
 		if (startrow == destrow){
 			startcol=kingew;destcol=10;
@@ -803,7 +813,7 @@ void pacman2(){
 		tzonemode=PARTIAL2;
 		startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
 		if ( orientation ){
-			a=10;startrow=9;destrow=9; // SOUTH
+			startrow=9;destrow=9;startcol=0;destcol=kingew; // SOUTH
 			if ( orientation == EAST ){
 				startrow=0; destrow=kingns;startcol=9;destcol=9;
 			}
@@ -847,14 +857,14 @@ void pacman4(){
 	a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=10;
 	pacman3();
 	incorientation(); // SOUTH
-	a=10;startrow=9;destrow=9;
+	a=10;b=kingew;startrow=9;destrow=9;startcol=0;destcol=10;
 	pacman3();
 	incorientation(); // EAST
 	//pacman5();
 	a=kingns;b=10;startrow=0;destrow=10;startcol=9;destcol=9;
 	pacman3();
 	incorientation(); // WEST
-	b=0;startcol=1;destcol=1;
+	a=kingns;b=0;startrow=0;destrow=10;startcol=1;destcol=1;
 	pacman3();
 }
 void pacman5(){
@@ -1589,23 +1599,24 @@ void surroundcount(){
   /*for (test=surrounded;test >0; test--){
 	  zap();
   }*/
-  if (surrounded == 3){	// unset any "enemy and target values" 
+  // unset any "enemy and target values" ONLY if blank square adjacent to king is accessible
+  if (surrounded == 3){	 
     ezew1=kingew;
-    if ( kingns  ){
+    if ( kingns  ){		// NORTH
       ezns1=kingns-1;
       enemyzero();
     }
-    if ( kingns < 10 ){
+    if ( kingns < 10 ){ // SOUTH
       ezns1=kingns+1;
       enemyzero();
     }
     ezns1=kingns;
-    if ( kingew  ){
-      ezew1=kingew-1;
-      enemyzero();
-    }
-    if ( kingew < 10 ){
+    if ( kingew < 10 ){ // EAST
       ezew1=kingew+1;
+      enemyzero();
+  	}
+    if ( kingew  ){
+      ezew1=kingew-1;	// WEST
       enemyzero();
     }
   }
@@ -1620,7 +1631,7 @@ void pause(){
 /******************************/
 
 void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
-  if (players[takena][takenb] > 1){
+  if (players[takena][takenb] > ATTACKER){
     if ((players[takenc][takend] == 0)||(enemy[takenc][takend] > ENEMYWEIGHT)){
       if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
         compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
@@ -1758,9 +1769,14 @@ void updatetarget(){
   target[10][0]=0;
   target[10][10]=0;
   if ( target[targetns][targetew] ){	// only if target is valid (i.e. not a king square)
-    if ( enemy[targetns][targetew] ) inctarget();	// increase target if blocking an enemy	
+  	// increase target if blocking 1 enemy
+    if ( enemy[targetns][targetew] ) inctarget();
+    // increase taregt if blocking 2 enemies		
     if (( enemy[targetns][targetew] == 6)||(enemy[targetns][targetew] == 11)||(enemy[targetns][targetew] == 21)||(enemy[targetns][targetew] == 15)||(enemy[targetns][targetew] == 25)||(enemy[targetns][targetew] == 30)) inctarget();
-    if (( enemy[targetns][targetew] == 35)||(enemy[targetns][targetew] == 16)||(enemy[targetns][targetew] == 26)) inctarget();
+    // increase target if blocking 3 enemies
+    if (( enemy[targetns][targetew] == 35)||(enemy[targetns][targetew] == 16)||(enemy[targetns][targetew] == 26) || (enemy[targetns][targetew] == 31)) inctarget();
+     
+    
     calccantake();			// calculates how many takes can be made in this position (cantake)
     //calctakeweight();		// calculate weight that should be applied to takes	
     y=cantake*TAKEWEIGHT;	// value to be added to target			
