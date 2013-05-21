@@ -32,16 +32,16 @@
 // 13-05-2013 NB v0.045 Introduction of RED FLAG (vinegar strokes issue 1 resolved) PROBLEM with illegal moves
 // 13-05-2013 NB v0.046 released not tested
 // 14-05-2013 NB v0.047 bugfix in enemy[][] array testing. Minor font change. Redflag disables full brokenarrow
-// 15-05-2013 NB v0.048 Fixed illegal moves. 
-*/
+// 15-05-2013 NB v0.048 Fixed illegal moves.
+// 21-05-2013 NB v0.049 improving AI (RingOfSteel), added color to deadpile 
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
 #define EAST 2
 #define WEST 3
 #define ENEMYWEIGHT 37
-#define DEADPILEA 218
-#define DEADPILED 230
+#define DEADPILEA 222
+#define DEADPILED 234
 #define SIDESTEP 3
 #define ATTACKER 1
 #define DEFENDER 2
@@ -227,7 +227,7 @@ Players:
 // +20 can be reached from WEST 
 extern unsigned char enemy[11][11];		// where the defenders can get to
 extern unsigned char computer[11][11];	// where the attackers can get to
-extern unsigned char priority[11][11];	// holds the priority of a piece to move
+//extern unsigned char priority[11][11];	// holds the priority of a piece to move
 extern unsigned char kingtracker[11][11]; // where the king can get to
 unsigned char players[11][11];			// to be the working copy of baseplayers
 unsigned char playertype,piecetype;		// player 1=attacker, 2=defender 
@@ -332,13 +332,15 @@ unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
 unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
+//unsigned char deadcolor;		// color of deadpiece
+//unsigned int deadstart;		// start of deadcolumn
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.048\nBY BARNSEY123\n";
+  message="V0.049\nBY BARNSEY123\n";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -446,6 +448,7 @@ void findpiece(){	// find a piece capable of moving to selected target
 		//if (( origorient == SOUTH ) && ( ns < 9 )) {calccantake();}
 		//if (( origorient == EAST  ) && ( ew < 9 )) {calccantake();}
 		//if (( origorient == WEST  ) && ( ew > 1 )) {calccantake();}
+		// IF REDFLAG==YES we won't check if we can be taken
 		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
 		// check NORTH and SOUTH
@@ -632,11 +635,12 @@ void subpacmany(){	// apply the points generated in pacman2-6
   
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( target[x][y] ){	// if accessible by attacker	
-    	if ( target[x][y] > 1 ){	
+    	if (( target[x][y] > 1 )||(redflag)){	
 	    	//printmessage();getchar();
 	      	target[x][y]+=points; 
       	}else{
 	      	target[x][y]=points; // can be caught if i go here
+	      	if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
       	}
     	decpoints();
     }
@@ -1166,6 +1170,8 @@ void drawboard(){
   draw(198,0,1);
   draw(0,-198,1);
   drawplayers(); 	// draw the players
+  deadatt();	// set dead colors attackers
+  deaddef();	// set dead colors defenders
 }
 
 
@@ -1455,6 +1461,12 @@ unsigned char cantakepiece(){
       pcheckew1=ew-1;
       pcheckew2=ew-2;
     }
+  }
+  // RingOfSteel: when fb==6 update target if defender outside it's home zone
+  if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
+	  if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
+		  target[ns][ew]+=10;
+	  }
   }
   // if a take is possible increment the take counter - if values fall within bounds...
   if ((pcheckns2 > -1)&&(pcheckns2 < 11)&&(pcheckew2 > -1)&&(pcheckew2 < 11)){

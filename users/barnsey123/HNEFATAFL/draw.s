@@ -96,6 +96,39 @@ loop
 	rts
 .)	
 
+_deadatt
+.(
+	ldx #210
+	lda #<$a024
+	sta tmp1+0
+	lda #>$a024
+	sta tmp1+1
+	ldy #0
+loop
+	lda #3
+	sta (tmp1),y
+	jsr _Add40
+	dex
+	bne loop
+	rts
+.)
+
+_deaddef
+.(
+	ldx #210
+	lda #<$a026
+	sta tmp1+0
+	lda #>$a026
+	sta tmp1+1
+	ldy #0
+loop
+	lda #1
+	sta (tmp1),y
+	jsr _Add40
+	dex
+	bne loop
+	rts
+.)
 /*
 void tileloop()
 {
@@ -415,3 +448,79 @@ loop
 	rts
 	.)
 .)
+
+;_hiresasm
+;	LDA $02C0
+;	PHA
+;	AND #$02
+;	BEQ $EBF4
+;	PLA
+;	ORA #$01
+;	STA $02C0
+;	JSR _sethires
+;	RTS
+;
+;_sethires
+;	PHA
+;	LDA $021F
+;	BNE $F92B
+;	LDX #$0B
+;	JSR _subhires1
+;	LDA #$FE
+;	AND $026A
+;	STA $026A
+;	LDA #$1E
+;	STA $BFDF
+;	LDA #$40
+;	STA $A000
+;	LDX #$17
+;	JSR _subhires1
+;	LDA #$00
+;	STA $0219
+;	STA $021A
+;	STA $10
+;	LDA #$A0
+;	STA $11
+;	LDA #$20
+;	STA $0215
+;	LDA #$FF
+;	STA $0213
+;	JSR $F8DC
+;	LDA #$01
+;	ORA $026A
+;	STA $026A
+;	PLA
+;	RTS
+
+; F982
+;_subhires1
+;	LDY #$06
+;loop
+;	LDA $F992,X
+;	STA $000B,Y
+;	DEX
+;	DEY
+;	BNE loop
+;	JSR _subhires1A
+;	RTS
+;
+;EDC4
+;_s;ubhires1A
+;	LDX #$00
+;	LDY #$00
+;bra3
+;	CPY $10
+;	BNE bra2
+;	CPX $11
+;	BEQ bra1
+;bra2
+;	LDA ($0C),Y
+;	STA ($0E),Y
+;	INY
+;	BNE bra3
+;	INC $0D
+;	INC $0F
+;	INX
+;	JMP $EDC8
+;bra1
+;	RTS
