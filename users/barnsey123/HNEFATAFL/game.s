@@ -98,3 +98,4 @@ _zerofoundpiece
 	lda #0
 	sta _foundpiece
 	rts
+	
