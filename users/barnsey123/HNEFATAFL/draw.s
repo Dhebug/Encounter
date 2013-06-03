@@ -20,6 +20,18 @@ skip
 	rts
 .)
 
+_Add1
+.(
+	clc
+	lda tmp1+0
+	adc #1
+	sta tmp1+0
+	bcc skip
+	inc tmp1+1
+skip
+	rts
+.)
+
 ; X=number of columns
 ; Out: update "tmp1"
 _AddCol
@@ -129,25 +141,42 @@ loop
 	bne loop
 	rts
 .)
-/*
-void tileloop()
-{
-	ptr_draw=(unsigned char*)0xa002;	// pointer to start of board
-	ptr_draw+=(col*3)+(row*720);		// 720=18*40 starting screen coordinate
-	for (counter=0;counter<18;inccounter())					//tileheight=pixels (e.g. 18)
-	{
-		//for (x=0;x<tilewidth;x++)
-		//	{
-		//	ptr_draw[x]=ptr_graph[x];
-		//	}
-		ptr_draw[0]=ptr_graph[0];
-		ptr_draw[1]=ptr_graph[1];
-		ptr_draw[2]=ptr_graph[2];
-		ptr_draw+=40;	// number of 6pixel "units" to advance (+40=next line down, same position across)
-		ptr_graph+=3;	// + unit of measurement	(how many 6pixel chunks "across" in graphic file)
-	}
-}
-*/
+
+; draws the bottom of the board
+_drawbottom
+.(
+	lda #<$bef2
+	sta tmp1+0
+	lda #>$bef2
+	sta tmp1+1
+	ldx #33
+loop
+	ldy #0
+	lda #%111111
+	sta (tmp1),y
+	jsr _Add1
+	dex
+	bne loop
+	rts
+.)
+
+; draws the edge of the board
+_drawedge
+.(
+	lda #<$a023
+	sta tmp1+0
+	lda #>$a023
+	sta tmp1+1
+	ldx #199
+loop
+	ldy #0
+	lda #%100000
+	sta (tmp1),y
+	jsr _Add40
+	dex
+	bne loop
+	rts
+.)
 
 _tileloop
 .(
