@@ -35,6 +35,7 @@
 // 15-05-2013 NB v0.048 Fixed illegal moves.
 // 21-05-2013 NB v0.049 improving AI (RingOfSteel), added color to deadpile 
 // 03-06-2013 NB v0.050 Addec color cursor (removed dotted type as got messy)
+// 03-06-2013 NB v0.051 replace some draw and curset commands
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -341,7 +342,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.050.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.051.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -1174,9 +1175,11 @@ void drawboard(){
   kingdefender[WEST]=2;			// count of defenders WEST of king
   surrounded=0;					// reset surrounded back to zero
   drawtiles();					// draw the background tiles
-  curset(12,198,1);
-  draw(198,0,1);
-  draw(0,-198,1);
+  //curset(12,198,1);
+  //draw(198,0,1);
+  drawbottom();
+  drawedge();
+  //draw(0,-198,1);
   drawplayers(); 	// draw the players
   deadatt();	// set dead colors attackers
   deaddef();	// set dead colors defenders
