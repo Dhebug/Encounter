@@ -94,7 +94,7 @@ loop
 	dex
 	bne loop
 	rts
-.)	
+.)
 
 _deadatt
 .(
@@ -200,6 +200,65 @@ skip
 .)
 
 
+;_eorMagicValueTable    .byt 0,128,63,63+128
+;_eorMagicValue         .byt 0
+;_eorMagicValueCounter  .byt 3
+
+;_tileloop2
+;.(
+;   ;inc _eorMagicValueCounter
+ ;  lda #1
+;   and #3
+;   tax
+;   lda _eorMagicValueTable,x
+;   sta _eorMagicValue
+; 
+;   lda _ptr_graph+0
+;   sta tmp0+0
+;   lda _ptr_graph+1
+;   sta tmp0+1
+;      
+;   ldx _col
+;   ldy _row
+;   jsr _SetScreenAddress
+;            
+;   ; Draw loop
+;   .(
+;   ldx #18
+;loop
+;   ldy #0
+;   lda (tmp0),y
+;   eor _eorMagicValue
+;   sta (tmp1),y
+;   iny
+;   lda (tmp0),y
+;   eor _eorMagicValue
+;   sta (tmp1),y
+;   iny
+;   lda (tmp0),y
+;   eor _eorMagicValue
+;   sta (tmp1),y
+;   .(
+;   clc
+;   lda tmp0+0
+;   adc #3
+;   sta tmp0+0
+;   bcc skip
+;   inc tmp0+1
+;skip	
+;   .)
+;   jsr _Add40			
+;   dex
+;   bne loop
+;   .)
+; Update ptr_graph (for animation purpose)
+;   lda tmp0+0
+;   sta _ptr_graph+0
+;   lda tmp0+1
+;   sta _ptr_graph+1	
+;   rts
+;.)
+
 
 /*
 void drawtile()	// draws a board tile, player piece or "arrow"
@@ -299,32 +358,34 @@ set_tile_to_draw
 
 
 ; Draw an inversed colr box to highlight selected box
-; _inversex=screen x position
-; _inversey=screen y position
+; _cx=screen x position
+; _cy=screen y position
 _inverse
 .(
-	ldx _inversex
-	ldy _inversey
+	ldx _cx
+	ldy _cy
 	jsr _SetScreenAddress
-	
 	jsr _Add40
-	jsr _Add40
+	;jsr _Add40
 	
 	; Draw loop
 	.(
-	ldx #18-3
+	ldx #17
 loop
 	ldy #0
 	lda (tmp1),y
-	eor #%001111
+	eor #%111111
+	eor #128
 	sta (tmp1),y
 	iny
 	lda (tmp1),y
 	eor #%111111
+	eor #128
 	sta (tmp1),y
 	iny
 	lda (tmp1),y
-	eor #%111110
+	eor #%111111
+	eor #128
 	sta (tmp1),y
 
 	jsr _Add40
@@ -336,118 +397,154 @@ loop
 	rts
 .)
 
+_inverse2
+.(
+	ldx _cx
+	ldy _cy
+	jsr _SetScreenAddress
+	jsr _Add40
+	; Draw loop
+	.(
+	ldx #17
+loop
+	ldy #0
+	lda (tmp1),y
+	eor #%111111
+	eor #128
+	eor #63
+	sta (tmp1),y
+	iny
+	lda (tmp1),y
+	eor #%111111
+	eor #128
+	eor #63
+	sta (tmp1),y
+	iny
+	lda (tmp1),y
+	eor #%111111
+	eor #128
+	eor #63
+	sta (tmp1),y
+
+	jsr _Add40
+			
+	dex
+	bne loop
+	.)
+		
+	rts
+.)
 
 ; _cx=x coordinate
 ; _cy=y coordinate
 ; _fb=0 -> Erase
 ; _fb=1 -> Draw
-_drawcursor
-.(
-	ldx _cx
-	ldy _cy
-	jsr _SetScreenAddress
-	
-	jsr _Add40
-
-	lda _fb
-	beq erase
-		
-draw
-	.(
-	; top line
-	ldy #0
-	lda #%101010
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
-		
-		
-	; Draw loop
-	.(
-	ldx #8
-loop
-	jsr _Add40
-
-	; draw	
-	ldy #0
-	lda (tmp1),y
-	ora #%010000
-	sta (tmp1),y
-	iny
-	iny
-	lda (tmp1),y
-	ora #%000001
-	sta (tmp1),y
-	
-	jsr _Add40
-			
-	dex
-	bne loop
-	.)
-	
-	; bottom line
-	ldy #0
-	lda #%101010
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
-	
-	rts
-	.)
-
-erase
-	.(
-	; top line
-	ldy #0
-	lda #%1100000
-	sta (tmp1),y
-	iny
-	lda #%1000000
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
-		
+;_drawcursor
+;.(
+;	ldx _cx
+;	ldy _cy
+;	jsr _SetScreenAddress
+;	
+;	jsr _Add40
+;
+;	lda _fb
+;	beq erase
+;		
+;draw
+;	.(
+;	; top line
+;	ldy #0
+;	lda #%101010
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
+;		
 		
 	; Draw loop
-	.(
-	ldx #8
-loop
-	jsr _Add40
-
+;	.(
+;	ldx #8
+;loop
+;	jsr _Add40
+;	; draw	
+;	ldy #0
+;	lda (tmp1),y
+;	ora #%010000
+;	sta (tmp1),y
+;	iny
+;	iny
+;	lda (tmp1),y
+;	ora #%000001
+;	sta (tmp1),y
+;	jsr _Add40
+;	dex
+;	bne loop
+;	.)
+;		
+;	; bottom line
+;	ldy #0
+;	lda #%101010
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
+;	
+;	rts
+;	.)
+;erase
+;	.(
+;	; top line
+;	ldy #0
+;	lda #%1000000
+;	sta (tmp1),y
+;	iny
+;	;lda #%1000000
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
+;		
+		
+;	; Draw loop
+;	.(
+;	ldx #8
+;loop
+;	jsr _Add40
+;
 	; draw	
-	ldy #0
-	lda (tmp1),y
-	and #%11101111
-	sta (tmp1),y
-	iny
-	iny
-	lda (tmp1),y
-	and #%11111110
-	sta (tmp1),y
-	
-	jsr _Add40
-			
-	dex
-	bne loop
-	.)
+;	ldy #0
+;	lda (tmp1),y
+;	and #%11111111
+;	sta (tmp1),y
+;	iny
+;	lda (tmp1),y
+;	sta (tmp1),y
+;	iny
+;	lda (tmp1),y
+;	and #%11111110
+;	sta (tmp1),y
+;	
+;	jsr _Add40
+;			
+;	dex
+;	bne loop
+;	.)
 	
 	; bottom line
-	ldy #0
-	lda #%1100000
-	sta (tmp1),y
-	iny
-	lda #%1000000
-	sta (tmp1),y
-	iny
-	sta (tmp1),y
+;	ldy #0
+;	lda #%1000000
+;	sta (tmp1),y
+;	iny
+;	;lda #%1000000
+;	sta (tmp1),y
+;	iny
+;	sta (tmp1),y
 	
-	rts
-	.)
-.)
+;	rts
+;	.)
+;.)
+
 
 ;_hiresasm
 ;	LDA $02C0

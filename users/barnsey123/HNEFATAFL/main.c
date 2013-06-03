@@ -34,6 +34,7 @@
 // 14-05-2013 NB v0.047 bugfix in enemy[][] array testing. Minor font change. Redflag disables full brokenarrow
 // 15-05-2013 NB v0.048 Fixed illegal moves.
 // 21-05-2013 NB v0.049 improving AI (RingOfSteel), added color to deadpile 
+// 03-06-2013 NB v0.050 Addec color cursor (removed dotted type as got messy)
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -234,8 +235,8 @@ unsigned char playertype,piecetype;		// player 1=attacker, 2=defender
 unsigned char ns,ew;		// default north/south position of central square 	(0-10)
 unsigned char cx,cy;		// cursor x screen position (pixels across)
 unsigned char fb=1;			// foreground/background 0=background, 1=foreground, 2=opposite, 3=nothing							
-unsigned char inversex;		// x position of square to be inversed (to highlight a selected piece)
-unsigned char inversey;		// y position of square to be inversed (to highlight a selected piece)
+//unsigned char inversex;		// x position of square to be inversed (to highlight a selected piece)
+//unsigned char inversey;		// y position of square to be inversed (to highlight a selected piece)
 char mkey;					// code of key pressed (plus loops)
 unsigned char cursormode;	// cursor movement mode 0=freeform 1=restricted
 unsigned char ons,oew;		// original north/south board pos
@@ -333,14 +334,14 @@ unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
 unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
 //unsigned char deadcolor;		// color of deadpiece
-//unsigned int deadstart;		// start of deadcolumn
+//unsigned int deadspace;		// start of deadcolumn
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.049\nBY BARNSEY123\n";
+  message="V0.050.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -448,7 +449,6 @@ void findpiece(){	// find a piece capable of moving to selected target
 		//if (( origorient == SOUTH ) && ( ns < 9 )) {calccantake();}
 		//if (( origorient == EAST  ) && ( ew < 9 )) {calccantake();}
 		//if (( origorient == WEST  ) && ( ew > 1 )) {calccantake();}
-		// IF REDFLAG==YES we won't check if we can be taken
 		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
 		// check NORTH and SOUTH
@@ -576,7 +576,8 @@ NEWTARGET:
   cx=oew;				// piece x screen position
   cy=ons;				// piece y screen position
   blinkcursor();		// draw cursor in foreground color at piece to move position cx,cy
-  fb=0;drawcursor();	// blank cursor
+  fb=0;
+  //drawcursor();	// blank cursor
   cx=targetew;			// target x screen position
   cy=targetns;			// target y screen position
   blinkcursor();		// draw cursor in foreground color at target position cx,cy
@@ -948,13 +949,20 @@ void movecursor2() {
   }
   if (canmovecursor ){
     fb=0;
-    drawcursor();						// print blank cursor (effect=remove dots)
+    //inversex=cx;
+	//inversey=cy;
+    //drawcursor();
+    inverse();				// print blank cursor (effect=remove dots)
     if ( mkey == 8 ) cx-=multiple;	// left
     if ( mkey == 9 ) cx+=multiple;	// right
     if ( mkey == 10 )cy+=multiple;	// down
     if ( mkey == 11 )cy-=multiple;	// up
+    
     fb=1;
-    drawcursor();						// print dotted cursor
+    //inversex=cx;
+	//inversey=cy;
+	//drawcursor();					// print dotted cursor
+	inverse();
     if ( mkey == 8 ) ew-=multiple;	// left
     if ( mkey == 9 ) ew+=multiple;	// right
     if ( mkey == 10 )ns+=multiple;	// down
@@ -1172,19 +1180,25 @@ void drawboard(){
   drawplayers(); 	// draw the players
   deadatt();	// set dead colors attackers
   deaddef();	// set dead colors defenders
+  
 }
 
 
 // blinks the cursor a number of times to attract attention
 void blinkcursor() {
-  //char curloop;
-  //unsigned int subloop;
+  //inversex=cx;
+  //inversey=cy;
   for (counter=0;counter<5;inccounter()){	// flash the cursor to draw attention to it
-    fb=0; drawcursor();					// draw cursor in background color at cx,cy
-    pausetime=250;pause();
-    fb=1; drawcursor();					// draw cursor in foreground color at cx,cy
-    pausetime=2000;pause();
+    fb=0; 
+    //drawcursor();					// draw cursor in background color at cx,cy
+    inverse();
+    pausetime=500;pause();
+    inverse();
+   	fb=1; 
+   	//drawcursor(); 	// draw cursor in foreground color at cx,cy
+   	pausetime=1000;pause();	
   }
+  if ((cx==5)&&(cy==5)) inverse();
 }
 // flashes the screen in the selected ink color
 void flashscreen() {
@@ -1253,14 +1267,15 @@ void playerturn(){
       if (( mkey == 88 )&&( canselect  )){	// if piece is SELECTED and CAN move
         inkcolor=2;inkasm(); 				// green to indicate piece is selected
         flashback=2;
+        inverse2();
         //printmessage();
         //strcpy(message,playertext);
         message="PLACE CURSOR ON DESTINATION\nX=SELECT\nR=RESET";
         printmessage();
         //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
-        inversex=cx;
-        inversey=cy;
-        inverse();				// highlight selected square (inverse color)
+        //inversex=cx;
+        //inversey=cy;
+        //inverse();				// highlight selected square (inverse color)
         mkey=0;					// ensure mkey at known value
         // set Original cursor and board position of selected square
         ocx=cx; ocy=cy; ons=ns; oew=ew;
@@ -1281,29 +1296,37 @@ void playerturn(){
         }
        	if ( mkey == 82 ){ // R has been selected, Reset cursor to original positions
          	fb=0;
-         	drawcursor();		// blank out cursor at current position
+         	//drawcursor();		// blank out cursor at current position
+         	//inversex=cx;
+         	//inversey=cy;
+         	inverse();
          	cx=ocx;						// reset coords and board values to original positions
          	cy=ocy;
          	ns=ons;
          	ew=oew;
-         	inversex=cx;
-         	inversey=cy;
-        	inverse();		// inverse square
+         	//inversex=cx;
+         	//inversey=cy;
          	fb=1;
-         	drawcursor();		// draw cursor at original selected position
+         	//drawcursor();		// draw cursor at original selected position
+         	inverse2();
+         	inverse();		// inverse square
        		}
        	if ( mkey == 88 ){				// if X selected
-         	inversex=ocx;
-         	inversey=ocy;
+         	//inversex=ocx;
+         	//inversey=ocy;
          	inverse();			// inverse original position
          	// X is in original position so return to cursor movement 
+         	
          	if (( ons == ns )&&( oew == ew)){
+	         	inverse2();
+	         	inverse();
            		mkey=0;		// piece de-selected
          	} 
          	else{ 
           		movepiece();	// move selected piece				
            		turn=0;		// player has ended turn
          	}
+         	
        	}
       }
       inkcolor=6;inkasm();	// back to cyan	
@@ -1321,7 +1344,7 @@ void movepiece(){
   piecetype=players[ons][oew];	// obtain type of piece
   // move piece
   fb=0;
-  drawcursor();				// blank out cursor at new selected position
+  //drawcursor();				// blank out cursor at new selected position
   row=ons;
   col=oew;
   tiletodraw=tiles[ons][oew];
