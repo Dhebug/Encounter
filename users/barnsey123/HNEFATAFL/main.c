@@ -36,6 +36,7 @@
 // 21-05-2013 NB v0.049 improving AI (RingOfSteel), added color to deadpile 
 // 03-06-2013 NB v0.050 Addec color cursor (removed dotted type as got messy)
 // 03-06-2013 NB v0.051 replace some draw and curset commands
+// 04-06-2013 NB v0.052 minor change to brokenarrow
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -342,7 +343,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.051.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.052.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -971,7 +972,7 @@ void movecursor2() {
   }
   else{
     if ( cursormode == 0 ) {flashback=6;flashred();}	// flash red: return to cyan:6
-    if ( cursormode == 1 ) {flashback=2;flashred();}	// flash red: return to green:2)
+    if ( cursormode == 1 ) {flashback=2;flashred();}	// flash red: return to green:2, yellow=3)
   }			
 }
 
@@ -1156,6 +1157,7 @@ void deadpile(){
   }
  
 }
+
 // DRAW THE BOARD
 void drawboard(){
   deadtoggle=0;					// ensure deadpile chars drawn in background
@@ -1253,7 +1255,7 @@ void playerturn(){
       if ( canselect  ){
         canpiecemove();
         if (route ) { 
-        	flashcolor=2;flashscreen();	// flash green
+        	flashcolor=2;flashscreen();	// flash 2=green, 3=yellow
           	if ( xkey == 80 ){	// if P is pressed
             	printpossiblemoves();	// Print possible moves
             	printturnprompt();
@@ -1268,7 +1270,7 @@ void playerturn(){
 	     flashred();	
       }		
       if (( mkey == 88 )&&( canselect  )){	// if piece is SELECTED and CAN move
-        inkcolor=2;inkasm(); 				// green to indicate piece is selected
+        inkcolor=2;inkasm(); 				// 2=green, 3=yellow to indicate piece is selected
         flashback=2;
         inverse2();
         //printmessage();
@@ -1551,7 +1553,7 @@ void inccantake(){
 // Explodes a tile
 void explodetile()	{
   //unsigned char b;
-  ptr_graph=ExplodeTiles;					// pointer to byte values of loaded picture	
+  ptr_graph=ExplodeTiles;		// pointer to byte values of loaded picture	
   for (b=0;b<8;b++){
     tileloop();
     pausetime=900;
@@ -1697,7 +1699,7 @@ unsigned char checkroute(){
 		switch(checkroutemode){
     		case 1:	if ((players[checkrouterow][checkroutecol] == ATTACKER )||(players[checkrouterow][checkroutecol] == DEFENDER )) z++;break;
       		case 2: if (target[checkrouterow][checkroutecol] )	target[checkrouterow][checkroutecol]+=2;break;
-      		case 3: if (target[checkrouterow][checkroutecol] ) z++;break; 
+      		case 3: if (target[checkrouterow][checkroutecol] >1 ) z++;break; 
       		case 4: if (enemy[checkrouterow][checkroutecol] ) z+=ENEMYBLOCK;break;
       		case 5: if (target[checkrouterow][checkroutecol]){
 	      				target[checkrouterow][checkroutecol]+=points;} // brokenarrow
