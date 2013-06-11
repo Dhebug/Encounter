@@ -24,7 +24,7 @@
 // 02-05-2013 NB v0.031 Added TRIGGER weighting and changes to brokenarrow
 // 04-05-2013 NB v0.032 Replecaed g variable in gspot with kingtoedge array
 // 04-05-2013 NB v0.033 Introduced pacman3 and some changes to subpacmanx
-// 07-05-2013 NB v0.040 Skip 03x coz of differnt versions floating about 
+// 07-05-2013 NB v0.040 Skip 03x coz of different versions floating about 
 // 07-05-2013 NB v0.041 Fixed a few bugs, reduced footprint
 // 08-05-2013 NB v0.042 resolving the vinegar strokes (trying)
 // 08-05-2013 NB v0.043 SHAZAM! One major bug resolved (broken arrow issue)
@@ -34,9 +34,10 @@
 // 14-05-2013 NB v0.047 bugfix in enemy[][] array testing. Minor font change. Redflag disables full brokenarrow
 // 15-05-2013 NB v0.048 Fixed illegal moves.
 // 21-05-2013 NB v0.049 improving AI (RingOfSteel), added color to deadpile 
-// 03-06-2013 NB v0.050 Addec color cursor (removed dotted type as got messy)
+// 03-06-2013 NB v0.050 Added color cursor (removed dotted type as got messy)
 // 03-06-2013 NB v0.051 replace some draw and curset commands
 // 04-06-2013 NB v0.052 minor change to brokenarrow
+// 11-06-2013 NB v0.053 using asm instead of hchar/curset
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -271,7 +272,7 @@ unsigned char row,col;		// used in tile drawing routines and array navigation ( 
 //unsigned char col;		// used in tile drawing routines and array navigation ( a column in 11x11 grid)
 unsigned char tiletodraw;	// used in tile drawing routines 0-11 (as at 18-10-2011)
 int pausetime;				// amount of time to wait
-unsigned char* ptr_draw;	// ptr to board starting position (e.g. 0xa002)
+//unsigned char* ptr_draw;	// ptr to board starting position (e.g. 0xa002)
 unsigned char* ptr_graph;	// pointer to byte values of loaded picture	
 unsigned char points;		// points around king
 char counter;				// general purpose counter (*** DO NOT set to UNSIGNED *** NB 24/10/2011)
@@ -330,7 +331,8 @@ unsigned char subpacc,subpacd;	// used in subpacman5
 unsigned char turncount=0;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
-unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadchar; deadcurset; // count of dead attackers or defenders
+unsigned char deadattackers, deaddefenders, deadplayers, deadchar, deadtoggle; deadcurset; // count of dead attackers or defenders
+//unsigned char* deadchar;
 unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
@@ -343,7 +345,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.052.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.053.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -1128,31 +1130,39 @@ void drawplayers() {
 }
 // update the deadpile
 void deadpile(){
-  //curset(212,0,0);
-  //hchar('X',0,1);
-  //curset(212+6,0,0);
-  //hchar('*',0,1);
-  //curset(212+12,0,0);
-  //hchar('0',0,1);
-  //curset(212+18,0,0);
-  //hchar('X',0,1);
-  if (playertype == 1){
-	  deaddefenders++;
-	  deadplayers=deaddefenders;
-	  deadcurset=DEADPILED;
-	  deadchar='(';
-  }
-  if (playertype == 2){
-	  deadattackers++;
+  //unsigned int tmpchar;
+  if (playertype == 2){	// ATTACKERS
+	  if ( deadtoggle ) deadattackers++;
 	  deadplayers=deadattackers;
-	  deadcurset=DEADPILEA;
-	  deadchar=')';
+	  //deadcurset=DEADPILEA;
+	  //deadchar=')';
+	  deadcurset=0xa025;
+	  //deadchar=0x9948;
+	  //deadchar=0x9800+(41*8);   // ")"
+	  //tmpchar=0x9948; // (9800hex + 41*8=328=148hex
+
+  }
+  if (playertype == 1){ // DEFENDERS
+	  if ( deadtoggle ) deaddefenders++;
+	  deadplayers=deaddefenders;
+	  //deadcurset=DEADPILED;
+	  //deadchar='(';
+	  deadcurset=0xa027;
+	  //deadchar=0x9940;
+	  //deadchar=0x9800+(40*8); // "("
+	  //tmpchar=0x9940; // (9800hex + 40*8=320=140hex
+
+
   }
   
-  if ( deadplayers  ){
+  if ( deadplayers ){
 	  for (x=0;x<deadplayers;x++){
-		  curset(deadcurset,x*8,0);
-		  hchar(deadchar,0,deadtoggle);
+		  //if ( deadtoggle == 0 ) deadchar=0x9800+(32*8); // space
+		  chasm();
+		  //deadcurset+=(40*9);
+		  deadcurset+=(40*8); // 40*8
+		  //curset(deadcurset,x*8,0);
+		  //hchar(deadchar,0,deadtoggle);
 	  }
   }
  
@@ -1160,7 +1170,7 @@ void deadpile(){
 
 // DRAW THE BOARD
 void drawboard(){
-  deadtoggle=0;					// ensure deadpile chars drawn in background
+  deadtoggle=0;				// ensure deadpile chars drawn in background
   playertype=1;deadpile();	// clear the deadpile of defenders
   playertype=2;deadpile();  // clear the deadpile of attackers
   deadattackers=0;deaddefenders=0; // reset deadpile counts
@@ -1699,7 +1709,7 @@ unsigned char checkroute(){
 		switch(checkroutemode){
     		case 1:	if ((players[checkrouterow][checkroutecol] == ATTACKER )||(players[checkrouterow][checkroutecol] == DEFENDER )) z++;break;
       		case 2: if (target[checkrouterow][checkroutecol] )	target[checkrouterow][checkroutecol]+=2;break;
-      		case 3: if (target[checkrouterow][checkroutecol] >1 ) z++;break; 
+      		case 3: if (target[checkrouterow][checkroutecol] ) z++;break; 
       		case 4: if (enemy[checkrouterow][checkroutecol] ) z+=ENEMYBLOCK;break;
       		case 5: if (target[checkrouterow][checkroutecol]){
 	      				target[checkrouterow][checkroutecol]+=points;} // brokenarrow
