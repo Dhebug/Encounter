@@ -5,8 +5,7 @@
  .zero
  
  .text
-
-
+ 
 ; Add 40 to "tmp1"
 _Add40
 .(
@@ -176,6 +175,38 @@ loop
 	dex
 	bne loop
 	rts
+.)
+
+_chasm
+.(
+	lda _deadcurset+0
+	sta tmp1+0
+	lda _deadcurset+1
+	sta tmp1+1
+	ldx #0
+loop
+	; check to see if a space is to be printed
+	lda _deadtoggle
+	cmp #0
+	beq chasmspace	; set the space char
+	lda _playertype	; if not a space then either defender or attacker
+	cmp #1			; is it a defender?
+	beq chasmdef	; playertype=defender
+	lda $9948,x		; else playertype=attacker
+chasmx
+	ldy #0
+	sta (tmp1),y
+	jsr _Add40
+	inx
+	cpx #7
+	bcc loop
+	rts
+chasmspace
+	lda $9900,x
+	jmp chasmx
+chasmdef
+	lda $9940,x
+	jmp chasmx
 .)
 
 _tileloop
