@@ -38,6 +38,7 @@
 // 03-06-2013 NB v0.051 replace some draw and curset commands
 // 04-06-2013 NB v0.052 minor change to brokenarrow
 // 11-06-2013 NB v0.053 using asm instead of hchar/curset
+// 12-06-2013 NB v0.054 add RowCountAtt and ColCountAtt to record number of attackers on any given row/col
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -233,6 +234,8 @@ extern unsigned char enemy[11][11];		// where the defenders can get to
 extern unsigned char computer[11][11];	// where the attackers can get to
 //extern unsigned char priority[11][11];	// holds the priority of a piece to move
 extern unsigned char kingtracker[11][11]; // where the king can get to
+extern unsigned char RowCountAtt[11];	// count of attackers on a Row
+extern unsigned char ColCountAtt[11];	// count of attackers on a Column
 unsigned char players[11][11];			// to be the working copy of baseplayers
 unsigned char playertype,piecetype;		// player 1=attacker, 2=defender 
 unsigned char ns,ew;		// default north/south position of central square 	(0-10)
@@ -331,8 +334,8 @@ unsigned char subpacc,subpacd;	// used in subpacman5
 unsigned char turncount=0;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
-unsigned char deadattackers, deaddefenders, deadplayers, deadchar, deadtoggle; deadcurset; // count of dead attackers or defenders
-//unsigned char* deadchar;
+unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset; // count of dead attackers or defenders
+//unsigned char deadchar;
 unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
@@ -345,7 +348,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.053.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.054.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -400,9 +403,10 @@ void computerturn(){
   printmessage();
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
+  ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
   //prioritycalc();	// calculates the priorities of pieces to move
   // 2. Loop through players array searching for pieces - calculating where they can go
-  for (fb=4;fb<9;fb++){
+  for (fb=4;fb<10;fb++){
 	  timertile();
       for (ctns=0;ctns<11;ctns++){
         for (ctew=0;ctew<11;ctew++){
@@ -415,8 +419,12 @@ void computerturn(){
 	      if (( fb == 6)&&( computer[ctns][ctew] )) updatetarget();
 	      // fb=8 update kingtracker
 	      if (( fb == 8)&&( players[ctns][ctew] == KING )) printdestinations();
+	      if (( fb == 9 )&&( players[ctns][ctew] == ATTACKER)){
+			RowCountAtt[ctns]++;
+			ColCountAtt[ctew]++;
+	      }
 	    }
-    }
+      }
   }
   // 3. Increment target positions around King (PACMAN)
   pacman2();
@@ -1130,32 +1138,16 @@ void drawplayers() {
 }
 // update the deadpile
 void deadpile(){
-  //unsigned int tmpchar;
-  if (playertype == 2){	// ATTACKERS
-	  if ( deadtoggle ) deadattackers++;
-	  deadplayers=deadattackers;
-	  //deadcurset=DEADPILEA;
-	  //deadchar=')';
-	  deadcurset=0xa025;
-	  //deadchar=0x9948;
-	  //deadchar=0x9800+(41*8);   // ")"
-	  //tmpchar=0x9948; // (9800hex + 41*8=328=148hex
-
-  }
-  if (playertype == 1){ // DEFENDERS
+  if (playertype == 1){ // DEFENDERS "("
 	  if ( deadtoggle ) deaddefenders++;
 	  deadplayers=deaddefenders;
-	  //deadcurset=DEADPILED;
-	  //deadchar='(';
 	  deadcurset=0xa027;
-	  //deadchar=0x9940;
-	  //deadchar=0x9800+(40*8); // "("
-	  //tmpchar=0x9940; // (9800hex + 40*8=320=140hex
-
-
+  }else{	// ATTACKERS ")"
+	  if ( deadtoggle ) deadattackers++;
+	  deadplayers=deadattackers;
+	  deadcurset=0xa025;
   }
-  
-  if ( deadplayers ){
+  //if ( deadplayers ){
 	  for (x=0;x<deadplayers;x++){
 		  //if ( deadtoggle == 0 ) deadchar=0x9800+(32*8); // space
 		  chasm();
@@ -1164,13 +1156,13 @@ void deadpile(){
 		  //curset(deadcurset,x*8,0);
 		  //hchar(deadchar,0,deadtoggle);
 	  }
-  }
+  //}
  
 }
 
 // DRAW THE BOARD
 void drawboard(){
-  deadtoggle=0;				// ensure deadpile chars drawn in background
+  deadtoggle=0;				// ensure deadpile char=space
   playertype=1;deadpile();	// clear the deadpile of defenders
   playertype=2;deadpile();  // clear the deadpile of attackers
   deadattackers=0;deaddefenders=0; // reset deadpile counts
