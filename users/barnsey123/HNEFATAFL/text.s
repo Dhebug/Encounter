@@ -5,7 +5,7 @@
 ;.)
 
 _playertext	.dsb 2
-_turntext	.byt " TURN:   ARROW KEYS TO MOVE",10,"X=SELECT PIECE   P=POSSIBLE MOVES",10,"TURN:              REMAINING:",0
+_turntext	.byt " TURN:  ARROW KEYS TO MOVE",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
 
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen
@@ -105,6 +105,7 @@ _printturncount
 	sta $bfc1
 	lda _odin	; units
 	sta $bfc2
+	rts
 .)
 
 _printremaining
@@ -115,5 +116,11 @@ _printremaining
 	sta $bfd9
 	lda _odin	; units
 	sta $bfda
+	rts
 .)
 
+_colorturn
+.(
+	lda _y		; color
+	sta $bfb9
+.)

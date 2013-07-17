@@ -40,7 +40,9 @@
 // 11-06-2013 NB v0.053 using asm instead of hchar/curset
 // 12-06-2013 NB v0.054 add RowCountAtt and ColCountAtt to record number of attackers on any given row/col
 // 15-07-2013 nb V0.060 (V0.055 IS PARKED)
-// 17-07-2013 NB v0.061 Adding turncounters, turns remaining
+// 17-07-2013 NB v0.061 Adding turncounters, turns remaining (huns, thor, odin variables)
+// 17-07-2013 NB v0.062 removed "ring of steel"
+// 17-07-2013 nb v0.063 Tidied up display, changed font, added SAGA, THOR, ODIN modes
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -63,6 +65,15 @@
 #define FULL 2
 #define NO 0
 #define YES 1
+#define BLACK 0
+#define RED	1
+#define GREEN 2
+#define YELLOW 3
+#define BLUE 4
+#define MAGENTA 5
+#define CYAN 6
+#define WHITE 7
+
 //#define VINEGAR 3
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
@@ -202,8 +213,9 @@ void zerocounter();			// set counter=0
 void deadpile();			// draw deadpile
 void flashred();			// flash screen in red
 //void gethightarget();		// without upsetting any other variables
-void calccantake2();			// alternative calcantake
+void calccantake2();		// alternative calcantake
 void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
+void printturnline();		// prints the turn counters
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -334,7 +346,7 @@ unsigned char checkroutemode;	// mode used for checkroute function
 								// 5= Emergency! Make target=255
 unsigned char checkrouterow, checkroutecol, checkroutestart, checkroutedest; // used in checkroute routine
 unsigned char subpacc,subpacd;	// used in subpacman5 
-unsigned char turncount=0;			// used to count the number of turns
+unsigned char turncount;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
 unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset; // count of dead attackers or defenders
@@ -354,7 +366,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.060.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.063 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -368,18 +380,18 @@ main(){
       gameinput=getchar();
       if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
       if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
-      if ( gamestyle == 3 ) {flashback=6;flashred();}
+      if ( gamestyle == 3 ) {flashback=CYAN;flashred();}
     }
     // set turnlimits
-	turnlimit=0;
+	turnlimit=0; turncount=0;
 	while (turnlimit == 0){
-		message="1: 55 TURNS\n2: 25 TURNS\n3: 15 TURNS";
+		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  25 TURNS\n3: 'ODIN'  12 TURNS";
 		printmessage();
 		gameinput=getchar();
-		if ( gameinput == 49 ) turnlimit=56;	// 55 turns
-		if ( gameinput == 50 ) turnlimit=26;	// 25 turns
-		if ( gameinput == 51 ) turnlimit=16; 	// 15 turns
-		if ( turnlimit == 0 ) {flashback=6;flashred();}
+		if ( gameinput == 49 ) turnlimit=255;	// 255 turns
+		if ( gameinput == 50 ) turnlimit=25;	// 25 turns
+		if ( gameinput == 51 ) turnlimit=15; 	// 15 turns
+		if ( turnlimit == 0 ) {flashback=CYAN;flashred();}
 	}   
     while (game > 0){
       ns=5;			// default north/south position of central square
@@ -427,9 +439,10 @@ void computerturn(){
   //message="TURN: ";
   //strcat(message, test2);
   //strcat(message, " THINKING...\0");
-  message="THINKING...";
+  message="THINKING...\n\nTURN:              REMAINING:    ";
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
+  printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
   ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
@@ -1012,8 +1025,8 @@ void movecursor2() {
     if ( mkey == 11 )ns-=multiple;	// up
   }
   else{
-    if ( cursormode == 0 ) {flashback=6;flashred();}	// flash red: return to cyan:6
-    if ( cursormode == 1 ) {flashback=2;flashred();}	// flash red: return to green:2, yellow=3)
+    if ( cursormode == 0 ) {flashback=CYAN;flashred();printturnline();}		// flash red: return to cyan:6
+    if ( cursormode == 1 ) {flashback=GREEN;flashred();printturnline();}	// flash red: return to green:2, yellow=3)
   }			
 }
 
@@ -1024,8 +1037,9 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="* PRESS ANY KEY TO PROCEED *";
+  message="* PRESS ANY KEY TO PROCEED *\n\nTURN:              REMAINING:    ";
   printmessage();
+  printturnline();
   k=getchar();
   fb=0;
   printdestinations();	// blank out arrows on all destinations
@@ -1258,7 +1272,7 @@ void playerturn(){
   oew=ew;			// original ew board position
   ocx=cx;			// original x screen position
   ocy=cy;			// original y screen position
-  flashback=6;
+  flashback=CYAN;
   playertext="ATTACKER'S";
   if ( playertype == 2 ) playertext="KING'S";
   /*
@@ -1272,13 +1286,7 @@ void playerturn(){
   blinkcursor();
   printturnprompt();	// display instructions
   // print number of turns and remaining turns
-  x=turncount;
-  calcturnvalue();		// for display purposes	
-  printturncount();		// print number of turns
-  x=turnlimit-turncount;// x= turns remaining
-  calcturnvalue();		// for display purposes
-  printremaining();		// print turns remaining
-  
+  printturnline();
   while (turn){			// repeat until move is made
     xkey=getchar();		// get code of pressed key
     mkey=xkey;
@@ -1296,10 +1304,11 @@ void playerturn(){
       if ( canselect  ){
         canpiecemove();
         if (route ) { 
-        	flashcolor=2;flashscreen();	// flash 2=green, 3=yellow
+        	flashcolor=GREEN;flashscreen();	// flash 2=green, 3=yellow
           	if ( xkey == 80 ){	// if P is pressed
             	printpossiblemoves();	// Print possible moves
             	printturnprompt();
+            	printturnline();
           	}
         }
         else { 
@@ -1311,13 +1320,14 @@ void playerturn(){
 	     flashred();	
       }		
       if (( mkey == 88 )&&( canselect  )){	// if piece is SELECTED and CAN move
-        inkcolor=2;inkasm(); 				// 2=green, 3=yellow to indicate piece is selected
-        flashback=2;
+        inkcolor=GREEN;inkasm(); 				// 2=green, 3=yellow to indicate piece is selected
+        flashback=GREEN;
         inverse2();
         //printmessage();
         //strcpy(message,playertext);
-        message="PLACE CURSOR ON DESTINATION\nX=SELECT\nR=RESET";
+        message="PLACE CURSOR ON DESTINATION\nX:SELECT   R:RESET\nTURN:              REMAINING:    ";
         printmessage();
+        printturnline();
         //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
         //inversex=cx;
         //inversey=cy;
@@ -1375,9 +1385,10 @@ void playerturn(){
          	
        	}
       }
-      inkcolor=6;inkasm();	// back to cyan	
-      flashback=6;
-      printturnprompt();		
+      inkcolor=CYAN;inkasm();	// back to cyan	
+      flashback=CYAN;
+      printturnprompt();
+      printturnline();		
     }		// key = X or P
   }	// While player turn		
 }
@@ -1531,12 +1542,13 @@ unsigned char cantakepiece(){
       pcheckew2=ew-2;
     }
   }
-  // RingOfSteel: when fb==6 update target if defender outside it's home zone
+  // Ring Of Steel: when fb==6 update target if defender outside it's home zone
+  /*
   if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
 	  if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
 		  target[ns][ew]+=10;
 	  }
-  }
+  }*/
   // if a take is possible increment the take counter - if values fall within bounds...
   if ((pcheckns2 > -1)&&(pcheckns2 < 11)&&(pcheckew2 > -1)&&(pcheckew2 < 11)){
     if (( players[pcheckns1][pcheckew1]  )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2 )&&(players[pcheckns1][pcheckew1] != CASTLE)){	
@@ -1914,7 +1926,7 @@ void updateroutetarget(){
 
 // flashes the screen red (goes back to whatever flashback is set to)
 void flashred(){
-	flashcolor=1;
+	flashcolor=RED;
 	flashscreen();
 }
 // calc huns, thor, odin
@@ -1927,6 +1939,18 @@ void calcturnvalue(){
   huns+=48;
   thor+=48;
   odin+=48;
+}
+void printturnline(){
+  x=turncount;
+  calcturnvalue();		// for display purposes	
+  printturncount();		// print number of turns
+  x=turnlimit-turncount;// x= turns remaining
+  calcturnvalue();		// for display purposes
+  printremaining();		// print turns remaining
+  y=GREEN;
+  if ( x < 11) y=YELLOW;
+  if ( x < 6 ) y=RED;
+  colorturn();	// set color for turn row
 }
 /*
 void prioritycalc(){ // calculates the priorities of moving a piece
