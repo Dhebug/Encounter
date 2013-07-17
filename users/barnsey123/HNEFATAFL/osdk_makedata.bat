@@ -6,4 +6,7 @@
 %OSDK%\bin\pictconv -m0 -f0 -o4_TitleTiles pics\defence-force2.png defence.s
 %OSDK%\bin\pictconv -m0 -f0 -o4_RunicTiles pics\runes.png runes.s
 %OSDK%\bin\pictconv -m0 -f0 -o4_TimerTiles pics\timer5.png timer.s
+%OSDK%\bin\pictconv -m0 -f0 -d1 -o4_Mask pics\MaskSmallOric2.png mask.s
+%OSDK%\bin\pictconv -m0 -f0 -d1 -o3_MaskC pics\MaskSmallOric2.png mask.c
+%OSDK%\bin\pictconv -m0 -f0 -d1 -o0 pics\MaskSmallOric2.png maskf0d1.tap
 pause

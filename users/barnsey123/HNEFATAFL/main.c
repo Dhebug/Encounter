@@ -39,6 +39,8 @@
 // 04-06-2013 NB v0.052 minor change to brokenarrow
 // 11-06-2013 NB v0.053 using asm instead of hchar/curset
 // 12-06-2013 NB v0.054 add RowCountAtt and ColCountAtt to record number of attackers on any given row/col
+// 15-07-2013 nb V0.060 (V0.055 IS PARKED)
+// 17-07-2013 NB v0.061 Adding turncounters, turns remaining
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -201,6 +203,7 @@ void deadpile();			// draw deadpile
 void flashred();			// flash screen in red
 //void gethightarget();		// without upsetting any other variables
 void calccantake2();			// alternative calcantake
+void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -342,13 +345,16 @@ unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
 //unsigned char deadcolor;		// color of deadpiece
 //unsigned int deadspace;		// start of deadcolumn
+unsigned char turnlimit;		// limit the number of turns (compares to turncount)
+unsigned char remaining;		// number of turns remaining
+unsigned char huns,thor,odin;	// hundreds, tens and units...
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.054.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.060.IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -364,19 +370,35 @@ main(){
       if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
       if ( gamestyle == 3 ) {flashback=6;flashred();}
     }
+    // set turnlimits
+	turnlimit=0;
+	while (turnlimit == 0){
+		message="1: 55 TURNS\n2: 25 TURNS\n3: 15 TURNS";
+		printmessage();
+		gameinput=getchar();
+		if ( gameinput == 49 ) turnlimit=56;	// 55 turns
+		if ( gameinput == 50 ) turnlimit=26;	// 25 turns
+		if ( gameinput == 51 ) turnlimit=16; 	// 15 turns
+		if ( turnlimit == 0 ) {flashback=6;flashred();}
+	}   
     while (game > 0){
       ns=5;			// default north/south position of central square
       ew=5;			// default east/west position of central square
       cx=ew;		// cursor x screen position
       cy=ns;		// cursor y screen position
       playertype++;	// playertype inited as 0 so ++ will make it 1 at start of game
-      if ( playertype == 3 ) { playertype = 1; turncount++; } // was defender, set to attacker player, inc turncount
+      if ( playertype == 3 ) { 
+	      playertype = 1; turncount++; // was defender, set to attacker player, inc turncount
+  	 	  if ( turncount > turnlimit ) gamestyle = 9; // signify end of game
+	  }
       //if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))||((gamestyle==2)&&(playertype==1)))
-      if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))){
-        playerturn();			// player input
-      }else{
-        computerturn();			// computer has a go...
-      }				
+      if ( gamestyle != 9 ){	// if turns not exceeded
+      	if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))){
+        	playerturn();			// player input
+      	}else{
+        	computerturn();			// computer has a go...
+      	}
+  	  }				
       checkend();				// check for end of game conditions
     }
 /*
@@ -384,11 +406,11 @@ main(){
     game=-1 Stalemate.
     game=-2 Attacker wins. 																
 */
-    message="ATTACKER WINS!"; // default (game=-2)
+    message="ATTACKER WINS! ODIN IS DISPLEASED..."; // default (game=-2)
     // king escapes or all attackers killed
-    if ( game == 0 ) message="KING WINS!"; 
+    if ( game == 0 ) message="KING WINS! ODIN IS PLEASED..."; 
     // computer can't move
-    if ( game == -1 ) message="STALEMATE"; 
+    if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
     printmessage();
     message="\nPRESS A KEY:";
     printline();
@@ -398,8 +420,15 @@ main(){
 
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn(){
-  //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
+  //char* test2=itoa(turncount);
+  //test2=itoa(turncount);
+  //strcat (message, test2);
+ // test2=itoa(turncount);
+  //message="TURN: ";
+  //strcat(message, test2);
+  //strcat(message, " THINKING...\0");
   message="THINKING...";
+  //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
@@ -683,12 +712,13 @@ void checkbrokenarrow(){
 		if (( kingpieces[orientation] == 1) && (f)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
 			if ( kingtoedge[orientation] == 0){	// no targets on route
-				//brokenarrow[orientation]=5;
+				/*
 				message="BROKEN ARROW UPDATE";
 				printline();
 				message="\nPRESS A KEY";
 				printline();
 				getchar();
+				*/
 				checkroutemode=5;checkroute();
 			}else{
 				brokenarrow[orientation]++; // POTENTIAL BROKEN ARROW
@@ -888,7 +918,7 @@ void pacman5(){
 void checkend()	{
 /* END OF GAME CONDITIONS
   game=0  King Wins.
-  game=-1 Stalemate.
+  game=-1 Stalemate. (or turnlimit exceeded)
   game=-2 Attacker wins. 																
 */
   // ns and ew contains new board co-ords of last piece moved
@@ -901,6 +931,7 @@ void checkend()	{
 	if ((ew )&&(players[ns][ew-1] == 3 )) 		surroundcount(); 
     if ( surrounded == 4 )  game=-2;	// king is surrounded on all sides by attackers or king squares
   }
+  if ( gamestyle == 9 ) game=-1; // turnlimit exceeded: stalemate
 }
 
 void cursormodezero() {
@@ -1228,7 +1259,7 @@ void playerturn(){
   ocx=cx;			// original x screen position
   ocy=cy;			// original y screen position
   flashback=6;
-  playertext="ATTACKER";
+  playertext="ATTACKER'S";
   if ( playertype == 2 ) playertext="KING'S";
   /*
   if ( playertype == 2 ){ 
@@ -1240,6 +1271,14 @@ void playerturn(){
   */
   blinkcursor();
   printturnprompt();	// display instructions
+  // print number of turns and remaining turns
+  x=turncount;
+  calcturnvalue();		// for display purposes	
+  printturncount();		// print number of turns
+  x=turnlimit-turncount;// x= turns remaining
+  calcturnvalue();		// for display purposes
+  printremaining();		// print turns remaining
+  
   while (turn){			// repeat until move is made
     xkey=getchar();		// get code of pressed key
     mkey=xkey;
@@ -1878,7 +1917,17 @@ void flashred(){
 	flashcolor=1;
 	flashscreen();
 }
-
+// calc huns, thor, odin
+void calcturnvalue(){
+  // calculate values
+  huns=x/100;
+  thor=(x-(huns*100))/10;
+  odin=x-(huns*100)-(thor*10);
+  // transform to ascii code
+  huns+=48;
+  thor+=48;
+  odin+=48;
+}
 /*
 void prioritycalc(){ // calculates the priorities of moving a piece
 	for(a=0;a<11;a++){

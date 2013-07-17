@@ -5,7 +5,7 @@
 ;.)
 
 _playertext	.dsb 2
-_turntext	.byt " TURN: USE CURSOR KEYS.",10,"X=SELECT",10,"P=POSSIBLE MOVES",0
+_turntext	.byt " TURN:   ARROW KEYS TO MOVE",10,"X=SELECT PIECE   P=POSSIBLE MOVES",10,"TURN:              REMAINING:",0
 
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen
@@ -97,4 +97,23 @@ _printturnprompt
 	jmp _printline
 .)
 
+_printturncount
+.(
+	lda _huns	; hundreds
+	sta $bfc0
+	lda _thor	; tens
+	sta $bfc1
+	lda _odin	; units
+	sta $bfc2
+.)
+
+_printremaining
+.(
+	lda _huns	; hundreds
+	sta $bfd8
+	lda _thor	; tens
+	sta $bfd9
+	lda _odin	; units
+	sta $bfda
+.)
 
