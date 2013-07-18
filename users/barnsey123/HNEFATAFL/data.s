@@ -90,11 +90,11 @@ _priority
 _kingtracker
 	.dsb 11*11
 
-_ColCountAtt
-	.dsb 11
+;_ColCountAtt
+;	.dsb 11
 	
-_RowCountAtt
-	.dsb 11
+;_RowCountAtt
+;	.dsb 11
 			  	
 _ClearArrays	
 .(
@@ -112,18 +112,18 @@ loop_clear
 	rts
 .)
 
-_ClearArrays2
-.(
-	lda #0
-	ldx #0
-loop_clear
-	sta _RowCountAtt,x
-	sta _ColCountAtt,x
-	inx
-	cpx #11
-	bne loop_clear
-	rts
-.)
+;_ClearArrays2
+;.(
+;	lda #0
+;	ldx #0
+;loop_clear
+;	sta _RowCountAtt,x
+;	sta _ColCountAtt,x
+;	inx
+;	cpx #11
+;	bne loop_clear
+;	rts
+;.)
 
 _CopyFont
 .(
