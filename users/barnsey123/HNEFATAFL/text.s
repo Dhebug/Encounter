@@ -5,7 +5,7 @@
 ;.)
 
 _playertext	.dsb 2
-_turntext	.byt " TURN:  ARROW KEYS TO MOVE",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
+_turntext	.byt " TURN:  #$%&:MOVE CURSOR",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
 
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen

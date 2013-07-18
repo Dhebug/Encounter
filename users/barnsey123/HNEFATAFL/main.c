@@ -43,6 +43,7 @@
 // 17-07-2013 NB v0.061 Adding turncounters, turns remaining (huns, thor, odin variables)
 // 17-07-2013 NB v0.062 removed "ring of steel"
 // 17-07-2013 nb v0.063 Tidied up display, changed font, added SAGA, THOR, ODIN modes
+// 18-07-2013 NB v0.064 REMOVE RowCountAtt and ColCountAtt
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -249,8 +250,8 @@ extern unsigned char enemy[11][11];		// where the defenders can get to
 extern unsigned char computer[11][11];	// where the attackers can get to
 //extern unsigned char priority[11][11];	// holds the priority of a piece to move
 extern unsigned char kingtracker[11][11]; // where the king can get to
-extern unsigned char RowCountAtt[11];	// count of attackers on a Row
-extern unsigned char ColCountAtt[11];	// count of attackers on a Column
+//extern unsigned char RowCountAtt[11];	// count of attackers on a Row
+//extern unsigned char ColCountAtt[11];	// count of attackers on a Column
 unsigned char players[11][11];			// to be the working copy of baseplayers
 unsigned char playertype,piecetype;		// player 1=attacker, 2=defender 
 unsigned char ns,ew;		// default north/south position of central square 	(0-10)
@@ -366,7 +367,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.063 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.064 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -385,12 +386,12 @@ main(){
     // set turnlimits
 	turnlimit=0; turncount=0;
 	while (turnlimit == 0){
-		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  25 TURNS\n3: 'ODIN'  12 TURNS";
+		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  22 TURNS\n3: 'ODIN'  12 TURNS";
 		printmessage();
 		gameinput=getchar();
 		if ( gameinput == 49 ) turnlimit=255;	// 255 turns
-		if ( gameinput == 50 ) turnlimit=25;	// 25 turns
-		if ( gameinput == 51 ) turnlimit=15; 	// 15 turns
+		if ( gameinput == 50 ) turnlimit=22;	// 22 turns
+		if ( gameinput == 51 ) turnlimit=12; 	// 12 turns
 		if ( turnlimit == 0 ) {flashback=CYAN;flashred();}
 	}   
     while (game > 0){
@@ -439,16 +440,16 @@ void computerturn(){
   //message="TURN: ";
   //strcat(message, test2);
   //strcat(message, " THINKING...\0");
-  message="THINKING...\n\nTURN:              REMAINING:    ";
+  message="ORIC IS THINKING...\n\nTURN:              REMAINING:    ";
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, priority and computer arrays
-  ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
+  //ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
   //prioritycalc();	// calculates the priorities of pieces to move
   // 2. Loop through players array searching for pieces - calculating where they can go
-  for (fb=4;fb<10;fb++){
+  for (fb=4;fb<9;fb++){
 	  timertile();
       for (ctns=0;ctns<11;ctns++){
         for (ctew=0;ctew<11;ctew++){
@@ -461,10 +462,10 @@ void computerturn(){
 	      if (( fb == 6)&&( computer[ctns][ctew] )) updatetarget();
 	      // fb=8 update kingtracker
 	      if (( fb == 8)&&( players[ctns][ctew] == KING )) printdestinations();
-	      if (( fb == 9 )&&( players[ctns][ctew] == ATTACKER)){
+	      /*if (( fb == 9 )&&( players[ctns][ctew] == ATTACKER)){
 			RowCountAtt[ctns]++;
 			ColCountAtt[ctew]++;
-	      }
+	      }*/
 	    }
       }
   }
@@ -1037,7 +1038,7 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="* PRESS ANY KEY TO PROCEED *\n\nTURN:              REMAINING:    ";
+  message="* PRESS ANY KEY *\n\nTURN:              REMAINING:    ";
   printmessage();
   printturnline();
   k=getchar();
@@ -1325,7 +1326,7 @@ void playerturn(){
         inverse2();
         //printmessage();
         //strcpy(message,playertext);
-        message="PLACE CURSOR ON DESTINATION\nX:SELECT   R:RESET\nTURN:              REMAINING:    ";
+        message="PLACE CURSOR ON DESTINATION\nX:SELECT SQUARE    R:RESET\nTURN:              REMAINING:    ";
         printmessage();
         printturnline();
         //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
@@ -1730,7 +1731,6 @@ void enemyzero() {
   }
 }
 // Checkroute:	
-// Currently only works when "crossing the T" 
 // checkroutemode=1 Returns number of pieces on a given route
 // 				checkroutemode=2 Increments the target values on route
 //				checkroutemode=3 Number of targets on route
@@ -1929,17 +1929,18 @@ void flashred(){
 	flashcolor=RED;
 	flashscreen();
 }
-// calc huns, thor, odin
+// gets the turn values and splits into huns, thor, odin
 void calcturnvalue(){
   // calculate values
   huns=x/100;
   thor=(x-(huns*100))/10;
   odin=x-(huns*100)-(thor*10);
-  // transform to ascii code
+  // transform to ascii code (hundreds, tens and units)
   huns+=48;
   thor+=48;
   odin+=48;
 }
+// prints the turn counters (uses huns, thor, odin)
 void printturnline(){
   x=turncount;
   calcturnvalue();		// for display purposes	
@@ -1948,8 +1949,8 @@ void printturnline(){
   calcturnvalue();		// for display purposes
   printremaining();		// print turns remaining
   y=GREEN;
-  if ( x < 11) y=YELLOW;
-  if ( x < 6 ) y=RED;
+  if ( x < 10) y=YELLOW; 
+  if ( x < 5 ) y=RED;
   colorturn();	// set color for turn row
 }
 /*
