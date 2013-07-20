@@ -44,6 +44,9 @@
 // 17-07-2013 NB v0.062 removed "ring of steel"
 // 17-07-2013 nb v0.063 Tidied up display, changed font, added SAGA, THOR, ODIN modes
 // 18-07-2013 NB v0.064 REMOVE RowCountAtt and ColCountAtt
+// 18-07-2013 NB v0.065 added "ring of steel" for THOR and ODIN levels
+// 18-07-2013 NB v0.066 possible screw up with new ODINJUMP (though new calchightarget looks good)
+// 18-07-2013 NB v0.067 FIRST BLOOD MODE
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -74,7 +77,9 @@
 #define MAGENTA 5
 #define CYAN 6
 #define WHITE 7
-
+#define SAGA 0
+#define THOR 1
+#define ODIN 2
 //#define VINEGAR 3
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
@@ -361,19 +366,23 @@ unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
 unsigned char turnlimit;		// limit the number of turns (compares to turncount)
 unsigned char remaining;		// number of turns remaining
 unsigned char huns,thor,odin;	// hundreds, tens and units...
+unsigned char playerlevel;		// player level (0=SAGA, 1=THOR, 2=ODIN)
+unsigned char firstblood;		// set to 0, gets changed on a take to signify who gets
+								// first blood award.
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.064 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.067 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
   inkcolor=6;inkasm();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
+    firstblood=1;
     drawboard();				// draw the board
     while (gamestyle==3){
       message="PLAYERS:1-2";	// number of players
@@ -389,9 +398,10 @@ main(){
 		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  22 TURNS\n3: 'ODIN'  12 TURNS";
 		printmessage();
 		gameinput=getchar();
-		if ( gameinput == 49 ) turnlimit=255;	// 255 turns
-		if ( gameinput == 50 ) turnlimit=22;	// 22 turns
-		if ( gameinput == 51 ) turnlimit=12; 	// 12 turns
+		// playerlevel set here, 0=SAGA, 1=THOR, 2=ODIN
+		if ( gameinput == 49 ) {turnlimit=255; playerlevel=SAGA;}	// 255 turns
+		if ( gameinput == 50 ) {turnlimit=22;  playerlevel=THOR;}	// 22 turns
+		if ( gameinput == 51 ) {turnlimit=12;  playerlevel=ODIN;}	// 12 turns
 		if ( turnlimit == 0 ) {flashback=CYAN;flashred();}
 	}   
     while (game > 0){
@@ -556,7 +566,43 @@ It alters the values of ctns,ctew,targetns,targetew,ons,oew,ns,ew and of course,
 hightarget
 */
 void calchightarget(){
+  char nsloop=1;
+  char ewloop=1;
+  unsigned char nsstart=0;
+  unsigned char ewstart=0;
+  unsigned char nsend=10;
+  unsigned char ewend=10;
+  if ( playerlevel == THOR ){
+	  nsloop=-1;
+	  ewloop=-1;
+	  nsstart=10;
+	  ewstart=10;
+	  nsend=0;
+	  ewend=0;
+  }
+  if ( playerlevel == ODIN ){
+	  //nsloop=1;
+	  ewloop=-1;
+	  //nstart=0;
+	  //nsend=10;
+	  ewstart=10;
+	  ewend=0;
+  }
   hightarget=0;	// highest value target
+  for (ctns=nsstart;ctns != nsend; ctns += nsloop){	// find the highest value for target
+    for (ctew=ewstart;ctew != ewend ;ctew += ewloop){
+      if ( target[ctns][ctew] > hightarget ){
+        hightarget=target[ctns][ctew];	// make hightarget the highest value
+        targetns=ctns;
+        targetew=ctew;		
+        ons=ctns;		// target is accessible so make ons/oew the default piece position to move
+        oew=ctew;		// the ACTUAL piece to move determined below (one of ons or oew will remain same)
+        ns=ctns;
+        ew=ctew;
+      }
+    }
+  }
+  /*
   for (ctns=0;ctns<11;ctns++){	// find the highest value for target
     for (ctew=0;ctew<11;ctew++){
       if ( target[ctns][ctew] > hightarget ){
@@ -569,7 +615,7 @@ void calchightarget(){
         ew=ctew;
       }
     }
-  }
+  }*/
 }
 /*
 void gethightarget(){ // without upsetting anything else
@@ -599,23 +645,28 @@ NEWTARGET:
   // having found target we need to select a piece to move
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
   fb=9;
+  if ( playerlevel == ODIN ) goto ODINJUMP2;
+ODINJUMP1:
   // NORTH + SOUTH
-  b=oew;
   // NORTH
-  zerofoundpiece();		// set foundpiece to ZERO "piece not found"
   origorient=NORTH;
-  for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}
+  if ( foundpiece != 1 ){
+	b=oew;
+	zerofoundpiece();		// set foundpiece to ZERO "piece not found"
+  	for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}
+  }
   // SOUTH
   if ( foundpiece != 1 ){ 
 	zerofoundpiece();
   	origorient=SOUTH;	
   	for (mkey=ons+1; mkey<11; mkey++)	{a=mkey;findpiece();}
   }	
+  if ( playerlevel == ODIN ) goto ODINJUMP3;
+ODINJUMP2:
   // EAST + WEST	
-  
   // EAST
   if ( foundpiece != 1 ){
-	a=ons;  
+	a=ons; 
 	zerofoundpiece();
   	origorient=EAST;
   	for (mkey=oew+1; mkey<11; mkey++)	{b=mkey;findpiece();}
@@ -626,6 +677,8 @@ NEWTARGET:
 	origorient=WEST;
   	for (mkey=oew-1; mkey>-1; mkey--)	{b=mkey;findpiece();}	
   }
+  if ( playerlevel == ODIN ) goto ODINJUMP1;
+ODINJUMP3:
   if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
@@ -1544,12 +1597,13 @@ unsigned char cantakepiece(){
     }
   }
   // Ring Of Steel: when fb==6 update target if defender outside it's home zone
-  /*
-  if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
-	  if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
+  if ( playerlevel ){ // if greater than SAGA
+  	if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
+	  	if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
 		  target[ns][ew]+=10;
-	  }
-  }*/
+	  	}
+  	}
+  }
   // if a take is possible increment the take counter - if values fall within bounds...
   if ((pcheckns2 > -1)&&(pcheckns2 < 11)&&(pcheckew2 > -1)&&(pcheckew2 < 11)){
     if (( players[pcheckns1][pcheckew1]  )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2 )&&(players[pcheckns1][pcheckew1] != CASTLE)){	
@@ -1578,6 +1632,19 @@ void takepiece() {
   // update deadpile
   deadtoggle=1; // ensure deadpiece is drawn in foreground color on deadpile 
   deadpile();
+  // check for firstblood
+  if ( firstblood ){
+	  // set firstblood to zero so it doesn't trigger again
+	  firstblood=0;
+	  if ( playertype == ATTACKER ){
+		  message="*** FIRST BLOOD TO ATTACKER!!! ***\n*** PRESS ANY KEY ***\nTURN:              REMAINING:    ";
+	  }else{
+		  message="*** FIRST BLOOD TO KING!!! ***\n*** PRESS ANY KEY ***\nTURN:              REMAINING:    ";
+	  }
+	  printmessage();
+	  printturnline();
+	  getchar();
+  }
 }
 
 void subarrows(){
