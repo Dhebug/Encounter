@@ -98,4 +98,9 @@ _zerofoundpiece
 	lda #0
 	sta _foundpiece
 	rts
-	
+
+;_getspace
+;	; get code of last key pressed
+;	lda $02df
+;	sta _mkey
+;	rts

@@ -14,7 +14,8 @@ _turntext	.byt " TURN:  #$%&:MOVE CURSOR",10,"X:SELECT PIECE   P:POSSIBLE MOVES"
 _erasetextarea
 .(
 	lda #5		; Purple color
-	ldx #40*3
+	;ldx #40*3
+	ldx _erasetext
 loop_erase	
 	sta $bb80+25*40-1,x
 	dex
@@ -121,6 +122,8 @@ _printremaining
 
 _colorturn
 .(
-	lda _y		; color
+	;lda #0		; black background
+	;sta $bfb8
+	lda _y		; color foreground
 	sta $bfb9
 .)
