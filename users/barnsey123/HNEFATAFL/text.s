@@ -120,6 +120,15 @@ _printremaining
 	rts
 .)
 
+_flashon
+.(
+ lda #1		// foreground=red
+ sta $bf91
+ lda #140	// flashing text
+ sta $bf92
+ rts
+.)
+
 _colorturn
 .(
 	;lda #0		; black background
