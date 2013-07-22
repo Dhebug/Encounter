@@ -48,6 +48,7 @@
 // 18-07-2013 NB v0.066 possible screw up with new ODINJUMP (though new calchightarget looks good)
 // 18-07-2013 NB v0.067 FIRST BLOOD MODE
 // 22-07-2013 NB v0.068 More efficient text display (for remaining turns)
+// 22-07-2013 NB v0.069 Flashing TEXT for "PRESS A KEY" and FIRST BLOOD
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -378,7 +379,7 @@ main(){
   hires();
   //hiresasm();
   erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
-  message="V0.068 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.069 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -444,6 +445,7 @@ main(){
     erasetext=120; // 40*3 (3 lines to erase)
     message="\n*** PRESS A KEY ***";
     printline();
+    flashon();
     getchar();
   }
 }
@@ -1098,8 +1100,9 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="* PRESS ANY KEY *";
+  message="\n *** PRESS ANY KEY ***";
   printmessage();
+  flashon();
   printturnline();
   k=getchar();
   fb=0;
@@ -1644,13 +1647,15 @@ void takepiece() {
 	  // set firstblood to zero so it doesn't trigger again
 	  firstblood=0;
 	  if ( playertype == ATTACKER ){
-		  message="*** FIRST BLOOD TO ATTACKER!!! ***\n*** PRESS ANY KEY ***";
+		  message="\n FIRST BLOOD TO ATTACKER * PRESS A KEY";
 	  }else{
-		  message="*** FIRST BLOOD TO KING!!! ***\n*** PRESS ANY KEY ***";
+		  message="\n FIRST BLOOD TO KING * PRESS A KEY";
 	  }
 	  printmessage();
+	  flashon();
 	  printturnline();
 	  getchar();
+	  //flashoff();
   }
 }
 
