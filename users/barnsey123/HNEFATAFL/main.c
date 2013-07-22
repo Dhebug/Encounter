@@ -47,6 +47,7 @@
 // 18-07-2013 NB v0.065 added "ring of steel" for THOR and ODIN levels
 // 18-07-2013 NB v0.066 possible screw up with new ODINJUMP (though new calchightarget looks good)
 // 18-07-2013 NB v0.067 FIRST BLOOD MODE
+// 22-07-2013 NB v0.068 More efficient text display (for remaining turns)
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -369,13 +370,15 @@ unsigned char huns,thor,odin;	// hundreds, tens and units...
 unsigned char playerlevel;		// player level (0=SAGA, 1=THOR, 2=ODIN)
 unsigned char firstblood;		// set to 0, gets changed on a take to signify who gets
 								// first blood award.
+unsigned char erasetext;		// how many lines to erase
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   //hiresasm();
-  message="V0.067 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
+  message="V0.068 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -403,7 +406,10 @@ main(){
 		if ( gameinput == 50 ) {turnlimit=22;  playerlevel=THOR;}	// 22 turns
 		if ( gameinput == 51 ) {turnlimit=12;  playerlevel=ODIN;}	// 12 turns
 		if ( turnlimit == 0 ) {flashback=CYAN;flashred();}
-	}   
+	} 
+	message="\n\nTURN:              REMAINING:    ";
+	printmessage();
+	erasetext=80; // 40*2 (2 lines to erase)  
     while (game > 0){
       ns=5;			// default north/south position of central square
       ew=5;			// default east/west position of central square
@@ -429,13 +435,14 @@ main(){
     game=-1 Stalemate.
     game=-2 Attacker wins. 																
 */
-    message="ATTACKER WINS! ODIN IS DISPLEASED..."; // default (game=-2)
+    message="ATTACKER WINS! ODIN IS DISPLEASED!"; // default (game=-2)
     // king escapes or all attackers killed
-    if ( game == 0 ) message="KING WINS! ODIN IS PLEASED..."; 
+    if ( game == 0 ) message="KING WINS! ODIN IS PLEASED!"; 
     // computer can't move
     if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
     printmessage();
-    message="\nPRESS A KEY:";
+    erasetext=120; // 40*3 (3 lines to erase)
+    message="\n*** PRESS A KEY ***";
     printline();
     getchar();
   }
@@ -450,7 +457,7 @@ void computerturn(){
   //message="TURN: ";
   //strcat(message, test2);
   //strcat(message, " THINKING...\0");
-  message="ORIC IS THINKING...\n\nTURN:              REMAINING:    ";
+  message="ORIC IS THINKING...";
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   printturnline();	// print turn counters
@@ -1091,7 +1098,7 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="* PRESS ANY KEY *\n\nTURN:              REMAINING:    ";
+  message="* PRESS ANY KEY *";
   printmessage();
   printturnline();
   k=getchar();
@@ -1379,7 +1386,7 @@ void playerturn(){
         inverse2();
         //printmessage();
         //strcpy(message,playertext);
-        message="PLACE CURSOR ON DESTINATION\nX:SELECT SQUARE    R:RESET\nTURN:              REMAINING:    ";
+        message="PLACE CURSOR ON DESTINATION\nX:SELECT SQUARE    R:RESET";
         printmessage();
         printturnline();
         //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
@@ -1637,9 +1644,9 @@ void takepiece() {
 	  // set firstblood to zero so it doesn't trigger again
 	  firstblood=0;
 	  if ( playertype == ATTACKER ){
-		  message="*** FIRST BLOOD TO ATTACKER!!! ***\n*** PRESS ANY KEY ***\nTURN:              REMAINING:    ";
+		  message="*** FIRST BLOOD TO ATTACKER!!! ***\n*** PRESS ANY KEY ***";
 	  }else{
-		  message="*** FIRST BLOOD TO KING!!! ***\n*** PRESS ANY KEY ***\nTURN:              REMAINING:    ";
+		  message="*** FIRST BLOOD TO KING!!! ***\n*** PRESS ANY KEY ***";
 	  }
 	  printmessage();
 	  printturnline();
