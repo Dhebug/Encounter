@@ -49,6 +49,7 @@
 // 18-07-2013 NB v0.067 FIRST BLOOD MODE
 // 22-07-2013 NB v0.068 More efficient text display (for remaining turns)
 // 22-07-2013 NB v0.069 Flashing TEXT for "PRESS A KEY" and FIRST BLOOD
+// 06-09-2013 NB v0.070 Bug in calcantake2 WAS: (ew < 10) NOW: (ew < 9)
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -379,7 +380,7 @@ main(){
   hires();
   //hiresasm();
   erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
-  message="V0.069 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.070 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -1944,7 +1945,7 @@ void calccantake() {
 void calccantake2(){
 	// check all directions from a given target square...
 	cantake=0;
-	if ( ew < 10 ) {orientation=EAST;  inccantake();}   // check EAST
+	if ( ew < 9 ) {orientation=EAST;  inccantake();}   // check EAST
     if ( ew > 1 )  {orientation=WEST;  inccantake();}   // check WEST
 	if ( ns > 1 )  {orientation=NORTH; inccantake();}   // check NORTH
     if ( ns < 9 )  {orientation=SOUTH; inccantake();}   // check SOUTH
