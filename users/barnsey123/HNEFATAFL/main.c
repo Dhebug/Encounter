@@ -50,6 +50,7 @@
 // 22-07-2013 NB v0.068 More efficient text display (for remaining turns)
 // 22-07-2013 NB v0.069 Flashing TEXT for "PRESS A KEY" and FIRST BLOOD
 // 06-09-2013 NB v0.070 Bug in calcantake2 WAS: (ew < 10) NOW: (ew < 9)
+// 07-09-2013 NB v0.071 Adding flashing messages for multiple takes
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -225,6 +226,8 @@ void flashred();			// flash screen in red
 void calccantake2();		// alternative calcantake
 void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
 void printturnline();		// prints the turn counters
+void takemessage();			// prints a message when multiple takes are made
+void submessage();			// subroutine of takemessage
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -373,6 +376,7 @@ unsigned char playerlevel;		// player level (0=SAGA, 1=THOR, 2=ODIN)
 unsigned char firstblood;		// set to 0, gets changed on a take to signify who gets
 								// first blood award.
 unsigned char erasetext;		// how many lines to erase
+unsigned char takecounter;		// how many pieces were taken in one move
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -380,7 +384,7 @@ main(){
   hires();
   //hiresasm();
   erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
-  message="V0.070 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.071 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
   printtitles();
@@ -1490,6 +1494,7 @@ void movepiece(){
     p2=KING;
   }
   tpew=ew;
+  takecounter=0;	// set the take counter to zero (incremented in takepiece)
   if ( ns > 1 ){// check north
     orientation=NORTH;
     if ( cantakepiece()  ) { tpns=ns-1; takepiece(); }
@@ -1507,6 +1512,7 @@ void movepiece(){
     orientation=WEST;
     if ( cantakepiece() ) { tpew=ew-1; takepiece(); }
   }
+  
   // update count of attackers around king
   kingattacker[NORTH]=0;		// count of attackers NORTH of king
   kingattacker[SOUTH]=0;		// count of attackers SOUTH of king
@@ -1538,6 +1544,7 @@ void movepiece(){
   for (counter=0;counter<kingew;inccounter()){ 
     cy=counter; incdefatt();
   }
+  if (takecounter > 1) takemessage(); // display a firstblood/multiple takes message
 }
 
 void incdefatt(){
@@ -1632,7 +1639,7 @@ unsigned char cantakepiece(){
 }
 
 // performs taking/removing a piece
-void takepiece() {		
+void takepiece(){		
   players[tpns][tpew]=0;			// clear board location
   row=tpns;
   col=tpew;
@@ -1643,23 +1650,27 @@ void takepiece() {
   // update deadpile
   deadtoggle=1; // ensure deadpiece is drawn in foreground color on deadpile 
   deadpile();
-  // check for firstblood
-  if ( firstblood ){
-	  // set firstblood to zero so it doesn't trigger again
+  inctakecounter();	// increment the take counter
+  if (firstblood){
 	  firstblood=0;
-	  if ( playertype == ATTACKER ){
-		  message="\n FIRST BLOOD TO ATTACKER * PRESS A KEY";
-	  }else{
+	  message="\n FIRST BLOOD TO ATTACKER * PRESS A KEY";
+	  if ( playertype == DEFENDER ){
 		  message="\n FIRST BLOOD TO KING * PRESS A KEY";
 	  }
-	  printmessage();
-	  flashon();
-	  printturnline();
-	  getchar();
-	  //flashoff();
+	  submessage();
   }
 }
-
+void takemessage(){	// displays a firstblood or multiple take message
+	message="\n DOUBLE TAKE! * PRESS A KEY";
+	if ( takecounter == 3 ) message="\n TRIPLE TAKE! * PRESS A KEY";
+	submessage();
+}
+void submessage(){
+	printmessage();
+	flashon();
+	printturnline();
+	getchar();
+}
 void subarrows(){
   if ( tiles[xns][xew] == CASTLE ) arrow=2;
   if ((players[xns][xew])&&(players[xns][xew] < CASTLE)) { 
@@ -1832,7 +1843,7 @@ unsigned char checkroute(){
 		switch(checkroutemode){
     		case 1:	if ((players[checkrouterow][checkroutecol] == ATTACKER )||(players[checkrouterow][checkroutecol] == DEFENDER )) z++;break;
       		case 2: if (target[checkrouterow][checkroutecol] )	target[checkrouterow][checkroutecol]+=2;break;
-      		case 3: if (target[checkrouterow][checkroutecol] ) z++;break; 
+      		case 3: if (target[checkrouterow][checkroutecol] > 1 ) z++;break; 
       		case 4: if (enemy[checkrouterow][checkroutecol] ) z+=ENEMYBLOCK;break;
       		case 5: if (target[checkrouterow][checkroutecol]){
 	      				target[checkrouterow][checkroutecol]+=points;} // brokenarrow
