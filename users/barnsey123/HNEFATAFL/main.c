@@ -382,7 +382,6 @@ main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
-  //hiresasm();
   erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
   message="V0.071 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
@@ -792,15 +791,8 @@ void checkbrokenarrow(){
 		//if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
 		if (( kingpieces[orientation] == 1) && (f)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
-			if ( kingtoedge[orientation] == 0){	// no targets on route
-				/*
-				message="BROKEN ARROW UPDATE";
-				printline();
-				message="\nPRESS A KEY";
-				printline();
-				getchar();
-				*/
-				checkroutemode=5;checkroute();
+			if ( kingtoedge[orientation] == 0){	// no targets on route to edge
+				checkroutemode=5;checkroute(); // add points to t-zone targets (startrow, startcol,destrow, destcol)
 			}else{
 				brokenarrow[orientation]++; // POTENTIAL BROKEN ARROW
 				if (tzonemode){				// if tzonemode > PARTIAL1
