@@ -5,8 +5,9 @@
 // adding routine to wipe the screen
 #include <lib.h>
 void WipeScreen();
+void Pause();
 extern unsigned char LabelPicture[];
-
+unsigned int PauseTime;
 
 void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 {
@@ -74,28 +75,42 @@ void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 	*(unsigned char*)(0xbfde)=18;
 }
 /*
- WipeScreen wipes the hires screen attaractively
+ WipeScreen wipes the hires screen attractively
 */
 void WipeScreen(){
 	unsigned char Row;
+	unsigned int Cell;
 	//unsigned int EvenScreenAddress=0xA001;	// start address of hires screen (even rows)
 	//unsigned int OddScreenAddress=0xA029;   // start address of hires screen (odd rows)
 	unsigned int StartAddress;
 	unsigned char x;
 	unsigned char z;
-	for ( x=0; x<2 ; x++ ){
-		StartAddress=0xA001;
-		z=196;
-		if (x==1){
-			StartAddress=0xA029;
-			z=197;
-		}
-		for (Row=x; Row<z; Row+=2){
-			poke(StartAddress+(Row*40),0x0000);	// black
+	unsigned char Count;
+	char Color;
+	PauseTime=55000; Pause();	// linger on screen for a while
+	for (Color=7;Color>=0;Color--){ // cycle through colors before blanking
+		for ( x=0; x<2 ; x++ ){
+			Count=0;
+			StartAddress=0xA001;
+			z=198;
+			if (x==1){
+				StartAddress=0xA029;
+				z=199;
+			}
+			//poke(StartAddress,0x0000);
+			PauseTime=1250;Pause();
+			for (Row=x; Row<=z; Row+=2){
+				poke(StartAddress+(Count*80),Color);	
+				Count++;
+			}
 		}
 	}
 }
-
+/* paustime */
+void Pause(){
+  int p;
+  for (p=0; p<PauseTime;p++){};
+}
 void main()
 {
 	hires();
