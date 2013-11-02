@@ -1,9 +1,10 @@
 //
 // This program simply display a compressed picture on the hires screen
 //
-
+// 02-11-2013 NB removed lprintf from file_unpackc saving a couple of K
+// adding routine to wipe the screen
 #include <lib.h>
-
+void WipeScreen();
 extern unsigned char LabelPicture[];
 
 
@@ -72,12 +73,34 @@ void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 	}
 	*(unsigned char*)(0xbfde)=18;
 }
-
+/*
+ WipeScreen wipes the hires screen attaractively
+*/
+void WipeScreen(){
+	unsigned char Row;
+	//unsigned int EvenScreenAddress=0xA001;	// start address of hires screen (even rows)
+	//unsigned int OddScreenAddress=0xA029;   // start address of hires screen (odd rows)
+	unsigned int StartAddress;
+	unsigned char x;
+	unsigned char z;
+	for ( x=0; x<2 ; x++ ){
+		StartAddress=0xA001;
+		z=196;
+		if (x==1){
+			StartAddress=0xA029;
+			z=197;
+		}
+		for (Row=x; Row<z; Row+=2){
+			poke(StartAddress+(Row*40),0x0000);	// black
+		}
+	}
+}
 
 void main()
 {
 	hires();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
+	WipeScreen();
 }
 
