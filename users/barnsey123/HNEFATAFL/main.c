@@ -51,6 +51,7 @@
 // 22-07-2013 NB v0.069 Flashing TEXT for "PRESS A KEY" and FIRST BLOOD
 // 06-09-2013 NB v0.070 Bug in calcantake2 WAS: (ew < 10) NOW: (ew < 9)
 // 07-09-2013 NB v0.071 Adding flashing messages for multiple takes
+// 04-11-2013 NB v0.072 To be called from VIKLOADER (this version has no font data loaded) and NO FLIPRUNE
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -101,7 +102,7 @@ extern unsigned char TimerTiles[];		// display timer in central square when comp
 ;   memcpy((unsigned char*)0xb400+32*8,Font_6x8_FuturaFull,768);
 ;
 */
-extern unsigned char Font_6x8_runic1_partial[520]; // runic oric chars (was [1024] 02/02/2012)
+//extern unsigned char Font_6x8_runic1_partial[520]; // runic oric chars (was [1024] 02/02/2012)
 
 /* RUNIC Alphabet Tiles (NOT the runic1 font) ordered as follows :
 Actually, the numbers here are not true anymore due to changes in the runes.png file
@@ -167,7 +168,7 @@ void enemyzero();			// set enemy value to zero when surrounded=3
 void explodetile();			// explodes a piece (plays an animation)	
 void findpiece();				
 void flashscreen();			// flashes screen in selected color for a second or so	
-void fliprune();			// flip the rune tiles in title screen	
+//void fliprune();			// flip the rune tiles in title screen	
 void gspot();				// count no of targets  from king to edge
 //void incbrokenarrow();		// increments the value of brokenarrow
 void inccantake();			// increments cantake	
@@ -194,7 +195,7 @@ void backbone();			// renamed from "printarrowsorblanks"
 void printdestinations();	// print arrows on tiles where a piece can move			
 void printmessage();		// prints message to screen		
 void printpossiblemoves();	// Print possible moves			
-void printtitles();			// print the title screen (used in titles/menus etc)	
+//void printtitles();			// print the title screen (used in titles/menus etc)	
 void printturnprompt();		// prints "your turn" message		
 void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -238,7 +239,7 @@ Tile types:
 */
 extern unsigned char tiles[11][11];			// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
-extern const unsigned char border[6][11];	// border (of title screens/menus etc)
+//extern const unsigned char border[6][11];	// border (of title screens/menus etc)
 //extern unsigned char presents[8];	// array of runic chars that spell "presents"
 //extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
 /* populate array with places of players 
@@ -380,13 +381,15 @@ unsigned char takecounter;		// how many pieces were taken in one move
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
+  /*
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   hires();
   erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
-  message="V0.071 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
+  message="V0.072 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
   printmessage();
   setflags(0);	// No keyclick, no cursor, no nothing
-  printtitles();
+  */
+  //printtitles();
   inkcolor=6;inkasm();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
@@ -1954,6 +1957,7 @@ void calccantake2(){
     if ( ns < 9 )  {orientation=SOUTH; inccantake();}   // check SOUTH
 }
 // print the title screen
+/*
 void printtitles()		{
   unsigned char f=0;
   inkcolor=3;inkasm();	// yellow, erm...gold
@@ -1977,7 +1981,8 @@ void printtitles()		{
     f++;if (f==2) f=0;
   }
 }
-
+*/
+/*
 // performs the rune flipping sequence in title screen
 void fliprune()		{
   for (tiletodraw=30;tiletodraw<35;tiletodraw++){
@@ -1989,6 +1994,7 @@ void fliprune()		{
     }
   }
 }
+*/
 /*
 void subzoneupdate(){	// (updates border targets)
 	message="BROKEN ARROW UPDATE";
