@@ -6,9 +6,12 @@
 #include <lib.h>
 void WipeScreen();
 void Pause();
+void PrintMessage();
 extern unsigned char LabelPicture[];
 unsigned int PauseTime;
-
+extern unsigned char Font_6x8_runic1_partial[520]; // runic oric chars
+unsigned char erasetext=120;		// how many lines to erase (3*40)=120;
+extern char* message;
 void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 {
 	unsigned int 	size;
@@ -88,7 +91,7 @@ void WipeScreen(){
 	unsigned char Count;
 	char Color;
 	PauseTime=55000; Pause();	// linger on screen for a while
-	for (Color=7;Color>=0;Color--){ // cycle through colors before blanking
+	for (Color=7;Color>=1;Color--){ // cycle through colors before blanking
 		for ( x=0; x<2 ; x++ ){
 			Count=0;
 			StartAddress=0xA001;
@@ -113,9 +116,15 @@ void Pause(){
 }
 void main()
 {
+	CopyFont();
 	hires();
+  	setflags(0);	// No keyclick, no cursor, no nothing
+  	message="  HNEFATAFL V0.072 BY NEIL BARNES\n      THANKS TO THE FOLLOWING:\n   DBUG,CHEMA,JAMESD,XERON,IBISUM";
+  	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
 	WipeScreen();
+	message="            IN MEMORY OF\n    JONATHAN 'TWILIGHTE' BRISTOW\n       ORIC LEGEND: 1968-2013";
+  	PrintMessage();
 }
 
