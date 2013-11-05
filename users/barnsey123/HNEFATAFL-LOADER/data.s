@@ -14,5 +14,7 @@ loop
 	inx 
 	
 	bne loop
-	rts	
+	; call hires
+	jmp $ec33
+	;rts	
 .)

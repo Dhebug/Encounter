@@ -3,13 +3,15 @@
 //
 // 02-11-2013 NB removed lprintf from file_unpackc saving a couple of K
 // adding routine to wipe the screen
+// 04-11-2013 NB Added credits and tribute text, setting font here instead of main prog
+// 05-11-2013 NB Calling Hires from CopyFont saving 3 bytes!
 #include <lib.h>
 void WipeScreen();
 void Pause();
 void PrintMessage();
 extern unsigned char LabelPicture[];
 unsigned int PauseTime;
-extern unsigned char Font_6x8_runic1_partial[520]; // runic oric chars
+extern unsigned char Font_6x8_runic1_partial[472]; // runic oric chars (59chars * 8)
 unsigned char erasetext=120;		// how many lines to erase (3*40)=120;
 extern char* message;
 void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
@@ -116,10 +118,10 @@ void Pause(){
 }
 void main()
 {
-	CopyFont();
-	hires();
+	CopyFont();	// hires called from CopyFont ASM routine
+	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="  HNEFATAFL V0.072 BY NEIL BARNES\n      THANKS TO THE FOLLOWING:\n   DBUG,CHEMA,JAMESD,XERON,IBISUM";
+  	message="  HNEFATAFL V0.073 BY NEIL BARNES\n      THANKS TO THE FOLLOWING:\n   DBUG,CHEMA,JAMESD,XERON,IBISUM";
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
