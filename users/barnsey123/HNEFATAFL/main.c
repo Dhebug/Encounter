@@ -52,6 +52,8 @@
 // 06-09-2013 NB v0.070 Bug in calcantake2 WAS: (ew < 10) NOW: (ew < 9)
 // 07-09-2013 NB v0.071 Adding flashing messages for multiple takes
 // 04-11-2013 NB v0.072 To be called from VIKLOADER (this version has no font data loaded) and NO FLIPRUNE
+// 05-11-2013 NB v0.073 Calling hires from CopyFont in Loader saving 3 bytes!
+//				  		Also adding border tiles for Trophy Display
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -90,6 +92,7 @@ extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (ani
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
 extern unsigned char RunicTiles[];		// Runic alphabet
 extern unsigned char TimerTiles[];		// display timer in central square when computer's turn
+extern unsigned char BorderTiles2[];	// for Trophy Screen
 /*
 ; You simply replace the existing font from C doing this:
 ;
@@ -196,6 +199,8 @@ void printdestinations();	// print arrows on tiles where a piece can move
 void printmessage();		// prints message to screen		
 void printpossiblemoves();	// Print possible moves			
 //void printtitles();			// print the title screen (used in titles/menus etc)	
+void PrintTrophyScreen();	// prints the trophy screen
+void PrintTrophyScreen1();	// sub of PrintTrophyScreen
 void printturnprompt();		// prints "your turn" message		
 void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -378,6 +383,7 @@ unsigned char firstblood;		// set to 0, gets changed on a take to signify who ge
 								// first blood award.
 unsigned char erasetext;		// how many lines to erase
 unsigned char takecounter;		// how many pieces were taken in one move
+unsigned char bottompattern;	// draw full line or blank
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -390,7 +396,6 @@ main(){
   setflags(0);	// No keyclick, no cursor, no nothing
   */
   //printtitles();
-  inkcolor=6;inkasm();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
@@ -443,9 +448,9 @@ main(){
     game=-1 Stalemate.
     game=-2 Attacker wins. 																
 */
-    message="ATTACKER WINS! ODIN IS DISPLEASED!"; // default (game=-2)
+    message="ATTACKER WINS!"; // default (game=-2)
     // king escapes or all attackers killed
-    if ( game == 0 ) message="KING WINS! ODIN IS PLEASED!"; 
+    if ( game == 0 ) message="KING WINS!"; 
     // computer can't move
     if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
     printmessage();
@@ -453,7 +458,7 @@ main(){
     message="\n*** PRESS A KEY ***";
     printline();
     flashon();
-    getchar();
+    PrintTrophyScreen();
   }
 }
 
@@ -1271,6 +1276,7 @@ void deadpile(){
 
 // DRAW THE BOARD
 void drawboard(){
+  inkcolor=6;inkasm();
   deadtoggle=0;				// ensure deadpile char=space
   playertype=1;deadpile();	// clear the deadpile of defenders
   playertype=2;deadpile();  // clear the deadpile of attackers
@@ -1290,6 +1296,7 @@ void drawboard(){
   drawtiles();					// draw the background tiles
   //curset(12,198,1);
   //draw(198,0,1);
+  bottompattern=63;
   drawbottom();
   drawedge();
   //draw(0,-198,1);
@@ -1982,6 +1989,28 @@ void printtitles()		{
   }
 }
 */
+void PrintTrophyScreen(){
+	inkcolor=3;inkasm(); // yellow, erm...gold
+	row=0;a=0;b=4;c=1;		// print top row of border
+	PrintTrophyScreen1();
+	a=6;b=8;c=7;
+	for (row=1;row<10;row++){
+		PrintTrophyScreen1();	// print middle rows of border
+	}
+	row=10;a=2;b=5;c=3;
+	PrintTrophyScreen1();	// print bottom row of border
+	bottompattern=0;drawbottom(); // blank out line at bottom
+	getchar();
+}
+void PrintTrophyScreen1(){
+	for (col=0; col<13; col++){
+		tiletodraw=b;
+		if (col==0)  tiletodraw=a;
+		if (col==12) tiletodraw=c;
+		ptr_graph=BorderTiles2;
+		drawtile();
+	}
+}
 /*
 // performs the rune flipping sequence in title screen
 void fliprune()		{
