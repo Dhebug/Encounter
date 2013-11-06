@@ -121,7 +121,7 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="  HNEFATAFL V0.073 BY NEIL BARNES\n      THANKS TO THE FOLLOWING:\n   DBUG,CHEMA,JAMESD,XERON,IBISUM";
+  	message="  HNEFATAFL V0.074 BY NEIL BARNES\n      THANKS TO THE FOLLOWING:\n   DBUG,CHEMA,JAMESD,XERON,IBISUM";
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
