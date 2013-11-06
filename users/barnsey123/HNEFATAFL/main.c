@@ -54,6 +54,10 @@
 // 04-11-2013 NB v0.072 To be called from VIKLOADER (this version has no font data loaded) and NO FLIPRUNE
 // 05-11-2013 NB v0.073 Calling hires from CopyFont in Loader saving 3 bytes!
 //				  		Also adding border tiles for Trophy Display
+// 06-11-2013 NB v0.074 Fixed Trophy Screen issues
+/****************************************/
+// TODO:
+// Add detail to Trophy Screen
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -201,6 +205,7 @@ void printpossiblemoves();	// Print possible moves
 //void printtitles();			// print the title screen (used in titles/menus etc)	
 void PrintTrophyScreen();	// prints the trophy screen
 void PrintTrophyScreen1();	// sub of PrintTrophyScreen
+//void PrintTrophyScreen2();	// blank out right edge of board
 void printturnprompt();		// prints "your turn" message		
 void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -448,16 +453,17 @@ main(){
     game=-1 Stalemate.
     game=-2 Attacker wins. 																
 */
-    message="ATTACKER WINS!"; // default (game=-2)
+    message="          ATTACKER WINS!"; // default (game=-2)
     // king escapes or all attackers killed
-    if ( game == 0 ) message="KING WINS!"; 
+    if ( game == 0 ) message="             KING WINS!"; 
     // computer can't move
-    if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
+    if ( game == -1 ) message="   STALEMATE - OR TURN LIMIT EXCEEDED"; 
     printmessage();
     erasetext=120; // 40*3 (3 lines to erase)
-    message="\n*** PRESS A KEY ***";
+    message="\n       *** PRESS A KEY ***";
     printline();
     flashon();
+    getchar();
     PrintTrophyScreen();
   }
 }
@@ -1261,15 +1267,14 @@ void deadpile(){
 	  deadplayers=deadattackers;
 	  deadcurset=0xa025;
   }
-  //if ( deadplayers ){
-	  for (x=0;x<deadplayers;x++){
-		  //if ( deadtoggle == 0 ) deadchar=0x9800+(32*8); // space
-		  chasm();
-		  //deadcurset+=(40*9);
-		  deadcurset+=(40*8); // 40*8
-		  //curset(deadcurset,x*8,0);
-		  //hchar(deadchar,0,deadtoggle);
-	  }
+  for (x=0;x<deadplayers;x++){
+	//if ( deadtoggle == 0 ) deadchar=0x9800+(32*8); // space
+	chasm();
+	//deadcurset+=(40*9);
+	deadcurset+=(40*8); // 40*8
+	//curset(deadcurset,x*8,0);
+	//hchar(deadchar,0,deadtoggle);
+  }
   //}
  
 }
@@ -1990,6 +1995,9 @@ void printtitles()		{
 }
 */
 void PrintTrophyScreen(){
+	erasetextarea();
+	message="          ()( HNEFATAFL ()(\n     )() VALHALLA AWARDS )()\n       *** PRESS A KEY ***";
+	printline();
 	inkcolor=3;inkasm(); // yellow, erm...gold
 	row=0;a=0;b=4;c=1;		// print top row of border
 	PrintTrophyScreen1();
@@ -2001,16 +2009,28 @@ void PrintTrophyScreen(){
 	PrintTrophyScreen1();	// print bottom row of border
 	bottompattern=0;drawbottom(); // blank out line at bottom
 	getchar();
+	//PrintTrophyScreen2();	// blank out right edge before redrawing board 
 }
 void PrintTrophyScreen1(){
-	for (col=0; col<13; col++){
+	for (col=0; col<11; col++){
 		tiletodraw=b;
 		if (col==0)  tiletodraw=a;
-		if (col==12) tiletodraw=c;
+		if (col==10) tiletodraw=c;
 		ptr_graph=BorderTiles2;
 		drawtile();
 	}
 }
+/*
+void PrintTrophyScreen2(){
+	tiletodraw=8;	// blank tile
+	for (row=0;row<11;row++){
+		for (col=11;col<13;col++){
+			ptr_graph=BorderTiles2;
+			drawtile();
+		}
+	}
+}
+*/
 /*
 // performs the rune flipping sequence in title screen
 void fliprune()		{
