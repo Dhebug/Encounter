@@ -65,8 +65,9 @@ _baseplayers
 	.byt 0,0,0,0,0,1,0,0,0,0,0
 	.byt 4,0,0,1,1,1,1,1,0,0,4
 */
+	
 ; uninitialized variable (will calc on fly) - target values of square
- 
+
 _target
 	.dsb 11*11		
 
