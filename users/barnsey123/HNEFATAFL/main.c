@@ -55,6 +55,8 @@
 // 05-11-2013 NB v0.073 Calling hires from CopyFont in Loader saving 3 bytes!
 //				  		Also adding border tiles for Trophy Display
 // 06-11-2013 NB v0.074 Fixed Trophy Screen issues
+// 07-11-2013 NB v0.075 New credits text
+// 08-11-2013 NB v0.076 New Trophy Graphic, contents drawn
 /****************************************/
 // TODO:
 // Add detail to Trophy Screen
@@ -91,6 +93,21 @@
 #define SAGA 0
 #define THOR 1
 #define ODIN 2
+#define TROPHY 12
+#define FIRSTBLOOD 1
+#define BLOODEAGLE 2
+#define BERZERKER 3
+#define ALGIZ 4
+#define URUZ 5
+#define RAIDO 6
+/*
+FIRSTBLOOD = MAKE FIRST KILL
+BLOODEAGLE = DOUBLE KILL
+BERZERKER = TRIPLE KILL
+ALGIZ = SURVIVAL - DONT LOSE A MAN - DEFENCE - SELF PRESERVATION
+URUZ = SPEED - WIN WITH >= 5 TURNS REMAINING
+RAIDO =  A LONG JOURNEY - WIN ON LAST TURN
+*/
 //#define VINEGAR 3
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
@@ -206,6 +223,7 @@ void printpossiblemoves();	// Print possible moves
 void PrintTrophyScreen();	// prints the trophy screen
 void PrintTrophyScreen1();	// sub of PrintTrophyScreen
 //void PrintTrophyScreen2();	// blank out right edge of board
+void PrintTrophyScreen3();	// Draw the Trophy Grid
 void printturnprompt();		// prints "your turn" message		
 void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -239,6 +257,8 @@ void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
 void printturnline();		// prints the turn counters
 void takemessage();			// prints a message when multiple takes are made
 void submessage();			// subroutine of takemessage
+void ClearTrophies();		// Initialize the trophies array
+void AlgizThorTrophyCalc();	// calculate awarding of the ALGIZ and THOR trophies
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -389,6 +409,8 @@ unsigned char firstblood;		// set to 0, gets changed on a take to signify who ge
 unsigned char erasetext;		// how many lines to erase
 unsigned char takecounter;		// how many pieces were taken in one move
 unsigned char bottompattern;	// draw full line or blank
+unsigned char Trophies[7][2];	// trophy array [trophytype][playertype]
+unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn)
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -404,6 +426,7 @@ main(){
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
+    ClearTrophies();			// initialize trophy array
     drawboard();				// draw the board
     while (gamestyle==3){
       message="PLAYERS:1-2";	// number of players
@@ -457,7 +480,11 @@ main(){
     // king escapes or all attackers killed
     if ( game == 0 ) message="             KING WINS!"; 
     // computer can't move
-    if ( game == -1 ) message="   STALEMATE - OR TURN LIMIT EXCEEDED"; 
+    if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
+    // Award RAIDO Trophy (win on last turn)
+    if (( game != -1 )&&(TurnsRemaining==0)){
+	    Trophies[RAIDO][playertype-1]=TROPHY;
+    }
     printmessage();
     erasetext=120; // 40*3 (3 lines to erase)
     message="\n       *** PRESS A KEY ***";
@@ -519,7 +546,8 @@ void computerturn(){
   // draw central square (overwriting timer)
   tiletodraw=9;	// KING ON A TILE
   if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
-  row=5;col=5; ptr_graph=PictureTiles;drawtile(); 
+  row=5;col=5; 
+  ptr_graph=PictureTiles;drawtile(); 
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
   // 4,5,6,7..N etc
@@ -1258,11 +1286,11 @@ void drawplayers() {
 }
 // update the deadpile
 void deadpile(){
-  if (playertype == 1){ // DEFENDERS "("
+  if (playertype == 1){ // IF ATTACKERS TURN THEN INC DEADEFENDERS "("
 	  if ( deadtoggle ) deaddefenders++;
 	  deadplayers=deaddefenders;
 	  deadcurset=0xa027;
-  }else{	// ATTACKERS ")"
+  }else{	// IF DEFENDERS TURN THEN INC DEADATTACKERS ")"
 	  if ( deadtoggle ) deadattackers++;
 	  deadplayers=deadattackers;
 	  deadcurset=0xa025;
@@ -1492,7 +1520,8 @@ void movepiece(){
 	  kingns=ns;kingew=ew;
 	  if ((kingns != 5)||(kingew != 5)) {
 		  players[5][5]=CASTLE; // set central square to be 4 so it can be used in takes
-		  tiletodraw=3; row=5;col=5; ptr_graph=PictureTiles;drawtile(); // draw central square
+		  tiletodraw=3; row=5;col=5; 
+		  ptr_graph=PictureTiles;drawtile(); // draw central square
 	  }
   }	
   // having moved piece we now need to check for, and implement any TAKES
@@ -1659,17 +1688,25 @@ void takepiece(){
   deadpile();
   inctakecounter();	// increment the take counter
   if (firstblood){
+	  Trophies[FIRSTBLOOD][playertype-1]=TROPHY;	// update Trophies Array
 	  firstblood=0;
 	  message="\n FIRST BLOOD TO ATTACKER * PRESS A KEY";
 	  if ( playertype == DEFENDER ){
 		  message="\n FIRST BLOOD TO KING * PRESS A KEY";
 	  }
 	  submessage();
+	  
   }
 }
 void takemessage(){	// displays a firstblood or multiple take message
-	message="\n DOUBLE TAKE! * PRESS A KEY";
-	if ( takecounter == 3 ) message="\n TRIPLE TAKE! * PRESS A KEY";
+	if ( takecounter == 2 ) {
+		message="\n DOUBLE TAKE! * PRESS A KEY";
+		Trophies[BLOODEAGLE][playertype-1]=TROPHY;
+	}
+	if ( takecounter == 3 ) {
+		message="\n TRIPLE TAKE! * PRESS A KEY";
+		Trophies[BERZERKER][playertype-1]=TROPHY;
+	}
 	submessage();
 }
 void submessage(){
@@ -1998,18 +2035,20 @@ void PrintTrophyScreen(){
 	erasetextarea();
 	message="          ()( HNEFATAFL ()(\n     )() VALHALLA AWARDS )()\n       *** PRESS A KEY ***";
 	printline();
-	inkcolor=3;inkasm(); // yellow, erm...gold
-	row=0;a=0;b=4;c=1;		// print top row of border
-	PrintTrophyScreen1();
+	inkcolor=3;inkasm(); 			// yellow, erm...gold
+	row=0;a=0;b=4;c=1;				
+	PrintTrophyScreen1();			// print top row of border
 	a=6;b=8;c=7;
 	for (row=1;row<10;row++){
-		PrintTrophyScreen1();	// print middle rows of border
+		PrintTrophyScreen1();		// print middle rows of border
 	}
 	row=10;a=2;b=5;c=3;
-	PrintTrophyScreen1();	// print bottom row of border
-	bottompattern=0;drawbottom(); // blank out line at bottom
-	getchar();
+	PrintTrophyScreen1();			// print bottom row of border
+	bottompattern=0;drawbottom();	// blank out line at bottom
 	//PrintTrophyScreen2();	// blank out right edge before redrawing board 
+	AlgizThorTrophyCalc();				// Calculate the awarding of ALGIZ/THOR Trophies
+	PrintTrophyScreen3();			// print the trophy grid (with trophies)
+	getchar();
 }
 void PrintTrophyScreen1(){
 	for (col=0; col<11; col++){
@@ -2031,6 +2070,43 @@ void PrintTrophyScreen2(){
 	}
 }
 */
+void PrintTrophyScreen3(){
+	// draw grid header
+	for (row=2;row<9;row++){
+		for (col=7;col<9;col++){
+			a=row-2;b=col-7;	// adjust a,b to align with array values
+			tiletodraw=Trophies[a][b];
+			ptr_graph=PictureTiles;drawtile();
+		}
+	}
+}
+void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies
+	//if ( playertype == 1){ // if current player is ATTACKER
+		if (deadattackers==0) Trophies[ALGIZ][0]=TROPHY;
+		if (deaddefenders==0) Trophies[ALGIZ][1]=TROPHY;
+		if (deaddefenders>11) Trophies[THOR][0]=TROPHY;
+		if (deadattackers==24)Trophies[THOR][1]=TROPHY;
+	//}
+	//if ( playertype == 2){ // if current player is DEFENDER
+	
+	//}
+}
+void ClearTrophies(){
+	Trophies[0][0]=7;	// PictureTiles : attacker tile
+	Trophies[0][1]=9;	// PictureTiles : king tile
+	Trophies[1][0]=0;
+	Trophies[1][1]=0;
+	Trophies[2][0]=0;
+	Trophies[2][1]=0;
+	Trophies[3][0]=0;
+	Trophies[3][1]=0;
+	Trophies[4][0]=0;
+	Trophies[4][1]=0;
+	Trophies[5][0]=0;
+	Trophies[5][1]=0;
+	Trophies[6][0]=0;
+	Trophies[6][1]=0;
+}
 /*
 // performs the rune flipping sequence in title screen
 void fliprune()		{
@@ -2085,6 +2161,7 @@ void printturnline(){
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
   calcturnvalue();		// for display purposes
+  TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
   y=GREEN;
   if ( x < 10) y=YELLOW; 
