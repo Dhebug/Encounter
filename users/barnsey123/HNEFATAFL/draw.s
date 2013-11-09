@@ -158,7 +158,23 @@ loop
 	bne loop
 	rts
 .)
-
+; draws bottom of trophy grid
+_DrawTrophyBottom
+.(
+	lda #<$b967
+	sta tmp1+0
+	lda #>$b967
+	sta tmp1+1
+	ldx #6
+loop
+	ldy #0
+	lda #%111111;
+	sta (tmp1),y
+	jsr _Add1
+	dex
+	bne loop
+	rts
+.)
 ; draws the edge of the board
 _drawedge
 .(
@@ -167,6 +183,23 @@ _drawedge
 	lda #>$a023
 	sta tmp1+1
 	ldx #199
+loop
+	ldy #0
+	lda #%100000
+	sta (tmp1),y
+	jsr _Add40
+	dex
+	bne loop
+	rts
+.)
+; draws the edge of the trophy grid
+_DrawTrophyEdge
+.(
+	lda #<$a5bd
+	sta tmp1+0
+	lda #>$a5bd
+	sta tmp1+1
+	ldx #127
 loop
 	ldy #0
 	lda #%100000
@@ -208,6 +241,25 @@ chasmdef
 	lda $9940,x
 	jmp chasmx
 .)
+
+_chasm2
+.(
+	lda _TextCursor+0
+	sta tmp1+0
+	lda _TextCursor+1
+	sta tmp1+1
+	ldx #0
+loop
+	lda _TextChar,x
+	ldy #0
+	sta (tmp1),y
+	jsr _Add40
+	inx
+	cpx #7
+	bcc loop
+	rts
+.)
+
 
 _tileloop
 .(

@@ -57,9 +57,10 @@
 // 06-11-2013 NB v0.074 Fixed Trophy Screen issues
 // 07-11-2013 NB v0.075 New credits text
 // 08-11-2013 NB v0.076 New Trophy Graphic, contents drawn
+// 09-11-2013 NB v0.077 Draw Trophy Grid edges and Color Headings
 /****************************************/
 // TODO:
-// Add detail to Trophy Screen
+// Add Text to Trophy Screen (Trophy Descriptions)
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -111,7 +112,7 @@ RAIDO =  A LONG JOURNEY - WIN ON LAST TURN
 //#define VINEGAR 3
 extern unsigned char ExplodeTiles[];	// extra graphics to "explode" a piece (animation)
 extern unsigned char PictureTiles[];	// standard graphics for pieces and backgrounds
-extern unsigned char RunicTiles[];		// Runic alphabet
+//extern unsigned char RunicTiles[];		// Runic alphabet
 extern unsigned char TimerTiles[];		// display timer in central square when computer's turn
 extern unsigned char BorderTiles2[];	// for Trophy Screen
 /*
@@ -224,6 +225,7 @@ void PrintTrophyScreen();	// prints the trophy screen
 void PrintTrophyScreen1();	// sub of PrintTrophyScreen
 //void PrintTrophyScreen2();	// blank out right edge of board
 void PrintTrophyScreen3();	// Draw the Trophy Grid
+void PrintTrophyScreen4();	// Print the Trophy Titles
 void printturnprompt();		// prints "your turn" message		
 void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -259,6 +261,7 @@ void takemessage();			// prints a message when multiple takes are made
 void submessage();			// subroutine of takemessage
 void ClearTrophies();		// Initialize the trophies array
 void AlgizThorTrophyCalc();	// calculate awarding of the ALGIZ and THOR trophies
+void DrawPictureTiles();	// called from lots of places so gets own function
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -269,6 +272,7 @@ Tile types:
 */
 extern unsigned char tiles[11][11];			// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
+extern unsigned char TrophyText[6][11];		// Titles of Trophies
 //extern const unsigned char border[6][11];	// border (of title screens/menus etc)
 //extern unsigned char presents[8];	// array of runic chars that spell "presents"
 //extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
@@ -411,6 +415,9 @@ unsigned char takecounter;		// how many pieces were taken in one move
 unsigned char bottompattern;	// draw full line or blank
 unsigned char Trophies[7][2];	// trophy array [trophytype][playertype]
 unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn)
+//unsigned char TrophyTitle[12];	// Titles of Trophies
+unsigned char TextChar; // Character of Trophy String
+unsigned char TextCursor; // Location of Text string
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -547,7 +554,8 @@ void computerturn(){
   tiletodraw=9;	// KING ON A TILE
   if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
   row=5;col=5; 
-  ptr_graph=PictureTiles;drawtile(); 
+  DrawPictureTiles();
+  //ptr_graph=PictureTiles;drawtile(); 
   //if ( playertype == 1 ) {pacman();}
   // other routines to go here to update the target array
   // 4,5,6,7..N etc
@@ -556,7 +564,10 @@ void computerturn(){
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
 }
+void DrawPictureTiles(){
+	  ptr_graph=PictureTiles;drawtile(); 
 
+}
 
 void findpiece(){	// find a piece capable of moving to selected target
   if ( foundpiece == 0 ){		
@@ -1329,9 +1340,8 @@ void drawboard(){
   drawtiles();					// draw the background tiles
   //curset(12,198,1);
   //draw(198,0,1);
-  bottompattern=63;
-  drawbottom();
-  drawedge();
+  bottompattern=63; drawbottom();
+  drawedge();	// far right of board
   //draw(0,-198,1);
   drawplayers(); 	// draw the players
   deadatt();	// set dead colors attackers
@@ -1509,7 +1519,7 @@ void movepiece(){
   row=ons;
   col=oew;
   tiletodraw=tiles[ons][oew];
-  ptr_graph=PictureTiles;drawtile();	//draw tile at original location (blank out square)
+  DrawPictureTiles();	//draw tile at original location (blank out square)
   players[ons][oew]=0;					//set original location to zero (unnocupied)
   players[ns][ew]=piecetype;			//update square with player info
   // row, col required for drawpiece function
@@ -1521,7 +1531,7 @@ void movepiece(){
 	  if ((kingns != 5)||(kingew != 5)) {
 		  players[5][5]=CASTLE; // set central square to be 4 so it can be used in takes
 		  tiletodraw=3; row=5;col=5; 
-		  ptr_graph=PictureTiles;drawtile(); // draw central square
+		  DrawPictureTiles(); // draw central square
 	  }
   }	
   // having moved piece we now need to check for, and implement any TAKES
@@ -1682,7 +1692,7 @@ void takepiece(){
   inkcolor=6;inkasm();
   explodetile();					// plays animation to "kill" a tile
   tiletodraw=tiles[row][col];		// decide tile to draw
-  ptr_graph=PictureTiles;drawtile();// draw tile at location
+  DrawPictureTiles();// draw tile at location
   // update deadpile
   deadtoggle=1; // ensure deadpiece is drawn in foreground color on deadpile 
   deadpile();
@@ -1765,7 +1775,7 @@ void drawpiece(){
   tiletodraw=players[row][col];
   if ( tiletodraw ) tiletodraw+=3;
   if ( tiles[row][col]  ) tiletodraw+=3;
-  ptr_graph=PictureTiles;drawtile();
+  DrawPictureTiles();
 }
 
 void drawarrow(){
@@ -1776,7 +1786,7 @@ void drawarrow(){
   else{
     tiletodraw=tiles[row][col];			  // draw original tile (includes blank)
   }
-  ptr_graph=PictureTiles;drawtile();
+  DrawPictureTiles();
 }
 
 void surroundcount(){
@@ -2032,9 +2042,11 @@ void printtitles()		{
 }
 */
 void PrintTrophyScreen(){
+	// Print text in text area
 	erasetextarea();
-	message="          ()( HNEFATAFL ()(\n     )() VALHALLA AWARDS )()\n       *** PRESS A KEY ***";
+	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
 	printline();
+	// set ink color for main screen
 	inkcolor=3;inkasm(); 			// yellow, erm...gold
 	row=0;a=0;b=4;c=1;				
 	PrintTrophyScreen1();			// print top row of border
@@ -2045,9 +2057,11 @@ void PrintTrophyScreen(){
 	row=10;a=2;b=5;c=3;
 	PrintTrophyScreen1();			// print bottom row of border
 	bottompattern=0;drawbottom();	// blank out line at bottom
-	//PrintTrophyScreen2();	// blank out right edge before redrawing board 
-	AlgizThorTrophyCalc();				// Calculate the awarding of ALGIZ/THOR Trophies
+	//PrintTrophyScreen2();			// blank out right edge before redrawing board 
+	AlgizThorTrophyCalc();			// Calculate the awarding of ALGIZ/THOR Trophies
 	PrintTrophyScreen3();			// print the trophy grid (with trophies)
+	cy=2;cx=7;inverse();cx=8;inverse();	// inverse the trophy head columns
+	//PrintTrophyScreen4();			// print text onto the hires part of screen
 	getchar();
 }
 void PrintTrophyScreen1(){
@@ -2076,8 +2090,22 @@ void PrintTrophyScreen3(){
 		for (col=7;col<9;col++){
 			a=row-2;b=col-7;	// adjust a,b to align with array values
 			tiletodraw=Trophies[a][b];
-			ptr_graph=PictureTiles;drawtile();
+			DrawPictureTiles();
 		}
+	}
+	DrawTrophyEdge();
+	DrawTrophyBottom();
+}
+// Print the trophy names
+void PrintTrophyScreen4(){
+	TextCursor=0xa5ae;	//starting position of text on screen
+	for (x=0;x<6;x++){
+		for (y=0;y<12;y++){
+			TextChar=0x9800+(TrophyText[x][y]*8);
+			chasm2();
+			TextCursor++;
+		}
+		TextCursor=0xa5ae+(40*8);
 	}
 }
 void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies

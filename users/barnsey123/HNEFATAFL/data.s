@@ -51,7 +51,6 @@ _presents
 _hnefatafl
 	.byt 8,9,18,0,3,16,3,0,20	
 	
-/*
 _baseplayers
 	.byt 4,0,0,1,1,1,1,1,0,0,4
 	.byt 0,0,0,0,0,1,0,0,0,0,0
@@ -65,7 +64,22 @@ _baseplayers
 	.byt 0,0,0,0,0,1,0,0,0,0,0
 	.byt 4,0,0,1,1,1,1,1,0,0,4
 */
-	
+/*
+Trophy Text,
+FIRST BLOOD
+BLOOD EAGLE
+BERZERKER
+ALGIZ
+URUZ
+RAIDO
+*/
+_TrophyText
+	.byt 70,73,82,83,84,32,66,76,79,79,68 
+	.byt 66,76,79,79,68,32,69,65,71,76,69 
+	.byt 66,69,82,90,69,82,75,69,82,32,32 
+	.byt 65,76,71,73,90,32,32,32,32,32,32 
+	.byt 85,82,85,90,32,32,32,32,32,32,32 
+	.byt 82,65,73,68,79,32,32,32,32,32,32 
 ; uninitialized variable (will calc on fly) - target values of square
 
 _target
