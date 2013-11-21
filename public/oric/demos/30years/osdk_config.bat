@@ -1,0 +1,10 @@
+@ECHO OFF
+
+::
+:: Set the build paremeters
+::
+SET OSDKADDR=$500	
+SET OSDKNAME=BORN1983
+SET OSDKFILE=
+SET OSDKDISK=BORN1983.dsk
+
