@@ -2,7 +2,10 @@
 #define ATARI_CONVERTER_H
 
 #include "hires.h"
-//#include "FreeImage.h"
+
+#ifdef _WIN32
+#include "FreeImage.h"
+#endif
 
 class RgbColor;
 class ShifterColor;

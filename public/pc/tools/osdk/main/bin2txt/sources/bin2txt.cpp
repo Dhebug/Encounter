@@ -130,8 +130,7 @@ int main(int argc,char *argv[])
 	printf("Size Read:%d\n",file_size);
 	unsigned char *BigBuffer=(unsigned char*)ptr_buffer_void;
 
-	std::string cDestString;
-	cTextFileGenerator.ConvertData(cDestString,BigBuffer,file_size);
+	std::string cDestString(cTextFileGenerator.ConvertData(BigBuffer,file_size));
 
 	if (!SaveFile(NameDst.c_str(),cDestString.c_str(),cDestString.size()))
 	{
