@@ -6,7 +6,10 @@
 /* Also changes a bit the timing of the loading routine to	*/
 /* avoid loading errors on some machines					*/
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
 #define FALSE 0
 #define TRUE 1
 

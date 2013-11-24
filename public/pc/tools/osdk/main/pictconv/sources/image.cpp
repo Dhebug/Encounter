@@ -525,4 +525,32 @@ int ImageContainer::FindBlocks(std::string& block_data) const
 }
 
 
+/*
+FREEIMAGE_LIB;
+1>------ Build started: Project: PictConv, Configuration: Debug Win32 ------
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetScanLine referenced in function "unsigned char * __cdecl FreeImage_GetBitsRowCol(struct FIBITMAP *,int,int)" (?FreeImage_GetBitsRowCol@@YAPAEPAUFIBITMAP@@HH@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetHeight referenced in function "unsigned char * __cdecl FreeImage_GetBitsRowCol(struct FIBITMAP *,int,int)" (?FreeImage_GetBitsRowCol@@YAPAEPAUFIBITMAP@@HH@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Clone referenced in function "public: __thiscall ImageContainer::ImageContainer(class ImageContainer const &)" (??0ImageContainer@@QAE@ABV0@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Unload referenced in function "public: void __thiscall ImageContainer::Clear(void)" (?Clear@ImageContainer@@QAEXXZ)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Allocate referenced in function "public: bool __thiscall ImageContainer::Allocate(unsigned int,unsigned int,unsigned int)" (?Allocate@ImageContainer@@QAE_NIII@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetWidth referenced in function "public: unsigned int __thiscall ImageContainer::GetWidth(void)const " (?GetWidth@ImageContainer@@QBEIXZ)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetBPP referenced in function "public: unsigned int __thiscall ImageContainer::GetDpp(void)const " (?GetDpp@ImageContainer@@QBEIXZ)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetColorsUsed referenced in function "public: unsigned int __thiscall ImageContainer::GetPaletteSize(void)const " (?GetPaletteSize@ImageContainer@@QBEIXZ)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_ConvertTo24Bits referenced in function "public: bool __thiscall ImageContainer::LoadPicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadPicture@ImageContainer@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Load referenced in function "public: bool __thiscall ImageContainer::LoadPicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadPicture@ImageContainer@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_FIFSupportsReading referenced in function "public: bool __thiscall ImageContainer::LoadPicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadPicture@ImageContainer@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetFIFFromFilename referenced in function "public: bool __thiscall ImageContainer::LoadPicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadPicture@ImageContainer@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_GetFileType referenced in function "public: bool __thiscall ImageContainer::LoadPicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadPicture@ImageContainer@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Save referenced in function "public: bool __thiscall ImageContainer::SavePicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)const " (?SavePicture@ImageContainer@@QBE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_FIFSupportsWriting referenced in function "public: bool __thiscall ImageContainer::SavePicture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)const " (?SavePicture@ImageContainer@@QBE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_ColorQuantizeEx referenced in function "public: bool __thiscall ImageContainer::ReduceColorDepth(class AtariClut const *)" (?ReduceColorDepth@ImageContainer@@QAE_NPBVAtariClut@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Paste referenced in function "public: bool __thiscall ImageContainer::ReduceColorDepthPerScanline(class std::map<int,class AtariClut,struct std::less<int>,class std::allocator<struct std::pair<int const ,class AtariClut> > > const *)" (?ReduceColorDepthPerScanline@ImageContainer@@QAE_NPBV?$map@HVAtariClut@@U?$less@H@std@@V?$allocator@U?$pair@$$CBHVAtariClut@@@std@@@3@@std@@@Z)
+1>image.obj : error LNK2019: unresolved external symbol _FreeImage_Copy referenced in function "public: bool __thiscall ImageContainer::ReduceColorDepthPerScanline(class std::map<int,class AtariClut,struct std::less<int>,class std::allocator<struct std::pair<int const ,class AtariClut> > > const *)" (?ReduceColorDepthPerScanline@ImageContainer@@QAE_NPBV?$map@HVAtariClut@@U?$less@H@std@@V?$allocator@U?$pair@$$CBHVAtariClut@@@std@@@3@@std@@@Z)
+1>pictconv.obj : error LNK2019: unresolved external symbol _FreeImage_DeInitialise referenced in function _main
+1>pictconv.obj : error LNK2019: unresolved external symbol _FreeImage_Initialise referenced in function _main
+*/
+
+
+
+
 

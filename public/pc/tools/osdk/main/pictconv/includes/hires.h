@@ -66,6 +66,10 @@ public:
 	virtual unsigned char *GetBufferData()=0;
 	virtual unsigned int GetBufferSize()=0;
 
+        virtual unsigned char *GetSecondaryBufferData()   { return 0; }
+        virtual unsigned int GetSecondaryBufferSize()	  { return 0; }
+
+
 protected:
 	PictureConverter(MACHINE machine);
 	PictureConverter();		// N/A

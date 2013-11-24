@@ -654,8 +654,10 @@ TextFileGenerator::~TextFileGenerator()
 }
 
 
-void TextFileGenerator::ConvertData(std::string& cDestString,const void* pSourceData,size_t nFileSize)
+std::string TextFileGenerator::ConvertData(const void* pSourceData,size_t nFileSize)
 {
+  std::string cDestString;
+
   if ( ((nFileSize/m_nDataSize)*m_nDataSize)!=nFileSize)
   {
     ShowError("The filesize must be a multiple of the data size.");
@@ -804,6 +806,8 @@ void TextFileGenerator::ConvertData(std::string& cDestString,const void* pSource
 
   // End of file carriage return
   cDestString+="\r\n";
+
+  return cDestString;
 }
 
 
