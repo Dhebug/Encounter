@@ -58,6 +58,7 @@
 // 07-11-2013 NB v0.075 New credits text
 // 08-11-2013 NB v0.076 New Trophy Graphic, contents drawn
 // 09-11-2013 NB v0.077 Draw Trophy Grid edges and Color Headings
+// 24-11-2013 NB v0.078 Adds text to Trophy Screen...
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -396,7 +397,7 @@ unsigned char subpacc,subpacd;	// used in subpacman5
 unsigned char turncount;			// used to count the number of turns
 //unsigned char enemytargetcount;	// count of enemy targets on a route
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
-unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset; // count of dead attackers or defenders
+unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset;  // count of dead attackers or defenders
 //unsigned char deadchar;
 unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
@@ -416,8 +417,8 @@ unsigned char bottompattern;	// draw full line or blank
 unsigned char Trophies[7][2];	// trophy array [trophytype][playertype]
 unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn)
 //unsigned char TrophyTitle[12];	// Titles of Trophies
-unsigned char TextChar; // Character of Trophy String
-unsigned char TextCursor; // Location of Text string
+unsigned char textchar; // Character of Trophy String
+//unsigned char TextCursor; // Location of Text string
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -434,6 +435,7 @@ main(){
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
     ClearTrophies();			// initialize trophy array
+    //PrintTrophyScreen();
     drawboard();				// draw the board
     while (gamestyle==3){
       message="PLAYERS:1-2";	// number of players
@@ -488,9 +490,14 @@ main(){
     if ( game == 0 ) message="             KING WINS!"; 
     // computer can't move
     if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
-    // Award RAIDO Trophy (win on last turn)
-    if (( game != -1 )&&(TurnsRemaining==0)){
-	    Trophies[RAIDO][playertype-1]=TROPHY;
+    // Award RAIDO AND URUZ Trophies (RAIDO = win on last turn, URUZ >=5 turns remaining)
+    if ( game != -1 ){
+	    if (TurnsRemaining == 0){
+	    	Trophies[RAIDO][playertype-1]=TROPHY;
+    	}
+    	if (TurnsRemaining >= 5){
+	    	Trophies[URUZ][playertype-1]=TROPHY;
+    	}
     }
     printmessage();
     erasetext=120; // 40*3 (3 lines to erase)
@@ -2061,7 +2068,7 @@ void PrintTrophyScreen(){
 	AlgizThorTrophyCalc();			// Calculate the awarding of ALGIZ/THOR Trophies
 	PrintTrophyScreen3();			// print the trophy grid (with trophies)
 	cy=2;cx=7;inverse();cx=8;inverse();	// inverse the trophy head columns
-	//PrintTrophyScreen4();			// print text onto the hires part of screen
+	PrintTrophyScreen4();			// print text onto the hires part of screen
 	getchar();
 }
 void PrintTrophyScreen1(){
@@ -2097,17 +2104,24 @@ void PrintTrophyScreen3(){
 	DrawTrophyBottom();
 }
 // Print the trophy names
+
 void PrintTrophyScreen4(){
-	TextCursor=0xa5ae;	//starting position of text on screen
+	//deadtext=0xa5ae;	//starting position of text on screen
+	row=3;col=2;
 	for (x=0;x<6;x++){
-		for (y=0;y<12;y++){
-			TextChar=0x9800+(TrophyText[x][y]*8);
+		//deadcurset=0xad29+((40*8)*(x*2))+((40*8)*2);
+		deadcurset=0xa002+(40*18*row)+(40*6)+(col*3);
+		for (y=0;y<11;y++){
+			//textchar=(TrophyText[x][y]-32)*8;
+			textchar=TrophyText[x][y];
 			chasm2();
-			TextCursor++;
+			deadcurset++;
 		}
-		TextCursor=0xa5ae+(40*8);
+		row++;
+		//deadtext=0xa5ae+((40*8)*2);
 	}
 }
+
 void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies
 	//if ( playertype == 1){ // if current player is ATTACKER
 		if (deadattackers==0) Trophies[ALGIZ][0]=TROPHY;

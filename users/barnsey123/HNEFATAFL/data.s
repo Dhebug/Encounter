@@ -80,6 +80,7 @@ _TrophyText
 	.byt 65,76,71,73,90,32,32,32,32,32,32 
 	.byt 85,82,85,90,32,32,32,32,32,32,32 
 	.byt 82,65,73,68,79,32,32,32,32,32,32 
+
 ; uninitialized variable (will calc on fly) - target values of square
 
 _target

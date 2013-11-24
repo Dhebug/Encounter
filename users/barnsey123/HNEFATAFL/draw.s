@@ -244,13 +244,45 @@ chasmdef
 
 _chasm2
 .(
-	lda _TextCursor+0
+	lda _deadcurset+0
 	sta tmp1+0
-	lda _TextCursor+1
+	lda _deadcurset+1
 	sta tmp1+1
 	ldx #0
 loop
-	lda _TextChar,x
+	lda _textchar	; load the char id no into accumulator
+	cmp #65			; is it an A?
+	beq chasmA
+	cmp #66			; B?
+	beq chasmB
+	cmp #68			; D?
+	beq chasmD
+	cmp #69			; E?
+	beq chasmE
+	cmp #70			; F?
+	beq chasmF
+	cmp #71			; G?
+	beq chasmG
+	cmp #73			; I?
+	beq chasmI
+	cmp #75			; K?
+	beq chasmK
+	cmp #76			; L?
+	beq chasmL
+	cmp #79			; O?
+	beq chasmO
+	cmp #82			; R?
+	beq chasmR
+	cmp #83			; S?
+	beq chasmS
+	cmp #84			; T?
+	beq chasmT
+	cmp #85			; U?
+	beq chasmU
+	cmp #90			; Z?
+	beq chasmZ
+	lda $9900,x		; else print a space
+chasmx2
 	ldy #0
 	sta (tmp1),y
 	jsr _Add40
@@ -258,8 +290,60 @@ loop
 	cpx #7
 	bcc loop
 	rts
+chasmA
+	lda $9A08,x
+	jmp chasmx2
+chasmB
+	lda $9A10,x
+	jmp chasmx2
+chasmD
+	lda $9A20,x
+	jmp chasmx2
+chasmE
+	lda $9A28,x
+	jmp chasmx2
+chasmF
+	lda $9A30,x
+	jmp chasmx2
+chasmG
+	lda $9A38,x
+	jmp chasmx2
+chasmI
+	lda $9A48,x
+	jmp chasmx2
+chasmK
+	lda $9A58,x
+	jmp chasmx2	
+chasmL
+	lda $9A60,x
+	jmp chasmx2	
+chasmO
+	lda $9A78,x
+	jmp chasmx2	
+chasmR
+	lda $9A90,x
+	jmp chasmx2	
+chasmS
+	lda $9A98,x
+	jmp chasmx2	
+chasmT
+	lda $9AA0,x
+	jmp chasmx2	
+chasmU
+	lda $9AA8,x
+	jmp chasmx2	
+chasmZ
+	lda $9AD0,x
+	jmp chasmx2		
 .)
 
+_SetScreenAddress2
+.(
+	ldx _cx
+	ldy _cy
+	jsr _SetScreenAddress
+	rts
+.)
 
 _tileloop
 .(
@@ -474,9 +558,10 @@ set_tile_to_draw
 ; _cy=screen y position
 _inverse
 .(
-	ldx _cx
-	ldy _cy
-	jsr _SetScreenAddress
+	;ldx _cx
+	;ldy _cy
+	;jsr _SetScreenAddress
+	jsr _SetScreenAddress2
 	jsr _Add40
 	;jsr _Add40
 	
@@ -511,9 +596,10 @@ loop
 
 _inverse2
 .(
-	ldx _cx
-	ldy _cy
-	jsr _SetScreenAddress
+	;ldx _cx
+	;ldy _cy
+	;jsr _SetScreenAddress
+	jsr _SetScreenAddress2
 	jsr _Add40
 	; Draw loop
 	.(
