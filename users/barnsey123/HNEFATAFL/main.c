@@ -59,6 +59,9 @@
 // 08-11-2013 NB v0.076 New Trophy Graphic, contents drawn
 // 09-11-2013 NB v0.077 Draw Trophy Grid edges and Color Headings
 // 24-11-2013 NB v0.078 Adds text to Trophy Screen...
+// 26-11-2013 NB v0.079 changed some text messages
+// 26-11-2013 NB v0.080 Changed RINGOFSTEEL behaviour (improves AI)
+// 26-11-2013 NB v0.081 Variable TAKEWEIGHT to control agression
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -76,7 +79,7 @@
 #define KING 3
 #define CASTLE 4
 #define ENEMYBLOCK 3
-#define TAKEWEIGHT 5
+#define LOWTAKEWEIGHT 3
 #define TRIGGERHIGH 3
 #define TRIGGERLOW 7
 #define PARTIAL1 0
@@ -102,6 +105,7 @@
 #define ALGIZ 4
 #define URUZ 5
 #define RAIDO 6
+#define RINGOFSTEEL 6
 /*
 FIRSTBLOOD = MAKE FIRST KILL
 BLOODEAGLE = DOUBLE KILL
@@ -419,6 +423,7 @@ unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn
 //unsigned char TrophyTitle[12];	// Titles of Trophies
 unsigned char textchar; // Character of Trophy String
 //unsigned char TextCursor; // Location of Text string
+unsigned char TakeWeight;
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -468,7 +473,7 @@ main(){
       playertype++;	// playertype inited as 0 so ++ will make it 1 at start of game
       if ( playertype == 3 ) { 
 	      playertype = 1; turncount++; // was defender, set to attacker player, inc turncount
-  	 	  if ( turncount > turnlimit ) gamestyle = 9; // signify end of game
+	      if ( turncount > turnlimit ) gamestyle = 9; // signify end of game
 	  }
       //if (( gamestyle == 0 )||((gamestyle==1)&&(playertype==2))||((gamestyle==2)&&(playertype==1)))
       if ( gamestyle != 9 ){	// if turns not exceeded
@@ -487,7 +492,7 @@ main(){
 */
     message="          ATTACKER WINS!"; // default (game=-2)
     // king escapes or all attackers killed
-    if ( game == 0 ) message="             KING WINS!"; 
+    if ( game == 0 ) message="            KING WINS"; 
     // computer can't move
     if ( game == -1 ) message="STALEMATE - OR TURN LIMIT EXCEEDED"; 
     // Award RAIDO AND URUZ Trophies (RAIDO = win on last turn, URUZ >=5 turns remaining)
@@ -501,7 +506,8 @@ main(){
     }
     printmessage();
     erasetext=120; // 40*3 (3 lines to erase)
-    message="\n       *** PRESS A KEY ***";
+    message="\n       ()( PRESS A KEY )()";
+    		 
     printline();
     flashon();
     getchar();
@@ -518,7 +524,8 @@ void computerturn(){
   //message="TURN: ";
   //strcat(message, test2);
   //strcat(message, " THINKING...\0");
-  message="ORIC IS THINKING...";
+  message="ORIC IS THINKING...\n";
+           
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   printturnline();	// print turn counters
@@ -1304,31 +1311,32 @@ void drawplayers() {
 }
 // update the deadpile
 void deadpile(){
-  if (playertype == 1){ // IF ATTACKERS TURN THEN INC DEADEFENDERS "("
-	  if ( deadtoggle ) deaddefenders++;
+  if (playertype == ATTACKER){  // IF ATTACKERS TURN THEN INC DEADEFENDERS 
+	  if ( deadtoggle ) {
+		  deaddefenders++;
+		  textchar=40;			// "("
+	  }
 	  deadplayers=deaddefenders;
 	  deadcurset=0xa027;
-  }else{	// IF DEFENDERS TURN THEN INC DEADATTACKERS ")"
-	  if ( deadtoggle ) deadattackers++;
+  }else{	// IF DEFENDERS TURN THEN INC DEADATTACKERS 
+	  if ( deadtoggle ) {
+		  deadattackers++;
+		  textchar=41;			// ")"
+      }
 	  deadplayers=deadattackers;
 	  deadcurset=0xa025;
   }
   for (x=0;x<deadplayers;x++){
-	//if ( deadtoggle == 0 ) deadchar=0x9800+(32*8); // space
-	chasm();
-	//deadcurset+=(40*9);
+	chasm2();
 	deadcurset+=(40*8); // 40*8
-	//curset(deadcurset,x*8,0);
-	//hchar(deadchar,0,deadtoggle);
   }
-  //}
- 
 }
 
 // DRAW THE BOARD
 void drawboard(){
+  TakeWeight=5;				// default TakeWeight - altered later
   inkcolor=6;inkasm();
-  deadtoggle=0;				// ensure deadpile char=space
+  deadtoggle=0;	textchar=32;// ensure deadpile char=space
   playertype=1;deadpile();	// clear the deadpile of defenders
   playertype=2;deadpile();  // clear the deadpile of attackers
   deadattackers=0;deaddefenders=0; // reset deadpile counts
@@ -1668,7 +1676,7 @@ unsigned char cantakepiece(){
     }
   }
   // Ring Of Steel: when fb==6 update target if defender outside it's home zone
-  if ( playerlevel ){ // if greater than SAGA
+  if (( playerlevel )&&(turncount < RINGOFSTEEL)){ // if greater than SAGA and within 1st RINGOFSTEEL turns
   	if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
 	  	if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
 		  target[ns][ew]+=10;
@@ -1705,11 +1713,12 @@ void takepiece(){
   deadpile();
   inctakecounter();	// increment the take counter
   if (firstblood){
+	  TakeWeight=LOWTAKEWEIGHT;	// reduce the takeweight figure
 	  Trophies[FIRSTBLOOD][playertype-1]=TROPHY;	// update Trophies Array
 	  firstblood=0;
-	  message="\n FIRST BLOOD TO ATTACKER * PRESS A KEY";
+	  message=" ()( FIRST BLOOD TO ATTACKER )()\n       )() PRESS A KEY ()(";           
 	  if ( playertype == DEFENDER ){
-		  message="\n FIRST BLOOD TO KING * PRESS A KEY";
+	  message="   ()( FIRST BLOOD TO KING )()\n       )() PRESS A KEY ()(";                      	   
 	  }
 	  submessage();
 	  
@@ -1717,11 +1726,11 @@ void takepiece(){
 }
 void takemessage(){	// displays a firstblood or multiple take message
 	if ( takecounter == 2 ) {
-		message="\n DOUBLE TAKE! * PRESS A KEY";
+		message="       ()( BLOOD EAGLE )()\n       )() PRESS A KEY ()(";	         
 		Trophies[BLOODEAGLE][playertype-1]=TROPHY;
 	}
 	if ( takecounter == 3 ) {
-		message="\n TRIPLE TAKE! * PRESS A KEY";
+		message="       ()(  BERZERKER  )()\n       )() PRESS A KEY ()(";	         
 		Trophies[BERZERKER][playertype-1]=TROPHY;
 	}
 	submessage();
@@ -1867,7 +1876,7 @@ void surroundcheck(){
   // if attacker or kingsquare n/s/e/w then inc surrounded
   //if (players[surns][surew]==1)	incsurround();	// is attacker n,s,e,w
   //if (tiles[surns][surew]>2)	incsurround();	// is king square n,s,e,w
-  if ((players[surns][surew] == 1)||(tiles[surns][surew] > 2)) {
+  if ((players[surns][surew] == ATTACKER)||(tiles[surns][surew] > 2)) {
 	  incsurround();
   }
 }
@@ -1991,7 +2000,7 @@ void updatetarget(){
     //calccantake();			// calculates how many takes can be made in this position (cantake)
     //y=cantake*TAKEWEIGHT;	// value to be added to target			
     //target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
-    target[targetns][targetew]+=(cantake*TAKEWEIGHT);
+    target[targetns][targetew]+=(cantake*TakeWeight);
     //if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
   }
 }
@@ -2109,29 +2118,21 @@ void PrintTrophyScreen4(){
 	//deadtext=0xa5ae;	//starting position of text on screen
 	row=3;col=2;
 	for (x=0;x<6;x++){
-		//deadcurset=0xad29+((40*8)*(x*2))+((40*8)*2);
 		deadcurset=0xa002+(40*18*row)+(40*6)+(col*3);
 		for (y=0;y<11;y++){
-			//textchar=(TrophyText[x][y]-32)*8;
 			textchar=TrophyText[x][y];
 			chasm2();
 			deadcurset++;
 		}
 		row++;
-		//deadtext=0xa5ae+((40*8)*2);
 	}
 }
 
 void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies
-	//if ( playertype == 1){ // if current player is ATTACKER
 		if (deadattackers==0) Trophies[ALGIZ][0]=TROPHY;
 		if (deaddefenders==0) Trophies[ALGIZ][1]=TROPHY;
 		if (deaddefenders>11) Trophies[THOR][0]=TROPHY;
 		if (deadattackers==24)Trophies[THOR][1]=TROPHY;
-	//}
-	//if ( playertype == 2){ // if current player is DEFENDER
-	
-	//}
 }
 void ClearTrophies(){
 	Trophies[0][0]=7;	// PictureTiles : attacker tile
