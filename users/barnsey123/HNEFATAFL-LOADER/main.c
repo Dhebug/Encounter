@@ -122,7 +122,7 @@ void main()
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
   	//message="   HNEFATAFL V0.075 BY NEIL BARNES\n      SKULL GFX: DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
-  	message="   HNEFATAFL V0.081 BY NEIL BARNES\n   ORIGINAL ARTWORK:DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
+  	message="   HNEFATAFL V0.083 BY NEIL BARNES\n   ORIGINAL ARTWORK:DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
