@@ -22,7 +22,7 @@
 // 01-05-2013 NB v0.029 Potential Broken Arrow Situation
 // 02-05-2013 NB v0.030 Fixed central square "backbone" issue
 // 02-05-2013 NB v0.031 Added TRIGGER weighting and changes to brokenarrow
-// 04-05-2013 NB v0.032 Replecaed g variable in gspot with kingtoedge array
+// 04-05-2013 NB v0.032 Replecaed g variable in gspot with kingtargets array
 // 04-05-2013 NB v0.033 Introduced pacman3 and some changes to subpacmanx
 // 07-05-2013 NB v0.040 Skip 03x coz of different versions floating about 
 // 07-05-2013 NB v0.041 Fixed a few bugs, reduced footprint
@@ -62,6 +62,7 @@
 // 26-11-2013 NB v0.079 changed some text messages
 // 26-11-2013 NB v0.080 Changed RINGOFSTEEL behaviour (improves AI)
 // 26-11-2013 NB v0.081 Variable TAKEWEIGHT to control agression
+// 29-11-2013 NB v0.082 Changed kingtoedge to kingtargets
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -403,7 +404,7 @@ unsigned char turncount;			// used to count the number of turns
 unsigned char brokenarrow[4];	// NORTH/SOUTH/EAST/WEST: 0=OK, 1=BROKENARROW, 2=POTENTIAL BROKEN ARROW in that direction
 unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset;  // count of dead attackers or defenders
 //unsigned char deadchar;
-unsigned char kingtoedge[4];	// number of TARGETS from king to edge of board
+unsigned char kingtargets[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
 unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
@@ -600,6 +601,7 @@ void findpiece(){	// find a piece capable of moving to selected target
 		if ((foundpiece == 1)&&(redflag == NO)){ // can't be taken so we've found a candidate	
 	  		if (a != targetns) {// target is not on same row as candidate
 				if ((targetns == kingns)&&((a < 2)||(a > 8))){
+				//if (targetns == kingns){
 					startrow=a;destrow=a;startcol=0;destcol=10;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
@@ -616,6 +618,7 @@ void findpiece(){	// find a piece capable of moving to selected target
 		if ((foundpiece == 1)&&(redflag == NO)){ // can't be taken so we've found a candidate
 			if ( b != targetew){// target is not on same column as candidate
 				if ((targetew == kingew)&&((b < 2)||(b > 8))){
+				//if (targetew == kingew){
 					startrow=0;destrow=10;startcol=b;destcol=b;
 					checkroute(); // returns z
 					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
@@ -739,7 +742,7 @@ ODINJUMP1:
   if ( foundpiece != 1 ){ 
 	zerofoundpiece();
   	origorient=SOUTH;	
-  	for (mkey=ons+1; mkey<11; mkey++)	{a=mkey;findpiece();}
+  	for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}
   }	
   if ( playerlevel == ODIN ) goto ODINJUMP3;
 ODINJUMP2:
@@ -749,13 +752,13 @@ ODINJUMP2:
 	a=ons; 
 	zerofoundpiece();
   	origorient=EAST;
-  	for (mkey=oew+1; mkey<11; mkey++)	{b=mkey;findpiece();}
+  	for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}
   }	
   // WEST
   if ( foundpiece != 1 ) { 
 	zerofoundpiece();
 	origorient=WEST;
-  	for (mkey=oew-1; mkey>-1; mkey--)	{b=mkey;findpiece();}	
+  	for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
   }
   if ( playerlevel == ODIN ) goto ODINJUMP1;
 ODINJUMP3:
@@ -793,13 +796,13 @@ void subpacmanx(){
   points+=brokenarrow[orientation]*10;
   //message="NOT SET";
  
-  if (( kingpieces[orientation] == 0 )&&(kingtoedge[orientation])){
+  if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){
 	  //calchightarget();
-	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) {
+	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) { // NORTH & SOUTH
 		  redflag=YES;	// raise a red flag
 		  points=200;
 	  }
-	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) {
+	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) { // EAST AND WEST
 		  redflag=YES;	// raise a red flag
 		  points=200;
 	  }	  
@@ -845,7 +848,7 @@ void subpacmany(){	// apply the points generated in pacman2-6
 }
 void checkbrokenarrow(){
 	// f= value of player piece at edge of board (if any)
-	// kingtoedge[orientation]= count of targets from king to edge
+	// kingtargets[orientation]= count of targets from king to edge
 	// kingpieces[]= count of pieces from king in a given orientation
 	unsigned char test=0;
 	//unsigned char testreturn=0;
@@ -854,11 +857,11 @@ void checkbrokenarrow(){
 	if (( c == 0 ) && ( d )) {
 		f=players[a][b];		// check for piece at edge of board
 		if (f == CASTLE) f=0;	// check for corner square
-	  	if (( target[a][b] )&&(tzonemode==FULL)) kingtoedge[orientation]--; // decrement kingtoedge(so maybe kingtoedge=zero) - to trigger brokenarrow
+	  	if (( target[a][b] )&&(tzonemode==FULL)) kingtargets[orientation]--; // decrement kingtargets(so maybe kingtargets=zero) - to trigger brokenarrow
 		//if (( kingpieces[orientation] == 1) && (f) && (f != ATTACKER)) test=1;
 		if (( kingpieces[orientation] == 1) && (f)) test=1;
 		if ((kingpieces[orientation] == 0 )||( test )){
-			if ( kingtoedge[orientation] == 0){	// no targets on route to edge
+			if ( kingtargets[orientation] == 0){	// no targets on route to edge
 				checkroutemode=5;checkroute(); // add points to t-zone targets (startrow, startcol,destrow, destcol)
 			}else{
 				brokenarrow[orientation]++; // POTENTIAL BROKEN ARROW
@@ -894,16 +897,16 @@ void gspot(){
 	setcheckmode3();	// count number of targets on route from king to edge
 	// NORTH
 	startrow=0;destrow=kingns;startcol=kingew;destcol=kingew;	
-	kingtoedge[NORTH]=checkroute();  // count of targets from king to edge
+	kingtargets[NORTH]=checkroute();  // count of targets from king to edge
 	// SOUTH
 	startrow=kingns;destrow=10;
-	kingtoedge[SOUTH]=checkroute();  // count of targets from king to edge
+	kingtargets[SOUTH]=checkroute();  // count of targets from king to edge
 	// EAST
 	destrow=kingns;destcol=10;
-	kingtoedge[EAST]=checkroute();
+	kingtargets[EAST]=checkroute();
 	// WEST
 	startcol=0;destcol=kingew;
-	kingtoedge[WEST]=checkroute();
+	kingtargets[WEST]=checkroute();
 }
 /*
 void gspot(){
@@ -957,7 +960,7 @@ void pacman2(){
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
-	gspot(); // sets kingtoedge[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
+	gspot(); // sets kingtargets[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	//checkbrokenarrowhead();
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
 	for (orientation = 0; orientation < 4; orientation++){
