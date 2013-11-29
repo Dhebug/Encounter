@@ -63,6 +63,7 @@
 // 26-11-2013 NB v0.080 Changed RINGOFSTEEL behaviour (improves AI)
 // 26-11-2013 NB v0.081 Variable TAKEWEIGHT to control agression
 // 29-11-2013 NB v0.082 Changed kingtoedge to kingtargets
+// 29-11-2013 NB v0.083 Fixed issue with REDFLAG (finally?)
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -102,10 +103,10 @@
 #define TROPHY 12
 #define FIRSTBLOOD 1
 #define BLOODEAGLE 2
-#define BERZERKER 3
-#define ALGIZ 4
-#define URUZ 5
-#define RAIDO 6
+#define BERZERKER  3
+#define ALGIZ      4
+#define URUZ       5
+#define RAIDO      6
 #define RINGOFSTEEL 6
 /*
 FIRSTBLOOD = MAKE FIRST KILL
@@ -233,7 +234,7 @@ void PrintTrophyScreen1();	// sub of PrintTrophyScreen
 void PrintTrophyScreen3();	// Draw the Trophy Grid
 void PrintTrophyScreen4();	// Print the Trophy Titles
 void printturnprompt();		// prints "your turn" message		
-void prioritycalc();		// updates priority array		
+//void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
 void subarrows();			// subroutine of arrows or blanks	
 void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)	
@@ -407,7 +408,8 @@ unsigned char deadattackers, deaddefenders, deadplayers, deadtoggle; deadcurset;
 unsigned char kingtargets[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
-unsigned char redflag;			// raise the red flag to IGNORE "can I be taken"
+unsigned char redflag[4];		// raise the red flag to IGNORE "can I be taken"
+unsigned char redflagX;			// determine if ANY redflag is raised
 //unsigned char deadcolor;		// color of deadpiece
 //unsigned int deadspace;		// start of deadcolumn
 unsigned char turnlimit;		// limit the number of turns (compares to turncount)
@@ -525,13 +527,13 @@ void computerturn(){
   //message="TURN: ";
   //strcat(message, test2);
   //strcat(message, " THINKING...\0");
-  message="ORIC IS THINKING...\n";
+  message="      ()( I AM THINKING )()\n";
            
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
-  ClearArrays();	// clear target, enemy, priority and computer arrays
+  ClearArrays();	// clear target, enemy and computer arrays
   //ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
   //prioritycalc();	// calculates the priorities of pieces to move
   // 2. Loop through players array searching for pieces - calculating where they can go
@@ -563,7 +565,7 @@ void computerturn(){
 	  return;
   }
   
-  if (redflag == NO ) pacman4(); 	// check for full broken arrow
+  if (redflagX == NO ) pacman4(); 	// check for full broken arrow
   //pacman6();	// "vinegar strokes"
   // draw central square (overwriting timer)
   tiletodraw=9;	// KING ON A TILE
@@ -587,19 +589,13 @@ void DrawPictureTiles(){
 void findpiece(){	// find a piece capable of moving to selected target
   if ( foundpiece == 0 ){		
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
-		//foundpiece=1;
-		calccantake2();
-		//cantake=0;
-		//calccantake();
-		//if (( origorient == NORTH ) && ( ns > 1 )) {calccantake();}
-		//if (( origorient == SOUTH ) && ( ns < 9 )) {calccantake();}
-		//if (( origorient == EAST  ) && ( ew < 9 )) {calccantake();}
-		//if (( origorient == WEST  ) && ( ew > 1 )) {calccantake();}
-		if (( cantake == 0 )&&( surrounded < 3)) canbetaken(); // if cannot take can I be taken?
+		calccantake2();		
+		if (( cantake == 0 )&&( surrounded < 3 )&&( redflagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
 		// check NORTH and SOUTH
-		if ((foundpiece == 1)&&(redflag == NO)){ // can't be taken so we've found a candidate	
-	  		if (a != targetns) {// target is not on same row as candidate
+		//if ((foundpiece == 1)&&(redflag[origorient] == NO)){ // can't be taken so we've found a candidate	
+	  	if (foundpiece == 1){ // can't be taken so we've found a candidate	
+			if (a != targetns) {// target is not on same row as candidate
 				if ((targetns == kingns)&&((a < 2)||(a > 8))){
 				//if (targetns == kingns){
 					startrow=a;destrow=a;startcol=0;destcol=10;
@@ -615,7 +611,8 @@ void findpiece(){	// find a piece capable of moving to selected target
 			}
 		}	
 		// CHECK EAST AND WEST
-		if ((foundpiece == 1)&&(redflag == NO)){ // can't be taken so we've found a candidate
+		//if ((foundpiece == 1)&&(redflag[origorient] == NO)){ // can't be taken so we've found a candidate
+		if (foundpiece == 1){ // can't be taken so we've found a candidate
 			if ( b != targetew){// target is not on same column as candidate
 				if ((targetew == kingew)&&((b < 2)||(b > 8))){
 				//if (targetew == kingew){
@@ -799,17 +796,19 @@ void subpacmanx(){
   if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){
 	  //calchightarget();
 	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) { // NORTH & SOUTH
-		  redflag=YES;	// raise a red flag
-		  points=200;
+		  redflag[orientation]=YES;	// raise a red flag
+		  redflagX=YES;
+		  points=100;
 	  }
 	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) { // EAST AND WEST
-		  redflag=YES;	// raise a red flag
-		  points=200;
+		  redflag[orientation]=YES;	// raise a red flag
+		  redflagX=YES;
+		  points=100;
 	  }	  
   }
-
   subpacmany(); // apply the points
 }
+
 void subpacmany(){	// apply the points generated in pacman2-6
 // SET UNCOUNTER
   pacman5();				// ensure correct paclevels are set
@@ -827,12 +826,12 @@ void subpacmany(){	// apply the points generated in pacman2-6
   
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( target[x][y] ){	// if accessible by attacker	
-    	if (( target[x][y] > 1 )||(redflag)){	
+    	if (( target[x][y] > 1 )||(redflag[orientation])){	
 	    	//printmessage();getchar();
 	      	target[x][y]+=points; 
       	}else{
 	      	target[x][y]=points; // can be caught if i go here
-	      	if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
+	      	//if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
       	}
     	decpoints();
     }
@@ -956,7 +955,7 @@ void checkbrokenarrowhead(){
 
 void pacman2(){
 // improved version of pacman
-	redflag=NO;		// at this point no red flag to be waived
+	redflagX=NO;		// at this point no red flag to be waived
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
@@ -965,6 +964,7 @@ void pacman2(){
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
 	for (orientation = 0; orientation < 4; orientation++){
 		brokenarrow[orientation]=0;
+		redflag[orientation]=0;
 		tzonemode=PARTIAL1;
 		// count of pieces across the "T"
 		// PARTIAL LEVEL 1 "LEFT"
