@@ -92,8 +92,8 @@ _enemy
 _computer
 	.dsb 11*11
 
-_priority
-	.dsb 11*11
+;_priority
+;	.dsb 11*11
 
 _kingtracker
 	.dsb 11*11
@@ -112,14 +112,13 @@ loop_clear
 	sta _target,x
 	sta _computer,x
 	sta _enemy,x
-	sta _priority,x
+	;sta _priority,x
 	sta _kingtracker,x
 	inx
 	cpx #11*11
 	bne loop_clear	
 	rts
 .)
-
 ;_ClearArrays2
 ;.(
 ;	lda #0
