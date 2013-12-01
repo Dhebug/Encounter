@@ -64,6 +64,7 @@
 // 26-11-2013 NB v0.081 Variable TAKEWEIGHT to control agression
 // 29-11-2013 NB v0.082 Changed kingtoedge to kingtargets
 // 29-11-2013 NB v0.083 Fixed issue with REDFLAG (finally?)
+// 01-12-2013 NB v0.084 The Sheldon Gambit part1
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -792,20 +793,36 @@ void subpacmanx(){
   */
   points+=brokenarrow[orientation]*10;
   //message="NOT SET";
- 
+  if (( orientation == NORTH )||(orientation == WEST)){
+	  if ( enemy[0][1] ) pointsplusten();
+	  if ( enemy[1][0] ) pointsplusten();
+  }
+  if (( orientation == NORTH )||(orientation == EAST)){
+	  if ( enemy[0][9] ) pointsplusten();
+	  if ( enemy[1][10] ) pointsplusten();
+  }
+  if (( orientation == SOUTH )||(orientation == EAST)){
+	  if ( enemy[9][10] ) pointsplusten();
+	  if ( enemy[10][9] ) pointsplusten();
+  }
+  if (( orientation == SOUTH )||(orientation == WEST)){
+	  if ( enemy[9][0] ) pointsplusten();
+	  if ( enemy[10][1] ) pointsplusten();
+  }
   if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){
 	  //calchightarget();
 	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) { // NORTH & SOUTH
 		  redflag[orientation]=YES;	// raise a red flag
 		  redflagX=YES;
-		  points=100;
+		  points=200;
 	  }
 	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) { // EAST AND WEST
 		  redflag[orientation]=YES;	// raise a red flag
 		  redflagX=YES;
-		  points=100;
+		  points=200;
 	  }	  
   }
+  
   subpacmany(); // apply the points
 }
 
@@ -872,6 +889,8 @@ void checkbrokenarrow(){
 			}
 		}
 	}
+	//if (( target[a][b] )&&(tzonemode==FULL)) kingtargets[orientation]++; // increment back
+
 }
 
 /*
@@ -1001,7 +1020,6 @@ void pacman2(){
 				startrow=0; destrow=kingns;startcol=1; destcol=1;
 			}
 		}
-		//points = 100;
 		pacman3();
 	  	// PARTIAL LEVEL 2 "RIGHT"
 	  	if (startrow == destrow){
