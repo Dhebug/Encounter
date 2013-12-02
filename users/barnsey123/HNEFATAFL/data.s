@@ -33,6 +33,12 @@ _border
 	.byt 28,12,6,2,4,14,16,14,4,18,29
 	.byt 24,27,27,27,27,27,27,27,27,27,25
 */
+/* sheldon = coords of two squares adjacent to corners when checking N,S,E,W */
+_sheldon
+	.byt 0,1,1,0,0,9,1,10
+	.byt 9,10,10,9,9,0,10,1
+	.byt 0,9,1,10,9,10,10,9
+	.byt 0,1,1,0,9,0,10,1
 /* RUNIC Alphabet Tiles ordered as follows is as follows:
 4	F: Fehu			Cattle/Gold/General Wealth
 14	A:	Ansuz		The Gods, mostly Odin

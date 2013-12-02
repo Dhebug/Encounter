@@ -64,7 +64,9 @@
 // 26-11-2013 NB v0.081 Variable TAKEWEIGHT to control agression
 // 29-11-2013 NB v0.082 Changed kingtoedge to kingtargets
 // 29-11-2013 NB v0.083 Fixed issue with REDFLAG (finally?)
-// 01-12-2013 NB v0.084 The Sheldon Gambit part1
+// 01-12-2013 NB v0.084 The Sheldon Gambit part1 (left or right block?)
+// 01-12-2013 NB v0.085 The Sheldon Gambit part2 (compressed, using sheldon array)
+// 02-12-2013 NB v0.086 Added screen fade: CheckerBoard
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -270,6 +272,9 @@ void submessage();			// subroutine of takemessage
 void ClearTrophies();		// Initialize the trophies array
 void AlgizThorTrophyCalc();	// calculate awarding of the ALGIZ and THOR trophies
 void DrawPictureTiles();	// called from lots of places so gets own function
+//void cleartarget();		// set all targets to 1 (before adding redflag point values
+void SubMoveCursor2();		// subroutine of movecursor2() to save memory
+void CheckerBoard();		// Checkerboard screen wipe
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -281,6 +286,7 @@ Tile types:
 extern unsigned char tiles[11][11];			// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
 extern unsigned char TrophyText[6][11];		// Titles of Trophies
+extern unsigned char sheldon[4][8];			// co-ords of corner squares (sheldon gambit)
 //extern const unsigned char border[6][11];	// border (of title screens/menus etc)
 //extern unsigned char presents[8];	// array of runic chars that spell "presents"
 //extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
@@ -433,13 +439,9 @@ main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   /*
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
-  hires();
-  erasetext=120; // 40*3 = 3 lines to erase (used in printmessage)
-  message="V0.072 IN MEMORY OF:\nJONATHAN 'TWILIGHTE' BRISTOW\nORIC LEGEND [1968-2013]";
-  printmessage();
-  setflags(0);	// No keyclick, no cursor, no nothing
   */
   //printtitles();
+  x=13;CheckerBoard();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
@@ -578,6 +580,11 @@ void computerturn(){
   // other routines to go here to update the target array
   // 4,5,6,7..N etc
   // 
+  // For first turn have seperate starting positions for THOR and ODIN
+  if ((turncount==1)&&(playerlevel)){
+	  target[8][7]=200;
+	  if (playerlevel==ODIN) target[10][2]=210;
+  }
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
@@ -598,7 +605,6 @@ void findpiece(){	// find a piece capable of moving to selected target
 	  	if (foundpiece == 1){ // can't be taken so we've found a candidate	
 			if (a != targetns) {// target is not on same row as candidate
 				if ((targetns == kingns)&&((a < 2)||(a > 8))){
-				//if (targetns == kingns){
 					startrow=a;destrow=a;startcol=0;destcol=10;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
@@ -606,8 +612,7 @@ void findpiece(){	// find a piece capable of moving to selected target
 					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
-					if ((b > kingew)&&(kingpieces[EAST]==1)) setfoundpiece10();
-					if ((b < kingew)&&(kingpieces[WEST]==1)) setfoundpiece10();
+					if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
 				}
 			}
 		}	
@@ -616,14 +621,12 @@ void findpiece(){	// find a piece capable of moving to selected target
 		if (foundpiece == 1){ // can't be taken so we've found a candidate
 			if ( b != targetew){// target is not on same column as candidate
 				if ((targetew == kingew)&&((b < 2)||(b > 8))){
-				//if (targetew == kingew){
 					startrow=0;destrow=10;startcol=b;destcol=b;
 					checkroute(); // returns z
 					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
-					if ((a < kingns)&&(kingpieces[NORTH]==1)) setfoundpiece10();
-					if ((a > kingns)&&(kingpieces[SOUTH]==1)) setfoundpiece10();
+					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
 				}
 			}
 		}
@@ -646,6 +649,7 @@ by adding the highest score (so far) onto the necessary targets...
 It alters the values of ctns,ctew,targetns,targetew,ons,oew,ns,ew and of course,
 hightarget
 */
+/*
 void calchightarget(){
   char nsloop=1;
   char ewloop=1;
@@ -670,8 +674,8 @@ void calchightarget(){
 	  ewend=0;
   }
   hightarget=0;	// highest value target
-  for (ctns=nsstart;ctns != nsend; ctns += nsloop){	// find the highest value for target
-    for (ctew=ewstart;ctew != ewend ;ctew += ewloop){
+  for (ctns=nsstart;ctns != nsend; ctns+=nsloop){	// find the highest value for target
+    for (ctew=ewstart;ctew != ewend ;ctew+=ewloop){
       if ( target[ctns][ctew] > hightarget ){
         hightarget=target[ctns][ctew];	// make hightarget the highest value
         targetns=ctns;
@@ -683,21 +687,25 @@ void calchightarget(){
       }
     }
   }
-  /*
-  for (ctns=0;ctns<11;ctns++){	// find the highest value for target
-    for (ctew=0;ctew<11;ctew++){
-      if ( target[ctns][ctew] > hightarget ){
-        hightarget=target[ctns][ctew];	// make hightarget the highest value
-        targetns=ctns;
-        targetew=ctew;		
-        ons=ctns;		// target is accessible so make ons/oew the default piece position to move
-        oew=ctew;		// the ACTUAL piece to move determined below (one of ons or oew will remain same)
-        ns=ctns;
-        ew=ctew;
-      }
-    }
-  }*/
 }
+*/
+void calchightarget(){
+	hightarget=0;
+	for (ctns=0;ctns<11;ctns++){	// find the highest value for target
+    	for (ctew=0;ctew<11;ctew++){
+      		if ( target[ctns][ctew] > hightarget ){
+	      		hightarget=target[ctns][ctew];	// make hightarget the highest value
+	      		targetns=ctns;
+	      		targetew=ctew;
+	      		ons=ctns;
+	      		oew=ctew;
+	      		ns=ctns;
+	      		ew=ctew;
+      		}
+  		}
+	}
+}
+
 /*
 void gethightarget(){ // without upsetting anything else
 	hightarget=0;
@@ -793,6 +801,7 @@ void subpacmanx(){
   */
   points+=brokenarrow[orientation]*10;
   //message="NOT SET";
+  /*
   if (( orientation == NORTH )||(orientation == WEST)){
 	  if ( enemy[0][1] ) pointsplusten();
 	  if ( enemy[1][0] ) pointsplusten();
@@ -809,20 +818,22 @@ void subpacmanx(){
 	  if ( enemy[9][0] ) pointsplusten();
 	  if ( enemy[10][1] ) pointsplusten();
   }
-  if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){
-	  //calchightarget();
-	  if ((orientation < EAST)&&((kingew<2)||(kingew>8))) { // NORTH & SOUTH
-		  redflag[orientation]=YES;	// raise a red flag
-		  redflagX=YES;
-		  points=200;
-	  }
-	  if ((orientation > SOUTH)&&((kingns<2)||(kingns>8))) { // EAST AND WEST
-		  redflag[orientation]=YES;	// raise a red flag
-		  redflagX=YES;
-		  points=200;
-	  }	  
+  */
+  // "The Sheldon Gambit"
+  for (x=0;x<8;x+=2){
+	  a=sheldon[orientation][x];
+	  b=sheldon[orientation][x+1];
+	  if ( enemy[a][b] ) pointsplusten();
   }
-  
+  // REDFLAG detection
+  if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ // if no pieces in orientation from KING but there ARE targets
+	  if (((orientation < EAST)&&((kingew<2)||(kingew>8))) || ((orientation > SOUTH)&&((kingns<2)||(kingns>8)))) { // NORTH/SOUTH OR EAST/WEST
+		  redflag[orientation]=YES;	// raise a red flag
+		  redflagX=YES;
+		  points=200;
+		  //cleartarget();	// set all targets to 1
+	  }	   
+  }
   subpacmany(); // apply the points
 }
 
@@ -1028,7 +1039,7 @@ void pacman2(){
 			startrow=kingns;destrow=10;
 	  	}
 	  	pacman3();	
-		subpacmanx(); // add points to target in all directions from king 	
+		subpacmanx(); // add points to target in orientation from king 	
 	}
 }
 void pacman3(){
@@ -1152,32 +1163,41 @@ void movecursor2() {
     }	
   }
   if (canmovecursor ){
-    fb=0;
-    //inversex=cx;
-	//inversey=cy;
-    //drawcursor();
-    inverse();				// print blank cursor (effect=remove dots)
+    fb=0;a=cx;b=cy;
+    SubMoveCursor2();
+    /*inverse();				
     if ( mkey == 8 ) cx-=multiple;	// left
     if ( mkey == 9 ) cx+=multiple;	// right
     if ( mkey == 10 )cy+=multiple;	// down
     if ( mkey == 11 )cy-=multiple;	// up
-    
-    fb=1;
-    //inversex=cx;
-	//inversey=cy;
-	//drawcursor();					// print dotted cursor
+    */
+    cx=a;cy=b;
+    fb=1;a=ew;b=ns;
+    SubMoveCursor2();
+    /*
 	inverse();
     if ( mkey == 8 ) ew-=multiple;	// left
     if ( mkey == 9 ) ew+=multiple;	// right
     if ( mkey == 10 )ns+=multiple;	// down
     if ( mkey == 11 )ns-=multiple;	// up
-  }
-  else{
-    if ( cursormode == 0 ) {flashback=CYAN;flashred();printturnline();}		// flash red: return to cyan:6
-    if ( cursormode == 1 ) {flashback=GREEN;flashred();printturnline();}	// flash red: return to green:2, yellow=3)
+    */
+    ew=a;ns=b;
+  }else{
+	flashback=CYAN;
+	if ( cursormode ) flashback=GREEN;
+	flashred();
+	printturnline();
+    //if ( cursormode == 0 ) {flashback=CYAN;flashred();printturnline();}		// flash red: return to cyan:6
+    //if ( cursormode == 1 ) {flashback=GREEN;flashred();printturnline();}	// flash red: return to green:2, yellow=3)
   }			
 }
-
+void SubMoveCursor2(){
+	inverse();
+    if ( mkey == 8 ) a-=multiple;	// left
+    if ( mkey == 9 ) a+=multiple;	// right
+    if ( mkey == 10 )b+=multiple;	// down
+    if ( mkey == 11 )b-=multiple;	// up
+}
 
 //  kicks off functions that print appropriate arrows at all possible 
 // destinations and blanks them out afterwards
@@ -2080,6 +2100,7 @@ void printtitles()		{
 */
 void PrintTrophyScreen(){
 	// Print text in text area
+	x=11;CheckerBoard();
 	erasetextarea();
 	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
 	printline();
@@ -2100,6 +2121,7 @@ void PrintTrophyScreen(){
 	cy=2;cx=7;inverse();cx=8;inverse();	// inverse the trophy head columns
 	PrintTrophyScreen4();			// print text onto the hires part of screen
 	getchar();
+	x=11;CheckerBoard();
 }
 void PrintTrophyScreen1(){
 	for (col=0; col<11; col++){
@@ -2109,6 +2131,26 @@ void PrintTrophyScreen1(){
 		ptr_graph=BorderTiles2;
 		drawtile();
 	}
+}
+// CheckerBoard :screenwipe, x controls number of cols (different at start of game)
+void CheckerBoard(){
+	tiletodraw=8;
+	pausetime=75;
+	for (a=0;a<2;a++){
+		for (row=0; row<11; row++){
+			for (col=a; col<x; col+=2){
+				ptr_graph=BorderTiles2;
+				drawtile();pause();
+			}
+			row++;
+			b=0;
+			if (a==0) b=1;
+			for (col=b; col<x; col+=2){
+				ptr_graph=BorderTiles2;
+				drawtile();pause();
+			}
+		}
+	}	
 }
 /*
 void PrintTrophyScreen2(){
