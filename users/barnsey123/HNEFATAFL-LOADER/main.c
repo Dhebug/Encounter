@@ -5,6 +5,7 @@
 // adding routine to wipe the screen
 // 04-11-2013 NB Added credits and tribute text, setting font here instead of main prog
 // 05-11-2013 NB Calling Hires from CopyFont saving 3 bytes!
+// 02-12-2013 NB slightly different message
 #include <lib.h>
 void WipeScreen();
 void Pause();
@@ -122,7 +123,8 @@ void main()
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
   	//message="   HNEFATAFL V0.075 BY NEIL BARNES\n      SKULL GFX: DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
-  	message="   HNEFATAFL V0.084 BY NEIL BARNES\n   ORIGINAL ARTWORK:DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
+  	message="    HNEFATAFL BY NEIL BARNES\nORIGINAL ARTWORK: DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";
+              	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
