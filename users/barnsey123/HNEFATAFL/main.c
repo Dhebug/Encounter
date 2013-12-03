@@ -67,6 +67,7 @@
 // 01-12-2013 NB v0.084 The Sheldon Gambit part1 (left or right block?)
 // 01-12-2013 NB v0.085 The Sheldon Gambit part2 (compressed, using sheldon array)
 // 02-12-2013 NB v0.086 Added screen fade: CheckerBoard
+// 03-12-2013 NB v0.087 Fixed bug in CheckerBoard
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -434,6 +435,7 @@ unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn
 unsigned char textchar; // Character of Trophy String
 //unsigned char TextCursor; // Location of Text string
 unsigned char TakeWeight;
+unsigned char Checker=13;
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -441,7 +443,7 @@ main(){
   CopyFont();  //memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   */
   //printtitles();
-  x=13;CheckerBoard();
+  CheckerBoard();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
@@ -2100,7 +2102,7 @@ void printtitles()		{
 */
 void PrintTrophyScreen(){
 	// Print text in text area
-	x=11;CheckerBoard();
+	Checker=11;CheckerBoard();
 	erasetextarea();
 	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
 	printline();
@@ -2121,7 +2123,7 @@ void PrintTrophyScreen(){
 	cy=2;cx=7;inverse();cx=8;inverse();	// inverse the trophy head columns
 	PrintTrophyScreen4();			// print text onto the hires part of screen
 	getchar();
-	x=11;CheckerBoard();
+	Checker=11;CheckerBoard();
 }
 void PrintTrophyScreen1(){
 	for (col=0; col<11; col++){
@@ -2138,14 +2140,14 @@ void CheckerBoard(){
 	pausetime=75;
 	for (a=0;a<2;a++){
 		for (row=0; row<11; row++){
-			for (col=a; col<x; col+=2){
+			for (col=a; col<Checker; col+=2){
 				ptr_graph=BorderTiles2;
 				drawtile();pause();
 			}
-			row++;
+			if (row < 10 ) row++;
 			b=0;
 			if (a==0) b=1;
-			for (col=b; col<x; col+=2){
+			for (col=b; col<Checker; col+=2){
 				ptr_graph=BorderTiles2;
 				drawtile();pause();
 			}
