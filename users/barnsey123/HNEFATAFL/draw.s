@@ -315,6 +315,25 @@ chasmZ
 	jmp chasmx2		
 .)
 
+;_chasm3
+;.(
+;	lda _deadcurset+0
+;	sta tmp1+0
+;	lda _deadcurset+1
+;	sta tmp1+1
+;	ldx #0
+;loop	
+;	lda _pausetime,x	
+;	ldy #0
+;	sta (tmp1),y
+;	jsr _Add40
+;	inx
+;	cpx #7
+;	bcc loop
+;	rts	
+;.)
+
+
 _SetScreenAddress2
 .(
 	ldx _cx

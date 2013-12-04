@@ -1,3 +1,4 @@
+	
 _setfoundpiece10
 	lda #10
 	sta _foundpiece

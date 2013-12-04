@@ -68,6 +68,7 @@
 // 01-12-2013 NB v0.085 The Sheldon Gambit part2 (compressed, using sheldon array)
 // 02-12-2013 NB v0.086 Added screen fade: CheckerBoard
 // 03-12-2013 NB v0.087 Fixed bug in CheckerBoard
+// 04-12-2013 NB v0.088 Reduced memory footprint (37222->36914)
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -187,7 +188,8 @@ void cantakeadjust();		// decrement cantake if taken piece is on same plane as k
 void checkbrokenarrow();	// check to see if brokenarrow can be incremented	
 void checkend();			// check for end game conditions 	
 void checkincroute();		// check to see if OK to incroute		
-void computerturn();		// AI for computer		
+void computerturn();		// AI for computer
+void computerturn2();		// subroutine of computerturn()	
 void cursormodevalid();		// sets modevalid to 1		
 void cursormodezero();		// set cursor mode to 0 if 1		
 void decpoints();			// decrement points variable	
@@ -221,6 +223,7 @@ void inverse();				// inverse the color in the square
 void movecursor2();			// move cursor routine	
 void movepiece(); 			// move a piece					
 void pacman2();				// update target positions around king (need to develop further)
+void pacman2b();			// subroutine of pacman2
 void pacman3();
 void pacman4();
 void pacman5();
@@ -237,6 +240,7 @@ void PrintTrophyScreen1();	// sub of PrintTrophyScreen
 //void PrintTrophyScreen2();	// blank out right edge of board
 void PrintTrophyScreen3();	// Draw the Trophy Grid
 void PrintTrophyScreen4();	// Print the Trophy Titles
+void PT5();					// subroutine of PrintTrophyScreen4()
 void printturnprompt();		// prints "your turn" message		
 //void prioritycalc();		// updates priority array		
 void setpoints();			// set points to default value	
@@ -276,6 +280,8 @@ void DrawPictureTiles();	// called from lots of places so gets own function
 //void cleartarget();		// set all targets to 1 (before adding redflag point values
 void SubMoveCursor2();		// subroutine of movecursor2() to save memory
 void CheckerBoard();		// Checkerboard screen wipe
+void subCheckerBoard();		// subroutine of checkerboard
+void subCheckerBoard2();	// subroutine 2 of checkerboard
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -435,7 +441,7 @@ unsigned char TurnsRemaining;	// for awarding the RAIDO Trophy (win on last turn
 unsigned char textchar; // Character of Trophy String
 //unsigned char TextCursor; // Location of Text string
 unsigned char TakeWeight;
-unsigned char Checker=13;
+unsigned char Checker=12;
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -525,43 +531,18 @@ main(){
 
 /********************* FUNCTION DEFINITIONS ************************/
 void computerturn(){
-  //char* test2=itoa(turncount);
-  //test2=itoa(turncount);
-  //strcat (message, test2);
- // test2=itoa(turncount);
-  //message="TURN: ";
-  //strcat(message, test2);
-  //strcat(message, " THINKING...\0");
-  message="      ()( I AM THINKING )()\n";
-           
+  message="      ()( I AM THINKING )()\n";       
   //if ( playertype == 1 ) { strcpy(playertext,"ATTACKER");}else{ strcpy(playertext,"KING");}
   printmessage();
   printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy and computer arrays
-  //ClearArrays2();	// clear 1 dimension arrays RowCountAtt, ColCountAtt
-  //prioritycalc();	// calculates the priorities of pieces to move
-  // 2. Loop through players array searching for pieces - calculating where they can go
-  for (fb=4;fb<9;fb++){
-	  timertile();
-      for (ctns=0;ctns<11;ctns++){
-        for (ctew=0;ctew<11;ctew++){
-          ns=ctns;ew=ctew;
-          // fb=4 means: don't print destinations, just update ENEMY	
-          if (( fb == 4 )&&(( players[ctns][ctew] == DEFENDER  )||(players[ctns][ctew] == KING))) printdestinations();	
-          // fb=5 (+COMPUTER array):fb=7 (can I be taken) 
-	      if (((fb == 5)||(fb == 7))&&( players[ctns][ctew] == ATTACKER))  printdestinations();
-	      // fb=6 if computer piece can get here update target values 		
-	      if (( fb == 6)&&( computer[ctns][ctew] )) updatetarget();
-	      // fb=8 update kingtracker
-	      if (( fb == 8)&&( players[ctns][ctew] == KING )) printdestinations();
-	      /*if (( fb == 9 )&&( players[ctns][ctew] == ATTACKER)){
-			RowCountAtt[ctns]++;
-			ColCountAtt[ctew]++;
-	      }*/
-	    }
-      }
-  }
+  // 2. Calculate information about the board
+  fb=4; computerturn2(); // fb=4 means: don't print destinations, just update ENEMY
+  fb=5; computerturn2(); // fb=5 (+COMPUTER array)
+  fb=6; computerturn2(); // fb=6 if computer piece can get here update target values
+  fb=7; computerturn2(); // fb=7 (can I be taken)
+  fb=8; computerturn2(); // fb=8 update kingtracker 
   // 3. Increment target positions around King (PACMAN)
   pacman2();
   calchightarget();
@@ -590,6 +571,19 @@ void computerturn(){
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
+}
+// end of computerturn()
+void computerturn2(){
+	timertile();
+    for (ctns=0;ctns<11;ctns++){
+    	for (ctew=0;ctew<11;ctew++){
+			ns=ctns;ew=ctew;
+    		if (( fb == 4 )&&(( players[ctns][ctew] == DEFENDER  )||(players[ctns][ctew] == KING))) printdestinations();	
+    		if (((fb == 5)||(fb == 7))&&( players[ctns][ctew] == ATTACKER)) printdestinations();
+			if (( fb == 6)&&( computer[ctns][ctew] )) updatetarget();
+			if (( fb == 8)&&( players[ctns][ctew] == KING )) printdestinations();
+		}
+	}
 }
 void DrawPictureTiles(){
 	  ptr_graph=PictureTiles;drawtile(); 
@@ -994,55 +988,61 @@ void pacman2(){
 	gspot(); // sets kingtargets[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	//checkbrokenarrowhead();
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
-	for (orientation = 0; orientation < 4; orientation++){
-		brokenarrow[orientation]=0;
-		redflag[orientation]=0;
-		tzonemode=PARTIAL1;
-		// count of pieces across the "T"
-		// PARTIAL LEVEL 1 "LEFT"
-		//points=50;	// for level 1
-		a=0;b=kingew;startrow=0;destrow=0;startcol=0;destcol=kingew; // NORTH
-		if ( orientation ){
-			a=10;b=kingew;startrow=10;destrow=10;startcol=0;destcol=kingew; // SOUTH
-			if ( orientation == EAST ){
-				a=kingns;b=10;startrow=0; destrow=kingns;startcol=10;destcol=10;
-			}
-			if ( orientation == WEST ){
-				a=kingns;b=0; startrow=0; destrow=kingns;startcol=0; destcol=0;
-			}
+	//for (orientation = 0; orientation < 4; orientation++){
+	orientation=NORTH; pacman2b();
+	orientation=SOUTH; pacman2b();
+	orientation=EAST;  pacman2b();
+	orientation=WEST;  pacman2b();		 	
+	//}
+}
+void pacman2b(){
+	brokenarrow[orientation]=0;
+	redflag[orientation]=0;
+	tzonemode=PARTIAL1;
+	// count of pieces across the "T"
+	// PARTIAL LEVEL 1 "LEFT"
+	//points=50;	// for level 1
+	a=0;b=kingew;startrow=0;destrow=0;startcol=0;destcol=kingew; // NORTH
+	if ( orientation ){
+		a=10;b=kingew;startrow=10;destrow=10;startcol=0;destcol=kingew; // SOUTH
+		if ( orientation == EAST ){
+			a=kingns;b=10;startrow=0; destrow=kingns;startcol=10;destcol=10;
 		}
-		pacman3();
-		// PARTIAL LEVEL 1 "RIGHT"
-		if (startrow == destrow){
-			startcol=kingew;destcol=10;
-		}else{
-			startrow=kingns;destrow=10;
+		if ( orientation == WEST ){
+			a=kingns;b=0; startrow=0; destrow=kingns;startcol=0; destcol=0;
 		}
-		pacman3();	
-		// LEVEL 2
-		// PARTIAL LEVEL 2 "LEFT"
-		// a + b already set in PARTIAL LEVEL 1 
-		tzonemode=PARTIAL2;
-		startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
-		if ( orientation ){
-			startrow=9;destrow=9;startcol=0;destcol=kingew; // SOUTH
-			if ( orientation == EAST ){
-				startrow=0; destrow=kingns;startcol=9;destcol=9;
-			}
-			if ( orientation == WEST ){
-				startrow=0; destrow=kingns;startcol=1; destcol=1;
-			}
-		}
-		pacman3();
-	  	// PARTIAL LEVEL 2 "RIGHT"
-	  	if (startrow == destrow){
-			startcol=kingew;destcol=10;
-	  	}else{
-			startrow=kingns;destrow=10;
-	  	}
-	  	pacman3();	
-		subpacmanx(); // add points to target in orientation from king 	
 	}
+	pacman3();
+	// PARTIAL LEVEL 1 "RIGHT"
+	if (startrow == destrow){
+		startcol=kingew;destcol=10;
+	}else{
+		startrow=kingns;destrow=10;
+	}
+	pacman3();	
+	// LEVEL 2
+	// PARTIAL LEVEL 2 "LEFT"
+	// a + b already set in PARTIAL LEVEL 1 
+	tzonemode=PARTIAL2;
+	startrow=1;destrow=1;startcol=0;destcol=kingew; // NORTH
+	if ( orientation ){
+		startrow=9;destrow=9;startcol=0;destcol=kingew; // SOUTH
+		if ( orientation == EAST ){
+			startrow=0; destrow=kingns;startcol=9;destcol=9;
+		}
+		if ( orientation == WEST ){
+			startrow=0; destrow=kingns;startcol=1; destcol=1;
+		}
+	}
+	pacman3();
+  	// PARTIAL LEVEL 2 "RIGHT"
+  	if (startrow == destrow){
+		startcol=kingew;destcol=10;
+  	}else{
+		startrow=kingns;destrow=10;
+  	}
+  	pacman3();	
+	subpacmanx(); // add points to target in orientation from king
 }
 void pacman3(){
 	//unsigned char test=0;
@@ -1151,12 +1151,14 @@ void movecursor2() {
     incmodeone();
   }		
   if (( cursormode ) && ( modeonevalid  )){	// if not at edge of board
-    if ( players[xptrns][xptrew] == 0 ) 					canmovecursor=1; // ok if square vacant
+    //if ( players[xptrns][xptrew] == 0 ) 					canmovecursor=1; // ok if square vacant
     if ( tiles[xptrns][xptrew] == 4 ) 						canmovecursor=0; // !ok if corner
-    if (( piecetype == 3 )&&( tiles[xptrns][xptrew] > 2 ))  canmovecursor=1; // ok if KING and corner/central
-    if (( xptrns == ons )&&( xptrew == oew )) 		 		canmovecursor=1; // ok if back to self
+    //if (( piecetype == 3 )&&( tiles[xptrns][xptrew] > 2 ))  canmovecursor=1; // ok if KING and corner/central
+    //if (( xptrns == ons )&&( xptrew == oew )) 		 		canmovecursor=1; // ok if back to self
+    if (( players[xptrns][xptrew] == 0 )||(( piecetype == KING )&&( tiles[xptrns][xptrew] > 2 ))||(( xptrns == ons )&&( xptrew == oew ))) canmovecursor=1;
+    
     // need to check that for non-king pieces wether the central square is vacant and can be skipped
-    if (( piecetype < 3 )&&( tiles[xptrns][xptrew] == 3)&&(players[xptrns][xptrew] !=3 )){ // tiles=3(central), tiles=4(corner)	
+    if (( piecetype < 3 )&&( tiles[xptrns][xptrew] == 3)&&(players[xptrns][xptrew] !=KING )){ // tiles=3(central), tiles=4(corner)	
       if ( players[skipns][skipew]  ) canmovecursor=0;	// cannot skip if otherside occupied
       if ((( skipns == ons )&&( skipew == oew ))||(	players[skipns][skipew] == 0)){			// ok to skip to self
         canmovecursor=1;
@@ -1167,30 +1169,15 @@ void movecursor2() {
   if (canmovecursor ){
     fb=0;a=cx;b=cy;
     SubMoveCursor2();
-    /*inverse();				
-    if ( mkey == 8 ) cx-=multiple;	// left
-    if ( mkey == 9 ) cx+=multiple;	// right
-    if ( mkey == 10 )cy+=multiple;	// down
-    if ( mkey == 11 )cy-=multiple;	// up
-    */
     cx=a;cy=b;
     fb=1;a=ew;b=ns;
     SubMoveCursor2();
-    /*
-	inverse();
-    if ( mkey == 8 ) ew-=multiple;	// left
-    if ( mkey == 9 ) ew+=multiple;	// right
-    if ( mkey == 10 )ns+=multiple;	// down
-    if ( mkey == 11 )ns-=multiple;	// up
-    */
     ew=a;ns=b;
   }else{
 	flashback=CYAN;
 	if ( cursormode ) flashback=GREEN;
 	flashred();
 	printturnline();
-    //if ( cursormode == 0 ) {flashback=CYAN;flashred();printturnline();}		// flash red: return to cyan:6
-    //if ( cursormode == 1 ) {flashback=GREEN;flashred();printturnline();}	// flash red: return to green:2, yellow=3)
   }			
 }
 void SubMoveCursor2(){
@@ -1207,7 +1194,7 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="\n *** PRESS ANY KEY ***";
+  message="\n       )() PRESS A KEY ()(";
   printmessage();
   flashon();
   printturnline();
@@ -1446,7 +1433,7 @@ void playerturn(){
   ocy=cy;			// original y screen position
   flashback=CYAN;
   playertext="ATTACKER'S";
-  if ( playertype == 2 ) playertext="KING'S";
+  if ( playertype == DEFENDER ) playertext="KING'S";
   /*
   if ( playertype == 2 ){ 
 	playertext="KING'S";
@@ -1471,8 +1458,8 @@ void playerturn(){
     /*******************************************************/
     if (( xkey == 88) || ( xkey == 80)){	// if 'X' or 'P' is selected (88=X, 80=P)
       canselect=0;		// set piece to NOT SELECTABLE
-      if (( playertype == 1 )&&(players[ns][ew] == 1 ))	canselect=1; // piece is selectable
-      if (( playertype == 2 )&&((players[ns][ew] == 2 )||(players[ns][ew] == 3))) canselect=1;// piece is selectable
+      if ((( playertype == ATTACKER )&&(players[ns][ew] == ATTACKER ))||(( playertype == DEFENDER )&&((players[ns][ew] == DEFENDER )||(players[ns][ew] == KING))))	canselect=1; // piece is selectable
+      //if (( playertype == 2 )&&((players[ns][ew] == 2 )||(players[ns][ew] == 3))) canselect=1;// piece is selectable
       if ( canselect  ){
         canpiecemove();
         if (route ) { 
@@ -1508,13 +1495,27 @@ void playerturn(){
         // set Original cursor and board position of selected square
         ocx=cx; ocy=cy; ons=ns; oew=ew;
         while (( mkey != 88 ) && ( mkey != 82)){ // move cursor until X or R selected
-        	if (( ons == ns )&&( cursormovetype < 0)) cursormovetype=1; // cursor allowed north-south
-          	if (( oew == ew )&&( cursormovetype < 0)) cursormovetype=2; // cursor allowed east-west
-          	if (( ons == ns )&&	(oew == ew )) 		cursormovetype=0; // cursor can move 	
-          	if (( cursormovetype == 2) && (( mkey == 8)	||(mkey == 9)))	cursormovetype=-1;	//!move 
-          	if (( cursormovetype == 1) && (( mkey == 10)||(mkey == 11)))cursormovetype=-1;	//!move
-          	if (( cursormovetype == 0) && (( mkey == 8)	||(mkey == 9)))	cursormovetype=1;	//move
-          	if (( cursormovetype == 0) && (( mkey == 10)||(mkey == 11)))cursormovetype=2;	//move
+        	if ( cursormovetype < 0 ){
+	        	if ( ons == ns ) cursormovetype=1;
+	        	if ( oew == ew ) cursormovetype=2;
+        	}
+        	//if (( ons == ns )&&( cursormovetype < 0)) cursormovetype=1; // cursor allowed north-south
+          	//if (( oew == ew )&&( cursormovetype < 0)) cursormovetype=2; // cursor allowed east-west
+          	if (( ons == ns )&&	(oew == ew )) 		cursormovetype=0; // cursor can move 
+          		
+          	//if (( cursormovetype == 2) && (( mkey == 8)	||(mkey == 9)))	cursormovetype=-1;	//!move 
+          	//if (( cursormovetype == 1) && (( mkey == 10)||(mkey == 11)))cursormovetype=-1;	//!move
+          	//if (( cursormovetype == 0) && (( mkey == 8)	||(mkey == 9)))	cursormovetype=1;	//move
+          	//if (( cursormovetype == 0) && (( mkey == 10)||(mkey == 11)))cursormovetype=2;	//move
+          	if (( mkey >= 8 ) && ( mkey <= 11)){
+	          	if ( cursormovetype > 0 ){
+		          	if ((( cursormovetype == 2 )&&( mkey < 10 ))||((cursormovetype == 1)&&(mkey>9))) cursormovetype=-1;
+	          	}else{ // cursormovetype is 0
+	          		cursormovetype=1;
+	          		if (( mkey == 10 )|| ( mkey == 11)) cursormovetype=2;
+          		}
+      		}
+          	
           	if ( cursormovetype > 0 ) {
             	cursormode=1;	// restricted
             	movecursor2();
@@ -2003,7 +2004,7 @@ unsigned char checkroute(){
 // and attacking piece isn't AND only one defender on plane
 void cantakeadjust(){							
   flag=0;
-  if ((playertype == 1)&&(gamestyle == 1)){	// if computer playing as attacker and his turn
+  if ((playertype == DEFENDER )&&(gamestyle == 1)){	// if COMPUTER playing as attacker and his turn
     if (pcheckns1 == kingns){
       flag=1;
       if (ctew < kingew){orientation=WEST;}else{orientation=EAST;}
@@ -2069,7 +2070,7 @@ void calccantake() {
 void calccantake2(){
 	// check all directions from a given target square...
 	cantake=0;
-	if ( ew < 9 ) {orientation=EAST;  inccantake();}   // check EAST
+	if ( ew < 9 )  {orientation=EAST;  inccantake();}   // check EAST
     if ( ew > 1 )  {orientation=WEST;  inccantake();}   // check WEST
 	if ( ns > 1 )  {orientation=NORTH; inccantake();}   // check NORTH
     if ( ns < 9 )  {orientation=SOUTH; inccantake();}   // check SOUTH
@@ -2137,22 +2138,25 @@ void PrintTrophyScreen1(){
 // CheckerBoard :screenwipe, x controls number of cols (different at start of game)
 void CheckerBoard(){
 	tiletodraw=8;
-	pausetime=75;
-	for (a=0;a<2;a++){
-		for (row=0; row<11; row++){
-			for (col=a; col<Checker; col+=2){
-				ptr_graph=BorderTiles2;
-				drawtile();pause();
-			}
-			if (row < 10 ) row++;
-			b=0;
-			if (a==0) b=1;
-			for (col=b; col<Checker; col+=2){
-				ptr_graph=BorderTiles2;
-				drawtile();pause();
-			}
-		}
-	}	
+	pausetime=25;
+	a=0;subCheckerBoard2();
+	a=1;subCheckerBoard2();
+}
+void subCheckerBoard(){
+	for (col=b; col<Checker; col+=2){
+		ptr_graph=BorderTiles2;
+		drawtile();pause();
+	}
+}
+void subCheckerBoard2(){
+	for (row=0; row<11; row++){
+		b=a;
+		subCheckerBoard();
+		if (row < 10 ) row++;
+		b=0;
+		if (a==0) b=1;
+		subCheckerBoard();
+	}
 }
 /*
 void PrintTrophyScreen2(){
@@ -2182,17 +2186,24 @@ void PrintTrophyScreen3(){
 void PrintTrophyScreen4(){
 	//deadtext=0xa5ae;	//starting position of text on screen
 	row=3;col=2;
-	for (x=0;x<6;x++){
-		deadcurset=0xa002+(40*18*row)+(40*6)+(col*3);
-		for (y=0;y<11;y++){
-			textchar=TrophyText[x][y];
-			chasm2();
-			deadcurset++;
-		}
-		row++;
-	}
+	//for (x=0;x<6;x++){
+	x=0; PT5();
+	x=1; PT5();
+	x=2; PT5();
+	x=3; PT5();
+	x=4; PT5();
+	x=5; PT5();
+	//}
 }
-
+void PT5(){
+	deadcurset=0xa002+(40*18*row)+(40*6)+(col*3);
+	for (y=0;y<11;y++){
+		textchar=TrophyText[x][y];
+		chasm2();
+		deadcurset++;
+	}
+	row++;
+}
 void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies
 		if (deadattackers==0) Trophies[ALGIZ][0]=TROPHY;
 		if (deaddefenders==0) Trophies[ALGIZ][1]=TROPHY;
