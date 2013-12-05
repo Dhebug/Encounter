@@ -69,6 +69,8 @@
 // 02-12-2013 NB v0.086 Added screen fade: CheckerBoard
 // 03-12-2013 NB v0.087 Fixed bug in CheckerBoard
 // 04-12-2013 NB v0.088 Reduced memory footprint (37222->36914)
+// 05-12-2013 NB v0.089 More memory reductions. 36609.
+// 05-12-2013 NB v0.090 Major change to possiblemoves (fixing bug in process)
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -196,7 +198,7 @@ void cursormodezero();		// set cursor mode to 0 if 1
 void decpoints();			// decrement points variable	
 void decroute();			// decs route	
 void pointsplusten();		// ADDS 10 TO POINTS		
-void drawarrow();			// draws "arrow"	
+void drawarrow();			// draws "arrow" (not any more 05/12/2013!)	
 void drawboard();			// kicks off drawgrid/drawtiles	
 void drawcursor();			// draws cursor 	
 void drawpiece();			// draws piece	
@@ -1829,9 +1831,12 @@ void drawpiece(){
 }
 
 void drawarrow(){	// not really an arrow any more...
+  // The business with the c variable is a bit of finessing so that the central square is not highlighted if you can't actually land on it..
   a=cx;b=cy;		// save contents of cx/cy to a/b
+  c=1;				// c means OK to print
   cx=col;cy=row;	// copy row/col to cx/cy for inverse function
-  inverse();		// inverse the color at square cx/cy
+  if (((cx==5)&&(cy==5))&&(players[ns][ew] != KING)) c=0; // don't highlight central square...
+  if (c) inverse();	// inverse the color at square cx/cy
   cx=a;cy=b;		// restore contents of cx/cy from a/b
   /*
   if ( fb == 1 ){
