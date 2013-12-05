@@ -323,7 +323,7 @@ chasmZ
 ;	sta tmp1+1
 ;	ldx #0
 ;loop	
-;	lda _pausetime,x	
+;	lda _someint,x	; where someint represents say $9AD0 (for the char Z)
 ;	ldy #0
 ;	sta (tmp1),y
 ;	jsr _Add40
