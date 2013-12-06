@@ -71,6 +71,7 @@
 // 04-12-2013 NB v0.088 Reduced memory footprint (37222->36914)
 // 05-12-2013 NB v0.089 More memory reductions. 36609.
 // 05-12-2013 NB v0.090 Major change to possiblemoves (fixing bug in process)
+// 06-12-2013 NB v0.091 Partially Fixed major bug (finpiece)
 /****************************************/
 // TODO:
 // Add Text to Trophy Screen (Trophy Descriptions)
@@ -274,6 +275,7 @@ void deadpile();			// draw deadpile
 void flashred();			// flash screen in red
 //void gethightarget();		// without upsetting any other variables
 void calccantake2();		// alternative calcantake
+void calccantake3();
 void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
 void printturnline();		// prints the turn counters
 void takemessage();			// prints a message when multiple takes are made
@@ -448,6 +450,7 @@ unsigned char textchar; // Character of Trophy String
 //unsigned char TextCursor; // Location of Text string
 unsigned char TakeWeight;
 unsigned char Checker=12;
+unsigned char CanTakeDirection[4]; // the direction of a possible take [NORTH,SOUTH,EASt,WEST]
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -598,16 +601,19 @@ void DrawPictureTiles(){
 }
 
 void findpiece(){	// find a piece capable of moving to selected target
+  unsigned char deadpiecens=targetns;
+  unsigned char deadpieceew=targetew;
   if ( foundpiece == 0 ){		
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
 		calccantake2();		
 		if (( cantake == 0 )&&( surrounded < 3 )&&( redflagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
 		// check NORTH and SOUTH
-		if ((foundpiece == 1)&&(a != targetns)){ // can't be taken so we've found a candidate && target is not on same row as candidate
-			//if (a != targetns) {// target is not on same row as candidate
-				if ((targetns == kingns)&&((a < 2)||(a > 8))){
-					startrow=a;destrow=a;startcol=0;destcol=10;
+		if ( CanTakeDirection[NORTH] ) deadpiecens=targetns-1;
+		if ( CanTakeDirection[SOUTH] ) deadpiecens=targetns+1;
+		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
+				if ((deadpiecens == kingns)&&((b < 2)||(b > 8))){
+					startrow=0;destrow=10;startcol=b;destcol=b;
 					//see if by moving a piece we leave the way open for the king to escape
 					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
 					checkroute(); // returns z
@@ -616,20 +622,19 @@ void findpiece(){	// find a piece capable of moving to selected target
 				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
 					if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
 				}
-			//}
 		}	
 		// CHECK EAST AND WEST
-		if ((foundpiece == 1)&&( b != targetew)){ // can't be taken so we've found a candidate && target is not on same column as candidate
-			//if ( b != targetew){// target is not on same column as candidate
-				if ((targetew == kingew)&&((b < 2)||(b > 8))){
-					startrow=0;destrow=10;startcol=b;destcol=b;
+		if ( CanTakeDirection[EAST] ) deadpieceew=targetew+1;
+		if ( CanTakeDirection[WEST] ) deadpiecens=targetew-1;
+		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same column as candidate
+				if ((deadpieceew == kingew)&&((a < 2)||(a > 8))){
+					startrow=a;destrow=a;startcol=0;destcol=10;
 					checkroute(); // returns z
 					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
 				}
 				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
 					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
 				}
-			//}
 		}
 		if (foundpiece == 1){
 			if (origorient < EAST){
@@ -1201,7 +1206,7 @@ void printpossiblemoves(){
   flashon();
   printturnline();
   k=getchar();
-  fb=0;
+  //fb=0;
   printdestinations();	// blank out arrows on all destinations
 }
 
@@ -1240,7 +1245,7 @@ void backbone()	{
       row=xns;
       col=xew;
       if ( arrow == 1 ){ // don't draw the arrow or update any array if arrow=2
-      	if (fb < 2) drawarrow();		// draw arrow (if fb = 0 or 1)
+      	if (fb == 1) drawarrow();		// draw arrow (or really, highlight square in red or blank it)
       	if (fb == 4) subarrows2(); 		// enemy can get here, update enemy array (direction specific)
       	if (fb == 5) computer[xns][xew]++;// computer can get here, increment computer array and set default target value
       	//if (fb == 0) drawarrow();		// if MODE is "blank an arrow"
@@ -2070,10 +2075,18 @@ void calccantake() {
 void calccantake2(){
 	// check all directions from a given target square...
 	cantake=0;
-	if ( ew < 9 )  {orientation=EAST;  inccantake();}   // check EAST
-    if ( ew > 1 )  {orientation=WEST;  inccantake();}   // check WEST
-	if ( ns > 1 )  {orientation=NORTH; inccantake();}   // check NORTH
-    if ( ns < 9 )  {orientation=SOUTH; inccantake();}   // check SOUTH
+	CanTakeDirection[NORTH]=0;
+	CanTakeDirection[SOUTH]=0;
+	CanTakeDirection[EAST]=0;
+	CanTakeDirection[WEST]=0;	
+	if ( ew < 9 )  {orientation=EAST;  calccantake3();}   // check EAST
+    if ( ew > 1 )  {orientation=WEST;  calccantake3();}   // check WEST
+	if ( ns > 1 )  {orientation=NORTH; calccantake3();}   // check NORTH
+    if ( ns < 9 )  {orientation=SOUTH; calccantake3();}   // check SOUTH
+}
+void calccantake3(){
+	inccantake();
+	CanTakeDirection[orientation]=1;
 }
 // print the title screen
 /*
