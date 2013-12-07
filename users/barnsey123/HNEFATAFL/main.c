@@ -71,10 +71,12 @@
 // 04-12-2013 NB v0.088 Reduced memory footprint (37222->36914)
 // 05-12-2013 NB v0.089 More memory reductions. 36609.
 // 05-12-2013 NB v0.090 Major change to possiblemoves (fixing bug in process)
-// 06-12-2013 NB v0.091 Partially Fixed major bug (finpiece)
+// 06-12-2013 NB v0.091 Partially Fixed major bug (findpiece)
+// 07-12-2013 NB v0.092 Fully fixed findpiece bug.
 /****************************************/
 // TODO:
-// Add Text to Trophy Screen (Trophy Descriptions)
+// Add points onto blank rows/colums if king can access them
+//
 #include <lib.h>
 #define NORTH 0
 #define SOUTH 1
@@ -208,7 +210,10 @@ void drawtile();			// draw a tile (subroutine of drawtiles)
 void drawtiles();			// draws all tiles at board x,y boxsize z (uses draw*tile functions)	
 void enemyzero();			// set enemy value to zero when surrounded=3 	
 void explodetile();			// explodes a piece (plays an animation)	
-void findpiece();				
+void FindPiece();			// find a piece to move
+void FindPieceNS();			// check for BAD moves NS (e.g. allowing king to escape)
+void FindPieceEW();			// check for BAD moves EW (e.g. allowing king to escape)
+void FindPieceB();			// subroutine of FindPieceNS/EW			
 void flashscreen();			// flashes screen in selected color for a second or so	
 //void fliprune();			// flip the rune tiles in title screen	
 void gspot();				// count no of targets  from king to edge
@@ -451,6 +456,7 @@ unsigned char textchar; // Character of Trophy String
 unsigned char TakeWeight;
 unsigned char Checker=12;
 unsigned char CanTakeDirection[4]; // the direction of a possible take [NORTH,SOUTH,EASt,WEST]
+unsigned char DeadPiece;
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -600,41 +606,41 @@ void DrawPictureTiles(){
 
 }
 
-void findpiece(){	// find a piece capable of moving to selected target
-  unsigned char deadpiecens=targetns;
-  unsigned char deadpieceew=targetew;
+void FindPiece(){	// find a piece capable of moving to selected target
+  
   if ( foundpiece == 0 ){		
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
 		calccantake2();		
 		if (( cantake == 0 )&&( surrounded < 3 )&&( redflagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0)	foundpiece=1;
 		// check NORTH and SOUTH
-		if ( CanTakeDirection[NORTH] ) deadpiecens=targetns-1;
-		if ( CanTakeDirection[SOUTH] ) deadpiecens=targetns+1;
+		
 		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
-				if ((deadpiecens == kingns)&&((b < 2)||(b > 8))){
-					startrow=0;destrow=10;startcol=b;destcol=b;
-					//see if by moving a piece we leave the way open for the king to escape
-					setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
-					checkroute(); // returns z
-					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
-				}
-				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
-					if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
-				}
+			if ( CanTakeDirection[NORTH] ) {
+				DeadPiece=targetns-1;
+				FindPieceNS();
+			}
+			if ( CanTakeDirection[SOUTH] ) {
+				DeadPiece=targetns+1;
+				FindPieceNS();
+			}
+			if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
+				if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
+			}
 		}	
 		// CHECK EAST AND WEST
-		if ( CanTakeDirection[EAST] ) deadpieceew=targetew+1;
-		if ( CanTakeDirection[WEST] ) deadpiecens=targetew-1;
 		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same column as candidate
-				if ((deadpieceew == kingew)&&((a < 2)||(a > 8))){
-					startrow=a;destrow=a;startcol=0;destcol=10;
-					checkroute(); // returns z
-					if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)			
-				}
-				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
-					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
-				}
+			if ( CanTakeDirection[EAST] ) {
+				DeadPiece=targetew+1;
+				FindPieceEW();
+			}
+			if ( CanTakeDirection[WEST] ) {
+				DeadPiece=targetew-1;
+				FindPieceEW();
+			}
+			if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
+				if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
+			}
 		}
 		if (foundpiece == 1){
 			if (origorient < EAST){
@@ -646,6 +652,24 @@ void findpiece(){	// find a piece capable of moving to selected target
 	}
   	if ((players[a][b] == DEFENDER)||(players[a][b] == KING)) foundpiece=9;
   }
+}
+void FindPieceNS(){
+	if ((DeadPiece == kingns)&&((b < 2)||(b > 8))){
+		startrow=0;destrow=10;startcol=b;destcol=b;
+		FindPieceB();			
+	}
+}
+void FindPieceEW(){
+	if ((DeadPiece == kingew)&&((a < 2)||(a > 8))){
+		startrow=a;destrow=a;startcol=0;destcol=10;
+		FindPieceB();
+	}
+}
+void FindPieceB(){
+	//see if by moving a piece we leave the way open for the king to escape
+	setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
+	checkroute(); // returns z
+	if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)
 }
 /*
 CalcHighTarget used to be part of targetselect (and is still called from it) but 
@@ -747,13 +771,13 @@ ODINJUMP1:
   if ( foundpiece != 1 ){
 	b=oew;
 	zerofoundpiece();		// set foundpiece to ZERO "piece not found"
-  	for (mkey=ons-1; mkey>-1; mkey--){a=mkey;findpiece();}
+  	for (mkey=ons-1; mkey>-1; mkey--){a=mkey;FindPiece();}
   }
   // SOUTH
   if ( foundpiece != 1 ){ 
 	zerofoundpiece();
   	origorient=SOUTH;	
-  	for (mkey=ons+1; mkey<11; mkey++){a=mkey;findpiece();}
+  	for (mkey=ons+1; mkey<11; mkey++){a=mkey;FindPiece();}
   }	
   if ( playerlevel == ODIN ) goto ODINJUMP3;
 ODINJUMP2:
@@ -763,13 +787,13 @@ ODINJUMP2:
 	a=ons; 
 	zerofoundpiece();
   	origorient=EAST;
-  	for (mkey=oew+1; mkey<11; mkey++){b=mkey;findpiece();}
+  	for (mkey=oew+1; mkey<11; mkey++){b=mkey;FindPiece();}
   }	
   // WEST
   if ( foundpiece != 1 ) { 
 	zerofoundpiece();
 	origorient=WEST;
-  	for (mkey=oew-1; mkey>-1; mkey--){b=mkey;findpiece();}	
+  	for (mkey=oew-1; mkey>-1; mkey--){b=mkey;FindPiece();}	
   }
   if ( playerlevel == ODIN ) goto ODINJUMP1;
 ODINJUMP3:
