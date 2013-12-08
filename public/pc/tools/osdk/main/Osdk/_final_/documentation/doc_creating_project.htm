@@ -43,20 +43,47 @@
 <p>those parameters define how the program will be constructed:
 </p>
 <ul>
-<li>the OSDKADDR variable contains the link adress. The default value is $600
+<li>the <b>OSDKADDR</b> variable contains the link adress. The default value is $600
 </li>
-<li>the OSDKNAME variable contains the name of the TAP file to generate. The default value is OSDK. 
+<li>the <b>OSDKNAME</b> variable contains the name of the TAP file to generate. The default value is OSDK. 
 </li>
-<li>the OSDKFILE variable contains the list of all files to build. In the example above, the DEMO.TAP program will be made from MAIN.C DISPLAY.S SOUND.S and PACKER.C. As you can see, the extensions are not given. It means that you cannot have two files having the same name but with a different extension. 
+<li>the <b>OSDKFILE</b> variable contains the list of all files to build. In the example above, the DEMO.TAP program will be made from MAIN.C DISPLAY.S SOUND.S and PACKER.C. As you can see, the extensions are not given. It means that you cannot have two files having the same name but with a different extension. 
 </li>
-<li>the OSDKLINK variable contains the list of parameters the linker will receive. The value <b>-B</b> will tell the linker to not automaticaly 
+<li>the <b>OSDKLINK</b> variable contains the list of parameters the linker will receive. The value <b>-B</b> will tell the linker to not automaticaly 
 happend 'header.s' and 'tail.s' thus giving you full control on how your program will fit in memory. Good for pure assembly code programs.
 </li>
-<li>the OSDKCOMP variable contains the list of parameters the compiler will receive. 
+<li>the <b>OSDKCOMP</b> variable contains the list of parameters the compiler will receive. 
 If you don't fill it, it will be initialized by default to the options -O2.
 You can try -O3 if you wish more aggresive optimizations (beta test, could produce wrong code)
 </li>
 </ul>
+
+<p>The OSDK also support some other variables, here they are for exaustivity:
+</p>
+
+<ul>
+<li>the <b>OSDKDOSBOX</b> variable contains the location of DOSBOX if it is installed. You need that only if you are trying to use Euphoric on a recent machine.
+</li>
+<li>the <b>OSDKTAPNAME</b> variable contains the name of the loaded program inside the TAP file (the one that appears in the Oric status bar). The default value is OSDK.
+</li>
+<li>the <b>OSDKBRIEF</b> variable if empty automatically insert pauses on the build process and show verbosity messages (default), else it will quit without pausing and show less verbosity.
+</li>
+<li>the <b>OSDKHEAD</b> variable content is passed to HEADER.EXE. The value <b>-S1</b> will tell it to show the size of the final executable (practical when writing 256 bytes intros).
+</li>
+</ul>
+
+
+<p>And internally during the Build time the OSDK defines some other variables from the existing ones:
+</p>
+
+<ul>
+<li>the <b>OSDKB</b> variable contains the location of the executable folder (%OSDK%\BIN)
+</li>
+<li>the <b>OSDKT</b> variable contains the location of the tempory folder (%OSDK%\TMP)
+</li>
+</ul>
+
+
 
 <p>The only thing you have to made, is edit this file to make it reflect your needs.
 </p>

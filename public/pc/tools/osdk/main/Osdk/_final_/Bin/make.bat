@@ -1,5 +1,5 @@
 @ECHO OFF
-::@ECHO ON
+::ECHO ON
 
 ::
 :: Initial checks to verify that everything is fine.
@@ -15,7 +15,13 @@ IF NOT "%OSDKNAME%"=="" GOTO Name
 SET OSDKNAME=OSDK
 :Name
 
-
+::
+:: Set the default tape name for the final executable
+:: if no name has been specified
+::
+IF NOT "%OSDKTAPNAME%"=="" GOTO TapName
+SET OSDKTAPNAME=OSDK
+:TapName
 
 ::
 :: Set the default assembly adress
@@ -54,9 +60,19 @@ IF EXIST BUILD\NUL GOTO NoBuild
 MD BUILD
 :NoBuild
 
-IF EXIST %OSDKT% GOTO NoTmp
-MD %OSDKT%
+
+::
+:: Make sure that temp folder is entirelly empty before attempting a new build
+:: Will guarantee we do not have side effects between builds
+::
+::ECHO ON
+RMDIR /s /q %OSDKT%\ >NUL
+MD %OSDKT% >NUL
+::IF EXIST %OSDKT%\NUL GOTO NoTmp
+::MD %OSDKT%
 :NoTmp
+::ECHO OFF
+
 
 ::
 :: Display a compilation message
@@ -90,6 +106,15 @@ IF NOT EXIST %OSDKT%\%OSDKNAME%.bas GOTO NoBas
 DEL %OSDKT%\%OSDKNAME%.bas >NUL
 :NoBas
 
+:: Delete eventual compressed files
+IF NOT EXIST BUILD\*.pak GOTO NoPak
+DEL BUILD\*.pak >NUL
+:NoPak
+
+IF NOT EXIST BUILD\%OSDKPACK%.* GOTO NoPakFiles
+DEL BUILD\%OSDKPACK%.* >NUL
+:NoPakFiles
+
 
 ::
 :: Create a BATCH file that will be used
@@ -97,9 +122,8 @@ DEL %OSDKT%\%OSDKNAME%.bas >NUL
 ::
 ::ECHO *=%OSDKADDR% >%OSDKT%\adress.tmp
 ::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %1 %2 %3 %4 %5 %6 %7 %8 %9 >%OSDKT%\link.bat
-ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.ss -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
+::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.ss -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
 ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
-
 
 
 ::
@@ -163,7 +187,7 @@ GOTO FileLoop
 IF "%OSDKBRIEF%"=="" ECHO Assembling %1.S
 
 :: Create the directory structure
-XCOPY /Y /T %1.S %OSDKT%
+XCOPY /Y /T %1.S %OSDKT%\
 
 :: Copy the file
 COPY %1.S %OSDKT%\%1 /Y >NUL
@@ -190,11 +214,12 @@ GOTO FileLoop
 :: Do we have a BASIC program ?
 IF NOT EXIST %OSDKT%\%OSDKNAME%.bas GOTO Link
 
-ECHO Generating line numbers
-%OSDKB%\Labels2Num %OSDKT%\%OSDKNAME%.bas %OSDKT%\%OSDKNAME%.bas2 1 1
+::ECHO Generating line numbers
+::%OSDKB%\Labels2Num %OSDKT%\%OSDKNAME%.bas %OSDKT%\%OSDKNAME%.bas2 1 1
 
 ECHO Generating TAPE file 
-%OSDKB%\Bas2Tap -b2t1 -color1 %OSDKT%\%OSDKNAME%.bas2 build\%OSDKNAME%.tap
+%OSDKB%\Bas2Tap -b2t1 -color1 %OSDKT%\%OSDKNAME%.bas build\%OSDKNAME%.tap
+
 IF ERRORLEVEL 1 GOTO ErFailure
 GOTO End
 
@@ -203,7 +228,7 @@ ECHO Linking
 CALL %OSDKT%\link.bat
 IF ERRORLEVEL 1 GOTO ErFailure
 ::ECHO Optimising size
-%OSDKB%\opt65.exe %OSDKT%\linked.s > %OSDKT%\linked_optimised.s
+::%OSDKB%\opt65.exe %OSDKT%\linked.s > %OSDKT%\linked_optimised.s
 
 
 ::
@@ -214,21 +239,52 @@ ECHO Assembling
 %OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR%
 IF NOT EXIST "build\final.out" GOTO ErFailure
 
+
+::
+:: Executable compression test
+::
+IF "%OSDKPACKADDR%"=="" GOTO EndPack
+
+IF "%OSDKBRIEF%"=="" ECHO Compressing
+%OSDK%\bin\FilePack -p0 build\final.out  %OSDKT%\final.pak
+
+IF "%OSDKBRIEF%"=="" ECHO   - Converting binary to text format
+%OSDK%\bin\bin2txt -s1 -f2  %OSDKT%\final.pak  %OSDKT%\final_pak.s _PackedStart >NUL
+
+IF "%OSDKBRIEF%"=="" ECHO   - Appending depacking code
+COPY %OSDKT%\final_fp.s+%OSDKB%\unpack.s+%OSDKT%\final_pak.s %OSDKT%\pak_linked.s >NUL
+
+IF "%OSDKBRIEF%"=="" ECHO   - Assembling
+%OSDKB%\xa.exe  %OSDKT%\pak_linked.s -o build\final.out -e %OSDKT%\xaerr.txt -l %OSDKT%\symbols -bt %OSDKPACKADDR%
+IF NOT EXIST "build\final.out" GOTO ErFailure
+
+:: The new start address is the packed executable load address
+set OSDKADDR=%OSDKPACKADDR%
+
+:EndPack
+
+
 ::
 :: Append the tape header
 ::
 ECHO Creating final program %OSDKNAME%.TAP
 %OSDKB%\header.exe %OSDKHEAD% build\final.out build\%OSDKNAME%.tap %OSDKADDR%
+%OSDKB%\taptap.exe ren build\%OSDKNAME%.tap %OSDKTAPNAME% 0
+
 :BuildOk
 ECHO Build of %OSDKNAME%.tap finished
 
 
 ::
-:: Generate the DSK file
+:: Generate the DSK file. If OSDKFILE is empty we assume (hm hmmm) that the caller is packaging itself with floppybuilder. (WIP)
 ::
 IF "%OSDKDISK%"=="" GOTO EndBuildDisk
-%OSDK%\bin\tap2dsk.exe %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+IF "%OSDKFILE%"=="" GOTO EndBuildDisk
+
+%OSDK%\bin\DskTool.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+::%OSDK%\bin\tap2dsk.exe %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm.exe build\%OSDKNAME%.DSK
+
 :EndBuildDisk
 
 ::

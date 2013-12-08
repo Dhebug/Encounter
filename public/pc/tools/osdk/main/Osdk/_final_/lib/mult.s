@@ -1,4 +1,4 @@
-; unsigned 16bit multply op1 x op2
+; unsigned 16bit multply op1 x op2 -> tmp
 mul16u
 	lda #0
 	sta tmp

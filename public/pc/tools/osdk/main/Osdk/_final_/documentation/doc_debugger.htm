@@ -17,52 +17,217 @@
 
 		<h1>Debugger</h1>
 
-<p id=chapter>Description</p>
+<table width="100%">
 
-<p>The debugger is an integral part of <A href="doc_euphoric.htm">Euphoric</A>, and can be used to trace what
-the program is doing.
-</p>
+<tr>
+	<td colspan="2">
+		<p id=chapter>Description</p>	
 
-<center>
-<img src="pics/euphoric_debugging.gif">
-</center>
-
-
-<p id=chapter>Keys</p>
-
-<p>To use the debugger, you need to know some keys:
-</p>
-
-<ul>
-<li><b>F11:</b> enter/leave from the debugger</li>
-<li><b>F2:</b> step by step tracing (enter in JSR)</li>
-<li><b>F3:</b> step by step tracing (do not enter in subroutines)</li>
-<li><b>F4:</b> show Oric screen (can crash...)</li>
-<li><b>F5:</b> execute up to breakpoint address</li>
-<li><b>F6:</b> reset</li>
-<li><b>F7:</b> nmi</li>
-<li><b>F10:</b> exit Euphoric</li>
-<li><b>F12:</b> abort execution (during F3 or F5)</li>
-<li><b>UP & DOWN arrows:</b> scroll zero page window</li>
-<li><b>PAGE UP & PAGE DOWN:</b> scroll the memory window</li>
-<li><b>A xxxx:</b> assemble code</li>
-<li><b>B xxxx:</b> set a breakpoint</li>
-<li><b>D xxxx:</b> set the memory window adress</li>
-<li><b>E xxxx:</b> edit a value in memory</li>
-<li><b>F xxxx:</b> fill memory with a single value</li>
-<li><b>M xxxx:</b> copy a block of memory</li>
-<li><b>U xxxx:</b> disassemble code</li>
-<li><b>P:</b> set PC</li>
-<li><b>R:</b> change Register. Type register to change (A,X,Y,S,P), or type N,V,B,D,I,Z,C to change a flag.</li>
-</ul>
+		<p>The debugger is an integral part of the <A href="doc_emulator.htm">emulator</A>, and can be used to trace what
+		the program is doing. Both Euphoric and Oricutron have a built in debugger, unfortunately they have different keyboard shortcuts so please make sure you use the correct ones :)
+		</p>
+	</td>
+</tr>
 
 
-<p id=chapter>Symbols</p>
+<tr>
+	<td>
+		<p id=chapter>Euphoric</p>	
+	</td>
+	
+	<td>
+		<p id=chapter>Oricutron</p>	
+	</td>
+</tr>
 
-<p>Since the assembler has been modified to output Euphoric compatible symbol
-table, you should see all the symbols defined in your program directly
-under the debugger.
-</p>
+
+<tr>
+	<td valign="top">
+		<p>To access Euphoric's debugger you need to press the F11 key. This will show you this screen:
+		</p>
+		
+		<center>
+		<img src="pics/euphoric_debugging.gif">
+		</center>
+		
+		<p>Pressing F11 again will leave the debugger.
+		</p>
+	</td>
+	
+	<td valign="top">
+		<p>To access Oricutron's debugger you need to press the F2 key. This will show you this screen:
+		</p>
+		
+		<center>
+		<img src="pics/oricutron_debugging.gif">
+		</center>
+		
+		<p>In the monitor, number arguments are decimal by default, or prefixed with $ for
+		hex or % for binary. Pretty much everything is output in hex.
+		</p>
+		
+		<p>In most places where you can enter a number or address, you can pass a CPU or
+		VIA register. (VIA registers are prefixed with V, e.g. VDDRA). Anywhere you can
+		pass an address, you can also use a symbol.
+		</p>
+		
+	</td>
+</tr>
+
+
+<tr>
+	<td colspan="2">
+		<p id=chapter>Commands</p>	
+	</td>
+</tr>
+
+
+<tr>
+	<td valign="top">
+		<p>To use Euphoric's debugger, you need to know some keys:
+		</p>
+		
+		<ul>
+		<li><b>F2:</b> step by step tracing (enter in JSR)</li>
+		<li><b>F3:</b> step by step tracing (do not enter in subroutines)</li>
+		<li><b>F4:</b> show Oric screen (can crash...)</li>
+		<li><b>F5:</b> execute up to breakpoint address</li>
+		<li><b>F6:</b> reset</li>
+		<li><b>F7:</b> nmi</li>
+		<li><b>F10:</b> exit Euphoric</li>
+		<li><b>F11:</b> enter/leave from the debugger</li>
+		<li><b>F12:</b> abort execution (during F3 or F5)</li>
+		<li><b>UP & DOWN arrows:</b> scroll zero page window</li>
+		<li><b>PAGE UP & PAGE DOWN:</b> scroll the memory window</li>
+		<li><b>A xxxx:</b> assemble code</li>
+		<li><b>B xxxx:</b> set a breakpoint</li>
+		<li><b>D xxxx:</b> set the memory window adress</li>
+		<li><b>E xxxx:</b> edit a value in memory</li>
+		<li><b>F xxxx:</b> fill memory with a single value</li>
+		<li><b>M xxxx:</b> copy a block of memory</li>
+		<li><b>U xxxx:</b> disassemble code</li>
+		<li><b>P:</b> set PC</li>
+		<li><b>R:</b> change Register. Type register to change (A,X,Y,S,P), or type N,V,B,D,I,Z,C to change a flag.</li>
+		</ul>
+	</td>
+	
+	<td valign="top">
+		<p>To use Oricutron's debugger, you need to know some keys:
+		</p>
+
+		<ul>
+		<li><b>F2:</b> Return to the emulator</li>
+		<li><b>F3:</b> Toggle console/debug output/memwatch</li>
+		<li><b>F4:</b> Toggle VIA/AY information</li>
+		<li><b>F9:</b> Reset cycle count</li>
+		<li><b>F10:</b> Step over code</li>
+		<li><b>F11:</b> Step over code without tracing into subroutines.</li>
+		<li><b>F12:</b> Skip instruction</li>
+  		</ul>
+				
+		<p>You also have some more advanced commands:
+		</p>
+		
+		<ul>
+		<li>?                     - Help</li>
+		<li>a <addr>              - Assemble</li>
+		<li>bc <bp id>            - Clear breakpoint</li>
+		<li>bcm <bp id>           - Clear mem breakpoint</li>
+		<li>bl                    - List breakpoints</li>
+		<li>blm                   - List mem breakpoints</li>
+		<li>bs <addr>             - Set breakpoint</li>
+		<li>bsm <addr> [rwc]      - Set mem breakpoint</li>
+		<li>bz                    - Zap breakpoints</li>
+		<li>bzm                   - Zap mem breakpoints</li>
+		<li>d <addr>              - Disassemble</li>
+		<li>df <addr> <end> <file>- Disassemble to file</li>
+		<li>m <addr>              - Dump memory</li>
+		<li>mm <addr> <value>     - Modify memory</li>
+		<li>mw <addr>             - Memory watch at addr</li>
+		<li>nl <file>             - Load snapshot</li>
+		<li>ns <file>             - Save snapshot</li>
+		<li>r <reg> <val>         - Set <reg> to <val></li>
+		<li>q, x or qm            - Quit monitor</li>
+		<li>qe                    - Quit emulator</li>
+		<li>sa <name> <addr>      - Add or move user symbol</li>
+		<li>sk <name>             - Kill user symbol</li>
+		<li>sc                    - Symbols not case-sensitive</li>
+		<li>sC                    - Symbols case-sensitive</li>
+		<li>sl <file>             - Load user symbols</li>
+		<li>sx <file>             - Export user symbols</li>
+		<li>sz                    - Zap user symbols</li>
+		<li>wm <addr> <len> <file>- Write mem to disk</li>
+		</ul>
+	</td>
+
+</tr>
+
+
+<tr>
+	<td colspan="2">
+		<p id=chapter>Advanced features</p>	
+	</td>
+</tr>
+
+
+<tr>
+	<td valign="top">
+	
+		<p>Euphoric's debugger has been slightly improved (there's a small assembler now) and made more consistent with existing PC debuggers (like debug :-). Here are the commands:
+
+		<ul>
+		<li><b>A:</b> Assembler</li>
+		<li><b>B:</b> set Breakpoint address</li>
+		<li><b>D:</b> Dump memory</li>
+		<li><b>E:</b> Enter hex data</li>
+		<li><b>F:</b> Fill memory block with a single value</li>
+		<li><b>M:</b> Move memory block</li>
+		<li><b>P:</b> set PC</li>
+		<li><b>R:</b> change Register. Type register to change (A,X,Y,S,P), or type N,V,B,D,I,Z,C to change a flag.</li>
+		<li><b>U:</b> Unassembler</li>
+		</ul>
+
+		</p>
+	
+	</td>
+	
+	<td valign="top">
+		<p>Oricutron supports two types of breakpoints. "Normal" breakpoints trigger when the CPU
+		is about to execute an instruction at the breakpoint address. "Memory" breakpoints
+		trigger when the breakpoint address is accessed or modified.
+		</p>
+		
+		<p>There are three ways a memory breakpoint can be triggered; when the CPU is about
+		to read the address (r), and the CPU is about to write the address (w), or after the
+		value at the address changes for any reason (c).
+		</p>
+		
+		<p>You specify which ways you'd like the breakpoint to trigger when you set the memory
+		breakpoint:
+		</p>
+
+		<ul>
+			<li>bsm r $0c00        <-- Break when the CPU is about to read from $0c00</li>
+			<li>bsm rw $0c00       <-- Break when the CPU is about to access $0c00</li>
+			<li>bsm c $0c00        <-- Break after then contents of $0c00 change</li>
+			<li>bsm rwc $0c00      <-- Break just before the CPU accesses $0c00, or just after it changes for any reason.</li>
+		</ul>
+
+	</td>
+</tr>
+
+<tr>
+	<td colspan="2">
+		<p id=chapter>Symbols</p>	
+
+		<p>Since the assemblers are compatible with both Euphoric and Oricutron's symbol formats, you should see all the symbols defined in your program directly while debugging.
+		</p>
+	</td>
+</tr>
+
+</table>
+
+
 
 
 <hr>

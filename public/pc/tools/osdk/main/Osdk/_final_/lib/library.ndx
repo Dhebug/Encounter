@@ -28,6 +28,8 @@
 	_clock
 -ctype.s
 	ctype
+-c_parameters.s	
+	get_2ptr
 -div.s
 	div16i
 	mod16i
@@ -97,6 +99,7 @@
 -itoa.s
 	_itoa
 	itoa
+	uitoa
 	udiv10
 	udiv10lp
 -mult.s
@@ -154,7 +157,6 @@
 -strcpy.s
 	_strcpy
 	_strcpymc
-	get_2ptr
 -strdup.s
 	_strdup
 -strcmp.s
@@ -234,5 +236,7 @@
 	_OsdkTableDiv6
 -osdkmod6.s
 	_OsdkTableMod6
+-overlay.s
+	_is_overlay_enabled	
 
 
