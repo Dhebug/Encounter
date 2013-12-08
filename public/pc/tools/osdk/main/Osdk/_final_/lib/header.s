@@ -1,21 +1,6 @@
 
 
 
-#define _hires		$ec33
-#define _text		$ec21
-#define _ping		$fa9f
-#define _shoot		$fab5
-#define _zap		$fae1
-#define _explode	$facb
-#define _kbdclick1	$fb14
-#define _kbdclick2	$fb2a
-
-#define _cls		$ccce
-#define _lores0		$d9ed
-#define _lores1		$d9ea
-
-
-
 	.zero
 
 	*= $50

@@ -1,6 +1,6 @@
-0 '
-1 ' This is a small HIRES demo
-2 '
+10 '
+20 ' This is a small HIRES demo
+30 '
 35 PRINT"REDEFINING THE CHARACTERS:"
 36 PRINT"@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 40 A=#B400+64*8

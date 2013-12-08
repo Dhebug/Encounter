@@ -4369,10 +4369,13 @@ skip ;\
 	GEU(label) ;\
 
 #define LTI(label)\
+	.( ;\
 	bvc *+4 ;\
 	eor #$80 ;\
-	bpl *+5 ;\
+	bpl skip ;\
 	jmp label ;\
+skip ;\
+	.) ;\
 
 #define LTU(label)\
 	bcs *+5 ;\

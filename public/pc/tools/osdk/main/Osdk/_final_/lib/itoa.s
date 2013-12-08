@@ -15,10 +15,8 @@ _itoa
 bufconv
 	.byt 0,0,0,0,0,0,0,0,0,0,0,0
 itoa
-	ldy #0
-	sty bufconv
 	lda op2+1
-	bpl itoaloop
+	bpl uitoa
 	lda #$2D	; minus sign
 	sta bufconv
 	sec
@@ -28,7 +26,10 @@ itoa
 	lda #0
 	sbc op2+1
 	sta op2+1
-	
+
+uitoa
+	ldy #0
+	sty bufconv
 itoaloop
 	jsr udiv10
 	pha

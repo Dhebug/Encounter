@@ -18,5 +18,16 @@
     <ClCompile Include="FloppyBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Floppy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Floppy.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="infos.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

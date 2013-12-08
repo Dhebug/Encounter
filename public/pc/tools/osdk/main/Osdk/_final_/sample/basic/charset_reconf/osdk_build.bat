@@ -1,4 +1,4 @@
-::@ECHO OFF
+@ECHO OFF
 
 
 ::
@@ -33,4 +33,3 @@ GOTO End
 
 
 :End
-Pause

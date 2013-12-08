@@ -33,5 +33,3 @@ GOTO End
 
 
 :End
-pause
-

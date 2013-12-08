@@ -53,6 +53,8 @@ int music(int chanel,int octave,int key,int volume);
 int sound(int chanel,int period,int volume);
 void w8912(unsigned char reg,unsigned char value);
 char key(void);
+char is_overlay_enabled();
+
 
 /* Stuff added by Alexios Chouchoulas */
 

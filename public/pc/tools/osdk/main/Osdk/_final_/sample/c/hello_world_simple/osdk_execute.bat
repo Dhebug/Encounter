@@ -1,6 +1,5 @@
 @ECHO OFF
 
-
 ::
 :: Initial check.
 :: Verify if the SDK is correctly configurated,
@@ -12,13 +11,13 @@ IF "%OSDK%"=="" GOTO ErCfg
 ::
 CALL osdk_config.bat
 
-
 ::
-:: Run Euphoric using the common batch
+:: Run the emulator using the common batch
 ::
-CALL %OSDK%\Euphoric\osdk_euphoric.bat
+SET OSDKDISK=resource.dsk
+set OSDKEMUL=EUPHORIC
+CALL %OSDK%\bin\execute.bat
 GOTO End
-
 
 ::
 :: Outputs an error message about configuration

@@ -44,13 +44,16 @@ IF "%OSDKDOSBOX%"=="" GOTO RunDefault
 :: Execute the emulator (DosBOX Version)
 ::
 :RunDosBox
+
+ECHO ON
+
 TYPE %OSDK%\BIN\dosbox.conf > %OSDK%\Euphoric\dosbox.conf
-ECHO mount c %osdk%\Euphoric >> %OSDK%\Euphoric\dosbox.conf
+ECHO mount c %osdk% >> %OSDK%\Euphoric\dosbox.conf
 ECHO c:  >> %OSDK%\Euphoric\dosbox.conf
-ECHO SET ORIC=c:\ >> %OSDK%\Euphoric\dosbox.conf
-ECHO %OSDKEUPHORIC%  >> %OSDK%\Euphoric\dosbox.conf
+ECHO SET ORIC=c:\Euphoric >> %OSDK%\Euphoric\dosbox.conf
+ECHO Euphoric\%OSDKEUPHORIC%  >> %OSDK%\Euphoric\dosbox.conf
 pushd %OSDK%\Euphoric
-"%OSDKDOSBOX%"
+"%OSDKDOSBOX%" -noconsole
 popd
 GOTO End
 
@@ -60,7 +63,7 @@ GOTO End
 :: Execute the emulator in fullscreen default mode
 ::
 :RunDefault
-SET ORIC=%OSDK%\Euphoric\
+SET ORIC=%OSDK%\Euphoric
 CD %OSDK%\Euphoric
 CALL %OSDKEUPHORIC%
 GOTO End
