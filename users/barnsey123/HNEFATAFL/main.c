@@ -73,6 +73,7 @@
 // 05-12-2013 NB v0.090 Major change to possiblemoves (fixing bug in process)
 // 06-12-2013 NB v0.091 Partially Fixed major bug (findpiece)
 // 07-12-2013 NB v0.092 Fully fixed findpiece bug.
+// 08-12-2103 NB v0.093 Now trying XENON (to occupy an unnocupied row if king can't be blocked otherwise), salvaged some more memory but XENON not working...
 /****************************************/
 // TODO:
 // Add points onto blank rows/colums if king can access them
@@ -189,7 +190,8 @@ void calccantake();			// can take be made (how many)
 void calchightarget();		// updates value of hightarget (the highest target so far)		
 //void calctakeweight();		// calculate the weight of "takeweight"		
 void canbetaken(); 			// can I be taken after moving here? returns value (take) 0=no 1=yes	
-void canpiecemove();		// can a selected piece move? 0=no, 1=yes		
+void canpiecemove();		// can a selected piece move? 0=no, 1=yes	
+void CanPieceMoveB();	
 void cantakeadjust();		// decrement cantake if taken piece is on same plane as king	
 void checkbrokenarrow();	// check to see if brokenarrow can be incremented	
 void checkend();			// check for end game conditions 	
@@ -295,6 +297,13 @@ void CheckerBoard();		// Checkerboard screen wipe
 void subCheckerBoard();		// subroutine of checkerboard
 void subCheckerBoard2();	// subroutine 2 of checkerboard
 void SheldonGambit();		// called from subpacmanx (block left or right?)
+void Xenon();
+void Xenon2();
+void XenonA();
+void XenonB();
+void XenonC();
+void XenonD();
+
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -397,7 +406,7 @@ unsigned char destrow,destcol;		// used in checkroute (returns no of pieces on a
 unsigned char canmovecursor;		// controls wether screen cursor can be moved or not
 unsigned char hightarget;			// contains highest value target
 unsigned char targetns,targetew;	// used to calc takes
-unsigned char x,y,z,a,b,c,d,e,f;	// general purpose variables
+unsigned char w,x,y,z,a,b,c,d,e,f;	// general purpose variables
 /* below used for cursor move routine */
 unsigned char multiple;		// concerning central square (how much to multiply the coords to SKIP the square
 unsigned char xptrns;		// copy of NS
@@ -474,10 +483,11 @@ main(){
       message="PLAYERS:1-2";	// number of players
       printmessage();
       gameinput=getchar();
-      if ( gameinput == 49 ) gamestyle=1;	// 1=human vs computer (as DEFENDERS)
-      if ( gameinput == 50 ) gamestyle=0;	// 0=human vs human
-      if ( gamestyle == 3 ) {flashback=CYAN;flashred();}
+      if ( gameinput == 49 ) {gamestyle=1;goto SKIPPY1;}	// 1=human vs computer (as DEFENDERS)
+      if ( gameinput == 50 ) {gamestyle=0;goto SKIPPY2;}	// 0=human vs human
+      flashback=CYAN;flashred();
     }
+SKIPPY1:    
     // set turnlimits
 	turnlimit=0; turncount=0;
 	while (turnlimit == 0){
@@ -485,11 +495,12 @@ main(){
 		printmessage();
 		gameinput=getchar();
 		// playerlevel set here, 0=SAGA, 1=THOR, 2=ODIN
-		if ( gameinput == 49 ) {turnlimit=255; playerlevel=SAGA;}	// 255 turns
-		if ( gameinput == 50 ) {turnlimit=22;  playerlevel=THOR;}	// 22 turns
-		if ( gameinput == 51 ) {turnlimit=12;  playerlevel=ODIN;}	// 12 turns
-		if ( turnlimit == 0 ) {flashback=CYAN;flashred();}
-	} 
+		if ( gameinput == 49 ) {turnlimit=255; playerlevel=SAGA;goto SKIPPY2;}	// 255 turns
+		if ( gameinput == 50 ) {turnlimit=22;  playerlevel=THOR;goto SKIPPY2;}	// 22 turns
+		if ( gameinput == 51 ) {turnlimit=12;  playerlevel=ODIN;goto SKIPPY2;}	// 12 turns
+		flashback=CYAN;flashred();
+	}
+SKIPPY2:
 	message="\n\nTURN:              REMAINING:    ";
 	printmessage();
 	erasetext=80; // 40*2 (2 lines to erase)  
@@ -559,6 +570,15 @@ void computerturn(){
   // 3. Increment target positions around King (PACMAN)
   pacman2();
   calchightarget();
+  // if no target is NOT on same row/column as king then check to see if
+  // there is a way open for the king to access an empty row/column (that can't
+  // be blocked by an attacker).
+  // if so populate that blank/row column by making any target values upon it be
+  // a high value
+  if (( targetns != kingns)&&(targetew != kingew)){
+	  Xenon();	
+	  calchightarget();	// re-calculate target values	
+  }
   if (hightarget == 0) {
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
@@ -584,6 +604,54 @@ void computerturn(){
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
+}
+// xenon (secondary routine to run after pacman2())
+void Xenon(){
+	a=0;Xenon2();	// a=0 means check ROWS
+	a=1;Xenon2();	// a=1 means check COLUMNS
+}
+void Xenon2(){
+	for (y=0;y<11;y++){ 	// loop through row or column
+		XenonB();			// is row/col empty?
+		if (b){				// if row/col is empty...
+			XenonC();		// can king get to it?
+			if (c) { 		// If he can...
+				XenonD();	// populate row/col with higher target values
+			} 
+		}	
+	}
+}
+void XenonB(){ // is the row/column empty?
+	b=YES; // assume row/col is empty
+	for (x=0; x<11; x++){
+		if (a){	// a=1: means y=COLUMN, x=ROW
+			c=players[x][y];
+		}else{	// a=0: means y=ROW x=COLUMN	
+			c=players[y][x];
+		}
+		if (c) b=NO;
+	}
+}
+void XenonC(){ // can king get to the row?
+	c=NO;
+	for (x=0; x<11;x++){
+		if (a){	
+			d=kingtracker[x][y];
+		}else{	// means y=ROW x=COLUMN	
+			d=kingtracker[y][x];
+		}
+		if (d) c=YES;	
+	}
+}
+void XenonD(){	// populate row/col with higher target values
+	for (x=0; x<11;x++){
+		if (a){ // x=row
+			c=x;d=y;
+		}else{	// x=col
+			c=y;d=x;
+		}
+		if (target[c][d]) target[c][d]+=hightarget;
+	}
 }
 // end of computerturn()
 void computerturn2(){
@@ -1343,23 +1411,46 @@ void canpiecemove() {
   ROUTE will be decremented if that piece is occupied (as no piece can occupy the central square except for
   the King but all pieces can traverse it */
   if (( piecetype < 3 ) && ( players[5][5] == 4 )){	// if not a king and central sqr unoccupied
-    if ( ns == 5 ) {
-      if ( ew == 4 ) {if ( players[5][6]  ) decroute();}	// check east +2	// east occupied, dec route
-      if ( ew == 6 ) {if ( players[5][4]  ) decroute();}	// check west +2	// west occupied, dec route
-    }
-    if ( ew == 5 ){
-      if ( ns == 4 ) { if ( players[6][5] ) decroute();}	// check south +2	// south occupied, dec route
-      if ( ns == 6 ) { if ( players[4][5]  ) decroute();}	// check north +2	// north occupied, dec route
-    }
+  	//c=ew;d=ns;f=0;
+  	//CanPieceMoveB();
+    //if ( ns == 5 ) {
+      //if (( ew == 4 )&&( players[5][6] )) decroute();	// check east +2	// east occupied, dec route
+      //if (( ew == 6 )&&( players[5][4] )) decroute();	// check west +2	// west occupied, dec route
+      //if (( ns == 5 )&& ((( ew == 4 )&&( players[5][6] )) || (( ew == 6 )&&( players[5][4] )))) decroute();
+    //}
+    //c=ns;d=ew;f=1;
+    //CanPieceMoveB();
+    
+    //if ( ew == 5 ){
+      //if (( ns == 4 )&&( players[6][5] )) decroute();	// check south +2	// south occupied, dec route
+      //if (( ns == 6 )&&( players[4][5] )) decroute();	// check north +2	// north occupied, dec route
+      //if ((( ns == 4 )&&( players[6][5] )) || (( ns == 6 )&&( players[4][5] ))) decroute();
+      //if (( ew == 5 ) && ((( ns == 4 )&&( players[6][5] )) || (( ns == 6 )&&( players[4][5] )))) decroute(); 
+      
+      if ( (( ns == 5 )&& ((( ew == 4 )&&( players[5][6] )) || (( ew == 6 )&&( players[5][4] )))) || (( ew == 5 ) && ((( ns == 4 )&&( players[6][5] )) || (( ns == 6 )&&( players[4][5] )))) ) decroute();
+      
+      
+      
+    //}
   }
   if ( route  ) route=1;
   //return route;
 }
-
+/*
+void CanPieceMoveB(){
+	w=5;x=6;y=5;z=4;
+	if ( f ){
+		w=6;x=5;y=4;z=5;
+	}
+	if ( d == 5 ){
+		if (( c == 4 )&&( players[w][x] )) decroute();
+		if (( c == 6 )&&( players[y][z] )) decroute();
+	} 
+}*/
 
 void checkincroute(){
-  if ( players[a][b] == 0 ) 					incroute();
-  if ( (a == 5) && (b == 5) && (players[a][b] == 4))	incroute();
+  if ( players[a][b] == 0 ) incroute();
+  if ( (a == 5) && (b == 5) && (players[a][b] == 4)) incroute();
   if (( piecetype == 3 )&&(tiles[a][b] == 4 ))	incroute(); // KING: corner square OK 
 }
 
@@ -1845,10 +1936,10 @@ void explodetile()	{
 void timertile(){
 	unsigned char timer;
 	ptr_graph=TimerTiles;		// pointer to byte values of loaded picture (Timer)
-	row=5;col=5;
+	row=5;col=5;pausetime=250;
 	for (timer=0;timer<8;timer++){
 		tileloop();
-		pausetime=250;pause();
+		pause();
 	}
 }
 
@@ -2142,8 +2233,10 @@ void PrintTrophyScreen(){
 	// Print text in text area
 	Checker=11;CheckerBoard();
 	erasetextarea();
-	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
+	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
+	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
 	printline();
+	printturnline();
 	// set ink color for main screen
 	inkcolor=3;inkasm(); 			// yellow, erm...gold
 	row=0;a=0;b=4;c=1;				
