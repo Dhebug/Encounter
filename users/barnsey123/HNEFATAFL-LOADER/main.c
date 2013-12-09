@@ -6,8 +6,10 @@
 // 04-11-2013 NB Added credits and tribute text, setting font here instead of main prog
 // 05-11-2013 NB Calling Hires from CopyFont saving 3 bytes!
 // 02-12-2013 NB slightly different message
+// 09-12-2013 NB cycling more times but faster
 #include <lib.h>
 void WipeScreen();
+void WipeScreenB();
 void Pause();
 void PrintMessage();
 extern unsigned char LabelPicture[];
@@ -84,16 +86,17 @@ void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
  WipeScreen wipes the hires screen attractively
 */
 void WipeScreen(){
-	unsigned char Row;
-	unsigned int Cell;
+	PauseTime=55000; Pause();	// linger on screen for a while
+	WipeScreenB();
+	WipeScreenB();
+	WipeScreenB();
+}
+void WipeScreenB(){
+	unsigned char Row,x,z,Count;
+	unsigned int Cell, StartAddress;
 	//unsigned int EvenScreenAddress=0xA001;	// start address of hires screen (even rows)
 	//unsigned int OddScreenAddress=0xA029;   // start address of hires screen (odd rows)
-	unsigned int StartAddress;
-	unsigned char x;
-	unsigned char z;
-	unsigned char Count;
 	char Color;
-	PauseTime=55000; Pause();	// linger on screen for a while
 	for (Color=7;Color>=1;Color--){ // cycle through colors before blanking
 		for ( x=0; x<2 ; x++ ){
 			Count=0;
@@ -104,7 +107,7 @@ void WipeScreen(){
 				z=199;
 			}
 			//poke(StartAddress,0x0000);
-			PauseTime=1250;Pause();
+			//PauseTime=100;Pause();
 			for (Row=x; Row<=z; Row+=2){
 				poke(StartAddress+(Count*80),Color);	
 				Count++;
@@ -122,7 +125,7 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="   HNEFATAFL V0.093 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
+  	message="   HNEFATAFL V0.094 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
