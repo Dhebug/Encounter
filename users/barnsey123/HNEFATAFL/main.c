@@ -73,7 +73,8 @@
 // 05-12-2013 NB v0.090 Major change to possiblemoves (fixing bug in process)
 // 06-12-2013 NB v0.091 Partially Fixed major bug (findpiece)
 // 07-12-2013 NB v0.092 Fully fixed findpiece bug.
-// 08-12-2103 NB v0.093 Now trying XENON (to occupy an unnocupied row if king can't be blocked otherwise), salvaged some more memory but XENON not working...
+// 08-12-2013 NB v0.093 Now trying XENON (to occupy an unnocupied row if king can't be blocked otherwise), salvaged some more memory but XENON not working...
+// 09-12-2013 NB v0.094 compressed XENON routines and got them working
 /****************************************/
 // TODO:
 // Add points onto blank rows/colums if king can access them
@@ -299,10 +300,6 @@ void subCheckerBoard2();	// subroutine 2 of checkerboard
 void SheldonGambit();		// called from subpacmanx (block left or right?)
 void Xenon();
 void Xenon2();
-void XenonA();
-void XenonB();
-void XenonC();
-void XenonD();
 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
@@ -429,10 +426,10 @@ unsigned char compass[4];	// used in cantake (if compass[NORTH]=1 then means can
 unsigned char xplayers;
 unsigned char inkcolor;	// screen color 
 unsigned char checkroutemode;	// mode used for checkroute function 
-								// 1=count number of pieces on route
-								// 2=increment target values on route (if no pieces on route)
-								// 3=amount of targets on route
-								// 4=Number of "enemy" targets on route (where enemies CAN go)
+								// 1= count number of pieces on route
+								// 2= increment target values on route (if no pieces on route)
+								// 3= amount of targets on route
+								// 4= Number of "enemy" targets on route (where enemies CAN go)
 								// 5= Emergency! Make target=255
 unsigned char checkrouterow, checkroutecol, checkroutestart, checkroutedest; // used in checkroute routine
 unsigned char subpacc,subpacd;	// used in subpacman5 
@@ -560,7 +557,7 @@ void computerturn(){
   printmessage();
   printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
-  ClearArrays();	// clear target, enemy and computer arrays
+  ClearArrays();	// clear target, enemy, kingtracker and computer arrays
   // 2. Calculate information about the board
   fb=4; computerturn2(); // fb=4 means: don't print destinations, just update ENEMY
   fb=5; computerturn2(); // fb=5 (+COMPUTER array)
@@ -569,16 +566,17 @@ void computerturn(){
   fb=8; computerturn2(); // fb=8 update kingtracker 
   // 3. Increment target positions around King (PACMAN)
   pacman2();
-  calchightarget();
-  // if no target is NOT on same row/column as king then check to see if
+  
+  // 5. if target is NOT on same row/column as king then check to see if
   // there is a way open for the king to access an empty row/column (that can't
-  // be blocked by an attacker).
+  // be blocked by an attacker - really just the Level3 row/col).
   // if so populate that blank/row column by making any target values upon it be
   // a high value
-  if (( targetns != kingns)&&(targetew != kingew)){
-	  Xenon();	
-	  calchightarget();	// re-calculate target values	
-  }
+  calchightarget();
+  if ( targetns != kingns) {a=1;Xenon();} // a=1 means check rows
+  if ( targetew != kingew) {a=0;Xenon();} // a=0 means check columns	
+  // 4. Find the highest value target (hightarget)
+  calchightarget();
   if (hightarget == 0) {
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
@@ -605,54 +603,31 @@ void computerturn(){
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
 }
-// xenon (secondary routine to run after pacman2())
+// xenon (secondary routine to run after pacman2(): check the "3rd level")
 void Xenon(){
-	a=0;Xenon2();	// a=0 means check ROWS
-	a=1;Xenon2();	// a=1 means check COLUMNS
+	points=20;
+	if (a){	// check ROWS
+		startrow=2; destrow=2; startcol=0; destcol=10;
+		Xenon2();
+		startrow=8; destrow=8; 
+		Xenon2();
+	}else{	// check COLS	 
+		startrow=0; destrow=10; startcol=2; destcol=2;
+		Xenon2();	
+		startcol=8; destcol=8; 
+		Xenon2();
+	}		
 }
 void Xenon2(){
-	for (y=0;y<11;y++){ 	// loop through row or column
-		XenonB();			// is row/col empty?
-		if (b){				// if row/col is empty...
-			XenonC();		// can king get to it?
-			if (c) { 		// If he can...
-				XenonD();	// populate row/col with higher target values
-			} 
-		}	
-	}
+	setcheckmode1(); checkroute();	// is row/col empty (z)?
+	if ( z == 0 ){	// if row/col is empty...CAN KING GET TO IT?
+		checkroutemode=6; checkroute();	
+		if (z) { 	// If he can...populate row/col with higher target values
+			checkroutemode=5; checkroute();
+		} 
+	}	
 }
-void XenonB(){ // is the row/column empty?
-	b=YES; // assume row/col is empty
-	for (x=0; x<11; x++){
-		if (a){	// a=1: means y=COLUMN, x=ROW
-			c=players[x][y];
-		}else{	// a=0: means y=ROW x=COLUMN	
-			c=players[y][x];
-		}
-		if (c) b=NO;
-	}
-}
-void XenonC(){ // can king get to the row?
-	c=NO;
-	for (x=0; x<11;x++){
-		if (a){	
-			d=kingtracker[x][y];
-		}else{	// means y=ROW x=COLUMN	
-			d=kingtracker[y][x];
-		}
-		if (d) c=YES;	
-	}
-}
-void XenonD(){	// populate row/col with higher target values
-	for (x=0; x<11;x++){
-		if (a){ // x=row
-			c=x;d=y;
-		}else{	// x=col
-			c=y;d=x;
-		}
-		if (target[c][d]) target[c][d]+=hightarget;
-	}
-}
+
 // end of computerturn()
 void computerturn2(){
 	timertile();
@@ -680,9 +655,18 @@ void FindPiece(){	// find a piece capable of moving to selected target
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
 		calccantake2();		
 		if (( cantake == 0 )&&( surrounded < 3 )&&( redflagX == NO )) canbetaken(); // if cannot take can I be taken?
-		if (compass[origorient] == 0)	foundpiece=1;
+		if (compass[origorient] == 0){ // means this piece can't be taken
+			foundpiece=1;
+			if ((( a<3 )&&(a<targetns)) || ((a>7)&&(a>targetns))){
+				startrow=a;destrow=a;startcol=0;destcol=10;
+				FindPieceB();// set foundpiece to 10 (don't leave ZONE unpopulated)
+			}
+			if ((( b<3 )&&(b<targetew)) || ((b>7)&&(b>targetew))){
+				startrow=0;destrow=10;startcol=b;destcol=b;
+				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
+			}
+		}
 		// check NORTH and SOUTH
-		
 		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
 			if ( CanTakeDirection[NORTH] ) {
 				DeadPiece=targetns-1;
@@ -734,10 +718,10 @@ void FindPieceEW(){
 	}
 }
 void FindPieceB(){
-	//see if by moving a piece we leave the way open for the king to escape
+	//see if by TAKING a piece we leave the way open for the king to escape
 	setcheckmode1();	// set checkroutemode=1 (checkroute will return count of pieces on row or column)
 	checkroute(); // returns z
-	if (z == 1) setfoundpiece10(); // don't move piece (do NOT leave the "zone" unpopulated)
+	if (z == 1) setfoundpiece10(); // don't TAKE piece
 }
 /*
 CalcHighTarget used to be part of targetselect (and is still called from it) but 
@@ -2068,7 +2052,7 @@ unsigned char checkroute(){
   checkroutedest=destrow;
   checkrouterow=startrow;	
   checkroutecol=startcol;	
-  if ( startrow == destrow ){   // ELSE a single ROW (EAST to WEST)
+  if ( startrow == destrow ){   // ELSE a single ROW (WEST to EAST)
 	  checkroutestart=startcol; 
 	  checkroutedest=destcol;
   }
@@ -2084,6 +2068,7 @@ unsigned char checkroute(){
       				break;
       		//case 6: if (players[checkrouterow][checkroutecol])      z++;break;
       		case 6: if (kingtracker[checkrouterow][checkroutecol]) z++;break;
+      		//case 7: if (computer[checkrouterow][checkroutecol]) target[checkrouterow][checkroutecol]+=hightarget;break;
   		}
   		if ( startrow == destrow ) {checkroutecol++;}else{checkrouterow++;}
 
@@ -2233,10 +2218,10 @@ void PrintTrophyScreen(){
 	// Print text in text area
 	Checker=11;CheckerBoard();
 	erasetextarea();
-	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
-	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
+	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
+	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
 	printline();
-	printturnline();
+	//printturnline();
 	// set ink color for main screen
 	inkcolor=3;inkasm(); 			// yellow, erm...gold
 	row=0;a=0;b=4;c=1;				
@@ -2406,9 +2391,11 @@ void calcturnvalue(){
 // prints the turn counters (uses huns, thor, odin)
 void printturnline(){
   x=turncount;
+  //x=kingns;
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
+  //x=kingew;
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
