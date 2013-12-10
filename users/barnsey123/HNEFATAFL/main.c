@@ -75,6 +75,7 @@
 // 07-12-2013 NB v0.092 Fully fixed findpiece bug.
 // 08-12-2013 NB v0.093 Now trying XENON (to occupy an unnocupied row if king can't be blocked otherwise), salvaged some more memory but XENON not working...
 // 09-12-2013 NB v0.094 compressed XENON routines and got them working
+// 10-12-2013 NB v0.095 introduction of XENON3
 /****************************************/
 // TODO:
 // Add points onto blank rows/colums if king can access them
@@ -298,8 +299,9 @@ void CheckerBoard();		// Checkerboard screen wipe
 void subCheckerBoard();		// subroutine of checkerboard
 void subCheckerBoard2();	// subroutine 2 of checkerboard
 void SheldonGambit();		// called from subpacmanx (block left or right?)
-void Xenon();
-void Xenon2();
+//void Xenon();
+//void Xenon2();
+void Xenon3();
 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
@@ -566,44 +568,43 @@ void computerturn(){
   fb=8; computerturn2(); // fb=8 update kingtracker 
   // 3. Increment target positions around King (PACMAN)
   pacman2();
+  // 4. Find the highest value target (hightarget)
+  calchightarget();	// to get targetns/targetew values
   
+  if (redflagX == NO ) pacman4(); 	// check for full broken arrow
   // 5. if target is NOT on same row/column as king then check to see if
   // there is a way open for the king to access an empty row/column (that can't
   // be blocked by an attacker - really just the Level3 row/col).
   // if so populate that blank/row column by making any target values upon it be
   // a high value
-  calchightarget();
-  if ( targetns != kingns) {a=1;Xenon();} // a=1 means check rows
-  if ( targetew != kingew) {a=0;Xenon();} // a=0 means check columns	
-  // 4. Find the highest value target (hightarget)
-  calchightarget();
-  if (hightarget == 0) {
-	  game=-1;	// signify END of game: computer cannot move: stalemate 
-	  return;
-  }
-  
-  if (redflagX == NO ) pacman4(); 	// check for full broken arrow
+  //if ( targetns != kingns) {a=1;Xenon();} // a=1 means check rows
+  //if ( targetew != kingew) {a=0;Xenon();} // a=0 means check columns
+  //a=1;Xenon();
+  //a=0;Xenon();	
   //pacman6();	// "vinegar strokes"
-  // draw central square (overwriting timer)
-  tiletodraw=9;	// KING ON A TILE
-  if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
-  row=5;col=5; 
-  DrawPictureTiles();
-  //ptr_graph=PictureTiles;drawtile(); 
-  //if ( playertype == 1 ) {pacman();}
-  // other routines to go here to update the target array
-  // 4,5,6,7..N etc
-  // 
   // For first turn have seperate starting positions for THOR and ODIN
   if ((turncount==1)&&(playerlevel)){
 	  target[8][7]=200;
 	  if (playerlevel==ODIN) target[10][2]=210;
   }
+  calchightarget();			// re-calculate hightarget after all other points have been added
+  if (hightarget == 0) {	// if can't move then stalemate
+	  game=-1;	// signify END of game: computer cannot move: stalemate 
+	  return;
+  }
+  // draw central square (overwriting timer)
+  tiletodraw=9;	// KING ON A TILE
+  if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
+  row=5;col=5; 
+  DrawPictureTiles();
+  // end of drawing central square
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
+  
 }
 // xenon (secondary routine to run after pacman2(): check the "3rd level")
+/*
 void Xenon(){
 	points=20;
 	if (a){	// check ROWS
@@ -622,12 +623,24 @@ void Xenon2(){
 	setcheckmode1(); checkroute();	// is row/col empty (z)?
 	if ( z == 0 ){	// if row/col is empty...CAN KING GET TO IT?
 		checkroutemode=6; checkroute();	
-		if (z) { 	// If he can...populate row/col with higher target values
+		if (z) { 	// If he can...populate add points to target values
 			checkroutemode=5; checkroute();
 		} 
 	}	
+}*/
+void Xenon3(){
+	if ( orientation < EAST ){ // check rows (NORTH/SOUTH)
+		startrow=x; destrow=x; startcol=0;destcol=10;
+		if ((x==0)||(x==10)) {startcol=1;destcol=9;}
+	}else{ // check colums (EAST/WEST)
+		startrow=0; destrow=10; startcol=y; destcol=y;
+		if ((y==0)||(y==10)) {startrow=1;destrow=9;} 
+	}
+	setcheckmode1(); checkroute(); // returns count of pieces on row/col
+	if (z==0){
+		checkroutemode=5; checkroute();	// if blank populate any targets with extra points
+	}
 }
-
 // end of computerturn()
 void computerturn2(){
 	timertile();
@@ -666,6 +679,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
 			}
 		}
+		
 		// check NORTH and SOUTH
 		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
 			if ( CanTakeDirection[NORTH] ) {
@@ -808,10 +822,10 @@ void cleartarget(){ // nukes target array
 	}
 }
 */
-// TARGETSELECT - find the highest scoring TARGET
+// TARGETSELECT - find the highest scoring TARGET and piece to move
 void targetselect(){
 NEWTARGET:
-  calchightarget();
+  calchightarget();	// re-calculate hightarget
   // having found target we need to select a piece to move
   compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
   fb=9;
@@ -849,7 +863,7 @@ ODINJUMP2:
   }
   if ( playerlevel == ODIN ) goto ODINJUMP1;
 ODINJUMP3:
-  if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target
+  if ( foundpiece != 1 ) {target[targetns][targetew]=1;goto NEWTARGET;}	// if can still be taken select new target, this may cause an ENDLESS LOOP if no target value found that is > 1
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
   cy=ons;				// piece y screen position
@@ -925,17 +939,18 @@ void subpacmany(){	// apply the points generated in pacman2-6
   }
   
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
-    if ( target[x][y] ){	// if accessible by attacker	
+    if ( target[x][y] ){	// if accessible by attacker
     	if (( target[x][y] > 1 )||(redflag[orientation])){	
-	    	//printmessage();getchar();
+	    	//printmessage();getchar();	
 	      	target[x][y]+=points; 
       	}else{
 	      	target[x][y]=points; // can be caught if i go here
 	      	//if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
       	}
+      	Xenon3();
     	decpoints();
+        //if (z){decpoints();} // only decrement points if route to edge is blocked
     }
-    //if (z){decpoints();} // only decrement points if route to edge is blocked
     if ( (orientation == NORTH) || (orientation == WEST) ) {uncounter--;}else{uncounter++;}
     if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
   }
@@ -2063,9 +2078,7 @@ unsigned char checkroute(){
       		case 2: if (target[checkrouterow][checkroutecol] )	target[checkrouterow][checkroutecol]+=2;break;
       		case 3: if (target[checkrouterow][checkroutecol] > 1 ) z++;break; 
       		case 4: if (enemy[checkrouterow][checkroutecol] ) z+=ENEMYBLOCK;break;
-      		case 5: if (target[checkrouterow][checkroutecol]){
-	      				target[checkrouterow][checkroutecol]+=points;} // brokenarrow
-      				break;
+      		case 5: if (target[checkrouterow][checkroutecol]) target[checkrouterow][checkroutecol]+=points;break; // brokenarrow
       		//case 6: if (players[checkrouterow][checkroutecol])      z++;break;
       		case 6: if (kingtracker[checkrouterow][checkroutecol]) z++;break;
       		//case 7: if (computer[checkrouterow][checkroutecol]) target[checkrouterow][checkroutecol]+=hightarget;break;
