@@ -236,7 +236,7 @@ IF ERRORLEVEL 1 GOTO ErFailure
 ::
 ::%OSDKB%\xa.exe %OSDKT%\linked.s -o final.out -e xaerr.txt -l xalbl.txt
 ECHO Assembling
-%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR%
+%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA
 IF NOT EXIST "build\final.out" GOTO ErFailure
 
 
