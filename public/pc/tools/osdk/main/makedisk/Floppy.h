@@ -2,6 +2,9 @@
 #define FLOPPY_H_
 
 #include <vector>
+#include <map>
+#include <sstream>
+#include <iostream>
 
 // File structure:
 // MFM_DISK
@@ -39,24 +42,44 @@ private:
 };
 
 
+class FileEntry
+{
+public:
+  FileEntry();
+  ~FileEntry();
+
+public:
+  int         m_FloppyNumber;     // 0 for a single floppy program
+  int         m_StartSide;        // 0 or 1
+  int         m_StartTrack;       // 0 to 42 (80...)
+  int         m_StartSector;      // 1 to 17 (or 16 or 18...)
+  int         m_SectorCount;
+  int         m_TotalSize;
+  int         m_LoadAddress;
+  std::string m_FilePath;
+};
+
+
 class Floppy
 {
 public:
   Floppy();
   ~Floppy();
 
-  bool Load(const char* fileName);
-  bool Save(const char* fileName) const;
+  bool LoadDisk(const char* fileName);
+  bool SaveDisk(const char* fileName) const;
+  bool SaveDescription(const char* fileName) const;
 
-  unsigned int formule_disk(int track,int sector);
+  unsigned int ComputeOffset(int track,int sector);
 
-  void writeSector(int track,int sector,const char *fileName);
+  void WriteSector(int track,int sector,const char *fileName);
+  int WriteFile(const char *fileName,int& track,int& sector,int loadAddress);   // Returns the number of sectors
 
-  int writeFile(const char *fileName,int& track,int& sector);   // Returns the number of sectors
+  bool AddDefine(std::string defineName,std::string defineValue);
 
   void SetOffset(int track,int sector)
   {
-    m_Offset=formule_disk(track,sector);
+    m_Offset=ComputeOffset(track,sector);
   }
 
   void SetOffset(size_t offset)
@@ -71,6 +94,18 @@ private:
   int         m_TrackNumber;      // 42
   int         m_SectorNumber;     // 17
   int         m_SideNumber;       // 2
+
+  std::vector<FileEntry>                            m_FileEntries;
+  std::vector<std::pair<std::string,std::string>>   m_DefineList;
+
+  // Temp - refactoring
+  int fileCount;
+
+  std::stringstream code_sector;
+  std::stringstream code_track;
+  std::stringstream code_nombre_secteur;
+  std::stringstream code_adress_low;
+  std::stringstream code_adress_high;
 };
 
 #endif

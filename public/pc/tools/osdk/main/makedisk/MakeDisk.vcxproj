@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)Build\$(ProjectName)\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>D:\svn\public\oric\demos\SlideShowDemo\disk_system\</OutDir>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\Debug\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
