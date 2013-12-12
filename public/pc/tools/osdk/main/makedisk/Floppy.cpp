@@ -94,11 +94,11 @@ FileEntry::~FileEntry()
 Floppy::Floppy() :
   m_Buffer(0),
   m_BufferSize(0),
-  m_Offset(0),
   m_TrackNumber(0),
-  m_SectorNumber(0)
+  m_SectorNumber(0),
+  m_CurrentTrack(0),
+  m_CurrentSector(1)
 {
-  fileCount=0;
 }
 
 
@@ -110,7 +110,6 @@ Floppy::~Floppy()
 
 bool Floppy::LoadDisk(const char* fileName)
 {
-  m_Offset=0;
   if (LoadFile(fileName,m_Buffer,m_BufferSize))
   {
     const FloppyHeader& header(*((FloppyHeader*)m_Buffer));
@@ -159,17 +158,17 @@ remplacée par un octet #F7. Comme on le voit, nombre de variantes sont utilisées
 15, 16 or 17 sectors: gap1=72; gap2=34; gap3=50;
           18 sectors: gap1=12; gap2=34; gap3=46;
 */
-unsigned int Floppy::ComputeOffset(int track,int sector)
+unsigned int Floppy::GetDskImageOffset()
 {
-  unsigned int offset=256+156;     // on ajoute le header
-  offset+=track*6400;     // On avance à la bonne piste
-  offset+=(taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(sector-1);
+  unsigned int offset=256+156;     // Add the header
+  offset+=m_CurrentTrack*6400;     // And move to the correct track
+  offset+=(taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(m_CurrentSector-1);
   return offset;
 }
 
 
 // 0x0319 -> 793
-void Floppy::WriteSector(int track,int sector,const char *fileName)
+void Floppy::WriteSector(const char *fileName)
 {
   std::string filteredFileName(StringTrim(fileName," \t\f\v\n\r"));
 
@@ -183,12 +182,14 @@ void Floppy::WriteSector(int track,int sector,const char *fileName)
       ShowError("File for sector is too large. %d bytes (%d too many)",bufferSize,bufferSize-256);
     }
 
-    unsigned int bootSectorOffset=ComputeOffset(track,sector);
-    if (m_BufferSize>bootSectorOffset+256)
+    unsigned int sectorOffset=GetDskImageOffset();
+    if (m_BufferSize>sectorOffset+256)
     {
-      memcpy((char*)m_Buffer+bootSectorOffset,buffer,bufferSize);
+      memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
     }
     printf("Boot sector '%s' installed, %d free bytes remaining in this sector.\n",filteredFileName.c_str(),256-bufferSize);
+
+    MoveToNextSector();
   }
   else
   {
@@ -196,12 +197,12 @@ void Floppy::WriteSector(int track,int sector,const char *fileName)
   }
 }
 
-int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,int loadAddress)
+int Floppy::WriteFile(const char *fileName,int loadAddress)
 {
   FileEntry fileEntry;
   fileEntry.m_FloppyNumber=0;     // 0 for a single floppy program
 
-  if (fileCount)
+  if (!m_FileEntries.empty())
   {
     code_adress_low  << ",";
     code_adress_high << ",";
@@ -213,17 +214,17 @@ int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,
   code_adress_low  << "<" << loadAddress;
   code_adress_high << ">" << loadAddress;
 
-  if (currentTrack>41) // face 2
+  if (m_CurrentTrack>41) // face 2
   {
     fileEntry.m_StartSide=1;
-    code_track << currentTrack-42+128;
+    code_track << m_CurrentTrack-42+128;
   }
   else
   {
     fileEntry.m_StartSide=0;
-    code_track << currentTrack;
+    code_track << m_CurrentTrack;
   }
-  code_sector << currentSector;
+  code_sector << m_CurrentSector;
 
   void*      fileBuffer;
   size_t     fileSize;
@@ -234,9 +235,9 @@ int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,
 
   int nb_sectors_by_files=(fileSize+255)/256;
 
-  fileEntry.m_StartTrack =currentTrack;           // 0 to 42 (80...)
-  fileEntry.m_StartSector=currentSector;          // 1 to 17 (or 16 or 18...)
-  fileEntry.m_SectorCount=nb_sectors_by_files;    // Should probably be the real length
+  fileEntry.m_StartTrack =m_CurrentTrack;           // 0 to 42 (80...)
+  fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
+  fileEntry.m_SectorCount=nb_sectors_by_files;      // Should probably be the real length
   fileEntry.m_LoadAddress=loadAddress;
   fileEntry.m_TotalSize=fileSize;
   fileEntry.m_FilePath   =fileName;
@@ -244,7 +245,7 @@ int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,
   unsigned char* fileData=(unsigned char*)fileBuffer;
   while (fileSize)
   {
-    SetOffset(currentTrack,currentSector);
+    unsigned int offset=SetPosition(m_CurrentTrack,m_CurrentSector);
 
     int sizeToWrite=256;
     if (fileSize<256)
@@ -253,28 +254,15 @@ int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,
     }
     fileSize-=sizeToWrite;
 
-    memset((char*)m_Buffer+m_Offset,0,256);
-    memcpy((char*)m_Buffer+m_Offset,fileData,sizeToWrite);
+    memset((char*)m_Buffer+offset,0,256);
+    memcpy((char*)m_Buffer+offset,fileData,sizeToWrite);
     fileData+=sizeToWrite;
 
-    currentSector++;
-
-    if (currentSector==taille_piste+1) // We reached the end of the track!
-    {
-      currentSector=1;
-      currentTrack++;
-      if (currentTrack==m_TrackNumber)
-      {
-        // Next side is following on the floppy in the DSK format, so technically we should have nothing to do
-        // All the hard work is in the loader
-      }
-    }
+    MoveToNextSector();
   }
   free(fileBuffer);
 
   code_nombre_secteur << nb_sectors_by_files;
-
-  ++fileCount;
 
   m_FileEntries.push_back(fileEntry);
 

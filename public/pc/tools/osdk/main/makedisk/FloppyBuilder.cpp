@@ -90,13 +90,6 @@ void main(int argc, char *argv[])
 
   std::string outputLayoutFileName;
 
-  // 
-  // Set some semi sane 
-  //
-  int currentTrack =1;
-  int currentSector=1;
-  floppy.SetOffset(currentTrack,currentSector);
-
   int lineNumber=0;
   for (auto it(script.begin());it!=script.end();++it)
   {
@@ -153,17 +146,17 @@ void main(int argc, char *argv[])
       {
         if (tokens.size()==3)
         {
-          currentTrack =std::atoi(tokens[1].c_str());
+          int currentTrack =std::atoi(tokens[1].c_str());
           if ( (currentTrack<0) || (currentTrack>41) )
           {
             ShowError("Syntax error line (%d), TrackNumber has to be between 0 and 41' \n",lineNumber);
           }
-          currentSector=std::atoi(tokens[2].c_str());
+          int currentSector=std::atoi(tokens[2].c_str());
           if ( (currentSector<0) || (currentSector>41) )
           {
             ShowError("Syntax error line (%d), SectorNumber has to be between 1 and 17' \n",lineNumber);
           }
-          floppy.SetOffset(currentTrack,currentSector);
+          floppy.SetPosition(currentTrack,currentSector);
         }
         else
         {
@@ -171,28 +164,16 @@ void main(int argc, char *argv[])
         }
       }
       else
-      if (tokens[0]=="SetBootSector")
+      if (tokens[0]=="WriteSector")
       {
-        if (tokens.size()==3)
+        if (tokens.size()==2)
         {
-          std::string fileName=tokens[2];
-          if (tokens[1]=="Microdisc")
-          {
-            floppy.WriteSector(0,2,fileName.c_str());
-          }
-          else
-          if (tokens[1]=="Jasmin")
-          {
-            floppy.WriteSector(0,1,fileName.c_str());
-          }
-          else
-          {
-            ShowError("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath'. '%s' is not a valid type \n",lineNumber,tokens[1].c_str());
-          }
+          std::string fileName=tokens[1];
+          floppy.WriteSector(fileName.c_str());
         }
         else
         {
-          ShowError("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'SetBootSector FilePath' \n",lineNumber);
         }
       }
       else
@@ -202,14 +183,7 @@ void main(int argc, char *argv[])
         {
           std::string fileName=tokens[1];
           int loadAddress=ConvertAdress(tokens[2].c_str());
-
-          if (currentSector==taille_piste+1)
-          {
-            currentSector=1;
-            currentTrack++;
-          }
-
-          int nb_sectors_by_files=floppy.WriteFile(fileName.c_str(),currentTrack,currentSector,loadAddress);
+          int nb_sectors_by_files=floppy.WriteFile(fileName.c_str(),loadAddress);
         }
         else
         {

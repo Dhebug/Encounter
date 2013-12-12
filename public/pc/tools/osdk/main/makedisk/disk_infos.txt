@@ -734,3 +734,129 @@ Dump du premier secteur de disquette Master ou Slave (VERSION)
 
 */
 
+nov. 23 19:05:26 <_Dbug_>	I have a question: In all the C64 demos I've seen recently was written "Loader: Krill", is it the de-factor standard in loading system and every group uses it?
+nov. 23 19:06:06 <_Fungus_>	most people are using krill's loader now yes
+nov. 23 19:06:19 <iAN_CooG>	then some use cadaver's, some soundemon's
+nov. 23 19:06:40 <Krillye>	_Dbug_: not all use them, but it's something like the market leader atm :)
+nov. 23 19:06:50 <AuMTRoN>	krill is the holy grail of loaders... krill can even load demos from loafs of bread etc...
+nov. 23 19:07:10 <algorithm>	krills loader is the best at the moment
+nov. 23 19:07:18 <_Fungus_>	I've seen a few demos use mine
+nov. 23 19:07:35 <algorithm>	lft's one is nice as well with some decent features, but uses more resources
+nov. 23 19:07:49 <Krillye>	algorithm: hmm, what resources?
+nov. 23 19:07:54 <AuMTRoN>	the only one i ever used was plushlload... which i assume was krill too
+nov. 23 19:08:03 <Krillye>	lft's loader still has some speed features i need to copy... some day
+nov. 23 19:08:04 <algorithm>	the gcr decode uses more stack area
+nov. 23 19:08:07 <_Dbug_>	Just for my own knowledge, what does the loader do, does it handle things like decompression, hardware compatibility, stuff like that? Or is it because it's very compact and fast?
+nov. 23 19:08:12 <XmikePOA>	http://linusakesson.net/programming/gcr-decoding/index.php
+nov. 23 19:08:17 <Krillye>	AuMTRoN: yes, very old codebase
+nov. 23 19:08:17 <AuMTRoN>	(and indeed, it was quite ok to use)
+nov. 23 19:08:28 <Krillye>	AuMTRoN: not really related to current one
+nov. 23 19:08:34 <AuMTRoN>	nono, i understand
+nov. 23 19:08:45 <algorithm>	dbug. decompression via exomizer etc while loading
+nov. 23 19:08:54 <algorithm>	and rather compact.
+nov. 23 19:09:07 <Krillye>	_Dbug_: the basic idea is to be able to load while irqs and sprites etc. may keep running, other than the rom routines
+nov. 23 19:09:36 <Krillye>	_Dbug_: but yes, it can also decompress on the fly and also abstracts hw, as in works on a few different drives
+nov. 23 19:09:56 <Krillye>	(even vice without true drive emu, but nobody seems to enable the feature)
+nov. 23 19:10:41 <Krillye>	_Dbug_: compactness (and speed) is configurable, depends on the settings, which depend on your needs
+nov. 23 19:10:53 <_Dbug_>	Basically I got the annoying task of maintenaing our Oric loader (the guy who wrote it has left) and I'm trying to figure out how to make it evolve. Like how to define files structures on disk, if I need some 'api' to load files, how to insert irqs or if I should provide optimzed default stuff for music and such
+nov. 23 19:11:23 <_Dbug_>	I guess all the annoying sync stuff is on the drive side on the c64?
+nov. 23 19:11:35 <Krillye>	_Dbug_: hmm sounds a lot more like a framework (similar to lft's "loader") than a loader :)
+nov. 23 19:11:36 <_Fungus_>	both sides
+nov. 23 19:12:03 <_Fungus_>	it's called handshaking
+nov. 23 19:12:31 <Krillye>	_Dbug_: the loader takes care of that, the protocol it implements can be interrupted arbitrarily by sprites, dma, interrupts, you name it
+nov. 23 19:13:15 <_Dbug_>	Krillye: Right now I have been given a 'FloppyMaker.exe' that takes a text files as an input, pointing to a list of binary resources, and it outputs some assembler array data with track/sector/lenght information which is included by a beautifull (and buggy) 'loader.s'
+nov. 23 19:13:38 <Krillye>	_Dbug_: yes, i see
+nov. 23 19:14:24 <_Dbug_>	My main problem is that the 'load sector' is basically blocking, all IRQ is disabled, so I would like to do somethinh like... change stuff on screen while it loads! or ... play sounds! (right now yo uget a black screen and no soumd)
+nov. 23 19:14:24 <algorithm>	for users who do not want to build sources, i guess you can have some predefined binaries with some code to relocate
+nov. 23 19:14:30 <Krillye>	_Dbug_: sounds a lot like lft's thingy, minus the bugs :D
+nov. 23 19:15:01 <Krillye>	_Dbug_: however, that's a different approach compared to the classic one, which my loader implements
+nov. 23 19:15:12 <Krillye>	but i have no idea what's classic and what not, on oric
+nov. 23 19:15:43 <_Dbug_>	classic on the oric is 'use the slow system loader and lose 16kb of ram in the process'
+nov. 23 19:15:57 <Krillye>	_Dbug_: there is no way to have the block load be pre-emptible?
+nov. 23 19:16:06 <_Dbug_>	My group is the only one who actually wrote a custom loader
+nov. 23 19:16:11 <Krillye>	like on atari? (lol)
+nov. 23 19:16:56 <_Dbug_>	The problem is that in my case when I get a sector read, I start to receive bytes and I have like 36 cycles between each byte, there's only a one byte buffer so if I'm too fast or too slow I miss data
+nov. 23 19:17:11 <_Dbug_>	That makes it hard to play generic code :)
+nov. 23 19:17:41 <_Dbug_>	Of course I can poll a register to read if there's data available... but then I lose cpu time for just testing stuff...
+nov. 23 19:18:45 <Krillye>	_Dbug_: work out the variance or that stuff, then write a code-knitter (tm) to fill in the wait times between the polls/fetches :D
+nov. 23 19:19:05 <_Dbug_>	Hmm... that's not actually stupid...
+nov. 23 19:19:16 <_Dbug_>	Not memory efficient... but that could work
+nov. 23 19:19:31 <_Dbug_>	demo code (read byte) demo code (read byte) some more demo code (read byte)
+nov. 23 19:19:31 <Krillye>	actually i've been thinking about something like that for streaming in samples
+nov. 23 19:19:57 <_Fungus_>	does oric only have like 16k ram or something?
+nov. 23 19:20:05 <Krillye>	because that's just 126 cycles between the samples, but putting diskfetch stuff in between reduces irq-context-switch overhead
+nov. 23 19:20:29 <_Dbug_>	_Fungus_, it has 64k of ram, the top 16k are overlaid by the ROM but you can page it out 
+nov. 23 19:20:38 <_Fungus_>	are the drives smart, or are they dumb peripherals controlled by the host
+nov. 23 19:20:52 <_Dbug_>	dump drive, it's basically a WDC controller directly on the bus
+nov. 23 19:21:12 <_Fungus_>	should make it easier to code
+nov. 23 19:21:19 <_Dbug_>	yeah but there's zero buffering
+nov. 23 19:21:33 <locutus>	plain WDC on bus, sounds simple enough
+nov. 23 19:21:38 <Krillye>	_Dbug_: 64k is plenty, you can generate that interleaved code at run-time 
+nov. 23 19:21:39 <_Dbug_>	I can do whatever I want between the read sector calls, but when the call is done I have to get the data when it arrives
+nov. 23 19:22:11 <_Dbug_>	there's a status byte, there's an irq line as well
+nov. 23 19:22:30 <_Dbug_>	funny thing is that in irq mode it takes so long to get the irq called anre returned that basically all you can do is fetch and store
+nov. 23 19:22:49 <Krillye>	yeah, so poll + interleaved code
+nov. 23 19:22:49 <_Dbug_>	so the polling mode is better, but that kills a bit of performance to test the status byte
+nov. 23 19:23:15 <_Dbug_>	Could be something to try. Thanks for the idea :)
+nov. 23 19:23:22 <_Fungus_>	then yeah you'll just have to code parts around the loader then
+nov. 23 19:23:36 <Krillye>	well, work out the variance. if you get it down to a fraction of a cycle, you only need to poll once every few bytes
+nov. 23 19:23:43 <Krillye>	to add a cycle or not
+nov. 23 19:23:47 <_Dbug_>	I guess I could just write a simple MACRO that performs 'read next byte and store'
+nov. 23 19:24:10 <_Dbug_>	Yeah like synchronize, fetch 10 bytes, synchronize, etc...
+nov. 23 19:24:34 <Krillye>	more like sync demo demo demo fetch demo demo demo fetch demo demo demo sync ...
+nov. 23 19:24:35 <Krillye>	:)
+nov. 23 19:25:00 <_Dbug_>	(I meant 'demo/fetch/demo/fetch' 10 times then synchronize and repeat)
+nov. 23 19:25:12 <Krillye>	yeah
+nov. 23 19:25:13 <Krillye>	:)
+nov. 23 19:25:15 <_Dbug_>	But yeah, could work
+nov. 23 19:25:34 <Krillye>	the tricky part is to work around the register restrictions
+nov. 23 19:25:37 <_Dbug_>	I will test first on something simple like rasters, could be nice to be able to move that while loading :)
+nov. 23 19:25:45 <Krillye>	:)
+nov. 23 19:26:18 <_Dbug_>	Yeah I guess I can make the MACRO have the 'register to use' as a parameter
+nov. 23 19:26:54 <_Dbug_>	perform an LDA/LDX/LDY on the port based on that, and write at fixed address in a buffer
+nov. 23 19:27:16 <_Dbug_>	(and have the macro increment the next absolute address after each call)
+nov. 23 19:27:17 <Krillye>	use pha
+nov. 23 19:27:30 <Krillye>	3 cycle with auto-increment on pointer
+nov. 23 19:27:33 <Krillye>	+s
+nov. 23 19:27:37 <_Dbug_>	I will run out of stack size
+nov. 23 19:27:48 <_Dbug_>	I have 256 bytes to load
+nov. 23 19:27:53 <Krillye>	not while the block is f... ok
+nov. 23 19:28:08 <groepaz>	256 is fine, no? :)
+nov. 23 19:28:11 <jbevren>	need moar stack
+nov. 23 19:28:12 <Krillye>	then sta abs : inc *-2
+nov. 23 19:28:35 <_Dbug_>	I guess technically I do not need the stack while loading...
+nov. 23 19:28:36 <Krillye>	or hmm.... tricky
+nov. 23 19:28:37 <algorithm>	stack galore
+nov. 23 19:28:54 <jbevren>	lda disk pha lda disk
+nov. 23 19:28:55 <jbevren>	hehe
+nov. 23 19:29:01 <Krillye>	copying the stack takes a lot of performance.. but you can knit that into the code as well
+nov. 23 19:29:03 <_Dbug_>	Disable irq, save the stack pointer, reset S to 255, the lds pha lda pha lda pha
+nov. 23 19:29:08 <algorithm>	unless you are jsr'ing via interleaved code, then should have ample stack
+nov. 23 19:29:28 <_Dbug_>	Guess that can work... if it crashes will be awesome to debug :D
+nov. 23 19:29:33 <groepaz>	jbevren: LDA and STA 
+nov. 23 19:29:43 <jbevren>	gpz- ah, I see many lda's in your code
+nov. 23 19:29:43 <_Dbug_>	That also basically mean I have to use A for fetching
+nov. 23 19:29:50 <Krillye>	_Dbug_: rest assured it WILL crash until you got it all right :)
+nov. 23 19:29:58 <_Dbug_>	Yeah I can expect that for sure
+nov. 23 19:30:01 <Krillye>	crash in very creative ways
+nov. 23 19:30:24 <Krillye>	but... disable irqs but still have an irq handler, to catch brk's 
+nov. 23 19:30:32 <Krillye>	easier to debug :)
+nov. 23 19:30:37 <_Dbug_>	So basically, a read sector becomes 256 calls to LDA port, PHA, with some demo code in between, followed by a PLA loop that stores in the final buffer
+nov. 23 19:31:26 <Krillye>	_Dbug_: yes... unless you must poll data for a whole revolution, then no time between sectors
+nov. 23 19:31:27 <_Dbug_>	I'm sure that would do an efficient protection as well. Any sucker trying to use the stack gets atomized :)
+nov. 23 19:31:51 <_Dbug_>	I have control on the interleave
+nov. 23 19:31:58 <Krillye>	very good
+nov. 23 19:32:10 <_Dbug_>	(At least I'm supposed to, never actually tried :D)
+nov. 23 19:32:18 <Krillye>	you could then even skip bytes inside sectors
+nov. 23 19:32:26 <Krillye>	and not use the stack after all 
+nov. 23 19:32:29 <Krillye>	or just parts of it
+nov. 23 19:33:04 <_Dbug_>	Will experiment :)
+nov. 23 19:33:10 <_Dbug_>	Thanks for sharing ideas!
+nov. 23 19:33:24 <Krillye>	so... you have a couple of knobs to turn, but the bottom line is interwoven loader and demo coe
+nov. 23 19:33:25 <Krillye>	code
+nov. 23 19:33:25 <Krillye>	:)
+nov. 23 19:33:44 <_Dbug_>	Yeah. Well if I can achieve that, that will be a first on the oric.
+nov. 23 19:33:50 <Krillye>	:D
+nov. 23 19:33:52 <AuMTRoN>	knobs to turn == balls on top
+nov. 23 19:33:58 <Krillye>	GO!
+nov. 23 19:34:13 <_Dbug_>	And that means the end of the bip bip bip bip [no soud except toc toc toc toc] bip bip bip of the current oric demos
