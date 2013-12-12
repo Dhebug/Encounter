@@ -76,9 +76,11 @@
 // 08-12-2013 NB v0.093 Now trying XENON (to occupy an unnocupied row if king can't be blocked otherwise), salvaged some more memory but XENON not working...
 // 09-12-2013 NB v0.094 compressed XENON routines and got them working
 // 10-12-2013 NB v0.095 introduction of XENON3
+// 11-12-2013 NB v0.096 refined placement of Xenon3
+// 12-12-2013 NB v0.097 Fixed the "Crucifix Conundrum"
 /****************************************/
 // TODO:
-// Add points onto blank rows/colums if king can access them
+// Don't take a piece in the zone if it allows king to escape 
 //
 #include <lib.h>
 #define NORTH 0
@@ -302,6 +304,7 @@ void SheldonGambit();		// called from subpacmanx (block left or right?)
 //void Xenon();
 //void Xenon2();
 void Xenon3();
+void Xenon4();
 
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
@@ -444,7 +447,7 @@ unsigned char kingtargets[4];	// number of TARGETS from king to edge of board
 unsigned char tzonemode;		// 0=PARTIAL1, 1=PARTIAL2, 2=FULL
 //unsigned char onlycheck;		// restrict check to one route in certain situations
 unsigned char redflag[4];		// raise the red flag to IGNORE "can I be taken"
-unsigned char redflagX;			// determine if ANY redflag is raised
+unsigned char RedFlagX;			// determine if ANY redflag is raised
 //unsigned char deadcolor;		// color of deadpiece
 //unsigned int deadspace;		// start of deadcolumn
 unsigned char turnlimit;		// limit the number of turns (compares to turncount)
@@ -566,12 +569,14 @@ void computerturn(){
   fb=6; computerturn2(); // fb=6 if computer piece can get here update target values
   fb=7; computerturn2(); // fb=7 (can I be taken)
   fb=8; computerturn2(); // fb=8 update kingtracker 
+
   // 3. Increment target positions around King (PACMAN)
   pacman2();
   // 4. Find the highest value target (hightarget)
   calchightarget();	// to get targetns/targetew values
-  
-  if (redflagX == NO ) pacman4(); 	// check for full broken arrow
+  // 5. BrokenArrow...
+  if (RedFlagX == NO ) pacman4(); 	// check for full broken arrow (hightarget required)
+
   // 5. if target is NOT on same row/column as king then check to see if
   // there is a way open for the king to access an empty row/column (that can't
   // be blocked by an attacker - really just the Level3 row/col).
@@ -582,22 +587,24 @@ void computerturn(){
   //a=1;Xenon();
   //a=0;Xenon();	
   //pacman6();	// "vinegar strokes"
-  // For first turn have seperate starting positions for THOR and ODIN
-  if ((turncount==1)&&(playerlevel)){
-	  target[8][7]=200;
-	  if (playerlevel==ODIN) target[10][2]=210;
-  }
-  calchightarget();			// re-calculate hightarget after all other points have been added
+  
+  //calchightarget();			// re-calculate hightarget after all other points have been added
   if (hightarget == 0) {	// if can't move then stalemate
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
   }
+
   // draw central square (overwriting timer)
   tiletodraw=9;	// KING ON A TILE
   if (players[5][5] != KING) tiletodraw=3; // CASTLE TILE
   row=5;col=5; 
   DrawPictureTiles();
   // end of drawing central square
+  // For first turn have seperate starting positions for THOR and ODIN
+  if ((turncount==1)&&(playerlevel)){
+	  target[8][7]=200;
+	  if (playerlevel==ODIN) target[10][2]=210;
+  }
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
@@ -636,7 +643,9 @@ void Xenon3(){
 		startrow=0; destrow=10; startcol=y; destcol=y;
 		if ((y==0)||(y==10)) {startrow=1;destrow=9;} 
 	}
-	setcheckmode1(); checkroute(); // returns count of pieces on row/col
+	setcheckmode1(); checkroute(); // returns count of pieces on row/col (z)	
+}
+void Xenon4(){
 	if (z==0){
 		checkroutemode=5; checkroute();	// if blank populate any targets with extra points
 	}
@@ -667,9 +676,10 @@ void FindPiece(){	// find a piece capable of moving to selected target
   if ( foundpiece == 0 ){		
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
 		calccantake2();		
-		if (( cantake == 0 )&&( surrounded < 3 )&&( redflagX == NO )) canbetaken(); // if cannot take can I be taken?
+		if (( cantake == 0 )&&( surrounded < 3 )&&( RedFlagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0){ // means this piece can't be taken
 			foundpiece=1;
+			/*
 			if ((( a<3 )&&(a<targetns)) || ((a>7)&&(a>targetns))){
 				startrow=a;destrow=a;startcol=0;destcol=10;
 				FindPieceB();// set foundpiece to 10 (don't leave ZONE unpopulated)
@@ -678,34 +688,37 @@ void FindPiece(){	// find a piece capable of moving to selected target
 				startrow=0;destrow=10;startcol=b;destcol=b;
 				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
 			}
+			*/
 		}
 		
 		// check NORTH and SOUTH
-		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
-			if ( CanTakeDirection[NORTH] ) {
-				DeadPiece=targetns-1;
-				FindPieceNS();
-			}
-			if ( CanTakeDirection[SOUTH] ) {
-				DeadPiece=targetns+1;
-				FindPieceNS();
-			}
-			if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
-				if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
-			}
-		}	
-		// CHECK EAST AND WEST
-		if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same column as candidate
-			if ( CanTakeDirection[EAST] ) {
-				DeadPiece=targetew+1;
-				FindPieceEW();
-			}
-			if ( CanTakeDirection[WEST] ) {
-				DeadPiece=targetew-1;
-				FindPieceEW();
-			}
-			if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
-				if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
+		if ( surrounded < 3 ){
+			if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
+				if ( CanTakeDirection[NORTH] ) {
+					DeadPiece=targetns-1;
+					FindPieceNS();
+				}
+				if ( CanTakeDirection[SOUTH] ) {
+					DeadPiece=targetns+1;
+					FindPieceNS();
+				}
+				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
+					if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
+				}
+			}	
+			// CHECK EAST AND WEST
+			if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same column as candidate
+				if ( CanTakeDirection[EAST] ) {
+					DeadPiece=targetew+1;
+					FindPieceEW();
+				}
+				if ( CanTakeDirection[WEST] ) {
+					DeadPiece=targetew-1;
+					FindPieceEW();
+				}
+				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
+					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
+				}
 			}
 		}
 		if (foundpiece == 1){
@@ -824,10 +837,14 @@ void cleartarget(){ // nukes target array
 */
 // TARGETSELECT - find the highest scoring TARGET and piece to move
 void targetselect(){
+  unsigned char test=0;
+  zerofoundpiece();
 NEWTARGET:
+  test++;
+  if (test==20){zap();return;}	// catch endless loop
   calchightarget();	// re-calculate hightarget
   // having found target we need to select a piece to move
-  compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array
+  compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array (can't be taken in any direction)
   fb=9;
   if ( playerlevel == ODIN ) goto ODINJUMP2;
 ODINJUMP1:
@@ -910,7 +927,7 @@ void subpacmanx(){
   if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ // if no pieces in orientation from KING but there ARE targets
 	  if (((orientation < EAST)&&((kingew<2)||(kingew>8))) || ((orientation > SOUTH)&&((kingns<2)||(kingns>8)))) { // NORTH/SOUTH OR EAST/WEST
 		  redflag[orientation]=YES;	// raise a red flag
-		  redflagX=YES;
+		  RedFlagX=YES;
 		  points=200;
 		  //cleartarget();	// set all targets to 1
 	  }	   
@@ -943,13 +960,16 @@ void subpacmany(){	// apply the points generated in pacman2-6
     	if (( target[x][y] > 1 )||(redflag[orientation])){	
 	    	//printmessage();getchar();	
 	      	target[x][y]+=points; 
+	      	Xenon3(); // count number of pieces on row/column
+	      	if ( z==0) target[x][y]+=100;	// add more points if empty row/col
       	}else{
 	      	target[x][y]=points; // can be caught if i go here
 	      	//if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
       	}
-      	Xenon3();
     	decpoints();
         //if (z){decpoints();} // only decrement points if route to edge is blocked
+    }else{
+		Xenon3(); Xenon4();	// update targets on blank rows
     }
     if ( (orientation == NORTH) || (orientation == WEST) ) {uncounter--;}else{uncounter++;}
     if ( orientation < EAST ) {x=uncounter;}else{y=uncounter;}
@@ -1071,7 +1091,7 @@ void checkbrokenarrowhead(){
 
 void pacman2(){
 // improved version of pacman
-	redflagX=NO;		// at this point no red flag to be waived
+	RedFlagX=NO;		// at this point no red flag to be waived
 	timertile();
 	//calchightarget();	// calc highest target so far
 	//if (hightarget == 0) return;	// cannot move...
@@ -1079,10 +1099,12 @@ void pacman2(){
 	//checkbrokenarrowhead();
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
 	//for (orientation = 0; orientation < 4; orientation++){
-	orientation=NORTH; pacman2b();
-	orientation=SOUTH; pacman2b();
-	orientation=EAST;  pacman2b();
-	orientation=WEST;  pacman2b();		 	
+	//if ( surrounded < 3 ){	// no need to add any more points
+		orientation=NORTH; pacman2b();
+		orientation=SOUTH; pacman2b();
+		orientation=EAST;  pacman2b();
+		orientation=WEST;  pacman2b();
+	//}		 	
 	//}
 }
 void pacman2b(){
@@ -1705,20 +1727,16 @@ void movepiece(){
   takecounter=0;	// set the take counter to zero (incremented in takepiece)
   if ( ns > 1 ){// check north
     orientation=NORTH; tpns=ns-1; movepieceB();
-    //if ( cantakepiece()  ) { tpns=ns-1; takepiece(); }
   }
   if ( ns < 9 ){ // check south
     orientation=SOUTH; tpns=ns+1; movepieceB();
-    //if ( cantakepiece()  ) { tpns=ns+1; takepiece(); }
   }
   tpns=ns;
   if ( ew < 9 ){ // check east
     orientation=EAST; tpew=ew+1; movepieceB();
-    //if ( cantakepiece() ) { tpew=ew+1; takepiece(); }
   }
   if ( ew > 1 ){ // check west
     orientation=WEST; tpew=ew-1; movepieceB();
-    //if ( cantakepiece() ) { tpew=ew-1; takepiece(); }
   }
   
   // update count of attackers around king
@@ -1908,7 +1926,7 @@ void subarrows(){
 void subarrows2(){
   if ( orientation == NORTH ) enemy[xns][xew]+=5; 	// means enemy can get here from SOUTH
   if ( orientation == SOUTH ) enemy[xns][xew]+=1; 	// means enemy can get here from NORTH
-  if ( orientation == EAST ) enemy[xns][xew]+=20; 	// means enemy can get here from WEST
+  if ( orientation == EAST )  enemy[xns][xew]+=20; 	// means enemy can get here from WEST
   if ( orientation == WEST )  enemy[xns][xew]+=10; 	// means enemy can get here from EAST
 }
 
@@ -2153,7 +2171,7 @@ void updatetarget(){
   if ( target[targetns][targetew] ){	// only if target is valid (i.e. not a king square)
   	// increase target if blocking 1 enemy
     if ( enemy[targetns][targetew] ) inctarget();
-    // increase taregt if blocking 2 enemies		
+    // increase target if blocking 2 enemies		
     if (( enemy[targetns][targetew] == 6)||(enemy[targetns][targetew] == 11)||(enemy[targetns][targetew] == 21)||(enemy[targetns][targetew] == 15)||(enemy[targetns][targetew] == 25)||(enemy[targetns][targetew] == 30)) inctarget();
     // increase target if blocking 3 enemies
     if (( enemy[targetns][targetew] == 35)||(enemy[targetns][targetew] == 16)||(enemy[targetns][targetew] == 26) || (enemy[targetns][targetew] == 31)) inctarget();
@@ -2163,6 +2181,10 @@ void updatetarget(){
     //y=cantake*TAKEWEIGHT;	// value to be added to target			
     //target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
     target[targetns][targetew]+=(cantake*TakeWeight);
+    // NOOSE: Favour takes in the zone (sketchy at present, needs refinement)
+    /* if ((( targetns < 2 )||(targetns > 9))||((targetew < 2)||( targetew > 9))){
+	    target[targetns][targetew]+=(cantake*TakeWeight);
+    }*/ 
     //if (cantake==0)	{canbetaken();}		// sets target to 1 if cannot take but can be taken
   }
 }
@@ -2405,10 +2427,12 @@ void calcturnvalue(){
 void printturnline(){
   x=turncount;
   //x=kingns;
+  x=enemy[5][3];
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
-  x=turnlimit-turncount;// x= turns remaining
+  //x=turnlimit-turncount;// x= turns remaining
   //x=kingew;
+  x=target[5][4];
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
