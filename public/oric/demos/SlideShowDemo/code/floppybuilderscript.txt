@@ -1,0 +1,84 @@
+;
+; Here is the current documentation for the description script.
+; - This file describes what goes on the floppy itself, list of files, boot sectors, locations, ...
+; - The result is stored in a description file which along with the loader code allows the user to load data.
+;
+; Syntax:
+; - Anything at the right of a ; is ignored (commented out)
+; - {FileIndex} is replaced at generation time by the current internal file index, practical for defines generation
+;
+; Things to do:
+; - Be able to define the format of the floppy we want in this file (number of tracks, sectors, sizes)
+; - Suppress the need for a source floppy to clone from
+; - Have a 0/1 parameter for the multiple calls to the tool, with only the last one needing the files
+; - Support for tap files (auto-detect loading area)
+; - Support for file compression in the tool
+; - Possibility to do partial loads, saves, depacking in realtime
+;
+OutputLayoutFile floppy_description.h
+OutputFloppyFile ..\build\SlideShow.dsk
+
+AddDefine LOADER_SHOW_DEBUGINFO 1
+
+;
+; This defines the bootsectors to use for the various operating systems
+; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
+; - Microdisc loads the sector 2 of track zero, the address is different on Atmos and Telestrat
+; - The system requires a third sector containing valid data
+;
+; Since we do not yet have a valid Jasmin reading code, all this bootsector will do is to 
+; write a message saying that this floppy needs to be booted on a Microdisc compatible system.
+;
+SetPosition 0 1
+WriteSector ..\build\files\sector_1-jasmin.o
+WriteSector ..\build\files\sector_2-microdisc.o
+WriteSector ..\build\files\sector_3.o
+
+;
+; Now here is the loader code, that one is Microdisc only
+;
+SetPosition 0 5
+AddFile ..\build\files\loader.o $fc00
+
+;
+; Then the files used in the demo
+;
+SetPosition 1 13
+AddDefine LOADER_SLIDESHOW {FileIndex}
+AddFile ..\build\files\slideshow.o $400
+
+AddDefine LOADER_FIRST_PICTURE {FileIndex}
+AddFile ..\build\files\damsel.hir $a000
+AddFile ..\build\files\dbug_windows95.hir $a000
+AddFile ..\build\files\dbug_yessagician.hir $a000
+AddFile ..\build\files\diamond_2.hir $a000
+AddFile ..\build\files\exocet_blueface.hir $a000
+AddFile ..\build\files\exocet_fists.hir $a000
+AddFile ..\build\files\exocet_moonguy.hir $a000
+AddFile ..\build\files\karate.hir $a000
+AddFile ..\build\files\karate_2.hir $a000
+AddFile ..\build\files\krillys.hir $a000
+AddFile ..\build\files\mooz_barbitoric.hir $a000
+AddFile ..\build\files\mooz_oric.hir $a000
+AddFile ..\build\files\mooz_santa.hir $a000
+AddFile ..\build\files\mooz_supertomato.hir $a000
+AddFile ..\build\files\prez_story.hir $a000
+AddFile ..\build\files\tomb_1.hir $a000
+AddFile ..\build\files\trois_mats.hir $a000
+AddFile ..\build\files\twilighte_beast.hir $a000
+AddFile ..\build\files\twilighte_dragons.hir $a000
+AddFile ..\build\files\twilighte_pegasus.hir $a000
+AddFile ..\build\files\twilighte_sonix.hir $a000
+AddDefine LOADER_LAST_PICTURE {FileIndex}
+
+
+AddDefine LOADER_FIRST_MUSIC {FileIndex}
+;AddFile ..\build\files\test.ym $c000
+AddFile ..\build\files\music_cuddly.ym $c000
+AddFile ..\build\files\northtar.ym $c000
+AddFile ..\build\files\music_no_second_prize.ym $c000
+AddFile ..\build\files\music_leaving_terramis.ym $c000
+AddDefine LOADER_LAST_MUSIC {FileIndex}
+
+
+
