@@ -41,19 +41,31 @@ void SetApplicationParameters(const char* pcApplicationName,int nVersionMajor,in
 
 
 
-void ShowError(const char *message)
+void ShowError(const char *pFormatString,...)
 {
   std::string cErrorMessage;
 
-  if (message)
+  if (pFormatString)
   {
     // Message will be something like: "MyApplication.exe: Something goes wrong, sorry !"
-    cErrorMessage=g_cApplicationName+": "+ message;
+
+    va_list va;
+    char    temp[4096];
+
+    va_start(va,pFormatString);
+    int nChar=vsprintf(temp,pFormatString,va);
+    va_end(va);
+    if ((unsigned int)nChar>=sizeof(temp))
+    {
+      temp[sizeof(temp)-1]=0;
+    }
+
+    cErrorMessage=g_cApplicationName+": "+ temp;
   }
   else
   {
     cErrorMessage=g_cUsageMessage;
-    StringReplace(cErrorMessage,"{ApplicationName}"		,g_cApplicationName);
+    StringReplace(cErrorMessage,"{ApplicationName}"	,g_cApplicationName);
     StringReplace(cErrorMessage,"{ApplicationVersion}"	,g_cVersionString);
   }
 
