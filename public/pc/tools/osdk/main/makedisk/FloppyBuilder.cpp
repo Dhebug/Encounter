@@ -19,7 +19,7 @@ void main(int argc, char *argv[])
   // Some initialization for the common library
   //
   SetApplicationParameters(
-    "MakeDisk",
+    "FloppyBuilder",
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
     "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
@@ -48,7 +48,7 @@ void main(int argc, char *argv[])
   }
 
 
-  if (argc!=4)
+  if (argc!=3)
   {
     ShowError(nullptr);
   }
@@ -62,15 +62,13 @@ void main(int argc, char *argv[])
   strcpy(description_name,argv[param]);
 
   char source_name[_MAX_PATH];
-  char dest_name[_MAX_PATH];
   param++;
   strcpy(source_name,argv[param]);
-  param++;
-  strcpy(dest_name,argv[param]);
 
-  //char ligne[900];
   int start=0;
 
+  //std::string templateFloppyDiskName;
+  std::string targetFloppyDiskName;
 
   //
   // Open the description file
@@ -78,8 +76,7 @@ void main(int argc, char *argv[])
   std::vector<std::string> script;
   if (!LoadText(description_name,script))
   {
-    printf("Can't load script file '%s'\n",description_name);
-    exit(1);
+    ShowError("Can't load script file '%s'\n",description_name);
   }
 
   //
@@ -88,8 +85,7 @@ void main(int argc, char *argv[])
   Floppy floppy;
   if (!floppy.LoadDisk(source_name))
   {
-    printf("FloppyBuilder: Can't load '%s'\n",source_name);
-    exit(1);
+    ShowError("FloppyBuilder: Can't load '%s'\n",source_name);
   }
 
   std::string outputLayoutFileName;
@@ -106,13 +102,20 @@ void main(int argc, char *argv[])
   {
     ++lineNumber;
 
-    const std::string currentLine(*it);
+    std::string currentLine(*it);
+
+    std::size_t found = currentLine.find(";");
+    if (found!=std::string::npos)
+    {
+      // Comments, just skip them
+      currentLine=currentLine.substr(0,found);
+    }
 
     std::istringstream iss(currentLine);
 
     std::string item;
     std::vector<std::string> tokens;
-    while (std::getline(iss, item,' ')) 
+    while (std::getline(iss,item,' ')) 
     {
       if (!item.empty())
       {
@@ -122,11 +125,6 @@ void main(int argc, char *argv[])
 
     if (!tokens.empty())
     {
-      if (tokens[0][0]==';')
-      {
-        // Comments, just skip them
-      }
-      else
       if (tokens[0]=="OutputLayoutFile")
       {
         if (tokens.size()==2)
@@ -135,7 +133,19 @@ void main(int argc, char *argv[])
         }
         else
         {
-          printf("Syntax error line (%d), syntax is 'OutputLayoutFile FilePath' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'OutputLayoutFile FilePath' \n",lineNumber);
+        }
+      }
+      else
+      if (tokens[0]=="OutputFloppyFile")
+      {
+        if (tokens.size()==2)
+        {
+          targetFloppyDiskName=tokens[1];
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'targetFloppyDiskName FilePath' \n",lineNumber);
         }
       }
       else
@@ -144,12 +154,20 @@ void main(int argc, char *argv[])
         if (tokens.size()==3)
         {
           currentTrack =std::atoi(tokens[1].c_str());
+          if ( (currentTrack<0) || (currentTrack>41) )
+          {
+            ShowError("Syntax error line (%d), TrackNumber has to be between 0 and 41' \n",lineNumber);
+          }
           currentSector=std::atoi(tokens[2].c_str());
+          if ( (currentSector<0) || (currentSector>41) )
+          {
+            ShowError("Syntax error line (%d), SectorNumber has to be between 1 and 17' \n",lineNumber);
+          }
           floppy.SetOffset(currentTrack,currentSector);
         }
         else
         {
-          printf("Syntax error line (%d), syntax is 'SetPosition TrackNumber SectorNumber' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'SetPosition TrackNumber SectorNumber' \n",lineNumber);
         }
       }
       else
@@ -169,12 +187,12 @@ void main(int argc, char *argv[])
           }
           else
           {
-            printf("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath'. '%s' is not a valid type \n",lineNumber,tokens[1].c_str());
+            ShowError("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath'. '%s' is not a valid type \n",lineNumber,tokens[1].c_str());
           }
         }
         else
         {
-          printf("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'SetBootSector Jasmin|Microdisc FilePath' \n",lineNumber);
         }
       }
       else
@@ -195,7 +213,7 @@ void main(int argc, char *argv[])
         }
         else
         {
-          printf("Syntax error line (%d), syntax is 'AddFile FilePath LoadAddress' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'AddFile FilePath LoadAddress' \n",lineNumber);
         }
       }
       else
@@ -207,13 +225,12 @@ void main(int argc, char *argv[])
         }
         else
         {
-          printf("Syntax error line (%d), syntax is 'AddDefine DefineName DefineValue' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'AddDefine DefineName DefineValue' \n",lineNumber);
         }
       }
       else
       {
-        printf("Syntax error line (%d), unknown keyword '%s' \n",lineNumber,tokens[0].c_str());
-        exit(1);
+        ShowError("Syntax error line (%d), unknown keyword '%s' \n",lineNumber,tokens[0].c_str());
       }
     }
   }
@@ -222,17 +239,15 @@ void main(int argc, char *argv[])
 
   if (!floppy.SaveDescription(outputLayoutFileName.c_str()))
   {
-    printf("Failed saving description '%s'\n",outputLayoutFileName.c_str());
-    exit(1);
+    ShowError("Failed saving description '%s'\n",outputLayoutFileName.c_str());
   }
 
-  if (!floppy.SaveDisk(dest_name))
+  if (!floppy.SaveDisk(targetFloppyDiskName.c_str()))
   {
-    printf("Failed saving disk '%s'\n",dest_name);
-    exit(1);
+    ShowError("Failed saving disk '%s'\n",targetFloppyDiskName.c_str());
   }
   else
   {
-    printf("Successfully created '%s'\n",dest_name);
+    printf("Successfully created '%s'\n",targetFloppyDiskName.c_str());
   }
 }

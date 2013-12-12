@@ -44,7 +44,7 @@
 //
 void SetApplicationParameters(const char* pcApplicationName,int nVersionMajor,int nVersionMinor,const char* pcUsageMessage);
 
-void ShowError(const char *pcMessage);
+void ShowError(const char *pcMessage,...);
 
 
 class ArgumentParser

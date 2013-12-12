@@ -180,8 +180,7 @@ void Floppy::WriteSector(int track,int sector,const char *fileName)
   {
     if (bufferSize>256)
     {
-      printf("File for sector is too large. %d bytes (%d too many)",bufferSize,bufferSize-256);
-      exit(1);
+      ShowError("File for sector is too large. %d bytes (%d too many)",bufferSize,bufferSize-256);
     }
 
     unsigned int bootSectorOffset=ComputeOffset(track,sector);
@@ -193,8 +192,7 @@ void Floppy::WriteSector(int track,int sector,const char *fileName)
   }
   else
   {
-    printf("%s",filteredFileName.c_str());
-    ShowError("Boot Sector file not found");
+    ShowError("Boot Sector file '%s' not found",filteredFileName.c_str());
   }
 }
 
@@ -231,8 +229,7 @@ int Floppy::WriteFile(const char *fileName,int& currentTrack,int& currentSector,
   size_t     fileSize;
   if (!LoadFile(fileName,fileBuffer,fileSize))
   {
-    printf("FloppyBuilder: Error can't open %s\n",fileName);
-    exit(1);
+    ShowError("Error can't open file '%s'\n",fileName);
   }
 
   int nb_sectors_by_files=(fileSize+255)/256;
@@ -350,8 +347,7 @@ bool Floppy::SaveDescription(const char* fileName) const
 
   if (!SaveFile(fileName,layoutInfo.str().c_str(),layoutInfo.str().length()))
   {
-    printf("FloppyBuilder: Can't save '%s'\n",fileName);
-    exit(1);
+    ShowError("Can't save '%s'\n",fileName);
   }
 
   return true;
