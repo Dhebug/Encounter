@@ -70,36 +70,49 @@ public:
   bool SaveDisk(const char* fileName) const;
   bool SaveDescription(const char* fileName) const;
 
-  unsigned int ComputeOffset(int track,int sector);
-
-  void WriteSector(int track,int sector,const char *fileName);
-  int WriteFile(const char *fileName,int& track,int& sector,int loadAddress);   // Returns the number of sectors
+  void WriteSector(const char *fileName);
+  int WriteFile(const char *fileName,int loadAddress);   // Returns the number of sectors
 
   bool AddDefine(std::string defineName,std::string defineValue);
 
-  void SetOffset(int track,int sector)
+  unsigned int SetPosition(int track,int sector)
   {
-    m_Offset=ComputeOffset(track,sector);
+    m_CurrentSector=sector;
+    m_CurrentTrack =track;
+    return GetDskImageOffset();
   }
 
-  void SetOffset(size_t offset)
+  void MoveToNextSector()
   {
-    m_Offset=offset;
+    m_CurrentSector++;
+
+    if (m_CurrentSector==taille_piste+1) // We reached the end of the track!
+    {
+      m_CurrentSector=1;
+      m_CurrentTrack++;
+      if (m_CurrentTrack==m_TrackNumber)
+      {
+        // Next side is following on the floppy in the DSK format, so technically we should have nothing to do
+        // All the hard work is in the loader
+      }
+    }
   }
+
+private:
+  unsigned int GetDskImageOffset();
 
 private:
   void*       m_Buffer;
   size_t      m_BufferSize;
-  size_t      m_Offset;
   int         m_TrackNumber;      // 42
   int         m_SectorNumber;     // 17
   int         m_SideNumber;       // 2
 
+  int         m_CurrentTrack;
+  int         m_CurrentSector;
+
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
-
-  // Temp - refactoring
-  int fileCount;
 
   std::stringstream code_sector;
   std::stringstream code_track;
