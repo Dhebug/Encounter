@@ -2427,12 +2427,12 @@ void calcturnvalue(){
 void printturnline(){
   x=turncount;
   //x=kingns;
-  x=enemy[5][3];
+  //x=enemy[5][3];
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
-  //x=turnlimit-turncount;// x= turns remaining
+  x=turnlimit-turncount;// x= turns remaining
   //x=kingew;
-  x=target[5][4];
+  //x=target[5][4];
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
