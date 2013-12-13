@@ -78,6 +78,8 @@
 // 10-12-2013 NB v0.095 introduction of XENON3
 // 11-12-2013 NB v0.096 refined placement of Xenon3
 // 12-12-2013 NB v0.097 Fixed the "Crucifix Conundrum"
+// 13-12-2013 NB v0.098 removed cantakeadjust (superfluous?) added SPIKE to finally solve
+//						the "LookBackInAnger" issue...
 /****************************************/
 // TODO:
 // Don't take a piece in the zone if it allows king to escape 
@@ -190,7 +192,7 @@ unsigned char cantakepiece();		// returns 0=no, 1 yes
 unsigned char checkroute(); // sets counter to be number of pieces on a given route				
 void blinkcursor();			// blinks the cursor to attract attention	
 void blinkcursorB();		// subroutine of blinkcursor()
-void calccantake();			// can take be made (how many)	
+//void calccantake();			// can take be made (how many)	
 void calchightarget();		// updates value of hightarget (the highest target so far)		
 //void calctakeweight();		// calculate the weight of "takeweight"		
 void canbetaken(); 			// can I be taken after moving here? returns value (take) 0=no 1=yes	
@@ -468,6 +470,7 @@ unsigned char TakeWeight;
 unsigned char Checker=12;
 unsigned char CanTakeDirection[4]; // the direction of a possible take [NORTH,SOUTH,EASt,WEST]
 unsigned char DeadPiece;
+unsigned char Spike;		// used in canbetakes/subcanbetaken2
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -679,7 +682,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 		if (( cantake == 0 )&&( surrounded < 3 )&&( RedFlagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0){ // means this piece can't be taken
 			foundpiece=1;
-			/*
+			
 			if ((( a<3 )&&(a<targetns)) || ((a>7)&&(a>targetns))){
 				startrow=a;destrow=a;startcol=0;destcol=10;
 				FindPieceB();// set foundpiece to 10 (don't leave ZONE unpopulated)
@@ -688,7 +691,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 				startrow=0;destrow=10;startcol=b;destcol=b;
 				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
 			}
-			*/
+			
 		}
 		
 		// check NORTH and SOUTH
@@ -1804,15 +1807,19 @@ target[targetns][targetew]=1;
 // can I be taken after moving here? 
 void canbetaken() {
   if ((targetns )&&(targetns < 10)){
+	Spike=NORTH;
     takena=targetns-1;takenb=targetew;takenc=targetns+1;takend=targetew;takene=1;
     subcanbetaken2();
+    Spike=SOUTH;
     takena=targetns+1;takenb=targetew;takenc=targetns-1;takend=targetew;takene=5;
     subcanbetaken2();
   }
 
   if ((targetew )&&(targetew < 10)){
+	Spike=EAST;
     takena=targetns;takenb=targetew+1;takenc=targetns;takend=targetew-1;takene=10;
     subcanbetaken2();
+    Spike=WEST;
     takena=targetns;takenb=targetew-1;takenc=targetns;takend=targetew+1;takene=20;
     subcanbetaken2();	
   }
@@ -1862,7 +1869,6 @@ unsigned char cantakepiece(){
      	// if ((( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == 4)&&(pcheckns2!=5)&&(pcheckew2!=5))) // the 5 is to EXCLUDE central square
       if (( players[pcheckns2][pcheckew2] == p1 )||(players[pcheckns2][pcheckew2] == p2 )||(players[pcheckns2][pcheckew2] == CASTLE)){  
         take++;
-        //if ((players[pcheckns1][pcheckew1]==3)&&(surrounded<3))take--;	// if possible take is a king but not surrounded
         if (players[pcheckns1][pcheckew1]==KING) take--;// if possible take is a king 
 
       } 
@@ -1931,11 +1937,12 @@ void subarrows2(){
 }
 
 void inccantake(){
-  z=cantakepiece();
-  if (z ){
+  //z=cantakepiece();	// z=number of pieces that can be taken
+  if (cantakepiece()){
     cantake+=z;
     cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
   }
+  //cantake+=cantakepiece();
 }
 
 // Explodes a tile
@@ -2037,11 +2044,13 @@ void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
     if ((players[takenc][takend] == 0)||(enemy[takenc][takend] > ENEMYWEIGHT)){
       if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
         compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+        if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
         if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
           if ((origorient < EAST)&&(mkey != takenc)&&(oew != takend)) compass[origorient]=0;
           if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
         }
       }
+      //if ((enemy[takenc][takend]-takene)==0) compass[origorient]=0;
     }
   }
 }
@@ -2177,9 +2186,6 @@ void updatetarget(){
     if (( enemy[targetns][targetew] == 35)||(enemy[targetns][targetew] == 16)||(enemy[targetns][targetew] == 26) || (enemy[targetns][targetew] == 31)) inctarget();
     // calculates how many takes can be made in this position (cantake)
     calccantake2();
-    //calccantake();			// calculates how many takes can be made in this position (cantake)
-    //y=cantake*TAKEWEIGHT;	// value to be added to target			
-    //target[targetns][targetew]+=y; // add cantake (will be zero if cannot take)
     target[targetns][targetew]+=(cantake*TakeWeight);
     // NOOSE: Favour takes in the zone (sketchy at present, needs refinement)
     /* if ((( targetns < 2 )||(targetns > 9))||((targetew < 2)||( targetew > 9))){
@@ -2214,14 +2220,14 @@ void calccantake2(){
 	CanTakeDirection[SOUTH]=0;
 	CanTakeDirection[EAST]=0;
 	CanTakeDirection[WEST]=0;	
-	if ( ew < 9 )  {orientation=EAST;  calccantake3();}   // check EAST
-    if ( ew > 1 )  {orientation=WEST;  calccantake3();}   // check WEST
-	if ( ns > 1 )  {orientation=NORTH; calccantake3();}   // check NORTH
-    if ( ns < 9 )  {orientation=SOUTH; calccantake3();}   // check SOUTH
+	if ( targetew < 9 )  {orientation=EAST;  calccantake3();}   // check EAST
+    if ( targetew > 1 )  {orientation=WEST;  calccantake3();}   // check WEST
+	if ( targetns > 1 )  {orientation=NORTH; calccantake3();}   // check NORTH
+    if ( targetns < 9 )  {orientation=SOUTH; calccantake3();}   // check SOUTH
 }
 void calccantake3(){
 	inccantake();
-	CanTakeDirection[orientation]=1;
+	CanTakeDirection[orientation]=z; // either 1 or 0 (TAKE or NOTAKE)
 }
 // print the title screen
 /*
