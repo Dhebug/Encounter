@@ -30,7 +30,6 @@ void Pause()
 extern void Player_SetMusic_Birthday();
 
 unsigned char CurrentMusic=LOADER_FIRST_MUSIC;
-//int CounterMusicWhatever=50*2;
 
 void main()
 {
@@ -42,12 +41,13 @@ void main()
 	MusicLooped=1;
 
 	System_InstallIRQ_SimpleVbl();
-	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+1;
-	//LoadFile();
-	//Mym_ReInitialize();
+	LoaderApiEntryIndex=LOADER_FIRST_MUSIC;
+	LoadFile();
+	Mym_ReInitialize();
 
 	while (1)
 	{		
+		/*
 		if (MusicLooped)
 		{
 			poke(0xbb80+40*25,16 | ((peek(0xbb80+40*25)+1)&7) );
@@ -61,8 +61,7 @@ void main()
 			Mym_ReInitialize();
 			++CurrentMusic;
 		}
-		
-		//--CounterMusicWhatever;
+		*/
          
 		for (LoaderApiEntryIndex=LOADER_FIRST_PICTURE;LoaderApiEntryIndex<LOADER_LAST_PICTURE;LoaderApiEntryIndex++)
 		{
