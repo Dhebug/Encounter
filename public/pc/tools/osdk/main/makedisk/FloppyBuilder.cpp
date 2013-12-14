@@ -30,6 +30,10 @@ void main(int argc, char *argv[])
     "\r\n"
     "Purpose:\r\n"
     "  Generating bootable floppies for the Oric computer.\r\n"
+    "\r\n"
+    "Usage:\r\n"
+    "  {ApplicationName} <description file path>\r\n"
+    "\r\n"
     );
 
   // makedisk filetobuild.txt default.dsk ..\build\%OSDKDISK%
@@ -48,31 +52,16 @@ void main(int argc, char *argv[])
   }
 
 
-  if (argc!=3)
+  if (argc!=2)
   {
     ShowError(nullptr);
   }
 
 
   //
-  // Copy last parameters
-  //
-  char	description_name[_MAX_PATH];
-
-  strcpy(description_name,argv[param]);
-
-  char source_name[_MAX_PATH];
-  param++;
-  strcpy(source_name,argv[param]);
-
-  int start=0;
-
-  //std::string templateFloppyDiskName;
-  std::string targetFloppyDiskName;
-
-  //
   // Open the description file
   //
+  const char* description_name(argv[param]);
   std::vector<std::string> script;
   if (!LoadText(description_name,script))
   {
@@ -83,12 +72,9 @@ void main(int argc, char *argv[])
   // Copy the floppy disk
   //
   Floppy floppy;
-  if (!floppy.LoadDisk(source_name))
-  {
-    ShowError("FloppyBuilder: Can't load '%s'\n",source_name);
-  }
 
   std::string outputLayoutFileName;
+  std::string targetFloppyDiskName;
 
   int lineNumber=0;
   for (auto it(script.begin());it!=script.end();++it)
@@ -118,6 +104,58 @@ void main(int argc, char *argv[])
 
     if (!tokens.empty())
     {
+      if (tokens[0]=="LoadDiskTemplate")
+      {
+        if (tokens.size()==2)
+        {
+          const std::string& templateFisk(tokens[1]);
+          if (!floppy.LoadDisk(templateFisk.c_str()))
+          {
+            ShowError("Can't load '%s'\n",templateFisk.c_str());
+          }
+
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'LoadDiskTemplate FilePath' \n",lineNumber);
+        }
+      }
+      else
+      if (tokens[0]=="DefineDisk")
+      {
+        if (tokens.size()==4)
+        {
+          int numberOfSides   =std::atoi(tokens[1].c_str());
+          int numberOfTracks  =std::atoi(tokens[2].c_str());
+          int numberOfSectors =std::atoi(tokens[3].c_str());
+
+          if ( numberOfSides!=2 )
+          {
+            ShowError("Syntax error line (%d), numberOfSides has to be 2 (so far)\n",lineNumber);
+          }
+
+          if ( numberOfTracks!=42 )
+          {
+            ShowError("Syntax error line (%d), numberOfTracks has to be 42 (so far)\n",lineNumber);
+          }
+
+          if ( numberOfSectors!=17 )
+          {
+            ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
+          }
+
+          if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors))
+          {
+            ShowError("Can't create disk\n");
+          }
+
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'DefineDisk numberOfSides numberOfTracks numberOfSectors' \n",lineNumber);
+        }
+      }
+      else
       if (tokens[0]=="OutputLayoutFile")
       {
         if (tokens.size()==2)
@@ -169,7 +207,10 @@ void main(int argc, char *argv[])
         if (tokens.size()==2)
         {
           std::string fileName=tokens[1];
-          floppy.WriteSector(fileName.c_str());
+          if (!floppy.WriteSector(fileName.c_str()))
+          {
+            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+          }
         }
         else
         {
@@ -183,11 +224,30 @@ void main(int argc, char *argv[])
         {
           std::string fileName=tokens[1];
           int loadAddress=ConvertAdress(tokens[2].c_str());
-          int nb_sectors_by_files=floppy.WriteFile(fileName.c_str(),loadAddress);
+          if (!floppy.WriteFile(fileName.c_str(),loadAddress,false))
+          {
+            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+          }
         }
         else
         {
           ShowError("Syntax error line (%d), syntax is 'AddFile FilePath LoadAddress' \n",lineNumber);
+        }
+      }
+      else
+      if (tokens[0]=="AddTapFile")
+      {
+        if (tokens.size()==2)
+        {
+          std::string fileName=tokens[1];
+          if (!floppy.WriteFile(fileName.c_str(),-1,true))
+          {
+            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+          }
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'AddTapFile FilePath' \n",lineNumber);
         }
       }
       else

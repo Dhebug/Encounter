@@ -108,6 +108,153 @@ Floppy::~Floppy()
 }
 
 
+unsigned int crctab[256] =
+{
+  0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
+  0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
+  0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
+  0x9339, 0x8318, 0xB37B, 0xA35A, 0xD3BD, 0xC39C, 0xF3FF, 0xE3DE,
+  0x2462, 0x3443, 0x0420, 0x1401, 0x64E6, 0x74C7, 0x44A4, 0x5485,
+  0xA56A, 0xB54B, 0x8528, 0x9509, 0xE5EE, 0xF5CF, 0xC5AC, 0xD58D,
+  0x3653, 0x2672, 0x1611, 0x0630, 0x76D7, 0x66F6, 0x5695, 0x46B4,
+  0xB75B, 0xA77A, 0x9719, 0x8738, 0xF7DF, 0xE7FE, 0xD79D, 0xC7BC,
+  0x48C4, 0x58E5, 0x6886, 0x78A7, 0x0840, 0x1861, 0x2802, 0x3823,
+  0xC9CC, 0xD9ED, 0xE98E, 0xF9AF, 0x8948, 0x9969, 0xA90A, 0xB92B,
+  0x5AF5, 0x4AD4, 0x7AB7, 0x6A96, 0x1A71, 0x0A50, 0x3A33, 0x2A12, 
+  0xDBFD, 0xCBDC, 0xFBBF, 0xEB9E, 0x9B79, 0x8B58, 0xBB3B, 0xAB1A, 
+  0x6CA6, 0x7C87, 0x4CE4, 0x5CC5, 0x2C22, 0x3C03, 0x0C60, 0x1C41, 
+  0xEDAE, 0xFD8F, 0xCDEC, 0xDDCD, 0xAD2A, 0xBD0B, 0x8D68, 0x9D49, 
+  0x7E97, 0x6EB6, 0x5ED5, 0x4EF4, 0x3E13, 0x2E32, 0x1E51, 0x0E70,
+  0xFF9F, 0xEFBE, 0xDFDD, 0xCFFC, 0xBF1B, 0xAF3A, 0x9F59, 0x8F78, 
+  0x9188, 0x81A9, 0xB1CA, 0xA1EB, 0xD10C, 0xC12D, 0xF14E, 0xE16F,
+  0x1080, 0x00A1, 0x30C2, 0x20E3, 0x5004, 0x4025, 0x7046, 0x6067, 
+  0x83B9, 0x9398, 0xA3FB, 0xB3DA, 0xC33D, 0xD31C, 0xE37F, 0xF35E,
+  0x02B1, 0x1290, 0x22F3, 0x32D2, 0x4235, 0x5214, 0x6277, 0x7256,
+  0xB5EA, 0xA5CB, 0x95A8, 0x8589, 0xF56E, 0xE54F, 0xD52C, 0xC50D,
+  0x34E2, 0x24C3, 0x14A0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
+  0xA7DB, 0xB7FA, 0x8799, 0x97B8, 0xE75F, 0xF77E, 0xC71D, 0xD73C,
+  0x26D3, 0x36F2, 0x0691, 0x16B0, 0x6657, 0x7676, 0x4615, 0x5634,
+  0xD94C, 0xC96D, 0xF90E, 0xE92F, 0x99C8, 0x89E9, 0xB98A, 0xA9AB,
+  0x5844, 0x4865, 0x7806, 0x6827, 0x18C0, 0x08E1, 0x3882, 0x28A3,
+  0xCB7D, 0xDB5C, 0xEB3F, 0xFB1E, 0x8BF9, 0x9BD8, 0xABBB, 0xBB9A,
+  0x4A75, 0x5A54, 0x6A37, 0x7A16, 0x0AF1, 0x1AD0, 0x2AB3, 0x3A92,
+  0xFD2E, 0xED0F, 0xDD6C, 0xCD4D, 0xBDAA, 0xAD8B, 0x9DE8, 0x8DC9,
+  0x7C26, 0x6C07, 0x5C64, 0x4C45, 0x3CA2, 0x2C83, 0x1CE0, 0x0CC1,
+  0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
+  0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
+};
+
+void compute_crc(unsigned char *ptr,int count)
+{
+  int i;
+  unsigned short crc=0xFFFF,byte;
+  for (i=0;i<count;i++) {
+    byte= *ptr++;
+    crc=(crc<<8)^crctab[(crc>>8)^byte];
+  }
+  *ptr++=crc>>8;
+  *ptr++=crc&0xFF;
+}
+
+
+struct DskHeader
+{
+  char signature[8];
+  int sides;
+  int tracks;
+  int geometry;
+};
+
+
+bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors)
+{
+  // Heavily based on MakeDisk and Tap2DSk
+  int gap1,gap2,gap3;
+
+  switch (numberOfSectors) 
+  {
+  case 15: case 16: case 17:
+    gap1=72; gap2=34; gap3=50;
+    break;
+
+  case 18:
+    gap1=12; gap2=34; gap3=46;
+    break;
+
+  default:
+    ShowError("Unrealistic sectors per track number\n");
+  }
+
+  m_BufferSize=256+numberOfSides*numberOfTracks*6400;
+  m_Buffer=malloc(m_BufferSize);
+  if (m_Buffer)
+  {
+    m_TrackNumber =numberOfTracks;      // 42
+    m_SectorNumber=numberOfSectors;     // 17
+    m_SideNumber  =numberOfSides;       // 2
+
+    DskHeader* header=(DskHeader*)m_Buffer;
+    memcpy(header->signature,"MFM_DISK",8);
+    header->sides=numberOfSides;
+    header->tracks=numberOfTracks;
+    header->geometry=1;
+
+    unsigned char* trackbuf=(unsigned char*)m_Buffer+256;
+    for (int s=0;s<numberOfSides;s++)
+    {
+      for (int t=0;t<numberOfTracks;t++) 
+      {
+        {
+          int i;
+          int offset=0;
+          for (i=0;i<gap1-12;i++) 
+          {
+            trackbuf[offset++]=0x4E;
+          }
+          for (int j=0;j<numberOfSectors;j++) 
+          {
+            for (i=0;i<12;i++) trackbuf[offset++]=0;
+            for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
+            trackbuf[offset++]=0xFE;
+            for (i=0;i<6;i++) offset++;
+            for (i=0;i<gap2-12;i++) trackbuf[offset++]=0x22;
+            for (i=0;i<12;i++) trackbuf[offset++]=0;
+            for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
+            trackbuf[offset++]=0xFB;
+            for (i=0;i<258;i++) offset++;
+            for (i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;
+          }
+
+          while (offset<6400) 
+          {
+            trackbuf[offset++]=0x4E;
+          }
+        }
+        int offset=gap1;
+        for (int i=0;i<numberOfSectors;i++)
+        {
+          trackbuf[offset+4]=t;
+          trackbuf[offset+5]=s;
+          trackbuf[offset+6]=i+1;
+          trackbuf[offset+7]=1;
+          compute_crc(trackbuf+offset,4+4);
+          offset+=4+6;
+          offset+=gap2;
+          memset(trackbuf+offset+4,0,256);
+          compute_crc(trackbuf+offset,4+256);
+          offset+=256+6;
+          offset+=gap3;
+        }
+        trackbuf+=6400;
+      }
+    }
+    return true;
+  }
+
+  return false;
+}
+
+
 bool Floppy::LoadDisk(const char* fileName)
 {
   if (LoadFile(fileName,m_Buffer,m_BufferSize))
@@ -127,8 +274,11 @@ bool Floppy::LoadDisk(const char* fileName)
 
 bool Floppy::SaveDisk(const char* fileName) const
 {
-  assert(m_Buffer);
-  return SaveFile(fileName,m_Buffer,m_BufferSize);
+  if (m_Buffer)
+  {
+    return SaveFile(fileName,m_Buffer,m_BufferSize);
+  }
+  return false;
 }
 
 /*
@@ -168,8 +318,13 @@ unsigned int Floppy::GetDskImageOffset()
 
 
 // 0x0319 -> 793
-void Floppy::WriteSector(const char *fileName)
+bool Floppy::WriteSector(const char *fileName)
 {
+  if (!m_Buffer)
+  {
+    return false;
+  }
+
   std::string filteredFileName(StringTrim(fileName," \t\f\v\n\r"));
 
   void*      buffer;
@@ -195,10 +350,112 @@ void Floppy::WriteSector(const char *fileName)
   {
     ShowError("Boot Sector file '%s' not found",filteredFileName.c_str());
   }
+  return true;
 }
 
-int Floppy::WriteFile(const char *fileName,int loadAddress)
+
+class TapeInfo
 {
+public:
+  TapeInfo() 
+    : m_StartAddress(0)
+    , m_EndAddress(0)
+    , m_FileType(0)
+    , m_AutoStarts(false)
+    , m_PtrData(nullptr)
+    , m_DataSize(0)
+  {
+
+  }
+
+  bool ParseHeader(void* fileBuffer,size_t fileSize)
+  {
+    m_DataSize=fileSize;
+    m_PtrData =(unsigned char*)fileBuffer;
+    while (m_DataSize && (m_PtrData[0]==0x16))
+    {
+      m_DataSize--;
+      m_PtrData++;
+    }
+    if (m_DataSize>8 && (m_PtrData[0]==0x24) && (m_PtrData[1]==0x00) && (m_PtrData[2]==0x00) )
+    {
+      // At this point at least we have a valid synchro sequence and we know we have a usable header
+      m_FileType    = m_PtrData[3];
+      m_AutoStarts  =(m_PtrData[4]!=0);
+      m_EndAddress  =(m_PtrData[5]<<8)|m_PtrData[6];
+      m_StartAddress=(m_PtrData[7]<<8)|m_PtrData[8];
+
+      m_DataSize-=9;
+      m_PtrData+=9;
+
+      if (m_DataSize && (m_PtrData[0]==0x00) )
+      {
+        // Skip the zero
+        m_DataSize--;
+        m_PtrData++;
+
+        // Now we read the name
+        while (m_DataSize && (m_PtrData[0]!=0x00))
+        {
+          m_FileName+=m_PtrData[0];
+          m_DataSize--;
+          m_PtrData++;
+        }
+        if (m_DataSize && (m_PtrData[0]==0x00) )
+        {
+          // Skip the zero
+          m_DataSize--;
+          m_PtrData++;
+
+          // Now ptr points on the actual data
+          return true;
+        }
+      }
+    }
+    // Not a valid tape file
+    return false;
+  }
+
+public:
+  unsigned char*  m_PtrData;
+  int             m_DataSize;
+  int             m_StartAddress;
+  int             m_EndAddress;
+  int             m_FileType;
+  bool            m_AutoStarts;
+  std::string     m_FileName;
+};
+
+
+bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent)
+{
+  if (!m_Buffer)
+  {
+    return false;
+  }
+
+  void*      fileBuffer;
+  size_t     fileSize;
+  if (!LoadFile(fileName,fileBuffer,fileSize))
+  {
+    ShowError("Error can't open file '%s'\n",fileName);
+  }
+
+  unsigned char* fileData=(unsigned char*)fileBuffer;
+
+  if (removeHeaderIfPresent)
+  {
+    TapeInfo tapeInfo;
+    if (!tapeInfo.ParseHeader(fileBuffer,fileSize))
+    {
+      ShowError("File '%s' is not a valid tape file\n",fileName);
+    }
+    // If the file was a valid tape header, then we use these new information
+    fileData=tapeInfo.m_PtrData;
+    fileSize=tapeInfo.m_DataSize;
+    loadAddress=tapeInfo.m_StartAddress;
+  }
+
   FileEntry fileEntry;
   fileEntry.m_FloppyNumber=0;     // 0 for a single floppy program
 
@@ -226,23 +483,15 @@ int Floppy::WriteFile(const char *fileName,int loadAddress)
   }
   code_sector << m_CurrentSector;
 
-  void*      fileBuffer;
-  size_t     fileSize;
-  if (!LoadFile(fileName,fileBuffer,fileSize))
-  {
-    ShowError("Error can't open file '%s'\n",fileName);
-  }
-
   int nb_sectors_by_files=(fileSize+255)/256;
 
   fileEntry.m_StartTrack =m_CurrentTrack;           // 0 to 42 (80...)
   fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
   fileEntry.m_SectorCount=nb_sectors_by_files;      // Should probably be the real length
   fileEntry.m_LoadAddress=loadAddress;
-  fileEntry.m_TotalSize=fileSize;
+  fileEntry.m_TotalSize  =fileSize;
   fileEntry.m_FilePath   =fileName;
 
-  unsigned char* fileData=(unsigned char*)fileBuffer;
   while (fileSize)
   {
     unsigned int offset=SetPosition(m_CurrentTrack,m_CurrentSector);
@@ -266,7 +515,7 @@ int Floppy::WriteFile(const char *fileName,int loadAddress)
 
   m_FileEntries.push_back(fileEntry);
 
-  return nb_sectors_by_files;
+  return true;
 }
 
 
@@ -315,7 +564,16 @@ bool Floppy::SaveDescription(const char* fileName) const
   int counter=0;
   for (auto it(m_FileEntries.begin());it!=m_FileEntries.end();++it)
   {
-    layoutInfo << "// - Entry #" << counter << " '"<< it->m_FilePath << " ' loads at address " << it->m_LoadAddress << " starts on track " << it->m_StartTrack<< " sector "<< it->m_StartSector <<" and is " << it->m_SectorCount << " sectors long (" << it->m_TotalSize << " bytes).\n";
+    if (it->m_StartTrack<m_TrackNumber)
+    {
+      // First side
+      layoutInfo << "// - Entry #" << counter << " '"<< it->m_FilePath << " ' loads at address " << it->m_LoadAddress << " starts on track " << it->m_StartTrack<< " sector "<< it->m_StartSector <<" and is " << it->m_SectorCount << " sectors long (" << it->m_TotalSize << " bytes).\n";
+    }
+    else
+    {
+      // Second side
+      layoutInfo << "// - Entry #" << counter << " '"<< it->m_FilePath << " ' loads at address " << it->m_LoadAddress << " starts on the second side on track " << (it->m_StartTrack-m_TrackNumber) << " sector "<< it->m_StartSector <<" and is " << it->m_SectorCount << " sectors long (" << it->m_TotalSize << " bytes).\n";
+    }
     ++counter;
   }
   layoutInfo << "//\n";
