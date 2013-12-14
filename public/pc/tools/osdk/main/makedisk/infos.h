@@ -1,7 +1,7 @@
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	6
+#define TOOL_VERSION_MINOR	7
 
 /*
 
@@ -23,4 +23,7 @@ Change history for the FloppyBuilder
 - Added the 'LoadDiskTemplate' and 'DefineDisk' commands (and removed these parameters from the command line)
 - Added the 'AddTapFile' command, similar to 'AddFile' but automatically removes the header and extract the start address of the file
 
+0.7 - 2013/12/14
+- The code now automatically compute the gaps values based on the floppy structure parameters
+- The 'DefineDisk' command now works (at least for 2 sided, 42 tracks and 17 sectors floppies)
 */
