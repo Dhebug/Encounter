@@ -860,3 +860,24 @@ nov. 23 19:33:50 <Krillye>	:D
 nov. 23 19:33:52 <AuMTRoN>	knobs to turn == balls on top
 nov. 23 19:33:58 <Krillye>	GO!
 nov. 23 19:34:13 <_Dbug_>	And that means the end of the bip bip bip bip [no soud except toc toc toc toc] bip bip bip of the current oric demos
+
+
+
+// BORN.DSK=537856 bytes
+// 17*358=6086
+// *2=12172
+// *44=537856
+
+// Boot sector at offset 793 (Confirmed)
+// Loader at offset 0x734 (1844) - Confirmed
+
+// 793-256-156=381
+// 381-256=125
+
+// offset=256+156; // on ajoute le header
+// offset+=track*6400; // On avance à la bonne piste
+// offset+=(taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(sector-1);
+//
+// So: Offset = 256+156 + (track*6400) + (taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(sector-1)
+//            = 256+156 + (track*6400) + (256+43+59)*(sector-1)
+//            = 412     + (track*6400) + (358)*(sector-1)

@@ -6,17 +6,6 @@
 #include <sstream>
 #include <iostream>
 
-// File structure:
-// MFM_DISK
-
-#define header_dsk 256+156
-
-// Nombre de secteur pour une piste
-#define taille_piste			17
-#define taille_secteur			256
-// Header secteur
-#define nb_oct_before_sector  59 // Cas de 17 secteurs/pistes !
-#define nb_oct_after_sector   43      //#define nb_oct_after_sector 31
 
 
 // This class is meant to be mapped on memory area supposed to be of MFM disk format.
@@ -27,18 +16,29 @@ public:
   FloppyHeader();
   ~FloppyHeader();
 
+  void Clear();
+
   bool IsValidHeader() const;
 
+  void SetSignature(char signature[8]);
+
+  void SetSideNumber(int sideNumber);
   int GetSideNumber() const;
+
+  void SetTrackNumber(int trackNumber);
   int GetTrackNumber() const;
 
+  void SetGeometry(int geometry);
+  int GetGeometry() const;
+
+  int FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave) const;    ///< Note: This function will expect valid data to exist past the padding because it needs to scan the data...
 
 private:
-  char          m_Signature[8];       // (MFM_DISK)
-  unsigned char m_Sides[4];     // :     4 bytes (2)
-  unsigned char m_Tracks[4];    // :    4 bytes (42/$2A)
-  unsigned char m_Geometry[4];  // :  4 bytes (1)
-  unsigned char m_Padding[236]; // : 236 bytes (000000...00000 )
+  char          m_Signature[8];   // (MFM_DISK)
+  unsigned char m_Sides[4];       // :     4 bytes (2)
+  unsigned char m_Tracks[4];      // :    4 bytes (42/$2A)
+  unsigned char m_Geometry[4];    // :  4 bytes (1)
+  unsigned char m_Padding[236];   // : 236 bytes (000000...00000 )
 };
 
 
@@ -88,7 +88,7 @@ public:
   {
     m_CurrentSector++;
 
-    if (m_CurrentSector==taille_piste+1) // We reached the end of the track!
+    if (m_CurrentSector==m_SectorNumber+1) // We reached the end of the track!
     {
       m_CurrentSector=1;
       m_CurrentTrack++;
@@ -106,9 +106,11 @@ private:
 private:
   void*       m_Buffer;
   size_t      m_BufferSize;
-  int         m_TrackNumber;      // 42
-  int         m_SectorNumber;     // 17
-  int         m_SideNumber;       // 2
+  int         m_TrackNumber;          // 42
+  int         m_SectorNumber;         // 17
+  int         m_SideNumber;           // 2
+  int         m_OffsetFirstSector;    // 156 (Location of the first byte of data of the first sector)
+  int         m_InterSectorSpacing;   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
 
   int         m_CurrentTrack;
   int         m_CurrentSector;

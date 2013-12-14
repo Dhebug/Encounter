@@ -15,25 +15,6 @@
 
 
 
-// BORN.DSK=537856 bytes
-// 17*358=6086
-// *2=12172
-// *44=537856
-
-// Boot sector at offset 793 (Confirmed)
-// Loader at offset 0x734 (1844) - Confirmed
-
-// 793-256-156=381
-// 381-256=125
-
-// offset=256+156; // on ajoute le header
-// offset+=track*6400; // On avance à la bonne piste
-// offset+=(taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(sector-1);
-//
-// So: Offset = 256+156 + (track*6400) + (taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(sector-1)
-//            = 256+156 + (track*6400) + (256+43+59)*(sector-1)
-//            = 412     + (track*6400) + (358)*(sector-1)
-
 
 FloppyHeader::FloppyHeader()
 {
@@ -58,10 +39,39 @@ bool FloppyHeader::IsValidHeader() const
   return true;
 }
 
+
+void FloppyHeader::Clear()
+{
+  memset(this,0,sizeof(FloppyHeader));
+}
+
+void FloppyHeader::SetSignature(char signature[8])
+{
+  memcpy(m_Signature,signature,8);
+}
+
+
+void FloppyHeader::SetSideNumber(int sideNumber)
+{
+  m_Sides[0]=(sideNumber>>0)&255;
+  m_Sides[1]=(sideNumber>>8)&255;
+  m_Sides[2]=(sideNumber>>16)&255;
+  m_Sides[3]=(sideNumber>>24)&255;
+}
+
 int FloppyHeader::GetSideNumber() const
 {
   int sideNumber= ( ( ( ( (m_Sides[3]<<8) | m_Sides[2]) << 8 ) | m_Sides[1]) << 8 ) | m_Sides[0];
   return sideNumber;
+}
+
+
+void FloppyHeader::SetTrackNumber(int trackNumber)
+{
+  m_Tracks[0]=(trackNumber>>0)&255;
+  m_Tracks[1]=(trackNumber>>8)&255;
+  m_Tracks[2]=(trackNumber>>16)&255;
+  m_Tracks[3]=(trackNumber>>24)&255;
 }
 
 int FloppyHeader::GetTrackNumber() const
@@ -70,6 +80,84 @@ int FloppyHeader::GetTrackNumber() const
   return trackNumber;
 }
 
+void FloppyHeader::SetGeometry(int geometry)
+{
+  m_Geometry[0]=(geometry>>0)&255;
+  m_Geometry[1]=(geometry>>8)&255;
+  m_Geometry[2]=(geometry>>16)&255;
+  m_Geometry[3]=(geometry>>24)&255;
+}
+
+int FloppyHeader::GetGeometry() const
+{
+  int geometry= ( ( ( ( (m_Geometry[3]<<8) | m_Geometry[2]) << 8 ) | m_Geometry[1]) << 8 ) | m_Geometry[0];
+  return geometry;
+}
+
+int FloppyHeader::FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave) const
+{
+  firstSectorOffset=0;
+  sectorInterleave=0;
+
+  /*
+  Format of a track:
+  6400 bytes in total
+  - gap1: 72/12 bytes at the start of the track (with zeroes)
+  Then for each sector:
+  - ?:             4 bytes (A1 A1 A1 FE)
+  - track number:  1 byte (0-40-80...)
+  - side number:   1 byte (0-1)
+  - sector number: 1 byte (1-18-19)
+  - one:           1 byte (1)
+  - crc:           2 bytes (crc of the 8 previous bytes)
+  - gap2:          34 bytes (22xAE , 12x00)
+  - ?:             4 bytes (A1 A1 A1 FB)
+  - data:          256 bytes
+  - crc:           2 bytes (crc of the 256+4 previous bytes)
+  - gap3:          50/46 bytes
+  */
+  unsigned char* trackDataStart=(unsigned char*)(this+1);
+  unsigned char* trackData   =trackDataStart;
+  unsigned char* trackDataEnd=trackDataStart+6400;
+
+  int lastSectorFound=0;
+  while (trackData<(trackDataEnd-16))
+  {
+    if ( (trackData[0]==0xa1) && (trackData[1]==0xa1) && (trackData[2]==0xa1) && (trackData[3]==0xfe) )
+    {
+      // Found a marker for a synchronization sequence for a sector [#A1 #A1 #A1], [#FE Track Side Sector tt CRC CRC] 
+      int sectorNumber=trackData[6];
+      if (sectorNumber==(lastSectorFound+1))
+      {
+        lastSectorFound=sectorNumber;
+      }
+      else
+      {
+        ShowError("There's something wrong in the track structure of the floppy, the sector id does not make sense.");
+      }
+      trackData+=10;  // Skip synchronization sequence
+      trackData+=34;  // - gap2:          34 bytes (22xAE , 12x00)
+      trackData+=4;   // - ?:             4 bytes (A1 A1 A1 FB)
+
+      if (sectorNumber==1)
+      {
+        firstSectorOffset=trackData-trackDataStart;
+      }
+      else
+      if (sectorNumber==2)
+      {
+        sectorInterleave=trackData-trackDataStart-firstSectorOffset;
+      }
+      trackData+=256; // Sector data
+    }
+    else
+    {
+      trackData++;
+    }
+  }
+
+  return lastSectorFound;
+}
 
 
 
@@ -97,7 +185,9 @@ Floppy::Floppy() :
   m_TrackNumber(0),
   m_SectorNumber(0),
   m_CurrentTrack(0),
-  m_CurrentSector(1)
+  m_CurrentSector(1),
+  m_OffsetFirstSector(156),   // 156 (Location of the first byte of data of the first sector)
+  m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
 {
 }
 
@@ -157,15 +247,6 @@ void compute_crc(unsigned char *ptr,int count)
 }
 
 
-struct DskHeader
-{
-  char signature[8];
-  int sides;
-  int tracks;
-  int geometry;
-};
-
-
 bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors)
 {
   // Heavily based on MakeDisk and Tap2DSk
@@ -193,11 +274,12 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
     m_SectorNumber=numberOfSectors;     // 17
     m_SideNumber  =numberOfSides;       // 2
 
-    DskHeader* header=(DskHeader*)m_Buffer;
-    memcpy(header->signature,"MFM_DISK",8);
-    header->sides=numberOfSides;
-    header->tracks=numberOfTracks;
-    header->geometry=1;
+    FloppyHeader& header(*((FloppyHeader*)m_Buffer));
+    header.Clear();
+    header.SetSignature("MFM_DISK");
+    header.SetSideNumber(numberOfSides);
+    header.SetTrackNumber(numberOfTracks);
+    header.SetGeometry(1);
 
     unsigned char* trackbuf=(unsigned char*)m_Buffer+256;
     for (int s=0;s<numberOfSides;s++)
@@ -248,7 +330,11 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
         trackbuf+=6400;
       }
     }
-    return true;
+    if (header.IsValidHeader())
+    {
+      m_SectorNumber=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing);   //17;    // Can't figure out that from the header Oo
+      return true;
+    }
   }
 
   return false;
@@ -264,7 +350,7 @@ bool Floppy::LoadDisk(const char* fileName)
     {
       m_TrackNumber =header.GetTrackNumber();
       m_SideNumber  =header.GetSideNumber();
-      m_SectorNumber=17;    // Can't figure out that from the header Oo
+      m_SectorNumber=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing);   //17;    // Can't figure out that from the header Oo
       return true;
     }
   }
@@ -308,11 +394,16 @@ remplacée par un octet #F7. Comme on le voit, nombre de variantes sont utilisées
 15, 16 or 17 sectors: gap1=72; gap2=34; gap3=50;
           18 sectors: gap1=12; gap2=34; gap3=46;
 */
+// Header secteur
+#define nb_oct_before_sector  59      // Cas de 17 secteurs/pistes !
+#define nb_oct_after_sector   43      //#define nb_oct_after_sector 31
+
 unsigned int Floppy::GetDskImageOffset()
 {
-  unsigned int offset=256+156;     // Add the header
+  unsigned int offset=256;         // Add the DSK file header size
   offset+=m_CurrentTrack*6400;     // And move to the correct track
-  offset+=(taille_secteur+nb_oct_after_sector+nb_oct_before_sector)*(m_CurrentSector-1);
+  offset+=m_OffsetFirstSector;     // Add the offset from the start of track to the data of the first sector
+  offset+=m_InterSectorSpacing*(m_CurrentSector-1);
   return offset;
 }
 
