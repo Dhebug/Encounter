@@ -80,9 +80,10 @@
 // 12-12-2013 NB v0.097 Fixed the "Crucifix Conundrum"
 // 13-12-2013 NB v0.098 removed cantakeadjust (superfluous?) added SPIKE to finally solve
 //						the "LookBackInAnger" issue...
+// 14-12-2013 NB v0.099 forgot calchightarget after pacman4 (brokenarrow)
 /****************************************/
 // TODO:
-// Don't take a piece in the zone if it allows king to escape 
+// 
 //
 #include <lib.h>
 #define NORTH 0
@@ -591,7 +592,7 @@ void computerturn(){
   //a=0;Xenon();	
   //pacman6();	// "vinegar strokes"
   
-  //calchightarget();			// re-calculate hightarget after all other points have been added
+  calchightarget();			// re-calculate hightarget after all other points have been added
   if (hightarget == 0) {	// if can't move then stalemate
 	  game=-1;	// signify END of game: computer cannot move: stalemate 
 	  return;
@@ -682,7 +683,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 		if (( cantake == 0 )&&( surrounded < 3 )&&( RedFlagX == NO )) canbetaken(); // if cannot take can I be taken?
 		if (compass[origorient] == 0){ // means this piece can't be taken
 			foundpiece=1;
-			
+			/*
 			if ((( a<3 )&&(a<targetns)) || ((a>7)&&(a>targetns))){
 				startrow=a;destrow=a;startcol=0;destcol=10;
 				FindPieceB();// set foundpiece to 10 (don't leave ZONE unpopulated)
@@ -690,7 +691,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 			if ((( b<3 )&&(b<targetew)) || ((b>7)&&(b>targetew))){
 				startrow=0;destrow=10;startcol=b;destcol=b;
 				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
-			}
+			}*/
 			
 		}
 		
