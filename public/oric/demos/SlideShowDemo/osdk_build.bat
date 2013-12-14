@@ -48,7 +48,7 @@ ECHO Assembling loader
 %osdk%\bin\xa -DASSEMBLER=XA loader.asm -o ..\build\files\loader.o
 
 :: Call Makedisk once to create loader.cod
-%osdk%\bin\makedisk floppybuilderscript.txt default.dsk
+%osdk%\bin\makedisk floppybuilderscript.txt
 
 if "%FLOPPYPASS%"=="--" goto EndLoop
 set FLOPPYPASS=%FLOPPYPASS%-
@@ -61,7 +61,7 @@ goto Loop
 :: Call Makedisk another time to build the final disk
 ECHO.
 ECHO Building final floppy
-%osdk%\bin\makedisk floppybuilderscript.txt default.dsk
+%osdk%\bin\makedisk floppybuilderscript.txt
 popd
 
 
