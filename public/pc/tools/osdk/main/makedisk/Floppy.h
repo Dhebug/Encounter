@@ -66,12 +66,14 @@ public:
   Floppy();
   ~Floppy();
 
+  bool CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors);
   bool LoadDisk(const char* fileName);
   bool SaveDisk(const char* fileName) const;
   bool SaveDescription(const char* fileName) const;
 
-  void WriteSector(const char *fileName);
-  int WriteFile(const char *fileName,int loadAddress);   // Returns the number of sectors
+  bool WriteSector(const char *fileName);
+  bool WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent);
+  bool WriteTapeFile(const char *fileName);
 
   bool AddDefine(std::string defineName,std::string defineValue);
 
