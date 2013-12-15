@@ -210,7 +210,7 @@ r2_wait_completion
 .)
 
 
-sector_counter		.byt nb_sectors_loader
+sector_counter		.byt (($FFFF-location_loader)+1)/256
 
 
 _END_

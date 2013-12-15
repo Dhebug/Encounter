@@ -23,7 +23,6 @@ popd
 
 :: Build the slide show parts of the demo
 pushd code
-call osdk_build.bat
 
 :: Then this retarded code is called twice in a loop:
 :: The reason is, that we are including 'loader.cod' inside the loader, but the content is valid only after makedisk created the layout.
@@ -46,6 +45,10 @@ ECHO Assembling bootsectors
 ECHO.
 ECHO Assembling loader
 %osdk%\bin\xa -DASSEMBLER=XA loader.asm -o ..\build\files\loader.o
+
+ECHO.
+ECHO Assembling main program
+call osdk_build.bat
 
 :: Call Makedisk once to create loader.cod
 %osdk%\bin\makedisk floppybuilderscript.txt

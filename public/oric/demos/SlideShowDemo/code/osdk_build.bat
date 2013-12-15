@@ -20,6 +20,7 @@ CALL osdk_config.bat
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 
 copy build\final.out ..\build\files\slideshow.o
+copy build\symbols ..\build\symbols 
 GOTO End
 
 
