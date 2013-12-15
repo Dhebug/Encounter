@@ -14,6 +14,9 @@
     <ClCompile Include="sources\common.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="lz_pack.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\common.h">

@@ -32,7 +32,6 @@ Initialize
 
 StartUp
 	;jmp StartUp
-	jsr SetUpIrqHandlers	
 	jsr SoftHiresWithCopyCharset
 
 	;ldx #LOADER_FIRST_PICTURE
@@ -54,30 +53,6 @@ loop_forever_demo_finished
 	jmp loop_forever_demo_finished
 	
 	
-ClearZeroPage
-.(
-	lda #0
-	tax
-loop
-	sta $00,x
-	dex
-	bne loop	
-	rts	
-.)	
-
-	
-SetUpIrqHandlers
-	sei
-		
-	; Make sure the microdisc IRQ is disabled	
-	jsr WaitCompletion
-	
-	;lda #%10000100 			; Disable the FDC (Eprom select + FDC Interrupt request)
-	;sta MICRODISC
-
-	;jsr WaitCompletion
-
-	rts	
 		
 IrqHandler
 	sta irq_save_a
@@ -244,8 +219,7 @@ microdisc_read_data
     bmi microdisc_read_data
 
 	lda $313
-__auto_write_address
-	sta $c000,y
+	sta $200,y 		; Store the byte in page 2
 	iny
 
 	bne microdisc_read_data
@@ -253,8 +227,17 @@ __auto_write_address
 	lda FDC_status_register
 	and #$1C
 
-	; Try to let time to an IRQ to play
+	; Try to let time to an IRQ to play, and during that time copy the sector to the final location
 	cli
+
+	ldy #0
+loop_copy
+	lda $200,y 			; Load the byte from page 2
+__auto_write_address
+	sta $c000,y 		; Store it to the final location
+	iny
+	bne loop_copy
+
 	nop
 	nop
 	sei
@@ -264,17 +247,15 @@ __auto_write_address
 	dec sectors_to_go
 	bne read_sectors_loop
 
+	jsr WaitCompletion
+
 	; Data successfully loaded (we hope), so we restore the interrupts
 	cli
 	rts
 	
 ExecuteData	
-	jsr SetUpIrqHandlers
-	jsr ClearZeroPage
 __auto_execute_address
-	jsr $a000
-	jsr SetUpIrqHandlers
-	rts
+	jmp $a000
 
 
 WaitCompletion

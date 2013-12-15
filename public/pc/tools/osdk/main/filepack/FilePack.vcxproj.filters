@@ -19,9 +19,6 @@
     <ClCompile Include="sources\filepack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\lz_pack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="tests\unpack.s">

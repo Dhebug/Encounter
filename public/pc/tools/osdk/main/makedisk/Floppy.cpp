@@ -168,7 +168,9 @@ FileEntry::FileEntry() :
   m_StartSector(1),
   m_SectorCount(0),
   m_LoadAddress(0),
-  m_FileSize(0)
+  m_FileSize(0),
+  m_CompressionMode(e_CompressionNone),
+  m_CompressedFileSize(0)
 {
 }
 
@@ -186,6 +188,7 @@ Floppy::Floppy() :
   m_SectorNumber(0),
   m_CurrentTrack(0),
   m_CurrentSector(1),
+  m_CompressionMode(e_CompressionNone),
   m_OffsetFirstSector(156),   // 156 (Location of the first byte of data of the first sector)
   m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
 {
@@ -550,7 +553,6 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   FileEntry fileEntry;
   fileEntry.m_FloppyNumber=0;     // 0 for a single floppy program
 
-
   if (m_CurrentTrack>41) // face 2
   {
     fileEntry.m_StartSide=1;
@@ -566,9 +568,33 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
   fileEntry.m_SectorCount=nb_sectors_by_files;      // Should probably be the real length
   fileEntry.m_LoadAddress=loadAddress;
-  fileEntry.m_FileSize  =fileSize;
+  fileEntry.m_FileSize   =fileSize;
   fileEntry.m_FilePath   =fileName;
+  fileEntry.m_CompressionMode=e_CompressionNone;
+  fileEntry.m_CompressedFileSize=0;
 
+
+  std::vector<unsigned char> compressedBuffer;
+  if (m_CompressionMode==e_CompressionFilepack)
+  {
+    // So the user requested FilePack compression.
+    // Great, we can do that.
+    compressedBuffer.resize(fileSize);
+    size_t compressedFileSize=LZ77_Compress(fileData,compressedBuffer.data(),fileSize);
+    if (compressedFileSize<fileSize)
+    {
+      // We actually did manage to compress the data
+      fileData=compressedBuffer.data();
+      fileSize=compressedFileSize;
+
+      fileEntry.m_CompressionMode=e_CompressionFilepack;
+      fileEntry.m_CompressedFileSize=compressedFileSize;
+    }
+  }
+
+  //
+  // Finally write the data to the disk structure
+  //
   while (fileSize)
   {
     unsigned int offset=SetPosition(m_CurrentTrack,m_CurrentSector);
@@ -610,6 +636,7 @@ bool Floppy::SaveDescription(const char* fileName) const
 
   std::stringstream code_sector;
   std::stringstream code_track;
+  std::stringstream code_compressed;
   std::stringstream code_size_low;
   std::stringstream code_size_high;
   std::stringstream code_adress_low;
@@ -632,12 +659,29 @@ bool Floppy::SaveDescription(const char* fileName) const
 
       code_sector << ",";
       code_track << ",";
+
+      code_compressed << ",";
     }
     code_adress_low  << "<" << fileEntry.m_LoadAddress;
     code_adress_high << ">" << fileEntry.m_LoadAddress;
 
-    code_size_low << "<" << fileEntry.m_FileSize;
-    code_size_high << ">" << fileEntry.m_FileSize;
+
+    if (fileEntry.m_CompressionMode==e_CompressionNone)
+    {
+      // Uncompressed file
+      code_size_low << "<" << fileEntry.m_FileSize;
+      code_size_high << ">" << fileEntry.m_FileSize;
+
+      code_compressed << 0;
+    }
+    else
+    {
+      // Compressed file
+      code_size_low << "<" << fileEntry.m_CompressedFileSize;
+      code_size_high << ">" << fileEntry.m_CompressedFileSize;
+
+      code_compressed << 1;
+    }
 
     code_sector << fileEntry.m_StartSector;
 
@@ -654,7 +698,19 @@ bool Floppy::SaveDescription(const char* fileName) const
       file_list_summary << " starts on the second side on track " << (fileEntry.m_StartTrack-m_TrackNumber);
       code_track << fileEntry.m_StartTrack-m_TrackNumber+128;
     }
-    file_list_summary << " sector "<< fileEntry.m_StartSector <<" and is " << fileEntry.m_SectorCount << " sectors long (" << fileEntry.m_FileSize << " bytes).\n";
+    file_list_summary << " sector " << fileEntry.m_StartSector << " and is " << fileEntry.m_SectorCount << " sectors long ";
+
+    if (fileEntry.m_CompressionMode==e_CompressionNone)
+    {
+      // Uncompressed file
+      file_list_summary << "(" << fileEntry.m_FileSize << " bytes).\n";
+    }
+    else
+    {
+      // Compressed file
+      file_list_summary << "(" << fileEntry.m_CompressedFileSize << " compressed bytes: " << (fileEntry.m_CompressedFileSize*100)/fileEntry.m_FileSize << "% of " << fileEntry.m_FileSize << " bytes).\n";
+    }
+
     ++counter;
   }
 
@@ -676,6 +732,11 @@ bool Floppy::SaveDescription(const char* fileName) const
 
   layoutInfo << "FileLoadAdressHigh .byt ";
   layoutInfo << code_adress_high.str() << "\n";
+
+  layoutInfo << "FileCompression .byt ";
+  layoutInfo << code_compressed.str() << "\n";
+  
+
   layoutInfo << "#endif\n";
 
   layoutInfo << "#else\n";

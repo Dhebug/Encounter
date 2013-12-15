@@ -23,6 +23,8 @@ OutputFloppyFile ..\build\SlideShow.dsk
 
 AddDefine LOADER_SHOW_DEBUGINFO 1
 
+;SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
+
 ;
 ; This defines the bootsectors to use for the various operating systems
 ; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
