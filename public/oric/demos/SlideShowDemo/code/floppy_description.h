@@ -6,11 +6,11 @@
 //
 // Information for the Assembler
 //
-FileStartSector .byt 5,13,1,16,14,12,10,8,6,4,2,17,15,13,11,9,7,5,3,1,16,14,12,10,5,3,16
-FileStartTrack .byt 0,1,3,4,6,8,10,12,14,16,18,19,21,23,25,27,29,31,33,35,36,38,40,128,130,131,132
-FileSectorCount .byt 3,22,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,29,15,30,15
-FileLoadAdressLow .byt <64512,<1024,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
-FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
+FileStartSector .byt 5,13,12,10,8,6,4,2,17,15,13,11,9,7,5,3,1,16,14,12,10,8,6,4,6,1,16,12
+FileStartTrack .byt 0,1,9,11,13,15,17,19,20,22,24,26,28,30,32,34,36,37,39,41,129,131,133,135,136,138,138,140
+FileSectorCount .byt 4,135,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,19,29,15,30,15
+FileLoadAdressLow .byt <64512,<1024,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
+FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
 #else
 //
 // Information for the Compiler
@@ -23,37 +23,39 @@ FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>
 #define FLOPPY_SECTOR_PER_TRACK 17   // Number of sectors per track
 //
 // List of files written to the floppy
-// - Entry #0 '..\build\files\loader.o ' loads at address 64512 starts on track 0 sector 5 and is 3 sectors long (621 bytes).
-// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 13 and is 22 sectors long (5389 bytes).
-// - Entry #2 '..\build\files\damsel.hir ' loads at address 40960 starts on track 3 sector 1 and is 32 sectors long (8000 bytes).
-// - Entry #3 '..\build\files\dbug_windows95.hir ' loads at address 40960 starts on track 4 sector 16 and is 32 sectors long (8000 bytes).
-// - Entry #4 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 6 sector 14 and is 32 sectors long (8000 bytes).
-// - Entry #5 '..\build\files\diamond_2.hir ' loads at address 40960 starts on track 8 sector 12 and is 32 sectors long (8000 bytes).
-// - Entry #6 '..\build\files\exocet_blueface.hir ' loads at address 40960 starts on track 10 sector 10 and is 32 sectors long (8000 bytes).
-// - Entry #7 '..\build\files\exocet_fists.hir ' loads at address 40960 starts on track 12 sector 8 and is 32 sectors long (8000 bytes).
-// - Entry #8 '..\build\files\exocet_moonguy.hir ' loads at address 40960 starts on track 14 sector 6 and is 32 sectors long (8000 bytes).
-// - Entry #9 '..\build\files\karate.hir ' loads at address 40960 starts on track 16 sector 4 and is 32 sectors long (8000 bytes).
-// - Entry #10 '..\build\files\karate_2.hir ' loads at address 40960 starts on track 18 sector 2 and is 32 sectors long (8000 bytes).
-// - Entry #11 '..\build\files\krillys.hir ' loads at address 40960 starts on track 19 sector 17 and is 32 sectors long (8000 bytes).
-// - Entry #12 '..\build\files\mooz_barbitoric.hir ' loads at address 40960 starts on track 21 sector 15 and is 32 sectors long (8000 bytes).
-// - Entry #13 '..\build\files\mooz_oric.hir ' loads at address 40960 starts on track 23 sector 13 and is 32 sectors long (8000 bytes).
-// - Entry #14 '..\build\files\mooz_santa.hir ' loads at address 40960 starts on track 25 sector 11 and is 32 sectors long (8000 bytes).
-// - Entry #15 '..\build\files\mooz_supertomato.hir ' loads at address 40960 starts on track 27 sector 9 and is 32 sectors long (8000 bytes).
-// - Entry #16 '..\build\files\prez_story.hir ' loads at address 40960 starts on track 29 sector 7 and is 32 sectors long (8000 bytes).
-// - Entry #17 '..\build\files\tomb_1.hir ' loads at address 40960 starts on track 31 sector 5 and is 32 sectors long (8000 bytes).
-// - Entry #18 '..\build\files\trois_mats.hir ' loads at address 40960 starts on track 33 sector 3 and is 32 sectors long (8000 bytes).
-// - Entry #19 '..\build\files\twilighte_beast.hir ' loads at address 40960 starts on track 35 sector 1 and is 32 sectors long (8000 bytes).
-// - Entry #20 '..\build\files\twilighte_dragons.hir ' loads at address 40960 starts on track 36 sector 16 and is 32 sectors long (8000 bytes).
-// - Entry #21 '..\build\files\twilighte_pegasus.hir ' loads at address 40960 starts on track 38 sector 14 and is 32 sectors long (8000 bytes).
-// - Entry #22 '..\build\files\twilighte_sonix.hir ' loads at address 40960 starts on track 40 sector 12 and is 32 sectors long (8000 bytes).
-// - Entry #23 '..\build\files\music_cuddly.ym ' loads at address 49152 starts on the second side on track 0 sector 10 and is 29 sectors long (7347 bytes).
-// - Entry #24 '..\build\files\northtar.ym ' loads at address 49152 starts on the second side on track 2 sector 5 and is 15 sectors long (3783 bytes).
-// - Entry #25 '..\build\files\music_no_second_prize.ym ' loads at address 49152 starts on the second side on track 3 sector 3 and is 30 sectors long (7478 bytes).
-// - Entry #26 '..\build\files\music_leaving_terramis.ym ' loads at address 49152 starts on the second side on track 4 sector 16 and is 15 sectors long (3716 bytes).
+// - Entry #0 '..\build\files\loader.o ' loads at address 64512 starts on track 0 sector 5 and is 4 sectors long (1024 bytes).
+// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 13 and is 135 sectors long (34308 bytes).
+// - Entry #2 '..\build\files\damsel.hir ' loads at address 40960 starts on track 9 sector 12 and is 32 sectors long (8000 bytes).
+// - Entry #3 '..\build\files\dbug_windows95.hir ' loads at address 40960 starts on track 11 sector 10 and is 32 sectors long (8000 bytes).
+// - Entry #4 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 13 sector 8 and is 32 sectors long (8000 bytes).
+// - Entry #5 '..\build\files\diamond_2.hir ' loads at address 40960 starts on track 15 sector 6 and is 32 sectors long (8000 bytes).
+// - Entry #6 '..\build\files\exocet_blueface.hir ' loads at address 40960 starts on track 17 sector 4 and is 32 sectors long (8000 bytes).
+// - Entry #7 '..\build\files\exocet_fists.hir ' loads at address 40960 starts on track 19 sector 2 and is 32 sectors long (8000 bytes).
+// - Entry #8 '..\build\files\exocet_moonguy.hir ' loads at address 40960 starts on track 20 sector 17 and is 32 sectors long (8000 bytes).
+// - Entry #9 '..\build\files\karate.hir ' loads at address 40960 starts on track 22 sector 15 and is 32 sectors long (8000 bytes).
+// - Entry #10 '..\build\files\karate_2.hir ' loads at address 40960 starts on track 24 sector 13 and is 32 sectors long (8000 bytes).
+// - Entry #11 '..\build\files\krillys.hir ' loads at address 40960 starts on track 26 sector 11 and is 32 sectors long (8000 bytes).
+// - Entry #12 '..\build\files\mooz_barbitoric.hir ' loads at address 40960 starts on track 28 sector 9 and is 32 sectors long (8000 bytes).
+// - Entry #13 '..\build\files\mooz_oric.hir ' loads at address 40960 starts on track 30 sector 7 and is 32 sectors long (8000 bytes).
+// - Entry #14 '..\build\files\mooz_santa.hir ' loads at address 40960 starts on track 32 sector 5 and is 32 sectors long (8000 bytes).
+// - Entry #15 '..\build\files\mooz_supertomato.hir ' loads at address 40960 starts on track 34 sector 3 and is 32 sectors long (8000 bytes).
+// - Entry #16 '..\build\files\prez_story.hir ' loads at address 40960 starts on track 36 sector 1 and is 32 sectors long (8000 bytes).
+// - Entry #17 '..\build\files\tomb_1.hir ' loads at address 40960 starts on track 37 sector 16 and is 32 sectors long (8000 bytes).
+// - Entry #18 '..\build\files\trois_mats.hir ' loads at address 40960 starts on track 39 sector 14 and is 32 sectors long (8000 bytes).
+// - Entry #19 '..\build\files\twilighte_beast.hir ' loads at address 40960 starts on track 41 sector 12 and is 32 sectors long (8000 bytes).
+// - Entry #20 '..\build\files\twilighte_dragons.hir ' loads at address 40960 starts on the second side on track 1 sector 10 and is 32 sectors long (8000 bytes).
+// - Entry #21 '..\build\files\twilighte_pegasus.hir ' loads at address 40960 starts on the second side on track 3 sector 8 and is 32 sectors long (8000 bytes).
+// - Entry #22 '..\build\files\twilighte_sonix.hir ' loads at address 40960 starts on the second side on track 5 sector 6 and is 32 sectors long (8000 bytes).
+// - Entry #23 '..\build\files\font_24x20.hir ' loads at address 40960 starts on the second side on track 7 sector 4 and is 19 sectors long (4800 bytes).
+// - Entry #24 '..\build\files\music_cuddly.ym ' loads at address 49152 starts on the second side on track 8 sector 6 and is 29 sectors long (7347 bytes).
+// - Entry #25 '..\build\files\northtar.ym ' loads at address 49152 starts on the second side on track 10 sector 1 and is 15 sectors long (3783 bytes).
+// - Entry #26 '..\build\files\music_no_second_prize.ym ' loads at address 49152 starts on the second side on track 10 sector 16 and is 30 sectors long (7478 bytes).
+// - Entry #27 '..\build\files\music_leaving_terramis.ym ' loads at address 49152 starts on the second side on track 12 sector 12 and is 15 sectors long (3716 bytes).
 //
 #define LOADER_SHOW_DEBUGINFO 1
 #define LOADER_SLIDESHOW 1
 #define LOADER_FIRST_PICTURE 2
 #define LOADER_LAST_PICTURE 23
-#define LOADER_FIRST_MUSIC 23
-#define LOADER_LAST_MUSIC 27
+#define LOADER_FONT_24x20 23
+#define LOADER_FIRST_MUSIC 24
+#define LOADER_LAST_MUSIC 28

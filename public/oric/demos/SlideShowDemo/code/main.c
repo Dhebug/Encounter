@@ -14,8 +14,21 @@ extern unsigned char MusicLooped;
 extern Mym_Initialize();
 extern Mym_ReInitialize();
 
+// transitions.s
+extern unsigned char PictureLoadBuffer[];
+extern void PictureTransitionFromTopAndBottom();
+
+// scroller.s
+extern unsigned char FontBuffer[];
+
+
 // loader_api.s
 extern unsigned char LoaderApiEntryIndex;
+extern unsigned char LoaderApiAddressLow;
+extern unsigned char LoaderApiAddressHigh;
+extern void* LoaderApiAddress;
+
+extern void SetLoadAddress();
 extern void LoadFile();
 
 void Pause()
@@ -41,9 +54,17 @@ void main()
 	MusicLooped=1;
 
 	System_InstallIRQ_SimpleVbl();
-	LoaderApiEntryIndex=LOADER_FIRST_MUSIC;
+
+	// Load and play the music
+	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+3;
 	LoadFile();
 	Mym_ReInitialize();
+
+    // Load the font
+	LoaderApiEntryIndex=LOADER_FONT_24x20;
+	LoaderApiAddress=FontBuffer;
+	SetLoadAddress();
+	LoadFile();
 
 	while (1)
 	{		
@@ -65,7 +86,13 @@ void main()
          
 		for (LoaderApiEntryIndex=LOADER_FIRST_PICTURE;LoaderApiEntryIndex<LOADER_LAST_PICTURE;LoaderApiEntryIndex++)
 		{
+			LoaderApiAddress=PictureLoadBuffer;
+			SetLoadAddress();
 			LoadFile();
+
+			//memcpy((unsigned char*)0xa000,PictureLoadBuffer,8000);
+			PictureTransitionFromTopAndBottom();
+
 			Pause();
 		}
 
@@ -80,6 +107,9 @@ void main()
 		VSync();
 	}
 
-	memset((unsigned char*)0xa000,0,8000);	
+	//memset((unsigned char*)0xa000,0,8000);	
 }
+
+
+
 

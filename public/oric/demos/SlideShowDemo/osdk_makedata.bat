@@ -27,10 +27,11 @@ SET PARAMS=-f1 -d0 -o2
 %PICTCONV% %PARAMS% data\twilighte_dragons.gif build\files\twilighte_dragons.hir
 %PICTCONV% %PARAMS% data\twilighte_pegasus.gif build\files\twilighte_pegasus.hir
 %PICTCONV% %PARAMS% data\twilighte_sonix.gif build\files\twilighte_sonix.hir
-:EndPictures
-
 %PICTCONV% %PARAMS% data\mooz_barbitoric.gif build\files\mooz_barbitoric.hir
 %PICTCONV% %PARAMS% data\mooz_santa.png build\files\mooz_santa.hir
+:EndPictures
+%PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
+
 
 
 ::goto EndMusics

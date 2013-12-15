@@ -3,7 +3,6 @@
 
 #define COLOR(color) pha:lda #16+(color&7):sta $bb80+40*27:pla
 #define STOP(color) pha:lda #16+(color&7):sta $bb80+40*27:jmp *:pla
-#define INSTALL_HANDLER(address,callback) lda #$4c:sta address:lda #<callback:sta address+1:lda #>callback:sta address+2 	; jmp=$4c
 
 	.zero
 	
@@ -18,12 +17,6 @@ irq_save_a			.dsb 1      ; To preserve the accumulator value in the IRQ code
 
 	.text
 
-; FFF7-FFF9 - Load File (JMP/LOW/HIGH) - file to load in X register
-; FFFA-FFFB - NMI Vector (Usually points to $0247)
-; FFFC-FFFD - RESET Vector (Usually points to $F88F)
-; FFFE-FFFF - IRQ Vector (Normally points to $0244)
-;
-
 	*=location_loader
 
 
@@ -36,18 +29,7 @@ Initialize
 ; Some local variables we need
 
 StartUp
-	; Set-up a safe irq that does nothing (just contains a RTI instruction)
-	; This helps avoiding crashes if the user presses RESET for example :)
-	lda #<IrqDoNothing    ; NMI vector
-	sta $fffa
-	sta $fffc
-	lda #>IrqDoNothing	  ; RESET vector
-	sta $fffb
-	sta $fffd
-
-	; Install our API (top of memory function calls)
-    INSTALL_HANDLER($FFF7,LoadData)
-
+	;jmp StartUp
 	jsr SetUpIrqHandlers	
 	jsr SoftHiresWithCopyCharset
 
@@ -67,10 +49,8 @@ StartUp
 	; End of demo - Just stay there doing nothing
 	;
 	sei
-.(	
-loop
-	jmp loop
-.)
+loop_forever_demo_finished
+	jmp loop_forever_demo_finished
 	
 	
 ClearZeroPage
@@ -87,12 +67,7 @@ loop
 	
 SetUpIrqHandlers
 	sei
-	
-	ldy #<IrqHandler
-	lda #>IrqHandler
-    sty $fffe
-	sta $ffff
-	
+		
 	; Make sure the microdisc IRQ is disabled	
 	jsr WaitCompletion
 	
@@ -133,10 +108,18 @@ from_brk
 	jmp from_brk
 
 
+		
 	
-HexData	.byt "0123456789ABCDEF"
-	
-	
+; X=File index
+; A=Low
+; Y=High
+SetLoadAddress
+	sta FileLoadAdressLow,x
+	tya
+	sta FileLoadAdressHigh,x
+	rts
+
+
 ; X=File index
 LoadData
 	sei
@@ -301,6 +284,8 @@ r2_wait_completion
 	rts
 
 #ifdef LOADER_SHOW_DEBUGINFO	
+HexData	.byt "0123456789ABCDEF"
+
 DisplayPosition	
 	.(
 	lda current_side	
@@ -409,4 +394,37 @@ hm_02
 	bne hm_04
 	rts
 
+_EndLoaderCode
+
+;
+; This is free memory that can be used, when it reaches zero then the loader start address should be changed
+;
+
+	.dsb $FFF4 - _EndLoaderCode
+
+_Vectors
+
+#if ( _Vectors <> $FFF4 )
+#error - Vector address is incorrect, loader will crash
+#else
+
+;
+; Here are the functions that the user can call from his own application
+;
+_ApiSetLoadAddress	.byt $4c,<SetLoadAddress,>SetLoadAddress 	; $FFF4
+_ApiSetLoadData		.byt $4c,<LoadData,>LoadData 				; $FFF7
+
+;
+; These three HAVE to be at these precise adresses, they map to hardware registers
+;
+_VectorNMI			.word IrqDoNothing		; FFFA-FFFB - NMI Vector (Usually points to $0247)
+_VectorReset		.word IrqDoNothing		; FFFC-FFFD - RESET Vector (Usually points to $F88F)
+_VectorIRQ			.word IrqHandler 		; FFFE-FFFF - IRQ Vector (Normally points to $0244)
+
+#echo Remaining space in the loader code:
+#print (_Vectors - _EndLoaderCode) 
+
+#endif
+
+; End of the loader - Nothing should come after because it's out of the addressable memory range :)
 

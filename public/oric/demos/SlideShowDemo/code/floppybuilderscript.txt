@@ -74,6 +74,8 @@ AddFile ..\build\files\twilighte_pegasus.hir $a000
 AddFile ..\build\files\twilighte_sonix.hir $a000
 AddDefine LOADER_LAST_PICTURE {FileIndex}
 
+AddDefine LOADER_FONT_24x20 {FileIndex}
+AddFile ..\build\files\font_24x20.hir $a000
 
 AddDefine LOADER_FIRST_MUSIC {FileIndex}
 ;AddFile ..\build\files\test.ym $c000

@@ -7,7 +7,7 @@
 IF "%OSDK%"=="" GOTO ErCfg
 
 
-%osdk%\bin\MemMap.exe build\symbols map.htm LcpIntro %OSDK%\documentation\documentation.css
+%osdk%\bin\MemMap.exe build\symbols map.htm SlideShow %OSDK%\documentation\documentation.css
 explorer map.htm
 
 
