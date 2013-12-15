@@ -168,7 +168,7 @@ FileEntry::FileEntry() :
   m_StartSector(1),
   m_SectorCount(0),
   m_LoadAddress(0),
-  m_TotalSize(0)
+  m_FileSize(0)
 {
 }
 
@@ -550,29 +550,15 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   FileEntry fileEntry;
   fileEntry.m_FloppyNumber=0;     // 0 for a single floppy program
 
-  if (!m_FileEntries.empty())
-  {
-    code_adress_low  << ",";
-    code_adress_high << ",";
-
-    code_sector << ",";
-    code_track << ",";
-    code_nombre_secteur << ",";
-  }
-  code_adress_low  << "<" << loadAddress;
-  code_adress_high << ">" << loadAddress;
 
   if (m_CurrentTrack>41) // face 2
   {
     fileEntry.m_StartSide=1;
-    code_track << m_CurrentTrack-42+128;
   }
   else
   {
     fileEntry.m_StartSide=0;
-    code_track << m_CurrentTrack;
   }
-  code_sector << m_CurrentSector;
 
   int nb_sectors_by_files=(fileSize+255)/256;
 
@@ -580,7 +566,7 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
   fileEntry.m_SectorCount=nb_sectors_by_files;      // Should probably be the real length
   fileEntry.m_LoadAddress=loadAddress;
-  fileEntry.m_TotalSize  =fileSize;
+  fileEntry.m_FileSize  =fileSize;
   fileEntry.m_FilePath   =fileName;
 
   while (fileSize)
@@ -602,8 +588,6 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   }
   free(fileBuffer);
 
-  code_nombre_secteur << nb_sectors_by_files;
-
   m_FileEntries.push_back(fileEntry);
 
   return true;
@@ -622,6 +606,58 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "//\n";
   layoutInfo << "// Information for the Assembler\n";
   layoutInfo << "//\n";
+  layoutInfo << "#ifdef LOADER\n";
+
+  std::stringstream code_sector;
+  std::stringstream code_track;
+  std::stringstream code_size_low;
+  std::stringstream code_size_high;
+  std::stringstream code_adress_low;
+  std::stringstream code_adress_high;
+
+  std::stringstream file_list_summary;
+
+  int counter=0;
+  for (auto it(m_FileEntries.begin());it!=m_FileEntries.end();++it)
+  {
+    const FileEntry& fileEntry(*it);
+
+    if (it!=m_FileEntries.begin())
+    {
+      code_adress_low  << ",";
+      code_adress_high << ",";
+
+      code_size_low << ",";
+      code_size_high << ",";
+
+      code_sector << ",";
+      code_track << ",";
+    }
+    code_adress_low  << "<" << fileEntry.m_LoadAddress;
+    code_adress_high << ">" << fileEntry.m_LoadAddress;
+
+    code_size_low << "<" << fileEntry.m_FileSize;
+    code_size_high << ">" << fileEntry.m_FileSize;
+
+    code_sector << fileEntry.m_StartSector;
+
+    file_list_summary << "// - Entry #" << counter << " '"<< fileEntry.m_FilePath << " ' loads at address " << fileEntry.m_LoadAddress;
+    if (fileEntry.m_StartTrack<m_TrackNumber)
+    {
+      // First side
+      file_list_summary << " starts on track " << fileEntry.m_StartTrack;
+      code_track << fileEntry.m_StartTrack;
+    }
+    else
+    {
+      // Second side
+      file_list_summary << " starts on the second side on track " << (fileEntry.m_StartTrack-m_TrackNumber);
+      code_track << fileEntry.m_StartTrack-m_TrackNumber+128;
+    }
+    file_list_summary << " sector "<< fileEntry.m_StartSector <<" and is " << fileEntry.m_SectorCount << " sectors long (" << fileEntry.m_FileSize << " bytes).\n";
+    ++counter;
+  }
+
 
   layoutInfo << "FileStartSector .byt ";
   layoutInfo << code_sector.str() << "\n";
@@ -629,14 +665,18 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "FileStartTrack .byt ";
   layoutInfo << code_track.str() << "\n";
 
-  layoutInfo << "FileSectorCount .byt ";
-  layoutInfo << code_nombre_secteur.str() << "\n";
+  layoutInfo << "FileSizeLow .byt ";
+  layoutInfo << code_size_low.str() << "\n";
+
+  layoutInfo << "FileSizeHigh .byt ";
+  layoutInfo << code_size_high.str() << "\n";
 
   layoutInfo << "FileLoadAdressLow .byt ";
   layoutInfo << code_adress_low.str() << "\n";
 
   layoutInfo << "FileLoadAdressHigh .byt ";
   layoutInfo << code_adress_high.str() << "\n";
+  layoutInfo << "#endif\n";
 
   layoutInfo << "#else\n";
   layoutInfo << "//\n";
@@ -647,26 +687,13 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "\n";
   layoutInfo << "//\n";
   layoutInfo << "// Summary for this floppy building session:\n";
+  layoutInfo << "#define FLOPPY_SIDE_NUMBER " << m_SideNumber << "    // Number of sides\n";
   layoutInfo << "#define FLOPPY_TRACK_NUMBER " << m_TrackNumber << "    // Number of tracks\n";
   layoutInfo << "#define FLOPPY_SECTOR_PER_TRACK " << m_SectorNumber <<  "   // Number of sectors per track\n";
   layoutInfo << "//\n";
 
   layoutInfo << "// List of files written to the floppy\n";
-  int counter=0;
-  for (auto it(m_FileEntries.begin());it!=m_FileEntries.end();++it)
-  {
-    if (it->m_StartTrack<m_TrackNumber)
-    {
-      // First side
-      layoutInfo << "// - Entry #" << counter << " '"<< it->m_FilePath << " ' loads at address " << it->m_LoadAddress << " starts on track " << it->m_StartTrack<< " sector "<< it->m_StartSector <<" and is " << it->m_SectorCount << " sectors long (" << it->m_TotalSize << " bytes).\n";
-    }
-    else
-    {
-      // Second side
-      layoutInfo << "// - Entry #" << counter << " '"<< it->m_FilePath << " ' loads at address " << it->m_LoadAddress << " starts on the second side on track " << (it->m_StartTrack-m_TrackNumber) << " sector "<< it->m_StartSector <<" and is " << it->m_SectorCount << " sectors long (" << it->m_TotalSize << " bytes).\n";
-    }
-    ++counter;
-  }
+  layoutInfo << file_list_summary.str();
   layoutInfo << "//\n";
 
   if (m_DefineList.empty())

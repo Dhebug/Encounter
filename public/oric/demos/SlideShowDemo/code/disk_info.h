@@ -1,7 +1,10 @@
 ;
 ; http://oric.free.fr/programming.html#disc
 ;
-#define location_loader $fc00
+#define location_loader 		$fc00		; Need to match the information set in loader.asm
+#define loader_track_position 	0			; Location of the loader on the disk (track number)
+#define loader_sector_position 	4			; Location of the loader on the disk (sector number)
+
 #define wait_status_floppy 30
 
 #define FDC_command_register	$0310

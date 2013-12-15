@@ -1,7 +1,7 @@
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	7
+#define TOOL_VERSION_MINOR	8
 
 /*
 
@@ -26,4 +26,8 @@ Change history for the FloppyBuilder
 0.7 - 2013/12/14
 - The code now automatically compute the gaps values based on the floppy structure parameters
 - The 'DefineDisk' command now works (at least for 2 sided, 42 tracks and 17 sectors floppies)
+
+0.8 - 2013/12/15
+- Cleaned up a bit the output description generation
+
 */

@@ -96,6 +96,8 @@ void main(int argc, char *argv[])
     std::vector<std::string> tokens;
     while (std::getline(iss,item,' ')) 
     {
+      // Remove eventual superfluous spaces and tabs
+      item=StringTrim(item);
       if (!item.empty())
       {
         tokens.push_back(item);
@@ -214,7 +216,7 @@ void main(int argc, char *argv[])
         }
         else
         {
-          ShowError("Syntax error line (%d), syntax is 'SetBootSector FilePath' \n",lineNumber);
+          ShowError("Syntax error line (%d), syntax is 'WriteSector FilePath' \n",lineNumber);
         }
       }
       else

@@ -54,7 +54,7 @@ public:
   int         m_StartTrack;       // 0 to 42 (80...)
   int         m_StartSector;      // 1 to 17 (or 16 or 18...)
   int         m_SectorCount;
-  int         m_TotalSize;
+  int         m_FileSize;
   int         m_LoadAddress;
   std::string m_FilePath;
 };
@@ -117,12 +117,6 @@ private:
 
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
-
-  std::stringstream code_sector;
-  std::stringstream code_track;
-  std::stringstream code_nombre_secteur;
-  std::stringstream code_adress_low;
-  std::stringstream code_adress_high;
 };
 
 #endif

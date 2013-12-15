@@ -17,9 +17,6 @@
 #define OPCODE_RTS				$60
 
 
-#define loader_track_position 	0	; Location of the loader on the disk (track number)
-#define loader_sector_position 	5	; Location of the loader on the disk (sector number)
-
 #include "disk_info.h"
 
 	.zero
