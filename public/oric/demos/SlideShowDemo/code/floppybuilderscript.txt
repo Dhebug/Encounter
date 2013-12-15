@@ -33,20 +33,20 @@ AddDefine LOADER_SHOW_DEBUGINFO 1
 ; write a message saying that this floppy needs to be booted on a Microdisc compatible system.
 ;
 SetPosition 0 1
-WriteSector ..\build\files\sector_1-jasmin.o
-WriteSector ..\build\files\sector_2-microdisc.o
-WriteSector ..\build\files\sector_3.o
+WriteSector ..\build\files\sector_1-jasmin.o 		; Sector 1
+WriteSector ..\build\files\sector_2-microdisc.o 	; Sector 2
+WriteSector ..\build\files\sector_3.o 				; Sector 3
 
 ;
 ; Now here is the loader code, that one is Microdisc only
 ;
-SetPosition 0 5
-AddFile ..\build\files\loader.o $fc00
+SetPosition 0 4
+AddFile ..\build\files\loader.o $fc00 				; Sector 4
 
 ;
 ; Then the files used in the demo
 ;
-SetPosition 1 13
+SetPosition 1 1
 AddDefine LOADER_SLIDESHOW {FileIndex}
 AddFile ..\build\files\slideshow.o $400
 

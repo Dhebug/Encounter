@@ -39,12 +39,18 @@ echo %FLOPPYPASS%
 ECHO.
 ECHO Assembling bootsectors
 %osdk%\bin\xa -DASSEMBLER=XA sector_1-jasmin.asm -o ..\build\files\sector_1-jasmin.o
+IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa -DASSEMBLER=XA sector_2-microdisc.asm -o ..\build\files\sector_2-microdisc.o
+IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa -DASSEMBLER=XA sector_3.asm -o ..\build\files\sector_3.o
+IF ERRORLEVEL 1 GOTO Error
 
 ECHO.
 ECHO Assembling loader
 %osdk%\bin\xa -DASSEMBLER=XA loader.asm -o ..\build\files\loader.o
+IF ERRORLEVEL 1 GOTO Error
+
+::IF NOT EXIST BUILD\symbols GOTO NoSymbol
 
 ECHO.
 ECHO Assembling main program
@@ -66,7 +72,11 @@ ECHO.
 ECHO Building final floppy
 %osdk%\bin\makedisk floppybuilderscript.txt
 popd
+goto End
 
+:Error
+ECHO.
+ECHO An Error has happened. Build stopped
 
-:end
+:End
 pause
