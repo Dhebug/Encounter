@@ -265,6 +265,30 @@ void main(int argc, char *argv[])
         }
       }
       else
+      if (tokens[0]=="SetCompressionMode")
+      {
+        if (tokens.size()==2)
+        {
+          if (tokens[1]=="None")
+          {
+            floppy.SetCompressionMode(e_CompressionNone);
+          }
+          else
+          if (tokens[1]=="FilePack")
+          {
+            floppy.SetCompressionMode(e_CompressionFilepack);
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), '%s' is not a valid compression mode, it should be either 'None' or 'FilePack' \n",lineNumber,tokens[1].c_str());
+          }
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'SetCompressionMode [None|FilePack]' \n",lineNumber);
+        }
+      }
+      else
       {
         ShowError("Syntax error line (%d), unknown keyword '%s' \n",lineNumber,tokens[0].c_str());
       }

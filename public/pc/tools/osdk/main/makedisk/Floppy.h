@@ -7,6 +7,11 @@
 #include <iostream>
 
 
+enum CompressionMode
+{
+  e_CompressionNone,
+  e_CompressionFilepack
+};
 
 // This class is meant to be mapped on memory area supposed to be of MFM disk format.
 // The header is 256 bytes long, so this class memory usage should be similar in size and structure.
@@ -49,19 +54,23 @@ public:
   ~FileEntry();
 
 public:
-  int         m_FloppyNumber;     // 0 for a single floppy program
-  int         m_StartSide;        // 0 or 1
-  int         m_StartTrack;       // 0 to 42 (80...)
-  int         m_StartSector;      // 1 to 17 (or 16 or 18...)
-  int         m_SectorCount;
-  int         m_FileSize;
-  int         m_LoadAddress;
-  std::string m_FilePath;
+  int             m_FloppyNumber;     // 0 for a single floppy program
+  int             m_StartSide;        // 0 or 1
+  int             m_StartTrack;       // 0 to 42 (80...)
+  int             m_StartSector;      // 1 to 17 (or 16 or 18...)
+  int             m_SectorCount;
+  int             m_FileSize;
+  int             m_CompressedFileSize;
+  CompressionMode m_CompressionMode;
+  int             m_LoadAddress;
+  std::string     m_FilePath;
 };
 
 
 class Floppy
 {
+public:
+
 public:
   Floppy();
   ~Floppy();
@@ -76,6 +85,11 @@ public:
   bool WriteTapeFile(const char *fileName);
 
   bool AddDefine(std::string defineName,std::string defineValue);
+
+  void SetCompressionMode(CompressionMode compressionMode)
+  {
+    m_CompressionMode=compressionMode;
+  }
 
   unsigned int SetPosition(int track,int sector)
   {
@@ -114,6 +128,8 @@ private:
 
   int         m_CurrentTrack;
   int         m_CurrentSector;
+
+  CompressionMode     m_CompressionMode;
 
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;

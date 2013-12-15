@@ -9,10 +9,11 @@
 #ifdef LOADER
 FileStartSector .byt 4,1,17,15,13,11,9,7,5,3,1,16,14,12,10,8,6,4,2,17,15,13,11,9,11,6,4,17
 FileStartTrack .byt 0,1,8,10,12,14,16,18,20,22,24,25,27,29,31,33,35,37,39,40,128,130,132,134,135,137,138,139
-FileSizeLow .byt <1024,<34308,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4800,<7347,<3783,<7478,<3716
-FileSizeHigh .byt >1024,>34308,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>4800,>7347,>3783,>7478,>3716
+FileSizeLow .byt <1024,<34351,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4800,<7347,<3783,<7478,<3716
+FileSizeHigh .byt >1024,>34351,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>4800,>7347,>3783,>7478,>3716
 FileLoadAdressLow .byt <64512,<1024,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
 FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
+FileCompression .byt 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 #endif
 #else
 //
@@ -28,7 +29,7 @@ FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>
 //
 // List of files written to the floppy
 // - Entry #0 '..\build\files\loader.o ' loads at address 64512 starts on track 0 sector 4 and is 4 sectors long (1024 bytes).
-// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 1 and is 135 sectors long (34308 bytes).
+// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 1 and is 135 sectors long (34351 bytes).
 // - Entry #2 '..\build\files\damsel.hir ' loads at address 40960 starts on track 8 sector 17 and is 32 sectors long (8000 bytes).
 // - Entry #3 '..\build\files\dbug_windows95.hir ' loads at address 40960 starts on track 10 sector 15 and is 32 sectors long (8000 bytes).
 // - Entry #4 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 12 sector 13 and is 32 sectors long (8000 bytes).

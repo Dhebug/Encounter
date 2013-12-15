@@ -30,4 +30,7 @@ Change history for the FloppyBuilder
 0.8 - 2013/12/15
 - Cleaned up a bit the output description generation
 
+0.9 - 2013/12/15
+- Added the 'SetCompressionMode' command. Possible parameters are 'None' (default value) and 'FilePack'
+
 */

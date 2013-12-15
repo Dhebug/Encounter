@@ -21,7 +21,7 @@
 0078 reg6
 007a reg7
 0400 osdk_start
-8900 osdk_stack
+892b osdk_stack
 0411 retstack
 0502 _main
 0412 enter
@@ -159,5 +159,7 @@
 6b00 _ScrollBuffer_3
 7500 _ScrollBuffer_4
 7f00 _ScrollBuffer_5
-8a00 osdk_check
-8a04 osdk_end
+8900 _ScrollerMessage
+8927 _ScrollerGenerate
+8a2b osdk_check
+8a2f osdk_end
