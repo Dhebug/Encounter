@@ -81,9 +81,10 @@
 // 13-12-2013 NB v0.098 removed cantakeadjust (superfluous?) added SPIKE to finally solve
 //						the "LookBackInAnger" issue...
 // 14-12-2013 NB v0.099 forgot calchightarget after pacman4 (brokenarrow)
+// 17-12-2013 NB v0.100 fixed bug in inccantake, brassed off.
 /****************************************/
 // TODO:
-// 
+// Fix the bloody thing
 //
 #include <lib.h>
 #define NORTH 0
@@ -200,6 +201,7 @@ void canbetaken(); 			// can I be taken after moving here? returns value (take) 
 void canpiecemove();		// can a selected piece move? 0=no, 1=yes	
 void CanPieceMoveB();	
 void cantakeadjust();		// decrement cantake if taken piece is on same plane as king	
+void cantakeadjust2();		// don't take a piece in zone if it is only piece on row/col
 void checkbrokenarrow();	// check to see if brokenarrow can be incremented	
 void checkend();			// check for end game conditions 	
 void checkincroute();		// check to see if OK to incroute		
@@ -244,7 +246,7 @@ void movepieceB();			// subroutine of movepiece()
 void pacman2();				// update target positions around king (need to develop further)
 void pacman2b();			// subroutine of pacman2
 void pacman3();
-void pacman4();
+void pacman4();				// aka FULL broken arrow
 void pacman5();
 //void pacman6();				// "vinegar strokes"
 void pause();				// wait a certain period of time (pausetime)
@@ -305,10 +307,10 @@ void subCheckerBoard();		// subroutine of checkerboard
 void subCheckerBoard2();	// subroutine 2 of checkerboard
 void SheldonGambit();		// called from subpacmanx (block left or right?)
 //void Xenon();
-//void Xenon2();
+void Xenon2();	// replacement of pacman3 in pacman4
 void Xenon3();
 void Xenon4();
-
+//void Xenon5();
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -579,8 +581,8 @@ void computerturn(){
   // 4. Find the highest value target (hightarget)
   calchightarget();	// to get targetns/targetew values
   // 5. BrokenArrow...
-  if (RedFlagX == NO ) pacman4(); 	// check for full broken arrow (hightarget required)
-
+  if ( RedFlagX == NO ) pacman4(); 	// check for full broken arrow (hightarget required)
+  //pacman4(); 	// check for full broken arrow (hightarget required)
   // 5. if target is NOT on same row/column as king then check to see if
   // there is a way open for the king to access an empty row/column (that can't
   // be blocked by an attacker - really just the Level3 row/col).
@@ -629,7 +631,7 @@ void Xenon(){
 		startcol=8; destcol=8; 
 		Xenon2();
 	}		
-}
+}*/
 void Xenon2(){
 	setcheckmode1(); checkroute();	// is row/col empty (z)?
 	if ( z == 0 ){	// if row/col is empty...CAN KING GET TO IT?
@@ -638,7 +640,7 @@ void Xenon2(){
 			checkroutemode=5; checkroute();
 		} 
 	}	
-}*/
+}
 void Xenon3(){
 	if ( orientation < EAST ){ // check rows (NORTH/SOUTH)
 		startrow=x; destrow=x; startcol=0;destcol=10;
@@ -679,8 +681,10 @@ void FindPiece(){	// find a piece capable of moving to selected target
   
   if ( foundpiece == 0 ){		
 	if (players[a][b] == ATTACKER){  // a=row, b=column (ns,ew = target location)
-		calccantake2();		
-		if (( cantake == 0 )&&( surrounded < 3 )&&( RedFlagX == NO )) canbetaken(); // if cannot take can I be taken?
+		// can computer take a piece (cantake)?
+		calccantake2();	
+		// if cannot take can I be taken?	
+		if (( cantake == NO )&&( surrounded < 3 )&&( RedFlagX == NO )) canbetaken(); 
 		if (compass[origorient] == 0){ // means this piece can't be taken
 			foundpiece=1;
 			/*
@@ -901,34 +905,14 @@ void subpacmanx(){
   setpoints();		// Set points to 10
   surroundpoints(); // add 10 * surrounded 
   points+=brokenarrow[orientation]*10;
-  //message="NOT SET";
-  /*
-  if (( orientation == NORTH )||(orientation == WEST)){
-	  if ( enemy[0][1] ) pointsplusten();
-	  if ( enemy[1][0] ) pointsplusten();
-  }
-  if (( orientation == NORTH )||(orientation == EAST)){
-	  if ( enemy[0][9] ) pointsplusten();
-	  if ( enemy[1][10] ) pointsplusten();
-  }
-  if (( orientation == SOUTH )||(orientation == EAST)){
-	  if ( enemy[9][10] ) pointsplusten();
-	  if ( enemy[10][9] ) pointsplusten();
-  }
-  if (( orientation == SOUTH )||(orientation == WEST)){
-	  if ( enemy[9][0] ) pointsplusten();
-	  if ( enemy[10][1] ) pointsplusten();
-  }
-  */
   // "The Sheldon Gambit"
-  //for (x=0;x<8;x+=2){
-	x=0; SheldonGambit();
-	x=2; SheldonGambit();
-	x=4; SheldonGambit();
-	x=6; SheldonGambit();	  
-  //}
+  x=0; SheldonGambit();
+  x=2; SheldonGambit();
+  x=4; SheldonGambit();
+  x=6; SheldonGambit();	  
   // REDFLAG detection
-  if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ // if no pieces in orientation from KING but there ARE targets
+  // if no pieces in orientation from KING but there ARE targets
+  if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ 
 	  if (((orientation < EAST)&&((kingew<2)||(kingew>8))) || ((orientation > SOUTH)&&((kingns<2)||(kingns>8)))) { // NORTH/SOUTH OR EAST/WEST
 		  redflag[orientation]=YES;	// raise a red flag
 		  RedFlagX=YES;
@@ -961,15 +945,14 @@ void subpacmany(){	// apply the points generated in pacman2-6
   
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( target[x][y] ){	// if accessible by attacker
-    	if (( target[x][y] > 1 )||(redflag[orientation])){	
+    	//if (( target[x][y] > 1 )||(redflag[orientation])){
+	    if ( target[x][y] > 1 ){	
 	    	//printmessage();getchar();	
 	      	target[x][y]+=points; 
 	      	Xenon3(); // count number of pieces on row/column
-	      	if ( z==0) target[x][y]+=100;	// add more points if empty row/col
-      	}else{
-	      	target[x][y]=points; // can be caught if i go here
-	      	//if (redflag) target[x][y]-=50;	// take another 50 points if redflag=yes
+	      	if ( z==0) target[x][y]+=points;	// add more points if empty row/col
       	}
+      	if ( redflag[orientation] ) target[x][y]+=50;
     	decpoints();
         //if (z){decpoints();} // only decrement points if route to edge is blocked
     }else{
@@ -1179,22 +1162,20 @@ void pacman3(){
 void pacman4(){
 	// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
 	// FULL LEVEL 2
-	tzonemode=FULL;
+	//tzonemode=FULL;
 	points=hightarget+1;
-	orientation = NORTH;
-	//pacman5();	// NORTH+SOUTH
-	a=0;b=kingew;startrow=1;destrow=1;startcol=0;destcol=10;
-	pacman3();
+	orientation = NORTH; // NORTH
+	startrow=1;destrow=1;startcol=0;destcol=10;
+	Xenon2();
 	orientation = SOUTH; // SOUTH
-	a=10;b=kingew;startrow=9;destrow=9;startcol=0;destcol=10;
-	pacman3();
+	startrow=9;destrow=9;startcol=0;destcol=10;
+	Xenon2();
 	orientation = EAST; // EAST
-	//pacman5();
-	a=kingns;b=10;startrow=0;destrow=10;startcol=9;destcol=9;
-	pacman3();
+	startrow=0;destrow=10;startcol=9;destcol=9;
+	Xenon2();
 	orientation = WEST; // WEST
-	a=kingns;b=0;startrow=0;destrow=10;startcol=1;destcol=1;
-	pacman3();
+	startrow=0;destrow=10;startcol=1;destcol=1;
+	Xenon2();
 }
 void pacman5(){
 	if (orientation < EAST){	// NORTH AND SOUTH (for pacman3) 
@@ -1205,7 +1186,12 @@ void pacman5(){
   		paclevel2=kingew;	
 	}
 }
-
+/*
+void Xenon5(){
+if (!redflag[orientation]){
+		Xenon2();
+	}
+}*/
 // check for endgame conditions
 void checkend()	{
 /* END OF GAME CONDITIONS
@@ -1395,7 +1381,11 @@ void backbone()	{
 }
 // sidestep: take a step sideways if you can be caught where you are...
 void sidestep(){
-	if (target[a][b] > 1)	target[a][b]+=SIDESTEP;
+	if (target[a][b] > 1)	{
+		target[a][b]+=SIDESTEP;
+		//if ( ((orientation<EAST)&&(b==xew)) || ((orientation>SOUTH)&&(a==xns)) ) target[a][b]+=SIDESTEP;
+	}
+	
 }
 
 // Multi function depending on value of "fb"
@@ -1940,9 +1930,10 @@ void subarrows2(){
 void inccantake(){
   //z=cantakepiece();	// z=number of pieces that can be taken
   if (cantakepiece()){
-    cantake+=z;
+    cantake+=take;		// take is returned from cantakepiece()
     cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
-  }
+  	cantakeadjust2();	// dont take if only piece in zone rol/col
+   }
   //cantake+=cantakepiece();
 }
 
@@ -2150,7 +2141,7 @@ unsigned char checkroute(){
 // and attacking piece isn't AND only one defender on plane
 void cantakeadjust(){							
   flag=0;
-  if ((playertype == DEFENDER )&&(gamestyle == 1)){	// if COMPUTER playing as attacker and his turn
+  //if ((playertype == DEFENDER )&&(gamestyle == 1)){	// if COMPUTER playing as attacker and his turn
     if (pcheckns1 == kingns){
       flag=1;
       if (ctew < kingew){orientation=WEST;}else{orientation=EAST;}
@@ -2165,10 +2156,19 @@ void cantakeadjust(){
       //if ((kingattacker[orientation]+kingdefender[orientation])<4){cantake--;}
       if (kingpieces[orientation] < 4) cantake--; //10-05-2013 if no other pieces on plane
     }
-
-  }
+  //}
 }
-
+void cantakeadjust2(){
+	if (( pcheckns1 < 2 ) || ( pcheckns1 > 8 )){
+		startrow=pcheckns1;destrow=pcheckns1;startcol=0;destcol=10;
+	}  
+	if (( pcheckew1 < 2 ) || ( pcheckew1 > 8 )){
+		startrow=0;destrow=10; startcol=pcheckew1; destcol=pcheckew1;
+	}
+	setcheckmode1();
+	if (checkroute()==1) cantake--;
+	
+}
 void updatetarget(){
   targetns=ctns;targetew=ctew;
   target[targetns][targetew]=2;	// set target to 2 (1=canbetaken if i go here)
@@ -2435,11 +2435,12 @@ void printturnline(){
   x=turncount;
   //x=kingns;
   //x=enemy[5][3];
+  //x=target[8][4];
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
   //x=kingew;
-  //x=target[5][4];
+  //x=target[8][5];
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
