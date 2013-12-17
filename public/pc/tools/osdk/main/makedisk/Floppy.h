@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <sstream>
 #include <iostream>
 
@@ -59,8 +60,8 @@ public:
   int             m_StartTrack;       // 0 to 42 (80...)
   int             m_StartSector;      // 1 to 17 (or 16 or 18...)
   int             m_SectorCount;
-  int             m_FileSize;
-  int             m_CompressedFileSize;
+  int             m_FinalFileSize;
+  int             m_StoredFileSize;
   CompressionMode m_CompressionMode;
   int             m_LoadAddress;
   std::string     m_FilePath;
@@ -114,6 +115,8 @@ public:
     }
   }
 
+  void MarkCurrentSectorUsed();
+
 private:
   unsigned int GetDskImageOffset();
 
@@ -128,6 +131,8 @@ private:
 
   int         m_CurrentTrack;
   int         m_CurrentSector;
+
+  std::set<int>       m_SectorUsageMap;
 
   CompressionMode     m_CompressionMode;
 

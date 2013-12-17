@@ -8,6 +8,27 @@ SET PICTCONV=D:\svn\public\pc\tools\osdk\main\Osdk\_final_\Bin\PictConv
 SET PARAMS=-f1 -d0 -o2 -t1
 SET PARAMS=-f1 -d0 -o2 
 ::goto EndPictures
+::%PICTCONV% %PARAMS% data\decal_euler.png build\files\decal_euler.hir
+
+%PICTCONV% %PARAMS% data\twilighte_im_title.png build\files\twilighte_im_title.hir
+%PICTCONV% %PARAMS% data\twilighte_whitehall.png build\files\twilighte_whitehall.hir
+%PICTCONV% %PARAMS% data\twilighte_im_sprites.png build\files\twilighte_im_sprites.hir
+%PICTCONV% %PARAMS% data\space_1999_sparks.png build\files\space_1999_sparks.hir
+%PICTCONV% %PARAMS% data\twilighte_otype_1.png build\files\twilighte_otype_1.hir
+%PICTCONV% %PARAMS% data\dbug_assembler2002.png build\files\dbug_assembler2002.hir
+%PICTCONV% %PARAMS% data\dbug_karhu.png build\files\dbug_karhu.hir
+%PICTCONV% %PARAMS% data\defence_force.png build\files\defence_force.hir
+%PICTCONV% %PARAMS% data\dbug_space1999_planets.png build\files\dbug_space1999_planets.hir
+%PICTCONV% %PARAMS% data\dbug_atmos_connectors.png build\files\dbug_atmos_connectors.hir
+%PICTCONV% %PARAMS% data\dbug_space1999.png build\files\dbug_space1999.hir
+%PICTCONV% %PARAMS% data\dbug_1337_logo.png build\files\dbug_1337_logo.hir
+%PICTCONV% %PARAMS% data\dbug_oric1.png build\files\dbug_oric1.hir
+%PICTCONV% %PARAMS% data\twilighte_tol_title.png build\files\twilighte_tol_title.hir
+%PICTCONV% %PARAMS% data\twilighte_tol_doors.png build\files\twilighte_tol_doors.hir
+%PICTCONV% %PARAMS% data\skooldaze.png build\files\skooldaze.hir
+%PICTCONV% %PARAMS% data\toxic_slime.png build\files\toxic_slime.hir
+%PICTCONV% %PARAMS% data\twilighte_ripped.png build\files\twilighte_ripped.hir
+%PICTCONV% %PARAMS% data\murder_on_the_atlantic.png build\files\murder_on_the_atlantic.hir
 %PICTCONV% %PARAMS% data\damsel.gif build\files\damsel.hir
 %PICTCONV% %PARAMS% data\dbug_windows95.gif build\files\dbug_windows95.hir
 %PICTCONV% %PARAMS% data\dbug_yessagician.gif build\files\dbug_yessagician.hir
@@ -31,6 +52,8 @@ SET PARAMS=-f1 -d0 -o2
 %PICTCONV% %PARAMS% data\mooz_santa.png build\files\mooz_santa.hir
 :EndPictures
 %PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
+
+%osdk%\bin\FilePack build\files\damsel.hir build\files\damsel.hir.pak
 
 
 
