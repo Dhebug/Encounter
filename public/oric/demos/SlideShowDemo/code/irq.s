@@ -28,6 +28,10 @@ _SystemFrameCounter_high	.dsb 1
 	.text
 	
 
+_Stop	
+	jmp _Stop
+	rts
+
 /*	
 ;
 ; Installs a simple 50hz Irq

@@ -15,6 +15,15 @@ current_sector		.dsb 1		; Index of the sector being loaded
 current_side		.dsb 1		; Has the bit 4 set to 0 or 1 to be used as a mask on the Microdisc control register (other bits have to be set to zero)
 irq_save_a			.dsb 1      ; To preserve the accumulator value in the IRQ code
 
+; Unpack test
+ptr_source			.dsb 2		; Packed source data adress
+ptr_destination		.dsb 2 		; Destination adress where we depack
+ptr_destination_end	.dsb 2		; Point on the end of the depacked stuff
+ptr_source_back		.dsb 2		; Temporary used to hold a pointer on depacked stuff
+offset				.dsb 2
+mask_value			.dsb 1
+nb_dst				.dsb 1
+
 	.text
 
 	*=location_loader
@@ -34,9 +43,8 @@ StartUp
 	;jmp StartUp
 	jsr SoftHiresWithCopyCharset
 
-	;ldx #LOADER_FIRST_PICTURE
+	;ldx #LOADER_COMPRESSED_TEST
 	;jsr LoadData
-	;STOP(1)
 
 	; Load the slideshow
 	ldx #LOADER_SLIDESHOW
@@ -57,19 +65,19 @@ loop_forever_demo_finished
 IrqHandler
 	sta irq_save_a
 	pla
+	pha
 	and #%00010000	; Check the saved B flag to detect a BRK
 	bne from_brk
 	
 from_irq
-	bit $304
-
+#ifdef LOADER_SHOW_DEBUGINFO	
 	lda $bfdf
 	eor #1
 	ora #16
 	sta $bfdf
-
+#endif
 	lda irq_save_a
-	pha
+	bit $304
 IrqDoNothing
 	rti	
 	
@@ -98,7 +106,74 @@ SetLoadAddress
 
 ; X=File index
 LoadData
+	;STOP(2)
+
+	; We have to start somewhere no matter what, compressed or not
+	jsr StartReadOperation
+
+	; Now at this stage we have to check if the data is compressed or not
+	lda FileStoredSizeLow,x
+	cmp FileSizeLow,x
+	bne LoadCompressedData
+
+	lda FileStoredSizeHigh,x
+	cmp FileSizeHigh,x
+	bne LoadCompressedData
+
+LoadUncompressedData	
+
+	;
+	; Loop to read all the sectors	
+	;
+read_sectors_loop
+    jsr	ReadNextSector
+
+	; Try to let time to an IRQ to play, and during that time copy the sector to the final location
+	cli
+
+	ldy #0
+loop_copy
+	lda $200,y 			; Load the byte from page 2
+__auto_write_address
+	sta $c000,y 		; Store it to the final location
+	iny
+	bne loop_copy
+
+	nop
+	nop
 	sei
+
+	; Next sector
+	inc __auto_write_address+2
+	dec sectors_to_go
+	bne read_sectors_loop
+
+	; Data successfully loaded (we hope), so we restore the interrupts
+	cli
+	rts
+
+
+LoadCompressedData
+	clc
+	lda FileLoadAdressLow,x
+	sta ptr_destination+0
+	adc FileSizeLow,x
+	sta ptr_destination_end+0
+
+	lda FileLoadAdressHigh,x
+	sta ptr_destination+1
+	adc FileSizeHigh,x
+	sta ptr_destination_end+1
+
+	;STOP(2)
+
+	jsr UnpackData
+	cli
+	rts
+
+	
+StartReadOperation	
+ 	sei
 
 	; Make sure the microdisc IRQ is disabled	
 	jsr WaitCompletion
@@ -137,17 +212,19 @@ first_side
 
     ; FileSizeLow/FileSizeHigh
 	; Number of sectors to load
-	lda FileSizeHigh,x 	
+	.(
+	lda FileStoredSizeHigh,x 	
 	sta sectors_to_go
-	lda FileSizeLow,x
+	lda FileStoredSizeLow,x
 	beq skip
 	inc sectors_to_go
-skip	
-	
-	;
-	; Loop to read all the sectors	
-	;
-read_sectors_loop	
+skip
+	.)	
+	rts
+
+
+ReadNextSector
+	cli
 
 	; Check if we have reached the end of the track
 	lda current_sector
@@ -164,10 +241,13 @@ read_sectors_loop
 	lda #0
 	sta current_track
 
+	sei
+
 	lda #%00010000
 	sta current_side	
 stay_on_same_side
 
+	
 	; Reset the sector position
 	lda #1
 	sta current_sector
@@ -175,7 +255,9 @@ same_track
 
 #ifdef LOADER_SHOW_DEBUGINFO	
 	; Display debug info
+	cli
 	jsr DisplayPosition
+	sei
 #endif
 
 	lda current_sector
@@ -227,32 +309,11 @@ microdisc_read_data
 	lda FDC_status_register
 	and #$1C
 
-	; Try to let time to an IRQ to play, and during that time copy the sector to the final location
-	cli
-
-	ldy #0
-loop_copy
-	lda $200,y 			; Load the byte from page 2
-__auto_write_address
-	sta $c000,y 		; Store it to the final location
-	iny
-	bne loop_copy
-
-	nop
-	nop
-	sei
-
-	; Next sector
-	inc __auto_write_address+2
-	dec sectors_to_go
-	bne read_sectors_loop
-
 	jsr WaitCompletion
-
-	; Data successfully loaded (we hope), so we restore the interrupts
 	cli
 	rts
-	
+
+
 ExecuteData	
 __auto_execute_address
 	jmp $a000
@@ -326,6 +387,7 @@ DisplayPosition
 #endif
 	
 
+; 97 bytes, would not fit in the boot sector unfortunately...
 SoftHiresWithCopyCharset
 	ldy #$00		;copy charset
 	.(
@@ -381,6 +443,182 @@ hm_02
 	bne hm_04
 	rts
 
+
+
+
+
+
+UnpackError
+	rts
+
+
+
+GetNextByte
+	php
+	lda __fetchByte+1
+	bne __fetchByte
+	nop
+	nop
+	nop
+	nop
+	sei
+	jsr	ReadNextSector
+	nop
+	nop
+	nop
+	nop
+	cli
+	ldx #0
+	ldy #0
+__fetchByte
+	lda $200
+	inc __fetchByte+1
+	plp
+	rts
+
+/*
+GetNextByte
+	lda (ptr_source),y 		
+	; Move stream pointer (one byte)
+	.(
+	inc ptr_source  		
+	bne skip
+	inc ptr_source+1
+skip
+	.)
+	rts
+*/
+
+
+
+; void file_unpack(void *ptr_dst,void *ptr_src)
+
+; Need to be called with valid values in:
+; ptr_destination
+; ptr_source
+; ptr_destination_end (Destination + size)
+UnpackData
+	;jmp UnpackData
+.(
+	cli
+
+	; Initialise variables
+	; We try to keep "y" null during all the code,
+	; so the block copy routine has to be sure that
+	; y is null on exit
+	ldy #0
+	sty __fetchByte+1
+	lda #1
+	sta mask_value
+	 
+unpack_loop
+	; Handle bit mask
+	lsr mask_value
+	bne end_reload_mask
+	
+	jsr GetNextByte 	; Read from source stream
+
+	ror 
+	sta mask_value   
+end_reload_mask
+	bcc back_copy
+
+write_byte
+	; Copy one byte from the source stream
+	jsr GetNextByte 	; Read from source stream
+	sta (ptr_destination),y
+
+	lda #1
+	sta nb_dst
+
+
+
+_UnpackEndLoop
+	;// We increase the current destination pointer,
+	;// by a given value, white checking if we reach
+	;// the end of the buffer.
+	clc
+	lda ptr_destination
+	adc nb_dst
+	sta ptr_destination
+
+	.(
+	bcc skip
+	inc ptr_destination+1
+skip
+	.)
+	cmp ptr_destination_end
+	lda ptr_destination+1
+	sbc ptr_destination_end+1
+	bcc unpack_loop  
+	rts
+	
+
+back_copy
+	;BreakPoint jmp BreakPoint	
+	; Copy a number of bytes from the already unpacked stream
+	; Here we know that y is null. So no need for clearing it.
+	; Just be sure it's still null at the end.
+	; At this point, the source pointer points to a two byte
+	; value that actually contains a 4 bits counter, and a 
+	; 12 bit offset to point back into the depacked stream.
+	; The counter is in the 4 high order bits.
+	;clc  <== No need, since we access this routie from a BCC
+	jsr GetNextByte 	; Read from source stream
+	adc #1
+	sta offset
+	jsr GetNextByte 	; Read from source stream
+	tax
+	and #$0f
+	adc #0
+	sta offset+1
+
+	txa
+	lsr
+	lsr
+	lsr
+	lsr
+	clc
+	adc #3
+	sta nb_dst
+
+	sec
+	lda ptr_destination
+	sbc offset
+	sta ptr_source_back
+	lda ptr_destination+1
+	sbc offset+1
+	sta ptr_source_back+1
+
+	; Beware, in that loop, the direction is important
+	; since RLE like depacking is done by recopying the
+	; very same byte just copied... Do not make it a 
+	; reverse loop to achieve some speed gain...
+	.(
+copy_loop
+	lda (ptr_source_back),y	; Read from already unpacked stream
+	sta (ptr_destination),y	; Write to destination buffer
+	iny
+	cpy nb_dst
+	bne copy_loop
+	.)
+	ldy #0
+	beq _UnpackEndLoop
+	rts
+.)
+
+
+; Taille actuelle du code 279 octets
+; 0x08d7 - 0x07e8 => 239 octets
+; 0x08c8 - 0x07e5 => 227 octets
+; 0x08d5 - 0x0800 => 213 octets
+; 0x08c9 - 0x0800 => 201 octets
+; 0x08c5 - 0x0800 => 197 octets
+; 0x08c3 - 0x0800 => 195 octets
+; 0x08c0 - 0x0800 => 192 octets
+; => 146 octets
+
+
 _EndLoaderCode
 
 ;
@@ -415,3 +653,4 @@ _VectorIRQ			.word IrqHandler 		; FFFE-FFFF - IRQ Vector (Normally points to $02
 
 ; End of the loader - Nothing should come after because it's out of the addressable memory range :)
 
+#print (UnpackError -SoftHiresWithCopyCharset)

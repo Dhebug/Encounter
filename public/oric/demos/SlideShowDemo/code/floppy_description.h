@@ -7,13 +7,14 @@
 // Information for the Assembler
 //
 #ifdef LOADER
-FileStartSector .byt 4,1,17,15,13,11,9,7,5,3,1,16,14,12,10,8,6,4,2,17,15,13,11,9,11,6,4,17
-FileStartTrack .byt 0,1,8,10,12,14,16,18,20,22,24,25,27,29,31,33,35,37,39,40,128,130,132,134,135,137,138,139
-FileSizeLow .byt <1024,<34351,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4800,<7347,<3783,<7478,<3716
-FileSizeHigh .byt >1024,>34351,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>4800,>7347,>3783,>7478,>3716
-FileLoadAdressLow .byt <64512,<1024,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
-FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
-FileCompression .byt 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+FileStartSector .byt 4,1,4,3,4,16,7,2,2,17,9,9,1,16,9,16,10,6,4,14,4,2,5,17,16,15,13,16,15,8,5,6,16,13,4,5,17,1,1,4,3,1,11,1,17,14,4,12
+FileStartTrack .byt 0,1,2,3,4,4,6,7,8,8,10,11,12,12,13,13,14,15,16,16,18,19,20,20,21,22,23,24,25,26,27,28,28,29,30,31,31,33,34,35,36,37,37,38,38,39,41,41
+FileStoredSizeLow .byt <1024,<5103,<4002,<4366,<2920,<6169,<3059,<4100,<3667,<6404,<4304,<2300,<3586,<2411,<1721,<2752,<3245,<3723,<2412,<6123,<3712,<4914,<2861,<3882,<3841,<3817,<4992,<3858,<2372,<3547,<4447,<2327,<3330,<2022,<4371,<2823,<4373,<4222,<4933,<3842,<3781,<2338,<1626,<3994,<3341,<6109,<2034,<3882
+FileStoredSizeHigh .byt >1024,>5103,>4002,>4366,>2920,>6169,>3059,>4100,>3667,>6404,>4304,>2300,>3586,>2411,>1721,>2752,>3245,>3723,>2412,>6123,>3712,>4914,>2861,>3882,>3841,>3817,>4992,>3858,>2372,>3547,>4447,>2327,>3330,>2022,>4371,>2823,>4373,>4222,>4933,>3842,>3781,>2338,>1626,>3994,>3341,>6109,>2034,>3882
+FileSizeLow .byt <1024,<34351,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8960,<8960,<8000,<8960,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4800,<7347,<3783,<7478,<3716,<8000
+FileSizeHigh .byt >1024,>34351,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8960,>8960,>8000,>8960,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>4800,>7347,>3783,>7478,>3716,>8000
+FileLoadAdressLow .byt <64512,<1024,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152,<40960
+FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152,>40960
 #endif
 #else
 //
@@ -29,38 +30,60 @@ FileCompression .byt 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 //
 // List of files written to the floppy
 // - Entry #0 '..\build\files\loader.o ' loads at address 64512 starts on track 0 sector 4 and is 4 sectors long (1024 bytes).
-// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 1 and is 135 sectors long (34351 bytes).
-// - Entry #2 '..\build\files\damsel.hir ' loads at address 40960 starts on track 8 sector 17 and is 32 sectors long (8000 bytes).
-// - Entry #3 '..\build\files\dbug_windows95.hir ' loads at address 40960 starts on track 10 sector 15 and is 32 sectors long (8000 bytes).
-// - Entry #4 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 12 sector 13 and is 32 sectors long (8000 bytes).
-// - Entry #5 '..\build\files\diamond_2.hir ' loads at address 40960 starts on track 14 sector 11 and is 32 sectors long (8000 bytes).
-// - Entry #6 '..\build\files\exocet_blueface.hir ' loads at address 40960 starts on track 16 sector 9 and is 32 sectors long (8000 bytes).
-// - Entry #7 '..\build\files\exocet_fists.hir ' loads at address 40960 starts on track 18 sector 7 and is 32 sectors long (8000 bytes).
-// - Entry #8 '..\build\files\exocet_moonguy.hir ' loads at address 40960 starts on track 20 sector 5 and is 32 sectors long (8000 bytes).
-// - Entry #9 '..\build\files\karate.hir ' loads at address 40960 starts on track 22 sector 3 and is 32 sectors long (8000 bytes).
-// - Entry #10 '..\build\files\karate_2.hir ' loads at address 40960 starts on track 24 sector 1 and is 32 sectors long (8000 bytes).
-// - Entry #11 '..\build\files\krillys.hir ' loads at address 40960 starts on track 25 sector 16 and is 32 sectors long (8000 bytes).
-// - Entry #12 '..\build\files\mooz_barbitoric.hir ' loads at address 40960 starts on track 27 sector 14 and is 32 sectors long (8000 bytes).
-// - Entry #13 '..\build\files\mooz_oric.hir ' loads at address 40960 starts on track 29 sector 12 and is 32 sectors long (8000 bytes).
-// - Entry #14 '..\build\files\mooz_santa.hir ' loads at address 40960 starts on track 31 sector 10 and is 32 sectors long (8000 bytes).
-// - Entry #15 '..\build\files\mooz_supertomato.hir ' loads at address 40960 starts on track 33 sector 8 and is 32 sectors long (8000 bytes).
-// - Entry #16 '..\build\files\prez_story.hir ' loads at address 40960 starts on track 35 sector 6 and is 32 sectors long (8000 bytes).
-// - Entry #17 '..\build\files\tomb_1.hir ' loads at address 40960 starts on track 37 sector 4 and is 32 sectors long (8000 bytes).
-// - Entry #18 '..\build\files\trois_mats.hir ' loads at address 40960 starts on track 39 sector 2 and is 32 sectors long (8000 bytes).
-// - Entry #19 '..\build\files\twilighte_beast.hir ' loads at address 40960 starts on track 40 sector 17 and is 32 sectors long (8000 bytes).
-// - Entry #20 '..\build\files\twilighte_dragons.hir ' loads at address 40960 starts on the second side on track 0 sector 15 and is 32 sectors long (8000 bytes).
-// - Entry #21 '..\build\files\twilighte_pegasus.hir ' loads at address 40960 starts on the second side on track 2 sector 13 and is 32 sectors long (8000 bytes).
-// - Entry #22 '..\build\files\twilighte_sonix.hir ' loads at address 40960 starts on the second side on track 4 sector 11 and is 32 sectors long (8000 bytes).
-// - Entry #23 '..\build\files\font_24x20.hir ' loads at address 40960 starts on the second side on track 6 sector 9 and is 19 sectors long (4800 bytes).
-// - Entry #24 '..\build\files\music_cuddly.ym ' loads at address 49152 starts on the second side on track 7 sector 11 and is 29 sectors long (7347 bytes).
-// - Entry #25 '..\build\files\northtar.ym ' loads at address 49152 starts on the second side on track 9 sector 6 and is 15 sectors long (3783 bytes).
-// - Entry #26 '..\build\files\music_no_second_prize.ym ' loads at address 49152 starts on the second side on track 10 sector 4 and is 30 sectors long (7478 bytes).
-// - Entry #27 '..\build\files\music_leaving_terramis.ym ' loads at address 49152 starts on the second side on track 11 sector 17 and is 15 sectors long (3716 bytes).
+// - Entry #1 '..\build\files\slideshow.o ' loads at address 1024 starts on track 1 sector 1 and is 20 sectors long (5103 compressed bytes: 14% of 34351 bytes).
+// - Entry #2 '..\build\files\twilighte_im_title.hir ' loads at address 40960 starts on track 2 sector 4 and is 16 sectors long (4002 compressed bytes: 50% of 8000 bytes).
+// - Entry #3 '..\build\files\twilighte_whitehall.hir ' loads at address 40960 starts on track 3 sector 3 and is 18 sectors long (4366 compressed bytes: 54% of 8000 bytes).
+// - Entry #4 '..\build\files\twilighte_im_sprites.hir ' loads at address 40960 starts on track 4 sector 4 and is 12 sectors long (2920 compressed bytes: 36% of 8000 bytes).
+// - Entry #5 '..\build\files\space_1999_sparks.hir ' loads at address 40960 starts on track 4 sector 16 and is 25 sectors long (6169 compressed bytes: 77% of 8000 bytes).
+// - Entry #6 '..\build\files\twilighte_otype_1.hir ' loads at address 40960 starts on track 6 sector 7 and is 12 sectors long (3059 compressed bytes: 38% of 8000 bytes).
+// - Entry #7 '..\build\files\dbug_assembler2002.hir ' loads at address 40960 starts on track 7 sector 2 and is 17 sectors long (4100 compressed bytes: 51% of 8000 bytes).
+// - Entry #8 '..\build\files\dbug_karhu.hir ' loads at address 40960 starts on track 8 sector 2 and is 15 sectors long (3667 compressed bytes: 45% of 8000 bytes).
+// - Entry #9 '..\build\files\defence_force.hir ' loads at address 40960 starts on track 8 sector 17 and is 26 sectors long (6404 compressed bytes: 80% of 8000 bytes).
+// - Entry #10 '..\build\files\dbug_space1999_planets.hir ' loads at address 40960 starts on track 10 sector 9 and is 17 sectors long (4304 compressed bytes: 53% of 8000 bytes).
+// - Entry #11 '..\build\files\dbug_atmos_connectors.hir ' loads at address 40960 starts on track 11 sector 9 and is 9 sectors long (2300 compressed bytes: 28% of 8000 bytes).
+// - Entry #12 '..\build\files\dbug_space1999.hir ' loads at address 40960 starts on track 12 sector 1 and is 15 sectors long (3586 compressed bytes: 44% of 8000 bytes).
+// - Entry #13 '..\build\files\dbug_1337_logo.hir ' loads at address 40960 starts on track 12 sector 16 and is 10 sectors long (2411 compressed bytes: 30% of 8000 bytes).
+// - Entry #14 '..\build\files\dbug_oric1.hir ' loads at address 40960 starts on track 13 sector 9 and is 7 sectors long (1721 compressed bytes: 21% of 8000 bytes).
+// - Entry #15 '..\build\files\twilighte_tol_title.hir ' loads at address 40960 starts on track 13 sector 16 and is 11 sectors long (2752 compressed bytes: 30% of 8960 bytes).
+// - Entry #16 '..\build\files\twilighte_tol_doors.hir ' loads at address 40960 starts on track 14 sector 10 and is 13 sectors long (3245 compressed bytes: 36% of 8960 bytes).
+// - Entry #17 '..\build\files\skooldaze.hir ' loads at address 40960 starts on track 15 sector 6 and is 15 sectors long (3723 compressed bytes: 46% of 8000 bytes).
+// - Entry #18 '..\build\files\toxic_slime.hir ' loads at address 40960 starts on track 16 sector 4 and is 10 sectors long (2412 compressed bytes: 26% of 8960 bytes).
+// - Entry #19 '..\build\files\twilighte_ripped.hir ' loads at address 40960 starts on track 16 sector 14 and is 24 sectors long (6123 compressed bytes: 76% of 8000 bytes).
+// - Entry #20 '..\build\files\murder_on_the_atlantic.hir ' loads at address 40960 starts on track 18 sector 4 and is 15 sectors long (3712 compressed bytes: 46% of 8000 bytes).
+// - Entry #21 '..\build\files\damsel.hir ' loads at address 40960 starts on track 19 sector 2 and is 20 sectors long (4914 compressed bytes: 61% of 8000 bytes).
+// - Entry #22 '..\build\files\dbug_windows95.hir ' loads at address 40960 starts on track 20 sector 5 and is 12 sectors long (2861 compressed bytes: 35% of 8000 bytes).
+// - Entry #23 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 20 sector 17 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
+// - Entry #24 '..\build\files\diamond_2.hir ' loads at address 40960 starts on track 21 sector 16 and is 16 sectors long (3841 compressed bytes: 48% of 8000 bytes).
+// - Entry #25 '..\build\files\exocet_blueface.hir ' loads at address 40960 starts on track 22 sector 15 and is 15 sectors long (3817 compressed bytes: 47% of 8000 bytes).
+// - Entry #26 '..\build\files\exocet_fists.hir ' loads at address 40960 starts on track 23 sector 13 and is 20 sectors long (4992 compressed bytes: 62% of 8000 bytes).
+// - Entry #27 '..\build\files\exocet_moonguy.hir ' loads at address 40960 starts on track 24 sector 16 and is 16 sectors long (3858 compressed bytes: 48% of 8000 bytes).
+// - Entry #28 '..\build\files\karate.hir ' loads at address 40960 starts on track 25 sector 15 and is 10 sectors long (2372 compressed bytes: 29% of 8000 bytes).
+// - Entry #29 '..\build\files\karate_2.hir ' loads at address 40960 starts on track 26 sector 8 and is 14 sectors long (3547 compressed bytes: 44% of 8000 bytes).
+// - Entry #30 '..\build\files\krillys.hir ' loads at address 40960 starts on track 27 sector 5 and is 18 sectors long (4447 compressed bytes: 55% of 8000 bytes).
+// - Entry #31 '..\build\files\mooz_barbitoric.hir ' loads at address 40960 starts on track 28 sector 6 and is 10 sectors long (2327 compressed bytes: 29% of 8000 bytes).
+// - Entry #32 '..\build\files\mooz_oric.hir ' loads at address 40960 starts on track 28 sector 16 and is 14 sectors long (3330 compressed bytes: 41% of 8000 bytes).
+// - Entry #33 '..\build\files\mooz_santa.hir ' loads at address 40960 starts on track 29 sector 13 and is 8 sectors long (2022 compressed bytes: 25% of 8000 bytes).
+// - Entry #34 '..\build\files\mooz_supertomato.hir ' loads at address 40960 starts on track 30 sector 4 and is 18 sectors long (4371 compressed bytes: 54% of 8000 bytes).
+// - Entry #35 '..\build\files\prez_story.hir ' loads at address 40960 starts on track 31 sector 5 and is 12 sectors long (2823 compressed bytes: 35% of 8000 bytes).
+// - Entry #36 '..\build\files\tomb_1.hir ' loads at address 40960 starts on track 31 sector 17 and is 18 sectors long (4373 compressed bytes: 54% of 8000 bytes).
+// - Entry #37 '..\build\files\trois_mats.hir ' loads at address 40960 starts on track 33 sector 1 and is 17 sectors long (4222 compressed bytes: 52% of 8000 bytes).
+// - Entry #38 '..\build\files\twilighte_beast.hir ' loads at address 40960 starts on track 34 sector 1 and is 20 sectors long (4933 compressed bytes: 61% of 8000 bytes).
+// - Entry #39 '..\build\files\twilighte_dragons.hir ' loads at address 40960 starts on track 35 sector 4 and is 16 sectors long (3842 compressed bytes: 48% of 8000 bytes).
+// - Entry #40 '..\build\files\twilighte_pegasus.hir ' loads at address 40960 starts on track 36 sector 3 and is 15 sectors long (3781 compressed bytes: 47% of 8000 bytes).
+// - Entry #41 '..\build\files\twilighte_sonix.hir ' loads at address 40960 starts on track 37 sector 1 and is 10 sectors long (2338 compressed bytes: 29% of 8000 bytes).
+// - Entry #42 '..\build\files\font_24x20.hir ' loads at address 40960 starts on track 37 sector 11 and is 7 sectors long (1626 compressed bytes: 33% of 4800 bytes).
+// - Entry #43 '..\build\files\music_cuddly.ym ' loads at address 49152 starts on track 38 sector 1 and is 16 sectors long (3994 compressed bytes: 54% of 7347 bytes).
+// - Entry #44 '..\build\files\northtar.ym ' loads at address 49152 starts on track 38 sector 17 and is 14 sectors long (3341 compressed bytes: 88% of 3783 bytes).
+// - Entry #45 '..\build\files\music_no_second_prize.ym ' loads at address 49152 starts on track 39 sector 14 and is 24 sectors long (6109 compressed bytes: 81% of 7478 bytes).
+// - Entry #46 '..\build\files\music_leaving_terramis.ym ' loads at address 49152 starts on track 41 sector 4 and is 8 sectors long (2034 compressed bytes: 54% of 3716 bytes).
+// - Entry #47 '..\build\files\dbug_yessagician.hir ' loads at address 40960 starts on track 41 sector 12 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
 //
-#define LOADER_SHOW_DEBUGINFO 1
+// 714 sectors used, out of 1428. (50% of the total available size used)
+//
 #define LOADER_SLIDESHOW 1
 #define LOADER_FIRST_PICTURE 2
-#define LOADER_LAST_PICTURE 23
-#define LOADER_FONT_24x20 23
-#define LOADER_FIRST_MUSIC 24
-#define LOADER_LAST_MUSIC 28
+#define LOADER_LAST_PICTURE 42
+#define LOADER_FONT_24x20 42
+#define LOADER_FIRST_MUSIC 43
+#define LOADER_LAST_MUSIC 47
+#define LOADER_COMPRESSED_TEST 47

@@ -8,6 +8,7 @@
 // irq.s
 extern void System_InstallIRQ_SimpleVbl();
 extern void VSync();
+extern void Stop();
 
 // player.s
 extern unsigned char MusicLooped;
@@ -56,7 +57,7 @@ void main()
 	System_InstallIRQ_SimpleVbl();
 
 	// Load and play the music
-	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+3;
+	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+2;
 	LoadFile();
 	Mym_ReInitialize();
 
@@ -65,6 +66,25 @@ void main()
 	LoaderApiAddress=FontBuffer;
 	SetLoadAddress();
 	LoadFile();
+
+	/*
+	// Test load compressed file
+	LoaderApiEntryIndex=LOADER_COMPRESSED_TEST;
+	LoaderApiAddress=PictureLoadBuffer+8;
+	SetLoadAddress();
+	LoadFile();
+
+	PictureLoadBuffer[0]='L';
+	PictureLoadBuffer[1]='Z';
+	PictureLoadBuffer[2]='7';
+	PictureLoadBuffer[3]='7';
+	*((int*)(PictureLoadBuffer+4))=8000;		// Src size
+	*((int*)(PictureLoadBuffer+6))=8000;		// Dst size
+
+	Stop();
+	file_unpack((unsigned char*)0xa000,PictureLoadBuffer);
+	*/
+
 
 	while (1)
 	{		

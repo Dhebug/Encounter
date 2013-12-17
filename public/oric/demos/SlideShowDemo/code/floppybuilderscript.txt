@@ -21,9 +21,7 @@ DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 OutputLayoutFile floppy_description.h
 OutputFloppyFile ..\build\SlideShow.dsk
 
-AddDefine LOADER_SHOW_DEBUGINFO 1
-
-;SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
+;AddDefine LOADER_SHOW_DEBUGINFO 1
 
 ;
 ; This defines the bootsectors to use for the various operating systems
@@ -45,6 +43,13 @@ WriteSector ..\build\files\sector_3.o 				; Sector 3
 SetPosition 0 4
 AddFile ..\build\files\loader.o $fc00 				; Sector 4
 
+
+;
+; From now on we compress data (The loader should not be compressed)
+;
+SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
+
+
 ;
 ; Then the files used in the demo
 ;
@@ -53,6 +58,29 @@ AddDefine LOADER_SLIDESHOW {FileIndex}
 AddFile ..\build\files\slideshow.o $400
 
 AddDefine LOADER_FIRST_PICTURE {FileIndex}
+
+;AddFile ..\build\files\decal_euler.hir $a000
+
+
+AddFile ..\build\files\twilighte_im_title.hir $a000
+AddFile ..\build\files\twilighte_whitehall.hir $a000
+AddFile ..\build\files\twilighte_im_sprites.hir $a000
+AddFile ..\build\files\space_1999_sparks.hir $a000
+AddFile ..\build\files\twilighte_otype_1.hir $a000
+AddFile ..\build\files\dbug_assembler2002.hir $a000
+AddFile ..\build\files\dbug_karhu.hir $a000
+AddFile ..\build\files\defence_force.hir $a000
+AddFile ..\build\files\dbug_space1999_planets.hir $a000
+AddFile ..\build\files\dbug_atmos_connectors.hir $a000
+AddFile ..\build\files\dbug_space1999.hir $a000
+AddFile ..\build\files\dbug_1337_logo.hir $a000
+AddFile ..\build\files\dbug_oric1.hir $a000
+AddFile ..\build\files\twilighte_tol_title.hir $a000
+AddFile ..\build\files\twilighte_tol_doors.hir $a000
+AddFile ..\build\files\skooldaze.hir $a000
+AddFile ..\build\files\toxic_slime.hir $a000
+AddFile ..\build\files\twilighte_ripped.hir $a000
+AddFile ..\build\files\murder_on_the_atlantic.hir $a000
 AddFile ..\build\files\damsel.hir $a000
 AddFile ..\build\files\dbug_windows95.hir $a000
 AddFile ..\build\files\dbug_yessagician.hir $a000
@@ -88,4 +116,6 @@ AddFile ..\build\files\music_leaving_terramis.ym $c000
 AddDefine LOADER_LAST_MUSIC {FileIndex}
 
 
-
+SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
+AddDefine LOADER_COMPRESSED_TEST {FileIndex}
+AddFile ..\build\files\dbug_yessagician.hir $a000

@@ -168,9 +168,9 @@ FileEntry::FileEntry() :
   m_StartSector(1),
   m_SectorCount(0),
   m_LoadAddress(0),
-  m_FileSize(0),
+  m_FinalFileSize(0),
   m_CompressionMode(e_CompressionNone),
-  m_CompressedFileSize(0)
+  m_StoredFileSize(0)
 {
 }
 
@@ -436,6 +436,7 @@ bool Floppy::WriteSector(const char *fileName)
     {
       memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
     }
+    MarkCurrentSectorUsed();
     printf("Boot sector '%s' installed, %d free bytes remaining in this sector.\n",filteredFileName.c_str(),256-bufferSize);
 
     MoveToNextSector();
@@ -562,17 +563,14 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
     fileEntry.m_StartSide=0;
   }
 
-  int nb_sectors_by_files=(fileSize+255)/256;
-
   fileEntry.m_StartTrack =m_CurrentTrack;           // 0 to 42 (80...)
   fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
-  fileEntry.m_SectorCount=nb_sectors_by_files;      // Should probably be the real length
   fileEntry.m_LoadAddress=loadAddress;
-  fileEntry.m_FileSize   =fileSize;
+  fileEntry.m_StoredFileSize=fileSize;
+  fileEntry.m_FinalFileSize   =fileSize;
+  fileEntry.m_SectorCount=(fileSize+255)/256;
   fileEntry.m_FilePath   =fileName;
   fileEntry.m_CompressionMode=e_CompressionNone;
-  fileEntry.m_CompressedFileSize=0;
-
 
   std::vector<unsigned char> compressedBuffer;
   if (m_CompressionMode==e_CompressionFilepack)
@@ -580,6 +578,7 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
     // So the user requested FilePack compression.
     // Great, we can do that.
     compressedBuffer.resize(fileSize);
+    gLZ77_XorMask=0;
     size_t compressedFileSize=LZ77_Compress(fileData,compressedBuffer.data(),fileSize);
     if (compressedFileSize<fileSize)
     {
@@ -588,7 +587,8 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
       fileSize=compressedFileSize;
 
       fileEntry.m_CompressionMode=e_CompressionFilepack;
-      fileEntry.m_CompressedFileSize=compressedFileSize;
+      fileEntry.m_StoredFileSize=compressedFileSize;
+      fileEntry.m_SectorCount=(fileSize+255)/256;
     }
   }
 
@@ -606,6 +606,7 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
     }
     fileSize-=sizeToWrite;
 
+    MarkCurrentSectorUsed();
     memset((char*)m_Buffer+offset,0,256);
     memcpy((char*)m_Buffer+offset,fileData,sizeToWrite);
     fileData+=sizeToWrite;
@@ -619,6 +620,15 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   return true;
 }
 
+void Floppy::MarkCurrentSectorUsed()
+{
+  int magicValue=(m_SectorNumber*m_CurrentTrack)+m_CurrentSector;
+  if (m_SectorUsageMap.find(magicValue)!=m_SectorUsageMap.end())
+  {
+    ShowError("Sector %d was already allocated",magicValue);
+  }
+  m_SectorUsageMap.insert(magicValue);
+}
 
 bool Floppy::SaveDescription(const char* fileName) const
 {
@@ -639,6 +649,8 @@ bool Floppy::SaveDescription(const char* fileName) const
   std::stringstream code_compressed;
   std::stringstream code_size_low;
   std::stringstream code_size_high;
+  std::stringstream code_stored_size_low;
+  std::stringstream code_stored_size_high;
   std::stringstream code_adress_low;
   std::stringstream code_adress_high;
 
@@ -654,6 +666,9 @@ bool Floppy::SaveDescription(const char* fileName) const
       code_adress_low  << ",";
       code_adress_high << ",";
 
+      code_stored_size_low << ",";
+      code_stored_size_high << ",";
+
       code_size_low << ",";
       code_size_high << ",";
 
@@ -665,23 +680,11 @@ bool Floppy::SaveDescription(const char* fileName) const
     code_adress_low  << "<" << fileEntry.m_LoadAddress;
     code_adress_high << ">" << fileEntry.m_LoadAddress;
 
+    code_size_low << "<" << fileEntry.m_FinalFileSize;
+    code_size_high << ">" << fileEntry.m_FinalFileSize;
 
-    if (fileEntry.m_CompressionMode==e_CompressionNone)
-    {
-      // Uncompressed file
-      code_size_low << "<" << fileEntry.m_FileSize;
-      code_size_high << ">" << fileEntry.m_FileSize;
-
-      code_compressed << 0;
-    }
-    else
-    {
-      // Compressed file
-      code_size_low << "<" << fileEntry.m_CompressedFileSize;
-      code_size_high << ">" << fileEntry.m_CompressedFileSize;
-
-      code_compressed << 1;
-    }
+    code_stored_size_low << "<" << fileEntry.m_StoredFileSize;
+    code_stored_size_high << ">" << fileEntry.m_StoredFileSize;
 
     code_sector << fileEntry.m_StartSector;
 
@@ -703,12 +706,12 @@ bool Floppy::SaveDescription(const char* fileName) const
     if (fileEntry.m_CompressionMode==e_CompressionNone)
     {
       // Uncompressed file
-      file_list_summary << "(" << fileEntry.m_FileSize << " bytes).\n";
+      file_list_summary << "(" << fileEntry.m_FinalFileSize << " bytes).\n";
     }
     else
     {
       // Compressed file
-      file_list_summary << "(" << fileEntry.m_CompressedFileSize << " compressed bytes: " << (fileEntry.m_CompressedFileSize*100)/fileEntry.m_FileSize << "% of " << fileEntry.m_FileSize << " bytes).\n";
+      file_list_summary << "(" << fileEntry.m_StoredFileSize << " compressed bytes: " << (fileEntry.m_StoredFileSize*100)/fileEntry.m_FinalFileSize << "% of " << fileEntry.m_FinalFileSize << " bytes).\n";
     }
 
     ++counter;
@@ -721,6 +724,12 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "FileStartTrack .byt ";
   layoutInfo << code_track.str() << "\n";
 
+  layoutInfo << "FileStoredSizeLow .byt ";
+  layoutInfo << code_stored_size_low.str() << "\n";
+
+  layoutInfo << "FileStoredSizeHigh .byt ";
+  layoutInfo << code_stored_size_high.str() << "\n";
+
   layoutInfo << "FileSizeLow .byt ";
   layoutInfo << code_size_low.str() << "\n";
 
@@ -732,9 +741,6 @@ bool Floppy::SaveDescription(const char* fileName) const
 
   layoutInfo << "FileLoadAdressHigh .byt ";
   layoutInfo << code_adress_high.str() << "\n";
-
-  layoutInfo << "FileCompression .byt ";
-  layoutInfo << code_compressed.str() << "\n";
   
 
   layoutInfo << "#endif\n";
@@ -755,6 +761,10 @@ bool Floppy::SaveDescription(const char* fileName) const
 
   layoutInfo << "// List of files written to the floppy\n";
   layoutInfo << file_list_summary.str();
+  layoutInfo << "//\n";
+
+  int totalAvailableSpace=m_TrackNumber*m_SectorNumber*m_SideNumber;
+  layoutInfo << "// " << m_SectorUsageMap.size() << " sectors used, out of " << totalAvailableSpace << ". (" << (m_SectorUsageMap.size()*100)/totalAvailableSpace << "% of the total available size used)\n";
   layoutInfo << "//\n";
 
   if (m_DefineList.empty())

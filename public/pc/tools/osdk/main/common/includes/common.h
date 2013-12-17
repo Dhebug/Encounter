@@ -100,7 +100,7 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
 long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
 void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
 long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp);
-
+extern unsigned char gLZ77_XorMask;
 
 //
 // Preprocessing and filtering

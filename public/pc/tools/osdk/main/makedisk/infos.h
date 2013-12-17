@@ -33,4 +33,8 @@ Change history for the FloppyBuilder
 0.9 - 2013/12/15
 - Added the 'SetCompressionMode' command. Possible parameters are 'None' (default value) and 'FilePack'
 
+0.10 - 2013/12/17
+- The compression code now generates correct data (it was using the Atari ST mode encoding, making the unpacking code not happy)
+- Added to the report file the occupation ratio of the floppy (by maintaining an internal list of used sectors also used to check if there's no overlap)
+
 */
