@@ -6,7 +6,7 @@
 
 _playertext	.dsb 2
 _turntext	.byt " TURN:  #$%&:MOVE CURSOR",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
-
+_pressakey	.byt "       ()( PRESS A KEY )()",0
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen
 ; It's possible to change the INK color in the code iself.
@@ -122,11 +122,16 @@ _printremaining
 
 _flashon
 .(
+ ldy #42	// screen offset
+ lda #<_pressakey
+ sta _message+0
+ lda #>_pressakey
+ sta _message+1	
+ jsr _printline
  lda #1		// foreground=red
  sta $bf91
  lda #140	// flashing text
  sta $bf92
- rts
 .)
 
 _colorturn

@@ -82,6 +82,8 @@
 //						the "LookBackInAnger" issue...
 // 14-12-2013 NB v0.099 forgot calchightarget after pacman4 (brokenarrow)
 // 17-12-2013 NB v0.100 fixed bug in inccantake, brassed off.
+// 18-12-2013 NB v0.101 solved the "don't move away from king if leaves path open" issue
+//						More efficient text routines (saving 150 bytes)
 /****************************************/
 // TODO:
 // Fix the bloody thing
@@ -536,7 +538,7 @@ SKIPPY2:
     game=-1 Stalemate.
     game=-2 Attacker wins. 																
 */
-    message="          ATTACKER WINS!"; // default (game=-2)
+    message="          ATTACKER WINS"; // default (game=-2)
     // king escapes or all attackers killed
     if ( game == 0 )  message="            KING WINS"; 
     // computer can't move
@@ -551,11 +553,11 @@ SKIPPY2:
     	}
     }
     printmessage();
-    erasetext=120; // 40*3 (3 lines to erase)
-    message="\n       ()( PRESS A KEY )()";
-    		 
-    printline();
+    //erasetext=80; // 40*3 (3 lines to erase)
+    //message="\n       ()( PRESS A KEY )()";	 
+    //printline();
     flashon();
+    printturnline();
     getchar();
     PrintTrophyScreen();
   }
@@ -700,7 +702,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 		}
 		
 		// check NORTH and SOUTH
-		if ( surrounded < 3 ){
+		//if ( surrounded < 3 ){
 			if (foundpiece == 1){ // can't be taken so we've found a candidate && target is not on same row as candidate
 				if ( CanTakeDirection[NORTH] ) {
 					DeadPiece=targetns-1;
@@ -728,7 +730,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
 				}
 			}
-		}
+		//}
 		if (foundpiece == 1){
 			if (origorient < EAST){
 				ons = a;
@@ -1304,9 +1306,10 @@ void printpossiblemoves(){
   char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  message="\n       )() PRESS A KEY ()(";
-  printmessage();
-  flashon();
+  //message="\n       )() PRESS A KEY ()(";
+  erasetextarea();
+  //printmessage();		// "PRESS A KEY"
+  flashon();			// Make it FLASH RED
   printturnline();
   k=getchar();
   //fb=0;
@@ -1379,11 +1382,13 @@ void backbone()	{
     }
   }
 }
-// sidestep: take a step sideways if you can be caught where you are...
+// sidestep: take a step sideways (or backwards) if you can be caught 
+// if you stay where you are...
 void sidestep(){
 	if (target[a][b] > 1)	{
 		target[a][b]+=SIDESTEP;
-		//if ( ((orientation<EAST)&&(b==xew)) || ((orientation>SOUTH)&&(a==xns)) ) target[a][b]+=SIDESTEP;
+		// add more points if step route on same row/col as king
+		if ( ( a == kingns ) || ( b == kingew ) ) target[a][b]+=10;
 	}
 	
 }
@@ -1886,9 +1891,13 @@ void takepiece(){
 	  TakeWeight=LOWTAKEWEIGHT;	// reduce the takeweight figure
 	  Trophies[FIRSTBLOOD][playertype-1]=TROPHY;	// update Trophies Array
 	  firstblood=0;
-	  message=" ()( FIRST BLOOD TO ATTACKER )()\n       )() PRESS A KEY ()(";           
+	  //message=" ()( FIRST BLOOD TO ATTACKER )()\n       )() PRESS A KEY ()("; 
+	  message=" ()( FIRST BLOOD TO ATTACKER )()";           
+          
 	  if ( playertype == DEFENDER ){
-	  message="   ()( FIRST BLOOD TO KING )()\n       )() PRESS A KEY ()(";                      	   
+	  //message="   ()( FIRST BLOOD TO KING )()\n       )() PRESS A KEY ()("; 
+	  message="   ()( FIRST BLOOD TO KING )()";                      	   
+                     	   
 	  }
 	  submessage();
 	  
@@ -1896,11 +1905,13 @@ void takepiece(){
 }
 void takemessage(){	// displays a firstblood or multiple take message
 	if ( takecounter == 2 ) {
-		message="       ()( BLOOD EAGLE )()\n       )() PRESS A KEY ()(";	         
+		//message="       ()( BLOOD EAGLE )()\n       )() PRESS A KEY ()(";	 
+		message="       ()( BLOOD EAGLE )()";	         
 		Trophies[BLOODEAGLE][playertype-1]=TROPHY;
 	}
 	if ( takecounter == 3 ) {
-		message="       ()(  BERZERKER  )()\n       )() PRESS A KEY ()(";	         
+		//message="       ()(  BERZERKER  )()\n       )() PRESS A KEY ()(";
+		message="       ()(  BERZERKER  )()";	         	         
 		Trophies[BERZERKER][playertype-1]=TROPHY;
 	}
 	submessage();
@@ -2259,6 +2270,7 @@ void printtitles()		{
 void PrintTrophyScreen(){
 	// Print text in text area
 	Checker=11;CheckerBoard();
+	erasetext=120; // all three lines
 	erasetextarea();
 	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
 	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
