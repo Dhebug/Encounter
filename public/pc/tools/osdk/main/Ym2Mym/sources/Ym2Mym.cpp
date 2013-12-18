@@ -26,6 +26,9 @@ fragment offset & counter data (OFFNUM).
 #include <stdlib.h>
 #include <string.h>
 
+#include "infos.h"
+#include "common.h"
+
 #define REGS    14
 #define FRAG    128  //  Number of rows to compress at a time 
 #define OFFNUM  14   //  Bits needed to store off+num of FRAG 
@@ -36,6 +39,52 @@ void writebits(unsigned data,int bits,FILE *f);
 
 int main(int argc,char *argv[])
 {
+  //
+  // Some initialization for the common library
+  //
+  SetApplicationParameters(
+    "Ym2Mym",
+    TOOL_VERSION_MAJOR,
+    TOOL_VERSION_MINOR,
+    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+    "\r\n"
+    "Author:\r\n"
+    "  First version by Marq/Lieves!Tuore & Fit (marq@iki.fi) \r\n"
+    "  More recent updates by Pointier Mickael \r\n"
+    "\r\n"
+    "Purpose:\r\n"
+    "  Convert Atari ST/Amstrad musics from the YM to MYM format.\r\n"
+    "\r\n"
+    "Usage:\r\n"
+    "  {ApplicationName} source.ym destination.mym\r\n"
+    "\r\n"
+    "Switches:\r\n"
+    " -tn   Tuning\r\n"
+    "       -t0 => No retune\r\n"
+    "       -t1 => Double frequency [default]\r\n"
+    "\r\n"
+    );
+
+  int retune_music=1;
+
+  ArgumentParser argumentParser(argc,argv);
+
+  while (argumentParser.ProcessNextArgument())
+  {
+    if (argumentParser.IsSwitch("-t"))
+    {
+      //format: [-t]
+      //	0 => No retune
+      // 	1 => Double frequency [default]
+      retune_music=argumentParser.GetIntegerValue(0);
+    }
+  }
+
+  if (argumentParser.GetParameterCount()!=2)
+  {
+    ShowError(0);
+  }
+
   unsigned char*data[REGS];    //  The unpacked YM data 
 
   unsigned current[REGS];
@@ -53,19 +102,9 @@ int main(int argc,char *argv[])
   unsigned long length;         //  Song length
   unsigned long ldata;          //  Needed in the loader
 
-  int retune_music=1;
-
-  if (argc!=3)
+  if ((f=fopen(argumentParser.GetParameter(0),"rb"))==NULL)
   {
-    printf("Usage: ym2mym source.ym destination.mym\n");
-    printf("Raw YM files only. Uncompress with LHA.\n");
-    return(EXIT_FAILURE);
-  }
-
-  if ((f=fopen(argv[1],"rb"))==NULL)
-  {
-    printf("File open error.\n");
-    return(EXIT_FAILURE);
+    ShowError("Can't open '%s'",argumentParser.GetParameter(0));
   }
 
   fseek(f,0,SEEK_END);
@@ -235,7 +274,7 @@ int main(int argc,char *argv[])
 
   fclose(f);
 
-  if ((f=fopen(argv[2],"wb"))==NULL)
+  if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)
   {
     printf("Cannot open destination file.\n");
     return(EXIT_FAILURE);
