@@ -82,8 +82,8 @@
 //						the "LookBackInAnger" issue...
 // 14-12-2013 NB v0.099 forgot calchightarget after pacman4 (brokenarrow)
 // 17-12-2013 NB v0.100 fixed bug in inccantake, brassed off.
-// 18-12-2013 NB v0.101 solved the "don't move away from king if leaves path open" issue
-//						More efficient text routines (saving 150 bytes)
+// 18-12-2013 NB v0.101 solved the "don't move away from king if leaves path open" issue. More efficient text routines (saving 150 bytes)
+// 19-12-2013 NB v0.102 refined above issue
 /****************************************/
 // TODO:
 // Fix the bloody thing
@@ -249,6 +249,7 @@ void pacman2();				// update target positions around king (need to develop furth
 void pacman2b();			// subroutine of pacman2
 void pacman3();
 void pacman4();				// aka FULL broken arrow
+void pacman4B();			// subroutine of pacman4
 void pacman5();
 //void pacman6();				// "vinegar strokes"
 void pause();				// wait a certain period of time (pausetime)
@@ -638,8 +639,9 @@ void Xenon2(){
 	setcheckmode1(); checkroute();	// is row/col empty (z)?
 	if ( z == 0 ){	// if row/col is empty...CAN KING GET TO IT?
 		checkroutemode=6; checkroute();	
-		if (z) { 	// If he can...populate add points to target values
-			checkroutemode=5; checkroute();
+		// if he can get to the empty zone row and can't be stopped en-route...
+		if ((z)&&(kingtargets[orientation]==0)) { 	 
+			checkroutemode=5; checkroute();	// add points to targets on empty row
 		} 
 	}	
 }
@@ -712,8 +714,8 @@ void FindPiece(){	// find a piece capable of moving to selected target
 					DeadPiece=targetns+1;
 					FindPieceNS();
 				}
-				if (a == kingns){ // if candidate is on same row as king (don't move away if only one piece E/W)
-					if (((b > kingew)&&(kingpieces[EAST]==1)) || ((b < kingew)&&(kingpieces[WEST]==1))) setfoundpiece10();
+				if (a == kingns){ // if candidate is on same row as king (don't move away if only one/two pieces E/W)
+					if (((b > kingew)&&(kingpieces[EAST] < 3 )) || ((b < kingew)&&(kingpieces[WEST] < 3 ))) setfoundpiece10();
 				}
 			}	
 			// CHECK EAST AND WEST
@@ -726,8 +728,8 @@ void FindPiece(){	// find a piece capable of moving to selected target
 					DeadPiece=targetew-1;
 					FindPieceEW();
 				}
-				if (b == kingew){ // if candidate is on same col as king (don't move away if only one piece N/S)
-					if (((a < kingns)&&(kingpieces[NORTH]==1)) || ((a > kingns)&&(kingpieces[SOUTH]==1))) setfoundpiece10();
+				if (b == kingew){ // if candidate is on same col as king (don't move away if only one/two pieces N/S)
+					if (((a < kingns)&&(kingpieces[NORTH] < 3 )) || ((a > kingns)&&(kingpieces[SOUTH] < 3 ))) setfoundpiece10();
 				}
 			}
 		//}
@@ -931,6 +933,7 @@ void SheldonGambit(){ //called from subpacmanx
 
 }
 void subpacmany(){	// apply the points generated in pacman2-6
+	unsigned char test=1;
 // SET UNCOUNTER
   pacman5();				// ensure correct paclevels are set
   uncounter=paclevel2+1;	// if south or east 
@@ -948,8 +951,8 @@ void subpacmany(){	// apply the points generated in pacman2-6
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( target[x][y] ){	// if accessible by attacker
     	//if (( target[x][y] > 1 )||(redflag[orientation])){
-	    if ( target[x][y] > 1 ){	
-	    	//printmessage();getchar();	
+	    if ( brokenarrow[orientation] > 0 ) test=0; // dont care if can be taken
+	    if ( target[x][y] > test ){	
 	      	target[x][y]+=points; 
 	      	Xenon3(); // count number of pieces on row/column
 	      	if ( z==0) target[x][y]+=points;	// add more points if empty row/col
@@ -1165,20 +1168,32 @@ void pacman4(){
 	// Cross the "T", see if a FULL broken arrow condition could exist (LEVEL 2)
 	// FULL LEVEL 2
 	//tzonemode=FULL;
-	points=hightarget+1;
-	orientation = NORTH; // NORTH
-	startrow=1;destrow=1;startcol=0;destcol=10;
-	Xenon2();
-	orientation = SOUTH; // SOUTH
-	startrow=9;destrow=9;startcol=0;destcol=10;
-	Xenon2();
-	orientation = EAST; // EAST
-	startrow=0;destrow=10;startcol=9;destcol=9;
-	Xenon2();
-	orientation = WEST; // WEST
-	startrow=0;destrow=10;startcol=1;destcol=1;
+	//points=hightarget+1;
+	
+	orientation = NORTH; pacman4B();// NORTH
+	//startrow=1;destrow=1;startcol=0;destcol=10;
+	//Xenon2();
+	orientation = SOUTH; pacman4B();// SOUTH
+	//startrow=9;destrow=9;startcol=0;destcol=10;
+	//Xenon2();
+	orientation = EAST; pacman4B();// EAST
+	//startrow=0;destrow=10;startcol=9;destcol=9;
+	//Xenon2();
+	orientation = WEST; pacman4B();// WEST
+	//startrow=0;destrow=10;startcol=1;destcol=1;
+	//Xenon2();
+}
+// ********************************
+void pacman4B(){
+	switch(origorient){
+		case NORTH: startrow=1;destrow=1;startcol=0;destcol=10;break;
+		case SOUTH: startrow=9;destrow=9;startcol=0;destcol=10;break;
+		case EAST:	startrow=0;destrow=10;startcol=9;destcol=9;break;
+		case WEST:	startrow=0;destrow=10;startcol=1;destcol=1;break;
+	}
 	Xenon2();
 }
+// ******************************** 
 void pacman5(){
 	if (orientation < EAST){	// NORTH AND SOUTH (for pacman3) 
 	  	paclevel1=kingew;
@@ -1388,7 +1403,10 @@ void sidestep(){
 	if (target[a][b] > 1)	{
 		target[a][b]+=SIDESTEP;
 		// add more points if step route on same row/col as king
-		if ( ( a == kingns ) || ( b == kingew ) ) target[a][b]+=10;
+		if ( ( a == kingns ) || ( b == kingew ) ) {
+			//target[a][b]+=10;
+			target[a][b]+=SIDESTEP;
+		}
 	}
 	
 }
