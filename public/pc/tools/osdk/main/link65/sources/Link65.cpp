@@ -116,7 +116,7 @@ std::set<std::string>				gDefinedLabelsList;
 //
 // Some pre-declarations...
 //
-bool ParseFile(const char* filename);
+bool ParseFile(const std::string& filename);
 
 
 
@@ -267,7 +267,7 @@ C:\OSDK\BIN\link65.exe -d C:\OSDK\lib/ -o C:\OSDK\TMP\linked.s -s C:\OSDK\TMP\ -
 // Return defined labels in label var, with return value of 1
 // Return labels used by JSR, JMP, LDA, STA in label var, with ret value of 2
 //
-int parseline(const std::string cInputLine)
+int parseline(const std::string cInputLine,bool parseIncludeFiles)
 {
 	char *tmp;
 
@@ -324,6 +324,10 @@ int parseline(const std::string cInputLine)
 				//
 				// Read define name
 				const char* pcFilename=strtok(NULL," \"*+-;\\\n/\t,()");
+				if (parseIncludeFiles)
+				{
+				  ParseFile(pcFilename);
+				}
 				/*
 				if (!stricmp(pcFilename,"GenericEditorRoutines.s"))
 				{
@@ -450,18 +454,25 @@ void linkerror(char *msg)
 
 
 
-bool ParseFile(const char* filename)
+bool ParseFile(const std::string& filename)
 {
 	std::vector<std::string> cTextData;
-	if (!LoadText(filename,cTextData))
+	if (!LoadText(filename.c_str(),cTextData))
 	{
-		printf("\nCannot open %s \n",filename);
+		printf("\nCannot open %s \n",filename.c_str());
 		outall();
 		exit(1);
 	}
 
 	if (gFlagVerbose)
-		printf("\nScanning file %s " ,filename);
+		printf("\nScanning file %s " ,filename.c_str());
+
+	bool parseIncludeFiles=false;
+	if (*filename.rbegin()=='s') // Quick hack, we parse the includes in the assembler files, need proper detection of format
+	{
+	  parseIncludeFiles=true;
+	}
+
 				   
 	unsigned int i;
 
@@ -473,7 +484,7 @@ bool ParseFile(const char* filename)
 		const std::string& cCurrentLine=*cItText;
 
 		std::string cFilteredLine=FilterLine(cCurrentLine);
-		int state=parseline(cFilteredLine);
+		int state=parseline(cFilteredLine,parseIncludeFiles);
 
 		std::string cFoundLabel;
 		if (state && label)
@@ -536,77 +547,79 @@ bool ParseFile(const char* filename)
 
 bool LoadLibrary(const std::string& path_library_files)
 {
-	std::string ndxstr=path_library_files+"library.ndx";
+  std::string ndxstr=path_library_files+"library.ndx";
 
-	std::vector<std::string> cTextData;
-	if (!LoadText(ndxstr.c_str(),cTextData))
+  std::vector<std::string> cTextData;
+  if (!LoadText(ndxstr.c_str(),cTextData))
+  {
+	printf("Cannot open Index file : %s \n",ndxstr.c_str());
+	exit(1);
+  }
+
+  if (gFlagVerbose)
+	printf("Reading lib index file\n");
+
+  LabelEntry_c cLabelEntry;
+  cLabelEntry.file_name	="";
+  cLabelEntry.label_name	="";
+
+  std::vector<std::string>::const_iterator cItText=cTextData.begin();
+  while (cItText!=cTextData.end())
+  {			
+	//  Get line file and parse it
+	std::string cCurrentLine=StringTrim(*cItText);
+
+	// Lines that indicate files start with - 
+	//if (cCurrentLine[0] < 32)
+	//	break;
+
+	if (!cCurrentLine.empty())
 	{
-		printf("Cannot open Index file : %s \n",ndxstr.c_str());
-		exit(1);
-	}
-	
-	if (gFlagVerbose)
-		printf("Reading lib index file\n");
-
-	LabelEntry_c cLabelEntry;
-	cLabelEntry.file_name	="";
-	cLabelEntry.label_name	="";
-
-	std::vector<std::string>::const_iterator cItText=cTextData.begin();
-	while (cItText!=cTextData.end())
-	{			
-		//  Get line file and parse it
-		std::string cCurrentLine=StringTrim(*cItText);
-
-		// Lines that indicate files start with - 
-		//if (cCurrentLine[0] < 32)
-		//	break;
-
+	  if (cCurrentLine[0] == '-') 
+	  {
 		// Found a file indicator. Check if already used, if not start using it in table
-		if (cCurrentLine[0] == '-') 
+		cLabelEntry.file_name=path_library_files+(cCurrentLine.c_str()+1);
+		// check for duplicate
+		for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
 		{
-			cLabelEntry.file_name=path_library_files+(cCurrentLine.c_str()+1);
-			// check for duplicate
-			for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
-			{
-				if (cLabelEntry.file_name==gLibraryReferencesList[i].file_name)
-				{
-					printf("Duplicate file %s in lib index\n",cLabelEntry.file_name.c_str());
-					outall();
-					exit(1);
-                }
-			}
+		  if (cLabelEntry.file_name==gLibraryReferencesList[i].file_name)
+		  {
+			printf("Duplicate file %s in lib index\n",cLabelEntry.file_name.c_str());
+			outall();
+			exit(1);
+		  }
 		}
-		else
-		if (!cCurrentLine.empty())
+	  }
+	  else
+	  {
+		// Found a label. Check if already used, if not put it in table
+		if (cLabelEntry.file_name.size()<2) 
 		{
-			// Found a label. Check if already used, if not put it in table
-			if (cLabelEntry.file_name.size()<2) 
-			{
-				linkerror("Error with file line indicator\n");
-				exit(1);
-			}
+		  linkerror("Error with file line indicator\n");
+		  exit(1);
+		}
 
-			cLabelEntry.label_name=cCurrentLine;
+		cLabelEntry.label_name=cCurrentLine;
 
-			// Check if label is duplicate
-			for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
-			{
-				if (cLabelEntry.label_name==gLibraryReferencesList[i].label_name)
-				{
-					printf("Duplicate label %s in lib index file\n",cLabelEntry.label_name.c_str());
-					outall();
-					exit(1);
-                }
-			}
+		// Check if label is duplicate
+		for (unsigned int i=0;i<gLibraryReferencesList.size();i++) 
+		{
+		  if (cLabelEntry.label_name==gLibraryReferencesList[i].label_name)
+		  {
+			printf("Duplicate label %s in lib index file\n",cLabelEntry.label_name.c_str());
+			outall();
+			exit(1);
+		  }
+		}
 
-			// One more entry in the table
-			gLibraryReferencesList.push_back(cLabelEntry);
-		}          
-		++cItText;
-	}
+		// One more entry in the table
+		gLibraryReferencesList.push_back(cLabelEntry);
+	  }
+	}          
+	++cItText;
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -802,9 +815,9 @@ int main(int argc,char **argv)
 			k=1;
         }
 				
-		char filename[255];
-		strcpy(filename,gInputFileList[k].m_cFileName.c_str());
-		ParseFile(filename);
+		//char filename[255];
+		//strcpy(filename,gInputFileList[k].m_cFileName.c_str());
+		ParseFile(gInputFileList[k].m_cFileName);
 
 		//		
 		// Check if used labels are defined inside the files 

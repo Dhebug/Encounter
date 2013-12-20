@@ -4,7 +4,7 @@
 SET BIN2TXT=%osdk%\bin\bin2txt
 
 SET PICTCONV=%OSDK%\Bin\PictConv
-SET PICTCONV=D:\svn\public\pc\tools\osdk\main\Osdk\_final_\Bin\PictConv
+::SET PICTCONV=D:\svn\public\pc\tools\osdk\main\Osdk\_final_\Bin\PictConv
 SET PARAMS=-f1 -d0 -o2 -t1
 SET PARAMS=-f1 -d0 -o2 
 ::goto EndPictures
@@ -52,14 +52,11 @@ SET PARAMS=-f1 -d0 -o2
 %PICTCONV% %PARAMS% data\mooz_santa.png build\files\mooz_santa.hir
 :EndPictures
 %PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
-
-%osdk%\bin\FilePack build\files\damsel.hir build\files\damsel.hir.pak
-
-
+%PICTCONV% -f0 -f0 -o2 data\Font6x8_ArtDeco.png build\files\Font6x8_ArtDeco.hir
 
 ::goto EndMusics
 SET PARAMS=-f2 -h1 -s1
-SET YM2MYM=D:\svn\public\pc\tools\osdk\main\Osdk\_final_\Bin\ym2mym.exe
+SET YM2MYM=%osdk%\Bin\ym2mym.exe
 
 :: Too large
 ::%YM2MYM% data\BigAlec-Judge.ym build\files\music_back.ym      <- 28 kb

@@ -18,6 +18,15 @@ extern Mym_ReInitialize();
 // transitions.s
 extern unsigned char PictureLoadBuffer[];
 extern void PictureTransitionFromTopAndBottom();
+extern void PictureTransitionVenicianStore();
+extern void PictureTransitionUnroll();
+
+extern void PictureDoTransition();
+
+extern void PrintDescription();
+
+
+extern void InitTransitionData();
 
 // scroller.s
 extern unsigned char FontBuffer[];
@@ -45,6 +54,19 @@ extern void Player_SetMusic_Birthday();
 
 unsigned char CurrentMusic=LOADER_FIRST_MUSIC;
 
+/*
+void PrintDescription(const char* author,const char* name)
+{
+	char* textLine;
+
+	textLine=(char*)0xbb80+40*25;
+	memset(textLine,32,40);
+
+	memcpy(textLine,author,strlen(author));
+	memcpy(textLine+20,name,strlen(name));
+}
+*/
+
 void main()
 {
 	int y;
@@ -53,6 +75,13 @@ void main()
 		hires();
 	}
 	MusicLooped=1;
+
+	// Load the 6x8 font
+	LoaderApiEntryIndex=LOADER_FONT_6x8_ARTDECO;
+	LoadFile();
+
+	// Some basic inits
+	InitTransitionData();
 
 	System_InstallIRQ_SimpleVbl();
 
@@ -111,7 +140,12 @@ void main()
 			LoadFile();
 
 			//memcpy((unsigned char*)0xa000,PictureLoadBuffer,8000);
-			PictureTransitionFromTopAndBottom();
+			//PictureTransitionFromTopAndBottom();
+			//PictureTransitionVenicianStore();
+			//PictureTransitionUnroll();
+			//PrintDescription("Twilighte","Barbitoric");
+			PrintDescription();
+			PictureDoTransition();
 
 			Pause();
 		}

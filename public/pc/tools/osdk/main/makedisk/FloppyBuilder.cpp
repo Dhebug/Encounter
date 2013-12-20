@@ -11,7 +11,78 @@
 #include "Floppy.h"
 
 
+// while (std::getline(iss,item,' ')) 
+bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNumber)
+{
+  returnedToken.clear();
 
+  const char* startOfLine    =restOfLine.c_str();
+  const char* currentPosition=startOfLine;
+  char car;
+
+  // First skip all the white space stuff
+  while ( (car=*currentPosition) &&  ( (car==' ') || (car=='\t') )  )
+  {
+    ++currentPosition;
+  }
+
+  // Then depending of the character we have, we need a terminator token
+  if (car)
+  {
+    char match =0;
+
+    if (car=='"')
+    {
+      match='"';
+    }
+    else
+    if (car=='{')
+    {
+      match='}';
+    }
+    else
+    if (car=='[')
+    {
+      match =']';
+    }
+
+    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )      
+    {
+      returnedToken.push_back(car);
+      ++currentPosition;
+    }
+
+    if (match && (car==match))
+    {
+      // Including the matching character
+      returnedToken.push_back(car);
+      ++currentPosition;
+      car=*currentPosition;
+    }
+
+    if (car)
+    {
+      // We have reach the end of the token, just make sure there's a white space behind
+      if ((car==' ') || (car=='\t'))
+      {
+        restOfLine=currentPosition;
+      }
+      else
+      {
+        // Parse error
+        ShowError("Parse error line '%d'\n",lineNumber);
+
+      }
+    }
+    else
+    {
+      // End of Line
+      restOfLine.clear();
+    }
+    return true;
+  }
+  return false;
+}
 
 void main(int argc, char *argv[])
 {
@@ -92,15 +163,38 @@ void main(int argc, char *argv[])
 
     std::istringstream iss(currentLine);
 
+    std::map<std::string,std::string>   metadata;
     std::string item;
     std::vector<std::string> tokens;
-    while (std::getline(iss,item,' ')) 
+    //while (std::getline(iss,item,' ')) 
+    while (GetNextToken(item,currentLine,lineNumber))
     {
       // Remove eventual superfluous spaces and tabs
       item=StringTrim(item);
       if (!item.empty())
       {
-        tokens.push_back(item);
+        if ( ((*item.begin())=='[') && ((*item.rbegin())==']') )
+        {
+          // Let's say it's metadata
+          std::string metaItem=StringTrim(item,"[]");
+          std::size_t found = metaItem.find(":");
+          if (found!=std::string::npos)
+          {
+            // Comments, just skip them
+            std::string key  =metaItem.substr(0,found);
+            std::string value=metaItem.substr(found+1);
+            metadata[key]=value;
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), found invalid '%s' metadata format, should be '[key:value]'\n",lineNumber,item.c_str());
+          }
+        }
+        else
+        {
+          // Let's say it's an actual parameter
+          tokens.push_back(item);
+        }
       }
     }
 
@@ -226,7 +320,7 @@ void main(int argc, char *argv[])
         {
           std::string fileName=tokens[1];
           int loadAddress=ConvertAdress(tokens[2].c_str());
-          if (!floppy.WriteFile(fileName.c_str(),loadAddress,false))
+          if (!floppy.WriteFile(fileName.c_str(),loadAddress,false,metadata))
           {
             ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
           }
@@ -242,7 +336,7 @@ void main(int argc, char *argv[])
         if (tokens.size()==2)
         {
           std::string fileName=tokens[1];
-          if (!floppy.WriteFile(fileName.c_str(),-1,true))
+          if (!floppy.WriteFile(fileName.c_str(),-1,true,metadata))
           {
             ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
           }

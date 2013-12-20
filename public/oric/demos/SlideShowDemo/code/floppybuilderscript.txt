@@ -61,51 +61,52 @@ AddDefine LOADER_FIRST_PICTURE {FileIndex}
 
 ;AddFile ..\build\files\decal_euler.hir $a000
 
-
-AddFile ..\build\files\twilighte_im_title.hir $a000
-AddFile ..\build\files\twilighte_whitehall.hir $a000
-AddFile ..\build\files\twilighte_im_sprites.hir $a000
-AddFile ..\build\files\space_1999_sparks.hir $a000
-AddFile ..\build\files\twilighte_otype_1.hir $a000
-AddFile ..\build\files\dbug_assembler2002.hir $a000
-AddFile ..\build\files\dbug_karhu.hir $a000
-AddFile ..\build\files\defence_force.hir $a000
-AddFile ..\build\files\dbug_space1999_planets.hir $a000
-AddFile ..\build\files\dbug_atmos_connectors.hir $a000
-AddFile ..\build\files\dbug_space1999.hir $a000
-AddFile ..\build\files\dbug_1337_logo.hir $a000
-AddFile ..\build\files\dbug_oric1.hir $a000
-AddFile ..\build\files\twilighte_tol_title.hir $a000
-AddFile ..\build\files\twilighte_tol_doors.hir $a000
-AddFile ..\build\files\skooldaze.hir $a000
-AddFile ..\build\files\toxic_slime.hir $a000
-AddFile ..\build\files\twilighte_ripped.hir $a000
-AddFile ..\build\files\murder_on_the_atlantic.hir $a000
-AddFile ..\build\files\damsel.hir $a000
-AddFile ..\build\files\dbug_windows95.hir $a000
-AddFile ..\build\files\dbug_yessagician.hir $a000
-AddFile ..\build\files\diamond_2.hir $a000
-AddFile ..\build\files\exocet_blueface.hir $a000
-AddFile ..\build\files\exocet_fists.hir $a000
-AddFile ..\build\files\exocet_moonguy.hir $a000
-AddFile ..\build\files\karate.hir $a000
-AddFile ..\build\files\karate_2.hir $a000
-AddFile ..\build\files\krillys.hir $a000
-AddFile ..\build\files\mooz_barbitoric.hir $a000
-AddFile ..\build\files\mooz_oric.hir $a000
-AddFile ..\build\files\mooz_santa.hir $a000
-AddFile ..\build\files\mooz_supertomato.hir $a000
-AddFile ..\build\files\prez_story.hir $a000
-AddFile ..\build\files\tomb_1.hir $a000
-AddFile ..\build\files\trois_mats.hir $a000
-AddFile ..\build\files\twilighte_beast.hir $a000
-AddFile ..\build\files\twilighte_dragons.hir $a000
-AddFile ..\build\files\twilighte_pegasus.hir $a000
-AddFile ..\build\files\twilighte_sonix.hir $a000
+AddFile ..\build\files\trois_mats.hir $a000                   [author:Vasiloric]        [name:Sailing ship]
+AddFile ..\build\files\damsel.hir $a000                       [author:Marcel Van Driel] [name:Damsel title]
+AddFile ..\build\files\murder_on_the_atlantic.hir $a000       [author:Dom]              [name:Murder on the Atlantic]
+AddFile ..\build\files\twilighte_ripped.hir $a000             [author:Twilighte]        [name:Ripped!]
+AddFile ..\build\files\twilighte_dragons.hir $a000            [author:Twilighte]        [name:Double Dragons]
+AddFile ..\build\files\dbug_oric1.hir $a000                   [author:Dbug]        		[name:Oric 1]
+AddFile ..\build\files\twilighte_pegasus.hir $a000            [author:Twilighte]        [name:Pegasus]
+AddFile ..\build\files\twilighte_im_title.hir $a000           [author:Twilighte]        [name:Impossible Mission]
+AddFile ..\build\files\twilighte_whitehall.hir $a000          [author:Twilighte]        [name:OType - Whitehall]
+AddFile ..\build\files\twilighte_im_sprites.hir $a000         [author:Twilighte]        [name:IM Sprite Sheets]
+AddFile ..\build\files\space_1999_sparks.hir $a000            [author:Chema]        	[name:Space 1999 - Sparks]
+AddFile ..\build\files\twilighte_otype_1.hir $a000            [author:Twilighte]        [name:OType]
+AddFile ..\build\files\dbug_assembler2002.hir $a000           [author:Dbug]        		[name:Assembly 2002]
+AddFile ..\build\files\dbug_karhu.hir $a000                   [author:Dbug]        		[name:Karhu]
+AddFile ..\build\files\defence_force.hir $a000                [author:Dbug]        		[name:Defence Force Logo]
+AddFile ..\build\files\dbug_space1999_planets.hir $a000       [author:Dbug]        		[name:Space 1999 - Planets]
+AddFile ..\build\files\dbug_atmos_connectors.hir $a000        [author:Dbug]        		[name:Hardware VSync]
+AddFile ..\build\files\dbug_space1999.hir $a000               [author:Dbug]        		[name:Space 1999]
+AddFile ..\build\files\dbug_1337_logo.hir $a000               [author:Dbug]        		[name:1337 Logo]
+AddFile ..\build\files\twilighte_tol_title.hir $a000          [author:Twilighte]        [name:Times Of Lore Title]
+AddFile ..\build\files\twilighte_tol_doors.hir $a000          [author:Twilighte]        [name:Times Of Lore Intro]
+AddFile ..\build\files\skooldaze.hir $a000                    [author:Symoon & Dbug]    [name:Skooldaze]
+AddFile ..\build\files\toxic_slime.hir $a000                  [author:Alexios]          [name:Toxic Slime]
+AddFile ..\build\files\dbug_windows95.hir $a000               [author:Dbug]        		[name:Windows 95]
+AddFile ..\build\files\dbug_yessagician.hir $a000             [author:Dbug]        		[name:Yessagician]
+AddFile ..\build\files\diamond_2.hir $a000                    [author:Fr{d{ric Baille]  [name:Diamond Island]
+AddFile ..\build\files\exocet_blueface.hir $a000              [author:Exocet]        	[name:Blueface]
+AddFile ..\build\files\exocet_fists.hir $a000                 [author:Exocet]        	[name:Fists]
+AddFile ..\build\files\exocet_moonguy.hir $a000               [author:Exocet]        	[name:Moon guy]
+AddFile ..\build\files\karate.hir $a000                       [author:Christophe Andreani] [name:Karate]
+AddFile ..\build\files\karate_2.hir $a000                     [author:Christophe Andreani] [name:Karate]
+AddFile ..\build\files\krillys.hir $a000                      [author:Orpheus]        	[name:Krillys]
+AddFile ..\build\files\mooz_barbitoric.hir $a000              [author:Mooz]        		[name:Barbitoric]
+AddFile ..\build\files\mooz_oric.hir $a000                    [author:Mooz]             [name:Oric]
+AddFile ..\build\files\mooz_santa.hir $a000                   [author:Mooz]        		[name:Santa]
+AddFile ..\build\files\mooz_supertomato.hir $a000             [author:Mooz]        		[name:Super Tomato]
+AddFile ..\build\files\prez_story.hir $a000                   [author:Prez]        		[name:Oric Coder]
+AddFile ..\build\files\tomb_1.hir $a000                       [author:Loriciels]        [name:Axayacatl]
+AddFile ..\build\files\twilighte_beast.hir $a000              [author:Twilighte]        [name:Shadow of the Beast]
+AddFile ..\build\files\twilighte_sonix.hir $a000              [author:Twilighte]        [name:Sonix]
 AddDefine LOADER_LAST_PICTURE {FileIndex}
 
 AddDefine LOADER_FONT_24x20 {FileIndex}
 AddFile ..\build\files\font_24x20.hir $a000
+AddDefine LOADER_FONT_6x8_ARTDECO {FileIndex}
+AddFile ..\build\files\Font6x8_ArtDeco.hir $9900
 
 AddDefine LOADER_FIRST_MUSIC {FileIndex}
 ;AddFile ..\build\files\test.ym $c000
@@ -114,8 +115,3 @@ AddFile ..\build\files\northtar.ym $c000
 AddFile ..\build\files\music_no_second_prize.ym $c000
 AddFile ..\build\files\music_leaving_terramis.ym $c000
 AddDefine LOADER_LAST_MUSIC {FileIndex}
-
-
-SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
-AddDefine LOADER_COMPRESSED_TEST {FileIndex}
-AddFile ..\build\files\dbug_yessagician.hir $a000

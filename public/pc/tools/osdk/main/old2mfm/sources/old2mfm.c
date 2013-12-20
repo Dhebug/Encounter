@@ -11,6 +11,9 @@ int gap1,gap2,gap3;
 char old_signature[]="ORICDISK";
 char new_signature[]="MFM_DISK";
 
+void init_track(int n);
+void compute_crc(unsigned char *ptr,int count);
+
 /* TODO:Fix endianness! */
 
 int main(int argc,char *argv[])
@@ -90,7 +93,7 @@ printf("done.\n");
 	return EXIT_SUCCESS;
 }
 
-init_track(int n)
+void init_track(int n)
 {
 	int i,j,offset=0;
 
@@ -147,7 +150,7 @@ unsigned int crctab[256] =
 	0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
 	
-compute_crc(unsigned char *ptr,int count)
+void compute_crc(unsigned char *ptr,int count)
 {
 	int i;
 	unsigned short crc=0xFFFF,byte;
