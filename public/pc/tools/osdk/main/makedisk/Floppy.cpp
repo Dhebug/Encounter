@@ -522,7 +522,7 @@ public:
 };
 
 
-bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent)
+bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent,const std::map<std::string,std::string>& metadata)
 {
   if (!m_Buffer)
   {
@@ -571,6 +571,12 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   fileEntry.m_SectorCount=(fileSize+255)/256;
   fileEntry.m_FilePath   =fileName;
   fileEntry.m_CompressionMode=e_CompressionNone;
+  fileEntry.m_Metadata = metadata;
+
+  for (auto metadataIt(metadata.begin());metadataIt!=metadata.end();++metadataIt)
+  {
+    m_MetadataCategories.insert(metadataIt->first);
+  }
 
   std::vector<unsigned char> compressedBuffer;
   if (m_CompressionMode==e_CompressionFilepack)
@@ -654,6 +660,20 @@ bool Floppy::SaveDescription(const char* fileName) const
   std::stringstream code_adress_low;
   std::stringstream code_adress_high;
 
+  std::map<std::string,std::stringstream>     metadata_content;
+
+  std::set<std::string>                       metadata_entries;
+
+  {
+    for (auto metadataIt(m_MetadataCategories.begin());metadataIt!=m_MetadataCategories.end();metadataIt++)
+    {
+      const std::string& metadataCategoryName(*metadataIt);
+      metadata_content[metadataCategoryName+"_Low"] << "_MetaData_" << metadataCategoryName << "_Low .byt ";
+      metadata_content[metadataCategoryName+"_High"] << "_MetaData_" << metadataCategoryName << "_High .byt ";
+    }
+  }
+
+
   std::stringstream file_list_summary;
 
   int counter=0;
@@ -676,6 +696,13 @@ bool Floppy::SaveDescription(const char* fileName) const
       code_track << ",";
 
       code_compressed << ",";
+
+      {
+        for (auto metadataIt(metadata_content.begin());metadataIt!=metadata_content.end();metadataIt++)
+        {
+          metadataIt->second << ",";
+        }
+      }
     }
     code_adress_low  << "<" << fileEntry.m_LoadAddress;
     code_adress_high << ">" << fileEntry.m_LoadAddress;
@@ -688,7 +715,8 @@ bool Floppy::SaveDescription(const char* fileName) const
 
     code_sector << fileEntry.m_StartSector;
 
-    file_list_summary << "// - Entry #" << counter << " '"<< fileEntry.m_FilePath << " ' loads at address " << fileEntry.m_LoadAddress;
+    file_list_summary << "// - Entry #" << counter << " '"<< fileEntry.m_FilePath << "'\n";
+    file_list_summary << "//   Loads at address " << fileEntry.m_LoadAddress;
     if (fileEntry.m_StartTrack<m_TrackNumber)
     {
       // First side
@@ -713,6 +741,48 @@ bool Floppy::SaveDescription(const char* fileName) const
       // Compressed file
       file_list_summary << "(" << fileEntry.m_StoredFileSize << " compressed bytes: " << (fileEntry.m_StoredFileSize*100)/fileEntry.m_FinalFileSize << "% of " << fileEntry.m_FinalFileSize << " bytes).\n";
     }
+
+
+    {
+      file_list_summary << "//   Associated metadata: ";
+      for (auto metadataIt(m_MetadataCategories.begin());metadataIt!=m_MetadataCategories.end();metadataIt++)
+      {
+        const std::string& metadataCategoryName(*metadataIt);
+
+        std::string metadataLabelEntry;
+        std::string metadataEntry;
+
+        auto fileMetadataIt=fileEntry.m_Metadata.find(metadataCategoryName);
+        if (fileMetadataIt==fileEntry.m_Metadata.end())
+        {
+          // No entries for that one
+          metadataLabelEntry="metadata_none";
+          metadataEntry=metadataLabelEntry+" .byt \"\",0";
+        }
+        else
+        {
+          const std::string& key(fileMetadataIt->first);
+          const std::string& value(fileMetadataIt->second);
+          file_list_summary << key << "='" << value << "' ";
+
+          std::string labelValue(StringMakeLabel(value));
+          metadataLabelEntry="metadata_"+key+"_"+labelValue;
+          metadataEntry=metadataLabelEntry+" .byt \""+value+"\",0";
+        }
+        metadata_entries.insert(metadataEntry);
+        metadata_content[metadataCategoryName+"_Low"] << "<" << metadataLabelEntry;
+        metadata_content[metadataCategoryName+"_High"] << ">" << metadataLabelEntry;
+      }
+    }
+
+    if (!fileEntry.m_Metadata.empty())
+    {
+      for (auto metaIt(fileEntry.m_Metadata.begin());metaIt!=fileEntry.m_Metadata.end();++metaIt)
+      {
+      }
+      file_list_summary << "\n";
+    }
+
 
     ++counter;
   }
@@ -743,7 +813,7 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << code_adress_high.str() << "\n";
   
 
-  layoutInfo << "#endif\n";
+  layoutInfo << "#endif // LOADER\n";
 
   layoutInfo << "#else\n";
   layoutInfo << "//\n";
@@ -754,11 +824,13 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "\n";
   layoutInfo << "//\n";
   layoutInfo << "// Summary for this floppy building session:\n";
+  layoutInfo << "//\n";
   layoutInfo << "#define FLOPPY_SIDE_NUMBER " << m_SideNumber << "    // Number of sides\n";
   layoutInfo << "#define FLOPPY_TRACK_NUMBER " << m_TrackNumber << "    // Number of tracks\n";
   layoutInfo << "#define FLOPPY_SECTOR_PER_TRACK " << m_SectorNumber <<  "   // Number of sectors per track\n";
-  layoutInfo << "//\n";
 
+  layoutInfo << "\n";
+  layoutInfo << "//\n";
   layoutInfo << "// List of files written to the floppy\n";
   layoutInfo << file_list_summary.str();
   layoutInfo << "//\n";
@@ -779,6 +851,29 @@ bool Floppy::SaveDescription(const char* fileName) const
       ++counter;
     }
   }
+
+  layoutInfo << "\n";
+  layoutInfo << "//\n";
+  layoutInfo << "// Metadata\n";
+  layoutInfo << "//\n";
+  layoutInfo << "#ifdef METADATA_STORAGE\n";
+
+  {
+    for (auto metadataIt(metadata_entries.begin());metadataIt!=metadata_entries.end();metadataIt++)
+    {
+      layoutInfo << *metadataIt << "\n";
+    }
+  }
+  layoutInfo << "\n";
+
+  {
+    for (auto metadataIt(metadata_content.begin());metadataIt!=metadata_content.end();metadataIt++)
+    {
+      layoutInfo << metadataIt->second.str() << "\n";
+    }
+  }
+  layoutInfo << "#endif // METADATA_STORAGE\n";
+  layoutInfo << "\n";
 
   if (!SaveFile(fileName,layoutInfo.str().c_str(),layoutInfo.str().length()))
   {

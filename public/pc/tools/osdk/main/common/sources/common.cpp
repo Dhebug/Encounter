@@ -5,6 +5,7 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <cctype>
 #ifdef WIN32
 /* for getch() */
 #include <conio.h>
@@ -306,6 +307,25 @@ std::string StringTrim(const std::string& cInputString,const std::string& cFilte
   }
   // Returns an empty string: This case means that basically the input string contains ONLY characters that needed to be filtered out
   return "";
+}
+
+std::string StringMakeLabel(const std::string& sourceString)
+{
+  std::string cleanString;
+  for (auto it(sourceString.begin());it!=sourceString.end();it++)
+  {
+    char car=*it;
+    if ( (car>32) && (car<128) && (std::isalpha(car) || std::isdigit(car) ) )
+    {
+      cleanString.push_back(car);
+    }
+    else
+    {
+      cleanString.push_back('_');
+    }
+  }
+
+  return cleanString;
 }
 
 

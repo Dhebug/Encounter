@@ -108,6 +108,7 @@ extern unsigned char gLZ77_XorMask;
 int StringReplace(std::string& cMainString,const std::string& cSearchedString,const std::string& cReplaceString);
 std::string StringTrim(const std::string& cInputString,const std::string& cFilteredOutCharacterList=" \t\f\v\n\r");
 std::string StringFormat(const char* pFormatString,...);
+std::string StringMakeLabel(const std::string& sourceString);
 
 int ConvertAdress(const char *ptr_value);
 

@@ -1,7 +1,7 @@
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	8
+#define TOOL_VERSION_MINOR	11
 
 /*
 
@@ -36,5 +36,8 @@ Change history for the FloppyBuilder
 0.10 - 2013/12/17
 - The compression code now generates correct data (it was using the Atari ST mode encoding, making the unpacking code not happy)
 - Added to the report file the occupation ratio of the floppy (by maintaining an internal list of used sectors also used to check if there's no overlap)
+
+0.11 - 2013/12/19
+- Added support for metadata that can be used later on by the programmer
 
 */

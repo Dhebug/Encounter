@@ -65,6 +65,7 @@ public:
   CompressionMode m_CompressionMode;
   int             m_LoadAddress;
   std::string     m_FilePath;
+  std::map<std::string,std::string> m_Metadata;
 };
 
 
@@ -82,7 +83,7 @@ public:
   bool SaveDescription(const char* fileName) const;
 
   bool WriteSector(const char *fileName);
-  bool WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent);
+  bool WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent,const std::map<std::string,std::string>& metadata);
   bool WriteTapeFile(const char *fileName);
 
   bool AddDefine(std::string defineName,std::string defineValue);
@@ -138,6 +139,8 @@ private:
 
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
+
+  std::set<std::string>                             m_MetadataCategories;
 };
 
 #endif
