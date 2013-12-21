@@ -16,7 +16,7 @@
 
 #define OPCODE_RTS				$60
 
-
+#define MICRODISC_LOADER
 #include "disk_info.h"
 
 	.zero
