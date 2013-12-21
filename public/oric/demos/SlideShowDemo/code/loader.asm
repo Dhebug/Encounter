@@ -1,4 +1,4 @@
-
+#define MICRODISC_LOADER
 #include "disk_info.h"
 
 #define COLOR(color) pha:lda #16+(color&7):sta $bb80+40*27:pla
