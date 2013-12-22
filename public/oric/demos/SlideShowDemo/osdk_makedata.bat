@@ -53,6 +53,7 @@ SET PARAMS=-f1 -d0 -o2
 :EndPictures
 %PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
 %PICTCONV% -f0 -f0 -o2 data\Font6x8_ArtDeco.png build\files\Font6x8_ArtDeco.hir
+%PICTCONV% -f0 -f0 -o2 data\font_16x16.png build\files\font_16x16.hir
 
 ::goto EndMusics
 SET PARAMS=-f2 -h1 -s1

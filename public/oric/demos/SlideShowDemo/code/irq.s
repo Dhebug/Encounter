@@ -83,6 +83,11 @@ _System_InstallIRQ_SimpleVbl
 	sta _SystemFrameCounter_low
 	sta _SystemFrameCounter_high
 	
+	;
+	; Scroller
+	;
+	jsr ScrollerDisplayReset	
+
 	
  	;
  	; Music player
@@ -138,6 +143,8 @@ skip
 
 _InterruptCallBack_1
 	jsr _DoNothing
+
+	jsr _ScrollerDisplay
 	
 _InterruptCodeEnd
 	pla

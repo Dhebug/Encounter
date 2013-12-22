@@ -110,10 +110,12 @@ AddFile ..\build\files\twilighte_beast.hir $a000              [author:Twilighte]
 AddFile ..\build\files\twilighte_sonix.hir $a000              [author:Twilighte]        [name:Sonix]
 AddDefine LOADER_LAST_PICTURE {FileIndex}
 
-AddDefine LOADER_FONT_24x20 {FileIndex}
-AddFile ..\build\files\font_24x20.hir $a000
+;AddDefine LOADER_FONT_24x20 {FileIndex}
+;AddFile ..\build\files\font_24x20.hir $a000
 AddDefine LOADER_FONT_6x8_ARTDECO {FileIndex}
-AddFile ..\build\files\Font6x8_ArtDeco.hir $9900
+AddFile ..\build\files\Font6x8_ArtDeco.hir $9D00    ; 9900=STD, 9D00=ALT
+AddDefine LOADER_FONT_16x16 {FileIndex}
+AddFile ..\build\files\Font_16x16.hir $a000
 
 AddDefine LOADER_FIRST_MUSIC {FileIndex}
 ;AddFile ..\build\files\test.ym $c000
