@@ -1,5 +1,5 @@
 
-#define _picture_font_2 $9900
+#define _picture_font_2 $9d00
 
 	.dsb 256-(*&255)
 	
@@ -12,61 +12,16 @@ _FontBuffer	.dsb 2528
 _ScrollBuffer	.dsb 40*20
 
 
-_ScrollerMessage
-	.byt "WELCOME TO THE DEFENCE FORCE SLIDE SHOW"
-
-
-_ScrollerGenerate
-.(
-	lda _ScrollerMessage,x
-
-	rts
-.)
-
-; Using the 24x20 font, each letter is 3 bytes large (in practice the largest is 20 pixels wide)
-; Say a buffer 128 bytes large
-; 128/3 bytes=42 characters large
-; "WELCOME TO THE DEFENCE FORCE SLIDE SHOW" <- That's about 40 characters :S
-; 128*20=2560
-; 2560*6=15360
-;
-
-
-
-/*
- Fonts infos: http://cgi.algonet.se/htbin/cgiwrap?user=guld1&script=fonts.pl
-
-Some scroll computation.
-
-Say we have a 32x24 font
-
-Displaying this message: "WELCOME TO DEFENCE FORCE ULTIMATE SLIDE DISK MUSIC SHOW, HOPE YOU WILL ENJOY IT!!!" (83 characters)
-would use:
-83*32=2656 pixels
-2656/240=about 11 screens wide,
-2656/50 =about 53 seconds scrolling time (at one pixel per frame - which is super slow)
-
-2656/32 =83 bytes wide
-83*24=1992 bytes for one scroll buffer
-1992*6=11952 bytes for six preshifted buffers
-
-
-32/6=5.3
-5*6=30
-6*6=36
-
-Miriam's choices:
-- millitary_15
-- spaz_20 (19x20 plus spacing)
-- classic_21_nice
-
-Me:
-- outline_24
-
-
-*/
-
-// From achimiex
+_MessageScroller
+	.asc "Welcome to the Defence-Force's SlideShow! "
+	.asc "This is still some heavy work in progress, with bugs and performance issues, "
+	.asc "but as far as I know this is the first attempt ever made on the Oric at loading things "
+	.asc "while playing musics and animations in the background."
+	.asc "                            "
+	.asc "The End :) Let's wrap..."
+			
+	.asc "                            "
+	.byt 0
 
 
 
@@ -74,25 +29,11 @@ Me:
 
 
 _MessageScrollerPtr			.dsb 2
-
+scroll_ptr_0				.dsb 2
+scroll_ptr_1 				.dsb 2
 	
 	.text
 	
-
-_MessageScroller
-	.asc "Good news everyone!       "
-	.asc "It is 7:56 on this mild norwegian morning, "
-	.asc "here at Kindergarden. "
-	.asc "Since party coding rules, I'm working on a small intro for the Alchimie-X.   "
-	.asc "This logo was (hand) converted from H2O's original, the music is from David Whittaker, "
-	.asc "the rest was built by Dbug on the party place."
-    .asc "Looks like our friends from space are back???   "
-    .asc "Greeting to everybody at Kindergarden and Alchimie, and anyone else who deserves it :)"
-	.asc "                            "
-	.asc "The End :) Let's wrap..."
-			
-	.asc "                            "
-	.byt 0
 
 
 
@@ -165,32 +106,32 @@ readCharacter
 	jsr ScrollerIncPointer
 	
 	; Multiply by 8 the ASCII code to point in the font
-	sta tmp7
+	sta scroll_ptr_1
 	lda #0
-	sta tmp7+1
+	sta scroll_ptr_1+1
 
-	asl tmp7
-	rol tmp7+1
+	asl scroll_ptr_1
+	rol scroll_ptr_1+1
 
-	asl tmp7
-	rol tmp7+1
+	asl scroll_ptr_1
+	rol scroll_ptr_1+1
 
-	asl tmp7
-	rol tmp7+1
+	asl scroll_ptr_1
+	rol scroll_ptr_1+1
 
 	; Add the font pointer
 	clc
 	lda #<_picture_font_2-32*8
-	adc tmp7
-	sta tmp7
+	adc scroll_ptr_1
+	sta scroll_ptr_1
 	lda #>_picture_font_2-32*8
-	adc tmp7+1
-	sta tmp7+1
+	adc scroll_ptr_1+1
+	sta scroll_ptr_1+1
 
 	; Copy the character data to the scroller buffer
 	ldy #0
 loopcopychar
-	lda (tmp7),y
+	lda (scroll_ptr_1),y
 	ora #64
 	sta ScrollerCharBuffer,y
 	iny
@@ -202,10 +143,10 @@ ScrollerEndNewCharacter
 
 ;Break jmp Break
 
-	lda #<$a000
-	sta tmp6
-	lda #>$a000
-	sta tmp6+1
+	lda #<_ScrollBuffer
+	sta scroll_ptr_0
+	lda #>_ScrollBuffer
+	sta scroll_ptr_0+1
 
 
 	ldx #0
@@ -222,30 +163,30 @@ ScrollerDisplayLoopMessageY
 	; And then scroll the whole scanline
 	ldy #39
 ScrollerDisplayLoopMessageX
-	lda (tmp6),y
+	lda (scroll_ptr_0),y
 	rol
 	cmp #192
 	and #%00111111
 	ora #%01000000
-	sta (tmp6),y
+	sta (scroll_ptr_0),y
 
 	dey
 	bne ScrollerDisplayLoopMessageX
 
 	clc
-	lda tmp6
+	lda scroll_ptr_0
 	adc #40
-	sta tmp6
+	sta scroll_ptr_0
 	bcc skipkipppp
-	inc tmp6+1
+	inc scroll_ptr_0+1
 skipkipppp
 
 	inx
 	cpx #8
 	bne ScrollerDisplayLoopMessageY
 
+	jsr BlitBufferToChars
 	rts
-
 
 ScrollerDisplayReset
 	lda #<_MessageScroller
@@ -263,3 +204,131 @@ ScrollerIncPointer
 	inc _MessageScrollerPtr+1
 skipscrollermove
 	rts
+
+
+BlitBufferToChars	
+    ;
+	; Then blit the buffer to the text screen
+    ;
+    lda #<$9900
+    sta scroll_ptr_0+0
+    lda #>$9900
+    sta scroll_ptr_0+1
+
+    ldx #0
+ loop_blit 
+    ldy #0
+	lda _ScrollBuffer+40*0,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*0,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*1,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*1,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*2,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*2,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*3,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*3,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*4,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*4,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*5,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*5,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*6,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*6,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*7,x
+	sta (scroll_ptr_0),y
+	iny
+	lda _ScrollBuffer+40*7,x
+	sta (scroll_ptr_0),y
+	iny
+
+	clc
+    lda scroll_ptr_0+0
+    adc #16
+    sta scroll_ptr_0+0
+    lda scroll_ptr_0+1
+    adc #0
+    sta scroll_ptr_0+1
+
+
+	inx 
+	cpx #40
+	bne loop_blit
+
+	rts
+
+
+
+
+; Using the 24x20 font, each letter is 3 bytes large (in practice the largest is 20 pixels wide)
+; Say a buffer 128 bytes large
+; 128/3 bytes=42 characters large
+; "WELCOME TO THE DEFENCE FORCE SLIDE SHOW" <- That's about 40 characters :S
+; 128*20=2560
+; 2560*6=15360
+;
+
+
+
+/*
+ Fonts infos: http://cgi.algonet.se/htbin/cgiwrap?user=guld1&script=fonts.pl
+
+Some scroll computation.
+
+Say we have a 32x24 font
+
+Displaying this message: "WELCOME TO DEFENCE FORCE ULTIMATE SLIDE DISK MUSIC SHOW, HOPE YOU WILL ENJOY IT!!!" (83 characters)
+would use:
+83*32=2656 pixels
+2656/240=about 11 screens wide,
+2656/50 =about 53 seconds scrolling time (at one pixel per frame - which is super slow)
+
+2656/32 =83 bytes wide
+83*24=1992 bytes for one scroll buffer
+1992*6=11952 bytes for six preshifted buffers
+
+
+32/6=5.3
+5*6=30
+6*6=36
+
+Miriam's choices:
+- millitary_15
+- spaz_20 (19x20 plus spacing)
+- classic_21_nice
+
+Me:
+- outline_24
+
+
+*/
+
+// From achimiex
+
+
+
