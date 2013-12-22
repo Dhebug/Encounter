@@ -1,38 +1,29 @@
 ;
-; This bootsector is for the Jasmin familly.
+; This part of the code is a bit tricky: Basically the Atmos with Microdisc and the Telestrat despite using a similar boot 
+; loading system are actually loading the boot sector at different addresses.
 ;
-; All it does is to display a warning message saying that this floppy cannot run on a Jasmin.
+; Since the 6502 is not particularly well equiped to handle code that can be loaded at any address we had to find a trick.
+; What we are doing is to make the code run at a particular address, and have a small module that makes sure that it is
+; moved at the correct place wherever it was loaded in first place. That makes the code a lot easier to write :)
 ;
-; Anyway, as I said it's a proof of concept, the disc stopped booting on microdisc when I tried filling a bit the sectors,
-; so I guess there is a lot of values not to modify, 
-; like in offsets $1ae and $1af that better have to keep the values 3 and 0...  (else we got error messages at boot).;
+; Warning: This whole code CANNOT be more than 256 bytes (ie: the size of the sector)
 ;
-; Here is the structure of a typical Sedoric floppy:
-; Dump du premier secteur de disquette Master ou Slave (VERSION)
-;       0 1 2 3 4 5 6 7 8 9 A B C D E F 0123456789ABCDEF
-; 0000- 01 00 00 00 00 00 00 00 20 20 20 20 20 20 20 20
-; 0010- 00 00 03 00 00 00 01 00 53 45 44 4F 52 49 43 20
-; 0020- 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-; 0030- 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-; 0040- 53 45 44 4F 52 49 43 20 56 33 2E 30 30 36 20 30 SEDORIC V3.006 0
-; 0050- 31 2F 30 31 2F 39 36 0D 0A 55 70 67 72 61 64 65 1/01/96..Upgrade
-; 0060- 64 20 62 79 20 52 61 79 20 4D 63 4C 61 75 67 68 d by Ray McLaugh
-; 0070- 6C 69 6E 20 20 20 20 20 20 20 20 20 0D 0A 61 6E lin ..an
-; 0080- 64 20 41 6E 64 72 7B 20 43 68 7B 72 61 6D 79 20 d André Chéramy
-; 0090- 20 20 20 20 20 20 20 20 20 20 20 20 0D 0A 0D 0A ....
-; 00A0- 53 65 65 20 53 45 44 4F 52 49 43 33 2E 46 49 58 See SEDORIC3.FIX
-; 00B0- 20 66 69 6C 65 20 66 6F 72 20 69 6E 66 6F 72 6D file for inform
-; 00C0- 61 74 69 6F 6E 20 0D 0A 20 20 20 20 20 20 20 20 ation ..
-; 00D0- 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-; 00E0- 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-; 00F0- 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 2
+; The bootloader will be placed in the screen area because we know that this is not going to be used by the operating system.
+; By chosing an address in HIRES area, we also guarantee that it will not be visible on the screen (the Oric boots in TEXT).
 ;
-; Possibly we can copy this and then patch what we want over
+#define FINAL_ADRESS 	$a000+50*40
+
+
+#define OPCODE_RTS				$60
+
+#define JASMIN_LOADER
+#include "disk_info.h"
 
 	.zero
 	
 	*=$00
 	
+retry_counter		.dsb 1	; Number of attempts at loading data (ie: not quite clear what happens when this fails...)	
 
 	.text
 
@@ -43,61 +34,232 @@
 	.byt $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
 	.byt $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
 
-	; From there we have 256-$40 bytes to express our creativity
-jasmin_main
-    ;jmp jasmin_main
-	; Clear the screen
-	lda #32
-	ldx #0
-loop_clear
-	sta $bb80+256*0,x
-	sta $bb80+256*1,x
-	sta $bb80+256*2,x
-	sta $bb80+256*3,x
-	sta $bfe0-256,x
-	dex
-	bne loop_clear
-   
-    ; Print the message on the screen
-    ldx #<$bb80+6
-    ldy #>$bb80+6
-    lda #Message1-MessageStart
-    jsr PrintText
+JasminStart
+	;jmp JasminStart
+	;
+	; Here starts the actual executable part, maximum available size is 233 bytes (256-23)
+	;
 
-    ldx #<$bb80+40+6
-    ldy #>$bb80+40+6
-    lda #Message1-MessageStart
-    jsr PrintText
+	;
+	; Try to find the load address
+	;
+	sei               	; Disable interruptions
 
-    ldx #<$bb80+40*3
-    ldy #>$bb80+40*3
-    lda #Message2-MessageStart
-    jsr PrintText
+	; Enable Overlay ram
+	lda #1
+	sta $03FA ; Enable Overlay
+	lda #1
+	sta $03FB ; Disable ROM
 
-    ; And I guess we can't do anything anymore, at some point we can try to get a real loader working.
-loop_forever
-	jmp loop_forever
+	;
+	; Read sector data
+	; 
+	ldy #4
+	sty retry_counter
+read_sectors_loop
 
-PrintText
-	stx 0
-	sty 1
+readretryloop
+	nop
+	nop
+	nop
+	
+read_one_sector
+	;
+	; Check if we are on the correct track already and if not
+	; then send a SEEK command to the FDC to move the head to
+	; the correct track.
+	;
+	ldx #loader_track_position
+	cpx FDC_track_register
+	beq track_ok
+	
+	; Write the track number in the FDC data register
+	stx FDC_data
 
-	tax
+wait_drive2
+	lda FDC_drq 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
+	bmi wait_drive2
+	
+	;
+	; Send a SEEK command (change track)
+	;
+	lda #CMD_Seek
+	sta FDC_command_register
+	; 
+	; Command words should only be loaded in the Command Register when the Busy status bit is off (Status bit 0). The one exception is the Force Interrupt command. 
+	; Whenever a command is being executed, the Busy status bit is set. 
+	; When a command is completed, an interrupt is generated and the busy status bit is reset. 
+	; The Status Register indicates whethter the completed command encountered an error or was fault free. For ease of discussion, commands are divided into four types (I, II, III, IV).
+	ldy #4
+r_wait_completion
+	dey
+	bne r_wait_completion
+r2_wait_completion
+	lda FDC_status_register
+	lsr
+	bcs r2_wait_completion
+	asl
+
+track_ok	
+
+	; Write the sector number in the FDC sector register
+__auto__sector_index
+	lda #loader_sector_position
+	sta FDC_sector_register ;
+	
+	; Interdire les IRQ du fdc ICI !
+	;lda #%10000100 			; on force les le Microdisk en side0, drive A ... Set le bit de donn�es !!!
+	;sta FDC_flags
+			
+	;
+	; Send a READSECTOR command
+	;
+	lda #CMD_ReadSector
+	sta FDC_command_register
+
+	ldy #wait_status_floppy
+waitcommand
+	nop 					; Not useful but for old Floppy drive maybe
+	nop 					; Not useful but for old Floppy drive maybe
+	dey	
+	bne waitcommand
+
+	;
+	; Read the sector data
+	;
 	ldy #0
-loop_text
-	lda MessageStart,x
-	beq done
-	sta (0),y
-	inx
+fetch_bytes_from_FDC
+	lda FDC_drq
+	bmi fetch_bytes_from_FDC
+	lda FDC_data
+__auto_write_address
+	sta location_loader,y
+
 	iny
-    jmp loop_text
+	bne fetch_bytes_from_FDC
+	; Done loading the sector
+	
+	lda FDC_status_register
+	and #$1C
+		
+	beq sector_OK
+	dec retry_counter
+	bne readretryloop
+	
+sector_OK
+	inc __auto__sector_index+1
+	inc __auto_write_address+2
+	dec sector_counter
+	bne read_sectors_loop
 
-done	
-	rts	
+	;
+	; Data successfully loader (we hope)
+	;
+	sei
+	lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
+	sta FDC_flags
+	
+	ldx #FDC_OFFSET_JASMIN
+	jmp location_loader
 
-MessageStart
-Message1
-	.byt 14,3,"Unsupported Disk system",0
-Message2	
-	.byt "This software is unfortunately only compatible with Microdisc compatible systems",0
+	
 
+
+
+sector_counter		.byt (($FFFF-location_loader)+1)/256
+
+
+_END_
+
+
+
+; Type I commands
+; 	The type I commands include the Restore, Seek, Step, Step-In and Step-
+; 	Out commands. Each of the Type I commands contains a rate field r1 r0
+; 	which determines the stepping motor rate.
+; 		r1 r0 Stepping rate
+; 		 0  0    6 ms
+; 		 0  1   12 ms
+; 		 1  0   20 ms
+; 		 1  1   30 ms
+; 	An optional verification of head position can be performed by settling
+; 	bit 2 (V=1) in the command word. The track number from the first
+; 	encountered ID Field is compared against the contents of the Track
+; 	Register. If the track numbers compare (and the ID Field CRC is correct)
+; 	the verify operation is complete and an INTRQ is generated with no
+; 	errors. 
+; 	
+; Seek
+; 	This command assumes that the Track Register contains the track number
+; 	of the current position of the head and the Data Register contains the
+; 	desired track number. The FD179X will update the Track Register and
+; 	issue stepping pulses in the appropriate direction until the contents of
+; 	the Track Register are equal to the contents of the Data Register. An
+; 	interrupt is generated at the completion of the command. Note: when
+; 	using multiple drives, the track register must be updated for the drive
+; 	selected before seeks are issued.
+
+; 
+; Type II commands
+; 	Type II commands are the Read Sector and Write Sector commands. Prior
+; 	to loading the Type II command into the Command Register, the computer
+; 	must load the Sector Register with the desired sector number. Upon
+; 	receipt of the Type II command, the busy status bit is set. The FD179X
+; 	must find an ID field with a matching Track number and Sector number,
+; 	otherwise the Record not found status bit is set and the command is
+; 	terminated with an interrupt. Each of the Type II commands contains an
+; 	m flag which determines if multiple records (sectors) are to be read or
+; 	written. If m=0, a single sector is read or written and an interrupt is
+; 	generated at the completion of the command. If m=1, multiple records are
+; 	read or written with the sector register internally updated so that an
+; 	address verification can occur on the next record. The FD179X will
+; 	continue to read or write multiple records and update the sector
+; 	register in numerical ascending sequence until the sector register
+; 	exceeds the number of sectors on the track or until the Force Interrupt
+; 	command is loaded into the Command Register. The Type II commands for
+; 	1791-94 also contain side select compare flags. When C=0 (bit 1), no
+; 	comparison is made. When C=1, the LSB of the side number is read off the
+; 	ID Field of the disk and compared with the contents of the S flag.
+; 
+; Read Sector
+; 	Upon receipt of the command, the head is loaded, the busy status bit set
+; 	and when an ID field is encountered that has the correct track number,
+; 	correct sector number, correct side number, and correct CRC, the data
+; 	field is presented to the computer. An DRQ is generated each time a byte
+; 	is transferred to the DR. At the end of the Read operation, the type of
+; 	Data Address Mark encountered in the data field is recorded in the
+; 	Status Register (bit 5).
+; 
+
+
+/*
+From: http://www.metabarn.com/v1050/docs/v1050_ProgTechDoc.txt
+
+During a command which performs a data transfer such as diskette
+read or write, data must be read from or written to the diskettes
+byte-by—byte via the Z-80A. This can be done either by polling
+the WD1793 data request bit (DRQ, status bit 1) or by the DRQ
+interrupt. Reading or writing the data register will reset both
+the DRQ bit and interrupt. The total time between byte transfers
+is 23 microseconds for 5" double density or 8" single density;
+the polling loop or interrupt service routine must be shorter
+than this to insure that no bytes are lost.
+
+The diskette motors are turned on by resetting bit 6 of port A of
+the miscellaneous 8255, and turned off by setting the same bit.
+Our BIOS code turns the motors on, then leaves them on for two
+seconds to save time in the case of multiple disk accesses.
+After turning on the motors, you must wait 800 ms. to be sure
+that the drives are up to speed before attempting to transfer
+data. The Ready input of the WD1793 is supplied from pin 34 of
+the drive interface; it indicates that the drive is loaded and
+has made at least one revolution at > 50% of normal speed. Note
+that the drive looks at the index pulse for this; if a hard-
+sectored disk is inserted the results are invalid.
+
+The reset line of the WD1793 is held in the reset mode by
+hardware at power-on. A timing restriction is inherent in the
+WD1793: after writing a command, the Z-80A must not read the
+status register for 28 microseconds.
+
+*/

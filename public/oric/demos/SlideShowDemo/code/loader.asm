@@ -28,7 +28,11 @@ nb_dst				.dsb 1
 
 	*=location_loader
 
-
+;
+; This is called from the bootsectors with the X register containing the fdc offset;
+; +$00 = Microdisc
+; +$e4 = Jasmin
+;
 Initialize
 	jmp StartUp
 
@@ -38,8 +42,11 @@ Initialize
 #include "floppy_description.h"
 
 ; Some local variables we need
+fdc_register_offset		.dsb 1
 
 StartUp
+	stx fdc_register_offset				; Store the FDC offset value
+	
 	;jmp StartUp
 	jsr SoftHiresWithCopyCharset
 
@@ -179,7 +186,7 @@ StartReadOperation
 	jsr WaitCompletion
 	
 	lda #%10000100 			; Disable the FDC (Eprom select + FDC Interrupt request)
-	sta MICRODISC
+	sta FDC_flags
 
 	;jsr WaitCompletion
 
@@ -200,7 +207,7 @@ StartReadOperation
 	lda FileStartTrack,x        ; If the track id is larger than 128, it means it is on the other side of the floppy
 	bpl first_side
 	; The file starts on the second side
-	ldy #%00010000				; Side 1
+	ldy #FDC_Flag_DiscSide	    ; Side 1
 	and #%01111111              ; Mask out the extra bit
 first_side
 	sty current_side
@@ -270,7 +277,7 @@ same_track
 	beq stay_on_the_track
 		
 	; Set the new track
-	sta	FDC_data
+	sta FDC_data
 		
 	lda #CMD_Seek
 	sta FDC_command_register	
@@ -278,7 +285,7 @@ same_track
 	
 	lda #%10000100 ; on force les le Microdisk en side0, drive A ... Set le bit de données !!!
 	ora current_side
-	sta MICRODISC
+	sta FDC_flags
 
 stay_on_the_track
 	lda #CMD_ReadSector
@@ -300,7 +307,7 @@ microdisc_read_data
 	lda $0318
     bmi microdisc_read_data
 
-	lda $313
+	lda FDC_data
 	sta $200,y 		; Store the byte in page 2
 	iny
 

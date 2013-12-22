@@ -8,7 +8,7 @@
 //
 #ifdef LOADER
 FileStartSector .byt 4,1,9,9,12,10,17,16,6,4,3,4,16,7,2,2,17,9,9,1,16,9,3,16,14,7,2,1,17,15,1,17,10,7,8,1,15,6,7,2,3,6,15,5,8,7,4,11
-FileStartTrack .byt 0,1,2,3,4,5,6,7,8,9,10,11,11,13,14,15,15,17,18,19,19,20,21,21,22,23,24,25,25,26,28,28,29,30,31,32,32,33,34,35,36,37,37,38,38,39,40,41
+FileStartTrack .byt 0,4,5,6,7,8,9,10,11,12,13,14,14,16,17,18,18,20,21,22,22,23,24,24,25,26,27,28,28,29,31,31,32,33,34,35,35,36,37,38,39,40,40,41,41,128,129,130
 FileStoredSizeLow .byt <1024,<6318,<4222,<4914,<3712,<6123,<3842,<1721,<3781,<4002,<4366,<2920,<6169,<3059,<4100,<3667,<6404,<4304,<2300,<3586,<2411,<2752,<3245,<3723,<2412,<2861,<3882,<3841,<3817,<4992,<3858,<2372,<3474,<4447,<2327,<3330,<2022,<4371,<2823,<4373,<4933,<2179,<1626,<553,<3994,<3341,<6109,<2034
 FileStoredSizeHigh .byt >1024,>6318,>4222,>4914,>3712,>6123,>3842,>1721,>3781,>4002,>4366,>2920,>6169,>3059,>4100,>3667,>6404,>4304,>2300,>3586,>2411,>2752,>3245,>3723,>2412,>2861,>3882,>3841,>3817,>4992,>3858,>2372,>3474,>4447,>2327,>3330,>2022,>4371,>2823,>4373,>4933,>2179,>1626,>553,>3994,>3341,>6109,>2034
 FileSizeLow .byt <1024,<37167,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8960,<8960,<8000,<8960,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4800,<760,<7347,<3783,<7478,<3716
@@ -34,139 +34,139 @@ FileLoadAdressHigh .byt >64512,>1024,>40960,>40960,>40960,>40960,>40960,>40960,>
 // - Entry #0 '..\build\files\loader.o'
 //   Loads at address 64512 starts on track 0 sector 4 and is 4 sectors long (1024 bytes).
 //   Associated metadata: // - Entry #1 '..\build\files\slideshow.o'
-//   Loads at address 1024 starts on track 1 sector 1 and is 25 sectors long (6318 compressed bytes: 16% of 37167 bytes).
+//   Loads at address 1024 starts on track 4 sector 1 and is 25 sectors long (6318 compressed bytes: 16% of 37167 bytes).
 //   Associated metadata: // - Entry #2 '..\build\files\trois_mats.hir'
-//   Loads at address 40960 starts on track 2 sector 9 and is 17 sectors long (4222 compressed bytes: 52% of 8000 bytes).
+//   Loads at address 40960 starts on track 5 sector 9 and is 17 sectors long (4222 compressed bytes: 52% of 8000 bytes).
 //   Associated metadata: author='Vasiloric' name='Sailing ship' 
 // - Entry #3 '..\build\files\damsel.hir'
-//   Loads at address 40960 starts on track 3 sector 9 and is 20 sectors long (4914 compressed bytes: 61% of 8000 bytes).
+//   Loads at address 40960 starts on track 6 sector 9 and is 20 sectors long (4914 compressed bytes: 61% of 8000 bytes).
 //   Associated metadata: author='Marcel Van Driel' name='Damsel title' 
 // - Entry #4 '..\build\files\murder_on_the_atlantic.hir'
-//   Loads at address 40960 starts on track 4 sector 12 and is 15 sectors long (3712 compressed bytes: 46% of 8000 bytes).
+//   Loads at address 40960 starts on track 7 sector 12 and is 15 sectors long (3712 compressed bytes: 46% of 8000 bytes).
 //   Associated metadata: author='Dom' name='Murder on the Atlantic' 
 // - Entry #5 '..\build\files\twilighte_ripped.hir'
-//   Loads at address 40960 starts on track 5 sector 10 and is 24 sectors long (6123 compressed bytes: 76% of 8000 bytes).
+//   Loads at address 40960 starts on track 8 sector 10 and is 24 sectors long (6123 compressed bytes: 76% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Ripped!' 
 // - Entry #6 '..\build\files\twilighte_dragons.hir'
-//   Loads at address 40960 starts on track 6 sector 17 and is 16 sectors long (3842 compressed bytes: 48% of 8000 bytes).
+//   Loads at address 40960 starts on track 9 sector 17 and is 16 sectors long (3842 compressed bytes: 48% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Double Dragons' 
 // - Entry #7 '..\build\files\dbug_oric1.hir'
-//   Loads at address 40960 starts on track 7 sector 16 and is 7 sectors long (1721 compressed bytes: 21% of 8000 bytes).
+//   Loads at address 40960 starts on track 10 sector 16 and is 7 sectors long (1721 compressed bytes: 21% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Oric 1' 
 // - Entry #8 '..\build\files\twilighte_pegasus.hir'
-//   Loads at address 40960 starts on track 8 sector 6 and is 15 sectors long (3781 compressed bytes: 47% of 8000 bytes).
+//   Loads at address 40960 starts on track 11 sector 6 and is 15 sectors long (3781 compressed bytes: 47% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Pegasus' 
 // - Entry #9 '..\build\files\twilighte_im_title.hir'
-//   Loads at address 40960 starts on track 9 sector 4 and is 16 sectors long (4002 compressed bytes: 50% of 8000 bytes).
+//   Loads at address 40960 starts on track 12 sector 4 and is 16 sectors long (4002 compressed bytes: 50% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Impossible Mission' 
 // - Entry #10 '..\build\files\twilighte_whitehall.hir'
-//   Loads at address 40960 starts on track 10 sector 3 and is 18 sectors long (4366 compressed bytes: 54% of 8000 bytes).
+//   Loads at address 40960 starts on track 13 sector 3 and is 18 sectors long (4366 compressed bytes: 54% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='OType - Whitehall' 
 // - Entry #11 '..\build\files\twilighte_im_sprites.hir'
-//   Loads at address 40960 starts on track 11 sector 4 and is 12 sectors long (2920 compressed bytes: 36% of 8000 bytes).
+//   Loads at address 40960 starts on track 14 sector 4 and is 12 sectors long (2920 compressed bytes: 36% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='IM Sprite Sheets' 
 // - Entry #12 '..\build\files\space_1999_sparks.hir'
-//   Loads at address 40960 starts on track 11 sector 16 and is 25 sectors long (6169 compressed bytes: 77% of 8000 bytes).
+//   Loads at address 40960 starts on track 14 sector 16 and is 25 sectors long (6169 compressed bytes: 77% of 8000 bytes).
 //   Associated metadata: author='Chema' name='Space 1999 - Sparks' 
 // - Entry #13 '..\build\files\twilighte_otype_1.hir'
-//   Loads at address 40960 starts on track 13 sector 7 and is 12 sectors long (3059 compressed bytes: 38% of 8000 bytes).
+//   Loads at address 40960 starts on track 16 sector 7 and is 12 sectors long (3059 compressed bytes: 38% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='OType' 
 // - Entry #14 '..\build\files\dbug_assembler2002.hir'
-//   Loads at address 40960 starts on track 14 sector 2 and is 17 sectors long (4100 compressed bytes: 51% of 8000 bytes).
+//   Loads at address 40960 starts on track 17 sector 2 and is 17 sectors long (4100 compressed bytes: 51% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Assembly 2002' 
 // - Entry #15 '..\build\files\dbug_karhu.hir'
-//   Loads at address 40960 starts on track 15 sector 2 and is 15 sectors long (3667 compressed bytes: 45% of 8000 bytes).
+//   Loads at address 40960 starts on track 18 sector 2 and is 15 sectors long (3667 compressed bytes: 45% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Karhu' 
 // - Entry #16 '..\build\files\defence_force.hir'
-//   Loads at address 40960 starts on track 15 sector 17 and is 26 sectors long (6404 compressed bytes: 80% of 8000 bytes).
+//   Loads at address 40960 starts on track 18 sector 17 and is 26 sectors long (6404 compressed bytes: 80% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Defence Force Logo' 
 // - Entry #17 '..\build\files\dbug_space1999_planets.hir'
-//   Loads at address 40960 starts on track 17 sector 9 and is 17 sectors long (4304 compressed bytes: 53% of 8000 bytes).
+//   Loads at address 40960 starts on track 20 sector 9 and is 17 sectors long (4304 compressed bytes: 53% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Space 1999 - Planets' 
 // - Entry #18 '..\build\files\dbug_atmos_connectors.hir'
-//   Loads at address 40960 starts on track 18 sector 9 and is 9 sectors long (2300 compressed bytes: 28% of 8000 bytes).
+//   Loads at address 40960 starts on track 21 sector 9 and is 9 sectors long (2300 compressed bytes: 28% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Hardware VSync' 
 // - Entry #19 '..\build\files\dbug_space1999.hir'
-//   Loads at address 40960 starts on track 19 sector 1 and is 15 sectors long (3586 compressed bytes: 44% of 8000 bytes).
+//   Loads at address 40960 starts on track 22 sector 1 and is 15 sectors long (3586 compressed bytes: 44% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Space 1999' 
 // - Entry #20 '..\build\files\dbug_1337_logo.hir'
-//   Loads at address 40960 starts on track 19 sector 16 and is 10 sectors long (2411 compressed bytes: 30% of 8000 bytes).
+//   Loads at address 40960 starts on track 22 sector 16 and is 10 sectors long (2411 compressed bytes: 30% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='1337 Logo' 
 // - Entry #21 '..\build\files\twilighte_tol_title.hir'
-//   Loads at address 40960 starts on track 20 sector 9 and is 11 sectors long (2752 compressed bytes: 30% of 8960 bytes).
+//   Loads at address 40960 starts on track 23 sector 9 and is 11 sectors long (2752 compressed bytes: 30% of 8960 bytes).
 //   Associated metadata: author='Twilighte' name='Times Of Lore Title' 
 // - Entry #22 '..\build\files\twilighte_tol_doors.hir'
-//   Loads at address 40960 starts on track 21 sector 3 and is 13 sectors long (3245 compressed bytes: 36% of 8960 bytes).
+//   Loads at address 40960 starts on track 24 sector 3 and is 13 sectors long (3245 compressed bytes: 36% of 8960 bytes).
 //   Associated metadata: author='Twilighte' name='Times Of Lore Intro' 
 // - Entry #23 '..\build\files\skooldaze.hir'
-//   Loads at address 40960 starts on track 21 sector 16 and is 15 sectors long (3723 compressed bytes: 46% of 8000 bytes).
+//   Loads at address 40960 starts on track 24 sector 16 and is 15 sectors long (3723 compressed bytes: 46% of 8000 bytes).
 //   Associated metadata: author='Symoon & Dbug' name='Skooldaze' 
 // - Entry #24 '..\build\files\toxic_slime.hir'
-//   Loads at address 40960 starts on track 22 sector 14 and is 10 sectors long (2412 compressed bytes: 26% of 8960 bytes).
+//   Loads at address 40960 starts on track 25 sector 14 and is 10 sectors long (2412 compressed bytes: 26% of 8960 bytes).
 //   Associated metadata: author='Alexios' name='Toxic Slime' 
 // - Entry #25 '..\build\files\dbug_windows95.hir'
-//   Loads at address 40960 starts on track 23 sector 7 and is 12 sectors long (2861 compressed bytes: 35% of 8000 bytes).
+//   Loads at address 40960 starts on track 26 sector 7 and is 12 sectors long (2861 compressed bytes: 35% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Windows 95' 
 // - Entry #26 '..\build\files\dbug_yessagician.hir'
-//   Loads at address 40960 starts on track 24 sector 2 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
+//   Loads at address 40960 starts on track 27 sector 2 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
 //   Associated metadata: author='Dbug' name='Yessagician' 
 // - Entry #27 '..\build\files\diamond_2.hir'
-//   Loads at address 40960 starts on track 25 sector 1 and is 16 sectors long (3841 compressed bytes: 48% of 8000 bytes).
+//   Loads at address 40960 starts on track 28 sector 1 and is 16 sectors long (3841 compressed bytes: 48% of 8000 bytes).
 //   Associated metadata: author='Fr{d{ric Baille' name='Diamond Island' 
 // - Entry #28 '..\build\files\exocet_blueface.hir'
-//   Loads at address 40960 starts on track 25 sector 17 and is 15 sectors long (3817 compressed bytes: 47% of 8000 bytes).
+//   Loads at address 40960 starts on track 28 sector 17 and is 15 sectors long (3817 compressed bytes: 47% of 8000 bytes).
 //   Associated metadata: author='Exocet' name='Blueface' 
 // - Entry #29 '..\build\files\exocet_fists.hir'
-//   Loads at address 40960 starts on track 26 sector 15 and is 20 sectors long (4992 compressed bytes: 62% of 8000 bytes).
+//   Loads at address 40960 starts on track 29 sector 15 and is 20 sectors long (4992 compressed bytes: 62% of 8000 bytes).
 //   Associated metadata: author='Exocet' name='Fists' 
 // - Entry #30 '..\build\files\exocet_moonguy.hir'
-//   Loads at address 40960 starts on track 28 sector 1 and is 16 sectors long (3858 compressed bytes: 48% of 8000 bytes).
+//   Loads at address 40960 starts on track 31 sector 1 and is 16 sectors long (3858 compressed bytes: 48% of 8000 bytes).
 //   Associated metadata: author='Exocet' name='Moon guy' 
 // - Entry #31 '..\build\files\karate.hir'
-//   Loads at address 40960 starts on track 28 sector 17 and is 10 sectors long (2372 compressed bytes: 29% of 8000 bytes).
+//   Loads at address 40960 starts on track 31 sector 17 and is 10 sectors long (2372 compressed bytes: 29% of 8000 bytes).
 //   Associated metadata: author='Christophe Andreani' name='Karate' 
 // - Entry #32 '..\build\files\karate_2.hir'
-//   Loads at address 40960 starts on track 29 sector 10 and is 14 sectors long (3474 compressed bytes: 43% of 8000 bytes).
+//   Loads at address 40960 starts on track 32 sector 10 and is 14 sectors long (3474 compressed bytes: 43% of 8000 bytes).
 //   Associated metadata: author='Christophe Andreani' name='Karate' 
 // - Entry #33 '..\build\files\krillys.hir'
-//   Loads at address 40960 starts on track 30 sector 7 and is 18 sectors long (4447 compressed bytes: 55% of 8000 bytes).
+//   Loads at address 40960 starts on track 33 sector 7 and is 18 sectors long (4447 compressed bytes: 55% of 8000 bytes).
 //   Associated metadata: author='Orpheus' name='Krillys' 
 // - Entry #34 '..\build\files\mooz_barbitoric.hir'
-//   Loads at address 40960 starts on track 31 sector 8 and is 10 sectors long (2327 compressed bytes: 29% of 8000 bytes).
+//   Loads at address 40960 starts on track 34 sector 8 and is 10 sectors long (2327 compressed bytes: 29% of 8000 bytes).
 //   Associated metadata: author='Mooz' name='Barbitoric' 
 // - Entry #35 '..\build\files\mooz_oric.hir'
-//   Loads at address 40960 starts on track 32 sector 1 and is 14 sectors long (3330 compressed bytes: 41% of 8000 bytes).
+//   Loads at address 40960 starts on track 35 sector 1 and is 14 sectors long (3330 compressed bytes: 41% of 8000 bytes).
 //   Associated metadata: author='Mooz' name='Oric' 
 // - Entry #36 '..\build\files\mooz_santa.hir'
-//   Loads at address 40960 starts on track 32 sector 15 and is 8 sectors long (2022 compressed bytes: 25% of 8000 bytes).
+//   Loads at address 40960 starts on track 35 sector 15 and is 8 sectors long (2022 compressed bytes: 25% of 8000 bytes).
 //   Associated metadata: author='Mooz' name='Santa' 
 // - Entry #37 '..\build\files\mooz_supertomato.hir'
-//   Loads at address 40960 starts on track 33 sector 6 and is 18 sectors long (4371 compressed bytes: 54% of 8000 bytes).
+//   Loads at address 40960 starts on track 36 sector 6 and is 18 sectors long (4371 compressed bytes: 54% of 8000 bytes).
 //   Associated metadata: author='Mooz' name='Super Tomato' 
 // - Entry #38 '..\build\files\prez_story.hir'
-//   Loads at address 40960 starts on track 34 sector 7 and is 12 sectors long (2823 compressed bytes: 35% of 8000 bytes).
+//   Loads at address 40960 starts on track 37 sector 7 and is 12 sectors long (2823 compressed bytes: 35% of 8000 bytes).
 //   Associated metadata: author='Prez' name='Oric Coder' 
 // - Entry #39 '..\build\files\tomb_1.hir'
-//   Loads at address 40960 starts on track 35 sector 2 and is 18 sectors long (4373 compressed bytes: 54% of 8000 bytes).
+//   Loads at address 40960 starts on track 38 sector 2 and is 18 sectors long (4373 compressed bytes: 54% of 8000 bytes).
 //   Associated metadata: author='Loriciels' name='Axayacatl' 
 // - Entry #40 '..\build\files\twilighte_beast.hir'
-//   Loads at address 40960 starts on track 36 sector 3 and is 20 sectors long (4933 compressed bytes: 61% of 8000 bytes).
+//   Loads at address 40960 starts on track 39 sector 3 and is 20 sectors long (4933 compressed bytes: 61% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Shadow of the Beast' 
 // - Entry #41 '..\build\files\twilighte_sonix.hir'
-//   Loads at address 40960 starts on track 37 sector 6 and is 9 sectors long (2179 compressed bytes: 27% of 8000 bytes).
+//   Loads at address 40960 starts on track 40 sector 6 and is 9 sectors long (2179 compressed bytes: 27% of 8000 bytes).
 //   Associated metadata: author='Twilighte' name='Sonix' 
 // - Entry #42 '..\build\files\font_24x20.hir'
-//   Loads at address 40960 starts on track 37 sector 15 and is 7 sectors long (1626 compressed bytes: 33% of 4800 bytes).
+//   Loads at address 40960 starts on track 40 sector 15 and is 7 sectors long (1626 compressed bytes: 33% of 4800 bytes).
 //   Associated metadata: // - Entry #43 '..\build\files\Font6x8_ArtDeco.hir'
-//   Loads at address 39168 starts on track 38 sector 5 and is 3 sectors long (553 compressed bytes: 72% of 760 bytes).
+//   Loads at address 39168 starts on track 41 sector 5 and is 3 sectors long (553 compressed bytes: 72% of 760 bytes).
 //   Associated metadata: // - Entry #44 '..\build\files\music_cuddly.ym'
-//   Loads at address 49152 starts on track 38 sector 8 and is 16 sectors long (3994 compressed bytes: 54% of 7347 bytes).
+//   Loads at address 49152 starts on track 41 sector 8 and is 16 sectors long (3994 compressed bytes: 54% of 7347 bytes).
 //   Associated metadata: // - Entry #45 '..\build\files\northtar.ym'
-//   Loads at address 49152 starts on track 39 sector 7 and is 14 sectors long (3341 compressed bytes: 88% of 3783 bytes).
+//   Loads at address 49152 starts on the second side on track 0 sector 7 and is 14 sectors long (3341 compressed bytes: 88% of 3783 bytes).
 //   Associated metadata: // - Entry #46 '..\build\files\music_no_second_prize.ym'
-//   Loads at address 49152 starts on track 40 sector 4 and is 24 sectors long (6109 compressed bytes: 81% of 7478 bytes).
+//   Loads at address 49152 starts on the second side on track 1 sector 4 and is 24 sectors long (6109 compressed bytes: 81% of 7478 bytes).
 //   Associated metadata: // - Entry #47 '..\build\files\music_leaving_terramis.ym'
-//   Loads at address 49152 starts on track 41 sector 11 and is 8 sectors long (2034 compressed bytes: 54% of 3716 bytes).
+//   Loads at address 49152 starts on the second side on track 2 sector 11 and is 8 sectors long (2034 compressed bytes: 54% of 3716 bytes).
 //   Associated metadata: //
 // 705 sectors used, out of 1428. (49% of the total available size used)
 //
