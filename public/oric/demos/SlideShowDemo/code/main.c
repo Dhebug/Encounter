@@ -23,7 +23,7 @@ extern void PictureTransitionUnroll();
 
 extern void PictureDoTransition();
 
-extern void PrintDescription();
+//extern void PrintDescription();
 
 
 extern void InitTransitionData();
@@ -144,7 +144,7 @@ void main()
 			//PictureTransitionVenicianStore();
 			//PictureTransitionUnroll();
 			//PrintDescription("Twilighte","Barbitoric");
-			PrintDescription();
+			//PrintDescription();
 			PictureDoTransition();
 
 			Pause();
