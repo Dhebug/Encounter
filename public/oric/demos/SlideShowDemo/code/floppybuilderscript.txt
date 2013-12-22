@@ -44,6 +44,13 @@ SetPosition 0 4
 AddFile ..\build\files\loader.o $fc00 				; Sector 4
 
 
+; Start Loader test
+;SetCompressionMode None
+;AddDefine LOADER_COMPRESSED_TEST {FileIndex}
+;AddFile ..\build\files\trois_mats.hir $a000                   [author:Vasiloric]        [name:Sailing ship]
+; End Loader Test
+
+
 ;
 ; From now on we compress data (The loader should not be compressed)
 ;
