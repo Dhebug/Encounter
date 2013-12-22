@@ -66,10 +66,10 @@ _incsurround
 	inc _surrounded
 	rts
 	
-_surroundpoints
+_MultiplyPoints
 .(
 	lda _points
-	ldx _surrounded
+	ldx _MultiPoints
 loop	
 	beq end
 	clc
