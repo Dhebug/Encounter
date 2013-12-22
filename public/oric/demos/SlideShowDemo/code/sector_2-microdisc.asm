@@ -111,7 +111,7 @@ read_one_sector
 	stx FDC_data
 
 wait_drive2
-	lda $318 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
+	lda FDC_drq 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
 	bmi wait_drive2
 	
 	;
@@ -119,7 +119,21 @@ wait_drive2
 	;
 	lda #CMD_Seek
 	sta FDC_command_register
-	jsr WaitCompletion
+	; 
+	; Command words should only be loaded in the Command Register when the Busy status bit is off (Status bit 0). The one exception is the Force Interrupt command. 
+	; Whenever a command is being executed, the Busy status bit is set. 
+	; When a command is completed, an interrupt is generated and the busy status bit is reset. 
+	; The Status Register indicates whethter the completed command encountered an error or was fault free. For ease of discussion, commands are divided into four types (I, II, III, IV).
+	ldy #4
+r_wait_completion
+	dey
+	bne r_wait_completion
+r2_wait_completion
+	lda FDC_status_register
+	lsr
+	bcs r2_wait_completion
+	asl
+
 track_ok	
 
 	; Write the sector number in the FDC sector register
@@ -130,7 +144,7 @@ __auto__sector_index
 	; Interdire les IRQ du fdc ICI !
 	;lda #%10000101 			; on force les le Microdisk en side0, drive A ... Set le bit de données !!!
 	lda #%10000100 			; on force les le Microdisk en side0, drive A ... Set le bit de données !!!
-	sta MICRODISC
+	sta FDC_flags
 			
 	;
 	; Send a READSECTOR command
@@ -150,9 +164,9 @@ waitcommand
 	;
 	ldy #0
 fetch_bytes_from_FDC
-	lda $0318
+	lda FDC_drq
 	bmi fetch_bytes_from_FDC
-	lda $0313
+	lda FDC_data
 __auto_write_address
 	sta location_loader,y
 
@@ -178,33 +192,13 @@ sector_OK
 	;
 	sei
 	lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
-	sta MICRODISC
+	sta FDC_flags
 	
+	ldx #FDC_OFFSET_MICRODISC
 	jmp location_loader
 
 	
-; 
-; Command words should only be loaded in the Command Register when the
-; Busy status bit is off (Status bit 0). The one exception is the Force
-; Interrupt command. Whenever a command is being executed, the Busy status
-; bit is set. When a command is completed, an interrupt is generated and
-; the busy status bit is reset. The Status Register indicates whethter the
-; completed command encountered an error or was fault free. For ease of
-; discussion, commands are divided into four types (I, II, III, IV).
-; 
-WaitCompletion
-.(
-	ldy #4
-r_wait_completion
-	dey
-	bne r_wait_completion
-r2_wait_completion
-	lda FDC_status_register
-	lsr
-	bcs r2_wait_completion
-	asl
-	rts
-.)
+
 
 
 sector_counter		.byt (($FFFF-location_loader)+1)/256

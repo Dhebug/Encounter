@@ -53,7 +53,7 @@ SetCompressionMode FilePack 				; So far only two modes: 'None' and 'FilePack'
 ;
 ; Then the files used in the demo
 ;
-SetPosition 1 1
+SetPosition 4 1
 AddDefine LOADER_SLIDESHOW {FileIndex}
 AddFile ..\build\files\slideshow.o $400
 
@@ -115,3 +115,4 @@ AddFile ..\build\files\northtar.ym $c000
 AddFile ..\build\files\music_no_second_prize.ym $c000
 AddFile ..\build\files\music_leaving_terramis.ym $c000
 AddDefine LOADER_LAST_MUSIC {FileIndex}
+
