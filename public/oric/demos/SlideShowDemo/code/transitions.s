@@ -76,7 +76,7 @@ end_author
 
     ; Install the IRQ callback to clear the text display
 	sei
-	lda #40
+	lda #39
 	sta description_position
 	lda #<_EraseDescriptionCallback
 	sta _InterruptCallBack_1+1
@@ -89,9 +89,14 @@ end_author
 
 _EraseDescriptionCallback
 .(
+	; Switch to ALT charset on the first of the three lines of text
+	lda #9
+	sta $bb80+40*25
+
+	; Delete the rest of the line
 	lda #" "
 	ldx description_position
-	sta $bb80+40*25-1,x
+	sta $bb80+40*25,x
 	dex
     bne not_done_yet
 

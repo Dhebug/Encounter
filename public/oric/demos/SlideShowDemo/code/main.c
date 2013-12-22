@@ -30,7 +30,7 @@ extern void InitTransitionData();
 
 // scroller.s
 extern unsigned char FontBuffer[];
-
+extern void ScrollerInit();
 
 // loader_api.s
 extern unsigned char LoaderApiEntryIndex;
@@ -85,13 +85,15 @@ void main()
 
 	System_InstallIRQ_SimpleVbl();
 
+	ScrollerInit();
+
 	// Load and play the music
 	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+2;
 	LoadFile();
 	Mym_ReInitialize();
 
     // Load the font
-	LoaderApiEntryIndex=LOADER_FONT_24x20;
+	LoaderApiEntryIndex=LOADER_FONT_16x16;
 	LoaderApiAddress=FontBuffer;
 	SetLoadAddress();
 	LoadFile();
