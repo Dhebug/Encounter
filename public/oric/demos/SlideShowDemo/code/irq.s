@@ -135,6 +135,9 @@ skip
 #ifdef ENABLE_MUSIC 	
 	jsr _Mym_PlayFrame
 #endif
+
+_InterruptCallBack_1
+	jsr _DoNothing
 	
 _InterruptCodeEnd
 	pla
@@ -146,3 +149,5 @@ _InterruptCodeEnd
 	rti
 
 
+_DoNothing
+	rts

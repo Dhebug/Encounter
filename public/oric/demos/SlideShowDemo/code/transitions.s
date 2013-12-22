@@ -3,6 +3,9 @@
 
 pos_y		.dsb 1
 save_y		.dsb 1
+description_size		.dsb 1    	; Useful for centering text
+description_position	.dsb 1 		; Current location of the text printer
+description_offset      .dsb 1      ; How far from the left side of the screen we start
 
 	.text
 
@@ -15,6 +18,7 @@ save_y		.dsb 1
 
 _PrintDescription
 .(
+	; Start by creating the description in the buffer
 	ldy _LoaderApiEntryIndex	
 	lda _MetaData_name_Low,y
 	sta tmp0+0
@@ -26,26 +30,26 @@ _PrintDescription
 loop_name
 	lda (tmp0),y
 	beq end_name
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	iny
 	inx
 	bne loop_name	
 end_name
 
 	lda #32
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	inx
 
 	lda #"b"
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	inx
 
 	lda #"y"
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	inx
 
 	lda #32
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	inx
 
 	ldy _LoaderApiEntryIndex
@@ -58,16 +62,76 @@ end_name
 loop_author
 	lda (tmp0),y
 	beq end_author
-	sta $bb80+40*25,x
+	sta _DescriptionBuffer,x
 	iny
 	inx
 	bne loop_author	
 end_author
 
-	lda #0
-	sta $bb80+40*25,x
-	inx
+	;lda #0
+	;sta _DescriptionBuffer,x
+	;inx
 
+	stx description_size
+
+    ; Install the IRQ callback to clear the text display
+	sei
+	lda #40
+	sta description_position
+	lda #<_EraseDescriptionCallback
+	sta _InterruptCallBack_1+1
+	lda #>_EraseDescriptionCallback
+	sta _InterruptCallBack_1+2
+	cli
+	rts
+.)
+
+
+_EraseDescriptionCallback
+.(
+	lda #" "
+	ldx description_position
+	sta $bb80+40*25-1,x
+	dex
+    bne not_done_yet
+
+    sec
+    lda #40
+    sbc description_size
+    lsr
+    sta description_offset
+
+	lda #<_PrintDescriptionCallback
+	sta _InterruptCallBack_1+1
+	lda #>_PrintDescriptionCallback
+	sta _InterruptCallBack_1+2
+not_done_yet	
+	stx description_position
+	rts
+.)
+
+_PrintDescriptionCallback
+	;jmp _PrintDescriptionCallback
+.(
+	ldx description_position
+
+	clc
+	txa
+	adc description_offset
+	tay
+
+	lda _DescriptionBuffer,x
+	sta $bb80+40*25,y
+	inx
+	cpx description_size
+    bne not_done_yet
+
+	lda #<_DoNothing
+	sta _InterruptCallBack_1+1
+	lda #>_DoNothing
+	sta _InterruptCallBack_1+2
+not_done_yet	
+	stx description_position
 	rts
 .)
 
@@ -75,6 +139,8 @@ end_author
 TransitionType	.byt 1
 
 _PictureDoTransition
+	jsr _PrintDescription
+
 	.(
 	ldx TransitionType
 	inx
@@ -377,4 +443,6 @@ _EmptySourceScanLine 		.dsb 256			; Only zeroes, can be used for special effects
 _EmptyDestinationScanLine 	.dsb 256			; Only zeroes, can be used for special effects
 
 _PictureLoadBuffer			.dsb 8192			; 32*256 (Because it loads full sectors...)
+
+_DescriptionBuffer 			.dsb 40
 
