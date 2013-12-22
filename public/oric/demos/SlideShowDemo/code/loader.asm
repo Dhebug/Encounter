@@ -46,12 +46,13 @@ fdc_register_offset		.dsb 1
 
 StartUp
 	stx fdc_register_offset				; Store the FDC offset value
-	
+
 	;jmp StartUp
 	jsr SoftHiresWithCopyCharset
 
 	;ldx #LOADER_COMPRESSED_TEST
 	;jsr LoadData
+	;STOP(1)
 
 	; Load the slideshow
 	ldx #LOADER_SLIDESHOW
@@ -182,11 +183,13 @@ LoadCompressedData
 StartReadOperation	
  	sei
 
+ 	ldy fdc_register_offset
+
 	; Make sure the microdisc IRQ is disabled	
 	jsr WaitCompletion
-	
+
 	lda #%10000100 			; Disable the FDC (Eprom select + FDC Interrupt request)
-	sta FDC_flags
+	sta FDC_flags,y
 
 	;jsr WaitCompletion
 
@@ -213,6 +216,8 @@ first_side
 	sty current_side
 	sta current_track
 
+ 	ldy fdc_register_offset
+
 	; First sector
 	lda FileStartSector,x
 	sta current_sector
@@ -232,6 +237,8 @@ skip
 
 ReadNextSector
 	cli
+
+ 	ldy fdc_register_offset
 
 	; Check if we have reached the end of the track
 	lda current_sector
@@ -268,52 +275,52 @@ same_track
 #endif
 
 	lda current_sector
-	sta FDC_sector_register
+	sta FDC_sector_register,y
 	inc current_sector
 	
 	; Check if the drive is on the correct track		
 	lda current_track
-	cmp FDC_track_register	
+	cmp FDC_track_register,y	
 	beq stay_on_the_track
 		
 	; Set the new track
-	sta FDC_data
+	sta FDC_data,y
 		
 	lda #CMD_Seek
-	sta FDC_command_register	
+	sta FDC_command_register,y	
 	jsr WaitCompletion
 	
 	lda #%10000100 ; on force les le Microdisk en side0, drive A ... Set le bit de données !!!
 	ora current_side
-	sta FDC_flags
+	sta FDC_flags,y
 
 stay_on_the_track
 	lda #CMD_ReadSector
-	sta FDC_command_register
+	sta FDC_command_register,y
 
 
-	ldy #wait_status_floppy
+	ldx #wait_status_floppy
 waitcommand
 	nop
 	nop
-	dey
+	dex
 	bne waitcommand
 
 	;
 	; Read the sector data
 	;
-	ldy #0
+	ldx #0
 microdisc_read_data
 	lda $0318
     bmi microdisc_read_data
 
-	lda FDC_data
-	sta $200,y 		; Store the byte in page 2
-	iny
+	lda FDC_data,y
+	sta $200,x 		; Store the byte in page 2
+	inx
 
 	bne microdisc_read_data
 
-	lda FDC_status_register
+	lda FDC_status_register,y
 	and #$1C
 
 	jsr WaitCompletion
@@ -327,15 +334,20 @@ __auto_execute_address
 
 
 WaitCompletion
-	ldy #4
+	txa
+	pha
+
+	ldx #4
 r_wait_completion
-	dey
+	dex
 	bne r_wait_completion
 r2_wait_completion
-	lda FDC_status_register
+	lda FDC_status_register,y
 	lsr
 	bcs r2_wait_completion
 	asl
+	pla
+	tax
 	rts
 
 #ifdef LOADER_SHOW_DEBUGINFO	
