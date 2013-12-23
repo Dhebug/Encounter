@@ -39,6 +39,11 @@ _sheldon
 	.byt 9,10,10,9,9,0,10,1
 	.byt 0,9,1,10,9,10,10,9
 	.byt 0,1,1,0,9,0,10,1
+_SheldonBlock
+	.byt 1,1,1,1,1,9,1,9
+	.byt 9,9,9,9,9,1,9,1
+	.byt 1,9,1,9,9,9,9,9
+	.byt 1,1,1,1,9,1,9,1
 /* RUNIC Alphabet Tiles ordered as follows is as follows:
 4	F: Fehu			Cattle/Gold/General Wealth
 14	A:	Ansuz		The Gods, mostly Odin

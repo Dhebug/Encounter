@@ -85,9 +85,10 @@
 // 18-12-2013 NB v0.101 solved the "don't move away from king if leaves path open" issue. More efficient text routines (saving 150 bytes)
 // 19-12-2013 NB v0.102 refined above issue
 // 22-12-2013 NB v0.103 Fixed another MAJOR issue in FindPiece (introduced recently) 
+// 23-12-2013 NB v0.104 Added Sheldon Blocker...
 /****************************************/
 // TODO:
-// Fix the bloody thing
+// 
 //
 #include <lib.h>
 #define NORTH 0
@@ -329,6 +330,7 @@ extern unsigned char tiles[11][11];			// tile description on board
 extern unsigned char target[11][11];		// uninitialized variable (will calc on fly) - target values of square
 extern unsigned char TrophyText[6][11];		// Titles of Trophies
 extern unsigned char sheldon[4][8];			// co-ords of corner squares (sheldon gambit)
+extern unsigned char SheldonBlock[4][8];	// co-ords of key corner squares
 //extern const unsigned char border[6][11];	// border (of title screens/menus etc)
 //extern unsigned char presents[8];	// array of runic chars that spell "presents"
 //extern unsigned char hnefatafl[9]; // array of runic chars that spell "hnefatafl"
@@ -482,6 +484,7 @@ unsigned char DeadPiece;
 unsigned char Spike;		// used in canbetakes/subcanbetaken2
 unsigned char KingCompare;
 unsigned char MultiPoints;
+unsigned char RingOfSteel; // yes or no (activated or not)
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -519,7 +522,8 @@ SKIPPY1:
 SKIPPY2:
 	message="\n\nTURN:              REMAINING:    ";
 	printmessage();
-	erasetext=80; // 40*2 (2 lines to erase)  
+	erasetext=80; // 40*2 (2 lines to erase) 
+	RingOfSteel=NO;	// ring of steel inactive 
     while (game > 0){
       ns=5;			// default north/south position of central square
       ew=5;			// default east/west position of central square
@@ -614,11 +618,18 @@ void computerturn(){
   row=5;col=5; 
   DrawPictureTiles();
   // end of drawing central square
-  // For first turn have seperate starting positions for THOR and ODIN
-  if ((turncount==1)&&(playerlevel)){
-	  target[8][7]=200;
-	  if (playerlevel==ODIN) target[10][2]=210;
+  // For first/second turn we have seperate starting positions for THOR and ODIN
+  if ( playerlevel ){
+  	if (turncount==1){
+	  	target[8][7]=200;
+	  	if (playerlevel==ODIN) target[1][1]=210;
+  	}
+  	if ((turncount==2)&&(RingOfSteel==NO)){	// ring of steel inactive
+  		target[1][1]=200;
+  		if (playerlevel==ODIN) target[9][9]=210;
+	}
   }
+  
   targetselect();			// Choose the highest value target and piece to move to it 
   ns=targetns;ew=targetew;	// make computer move compatible with human move selection
   movepiece();				// make the move
@@ -641,11 +652,11 @@ void Xenon(){
 	}		
 }*/
 void Xenon2(){
-	setcheckmode1(); checkroute();	// is row/col empty (z)?
-	if ( z == 0 ){	// if row/col is empty...CAN KING GET TO IT?
-		checkroutemode=6; checkroute();	
+	setcheckmode1();	// is row/col empty (z)?
+	if ( checkroute() == 0 ){	// if row/col is empty...CAN KING GET TO IT?
+		checkroutemode=6; 	
 		// if he can get to the empty zone row and can't be stopped en-route...
-		if ((z)&&(kingtargets[orientation]==0)) { 	 
+		if ((checkroute())&&(kingtargets[orientation]==0)) { 	 
 			checkroutemode=5; checkroute();	// add points to targets on empty row
 		} 
 	}	
@@ -697,6 +708,7 @@ void FindPiece(){	// find a piece capable of moving to selected target
 		// compass=0 means this piece can't be taken when moving FROM that direction
 		if (compass[origorient] == 0){ 
 			foundpiece=1;
+			// possibly useless...
 			/*
 			if ((( a<3 )&&(a<targetns)) || ((a>7)&&(a>targetns))){
 				startrow=a;destrow=a;startcol=0;destcol=10;
@@ -705,8 +717,8 @@ void FindPiece(){	// find a piece capable of moving to selected target
 			if ((( b<3 )&&(b<targetew)) || ((b>7)&&(b>targetew))){
 				startrow=0;destrow=10;startcol=b;destcol=b;
 				FindPieceB(); // set foundpiece to 10 (don't leave ZONE unpopulated)
-			}*/
-			
+			}
+			*/
 		}
 		
 		// check NORTH and SOUTH
@@ -898,10 +910,12 @@ ODINJUMP2:
   }
   if ( playerlevel == ODIN ) goto ODINJUMP1;
 ODINJUMP3:
+// if can still be taken select new target, this may cause an ENDLESS LOOP if no target value found that is > 1
   if ( foundpiece != 1 ) {
 	  target[targetns][targetew]=1;
-	  cy=targetns;cx=targetew;inverse();getchar();inverse();
-	  goto NEWTARGET;}	// if can still be taken select new target, this may cause an ENDLESS LOOP if no target value found that is > 1
+	  // show where this routine kicks in...
+	  //cy=targetns;cx=targetew;inverse();getchar();inverse();
+	  goto NEWTARGET;}	
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
   cy=ons;				// piece y screen position
@@ -922,10 +936,12 @@ void subpacmanx(){
   MultiplyPoints();	// add 10 * brokenarrow[orientation] 
   //points+=brokenarrow[orientation]*10;
   // "The Sheldon Gambit" (add more points if satifies the sheldon gambit criteria
-  x=0; SheldonGambit();
-  x=2; SheldonGambit();
-  x=4; SheldonGambit();
-  x=6; SheldonGambit();	  
+  if ( RedFlagX == NO ){
+  	x=0; SheldonGambit();
+  	x=2; SheldonGambit();
+  	x=4; SheldonGambit();
+  	x=6; SheldonGambit();
+  }	  
   // REDFLAG detection
   // if no pieces in orientation from KING but there ARE targets
   if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ 
@@ -941,7 +957,14 @@ void subpacmanx(){
 void SheldonGambit(){ //called from subpacmanx
 	a=sheldon[orientation][x];
 	b=sheldon[orientation][x+1];
-	if ( enemy[a][b] ) pointsplusten();
+	c=SheldonBlock[orientation][x];
+	d=SheldonBlock[orientation][x+1];
+	if ( enemy[a][b] ) {
+		pointsplusten();
+		if ( target[c][d] ) target[c][d]+=50;	// try to block one of the corners
+		
+		//if ( target[a][b] ) target[a][b]+=100;	// block if possible
+	}
 
 }
 void subpacmany(){	// apply the points generated in pacman2-6
@@ -962,12 +985,12 @@ void subpacmany(){	// apply the points generated in pacman2-6
   
   while (((players[x][y] == 0)||(tiles[x][y] == CASTLE)) && ((uncounter > -1)&&(uncounter < 11))){
     if ( target[x][y] ){	// if accessible by attacker
-	    if (( target[x][y] > 1 )|| redflag[orientation] || brokenarrow[orientation] ){	
+	    if (( target[x][y] > 1 )|| brokenarrow[orientation] ){	
 	      	target[x][y]+=points; 
-	      	//Xenon3(); // count number of pieces on row/column
-	      	//if ( z==0) target[x][y]+=points;	// add more points if empty row/col
+	      	Xenon3(); // count number of pieces on row/column
+	      	if ( z==0) target[x][y]+=10;	// add more points if empty row/col
       	}
-      	if ( redflag[orientation] ) target[x][y]+=50;
+      	if ( redflag[orientation] ) target[x][y]+=10;
     	decpoints();
     }else{
 		Xenon3(); Xenon4();	// update targets on blank rows
@@ -1049,27 +1072,16 @@ void pacman2(){
 	gspot(); // sets kingtargets[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
 	KingCompare=kingew;
-	orientation=NORTH; startrow=0;destrow=0;startcol=1;destcol=9;  	pacman2b();
-	orientation=SOUTH; startrow=10;destrow=10;startcol=1;destcol=9;	pacman2b();
+	orientation=NORTH; startrow=0;destrow=0;startcol=0;destcol=10;  pacman2b();
+	orientation=SOUTH; startrow=10;destrow=10;startcol=0;destcol=10;pacman2b();
 	KingCompare=kingns;
-	orientation=EAST;  startrow=1; destrow=9;startcol=10;destcol=10;pacman2b();
-	orientation=WEST;  startrow=1; destrow=9;startcol=0; destcol=0; pacman2b();
+	orientation=EAST;  startrow=0; destrow=10;startcol=10;destcol=10;pacman2b();
+	orientation=WEST;  startrow=0; destrow=10;startcol=0; destcol=0; pacman2b();
 }
 void pacman2b(){
 	brokenarrow[orientation]=0;
 	redflag[orientation]=0;
 	tzonemode=OUTER;	// either outer or inner
-	/*
-	startrow=0;destrow=0;startcol=1;destcol=9; // NORTH
-	if ( orientation == SOUTH){
-		startrow=10;destrow=10;startcol=1;destcol=9; // SOUTH
-	}
-	if ( orientation == EAST ){
-		startrow=1; destrow=9;startcol=10;destcol=10; // EAST
-	}
-	if ( orientation == WEST ){
-		startrow=1; destrow=9;startcol=0; destcol=0; // WEST
-	}*/
 	checkbrokenarrow();
 	tzonemode=INNER;
 	startrow=1;destrow=1;startcol=0;destcol=10; // NORTH
@@ -1790,15 +1802,16 @@ unsigned char cantakepiece(){
       pcheckew2=ew-2;
     }
   }
-  /*
+  
   // Ring Of Steel: when fb==6 update target if defender outside it's home zone
   if (( playerlevel )&&(turncount < RINGOFSTEEL)){ // if greater than SAGA and within 1st RINGOFSTEEL turns
   	if ((fb == 6)&&(players[pcheckns1][pcheckew1] == DEFENDER)){
 	  	if (( pcheckns1 < 3 ) || (pcheckns1 > 7) || (pcheckew1 < 3)||(pcheckew1 > 7)){
+		  RingOfSteel=YES;
 		  target[ns][ew]+=10;
 	  	}
   	}
-  }*/
+  }
   // if a take is possible increment the take counter - if values fall within bounds...
   if ((pcheckns2 > -1)&&(pcheckns2 < 11)&&(pcheckew2 > -1)&&(pcheckew2 < 11)){
     if (( players[pcheckns1][pcheckew1]  )&&(players[pcheckns1][pcheckew1] != p1)&&(players[pcheckns1][pcheckew1] != p2 )&&(players[pcheckns1][pcheckew1] != CASTLE)){	
@@ -2056,7 +2069,7 @@ unsigned char checkroute(){
       		case 6: if (kingtracker[checkrouterow][checkroutecol]) z++;break;
       		//case 7: if (computer[checkrouterow][checkroutecol]) target[checkrouterow][checkroutecol]+=hightarget;break;
       		case 8:
-	      		if (players[checkrouterow][checkroutecol]) z++;
+	      		if ((players[checkrouterow][checkroutecol])&&(players[checkrouterow][checkroutecol]<CASTLE)) z++;
 	      		if (test){	// EAST/WEST
 	      			test2=checkrouterow;
 	      		}else{		// NORTH SOUTH
@@ -2229,12 +2242,15 @@ void printtitles()		{
 void PrintTrophyScreen(){
 	// Print text in text area
 	Checker=11;CheckerBoard();
-	erasetext=120; // all three lines
+	erasetext=40; // one line 
 	erasetextarea();
-	message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
+	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\n     ()(   PRESS A KEY   ()(";
 	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
+	message="         ()(  HNEFATAFL  ()(";
 	printline();
+	//flashon();
 	//printturnline();
+	erasetext=120;
 	// set ink color for main screen
 	inkcolor=3;inkasm(); 			// yellow, erm...gold
 	row=0;a=0;b=4;c=1;				
@@ -2409,6 +2425,7 @@ void printturnline(){
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
+  if ( turncount > turnlimit ) {turncount--;x=0;}
   //x=kingew;
   //x=target[8][5];
   //x=brokenarrow[WEST];
