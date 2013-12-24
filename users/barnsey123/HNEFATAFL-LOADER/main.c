@@ -7,16 +7,20 @@
 // 05-11-2013 NB Calling Hires from CopyFont saving 3 bytes!
 // 02-12-2013 NB slightly different message
 // 09-12-2013 NB cycling more times but faster
+// 24-12-2013 NB Using CheckerBoard
 #include <lib.h>
 void WipeScreen();
 void WipeScreenB();
 void Pause();
 void PrintMessage();
+void subCheckerBoard();
+void subCheckerBoard2();
 extern unsigned char LabelPicture[];
 unsigned int PauseTime;
 extern unsigned char Font_6x8_runic1_partial[472]; // runic oric chars (59chars * 8)
 unsigned char erasetext=120;		// how many lines to erase (3*40)=120;
 extern char* message;
+unsigned char a,b,c,cx,cy;
 void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 {
 	unsigned int 	size;
@@ -85,34 +89,62 @@ void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 /*
  WipeScreen wipes the hires screen attractively
 */
+/*
 void WipeScreen(){
 	PauseTime=55000; Pause();	// linger on screen for a while
 	WipeScreenB();
 	WipeScreenB();
 	WipeScreenB();
-}
+}*/
+
 void WipeScreenB(){
 	unsigned char Row,x,z,Count;
-	unsigned int Cell, StartAddress;
+	unsigned int StartAddress;
 	//unsigned int EvenScreenAddress=0xA001;	// start address of hires screen (even rows)
 	//unsigned int OddScreenAddress=0xA029;   // start address of hires screen (odd rows)
-	char Color;
-	for (Color=7;Color>=1;Color--){ // cycle through colors before blanking
-		for ( x=0; x<2 ; x++ ){
-			Count=0;
-			StartAddress=0xA001;
-			z=198;
-			if (x==1){
-				StartAddress=0xA029;
-				z=199;
-			}
-			//poke(StartAddress,0x0000);
-			//PauseTime=100;Pause();
-			for (Row=x; Row<=z; Row+=2){
-				poke(StartAddress+(Count*80),Color);	
-				Count++;
-			}
+	for ( x=0; x<2 ; x++ ){
+		Count=0;
+		StartAddress=0xA001;
+		z=198;
+		if (x==1){
+			StartAddress=0xA029;
+			z=199;
 		}
+		//poke(StartAddress,0x0000);
+		//PauseTime=100;Pause();
+		for (Row=x; Row<=z; Row+=2){
+			poke(StartAddress+(Count*80),1);	
+			Count++;
+		}
+	}
+}
+// CheckerBoard :screenwipe, x controls number of cols (different at start of game)
+void CheckerBoard(){
+	a=0;subCheckerBoard2();
+	PauseTime=11500; Pause();
+	a=1;subCheckerBoard2();
+	PauseTime=11500; Pause();
+	//PauseTime=25000; Pause();
+	a=1;subCheckerBoard2();
+	PauseTime=11500; Pause();
+	a=0;subCheckerBoard2();
+	PauseTime=7500; Pause();
+	WipeScreenB();	// set color to red
+
+}
+void subCheckerBoard(){
+	for (cx=b; cx<12; cx+=2){
+		inverse2(); PauseTime=50; Pause();
+	}
+}
+void subCheckerBoard2(){
+	for (cy=0; cy<9; cy++){
+		b=a;
+		subCheckerBoard();
+		if (cy < 9 ) cy++;
+		b=0;
+		if (a==0) b=1;
+		subCheckerBoard();
 	}
 }
 /* paustime */
@@ -125,11 +157,12 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="   HNEFATAFL V0.104 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
+  	message="   HNEFATAFL V0.105 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
-	WipeScreen();
+	PauseTime=50000; Pause();
+	CheckerBoard();
 	message="            IN MEMORY OF\n    JONATHAN 'TWILIGHTE' BRISTOW\n       ORIC LEGEND: 1968-2013";
   	PrintMessage();
 }

@@ -9,4 +9,4 @@
 
 SET OSDKADDR=$600
 SET OSDKNAME=VIKLOAD
-SET OSDKFILE=main mask font_6x8_runic1_partial data text
+SET OSDKFILE=main mask font_6x8_runic1_partial data text drawloader
