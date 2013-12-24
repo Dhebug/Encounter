@@ -104,7 +104,7 @@ _printturncount
 	sta $bfc0
 	lda _thor	; tens
 	sta $bfc1
-	lda _odin	; units
+	lda _odin2	; units
 	sta $bfc2
 	rts
 .)
@@ -115,7 +115,7 @@ _printremaining
 	sta $bfd8
 	lda _thor	; tens
 	sta $bfd9
-	lda _odin	; units
+	lda _odin2	; units
 	sta $bfda
 	rts
 .)

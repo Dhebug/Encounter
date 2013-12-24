@@ -40,7 +40,7 @@
 // 11-06-2013 NB v0.053 using asm instead of hchar/curset
 // 12-06-2013 NB v0.054 add RowCountAtt and ColCountAtt to record number of attackers on any given row/col
 // 15-07-2013 nb V0.060 (V0.055 IS PARKED)
-// 17-07-2013 NB v0.061 Adding turncounters, turns remaining (huns, thor, odin variables)
+// 17-07-2013 NB v0.061 Adding turncounters, turns remaining (huns, thor, odin2 variables)
 // 17-07-2013 NB v0.062 removed "ring of steel"
 // 17-07-2013 nb v0.063 Tidied up display, changed font, added SAGA, THOR, ODIN modes
 // 18-07-2013 NB v0.064 REMOVE RowCountAtt and ColCountAtt
@@ -86,9 +86,10 @@
 // 19-12-2013 NB v0.102 refined above issue
 // 22-12-2013 NB v0.103 Fixed another MAJOR issue in FindPiece (introduced recently) 
 // 23-12-2013 NB v0.104 Added Sheldon Blocker...
+// 24-12-2013 NB v0.105 changes to turncounts, canbetaken
 /****************************************/
 // TODO:
-// 
+// BUG somewhere in canbetaken
 //
 #include <lib.h>
 #define NORTH 0
@@ -299,7 +300,7 @@ void flashred();			// flash screen in red
 //void gethightarget();		// without upsetting any other variables
 void calccantake2();		// alternative calcantake
 void calccantake3();
-void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin)
+void calcturnvalue();		// calculate hundreds,tens,units (huns, thor and odin2)
 void printturnline();		// prints the turn counters
 void takemessage();			// prints a message when multiple takes are made
 void submessage();			// subroutine of takemessage
@@ -465,7 +466,7 @@ unsigned char RedFlagX;			// determine if ANY redflag is raised
 //unsigned int deadspace;		// start of deadcolumn
 unsigned char turnlimit;		// limit the number of turns (compares to turncount)
 unsigned char remaining;		// number of turns remaining
-unsigned char huns,thor,odin;	// hundreds, tens and units...
+unsigned char huns,thor,odin2;	// hundreds, tens and units...
 unsigned char playerlevel;		// player level (0=SAGA, 1=THOR, 2=ODIN)
 unsigned char firstblood;		// set to 0, gets changed on a take to signify who gets
 								// first blood award.
@@ -510,13 +511,13 @@ SKIPPY1:
     // set turnlimits
 	turnlimit=0; turncount=0;
 	while (turnlimit == 0){
-		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  22 TURNS\n3: 'ODIN'  12 TURNS";
+		message="1: 'SAGA' 255 TURNS\n2: 'THOR'  25 TURNS\n3: 'ODIN'  20 TURNS";
 		printmessage();
 		gameinput=getchar();
 		// playerlevel set here, 0=SAGA, 1=THOR, 2=ODIN
 		if ( gameinput == 49 ) {turnlimit=255; playerlevel=SAGA;goto SKIPPY2;}	// 255 turns
-		if ( gameinput == 50 ) {turnlimit=22;  playerlevel=THOR;goto SKIPPY2;}	// 22 turns
-		if ( gameinput == 51 ) {turnlimit=12;  playerlevel=ODIN;goto SKIPPY2;}	// 12 turns
+		if ( gameinput == 50 ) {turnlimit=25;  playerlevel=THOR;goto SKIPPY2;}	// 25 turns
+		if ( gameinput == 51 ) {turnlimit=20;  playerlevel=ODIN;goto SKIPPY2;}	// 20 turns
 		flashback=CYAN;flashred();
 	}
 SKIPPY2:
@@ -621,12 +622,18 @@ void computerturn(){
   // For first/second turn we have seperate starting positions for THOR and ODIN
   if ( playerlevel ){
   	if (turncount==1){
-	  	target[8][7]=200;
-	  	if (playerlevel==ODIN) target[1][1]=210;
+	  	if (playerlevel==THOR){
+		  	target[8][7]=200;
+		}else{
+			target[9][8]=200;
+		}
   	}
   	if ((turncount==2)&&(RingOfSteel==NO)){	// ring of steel inactive
-  		target[1][1]=200;
-  		if (playerlevel==ODIN) target[9][9]=210;
+  		if (playerlevel==THOR) {
+	  		target[1][1]=200;
+  		}else{
+	  		target[1][2]=200;
+  		}
 	}
   }
   
@@ -914,7 +921,7 @@ ODINJUMP3:
   if ( foundpiece != 1 ) {
 	  target[targetns][targetew]=1;
 	  // show where this routine kicks in...
-	  //cy=targetns;cx=targetew;inverse();getchar();inverse();
+	  cy=targetns;cx=targetew;inverse();getchar();inverse();
 	  goto NEWTARGET;}	
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
@@ -1300,8 +1307,12 @@ void backbone()	{
       col=xew;
       if ( arrow == 1 ){ // don't draw the arrow or update any array if arrow=2
       	if (fb == 1) drawarrow();		// draw arrow (or really, highlight square in red or blank it)
-      	if (fb == 4) subarrows2(); 		// enemy can get here, update enemy array (direction specific)
-      	if (fb == 5) computer[xns][xew]++;// computer can get here, increment computer array and set default target value
+      	if (fb == 4) {
+	      	subarrows2(); 		// enemy can get here, update enemy array (direction specific)
+      		//getchar();
+      		//subarrows2();
+        }
+	    if (fb == 5) computer[xns][xew]++;// computer can get here, increment computer array and set default target value
       	//if (fb == 0) drawarrow();		// if MODE is "blank an arrow"
       	if (fb == 8) kingtracker[xns][xew]=1; // king can get here...
   	  }
@@ -1885,6 +1896,7 @@ void subarrows(){
 }
 
 void subarrows2(){
+  //cx=xew;cy=xns;inverse();
   if ( orientation == NORTH ) enemy[xns][xew]+=5; 	// means enemy can get here from SOUTH
   if ( orientation == SOUTH ) enemy[xns][xew]+=1; 	// means enemy can get here from NORTH
   if ( orientation == EAST )  enemy[xns][xew]+=20; 	// means enemy can get here from WEST
@@ -1998,7 +2010,7 @@ void pause(){
 void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
   if (players[takena][takenb] > ATTACKER){
     if ((players[takenc][takend] == 0)||(enemy[takenc][takend] > ENEMYWEIGHT)){
-      if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
+      if ((takene <= enemy[takenc][takend])&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
         compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
         if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
         if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
@@ -2006,6 +2018,8 @@ void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
           if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
         }
       }
+      //if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
+
       //if ((enemy[takenc][takend]-takene)==0) compass[origorient]=0;
     }
   }
@@ -2404,18 +2418,18 @@ void flashred(){
 	flashcolor=RED;
 	flashscreen();
 }
-// gets the turn values and splits into huns, thor, odin
+// gets the turn values and splits into huns, thor, odin2
 void calcturnvalue(){
   // calculate values
   huns=x/100;
   thor=(x-(huns*100))/10;
-  odin=x-(huns*100)-(thor*10);
+  odin2=x-(huns*100)-(thor*10);
   // transform to ascii code (hundreds, tens and units)
   huns+=48;
   thor+=48;
-  odin+=48;
+  odin2+=48;
 }
-// prints the turn counters (uses huns, thor, odin)
+// prints the turn counters (uses huns, thor, odin2)
 void printturnline(){
   x=turncount;
   //x=kingns;
