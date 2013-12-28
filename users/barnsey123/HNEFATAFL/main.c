@@ -87,6 +87,8 @@
 // 22-12-2013 NB v0.103 Fixed another MAJOR issue in FindPiece (introduced recently) 
 // 23-12-2013 NB v0.104 Added Sheldon Blocker...
 // 24-12-2013 NB v0.105 changes to turncounts, canbetaken
+// 27-12-2013 NB v0.106 UpdateKingPieces (turned into function)
+// 28-12-2013 NB v0.107 restored subcanbetaken2 and amended it...
 /****************************************/
 // TODO:
 // BUG somewhere in canbetaken
@@ -275,7 +277,9 @@ void printturnprompt();		// prints "your turn" message
 void setpoints();			// set points to default value	
 void subarrows();			// subroutine of arrows or blanks	
 void subarrows2();			// subroutine of arrows or blanks (updates ENEMY with direction of enemy)	
-void subcanbetaken2(); 		// attempt to reduce memory footprint		
+void subcanbetaken2(); 		// attempt to reduce memory footprint	
+//void subcanbetaken3(); 		// attempt to reduce memory footprint		
+	
 //void subpaceastwest();		// subroutine of pacman	
 //unsigned char subpaccrosst();		// sub of pacman2
 void subpacmanx();			// grand sub of pacman2	
@@ -319,6 +323,7 @@ void Xenon2();	// replacement of pacman3 in pacman4
 void Xenon3();
 void Xenon4();
 //void Xenon5();
+void UpdateKingPieces();	// updates the count of pieces in each direction from king
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -582,13 +587,15 @@ void computerturn(){
   printturnline();	// print turn counters
   // 1. initialize target, enemy and computer array to zeroes
   ClearArrays();	// clear target, enemy, kingtracker and computer arrays
+  // 1.5 Update number of pieces in each orientation from King
+  UpdateKingPieces();	// update count of pieces around king
   // 2. Calculate information about the board
   fb=4; computerturn2(); // fb=4 means: don't print destinations, just update ENEMY
   fb=5; computerturn2(); // fb=5 (+COMPUTER array)
   fb=6; computerturn2(); // fb=6 if computer piece can get here update target values
   fb=7; computerturn2(); // fb=7 (can I be taken)
   fb=8; computerturn2(); // fb=8 update kingtracker 
-
+  //calchightarget();
   // 3. Increment target positions around King (PACMAN)
   pacman2();
   // 4. Find the highest value target (hightarget)
@@ -663,7 +670,8 @@ void Xenon2(){
 	if ( checkroute() == 0 ){	// if row/col is empty...CAN KING GET TO IT?
 		checkroutemode=6; 	
 		// if he can get to the empty zone row and can't be stopped en-route...
-		if ((checkroute())&&(kingtargets[orientation]==0)) { 	 
+		//if ((checkroute())&&(kingtargets[orientation]==0)) { 	
+		if (checkroute()){ 
 			checkroutemode=5; checkroute();	// add points to targets on empty row
 		} 
 	}	
@@ -883,7 +891,7 @@ NEWTARGET:
   // having found target we need to select a piece to move
   //compass[NORTH]=0;compass[SOUTH]=0;compass[EAST]=0;compass[WEST]=0;	// initialize compass array (can't be taken in any direction)
   fb=9;
-  if ( playerlevel == ODIN ) goto ODINJUMP2;
+  //if ( playerlevel == ODIN ) goto ODINJUMP2;
 ODINJUMP1:
   // NORTH + SOUTH
   // NORTH
@@ -899,7 +907,7 @@ ODINJUMP1:
   	origorient=SOUTH;	
   	for (mkey=ons+1; mkey<11; mkey++){a=mkey;FindPiece();}
   }	
-  if ( playerlevel == ODIN ) goto ODINJUMP3;
+  //if ( playerlevel == ODIN ) goto ODINJUMP3;
 ODINJUMP2:
   // EAST + WEST	
   // EAST
@@ -915,10 +923,11 @@ ODINJUMP2:
 	origorient=WEST;
   	for (mkey=oew-1; mkey>-1; mkey--){b=mkey;FindPiece();}	
   }
-  if ( playerlevel == ODIN ) goto ODINJUMP1;
+  //if ( playerlevel == ODIN ) goto ODINJUMP1;
 ODINJUMP3:
 // if can still be taken select new target, this may cause an ENDLESS LOOP if no target value found that is > 1
   if ( foundpiece != 1 ) {
+	  printturnline();
 	  target[targetns][targetew]=1;
 	  // show where this routine kicks in...
 	  cy=targetns;cx=targetew;inverse();getchar();inverse();
@@ -936,29 +945,37 @@ ODINJUMP3:
 }
 // subroutine of pacman
 void subpacmanx(){
-  setpoints();		// Set points to 10
-  MultiPoints=surrounded;
-  MultiplyPoints(); // add 10 * surrounded
-  MultiPoints=brokenarrow[orientation];
-  MultiplyPoints();	// add 10 * brokenarrow[orientation] 
-  //points+=brokenarrow[orientation]*10;
-  // "The Sheldon Gambit" (add more points if satifies the sheldon gambit criteria
-  if ( RedFlagX == NO ){
-  	x=0; SheldonGambit();
-  	x=2; SheldonGambit();
-  	x=4; SheldonGambit();
-  	x=6; SheldonGambit();
-  }	  
-  // REDFLAG detection
+// REDFLAG detection
   // if no pieces in orientation from KING but there ARE targets
   if (( kingpieces[orientation] == 0 )&&(kingtargets[orientation])){ 
 	  if (((orientation < EAST)&&((kingew<2)||(kingew>8))) || ((orientation > SOUTH)&&((kingns<2)||(kingns>8)))) { // NORTH/SOUTH OR EAST/WEST
 		  redflag[orientation]=YES;	// raise a red flag
-		  RedFlagX=YES;
-		  points=200;
+		  RedFlagX=YES;				// signifies a red flag has been raised
+		  calchightarget();
+		  points=hightarget+10;		// set to > highest target
 		  //cleartarget();	// set all targets to 1
 	  }	   
   }
+  if ( RedFlagX == NO ){
+	if (brokenarrow[orientation]) {
+		points=hightarget;
+		MultiPoints=brokenarrow[orientation];
+		MultiplyPoints();	// add 10 * brokenarrow[orientation]
+	}else{
+		setpoints();		// Set points to 10
+  		MultiPoints=surrounded;
+  		MultiplyPoints(); // add 10 * surrounded
+		//MultiPoints=brokenarrow[orientation];
+		//MultiplyPoints();	// add 10 * brokenarrow[orientation]
+		// "The Sheldon Gambit" (add more points if satifies the sheldon gambit criteria
+  		x=0; SheldonGambit();
+  		x=2; SheldonGambit();
+  		x=4; SheldonGambit();
+  		x=6; SheldonGambit();
+	}	  
+  }
+  //if (brokenarrow[orientation]) pointsplusten();	// add ten for luck
+  //points+=brokenarrow[orientation]*10;
   subpacmany(); // apply the points
 }
 void SheldonGambit(){ //called from subpacmanx
@@ -968,8 +985,7 @@ void SheldonGambit(){ //called from subpacmanx
 	d=SheldonBlock[orientation][x+1];
 	if ( enemy[a][b] ) {
 		pointsplusten();
-		if ( target[c][d] ) target[c][d]+=50;	// try to block one of the corners
-		
+		if ((playerlevel==ODIN)&&( target[c][d] )) target[c][d]+=50;	// try to block one of the corners	
 		//if ( target[a][b] ) target[a][b]+=100;	// block if possible
 	}
 
@@ -997,7 +1013,7 @@ void subpacmany(){	// apply the points generated in pacman2-6
 	      	Xenon3(); // count number of pieces on row/column
 	      	if ( z==0) target[x][y]+=10;	// add more points if empty row/col
       	}
-      	if ( redflag[orientation] ) target[x][y]+=10;
+      	//if ( redflag[orientation] ) target[x][y]+=10;
     	decpoints();
     }else{
 		Xenon3(); Xenon4();	// update targets on blank rows
@@ -1079,11 +1095,11 @@ void pacman2(){
 	gspot(); // sets kingtargets[orientation]=count of targets from king to edge (no of pieces is found in kingpieces[])
 	surroundcount();  // set surrounded value (used in subpacmanx - only have to calc once though)	
 	KingCompare=kingew;
-	orientation=NORTH; startrow=0;destrow=0;startcol=0;destcol=10;  pacman2b();
-	orientation=SOUTH; startrow=10;destrow=10;startcol=0;destcol=10;pacman2b();
+	orientation=NORTH; startrow=0; destrow=0; startcol=0; destcol=10; pacman2b();
+	orientation=SOUTH; startrow=10;destrow=10;startcol=0; destcol=10; pacman2b();
 	KingCompare=kingns;
-	orientation=EAST;  startrow=0; destrow=10;startcol=10;destcol=10;pacman2b();
-	orientation=WEST;  startrow=0; destrow=10;startcol=0; destcol=0; pacman2b();
+	orientation=EAST;  startrow=0; destrow=10;startcol=10;destcol=10; pacman2b();
+	orientation=WEST;  startrow=0; destrow=10;startcol=0; destcol=0;  pacman2b();
 }
 void pacman2b(){
 	brokenarrow[orientation]=0;
@@ -1091,15 +1107,15 @@ void pacman2b(){
 	tzonemode=OUTER;	// either outer or inner
 	checkbrokenarrow();
 	tzonemode=INNER;
-	startrow=1;destrow=1;startcol=0;destcol=10; // NORTH
+		startrow=1; destrow=1; startcol=0;destcol=10; // NORTH
 	if ( orientation == SOUTH ){
 		startrow=10;destrow=10;startcol=0;destcol=10; // SOUTH
 	}
 	if ( orientation == EAST ){
-		startrow=0; destrow=10;startcol=9;destcol=9; // EAST
+		startrow=0; destrow=10;startcol=9;destcol=9;  // EAST
 	}
 	if ( orientation == WEST ){
-		startrow=0; destrow=10;startcol=1; destcol=1; // WEST
+		startrow=0; destrow=10;startcol=1;destcol=1;  // WEST
 	}
 	checkbrokenarrow();
 	subpacmanx(); // add points to target in orientation from king
@@ -1700,7 +1716,12 @@ void movepiece(){
     orientation=WEST; tpew=ew-1; movepieceB();
   }
   
-  // update count of attackers around king
+  UpdateKingPieces();	// update count of pieces around king
+  
+  if (takecounter > 1) takemessage(); // display a firstblood/multiple takes message
+}
+void UpdateKingPieces(){
+	// update count of attackers around king
   kingattacker[NORTH]=0;		// count of attackers NORTH of king
   kingattacker[SOUTH]=0;		// count of attackers SOUTH of king
   kingattacker[EAST]=0;			// count of attackers EAST of king
@@ -1735,10 +1756,7 @@ void movepiece(){
   for (counter=0;counter<kingew;inccounter()){ 
     cy=counter; incdefatt();
   }
-  
-  if (takecounter > 1) takemessage(); // display a firstblood/multiple takes message
 }
-
 void movepieceB(){
   if ( cantakepiece() ) takepiece(); 
 }
@@ -1904,9 +1922,9 @@ void subarrows2(){
 }
 
 void inccantake(){
-  //z=cantakepiece();	// z=number of pieces that can be taken
-  if (cantakepiece()){
-    cantake+=take;		// take is returned from cantakepiece()
+  z=cantakepiece();	// z=number of pieces that can be taken
+  if (z){
+    cantake+=z;			// take is returned from cantakepiece()
     cantakeadjust();	// decrement take count if taken piece on same plane as king and taker isn't	
   	cantakeadjust2();	// dont take if only piece in zone rol/col
    }
@@ -2006,26 +2024,65 @@ void pause(){
 
 
 /******************************/
-
 void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
   if (players[takena][takenb] > ATTACKER){
     if ((players[takenc][takend] == 0)||(enemy[takenc][takend] > ENEMYWEIGHT)){
-      if ((takene <= enemy[takenc][takend])&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
+      if ((enemy[takenc][takend]-takene)&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
+        compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+        if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
+        /*if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
+          if ((origorient < EAST)&&(mkey != takenc)&&(oew != takend)) compass[origorient]=0;
+          if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
+        }*/
+      }
+    }
+  }
+}
+/*
+void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
+  if ((players[takena][takenb] > ATTACKER) && enemy[takenc][takend] ){
+    if ( ((players[takenc][takend] == 0)||((players[takenc][takend]==ATTACKER))) && (enemy[takenc][takend])){
         compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
         if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
         if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
           if ((origorient < EAST)&&(mkey != takenc)&&(oew != takend)) compass[origorient]=0;
           if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
         }
-      }
-      //if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
-
-      //if ((enemy[takenc][takend]-takene)==0) compass[origorient]=0;
     }
   }
-}
-
-
+}*/
+/*
+void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
+  if (players[takena][takenb] > ATTACKER){
+    if ((players[takenc][takend] == 0)||(players[takenc][takend]==ATTACKER)){ // 27-12-2013
+      if (enemy[takenc][takend] > takene){ // 27-12-2013 
+        compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+        if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
+          if ((origorient < EAST)&&(mkey != takenc)&&(oew != takend)) compass[origorient]=0;
+          if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
+        }
+      }else{
+	      if ((Spike==origorient)&&(enemy[takenc][takend]==takene)) compass[origorient]=0;
+      }
+    }
+  }
+}*/
+/*
+void subcanbetaken2(){	// DO NOT MESS with this (NBARNES 10-01-2012)
+  if (players[takena][takenb] > ATTACKER){ // if one side is defender/king/castle
+	// if opposite side is empty and accessible by defenders
+    if ((players[takenc][takend] == 0)&&(enemy[takenc][takend])){
+      //if ((enemy[takenc][takend]-takene > 0)&&((enemy[takenc][takend] < ENEMYWEIGHT)||(enemy[takenc][takend]-ENEMYWEIGHT))){ // 23-12-2011 
+        compass[origorient]=1;	// e.g. compass[NORTH]=1 means canbetaken here if moving from NORTH
+        if ((Spike==origorient)&&(enemy[takenc][takend]-takene==0)) compass[origorient]=0;
+        if (enemy[takenc][takend]>ENEMYWEIGHT){ // THIS is the business!!!
+          if ((origorient < EAST)&&(mkey != takenc)&&(oew != takend)) compass[origorient]=0;
+          if ((origorient > SOUTH)&&(ons != takenc)&&(mkey != takend))compass[origorient]=0;
+        }
+      //}
+     }
+  }
+}*/
 void inctarget(){
   target[targetns][targetew]+=2;
   //target[targetns][targetew]++; // 28-04-2013
@@ -2436,6 +2493,7 @@ void printturnline(){
   //x=enemy[5][3];
   //x=target[8][4];
   //x=compass[WEST];
+  x=foundpiece;
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
@@ -2444,6 +2502,7 @@ void printturnline(){
   //x=target[8][5];
   //x=brokenarrow[WEST];
   //x=compass[EAST];
+  x=target[targetns][targetew];
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
