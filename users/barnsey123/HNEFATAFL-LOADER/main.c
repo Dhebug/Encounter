@@ -121,15 +121,14 @@ void WipeScreenB(){
 // CheckerBoard :screenwipe, x controls number of cols (different at start of game)
 void CheckerBoard(){
 	a=0;subCheckerBoard2();
-	PauseTime=11500; Pause();
+	PauseTime=1000; Pause();
 	a=1;subCheckerBoard2();
-	PauseTime=11500; Pause();
+	PauseTime=1000; Pause();
 	//PauseTime=25000; Pause();
 	a=1;subCheckerBoard2();
-	PauseTime=11500; Pause();
+	PauseTime=1000; Pause();
 	a=0;subCheckerBoard2();
-	PauseTime=7500; Pause();
-	WipeScreenB();	// set color to red
+	PauseTime=1000; Pause();
 
 }
 void subCheckerBoard(){
@@ -157,12 +156,16 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="   HNEFATAFL V0.105 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
+  	message="   HNEFATAFL V0.107 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
 	PauseTime=50000; Pause();
 	CheckerBoard();
+	//CheckerBoard();
+	//CheckerBoard();
+	//CheckerBoard();
+	WipeScreenB();	// set color to red
 	message="            IN MEMORY OF\n    JONATHAN 'TWILIGHTE' BRISTOW\n       ORIC LEGEND: 1968-2013";
   	PrintMessage();
 }
