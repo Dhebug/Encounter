@@ -89,6 +89,7 @@
 // 24-12-2013 NB v0.105 changes to turncounts, canbetaken
 // 27-12-2013 NB v0.106 UpdateKingPieces (turned into function)
 // 28-12-2013 NB v0.107 restored subcanbetaken2 and amended it...
+// 30-12-2013 NB v1.000 1st v1 RELEASE!
 /****************************************/
 // TODO:
 // BUG somewhere in canbetaken
@@ -930,7 +931,7 @@ ODINJUMP3:
 	  printturnline();
 	  target[targetns][targetew]=1;
 	  // show where this routine kicks in...
-	  cy=targetns;cx=targetew;inverse();getchar();inverse();
+	  // cy=targetns;cx=targetew;inverse();getchar();inverse();
 	  goto NEWTARGET;}	
   //if ( target[targetns][targetew]==2) {zoneupdate(); goto NEWTARGET;} // if nothing useful found update the zone
   cx=oew;				// piece x screen position
@@ -2493,7 +2494,7 @@ void printturnline(){
   //x=enemy[5][3];
   //x=target[8][4];
   //x=compass[WEST];
-  x=foundpiece;
+  //x=foundpiece;
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
@@ -2502,7 +2503,7 @@ void printturnline(){
   //x=target[8][5];
   //x=brokenarrow[WEST];
   //x=compass[EAST];
-  x=target[targetns][targetew];
+  //x=target[targetns][targetew];
   calcturnvalue();		// for display purposes
   TurnsRemaining=x;		// for RAIDO Trophy Calculation
   printremaining();		// print turns remaining
