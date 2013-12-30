@@ -8,19 +8,29 @@
 // 02-12-2013 NB slightly different message
 // 09-12-2013 NB cycling more times but faster
 // 24-12-2013 NB Using CheckerBoard
+// 30-12-2013 NB made smaller...
 #include <lib.h>
-void WipeScreen();
+#define BLACK 0
+#define RED	1
+#define GREEN 2
+#define YELLOW 3
+#define BLUE 4
+#define MAGENTA 5
+#define CYAN 6
+#define WHITE 7
+//void WipeScreen();
 void WipeScreenB();
+void WipeScreenC();
 void Pause();
 void PrintMessage();
 void subCheckerBoard();
 void subCheckerBoard2();
 extern unsigned char LabelPicture[];
-unsigned int PauseTime;
+unsigned int PauseTime,StartAddress;
 extern unsigned char Font_6x8_runic1_partial[472]; // runic oric chars (59chars * 8)
 unsigned char erasetext=120;		// how many lines to erase (3*40)=120;
 extern char* message;
-unsigned char a,b,c,cx,cy;
+unsigned char a,b,c,cx,cy,x,Row,Count,z,Color;
 void file_unpackc(unsigned char *buf_dest,unsigned char *buf_src)
 {
 	unsigned int 	size;
@@ -96,26 +106,21 @@ void WipeScreen(){
 	WipeScreenB();
 	WipeScreenB();
 }*/
-
 void WipeScreenB(){
-	unsigned char Row,x,z,Count;
-	unsigned int StartAddress;
+	
 	//unsigned int EvenScreenAddress=0xA001;	// start address of hires screen (even rows)
 	//unsigned int OddScreenAddress=0xA029;   // start address of hires screen (odd rows)
-	for ( x=0; x<2 ; x++ ){
-		Count=0;
-		StartAddress=0xA001;
-		z=198;
-		if (x==1){
-			StartAddress=0xA029;
-			z=199;
-		}
-		//poke(StartAddress,0x0000);
-		//PauseTime=100;Pause();
-		for (Row=x; Row<=z; Row+=2){
-			poke(StartAddress+(Count*80),1);	
-			Count++;
-		}
+	//PauseTime=15000;
+	//Pause();
+	x=0;StartAddress=0xA001;z=198;WipeScreenC();
+	//Pause();
+	x=1;StartAddress=0xA029;z=199;WipeScreenC();
+}
+void WipeScreenC(){
+	Count=0;
+	for (Row=x; Row<=z; Row+=2){
+		poke(StartAddress+(Count*80),Color);	
+		Count++;
 	}
 }
 // CheckerBoard :screenwipe, x controls number of cols (different at start of game)
@@ -156,7 +161,7 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="   HNEFATAFL V0.107 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
+  	message="    HNEFATAFL V1.0 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
@@ -165,8 +170,22 @@ void main()
 	//CheckerBoard();
 	//CheckerBoard();
 	//CheckerBoard();
-	WipeScreenB();	// set color to red
 	message="            IN MEMORY OF\n    JONATHAN 'TWILIGHTE' BRISTOW\n       ORIC LEGEND: 1968-2013";
   	PrintMessage();
+	Color=RED;WipeScreenB();	
+	Color=MAGENTA;WipeScreenB(); 
+	Color=WHITE;WipeScreenB();
+	Color=RED;WipeScreenB();	
+	Color=MAGENTA;WipeScreenB(); 
+	Color=YELLOW;WipeScreenB();	
+	Color=RED;WipeScreenB();
+	Color=MAGENTA;WipeScreenB(); 
+	Color=BLUE;WipeScreenB();	
+	Color=RED;WipeScreenB(); 
+	Color=MAGENTA;WipeScreenB();
+	Color=GREEN;WipeScreenB();	
+	Color=MAGENTA;WipeScreenB(); 
+	Color=RED;WipeScreenB();	
+	PauseTime=25000;Pause();
 }
 
