@@ -90,6 +90,7 @@
 // 27-12-2013 NB v0.106 UpdateKingPieces (turned into function)
 // 28-12-2013 NB v0.107 restored subcanbetaken2 and amended it...
 // 30-12-2013 NB v1.000 1st v1 RELEASE!
+// 31-12-2013 NB v1.1 Fixed bug in 2 player mode (instant stalemate)
 /****************************************/
 // TODO:
 // BUG somewhere in canbetaken
@@ -510,7 +511,7 @@ main(){
       printmessage();
       gameinput=getchar();
       if ( gameinput == 49 ) {gamestyle=1;goto SKIPPY1;}	// 1=human vs computer (as DEFENDERS)
-      if ( gameinput == 50 ) {gamestyle=0;goto SKIPPY2;}	// 0=human vs human
+      if ( gameinput == 50 ) {gamestyle=0;turnlimit=255; playerlevel=SAGA;goto SKIPPY2;}	// 0=human vs human
       flashback=CYAN;flashred();
     }
 SKIPPY1:    
@@ -2489,6 +2490,7 @@ void calcturnvalue(){
 }
 // prints the turn counters (uses huns, thor, odin2)
 void printturnline(){
+  if ( turncount > turnlimit ) turncount--;
   x=turncount;
   //x=kingns;
   //x=enemy[5][3];
@@ -2498,7 +2500,7 @@ void printturnline(){
   calcturnvalue();		// for display purposes	
   printturncount();		// print number of turns
   x=turnlimit-turncount;// x= turns remaining
-  if ( turncount > turnlimit ) {turncount--;x=0;}
+  //if ( turncount > turnlimit ) {x=0;}
   //x=kingew;
   //x=target[8][5];
   //x=brokenarrow[WEST];
