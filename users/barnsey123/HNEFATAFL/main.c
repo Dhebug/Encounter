@@ -91,6 +91,7 @@
 // 28-12-2013 NB v0.107 restored subcanbetaken2 and amended it...
 // 30-12-2013 NB v1.000 1st v1 RELEASE!
 // 31-12-2013 NB v1.1 Fixed bug in 2 player mode (instant stalemate)
+// 02-01-2014 NB v1.2 Alternate arrow keys (A,Z + <>) get translated to up/down/left/right
 /****************************************/
 // TODO:
 // BUG somewhere in canbetaken
@@ -326,6 +327,7 @@ void Xenon3();
 void Xenon4();
 //void Xenon5();
 void UpdateKingPieces();	// updates the count of pieces in each direction from king
+void TranslateKey();		// translates input so that alternative key selections can be made
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -443,7 +445,7 @@ unsigned char take;
 unsigned char p1;	// piece type comparison (lower) - used for determining takes - default=attacker
 unsigned char p2;	// piece type comparison (upper) - used for determining takes - default=attacker
 /* playerturn variables */
-unsigned char xkey;			// code of key pressed	
+//unsigned char xkey;			// code of key pressed	
 unsigned char canselect;	// 0=no, 1=yes (is the piece selectable?)
 char cursormovetype;		// -1=no, 0=yes (n,s,e,w) 1=(north/south only), 2=(east/west only)
 unsigned char turn;			// determines end of player turn 1=playerturn, 0=end of playerturn
@@ -1276,7 +1278,7 @@ void SubMoveCursor2b(){
 //  kicks off functions that highlights squares at all possible 
 // destinations and blanks them out afterwards
 void printpossiblemoves(){
-  char k;	// key entered
+  //char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
   //message="\n       )() PRESS A KEY ()(";
@@ -1284,7 +1286,8 @@ void printpossiblemoves(){
   //printmessage();		// "PRESS A KEY"
   flashon();			// Make it FLASH RED
   printturnline();
-  k=getchar();
+  //k=getchar();
+  getchar();
   //fb=0;
   printdestinations();	// blank out arrows on all destinations
 }
@@ -1570,23 +1573,25 @@ void playerturn(){
   // print number of turns and remaining turns
   printturnline();
   while (turn){			// repeat until move is made
-    xkey=getchar();		// get code of pressed key
-    mkey=xkey;
-    if (( xkey > 7 ) && ( xkey < 12 )){  // 8-11 = cursor keys 
+    //xkey=getchar();		// get code of pressed key
+    //mkey=xkey;
+    mkey=getchar();
+    TranslateKey();
+    if (( mkey > 7 ) && ( mkey < 12 )){  // 8-11 = cursor keys 
       cursormode=0;  // freeform
       movecursor2();  
     }		
     /*******************************************************/
     /* determine if X or P is selected (to select a piece) */
     /*******************************************************/
-    if (( xkey == 88) || ( xkey == 80)){	// if 'X' or 'P' is selected (88=X, 80=P)
+    if (( mkey == 88) || ( mkey == 80)){	// if 'X' or 'P' is selected (88=X, 80=P)
       canselect=0;		// set piece to NOT SELECTABLE
       if ((( playertype == ATTACKER )&&(players[ns][ew] == ATTACKER ))||(( playertype == DEFENDER )&&((players[ns][ew] == DEFENDER )||(players[ns][ew] == KING))))	{	// piece is selectable
 	  	canselect=1; // set piece is selectable
         canpiecemove();
         if (route ) { 
         	flashcolor=GREEN;flashscreen();	
-          	if ( xkey == 80 ){				// if P is pressed
+          	if ( mkey == 80 ){				// if P is pressed
             	printpossiblemoves();		// Print possible moves
             	printturnprompt();
             	printturnline();
@@ -1637,6 +1642,7 @@ void playerturn(){
           	}
           	if ( cursormovetype < 0) { flashred();}	// flashscreen red
           	mkey=getchar();
+          	TranslateKey();
         }
        	if ( mkey == 82 ){ // R has been selected, Reset cursor to original positions
          	fb=0;
@@ -2513,6 +2519,17 @@ void printturnline(){
   if ( x < 10) y=YELLOW; 
   if ( x < 5 ) y=RED;
   colorturn();	// set color for turn row
+}
+void TranslateKey(){
+	switch(mkey){
+		case 65: mkey=11; break; // A (up)
+		case 90: mkey=10; break;// Z (down)
+		case 44: mkey=8;  break;// , ( < left)
+		case 46: mkey=9;  break;// . ( > right)
+		case 32: mkey=88; break;// SPACE (X)
+		case 13: mkey=88; break;// RETURN (X)
+	}
+	//xkey=mkey;
 }
 /*
 void prioritycalc(){ // calculates the priorities of moving a piece
