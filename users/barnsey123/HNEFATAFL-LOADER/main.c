@@ -161,7 +161,7 @@ void main()
 	CopyFont();	// hires called from CopyFont ASM routine
 	//hires();
   	setflags(0);	// No keyclick, no cursor, no nothing
-  	message="    HNEFATAFL V1.1 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
+  	message="    HNEFATAFL V1.2 BY NEIL BARNES\n  ORIGINAL ARTWORK : DARREN BENNETT\nTHX TO:DBUG,CHEMA,JAMESD,XERON,IBISUM";       	
   	PrintMessage();
 	//file_unpackc((unsigned char*)0xa000,LabelPicture);
 	file_unpack((unsigned char*)0xa000,LabelPicture);
