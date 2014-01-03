@@ -64,10 +64,25 @@ SetPosition 4 1
 AddDefine LOADER_SLIDESHOW {FileIndex}
 AddFile ..\build\files\slideshow.o $400
 
+
+;
+; The fonts
+;
+AddDefine LOADER_FONT_6x8_ARTDECO {FileIndex}
+AddFile ..\build\files\Font6x8_ArtDeco.hir $9D00    ; 9900=STD, 9D00=ALT
+
+AddDefine LOADER_FONT_12x16_ARTDECO {FileIndex}
+AddFile ..\build\files\Font12x16_ArtDeco.hir $a000
+
+
+;
+; The pictures
+;
 AddDefine LOADER_FIRST_PICTURE {FileIndex}
 
 ;AddFile ..\build\files\decal_euler.hir $a000
 
+AddFile ..\build\files\mondrian.hir $a000                     [author:Mondrian]         [name:RGB Composition]
 AddFile ..\build\files\trois_mats.hir $a000                   [author:Vasiloric]        [name:Sailing ship]
 AddFile ..\build\files\damsel.hir $a000                       [author:Marcel Van Driel] [name:Damsel title]
 AddFile ..\build\files\murder_on_the_atlantic.hir $a000       [author:Dom]              [name:Murder on the Atlantic]
@@ -112,10 +127,10 @@ AddDefine LOADER_LAST_PICTURE {FileIndex}
 
 ;AddDefine LOADER_FONT_24x20 {FileIndex}
 ;AddFile ..\build\files\font_24x20.hir $a000
-AddDefine LOADER_FONT_6x8_ARTDECO {FileIndex}
-AddFile ..\build\files\Font6x8_ArtDeco.hir $9D00    ; 9900=STD, 9D00=ALT
-AddDefine LOADER_FONT_16x16 {FileIndex}
-AddFile ..\build\files\Font_16x16.hir $a000
+
+;AddDefine LOADER_FONT_16x16 {FileIndex}
+;AddFile ..\build\files\Font_16x16.hir $a000
+
 
 AddDefine LOADER_FIRST_MUSIC {FileIndex}
 ;AddFile ..\build\files\test.ym $c000

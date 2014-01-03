@@ -93,10 +93,14 @@ _EraseDescriptionCallback
 	lda #9
 	sta $bb80+40*25
 
+	; Then ink color attribute
+	lda #3                 ; Yellow
+	sta $bb80+40*25+1
+
 	; Delete the rest of the line
 	lda #" "
 	ldx description_position
-	sta $bb80+40*25,x
+	sta $bb80+40*25+1,x
 	dex
     bne not_done_yet
 

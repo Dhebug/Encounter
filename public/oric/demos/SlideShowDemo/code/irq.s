@@ -1,5 +1,5 @@
 
-#define ENABLE_MUSIC 1 	
+//#define ENABLE_MUSIC 1 	
 
 #define        via_portb                $0300 
 #define        via_t1cl                $0304 
@@ -86,9 +86,9 @@ _System_InstallIRQ_SimpleVbl
 	;
 	; Scroller
 	;
-	jsr ScrollerDisplayReset	
+	jsr _ScrollerInit
 
-	
+
  	;
  	; Music player
  	;
