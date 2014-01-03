@@ -31,6 +31,7 @@ extern void InitTransitionData();
 // scroller.s
 extern unsigned char FontBuffer[];
 extern void ScrollerInit();
+extern void TestScroller();
 
 // loader_api.s
 extern unsigned char LoaderApiEntryIndex;
@@ -80,23 +81,31 @@ void main()
 	LoaderApiEntryIndex=LOADER_FONT_6x8_ARTDECO;
 	LoadFile();
 
+    // Load the 12x16 font
+	LoaderApiEntryIndex=LOADER_FONT_12x16_ARTDECO;	// 3040 bytes
+	LoaderApiAddress=FontBuffer;
+	SetLoadAddress();
+	LoadFile();
+
+//while(1);
+
+	memset((unsigned char*)0xa000,64+1+4+16,8000);
+
+
 	// Some basic inits
 	InitTransitionData();
 
 	System_InstallIRQ_SimpleVbl();
 
-	ScrollerInit();
+			    //TestScroller();
+				//while (1)
+				{
+				}
 
 	// Load and play the music
 	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+2;
 	LoadFile();
 	Mym_ReInitialize();
-
-    // Load the font
-	LoaderApiEntryIndex=LOADER_FONT_16x16;
-	LoaderApiAddress=FontBuffer;
-	SetLoadAddress();
-	LoadFile();
 
 	/*
 	// Test load compressed file
@@ -152,14 +161,6 @@ void main()
 			Pause();
 		}
 
-		/*
-		for (LoaderApiEntryIndex=LOADER_FIRST_MUSIC;LoaderApiEntryIndex<LOADER_LAST_MUSIC;LoaderApiEntryIndex++)
-		{
-			LoadFile();
-			Mym_Initialize();
-			//Pause();
-		}
-		*/
 		VSync();
 	}
 

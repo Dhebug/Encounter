@@ -50,9 +50,11 @@ SET PARAMS=-f1 -d0 -o2
 %PICTCONV% %PARAMS% data\twilighte_sonix.gif build\files\twilighte_sonix.hir
 %PICTCONV% %PARAMS% data\mooz_barbitoric.gif build\files\mooz_barbitoric.hir
 %PICTCONV% %PARAMS% data\mooz_santa.png build\files\mooz_santa.hir
+%PICTCONV% %PARAMS% data\mondrian.png build\files\mondrian.hir
 :EndPictures
 %PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
 %PICTCONV% -f0 -f0 -o2 data\Font6x8_ArtDeco.png build\files\Font6x8_ArtDeco.hir
+%PICTCONV% -f0 -f0 -o2 data\Font12x16_ArtDeco.png build\files\Font12x16_ArtDeco.hir
 %PICTCONV% -f0 -f0 -o2 data\font_16x16.png build\files\font_16x16.hir
 
 ::goto EndMusics
