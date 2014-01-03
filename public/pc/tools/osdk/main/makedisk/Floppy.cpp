@@ -715,8 +715,8 @@ bool Floppy::SaveDescription(const char* fileName) const
 
     code_sector << fileEntry.m_StartSector;
 
-    file_list_summary << "// - Entry #" << counter << " '"<< fileEntry.m_FilePath << "'\n";
-    file_list_summary << "//   Loads at address " << fileEntry.m_LoadAddress;
+    file_list_summary << "// Entry #" << counter << " '"<< fileEntry.m_FilePath << "'\n";
+    file_list_summary << "// - Loads at address " << fileEntry.m_LoadAddress;
     if (fileEntry.m_StartTrack<m_TrackNumber)
     {
       // First side
@@ -742,9 +742,11 @@ bool Floppy::SaveDescription(const char* fileName) const
       file_list_summary << "(" << fileEntry.m_StoredFileSize << " compressed bytes: " << (fileEntry.m_StoredFileSize*100)/fileEntry.m_FinalFileSize << "% of " << fileEntry.m_FinalFileSize << " bytes).\n";
     }
 
-
     {
-      file_list_summary << "//   Associated metadata: ";
+	  if (!fileEntry.m_Metadata.empty())
+	  {
+		file_list_summary << "// - Associated metadata: ";
+	  }
       for (auto metadataIt(m_MetadataCategories.begin());metadataIt!=m_MetadataCategories.end();metadataIt++)
       {
         const std::string& metadataCategoryName(*metadataIt);
@@ -773,16 +775,21 @@ bool Floppy::SaveDescription(const char* fileName) const
         metadata_content[metadataCategoryName+"_Low"] << "<" << metadataLabelEntry;
         metadata_content[metadataCategoryName+"_High"] << ">" << metadataLabelEntry;
       }
+	  if (!fileEntry.m_Metadata.empty())
+	  {
+		file_list_summary << "\n";
+	  }
     }
 
+	/*
     if (!fileEntry.m_Metadata.empty())
     {
       for (auto metaIt(fileEntry.m_Metadata.begin());metaIt!=fileEntry.m_Metadata.end();++metaIt)
       {
       }
-      file_list_summary << "\n";
     }
-
+	file_list_summary << "\n";
+	*/
 
     ++counter;
   }
@@ -832,6 +839,7 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "\n";
   layoutInfo << "//\n";
   layoutInfo << "// List of files written to the floppy\n";
+  layoutInfo << "//\n";
   layoutInfo << file_list_summary.str();
   layoutInfo << "//\n";
 

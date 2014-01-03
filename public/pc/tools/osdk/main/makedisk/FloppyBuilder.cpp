@@ -230,19 +230,21 @@ void main(int argc, char *argv[])
             ShowError("Syntax error line (%d), numberOfSides has to be 2 (so far)\n",lineNumber);
           }
 
+		  /*
           if ( numberOfTracks!=42 )
           {
             ShowError("Syntax error line (%d), numberOfTracks has to be 42 (so far)\n",lineNumber);
           }
+		  */
 
-          if ( numberOfSectors!=17 )
+		  if ( numberOfSectors!=17 )
           {
             ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
           }
 
           if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors))
           {
-            ShowError("Can't create disk\n");
+            ShowError("Can't create the requested disk format\n");
           }
 
         }

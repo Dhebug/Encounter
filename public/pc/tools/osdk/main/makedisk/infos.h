@@ -1,8 +1,3 @@
-
-
-#define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	11
-
 /*
 
 Change history for the FloppyBuilder
@@ -40,4 +35,10 @@ Change history for the FloppyBuilder
 0.11 - 2013/12/19
 - Added support for metadata that can be used later on by the programmer
 
+0.12 - 2013/12/27
+- The 'DefineDisk' command accepts a variable set of track definition values
+
 */
+
+#define TOOL_VERSION_MAJOR	0
+#define TOOL_VERSION_MINOR	12
