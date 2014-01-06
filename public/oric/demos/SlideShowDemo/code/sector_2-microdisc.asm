@@ -11,7 +11,8 @@
 ; The bootloader will be placed in the screen area because we know that this is not going to be used by the operating system.
 ; By chosing an address in HIRES area, we also guarantee that it will not be visible on the screen (the Oric boots in TEXT).
 ;
-#define FINAL_ADRESS 	$a000+50*40
+//#define FINAL_ADRESS 	$a000+50*40
+#define FINAL_ADRESS	$9800			; First 256 bytes of the STD charset are invisible
 
 
 #define OPCODE_RTS				$60
@@ -68,7 +69,7 @@ _start_relocator_
 	; location
 	ldy #0
 copy_loop
-	lda ($00),y
+	lda ($00),y  
 	sta FINAL_ADRESS,y
 	iny
 	cpy _END_-_BEGIN_
@@ -85,6 +86,26 @@ _end_relocator_
      *=FINAL_ADRESS
 
 _BEGIN_
+	;
+	; Switch to HIRES
+	;
+	ldy #39 			; From $9900 to $c000 is 39 pages (9984 bytes)
+	lda #0
+loop_hires_outer	
+	tax
+loop_hires_inner
+__auto_hires
+	sta $9900,x
+	inx
+	bne loop_hires_inner
+	inc __auto_hires+2
+	dey
+	bne loop_hires_outer
+
+	lda #30				; Write hires switch
+	sta $bfdf
+
+
 	;
 	; Read sector data
 	; 
@@ -194,6 +215,46 @@ sector_OK
 	lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
 	sta FDC_flags
 	
+	/*
+	;
+	; Switch to HIRES
+	;
+	lda #$a0             ;clear down all memory area with zero
+	sta $01
+	lda #$00
+	sta $00 			; a = 0 from here
+	ldx #$20
+hm_01 
+    sta ($00),y
+	iny
+	bne hm_01
+	inc $01
+	dex
+	bne hm_01
+	lda #30			;write hires switch
+	sta $bf40
+	lda #$a0		;clear hires with #$40
+	sta $01
+	ldx #$20
+	ldx #64
+hm_04
+	ldy #124
+hm_05
+	lda #$40
+	sta ($00),y
+	dey
+	bpl hm_05
+	lda $00
+	adc #125
+	sta $00
+	bcc hm_02
+	inc $01
+hm_02	
+	dex
+	bne hm_04
+	*/
+
+
 	ldx #FDC_OFFSET_MICRODISC
 	jmp location_loader
 

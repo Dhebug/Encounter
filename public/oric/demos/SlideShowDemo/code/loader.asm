@@ -47,28 +47,14 @@ fdc_register_offset		.dsb 1
 StartUp
 	stx fdc_register_offset				; Store the FDC offset value
 
-	;jmp StartUp
-	jsr SoftHiresWithCopyCharset
-
-	;ldx #LOADER_COMPRESSED_TEST
-	;jsr LoadData
-	;STOP(1)
-
 	; Load the slideshow
 	ldx #LOADER_SLIDESHOW
 	jsr LoadData
 
-	;STOP(1)	
-	jsr ExecuteData
+	; Give control to the application and hope it knows what to do
+__auto_execute_address
+	jmp $a000
 		
-	;
-	; End of demo - Just stay there doing nothing
-	;
-	sei
-loop_forever_demo_finished
-	jmp loop_forever_demo_finished
-	
-	
 		
 IrqHandler
 	sta irq_save_a
@@ -257,7 +243,7 @@ ReadNextSector
 
 	sei
 
-	lda #%00010000
+	lda #FDC_Flag_DiscSide
 	sta current_side	
 stay_on_same_side
 
@@ -290,11 +276,11 @@ same_track
 	sta FDC_command_register,y	
 	jsr WaitCompletion
 	
+stay_on_the_track
 	lda #%10000100 ; on force les le Microdisk en side0, drive A ... Set le bit de données !!!
 	ora current_side
 	sta FDC_flags,y
 
-stay_on_the_track
 	lda #CMD_ReadSector
 	sta FDC_command_register,y
 
@@ -326,11 +312,6 @@ microdisc_read_data
 	jsr WaitCompletion
 	cli
 	rts
-
-
-ExecuteData	
-__auto_execute_address
-	jmp $a000
 
 
 WaitCompletion
@@ -406,72 +387,6 @@ DisplayPosition
 #endif
 	
 
-; 97 bytes, would not fit in the boot sector unfortunately...
-SoftHiresWithCopyCharset
-	ldy #$00		;copy charset
-	.(
-copy_charset_loop
-	lda $b500,y
-	sta $9900,y
-	lda $b600,y
-	sta $9a00,y
-	lda $b700,y
-	sta $9b00,y
-	lda $b900,y
-	sta $9d00,y
-	lda $ba00,y
-	sta $9e00,y
-	lda $bb00,y
-	sta $9f00,y
-	dey
-	bne copy_charset_loop
-	.)
-SoftHires	
-	lda #$a0             ;clear down all memory area with zero
-	sta $01
-	lda #$00
-	sta $00 			; a = 0 from here
-	ldx #$20
-hm_01 
-    sta ($00),y
-	iny
-	bne hm_01
-	inc $01
-	dex
-	bne hm_01
-	lda #30			;write hires switch
-	sta $bf40
-	lda #$a0		;clear hires with #$40
-	sta $01
-	ldx #$20
-	ldx #64
-hm_04
-	ldy #124
-hm_05
-	lda #$40
-	sta ($00),y
-	dey
-	bpl hm_05
-	lda $00
-	adc #125
-	sta $00
-	bcc hm_02
-	inc $01
-hm_02	
-	dex
-	bne hm_04
-	rts
-
-
-
-
-
-
-UnpackError
-	rts
-
-
-
 GetNextByte
 	php
 	lda __fetchByte+1
@@ -494,19 +409,6 @@ __fetchByte
 	inc __fetchByte+1
 	plp
 	rts
-
-/*
-GetNextByte
-	lda (ptr_source),y 		
-	; Move stream pointer (one byte)
-	.(
-	inc ptr_source  		
-	bne skip
-	inc ptr_source+1
-skip
-	.)
-	rts
-*/
 
 
 
@@ -578,9 +480,7 @@ back_copy
 	; Copy a number of bytes from the already unpacked stream
 	; Here we know that y is null. So no need for clearing it.
 	; Just be sure it's still null at the end.
-	; At this point, the source pointer points to a two byte
-	; value that actually contains a 4 bits counter, and a 
-	; 12 bit offset to point back into the depacked stream.
+	; At this point, the source pointer points to a two byte value that actually contains a 4 bits counter, and a 12 bit offset to point back into the depacked stream.
 	; The counter is in the 4 high order bits.
 	;clc  <== No need, since we access this routie from a BCC
 	jsr GetNextByte 	; Read from source stream
@@ -626,18 +526,6 @@ copy_loop
 	rts
 .)
 
-
-; Taille actuelle du code 279 octets
-; 0x08d7 - 0x07e8 => 239 octets
-; 0x08c8 - 0x07e5 => 227 octets
-; 0x08d5 - 0x0800 => 213 octets
-; 0x08c9 - 0x0800 => 201 octets
-; 0x08c5 - 0x0800 => 197 octets
-; 0x08c3 - 0x0800 => 195 octets
-; 0x08c0 - 0x0800 => 192 octets
-; => 146 octets
-
-
 _EndLoaderCode
 
 ;
@@ -672,4 +560,3 @@ _VectorIRQ			.word IrqHandler 		; FFFE-FFFF - IRQ Vector (Normally points to $02
 
 ; End of the loader - Nothing should come after because it's out of the addressable memory range :)
 
-#print (UnpackError -SoftHiresWithCopyCharset)

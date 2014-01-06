@@ -51,7 +51,26 @@ SET PARAMS=-f1 -d0 -o2
 %PICTCONV% %PARAMS% data\mooz_barbitoric.gif build\files\mooz_barbitoric.hir
 %PICTCONV% %PARAMS% data\mooz_santa.png build\files\mooz_santa.hir
 %PICTCONV% %PARAMS% data\mondrian.png build\files\mondrian.hir
+
+
+%PICTCONV% %PARAMS% data\output-buffy.png  build\files\output-buffy.hir
+%PICTCONV% %PARAMS% data\output-dog.png  build\files\output-dog.hir
+%PICTCONV% %PARAMS% data\output-homer.png  build\files\output-homer.hir
+%PICTCONV% %PARAMS% data\output-lena.png  build\files\output-lena.hir
+%PICTCONV% %PARAMS% data\Flowers.bmp build\files\flowers_gloky.hir
+%PICTCONV% %PARAMS% data\pinky-indecence.bmp build\files\pinky-indecence.hir
+%PICTCONV% %PARAMS% data\pinky-breast.bmp build\files\pinky-breast.hir
+
+
+%PICTCONV% %PARAMS% -t1 data\output-mire.png  build\files\output-mire.hir
+
+
 :EndPictures
+
+:: Monochrome pictures
+%PICTCONV% -f0 -f0 -o2 data\title_picture.png build\files\title_picture.hir
+%PICTCONV% -f0 -f0 -o2 data\title_picture_2.png build\files\title_picture_2.hir
+%PICTCONV% -f0 -f0 -o2 data\british_board_censors.png build\files\british_board_censors.hir
 %PICTCONV% -f0 -f0 -o2 data\font_24x20.png build\files\font_24x20.hir
 %PICTCONV% -f0 -f0 -o2 data\Font6x8_ArtDeco.png build\files\Font6x8_ArtDeco.hir
 %PICTCONV% -f0 -f0 -o2 data\Font12x16_ArtDeco.png build\files\Font12x16_ArtDeco.hir
@@ -96,14 +115,33 @@ SET YM2MYM=%osdk%\Bin\ym2mym.exe
 ::%YM2MYM% data\NONAME.YM build\files\music_back.ym               :: Forgot the name of that one, but it was cool!
 ::BigAlec-NoSecondPrize
 ::BigAlec-Reality
+::%YM2MYM% data\DavidWhittaker-BeyondTheIcePalace.ym build\files\DavidWhittaker-BeyondTheIcePalace.ym 
+::%YM2MYM% data\DavidWhittaker-ReturnToGenesis.ym build\files\DavidWhittaker-ReturnToGenesis.ym 
+::%YM2MYM% data\DavidWhittaker-Custodian.YM build\files\DavidWhittaker-Custodian.YM
+::%YM2MYM% data\TonyWilliams-Onslaught1.ym build\files\TonyWilliams-Onslaught1.ym
 
 %YM2MYM% data\BigAlec-NoSecondPrize.ym build\files\music_no_second_prize.ym
 %YM2MYM% data\JochenHippel-LeavingTerramis.YM build\files\music_leaving_terramis.ym
 %YM2MYM% data\CUDDLY1.YM build\files\music_cuddly.ym
 %YM2MYM% data\JochenHippel-RingsOfMedusa.YM build\files\music_rings_of_medusa.ym
 %YM2MYM% data\northtar.ym build\files\northtar.ym
-%YM2MYM% data\TEST.ym build\files\TEST.ym
+%YM2MYM% data\BeBop.ym build\files\BeBop.ym
+%YM2MYM% data\BigAlec-BestPartOfCreation.ym build\files\BigAlec-BestPartOfCreation.ym
 
+%YM2MYM% data\ChrisMad.BitmapMania.ym build\files\ChrisMad.BitmapMania.ym
+%YM2MYM% data\ChristianHellmanzik-Arsch.ym build\files\ChristianHellmanzik-Arsch.ym
+%YM2MYM% data\ChristianHellmanzik-StarTunnel.ym build\files\ChristianHellmanzik-StarTunnel.ym
+
+%YM2MYM% data\CuddlyMegaballs.YM build\files\CuddlyMegaballs.YM 
+%YM2MYM% data\Jess-BmgsLoader.ym build\files\Jess-BmgsLoader.ym 
+%YM2MYM% data\JochenHippel-Cuddly-3DDoc.ym build\files\JochenHippel-Cuddly-3DDoc.ym 
+%YM2MYM% data\MattFurniss-EscapeFromThePlanetOfRobotMonsters.ym build\files\MattFurniss-EscapeFromThePlanetOfRobotMonsters.ym 
+%YM2MYM% data\LTK-MageMix.YM build\files\LTK-MageMix.YM 
+
+%YM2MYM% data\StefanJerowowski-Spherical.ym build\files\StefanJerowowski-Spherical.ym
+%YM2MYM% data\SABOTR2.ym build\files\SABOTR2.ym
+%YM2MYM% data\TonyWilliams-Onslaught2.ym build\files\TonyWilliams-Onslaught2.ym
+%YM2MYM% data\PYM_INTR.YM build\files\PYM_INTR.YM
 
 
 :EndMusics

@@ -440,18 +440,3 @@ loop
 .)
 
 
-	.dsb 256-(*&255)
-
-_ScreenAddrLow				.dsb 256
-_ScreenAddrHigh  			.dsb 256
-	
-_PictureLoadBufferAddrLow	.dsb 256
-_PictureLoadBufferAddrHigh  .dsb 256
-
-_EmptySourceScanLine 		.dsb 256			; Only zeroes, can be used for special effects
-_EmptyDestinationScanLine 	.dsb 256			; Only zeroes, can be used for special effects
-
-_PictureLoadBuffer			.dsb 8192			; 32*256 (Because it loads full sectors...)
-
-_DescriptionBuffer 			.dsb 40
-

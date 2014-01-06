@@ -1,5 +1,4 @@
 
-//#define ENABLE_MUSIC 1 	
 
 #define        via_portb                $0300 
 #define        via_t1cl                $0304 
@@ -32,34 +31,7 @@ _Stop
 	jmp _Stop
 	rts
 
-/*	
-;
-; Installs a simple 50hz Irq
-;
-; 304
-; 306
-; 307
-bit $304	// VIA_T1CL ; Turn off interrupt early.  (More on that below
 
-;Based on setting T1 to FFFF and adding to global counter in IRQ for up to 16.5
-;Million Clock Cycles.
-
-
-#define VIA_T1CL 			$0304
-#define VIA_T1CH 			$0305
-
-#define VIA_T1LL 			$0306
-#define VIA_T1LH 			$0307
-
-_VSync
-	lda $300
-vsync_wait
-	lda $30D
-	and #%00010000 ;test du bit cb1 du registre d'indicateur d'IRQ
-	beq vsync_wait
-	rts
-
-*/
 _System_InstallIRQ_SimpleVbl
 .(
 	sei
@@ -83,20 +55,6 @@ _System_InstallIRQ_SimpleVbl
 	sta _SystemFrameCounter_low
 	sta _SystemFrameCounter_high
 	
-	;
-	; Scroller
-	;
-	jsr _ScrollerInit
-
-
- 	;
- 	; Music player
- 	;
-#ifdef ENABLE_MUSIC 	
-	;jsr _Mym_Initialize
-	;jsr _Mym_Initialize
-#endif	
-
 	// Install interrupt (this works only if overlay ram is disabled)
 	lda #<_InterruptCode_SimpleVbl
 	sta $FFFE
@@ -135,16 +93,15 @@ skip
 	pha
 	tya
 	pha
-	
-	
-#ifdef ENABLE_MUSIC 	
-	jsr _Mym_PlayFrame
-#endif
+		
+_InterruptCallBack_1		; Used by the transition animation that shows the name of the authors
+	jsr _DoNothing			; Transformed to "jsr _PrintDescriptionCallback"
 
-_InterruptCallBack_1
-	jsr _DoNothing
+_InterruptCallBack_2		; Used by the scrolling code
+	jsr _DoNothing			; Transformed to "jsr _ScrollerDisplay"
 
-	jsr _ScrollerDisplay
+_InterruptCallBack_3		; Used by the music player
+	jsr _DoNothing			; Transformed to "jsr _Mym_PlayFrame"
 	
 _InterruptCodeEnd
 	pla

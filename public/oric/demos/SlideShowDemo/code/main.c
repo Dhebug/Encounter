@@ -11,7 +11,8 @@ extern void VSync();
 extern void Stop();
 
 // player.s
-extern unsigned char MusicLooped;
+extern volatile unsigned char MusicPlaying;
+extern unsigned int MusicLength;
 extern Mym_Initialize();
 extern Mym_ReInitialize();
 
@@ -42,40 +43,63 @@ extern void* LoaderApiAddress;
 extern void SetLoadAddress();
 extern void LoadFile();
 
-void Pause()
+void Pause(int delay)
 {
+	int wasPlayingMusic=MusicPlaying;
 	int i;
-	for (i=0;i<50*5;i++)
+
+	for (i=0;i<delay;i++)
 	{
 		VSync();
+		if (MusicPlaying!=wasPlayingMusic)
+		{
+			break;
+		}
 	}
 }
 
 extern void Player_SetMusic_Birthday();
 
-unsigned char CurrentMusic=LOADER_FIRST_MUSIC;
+unsigned char CurrentMusic=0;
+unsigned char CurrentPicture=0;
 
-/*
-void PrintDescription(const char* author,const char* name)
+void RetroIntro()
 {
-	char* textLine;
+	// Load and play the music
+	LoaderApiEntryIndex=LOADER_INTRO_MUSIC;		// BeBop music
+	LoadFile();
+	MusicLength=50*3;		// 3 seconds
+	MusicLength=50*30;		// 3 seconds
+	MusicLength=50*20;		// 3 seconds
+	MusicLength=50*25;		// 3 seconds
+	//MusicLength=50*28;		// 3 seconds
+	MusicLength=50*24;		// 3 seconds
+	Mym_Initialize();
 
-	textLine=(char*)0xbb80+40*25;
-	memset(textLine,32,40);
+	for (LoaderApiEntryIndex=LOADER_FIRST_INTRO_PICTURE;LoaderApiEntryIndex<LOADER_LAST_INTRO_PICTURE;LoaderApiEntryIndex++)
+	{
+		LoaderApiAddress=PictureLoadBuffer;
+		SetLoadAddress();
+		LoadFile();
 
-	memcpy(textLine,author,strlen(author));
-	memcpy(textLine+20,name,strlen(name));
+		PictureTransitionUnroll();
+
+		Pause(50*4);
+	}
+
+
+	while (MusicPlaying);
+
+	// Clear the screen again
+	memset((unsigned char*)0xa000,64,8000);
 }
-*/
+
 
 void main()
 {
-	int y;
-	if (!is_overlay_enabled())
-	{
-		hires();
-	}
-	MusicLooped=1;
+	// Clear the screen
+	//memset((unsigned char*)0xa000,64,8000);
+	memset((unsigned char*)0x9900,0,0xbfe0-0x9900);	
 
 	// Load the 6x8 font
 	LoaderApiEntryIndex=LOADER_FONT_6x8_ARTDECO;
@@ -87,79 +111,46 @@ void main()
 	SetLoadAddress();
 	LoadFile();
 
-//while(1);
-
-	memset((unsigned char*)0xa000,64+1+4+16,8000);
-
-
 	// Some basic inits
 	InitTransitionData();
 
+	// Install the IRQ handler
 	System_InstallIRQ_SimpleVbl();
 
-			    //TestScroller();
-				//while (1)
-				{
-				}
+	// Play the black & white retro intro
+	//RetroIntro();
 
-	// Load and play the music
-	LoaderApiEntryIndex=LOADER_FIRST_MUSIC+2;
-	LoadFile();
-	Mym_ReInitialize();
-
-	/*
-	// Test load compressed file
-	LoaderApiEntryIndex=LOADER_COMPRESSED_TEST;
-	LoaderApiAddress=PictureLoadBuffer+8;
-	SetLoadAddress();
-	LoadFile();
-
-	PictureLoadBuffer[0]='L';
-	PictureLoadBuffer[1]='Z';
-	PictureLoadBuffer[2]='7';
-	PictureLoadBuffer[3]='7';
-	*((int*)(PictureLoadBuffer+4))=8000;		// Src size
-	*((int*)(PictureLoadBuffer+6))=8000;		// Dst size
-
-	Stop();
-	file_unpack((unsigned char*)0xa000,PictureLoadBuffer);
-	*/
-
+	// Start the scroller
+	ScrollerInit();
 
 	while (1)
 	{		
-		/*
-		if (MusicLooped)
+		// Change the music if necessary
+		if (!MusicPlaying)
 		{
-			poke(0xbb80+40*25,16 | ((peek(0xbb80+40*25)+1)&7) );
-			//MusicPlaying=1;
 			if ( (CurrentMusic<LOADER_FIRST_MUSIC) || (CurrentMusic>=LOADER_LAST_MUSIC) )
 			{
 				CurrentMusic=LOADER_FIRST_MUSIC;
 			}
-			LoaderApiEntryIndex=CurrentMusic;
+			LoaderApiEntryIndex=CurrentMusic++;
 			LoadFile();
-			Mym_ReInitialize();
-			++CurrentMusic;
+			Mym_Initialize();
 		}
-		*/
-         
-		for (LoaderApiEntryIndex=LOADER_FIRST_PICTURE;LoaderApiEntryIndex<LOADER_LAST_PICTURE;LoaderApiEntryIndex++)
+
+		// Next picture
+		if ( (CurrentPicture<LOADER_FIRST_PICTURE) || (CurrentPicture>=LOADER_LAST_PICTURE) )
 		{
-			LoaderApiAddress=PictureLoadBuffer;
-			SetLoadAddress();
-			LoadFile();
-
-			//memcpy((unsigned char*)0xa000,PictureLoadBuffer,8000);
-			//PictureTransitionFromTopAndBottom();
-			//PictureTransitionVenicianStore();
-			//PictureTransitionUnroll();
-			//PrintDescription("Twilighte","Barbitoric");
-			//PrintDescription();
-			PictureDoTransition();
-
-			Pause();
+			CurrentPicture=LOADER_FIRST_PICTURE;
 		}
+		LoaderApiEntryIndex=CurrentPicture++;			
+		LoaderApiAddress=PictureLoadBuffer;
+		SetLoadAddress();
+		LoadFile();
+
+		PictureDoTransition();
+		//PictureTransitionVenicianStore();
+
+		Pause(50*15);
 
 		VSync();
 	}
