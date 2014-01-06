@@ -7,14 +7,14 @@
 // Information for the Assembler
 //
 #ifdef LOADER
-FileStartSector .byt 4,1,10,13,1,5,5,8,6,13,12,2,17,16,17,12,3,15,15,13,5,5,14,12,5,16,12,10,3,15,14,13,11,14,13,6,3,4,14,11,2,3,15,16,2,11,10,7,14
-FileStartTrack .byt 0,4,5,5,6,6,7,8,9,10,11,12,12,13,14,15,17,17,18,19,21,22,22,23,24,24,25,26,27,27,28,29,30,31,32,33,34,35,35,36,37,38,38,39,41,41,128,129,130
-FileStoredSizeLow .byt <1024,<6648,<553,<1224,<970,<4222,<4914,<3712,<6123,<3842,<1721,<3781,<4002,<4366,<2920,<6169,<3059,<4100,<3667,<6404,<4304,<2300,<3586,<2411,<2752,<3245,<3723,<2412,<2861,<3882,<3841,<3817,<4992,<3858,<2372,<3474,<4447,<2327,<3330,<2022,<4371,<2823,<4373,<4933,<2179,<3994,<3341,<6109,<2034
-FileStoredSizeHigh .byt >1024,>6648,>553,>1224,>970,>4222,>4914,>3712,>6123,>3842,>1721,>3781,>4002,>4366,>2920,>6169,>3059,>4100,>3667,>6404,>4304,>2300,>3586,>2411,>2752,>3245,>3723,>2412,>2861,>3882,>3841,>3817,>4992,>3858,>2372,>3474,>4447,>2327,>3330,>2022,>4371,>2823,>4373,>4933,>2179,>3994,>3341,>6109,>2034
-FileSizeLow .byt <1024,<30941,<760,<3040,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8960,<8960,<8000,<8960,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<7347,<3783,<7478,<3716
-FileSizeHigh .byt >1024,>30941,>760,>3040,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8960,>8960,>8000,>8960,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>7347,>3783,>7478,>3716
-FileLoadAdressLow .byt <64512,<1024,<40192,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
-FileLoadAdressHigh .byt >64512,>1024,>40192,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
+FileStartSector .byt 4,1,9,12,17,12,5,16,3,17,13,13,11,2,1,16,15,11,8,11,14,13,11,5,17,15,1,8,11,12,5,12,3,1,15,16,10,2,17,10,8,7,15,15,16,11,4,4,16,11,13,11,7,12,3,17,15,6,5,8,15
+FileStartTrack .byt 0,4,6,6,6,7,8,8,9,10,11,12,13,14,15,15,16,17,18,19,20,21,23,24,24,25,27,28,29,30,31,31,32,33,33,34,36,37,37,38,39,40,41,128,129,130,131,132,132,133,134,135,137,139,140,141,142,144,146,147,148
+FileStoredSizeLow .byt <1024,<10600,<553,<1223,<2941,<2371,<2725,<970,<7825,<3185,<4222,<3711,<1869,<3882,<3667,<3858,<3131,<3474,<4992,<4933,<3842,<7938,<2637,<2823,<3781,<5093,<6123,<4914,<4373,<2327,<1721,<2033,<3817,<3330,<4371,<7032,<2300,<3723,<2411,<3586,<3974,<6169,<4304,<4366,<2920,<2438,<4301,<3059,<2861,<4713,<3826,<7663,<9810,<2034,<7868,<3733,<6168,<8194,<5116,<6109,<3994
+FileStoredSizeHigh .byt >1024,>10600,>553,>1223,>2941,>2371,>2725,>970,>7825,>3185,>4222,>3711,>1869,>3882,>3667,>3858,>3131,>3474,>4992,>4933,>3842,>7938,>2637,>2823,>3781,>5093,>6123,>4914,>4373,>2327,>1721,>2033,>3817,>3330,>4371,>7032,>2300,>3723,>2411,>3586,>3974,>6169,>4304,>4366,>2920,>2438,>4301,>3059,>2861,>4713,>3826,>7663,>9810,>2034,>7868,>3733,>6168,>8194,>5116,>6109,>3994
+FileSizeLow .byt <1024,<37108,<760,<3040,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<8000,<4172,<9866,<12872,<3716,<9958,<5306,<8061,<11341,<8242,<7478,<7347
+FileSizeHigh .byt >1024,>37108,>760,>3040,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>8000,>4172,>9866,>12872,>3716,>9958,>5306,>8061,>11341,>8242,>7478,>7347
+FileLoadAdressLow .byt <64512,<1024,<40192,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152,<49152,<49152,<49152,<49152,<49152,<49152,<49152
+FileLoadAdressHigh .byt >64512,>1024,>40192,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152,>49152,>49152,>49152,>49152,>49152,>49152,>49152
 #endif // LOADER
 #else
 //
@@ -35,152 +35,184 @@ FileLoadAdressHigh .byt >64512,>1024,>40192,>40960,>40960,>40960,>40960,>40960,>
 // Entry #0 '..\build\files\loader.o'
 // - Loads at address 64512 starts on track 0 sector 4 and is 4 sectors long (1024 bytes).
 // Entry #1 '..\build\files\slideshow.o'
-// - Loads at address 1024 starts on track 4 sector 1 and is 26 sectors long (6648 compressed bytes: 21% of 30941 bytes).
+// - Loads at address 1024 starts on track 4 sector 1 and is 42 sectors long (10600 compressed bytes: 28% of 37108 bytes).
 // Entry #2 '..\build\files\Font6x8_ArtDeco.hir'
-// - Loads at address 40192 starts on track 5 sector 10 and is 3 sectors long (553 compressed bytes: 72% of 760 bytes).
+// - Loads at address 40192 starts on track 6 sector 9 and is 3 sectors long (553 compressed bytes: 72% of 760 bytes).
 // Entry #3 '..\build\files\Font12x16_ArtDeco.hir'
-// - Loads at address 40960 starts on track 5 sector 13 and is 5 sectors long (1224 compressed bytes: 40% of 3040 bytes).
-// Entry #4 '..\build\files\mondrian.hir'
-// - Loads at address 40960 starts on track 6 sector 1 and is 4 sectors long (970 compressed bytes: 12% of 8000 bytes).
+// - Loads at address 40960 starts on track 6 sector 12 and is 5 sectors long (1223 compressed bytes: 40% of 3040 bytes).
+// Entry #4 '..\build\files\british_board_censors.hir'
+// - Loads at address 40960 starts on track 6 sector 17 and is 12 sectors long (2941 compressed bytes: 36% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Censor' 
+// Entry #5 '..\build\files\title_picture.hir'
+// - Loads at address 40960 starts on track 7 sector 12 and is 10 sectors long (2371 compressed bytes: 29% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Title' 
+// Entry #6 '..\build\files\title_picture_2.hir'
+// - Loads at address 40960 starts on track 8 sector 5 and is 11 sectors long (2725 compressed bytes: 34% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Features' 
+// Entry #7 '..\build\files\mondrian.hir'
+// - Loads at address 40960 starts on track 8 sector 16 and is 4 sectors long (970 compressed bytes: 12% of 8000 bytes).
 // - Associated metadata: author='Mondrian' name='RGB Composition' 
-// Entry #5 '..\build\files\trois_mats.hir'
-// - Loads at address 40960 starts on track 6 sector 5 and is 17 sectors long (4222 compressed bytes: 52% of 8000 bytes).
-// - Associated metadata: author='Vasiloric' name='Sailing ship' 
-// Entry #6 '..\build\files\damsel.hir'
-// - Loads at address 40960 starts on track 7 sector 5 and is 20 sectors long (4914 compressed bytes: 61% of 8000 bytes).
-// - Associated metadata: author='Marcel Van Driel' name='Damsel title' 
-// Entry #7 '..\build\files\murder_on_the_atlantic.hir'
-// - Loads at address 40960 starts on track 8 sector 8 and is 15 sectors long (3712 compressed bytes: 46% of 8000 bytes).
+// Entry #8 '..\build\files\output-lena.hir'
+// - Loads at address 40960 starts on track 9 sector 3 and is 31 sectors long (7825 compressed bytes: 97% of 8000 bytes).
+// - Associated metadata: author='Playboy' name='Lena' 
+// Entry #9 '..\build\files\murder_on_the_atlantic.hir'
+// - Loads at address 40960 starts on track 10 sector 17 and is 13 sectors long (3185 compressed bytes: 39% of 8000 bytes).
 // - Associated metadata: author='Dom' name='Murder on the Atlantic' 
-// Entry #8 '..\build\files\twilighte_ripped.hir'
-// - Loads at address 40960 starts on track 9 sector 6 and is 24 sectors long (6123 compressed bytes: 76% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='Ripped!' 
-// Entry #9 '..\build\files\twilighte_dragons.hir'
-// - Loads at address 40960 starts on track 10 sector 13 and is 16 sectors long (3842 compressed bytes: 48% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='Double Dragons' 
-// Entry #10 '..\build\files\dbug_oric1.hir'
-// - Loads at address 40960 starts on track 11 sector 12 and is 7 sectors long (1721 compressed bytes: 21% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Oric 1' 
-// Entry #11 '..\build\files\twilighte_pegasus.hir'
-// - Loads at address 40960 starts on track 12 sector 2 and is 15 sectors long (3781 compressed bytes: 47% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='Pegasus' 
-// Entry #12 '..\build\files\twilighte_im_title.hir'
-// - Loads at address 40960 starts on track 12 sector 17 and is 16 sectors long (4002 compressed bytes: 50% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='Impossible Mission' 
-// Entry #13 '..\build\files\twilighte_whitehall.hir'
-// - Loads at address 40960 starts on track 13 sector 16 and is 18 sectors long (4366 compressed bytes: 54% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='OType - Whitehall' 
-// Entry #14 '..\build\files\twilighte_im_sprites.hir'
-// - Loads at address 40960 starts on track 14 sector 17 and is 12 sectors long (2920 compressed bytes: 36% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='IM Sprite Sheets' 
-// Entry #15 '..\build\files\space_1999_sparks.hir'
-// - Loads at address 40960 starts on track 15 sector 12 and is 25 sectors long (6169 compressed bytes: 77% of 8000 bytes).
-// - Associated metadata: author='Chema' name='Space 1999 - Sparks' 
-// Entry #16 '..\build\files\twilighte_otype_1.hir'
-// - Loads at address 40960 starts on track 17 sector 3 and is 12 sectors long (3059 compressed bytes: 38% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='OType' 
-// Entry #17 '..\build\files\dbug_assembler2002.hir'
-// - Loads at address 40960 starts on track 17 sector 15 and is 17 sectors long (4100 compressed bytes: 51% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Assembly 2002' 
-// Entry #18 '..\build\files\dbug_karhu.hir'
-// - Loads at address 40960 starts on track 18 sector 15 and is 15 sectors long (3667 compressed bytes: 45% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Karhu' 
-// Entry #19 '..\build\files\defence_force.hir'
-// - Loads at address 40960 starts on track 19 sector 13 and is 26 sectors long (6404 compressed bytes: 80% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Defence Force Logo' 
-// Entry #20 '..\build\files\dbug_space1999_planets.hir'
-// - Loads at address 40960 starts on track 21 sector 5 and is 17 sectors long (4304 compressed bytes: 53% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Space 1999 - Planets' 
-// Entry #21 '..\build\files\dbug_atmos_connectors.hir'
-// - Loads at address 40960 starts on track 22 sector 5 and is 9 sectors long (2300 compressed bytes: 28% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Hardware VSync' 
-// Entry #22 '..\build\files\dbug_space1999.hir'
-// - Loads at address 40960 starts on track 22 sector 14 and is 15 sectors long (3586 compressed bytes: 44% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Space 1999' 
-// Entry #23 '..\build\files\dbug_1337_logo.hir'
-// - Loads at address 40960 starts on track 23 sector 12 and is 10 sectors long (2411 compressed bytes: 30% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='1337 Logo' 
-// Entry #24 '..\build\files\twilighte_tol_title.hir'
-// - Loads at address 40960 starts on track 24 sector 5 and is 11 sectors long (2752 compressed bytes: 30% of 8960 bytes).
-// - Associated metadata: author='Twilighte' name='Times Of Lore Title' 
-// Entry #25 '..\build\files\twilighte_tol_doors.hir'
-// - Loads at address 40960 starts on track 24 sector 16 and is 13 sectors long (3245 compressed bytes: 36% of 8960 bytes).
-// - Associated metadata: author='Twilighte' name='Times Of Lore Intro' 
-// Entry #26 '..\build\files\skooldaze.hir'
-// - Loads at address 40960 starts on track 25 sector 12 and is 15 sectors long (3723 compressed bytes: 46% of 8000 bytes).
-// - Associated metadata: author='Symoon & Dbug' name='Skooldaze' 
-// Entry #27 '..\build\files\toxic_slime.hir'
-// - Loads at address 40960 starts on track 26 sector 10 and is 10 sectors long (2412 compressed bytes: 26% of 8960 bytes).
-// - Associated metadata: author='Alexios' name='Toxic Slime' 
-// Entry #28 '..\build\files\dbug_windows95.hir'
-// - Loads at address 40960 starts on track 27 sector 3 and is 12 sectors long (2861 compressed bytes: 35% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Windows 95' 
-// Entry #29 '..\build\files\dbug_yessagician.hir'
-// - Loads at address 40960 starts on track 27 sector 15 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
-// - Associated metadata: author='Dbug' name='Yessagician' 
-// Entry #30 '..\build\files\diamond_2.hir'
-// - Loads at address 40960 starts on track 28 sector 14 and is 16 sectors long (3841 compressed bytes: 48% of 8000 bytes).
+// Entry #10 '..\build\files\trois_mats.hir'
+// - Loads at address 40960 starts on track 11 sector 13 and is 17 sectors long (4222 compressed bytes: 52% of 8000 bytes).
+// - Associated metadata: author='Vasiloric' name='Sailing ship' 
+// Entry #11 '..\build\files\diamond_2.hir'
+// - Loads at address 40960 starts on track 12 sector 13 and is 15 sectors long (3711 compressed bytes: 46% of 8000 bytes).
 // - Associated metadata: author='Fr{d{ric Baille' name='Diamond Island' 
-// Entry #31 '..\build\files\exocet_blueface.hir'
-// - Loads at address 40960 starts on track 29 sector 13 and is 15 sectors long (3817 compressed bytes: 47% of 8000 bytes).
-// - Associated metadata: author='Exocet' name='Blueface' 
-// Entry #32 '..\build\files\exocet_fists.hir'
-// - Loads at address 40960 starts on track 30 sector 11 and is 20 sectors long (4992 compressed bytes: 62% of 8000 bytes).
-// - Associated metadata: author='Exocet' name='Fists' 
-// Entry #33 '..\build\files\exocet_moonguy.hir'
-// - Loads at address 40960 starts on track 31 sector 14 and is 16 sectors long (3858 compressed bytes: 48% of 8000 bytes).
-// - Associated metadata: author='Exocet' name='Moon guy' 
-// Entry #34 '..\build\files\karate.hir'
-// - Loads at address 40960 starts on track 32 sector 13 and is 10 sectors long (2372 compressed bytes: 29% of 8000 bytes).
-// - Associated metadata: author='Christophe Andreani' name='Karate' 
-// Entry #35 '..\build\files\karate_2.hir'
-// - Loads at address 40960 starts on track 33 sector 6 and is 14 sectors long (3474 compressed bytes: 43% of 8000 bytes).
-// - Associated metadata: author='Christophe Andreani' name='Karate' 
-// Entry #36 '..\build\files\krillys.hir'
-// - Loads at address 40960 starts on track 34 sector 3 and is 18 sectors long (4447 compressed bytes: 55% of 8000 bytes).
-// - Associated metadata: author='Orpheus' name='Krillys' 
-// Entry #37 '..\build\files\mooz_barbitoric.hir'
-// - Loads at address 40960 starts on track 35 sector 4 and is 10 sectors long (2327 compressed bytes: 29% of 8000 bytes).
-// - Associated metadata: author='Mooz' name='Barbitoric' 
-// Entry #38 '..\build\files\mooz_oric.hir'
-// - Loads at address 40960 starts on track 35 sector 14 and is 14 sectors long (3330 compressed bytes: 41% of 8000 bytes).
-// - Associated metadata: author='Mooz' name='Oric' 
-// Entry #39 '..\build\files\mooz_santa.hir'
-// - Loads at address 40960 starts on track 36 sector 11 and is 8 sectors long (2022 compressed bytes: 25% of 8000 bytes).
-// - Associated metadata: author='Mooz' name='Santa' 
-// Entry #40 '..\build\files\mooz_supertomato.hir'
-// - Loads at address 40960 starts on track 37 sector 2 and is 18 sectors long (4371 compressed bytes: 54% of 8000 bytes).
-// - Associated metadata: author='Mooz' name='Super Tomato' 
-// Entry #41 '..\build\files\prez_story.hir'
-// - Loads at address 40960 starts on track 38 sector 3 and is 12 sectors long (2823 compressed bytes: 35% of 8000 bytes).
-// - Associated metadata: author='Prez' name='Oric Coder' 
-// Entry #42 '..\build\files\tomb_1.hir'
-// - Loads at address 40960 starts on track 38 sector 15 and is 18 sectors long (4373 compressed bytes: 54% of 8000 bytes).
-// - Associated metadata: author='Loriciels' name='Axayacatl' 
-// Entry #43 '..\build\files\twilighte_beast.hir'
-// - Loads at address 40960 starts on track 39 sector 16 and is 20 sectors long (4933 compressed bytes: 61% of 8000 bytes).
-// - Associated metadata: author='Twilighte' name='Shadow of the Beast' 
-// Entry #44 '..\build\files\twilighte_sonix.hir'
-// - Loads at address 40960 starts on track 41 sector 2 and is 9 sectors long (2179 compressed bytes: 27% of 8000 bytes).
+// Entry #12 '..\build\files\twilighte_sonix.hir'
+// - Loads at address 40960 starts on track 13 sector 11 and is 8 sectors long (1869 compressed bytes: 23% of 8000 bytes).
 // - Associated metadata: author='Twilighte' name='Sonix' 
-// Entry #45 '..\build\files\music_cuddly.ym'
-// - Loads at address 49152 starts on track 41 sector 11 and is 16 sectors long (3994 compressed bytes: 54% of 7347 bytes).
-// Entry #46 '..\build\files\northtar.ym'
-// - Loads at address 49152 starts on the second side on track 0 sector 10 and is 14 sectors long (3341 compressed bytes: 88% of 3783 bytes).
-// Entry #47 '..\build\files\music_no_second_prize.ym'
-// - Loads at address 49152 starts on the second side on track 1 sector 7 and is 24 sectors long (6109 compressed bytes: 81% of 7478 bytes).
-// Entry #48 '..\build\files\music_leaving_terramis.ym'
-// - Loads at address 49152 starts on the second side on track 2 sector 14 and is 8 sectors long (2034 compressed bytes: 54% of 3716 bytes).
+// Entry #13 '..\build\files\dbug_yessagician.hir'
+// - Loads at address 40960 starts on track 14 sector 2 and is 16 sectors long (3882 compressed bytes: 48% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Yessagician' 
+// Entry #14 '..\build\files\dbug_karhu.hir'
+// - Loads at address 40960 starts on track 15 sector 1 and is 15 sectors long (3667 compressed bytes: 45% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Karhu' 
+// Entry #15 '..\build\files\exocet_moonguy.hir'
+// - Loads at address 40960 starts on track 15 sector 16 and is 16 sectors long (3858 compressed bytes: 48% of 8000 bytes).
+// - Associated metadata: author='Exocet' name='Moon guy' 
+// Entry #16 '..\build\files\twilighte_tol_doors.hir'
+// - Loads at address 40960 starts on track 16 sector 15 and is 13 sectors long (3131 compressed bytes: 39% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Times Of Lore Intro' 
+// Entry #17 '..\build\files\karate_2.hir'
+// - Loads at address 40960 starts on track 17 sector 11 and is 14 sectors long (3474 compressed bytes: 43% of 8000 bytes).
+// - Associated metadata: author='Christophe Andr{ani' name='Karate' 
+// Entry #18 '..\build\files\exocet_fists.hir'
+// - Loads at address 40960 starts on track 18 sector 8 and is 20 sectors long (4992 compressed bytes: 62% of 8000 bytes).
+// - Associated metadata: author='Exocet' name='Fists' 
+// Entry #19 '..\build\files\twilighte_beast.hir'
+// - Loads at address 40960 starts on track 19 sector 11 and is 20 sectors long (4933 compressed bytes: 61% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Shadow of the Beast' 
+// Entry #20 '..\build\files\twilighte_dragons.hir'
+// - Loads at address 40960 starts on track 20 sector 14 and is 16 sectors long (3842 compressed bytes: 48% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Double Dragons' 
+// Entry #21 '..\build\files\output-buffy.hir'
+// - Loads at address 40960 starts on track 21 sector 13 and is 32 sectors long (7938 compressed bytes: 99% of 8000 bytes).
+// - Associated metadata: author='Unknown' name='Buffy' 
+// Entry #22 '..\build\files\twilighte_tol_title.hir'
+// - Loads at address 40960 starts on track 23 sector 11 and is 11 sectors long (2637 compressed bytes: 32% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Times Of Lore Title' 
+// Entry #23 '..\build\files\prez_story.hir'
+// - Loads at address 40960 starts on track 24 sector 5 and is 12 sectors long (2823 compressed bytes: 35% of 8000 bytes).
+// - Associated metadata: author='Prez' name='Oric Coder' 
+// Entry #24 '..\build\files\twilighte_pegasus.hir'
+// - Loads at address 40960 starts on track 24 sector 17 and is 15 sectors long (3781 compressed bytes: 47% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Pegasus' 
+// Entry #25 '..\build\files\flowers_gloky.hir'
+// - Loads at address 40960 starts on track 25 sector 15 and is 20 sectors long (5093 compressed bytes: 63% of 8000 bytes).
+// - Associated metadata: author='Gloky' name='Floral Explosion' 
+// Entry #26 '..\build\files\twilighte_ripped.hir'
+// - Loads at address 40960 starts on track 27 sector 1 and is 24 sectors long (6123 compressed bytes: 76% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Ripped!' 
+// Entry #27 '..\build\files\damsel.hir'
+// - Loads at address 40960 starts on track 28 sector 8 and is 20 sectors long (4914 compressed bytes: 61% of 8000 bytes).
+// - Associated metadata: author='Marcel Van Driel' name='Damsel title' 
+// Entry #28 '..\build\files\tomb_1.hir'
+// - Loads at address 40960 starts on track 29 sector 11 and is 18 sectors long (4373 compressed bytes: 54% of 8000 bytes).
+// - Associated metadata: author='Loriciels' name='Axayacatl' 
+// Entry #29 '..\build\files\mooz_barbitoric.hir'
+// - Loads at address 40960 starts on track 30 sector 12 and is 10 sectors long (2327 compressed bytes: 29% of 8000 bytes).
+// - Associated metadata: author='Mooz' name='Barbitoric' 
+// Entry #30 '..\build\files\dbug_oric1.hir'
+// - Loads at address 40960 starts on track 31 sector 5 and is 7 sectors long (1721 compressed bytes: 21% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Oric 1' 
+// Entry #31 '..\build\files\dbug_atmos_connectors.hir'
+// - Loads at address 40960 starts on track 31 sector 12 and is 8 sectors long (2033 compressed bytes: 25% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Hardware VSync' 
+// Entry #32 '..\build\files\exocet_blueface.hir'
+// - Loads at address 40960 starts on track 32 sector 3 and is 15 sectors long (3817 compressed bytes: 47% of 8000 bytes).
+// - Associated metadata: author='Exocet' name='Blueface' 
+// Entry #33 '..\build\files\mooz_oric.hir'
+// - Loads at address 40960 starts on track 33 sector 1 and is 14 sectors long (3330 compressed bytes: 41% of 8000 bytes).
+// - Associated metadata: author='Mooz' name='Oric' 
+// Entry #34 '..\build\files\mooz_supertomato.hir'
+// - Loads at address 40960 starts on track 33 sector 15 and is 18 sectors long (4371 compressed bytes: 54% of 8000 bytes).
+// - Associated metadata: author='Mooz' name='Super Tomato' 
+// Entry #35 '..\build\files\output-homer.hir'
+// - Loads at address 40960 starts on track 34 sector 16 and is 28 sectors long (7032 compressed bytes: 87% of 8000 bytes).
+// - Associated metadata: author='Matt Groening' name='Homer' 
+// Entry #36 '..\build\files\toxic_slime.hir'
+// - Loads at address 40960 starts on track 36 sector 10 and is 9 sectors long (2300 compressed bytes: 28% of 8000 bytes).
+// - Associated metadata: author='Alexios' name='Toxic Slime' 
+// Entry #37 '..\build\files\skooldaze.hir'
+// - Loads at address 40960 starts on track 37 sector 2 and is 15 sectors long (3723 compressed bytes: 46% of 8000 bytes).
+// - Associated metadata: author='Symoon & Dbug' name='Skooldaze' 
+// Entry #38 '..\build\files\dbug_1337_logo.hir'
+// - Loads at address 40960 starts on track 37 sector 17 and is 10 sectors long (2411 compressed bytes: 30% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='1337 Logo' 
+// Entry #39 '..\build\files\dbug_space1999.hir'
+// - Loads at address 40960 starts on track 38 sector 10 and is 15 sectors long (3586 compressed bytes: 44% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Space 1999' 
+// Entry #40 '..\build\files\twilighte_im_title.hir'
+// - Loads at address 40960 starts on track 39 sector 8 and is 16 sectors long (3974 compressed bytes: 49% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='Impossible Mission' 
+// Entry #41 '..\build\files\space_1999_sparks.hir'
+// - Loads at address 40960 starts on track 40 sector 7 and is 25 sectors long (6169 compressed bytes: 77% of 8000 bytes).
+// - Associated metadata: author='Chema' name='Space 1999 - Sparks' 
+// Entry #42 '..\build\files\dbug_space1999_planets.hir'
+// - Loads at address 40960 starts on track 41 sector 15 and is 17 sectors long (4304 compressed bytes: 53% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Space 1999 - Planets' 
+// Entry #43 '..\build\files\twilighte_whitehall.hir'
+// - Loads at address 40960 starts on the second side on track 0 sector 15 and is 18 sectors long (4366 compressed bytes: 54% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='OType - Whitehall' 
+// Entry #44 '..\build\files\twilighte_im_sprites.hir'
+// - Loads at address 40960 starts on the second side on track 1 sector 16 and is 12 sectors long (2920 compressed bytes: 36% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='IM Sprite Sheets' 
+// Entry #45 '..\build\files\pinky-indecence.hir'
+// - Loads at address 40960 starts on the second side on track 2 sector 11 and is 10 sectors long (2438 compressed bytes: 30% of 8000 bytes).
+// - Associated metadata: author='Pinky' name='Watch my back' 
+// Entry #46 '..\build\files\pinky-breast.hir'
+// - Loads at address 40960 starts on the second side on track 3 sector 4 and is 17 sectors long (4301 compressed bytes: 53% of 8000 bytes).
+// - Associated metadata: author='Pinky' name='Dithered indecency' 
+// Entry #47 '..\build\files\twilighte_otype_1.hir'
+// - Loads at address 40960 starts on the second side on track 4 sector 4 and is 12 sectors long (3059 compressed bytes: 38% of 8000 bytes).
+// - Associated metadata: author='Twilighte' name='OType' 
+// Entry #48 '..\build\files\dbug_windows95.hir'
+// - Loads at address 40960 starts on the second side on track 4 sector 16 and is 12 sectors long (2861 compressed bytes: 35% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='Windows 95' 
+// Entry #49 '..\build\files\output-mire.hir'
+// - Loads at address 40960 starts on the second side on track 5 sector 11 and is 19 sectors long (4713 compressed bytes: 58% of 8000 bytes).
+// - Associated metadata: author='Dbug' name='The End' 
+// Entry #50 '..\build\files\BeBop.ym'
+// - Loads at address 49152 starts on the second side on track 6 sector 13 and is 15 sectors long (3826 compressed bytes: 91% of 4172 bytes).
+// Entry #51 '..\build\files\MattFurniss-EscapeFromThePlanetOfRobotMonsters.ym'
+// - Loads at address 49152 starts on the second side on track 7 sector 11 and is 30 sectors long (7663 compressed bytes: 77% of 9866 bytes).
+// Entry #52 '..\build\files\ChrisMad.BitmapMania.ym'
+// - Loads at address 49152 starts on the second side on track 9 sector 7 and is 39 sectors long (9810 compressed bytes: 76% of 12872 bytes).
+// Entry #53 '..\build\files\music_leaving_terramis.ym'
+// - Loads at address 49152 starts on the second side on track 11 sector 12 and is 8 sectors long (2034 compressed bytes: 54% of 3716 bytes).
+// Entry #54 '..\build\files\ChristianHellmanzik-StarTunnel.ym'
+// - Loads at address 49152 starts on the second side on track 12 sector 3 and is 31 sectors long (7868 compressed bytes: 79% of 9958 bytes).
+// Entry #55 '..\build\files\music_rings_of_medusa.ym'
+// - Loads at address 49152 starts on the second side on track 13 sector 17 and is 15 sectors long (3733 compressed bytes: 70% of 5306 bytes).
+// Entry #56 '..\build\files\ChristianHellmanzik-Arsch.ym'
+// - Loads at address 49152 starts on the second side on track 14 sector 15 and is 25 sectors long (6168 compressed bytes: 76% of 8061 bytes).
+// Entry #57 '..\build\files\JochenHippel-Cuddly-3DDoc.ym'
+// - Loads at address 49152 starts on the second side on track 16 sector 6 and is 33 sectors long (8194 compressed bytes: 72% of 11341 bytes).
+// Entry #58 '..\build\files\BigAlec-BestPartOfCreation.ym'
+// - Loads at address 49152 starts on the second side on track 18 sector 5 and is 20 sectors long (5116 compressed bytes: 62% of 8242 bytes).
+// Entry #59 '..\build\files\music_no_second_prize.ym'
+// - Loads at address 49152 starts on the second side on track 19 sector 8 and is 24 sectors long (6109 compressed bytes: 81% of 7478 bytes).
+// Entry #60 '..\build\files\music_cuddly.ym'
+// - Loads at address 49152 starts on the second side on track 20 sector 15 and is 16 sectors long (3994 compressed bytes: 54% of 7347 bytes).
 //
-// 708 sectors used, out of 1428. (49% of the total available size used)
+// 1023 sectors used, out of 1428. (71% of the total available size used)
 //
 #define LOADER_SLIDESHOW 1
 #define LOADER_FONT_6x8_ARTDECO 2
 #define LOADER_FONT_12x16_ARTDECO 3
-#define LOADER_FIRST_PICTURE 4
-#define LOADER_LAST_PICTURE 45
-#define LOADER_FIRST_MUSIC 45
-#define LOADER_LAST_MUSIC 49
+#define LOADER_FIRST_INTRO_PICTURE 4
+#define LOADER_LAST_INTRO_PICTURE 7
+#define LOADER_FIRST_PICTURE 7
+#define LOADER_LAST_PICTURE 50
+#define LOADER_INTRO_MUSIC 50
+#define LOADER_FIRST_MUSIC 51
+#define LOADER_LAST_MUSIC 61
 
 //
 // Metadata
@@ -188,36 +220,44 @@ FileLoadAdressHigh .byt >64512,>1024,>40192,>40960,>40960,>40960,>40960,>40960,>
 #ifdef METADATA_STORAGE
 metadata_author_Alexios .byt "Alexios",0
 metadata_author_Chema .byt "Chema",0
-metadata_author_Christophe_Andreani .byt "Christophe Andreani",0
+metadata_author_Christophe_Andr_ani .byt "Christophe Andr{ani",0
 metadata_author_Dbug .byt "Dbug",0
 metadata_author_Dom .byt "Dom",0
 metadata_author_Exocet .byt "Exocet",0
 metadata_author_Fr_d_ric_Baille .byt "Fr{d{ric Baille",0
+metadata_author_Gloky .byt "Gloky",0
 metadata_author_Loriciels .byt "Loriciels",0
 metadata_author_Marcel_Van_Driel .byt "Marcel Van Driel",0
+metadata_author_Matt_Groening .byt "Matt Groening",0
 metadata_author_Mondrian .byt "Mondrian",0
 metadata_author_Mooz .byt "Mooz",0
-metadata_author_Orpheus .byt "Orpheus",0
+metadata_author_Pinky .byt "Pinky",0
+metadata_author_Playboy .byt "Playboy",0
 metadata_author_Prez .byt "Prez",0
 metadata_author_Symoon___Dbug .byt "Symoon & Dbug",0
 metadata_author_Twilighte .byt "Twilighte",0
+metadata_author_Unknown .byt "Unknown",0
 metadata_author_Vasiloric .byt "Vasiloric",0
 metadata_name_1337_Logo .byt "1337 Logo",0
-metadata_name_Assembly_2002 .byt "Assembly 2002",0
 metadata_name_Axayacatl .byt "Axayacatl",0
 metadata_name_Barbitoric .byt "Barbitoric",0
 metadata_name_Blueface .byt "Blueface",0
+metadata_name_Buffy .byt "Buffy",0
+metadata_name_Censor .byt "Censor",0
 metadata_name_Damsel_title .byt "Damsel title",0
-metadata_name_Defence_Force_Logo .byt "Defence Force Logo",0
 metadata_name_Diamond_Island .byt "Diamond Island",0
+metadata_name_Dithered_indecency .byt "Dithered indecency",0
 metadata_name_Double_Dragons .byt "Double Dragons",0
+metadata_name_Features .byt "Features",0
 metadata_name_Fists .byt "Fists",0
+metadata_name_Floral_Explosion .byt "Floral Explosion",0
 metadata_name_Hardware_VSync .byt "Hardware VSync",0
+metadata_name_Homer .byt "Homer",0
 metadata_name_IM_Sprite_Sheets .byt "IM Sprite Sheets",0
 metadata_name_Impossible_Mission .byt "Impossible Mission",0
 metadata_name_Karate .byt "Karate",0
 metadata_name_Karhu .byt "Karhu",0
-metadata_name_Krillys .byt "Krillys",0
+metadata_name_Lena .byt "Lena",0
 metadata_name_Moon_guy .byt "Moon guy",0
 metadata_name_Murder_on_the_Atlantic .byt "Murder on the Atlantic",0
 metadata_name_OType .byt "OType",0
@@ -229,7 +269,6 @@ metadata_name_Pegasus .byt "Pegasus",0
 metadata_name_RGB_Composition .byt "RGB Composition",0
 metadata_name_Ripped_ .byt "Ripped!",0
 metadata_name_Sailing_ship .byt "Sailing ship",0
-metadata_name_Santa .byt "Santa",0
 metadata_name_Shadow_of_the_Beast .byt "Shadow of the Beast",0
 metadata_name_Skooldaze .byt "Skooldaze",0
 metadata_name_Sonix .byt "Sonix",0
@@ -237,16 +276,19 @@ metadata_name_Space_1999 .byt "Space 1999",0
 metadata_name_Space_1999___Planets .byt "Space 1999 - Planets",0
 metadata_name_Space_1999___Sparks .byt "Space 1999 - Sparks",0
 metadata_name_Super_Tomato .byt "Super Tomato",0
+metadata_name_The_End .byt "The End",0
 metadata_name_Times_Of_Lore_Intro .byt "Times Of Lore Intro",0
 metadata_name_Times_Of_Lore_Title .byt "Times Of Lore Title",0
+metadata_name_Title .byt "Title",0
 metadata_name_Toxic_Slime .byt "Toxic Slime",0
+metadata_name_Watch_my_back .byt "Watch my back",0
 metadata_name_Windows_95 .byt "Windows 95",0
 metadata_name_Yessagician .byt "Yessagician",0
 metadata_none .byt "",0
 
-_MetaData_author_High .byt >metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_author_Mondrian,>metadata_author_Vasiloric,>metadata_author_Marcel_Van_Driel,>metadata_author_Dom,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Dbug,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Chema,>metadata_author_Twilighte,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Symoon___Dbug,>metadata_author_Alexios,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Fr_d_ric_Baille,>metadata_author_Exocet,>metadata_author_Exocet,>metadata_author_Exocet,>metadata_author_Christophe_Andreani,>metadata_author_Christophe_Andreani,>metadata_author_Orpheus,>metadata_author_Mooz,>metadata_author_Mooz,>metadata_author_Mooz,>metadata_author_Mooz,>metadata_author_Prez,>metadata_author_Loriciels,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_none,>metadata_none,>metadata_none,>metadata_none
-_MetaData_author_Low .byt <metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_author_Mondrian,<metadata_author_Vasiloric,<metadata_author_Marcel_Van_Driel,<metadata_author_Dom,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Dbug,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Chema,<metadata_author_Twilighte,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Symoon___Dbug,<metadata_author_Alexios,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Fr_d_ric_Baille,<metadata_author_Exocet,<metadata_author_Exocet,<metadata_author_Exocet,<metadata_author_Christophe_Andreani,<metadata_author_Christophe_Andreani,<metadata_author_Orpheus,<metadata_author_Mooz,<metadata_author_Mooz,<metadata_author_Mooz,<metadata_author_Mooz,<metadata_author_Prez,<metadata_author_Loriciels,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_none,<metadata_none,<metadata_none,<metadata_none
-_MetaData_name_High .byt >metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_name_RGB_Composition,>metadata_name_Sailing_ship,>metadata_name_Damsel_title,>metadata_name_Murder_on_the_Atlantic,>metadata_name_Ripped_,>metadata_name_Double_Dragons,>metadata_name_Oric_1,>metadata_name_Pegasus,>metadata_name_Impossible_Mission,>metadata_name_OType___Whitehall,>metadata_name_IM_Sprite_Sheets,>metadata_name_Space_1999___Sparks,>metadata_name_OType,>metadata_name_Assembly_2002,>metadata_name_Karhu,>metadata_name_Defence_Force_Logo,>metadata_name_Space_1999___Planets,>metadata_name_Hardware_VSync,>metadata_name_Space_1999,>metadata_name_1337_Logo,>metadata_name_Times_Of_Lore_Title,>metadata_name_Times_Of_Lore_Intro,>metadata_name_Skooldaze,>metadata_name_Toxic_Slime,>metadata_name_Windows_95,>metadata_name_Yessagician,>metadata_name_Diamond_Island,>metadata_name_Blueface,>metadata_name_Fists,>metadata_name_Moon_guy,>metadata_name_Karate,>metadata_name_Karate,>metadata_name_Krillys,>metadata_name_Barbitoric,>metadata_name_Oric,>metadata_name_Santa,>metadata_name_Super_Tomato,>metadata_name_Oric_Coder,>metadata_name_Axayacatl,>metadata_name_Shadow_of_the_Beast,>metadata_name_Sonix,>metadata_none,>metadata_none,>metadata_none,>metadata_none
-_MetaData_name_Low .byt <metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_name_RGB_Composition,<metadata_name_Sailing_ship,<metadata_name_Damsel_title,<metadata_name_Murder_on_the_Atlantic,<metadata_name_Ripped_,<metadata_name_Double_Dragons,<metadata_name_Oric_1,<metadata_name_Pegasus,<metadata_name_Impossible_Mission,<metadata_name_OType___Whitehall,<metadata_name_IM_Sprite_Sheets,<metadata_name_Space_1999___Sparks,<metadata_name_OType,<metadata_name_Assembly_2002,<metadata_name_Karhu,<metadata_name_Defence_Force_Logo,<metadata_name_Space_1999___Planets,<metadata_name_Hardware_VSync,<metadata_name_Space_1999,<metadata_name_1337_Logo,<metadata_name_Times_Of_Lore_Title,<metadata_name_Times_Of_Lore_Intro,<metadata_name_Skooldaze,<metadata_name_Toxic_Slime,<metadata_name_Windows_95,<metadata_name_Yessagician,<metadata_name_Diamond_Island,<metadata_name_Blueface,<metadata_name_Fists,<metadata_name_Moon_guy,<metadata_name_Karate,<metadata_name_Karate,<metadata_name_Krillys,<metadata_name_Barbitoric,<metadata_name_Oric,<metadata_name_Santa,<metadata_name_Super_Tomato,<metadata_name_Oric_Coder,<metadata_name_Axayacatl,<metadata_name_Shadow_of_the_Beast,<metadata_name_Sonix,<metadata_none,<metadata_none,<metadata_none,<metadata_none
+_MetaData_author_High .byt >metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Mondrian,>metadata_author_Playboy,>metadata_author_Dom,>metadata_author_Vasiloric,>metadata_author_Fr_d_ric_Baille,>metadata_author_Twilighte,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Exocet,>metadata_author_Twilighte,>metadata_author_Christophe_Andr_ani,>metadata_author_Exocet,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Unknown,>metadata_author_Twilighte,>metadata_author_Prez,>metadata_author_Twilighte,>metadata_author_Gloky,>metadata_author_Twilighte,>metadata_author_Marcel_Van_Driel,>metadata_author_Loriciels,>metadata_author_Mooz,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Exocet,>metadata_author_Mooz,>metadata_author_Mooz,>metadata_author_Matt_Groening,>metadata_author_Alexios,>metadata_author_Symoon___Dbug,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_author_Twilighte,>metadata_author_Chema,>metadata_author_Dbug,>metadata_author_Twilighte,>metadata_author_Twilighte,>metadata_author_Pinky,>metadata_author_Pinky,>metadata_author_Twilighte,>metadata_author_Dbug,>metadata_author_Dbug,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none
+_MetaData_author_Low .byt <metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Mondrian,<metadata_author_Playboy,<metadata_author_Dom,<metadata_author_Vasiloric,<metadata_author_Fr_d_ric_Baille,<metadata_author_Twilighte,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Exocet,<metadata_author_Twilighte,<metadata_author_Christophe_Andr_ani,<metadata_author_Exocet,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Unknown,<metadata_author_Twilighte,<metadata_author_Prez,<metadata_author_Twilighte,<metadata_author_Gloky,<metadata_author_Twilighte,<metadata_author_Marcel_Van_Driel,<metadata_author_Loriciels,<metadata_author_Mooz,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Exocet,<metadata_author_Mooz,<metadata_author_Mooz,<metadata_author_Matt_Groening,<metadata_author_Alexios,<metadata_author_Symoon___Dbug,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_author_Twilighte,<metadata_author_Chema,<metadata_author_Dbug,<metadata_author_Twilighte,<metadata_author_Twilighte,<metadata_author_Pinky,<metadata_author_Pinky,<metadata_author_Twilighte,<metadata_author_Dbug,<metadata_author_Dbug,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none
+_MetaData_name_High .byt >metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_name_Censor,>metadata_name_Title,>metadata_name_Features,>metadata_name_RGB_Composition,>metadata_name_Lena,>metadata_name_Murder_on_the_Atlantic,>metadata_name_Sailing_ship,>metadata_name_Diamond_Island,>metadata_name_Sonix,>metadata_name_Yessagician,>metadata_name_Karhu,>metadata_name_Moon_guy,>metadata_name_Times_Of_Lore_Intro,>metadata_name_Karate,>metadata_name_Fists,>metadata_name_Shadow_of_the_Beast,>metadata_name_Double_Dragons,>metadata_name_Buffy,>metadata_name_Times_Of_Lore_Title,>metadata_name_Oric_Coder,>metadata_name_Pegasus,>metadata_name_Floral_Explosion,>metadata_name_Ripped_,>metadata_name_Damsel_title,>metadata_name_Axayacatl,>metadata_name_Barbitoric,>metadata_name_Oric_1,>metadata_name_Hardware_VSync,>metadata_name_Blueface,>metadata_name_Oric,>metadata_name_Super_Tomato,>metadata_name_Homer,>metadata_name_Toxic_Slime,>metadata_name_Skooldaze,>metadata_name_1337_Logo,>metadata_name_Space_1999,>metadata_name_Impossible_Mission,>metadata_name_Space_1999___Sparks,>metadata_name_Space_1999___Planets,>metadata_name_OType___Whitehall,>metadata_name_IM_Sprite_Sheets,>metadata_name_Watch_my_back,>metadata_name_Dithered_indecency,>metadata_name_OType,>metadata_name_Windows_95,>metadata_name_The_End,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none,>metadata_none
+_MetaData_name_Low .byt <metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_name_Censor,<metadata_name_Title,<metadata_name_Features,<metadata_name_RGB_Composition,<metadata_name_Lena,<metadata_name_Murder_on_the_Atlantic,<metadata_name_Sailing_ship,<metadata_name_Diamond_Island,<metadata_name_Sonix,<metadata_name_Yessagician,<metadata_name_Karhu,<metadata_name_Moon_guy,<metadata_name_Times_Of_Lore_Intro,<metadata_name_Karate,<metadata_name_Fists,<metadata_name_Shadow_of_the_Beast,<metadata_name_Double_Dragons,<metadata_name_Buffy,<metadata_name_Times_Of_Lore_Title,<metadata_name_Oric_Coder,<metadata_name_Pegasus,<metadata_name_Floral_Explosion,<metadata_name_Ripped_,<metadata_name_Damsel_title,<metadata_name_Axayacatl,<metadata_name_Barbitoric,<metadata_name_Oric_1,<metadata_name_Hardware_VSync,<metadata_name_Blueface,<metadata_name_Oric,<metadata_name_Super_Tomato,<metadata_name_Homer,<metadata_name_Toxic_Slime,<metadata_name_Skooldaze,<metadata_name_1337_Logo,<metadata_name_Space_1999,<metadata_name_Impossible_Mission,<metadata_name_Space_1999___Sparks,<metadata_name_Space_1999___Planets,<metadata_name_OType___Whitehall,<metadata_name_IM_Sprite_Sheets,<metadata_name_Watch_my_back,<metadata_name_Dithered_indecency,<metadata_name_OType,<metadata_name_Windows_95,<metadata_name_The_End,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none,<metadata_none
 #endif // METADATA_STORAGE
 

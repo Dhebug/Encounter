@@ -19,7 +19,6 @@ _MusicResetCounter	.dsb 2		; Contains the number of rows to play before reseting
 _CurrentFrame		.dsb 1		; From 0 to 255 and then cycles... the index of the frame to play this vbl
 
 _PlayerVbl			.dsb 1
-_MusicLooped		.dsb 1
 
 _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
 
@@ -32,7 +31,7 @@ _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14
 #define _MusicData			$c000
 
 _PlayerCount		.byt 0
-;_CurrentMusic		.byt LOADER_FIRST_MUSIC
+_MusicPlaying		.byt 0
 
 
 ;
@@ -78,16 +77,6 @@ _RegisterChanCVolume
 
 _PlayerRegCurrentValue	.byt 0
 
-
-_Mym_ReInitialize
-.(
-	sei
-	lda #0
-	sta _MusicLooped
-	jsr _Mym_Initialize
-	cli 
-	rts
-.)
 
 _Mym_Initialize
 .(
@@ -158,6 +147,20 @@ unpack_block_loop
 
 	lda #9
 	sta _FrameLoadBalancer
+
+	lda #1
+	sta _MusicPlaying
+
+	;
+	; Install the IRQ
+	;
+	sei
+	lda #<_Mym_PlayFrame
+	sta _InterruptCallBack_3+1
+	lda #>_Mym_PlayFrame
+	sta _InterruptCallBack_3+2
+	cli
+
 	rts
 .)
 
@@ -172,10 +175,35 @@ _Mym_PlayFrame
 	bne music_contines
 	dec _MusicResetCounter+1
 	bne music_contines
+
 music_resets
-	lda #1
-	sta _MusicLooped
-	jsr _Mym_Initialize
+	; Indicate the main code that the music is finished
+	lda #0
+	sta _MusicPlaying
+
+	; Disable the IRQ so it does not conflict or cause weird things
+	lda #<_DoNothing
+	sta _InterruptCallBack_3+1
+	lda #>_DoNothing
+	sta _InterruptCallBack_3+2
+
+	; Cut the sound so it does not sounds like a dying cat
+
+	; y=register number
+	; x=value to write
+	ldy #8
+	ldx #0
+	jsr _PsgPlayRegister
+
+	ldy #9
+	ldx #0
+	jsr _PsgPlayRegister
+
+	ldy #10
+	ldx #0
+	jsr _PsgPlayRegister
+
+	rts 
 	
 music_contines	
 
@@ -194,28 +222,9 @@ register_loop
 _auto_psg_play_read
 	ldx	_PlayerBuffer
 
-	sty	VIA_1
-	txa
-
-	pha
-	lda	VIA_2
-	ora	#$EE		; $EE	238	11101110
-	sta	VIA_2
-
-	and	#$11		; $11	17	00010001
-	ora	#$CC		; $CC	204	11001100
-	sta	VIA_2
-
-	tax
-	pla
-	sta	VIA_1
-	txa
-	ora	#$EC		; $EC	236	11101100
-	sta	VIA_2
-
-	and	#$11		; $11	17	00010001
-	ora	#$CC		; $CC	204	11001100
-	sta	VIA_2
+	; y=register number
+	; x=value to write
+	jsr _PsgPlayRegister
 
 	inc _auto_psg_play_read+2 
 	iny
@@ -265,6 +274,36 @@ skip
 	rts
 .)
 
+
+; y=register number
+; x=value to write
+_PsgPlayRegister
+.(
+	sty	VIA_1
+	txa
+
+	pha
+	lda	VIA_2
+	ora	#$EE		; $EE	238	11101110
+	sta	VIA_2
+
+	and	#$11		; $11	17	00010001
+	ora	#$CC		; $CC	204	11001100
+	sta	VIA_2
+
+	tax
+	pla
+	sta	VIA_1
+	txa
+	ora	#$EC		; $EC	236	11101100
+	sta	VIA_2
+
+	and	#$11		; $11	17	00010001
+	ora	#$CC		; $CC	204	11001100
+	sta	VIA_2
+
+	rts
+.)
 
 
 
@@ -526,12 +565,5 @@ _PlayerRegBits
 
 	; Wave form
 	.byt 8
-
-	.dsb 256-(*&255)
-	
-_PlayerBuffer		.dsb 256*14			; About 3.5 kilobytes somewhere in memory, we put the music file in overlay memory
-_PlayerBufferEnd
-
-	.text
 
 
