@@ -93,6 +93,11 @@ public:
     m_CompressionMode=compressionMode;
   }
 
+  void AllowMissingFiles(bool allowMissingFiles)
+  {
+    m_AllowMissingFiles=allowMissingFiles;
+  }
+
   unsigned int SetPosition(int track,int sector)
   {
     m_CurrentSector=sector;
@@ -136,6 +141,8 @@ private:
   std::set<int>       m_SectorUsageMap;
 
   CompressionMode     m_CompressionMode;
+  bool                                              m_AllFilesAreResolved;
+  bool                                              m_AllowMissingFiles;
 
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
