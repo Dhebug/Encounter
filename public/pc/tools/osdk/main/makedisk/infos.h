@@ -38,7 +38,11 @@ Change history for the FloppyBuilder
 0.12 - 2013/12/27
 - The 'DefineDisk' command accepts a variable set of track definition values
 
+0.13 - 2014/01/08
+- Added a new parameter to make it possible to bootstrap the floppy building process: With 'init' a description fill be generated even if data is missing,
+this makes it possible to do a multi-pass build process which will not fail because it depends on things not yet generated :)
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	12
+#define TOOL_VERSION_MINOR	13

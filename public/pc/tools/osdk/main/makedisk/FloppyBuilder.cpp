@@ -71,7 +71,6 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
       {
         // Parse error
         ShowError("Parse error line '%d'\n",lineNumber);
-
       }
     }
     else
@@ -103,7 +102,7 @@ void main(int argc, char *argv[])
     "  Generating bootable floppies for the Oric computer.\r\n"
     "\r\n"
     "Usage:\r\n"
-    "  {ApplicationName} <description file path>\r\n"
+    "  {ApplicationName} <init|build> <description file path>\r\n"
     "\r\n"
     );
 
@@ -123,10 +122,27 @@ void main(int argc, char *argv[])
   }
 
 
-  if (argc!=2)
+  if (argc!=3)
   {
     ShowError(nullptr);
   }
+
+  Floppy floppy;
+
+  if (!strcmp(argv[param],"init"))
+  {
+    floppy.AllowMissingFiles(true);
+  }
+  else
+  if (!strcmp(argv[param],"build"))
+  {
+    floppy.AllowMissingFiles(false);
+  }
+  else
+  {
+    ShowError("The first parameter should be either 'init' or 'build'.");
+  }
+  param++;
 
 
   //
@@ -139,10 +155,6 @@ void main(int argc, char *argv[])
     ShowError("Can't load script file '%s'\n",description_name);
   }
 
-  //
-  // Copy the floppy disk
-  //
-  Floppy floppy;
 
   std::string outputLayoutFileName;
   std::string targetFloppyDiskName;
