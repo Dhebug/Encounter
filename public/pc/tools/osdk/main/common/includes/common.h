@@ -94,6 +94,10 @@ bool DeleteFile(const char* pcFileName);
 
 bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
 
+bool IsUpToDate(const char* sourceFile,const char* targetFile);
+bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile);
+
+
 //
 // Compression (moved out FilePack)
 //

@@ -100,6 +100,14 @@ int __cdecl main(int argc,char *argv[])
     " -nn   Defines the number of entries per line.\r\n"
     "       -n16 => Output 16 values each line\r\n"
     "       -n40 => Output 40 values each line\r\n"
+    "\r\n"
+    " -un   Update check.\r\n"
+    "       -u0 => Do not check if files are up to date [default]\r\n"
+    "       -u1 => Perform a date check on the files and only update if needed\r\n"
+    "\r\n"
+    " -vn   Verbosity.\r\n"
+    "       -v0 => Silent [default]\r\n"
+    "       -v1 => Shows information about what PictConv is doing\r\n"
     );
 
 #ifdef _DEBUG
@@ -111,8 +119,10 @@ int __cdecl main(int argc,char *argv[])
 #endif
 
   DEVICE_FORMAT	output_format=DEVICE_FORMAT_BASIC_TAPE;
-  //bool			flag_basic_loader=true;
-  bool			flag_testing=false;
+  //bool flag_basic_loader=true;
+  bool	flag_testing   = false;
+  bool  flagUpdateTest = false;
+  bool  flagVerbosity  = false;
 
   TextFileGenerator textFileGenerator;
   textFileGenerator.SetLabel("_LabelPicture");
@@ -268,8 +278,24 @@ int __cdecl main(int argc,char *argv[])
       //	1 => enabled
       flag_testing=argumentParser.GetBooleanValue(true);
     }
+    else
+    if (argumentParser.IsSwitch("-u"))
+    {
+      //testing: [-u]
+      //	0 => no update check
+      //	1 => do update check
+      flagUpdateTest=argumentParser.GetBooleanValue(true);
+    }
+    else
+    if (argumentParser.IsSwitch("-v"))
+    {
+      //testing: [-v]
+      //	0 => silent
+      //	1 => verbose
+      flagVerbosity=argumentParser.GetBooleanValue(true);
+    }
   }
-
+  
   if (argumentParser.GetParameterCount()!=NB_ARG)
   {
     ShowError(0);
@@ -306,59 +332,67 @@ int __cdecl main(int argc,char *argv[])
   std::string source_name=argumentParser.GetParameter(0);
   std::string dest_name=argumentParser.GetParameter(1);
 
-
   //
-  // Initialize free image
+  // Eventual time stamp check
   //
-  FreeImage_Initialise();
-
-  //
-  // Try to load the source picture
-  //
-  ImageContainer sourceImage;
-  if (!sourceImage.LoadPicture(source_name))
+  if ( (!flagUpdateTest) || (flagUpdateTest && IsUpToDate(source_name,dest_name)) )
   {
-    ShowError("Could not load the source picture");
-  }
+    //
+    // Initialize free image
+    //
+    FreeImage_Initialise();
 
-  //
-  // Display informations about the picture
-  //
-  printf("\r\n Name of the source picture: '%s'",source_name.c_str());
-  printf("\r\n Size: %dx%d",sourceImage.GetWidth(),sourceImage.GetHeight());
-  printf("\r\n BPP: %d",sourceImage.GetDpp());
+    //
+    // Try to load the source picture
+    //
+    ImageContainer sourceImage;
+    if (!sourceImage.LoadPicture(source_name))
+    {
+      ShowError("Could not load the source picture");
+    }
 
-  int color_count=sourceImage.GetPaletteSize();
-  if (color_count)
-  {
-    // palletized
-    printf("\r\n Color count: %d",color_count);
-  }
-  else
-  {
-    // true color
-    printf("\r\n True color picture");
-  }
-  printf("\r\n");
+    //
+    // Display informations about the picture
+    //
+    if (flagVerbosity)
+    {
+      printf("\r\n Name of the source picture: '%s'",source_name.c_str());
+      printf("\r\n Size: %dx%d",sourceImage.GetWidth(),sourceImage.GetHeight());
+      printf("\r\n BPP: %d",sourceImage.GetDpp());
 
-  //
-  // Convert to destination format
-  //
-  Hires.SetDebug(flag_testing);
-  if (!Hires.Convert(sourceImage))
-  {
-    ShowError("Conversion failed");
-  }
+      int color_count=sourceImage.GetPaletteSize();
+      if (color_count)
+      {
+        // palletized
+        printf("\r\n Color count: %d",color_count);
+      }
+      else
+      {
+        // true color
+        printf("\r\n True color picture");
+      }
+      printf("\r\n");
+    }
 
-  if (!Hires.Save(output_format,dest_name,textFileGenerator))
-  {
-    ShowError("Saving failed");
-  }
+    //
+    // Convert to destination format
+    //
+    Hires.SetDebug(flag_testing);
+    if (!Hires.Convert(sourceImage))
+    {
+      ShowError("Conversion failed");
+    }
 
-  //
-  // Terminate free image
-  //
-  FreeImage_DeInitialise();
+    if (!Hires.Save(output_format,dest_name,textFileGenerator))
+    {
+      ShowError("Saving failed");
+    }
+
+    //
+    // Terminate free image
+    //
+    FreeImage_DeInitialise();
+  }
 
   //	getch();
 

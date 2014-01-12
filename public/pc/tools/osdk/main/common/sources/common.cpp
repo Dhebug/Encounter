@@ -275,6 +275,27 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
   }
 }
 
+bool IsUpToDate(const char* sourceFile,const char* targetFile)
+{
+  struct stat sourceFileInfo;
+  struct stat targetFileInfo;
+
+  if (stat(sourceFile,&sourceFileInfo)== -1)
+  {
+    return false;
+  }
+  if (stat(targetFile,&targetFileInfo)== -1)
+  {
+    return false;
+  }
+  return (targetFileInfo.st_mtime >= sourceFileInfo.st_mtime);
+}
+
+bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile)
+{
+  return IsUpToDate(sourceFile.c_str(),targetFile.c_str());
+}
+
 
 int StringReplace(std::string& cMainString,const std::string& cSearchedString,const std::string& cReplaceString)
 {

@@ -28,6 +28,7 @@ fragment offset & counter data (OFFNUM).
 
 #include "infos.h"
 #include "common.h"
+#include "lzh.h"
 
 #define REGS    14
 #define FRAG    128  //  Number of rows to compress at a time 
@@ -86,40 +87,54 @@ int main(int argc,char *argv[])
   }
 
   unsigned char*data[REGS];    //  The unpacked YM data 
-
   unsigned current[REGS];
 
-  char id[5]={0,0,0,0,0};
   char ym_new=0;
-  char LeOnArD[8];             //  Check string 
-
-  FILE    *f;
 
   long n,i,row,change,pack,biggest=0,hits,oldrow,remain,offi;
   long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
   long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
 
   unsigned long length;         //  Song length
-  unsigned long ldata;          //  Needed in the loader
 
-  if ((f=fopen(argumentParser.GetParameter(0),"rb"))==NULL)
+  const char* sourceFilename(argumentParser.GetParameter(0));
+  void* pcBuffer;
+  size_t cBufferSize;
+  if (!LoadFile(sourceFilename,pcBuffer,cBufferSize))
   {
-    ShowError("Can't open '%s'",argumentParser.GetParameter(0));
+    ShowError("Can't load '%s'",sourceFilename);
   }
 
-  fseek(f,0,SEEK_END);
-  length=ftell(f)-4;
-  fseek(f,0,SEEK_SET);
-
-  fread(id,1,4,f);
-  if (!strcmp(id,"YM2!"))        //  YM2 is ok 
+  const lzhHeader_t* header=(const lzhHeader_t*)pcBuffer;
+  if ( (cBufferSize>=sizeof(lzhHeader_t)) && (!strncmp(header->id,"-lh5-",5)) )
   {
+    CLzhDepacker depacker;
+    int dstSize=header->original;
+    void *pDst=malloc(dstSize);
+    const char* packedData=(const char*)pcBuffer+sizeof(lzhHeader_t)+header->name_lenght+2;
+
+    if (!depacker.LzUnpack(packedData,header->packed,pDst,dstSize))
+    {
+      ShowError("Failed depacking '%s', wrong LHA format or corrupted file?",sourceFilename);
+    }
+    free(pcBuffer);
+    pcBuffer=pDst;
+    cBufferSize=dstSize;
+  }
+  const char* sourceData=(const char*)pcBuffer;
+
+  // Check if the file is compressed 
+  length=cBufferSize-4;
+  if (!strncmp(sourceData,"YM2!",4))        //  YM2 is ok 
+  {
+    sourceData+=4;
     // YM2!
     // First four bytes is the ASCII identifier "YM2!".
   }
   else
-  if (!strcmp(id,"YM3!"))      //  YM3 is ok
+  if (!strncmp(sourceData,"YM3!",4))      //  YM3 is ok
   {
+    sourceData+=4;
     // YM3!
     // First four bytes is again the ASCII identifier "YM3!".
     // ------------------------------------------------------
@@ -145,8 +160,9 @@ int main(int argc,char *argv[])
     // data block for this interrupt and for this register has the value 255 ($FF).
   }
   else 
-  if (!strcmp(id,"YM3b"))    //  YM3b is ok
+  if (!strncmp(sourceData,"YM3b",4))    //  YM3b is ok
   {
+    sourceData+=4;
     // YM3b!
     // 
     // This format is nearly identical with YM3. It adds only the ability to use loops.
@@ -154,21 +170,23 @@ int main(int argc,char *argv[])
     // First four bytes is the ASCII identifier "YM3b".
     // The following bytes are the data block (see YM3 description).
     // Last four bytes is a DWORD (32bits integers) data and contains the frame number
-    // at wich the loop restart. That's all.
-    fread(id,1,4,f);    //  Skip restart for YM3b 
+    // at which the loop restart. That's all.
+    sourceData+=4;    //  Skip restart for YM3b 
     length-=4;
   }
   else
-  if (!strcmp(id,"YM4!"))    //  YM4 is not yet ok
+  if (!strncmp(sourceData,"YM4!",4))    //  YM4 is not yet ok
   {
+    sourceData+=4;
     // YM4!
     // (note, should be similar to YM5, without extra infos)
     printf("YM4! format is not yet supported.\n");
     exit(EXIT_FAILURE);
   }
   else
-  if ( (!strcmp(id,"YM5!")) || (!strcmp(id,"YM6!")) ) //  YM5 is ok but needs a different loader    
+  if ( (!strncmp(sourceData,"YM5!",4)) || (!strncmp(sourceData,"YM6!",4)) ) //  YM5 is ok but needs a different loader    
   {
+    sourceData+=4;
     // YM5!
     // This is the actual and most common used format and consist consists of additional information:
     // chip frequency, player frequency, title, author name, comment and specific Atari ST data (Digi-Drum and SID effects).
@@ -179,43 +197,43 @@ int main(int argc,char *argv[])
   }
   else
   {
-    printf("Unknown file format '%s'.\n",id);
+    printf("Unknown file format '%s'.\n",sourceData);
     exit(EXIT_FAILURE);
   }
 
   if (ym_new)  //  New YM5 format loader     
   {
-    fread(LeOnArD,1,8,f);            //  Skip checkstring     
+    sourceData+=8;                   //  Skip 'LeOnArD' checkstring     
     for (n=length=0;n<4;n++)         //  Number of VBL's  
     {
       length<<=8;
-      length+=fgetc(f);
+      length+=*sourceData++;
     }
     length*=REGS;
 
-    fread(&ldata,1,3,f);            //  Skip first 3 bytes of info
-    if (!(fgetc(f)&1))
+    sourceData+=3;            //  Skip first 3 bytes of info
+    if (!((*sourceData++)&1))
     {
       printf("Only interleaved data supported.\n");
       return(EXIT_FAILURE);
     }
 
-    if (fgetc(f) || fgetc(f))        //  Number of digidrums   
+    if ((*sourceData++) || (*sourceData++))        //  Number of digidrums   
     {
       printf("Digidrums not supported.\n");
       return(EXIT_FAILURE);
     }
 
-    fread(&ldata,1,4,f);            /*  Skip external freq      */
-    fread(&ldata,1,2,f);            /*  Skip VBL freq           */
-    fread(&ldata,1,4,f);            /*  Skip loop position      */
-    fread(&ldata,1,2,f);            /*  Skip additional data    */
+    sourceData+=4;            /*  Skip external freq      */
+    sourceData+=2;            /*  Skip VBL freq           */
+    sourceData+=4;            /*  Skip loop position      */
+    sourceData+=2;            /*  Skip additional data    */
 
-    while(fgetc(f))                 /*  Skip song name          */
+    while((*sourceData++))                 /*  Skip song name          */
       ;
-    while(fgetc(f))                 /*  Skip author name        */
+    while((*sourceData++))                 /*  Skip author name        */
       ;
-    while(fgetc(f))                 /*  Skip comments           */
+    while((*sourceData++))                 /*  Skip comments           */
       ;
   }
 
@@ -229,7 +247,8 @@ int main(int argc,char *argv[])
       return(EXIT_FAILURE);
     }
     memset(data[n],0,length/REGS+FRAG);
-    fread(data[n],1,length/REGS,f);
+    memcpy(data[n],sourceData,length/REGS);
+    sourceData+=length/REGS;
   }
 
   if (retune_music)
@@ -272,8 +291,7 @@ int main(int argc,char *argv[])
     }
   }
 
-  fclose(f);
-
+  FILE* f;
   if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)
   {
     printf("Cannot open destination file.\n");
@@ -363,7 +381,10 @@ int main(int argc,char *argv[])
 
   writebits(0,0,f);   // Pad to byte size
   fclose(f);
-  return(EXIT_SUCCESS);
+
+  free(pcBuffer);
+
+  return EXIT_SUCCESS;
 }
 
 //  Writes bits to a file. If bits is 0, pads to byte size.

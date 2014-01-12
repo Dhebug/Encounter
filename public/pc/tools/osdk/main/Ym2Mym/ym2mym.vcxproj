@@ -120,6 +120,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="sources\lzhlib.cpp" />
     <ClCompile Include="sources\Ym2Mym.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\normal.ico" />
+    <None Include="sources\lzhlib.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
@@ -141,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\infos.h" />
+    <ClInclude Include="sources\lzh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

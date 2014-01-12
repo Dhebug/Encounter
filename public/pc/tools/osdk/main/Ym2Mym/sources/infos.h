@@ -17,5 +17,8 @@ Change history for the Ym2Mym
 - Added support for retuning (Atari ST songs are at 2mhz, Amstrad ones at 1mhz)
 - Added rude support for YM6 format (also skips most of the header)
 
+1.1 - 2014/01/12
+- The tool is now able to extract LHA compressed YM files directly, should make the process much easier :)
+
 
 */
