@@ -50,24 +50,26 @@ ECHO Assembling music player
 ::
 echo %osdk%
 
-%OSDK%\bin\ym2mym data\BubbleBobble.ym data\BubbleBobble.mym 
+%OSDK%\bin\ym2mym "data\Bubble Bobble 1.ym" data\BubbleBobble.mym 
 %OSDK%\bin\header -h1 -a0 data\BubbleBobble.mym build\BubbleBobble.tap $7600
 
-%OSDK%\bin\ym2mym data\Giana-Title.ym data\Giana-Title.mym 
+%OSDK%\bin\ym2mym "data\Great Giana Sisters 1 - title.ym" data\Giana-Title.mym 
 %OSDK%\bin\header -h1 -a0 data\Giana-Title.mym build\Giana-Title.tap $7600
 
-%OSDK%\bin\ym2mym data\RainbowIsland.ym data\RainbowIsland.mym 
+%OSDK%\bin\ym2mym "data\Rainbow Island  1.ym" data\RainbowIsland.mym 
 %OSDK%\bin\header -h1 -a0 data\RainbowIsland.mym build\RainbowIsland.tap $7600
 
-%OSDK%\bin\ym2mym "data\Pacmania 1.lha" data\PacMania-1.mym 
+%OSDK%\bin\ym2mym "data\Pacmania 1.ym" data\PacMania-1.mym 
 %OSDK%\bin\header -h1 -a0 data\PacMania-1.mym build\PacMania-1.tap $7600
 
-%OSDK%\bin\ym2mym "data\R-Type  2 - level 1.lha" data\Rtype-1.mym 
-%OSDK%\bin\header -h1 -a0 data\Rtype-1.mym build\Rtype-1.tap $7600
+%OSDK%\bin\ym2mym "data\Tetris title.ym" data\Tetris.mym 
+%OSDK%\bin\header -h1 -a0 data\Tetris.mym build\Tetris.tap $7600
 
-%OSDK%\bin\ym2mym data\SpeedBall.ym data\SpeedBall.mym 
+%OSDK%\bin\ym2mym "data\Speedball 1.ym" data\SpeedBall.mym 
 %OSDK%\bin\header -h1 -a0 data\SpeedBall.mym build\SpeedBall.tap $7600
 
+%OSDK%\bin\ym2mym "data\Nebulus.ym" data\Nebulus.mym 
+%OSDK%\bin\header -h1 -a0 data\Nebulus.mym build\Nebulus.tap $7600
 
 
 ::
@@ -79,15 +81,16 @@ echo %osdk%
 %OSDK%\bin\taptap ren build\Giana-Title.tap "Music2" 0
 %OSDK%\bin\taptap ren build\RainbowIsland.tap "Music3" 0
 %OSDK%\bin\taptap ren build\PacMania-1.tap "Music4" 0
-%OSDK%\bin\taptap ren build\Rtype-1.tap "Music5" 0
+%OSDK%\bin\taptap ren build\Tetris.tap "Music5" 0
 %OSDK%\bin\taptap ren build\SpeedBall.tap "Music6" 0
+%OSDK%\bin\taptap ren build\Nebulus.tap "Music7" 0
 
 
 
 pause
 
 ECHO Building DSK file
-%OSDK%\bin\tap2dsk -iCLS:TEST build\%OSDKNAME%.TAP build\mymplayer.tap build\BubbleBobble.tap build\Giana-Title.tap build\RainbowIsland.tap build\PacMania-1.tap build\Rtype-1.tap build\SpeedBall.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk -iCLS:TEST build\%OSDKNAME%.TAP build\mymplayer.tap build\BubbleBobble.tap build\Giana-Title.tap build\RainbowIsland.tap build\PacMania-1.tap build\Tetris.tap build\SpeedBall.tap build\Nebulus.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm build\%OSDKNAME%.dsk
 
 

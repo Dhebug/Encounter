@@ -6,13 +6,12 @@
 60 REM
 70 HIMEM #6000 
 80 TEXT:PAPER4:INK6:CLS
-90 GOSUB 1000
 100 PRINT "Loading music player"
 110 LOAD"MYMPLAYER.BIN"
-120 PRINT"Music choice: 1 to 6 Space:Quit"
+120 CLS:GOSUB 1000:PRINT:PRINT"Number:Select music    Space:Quit"
 130 GET A$
-140 IF A$>="1" OR A$<="6" THEN GOTO 200
-145 IF A$=" " THEN CALL#6503:TEXT:END
+140 IF A$=" " THEN END
+145 IF A$>="1" OR A$<="7" THEN GOTO 200
 150 GOTO 120
 160 REM
 170 REM Loading music
@@ -34,9 +33,10 @@
 1040 PRINT"CHOOSE THE MUSIC:"
 1050 PRINT"1-Bubble Bobble"
 1060 PRINT"2-Great Giana Sisters"
-1070 PRINT"3-Rainbow Islands"
+1070 PRINT"3-Rainbow Islands (Broken)"
 1080 PRINT"4-Pac Mania"
-1090 PRINT"5-R-Type (broken)"
+1090 PRINT"5-Tetris"
 1100 PRINT"6-Speedball"
+1100 PRINT"7-Nebulus"
 1500 RETURN
 
