@@ -1243,7 +1243,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
 #ifdef _DEBUG
     if (y==138)
     {
-      __asm int 3;
+      //__asm int 3;
     }
 #endif
     if (RecurseLine((unsigned char)m_Buffer.m_buffer_cols,ptr_bloc6,ptr_hires,0,7))
