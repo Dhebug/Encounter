@@ -50,26 +50,13 @@ ECHO Assembling music player
 ::
 echo %osdk%
 
-%OSDK%\bin\ym2mym "data\Bubble Bobble 1.ym" data\BubbleBobble.mym 
-%OSDK%\bin\header -h1 -a0 data\BubbleBobble.mym build\BubbleBobble.tap $7600
-
-%OSDK%\bin\ym2mym "data\Great Giana Sisters 1 - title.ym" data\Giana-Title.mym 
-%OSDK%\bin\header -h1 -a0 data\Giana-Title.mym build\Giana-Title.tap $7600
-
-%OSDK%\bin\ym2mym "data\Rainbow Island  1.ym" data\RainbowIsland.mym 
-%OSDK%\bin\header -h1 -a0 data\RainbowIsland.mym build\RainbowIsland.tap $7600
-
-%OSDK%\bin\ym2mym "data\Pacmania 1.ym" data\PacMania-1.mym 
-%OSDK%\bin\header -h1 -a0 data\PacMania-1.mym build\PacMania-1.tap $7600
-
-%OSDK%\bin\ym2mym "data\Tetris title.ym" data\Tetris.mym 
-%OSDK%\bin\header -h1 -a0 data\Tetris.mym build\Tetris.tap $7600
-
-%OSDK%\bin\ym2mym "data\Speedball 1.ym" data\SpeedBall.mym 
-%OSDK%\bin\header -h1 -a0 data\SpeedBall.mym build\SpeedBall.tap $7600
-
-%OSDK%\bin\ym2mym "data\Nebulus.ym" data\Nebulus.mym 
-%OSDK%\bin\header -h1 -a0 data\Nebulus.mym build\Nebulus.tap $7600
+%OSDK%\bin\ym2mym -h1 "data\Bubble Bobble 1.ym" build\BubbleBobble.tap              $7600 "Music1"
+%OSDK%\bin\ym2mym -h1 "data\Great Giana Sisters 1 - title.ym" build\Giana-Title.tap $7600 "Music2"
+%OSDK%\bin\ym2mym -h1 "data\Rainbow Island  1.ym" build\RainbowIsland.tap           $7600 "Music3"
+%OSDK%\bin\ym2mym -h1 "data\Pacmania 1.ym" build\PacMania-1.tap                     $7600 "Music4"
+%OSDK%\bin\ym2mym -h1 "data\Tetris title.ym" build\Tetris.tap                       $7600 "Music5"
+%OSDK%\bin\ym2mym -h1 "data\Speedball 1.ym" build\SpeedBall.tap                     $7600 "Music6"
+%OSDK%\bin\ym2mym -h1 "data\Nebulus.ym" build\Nebulus.tap                           $7600 "Music7"
 
 
 ::
@@ -77,14 +64,6 @@ echo %osdk%
 ::
 %OSDK%\bin\taptap ren build\%OSDKNAME%.tap "Test" 0
 %OSDK%\bin\taptap ren build\mymplayer.tap "mymplayer" 0
-%OSDK%\bin\taptap ren build\BubbleBobble.tap "Music1" 0
-%OSDK%\bin\taptap ren build\Giana-Title.tap "Music2" 0
-%OSDK%\bin\taptap ren build\RainbowIsland.tap "Music3" 0
-%OSDK%\bin\taptap ren build\PacMania-1.tap "Music4" 0
-%OSDK%\bin\taptap ren build\Tetris.tap "Music5" 0
-%OSDK%\bin\taptap ren build\SpeedBall.tap "Music6" 0
-%OSDK%\bin\taptap ren build\Nebulus.tap "Music7" 0
-
 
 
 pause
