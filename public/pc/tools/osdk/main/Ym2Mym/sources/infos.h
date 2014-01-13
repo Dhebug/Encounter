@@ -1,8 +1,3 @@
-
-
-#define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	0
-
 /*
 
 Change history for the Ym2Mym
@@ -20,5 +15,14 @@ Change history for the Ym2Mym
 1.1 - 2014/01/12
 - The tool is now able to extract LHA compressed YM files directly, should make the process much easier :)
 
+1.2 - 2014/01/13
+- Added a -v flag to enable/disable verbosity
+- Added a -h flag to add a tape compatible header
 
 */
+
+
+
+#define TOOL_VERSION_MAJOR	1
+#define TOOL_VERSION_MINOR	2
+

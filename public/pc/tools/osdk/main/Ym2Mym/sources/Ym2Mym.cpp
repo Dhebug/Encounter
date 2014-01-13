@@ -36,7 +36,7 @@ fragment offset & counter data (OFFNUM).
 
 
 
-void writebits(unsigned data,int bits,FILE *f);
+void writebits(unsigned data,int bits,char* &ptrWrite);
 
 int main(int argc,char *argv[])
 {
@@ -57,16 +57,26 @@ int main(int argc,char *argv[])
     "  Convert Atari ST/Amstrad musics from the YM to MYM format.\r\n"
     "\r\n"
     "Usage:\r\n"
-    "  {ApplicationName} source.ym destination.mym\r\n"
+    "  {ApplicationName} source.ym destination.mym [load adress] [header name] \r\n"
     "\r\n"
     "Switches:\r\n"
     " -tn   Tuning\r\n"
     "       -t0 => No retune\r\n"
     "       -t1 => Double frequency [default]\r\n"
     "\r\n"
+    " -hn   Header\r\n"
+    "       -h0 => No tape header [default]\r\n"
+    "       -h1 => Use tape header (requires a start address and a name)\r\n"
+    "\r\n"
+    " -vn   Verbosity.\r\n"
+    "       -v0 => Silent [default]\r\n"
+    "       -v1 => Shows information about what PictConv is doing\r\n"
+    "\r\n"
     );
 
   int retune_music=1;
+  bool flagVerbosity=false;
+  bool flag_header=false;
 
   ArgumentParser argumentParser(argc,argv);
 
@@ -79,11 +89,51 @@ int main(int argc,char *argv[])
       // 	1 => Double frequency [default]
       retune_music=argumentParser.GetIntegerValue(0);
     }
+    else
+    if (argumentParser.IsSwitch("-v"))
+    {
+      //testing: [-v]
+      //	0 => silent
+      //	1 => verbose
+      flagVerbosity=argumentParser.GetBooleanValue(true);
+    }
+    else 
+    if (argumentParser.IsSwitch("-h"))
+    {
+      //format: [-h]
+      //	0 => suppress header
+      // 	1 => save header (default)
+      flag_header=argumentParser.GetBooleanValue(true);
+    }
   }
 
-  if (argumentParser.GetParameterCount()!=2)
+  int adress_start=0;
+  std::string headerName;
+
+  if (flag_header)
   {
-    ShowError(0);
+    // Header mode: Four parameters
+    if (argumentParser.GetParameterCount()!=4)
+    {
+      //
+      // Wrong number of arguments
+      //
+      ShowError(0);
+    }
+
+    //
+    // Check start address
+    //
+    adress_start=ConvertAdress(argumentParser.GetParameter(2));
+    headerName=argumentParser.GetParameter(3);
+  }
+  else
+  {
+    // No header mode: Two parameters
+    if (argumentParser.GetParameterCount()!=2)
+    {
+      ShowError(0);
+    }
   }
 
   unsigned char*data[REGS];    //  The unpacked YM data 
@@ -91,7 +141,8 @@ int main(int argc,char *argv[])
 
   char ym_new=0;
 
-  long n,i,row,change,pack,biggest=0,hits,oldrow,remain,offi;
+  unsigned long n,row;
+  long i,change,pack,biggest=0,hits,oldrow,remain,offi;
   long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
   long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
 
@@ -254,7 +305,10 @@ int main(int argc,char *argv[])
   if (retune_music)
   {
     unsigned int frame;
-    printf("Retuning the frequency.\n");
+    if (flagVerbosity)
+    {
+      printf("Retuning the frequency.\n");
+    }
     for (frame=0;frame<=length/REGS;frame++)
     {
       int freqA=   ( ((data[1][frame])<<8) | (data[0][frame]) )>>1;
@@ -291,12 +345,9 @@ int main(int argc,char *argv[])
     }
   }
 
-  FILE* f;
-  if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)
-  {
-    printf("Cannot open destination file.\n");
-    return(EXIT_FAILURE);
-  }
+
+  char* destinationBuffer=(char*)malloc(cBufferSize);
+  char* ptrWrite=destinationBuffer;
 
   // Set current values to impossible 
   for (n=0;n<REGS;n++)
@@ -304,8 +355,8 @@ int main(int argc,char *argv[])
     current[n]=0xffff;
   }
 
-  fputc(length/REGS&0xff,f);  //  Write tune length 
-  fputc(length/REGS>>8,f);
+  *ptrWrite++=length/REGS&0xff;  //  Write tune length 
+  *ptrWrite++=(length/REGS>>8)&255;
 
   for (n=0;n<length/REGS;n+=FRAG)  //  Go through fragments...   
   {
@@ -317,12 +368,12 @@ int main(int argc,char *argv[])
 
       if (!change) //  No changes in the whole fragment   
       {
-        writebits(0,1,f);
+        writebits(0,1,ptrWrite);
         continue;   //  Skip the next pass             
       }
       else
       {
-        writebits(1,1,f);
+        writebits(1,1,ptrWrite);
       }
 
       for (row=0;row<FRAG;row++)
@@ -362,33 +413,88 @@ int main(int argc,char *argv[])
           {
             row+=biggest-1;
             current[i]=data[i][n+row];
-            writebits(2,2,f);
-            writebits((offi<<OFFNUM/2)+(biggest-1),OFFNUM,f);
+            writebits(2,2,ptrWrite);
+            writebits((offi<<OFFNUM/2)+(biggest-1),OFFNUM,ptrWrite);
           }
           else    //  Nope, write raw bits   
           {
-            writebits(3,2,f);
-            writebits(data[i][n+row],regbits[i],f);
+            writebits(3,2,ptrWrite);
+            writebits(data[i][n+row],regbits[i],ptrWrite);
           }
         }
         else    //  Same as former value, write 0  
         {
-          writebits(0,1,f);
+          writebits(0,1,ptrWrite);
         }
       }
     }
   }
 
-  writebits(0,0,f);   // Pad to byte size
+  writebits(0,0,ptrWrite);   // Pad to byte size
+
+  size_t outputFileSize=(ptrWrite-destinationBuffer);
+
+  FILE* f;
+  if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)
+  {
+    printf("Cannot open destination file.\n");
+    return(EXIT_FAILURE);
+  }
+
+  if (flag_header)
+  {
+    //
+    // Write tape header
+    //
+    unsigned char Header[]=
+    {
+      0x16,	// 0 Synchro
+      0x16,	// 1
+      0x16,	// 2
+      0x24,	// 3
+
+      0x00,	// 4
+      0x00,	// 5
+
+      0x80,	// 6
+
+      0x00,	// 7  $80=BASIC Autostart $C7=Assembly autostart
+
+      0xbf,	// 8  End adress
+      0x40,	// 9
+
+      0xa0,	// 10 Start adress
+      0x00,	// 11
+
+      0x00	// 12 
+    };
+
+    int adress_end =adress_start+outputFileSize-1;
+
+    Header[10]=(adress_start>>8);
+    Header[11]=(adress_start&255);
+
+    Header[8]=(adress_end>>8);
+    Header[9]=(adress_end&255);
+
+    //
+    // Write header
+    //
+    fwrite(Header,sizeof(Header),1,f);
+    fwrite(headerName.c_str(),headerName.size()+1,1,f); // Include the null terminator
+  }
+  fwrite(destinationBuffer,outputFileSize,1,f);
+
   fclose(f);
 
   free(pcBuffer);
+  free(destinationBuffer);
 
   return EXIT_SUCCESS;
 }
 
 //  Writes bits to a file. If bits is 0, pads to byte size.
-void writebits(unsigned data,int bits,FILE *f)
+void writebits(unsigned data,int bits,char* &ptrWrite)
 {
   static unsigned char    byte=0;
 
@@ -399,7 +505,7 @@ void writebits(unsigned data,int bits,FILE *f)
   if (!bits && off)
   {
     off=byte=0;
-    fputc(byte,f);
+    *ptrWrite++=byte;
     return;
   }
 
@@ -411,7 +517,7 @@ void writebits(unsigned data,int bits,FILE *f)
 
     if (++off==8)
     {
-      fputc(byte,f);
+      *ptrWrite++=byte;
       off=byte=0;
     }
   }
