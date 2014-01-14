@@ -72,8 +72,13 @@ int main(int argc,char *argv[])
     "       -v0 => Silent [default]\r\n"
     "       -v1 => Shows information about what PictConv is doing\r\n"
     "\r\n"
+    " -mn   Max size.\r\n"
+    "       -m0 => No size limit [default]\r\n"
+    "       -m1234 => Outputs an error if the exported size is too large\r\n"
+    "\r\n"
     );
 
+  int maxSize=0;
   int retune_music=1;
   bool flagVerbosity=false;
   bool flag_header=false;
@@ -105,8 +110,16 @@ int main(int argc,char *argv[])
       // 	1 => save header (default)
       flag_header=argumentParser.GetBooleanValue(true);
     }
+    else 
+    if (argumentParser.IsSwitch("-m"))
+    {
+      //format: [-m]
+      //	0 => no max size (default)
+      // 	other => maximum size
+      maxSize=argumentParser.GetIntegerValue(0);
+    }
   }
-
+  
   int adress_start=0;
   std::string headerName;
 
@@ -433,6 +446,11 @@ int main(int argc,char *argv[])
   writebits(0,0,ptrWrite);   // Pad to byte size
 
   size_t outputFileSize=(ptrWrite-destinationBuffer);
+
+  if (maxSize && (outputFileSize>maxSize))
+  {
+    ShowError("File '%s' is too large (%d bytes instead of maximum %d)",sourceFilename,outputFileSize,maxSize);
+  }
 
   FILE* f;
   if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)

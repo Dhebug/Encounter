@@ -63,8 +63,11 @@ Version 0.016
 - New option to skip the conversion if the target file is more recent than the source file (-u)
 - New option to enable/disable information about what happens (-v)
 
+Version 0.017
+- Fixed a the update code, was failing if the target file did not exist (facepalm)
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	16
+#define TOOL_VERSION_MINOR	17
 
