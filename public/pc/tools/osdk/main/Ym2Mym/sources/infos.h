@@ -19,10 +19,13 @@ Change history for the Ym2Mym
 - Added a -v flag to enable/disable verbosity
 - Added a -h flag to add a tape compatible header
 
+1.3 - 2014/01/13
+- Added a -m flag to check if the exported file fits a maximum size
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	2
+#define TOOL_VERSION_MINOR	3
 

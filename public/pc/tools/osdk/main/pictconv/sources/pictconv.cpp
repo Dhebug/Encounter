@@ -335,7 +335,7 @@ int __cdecl main(int argc,char *argv[])
   //
   // Eventual time stamp check
   //
-  if ( (!flagUpdateTest) || (flagUpdateTest && IsUpToDate(source_name,dest_name)) )
+  if ( (!flagUpdateTest) || (flagUpdateTest && !IsUpToDate(source_name,dest_name)) )
   {
     //
     // Initialize free image
