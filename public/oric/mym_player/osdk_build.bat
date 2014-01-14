@@ -37,6 +37,9 @@ ECHO Assembling music player
 :: - 8657 -> $762f / 30255
 :: Round to -> $7600 / 30208 this gives us $2200 / 8704 bytes for the music
 ::
+:: TEXT last usable memory area is $B400 / 46080
+:: $B400-$7600  gives us $3E00 / 15872 bytes for the music
+::
 :: So we make each music load in $7600
 ::
 :: The depacking buffer for the music requires 256 bytes per register, so 256*14 bytes = $e00 / 3584 bytes
@@ -50,13 +53,19 @@ ECHO Assembling music player
 ::
 echo %osdk%
 
-%OSDK%\bin\ym2mym -h1 "data\Bubble Bobble 1.ym" build\BubbleBobble.tap              $7600 "Music1"
-%OSDK%\bin\ym2mym -h1 "data\Great Giana Sisters 1 - title.ym" build\Giana-Title.tap $7600 "Music2"
-%OSDK%\bin\ym2mym -h1 "data\Rainbow Island  1.ym" build\RainbowIsland.tap           $7600 "Music3"
-%OSDK%\bin\ym2mym -h1 "data\Pacmania 1.ym" build\PacMania-1.tap                     $7600 "Music4"
-%OSDK%\bin\ym2mym -h1 "data\Tetris title.ym" build\Tetris.tap                       $7600 "Music5"
-%OSDK%\bin\ym2mym -h1 "data\Speedball 1.ym" build\SpeedBall.tap                     $7600 "Music6"
-%OSDK%\bin\ym2mym -h1 "data\Nebulus.ym" build\Nebulus.tap                           $7600 "Music7"
+SET YM2MYM=%osdk%\Bin\ym2mym.exe -h1 -m15872
+
+%YM2MYM% "data\Bubble Bobble 1.ym" build\BubbleBobble.tap              $7600 "Music1"
+%YM2MYM% "data\Great Giana Sisters 1 - title.ym" build\Giana-Title.tap $7600 "Music2"
+%YM2MYM% "data\Rainbow Island  1.ym" build\RainbowIsland.tap           $7600 "Music3"
+%YM2MYM% "data\Pacmania 1.ym" build\PacMania-1.tap                     $7600 "Music4"
+%YM2MYM% "data\Tetris title.ym" build\Tetris.tap                       $7600 "Music5"
+%YM2MYM% "data\Speedball 1.ym" build\SpeedBall.tap                     $7600 "Music6"
+%YM2MYM% "data\Nebulus.ym" build\Nebulus.tap                           $7600 "Music7"
+%YM2MYM% "data\Outrun 1.ym" build\Outrun.tap                           $7600 "Music8"
+%YM2MYM% "data\Commando.ym" build\Commando.tap                         $7600 "Music9"
+%YM2MYM% "data\The Real Ghostbusters 1.ym" build\Ghostbusters.tap      $7600 "Music0"
+%YM2MYM% "data\Supercars 1.ym" build\Supercars.tap                     $7600 "MusicA"
 
 
 ::
@@ -69,7 +78,7 @@ echo %osdk%
 pause
 
 ECHO Building DSK file
-%OSDK%\bin\tap2dsk -iCLS:TEST build\%OSDKNAME%.TAP build\mymplayer.tap build\BubbleBobble.tap build\Giana-Title.tap build\RainbowIsland.tap build\PacMania-1.tap build\Tetris.tap build\SpeedBall.tap build\Nebulus.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk -iCLS:TEST build\%OSDKNAME%.TAP build\mymplayer.tap build\BubbleBobble.tap build\Giana-Title.tap build\RainbowIsland.tap build\PacMania-1.tap build\Tetris.tap build\SpeedBall.tap build\Nebulus.tap build\Outrun.tap build\Commando.tap build\Ghostbusters.tap build\Supercars.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm build\%OSDKNAME%.dsk
 
 
