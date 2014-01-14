@@ -154,7 +154,7 @@ int main(int argc,char *argv[])
 
   char ym_new=0;
 
-  unsigned long n,row;
+  long n,row;
   long i,change,pack,biggest=0,hits,oldrow,remain,offi;
   long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
   long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
@@ -185,18 +185,18 @@ int main(int argc,char *argv[])
     pcBuffer=pDst;
     cBufferSize=dstSize;
   }
-  const char* sourceData=(const char*)pcBuffer;
+  const unsigned char* sourceData=(const unsigned char*)pcBuffer;
 
   // Check if the file is compressed 
   length=cBufferSize-4;
-  if (!strncmp(sourceData,"YM2!",4))        //  YM2 is ok 
+  if (!strncmp((const char*)sourceData,"YM2!",4))        //  YM2 is ok 
   {
     sourceData+=4;
     // YM2!
     // First four bytes is the ASCII identifier "YM2!".
   }
   else
-  if (!strncmp(sourceData,"YM3!",4))      //  YM3 is ok
+  if (!strncmp((const char*)sourceData,"YM3!",4))      //  YM3 is ok
   {
     sourceData+=4;
     // YM3!
@@ -224,7 +224,7 @@ int main(int argc,char *argv[])
     // data block for this interrupt and for this register has the value 255 ($FF).
   }
   else 
-  if (!strncmp(sourceData,"YM3b",4))    //  YM3b is ok
+  if (!strncmp((const char*)sourceData,"YM3b",4))    //  YM3b is ok
   {
     sourceData+=4;
     // YM3b!
@@ -239,7 +239,7 @@ int main(int argc,char *argv[])
     length-=4;
   }
   else
-  if (!strncmp(sourceData,"YM4!",4))    //  YM4 is not yet ok
+  if (!strncmp((const char*)sourceData,"YM4!",4))    //  YM4 is not yet ok
   {
     sourceData+=4;
     // YM4!
@@ -248,7 +248,7 @@ int main(int argc,char *argv[])
     exit(EXIT_FAILURE);
   }
   else
-  if ( (!strncmp(sourceData,"YM5!",4)) || (!strncmp(sourceData,"YM6!",4)) ) //  YM5 is ok but needs a different loader    
+  if ( (!strncmp((const char*)sourceData,"YM5!",4)) || (!strncmp((const char*)sourceData,"YM6!",4)) ) //  YM5 is ok but needs a different loader    
   {
     sourceData+=4;
     // YM5!
