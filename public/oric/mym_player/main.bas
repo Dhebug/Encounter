@@ -11,7 +11,7 @@
 120 CLS:GOSUB 1000:PRINT:PRINT"Number:Select music    Space:Quit"
 130 GET A$
 140 IF A$=" " THEN END
-145 IF A$>="1" OR A$<="7" THEN GOTO 200
+145 IF (A$>="0" AND A$<="9") OR (A$="A") THEN GOTO 200
 150 GOTO 120
 160 REM
 170 REM Loading music
@@ -33,10 +33,15 @@
 1040 PRINT"CHOOSE THE MUSIC:"
 1050 PRINT"1-Bubble Bobble"
 1060 PRINT"2-Great Giana Sisters"
-1070 PRINT"3-Rainbow Islands (Broken)"
+1070 PRINT"3-Rainbow Islands"
 1080 PRINT"4-Pac Mania"
 1090 PRINT"5-Tetris"
 1100 PRINT"6-Speedball"
-1100 PRINT"7-Nebulus"
+1110 PRINT"7-Nebulus"
+1120 PRINT"8-Outrun"
+1130 PRINT"9-Commando"
+1140 PRINT"0-Ghostbusters"
+1150 PRINT"A-Supercars"
+
 1500 RETURN
 
