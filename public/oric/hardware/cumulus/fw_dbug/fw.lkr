@@ -1,0 +1,94 @@
+// Cumulus 18F46K20 Firmware
+// Linker Script.
+// Copyright 2010 Retromaster.
+//
+//  This file is part of Cumulus Firmware.
+//
+//  Cumulus Firmware is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License,
+//  or any later version. 
+//
+//  Cumulus Firmware is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with Cumulus Firmware.  If not, see <http://www.gnu.org/licenses/>.
+
+
+#DEFINE _CODEEND _DEBUGCODESTART - 1
+#DEFINE _CEND _CODEEND + _DEBUGCODELEN
+#DEFINE _DATAEND _DEBUGDATASTART - 1
+#DEFINE _DEND _DATAEND + _DEBUGDATALEN
+
+LIBPATH .
+
+#IFDEF _CRUNTIME
+  #IFDEF _EXTENDEDMODE
+    FILES c018i_e.o
+    FILES clib_e.lib
+    FILES p18f46k20_e.lib
+
+  #ELSE
+    FILES c018i.o
+    FILES clib.lib
+    FILES p18f46k20.lib
+  #FI
+
+#FI
+
+CODEPAGE   NAME=boot       START=0x0            END=0x0FFF          PROTECTED
+CODEPAGE   NAME=vectors    START=0x1000          END=0x0x1029  
+#IFDEF _DEBUGCODESTART
+  CODEPAGE   NAME=page       START=0x0               END=_CODEEND
+  CODEPAGE   NAME=debug      START=_DEBUGCODESTART   END=_CEND        PROTECTED
+#ELSE
+  CODEPAGE   NAME=page       START=0x2030               END=0xFFFF
+#FI
+
+CODEPAGE   NAME=idlocs     START=0x200000          END=0x200007       PROTECTED
+CODEPAGE   NAME=config     START=0x300000          END=0x30000D       PROTECTED
+CODEPAGE   NAME=devid      START=0x3FFFFE          END=0x3FFFFF       PROTECTED
+CODEPAGE   NAME=eedata     START=0xF00000          END=0xF003FF       PROTECTED
+
+#IFDEF _EXTENDEDMODE
+  DATABANK   NAME=gpre       START=0x0               END=0x5F
+#ELSE
+  ACCESSBANK NAME=accessram  START=0x0               END=0x5F
+#FI
+
+DATABANK   NAME=gpr0       START=0x60              END=0xFF
+DATABANK   NAME=gpr1       START=0x100             END=0x1FF
+DATABANK   NAME=gpr2       START=0x200             END=0x2FF
+DATABANK   NAME=gpr3       START=0x300             END=0x3FF
+DATABANK   NAME=big4       START=0x400             END=0x7FF 	PROTECTED
+DATABANK   NAME=big3       START=0x800             END=0x9FF    PROTECTED
+DATABANK   NAME=big2      START=0xA00              END=0xBFF	PROTECTED
+DATABANK   NAME=big1       START=0xC00             END=0xDFF	PROTECTED
+
+#IFDEF _DEBUGDATASTART
+  DATABANK   NAME=gpr14      START=0xE00             END=_DATAEND
+  DATABANK   NAME=dbgspr     START=_DEBUGDATASTART   END=_DEND           PROTECTED
+#ELSE //no debug
+  DATABANK   NAME=gpr14      START=0xE00             END=0xEFF
+#FI
+
+DATABANK   NAME=gpr15      START=0xF00             END=0xF5F
+ACCESSBANK NAME=accesssfr  START=0xF60             END=0xFFF          PROTECTED
+
+#IFDEF _CRUNTIME
+  SECTION    NAME=CONFIG     ROM=config
+  #IFDEF _DEBUGDATASTART
+    STACK SIZE=0x100 RAM=gpr13
+  #ELSE
+    STACK SIZE=0x100 RAM=gpr14
+  #FI
+#FI
+
+SECTION NAME=sector_buffer_section RAM=big4
+SECTION NAME=fat32_sector_buffer_section RAM=big1
+SECTION NAME=ui_data_section RAM=big2
+SECTION NAME=wd179x_data_section RAM=big3
+
