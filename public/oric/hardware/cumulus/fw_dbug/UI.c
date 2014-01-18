@@ -443,7 +443,7 @@ static void draw_image_select_menu_item(uint8_t item, uint8_t selected)
 
   if (item < file_count)
   {
-    int y = 12 + item * 8;
+    int y = 13 + item * 8;
     n6610_fill_area(0,y, 130, 8);
     if (file_list[item].dir)
     {
@@ -701,9 +701,21 @@ static void handle_emulation(void)
   }
   if (pressed_button == BUTTON_RIGHT_BOTTOM)
   {
-    /* Write Protect */
-    wd179x_drive[selection].type_I_status ^= 0x40;
-    draw_emulation_drive_item(selection, 1);
+    // This used to be to switch the write protection, but I don't really care.
+    // So the new behavior is going to be 'Reload the currently mounted floppy and reboot the Oric'
+    int8_t old_selection=selection;
+    uint16_t old_dir_page=dir_page;
+    if (!change_card())
+    {
+      if (!change_card())
+      {
+        io_error();
+      }
+    }
+    selection=old_selection;
+    dir_page=old_dir_page;
+
+    enter_reset_oric();
   }
   if (pressed_button == BUTTON_RIGHT_CENTER)
     enter_main_menu();
