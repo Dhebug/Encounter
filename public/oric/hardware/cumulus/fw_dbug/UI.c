@@ -51,10 +51,10 @@ typedef enum
 
 typedef enum
 {
-  ui_main_reset=0,
+  ui_main_style =0,
+  ui_main_reset ,
   ui_main_command_log,
   ui_main_about,
-  ui_main_continue,
   ui_main_count
 } ui_main_item;
 
@@ -64,7 +64,7 @@ typedef enum
 far rom char str_cumulus[] = "Cumulus";
 far rom char str_version[] = SETUP_VERSION_NUMBER;
 #ifdef SETUP_VERSION_NAME
-far rom char str_version_name[] =SETUP_VERSION_NAME;
+far rom char str_version_name[] = SETUP_VERSION_NAME;
 #endif
 far rom char str_about_1[] = "Oric Microdisc";
 far rom char str_about_2[] = "compatible";
@@ -73,6 +73,7 @@ far rom char str_by_retromaster[] = "by retromaster";
 far rom char str_and_metadata[] = "and metadata";
 far rom char str_empty[] = "-- Empty --";
 far rom char str_about[] = "About";
+far rom char str_change_style[] = "Change Style";
 far rom char str_reset_oric[] = "Reset Oric";
 far rom char str_continue[] = "Continue";
 far rom char str_main[] = "Main";
@@ -95,7 +96,7 @@ far rom char* str_status[ui_status_count] = {
   (far rom char*) "Disk Write-Protected!",
   (far rom char*) "Drive Not Ready!",
 };
-static rom char hex_lookup[16] ={
+static rom char hex_lookup[16] = {
   '0', '1', '2', '3',
   '4', '5', '6', '7',
   '8', '9', 'A', 'B',
@@ -271,12 +272,17 @@ static void enter_emulation(void)
 static void draw_main_menu_item(ui_main_item item, uint8_t selected)
 {
   if (selected)
-    n6610_use_color(element_menu_entry_selected); //n6610_set_color(0xF, 0xF, 0xF, 0x8, 0x0, 0x0);
+    n6610_use_color(element_menu_entry_selected);
   else
-    n6610_use_color(element_menu_entry); //n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x8);
+    n6610_use_color(element_menu_entry);
 
   switch (item)
   {
+  case ui_main_style:
+    n6610_fill_area(0, 16, 130, 8);
+    n6610_draw_rom_str(0, 16, str_change_style);
+    break;
+
   case ui_main_reset:
     n6610_fill_area(0, 24, 130, 8);
     n6610_draw_rom_str(0, 24, str_reset_oric);
@@ -289,10 +295,6 @@ static void draw_main_menu_item(ui_main_item item, uint8_t selected)
     n6610_fill_area(0, 48, 130, 8);
     n6610_draw_rom_str(0, 48, str_about);
     break;
-  case ui_main_continue:
-    n6610_fill_area(0, 104, 130, 8);
-    n6610_draw_rom_str(0, 104, str_continue);
-    break;
   }
 }
 
@@ -302,12 +304,12 @@ static void enter_main_menu(void)
   uint8_t i;
 
   prep_screen();
-   
+
   draw_main_menu_item(0, 1);
   for (i = 1; i < ui_main_count; i++)
     draw_main_menu_item(i, 0);
 
-  n6610_use_color(element_header_footer); //n6610_set_color(0x0, 0x0, 0x0, 0xF, 0xF, 0xF);
+  n6610_use_color(element_header_footer);
   n6610_draw_rom_str(1, 123, str_main);
 
   selection = 0;
@@ -317,30 +319,18 @@ static void enter_main_menu(void)
 /* Draws yes or no. */
 static void draw_reset_oric_items(void)
 {
-  /*
-   if (selection == 0)
-           n6610_set_color(0xF, 0xF, 0xF, 0x8, 0x0, 0x0);
-   else
-           n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x8);
-   */
   if (selection == 0)
-    n6610_use_color(element_menu_entry_selected); //n6610_set_color(0xF, 0xF, 0xF, 0x8, 0x0, 0x0);
+    n6610_use_color(element_menu_entry_selected);
   else
-    n6610_use_color(element_menu_entry); //n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x8);
+    n6610_use_color(element_menu_entry);
 
   n6610_fill_area(0, 16, 130, 8);
   n6610_draw_rom_str(0, 16, str_yes);
 
-  /*
   if (selection == 1)
-          n6610_set_color(0xF, 0xF, 0xF, 0x8, 0x0, 0x0);
+    n6610_use_color(element_menu_entry_selected);
   else
-          n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x8);
-   */
-  if (selection == 1)
-    n6610_use_color(element_menu_entry_selected); //n6610_set_color(0xF, 0xF, 0xF, 0x8, 0x0, 0x0);
-  else
-    n6610_use_color(element_menu_entry); //n6610_set_color(0xF, 0xF, 0xF, 0x0, 0x0, 0x8);
+    n6610_use_color(element_menu_entry);
 
   n6610_fill_area(0, 24, 130, 8);
   n6610_draw_rom_str(0, 24, str_no);
@@ -432,10 +422,6 @@ static void io_error(void)
   n6610_use_color(element_text);
   n6610_draw_rom_str(8, 16, str_card_io_error);
 
-  n6610_use_color(element_text);
-  n6610_fill_area(0, 104, 130, 8);
-  n6610_draw_rom_str(0, 104, str_continue);
-
   state = ui_state_io_error;
 }
 
@@ -451,15 +437,15 @@ static void draw_image_select_menu_item(uint8_t item, uint8_t selected)
   if (item < file_count)
   {
     int y = 13 + item * 8;
-    n6610_fill_area(0,y, 130, 8);
+    n6610_fill_area(0, y, 130, 8);
     if (file_list[item].dir)
     {
-      n6610_draw_char(0,y, '/');
-      n6610_draw_ram_str(8,y, file_list[item].name);
+      n6610_draw_char(0, y, '/');
+      n6610_draw_ram_str(8, y, file_list[item].name);
     }
     else
     {
-      n6610_draw_ram_str(0,y, file_list[item].name);
+      n6610_draw_ram_str(0, y, file_list[item].name);
     }
   }
   else if (item == FILE_LIST_SIZE)
@@ -710,8 +696,8 @@ static void handle_emulation(void)
   {
     // This used to be to switch the write protection, but I don't really care.
     // So the new behavior is going to be 'Reload the currently mounted floppy and reboot the Oric'
-    int8_t old_selection=selection;
-    uint16_t old_dir_page=dir_page;
+    int8_t old_selection = selection;
+    uint16_t old_dir_page = dir_page;
     if (!change_card())
     {
       if (!change_card())
@@ -719,8 +705,8 @@ static void handle_emulation(void)
         io_error();
       }
     }
-    selection=old_selection;
-    dir_page=old_dir_page;
+    selection = old_selection;
+    dir_page = old_dir_page;
 
     enter_reset_oric();
   }
@@ -730,29 +716,31 @@ static void handle_emulation(void)
 
 static void handle_main_menu(void)
 {
-  if (pressed_button == BUTTON_LEFT_TOP)
+  switch (pressed_button)
   {
+  case BUTTON_LEFT_TOP:
     draw_main_menu_item(selection, 0);
     selection--;
     if (selection < 0)
       selection = ui_main_count - 1;
     draw_main_menu_item(selection, 1);
-  }
-  if (pressed_button == BUTTON_LEFT_BOTTOM)
-  {
+    break;
+
+  case BUTTON_LEFT_BOTTOM:
     draw_main_menu_item(selection, 0);
     selection++;
     if (selection >= ui_main_count)
       selection = 0;
     draw_main_menu_item(selection, 1);
-  }
-  if (pressed_button == BUTTON_RIGHT_TOP)
-  {
+    break;
+
+  case BUTTON_RIGHT_TOP:
     /* Go somewhere else */
     switch (selection)
     {
-    case ui_main_continue:
-      enter_emulation();
+    case ui_main_style:
+      n6610_cycle_style();
+      enter_main_menu();
       break;
     case ui_main_command_log:
       enter_command_log();
@@ -764,6 +752,12 @@ static void handle_main_menu(void)
       enter_about();
       break;
     }
+    break;
+
+  case BUTTON_RIGHT_BOTTOM:
+    // Back to the main page
+    enter_emulation();
+    break;
   }
 }
 
@@ -780,7 +774,7 @@ static void handle_image_select(void)
       selection = FILE_LIST_SIZE;
     draw_image_select_menu_item(selection, 1);
     break;
-  
+
   case BUTTON_LEFT_BOTTOM:
     draw_image_select_menu_item(selection, 0);
     selection++;
@@ -796,7 +790,7 @@ static void handle_image_select(void)
     enter_emulation();
     break;
 
-  case  BUTTON_RIGHT_CENTER:
+  case BUTTON_RIGHT_CENTER:
     dir_page++;
     enter_image_select(); /* This will automatically handle end of directory */
     break;

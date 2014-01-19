@@ -7,7 +7,7 @@
 //
 // Firmware version/name
 //
-#define SETUP_VERSION_NUMBER "v0.7"
+#define SETUP_VERSION_NUMBER "v0.8"
 #define SETUP_VERSION_NAME "Dbug"
 
 //

@@ -114,6 +114,7 @@ typedef struct
 } color_set;
 
 extern void n6610_use_color(ui_element element);
+extern void n6610_cycle_style();
 
 
 #endif
