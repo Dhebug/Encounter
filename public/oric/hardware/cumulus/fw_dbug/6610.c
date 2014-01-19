@@ -648,5 +648,11 @@ void n6610_use_color(ui_element element)
     colors->background.blue);
 }
 
-
-
+void n6610_cycle_style()
+{
+  UiStyle = UiStyle + 1;
+  if (UiStyle >= _ui_style_count)
+  {
+    UiStyle = 0;
+  }
+}
