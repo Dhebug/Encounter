@@ -89,8 +89,29 @@ typedef enum
     element_footer_ok,
     element_footer_error,
     element_menu_entry,
-    element_menu_entry_selected
+    element_menu_entry_selected,
+    _element_count
 } ui_element;
+
+typedef enum
+{
+    ui_style_retromaster,
+    ui_style_defenceforce,
+    _ui_style_count
+} ui_style;
+
+typedef struct
+{
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+} rgb;
+
+typedef struct
+{
+  rgb   foreground;
+  rgb   background;
+} color_set;
 
 extern void n6610_use_color(ui_element element);
 

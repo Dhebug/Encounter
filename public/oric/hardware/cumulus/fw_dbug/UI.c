@@ -62,7 +62,10 @@ typedef enum
 
 #pragma romdata
 far rom char str_cumulus[] = "Cumulus";
-far rom char str_version[] = "v0.6";
+far rom char str_version[] = SETUP_VERSION_NUMBER;
+#ifdef SETUP_VERSION_NAME
+far rom char str_version_name[] =SETUP_VERSION_NAME;
+#endif
 far rom char str_about_1[] = "Oric Microdisc";
 far rom char str_about_2[] = "compatible";
 far rom char str_about_3[] = "SD Card Emulator";
@@ -160,6 +163,10 @@ static void prep_screen(void)
   n6610_set_font(FONT_6X8);
   n6610_draw_rom_str(1, 2, str_cumulus);
   n6610_draw_rom_str(50, 2, str_version);
+
+#ifdef SETUP_VERSION_NAME
+  n6610_draw_rom_str(80, 2, str_version_name);
+#endif
 
 
 
@@ -295,7 +302,7 @@ static void enter_main_menu(void)
   uint8_t i;
 
   prep_screen();
-
+   
   draw_main_menu_item(0, 1);
   for (i = 1; i < ui_main_count; i++)
     draw_main_menu_item(i, 0);
