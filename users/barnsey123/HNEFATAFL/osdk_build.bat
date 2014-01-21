@@ -18,6 +18,8 @@ CALL osdk_config.bat
 :: Launch the compilation of files
 ::
 CALL %OSDK%\bin\make.bat %OSDKFILE%
+
+
 GOTO End
 
 
