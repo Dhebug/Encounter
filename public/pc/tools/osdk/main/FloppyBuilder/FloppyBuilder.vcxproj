@@ -56,13 +56,13 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Release\MakeDisk.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release\FloppyBuilder.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
       <AdditionalIncludeDirectories>../common/includes;</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
-      <TypeLibraryName>.\Release\MakeDisk.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Release\FloppyBuilder.tlb</TypeLibraryName>
     </Midl>
     <ResourceCompile>
       <Culture>0x040c</Culture>
@@ -70,7 +70,7 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release\MakeDisk.bsc</OutputFile>
+      <OutputFile>.\Release\FloppyBuilder.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -91,14 +91,14 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Build\MakeDisk.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Build\FloppyBuilder.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <AdditionalIncludeDirectories>../common/includes;</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
-      <TypeLibraryName>.\Build\MakeDisk.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Build\FloppyBuilder.tlb</TypeLibraryName>
     </Midl>
     <ResourceCompile>
       <Culture>0x040c</Culture>
@@ -106,7 +106,7 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Build\MakeDisk.bsc</OutputFile>
+      <OutputFile>.\Build\FloppyBuilder.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
