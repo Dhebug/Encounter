@@ -20,6 +20,9 @@ bits, not full 8
 10 - offset + number of bytes from preceding
 data. As many bits as are required to hold
 fragment offset & counter data (OFFNUM).
+
+AYC information: http://www.cpcwiki.eu/index.php/AYC
+
 */
 
 #include <stdio.h>
@@ -478,10 +481,10 @@ int main(int argc,char *argv[])
 
       0x00,	// 7  $80=BASIC Autostart $C7=Assembly autostart
 
-      0xbf,	// 8  End adress
+      0xbf,	// 8  End address
       0x40,	// 9
 
-      0xa0,	// 10 Start adress
+      0xa0,	// 10 Start address
       0x00,	// 11
 
       0x00	// 12 
