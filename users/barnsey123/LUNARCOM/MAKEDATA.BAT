@@ -54,4 +54,7 @@
 
 :: PEOPLE
 %osdk%\BIN\pictconv -f2 -d0 pics\PEOPLE\barnsey.PNG barnsey-color.tap
+%osdk%\BIN\pictconv -f2 -d1 pics\PEOPLE\pilot.PNG pilot-color.tap
+%osdk%\BIN\pictconv -f2 -d1 pics\PEOPLE\pilot-led.PNG pilot-led-color.tap
+%osdk%\BIN\pictconv -f2 -d1 pics\PEOPLE\pilot-led-2.PNG pilot-led-2.tap
 pause
