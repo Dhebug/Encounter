@@ -105,7 +105,7 @@ public:
     return GetDskImageOffset();
   }
 
-  void MoveToNextSector()
+  bool MoveToNextSector()
   {
     m_CurrentSector++;
 
@@ -118,7 +118,13 @@ public:
         // Next side is following on the floppy in the DSK format, so technically we should have nothing to do
         // All the hard work is in the loader
       }
+      if (m_CurrentTrack==(m_TrackNumber*2))
+      {
+        // We have reached the end of the floppy...
+        return false;
+      }
     }
+    return true;
   }
 
   void MarkCurrentSectorUsed();
@@ -147,6 +153,7 @@ private:
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
 
+  int                     m_LastFileWithMetadata;
   std::set<std::string>                             m_MetadataCategories;
 };
 
