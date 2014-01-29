@@ -190,6 +190,7 @@ Floppy::Floppy() :
   m_SectorNumber(0),
   m_CurrentTrack(0),
   m_CurrentSector(1),
+  m_LastFileWithMetadata(0),
   m_CompressionMode(e_CompressionNone),
   m_OffsetFirstSector(156),   // 156 (Location of the first byte of data of the first sector)
   m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
@@ -584,7 +585,12 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   fileEntry.m_SectorCount=(fileSize+255)/256;
   fileEntry.m_FilePath   =fileName;
   fileEntry.m_CompressionMode=e_CompressionNone;
-  fileEntry.m_Metadata = metadata;
+
+  if (!metadata.empty())
+  {
+    fileEntry.m_Metadata = metadata;
+    m_LastFileWithMetadata=m_FileEntries.size();
+  }
 
   for (auto metadataIt(metadata.begin());metadataIt!=metadata.end();++metadataIt)
   {
@@ -630,7 +636,10 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
     memcpy((char*)m_Buffer+offset,fileData,sizeToWrite);
     fileData+=sizeToWrite;
 
-    MoveToNextSector();
+    if (!MoveToNextSector())
+    {
+      ShowError("Floppy disk is full, not enough space to store '%s'.\n",fileName);
+    }
   }
   free(fileBuffer);
 
@@ -714,6 +723,7 @@ bool Floppy::SaveDescription(const char* fileName) const
 
       code_compressed << ",";
 
+      if (counter<=m_LastFileWithMetadata)
       {
         for (auto metadataIt(metadata_content.begin());metadataIt!=metadata_content.end();metadataIt++)
         {
@@ -759,11 +769,12 @@ bool Floppy::SaveDescription(const char* fileName) const
       file_list_summary << "(" << fileEntry.m_StoredFileSize << " compressed bytes: " << (fileEntry.m_StoredFileSize*100)/fileEntry.m_FinalFileSize << "% of " << fileEntry.m_FinalFileSize << " bytes).\n";
     }
 
+    if (counter<=m_LastFileWithMetadata)
     {
-	  if (!fileEntry.m_Metadata.empty())
-	  {
-		file_list_summary << "// - Associated metadata: ";
-	  }
+      if (!fileEntry.m_Metadata.empty())
+      {
+        file_list_summary << "// - Associated metadata: ";
+      }
       for (auto metadataIt(m_MetadataCategories.begin());metadataIt!=m_MetadataCategories.end();metadataIt++)
       {
         const std::string& metadataCategoryName(*metadataIt);
@@ -792,10 +803,10 @@ bool Floppy::SaveDescription(const char* fileName) const
         metadata_content[metadataCategoryName+"_Low"] << "<" << metadataLabelEntry;
         metadata_content[metadataCategoryName+"_High"] << ">" << metadataLabelEntry;
       }
-	  if (!fileEntry.m_Metadata.empty())
-	  {
-		file_list_summary << "\n";
-	  }
+      if (!fileEntry.m_Metadata.empty())
+      {
+        file_list_summary << "\n";
+      }
     }
 
 	/*
