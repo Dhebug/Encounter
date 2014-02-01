@@ -90,6 +90,15 @@
     <ClCompile Include="sources\oric_converter.cpp">
       <Filter>Sources\converters</Filter>
     </ClCompile>
+    <ClCompile Include="sources\oric_converter_colored.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\oric_converter_charmap.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\oric_converter_samhocevar.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="misc\a.txt">

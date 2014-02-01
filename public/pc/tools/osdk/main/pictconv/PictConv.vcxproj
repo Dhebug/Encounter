@@ -161,6 +161,9 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="sources\image.cpp" />
+    <ClCompile Include="sources\oric_converter_charmap.cpp" />
+    <ClCompile Include="sources\oric_converter_colored.cpp" />
+    <ClCompile Include="sources\oric_converter_samhocevar.cpp" />
     <ClCompile Include="sources\pictconv.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>

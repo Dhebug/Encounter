@@ -99,6 +99,7 @@ public:
     FORMAT_TWILIGHTE_MASK,  // -f3
     FORMAT_RB,              // -f4
     FORMAT_CHARMAP,         // -f5
+    FORMAT_SAM_HOCEVAR,     // -f6
     _FORMAT_MAX_
   };
 
@@ -123,7 +124,8 @@ public:
   void convert_rb(const ImageContainer& sourcePicture);
   void convert_twilighte_mask(const ImageContainer& sourcePicture);
   void convert_charmap(const ImageContainer& sourcePicture);
-
+  void convert_sam_hocevar(const ImageContainer& sourcePicture);
+  
   ORIC_COLOR convert_pixel_monochrom(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
   ORIC_COLOR convert_pixel_rgb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
   ORIC_COLOR convert_pixel_rb(const ImageContainer& sourcePicture,unsigned int x,unsigned int y);
