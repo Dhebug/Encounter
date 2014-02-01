@@ -479,7 +479,7 @@ public:
       m_DataSize--;
       m_PtrData++;
     }
-    if (m_DataSize>8 && (m_PtrData[0]==0x24) && (m_PtrData[1]==0x00) && (m_PtrData[2]==0x00) )
+    if (m_DataSize>8 && (m_PtrData[0]==0x24) /*&& (m_PtrData[1]==0x00) && (m_PtrData[2]==0x00)*/ ) // Harrier Attack has 0x24 0x80 0xBF
     {
       // At this point at least we have a valid synchro sequence and we know we have a usable header
       m_FileType    = m_PtrData[3];
@@ -490,7 +490,7 @@ public:
       m_DataSize-=9;
       m_PtrData+=9;
 
-      if (m_DataSize && (m_PtrData[0]==0x00) )
+      if (m_DataSize /*&& (m_PtrData[0]==0x00)*/ ) // Harrier Attack has 0xE8
       {
         // Skip the zero
         m_DataSize--;
@@ -871,8 +871,8 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << file_list_summary.str();
   layoutInfo << "//\n";
 
-  int totalAvailableSpace=m_TrackNumber*m_SectorNumber*m_SideNumber;
-  layoutInfo << "// " << m_SectorUsageMap.size() << " sectors used, out of " << totalAvailableSpace << ". (" << (m_SectorUsageMap.size()*100)/totalAvailableSpace << "% of the total available size used)\n";
+  int totalAvailableSectors=m_TrackNumber*m_SectorNumber*m_SideNumber;
+  layoutInfo << "// " << m_SectorUsageMap.size() << " sectors used, out of " << totalAvailableSectors << ". (" << (m_SectorUsageMap.size()*100)/totalAvailableSectors << "% of the total disk size used)\n";
   layoutInfo << "//\n";
 
   if (m_DefineList.empty())

@@ -63,6 +63,7 @@ int __cdecl main(int argc,char *argv[])
     "         -f3 => Twilight masks\r\n"
     "         -f4 => RB conversion\r\n"
     "         -f5 => CHAR generator\r\n"
+    "         -f6 => Sam method (Img2Oric)\r\n"
     "       -Atari ST:\r\n"
     "         -f0 => Single palette format [default]\r\n"
     "         -f1 => Multi palette format\r\n"
@@ -141,29 +142,7 @@ int __cdecl main(int argc,char *argv[])
   {
     if (argumentParser.IsSwitch("-f"))
     {
-      //format: [-f]
-      //	0 => to hires 240x200 monochrome format
-      // 	1 => precolored picture (like the Windows 95 picture)
-      //	2 => RVB conversion
-      //		=> give the scanline colors (RGB/RG/BCW), both for paper and ink
-      //  3 => Twilighte mask
-      //	4 => RB conversion
-      //  5 => Shifter format (Atari ST)
       switchFormat=argumentParser.GetIntegerValue(0);
-      /*
-      Hires.SetFormat((PictureConverter::FORMAT)cArgumentParser.GetIntegerValue(PictureConverter::FORMAT_MONOCHROM));
-      if (Hires.GetFormat()==PictureConverter::FORMAT_MONOCHROM)
-      {
-      // Check extended parameters for monochrome conversion
-      switch (*cArgumentParser.GetRemainingStuff())
-      {
-      case 'z':
-      // Clear bitmap bit flag
-      Hires.set_bit6(false);
-      break;
-      }
-      }
-      */
     }
     else
     if (argumentParser.IsSwitch("-m"))

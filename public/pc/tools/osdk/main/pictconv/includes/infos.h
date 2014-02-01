@@ -66,8 +66,11 @@ Version 0.016
 Version 0.017
 - Fixed a the update code, was failing if the target file did not exist (facepalm)
 
+Version 0.018
+- Added the -f6 conversion mode for Oric pictures. This is the method used in Img2Oric/LibPipi and generally gives much better results when converting - albeit much much slower than other methods.
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	17
+#define TOOL_VERSION_MINOR	18
 
