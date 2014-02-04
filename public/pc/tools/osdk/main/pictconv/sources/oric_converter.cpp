@@ -708,11 +708,11 @@ bool OricPictureConverter::Convert(const ImageContainer& sourcePicture)
     //return false;
   }
 
-  if ( (m_format==OricPictureConverter::FORMAT_COLORED) &&
+  if ( ( (m_format==OricPictureConverter::FORMAT_COLORED) || (m_format==OricPictureConverter::FORMAT_SAM_HOCEVAR) ) &&
     ((sourcePicture.GetWidth()%6)==0) &&
     (sourcePicture.GetWidth()>240))
   {
-    printf("\r\n Colored pictures should be at most 240 pixels wide, and multiple of 6 pixel wide.");
+    printf("\r\n Colored/SamHocevar pictures should be at most 240 pixels wide, and multiple of 6 pixel wide.");
     return false;
   }
 
