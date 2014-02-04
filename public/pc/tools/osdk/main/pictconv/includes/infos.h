@@ -69,8 +69,12 @@ Version 0.017
 Version 0.018
 - Added the -f6 conversion mode for Oric pictures. This is the method used in Img2Oric/LibPipi and generally gives much better results when converting - albeit much much slower than other methods.
 
+Version 0.019
+- Fixed a buffer overflow in the -f6 conversion mode happening when images are not 240x200
+- Changed the depth mode from 3 to 2 to speed-up the conversion
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	18
+#define TOOL_VERSION_MINOR	19
 
