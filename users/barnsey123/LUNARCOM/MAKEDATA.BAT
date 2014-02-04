@@ -6,11 +6,11 @@ SET PIMP=%OSDK%\THEPIMP
 :: MAN ON MOON Mono
 echo PIMPING MENONMOON
 
-::%osdk%\BIN\pictconv -m0 -f0 -d1 -O0 pics\MANONMOON\MANONMOON2.PNG manonmoon.tap
-::%osdk%\BIN\pictconv -m0 -f0 -d1 -O0 pics\MANONMOON\big-rock.png big-rock.tap
+::%osdk%\BIN\pictconv -f6 pics\MANONMOON\MANONMOON2.PNG manonmoon.tap
+::%osdk%\BIN\pictconv -f6 pics\MANONMOON\big-rock.png big-rock.tap
 
-::%PIMP%\bin\pipi.exe pics\MANONMOON\MANONMOON2.PNG -o manonmoon.tap
-::%PIMP%\bin\pipi.exe pics\MANONMOON\big-rock.png -o big-rock.tap
+%PIMP%\bin\pipi.exe pics\MANONMOON\MANONMOON2.PNG -o manonmoon.tap
+%PIMP%\bin\pipi.exe pics\MANONMOON\big-rock.png -o big-rock.tap
 
 :: TYCHO MONO
 ::%osdk%\BIN\pictconv -m0 -f0 -d1 pics\TYCHO\tycho-central.PNG tycho-central.tap
@@ -70,7 +70,7 @@ echo PIMPING ROCKETS
 ::%osdk%\BIN\pictconv -f2 -d0 pics\ROCKETS\lift-off-2.PNG lift-off-2.tap
 
 ::%PIMP%\bin\pipi.exe pics\ROCKETS\lift-off.PNG -o lift-off.tap
-:;%PIMP%\bin\pipi.exe pics\ROCKETS\lift-off-2.PNG -o lift-off-2.tap
+::%PIMP%\bin\pipi.exe pics\ROCKETS\lift-off-2.PNG -o lift-off-2.tap
 
 :: PEOPLE
 ::%OSDK%\BIN\pictconv -f2 -d1 pics\PEOPLE\barnsey.PNG barnsey-color.tap
@@ -85,6 +85,7 @@ echo PIMPING PEOPLE
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\pilot-led-2.PNG -o pilot-led-2.tap
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\pilot-led-2B.PNG -o pilot-led-2B.tap
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\pilot-led-4.PNG -o pilot-led-4.tap
+::%PIMP%\bin\pipi.exe pics\PEOPLE\pilot-led-5.PNG -o pilot-led-5.tap
 
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\chick1-jetpac.PNG -o chick1-jetpac.tap
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\chick-with-gun.PNG -o chick-with-gun.tap
@@ -92,7 +93,19 @@ echo PIMPING PEOPLE
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella2.PNG -o barbarella2.tap
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella3.PNG -o barbarella3.tap
 ::%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella4.PNG -o barbarella4.tap
-%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella5.PNG -o barbarella5.tap
-%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella6.PNG -o barbarella6.tap
+::%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella5.PNG -o barbarella5.tap
+::%PIMP%\bin\pipi.exe pics\PEOPLE\barbarella6.PNG -o barbarella6.tap
+::%PIMP%\bin\pipi.exe pics\PEOPLE\SpaceGirl.PNG -o SpaceGirl.tap
+
+echo PIMPING VIDEO
+::VIDEO
+::%PIMP%\bin\pipi.exe VIDEO\you-wanker.png -o you-wanker.tap
+::%OSDK%\bin\pictconv -f6 -u VIDEO\you-wanker.png you-wanker.tap
+%OSDK%\bin\pictconv -u -f6 -o4_BlahBlah VIDEO\blahblah.png BlahBlah.s
+
+echo PIMPING OBJECTS
+::OBJECTS
+::%PIMP%\bin\pipi.exe pics\OBJECTS\watch.png -o watch.tap
+
 pause
 
