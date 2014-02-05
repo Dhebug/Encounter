@@ -28,6 +28,7 @@ Occupation.
 extern unsigned char Tears[];		// video talking 
 extern unsigned char LookRight[];	// video looking right
 extern unsigned char YouFuck[];		// video "you fuck"
+extern unsigned char Whoops[];		// video whoops
 unsigned char Frame;				// Frame of video to play
 int PauseTime,p;					// amount of time to Pause
 unsigned char* PtrGraphic;			// pointer to byte values of loaded picture
@@ -41,6 +42,8 @@ void PlayTears();	// Pretend Tears
 void PlayTearsA();
 void PlayYouFuck();	// Go away you nasty man
 void PlayYouFuckA();
+void PlayWhoops();	// Did I swear?
+void PlayWhoopsA();
 void PlayVideo();	// play all video
 
 /* Main Program */
@@ -70,6 +73,12 @@ void PlayVideo()	{
   PlayLookRight();
   PlayTears();
   PlayYouFuck();
+  PlayWhoops();
+  
+  PlayTears();
+  PlayYouFuck();
+  PlayLookRight();
+  PlayWhoops();
   
 }
 void Pause(){
@@ -117,6 +126,22 @@ void PlayYouFuck(){
 }
 void PlayYouFuckA(){
 	PtrGraphic=YouFuck;
+	DrawFrame();  
+	Pause();
+}
+
+void PlayWhoops(){
+	// tears
+	for (Frame=0;Frame<6;Frame++){
+	  PlayWhoopsA();
+  	}
+  	// tears back
+  	for (Frame=5;Frame>0;Frame--){
+	  PlayWhoopsA();
+  	}
+}
+void PlayWhoopsA(){
+	PtrGraphic=Whoops;
 	DrawFrame();  
 	Pause();
 }
