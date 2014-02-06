@@ -182,6 +182,7 @@ void PlayYabberA(){
 	DrawFrame();  
 	Pause();
 }
+
 void PlayYouFuck(){
 	// tears
 	for (Frame=0;Frame<6;Frame++){
