@@ -18,6 +18,7 @@ Occupation.
 History
 04/02/2014 Started work with first few vids and sorted out display routines
 05/02/2014 added more vids
+07/02/2014 New PlayChunk routine (more efficient), more vids
 */
 #include <lib.h>
 #define BLACK 0
@@ -28,6 +29,7 @@ History
 #define MAGENTA 5
 #define CYAN 6
 #define WHITE 7
+#define MAXFRAME 6
 /* Definition of Global variables */
 extern unsigned char Tears[];		// video talking 
 extern unsigned char LookRight[];	// video looking right
@@ -36,7 +38,9 @@ extern unsigned char YouFuck[];		// video "you fuck"
 extern unsigned char Whoops[];		// video whoops
 extern unsigned char NodYes[];		// video nodding
 extern unsigned char LeanForward[];	// video leaning forward
-unsigned char Frame;				// Frame of video to play
+extern unsigned char Disdain[];		// video "don't care/not bothered"
+extern unsigned char CheckWatch[];	// video check the watch
+unsigned char Frame, MaxFrame;	// Frame of video to play up to MaxFrame
 int PauseTime,PauseCount;			// amount of time to Pause
 unsigned char* PtrGraphic;			// pointer to byte values of loaded picture
 unsigned char InkColor;
@@ -45,7 +49,6 @@ unsigned char InkColor;
 void Pause();		// adds pause to video playback
 void PlayChunk(unsigned char Chunk[]);	// play part of video
 void PlayVideo();	// play all video
-
 
 /* Main Program */
 
@@ -62,26 +65,41 @@ void main(){
 /* Definition of Functions */
 
 void PlayVideo(){
-  PlayChunk(LookRight);
+  MaxFrame=MAXFRAME; // this gets reset at end of PlayChunk so can be freely changed
+  PlayChunk(Yabber);PlayChunk(Yabber);
+  MaxFrame=4;PlayChunk(LookRight); 
+  PlayChunk(Yabber);
+  PlayChunk(CheckWatch);
+  PlayChunk(Yabber);PlayChunk(Yabber);
+  MaxFrame=4;PlayChunk(YouFuck);
   PlayChunk(Yabber);
   PlayChunk(Tears);
-  PlayChunk(YouFuck);
-  PlayChunk(Whoops);
-  PlayChunk(NodYes);
+  //PlayChunk(LookRight);
   PlayChunk(LeanForward);
+  PlayChunk(Yabber);PlayChunk(Yabber);
+  PlayChunk(Whoops);
+  MaxFrame=3;PlayChunk(LookRight);
+  PlayChunk(Yabber);
+  PlayChunk(NodYes);
+  PlayChunk(Yabber);PlayChunk(Yabber);
+  PlayChunk(Disdain);
+  PlayChunk(Yabber);
+  PlayChunk(CheckWatch);
+  PlayChunk(YouFuck);
 }
 
 void PlayChunk(unsigned char Chunk[]){
-	for (Frame=0;Frame<6; Frame++){
+	for (Frame=0;Frame<MaxFrame; Frame++){
 		PtrGraphic=Chunk;
 		DrawFrame();
 		Pause();
 	}
-	for (Frame=5;Frame>0;Frame--){
+	for (Frame=MaxFrame-1;Frame>0;Frame--){
 		PtrGraphic=Chunk;
 		DrawFrame();
 		Pause();
 	}
+	MaxFrame=MAXFRAME;
 }
 
 void Pause(){
