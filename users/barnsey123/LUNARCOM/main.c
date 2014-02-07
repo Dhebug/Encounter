@@ -37,27 +37,15 @@ extern unsigned char Whoops[];		// video whoops
 extern unsigned char NodYes[];		// video nodding
 extern unsigned char LeanForward[];	// video leaning forward
 unsigned char Frame;				// Frame of video to play
-int PauseTime,p;					// amount of time to Pause
+int PauseTime,PauseCount;			// amount of time to Pause
 unsigned char* PtrGraphic;			// pointer to byte values of loaded picture
 unsigned char InkColor;
 /* Listing of Functions */
 
 void Pause();		// adds pause to video playback
-void PlayLeanForward();	// LeanForward
-void PlayLeanForwardA();	
-void PlayLookRight();	// Look Right
-void PlayLookRightA();	
-void PlayNodYes();	// Nod yes
-void PlayNodYesA();
-void PlayTears();	// Pretend Tears
-void PlayTearsA();
-void PlayYabber();	// general talking
-void PlayYabberA();
-void PlayYouFuck();	// Go away you nasty man
-void PlayYouFuckA();
-void PlayWhoops();	// Did I swear?
-void PlayWhoopsA();
+void PlayChunk(unsigned char Chunk[]);	// play part of video
 void PlayVideo();	// play all video
+
 
 /* Main Program */
 
@@ -73,145 +61,31 @@ void main(){
 
 /* Definition of Functions */
 
-void PlayVideo()	{
-  /*PtrGraphic=BlahBlah;	// pointer to byte values of loaded video	
-  for (Frame=0;Frame<12;Frame++){
-    DisplayFrame();	// print a frame	
-    PauseTime=900;	// define length of Pause
-    //Pause();		// add a pause
-    //getchar();
-  }	*/
-  // Look Right and back
-  // look right
-  PlayLookRight();
-  PlayYabber();PlayYabber();PlayYabber();
-  PlayTears();
-  PlayYouFuck();
-  PlayWhoops();
-  PlayYabber();PlayYabber();
-  PlayNodYes();
-  PlayLeanForward();
-  
-  /*PlayTears();
-  PlayYouFuck();
-  PlayLookRight();
-  PlayLeanForward();
-  PlayWhoops();
-  PlayNodYes();*/
-  
+void PlayVideo(){
+  PlayChunk(LookRight);
+  PlayChunk(Yabber);
+  PlayChunk(Tears);
+  PlayChunk(YouFuck);
+  PlayChunk(Whoops);
+  PlayChunk(NodYes);
+  PlayChunk(LeanForward);
 }
+
+void PlayChunk(unsigned char Chunk[]){
+	for (Frame=0;Frame<6; Frame++){
+		PtrGraphic=Chunk;
+		DrawFrame();
+		Pause();
+	}
+	for (Frame=5;Frame>0;Frame--){
+		PtrGraphic=Chunk;
+		DrawFrame();
+		Pause();
+	}
+}
+
 void Pause(){
-  for (p=0; p<PauseTime;p++){};
-}
-void PlayLeanForward(){
-	// look right
-	for (Frame=0;Frame<6;Frame++){
-	  PlayLeanForwardA();
-  	}
-  	// look back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayLeanForwardA();
-  	}
-}
-void PlayLeanForwardA(){
-	PtrGraphic=LeanForward;
-	DrawFrame();  
-	Pause();
+  for (PauseCount=0; PauseCount<PauseTime;PauseCount++){};
 }
 
-void PlayLookRight(){
-	// look right
-	for (Frame=0;Frame<6;Frame++){
-	  PlayLookRightA();
-  	}
-  	// look back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayLookRightA();
-  	}
-}
-void PlayLookRightA(){
-	PtrGraphic=LookRight;
-	DrawFrame();  
-	Pause();
-}
-
-void PlayNodYes(){
-	// tears
-	for (Frame=0;Frame<6;Frame++){
-	  PlayNodYesA();
-  	}
-  	// tears back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayNodYesA();
-  	}
-}
-void PlayNodYesA(){
-	PtrGraphic=NodYes;
-	DrawFrame();  
-	Pause();
-}
-
-void PlayTears(){
-	// tears
-	for (Frame=0;Frame<6;Frame++){
-	  PlayTearsA();
-  	}
-  	// tears back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayTearsA();
-  	}
-}
-void PlayTearsA(){
-	PtrGraphic=Tears;
-	DrawFrame();  
-	Pause();
-}
-
-void PlayYabber(){
-	// tears
-	for (Frame=0;Frame<6;Frame++){
-	  PlayYabberA();
-  	}
-  	// tears back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayYabberA();
-  	}
-}
-void PlayYabberA(){
-	PtrGraphic=Yabber;
-	DrawFrame();  
-	Pause();
-}
-
-void PlayYouFuck(){
-	// tears
-	for (Frame=0;Frame<6;Frame++){
-	  PlayYouFuckA();
-  	}
-  	// tears back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayYouFuckA();
-  	}
-}
-void PlayYouFuckA(){
-	PtrGraphic=YouFuck;
-	DrawFrame();  
-	Pause();
-}
-
-void PlayWhoops(){
-	// tears
-	for (Frame=0;Frame<6;Frame++){
-	  PlayWhoopsA();
-  	}
-  	// tears back
-  	for (Frame=5;Frame>0;Frame--){
-	  PlayWhoopsA();
-  	}
-}
-void PlayWhoopsA(){
-	PtrGraphic=Whoops;
-	DrawFrame();  
-	Pause();
-}
 
