@@ -19,6 +19,7 @@ History
 04/02/2014 Started work with first few vids and sorted out display routines
 05/02/2014 added more vids
 07/02/2014 New PlayChunk routine (more efficient), more vids
+09/02/2014 Using file_unpack to compress the video images
 */
 #include <lib.h>
 #define BLACK 0
@@ -30,28 +31,33 @@ History
 #define CYAN 6
 #define WHITE 7
 #define MAXFRAME 6
+#define FRAMEWIDTH 12
+#define FRAMEHEIGHT 48
+#define FRAMECOUNT 6
 /* Definition of Global variables */
-extern unsigned char Tears[];		// video talking 
+extern unsigned char CheckWatch[];	// video check the watch
+extern unsigned char Disdain[];		// video "don't care/not bothered"
+extern unsigned char LeanForward[];	// video leaning forward
 extern unsigned char LookRight[];	// video looking right
+extern unsigned char NodYes[];		// video nodding
+extern unsigned char Tears[];		// video talking 
+extern unsigned char Whoops[];		// video whoops
 extern unsigned char Yabber[];		// video talking
 extern unsigned char YouFuck[];		// video "you fuck"
-extern unsigned char Whoops[];		// video whoops
-extern unsigned char NodYes[];		// video nodding
-extern unsigned char LeanForward[];	// video leaning forward
-extern unsigned char Disdain[];		// video "don't care/not bothered"
-extern unsigned char CheckWatch[];	// video check the watch
+unsigned char UnPack[FRAMEWIDTH*FRAMEHEIGHT*FRAMECOUNT]; // where the image data gets unpacked to
 unsigned char Frame, MaxFrame;	// Frame of video to play up to MaxFrame
 int PauseTime,PauseCount;			// amount of time to Pause
-unsigned char* PtrGraphic;			// pointer to byte values of loaded picture
+unsigned char* PtrGraphic;			// pointer to byte values of picture
+unsigned char* PtrUnPack;			// pointer to byte values of unpacked picture
 unsigned char InkColor;
 /* Listing of Functions */
-
 void Pause();		// adds pause to video playback
 void PlayChunk(unsigned char Chunk[]);	// play part of video
 void PlayVideo();	// play all video
 
+/****************/
 /* Main Program */
-
+/****************/
 void main(){
 	hires();
 	InkColor=CYAN; VideoInkLeft();	// set ink to right of video
@@ -88,22 +94,29 @@ void PlayVideo(){
   PlayChunk(YouFuck);
 }
 
+// Chunk[] contains packed data (e.g Yabber.s)
 void PlayChunk(unsigned char Chunk[]){
+	PtrUnPack=UnPack;				// set the pointer to UnPack (destination of unpacked data)
+	file_unpack(PtrUnPack,Chunk);	// Unpack gets populated with unpacked Chunk
+	// Play frames sequentually
 	for (Frame=0;Frame<MaxFrame; Frame++){
-		PtrGraphic=Chunk;
-		DrawFrame();
-		Pause();
+		PtrGraphic=UnPack;			// point to start of unpack
+		DrawFrame();				// PtrGraphic and Frame used in this ASM function
+		Pause();					// Stop frames playing too fast
 	}
+	// Play Frames in reverse order
 	for (Frame=MaxFrame-1;Frame>0;Frame--){
-		PtrGraphic=Chunk;
-		DrawFrame();
-		Pause();
+		PtrGraphic=UnPack;			// point to start of unpack
+		DrawFrame();				// PtrGraphic and Frame used in this ASM function
+		Pause();					// Stop frames playing too fast
 	}
-	MaxFrame=MAXFRAME;
+	MaxFrame=MAXFRAME;				// reset MaxFrame to be default value
 }
 
 void Pause(){
   for (PauseCount=0; PauseCount<PauseTime;PauseCount++){};
 }
+
+
 
 
