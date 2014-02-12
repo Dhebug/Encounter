@@ -12,7 +12,7 @@ Asteroid2 Movie
 #define CYAN 6
 #define WHITE 7
 #define MAXFRAME 1
-#define FRAMEWIDTH 38
+#define FRAMEWIDTH 33
 #define FRAMEHEIGHT 155
 #define FRAMECOUNT 1
 /* Definition of Global variables */

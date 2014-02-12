@@ -36,8 +36,8 @@ _DisplayFrame
 	
 	; Draw loop
 	.(
-	; 135 lines per frame)
-	ldx #135	
+	; 155 lines per frame)
+	ldx #155	
 loop
 	ldy #0
 	; now print 33 bytes (1byte=6pixels, image=198 pixels across, so 33 bytes required
@@ -113,17 +113,17 @@ loop
 	beq end
 	clc
 	lda _PtrGraphic+0
-	; 38 bytes (228 pixels) * 155 lines 
-	; add lower half 4455 to lower half of ptrgraph
-	adc #<4455
+	; 33 bytes (198 pixels) * 155 lines 
+	; add lower half 5115 to lower half of ptrgraph
+	adc #<5115
 	sta _PtrGraphic+0
 	bcc skip
 	inc _PtrGraphic+1	
 skip
-	; add upper half of 4455 to upper half of ptrgraph
+	; add upper half of 5115 to upper half of ptrgraph
 	clc
 	lda _PtrGraphic+1
-	adc #>4455
+	adc #>5115
 	sta _PtrGraphic+1
 	
 	dex
@@ -138,7 +138,7 @@ end
 ; set ink to LEFT of video playback
 _VideoInkLeft
 .(
-	ldx #135
+	ldx #155
 	lda #<$a001
 	sta tmp1+0
 	lda #>$a001
