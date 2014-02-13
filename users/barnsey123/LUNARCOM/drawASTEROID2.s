@@ -13,8 +13,17 @@ skip
 
 _BytePrint
 .(
+	; load next byte
 	lda (tmp0),y
+	; compare with existing screen location (if same data then skip) 
+	cmp (tmp1),y	
+	beq skip
+	; if new data is blank then old data must be retained (skip)
+	cmp #64
+	beq skip
+	; else data is different so print it
 	sta (tmp1),y
+skip
 	iny
 	rts
 .)
