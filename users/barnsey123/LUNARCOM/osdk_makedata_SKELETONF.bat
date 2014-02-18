@@ -1,5 +1,5 @@
 @ECHO OFF
-:: Full Screen Asteroid2
+:: Full Screen SkeletonF
 :: Enable variable changes within FOR loops
 SETLOCAL EnableDelayedExpansion
 SET MAINPATH=%OSDK%\LUNARCOM\
@@ -18,7 +18,8 @@ FOR %%a IN (*.PNG) DO (
 	:: The first file needs to  be processed differently
 	::IF !OLDFILE! == "DUMMY" (
 	%OSDK%\bin\pictconv -f0 -d1 -o2 %%a chunk.hir
+	::%OSDK%\bin\pictconv -f6 -d0 -o2 %%a chunk.hir
 	%OSDK%\bin\FilePack -p chunk.hir chunk.pak
-	%OSDK%\bin\Bin2Txt -s1 -f2 chunk.pak ..\%%~na.s _%%~na
+	%OSDK%\bin\Bin2Txt -s1 -f2 chunk.pak %MAINPATH%\%%~na.s _%%~na
 )
 pause
