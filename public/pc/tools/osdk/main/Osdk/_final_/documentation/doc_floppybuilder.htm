@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - FloppyBuilder</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>FloppyBuilder</h1>
+
+<p>Important: <i>The rest of this documentation is going to try to explain how the whole process works, but the best example is to look at the real world sample demo 
+<B>Pushing The Envelope</b> <a href="http://miniserve.defence-force.org/svn/public/oric/demos/PushingTheEnvelope/">source code</a> in the SVN depot.</i>
+</p>
+
+<p id=chapter>Description</p>
+
+<p>The FloppyBuilder is a relatively advanced tool which can be used to generate optimized DSK files.
+</p>
+
+<p>The Tap2Dsk tool is conceptually equivalent to the FloppyBuilder, the main difference being that Tap2Dsk generates Sedoric floppies while FloppyBuilder generates 
+floppy files that do not rely on the disk operating system, allowing the user to use almost all the Oric memory and most of the floppy surface.
+</p>
+
+<p>In order to use the FloppyBuilder, you need to create a description file using the syntax described in the following sections. From this description file will be generated both a DSK file and a header file.
+</p>
+
+<p>The DSK file is a floppy disk image (in the usual Oric format at used in emulators), while the header file contains informations about the floppy layout which can be used by the programmer to load the files.
+</p>
+
+<p>With this organisation comes an interesting chicken and egg problem: In order to generate the DSK file, the FloppyBuilder needs to have a list of files to write, but in order to access the files the user
+code needs to know where the files are located and how large they are, which in turn impacts the content of the DSK file which may mean that the location of the file changed. To solved this cyclical dependency
+the FloppyBuilder has been designed to be run in two different modes: The <b>initialization</b> mode and the <b>building</b> mode:
+</p>
+
+<ul>
+<li>The FloppyBuilder will first be called in Initialization mode, which will generate a header file with enough information to make it possible to build the project without actually requiring that all files be present.</li>
+<li>The user code is then assembled/compiled, it can reference and use the content of the header file, which will possibly not be entirelly correct but will allow the files to have the correct size.</li>
+<li>The FloppyBuilder is then called in Building mode, which will require all files to be present, this pass will update the header file which should now contains correct data.</li>
+<li>The user code is then assembled/compiled again, this time with all the correct information in the header file.</li>
+<li>The FloppyBuilder is then called in Building mode a final time, we now have a valid DSK file.</li>
+</ul>
+
+<p>This process is admitely not very elegant, but it has the benefit of being simple and automated, and it allows for basically optimal file referencement: 
+You do not need to load a directory and search, you can just ask the loader to load a particular file immediately, identified by a single immediate value.
+</p>
+
+<p id=chapter>Invocation</p>
+
+<p>The floppy builder does not take any optional switch or parameter at this point in time, the syntax is just one of these two situations: 
+</p>
+<pre>
+	FloppyBuilder init description_file
+	FloppyBuilder build description_file
+</pre>
+
+<p id=chapter>The Description File format</p>
+
+<p>Description file is a simple ASCII text format containing commands followed by a number of parameters. Empty lines are ignored, and semi-colon characters (;) are considered as comments.
+</p>
+
+<p>Here is a list of commands:
+</p>
+
+<ul>
+<li>AddDefine define_name define_value</li>
+<li>AddFile file address [optional_medatas]</li>
+<li>DefineDisk sides tracks sectors</li>
+<li>OutputFloppyFile dsk_file</li>
+<li>OutputLayoutFile header_file</li>
+<li>SetPosition track sector</li>
+<li>SetCompressionMode</li>
+<li>WriteSector file</li>
+</ul>
+
+<p>Here is an example of how these commands can be used:
+</p>
+
+<pre>
+;
+; ODSK Floppy Builder template description file
+;
+DefineDisk 2 42 17                                    ; 2 sides, 42 tracks, 17 sectors
+OutputLayoutFile floppy_description.h                 ; This file will be used by the loader (generated from this script)
+OutputFloppyFile ..\build\FloppyBuilderTest.dsk       ; The final DSK file containing the data (generated from this script)
+
+;
+; This defines the bootsectors to use for the various operating systems
+; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
+; - Microdisc loads the sector 2 of track zero, the address is different on Atmos and Telestrat
+; - The system requires a third sector containing valid data
+;
+; Since we do not yet have a valid Jasmin reading code, all this bootsector will do is to 
+; write a message saying that this floppy needs to be booted on a Microdisc compatible system.
+;
+SetPosition 0 1                                       ; Set the head to track 0, sector 1
+WriteSector ..\build\files\sector_1-jasmin.o          ; Written to track 0, sector 1
+WriteSector ..\build\files\sector_2-microdisc.o       ; Written to track 0, sector 2
+WriteSector ..\build\files\sector_3.o                 ; Written to track 0, sector 3
+
+;
+; Now here is the loader code, that one is Microdisc only
+;
+SetPosition 0 4
+AddFile ..\build\files\loader.o $fc00                 ; Written to track 0, sector 4, and will be loaded in $fc00
+
+;
+; From now on we compress data (The loader should not be compressed)
+;
+SetCompressionMode FilePack                           ; So far only two modes: 'None' and 'FilePack'
+
+;
+; Then the files used in this demo
+;
+AddDefine LOADER_TEST_DEMO {FileIndex}
+AddFile ..\build\files\testdemo.o $400                ; The main application, can be loaded by using the LOADER_TEST_DEMO define
+
+AddDefine LOADER_FIRST_INTRO_PICTURE {FileIndex}
+AddFile ..\build\files\test_picture.hir $a000         ; A hires picture loaded in $a000, can be access using the LOADER_FIRST_INTRO_PICTURE define
+AddDefine LOADER_LAST_PICTURE {FileIndex}
+</pre>
+
+<p>This may look a bit complicated, but the beauty of the system is that the entire process is data driven because the generated data can be used almost transparently from either your assembler or C code.
+</p>
+
+<p id=chapter>The generated Header file</p>
+
+<p>So, what does the generated header file looks like? If you would put the sample description file through the FloppyBuilder is here what you would get as a result:
+</p>
+
+<pre>
+//
+// Floppy layout generated by FloppyBuilder 0.15
+// (The generated floppy is missing some files, a new build pass is required)
+//
+
+#ifdef ASSEMBLER
+//
+// Information for the Assembler
+//
+#ifdef LOADER
+FileStartSector .byt 4,8,9
+FileStartTrack .byt 0,0,0
+FileStoredSizeLow .byt <1024,<44,<44
+FileStoredSizeHigh .byt >1024,>44,>44
+FileSizeLow .byt <1024,<44,<44
+FileSizeHigh .byt >1024,>44,>44
+FileLoadAdressLow .byt <64512,<1024,<40960
+FileLoadAdressHigh .byt >64512,>1024,>40960
+#endif // LOADER
+#else
+//
+// Information for the Compiler
+//
+#endif
+
+//
+// Summary for this floppy building session:
+//
+#define FLOPPY_SIDE_NUMBER 2    // Number of sides
+#define FLOPPY_TRACK_NUMBER 42    // Number of tracks
+#define FLOPPY_SECTOR_PER_TRACK 17   // Number of sectors per track
+
+//
+// List of files written to the floppy
+//
+// Entry #0 '..\build\files\loader.o'
+// - Loads at address 64512 starts on track 0 sector 4 and is 4 sectors long (1024 bytes).
+// Entry #1 '..\build\files\testdemo.o'
+// - Loads at address 1024 starts on track 0 sector 8 and is 1 sectors long (44 bytes).
+// Entry #2 '..\build\files\test_picture.hir'
+// - Loads at address 40960 starts on track 0 sector 9 and is 1 sectors long (44 bytes).
+//
+// 9 sectors used, out of 1428. (0% of the total disk size used)
+//
+#define LOADER_TEST_DEMO 1
+#define LOADER_FIRST_INTRO_PICTURE 2
+#define LOADER_LAST_PICTURE 3
+
+//
+// Metadata
+//
+#ifdef METADATA_STORAGE
+
+#endif // METADATA_STORAGE
+</pre>
+
+<p>As you can see, the file contains some preprocessor information, tests, defines and actual entries:
+</p>
+
+<ul>
+<li>Some #ifdef to handle both C and 6502 code. If ASSEMBLER is not defined at build time, the code will be assumed to be loaded from a C module</li>
+<li>Some loader specific information, in the form of arrays of data with information for each file (location on track, size, loading address, compressed size, ...)</li>
+<li>Some #define describing the format of the floppy (used by the loader to detect when it needs to change track or side)</li>
+<li>Some #define that can be used to identify the files by ID (created by the AddDefine commands)</li>
+<li>Some final #ifdef for the METADATA section (optional, more on that later)</li>
+</ul>
+
+<p id=chapter>The loader</p>
+
+<p>We are now reaching the 'can do better' part. The loader is pretty much still a work in progress, if you take the source code of Pushing The Envelope as a base you could just keep it as is,
+the only thing you may need to change is the <B>ldx #LOADER_SLIDESHOW</b> in <I>loader.asm</i> if you changed the define. The rest can be kept as is.
+</p>
+
+<p id=chapter>The loading API</p>
+
+<p>If you kept the loader as is, you have access to two functions in the loading API:
+</p>
+
+<ul>
+<li>LoadData (in $FFF7)</li>
+<li>SetLoadAddress (in $FFF4)</li>
+</ul>
+
+<p>The function calls have been wrapped in 'loader_api.s', but basically all you need to do is to load a file is to pass the file entry number in the register X and then jmp to $fff7.
+This will use the default address specified in the description file.
+</p>
+
+<p>If you want to load the data at another location, you can call the SetLoadAddress function in a similar way: Set X with the file entry number, A for the lower part of the address and Y for the high part,
+then call $fff4. Subsequent calls to $fff7 for this file will use the new location (the call patched the loader table)
+</p>
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 0.15</p>
+- The output file now clearly states how much free room is available in bytes on the disk<br>
+
+<p id=dateentry>Version 0.14</p>
+- The MetaData tables will now not contain any information after the last file that declared metadata, this allows to not waste room in the loader for dummy data<br>
+ 
+<p id=dateentry>Version 0.13</p>
+- Added a new parameter to make it possible to bootstrap the floppy building process: With 'init' a description fill be generated even if data is missing,
+this makes it possible to do a multi-pass build process which will not fail because it depends on things not yet generated :)<br>
+
+<p id=dateentry>Version 0.12</p>
+- The 'DefineDisk' command accepts a variable set of track definition values<br>
+
+<p id=dateentry>Version 0.11</p>
+- Added support for metadata that can be used later on by the programmer<br>
+
+<p id=dateentry>Version 0.10</p>
+- The compression code now generates correct data (it was using the Atari ST mode encoding, making the unpacking code not happy)<br>
+- Added to the report file the occupation ratio of the floppy (by maintaining an internal list of used sectors also used to check if there's no overlap)<br>
+
+<p id=dateentry>Version 0.9</p>
+- Added the 'SetCompressionMode' command. Possible parameters are 'None' (default value) and 'FilePack'<br>
+
+<p id=dateentry>Version 0.8</p>
+- Cleaned up a bit the output description generation<br>
+
+<p id=dateentry>Version 0.7</p>
+- The code now automatically compute the gaps values based on the floppy structure parameters<br>
+- The 'DefineDisk' command now works (at least for 2 sided, 42 tracks and 17 sectors floppies)<br>
+
+<p id=dateentry>Version 0.6</p>
+- Added the 'LoadDiskTemplate' and 'DefineDisk' commands (and removed these parameters from the command line)<br>
+- Added the 'AddTapFile' command, similar to 'AddFile' but automatically removes the header and extract the start address of the file<br>
+
+<p id=dateentry>Version 0.5</p>
+- Fixed parsing of comments<br>
+- added a 'OutputFloppyFile' command<br>
+- validated that the number of sectors and tracks is correct in the 'SetPosition' command.<br>
+- removed some unused variables<br>
+- cleaned the offset/track/sector management code<br>
+- the 'SetBootSector' command is now 'WriteSector' and automatically move to the next sector after writing data<br>
+
+<p id=dateentry>Version 0.3</p>
+- Work started in 2013 by Mickaël Pointier for the Oric 30th birthday<br>
+
+<p id=dateentry>Version 0.2</p>
+- Makedisk (c) 2002 Jérome Debrune, used on all Defence Force demos until 2013<br>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

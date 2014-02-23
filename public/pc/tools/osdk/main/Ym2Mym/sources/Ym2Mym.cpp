@@ -73,7 +73,7 @@ int main(int argc,char *argv[])
     "\r\n"
     " -vn   Verbosity.\r\n"
     "       -v0 => Silent [default]\r\n"
-    "       -v1 => Shows information about what PictConv is doing\r\n"
+    "       -v1 => Shows information about what Ym2Mym is doing\r\n"
     "\r\n"
     " -mn   Max size.\r\n"
     "       -m0 => No size limit [default]\r\n"
