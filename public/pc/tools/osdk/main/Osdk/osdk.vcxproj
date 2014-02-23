@@ -129,6 +129,9 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="_final_\documentation\doc_floppybuilder.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="_final_\lib\clock.s" />
     <None Include="_final_\lib\ctype.s" />
     <None Include="_final_\lib\div.s" />

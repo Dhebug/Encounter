@@ -480,6 +480,9 @@
     <None Include="_final_\Bin\vc_make.bat">
       <Filter>bin</Filter>
     </None>
+    <None Include="_final_\documentation\doc_floppybuilder.htm">
+      <Filter>documentation</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="_final_\include\6502.h">
