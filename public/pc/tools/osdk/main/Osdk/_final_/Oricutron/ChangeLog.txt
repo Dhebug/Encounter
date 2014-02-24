@@ -1,5 +1,74 @@
 Oricutron ChangeLog
 
+1.1 (07-Dec-2013)
+-----------------
+
+All:
+
+* Now possible to set scanline and fullscreen options when built
+  without OpenGL support
+* Includes patches and symbols for Pravetz 8D rom
+* Disk and tape image autodetection. Oricutron will now attempt
+  to detect the configuration required for any disk or tape
+  inserted via commandline or menu.
+* "Insert disk 0/1" menu items enabled even when no disk drive is
+  enabled. Inserting a disk will use the autodetection routines
+  to determine which drive type to enable.
+* Autorun for Jasmin and Pravetz disks
+* Fixed crash bug when switching between software and GL rendering
+  on builds using SDL requesters.
+* Various AY emulation improvements
+* Simplified system timing
+
+
+Windows:
+
+* Clipboard paste support
+
+
+Linux:
+
+* Now defaults to building with OpenGL support
+* Clipboard paste support
+* GTK filerequester and messagebox
+* Fixed audio click on startup
+
+
+1.0 (22-Oct-2013)
+-----------------
+
+All:
+
+* Pravetz Dos-8D disk support <iss>
+* Better Pravetz emulation <iss>
+* Telestrat now basically working
+* Fixed some rendering issues in the debugger
+* Now defaults to no joystick instead of IJK
+* Some minor fixes in the joystick code
+* Support for .ort files from commandline <stefan h>
+* Commandline options for turbotape, lightpen and
+  scanlines
+* On windows, error messages now pop up in a message
+  box
+* Textattrs are now properly reset at the start of each
+  line again
+* Better telestrat VIA display in the debugger <stefan h>
+* Fixed backslash key <stefan h>
+* Various improvements to the build system <stefan h/revolf/iss>
+* 8-bit display mode for low-end systems
+* Various optimisations
+
+
+Amiga/MorphOS/AROS:
+
+* Added version tag in guide <stefan h>
+
+
+BeOS:
+
+* Various fixes and tweaks <revolf>
+
+
 0.9 (02-Mar-2012)
 -----------------
 
