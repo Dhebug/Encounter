@@ -1,7 +1,7 @@
-Oricutron 0.9
+Oricutron 1.1
 -------------
 
-(c)2009-2012 Peter Gordon (pete@petergordon.org.uk)
+(c)2009-2013 Peter Gordon (pete@petergordon.org.uk)
 
 This is a work in progress.
 
@@ -16,8 +16,6 @@ Current status
   Tape:  99% done (.TAP, .ORT and .WAV supported)
   Disk:  Reading/Writing sectors works. No track read/write.
 
-Telestrat emulation is included, but is far from finished and doesn't currently
-work well enough to be useful.
 
 
 Credits
@@ -37,6 +35,7 @@ Credits
   Stefan Haubenthal
   Ibisum
   Kamel Biskri
+  Iss
 
 
   Amiga & Windows ports
@@ -52,8 +51,8 @@ Credits
   Kamel Biskri
 
 
-  MorphOS & AROS port
-  -------------------
+  MorphOS & AROS ports
+  --------------------
 
   Stefan Haubenthal
 
@@ -70,7 +69,15 @@ Credits
   ------------
 
   Ibisum
-  
+
+
+  Pravetz disk support
+  --------------------
+
+  Iss
+
+
+
 
 Thanks
 ======
@@ -113,40 +120,52 @@ the long version does.
 Here are all the options:
 
 
-  -m / --machine    = Specify machine type. Valid types are:
+  -m / --machine     = Specify machine type. Valid types are:
 
-                      "atmos" or "a" for Oric atmos
-                      "oric1" or "1" for Oric-1
-                      "o16k" for Oric-1 16k
-                      "telestrat" or "t" for Telestrat
-                      "pravetz", "pravetz8d" or "p" for Pravetz 8D
+                       "atmos" or "a" for Oric atmos
+                       "oric1" or "1" for Oric-1
+                       "o16k" for Oric-1 16k
+                       "telestrat" or "t" for Telestrat
+                       "pravetz", "pravetz8d" or "p" for Pravetz 8D
 
-  -d / --disk       = Specify a disk image to use in drive 0
-  -t / --tape       = Specify a tape image to use
-  -k / --drive      = Specify a disk drive controller. Valid types are:
+  -d / --disk        = Specify a disk image to use in drive 0
+  -t / --tape        = Specify a tape image to use
+  -k / --drive       = Specify a disk drive controller. Valid types are:
 
-                      "microdisc" or "m" for Microdisc
-                      "jasmin" or "j" for Jasmin
+                       "microdisc" or "m" for Microdisc
+                       "jasmin" or "j" for Jasmin
 
-  -s / --symbols    = Load symbols from a file
-  -f / --fullscreen = Run oricutron fullscreen
-  -w / --window     = Run oricutron in a window
-  -R / --rendermode = Render mode. Valid modes are:
+  -s / --symbols     = Load symbols from a file
+  -f / --fullscreen  = Run oricutron fullscreen
+  -w / --window      = Run oricutron in a window
+  -R / --rendermode  = Render mode. Valid modes are:
 
-                      "soft" for software rendering
-                      "opengl" for OpenGL
+                       "soft" for software rendering
+                       "opengl" for OpenGL
 
-  -b / --debug      = Start oricutron in the debugger
-  -r / --breakpoint = Set a breakpoint
-  -h / --help       = Print command line help and quit
+  -b / --debug       = Start oricutron in the debugger
+  -r / --breakpoint  = Set a breakpoint
+  -h / --help        = Print command line help and quit
+
+  --turbotape on|off = Enable or disable turbotape
+  --lightpen on|off  = Enable or disable lightpen
+  --vsynchack on|off = Enable or disable VSync hack
+  --scanlines on|off = Enable or disable scanline simulation
+
+NOTE: If you are not sure what machine or drive type is required for a disk or
+tape image, just pass the filename without any options and Oricutron will
+try and autodetect for you.
 
 
 Examples:
 
+oricutron tapes/tape_image.tap
+oricutron disks/disk_image.dsk
 oricutron --machine atmos --tape "tape files/foo.tap" --symbols "my files/symbols"
 oricutron -m1 -tBUILD/foo.tap -sBUILD/symbols -b
 oricutron --drive microdisc --disk demos/barbitoric.dsk --fullscreen
 oricutron -ddemos/barbitoric.dsk -f
+oricutron --turbotape off tapes/hobbit.tap
 
 
 
@@ -185,7 +204,7 @@ Keys
 
   F2      - Return to the emulator
   F3      - Toggle console/debug output/memwatch
-  F4      - Toggle VIA/AY information
+  F4      - Toggle VIA/AY/disk information
   F9      - Reset cycle count
   F10     - Step over code
   F11     - Step over code without tracing into
