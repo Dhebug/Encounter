@@ -10,7 +10,7 @@ del *.hir /s
 del *.pak /s
 del *.zip /s
 del *.bin /s
-del *.bmp /s
+::del *.bmp /s
 
 del copy*.* /s
 del copie*.* /s
