@@ -3,6 +3,7 @@
 ::
 :: Set the build paremeters
 ::
-SET OSDKADDR=$1000
+SET OSDKADDR=$400
 SET OSDKNAME=HIPIC
 SET OSDKFILE=main irq player picture rasters xnitzy oops
+SET OSDKDISK=

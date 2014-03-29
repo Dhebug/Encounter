@@ -6,6 +6,7 @@
 
 // irq.s
 extern void System_InstallIRQ_SimpleVbl();
+extern void System_RemoveIRQ();
 extern void VSync();
 
 // player.s
@@ -30,19 +31,19 @@ unsigned char GlobalShowY;
 
 void Rasters()
 {
-	if (GlobalShowY<45)
+	if (GlobalShowY<44)
 	{
 		unsigned char* screen;
 		int y,maxy;
 		int i,j,k;
 
-		screen=(unsigned char*)0xa000+40*45;
+		screen=(unsigned char*)0xa000+40*44;
 
 		i=RasterPos;
 		j=RasterPos;
 		k=RasterPos;
 
-		maxy=(45-GlobalShowY)/2;
+		maxy=(44-GlobalShowY)/2;
 		if (maxy>18)
 		{
 			maxy=18;
@@ -185,15 +186,14 @@ void StarField()
 {
    	int y;
 	unsigned char* ptr;
-   		int x,xx,color;
-			int xxx;
+	int x,xx,color;
+	int xxx;
 	
 	memset((unsigned char*)0xa000,0,8000);
 	memcpy((unsigned char*)0xa000,LabelPictureXnitzy,8000);
 	
-
-   while (StarGlobalOffset>-150)
-   {
+	while (StarGlobalOffset>-150)
+	{
 		ptr=(unsigned char*)0xa000+4;
    		for (y=0;y<20;y++)
    		{
@@ -212,7 +212,7 @@ void StarField()
    		}
 
 		StarGlobalOffset--;
-   }
+   	}
 
 	memcpy((unsigned char*)0xa000,LabelPictureOops,8000);
 	for (y=0;y<100;y++)
@@ -226,10 +226,12 @@ extern void Player_SetMusic_Birthday();
 void main()
 {
 	int y;
+	/*
 	if (!is_overlay_enabled())
 	{
 		hires();
 	}
+	*/
 	System_InstallIRQ_SimpleVbl();
 
     // Show the Xnitzy && Xnutzi animation
@@ -253,6 +255,7 @@ void main()
 		Pause();
 	}
 	memset((unsigned char*)0xa000,0,8000);	
-	Player_Silence();
+
+	System_RemoveIRQ();
 }
 

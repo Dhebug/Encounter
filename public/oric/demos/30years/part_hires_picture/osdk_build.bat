@@ -19,7 +19,7 @@ CALL osdk_config.bat
 ::
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 
-copy build\final.out ..\disk_system\demo\part_hires_picture.o
+copy build\final.out ..\build\files\part_hires_picture.o
 GOTO End
 
 

@@ -29,3 +29,4 @@ IF "%OSDKBRIEF%"=="" PAUSE
 GOTO End
 
 :End
+::pause
