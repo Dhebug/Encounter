@@ -20,12 +20,7 @@ CALL osdk_config.bat
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 
 
-ECHO Building DSK file
-%OSDK%\bin\tap2dsk build\%OSDKNAME%.TAP build\%OSDKNAME%.dsk
-%OSDK%\bin\old2mfm build\%OSDKNAME%.dsk
-
-
-copy build\final.out ..\disk_system\demo\part_motherboard_scroller.o
+copy build\final.out ..\build\files\part_motherboard_scroller.o
 GOTO End
 
 

@@ -20,42 +20,13 @@
 _VblCounter					.dsb 1
 
 _SystemFrameCounter
-_SystemFrameCounter_low		.dsb 1
-_SystemFrameCounter_high	.dsb 1
 
 	
 	.text
 	
+_OldIrq	.dsb 2
 
 
-/*	
-;
-; Installs a simple 50hz Irq
-;
-; 304
-; 306
-; 307
-bit $304	// VIA_T1CL ; Turn off interrupt early.  (More on that below
-
-;Based on setting T1 to FFFF and adding to global counter in IRQ for up to 16.5
-;Million Clock Cycles.
-
-
-#define VIA_T1CL 			$0304
-#define VIA_T1CH 			$0305
-
-#define VIA_T1LL 			$0306
-#define VIA_T1LH 			$0307
-
-_VSync
-	lda $300
-vsync_wait
-	lda $30D
-	and #%00010000 ;test du bit cb1 du registre d'indicateur d'IRQ
-	beq vsync_wait
-	rts
-
-*/
 _System_InstallIRQ_SimpleVbl
 .(
 	sei
@@ -76,10 +47,13 @@ _System_InstallIRQ_SimpleVbl
 
 	lda #0
 	sta _VblCounter
-	sta _SystemFrameCounter_low
-	sta _SystemFrameCounter_high
 
 	// Install interrupt (this works only if overlay ram is disabled)
+	lda $FFFE
+	sta _OldIrq+0
+	lda $FFFF
+	sta _OldIrq+1
+
 	lda #<_InterruptCode_SimpleVbl
 	sta $FFFE
 	lda #>_InterruptCode_SimpleVbl
@@ -91,7 +65,19 @@ _System_InstallIRQ_SimpleVbl
 	rts	
 .)
 
+_System_RemoveIRQ
+.(
+	sei
+	lda _OldIrq+0
+	sta $FFFE
+	lda _OldIrq+1
+	sta $FFFF
 
+	jsr _Player_Silence
+
+	cli
+	rts
+.)
 
 
 _VSync
@@ -106,14 +92,7 @@ _InterruptCode_SimpleVbl
 _InterruptCode
 	bit $304
 	inc _VblCounter
-	
-	.(
-	inc _SystemFrameCounter_low
-	bne skip
-	inc _SystemFrameCounter_high
-skip
-	.)
-	
+		
 	pha
 	txa
 	pha
