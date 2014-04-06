@@ -675,7 +675,7 @@ skip ;\
 	ldy #y2+1 ;\
 	adc ptr2,y ;\
 	ldy #y3+1 ;\
-	sta ptr3+1 ;\
+	sta ptr3,y ;\
 
 #define ADDW_DCD(tmp2,cte1,tmp3)\
 	clc ;\
