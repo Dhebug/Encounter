@@ -60,8 +60,6 @@
 // Image dimensions and recursion depth. 
 // DEPTH = 2 is a reasonable value,
 // DEPTH = 3 gives good quality, and higher values may improve the results even more but at the cost of significantly longer computation times.
-#define WIDTH 240
-#define HEIGHT 200
 #define DEPTH 2
 
 
@@ -423,11 +421,14 @@ void OricPictureConverter::convert_sam_hocevar(const ImageContainer& sourcePictu
 
   init_tables();
 
+  int width=sourcePicture.GetWidth();
+  int height=sourcePicture.GetHeight();
+
   // Load the image into a friendly array of fast integers. 
   // We create it slightly bigger than the image so that we don't have to care about borders when propagating the error later 
-  int* src = (int*)calloc((WIDTH + 1) * (HEIGHT + 1) * 3, sizeof(int));
-  int* dst = (int*)calloc((WIDTH + 1) * (HEIGHT + 1) * 3, sizeof(int));
-  int stride = (WIDTH + 1) * 3;
+  int* src = (int*)calloc((width + 1) * (height + 1) * 3, sizeof(int));
+  int* dst = (int*)calloc((width + 1) * (height + 1) * 3, sizeof(int));
+  int stride = (width + 1) * 3;
 
   unsigned int pictureWidth(sourcePicture.GetWidth());
 
@@ -455,7 +456,7 @@ void OricPictureConverter::convert_sam_hocevar(const ImageContainer& sourcePictu
   {
     unsigned char bg = 0, fg = 7;
 
-    fprintf(stderr, "\rProcessing... %i%%", (y + 1) / 2);
+    fprintf(stderr, "\rProcessing... %i%%", (y + 1)*100 / height);
 
     for (x = 0; x < pictureWidth; x += 6)
     {
