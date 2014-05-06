@@ -19,7 +19,9 @@ Generate an html file representing the memory map of provided files.
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
+#ifdef _WIN32
 #include <io.h>
+#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -81,9 +83,9 @@ public:
     while (it!=m_labels.end())
     {
       const std::string& label=*it;
-      if ( 
+      if (
             ((label.size()>=1) && (label[0]=='_')) ||
-            ((label.size()>=4) && (label[0]=='o') && (label[1]=='s')&& (label[2]=='d') && (label[3]=='k')) 
+            ((label.size()>=4) && (label[0]=='o') && (label[1]=='s')&& (label[2]=='d') && (label[3]=='k'))
          )
       {
         return true;
@@ -124,7 +126,7 @@ public:
     Block newBlock(address);
     std::pair<std::set<Block>::iterator,bool> insertIt=m_map_data.insert(newBlock);
     std::set<Block>::iterator it=insertIt.first;
-    Block& block=const_cast<Block&>(*it); // The C++ norm states that dereferencing a std::set returns a const reference, because modifying the key would require modifying the container itself 
+    Block& block=const_cast<Block&>(*it); // The C++ norm states that dereferencing a std::set returns a const reference, because modifying the key would require modifying the container itself
     block.m_labels.insert(label);
   }
 
@@ -133,7 +135,7 @@ public:
     return m_map_data;
   }
 
-public:	
+public:
   std::string	    m_anchor_name;
   std::string	    m_section_name;
   int		    m_adress_size;
@@ -144,7 +146,7 @@ public:
 };
 
 
-void Section::Generate(std::string &html)  
+void Section::Generate(std::string &html)
 {
   html+="<a name=\""+m_anchor_name+"\"></a>\r\n";
 
@@ -272,7 +274,7 @@ enum INPUT_FORMAT
 
 #define NB_ARG	4
 
-int main(int argc,char *argv[]) 
+int main(int argc,char *argv[])
 {
   //
   // Some initialization for the common library

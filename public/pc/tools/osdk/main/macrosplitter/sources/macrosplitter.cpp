@@ -38,8 +38,10 @@ _test
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifdef _WIN32
 #include <conio.h>
 #include <io.h>
+#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -72,7 +74,7 @@ bool ConvertBuffer(void* &pBuffer,size_t &nSizeBuffer)
  * argv[1] - Original filename (macro converted file)
  * argv[2] - Destination filename (tape file)
  */
-void main(int argc,char *argv[])
+int main(int argc,char *argv[])
 {
 	//
 	// Some initialization for the common library
@@ -92,7 +94,7 @@ void main(int argc,char *argv[])
 		"  Reformat the file resulting from the macro conversion by splitting the\r\n"
 		"  lines after the ; character\r\n"
 		"\r\n"
-		"Parameters:\r\n" 
+		"Parameters:\r\n"
 		"  <options> <sourcefile> <destinationfile>\r\n"
 		"\r\n"
 		"Exemple:\r\n"
@@ -100,7 +102,7 @@ void main(int argc,char *argv[])
 		);
 
 
-    long param=1;									   
+    long param=1;
 	if (argc>1)
 	{
 		for (;;)

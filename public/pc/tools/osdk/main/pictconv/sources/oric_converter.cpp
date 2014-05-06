@@ -188,8 +188,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& s
   }
 
   if (r|g|b)
-    return ORIC_COLOR_WHITE; 
-  return ORIC_COLOR_BLACK; 
+    return ORIC_COLOR_WHITE;
+  return ORIC_COLOR_BLACK;
 }
 
 
@@ -237,8 +237,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
       break;
     }
     if (r|g|b)
-      return ORIC_COLOR_WHITE; 
-    return ORIC_COLOR_BLACK; 
+      return ORIC_COLOR_WHITE;
+    return ORIC_COLOR_BLACK;
     break;
 
   case DITHER_ALTERNATE:
@@ -276,8 +276,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
         break;
     }
     if (r|g|b)
-      return ORIC_COLOR_WHITE; 
-    return ORIC_COLOR_BLACK; 
+      return ORIC_COLOR_WHITE;
+    return ORIC_COLOR_BLACK;
     break;
 
   case DITHER_ORDERED:
@@ -311,8 +311,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
         break;
       }
       if (r|g|b)
-        return ORIC_COLOR_WHITE; 
-      return ORIC_COLOR_BLACK; 
+        return ORIC_COLOR_WHITE;
+      return ORIC_COLOR_BLACK;
     }
     break;
 
@@ -322,7 +322,7 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
   default:
     break;
   }
-  return ORIC_COLOR_BLACK; 
+  return ORIC_COLOR_BLACK;
 }
 
 
@@ -422,8 +422,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rb(const ImageContainer& sourcePi
   }
 
   if (r|gb)
-    return ORIC_COLOR_WHITE; 
-  return ORIC_COLOR_BLACK; 
+    return ORIC_COLOR_WHITE;
+  return ORIC_COLOR_BLACK;
 }
 
 
@@ -510,7 +510,7 @@ void OricPictureConverter::convert_twilighte_mask(const ImageContainer& sourcePi
         val<<=1;
         mask_control<<=1;
 
-        // Get the original pixel color 
+        // Get the original pixel color
         BYTE *ptr_byte=FreeImage_GetBitsRowCol(convertedPicture.GetBitmap(),x,y);
         int color=0;
         if ((*ptr_byte++)>128)	color|=4;
@@ -618,7 +618,7 @@ void OricPictureConverter::convert_rgb(const ImageContainer& sourcePicture)
         }
         x++;
       }
-      if (m_flag_setbit6)			
+      if (m_flag_setbit6)
       {
         // In some cases you don't want the bit 6 to be set at all
         val|=64;
@@ -850,7 +850,7 @@ void OricPictureConverter::save_header(long handle,int adress_begin)
     0x24,
     // 4
     0x00,0x00,
-    // 6 
+    // 6
     0x80,0x00,
     // 8
     0xbf,0xdf,
@@ -896,7 +896,7 @@ void OricPictureConverter::SaveToFile(long handle,int output_format)
     if (flag_header)
     {
       save_header(handle,0xa000);
-      //write(handle,Header,13);	
+      //write(handle,Header,13);
       write(handle,"",1);	//write(handle,name,strlen(name)+1);
     }
     break;

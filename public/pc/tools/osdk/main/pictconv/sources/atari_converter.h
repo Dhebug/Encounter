@@ -3,9 +3,7 @@
 
 #include "hires.h"
 
-#ifdef _WIN32
 #include "FreeImage.h"
-#endif
 
 class RgbColor;
 class ShifterColor;

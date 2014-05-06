@@ -47,13 +47,8 @@ typedef unsigned long  lzh_ulong;   /* 32 bits or more */
 
 #else
 
-#ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
-#endif
-
-#ifdef HAVE_STDINT_H
 #include <stdint.h>
-#endif
 
 typedef uint8_t  lzh_uchar;
 typedef uint16_t lzh_ushort;
@@ -129,7 +124,7 @@ public:
 	bool	LzUnpack(const void *pSrc,int srcSize,void *pDst,int dstSize);
 
 private:
-	
+
 	//----------------------------------------------
 	// New stuff to handle memory IO
 	//----------------------------------------------

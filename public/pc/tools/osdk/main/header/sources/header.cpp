@@ -21,11 +21,23 @@ This program will add a oric header to any binary file
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <conio.h>
-#include <io.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#ifdef _WIN32
+#include <conio.h>
+#include <io.h>
+#else
+#include <sys/stat.h>
+#define _open  open
+#define _read  read
+#define _write write
+#define _close close
+#define _O_TRUNC  O_TRUNC
+#define _O_CREAT  O_CREAT
+#define _S_IREAD  S_IREAD
+#define _S_IWRITE S_IWRITE
+#endif
 
 unsigned char Header[]=
 {
@@ -47,7 +59,7 @@ unsigned char Header[]=
 	0xa0,	// 10 Start adress
 	0x00,	// 11
 
-	0x00,	// 12 
+	0x00,	// 12
 	0x00	// 12
 };
 
@@ -59,7 +71,7 @@ unsigned char Header[]=
  * argv[2] - Destination filename (tape file)
  * argv[3] - Start adress
  */
-void main(int argc,char *argv[])
+ int main(int argc,char *argv[])
 {
 	//
 	// Some initialization for the common library
@@ -79,12 +91,12 @@ void main(int argc,char *argv[])
 		"  Add a header to a raw binary file in order to make it loadable by an\r\n"
 		"  oric using the CLOAD command.\r\n"
 		"\r\n"
-		"Parameters:\r\n" 
+		"Parameters:\r\n"
 		"  <options> <sourcefile> <destinationfile> <loadadress>\r\n"
 		"  hexadecimal address should be prefixed by a $ symbol\r\n"
 		"  and should not be present in -h0 mode\r\n"
 		"\r\n"
-		"Options:\r\n" 
+		"Options:\r\n"
 		"  -a[0/1] for autorun (1) or non autorun (0)\r\n"
 		"  -h[0/1] for header (1) or no header (0)\r\n"
 		"  -s[0/1] for showing size of file (1) or not (0)\r\n"
@@ -109,7 +121,7 @@ void main(int argc,char *argv[])
 			// 	1 => perform auto run
 			flag_auto=cArgumentParser.GetBooleanValue(true);
 		}
-		else 
+		else
 		if (cArgumentParser.IsSwitch("-h"))
 		{
 			//format: [-h]
@@ -117,11 +129,11 @@ void main(int argc,char *argv[])
 			// 	1 => save header (default)
 			flag_header=cArgumentParser.GetBooleanValue(true);
 		}
-		else 
+		else
 		if (cArgumentParser.IsSwitch("-s"))
 		{
 			//format: [-s]
-			//	0 => suppress display of size 
+			//	0 => suppress display of size
 			// 	1 => show size of generated file (default)
 			flag_display_size=cArgumentParser.GetBooleanValue(true);
 		}
@@ -161,21 +173,26 @@ void main(int argc,char *argv[])
 	// Read file
 	//
 	const char *filename_src=cArgumentParser.GetParameter(0);
-
-
+	int filesize = 0;
+#ifdef _WIN32
 	struct _finddata_t 	file_info;
-
 	if (_findfirst(filename_src, &file_info)== -1)
 	{
 		ShowError("file not found");
-	}   
+	}
+	filesize = file_info.size;
+#else
+	struct stat st;
+	stat(filename_src, &st);
+	filesize = st.st_size;
+#endif
 	int handle_src=_open(filename_src,O_BINARY|O_RDONLY,0);
     if (handle_src==-1)
 	{
 		ShowError("unable to open source file");
 	}
 
-	void *ptr_buf=malloc(file_info.size);
+	void *ptr_buf=malloc(filesize);
 	if (!ptr_buf)
 	{
 		ShowError("not enough memory");
@@ -184,7 +201,7 @@ void main(int argc,char *argv[])
 	//
 	// Read source data
 	//
-	_read(handle_src,ptr_buf,file_info.size);
+	_read(handle_src,ptr_buf,filesize);
 
 
 	//
@@ -203,7 +220,7 @@ void main(int argc,char *argv[])
 		size_header=sizeof(Header);
 
 		//adress_start=0x800;
-		int adress_end	=adress_start+file_info.size-1;
+		int adress_end	=adress_start+filesize-1;
 		//flag_auto=true;
 
 		if (flag_auto)	Header[7]=0xC7;
@@ -223,7 +240,7 @@ void main(int argc,char *argv[])
 		//
 		// Copy the file
 		//
-		_write(handle_dst,ptr_buf,file_info.size);
+		_write(handle_dst,ptr_buf,filesize);
 	}
 	else
 	{
@@ -267,12 +284,12 @@ void main(int argc,char *argv[])
 		ptr_header++;
 
 		// Recompute size (without header data)
-		file_info.size-=ptr_header-(char*)ptr_buf;
+		filesize-=ptr_header-(char*)ptr_buf;
 
 		//
 		// Copy the file
 		//
-		_write(handle_dst,ptr_header,file_info.size);
+		_write(handle_dst,ptr_header,filesize);
 	}
 
 	//
@@ -287,8 +304,8 @@ void main(int argc,char *argv[])
 	// Eventually show some information
 	//
 	if (flag_display_size)
-	{		  
-		printf("File '%s' is %d bytes long (%d bytes header and %d bytes of data)\n",filename_dst,size_header+file_info.size,size_header,file_info.size);
+	{
+		printf("File '%s' is %d bytes long (%d bytes header and %d bytes of data)\n",filename_dst,size_header+filesize,size_header,filesize);
 	}
 
 
@@ -303,7 +320,7 @@ void main(int argc,char *argv[])
 
 FF FF (ou 00 00)
 
-80 00 
+80 00
 
 B8 00 					// End adress
 B4 00 					// Start adress

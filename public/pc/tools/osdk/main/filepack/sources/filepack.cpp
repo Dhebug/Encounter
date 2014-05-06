@@ -4,20 +4,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <limits.h>
+#define _MAX_PATH PATH_MAX
+#define _MAX_DRIVE 255
+#define _MAX_DIR   255
+#define _MAX_FNAME 255
+#define _MAX_EXT   255
+#endif
 #include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <STDLIB.H>
+#include <stdlib.h>
 
 #include "infos.h"
 
 #include "common.h"
 
 
-long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
-void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
-long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp);
+static void _splitpath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension);
+extern long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
+extern void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
+extern long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp);
 
 extern unsigned char gLZ77_XorMask;
 
@@ -26,7 +36,7 @@ extern unsigned char gLZ77_XorMask;
 
 
 
-void main(int argc,char *argv[]) 
+int main(int argc,char *argv[])
 {
 	//
 	// Some initialization for the common library
@@ -72,13 +82,13 @@ void main(int argc,char *argv[])
 		{
 			flag_pack=false;
 		}
-		else 
+		else
 		if (cArgumentParser.IsSwitch("-p"))	// Pack data
 		{
 			flag_pack=true;
 			headerType=cArgumentParser.GetIntegerValue(1);
 		}
-		else 
+		else
 		if (cArgumentParser.IsSwitch("-m"))	// Pack data
 		{
 			if (cArgumentParser.GetBooleanValue(true))
@@ -187,7 +197,7 @@ void main(int argc,char *argv[])
 				ptr_buffer_dst[4]=(size_buffer_src&255);
 				ptr_buffer_dst[5]=(size_buffer_src>>8)&255;
 
-				ptr_buffer_dst[6]=(size_buffer_dst&255);   
+				ptr_buffer_dst[6]=(size_buffer_dst&255);
 				ptr_buffer_dst[7]=(size_buffer_dst>>8)&255;
 
 				size_buffer_dst+=8;
@@ -205,7 +215,7 @@ void main(int argc,char *argv[])
 				ptr_buffer_dst[6]=(size_buffer_src>>16)&255;
 				ptr_buffer_dst[7]=(size_buffer_src>>24)&255;
 
-				ptr_buffer_dst[8]=(size_buffer_dst&255);   
+				ptr_buffer_dst[8]=(size_buffer_dst&255);
 				ptr_buffer_dst[9]=(size_buffer_dst>>8)&255;
 				ptr_buffer_dst[10]=(size_buffer_dst>>16)&255;
 				ptr_buffer_dst[11]=(size_buffer_dst>>24)&255;
@@ -225,7 +235,7 @@ void main(int argc,char *argv[])
 			fprintf(dest_file,"#define run_adress $%x 	; Come from original TAP executable \r\n",0x600);
 			fprintf(dest_file,"#define unpacked_size $%x 	; Come from original TAP executable \r\n",size_buffer_src);
 
-			fclose(dest_file);			
+			fclose(dest_file);
 		}
 	}
 	else
@@ -306,6 +316,66 @@ void main(int argc,char *argv[])
 	//
 	delete[] ptr_buffer;
 	delete[] ptr_buffer_dst;
+}
+
+
+// From https://groups.google.com/forum/#!topic/gnu.gcc.help/0dKxhmV4voE
+void _splitpath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension)
+{
+  char* CopyOfPath = (char*) Path;
+  int Counter = 0;
+  int Last = 0;
+  int Rest = 0;
+
+  // no drives available in linux .
+  // extensions are not common in linux
+  // but considered anyway
+  Drive = NULL;
+
+  while(*CopyOfPath != '\0')
+    {
+      // search for the last slash
+      while(*CopyOfPath != '/' && *CopyOfPath != '\0')
+        {
+          CopyOfPath++;
+          Counter++;
+        }
+      if(*CopyOfPath == '/')
+        {
+          CopyOfPath++;
+         Counter++;
+          Last = Counter;
+        }
+      else
+          Rest = Counter - Last;
+    }
+  // directory is the first part of the path until the
+  // last slash appears
+  strncpy(Directory,Path,Last);
+  // strncpy doesnt add a '\0'
+  Directory[Last] = '\0';
+  // Filename is the part behind the last slahs
+  strcpy(Filename,CopyOfPath -= Rest);
+  // get extension if there is any
+  while(*Filename != '\0')
+  {
+    // the part behind the point is called extension in windows systems
+    // at least that is what i thought apperantly the '.' is used as part
+    // of the extension too .
+    if(*Filename == '.')
+      {
+        while(*Filename != '\0')
+        {
+          *Extension = *Filename;
+          Extension++;
+          Filename++;
+ }
+      }
+      if(*Filename != '\0')
+        {Filename++;}
+  }
+  *Extension = '\0';
+  return;
 }
 
 

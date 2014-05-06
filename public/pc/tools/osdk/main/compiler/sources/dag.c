@@ -172,7 +172,7 @@ void gencode(caller, callee) Symbol caller[], callee[]; {
 		switch (cp->kind) {
 		case Start: case Asm: case Switch:
 			break;
-		case Defpoint: 
+		case Defpoint:
 			src = cp->u.point.src;
 			break;
 		case Blockbeg: {
@@ -220,7 +220,7 @@ static int haskid(p, t) Node p, t; {
 	else if (p == t)
 		return 1;
 	else
-		return haskid(p, t->kids[0]) || haskid(p, t->kids[1]); 
+		return haskid(p, t->kids[0]) || haskid(p, t->kids[1]);
 }
 
 /* labelnode - list and return a LABEL node for label lab */
@@ -292,28 +292,28 @@ Node listnodes(tp, tlab, flab) Tree tp; {
 		trash(0);
 		listnodes(tp->kids[0], 0, flab = genlabel(2));
 		trash(0);
-		if (q = tp->kids[1]) 
+		if (q = tp->kids[1])
 		{
 			assert(q->op == RIGHT);
 			listnodes(q->kids[0], 0, 0);
-			if (islabel(nodelist)) 
+			if (islabel(nodelist))
 			{
 				equatelab(nodelist->syms[0], findlabel(flab + 1));
 				remove_node(nodelist);
 			}
 			trash(0);
 		}
-		if (q && q->kids[1]) 
+		if (q && q->kids[1])
 		{
 			list(jump(flab + 1));
 			labelnode(flab);
 			listnodes(q->kids[1], 0, 0);
-			if (islabel(nodelist)) 
+			if (islabel(nodelist))
 			{
 				equatelab(nodelist->syms[0], findlabel(flab + 1));
 				remove_node(nodelist);
 			}
-		} 
+		}
 		else
 			labelnode(flab);
 		p = labelnode(flab + 1);
@@ -630,9 +630,9 @@ static void printnode(p, fd, lev) Node p; {
 }
 
 /* remove_node - remove node p from the node list */
-static void remove_node(p) Node p; 
+static void remove_node(p) Node p;
 {
-	if (nodelist) 
+	if (nodelist)
 	{
 		Node q = nodelist;
 		for ( ; q->link != p && q->link != nodelist; q = q->link)
@@ -719,7 +719,7 @@ static Node undag(nodelist) Node nodelist; {
 			 * re-insert p into the node list
 			 * immediately before its predecessor;
 			 * this places the CALL node before the ASGN node.
-			 */ 
+			 */
 			for (q = &head; q && q->link != pred; q = q->link)
 				;
 			assert(q);
@@ -768,7 +768,7 @@ static Node undag1(p, root) Node p, root; {
 	} else if (generic(p->op) == INDIR
 	&& (p->kids[0]->op == ADDRL+P || p->kids[0]->op == ADDRF+P)
 	&& p->kids[0]->syms[0]->sclass == REGISTER && p != root) {
-		p = newnode(p->op, 
+		p = newnode(p->op,
 			newnode(p->kids[0]->op, 0, 0, p->kids[0]->syms[0]), 0, 0);
 		p->count = 1;
 	} else if (p->op == INDIR+B) {

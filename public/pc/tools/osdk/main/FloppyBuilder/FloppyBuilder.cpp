@@ -11,7 +11,7 @@
 #include "Floppy.h"
 
 
-// while (std::getline(iss,item,' ')) 
+// while (std::getline(iss,item,' '))
 bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNumber)
 {
   returnedToken.clear();
@@ -46,7 +46,7 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
       match =']';
     }
 
-    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )      
+    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )
     {
       returnedToken.push_back(car);
       ++currentPosition;
@@ -83,7 +83,7 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
   return false;
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   //
   // Some initialization for the common library
@@ -108,7 +108,7 @@ void main(int argc, char *argv[])
 
   // makedisk filetobuild.txt default.dsk ..\build\%OSDKDISK%
 
-  long param=1;									   
+  long param=1;
 
   if (argc>1)
   {
@@ -178,7 +178,7 @@ void main(int argc, char *argv[])
     std::map<std::string,std::string>   metadata;
     std::string item;
     std::vector<std::string> tokens;
-    //while (std::getline(iss,item,' ')) 
+    //while (std::getline(iss,item,' '))
     while (GetNextToken(item,currentLine,lineNumber))
     {
       // Remove eventual superfluous spaces and tabs

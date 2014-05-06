@@ -41,7 +41,11 @@ int __cdecl main(int argc,char *argv[])
     "PictConv",
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
+    #ifdef _WIN32
     "{ApplicationName} - Version {ApplicationVersion} - ("__DATE__" / "__TIME__") - This program is a part of the OSDK\r\n"
+    #else
+    "{ApplicationName} - Version {ApplicationVersion} - (Missing Date) - This program is a part of the OSDK\r\n"
+    #endif
     "\r\n"
     "Author:\r\n"
     "  (c) 2002-2013 Pointier Mickael \r\n"
@@ -131,7 +135,7 @@ int __cdecl main(int argc,char *argv[])
   textFileGenerator.SetEndianness(TextFileGenerator::_eEndianness_Little);	// Little endian
 
   int switchMachine=0;		// Default 0=oric
-  int switchFormat=0;		
+  int switchFormat=0;
   int switchDither=0;
   int switchPalette=0;		// Default 0=automatically generate the palette
   int switchBlock=0;		// Default 0=no block mode (full picture)
@@ -274,7 +278,7 @@ int __cdecl main(int argc,char *argv[])
       flagVerbosity=argumentParser.GetBooleanValue(true);
     }
   }
-  
+
   if (argumentParser.GetParameterCount()!=NB_ARG)
   {
     ShowError(0);
