@@ -92,7 +92,11 @@ int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 
 static const char *copyright=
 {
+#ifdef _WIN32
 	"Cross-Assembler 65xx V2.2.3 ("__TIME__" / "__DATE__") \r\n"
+#else
+	"Cross-Assembler 65xx V2.2.3 (No date available) \r\n"
+#endif
 	"(c) 1989-98 by A.Fachat\r\n"
 	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
 	"Oric C adaptation and debugging by Mickael Pointier\r\n"

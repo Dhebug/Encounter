@@ -24,6 +24,9 @@
 #include "common.h"
 
 #include "image.h"
+#ifndef _WIN32
+#define _int64 int64_t
+#endif
 
 void dither_riemersma_monochrom(ImageContainer& image,int width,int height);
 

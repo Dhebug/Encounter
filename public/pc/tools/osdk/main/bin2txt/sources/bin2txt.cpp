@@ -23,7 +23,9 @@ First version Mick: Fri  13/09/96  16:16:14
 #include <stdarg.h>
 #include <ctype.h>
 #include <fcntl.h>
+#ifdef _WIN32
 #include <io.h>
+#endif
 #include <string.h>
 
 #include "infos.h"
@@ -60,12 +62,12 @@ int main(int argc,char *argv[])
 		"USAGE:\r\n"
 		"{ApplicationName} -s<number> -f<number> <binary file> <txt file> <label name>\r\n"
 		"  [options]:\r\n"
-		"  ®-s[1|2|4]	    For BYTE,WORD,LONG format.\r\n"
-		"  ®-e[1|2]			Define endianness: 1 for little endian, 2 for big endian\r\n"
-		"  ®-f[1|2|3]		For C, ASM, BASIC.\r\n"
-		"  ®-h[1|2]			1 for hexadecimal, 2 for decimal\r\n"
-		"  ®-l[b:s]			Defines line values for BASIC (-l10:10)\r\n"
-		"  ®-n[16|32|..]	Defines the number of entries per line.\r\n"
+		"  -s[1|2|4]	    For BYTE,WORD,LONG format.\r\n"
+		"  -e[1|2]			Define endianness: 1 for little endian, 2 for big endian\r\n"
+		"  -f[1|2|3]		For C, ASM, BASIC.\r\n"
+		"  -h[1|2]			1 for hexadecimal, 2 for decimal\r\n"
+		"  -l[b:s]			Defines line values for BASIC (-l10:10)\r\n"
+		"  -n[16|32|..]	Defines the number of entries per line.\r\n"
 		);
 
 

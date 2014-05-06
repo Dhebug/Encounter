@@ -9,8 +9,8 @@ ifeq ($(PLATFORM),win32)
 CPPFLAGS += -I libs
 LDFLAGS += -L libs -lFreeImage
 else
-CPPFLAGS += -I $(FI_PATH)/Dist
-LDFLAGS += -L $(FI_PATH)/Dist -lfreeimage
+CPPFLAGS += -I $(FI_PATH)/ -I../../../../shared_libraries/freeimage/v3.12.0/Source/
+LDFLAGS += -L $(FI_PATH)/ -lfreeimage -lm
 endif
 
 LDFLAGS += -lstdc++

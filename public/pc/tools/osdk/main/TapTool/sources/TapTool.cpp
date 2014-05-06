@@ -18,7 +18,7 @@ int file_size;
 unsigned char header[9];
 char Mem[48*1024],name[18];
 
-struct RiffSample 
+struct RiffSample
 {
 RiffSample()
 {
@@ -71,7 +71,7 @@ public:
 	int datalength;
 };
 
-#define Make4CC(a,b,c,d)    
+#define Make4CC(a,b,c,d)
 
 RiffSample sample_riff;
 
@@ -231,9 +231,9 @@ void ask_name(char *name)
 {
   char reply[80];
   do {
-    if (name[0]) 
+    if (name[0])
       printf("Stored name is %s, enter new name (or RETURN to keep): ",name);
-    else 
+    else
       printf("Program has no stored name, enter a name: ");
     gets(reply);
     if (reply[0]) strcpy(name,reply);
@@ -247,7 +247,7 @@ int main(int argc,char *argv[])
   int start,end;
   int firstprog=TRUE;
   int i;
-  
+
   open_files(argc,argv);
 
   while (!feof(in)) {

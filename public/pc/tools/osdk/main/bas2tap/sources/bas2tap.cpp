@@ -5,7 +5,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#ifdef _WIN32
 #include <conio.h>
+#else
+#define memicmp strncasecmp
+#endif
 #include <string.h>
 
 //
@@ -14,8 +18,8 @@
 // - Option to optimize the programs (truncate variables to two characters, remove comments)
 //
 
-char *keywords[]= 
-{ 
+char *keywords[]=
+{
   "END","EDIT","STORE","RECALL","TRON","TROFF","POP","PLOT",
   "PULL","LORES","DOKE","REPEAT","UNTIL","FOR","LLIST","LPRINT","NEXT","DATA",
   "INPUT","DIM","CLS","READ","LET","GOTO","RUN","IF","RESTORE","GOSUB","RETURN",
@@ -38,26 +42,26 @@ void Tap2Bas(unsigned char *ptr_buffer,size_t file_size)
 {
   unsigned int i, car;
 
-  if (ptr_buffer[0]!=0x16 || ptr_buffer[3]!=0x24) 
-  { 
+  if (ptr_buffer[0]!=0x16 || ptr_buffer[3]!=0x24)
+  {
     ShowError("Not an Oric file");
   }
-  if (ptr_buffer[6]) 
-  { 
-    ShowError("Not a BASIC file"); 
+  if (ptr_buffer[6])
+  {
+    ShowError("Not a BASIC file");
   }
-  i=13; 
+  i=13;
   while (ptr_buffer[i++]);
-  while (ptr_buffer[i] || ptr_buffer[i+1]) 
+  while (ptr_buffer[i] || ptr_buffer[i+1])
   {
     i+=2;
     printf(" %u ",ptr_buffer[i]+(ptr_buffer[i+1]<<8));
     i+=2;
-    while (car=ptr_buffer[i++]) 
+    while (car=ptr_buffer[i++])
     {
-      if (car<128) 
+      if (car<128)
         putchar(car);
-      else 
+      else
         printf("%s",keywords[car-128]);
     }
     putchar('\n');
@@ -87,7 +91,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   unsigned int end, lastptr, adr;
   int j,ptr,keyw,string,rem,data;
 
-  // Mike: Need to improve the parsing of this with a global function to split 
+  // Mike: Need to improve the parsing of this with a global function to split
   // a text file in separate lines.
   std::vector<std::string> textData;
   if (!LoadText(sourceFile,textData))
@@ -128,29 +132,29 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
       else
       {
         // Standard line
-        buf[i++]=0; 
+        buf[i++]=0;
         buf[i++]=0;
 
         int number=get_value(ligne,-1);
-        if (number<0) 
+        if (number<0)
         {
           // Mike: Need to add better diagnostic here
           ShowError("Missing line number in file %s line %d",currentFile.c_str(),currentLineNumber);
           break;
         }
-        buf[i++]=number&0xFF; 
+        buf[i++]=number&0xFF;
         buf[i++]=number>>8;
 
-        ptr=0; 
+        ptr=0;
         rem=0;
         bool color=useColor;
-        string=0; 
+        string=0;
         data=0;
         if (ligne[ptr]==' ') ptr++;
 
-        while (ligne[ptr]) 
+        while (ligne[ptr])
         {
-          if (rem) 
+          if (rem)
           {
             if (color)
             {
@@ -159,32 +163,32 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
               buf[i++]='B';	// GREEN labels
             }
             buf[i++]=ligne[ptr++];
-          } 
-          else 
-          if (string) 
+          }
+          else
+          if (string)
           {
             if (ligne[ptr]=='"') string=0;
             buf[i++]=ligne[ptr++];
-          } 
-          else 
-          if (data) 
+          }
+          else
+          if (data)
           {
             if (ligne[ptr]==':') data=0;
             buf[i++]=ligne[ptr++];
-          } 
-          else 
+          }
+          else
           {
             const char* pLine=(ligne+ptr);
             keyw=search_keyword(pLine);
             if (keyw==29 || ligne[ptr]=='\'') rem=1;
             if (keyw==17) data=1;
             if (ligne[ptr]=='"') string=1;
-            if (keyw>=0) 
+            if (keyw>=0)
             {
-              buf[i++]=keyw+128; 
+              buf[i++]=keyw+128;
               ptr+=strlen(keywords[keyw]);
-            } 
-            else 
+            }
+            else
             {
               buf[i++]=ligne[ptr++];
             }
@@ -200,7 +204,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
 
   //following line modified by Wilfrid AVRILLON (Waskol) 06/20/2009
   //It should follow this rule of computation : End_Address=Start_Address+File_Size-1
-  //Let's assume a 1 byte program, it starts at address #501 and ends at address #501 (Address=Address+1-1) ! 
+  //Let's assume a 1 byte program, it starts at address #501 and ends at address #501 (Address=Address+1-1) !
   //It was a blocking issue for various utilities (tap2wav for instance)
   //end=0x501+i-1;	        //end=0x501+i;
   end=0x501+i;
@@ -213,10 +217,10 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
 
   for(j=4,lastptr=0;j<i;j++)
   {
-    if (buf[j]==0) 
+    if (buf[j]==0)
     {
-      adr=0x501+j+1; 
-      buf[lastptr]=adr&0xFF; 
+      adr=0x501+j+1;
+      buf[lastptr]=adr&0xFF;
       buf[lastptr+1]=adr>>8;
       lastptr=j+1;
       j+=4;
@@ -227,13 +231,13 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   // Save file
   //
   FILE *out=fopen(destFile,"wb");
-  if (out==NULL) 
-  { 
-    printf("Can't open file for writing\n"); 
-    exit(1); 
+  if (out==NULL)
+  {
+    printf("Can't open file for writing\n");
+    exit(1);
   }
   fwrite(head,1,14,out);
-  fwrite(buf,1,i+1,out); 
+  fwrite(buf,1,i+1,out);
   fclose(out);
 }
 
@@ -242,7 +246,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
 
 #define NB_ARG	2
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   //
   // Some initialization for the common library
@@ -261,10 +265,10 @@ void main(int argc, char **argv)
     "  encoded TAPE file that can be loaded using the CLOAD command.\r\n"
     "  (and the opposite operation as well).\r\n"
     "\r\n"
-    "Parameters:\r\n" 
+    "Parameters:\r\n"
     "  <options> <sourcefile> <destinationfile>\r\n"
     "\r\n"
-    "Options:\r\n" 
+    "Options:\r\n"
     "  -b2t[0|1] for converting to tape format with autorun (1) or not (0)\r\n"
     "  -t2b for converting from tape format text\r\n"
     "  -color[0|1] for enabling colored comments"
@@ -275,7 +279,7 @@ void main(int argc, char **argv)
     );
 
   bool basicToTape=true;
-  bool autoRun=true;	
+  bool autoRun=true;
   bool useColor=false;
 
   ArgumentParser argumentParser(argc,argv);
@@ -287,14 +291,14 @@ void main(int argc, char **argv)
       // Tape to BASIC source code
       basicToTape=false;
     }
-    else 
+    else
     if (argumentParser.IsSwitch("-b2t"))
     {
       // BASIC source code to tape
       basicToTape=true;
       autoRun=argumentParser.GetBooleanValue(true);
     }
-    else 
+    else
     if (argumentParser.IsSwitch("-color"))
     {
       // Handling of color codes

@@ -1,4 +1,5 @@
 /* C compiler: definitions */
+#include <unistd.h>
 
 /* default sizes */
 #define MAXLINE   512		/* maximum output line length */
@@ -38,7 +39,7 @@ typedef struct tree *Tree;	/* tree nodes */
 typedef struct field *Field;	/* struct/union fields */
 typedef struct swtch *Swtch;	/* switch data */
 
-typedef union value 
+typedef union value
 {	/* constant values: */
 	char sc;		/* signed */
 	short ss;		/* signed */
@@ -209,13 +210,14 @@ dclproto(extern double strtod,(char *, char **));
 
 
 /* C library */
+#ifndef _POSIX_VERSION
 int atoi(char *);
 int close(int);
 int creat(char *, int);
 void exit(int);
 Generic malloc(unsigned);
-int open(char *, int);
 int read(int, char *, int);
+int open(char *, int);
 long strtol(char *, char **, int);
 int sprintf(char *, const char *, ...);
 char *strchr(const char *, int);
@@ -224,6 +226,9 @@ unsigned strlen(const char *);
 //char *strncmp(const char *, const char *, unsigned);
 //char *strncpy(char *, const char *, unsigned);
 int write(int, char *, int);
+#else
+#define _strdup strdup
+#endif
 
 
 struct node {		/* dag nodes: */
@@ -462,7 +467,7 @@ extern int ncalled;
 extern int npoints;
 void traceinit(char *);
 
-typedef struct 
+typedef struct
 {
 	List entry;
 	List exit;

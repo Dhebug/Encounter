@@ -72,7 +72,7 @@ int main(int argc,char *argv[])
             {
                 if(!readbits(1,f))  /*  Unchanged register  */
                 {
-                    
+
                     data[i][n+index]=current[i];
                     index++;
                 }
@@ -128,7 +128,7 @@ unsigned readbits(int bits,FILE *f)
     unsigned    n,data=0;
 
     /* Go through the bits and read a whole byte if needed */
-    for(n=0;n<bits;n++) 
+    for(n=0;n<bits;n++)
     {
         data<<=1;
         if(++off==8)
@@ -136,7 +136,7 @@ unsigned readbits(int bits,FILE *f)
             byte=fgetc(f);
             off=0;
         }
-        
+
         if(byte&(0x80>>off))
             data++;
     }

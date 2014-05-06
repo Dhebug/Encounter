@@ -47,8 +47,8 @@
 
 #define isjmp  0x0001 /* set, if command may cause a jump */
 #define fixed  0x0002 /* set, if command should NOT be removed NOR moved */
-#define dupl   0x0004 /* if command makes sense if repeated 
-                              eg. "sta xx, sta xx" doesn't make sense but 
+#define dupl   0x0004 /* if command makes sense if repeated
+                              eg. "sta xx, sta xx" doesn't make sense but
                                   "inc xx, inc xx" makes sense           */
 #define isinit 0x0008 /* set, if commad initializes some flags or reg_y  */
 
@@ -212,7 +212,7 @@ typedef struct {
   int   mod;    /* command modifies ...           */
   int   depind; /* indirect depentencies          */
   int   flags;  /* special command-flags          */
-  int   feeds;  /* command is used to calculate.. */ 
+  int   feeds;  /* command is used to calculate.. */
   int   passes; /* things that are unchanged and used later */
   int   par;    /* command parameter              */
   int   mpar;   /* memory-address of dep or mod   */
@@ -246,7 +246,7 @@ static int  mpar_pos[par_max];
 
 static int  mpar_flag[par_max];
 #define undefd 0x0100
- 
+
 static int  blk_mod;
 
 static int  com_match_lnum;
@@ -290,7 +290,7 @@ int readline(char *buf, FILE *infile)
   if (x==0 && buf[x]==EOF) return EOF;
   buf[x]='\0';
   return 0;
-}    
+}
 
 void clear_buf()
 {
@@ -336,7 +336,7 @@ void lineout(line *p)
   printf(" passes:");
    mapout(p->passes);
   printf(" fl:%2i",p->flags);
-  if (p->par!=no_par) { 
+  if (p->par!=no_par) {
     printf(" \"%s\"  [%i",&parbuf[par_pos[p->par]],p->par);
     if (p->depind & mem) {
       printf("/%i",p->mpar);
@@ -383,7 +383,7 @@ int get_parid( char *par, int length)
     y=0;
     if (parbuf[par_pos[x]+length]!='\0') {
       x++;
-      continue; }    
+      continue; }
     while (y<length) {
       if (parbuf[par_pos[x]+y]!=par[y]) {
         y=0;
@@ -404,7 +404,7 @@ int get_parid( char *par, int length)
     printf(", added to database par[%i]\n",par_num);
 #   endif
     y=0;
-    while (y<length) { 
+    while (y<length) {
       parbuf[par_used+y]=par[y];
       y++; }
     parbuf[par_used+y]='\0';
@@ -427,7 +427,7 @@ int get_mparid( char *mpar, int length )
     y=0;
     if (mparbuf[mpar_pos[x]+length]!='\0') {
       x++;
-      continue; }    
+      continue; }
     while (y<length) {
       if (mparbuf[mpar_pos[x]+y]!=mpar[y]) {
         y=0;
@@ -435,7 +435,7 @@ int get_mparid( char *mpar, int length )
       y++; }
     if (y!=0) break;
     x++; }
-    
+
 # ifdef debug_parse
   if (y!=0) printf("existing mpar[%i]",x);
 # endif
@@ -449,7 +449,7 @@ int get_mparid( char *mpar, int length )
 #   endif
 
     y=0;
-    while (y<length) { 
+    while (y<length) {
       mparbuf[mpar_used+y]=mpar[y];
       y++; }
     mparbuf[mpar_used+y]='\0';
@@ -463,7 +463,7 @@ int get_mparid( char *mpar, int length )
   printf(":%s\n",&mparbuf[mpar_pos[x]]);
 # endif
 
-  return x; 
+  return x;
 }
 
 /*********************************************************************/
@@ -560,8 +560,8 @@ char *getterm(char *a, unsigned int *par)
     if (a==NULL) return NULL;
     a=&a[nextchar(a,0)];
     if (*a!=')') return NULL;
-    return &a[1]; } 
-  else 
+    return &a[1]; }
+  else
     return getval(a, par);
 }
 
@@ -616,10 +616,10 @@ int resolve_abs(char *a)
 # ifdef debug_parse
   printf("try to resolve \"%s\", ",a);
 # endif
-   
+
   if (getexpr(a, &tmp)==NULL) { dbmsg("sorry\n"); return undefd; }
   if (tmp>0xff) { dbmsg("sorry >255\n"); return undefd; }
-  else { 
+  else {
 #   ifdef debug_parse
     printf("value is %i\n",tmp);
 #   endif
@@ -677,7 +677,7 @@ int parse_line(char *a, line *p)
 
   i=nextchar(a,i+3);
   if ( a[i]=='\0' || a[i]==';' ) return 0;
- 
+
   /* hey, there seem to be a parameter */
   /* let's remove comments and white spaces */
 
@@ -696,27 +696,27 @@ int parse_line(char *a, line *p)
   /* now i points to start and j is length of parameter-string */
 
   p->par=x=get_parid(&a[i],j);
-  
+
   if (j==1 && (a[i]=='a'||a[i]=='A') ) return 0; /* Akku addressed */
   if (a[i]=='#') { /* immediate */
-    if ( (p->mpar=resolve_abs(&parbuf[par_pos[x]+1]))!=undefd ) 
+    if ( (p->mpar=resolve_abs(&parbuf[par_pos[x]+1]))!=undefd )
       p->depind|=absolute; /* resolved */
     return 0; }
 
-  if ( a[i]=='(' ) { 
+  if ( a[i]=='(' ) {
     i++;
-    while ( a[i]==' ' || a[i]=='\t' ) i++; 
+    while ( a[i]==' ' || a[i]=='\t' ) i++;
     p->depind=p->depind|imem; /* indirect-flag */ }
 
   p->depind=p->depind|mem;
 
   j=i;
-  while ( a[j]!='\0' && a[j]!=';' && a[j]!=',' && a[j]!=')' 
+  while ( a[j]!='\0' && a[j]!=';' && a[j]!=',' && a[j]!=')'
                      && a[j]!=' ' && a[j]!='\t' ) j++;
   j=j-i;
 
   /* now "i" exactly points to start of mem-address, j is length */
-  
+
   x=get_mparid( &a[i], j );
   p->mpar=x;
 
@@ -729,8 +729,8 @@ int parse_line(char *a, line *p)
 
   i=i+j;
 
-  /* scan for ",x" and ",y" idexes */  
-    
+  /* scan for ",x" and ",y" idexes */
+
   x=0;
   while (1) {
     if (a[i]=='\0'||a[i]==';') break;
@@ -768,7 +768,7 @@ void line_copy(line *to, line *from)
 }
 
 #define iline_copy(par1,par2)  line_copy(&blkbuf[par1],&blkbuf[par2])
-  
+
 /*********************************************************************/
 
 void make_feedlist()
@@ -791,7 +791,7 @@ void make_feedlist()
     p->passes=hlp & ~p->mod;
     hlp=(hlp & ( ~p->mod )) | p->dep & valid_map;
 
-    if (p->depind & mem) { 
+    if (p->depind & mem) {
 
       if (p->depind & imem) {
 
@@ -801,12 +801,12 @@ void make_feedlist()
         if (p->mod & mem) p->feeds|=mem;
 
         /* dep: ptr,ptr+1 */
- 
+
         mpar_flag[p->mpar]=1;
         mpar_flag[p->mparhi]=1; }
 
       else if (p->depind & (reg_x|reg_y) ) {
-      
+
         /* indexed addressmode (,x or ,y) */
         /* don't know the exact address, so always set feed-flag */
 
@@ -817,7 +817,7 @@ void make_feedlist()
         mpar_flag[p->mpar]=1; }
 
       else
-  
+
         /* normal addressed memory (direct) */
 
         if ( mpar_flag[p->mpar] ) {
@@ -836,7 +836,7 @@ void make_feedlist()
 
 int simple_erase()
 {
-  /* erase all commands, that don't feed a register/flag nor change memory 
+  /* erase all commands, that don't feed a register/flag nor change memory
      nor are fixed */
 
   int i,j;
@@ -863,7 +863,7 @@ int simple_erase()
 void set_absval(line *p, int val)
 {
   static char par[5];
-  
+
   sprintf(par,"#%i",val);
 
   p->par=get_parid(par, strlen(par));
@@ -896,37 +896,37 @@ int opti1()
 
       switch (p->tok) {
 
-	    case as_lda: { 
+	    case as_lda: {
           if (rega==val && val!=undefd && (p->feeds&reg_sr)==0) {
 #           ifdef debug_opti1
             printf("*** %i redundant lda#\n",i);
 #           endif
             done=2; }
           else done=1;
-          rega=val; 
-          break; } 
+          rega=val;
+          break; }
 
-        case as_ldx: { 
+        case as_ldx: {
           if (regx==val && val!=undefd && (p->feeds&reg_sr)==0) {
 #           ifdef debug_opti1
             printf("*** %i redundant ldx#\n",i);
 #           endif
             done=2; }
           else done=1;
-          regx=val; 
+          regx=val;
           break; }
 
-        case as_ldy: { 
+        case as_ldy: {
           if (regy==val && val!=undefd && (p->feeds&reg_sr)==0) {
 #           ifdef debug_opti1
             printf("*** %i redundant ldy#\n",i);
 #           endif
             done=2; }
-          else done=1; 
-          regy=val; 
+          else done=1;
+          regy=val;
           break; }
 
-        case as_and: { 
+        case as_and: {
           if ( (val!=undefd && rega!=undefd) || val==0 || rega==0 ) {
             rega&=val;
 #           ifdef debug_opti1
@@ -947,7 +947,7 @@ int opti1()
             rega=undefd; }
           break; }
 
-        case as_ora: { 
+        case as_ora: {
           if ( (val!=undefd && rega!=undefd) || val==0xff || rega==0xff ) {
             rega|=val;
 #           ifdef debug_opti1
@@ -968,7 +968,7 @@ int opti1()
             rega=undefd; }
           break; }
 
-        case as_eor: { 
+        case as_eor: {
           if ( val!=undefd && rega!=undefd ) {
             rega^=val;
 #           ifdef debug_opti1
@@ -996,41 +996,41 @@ int opti1()
 
       switch (p->tok) {
 
-	    case as_sta: { 
+	    case as_sta: {
           if (*par==rega && rega!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i redundant sta\n",i);
 #           endif
             done=2; }
           else done=1;
-          *par=rega; 
+          *par=rega;
           break; }
 
-	    case as_stx: { 
+	    case as_stx: {
           if (*par==regx && regx!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i redundant stx\n",i);
 #           endif
             done=2; }
           else done=1;
-          *par=regx; 
+          *par=regx;
           break; }
 
-	    case as_sty: { 
+	    case as_sty: {
           if (*par==regy && regy!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i redundant sty\n",i);
 #           endif
             done=2; }
           else done=1;
-          *par=regy; 
+          *par=regy;
           break; }
 
         case as_inc: { if (*par!=undefd) *par=0xff&(*par+1); done=1; break; }
 
         case as_dec: { if (*par!=undefd) *par=0xff&(*par-1); done=1; break; }
 
-        case as_and: { 
+        case as_and: {
           if ( (*par!=undefd && rega!=undefd) || *par==0 || rega==0 ) {
             rega&=*par;
 #           ifdef debug_opti1
@@ -1048,7 +1048,7 @@ int opti1()
               printf("*** %i redundant and\n",i);
 #             endif
               done=2; }
-            else 
+            else
               if ( *par!=undefd ) {
 #               ifdef debug_opti1
                 printf("*** %i known par #%i of and\n",i,*par);
@@ -1060,7 +1060,7 @@ int opti1()
             rega=undefd; }
           break; }
 
-        case as_ora: { 
+        case as_ora: {
           if ( (*par!=undefd && rega!=undefd) || *par==0xff || rega==0xff ) {
             rega|=*par;
 #           ifdef debug_opti1
@@ -1078,7 +1078,7 @@ int opti1()
               printf("*** %i redundant ora\n",i);
 #             endif
               done=2; }
-            else 
+            else
               if ( *par!=undefd ) {
 #               ifdef debug_opti1
                 printf("*** %i known par #%i of ora\n",i,*par);
@@ -1090,7 +1090,7 @@ int opti1()
             rega=undefd; }
           break; }
 
-        case as_eor: { 
+        case as_eor: {
           if ( *par!=undefd && rega!=undefd ) {
             rega^=*par;
 #           ifdef debug_opti1
@@ -1108,7 +1108,7 @@ int opti1()
               printf("*** %i redundant eor\n",i);
 #             endif
               done=2; }
-            else 
+            else
               if ( *par!=undefd ) {
 #               ifdef debug_opti1
                 printf("*** %i known par #%i of eor\n",i,*par);
@@ -1130,10 +1130,10 @@ int opti1()
             flag=1;
             opt++; }
           rega=*par;
-          done=1; 
+          done=1;
           break; }
 
-        case as_adc: { 
+        case as_adc: {
           if (*par!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i adc #%i\n",i,*par);
@@ -1143,10 +1143,10 @@ int opti1()
             opt++;
             flag=1; }
           rega=undefd;
-          done=1; 
+          done=1;
           break; }
 
-        case as_sbc: { 
+        case as_sbc: {
           if (*par!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i sbc #%i\n",i,*par);
@@ -1159,7 +1159,7 @@ int opti1()
           done=1;
           break; }
 
-        case as_cmp: { 
+        case as_cmp: {
           if (*par!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i cmp #%i\n",i,*par);
@@ -1168,10 +1168,10 @@ int opti1()
             set_absval(p,*par);
             opt++;
             flag=1; }
-          done=1; 
+          done=1;
           break; }
 
-        case as_cpx: { 
+        case as_cpx: {
           if (*par!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i cpx #%i\n",i,*par);
@@ -1180,10 +1180,10 @@ int opti1()
             set_absval(p,*par);
             opt++;
             flag=1; }
-          done=1; 
+          done=1;
           break; }
 
-        case as_cpy: { 
+        case as_cpy: {
           if (*par!=undefd) {
 #           ifdef debug_opti1
             printf("*** %i cpy #%i\n",i,*par);
@@ -1192,7 +1192,7 @@ int opti1()
             set_absval(p,*par);
             opt++;
             flag=1; }
-          done=1; 
+          done=1;
           break; }
 
         case as_ldx: {
@@ -1205,7 +1205,7 @@ int opti1()
             opt++;
             flag=1; }
           regx=*par;
-          done=1; 
+          done=1;
           break; }
 
         case as_ldy: {
@@ -1218,7 +1218,7 @@ int opti1()
             opt++;
             flag=1; }
           regy=*par;
-          done=1; 
+          done=1;
           break; }
 	  }
 	}
@@ -1226,7 +1226,7 @@ int opti1()
       case as_inx: { if (regx!=undefd) regx=0xff&(regx+1); done=1; break; }
       case as_iny: { if (regy!=undefd) regy=0xff&(regy+1); done=1; break; }
       case as_dex: { if (regx!=undefd) regx=0xff&(regx-1); done=1; break; }
-      case as_dey: { if (regy!=undefd) regy=0xff&(regy-1); done=1; break; } 
+      case as_dey: { if (regy!=undefd) regy=0xff&(regy-1); done=1; break; }
 	}
 
   if (i!=j) line_copy(&blkbuf[j],&blkbuf[i]);
@@ -1239,8 +1239,8 @@ int opti1()
     j++; }
   else { if (done==2) { opt++; flag=1; } else j++; }
 
-  i++; } 
-  
+  i++; }
+
   blkbuf_len=j;
   return (flag);
 }
@@ -1269,7 +1269,7 @@ int  changeable(int aa, int bb)
   if (a->mod & b->dep) { dbmsg("no\n"); return 0; }
   if (a->mod & b->mod) { dbmsg("no\n"); return 0; }
   if (a->dep & b->mod) { dbmsg("no\n"); return 0; }
-  
+
   dbmsg("yes\n");
   return 1;
 }
@@ -1340,19 +1340,19 @@ int add_dep(line *p, int hlp, int map)
 {
     hlp=((hlp & ( ~p->mod )) | p->dep) & valid_map;
 
-    if (p->depind & mem) { 
+    if (p->depind & mem) {
 
       if (p->depind & imem) {
 
         /* dep: ptr,ptr+1 */
- 
+
         mpar_flag[p->mpar]|=map;
         mpar_flag[p->mparhi]|=map;
 
         if (p->dep&mem) hlp|=imem; }
 
       else if (p->depind & (reg_x|reg_y) ) {
-      
+
         /* dep: ptr */
 
         mpar_flag[p->mpar]|=map;
@@ -1360,7 +1360,7 @@ int add_dep(line *p, int hlp, int map)
         if (p->dep&mem) hlp|=imem; }
 
       else
-  
+
         /* normal addressed memory (direct) */
 
         if ( mpar_flag[p->mpar]!=0 && (p->mod & mem)!=0 ) mpar_flag[p->mpar]&=~map;
@@ -1393,7 +1393,7 @@ int try_sim2(int i, int j)
   /* calculate A.dep, A.mod and A.feeds */
 
   x=0;
-  while (x<mpar_num) 
+  while (x<mpar_num)
   {
 	  mpar_flag[x++]=1; /* all mpar used later */
   }
@@ -1401,35 +1401,35 @@ int try_sim2(int i, int j)
   rest_dep=blk_mod|imem;
 
   x=blkbuf_len-1;
-  while (x>=j) 
+  while (x>=j)
   {
 	  rest_dep=add_dep(&blkbuf[x--],rest_dep,1);
   }
 
   A_dep=0;
-  while (x>i) 
+  while (x>i)
   {
 	  A_dep=add_dep(&blkbuf[x--],A_dep,4);
   }
 
   A_mod=0;
   x=j-1;
-  while (x>i) 
+  while (x>i)
   {
     A_mod|=blkbuf[x].mod;
-    if( (blkbuf[x].depind & mem)!=0 && (blkbuf[x].mod & mem)!=0 ) 
+    if( (blkbuf[x].depind & mem)!=0 && (blkbuf[x].mod & mem)!=0 )
 	{
       if (blkbuf[x].depind&(imem|reg_x|reg_y))
 	  {
 		  A_mod|=imem;
 	  }
-      else 
+      else
 	  {
         mpar_flag[blkbuf[x].mpar]|=8;
-        if (mpar_flag[blkbuf[x].mpar]&1) mpar_flag[blkbuf[x].mpar]|=2; 
-	  } 
+        if (mpar_flag[blkbuf[x].mpar]&1) mpar_flag[blkbuf[x].mpar]|=2;
+	  }
 	}
-    x--; 
+    x--;
   }
   A_mod&=valid_map|imem;
 
@@ -1455,33 +1455,33 @@ int try_sim2(int i, int j)
   /*  1) B_mod must not match A_dep  */
 
   j_end=j+1;
-  while (j_end<blkbuf_len) 
+  while (j_end<blkbuf_len)
   {
     if (blkbuf[j_end].mod & A_dep) break;
 
-    if( (blkbuf[j_end].depind & mem)!=0 && (blkbuf[j_end].mod & mem)!=0 ) 
+    if( (blkbuf[j_end].depind & mem)!=0 && (blkbuf[j_end].mod & mem)!=0 )
 	{
       if ((blkbuf[j_end].depind&(imem|reg_x|reg_y))!=0 && (A_dep&imem)!=0) break;
-      else 
-	  if (mpar_flag[blkbuf[j_end].mpar]&4) break; 
+      else
+	  if (mpar_flag[blkbuf[j_end].mpar]&4) break;
 	}
-    j_end++; 
+    j_end++;
   }
-    
+
 # ifdef debug_opti2
   printf("found j_end_max=%i\n",j_end);
 # endif
 
-  while (j_end>j+1) 
+  while (j_end>j+1)
   {
 
     /*  2) calculate Brest_dep, B_mod (B_feeds must not match A_mod) */
- 
+
     x=0;
-    while (x<mpar_num) 
+    while (x<mpar_num)
 	{
       mpar_flag[x]=(mpar_flag[x]&15)|16; /* all mpar used later */
-      x++; 
+      x++;
 	}
 
     Brest_dep=blk_mod|imem;
@@ -1491,58 +1491,58 @@ int try_sim2(int i, int j)
 
     B_mod=0; y=0; /* y used as flag */
     x=j_end-1;
-    while (x>=j && y==0) 
+    while (x>=j && y==0)
 	{
       B_mod|=blkbuf[x].mod;
-      if( (blkbuf[x].depind & mem)!=0 && (blkbuf[x].mod & mem)!=0 ) 
+      if( (blkbuf[x].depind & mem)!=0 && (blkbuf[x].mod & mem)!=0 )
 	  {
         if (blkbuf[x].depind&(imem|reg_x|reg_y)) B_mod|=imem;
-        else 
+        else
 		{
-          if ( (mpar_flag[blkbuf[x].mpar]&4)!=0 )          
-		  { 
+          if ( (mpar_flag[blkbuf[x].mpar]&4)!=0 )
+		  {
 			  y=1;
-			  continue; 
+			  continue;
 		  } /* B_mod matched A_dep */
-          if ( (mpar_flag[blkbuf[x].mpar]&(16|8))==(16|8) )             
-		  { 
+          if ( (mpar_flag[blkbuf[x].mpar]&(16|8))==(16|8) )
+		  {
 			  y=1;
-			  continue; 
-		  } /* B_feeds matched A_mod */ 
-        } 
+			  continue;
+		  } /* B_feeds matched A_mod */
+        }
       }
-      x--; 
+      x--;
 	}
 
-    if (y) 
-	{ 
-		j_end--; 
-		continue; 
+    if (y)
+	{
+		j_end--;
+		continue;
 	}
 
     B_mod&=valid_map|imem;
 
 #ifdef debug
-    printf("Brest_dep = "); 
-	mapout(Brest_dep); 
+    printf("Brest_dep = ");
+	mapout(Brest_dep);
 	printf("\n");
-    printf("B_mod     = "); 
-	mapout(B_mod); 
+    printf("B_mod     = ");
+	mapout(B_mod);
 	printf("\n");
 #endif
-    
-    if (Brest_dep & B_mod & A_mod) 
-	{ 
-		j_end--; 
-		continue; 
+
+    if (Brest_dep & B_mod & A_mod)
+	{
+		j_end--;
+		continue;
 	}; /* B_feeds matches A_mod so skip */
 
     /*  1) B_mod must not match A_dep */
 
-    if (B_mod & A_dep) 
-	{ 
-		j_end--; 
-		continue; 
+    if (B_mod & A_dep)
+	{
+		j_end--;
+		continue;
 	}
 
     /*  3) A_feeds not in B_dep */
@@ -1551,18 +1551,18 @@ int try_sim2(int i, int j)
     x=j_end-1;
     while (x>=j) B_dep=add_dep(&blkbuf[x--],B_dep,32);
 
-    if (B_dep & A_feeds & (valid_map|imem)) 
-	{ 
-		j_end--; 
-		continue; 
+    if (B_dep & A_feeds & (valid_map|imem))
+	{
+		j_end--;
+		continue;
 	}
 
     x=0;
     while (x<mpar_num && (mpar_flag[x]&(2|32))!=(2|32) ) x++;
-    if (x!=mpar_num) 
-	{ 
-		j_end--; 
-		continue; 
+    if (x!=mpar_num)
+	{
+		j_end--;
+		continue;
 	}
 
     break;
@@ -1573,36 +1573,36 @@ int try_sim2(int i, int j)
   printf("j_end is %i\n\n",j_end);
 # endif
 
-  if (j_end>=blkbuf_len) 
+  if (j_end>=blkbuf_len)
   {
     dbmsg("### no need to move\n");
-    return 0; 
+    return 0;
   }
 
-  if (j_end<=j+1) 
+  if (j_end<=j+1)
   {
     dbmsg("### to small to move\n");
-    return 0; 
+    return 0;
   }
 
   x=j_end-j-1;
-  while (x>=0) 
+  while (x>=0)
   {
     iline_copy(blkbuf_len+x, j+x);
-    x--; 
+    x--;
   }
   x=j-i-2;
   y=i+(j_end-j)+1;
-  while (x>=0) 
+  while (x>=0)
   {
     iline_copy(y+x, i+1+x);
-    x--; 
+    x--;
   }
   x=j_end-j-1;
-  while (x>=0) 
+  while (x>=0)
   {
     iline_copy(i+1+x, blkbuf_len+x);
-    x--; 
+    x--;
   }
   return 1;
 
@@ -1622,26 +1622,26 @@ int opti2()
   /* first move all "cl/se ldy #,iny,dey" up as much as possible */
 
   i=0;
-  while (i<blkbuf_len) 
+  while (i<blkbuf_len)
   {
-    if (blkbuf[i].flags & isinit) 
+    if (blkbuf[i].flags & isinit)
 	{
-      if ( blkbuf[i].tok==as_ldy && (blkbuf[i].depind & mem)!=0 ) 
-	  { 
-		  i++; 
-		  continue; 
+      if ( blkbuf[i].tok==as_ldy && (blkbuf[i].depind & mem)!=0 )
+	  {
+		  i++;
+		  continue;
 	  }
       j=i-1;
-      while (j>=0 && changeable(j,j+1)) 
+      while (j>=0 && changeable(j,j+1))
 	  {
         il=&blkbuf[j+1];
         jl=&blkbuf[j--];
         line_copy(tmp,il);
         line_copy(il,jl);
-        line_copy(jl,tmp); 
+        line_copy(jl,tmp);
 	  }
 	}
-  i++; 
+  i++;
   }
 
   make_feedlist();
@@ -1730,9 +1730,9 @@ int com_match2_default(int j)
        com_match_lptr->tok==blkbuf[j].tok   && \
        com_match_lptr->par==blkbuf[j].par        ) {
     op2msg("duplicated command\n");
-    repl1(com_match_lnum,j,com_match_lnum,com_match_lptr->tok); 
+    repl1(com_match_lnum,j,com_match_lnum,com_match_lptr->tok);
     return 1; }
-  
+
   return 0;
 }
 
@@ -1741,15 +1741,15 @@ int com_match2_tax(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_txa) { 
-    op2msg("tax,txa -> tax\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_tax); 
+  if (b->tok==as_txa) {
+    op2msg("tax,txa -> tax\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_tax);
     return 1; }
 
   if (b->tok==as_stx && (b->passes & reg_x)==0) {
     if (!no_dep(com_match_lnum,j,reg_x)) return 0;
-    op2msg("tax,stx -> sta\n"); 
-    repl1(com_match_lnum,j,j,as_sta); 
+    op2msg("tax,stx -> sta\n");
+    repl1(com_match_lnum,j,j,as_sta);
     return 1; }
 
   return com_match2_default(j);
@@ -1760,15 +1760,15 @@ int com_match2_txa(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_tax) { 
-    op2msg("txa,tax -> txa\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_txa); 
+  if (b->tok==as_tax) {
+    op2msg("txa,tax -> txa\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_txa);
     return 1; }
 
   if ( b->tok==as_sta && (b->dep&(reg_x|reg_y))==0 && (b->passes & reg_a)==0 ) {
     if (!no_dep(com_match_lnum,j,reg_a)) return 0;
-    op2msg("txa,sta -> stx\n"); 
-    repl1(com_match_lnum,j,j,as_stx); 
+    op2msg("txa,sta -> stx\n");
+    repl1(com_match_lnum,j,j,as_stx);
     return 1; }
 
   return com_match2_default(j);
@@ -1779,15 +1779,15 @@ int com_match2_tay(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_tya) { 
-    op2msg("tay,tya -> tay\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_tay); 
+  if (b->tok==as_tya) {
+    op2msg("tay,tya -> tay\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_tay);
     return 1; }
 
   if (b->tok==as_sty && (b->passes & reg_y)==0) {
     if (!no_dep(com_match_lnum,j,reg_y)) return 0;
-    op2msg("tay,sty -> sta\n"); 
-    repl1(com_match_lnum,j,j,as_sta); 
+    op2msg("tay,sty -> sta\n");
+    repl1(com_match_lnum,j,j,as_sta);
     return 1; }
 
   return com_match2_default(j);
@@ -1798,15 +1798,15 @@ int com_match2_tya(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_tay) { 
-    op2msg("tya,tay -> tya\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_tya); 
+  if (b->tok==as_tay) {
+    op2msg("tya,tay -> tya\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_tya);
     return 1; }
 
   if ( b->tok==as_sta && (b->dep&(reg_x|reg_y))==0 && (b->passes & reg_a)==0 ) {
     if (!no_dep(com_match_lnum,j,reg_a)) return 0;
-    op2msg("tya,sta -> sty\n"); 
-    repl1(com_match_lnum,j,j,as_sty); 
+    op2msg("tya,sta -> sty\n");
+    repl1(com_match_lnum,j,j,as_sty);
     return 1; }
 
   return com_match2_default(j);
@@ -1815,20 +1815,20 @@ int com_match2_tya(int j)
 int com_match2_txs(int j)
 {
   if (blkbuf[j].tok==as_tsx) {
-    op2msg("txs,tsx -> txs\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_txs); 
+    op2msg("txs,tsx -> txs\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_txs);
     return 1; }
-  
+
   return com_match2_default(j);
 }
 
 int com_match2_tsx(int j)
 {
   if (blkbuf[j].tok==as_txs) {
-    op2msg("tsx,txs -> tsx\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_tsx); 
+    op2msg("tsx,txs -> tsx\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_tsx);
     return 1; }
-  
+
   return com_match2_default(j);
 }
 
@@ -1838,21 +1838,21 @@ int com_match2_lda(int j)
   b=&blkbuf[j];
 
   if ( (b->passes & reg_a)==0 && (com_match_lptr->dep&(reg_x|reg_y))==0 ) {
-    if (b->tok==as_tax) { 
+    if (b->tok==as_tax) {
       if (!no_dep(com_match_lnum,j,reg_a)) return 0;
-      op2msg("lda,tax -> ldx\n"); 
-      repl1(com_match_lnum,j,com_match_lnum,as_ldx); 
+      op2msg("lda,tax -> ldx\n");
+      repl1(com_match_lnum,j,com_match_lnum,as_ldx);
       return 1; }
     if (b->tok==as_tay) {
       if (!no_dep(com_match_lnum,j,reg_a)) return 0;
-      op2msg("lda,tay -> ldy\n"); 
-      repl1(com_match_lnum,j,com_match_lnum,as_ldy); 
+      op2msg("lda,tay -> ldy\n");
+      repl1(com_match_lnum,j,com_match_lnum,as_ldy);
       return 1; }
     }
 
-  if ( b->tok==as_sta && com_match_lptr->par==blkbuf[j].par ) { 
-    op2msg("lda,sta -> lda\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_lda); 
+  if ( b->tok==as_sta && com_match_lptr->par==blkbuf[j].par ) {
+    op2msg("lda,sta -> lda\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_lda);
     return 1; }
 
   return com_match2_default(j);
@@ -1863,15 +1863,15 @@ int com_match2_ldx(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_txa && (b->passes & reg_x)==0) { 
+  if (b->tok==as_txa && (b->passes & reg_x)==0) {
     if (!no_dep(com_match_lnum,j,reg_x)) return 0;
-    op2msg("ldx,txa -> lda\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_lda); 
+    op2msg("ldx,txa -> lda\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_lda);
     return 1; }
 
   if ( b->tok==as_stx && com_match_lptr->par==b->par ) {
-    op2msg("ldx,stx -> ldx\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_ldx); 
+    op2msg("ldx,stx -> ldx\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_ldx);
     return 1; }
 
   return com_match2_default(j);
@@ -1882,15 +1882,15 @@ int com_match2_ldy(int j)
   line *b;
   b=&blkbuf[j];
 
-  if (b->tok==as_tya && (b->passes & reg_y)==0) { 
+  if (b->tok==as_tya && (b->passes & reg_y)==0) {
     if (!no_dep(com_match_lnum,j,reg_y)) return 0;
-    op2msg("ldy,tya -> lda\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_lda); 
+    op2msg("ldy,tya -> lda\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_lda);
     return 1; }
 
   if ( b->tok==as_sty && com_match_lptr->par==b->par ) {
-    op2msg("ldy,sty -> ldy\n"); 
-    repl1(com_match_lnum,j,com_match_lnum,as_ldy); 
+    op2msg("ldy,sty -> ldy\n");
+    repl1(com_match_lnum,j,com_match_lnum,as_ldy);
     return 1; }
 
   return com_match2_default(j);
@@ -1902,17 +1902,17 @@ int com_match2_sta(int j)
   b=&blkbuf[j];
 
   if (com_match_lptr->par==b->par) {
-    if (b->tok==as_lda) { 
-      op2msg("sta,lda -> sta\n"); 
-      repl1(com_match_lnum,j,com_match_lnum,as_sta); 
+    if (b->tok==as_lda) {
+      op2msg("sta,lda -> sta\n");
+      repl1(com_match_lnum,j,com_match_lnum,as_sta);
       return 1; }
-    if (b->tok==as_ldx) { 
-      op2msg("sta,ldx -> sta,tax\n"); 
-      set_tcom(j,as_tax); 
+    if (b->tok==as_ldx) {
+      op2msg("sta,ldx -> sta,tax\n");
+      set_tcom(j,as_tax);
       return 1; }
-    if (b->tok==as_ldy) { 
-      op2msg("sta,ldy -> sta,tay\n"); 
-      set_tcom(j,as_tay); 
+    if (b->tok==as_ldy) {
+      op2msg("sta,ldy -> sta,tay\n");
+      set_tcom(j,as_tay);
       return 1; }
   }
 
@@ -1925,13 +1925,13 @@ int com_match2_stx(int j)
   b=&blkbuf[j];
 
   if (com_match_lptr->par==b->par) {
-    if (b->tok==as_ldx) { 
-      op2msg("stx,ldx -> stx\n"); 
-      repl1(com_match_lnum,j,com_match_lnum,as_stx); 
+    if (b->tok==as_ldx) {
+      op2msg("stx,ldx -> stx\n");
+      repl1(com_match_lnum,j,com_match_lnum,as_stx);
       return 1; }
-    if (b->tok==as_lda) { 
-      op2msg("stx,lda -> stx,txa\n"); 
-      set_tcom(j,as_txa); 
+    if (b->tok==as_lda) {
+      op2msg("stx,lda -> stx,txa\n");
+      set_tcom(j,as_txa);
       return 1; }
   }
 
@@ -1944,13 +1944,13 @@ int com_match2_sty(int j)
   b=&blkbuf[j];
 
   if (com_match_lptr->par==b->par) {
-    if (b->tok==as_ldy) { 
-      op2msg("sty,ldy -> sty\n"); 
-      repl1(com_match_lnum,j,com_match_lnum,as_sty); 
+    if (b->tok==as_ldy) {
+      op2msg("sty,ldy -> sty\n");
+      repl1(com_match_lnum,j,com_match_lnum,as_sty);
       return 1; }
-    if (b->tok==as_lda) { 
-      op2msg("sty,lda -> sty,tya\n"); 
-      set_tcom(j,as_tya); 
+    if (b->tok==as_lda) {
+      op2msg("sty,lda -> sty,tya\n");
+      set_tcom(j,as_tya);
       return 1; }
   }
 
@@ -2036,7 +2036,7 @@ int opti3()
 
   return 0;
 }
-     
+
 /*********************************************************************/
 
 void add_line(line *p)
@@ -2058,7 +2058,7 @@ optimize_block()
   int i;
 
   if (blkbuf_len<1) return;
-  
+
   dbmsg("<BLOCK>\n");
 
   opt=0;
@@ -2108,7 +2108,7 @@ optimize_block()
 
 /*********************************************************************/
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   char linebuf[line_len];
   line tmp;
@@ -2146,10 +2146,10 @@ main(int argc, char **argv)
           case 'c':  { wall_flag=flag_c; break; }
           case 'd':  { wall_flag=flag_d; break; }
           case 'i':  { wall_flag=flag_i; break; }
-          default :  { 
-            printf("  error: unknown flag/register \"%c\"\n",linebuf[i]); exit(1); }          
+          default :  {
+            printf("  error: unknown flag/register \"%c\"\n",linebuf[i]); exit(1); }
 		  }
-        blk_mod|=wall_flag; 
+        blk_mod|=wall_flag;
         i=nextchar(linebuf,i+1); }
 
       wall_flag=1;
@@ -2164,8 +2164,8 @@ main(int argc, char **argv)
       if ( tmp.tok==no_tok  || ret>1 || (tmp.flags & isjmp)!=0 ) { clear_buf(); puts(linebuf); }
       else { /* only print label */
         i=nextchar(linebuf,0);
-        while ( linebuf[i]!='\0' && linebuf[i]!=' ' && linebuf[i]!='\t' ) 
-          putc(linebuf[i++],stdout); 
+        while ( linebuf[i]!='\0' && linebuf[i]!=' ' && linebuf[i]!='\t' )
+          putc(linebuf[i++],stdout);
         printf("\n");
         if (tmp.tok!=null_tok) add_line(&tmp); }
       continue; }
@@ -2181,7 +2181,7 @@ main(int argc, char **argv)
       optimize_block();
       puts(linebuf);
       clear_buf(); }
-    else { if (tmp.tok==as_jsr) printf("argh!"); 
+    else { if (tmp.tok==as_jsr) printf("argh!");
            add_line(&tmp); }
   wall_flag=0;
   }
