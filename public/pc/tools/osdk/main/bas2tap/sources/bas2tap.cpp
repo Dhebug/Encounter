@@ -236,8 +236,38 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
     printf("Can't open file for writing\n");
     exit(1);
   }
-  fwrite(head,1,14,out);
+  fwrite(head,1,13,out);
+  // write the name
+  if (currentFile.length > 0) {
+	  char *fileName = strdup(currentFile.c_str());
+	  // only take the file name from the path
+	  // try to find \\  
+	  char *lastsep = strrchr(fileName, '\\');
+	  if (lastsep != NULL) {
+		  // if there is something after the separator
+		  if (lastsep + 1 != 0)
+			  fileName = lastsep + 1;
+	  }
+	  else {
+		  // try to find / 
+		  lastsep = strrchr(fileName, '/');
+		  if (lastsep != NULL) {
+			  // if there is something after the separator
+			  if (lastsep + 1 != 0)
+				  fileName = lastsep + 1;
+		  }
+	  }
+	  // remove the extension if there is one
+	  char *lastdot = strrchr(fileName, '.');
+	  if (lastdot != NULL)
+		*lastdot = 0;
+	  fwrite(fileName, 1, strlen(fileName), out);
+	  free(fileName);
+  }
+  fwrite("\x00", 1, 1, out);
   fwrite(buf,1,i+1,out);
+  // oricutron bug work around
+  //fwrite("\x00", 1, 1, out);
   fclose(out);
 }
 
@@ -272,7 +302,7 @@ int main(int argc, char **argv)
     "  -b2t[0|1] for converting to tape format with autorun (1) or not (0)\r\n"
     "  -t2b for converting from tape format text\r\n"
     "  -color[0|1] for enabling colored comments"
-    "\r\n"
+	"\r\n"
     "Exemple:\r\n"
     "  {ApplicationName} -b2t1 final.txt osdk.tap\r\n"
     "  {ApplicationName} -t2b osdk.tap program.txt\r\n"
