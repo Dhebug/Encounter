@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #define NBTRACKS 21
 #define NBSECT 17
 
@@ -169,6 +170,10 @@ void store_file(byte *buf, char *name, byte *header)
 	update_sector(desc_track,desc_sect,descriptor);
 }
 
+char generateEscapeCode(int color) {
+	return (char) 64 + color;
+}
+
 int main(int argc, char *argv[])
 {
 	byte header[9];
@@ -179,31 +184,76 @@ int main(int argc, char *argv[])
 	int tracks=21; // minimum track number
 	int total_sectors,free_sectors;
 	int tape_num,i, options=0;
+	int tape_name_index = -1;
+	int paper_color = -1;
+	int ink_color = -1;
 
 	printf("Tap2dsk V2.1\n");
 
 	if (argc<2) {
-		fprintf(stderr,"Usage: tap2dsk [-n<disk_label>] [-i<init_string>] <tape_image1> ...<tape_imageN> <old_disk_image>\n");
+		fprintf(stderr,"Usage: tap2dsk [-c<paper_color>:<ink_color>] [-n<disk_label>] [-i<init_string>] <tape_image1> ...<tape_imageN> <old_disk_image>\n");
 		exit(1);
 	}
 
 	for (i=1; i<argc; i++) {
 		if (argv[i][0]=='-') {
 			switch (argv[i][1]) {
+			case 'c': case 'C':
+				if (sscanf(argv[i], "-c%d:%d", &paper_color, &ink_color) != 2) {
+					fprintf(stderr, "Malformed color option. It should be -c<paper_color>:<ink_color>\n");
+					exit(3);
+				}
+				if (paper_color <16 || paper_color >23 || ink_color < 0 || ink_color > 7) {
+					fprintf(stderr, "Wrong colors. Paper color should be between 16 and 23 and ink color between 0 and 7\n");
+					exit(3);
+				}
+				// if the name was before
+				if (tape_name_index > 0) {
+					memset(system_sect + 9, ' ', 21);
+					*(system_sect + 9) = (char)27;
+					*(system_sect + 10) = generateEscapeCode(paper_color);
+					*(system_sect + 11) = (char)27;
+					*(system_sect + 12) = generateEscapeCode(ink_color);
+					if (strlen(argv[tape_name_index]) - 2 > 17) {
+						fprintf(stderr, "Disk label too long (if you use colors you loose four characters)\n");
+						exit(3);
+					}
+					memcpy(system_sect + 13, argv[tape_name_index] + 2, strlen(argv[tape_name_index]) - 2);
+				}
+				break;
 			case 'i': case 'I':
 				if (strlen(argv[i]) - 2 > 60) {
 					fprintf(stderr,"Init string too long\n");
 					exit(3);
 				}
 				memcpy(system_sect+0x1E,argv[i]+2,strlen(argv[i])-2);
+				// remember where it was
+				tape_name_index = i;
 				break;
 			case 'n': case 'N':
 				memset(system_sect+9,' ',21);
-				if (strlen(argv[i]) - 2 > 21) {
-					fprintf(stderr,"Disk label too long\n");
-					exit(3);
+				// if the colors were before
+				if (paper_color > 0 && ink_color >= 0) {
+					*(system_sect + 9) = (char)27;
+					*(system_sect + 10) = generateEscapeCode(paper_color);
+					*(system_sect + 11) = (char)27;
+					*(system_sect + 12) = generateEscapeCode(ink_color);
+					if (strlen(argv[i]) - 2 > 17) {
+							fprintf(stderr, "Disk label too long (if you use colors you loose four characters)\n");
+							exit(3);
+					}
+					memcpy(system_sect + 13, argv[i] + 2, strlen(argv[i]) - 2);
 				}
-				memcpy(system_sect+9,argv[i]+2,strlen(argv[i])-2);
+				else {
+					// if there are no colors do like before
+					// if the colors are after we will overwrite the label
+					if (strlen(argv[i]) - 2 > 21) {
+						fprintf(stderr, "Disk label too long\n");
+						exit(3);
+					}
+					memcpy(system_sect + 9, argv[i] + 2, strlen(argv[i]) - 2);
+				}
+				tape_name_index = i;
 				break;
 			default: fprintf(stderr,"Bad option : %c\n",argv[i][1]);
 				exit(2);
@@ -246,6 +296,36 @@ int main(int argc, char *argv[])
 				name[i]=fgetc(tape);
 				if (name[i]==0) break;
 			}
+
+			// if the name is null then copy the file name instead
+			if (name[0] == 0) {
+				// only take the file name from the path
+				char *fileName = argv[tape_num];
+				// try to find \\  
+				char *lastsep = strrchr(fileName, '\\');
+				if (lastsep != NULL) {
+					// if there is something after the separator
+					if (lastsep+1 != 0)
+						fileName = lastsep + 1;
+				} else {
+					// try to find / 
+					lastsep = strrchr(fileName, '/');
+					if (lastsep != NULL) {
+						// if there is something after the separator
+						if (lastsep + 1 != 0)
+							fileName = lastsep + 1;
+					}
+				}
+				// remove the extension if there is one
+				char *lastdot = strrchr(fileName, '.');
+				if (lastdot != NULL)
+					*lastdot = 0;
+				for (i = 0; i<17; i++) {
+					name[i] = fileName[i];
+					if (name[i] == 0) break;
+				}
+			}
+
 			start=(header[6]<<8)+header[7];
 			end=(header[4]<<8)+header[5];
 			for (i=0; i<end+1-start; i++)
