@@ -1,5 +1,5 @@
 /* C compiler: definitions */
-#ifdef _POSIX_VERSION
+#ifdef POSIX
 #include <unistd.h>
 #endif
 
