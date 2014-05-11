@@ -92,7 +92,7 @@ void convert_basename(char *dest, char *name)
 	while (dest_offset<9 && src_offset<17 && name[src_offset]) {
 		if (name[src_offset]>='a' && name[src_offset]<='z')
 			name[src_offset]-=0x20;
-		if (name[src_offset]>='0' && name[src_offset]<='9' 
+		if (name[src_offset]>='0' && name[src_offset]<='9'
 			|| name[src_offset]>='A' && name[src_offset]<='Z') {
 				putchar(name[src_offset]);
 				dest[dest_offset++]=name[src_offset];
@@ -301,14 +301,14 @@ int main(int argc, char *argv[])
 			if (name[0] == 0) {
 				// only take the file name from the path
 				char *fileName = argv[tape_num];
-				// try to find \\  
+				// try to find '\\'
 				char *lastsep = strrchr(fileName, '\\');
 				if (lastsep != NULL) {
 					// if there is something after the separator
 					if (lastsep+1 != 0)
 						fileName = lastsep + 1;
 				} else {
-					// try to find / 
+					// try to find /
 					lastsep = strrchr(fileName, '/');
 					if (lastsep != NULL) {
 						// if there is something after the separator
