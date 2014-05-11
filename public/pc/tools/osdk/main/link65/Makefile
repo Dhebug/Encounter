@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -Iincludes -I../common/includes/ -std=c++11
+CFLAGS=-c -Wall -Iincludes -I../common/includes/ -std=c++11 -DPOSIX
 LDFLAGS=-L../common/ -lcommon ../common/common.o -lcurses
 SOURCES=sources/Link65.cpp
 
