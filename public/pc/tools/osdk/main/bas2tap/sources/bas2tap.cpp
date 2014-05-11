@@ -238,10 +238,10 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   }
   fwrite(head,1,13,out);
   // write the name
-  if (currentFile.length > 0) {
+  if (currentFile.length() > 0) {
 	  char *fileName = strdup(currentFile.c_str());
 	  // only take the file name from the path
-	  // try to find \\  
+	  // try to find '\\'
 	  char *lastsep = strrchr(fileName, '\\');
 	  if (lastsep != NULL) {
 		  // if there is something after the separator
@@ -249,7 +249,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
 			  fileName = lastsep + 1;
 	  }
 	  else {
-		  // try to find / 
+		  // try to find /
 		  lastsep = strrchr(fileName, '/');
 		  if (lastsep != NULL) {
 			  // if there is something after the separator
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
     "  -t2b for converting from tape format text\r\n"
     "  -color[0|1] for enabling colored comments"
 	"\r\n"
-    "Exemple:\r\n"
+    "Example:\r\n"
     "  {ApplicationName} -b2t1 final.txt osdk.tap\r\n"
     "  {ApplicationName} -t2b osdk.tap program.txt\r\n"
     );
