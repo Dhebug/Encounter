@@ -42,13 +42,17 @@ Change history for the FloppyBuilder
 - Added a new parameter to make it possible to bootstrap the floppy building process: With 'init' a description fill be generated even if data is missing,
 this makes it possible to do a multi-pass build process which will not fail because it depends on things not yet generated :)
 
-0.14 - 2014/01/88
+0.14 - 2014/01/08
 - The MetaData tables will now not contain any information after the last file that declared metadata, this allows to not waste room in the loader for dummy data
 
-0.15 - 2014/01/88
+0.15 - 2014/01/08
 - The output file now clearly states how much free room is available in bytes on the disk
+
+0.16 - 2014/04/06
+- Added a mode where data can be extracted from an existing DSK file
+- The parser now accepts quoted strings
 
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	15
+#define TOOL_VERSION_MINOR	16

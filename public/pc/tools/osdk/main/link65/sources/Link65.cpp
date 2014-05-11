@@ -40,7 +40,6 @@ List of modifications:
 
 #include "infos.h"
 
-#include <unistd.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,6 +50,7 @@ List of modifications:
 #ifndef _POSIX_VERSION
 	#include <direct.h>
 #else
+        #include <unistd.h>
 	#include <limits.h>
 	#define stricmp strcasecmp
 	#define _MAX_PATH PATH_MAX

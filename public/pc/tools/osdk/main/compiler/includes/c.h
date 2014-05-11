@@ -1,5 +1,7 @@
 /* C compiler: definitions */
+#ifdef _POSIX_VERSION
 #include <unistd.h>
+#endif
 
 /* default sizes */
 #define MAXLINE   512		/* maximum output line length */

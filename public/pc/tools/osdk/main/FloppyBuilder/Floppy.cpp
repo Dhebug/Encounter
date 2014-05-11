@@ -648,6 +648,51 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
   return true;
 }
 
+
+bool Floppy::ExtractFile(const char *fileName,int trackNumber,int sectorNumber,int sectorCount)
+{
+  if (!m_Buffer)
+  {
+    return false;
+  }
+
+  int memoTrack=m_CurrentTrack;
+  int memoSector=m_CurrentSector;
+
+  if (trackNumber>=128)
+  {
+    trackNumber=(trackNumber-128)+m_TrackNumber;
+  }
+
+  SetPosition(trackNumber,sectorNumber);
+
+  std::vector<char> fileBuffer;
+  fileBuffer.resize(sectorCount*256);
+
+  char* writeAddress=fileBuffer.data();
+  while (sectorCount--)
+  {
+    unsigned int offset=SetPosition(m_CurrentTrack,m_CurrentSector);
+    memcpy(writeAddress,(char*)m_Buffer+offset,256);
+    writeAddress+=256;
+
+    if (!MoveToNextSector())
+    {
+      ShowError("Reach the end of disk when extracting '%s'.\n",fileName);
+    }
+  }
+  if (!SaveFile(fileName,fileBuffer.data(),fileBuffer.size()))
+  {
+    ShowError("Reach the end of disk when extracting '%s'.\n",fileName);
+  }
+
+
+  // Restore the old position
+  SetPosition(memoTrack,memoSector);
+  return true;
+}
+
+
 void Floppy::MarkCurrentSectorUsed()
 {
   int magicValue=(m_SectorNumber*m_CurrentTrack)+m_CurrentSector;

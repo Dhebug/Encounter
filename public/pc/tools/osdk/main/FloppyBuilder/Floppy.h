@@ -86,6 +86,8 @@ public:
   bool WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent,const std::map<std::string,std::string>& metadata);
   bool WriteTapeFile(const char *fileName);
 
+  bool ExtractFile(const char *fileName,int trackNumber,int sectorNumber,int sectorCount);
+
   bool AddDefine(std::string defineName,std::string defineValue);
 
   void SetCompressionMode(CompressionMode compressionMode)
