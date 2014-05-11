@@ -46,7 +46,14 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
       match =']';
     }
 
-    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )
+    if (match)
+    {
+      // Push the starting character
+      returnedToken.push_back(car);
+      ++currentPosition;
+    }
+
+    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )      
     {
       returnedToken.push_back(car);
       ++currentPosition;
@@ -102,7 +109,7 @@ int main(int argc, char *argv[])
     "  Generating bootable floppies for the Oric computer.\r\n"
     "\r\n"
     "Usage:\r\n"
-    "  {ApplicationName} <init|build> <description file path>\r\n"
+    "  {ApplicationName} <init|build|extract> <description file path>\r\n"
     "\r\n"
     );
 
@@ -129,9 +136,16 @@ int main(int argc, char *argv[])
 
   Floppy floppy;
 
+  bool extract=false;
   if (!strcmp(argv[param],"init"))
   {
     floppy.AllowMissingFiles(true);
+  }
+  else
+  if (!strcmp(argv[param],"extract"))
+  {
+    floppy.AllowMissingFiles(true);
+    extract=true;
   }
   else
   if (!strcmp(argv[param],"build"))
@@ -205,6 +219,7 @@ int main(int argc, char *argv[])
         else
         {
           // Let's say it's an actual parameter
+          item=StringTrim(item,"\"");
           tokens.push_back(item);
         }
       }
@@ -249,7 +264,7 @@ int main(int argc, char *argv[])
           }
 		  */
 
-		  if ( numberOfSectors!=17 )
+	  if ( numberOfSectors!=17 )
           {
             ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
           }
@@ -361,6 +376,26 @@ int main(int argc, char *argv[])
         }
       }
       else
+      if (tokens[0]=="SaveFile")
+      {
+        // ; SaveFile "File_0.bin"  $80 $01 $47  ; Name Track Sector Lenght adress
+        if (tokens.size()==5)
+        {
+          std::string fileName=tokens[1];
+          int trackNumber =ConvertAdress(tokens[2].c_str());
+          int sectorNumber=ConvertAdress(tokens[3].c_str());
+          int sectorCount =ConvertAdress(tokens[4].c_str());
+          if (!floppy.ExtractFile(fileName.c_str(),trackNumber,sectorNumber,sectorCount))
+          {
+            ShowError("Error line (%d), could not extract file '%s' from disk. Make sure you have a valid floppy format declared and some available disk space. \n",lineNumber,fileName.c_str());
+          }
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'ExtractFile FilePath TrackNumber SectorNumber SectorCount' \n",lineNumber);
+        }
+      }
+      else
       if (tokens[0]=="AddDefine")
       {
         if (tokens.size()==3)
@@ -404,18 +439,21 @@ int main(int argc, char *argv[])
   }
 
 
+  if (!extract)
+  {
+    // We write the resulting files only in 'init' or 'build' mode
+    if (!floppy.SaveDescription(outputLayoutFileName.c_str()))
+    {
+      ShowError("Failed saving description '%s'\n",outputLayoutFileName.c_str());
+    }
 
-  if (!floppy.SaveDescription(outputLayoutFileName.c_str()))
-  {
-    ShowError("Failed saving description '%s'\n",outputLayoutFileName.c_str());
-  }
-
-  if (!floppy.SaveDisk(targetFloppyDiskName.c_str()))
-  {
-    ShowError("Failed saving disk '%s'\n",targetFloppyDiskName.c_str());
-  }
-  else
-  {
-    printf("Successfully created '%s'\n",targetFloppyDiskName.c_str());
+    if (!floppy.SaveDisk(targetFloppyDiskName.c_str()))
+    {
+      ShowError("Failed saving disk '%s'\n",targetFloppyDiskName.c_str());
+    }
+    else
+    {
+      printf("Successfully created '%s'\n",targetFloppyDiskName.c_str());
+    }
   }
 }

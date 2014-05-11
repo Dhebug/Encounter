@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define NBTRACKS 21
 #define NBSECT 17
@@ -117,7 +118,6 @@ void store_file(byte *buf, char *name, byte *header)
 	int sectors=(end-start)/sizeof(sector)+1;
 	int desc_sect,desc_track;
 	int desc_off=0x0C;
-	int offset;
 
 	memset(descriptor,0,sizeof(sector));
 	find_free_sector(descriptor);
@@ -300,6 +300,7 @@ int main(int argc, char *argv[])
 			// if the name is null then copy the file name instead
 			if (name[0] == 0) {
 				// only take the file name from the path
+                                char *lastdot;
 				char *fileName = argv[tape_num];
 				// try to find '\\'
 				char *lastsep = strrchr(fileName, '\\');
@@ -316,8 +317,9 @@ int main(int argc, char *argv[])
 							fileName = lastsep + 1;
 					}
 				}
+
 				// remove the extension if there is one
-				char *lastdot = strrchr(fileName, '.');
+				lastdot = strrchr(fileName, '.');
 				if (lastdot != NULL)
 					*lastdot = 0;
 				for (i = 0; i<17; i++) {
