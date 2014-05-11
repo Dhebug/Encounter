@@ -510,9 +510,16 @@ int ConvertAdress(const char *ptr_value)
 
   if (ptr_value[0]=='$')
   {
-    // Hexadecimal
+    // Hexadecimal (Assembler style)
     base=16;
     ptr_value++;
+  }
+  else
+  if ( (ptr_value[0]=='0') && (ptr_value[1]=='x') )
+  {
+    // Hexadecimal (C style)
+    base=16;
+    ptr_value+=2;
   }
   else
   {

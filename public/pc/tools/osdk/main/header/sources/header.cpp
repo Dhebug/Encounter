@@ -93,7 +93,7 @@ unsigned char Header[]=
 		"\r\n"
 		"Parameters:\r\n"
 		"  <options> <sourcefile> <destinationfile> <loadadress>\r\n"
-		"  hexadecimal address should be prefixed by a $ symbol\r\n"
+		"  hexadecimal address should be prefixed by a $ or 0x symbol\r\n"
 		"  and should not be present in -h0 mode\r\n"
 		"\r\n"
 		"Options:\r\n"
