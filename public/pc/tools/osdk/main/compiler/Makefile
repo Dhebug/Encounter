@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall -Iincludes
+CFLAGS=-c -Wall -Iincludes -DPOSIX
 LDFLAGS=
 SOURCES=sources/dag.c    \
 	sources/debug.c  \
