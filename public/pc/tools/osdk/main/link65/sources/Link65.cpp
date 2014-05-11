@@ -47,10 +47,10 @@ List of modifications:
 #include <memory.h>
 #include <ctype.h>
 
-#ifndef _POSIX_VERSION
+#ifndef POSIX
 	#include <direct.h>
 #else
-        #include <unistd.h>
+    #include <unistd.h>
 	#include <limits.h>
 	#define stricmp strcasecmp
 	#define _MAX_PATH PATH_MAX
