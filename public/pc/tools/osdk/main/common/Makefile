@@ -14,6 +14,6 @@ clean:
 	rm -f libcommon.a *.o
 
 libcommon.a: $(OBJS)
-	$(AR) $(ARFLAGS) $@ $(<)
+	$(AR) $(ARFLAGS) $@ $(^)
 
 #	$(RANLIB) $@
