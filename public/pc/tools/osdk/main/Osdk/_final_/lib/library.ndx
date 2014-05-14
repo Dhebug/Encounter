@@ -28,7 +28,7 @@
 	_clock
 -ctype.s
 	ctype
--c_parameters.s	
+-c_parameters.s
 	get_2ptr
 -div.s
 	div16i
@@ -121,6 +121,7 @@
 	_bang
 -printf.s
 	_printf
+    _sprintf
 -lprintf.s
 	_lprintf
 -scanf.s
@@ -237,6 +238,6 @@
 -osdkmod6.s
 	_OsdkTableMod6
 -overlay.s
-	_is_overlay_enabled	
+	_is_overlay_enabled
 
 
