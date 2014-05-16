@@ -17,7 +17,7 @@ static struct symbol tval;	/* symbol for constants */
 enum { BLANK=01, NEWLINE=02, LETTER=04, DIGIT=010, HEX=020, BAD=040 };
 
 
-static unsigned char map[256] = 
+static unsigned char map[256] =
 {
 /* 000 nul */	BAD,
 /* 001 soh */	BAD,
@@ -404,7 +404,7 @@ static int errno;
 #endif
 
 /* fcon - scan for tail of a floating constant, set token, return symbol */
-static Symbol fcon() 
+static Symbol fcon()
 {
 	char *s = token;
 	int n = 0;
@@ -424,7 +424,7 @@ static Symbol fcon()
 		}
 	}
 
-	if (*cp == 'e' || *cp == 'E') 
+	if (*cp == 'e' || *cp == 'E')
 	{
 		if (*++cp == '-' || *cp == '+')
 		{
@@ -433,9 +433,9 @@ static Symbol fcon()
 
 		if (map[*cp]&DIGIT)
 		{
-			do 
+			do
 			{
-				cp++; 
+				cp++;
 			}
 			while (map[*cp]&DIGIT);
 		}
@@ -449,7 +449,7 @@ static Symbol fcon()
 	{
 		tval.u.c.v.d = 0.0;
 	}
-	else 
+	else
 	{
 		double temp_double;
 		char c = *cp;
@@ -465,7 +465,7 @@ static Symbol fcon()
 		*cp = c;
 	}
 
-	if (*cp == 'f' || *cp == 'F') 
+	if (*cp == 'f' || *cp == 'F')
 	{
 		char c = *++cp;
 		*cp = 0;
@@ -481,8 +481,8 @@ static Symbol fcon()
 		tval.u.c.v.f = (float)tval.u.c.v.d;
 		*cp = c;
 	}
-	else 
-	if (*cp == 'l' || *cp == 'L') 
+	else
+	if (*cp == 'l' || *cp == 'L')
 	{
 		cp++;
 		tval.type = longdouble;
@@ -587,7 +587,25 @@ int gettok() {
 				cp = rcp;
 				tsym = icon(n, overflow);
 				return ICON;
-			} else if (*token == '0') {
+			}
+            else if (*token == '0' && (*rcp == 'b' || *rcp == 'B')) {
+				while (*++rcp) {
+					if (*rcp=='0' || *rcp=='1')
+						d = *rcp - '0';
+					else
+						break;
+					if (n&~((unsigned)-1 >> 1))
+						overflow++;
+					else
+						n = (n<<1) + d;
+				}
+				if ((char *)rcp - token <= 2)
+					error("invalid binary constant\n");
+				cp = rcp;
+				tsym = icon(n, overflow);
+				return ICON;
+			}
+            else if (*token == '0') {
 				int err = 0;
 				for ( ; map[*rcp]&DIGIT; rcp++) {
 					if (*rcp == '8' || *rcp == '9')
@@ -766,7 +784,7 @@ int gettok() {
 			return '-';
 		case ';': case ',': case ':':
 		case '*': case '~': case '%': case '^': case '?':
-		case '[': case ']': case '{': case '}': case '(': case ')': 
+		case '[': case ']': case '{': case '}': case '(': case ')':
 			cp = rcp;
 			return *(rcp-1);
 #include "keywords.h"
