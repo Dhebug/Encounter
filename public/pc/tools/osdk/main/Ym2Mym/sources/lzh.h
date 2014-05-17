@@ -53,7 +53,7 @@ typedef unsigned long  lzh_ulong;   /* 32 bits or more */
 typedef uint8_t  lzh_uchar;
 typedef uint16_t lzh_ushort;
 typedef uint_fast32_t lzh_uint;
-typedef uint_fast32_t lzh_ulong;
+typedef uint32_t lzh_ulong;
 
 #endif
 
