@@ -14,8 +14,6 @@ CALL osdk_config.bat
 ::
 :: Run the emulator using the common batch
 ::
-SET OSDKDISK=resource.dsk
-set OSDKEMUL=EUPHORIC
 CALL %OSDK%\bin\execute.bat
 GOTO End
 
