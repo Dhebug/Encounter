@@ -1,5 +1,5 @@
 @ECHO OFF
-::ECHO ON
+ECHO ON
 
 ::
 :: Initial checks to verify that everything is fine.
@@ -281,8 +281,8 @@ ECHO Build of %OSDKNAME%.tap finished
 IF "%OSDKDISK%"=="" GOTO EndBuildDisk
 IF "%OSDKFILE%"=="" GOTO EndBuildDisk
 
-%OSDK%\bin\DskTool.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
-::%OSDK%\bin\tap2dsk.exe %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+::%OSDK%\bin\DskTool.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk.exe %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm.exe build\%OSDKNAME%.DSK
 
 :EndBuildDisk
