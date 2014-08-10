@@ -10,7 +10,7 @@ SET OSDKFILE=main draw dither costable sound auxiliar pic_logo pic_landau pic_ba
 ::SET OSDKFILE=pouet
 ::SET OSDKLINK=-B
 SET OSDKTAPNAME="SPINTRO"
-SET OSDKDISK= BUILD/%OSDKNAME%.TAP
+SET OSDKDISK= BUILD\%OSDKNAME%.TAP
 
 SET OSDKDOSBOX=
 
