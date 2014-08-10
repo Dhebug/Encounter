@@ -1,4 +1,3 @@
-
 ; Do not print on the first screen columns. Screen attributes will be destroyed
 
 _gotoxy
