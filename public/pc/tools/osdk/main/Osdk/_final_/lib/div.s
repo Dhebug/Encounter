@@ -1,3 +1,4 @@
+
 ;
 ; op1/op2 (16-bit signed)
 ;
@@ -107,5 +108,4 @@ mod16u
 zerodiv
 	ldx #$85
 	jmp $C47E
-
 
