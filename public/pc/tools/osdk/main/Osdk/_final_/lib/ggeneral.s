@@ -1,6 +1,5 @@
 ; Help routines for more complicated functions
 
-
 getXparm               ; Get X params (16bit) from stack
         ldy #0         ; X is the number of params
         sty $2e0       ; Zero error indicator.
@@ -26,3 +25,4 @@ grexit2
 	tax
 	lda #0
         rts 
+
