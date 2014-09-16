@@ -26,7 +26,7 @@ public:
 
   bool IsValidHeader() const;
 
-  void SetSignature(char signature[8]);
+  void SetSignature(const char signature[8]);
 
   void SetSideNumber(int sideNumber);
   int GetSideNumber() const;
