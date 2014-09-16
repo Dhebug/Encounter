@@ -45,7 +45,7 @@ void FloppyHeader::Clear()
   memset(this,0,sizeof(FloppyHeader));
 }
 
-void FloppyHeader::SetSignature(char signature[8])
+void FloppyHeader::SetSignature(const char signature[8])
 {
   memcpy(m_Signature,signature,8);
 }
@@ -167,10 +167,10 @@ FileEntry::FileEntry() :
   m_StartTrack(0),
   m_StartSector(1),
   m_SectorCount(0),
-  m_LoadAddress(0),
   m_FinalFileSize(0),
+  m_StoredFileSize(0),
   m_CompressionMode(e_CompressionNone),
-  m_StoredFileSize(0)
+  m_LoadAddress(0)
 {
 }
 
@@ -440,7 +440,7 @@ bool Floppy::WriteSector(const char *fileName)
       memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
     }
     MarkCurrentSectorUsed();
-    printf("Boot sector '%s' installed, %d free bytes remaining in this sector.\n",filteredFileName.c_str(),256-bufferSize);
+    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),256-bufferSize);
 
     MoveToNextSector();
   }

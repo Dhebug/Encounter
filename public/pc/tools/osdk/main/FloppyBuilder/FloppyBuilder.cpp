@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     for (;;)
     {
       long nb_arg=argc;
-      const char *ptr_arg=argv[param];
+      //const char *ptr_arg=argv[param];
 
       if (nb_arg==argc)   break;
     }
