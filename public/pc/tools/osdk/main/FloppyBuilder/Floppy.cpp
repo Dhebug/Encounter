@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <iostream>
-#include <string.h>
+#include <string>
 
 #include <assert.h>
 
@@ -200,7 +200,7 @@ Floppy::Floppy() :
 
 Floppy::~Floppy()
 {
-  delete m_Buffer;
+  free(m_Buffer);
 }
 
 
@@ -460,12 +460,12 @@ class TapeInfo
 {
 public:
   TapeInfo() 
-    : m_StartAddress(0)
+    : m_PtrData(nullptr)
+    , m_DataSize(0)
+    , m_StartAddress(0)
     , m_EndAddress(0)
     , m_FileType(0)
     , m_AutoStarts(false)
-    , m_PtrData(nullptr)
-    , m_DataSize(0)
   {
 
   }
