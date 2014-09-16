@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <string.h>
 
 #include <assert.h>
 
@@ -204,7 +205,7 @@ Floppy::~Floppy()
 }
 
 
-unsigned int crctab[256] =
+unsigned short crctab[256] =
 {
   0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
   0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
@@ -270,6 +271,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
 
   default:
     ShowError("Unrealistic sectors per track number\n");
+    return false;
   }
 
   m_BufferSize=256+numberOfSides*numberOfTracks*6400;
@@ -288,9 +290,9 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
     header.SetGeometry(1);
 
     unsigned char* trackbuf=(unsigned char*)m_Buffer+256;
-    for (int s=0;s<numberOfSides;s++)
+    for (unsigned char s=0;s<numberOfSides;s++)
     {
-      for (int t=0;t<numberOfTracks;t++) 
+      for (unsigned char t=0;t<numberOfTracks;t++) 
       {
         {
           int i;
@@ -319,7 +321,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
           }
         }
         int offset=gap1;
-        for (int i=0;i<numberOfSectors;i++)
+        for (unsigned char i=0;i<numberOfSectors;i++)
         {
           trackbuf[offset+4]=t;
           trackbuf[offset+5]=s;
