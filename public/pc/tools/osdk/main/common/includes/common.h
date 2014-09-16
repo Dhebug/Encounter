@@ -2,12 +2,14 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#ifdef _MSC_VER
 // Disable the warning C4706 -> assignment within conditional expression
 // Allow us to use Warning level 4 instead of level 3
 #pragma warning( disable : 4706)
 #pragma warning( disable : 4786)	// Debug symbols thing
 #pragma warning( disable : 4996)   // #define _CRT_SECURE_NO_WARNINGS
 //#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 
 #include <string>
