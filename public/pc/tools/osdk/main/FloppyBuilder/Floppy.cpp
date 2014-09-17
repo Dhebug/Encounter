@@ -443,7 +443,7 @@ bool Floppy::WriteSector(const char *fileName)
       memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
     }
     MarkCurrentSectorUsed();
-    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)256-bufferSize);
+    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)(256-bufferSize));
 
     MoveToNextSector();
   }
