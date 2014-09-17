@@ -18,7 +18,7 @@ struct {
 	int length;
 } sample_riff= {"RIFF",0,"WAVE","fmt ",16,1,1,4800,4800,1,8,"data",0};
 
-main(int argc,char *argv[])
+int main(int argc,char *argv[])
 {
 	int i,c,size;
 
@@ -51,5 +51,6 @@ main(int argc,char *argv[])
                 fputc(c&0x02?0xE0:0x20,fd2);
                 fputc(c&0x01?0xE0:0x20,fd2);
 	}
+    return 0;
 }
 

@@ -5,9 +5,11 @@ int sync_ok=0;
 int offset;
 FILE *in, *out;
 
-main(int argc,char **argv)
-{	
-	unsigned start,end,i;
+void synchronize(void);
+int getbyte(void);
+
+int main(int argc,char **argv)
+{
         printf(".4k8 -> .tap 1.0\n");
         if (argc!=3) { printf("Usage: %s file.4k8 file.tap\n",argv[0]); exit(1);}
 	in=fopen(argv[1],"rb"); out=fopen(argv[2],"wb");
@@ -21,10 +23,9 @@ main(int argc,char **argv)
 }
 
 
-getsample()
+int getsample()
 {
         static int shifter, shiftcount=0;
-        int sample;
         if (shiftcount==0) {
                 shiftcount=8;
                 if (feof(in)) shifter=0x55;
@@ -35,7 +36,7 @@ getsample()
         return (shifter>>8) & 1;
 }
 
-getbit()
+int getbit()
 {
         int length=0;
         do length++; while (getsample()==1);
@@ -43,7 +44,7 @@ getbit()
         return length<3 ? 1 : 0;
 }
 
-getbyte()
+int getbyte(void)
 {
 	int decaleur=0,byte=0,i,bit,sum=0;
 	getbit();
@@ -59,7 +60,7 @@ getbyte()
 	return byte;
 }
 
-synchronize()
+void synchronize(void)
 {
 	int decaleur=0,val;
 	printf("Searching synchro...\n");
