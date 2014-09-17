@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *keywords[]= { 
+char *keywords[]= {
 "END","EDIT","STORE","RECALL","TRON","TROFF","POP","PLOT",
 "PULL","LORES","DOKE","REPEAT","UNTIL","FOR","LLIST","LPRINT","NEXT","DATA",
 "INPUT","DIM","CLS","READ","LET","GOTO","RUN","IF","RESTORE","GOSUB","RETURN",
@@ -19,13 +19,15 @@ char *keywords[]= {
 unsigned char buf[48*1024];
 unsigned char head[14]={ 0x16,0x16,0x16,0x24,0,0,0,0,0,0,5,1,0,0 };
 
-main(int argc, char **argv)
+int search_keyword(char *str);
+
+int main(int argc, char **argv)
 {
-	unsigned int i, car, number, end, lastptr, adr;
+	unsigned int i, number, end, lastptr, adr;
 	int j,ptr,keyw,string,rem,data;
 	unsigned char ligne[256];
 	FILE *in,*out;
-	if (argc!=3) { 
+	if (argc!=3) {
 		perror("Usage : txt2bas txtfile <Oric-BASIC-file>\n");
 		exit(1);
 	}
@@ -52,7 +54,7 @@ main(int argc, char **argv)
 			if (ligne[ptr]==':') data=0;
 			buf[i++]=ligne[ptr++];
 		    } else {
-			keyw=search_keyword(ligne+ptr);
+			keyw=search_keyword((char*)(ligne+ptr));
 			if (keyw==29 || ligne[ptr]=='\'') rem=1;
 			if (keyw==17) data=1;
 			if (ligne[ptr]=='"') string=1;
@@ -65,20 +67,21 @@ main(int argc, char **argv)
 		}
 		buf[i++]=0;
 	}
-	buf[i++]=0; 
+	buf[i++]=0;
 	end=0x501+i; head[8]=end>>8; head[9]=end&0xFF;
 	for(j=4,lastptr=0;j<i;j++)
 		if (buf[j]==0) {
-			adr=0x500+j+1; 
+			adr=0x500+j+1;
 			buf[lastptr]=adr&0xFF; buf[lastptr+1]=adr>>8;
 			lastptr=j+1;
 			j+=4;
 		}
 	fwrite(head,1,14,out);
 	fwrite(buf,1,i,out); fclose(out);
+    return 0;
 }
 
-search_keyword(char *str)
+int search_keyword(char *str)
 {
 	int i;
 	for (i=0;i<sizeof(keywords)/sizeof(char *);i++)
