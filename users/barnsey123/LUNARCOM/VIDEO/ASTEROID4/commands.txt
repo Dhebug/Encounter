@@ -1,0 +1,18 @@
+17-09-2014
+using asteroid4.gif (approx 1mb)
+The asteroid images in the gif occupy a central strip so step 1 is to crop the images in the gif and remove the blank space.
+
+Using ImageMagick:
+
+convert asteroid4.gif -crop 148x327+132+43 +repage asteroid4out.gif
+
+Originally, I started at 160x330+120+140 but the above cropping was optimal (725kb)
+
+
+rotate and resize to fit oric screen 
+convert asteroid4.gif -crop 148x327+132+43 +repage -rotate +90 -resize 240x80 asteroid4out.gif (265k)
+
+
+
+
+
