@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		buf[i++]=number&0xFF; buf[i++]=number>>8;
 		j=0; while((ligne[j]=getc(in))!='\n') j++; ligne[j]=0;
 		ptr=0; rem=0; string=0; data=0;
-		if (ligne[ptr]=' ') ptr++;
+		if (ligne[ptr]==' ') ptr++;
 		while(ligne[ptr]) {
 		    if (rem) {
 			buf[i++]=ligne[ptr++];
