@@ -207,7 +207,7 @@ void emit_standard_header(unsigned char header[])
 
 void emit_loader()
 {
-  int i;
+  unsigned int i;
   unsigned char loader_header[9]={ 0,0,0x80,0xC7,0x01,0x10+sizeof(loader)-1,0x01,0x10,0};
   emit_standard_header(loader_header);
   emit_standard_gap(30);
