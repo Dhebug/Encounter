@@ -11,7 +11,7 @@ unsigned short	DitherMask[9];
 //unsigned char	DitherTable[16*2][256];
 
 
-void ComputeDitherMask(long position,char *chaine)
+void ComputeDitherMask(long position,const char *chaine)
 {
 	unsigned short value=0;
 	for (long i=0;i<16;i++)
