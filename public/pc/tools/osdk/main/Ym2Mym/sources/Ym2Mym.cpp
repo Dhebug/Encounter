@@ -34,8 +34,8 @@ AYC information: http://www.cpcwiki.eu/index.php/AYC
 #include "lzh.h"
 
 #define REGS    14
-#define FRAG    128  //  Number of rows to compress at a time 
-#define OFFNUM  14   //  Bits needed to store off+num of FRAG 
+#define FRAG    128  //  Number of rows to compress at a time
+#define OFFNUM  14   //  Bits needed to store off+num of FRAG
 
 
 
@@ -105,7 +105,7 @@ int main(int argc,char *argv[])
       //	1 => verbose
       flagVerbosity=argumentParser.GetBooleanValue(true);
     }
-    else 
+    else
     if (argumentParser.IsSwitch("-h"))
     {
       //format: [-h]
@@ -113,7 +113,7 @@ int main(int argc,char *argv[])
       // 	1 => save header (default)
       flag_header=argumentParser.GetBooleanValue(true);
     }
-    else 
+    else
     if (argumentParser.IsSwitch("-m"))
     {
       //format: [-m]
@@ -122,7 +122,7 @@ int main(int argc,char *argv[])
       maxSize=argumentParser.GetIntegerValue(0);
     }
   }
-  
+
   int adress_start=0;
   std::string headerName;
 
@@ -152,7 +152,7 @@ int main(int argc,char *argv[])
     }
   }
 
-  unsigned char*data[REGS];    //  The unpacked YM data 
+  unsigned char*data[REGS];    //  The unpacked YM data
   unsigned current[REGS];
 
   char ym_new=0;
@@ -190,9 +190,9 @@ int main(int argc,char *argv[])
   }
   const unsigned char* sourceData=(const unsigned char*)pcBuffer;
 
-  // Check if the file is compressed 
+  // Check if the file is compressed
   length=cBufferSize-4;
-  if (!strncmp((const char*)sourceData,"YM2!",4))        //  YM2 is ok 
+  if (!strncmp((const char*)sourceData,"YM2!",4))        //  YM2 is ok
   {
     sourceData+=4;
     // YM2!
@@ -209,12 +209,12 @@ int main(int argc,char *argv[])
     // ------------------------------------------------------
     // 0      4       ID      "YM3!"  File type Identificator
     // The next bytes are the data block of AY chip registers values.
-    // 
+    //
     // Registers are updates one time per VBL interrupt. If music length is N interrupts,
     // then block consist first N bytes for register 0, further N bytes for register 1
     // and so on. In total: N*14 bytes. The number of used VBL for music can be computed
     // as follow: nvbl = (ymfile_size-4)/14;
-    // 
+    //
     // VBL1:
     //     store reg0,reg1,reg2,...,reg12,reg13  (14 regs)
     // VBL2:
@@ -222,23 +222,23 @@ int main(int argc,char *argv[])
     //       ..........
     // VBLn:
     //     store reg0,reg1,reg2,...,reg12,reg13  (14 regs)
-    // 
+    //
     // If the current interrupt features no output to register 13 then the byte of the
     // data block for this interrupt and for this register has the value 255 ($FF).
   }
-  else 
+  else
   if (!strncmp((const char*)sourceData,"YM3b",4))    //  YM3b is ok
   {
     sourceData+=4;
     // YM3b!
-    // 
+    //
     // This format is nearly identical with YM3. It adds only the ability to use loops.
-    // 
+    //
     // First four bytes is the ASCII identifier "YM3b".
     // The following bytes are the data block (see YM3 description).
     // Last four bytes is a DWORD (32bits integers) data and contains the frame number
     // at which the loop restart. That's all.
-    sourceData+=4;    //  Skip restart for YM3b 
+    sourceData+=4;    //  Skip restart for YM3b
     length-=4;
   }
   else
@@ -251,7 +251,7 @@ int main(int argc,char *argv[])
     exit(EXIT_FAILURE);
   }
   else
-  if ( (!strncmp((const char*)sourceData,"YM5!",4)) || (!strncmp((const char*)sourceData,"YM6!",4)) ) //  YM5 is ok but needs a different loader    
+  if ( (!strncmp((const char*)sourceData,"YM5!",4)) || (!strncmp((const char*)sourceData,"YM6!",4)) ) //  YM5 is ok but needs a different loader
   {
     sourceData+=4;
     // YM5!
@@ -268,10 +268,10 @@ int main(int argc,char *argv[])
     exit(EXIT_FAILURE);
   }
 
-  if (ym_new)  //  New YM5 format loader     
+  if (ym_new)  //  New YM5 format loader
   {
-    sourceData+=8;                   //  Skip 'LeOnArD' checkstring     
-    for (n=length=0;n<4;n++)         //  Number of VBL's  
+    sourceData+=8;                   //  Skip 'LeOnArD' checkstring
+    for (n=length=0;n<4;n++)         //  Number of VBL's
     {
       length<<=8;
       length+=*sourceData++;
@@ -285,7 +285,7 @@ int main(int argc,char *argv[])
       return(EXIT_FAILURE);
     }
 
-    if ((*sourceData++) || (*sourceData++))        //  Number of digidrums   
+    if ((*sourceData++) || (*sourceData++))        //  Number of digidrums
     {
       printf("Digidrums not supported.\n");
       return(EXIT_FAILURE);
@@ -354,7 +354,7 @@ int main(int argc,char *argv[])
   {
     for (n=0;n<REGS;n++)
     {
-      for (row=0;row<length/REGS;row++)
+      for (row=0;row<(long)(length/REGS);row++)
       {
         data[n][row]&=regand[n];
       }
@@ -365,27 +365,27 @@ int main(int argc,char *argv[])
   char* destinationBuffer=(char*)malloc(cBufferSize);
   char* ptrWrite=destinationBuffer;
 
-  // Set current values to impossible 
+  // Set current values to impossible
   for (n=0;n<REGS;n++)
-  {     
+  {
     current[n]=0xffff;
   }
 
-  *ptrWrite++=length/REGS&0xff;  //  Write tune length 
+  *ptrWrite++=length/REGS&0xff;  //  Write tune length
   *ptrWrite++=(length/REGS>>8)&255;
 
-  for (n=0;n<length/REGS;n+=FRAG)  //  Go through fragments...   
+  for (n=0;n<(long)(length/REGS);n+=FRAG)  //  Go through fragments...
   {
-    for (i=0;i<REGS;i++)         //  ... for each register    
+    for (i=0;i<REGS;i++)         //  ... for each register
     {
       for (row=change=0;row<FRAG;row++)
         if (data[i][n+row]!=current[i])
           change=1;
 
-      if (!change) //  No changes in the whole fragment   
+      if (!change) //  No changes in the whole fragment
       {
         writebits(0,1,ptrWrite);
-        continue;   //  Skip the next pass             
+        continue;   //  Skip the next pass
       }
       else
       {
@@ -405,7 +405,7 @@ int main(int argc,char *argv[])
             offi=0;
             remain=FRAG-row;
 
-            // Go through the preceding data and try to find similar data 
+            // Go through the preceding data and try to find similar data
             for (oldrow=0;oldrow<FRAG;oldrow++)
             {
               hits=0;
@@ -432,13 +432,13 @@ int main(int argc,char *argv[])
             writebits(2,2,ptrWrite);
             writebits((offi<<OFFNUM/2)+(biggest-1),OFFNUM,ptrWrite);
           }
-          else    //  Nope, write raw bits   
+          else    //  Nope, write raw bits
           {
             writebits(3,2,ptrWrite);
             writebits(data[i][n+row],regbits[i],ptrWrite);
           }
         }
-        else    //  Same as former value, write 0  
+        else    //  Same as former value, write 0
         {
           writebits(0,1,ptrWrite);
         }
@@ -448,7 +448,7 @@ int main(int argc,char *argv[])
 
   writebits(0,0,ptrWrite);   // Pad to byte size
 
-  size_t outputFileSize=(ptrWrite-destinationBuffer);
+  ssize_t outputFileSize=(ptrWrite-destinationBuffer);
 
   if (maxSize && (outputFileSize>maxSize))
   {
@@ -487,7 +487,7 @@ int main(int argc,char *argv[])
       0xa0,	// 10 Start address
       0x00,	// 11
 
-      0x00	// 12 
+      0x00	// 12
     };
 
     int adress_end =adress_start+outputFileSize-1;
@@ -531,9 +531,9 @@ void writebits(unsigned data,int bits,char* &ptrWrite)
   }
 
   // Go through the bits and write a whole byte if needed
-  for (n=0;n<bits;n++) 
+  for (n=0;n<bits;n++)
   {
-    if (data&(1<<bits-1-n))
+    if (data&(1<<((bits-1)-n)))
       byte|=0x80>>off;
 
     if (++off==8)
