@@ -52,7 +52,7 @@ byte sedoric[]=
 };
 
 int track,sect=1;
-int dir_offset=0x10;
+unsigned int dir_offset=0x10;
 int used_sectors;
 
 
@@ -93,8 +93,8 @@ void convert_basename(char *dest, char *name)
 	while (dest_offset<9 && src_offset<17 && name[src_offset]) {
 		if (name[src_offset]>='a' && name[src_offset]<='z')
 			name[src_offset]-=0x20;
-		if (name[src_offset]>='0' && name[src_offset]<='9'
-			|| name[src_offset]>='A' && name[src_offset]<='Z') {
+		if ((name[src_offset]>='0' && name[src_offset]<='9')
+			|| (name[src_offset]>='A' && name[src_offset]<='Z')) {
 				putchar(name[src_offset]);
 				dest[dest_offset++]=name[src_offset];
 		}
@@ -137,12 +137,12 @@ void store_file(byte *buf, char *name, byte *header)
 	descriptor[10]=sectors&0xFF;
 	descriptor[11]=sectors>>8;
 
-	convert_basename(directory+dir_offset,name);
+	convert_basename((char*)(directory+dir_offset),name);
 	if (exec) {
-		sprintf(directory+dir_offset+9,"COM");
+		sprintf((char*)(directory+dir_offset+9),"COM");
 		printf(".COM");
 	} else {
-		sprintf(directory+dir_offset+9,"%s",block?"BIN":"BAS");
+		sprintf((char*)(directory+dir_offset+9),"%s",block?"BIN":"BAS");
 		printf(".%s",block?"BIN":"BAS");
 	}
 	printf("\n");
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 	int dir_track=20, dir_sect=4;
 	int tracks=21; // minimum track number
 	int total_sectors,free_sectors;
-	int tape_num,i, options=0;
+	int tape_num,i;
 	int tape_name_index = -1;
 	int paper_color = -1;
 	int ink_color = -1;
@@ -368,6 +368,8 @@ int main(int argc, char *argv[])
 	for (track=0;track<tracks;track++)
 		for (sect=1;sect<=NBSECT;sect++)
 			fwrite(disk[track][sect-1],sizeof(sector),1,dsk);
+
+    return 0;
 }
 
 
