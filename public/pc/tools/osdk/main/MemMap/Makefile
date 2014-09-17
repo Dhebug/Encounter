@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -Iincludes -I../common/includes/ -std=c++11
+CFLAGS=-c -Wall -Iincludes -I../common/includes/ -std=c++11 -Wno-unknown-pragmas
 LDFLAGS=-L../common/ -lcommon ../common/common.o ../common/lz_pack.o -lcurses
 SOURCES=sources/memmap.cpp
 
