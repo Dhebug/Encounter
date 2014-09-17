@@ -569,7 +569,7 @@ void outall()
 // Simple function that prints error message/calls outall.
 // Simplifies the look of the main program
 //
-void linkerror(char *msg)
+void linkerror(const char *msg)
 {
 	printf(msg);
 	outall();
