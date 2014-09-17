@@ -18,7 +18,7 @@
 // - Option to optimize the programs (truncate variables to two characters, remove comments)
 //
 
-char *keywords[]=
+const char *keywords[]=
 {
   "END","EDIT","STORE","RECALL","TRON","TROFF","POP","PLOT",
   "PULL","LORES","DOKE","REPEAT","UNTIL","FOR","LLIST","LPRINT","NEXT","DATA",
@@ -57,7 +57,7 @@ void Tap2Bas(unsigned char *ptr_buffer,size_t file_size)
     i+=2;
     printf(" %u ",ptr_buffer[i]+(ptr_buffer[i+1]<<8));
     i+=2;
-    while (car=ptr_buffer[i++])
+    while ((car=ptr_buffer[i++]))
     {
       if (car<128)
         putchar(car);
@@ -73,7 +73,7 @@ void Tap2Bas(unsigned char *ptr_buffer,size_t file_size)
 // tap2bas
 int search_keyword(const char *str)
 {
-  for (int i=0;i<sizeof(keywords)/sizeof(char *);i++)
+  for (unsigned int i=0;i<sizeof(keywords)/sizeof(char *);i++)
   {
     if (strncmp(keywords[i],str,strlen(keywords[i]))==0)
     {
