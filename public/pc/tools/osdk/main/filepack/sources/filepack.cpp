@@ -233,7 +233,7 @@ int main(int argc,char *argv[])
 			}
 
 			fprintf(dest_file,"#define run_adress $%x 	; Come from original TAP executable \r\n",0x600);
-			fprintf(dest_file,"#define unpacked_size $%x 	; Come from original TAP executable \r\n",size_buffer_src);
+			fprintf(dest_file,"#define unpacked_size $%x 	; Come from original TAP executable \r\n",(unsigned int)size_buffer_src);
 
 			fclose(dest_file);
 		}
