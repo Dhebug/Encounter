@@ -733,16 +733,16 @@ bool Floppy::SaveDescription(const char* fileName) const
   std::stringstream code_adress_low;
   std::stringstream code_adress_high;
 
-  std::map<std::string,std::stringstream>     metadata_content;
+  std::map<std::string,std::string> metadata_content;
 
-  std::set<std::string>                       metadata_entries;
+  std::set<std::string>             metadata_entries;
 
   {
     for (auto metadataIt(m_MetadataCategories.begin());metadataIt!=m_MetadataCategories.end();metadataIt++)
     {
       const std::string& metadataCategoryName(*metadataIt);
-      metadata_content[metadataCategoryName+"_Low"] << "_MetaData_" << metadataCategoryName << "_Low .byt ";
-      metadata_content[metadataCategoryName+"_High"] << "_MetaData_" << metadataCategoryName << "_High .byt ";
+      metadata_content[metadataCategoryName+"_Low"]  += "_MetaData_" + metadataCategoryName + "_Low .byt ";
+      metadata_content[metadataCategoryName+"_High"] += "_MetaData_" + metadataCategoryName + "_High .byt ";
     }
   }
 
@@ -774,7 +774,7 @@ bool Floppy::SaveDescription(const char* fileName) const
       {
         for (auto metadataIt(metadata_content.begin());metadataIt!=metadata_content.end();metadataIt++)
         {
-          metadataIt->second << ",";
+          metadataIt->second += ",";
         }
       }
     }
@@ -847,8 +847,8 @@ bool Floppy::SaveDescription(const char* fileName) const
           metadataEntry=metadataLabelEntry+" .byt \""+value+"\",0";
         }
         metadata_entries.insert(metadataEntry);
-        metadata_content[metadataCategoryName+"_Low"] << "<" << metadataLabelEntry;
-        metadata_content[metadataCategoryName+"_High"] << ">" << metadataLabelEntry;
+        metadata_content[metadataCategoryName+"_Low"]  += "<" + metadataLabelEntry;
+        metadata_content[metadataCategoryName+"_High"] += ">" + metadataLabelEntry;
       }
       if (!fileEntry.m_Metadata.empty())
       {
@@ -952,7 +952,7 @@ bool Floppy::SaveDescription(const char* fileName) const
   {
     for (auto metadataIt(metadata_content.begin());metadataIt!=metadata_content.end();metadataIt++)
     {
-      layoutInfo << metadataIt->second.str() << "\n";
+      layoutInfo << metadataIt->second << "\n";
     }
   }
   layoutInfo << "#endif // METADATA_STORAGE\n";
