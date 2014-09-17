@@ -305,7 +305,7 @@ unsigned char Header[]=
 	//
 	if (flag_display_size)
 	{
-		printf("File '%s' is %d bytes long (%d bytes header and %d bytes of data)\n",filename_dst,size_header+filesize,size_header,filesize);
+		printf("File '%s' is %d bytes long (%d bytes header and %d bytes of data)\n",filename_dst,(int)(size_header+filesize),(int)size_header,filesize);
 	}
 
 
