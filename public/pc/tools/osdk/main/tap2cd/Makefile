@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall -Iincludes -I../common/includes/
+CFLAGS=-c -Wall -Iincludes -I../common/includes/ -Wno-deprecated-declarations
 LDFLAGS=-lcurses
 SOURCES=sources/tap2cd.c
 
