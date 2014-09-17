@@ -631,7 +631,7 @@ int resolve_abs(char *a)
 
 int parse_line(char *a, line *p)
 {
-  static int i,j,x,y;
+  static int i,j,x;
 
   p->tok=null_tok;
   p->dep=0;
@@ -789,7 +789,7 @@ void make_feedlist()
     p=&blkbuf[i];
     p->feeds=p->mod & hlp;
     p->passes=hlp & ~p->mod;
-    hlp=(hlp & ( ~p->mod )) | p->dep & valid_map;
+    hlp=((hlp & ( ~p->mod ))) | (p->dep & valid_map);
 
     if (p->depind & mem) {
 
@@ -2053,10 +2053,8 @@ void add_line(line *p)
 # endif
 }
 
-optimize_block()
+void optimize_block()
 {
-  int i;
-
   if (blkbuf_len<1) return;
 
   dbmsg("<BLOCK>\n");
@@ -2187,4 +2185,5 @@ int main(int argc, char **argv)
   }
 
   fclose(fin);
+  return 0;
 }
