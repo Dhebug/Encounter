@@ -182,19 +182,20 @@ FileEntry::~FileEntry()
 
 
 
-Floppy::Floppy() :
-  m_AllFilesAreResolved(true),
-  m_AllowMissingFiles(false),
-  m_Buffer(0),
-  m_BufferSize(0),
-  m_TrackNumber(0),
-  m_SectorNumber(0),
-  m_CurrentTrack(0),
-  m_CurrentSector(1),
-  m_LastFileWithMetadata(0),
-  m_CompressionMode(e_CompressionNone),
-  m_OffsetFirstSector(156),   // 156 (Location of the first byte of data of the first sector)
-  m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
+Floppy::Floppy() 
+  :m_Buffer(0)
+  ,m_BufferSize(0)
+  ,m_TrackNumber(0)
+  ,m_SectorNumber(0)
+  ,m_SideNumber(0)
+  ,m_OffsetFirstSector(156)    // 156 (Location of the first byte of data of the first sector)
+  ,m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
+  ,m_CurrentTrack(0)
+  ,m_CurrentSector(1)
+  ,m_CompressionMode(e_CompressionNone)
+  ,m_AllFilesAreResolved(true)
+  ,m_AllowMissingFiles(false)
+  ,m_LastFileWithMetadata(0)
 {
 }
 
@@ -442,7 +443,7 @@ bool Floppy::WriteSector(const char *fileName)
       memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
     }
     MarkCurrentSectorUsed();
-    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),256-bufferSize);
+    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)256-bufferSize);
 
     MoveToNextSector();
   }
