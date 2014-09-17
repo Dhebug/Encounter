@@ -129,7 +129,7 @@ int main(int argc,char *argv[])
 	{
 		ShowError("Unable to load the source file");
 	}
-	printf("Size Read:%d\n",file_size);
+	printf("Size Read:%d\n",(signed int) file_size);
 	unsigned char *BigBuffer=(unsigned char*)ptr_buffer_void;
 
 	std::string cDestString(cTextFileGenerator.ConvertData(BigBuffer,file_size));
