@@ -16,7 +16,8 @@
 FILE *in,*out;
 int file_size=0;
 unsigned char header[9];
-unsigned char Mem[48*1024],name[18];
+unsigned char Mem[48*1024];
+char name[18];
 int check_crc=0;
 int df_loader=0;
 
@@ -38,7 +39,7 @@ struct {
 
 
 // These files are created by 'CreateLoader.bat'
-#include "loader_df.h"      
+#include "loader_df.h"
 #include "loader_crc.h"
 #include "loader_nocrc.h"
 
@@ -102,7 +103,7 @@ void emit_standard_short_level() { emit_level(4); }
 void emit_standard_long_level() { emit_level(10); }
 
 void emit_standard_bit(int bit)
-{  
+{
   emit_standard_short_level();
   if (bit==0) emit_standard_long_level();
   else emit_standard_short_level();
@@ -123,17 +124,17 @@ write routine adds half a bit (half a period) to every byte written... As a resu
 one byte out of two, the second half of the period (the one that differentiates 0 and 1)
 is written as the high level instead of the low level. When reading, the high level is
 always considered as the first part of the period, so in one byte out of two, the part
-of the period that was written in second place becomes the first part when reading 
+of the period that was written in second place becomes the first part when reading
 (it is associated with the first part of next bit). So, thanks to a scheme where
 the first part written is always the same duration, the bits read are the same than
 the ones written, except that a variable number of stop bits are read between two
 consecutives bytes (3 and half stop bits are written between two consecutive bytes,
 but the read routines detects alternately 3 and 4 stop bits between two bytes).
 
-This inversing "feature" is corrected here (there's no additional half period), 
-but it seems that the waveform emitted by a number of player devices is reversed 
-(all the high levels become low levels, and low levels become high levels), 
-so it's good to keep this asymetric coding for the standard format. 
+This inversing "feature" is corrected here (there's no additional half period),
+but it seems that the waveform emitted by a number of player devices is reversed
+(all the high levels become low levels, and low levels become high levels),
+so it's good to keep this asymetric coding for the standard format.
 */
 
 void emit_standard_byte_with_no_stop_bit(int val)
@@ -166,13 +167,13 @@ void emit_fast_byte(int val)
 void emit_fast_synchro()
 {
 /*
-The turbo fast format is not affected by the waveform inversion because each high or 
-low level is measured independently. However when the standard bytes are read, 
-we don't know if the waveform is inversed or not, and thus we don't know if the first turbo 
+The turbo fast format is not affected by the waveform inversion because each high or
+low level is measured independently. However when the standard bytes are read,
+we don't know if the waveform is inversed or not, and thus we don't know if the first turbo
 fast level will be a high or a low level... So, an additional 1/2 bit is used here to be sure the
 last bit (parity bit) is complete in standard format: if the waveform is reversed, the last
 part of the parity bit will be associated to the first part of the bit that follows.
-A standard short level is thus written to complete last bit in case the waveform will be 
+A standard short level is thus written to complete last bit in case the waveform will be
 inversed, and then a small synchro is written, consisting in a sequence of very short levels
 (2 samples each) followed by a longer level (5 samples long).
 */
@@ -214,13 +215,13 @@ int compute_crc8(int start, int size)
       shifter<<=1;
       crc<<=1;
       if ((shifter&0x100)!=0) crc|=1;
-      if ((crc&0x100)!=0) 
+      if ((crc&0x100)!=0)
         crc^=0x1D5;  /* x^8+x^7+x^6+x^4+x^2+1 polynomial */
     }
   }
   return crc;
 }
-      
+
 void emit_fast_page(int adr,int size)
 {
   int i;
@@ -252,10 +253,8 @@ void emit_standard_header(char header[])
 
 void emit_loader()
 {
-  int nb_lines = sizeof(loader_no_check) / sizeof(char *);
-
-  int i,addr=0x0100;
-  char loader_header[9]={ 
+  int i;
+  char loader_header[9]={
     0, /* not an array of integers */
     0, /* not an array of strings */
     0x80, /* memory block */
@@ -267,25 +266,25 @@ void emit_loader()
 
 
   if (check_crc){
-  	  loader_header[5]=sizeof(loader_check_crc)-1 & 0xFF;
+  	  loader_header[5]=(sizeof(loader_check_crc)-1) & 0xFF;
       emit_standard_header(loader_header);
       emit_standard_gap(30);
 	  for (i=0;i<sizeof(loader_check_crc);i++) emit_standard_byte(loader_check_crc[i]);
   }else{
 	   if (df_loader){
-		   loader_header[5]=sizeof(loader_df)-1 & 0xFF;
+		   loader_header[5]=(sizeof(loader_df)-1) & 0xFF;
 		   emit_standard_header(loader_header);
 		   emit_standard_gap(30);
 		   for (i=0;i<sizeof(loader_df);i++) emit_standard_byte(loader_df[i]);
 	   }else{
-		   loader_header[5]=sizeof(loader_no_check)-1 & 0xFF;
+		   loader_header[5]=(sizeof(loader_no_check)-1) & 0xFF;
 		   emit_standard_header(loader_header);
 		   emit_standard_gap(30);
 		   for (i=0;i<sizeof(loader_no_check);i++) emit_standard_byte(loader_no_check[i]);
 	   }
   }
 
- 
+
 }
 
 void emit_fast_prog(int start,int end)
@@ -296,7 +295,7 @@ void emit_fast_prog(int start,int end)
 	  emit_standard_gap(2000);
   else
 	  emit_standard_gap(100);
-  
+
   emit_fast_page(0x2A8,9);	/* header is emitted as a small 9-bytes page */
 
   if (df_loader){
@@ -324,9 +323,9 @@ void ask_name(char *name)
 {
   char reply[80];
   do {
-    if (name[0]) 
+    if (name[0])
       printf("Stored name is %s, enter new name (or RETURN to keep): ",name);
-    else 
+    else
       printf("Program has no stored name, enter a name: ");
     gets(reply);
     if (reply[0]) strcpy(name,reply);
@@ -338,7 +337,7 @@ int main(int argc,char *argv[])
   int start,end;
   int firstprog=TRUE;
   int i;
-  
+
   check_args(argc,argv);
 
   while (!feof(in)) {
