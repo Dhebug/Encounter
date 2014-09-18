@@ -1,17 +1,21 @@
-CC=g++
-CFLAGS=-c -Iincludes -I../common/includes/ -std=c++11 -DPOSIX -Wall -Wno-unknown-pragmas
-LDFLAGS=-L../common/ -lcommon ../common/common.o -lcurses
+include ../../../rules.mk
+
+CPPFLAGS += -Wall -Iincludes
+
+CPPFLAGS += -I ../common/includes
+LDFLAGS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
+
+CXXFLAGS += -Wno-unknown-pragmas
+
 SOURCES=sources/Link65.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=link65
+EXECUTABLE=link65$(EXE)
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS)
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
 
