@@ -1,4 +1,4 @@
-SUBDIRS := unittestcpp
+SUBDIRS := #unittestcpp
 
 all clean:
 	@for d in $(SUBDIRS); do \
