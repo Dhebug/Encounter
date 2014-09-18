@@ -34,6 +34,8 @@ endif
 
 ifneq ($(PLATFORM),win32)
 COMMON_EXTRA_LDFLAGS += -lcurses
-CPPFLAGS += -D__cdecl= -std=c++11 -DPOSIX
+CXXFLAGS += -std=c++11
+CPPFLAGS += -D__cdecl=  -DPOSIX
+CFLAGS   += -Wall
 endif
 
