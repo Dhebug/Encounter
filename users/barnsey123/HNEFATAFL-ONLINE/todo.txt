@@ -1,0 +1,13 @@
+
+// TO DO LIST
+*** 16/02/2012 If the "zone" is unpopulated and king can reach it on next turn 
+	then increase target values on the zone by LOADS!!!!
+*** 27/08/2012 Implement Priority choices - Particular attackers pieces have been 
+allocated a move priority (based on the number of existing attackers on a given row/column
+The idea is that a solitary attacker (he's the only one on a row/col) should have a lower 
+moving priority than one that is on a well populated row/col, thus reducing the likelihood
+of leaving a  row/col unpopulated.
+
+*** routine to detect if all attackers have been captured
+*** routine to detect stalemate (a side cannot move)
+
