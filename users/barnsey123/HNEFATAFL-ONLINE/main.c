@@ -2,6 +2,10 @@
 // Comms routines lifted from Fabrice Frances 1995 program "tea for two"
 /*
 v0.1 19-09-2014 Online only version of HNEFATAFL (two human players playing over the net)
+v0.2 20-09-2014 Got the main screen working anway (two oricutron sessions now talk to each other)
+TO DO:
+Get moves sent/received properly
+Tidy up the screen messages
 */
 #include <lib.h>
 #define NORTH 0
@@ -237,8 +241,9 @@ void SubMoveCursor2b();		// subroutine of movecursor2() to save memory
 void UpdateKingPieces();	// updates the count of pieces in each direction from king
 void TranslateKey();		// translates input so that alternative key selections can be made
 /****************** COMMS ROUTINES   *******************************/
+void intro_screen(void);
 void read_number(char *number);
-char number[36];
+void link(void);
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -302,6 +307,7 @@ unsigned char ctns=0;			// Computer Turn north-south board position
 unsigned char ctew=0;			// Computer Turn east-west   board position 
 extern char* playertext;
 extern char* message;
+extern char* turntext;
 unsigned char foundpiece;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
 //char xloop=0;				// general purpose loop variable
 unsigned char xns=0;		// copy of ns (arrows or blanks, and subarrows)
@@ -407,19 +413,24 @@ unsigned char MultiPoints;
 char started;
 char* clockptr;
 extern unsigned char* ACIA;
-unsigned char xACIA;
+//unsigned char xACIA;
+char number[36];
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
-  CopyFont();  		//memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
+  //CopyFont();  		//memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   setflags(0); 		// turn flashing cursor off
   init_comm();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
     ClearTrophies();			// initialize trophy array
+    intro_screen();
+    link();
+    hires();
     drawboard();				// draw the board
     // determine if client or server
+    /*
     while (gamestyle==3){
       message="* WHO ARE YOU? SERVER ALWAYS KING\n1: SERVER (\n2: CLIENT )";	// define wether you are a server or a client
       printmessage();
@@ -456,8 +467,13 @@ main(){
 			x=1;
 	    	if ( gameinput == 50 ){
 	    		if (clientServer == CLIENT){
-		    		message="PHONE NUMBER OR IP:\n";
-		    		printmessage();
+		    		//message="PHONE NUMBER OR IP:\n";
+		    		//printmessage();
+		    		gotoxy(2,18); printf("P H O N E  /  I P   ( o p t . )");
+      				gotoxy(2,19); printf("P H O N E  /  I P   ( o p t . )");
+     				gotoxy(2,20); printf(">                                   <");
+     				gotoxy(2,21); printf(">                                   <");
+      				setflags(SCREEN|CURSOR);
 		    		read_number(number);
 		    		send_char('A'); send_char('T'); send_char('D');
       				for(a=0;number[a];a++) send_char(number[a]);
@@ -471,8 +487,9 @@ main(){
 	    	flashback=CYAN;flashred();
     	}
     }
-    
-    turncount=0; turnlimit=99; // 99=dummy turnlimit (for CLIENT the turnlimit is retrieved from SERVER at start of a game)
+    */
+    turnlimit=255;
+    /* 
 	if ( clientServer == SERVER ){  
 	    // set turnlimits, SERVER determines turnlimits
 		while (turnlimit == 99){
@@ -485,9 +502,10 @@ main(){
 			if ( gameinput == 51 ) {turnlimit=25;  playerlevel=ODIN;}	// 25 turns
 			flashback=CYAN;flashred();
 		}
-	}
+	}*/
 	
-	
+	drawboard();				// draw the board
+	screen(0);
 	message="\n\nTURN:              REMAINING:    ";
 	printmessage();
 	erasetext=80; // 40*2 (2 lines to erase) 
@@ -1505,8 +1523,8 @@ void playerturn(){
   ocx=cx;			// original x screen position
   ocy=cy;			// original y screen position
   flashback=CYAN;
-  playertext="ATTACKER'S";
-  if ( playertype == DEFENDER ) playertext="KING'S";
+  //playertext="ATTACKER'S";
+  //if ( playertype == DEFENDER ) playertext="KING'S";
   /*
   if ( playertype == 2 ){ 
 	playertext="KING'S";
@@ -1515,14 +1533,19 @@ void playerturn(){
     playertext="ATTACKER";
   }
   */
+  if ((( clientServer == SERVER )&&( playertype == ATTACKER )) || (( clientServer == CLIENT )&&( playertype == DEFENDER ))){
+	  playertext="WAITING...";
+	  turntext="\n\n";
+  }else{
+	  playertext="YOUR ";
+	  turntext="TURN: ARROWS MOVE CURSOR\nX:SELECT PIECE   P:POSSIBLE MOVES\nTURN:              REMAINING:    ";
+  }   
   blinkcursor();
   printturnprompt();	// display instructions
   // print number of turns and remaining turns
   printturnline();
   while (turn){			// repeat until move is made
-    //xkey=getchar();		// get code of pressed key
-    //mkey=xkey;
-    mkey=getchar();
+    mkey=getchar();		// code of pressed key
     TranslateKey();
     if (( mkey > 7 ) && ( mkey < 12 )){  // 8-11 = cursor keys 
       cursormode=0;  // freeform
@@ -1609,7 +1632,8 @@ void playerturn(){
            		mkey=0;		// piece de-selected
          	} 
          	else{ 
-          		movepiece();// move selected piece				
+          		movepiece();// move selected piece	
+          		send_move();// send moves ons,oew,ns,ew 			
            		turn=0;		// player has ended turn
          	}
          	
@@ -2487,25 +2511,100 @@ void prioritycalc(){ // calculates the priorities of moving a piece
 void read_number(char *number) {
   int i = 0;
   char c;
-  setflags(1);
-  message="";
   do {
-    gotoxy(3+i,26); c=getchar();
-    if (c==0x7F && i) { //DEL
+    gotoxy(3+i,20); c=get();
+    if (c==0x7F && i) {
       i--;
-      gotoxy(3+i,26); putchar(' ');
+      gotoxy(3+i,20); putchar(' ');
+      gotoxy(3+i,21); putchar(' ');
     }
     else if (i<35 && (c=='.' || c==':' || c>='0' && c<='9' || c>='a' && c<='z' || c>='A' && c<='Z')) {
-      gotoxy(3+i,26); putchar(c);
+      gotoxy(3+i,20); putchar(c);
+      gotoxy(3+i,21); putchar(c);
       number[i++]=c;
-      strcat(message,c);
-      printmessage();
     }
-  } while(c!=0x0D); // ENTER
+  } while(c!=0x0D);
   number[i]=0;
-  setflags(0);
 }
 
+void link(void) {
+  const int screen=0xBB80;
+  char number[36];
+  char c=0;
+  int i;
+
+  poke(screen+18*40,A_STD2H);
+  poke(screen+19*40,A_STD2H);
+  poke(screen+18*40+1,A_FWGREEN);
+  poke(screen+19*40+1,A_FWGREEN);
+
+  gotoxy(0,18); printf("\033%c\033%c    A C I A   A D D R E S S :",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,19); printf("\033%c\033%c    A C I A   A D D R E S S :",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,20); printf("\033%c\033%c1)  # 3 1 C",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,21); printf("\033%c\033%c1)  # 3 1 C",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,22); printf("\033%c\033%c2)  # 3 2 0",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,23); printf("\033%c\033%c2)  # 3 2 0",64+A_STD2H,64+A_FWGREEN);
+  do c=get(); while(c<'1' || c>'2');
+  if(c=='1') ACIA=(unsigned char*)0x31c; else ACIA=(unsigned char*)0x320;
+
+  gotoxy(0,18); printf("\033%c\033%c1)  N U L L   M O D E M    ",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,19); printf("\033%c\033%c1)  N U L L   M O D E M    ",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,20); printf("\033%c\033%c2)  M O D E M : I P        ",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,21); printf("\033%c\033%c2)  M O D E M : I P        ",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,22); printf("\033%c\033%c                                ",64+A_STD2H,64+A_FWGREEN);
+  gotoxy(0,23); printf("\033%c\033%c                                ",64+A_STD2H,64+A_FWGREEN);
+  do c=get(); while(c<'1' || c>'2');
+  if (c=='1') {
+    set_dtr();
+    if (carrier_detect()) ;//swap_sides();
+  } else {
+    set_dtr();
+    gotoxy(2,18); printf("1)  C L I E N T        ");
+    gotoxy(2,19); printf("1)  C L I E N T        ");
+    gotoxy(2,20); printf("2)  S E R V E R        ");
+    gotoxy(2,21); printf("2)  S E R V E R        ");
+    do c=get(); while(c<'1' || c>'2');
+    if (c=='1') {
+	  clientServer=CLIENT;
+      gotoxy(2,18); printf("P H O N E / I P ( O P T I O N A L");
+      gotoxy(2,19); printf("P H O N E / I P ( O P T I O N A L");
+      gotoxy(2,20); printf(">                                   <");
+      gotoxy(2,21); printf(">                                   <");
+      setflags(SCREEN|CURSOR);
+      read_number(number);
+      setflags(SCREEN);
+      send_char('A'); send_char('T'); send_char('D');
+      for(i=0;number[i];i++) send_char(number[i]);
+    } else {
+	  clientServer=SERVER;
+      send_char('A'); send_char('T'); send_char('A');
+      //swap_sides();
+    }
+    send_char('\015');
+    while(!carrier_detect());
+  }
+}
+
+void intro_screen(void) {
+  const int screen=0xBB80;
+  lores1();
+  setflags(SCREEN); poke(0x20C,0x7F);
+  poke(screen,32); memcpy((char *)screen+1,(char *)screen,28*40);
+  poke(screen+80,A_ALT); poke(screen+120,A_ALT); poke(screen+160,A_ALT);
+  //board[7][3]=KING; display(3,7); board[7][3]=QUEEN|COLOR; display(4,7);
+  gotoxy(9,6);  printf("\033%c\033%cH N E F A T A F L",64+A_STD2H,64+A_FWYELLOW);
+  gotoxy(9,7);  printf("\033%c\033%cH N E F A T A F L",64+A_STD2H,64+A_FWYELLOW);
+  gotoxy(6,10);  printf("\033%c\033%cO N L I N E  ( V 0 . 1 )",64+A_STD2H,64+A_FWYELLOW);
+  gotoxy(6,11);  printf("\033%c\033%cO N L I N E  ( V 0 . 1 )",64+A_STD2H,64+A_FWYELLOW);
+  gotoxy(12,15); printf("NEIL BARNES 2014");
+}
+
+void send_move() {
+  send_char(0x1B);
+  send_char(ons); send_char(oew);	// original position of piece
+  send_char(ns);  send_char(ew);	// new location of piece
+  send_char(';');
+}
 
 
 
