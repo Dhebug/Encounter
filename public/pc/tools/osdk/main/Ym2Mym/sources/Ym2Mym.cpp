@@ -448,7 +448,7 @@ int main(int argc,char *argv[])
 
   writebits(0,0,ptrWrite);   // Pad to byte size
 
-  ssize_t outputFileSize=(ptrWrite-destinationBuffer);
+  ptrdiff_t outputFileSize=(ptrWrite-destinationBuffer);
 
   if (maxSize && (outputFileSize>maxSize))
   {
