@@ -28,6 +28,7 @@ AYC information: http://www.cpcwiki.eu/index.php/AYC
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 
 #include "infos.h"
 #include "common.h"
