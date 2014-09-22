@@ -1,5 +1,5 @@
 #include "lib.h"
-#include "MiniGameAwale.h"
+#include "MinigameAwale.h"
 //#include <stdio.h>
 
 #define NB_TEST	(5000)

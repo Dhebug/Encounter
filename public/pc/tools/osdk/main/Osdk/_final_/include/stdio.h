@@ -1,7 +1,6 @@
 /* stdio.h */
 
 #ifndef _STDIO_
-
 #define _STDIO_
 
 #ifndef NULL

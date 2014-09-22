@@ -1,4 +1,4 @@
-#include "MiniGameAwale.h"
+#include "MinigameAwale.h"
 #include <stdio.h>
 
 //#include <assert.h>	// no assert on oric!
@@ -140,7 +140,7 @@ void	StateAwale_PlayShot(StateAwale* state, ShotAwale play)
 	{
 		// faire le test avant, de toute façon il faut faire le test,
 		// on évite ainsi de faire un incrément plus une correction
-		// revoir l'ordre de stockage des troous afin d'avoir un tableau 
+		// revoir l'ordre de stockage des troous afin d'avoir un tableau
 		// linéaire et de ne pas faire de test pour step
 		column += step;
 		if(column<0)
@@ -157,7 +157,7 @@ void	StateAwale_PlayShot(StateAwale* state, ShotAwale play)
 		}
 
 		state->m_map[line][column]++;
-		seeds--; 
+		seeds--;
 	};
 
 	// 3°) does we get seeds ?
@@ -227,7 +227,7 @@ int StateAwale_AlphaBeta(const StateAwale* state, int player, int alpha, int bet
 				end = TRUE;
 		}
 	}
-	
+
 	return m;
 }
 
@@ -302,7 +302,7 @@ ShotAwale GameAwale_GetShot_Human(/*const*/ GameAwale *game )
 	int place;
 	int canPlayShot;
 	ShotAwale shot;
-	
+
 	canPlayShot = FALSE;
 	while(!canPlayShot)
 	{
@@ -318,7 +318,7 @@ ShotAwale GameAwale_GetShot_Human(/*const*/ GameAwale *game )
 				canPlayShot = TRUE;
 			}
 		}
-		
+
 		if(canPlayShot != TRUE)
 		{
 			puts("invalid shot\n");
@@ -342,7 +342,7 @@ ShotAwale GameAwale_GetShot_Cpu0(/*const*/ GameAwale *game )
 #ifdef DISPLAY
 	//cout << "Shot Selected : " << ret.m_column << endl;
 	printf("Shot selected: %d\n", shot);
-#endif	
+#endif
 
 	return shot;
 }
@@ -380,7 +380,7 @@ ShotAwale GameAwale_GetShot_Cpu2(/*const*/ GameAwale* game )
 #ifdef DISPLAY
 	//cout << "Shot Selected : " << ret.m_column << endl;
 	printf("Shot Selected : %d\n", shot );
-#endif	
+#endif
 	return shot;
 }
 

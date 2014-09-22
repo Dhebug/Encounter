@@ -1,9 +1,12 @@
-
+#ifndef __LIB_H_
+#define __LIB_H_
 void exit(int retval);
 
+#ifndef _STDIO_
 int getchar(void);
 int putchar(char c);
 int printf(const char *format,...);
+#endif
 char *itoa(int n);
 
 int isalpha(char c);
@@ -76,7 +79,7 @@ void call(int addr);		     /* call a machine code routine */
 
 void sedoric(char *command);		/* invoke a sedoric command */
 
-/* Disk drive API - Work in progress 
+/* Disk drive API - Work in progress
 void init_disk()
 int sect_read(int sector_number, char * buffer);
 int sect_write(int sector_number, char * buffer);
@@ -199,3 +202,5 @@ extern unsigned int pcrand();
 
 #define srand(seed) if (0) {} else {randseedLow=(seed);randseedTop=0;}
 #define rand() 		(rand32()?(randseedTop & 0x7fff):(randseedTop & 0x7fff))
+
+#endif // __LIB_H_
