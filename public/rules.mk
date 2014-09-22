@@ -3,7 +3,11 @@
 
 
 # Path of the public/ directory (for instance /home/pennysbird/oric/public/)
-# OSDKPATH  = /home/user/osdkpath
+
+
+# OSDKPATH  = /home/user/oric/public
+
+
 CPP       = cpp
 CFLAGS   += -Wall
 TOOLS     =$(OSDKPATH)/pc/tools/osdk/main/
@@ -20,8 +24,11 @@ MACROS    =$(TOOLS)/Osdk/_final_/macro/MACROS.H
 .PHONY: $(DATA) compile_c
 
 ifndef OSDKPATH
+$(warning ***)
 $(warning **********************************************)
-$(warning You must edit this file an fill OSDKPATH   ***)
+$(warning You must edit)
+$(warning $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))/rules.mk)
+$(warning an fill OSDKPATH)
 $(warning **********************************************)
 $(error )
 endif
