@@ -14,3 +14,6 @@ picture.s:
 	$(FILEPACK) -p picture.hir picture.pak
 	$(BIN2TXT)  -s1 -f2 picture.pak picture.s _LabelPicture
 	cat picture.s >> $(BIN).final.s
+
+clean::
+	rm -f $(DATA) picture.hir picture.pak

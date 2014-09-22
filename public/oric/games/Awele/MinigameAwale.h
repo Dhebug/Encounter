@@ -1,3 +1,6 @@
+#ifndef __AWELE_H_
+#define __AWELE_H_
+
 #define WIDTH	(6)
 #define LENGTH	(2)
 
@@ -75,7 +78,7 @@ struct _game_awale;
 typedef	ShotAwale	(*SHOT_FUNC)(struct _game_awale*);
 
 typedef struct _game_awale
-{	
+{
 	SHOT_FUNC	m_shotFunc[LENGTH];
 	PlayerAwale	m_player[LENGTH];
 	StateAwale	m_currentState;
@@ -90,6 +93,6 @@ ShotAwale GameAwale_GetShot_Human(GameAwale* game );
 ShotAwale GameAwale_GetShot_Cpu0(GameAwale* game );	// random
 ShotAwale GameAwale_GetShot_Cpu1(GameAwale* game ); // alpha-beta
 ShotAwale GameAwale_GetShot_Cpu2(GameAwale* game ); // alpha-beta bis
-
+#endif // __AWELE_H_
 
 
