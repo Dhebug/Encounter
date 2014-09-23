@@ -5,8 +5,7 @@
 ;.)
 
 _playertext	.dsb 2
-;_turntext	.byt "YOUR TURN: ARROWS MOVE CURSOR",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
-_turntext .byt "",0;
+_turntext	.byt "TURN:  #$%&:MOVE CURSOR",10,"X:SELECT PIECE   P:POSSIBLE MOVES",10,"TURN:              REMAINING:    ",0
 _pressakey	.byt "       ()( PRESS A KEY )()",0
 ;
 ; Simply erases the three lines of TEXT at the bottom of the HIRES screen
