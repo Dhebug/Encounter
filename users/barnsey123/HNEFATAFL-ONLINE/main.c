@@ -3,9 +3,9 @@
 /*
 v0.1 19-09-2014 Online only version of HNEFATAFL (two human players playing over the net)
 v0.2 20-09-2014 Got the main screen working anway (two oricutron sessions now talk to each other)
+v0.3 23-09-2014 Moves now communicated properly (can play online game)
 TO DO:
-Get moves sent/received properly
-Tidy up the screen messages
+Repeat game doesn't work properly (once a server always a server, should not re-negotiate)
 */
 #include <lib.h>
 #define NORTH 0
@@ -65,6 +65,7 @@ extern unsigned char PictureTiles[];	// standard graphics for pieces and backgro
 //extern unsigned char RunicTiles[];		// Runic alphabet
 extern unsigned char TimerTiles[];		// display timer in central square when computer's turn
 extern unsigned char BorderTiles2[];	// for Trophy Screen
+
 /*
 ; You simply replace the existing font from C doing this:
 ;
@@ -241,9 +242,11 @@ void SubMoveCursor2b();		// subroutine of movecursor2() to save memory
 void UpdateKingPieces();	// updates the count of pieces in each direction from king
 void TranslateKey();		// translates input so that alternative key selections can be made
 /****************** COMMS ROUTINES   *******************************/
-void intro_screen(void);
+//void intro_screen(void);
 void read_number(char *number);
-void link(void);
+//void link(void);
+void send_move();
+void opponent_play();
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -418,30 +421,28 @@ char number[36];
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
-  //CopyFont();  		//memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
+  CopyFont();  		//memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   setflags(0); 		// turn flashing cursor off
   init_comm();
   for(;;){	// endless loop
     //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
     firstblood=1;
     ClearTrophies();			// initialize trophy array
-    intro_screen();
-    link();
-    hires();
+    //intro_screen();
+    //link();
+    //hires();
     drawboard();				// draw the board
     // determine if client or server
-    /*
+    
     while (gamestyle==3){
-      message="* WHO ARE YOU? SERVER ALWAYS KING\n1: SERVER (\n2: CLIENT )";	// define wether you are a server or a client
+      message="* WHO ARE YOU? SERVER ALWAYS KING \n1: SERVER (\n2: CLIENT )";	// define wether you are a server or a client
       printmessage();
       gameinput=getchar();
-      if (( gameinput == 49 ) || (gameinput == 50 )){
-		gamestyle=0;
-		clientServer=CLIENT;							// I am CLIENT (ATTACKERS)
-      	if ( gameinput == 49 ) clientServer=SERVER;		// I am SERVER (KING)
-      }else{
-      	flashback=CYAN;flashred();
-  	  }
+      switch(gameinput){
+	      case 49: gamestyle=0; clientServer=SERVER; break;
+	      case 50: gamestyle=0; clientServer=CLIENT; break;
+	      default: flashback=CYAN;flashred();
+      }
     } 
     // determine ACIA address
     x=0;
@@ -449,45 +450,36 @@ main(){
 	    message="SELECT ACIA:\n1: 0X31C : FOR LAN/INTERNET\n2: 0X320";
 	    printmessage();
 	    gameinput=getchar();
-	    if (( gameinput == 49 ) || (gameinput == 50 )){
-		    x=1;
-		    ACIA=(unsigned char*)0x320;
-	    	if ( gameinput == 49 ) ACIA=(unsigned char*)0x31c; 
-    	}else{
-    		flashback=CYAN;flashred();
-    	}
+	    switch(gameinput){
+		    case 49: x=1; ACIA=(unsigned char*)0x31c; break;
+	      	case 50: x=1; ACIA=(unsigned char*)0x320;break;
+	      	default: flashback=CYAN;flashred();
+	    }
     }
-    x=0;
-    while (x == 0){
+    // select comms type
+    while (x == 1){   
 	    message="SELECT COMMS:\n1: NULL MODEM\n2: MODEM.LAN.INTERNET";
 	    printmessage();
 	    gameinput=getchar();
-	    if (( gameinput == 49 ) || (gameinput == 50 )){
-		    set_dtr();
-			x=1;
-	    	if ( gameinput == 50 ){
-	    		if (clientServer == CLIENT){
-		    		//message="PHONE NUMBER OR IP:\n";
-		    		//printmessage();
-		    		gotoxy(2,18); printf("P H O N E  /  I P   ( o p t . )");
-      				gotoxy(2,19); printf("P H O N E  /  I P   ( o p t . )");
-     				gotoxy(2,20); printf(">                                   <");
-     				gotoxy(2,21); printf(">                                   <");
-      				setflags(SCREEN|CURSOR);
-		    		read_number(number);
-		    		send_char('A'); send_char('T'); send_char('D');
-      				for(a=0;number[a];a++) send_char(number[a]);
-	    		}else{
-		    		send_char('A'); send_char('T'); send_char('A');
-	    		}
-	    		send_char('\015');
-    			while(!carrier_detect());   				
-	    	}
-    	}else{	
-	    	flashback=CYAN;flashred();
-    	}
+	    switch(gameinput){
+		    case 49: x=0; set_dtr(); break;
+		    case 50: x=0; set_dtr();
+		    	switch(clientServer){
+			    	case SERVER:	send_char('A'); send_char('T'); send_char('A'); break;
+			    	case CLIENT:	setflags(SCREEN|CURSOR);
+			    					message="PHONE NUMBER OR IP:\n";
+		    						printmessage();
+		    						read_number(number);
+		    						send_char('A'); send_char('T'); send_char('D');
+      								for(a=0;number[a];a++) send_char(number[a]);
+      								break;
+		    	}break;
+		    default: flashback=CYAN;flashred();
+	    }
     }
-    */
+	send_char('\015');
+    while(!carrier_detect()); 
+    setflags(0);
     turnlimit=255;
     /* 
 	if ( clientServer == SERVER ){  
@@ -504,8 +496,8 @@ main(){
 		}
 	}*/
 	
-	drawboard();				// draw the board
-	screen(0);
+	//drawboard();				// draw the board
+	//screen(0);
 	message="\n\nTURN:              REMAINING:    ";
 	printmessage();
 	erasetext=80; // 40*2 (2 lines to erase) 
@@ -1533,118 +1525,132 @@ void playerturn(){
     playertext="ATTACKER";
   }
   */
-  if ((( clientServer == SERVER )&&( playertype == ATTACKER )) || (( clientServer == CLIENT )&&( playertype == DEFENDER ))){
-	  playertext="WAITING...";
-	  turntext="\n\n";
+  if ((( clientServer == SERVER )&&( playertype == DEFENDER )) || (( clientServer == CLIENT )&&( playertype == ATTACKER ))){
+	  blinkcursor();
+  	  printturnprompt();	// display instructions
+  	  printturnline();
+  	  while (turn){			// repeat until move is made
+	    mkey=getchar();		// code of pressed key
+	    TranslateKey();
+	    if (( mkey > 7 ) && ( mkey < 12 )){  // 8-11 = cursor keys 
+	      cursormode=0;  // freeform
+	      movecursor2();  
+	    }		
+	    /*******************************************************/
+	    /* determine if X or P is selected (to select a piece) */
+	    /*******************************************************/
+	    if (( mkey == 88) || ( mkey == 80)){	// if 'X' or 'P' is selected (88=X, 80=P)
+	      canselect=0;		// set piece to NOT SELECTABLE
+	      if ((( playertype == ATTACKER )&&(players[ns][ew] == ATTACKER ))||(( playertype == DEFENDER )&&((players[ns][ew] == DEFENDER )||(players[ns][ew] == KING))))	{	// piece is selectable
+		  	canselect=1; // set piece is selectable
+	        canpiecemove();
+	        if (route ) { 
+	        	flashcolor=GREEN;flashscreen();	
+	          	if ( mkey == 80 ){				// if P is pressed
+	            	printpossiblemoves();		// Print possible moves
+	            	printturnprompt();
+	            	printturnline();
+	          	}
+	        }
+	        else { 
+	          flashred();
+	          canselect=0;		// unselectable, cannot move
+	        }				
+	      }
+	      else { 
+		     flashred();	
+	      }		
+	      if (( mkey == 88 )&&( canselect  )){	// if piece is SELECTED and CAN move
+	        inkcolor=GREEN;inkasm(); 				// 2=green, 3=yellow to indicate piece is selected
+	        flashback=GREEN;
+	        inverse2();
+	        //printmessage();
+	        //strcpy(message,playertext);
+	        message="PLACE CURSOR ON DESTINATION\nX:SELECT SQUARE    R:RESET";
+	        printmessage();
+	        printturnline();
+	        //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
+	        //inversex=cx;
+	        //inversey=cy;
+	        //inverse();				// highlight selected square (inverse color)
+	        mkey=0;					// ensure mkey at known value
+	        // set Original cursor and board position of selected square
+	        ocx=cx; ocy=cy; ons=ns; oew=ew;
+	        while (( mkey != 88 ) && ( mkey != 82)){ // move cursor until X or R selected
+	        	if ( cursormovetype < 0 ){
+		        	if ( ons == ns ) cursormovetype=1;
+		        	if ( oew == ew ) cursormovetype=2;
+	        	}
+	          	if (( ons == ns )&&	(oew == ew )) 	cursormovetype=0; // cursor can move 
+	          	if (( mkey >= 8 ) && ( mkey <= 11)){
+		          	if ( cursormovetype > 0 ){
+			          	if ((( cursormovetype == 2 )&&( mkey < 10 ))||((cursormovetype == 1)&&(mkey>9))) cursormovetype=-1;
+		          	}else{ // cursormovetype is 0
+		          		cursormovetype=1;
+		          		if (( mkey == 10 )|| ( mkey == 11)) cursormovetype=2;
+	          		}
+	      		}
+	          	
+	          	if ( cursormovetype > 0 ) {
+	            	cursormode=1;	// restricted
+	            	movecursor2();
+	          	}
+	          	if ( cursormovetype < 0) { flashred();}	// flashscreen red
+	          	mkey=getchar();
+	          	TranslateKey();
+	        }
+	       	if ( mkey == 82 ){ // R has been selected, Reset cursor to original positions
+	         	fb=0;
+	         	inverse();
+	         	cx=ocx;			// reset coords and board values to original positions
+	         	cy=ocy;
+	         	ns=ons;
+	         	ew=oew;
+	         	fb=1;
+	         	inverse2(); inverse();		
+	       		}
+	       	if ( mkey == 88 ){				// if X selected
+	         	inverse();			// inverse original position
+	         	// X is in original position so return to cursor movement 
+	         	if (( ons == ns )&&( oew == ew)){
+		         	inverse2(); inverse();
+	           		mkey=0;		// piece de-selected
+	         	} 
+	         	else{ 
+	          		movepiece();// move selected piece	
+	          		send_move();// send moves ons,oew,ns,ew 			
+	           		turn=0;		// player has ended turn
+	         	}
+	         	
+	       	}
+	      }
+	      inkcolor=CYAN;inkasm();	// back to cyan	
+	      flashback=CYAN;
+	      printturnprompt();
+	      printturnline();		
+	    }		// key = X or P
+	  } // While player turn
   }else{
-	  playertext="YOUR ";
-	  turntext="TURN: ARROWS MOVE CURSOR\nX:SELECT PIECE   P:POSSIBLE MOVES\nTURN:              REMAINING:    ";
-  }   
-  blinkcursor();
-  printturnprompt();	// display instructions
-  // print number of turns and remaining turns
-  printturnline();
-  while (turn){			// repeat until move is made
-    mkey=getchar();		// code of pressed key
-    TranslateKey();
-    if (( mkey > 7 ) && ( mkey < 12 )){  // 8-11 = cursor keys 
-      cursormode=0;  // freeform
-      movecursor2();  
-    }		
-    /*******************************************************/
-    /* determine if X or P is selected (to select a piece) */
-    /*******************************************************/
-    if (( mkey == 88) || ( mkey == 80)){	// if 'X' or 'P' is selected (88=X, 80=P)
-      canselect=0;		// set piece to NOT SELECTABLE
-      if ((( playertype == ATTACKER )&&(players[ns][ew] == ATTACKER ))||(( playertype == DEFENDER )&&((players[ns][ew] == DEFENDER )||(players[ns][ew] == KING))))	{	// piece is selectable
-	  	canselect=1; // set piece is selectable
-        canpiecemove();
-        if (route ) { 
-        	flashcolor=GREEN;flashscreen();	
-          	if ( mkey == 80 ){				// if P is pressed
-            	printpossiblemoves();		// Print possible moves
-            	printturnprompt();
-            	printturnline();
-          	}
-        }
-        else { 
-          flashred();
-          canselect=0;		// unselectable, cannot move
-        }				
-      }
-      else { 
-	     flashred();	
-      }		
-      if (( mkey == 88 )&&( canselect  )){	// if piece is SELECTED and CAN move
-        inkcolor=GREEN;inkasm(); 				// 2=green, 3=yellow to indicate piece is selected
-        flashback=GREEN;
-        inverse2();
-        //printmessage();
-        //strcpy(message,playertext);
-        message="PLACE CURSOR ON DESTINATION\nX:SELECT SQUARE    R:RESET";
-        printmessage();
-        printturnline();
-        //printf("\n\n\n%s Turn X=Select R=Reset",playertext);
-        //inversex=cx;
-        //inversey=cy;
-        //inverse();				// highlight selected square (inverse color)
-        mkey=0;					// ensure mkey at known value
-        // set Original cursor and board position of selected square
-        ocx=cx; ocy=cy; ons=ns; oew=ew;
-        while (( mkey != 88 ) && ( mkey != 82)){ // move cursor until X or R selected
-        	if ( cursormovetype < 0 ){
-	        	if ( ons == ns ) cursormovetype=1;
-	        	if ( oew == ew ) cursormovetype=2;
-        	}
-          	if (( ons == ns )&&	(oew == ew )) 	cursormovetype=0; // cursor can move 
-          	if (( mkey >= 8 ) && ( mkey <= 11)){
-	          	if ( cursormovetype > 0 ){
-		          	if ((( cursormovetype == 2 )&&( mkey < 10 ))||((cursormovetype == 1)&&(mkey>9))) cursormovetype=-1;
-	          	}else{ // cursormovetype is 0
-	          		cursormovetype=1;
-	          		if (( mkey == 10 )|| ( mkey == 11)) cursormovetype=2;
-          		}
-      		}
-          	
-          	if ( cursormovetype > 0 ) {
-            	cursormode=1;	// restricted
-            	movecursor2();
-          	}
-          	if ( cursormovetype < 0) { flashred();}	// flashscreen red
-          	mkey=getchar();
-          	TranslateKey();
-        }
-       	if ( mkey == 82 ){ // R has been selected, Reset cursor to original positions
-         	fb=0;
-         	inverse();
-         	cx=ocx;			// reset coords and board values to original positions
-         	cy=ocy;
-         	ns=ons;
-         	ew=oew;
-         	fb=1;
-         	inverse2(); inverse();		
-       		}
-       	if ( mkey == 88 ){				// if X selected
-         	inverse();			// inverse original position
-         	// X is in original position so return to cursor movement 
-         	if (( ons == ns )&&( oew == ew)){
-	         	inverse2(); inverse();
-           		mkey=0;		// piece de-selected
-         	} 
-         	else{ 
-          		movepiece();// move selected piece	
-          		send_move();// send moves ons,oew,ns,ew 			
-           		turn=0;		// player has ended turn
-         	}
-         	
-       	}
-      }
-      inkcolor=CYAN;inkasm();	// back to cyan	
-      flashback=CYAN;
-      printturnprompt();
-      printturnline();		
-    }		// key = X or P
-  }	// While player turn		
+	  // WAIT for opponents turn
+	  erasetext=80; // two lines
+	  erasetextarea();
+	  message="WAITING...";
+	  printmessage();
+	  printturnline();
+	  do{
+	  	c=receive_char();
+  	  }
+  	  while (c != 0x1B);
+      opponent_play(); 
+	  gotoxy(3,26);
+	  //setflags(SCREEN|CURSOR);
+  	  //printf("ONS=%s OEW=%s NS=%s EW=%s", ons,oew,ns,ew);
+  	  //setflags(0);
+  	  //getchar();
+  	  cx=oew;cy=ons;blinkcursor();
+	  movepiece();
+	  cx=ew;cy=ns;blinkcursor();
+  }			
 }
 
 
@@ -2512,21 +2518,21 @@ void read_number(char *number) {
   int i = 0;
   char c;
   do {
-    gotoxy(3+i,20); c=get();
+    gotoxy(2+i,26); c=get();
     if (c==0x7F && i) {
       i--;
-      gotoxy(3+i,20); putchar(' ');
-      gotoxy(3+i,21); putchar(' ');
+      gotoxy(2+i,26); putchar(' ');
+      //gotoxy(3+i,21); putchar(' ');
     }
     else if (i<35 && (c=='.' || c==':' || c>='0' && c<='9' || c>='a' && c<='z' || c>='A' && c<='Z')) {
-      gotoxy(3+i,20); putchar(c);
-      gotoxy(3+i,21); putchar(c);
+      gotoxy(2+i,26); putchar(c);
+      //gotoxy(3+i,21); putchar(c);
       number[i++]=c;
     }
   } while(c!=0x0D);
-  number[i]=0;
+  number[i]=0;	// null termination
 }
-
+/*
 void link(void) {
   const int screen=0xBB80;
   char number[36];
@@ -2583,8 +2589,8 @@ void link(void) {
     send_char('\015');
     while(!carrier_detect());
   }
-}
-
+}*/
+/*
 void intro_screen(void) {
   const int screen=0xBB80;
   lores1();
@@ -2598,12 +2604,20 @@ void intro_screen(void) {
   gotoxy(6,11);  printf("\033%c\033%cO N L I N E  ( V 0 . 1 )",64+A_STD2H,64+A_FWYELLOW);
   gotoxy(12,15); printf("NEIL BARNES 2014");
 }
-
+*/
 void send_move() {
   send_char(0x1B);
   send_char(ons); send_char(oew);	// original position of piece
   send_char(ns);  send_char(ew);	// new location of piece
   send_char(';');
+}
+
+void opponent_play() {
+ ons=wait_char();
+ oew=wait_char();
+ ns=wait_char();
+ ew=wait_char();
+ wait_char();		// get the trailing ;
 }
 
 
