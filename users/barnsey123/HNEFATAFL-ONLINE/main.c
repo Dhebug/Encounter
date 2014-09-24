@@ -4,6 +4,9 @@
 v0.1 19-09-2014 Online only version of HNEFATAFL (two human players playing over the net)
 v0.2 20-09-2014 Got the main screen working anway (two oricutron sessions now talk to each other)
 v0.3 23-09-2014 Moves now communicated properly (can play online game)
+v0.4 23-09-2014 sending/recieving serverType so that server can be either ATTACKER or DEFENDER
+v0.5 24-09-2014 tidying up display messages so they make sense (press a key, please wait etc
+v0.6 24-09-2014 fixed bug in ALGIZ trophy award (you have to WIN and not lose a man)
 TO DO:
 Repeat game doesn't work properly (once a server always a server, should not re-negotiate)
 */
@@ -55,7 +58,7 @@ Repeat game doesn't work properly (once a server always a server, should not re-
 FIRSTBLOOD = MAKE FIRST KILL
 BLOODEAGLE = DOUBLE KILL
 BERZERKER = TRIPLE KILL
-ALGIZ = SURVIVAL - DONT LOSE A MAN - DEFENCE - SELF PRESERVATION
+ALGIZ = SURVIVAL - WIN WITHOUT LOSING A MAN - DEFENCE - SELF PRESERVATION
 URUZ = SPEED - WIN WITH >= 5 TURNS REMAINING
 RAIDO =  A LONG JOURNEY - WIN ON LAST TURN
 */
@@ -247,6 +250,9 @@ void read_number(char *number);
 //void link(void);
 void send_move();
 void opponent_play();
+void send_serverType();
+void get_serverType();
+void chooseSide();
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -300,7 +306,6 @@ unsigned char flashcolor;	// color of ink to flash in
 unsigned char flashback;	// color of ink to return to
 char game;					// *** MUST NOT BE UNSIGNED ***<=0 means endgame (see checkend for values), 1=GAMEON
 unsigned char gamestyle;	// 0=human vs human; 1=human king vs computer; ** NO!!! 2=human vs computer king**; 3=undefined
-unsigned char clientServer;	// 1=I AM SERVER, 2=I AM CLIENT
 unsigned char kingns,kingew;// kings position North-South
 unsigned char kingattacker[4];	// number of attackers in all four directions from king
 unsigned char kingdefender[4];	// number of defenders in all four directions from king
@@ -310,7 +315,9 @@ unsigned char ctns=0;			// Computer Turn north-south board position
 unsigned char ctew=0;			// Computer Turn east-west   board position 
 extern char* playertext;
 extern char* message;
-extern char* turntext;
+//extern char* pressAKeyText;
+//extern char* pleaseWaitText;
+//extern char* turntext;
 unsigned char foundpiece;	// has a piece been found (during computer move) that can move to the hightarget square? 0=no, 1=yes&ok, 9=yes!ok
 //char xloop=0;				// general purpose loop variable
 unsigned char xns=0;		// copy of ns (arrows or blanks, and subarrows)
@@ -418,24 +425,17 @@ char* clockptr;
 extern unsigned char* ACIA;
 //unsigned char xACIA;
 char number[36];
+unsigned char clientServer;	// 1=I AM SERVER, 2=I AM CLIENT
+unsigned char serverType;	// 1=ATTACKER, 2=DEFENDER
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
   CopyFont();  		//memcpy((unsigned char*)0xb400+32*8,Font_6x8_runic1_full,768);
   setflags(0); 		// turn flashing cursor off
   init_comm();
-  for(;;){	// endless loop
-    //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
-    firstblood=1;
-    ClearTrophies();			// initialize trophy array
-    //intro_screen();
-    //link();
-    //hires();
-    drawboard();				// draw the board
-    // determine if client or server
-    
-    while (gamestyle==3){
-      message="* WHO ARE YOU? SERVER ALWAYS KING \n1: SERVER (\n2: CLIENT )";	// define wether you are a server or a client
+  drawboard();
+   while (gamestyle==3){
+      message="* WHO ARE YOU?\n1: SERVER \n2: CLIENT ";	// define wether you are a server or a client
       printmessage();
       gameinput=getchar();
       switch(gameinput){
@@ -462,26 +462,58 @@ main(){
 	    printmessage();
 	    gameinput=getchar();
 	    switch(gameinput){
-		    case 49: x=0; set_dtr(); break;
-		    case 50: x=0; set_dtr();
-		    	switch(clientServer){
-			    	case SERVER:	send_char('A'); send_char('T'); send_char('A'); break;
-			    	case CLIENT:	setflags(SCREEN|CURSOR);
-			    					message="PHONE NUMBER OR IP:\n";
-		    						printmessage();
-		    						read_number(number);
-		    						send_char('A'); send_char('T'); send_char('D');
-      								for(a=0;number[a];a++) send_char(number[a]);
-      								break;
-		    	}break;
+		    case 49:	x=0; set_dtr(); 
+		    break;
+		    case 50:	x=0; set_dtr();
+		    			switch(clientServer){
+					    	case SERVER:	
+					    					//chooseSide();
+		    								send_char('A'); send_char('T'); send_char('A');
+					    	break;
+					    	case CLIENT:	setflags(SCREEN|CURSOR);
+					    					message="PHONE NUMBER OR IP:\n";
+				    						printmessage();
+				    						read_number(number);
+				    						send_char('A'); send_char('T'); send_char('D');
+		      								for(a=0;number[a];a++) send_char(number[a]);
+		      								setflags(0);
+		      				break;
+		    			}
+		    break;
 		    default: flashback=CYAN;flashred();
 	    }
     }
 	send_char('\015');
+	message="()()( WAITING FOR CONNECTION )()()\n\n";
+	printmessage();
+	//pleaseWait();	// flash text
     while(!carrier_detect()); 
-    setflags(0);
-    turnlimit=255;
-    /* 
+  for(;;){	// endless loop
+    //playertype=0;				// 1=attacker, 2=defender (set at zero as incremented within loop)
+    firstblood=1;
+    ClearTrophies();			// initialize trophy array
+    //intro_screen();
+    //link();
+    //hires();
+    drawboard();				// draw the board
+    
+    switch (clientServer){
+	    case SERVER: 
+    		// send serverType to Client
+    		chooseSide();
+    		send_serverType();	// server is attacker or defender (client will be opposite)
+	    break;
+	    case CLIENT:
+	    	//pleaseWait();
+	    	message="()()( WAITING FOR SERVER )()()\n\n";
+	    	printmessage();
+	    	get_serverType(); // server is attacker or defender (client will be opposite)
+	    break;
+    } 
+    //flashText="       ()( PRESS A KEY )()";
+    //setflags(0);
+    turnlimit=60;
+    /*
 	if ( clientServer == SERVER ){  
 	    // set turnlimits, SERVER determines turnlimits
 		while (turnlimit == 99){
@@ -540,14 +572,12 @@ main(){
     	}
     }
     printmessage();
-    //erasetext=80; // 40*3 (3 lines to erase)
-    //message="\n       ()( PRESS A KEY )()";	 
-    //printline();
-    flashon();
+    pressAKey();
     printturnline();
     getchar();
+    //if ( clientServer == SERVER ) getchar();
     PrintTrophyScreen();
-    end_comm();
+    //end_comm();
   }
 }
 
@@ -1240,12 +1270,9 @@ void printpossiblemoves(){
   //char k;	// key entered
   fb=1;
   printdestinations();	// print arrows on all destinations	
-  //message="\n       )() PRESS A KEY ()(";
   erasetextarea();
-  //printmessage();		// "PRESS A KEY"
-  flashon();			// Make it FLASH RED
+  pressAKey();			// Make it FLASH RED
   printturnline();
-  //k=getchar();
   getchar();
   //fb=0;
   printdestinations();	// blank out arrows on all destinations
@@ -1515,8 +1542,8 @@ void playerturn(){
   ocx=cx;			// original x screen position
   ocy=cy;			// original y screen position
   flashback=CYAN;
-  //playertext="ATTACKER'S";
-  //if ( playertype == DEFENDER ) playertext="KING'S";
+  playertext="ATTACKER'S";
+  if ( playertype == DEFENDER ) playertext="KING'S";
   /*
   if ( playertype == 2 ){ 
 	playertext="KING'S";
@@ -1525,7 +1552,8 @@ void playerturn(){
     playertext="ATTACKER";
   }
   */
-  if ((( clientServer == SERVER )&&( playertype == DEFENDER )) || (( clientServer == CLIENT )&&( playertype == ATTACKER ))){
+  if ((( clientServer == SERVER )&&( playertype == serverType )) || (( clientServer == CLIENT )&&( playertype != serverType ))){
+	  zap();
 	  blinkcursor();
   	  printturnprompt();	// display instructions
   	  printturnline();
@@ -1849,11 +1877,9 @@ void takepiece(){
 	  TakeWeight=LOWTAKEWEIGHT;	// reduce the takeweight figure
 	  Trophies[FIRSTBLOOD][playertype-1]=TROPHY;	// update Trophies Array
 	  firstblood=0;
-	  //message=" ()( FIRST BLOOD TO ATTACKER )()\n       )() PRESS A KEY ()("; 
 	  message=" ()( FIRST BLOOD TO ATTACKER )()";           
           
 	  if ( playertype == DEFENDER ){
-	  //message="   ()( FIRST BLOOD TO KING )()\n       )() PRESS A KEY ()("; 
 	  message="   ()( FIRST BLOOD TO KING )()";                      	   
                      	   
 	  }
@@ -1876,7 +1902,7 @@ void takemessage(){	// displays a firstblood or multiple take message
 }
 void submessage(){
 	printmessage();
-	flashon();
+	pressAKey();	// flash red text
 	printturnline();
 	getchar();
 }
@@ -2291,8 +2317,6 @@ void PrintTrophyScreen(){
 	//message="       ()(    HNEFATAFL    ()(\n     )() VALHALLA AWARDS )()\nTURN:              REMAINING:";
 	message="         ()(  HNEFATAFL  ()(";
 	printline();
-	//flashon();
-	//printturnline();
 	erasetext=120;
 	// set ink color for main screen
 	inkcolor=3;inkasm(); 			// yellow, erm...gold
@@ -2393,8 +2417,9 @@ void PT5(){
 	row++;
 }
 void AlgizThorTrophyCalc(){	// Calculate if anyone should get the ALGIZ or THOR Trophies
-		if (deadattackers==0) Trophies[ALGIZ][0]=TROPHY;
-		if (deaddefenders==0) Trophies[ALGIZ][1]=TROPHY;
+
+		if ((game == -2) && (deadattackers==0)) Trophies[ALGIZ][0]=TROPHY;	// attackers win without losing a man
+		if ((game == 0)&&(deaddefenders==0)) Trophies[ALGIZ][1]=TROPHY; // king wins without losing a man
 		if (deaddefenders>11) Trophies[THOR][0]=TROPHY;
 		if (deadattackers==24)Trophies[THOR][1]=TROPHY;
 }
@@ -2620,5 +2645,33 @@ void opponent_play() {
  wait_char();		// get the trailing ;
 }
 
+void send_serverType() {
+	send_char(0x1B);
+	send_char(serverType);
+	send_char(';');
+}
+
+void get_serverType(){
+	do{
+	  	c=receive_char();
+  	  }
+  	while (c != 0x1B);
+	serverType=wait_char();
+	wait_char();	// get the trailing ;
+}
+
+void chooseSide(){
+	x=0;
+	while (x == 0){
+		message="SERVER: WHICH SIDE WILL YOU PLAY?\n1: ATTACKERS        )\n2: DEFENDERS - KING (";
+		printmessage();
+		gameinput=getchar();
+		switch(gameinput){
+			case 49: x=1; serverType=ATTACKER; break;
+				case 50: x=1; serverType=DEFENDER; break;
+				default: flashback=CYAN;flashred();
+		}
+	} 
+}
 
 
