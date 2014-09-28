@@ -1,26 +1,29 @@
-CC=g++
-CFLAGS=-c -Iincludes -I../common/includes/ -std=c++11 -w
-LDFLAGS=-L../common/ -lcommon ../common/common.o ../common/lz_pack.o -lcurses
+include ../../../rules.mk
+
+CPPFLAGS += -Wall -Iincludes
+
+CPPFLAGS += -I ../common/includes
+LDLIBS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
+
 SOURCES=sources/xaa.cpp   \
 	sources/xa.cpp    \
 	sources/xal.cpp   \
-    	sources/xam.cpp   \
-      	sources/xao.cpp   \
-        sources/xap.cpp   \
+	sources/xam.cpp   \
+	sources/xao.cpp   \
+	sources/xap.cpp   \
 	sources/xar2.cpp  \
 	sources/xar.cpp   \
 	sources/xat.cpp   \
 	sources/xau.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=xa
+EXECUTABLE=xa$(EXE)
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS)
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
 
