@@ -28,6 +28,9 @@
 #include <unistd.h>
 #endif
 
+#if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ < 6
+#define nullptr (NULL)
+#endif
 
 //
 // Debugging macros
