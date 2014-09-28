@@ -1,17 +1,19 @@
-CC=g++
-CFLAGS=-c -Wall -Iincludes -I../common/includes/ -std=c++11
-LDFLAGS=-L../common/ -lcommon ../common/common.o -lcurses
+include ../../../rules.mk
+
+CPPFLAGS= -Wall -Iincludes
+
+CPPFLAGS += -I ../common/includes
+LDLIBS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
 SOURCES=sources/DskTool.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=DskTool
+EXECUTABLE=bas2tap$(EXE)
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS)
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
 
