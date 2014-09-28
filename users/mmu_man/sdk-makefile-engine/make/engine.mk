@@ -138,7 +138,7 @@ OBJS := $(addsuffix .os,$(addprefix BUILD/,$(FILES)))
 BUILD/%.os: %.c
 	@echo Compiling $<
 	@echo   - preprocess
-	$(Q)$(OSDKCPP) -lang-c++ $(CPPFLAGS) -nostdinc $(<) $(call fixpath,$@.c1)
+	$(Q)$(OSDKCPP) -lang-c++ $(CPPFLAGS) -nostdinc $(<) -o $(call fixpath,$@.c1)
 	@echo   - compile
 	$(Q)$(OSDKCOMPILER) -N$(basename $(notdir $@)) $(CFLAGS) $(call fixpath,$@.c1) >$@.c2
 	@echo   - convert C to assembly code
