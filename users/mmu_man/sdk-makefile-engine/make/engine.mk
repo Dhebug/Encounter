@@ -13,9 +13,9 @@ DS=/
 
 MAKEDIR=$(CURDIR)
 
-
+ifeq ($(OS),Windows_NT)
+$(info Detected Windows OS type)
 CAT=type
-#CAT=cat
 DEVNULL=NUL
 OSDKB = $(OSDK)\bin
 OSDKCPP=$(OSDKB)\cpp
@@ -27,8 +27,20 @@ OSDKMACROSPLITTER=$(OSDKB)\macrosplitter
 
 # function to $(call) to fix the path for windows...
 fixpath = $(subst /,\,$(1))
-#fixpath = $(1)
+else
+CAT=cat
+DEVNULL=/dev/null
+OSDKB = $(OSDK)/bin
+OSDKCPP=$(OSDKB)/cpp
+OSDKCOMPILER=$(OSDKB)/compiler
+OSDKLINK65=$(OSDKB)/link65
+OSDKXA=$(OSDKB)/xa
+OSDKMACROSPLITTER=$(OSDKB)/macrosplitter
+#OSDK=$(OSDKB)/cpp$(EXESUFF)
 
+# function to $(call) to fix the path for windows...
+fixpath = $(1)
+endif
 
 # Try to get infos from osdk_config.bat
 ifeq ($(NAME),)
