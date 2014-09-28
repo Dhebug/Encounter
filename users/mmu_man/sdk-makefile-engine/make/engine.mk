@@ -15,6 +15,7 @@ MAKEDIR=$(CURDIR)
 
 ifeq ($(OS),Windows_NT)
 $(info Detected Windows OS type)
+EXESUFF=.exe
 CAT=type
 DEVNULL=NUL
 OSDKB = $(OSDK)\bin
@@ -28,6 +29,7 @@ OSDKMACROSPLITTER=$(OSDKB)\macrosplitter
 # function to $(call) to fix the path for windows...
 fixpath = $(subst /,\,$(1))
 else
+EXESUFF=
 CAT=cat
 DEVNULL=/dev/null
 OSDKB = $(OSDK)/bin
@@ -78,14 +80,14 @@ endif
 
 # try to autodetect Euphoric
 ifeq ($(EUPHORIC),)
-ifneq ($(wildcard $(OSDK)/euphoric/euphoric.exe),)
-EUPHORIC = $(OSDK)/euphoric/euphoric.exe
+ifneq ($(wildcard $(OSDK)/euphoric/euphoric$(EXESUFF)),)
+EUPHORIC = $(OSDK)/euphoric/euphoric$(EXESUFF)
 else
-ifneq ($(wildcard $(OSDK)/../euphoric/euphoric.exe),)
-EUPHORIC = $(OSDK)/../euphoric/euphoric.exe
+ifneq ($(wildcard $(OSDK)/../euphoric/euphoric$(EXESUFF)),)
+EUPHORIC = $(OSDK)/../euphoric/euphoric$(EXESUFF)
 else
-ifneq ($(wildcard C:/PROGRA~1/euphoric/euphoric.exe),)
-EUPHORIC = C:/PROGRA~1/euphoric/euphoric.exe
+ifneq ($(wildcard C:/PROGRA~1/euphoric/euphoric$(EXESUFF)),)
+EUPHORIC = C:/PROGRA~1/euphoric/euphoric$(EXESUFF)
 endif
 endif
 endif
@@ -93,14 +95,14 @@ endif
 
 # try to autodetect Oricutron
 ifeq ($(ORICUTRON),)
-ifneq ($(wildcard $(OSDK)/oricutron/oricutron.exe),)
-ORICUTRON = $(OSDK)/oricutron/oricutron.exe
+ifneq ($(wildcard $(OSDK)/oricutron/oricutron$(EXESUFF)),)
+ORICUTRON = $(OSDK)/oricutron/oricutron$(EXESUFF)
 else
-ifneq ($(wildcard $(OSDK)/../oricutron/oricutron.exe),)
-ORICUTRON = $(OSDK)/../oricutron/oricutron.exe
+ifneq ($(wildcard $(OSDK)/../oricutron/oricutron$(EXESUFF)),)
+ORICUTRON = $(OSDK)/../oricutron/oricutron$(EXESUFF)
 else
-ifneq ($(wildcard C:/PROGRA~1/oricutron/oricutron.exe),)
-ORICUTRON = C:/PROGRA~1/oricutron/oricutron.exe
+ifneq ($(wildcard C:/PROGRA~1/oricutron/oricutron$(EXESUFF)),)
+ORICUTRON = C:/PROGRA~1/oricutron/oricutron$(EXESUFF)
 endif
 endif
 endif
