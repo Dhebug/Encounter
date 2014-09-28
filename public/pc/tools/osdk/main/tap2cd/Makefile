@@ -8,7 +8,7 @@ LDLIBS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
 
 SOURCES=sources/tap2cd.c
 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=tap2cd$(EXE)
 
 all: $(SOURCES) $(EXECUTABLE)
