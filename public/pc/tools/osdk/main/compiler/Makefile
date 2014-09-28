@@ -1,6 +1,7 @@
-CC=gcc
-CFLAGS=-c -Iincludes -DPOSIX -w
-LDFLAGS=
+include ../../../rules.mk
+
+CPPFLAGS += -Iincludes -DPOSIX
+
 SOURCES=sources/dag.c    \
 	sources/debug.c  \
  	sources/decl.c   \
@@ -22,14 +23,13 @@ SOURCES=sources/dag.c    \
 	sources/types.c
 
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=compiler
+EXECUTABLE=compiler$(EXE)
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS)
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
 
