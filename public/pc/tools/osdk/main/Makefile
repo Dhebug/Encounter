@@ -4,8 +4,7 @@ SUBDIRS := common \
 	pictconv \
 	bas2tap filepack opt65 tap2dsk Ym2Mym bin2txt \
 	FloppyBuilder MemMap TapTool DskTool header \
-	macrosplitter tap2cd xa \
-	Osdk/_final_/sample
+	macrosplitter tap2cd xa
 
 
 all clean:
