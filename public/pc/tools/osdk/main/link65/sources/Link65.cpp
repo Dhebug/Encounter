@@ -1090,9 +1090,10 @@ int main(int argc,char **argv)
 		{
 			char current_directory[_MAX_PATH+1];
 			char filename[_MAX_PATH];
+                        char dummy[_MAX_PATH];
 
 			getcwd(current_directory,_MAX_PATH);
-			_splitpath(gInputFileList[k].m_cFileName.c_str(),0,0,filename,0);
+			_splitpath(gInputFileList[k].m_cFileName.c_str(),dummy,dummy,filename,dummy);
 
 			fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
 		}
