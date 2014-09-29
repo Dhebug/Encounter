@@ -3817,7 +3817,7 @@ skip ;\
 	ldx adr2 ;\
 	lda adr2+1 ;\
 	stx *+12 ;\
-	sta *+10 ;\ 
+	sta *+10 ;\
 	ldx #0 ;\
 	lda adr1,x ;\
 	sta $1234,x ;\
@@ -3938,7 +3938,7 @@ skip ;\
 	sta *+15 ;\
 	iny ;\
 	lda ptr2,y ;\
-	sta *+10 ;\ 
+	sta *+10 ;\
 	ldx #0 ;\
 	lda adr1,x ;\
 	sta $1234,x ;\
