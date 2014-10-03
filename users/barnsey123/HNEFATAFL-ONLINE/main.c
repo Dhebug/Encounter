@@ -7,8 +7,9 @@ v0.3 23-09-2014 Moves now communicated properly (can play online game)
 v0.4 23-09-2014 sending/recieving serverType so that server can be either ATTACKER or DEFENDER
 v0.5 24-09-2014 tidying up display messages so they make sense (press a key, please wait etc
 v0.6 24-09-2014 fixed bug in ALGIZ trophy award (you have to WIN and not lose a man)
+v1.0 03-10-2014 Made a few changes to the text displays (more color, clearer instructions) 
 TO DO:
-Repeat game doesn't work properly (once a server always a server, should not re-negotiate)
+
 */
 #include <lib.h>
 #define NORTH 0
@@ -244,6 +245,7 @@ void SubMoveCursor2b();		// subroutine of movecursor2() to save memory
 //void Xenon5();
 void UpdateKingPieces();	// updates the count of pieces in each direction from king
 void TranslateKey();		// translates input so that alternative key selections can be made
+void colorPrompt();
 /****************** COMMS ROUTINES   *******************************/
 //void intro_screen(void);
 void read_number(char *number);
@@ -253,6 +255,7 @@ void opponent_play();
 void send_serverType();
 void get_serverType();
 void chooseSide();
+//void printCommText();
 /****************** GLOBAL VARIABLES *******************************/
 /* Populate array with tile types
 Tile types:
@@ -427,6 +430,8 @@ extern unsigned char* ACIA;
 char number[36];
 unsigned char clientServer;	// 1=I AM SERVER, 2=I AM CLIENT
 unsigned char serverType;	// 1=ATTACKER, 2=DEFENDER
+//char* binary[]={'0','0','0','0','1','0','0','1','1','0','0','0','0','1','0','1','1','1','0','0','0','0','0','1','1','0','0','0','0','0','0','1','0','1','0'};
+//char* commText="01101110.01100011.11110000.01010101";
 /****************** MAIN PROGRAM ***********************************/
 main(){
   //gameinput=0;	// 0=undefined 1=play against computer, 2=human vs human
@@ -436,7 +441,7 @@ main(){
   drawboard();
    while (gamestyle==3){
       message="* WHO ARE YOU?\n1: SERVER \n2: CLIENT ";	// define wether you are a server or a client
-      printmessage();
+      colorPrompt();
       gameinput=getchar();
       switch(gameinput){
 	      case 49: gamestyle=0; clientServer=SERVER; break;
@@ -448,7 +453,7 @@ main(){
     x=0;
     while (x == 0){
 	    message="SELECT ACIA:\n1: 0X31C : FOR LAN/INTERNET\n2: 0X320";
-	    printmessage();
+	    colorPrompt();
 	    gameinput=getchar();
 	    switch(gameinput){
 		    case 49: x=1; ACIA=(unsigned char*)0x31c; break;
@@ -459,7 +464,7 @@ main(){
     // select comms type
     while (x == 1){   
 	    message="SELECT COMMS:\n1: NULL MODEM\n2: MODEM.LAN.INTERNET";
-	    printmessage();
+	    colorPrompt();
 	    gameinput=getchar();
 	    switch(gameinput){
 		    case 49:	x=0; set_dtr(); 
@@ -473,6 +478,7 @@ main(){
 					    	case CLIENT:	setflags(SCREEN|CURSOR);
 					    					message="PHONE NUMBER OR IP:\n";
 				    						printmessage();
+				    						poke(0xbf90+1,GREEN);
 				    						read_number(number);
 				    						send_char('A'); send_char('T'); send_char('D');
 		      								for(a=0;number[a];a++) send_char(number[a]);
@@ -484,8 +490,9 @@ main(){
 	    }
     }
 	send_char('\015');
-	message="()()( WAITING FOR CONNECTION )()()\n\n";
+	message="()()( WAITING FOR CONNECTION )()(\n\n";
 	printmessage();
+	poke(0xbf69,YELLOW);
 	//pleaseWait();	// flash text
     while(!carrier_detect()); 
   for(;;){	// endless loop
@@ -505,8 +512,9 @@ main(){
 	    break;
 	    case CLIENT:
 	    	//pleaseWait();
-	    	message="()()( WAITING FOR SERVER )()()\n\n";
+	    	message="()()() WAITING FOR SERVER )()()()\n\n";
 	    	printmessage();
+	    	poke(0xbf68+1,YELLOW);
 	    	get_serverType(); // server is attacker or defender (client will be opposite)
 	    break;
     } 
@@ -1553,7 +1561,7 @@ void playerturn(){
   }
   */
   if ((( clientServer == SERVER )&&( playertype == serverType )) || (( clientServer == CLIENT )&&( playertype != serverType ))){
-	  zap();
+	  //zap();
 	  blinkcursor();
   	  printturnprompt();	// display instructions
   	  printturnline();
@@ -1662,26 +1670,43 @@ void playerturn(){
 	  // WAIT for opponents turn
 	  erasetext=80; // two lines
 	  erasetextarea();
-	  message="WAITING...";
+	  message="()()() OPPONENT IS THINKING )()()";
 	  printmessage();
+	  poke(0xbf69,YELLOW);
 	  printturnline();
 	  do{
 	  	c=receive_char();
   	  }
   	  while (c != 0x1B);
-      opponent_play(); 
-	  gotoxy(3,26);
-	  //setflags(SCREEN|CURSOR);
-  	  //printf("ONS=%s OEW=%s NS=%s EW=%s", ons,oew,ns,ew);
-  	  //setflags(0);
-  	  //getchar();
+      opponent_play();
+      zap();
+      message="()()()     MAKING MOVE      )()()";
+      printmessage();
+      poke(0xbf69,YELLOW);
   	  cx=oew;cy=ons;blinkcursor();
 	  movepiece();
 	  cx=ew;cy=ns;blinkcursor();
   }			
 }
-
-
+/*
+void printCommText(){
+	
+	unsigned char marker;
+	unsigned char fred=2;
+	char binText=48;
+	pausetime=500;
+	poke(0xbf91,2); //green
+	for (marker=1; marker<=39 ; marker++){
+		gotoxy(fred,26);
+		//plot(fred,26,"1");
+		putchar(binText);
+		fred++;
+		//printf("%.*s",marker,commText);
+		pause();	
+	}
+	
+}
+*/
 // Moves selected piece to new location - updating board arrays and re-drawing tiles where necessary
 void movepiece(){ 
   p1=ATTACKER;	// piece type comparison (lower) - used for determining takes - default=attacker
@@ -2615,26 +2640,13 @@ void link(void) {
     while(!carrier_detect());
   }
 }*/
-/*
-void intro_screen(void) {
-  const int screen=0xBB80;
-  lores1();
-  setflags(SCREEN); poke(0x20C,0x7F);
-  poke(screen,32); memcpy((char *)screen+1,(char *)screen,28*40);
-  poke(screen+80,A_ALT); poke(screen+120,A_ALT); poke(screen+160,A_ALT);
-  //board[7][3]=KING; display(3,7); board[7][3]=QUEEN|COLOR; display(4,7);
-  gotoxy(9,6);  printf("\033%c\033%cH N E F A T A F L",64+A_STD2H,64+A_FWYELLOW);
-  gotoxy(9,7);  printf("\033%c\033%cH N E F A T A F L",64+A_STD2H,64+A_FWYELLOW);
-  gotoxy(6,10);  printf("\033%c\033%cO N L I N E  ( V 0 . 1 )",64+A_STD2H,64+A_FWYELLOW);
-  gotoxy(6,11);  printf("\033%c\033%cO N L I N E  ( V 0 . 1 )",64+A_STD2H,64+A_FWYELLOW);
-  gotoxy(12,15); printf("NEIL BARNES 2014");
-}
-*/
+
 void send_move() {
   send_char(0x1B);
   send_char(ons); send_char(oew);	// original position of piece
   send_char(ns);  send_char(ew);	// new location of piece
   send_char(';');
+  //printCommText();
 }
 
 void opponent_play() {
@@ -2664,7 +2676,9 @@ void chooseSide(){
 	x=0;
 	while (x == 0){
 		message="SERVER: WHICH SIDE WILL YOU PLAY?\n1: ATTACKERS        )\n2: DEFENDERS - KING (";
-		printmessage();
+		colorPrompt();
+		poke(0xbf90+21,YELLOW); 
+		poke(0xbfb8+21,RED);
 		gameinput=getchar();
 		switch(gameinput){
 			case 49: x=1; serverType=ATTACKER; break;
@@ -2674,4 +2688,9 @@ void chooseSide(){
 	} 
 }
 
+void colorPrompt(){
+	printmessage();
+	poke(0xbf90+4,GREEN);
+	poke(0xbfb8+4,GREEN);
+}
 
