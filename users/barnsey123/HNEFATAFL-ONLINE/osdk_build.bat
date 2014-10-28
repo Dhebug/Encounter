@@ -19,8 +19,11 @@ CALL osdk_config.bat
 ::
 :: CALL %OSDK%\bin\make.bat %OSDKFILE%
 CALL %OSDKBIN%\make.bat %OSDKFILE%
+:: the QUIT command stops the disk version from hanging... 
+:: The instruction is necessary before running any program that
+:: uses Page 4 of memory or modifies the IRQ/NMI vectors itself
 
-%OSDKBIN%\tap2dsk.exe -i"!HNEFATAFL" BUILD\HNEFATAFL-ONLINE.TAP HNEFATAFL-ONLINE.DSK
+%OSDKBIN%\tap2dsk.exe -i"!QUIT:!HNEFATAFL" BUILD\HNEFATAFL-ONLINE.TAP HNEFATAFL-ONLINE.DSK
 %OSDKBIN%\old2mfm.exe HNEFATAFL-ONLINE.DSK
 copy BUILD\HNEFATAFL-ONLINE.TAP %OSDK%ORICUTRON\TAPES
 copy HNEFATAFL-ONLINE.DSK %OSDK%ORICUTRON\DISKS
