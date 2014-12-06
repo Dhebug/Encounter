@@ -8,6 +8,9 @@
 ;              492 bytes - Moved everything in the zero page, and replaced the individual clears by one clearing loop
 ;              485 bytes - Modified the WriteRegister routine to use X and Y instead of X and A, leading to less pushing and popping in the main code
 ;              478 bytes - The main music routine is now inline in the IRQ
+;              469 bytes - Optimized the sound stopping code :)
+;              465 bytes - Inlined the mym initialisation in the StartMusic code
+;              455 bytes - Simplified the load balancer code by using the same frame counter for two different purpose.
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -42,7 +45,6 @@ _PlayerVbl			.dsb 1
 _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
 
 _50hzFlipFlop			.dsb 1
-_PlayerCount			.dsb 1 		; Load balancer, counts to 0 to 128
 _PlayerRegCurrentValue	.dsb 1 		; For depacking of data
 
 _PlayerRegValues	.dsb 14		; 14 values, each containing the value of one of the PSG registers
@@ -57,9 +59,6 @@ _end_zero_page_data
 MymPlayerStart
 	jmp StartMusic			; Call #5600 to start the music
 EndMusic					; Call #5603 to stop the music
-	php
-	sei
-
 	; Restore the RTI opcode
 	lda #OPCODE_RTI
 	sta $230				; Oric 1
@@ -68,141 +67,10 @@ EndMusic					; Call #5603 to stop the music
 	; Stop the sound
 	ldy #8
 	jsr WriteZeroToRegister
-
-	ldy #9
-	jsr WriteZeroToRegister
-
-	ldy #10
-	jsr WriteZeroToRegister
-
-	plp
-	rts	
-
-StartMusic
-	jsr _Mym_Initialize
-
-	;
-	; Replace the RTI by a JMP
-	; Unfortunately the addresses are different on the Oric 1 and Atmos
-	;
-	lda #<irq_handler
-	sta $230+1				; Oric 1
-	sta $24A+1				; Atmos 
-
-	lda #>irq_handler	
-	sta $230+2				; Oric 1
-	sta $24A+2				; Atmos 
-
-	lda #OPCODE_JMP
-	sta $230+0				; Oric 1
-	sta $24A+0				; Atmos 
-
-	rts
-
-
-irq_handler
-	; This handler runs at 100hz if comming from the BASIC, 
-	; but the music should play at 50hz, so we need to call the playing code only every second frame
-	dec _50hzFlipFlop
-	bpl skipFrame
-
-	inc _50hzFlipFlop
-	inc _50hzFlipFlop
-
-	sei
-
-	pha
-	txa
-	pha
-	tya
-	pha
-
-	;
-	; Check for end of music
-	; 
-	dec _MusicResetCounter+0
-	bne music_contines
-	dec _MusicResetCounter+1
-	bne music_contines
-music_resets
-	jsr _Mym_Initialize
-	
-music_contines	
-
-	;
-	; Play a frame of 14 registers
-	;
-	.(
-	lda _CurrentFrame
-	sta _auto_psg_play_read+1
-	lda #>_PlayerBuffer
-	sta _auto_psg_play_read+2
-
-	ldy #0
-register_loop
-
-_auto_psg_play_read
-	ldx	_PlayerBuffer
-	jsr WriteRegister
-
-	inc _auto_psg_play_read+2 
 	iny
-	cpy #14
-	bne register_loop
-	.)
-
-	inc _CurrentFrame
-	inc _PlayerCount
-
-
-	lda _CurrentAYRegister
-	cmp #14
-	bcs end_reg
-	.(
-	dec _FrameLoadBalancer
-	bne end_frame
-
-	jsr _PlayerUnpackRegister
-	inc _CurrentAYRegister
-	lda #9
-	sta _FrameLoadBalancer
-
-	bne end_frame
-	.)
-
-end_reg
-	.(
-	lda _PlayerCount
-	cmp #128
-	bcc end_frame
-
-	lda #0
-	sta _CurrentAYRegister
-	sta _PlayerCount
-	lda #9
-	sta _FrameLoadBalancer
-	
-	clc
-	lda _PlayerVbl+0
-	adc #128
-	sta _PlayerVbl+0
-	.)
-end_frame
-
-	pla
-	tay
-	pla
-	tax
-	pla
-
-skipFrame
-	rti
-
-
-
-
-
-
+	jsr WriteZeroToRegister
+	iny 
+	; Fall-through
 ; WRITE X TO REGISTER Y 0F 8912.
 WriteZeroToRegister
 	ldx #0
@@ -234,9 +102,7 @@ skip
 .)
 
 
-
-
-_Mym_Initialize
+StartMusic
 .(
 	; Initialize the read bit counter
 	lda #<(_MusicData+2)
@@ -289,8 +155,126 @@ unpack_block_loop
 
 	lda #9
 	sta _FrameLoadBalancer
-	rts
 .)
+
+
+	;
+	; Replace the RTI by a JMP
+	; Unfortunately the addresses are different on the Oric 1 and Atmos
+	;
+	lda #<irq_handler
+	sta $230+1				; Oric 1
+	sta $24A+1				; Atmos 
+
+	lda #>irq_handler	
+	sta $230+2				; Oric 1
+	sta $24A+2				; Atmos 
+
+	lda #OPCODE_JMP
+	sta $230+0				; Oric 1
+	sta $24A+0				; Atmos 
+
+	rts
+
+
+irq_handler
+	; This handler runs at 100hz if comming from the BASIC, 
+	; but the music should play at 50hz, so we need to call the playing code only every second frame
+	dec _50hzFlipFlop
+	bpl skipFrame
+
+	inc _50hzFlipFlop
+	inc _50hzFlipFlop
+
+	sei
+
+	pha
+	txa
+	pha
+	tya
+	pha
+
+	;
+	; Check for end of music
+	; 
+	.(
+	dec _MusicResetCounter+0
+	bne continue
+	dec _MusicResetCounter+1
+	bne continue
+	; reset the music
+	jsr StartMusic	
+continue
+	.)
+
+	;
+	; Play a frame of 14 registers, starting by the last one
+	;
+	.(
+	lda _CurrentFrame
+	sta _auto_psg_play_read+1
+	lda #>(_PlayerBuffer+13*256)
+	sta _auto_psg_play_read+2
+
+	ldy #13
+register_loop
+
+_auto_psg_play_read
+	ldx	_PlayerBuffer
+	jsr WriteRegister
+
+	dec _auto_psg_play_read+2 
+	dey
+	bpl register_loop
+	.)
+
+	inc _CurrentFrame
+
+	;
+	; Depack one new frame ?
+	;
+	lda _CurrentAYRegister
+	cmp #14
+	bcs end_reg
+
+	dec _FrameLoadBalancer
+	bne end_frame
+
+	jsr _PlayerUnpackRegister
+	inc _CurrentAYRegister
+	bne reset_load_balancer
+end_reg
+
+	;
+	; Reached a multiple of 128 frames?
+	;
+	lda _CurrentFrame
+	and #127
+	bne end_frame
+
+	lda #0
+	sta _CurrentAYRegister
+
+	clc
+	lda _PlayerVbl+0
+	adc #128
+	sta _PlayerVbl+0
+
+reset_load_balancer
+	lda #9
+	sta _FrameLoadBalancer
+end_frame
+
+	pla
+	tay
+	pla
+	tax
+	pla
+
+skipFrame
+	rti
+
+
 
 
 
@@ -298,7 +282,7 @@ unpack_block_loop
 
 ;
 ; Initialise X with the number of bits to read
-; Y is not modifier
+; Y is not modified
 ; A contains the value on exit
 ;
 _ReadOneBit
