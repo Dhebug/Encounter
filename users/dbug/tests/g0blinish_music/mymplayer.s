@@ -11,6 +11,7 @@
 ;              469 bytes - Optimized the sound stopping code :)
 ;              465 bytes - Inlined the mym initialisation in the StartMusic code
 ;              455 bytes - Simplified the load balancer code by using the same frame counter for two different purpose.
+;              449 bytes - Merged more initialization code all over the place
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -138,7 +139,7 @@ unpack_block_loop
 	stx _CurrentAYRegister
 	
 	; Unpack that register
-	jsr _PlayerUnpackRegister2
+	jsr _PlayerUnpackRegister
 
 	; Next register
 	ldx _CurrentAYRegister
@@ -147,14 +148,7 @@ unpack_block_loop
 	bne unpack_block_loop
 	.)
 
-	lda #128
-	sta _PlayerVbl+0
-
-	lda #0
-	sta _CurrentAYRegister
-
-	lda #9
-	sta _FrameLoadBalancer
+	jsr NextFrameBlock
 .)
 
 
@@ -242,27 +236,15 @@ _auto_psg_play_read
 
 	jsr _PlayerUnpackRegister
 	inc _CurrentAYRegister
-	bne reset_load_balancer
+	jsr ResetLoadBalancer
+	bne end_frame
 end_reg
 
-	;
 	; Reached a multiple of 128 frames?
-	;
 	lda _CurrentFrame
-	and #127
+	and #127				; Probably possible to use BIT to check for more stuff at once
 	bne end_frame
-
-	lda #0
-	sta _CurrentAYRegister
-
-	clc
-	lda _PlayerVbl+0
-	adc #128
-	sta _PlayerVbl+0
-
-reset_load_balancer
-	lda #9
-	sta _FrameLoadBalancer
+	jsr NextFrameBlock
 end_frame
 
 	pla
@@ -275,7 +257,21 @@ skipFrame
 	rti
 
 
+NextFrameBlock
+	lda #0
+	sta _CurrentAYRegister
 
+	lda #>_PlayerBuffer
+	sta _RegisterBufferHigh
+
+	lda _PlayerVbl+0
+	eor #128
+	sta _PlayerVbl+0
+
+ResetLoadBalancer
+	lda #9
+	sta _FrameLoadBalancer
+	rts
 
 
 
@@ -322,33 +318,19 @@ end_reload
 
 
 
-
-
 _PlayerUnpackRegister
-	lda #>_PlayerBuffer
-	clc
-	adc _CurrentAYRegister
-	sta _RegisterBufferHigh
-_PlayerUnpackRegister2
-	;
 	; Init register bit count and current value
-	;	 
 	ldx _CurrentAYRegister
 	lda _PlayerRegValues,x
 	sta _PlayerRegCurrentValue  
 	
-	;
-	; Check if it's packed or not
-	; and call adequate routine...
-	;
+	; Check if it's packed or not and call adequate routine...
 	jsr _ReadOneBit
 	bne DecompressFragment
 	
 UnchangedFragment	
 .(
-	;
 	; No change at all, just repeat '_PlayerRegCurrentValue' 128 times 
-	;
 	lda _RegisterBufferHigh				; highpart of buffer adress + register number
 	sta __auto_copy_unchanged_write+2
 
@@ -363,8 +345,6 @@ __auto_copy_unchanged_write
 	dex
 	bne repeat_loop
 .)
-
-	;jmp player_main_return	
 player_main_return
 	; Write back register current value
 	ldx _CurrentAYRegister
@@ -391,20 +371,21 @@ UnchangedRegister
 .(	
 	; We just copy the current value 128 times
 	lda _RegisterBufferHigh				; highpart of buffer adress + register number
-	sta player_copy_last+2
+	sta __auto_player_copy_last+2
 
 	ldx _BufferFrameOffset				; Value between 00 and 7f
 	lda _PlayerRegCurrentValue			; Value to copy
-player_copy_last
+__auto_player_copy_last
 	sta _PlayerBuffer,x
-
-	inc _BufferFrameOffset
+	inx
 .)
 
 player_return
+	sta _PlayerRegCurrentValue			; New value to write
+	stx _BufferFrameOffset				; New buffer offset
 
 	; Check end of loop
-	lda _BufferFrameOffset
+	txa 
 	and #127
 	bne decompressFragmentLoop
 
@@ -416,26 +397,25 @@ PlayerNotCopyLast
 	jsr _ReadOneBit
 	beq DecompressWithOffset
 
+; New register value
 ReadNewRegisterValue
+	; Copy to stream
+	lda _RegisterBufferHigh				; highpart of buffer adress + register number
+	sta __auto_player_read_new+2
+
 	; Read new register value (variable bit count)
 	ldx _CurrentAYRegister
 	lda _PlayerRegBits,x
 	jsr _ReadBits
-	sta _PlayerRegCurrentValue
 
-	; Copy to stream
-	lda _RegisterBufferHigh				; highpart of buffer adress + register number
-	sta player_read_new+2
-
-	ldx _BufferFrameOffset					; Value between 00 and 7f
-	lda _PlayerRegCurrentValue			; New value to write
-player_read_new
+	ldx _BufferFrameOffset				; Value between 00 and 7f
+__auto_player_read_new
 	sta _PlayerBuffer,x
-
-	inc _BufferFrameOffset
+	inx
 	jmp player_return
 
 
+; Offset depacking
 DecompressWithOffset
 .(
 	; Read Offset (0 to 127)
@@ -457,23 +437,16 @@ DecompressWithOffset
 	jsr _ReadBits
 
 	ldx _BufferFrameOffset
-	
-player_copy_offset_loop
-
+loop_copy_offset
 __auto_read
 	lda _PlayerBuffer,y				; Y for reading
 	iny
 
 __auto_write
 	sta _PlayerBuffer,x				; X for writing
-
-	inc _BufferFrameOffset
-
 	inx
 	dec _DecodedResult
-	bpl player_copy_offset_loop 
-
-	sta _PlayerRegCurrentValue
+	bpl loop_copy_offset 
 
 	jmp player_return
 .)
