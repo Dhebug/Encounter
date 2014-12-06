@@ -15,5 +15,4 @@
 230 PRINT"Press a key to stop
 240 GET A$
 250 CALL#5603
-270 GOTO 120
 

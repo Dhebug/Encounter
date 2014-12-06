@@ -1,7 +1,19 @@
 ; Player size:
 ; 2014/12/06 - 658 bytes
+;              638 bytes - Mostly removed commented out crap, and moved EndMusic at the start to avoid the jmp
+;              622 bytes - Improved the ReadBits function
+;              580 bytes - The IRQ handler patcher is now modifying the higher byte anymore, since it is the same value on the Oric 1 and Atmos
 ;
-;
+
+#define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
+#define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
+
+#define VIA_1				$30f
+#define VIA_2				$30c
+
+#define OPCODE_RTI			$40
+#define OPCODE_JMP			$4c
+
 	.zero
 
 	*=$50
@@ -20,80 +32,18 @@ _MusicResetCounter	.dsb 2		; Contains the number of rows to play before reseting
 _CurrentFrame		.dsb 1		; From 0 to 255 and then cycles... the index of the frame to play this vbl
 
 _PlayerVbl			.dsb 1
-_MusicLooped		.dsb 1
 
 _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
 
 
 	.text
 
-#define VIA_1				$30f
-#define VIA_2				$30c
-
 	*=$5600                             ; Actual start address of the player
 
-#define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
-#define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
-
 MymPlayerStart
-	jmp StartMusic			; Call #5700 to start the music
-	jmp EndMusic 			; Call #5703 to stop the music
-
-StartMusic
+	jmp StartMusic			; Call #5600 to start the music
+EndMusic					; Call #5603 to stop the music
 	php
-	pha
-	sei
-
-    clc
-	lda $fffe
-	adc #1
-	sta __auto_1+1
-	sta __auto_3+1
-	sta __auto_5+1
-	lda $ffff
-	adc #0
-	sta __auto_1+2
-	sta __auto_3+2
-	sta __auto_5+2
-
-    clc
-	lda $fffe
-	adc #2
-	sta __auto_2+1
-	sta __auto_4+1
-	sta __auto_6+1
-	lda $ffff
-	adc #0
-	sta __auto_2+2
-	sta __auto_4+2
-	sta __auto_6+2
-
-	; Save the old handler value
-__auto_1
-	lda $245
-	sta jmp_old_handler+1
-__auto_2
-	lda $246
-	sta jmp_old_handler+2
-
-	; Install our own handler
-	lda #<irq_handler
-__auto_3
-	sta $245
-	lda #>irq_handler
-__auto_4
-	sta $246
-
-	jsr _Mym_Initialize
-
-	pla
-	plp
-	rts
-
-
-EndMusic
-	php
-	pha
 	sei
 
 	; Restore the old handler value
@@ -117,12 +67,50 @@ __auto_6
 	ldx #0
 	jsr WriteRegister
 
-	pla
 	plp
 	rts	
 
+StartMusic
+	php
+	sei
 
-_50hzFlipFlop	.byt 0
+	; The IRQ locations are different on the Atmos and Oric 1:
+	; - $245-246 on the ATMOS
+	; - $229-22A on the Oric 1
+	; Since they both start in page two, we can just afford to read the low byte in the ROM IRQ vector.
+	; By doing that the code is compatible with both the Oric 1 and Atmos
+	;
+	ldx $fffe
+	inx
+	stx __auto_1+1
+	stx __auto_3+1
+	stx __auto_5+1
+	inx
+	stx __auto_2+1
+	stx __auto_4+1
+	stx __auto_6+1
+
+	; Save the old handler value
+__auto_1
+	lda $245
+	sta jmp_old_handler+1
+__auto_2
+	lda $246
+	sta jmp_old_handler+2
+
+	; Install our own handler
+	lda #<irq_handler
+__auto_3
+	sta $245
+	lda #>irq_handler
+__auto_4
+	sta $246
+
+	jsr _Mym_Initialize
+
+	plp
+	rts
+
 
 irq_handler
 	pha
@@ -152,41 +140,10 @@ skipFrame
 jmp_old_handler
 	jmp 0000
 
-; http://www.defence-force.org/ftp/oric/documentation/v1.1_rom_disassembly.pdf
-;
-; Oric Atmos ROM function W8912
-; Originally called with JSR F590
-; F590  08  PHP  WRITE X TO REGISTER A 0F 8912.
-; F591  78  SEI
-; F592  8D 0F 03  STA $030F  Send A to port A of 6522.
-; F595  A8  TAY
-; F596  8A  TXA
-; F597  C0 07  CPY #$07  If writing to register 7, set
-; F599  D0 02  BNE $F59D  1/0 port to output.
-; F59B  09 40  ORA #$40
-; F59D  48  PHA
-; F59E  AD 0C 03  LDA $030C  Set CA2 (BC1 of 8912) to 1,
-; F5A1  09 EE  ORA #$EE  set CB2 (BDIR of 8912) to 1.
-; F5A3  8D 0C 03  STA $030C  8912 latches the address.
-; F5A6  29 11  AND #$11  Set CA2 and CB2 to 0, BC1 and
-; F5A8  09 CC  ORA #$CC  BDIR in inactive state.
-; F5AA  8D 0C 03  STA $030C
-; F5AD  AA  TAX
-; F5AE  68  PLA
-; F5AF  8D 0F 03  STA $030F  Send data to 8912 register.
-; F5B2  8A  TXA
-; F5B3  09 EC  ORA #$EC  Set CA2 to 0 and CB2 to 1,
-; F5B5  8D 0C 03  STA $030C  8912 latches data.
-; F5B8  29 11  AND #$11  Set CA2 and CB2 to 0, BC1 and
-; F5BA  09 CC  ORA #$CC  BDIR in inactive state.
-; F5BC  8D 0C 03  STA $030C
-; F5BF  28  PLP
-; F5C0  60  RTS
 
+; WRITE X TO REGISTER A 0F 8912.
 WriteRegister
 .(
-	PHP  			; WRITE X TO REGISTER A 0F 8912.
-	SEI
 	STA $030F  		; Send A to port A of 6522.
 	TAY
 	TXA
@@ -210,68 +167,11 @@ skip
 	AND #$11  		; Set CA2 and CB2 to 0, BC1 and
 	ORA #$CC 		; BDIR in inactive state.
 	STA $030C
-	PLP
 	RTS
 .)
 
 
 
-_PlayerCount		.byt 0
-
-
-;
-; Current PSG values during unpacking
-;
-_PlayerRegValues		
-_RegisterChanAFrequency
-	; Chanel A Frequency
-	.byt 8
-	.byt 4
-
-_RegisterChanBFrequency
-	; Chanel B Frequency
-	.byt 8
-	.byt 4 
-
-_RegisterChanCFrequency
-	; Chanel C Frequency
-	.byt 8
-	.byt 4
-
-_RegisterChanNoiseFrequency
-	; Chanel sound generator
-	.byt 5
-
-	; select
-	.byt 8 
-
-	; Volume A,B,C
-_RegisterChanAVolume
-	.byt 5
-_RegisterChanBVolume
-	.byt 5
-_RegisterChanCVolume
-	.byt 5
-
-	; Wave period
-	.byt 8 
-	.byt 8
-
-	; Wave form
-	.byt 8
-
-_PlayerRegCurrentValue	.byt 0
-
-
-_Mym_ReInitialize
-.(
-	sei
-	lda #0
-	sta _MusicLooped
-	jsr _Mym_Initialize
-	cli 
-	rts
-.)
 
 _Mym_Initialize
 .(
@@ -357,8 +257,6 @@ _Mym_PlayFrame
 	dec _MusicResetCounter+1
 	bne music_contines
 music_resets
-	lda #1
-	sta _MusicLooped
 	jsr _Mym_Initialize
 	
 music_contines	
@@ -389,31 +287,6 @@ _auto_psg_play_read
 	pla
 	tay
 	pla
-
-	/*
-	sty	VIA_1
-	txa
-
-	pha
-	lda	VIA_2
-	ora	#$EE		; $EE	238	11101110
-	sta	VIA_2
-
-	and	#$11		; $11	17	00010001
-	ora	#$CC		; $CC	204	11001100
-	sta	VIA_2
-
-	tax
-	pla
-	sta	VIA_1
-	txa
-	ora	#$EC		; $EC	236	11101100
-	sta	VIA_2
-
-	and	#$11		; $11	17	00010001
-	ora	#$CC		; $CC	204	11001100
-	sta	VIA_2
-	*/
 
 	inc _auto_psg_play_read+2 
 	iny
@@ -469,11 +342,12 @@ skip
 ;
 ; Initialise X with the number of bits to read
 ; Y is not modifier
-; A is saved and restored..
+; A contains the value on exit
 ;
+_ReadOneBit
+	lda #1
 _ReadBits
-	pha
-
+	tax
 	lda #0
 	sta _DecodedResult
 
@@ -503,7 +377,7 @@ end_reload
 	dex
 	bne loop_read_bits
 	
-	pla
+	lda _DecodedResult
 	rts
 
 
@@ -523,16 +397,12 @@ _PlayerUnpackRegister2
 	lda _PlayerRegValues,x
 	sta _PlayerRegCurrentValue  
 	
-
 	;
 	; Check if it's packed or not
 	; and call adequate routine...
 	;
-	ldx #1
-	jsr _ReadBits
-	ldx _DecodedResult
+	jsr _ReadOneBit
 	bne DecompressFragment
-
 	
 UnchangedFragment	
 .(
@@ -546,7 +416,6 @@ UnchangedFragment
 	lda _PlayerRegCurrentValue			; Value to write
 
 	ldy _PlayerVbl
-	
 repeat_loop
 __auto_copy_unchanged_write
 	sta _PlayerBuffer,y
@@ -555,9 +424,7 @@ __auto_copy_unchanged_write
 	bne repeat_loop
 .)
 
-	jmp player_main_return
-
-	
+	;jmp player_main_return	
 player_main_return
 	; Write back register current value
 	ldx _CurrentAYRegister
@@ -569,8 +436,6 @@ player_main_return
 	rts
 
 
-
-
 DecompressFragment
 	lda _PlayerVbl						; Either 0 or 128 at this point else we have a problem...
 	sta _BufferFrameOffset
@@ -579,10 +444,7 @@ decompressFragmentLoop
 	
 player_copy_packed_loop
 	; Check packing method
-	ldx #1
-	jsr _ReadBits
-
-	ldx _DecodedResult
+	jsr _ReadOneBit
 	bne PlayerNotCopyLast
 
 UnchangedRegister
@@ -599,7 +461,6 @@ player_copy_last
 	inc _BufferFrameOffset
 .)
 
-
 player_return
 
 	; Check end of loop
@@ -612,20 +473,15 @@ player_return
 
 PlayerNotCopyLast
 	; Check packing method
-	ldx #1
-	jsr _ReadBits
-
-	ldx _DecodedResult
+	jsr _ReadOneBit
 	beq DecompressWithOffset
 
 ReadNewRegisterValue
 	; Read new register value (variable bit count)
 	ldx _CurrentAYRegister
 	lda _PlayerRegBits,x
-	tax
 	jsr _ReadBits
-	ldx _DecodedResult
-	stx _PlayerRegCurrentValue
+	sta _PlayerRegCurrentValue
 
 	; Copy to stream
 	lda _RegisterBufferHigh				; highpart of buffer adress + register number
@@ -640,32 +496,25 @@ player_read_new
 	jmp player_return
 
 
-
-
 DecompressWithOffset
 .(
 	; Read Offset (0 to 127)
-	ldx #7
+	lda #7
 	jsr _ReadBits					
+	; Compute wrap around offset...
+	clc
+	adc _BufferFrameOffset					; between 0 and 255
+	sec
+	sbc #128							; -128
+	tay
 
 	lda _RegisterBufferHigh			; highpart of buffer adress + register number
 	sta __auto_write+2				; Write adress
 	sta __auto_read+2				; Read adress
 
-	; Compute wrap around offset...
-	lda _BufferFrameOffset					; between 0 and 255
-	clc
-	adc _DecodedResult					; + Offset Between 00 and 7f
-	sec
-	sbc #128							; -128
-	tay
-
 	; Read count (7 bits)
-	ldx #7
+	lda #7
 	jsr _ReadBits
-	
-	inc	_DecodedResult					; 1 to 129
-
 
 	ldx _BufferFrameOffset
 	
@@ -682,7 +531,7 @@ __auto_write
 
 	inx
 	dec _DecodedResult
-	bne player_copy_offset_loop 
+	bpl player_copy_offset_loop 
 
 	sta _PlayerRegCurrentValue
 
@@ -724,4 +573,52 @@ _PlayerRegBits
 
 	; Wave form
 	.byt 8
+
+
+_50hzFlipFlop			.byt 0
+_PlayerCount			.byt 0 		; Load balancer, counts to 0 to 128
+_PlayerRegCurrentValue	.byt 0 		; For depacking of data
+
+
+;
+; Current PSG values during unpacking
+;
+_PlayerRegValues		
+_RegisterChanAFrequency
+	; Chanel A Frequency
+	.byt 8
+	.byt 4
+
+_RegisterChanBFrequency
+	; Chanel B Frequency
+	.byt 8
+	.byt 4 
+
+_RegisterChanCFrequency
+	; Chanel C Frequency
+	.byt 8
+	.byt 4
+
+_RegisterChanNoiseFrequency
+	; Chanel sound generator
+	.byt 5
+
+	; select
+	.byt 8 
+
+	; Volume A,B,C
+_RegisterChanAVolume
+	.byt 5
+_RegisterChanBVolume
+	.byt 5
+_RegisterChanCVolume
+	.byt 5
+
+	; Wave period
+	.byt 8 
+	.byt 8
+
+	; Wave form
+	.byt 8
+
 
