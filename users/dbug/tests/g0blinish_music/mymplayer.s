@@ -3,7 +3,9 @@
 ;              638 bytes - Mostly removed commented out crap, and moved EndMusic at the start to avoid the jmp
 ;              622 bytes - Improved the ReadBits function
 ;              580 bytes - The IRQ handler patcher is now modifying the higher byte anymore, since it is the same value on the Oric 1 and Atmos
-;
+;              550 bytes - Actually used the secondary way to chain IRQs by patching the RTI
+;              546 bytes - Added a "zero write" to register variant
+;              492 bytes - Moved everything in the zero page, and replaced the individual clears by one clearing loop
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -18,6 +20,8 @@
 
 	*=$50
 
+_start_zero_page_data
+; ---------------------------------
 _DecodedByte		.dsb 1		; Byte being currently decoded from the MYM stream
 _DecodeBitCounter	.dsb 1		; Number of bits we can read in the current byte
 _DecodedResult		.dsb 1		; What is returned by the 'read bits' function
@@ -35,6 +39,14 @@ _PlayerVbl			.dsb 1
 
 _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
 
+_50hzFlipFlop			.dsb 1
+_PlayerCount			.dsb 1 		; Load balancer, counts to 0 to 128
+_PlayerRegCurrentValue	.dsb 1 		; For depacking of data
+
+_PlayerRegValues	.dsb 14		; 14 values, each containing the value of one of the PSG registers
+; ---------------------------------
+_end_zero_page_data
+
 
 	.text
 
@@ -46,73 +58,48 @@ EndMusic					; Call #5603 to stop the music
 	php
 	sei
 
-	; Restore the old handler value
-	lda jmp_old_handler+1
-__auto_5
-	sta $245
-	lda jmp_old_handler+2
-__auto_6
-	sta $246
+	; Restore the RTI opcode
+	lda #OPCODE_RTI
+	sta $230				; Oric 1
+	sta $24A				; Atmos 
 
 	; Stop the sound
 	lda #8
-	ldx #0
-	jsr WriteRegister
+	jsr WriteZeroToRegister
 
 	lda #9
-	ldx #0
-	jsr WriteRegister
+	jsr WriteZeroToRegister
 
 	lda #10
-	ldx #0
-	jsr WriteRegister
+	jsr WriteZeroToRegister
 
 	plp
 	rts	
 
 StartMusic
-	php
-	sei
-
-	; The IRQ locations are different on the Atmos and Oric 1:
-	; - $245-246 on the ATMOS
-	; - $229-22A on the Oric 1
-	; Since they both start in page two, we can just afford to read the low byte in the ROM IRQ vector.
-	; By doing that the code is compatible with both the Oric 1 and Atmos
-	;
-	ldx $fffe
-	inx
-	stx __auto_1+1
-	stx __auto_3+1
-	stx __auto_5+1
-	inx
-	stx __auto_2+1
-	stx __auto_4+1
-	stx __auto_6+1
-
-	; Save the old handler value
-__auto_1
-	lda $245
-	sta jmp_old_handler+1
-__auto_2
-	lda $246
-	sta jmp_old_handler+2
-
-	; Install our own handler
-	lda #<irq_handler
-__auto_3
-	sta $245
-	lda #>irq_handler
-__auto_4
-	sta $246
-
 	jsr _Mym_Initialize
 
-	plp
+	;
+	; Replace the RTI by a JMP
+	; Unfortunately the addresses are different on the Oric 1 and Atmos
+	;
+	lda #<irq_handler
+	sta $230+1				; Oric 1
+	sta $24A+1				; Atmos 
+
+	lda #>irq_handler	
+	sta $230+2				; Oric 1
+	sta $24A+2				; Atmos 
+
+	lda #OPCODE_JMP
+	sta $230+0				; Oric 1
+	sta $24A+0				; Atmos 
+
 	rts
 
 
 irq_handler
+	sei
 	pha
 	txa
 	pha
@@ -137,11 +124,14 @@ skipFrame
 	tax
 	pla
 
-jmp_old_handler
-	jmp 0000
+	rti
+;jmp_old_handler
+;	jmp 0000
 
 
 ; WRITE X TO REGISTER A 0F 8912.
+WriteZeroToRegister
+	ldx #0
 WriteRegister
 .(
 	STA $030F  		; Send A to port A of 6522.
@@ -175,6 +165,20 @@ skip
 
 _Mym_Initialize
 .(
+	; Initialize the read bit counter
+	lda #<(_MusicData+2)
+	sta __auto_music_ptr+1
+	lda #>(_MusicData+2)
+	sta __auto_music_ptr+2
+
+	; Clear all data
+	lda #0
+	ldx #_end_zero_page_data-_start_zero_page_data
+loop_clear
+	sta _start_zero_page_data-1,x
+	dex
+	bne loop_clear
+
 	; The two first bytes of the MYM music is the number of rows in the music
 	; We decrement that at each frame, and when we reach zero, time to start again.
 	ldx _MusicData+0
@@ -183,34 +187,6 @@ _Mym_Initialize
 	inx
 	stx _MusicResetCounter+1
 		
-	.(
-	; Initialize the read bit counter
-	lda #<(_MusicData+2)
-	sta __auto_music_ptr+1
-	lda #>(_MusicData+2)
-	sta __auto_music_ptr+2
-
-	lda #1
-	sta _DecodeBitCounter
-
-	; Clear all data
-	lda #0
-	sta _DecodedResult
-	sta _DecodedByte
-	sta _PlayerVbl
-	sta _PlayerRegCurrentValue
-	sta _BufferFrameOffset
-	sta _PlayerCount
-	sta _CurrentAYRegister
-	sta _CurrentFrame
-
-	ldx #14
-loop_init
-	dex
-	sta _PlayerRegValues,x
-	bne loop_init
-	.)
-
 	;
 	; Unpack the 128 first register frames
 	;
@@ -251,7 +227,7 @@ _Mym_PlayFrame
 .(
 	;
 	; Check for end of music
-	; CountZero: $81,$0d
+	; 
 	dec _MusicResetCounter+0
 	bne music_contines
 	dec _MusicResetCounter+1
@@ -353,12 +329,11 @@ _ReadBits
 
 	; Will iterate X times (number of bits to read)
 loop_read_bits
-
 	dec _DecodeBitCounter
-	bne end_reload
+	bpl end_reload
 
 	; reset mask
-	lda #8
+	lda #7
 	sta _DecodeBitCounter
 
 	; fetch a new byte, and increment the adress.
@@ -574,51 +549,5 @@ _PlayerRegBits
 	; Wave form
 	.byt 8
 
-
-_50hzFlipFlop			.byt 0
-_PlayerCount			.byt 0 		; Load balancer, counts to 0 to 128
-_PlayerRegCurrentValue	.byt 0 		; For depacking of data
-
-
-;
-; Current PSG values during unpacking
-;
-_PlayerRegValues		
-_RegisterChanAFrequency
-	; Chanel A Frequency
-	.byt 8
-	.byt 4
-
-_RegisterChanBFrequency
-	; Chanel B Frequency
-	.byt 8
-	.byt 4 
-
-_RegisterChanCFrequency
-	; Chanel C Frequency
-	.byt 8
-	.byt 4
-
-_RegisterChanNoiseFrequency
-	; Chanel sound generator
-	.byt 5
-
-	; select
-	.byt 8 
-
-	; Volume A,B,C
-_RegisterChanAVolume
-	.byt 5
-_RegisterChanBVolume
-	.byt 5
-_RegisterChanCVolume
-	.byt 5
-
-	; Wave period
-	.byt 8 
-	.byt 8
-
-	; Wave form
-	.byt 8
 
 
