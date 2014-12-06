@@ -7,6 +7,7 @@
 ;              546 bytes - Added a "zero write" to register variant
 ;              492 bytes - Moved everything in the zero page, and replaced the individual clears by one clearing loop
 ;              485 bytes - Modified the WriteRegister routine to use X and Y instead of X and A, leading to less pushing and popping in the main code
+;              478 bytes - The main music routine is now inline in the IRQ
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -150,8 +151,43 @@ _auto_psg_play_read
 	bne register_loop
 	.)
 
+	inc _CurrentFrame
+	inc _PlayerCount
 
-	jsr _Mym_PlayFrame
+
+	lda _CurrentAYRegister
+	cmp #14
+	bcs end_reg
+	.(
+	dec _FrameLoadBalancer
+	bne end_frame
+
+	jsr _PlayerUnpackRegister
+	inc _CurrentAYRegister
+	lda #9
+	sta _FrameLoadBalancer
+
+	bne end_frame
+	.)
+
+end_reg
+	.(
+	lda _PlayerCount
+	cmp #128
+	bcc end_frame
+
+	lda #0
+	sta _CurrentAYRegister
+	sta _PlayerCount
+	lda #9
+	sta _FrameLoadBalancer
+	
+	clc
+	lda _PlayerVbl+0
+	adc #128
+	sta _PlayerVbl+0
+	.)
+end_frame
 
 	pla
 	tay
@@ -161,6 +197,10 @@ _auto_psg_play_read
 
 skipFrame
 	rti
+
+
+
+
 
 
 ; WRITE X TO REGISTER Y 0F 8912.
@@ -245,60 +285,13 @@ unpack_block_loop
 	sta _PlayerVbl+0
 
 	lda #0
-	sta _PlayerCount
 	sta _CurrentAYRegister
-	sta _CurrentFrame
 
 	lda #9
 	sta _FrameLoadBalancer
 	rts
 .)
 
-
-
-_Mym_PlayFrame
-.(
-
-	inc _CurrentFrame
-	inc _PlayerCount
-
-	lda _CurrentAYRegister
-	cmp #14
-	bcs end_reg
-
-	.(
-	dec _FrameLoadBalancer
-	bne end
-
-	jsr _PlayerUnpackRegister
-	inc _CurrentAYRegister
-	lda #9
-	sta _FrameLoadBalancer
-end	
-	rts
-	.)
-
-end_reg
-	.(
-	lda _PlayerCount
-	cmp #128
-	bcc skip
-
-	lda #0
-	sta _CurrentAYRegister
-	sta _PlayerCount
-	lda #9
-	sta _FrameLoadBalancer
-	
-	clc
-	lda _PlayerVbl+0
-	adc #128
-	sta _PlayerVbl+0
-skip
-	.)
-
-	rts
-.)
 
 
 
