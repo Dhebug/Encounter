@@ -6,6 +6,7 @@
 ;              550 bytes - Actually used the secondary way to chain IRQs by patching the RTI
 ;              546 bytes - Added a "zero write" to register variant
 ;              492 bytes - Moved everything in the zero page, and replaced the individual clears by one clearing loop
+;              485 bytes - Modified the WriteRegister routine to use X and Y instead of X and A, leading to less pushing and popping in the main code
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -64,13 +65,13 @@ EndMusic					; Call #5603 to stop the music
 	sta $24A				; Atmos 
 
 	; Stop the sound
-	lda #8
+	ldy #8
 	jsr WriteZeroToRegister
 
-	lda #9
+	ldy #9
 	jsr WriteZeroToRegister
 
-	lda #10
+	ldy #10
 	jsr WriteZeroToRegister
 
 	plp
@@ -99,24 +100,58 @@ StartMusic
 
 
 irq_handler
+	; This handler runs at 100hz if comming from the BASIC, 
+	; but the music should play at 50hz, so we need to call the playing code only every second frame
+	dec _50hzFlipFlop
+	bpl skipFrame
+
+	inc _50hzFlipFlop
+	inc _50hzFlipFlop
+
 	sei
+
 	pha
 	txa
 	pha
 	tya
 	pha
 
-	; This handler runs at 100hz if comming from the BASIC, 
-	; but the music should play at 50hz, so we need to call the playing code
-	; only every second frame
-	lda _50hzFlipFlop
-	eor #1
-	sta _50hzFlipFlop
-	beq skipFrame
+	;
+	; Check for end of music
+	; 
+	dec _MusicResetCounter+0
+	bne music_contines
+	dec _MusicResetCounter+1
+	bne music_contines
+music_resets
+	jsr _Mym_Initialize
+	
+music_contines	
+
+	;
+	; Play a frame of 14 registers
+	;
+	.(
+	lda _CurrentFrame
+	sta _auto_psg_play_read+1
+	lda #>_PlayerBuffer
+	sta _auto_psg_play_read+2
+
+	ldy #0
+register_loop
+
+_auto_psg_play_read
+	ldx	_PlayerBuffer
+	jsr WriteRegister
+
+	inc _auto_psg_play_read+2 
+	iny
+	cpy #14
+	bne register_loop
+	.)
+
 
 	jsr _Mym_PlayFrame
-
-skipFrame
 
 	pla
 	tay
@@ -124,18 +159,16 @@ skipFrame
 	tax
 	pla
 
+skipFrame
 	rti
-;jmp_old_handler
-;	jmp 0000
 
 
-; WRITE X TO REGISTER A 0F 8912.
+; WRITE X TO REGISTER Y 0F 8912.
 WriteZeroToRegister
 	ldx #0
 WriteRegister
 .(
-	STA $030F  		; Send A to port A of 6522.
-	TAY
+	STY $030F  		; Send Y to port A of 6522.	
 	TXA
 	CPY #$07  		; If writing to register 7, set
 	BNE skip  		; 1/0 port to output.
@@ -225,51 +258,6 @@ unpack_block_loop
 
 _Mym_PlayFrame
 .(
-	;
-	; Check for end of music
-	; 
-	dec _MusicResetCounter+0
-	bne music_contines
-	dec _MusicResetCounter+1
-	bne music_contines
-music_resets
-	jsr _Mym_Initialize
-	
-music_contines	
-
-	;
-	; Play a frame of 14 registers
-	;
-	.(
-	lda _CurrentFrame
-	sta _auto_psg_play_read+1
-	lda #>_PlayerBuffer
-	sta _auto_psg_play_read+2
-
-	ldy #0
-register_loop
-
-_auto_psg_play_read
-	ldx	_PlayerBuffer
-
-	; W8912
-	; jsr $f590
-	; a=register
-	; x=value
-	pha
-	tya
-	pha
-	jsr WriteRegister
-	pla
-	tay
-	pla
-
-	inc _auto_psg_play_read+2 
-	iny
-	cpy #14
-	bne register_loop
-	.)
-
 
 	inc _CurrentFrame
 	inc _PlayerCount
