@@ -12,6 +12,8 @@
 ;              465 bytes - Inlined the mym initialisation in the StartMusic code
 ;              455 bytes - Simplified the load balancer code by using the same frame counter for two different purpose.
 ;              449 bytes - Merged more initialization code all over the place
+;              442 bytes - Improved the logic in the mym depacking
+;              416 bytes - Used zero page addressing for the write buffers
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -34,8 +36,9 @@ _DecodedResult		.dsb 1		; What is returned by the 'read bits' function
 
 _CurrentAYRegister	.dsb 1		; Contains the number of the register being decoded	
 
-_RegisterBufferHigh	.dsb 1		; Points to the high byte of the decoded register buffer, increment to move to the next register	
-_BufferFrameOffset	.dsb 1		; From 0 to 127, used when filling the decoded register buffer
+_ptr_register_buffer
+_ptr_register_buffer_low	.dsb 1 		; Points to the low byte of the decoded register buffer
+_ptr_register_buffer_high	.dsb 1		; Points to the high byte of the decoded register buffer, increment to move to the next register	
 
 _MusicResetCounter	.dsb 2		; Contains the number of rows to play before reseting
 
@@ -44,7 +47,7 @@ _CurrentFrame		.dsb 1		; From 0 to 255 and then cycles... the index of the frame
 _PlayerVbl			.dsb 1
 
 _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
-
+temp_value			.dsb 1      ; temp
 _50hzFlipFlop			.dsb 1
 _PlayerRegCurrentValue	.dsb 1 		; For depacking of data
 
@@ -132,9 +135,10 @@ loop_clear
 	;
 	.(
 	lda #>_PlayerBuffer
-	sta _RegisterBufferHigh
+	sta _ptr_register_buffer_high
 
 	ldx #0
+	stx _ptr_register_buffer_low
 unpack_block_loop
 	stx _CurrentAYRegister
 	
@@ -262,7 +266,7 @@ NextFrameBlock
 	sta _CurrentAYRegister
 
 	lda #>_PlayerBuffer
-	sta _RegisterBufferHigh
+	sta _ptr_register_buffer_high
 
 	lda _PlayerVbl+0
 	eor #128
@@ -328,19 +332,15 @@ _PlayerUnpackRegister
 	jsr _ReadOneBit
 	bne DecompressFragment
 	
+; No change at all, just repeat '_PlayerRegCurrentValue' 128 times 
 UnchangedFragment	
 .(
-	; No change at all, just repeat '_PlayerRegCurrentValue' 128 times 
-	lda _RegisterBufferHigh				; highpart of buffer adress + register number
-	sta __auto_copy_unchanged_write+2
-
-	ldx #128							; 128 iterations
 	lda _PlayerRegCurrentValue			; Value to write
 
 	ldy _PlayerVbl
+	ldx #128							; 128 iterations
 repeat_loop
-__auto_copy_unchanged_write
-	sta _PlayerBuffer,y
+	sta (_ptr_register_buffer),y
 	iny	
 	dex
 	bne repeat_loop
@@ -352,13 +352,12 @@ player_main_return
 	sta _PlayerRegValues,x
 
 	; Move to the next register buffer
-	inc _RegisterBufferHigh
+	inc _ptr_register_buffer_high
 	rts
 
 
 DecompressFragment
-	lda _PlayerVbl						; Either 0 or 128 at this point else we have a problem...
-	sta _BufferFrameOffset
+	ldy _PlayerVbl						; Either 0 or 128 at this point else we have a problem...
 
 decompressFragmentLoop	
 	
@@ -367,25 +366,17 @@ player_copy_packed_loop
 	jsr _ReadOneBit
 	bne PlayerNotCopyLast
 
+; We just copy the current value 128 times
 UnchangedRegister
-.(	
-	; We just copy the current value 128 times
-	lda _RegisterBufferHigh				; highpart of buffer adress + register number
-	sta __auto_player_copy_last+2
-
-	ldx _BufferFrameOffset				; Value between 00 and 7f
 	lda _PlayerRegCurrentValue			; Value to copy
-__auto_player_copy_last
-	sta _PlayerBuffer,x
-	inx
-.)
+	sta (_ptr_register_buffer),y
+	iny 
 
 player_return
 	sta _PlayerRegCurrentValue			; New value to write
-	stx _BufferFrameOffset				; New buffer offset
 
 	; Check end of loop
-	txa 
+	tya 
 	and #127
 	bne decompressFragmentLoop
 
@@ -397,54 +388,47 @@ PlayerNotCopyLast
 	jsr _ReadOneBit
 	beq DecompressWithOffset
 
-; New register value
+; New register value copied to the register stream
 ReadNewRegisterValue
-	; Copy to stream
-	lda _RegisterBufferHigh				; highpart of buffer adress + register number
-	sta __auto_player_read_new+2
-
 	; Read new register value (variable bit count)
 	ldx _CurrentAYRegister
 	lda _PlayerRegBits,x
 	jsr _ReadBits
 
-	ldx _BufferFrameOffset				; Value between 00 and 7f
-__auto_player_read_new
-	sta _PlayerBuffer,x
-	inx
+	sta (_ptr_register_buffer),y
+	iny
 	jmp player_return
 
 
 ; Offset depacking
 DecompressWithOffset
 .(
+	lda _ptr_register_buffer_high		; highpart of buffer adress + register number
+	sta __auto_read+2					; Read adress
+
 	; Read Offset (0 to 127)
 	lda #7
 	jsr _ReadBits					
 	; Compute wrap around offset...
 	clc
-	adc _BufferFrameOffset					; between 0 and 255
+	tya
+	adc _DecodedResult					; between 0 and 255
 	sec
 	sbc #128							; -128
-	tay
-
-	lda _RegisterBufferHigh			; highpart of buffer adress + register number
-	sta __auto_write+2				; Write adress
-	sta __auto_read+2				; Read adress
-
+	sta temp_value
+		
 	; Read count (7 bits)
 	lda #7
 	jsr _ReadBits
 
-	ldx _BufferFrameOffset
+	ldx temp_value
 loop_copy_offset
 __auto_read
-	lda _PlayerBuffer,y				; Y for reading
-	iny
-
-__auto_write
-	sta _PlayerBuffer,x				; X for writing
+	lda _PlayerBuffer,x				; X for reading
 	inx
+
+	sta (_ptr_register_buffer),y 	; Y for writing
+	iny
 	dec _DecodedResult
 	bpl loop_copy_offset 
 
