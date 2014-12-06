@@ -86,6 +86,7 @@ int main(int argc,char *argv[])
   int retune_music=1;
   bool flagVerbosity=false;
   bool flag_header=false;
+  bool interleavedFormat=true;
 
   ArgumentParser argumentParser(argc,argv);
 
@@ -163,7 +164,8 @@ int main(int argc,char *argv[])
   long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
   long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
 
-  unsigned long length;         //  Song length
+  unsigned long frameCount;     // Number of frames
+  unsigned long length;         // Song length (frameCount*14)
 
   const char* sourceFilename(argumentParser.GetParameter(0));
   void* pcBuffer;
@@ -278,12 +280,13 @@ int main(int argc,char *argv[])
       length+=*sourceData++;
     }
     length*=REGS;
-
+    
     sourceData+=3;            //  Skip first 3 bytes of info
     if (!((*sourceData++)&1))
     {
-      printf("Only interleaved data supported.\n");
-      return(EXIT_FAILURE);
+      interleavedFormat=false;
+      //printf("Only interleaved data supported.\n");
+      //return(EXIT_FAILURE);
     }
 
     if ((*sourceData++) || (*sourceData++))        //  Number of digidrums
@@ -297,26 +300,62 @@ int main(int argc,char *argv[])
     sourceData+=4;            /*  Skip loop position      */
     sourceData+=2;            /*  Skip additional data    */
 
+    if (flagVerbosity)
+    {
+      printf("Song name: %s\n",sourceData);
+    }
     while((*sourceData++))                 /*  Skip song name          */
       ;
+
+    if (flagVerbosity)
+    {
+      printf("Author name: %s\n",sourceData);
+    }
     while((*sourceData++))                 /*  Skip author name        */
       ;
+
+    if (flagVerbosity)
+    {
+      printf("Comments: %s\n",sourceData);
+    }
     while((*sourceData++))                 /*  Skip comments           */
       ;
   }
 
-  /*  Old YM2/YM3 format loader   */
+  //
+  // Extract the register data to get them in an easier to access location
+  //
+  frameCount=length/REGS;
   for (n=0;n<REGS;n++)     /*  Allocate memory & read data */
   {
-    /*  Allocate extra fragment to make packing easier  */
-    if ((data[n]=(unsigned char*)malloc(length/REGS+FRAG))==NULL)
+    //  Allocate extra fragment to make packing easier
+    if ((data[n]=(unsigned char*)malloc(frameCount+FRAG))==NULL)
     {
       printf("Out of memory.\n");
       return(EXIT_FAILURE);
     }
-    memset(data[n],0,length/REGS+FRAG);
-    memcpy(data[n],sourceData,length/REGS);
-    sourceData+=length/REGS;
+    memset(data[n],0,frameCount+FRAG);
+    if (interleavedFormat)
+    {
+      // R0 R0 R0 R0 R0 R0 R0... | R1 R1 R1 R1 ... | R13 R13 R13 R13
+      memcpy(data[n],sourceData,frameCount);
+      sourceData+=frameCount;
+    }
+    else
+    {
+      // Data block contents now values for 16 registers (14 AY registers plus 2 virtual registers
+      // for Atari special effects). 
+      // If bit 0 of field Song Attributes is set, data block are stored in YM3-style order (interleaved). 
+      // If this bit is reset, then data block consists first 16 bytes of first VBL, then next 16 bytes for second VBL and so on. 
+      // In second case YM5 file is compressed more badly.
+
+      // R0 R1 R2 R3 R4 ... R13 R14 R15 | R0 R1 R2 ... R13 R14 R15 |
+      for (unsigned int i=0;i<frameCount;i++)
+      {
+        data[n][i]=sourceData[i*16];
+      }
+      sourceData++;
+    }
   }
 
   if (retune_music)
