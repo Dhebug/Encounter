@@ -14,6 +14,7 @@
 ;              449 bytes - Merged more initialization code all over the place
 ;              442 bytes - Improved the logic in the mym depacking
 ;              416 bytes - Used zero page addressing for the write buffers
+;              413 bytes - Reordered some of the depacking code to avoid refetching data multiple time
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -327,6 +328,8 @@ _PlayerUnpackRegister
 	ldx _CurrentAYRegister
 	lda _PlayerRegValues,x
 	sta _PlayerRegCurrentValue  
+
+	ldy _PlayerVbl						; Either 0 or 128 at this point else we have a problem...
 	
 	; Check if it's packed or not and call adequate routine...
 	jsr _ReadOneBit
@@ -334,58 +337,25 @@ _PlayerUnpackRegister
 	
 ; No change at all, just repeat '_PlayerRegCurrentValue' 128 times 
 UnchangedFragment	
-.(
 	lda _PlayerRegCurrentValue			; Value to write
-
-	ldy _PlayerVbl
 	ldx #128							; 128 iterations
-repeat_loop
+loop_repeat_register
 	sta (_ptr_register_buffer),y
 	iny	
 	dex
-	bne repeat_loop
-.)
-player_main_return
-	; Write back register current value
-	ldx _CurrentAYRegister
-	lda _PlayerRegCurrentValue  
-	sta _PlayerRegValues,x
+	bne loop_repeat_register
 
+player_main_return
 	; Move to the next register buffer
 	inc _ptr_register_buffer_high
 	rts
 
 
 DecompressFragment
-	ldy _PlayerVbl						; Either 0 or 128 at this point else we have a problem...
-
-decompressFragmentLoop	
-	
-player_copy_packed_loop
-	; Check packing method
-	jsr _ReadOneBit
-	bne PlayerNotCopyLast
-
-; We just copy the current value 128 times
-UnchangedRegister
-	lda _PlayerRegCurrentValue			; Value to copy
-	sta (_ptr_register_buffer),y
-	iny 
-
-player_return
-	sta _PlayerRegCurrentValue			; New value to write
-
-	; Check end of loop
-	tya 
-	and #127
-	bne decompressFragmentLoop
-
-	jmp player_main_return
-
-
-PlayerNotCopyLast
-	; Check packing method
-	jsr _ReadOneBit
+loop_depack_fragment		
+	jsr _ReadOneBit						; Check packing method
+	beq RepeatLastRegisterValue
+	jsr _ReadOneBit						; Check packing method
 	beq DecompressWithOffset
 
 ; New register value copied to the register stream
@@ -398,6 +368,28 @@ ReadNewRegisterValue
 	sta (_ptr_register_buffer),y
 	iny
 	jmp player_return
+
+
+; Repeat the previous value of the register
+RepeatLastRegisterValue
+	lda _PlayerRegCurrentValue			; Value to copy
+	sta (_ptr_register_buffer),y
+	iny 
+
+player_return
+	sta _PlayerRegCurrentValue			; New value to write
+
+	; Check end of loop
+	tya 
+	and #127
+	bne loop_depack_fragment
+
+	; Write back register current value
+	ldx _CurrentAYRegister
+	lda _PlayerRegCurrentValue  
+	sta _PlayerRegValues,x
+
+	jmp player_main_return
 
 
 ; Offset depacking
@@ -431,8 +423,7 @@ __auto_read
 	iny
 	dec _DecodedResult
 	bpl loop_copy_offset 
-
-	jmp player_return
+	bmi player_return
 .)
 
 
