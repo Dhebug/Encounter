@@ -16,6 +16,7 @@
 ;              416 bytes - Used zero page addressing for the write buffers
 ;              413 bytes - Reordered some of the depacking code to avoid refetching data multiple time
 ;              403 bytes - Moved the current register handling inside the UnpackRegister routine itself
+;              400 bytes - Exploited the fact that the ReadBits function clears the carry on exit
 
 #define _PlayerBuffer		$5900		; .dsb 256*14 (About 3.5 kilobytes)
 #define _MusicData			$6700		; Musics are loaded in $67B0, between the player buffer and the redefined character sets
@@ -32,28 +33,28 @@
 
 _start_zero_page_data
 ; ---------------------------------
-_DecodedByte		.dsb 1		; Byte being currently decoded from the MYM stream
-_DecodeBitCounter	.dsb 1		; Number of bits we can read in the current byte
-_DecodedResult		.dsb 1		; What is returned by the 'read bits' function
+_DecodedByte			.dsb 1		; Byte being currently decoded from the MYM stream
+_DecodeBitCounter		.dsb 1		; Number of bits we can read in the current byte
+_DecodedResult			.dsb 1		; What is returned by the 'read bits' function
 
-_CurrentAYRegister	.dsb 1		; Contains the number of the register being decoded	
+_CurrentAYRegister		.dsb 1		; Contains the number of the register being decoded	
 
 _ptr_register_buffer
 _ptr_register_buffer_low	.dsb 1 		; Points to the low byte of the decoded register buffer
 _ptr_register_buffer_high	.dsb 1		; Points to the high byte of the decoded register buffer, increment to move to the next register	
 
-_MusicResetCounter	.dsb 2		; Contains the number of rows to play before reseting
+_MusicResetCounter		.dsb 2		; Contains the number of rows to play before reseting
 
-_CurrentFrame		.dsb 1		; From 0 to 255 and then cycles... the index of the frame to play this vbl
+_CurrentFrame			.dsb 1		; From 0 to 255 and then cycles... the index of the frame to play this vbl
 
-_PlayerVbl			.dsb 1
+_PlayerVbl				.dsb 1 		; Swapped between 0 and 128 to address the start of the register buffer for this frame
 
-_FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
-temp_value			.dsb 1      ; temp
+_FrameLoadBalancer		.dsb 1		; We depack a new frame every 9 VBLs, this way the 14 registers are evenly depacked over 128 frames
+temp_value				.dsb 1      ; temp
 _50hzFlipFlop			.dsb 1
 _PlayerRegCurrentValue	.dsb 1 		; For depacking of data
 
-_PlayerRegValues	.dsb 14		; 14 values, each containing the value of one of the PSG registers
+_PlayerRegValues		.dsb 14		; 14 values, each containing the value of one of the PSG registers
 ; ---------------------------------
 _end_zero_page_data
 
@@ -350,7 +351,7 @@ ReadNewRegisterValue
 	ldx _CurrentAYRegister				; Read new register value (variable bit count)
 	lda _PlayerRegBits,x
 	jsr _ReadBits
-	jmp WriteSingleValue
+	bcc WriteSingleValue
 
 ; Repeat the previous value of the register
 RepeatLastRegisterValue
@@ -390,11 +391,9 @@ DecompressWithOffset
 	lda #7
 	jsr _ReadBits					
 	; Compute wrap around offset...
-	clc
 	tya
 	adc _DecodedResult					; between 0 and 255
-	sec
-	sbc #128							; -128
+	eor #128
 	sta temp_value
 		
 	; Read count (7 bits)
