@@ -7,14 +7,14 @@
 // Information for the Assembler
 //
 #ifdef LOADER
-FileStartSector .byt 4,8,13,16,1,8,13,2,9,12,1,13,2,15,2,3,6,12,1,6,5,5
-FileStartTrack .byt 0,0,2,2,3,3,3,4,4,5,6,6,7,7,8,8,8,8,9,11,12,13
-FileStoredSizeLow .byt <1024,<9773,<560,<447,<1598,<1080,<1413,<1775,<5087,<1307,<2834,<1503,<3288,<954,<162,<692,<1332,<1504,<9810,<3912,<4272,<9660
-FileStoredSizeHigh .byt >1024,>9773,>560,>447,>1598,>1080,>1413,>1775,>5087,>1307,>2834,>1503,>3288,>954,>162,>692,>1332,>1504,>9810,>3912,>4272,>9660
-FileSizeLow .byt <1024,<36176,<760,<576,<6000,<2080,<8000,<8000,<8000,<5680,<5680,<5680,<10000,<2140,<450,<792,<5680,<8000,<12872,<6750,<6459,<11860
-FileSizeHigh .byt >1024,>36176,>760,>576,>6000,>2080,>8000,>8000,>8000,>5680,>5680,>5680,>10000,>2140,>450,>792,>5680,>8000,>12872,>6750,>6459,>11860
-FileLoadAdressLow .byt <64512,<1024,<39168,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152,<49152,<49152,<49152
-FileLoadAdressHigh .byt >64512,>1024,>39168,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152,>49152,>49152,>49152
+FileStartSector .byt 4,8,13,16,1,8,13,2,9,12,1,13,2,15,2,3,6,12,1
+FileStartTrack .byt 0,0,2,2,3,3,3,4,4,5,6,6,7,7,8,8,8,8,9
+FileStoredSizeLow .byt <1024,<9773,<560,<447,<1598,<1080,<1413,<1775,<5087,<1307,<2834,<1503,<3288,<954,<162,<692,<1332,<1504,<3912
+FileStoredSizeHigh .byt >1024,>9773,>560,>447,>1598,>1080,>1413,>1775,>5087,>1307,>2834,>1503,>3288,>954,>162,>692,>1332,>1504,>3912
+FileSizeLow .byt <1024,<36176,<760,<576,<6000,<2080,<8000,<8000,<8000,<5680,<5680,<5680,<10000,<2140,<450,<792,<5680,<8000,<6750
+FileSizeHigh .byt >1024,>36176,>760,>576,>6000,>2080,>8000,>8000,>8000,>5680,>5680,>5680,>10000,>2140,>450,>792,>5680,>8000,>6750
+FileLoadAdressLow .byt <64512,<1024,<39168,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<40960,<49152
+FileLoadAdressHigh .byt >64512,>1024,>39168,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>40960,>49152
 #endif // LOADER
 #else
 //
@@ -68,16 +68,10 @@ FileLoadAdressHigh .byt >64512,>1024,>39168,>40960,>40960,>40960,>40960,>40960,>
 // - Loads at address 40960 starts on track 8 sector 6 and is 6 sectors long (1332 compressed bytes: 23% of 5680 bytes).
 // Entry #17 '..\build\files\logo_zerofx.hir'
 // - Loads at address 40960 starts on track 8 sector 12 and is 6 sectors long (1504 compressed bytes: 18% of 8000 bytes).
-// Entry #18 '..\build\files\ChrisMad.BitmapMania.ym'
-// - Loads at address 49152 starts on track 9 sector 1 and is 39 sectors long (9810 compressed bytes: 76% of 12872 bytes).
-// Entry #19 '..\build\files\DecadeReset.ym'
-// - Loads at address 49152 starts on track 11 sector 6 and is 16 sectors long (3912 compressed bytes: 57% of 6750 bytes).
-// Entry #20 '..\build\files\Lap.ym'
-// - Loads at address 49152 starts on track 12 sector 5 and is 17 sectors long (4272 compressed bytes: 66% of 6459 bytes).
-// Entry #21 '..\build\files\Sote1.ym'
-// - Loads at address 49152 starts on track 13 sector 5 and is 38 sectors long (9660 compressed bytes: 81% of 11860 bytes).
+// Entry #18 '..\build\files\DecadeReset.ym'
+// - Loads at address 49152 starts on track 9 sector 1 and is 16 sectors long (3912 compressed bytes: 57% of 6750 bytes).
 //
-// 263 sectors used, out of 1428. (18% of the total disk size used)
+// 169 sectors used, out of 1428. (11% of the total disk size used)
 //
 #define LOADER_SLIDESHOW 1
 #define LOADER_FONT_6x8_ARTDECO 2
