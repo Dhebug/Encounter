@@ -26,7 +26,7 @@ Change history for the Ym2Mym
 - Fixed a stupid bug of signed data added in version 1.2
 
 1.5 - 2014/12/06
-- The verbose mode (-v1) now display the embedded informations such as author name, song name, and extra comments
+- The verbose mode (-v1) now displays the embedded informations such as author name, song name, and extra comments
 - Interleave register format is now also supported
 
 */

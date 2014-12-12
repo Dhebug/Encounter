@@ -24,6 +24,9 @@ del printer.txt /s
 
 del tmp\*.* /q
 del Euphoric\dosbox.conf
+del Euphoric\stderr.txt
+del Euphoric\stdout.txt
+
 ECHO Do not erase >tmp\keepmehere.txt
 
 pause

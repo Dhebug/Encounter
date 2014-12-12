@@ -357,55 +357,74 @@ Lena
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
-<p id=dateentry>Version 0.013</p>
+
+<p id=dateentry>Version 0.20</p>
+- The -f6 mode can now be used for pictures that are taller than the screen<br>
+- Fixed the percentage calculation so it actually goes from 0 to 100 even when pictures are not 200 pixel tall.<br>
+
+<p id=dateentry>Version 0.19</p>
+- Fixed a buffer overflow in the -f6 conversion mode happening when images are not 240x200<br>
+- Changed the depth mode from 3 to 2 to speed-up the conversion<br>
+
+<p id=dateentry>Version 0.18</p>
+- Added the -f6 conversion mode for Oric pictures. This is the method used in Img2Oric/LibPipi and generally gives much better results when converting - albeit much much slower than other methods.<br>
+
+<p id=dateentry>Version 0.17</p>
+- Fixed a the update code, was failing if the target file did not exist (facepalm)<br>
+
+<p id=dateentry>Version 0.16</p>
+- New option to skip the conversion if the target file is more recent than the source file (-u)<br>
+- New option to enable/disable information about what happens (-v)<br>
+
+<p id=dateentry>Version 0.13</p>
  - It is now possible to lock some colors index to some particular values.<br>
 
-<p id=dateentry>Version 0.012</p>
+<p id=dateentry>Version 0.12</p>
  - Lot of modifications in the codebase to handle more cleanly the various types of machines.<br>
  - The Atari ST now can generate multi-palette pictures.<br>
  - Color reduction is now done by PictConv, no need to reduce to 16 colors manually.<br>
 
-<p id=dateentry>Version 0.011</p>
+<p id=dateentry>Version 0.11</p>
  - Added the -o7 format to generate BASIC source codes.<br>
  - Removed the constraints in the -f1 mode, pictures just need to be multiple of 6 in width, and no more than 240 pixel wide.
 
-<p id=dateentry>Version 0.010</p>
+<p id=dateentry>Version 0.10</p>
  - If there is something specified after -o3 or -o4 modes, it's used as a label name to use when generating source code data.<br>
  - If there is a 'z' specified after -f0 mode (monochrome conversion), it means that bit 6 should not be set in converted bytes<br>
  - Added -n switch to set the number of values per line (stolen from Bin2Txt !)<br>
 
-<p id=dateentry>Version 0.009</p>
+<p id=dateentry>Version 0.9</p>
  - New option for generating 'masks' in bits 6 and 7 based on what is presents in bits 0/1/2 and 3/4/5.<br>
    (Twilighte's request for his new games)<br>
  - Added a way to convert pictures to something that can be used on an Atari ST.<br>
    (needed that for my entry to the 20 years anniversary Atari ST compo)<br>
 
-<p id=dateentry>Version 0.008</p>
+<p id=dateentry>Version 0.8</p>
  - Added "test" mode that's usefull to debug a picture in colored mode
  
-<p id=dateentry>Version 0.007</p>
+<p id=dateentry>Version 0.7</p>
  - Removed the timer check in the colored conversion mode. It was producing bad 
    conversion on slow computers. Anyway, if you are unlucky, a conversion could
    now take hours to perform if the tool has to perform ALL possible combinations.
 
-<p id=dateentry>Version 0.006</p>
+<p id=dateentry>Version 0.6</p>
  - A message is given if the picture is not found or invalid.<br>
  - Colored mode had some bugs: all now corrected ???<br>
 
-<p id=dateentry>Version 0.005</p>
+<p id=dateentry>Version 0.5</p>
  - Debugged the -o6 format.<br>
  - Debugged the -f1 mode.<br>
 
-<p id=dateentry>Version 0.004</p>
+<p id=dateentry>Version 0.4</p>
  - Allow free size pictures (bigger than screen size except for colored mode)<br>
 
-<p id=dateentry>Version 0.003</p>
+<p id=dateentry>Version 0.3</p>
  - Riemersman dithering implemented <br>
 
-<p id=dateentry>Version 0.002</p>
+<p id=dateentry>Version 0.2</p>
  - New version with basic dithering<br>
 
-<p id=dateentry>Version 0.001</p>
+<p id=dateentry>Version 0.1</p>
  - First beta release<br>
 
 

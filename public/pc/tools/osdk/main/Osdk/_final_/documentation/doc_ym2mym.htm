@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Ym2Mym</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Ym2Mym</h1>
+
+<p id=chapter>Description</p>
+
+<div class="article">
+The Oric computers are equiped with a AY-3-8912 sound chip.
+<br>
+<br>
+This component can be found in multiple variants in many other systems such as the MSX, Amstrad CPC, Atari ST, some of the Sinclair Spectrum machines, among other.
+<br>
+<br>
+It is an unfortunate fact that only very few Oric games had music back in the 80ies, but this can be fortunately fixed today thanks to the huge catalog of available musics on the other machines!
+</div>
+
+
+<p id=chapter>YM Files</p>
+
+<div class="article">
+The YM file format was originally designed by Arnaud Carré as a way to record Atari ST musics to make them replayable on a PC.
+<br>
+<br>
+Technically a YM file is simply a register dump of the music: A program captured 50 times per second the content of the values sent to the YM chip. 
+With 14 registers to record, 50 times per second, it means that one second of music takes 700 bytes, so roughly 42kbytes per minute of music.
+<br>
+<br>
+The chosen solution was to store the data sorted by register number, and then compress the whole file with the LHA compressor, which typically reduces the music files to less than 10kb even for very long musics.
+<br>
+<br>
+Unfortunatelly this means that the music file must be entirelly decompressed before it can be used, which makes it unusable on 8bit machines. That's where the MYM format comes in.
+</div>
+
+
+<p id=chapter>MYM Files</p>
+
+<div class="article">
+The MYM files are basically YM files that have been uncompressed and recompressed in a way that allows for partial decompression over time. The efficiency is not as good, but at least it works.
+<br>
+<br>
+Ym2MYm can be used to perform this conversion. It will work only on YM files that do not use special timer effects such as digidrums or sid.
+</div>
+
+
+<p id=chapter>Utilisation</p>
+
+<p>To transform a binary file as a texte file:
+</p>
+<pre>
+%OSDK%\bin\Ym2Mym [switches] source.ym destination.mym [load adress] [header name]
+</pre>
+
+
+<p id=chapter>Switches</p>
+
+<ul>
+	<li>-tn Tuning
+		<br>
+		The Atari ST soundchip has a 2mhz frequency, while most 8bit machines (including the Oric) have a 1mhz soundchip.
+		<br>
+		This means that in order to replay correctly an Atari ST music on the Oric we have to double the value of the frequency registers else the music will play too low which will result in ugly waveforms and low notes.
+		<ul>
+			<li>-t0 => No retune</li>
+			<li>-t1 => Double frequency [default]</li>
+			<br>
+		</ul>
+	</li>
+
+	<li>-vn Verbosity
+		<br>
+		Enables or disable the printing of informative messages.
+		<ul>
+			<li>-v0 => Silent [default]</li>
+			<li>-v1 => Shows information about what Ym2Mym is doing</li>
+			<br>
+		</ul>
+	</li>
+
+	<li>-hn Header
+		<br>
+		Adds a tape compatible header
+		<ul>
+			<li>-h0 => No tape header [default]</li>
+			<li>-h1 => Use tape header (requires a start address and a name)</li>
+			<br>
+		</ul>
+	</li>
+
+	<li>-mn Max size
+		<br>
+		The MYM replay routine generally is provided with a limited size for the music. Using this switch you can force Ym2Mym to refuse to convert a music and output an error message if the final compressed file gets larger than the specified number.
+		<ul>
+			<li>-m0 => No size limit [default]</li>
+			<li>-m1234 => Outputs an error if the exported size is too large</li>
+			<br>
+		</ul>
+	</li>
+</ul>
+
+<br>
+
+<p id=chapter>History</p>
+
+<p id=dateentry>Version 1.5</p>
+<ul>
+	<li>The verbose mode (-v1) now display the embedded informations such as author name, song name, and extra comments</li>
+	<li>Interleave register format is now also supported</li>
+</ul>
+
+<p id=dateentry>Version 1.4</p>
+<ul>
+	<li>Fixed a stupid bug of signed data added in version 1.2</li>
+</ul>
+
+<p id=dateentry>Version 1.3 (Broken!)</p>
+<ul>
+	<li>Added a -m flag to check if the exported file fits a maximum size</li>
+</ul>
+
+<p id=dateentry>Version 1.2 (Broken!)</p>
+<ul>
+	<li>Added a -v flag to enable/disable verbosity</li>
+	<li>Added a -h flag to add a tape compatible header</li>
+</ul>
+
+<p id=dateentry>Version 1.1</p>
+<ul>
+	<li>The tool is now able to extract LHA compressed YM files directly, should make the process much easier :)</li>
+</ul>
+
+<p id=dateentry>Version 1.0</p>
+<ul>
+	<li>Added support for retuning (Atari ST songs are at 2mhz, Amstrad ones at 1mhz)</li>
+	<li>Added rude support for YM6 format (also skips most of the header)</li>
+</ul>
+
+<p id=dateentry>Version 0.2</p>
+<ul>
+	<li>Added a rude YM5 loader. Skips most of the header.</li>
+</ul>
+
+<p id=dateentry>Version 0.1</p>
+<ul>
+	<li>First version by Marq/Lieves!Tuore & Fit (marq@iki.fi)</li>
+</ul>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+
+	</BODY>
+</HTML>
+

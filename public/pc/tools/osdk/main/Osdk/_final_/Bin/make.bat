@@ -1,5 +1,5 @@
 @ECHO OFF
-ECHO ON
+::ECHO ON
 
 ::
 :: Initial checks to verify that everything is fine.
