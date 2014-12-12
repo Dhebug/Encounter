@@ -246,9 +246,6 @@
     <None Include="_final_\documentation\doc_debugger.htm">
       <Filter>documentation</Filter>
     </None>
-    <None Include="_final_\documentation\doc_euphoric.htm">
-      <Filter>documentation</Filter>
-    </None>
     <None Include="_final_\documentation\doc_filepack.htm">
       <Filter>documentation</Filter>
     </None>
@@ -481,6 +478,15 @@
       <Filter>bin</Filter>
     </None>
     <None Include="_final_\documentation\doc_floppybuilder.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_emulator.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_oricutron.htm">
+      <Filter>documentation</Filter>
+    </None>
+    <None Include="_final_\documentation\doc_ym2mym.htm">
       <Filter>documentation</Filter>
     </None>
   </ItemGroup>

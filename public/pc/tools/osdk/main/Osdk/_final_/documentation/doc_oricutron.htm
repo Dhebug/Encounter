@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>OSDK - Oricutron</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+		<h1>Oricutron</h1>
+
+<p id=chapter>Debugging</p>
+
+<p>To access Oricutron's debugger you need to press the F2 key. This will show you this screen:
+</p>
+
+<center>
+<img src="pics/oricutron_debugging.gif">
+</center>
+
+<p>In the monitor, number arguments are decimal by default, or prefixed with $ for
+hex or % for binary. Pretty much everything is output in hex.
+</p>
+
+<p>In most places where you can enter a number or address, you can pass a CPU or
+VIA register. (VIA registers are prefixed with V, e.g. VDDRA). Anywhere you can
+pass an address, you can also use a symbol.
+</p>
+
+<p id=chapter>Commands</p>
+
+		<p>To use Oricutron's debugger, you need to know some keys:
+		</p>
+
+		<ul>
+		<li><b>F2:</b> Return to the emulator</li>
+		<li><b>F3:</b> Toggle console/debug output/memwatch</li>
+		<li><b>F4:</b> Toggle VIA/AY information</li>
+		<li><b>F9:</b> Reset cycle count</li>
+		<li><b>F10:</b> Step over code</li>
+		<li><b>F11:</b> Step over code without tracing into subroutines.</li>
+		<li><b>F12:</b> Skip instruction</li>
+  		</ul>
+
+<p id=chapter>Advanced features</p>	
+
+		<p>You also have some more advanced commands:
+		</p>
+		
+		<ul>
+		<li>?                     - Help</li>
+		<li>a <addr>              - Assemble</li>
+		<li>bc <bp id>            - Clear breakpoint</li>
+		<li>bcm <bp id>           - Clear mem breakpoint</li>
+		<li>bl                    - List breakpoints</li>
+		<li>blm                   - List mem breakpoints</li>
+		<li>bs <addr>             - Set breakpoint</li>
+		<li>bsm <addr> [rwc]      - Set mem breakpoint</li>
+		<li>bz                    - Zap breakpoints</li>
+		<li>bzm                   - Zap mem breakpoints</li>
+		<li>d <addr>              - Disassemble</li>
+		<li>df <addr> <end> <file>- Disassemble to file</li>
+		<li>m <addr>              - Dump memory</li>
+		<li>mm <addr> <value>     - Modify memory</li>
+		<li>mw <addr>             - Memory watch at addr</li>
+		<li>nl <file>             - Load snapshot</li>
+		<li>ns <file>             - Save snapshot</li>
+		<li>r <reg> <val>         - Set <reg> to <val></li>
+		<li>q, x or qm            - Quit monitor</li>
+		<li>qe                    - Quit emulator</li>
+		<li>sa <name> <addr>      - Add or move user symbol</li>
+		<li>sk <name>             - Kill user symbol</li>
+		<li>sc                    - Symbols not case-sensitive</li>
+		<li>sC                    - Symbols case-sensitive</li>
+		<li>sl <file>             - Load user symbols</li>
+		<li>sx <file>             - Export user symbols</li>
+		<li>sz                    - Zap user symbols</li>
+		<li>wm <addr> <len> <file>- Write mem to disk</li>
+		</ul>
+
+<br>		
+
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+
+
+<p id=dateentry>Version 1.2 (01-Nov-2014)</p>
+<ul>
+	<li>Fixed memory access breakpoints which were broken in (at least) v1.1.</li>
+	<li>Added snapshot files to the filetype autodetection</li>
+	<li>Added a virtual on-screen keyboard, and the ability to remap keys (torguet)</li>
+	<li>Fixed autobooting of Jasmin disks (christian)</li>
+	<li>ACIA 6551 serial port emulation, including a virtual modem which lets you connect over TCP/IP (iss)</li>
+	<li>Fixed a bug in the V flag emulation for SBC/ADC (christian)</li>
+	<li>Detects invalid .tap images (encoded length larger than tape image length)</li>
+    <li>Added copy to clipboard (iss)</li>
+</ul>
+
+
+<p id=dateentry>Version 1.1 (07-Dec-2013)</p>
+<ul>
+    <li>Now possible to set scanline and fullscreen options when built without OpenGL support</li>
+    <li>Includes patches and symbols for Pravetz 8D rom</li>
+    <li>Disk and tape image autodetection. Oricutron will now attempt to detect the configuration required for any disk or tape inserted via commandline or menu.</li>
+    <li>"Insert disk 0/1" menu items enabled even when no disk drive is enabled. Inserting a disk will use the autodetection routines to determine which drive type to enable.</li>
+    <li>Autorun for Jasmin and Pravetz disks</li>
+    <li>Fixed crash bug when switching between software and GL rendering on builds using SDL requesters.</li>
+    <li>Various AY emulation improvements</li>
+    <li>Simplified system timing</li>
+</ul>
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="pics/osdk_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

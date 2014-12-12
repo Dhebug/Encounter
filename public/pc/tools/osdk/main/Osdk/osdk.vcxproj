@@ -129,7 +129,16 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="_final_\documentation\doc_emulator.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="_final_\documentation\doc_floppybuilder.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="_final_\documentation\doc_oricutron.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="_final_\documentation\doc_ym2mym.htm">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="_final_\lib\clock.s" />
@@ -200,7 +209,6 @@
     <None Include="_final_\documentation\doc_copyright.htm" />
     <None Include="_final_\documentation\doc_creating_project.htm" />
     <None Include="_final_\documentation\doc_debugger.htm" />
-    <None Include="_final_\documentation\doc_euphoric.htm" />
     <None Include="_final_\documentation\doc_filepack.htm" />
     <None Include="_final_\documentation\doc_glossary.htm" />
     <None Include="_final_\documentation\doc_header.htm" />
