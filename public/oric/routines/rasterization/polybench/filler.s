@@ -30,9 +30,8 @@ reg7	.dsb 2
 
 	*= tmp1
 
-_DY				.dsb 2	; tmp1
-_DX				.dsb 2	; tmp2
-
+_DY				.dsb 1	; tmp1
+_DX				.dsb 1	; tmp2
 _E				.dsb 2	; tmp3
 
 	*= tmp1
@@ -424,19 +423,10 @@ no_bottom
 	sta	_PolyY0
 no_top
 
-	;
-	; Compute line width
-	; And init E
-	;
-	sec
-	lda	_X1
-	sbc	_X0
-	sta	_DX
+	; Init E
 	lda	#0
-	sbc	#0
 	sta	_E
 	sta	_E+1
-	sta	_DX+1
 
 	;
 	; Common inits
@@ -446,14 +436,20 @@ no_top
 
 	txa
 	cmp	_X1
-	bcs	go_compute_right
+	bcs main_to_left
 
-go_compute_left
+	; Compute line width
+	sec
+	lda	_X1
+	sbc	_X0
+	sta	_DX
+
+main_to_right
 .(
 	lda	_FlagFirst
-	beq	loop_y_left_first_init
+	beq	loop_first_to_right
 
-loop_y_left
+loop_to_right
 	txa
 
 	cmp	_MinX,y
@@ -471,7 +467,7 @@ no_max_1
 	adc	_DX
 	sta	_E
 	lda	_E+1
-	adc	_DX+1
+	adc	#0
 	sta	_E+1
 	bmi	end_loop_e_left
 loop_e_left
@@ -491,15 +487,21 @@ loop_e_left
 end_loop_e_left
 	iny
 	cpy	_Y1
-	bcc	loop_y_left
+	bcc	loop_to_right
 	rts
 .)
 
-go_compute_right
+main_to_left
 .(
+	; Init width
+	sec
+	lda	_X0
+	sbc	_X1
+	sta	_DX
+
 	lda	_FlagFirst
-	beq	loop_y_right_first_init
-loop_y_right
+	beq	loop_first_to_left
+loop_to_left
 	txa
 
 	cmp	_MaxX,y
@@ -513,11 +515,12 @@ no_max_2
 	sec
 no_min_2
 
+	clc
 	lda	_E
-	sbc	_DX
+	adc	_DX
 	sta	_E
 	lda	_E+1
-	sbc	_DX+1
+	adc	#0
 	sta	_E+1
 	bmi	end_loop_e_right
 loop_e_right
@@ -536,16 +539,16 @@ loop_e_right
 end_loop_e_right
 	iny
 	cpy	_Y1
-	bcc	loop_y_right
+	bcc	loop_to_left
 	rts
 .)
 
-loop_y_left_first_init
+loop_first_to_right
 .(
 	lda	#1
 	sta	_FlagFirst
 	clc
-loop_y_left_first
+loop_y_leftto_right
 	txa			; NZ, not C
 	sta	_MinX,y
 	sta	_MaxX,y
@@ -554,7 +557,7 @@ loop_y_left_first
 	adc	_DX
 	sta	_E
 	lda	_E+1
-	adc	_DX+1
+	adc	#0
 	sta	_E+1
 	bmi	end_loop_e_left_first
 loop_e_left_first
@@ -573,25 +576,25 @@ loop_e_left_first
 end_loop_e_left_first
 	iny
 	cpy	_Y1
-	bcc	loop_y_left_first
+	bcc	loop_y_leftto_right
 	rts
 .)
 
-loop_y_right_first_init
+loop_first_to_left
 .(
 	lda	#1
 	sta	_FlagFirst
-loop_y_right_first
+	clc
+loop_to_left
 	txa
 	sta	_MinX,y
 	sta	_MaxX,y
 
-	sec
 	lda	_E
-	sbc	_DX
+	adc	_DX
 	sta	_E
 	lda	_E+1
-	sbc	_DX+1
+	adc	#0
 	sta	_E+1
 	bmi	end_loop_e_right_first
 loop_e_right_first
@@ -610,7 +613,7 @@ loop_e_right_first
 end_loop_e_right_first
 	iny
 	cpy	_Y1
-	bcc	loop_y_right_first
+	bcc	loop_to_left
 	rts
 .)
 
