@@ -198,16 +198,14 @@ skip
 	;
 	; Update Y position and local mini/max
 	;
+	inc	_PolyY0
 	ldy	_PolyY0
 
 	lda	#239
-	sta	_MinX,y
+	sta	_MinX-1,y
 
 	lda	#0
-	sta	_MaxX,y
-
-	iny
-	sty	_PolyY0
+	sta	_MaxX-1,y
 
 	cpy	_PolyY1
 	;bcs	end_draw
@@ -379,101 +377,7 @@ UnrolledOffset
 	.byt 3*1 
 	.byt 3*0 
 	
-/*		
-UnrolledPtrLow
-	.byt <(UnrolledMultipleDraw+3*40)
-	                                 
-	.byt <(UnrolledMultipleDraw+3*39)
-	.byt <(UnrolledMultipleDraw+3*38)
-	.byt <(UnrolledMultipleDraw+3*37)
-	.byt <(UnrolledMultipleDraw+3*36)
-	.byt <(UnrolledMultipleDraw+3*35)
-	.byt <(UnrolledMultipleDraw+3*34)
-	.byt <(UnrolledMultipleDraw+3*33)
-	.byt <(UnrolledMultipleDraw+3*32)
-	.byt <(UnrolledMultipleDraw+3*31)
-	.byt <(UnrolledMultipleDraw+3*30)
-		                             
-	.byt <(UnrolledMultipleDraw+3*29)
-	.byt <(UnrolledMultipleDraw+3*28)
-	.byt <(UnrolledMultipleDraw+3*27)
-	.byt <(UnrolledMultipleDraw+3*26)
-	.byt <(UnrolledMultipleDraw+3*25)
-	.byt <(UnrolledMultipleDraw+3*24)
-	.byt <(UnrolledMultipleDraw+3*23)
-	.byt <(UnrolledMultipleDraw+3*22)
-	.byt <(UnrolledMultipleDraw+3*21)
-	.byt <(UnrolledMultipleDraw+3*20)
-                                     
-	.byt <(UnrolledMultipleDraw+3*19)
-	.byt <(UnrolledMultipleDraw+3*18)
-	.byt <(UnrolledMultipleDraw+3*17)
-	.byt <(UnrolledMultipleDraw+3*16)
-	.byt <(UnrolledMultipleDraw+3*15)
-	.byt <(UnrolledMultipleDraw+3*14)
-	.byt <(UnrolledMultipleDraw+3*13)
-	.byt <(UnrolledMultipleDraw+3*12)
-	.byt <(UnrolledMultipleDraw+3*11)
-	.byt <(UnrolledMultipleDraw+3*10)
-                                     
-	.byt <(UnrolledMultipleDraw+3*9 )
-	.byt <(UnrolledMultipleDraw+3*8 )
-	.byt <(UnrolledMultipleDraw+3*7 )
-	.byt <(UnrolledMultipleDraw+3*6 )
-	.byt <(UnrolledMultipleDraw+3*5 )
-	.byt <(UnrolledMultipleDraw+3*4 )
-	.byt <(UnrolledMultipleDraw+3*3 )
-	.byt <(UnrolledMultipleDraw+3*2 )
-	.byt <(UnrolledMultipleDraw+3*1 )
-	.byt <(UnrolledMultipleDraw+3*0 )
-			
-UnrolledPtrHigh
-	.byt >(UnrolledMultipleDraw+3*40)
-	                                 
-	.byt >(UnrolledMultipleDraw+3*39)
-	.byt >(UnrolledMultipleDraw+3*38)
-	.byt >(UnrolledMultipleDraw+3*37)
-	.byt >(UnrolledMultipleDraw+3*36)
-	.byt >(UnrolledMultipleDraw+3*35)
-	.byt >(UnrolledMultipleDraw+3*34)
-	.byt >(UnrolledMultipleDraw+3*33)
-	.byt >(UnrolledMultipleDraw+3*32)
-	.byt >(UnrolledMultipleDraw+3*31)
-	.byt >(UnrolledMultipleDraw+3*30)
-		                             
-	.byt >(UnrolledMultipleDraw+3*29)
-	.byt >(UnrolledMultipleDraw+3*28)
-	.byt >(UnrolledMultipleDraw+3*27)
-	.byt >(UnrolledMultipleDraw+3*26)
-	.byt >(UnrolledMultipleDraw+3*25)
-	.byt >(UnrolledMultipleDraw+3*24)
-	.byt >(UnrolledMultipleDraw+3*23)
-	.byt >(UnrolledMultipleDraw+3*22)
-	.byt >(UnrolledMultipleDraw+3*21)
-	.byt >(UnrolledMultipleDraw+3*20)
-                                     
-	.byt >(UnrolledMultipleDraw+3*19)
-	.byt >(UnrolledMultipleDraw+3*18)
-	.byt >(UnrolledMultipleDraw+3*17)
-	.byt >(UnrolledMultipleDraw+3*16)
-	.byt >(UnrolledMultipleDraw+3*15)
-	.byt >(UnrolledMultipleDraw+3*14)
-	.byt >(UnrolledMultipleDraw+3*13)
-	.byt >(UnrolledMultipleDraw+3*12)
-	.byt >(UnrolledMultipleDraw+3*11)
-	.byt >(UnrolledMultipleDraw+3*10)
-                                     
-	.byt >(UnrolledMultipleDraw+3*9 )
-	.byt >(UnrolledMultipleDraw+3*8 )
-	.byt >(UnrolledMultipleDraw+3*7 )
-	.byt >(UnrolledMultipleDraw+3*6 )
-	.byt >(UnrolledMultipleDraw+3*5 )
-	.byt >(UnrolledMultipleDraw+3*4 )
-	.byt >(UnrolledMultipleDraw+3*3 )
-	.byt >(UnrolledMultipleDraw+3*2 )
-	.byt >(UnrolledMultipleDraw+3*1 )
-	.byt >(UnrolledMultipleDraw+3*0 )
-*/
+
 	
 	.dsb 256-(*&255)
 
@@ -505,8 +409,12 @@ swap_values
 
 no_swap_values
 	; Store height
-	sec
 	lda	_Y1
+	cmp	_PolyY1
+	bcc	no_bottom
+	sta	_PolyY1
+no_bottom
+	sec
 	sbc	_Y0
 	sta	_DY
 
@@ -515,12 +423,6 @@ no_swap_values
 	bcs	no_top
 	sta	_PolyY0
 no_top
-
-	lda	_Y1
-	cmp	_PolyY1
-	bcc	no_bottom
-	sta	_PolyY1
-no_bottom
 
 	;
 	; Compute line width
@@ -562,9 +464,9 @@ no_min_1
 	cmp	_MaxX,y
 	bcc	no_max_1
 	sta	_MaxX,y
+	clc
 no_max_1
 
-	clc
 	lda	_E
 	adc	_DX
 	sta	_E
@@ -600,16 +502,17 @@ go_compute_right
 loop_y_right
 	txa
 
-	cmp	_MinX,y
-	bcs	no_min_2
-	sta	_MinX,y
-no_min_2
-
 	cmp	_MaxX,y
 	bcc	no_max_2
 	sta	_MaxX,y
 no_max_2
+
+	cmp	_MinX,y
+	bcs	no_min_2
+	sta	_MinX,y
 	sec
+no_min_2
+
 	lda	_E
 	sbc	_DX
 	sta	_E

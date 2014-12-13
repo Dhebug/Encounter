@@ -39,7 +39,8 @@
 // 2008-04-21|Removed useless register reloading                  | 79.2%|3067 2655 2789 2788 2941 2965 2885
 // 2008-04-21|Replaced LDA $xxxx,y/TAX by LDX $xxxx,y             | 78.7%|3050 2641 2775 2775 2925 2950 2868
 // 2008-04-21|Improved pattern management                         | 78.7%|3049 2640 2774 2774 2924 2949 2868  <- PolyBench 3
-
+// 2014-12-13|Testing again... after 6 years :)                   | 78.7%|3048 2638 2771 2771 2921 2947 2866
+// 2014-12-13|Avoided some pointless clc and sec                  | 78.4%|3038 2631 2762 2763 2910 2939 2858
 
 // ---- Externs
 extern	unsigned char	RandomValue;
