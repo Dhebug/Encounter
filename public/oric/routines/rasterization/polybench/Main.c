@@ -41,7 +41,8 @@
 // 2008-04-21|Improved pattern management                         | 78.7%|3049 2640 2774 2774 2924 2949 2868  <- PolyBench 3
 // 2014-12-13|Testing again... after 6 years :)                   | 78.7%|3048 2638 2771 2771 2921 2947 2866
 // 2014-12-13|Avoided some pointless clc and sec                  | 78.4%|3038 2631 2762 2763 2910 2939 2858
-// 2014-12-13|Used DX as an unsigned 8bit value                   |      |3031 2623 2754 2758 2902 2928 2846
+// 2014-12-13|Used DX as an unsigned 8bit value                   | 78.3%|3031 2623 2754 2758 2902 2928 2846
+// 2014-12-13|Used the direction test to compute the width        | 76.9%|2977 2577 2708 2706 2856 2878 2806
 
 
 // ---- Externs

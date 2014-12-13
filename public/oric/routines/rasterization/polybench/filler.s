@@ -435,14 +435,14 @@ no_top
 	ldx	_X0
 
 	txa
-	cmp	_X1
+	sec
+	sbc	_X1              ; Compute line width
 	bcs main_to_left
 
-	; Compute line width
-	sec
-	lda	_X1
-	sbc	_X0
-	sta	_DX
+	; Negate to get the positive value
+	eor #$ff 
+	adc #1
+	sta _DX
 
 main_to_right
 .(
@@ -474,7 +474,7 @@ loop_e_left
 	inx
 	
 	.(
-	sec
+	;sec
 	lda	_E
 	sbc	_DY
 	sta	_E
@@ -494,28 +494,25 @@ end_loop_e_left
 main_to_left
 .(
 	; Init width
-	sec
-	lda	_X0
-	sbc	_X1
 	sta	_DX
 
 	lda	_FlagFirst
 	beq	loop_first_to_left
+
 loop_to_left
 	txa
+
+	cmp	_MinX,y
+	bcs	no_min_2
+	sta	_MinX,y
+	clc
+no_min_2
 
 	cmp	_MaxX,y
 	bcc	no_max_2
 	sta	_MaxX,y
 no_max_2
 
-	cmp	_MinX,y
-	bcs	no_min_2
-	sta	_MinX,y
-	sec
-no_min_2
-
-	clc
 	lda	_E
 	adc	_DX
 	sta	_E
@@ -526,7 +523,7 @@ no_min_2
 loop_e_right
 	dex
 	.(
-	sec
+	;sec
 	lda	_E
 	sbc	_DY
 	sta	_E
@@ -563,7 +560,7 @@ loop_y_leftto_right
 loop_e_left_first
 	inx
 	.(
-	sec
+	;sec
 	lda	_E
 	sbc	_DY
 	sta	_E
@@ -580,10 +577,13 @@ end_loop_e_left_first
 	rts
 .)
 
+
+
 loop_first_to_left
 .(
 	lda	#1
 	sta	_FlagFirst
+
 	clc
 loop_to_left
 	txa
@@ -600,7 +600,7 @@ loop_to_left
 loop_e_right_first
 	dex
 	.(
-	sec
+	;sec
 	lda	_E
 	sbc	_DY
 	sta	_E
@@ -616,6 +616,10 @@ end_loop_e_right_first
 	bcc	loop_to_left
 	rts
 .)
+
+
+
+
 
 _ClearAndSwapFlag
 	lda	_OddEvenFlag
