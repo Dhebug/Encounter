@@ -175,42 +175,42 @@ float log2( double n )
 
 void main(int argc,char *argv[]) 
 {
-    long	param;
-    long	nb_arg;
+  long	param;
+  long	nb_arg;
 
-	bool	flag_pack=true;
-    param=1;									   
+  bool	flag_pack=true;
+  param=1;									   
 
-	if (argc>1)
-	{
-		for (;;)
-		{
-			nb_arg=argc;
-			const char *ptr_arg=argv[param];
-			/*
-			if (get_switch(ptr_arg,"-u"))	// UNPACK
-			{
-				flag_pack=false;
-				argc--;
-				param++;
-			}
-			else 
-			if (get_switch(ptr_arg,"-p"))	// PACK
-			{
-				flag_pack=true;
-				argc--;
-				param++;
-			}
-			*/
-			if (nb_arg==argc)   break;
-		}
-	}
-
-
-    if (argc!=(NB_ARG+1))
+  if (argc>1)
+  {
+    for (;;)
     {
-		DisplayError();
+      nb_arg=argc;
+      const char *ptr_arg=argv[param];
+      /*
+      if (get_switch(ptr_arg,"-u"))	// UNPACK
+      {
+      flag_pack=false;
+      argc--;
+      param++;
+      }
+      else 
+      if (get_switch(ptr_arg,"-p"))	// PACK
+      {
+      flag_pack=true;
+      argc--;
+      param++;
+      }
+      */
+      if (nb_arg==argc)   break;
     }
+  }
+
+
+  if (argc!=(NB_ARG+1))
+  {
+    DisplayError();
+  }
 
 
 	//
@@ -432,17 +432,39 @@ void main(int argc,char *argv[])
 	unsigned char *ptr_dst=ptr_buffer_dst;
 	for (int i=0;i<(size_buffer_dst-1);i++)
 	{
-		unsigned char b0=*ptr_src++;
-		b0=logVolume[b0]; //>>4;
+#if 1
+          // Log conversion
+	  unsigned char b0=*ptr_src++;
+	  b0=logVolume[b0]; //>>4;
 
-		unsigned char b1=*ptr_src++;
-		b1=logVolume[b1]; //>>4;
+	  unsigned char b1=*ptr_src++;
+	  b1=logVolume[b1]; //>>4;
+          unsigned char b=(b1<<4)|(b0);
+#else
+          /*
+          // Raw conversion
+          unsigned char b0=*ptr_src++;
+          b0=(((unsigned int)b0)*15)/255;
 
-		unsigned char b=(b1<<4)|(b0);
+          unsigned char b1=*ptr_src++;
+          b1=(((unsigned int)b1)*15)/255;
+
+          unsigned char b=(b1<<4)|(b0);
+          */
+          // Error based conversion
+          unsigned char b0=*ptr_src++;
+          b0=(((unsigned int)b0)*15)/255;
+
+          unsigned char b1=*ptr_src++;
+          b1=(((unsigned int)b1)*15)/255;
+
+          unsigned char b=(b1<<4)|(b0);
+#endif
+
                 if (!b)
                 {
                   // To avoid a spurious null terminator
-                  b=1;
+                  //b=1;
                 }
 		*ptr_dst++=b;
 	}
