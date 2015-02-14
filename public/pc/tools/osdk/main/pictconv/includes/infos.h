@@ -77,7 +77,12 @@ Version 0.20
 - The -f6 mode can now be used for pictures that are taller than the screen
 - Fixed the percentage calculation so it actually goes from 0 to 100 even when pictures are not 200 pixel tall.
 
+Version 0.21
+- Added support for 32bit picture, to handle things like masking/opacity in the picture formats
+- The -a1 mode will generate bytes with null value for blocks of 6 pixels with transparent alpha values (only active in monochrome or AIC conversion modes)
+- Added the -f7 conversion mode for Oric pictures using the AIC coloring method.
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	20
+#define TOOL_VERSION_MINOR	21

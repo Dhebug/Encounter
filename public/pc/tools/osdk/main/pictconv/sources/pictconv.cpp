@@ -48,7 +48,7 @@ int __cdecl main(int argc,char *argv[])
     #endif
     "\r\n"
     "Author:\r\n"
-    "  (c) 2002-2013 Pointier Mickael \r\n"
+    "  (c) 2002-2015 Pointier Mickael \r\n"
     "\r\n"
     "Usage:\r\n"
     "  {ApplicationName} [switches] <source picture> <destination file>\r\n"
@@ -68,6 +68,7 @@ int __cdecl main(int argc,char *argv[])
     "         -f4 => RB conversion\r\n"
     "         -f5 => CHAR generator\r\n"
     "         -f6 => Sam method (Img2Oric)\r\n"
+    "         -f7 => AIC encoding\r\n"
     "       -Atari ST:\r\n"
     "         -f0 => Single palette format [default]\r\n"
     "         -f1 => Multi palette format\r\n"
@@ -82,6 +83,10 @@ int __cdecl main(int argc,char *argv[])
     "       -d1 => alternate (01010101) dithering\r\n"
     "       -d2 => ordered dither\r\n"
     "       -d3 => riemersma\r\n"
+    "\r\n"
+    " -an   Alpha mode\r\n"
+    "       -a0 => no transparency [default]\r\n"
+    "       -a1 => encode alpha as zeroes\r\n"
     "\r\n"
     " -on   Output file format\r\n"
     "       -o0 => TAP (with a header that load in 0xa000)\r\n"
@@ -139,6 +144,7 @@ int __cdecl main(int argc,char *argv[])
   int switchDither=0;
   int switchPalette=0;		// Default 0=automatically generate the palette
   int switchBlock=0;		// Default 0=no block mode (full picture)
+  int switchAlpha=0;            // Default 0=no transparency
 
   ArgumentParser argumentParser(argc,argv);
 
@@ -163,6 +169,14 @@ int __cdecl main(int argc,char *argv[])
       //	0 => No blocs (simple picture)
       // 	1 => Blocks enabled
       switchBlock=argumentParser.GetIntegerValue(0);
+    }
+    else
+    if (argumentParser.IsSwitch("-a"))
+    {
+      //alpha mode: [-a]
+      //	0 => No transparency
+      // 	1 => Encode full transparent alpha as holes saved as zeroes. Or something like that at least.
+      switchAlpha=argumentParser.GetIntegerValue(0);
     }
     else
     if (argumentParser.IsSwitch("-p"))
@@ -308,6 +322,12 @@ int __cdecl main(int argc,char *argv[])
   {
     ShowError("Invalid palette mode (-p) for the selected machine (-m)");
   }
+
+  if (!Hires.SetTransparencyMode(switchAlpha))
+  {
+    ShowError("Invalid alpha mode (-a) for the selected machine (-m)");
+  }
+  
 
   //
   // Copy last parameters

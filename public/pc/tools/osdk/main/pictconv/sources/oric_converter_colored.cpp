@@ -34,21 +34,8 @@ int gmax_count=0;
 
 bool FlagDebug=false;
 
-/*
-- u8: nombre de couleurs sur le bloc (1, 2, ou invalide)
-- u8: couleur 1
-- u8: couleur 2
-- u8: flag (inverse vidéo possible, ...)
-*/
-struct BLOC6
-{
-  unsigned char	color_count;
-  unsigned char	color[2];
-  unsigned char	value;
-};
 
-
-BLOC6	Bloc6Buffer[40];	// For 240 pixel wide pictures
+BlocOf6	Bloc6Buffer[40];	// For 240 pixel wide pictures
 
 
 /*
@@ -77,7 +64,7 @@ Changement de papier d'une couleur inversée de la couleur, en mettant la vidéo i
 
 
 
-bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,unsigned char cur_paper,unsigned char cur_ink)
+bool RecurseLine(unsigned char count,BlocOf6 *ptr_bloc6,unsigned char *ptr_hires,ORIC_COLOR cur_paper,ORIC_COLOR cur_ink)
 {
   PtrSpaces-=2;
 
@@ -121,8 +108,8 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
   }
 
   unsigned char	color_count=ptr_bloc6->color_count;
-  unsigned char	c0=ptr_bloc6->color[0];
-  unsigned char	c1=ptr_bloc6->color[1];
+  ORIC_COLOR	c0=ptr_bloc6->colors[0];
+  ORIC_COLOR	c1=ptr_bloc6->colors[1];
   unsigned char	v =ptr_bloc6->value;
 
 
@@ -153,12 +140,12 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
       }
 
       // Try each of the 8 possible ink colors
-      for (unsigned char color=0;color<8;color++)
+      for (ORIC_COLOR color=ORIC_COLOR_BLACK;color<_ORIC_COLOR_LAST_;color++)
       {
         if (FlagDebug)	printf("\r\n %sUse paper color (%d) while changing ink color to (%d)",PtrSpaces,cur_paper,color);
         if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
         {
-          ptr_hires[-1]=color;
+          ptr_hires[-1]=(unsigned char)color;
           return true;
         }
       }
@@ -191,12 +178,12 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
       }
 
       // Try each of the 8 possible ink colors
-      for (unsigned char color=0;color<8;color++)
+      for (ORIC_COLOR color=ORIC_COLOR_BLACK;color<_ORIC_COLOR_LAST_;color++)
       {
         if (FlagDebug)	printf("\r\n %sUse inverted paper color (%d => %d) while changing ink color to (%d)",PtrSpaces,cur_paper,7-cur_paper,color);
         if (RecurseLine(count,ptr_bloc6,ptr_hires,cur_paper,color))
         {
-          ptr_hires[-1]=128|color;
+          ptr_hires[-1]=(unsigned char)(128|color);
           return true;
         }
       }
@@ -217,16 +204,16 @@ bool RecurseLine(unsigned char count,BLOC6 *ptr_bloc6,unsigned char *ptr_hires,u
     if (FlagDebug)	printf("\r\n %sChange paper color to (%d)",PtrSpaces,c0);
     if (RecurseLine(count,ptr_bloc6,ptr_hires,c0,cur_ink))
     {
-      ptr_hires[-1]=16+c0;
+      ptr_hires[-1]=(unsigned char)(16+c0);
       return true;
     }
 
 
-    // Change paper color, using inverse vidéo
+    // Change paper color, using inverse video
     if (FlagDebug)	printf("\r\n %sChange paper color to (%d) using inversion (%d)",PtrSpaces,7-c0,c0);
-    if (RecurseLine(count,ptr_bloc6,ptr_hires,7-c0,cur_ink))
+    if (RecurseLine(count,ptr_bloc6,ptr_hires,ORIC_COLOR_WHITE-c0,cur_ink))
     {
-      ptr_hires[-1]=128|16+(7-c0);
+      ptr_hires[-1]=(unsigned char)(128|16+(7-c0));
       return true;
     }
   }
@@ -310,7 +297,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
       printf("\r\nLine %d ",y);
     }
 
-    BLOC6 *ptr_bloc6=Bloc6Buffer;
+    BlocOf6 *ptr_bloc6=Bloc6Buffer;
     bool error_in_line=false;
 
     //
@@ -322,59 +309,20 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
       bool error_in_bloc=false;
 
       // Init that bloc
-      ptr_bloc6->color_count=0;
-      ptr_bloc6->color[0]=0;
-      ptr_bloc6->color[1]=0;
-      ptr_bloc6->value=0;
+      ptr_bloc6->Clear();
 
       for (int bit=0;bit<6;bit++)
       {
-        ptr_bloc6->value<<=1;
 
         // Get the original pixel color 
         BYTE *ptr_byte=FreeImage_GetBitsRowCol(convertedPicture.GetBitmap(),x,y);
-        unsigned char color=0;
-        if ((*ptr_byte++)>128)	color|=4;
-        if ((*ptr_byte++)>128)	color|=2;
-        if ((*ptr_byte++)>128)	color|=1;
+        ORIC_COLOR color=ORIC_COLOR_BLACK;
+        if ((*ptr_byte++)>128)	color|=ORIC_COLOR_BLUE;
+        if ((*ptr_byte++)>128)	color|=ORIC_COLOR_GREEN;
+        if ((*ptr_byte++)>128)	color|=ORIC_COLOR_RED;
 
-        // Check if it's already present in the color map
-        switch (ptr_bloc6->color_count)
-        {
-        case 0:
-          ptr_bloc6->color_count++;
-          ptr_bloc6->color[0]=color;
-          ptr_bloc6->color[1]=color;	// To avoid later tests
-          break;
+        error_in_bloc|=ptr_bloc6->AddColor(color);
 
-        case 1:
-          if (ptr_bloc6->color[0]!=color)
-          {
-            // one more color
-            ptr_bloc6->color_count++;
-            ptr_bloc6->color[1]=color;
-            ptr_bloc6->value|=1;
-          }
-          break;
-
-        case 2:
-          if (ptr_bloc6->color[0]!=color)
-          {
-            if (ptr_bloc6->color[1]==color)
-            {
-              // second color
-              ptr_bloc6->value|=1;
-            }
-            else
-            {
-              // color overflow !!!
-              ptr_bloc6->color_count++;
-
-              error_in_bloc=true;
-            }
-          }
-          break;
-        }
         x++;
       }
 
@@ -411,7 +359,7 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
       //__asm int 3;
     }
 #endif
-    if (RecurseLine((unsigned char)m_Buffer.m_buffer_cols,ptr_bloc6,ptr_hires,0,7))
+    if (RecurseLine((unsigned char)m_Buffer.m_buffer_cols,ptr_bloc6,ptr_hires,ORIC_COLOR_BLACK,ORIC_COLOR_WHITE))
       //if (RecurseLine(7,ptr_bloc6,ptr_hires,0,7))
     {
       //

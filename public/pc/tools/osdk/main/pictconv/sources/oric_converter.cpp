@@ -45,6 +45,15 @@ void dither_riemersma_rgb(ImageContainer& image,int width,int height);
 class OricRgbColor : public RgbColor
 {
 public:
+  ORIC_COLOR GetOricColor()
+  {
+    ORIC_COLOR color=ORIC_COLOR_BLACK;
+    if ((m_red)>128)	color|=ORIC_COLOR_RED;
+    if ((m_green)>128)	color|=ORIC_COLOR_GREEN;
+    if ((m_blue)>128)	color|=ORIC_COLOR_BLUE;
+    return (ORIC_COLOR)color;
+  }
+
   void SetOricColor(ORIC_COLOR color)
   {
     if (color&1)	m_red=255;
@@ -55,8 +64,11 @@ public:
 
     if (color&4)	m_blue=255;
     else		m_blue=0;
+
+    m_alpha=255;
   }
 };
+
 
 
 // ============================================================================
@@ -72,6 +84,12 @@ PictureConverter(MACHINE_ORIC),
 {
   m_Buffer.SetBufferSize(240,200);	// Default size
   m_Buffer.ClearBuffer(m_flag_setbit6);
+
+  // Define the default AIC palette (should be possible to override at some point)
+  m_PaletteAIC[0][0]=ORIC_COLOR_BLACK;
+  m_PaletteAIC[0][1]=ORIC_COLOR_CYAN;
+  m_PaletteAIC[1][0]=ORIC_COLOR_BLACK;
+  m_PaletteAIC[1][1]=ORIC_COLOR_YELLOW;
 }
 
 OricPictureConverter::~OricPictureConverter()
@@ -87,6 +105,13 @@ ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& s
   unsigned char r=rgb.m_red;
   unsigned char g=rgb.m_green;
   unsigned char b=rgb.m_blue;
+  unsigned char a=rgb.m_alpha;
+
+  ORIC_COLOR alphaMask=ORIC_COLOR_OPAQUE;
+  if ( (m_transparency==TRANSPARENCY_HOLES) && (a<128) )
+  {
+    alphaMask|=ORIC_COLOR_TRANSPARENT;
+  }
 
   switch (m_dither)
   {
@@ -122,65 +147,60 @@ ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& s
       b=255;
     }
     else
-      if ((r+g+b)<85*3)
+    if ((r+g+b)<85*3)
+    {
+      r=0;
+      g=0;
+      b=0;
+    }
+    else
+    {
+      if ((x^y)&1)
       {
-        r=0;
-        g=0;
-        b=0;
-      }
-      else
-      {
-        if ((x^y)&1)
+        if (m_dither==DITHER_ALTERNATE_INVERSED)
         {
-          if (m_dither==DITHER_ALTERNATE_INVERSED)
-          {
-            r=255;
-            g=255;
-            b=255;
-          }
-          else
-          {
-            r=0;
-            g=0;
-            b=0;
-          }
+          r=255;
+          g=255;
+          b=255;
         }
         else
         {
-          if (m_dither==DITHER_ALTERNATE_INVERSED)
-          {
-            r=0;
-            g=0;
-            b=0;
-          }
-          else
-          {
-            r=255;
-            g=255;
-            b=255;
-          }
+          r=0;
+          g=0;
+          b=0;
         }
       }
-      break;
+      else
+      {
+        if (m_dither==DITHER_ALTERNATE_INVERSED)
+        {
+          r=0;
+          g=0;
+          b=0;
+        }
+        else
+        {
+          r=255;
+          g=255;
+          b=255;
+        }
+      }
+    }
+    break;
 
   case DITHER_ORDERED:
     {
       //
       // Use a dithering matrix
       //
-      int	bit=1 << ((x&3) | ((y&3)<<2));
+      int bit=1 << ((x&3) | ((y&3)<<2));
 
       unsigned char c=(r+g+b)/3;
       if (DitherMask[(c*8)/255]&bit)	c=255;
-      else							c=0;
+      else				c=0;
 
       r=g=b=c;
     }
-    break;
-
-  case DITHER_RIEMERSMA:
-    break;
-  case DITHER_FLOYD:
     break;
 
   default:
@@ -188,8 +208,8 @@ ORIC_COLOR OricPictureConverter::convert_pixel_monochrom(const ImageContainer& s
   }
 
   if (r|g|b)
-    return ORIC_COLOR_WHITE;
-  return ORIC_COLOR_BLACK;
+    return ORIC_COLOR_WHITE|alphaMask;
+  return ORIC_COLOR_BLACK|alphaMask;
 }
 
 
@@ -253,19 +273,19 @@ ORIC_COLOR OricPictureConverter::convert_pixel_rgb(const ImageContainer& sourceP
     case 0:
       if (r>170)	r=255;
       else
-        if (r<85)	r=0;
-        else		r=(unsigned char)(255*((x^y)&1));
-        g=0;
-        b=0;
-        break;
+      if (r<85)	r=0;
+      else		r=(unsigned char)(255*((x^y)&1));
+      g=0;
+      b=0;
+      break;
     case 1:
       if (g>170)	g=255;
       else
-        if (g<85)	g=0;
-        else		g=(unsigned char)(255*((x^y)&1));
-        r=0;
-        b=0;
-        break;
+      if (g<85)	g=0;
+      else		g=(unsigned char)(255*((x^y)&1));
+      r=0;
+      b=0;
+      break;
     case 2:
       if (b>170)	b=255;
       else
@@ -457,20 +477,124 @@ void OricPictureConverter::convert_monochrom(const ImageContainer& sourcePicture
     for (int col=0;col<m_Buffer.m_buffer_cols;col++)
     {
       unsigned char val=0;
+      unsigned char transparentPixelMask=0;
       for (int bit=0;bit<6;bit++)
       {
         val<<=1;
+        transparentPixelMask<<=1;
         ORIC_COLOR color=convert_pixel_monochrom(convertedPicture,x,y);
+
+        if ( (m_transparency==TRANSPARENCY_HOLES) && (color & ORIC_COLOR_TRANSPARENT) )
+        {
+          color&=~ORIC_COLOR_TRANSPARENT;
+          transparentPixelMask|=1;
+        }
+
         if (color!=ORIC_COLOR_BLACK)
         {
           val|=1;
         }
         x++;
       }
+      if ( (m_transparency==TRANSPARENCY_HOLES) && (transparentPixelMask==(1+2+4+8+16+32)) )
+      {
+        val=0;
+      }
+      else
       if (m_flag_setbit6)
       {
         // In some cases you don't want to get the bit 6 to be set at all
         val|=64;
+      }
+      *ptr_hires++=val;
+    }
+  }
+}
+
+
+
+
+
+
+class OricImageContainer : public ImageContainer
+{
+public:
+  OricImageContainer(const ImageContainer& otherImage) 
+    : ImageContainer(otherImage) 
+  {}
+
+  OricRgbColor ReadOricColor(int x,int y)
+  {
+    OricRgbColor oricColor;
+    BYTE *ptr_byte=FreeImage_GetBitsRowCol(GetBitmap(),x,y);
+
+    oricColor.m_blue	=*ptr_byte++;
+    oricColor.m_green	=*ptr_byte++;
+    oricColor.m_red	=*ptr_byte++;
+    oricColor.m_alpha   =*ptr_byte++;
+
+    return oricColor;
+  }
+
+};
+
+
+void OricPictureConverter::convert_aic(const ImageContainer& sourcePicture)
+{
+  OricImageContainer convertedPicture(sourcePicture);
+
+  //
+  // Perform the global dithering, if required
+  //
+  switch (m_dither)
+  {
+  case DITHER_RIEMERSMA:
+    dither_riemersma_monochrom(convertedPicture,m_Buffer.m_buffer_width,m_Buffer.m_buffer_height);
+    m_dither=DITHER_NONE;
+    break;
+  }
+
+  //
+  // Perform the HIRES conversion
+  //
+  unsigned char* ptr_hires=m_Buffer.m_buffer;
+  for (unsigned int y=0;y<m_Buffer.m_buffer_height;y++)
+  {
+    ORIC_COLOR paper=m_PaletteAIC[y&1][0];
+    ORIC_COLOR ink  =m_PaletteAIC[y&1][1];
+
+    int	x=0;
+    for (int col=0;col<m_Buffer.m_buffer_cols;col++)
+    {
+      BlocOf6 pixelBloc;
+
+      bool isOpaque=false;
+      for (int bit=0;bit<6;bit++)
+      {
+        // Read the source color
+        OricRgbColor rgb=convertedPicture.ReadOricColor(x,y);
+        if (rgb.m_alpha>128)
+        {
+          isOpaque=true;
+        }
+
+        pixelBloc.AddColor(rgb.GetOricColor());
+        x++;
+      }
+      unsigned char val;
+      if (isOpaque || (m_transparency!=TRANSPARENCY_HOLES))
+      {
+        pixelBloc.UsePalette(paper,ink);
+        val=pixelBloc.value;
+        if (m_flag_setbit6)
+        {
+          // In some cases you don't want to get the bit 6 to be set at all
+          val|=64;
+        }
+      }
+      else
+      {
+        val=0;
       }
       *ptr_hires++=val;
     }
@@ -749,6 +873,10 @@ bool OricPictureConverter::Convert(const ImageContainer& sourcePicture)
     convert_sam_hocevar(sourcePicture);
     break;
 
+  case FORMAT_AIC:
+    convert_aic(sourcePicture);
+    break;
+
   default:
     // Oops
     return false;
@@ -761,7 +889,7 @@ bool OricPictureConverter::Convert(const ImageContainer& sourcePicture)
 
 bool OricPictureConverter::TakeSnapShot(ImageContainer& sourcePicture)
 {
-  if (!sourcePicture.Allocate(m_Buffer.m_buffer_width,m_Buffer.m_buffer_height,24))
+  if (!sourcePicture.Allocate(m_Buffer.m_buffer_width,m_Buffer.m_buffer_height,32))
   {
     return false;
   }
@@ -769,8 +897,18 @@ bool OricPictureConverter::TakeSnapShot(ImageContainer& sourcePicture)
   unsigned char *ptr_hires=m_Buffer.m_buffer;
   for (unsigned int y=0;y<m_Buffer.m_buffer_height;y++)
   {
-    ORIC_COLOR paper=ORIC_COLOR_BLACK;
-    ORIC_COLOR ink	=ORIC_COLOR_WHITE;
+    ORIC_COLOR paper,ink;
+
+    if (m_format==FORMAT_AIC)
+    {
+      paper=m_PaletteAIC[y&1][0];
+      ink  =m_PaletteAIC[y&1][1];
+    }
+    else
+    {
+      paper=ORIC_COLOR_BLACK;
+      ink  =ORIC_COLOR_WHITE;
+    }
 
     int x=0;
     for (int col=0;col<m_Buffer.m_buffer_cols;col++)
