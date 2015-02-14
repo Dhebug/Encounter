@@ -172,6 +172,7 @@
     <None Include="_final_\lib\scanf.s" />
     <None Include="_final_\lib\SEDORIC.S" />
     <None Include="_final_\lib\sound.s" />
+    <None Include="_final_\lib\sqrt.s" />
     <None Include="_final_\lib\sscanf.s" />
     <None Include="_final_\lib\STRCAT.S" />
     <None Include="_final_\lib\STRCHR.S" />

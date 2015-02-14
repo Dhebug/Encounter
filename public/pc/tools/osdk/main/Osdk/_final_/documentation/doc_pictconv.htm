@@ -59,6 +59,7 @@ PC paint program (PaintShopPro, PhotoShop, ...), in a format displayable on the 
   -f4 => RB conversion
   -f5 => CHAR generator (not finished)
   -f6 => Sam method (Img2Oric)
+  -f7 => AIC encoding
 <b>Atari ST</b>:
   -f0 => Single palette format [default]
   -f1 => Multi palette format
@@ -144,7 +145,15 @@ That's particularly useful to make sure that your background color is at index 0
 </p>
 </li>
 
-<li>The -t switch enable the testing mode:
+
+<li>The -a switch enable the alpha channel detection:
+<pre>
+-a0 => no transparency [default]
+-a1 => encode alpha as zeroes (Only supported for monochrome and AIC pictures)
+</pre>
+</li>
+
+<li>The -t switch enables the testing mode:
 <pre>
 -t0 => Testing disabled
 -t1 => Testing enabled
@@ -357,6 +366,11 @@ Lena
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
+
+<p id=dateentry>Version 0.21</p>
+- Added support for 32bit picture, to handle things like masking/opacity in the picture formats
+- The -a1 mode will generate bytes with null value for blocks of 6 pixels with transparent alpha values (only active in monochrome or AIC conversion modes)
+- Added the -f7 conversion mode for Oric pictures using the AIC coloring method.
 
 <p id=dateentry>Version 0.20</p>
 - The -f6 mode can now be used for pictures that are taller than the screen<br>
