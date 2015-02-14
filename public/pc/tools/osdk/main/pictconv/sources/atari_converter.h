@@ -58,7 +58,10 @@ protected:
 	virtual bool SetFormat(int format)		{ m_format=(FORMAT)format;return m_format<_FORMAT_MAX_; }
 
 	virtual int GetPaletteMode() const				{ return m_palette_mode; }
-	virtual bool SetPaletteMode(int paletteMode)	{ m_palette_mode=(PALETTE_MODE)paletteMode;return m_palette_mode<_PALETTE_MAX_; }
+	virtual bool SetPaletteMode(int paletteMode)	                { m_palette_mode=(PALETTE_MODE)paletteMode;return m_palette_mode<_PALETTE_MAX_; }
+
+        virtual int GetTransparencyMode() const                         { return m_transparency; }
+        virtual bool SetTransparencyMode(int transparencyMode)          { m_transparency=(TRANSPARENCY)transparencyMode;return m_transparency<_TRANSPARENCY_MAX_; }
 
 	virtual bool Convert(const ImageContainer& sourcePicture);
 	virtual bool TakeSnapShot(ImageContainer& sourcePicture);

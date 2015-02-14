@@ -24,12 +24,12 @@
 #include "dithering.h"
 
 
-PictureConverter::PictureConverter(MACHINE machine)	:
-m_machine(machine)
+PictureConverter::PictureConverter(MACHINE machine)	
+  : m_machine(machine)
+  , m_dither(DITHER_NONE)
+  , m_transparency(TRANSPARENCY_NONE)
+  , m_flag_debug(false)
 {
-  m_dither	=DITHER_NONE;
-  m_flag_debug=false;
-  m_block_data="";
 }
 
 PictureConverter::~PictureConverter()

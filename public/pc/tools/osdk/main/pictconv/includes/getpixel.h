@@ -19,6 +19,7 @@ public:
   unsigned char m_red;
   unsigned char m_green;
   unsigned char m_blue;
+  unsigned char m_alpha;
 };
 
 

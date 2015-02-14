@@ -13,45 +13,44 @@ class AtariClut;
 class ImageContainer
 {
 public:
-	ImageContainer();
-	ImageContainer(const ImageContainer& otherImage);
-	~ImageContainer();
+  ImageContainer();
+  ImageContainer(const ImageContainer& otherImage);
+  virtual ~ImageContainer();
 
-	void Clear();
-	bool Allocate(unsigned int width,unsigned int height,unsigned int bpp);
+  void Clear();
+  bool Allocate(unsigned int width,unsigned int height,unsigned int bpp);
 
-	FIBITMAP* GetBitmap()
-	{
-		return m_pBitmap;
-	}
+  FIBITMAP* GetBitmap()
+  {
+    return m_pBitmap;
+  }
 
-	unsigned int GetWidth() const;
-	unsigned int GetHeight() const;
-	unsigned int GetDpp() const;
-	unsigned int GetPaletteSize() const;
+  unsigned int GetWidth() const;
+  unsigned int GetHeight() const;
+  unsigned int GetDpp() const;
+  unsigned int GetPaletteSize() const;
 
-	bool LoadPicture(const std::string& fileName);
-	bool SavePicture(const std::string& fileName) const;
+  bool LoadPicture(const std::string& fileName);
+  bool SavePicture(const std::string& fileName) const;
 
-	void WriteColor(const RgbColor& rgb,int x,int y);
-	RgbColor ReadColor(int x,int y) const;
+  void WriteColor(const RgbColor& rgb,int x,int y);
+  RgbColor ReadColor(int x,int y) const;
 
-	// Painting functions
-	void FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth);
+  // Painting functions
+  void FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth);
 
+  // Utility functions
+  bool ConvertToGrayScale();	// Pure grey scale conversion
+  bool ReduceColorDepth(const AtariClut* pClut=0);
+  bool ReduceColorDepthPerScanline(const std::map<int,AtariClut>* pCluts=0);
 
-	// Utility functions
-	bool ConvertToGrayScale();	// Pure grey scale conversion
-	bool ReduceColorDepth(const AtariClut* pClut=0);
-	bool ReduceColorDepthPerScanline(const std::map<int,AtariClut>* pCluts=0);
+  int FindBlocks(std::string& block_data) const;
 
-	int FindBlocks(std::string& block_data) const;
-
-	// Block copy functions
-	bool CreateFromImage(const ImageContainer& otherImage,unsigned int x,unsigned int y,unsigned int width,unsigned int height);	// Accepts itself as a valid source, can use that to crop a picture
+  // Block copy functions
+  bool CreateFromImage(const ImageContainer& otherImage,unsigned int x,unsigned int y,unsigned int width,unsigned int height);	// Accepts itself as a valid source, can use that to crop a picture
 
 private:
-	FIBITMAP*	m_pBitmap;
+  FIBITMAP*	m_pBitmap;
 };
 
 
