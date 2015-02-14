@@ -112,6 +112,8 @@
 	_randseed16
 	_randseed32
 	_rand32
+-sqrt.s
+	_sqrt16
 -oric.s
 	_peek
 	_deek
