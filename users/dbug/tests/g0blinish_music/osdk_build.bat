@@ -53,7 +53,14 @@ echo %osdk%
 
 SET YM2MYM=%osdk%\Bin\ym2mym.exe -h1
 
-%YM2MYM% "einstein.ym" build\einstein.tap              $6700 "Music1"
+SET MUSIC="einstein.ym"
+SET MUSIC="D:\_music_\ST_SOUND\ST_SOUND\Big Alec (Gunnar Gaubatz)\No Second Prize 1 - intro.ym"
+SET MUSIC="D:\_music_\ST_SOUND\ST_SOUND\Count Zero (Nic Alderton)\Decade Boot.ym"
+SET MUSIC="D:\_music_\ST_SOUND\ST_SOUND\Huelsbeck Chris\Jim Power  1.ym"
+::SET MUSIC="D:\_music_\ST_SOUND\ST_SOUND\Jess (Jean-Sebastien Gerard)\For your Loader #1.ym"
+::SET MUSIC="D:\_music_\ST_SOUND\ST_SOUND\Scavenger (Joris de Man)\DBA 6.ym"
+
+%YM2MYM% %MUSIC% build\einstein.tap              $6700 "Music1"
 
 
 ::
