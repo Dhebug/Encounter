@@ -489,6 +489,9 @@
     <None Include="_final_\documentation\doc_ym2mym.htm">
       <Filter>documentation</Filter>
     </None>
+    <None Include="_final_\lib\sqrt.s">
+      <Filter>lib</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="_final_\include\6502.h">

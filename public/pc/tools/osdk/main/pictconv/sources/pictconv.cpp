@@ -86,7 +86,7 @@ int __cdecl main(int argc,char *argv[])
     "\r\n"
     " -an   Alpha mode\r\n"
     "       -a0 => no transparency [default]\r\n"
-    "       -a1 => encode alpha as zeroes\r\n"
+    "       -a1 => encode alpha as zeroes (only in f0 and f7 modes)\r\n"
     "\r\n"
     " -on   Output file format\r\n"
     "       -o0 => TAP (with a header that load in 0xa000)\r\n"
