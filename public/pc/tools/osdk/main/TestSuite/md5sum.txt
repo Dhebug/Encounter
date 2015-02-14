@@ -1,0 +1,31 @@
+Usage: md5sum.exe [OPTION] [FILE]...
+  or:  md5sum.exe [OPTION] --check [FILE]
+Print or check MD5 checksums.
+With no FILE, or when FILE is -, read standard input.
+
+  -b, --binary            read files in binary mode
+  -c, --check             check MD5 sums against given list
+
+The following two options are useful only when verifying checksums:
+      --status            don't output anything, status code shows success
+  -w, --warn              warn about improperly formated MD5 checksum lines
+
+      --help              display this help and exit
+      --version           output version information and exit
+
+The sums are computed as described in RFC 1321.  When checking, the input
+should be a former output of this program.  The default mode is to print
+a line with checksum, a character indicating type (`*' for binary, ` ' for
+text), and name for each FILE.
+
+WARNING:  You are using a specially adapted copy of md5sum.  This version
+          has been modified as follows:
+          1) Only ever use binary mode
+          2) Be more liberal about line endings in files used by --check
+          3) Built-in Win32 file wildcard matching (globbing)
+          This version was compiled by bruce@gridpoint.com for the
+          People for a Clearer Phish.  Source code changes are available
+          from Bruce upon request.
+
+
+Report bugs to bruce@gridpoint.com
