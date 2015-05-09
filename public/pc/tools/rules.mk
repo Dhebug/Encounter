@@ -11,6 +11,8 @@ else
 CPPFLAGS += -DNDEBUG
 endif
 
+MATH_LIBS ?= -lm
+
 ifeq ($(PLATFORM),win32)
 EXE = .exe
 .SUFFIXES: .exe

@@ -10,7 +10,7 @@ CPPFLAGS += -I libs
 LDFLAGS += -L libs -lFreeImage
 else
 CPPFLAGS += -I $(FI_PATH)/ -I../../../../shared_libraries/freeimage/v3.12.0/Source/
-LDFLAGS += -L $(FI_PATH)/ -lfreeimage -lm
+LDFLAGS += -L $(FI_PATH)/ -lfreeimage $(MATH_LIBS)
 endif
 
 LDFLAGS += -lstdc++
