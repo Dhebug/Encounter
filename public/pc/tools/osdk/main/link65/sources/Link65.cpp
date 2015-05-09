@@ -40,6 +40,7 @@ List of modifications:
 
 #include "infos.h"
 
+#define _GNU_SOURCE 1 /* for fcloseall() */
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
