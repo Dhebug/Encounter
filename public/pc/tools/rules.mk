@@ -1,8 +1,10 @@
 
 RANLIB ?= ranlib
 
-#HOSTOS := $(shell uname -s)
-#PLATFORM ?= $(HOSTOS)
+HOSTOS := $(shell uname -s)
+ifeq ($(PLATFORM),)
+PLATFORM := $(HOSTOS)
+endif
 
 ifeq ($(RELEASE),)
 DEBUG = 1
@@ -33,6 +35,10 @@ CPPFLAGS += -DWIN32
 
 endif
 
+ifeq ($(PLATFORM),Haiku)
+CURSES_LIB := -lncurses
+MATH_LIBS :=
+endif
 
 ifneq ($(PLATFORM),win32)
 CURSES_LIB ?= -lcurses
