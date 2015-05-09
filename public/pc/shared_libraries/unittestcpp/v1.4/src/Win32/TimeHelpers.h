@@ -10,6 +10,10 @@
     #endif
 #endif
 
+#ifdef __HAIKU__
+    #define __int64 long long
+#endif
+
 namespace UnitTest {
 
 class Timer
