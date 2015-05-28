@@ -7,7 +7,7 @@ SUBDIRS := common \
 	macrosplitter tap2cd xa
 
 
-all clean:
+all install clean:
 	@for d in $(SUBDIRS); do \
 		$(MAKE) -C "$$d" $(MAKECMDGOALS) || exit $?; \
 	done
