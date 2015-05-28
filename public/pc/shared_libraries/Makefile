@@ -5,3 +5,6 @@ all clean:
 		$(MAKE) -C "$$d" $(MAKECMDGOALS) || exit $?; \
 	done
 
+install:
+#NOP
+

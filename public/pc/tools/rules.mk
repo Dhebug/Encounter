@@ -1,4 +1,7 @@
 
+# Quiet
+#Q ?= @
+
 RANLIB ?= ranlib
 
 HOSTOS := $(shell uname -s)
@@ -50,3 +53,18 @@ CPPFLAGS += -D__cdecl=  -DPOSIX
 CFLAGS   += -Wall
 endif
 
+
+ifneq ($(OSDK),)
+#FIXME: This is a HACK to avoid install being the default target.
+# TODO: move the include to bottom of makefiles
+ifeq ($(MAKECMDGOALS),install)
+#$(info OSDK=$(OSDK))
+#ifneq ($(BINS),)
+#$(info BINS=$(BINS))
+install:
+	$(Q)install -d $(OSDK)/bin
+	$(Q)for B in $(BINS) $(EXECUTABLE); do install $$B $(OSDK)/bin/; done
+	$(Q)for B in $(BINS) $(EXECUTABLE); do b="`echo "$$B" | tr A-Z a-z`"; if [ "$$B" != "$$b" ]; then ln -sf "$$B" "$(OSDK)/bin/$$b"; fi; done
+
+endif
+endif
