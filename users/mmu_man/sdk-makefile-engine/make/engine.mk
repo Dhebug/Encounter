@@ -28,6 +28,7 @@ OSDKLINK65=$(OSDKB)\link65
 OSDKXA=$(OSDKB)\xa
 OSDKMACROSPLITTER=$(OSDKB)\macrosplitter
 #OSDK=$(OSDKB)/cpp$(EXESUFF)
+WWWBROWSER=explorer
 
 # function to $(call) to fix the path for windows...
 fixpath = $(subst /,\,$(1))
@@ -50,6 +51,7 @@ OSDKLINK65=$(OSDKB)/link65
 OSDKXA=$(OSDKB)/xa
 OSDKMACROSPLITTER=$(OSDKB)/macrosplitter
 #OSDK=$(OSDKB)/cpp$(EXESUFF)
+WWWBROWSER=xdg-open
 
 # function to $(call) to fix the path for windows...
 fixpath = $(1)
@@ -241,6 +243,10 @@ debug-oricutron: $(BUILDDIR)/$(REALTARGET)
 
 debug: debug-oricutron
 
+showmap: $(BUILDDIR)/$(REALTARGET)
+	$(Q)$(OSDKB)/memmap BUILD/symbols BUILD/map.htm "$(NAME)" $(OSDK)/documentation/documentation.css
+	$(Q)$(WWWBROWSER) BUILD/map.htm
+
 release: $(BUILDDIR)/$(REALTARGET)
 	@echo Generating dist files
 	@-mkdir REL
@@ -278,6 +284,7 @@ help:
 	@echo "              run:	test with the default emulator ($(EMULATOR))"
 	@echo " re, run-euphoric:	test with Euphoric"
 	@echo "ro, run-oricutron:	test with Oricutron"
+	@echo "          showmap:	show memory map in web browser"
 #	@echo "release:	generate a release zip file (TODO)"
 	@echo
 
