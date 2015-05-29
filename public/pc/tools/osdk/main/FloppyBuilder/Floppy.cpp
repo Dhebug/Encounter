@@ -972,10 +972,24 @@ bool Floppy::AddDefine(std::string defineName,std::string defineValue)
 {
   // Ugly token replacement, can do more optimal but as long as it works...
   {
-    std::stringstream tempValue;
-    tempValue << m_FileEntries.size();
-    StringReplace(defineName ,"{FileIndex}",tempValue.str());
-    StringReplace(defineValue,"{FileIndex}",tempValue.str());
+    {
+      std::stringstream tempValue;
+      tempValue << m_FileEntries.size();
+      StringReplace(defineName ,"{FileIndex}",tempValue.str());
+      StringReplace(defineValue,"{FileIndex}",tempValue.str());
+    }
+
+    if (m_FileEntries.empty())
+    {
+      ShowError("AddDefine %s: The {FileSize} directive can be used only after a file was added\n",defineName.c_str());
+    }
+    else
+    {
+      std::stringstream tempValue;
+      tempValue << m_FileEntries.back().m_FinalFileSize;
+      StringReplace(defineName ,"{FileSize}",tempValue.str());
+      StringReplace(defineValue,"{FileSize}",tempValue.str());
+    }
   }
 
   m_DefineList.push_back(std::pair<std::string,std::string>(defineName,defineValue));
