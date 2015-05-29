@@ -1,4 +1,4 @@
-SUBDIRS := 4k8  old2mfm  txt2bas
+SUBDIRS := 4k8  txt2bas
 #              Bin2Tap dsk  tap2dsk
 
 all install clean:
