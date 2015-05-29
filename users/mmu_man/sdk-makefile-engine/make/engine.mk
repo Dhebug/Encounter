@@ -3,22 +3,25 @@
 $(info OSDK Makefile engine (GNU make) v0.1)
 
 # quiet if =@
+# verbose if =
 Q=@
 
-# FIXME: check for wincrap
-DS=/
-#DS=/
-#EXESUFF=.exe
-#EXESUFF=
-
-MAKEDIR=$(CURDIR)
-
+# XXX: ifdef COMSPEC ?
 ifeq ($(OS),Windows_NT)
 $(info Detected Windows OS type)
+# useful ? DS=/
+DS=\\
 EXESUFF=.exe
 CAT=type
+CDD=cd /d
+CLEAR=cls
+COPY=copy /Y
+RMF=del /F
+RMR=del /S
+RMDIR=rd
 DEVNULL=NUL
 OSDKB = $(OSDK)\bin
+OSDKT = $(OSDK)\tmp
 OSDKCPP=$(OSDKB)\cpp
 OSDKCOMPILER=$(OSDKB)\compiler
 OSDKLINK65=$(OSDKB)\link65
@@ -30,9 +33,17 @@ OSDKMACROSPLITTER=$(OSDKB)\macrosplitter
 fixpath = $(subst /,\,$(1))
 else
 EXESUFF=
+DS=/
 CAT=cat
+CDD=cd
+CLEAR=clear
+COPY=cp -f
+RMF=rm -f
+RMR=rm -R
+RMDIR=rmdir
 DEVNULL=/dev/null
 OSDKB = $(OSDK)/bin
+OSDKT = $(OSDK)/tmp
 OSDKCPP=$(shell which cpp)
 OSDKCOMPILER=$(OSDKB)/compiler
 OSDKLINK65=$(OSDKB)/link65
@@ -67,16 +78,22 @@ endif
 
 ifeq ($(TYPE),)
 TYPE = TAPE
+$(info No TYPE defined, defaulting to $(TYPE))
 endif
 
 ifeq ($(TYPE),TAPE)
 EXT=tap
 else ifeq ($(TYPE),DISK)
 EXT=dsk
+ORICUTRONFLAGS += -km -d
 else
 $(error Invalid TYPE $(TYPE))
 endif
 
+ifeq ($(ADDR),)
+ADDR=600
+$(info No ADDR defined, defaulting to 0x$(ADDR))
+endif
 
 # try to autodetect Euphoric
 ifeq ($(EUPHORIC),)
@@ -103,6 +120,8 @@ ORICUTRON = $(OSDK)/../oricutron/oricutron$(EXESUFF)
 else
 ifneq ($(wildcard C:/PROGRA~1/oricutron/oricutron$(EXESUFF)),)
 ORICUTRON = C:/PROGRA~1/oricutron/oricutron$(EXESUFF)
+else
+ORICUTRON = oricutron
 endif
 endif
 endif
@@ -125,7 +144,7 @@ CFLAGS += $(OPTIMIZE)
 
 REALTARGET=$(NAME).$(EXT)
 
-BUILDDIR=$(MAKEDIR)/BUILD
+BUILDDIR=$(CURDIR)/BUILD
 
 OBJS := $(addsuffix .os,$(addprefix BUILD/,$(FILES)))
 
@@ -156,13 +175,13 @@ BUILD/%.os: %.c
 
 BUILD/%.os: %.asm
 	@echo Assembling $<
-	$(Q)copy $< $(call fixpath,$@) /Y >NUL
+	$(Q)$(COPY) $< $(call fixpath,$@)
 #	$(Q)$(CAT) $< > $@
 
 
 BUILD/%.os: %.s
 	@echo Assembling $<
-	$(Q)copy $< $(call fixpath,$@) /Y >NUL
+	$(Q)$(COPY) $< $(call fixpath,$@)
 #	$(Q)$(CAT) $< > $@
 
 
@@ -187,35 +206,38 @@ $(BUILDDIR)/$(REALTARGET): $(BUILDDIR) $(OBJS)
 	@echo Linking
 	$(Q)$(OSDKLINK65) $(OSDKLINK) -d $(OSDK)/lib/ -o BUILD/linked.s -f -q $(OBJS)
 	@echo Assembling
-	$(Q)$(OSDKXA) BUILD/linked.s -o BUILD/final.out -e BUILD/xaerr.txt -l BUILD/symbols -bt $$$(ADDR)
-	$(Q)$(OSDKB)/header $(OSDKHEAD) build/final.out BUILD/$(NAME).tap $$$(ADDR)
+	$(Q)$(OSDKXA) BUILD/linked.s -o BUILD/final.out -e BUILD/xaerr.txt -l BUILD/symbols -bt '$$$(ADDR)'
+	$(Q)$(OSDKB)/header $(OSDKHEAD) BUILD/final.out BUILD/$(NAME).tap '$$$(ADDR)'
 ifeq ($(TYPE),DISK)
-	$(Q)-$(OSDKB)/tap2dsk BUILD/$(NAME).tap $@
+	$(Q)-$(OSDKB)/tap2dsk -i"$(NAME)" BUILD/$(NAME).tap $@
+	$(Q)-$(OSDKB)/old2mfm $@
+# >$(DEVNULL)
 endif
 	@echo Build of $(@F) finished
 
 #XXX: tap2dsk doesn't return anything so return value is random!!!
+# 2015: not true anymore (in the code)
 
 #	echo > $@
 
-test-euphoric: $(BUILDDIR)/$(REALTARGET)
+run-euphoric: $(BUILDDIR)/$(REALTARGET)
 	$(Q)$(EUPHORIC) $(BUILDDIR)/$(REALTARGET)
-	@cls
+	@$(CLEAR)
 # Euphoric usually puts some garbage in the console when on white bg,
 # so clear the screen on exit
 
-test-oricutron: $(BUILDDIR)/$(REALTARGET)
-	$(Q)cd /d $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(call fixpath,$(BUILDDIR)/symbols)" "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
+run-oricutron: $(BUILDDIR)/$(REALTARGET)
+	$(Q)cd $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(call fixpath,$(BUILDDIR)/symbols)" $(ORICUTRONFLAGS) "$(call fixpath,$(BUILDDIR)/$(REALTARGET))"
 
 
-test: test-$(EMULATOR)
+test run: run-$(EMULATOR)
 
 ifeq ($(BREAKPOINT),)
 BREAKPOINT=_main
 endif
 
 debug-oricutron: $(BUILDDIR)/$(REALTARGET)
-	$(Q)cd /d $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(BUILDDIR)/symbols" "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)"
+	$(Q)$(CDD) $(call fixpath,$(dir $(ORICUTRON))) && $(call fixpath,$(ORICUTRON)) -s "$(BUILDDIR)/symbols" $(ORICUTRONFLAGS) "$(BUILDDIR)/$(REALTARGET)" -r "$(BREAKPOINT)"
 
 debug: debug-oricutron
 
@@ -223,7 +245,7 @@ release: $(BUILDDIR)/$(REALTARGET)
 	@echo Generating dist files
 	@-mkdir REL
 	@-mkdir "REL/$(NAME)"
-	@copy /Y $(BUILDDIR)/$(REALTARGET) "REL/$(NAME)/"
+	@$(COPY) $(BUILDDIR)/$(REALTARGET) "REL/$(NAME)/"
 #TODO: generate the .nfo
 
 zip: release
@@ -233,8 +255,9 @@ zip: release
 
 clean:
 	@echo Cleaning up...
-	@-del /f $(call fixpath, $(wildcard $(addprefix $(BUILDDIR)/,*.os.c1 *.os.c2 *.os.s1 *.os symbols final.out xaerr.txt linked.s $(NAME).tap $(NAME).dsk))) 2>$(DEVNULL)
-	@-rd BUILD 2>$(DEVNULL)
+#	@-$(RMR) BUILD
+	@-$(RMF) $(call fixpath, $(wildcard $(addprefix $(BUILDDIR)/,*.os.c1 *.os.c2 *.os.s1 *.os symbols final.out xaerr.txt linked.s $(NAME).tap $(NAME).dsk)))
+	@-$(RMDIR) BUILD
 
 #DEBUG:
 dumpenv:
@@ -244,18 +267,19 @@ dumpenv:
 #echo del osdk_config.mk
 
 # shortcuts
-te: test-euphoric
-to: test-oricutron
+te re: run-euphoric
+to ro: run-oricutron
 
 
 help:
-	@echo possible targets:
-	@echo all (default): generate the binary
-	@echo clean: remove files
-	@echo test: test with the default emulator ($(EMULATOR))
-	@echo te, test-euphoric:	test with Euphoric
-	@echo to, test-oricutron:	test with Oricutron
-#	@echo release:	generate a release zip file (TODO)
+	@echo "possible targets:"
+	@echo "    all (default):	generate the binary"
+	@echo "            clean:	remove files"
+	@echo "              run:	test with the default emulator ($(EMULATOR))"
+	@echo " re, run-euphoric:	test with Euphoric"
+	@echo "ro, run-oricutron:	test with Oricutron"
+#	@echo "release:	generate a release zip file (TODO)"
+	@echo
 
 
 
