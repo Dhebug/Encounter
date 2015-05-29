@@ -262,7 +262,7 @@ zip: release
 clean:
 	@echo Cleaning up...
 #	@-$(RMR) BUILD
-	@-$(RMF) $(call fixpath, $(wildcard $(addprefix $(BUILDDIR)/,*.os.c1 *.os.c2 *.os.s1 *.os symbols final.out xaerr.txt linked.s $(NAME).tap $(NAME).dsk)))
+	@-$(RMF) $(call fixpath, $(wildcard $(addprefix $(BUILDDIR)/,*.os.c1 *.os.c2 *.os.s1 *.os symbols final.out map.htm xaerr.txt linked.s $(NAME).tap $(NAME).dsk)))
 	@-$(RMDIR) BUILD
 
 #DEBUG:
