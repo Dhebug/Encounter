@@ -52,7 +52,10 @@ this makes it possible to do a multi-pass build process which will not fail beca
 - Added a mode where data can be extracted from an existing DSK file
 - The parser now accepts quoted strings
 
+0.17 - 2015/05/29
+- A macro expansion now accept the new value {FileSize} which gets expanded to the size of the previous file inserted in the script
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	16
+#define TOOL_VERSION_MINOR	17
