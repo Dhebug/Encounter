@@ -24,6 +24,9 @@
 #include "common.h"
 
 #include "image.h"
+
+#include <cstdint>
+
 #ifndef _WIN32
 #define _int64 int64_t
 #endif
@@ -62,11 +65,14 @@ void OricPictureConverter::convert_charmap(const ImageContainer& sourcePicture)
   m_Buffer.SetBufferSize(charWidth*6,charHeight);
   unsigned char *ptr_hires=m_Buffer.GetBufferData();
 
-  m_SecondaryBuffer.SetBufferSize(96*6,8);
+  unsigned int maxCharacters=96;
+
+  m_SecondaryBuffer.SetBufferSize(6,maxCharacters*8);
   unsigned char *ptr_redef=m_SecondaryBuffer.GetBufferData();
 
-  std::map<_int64,std::pair<int,char>>   characterMap;     // mask -> count, index
-  char charIndex=0;
+  std::map<uint64_t,std::pair<unsigned int,unsigned int>>   characterMap;     // mask -> count, index
+
+  unsigned int charIndex=0;
   for (int charY=0;charY<charHeight;++charY)
   {
     for (int charX=0;charX<charWidth;++charX)
@@ -96,21 +102,37 @@ void OricPictureConverter::convert_charmap(const ImageContainer& sourcePicture)
         characterMap[val].second=charIndex;
         charIndex++;
 
-        // Store the redefined data
-        for (int line=0;line<8;++line)
+        if (charIndex<maxCharacters)
         {
-          *ptr_redef++=character[line];
+          // Store the redefined data
+          for (int line=0;line<8;++line)
+          {
+            *ptr_redef++=character[line];
+          }
         }
+      }
+      if (characterMap.size()>=107)
+      {
+        val=val;
       }
       ++characterMap[val].first;
 
-      *ptr_hires++=32+characterMap[val].second;
+      unsigned int asciiCode=characterMap[val].second;
+      if (asciiCode<96)
+      {
+        *ptr_hires++=(unsigned char)32+asciiCode;
+      }
+      else
+      {
+        *ptr_hires++=32;
+      }
     }
   }
   printf("\r\n Found %u different characters",characterMap.size());
 
 #if 0
   // Generate PC picture
+  m_Buffer.SetBufferSize(charWidth*6,charHeight*8);
 
   //
   // Then we rebuild the picture from the charmap
@@ -133,10 +155,10 @@ void OricPictureConverter::convert_charmap(const ImageContainer& sourcePicture)
           }
         }
       }
-      int count=characterMap[val];
+      int count=characterMap[val].first;
 
       // Rebuild the pattern in the target picture
-      unsigned char *ptr_hires=m_Buffer.m_buffer+charX+(charY*8)*charWidth;;
+      unsigned char *ptr_hires=m_Buffer.m_buffer+charX+(charY*8)*charWidth;
       // First line is marked with a color depending of the stats
       if (count<5)
       {

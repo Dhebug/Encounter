@@ -82,7 +82,10 @@ Version 0.21
 - The -a1 mode will generate bytes with null value for blocks of 6 pixels with transparent alpha values (only active in monochrome or AIC conversion modes)
 - Added the -f7 conversion mode for Oric pictures using the AIC coloring method.
 
+Version 0.22
+- Fixed the -f5 (charmap generator) to work correctly without crashing.
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	21
+#define TOOL_VERSION_MINOR	22
