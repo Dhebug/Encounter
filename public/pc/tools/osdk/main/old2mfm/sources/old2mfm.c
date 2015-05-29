@@ -47,7 +47,7 @@ int main(int argc,char *argv[])
 	}
 	fread(bigbuf,sides*tracks*sectors,256,fd);
 	fseek(fd,0,SEEK_SET);
-printf("read old.\n");
+	/*printf("read old.\n");*/
 
         switch (sectors) {
                 case 15: case 16: case 17:
@@ -62,7 +62,7 @@ printf("read old.\n");
         }
 	init_track(sectors);
 
-printf("writing header...\n");
+	/*printf("writing header...\n");*/
 	fwrite(new_signature,8,1,fd);
 	fwrite(&sides,1,sizeof(int32_t),fd);
 	fwrite(&tracks,1,sizeof(int32_t),fd);
@@ -73,7 +73,7 @@ printf("writing header...\n");
 	  for(t=0;t<tracks;t++) {
             offset=gap1;
 	    for(i=0;i<sectors;i++) {
-printf("writing size %d track %d sector %d...\n", s, t, i);
+              /*printf("writing size %d track %d sector %d...\n", s, t, i);*/
               trackbuf[offset+4]=t;
               trackbuf[offset+5]=s;
               trackbuf[offset+6]=i+1;
@@ -88,7 +88,7 @@ printf("writing size %d track %d sector %d...\n", s, t, i);
 	    }
 	    fwrite(trackbuf,6400,1,fd);
 	  }
-printf("done.\n");
+	/*printf("done.\n");*/
 	free(bigbuf);
 	return EXIT_SUCCESS;
 }
