@@ -1040,5 +1040,12 @@ void OricPictureConverter::SaveToFile(long handle,int output_format)
     break;
   }
   write(handle,(unsigned char*)m_Buffer.m_buffer,GetBufferSize());
+
+  // Possibly we have a second buffer to save
+  if (GetSecondaryBufferSize())
+  {
+    write(handle,(unsigned char*)GetSecondaryBufferData(),GetSecondaryBufferSize());
+  }
+
 }
 
