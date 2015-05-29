@@ -27,7 +27,9 @@ CPPFLAGS += -I sources -I includes
 OBJS := $(subst .cpp,.o,$(SOURCES))
 #OBJS := $(SOURCES:.cpp,.o)
 
-all: pictconv$(EXE)
+EXECUTABLE=pictconv$(EXE)
+
+all: $(EXECUTABLE)
 
 pictconv$(EXE): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDFLAGS)
