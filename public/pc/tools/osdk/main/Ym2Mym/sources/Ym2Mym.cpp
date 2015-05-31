@@ -39,6 +39,13 @@ AYC information: http://www.cpcwiki.eu/index.php/AYC
 #define OFFNUM  14   //  Bits needed to store off+num of FRAG
 
 
+enum DurationMode
+{
+  DurationModeKeepAll,
+  DurationModeTruncateMode,
+  DurationModeFade
+};
+
 
 void writebits(unsigned data,int bits,char* &ptrWrite);
 
@@ -80,9 +87,15 @@ int main(int argc,char *argv[])
     "       -m0 => No size limit [default]\r\n"
     "       -m1234 => Outputs an error if the exported size is too large\r\n"
     "\r\n"
+    " -dxn  Duration mode.\r\n"
+    "       -dt1234 => Truncate at frame 1234\r\n"
+    "       -df1234 => Fade out at frame 1234\r\n"
+    "\r\n"
     );
 
   int maxSize=0;
+  int duration=0;
+  DurationMode durationMode=DurationModeKeepAll;
   int retune_music=1;
   bool flagVerbosity=false;
   bool flag_header=false;
@@ -122,6 +135,26 @@ int main(int argc,char *argv[])
       //	0 => no max size (default)
       // 	other => maximum size
       maxSize=argumentParser.GetIntegerValue(0);
+    }
+    else
+    if (argumentParser.IsSwitch("-dt"))
+    {
+      if (durationMode!=DurationModeKeepAll)
+      {
+        ShowError("Can't use -dt and -df at the same time");
+      }
+      durationMode=DurationModeTruncateMode;
+      duration=argumentParser.GetIntegerValue(0);
+    }
+    else
+    if (argumentParser.IsSwitch("-df"))
+    {
+      if (durationMode!=DurationModeKeepAll)
+      {
+        ShowError("Can't use -dt and -df at the same time");
+      }
+      durationMode=DurationModeFade;
+      duration=argumentParser.GetIntegerValue(0);
     }
   }
 
@@ -400,6 +433,42 @@ int main(int argc,char *argv[])
       }
     }
   }
+
+  //
+  // Handle the music truncation/fade
+  //
+  if ( (durationMode!=DurationModeKeepAll) && (frameCount>duration) )
+  {
+    length=duration*REGS;
+
+    if (durationMode==DurationModeFade)
+    {
+      int fadeDuration=50;
+      if (fadeDuration>duration)
+      {
+        fadeDuration=duration;
+      }
+
+      int fadeStartPosition=duration-fadeDuration;
+      for (n=8;n<10;n++)
+      {
+        for (row=fadeStartPosition;row<duration;row++)
+        {
+          unsigned char startVolume=data[n][fadeStartPosition];
+          if (startVolume>15)
+          {
+            startVolume=15;
+          }
+          data[n][row]=startVolume-(startVolume*row)/duration;
+        }
+      }
+
+    }
+
+    // Make sure the last entry plays nothing
+    data[7][duration-1]=255;    // Active sound channels registers
+  }
+
 
 
   char* destinationBuffer=(char*)malloc(cBufferSize);
