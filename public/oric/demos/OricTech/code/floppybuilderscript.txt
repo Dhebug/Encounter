@@ -1,0 +1,157 @@
+;
+; Here is the current documentation for the description script.
+; - This file describes what goes on the floppy itself, list of files, boot sectors, locations, ...
+; - The result is stored in a description file which along with the loader code allows the user to load data.
+;
+; Syntax:
+; - Anything at the right of a ; is ignored (commented out)
+; - {FileIndex} is replaced at generation time by the current internal file index, practical for defines generation
+;
+; Things to do:
+; - Be able to define the format of the floppy we want in this file (number of tracks, sectors, sizes)
+; - Suppress the need for a source floppy to clone from
+; - Have a 0/1 parameter for the multiple calls to the tool, with only the last one needing the files
+; - Support for tap files (auto-detect loading area)
+; - Support for file compression in the tool
+; - Possibility to do partial loads, saves, depacking in realtime
+;
+;LoadDiskTemplate default.dsk
+DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
+
+OutputLayoutFile floppy_description.h
+OutputFloppyFile ..\build\VIP2015.dsk
+
+;AddDefine LOADER_SHOW_DEBUGINFO 1
+;AddDefine ENABLE_TIMING_DEBUGGING 1
+
+;
+; This defines the bootsectors to use for the various operating systems
+; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
+; - Microdisc loads the sector 2 of track zero, the address is different on Atmos and Telestrat
+; - The system requires a third sector containing valid data
+;
+; Since we do not yet have a valid Jasmin reading code, all this bootsector will do is to 
+; write a message saying that this floppy needs to be booted on a Microdisc compatible system.
+;
+SetPosition 0 1
+WriteSector ..\build\files\sector_1-jasmin.o 		; Sector 1
+WriteSector ..\build\files\sector_2-microdisc.o 	; Sector 2
+WriteSector ..\build\files\sector_3.o 				; Sector 3
+
+;
+; Now here is the loader code, that one is Microdisc only
+;
+SetPosition 0 4
+AddFile ..\build\files\loader.o $fd00 				; Sector 4
+
+;
+; From now on we compress data (The loader should not be compressed)
+;
+SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
+
+;
+; Then the files used in the demo
+;
+AddDefine LOADER_INTRO {FileIndex}
+AddFile ..\build\files\intro.o $c000				; The VIP intro part
+
+AddDefine LOADER_TECHTECH {FileIndex}
+AddFile ..\build\files\techtech.o $c000				; The Tech Tech part
+
+;
+; The fonts
+;
+AddDefine LOADER_FONT_6x8 {FileIndex}
+AddFile ..\build\files\Font6x8.hir $9900    		; 9900=STD, 9D00=ALT
+
+AddDefine LOADER_FONT_6x6 {FileIndex}
+AddFile ..\build\files\Font6x6.hir $a000
+
+
+;
+; Random logos and pictures
+;
+AddDefine LOADER_VIP_LOGO {FileIndex}
+AddFile ..\build\files\vip_rasters.hir $9900
+AddDefine LOADER_VIP_LOGO_SIZE {FileSize}
+
+AddDefine LOADER_CLOUD {FileIndex}
+AddFile ..\build\files\cloud.hir $9900
+AddDefine LOADER_CLOUD_SIZE {FileSize}
+
+AddDefine LOADER_RAINDROP {FileIndex}
+AddFile ..\build\files\rain_drop.hir $9900
+AddDefine LOADER_RAINDROP_SIZE {FileSize}
+
+AddDefine LOADER_LONG_SCROLLER {FileIndex}
+AddFile ..\build\files\long_scroller.hir $9900
+AddDefine LOADER_LONG_SCROLLER_SIZE {FileSize}
+
+AddDefine LOADER_SOUND_WARNING {FileIndex}
+AddFile ..\build\files\SoundWarning.hir $9900
+AddDefine LOADER_SOUND_WARNING_SIZE {FileSize}
+
+
+;
+; The Scrollable VIP logo
+;
+AddDefine LOADER_VIP_SCROLL {FileIndex}
+AddFile ..\build\files\VIPScroll.hir $9800
+AddDefine LOADER_VIP_SCROLL_SIZE {FileSize}
+
+AddDefine LOADER_FONT_30x40 {FileIndex}
+AddFile ..\build\files\font_30x40.hir $9800
+AddDefine LOADER_FONT_30x40_SIZE {FileSize}
+
+AddDefine LOADER_OVERLAY {FileIndex}
+AddFile ..\build\files\overlay.hir $9800
+AddDefine LOADER_OVERLAY_SIZE {FileSize}
+
+;
+; Audio
+;
+AddDefine LOADER_SAMPLE_BOOMTSCHACK {FileIndex}
+AddFile ..\build\files\BoomTschak.raw $400						; The kraftwerk music
+AddDefine LOADER_SAMPLE_BOOMTSCHACK_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_DEFENCE {FileIndex}
+AddFile ..\build\files\SampleDefence.raw $400				; The defence sample
+AddDefine LOADER_SAMPLE_DEFENCE_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_FORCE {FileIndex}
+AddFile ..\build\files\SampleForce.raw $400				; The force sample
+AddDefine LOADER_SAMPLE_FORCE_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_HA {FileIndex}
+AddFile ..\build\files\SampleHa.raw $400				; The Ha sample
+AddDefine LOADER_SAMPLE_HA_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_YEAH {FileIndex}
+AddFile ..\build\files\SampleYeah.raw $400				; The Yeah sample
+AddDefine LOADER_SAMPLE_YEAH_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_CHIME_START {FileIndex}
+AddFile ..\build\files\SampleChimeLoopStart.raw $400				; The First part of the chime loop sample
+AddDefine LOADER_SAMPLE_CHIME_START_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_CHIME_END {FileIndex}
+AddFile ..\build\files\SampleChimeLoopEnd.raw $400			 ; The End part of the chime loop sample
+AddDefine LOADER_SAMPLE_CHIME_END_SIZE {FileSize}
+
+
+AddDefine LOADER_SAMPLE_MUSIC_NON_STOP {FileIndex}
+AddFile ..\build\files\SampleMusicNonStop.raw $400			 ; Music Non Stop
+AddDefine LOADER_SAMPLE_MUSIC_NON_STOP_SIZE {FileSize}
+
+AddDefine LOADER_SAMPLE_TECHNO_POP  {FileIndex}
+AddFile ..\build\files\SampleTechnoPop.raw $400				 ; Techno Pop
+AddDefine LOADER_SAMPLE_TECHNO_POP_SIZE {FileSize}
+
+
+
+;
+; YM Music
+;
+AddDefine LOADER_INTRO_MUSIC {FileIndex}
+AddFile ..\build\files\ThalionIntro.mym $400					; The Thalion music intro
+AddDefine LOADER_INTRO_MUSIC_SIZE {FileSize}
