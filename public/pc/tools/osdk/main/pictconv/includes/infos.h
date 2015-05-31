@@ -84,6 +84,7 @@ Version 0.21
 
 Version 0.22
 - Fixed the -f5 (charmap generator) to work correctly without crashing.
+- Inverted -o0 and -o1 in the description of commands
 
 */
 
