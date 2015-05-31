@@ -160,7 +160,7 @@ IF "%OSDKBRIEF%"=="" ECHO Compiling %1.C
 
 IF "%OSDKBRIEF%"=="" ECHO   - preprocess
 :: the -DATMOS is for Contiki
-%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include -D__16BIT__ -D__NOFLOAT__ -DATMOS -nostdinc %1.c %OSDKT%\%1.c
+%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include -D__16BIT__ -D__NOFLOAT__ -DATMOS -DOSDKNAME_%OSDKNAME% -nostdinc %1.c %OSDKT%\%1.c
 
 IF "%OSDKBRIEF%"=="" ECHO   - compile
 %OSDKB%\compiler.exe -N%1 %OSDKCOMP% %OSDKT%\%1.c >%OSDKT%\%1.c2
@@ -236,7 +236,7 @@ IF ERRORLEVEL 1 GOTO ErFailure
 ::
 ::%OSDKB%\xa.exe %OSDKT%\linked.s -o final.out -e xaerr.txt -l xalbl.txt
 ECHO Assembling
-%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA
+%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA -DOSDKNAME_%OSDKNAME%
 IF NOT EXIST "build\final.out" GOTO ErFailure
 
 
