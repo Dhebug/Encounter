@@ -1,6 +1,6 @@
 #
 
-BINS = bin2tap tap2bin
+BINS = bin2tap tap2bin out2asm out2ym
 
 all: $(BINS)
 
