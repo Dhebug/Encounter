@@ -44,7 +44,7 @@ gen_bitmap()
 	out="$(basename "$ttf" | tr '$ -' '___')"
 	out="${out/.ttf/}"
 
-	convert_args="-background $BG -fill $FG -size $size xc:$BG -colors 2"
+	convert_args="+antialias -background $BG -fill $FG -size $size xc:$BG -colors 2"
 
 	if [ -n "$ttf" ]; then
 		convert_args="$convert_args -font $ttf"
