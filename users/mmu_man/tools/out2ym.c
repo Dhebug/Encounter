@@ -10,6 +10,9 @@ static char *fon = 0;
 
 static int quit = 0;
 
+/* 14 + 2 extended data in non-interleaved mode */
+#define REGS 16
+
 static unsigned char getb(void)
 {
     int c = fgetc(fi);
@@ -47,21 +50,21 @@ static void convert(void)
 	  "YM6!",
 	  "LeOnArD!",
 	  0,
+	  0, /* not interleaved */
 	  0,
-	  0,
-	  htonl(/*2000000 1773400*/ 1000000),
-	  htons(50),
+	  htonl(2000000/* 1773400 1000000*/),
+	  htons(5),
 	  0,
 	  0
 	};
 
     // values from mym's player.s
-    uint8_t frame[16] = { 8, 4, 8, 4, 8, 4, 5, 8, 5, 5, 5, 8, 8, 8, 0, 0 };
-    const uint8_t mask[16] = {
+    uint8_t frame[REGS] = {};// 8, 4, 8, 4, 8, 4, 5, 8, 5, 5, 5, 8, 8, 8/*, 0, 0*/ };
+    const uint8_t mask[REGS] = {
       0xff, 0x0f, 0xff, 0x0f,
-      0xff, 0x0f, 0x1f, 0x3f,
+      0xff, 0x0f, 0x1f, 0xff,
       0x1f, 0x1f, 0x1f, 0xff,
-      0xff, 0x0f, 0x00, 0x00
+      0xff, 0xff/*, 0x00, 0x00*/
     };
     //    fseeko(fi, 0L, SEEK_SET);
     //header.nb_frames = htonl((uint32_t)length);
@@ -79,7 +82,7 @@ static void convert(void)
 
     while(1)
     {
-      unsigned int t;
+      unsigned char t;
       unsigned char r, v;
         t = getb();
 
@@ -106,7 +109,8 @@ static void convert(void)
 
 	if (r > 15) {
 	  fprintf(stderr, "r = %d\n", r);
-	  continue;
+	  //continue;
+	  r &= 0x0f;
 	}
 	v &= mask[r];
 	//fprintf(stderr, "v: %d\n", v);
