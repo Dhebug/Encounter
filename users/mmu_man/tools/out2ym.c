@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 static FILE *fi = 0;
 static FILE *fo = 0;
@@ -12,6 +13,13 @@ static int quit = 0;
 
 /* 14 + 2 extended data in non-interleaved mode */
 #define REGS 16
+
+#define INTERLEAVED 1
+
+#define MIN_ALLOC 128
+//#define FREQ 2000000
+#define FREQ 1773400
+//#define FREQ 1000000
 
 static unsigned char getb(void)
 {
@@ -30,7 +38,8 @@ static void header(void)
 static void convert(void)
 {
     unsigned char data;
-     ;
+    unsigned char *frames;
+    int i, j;
 
     struct ymheader {
       char magic[4];
@@ -47,13 +56,17 @@ static void convert(void)
   
     } __attribute__ ((__packed__)) header =
 	{
-	  "YM6!",
+	  "YM5!",
 	  "LeOnArD!",
 	  0,
-	  0, /* not interleaved */
+#ifdef INTERLEAVED
+	  htonl(1), /* interleaved */
+#else
+	  0, /* not not interleaved */
+#endif
 	  0,
-	  htonl(2000000/* 1773400 1000000*/),
-	  htons(5),
+	  htonl(FREQ),
+	  htons(50),
 	  0,
 	  0
 	};
@@ -79,11 +92,16 @@ static void convert(void)
     fputc('\0', fo);
     fflush(fo);
 
+#ifdef INTERLEAVED
+    frames = malloc(REGS*MIN_ALLOC);
+#endif
 
     while(1)
     {
       unsigned char t;
       unsigned char r, v;
+
+
         t = getb();
 
         if(quit)
@@ -91,13 +109,21 @@ static void convert(void)
 
         data = getb();
         //fprintf(stderr," $%.2X\n",data);
-	//t |= data << 8;
+	t |= (data << 8) & 0xff00;
 
 	fprintf(stderr, "t: %d\n", t);
 	while (t > 0) {
+#ifdef INTERLEAVED
+	  memcpy(&frames[REGS * header.nb_frames], frame, sizeof(frame));
+#else
 	  fwrite(frame, sizeof(frame), 1, fo);
+#endif
 	  t--;
 	  header.nb_frames++;
+#ifdef INTERLEAVED
+	  if (header.nb_frames % MIN_ALLOC == 0)
+	    frames = realloc(frames, REGS * (header.nb_frames + MIN_ALLOC));
+#endif
 	}
 
 
@@ -112,13 +138,25 @@ static void convert(void)
 	  //continue;
 	  r &= 0x0f;
 	}
-	v &= mask[r];
+	//v &= mask[r];
 	//fprintf(stderr, "v: %d\n", v);
         //fprintf(fo," $%.2X\n",data);
 	frame[r] = v;
     }
+#ifdef INTERLEAVED
+    memcpy(&frames[REGS * header.nb_frames], frame, sizeof(frame));
+#else
     fwrite(frame, sizeof(frame), 1, fo);
+#endif
     header.nb_frames++;
+
+#ifdef INTERLEAVED
+    for (j = 0; j < REGS; j++) {
+      for (i = 0; i < header.nb_frames; i++)
+	fwrite(&frames[REGS * i + j], 1, 1, fo);
+    }
+#endif
+
     fprintf(fo,"End!");
     fflush(fo);
 
