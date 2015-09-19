@@ -36,13 +36,13 @@ ADDR=500
 # FILES=main foo bar ...
 FILES= \
 	main \
-	Tunnel \
 	player \
 	font \
-	costbl \
 	scroller \
 	vipsplash \
 	chars gadgets boing logoa0xb3
+#	Tunnel \
+#	costbl \
 #	logovip3 logoua3 \
 #	chars \
 #	unpack \
