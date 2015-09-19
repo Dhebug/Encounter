@@ -56,7 +56,7 @@ static void convert(void)
   
     } __attribute__ ((__packed__)) header =
 	{
-	  "YM5!",
+	  "YM6!",
 	  "LeOnArD!",
 	  0,
 #ifdef INTERLEAVED
