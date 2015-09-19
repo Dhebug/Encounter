@@ -93,8 +93,8 @@ _MessageScroller
 //	.byt SCROLLER_SCREEN_UP
 #ifndef DEBUG
 	.asc "/ gfx: Cicile/TripleA  "
-//	.asc "/ music: Fabounio/TripleA  "
-	.asc "/ music: David Whittaker.    "
+	.asc "/ music: Fabounio/TripleA  "
+//	.asc "/ music: David Whittaker.    "
 	;; 	.byt SCROLLER_SHOW_LOGOUA3
 #endif
 	//.byt SCROLLER_START_BOING
