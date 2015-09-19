@@ -22,13 +22,10 @@ extern unsigned char LogoA0XB[];
 unsigned char logobuf[40*/*200*/142];
 
 //extern unsigned char	Texture[256*64];
-extern char				TabCos[256];
+//extern char				TabCos[256];
 
-#include "angle.c"
-#include "prof.c"
-
-unsigned char  IncX;
-unsigned char  IncY;
+//#include "angle.c"
+//#include "prof.c"
 
 #define	SCROLLER_START_ADDR 0xa000+SCROLLER_OFFSET
 
@@ -49,7 +46,7 @@ void ScrollerInit();
 void (*BottomEffectCallBack)(void);
 void (*TopEffectCallBack)(void);
 
-
+#if 0
 unsigned char		value_1 = 0;
 unsigned char		value_2 = 0;
 void JSun_MainLoop()
@@ -78,7 +75,7 @@ void JSun_Init()
 
 	//hires();
 }
-
+#endif
 
 
 void ClearTextWindow()
@@ -181,6 +178,7 @@ void main()
 							}
 							break;
 
+#if 0
 						case SCROLLER_START_BOING:
 							{
 								//ClearTextWindow();
@@ -189,6 +187,7 @@ void main()
 							}
 							break;
 
+#endif
 						case SCROLLER_BOTTOM_TEXT:
 							{
 								char *t = *(void **)&ScrollerCommandParam1;
