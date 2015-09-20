@@ -5,6 +5,8 @@ _main
 	jmp _main
 	jsr CopyZeroPageRoutine	
 	jsr ZeroPageRoutine
+	jsr SwapBuffer
+	jsr SwapBuffer
 	rts
 	
 StartZeroPageRoutine 
@@ -25,6 +27,7 @@ EndZeroPageRoutine
 	*=StartZeroPageRoutine+EndZeroPageRoutine-ZeroPageRoutine
 	
 CopyZeroPageRoutine	
+.(
 	ldx #0
 loop	
 	lda StartZeroPageRoutine,x
@@ -33,5 +36,25 @@ loop
 	cpx #EndZeroPageRoutine-ZeroPageRoutine
 	bne loop
 	rts
+.)
+
+
+SwapBuffer  .dsb 256
+
+SwapZeroPage
+	jmp SwapZeroPage
+.(	
+	ldy #0
+loop
+	lda $00,y
+	tax
+	lda SwapBuffer,y
+	sta $00,y
+	txa
+	sta SwapBuffer,y
+	iny
+	bne loop
+	rts
+.)
 
 		
