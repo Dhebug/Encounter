@@ -238,31 +238,36 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   }
   fwrite(head,1,13,out);
   // write the name
-  if (currentFile.length() > 0) {
-	  char *fileName = strdup(currentFile.c_str());
-	  // only take the file name from the path
-	  // try to find '\\'
-	  char *lastsep = strrchr(fileName, '\\');
-	  if (lastsep != NULL) {
-		  // if there is something after the separator
-		  if (lastsep + 1 != 0)
-			  fileName = lastsep + 1;
-	  }
-	  else {
-		  // try to find /
-		  lastsep = strrchr(fileName, '/');
-		  if (lastsep != NULL) {
-			  // if there is something after the separator
-			  if (lastsep + 1 != 0)
-				  fileName = lastsep + 1;
-		  }
-	  }
-	  // remove the extension if there is one
-	  char *lastdot = strrchr(fileName, '.');
-	  if (lastdot != NULL)
-		*lastdot = 0;
-	  fwrite(fileName, 1, strlen(fileName), out);
-	  free(fileName);
+  if (currentFile.length() > 0) 
+  {
+    char *currentFileDup = strdup(currentFile.c_str());
+    char *fileName = currentFileDup;
+    // only take the file name from the path
+    // try to find '\\'
+    char *lastsep = strrchr(fileName, '\\');
+    if (lastsep != NULL)
+    {
+      // if there is something after the separator
+      if (lastsep + 1 != 0)
+        fileName = lastsep + 1;
+    }
+    else 
+    {
+      // try to find /
+      lastsep = strrchr(fileName, '/');
+      if (lastsep != NULL)
+      {
+        // if there is something after the separator
+        if (lastsep + 1 != 0)
+          fileName = lastsep + 1;
+      }
+    }
+    // remove the extension if there is one
+    char *lastdot = strrchr(fileName, '.');
+    if (lastdot != NULL)
+      *lastdot = 0;
+    fwrite(fileName, 1, strlen(fileName), out);
+    free(currentFileDup);
   }
   fwrite("\x00", 1, 1, out);
   fwrite(buf,1,i+1,out);
