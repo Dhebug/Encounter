@@ -513,7 +513,7 @@ int main(int argc,char *argv[])
   //
   // Make some cleaning
   //
-  delete[] ptr_buffer;
+  free(ptr_buffer);
 
   return 0;
 }
