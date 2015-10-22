@@ -107,6 +107,7 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
   if (read(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
   {
     free(pcBuffer);
+    close(nHandle);
     return false;
   }
   close(nHandle);
@@ -355,7 +356,8 @@ ArgumentParser::ArgumentParser(int argc,char *argv[]) :
   m_argv(argv),
   m_first_param(1),
   m_nb_arg(-1),
-  m_remaining_argc(argc)
+  m_remaining_argc(argc),
+  m_ptr_arg(0)
 {
   assert(argc>=1);
 
