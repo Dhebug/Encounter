@@ -254,7 +254,8 @@ AtariPictureConverter::AtariPictureConverter() :
 	PictureConverter(MACHINE_ATARIST),
 	m_format(FORMAT_SINGLE_PALETTE),
 	m_palette_mode(PALETTE_AUTOMATIC),
-	m_buffer(0)
+	m_buffer(0),
+        m_flagPalettePerScanline(false)
 {
 	set_buffer_size(320,200);	// Default size
 
