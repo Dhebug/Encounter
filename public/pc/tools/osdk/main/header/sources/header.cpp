@@ -192,7 +192,7 @@ unsigned char Header[]=
 		ShowError("unable to open source file");
 	}
 
-	void *ptr_buf=malloc(filesize);
+	void *ptr_buf=malloc(filesize+1);
 	if (!ptr_buf)
 	{
 		ShowError("not enough memory");
@@ -248,6 +248,7 @@ unsigned char Header[]=
 		size_header=0;
 
 		char *ptr_header=(char*)ptr_buf;
+                ptr_header[filesize]=0;
 
 		// Skip synchronization bytes
 		// 16 16 16 24
