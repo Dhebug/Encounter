@@ -219,9 +219,12 @@ void main(int argc,char *argv[])
 	char	source_name[_MAX_PATH];
 	char	dest_name[_MAX_PATH];
 
-	strcpy(source_name,argv[param]);
+	strncpy(source_name,argv[param],sizeof(source_name));
+        source_name[sizeof(source_name)-1]=0;
+
 	param++;
-	strcpy(dest_name,argv[param]);
+	strncpy(dest_name,argv[param],sizeof(dest_name));
+        dest_name[sizeof(dest_name)-1]=0;
 
 
 	unsigned char *ptr_buffer;
