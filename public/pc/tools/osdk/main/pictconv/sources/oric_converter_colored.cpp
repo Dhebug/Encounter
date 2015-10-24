@@ -285,7 +285,6 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
   //
   // Phase 1: Create a buffer with infos
   //
-  bool flag=false;
   unsigned char *ptr_hires=m_Buffer.m_buffer;
 
   bool error_in_picture=false;
@@ -396,21 +395,18 @@ void OricPictureConverter::convert_colored(const ImageContainer& sourcePicture)
       x=0;
       for (int col=0;col<m_Buffer.m_buffer_cols;col++)
       {
-        if (flag)
+#if 0
+        if (ptr_bloc6->color_count>2)
         {
-          if (ptr_bloc6->color_count>2)
-          {
-            val=127;
-          }
-          else
-          {
-            val=64;
-          }
+          val=127;
         }
         else
         {
-          val=64+ptr_bloc6->value;
+          val=64;
         }
+#else
+        val=64+ptr_bloc6->value;
+#endif
         *ptr_hires++=val;
         ptr_bloc6++;
       }
