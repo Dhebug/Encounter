@@ -111,10 +111,12 @@ void OricPictureConverter::convert_charmap(const ImageContainer& sourcePicture)
           }
         }
       }
+#if 0  // Breakpoint location for testing overflow or debug issues
       if (characterMap.size()>=107)
       {
         val=val;
       }
+#endif
       ++characterMap[val].first;
 
       unsigned int asciiCode=characterMap[val].second;

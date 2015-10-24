@@ -1029,6 +1029,7 @@ void OricPictureConverter::SaveToFile(long handle,int output_format)
 
   case DEVICE_FORMAT_BASIC_TAPE:
     write(handle,BasicLoader,sizeof(BasicLoader));
+    // fallthrough
   default:	// Fall trough
     bool flag_header=true;
     if (flag_header)
