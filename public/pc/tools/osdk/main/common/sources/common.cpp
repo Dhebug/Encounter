@@ -879,9 +879,12 @@ std::string TextFileGenerator::ConvertData(const void* pSourceData,size_t nFileS
   return cDestString;
 }
 
+
 std::string ExpandFilePath(const std::string& sourceFile)
 {
   char fullPathName[4096];
+  fullPathName[0]=0;
+#ifdef WIN32
   char* filePosition;
   GetFullPathName(sourceFile.c_str(),sizeof(fullPathName),fullPathName,&filePosition);
   if (filePosition)
@@ -889,12 +892,14 @@ std::string ExpandFilePath(const std::string& sourceFile)
     // If there's a filename, cut it out.
     *filePosition=0;
   }
+#endif
   return fullPathName;
 }
 
 int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resolvedFileList)
 {
   resolvedFileList.clear();
+#ifdef WIN32
 
   WIN32_FIND_DATA findData;
   HANDLE findhandle=FindFirstFile(sourceFile.c_str(),&findData);
@@ -907,7 +912,7 @@ int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resol
     while (FindNextFile(findhandle,&findData));
     FindClose(findhandle);
   }
-
+#endif
   return (int)resolvedFileList.size();
 }
 
