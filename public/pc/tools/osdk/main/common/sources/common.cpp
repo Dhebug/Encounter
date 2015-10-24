@@ -9,6 +9,12 @@
 #ifdef WIN32
 /* for getch() */
 #include <conio.h>
+#include <windows.h>
+
+#ifdef DeleteFile
+#undef DeleteFile
+#endif
+
 #else
 /* for getch() */
 #include <curses.h>
@@ -100,6 +106,7 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
   pcBuffer=malloc(cBufferSize+1);
   if (!pcBuffer)
   {
+    close(nHandle);
     return false;
   }
 
@@ -870,6 +877,38 @@ std::string TextFileGenerator::ConvertData(const void* pSourceData,size_t nFileS
   cDestString+="\r\n";
 
   return cDestString;
+}
+
+std::string ExpandFilePath(const std::string& sourceFile)
+{
+  char fullPathName[4096];
+  char* filePosition;
+  GetFullPathName(sourceFile.c_str(),sizeof(fullPathName),fullPathName,&filePosition);
+  if (filePosition)
+  {
+    // If there's a filename, cut it out.
+    *filePosition=0;
+  }
+  return fullPathName;
+}
+
+int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resolvedFileList)
+{
+  resolvedFileList.clear();
+
+  WIN32_FIND_DATA findData;
+  HANDLE findhandle=FindFirstFile(sourceFile.c_str(),&findData);
+  if (findhandle!=INVALID_HANDLE_VALUE)
+  {
+    do
+    {
+      resolvedFileList.push_back(findData.cFileName);
+    }
+    while (FindNextFile(findhandle,&findData));
+    FindClose(findhandle);
+  }
+
+  return (int)resolvedFileList.size();
 }
 
 
