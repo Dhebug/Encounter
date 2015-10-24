@@ -6,7 +6,7 @@ FILE *fd;
 char *bigbuf;
 char header[256];
 char trackbuf[6400];
-int32_t sides, tracks, sectors, geometry=1;
+uint32_t sides, tracks, sectors, geometry=1;
 int gap1,gap2,gap3;
 char old_signature[]="ORICDISK";
 char new_signature[]="MFM_DISK";
@@ -48,9 +48,9 @@ int main(int argc,char *argv[])
     printf("%s is not an old disk image\n",argv[1]);
     exit(EXIT_FAILURE);
   }
-  fileread(&sides,1,sizeof(int32_t),fd);
-  fileread(&tracks,1,sizeof(int32_t),fd);
-  fileread(&sectors,1,sizeof(int32_t),fd);
+  fileread(&sides,1,sizeof(uint32_t),fd);
+  fileread(&tracks,1,sizeof(uint32_t),fd);
+  fileread(&sectors,1,sizeof(uint32_t),fd);
   fileread(header+20,256-20,1,fd);
   if ( (sides>2) || (tracks>256) || (sectors>18) )
   {
@@ -83,9 +83,9 @@ int main(int argc,char *argv[])
 
   /*printf("writing header...\n");*/
   fwrite(new_signature,8,1,fd);
-  fwrite(&sides,1,sizeof(int32_t),fd);
-  fwrite(&tracks,1,sizeof(int32_t),fd);
-  fwrite(&geometry,1,sizeof(int32_t),fd);
+  fwrite(&sides,1,sizeof(uint32_t),fd);
+  fwrite(&tracks,1,sizeof(uint32_t),fd);
+  fwrite(&geometry,1,sizeof(uint32_t),fd);
   fwrite(header+20,256-20,1,fd);
 
   for(s=0;s<sides;s++)
@@ -109,9 +109,10 @@ int main(int argc,char *argv[])
       }
       fwrite(trackbuf,6400,1,fd);
     }
-    /*printf("done.\n");*/
-    free(bigbuf);
-    return EXIT_SUCCESS;
+
+  /*printf("done.\n");*/
+  free(bigbuf);
+  return EXIT_SUCCESS;
 }
 
 void init_track(int n)
