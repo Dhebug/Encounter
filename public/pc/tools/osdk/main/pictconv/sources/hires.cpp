@@ -28,6 +28,7 @@ PictureConverter::PictureConverter(MACHINE machine)
   : m_machine(machine)
   , m_dither(DITHER_NONE)
   , m_transparency(TRANSPARENCY_NONE)
+  , m_blockmode(BLOCKMODE_DISABLED)
   , m_flag_debug(false)
 {
 }
