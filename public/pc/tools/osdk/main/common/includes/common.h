@@ -102,6 +102,12 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
 bool IsUpToDate(const char* sourceFile,const char* targetFile);
 bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile);
 
+//
+// Batch processing
+//
+std::string ExpandFilePath(const std::string& sourceFile);
+int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resolvedFileList);
+
 
 //
 // Compression (moved out FilePack)
