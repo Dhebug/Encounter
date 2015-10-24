@@ -446,6 +446,7 @@ bool Floppy::WriteSector(const char *fileName)
     printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)(256-bufferSize));
 
     MoveToNextSector();
+    free(buffer);
   }
   else
   {
@@ -645,6 +646,63 @@ bool Floppy::WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfP
     }
   }
   free(fileBuffer);
+
+  m_FileEntries.push_back(fileEntry);
+
+  return true;
+}
+
+
+
+bool Floppy::ReserveSectors(int sectorCount,int fillValue,const std::map<std::string,std::string>& metadata)
+{
+  FileEntry fileEntry;
+  fileEntry.m_FloppyNumber=0;     // 0 for a single floppy program
+
+  if (m_CurrentTrack>41) // face 2
+  {
+    fileEntry.m_StartSide=1;
+  }
+  else
+  {
+    fileEntry.m_StartSide=0;
+  }
+
+  fileEntry.m_StartTrack =m_CurrentTrack;           // 0 to 42 (80...)
+  fileEntry.m_StartSector=m_CurrentSector;          // 1 to 17 (or 16 or 18...)
+  fileEntry.m_LoadAddress=0;
+  fileEntry.m_StoredFileSize=sectorCount*256;
+  fileEntry.m_FinalFileSize =sectorCount*256;
+  fileEntry.m_SectorCount=sectorCount;
+  fileEntry.m_FilePath   ="Reserved sectors";
+  fileEntry.m_CompressionMode=e_CompressionNone;
+
+  if (!metadata.empty())
+  {
+    fileEntry.m_Metadata = metadata;
+    m_LastFileWithMetadata=m_FileEntries.size();
+  }
+
+  for (auto metadataIt(metadata.begin());metadataIt!=metadata.end();++metadataIt)
+  {
+    m_MetadataCategories.insert(metadataIt->first);
+  }
+
+  //
+  // Finally write the data to the disk structure
+  //
+  while (sectorCount--)
+  {
+    unsigned int offset=SetPosition(m_CurrentTrack,m_CurrentSector);
+
+    MarkCurrentSectorUsed();
+    memset((char*)m_Buffer+offset,fillValue,256);
+
+    if (!MoveToNextSector())
+    {
+      ShowError("Floppy disk is full, not enough space to reserve %u more sectors.\n",sectorCount);
+    }
+  }
 
   m_FileEntries.push_back(fileEntry);
 

@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     "\r\n"
     "Author:\r\n"
     "  (c) 2002 Debrune Jerome for the initial version \r\n"
-    "  (c) 2013 Pointier Mickael for the subsequent changes \r\n"
+    "  (c) 2015 Pointier Mickael for the subsequent changes \r\n"
     "\r\n"
     "Purpose:\r\n"
     "  Generating bootable floppies for the Oric computer.\r\n"
@@ -373,6 +373,27 @@ int main(int argc, char *argv[])
         else
         {
           ShowError("Syntax error line (%d), syntax is 'AddTapFile FilePath' \n",lineNumber);
+        }
+      }
+      else
+      if (tokens[0]=="ReserveSectors")
+      {
+        if ( (tokens.size()==2) || (tokens.size()==3) )
+        {
+          int sectorCount=ConvertAdress(tokens[1].c_str());
+          int fillValue=0;
+          if (tokens.size()==3)
+          {
+            fillValue=ConvertAdress(tokens[2].c_str());
+          }
+          if (!floppy.ReserveSectors(sectorCount,fillValue,metadata))
+          {
+            ShowError("Error line (%d), could not reserve %u sectors on the disk. Make sure you have a valid floppy format declared. \n",lineNumber,sectorCount);
+          }
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'ReserveSectors SectorCount [FillValue]' \n",lineNumber);
         }
       }
       else

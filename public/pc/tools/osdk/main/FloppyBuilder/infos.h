@@ -55,7 +55,10 @@ this makes it possible to do a multi-pass build process which will not fail beca
 0.17 - 2015/05/29
 - A macro expansion now accept the new value {FileSize} which gets expanded to the size of the previous file inserted in the script
 
+0.18 - 2015/08/15
+- Added a 'ReserveSectors' command that can be used to leave room on the disk for save games or stuff like that.
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	17
+#define TOOL_VERSION_MINOR	18
