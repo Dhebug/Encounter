@@ -283,10 +283,13 @@ int readline(char *buf, FILE *infile)
   static int x;
   inp_line++;
   x=0;
-  while (x<line_len-1) {
-    buf[x]=fgetc(infile);
-    if (buf[x]=='\n'||buf[x]=='\0'||buf[x]==EOF) break;
-    x++; }
+  while (x<line_len-1)
+  {
+    int value=fgetc(infile);
+    buf[x]=(char)value;
+    if ( (buf[x]=='\n') || (buf[x]=='\0') || (value==EOF)) break;
+    x++; 
+  }
   if (x==0 && buf[x]==EOF) return EOF;
   buf[x]='\0';
   return 0;
@@ -683,9 +686,11 @@ int parse_line(char *a, line *p)
 
   j=i;
   while (a[j]!='\0' && a[j]!=';') j++; /* search end of parameter */
-  while (j>i) {
+  while (j>i)
+  {
     if (a[j-1]!=' ' && a[j-1]!='\t') break;
-    j=j-1; }
+    j=j-1; 
+  }
   j=j-i;
 
 # ifdef debug_parse
@@ -698,15 +703,19 @@ int parse_line(char *a, line *p)
   p->par=x=get_parid(&a[i],j);
 
   if (j==1 && (a[i]=='a'||a[i]=='A') ) return 0; /* Akku addressed */
-  if (a[i]=='#') { /* immediate */
+  if (a[i]=='#') 
+  { /* immediate */
     if ( (p->mpar=resolve_abs(&parbuf[par_pos[x]+1]))!=undefd )
       p->depind|=absolute; /* resolved */
-    return 0; }
+    return 0; 
+  }
 
-  if ( a[i]=='(' ) {
+  if ( a[i]=='(' ) 
+  {
     i++;
     while ( a[i]==' ' || a[i]=='\t' ) i++;
-    p->depind=p->depind|imem; /* indirect-flag */ }
+    p->depind=p->depind|imem; /* indirect-flag */ 
+  }
 
   p->depind=p->depind|mem;
 
@@ -720,9 +729,11 @@ int parse_line(char *a, line *p)
   x=get_mparid( &a[i], j );
   p->mpar=x;
 
-  if (p->depind & imem) {
+  if (p->depind & imem) 
+  {
     /* address points to 16bit-pointer */
-    strcpy(tmpstr,&a[i]);
+    strncpy(tmpstr,&a[i],sizeof(tmpstr));
+    tmpstr[sizeof(tmpstr)-1]=0;
     tmpstr[j]='+';
     tmpstr[j+1]='1';
     p->mparhi=get_mparid( tmpstr, j+2 ); }
@@ -732,19 +743,23 @@ int parse_line(char *a, line *p)
   /* scan for ",x" and ",y" idexes */
 
   x=0;
-  while (1) {
+  while (1)
+  {
     if (a[i]=='\0'||a[i]==';') break;
     if (a[i]==' '||a[i]=='\t') { i++; continue; }
     if (a[i]==',')  { x=1; i++; continue; }
     if (a[i]=='x' && x==1) { x=2; i++; continue; }
     if (a[i]=='y' && x==1) { x=3; i++; continue; }
-    x=0; i++; }
+    x=0; i++;
+  }
 
-  if (x==2) {
+  if (x==2) 
+  {
     p->dep=p->dep|reg_x;
     p->depind=p->depind|reg_x;
   }
-  if (x==3) {
+  if (x==3)
+  {
     p->dep=p->dep|reg_y;
     p->depind=p->depind|reg_y;
   }
