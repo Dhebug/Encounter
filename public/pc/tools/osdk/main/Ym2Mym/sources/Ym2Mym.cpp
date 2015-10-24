@@ -46,8 +46,83 @@ enum DurationMode
   DurationModeFade
 };
 
+enum ExportFormat
+{
+  ExportFormatMym,
+  ExportFormatWav
+};
 
-void writebits(unsigned data,int bits,char* &ptrWrite);
+
+  unsigned char*data[REGS];    //  The unpacked YM data
+  unsigned current[REGS];
+
+  char ym_new=0;
+
+  long n,row;
+  long i,change,pack,biggest=0,hits,oldrow,remain,offi;
+  long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
+  long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
+
+
+class MymExporter : public ArgumentParser
+{
+public:
+  MymExporter(int argc,char *argv[])
+    : ArgumentParser(argc,argv)
+  {
+    maxSize=0;
+    duration=0;
+    durationMode=DurationModeKeepAll;
+    exportFormat=ExportFormatMym;
+    retune_music=1;
+    flagVerbosity=false;
+    flag_header=false;
+    interleavedFormat=true;
+    adress_start=0;
+    m_FrameCount=0;
+    length=0;
+    pcBuffer=nullptr;
+    cBufferSize=0;
+    sourceFilename=nullptr;
+    m_FlagStereo=false;
+  }
+
+  int Main();
+
+  bool ExportMym();
+  bool ExportWav();
+
+  void writebits(unsigned data,int bits,char* &ptrWrite);
+
+private:
+  MymExporter();  // N/A
+
+private:
+  int maxSize;
+  int duration;
+  DurationMode durationMode;
+  ExportFormat exportFormat;
+  int retune_music;
+  bool flagVerbosity;
+  bool flag_header;
+  bool interleavedFormat;
+  bool m_FlagStereo;
+
+  unsigned long m_FrameCount;     // Number of frames
+  unsigned long length;         // Song length (frameCount*14)
+
+  void* pcBuffer;
+  size_t cBufferSize;
+
+  int adress_start;
+
+  std::string headerName;
+
+  const char* sourceFilename;
+};
+
+
+
 
 int main(int argc,char *argv[])
 {
@@ -75,6 +150,10 @@ int main(int argc,char *argv[])
     "       -t0 => No retune\r\n"
     "       -t1 => Double frequency [default]\r\n"
     "\r\n"
+    " -fn   Format\r\n"
+    "       -f0 => MYM format[default]\r\n"
+    "       -f1 => WAV format\r\n"
+    "\r\n"
     " -hn   Header\r\n"
     "       -h0 => No tape header [default]\r\n"
     "       -h1 => Use tape header (requires a start address and a name)\r\n"
@@ -91,80 +170,95 @@ int main(int argc,char *argv[])
     "       -dt1234 => Truncate at frame 1234\r\n"
     "       -df1234 => Fade out at frame 1234\r\n"
     "\r\n"
+    " -sn   Stereo/Mono (for WAV exporter).\r\n"
+    "       -s0 => Mono output format [default]\r\n"
+    "       -s1 => Stereo output format\r\n"
+    "\r\n"
     );
 
-  int maxSize=0;
-  int duration=0;
-  DurationMode durationMode=DurationModeKeepAll;
-  int retune_music=1;
-  bool flagVerbosity=false;
-  bool flag_header=false;
-  bool interleavedFormat=true;
 
-  ArgumentParser argumentParser(argc,argv);
+  MymExporter mymExporter(argc,argv);
+  return mymExporter.Main();
+}
 
-  while (argumentParser.ProcessNextArgument())
+
+int MymExporter::Main()
+{
+  while (ProcessNextArgument())
   {
-    if (argumentParser.IsSwitch("-t"))
+    if (IsSwitch("-t"))
     {
       //format: [-t]
       //	0 => No retune
       // 	1 => Double frequency [default]
-      retune_music=argumentParser.GetIntegerValue(0);
+      retune_music=GetIntegerValue(0);
     }
     else
-    if (argumentParser.IsSwitch("-v"))
+    if (IsSwitch("-v"))
     {
       //testing: [-v]
       //	0 => silent
       //	1 => verbose
-      flagVerbosity=argumentParser.GetBooleanValue(true);
+      flagVerbosity=GetBooleanValue(true);
     }
     else
-    if (argumentParser.IsSwitch("-h"))
+    if (IsSwitch("-h"))
     {
       //format: [-h]
       //	0 => suppress header
       // 	1 => save header (default)
-      flag_header=argumentParser.GetBooleanValue(true);
+      flag_header=GetBooleanValue(true);
     }
     else
-    if (argumentParser.IsSwitch("-m"))
+    if (IsSwitch("-m"))
     {
       //format: [-m]
       //	0 => no max size (default)
       // 	other => maximum size
-      maxSize=argumentParser.GetIntegerValue(0);
+      maxSize=GetIntegerValue(0);
     }
     else
-    if (argumentParser.IsSwitch("-dt"))
+    if (IsSwitch("-s"))
+    {
+      //format: [-s]
+      //	0 => mono (default)
+      // 	other => stereo
+      m_FlagStereo=GetBooleanValue(false);
+    }
+    else
+    if (IsSwitch("-f"))
+    {
+      //format: [-f]
+      //	-f0 => MYM format[default]
+      // 	-f1 => WAV format
+      exportFormat=(ExportFormat)GetIntegerValue(0);
+    }
+    else
+    if (IsSwitch("-dt"))
     {
       if (durationMode!=DurationModeKeepAll)
       {
         ShowError("Can't use -dt and -df at the same time");
       }
       durationMode=DurationModeTruncateMode;
-      duration=argumentParser.GetIntegerValue(0);
+      duration=GetIntegerValue(0);
     }
     else
-    if (argumentParser.IsSwitch("-df"))
+    if (IsSwitch("-df"))
     {
       if (durationMode!=DurationModeKeepAll)
       {
         ShowError("Can't use -dt and -df at the same time");
       }
       durationMode=DurationModeFade;
-      duration=argumentParser.GetIntegerValue(0);
+      duration=GetIntegerValue(0);
     }
   }
-
-  int adress_start=0;
-  std::string headerName;
 
   if (flag_header)
   {
     // Header mode: Four parameters
-    if (argumentParser.GetParameterCount()!=4)
+    if (GetParameterCount()!=4)
     {
       //
       // Wrong number of arguments
@@ -175,34 +269,20 @@ int main(int argc,char *argv[])
     //
     // Check start address
     //
-    adress_start=ConvertAdress(argumentParser.GetParameter(2));
-    headerName=argumentParser.GetParameter(3);
+    adress_start=ConvertAdress(GetParameter(2));
+    headerName=GetParameter(3);
   }
   else
   {
     // No header mode: Two parameters
-    if (argumentParser.GetParameterCount()!=2)
+    if (GetParameterCount()!=2)
     {
       ShowError(0);
     }
   }
 
-  unsigned char*data[REGS];    //  The unpacked YM data
-  unsigned current[REGS];
 
-  char ym_new=0;
-
-  long n,row;
-  long i,change,pack,biggest=0,hits,oldrow,remain,offi;
-  long regbits[REGS]={8,4,8,4, 8,4,5,8, 5,5,5,8, 8,8};                          // Bits per PSG reg
-  long regand[REGS]={255,15,255,15, 255,15,31,255, 31,31,31,255, 255,255};      // AND values to mask out extra bits from register data
-
-  unsigned long frameCount;     // Number of frames
-  unsigned long length;         // Song length (frameCount*14)
-
-  const char* sourceFilename(argumentParser.GetParameter(0));
-  void* pcBuffer;
-  size_t cBufferSize;
+  sourceFilename=GetParameter(0);
   if (!LoadFile(sourceFilename,pcBuffer,cBufferSize))
   {
     ShowError("Can't load '%s'",sourceFilename);
@@ -358,21 +438,21 @@ int main(int argc,char *argv[])
   //
   // Extract the register data to get them in an easier to access location
   //
-  frameCount=length/REGS;
+  m_FrameCount=length/REGS;
   for (n=0;n<REGS;n++)     /*  Allocate memory & read data */
   {
     //  Allocate extra fragment to make packing easier
-    if ((data[n]=(unsigned char*)malloc(frameCount+FRAG))==NULL)
+    if ((data[n]=(unsigned char*)malloc(m_FrameCount+FRAG))==NULL)
     {
       printf("Out of memory.\n");
       return(EXIT_FAILURE);
     }
-    memset(data[n],0,frameCount+FRAG);
+    memset(data[n],0,m_FrameCount+FRAG);
     if (interleavedFormat)
     {
       // R0 R0 R0 R0 R0 R0 R0... | R1 R1 R1 R1 ... | R13 R13 R13 R13
-      memcpy(data[n],sourceData,frameCount);
-      sourceData+=frameCount;
+      memcpy(data[n],sourceData,m_FrameCount);
+      sourceData+=m_FrameCount;
     }
     else
     {
@@ -383,7 +463,7 @@ int main(int argc,char *argv[])
       // In second case YM5 file is compressed more badly.
 
       // R0 R1 R2 R3 R4 ... R13 R14 R15 | R0 R1 R2 ... R13 R14 R15 |
-      for (unsigned int i=0;i<frameCount;i++)
+      for (unsigned int i=0;i<m_FrameCount;i++)
       {
         data[n][i]=sourceData[i*16];
       }
@@ -437,7 +517,7 @@ int main(int argc,char *argv[])
   //
   // Handle the music truncation/fade
   //
-  if ( (durationMode!=DurationModeKeepAll) && (frameCount>duration) )
+  if ( (durationMode!=DurationModeKeepAll) && (m_FrameCount>(unsigned long)duration) )
   {
     length=duration*REGS;
 
@@ -459,7 +539,7 @@ int main(int argc,char *argv[])
           {
             startVolume=15;
           }
-          data[n][row]=startVolume-(startVolume*row)/duration;
+          data[n][row]=(unsigned char)(startVolume-(startVolume*row)/duration);
         }
       }
 
@@ -470,7 +550,24 @@ int main(int argc,char *argv[])
   }
 
 
+  switch (exportFormat)
+  {
+  case ExportFormatMym:
+    ExportMym();
+    break;
 
+  case ExportFormatWav:
+    ExportWav();
+    break;
+  }
+  free(pcBuffer);
+  return EXIT_SUCCESS;
+}
+
+
+
+bool MymExporter::ExportMym()
+{
   char* destinationBuffer=(char*)malloc(cBufferSize);
   char* ptrWrite=destinationBuffer;
 
@@ -565,10 +662,9 @@ int main(int argc,char *argv[])
   }
 
   FILE* f;
-  if ((f=fopen(argumentParser.GetParameter(1),"wb"))==NULL)
+  if ((f=fopen(GetParameter(1),"wb"))==NULL)
   {
-    printf("Cannot open destination file.\n");
-    return(EXIT_FAILURE);
+    ShowError("Cannot open destination file '%s')",GetParameter(1));
   }
 
   if (flag_header)
@@ -617,14 +713,305 @@ int main(int argc,char *argv[])
 
   fclose(f);
 
-  free(pcBuffer);
   free(destinationBuffer);
 
   return EXIT_SUCCESS;
 }
 
+
+
+
+
+#define FOURCC(a,b,c,d) ( (unsigned int) (((d)<<24) | ((c)<<16) | ((b)<<8) | (a)) )
+
+class WavHeader
+{
+public:
+  WavHeader()    
+  {
+    memset(this,0,sizeof(*this));
+    riff_4cc=FOURCC('R','I','F','F');
+    wave_4cc=FOURCC('W','A','V','E');
+    fmt_4cc =FOURCC('f','m','t',' ');
+    data_4cc=FOURCC('d','a','t','a');
+    fmt_size=16;
+    format_tag=1;  // WAVE_FORMAT_PCM
+  }
+
+public:
+  unsigned int    riff_4cc;             // 'RIFF'
+  unsigned int    riff_size;
+  unsigned int    wave_4cc;             // 'WAVE'
+  unsigned int    fmt_4cc;              // 'fmt '
+  unsigned int    fmt_size;             // Chunk size: 16, 18 or 40
+  unsigned short  format_tag;           // Format code
+  unsigned short  channels;             // Number of interleaved channels: 1 for mono, 2 for stereo
+  unsigned int    samples_per_second;   // Sampling rate
+  unsigned int    bytes_per_second;     // Data rate
+  unsigned short  byte_per_sample;      // Data block size (bytes): 1 for mono, 2 for stereo
+  unsigned short  bits_per_sample;      // Bits per sample
+  unsigned int    data_4cc;             // 'data'
+  unsigned int    datalength;           // Length
+};
+
+
+unsigned int ymVolumeTable[16] =
+{	
+  //62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767
+  0, 513/4, 828/4, 1239/4, 1923/4, 3238/4, 4926/4, 9110/4, 10344/4, 17876/4, 24682/4, 30442/4, 38844/4, 47270/4, 56402/4, 65535/4
+};
+
+
+// Envelope shape descriptions
+// Bit 7 set = go to step defined in bits 0-6
+//                           0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+unsigned char eshape0[] = { 15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 128+15 };
+unsigned char eshape4[] = {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15, 0, 128+16 };
+unsigned char eshape8[] = { 15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 128+0 };
+unsigned char eshapeA[] = { 15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15, 128+0 };
+unsigned char eshapeB[] = { 15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 15, 128+16 };
+unsigned char eshapeC[] = {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15, 128+0 };
+unsigned char eshapeD[] = {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15, 128+15 };
+unsigned char eshapeE[] = {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 128+0 };
+
+unsigned char *eshapes[] = 
+{ 
+  eshape0, // 0000
+  eshape0, // 0001
+  eshape0, // 0010
+  eshape0, // 0011
+  eshape4, // 0100
+  eshape4, // 0101
+  eshape4, // 0110
+  eshape4, // 0111
+  eshape8, // 1000
+  eshape0, // 1001
+  eshapeA, // 1010
+  eshapeB, // 1011
+  eshapeC, // 1100
+  eshapeD, // 1101
+  eshapeE, // 1110
+  eshape4  // 1111
+};
+
+
+/*
+** RNG for the AY noise generator
+*/
+unsigned int  m_noise_generator=1;
+
+unsigned int GetRandomBit()
+{
+  unsigned int rbit = (m_noise_generator&1) ^ ((m_noise_generator>>2)&1);
+  m_noise_generator = (m_noise_generator>>1)|(rbit<<16);
+  return rbit&1;
+}
+
+
+bool MymExporter::ExportWav()
+{
+  // http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+  //
+  // Wav format:
+  // U32 RIFF
+  // U32 Lenght
+  // U32 WAVE
+  WavHeader wavHeader;
+  wavHeader.channels=1;
+  wavHeader.byte_per_sample=1;
+  wavHeader.bits_per_sample=8;
+  wavHeader.samples_per_second=25033;
+  wavHeader.bytes_per_second=wavHeader.samples_per_second*wavHeader.byte_per_sample;
+
+  if (m_FlagStereo)
+  {
+    wavHeader.channels=2;
+    wavHeader.byte_per_sample=2;
+  }
+
+  unsigned int soundchipClock  =2000000;                            // The YM in the ST is at 2mhz
+  //unsigned int bytesPerSample  =1;                                  // Should be 1 for 8bit mono, 2 for 8bit stereo
+  unsigned int framePerSecond  =50;                                 // Should be 50, 60 or 71 
+  unsigned int samplesPerSecond=25033;                              // 25khz on the ATARI STE
+  unsigned int samplesPerFrame =samplesPerSecond/framePerSecond;    // About 500 samples per frame at 25khz/50hz
+  unsigned int cyclesPerSample =soundchipClock/samplesPerSecond;    // About 80 sound-chip cycles between two values
+
+
+
+  unsigned int sampleLenght=m_FrameCount*samplesPerFrame;
+
+  wavHeader.datalength=sampleLenght*wavHeader.byte_per_sample;
+  wavHeader.riff_size =wavHeader.datalength+8+wavHeader.fmt_size+12;
+
+  char* destinationBuffer=(char*)malloc(wavHeader.datalength);
+  if (!destinationBuffer)
+  {
+    printf("Out of memory.\n");
+    return EXIT_FAILURE;
+  }
+  memset(destinationBuffer,0x80,sampleLenght);
+  char* ptrWrite=destinationBuffer;
+
+#if 0
+  // Generate some funny sample in it
+  for (int i=0;i<sampleLenght;i++)
+  {
+    char value=128+127*sinf((float)i*0.025f);
+    *ptrWrite++=value;
+  }
+#else
+  // Actual YM decoding
+
+  // We are going to use an alternate method.
+  // Instead of simulating per row, it's going to be per register.
+  // At 2mhz, we get 80 cycles between each value
+  {
+    ptrWrite=destinationBuffer;
+
+    unsigned int frame=0;
+    unsigned int reloadCounter=1;
+    unsigned int control=0;
+    unsigned int noisePeriode=1;
+    unsigned int enveloppePeriode=1;
+    unsigned int enveloppeShape=0;
+    unsigned int enveloppeCycles=0;
+    unsigned int noiseCycles=0;
+    
+    unsigned int noiseValue=0;
+
+    // Fixed point arithmetic 8:24
+    unsigned int volume[3]={0,0,0};
+    unsigned int channelActive[3]={0,0,0};
+    unsigned int noiseActive[3]={0,0,0};;
+    unsigned int cycleSumCounter[3]={0,0,0};
+    unsigned int cycleSumIncrement[3]={0,0,0};
+
+    for (unsigned int i=0;i<sampleLenght;i++)
+    {
+      reloadCounter--;
+      if (!reloadCounter)
+      {
+        reloadCounter=samplesPerFrame;
+        
+        cycleSumIncrement[0]=3*(0xFFFFFFFF/((((data[1][frame]&15)<<8) | data[0][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[1]=3*(0xFFFFFFFF/((((data[3][frame]&15)<<8) | data[2][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[2]=3*(0xFFFFFFFF/((((data[5][frame]&15)<<8) | data[4][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
+        control=data[7][frame];
+        volume[0] =data[8][frame];
+        volume[1] =data[9][frame];
+        volume[2] =data[10][frame];
+
+        noisePeriode=2*16*(data[6][frame]&31);
+        enveloppePeriode=16*((data[12][frame]<<8) | data[11][frame]);
+        enveloppeShape =data[9][frame];
+
+        channelActive[0]=!(control&1);
+        channelActive[1]=!(control&2);
+        channelActive[2]=!(control&4);
+
+        noiseActive[0]=!(control&8);
+        noiseActive[1]=!(control&16);
+        noiseActive[2]=!(control&32);
+
+        ++frame;
+      }
+
+      int controlTest=control;
+      int channelOutputValue[3]={0,0,0};
+      for (int channel=0;channel<3;channel++)
+      {
+        if ( (controlTest & (1+8)) != (1+8) )  // Test if there's either tone or noise on this channel
+        {
+          int output=0;
+
+          if (!(controlTest & 1))             // Tone
+          {
+            output|=cycleSumCounter[channel]&(1<<31);
+          }
+
+          if (!(controlTest & 8))             // Noise
+          {
+            output|=noiseValue;
+          }
+
+          int value;
+          if (volume[channel]>15)
+          {
+            int enveloppeVolume=15;
+            value=(ymVolumeTable[enveloppeVolume]*255)/(65535/4);
+          }
+          else
+          {
+            value=(ymVolumeTable[volume[channel]]*255)/(65535/4);
+          }
+          if (!output)
+          {
+            value=-value;
+          }
+          channelOutputValue[channel]=value;
+        }
+        controlTest>>=1;
+        cycleSumCounter[channel]+=cycleSumIncrement[channel];   // Fixed point increment
+      }
+      if (m_FlagStereo)
+      {
+        // Stereo
+        *ptrWrite+=(unsigned char) ( (channelOutputValue[0]+(channelOutputValue[1]/2)+(channelOutputValue[2]/3) )/4 );
+        ptrWrite++;
+        *ptrWrite+=(unsigned char) ( (channelOutputValue[2]+(channelOutputValue[1]/2)+(channelOutputValue[0]/3) )/4 );
+        ptrWrite++;
+      }
+      else
+      {
+        // Mono
+        int mixerValue=0;
+        mixerValue+=channelOutputValue[0];
+        mixerValue+=channelOutputValue[1];
+        mixerValue+=channelOutputValue[2];
+
+        mixerValue/=8;
+        *ptrWrite+=(unsigned char)(mixerValue);
+        ptrWrite++;
+      }
+
+      if (noiseActive[0]|noiseActive[1]|noiseActive[2])
+      {
+        if (noisePeriode>cyclesPerSample)
+        {
+          noiseCycles+=cyclesPerSample;
+          while (noiseCycles>noisePeriode)
+          {
+            noiseCycles-=noisePeriode;
+            noiseValue=GetRandomBit();
+          }
+        }
+      }
+    }
+    //break;
+  }
+#endif
+
+
+
+  FILE* f;
+  if ((f=fopen(GetParameter(1),"wb"))==NULL)
+  {
+    ShowError("Cannot open destination WAV file '%s')",GetParameter(1));
+  }
+
+
+  fwrite(&wavHeader,sizeof(wavHeader),1,f);                     // Header
+  fwrite(destinationBuffer,wavHeader.datalength,1,f);           // Data
+  free(destinationBuffer);
+
+  fclose(f);
+
+  return EXIT_SUCCESS;
+}
+
+
 //  Writes bits to a file. If bits is 0, pads to byte size.
-void writebits(unsigned data,int bits,char* &ptrWrite)
+void MymExporter::writebits(unsigned data,int bits,char* &ptrWrite)
 {
   static unsigned char    byte=0;
 

@@ -32,10 +32,13 @@ Change history for the Ym2Mym
 1.6 - 2015/05/29
 - Added a -d flag that can be used to shorten a music. "-dt" truncates the music, "-df" fades it out. (example: -dt50 will cut the music after 1 second - 50 frames - )
 
+1.7 - 2015/05/29
+- Added a -f flag that can be used to export the music to WAV format instead of MYM
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	6
+#define TOOL_VERSION_MINOR	7
 
