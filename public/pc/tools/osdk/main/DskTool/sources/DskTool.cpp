@@ -3,6 +3,7 @@
 
 #include "infos.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +12,7 @@ FILE *fd;
 char bigbuf[1024*1024];
 char header[256];
 unsigned char trackbuf[6400];
-int sides, tracks, sectors, geometry=1;
+uint32_t sides, tracks, sectors, geometry=1;
 int gap1,gap2,gap3;
 char old_signature[]="ORICDISK";
 char new_signature[]="MFM_DISK";
@@ -21,7 +22,8 @@ void init_track(int n)
   int i,j,offset=0;
 
   for (i=0;i<gap1-12;i++) trackbuf[offset++]=0x4E;
-  for (j=0;j<n;j++) {
+  for (j=0;j<n;j++)
+  {
     for (i=0;i<12;i++) trackbuf[offset++]=0;
     for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
     trackbuf[offset++]=0xFE;
@@ -86,67 +88,90 @@ void compute_crc(unsigned char *ptr,int count)
 }
 
 
+void fileread( void * ptr, size_t size, size_t count, FILE * stream )
+{
+  if (fread(ptr,size,count,stream)!=count)
+  {
+    printf("Read error\n");
+    exit(EXIT_FAILURE);
+  }
+}
+
 int main(int argc,char *argv[])
 {
   printf("\nDskTool: A multi-tape-tool based on Tap2CD by Fabrice Frances. Version %d.%3d\n\n",TOOL_VERSION_MAJOR,TOOL_VERSION_MINOR);
 
-        int i,s,t,offset;
+  unsigned int i,s,t,offset;
 
-        printf("Old -> MFM v1.2\n");
-	if (argc!=2) {
-		printf("Usage: DskTool <diskimage>\n");
-		printf("(converts old Euphoric disk image format to new MFM format)\n");
-		exit(1);
-	}
-	fd=fopen(argv[1],"r+b");
-	if (fd==NULL) {
-		printf("Unable to open %s for read/write operation\n",argv[1]);
-		exit(1);
-	}
-	fread(header,8,1,fd);
-	if (strncmp(header,old_signature,8)!=0) {
-		printf("%s is not an old disk image\n",argv[1]);
-		exit(1);
-	}
-	fread(&sides,1,4,fd); fread(&tracks,1,4,fd); fread(&sectors,1,4,fd);
-	fread(header+20,256-20,1,fd);
-	fread(bigbuf,sides*tracks*sectors,256,fd);
-	fseek(fd,0,SEEK_SET);
+  printf("Old -> MFM v1.2\n");
+  if (argc!=2) 
+  {
+    printf("Usage: DskTool <diskimage>\n");
+    printf("(converts old Euphoric disk image format to new MFM format)\n");
+    exit(1);
+  }
 
-        switch (sectors) {
-                case 15: case 16: case 17:
-                        gap1=72; gap2=34; gap3=50;
-                        break;
-                case 18:
-                        gap1=12; gap2=34; gap3=46;
-                        break;
-                default:
-                        printf("unrealistic sectors per track number\n");
-                        exit(1);
-        }
-	init_track(sectors);
+  fd=fopen(argv[1],"r+b");
+  if (fd==NULL)
+  {
+    printf("Unable to open %s for read/write operation\n",argv[1]);
+    exit(1);
+  }
+  fileread(header,8,1,fd);
+  if (strncmp(header,old_signature,8)!=0)
+  {
+    printf("%s is not an old disk image\n",argv[1]);
+    exit(1);
+  }
+  fileread(&sides,1,sizeof(uint32_t),fd);
+  fileread(&tracks,1,sizeof(uint32_t),fd);
+  fileread(&sectors,1,sizeof(uint32_t),fd);
+  fileread(header+20,256-20,1,fd);
+  if ( (sides>2) || (tracks>256) || (sectors>18) )
+  {
+    printf("A valid floppy cannot have %d sides, %d tracks and %d sectors per track\n",sides,tracks,sectors);
+    exit(EXIT_FAILURE);
+  }
+  fileread(bigbuf,sides*tracks*sectors,256,fd);
+  fseek(fd,0,SEEK_SET);
 
-	fwrite(new_signature,8,1,fd);
-	fwrite(&sides,1,4,fd); fwrite(&tracks,1,4,fd); fwrite(&geometry,1,4,fd);
-	fwrite(header+20,256-20,1,fd);
+  switch (sectors) 
+  {
+  case 15: case 16: case 17:
+    gap1=72; gap2=34; gap3=50;
+    break;
+  case 18:
+    gap1=12; gap2=34; gap3=46;
+    break;
+  default:
+    printf("unrealistic sectors per track number\n");
+    exit(1);
+  }
+  init_track(sectors);
 
-	for(s=0;s<sides;s++)
-	  for(t=0;t<tracks;t++) {
-            offset=gap1;
-	    for(i=0;i<sectors;i++) {
-              trackbuf[offset+4]=t;
-              trackbuf[offset+5]=s;
-              trackbuf[offset+6]=i+1;
-              trackbuf[offset+7]=1;
-              compute_crc(trackbuf+offset,4+4);
-              offset+=4+6;
-              offset+=gap2;
-              memcpy(trackbuf+offset+4,bigbuf+((s*tracks+t)*sectors+i)*256,256);
-              compute_crc(trackbuf+offset,4+256);
-              offset+=256+6;
-              offset+=gap3;
-	    }
-	    fwrite(trackbuf,6400,1,fd);
-	  }
+  fwrite(new_signature,8,1,fd);
+  fwrite(&sides,1,4,fd); fwrite(&tracks,1,4,fd); fwrite(&geometry,1,4,fd);
+  fwrite(header+20,256-20,1,fd);
+
+  for(s=0;s<sides;s++)
+    for(t=0;t<tracks;t++)
+    {
+      offset=gap1;
+      for(i=0;i<sectors;i++)
+      {
+        trackbuf[offset+4]=t;
+        trackbuf[offset+5]=s;
+        trackbuf[offset+6]=i+1;
+        trackbuf[offset+7]=1;
+        compute_crc(trackbuf+offset,4+4);
+        offset+=4+6;
+        offset+=gap2;
+        memcpy(trackbuf+offset+4,bigbuf+((s*tracks+t)*sectors+i)*256,256);
+        compute_crc(trackbuf+offset,4+256);
+        offset+=256+6;
+        offset+=gap3;
+      }
+      fwrite(trackbuf,6400,1,fd);
+    }
 }
 
