@@ -496,5 +496,7 @@ void OricPictureConverter::convert_sam_hocevar(const ImageContainer& sourcePictu
     }
   }
   fprintf(stderr, "\n");
+  free(src);
+  free(dst);
 }
 
