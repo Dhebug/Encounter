@@ -194,17 +194,11 @@ void ImageContainer::FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned 
     unsigned int dx=FreeImage_GetWidth(m_pBitmap);
     unsigned int dy=FreeImage_GetHeight(m_pBitmap);
 
-    if (x0<0)	return;
-    if (y0<0)	return;
-
     if (x0>=dx)	return;
     if (y0>=dy)	return;
 
     unsigned int x1=(x0+width)-1;
     unsigned int y1=(y0+heigth)-1;
-
-    if (x1<0)	return;
-    if (y1<0)	return;
 
     if (x1>=dx)	return;
     if (y1>=dy)	return;
