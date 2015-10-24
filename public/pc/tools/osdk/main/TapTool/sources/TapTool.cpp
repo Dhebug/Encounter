@@ -250,22 +250,29 @@ int main(int argc,char *argv[])
 
   open_files(argc,argv);
 
-  while (!feof(in)) {
+  while (!feof(in)) 
+  {
     while (fgetc(in)==0x16) ; /* read synchro (0x24 included) */
     if (feof(in)) break;
-    for (i=8;i>=0;i--) Mem[0x2A8+i]=header[8-i]=fgetc(in);  /* header */
+    for (i=8;i>=0;i--) Mem[0x2A8+i]=header[8-i]=(char)fgetc(in);  /* header */
     start=header[6]*256+header[7]; end=header[4]*256+header[5];
-    i=0; while ((name[i++]=fgetc(in))!=0); /* name */
-    for (i=start;i<=end;i++) Mem[i]=fgetc(in);
+    i=0; while ((name[i++]=(char)fgetc(in))!=0); /* name */
+    for (i=start;i<=end;i++) Mem[i]=(char)fgetc(in);
     if (firstprog) ask_name(name);
     emit_fast_prog(start,end);
     firstprog=FALSE;
   }
   fclose(in);
-  fseek(out,40,SEEK_SET); fwrite(&file_size,1,4,out);
+
+  bool isOk=true;
+
+  isOk &= (fseek(out,40,SEEK_SET)==0); 
+  isOk &= (fwrite(&file_size,1,4,out)==4);
   file_size+=36;
-  fseek(out,4,SEEK_SET); fwrite(&file_size,1,4,out);
+  isOk &= (fseek(out,4,SEEK_SET)==0); 
+  isOk &= (fwrite(&file_size,1,4,out)==4);
   fclose(out);
-  return 0;
+
+  return isOk?0:1;
 }
 
