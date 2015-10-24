@@ -396,7 +396,8 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
 
 	char inpline[MAX_LINE_SIZE+1];
 	assert(sizeof(inpline)>cInputLine.size());
-	strcpy(inpline,cInputLine.c_str());
+	strncpy(inpline,cInputLine.c_str(),MAX_LINE_SIZE);
+        inpline[MAX_LINE_SIZE]=0;
 
 	int len=strlen(inpline);
 
@@ -644,7 +645,7 @@ bool ParseFile(const std::string& filename)
 			bool bUndefinedLabel=true;
 			for (i=0;i<gReferencedLabelsList.size();i++)
 			{
-				if (gReferencedLabelsList[i].label_name==label)
+				if (gReferencedLabelsList[i].label_name==cFoundLabel)
 				{
 					bUndefinedLabel=false;
 					break;
@@ -655,7 +656,7 @@ bool ParseFile(const std::string& filename)
 			{
 				// Allocate memory for label name and store it
 				ReferencedLabelEntry_c cLabelEntry;
-				cLabelEntry.label_name		=label;
+				cLabelEntry.label_name		=cFoundLabel;
 				cLabelEntry.m_bIsResolved	=false;
 
 				gReferencedLabelsList.push_back(cLabelEntry);
