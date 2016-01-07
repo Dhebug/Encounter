@@ -64,6 +64,10 @@ AddFile ..\build\files\SecondProgram.o $c000		; The "Second program" picture
 AddDefine LOADER_FONT_6x8 {FileIndex}
 AddFile ..\build\files\Font6x8.hir $9900    		; 9900=STD, 9D00=ALT
 
+;
+; Some reserved sectors
+;
+ReserveSectors 6                                    ; 5 sectors
 
 ;
 ; The pictures
@@ -75,4 +79,5 @@ AddDefine LOADER_PICTURE_FIRSTPROGRAM_SIZE {FileSize}
 AddDefine LOADER_PICTURE_SECONDPROGRAM {FileIndex}
 AddFile ..\build\files\SecondProgram.hir $a000
 AddDefine LOADER_PICTURE_SECONDPROGRAM_SIZE {FileSize}
+
 

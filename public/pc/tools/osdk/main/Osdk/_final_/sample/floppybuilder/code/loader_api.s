@@ -16,14 +16,14 @@ _LoaderApiAddressLow	.byt 0
 _LoaderApiAddressHigh	.byt 0
 
 
-_LoadFile
+_LoaderApiLoadFile
 	; Draw the 'Loading Data message'
 	;ldx #126
 	;stx $bb80+40*26+39
 	;inx
 	;stx $bb80+40*27+39
 	ldx _LoaderApiEntryIndex
-_LoadFileRegister	
+_LoaderApiLoadFileRegister	
 	jsr $fff7					; _LoadFile
 
 	; Erase the 'Loading Data message'
@@ -32,17 +32,17 @@ _LoadFileRegister
 	;stx $bb80+40*27+39
 	rts
 
-_SetLoadAddress
+_LoaderApiSetLoadAddress
 	lda _LoaderApiAddressLow
 	ldy _LoaderApiAddressHigh
 	ldx _LoaderApiEntryIndex
-_SetLoadAddressRegister	
+_LoaderApiSetLoadAddressRegister	
 	jmp $fff4					; SetLoadAddress
 
 
 ; x: file index
 ; a: Low part of address
 ; y: High part of address
-_LoadFileAtAddressRegister
+_LoaderApiLoadFileAtAddressRegister
 	jsr $fff4					; SetLoadAddress
 	jmp $fff7					; _LoadFile

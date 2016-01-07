@@ -1,27 +1,17 @@
 //
 // FLoppyBuilder sample code
+// First part
 // (c) 2015 Dbug / Defence Force
 //
 
 #include <lib.h>
 
-#include "floppy_description.h"
-
-// loader_api.s
-extern unsigned char LoaderApiEntryIndex;
-extern unsigned char LoaderApiAddressLow;
-extern unsigned char LoaderApiAddressHigh;
-extern char* LoaderApiAddress;
-
-extern void SetLoadAddress();
-extern void LoadFile();
-
+#include "file_loader.h"
 
 void main()
 {
 	// Load the first picture at the default address specified in the script
-	LoaderApiEntryIndex=LOADER_PICTURE_FIRSTPROGRAM;
-	LoadFile();
+	LoadFile(LOADER_PICTURE_FIRSTPROGRAM);
 
 	// Quit and return to the loader
 }
