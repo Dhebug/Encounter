@@ -8,7 +8,6 @@
 #pragma warning( disable : 4706)
 #pragma warning( disable : 4786)	// Debug symbols thing
 #pragma warning( disable : 4996)   // #define _CRT_SECURE_NO_WARNINGS
-//#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 
@@ -75,7 +74,7 @@ public:
 private:
   ArgumentParser();
 
-private:
+protected:
   int		m_argc;
   char**	m_argv;
   long		m_first_param;
