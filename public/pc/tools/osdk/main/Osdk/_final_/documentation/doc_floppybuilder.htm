@@ -76,6 +76,7 @@ You do not need to load a directory and search, you can just ask the loader to l
 <li>DefineDisk sides tracks sectors</li>
 <li>OutputFloppyFile dsk_file</li>
 <li>OutputLayoutFile header_file</li>
+<li>ReserveSectors number_of_sectors</li>
 <li>SetPosition track sector</li>
 <li>SetCompressionMode</li>
 <li>WriteSector file</li>
@@ -233,6 +234,16 @@ then call $fff4. Subsequent calls to $fff7 for this file will use the new locati
 
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
+
+<p id=dateentry>Version 0.18</p>
+- Added a 'ReserveSectors' command that can be used to leave room on the disk for save games or stuff like that.<br>
+
+<p id=dateentry>Version 0.17</p>
+- A macro expansion now accept the new value {FileSize} which gets expanded to the size of the previous file inserted in the script<br>
+
+<p id=dateentry>Version 0.16</p>
+- Added a mode where data can be extracted from an existing DSK file<br>
+- The parser now accepts quoted strings<br>
 
 <p id=dateentry>Version 0.15</p>
 - The output file now clearly states how much free room is available in bytes on the disk<br>

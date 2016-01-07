@@ -63,6 +63,7 @@ PC paint program (PaintShopPro, PhotoShop, ...), in a format displayable on the 
 <b>Atari ST</b>:
   -f0 => Single palette format [default]
   -f1 => Multi palette format
+  -f2 => Monochrome format
 </pre>
 </p>
 </li>
@@ -166,7 +167,16 @@ That's particularly useful to make sure that your background color is at index 0
 -n40 => Output 40 values each line
 </pre>
 </li>
+
+
+<li>The -s switch sets if the swap mode is enabled or not:
+<pre>
+-s0 => no swapping [default]
+-s1 => generate two pictures instead of one, designed to be swapped each frame
+</pre>
+</li>
 </ul>
+
 
 <p id=chapter>Some picture samples</p>
 
@@ -366,6 +376,10 @@ Lena
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
+
+<p id=dateentry>Version 0.23</p>
+- Added the -f2 option to the Atari ST converter, with support for monochrome pictures
+- Added the -s1 option to generate two pictures that can be swapped each frame to generate more colors
 
 <p id=dateentry>Version 0.22</p>
 - Fixed the -f5 (charmap generator) to work correctly without crashing.
