@@ -263,7 +263,7 @@ RgbColor ImageContainer::ReadColor(int x,int y)	const
 }
 
 
-bool ImageContainer::ConvertToGrayScale()
+bool ImageContainer::ConvertToGrayScale(int maxValues)
 {
   int dx=FreeImage_GetWidth(m_pBitmap);
   int dy=FreeImage_GetHeight(m_pBitmap);
@@ -278,6 +278,23 @@ bool ImageContainer::ConvertToGrayScale()
       rgb.m_blue =rgb.m_red;
       WriteColor(rgb,x,y);
     }
+  }
+  if (maxValues<256)
+  {
+    if (GetDpp()!=24)
+    {
+      FIBITMAP* dib24 = FreeImage_ConvertTo24Bits(m_pBitmap);
+      if (dib24)
+      {
+        FreeImage_Unload(m_pBitmap);
+        m_pBitmap=dib24;
+      }
+    }
+    FIBITMAP *dib8  = FreeImage_ColorQuantizeEx(m_pBitmap,FIQ_NNQUANT,maxValues);
+    FIBITMAP *dib32 = FreeImage_ConvertTo32Bits(dib8);
+    FreeImage_Unload(dib8);
+    FreeImage_Unload(m_pBitmap);
+    m_pBitmap=dib32;
   }
   return true;
 }

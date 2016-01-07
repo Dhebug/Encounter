@@ -42,6 +42,13 @@ public:
     _TRANSPARENCY_MAX_
   };
 
+  enum SWAPPING
+  {
+    SWAPPING_DISABLED,
+    SWAPPING_ENABLED,
+    _SWAPPING_MAX_
+  };
+
 public:
   static PictureConverter* GetConverter(MACHINE machine);
   static void DeleteConverter(PictureConverter* pConverter);
@@ -63,6 +70,9 @@ public:
   virtual int GetPaletteMode() const=0;
   virtual bool SetPaletteMode(int paletteMode)=0;
 
+  virtual int GetSwapMode() const=0;
+  virtual bool SetSwapMode(int swapMode)=0;
+
   virtual int GetTransparencyMode() const=0;
   virtual bool SetTransparencyMode(int transparencyMode)=0;
 
@@ -73,7 +83,7 @@ public:
 
   virtual void SaveToFile(long handle,int output_format)=0;
 
-  virtual unsigned char *GetBufferData()=0;
+  virtual unsigned char *GetBufferData(int buffer=0)=0;
   virtual unsigned int GetBufferSize()=0;
 
   virtual unsigned char *GetSecondaryBufferData()   { return 0; }
@@ -90,6 +100,7 @@ protected:
   DITHER			m_dither;
   BLOCKMODE			m_blockmode;
   TRANSPARENCY                  m_transparency;
+  SWAPPING                      m_swapping;
   bool				m_flag_debug;
 
   std::string			m_block_data;

@@ -40,7 +40,7 @@ public:
   void FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth);
 
   // Utility functions
-  bool ConvertToGrayScale();	// Pure grey scale conversion
+  bool ConvertToGrayScale(int maxValues=256);	        // Pure grey scale conversion
   bool ReduceColorDepth(const AtariClut* pClut=0);
   bool ReduceColorDepthPerScanline(const std::map<int,AtariClut>* pCluts=0);
 
