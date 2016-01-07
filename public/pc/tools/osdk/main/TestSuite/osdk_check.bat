@@ -104,7 +104,7 @@ IF "%MD5CREATE%"=="YES" GOTO CreateMD5
 :CheckMD5
 ECHO Checking MD5 list for %1
 pushd output\%1
-md5sum --check ../../%1_md5list.txt >../md5checkoutput.txt
+..\..\md5sum.exe --check ../../%1_md5list.txt >../md5checkoutput.txt
 popd
 IF ERRORLEVEL 1 GOTO Error
 GOTO:EOF
