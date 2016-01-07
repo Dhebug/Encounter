@@ -39,6 +39,7 @@ public:
   {
     FORMAT_SINGLE_PALETTE,
     FORMAT_MULTIPLE_PALETTE,
+    FORMAT_MONOCHROME,
     _FORMAT_MAX_
   };
 
@@ -54,14 +55,17 @@ protected:
   AtariPictureConverter();
   virtual ~AtariPictureConverter();
 
-  virtual int GetFormat() const			{ return (int)m_format; }
-  virtual bool SetFormat(int format)		{ m_format=(FORMAT)format;return m_format<_FORMAT_MAX_; }
+  virtual int GetFormat() const			                { return (int)m_format; }
+  virtual bool SetFormat(int format);
 
   virtual int GetPaletteMode() const				{ return m_palette_mode; }
   virtual bool SetPaletteMode(int paletteMode)	                { m_palette_mode=(PALETTE_MODE)paletteMode;return m_palette_mode<_PALETTE_MAX_; }
 
-  virtual int GetTransparencyMode() const                         { return m_transparency; }
-  virtual bool SetTransparencyMode(int transparencyMode)          { m_transparency=(TRANSPARENCY)transparencyMode;return m_transparency<_TRANSPARENCY_MAX_; }
+  virtual int GetTransparencyMode() const                       { return m_transparency; }
+  virtual bool SetTransparencyMode(int transparencyMode)        { m_transparency=(TRANSPARENCY)transparencyMode;return m_transparency<_TRANSPARENCY_MAX_; }
+
+  virtual int GetSwapMode() const                               { return m_swapping; }
+  virtual bool SetSwapMode(int swapMode)                        { m_swapping=(SWAPPING)swapMode;return m_transparency<_SWAPPING_MAX_; }
 
   virtual bool Convert(const ImageContainer& sourcePicture);
   virtual bool TakeSnapShot(ImageContainer& sourcePicture);
@@ -71,14 +75,15 @@ protected:
 private:
   //int	convert_pixel_shifter(const RgbColor& rgb);
   void convert_shifter(const ImageContainer& sourcePicture);
+  void convert_shifter_monochrome(const ImageContainer& sourcePicture);
 
   void clear_screen();
 
-  unsigned char* GetBufferData()	{ return m_buffer; }
-  unsigned int GetBufferSize()		{ return m_buffer_size; }
+  unsigned char* GetBufferData(int buffer=0)	{ return m_buffer+(buffer*m_buffer_size); }
+  unsigned int GetBufferSize()		        { return m_buffer_size; }
 
-  unsigned int get_buffer_width()	{ return m_buffer_width; }
-  unsigned int get_buffer_height()	{ return m_buffer_height; }
+  unsigned int get_buffer_width()		{ return m_buffer_width; }
+  unsigned int get_buffer_height()	        { return m_buffer_height; }
 
   void set_buffer_size(int width,int height);
 
@@ -91,7 +96,7 @@ private:
   unsigned int				m_buffer_size;
   unsigned int				m_buffer_width;
   unsigned int				m_buffer_height;
-  int					m_buffer_cols;
+  int					m_buffer_bitplans;
   bool					m_flagPalettePerScanline;
 
   std::map<int,AtariClut>		m_cluts;		// Scanline/associated clut

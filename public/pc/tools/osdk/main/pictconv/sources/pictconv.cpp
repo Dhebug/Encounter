@@ -72,6 +72,7 @@ int __cdecl main(int argc,char *argv[])
     "       -Atari ST:\r\n"
     "         -f0 => Single palette format [default]\r\n"
     "         -f1 => Multi palette format\r\n"
+    "         -f2 => Monochrome format\r\n"
     "\r\n"
     " -pn   Palette management\r\n"
     "         -p0 => Generate a palette automatically [default]\r\n"
@@ -83,6 +84,10 @@ int __cdecl main(int argc,char *argv[])
     "       -d1 => alternate (01010101) dithering\r\n"
     "       -d2 => ordered dither\r\n"
     "       -d3 => riemersma\r\n"
+    "\r\n"
+    " -sn   Swap mode\r\n"
+    "       -s0 => no swapping [default]\r\n"
+    "       -s1 => generate two pictures instead of one, designed to be swapped each frame\r\n"
     "\r\n"
     " -an   Alpha mode\r\n"
     "       -a0 => no transparency [default]\r\n"
@@ -145,6 +150,7 @@ int __cdecl main(int argc,char *argv[])
   int switchPalette=0;		// Default 0=automatically generate the palette
   int switchBlock=0;		// Default 0=no block mode (full picture)
   int switchAlpha=0;            // Default 0=no transparency
+  int switchSwap=0;             // Default 0=no swapping
 
   ArgumentParser argumentParser(argc,argv);
 
@@ -177,6 +183,14 @@ int __cdecl main(int argc,char *argv[])
       //	0 => No transparency
       // 	1 => Encode full transparent alpha as holes saved as zeroes. Or something like that at least.
       switchAlpha=argumentParser.GetIntegerValue(0);
+    }
+    else
+    if (argumentParser.IsSwitch("-s"))
+    {
+      //swap mode: [-s]
+      //	0 => no swapping [default]
+      // 	1 => generate two pictures instead of one, designed to be swapped each frame
+      switchSwap=argumentParser.GetIntegerValue(0);
     }
     else
     if (argumentParser.IsSwitch("-p"))
@@ -327,7 +341,12 @@ int __cdecl main(int argc,char *argv[])
   {
     ShowError("Invalid alpha mode (-a) for the selected machine (-m)");
   }
-  
+
+  if (!Hires.SetSwapMode(switchSwap))
+  {
+    ShowError("Invalid swap mode (-s) for the selected machine (-m)");
+  }
+
 
   //
   // Copy last parameters

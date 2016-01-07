@@ -122,7 +122,7 @@ void OricPictureConverter::convert_charmap(const ImageContainer& sourcePicture)
       unsigned int asciiCode=characterMap[val].second;
       if (asciiCode<96)
       {
-        *ptr_hires++=(unsigned char)32+asciiCode;
+        *ptr_hires++=(unsigned char)(32+asciiCode);
       }
       else
       {

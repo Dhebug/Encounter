@@ -276,6 +276,9 @@ public:
   virtual int GetTransparencyMode() const                         { return m_transparency; }
   virtual bool SetTransparencyMode(int transparencyMode)          { m_transparency=(TRANSPARENCY)transparencyMode;return m_transparency<_TRANSPARENCY_MAX_; }
 
+  virtual int GetSwapMode() const                                 { return m_swapping; }
+  virtual bool SetSwapMode(int swapMode)                          { m_swapping=(SWAPPING)swapMode;return m_transparency<_SWAPPING_MAX_; }
+
   virtual bool Convert(const ImageContainer& sourcePicture);
   virtual bool TakeSnapShot(ImageContainer& sourcePicture);
 
@@ -299,8 +302,8 @@ public:
 
   void save_header(long handle,int adress_begin);
 
-  virtual unsigned char *GetBufferData()	  { return m_Buffer.GetBufferData(); }
-  virtual unsigned int GetBufferSize()	          { return m_Buffer.GetBufferSize(); }
+  virtual unsigned char *GetBufferData(int buffer=0)	  { (void)buffer; return m_Buffer.GetBufferData(); }
+  virtual unsigned int GetBufferSize()	          		{ return m_Buffer.GetBufferSize(); }
 
   virtual unsigned char *GetSecondaryBufferData() { return m_SecondaryBuffer.GetBufferData(); }
   virtual unsigned int GetSecondaryBufferSize()	  { return m_SecondaryBuffer.GetBufferSize(); }

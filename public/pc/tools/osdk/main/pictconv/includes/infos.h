@@ -86,7 +86,11 @@ Version 0.22
 - Fixed the -f5 (charmap generator) to work correctly without crashing.
 - Inverted -o0 and -o1 in the description of commands (issue #3)
 
+Version 0.23
+- Added the -f2 option to the Atari ST converter, with support for monochrome pictures
+- Added the -s1 option to generate two pictures that can be swapped each frame to generate more colors
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	22
+#define TOOL_VERSION_MINOR	23
