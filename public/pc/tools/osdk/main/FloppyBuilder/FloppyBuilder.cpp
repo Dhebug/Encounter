@@ -90,46 +90,79 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
   return false;
 }
 
+
+class FloppyBuilder : public ArgumentParser
+{
+public:
+  FloppyBuilder(int argc,char *argv[])
+    : ArgumentParser(argc,argv)
+  {
+  }
+
+  int Main();
+
+
+private:
+};
+
+
 int main(int argc, char *argv[])
 {
-  //
-  // Some initialization for the common library
-  //
-  SetApplicationParameters(
-    "FloppyBuilder",
-    TOOL_VERSION_MAJOR,
-    TOOL_VERSION_MINOR,
-    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
-    "\r\n"
-    "Author:\r\n"
-    "  (c) 2002 Debrune Jerome for the initial version \r\n"
-    "  (c) 2015 Pointier Mickael for the subsequent changes \r\n"
-    "\r\n"
-    "Purpose:\r\n"
-    "  Generating bootable floppies for the Oric computer.\r\n"
-    "\r\n"
-    "Usage:\r\n"
-    "  {ApplicationName} <init|build|extract> <description file path>\r\n"
-    "\r\n"
-    );
+  try
+  {
+    //
+    // Some initialization for the common library
+    //
+    SetApplicationParameters(
+      "FloppyBuilder",
+      TOOL_VERSION_MAJOR,
+      TOOL_VERSION_MINOR,
+      "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+      "\r\n"
+      "Author:\r\n"
+      "  (c) 2002 Debrune Jerome for the initial version \r\n"
+      "  (c) 2015 Pointier Mickael for the subsequent changes \r\n"
+      "\r\n"
+      "Purpose:\r\n"
+      "  Generating bootable floppies for the Oric computer.\r\n"
+      "\r\n"
+      "Usage:\r\n"
+      "  {ApplicationName} <init|build|extract> <description file path>\r\n"
+      "\r\n"
+      );
+
+    FloppyBuilder floppyBuilder(argc,argv);
+    return floppyBuilder.Main();
+  }
+
+  catch (std::exception& e)
+  {
+    ShowError("Exception thrown: %s",e.what());
+  }
+}
+
+
+
+int FloppyBuilder::Main()
+{
 
   // makedisk filetobuild.txt default.dsk ..\build\%OSDKDISK%
 
   long param=1;
 
-  if (argc>1)
+  if (m_argc>1)
   {
     for (;;)
     {
-      long nb_arg=argc;
+      long nb_arg=m_argc;
       //const char *ptr_arg=argv[param];
 
-      if (nb_arg==argc)   break;
+      if (nb_arg==m_argc)   break;
     }
   }
 
 
-  if (argc!=3)
+  if (m_argc!=3)
   {
     ShowError(nullptr);
   }
@@ -137,18 +170,18 @@ int main(int argc, char *argv[])
   Floppy floppy;
 
   bool extract=false;
-  if (!strcmp(argv[param],"init"))
+  if (!strcmp(m_argv[param],"init"))
   {
     floppy.AllowMissingFiles(true);
   }
   else
-  if (!strcmp(argv[param],"extract"))
+  if (!strcmp(m_argv[param],"extract"))
   {
     floppy.AllowMissingFiles(true);
     extract=true;
   }
   else
-  if (!strcmp(argv[param],"build"))
+  if (!strcmp(m_argv[param],"build"))
   {
     floppy.AllowMissingFiles(false);
   }
@@ -162,7 +195,7 @@ int main(int argc, char *argv[])
   //
   // Open the description file
   //
-  const char* description_name(argv[param]);
+  const char* description_name(m_argv[param]);
   std::vector<std::string> script;
   if (!LoadText(description_name,script))
   {
@@ -477,4 +510,5 @@ int main(int argc, char *argv[])
       printf("Successfully created '%s'\n",targetFloppyDiskName.c_str());
     }
   }
+  return 0;
 }
