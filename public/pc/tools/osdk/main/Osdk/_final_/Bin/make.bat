@@ -282,7 +282,7 @@ IF "%OSDKDISK%"=="" GOTO EndBuildDisk
 IF "%OSDKFILE%"=="" GOTO EndBuildDisk
 
 ::%OSDK%\bin\DskTool.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
-%OSDK%\bin\tap2dsk.exe %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm.exe build\%OSDKNAME%.DSK
 
 :EndBuildDisk
