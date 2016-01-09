@@ -46,6 +46,7 @@
 #include <lib.h>
 
 #include "floppy_description.h"
+#include "loader_api.h"
 
 extern void HandleRasters(unsigned int counter,unsigned char xposition);
 extern void UpdateRasters(unsigned char xposition,unsigned char WhatToShow);
@@ -84,14 +85,6 @@ extern void InitializeTables();
 // sprites.s
 void PreshiftSprite();
 
-// loader_api.s
-extern unsigned char LoaderApiEntryIndex;
-extern unsigned char LoaderApiAddressLow;
-extern unsigned char LoaderApiAddressHigh;
-extern void* LoaderApiAddress;
-
-extern void SetLoadAddress();
-extern void LoadFile();
 
 
 int EffectCounter=0;
@@ -324,10 +317,7 @@ void BounceTriangle(unsigned int duration)
 	unsigned char angle;
 
 	// Load the three logos
-	LoaderApiEntryIndex=LOADER_TRIANGLE_LOGOS;
-	LoaderApiAddress=LogoBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_TRIANGLE_LOGOS,LogoBuffer);
 
 	//DisplayLogoSize=50+RegisterChanBVolume;
 	angle=0;
@@ -369,10 +359,7 @@ void TriangleSequence(unsigned char finalLogo)
 
 	// Load the kindergarden logo on the top of the screen in the buffer
 	// Load the three logos
-	LoaderApiEntryIndex=LOADER_TRIANGLE_LOGOS;
-	LoaderApiAddress=LogoBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_TRIANGLE_LOGOS,LogoBuffer);
 
 	FadeToBlackBetweenRasters();
 	ShowRasters();
@@ -957,8 +944,7 @@ void main()
 	InitializeTables();
 
 	// Load the 6x8 font
-	LoaderApiEntryIndex=LOADER_FONT_6x8_ARTDECO;
-	LoadFile();
+	LoadFile(LOADER_FONT_6x8_ARTDECO);
 
 	// Start the calendar
 	InstallCalendarDecount();
@@ -968,18 +954,14 @@ void main()
 
 #ifdef ENABLE_MUSIC
 	// Load and play the music
-	LoaderApiEntryIndex=LOADER_INTRO_MUSIC;
-	LoadFile();
+	LoadFile(LOADER_INTRO_MUSIC);
 	Mym_MusicStart();
 #endif
 
 
 #ifdef ENABLE_MAIN_DEFENCE_FORCE_LOGO
 	// Load the defence force logo
-	LoaderApiEntryIndex=LOADER_DEFENCEFORCE_LOGO;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_DEFENCEFORCE_LOGO,PictureLoadingBuffer);
 
 	WaitPosition(0,7,40);	// --------------------------------------------------------------------- Defence Force logo appears
 
@@ -1006,19 +988,13 @@ void main()
 #endif
 
 	// Load the 6x6 font
-	LoaderApiEntryIndex=LOADER_FONT_6x6;
-	LoaderApiAddress=Font6x6;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_FONT_6x6,Font6x6);
 
 	
 
 #ifdef ENABLE_KINDERGARDEN_LOGO
 	// Load the kindergarden logo on the top of the screen in the buffer
-	LoaderApiEntryIndex=LOADER_KINDERGARDEN_LOGO;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_KINDERGARDEN_LOGO,PictureLoadingBuffer);
 
 	Pause(50);
 
@@ -1029,10 +1005,7 @@ void main()
 
 #ifdef ENABLE_BIG_SCREEN_SEQUENCE
 	// Load the big screen picture
-	LoaderApiEntryIndex=LOADER_BIGSCREEN;
-	LoaderApiAddress=PictureLoadingBuffer;	//(unsigned char*)0xa000+40*55;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_BIGSCREEN,PictureLoadingBuffer);
 
 	WaitPosition(0,23,0);	// --------------------------------------------------------------------- Show the big screen
 
@@ -1042,16 +1015,10 @@ void main()
 	//Pause(50*5,(unsigned char*)0xa000+40*55,);
 
 	// Load the smallscreenpictures
-	LoaderApiEntryIndex=LOADER_SMALLSCREEN;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_SMALLSCREEN,PictureLoadingBuffer);
 
 	// Load the ultrasmallscreenpictures
-	LoaderApiEntryIndex=LOADER_SCREEN_60x50;
-	LoaderApiAddress=PictureLoadBuffer60x50;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_SCREEN_60x50,PictureLoadBuffer60x50);
 
 	WaitPosition(0,25,0);	// --------------------------------------------------------------------- Oldskool compo starts NOW! (LARGE)
 	EraseScreen120(0,100,0);
@@ -1126,10 +1093,7 @@ void main()
 	ShowPicture(StartScreen120x100+40*27,PictureLoadingBuffer+20*397,71,20,EFFECT_FROM_TOP_TO_BOTTOM);
 
 	// Load the kindergarden party outside
-	LoaderApiEntryIndex=LOADER_REAL_PARTY;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_REAL_PARTY,PictureLoadingBuffer);
 
 // 1.07
 // 1.09
@@ -1157,26 +1121,17 @@ void main()
 		unsigned char* smokeAnimation;
 
 		// Load the kindergarden party outside
-		LoaderApiEntryIndex=LOADER_PARTY_OUTSIDE;
-		LoaderApiAddress=PictureLoadingBuffer;	//(unsigned char*)0xa000+40*55;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LOADER_PARTY_OUTSIDE,PictureLoadingBuffer);
 		FadeToBlackBetweenRasters();
 		memcpy((unsigned char*)0xa000+40*55,PictureLoadingBuffer,40*142);
 
 		// Load the flame animation
 		flameAnimation=PictureLoadingBuffer;
-		LoaderApiEntryIndex=LOADER_FLAME_ANIM;
-		LoaderApiAddress=flameAnimation;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LOADER_FLAME_ANIM,flameAnimation);
 
 		// Load the smoke animation
 		smokeAnimation=flameAnimation+30*3*5;
-		LoaderApiEntryIndex=LOADER_SMOKE_ANIM;
-		LoaderApiAddress=smokeAnimation;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LOADER_SMOKE_ANIM,smokeAnimation);
 
 
 		EffectCounter=0;
@@ -1260,10 +1215,7 @@ void main()
 		unsigned char x;
 
 		// Load the credits
-		LoaderApiEntryIndex=LOADER_CREDITS;
-		LoaderApiAddress=PictureLoadingBuffer;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LOADER_CREDITS,PictureLoadingBuffer);
 
 		//Pause(50);
 
@@ -1321,10 +1273,7 @@ void main()
 		unsigned char yy;
 
 		// Load the badestamp picture
-		LoaderApiEntryIndex=LOADER_BADESTAMP;
-		LoaderApiAddress=PictureLoadingBuffer;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LOADER_BADESTAMP,PictureLoadingBuffer);
 		FadeToBlackBetweenRasters();
 		DrawBadeStampRasters(PictureLoadingBuffer,1);
 		memcpy((unsigned char*)0xa000+40*55,PictureLoadingBuffer,40*142);
@@ -1366,10 +1315,7 @@ void main()
 #endif
 
 	// Preload the cake picture
-	LoaderApiEntryIndex=LOADER_BIRTHDAY;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_BIRTHDAY,PictureLoadingBuffer);
 	PatchAttributesBirthdayCake();			// Hide the PictConv helper codes
 
 #ifdef ENABLE_AMIGA_RASTERS
@@ -1383,17 +1329,11 @@ void main()
 	memcpy((void*)0xa000,PictureLoadingBuffer,8000);
 
 	// Load the title screen
-	LoaderApiEntryIndex=LOADER_TITLE_SCREEN;
-	LoaderApiAddress=PictureLoadingBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_TITLE_SCREEN,PictureLoadingBuffer);
 
 #ifdef ENABLE_CAKE_FLAMES
 	// Load the flame animation
-	LoaderApiEntryIndex=LOADER_FLAME_ANIM;
-	LoaderApiAddress=PictureLoadBuffer60x50;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_FLAME_ANIM,PictureLoadBuffer60x50);
 
 	// Erase the countdown
 	memset((unsigned char*)0xbb80+25*40,32,20);

@@ -8,6 +8,11 @@ setlocal
 IF "%OSDK%"=="" GOTO ErCfg
 
 ::
+:: Build assets
+::
+call osdk_makedata.bat
+
+::
 :: Set the build paremeters
 ::
 CALL osdk_config.bat

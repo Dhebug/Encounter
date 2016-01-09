@@ -40,6 +40,6 @@ SET PARAMS=-f2 -h1 -s1
 
 %YM2MYM% "data\Decade Reset.ym" build\files\DecadeReset.ym
 
-pause
+::pause
 
 
