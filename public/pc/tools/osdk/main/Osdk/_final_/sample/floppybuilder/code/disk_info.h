@@ -4,6 +4,8 @@
 #define location_loader 		$fd00		; Need to match the information set in loader.asm
 #define loader_track_position 	0			; Location of the loader on the disk (track number)
 #define loader_sector_position 	4			; Location of the loader on the disk (sector number)
+#define loader_zp_start         $80         ; Location of the first zero page address used during the loading
+#define loader_sector_buffer    $200        ; Location of the 256 bytes buffer used to load the sectors
 
 #define wait_status_floppy 30
 

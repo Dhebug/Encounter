@@ -9,10 +9,10 @@
 #ifdef LOADER
 FileStartSector .byt 4,7,9,10,13,2,9
 FileStartTrack .byt 0,0,0,0,0,1,1
-FileStoredSizeLow .byt <768,<266,<39,<556,<1536,<1602,<1619
-FileStoredSizeHigh .byt >768,>266,>39,>556,>1536,>1602,>1619
-FileSizeLow .byt <768,<486,<39,<760,<1536,<8000,<8000
-FileSizeHigh .byt >768,>486,>39,>760,>1536,>8000,>8000
+FileStoredSizeLow .byt <768,<262,<38,<556,<1536,<1602,<1619
+FileStoredSizeHigh .byt >768,>262,>38,>556,>1536,>1602,>1619
+FileSizeLow .byt <768,<485,<38,<760,<1536,<8000,<8000
+FileSizeHigh .byt >768,>485,>38,>760,>1536,>8000,>8000
 FileLoadAdressLow .byt <64768,<49152,<49152,<39168,<0,<40960,<40960
 FileLoadAdressHigh .byt >64768,>49152,>49152,>39168,>0,>40960,>40960
 #endif // LOADER
@@ -35,9 +35,9 @@ FileLoadAdressHigh .byt >64768,>49152,>49152,>39168,>0,>40960,>40960
 // Entry #0 '..\build\files\loader.o'
 // - Loads at address 64768 starts on track 0 sector 4 and is 3 sectors long (768 bytes).
 // Entry #1 '..\build\files\FirstProgram.o'
-// - Loads at address 49152 starts on track 0 sector 7 and is 2 sectors long (266 compressed bytes: 54% of 486 bytes).
+// - Loads at address 49152 starts on track 0 sector 7 and is 2 sectors long (262 compressed bytes: 54% of 485 bytes).
 // Entry #2 '..\build\files\SecondProgram.o'
-// - Loads at address 49152 starts on track 0 sector 9 and is 1 sectors long (39 bytes).
+// - Loads at address 49152 starts on track 0 sector 9 and is 1 sectors long (38 bytes).
 // Entry #3 '..\build\files\Font6x8.hir'
 // - Loads at address 39168 starts on track 0 sector 10 and is 3 sectors long (556 compressed bytes: 73% of 760 bytes).
 // Entry #4 'Reserved sectors'

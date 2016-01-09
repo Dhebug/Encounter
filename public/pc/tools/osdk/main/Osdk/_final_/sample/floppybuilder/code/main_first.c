@@ -6,7 +6,7 @@
 
 #include <lib.h>
 
-#include "file_loader.h"
+#include "loader_api.h"
 
 void main()
 {
