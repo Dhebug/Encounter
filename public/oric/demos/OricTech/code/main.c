@@ -7,6 +7,7 @@
 
 #include "defines.h"
 #include "floppy_description.h"
+#include "loader_api.h"
 #include "script.h"
 
 #ifdef OSDKNAME_intro
@@ -60,16 +61,6 @@ extern char SampleSoundMusicNonStop[];
 extern char SampleSoundTechnoPop[];
 extern char SampleSoundChimeStart[];
 extern char SampleSoundChimeEnd[];
-
-// loader_api.s
-extern unsigned char LoaderApiEntryIndex;
-extern unsigned char LoaderApiAddressLow;
-extern unsigned char LoaderApiAddressHigh;
-extern char* LoaderApiAddress;
-
-extern void SetLoadAddress();
-extern void LoadFile();
-
 
 
 #ifdef OSDKNAME_intro
@@ -313,41 +304,23 @@ void main()
 
 
 	// Load the cloud picture
-	LoaderApiEntryIndex=LOADER_CLOUD;
-	LoaderApiAddress=CloudPicture;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_CLOUD,CloudPicture);
 
 	// Load the rain drop picture
-	LoaderApiEntryIndex=LOADER_RAINDROP;
-	LoaderApiAddress=RainDropPicture;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_RAINDROP,RainDropPicture);
 
 	// Load the VIP scroll stuff
-	LoaderApiEntryIndex=LOADER_VIP_LOGO;
-	LoaderApiAddress=VipLogoPicture;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_VIP_LOGO,VipLogoPicture);
 
 	// Load the Long Scroller
-	LoaderApiEntryIndex=LOADER_LONG_SCROLLER;
-	LoaderApiAddress=LongScrollerPicture;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_LONG_SCROLLER,LongScrollerPicture);
 
 	// Load the sound warning picture
-	LoaderApiEntryIndex=LOADER_SOUND_WARNING;
-	LoaderApiAddress=SoundWarningPicture;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_SOUND_WARNING,SoundWarningPicture);
 
 #ifdef ENABLE_MUSIC	
 	// Load and play the music
-	LoaderApiEntryIndex=LOADER_INTRO_MUSIC;
-	LoaderApiAddress=MusicData;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_INTRO_MUSIC,MusicData);
 	Mym_MusicStart();
 #endif
 

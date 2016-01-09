@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "script.h"
 #include "floppy_description.h"
+#include "loader_api.h"
 
 	.zero
 
@@ -66,14 +67,10 @@ loop_clear_inner
 
 	// Load files
 	// Load the 6x8 font
-	ldx #LOADER_FONT_6x8
-	jsr _LoadFileRegister
+	LoadFile(LOADER_FONT_6x8)
 
 	// Load the VIP scroll stuff (HAS TO BE BEFORE _BufferCharset30x40)
-	ldx #LOADER_VIP_SCROLL
-	lda #<_BufferCharset
-	ldy #>_BufferCharset
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_VIP_SCROLL,_BufferCharset)
 
 	// Copy the 96*8=768 bytes of charset data while adding an attribute neutral value bit to avoid glitches in case of screen conflict
 	ldx #0
@@ -91,10 +88,7 @@ loop_copy_std_charset
 	bne loop_copy_std_charset
 
 	// Load the BIG scroll stuff (HAS TO BE BEFORE _BufferInverseVideo)
-	ldx #LOADER_FONT_30x40
-	lda #<_BufferCharset30x40
-	ldy #>_BufferCharset30x40
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_FONT_30x40,_BufferCharset30x40)
 
 	// Copy the 15*8=768 bytes of charset data while adding an attribute neutral value bit to avoid glitches in case of screen conflict
 	ldx #127
@@ -108,10 +102,7 @@ loop_copy_alt_charset
 	//
 	// Load the 36x128 overlay file (#define LOADER_OVERLAY_SIZE 5376)
 	//
-	ldx #LOADER_OVERLAY;
-	lda #<_BufferInverseVideo
-	ldy #>_BufferInverseVideo
-	jsr _LoadFileAtAddressRegister   // <-- memory overwrite at the moment, need to fix that
+	LoadFileAt(LOADER_OVERLAY,_BufferInverseVideo) // <-- memory overwrite at the moment, need to fix that
 
 	// Filter the content of the buffer to only have zeroes and 128 values
 	// 36*128=4608 bytes = 18*256
@@ -153,46 +144,25 @@ update_value
 	sta _OverlayLineInc
 
 	// Load the sample sound
-	ldx #LOADER_SAMPLE_BOOMTSCHACK;
-	lda #<_SampleSound
-	ldy #>_SampleSound
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_BOOMTSCHACK,_SampleSound)
 
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_DEFENCE;
-	lda #<_SampleSoundDefence
-	ldy #>_SampleSoundDefence
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_DEFENCE,_SampleSoundDefence)
 
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_FORCE;
-	lda #<_SampleSoundForce
-	ldy #>_SampleSoundForce
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_FORCE,_SampleSoundForce)
 	
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_MUSIC_NON_STOP;
-	lda #<_SampleSoundMusicNonStop
-	ldy #>_SampleSoundMusicNonStop
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_MUSIC_NON_STOP,_SampleSoundMusicNonStop)
 
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_TECHNO_POP;
-	lda #<_SampleSoundTechnoPop
-	ldy #>_SampleSoundTechnoPop
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_TECHNO_POP,_SampleSoundTechnoPop)
 
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_CHIME_START;
-	lda #<_SampleSoundChimeStart
-	ldy #>_SampleSoundChimeStart
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_CHIME_START,_SampleSoundChimeStart)
 
 	// Load the second sample sound
-	ldx #LOADER_SAMPLE_CHIME_END;
-	lda #<_SampleSoundChimeEnd
-	ldy #>_SampleSoundChimeEnd
-	jsr _LoadFileAtAddressRegister
+	LoadFileAt(LOADER_SAMPLE_CHIME_END,_SampleSoundChimeEnd)
 
 	// Initialize the various elements of the big text scroller
 	jsr _BigScrollerInit
