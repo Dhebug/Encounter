@@ -6,7 +6,7 @@
 
 	.zero
 	
-	*=$00
+	*=loader_zp_start
 	
 retry_counter		.dsb 1		; Number of attempts at loading data (ie: not quite clear what happens when this fails...)
 sectors_to_go		.dsb 1		; How many sectors do we still need to load for this file
@@ -140,9 +140,9 @@ read_sectors_loop
 
 	ldy #0
 loop_copy
-	lda $200,y 			; Load the byte from page 2
+	lda loader_sector_buffer,y 			; Load the byte from the sector buffer
 __auto_write_address
-	sta $c000,y 		; Store it to the final location
+	sta $c000,y 						; Store it to the final location
 	iny
 	bne loop_copy
 
@@ -314,7 +314,7 @@ microdisc_read_data
     bmi microdisc_read_data
 
 	lda FDC_data,y
-	sta $200,x 		; Store the byte in page 2
+	sta loader_sector_buffer,x 		; Store the byte in sector buffer
 	inx
 
 	bne microdisc_read_data

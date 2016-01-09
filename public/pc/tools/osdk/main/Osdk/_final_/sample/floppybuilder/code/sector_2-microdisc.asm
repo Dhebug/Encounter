@@ -72,7 +72,7 @@ copy_loop
 	lda ($00),y  
 	sta FINAL_ADRESS,y
 	iny
-	cpy _END_-_BEGIN_
+	cpy #(_END_-_BEGIN_)
 	bne copy_loop
 	
 	jmp FINAL_ADRESS
