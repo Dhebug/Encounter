@@ -13,7 +13,7 @@
 extern unsigned char LoaderApiEntryIndex;
 extern unsigned char LoaderApiAddressLow;
 extern unsigned char LoaderApiAddressHigh;
-extern char* LoaderApiAddress;
+extern void* LoaderApiAddress;
 
 extern void SetLoadAddress();
 extern void LoadFile();
