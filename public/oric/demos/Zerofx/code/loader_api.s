@@ -2,11 +2,6 @@
 ; Small code to implement the loading of data while a program is running.
 ; What it does is to call the loader module, it abstracts the actual loader implementation 
 ;
-
-	.zero
-
-
-
 	.text
 
 _LoaderApiEntryIndex	.byt 0
@@ -15,27 +10,22 @@ _LoaderApiAddress
 _LoaderApiAddressLow	.byt 0
 _LoaderApiAddressHigh	.byt 0
 
-
-_LoadFile
-	; Draw the 'Loading Data message'
-	;ldx #126
-	;stx $bb80+40*26+39
-	;inx
-	;stx $bb80+40*27+39
+_LoaderApiLoadFile
 	ldx _LoaderApiEntryIndex
-	jsr $fff7					; _LoadFile
+_LoaderApiLoadFileRegister	
+	jmp $fff7					; _LoadFile
 
-	; Erase the 'Loading Data message'
-	;ldx #16
-	;stx $bb80+40*26+39
-	;stx $bb80+40*27+39
-	rts
-
-_SetLoadAddress
+_LoaderApiSetLoadAddress
 	lda _LoaderApiAddressLow
 	ldy _LoaderApiAddressHigh
 	ldx _LoaderApiEntryIndex
+_LoaderApiSetLoadAddressRegister	
 	jmp $fff4					; SetLoadAddress
 
 
-
+; x: file index
+; a: Low part of address
+; y: High part of address
+_LoaderApiLoadFileAtAddressRegister
+	jsr $fff4					; SetLoadAddress
+	jmp $fff7					; _LoadFile
