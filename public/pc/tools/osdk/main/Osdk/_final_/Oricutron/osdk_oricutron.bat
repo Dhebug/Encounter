@@ -16,7 +16,8 @@ SET OSDKORICUTRON=oricutron.exe
 
 :: - Tape or Disk based
 IF     "%OSDKDISK%"=="" SET OSDKORICUTRON=%OSDKORICUTRON% -t OSDK.TAP -s symbols
-IF NOT "%OSDKDISK%"=="" SET OSDKORICUTRON=%OSDKORICUTRON% -d OSDK.DSK -s symbols
+IF NOT "%OSDKDISK%"=="" SET OSDKORICUTRON=%OSDKORICUTRON% -d OSDK.DSK -s symbols 
+::-k jasmin
 
 
 ::

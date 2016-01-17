@@ -73,6 +73,17 @@ By default the output name will be 'go.s':
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
+<p id=dateentry>Version 0.64</p>
+ - Fixed the age old problem if includes from assembler sources leading to Unresolved External errors<br>
+
+<p id=dateentry>Version 0.63</p>
+Fixed a number of issues in the linker:<br>
+- (WIP) The old linked filtered out comments, need to implement this feature as well<br>
+- removed some test code<br>
+- fixed the loading of symbols from the library index  file<br>
+- Fixed a problem of text file parsings. Mixed unix/dos cariage return would result in very long lines (containing many lines), leading to some crashes later on.<br>
+- Also fixed a problem in reporting the parsed files.<br>
+
 <p id=dateentry>Version 0.059</p>
  - Corrected a bug that made it impossible to "link" only one source file<br>
 
