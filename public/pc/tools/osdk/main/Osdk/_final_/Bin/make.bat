@@ -43,13 +43,12 @@ SET OSDKCOMP=-O2
 
 SET OSDKB=%OSDK%\BIN
 SET OSDKT=%OSDK%\TMP
-
+SET OSDKLINKLIST=
 SET TMP=%OSDKT%
 SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-
 
 ::
 :: Create a build directory if it does not exist
@@ -123,7 +122,7 @@ DEL BUILD\%OSDKPACK%.* >NUL
 ::ECHO *=%OSDKADDR% >%OSDKT%\adress.tmp
 ::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %1 %2 %3 %4 %5 %6 %7 %8 %9 >%OSDKT%\link.bat
 ::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.ss -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
-ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
+::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
 
 
 ::
@@ -172,7 +171,7 @@ IF "%OSDKBRIEF%"=="" ECHO   - convert C to assembly code
 IF "%OSDKBRIEF%"=="" ECHO   - cleanup output
 ::%OSDKB%\tr < %OSDKT%\%1.s > %OSDKT%\%1
 %OSDKB%\macrosplitter.exe %OSDKT%\%1.s %OSDKT%\%1
-
+SET OSDKLINKLIST=%OSDKLINKLIST% %OSDKT%\%1
 SHIFT
 GOTO FileLoop
 
@@ -190,7 +189,8 @@ IF "%OSDKBRIEF%"=="" ECHO Assembling %1.S
 XCOPY /Y /T %1.S %OSDKT%\
 
 :: Copy the file
-COPY %1.S %OSDKT%\%1 /Y >NUL
+COPY %1.S %OSDKT%\%1.s /Y >NUL
+SET OSDKLINKLIST=%OSDKLINKLIST% %1.s
 SHIFT
 GOTO FileLoop
 
@@ -224,7 +224,16 @@ IF ERRORLEVEL 1 GOTO ErFailure
 GOTO End
 
 :Link
+::
+:: Create a BATCH file that will be used
+:: to later link all the part of the program
+::
 ECHO Linking
+::ECHO %OSDKLINKLIST%
+cd 
+ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -f -q %OSDKLINKLIST% >%OSDKT%\link.bat
+::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
+::pause
 CALL %OSDKT%\link.bat
 IF ERRORLEVEL 1 GOTO ErFailure
 ::ECHO Optimising size
@@ -233,10 +242,10 @@ IF ERRORLEVEL 1 GOTO ErFailure
 
 ::
 :: Assemble the big file
-::
+:: (-W -C are meant to disallow the 65816 and 65c02 instructions)
 ::%OSDKB%\xa.exe %OSDKT%\linked.s -o final.out -e xaerr.txt -l xalbl.txt
 ECHO Assembling
-%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA -DOSDKNAME_%OSDKNAME%
+%OSDKB%\xa.exe -W -C %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA -DOSDKNAME_%OSDKNAME%
 IF NOT EXIST "build\final.out" GOTO ErFailure
 
 

@@ -17,10 +17,18 @@
 
 		<h1>Version history</h1>
 
+<p id=dateentry>Version 1.8 - January 17th 2016</p>
+	<ul>
+		<li>The build script is now correctly setting up XA: If you use 65816 or 65c02 instructions they will be refused with an error message</li>
+		<li>Upgraded <A href="doc_linker.htm">Link65</A> to the version 0.64 (fixed a bunch of problems with include files and external symbols)</li>
+		<li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 0.19 (Better error handling).</li>
+        <li>Improved the FloppyBuilder sample program with a new API file to make it easier to use</li>
+	</ul>
+
 <p id=dateentry>Version 1.7 - January 7th 2016</p>
 	<ul>
 		<li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to the version 0.23 (Two new options for the Atari ST monochrome mode, -f2 and -s1)</li>
-		<li>Upgraded FloppyBuilder to version 0.18 (Added a 'ReserveSectors' command that can be used to leave room on the disk for save games or stuff like that).</li>
+		<li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 0.18 (Added a 'ReserveSectors' command that can be used to leave room on the disk for save games or stuff like that).</li>
 		<li>Added a FloppyBuilder sample program</li>
 		<li>The OSDK is now going through the Coverity analyzer (https://scan.coverity.com/projects/osdk - a number of small issues have been corrected, but as all code changes that can lead to bugs)</li>
 	</ul>
@@ -28,7 +36,7 @@
 <p id=dateentry>Version 1.6 - May 31th 2015</p>
 	<ul>
 		<li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to the version 0.22 (Fixed the -o0/-o1 documentation error, and made the -f5 charmap mode actually work)</li>
-		<li>Upgraded FloppyBuilder to version 0.17 (data can now be extracted from an existing DSK file, parser and macro expansion improvements).</li>
+		<li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 0.17 (data can now be extracted from an existing DSK file, parser and macro expansion improvements).</li>
         <li>Upgraded <A href="doc_ym2mym.htm">Ym2Mym</A> to the version 1.6 (music can now be truncated and faded out)</li>
 		<li>Disabled the verbose messages displayed by old2mfm.</li>
 	</ul>
@@ -66,7 +74,7 @@
 
 <p id=dateentry>Version 1.0 - February the 23rd 2014</p>
 	<ul>
-		<li>Added FloppyBuilder 0.15 - A new tool to generate bootable floppies with full access to overlay memory.</li>
+		<li>Added <A href="doc_floppybuilder.htm">FloppyBuilder</A> 0.15 - A new tool to generate bootable floppies with full access to overlay memory.</li>
 		<li>Added Ym2Mym 1.4 - A new tool to convert Atari ST and Amstrad musics to a format suitable for the Oric.</li>
 		<li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to the version 0.19 (New 'img2oric/libpipi' algorithm)</li>
         <li>Plus quite many internal changes (linux compatibility, bug fixes, ...) which should not impact the end user of the SDK</li>
