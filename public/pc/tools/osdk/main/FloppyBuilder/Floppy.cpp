@@ -420,38 +420,37 @@ unsigned int Floppy::GetDskImageOffset()
 // 0x0319 -> 793
 bool Floppy::WriteSector(const char *fileName)
 {
-  if (!m_Buffer)
+  if (!m_AllowMissingFiles)
   {
-    return false;
-  }
-
-  std::string filteredFileName(StringTrim(fileName," \t\f\v\n\r"));
-
-  void*      buffer;
-  size_t     bufferSize;
-
-  if (LoadFile(filteredFileName.c_str(),buffer,bufferSize))
-  {
-    if (bufferSize>256)
+    if (!m_Buffer)
     {
-      ShowError("File for sector is too large. %d bytes (%d too many)",bufferSize,bufferSize-256);
+      return false;
     }
 
-    unsigned int sectorOffset=GetDskImageOffset();
-    if (m_BufferSize>sectorOffset+256)
-    {
-      memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
-    }
-    MarkCurrentSectorUsed();
-    printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)(256-bufferSize));
+    std::string filteredFileName(StringTrim(fileName," \t\f\v\n\r"));
 
-    MoveToNextSector();
-    free(buffer);
-  }
-  else
-  {
-    m_AllFilesAreResolved=false;
-    if (!m_AllowMissingFiles)
+    void*      buffer;
+    size_t     bufferSize;
+
+    if (LoadFile(filteredFileName.c_str(),buffer,bufferSize))
+    {
+      if (bufferSize>256)
+      {
+        ShowError("File '%s' is too large and will not fit in a sector (%d bytes are %d too many).",filteredFileName.c_str(),bufferSize,bufferSize-256);
+      }
+
+      unsigned int sectorOffset=GetDskImageOffset();
+      if (m_BufferSize>sectorOffset+256)
+      {
+        memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
+      }
+      MarkCurrentSectorUsed();
+      printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)(256-bufferSize));
+
+      MoveToNextSector();
+      free(buffer);
+    }
+    else
     {
       ShowError("Boot Sector file '%s' not found",filteredFileName.c_str());
     }
