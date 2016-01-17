@@ -58,7 +58,11 @@ this makes it possible to do a multi-pass build process which will not fail beca
 0.18 - 2015/08/15
 - Added a 'ReserveSectors' command that can be used to leave room on the disk for save games or stuff like that.
 
+0.19 - 2016/01/10
+- Improved some error message to make them more useful when a problem happens.
+- Made it possible to use the system without having to delete the build folder if for some reason the size of a sector file got too large.
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	18
+#define TOOL_VERSION_MINOR	19
