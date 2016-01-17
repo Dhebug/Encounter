@@ -1,4 +1,5 @@
 
+#define ENABLE_MUSIC
 
 #include "script.h"
 
