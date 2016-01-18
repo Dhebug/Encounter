@@ -3,7 +3,7 @@
 //
 #include <lib.h>
 
-#include "floppy_description.h"
+#include "loader_api.h"
 
 // irq.s
 extern void System_InstallIRQ_SimpleVbl();
@@ -36,14 +36,6 @@ extern unsigned char FontBuffer[];
 extern void ScrollerInit();
 extern void TestScroller();
 
-// loader_api.s
-extern unsigned char LoaderApiEntryIndex;
-extern unsigned char LoaderApiAddressLow;
-extern unsigned char LoaderApiAddressHigh;
-extern void* LoaderApiAddress;
-
-extern void SetLoadAddress();
-extern void LoadFile();
 
 void Pause(int delay)
 {
@@ -63,12 +55,12 @@ void Pause(int delay)
 unsigned char CurrentMusic=0;
 unsigned char CurrentPicture=0;
 unsigned int PictureDelay=0;
+unsigned char pictureIndex=0;
 
 void RetroIntro()
 {
 	// Load and play the music
-	LoaderApiEntryIndex=LOADER_INTRO_MUSIC;		// BeBop music
-	LoadFile();
+	LoadFile(LOADER_INTRO_MUSIC);                      // BeBop music
 	/*
 	MusicLength=50*3;		// 3 seconds
 	MusicLength=50*30;		// 3 seconds
@@ -79,11 +71,9 @@ void RetroIntro()
 	*/
 	Mym_MusicStart();
 
-	for (LoaderApiEntryIndex=LOADER_FIRST_INTRO_PICTURE;LoaderApiEntryIndex<LOADER_LAST_INTRO_PICTURE;LoaderApiEntryIndex++)
+	for (pictureIndex=LOADER_FIRST_INTRO_PICTURE;pictureIndex<LOADER_LAST_INTRO_PICTURE;pictureIndex++)
 	{
-		LoaderApiAddress=PictureLoadBuffer;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(pictureIndex,PictureLoadBuffer);
 
 		PictureTransitionUnroll();
 
@@ -104,14 +94,10 @@ void main()
 	memset((unsigned char*)0x9900,0,0xbfe0-0x9900);	
 
 	// Load the 6x8 font
-	LoaderApiEntryIndex=LOADER_FONT_6x8_ARTDECO;
-	LoadFile();
+	LoadFile(LOADER_FONT_6x8_ARTDECO);
 
     // Load the 12x16 font
-	LoaderApiEntryIndex=LOADER_FONT_12x16_ARTDECO;	// 3040 bytes
-	LoaderApiAddress=FontBuffer;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_FONT_12x16_ARTDECO,FontBuffer);    // 3040 bytes
 
 	// Some basic inits
 	InitTransitionData();
@@ -135,8 +121,7 @@ void main()
 			{
 				CurrentMusic=LOADER_FIRST_MUSIC;
 			}
-			LoaderApiEntryIndex=CurrentMusic++;
-			LoadFile();
+			LoadFile(CurrentMusic++);
 			Mym_MusicStop();
 			Mym_MusicStart();
 		}
@@ -150,10 +135,7 @@ void main()
 				{
 					CurrentPicture=LOADER_FIRST_PICTURE;
 				}
-				LoaderApiEntryIndex=CurrentPicture++;			
-				LoaderApiAddress=PictureLoadBuffer;
-				SetLoadAddress();
-				LoadFile();
+				LoadFileAt(CurrentPicture++,PictureLoadBuffer);
 
 				PictureDoTransition();
 
