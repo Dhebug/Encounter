@@ -6,7 +6,7 @@
 #include <lib.h>
 
 #include "defines.h"
-#include "floppy_description.h"
+#include "loader_api.h"
 
 // irq.s
 extern void System_InstallIRQ_SimpleVbl();
@@ -39,14 +39,6 @@ extern unsigned char GameOver;
 
 extern unsigned char VisitedLocations[];
 
-// loader_api.s
-extern unsigned char LoaderApiEntryIndex;
-extern unsigned char LoaderApiAddressLow;
-extern unsigned char LoaderApiAddressHigh;
-extern char* LoaderApiAddress;
-
-extern void SetLoadAddress();
-extern void LoadFile();
 
 // messages.s
 extern char* PrintScreenPtr;
@@ -323,9 +315,7 @@ void ShowMockupUi()
 
 	// Picture at the center
 	//LoaderApiEntryIndex=OsloLocation;
-	LoaderApiAddress=BufferPicture1;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LoaderApiEntryIndex,BufferPicture1);
 
 	screen=(char*)0xa000+40*10;
 	picture=BufferPicture1;
@@ -535,10 +525,7 @@ void ShowTitleScreen()
 {
 	SwitchToHires();
 
-	LoaderApiEntryIndex=LOADER_TITLE_SCREEN;
-	LoaderApiAddress=BufferPicture1;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_TITLE_SCREEN,BufferPicture1);
 
 	InitTransitionDataBuffer1();
 	PictureTransitionUnroll();
@@ -569,31 +556,19 @@ void ShowAttractMode()
 	// Load all the pictures we need for the attract sequence
 	//
 #ifdef ENABLE_GAMEJAM_LOGO
-	LoaderApiEntryIndex=LOADER_GAMEJAM_LOGO;
-	LoaderApiAddress=BufferPicture1;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_GAMEJAM_LOGO,BufferPicture1);
 #endif		
 
 #ifdef ENABLE_FUNCOM_LOGO
-	LoaderApiEntryIndex=LOADER_FUNCOM_LOGO;
-	LoaderApiAddress=BufferPicture2;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_FUNCOM_LOGO,BufferPicture2);
 #endif	
 
 #ifdef ENABLE_VALP_ANIMATION	
-	LoaderApiEntryIndex=LOADER_VALP_OUTLINE;
-	LoaderApiAddress=BufferPicture3;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_VALP_OUTLINE,BufferPicture3);
 #endif		
 
 #ifdef ENABLE_STORY_PAGE
-	LoaderApiEntryIndex=LOADER_HOW_TO_PLAY;
-	LoaderApiAddress=BufferPicture4;
-	SetLoadAddress();
-	LoadFile();
+	LoadFileAt(LOADER_HOW_TO_PLAY,BufferPicture4);
 #endif		
 
 	// Erase the three bottom lines of text
@@ -705,9 +680,7 @@ void GameLoop()
 		{
 			LoaderApiEntryIndex=LOADER_ENDING_GIVEUP;			
 		}
-		LoaderApiAddress=BufferPicture1;
-		SetLoadAddress();
-		LoadFile();
+		LoadFileAt(LoaderApiEntryIndex,BufferPicture1);
 
 		InitTransitionDataBuffer1();
 		PictureTransitionUnroll();
@@ -785,8 +758,7 @@ void main()
 	InitializeTables();
 
 	// Load the 6x8 font
-	LoaderApiEntryIndex=LOADER_FONT_6x8;
-	LoadFile();
+	LoadFileAt(LOADER_FONT_6x8,0x9900);
 
 
 	GameLoop();
