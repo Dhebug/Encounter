@@ -54,6 +54,18 @@ public:
   FileEntry();
   ~FileEntry();
 
+  int GetSector() const
+  {
+    if (m_CompressionMode==e_CompressionFilepack)
+    {
+      return m_StartSector+128;
+    }
+    else
+    {
+      return m_StartSector;
+    }
+  }
+
 public:
   int             m_FloppyNumber;     // 0 for a single floppy program
   int             m_StartSide;        // 0 or 1
@@ -63,7 +75,6 @@ public:
   int             m_FinalFileSize;
   int             m_StoredFileSize;
   CompressionMode m_CompressionMode;
-  int             m_LoadAddress;
   std::string     m_FilePath;
   std::map<std::string,std::string> m_Metadata;
 };
@@ -83,7 +94,8 @@ public:
   bool SaveDescription(const char* fileName) const;
 
   bool WriteSector(const char *fileName);
-  bool WriteFile(const char *fileName,int loadAddress,bool removeHeaderIfPresent,const std::map<std::string,std::string>& metadata);
+  bool WriteLoader(const char *fileName,int loadAddress);
+  bool WriteFile(const char *fileName,bool removeHeaderIfPresent,const std::map<std::string,std::string>& metadata);
   bool WriteTapeFile(const char *fileName);
 
   bool ReserveSectors(int sectorCount,int fillValue,const std::map<std::string,std::string>& metadata);
@@ -91,6 +103,7 @@ public:
   bool ExtractFile(const char *fileName,int trackNumber,int sectorNumber,int sectorCount);
 
   bool AddDefine(std::string defineName,std::string defineValue);
+  bool AddDefine(std::string defineName,int defineValue);
 
   void SetCompressionMode(CompressionMode compressionMode)
   {
@@ -144,6 +157,10 @@ private:
   int         m_SideNumber;           // 2
   int         m_OffsetFirstSector;    // 156 (Location of the first byte of data of the first sector)
   int         m_InterSectorSpacing;   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
+
+  int         m_LoaderTrackPosition;
+  int         m_LoaderSectorPosition;
+  int         m_LoaderLoadAddress;
 
   int         m_CurrentTrack;
   int         m_CurrentSector;

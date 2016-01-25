@@ -62,7 +62,14 @@ this makes it possible to do a multi-pass build process which will not fail beca
 - Improved some error message to make them more useful when a problem happens.
 - Made it possible to use the system without having to delete the build folder if for some reason the size of a sector file got too large.
 
+1.0 - 2016/01/25
+- Added a 'FormatVersion' command to help handle the lack of backward compatibility
+- Added a 'WriteLoader' command to simplify the handling of loader specific parameters (the loader cannot be compressed, should not be in the directories, etc...)
+- Three new defines are automatically created: FLOPPY_LOADER_TRACK, FLOPPY_LOADER_SECTOR and FLOPPY_LOADER_ADDRESS. They are designed to be used by the boot sectors to help load the loader.
+- Added a new set of macro variables: {FileTrack}, {FileSector}, {FileSize} and {FileSizeCompressed}
+- It is now possible to use the -D switch on the command line parameters to add a number of defines to the list of defines exported to the header file.
+
 */
 
-#define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	19
+#define TOOL_VERSION_MAJOR	1
+#define TOOL_VERSION_MINOR	0

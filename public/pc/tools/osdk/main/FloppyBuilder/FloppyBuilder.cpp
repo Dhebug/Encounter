@@ -103,6 +103,7 @@ public:
 
 
 private:
+  std::string                         m_FormatVersion;
 };
 
 
@@ -127,7 +128,11 @@ int main(int argc, char *argv[])
       "  Generating bootable floppies for the Oric computer.\r\n"
       "\r\n"
       "Usage:\r\n"
-      "  {ApplicationName} <init|build|extract> <description file path>\r\n"
+      "  {ApplicationName} [switches] <init|build|extract> <description file path>\r\n"
+      "\r\n"
+      "Switches:\r\n"
+      " -Dname=value Add define\r\n"
+      "       -DTEST=23 \r\n"
       "\r\n"
       );
 
@@ -145,57 +150,58 @@ int main(int argc, char *argv[])
 
 int FloppyBuilder::Main()
 {
+  Floppy floppy;
 
-  // makedisk filetobuild.txt default.dsk ..\build\%OSDKDISK%
-
-  long param=1;
-
-  if (m_argc>1)
+  while (ProcessNextArgument())
   {
-    for (;;)
+    if (IsSwitch("-D"))
     {
-      long nb_arg=m_argc;
-      //const char *ptr_arg=argv[param];
-
-      if (nb_arg==m_argc)   break;
+      // One more define
+      std::string defineName=GetStringValue();
+      std::string defineValue;
+      std::size_t found = defineName.find("=");
+      if (found!=std::string::npos)
+      {
+        defineValue =defineName.substr(found+1);
+        defineName  =defineName.substr(0,found);
+      }
+      floppy.AddDefine(defineName,defineValue);
+      //printf("--------------> %s=%s\r\n",defineName.c_str(),defineValue.c_str());
     }
   }
 
-
-  if (m_argc!=3)
+  if (GetParameterCount()!=2)
   {
     ShowError(nullptr);
   }
 
-  Floppy floppy;
-
   bool extract=false;
-  if (!strcmp(m_argv[param],"init"))
+  const char* sequence=GetParameter(0);
+  if (!strcmp(sequence,"init"))
   {
     floppy.AllowMissingFiles(true);
   }
   else
-  if (!strcmp(m_argv[param],"extract"))
+  if (!strcmp(sequence,"extract"))
   {
     floppy.AllowMissingFiles(true);
     extract=true;
   }
   else
-  if (!strcmp(m_argv[param],"build"))
+  if (!strcmp(sequence,"build"))
   {
     floppy.AllowMissingFiles(false);
   }
   else
   {
-    ShowError("The first parameter should be either 'init' or 'build'.");
+    ShowError("The first parameter should be either 'init', 'build' or 'extract'.");
   }
-  param++;
 
 
   //
   // Open the description file
   //
-  const char* description_name(m_argv[param]);
+  const char* description_name(GetParameter(1));
   std::vector<std::string> script;
   if (!LoadText(description_name,script))
   {
@@ -259,235 +265,303 @@ int FloppyBuilder::Main()
     }
 
     if (!tokens.empty())
-    {
-      if (tokens[0]=="LoadDiskTemplate")
+    {      
+      if (tokens[0]=="FormatVersion")
       {
         if (tokens.size()==2)
         {
-          const std::string& templateFisk(tokens[1]);
-          if (!floppy.LoadDisk(templateFisk.c_str()))
+          m_FormatVersion=tokens[1];
+          // We found a version string, let's analyze what we can do with it.
+          char* end;
+          int majorVersion =std::strtoul(m_FormatVersion.c_str(),&end,10);
+          if (end && end[0]=='.')
           {
-            ShowError("Can't load '%s'\n",templateFisk.c_str());
+            ++end;
+            int minorVersion =std::strtoul(end,&end,10);
+            if ( (majorVersion>TOOL_VERSION_MAJOR) || ( (majorVersion==TOOL_VERSION_MAJOR) && (minorVersion>TOOL_VERSION_MINOR) ) )
+            {
+              ShowError("This is FloppyBuilder %u.%u, not able to handle the requested future FormatVersion %u.%u' \n",TOOL_VERSION_MAJOR,TOOL_VERSION_MINOR,majorVersion,minorVersion);
+            }
+            else
+            {
+              // This is at least a version equal to ours.
+              switch (majorVersion)
+              {
+              default:
+              case 0:
+                switch (minorVersion)
+                {
+                default:
+                case 19:  ShowError("AddFile does not have a size parameter anymore\n");
+                case 20:
+                  break;
+                }
+                break;
+              }
+            }
           }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'FormatVersion major.minor' \n",lineNumber);
+          }
+        }
+        else
+        {
+          ShowError("Syntax error line (%d), syntax is 'FormatVersion major.minor' \n",lineNumber);
+        }
+      }
+      else
+      {
+        if (m_FormatVersion.empty())
+        {
+          ShowError("A 'FormatVersion major.minor' instruction is required at the start of the script\n");
+        }
 
-        }
-        else
+        if (tokens[0]=="LoadDiskTemplate")
         {
-          ShowError("Syntax error line (%d), syntax is 'LoadDiskTemplate FilePath' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="DefineDisk")
-      {
-        if (tokens.size()==4)
-        {
-          int numberOfSides   =std::atoi(tokens[1].c_str());
-          int numberOfTracks  =std::atoi(tokens[2].c_str());
-          int numberOfSectors =std::atoi(tokens[3].c_str());
+          if (tokens.size()==2)
+          {
+            const std::string& templateDisk(tokens[1]);
+            if (!floppy.LoadDisk(templateDisk.c_str()))
+            {
+              ShowError("Can't load '%s'\n",templateDisk.c_str());
+            }
 
-          if ( numberOfSides!=2 )
-          {
-            ShowError("Syntax error line (%d), numberOfSides has to be 2 (so far)\n",lineNumber);
           }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'LoadDiskTemplate FilePath' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="DefineDisk")
+        {
+          if (tokens.size()==4)
+          {
+            int numberOfSides   =std::atoi(tokens[1].c_str());
+            int numberOfTracks  =std::atoi(tokens[2].c_str());
+            int numberOfSectors =std::atoi(tokens[3].c_str());
 
-		  /*
-          if ( numberOfTracks!=42 )
-          {
-            ShowError("Syntax error line (%d), numberOfTracks has to be 42 (so far)\n",lineNumber);
-          }
-		  */
+            if ( numberOfSides!=2 )
+            {
+              ShowError("Syntax error line (%d), numberOfSides has to be 2 (so far)\n",lineNumber);
+            }
 
-	  if ( numberOfSectors!=17 )
-          {
-            ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
-          }
+		    /*
+            if ( numberOfTracks!=42 )
+            {
+              ShowError("Syntax error line (%d), numberOfTracks has to be 42 (so far)\n",lineNumber);
+            }
+		    */
 
-          if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors))
-          {
-            ShowError("Can't create the requested disk format\n");
-          }
+	    if ( numberOfSectors!=17 )
+            {
+              ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
+            }
 
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'DefineDisk numberOfSides numberOfTracks numberOfSectors' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="OutputLayoutFile")
-      {
-        if (tokens.size()==2)
-        {
-          outputLayoutFileName=tokens[1];
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'OutputLayoutFile FilePath' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="OutputFloppyFile")
-      {
-        if (tokens.size()==2)
-        {
-          targetFloppyDiskName=tokens[1];
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'targetFloppyDiskName FilePath' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="SetPosition")
-      {
-        if (tokens.size()==3)
-        {
-          int currentTrack =std::atoi(tokens[1].c_str());
-          if ( (currentTrack<0) || (currentTrack>41) )
-          {
-            ShowError("Syntax error line (%d), TrackNumber has to be between 0 and 41' \n",lineNumber);
+            if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors))
+            {
+              ShowError("Can't create the requested disk format\n");
+            }
+
           }
-          int currentSector=std::atoi(tokens[2].c_str());
-          if ( (currentSector<0) || (currentSector>41) )
+          else
           {
-            ShowError("Syntax error line (%d), SectorNumber has to be between 1 and 17' \n",lineNumber);
-          }
-          floppy.SetPosition(currentTrack,currentSector);
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'SetPosition TrackNumber SectorNumber' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="WriteSector")
-      {
-        if (tokens.size()==2)
-        {
-          std::string fileName=tokens[1];
-          if (!floppy.WriteSector(fileName.c_str()))
-          {
-            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            ShowError("Syntax error line (%d), syntax is 'DefineDisk numberOfSides numberOfTracks numberOfSectors' \n",lineNumber);
           }
         }
         else
+        if (tokens[0]=="OutputLayoutFile")
         {
-          ShowError("Syntax error line (%d), syntax is 'WriteSector FilePath' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="AddFile")
-      {
-        if (tokens.size()==3)
-        {
-          std::string fileName=tokens[1];
-          int loadAddress=ConvertAdress(tokens[2].c_str());
-          if (!floppy.WriteFile(fileName.c_str(),loadAddress,false,metadata))
+          if (tokens.size()==2)
           {
-            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            outputLayoutFileName=tokens[1];
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'OutputLayoutFile FilePath' \n",lineNumber);
           }
         }
         else
+        if (tokens[0]=="OutputFloppyFile")
         {
-          ShowError("Syntax error line (%d), syntax is 'AddFile FilePath LoadAddress' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="AddTapFile")
-      {
-        if (tokens.size()==2)
-        {
-          std::string fileName=tokens[1];
-          if (!floppy.WriteFile(fileName.c_str(),-1,true,metadata))
+          if (tokens.size()==2)
           {
-            ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            targetFloppyDiskName=tokens[1];
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'targetFloppyDiskName FilePath' \n",lineNumber);
           }
         }
         else
+        if (tokens[0]=="SetPosition")
         {
-          ShowError("Syntax error line (%d), syntax is 'AddTapFile FilePath' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="ReserveSectors")
-      {
-        if ( (tokens.size()==2) || (tokens.size()==3) )
-        {
-          int sectorCount=ConvertAdress(tokens[1].c_str());
-          int fillValue=0;
           if (tokens.size()==3)
           {
-            fillValue=ConvertAdress(tokens[2].c_str());
-          }
-          if (!floppy.ReserveSectors(sectorCount,fillValue,metadata))
-          {
-            ShowError("Error line (%d), could not reserve %u sectors on the disk. Make sure you have a valid floppy format declared. \n",lineNumber,sectorCount);
-          }
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'ReserveSectors SectorCount [FillValue]' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="SaveFile")
-      {
-        // ; SaveFile "File_0.bin"  $80 $01 $47  ; Name Track Sector Lenght adress
-        if (tokens.size()==5)
-        {
-          std::string fileName=tokens[1];
-          int trackNumber =ConvertAdress(tokens[2].c_str());
-          int sectorNumber=ConvertAdress(tokens[3].c_str());
-          int sectorCount =ConvertAdress(tokens[4].c_str());
-          if (!floppy.ExtractFile(fileName.c_str(),trackNumber,sectorNumber,sectorCount))
-          {
-            ShowError("Error line (%d), could not extract file '%s' from disk. Make sure you have a valid floppy format declared and some available disk space. \n",lineNumber,fileName.c_str());
-          }
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'ExtractFile FilePath TrackNumber SectorNumber SectorCount' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="AddDefine")
-      {
-        if (tokens.size()==3)
-        {
-          floppy.AddDefine(tokens[1],tokens[2]);
-        }
-        else
-        {
-          ShowError("Syntax error line (%d), syntax is 'AddDefine DefineName DefineValue' \n",lineNumber);
-        }
-      }
-      else
-      if (tokens[0]=="SetCompressionMode")
-      {
-        if (tokens.size()==2)
-        {
-          if (tokens[1]=="None")
-          {
-            floppy.SetCompressionMode(e_CompressionNone);
-          }
-          else
-          if (tokens[1]=="FilePack")
-          {
-            floppy.SetCompressionMode(e_CompressionFilepack);
+            int currentTrack =std::atoi(tokens[1].c_str());
+            if ( (currentTrack<0) || (currentTrack>41) )
+            {
+              ShowError("Syntax error line (%d), TrackNumber has to be between 0 and 41' \n",lineNumber);
+            }
+            int currentSector=std::atoi(tokens[2].c_str());
+            if ( (currentSector<0) || (currentSector>41) )
+            {
+              ShowError("Syntax error line (%d), SectorNumber has to be between 1 and 17' \n",lineNumber);
+            }
+            floppy.SetPosition(currentTrack,currentSector);
           }
           else
           {
-            ShowError("Syntax error line (%d), '%s' is not a valid compression mode, it should be either 'None' or 'FilePack' \n",lineNumber,tokens[1].c_str());
+            ShowError("Syntax error line (%d), syntax is 'SetPosition TrackNumber SectorNumber' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="WriteSector")
+        {
+          if (tokens.size()==2)
+          {
+            std::string fileName=tokens[1];
+            if (!floppy.WriteSector(fileName.c_str()))
+            {
+              ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'WriteSector FilePath' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="WriteLoader")
+        {
+          if (tokens.size()==3)
+          {
+            std::string fileName=tokens[1];
+            int loadAddress=ConvertAdress(tokens[2].c_str());
+            if (!floppy.WriteLoader(fileName.c_str(),loadAddress))
+            {
+              ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'WriteLoader FilePath LoadAddress' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="AddFile")
+        {
+          if (tokens.size()==2)
+          {
+            std::string fileName=tokens[1];
+            if (!floppy.WriteFile(fileName.c_str(),false,metadata))
+            {
+              ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'AddFile FilePath' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="AddTapFile")
+        {
+          if (tokens.size()==2)
+          {
+            std::string fileName=tokens[1];
+            if (!floppy.WriteFile(fileName.c_str(),true,metadata))
+            {
+              ShowError("Error line (%d), could not write file '%s' to disk. Make sure you have a valid floppy format declared. \n",lineNumber,fileName.c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'AddTapFile FilePath' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="ReserveSectors")
+        {
+          if ( (tokens.size()==2) || (tokens.size()==3) )
+          {
+            int sectorCount=ConvertAdress(tokens[1].c_str());
+            int fillValue=0;
+            if (tokens.size()==3)
+            {
+              fillValue=ConvertAdress(tokens[2].c_str());
+            }
+            if (!floppy.ReserveSectors(sectorCount,fillValue,metadata))
+            {
+              ShowError("Error line (%d), could not reserve %u sectors on the disk. Make sure you have a valid floppy format declared. \n",lineNumber,sectorCount);
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'ReserveSectors SectorCount [FillValue]' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="SaveFile")
+        {
+          // ; SaveFile "File_0.bin"  $80 $01 $47  ; Name Track Sector Lenght adress
+          if (tokens.size()==5)
+          {
+            std::string fileName=tokens[1];
+            int trackNumber =ConvertAdress(tokens[2].c_str());
+            int sectorNumber=ConvertAdress(tokens[3].c_str());
+            int sectorCount =ConvertAdress(tokens[4].c_str());
+            if (!floppy.ExtractFile(fileName.c_str(),trackNumber,sectorNumber,sectorCount))
+            {
+              ShowError("Error line (%d), could not extract file '%s' from disk. Make sure you have a valid floppy format declared and some available disk space. \n",lineNumber,fileName.c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'ExtractFile FilePath TrackNumber SectorNumber SectorCount' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="AddDefine")
+        {
+          if (tokens.size()==3)
+          {
+            floppy.AddDefine(tokens[1],tokens[2]);
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'AddDefine DefineName DefineValue' \n",lineNumber);
+          }
+        }
+        else
+        if (tokens[0]=="SetCompressionMode")
+        {
+          if (tokens.size()==2)
+          {
+            if (tokens[1]=="None")
+            {
+              floppy.SetCompressionMode(e_CompressionNone);
+            }
+            else
+            if (tokens[1]=="FilePack")
+            {
+              floppy.SetCompressionMode(e_CompressionFilepack);
+            }
+            else
+            {
+              ShowError("Syntax error line (%d), '%s' is not a valid compression mode, it should be either 'None' or 'FilePack' \n",lineNumber,tokens[1].c_str());
+            }
+          }
+          else
+          {
+            ShowError("Syntax error line (%d), syntax is 'SetCompressionMode [None|FilePack]' \n",lineNumber);
           }
         }
         else
         {
-          ShowError("Syntax error line (%d), syntax is 'SetCompressionMode [None|FilePack]' \n",lineNumber);
+          ShowError("Syntax error line (%d), unknown keyword '%s' \n",lineNumber,tokens[0].c_str());
         }
-      }
-      else
-      {
-        ShowError("Syntax error line (%d), unknown keyword '%s' \n",lineNumber,tokens[0].c_str());
       }
     }
   }
