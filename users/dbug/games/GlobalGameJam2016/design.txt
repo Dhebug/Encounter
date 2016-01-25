@@ -1,4 +1,4 @@
-GGJ Diversifiers
+﻿GGJ Diversifiers
 
 For those jammers looking to level up or jam on hardcore we have our GGJ16 Diversifiers!
 
@@ -38,6 +38,114 @@ Capture and Play - Bluetooth: Make a game with Bluetooth capabilities in which a
 * Not directly gameplay related:
 Do You Even Care? (sponsored by iThrive Games): Drawing from guidance materials from iThrive's subject matter experts, make a game that teaches empathy to teens. Guidance materials from iThrive's subject matter experts is available from: http://ithrivegames.com/iThrive%20G4H%20Materials.pdf
 Twitch Plays (sponsored by Twitch): Create a live streamed game intended to be played concurrently by the masses on Twitch.
+
+
+
+--------------------------------------------
+https://csdb.dk/forums/?roomid=11&topicid=26608&firstpost=30
+--------------------------------------------
+Ok guys, I finally tested the routine I did up there. Like said before, it only allows 14 bit input ($0000 to $41FF to be more accurate). The reason for this is that M needs one more bit. Ok, some people might want full 16 bit so here is a fixed routine which only has 3 opcodes more:
+
+        LDY #$00    ; R = 0
+        LDX #$07
+        CLC         ; clear bit 16 of M
+.loop
+        TYA
+        ORA stab-1,X
+        STA THI     ; (R ASL 8) | (D ASL 7)
+        LDA MHI
+        BCS .skip0  ; M >= 65536? then T <= M is always true
+        CMP THI
+        BCC .skip1  ; T <= M
+.skip0
+        SBC THI
+        STA MHI     ; M = M - T
+        TYA
+        ORA stab,x
+        TAY         ; R = R OR D
+.skip1
+        ASL MLO
+        ROL MHI     ; M = M ASL 1
+        DEX
+        BNE .loop
+
+        ; last iteration
+
+        BCS .skip2
+        STY THI
+        LDA MLO
+        CMP #$80
+        LDA MHI
+        SBC THI
+        BCC .skip3
+.skip2
+        INY         ; R = R OR D (D is 1 here)
+.skip3
+        RTS
+stab:   .BYTE $01,$02,$04,$08,$10,$20,$40,$80
+
+This routine works perfectly for all values from $0000 to $FFFF. It even works better than BASIC V2 math which for example fails at INT(SQR(X)) sometimes :)
+
+In fact, my small BASIC program which was supposed to test the assembler sqrt routine failed at value 26569. It returned 162 there although 163*163 = 26569, so it said that my asm routine had failed although it was the BASIC V2 math routines which had failed :D
+--------------------------------------------
+https://csdb.dk/forums/?roomid=11&topicid=26608&firstpost=18
+--------------------------------------------
+(part 4: finally some asm)
+
+Taking a slightly modified version of the last pseudo code:
+
+R = 0
+M = N
+D = 128
+for n = 7 to 0
+{
+    T = (R ASL 8) OR (D ASL 7)
+    if (T <= M) then M=M-T : R = R OR D
+    M = M ASL 1
+    D = D LSR 1
+}
+
+T can now be calculated quite easily. The high byte is simply R OR <some stuff> and the low byte is always 0 except for the last iteration where it is 128. The shifting of D is done via a table and voila, here is some 6510 code:
+
+        LDY #$00    ; R = 0
+        LDX #$07
+.loop
+        TYA
+        ORA stab-1,X
+        STA THI     ; (R ASL 8) | (D ASL 7)
+        LDA MHI
+        CMP THI
+        BCC .skip1  ; T <= M
+        SBC THI
+        STA MHI     ; M = M - T
+        TYA
+        ORA stab,x
+        TAY         ; R = R OR D
+.skip1
+        ASL MLO
+        ROL MHI     ; M = M ASL 1
+        DEX
+        BNE .loop
+
+        ; last iteration
+
+        STY THI
+        LDA MLO
+        CMP #$80
+        LDA MHI
+        SBC THI
+        BCC .skip2
+        INY         ; R = R OR D (D is 1 here)
+.skip2
+        RTS
+stab:   .BYTE $01,$02,$04,$08,$10,$20,$40,$80
+
+I hope I didn't make any mistakes in that routine :)
+
+Input is MLO/MHI for N and output is Y-register for int(sqrt(N)).
+
+(Anyone here who would have guessed that a routine like that calculates a square root?)
+--------------------------------------------
 
 
 
