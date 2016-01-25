@@ -1,0 +1,43 @@
+GGJ Diversifiers
+
+For those jammers looking to level up or jam on hardcore we have our GGJ16 Diversifiers!
+
+Whether you're looking to add to your personal challenges for Global Game Jam®, or find something to help your game stand out from the crowd, diversifiers are here to help. The diversifiers are a free-for-all voluntary list of secondary constraints, that the individual teams can choose to go for, or not, as they please.
+
+We are getting diversifiers translated into as many languages as possible and will be distributing translations via Site Organisers.
+
+The diversifiers for 2016 are:
+
+* Doable on the ORIC:
+Comic book colours: Your game uses only 4 colours, with an emphasis on contrast
+LEGO Got It Right: There are no spoken or written words in this game. This is even true in the instructions
+The Bard's Tale: 2016 is 400 years since the death of Shakespeare. Build a game around one of his works
+A local game for local people: Make a game that features your country, city, or people that jam around you
+Crowd sourced: Anyone who is watching it can play along!
+No retreat, no surrender: The protagonist is unable to go anywhere but forward, in every situation
+Take Control: Instead of the usual keyboard and console controllers, your game must use a custom controller
+Marco Polo: Create a game that contains no graphical output -- all information is conveyed to the player through audio
+Gandhi’s Game: This game must have zero violence in its game play. Conflicts must have resolutions based on logic
+One hand tied behind my back: Create a game that can be played with only one hand.
+Multijammer: Work cooperatively with other GGJ sites within your own timezone
+Story Mode: No cutscenes, textboxes or interruption of gameplay. Use player actions for all your storytelling 
+Infinite: Your world is procedurally generated
+Loudmouth: All audio assets are created by sounds from your mouth
+What was that?: Any sound featured must not be sourced from the object in the game making that sound
+Work and Play: The game requires the player to code/learn to code to progress
+Won’t somebody think of the children?: Your team must use the works from a child or children
+Common Ground: Make a co-op game playable by players who have very different levels of ability to each other
+
+* Hard to do without major hurdles on the ORIC:
+Where in the world is…: Gameplay or art changes depending on the player's geographical location (GPS, IP location, etc). The game experience is therefore significantly different for players all around the globe
+Companion screen: The game uses a mobile device as an additional screen to show a different mode or portion of the game
+
+* Impossible to do on the ORIC:
+Capture and Play - Bluetooth: Make a game with Bluetooth capabilities in which any bluetooth device near the PC that have the game would interact with something inside the game. (More items, more enemies, another challenger player, or instant co-op, etc)
+
+* Not directly gameplay related:
+Do You Even Care? (sponsored by iThrive Games): Drawing from guidance materials from iThrive's subject matter experts, make a game that teaches empathy to teens. Guidance materials from iThrive's subject matter experts is available from: http://ithrivegames.com/iThrive%20G4H%20Materials.pdf
+Twitch Plays (sponsored by Twitch): Create a live streamed game intended to be played concurrently by the masses on Twitch.
+
+
+
