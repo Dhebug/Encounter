@@ -5,5 +5,5 @@
 ::
 SET OSDKADDR=$c000
 SET OSDKNAME=game
-SET OSDKFILE=main utilities irq loader_api screen digiplayer transitions messages buffers
+SET OSDKFILE=main game utilities irq loader_api messages buffers
 SET OSDKDISK=

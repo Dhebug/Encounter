@@ -109,7 +109,12 @@ _InterruptCallBack_3		; Used by the music player
 ;	key_down=8,
 ;	key_fire= 16
 
-
+_WaitNoKeyPressed
+	lda _KeyboardState
+	bne _WaitNoKeyPressed
+	lda #0
+	sta _KeyboardStateMemorized
+	rts
 
 _ReadKeyboard
 	lda #00

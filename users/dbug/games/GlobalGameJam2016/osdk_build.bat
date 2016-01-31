@@ -18,7 +18,7 @@ call osdk_makedata.bat
 CALL osdk_config.bat
 
 :: Delete the floppy, just to be sure
-del build\GlobalGameJam2015.dsk
+del build\GlobalGameJam2016.dsk
 
 :: Create the folders we need
 md build

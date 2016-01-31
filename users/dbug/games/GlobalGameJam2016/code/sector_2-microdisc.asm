@@ -85,7 +85,7 @@ copy_loop
 	lda ($00),y  
 	sta FINAL_ADRESS,y
 	iny
-	cpy _END_-_BEGIN_
+	cpy #(_END_-_BEGIN_)
 	bne copy_loop
 	
 	jmp FINAL_ADRESS
@@ -102,6 +102,7 @@ _BEGIN_
 	;
 	; Switch to HIRES
 	;
+#if 1	
 	ldy #39 			; From $9900 to $c000 is 39 pages (9984 bytes)
 	lda #0
 loop_hires_outer	
@@ -117,7 +118,7 @@ __auto_hires
 
 	lda #30				; Write hires switch
 	sta $bfdf
-
+#endif
 
 	;
 	; Read sector data
