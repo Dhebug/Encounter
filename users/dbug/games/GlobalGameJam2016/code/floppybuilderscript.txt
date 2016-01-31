@@ -21,7 +21,7 @@ FormatVersion 0.20
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
 OutputLayoutFile floppy_description.h
-OutputFloppyFile ..\build\GlobalGameJam2015.dsk
+OutputFloppyFile ..\build\GlobalGameJam2016.dsk
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1
 ;AddDefine ENABLE_TIMING_DEBUGGING 1
@@ -72,6 +72,7 @@ AddDefine LOADER_FONT_6x8 {FileIndex}
 
 AddFile ..\build\files\Font6x6.hir
 AddDefine LOADER_FONT_6x6 {FileIndex}
+AddDefine LOADER_FONT_6x6_SIZE {FileSize}
 
 ;
 ; The pictures
@@ -79,74 +80,6 @@ AddDefine LOADER_FONT_6x6 {FileIndex}
 AddFile ..\build\files\GlobalGameJamOslo.hir		      ; The 240x200 Global Game Jam Oslo logo
 AddDefine LOADER_GAMEJAM_LOGO {FileIndex}
 
-AddFile ..\build\files\oslo_map.hir		              [description:Where do you want to go now?] [name:Map of Oslo]
-AddDefine LOADER_OSLO_MAP {FileIndex}
-
 AddFile ..\build\files\title_screen.hir
 AddDefine LOADER_TITLE_SCREEN {FileIndex}
-
-AddFile ..\build\files\ending_giveup.hir
-AddDefine LOADER_ENDING_GIVEUP {FileIndex}
-
-AddFile ..\build\files\ending_out_of_money.hir
-AddDefine LOADER_ENDING_OUT_OF_MONEY {FileIndex}
-
-AddFile ..\build\files\ending_out_of_time.hir
-AddDefine LOADER_ENDING_OUT_OF_TIME {FileIndex}
-
-AddFile ..\build\files\ending_victory.hir
-AddDefine LOADER_ENDING_VICTORY {FileIndex}
-
-AddFile ..\build\files\how_to_play.hir
-AddDefine LOADER_HOW_TO_PLAY {FileIndex}
-
-;
-; Locations, 174x180 pictures
-;
-AddFile ..\build\files\location_vigeland.hir    [description:The Vigeland Park is the worlds largestsculpture park made by a single artist one of Norway most popular attractions] [name:Vigeland Park]
-AddDefine LOADER_LOCATION_FIRST {FileIndex}
-AddDefine LOADER_LOCATION_VIGELAND {FileIndex}
-
-AddFile ..\build\files\location_opera.hir		  [description:The Opera is a weirdly shaped thing in the Oslo harbor] [name:Oslo Opera]
-AddDefine LOADER_LOCATION_OPERA {FileIndex}
-
-AddFile ..\build\files\location_holmenkolen.hir       		  [description:See the famous ski jump] [name:Holmenkolen]
-AddDefine LOADER_LOCATION_HOLMENKOLEN {FileIndex}
-
-AddFile ..\build\files\location_jernbanetorget.hir       		  [description:The Oslo train station is really the    city hub] [name:Oslo Sentralstajon]
-AddDefine LOADER_LOCATION_OSLOS {FileIndex}
-
-AddFile ..\build\files\location_akerbrygge.hir       		  [description:Boats, shopping malls, and expensive restaurants] [name:Aker Brygge]
-AddDefine LOADER_LOCATION_AKERBRYGGE {FileIndex}
-
-AddFile ..\build\files\location_kingscastle.hir       		  [description:Where the royal familly lives] [name:The Royal Palace]
-AddDefine LOADER_LOCATION_KINGCASTLE {FileIndex}
-
-AddFile ..\build\files\location_sognsvann.hir       		  [description:A nice lake, you can swim and take a walk] [name:Sognsvann]
-AddDefine LOADER_LOCATION_SOGNSVANN {FileIndex}
-
-AddFile ..\build\files\location_vikingship_museum.hir       		  [description:Hosts three nice viking ships] [name:Viking Ship Museum]
-AddDefine LOADER_LOCATION_VIKINGSHIP {FileIndex}
-
-AddFile ..\build\files\location_munch_museum.hir       		  [description:The Scream is there, among many other paintings] [name:Munch Museum]
-AddDefine LOADER_LOCATION_MUNCHMUSEUM {FileIndex}
-
-AddFile ..\build\files\location_ibsen_museum.hir       		  [description:Ibsen, famous Norwegian writter] [name:Ibsen Museum]
-AddDefine LOADER_LOCATION_IBSENMUSEUM {FileIndex}
-
-AddFile ..\build\files\location_norwegian_folk_museum.hir       		  [description:Many interesting things to see there,   including a beautiful stave church builtin the early 13th century] [name:Norwegian Folk Museum]
-AddDefine LOADER_LOCATION_NORWEGIANFOLK {FileIndex}
-
-AddFile ..\build\files\location_kon_tiki_museum.hir       		  [description:Learn about Thor Heyerdahl's expedition] [name:Kon-Tiki museum]
-AddDefine LOADER_LOCATION_KONTIKI {FileIndex}
-
-AddFile ..\build\files\location_akershus_fortress.hir       		  [description:The Oslo fortress, protecting from invaders comming by boat] [name:Akershus Fortress]
-AddDefine LOADER_LOCATION_AKERSHUS {FileIndex}
-
-AddFile ..\build\files\location_national_gallery.hir       		  [description:The other place where you can see the Scream. For free] [name:National Gallery]
-AddDefine LOADER_LOCATION_NATIONALGALLERY {FileIndex}
-
-AddFile ..\build\files\location_natural_history_museum.hir       		  [description:Dinosaurs and old stuff :)] [name:Natural History Museum]
-AddDefine LOADER_LOCATION_NATURALHISTORY {FileIndex}
-AddDefine LOADER_LOCATION_LAST {FileIndex}
 

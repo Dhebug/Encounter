@@ -73,14 +73,13 @@ _BufferPicture2		.dsb 8000
 _BufferPicture3		.dsb 8000
 _BufferPicture4		.dsb 8000
 
+_Font6x6			.dsb LOADER_FONT_6x6_SIZE  ;96*6	; 576 bytes
 
 	*=$9800+256
 
 _StdCharset	
 
-	*=$9c00
 
-_Font6x6			.dsb 96*6	; 576 bytes
 
 
 ;	*=$200
