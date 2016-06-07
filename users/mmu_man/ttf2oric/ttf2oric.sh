@@ -69,6 +69,9 @@ gen_bitmap()
 		esac
 		#echo "$i: '$c'"
 		#printf "%03i: %s %s\n" "$i" "$c" "$ec"
+		echo "fill '$BG' " >> $TMPSC
+		echo "rectangle 0,$(($i * 8)) 8,$(($i * 8 + 8)) " >> $TMPSC
+		echo "fill '$FG' " >> $TMPSC
 		echo "text $x,$y '$ec' " >> $TMPSC
 		#convert_args="$convert_args -draw 'text $x,$y $ec'"
 		#echo "$convert_args"
