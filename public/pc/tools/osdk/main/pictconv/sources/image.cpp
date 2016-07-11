@@ -330,6 +330,13 @@ bool ImageContainer::ReduceColorDepth(const AtariClut* pClut)
     }
   }
 
+  if (FreeImage_GetBPP(m_pBitmap) != 24) 
+  {
+    FIBITMAP *dib24 = FreeImage_ConvertTo24Bits(m_pBitmap);
+    FreeImage_Unload(m_pBitmap);
+    m_pBitmap=dib24;
+  }
+
   FIBITMAP *dib8  = FreeImage_ColorQuantizeEx(m_pBitmap,FIQ_NNQUANT,16,reservedPalette.size(),pReservedPalette);
   FIBITMAP *dib32 = FreeImage_ConvertTo32Bits(dib8);
   FreeImage_Unload(dib8);
