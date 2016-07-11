@@ -90,7 +90,10 @@ Version 0.23
 - Added the -f2 option to the Atari ST converter, with support for monochrome pictures
 - Added the -s1 option to generate two pictures that can be swapped each frame to generate more colors
 
+Version 0.24
+- Fixed a problem in the color reduction code failing on a 32bit source image
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	23
+#define TOOL_VERSION_MINOR	24

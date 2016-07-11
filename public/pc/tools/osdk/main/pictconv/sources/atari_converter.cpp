@@ -70,6 +70,7 @@ int AtariClut::convert_pixel_shifter(const RgbColor& rgb)
 void AtariClut::SetColor(const ShifterColor& color,int index)
 {
   assert(index<16);
+  assert(m_clut_index_to_color.size()==m_clut_color_to_index.size());
 
   m_clut_color_to_index[color]=index;
   m_clut_index_to_color[index]=color;
@@ -90,6 +91,7 @@ void AtariClut::Reorder(AtariClut& baseClut)
 {
 #if 1
   AtariClut newClut;
+  assert(m_clut_index_to_color.size()==m_clut_color_to_index.size());
 
   // Code that computes the error between colors and choose the closest one
   std::map<int,ShifterColor>::iterator it=baseClut.m_clut_index_to_color.begin();
@@ -158,10 +160,12 @@ void AtariClut::Reorder(AtariClut& baseClut)
     ++it;
   }
 #endif
+  assert(m_clut_index_to_color.size()==m_clut_color_to_index.size());
 }
 
 void AtariClut::SaveClut(long handle) const
 {
+  assert(m_clut_index_to_color.size()==m_clut_color_to_index.size());
   unsigned short clut[16];
   memset(clut,0,sizeof(clut));
 
@@ -185,6 +189,7 @@ void AtariClut::SaveClut(long handle) const
 
 void AtariClut::SaveClutAsText(std::string& text)  const
 {
+  assert(m_clut_index_to_color.size()==m_clut_color_to_index.size());
   unsigned short clut[16];
   memset(clut,0,sizeof(clut));
 
