@@ -1,0 +1,18 @@
+//#line "main.c" 100
+extern void DrawMap(void);
+//#line "main.c" 185
+extern void DisplayMousePos(void);
+//#line "main.c" 209
+extern void LoadLevel(void);
+//#line "main.c" 216
+extern void SaveLevel(void);
+//#line "main.c" 225
+extern void CreateMenu(void);
+//#line "main.c" 240
+extern void Fin(void);
+//#line "main.c" 261
+extern void Error(U8 *message,... );
+//#line "main.c" 335
+extern void BouclePrincipale(void);
+//#line "main.c" 437
+extern int main(S16 argc,U8 *argv[]);

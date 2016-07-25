@@ -1,0 +1,47 @@
+
+Here is a code sample often use in my C source:
+
+
+unsigned char	FlagDoorOpen=TRUE;
+
+    if (FlagDoorOpen)
+    {
+	....
+	....
+	....
+    }
+
+
+
+Here is the PCode equivalent after compilation with RCC16:
+
+	CZBW_DD(_FlagDoorOpen,tmp0)
+	EQ0W_D(tmp0,Lmain125)
+
+
+
+Here is the compiled code in full optimisation mode:
+
+	lda _FlagDoorOpen ;
+	sta tmp0 ;		! All these instructions
+	lda #0 ;		! are useless...
+	sta tmp0+1 ;		!
+	lda tmp0 ;		!
+	ora tmp0+1 ;		!
+	bne *+5 ;
+	jmp Lmain378 ;
+
+
+
+Here is the equivalent code:
+
+	lda _FlagDoorOpen;
+	bne *+5:
+	jmp Lmain378
+
+
+
+I think, I will rewrite all my code in 6502 myself !
+
+
+

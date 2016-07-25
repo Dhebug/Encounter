@@ -1,0 +1,44 @@
+//#line "convert.c" 55
+extern void Error(U8 *message,... );
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 49
+extern void CloseFileSystem(void);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 57
+extern void InitFileSystem(S32 max_files);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 65
+extern void OpenTextFile(char *file_name);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 106
+extern void CloseCurrentTextFile(void);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 139
+extern void ReadBuf(FILE_BUF *fichier,void *adresse,U32 nombre);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 184
+extern void SeekBuf(FILE_BUF *fichier,U32 nombre);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 274
+extern void OpenReadBuf(FILE_BUF *fichier,U8 *chaine,U32 buffer_size);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 292
+extern void CloseBuf(FILE_BUF *fichier);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 321
+extern void OpenWriteCount(FILE_COUNT *fichier,U8 *chaine);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 332
+extern void CloseCount(FILE_COUNT *fichier);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 339
+extern void WriteByte(FILE_COUNT *fichier,U8 *chaine,U8 valeur);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 346
+extern void WriteWord(FILE_COUNT *fichier,U8 *chaine,U16 valeur);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 354
+extern void WriteLong(FILE_COUNT *fichier,U8 *chaine,U32 valeur);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 362
+extern void WriteWordDecal(FILE_COUNT *fichier,U8 *chaine,U16 valeur);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 369
+extern void WriteLongDecal(FILE_COUNT *fichier,U8 *chaine,U32 valeur);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 379
+extern void WriteMult(FILE_COUNT *fichier,U8 *chaine,void *adresse,U32 nombre);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 389
+extern void PadWord(FILE_COUNT *fichier);
+//#line "F:\PROJET\TIME\TOOLS\FILES\FILES.C" 400
+extern void PadLong(FILE_COUNT *fichier);
+//#line "convert.c" 142
+extern void InitLog(void);
+//#line "convert.c" 163
+extern void MainLoop(void);
+//#line "convert.c" 255
+extern void main(S16 argc,U8 *argv[]);
