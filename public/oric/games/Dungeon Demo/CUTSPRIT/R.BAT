@@ -1,0 +1,1 @@
+cutsprit ..\pic\objects.pcx

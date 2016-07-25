@@ -1,0 +1,369 @@
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+Last modif: Mon  23/06/97 (16:14:23)
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+A chaque changement de niveau:
+Calculer les X/Y/Level ou on atteri
+M‚moriser les X/Y/Level de destination
+Sauver la carte courante
+Charger la nouvelle carte
+Repositionner au bon endroit X/Y/Level
+
+Note, trouver une solution pour les listes d'objets/monstres dans les niveaux. Il doivent rester au mˆme endroit
+lorsque l'on change de niveau, et ˆtre de retour lorsque l'on revient.
+La carte doit aussi indiquer une tableau de 16 valeurs indiquant le type de monstre dans chaque zone.
+
+Penser … mettre une liste de messages … afficher sur les murs.
+
+Penser … compacter les maps, pour gagner en temps de chargement/sauvegarde, et eviter les tricheurs qui patchent !
+Pour les interrupteurs, il faut g‚rer en XOR. Ca permet de cumuler plusieurs boutons.
+
+Si on se r‚serve 32 bits par case, ca donne une map de 4096 octet pour chaque niveau.
+
+On doit pouvoir utiliser les position 0/0/0 pour indiquer que l'on change de mode de jeu !
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Pour chaque case:
+* 16 bits: Extended Code/Displacement
+Type pour les 14 bits suivants: 	2 bits
+	00 -> Rien derriŠre !
+	01 -> Action (4 bits) sur un ‚l‚ment du niveau (10 bits)
+	10 -> T‚l‚portation des joueurs (Cod‚ sur 14 bits)
+	11 -> Extended Code
+Num‚ro du niveau: 16 niveaux		4 bits	 (Si c'est un t‚l‚porteur, nø du niveau de destination)
+Position dans le niveau: 32x32=1024	10bits	 (Si c'est un t‚l‚porteur ou un bouton)
+
+* 16 bits: Main Code/Action
+Num‚ro de zone pour les monstres (16)	4 bits	 (Un seul type de monstre par zone)
+Flag de FogOfWar pour la carte		1 bit	 (D‚ja visit‚/vu ou non)
+Flag indiquant si c'est traversable     1 bit    (Mur ou pas, porte ferm‚e/ouverte)
+Flag indiquant si c'est opaque ou non   1 bit    (porte ferm‚e/ouverte/cass‚e)
+Flag indiquant si c'est ON ou OFF       1 bit    (action‚ ou pas,lev‚/baiss‚)
+Flag indiquant si c'est actionnable     1 bit    (porte, bouton, levier)
+Flag indiquant si c'est auto-action     1 bit    (Quand on passe dessus, trappe qui s'ouvre/ferme)
+
+Total=10+4+4+1*8=26 bits, reste 32-26=6 bits libres
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+[?] = Valeur quelconque sans signification
+[-] = Valeur quelconque significative
+[0] =
+[1] =
+[l] = Num‚ro de niveau
+[x] = Coordonn‚e X
+[y] = Coordonn‚e Y
+
+
+   ÚÄÄÄÄÄÄNum‚ro de zone de monstres
+   ³
+   ³
+   ³
+   ³
+   ³		    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄOpaque ? (On peut voir derriŠre ou non ?) 0:Transparent 1:Opaque
+   ³		    ³ ÚÄÄÄÄÄÄÄÄÄÄÄÄEtat 0 ou 1 ?
+   ³		    ³ ³
+   ³		    ³ ³  ÚÄÄÄÄÄÄÄÄÄÄÄType d'action (00:Aucune 01:UserHand 10:Automatic 11:UserObject)
+   ³		    ³ ³  ³ ÚÄÄÄÄÄÄÄÄÄÄTraversable ?
+   ³		    ³ ³  ³ ³ ÚÄÄÄÄÄÄÄÄÄD‚ja visit‚ ?
+   ³		    ³ ³  ³ ³ ³
+   ³		    ³ ³  ³ ³ ³	  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄCode expliquant les deux suivants (00:Rien 01:Action dans le niveau 10:T‚l‚port 11:Extended code)
+   ³		    ³ ³  ³ ³ ³	  ³   ÚÄÄÄÄÄÄÄÄÄÄÄÄNum‚ro du niveau
+   ³		    ³ ³  ³ ³ ³	  ³   ³      ÚÄÄÄÄÄÄPosition dans le niveau
+   ³		    ³ ³  ³ ³ ³	  ³   ³      ³
+ÚÄÄÁÄÂÄÂÄÂÄÂÄ¿ ÚÄÂÄÂÁÂÁÂÄÁÂÁÂÁ¿ ÚÄÁÂÄÄÁÄÂÄÄÄÄÁÄÄÄÄÄ¿
+³0123³4³5³6³7³ ³0³1³2³3³45³6³7³ ³01³2345³6701234567³
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³-³00³1³-³ ³00³????³??????????³Sol
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³-³00³0³-³ ³00³????³??????????³Mur
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³0³01³0³-³ ³  ³	³	   ³Porte ferm‚e avec bouton
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³01³1³-³ ³  ³	³	   ³Porte ouverte avec bouton
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³0³11³0³-³ ³  ³	³	   ³Porte ferm‚e avec serrure
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³11³1³-³ ³  ³	³	   ³Porte ouverte avec serrure
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³0³00³0³-³ ³  ³	³	   ³Porte ferm‚e sans bouton
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³00³1³-³ ³  ³	³	   ³Porte ouverte sans bouton
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³10³1³-³ ³10³llll³yyyyyxxxxx³T‚l‚porteur actif
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³0³10³1³-³ ³10³llll³yyyyyxxxxx³T‚l‚porteur inactif
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³10³1³-³ ³  ³	³	   ³Trappe ouverte
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³0³10³1³-³ ³  ³	³	   ³Trappe ferm‚e
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³0³10³1³-³ ³01³	³	   ³Dalle au sol inactive
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³0³1³10³1³-³ ³01³	³	   ³Dalle au sol active
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³0³01³0³-³ ³  ³	³	   ³Bouton non actif
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³1³01³0³-³ ³  ³	³	   ³Bouton actif
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³0³01³0³-³ ³  ³0---³yyyyyxxxxx³Serrure/Fente … piece non utilis‚e
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³1³00³0³-³ ³  ³	³yyyyyxxxxx³Serrure/Fente … piece utilis‚e
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³1³1³10³1³-³ ³10³llll³yyyyyxxxxx³Escalier qui monte ou descend sur 1 ou plusieurs niveaux
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³ ³ ³  ³ ³-³ ³  ³	³	   ³
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³ ³ ³  ³ ³-³ ³  ³	³	   ³
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³ ³ ³  ³ ³-³ ³  ³	³	   ³
+ÃÄÄÄÄÅÄÅÄÅÄÅÄ´ ÃÄÅÄÅÄÅÄÅÄÄÅÄÅÄ´ ÃÄÄÅÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄ´
+³----³ ³ ³ ³ ³ ³ ³ ³ ³ ³  ³ ³-³ ³  ³	³	   ³
+ÀÄÄÄÄÁÄÁÄÁÄÁÄÙ ÀÄÁÄÁÄÁÄÁÄÄÁÄÁÄÙ ÀÄÄÁÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Types d'action possible:
+- Action espace (press‚ par le joueur)
+	Ouvrir/Fermer une porte (ou casser si avec arme)
+	Actionner un levier/bouton
+	Utilisation d'une clef ou d'un objet sp‚cial doit ˆtre d‚tect‚e
+
+- Action automatique (pass‚ sur la case)
+	Monter/Descendre un escalier
+	Tomber dans une trappe
+	T‚l‚portation
+	Ouverture/fermeture d'une porte
+	Ouverture/fermeture d'une trappe
+	Activation/D‚sactivation d'un bouton
+	Apparition/Disparition d'un mur
+	Lancement d'une fleche/boule de feu...
+
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Notes g‚n‚rales sur le fonctionnement:
+
+Un bouton doit pouvoir en (d‚s)activer un autre.
+Une serrure ne peut activer qu'un ‚l‚ment du niveau courant (Le code LEVEL sert de num‚ro de clef: 16 types diff‚rents de clef)
+Une serrure peut servir … mettre des pieces... Si le code serrure est [0,7], c'est une Clef, si c'est [8,15] C'est pour mettre des
+pieces.
+
+Un bouton peut agir sur n'importe quel niveau du jeu.
+
+ On doit pouvoir coder des messages -> Extended code
+
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Couleurs disponibles: NOIR ROUGE VERT BLEU JAUNE CYAN VIOLET BLANC
+
+Liste des clefs exemple:
+0	Clef de fer (blanche)
+1	Clef en or  (jaune)
+2	Clef de feu (rouge)
+3	Clef en platine (cyan)
+4	Clef en jade (verte)
+5	Clef ang‚lique (blanche)
+6	Clef infernale (rouge)
+7	Clef de vie (blanche)
+8	Clef de mort (blanche)
+
+Liste des pieces de monnaie:
+0	Petite fer (blanche)	Valeur: 1
+1	Grande Fer (blanche)	Valeur: 2
+2	Petite cuivre (rouge)	Valeur: 5
+3	Grande cuivre (rouge)	Valeur: 10
+4	Petite Or (jaune)	Valeur: 50
+5	Grande Or (jaune)	Valeur: 100
+6	Petite platine (cyan)	Valeur: 500
+7	Grande platine (cyan)	Valeur: 1000
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Styles graphiques de base:
+
+DONGEON:
+0	Sol
+1	Mur
+2	Porte en bois
+3	Grille en m‚tal
+
+
+VILLE:
+0	Rue
+1	Mur d'enceinte
+2	Toiture
+3	Fontaine
+4	Portail
+5	Personnage non joueur
+
+
+EXTERIEUR:
+0	Plaine
+1	Arbre
+2	Chemin
+3	Champs
+4	Rochers
+5	Falaises
+6	Ponts
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+Les Clefs et l'Or sont affect‚s … toute l'‚quipe. Pas dans l'inventaire individuel.
+La monnaie est convertie automatiquement et affich‚e sous la forme: o x12    O x3
+
+
+Un monstre ne peut pas sortir de son num‚ro de zone.
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Touches utilis‚es:
+- Up		Move forward
+- Down		Move backward
+- Left		Rotate left 90ø
+- Right 	Rotate right 90ø
+
+- Space Bar	Open the doors/Action buttons
+
+- CTRL Left	Move left
+- CTRL Right	Move right
+- CTRL Down	Rotate 180ø (demi-tour)
+
+- 1/2/3/4	Select the leader
+- CTRL 1	Swap Leader with 1st Hero
+- CTRL 2	Swap Leader with 2nd Hero
+- CTRL 3	Swap Leader with 3rd Hero
+- CTRL 4	Swap Leader with 4th Hero
+
+- P		Pause
+- H		Help
+- S		Sleep
+- ESC		Menu (Quitter/Charger/Sauver)
+- G		Get (Ramasse un objet sur le sol, et le met dans l'inventaire du Leader.)
+- L		Look (Regarder devant soit -> D‚tecte faux mur, passage secret, porte … casser.)
+
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Fichiers:
+- PAUSE.HIR	image si PAUSE
+- HELP.HIR	image si HELP
+- UP.HIR	image si monte au niveau sup‚rieur
+- DOWN.HIR	image si descend au niveau inf‚rieur
+- CAMP.HIR	image si SLEEP (l'‚quipe se repose)
+
+- LEVELxx.INI	niveau xx du jeu, non modifi‚. Lorsque l'on fait une nouvelle partie, tous les LEVELxx.INI sont copi‚s en LEVELxx.GAM
+- LEVELxx.GAM	niveau xx du jeu, pour le joueur.
+
+- HEROxx.INI	tous les heros du jeu, avec les caract‚ristiques de d‚part
+
+- HEROxx.GAM	tous les heros dans la partie actuelle
+
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+
+Carte m‚moire du jeu:
+
+
+   ADR	  SIZE	   NAME 			 REMARQUES
+ÚÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $FFFF ³	³			      ³
+³	³ 16384 ³ ROM ATMOS		      ³
+³ $C000 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $BFFF ³	³			      ³
+³	³    32 ³ --------------------------- ³ INUTILISABLE
+³ $BFE0 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $BFDF ³	³			      ³
+³	³    40 ³ Line 2 Text		      ³
+³ $BFB8 ³	³			      ³
+³	³    40 ³ Line 1 Text		      ³
+³ $BF90 ³	³			      ³
+³	³    40 ³ Line 0 Text		      ³
+³ $BF68 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $BF67 ³	³			      ³
+³	³    40 ³ --------------------------- ³ INUTILISABLE
+³ $BF40 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $BF3F ³	³			      ³
+³	³  8000 ³ HIRES SCREEN		      ³
+³ $A000 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $9FFF ³	³			      ³
+³	³  1024 ³ ALT CHAR SET		      ³ Zone d'‚change infos avec les diff‚rents morceaux du programme
+³ $9C00 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $9BFF ³	³			      ³
+³	³   768 ³ STD CHAR SET [32-127]       ³ Les 32 premiers caractŠres sont niqu‚s par la table de saut
+³ $9900 ³	³			      ³
+³	³   256 ³ TABLE DE SAUT SUR FONTE     ³ Permet d'afficher du texte en HIRES de fa‡on rapide !
+³ $9800 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $97FF ³	³			      ³
+³	³  4096 ³ Map of the level	      ³ Note, c'est allign‚ sur un multiple de 256
+³ $8800 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $87FF ³	³			      ³
+³	³  3900 ³ Display Buffer	      ³ Doit aussi pouvoir servir au chargement de 'DLL'... arf arf...
+³ $78C4 ³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $78C3 ³	³			      ³
+³	³ 29636 ³ USER RAM		      ³ Ce qui reste pour le programme
+³ $500	³	³			      ³
+ÃÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+³ $4FF	³	³			      ³
+³	³   256 ³ PAGE 4		      ³ Utilis‚e par SEDORIC
+³ $400	³	³			      ³
+³	³   256 ³ PAGE 3		      ³ I/O
+³ $300	³	³			      ³
+³	³   256 ³ PAGE 2		      ³ RUN TIME VARIABLES
+³ $200	³	³			      ³
+³	³   256 ³ PAGE 1		      ³ STACK
+³ $100	³	³			      ³
+³	³   256 ³ PAGE 0		      ³ ALLOCATED SYSTEM VARS
+³ $000	³	³			      ³
+ÀÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+
+Besoins en m‚moire:
+- 3900 octets de buffer d'affichage (30x130 octets)= Fenˆtre de 180x130 pixels
+- 4096 octets pour stocker la carte du niveau en m‚moire.
+
+
+
+Diff‚rents programmes n‚c‚ssaires:
+- Loader
+- Intro/Bumper (Pr‚sentation du jeu, de la boite de prod... arf arf...)
+- Credits (Qui a fait quoi, greetings...)
+- Game Over (Equipe morte)
+- Game Over (Jeu r‚ussi !)
+- StartGame -> Initialisation, Cr‚ation de l'‚quipe, Launch game.
+- Jeu dongeon en 3D
+- Jeu ext‚rieur en 2D
+- jeu ville en 2D
+- Magasins pour faire les achats:
+		Alchimiste-potions & magie.
+		Bazard-Cordes & Rations, Cartes des Niveaux.
+		Taverne-dormir & embaucher & ragots.
+		Armurier-Equipement & Entrainement.
+
+

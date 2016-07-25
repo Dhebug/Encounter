@@ -1,0 +1,83 @@
+
+
+Le dongeon doit ˆtre ‚quip‚ des choses suivantes:
+	- Plafond
+	- Sol
+	- Murs
+	- Portes
+	- Herses
+	- Trappes
+	- Dalles … pression
+	- Boutons (ronds ou carr‚s)
+	- Leviers
+	- Serrures
+	- Fentes pour des pieces
+	- Niches pour des objets
+	- Cases rotatives/mouvement/d‚placement
+	- T‚l‚porteurs
+	- Lanceurs de fireballs/sortileges
+	- Fontaines
+	- Objets divers sur les murs (crochets/inscriptions/...)
+
+
+
+
+
+Effets sp‚ciaux … pr‚voir:
+	- Rideau de t‚l‚portation
+	- Explosion de fireball/lightning/firebolt
+	- Nuage de poison
+
+
+
+
+
+Objets:
+    Armes:
+	- Ep‚e
+	- Sabre
+	- Fleuret
+	- Hache
+	- Lance
+	- Dague
+	- Shurikens
+	- Dards
+	- Arc/Fleche
+	- Fronde/Pierre
+	- Baton
+
+    Habillement/Protection:
+	- Bottes
+	- Chaussures
+	- Pantalon
+	- Robe
+	- Cape
+
+	- Casque
+	- Heaume
+	- Cotte de maille
+	- Armure de plaque
+	- Armure de cuir
+
+	- Bouclier en bois
+	- Ecu
+	- Bouclier en acier
+
+    Nourriture:
+	- Pain
+	- Pomme
+	- Steack
+	- Cuisse
+	- Ration
+
+    Divers:
+	- Fiole
+	- LockPicks
+	- Carte magique
+
+
+
+
+
+
+

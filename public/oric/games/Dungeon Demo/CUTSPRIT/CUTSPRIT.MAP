@@ -1,0 +1,521 @@
+WATCOM Linker Version 10.5
+Copyright by WATCOM International Corp. 1985, 1995. All rights reserved.
+Created on:       96/09/21 00:46:02
+Executable Image: cutsprit.exe
+creating a DOS/4G executable
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+DGROUP                          0002:00000000        00005840
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+BEGTEXT                CODE                          0001:00000000   00000010
+_TEXT                  CODE                          0001:00000010   00006b1c
+_NULL                  BEGDATA        DGROUP         0002:00000000   00000004
+_AFTERNULL             BEGDATA        DGROUP         0002:00000004   00000000
+CONST                  DATA           DGROUP         0002:00000004   0000084c
+CONST2                 DATA           DGROUP         0002:00000850   00000104
+_DATA                  DATA           DGROUP         0002:00000954   00000c65
+TIB                    DATA           DGROUP         0002:000015b9   00000000
+TI                     DATA           DGROUP         0002:000015b9   00000000
+TIE                    DATA           DGROUP         0002:000015b9   00000000
+XIB                    DATA           DGROUP         0002:000015ba   00000000
+XI                     DATA           DGROUP         0002:000015ba   0000001e
+XIE                    DATA           DGROUP         0002:000015d8   00000000
+YIB                    DATA           DGROUP         0002:000015d8   00000000
+YI                     DATA           DGROUP         0002:000015d8   0000000c
+YIE                    DATA           DGROUP         0002:000015e4   00000000
+DATA                   DATA           DGROUP         0002:000015e4   00000000
+_BSS                   BSS            DGROUP         0002:000015f0   000003d0
+STACK                  STACK          DGROUP         0002:000019c0   00003e80
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: CUTSPRIT.OBJ(D:\ORIC\DEV\SOURCES\DUNGEON\CUTSPRIT\cutsprit.c)
+0001:00000010+ Error
+0001:000002b4* CloseFileSystem
+0001:000002ec* InitFileSystem
+0001:00000348* OpenTextFile
+0001:000004c0* CloseCurrentTextFile
+0001:000004f8* ReadBuf
+0001:00000600* SeekBuf
+0001:000006c8* OpenReadBuf
+0001:00000788* CloseBuf
+0001:000007b4* OpenWriteCount
+0001:00000824* CloseCount
+0001:00000844* WriteByte
+0001:000008b0* WriteWord
+0001:00000960* WriteLong
+0001:00000a10* WriteWordDecal
+0001:00000a80* WriteLongDecal
+0001:00000aec* WriteMult
+0001:00000b5c* PadWord
+0001:00000bf0* PadLong
+0001:00000c84+ InitLog
+0001:00000d28+ MainLoop
+0001:00001060  main
+0002:000015f0+ FileSystemInfo
+0002:00001600+ NomFichierDest
+0002:00001690+ NomImage
+0002:00001720+ NomFichierTexture
+0002:000017b0+ FlagLori
+0002:000017b4+ FlagPalette
+0002:000017b8+ FlagPause
+0002:000017bc+ FlagInfos
+0002:000017c0+ SDir
+0002:00001842+ SExt
+0002:00001847+ SName
+0002:00001850+ SDrive
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(toupper)
+0001:000012d9* _toupper
+0001:000012e7  toupper
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(strcat)
+0001:000012f9  strcat
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(strlen)
+0001:0000132e  strlen
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(ltoa)
+0001:0000136c  ultoa
+0001:000013bc  ltoa
+0001:000013f1* _ltoa
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(printf)
+0001:0000140b  printf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(exit)
+0001:0000142e+ __null_int23_exit
+0001:0000142f  exit
+0001:00001449* _exit
+0002:00000954+ __atexit
+0002:00000958+ __int23_exit
+0002:0000095c+ __FPE_handler_exit
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(nfree)
+0001:0000145f  free
+0001:0000146d  _nfree
+0002:00001854+ __MiniHeapFreeRover
+Module: f:\projet\lib386\lib_sys4\dos_sys.lib(H:\PROJET\LIB386\LIB_SYS4\malloc.c)
+0001:000014f0+ Norm_DosMalloc
+0001:00001584* Norm_DosFree
+0001:000015ac  Norm_Malloc
+0001:00001604* Norm_SmartMalloc
+0001:00001628* Norm_Mshrink
+0002:00001860+ MemInfo
+Module: f:\projet\lib386\lib_sys4\dos_sys.lib(H:\PROJET\LIB386\lib_sys4\Files.c)
+0001:00001640  FileSize
+0001:00001678  OpenRead
+0001:00001698  OpenWrite
+0001:000016bc* OpenReadWrite
+0001:000016dc+ Copy
+0001:0000179c+ AddExt
+0001:000017f4* AddExtIfNot
+0001:00001854* GetFileName
+0001:0000188c* CopyBak
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(read)
+0001:000018e8  read
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(close)
+0001:000019f1  close
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(strcpy)
+0001:000019ff  strcpy
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(memcpy)
+0001:00001a24  memcpy
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(write)
+0001:00001a4d  write
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(InitSvga.ASM)
+0001:00001cc2* ClearVideo
+0001:00001cb1* InitMcga
+0002:00000968* Enable
+0002:000010ec* OldVideo
+0002:000010f1  Phys
+0002:000010f5  Screen_X
+0001:00001c24* InitSvga
+0002:000010f9  Screen_Y
+0002:000010fd  MemoLog
+0001:00001c7d* SimpleInitSvga
+0002:00000964  NewBank
+0002:000010ed  Log
+0002:00000960* InitSvgaMode
+0002:00001101  BankCurrent
+0002:0000096c  TabOffLine
+0001:00001c9b* ClearSvga
+0001:00001ca6* InitMcgaMode
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(clip.ASM)
+0001:00001cd0  SetClip
+0001:00001d6b* RestoreClip
+0002:00001110  ClipYmin
+0002:0000110c  ClipXmin
+0001:00001d42* MemoClip
+0001:00001d1f* UnSetClip
+0002:00001118  ClipYmax
+0002:00001114  ClipXmax
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(splitpat)
+0001:00001ddc  _splitpath
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(makepath)
+0001:00001ecb  _makepath
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(G:\PROJET\LIB386\LIB_SVG5\pcx.c)
+0002:0000189c+ ffblk
+0002:0000194c+ PtDest
+0002:00001950+ row
+0002:00001954+ col
+0002:00001958+ length
+0002:00001966+ end
+0002:00001968+ start_angle
+0002:0000196a+ level
+0002:0000196c+ done
+0002:0000196e+ cursor_x
+0002:00001970+ cursor_y
+0002:00001972+ column
+0002:00001974+ start_x
+0002:00001976+ start_y
+0002:00001978+ type
+0002:0000197a+ mode
+0002:0000197c+ key
+0002:0000197e+ srcoff
+0001:000020f0* line_out
+0001:00002130* next_char
+0001:0000217c  Load_Pcx
+0001:00002354* Save_Pcx
+0002:0000112c+ dir_index
+0002:0000112e+ index
+0002:00001130+ debugline
+0002:00001980+ xres
+0002:00001982+ destseg
+0002:00001984+ srcseg
+0002:00001986+ attr
+0002:00001988+ bank
+0002:0000198a+ i
+0002:0000198c+ j
+0002:0000198e+ k
+0002:00001990+ destoff
+0002:00001992+ yres
+0002:00001994+ active_bank
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(sprintf)
+0001:00002525  sprintf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fopen)
+0001:00002558+ __open_flags
+0001:0000271e+ _fsopen
+0001:00002767  fopen
+0001:000027e1* freopen
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fprintf)
+0001:00002836  fprintf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(set386)
+0001:00002860  memset
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fclose)
+0001:00002882  fclose
+0001:000028af  __shutdown_stream
+0001:000028e5+ __MkTmpFile
+0001:0000295a  __doclose
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(memicmp)
+0001:00002a01* _memicmp
+0001:00002a1b  memicmp
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(atoi)
+0001:00002a72  atoi
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(stricmp)
+0001:00002adf* strcmpi
+0001:00002adf* _stricmp
+0001:00002af4  stricmp
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(cstrt386)
+0001:00000003* ___begtext
+0002:00000000* __nullarea
+0002:000015b9* _start_TI
+0002:000015b9* _end_TI
+0002:00001134* __GDAptr
+0002:00001138* __D16Infoseg
+0002:0000113a  __x386_zero_base_selector
+0001:00002b40  _cstart_
+0001:00002dcf  __exit
+0001:00002dd2  __do_exit_with_msg__
+0001:00002e0c* __GETDS
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(argcv386)
+0002:0000113c  _argc
+0002:00001140  _argv
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(iob)
+0002:00001144  __iob
+0002:0000134c* __tmpfnext
+0002:0000134d  _fmode
+0002:00001998  __ClosedStreams
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fprtf)
+0001:00002e38  __fprtf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(nmalloc)
+0001:00002ec9  malloc
+0001:00002ed7  _nmalloc
+0002:00001358  __nheapbeg
+0002:0000135c  __MiniHeapRover
+0002:00001360  __LargestSizeB4MiniHeapRover
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(memalloc)
+0001:00002fcc  __MemAllocator
+0001:00003074  __MemFree
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(heapmod)
+0002:0000199c  __nheap_clean
+0002:0000199d  __fheap_clean
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(int386)
+0001:0000317f  int386
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(intx386)
+0001:000031ad  int386x
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(nexpand)
+0001:000031d0  _expand
+0001:000031e5+ __HeapManager_expand
+0001:00003390+ _nexpand
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(lseek)
+0001:00003420* _lseek
+0001:0000343a  lseek
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(open)
+0001:00003487  open
+0001:000034a9  sopen
+0001:00003696* __set_binary
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(iomode)
+0001:00003702  __IOMode
+0001:00003758  __SetIOMode
+0002:00001364+ __NFiles
+0002:00001368+ __init_mode
+0002:000013b8+ _iomode
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(seterrno)
+0001:0000376e* __set_EDOM
+0001:00003779* __set_ERANGE
+0001:0000377d* __set_EINVAL
+0001:0000378d  __set_errno
+0001:00003799+ __set_doserrno
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(dosret)
+0001:000037a0* _dosret0
+0001:000037ba+ _dosretax
+0001:000037d7  __set_errno_dos
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(_clse)
+0001:00003852  __close
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(stack386)
+0001:00003887  stackavail
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(stk386)
+0001:000038ab* __STK
+0001:00003898* __CHK
+0001:000038a8* __GRO
+0001:000038c9  __STKOVERFLOW
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(S_Phys.ASM)
+0002:000013fc* BankSize
+0002:00001400* BankOver
+0001:00003a76* CopyBlockPhys
+0001:00003d29* Flip
+0001:000038eb* CopyBlockPhysClip
+0002:00001405  BankShift
+0001:00003a7d* EnterCopyBlockPhys
+0002:00001404  NonStdVESA
+0002:000013f8  ScanLine
+0001:000038d8* Vsync
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(vesa.ASM)
+0001:00003df7  InitModeVesa
+0002:0000143a* VESA_Error
+0001:00003de4  NewBankVesa
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(mbncnt)
+0001:00003ec4  _mbsnccnt
+0001:00003f08  _mbsnbcnt
+0001:00003f45* _mbsninc
+0001:00003f6f* __mbsninc
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(mbscat)
+0001:00003fbc* _mbscat
+0001:0000400e* _mbscpy
+0001:0000402d* _mbsdup
+0001:0000407a* _mbsncat
+0001:000040ec* _mbsnbcat
+0001:000041df  _mbsncpy
+0001:00004207+ _mbsnbcpy
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(mbconv)
+0001:000042bc  _mbptov
+0001:000042fb* _mbvtop
+0001:00004319  __mbvtop
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(isdbcs)
+0002:00001440  __IsDBCS
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(mbtype)
+0002:00001444  __MBCSIsTable
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(mbsinc)
+0001:0000448f  _mbgetcode
+0001:00004500* _mbsnextc
+0001:00004553* _mbsinc
+0001:0000459a  _mbsdec
+Module: f:\projet\lib386\lib_svg5\dos_svga.lib(global.ASM)
+0002:00001548  ImageSizeX
+0002:0000154c  ImageSizeY
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(prtf)
+0001:00004628  __prtf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(tolower)
+0001:000051ff* _tolower
+0001:0000520d  tolower
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(allocfp)
+0001:0000521f  __allocfp
+0001:000052c2  __freefp
+0001:000052f9  __purgefp
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fseek)
+0001:0000535e  fseek
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(chktty)
+0001:000054b1  __chktty
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(stinit)
+0002:000019a4  __OpenStreams
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(__stos)
+0001:000054f0  __STOSB
+0001:00005527* __STOSD
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(gtpid)
+0001:00005593  getpid
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(flush)
+0001:00005599  __flush
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(ftell)
+0001:0000567b  ftell
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(remove)
+0001:000056af  remove
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(istable)
+0002:00000850  _IsTable
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(cmain386)
+0001:000056bd  __CMain
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(inirt386)
+0001:00005716  __InitRtns
+0001:00005761  __FiniRtns
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(seg386)
+0000:00001234  __DOSseg__
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(crwd386)
+0002:00001560  _psp
+0002:0000158b  _osmajor
+0002:0000158c  _osminor
+0002:00001582  _Extender
+0002:00001583  _ExtenderSubtype
+0002:00001584  __X32VM
+0002:00001564* __x386_stacklow
+0002:00001558  _LpCmdLine
+0002:0000155c  _LpPgmName
+0002:00001550  _dynend
+0002:00001554  _curbrk
+0002:00001564  _STACKLOW
+0002:00001568  _STACKTOP
+0002:0000156c  __ASTACKSIZ
+0002:00001570  __ASTACKPTR
+0002:00001574* _cbyte
+0002:00001578* _cbyte2
+0002:0000157c  _child
+0002:00001585  _Envptr
+0002:00001589  _Envseg
+0002:00001580  __no87
+0002:0000158d  __FPE_handler
+0002:0000158d  ___FPE_handler
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(initargv)
+0001:000057b1  __Init_Argv
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(fputc)
+0001:00005969  fputc
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(ioalloc)
+0001:00005a37  __ioalloc
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(grownear)
+0001:00005af8+ __FreeDPMIBlocks
+0001:00005b54* __ReAllocDPMIBlock
+0001:00005cfa+ __LastFree
+0001:00005ee9  __ExpandDGROUP
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(nmemneed)
+0001:000060c8  __nmemneed
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(segread)
+0001:000060cb  segread
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(intxa386)
+0001:000060f6  __int386x_
+0001:00006153  _DoINTR_
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(isatt)
+0001:000064d4  isatty
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(umaskval)
+0002:00001594  __umaskval
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(errno)
+0001:000064f9  __get_errno_ptr
+0001:000064ff  __get_doserrno_ptr
+0002:000019a8+ errno
+0002:000019ac+ _doserrno
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(xmsg)
+0001:00006505+ __exit_with_msg
+0001:00006512  __fatal_runtime_error
+Module: f:\projet\lib386\lib_sys4\dos_sys.lib(scminmax.ASM)
+0002:000015a4  ScreenYmax
+0002:000015a0  ScreenXmax
+0002:0000159c  ScreenYmin
+0002:00001598  ScreenXmin
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(strncat)
+0001:00006540  strncat
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(strncpy)
+0001:00006587  strncpy
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(intr)
+0001:000065b8  intr
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(inirmsel)
+0002:000019b0  _ExtenderRealModeSelector
+0002:000015de* __DPMI_real_mode_fini
+0002:000015d2* __DPMI_real_mode_init
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(itoa)
+0001:000066fe+ utoa
+0001:00006750* _itoa
+0001:0000676a  itoa
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(noefgfmt)
+0002:000015a8  __EFG_printf
+0002:000015ac* __EFG_scanf
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(tell)
+0001:000067af  tell
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(initfile)
+0001:000067c1  __InitFiles
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(ioexit)
+0001:00006836  __full_io_exit
+0001:00006845* fcloseall
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(qwrit)
+0001:000068b0  __qwrite
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(unlnk)
+0001:0000692e  unlink
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(cinit)
+0001:00006952  __CommonInit
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(___argc)
+0002:000019b4  ___Argc
+0002:000019b8  ___Argv
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(minreal)
+0002:000019bc  __minreal
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(heapen)
+0001:0000695d* _heapenable
+0002:000015b0  __heap_enabled
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(sbrk386)
+0001:0000696d* sbrk
+0001:00006a37  __brk
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(amblksiz)
+0002:000015b4  _amblksiz
+Module: C:\COMPIL\WATCOM\lib386\dos\clib3s.lib(enterdb)
+0001:00006b01  __EnterWVIDEO
+0002:000015b8+ __WD_Present
+
+
+                        +----------------------+
+                        |   Imported Symbols   |
+                        +----------------------+
+
+Symbol                              Module
+======                              ======
+
+
+
+                        +--------------------+
+                        |   Libraries Used   |
+                        +--------------------+
+
+f:\projet\lib386\lib_sys4\dos_sys.lib
+f:\projet\lib386\lib_svg5\dos_svga.lib
+C:\COMPIL\WATCOM\lib386\dos\clib3s.lib
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  3e80 (16000.)
+Memory size:  c36c (50028.)
+Entry point address: 0001:00002b40
+Link time: 00:05.60

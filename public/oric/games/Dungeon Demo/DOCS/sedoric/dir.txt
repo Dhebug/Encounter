@@ -1,0 +1,145 @@
+ 100 REM------------------------------
+ 110 REM			     '
+ 120 REM   Alphabetical sort of the  '
+ 130 REM       disc directory	     '
+ 140 REM			     '
+ 150 REM	    V1.1	     '
+ 160 REM			     '
+ 170 REM     AUTHOR:Fabrice BROCHE   '
+ 180 REM       16 September 1985     '
+ 190 REM			     '
+ 200 REM      `  Ripelle Software    '
+ 210 REM			     '
+ 220 REM  Translation:Allan Whitaker '
+ 230 REM  V1.1	  :   Allan Whitaker '
+ 240 REM	  :   Nov 1991	     '
+ 250 REM------------------------------
+ 260 REM
+ 270 PAPER 0:INK 7
+ 280 ERR SET:ERRGOTO  SubRoutineError1
+ 290 CLS:IF PEEK(#FFFE)=40 THEN D$=" "
+ 300 PRINT:PRINT TAB(8);"DIRECTORY SORT PROGRAM"
+ 310 PRINT:PRINT TAB(13);"VERSION 1.1"
+ 320 PRINT:PRINT"Enter the disc into the appropriate"
+ 330 PRINT"drive, then press the drive letter"
+ 340 PRINT"(e.g. A, B, C or D)"
+ 350 CR$=CHR$(13):ESC$=CHR$(27)
+GetKeyboardEntry
+     GET A$:IF A$=ESC$ THEN ERROR 50
+ 370 IF A$<"A" OR A$>"D" THEN  GetKeyboardEntry
+ 380 DRV$=A$:D=ASC(A$)-64
+ 390 KEY OFF
+ 400 PRINT:PRINT:PRINT"Initialising..."
+ 410 REM
+ 420 REM initialisation
+ 430 REM
+ 440 FOR I=0 TO 15:NU$=NU$+CHR$(0):NEXT
+ 450 NT=0:NS=0:SC$="":SD$="":BC$=""
+ 460 CP=20:CS=4
+ 470 DIM A$(256)
+ 480 REM --- Open drive in direct mode ---
+ 490 GOSUB SubRoutine1
+ 500 FIELD 1,PSTE TO O,SECTEUR TO O,
+ 510 FIELD 1,NOMBRE TO O,
+ 520 FIELD 1,NEUTRE TO $13,
+ 530 FOR I=0 TO 14
+ 540 FIELD 1,NOM (I) TO $16,
+ 550 NEXT
+ 560 REM
+ 570 REM reading filenames from disc
+ 580 REM
+
+ 590 PRINT:PRINT"Reading filenames in directory
+
+ 600 P=20:S=4
+ 610 TAKE 1,P,S
+ 620 NOMBRE > NB
+ 630 IF NB=0 THEN NB=15 ELSE NB=NB/16-1
+ 640 PSTE > P
+ 650 SECTEUR > S
+ 660 FOR I=0 TO NB-1
+ 670 NOM(I) > DE$
+ 680 A$(NT)=DE$:NT=NT+1
+ 690 NEXT
+ 700 NS=NS+1
+ 710 IF S<>0 THEN 610
+ 720 PRINT:PRINT"Number of files in directory ="NT
+ 730 PRINT"Number of directory sectors ="NS
+
+
+ 740 REM
+ 750 REM alpha sort
+ 760 REM
+ 770 PRINT:PRINT"Sorting alphabetically...":PRINT
+ 780 NT=NT-1
+ 790 EC=NT
+ 800 EC=INT(EC/2)
+ 810 IF EC<1 THEN 910
+ 820 J=0:K=NT-EC
+ 830 I=J
+ 840 M=I+EC
+ 850 IF A$(I) <= A$(M) THEN 890
+ 860 SWAP A$(M),A$(I)
+ 870 I=I-EC
+ 880 IF I>=0 THEN 840
+ 890 J=J+1
+ 900 IF J>K THEN 800 ELSE 830
+ 910 IF ST=0 THEN 960
+ 920 FOR I=NT TO 0 STEP-1
+ 930 A$(I+ST)=A$(I)
+ 940 NEXT
+ 950 NT=NT+ST:P=0
+ 960 FORI=0TONT STEP 2
+ 970 PRINTSPC(3)LEFT$(A$(I),12)SPC(8);
+ 980 PRINTLEFT$(A$(I+1),12)
+ 990 IF KEY$<>"" THEN GET A$
+ 1000 NEXT
+ 1010 REM
+ 1020 REM Save sorted directory
+ 1030 REM
+ 1040 KEY SET
+ 1050 PRINT:PRINT"Do you wish to save the sorted":PRINT"directory? (Y/N) ";
+ 1060 GET A$:IF A$=ESC$ THEN ERROR 50
+ 1070 IF A$="Y" THEN PRINT "yes.": GOTO 1080 ELSE PRINT " no.":GOTO 1280
+ 1080 KEY OFF
+ 1090 PRINT:PRINT:PRINT "The directory sectors are :":PRINT
+ 1100 P=CP:S=CS:N=0
+ 1110 TAKE 1,P,S
+ 1120 N1=0:BI=TRUE
+ 1130 FOR I=0 TO 14
+ 1140 V=N+I
+ 1150 IF A$(V)="" THEN A$(V)=NU$:BI=FALSE:GOTO 1170
+ 1160 N1=N1+1
+ 1170 LSET NOM(I) < A$(V)
+ 1180 NEXT
+ 1190 N=N+15
+ 1200 IF N1=15 THEN N1=0 ELSE N1=N1*16+16
+ 1210 LSET NOMBRE < N1
+ 1220 PUT 1,P,S
+ 1230 POKE#26A,10:PRINT"  Track"D$P;
+ 1240 POKE#269,15:PRINT" Sector"D$S:POKE#26A,11
+ 1250 PSTE > P:SECTEUR > S
+ 1260 IF S<>0 THEN 1110
+ 1270 KEY SET
+ 1280 PRINT:DIR DRV$+"-*.*":PRINT:PRINT
+ 1290 CLOSE 1
+ 1300 PRINT"Sort another disc? ";
+ 1310 GET A$:IF A$=ESC$ OR A$<>"Y" THEN ERROR 50 ELSE RUN
+ 1320 '
+ 1330 ' CONTROL OF ERRORS
+ 1340 '
+SubRoutineError1
+      IF EN=50 THEN CLOSE 1:PRINT:PRINT:ERR OFF:END
+ 1360 IF EN<>5 THEN RESUME NEXT
+ 1370 KEY SET
+ 1380 PRINT"Disc protected
+ 1390 PRINT"Press RETURN to continue ";
+ 1400 GET A$:IF A$=ESC$ THEN ERROR 50
+ 1410 RESUME
+ 1420 END
+
+SubRoutine1 ON D GOTO1440,1450,1460,1470
+ 1440 OPEN D,1,A:RETURN
+ 1450 OPEN D,1,B:RETURN
+ 1460 OPEN D,1,C:RETURN
+ 1470 OPEN D,1,D:RETURN
