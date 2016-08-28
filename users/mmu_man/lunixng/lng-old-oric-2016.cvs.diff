@@ -1,0 +1,8066 @@
+? README.ORIC
+? binoric
+? lunix-oric-alpha.zip
+? pkg
+? apps/232echo
+? apps/232term
+? apps/amalloc
+? apps/b-co
+? apps/b-cs
+? apps/beep
+? apps/buf
+? apps/cat
+? apps/cd
+? apps/ciartc
+? apps/clear
+? apps/connd
+? apps/cp
+? apps/date
+? apps/dcf77
+? apps/echo
+? apps/env
+? apps/expand
+? apps/false
+? apps/ftp
+? apps/getty
+? apps/help
+? apps/hextype
+? apps/httpd
+? apps/ide64rtc
+? apps/kill
+? apps/loop
+? apps/ls
+? apps/lsmod
+? apps/meminfo
+? apps/microterm
+? apps/more
+? apps/popclient
+? apps/ppp
+? apps/ps
+? apps/pwd
+? apps/rm
+? apps/sh
+? apps/sleep
+? apps/slip
+? apps/sliptst
+? apps/smwrtc
+? apps/strminfo
+? apps/tcpip
+? apps/tcpipstat
+? apps/tee
+? apps/telnet
+? apps/testapp
+? apps/time
+? apps/touch
+? apps/true
+? apps/uname
+? apps/uptime
+? apps/uudecode
+? apps/uuencode
+? apps/wc
+? bin64/boot.c64
+? bin64/lunix.c64
+? devel_utils/chklib
+? devel_utils/chkobj
+? devel_utils/lld
+? devel_utils/luna
+? devel_utils/lupo
+? devel_utils/mksfxpkg
+? devel_utils/oric
+? devel_utils/relate
+? devel_utils/apple/diskimage
+? devel_utils/apple/extract
+? devel_utils/atari/makeatr
+? devel_utils/atari/makeimage
+? help/help.html
+? include/acia.h
+? include/boot_extra.h
+? include/config.h
+? include/fdc.h
+? include/jumptab.ca65.h
+? include/jumptab.h
+? include/ksym.h
+? include/oric.h
+? include/oric_fdc.h
+? include/ula.h
+? include/via.h
+? include/zp.h
+? kernel/boot.c64
+? kernel/boot.oric
+? kernel/fs_oricvtape.s
+? kernel/fs_oricvtape_init.s
+? kernel/globals.txt
+? kernel/lng_kfunc.txt
+? kernel/lunix.c64
+? kernel/lunix.oric
+? kernel/oric
+? kernel/modules/fifo64
+? kernel/modules/oricvtape.s
+? kernel/modules/rs232std
+? kernel/modules/sfifo64
+? kernel/modules/sswiftlink
+? kernel/modules/swiftlink
+? kernel/opt/fdc_wdc.s
+? kernel/opt/oric_console.s
+? kernel/opt/oric_console_init.s
+Index: Makefile
+===================================================================
+RCS file: /cvsroot/lng/lng/Makefile,v
+retrieving revision 1.31
+diff -u -r1.31 Makefile
+--- Makefile	15 Jan 2009 19:36:58 -0000	1.31
++++ Makefile	28 Aug 2016 17:17:04 -0000
+@@ -11,12 +11,15 @@
+ # MACHINE=c64 to create Commodore64 version (binaries in bin64)
+ # MACHINE=c128 for Commodore128 version (binaries in bin128)
+ # MACHINE=atari for Atari 65XE/800/130 version (no binaries right now)
++# MACHINE=oric for ORIC-1/Atmos/Telestrat version (no binaries right now)
+ 
+-MACHINE=c64
++#MACHINE=c64
++MACHINE=oric
+ 
+ # Modules to include in package (created with "make package")
+ 
+-MODULES=sswiftlink sfifo64 rs232std swiftlink fifo64
++#MODULES=sswiftlink sfifo64 rs232std swiftlink fifo64
++MODULES=
+ 
+ # Applications to include in package
+ # the applications (in binary form) do not depend on the machine selection
+@@ -45,14 +48,15 @@
+ 
+ .PHONY : all apps kernel libstd help package clean distclean devel
+ 
+-export PATH+=:$(PWD)/devel_utils/:$(PWD)/devel_utils/atari:.
++# shouldn't we use $(CURDIR) instead of $(PWD) ???
++export PATH+=:$(PWD)/devel_utils/:$(PWD)/devel_utils/$(MACHINE):.
+ export LUPO_INCLUDEPATH=:$(PWD)/kernel:$(PWD)/include
+ export LNG_LIBRARIES=$(PWD)/lib/libstd.a
+ export COMPFLAGS
+ export MACHINE
+ 
+-ifeq "$(MACHINE)" "atari"
+-    BINDIR=binatari
++ifeq "$(filter c64 c128,$(MACHINE))" ""
++    BINDIR=bin$(MACHINE)
+ else
+     BINDIR=$(patsubst c%,bin%,$(MACHINE))
+ endif
+@@ -81,11 +85,13 @@
+ 
+ devel :
+ 	$(MAKE) -C devel_utils
+-	$(MAKE) -C devel_utils/atari
+-	$(MAKE) -C devel_utils/apple
++# also build machine-specific dev utils
++ifneq "$(wildcard devel_utils/$(MACHINE))" ""
++	$(MAKE) -C devel_utils/$(MACHINE)
++endif
+ 
+ binaries: all
+-	-mkdir $(BINDIR)
++	-mkdir -p $(BINDIR)
+ 	-cp kernel/boot.$(MACHINE) kernel/lunix.$(MACHINE) $(MODULES:%=kernel/modules/%) $(BINDIR)
+ 
+ cbmpackage : binaries
+@@ -101,13 +107,6 @@
+ 	 mksfxpkg $(MACHINE) ../pkg/samples.$(MACHINE) skeleton skeleton.o65 hello ; \
+ 	 rm skeleton skeleton.o65 hello
+ 
+-ataripackage: binaries
+-	makeimage $(BINDIR)/boot.$(MACHINE) $(BINDIR)/lunix.$(MACHINE) $(BINDIR)/atari.bin
+-	cp $(BINDIR)/atari.bin pkg
+-
+-ataridisc: binaries
+-	makeatr lng-$(MACHINE).atr $(BINDIR)/atari.bin
+-
+ cbmdisc: binaries
+ 	echo creating LUnix disc image for $(MACHINE)
+ 	c1541 -format lunix,00 d64 lunix-$(MACHINE).d64 > /dev/null
+@@ -138,13 +137,37 @@
+ 		; do c1541 -attach ../lunix-$(MACHINE).d64 -write $$i > /dev/null \
+ 		; done
+ 
+-ifeq "$(MACHINE)" "atari"
+-disc:	ataridisc
+-package: ataripackage
+-else
+-disc:	cbmdisc
+-package: cbmpackage
+-endif
++ataripackage: binaries
++	makeimage $(BINDIR)/boot.$(MACHINE) $(BINDIR)/lunix.$(MACHINE) $(BINDIR)/atari.bin
++	cp $(BINDIR)/atari.bin pkg
++
++ataridisc: binaries
++	makeatr lng-$(MACHINE).atr $(BINDIR)/atari.bin
++
++oricpackage: oricdisc
++	zip -jy9 lunix-oric-alpha.zip $(BINDIR)/lunix.tap $(BINDIR)/lunix.dsk
++
++# BeOS doesn't use the updated PATH before execing...
++# give full path
++oricdisc: binaries
++	echo "test test"> $(BINDIR)/test.txt
++	devel_utils/$(MACHINE)/bin2tap -c -n lunix $(BINDIR)/lunix.$(MACHINE) \
++		-a -n lboot $(BINDIR)/boot.$(MACHINE) \
++		$(BINDIR)/lunix.tap
++	#devel_utils/$(MACHINE)/bin2tap -c -n lunix $(BINDIR)/lunix.$(MACHINE) \
++	#	$(BINDIR)/lunix.tap
++	#devel_utils/$(MACHINE)/bin2tap -a -c -n lboot $(BINDIR)/boot.$(MACHINE) \
++	#	$(BINDIR)/lboot.tap
++#		-s 0 -n test $(BINDIR)/test.txt 
++	rm -f $(BINDIR)/lunix.dsk
++	devel_utils/$(MACHINE)/tap2dsk $(BINDIR)/lunix.tap $(BINDIR)/lunix.dsk
++	devel_utils/$(MACHINE)/old2mfm $(BINDIR)/lunix.dsk
++
++c64disc c128disc: cbmdisc
++c64package c128package: cbmpackage
++
++disc: $(MACHINE)disc
++package: $(MACHINE)package
+ 
+ clean :
+ 	$(MAKE) -C kernel clean
+@@ -156,11 +179,15 @@
+ distclean : clean
+ 	$(MAKE) -C kernel distclean
+ 	$(MAKE) -C devel_utils clean
+-	$(MAKE) -C devel_utils/atari clean
+ 	$(MAKE) -C devel_utils/apple clean
++	$(MAKE) -C devel_utils/atari clean
++	$(MAKE) -C devel_utils/oric clean
+ 	-cd kernel ; rm -f boot.c* lunix.c* globals.txt
+ 	-cd bin64 ; rm -f $(MODULES) boot.* lunix.* lng.c64
+ 	-cd bin128 ;  rm -f $(MODULES) boot.* lunix.* lng.c128
++	-cd binapple ;  rm -f $(MODULES) boot.* lunix.* lng.apple
++	-cd binatari ;  rm -f $(MODULES) boot.* lunix.* lng.atari
++	-cd binoric ;  rm -f $(MODULES) boot.* lunix.* lng.oric
+ 	-cd include ; rm -f jumptab.h jumptab.ca65.h ksym.h zp.h
+ 	-rm -rf pkg binatari
+ 	find . -name "*~" -exec rm -v \{\} \;
+Index: apps/ciartc.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/ciartc.s,v
+retrieving revision 1.3
+diff -u -r1.3 ciartc.s
+--- apps/ciartc.s	12 Jul 2001 20:48:08 -0000	1.3
++++ apps/ciartc.s	28 Aug 2016 17:17:04 -0000
+@@ -110,6 +110,7 @@
+ 
+ update_date:
+ 		;; copy cia_tod to time
++#ifdef HAVE_CIA
+ 		lda	CIA1_TODHR		; latch time
+ 		sta	hour
+ 		ldx	CIA1_TODMIN
+@@ -118,6 +119,7 @@
+ 		stx	second
+ 		ldx	CIA1_TOD10		; free latch
+ 		stx	sec10
++#endif
+ 		;; convert from 01-12am/pm to 00-23
+ 		and	#$7f
+ 		cmp	#$12
+@@ -217,6 +219,7 @@
+ 		eor	#$80	; cia inverts am/pm on write when hour==12
+ 	+	sty	ampmhour
+ 		;; write time to cia_tod
++#ifdef HAVE_CIA
+ 		sta	CIA1_TODHR	; stop clock
+ 		ldx	minute
+ 		stx	CIA1_TODMIN
+@@ -224,6 +227,7 @@
+ 		stx	CIA1_TODSEC
+ 		ldx	sec10
+ 		stx	CIA1_TOD10	; continue clock
++#endif
+ 		;; reset ntp
+ 		lda	li_vn_mode
+ 		ora	#%11000000	; not synchronized
+Index: apps/dcf77.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/dcf77.s,v
+retrieving revision 1.3
+diff -u -r1.3 dcf77.s
+--- apps/dcf77.s	27 Jun 2001 20:57:16 -0000	1.3
++++ apps/dcf77.s	28 Aug 2016 17:17:04 -0000
+@@ -156,6 +156,7 @@
+ 
+ 		bit	irq_handler
+ irq_handler:
++#ifdef HAVE_CIA
+ 		;; increment the jiffie conter
+ 		inc	duration
+ 		bne	+
+@@ -253,6 +254,7 @@
+ 		sty	bytecount
+ 		ldx	#$01
+ stx_bit:	stx	bitcount
++#endif
+ return:		rts
+ 
+ mark_invalid:	BLINK(1,0)
+@@ -673,6 +675,7 @@
+ 		rts
+ 		
+ normal_mode:
++#ifdef HAVE_CIA
+ 		;; free memory used for commandline arguments
+ 		ldx	userzp+1
+ 		jsr	lkf_free	
+@@ -713,6 +716,7 @@
+ 		jsr	lkf_hook_irq
+ 		nop
+ 
++#endif
+ 		jmp	main
+ 
+ end_of_code:
+Index: apps/sh.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/sh.s,v
+retrieving revision 1.4
+diff -u -r1.4 sh.s
+--- apps/sh.s	4 Feb 2003 17:23:51 -0000	1.4
++++ apps/sh.s	28 Aug 2016 17:17:04 -0000
+@@ -69,7 +69,7 @@
+ 		ldy #0
+ 		lda (ARGS),y
+ 		cmp #"-"
+-		beq +           ; switch?
++		beq ++           ; switch?
+ 
+ 		;;from_file:
+ 		lda ARGS
+@@ -78,8 +78,10 @@
+ 		ldx #fmode_ro
+ 		jsr fopen		; open file
+ 		;;nop			; exit on error
+-		bcs nofile
+-		stx fd_stdin
++		;bcs nofile
++		bcc +
++		jmp nofile
++	+	stx fd_stdin
+ 
+ 		ldy #0
+ 	-	inc ARGS		; Skip filename
+Index: apps/smwrtc.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/smwrtc.s,v
+retrieving revision 1.3
+diff -u -r1.3 smwrtc.s
+--- apps/smwrtc.s	9 Dec 2001 01:39:32 -0000	1.3
++++ apps/smwrtc.s	28 Aug 2016 17:17:05 -0000
+@@ -101,6 +101,7 @@
+ 	;; read a byte from Smart Watch
+ 
+ read_byte:
++#ifdef HAVE_CIA
+ 		lda	#%00001110		; config lsb as input
+ 		sta	CIA1_DDRA
+ 		lda	#0
+@@ -117,12 +118,14 @@
+ 		sta	tmpzp+2
+ 		dex
+ 		bne	-
++#endif
+ 		rts
+ 
+ 	;; write_byte
+ 	;; write a byte to Smart Watch
+ 
+ write_byte:
++#ifdef HAVE_CIA
+ 		tax				; save data byte
+ 		ldy	#8			; set up count
+ 		lda	#%00001100		; initial config output enable off
+@@ -140,12 +143,14 @@
+ 		clv
+ 		bvc	-			; loop
+ 
++#endif
+ 	+	rts
+ 
+ 	;; select_smartwatch
+ 	;; write magic bytes to port to enable Smart Watch
+ 
+ select_smartwatch:
++#ifdef HAVE_CIA
+ 		lda	#%00001110		; read cycle to start dallas chip
+ 		sta	CIA1_PRA
+ 		lda	#%00000010
+@@ -164,6 +169,7 @@
+ 		jsr	write_byte
+ 		dec	tmpzp+2
+ 		bne	-
++#endif
+ 		rts
+ 
+ 	;; update_date
+@@ -171,6 +177,7 @@
+ 	;; at this point irq must be disabled
+ 
+ update_date:
++#ifdef HAVE_CIA
+ 		lda	CIA1_DDRA		; store cia1 registers
+ 		pha
+ 		lda	CIA1_PRA
+@@ -219,6 +226,7 @@
+ 		sta	CIA1_PRA
+ 		pla
+ 		sta	CIA1_DDRA
++#endif
+ 		rts
+ 
+ 	;; write_time
+@@ -226,6 +234,7 @@
+ 	;; irq must be disabled
+ 
+ write_time:
++#ifdef HAVE_CIA
+ 		;; convert from 00-23 to 01-12am/pm
+ 		lda	hour
+ 		tax
+@@ -282,6 +291,7 @@
+ 		sta	CIA1_PRA
+ 		pla
+ 		sta	CIA1_DDRA
++#endif
+ 		rts
+ 
+ ;;; api --------------------------------------------------------------------
+Index: apps/time.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/time.s,v
+retrieving revision 1.3
+diff -u -r1.3 time.s
+--- apps/time.s	12 Jul 2001 20:48:08 -0000	1.3
++++ apps/time.s	28 Aug 2016 17:17:05 -0000
+@@ -77,11 +77,13 @@
+ 		ldy  bufSEC
+ 		;; FIXME -> move into kernel or system dependent library
+ 		sei
++#ifdef HAVE_CIA
+ 		sta  CIA1_TODHR
+ 		stx  CIA1_TODMIN
+ 		sty  CIA1_TODSEC
+ 		lda  #0
+ 		sta  CIA1_TOD10
++#endif
+ 		cli
+ 		rts
+ 
+@@ -92,11 +94,13 @@
+ 		;; FIXME
+ 		;; shouldn't this be in the kernel ?? (direct access to CIA1)
+ 		sei
++#ifdef HAVE_CIA
+ 		lda  CIA1_TODHR			; (reading TODHR makes the CIA latch the
+ 		sta  bufHR				; current time)
+ 		ldy  CIA1_TODMIN
+ 		ldx  CIA1_TODSEC
+ 		lda  CIA1_TOD10
++#endif
+ 		cli
+ 		sty  bufMIN
+ 		stx  bufSEC
+Index: apps/uname.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/uname.s,v
+retrieving revision 1.5
+diff -u -r1.5 uname.s
+--- apps/uname.s	12 Jun 2004 11:35:51 -0000	1.5
++++ apps/uname.s	28 Aug 2016 17:17:05 -0000
+@@ -243,18 +243,33 @@
+ 		cmp  #larch_c64
+ 		beq  hwc64
+ 		cmp  #larch_c128
++		beq hwc128
++		cmp  #larch_atari
++		beq hwatari
++		cmp  #larch_oric
+ 		bne  name_unknown
+-
+-		;; hwc128
++;hworic:
++		bit  txt_machtypeoric
++		jsr  lkf_strout
++		nop
++		jmp  hwfreq
++hwc64:
++		bit  txt_machtype64
++		jsr  lkf_strout
++		nop
++		jmp  hwfreq
++hwc128:
+ 		bit  txt_machtype128
+ 		jsr  lkf_strout
+ 		nop
+-		jmp  +
+-
+-hwc64:	bit  txt_machtype64
++		jmp  hwfreq
++hwatari:
++		bit  txt_machtypeatari
+ 		jsr  lkf_strout
+ 		nop
+-	+	lda  lk_archtype
++		;jmp  hwfreq
++hwfreq:
++		lda  lk_archtype
+ 		and  #larchf_pal
+ 		bne  hwpal
+ 		bit  txt_machtypentsc
+@@ -321,6 +336,10 @@
+ 		.text "C64",0
+ txt_machtype128:
+ 		.text "C128",0
++txt_machtypeatari:
++		.text "Atari",0
++txt_machtypeoric:
++		.text "ORIC",0
+ txt_machtypepal:
+ 		.text "pal ",0
+ txt_machtypentsc:
+Index: apps/uptime.s
+===================================================================
+RCS file: /cvsroot/lng/lng/apps/uptime.s,v
+retrieving revision 1.5
+diff -u -r1.5 uptime.s
+--- apps/uptime.s	12 Jul 2001 20:48:08 -0000	1.5
++++ apps/uptime.s	28 Aug 2016 17:17:05 -0000
+@@ -37,11 +37,13 @@
+ 		;; FIXME
+ 		;; shouldn't this be in the kernel ?? (direct access to CIA2)
+ 		sei
++#ifdef HAVE_CIA
+ 		lda  CIA2_TODHR			; (reading TODHR makes the CIA latch the
+ 		sta  bufHR				; current time)
+ 		ldy  CIA2_TODMIN
+ 		ldx  CIA2_TODSEC
+ 		lda  CIA2_TOD10
++#endif
+ 		cli
+ 		sty  bufMIN
+ 		stx  bufSEC
+Index: devel_utils/apple/Makefile
+===================================================================
+RCS file: /cvsroot/lng/lng/devel_utils/apple/Makefile,v
+retrieving revision 1.3
+diff -u -r1.3 Makefile
+--- devel_utils/apple/Makefile	4 Feb 2003 18:32:55 -0000	1.3
++++ devel_utils/apple/Makefile	28 Aug 2016 17:17:05 -0000
+@@ -1,7 +1,8 @@
+ .PHONY : all clean
+ 
+ CC=gcc
+-COMPFLAGS=-O6 -ansi -Wall -W -Wstrict-prototypes -Wshadow -Wmissing-declarations -Wmissing-prototypes -fomit-frame-pointer
++COMPFLAGS=-O6 -Wall -W -Wstrict-prototypes -Wshadow -Wmissing-declarations -Wmissing-prototypes -fomit-frame-pointer
++#-ansi breaks in BeOS
+ 
+ # list of applications
+ APPS=diskimage extract
+Index: devel_utils/apple/diskimage.c
+===================================================================
+RCS file: /cvsroot/lng/lng/devel_utils/apple/diskimage.c,v
+retrieving revision 1.3
+diff -u -r1.3 diskimage.c
+--- devel_utils/apple/diskimage.c	15 Jan 2009 19:40:08 -0000	1.3
++++ devel_utils/apple/diskimage.c	28 Aug 2016 17:17:05 -0000
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <sys/types.h> /*for u_int8_t*/
+ #include <unistd.h>
+Index: devel_utils/apple/extract.c
+===================================================================
+RCS file: /cvsroot/lng/lng/devel_utils/apple/extract.c,v
+retrieving revision 1.2
+diff -u -r1.2 extract.c
+--- devel_utils/apple/extract.c	22 Dec 2000 22:10:54 -0000	1.2
++++ devel_utils/apple/extract.c	28 Aug 2016 17:17:05 -0000
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <stdint.h>
+ #include <strings.h>
+ #include <sys/types.h>
+ #include <string.h>
+Index: include/console.h
+===================================================================
+RCS file: /cvsroot/lng/lng/include/console.h,v
+retrieving revision 1.5
+diff -u -r1.5 console.h
+--- include/console.h	5 Jan 2001 20:17:06 -0000	1.5
++++ include/console.h	28 Aug 2016 17:17:05 -0000
+@@ -48,5 +48,20 @@
+ #  define size_y	24
+ #  define MAX_CONSOLES		1
+ #endif
++#ifdef ORIC_CONSOLE
++;// defines for ORIC console
++#  define ORIC_FONT	ULA_TEXT_STDCHR
++#  define SCREEN_BASE	ULA_TEXT_BASE
++#  define SCREEN_SIZE	1120	; 40*28
++; this can't work, kernel stores mem allocator data at $c000!
++; need to allocate that elsewhere.
++; what about another RAM bank in telestrat ?
++;#  define SCREEN_VIRT_BASE	$c000	; eat virtual console buffers from overlay ram
++#  define cursor	$a0				; $20 (space) + $80 (inverted)
++#  define size_x	40
++#  define size_y	28
++#  define MAX_CONSOLES		1
++;#  define MAX_CONSOLES		4		; seems reasonable
++#endif
+ 
+ #endif
+Index: include/debug.h
+===================================================================
+RCS file: /cvsroot/lng/lng/include/debug.h,v
+retrieving revision 1.2
+diff -u -r1.2 debug.h
+--- include/debug.h	27 Jun 2001 20:57:16 -0000	1.2
++++ include/debug.h	28 Aug 2016 17:17:05 -0000
+@@ -27,6 +27,12 @@
+ # define debug3       $420  	    ; upper left corner of the screen
+ #endif
+ 
++#ifdef ORIC
++# define debug1       $BB80        ; foreground color
++# define debug2       $BB80	   ; background color
++# define debug3       $BB80	   ; upper left corner of the screen
++#endif
++
+ #ifdef DEBUG
+ # begindef db(textstring)
+ 	php
+Index: include/fs.h
+===================================================================
+RCS file: /cvsroot/lng/lng/include/fs.h,v
+retrieving revision 1.8
+diff -u -r1.8 fs.h
+--- include/fs.h	16 Sep 2004 10:03:57 -0000	1.8
++++ include/fs.h	28 Aug 2016 17:17:05 -0000
+@@ -7,6 +7,7 @@
+ #define MAJOR_USER    4
+ #define MAJOR_IEC     5
+ #define MAJOR_IDE64   6
++#define MAJOR_VTAPE   7
+ 
+ #define fmode_ro  0
+ #define fmode_wo  1
+Index: include/keyboard.h
+===================================================================
+RCS file: /cvsroot/lng/lng/include/keyboard.h,v
+retrieving revision 1.3
+diff -u -r1.3 keyboard.h
+--- include/keyboard.h	2 Mar 2001 21:09:38 -0000	1.3
++++ include/keyboard.h	28 Aug 2016 17:17:05 -0000
+@@ -17,8 +17,15 @@
+ #define joy_fire    %00010000
+ 
+ #define keybuflen 16      ; size of keyboard buffer
++#ifdef HAVE_CIA
+ #define	port_row CIA1_PRA ; selection of rows
+ #define	port_col CIA1_PRB ; status of columns
++#endif
++#ifdef HAVE_VIA
++;// not even exactly... ORIC has a braindead keyb port
++#define	port_row VIA1_ORA ; selection of rows
++#define	port_col VIA1_ORB ; status of columns
++#endif
+ 
+ #ifdef C128
+ # define port_row2 VIC_KEYREG
+Index: include/system.h
+===================================================================
+RCS file: /cvsroot/lng/lng/include/system.h,v
+retrieving revision 1.19
+diff -u -r1.19 system.h
+--- include/system.h	11 Sep 2004 16:09:34 -0000	1.19
++++ include/system.h	28 Aug 2016 17:17:05 -0000
+@@ -134,14 +134,18 @@
+ #define lk_modroot   $ffed    ;// root of linked list of modules (16bit)
+ #define lk_consmax   $ffef    ;// absolute number of consoles
+ #define lk_archtype  $fff0    ;// machine architecture
+-#  define larchf_type     %00000011 ;// type of machine
++#  define larchf_type     %00000111 ;// type of machine
+ #   define larch_c64       0
+ #   define larch_c128      1
+-#   define larch_atari     2
++#   define larch_apple     2
++#   define larch_atari     3
++#   define larch_oric      4
+ #  define larchf_8500     %00010000 ;// flag for 85xx (not 65xx) CPU
+ #  define larchf_pal      %00100000 ;// flag for PAL (not NTSC) video hardware
+ #  define larchf_reu      %01000000 ;// flag for available REU hardware
+ #  define larchf_scpu     %10000000 ;// flag for available SCPU hardware
++#define lk_archmodel $fff1    ;// machine-specific model identification
++#define lk_archconf  $fff2    ;// machine-specific configuration flags (options)
+ 
+ ;// this is not implemented, hence nonused
+ #define lk_timedive  $c2c0    ;// exponent of time dic
+Index: kernel/Makefile
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/Makefile,v
+retrieving revision 1.15
+diff -u -r1.15 Makefile
+--- kernel/Makefile	13 Mar 2004 15:06:59 -0000	1.15
++++ kernel/Makefile	28 Aug 2016 17:17:05 -0000
+@@ -1,10 +1,62 @@
+ # -*- make -*-
+ 
+-# List of modules
++# configurable options:
++# each machine (platform) has specific drivers and options
++#DRIVERS: specify which drivers are to be compiled in the kernel.
++# Some drivers may not be usable as module, most obvious being
++# floppy drivers.
++#MODULES: list of loadable modules
++#START_ADDRESS: The address the bootloader is installed.
++
++# machine-specific setup
++ifeq "$(MACHINE)" "c64"
++    # List of built-in drivers and filesystems
++    DRIVERS=fs_iec fs_ide64
++    # List of modules
++    MODULES=sswiftlink sfifo64 rs232std swiftlink fifo64
++    # start address of bootloader, do not touch
++    START_ADDRESS=4096
++endif
++
++ifeq "$(MACHINE)" "c128"
++    # List of built-in drivers and filesystems
++    DRIVERS=fs_iec fs_ide64
++    # List of modules
++    MODULES=sswiftlink sfifo64 rs232std swiftlink fifo64
++    # start address of bootloader, do not touch
++    START_ADDRESS=4864
++endif
++
++ifeq "$(MACHINE)" "apple"
++all: machine-is-not-yet-supported
++    # List of built-in drivers and filesystems
++    # XXX: remove iec ide64
++    DRIVERS=fs_iec fs_ide64
++    # List of modules
++    MODULES=
++    # start address of bootloader, do not touch
++    START_ADDRESS=
++endif
++
+ ifeq "$(MACHINE)" "atari"
++    # List of built-in drivers and filesystems
++    # XXX: remove iec ide64
++    DRIVERS=fs_iec fs_ide64
++    # List of modules
+     MODULES=
+-else
+-    MODULES=$(addprefix modules/,sswiftlink sfifo64 rs232std swiftlink fifo64)
++    # start address of bootloader, do not touch
++    START_ADDRESS=20480
++endif
++
++ifeq "$(MACHINE)" "oric"
++    # List of built-in drivers and filesystems
++    # XXX: remove iec ide64
++    # XXX: move fs_oricvtape to oric/
++    DRIVERS=oric/fdc fs_oricvtape fs_iec fs_ide64
++    # List of modules
++    MODULES=
++    # start address of bootloader, do not touch
++    START_ADDRESS=4096
+ endif
+ 
+ #============== end of configurable section ============================
+@@ -22,15 +74,24 @@
+ KERNEL=lunix.$(MACHINE)
+ BOOT=boot.$(MACHINE)
+ 
++# drivers have init code in foo_init.s for the bootloader
++BOOTEXTRASRC:=$(wildcard $(patsubst %,%_init.s, $(DRIVERS)))
++BOOTEXTRA:=$(BOOTEXTRASRC:s=o)
++# get object names
++DRIVERS:=$(patsubst %,%.o, $(DRIVERS))
++# modules live in modules/
++MODULES:=$(addprefix modules/,$(MODULES))
++
+ # List of objects (for "lunix.*")
+ OBJ=init.o delay.o hook.o keyboard.o lock.o panic.o \
+     schedule.o sleep.o suspend.o tasksw.o nmi.o console.o error.o \
+     imemory.o addtask.o taskctrl.o signal.o smb.o environment.o \
+-    fs.o fs_pipe.o fs_iec.o fs_ide64.o fs_cons.o fs_user.o fs_sys.o \
+-    reloc.o kfunc_tab.o o65.o execute.o module.o misc.o
++    fs.o fs_pipe.o fs_cons.o fs_user.o fs_sys.o \
++    reloc.o kfunc_tab.o o65.o execute.o module.o misc.o \
++    $(DRIVERS)
+ 
+ # Boot-loader objects (for "boot.*")
+-BOOTOBJ=bootstrap.o calib.o
++BOOTOBJ=bootstrap.o calib.o $(BOOTEXTRA)
+ 
+ all : $(KERNEL) $(BOOT) modules lng_kfunc.txt
+ 
+@@ -46,7 +107,16 @@
+ keyboard.o  : $(MACHINE)/keyboard.s
+ bootstrap.o : $(MACHINE)/reset.s $(MACHINE)/irqinit.s $(MACHINE)/reboot.s \
+ 	      $(MACHINE)/initmemmap.s $(MACHINE)/keyboard_init.s \
+-	      opt/*_console*_init.s
++	      opt/*_console*_init.s boot_extra.h
++
++# Additional compile flags
++BUILD_DATE=$(shell date +'%b %d %Y')
++$(OBJ)      : ECOMPFLAGS=-dBUILDING_KERNEL=1 -d__KERNEL__=1
++$(BOOTOBJ)  : ECOMPFLAGS=-dBUILDING_BOOT=1 -d__KERNEL__=1 -d__BOOT__=1 \
++              -d__DATE__='"\"$(BUILD_DATE)\""'
++$(MODULES)  : ECOMPFLAGS=-dBUILDING_MODULE=1
++# my gnu make crashes with += above
++COMPFLAGS+=$(ECOMPFLAGS)
+ 
+ # Copy configuration file.
+ ../include/config.h : $(MACHINE)/config.h
+@@ -66,22 +136,16 @@
+ $(KERNEL) : $(OBJ)
+ 	lld -d globals.txt -o $@ -s 8192 $^
+ 
++../include/boot_extra.h : $(BOOTEXTRASRC)
++	echo $(BOOTEXTRA)
++	grep -h CallFromBootLoader $(BOOTEXTRA:o=s) > ../include/boot_extra.h
++
+ # Collect kernel symbols (needed by boot loader).
+ ../include/ksym.h : $(KERNEL) globals.txt
+ 	mksym
+ 
+ # Final step of creating the boot loader (linking all objects)
+ 
+-ifeq "$(MACHINE)" "c64"
+- START_ADDRESS=4096
+-endif
+-ifeq "$(MACHINE)" "c128"
+- START_ADDRESS=4864
+-endif
+-ifeq "$(MACHINE)" "atari"
+- START_ADDRESS=20480
+-endif
+-
+ $(BOOT) : $(BOOTOBJ)
+ 	lld -o $@ -s $(START_ADDRESS) $^
+ 
+Index: kernel/README
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/README,v
+retrieving revision 1.6
+diff -u -r1.6 README
+--- kernel/README	4 Feb 2003 19:17:23 -0000	1.6
++++ kernel/README	28 Aug 2016 17:17:06 -0000
+@@ -23,8 +23,9 @@
+ 	$0100-$01ff	Processor stack
+ 
+ 	$0200-$1fff	30 dynamic assigned memory pages
+-	($0400-$07ff	used for console screen)
+-        ($0800-$0bff    used for 2nd console screen)
++	($0300-$03ff	IO-area on ORIC)
++	($0400-$07ff	used for console screen on CBM)
++        ($0800-$0bff    used for 2nd console screen on CBM)
+ 	
+ 	$2000-$47ff	10k reserved for kernel (position and size will change!)
+ 	
+Index: kernel/bootstrap.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/bootstrap.s,v
+retrieving revision 1.22
+diff -u -r1.22 bootstrap.s
+--- kernel/bootstrap.s	11 Sep 2004 16:09:34 -0000	1.22
++++ kernel/bootstrap.s	28 Aug 2016 17:17:06 -0000
+@@ -346,6 +346,9 @@
+ 	+
+ #endif
+ 
++		;; extra bootloader init stuff for drivers
++		#include <boot_extra.h>
++
+ 		;; spawn init task		
+ 		lda  #0
+ 		sta  userzp
+@@ -362,7 +365,8 @@
+ welcome_txt:
+ 		.byte $0a
+ 		.text "Welcome to LUnix next generation (LNG)",$0a
+-		.text "Version 0.22, ?? ??? 2004",$0a,$0a
++		.text "Version 0.22, "
++		.text __DATE__,$0a,$0a
+ 		.text "Compile time options:",$0a
+ #ifdef VERBOSE_ERROR
+ 		.text "  - verbose error messages",$0a
+@@ -379,6 +383,9 @@
+ #ifdef ANTIC_CONSOLE
+ 		.text "  - ANTIC/GTIA console",$0a
+ #endif
++#ifdef ORIC_CONSOLE
++		.text "  - ORIC console",$0a
++#endif
+ #ifdef MULTIPLE_CONSOLES
+ 		.text "  - multiple consoles",$0a
+ #endif
+@@ -406,12 +413,26 @@
+ ;#endif
+ 		.byte 0
+ 
+-txt_c64:
++#ifdef C64
++txt_machine:
+ 		.text "Commodore 64",0
+-txt_c128:
++#endif
++#ifdef C128
++txt_machine:
+ 		.text "Commodore 128",0
+-txt_atari:
++#endif
++#ifdef APPLE
++txt_machine:
++		.text "Apple II",0
++#endif
++#ifdef ATARI
++txt_machine:
+ 		.text "Atari",0
++#endif
++#ifdef ORIC
++txt_machine:
++		.text "ORIC",0
++#endif
+ txt_pal:
+ 		.text " (PAL)",0
+ txt_ntsc:
+@@ -422,38 +443,25 @@
+ 		.text " on 60Hz power",$0a,0
+ 
+ print_machine_type:
+-		lda  lk_archtype
+-		and  #larchf_type
+-		cmp  #larch_c64
+-		beq  +
+-		cmp  #larch_c128
+-		beq  ++
+-		cmp  #larch_atari
+-		beq  +++
+-		bne  ++++
+-	+	ldy  #txt_c64-txt_c64
+-		SKIP_WORD
+-	+	ldy  #txt_c128-txt_c64
+-		SKIP_WORD
+-	+	ldy  #txt_atari-txt_c64
++		ldy  #txt_machine-txt_machine
+ 		jsr  mout
+ 
+ 	+	lda  lk_archtype
+-		ldy  #txt_pal-txt_c64
++		ldy  #txt_pal-txt_machine
+ 		and  #larchf_pal
+ 		bne  +
+-		ldy  #txt_ntsc-txt_c64
++		ldy  #txt_ntsc-txt_machine
+ 	+	jsr  mout
+ #ifdef HAVE_CIA
+ 		lda  CIA1_CRA			; on c64 and c128
+-		ldy  #txt_50hz-txt_c64
++		ldy  #txt_50hz-txt_machine
+ 		and  #%10000000
+ 		bne  mout
+-		ldy  #txt_60hz-txt_c64
++		ldy  #txt_60hz-txt_machine
+ #else
+-		ldy  #txt_50hz-txt_c64
++		ldy  #txt_50hz-txt_machine
+ #endif
+-mout:		lda  txt_c64,y
++mout:		lda  txt_machine,y
+ 		beq  +
+ 		jsr  lkf_printk
+ 		iny
+@@ -502,6 +510,7 @@
+ 		jmp  lkf_addtask
+ #endif
+ 
++
+ 		;; include code that initialises
+ 		;; the keyboard and console
+ 		;; (this code should also set the value of lk_consmax)
+@@ -518,6 +527,9 @@
+ #ifdef ANTIC_CONSOLE
+ # include "opt/antic_console_init.s"
+ #endif
++#ifdef ORIC_CONSOLE
++# include "opt/oric_console_init.s"
++#endif
+ 
+ #ifdef PCAT_KEYB
+ # include "opt/pcat_keyboard_init.s"
+Index: kernel/console.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/console.s,v
+retrieving revision 1.7
+diff -u -r1.7 console.s
+--- kernel/console.s	5 Jan 2001 20:17:06 -0000	1.7
++++ kernel/console.s	28 Aug 2016 17:17:06 -0000
+@@ -92,3 +92,7 @@
+ #ifdef ANTIC_CONSOLE
+ # include "opt/antic_console.s"
+ #endif
++
++#ifdef ORIC_CONSOLE
++# include "opt/oric_console.s"
++#endif
+Index: kernel/error.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/error.s,v
+retrieving revision 1.2
+diff -u -r1.2 error.s
+--- kernel/error.s	12 Sep 2000 19:19:42 -0000	1.2
++++ kernel/error.s	28 Aug 2016 17:17:06 -0000
+@@ -11,7 +11,7 @@
+ .global hexout
+ 		
+ 		;; function: catcherr
+-		;; return from kernel or module function bach to user application
++		;; return from kernel or module function back to user application
+ 		;; with error, if next instruction in user context is "nop" catcherr
+ 		;; will jump to suicerrout
+ 		;; < A=error code, that should be returned to main program
+Index: kernel/execute.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/execute.s,v
+retrieving revision 1.5
+diff -u -r1.5 execute.s
+--- kernel/execute.s	7 Nov 2003 20:46:06 -0000	1.5
++++ kernel/execute.s	28 Aug 2016 17:17:07 -0000
+@@ -88,7 +88,8 @@
+ 		cmp #>LNG_MAGIC           ; $fffe
+ 		bne _o65_load
+ 		cpx #<LNG_MAGIC
+-		beq _lng_load
++		bne _o65_load
++		jmp _lng_load
+ 
+ _o65_load:
+ 		cmp #<O65_MAGIC           ; $0001
+@@ -102,8 +103,9 @@
+ 
+ 		ldx syszp+7		; fd
+ 		jsr loado65
+-		bcc +
+-		tay
++		bcs +
++		jmp _o65_run
++	+	tay
+ 		jmp _o65_error		; (pla 3 times)
+ 
+ 		;;
+@@ -163,11 +165,12 @@
+ 
+ 		rts
+ 
++	-	jmp _not_script
+ script_run:
+    		cmp #"#"
+-		bne _not_script
++		bne -
+ 		cpx #"!"
+-		bne _not_script
++		bne -
+ 
+ 		;; init stackframe
+ 
+@@ -302,6 +305,7 @@
+ 		;;---- end script runner
+ 		;;
+ 
++_o65_run:
+ 	+	;; A/Y is address of start, 3 bytes on stack
+ 		;; is (main) is not == (load) this needs to be changed!!!
+ 
+Index: kernel/fs.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/fs.s,v
+retrieving revision 1.8
+diff -u -r1.8 fs.s
+--- kernel/fs.s	9 Jul 2002 16:28:59 -0000	1.8
++++ kernel/fs.s	28 Aug 2016 17:17:07 -0000
+@@ -185,6 +185,10 @@
+ 		.text "net64"
+ 		.byte 0, MAJOR_IEC,15
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.text "vtape"
++		.byte 0, MAJOR_VTAPE,0
++#endif
+ 		.text "console"
+ 		.byte 0, MAJOR_CONSOLE,0
+ 		.text "pipe"
+@@ -217,6 +221,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word fs_oricvtape_fopen-1
++#endif
+ 
+ mtab_fgetc equ [*]-2
+ 		.word fs_pipe_fgetc-1
+@@ -229,6 +236,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word fs_oricvtape_fgetc-1
++#endif
+ 
+ mtab_fputc equ [*]-2
+ 		.word fs_pipe_fputc-1
+@@ -241,6 +251,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word err_notimp-1
++#endif
+ 
+ mtab_fclose equ [*]-2
+ 		.word fs_pipe_fclose
+@@ -251,7 +264,10 @@
+ #ifdef HAVE_IDE64
+ 		.word fs_ide64_fclose
+ #else
+-		.word err_notimp-1
++		.word err_notimp
++#endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word fs_oricvtape_fclose
+ #endif
+ 
+ mtab_fcmd equ [*]-2
+@@ -265,6 +281,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word err_notimp-1
++#endif
+ 
+ mtab_fopendir equ [*]-2
+ 		.word err_notimp-1		; fs_pipe
+@@ -277,6 +296,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word err_notimp-1
++#endif
+ 
+ mtab_freaddir equ [*]-2
+ 		.word err_notimp-1		; fs_pipe
+@@ -289,6 +311,9 @@
+ #else
+ 		.word err_notimp-1
+ #endif
++#ifdef HAVE_EUPHORIC_TAPEFS
++		.word err_notimp-1
++#endif
+ 
+ 		;; function: resolve_fileno
+ 		;; get SMB that corresponds to a given fileno
+Index: kernel/init.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/init.s,v
+retrieving revision 1.8
+diff -u -r1.8 init.s
+--- kernel/init.s	8 Mar 2003 22:35:06 -0000	1.8
++++ kernel/init.s	28 Aug 2016 17:17:07 -0000
+@@ -84,7 +84,6 @@
+ 		jmp  load_and_execute2
+ #endif
+ 
+-report_error_2:
+ report_error:
+ 		jsr  print_error
+ 
+@@ -108,8 +107,10 @@
+ 		cmp  #"l"
+ 		beq  load_and_execute
+ 		cmp  #"x"
+-		beq  reboot
+-
++		beq reboot
++#ifdef HAVE_EXTRA_INIT
++		jmp check_extra_init_cmd
++#endif
+ 		;; unknown command
+ 
+ c_end:
+@@ -121,6 +122,11 @@
+ 
+ #include MACHINE(reboot.s)
+ 
++		;; relative jump too long...
++report_error_2:
++		jmp report_error
++
++
+ 	-	iny
+ 		beq  c_end
+ 
+@@ -292,10 +298,22 @@
+ 		.buf  32-(3+3+8)
+ #endif
+ 
++#ifdef HAVE_EXTRA_INIT
++check_extra_init_cmd:
++#include MACHINE(extrainit.s)
++		jmp c_end
++#endif
++
+ ;;; strings
+ 
+ pwd_default:	.text "PWD=/disk8",0
+ startup_txt:	.text $0a,"Init v0.1",$0a,0
+-error_txt:	.text "? (l)oad command / e(x)it+reboot",$0a,0
++error_txt:	.text "? (l)oad command / e(x)it+reboot"
++#ifdef HAVE_EXTRA_INIT
++		.text " / ",$0a
++#define WANT_INIT_CMD_STRING
++#include MACHINE(extrainit.s)
++#endif
++		.text $0a,0
+ tmp_page:	.buf 1
+ 
+Index: kernel/kfunc_tab.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/kfunc_tab.s,v
+retrieving revision 1.4
+diff -u -r1.4 kfunc_tab.s
+--- kernel/kfunc_tab.s	7 Nov 2003 20:46:06 -0000	1.4
++++ kernel/kfunc_tab.s	28 Aug 2016 17:17:07 -0000
+@@ -1,5 +1,7 @@
+ 	.global	kfunc_tab
+ 
++#include <config.h>
++
+ kfunc_tab:
+ 	.word set_zpsize
+ 	.word get_moduleif
+@@ -70,4 +72,8 @@
+ 	.word srandom
+ 	.word getenv
+ 	.word setenv
++#ifdef HAVE_O65
+ 	.word loado65
++#else
++	.word panic
++#endif
+Index: kernel/module.s
+===================================================================
+RCS file: /cvsroot/lng/lng/kernel/module.s,v
+retrieving revision 1.4
+diff -u -r1.4 module.s
+--- kernel/module.s	12 Jul 2001 20:48:08 -0000	1.4
++++ kernel/module.s	28 Aug 2016 17:17:07 -0000
+@@ -80,7 +80,7 @@
+ 						
+ 		;; function: get_moduleif
+ 		
+-		;; serach for module and copy
++		;; search for module and copy
+ 		;; module interface into local
+ 		;; memory
+ 		
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ README.ORIC	2006-09-22 00:25:57.255328256 +0200
+@@ -0,0 +1,24 @@
++LUnix NG port to ORIC
++Francois Revol <revol@free.fr>
++----
++
++Currently floppy isn't supported for file access, but is required to enable access to overlay RAM.
++
++CLOAD "LUNIX"
++CLOAD "LBOOT"
++
++How to build ?
++
++from a Unix/Linux/BeOS (cygwin ?) host:
++open a terminal here and type:
++
++make package
++
++This will build the luna assembler, the bin2tap tool, lunix kernel and loader, then the .tap file and zip them.
++
++bin2tap.c might need #include fixing (I only compiled it in BeOS yet)
++
++
++currently the loader is at $1000
++the kernel is at $2000
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ devel_utils/oric/README	2006-09-23 16:50:22.273416192 +0200
+@@ -0,0 +1,14 @@
++ORIC specific build tools:
++
++bin2tap: converts raw binary (and c64 format) to tape files.
++(c) Francois Revol, revol@free.fr
++I later found similar code but they didn't have the c64 
++support for luna files anyway.
++
++tap2dsk: creates a floppy image from tape files.
++(c) F.Frances 2004
++
++old2mfm: converts plain logical disk image to widely used mfm-encoded images.
++unknown author.
++
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ devel_utils/oric/Makefile	2006-09-23 16:14:38.273416192 +0200
+@@ -0,0 +1,19 @@
++.PHONY : all clean
++
++CC=gcc
++COMPFLAGS=-O6 -Wall -W -Wstrict-prototypes -Wshadow -Wmissing-declarations -Wmissing-prototypes -fomit-frame-pointer
++#BeOS header stdint.h doesn't like -ansi (C++ comments)
++
++# list of applications
++APPS=bin2tap tap2dsk old2mfm
++OLDAPPS=
++
++all : $(APPS)
++
++clean :
++	-rm $(APPS)
++
++$(APPS) : Makefile
++
++# Rules
++% : %.c ; $(CC) $< -o $@ $(COMPFLAGS)
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ devel_utils/oric/bin2tap.c	2006-10-05 19:22:34.273678336 +0200
+@@ -0,0 +1,275 @@
++#include <ctype.h>
++#include <stdio.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <sys/param.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++/* XXX: LITTLE_ENDIAN only! needs some swapping around */
++
++#define TYPE_BASIC	0x00
++#define TYPE_ASM	0x80
++
++#define SPEED_SLOW	0
++#define SPEED_FAST	1
++
++#define FILENAMEMAX (16)
++struct k7header {
++	unsigned char syn[3];
++#define SYN 0x16 /* sync */
++	unsigned char sta[1];
++#define STA 0x24 /* start mark */
++	/* in tape order */
++	unsigned char speed; // 0=fast
++	unsigned char dummy2; // unknown
++	unsigned char type; // 0=basic
++	unsigned char autoflag;
++	uint16_t end_addr;
++	uint16_t start_addr;
++	unsigned char dummy; // unknown
++	char filename[FILENAMEMAX+1];
++};
++
++int usagedump(void)
++{
++	printf("tapdump <tapfile>\n");
++	return 0;
++}
++
++int usage2bin(void)
++{
++	printf("tap2bin <tapfile>\n");
++	return 0;
++}
++
++int usage(void)
++{
++	printf("Usage: bin2tap [-a] [-S] [-t asm|basic] [-c] [-s addr] [-n name] <binfile> [...] <tapfile>\n");
++	printf("Options:\n");
++	printf("-a	set auto flag\n");
++	printf("-S	set slow speed (fast is default)\n");
++	printf("-t <t>	set the type to <t> (basic or asm, default is asm)\n");
++	printf("-c	C64 input format (binary, start address in first 2 bytes)\n");
++	//printf("-o	out input format (hex dump)\n");
++	printf("-s <a>	set start address to <a> (decimal or 0xHHHH)\n");
++	printf("-n <n>	set name on tape to <n>\n");
++	return 0;
++}
++
++int readheader(int fd, struct k7header *h)
++{
++	int err, i;
++	uint16_t a;
++	
++	err = read(fd, h, 4+4+4+1);
++	if (err < 0)
++		return err;
++	if (err < 4+4+4+1)
++		return -1;
++	if (h->syn[0] != SYN)
++		return -1;
++	if (h->syn[1] != SYN)
++		return -1;
++	if (h->syn[2] != SYN)
++		return -1;
++	if (h->sta[0] != STA)
++		return -1;
++	/* addresses are little endian but reverse order on tape... */
++	a = (*(uint8_t *)&h->start_addr) << 8;
++	a |= *((uint8_t *)&h->start_addr+1);
++	h->start_addr = a;
++	a = (*(uint8_t *)&h->end_addr) << 8;
++	a |= *((uint8_t *)&h->end_addr+1);
++	h->end_addr = a;
++	for (i = 0; i < FILENAMEMAX; i++) {
++		err = read(fd, &h->filename[i], 1);
++		if (err < 0)
++			return err;
++		if (err < 1)
++			return -1;
++		if (!h->filename[i])
++			break;
++	}
++	/*read(fd, &h->filename[i], 1);*/
++	/*XXX:ENDIAN!*/
++	return 0;
++}
++
++int writeheader(int fd, struct k7header *h)
++{
++	uint16_t a;
++	char z = '\0';
++	int err, i;
++	a = h->start_addr;
++	(*(uint8_t *)&h->start_addr) = a >> 8;
++	*((uint8_t *)&h->start_addr+1) = a & 0xff;
++	a = h->end_addr;
++	(*(uint8_t *)&h->end_addr) = a >> 8;
++	*((uint8_t *)&h->end_addr+1) = a & 0xff;
++	err = write(fd, h, 4+4+4+1);
++	h->filename[FILENAMEMAX] = '\0';
++	write(fd, h->filename, MIN(strlen(h->filename), FILENAMEMAX)+1);
++	/*write(fd, &z, 1);*/
++	return 0;
++}
++
++int tapdump(char *file)
++{
++	int fd = open(file, O_RDONLY);
++	struct k7header header;
++	while (readheader(fd, &header) >= 0) {
++		printf("syn: %02x %02x %02x, sta: %02x\n", 
++			header.syn[0], header.syn[1], header.syn[2], header.sta[0]);
++		printf("auto: %02x, type: %02x, speed: %02x\n", header.autoflag, header.type, header.speed);
++		printf("start: $%04x, end: $%04x\n", header.start_addr, header.end_addr);
++		printf("name: %s\n", header.filename);
++		if (lseek(fd, header.end_addr - header.start_addr + 1, SEEK_CUR) < 0)
++			return -1;
++	}
++	return 0;
++}
++
++int tap2bin(char *file)
++{
++	int fd = open(file, O_RDONLY);
++	struct k7header header;
++	char *buf;
++	buf = (char *)malloc(64*1024);
++	while (readheader(fd, &header) >= 0) {
++		char fname[FILENAMEMAX+1+3+1];
++		char *p;
++		int outfd;
++		memset(fname, 0, FILENAMEMAX+3+1);
++		strncpy(fname, header.filename, FILENAMEMAX);
++		p = strchr(fname, '.');
++		if (p)
++			*p = '\0';
++		strcat(fname, ".bin");
++		outfd = open(fname, O_WRONLY|O_CREAT, 0644);
++		read(fd, buf, header.end_addr - header.start_addr + 1);
++		write(outfd, buf, header.end_addr - header.start_addr + 1);
++		close(outfd);
++		printf("written %d bytes to %s\n", header.end_addr - header.start_addr + 1, fname);
++		printf("syn: %02x %02x %02x, sta: %02x\n", 
++			header.syn[0], header.syn[1], header.syn[2], header.sta[0]);
++		printf("auto: %02x, type: %02x, speed: %02x\n", header.autoflag, header.type, header.speed);
++		printf("start: $%04x, end: $%04x\n", header.start_addr, header.end_addr);
++		printf("name: %s\n", header.filename);
++	}
++	return 0;
++}
++
++int bin2tap(char *in, int fout, int c64, int start, int autoflag, int type, int speed, char *name)
++{
++	struct k7header header;
++	struct k7header *h = &header;
++	struct stat st;
++	char *buf;
++	int fin;
++	memset(h, 0, sizeof(header));
++	h->syn[0] = SYN;
++	h->syn[1] = SYN;
++	h->syn[2] = SYN;
++	h->syn[3] = STA;
++	h->autoflag = autoflag?1:0xc7; /* hmm... */
++	h->autoflag = autoflag?1:0; /* hmm... */
++	h->type = type;
++	h->speed = speed;
++	h->start_addr = 0x0500;
++	if (start >= 0)
++		h->start_addr = (uint16_t)start;
++	if (name) {
++		int i;
++		strncpy(header.filename, name, FILENAMEMAX);
++		for (i = 0; i < FILENAMEMAX; i++)
++			h->filename[i] = toupper(h->filename[i]);
++	}
++	fin = open(in, O_RDONLY);
++	if (fin < 0)
++		return fin;
++	fstat(fin, &st);
++	if (c64) {
++		uint8_t v;
++		read(fin, &v, 1);
++		header.start_addr = v;
++		read(fin, &v, 1);
++		header.start_addr |= v << 8;
++		st.st_size -= 2;
++	}
++	header.end_addr = header.start_addr + (uint16_t)st.st_size - 1;
++	writeheader(fout, &header);
++	buf = (char *)malloc((uint16_t)st.st_size);
++	read(fin, buf, (uint16_t)st.st_size);
++	write(fout, buf, (uint16_t)st.st_size);
++	free(buf);
++	close(fin);
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	int i;
++	int c64 = 0;
++	int fin, fout;
++	char *name = NULL;
++	int start = -1;
++	int autoflag = 0;
++	int speed = SPEED_FAST;
++	int type = TYPE_ASM;
++	
++	if (strstr(argv[0], "tapdump")) {
++		if (argc < 2)
++			return usagedump();
++		return tapdump(argv[1]);
++	}
++	if (strstr(argv[0], "tap2bin")) {
++		if (argc < 2)
++			return usage2bin();
++		return tap2bin(argv[1]);
++	}
++	if (argc < 3)
++		return usage();
++	fout = open(argv[argc-1], O_WRONLY|O_CREAT, 0666);
++	if (fout < 0) {
++		printf("can't open output file '%s'\n", argv[argc-1]);
++		return 1;
++	}
++	argc--;
++	for (i = 1; i < argc; i++) {
++		if (!strcmp(argv[i], "-c"))
++			c64 = 1;
++		else if (!strcmp(argv[i], "-s")) {
++			i++;
++			if (!strncmp(argv[i], "0x", 2)) {
++				start = strtol(argv[i]+2, NULL, 16);
++			} else
++				start = atoi(argv[i]);
++			c64 = 0;
++		} else if (!strcmp(argv[i], "-t")) {
++			i++;
++			printf("type unsupported, binary assumed\n");
++		} else if (!strcmp(argv[i], "-n")) {
++			i++;
++			name = argv[i];
++		} else if (!strcmp(argv[i], "-a")) {
++			autoflag = 1;
++		} else if (!strcmp(argv[i], "-S")) {
++			speed = SPEED_SLOW;
++		} else if (!strncmp(argv[i], "-", 1)) {
++			printf("unknown option %s\n", argv[i]);
++		} else {
++			bin2tap(argv[i], fout, c64, start, autoflag, type, speed, name);
++			/* reset for next file */
++			/*c64 = 0;*/
++			start = -1;
++			name = NULL;
++			type = TYPE_ASM;
++			speed = SPEED_FAST;
++			autoflag = 0;
++		}
++	}
++	return 0;
++}
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ devel_utils/oric/old2mfm.c	2006-09-23 16:19:44.273940480 +0200
+@@ -0,0 +1,142 @@
++#include <stdio.h>
++FILE *fd;
++char bigbuf[1024*1024];
++char header[256];
++char trackbuf[6400];
++int sides, tracks, sectors, geometry=1;
++int gap1,gap2,gap3;
++char old_signature[]="ORICDISK";
++char new_signature[]="MFM_DISK";
++
++
++main(int argc,char *argv[])
++{
++        int i,s,t,offset;
++
++        printf("Old -> MFM v1.2\n");
++	if (argc!=2) {
++		printf("Usage: oric2mfm <diskimage>\n");
++		printf("(converts old Euphoric disk image format to new MFM format)\n");
++		exit(1);
++	}
++	fd=fopen(argv[1],"r+b");
++	if (fd==NULL) {
++		printf("Unable to open %s for read/write operation\n",argv[1]);
++		exit(1);
++	}
++	fread(header,8,1,fd);
++	if (strncmp(header,old_signature,8)!=0) {
++		printf("%s is not an old disk image\n",argv[1]);
++		exit(1);
++	}
++	fread(&sides,1,4,fd); fread(&tracks,1,4,fd); fread(&sectors,1,4,fd);
++	fread(header+20,256-20,1,fd);
++	fread(bigbuf,sides*tracks*sectors,256,fd);
++	fseek(fd,0,SEEK_SET);
++
++        switch (sectors) {
++                case 15: case 16: case 17:
++                        gap1=72; gap2=34; gap3=50;
++                        break;
++                case 18:
++                        gap1=12; gap2=34; gap3=46;
++                        break;
++                default:
++                        printf("unrealistic sectors per track number\n");
++                        exit(1);
++        }
++	init_track(sectors);
++
++	fwrite(new_signature,8,1,fd);
++	fwrite(&sides,1,4,fd); fwrite(&tracks,1,4,fd); fwrite(&geometry,1,4,fd);
++	fwrite(header+20,256-20,1,fd);
++
++	for(s=0;s<sides;s++)
++	  for(t=0;t<tracks;t++) {
++            offset=gap1;
++	    for(i=0;i<sectors;i++) {
++              trackbuf[offset+4]=t;
++              trackbuf[offset+5]=s;
++              trackbuf[offset+6]=i+1;
++              trackbuf[offset+7]=1;
++              compute_crc(trackbuf+offset,4+4);
++              offset+=4+6;
++              offset+=gap2;
++              memcpy(trackbuf+offset+4,bigbuf+((s*tracks+t)*sectors+i)*256,256);
++              compute_crc(trackbuf+offset,4+256);
++              offset+=256+6;
++              offset+=gap3;
++	    }
++	    fwrite(trackbuf,6400,1,fd);
++	  }
++	return 0;
++}
++
++init_track(int n)
++{
++	int i,j,offset=0;
++
++	for (i=0;i<gap1-12;i++) trackbuf[offset++]=0x4E;
++	for (j=0;j<n;j++) {
++		for (i=0;i<12;i++) trackbuf[offset++]=0;
++		for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
++		trackbuf[offset++]=0xFE;
++		for (i=0;i<6;i++) offset++;
++/*                for (i=0;i<gap2-12;i++) trackbuf[offset++]=0x4E;
++*/ for (i=0;i<gap2-12;i++) trackbuf[offset++]=0x22;
++		for (i=0;i<12;i++) trackbuf[offset++]=0;
++		for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
++		trackbuf[offset++]=0xFB;
++		for (i=0;i<258;i++) offset++;
++		for (i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;
++	}
++	while (offset<6400) trackbuf[offset++]=0x4E;
++}
++
++unsigned int crctab[256] =
++{
++	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
++	0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
++	0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
++	0x9339, 0x8318, 0xB37B, 0xA35A, 0xD3BD, 0xC39C, 0xF3FF, 0xE3DE,
++	0x2462, 0x3443, 0x0420, 0x1401, 0x64E6, 0x74C7, 0x44A4, 0x5485,
++	0xA56A, 0xB54B, 0x8528, 0x9509, 0xE5EE, 0xF5CF, 0xC5AC, 0xD58D,
++	0x3653, 0x2672, 0x1611, 0x0630, 0x76D7, 0x66F6, 0x5695, 0x46B4,
++	0xB75B, 0xA77A, 0x9719, 0x8738, 0xF7DF, 0xE7FE, 0xD79D, 0xC7BC,
++	0x48C4, 0x58E5, 0x6886, 0x78A7, 0x0840, 0x1861, 0x2802, 0x3823,
++	0xC9CC, 0xD9ED, 0xE98E, 0xF9AF, 0x8948, 0x9969, 0xA90A, 0xB92B,
++	0x5AF5, 0x4AD4, 0x7AB7, 0x6A96, 0x1A71, 0x0A50, 0x3A33, 0x2A12, 
++	0xDBFD, 0xCBDC, 0xFBBF, 0xEB9E, 0x9B79, 0x8B58, 0xBB3B, 0xAB1A, 
++	0x6CA6, 0x7C87, 0x4CE4, 0x5CC5, 0x2C22, 0x3C03, 0x0C60, 0x1C41, 
++	0xEDAE, 0xFD8F, 0xCDEC, 0xDDCD, 0xAD2A, 0xBD0B, 0x8D68, 0x9D49, 
++	0x7E97, 0x6EB6, 0x5ED5, 0x4EF4, 0x3E13, 0x2E32, 0x1E51, 0x0E70,
++	0xFF9F, 0xEFBE, 0xDFDD, 0xCFFC, 0xBF1B, 0xAF3A, 0x9F59, 0x8F78, 
++	0x9188, 0x81A9, 0xB1CA, 0xA1EB, 0xD10C, 0xC12D, 0xF14E, 0xE16F,
++	0x1080, 0x00A1, 0x30C2, 0x20E3, 0x5004, 0x4025, 0x7046, 0x6067, 
++	0x83B9, 0x9398, 0xA3FB, 0xB3DA, 0xC33D, 0xD31C, 0xE37F, 0xF35E,
++	0x02B1, 0x1290, 0x22F3, 0x32D2, 0x4235, 0x5214, 0x6277, 0x7256,
++	0xB5EA, 0xA5CB, 0x95A8, 0x8589, 0xF56E, 0xE54F, 0xD52C, 0xC50D,
++	0x34E2, 0x24C3, 0x14A0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
++	0xA7DB, 0xB7FA, 0x8799, 0x97B8, 0xE75F, 0xF77E, 0xC71D, 0xD73C,
++	0x26D3, 0x36F2, 0x0691, 0x16B0, 0x6657, 0x7676, 0x4615, 0x5634,
++	0xD94C, 0xC96D, 0xF90E, 0xE92F, 0x99C8, 0x89E9, 0xB98A, 0xA9AB,
++	0x5844, 0x4865, 0x7806, 0x6827, 0x18C0, 0x08E1, 0x3882, 0x28A3,
++	0xCB7D, 0xDB5C, 0xEB3F, 0xFB1E, 0x8BF9, 0x9BD8, 0xABBB, 0xBB9A,
++	0x4A75, 0x5A54, 0x6A37, 0x7A16, 0x0AF1, 0x1AD0, 0x2AB3, 0x3A92,
++	0xFD2E, 0xED0F, 0xDD6C, 0xCD4D, 0xBDAA, 0xAD8B, 0x9DE8, 0x8DC9,
++	0x7C26, 0x6C07, 0x5C64, 0x4C45, 0x3CA2, 0x2C83, 0x1CE0, 0x0CC1,
++	0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
++	0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
++};
++	
++compute_crc(unsigned char *ptr,int count)
++{
++	int i;
++	unsigned short crc=0xFFFF,byte;
++	for (i=0;i<count;i++) {
++		byte= *ptr++;
++		crc=(crc<<8)^crctab[(crc>>8)^byte];
++	}
++	*ptr++=crc>>8;
++	*ptr++=crc&0xFF;
++}
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ devel_utils/oric/tap2dsk.c	2006-09-28 05:20:15.274202624 +0200
+@@ -0,0 +1,231 @@
++/* tap2dsk : converts an Oric tape image to a sedoric/stratsed dsk image */
++/* (c) F.Frances 2004 */
++
++/* Limitations :
++ *   - only 1 bitmap sector, thus limits the capacity to ~2048 sectors
++ *   - only 1 side with 80 tracks max.
++ */
++
++#include <stdio.h>
++#define NBTRACKS 21
++#define NBSECT 17
++
++typedef unsigned char byte;
++typedef byte sector[256];
++
++struct {
++	char signature[8];
++	int sides;
++	int tracks;
++	int sect;
++	char pad[256-20];
++} imageheader = { "ORICDISK", 1, NBTRACKS, NBSECT };
++
++sector disk[80][NBSECT];
++sector directory,descriptor;
++sector system_sect={	// some system parameters
++	0,0,0,0,	// drive table, unread on slave disk
++	0,			// keyboard type, unread on slave disk
++	0,0,0,0,	// RENUM parameters, unread on slave disk
++	'T','A','P','2','D','S','K',' ','S','A','M','P','L','E',' ','D','I','S','C',' ',' '
++};
++sector bitmap={
++	0xFF,		// signature
++	0,
++	0,0,		// number of free sectors
++	0,0,		// number of files
++	NBTRACKS,	// number of tracks/side
++	NBSECT,		// number of sectors/track
++	1,			// number of directory sectors
++	NBTRACKS,	// number of tracks + 128 if double sided
++	1			// master/slave/gameinit indicator
++};
++int track,sect=1;
++int dir_offset=0x10;
++int used_sectors;
++
++void allocate_sector(int track, int sect, byte *contents)
++{
++	int linear_sector=track*NBSECT+sect-1;
++	bitmap[0x10+linear_sector/8] &= ~(1<<linear_sector%8);
++	memcpy(disk[track][sect-1],contents,sizeof(sector));
++	used_sectors++;
++}
++
++void find_free_sector(byte *contents)
++{
++	int linear_sector=0;
++	while ((bitmap[0x10+linear_sector/8] & (1<<linear_sector%8)) == 0)
++		linear_sector++;
++
++	track=linear_sector/NBSECT;
++	sect=linear_sector%NBSECT+1;
++	if (track==80) {
++		fprintf(stderr,"Not enough space on sample disc");
++		exit(1);
++	}
++	allocate_sector(track,sect,contents);
++}
++
++void update_sector(int track, int sect, byte *contents)
++{
++	memcpy(disk[track][sect-1],contents,sizeof(sector));
++}
++
++void convert_basename(char *dest, char *name)
++{
++	static int filenumber=0;
++	int dest_offset=0, src_offset=0;
++	while (dest_offset<9 && src_offset<17 && name[src_offset]) {
++		if (name[src_offset]>='a' && name[src_offset]<='z')
++			name[src_offset]-=0x20;
++		if (name[src_offset]>='0' && name[src_offset]<='9' 
++			|| name[src_offset]>='A' && name[src_offset]<='Z')
++			dest[dest_offset++]=name[src_offset];
++		src_offset++;
++	}
++	if (dest_offset) {
++		while (dest_offset<9)
++			dest[dest_offset++]=' ';
++	} else
++		sprintf(dest,"NONAME%03d",filenumber++);
++}
++
++void store_file(byte *buf, char *name, byte *header)
++{
++	int start=(header[6]<<8)+header[7];
++	int end=(header[4]<<8)+header[5];
++	int exec=header[3];
++	int block=header[2];
++	int sectors=(end-start)/sizeof(sector)+1;
++	int desc_sect,desc_track;
++	int desc_off=0x0C;
++	int offset;
++
++	memset(descriptor,0,sizeof(sector));
++	find_free_sector(descriptor);
++	desc_track=track; desc_sect=sect;
++	descriptor[2]=0xFF;
++	descriptor[3]=(block?0x40:0x80)+(exec?1:0);
++	descriptor[4]=header[7];
++	descriptor[5]=header[6];
++	descriptor[6]=header[5];
++	descriptor[7]=header[4];
++	if (exec) {
++		descriptor[8]=descriptor[4];
++		descriptor[9]=descriptor[5];
++	} else {
++		descriptor[8]=descriptor[9]=0;
++	}
++	descriptor[10]=sectors&0xFF;
++	descriptor[11]=sectors>>8;
++
++	convert_basename(directory+dir_offset,name);
++	if (exec)
++		sprintf(directory+dir_offset+9,"COM");
++	else sprintf(directory+dir_offset+9,"%s",block?"BIN":"BAS");
++	directory[dir_offset+12]=desc_track;
++	directory[dir_offset+13]=desc_sect;
++	directory[dir_offset+14]=sectors+1+(sectors>=(256-12)/2?1:0); // Sedoric bug work-around : allocate a second descriptor when exactly 122 sectors of data
++	directory[dir_offset+15]=0x40; // UNPROT
++
++	while (sectors--) {
++		find_free_sector(buf);
++		buf+=sizeof(sector);
++		descriptor[desc_off++]=track;
++		descriptor[desc_off++]=sect;
++		if (desc_off==0x100) {			// Sedoric bug work-around : allocate a second descriptor when the first is full, even if not needed
++			find_free_sector(descriptor);
++			descriptor[0]=track;
++			descriptor[1]=sect;
++			update_sector(desc_track,desc_sect,descriptor);
++			memset(descriptor,0,sizeof(sector));
++			desc_track=track;
++			desc_sect=sect;
++			desc_off=2;
++		}
++	}
++	update_sector(desc_track,desc_sect,descriptor);
++}
++
++int main(int argc, char *argv[])
++{
++	byte header[9];
++	char name[17];
++	byte file_buffer[48*1024];
++	FILE *tape, *dsk;
++	int dir_track=20, dir_sect=4;
++	int tracks=21; // minimum track number
++	int total_sectors,free_sectors;
++
++	if (argc!=3) {
++		fprintf(stderr,"Usage: tap2dsk <tape_image> <old_disk_image>\n");
++		exit(1);
++	}
++	tape=fopen(argv[1],"rb");
++	if (tape==NULL) {
++		fprintf(stderr,"Cannot read tape image %s\n",argv[1]);
++		exit(1);
++	}
++	dsk=fopen(argv[2],"wb");
++	if (dsk==NULL) {
++		fprintf(stderr,"Cannot open %s for writing\n",argv[2]);
++		exit(1);
++	}
++
++	memset(bitmap+0x10,0xFF,sizeof(sector)-0x10);
++	allocate_sector(20,1,system_sect);
++	allocate_sector(20,2,bitmap);
++	allocate_sector(20,4,directory);
++	while (!feof(tape)) {
++		int start,end,i;
++		int c;
++		do
++			c = fgetc(tape);
++		while ((c!=EOF) && (c!=0x24));
++		if (c==EOF)
++			break;
++		for (i=0;i<9;i++) header[i]=fgetc(tape);
++		for (i=0;i<17;i++) {
++			name[i]=fgetc(tape);
++			if (name[i]==0) break;
++		}
++		start=(header[6]<<8)+header[7];
++		end=(header[4]<<8)+header[5];
++		for (i=0; i<end+1-start; i++)
++			file_buffer[i]=fgetc(tape);
++		printf("Storing %s\n",name);
++		store_file(file_buffer,name,header);
++		bitmap[4]++; // number of files
++		dir_offset+=16;
++		if (dir_offset==0x100) {
++			find_free_sector(directory);
++			directory[0]=track;
++			directory[1]=sect;
++			update_sector(dir_track,dir_sect,directory);
++			memset(directory,0,sizeof(sector));
++			dir_track=track;
++			dir_sect=sect;
++			dir_offset=0x10;
++			update_sector(dir_track,dir_sect,directory);
++		}
++	}
++	directory[2]=dir_offset;
++	update_sector(dir_track,dir_sect,directory);
++
++	if (track>=tracks) tracks=track+1;
++	total_sectors=tracks*NBSECT;
++	free_sectors=total_sectors-used_sectors;
++	bitmap[2]=free_sectors & 0xFF;
++	bitmap[3]=free_sectors >> 8;
++	bitmap[6]=tracks;
++	bitmap[9]=tracks;
++	update_sector(20,2,bitmap);
++
++	imageheader.tracks=tracks;
++	fwrite(&imageheader,sizeof(imageheader),1,dsk);
++	for (track=0;track<tracks;track++)
++		for (sect=1;sect<=NBSECT;sect++)
++			fwrite(disk[track][sect-1],sizeof(sector),1,dsk);
++	return 0;
++}
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/acia.h	2006-09-18 00:55:12.279969792 +0200
+@@ -0,0 +1,19 @@
++
++#ifndef _ACIA_H
++#define _ACIA_H
++
++;// 
++#ifndef ACIA1_BASE
++;// telestrat
++#define ACIA1_BASE $31c
++#endif
++#define ACIA1 ACIA1_BASE
++
++;// ACIA1 register map
++#define ACIA1_DR      CIA1+0       ; data register (i/o)
++#define ACIA1_SR      CIA1+1       ; status register
++#define ACIA1_CMDR    CIA1+2       ; command register
++#define ACIA1_CTLR    CIA1+3       ; control register
++
++#endif
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/boot_extra.h	2006-09-28 21:18:18.280231936 +0200
+@@ -0,0 +1,2 @@
++		jsr oric_fdc_init			; CallFromBootLoader
++		jsr fs_oricvtape_init	; CallFromBootLoader
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/config.h	2007-02-25 15:38:26.280494080 +0100
+@@ -0,0 +1,108 @@
++;// main configuration file
++
++#ifndef _CONFIG_H
++#define _CONFIG_H
++
++# define ORIC
++
++# define MACHINE_H <oric.h>
++# define MACHINE(file) "oric/file"
++
++;// Kernel error messages
++;// ---------------------
++;//   The functions "lkf_printerror" and "lkf_suicerrout" print a short
++;//   message via printk. Normally just the error code is reported.
++;//   If you want to have textual error messages add the following to
++;//   the compile-flags (costs 444 bytes)
++
++#define VERBOSE_ERROR
++
++
++;// Multiple consoles
++;// -----------------
++;// startup with more than just one console, system needs at least 1k for
++;// each additional console! (should better allocate memory on demand)
++;// currently the functions keys are used to select and shift+commodore to
++;// switch between consoles (this time just 2 consoles are available F1/F2)
++;// (costs 1024+135=1159 bytes)
++;// THIS IS UNSUPPORTED RIGHT NOW
++
++;#define MULTIPLE_CONSOLES
++
++
++;// .o65 file format support
++;// ------------------------
++;// .o65 is a relocatable file format different than LNG native one.
++;// Soon cc65 (a free C compiler for 6502) will have support for building
++;// LNG applications and the output format had to be .o65. Hence enable this
++;// if you want to execute applications built using cc65. (costs ~900 bytes)
++
++;#define HAVE_O65
++
++
++;// Init shell script support
++;// -------------------------
++;// this forces kernel to load sh and execute lunixrc script upon boot
++;// instead of executing built-in microshell
++
++;#define HAVE_INITSCRIPT
++
++
++;// Misc stuff
++;// ----------
++;// always_szu may save some memory (around 265 bytes), but usually
++;// slows taskswitching down (up to 160us per taskswitch)
++
++#define ALWAYS_SZU
++
++;// Floppy support
++;// --------------
++;// Support for both Jasmin and Microdisc is possible and removes the
++;// need to produce separate binaries. It is possible to disable 
++;// support for one of them to get a smaller kernel. 
++;// Telestrat implies Microdisc support.
++
++#define SUPPORT_JASMIN
++#define SUPPORT_MICRODISC
++
++;#define SUPPORT_TELESTRAT
++
++
++;// Tape support
++;// ------------
++;// various ways of using the tape interface:
++;// - EUPHORIC_TAPEFS:
++;// calls the ROM to handle byte I/O, expecting Euphoric will
++;// catch those calls. Can probably be used to send files.
++;// Includes tangerine header.
++;// *will crash on real hardware*
++;// - TAN_TAPE:
++;// Tape device with the Tangerine (ORIC) framing and format
++;// (1200Hz/2400Hz modulation, sync bytes + header)
++;// - SER_TAPE:
++;// Use the tape connector as a TTL-level serial port.
++;// Should be able to connect to a PC through a MAX232.
++
++#define HAVE_EUPHORIC_TAPEFS	; in fs_oricvtape.s
++;#define HAVE_TAN_TAPE ; UNIMPLEMENTED
++;#define HAVE_SER_TAPE ; UNIMPLEMENTED
++
++
++;// Test init command
++;// -----------------
++;// Enable custom test commands at init prompt
++;// located in $(MACHINE)/extrainit.s
++
++#define HAVE_EXTRA_INIT
++
++;//---------------------------------------------------------------------------
++;// end of configurable section
++
++
++;// dummy
++#define SPEED_MAX
++#define SPEED_1MHZ
++
++
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/fdc.h	2006-10-05 11:25:58.281018368 +0200
+@@ -0,0 +1,22 @@
++#ifndef _FDC_H
++#define _FDC_H
++
++;// Floppy driver module interface
++;// for low-level stuff see oric_fdc.h and others
++
++#begindef FDC_struct8
++  .asc "fdc"
++  .byte 7
++  FDC_lock:     lda #0
++                 rts
++  FDC_unlock:   lda #0
++                 rts
++  FDC_setdrive:		jmp lkf_suicide	; set current drive (0-3)
++  FDC_sectorsize:	jmp lkf_suicide	; return block size (in pages)
++  FDC_sectorbuffer:	jmp lkf_suicide	; return block buffer page number
++  FDC_settrack:		jmp lkf_suicide	; set current track
++  FDC_readsector:	jmp lkf_suicide	;
++  FDC_writesector:	jmp lkf_suicide
++#enddef
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/jumptab.ca65.h	2006-09-17 11:40:38.281542656 +0200
+@@ -0,0 +1,78 @@
++;// *** DO NOT EDIT THIS FILE ***
++;// this is include file for ca65 with .o65 lunix target
++;// use it only with current kernel - make LNG first to regenerate this file
++;// -rw-r--r--  1 revol users 1137 Nov  7  2003 kfunc_tab.s
++
++.import LUNIXKERNEL
++
++lkf_jumptab = LUNIXKERNEL
++lkf_set_zpsize = lkf_jumptab + 0
++lkf_get_moduleif = lkf_jumptab + 2
++lkf_fopen = lkf_jumptab + 4
++lkf_fopendir = lkf_jumptab + 6
++lkf_fclose = lkf_jumptab + 8
++lkf_fgetc = lkf_jumptab + 10
++lkf_fputc = lkf_jumptab + 12
++lkf_fcmd = lkf_jumptab + 14
++lkf_freaddir = lkf_jumptab + 16
++lkf_fgetdevice = lkf_jumptab + 18
++lkf_strout = lkf_jumptab + 20
++lkf_popen = lkf_jumptab + 22
++lkf_ufd_open = lkf_jumptab + 24
++lkf_fdup = lkf_jumptab + 26
++lkf_print_error = lkf_jumptab + 28
++lkf_suicerrout = lkf_jumptab + 30
++lkf_suicide = lkf_jumptab + 32
++lkf_palloc = lkf_jumptab + 34
++lkf_free = lkf_jumptab + 36
++lkf_force_taskswitch = lkf_jumptab + 38
++lkf_forkto = lkf_jumptab + 40
++lkf_getipid = lkf_jumptab + 42
++lkf_signal = lkf_jumptab + 44
++lkf_sendsignal = lkf_jumptab + 46
++lkf_wait = lkf_jumptab + 48
++lkf_sleep = lkf_jumptab + 50
++lkf_lock = lkf_jumptab + 52
++lkf_unlock = lkf_jumptab + 54
++lkf_suspend = lkf_jumptab + 56
++lkf_hook_alert = lkf_jumptab + 58
++lkf_hook_irq = lkf_jumptab + 60
++lkf_hook_nmi = lkf_jumptab + 62
++lkf_panic = lkf_jumptab + 64
++lkf_locktsw = lkf_jumptab + 66
++lkf_unlocktsw = lkf_jumptab + 68
++lkf_add_module = lkf_jumptab + 70
++lkf_fix_module = lkf_jumptab + 72
++lkf_mpalloc = lkf_jumptab + 74
++lkf_spalloc = lkf_jumptab + 76
++lkf_pfree = lkf_jumptab + 78
++lkf_mun_block = lkf_jumptab + 80
++lkf_catcherr = lkf_jumptab + 82
++lkf_printk = lkf_jumptab + 84
++lkf_hexout = lkf_jumptab + 86
++lkf_disable_nmi = lkf_jumptab + 88
++lkf_enable_nmi = lkf_jumptab + 90
++lkf_get_bitadr = lkf_jumptab + 92
++lkf_addtask = lkf_jumptab + 94
++lkf_get_smbptr = lkf_jumptab + 96
++lkf_smb_alloc = lkf_jumptab + 98
++lkf_smb_free = lkf_jumptab + 100
++lkf_alloc_pfd = lkf_jumptab + 102
++lkf_io_return = lkf_jumptab + 104
++lkf_io_return_error = lkf_jumptab + 106
++lkf_ref_increment = lkf_jumptab + 108
++lkf_p_insert = lkf_jumptab + 110
++lkf_p_remove = lkf_jumptab + 112
++lkf__raw_alloc = lkf_jumptab + 114
++lkf_exe_reloc = lkf_jumptab + 116
++lkf_exe_test = lkf_jumptab + 118
++lkf_init = lkf_jumptab + 120
++lkf_keyb_joy0 = lkf_jumptab + 122
++lkf_keyb_joy1 = lkf_jumptab + 124
++lkf_keyb_scan = lkf_jumptab + 126
++lkf_keyb_stat = lkf_jumptab + 128
++lkf_random = lkf_jumptab + 130
++lkf_srandom = lkf_jumptab + 132
++lkf_getenv = lkf_jumptab + 134
++lkf_setenv = lkf_jumptab + 136
++lkf_loado65 = lkf_jumptab + 138
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/jumptab.h	2006-09-17 11:40:38.281542656 +0200
+@@ -0,0 +1,76 @@
++;// *** DO NOT EDIT THIS FILE ***
++;// -rw-r--r--  1 revol users 1137 Nov  7  2003 kfunc_tab.s
++#ifndef _JUMPTAB_H
++#define _JUMPTAB_H
++#include <system.h>
++#define lkf_set_zpsize [lk_jumptab + 0]
++#define lkf_get_moduleif [lk_jumptab + 2]
++#define lkf_fopen [lk_jumptab + 4]
++#define lkf_fopendir [lk_jumptab + 6]
++#define lkf_fclose [lk_jumptab + 8]
++#define lkf_fgetc [lk_jumptab + 10]
++#define lkf_fputc [lk_jumptab + 12]
++#define lkf_fcmd [lk_jumptab + 14]
++#define lkf_freaddir [lk_jumptab + 16]
++#define lkf_fgetdevice [lk_jumptab + 18]
++#define lkf_strout [lk_jumptab + 20]
++#define lkf_popen [lk_jumptab + 22]
++#define lkf_ufd_open [lk_jumptab + 24]
++#define lkf_fdup [lk_jumptab + 26]
++#define lkf_print_error [lk_jumptab + 28]
++#define lkf_suicerrout [lk_jumptab + 30]
++#define lkf_suicide [lk_jumptab + 32]
++#define lkf_palloc [lk_jumptab + 34]
++#define lkf_free [lk_jumptab + 36]
++#define lkf_force_taskswitch [lk_jumptab + 38]
++#define lkf_forkto [lk_jumptab + 40]
++#define lkf_getipid [lk_jumptab + 42]
++#define lkf_signal [lk_jumptab + 44]
++#define lkf_sendsignal [lk_jumptab + 46]
++#define lkf_wait [lk_jumptab + 48]
++#define lkf_sleep [lk_jumptab + 50]
++#define lkf_lock [lk_jumptab + 52]
++#define lkf_unlock [lk_jumptab + 54]
++#define lkf_suspend [lk_jumptab + 56]
++#define lkf_hook_alert [lk_jumptab + 58]
++#define lkf_hook_irq [lk_jumptab + 60]
++#define lkf_hook_nmi [lk_jumptab + 62]
++#define lkf_panic [lk_jumptab + 64]
++#define lkf_locktsw [lk_jumptab + 66]
++#define lkf_unlocktsw [lk_jumptab + 68]
++#define lkf_add_module [lk_jumptab + 70]
++#define lkf_fix_module [lk_jumptab + 72]
++#define lkf_mpalloc [lk_jumptab + 74]
++#define lkf_spalloc [lk_jumptab + 76]
++#define lkf_pfree [lk_jumptab + 78]
++#define lkf_mun_block [lk_jumptab + 80]
++#define lkf_catcherr [lk_jumptab + 82]
++#define lkf_printk [lk_jumptab + 84]
++#define lkf_hexout [lk_jumptab + 86]
++#define lkf_disable_nmi [lk_jumptab + 88]
++#define lkf_enable_nmi [lk_jumptab + 90]
++#define lkf_get_bitadr [lk_jumptab + 92]
++#define lkf_addtask [lk_jumptab + 94]
++#define lkf_get_smbptr [lk_jumptab + 96]
++#define lkf_smb_alloc [lk_jumptab + 98]
++#define lkf_smb_free [lk_jumptab + 100]
++#define lkf_alloc_pfd [lk_jumptab + 102]
++#define lkf_io_return [lk_jumptab + 104]
++#define lkf_io_return_error [lk_jumptab + 106]
++#define lkf_ref_increment [lk_jumptab + 108]
++#define lkf_p_insert [lk_jumptab + 110]
++#define lkf_p_remove [lk_jumptab + 112]
++#define lkf__raw_alloc [lk_jumptab + 114]
++#define lkf_exe_reloc [lk_jumptab + 116]
++#define lkf_exe_test [lk_jumptab + 118]
++#define lkf_init [lk_jumptab + 120]
++#define lkf_keyb_joy0 [lk_jumptab + 122]
++#define lkf_keyb_joy1 [lk_jumptab + 124]
++#define lkf_keyb_scan [lk_jumptab + 126]
++#define lkf_keyb_stat [lk_jumptab + 128]
++#define lkf_random [lk_jumptab + 130]
++#define lkf_srandom [lk_jumptab + 132]
++#define lkf_getenv [lk_jumptab + 134]
++#define lkf_setenv [lk_jumptab + 136]
++#define lkf_loado65 [lk_jumptab + 138]
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/ksym.h	2007-02-25 15:38:29.281804800 +0100
+@@ -0,0 +1,147 @@
++#ifndef _KSYM_H
++#define _KSYM_H
++#define lkf_init $2005
++#define lkf_oric_getmemconf $209a
++#define lkf_oric_microdisc_control_shadow $20bc
++#define lkf_oric_setmemconf $209e
++#define lkf_oric_setmemconf_ovl $20aa
++#define lkf_oric_setmemconf_ovl_j $20b6
++#define lkf_oric_setmemconf_ovl_m $20c2
++#define lkf_oric_setmemconf_rom $20a7
++#define lkf_oric_setmemconf_rom_j $20ad
++#define lkf_oric_setmemconf_rom_m $20bd
++#define lkf_delay_50us $22d9
++#define lkf_delay_calib_hi $22dd
++#define lkf_delay_calib_lo $22db
++#define lkf__nmi_dis $23da
++#define lkf__nmi_ena $23f3
++#define lkf_disable_nmi $23bd
++#define lkf_enable_nmi $23dd
++#define lkf_hook_alert $233c
++#define lkf_hook_irq $22e6
++#define lkf_hook_nmi $2361
++#define lkf_joys_scan $248d
++#define lkf_keyb_joy0 $25ae
++#define lkf_keyb_joy1 $25b4
++#define lkf_keyb_scan $248e
++#define lkf_keyb_stat $25ab
++#define lkf_bit_n_set $25ba
++#define lkf_lock $25d6
++#define lkf_unlock $25f7
++#define lkf_panic $2683
++#define lkf_p_insert $275b
++#define lkf_p_remove $26a1
++#define lkf__wakeup $27bd
++#define lkf_sleep $283e
++#define lkf_block $28c2
++#define lkf_suspend $28c2
++#define lkf__irq_alertptr $294f
++#define lkf__irq_jobptr $293c
++#define lkf_force_taskswitch $28d6
++#define lkf_idle_task $2a0d
++#define lkf_irq_handler $28f7
++#define lkf_locktsw $2a13
++#define lkf_unlocktsw $2a16
++#define lkf__nmi_jobptr $2a3e
++#define lkf_brk_handler $2a48
++#define lkf_nmi_handler $2a2e
++#define lkf_beep $2a66
++#define lkf_cons_clear $2a7d
++#define lkf_cons_home $2aad
++#define lkf_cons_out $2baa
++#define lkf_console_toggle $2a7c
++#define lkf_printk $2a67
++#define lkf_catcherr $2deb
++#define lkf_hexout $3124
++#define lkf_print_error $2f1c
++#define lkf_suicerrout $2e12
++#define lkf_suicide $2e15
++#define lkf__raw_alloc $3202
++#define lkf_btab2r $330a
++#define lkf_free $32ac
++#define lkf_io_map $32ea
++#define lkf_mpalloc $3183
++#define lkf_palloc $3174
++#define lkf_pfree $32bc
++#define lkf_spalloc $3256
++#define lkf_addtask $332d
++#define lkf_getipid $3577
++#define lkf_mun_block $34d1
++#define lkf_set_zpsize $34c3
++#define lkf_wait $3505
++#define lkf__raw_sendsignal $3620
++#define lkf_sendsignal $3606
++#define lkf_signal $36b2
++#define lkf_get_smbptr $378e
++#define lkf_smb_alloc $36c8
++#define lkf_smb_free $375f
++#define lkf_getenv $37bd
++#define lkf_setenv $3804
++#define lkf_alloc_pfd $3a20
++#define lkf_fclose $3a7b
++#define lkf_fcmd $3b3e
++#define lkf_fdup $3a6a
++#define lkf_fgetc $3af2
++#define lkf_fgetdevice $3b65
++#define lkf_fopen $3a4f
++#define lkf_fopendir $3a3d
++#define lkf_fputc $3adb
++#define lkf_freaddir $3b50
++#define lkf_io_return $3b09
++#define lkf_io_return_error $3b07
++#define lkf_pprefix $396b
++#define lkf_ref_increment $3b1a
++#define lkf_fs_pipe_fclose $3c25
++#define lkf_fs_pipe_fgetc $3d2f
++#define lkf_fs_pipe_fopen $3ba0
++#define lkf_fs_pipe_fputc $3cbb
++#define lkf_popen $3ba6
++#define lkf_console_open $3d86
++#define lkf_console_passkey $3dc8
++#define lkf_fs_cons_fclose $3db5
++#define lkf_fs_cons_fgetc $3dea
++#define lkf_fs_cons_fopen $3d86
++#define lkf_fs_cons_fputc $3dbb
++#define lkf_fs_user_fclose $3eac
++#define lkf_fs_user_fgetc $3eb2
++#define lkf_fs_user_fputc $3eaf
++#define lkf_ufd_open $3e51
++#define lkf_fs_sys_fclose $3efd
++#define lkf_fs_sys_fopendir $3ec3
++#define lkf_fs_sys_freaddir $3f13
++#define lkf_exe_reloc $3fc7
++#define lkf_exe_test $3fa1
++#define lkf_kfunc_tab $4095
++#define lkf_forkto $4133
++#define lkf_add_module $425e
++#define lkf_fix_module $4310
++#define lkf_get_moduleif $42a2
++#define lkf_end_of_kernel $44c5
++#define lkf_get_bitadr $4345
++#define lkf_random $43b0
++#define lkf_srandom $43aa
++#define lkf_strout $4370
++#define lkf_update_random $43b7
++#define lkf_microdisc_setdrive $441f
++#define lkf_oric_fdc_fpatch__3 $4401
++#define lkf_oric_fdc_patch_command__1 $43ed
++#define lkf_oric_fdc_patch_command__2 $43f2
++#define lkf_fs_oricvtape_fclose $44bf
++#define lkf_fs_oricvtape_fgetc $4564
++#define lkf_fs_oricvtape_fopen $4440
++#define lkf_fs_oricvtape_fputc $44e2
++#define lkf_CBMerr2lng $4c4a
++#define lkf_CBMerr_tab $4c3f
++#define lkf_cbm2unix $4c0e
++#define lkf_enter_atomic $4a64
++#define lkf_filename $4c2b
++#define lkf_fs_iec_fclose $492e
++#define lkf_fs_iec_fcmd $4a77
++#define lkf_fs_iec_fgetc $495c
++#define lkf_fs_iec_fopen $481f
++#define lkf_fs_iec_fopendir $4aec
++#define lkf_fs_iec_fputc $49d8
++#define lkf_fs_iec_freaddir $4b13
++#define lkf_leave_atomic $4a6a
++#define lkf_unix2cbm $4bf9
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/oric.h	2006-09-28 14:11:52.282066944 +0200
+@@ -0,0 +1,68 @@
++#ifndef _ORIC_H
++#define _ORIC_H
++
++;// hardware related
++;// see oric.ifrance.com/oric/programming.h
++
++;// unneeded memory config stuff
++;// actually some is needed...
++; ORIC specific
++#define MEMCONF_ROM  0
++#define MEMCONF_OVL  1
++;extern oric_getmemconf
++;extern oric_setmemconf
++; but the kernel doesn't need to know
++;#define GETMEMCONF  jsr oric_getmemconf
++;#define SETMEMCONF  jsr oric_setmemconf
++#define GETMEMCONF  ;nop
++#define SETMEMCONF  ;nop
++#define MEMCONF_SYS  0
++#define MEMCONF_USER 0
++#define MEMCONF_FONT 0
++
++;; model and drive identification
++;extern lk_oric_arch
++;#define lk_oric_arch lk_archmodel
++#define lk_oric_arch    $fff1
++#define loric_typemask  %00000011
++#define loric_oric1     0
++#define loric_atmos     1
++#define loric_stratos   2    ;// = telestrat
++#define loric_diskmask  %00001100
++#define loric_none      %00000000
++#define loric_jasmin    %00000100
++#define loric_mdisc     %00001000
++;//#define loric_cumana    3
++
++#define lk_oric_conf lk_archconf
++#define loric_joymask   %00000001
++#define loric_uart      %00000010
++
++
++;// I/O
++
++;// 1st VIA is at $300, Telestrat has a second one at $320
++#define HAVE_VIA
++#define VIA1_BASE $300
++#define HAVE_VIA2
++#define VIA2_BASE $320
++#include <via.h>
++
++;// Sound (+ keyboard)
++#define HAVE_AY3_8912
++
++;// video controller
++#define HAVE_ULA
++#include <ula.h>
++
++;// serial port (stratos / exp)
++;#define HAVE_ACIA
++;#include "acia.h"
++
++;// both Jasmin and Microdrive
++#include <oric_fdc.h>
++
++;// we have an ORIC-specific console (ULA)
++#define ORIC_CONSOLE
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/oric_fdc.h	2006-10-04 09:27:39.282066944 +0200
+@@ -0,0 +1,81 @@
++
++#ifndef _ORIC_FDC_H
++#define _ORIC_FDC_H
++
++;// Jasmin
++#ifdef SUPPORT_JASMIN
++
++; actually $3f4, first 4 bytes are still VIA1
++# define JASMIN_BASE $3f0
++# define JASMIN JASMIN_BASE
++
++# define JASMIN_FDC     JASMIN+4   ; WD178x register base
++# define JASMIN_FDC_COMMAND	JASMIN+4
++# define JASMIN_FDC_STATUS	JASMIN+4
++# define JASMIN_FDC_TRACK	JASMIN+5
++# define JASMIN_FDC_SECTOR	JASMIN+6
++# define JASMIN_FDC_DATA	JASMIN+7
++
++
++# define JASMIN_SIDESEL		JASMIN+8	; bit0 = side
++# define JASMIN_RESET		JASMIN+9	; bit0 =1 -> enable FDC register mapping, 0 -> reset FDC ?
++# define JASMIN_OVERLAY		JASMIN+10	; bit0 =1 -> enable overlay ram
++# define JASMIN_ROMDIS		JASMIN+11	; bit0 =1 -> disable rom
++# define JASMIN_DISK1_SELECT	JASMIN+12	; bit0 =1 -> this drive is selected (only 1 allowed at a time)
++# define JASMIN_DISK2_SELECT	JASMIN+13	; bit0 =1 -> this drive is selected (only 1 allowed at a time)
++# define JASMIN_DISK3_SELECT	JASMIN+14	; bit0 =1 -> this drive is selected (only 1 allowed at a time)
++# define JASMIN_DISK4_SELECT	JASMIN+15	; bit0 =1 -> this drive is selected (only 1 allowed at a time)
++
++#endif
++
++#ifdef SUPPORT_MICRODISC
++
++# define MICRODISC_BASE $310
++# define MICRODISC MICRODISC_BASE
++
++# define MICRODISC_FDC_COMMAND	MICRODISC
++# define MICRODISC_FDC_STATUS	MICRODISC
++# define MICRODISC_FDC_TRACK	MICRODISC+1
++# define MICRODISC_FDC_SECTOR	MICRODISC+2
++# define MICRODISC_FDC_DATA	MICRODISC+3
++# define MICRODISC_CONTROL	MICRODISC+4 ; ROMDIS, OVERLAY, DRIVE SELECT...
++# define MICRODISC_IRQF		MICRODISC+4 ; 
++# define MICRODISC_DRQF		MICRODISC+8 ; 
++
++# define MICRODISC_CONTROL_DRQ_NMI	%00000001	; generate NMI on DRQ
++# define MICRODISC_CONTROL_ROMEN	%00000010	; enable ROM (!ROMDIS)
++# define MICRODISC_CONTROL_DATACLKDIV	%00000100	; should always be set!
++# define MICRODISC_CONTROL_DBL_DENSITY	%00001000	; select double density disc
++# define MICRODISC_CONTROL_SIDE_B	%00010000	; select second side
++# define MICRODISC_CONTROL_DRIVESEL	%01100000	; bitmask
++# define MICRODISC_DRIVESEL_2		%00100000	; 
++# define MICRODISC_CONTROL_OVERLAY	%10000000	; disable internal EPROM
++
++; cached value of the control register 
++; when writing to it one should and/or bits to this 
++; before writing MICRODISC_CONTROL
++; this is done so because it is a write-only reg
++; (reading returns IRQ flag) and we need to set bits
++; to switch overlay ram too through oric_setmemconf.
++; those symbols are located in kernel/oric/reboot.s
++;extern oric_microdisc_control_shadow
++
++#endif
++
++; the init code will eventually patch addresses 
++
++;#ifdef SUPPORT_MICRODISC
++;#define FDC_COMMAND	MICRODISC_FDC_COMMAND
++;#define FDC_STATUS	MICRODISC_FDC_STATUS
++;#define FDC_TRACK	MICRODISC_FDC_TRACK
++;#define FDC_SECTOR	MICRODISC_FDC_SECTOR
++;#define FDC_DATA	MICRODISC_FDC_DATA
++;#else
++;#define FDC_COMMAND	JASMIN_FDC_COMMAND
++;#define FDC_STATUS	JASMIN_FDC_STATUS
++;#define FDC_TRACK	JASMIN_FDC_TRACK
++;#define FDC_SECTOR	JASMIN_FDC_SECTOR
++;#define FDC_DATA	JASMIN_FDC_DATA
++;#endif
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/ula.h	2006-09-28 17:24:01.282853376 +0200
+@@ -0,0 +1,69 @@
++#ifndef _ORIC_ULA_H
++#define _ORIC_ULA_H
++
++;// TODO: HIRES definitions ?
++
++#ifdef ORIC16K
++;// likely never supported anyway
++#define ULA_BASE $3400
++#error
++#else
++#define ULA_BASE $B400
++#endif
++
++;// standard charset bitmaps
++#define ULA_TEXT_STDCHR ULA_BASE
++#define ULA_TEXT_STDCHR_SZ $400
++
++;// alt charset bitmaps
++#define ULA_TEXT_ALTCHR [ULA_TEXT_STDCHR+ULA_TEXT_STDCHR_SZ]
++#define ULA_TEXT_ALTCHR_SZ $380
++
++;// text screen
++#define ULA_TEXT_BASE [ULA_TEXT_ALTCHR+ULA_TEXT_ALTCHR_SZ]
++
++
++;//
++;// ULA attributes
++;//
++
++;// separate bits
++
++;// can apply to any character
++#define UATTR_INVERT     $80
++;// only in an attribute char (< 32)
++#define UATTR_STDCHR     $00 ; standard charset
++#define UATTR_ALTCHR     $01 ; alternate charset
++#define UATTR_DBL_HGT    $02 ; double height
++#define UATTR_BLINK      $04 ; blinking
++
++;// foreground
++#define UATTR_FG_BLACK   $00
++#define UATTR_FG_RED     $01
++#define UATTR_FG_GREEN   $02
++#define UATTR_FG_YELLOW  $03
++#define UATTR_FG_BLUE    $04
++#define UATTR_FG_MAGENTA $05
++#define UATTR_FG_CYAN    $06
++#define UATTR_FG_WHITE   $07
++
++;// background
++#define UATTR_BG_BLACK   $10
++#define UATTR_BG_RED     $11
++#define UATTR_BG_GREEN   $12
++#define UATTR_BG_YELLOW  $13
++#define UATTR_BG_BLUE    $14
++#define UATTR_BG_MAGENTA $15
++#define UATTR_BG_CYAN    $16
++#define UATTR_BG_WHITE   $17
++
++;// video mode
++#define UATTR_TEXT_60HZ    $18
++#define UATTR_TEXT_50HZ    $1a
++#define UATTR_HIRES_60HZ    $1c
++#define UATTR_HIRES_50HZ    $1e
++
++
++
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/via.h	2006-09-28 16:50:23.283115520 +0200
+@@ -0,0 +1,82 @@
++
++#ifndef _VIA_H
++#define _VIA_H
++
++;// VIA related stuff
++;// ORIC-1 and Atmos have only 1 VIA, Stratos has a 2nd one
++;// it's actually mirrored 16 times in page 3
++;// but other I/O take its place
++;// cf. Theoric nr 2 page 57
++;// 
++
++#ifndef VIA1_BASE
++#define VIA1_BASE $300
++#endif
++#define VIA1 VIA1_BASE
++
++#define VIA1_ORB     VIA1+0       ; port register B (i/o)
++#define VIA1_ORA     VIA1+1       ; port register A (i/o)
++#define VIA1_DDRB    VIA1+2       ; data direction register B  (0=input,
++#define VIA1_DDRA    VIA1+3       ; data direction register A   1=output)
++;//XXX:FIXME
++#define VIA1_T1LO    VIA1+4       ; timer 1 bits 0-7 (lo byte)
++#define VIA1_T1HI    VIA1+5       ; timer 1 bits 8-15 (hi byte)
++#define VIA1_T1LLO   VIA1+6       ; timer 1 latch bits 0-7 (lo byte)
++#define VIA1_T1LHI   VIA1+7       ; timer 1 latch bits 8-15 (hi byte)
++#define VIA1_T2LO    VIA1+8       ; timer 2
++#define VIA1_T2HI    VIA1+9       ; timer 2
++#define VIA1_SR      VIA1+10      ; shift register
++#define VIA1_ACR     VIA1+11      ; aux control register
++#define VIA1_PCR     VIA1+12      ; peripheral control register
++#define VIA1_IFR     VIA1+13      ; interrupt flag register
++#define VIA1_IER     VIA1+14      ; interrupt enable register
++#define VIA1_ORA_NH  VIA1+15      ; port register A (no handshake)
++
++;// aliases
++#define VIA1_IRA     VIA1_ORA
++#define VIA1_IRB     VIA1_ORB
++;// CIA-like aliases
++#define VIA1_PRA     VIA1_ORA
++#define VIA1_PRB     VIA1_ORB
++#define VIA1_TALO    VIA1_T1LO
++#define VIA1_TAHI    VIA1_T1HI
++
++
++
++#ifdef HAVE_VIA2
++
++#ifndef VIA2_BASE
++#define VIA2_BASE $320
++#endif
++#define VIA2 VIA2_BASE
++
++#define VIA2_ORB     VIA2+0       ; port register B (i/o)
++#define VIA2_ORA     VIA2+1       ; port register A (i/o)
++#define VIA2_DDRB    VIA2+2       ; data direction register B  (0=input,
++#define VIA2_DDRA    VIA2+3       ; data direction register A   1=output)
++;//XXX:FIXME
++#define VIA2_T1LO    VIA2+4       ; timer 1 bits 0-7 (lo byte)
++#define VIA2_T1HI    VIA2+5       ; timer 1 bits 8-15 (hi byte)
++#define VIA2_T1LLO   VIA2+6       ; timer 1 latch bits 0-7 (lo byte)
++#define VIA2_T1LHI   VIA2+7       ; timer 1 latch bits 8-15 (hi byte)
++#define VIA2_T2LO    VIA2+8       ; timer 2
++#define VIA2_T2HI    VIA2+9       ; timer 2
++#define VIA2_SR      VIA2+10      ; shift register
++#define VIA2_ACR     VIA2+11      ; aux control register
++#define VIA2_PCR     VIA2+12      ; peripheral control register
++#define VIA2_IFR     VIA2+13      ; interrupt flag register
++#define VIA2_IER     VIA2+14      ; interrupt enable register
++#define VIA2_ORA_NH  VIA2+15      ; port register A (no handshake)
++
++;// aliases
++#define VIA2_IRA     VIA2_ORA
++#define VIA2_IRB     VIA2_ORB
++;// CIA-like aliases
++#define VIA2_PRA     VIA2_ORA
++#define VIA2_PRB     VIA2_ORB
++#define VIA2_TALO    VIA2_T1LO
++#define VIA2_TAHI    VIA2_T1HI
++
++#endif
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ include/zp.h	2007-02-25 15:38:28.283115520 +0100
+@@ -0,0 +1,32 @@
++#define altflags 21 ; len=1
++#define done 22 ; len=8
++#define last 30 ; len=8
++#define keycode 38 ; len=1
++#define sbase 39 ; len=1
++#define cchar 40 ; len=1
++#define current_output 41 ; len=1
++#define cons_visible 42 ; len=1
++#define mapl 43 ; len=1
++#define maph 44 ; len=1
++#define csrx 45 ; len=1
++#define csry 46 ; len=1
++#define buc 47 ; len=1
++#define cflag 48 ; len=1
++#define rvs_flag 49 ; len=1
++#define scrl_y1 50 ; len=1
++#define scrl_y2 51 ; len=1
++#define esc_flag 52 ; len=1
++#define esc_parcnt 53 ; len=1
++#define wr_pointer 54 ; len=1
++#define rd_pointer 55 ; len=1
++#define susp_flag 56 ; len=1
++#define nlflag 57 ; len=1
++#define usage_count 58 ; len=1
++#define ch_state 59 ; len=1
++#define ch_secadr 60 ; len=1
++#define ch_device 61 ; len=1
++#define EOI 62 ; len=1
++#define buffer 63 ; len=1
++#define buffer_status 64 ; len=1
++#define filename_length 65 ; len=1
++#define fopen_flags 66 ; len=1
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/fs_oricvtape.s	2006-09-28 17:43:56.293339136 +0200
+@@ -0,0 +1,334 @@
++		;; virtual filesystem (oric emulator tape)
++		;;
++
++
++
++;//#ifdef HAVE_EUPHORIC_TAPEFS
++
++#include <config.h>
++#include <system.h>
++#include <kerrors.h>
++#include <fs.h>
++
++#define osmb_avail 5 ; (word) number of bytes to read
++
++#define k7fname $27f
++#define MAXK7NAME 15
++#define ATMOS_GETSYN $e735
++#define ATMOS_RDBYTE $e6c9
++
++
++;extern oric_setmemconf_rom
++;extern oric_setmemconf_ovl
++
++		.global fs_oricvtape_fopen
++		.global fs_oricvtape_fclose
++		.global fs_oricvtape_fputc
++		.global fs_oricvtape_fgetc
++		
++		; handle errors there
++_omemrom:
++		; set overlay back
++		jsr  oric_setmemconf_ovl
++		cli
++_omem1:	ldx syszp+4
++		jsr  smb_free
++	-	lda  #lerr_illarg
++		SKIP_WORD
++_outofmem:
++		lda  #lerr_outofmem
++		jmp  catcherr
++
++		;; function: oricvtape_fopen
++		;; open file from tape (actually host fs) readonly
++		;; <syszp=filename, syszp+2=fmode
++		;; X=minor (device number)
++		;; > X fd for reading
++		;; calls: smb_alloc 
++		
++fs_oricvtape_fopen:
++		lda  syszp+2
++		cmp  #fmode_ro
++		bne  -
++		
++;		lda  #"H"
++;		jsr  printk
++;		lda  #":"
++;		jsr  printk
++		
++
++
++#ifndef ALWAYS_SZU
++;		sei
++;		ldx  lk_ipid
++;		lda  #tstatus_szu
++;		ora  lk_tstatus,x
++;		sta  lk_tstatus,x
++;		cli
++#endif
++
++		; store filename in page 2
++;	-	jmp -
++		ldy  #0
++	-	lda  (syszp),y
++		and  #%11011111			; lower->UPPER
++		sta  k7fname,y
++		beq  +
++		iny
++		cpy  #MAXK7NAME
++		bne  -
++	+	
++
++		sec						; non blocking
++
++		jsr  smb_alloc
++		bcs  _outofmem
++		;; X=SMB, syszp=address
++		stx  syszp+3
++		ldy  #0
++		lda  #MAJOR_VTAPE
++		sta  (syszp),y			; set major
++		lda  #0
++		iny
++		sta  (syszp),y			; set minor
++		iny
++		lda  #1
++		sta  (syszp),y			; set rd-counter
++		iny
++		lda  #0
++		sta  (syszp),y			; set wr-counter
++		lda  #fflags_read
++		iny
++		sta  (syszp),y			; set flags (write-only)
++		iny
++;		lda  syszp+3
++;		sta  (syszp),y			; set SMB1-ID (in SMB2)
++;		sta  (syszp+5),y		; set SMB2-ID (in SMB1)
++;		lda  #pflags_empty
++;		iny
++;		sta  (syszp+5),y		; set pipe-flags (empty)
++;		lda  #15
++;		iny
++;		sta  (syszp+5),y		; set pipe-readptr
++;		iny
++;		sta  (syszp+5),y		; set pipe-writeptr
++		ldx  syszp+3
++		jsr  alloc_pfd			; (will be successfull)
++		stx  syszp+3
++		
++		sei
++		
++
++		; get the ROM
++		jsr  oric_setmemconf_rom
++		
++;	-	jmp -
++		; call GETSYN
++		jsr  ATMOS_GETSYN
++		
++		; read the header and skip it
++	-	jsr  ATMOS_RDBYTE
++		cmp  #$16				; SYN
++		beq  -
++		cmp  #$24				; STA
++		bne  _omemrom
++		ldy  #4
++	-	jsr  ATMOS_RDBYTE
++		;jsr hexout
++		dey
++		bne  -
++
++		; read end address
++		ldy  #osmb_avail
++		jsr  ATMOS_RDBYTE
++		;jsr hexout
++		sta  (syszp),y
++		iny
++		jsr  ATMOS_RDBYTE
++		;jsr hexout
++		sta  (syszp),y
++
++		; skip start addr and rest of header
++		jsr  ATMOS_RDBYTE
++		;jsr hexout
++		jsr  ATMOS_RDBYTE
++		;jsr hexout
++		jsr  ATMOS_RDBYTE
++		;jsr hexout
++
++		; skip filename, we know it
++	-	jsr  ATMOS_RDBYTE
++		cmp  #0
++		bne  -
++		;lda  #$0a
++		;jsr  printk
++		
++
++		
++		; set overlay back
++		jsr  oric_setmemconf_ovl
++		
++		cli
++		
++#ifndef ALWAYS_SZU
++		sei
++		ldx  lk_ipid
++		lda  #$ff-tstatus_szu
++		and  lk_tstatus,x
++		sta  lk_tstatus,x
++		ldx  syszp+3			; fs for reading
++		cli
++#else
++		ldx  syszp+3
++#endif
++		clc
++		rts
++
++fs_oricvtape_fclose:
++		lda  #0
++		clc
++		rts
++
++
++		;; buffer is full
++	-	bit  syszp+4			; check flags
++		bmi  +					; block till byte is available
++		lda  #lerr_tryagain
++		jmp  io_return_error
++		
++	+	lda  (syszp),y
++		ora  #pflags_wrwait
++		sta  (syszp),y
++		lda  #waitc_stream
++		ldx  syszp+2
++		jsr  block
++		ldy  #fsmb_rdcnt
++		lda  (syszp),y
++		beq  _fputc_error
++		jmp  +
++		
++fs_oricvtape_fputc:					; data byte is in syszp+5
++		ldy  #psmb_otherid
++		lda  (syszp),y
++		beq  _fputc_error		; can't write, because there is no destination
++		sta  syszp+6			; remember SMB-ID
++		tax
++		jsr  get_smbptr
++		
++	+	ldy  #psmb_flags
++		lda  (syszp),y
++		tax
++		and  #pflags_full
++		bne  -
++		txa
++		and  #$ff-(pflags_empty+pflags_rdwait)
++		sta  (syszp),y
++		txa
++		and  #pflags_rdwait		; check if someone must be woken up
++		pha						; store mun_block-flag
++		;; <<-- check for large mode (not implemented yet)
++
++		;; put short (without use of extra data pages)
++		ldy  #psmb_wrpos
++		lda  (syszp),y
++		tay
++		lda  syszp+5			; data byte
++		sta  (syszp),y
++		iny
++		cpy  #32
++		bne  +
++		ldy  #psmb_wrpos+1
++	+	tya
++		ldy  #psmb_wrpos
++		sta  (syszp),y
++		ldy  #psmb_rdpos
++		cmp  (syszp),y
++		bne  wrdone1
++		;; <<-- try to expand (not implemented yet)
++		ldy  #psmb_flags
++		lda  #pflags_full
++		ora  (syszp),y
++		sta  (syszp),y
++wrdone1:
++		pla
++		beq  +
++		lda  #waitc_stream
++		ldx  syszp+6			; other SMB-ID
++		jsr  mun_block			; unblock waiting tasks
++	+	jmp  io_return
++
++_fputc_error:
++		lda  #lerr_brokenpipe
++		SKIP_WORD
++		
++_fgetc_EOF:
++		lda  #lerr_eof
++		jmp  io_return_error
++		
++		;; buffer is empty
++	-	ldy  #psmb_otherid
++		lda  (syszp),y
++		beq  _fgetc_EOF			; no source left, this is EOF
++
++		bit syszp+4				; check flag
++		bmi  +					; do block
++		lda  #lerr_tryagain
++		jmp  io_return_error
++		
++	+	ldy  #psmb_flags
++		lda  (syszp),y
++		ora  #pflags_rdwait
++		sta  (syszp),y
++		lda  #waitc_stream
++		ldx  syszp+2
++		jsr  block				; block, then try again
++
++		
++oric_rdbyte:
++		sei
++		; get the ROM
++		jsr  oric_setmemconf_rom
++		
++		; call GETSYN
++		jsr  ATMOS_RDBYTE
++		
++		pha
++		; set overlay back
++		jsr  oric_setmemconf_ovl
++		pla
++		
++		cli
++		;jsr hexout
++		;pha
++		;lda #$0a
++		;jsr printk
++		;pla
++		rts
++
++
++fs_oricvtape_fgetc:
++		
++	;	ldy  #osmb_avail
++	;	lda  (syszp),y
++	;	bne  header_done
++		
++		
++header_done:
++		jsr  oric_rdbyte
++	+	clc
++;		lda  syszp+5
++
++;		lda  #"K"
++;		jsr  printk
++;		lda  #$0a
++;		jsr  printk
++
++		;sta  syszp+5
++		clc
++		jmp  io_return
++
++err:
++		lda  #lerr_ioerror
++		jmp  io_return_error
++
++;//#endif ; HAVE_EUPHORIC_TAPEFS
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/fs_oricvtape_init.s	2006-09-28 17:43:43.293601280 +0200
+@@ -0,0 +1,40 @@
++		;; virtual filesystem (oric emulator tape)
++		;;
++;//#ifdef HAVE_EUPHORIC_TAPEFS
++
++#include <config.h>
++#include <system.h>
++#include <kerrors.h>
++#include <fs.h>
++#include <ksym.h>
++
++		.global	fs_oricvtape_init
++
++		; bootloader code
++		; inserted at the end of bootstrap.s
++#if 0
++		jsr fs_oricvtape_init	; CallFromBootLoader
++#endif
++
++fs_oricvtape_init:
++		; allocate page 2 as we must copy the name
++		; there for the emulator to find.
++		jsr  lkf_locktsw
++		lda  #1					; number of pages
++		ldx  #2					; start page
++		ldy  #memown_sys		; usage ID
++		sta  tmpzp
++		stx  tmpzp+3
++		sty  tmpzp+4
++		jsr  lkf__raw_alloc		; (does unlocktsw)
++		;; say hello
++		ldx  #0
++	-	lda  msg,x
++		beq  +
++		jsr  lkf_printk
++		inx
++		bne  -
++	+	rts
++msg:
++		.text "  - Euphoric virtual tape filesystem",$0a,0
++;//#endif ; HAVE_EUPHORIC_TAPEFS
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/globals.txt	2007-02-25 15:38:29.294125568 +0100
+@@ -0,0 +1,144 @@
++ 2005 : init
++ 209a : oric_getmemconf
++ 20bc : oric_microdisc_control_shadow
++ 209e : oric_setmemconf
++ 20aa : oric_setmemconf_ovl
++ 20b6 : oric_setmemconf_ovl_j
++ 20c2 : oric_setmemconf_ovl_m
++ 20a7 : oric_setmemconf_rom
++ 20ad : oric_setmemconf_rom_j
++ 20bd : oric_setmemconf_rom_m
++ 22d9 : delay_50us
++ 22dd : delay_calib_hi
++ 22db : delay_calib_lo
++ 23da : _nmi_dis
++ 23f3 : _nmi_ena
++ 23bd : disable_nmi
++ 23dd : enable_nmi
++ 233c : hook_alert
++ 22e6 : hook_irq
++ 2361 : hook_nmi
++ 248d : joys_scan
++ 25ae : keyb_joy0
++ 25b4 : keyb_joy1
++ 248e : keyb_scan
++ 25ab : keyb_stat
++ 25ba : bit_n_set
++ 25d6 : lock
++ 25f7 : unlock
++ 2683 : panic
++ 275b : p_insert
++ 26a1 : p_remove
++ 27bd : _wakeup
++ 283e : sleep
++ 28c2 : block
++ 28c2 : suspend
++ 294f : _irq_alertptr
++ 293c : _irq_jobptr
++ 28d6 : force_taskswitch
++ 2a0d : idle_task
++ 28f7 : irq_handler
++ 2a13 : locktsw
++ 2a16 : unlocktsw
++ 2a3e : _nmi_jobptr
++ 2a48 : brk_handler
++ 2a2e : nmi_handler
++ 2a66 : beep
++ 2a7d : cons_clear
++ 2aad : cons_home
++ 2baa : cons_out
++ 2a7c : console_toggle
++ 2a67 : printk
++ 2deb : catcherr
++ 3124 : hexout
++ 2f1c : print_error
++ 2e12 : suicerrout
++ 2e15 : suicide
++ 3202 : _raw_alloc
++ 330a : btab2r
++ 32ac : free
++ 32ea : io_map
++ 3183 : mpalloc
++ 3174 : palloc
++ 32bc : pfree
++ 3256 : spalloc
++ 332d : addtask
++ 3577 : getipid
++ 34d1 : mun_block
++ 34c3 : set_zpsize
++ 3505 : wait
++ 3620 : _raw_sendsignal
++ 3606 : sendsignal
++ 36b2 : signal
++ 378e : get_smbptr
++ 36c8 : smb_alloc
++ 375f : smb_free
++ 37bd : getenv
++ 3804 : setenv
++ 3a20 : alloc_pfd
++ 3a7b : fclose
++ 3b3e : fcmd
++ 3a6a : fdup
++ 3af2 : fgetc
++ 3b65 : fgetdevice
++ 3a4f : fopen
++ 3a3d : fopendir
++ 3adb : fputc
++ 3b50 : freaddir
++ 3b09 : io_return
++ 3b07 : io_return_error
++ 396b : pprefix
++ 3b1a : ref_increment
++ 3c25 : fs_pipe_fclose
++ 3d2f : fs_pipe_fgetc
++ 3ba0 : fs_pipe_fopen
++ 3cbb : fs_pipe_fputc
++ 3ba6 : popen
++ 3d86 : console_open
++ 3dc8 : console_passkey
++ 3db5 : fs_cons_fclose
++ 3dea : fs_cons_fgetc
++ 3d86 : fs_cons_fopen
++ 3dbb : fs_cons_fputc
++ 3eac : fs_user_fclose
++ 3eb2 : fs_user_fgetc
++ 3eaf : fs_user_fputc
++ 3e51 : ufd_open
++ 3efd : fs_sys_fclose
++ 3ec3 : fs_sys_fopendir
++ 3f13 : fs_sys_freaddir
++ 3fc7 : exe_reloc
++ 3fa1 : exe_test
++ 4095 : kfunc_tab
++ 4133 : forkto
++ 425e : add_module
++ 4310 : fix_module
++ 42a2 : get_moduleif
++ 44c5 : end_of_kernel
++ 4345 : get_bitadr
++ 43b0 : random
++ 43aa : srandom
++ 4370 : strout
++ 43b7 : update_random
++ 441f : microdisc_setdrive
++ 4401 : oric_fdc_fpatch__3
++ 43ed : oric_fdc_patch_command__1
++ 43f2 : oric_fdc_patch_command__2
++ 44bf : fs_oricvtape_fclose
++ 4564 : fs_oricvtape_fgetc
++ 4440 : fs_oricvtape_fopen
++ 44e2 : fs_oricvtape_fputc
++ 4c4a : CBMerr2lng
++ 4c3f : CBMerr_tab
++ 4c0e : cbm2unix
++ 4a64 : enter_atomic
++ 4c2b : filename
++ 492e : fs_iec_fclose
++ 4a77 : fs_iec_fcmd
++ 495c : fs_iec_fgetc
++ 481f : fs_iec_fopen
++ 4aec : fs_iec_fopendir
++ 49d8 : fs_iec_fputc
++ 4b13 : fs_iec_freaddir
++ 4a6a : leave_atomic
++ 4bf9 : unix2cbm
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/lng_kfunc.txt	2006-09-28 17:44:01.295436288 +0200
+@@ -0,0 +1,874 @@
++  <= syszp0
++  <= syszp1
++  <= Y,A
++  <= syszp0
++  <= syszp1
++  <= Y,A
++  <= task
++  <= task
++warning: reloc_and_exec->exe_reloc might cause inconsistency in syszp0
++warning: reloc_and_exec->exe_reloc might cause inconsistency in syszp1
++  <= syszp2
++  <= syszp3
++  <= syszp4
++  <= syszp5
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= Y,A
++warning: fclose->resolve_fileno might cause inconsistency in syszp0
++warning: fclose->resolve_fileno might cause inconsistency in syszp1
++  <= syszp2
++  <= syszp3
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp0
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp1
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp2
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp3
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp4
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp5
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp6
++warning: fclose->resolve_fileno might cause inconsistency in tmpzp7
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= syszp3
++  <= tmpzp0
++  <= tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= tmpzp4
++  <= tmpzp5
++  <= tmpzp6
++  <= tmpzp7
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= syszp3
++  <= tmpzp0
++  <= tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= tmpzp4
++  <= tmpzp5
++  <= tmpzp6
++  <= tmpzp7
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= syszp0
++  <= syszp1
++  <= syszp2
++  <= syszp3
++  <= tmpzp0
++  <= tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= tmpzp4
++  <= tmpzp5
++  <= tmpzp6
++  <= tmpzp7
++  <= tmpzp0
++  <= tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= tmpzp4
++  <= tmpzp5
++  <= context
++  <= context
++  <= context
++warning: p_insert->check_cycletime might cause inconsistency in A,Y
++warning: :->getipid might cause inconsistency in tmpzp0
++warning: :->getipid might cause inconsistency in tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= context
++warning: smb_free->pfree might cause inconsistency in context
++  <= A,Y
++  <= A,Y
++warning: addtask->spalloc might cause inconsistency in tmpzp0
++warning: addtask->spalloc might cause inconsistency in tmpzp1
++  <= context
++  <= A,Y
++  <= context
++  <= context
++  <= context
++  <= tmpzp0
++  <= tmpzp1
++  <= tmpzp2
++  <= tmpzp3
++  <= tmpzp4
++  <= A,Y
++
++Summary
++=======
++
++ Name    = int_fddup
++ inputs  =  A=fn
++
++ outputs = (null)
++ comment =  increase reader/writer counter of stream
++ according to flags (readable/writeable)
++
++ Changes = syszp0,syszp1,Y,A
++
++ Name    = addtask
++ inputs  =  X/Y = address of code to execute
++ A = priority (1-7)
++
++ outputs = (null)
++ comment =  add task to scheduler
++ syszp:	0=stdin, 1=stdout, 2=stderr (will be dupped),
++ syszp+3=codebase_hi (-> syszp+7 in new context),
++ syszp+4/5=parameter-structure ([5]=0 if none)
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7,syszp4,syszp5,syszp0,syszp1,Y,A,context,A,Y
++
++ Name    = task_init
++ inputs  = (null)
++ outputs = (null)
++ comment =  this is what a new task will execute first
++
++ Changes = 
++
++ Name    = calibrate_delay
++ inputs  = (null)
++ outputs = (null)
++ comment =  used to calibrate delay loops 
++ well, seems not to work well this way
++ hardcoding might be better
++
++ Changes = unknown
++
++ Name    = beep
++ inputs  = (null)
++ outputs = (null)
++ comment =  no parameters
++ do beep (the same as in C128 rom)
++
++ Changes = A
++
++ Name    = printk
++ inputs  =  A=char
++
++ outputs = (null)
++ comment =  print (kernel) messages to console directly all registers
++ (A, X and Y) are unchanged !!
++
++ Changes = 
++ Unresolved calls = cons_out
++
++ Name    = cons_out
++ inputs  =  A=char, X=number of console
++
++ outputs = (null)
++ comment =  print character to console
++
++ Changes = tmpzp0,tmpzp1
++ Unresolved calls = untocktsw
++
++ Name    = delay_50us
++ inputs  = (null)
++ outputs = (null)
++ comment =  delay for 50us, is affected by
++ calib
++
++ Changes = 
++
++ Name    = getenv
++ inputs  = A/Y=variable name "NAME",0
++
++ outputs = A/Y=pointer to "value",0
++
++ comment =  find environment variable
++      or 0/0 if not found (checking X offset is enough)
++	or 0/0 if no environment page (0 in env_page)
++
++ Changes = syszp0,syszp1,syszp2,syszp3,syszp4,syszp5
++
++ Name    = setenv
++ inputs  = (null)
++ outputs = A/Y=variable 'NAME=value',0
++
++ comment =  set environment variable, setting to empty value will delete variable
++ C=0 no error
++ C=1 if environment full (variable NAME will be erased if existed before)
++     if bad form (w/o '=')
++     if environment not present (0 as env_page)
++
++ Changes = syszp0,syszp1,syszp2,syszp3,syszp4,syszp5
++
++ Name    = catcherr
++ inputs  =  A=error code, that should be returned to main program
++
++ outputs = (null)
++ comment =  return from kernel or module function back to user application
++ with error, if next instruction in user context is "nop" catcherr
++ will jump to suicerrout
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,task
++
++ Name    = suicerrout
++ inputs  =  A=error code
++
++ outputs = (null)
++ comment =  kill current task, but print a error message first
++
++ Changes = task
++ Unresolved calls = print_error
++
++ Name    = suicide
++ inputs  =  A=exit code
++
++ outputs = (null)
++ comment =  kill current task
++
++ Changes = task
++
++ Name    = print_error
++ inputs  =  A=error code
++
++ outputs = (null)
++ comment =  print a standard error message to stdout or (if not
++ available) use printk
++
++ Changes = 
++ Unresolved calls = printk,hexout
++
++ Name    = hexout
++ inputs  = (null)
++ outputs = (null)
++ comment =  print 8bit number in hex
++ (uses printk, so is only usefull for kernel or
++ module functions!)
++
++ Changes = 
++ Unresolved calls = printk
++
++ Name    = forkto
++ inputs  =  A/Y = address of structure:
++	.byte stdin_fd, stdout_fd, stderr_fd
++	.asc  "<filename>\0"
++		optional: .asc "<parameter>\0"
++		...
++	.asc "\0"
++
++ outputs =  c=1: error (error number in A)
++ c=0: X/Y = child's PID
++
++ comment =  load and start a new process
++
++ Changes = syszp0,syszp1,syszp2,syszp3,syszp4,syszp5,syszp6,syszp7
++ Unresolved calls = fopen,spalloc,mpalloc,pfree,addtask,catcherr,fgetc,exe_test,reloc_and_exec,loado65
++
++ Name    = reloc_and_exec
++ inputs  =  Y = exe-parameter (high-byte of base-address)
++
++ outputs = (null)
++ comment =  claim new task's memory, then relocate and launch it
++ (executed in new task's context
++  after initializing the environment)
++
++ Changes = syszp0,syszp1,syszp2,syszp3,syszp4,syszp5
++
++ Name    = o65_exec_task
++ inputs  =  Y = high-byte of first address
++
++ outputs = (null)
++ comment =  claim new task's memory, then launch it (already relocated)
++ (executed in new task's context
++  after initializing the environment)
++
++ Changes = 
++
++ Name    = resolve_dev
++ inputs  =  A/Y=filename (including path) X->syszp+2
++
++ outputs =  X/Y=pdminor/pdmajor
++
++ comment =  resolve device from path prefix
++
++ Changes = syszp0,syszp1,syszp2
++
++ Name    = resolve_fileno
++ inputs  =  X=fileno
++
++ outputs =  syszp=SMB, syszp+2=SMB-ID, Y=major*2, X=minor
++ syszp+3=fileno
++ c=error (A=errorcode)
++
++ comment =  get SMB that corresponds to a given fileno
++
++ Changes = syszp0,syszp1,syszp2,syszp3,tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7
++
++ Name    = alloc_pfd
++ inputs  =  X = SMB-ID
++
++ outputs =  X = fd
++
++ comment =  allocate slot in process' file-table
++
++ Changes = A,X,Y
++
++ Name    = fopendir
++ inputs  =  A/Y = filename
++
++ outputs =  c=0 : X = fileno
++ c=1 : A = errno
++
++ comment =  open directory for reading with freaddir
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7,syszp0,syszp1,syszp2
++
++ Name    = fopen
++ inputs  =  A/Y = filename
++ X = mode (fmode_ro, fmode_wo, fmode_rw, fmode_a)
++
++ outputs =  c=0 : X = fileno
++ c=1 : A = errno
++
++ comment =  open file 
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7,syszp0,syszp1,syszp2
++
++ Name    = fdup
++ inputs  =  X = fileno
++
++ outputs =  X = new fileno
++
++ comment =  duplicate fd
++
++ Changes = Y,A
++
++ Name    = fclose
++ inputs  =  X = fileno, c=error (A=code)
++
++ outputs = (null)
++ comment =  close file
++
++ Changes = syszp0,syszp1,tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7,syszp2,syszp3,context
++
++ Name    = fputc
++ inputs  =  X = fileno, c=blocking
++
++ outputs =  c=0 : A = byte
++
++ comment =  put single byte to stream
++   c=1 : A = errno
++
++ Changes = syszp0,syszp1,syszp2,syszp3,tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7
++
++ Name    = fgetc
++ inputs  =  X = fileno
++
++ outputs =  c=0 : A = byte, c=blocking
++
++ comment =  get single byte from stream
++   c=1 : A = errno
++
++ Changes = syszp0,syszp1,syszp2,syszp3,tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7
++
++ Name    = ref_increment
++ inputs  =  syszp points to fs_smb
++
++ outputs = (null)
++ comment =  increase reference counter of stream
++ according to it's flags (readable/writeable)
++
++ Changes = Y,A
++
++ Name    = fcmd
++ inputs  =  A/Y = filename
++
++ outputs =  c=0 : X = fileno
++
++ comment =  execute device specific command
++   X = command (fcmd_del)
++   c=1 : A = errno
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7,syszp0,syszp1,syszp2
++
++ Name    = freaddir
++ inputs  =  X = fileno, A/Y = dir strcut
++
++ outputs =  c=0 : A = byte, c=blocking
++
++ comment =  read single directory entry
++   c=1 : A = errno
++
++ Changes = syszp0,syszp1,syszp2,syszp3,tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7
++
++ Name    = fgetdevice
++ inputs  =  X=stream ID
++
++ outputs =  X/Y=minor/major
++
++ comment =  get device (major and minor numbers) of the device
++ that is responsible for a give stream
++
++ Changes = 
++
++ Name    = oricvtape_fopen
++ inputs  = syszp=filename, syszp+2=fmode
++
++ outputs =  X fd for reading
++
++ comment =  open file from tape (actually host fs) readonly
++ X=minor (device number)
++
++ Changes = 
++ Unresolved calls = smb_alloc
++
++ Name    = popen
++ inputs  = (null)
++ outputs =  X/Y fd for reading/writing
++
++ comment =  open bidirectional pipe
++
++ Changes = 
++ Unresolved calls = smb_alloc
++
++ Name    = ufd_open
++ inputs  =  A=minor, bit$=pointer to function
++
++ outputs =  X=fd, c=error
++
++ comment =  create user defined stream
++ fgetc/fputc and fclose calls are redirected to a user defined
++ function
++
++ Changes = 
++ Unresolved calls = smb_alloc
++
++ Name    = hook_irq
++ inputs  =  X/Y=address of handler
++
++ outputs = (null)
++ comment =  Note: you must disable IRQ before using tmpzp (!)
++ and keep it disabled as long as tmpzp must not be modified
++ by another task
++ bit pattern for
++   lsem_irq1 = $0000000001 (No. 0)
++   lsem_irq2 = $0000000002 (No. 1)
++   lsem_irq3 = $0000000004 (No. 2)
++
++ Changes = tmpzp0,tmpzp1,tmpzp2
++
++ Name    = hook_alert
++ inputs  =  X/Y=address of handler
++
++ outputs = (null)
++ comment =  install a alarm handler (triggered by TOD of CIA1)
++
++ Changes = 
++
++ Name    = hook_nmi
++ inputs  =  X/Y=address of handler
++
++ outputs = (null)
++ comment = (null)
++ Changes = 
++
++ Name    = disable_nmi
++ inputs  = (null)
++ outputs = (null)
++ comment =  disable NMI temporary
++
++ Changes = 
++
++ Name    = enable_nmi
++ inputs  = (null)
++ outputs = (null)
++ comment =  enable temporary disabled NMI
++
++ Changes = 
++
++ Name    = palloc
++ inputs  =  A=number of pages to allocate
++
++ outputs =  c=0: X=start page
++ c=1: out of memory
++
++ comment =  pagewise allocation (forward search)
++ wrapper for mpalloc with simpler interface for applications
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5
++
++ Name    = mpalloc
++ inputs  =  A=number of pages to allocate
++ X=page usage code / flags
++ Y=mode (bit7 = no I/O area)
++
++ outputs =  c=0: X=start page
++ c=1: out of memory
++
++ comment =  multi page allocation (forward search)
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5
++
++ Name    = _raw_alloc
++ inputs  =  tmpzp = number of pages
++ tmpzp+3 = start page
++ tmpzp+4 = usage flags
++
++ outputs =  c=0: X=start page
++
++ comment =  raw memory allocation
++ (call lock_tsw before!)
++
++ Changes = context
++
++ Name    = spalloc
++ inputs  =  X=page usage code / flags
++ Y=mode (bit7 = no I/O area)
++
++ outputs =  c=0: X=start page
++ c=1: out of memory
++
++ comment =  allocate a single page (much faster, backward search)
++
++ Changes = tmpzp0,tmpzp1,context
++
++ Name    = free
++ inputs  =  X=start page
++
++ outputs = (null)
++ comment =  free pages allocated with palloc, mpalloc or spalloc
++ wrapper for pfree with security checks
++
++ Changes = context
++
++ Name    = pfree
++ inputs  =  X=startpage of memory
++
++ outputs = (null)
++ comment =  free memory allocated with mpalloc or spalloc
++ (new: you can also free parts of allocated memory now !)
++ (no error check!)
++ (could do many sanity checks in here)
++
++ Changes = context
++
++ Name    = _check_blocking
++ inputs  = (null)
++ outputs = (null)
++ comment =  check if blocking desired on unavailable global semaphore
++
++ Changes = context
++
++ Name    = lock
++ inputs  =  X=No. of semaphore
++ C=0 - non blocking
++
++ outputs = (null)
++ comment =  lock system semaphore
++
++ Changes = 
++
++ Name    = unlock
++ inputs  =  X=No. of semaphore
++
++ outputs = (null)
++ comment =  unlock locked system semaphore
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,A,Y
++
++ Name    = _validate_lock
++ inputs  =  X=lock number
++
++ outputs =  tmpzp+4 = lock number
++ Y=index to byte of lock in TSP
++ X=index to bit of lock in byte
++ A=0 if currently unlocked in TSP, else lock bit is set
++ Z=1 if currently unlocked in TSP, 0 if currently locked
++ I=1 (IRQs disabled)
++
++ comment =  validate lock number and generate indices
++
++ if lock number is valid:
++
++ Changes = tmpzp4
++
++ Name    = _sem_cleanup
++ inputs  =  X=lock number
++
++ outputs =  X=lock number
++
++ comment =  un-register IRQ/Alert or NMI-handler
++ assumes lsem_nmi is the last semaphore that needs
++ special cleanup (lsem_* defined in include/system.h)
++
++ Changes = 
++ Unresolved calls = _nmi_dis
++
++ Name    = get_bitadr
++ inputs  =  bit instruction following "jsr..."
++
++ outputs =  X/Y = bitadr (A unchanged)
++
++ comment =  get parameter passed by a preceeding bit-instruction
++ the bit-instruction must be right before the jsr instruction
++ sei is called, you have to call cli somewhen again outside!
++
++ Changes = tmpzp0,tmpzp1
++
++ Name    = strout
++ inputs  =  X=fd, bit string_start after "jsr strout" command
++
++ outputs =  c=error or not
++
++ comment =  print string
++
++ Changes = 
++
++ Name    = random
++ inputs  =  nothing
++
++ outputs =  A random number
++
++ comment =  Get a random number
++
++ Changes = 
++
++ Name    = update_random
++ inputs  =  nothing
++
++ outputs =  nothing
++
++ comment =  Update random number generator
++
++ Changes = 
++
++ Name    = add_module
++ inputs  =  X/Y=pointer to module structure
++
++ outputs = (null)
++ comment =  add module to system
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3
++
++ Name    = get_moduleif
++ inputs  =  X/Y=pointer to moddesc
++
++ outputs =  c=error
++
++ comment =  search for module and copy
++ module interface into local
++ memory
++   A=device number
++ structure of moddesc:
++  .asc "xyz"      ; module type identifier
++  .byte ifsize    ; number of provided functions
++                  ; will be replaced by module version
++  .buf 3*ifsize   ; placeholder for ifsize JMPs
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5
++
++ Name    = fix_module
++ inputs  =  X=address of first unneccessary code page. (or $00 if none)
++
++ outputs = (null)
++ comment =  make module (associated with current task) a passive
++ part of the system.
++ this means, all memory occupied by the current task
++ is converted into "memory used by a module" and the task
++ is removed from the scheduler.
++ => there is no return from this function!
++   (all hardware initialisation and detection code of a module
++   should be at the end of the code, so the used memory can be
++   deallocated afterwards) 
++
++ Changes = 
++
++ Name    = loado65
++ inputs  =  X = fd, first two bytes (magic number) already read
++
++ outputs =  C=0: A/Y = execute-address ($00/first-page)
++ C=1: A = error-code
++
++ comment =  Loads and relocates an o65-format file.
++ Links function-calls to the kernel.
++
++ Changes = 
++ Unresolved calls = lock,unlock,fgetc,fclose,mpalloc,pfree
++
++ Name    = panic
++ inputs  = (null)
++ outputs = (null)
++ comment =  stop system immediateliy, right after printing
++ a "panik"-message using printk
++
++ Changes = no_return
++ Unresolved calls = printk
++
++ Name    = exe_test
++ inputs  =  syszp points to code
++
++ outputs =  c=1 if code *is* executable
++
++ comment =  syszp points to first 256 bytes of code
++ check for ($fffe) LNG-magic-bytes
++ (magic header of LUnix0.1 has been $ffff)
++
++ Changes = 
++
++ Name    = exe_reloc
++ inputs  =  syszp+1 = hi-byte of code to be relocated
++ syszp+0 = 0, (syszp) must point to valid exe-header
++
++ outputs = (null)
++ comment =  code relocator
++  syszp points to start of a binary in LNG-format
++ (exe_reloc runs in the new task's environment!)
++
++ Changes = syszp0,syszp1,syszp2,syszp3,syszp4,syszp5
++
++ Name    = p_remove
++ inputs  =  x=IPID  (assume IRQ|taskwsitching is disabled)
++
++ outputs = (null)
++ comment =  remove process from the switching queue
++
++ Changes = 
++
++ Name    = check_cycletime
++ inputs  = (null)
++ outputs = (null)
++ comment =  after the run-queue has changed, the round trip time
++ of the scheduler might have become to low/high and
++ need some further recomputation
++
++ Changes = A,Y
++
++ Name    = p_insert
++ inputs  =  X=ipid
++
++ outputs = (null)
++ comment =  insert task in run-queue
++
++ Changes = A,Y
++
++ Name    = :
++ inputs  =  A/Y=PID of destination process
++ X=number of signal (0..7 or 9 for kill)
++
++ outputs = (null)
++ comment =  send signal to current or other task
++
++ Changes = tmpzp0,tmpzp1,tmpzp4,tmpzp2,tmpzp3
++
++ Name    = signal
++ inputs  =  X=signal number 0..7, A/Y=address of handler
++ (Y=0 de-installs handler)
++
++ outputs =  c=error
++
++ comment =  install a signal handler
++
++ Changes = 
++
++ Name    = sleep
++ inputs  =  X/Y=sleeptime in jiffies (1/64s)
++
++ outputs = (null)
++ comment =  suspend current task for a specified time
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5
++
++ Name    = smb_alloc
++ inputs  =  c=non blocking
++
++ outputs =  syszp=address, X=SMB
++
++ comment =  allocate SMB (small memory block - 32 bytes)
++
++ Changes = A,X,Y,tmpzp2,syszp0,syszp1
++ Unresolved calls = locktsw,unlocktsw,spalloc,block
++
++ Name    = smb_free
++ inputs  =  X=SMB-ID
++
++ outputs = (null)
++ comment =  free SMB allocated with smb_alloc
++
++ Changes = context
++
++ Name    = get_smbptr
++ inputs  =  X = SMB-ID
++
++ outputs =  syszp = ptr, c=error
++
++ comment =  get pointer to SMB
++
++ Changes = syszp0,syszp1
++
++ Name    = block
++ inputs  =  A=wait code 0 (waitc_...)
++ X=wait code 1 (additional parameter)		
++
++ outputs = (null)
++ comment =  suspend current task
++
++ Changes = context
++
++ Name    = mun_block
++ inputs  =  A=wait code 0
++ X=wait code 1
++
++ outputs = (null)
++ comment =  un-suspend all tasks with a matching waitcode
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,A,Y
++
++ Name    = wait
++ inputs  =  X/Y=pointer to 7 free bytes (for PID and TIME)
++ c=0:		non blocking
++ c=1:		blocking (may block for ever, if there is no child)
++
++ outputs =  c=0:		ok, A=exitcode (struct contains info)
++ c=1:		error (try again)
++
++ comment =  wait for a child and get its exitcode
++
++ Changes = tmpzp2,tmpzp3,tmpzp0,tmpzp1,A,Y
++
++ Name    = getipid
++ inputs  =  A/Y=PID
++
++ outputs =  X=IPID, c=error
++
++ comment =  get internal process number (range 0..31)
++ from PID
++  (IRQ should be disabled for reliable operation !)
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3
++
++ Name    = force_taskswitch
++ inputs  = (null)
++ outputs = (null)
++ comment =  force a task (context) switch
++
++ Changes = tmpzp0,tmpzp1,tmpzp2,tmpzp3,tmpzp4,tmpzp5,tmpzp6,tmpzp7
++
++ Name    = locktsw
++ inputs  = (null)
++ outputs = (null)
++ comment =  lock taskswitching without (!) disabling IRQ
++  used by:	mpalloc spalloc pfree
++
++ Changes = 
++
++ Name    = unlocktsw
++ inputs  = (null)
++ outputs = (null)
++ comment =  problem=
++ task can not be killed while it has disabled taskswitches,
++ IRQ or NMI handler may not call functions, that disable
++ taskswitches this way. (may lead to data inconsistency)
++ (a NMI handler must not call any kernel routine for that reason !)
++ another problem is killing/sending signals to a suspended task !
++ might call force_taskswitch
++
++ Changes = context
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/modules/oricvtape.s	2006-09-24 05:57:55.297009152 +0200
+@@ -0,0 +1,421 @@
++		;; For emacs: -*- MODE: asm; tab-width: 4; -*-
++		;;; low-level driver for Euphoric emulated tape link
++		
++#include <system.h>
++#include <jumptab.h>
++#include <stdio.h>
++#include <config.h>
++#include MACHINE_H
++
++#begindef debug_putc(char)
++		lda  #char
++		ldx  #stdout
++		sec
++		jsr  fputc
++		nop
++#enddef
++		
++		;; nmizp+2 write offset
++		;; nmizp+3 read offset
++		;; nmizp+6 status
++		
++		start_of_code equ $1000
++
++		.org start_of_code
++		
++		.byte >LNG_MAGIC,   <LNG_MAGIC
++		.byte >LNG_VERSION, <LNG_VERSION
++		.byte >(end_of_code-start_of_code+255)
++		.byte >start_of_code
++
++		jmp  initialize
++
++#define WATER_LO	40 
++#define WATER_HI    200
++
++#define CMDVAL_NOI  %00001011
++#define CMDVAL_HALT %00000001
++#define CMDVAL_GO   %00001001
++
++		SELFMOD equ $fe00		; placeholder
++
++setmconf:
++		jmp lk_oric_setmemconf
++		
++		RELO_JMP(+)				; relocator jump
++
++module_struct:
++		.asc "ser"      ; module identifier
++		.byte 4         ; module interface size
++		.byte 1         ; module interface version number
++		.byte 1         ; weight (number of available virtual devices)
++		.word 0000      ; (reserved, used by kernel)
++        
++		;; functions provided by low-level serial driver
++		;;  rs232_lock   (exclusive open)
++		;;  rs232_unlock
++		;;  rs232_ctrl   (X=baud rate)
++		;;  rs232_getc
++		;;  rs232_putc
++		;;               (status?)
++
++	+	jmp rs232_lock
++		jmp rs232_unlock
++		jmp rs232_ctrl
++		jmp rs232_getc
++		jmp rs232_putc
++		
++		;; interface speed for rs232_ctrl (passed in X register)
++		;;  0:  300
++		;;  1:  600
++		;;  2:  1200
++		;;  3:  2400
++		;;  4:  4800
++		;;  5:  9600
++		;;  6:  19200
++		;;  7:  38400
++		;;  8:  57600 (16x external clock for swiftlink)
++
++		;; base address of swiftlink is hardcoded (for fast/short code)
++		swift_base equ $de00
++		
++		swift_io      equ swift_base+0
++		swift_status  equ swift_base+1
++		swift_command equ swift_base+2
++		swift_control equ swift_base+3
++		
++nmi_struct:
++		jmp  nmi_handler
++		jmp  nmi_disable
++		jmp  nmi_enable
++		
++rs232_lock:
++		;; (re-)initialize swiftlink
++		
++		jsr  lkf_disable_nmi
++		ldx  #<nmi_struct
++_haddr_hi:
++		ldy  #>nmi_struct
++		jsr  lkf_hook_nmi		; hook into system
++		nop
++		
++		;; now nmizp[0..7] can be used...
++		
++		lda  #1					; allocate receive buffer in context
++		jsr  lkf_palloc			; of calling process
++		nop						; error is not allowed
++		stx  r_buf_ptr1			; update absolute pointers into buffer
++		stx  r_buf_ptr2		
++		lda  #0
++		sta  nmizp+2			; write pointer into receive buffer
++		sta  nmizp+3			; write pointer into receive buffer
++		sta  nmizp+6				; $80 if receive buffer if full
++		;; (check if swiftlink is already in use ?)
++		sta  swift_status		; reset of swiftlink
++		lda  swift_status		; clear interrupt flag
++		lda  swift_io			; clear rx-interrupt
++		jmp  lkf_enable_nmi		; (will call nmi_enable)
++
++rs232_unlock:
++		jsr  lkf_disable_nmi
++		ldx  r_buf_ptr1
++		jsr  lkf_free			; free receive buffer
++		ldx  #lsem_nmi
++		jsr  lkf_unlock			; unlock NMI system semaphore (will call nmi_disable)
++		jmp  lkf_enable_nmi		; (will call nmi_enable)
++		
++rs232_ctrl:						; set baud reate
++		cpx  #9
++		bcs  +					; (return with error if >=9)
++		lda  baudtable,x
++		ora  #%00010000			; (8N1, receiver clock = baud rate generator)
++		sta  brate+1
++		sta  swift_control
++		clc
++	+	rts
++		
++nmi_enable:
++		lda  nmizp+6
++		ora  #$40
++		sta  nmizp+6
++		bmi  +					; skip if receive buffer is already full
++brate:	lda  #%00011100			; 1 stopbit, 8 databits, 9600 baud (internal)
++		sta  swift_control
++		lda  #CMDVAL_GO			; no parity, no echo, no XMIT-IRQ,
++								;  RECV-IRQ enabled, RTS on, DTR low
++		sta  cmdval+1
++		sta  swift_command
++	+	plp
++		rts
++		
++nmi_disable:
++		lda  swift_status
++		and  #%00010000			; test bit 4
++		beq  nmi_disable		; wait until current byte is sent
++		
++		lda  #CMDVAL_NOI		; no parity, no echo, no XMIT-IRQ,
++								;  no RECV-IRQ, RTS off, DTR low
++		sta  cmdval+1
++		sta  swift_command
++		lda  nmizp+6
++		and  #$ff-$40
++		sta  nmizp+6
++		plp
++		rts
++				
++nmi_handler:
++		lda  swift_command
++		ora  #%00000010
++		sta  swift_command		; prevent any more interrupts
++		lda  swift_status
++		and  #%00001000			; test bit 3 of status
++		beq  nmi_ret			; skip, if nothing has been received
++
++	-	lda  swift_io			; read byte from swiftlink
++		ldx  nmizp+2
++
++r_buf_ptr1 equ *+2
++		sta  SELFMOD,x			; store byte in receive buffer
++		
++		inx				
++		cpx  nmizp+3		; prevent puffer overflows
++		bne  +
++		dex
++	+	stx  nmizp+2
++
++		txa
++		sbc  nmizp+3
++		cmp  #WATER_HI			; high water mark
++		bcs	 +					; buffer is (nearly) full
++
++		;; next_char:
++		lda  swift_status
++		and  #%00001000
++		bne  -
++
++nmi_ret:				
++		pla						; restore memory-configuration
++		SETMEMCONF
++		pla						; restore register and return
++		tay
++		pla
++		tax
++cmdval:	lda  #CMDVAL_NOI			; value for command register
++		sta  swift_command
++		pla
++		rti
++
++
++	+	lda  #CMDVAL_HALT			; no parity, no echo, no XMIT-IRQ,
++								;  no RECV-IRQ, RTS off, DTR low
++		sta  cmdval+1
++		lda  nmizp+6
++		ora  #$80
++		sta  nmizp+6
++		jmp  nmi_ret
++		
++rs232_getc:
++		sei
++		stx  tmpzp+1
++		ldx  nmizp+3
++		cpx  nmizp+2
++		beq  null				; no char available
++		
++r_buf_ptr2 equ *+2		
++		lda  SELFMOD,x		
++		sta  tmpzp
++		inx
++		stx  nmizp+3
++		
++		lda  nmizp+6
++		and  #%01000000			; NMI allowed?
++		beq  +
++		txa
++		sbc  nmizp+2
++		cmp  #$100-WATER_LO
++		bcs  reactivate			; check low water mark
++		bpl  +
++		
++reactivate:
++		ldx  #CMDVAL_GO			; no parity, no echo, no XMIT-IRQ,
++								;  RECV-IRQ enabled, RTS on, DTR low
++		stx  cmdval+1
++		stx  swift_command
++		lda  nmizp+6
++		and  #$ff-$80			; buffer is not full anymore
++		sta  nmizp+6
++		
++	+	ldx  tmpzp+1
++		lda  tmpzp
++		clc
++		cli
++		rts
++
++null:	ldx  tmpzp+1
++		sec						; leave with c=1, when no char available
++		cli
++		rts
++
++		
++	-	lda  tmpzp
++		cli
++		
++rs232_putc:
++		sei
++		sta  tmpzp
++		lda  swift_status
++		and  #%00010000			; test bit 4
++		beq  -					; wait until current byte is sent
++		lda  tmpzp
++		sta  swift_io			; send byte
++		cli
++		rts
++
++		RELO_JMP(+)				; (don't relocate data-inlay)
++		
++baudtable:		.byte 5, 6, 7, 8, 10, 12, 14, 15, 0
++		
++	+	;; initialisation
++
++not_swiftlink:
++		ldy  #0
++	-	lda  not_txt,y
++		beq  +
++		sec
++		ldx  #stdout
++		jsr  fputc
++		nop
++		iny
++		bne  -
++	+	lda  #1
++		rts
++				
++		bit  module_struct
++initialize:
++		;; check for swiftlink
++
++		;; first, non destructive check (read-only) (RAM at $02/$03)
++
++		lda  swift_control
++		ldx  swift_command
++		ldy  #0
++	-	cmp  swift_control
++		bne  not_swiftlink
++		cpx  swift_command
++		bne  not_swiftlink
++		iny
++		bpl  -
++
++		sta  swift_status
++		lda  swift_status
++		tax
++		eor  #$ff
++		tay
++
++		;; check swift_status reset functionality
++		lda  swift_command
++		and  #$ef
++		sta  swift_command
++		lda  swift_command
++		and  #$10
++		bne  not_swiftlink
++		
++		cpx  swift_status
++		bne  not_swiftlink
++		
++		lda  swift_command
++		ora  #$10
++		sta  swift_command
++		lda  swift_command
++		and  #$10
++		beq  not_swiftlink
++		
++		cpx  swift_status
++		bne  not_swiftlink
++		
++		sty  swift_status		; should clear bit 4-0 of swift_command
++		lda  swift_command
++		and  #$1f
++		bne  not_swiftlink
++
++		cpx  swift_status
++		bne  not_swiftlink
++		
++		;; check 4 byte cycle and swift_controll r/w
++		
++		lda  swift_control		; check, if swift_control is read/write
++		cmp  swift_control+4
++	-	bne  not_swiftlink
++		
++		eor  #$f0
++		sta  swift_control
++		cmp  swift_control
++		bne  not_swiftlink
++		cmp  swift_control+4
++		bne  -					; not_swiftlink
++		
++		eor  #$ff
++		sta  swift_control
++		cmp  swift_control
++		bne  -					; not_swiftlink
++		cmp  swift_control+4
++		bne  -					; not_swiftlink
++
++		ldx  #<module_struct
++		ldy  initialize-1		; #>module_struct 
++		jsr  lkf_add_module
++		bcc  is_available
++
++		lda  #$ff
++		rts						; return with error
++		
++is_available:
++		;; allocate receive buffer (256 byte)
++		ldy  #0
++	-	lda  ok_txt,y
++		beq  +
++		sec
++		ldx  #stdout
++		jsr  fputc
++		nop
++		iny
++		bne  -
++
++	+	;; runtime - code relocation
++		
++		lda  start_of_code
++		clc
++		adc  #>(nmi_struct-start_of_code)
++		sta  _haddr_hi+1
++
++		;; finished, free unused memory and exit
++		
++		lda  #>(initialize+255-start_of_code)
++		cmp  #>(end_of_code-start_of_code)
++		beq  +
++		bcs  ++
++	+	clc
++		adc  start_of_code
++		tax
++		jmp  lkf_fix_module
++		
++		;; nothing to free
++	+	ldx  #0
++		jmp  lkf_fix_module		
++
++		RELO_END ; no more code to relocate
++
++not_txt:
++		.text "sorry, no swiftlink detected"
++		.byte $0a,$00
++		
++ok_txt:
++		.text "Swiftlink ("
++		.digit swift_base>12
++		.digit (swift_base>8) & 15
++		.digit (swift_base>4) & 15
++		.digit swift_base & 15
++		.text ",NMI) registered"
++		.byte $0a,$00
++
++end_of_code:
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/opt/fdc_wdc.s	2006-10-05 00:37:16.299368448 +0200
+@@ -0,0 +1,2 @@
++;// generic code for WDC floppy controller 
++;// to be included in machine specific driver
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/opt/oric_console.s	2006-09-22 02:45:06.299630592 +0200
+@@ -0,0 +1,718 @@
++		;; Hey emacs, look at this: -*- MODE: asm; tab-width: 4; -*-
++
++		;; simple console driver
++		;; rewritten to support more than just one screen
++		;; (static screens)
++
++; MULTIPLE_CONSOLES are not supported yet, code is based on ANTIC console
++
++#include <console.h>
++
++		;; screen base offset
++#define SBO $80
++
++		;; additional globals needed by
++		;; console_init (called at boot-time)
++		;; (they will get a "lkf_" prefix there!)
++
++#ifdef MULTIPLE_CONSOLES
++		.global cons_regbuf
++#endif
++		.global cons_home
++		.global cons_clear
++
++		;; switch to next virtual console
++console_toggle:
++#ifdef MULTIPLE_CONSOLES
++		beq  do_toggle
++		bmi  do_toggle
++
++		cmp  #1
++		beq  do_cons1
++		cmp  #2
++		beq  do_cons2
++
++do_cons1:
++		lda  #$16
++		sta  VIC_VSCB			; default is console 1 (at $0400)
++		lda  #0
++		sta  cons_visible
++		rts
++
++do_cons2:
++		lda  #$26
++		sta  VIC_VSCB			; console 2 (at $0800)
++		lda  #1
++		sta  cons_visible
++		rts
++
++do_toggle:
++		lda  VIC_VSCB
++		eor  #$30
++		sta  VIC_VSCB
++		lda  cons_visible
++		eor  #1
++		sta  cons_visible
++#endif
++		rts
++
++		;; clear screen
++cons_clear:
++		jsr  cons_hidecsr
++		ldx  sbase
++		stx  loc1
++		inx
++		stx  loc1+3
++		inx
++		stx  loc1+6
++		inx
++		stx  loc1+9
++		;inx
++		stx  loc1+12
++		lda  #" "
++		ldx  #0
++
++loc1 equ *+2
++	-	sta  SCREEN_BASE,x
++		sta  SCREEN_BASE+$100,x
++		sta  SCREEN_BASE+$200,x
++		sta  SCREEN_BASE+$300,x
++		;sta  SCREEN_BASE+$400-$80-32,x
++		sta  SCREEN_BASE+1120-$100-1,x
++		inx
++		bne  -
++
++		jmp  cons_showcsr
++
++		;; move cursor to the upper left corner of the screen
++cons_home:
++		ldx  #0
++		ldy  #0
++
++cons_setpos:
++		cpx  #size_x
++		bcs  +
++		cpy  #size_y
++		bcs  +					; ignore invalid settings
++		stx  csrx
++		sty  csry
++		;; calculate position in RAM
++		clc
++		txa
++		adc  ypos_table_lo,y
++		sta  mapl
++		lda  ypos_table_hi,y
++		adc  sbase				; start of screen
++		sta  maph
++	+	rts
++
++cons_csrup:
++		ldx  csry
++		beq  err				; error
++		dex
++		stx  csry
++		sec
++		lda  mapl
++		sbc  #size_x
++		sta  mapl
++		bcs  +
++		dec  maph
++		clc
++	+	rts
++
++err:		sec
++		rts
++
++cons_csrdown:	
++		ldx  csry
++		cpx  #size_y-1
++		beq  err
++		inx
++		stx  csry
++		clc
++		lda  mapl
++		adc  #size_x
++		sta  mapl
++		bcc  +
++		inc  maph
++		clc
++	+	rts
++
++cons_csrleft:
++		ldx  csrx
++		beq  err				; error
++		dex
++		stx  csrx
++		lda  mapl
++		bne  +
++		dec  maph
++	+	dec  mapl
++		clc
++		rts
++
++cons_csrright:	
++		ldx  csrx
++		cpx  #size_x-1
++		beq  err
++		inx
++		stx  csrx
++		inc  mapl
++		bne  +
++		inc  maph
++	+	clc
++		rts
++
++cons_scroll_up:
++		ldy  scrl_y1
++
++	-	clc
++		lda  ypos_table_lo,y
++		sta  scrl_loop+4
++		adc  #size_x
++		sta  scrl_loop+1
++		lda  ypos_table_hi,y
++		php						; add without carry for source 
++		clc
++		adc  sbase
++		plp
++		sta  scrl_loop+5
++		adc  #0					; but we need the carry for this one
++		sta  scrl_loop+2
++		ldx  #size_x-1
++scrl_loop:
++		lda  .0,x
++		sta  .0,x
++		dex
++		bpl  scrl_loop
++		iny
++		cpy  scrl_y2
++		bne  -
++
++		;; erase the last line
++		lda  ypos_table_lo,y
++		sta  scrl_loop2+1
++		lda  ypos_table_hi,y
++		ora  sbase
++;	clc
++;	adc  sbase
++		sta  scrl_loop2+2
++		lda  #" "
++		ldx  #size_x-1
++scrl_loop2:
++		sta  .0,x
++		dex
++		bpl  scrl_loop2
++		rts
++
++cons_showcsr:
++		bit  cflag
++		bvs  +					; already shown
++		bpl  +					; cursor disabled
++		sei
++		lda  mapl
++		sta  tmpzp
++		lda  maph
++		sta  tmpzp+1
++		ldy  #0
++		lda  (tmpzp),y
++		sta  buc
++		lda  #cursor
++		sta  (tmpzp),y
++		cli
++		lda  #$c0
++		sta  cflag
++	+	rts
++
++cons_hidecsr:
++		bit  cflag
++		bvc	 +					; no cursor there
++		sei
++		lda  mapl
++		sta  tmpzp
++		lda  maph
++		sta  tmpzp+1
++		ldy  #0
++		lda  buc
++		sta  (tmpzp),y
++		cli
++		lda  cflag
++		and  #%10111111
++		sta  cflag
++	+	rts
++
++		;; convert ascii to screencodes
++cons_a2p:
++		cmp #$20
++		bpl +
++		; remove attributes
++		lda #$20
++	+	cmp #$80
++		bmi +
++		; mark > 127 as inverted space
++		lda #$80+$20
++	- +	rts
++
++;		cmp  #32
++;		bcc  _is_special
++;		cmp  #64
++;		bcc  _keepit			; <64, then no change
++;		beq  _is_special
++;		cmp  #91
++;		bcc  _keepit			; big letter (no change)
++;		cmp  #97
++;		bcc  _is_special		; 91..96
++;		cmp  #123
++;		bcc  _sub96				; small letters (-96)
++;_is_special:
++;		ldx  #_no_of_specials
++;	-	cmp  special_mapping-1,x
++;		beq  +
++;		dex
++;		bne  -
++;		;; not found
++;		lda  #102
++;		sec
++;		rts
++;
++;	+	lda  special_code-1,x
++;		SKIP_WORD
++;				
++;_sub96:	
++;		sbc  #95
++;_keepit:		
++;		clc
++;	-	rts
++;
++;special_mapping:
++;		.byte $40,$7b,$7d,$5c,$7e,$60,$5b,$5d,$a7,$5e,$7c,$5f,$1c,$1e
++;_no_of_specials equ *-special_mapping
++;
++;special_code:
++;		.byte   0,115,107,127,113,109, 27, 29, 92, 30, 93,100, 94, 28
++
++cons1out:
++		ldx  #0
++
++		;; print char to console, X=number of console
++cons_out:
++#ifdef MULTIPLE_CONSOLES
++		cpx  #2
++		bcs  -					; (silently ignore character, when X>1)
++		jsr  locktsw			; (this code isn't reentrant!!)
++		sta  cchar
++
++		cpx  cons_visible
++		beq  ++
++
++		lda  #$80
++		cpx  #0
++		bne  +
++		eor  screenB_base+size_x-1	; view action on hidden screen
++		sta  screenB_base+size_x-1	
++		jmp  ++
++
++	+	eor  screenA_base+size_x-1	; view action on hidden screen
++		sta  screenA_base+size_x-1
++
++	+	cpx  current_output
++		beq  +
++
++		;; load variables of alternate screen
++		stx  current_output
++		lda  sbase
++		eor  #>(screenA_base^screenB_base)
++		sta  sbase
++		ldx  #8
++
++	-	ldy  mapl,x
++		lda  cons_regbuf,x
++		sta  mapl,x
++		tya
++		sta  cons_regbuf,x
++		dex
++		bpl  -
++	+
++#else
++		cpx  #1
++		bcs  -					; (silently ignore character, when X>0)		
++		jsr  locktsw			; (this code isn't reentrant!!)
++		sta  cchar
++#endif
++
++		jsr  cons_hidecsr
++
++		ldx  esc_flag
++		bne  jdo_escapes
++
++		;; print normal character
++		lda  cchar
++		cmp  #32
++		bcc  special_chars
++		jsr  cons_a2p
++		eor  rvs_flag
++		tax
++		php						; write character code
++		sei						; to char_map
++		lda  mapl
++		sta  tmpzp
++		lda  maph
++		sta  tmpzp+1
++		ldy  #0
++		txa
++		sta  (tmpzp),y
++		plp
++		jsr  cons_csrright
++_back:		jsr  cons_showcsr
++		jmp  unlocktsw
++
++jdo_escapes:	
++		jmp  do_escapes
++
++special_chars:
++
++		;; UNIX ascii (default)
++		cmp  #10
++		beq  _crlf
++		cmp  #13
++		beq  _cr
++		cmp  #27				; escape
++		beq  _esc
++		cmp  #9
++		beq  _tab
++		cmp  #8
++		beq  _del
++		cmp  #7
++		beq  _beep
++		jmp  _back
++
++_crlf:		lda  csry
++		cmp  scrl_y2
++		bne  +
++
++		jsr  cons_scroll_up
++		jmp  _cr
++
++	+	jsr  cons_csrdown
++
++_cr:		ldx  #0
++		ldy  csry
++		jsr  cons_setpos
++		jmp  _back
++_esc:		lda  #1
++		sta  esc_flag
++		jmp  _back
++
++_tab:		lda  csrx				; tab-width=4
++		lsr  a
++		lsr  a
++		clc
++		adc  #1
++		asl  a
++		asl  a
++		tax
++		ldy  csry
++		jsr  cons_setpos		; (only done, if position is valid)
++		jmp  _back
++
++_del:		ldx  csrx
++		beq  +					; skip if already on left border
++		dex
++		ldy  csry
++		jsr  cons_setpos
++		php
++		sei
++		lda  mapl
++		sta  tmpzp
++		lda  maph
++		sta  tmpzp+1
++		lda  #32
++		ldy  #0
++		sta  (tmpzp),y
++		plp
++	+	jmp  _back
++
++_beep:		jsr beep
++		jmp _back
++
++do_escapes:
++		cpx  #2
++		beq  do_esc2			; state2
++		lda  cchar
++
++		;; waiting for escape command (character)
++		cmp  #91
++		bne  +
++
++		;; <ESC>[...
++		lda  #2
++		sta  esc_flag
++		lda  #0
++		sta  esc_parcnt
++		lda  #$ff
++		sta  esc_par		
++		jmp  _back
++
++	+	cmp  #68
++		bne  leave_esc
++
++		;; <ESC>D
++		lda  csry
++		cmp  scrl_y2
++		beq  +
++		jsr  cons_csrdown
++		jmp  leave_esc
++	+	jsr  cons_scroll_up
++
++		;; ignore unknown escapes
++
++leave_esc:
++		lda  #0
++		sta  esc_flag
++
++		jmp  _back
++
++		;; digit -> add to current parameter
++		;; ";"   -> step to next parameter
++		;; else  -> command!
++do_esc2:
++		lda  cchar
++		cmp  #";"				; equal to "9"+2 !
++		beq  do_esc_nextpar
++		bcs  do_esc_command		; most likely a command
++		;; most likely a digit
++		and  #15
++		sta  cchar
++		ldx  esc_parcnt
++		lda  esc_par,x
++		bpl  +
++		lda  #0
++		beq  ++					; note, that c=0 !
++	+	asl  a
++		asl  a
++		adc  esc_par,x
++		asl  a
++	+	adc  cchar
++		sta  esc_par,x
++		jmp  _back				; state doesn't change
++
++do_esc_nextpar:
++		ldx  esc_parcnt			; increase par-counter (if possible)
++		cmp  #7
++		beq  +
++		inx
++		stx  esc_parcnt
++	+	lda  #255				; initialize parameter
++		sta  esc_par,x
++		jmp  _back				; state doesn't change again
++
++do_esc_command:
++		lda  cchar
++		cmp  #72
++		bne  esc_com2
++
++		;; cursor positioning <ESC>[#y;#xH
++		ldy  esc_par
++		bpl  +					; parameter defaults to 0
++		ldy  #1
++	+	dey
++		lda  esc_parcnt
++		beq  +
++		ldx  esc_par+1
++		bpl  ++					; parameter defaults to 0
++	+	ldx  #1
++	+	dex
++		jsr  cons_setpos
++		jmp  leave_esc
++
++esc_com2:
++		cmp  #74
++		bne  esc_com3
++
++		;; clear screen <ESC>[2J
++		lda  esc_par
++		cmp  #2
++		bne  +
++		jsr  cons_clear
++	+	jmp  leave_esc
++
++esc_com3:
++		cmp  #75
++		bne  esc_com4
++
++		;; erase rest of line <ESC>[K
++		lda  esc_par
++		cmp  #255
++		bne  +
++		php
++		sei
++		lda  mapl
++		sta  tmpzp
++		lda  maph
++		sta  tmpzp+1
++		ldy  #0
++		ldx  csrx
++		lda  #0
++	-	sta  (tmpzp),y
++		iny
++		inx
++		cpx  #size_x
++		bne  -
++		plp
++	+	jmp  leave_esc
++
++esc_com4:		
++		cmp  #114
++		bne  esc_com5
++
++		;; change scroll-region <ESC>[#y1;#y2r
++		lda  esc_parcnt
++		cmp  #1
++		bne  +					; skip (illegal parameter)
++		ldx  esc_par
++		bmi  +
++		beq  +
++		cmp  #size_y
++		bcs  +
++		dex
++		ldy  esc_par+1
++		bmi  +
++		cmp  #size_y+1
++		bcs  +
++		dey
++		sty  cchar
++		cpx  cchar
++		bcs  +
++		stx  scrl_y1			; valid !
++		sty  scrl_y2
++	+	jmp  leave_esc
++
++esc_com5:
++		cmp  #109
++		bne  esc_com6
++
++		;; change attributes <ESC>[#a1;...m
++		ldy  #$ff
++	-	iny
++		lda  esc_par,y
++		bmi  +					; clear all attributes
++		beq  +					; clear all attributes
++		cmp  #7
++		bne  ++					; skip
++		lda  #$80				; activate RVS
++		SKIP_WORD
++	+	lda  #$00				; de-activate RVS
++		sta  rvs_flag
++	+	cpy  esc_parcnt
++		bne  -
++		jmp  leave_esc
++
++esc_com6:
++		cmp  #$41
++		bne  esc_com7
++
++		;; cursor step up one position <ESC>[A
++		lda  esc_par
++		cmp  #255
++		bne  +
++		jsr  cons_csrup
++	+	jmp  leave_esc
++
++esc_com7:
++		cmp  #$42
++		bne  esc_com8
++
++		;; cursor step down one position <ESC>[B
++		lda  esc_par
++		cmp  #255
++		bne  +
++		jsr  cons_csrdown
++	+	jmp  leave_esc
++
++esc_com8:
++		cmp  #$43
++		bne  esc_com9
++
++		;; cursor step forw one position <ESC>[C
++		lda  esc_par
++		cmp  #255
++		bne  +
++		jsr  cons_csrright
++	+	jmp  leave_esc
++
++esc_com9:
++		cmp  #$44
++		bne  esc_com10
++
++		;; cursor step backw one position <ESC>[D
++		lda  esc_par
++		cmp  #255
++		bne  +
++		jsr  cons_csrleft
++	+	jmp  leave_esc
++
++esc_com10:		
++		;; unknown sequence, just ignore
++		jmp  leave_esc
++
++ypos_table_lo:
++		.byte <(  0+SBO), <( 40+SBO), <( 80+SBO), <(120+SBO), <(160+SBO)
++		.byte <(200+SBO), <(240+SBO), <(280+SBO), <(320+SBO), <(360+SBO)
++		.byte <(400+SBO), <(440+SBO), <(480+SBO), <(520+SBO), <(560+SBO)
++		.byte <(600+SBO), <(640+SBO), <(680+SBO), <(720+SBO), <(760+SBO)
++		.byte <(800+SBO), <(840+SBO), <(880+SBO), <(920+SBO), <(960+SBO)
++		.byte <(1000+SBO),<(1040+SBO),<(1080+SBO),<(1120+SBO)
++
++ypos_table_hi:
++		.byte >(  0+SBO), >( 40+SBO), >( 80+SBO), >(120+SBO), >(160+SBO)
++		.byte >(200+SBO), >(240+SBO), >(280+SBO), >(320+SBO), >(360+SBO)
++		.byte >(400+SBO), >(440+SBO), >(480+SBO), >(520+SBO), >(560+SBO)
++		.byte >(600+SBO), >(640+SBO), >(680+SBO), >(720+SBO), >(760+SBO)
++		.byte >(800+SBO), >(840+SBO), >(880+SBO), >(920+SBO), >(960+SBO)
++		.byte >(1000+SBO),>(1040+SBO),>(1080+SBO),>(1120+SBO)
++
++		;; zeropage assignments
++		
++;;; ZEROpage: sbase 1
++;;; ZEROpage: cchar 1
++;;; ZEROpage: current_output 1
++;;; ZEROpage: cons_visible 1
++;;; ZEROpage: mapl 1
++;;; ZEROpage: maph 1
++;;; ZEROpage: csrx 1
++;;; ZEROpage: csry 1
++;;; ZEROpage: buc 1
++;;; ZEROpage: cflag 1
++;;; ZEROpage: rvs_flag 1
++;;; ZEROpage: scrl_y1 1
++;;; ZEROpage: scrl_y2 1
++;;; ZEROpage: esc_flag 1
++;;; ZEROpage: esc_parcnt 1
++
++		;; the out-commended defines are replaced
++		;; by zeropage assignments above
++
++;sbase:			.byte 0			; base address of screen (hi byte)
++;cchar:			.byte 0
++;current_output:	.byte 0
++;cons_visible:	.byte 0
++
++		;; variables to store, when switching screens
++;mapl:			.byte 0
++;maph:			.byte 0
++;csrx:			.byte 0
++;csry:			.byte 0
++;buc:			.byte 0			; byte under cursor
++;cflag:			.byte 0			; cursor flag (on/off)
++;rvs_flag:		.byte 0			; bit 7 - RVS ON
++;scrl_y1:		.byte 0			; scroll region first line
++;scrl_y2:		.byte 0			; scroll region last line
++
++#ifdef MULTIPLE_CONSOLES
++		;; room for storing screen-variables
++cons_regbuf:	.buf 9
++#endif
++
++		;; escape decoding related
++;esc_flag:		.byte 0			; escape-statemachine-flag
++;esc_parcnt:	.byte 0			; number of parameters read
++esc_par:		.buf 8			; room for up to 8 parameters
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/opt/oric_console_init.s	2006-09-22 01:22:03.299630592 +0200
+@@ -0,0 +1,86 @@
++;
++; ORIC simple console initialization
++; François Revol <revol@free.fr>
++; 18.09.2006
++;
++
++#include <console.h>
++
++console_init:
++		
++		;; allocate memory for display_list and screen
++		jsr  lkf_locktsw
++		lda  #5				; number of pages
++		ldx  #>SCREEN_BASE		; start page
++		ldy  #memown_scr		; usage ID
++		sta  tmpzp
++		stx  tmpzp+3
++		sty  tmpzp+4
++		jsr  lkf__raw_alloc		; (does unlocktsw)
++		
++		;; allocate memory for font copy
++		jsr  lkf_locktsw
++		lda  #7				; number of pages (4 for std charset + 3.5 for alt charset)
++		ldx  #>ORIC_FONT		; start page
++		ldy  #memown_scr		; usage ID
++		sta  tmpzp
++		stx  tmpzp+3
++		sty  tmpzp+4
++		jsr  lkf__raw_alloc		; (does unlocktsw)
++
++#ifdef MULTIPLE_CONSOLES
++		;; allocate memory for display_list and screen
++		jsr  lkf_locktsw
++		lda  #5*MAX_CONSOLES		; number of pages
++		ldx  #>SCREEN_VIRT_BASE		; start page
++		ldy  #memown_scr		; usage ID
++		sta  tmpzp
++		stx  tmpzp+3
++		sty  tmpzp+4
++		jsr  lkf__raw_alloc		; (does unlocktsw)
++
++		lda #MAX_CONSOLES		; set number of consoles
++#else
++		lda #1					; single console
++#endif
++		sta lk_consmax
++
++		lda #0				; initialize fs_cons stuff
++		sta usage_count
++#ifdef MULTIPLE_CONSOLES
++		sta usage_map
++#endif
++
++		lda #>SCREEN_BASE
++		sta sbase
++
++                lda  #$80
++                sta  cflag			; curor enabled (not yet drawn)
++                lda  #0
++                sta  esc_flag
++                sta  rvs_flag
++                sta  scrl_y1
++                lda  #(size_y-1)
++                sta  scrl_y2
++                lda #0				; clone status to all consoles
++                sta tmpzp
++    		jsr lkf_cons_clear
++                jsr lkf_cons_home
++
++		;; print startup message
++		ldx  #0
++	-	lda  start_text,x
++		beq  +
++		jsr  lkf_printk
++		inx
++		bne  -
++
++	+	rts
++
++start_text:
++#ifdef MULTIPLE_CONSOLES
++		.text "ORIC consoles (v0.1) @ $BB80,$x00",$0a,0
++#else
++		.text "ORIC console (v0.1) @ $BB80",$0a,0
++#endif
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/README	2006-09-20 21:59:55.300679168 +0200
+@@ -0,0 +1,3 @@
++Collection of code fragments that are ORIC-specific
++
++the fragments are inserted into the main code by include-statements
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/config.h	2007-02-25 15:26:52.300941312 +0100
+@@ -0,0 +1,108 @@
++;// main configuration file
++
++#ifndef _CONFIG_H
++#define _CONFIG_H
++
++# define ORIC
++
++# define MACHINE_H <oric.h>
++# define MACHINE(file) "oric/file"
++
++;// Kernel error messages
++;// ---------------------
++;//   The functions "lkf_printerror" and "lkf_suicerrout" print a short
++;//   message via printk. Normally just the error code is reported.
++;//   If you want to have textual error messages add the following to
++;//   the compile-flags (costs 444 bytes)
++
++#define VERBOSE_ERROR
++
++
++;// Multiple consoles
++;// -----------------
++;// startup with more than just one console, system needs at least 1k for
++;// each additional console! (should better allocate memory on demand)
++;// currently the functions keys are used to select and shift+commodore to
++;// switch between consoles (this time just 2 consoles are available F1/F2)
++;// (costs 1024+135=1159 bytes)
++;// THIS IS UNSUPPORTED RIGHT NOW
++
++;#define MULTIPLE_CONSOLES
++
++
++;// .o65 file format support
++;// ------------------------
++;// .o65 is a relocatable file format different than LNG native one.
++;// Soon cc65 (a free C compiler for 6502) will have support for building
++;// LNG applications and the output format had to be .o65. Hence enable this
++;// if you want to execute applications built using cc65. (costs ~900 bytes)
++
++;#define HAVE_O65
++
++
++;// Init shell script support
++;// -------------------------
++;// this forces kernel to load sh and execute lunixrc script upon boot
++;// instead of executing built-in microshell
++
++;#define HAVE_INITSCRIPT
++
++
++;// Misc stuff
++;// ----------
++;// always_szu may save some memory (around 265 bytes), but usually
++;// slows taskswitching down (up to 160us per taskswitch)
++
++#define ALWAYS_SZU
++
++;// Floppy support
++;// --------------
++;// Support for both Jasmin and Microdisc is possible and removes the
++;// need to produce separate binaries. It is possible to disable 
++;// support for one of them to get a smaller kernel. 
++;// Telestrat implies Microdisc support.
++
++#define SUPPORT_JASMIN
++#define SUPPORT_MICRODISC
++
++;#define SUPPORT_TELESTRAT
++
++
++;// Tape support
++;// ------------
++;// various ways of using the tape interface:
++;// - EUPHORIC_TAPEFS:
++;// calls the ROM to handle byte I/O, expecting Euphoric will
++;// catch those calls. Can probably be used to send files.
++;// Includes tangerine header.
++;// *will crash on real hardware*
++;// - TAN_TAPE:
++;// Tape device with the Tangerine (ORIC) framing and format
++;// (1200Hz/2400Hz modulation, sync bytes + header)
++;// - SER_TAPE:
++;// Use the tape connector as a TTL-level serial port.
++;// Should be able to connect to a PC through a MAX232.
++
++#define HAVE_EUPHORIC_TAPEFS	; in fs_oricvtape.s
++;#define HAVE_TAN_TAPE ; UNIMPLEMENTED
++;#define HAVE_SER_TAPE ; UNIMPLEMENTED
++
++
++;// Test init command
++;// -----------------
++;// Enable custom test commands at init prompt
++;// located in $(MACHINE)/extrainit.s
++
++#define HAVE_EXTRA_INIT
++
++;//---------------------------------------------------------------------------
++;// end of configurable section
++
++
++;// dummy
++#define SPEED_MAX
++#define SPEED_1MHZ
++
++
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/fdc_regs.h	2006-10-04 09:23:46.301465600 +0200
+@@ -0,0 +1,65 @@
++#ifndef _ORIC_FDC_REGS_H
++#define _ORIC_FDC_REGS_H
++
++#include <config.h>
++#include <oric_fdc.h>
++
++;// Some glue to enable compiling support for both FDC or either.
++
++#ifdef SUPPORT_MICRODISC
++#ifdef SUPPORT_JASMIN
++#begindef FDC_COMMAND
++		MICRODISC_FDC_COMMAND
++.global oric_fdc_patch_command%%next,pcur%%
++oric_fdc_patch_command%%pcur%% equ *-2
++#enddef
++#begindef FDC_STATUS
++		MICRODISC_FDC_STATUS
++.global oric_fdc_patch_command%%next,pcur%%
++oric_fdc_patch_command%%pcur%% equ *-2
++#enddef
++#begindef FDC_TRACK
++		MICRODISC_FDC_TRACK
++.global oric_fdc_patch_track%%next,pcur%%
++oric_fdc_patch_track%%pcur%% equ *-2
++#enddef
++#begindef FDC_SECTOR
++		MICRODISC_FDC_SECTOR
++.global oric_fdc_patch_sector%%next,pcur%%
++oric_fdc_patch_sector%%pcur%% equ *-2
++#enddef
++#begindef FDC_DATA
++		MICRODISC_FDC_DATA
++.global oric_fdc_patch_data%%next,pcur%%
++oric_fdc_patch_data%%pcur%% equ *-2
++#enddef
++
++#begindef FUNC(func)
++	microdisc_func
++.global microdisc_func
++.global oric_fdc_fpatch%%next,pcur%%
++oric_fdc_fpatch%%pcur%% equ *-2
++#enddef
++
++#else
++#define FDC_COMMAND    MICRODISC_FDC_COMMAND
++#define FDC_STATUS     MICRODISC_FDC_STATUS
++#define FDC_TRACK      MICRODISC_FDC_TRACK
++#define FDC_SECTOR     MICRODISC_FDC_SECTOR
++#define FDC_DATA       MICRODISC_FDC_DATA
++#begindef FUNC(func)
++	microdisc_func
++#enddef
++#endif
++#else
++#define FDC_COMMAND    JASMIN_FDC_COMMAND
++#define FDC_STATUS     JASMIN_FDC_STATUS
++#define FDC_TRACK      JASMIN_FDC_TRACK
++#define FDC_SECTOR     JASMIN_FDC_SECTOR
++#define FDC_DATA       JASMIN_FDC_DATA
++#begindef FUNC(func)
++	jasmin_func
++#enddef
++#endif
++
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/calib.s	2000-12-27 16:33:50.300941312 +0100
+@@ -0,0 +1,5 @@
++
++		ldx  #<($10000 - 5)		; default values for 1MHz systems
++		ldy  #>($10000 - 5)		; ( 1MHz -> 5 )
++		stx  lkf_delay_calib_lo
++		sty  lkf_delay_calib_hi
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/extrainit.s	2006-09-25 00:57:58.301203456 +0200
+@@ -0,0 +1,73 @@
++#ifdef WANT_INIT_CMD_STRING
++		;; init prompt help
++		.text "test (k)assette / dump (m)emory allocs"
++#else
++		cmp #"k"
++		beq k7test
++		cmp #"m"
++		beq dump_mem
++		jmp bad_cmd
++		
++	-	nop
++	jmp -
++k7test:
++		;; ATMOS only test
++		lda #MEMCONF_ROM
++		jsr oric_setmemconf
++		ldy #16
++		jsr $e735			; GETSYN
++	-	jsr $e6c9			; RDBYTE
++		jsr hexout
++		dey
++		bpl -
++		ldy #16
++		lda #$0a
++		jsr printk
++		jmp -
++
++freecnt:
++		.byte 0
++
++dump_mem:
++		ldy #0
++		sty freecnt
++dm1:
++		lda lk_memmap,y
++		ldx #8
++	-	
++		rol a
++		pha
++		lda #"."			; used block
++		bcc +
++		lda #"F"			; free block
++		inc freecnt
++	+	jsr printk
++		pla
++		
++		dex
++		bne -
++		
++		tya
++		and #01
++		beq +
++		lda #$0a
++		jsr printk
++	+	
++		iny
++		cpy #32
++		bne dm1
++		
++		lda #"$"
++		jsr printk
++		lda freecnt
++		jsr hexout
++		ldx console_fd
++		bit freemsg
++		jsr strout
++		jmp ploop
++freemsg:
++		.text " free pages",$0a,0
++
++bad_cmd:
++	
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/fdc.s	2006-10-05 11:26:35.301203456 +0200
+@@ -0,0 +1,119 @@
++		;; ORIC Floppy Drive Controller driver
++		;; supports both Jasmin and Microdisc
++
++
++
++#include <config.h>
++#include <system.h>
++#include <kerrors.h>
++#include <fs.h>
++#include <oric_fdc.h>
++#include "oric/fdc_regs.h"
++
++;extern oric_setmemconf_rom
++;extern oric_setmemconf_ovl
++;extern oric_microdisc_control_shadow
++
++
++module_struct:
++		.asc "fdc"      ; module identifier
++		.byte 2         ; module interface size
++		.byte 1         ; module interface version number
++		.byte 1         ; weight (number of available virtual devices)
++		.word 0000      ; (reserved, used by kernel)
++		jmp  fdc_lock
++		jmp  fdc_unlock
++		jmp  fdc_setdrive
++		jmp  fdc_sectorsize
++		jmp  fdc_sectorbuffer
++		jmp  fdc_settrack
++		jmp  fdc_readsector
++		jmp  fdc_writesector
++
++;; functions provided by low-level floppy controller
++
++fdc_lock:
++		lda  #0
++		rts
++
++fdc_unlock:
++		lda  #0
++		rts
++
++
++putcmd:
++		lda FDC_COMMAND
++		ora #1
++		sta FDC_COMMAND
++
++current_drive:
++		.byte 0
++
++	-	rts
++fdc_setdrive:
++		cmp  current_drive
++		beq  -				; already done
++		pha
++		ldx  current_drive
++		
++		; save current drive values
++		
++		; 
++		pla
++		jsr  FUNC(setdrive)
++		
++		; restore new drive values
++		
++		
++		rts
++
++fdc_sectorsize:
++		lda  #1 ; XXX
++		rts
++
++fdc_sectorbuffer:
++		
++		rts
++fdc_settrack:
++		
++		rts
++
++fdc_readsector:
++		rts
++
++fdc_writesector:
++		rts
++
++#ifdef SUPPORT_JASMIN
++		;; < A
++		;; modifies A,X
++jasmin_setdrive:
++		; not sure if activating a drive before deselecting another one is ok...
++		pha
++		ldx  current_drive
++		lda  #0
++		sta  JASMIN_DISK1_SELECT,x
++		pla
++		tax
++		lda  #1
++		sta  JASMIN_DISK1_SELECT,x
++#endif
++
++#ifdef SUPPORT_MICRODISC
++microdisc_dtab:
++		.byte	0
++		.byte	MICRODISC_DRIVESEL_2
++		.byte	MICRODISC_DRIVESEL_2+MICRODISC_DRIVESEL_2
++		.byte	MICRODISC_DRIVESEL_2+MICRODISC_DRIVESEL_2+MICRODISC_DRIVESEL_2
++microdisc_setdrive:
++		tax
++		lda  oric_microdisc_control_shadow
++		and  #~MICRODISC_CONTROL_DRIVESEL
++		ora  microdisc_dtab,x
++		sta  oric_microdisc_control_shadow
++		sta  MICRODISC_CONTROL
++		rts
++
++		
++#endif
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/fdc_init.s	2006-09-28 17:53:56.301465600 +0200
+@@ -0,0 +1,62 @@
++		;; ORIC Floppy Drive Controller driver
++		;; supports both Jasmin and Microdisc
++
++#include <config.h>
++#include <system.h>
++#include <kerrors.h>
++#include <fs.h>
++#include <oric.h>
++#include <ksym.h>
++
++		.global	oric_fdc_init
++
++		; bootloader code
++		; inserted at the end of bootstrap.s
++#if 0
++		jsr oric_fdc_init			; CallFromBootLoader
++#endif
++
++oric_fdc_init:
++		;; say hello
++		ldx  #msg-msg
++		jsr  mout
++		lda  lk_oric_arch
++		and  #loric_jasmin
++		bne  jasmin
++		; microdisc
++		ldx  #mdmsg-msg
++		jsr  mout
++		; nothing else to do;
++		; the driver is compiled with microdisc
++		; addresses
++		; we'll just disable IRQ for now
++		rts
++jasmin:
++		ldx  #jmsg-msg
++		jsr  mout
++		; patch addresses in the FDC driver
++		; to match the Jasmin hardware
++		; XXX
++		
++		; reset the controller
++		lda  #0
++		sta  JASMIN_RESET
++		lda  #1
++		sta  JASMIN_RESET
++		
++		rts
++
++mout:
++	-	lda  msg,x
++		beq  +
++		jsr  lkf_printk
++		inx
++		bne  -
++	+	rts
++msg:
++		.text "  - ORIC floppy support",$0a,0
++mdmsg:
++		.text "  detected Microdisc drive",$0a,0
++jmsg:
++		.text "  detected Jasmin drive",$0a,0
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/iec.s	2000-12-27 16:33:50.301727744 +0100
+@@ -0,0 +1,135 @@
++;; THROW IT OUT!!!
++
++		;; C64 related IEC-routines
++
++		;; need this short delaytime
++		
++#begindef DELAY_10us
++		nop
++		nop
++		nop
++		nop
++		nop
++#enddef
++
++delay_50us:
++		clc
++		ldx  #256-5
++		lda  #255
++	-	inx
++		bne  -
++		adc  #1	
++		bcc  -
++		rts
++
++;**************************************************************************
++;		direct I/O related subroutines (very C64 specific)
++;**************************************************************************
++
++		io_port   equ $0000
++		ATN_out   equ %00001000
++		CLOCK_out equ %00010000
++		DATA_out  equ %00100000
++		;; CLOCK_in  equ %01000000
++		;; DATA_in   equ %10000000
++
++DATA_lo:
++		lda  #$ff-DATA_out
++		and  io_port
++		sta  io_port
++		rts
++
++DATA_hi:
++		lda  #DATA_out
++		ora  io_port
++		sta  io_port
++		rts
++
++CLOCK_lo:
++		lda  #$ff-CLOCK_out
++		and  io_port
++		sta  io_port
++		rts
++
++CLOCK_hi:
++		lda  #CLOCK_out
++		ora  io_port
++		sta  io_port
++		rts
++		
++ATN_lo:
++		lda  #$ff-ATN_out
++		and  io_port
++		sta  io_port
++		rts
++
++ATN_hi:
++		lda  #ATN_out
++		ora  io_port
++		sta  io_port
++		rts
++
++read_port:
++		lda  io_port
++		cmp  io_port
++		bne  read_port
++		asl  a
++		rts						; returns with c=!DATA_in and n=!CLOCK_in !!
++
++attention:
++		sei
++		jsr  DATA_lo
++		jsr  ATN_hi
++		jsr  CLOCK_hi
++
++#define to_1ms     60			; 60*17 = 1020 CPU-ticks
++#define to_256us   15           ; 15*17 = 255 CPU-ticks
++
++delay_1ms:
++		ldy  #to_1ms
++		
++	-	bit  delay_1ms
++		bit  delay_1ms
++		bit  delay_1ms
++		dey
++		bne  -
++		rts
++
++		;;  Y=timeout
++		;;  returns with c=1 on timeout
++		
++wait_data_hi_to:
++	-	lda  io_port
++		ora  io_port
++		asl  a
++		bcc  +
++		dey
++		bne  -
++	+	rts
++		
++		;;  Y=timeout
++		;;  returns with c=0 on timeout
++		
++wait_clock_hi_to:
++	-	lda  io_port
++		ora  io_port
++		asl  a
++		bpl  +
++		dey
++		bne  -
++		dey						; set negative-flag
++	+	rts
++
++#begindef RECEIVE_BIT(destination)
++ %%next,pcur%%:	lda  io_port
++		cmp  io_port
++		bne  %%pcur%%
++		asl  a
++		bpl  %%pcur%%
++		ror  destination
++ %%next,pcur%%:	lda  io_port
++		cmp  io_port
++		bne  %%pcur%%
++		asl  a
++		bmi  %%pcur%%
++#enddef
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/initmemmap.s	2006-09-20 23:34:05.301727744 +0200
+@@ -0,0 +1,14 @@
++						
++_initmemmap:
++		.byte $2f,$ff,$ff,$ff	; $0000-$1fff  (pages 0,1 not available, page 3 is I/O)
++		.byte $ff,$ff,$ff,$ff	; $2000-$3fff
++		.byte $ff,$ff,$ff,$ff	; $4000-$5fff
++		.byte $ff,$ff,$ff,$ff	; $6000-$7fff
++		.byte $ff,$ff,$ff,$ff	; $8000-$9fff
++		.byte $ff,$ff,$ff,$ff	; $a000-$bfff
++_initmemmap_rom:
++		.byte $ff,$ff,$ff,$ff	; $c000-$dfff
++		.byte $ff,$ff,$ff,$fe	; $e000-$ffff  (page 255 not available)
++		
++		;; I/O area is disabled since switching I/O area on/off is not
++		;; implemented yet
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/io_map.s	2006-09-20 00:26:45.301727744 +0200
+@@ -0,0 +1,13 @@
++		;; memory map
++		;; tells mpalloc and spalloc which pages are not available in
++		;; "no I/O" mode
++		
++io_map:	.byte $ef,$ff,$ff,$ff	; $0000-$1fff (page 3 is I/O)
++		.byte $ff,$ff,$ff,$ff	; $2000-$3fff
++		.byte $ff,$ff,$ff,$ff	; $4000-$5fff
++		.byte $ff,$ff,$ff,$ff	; $6000-$7fff
++		.byte $ff,$ff,$ff,$ff	; $8000-$9fff
++		.byte $ff,$ff,$ff,$ff	; $a000-$bfff
++		.byte $ff,$ff,$ff,$ff	; $c000-$dfff
++		.byte $ff,$ff,$ff,$ff	; $e000-$ffff
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/irqinit.s	2006-09-20 01:51:39.301727744 +0200
+@@ -0,0 +1,37 @@
++; depended on pal/ntsc do:
++; - init 1/64s (64Hz) IRQ timers interrupt
++; - init internal TOD timer (driven with NMI VBLNK call)
++; - init timer 2 (joined 3+4) to count time spent in task, reload on stop (in tasksw.s)
++;   (however it fucks up because the value can't be read from there :(
++
++		;; init system interrupt
++		lda #%11000000			; enable T1 irq
++		lda #$ff
++		sta VIA1_IER
++		
++#if 0
++; XXX:FIXME
++		lda #%00000011
++		sta POKEY_SKCTL			; reset serial, init keyboard scan
++
++		lda #0
++		sta POKEY_AUDC1
++		sta POKEY_AUDC2
++
++		lda #%00010000			; 64KHz base clock, join timer 1&2
++		sta POKEY_AUDCTL
++		; timer 2 counts timer 1 shots and timer 1 is on 64KHz clock
++		; we have 4*250=1000 and 64000/1000=64Hz
++		lda #<2000
++		ldx #>2000
++		; load half of it???
++		;lda #<500
++		;ldx #>500
++		sta POKEY_AUDF1
++		stx POKEY_AUDF2
++
++		lda #%11000010			; enable IRQs from timer 2, kbd & break
++		sta POKEY_IRQEN
++
++		sta POKEY_STIMER		; run timers
++#endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/keyboard.s	2006-09-20 21:50:47.301989888 +0200
+@@ -0,0 +1,318 @@
++;
++; Atmos keyboard handler
++; François 'mmu_man' Revol <revol@free.fr>
++; 25.12.2000, 04.03.2003
++;
++
++; - check keyboard maps & update for all extended functions & characters like `
++; - OPTION=alt, START=ex1, SELECT=ex2, HELP=ex3, CAPS
++
++btab2i:		.byte $fe, $fd, $fb, $f7, $ef, $df, $bf, $7f
++
++		;; table for $e? keys
++locktab:	.byte keyb_ctrl, keyb_lshift|keyb_rshift, keyb_caps, keyb_ex3
++
++		;; UNIX (ascii) decoding tables
++
++#define dunno $7f
++#define none_c		dunno
++; other defines for special characters in tables below (later)
++; internal codes $81-84 - cursors, $df/$f0 console toggle (prev/next), $f1-$f7 - goto console
++; $e0-$ef internal flags for altflag toggle, $f8-$ff is reserved to maintain code similarity
++; to c64 keyboard
++#define ctrl_c		$e0		; internal code -> keyb_ctrl
++#define shift_c		$e1		; internal code -> keyb_shift
++#define caps_c		$e2		; internal code -> keyb_caps
++#define help_c		$e3		; internal code -> keyb_ex3
++#define option_c	$e4		; internal code -> keyb_alt	; not used, handled below
++#define start_c		$e5		; internal code -> keyb_ex1	; not used, handled below
++#define select_c	$e6		; internal code -> keyb_ex2	; not used, handled below
++#define break_c		$03		; break is equal to CTRL+C
++#define esc_c		$1b
++#define return_c	$0a
++#define space_c		$20
++#define bkspc_c		$08
++#define tab_c		$09
++#define inv_c		dunno
++#define shelp_c		dunno
++#define sesc_c		dunno
++#define sreturn_c	dunno
++#define sspace_c	dunno
++#define clear_c		dunno
++#define insert_c	dunno
++#define del_c		$08
++#define stab_c		dunno
++#define sinv_c		dunno
++#define scaps_c		dunno
++#define backslash_c	"\\"
++
++#define csr_up_c	$81		; internal code -> cursor up
++#define csr_down_c	$82		; down
++#define csr_left_c	$83		; left
++#define csr_right_c	$84		; right
++
++;// ORIC specifics
++#define pound_c		$5f
++;// Atmos' FUNCT key... alt ?
++#define func_c		option_c
++
++;	.byte "L", "J", ";", $03, $04, "K", "+", "*"
++;	.byte "O", $09, "P", "U", return_c, "I", "-", "="
++;	.byte "V", help_c, "C", $03, $04, "B", "X", "Z"
++;	.byte "4", $09, "3", "6", esc_c, "5", "2", "1"
++;	.byte ",", space_c, ".", "N", $04, "M", "/", caps_c
++;	.byte "R", $09, "E", "Y", tab_c, "T", "W", "Q"
++;	.byte "9", $01, "0", "7", bkspc_c, "8", "<", ">"
++;	.byte "F", "H", "D", $0b, caps_c, "G", "S", "A"
++
++_keytab_normal:
++	.byte "7",        "n",        "5",         "v",       none_c,      "1",       "x",       "3"
++	.byte "j",        "t",        "r",         "f",       none_c,      esc_c,     "q",       "d"
++	.byte "m",        "6",        "b",         "4",       ctrl_c,      "z",       "2",       "c"
++	.byte "k",        "9",        ";",         "-",       none_c,      none_c,    "\\",      "'"
++	.byte " ",        ",",        ".",         csr_up_c,  shift_c,     csr_left_c,csr_down_c,csr_right_c
++	.byte "u",        "i",        "o",         "p",       func_c,      del_c,     "]",       "["
++	.byte "y",        "h",        "g",         "e",       none_c,      "a",       "s",       "w"
++	.byte "8",        "l",        "0",         "/",       shift_c,     return_c,  none_c,    "="
++#if 0
++	.byte $6c, $6a, ";", none_c, none_c, $6b, "+", "*"
++	.byte $6f, none_c, $70, $75, return_c, $69, "-", "="
++	.byte $76, help_c, $63, none_c, none_c, $62, $78, $7a
++	.byte "4", none_c, "3", "6", esc_c, "5", "2", "1"
++	.byte ",", space_c, ".", $6e, none_c, $6d, "/", inv_c
++	.byte $72, none_c, $65, $79, tab_c, $74, $77, $71
++	.byte "9", none_c, "0", "7", bkspc_c, "8", "<", ">"
++	.byte $66, $68, $64, none_c, caps_c, $67, $73, $61
++#endif
++_keytab_shift:
++	.byte "&",        "N",        "%",         "V",       none_c,      "!",       "X",       "#"
++	.byte "J",        "T",        "R",         "F",       none_c,      esc_c,     "Q",       "D"
++	.byte "M",        "^",        "b",         "$",       ctrl_c,      "Z",       "@",       "C"
++	.byte "K",        "(",        ":",         pound_c,   none_c,      none_c,    "|",       "\""
++	.byte " ",        "<",        ">",         csr_up_c,  shift_c,     csr_left_c,csr_down_c,csr_right_c
++	.byte "U",        "I",        "O",         "P",       func_c,      del_c,     "}",       "{"
++	.byte "Y",        "H",        "G",         "E",       none_c,      "A",       "S",       "W"
++	.byte "*",        "L",        ")",         "?",       shift_c,     return_c,  none_c,    "+"
++#if 0
++	.byte $4c, $4a, ":", none_c, none_c, $4b, backslash_c, "^"
++	.byte $4f, none_c, $50, $55, sreturn_c, $49, "_", "|"
++	.byte $56, shelp_c, $43, none_c, none_c, $42, $58, $5a
++	.byte "$", none_c, "#", "&", sesc_c, "%", $22, "!"
++	.byte "[", sspace_c, "]", $4e, none_c, $4d, "?", sinv_c
++	.byte $52, none_c, $45, $59, stab_c, $54, $57, $51
++	.byte "(", none_c, ")", "'", del_c, "@", clear_c, insert_c
++	.byte $46, $48, $44, none_c, scaps_c, $47, $53, $41
++#endif
++;_keytab_control:
++;	.byte $0c, $0a, ";", none_c, none_c, $0b, csr_left_c, csr_right_c
++;	.byte $0f, none_c, $10, $15, return_c, $09, csr_up_c, csr_down_c
++;	.byte $16, help_c, $03, none_c, none_c, $02, $18, $1a
++;	.byte "4", none_c, "3", "6", esc_c, "5", "2", "1"
++;	.byte ",", space_c, ".", $0e, none_c, $0d, "/", inv_c
++;	.byte $12, none_c, $05, $19, tab_c, $14, $17, $11
++;	.byte "9", none_c, "0", "7", bkspc_c, "8", "<", ">"
++;	.byte $06, $08, $04, none_c, caps_c, $07, $13, $01
++
++; console (START+OPTION) modifiers - 'lock' keys
++_cons_toggle:	; none, START, OPTION, START+OPTION
++		.byte	0, keyb_ex1, keyb_ex2, keyb_ex1|keyb_ex2
++
++; to speedup trigger translation
++_trig_toggle:
++		.byte	%11100000, %11110000
++
++;lastcons:	.byte 0
++curcol:		.byte 0		; current column
++kcnt:	.byte 0
++;colmask:	.byte $fe	; column bitmask (1st col)
++;;; ZEROpage: done 8
++;;; ZEROpage: last 8
++;done:			.buf 8			; map of done keys
++;last:			.buf 8			; map as it was scanned the last time
++
++;;; ZEROpage: keycode 1
++;keycode:		.buf 1			; keycode (equal to $cb in C64 ROM)
++
++flag:			.byte 0			; must be zero at startup
++
++
++		;; to save the time this is called only on timer IRQ
++.global joys_scan
++
++joys_scan:
++		; no joystick yet
++		rts
++
++
++keyb_scan:
++		;; keyboard scanning begins here
++		
++;	lda $bb80+40+31
++;	and #%00100000
++;	ora #"S"
++;	eor #%00100000
++;	sta $bb80+40+31
++
++		;; changing the row is way simpler than changing the col,
++		;; so we'll shift the column once every interrupt,
++		;; and scan all 8 rows for that col.
++		;; that should be enough for a start
++
++		ldx curcol
++		
++		cpx #4						; row 4: clear modifiers, we'll check them now
++		bne kbnocaf
++		lda #keyb_ctrl|keyb_rshift|keyb_lshift|keyb_alt
++		eor #$ff
++		and altflags
++		sta altflags
++kbnocaf:
++		;; check each row
++;	txa
++;	clc
++;	adc #"0"
++;	sta $bb80+40+34
++	
++		ldy #7						; start from row 7 downwards
++		lda VIA1_ORB
++		ora #$07					; set last 3 bits (start at line 7)
++		sta VIA1_ORB
++		
++kbnxtlin:
++;	tya
++;	clc
++;	adc #"0"
++;	sta $bb80+40+35
++;	lda $bb80+40+32
++;	and #%00100000
++;	ora #"L"
++;	eor #%00100000
++;	sta $bb80+40+32
++		lda VIA1_ORB
++		and #$08					; is the key pressed ?
++		bne +						; yes
++		lda btab2i,x					; no: make sure we remember
++		and last,y
++		sta last,y
++		jmp kbalready
++		
++	+	lda btab2i,x					; yes: check if it's new
++		eor #$ff
++		and last,y
++		bne kbalready
++		
++		;; new modifier: don't generate keycodes, just update altflags
++		cpx #4
++		beq kbchkmods
++		
++		;; newly pressed... handle
++		lda btab2i,x
++		eor #$ff
++		ora last,y					; remember pressed state
++		sta last,y
++		
++		;; calculate keycode: code = row * 8 + col
++		tya						; row
++		asl a
++		asl a
++		asl a						; *= 8
++		ora curcol					; += curcol
++		sta keycode
++		jmp kbalready
++kbchkmods:
++		lda #0
++		cpy #2
++		bne +
++		lda #keyb_ctrl
++	+	cpy #4
++		bne +
++		lda #keyb_lshift
++	+	cpy #5
++		bne +
++		lda #keyb_alt
++	+	cpy #7
++		bne +
++		lda #keyb_rshift
++	+	ora altflags
++		sta altflags
++;	and #7
++;	clc
++;	adc #"0"
++;	sta $bb80+40+37
++kbalready:
++		dey
++		bmi +
++		dec VIA1_ORB
++		jmp kbnxtlin
++	+	
++		;cmp #8
++		;inc VIA1_ORB
++		;lda #0
++		
++		
++;kbnxtcol:
++		;; shift the column
++		
++		ldx curcol
++		inx
++		cpx #8
++		bne +
++		ldx #0
++	+	stx curcol
++		lda btab2i,x
++		tax
++		lda #$0e				; register 14 of PSG
++		sta VIA1_ORA_NH
++		lda #$ff				; ??
++		sta VIA1_PCR
++		ldy #$dd				; ??
++		sty VIA1_PCR
++		stx VIA1_ORA_NH
++		lda #$fd
++		sta VIA1_PCR
++		
++		;cpx #$fe				; back to first col ?
++		;bne done_keyb			; yes
++		
++		;; check keypresses
++		
++		lda keycode
++		cmp #$40
++		bmi dokey
++done_keyb:
++		rts
++		
++dokey:
++	
++		;;; DONE!
++		; queue key into keybuffer
++		;; machine-dependent code returns with keycode offset in X register
++		ldx  keycode
++		lda #$41
++		sta keycode
++
++;	lda $bb80+40+33
++;	and #%00100000
++;	ora #"D"
++;	eor #%00100000
++;	sta $bb80+40+33
++
++;	txa
++;	lsr a
++;	lsr a
++;	lsr a
++;	clc
++;	adc #"0"
++;	sta $bb80+40+36
++	
++;	txa
++;	and #$07
++;	clc
++;	adc #"0"
++;	sta $bb80+40+37
++
++		;; machine-dependent code returns with keycode in X register
++
++
++
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/keyboard_init.s	2006-09-28 06:43:58.301989888 +0200
+@@ -0,0 +1,58 @@
++;
++; Atari keyboard init
++; Maciej 'YTM/Alliance' Witkowiak <ytm@friko.onet.pl>
++; 25.12.2000
++;
++
++#include <config.h>
++#include <system.h>
++#include MACHINE_H
++#include <keyboard.h>
++#include <zp.h>
++
++		;; initialize and install keyboard scanning routine
++keyboard_init:
++
++		; XXX: make sure VIA is setup correctly
++		; XXX:FIXME:don't screw up other bits in the VIA
++		; braindeadness due to the keyboard columns being wired
++		; on the IO port of the AY8912, which is accessed through
++		; the VIA...
++		
++		lda #0					; row 0 
++		ldx #$fe					; col 0 (bitmask)
++		sta VIA1_ORB
++		lda #$0e				; register 14 of PSG
++		sta VIA1_ORA_NH
++		lda #$ff				; ??
++		sta VIA1_PCR
++		ldy #$dd				; ??
++		sty VIA1_PCR
++		stx VIA1_ORA_NH
++		lda #$fd
++		sta VIA1_PCR
++		; this checks if the key is down
++		;sty VIA1_PCR
++		;lda VIA1_ORB
++		;and #08
++		
++		ldx  #<lkf_keyb_scan
++		ldy  #>lkf_keyb_scan
++		jsr  lkf_hook_irq		; hook into system
++
++		ldx #0
++		stx altflags
++
++		lda #$41			; invalid keycode
++		sta keycode
++
++	-	lda  _startmsg,x
++		beq  +
++		jsr  lkf_printk
++		inx
++		bne  -
++	+	rts
++
++_startmsg:
++		.text "ORIC keyboard module version 0.1"
++		.byte $0a,$00
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/random.s	2006-09-18 01:42:50.302776320 +0200
+@@ -0,0 +1,15 @@
++		;; function:	update_random
++		;; Update random number generator
++		;; < nothing
++		;; > nothing
++
++; This can be accomplished by a function of long period (like in the bottom)
++; or by using hardware. lastrnd is 16 bit, but only lower 8 bits are used
++
++		lda lastrnd
++		adc VIA1_TALO
++		adc VIA1_TAHI
++		;; SID stuff?
++		sta lastrnd
++		rts
++
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/reboot.s	2006-10-04 00:42:12.302776320 +0200
+@@ -0,0 +1,95 @@
++		;; leave LUnix (?) reboot system
++#include <oric.h>
++#include <system.h>
++
++reboot:	
++		sei						; disable irq
++		
++		;; make sure the ROM is mapped in
++		lda #MEMCONF_ROM
++		jsr oric_setmemconf
++		
++		;; reset vector
++		jmp ($fffc)
++
++
++
++
++		;; utility routines to switch between ROM and overlay
++		
++		;; lotsa globals to let the bootloader patch stuff to avoid lengthy cmp/bne
++oric_memconf:
++		.byte MEMCONF_OVL		; bootloader will do this
++.global	oric_getmemconf
++oric_getmemconf:
++		lda oric_memconf
++	-	rts
++.global	oric_setmemconf
++oric_setmemconf:
++		cmp oric_memconf
++		beq -					;done already
++		cmp #MEMCONF_ROM
++		bne oric_setmemconf_ovl
++.global	oric_setmemconf_rom
++oric_setmemconf_rom:
++		jmp -
++.global	oric_setmemconf_ovl
++oric_setmemconf_ovl:
++		jmp -
++
++#ifdef SUPPORT_JASMIN
++.global oric_setmemconf_rom_j
++.global oric_setmemconf_ovl_j
++oric_setmemconf_rom_j:			;
++		lda #%00000000			;
++		jmp +
++		sta JASMIN_OVERLAY		; enable overlay RAM
++		;sta JASMIN_ROMDIS		; disable BASIC ROM
++		rts
++oric_setmemconf_ovl_j:			;
++		lda #%00000001			;
++	+	sta JASMIN_OVERLAY		; enable overlay RAM
++		;sta JASMIN_ROMDIS		; disable BASIC ROM
++		rts
++#endif
++#ifdef SUPPORT_MICRODISC
++.global oric_microdisc_control_shadow
++oric_microdisc_control_shadow:
++		.byte %00000000
++.global oric_setmemconf_rom_m
++.global oric_setmemconf_ovl_m
++oric_setmemconf_rom_m:			;5 bytes
++		; XXX: should have a ghost of the reg to avoid screwing up other bits...
++		lda #%0000010			; enable EPROM and BASIC ROM
++		jmp +
++		;sta MICRODISC_CONTROL
++		;rts
++oric_setmemconf_ovl_m:			;6 bytes
++		;this can't work, reading doesn't give the same reg
++		;lda MICRODISC_CONTROL
++		lda oric_microdisc_control_shadow
++		ora #%10000000			; disable EPROM
++		and #%11111101			; disable BASIC ROM
++		lda #%10000000			; disable EPROM and BASIC ROM (also IRQs)
++	+	sta MICRODISC_CONTROL
++		rts
++#endif
++#ifdef SUPPORT_TELESTRAT
++.global oric_setmemconf_rom_t
++.global oric_setmemconf_ovl_t
++oric_setmemconf_rom_t:			;8 bytes
++		;; telestrat: select bank 7 (ROM)
++		lda #%00000111
++		ora VIA2_ORA
++		jmp +
++		;sta VIA2_ORA
++		;rts
++oric_setmemconf_ovl_t:			;9 bytes
++		;; telestrat: select bank 0 (RAM)
++		lda #%11111000
++		and VIA2_ORA
++	+	sta VIA2_ORA
++		rts
++#endif
++
++		
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/reset.s	2006-10-04 00:40:23.302776320 +0200
+@@ -0,0 +1,176 @@
++;// set up hardware before starting the kernel
++;// hw detection
++#include <oric.h>
++#include <system.h>
++
++#include <ksym.h>
++
++		;; disable all IRQs from VIA
++		
++		lda #$7f
++		sta VIA1_IER
++		
++		;; detect model
++		
++		ldy #loric_atmos		; assume Atmos for now
++		;; check for the "1" from "BASIC v1.1" of Atmos
++		;lda #"1"
++		;cmp $EDAD
++		;; this check is used by Loriciel, might be more reliable (?)
++		lda $fff9
++		cmp #$01
++		beq +
++		ldy #loric_oric1
++	+	
++;		jmp check_jasmin
++
++
++		;; detect floppy hardware
++		;; and enable overlay RAM
++		
++check_jasmin:
++#ifdef SUPPORT_JASMIN
++		;; detect Jasmin drive
++		lda VIA1_ACR			; VIA1+11
++		tax						; backup
++		cmp JASMIN_ROMDIS		; 
++		bne has_jasmin
++		
++		eor #%00000100			; change shift reg mode (unused)
++		sta VIA1_ACR
++		cmp JASMIN_ROMDIS		; 
++		stx VIA1_ACR			; change back (flags unaffected)
++		bne has_jasmin
++		jmp check_microdisc
++		
++has_jasmin:
++		lda #0
++		sta JASMIN_ROMDIS		; we don't want the drive's EPROM
++		; patch loader and kernel calls
++		lda #<lkf_oric_setmemconf_rom_j
++		sta lkf_oric_setmemconf_rom+1
++		lda #>lkf_oric_setmemconf_rom_j
++		sta lkf_oric_setmemconf_rom+2
++		
++		lda #<lkf_oric_setmemconf_ovl_j
++		sta lkf_oric_setmemconf_ovl+1
++		lda #>lkf_oric_setmemconf_ovl_j
++		sta lkf_oric_setmemconf_ovl+2
++		
++		tya
++		ora #loric_jasmin
++		tay
++		jmp got_fdc				; who needs both ?
++#endif
++		
++check_microdisc:
++#ifdef SUPPORT_MICRODISC
++		;; detect Microdrive/telestrat
++		; probe MD
++		ldx MICRODISC_IRQF
++	-	lda VIA1_T1LO
++		cmp VIA1_T1LO
++		beq -
++		cpx MICRODISC_IRQF
++		bne check_telestrat
++		
++		; patch loader and kernel calls
++		lda #<lkf_oric_setmemconf_rom_m
++		sta lkf_oric_setmemconf_rom+1
++		lda #>lkf_oric_setmemconf_rom_m
++		sta lkf_oric_setmemconf_rom+2
++		
++		lda #<lkf_oric_setmemconf_ovl_m
++		sta lkf_oric_setmemconf_ovl+1
++		lda #>lkf_oric_setmemconf_ovl_m
++		sta lkf_oric_setmemconf_ovl+2
++		
++		tya
++		ora #loric_mdisc
++		tay
++		
++		jmp got_fdc
++
++#endif
++check_telestrat:
++#ifdef SUPPORT_TELESTRAT
++		;; check for 2nd VIA (stratos)
++		lda VIA2_DDRA
++		cmp #%00010111
++		bne +
++		cmp VIA1_DDRA
++		beq +
++		tya
++		and #~loric_typemask
++		ora #loric_stratos
++		tay
++		
++		; patch loader and kernel calls
++		lda #<lkf_oric_setmemconf_rom_t
++		sta lkf_oric_setmemconf_rom+1
++		lda #>lkf_oric_setmemconf_rom_t
++		sta lkf_oric_setmemconf_rom+2
++		
++		lda #<lkf_oric_setmemconf_ovl_t
++		sta lkf_oric_setmemconf_ovl+1
++		lda #>lkf_oric_setmemconf_ovl_t
++		sta lkf_oric_setmemconf_ovl+2
++		
++		jmp got_fdc
++	+	
++#endif
++		
++		
++		;; no floppy:
++		;; display an error on status line, some fancy audio,
++		;; wait some time and reboot.
++no_fdc:
++		lda #<_nodrivemsg
++		;ldy #>_nodrivemsg ; delayed
++		ldx #0
++		
++		; jump to ROM's STOUT
++		; ORIC-1 vs Atmos: cf. Theoric nr 2 page 50
++		cpy #loric_oric1
++		bne no_fdc_atmos
++		
++		ldy #>_nodrivemsg
++		jsr $f82f				; STOUT
++		jsr $fab1				; EXPLD
++		jmp +
++no_fdc_atmos:
++		ldy #>_nodrivemsg
++		jsr $f865				; STOUD
++		jsr $facb				; EXPLD
++	+	
++		; spin for a while...
++		ldy #$ff
++	-	dey
++		bne -
++		
++		; RESET vector
++		jmp ($fffc)
++
++		;; we have a floppy, continue
++got_fdc:
++		; switch to overlay RAM...
++		; before storing anything to it :)
++		jsr lkf_oric_setmemconf_ovl
++		
++		; save model and hw flags
++		sty lk_oric_arch
++		
++		;; set archtype (first solution on PAL/NTSC detection)
++
++		ldx #larch_oric		; oric/ntsc
++		stx lk_archtype
++		
++		jmp resetdone
++
++
++
++_nodrivemsg:
++		.text "Jasmin or Microdisc required!"
++		.byte $00
++		
++resetdone:
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/stackin.s	2000-12-27 16:33:50.302776320 +0100
+@@ -0,0 +1,14 @@
++		;; swap in stack
++
++		ldx  #$ff
++		txs
++		ldy  #tsp_stsize
++		lda  (lk_tsp),y
++		tax
++		eor  #$ff
++		sta  _stll+1
++
++_stll:		lda  .0,x
++		pha
++		dex
++		bne  _stll
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/stackout.s	2000-12-27 16:33:50.303038464 +0100
+@@ -0,0 +1,27 @@
++		;; taskswitching
++		;; swapping stack out
++
++
++		lda  lk_tsp+1
++		sta  _stsl+2			; self modifying code for extra performance
++		sta  _zpsl+2
++
++		;; swap out stack
++
++		tsx						; remember stackpointer
++		txa
++		eor  #$ff
++		ldy #tsp_stsize
++		sta  (lk_tsp),y
++		clc						; exact check for stackoverflow
++		adc  #tsp_swap
++		bcs  _stackoverflow
++		ldy  #tsp_zpsize
++		adc  (lk_tsp),y
++		bcs  _stackoverflow
++		inx
++
++	-	pla						; stackpointer must be initialized with 0 (!)
++_stsl:		sta  .0,x
++		inx
++		bne  -
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/tasksw.s	2006-09-20 23:06:12.303038464 +0200
+@@ -0,0 +1,94 @@
++		;; For emacs: -*- MODE: asm; tab-width: 4; -*-
++
++	lda VIA1_TALO
++
++		lda  lk_ipid
++		bmi  _idle			; skip next, if we're idle
++
++		;; add CPU time spent to task's time
++		;;  5 bytes -> overflow after 12 days, 22 hours, 4 minutes, ...
++
++;		;; This is disabled since Atari has no precise timer to read
++;		;; 1/[56]0s timer could be used to provide some kind of generalization
++;		;; But who the fuck cares? All in all tsp_time is currently for information
++;		;; purposes only
++;		lda  #0
++;		sta  CIA1_CRB           ; stop timer2 of CIA1
++;		ldy  #tsp_time
++;		sec
++;		lda  (lk_tsp),y
++;		sbc  CIA1_TBLO
++;		sta  (lk_tsp),y         ; add to time0
++;		iny
++;		lda  (lk_tsp),y
++;		sbc  CIA1_TBHI
++;		sta  (lk_tsp),y         ; add to time1
++;		ldx  #3
++;	-	bcc  +
++;		iny
++;		lda  (lk_tsp),y
++;		adc  #0
++;		sta  (lk_tsp),y         ; increase time2,3,4
++;		dex
++;		bne  -
++
++		dec  lk_timer
++		beq  do_taskswitch		; end of time slice, so switch
++
++_checktimer:
++;	lda #%00000001
++;	sta $BB80+40+28
++;	lda #%00010000
++;	sta $BB80+40+29
++;	lda $BB80+40+30
++;	and #%00100000
++;	ora #"I"
++;	eor #%00100000
++;	sta $BB80+40+30
++		lda  VIA1_IFR			; check IRQ source
++		tax
++		and  #%01000000			; was it timer IRQ?
++		bne  +				; yes!
++		jmp +
++
++		txa
++		and  #%00100000		; timer 2
++		beq  _irq_end			; it wasn't timer2 IRQ either - forget it
++		txa
++;		jsr  keyb_scan
++		jmp  _irq_end
++	+
++		;jsr  keyb_scan
++		inc  lk_systic			; system ticks (overflow after 72.8h)
++		bne  +
++		inc  lk_systic+1		; (nearly counts seconds/4)
++		bne  +
++		inc  lk_systic+2
++	+	inc  lk_sleepcnt		; time to wakeup a sleeping task ?
++		bne  _irq_jobptr		; (not jet)
++		inc  lk_sleepcnt+1
++		bne  _irq_jobptr		; (not jet)
++		jsr  _wakeup			; Yes!
++
++_irq_jobptr:
++		bit  $ffff			; placeholder for up to 3 IRQ routines
++		bit  $ffff			; all called once every 1/64 second
++		bit  $ffff
++
++_irq_end:
++	- +	lda  VIA1_T1LO			; acknowledge timer 1 interrupt
++		;lda  #%11000000			; acknowledge timer 1 interrupts
++		;sta  VIA1_IFR
++		pla
++		SETMEMCONF			; switch to task's memory configuration
++		pla
++		tay
++		pla
++		tax
++		pla
++		rti
++
++		;; this is dummy, Atmos has no timer to alarm (yet) :(
++_irq_alertptr:
++		bit  $ffff				; placeholder for 1 alarm handler
++		jmp  -
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/zpagein.s	2000-12-27 16:33:50.303038464 +0100
+@@ -0,0 +1,41 @@
++
++		sta  _zpll+2
++		sta  _stll+2
++
++		;; swap in zeropage
++
++# ifndef ALWAYS_SZU
++		lda  lk_tstatus,y		; task status
++		and  #tstatus_szu		; check if system zeropage is used
++		beq  +					; not used, then skip
++
++		lda  lk_tsp+1			; extra 8 zeropage bytes for
++		sta  _szll+2			; kernel or (shared-) library routines
++		ldx  #7
++_szll:		lda  .tsp_syszp,x
++		sta  syszp,x
++		dex
++		bpl  _szll
++
++	+	ldy  #tsp_zpsize		; size of zeropage
++		lda  (lk_tsp),y
++		beq  +
++		tax
++		dex
++
++_zpll:  	lda  .tsp_swap,x
++		sta  userzp,x
++		dex
++		bpl  _zpll
++	+
++# else
++		ldy  #tsp_zpsize		; size of zeropage
++		lda  (lk_tsp),y
++		clc
++		adc  #7
++		tax
++_zpll:  	lda  .tsp_swap-8,x		; (alwasy_szu makes this loop 96us longer)
++		sta  userzp-8,x
++		dex
++		bpl  _zpll		
++# endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/zpageout.s	2000-12-27 16:33:50.303300608 +0100
+@@ -0,0 +1,40 @@
++		;; swap out zeropage
++
++# ifndef ALWAYS_SZU
++		ldy  #tsp_zpsize
++		lda  (lk_tsp),y			; size of used zeropage
++		beq  +
++		tax
++		dex
++
++	-	lda  userzp,x			; if zpsize is zero 1 byte will be copied
++_zpsl:		sta  .tsp_swap,x		; (doesn't matter, i think)
++		dex
++		bpl  -
++
++	+	ldy  lk_ipid
++		lda  lk_tstatus,y		; task status
++		and  #tstatus_szu		; check if system zeropage is used
++		beq  +					; not used, then skip
++
++		lda  lk_tsp+1			; extra 8 zeropage bytes for
++		sta  _szsl+2			; kernel or (shared-) library routines
++		ldx  #7
++	-	lda  syszp,x
++_szsl:		sta  .tsp_syszp,x
++		dex
++		bpl  -
++	+
++# else
++		;; always add 8 bytes szu to zeropage (syszp = userzp-8)
++		ldy  #tsp_zpsize
++		lda  (lk_tsp),y			; size of used zeropage
++		clc
++		adc  #7
++		tax
++	-	lda  userzp-8,x			; if zpsize is zero 1 byte will be copied
++_zpsl:		sta  .tsp_swap-8,x		; (doesn't matter, i think)
++		dex
++		bpl  -
++		ldy  lk_ipid
++# endif
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/keyboard.s.001	2006-09-20 12:58:01.302514176 +0200
+@@ -0,0 +1,380 @@
++;
++; Atmos keyboard handler
++; Maciej 'YTM/Elysium' Witkowiak <ytm@elysium.pl>
++; 25.12.2000, 04.03.2003
++;
++
++; - check keyboard maps & update for all extended functions & characters like `
++; - OPTION=alt, START=ex1, SELECT=ex2, HELP=ex3, CAPS
++
++btab2i:		.byte $fe, $fd, $fb, $f7, $ef, $df, $bf, $7f
++
++		;; table for $e? keys
++locktab:	.byte keyb_ctrl, keyb_lshift|keyb_rshift, keyb_caps, keyb_ex3
++
++		;; UNIX (ascii) decoding tables
++
++#define dunno $7f
++#define none_c		dunno
++; other defines for special characters in tables below (later)
++; internal codes $81-84 - cursors, $df/$f0 console toggle (prev/next), $f1-$f7 - goto console
++; $e0-$ef internal flags for altflag toggle, $f8-$ff is reserved to maintain code similarity
++; to c64 keyboard
++#define ctrl_c		$e0		; internal code -> keyb_ctrl
++#define shift_c		$e1		; internal code -> keyb_shift
++#define caps_c		$e2		; internal code -> keyb_caps
++#define help_c		$e3		; internal code -> keyb_ex3
++#define option_c	$e4		; internal code -> keyb_alt	; not used, handled below
++#define start_c		$e5		; internal code -> keyb_ex1	; not used, handled below
++#define select_c	$e6		; internal code -> keyb_ex2	; not used, handled below
++#define break_c		$03		; break is equal to CTRL+C
++#define esc_c		$1b
++#define return_c	$0a
++#define space_c		$20
++#define bkspc_c		$08
++#define tab_c		$09
++#define inv_c		dunno
++#define shelp_c		dunno
++#define sesc_c		dunno
++#define sreturn_c	dunno
++#define sspace_c	dunno
++#define clear_c		dunno
++#define insert_c	dunno
++#define del_c		$08
++#define stab_c		dunno
++#define sinv_c		dunno
++#define scaps_c		dunno
++#define backslash_c	"\\"
++
++#define csr_up_c	$81		; internal code -> cursor up
++#define csr_down_c	$82		; down
++#define csr_left_c	$83		; left
++#define csr_right_c	$84		; right
++
++;	.byte "L", "J", ";", $03, $04, "K", "+", "*"
++;	.byte "O", $09, "P", "U", return_c, "I", "-", "="
++;	.byte "V", help_c, "C", $03, $04, "B", "X", "Z"
++;	.byte "4", $09, "3", "6", esc_c, "5", "2", "1"
++;	.byte ",", space_c, ".", "N", $04, "M", "/", caps_c
++;	.byte "R", $09, "E", "Y", tab_c, "T", "W", "Q"
++;	.byte "9", $01, "0", "7", bkspc_c, "8", "<", ">"
++;	.byte "F", "H", "D", $0b, caps_c, "G", "S", "A"
++
++_keytab_normal:
++	.byte $6c, $6a, ";", none_c, none_c, $6b, "+", "*"
++	.byte $6f, none_c, $70, $75, return_c, $69, "-", "="
++	.byte $76, help_c, $63, none_c, none_c, $62, $78, $7a
++	.byte "4", none_c, "3", "6", esc_c, "5", "2", "1"
++	.byte ",", space_c, ".", $6e, none_c, $6d, "/", inv_c
++	.byte $72, none_c, $65, $79, tab_c, $74, $77, $71
++	.byte "9", none_c, "0", "7", bkspc_c, "8", "<", ">"
++	.byte $66, $68, $64, none_c, caps_c, $67, $73, $61
++_keytab_shift:
++	.byte $4c, $4a, ":", none_c, none_c, $4b, backslash_c, "^"
++	.byte $4f, none_c, $50, $55, sreturn_c, $49, "_", "|"
++	.byte $56, shelp_c, $43, none_c, none_c, $42, $58, $5a
++	.byte "$", none_c, "#", "&", sesc_c, "%", $22, "!"
++	.byte "[", sspace_c, "]", $4e, none_c, $4d, "?", sinv_c
++	.byte $52, none_c, $45, $59, stab_c, $54, $57, $51
++	.byte "(", none_c, ")", "'", del_c, "@", clear_c, insert_c
++	.byte $46, $48, $44, none_c, scaps_c, $47, $53, $41
++;_keytab_control:
++;	.byte $0c, $0a, ";", none_c, none_c, $0b, csr_left_c, csr_right_c
++;	.byte $0f, none_c, $10, $15, return_c, $09, csr_up_c, csr_down_c
++;	.byte $16, help_c, $03, none_c, none_c, $02, $18, $1a
++;	.byte "4", none_c, "3", "6", esc_c, "5", "2", "1"
++;	.byte ",", space_c, ".", $0e, none_c, $0d, "/", inv_c
++;	.byte $12, none_c, $05, $19, tab_c, $14, $17, $11
++;	.byte "9", none_c, "0", "7", bkspc_c, "8", "<", ">"
++;	.byte $06, $08, $04, none_c, caps_c, $07, $13, $01
++
++; console (START+OPTION) modifiers - 'lock' keys
++_cons_toggle:	; none, START, OPTION, START+OPTION
++		.byte	0, keyb_ex1, keyb_ex2, keyb_ex1|keyb_ex2
++
++; to speedup trigger translation
++_trig_toggle:
++		.byte	%11100000, %11110000
++
++lastcons:	.byte 0
++colmask:	.byte $fe	; column bitmask (1st col)
++;;; ZEROpage: done 8
++;;; ZEROpage: last 8
++;done:			.buf 8			; map of done keys
++;last:			.buf 8			; map as it was scanned the last time
++
++;;; ZEROpage: keycode 1
++;keycode:		.buf 1			; keycode (equal to $cb in C64 ROM)
++
++flag:			.byte 0			; must be zero at startup
++
++
++		;; to save the time this is called only on timer IRQ
++.global joys_scan
++
++joys_scan:
++		; no joystick yet
++		rts
++#if 0
++		;; joystick scanning, return the same values as C64
++		;; (combine with trigger)
++		lda GTIA_TRIG0
++		and #%00000001
++		tax
++		lda PIA_PORTA
++		pha
++		and #%00001111
++		ora _trig_toggle,x
++		sta joy0result
++
++		lda GTIA_TRIG1
++		and #%00000001
++		tax
++		pla
++		lsr a
++		lsr a
++		lsr a
++		lsr a
++		ora _trig_toggle,x
++		sta joy1result
++
++		;; console keys don't do keyboard IRQ and we must know their state
++		lda GTIA_CONSOL
++		cmp lastcons
++		bne +				; something new!
++		rts
++	+	sta lastcons
++		and #%00000111
++		eor #%00000111
++		pha
++		and #%00000011			; only START+SELECT
++		beq +				; none pressed?
++		tax
++		lda altflags
++		eor _cons_toggle,x
++		sta altflags
++
++	+	pla
++		and #%00000100			; OPTION is alt, no toggle but state driven
++		beq +
++		lda altflags			; set
++		ora #keyb_alt
++		bne ++
++	+	lda altflags			; clear
++		and #~keyb_alt
++	+	sta altflags
++		rts
++#endif
++
++;_keybdbg:
++;		.text "got IRQ!"
++;		.bytes $0a,$00
++keyb_scan:
++		;; keyboard scanning begins here
++		
++		;;DEBUG
++;		ldx #0
++;	-	lda  _keybdbg,x
++;		beq  +
++;		jsr  printk
++;		inx
++;		bne  -
++;	+	rts
++
++		lda #"K"
++		sta $bb80+40+31
++		;rts
++
++		;; changing the row is way simpler than changing the col,
++		;; so we'll shift the column once every interrupt,
++		;; and scan all 8 rows for that col.
++		;; that should be enough for a start
++		
++		;; check each row
++		ldx colmask
++		ldy #7
++		lda VIA1_ORB
++		ora #$07					; set last 3 bits
++		sta VIA1_ORB
++	-	lda VIA1_ORB
++		and #$08					; is the key pressed ?
++		beq +						; no
++	lda $bb80+40+34
++	eor #$80
++	sta $bb80+40+34
++		txa						; yes: set the bit in the done tab
++		eor #$ff
++		ora done,y
++		sta done,y
++		
++	+	dey
++		bmi +
++		dec VIA1_ORB
++		jmp -
++	+	
++		cmp #8
++		inc VIA1_ORB
++		lda #0
++		
++		
++		;; shift the column
++		lda colmask
++		rol a
++		bcs +					; 
++		lda #$ff					; set bit0 to 1 so it'll change to 0
++	+	eor #$01				; set bit0 to 1 if it wasn't
++		tax
++		lda #$0e				; register 14 of PSG
++		sta VIA1_ORA_NH
++		lda #$ff				; ??
++		sta VIA1_PCR
++		ldy #$dd				; ??
++		sty VIA1_PCR
++		stx VIA1_ORA_NH
++		lda #$fd
++		sta VIA1_PCR
++		stx colmask
++		txa
++		cmp #$fe
++		bne done_keyb
++		
++		;; check keypresses
++		
++		
++		
++		
++		;; move done to last
++		ldy #7
++		lda #0
++	-	lda done,y
++		sta last,y
++		stx done,y
++		dey
++		bpl -					; clear maps
++
++		
++done_keyb:
++		
++	lda $bb80+40+35
++	eor #$80
++	sta $bb80+40+35
++;	lda #"h"
++;	bne _addkey
++;	rts
++
++		; x = line nr
++		; y = keycode (=line * 8 + bit_offset)
++		lda #0
++		tax
++		tay
++_keyscan_main:
++	+ -	lda  port_col
++		cmp  port_col
++		bne  -
++	+	pha						; remember line-pattern
++		and  last,x				; add last time result
++		pha						; remember this too
++		and  done,x				; clear done keys, that are released
++		eor  done,x
++		sta  done,x
++		pla
++		ora  done,x				; remove old keys (that are pressed before)
++		eor  #$ff
++		beq  contnxtline		; no key left, then continue with next line
++
++	-	lsr  a
++		bcc  contnxtbit			; not pressed
++		pha						; found pressed key
++		lda  _keytab_normal,y
++		cmp  #$f8				; some keys are treated more equal !!
++		bcc  +
++		eor  #$ff
++		ora  altflags
++		sta  altflags			; altflags contains pattern of shift,commo,..
++		bit  flag				; (be sure, flag doesn't stay $ff)
++		bpl  ++
++		lda  #$40
++		sta  flag				; if flag is null, set it to none
++		jmp  ++
++
++	+	sty  keycode			; remember key if it is not shift or commo
++	+	pla
++		beq  contnxtline
++
++contnxtbit:		
++		iny
++		bne  -					; loop should not be left this way
++		;; jsr  panic				; (just for debugging :)
++
++contnxtline:	
++		pla						; line is completed
++		sta  last,x				; remember result of scan
++
++		inx
++#ifndef C128
++		cpx  #8					; next line
++#else
++		cpx  #11
++#endif
++		beq  +					; all done !
++
++		tya					; increase keycounter to next lines base
++		and  #$f8
++		clc
++		adc  #8
++
++		tay
++		jmp  _keyscan_main
++
++	+	lda  #$ff
++		sta  port_row				; reset port_row
++#ifdef C128
++		sta port_row2
++#endif
++		lda  port_row
++		and  port_col
++		cmp  #$ff				; disturbed by joystick ?
++		beq  +					; shit, then throw it all away
++	-	rts
++
++	+	lda  keycode				; look at what we've found
++#ifndef C128
++		cmp  #$40
++#else
++		cmp  #(64+24)
++#endif
++		bcs  -					; nothing ? So lets leave!
++		sta  flag
++		lsr  a
++		lsr  a
++		lsr  a
++		tax
++		lda  keycode
++		and  #7
++		tay
++		lda  btab2i,y
++		eor  #$ff
++		ora  done,x				; mark this key, to ignore it next time
++		sta  done,x
++
++		; queue key into keybuffer
++		;; machine-dependent code returns with keycode offset in X register
++		ldx  keycode
++
++		;;DEBUG
++;		lda #"K"
++;		jsr printk
++;		lda #":"
++;		jsr printk
++;		txa
++;		jsr hexout
++;		lda #"\n"
++;		jsr printk
++;		rts
++
++	lda $bb80+40+31
++	eor #$80
++	sta $bb80+40+31
++
++
++		;; machine-dependent code returns with keycode in X register
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/detect/reboot.s.001	2006-09-24 01:49:08.302252032 +0200
+@@ -0,0 +1,88 @@
++		;; leave LUnix (?) reboot system
++#include <oric.h>
++#include <system.h>
++
++reboot:	
++		sei						; disable irq
++		
++		;; make sure the ROM is mapped in
++		lda #MEMCONF_ROM
++		jsr oric_setmemconf
++		
++		;; reset vector
++		jmp ($fffc)
++
++		;; utility routines to switch between ROM and overlay
++oric_memconf:
++		.byte MEMCONF_OVL		; bootloader will do this
++oric_getmemconf:
++		lda oric_memconf
++	-	rts
++oric_setmemconf:
++		cmp oric_memconf
++		beq -					;done already
++		cmp #MEMCONF_ROM
++		bne oric_setmemconf_ovl
++#ifdef SUPPORT_TELESTRAT
++		; check telestrat first (its microdisc doesn't have the romdis bit)
++		lda lk_oric_arch
++		and #loric_stratos		; optimization
++		beq +
++		lda VIA2_ORA
++		ora #%00000111
++smc_t:
++		sta VIA2_ORA
++		rts
++	+	
++#endif
++		lda lk_oric_arch
++		and #loric_diskmask
++#ifdef SUPPORT_JASMIN
++		cmp #loric_jasmin
++		bne +
++		lda #0
++smc_j:
++		sta JASMIN_OVERLAY
++		sta JASMIN_ROMDIS
++		rts
++	+	
++#endif
++#ifdef SUPPORT_MICRODISC
++		cmp #loric_mdisc
++		bne +
++		lda #%00000010
++smc_m:
++		sta MICRODISC_CONTROL
++		rts
++	+
++#endif
++
++oric_setmemconf_ovl:
++#ifdef SUPPORT_TELESTRAT
++		; check telestrat first (its microdisc doesn't have the romdis bit)
++		lda lk_oric_arch
++		and #loric_stratos		; optimization
++		beq +
++		lda VIA2_ORA
++		and #%11111000
++		jmp smc_t
++	+
++#endif
++		lda lk_oric_arch
++		and #loric_diskmask
++#ifdef SUPPORT_JASMIN
++		cmp #loric_jasmin
++		bne +
++		lda #%00000001
++		jmp smc_j
++	+
++#endif
++#ifdef SUPPORT_MICRODISC
++		cmp #loric_mdisc
++		bne +
++		lda #%10000000
++		jmp smc_m
++	+
++#endif
++		rts
++		
+\ No newline at end of file
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/detect/reboot.s.002	2006-09-24 02:18:23.302252032 +0200
+@@ -0,0 +1,77 @@
++		;; leave LUnix (?) reboot system
++#include <oric.h>
++#include <system.h>
++
++reboot:	
++		sei						; disable irq
++		
++		;; make sure the ROM is mapped in
++		lda #MEMCONF_ROM
++		jsr oric_setmemconf
++		
++		;; reset vector
++		jmp ($fffc)
++
++		;; utility routines to switch between ROM and overlay
++oric_memconf:
++		.byte MEMCONF_OVL		; bootloader will do this
++.global	oric_getmemconf
++oric_getmemconf:
++		lda oric_memconf
++	-	rts
++oric_setmemconf:
++		cmp oric_memconf
++		beq -					;done already
++		pha						; backup
++#ifdef SUPPORT_TELESTRAT
++		; check telestrat first (its microdisc doesn't have the romdis bit)
++		lda lk_oric_arch
++		;and #loric_typemask
++		;cmp #loric_stratos
++		and #loric_stratos		; optimization
++		beq smc_not_tel
++		pla
++		cmp #MEMCONF_ROM
++		bne +
++		lda VIA2_ORA
++		ora #%00000111
++		sta VIA2_ORA
++		rts
++	+	lda VIA2_ORA
++		and #%11111000
++		sta VIA2_ORA
++		rts
++smc_not_tel:
++#endif
++		lda lk_oric_arch
++		and #loric_diskmask
++#ifdef SUPPORT_JASMIN
++		cmp #loric_jasmin
++		bne smc_not_j
++		pla
++		cmp #MEMCONF_ROM
++		beq +
++		lda #%00000001
++		jmp ++
++	+	lda #0
++	+	sta JASMIN_OVERLAY
++		sta JASMIN_ROMDIS
++		rts
++smc_not_j:
++#endif
++#ifdef SUPPORT_MICRODISC
++		cmp #loric_mdisc
++		bne smc_not_md
++		pla
++		cmp #MEMCONF_ROM
++		beq +
++		lda #%10000000
++		jmp ++
++	+	lda #%00000010
++	+	sta MICRODISC_CONTROL
++		rts
++smc_not_md:
++#endif
++		pla
++		rts
++		
+\ No newline at end of file
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/detect/reboot.s.003	2006-09-24 03:53:21.302252032 +0200
+@@ -0,0 +1,97 @@
++		;; leave LUnix (?) reboot system
++#include <oric.h>
++#include <system.h>
++
++reboot:	
++		sei						; disable irq
++		
++		;; make sure the ROM is mapped in
++		lda #MEMCONF_ROM
++		jsr oric_setmemconf
++		
++		;; reset vector
++		jmp ($fffc)
++
++		;; utility routines to switch between ROM and overlay
++oric_memconf:
++		.byte MEMCONF_OVL		; bootloader will do this
++.global	oric_getmemconf
++oric_getmemconf:
++		lda oric_memconf
++	-	rts
++.global	oric_setmemconf
++oric_setmemconf:
++		cmp oric_memconf
++		beq -					;done already
++		cmp #MEMCONF_ROM
++		bne oric_setmemconf_ovl
++.global	oric_setmemconf_rom
++oric_setmemconf_rom:
++		jmp $0
++		jmp $0
++		nop
++		nop
++		rts
++.global	oric_setmemconf_ovl
++oric_setmemconf_ovl:
++		jmp $0
++		jmp $0
++		nop
++		nop
++		rts
++
++#if 0
++		pha						; backup
++#ifdef SUPPORT_TELESTRAT
++		; check telestrat first (its microdisc doesn't have the romdis bit)
++		lda lk_oric_arch
++		;and #loric_typemask
++		;cmp #loric_stratos
++		and #loric_stratos		; optimization
++		beq smc_not_tel
++		pla
++		cmp #MEMCONF_ROM
++		bne +
++		lda VIA2_ORA
++		ora #%00000111
++		sta VIA2_ORA
++		rts
++	+	lda VIA2_ORA
++		and #%11111000
++		sta VIA2_ORA
++		rts
++smc_not_tel:
++#endif
++		lda lk_oric_arch
++		and #loric_diskmask
++#ifdef SUPPORT_JASMIN
++		cmp #loric_jasmin
++		bne smc_not_j
++		pla
++		cmp #MEMCONF_ROM
++		beq +
++		lda #%00000001
++		jmp ++
++	+	lda #0
++	+	sta JASMIN_OVERLAY
++		sta JASMIN_ROMDIS
++		rts
++smc_not_j:
++#endif
++#ifdef SUPPORT_MICRODISC
++		cmp #loric_mdisc
++		bne smc_not_md
++		pla
++		cmp #MEMCONF_ROM
++		beq +
++		lda #%10000000
++		jmp ++
++	+	lda #%00000010
++	+	sta MICRODISC_CONTROL
++		rts
++smc_not_md:
++#endif
++		pla
++		rts
++#endif
++		
+\ No newline at end of file
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/detect/reset.s.002	2006-09-24 00:42:42.302514176 +0200
+@@ -0,0 +1,138 @@
++;// set up hardware before starting the kernel
++;// hw detection
++#include <oric.h>
++#include <system.h>
++
++		;; disable all IRQs from VIA
++		
++		lda #$7f
++		sta VIA1_IER
++		
++		;; detect model
++		
++		ldy #loric_atmos		; assume Atmos for now
++		;; check for the "1" from "BASIC v1.1" of Atmos
++		;lda #"1"
++		;cmp $EDAD
++		;; this check is used by Loriciel, might be more reliable (?)
++		lda $fff9
++		cmp #$01
++		beq +
++		ldy #loric_oric1
++	+	
++#ifdef SUPPORT_TELESTRAT
++		;; check for 2nd VIA (stratos)
++		lda VIA2_DDRA
++		cmp #%00010111
++		bne +
++		cmp VIA1_DDRA
++		beq +
++		ldy #loric_stratos
++		;; telestrat: select bank 0 (RAM)
++		lda #%11111000
++		and VIA2_ORA
++		sta VIA2_ORA
++	+	
++#endif
++		
++		;; detect floppy hardware
++		;; and enable overlay RAM
++		
++check_jasmin:
++#ifdef SUPPORT_JASMIN
++		;; detect Jasmin drive
++		lda VIA1_ACR			; VIA1+11
++		tax						; backup
++		cmp JASMIN_ROMDIS		; 
++		bne has_jasmin
++		
++		eor #%00000100			; change shift reg mode (unused)
++		sta VIA1_ACR
++		cmp JASMIN_ROMDIS		; 
++		stx VIA1_ACR			; change back (flags unaffected)
++		bne has_jasmin
++		jmp check_microdisc
++		
++has_jasmin:
++		lda #%00000001			;
++		sta JASMIN_OVERLAY		; enable overlay RAM
++		sta JASMIN_ROMDIS		; disable BASIC ROM
++
++		tya
++		ora #loric_jasmin
++		tay
++		jmp got_fdc				; who needs both ?
++#endif
++		
++check_microdisc:
++#ifdef SUPPORT_MICRODISC
++		;; detect Microdrive/telestrat
++		; probe MD
++		ldx MICRODISC_IRQF
++	-	lda VIA1_T1LO
++		cmp VIA1_T1LO
++		beq -
++		cpx MICRODISC_IRQF
++		bne no_fdc
++		
++		;this can't work, reading doesn't give the same reg
++		;lda MICRODISC_CONTROL
++		;ora #%10000000			; disable EPROM
++		;and #%11111101			; disable BASIC ROM
++		
++		lda #%10000000			; disable EPROM and BASIC ROM (also IRQs)
++		sta MICRODISC_CONTROL
++		
++		tya
++		ora #loric_mdisc
++		tay
++		
++		jmp got_fdc
++#endif
++		
++		;; no floppy:
++		;; display an error on status line, some fancy audio,
++		;; wait some time and reboot.
++no_fdc:
++		lda #<_nodrivemsg
++		;ldy #>_nodrivemsg ; delayed
++		ldx #0
++		
++		; jump to ROM's STOUT
++		; ORIC-1 vs Atmos: cf. Theoric nr 2 page 50
++		cpy #loric_oric1
++		bne no_fdc_atmos
++		
++		ldy #>_nodrivemsg
++		jsr $f82f				; STOUT
++		jsr $fab1				; EXPLD
++		jmp +
++no_fdc_atmos:
++		ldy #>_nodrivemsg
++		jsr $f865				; STOUD
++		jsr $facb				; EXPLD
++	+	
++		; spin for a while...
++		ldy #$ff
++	-	dey
++		bne -
++		
++		; RESET vector
++		jmp ($fffc)
++
++		;; we have a floppy, continue
++got_fdc:
++		; save model and hw flags
++		sty lk_oric_arch
++		
++		;; set archtype (first solution on PAL/NTSC detection)
++
++		ldx #larch_oric		; oric/ntsc
++		stx lk_archtype
++		jmp resetdone
++
++_nodrivemsg:
++		.text "Jasmin or Microdisc required!"
++		.byte $00
++		
++resetdone:
+--- /dev/null	2016-08-28 20:59:50.116314000 +0200
++++ kernel/oric/old/detect/reset.s.003	2006-09-24 04:23:04.302514176 +0200
+@@ -0,0 +1,226 @@
++;// set up hardware before starting the kernel
++;// hw detection
++#include <oric.h>
++#include <system.h>
++
++#include <ksym.h>
++
++; we won't be changing disc drive after boot...
++; so we copy simple setmemconf code to avoid useless tests in the kernel.
++; we'll copy to the bootloader's copy and the kernel's copy of setmemconf_ovl/rom
++
++#begindef MY_MEMCPY(to,from,sz)
++		tya
++		pha
++		ldy #sz
++	-	lda from,y
++		sta to,y
++		dey
++		bne -
++		pla
++		tay
++#enddef
++
++#begindef MY_MEMCPYI(ito,from,sz)
++		tya
++		pha
++		lda ito
++		sta *+15
++		lda ito+1
++		sta *+10
++		ldy #sz
++	-	lda from,y
++		sta $0,y
++		dey
++		bne -
++		pla
++		tay
++#enddef
++
++		;; disable all IRQs from VIA
++		
++		lda #$7f
++		sta VIA1_IER
++		
++		;; detect model
++		
++		ldy #loric_atmos		; assume Atmos for now
++		;; check for the "1" from "BASIC v1.1" of Atmos
++		;lda #"1"
++		;cmp $EDAD
++		;; this check is used by Loriciel, might be more reliable (?)
++		lda $fff9
++		cmp #$01
++		beq +
++		ldy #loric_oric1
++	+	
++		jmp check_jasmin
++
++smc_ptrr:
++		.word lkf_oric_setmemconf_rom
++smc_ptro:
++		.word lkf_oric_setmemconf_ovl
++
++		;; detect floppy hardware
++		;; and enable overlay RAM
++		
++check_jasmin:
++#ifdef SUPPORT_JASMIN
++		;; detect Jasmin drive
++		lda VIA1_ACR			; VIA1+11
++		tax						; backup
++		cmp JASMIN_ROMDIS		; 
++		bne has_jasmin
++		
++		eor #%00000100			; change shift reg mode (unused)
++		sta VIA1_ACR
++		cmp JASMIN_ROMDIS		; 
++		stx VIA1_ACR			; change back (flags unaffected)
++		bne has_jasmin
++		jmp check_microdisc
++		
++has_jasmin:
++		MY_MEMCPY(oric_setmemconf_rom, rom_j, 9)
++		MY_MEMCPY(oric_setmemconf_ovl, ovl_j, 9)
++		
++	;	MY_MEMCPY(lkf_oric_setmemconf_rom, rom_j, 9)
++		MY_MEMCPYI(smc_ptrr, rom_j, 9)
++		MY_MEMCPYI(smc_ptro, ovl_j, 9)
++		tya
++		ora #loric_jasmin
++		tay
++		jmp got_fdc				; who needs both ?
++#endif
++		
++check_microdisc:
++#ifdef SUPPORT_MICRODISC
++		;; detect Microdrive/telestrat
++		; probe MD
++		ldx MICRODISC_IRQF
++	-	lda VIA1_T1LO
++		cmp VIA1_T1LO
++		beq -
++		cpx MICRODISC_IRQF
++		bne check_telestrat
++		
++		MY_MEMCPY(oric_setmemconf_rom, rom_m, 9)
++		MY_MEMCPY(oric_setmemconf_ovl, ovl_m, 9)
++		MY_MEMCPYI(smc_ptrr , rom_m, 9)
++		MY_MEMCPYI(smc_ptro , ovl_m, 9)
++		tya
++		ora #loric_mdisc
++		tay
++		
++		jmp got_fdc
++
++#endif
++check_telestrat:
++#ifdef SUPPORT_TELESTRAT
++		;; check for 2nd VIA (stratos)
++		lda VIA2_DDRA
++		cmp #%00010111
++		bne +
++		cmp VIA1_DDRA
++		beq +
++		tya
++		and #~loric_typemask
++		ora #loric_stratos
++		tay
++		MY_MEMCPY(oric_setmemconf_rom, rom_t, 9)
++		MY_MEMCPY(oric_setmemconf_ovl, ovl_t, 9)
++		MY_MEMCPYI(smc_ptrr, rom_t, 9)
++		MY_MEMCPYI(smc_ptro , ovl_t, 9)
++		jmp got_fdc
++	+	
++#endif
++		
++		
++		;; no floppy:
++		;; display an error on status line, some fancy audio,
++		;; wait some time and reboot.
++no_fdc:
++		lda #<_nodrivemsg
++		;ldy #>_nodrivemsg ; delayed
++		ldx #0
++		
++		; jump to ROM's STOUT
++		; ORIC-1 vs Atmos: cf. Theoric nr 2 page 50
++		cpy #loric_oric1
++		bne no_fdc_atmos
++		
++		ldy #>_nodrivemsg
++		jsr $f82f				; STOUT
++		jsr $fab1				; EXPLD
++		jmp +
++no_fdc_atmos:
++		ldy #>_nodrivemsg
++		jsr $f865				; STOUD
++		jsr $facb				; EXPLD
++	+	
++		; spin for a while...
++		ldy #$ff
++	-	dey
++		bne -
++		
++		; RESET vector
++		jmp ($fffc)
++
++		;; we have a floppy, continue
++got_fdc:
++		; save model and hw flags
++		sty lk_oric_arch
++		
++		;; set archtype (first solution on PAL/NTSC detection)
++
++		ldx #larch_oric		; oric/ntsc
++		stx lk_archtype
++		
++		; switch to overlay RAM
++		jsr oric_setmemconf_ovl
++		
++		jmp resetdone
++
++
++rom_j:	;9 bytes
++		lda #%00000001			;
++		sta JASMIN_OVERLAY		; enable overlay RAM
++		sta JASMIN_ROMDIS		; disable BASIC ROM
++		rts
++ovl_j:	;9 bytes
++		lda #%00000001			;
++		sta JASMIN_OVERLAY		; enable overlay RAM
++		sta JASMIN_ROMDIS		; disable BASIC ROM
++		rts
++rom_m:	;6 bytes
++		; XXX: should have a ghost of the reg to avoid screwing up other bits...
++		lda #%0000010			; enable EPROM and BASIC ROM
++		sta MICRODISC_CONTROL
++		
++		rts
++ovl_m:	;6 bytes
++		;this can't work, reading doesn't give the same reg
++		;lda MICRODISC_CONTROL
++		;ora #%10000000			; disable EPROM
++		;and #%11111101			; disable BASIC ROM
++		lda #%10000000			; disable EPROM and BASIC ROM (also IRQs)
++		sta MICRODISC_CONTROL
++		rts
++rom_t:	;9 bytes
++		;; telestrat: select bank 7 (ROM)
++		lda #%00000111
++		ora VIA2_ORA
++		sta VIA2_ORA
++		rts
++ovl_t:	;9 bytes
++		;; telestrat: select bank 0 (RAM)
++		lda #%11111000
++		and VIA2_ORA
++		sta VIA2_ORA
++		rts
++
++
++_nodrivemsg:
++		.text "Jasmin or Microdisc required!"
++		.byte $00
++		
++resetdone:
