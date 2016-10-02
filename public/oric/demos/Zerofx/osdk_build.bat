@@ -26,6 +26,8 @@ pushd build
 md files
 popd
 
+SET FBDEFINES=-DRANDOM_DEFINE_TO_EXPORT=12345
+
 :: Build the slide show parts of the demo
 pushd code
 
@@ -37,7 +39,7 @@ pushd code
 :: A possibility is to have FloppyBuilder return a crc of the floppy it generated, if the crc is the same twice in a row, then the data is stable...
 
 :: Call FloppyBuilder once to create loader.cod
-%osdk%\bin\FloppyBuilder init floppybuilderscript.txt
+%osdk%\bin\FloppyBuilder %FBDEFINES% init floppybuilderscript.txt
 
 
 set FLOPPYPASS=-
@@ -66,7 +68,7 @@ ECHO Assembling main program
 call osdk_build.bat
 
 :: Call FloppyBuilder once to create loader.cod
-%osdk%\bin\FloppyBuilder build floppybuilderscript.txt
+%osdk%\bin\FloppyBuilder %FBDEFINES% build floppybuilderscript.txt
 
 if "%FLOPPYPASS%"=="--" goto EndLoop
 set FLOPPYPASS=%FLOPPYPASS%-
@@ -79,7 +81,7 @@ goto Loop
 :: Call FloppyBuilder another time to build the final disk
 ECHO.
 ECHO Building final floppy
-%osdk%\bin\FloppyBuilder build floppybuilderscript.txt
+%osdk%\bin\FloppyBuilder %FBDEFINES% build floppybuilderscript.txt
 popd
 goto End
 
