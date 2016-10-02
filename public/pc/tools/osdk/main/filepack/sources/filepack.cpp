@@ -24,7 +24,6 @@
 #include "common.h"
 
 
-static void _splitpath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension);
 extern long LZ77_Compress(void *buf_src,void *buf_dest,long size_buf_src);
 extern void LZ77_UnCompress(void *buf_src,void *buf_dest,long size);
 extern long LZ77_ComputeDelta(unsigned char *buf_comp,long size_uncomp,long size_comp);
@@ -128,7 +127,7 @@ int main(int argc,char *argv[])
 
   char	header_name[_MAX_PATH];
 
-  _splitpath(dest_name,SDrive,SDir,SName,SExt);
+  SplitPath(dest_name,SDrive,SDir,SName,SExt);
   sprintf(header_name,"%s%s%s_fp.s",SDrive,SDir,SName);
 
 
@@ -320,63 +319,5 @@ int main(int argc,char *argv[])
 }
 
 
-// From https://groups.google.com/forum/#!topic/gnu.gcc.help/0dKxhmV4voE
-void _splitpath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension)
-{
-  char* CopyOfPath = (char*) Path;
-  int Counter = 0;
-  int Last = 0;
-  int Rest = 0;
-
-  // no drives available in linux .
-  // extensions are not common in linux
-  // but considered anyway
-  Drive = NULL;
-
-  while(*CopyOfPath != '\0')
-  {
-    // search for the last slash
-    while(*CopyOfPath != '/' && *CopyOfPath != '\0')
-    {
-      CopyOfPath++;
-      Counter++;
-    }
-    if(*CopyOfPath == '/')
-    {
-      CopyOfPath++;
-      Counter++;
-      Last = Counter;
-    }
-    else
-      Rest = Counter - Last;
-  }
-  // directory is the first part of the path until the
-  // last slash appears
-  strncpy(Directory,Path,Last);
-  // strncpy doesnt add a '\0'
-  Directory[Last] = '\0';
-  // Filename is the part behind the last slahs
-  strcpy(Filename,CopyOfPath -= Rest);
-  // get extension if there is any
-  while(*Filename != '\0')
-  {
-    // the part behind the point is called extension in windows systems
-    // at least that is what i thought apperantly the '.' is used as part
-    // of the extension too .
-    if(*Filename == '.')
-    {
-      while(*Filename != '\0')
-      {
-        *Extension = *Filename;
-        Extension++;
-        Filename++;
-      }
-    }
-    if(*Filename != '\0')
-    {Filename++;}
-  }
-  *Extension = '\0';
-  return;
-}
 
 

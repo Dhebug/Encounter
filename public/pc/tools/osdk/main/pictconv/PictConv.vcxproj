@@ -56,7 +56,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../external_libraries/unittestcpp/unittest-cpp-1.4/include;includes;../common/includes;sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../../shared_libraries/nanosvg/src;$(SolutionDir)../../../shared_libraries/unittestcpp/unittest-cpp-1.4/include;includes;../common/includes;sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;FREEIMAGE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -99,7 +99,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../external_libraries/unittestcpp/unittest-cpp-1.4/include;includes;../common/includes;sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../../shared_libraries/nanosvg/src;$(SolutionDir)../../../shared_libraries/unittestcpp/unittest-cpp-1.4/include;includes;../common/includes;sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;FREEIMAGE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -136,10 +136,12 @@
     <ClInclude Include="sources\image.h" />
     <ClInclude Include="includes\infos.h" />
     <ClInclude Include="includes\resource.h" />
+    <ClInclude Include="sources\limitless_converter.h" />
     <ClInclude Include="sources\shifter_color.h" />
     <ClInclude Include="sources\atari_converter.h" />
     <ClInclude Include="includes\hires.h" />
     <ClInclude Include="sources\oric_converter.h" />
+    <ClInclude Include="sources\svg_format.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\dither_riemersma.cpp">
@@ -161,6 +163,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="sources\image.cpp" />
+    <ClCompile Include="sources\limitless_converter.cpp" />
     <ClCompile Include="sources\oric_converter_charmap.cpp" />
     <ClCompile Include="sources\oric_converter_colored.cpp" />
     <ClCompile Include="sources\oric_converter_samhocevar.cpp" />
@@ -171,6 +174,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="sources\shifter_color.cpp" />
+    <ClCompile Include="sources\svg_format.cpp" />
     <ClCompile Include="sources\Tests\colortest.cpp" />
     <ClCompile Include="sources\Tests\maintest.cpp" />
     <ClCompile Include="sources\atari_converter.cpp" />

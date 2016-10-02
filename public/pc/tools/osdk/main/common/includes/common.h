@@ -107,6 +107,90 @@ bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile);
 std::string ExpandFilePath(const std::string& sourceFile);
 int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resolvedFileList);
 
+//
+// Directory management
+//
+void SplitPath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension);
+void MakePath(char* Path,const char* Drive,const char* Directory,const char* File,const char* Extension);
+int StringCheckFileExtensionList(const std::string& cCompleteFilePath,const std::string& cExtensionsToCheck);
+
+
+
+class PathSplitter
+{
+public:
+  PathSplitter()    
+  {
+    Clear();
+  }
+
+  PathSplitter(const std::string &ref_filename)    
+  {
+    Split(ref_filename);
+  }		
+
+  void Clear()
+  {
+    m_drive="";
+    m_directory="";
+    m_name="";
+    m_extension="";
+  }
+
+  void Split(const std::string &ref_filename);
+
+  std::string GetFullFileName() const     //!< Complete filename (including access path and extension)
+  {
+    return m_drive+m_directory+m_name+m_extension; 
+  }
+
+  std::string GetFilePath() const         //!< Drive letter and directory
+  {
+    return m_drive+m_directory; 
+  }
+
+  std::string GetFileNameExtension() const //!< Filename (including extension)
+  {
+    return m_name+m_extension; 
+  }
+
+  const std::string &GetDrive() const
+  {
+    return m_drive;
+  }
+
+  const std::string &GetDirectory() const
+  {
+    return m_directory;
+  }
+
+  const std::string &GetFileName() const   //!< Filename (without extension)
+  {
+    return m_name;
+  }
+
+  const std::string &GetExtension() const
+  {
+    return m_extension;
+  }
+
+  void SetExtension(const std::string& extension) 
+  {
+    m_extension=extension;
+  }
+
+  bool HasExtension(const char* extension) const;
+  bool HasExtension(const std::string& extension) const  { return HasExtension(extension.c_str()); }
+
+
+private:
+  std::string	m_drive;	//!< Drive letter
+  std::string	m_directory;	//!< Complete directory
+  std::string	m_name;		//!< Name of the file (without extension)
+  std::string   m_extension;	//!< Extension of the file (including the dot)
+};
+
+
 
 //
 // Compression (moved out FilePack)

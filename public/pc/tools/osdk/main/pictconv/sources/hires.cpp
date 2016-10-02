@@ -20,6 +20,8 @@
 #include "hires.h"
 #include "oric_converter.h"
 #include "atari_converter.h"
+#include "limitless_converter.h"
+
 #include "image.h"
 #include "dithering.h"
 
@@ -48,6 +50,10 @@ PictureConverter* PictureConverter::GetConverter(MACHINE machine)
 
   case MACHINE_ATARIST:
     return new AtariPictureConverter();
+    break;
+
+  case MACHINE_LIMITLESS:
+    return new LimitlessPictureConverter();
     break;
 
   default:

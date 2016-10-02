@@ -57,6 +57,7 @@ int __cdecl main(int argc,char *argv[])
     " -mn   Machine\r\n"
     "       -m0 => Oric [default]\r\n"
     "       -m1 => Atari ST\r\n"
+    "       -m2 => Limitless\r\n"
     "\r\n"
     " -fn   Rendering format (machine dependent)\r\n"
     "       -Oric:\r\n"
@@ -166,6 +167,7 @@ int __cdecl main(int argc,char *argv[])
       //format: [-m]
       //	0 => Oric
       // 	1 => Atari ST
+      //        2 => Limitless
       switchMachine=argumentParser.GetIntegerValue(0);
     }
     else
@@ -316,6 +318,7 @@ int __cdecl main(int argc,char *argv[])
   // Set and validate the parameters
   //	0 => Oric
   // 	1 => Atari ST
+  // 	2 => Limitless
   //
   PictureConverter* pictureConverter=PictureConverter::GetConverter((PictureConverter::MACHINE)switchMachine);
   if (!pictureConverter)
