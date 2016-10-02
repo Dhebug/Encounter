@@ -23,6 +23,10 @@
 #include <limits.h>
 #define stricmp strcasecmp
 #define _MAX_PATH PATH_MAX
+#define _MAX_DRIVE 3
+#define _MAX_DIR PATH_MAX
+#define _MAX_FNAME NAME_MAX
+#define _MAX_EXT NAME_MAX
 #endif
 
 #include <stdio.h>
@@ -929,7 +933,6 @@ void SplitPath(const char* Path,char* Drive,char* Directory,char*Filename,char* 
 #ifdef WIN32
   _splitpath(Path,Drive,Directory,Filename,Extension);
 #else
-#define _MAX_PATH PATH_MAX
 // From https://groups.google.com/forum/#!topic/gnu.gcc.help/0dKxhmV4voE
   char* CopyOfPath = (char*) Path;
   int Counter = 0;
