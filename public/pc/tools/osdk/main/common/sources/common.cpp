@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cctype>
+
 #ifdef WIN32
 /* for getch() */
 #include <conio.h>
@@ -18,7 +19,12 @@
 #else
 /* for getch() */
 #include <curses.h>
+#include <unistd.h>
+#include <limits.h>
+#define stricmp strcasecmp
+#define _MAX_PATH PATH_MAX
 #endif
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -914,6 +920,137 @@ int ExpandFileList(const std::string& sourceFile,std::vector<std::string>& resol
   }
 #endif
   return (int)resolvedFileList.size();
+}
+
+
+
+void SplitPath(const char* Path,char* Drive,char* Directory,char*Filename,char* Extension)
+{
+#ifdef WIN32
+  _splitpath(Path,Drive,Directory,Filename,Extension);
+#else
+#define _MAX_PATH PATH_MAX
+// From https://groups.google.com/forum/#!topic/gnu.gcc.help/0dKxhmV4voE
+  char* CopyOfPath = (char*) Path;
+  int Counter = 0;
+  int Last = 0;
+  int Rest = 0;
+
+  // no drives available in linux .
+  // extensions are not common in linux
+  // but considered anyway
+  Drive = NULL;
+
+  while(*CopyOfPath != '\0')
+  {
+    // search for the last slash
+    while(*CopyOfPath != '/' && *CopyOfPath != '\0')
+    {
+      CopyOfPath++;
+      Counter++;
+    }
+    if(*CopyOfPath == '/')
+    {
+      CopyOfPath++;
+      Counter++;
+      Last = Counter;
+    }
+    else
+      Rest = Counter - Last;
+  }
+  // directory is the first part of the path until the
+  // last slash appears
+  strncpy(Directory,Path,Last);
+  // strncpy doesnt add a '\0'
+  Directory[Last] = '\0';
+  // Filename is the part behind the last slahs
+  strcpy(Filename,CopyOfPath -= Rest);
+  // get extension if there is any
+  while(*Filename != '\0')
+  {
+    // the part behind the point is called extension in windows systems
+    // at least that is what i thought apperantly the '.' is used as part
+    // of the extension too .
+    if(*Filename == '.')
+    {
+      while(*Filename != '\0')
+      {
+        *Extension = *Filename;
+        Extension++;
+        Filename++;
+      }
+    }
+    if(*Filename != '\0')
+    {Filename++;}
+  }
+  *Extension = '\0';
+#endif
+}
+
+
+void MakePath(char* Path,const char* Drive,const char* Directory,const char* File,const char* Extension)
+{
+#ifdef WIN32
+  _makepath(Path,Drive,Directory,File,Extension);
+#else
+// Abstract:   Make a path out of its parts
+// Parameters: Path: Object to be made
+//             Drive: Logical drive , only for compatibility , notconsidered
+//             Directory: Directory part of path
+//             Filename: File part of path
+//             Extension: Extension part of path (includes the leading point)
+// Returns:    Path is changed
+// Comment:    Note that the concept of an extension is not available in Linux,
+//             nevertheless it is considered
+  while(*Drive != '\0' && Drive != NULL)
+  {
+    *Path = *Drive;
+    Path++;
+    Drive++;
+  }
+  while(*Directory != '\0' && Directory != NULL)
+  {
+    *Path = *Directory;
+    Path ++;
+    Directory ++;
+  }
+  while(*File != '\0' && File != NULL)
+  {
+    *Path = *File;
+    Path ++;
+    File ++;
+  }
+  while(*Extension != '\0' && Extension != NULL)
+  {
+    *Path = *Extension;
+    Path ++;
+    Extension ++;
+  }
+  *Path = '\0';
+#endif
+}
+
+
+
+void PathSplitter::Split(const std::string &ref_filename)
+{
+  char source_drive[_MAX_DRIVE];
+  char source_directory[_MAX_DIR];
+  char source_name[_MAX_FNAME];
+  char source_extension[_MAX_EXT];
+
+  SplitPath(ref_filename.c_str(),source_drive,source_directory,source_name,source_extension);
+
+  m_drive	=source_drive;
+  m_directory	=source_directory;
+  m_name	=source_name;
+  m_extension	=source_extension;
+}
+
+
+bool PathSplitter::HasExtension(const char* extension) const
+{
+  return stricmp(m_extension.c_str(),extension)==0;
 }
 
 

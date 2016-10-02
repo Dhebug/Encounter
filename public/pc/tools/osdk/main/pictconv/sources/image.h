@@ -38,6 +38,8 @@ public:
 
   // Painting functions
   void FillRectangle(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int width,unsigned int heigth);
+  void DrawPoint(const RgbColor& rgb,unsigned int x,unsigned int y);
+  void DrawLine(const RgbColor& rgb,unsigned int x0,unsigned int y0,unsigned int x1,unsigned int y1);
 
   // Utility functions
   bool ConvertToGrayScale(int maxValues=256);	        // Pure grey scale conversion

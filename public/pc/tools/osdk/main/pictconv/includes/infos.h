@@ -92,6 +92,7 @@ Version 0.23
 
 Version 0.24
 - Fixed a problem in the color reduction code failing on a 32bit source image
+- Added support for converting vectorial images in SVG format to either bitmap or MCP40 vectorial format
 
 */
 

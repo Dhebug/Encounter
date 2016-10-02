@@ -14,6 +14,7 @@ public:
   {
     MACHINE_ORIC,
     MACHINE_ATARIST,
+    MACHINE_LIMITLESS,
     _MACHINE_MAX_
   };
 

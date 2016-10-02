@@ -55,6 +55,12 @@
     <ClInclude Include="sources\oric_converter.h">
       <Filter>Sources\converters</Filter>
     </ClInclude>
+    <ClInclude Include="sources\svg_format.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\limitless_converter.h">
+      <Filter>Sources\converters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\dither_riemersma.cpp">
@@ -97,6 +103,12 @@
       <Filter>Sources\converters</Filter>
     </ClCompile>
     <ClCompile Include="sources\oric_converter_samhocevar.cpp">
+      <Filter>Sources\converters</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\svg_format.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\limitless_converter.cpp">
       <Filter>Sources\converters</Filter>
     </ClCompile>
   </ItemGroup>
