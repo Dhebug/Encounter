@@ -3,6 +3,7 @@ include ../../../rules.mk
 CPPFLAGS += -I ../common/includes
 
 FI_PATH := ../../../../shared_libraries/freeimage/v3.12.0
+NS_PATH := ../../../../shared_libraries/nanosvg
 UT_PATH := ../../../../shared_libraries/unittestcpp/v1.4
 CPPFLAGS += -DFREEIMAGE_LIB
 ifeq ($(PLATFORM),win32)
@@ -12,6 +13,8 @@ else
 CPPFLAGS += -I $(FI_PATH)/ -I../../../../shared_libraries/freeimage/v3.12.0/Source/
 LDFLAGS += -L $(FI_PATH)/ -lfreeimage $(MATH_LIBS)
 endif
+
+CPPFLAGS += -I $(NS_PATH)/src
 
 LDFLAGS += -lstdc++
 LDFLAGS += -L ../common -lcommon $(COMMON_EXTRA_LDFLAGS)
