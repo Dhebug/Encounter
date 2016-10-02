@@ -944,7 +944,7 @@ void main()
 	InitializeTables();
 
 	// Load the 6x8 font
-	LoadFile(LOADER_FONT_6x8_ARTDECO);
+	LoadFileAt(LOADER_FONT_6x8_ARTDECO,0x9900);
 
 	// Start the calendar
 	InstallCalendarDecount();
@@ -954,7 +954,7 @@ void main()
 
 #ifdef ENABLE_MUSIC
 	// Load and play the music
-	LoadFile(LOADER_INTRO_MUSIC);
+	LoadFileAt(LOADER_INTRO_MUSIC,0xc000);
 	Mym_MusicStart();
 #endif
 
