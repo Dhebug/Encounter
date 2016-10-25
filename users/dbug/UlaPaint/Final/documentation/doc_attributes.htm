@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>UlaPaint - Attribute table</title>
+		<link href="documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+
+	<BODY>
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="ulapaint_logo_small.png">
+<hr>
+
+		<h1>Attribute table</h1>
+
+<p id=chapter>What is an attribute ?</p>
+
+<p>In Hires mode, any byte in memory that happens to have a value in the range [0-31] or [128-159] is considered as an attribute.
+The second interval simply described the fact that the video inverse bit (value=128) is active.
+</p>
+<p>Values that are not in this range are simply pixels patterns that are used to draw on screen at pixel level.
+</p>
+<p>Of course, since It's not possible to put TWO values in the same byte, it's not possible to have at the same location an attribute
+and some pixels. If you use an attribute somewhere on screen, this area will appear as 6 horizontal pixels using the background color. 
+</p>
+
+
+
+<p id=chapter>Attribute table</h1>
+
+<p>Here is the list of all possible attributes:
+</p>
+
+<b>Ink (foreground) attributes</b>
+<table BORDER>
+<tr>
+	<td><b>VALUE</b></td>
+	<td><b>EFFECT</b></td>
+	<td><b></b></td>
+</tr>
+<tr>
+	<td>0</td>
+	<td>Change INK to BLACK</td>
+	<td bgcolor="#000000" width="15"></td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>Change INK to RED</td>
+	<td bgcolor="#FF0000" width="15"></td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>Change INK to GREEN</td>
+	<td bgcolor="#00FF00" width="15"></td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>Change INK to YELLOW</td>
+	<td bgcolor="#FFFF00" width="15"></td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>Change INK to BLUE</td>
+	<td bgcolor="#0000FF" width="15"></td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>Change INK to MAGENTA</td>
+	<td bgcolor="#FF00FF" width="15"></td>
+</tr>
+<tr>
+	<td>6</td>
+	<td>Change INK to CYAN</td>
+	<td bgcolor="#00FFFF" width="15"></td>
+</tr>
+<tr>
+	<td>7</td>
+	<td>Change INK to WHITE</td>
+	<td bgcolor="#FFFFFF" width="15"></td>
+</tr>
+</table>
+<br>
+<br>
+<b>CharSet modifier attributes</b>
+<table BORDER>
+<tr>
+	<td><b>VALUE</b></td>
+	<td><b>EFFECT</b></td>
+</tr>
+<tr>
+	<td>8</td>
+	<td>SingleSize NonBlinking Standard Charset</td>
+</tr>
+<tr>
+	<td>9</td>
+	<td>SingleSize NonBlinking Alternate Charset</td>
+</tr>
+<tr>
+	<td>10</td>
+	<td>DoubleSize NonBlinking Standard Charset</td>
+</tr>
+<tr>
+	<td>11</td>
+	<td>DoubleSize NonBlinking Alternate Charset</td>
+</tr>
+<tr>
+	<td>12</td>
+	<td>SingleSize Blinking Standard Charset</td>
+</tr>
+<tr>
+	<td>13</td>
+	<td>SingleSize Blinking Alternate Charset</td>
+</tr>
+<tr>
+	<td>15</td>
+	<td>DoubleSize Blinking Standard Charset</td>
+</tr>
+<tr>
+	<td>15</td>
+	<td>DoubleSize Blinking Alternate Charset</td>
+</tr>
+</table>
+<br>
+<br>
+<b>Paper (background) attributes</b>
+<table BORDER>
+<tr>
+	<td><b>VALUE</b></td>
+	<td><b>EFFECT</b></td>
+	<td><b></b></td>
+</tr>
+<tr>
+	<td>16</td>
+	<td>Change PAPER to BLACK</td>
+	<td bgcolor="#000000" width="15"></td>
+</tr>
+<tr>
+	<td>17</td>
+	<td>Change PAPER to RED</td>
+	<td bgcolor="#FF0000" width="15"></td>
+</tr>
+<tr>
+	<td>18</td>
+	<td>Change PAPER to GREEN</td>
+	<td bgcolor="#00FF00" width="15"></td>
+</tr>
+<tr>
+	<td>19</td>
+	<td>Change PAPER to YELLOW</td>
+	<td bgcolor="#FFFF00" width="15"></td>
+</tr>
+<tr>
+	<td>20</td>
+	<td>Change PAPER to BLUE</td>
+	<td bgcolor="#0000FF" width="15"></td>
+</tr>
+<tr>
+	<td>21</td>
+	<td>Change PAPER to MAGENTA</td>
+	<td bgcolor="#FF00FF" width="15"></td>
+</tr>
+<tr>
+	<td>22</td>
+	<td>Change PAPER to CYAN</td>
+	<td bgcolor="#00FFFF" width="15"></td>
+</tr>
+<tr>
+	<td>23</td>
+	<td>Change PAPER to WHITE</td>
+	<td bgcolor="#FFFFFF" width="15"></td>
+</tr>
+</table>
+<br>
+<br>
+<b>Video control attributes</b>
+<table BORDER>
+<tr>
+	<td><b>VALUE</b></td>
+	<td><b>EFFECT</b></td>
+</tr>
+<tr>
+	<td>24</td>
+	<td>60 Hz TEXT display</td>
+</tr>
+<tr>
+	<td>25</td>
+	<td>60 Hz TEXT display</td>
+</tr>
+<tr>
+	<td>26</td>
+	<td>50 Hz TEXT display</td>
+</tr>
+<tr>
+	<td>27</td>
+	<td>50 Hz TEXT display</td>
+</tr>
+<tr>
+	<td>28</td>
+	<td>60 Hz HIRES display</td>
+</tr>
+<tr>
+	<td>29</td>
+	<td>60 Hz HIRES display</td>
+</tr>
+<tr>
+	<td>30</td>
+	<td>50 Hz HIRES display</td>
+</tr>
+<tr>
+	<td>31</td>
+	<td>50 Hz HIRES display</td>
+</tr>
+</table>
+
+
+
+<hr>
+<A href="documentation.htm"><img src="arrow_back.gif"></A>
+<img src="ulapaint_logo_small.png">
+<hr>
+
+	</BODY>
+</HTML>
+
+

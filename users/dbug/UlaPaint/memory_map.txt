@@ -1,0 +1,37 @@
+
+Memory map:
+
+Total size of executable: 33370 bytes
+Total available memory: 37631 bytes (in HIRES)
+Remaining memory: 4261 bytes
+
+L'idéal serait d'avoir:
+
+Note: Le UNDO manuel par auto-incrémentation et sauvegarde sur fichie doit être jouable...
+
+
+
+
+
+Stratégie d'effacement:
+
+Point:
+======
+
+
+Ligne:
+======
+
+
+Rectangle/Carré (vide):
+=======================
+
+
+
+Rectangle/Carré (plein):
+========================
+Hum... Tout sauver peux prendre jusqu'a 8ko !!!
+
+
+
+
