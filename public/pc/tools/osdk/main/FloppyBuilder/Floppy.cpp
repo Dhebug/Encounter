@@ -95,8 +95,10 @@ int FloppyHeader::GetGeometry() const
   return geometry;
 }
 
-int FloppyHeader::FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave) const
+int FloppyHeader::FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave,std::vector<int>& sectorOffsets) const
 {
+  std::map<int,int> sectorsFound;
+
   firstSectorOffset=0;
   sectorInterleave=0;
 
@@ -128,26 +130,31 @@ int FloppyHeader::FindNumberOfSectors(int& firstSectorOffset,int& sectorInterlea
     {
       // Found a marker for a synchronization sequence for a sector [#A1 #A1 #A1], [#FE Track Side Sector tt CRC CRC] 
       int sectorNumber=trackData[6];
-      if (sectorNumber==(lastSectorFound+1))
-      {
-        lastSectorFound=sectorNumber;
-      }
-      else
-      {
-        ShowError("There's something wrong in the track structure of the floppy, the sector id does not make sense.");
-      }
       trackData+=10;  // Skip synchronization sequence
       trackData+=34;  // - gap2:          34 bytes (22xAE , 12x00)
       trackData+=4;   // - ?:             4 bytes (A1 A1 A1 FB)
 
+      int sectorOffset=trackData-trackDataStart;
+
+      auto ret=sectorsFound.emplace(std::make_pair(sectorNumber,sectorOffset));
+      if (!ret.second)
+      {
+        ShowError("There's something wrong in the track structure of the floppy, sector %u was already found.",sectorNumber);
+      }
+
+      if (sectorNumber>lastSectorFound)
+      {
+        lastSectorFound=sectorNumber;
+      }
+
       if (sectorNumber==1)
       {
-        firstSectorOffset=trackData-trackDataStart;
+        firstSectorOffset=sectorOffset;
       }
       else
       if (sectorNumber==2)
       {
-        sectorInterleave=trackData-trackDataStart-firstSectorOffset;
+        sectorInterleave=sectorOffset-firstSectorOffset;
       }
       trackData+=256; // Sector data
     }
@@ -156,7 +163,16 @@ int FloppyHeader::FindNumberOfSectors(int& firstSectorOffset,int& sectorInterlea
       trackData++;
     }
   }
+  if ((int)sectorsFound.size()!=lastSectorFound)
+  {
+    ShowError("There's something wrong in the track structure of the floppy, the sector id does not make sense.");
+  }
+  sectorOffsets.resize(lastSectorFound);
 
+  for (auto it(sectorsFound.begin());it!=sectorsFound.end();++it)
+  {
+    sectorOffsets[it->first-1]=it->second;
+  }
   return lastSectorFound;
 }
 
@@ -184,9 +200,9 @@ FileEntry::~FileEntry()
 Floppy::Floppy() 
   :m_Buffer(0)
   ,m_BufferSize(0)
-  ,m_TrackNumber(0)
-  ,m_SectorNumber(0)
-  ,m_SideNumber(0)
+  ,m_TrackCount(0)
+  ,m_SectorCount(0)
+  ,m_SideCount(0)
   ,m_OffsetFirstSector(156)    // 156 (Location of the first byte of data of the first sector)
   ,m_InterSectorSpacing(358)   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
   ,m_CurrentTrack(0)
@@ -248,7 +264,8 @@ void compute_crc(unsigned char *ptr,int count)
 {
   int i;
   unsigned short crc=0xFFFF,byte;
-  for (i=0;i<count;i++) {
+  for (i=0;i<count;i++)
+  {
     byte= *ptr++;
     crc=(crc<<8)^crctab[(crc>>8)^byte];
   }
@@ -257,8 +274,32 @@ void compute_crc(unsigned char *ptr,int count)
 }
 
 
-bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors)
+bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors,int interleave)
 {
+  // Compute the interleave sector order
+  std::vector<unsigned char> sectorList;
+  sectorList.resize(numberOfSectors);
+
+  unsigned int offset=0;
+  for (unsigned char sector=0;sector<numberOfSectors;sector++)
+  {
+    while (sectorList[offset]!=0)
+    {
+      offset++;
+      if (offset>=sectorList.size())
+      {
+        offset=0;
+      }
+    }
+    sectorList[offset]=sector+1;
+    offset+=interleave;
+    if (offset>=sectorList.size())
+    {
+      offset=0;
+    }
+  }
+
+
   // Heavily based on MakeDisk and Tap2DSk
   int gap1,gap2,gap3;
 
@@ -281,9 +322,9 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
   m_Buffer=malloc(m_BufferSize);
   if (m_Buffer)
   {
-    m_TrackNumber =numberOfTracks;      // 42
-    m_SectorNumber=numberOfSectors;     // 17
-    m_SideNumber  =numberOfSides;       // 2
+    m_TrackCount =numberOfTracks;      // 42
+    m_SectorCount=numberOfSectors;     // 17
+    m_SideCount  =numberOfSides;       // 2
 
     FloppyHeader& header(*((FloppyHeader*)m_Buffer));
     header.Clear();
@@ -293,29 +334,28 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
     header.SetGeometry(1);
 
     unsigned char* trackbuf=(unsigned char*)m_Buffer+256;
-    for (unsigned char s=0;s<numberOfSides;s++)
+    for (unsigned char side=0;side<numberOfSides;side++)
     {
-      for (unsigned char t=0;t<numberOfTracks;t++) 
+      for (unsigned char track=0;track<numberOfTracks;track++) 
       {
         {
-          int i;
           int offset=0;
-          for (i=0;i<gap1-12;i++) 
+          for (int i=0;i<gap1-12;i++) 
           {
             trackbuf[offset++]=0x4E;
           }
-          for (int j=0;j<numberOfSectors;j++) 
+          for (int sector=0;sector<numberOfSectors;sector++) 
           {
-            for (i=0;i<12;i++) trackbuf[offset++]=0;
-            for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
+            for (int i=0;i<12;i++)      trackbuf[offset++]=0;
+            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;
             trackbuf[offset++]=0xFE;
-            for (i=0;i<6;i++) offset++;
-            for (i=0;i<gap2-12;i++) trackbuf[offset++]=0x22;
-            for (i=0;i<12;i++) trackbuf[offset++]=0;
-            for (i=0;i<3;i++) trackbuf[offset++]=0xA1;
+            for (int i=0;i<6;i++)       offset++;
+            for (int i=0;i<gap2-12;i++) trackbuf[offset++]=0x22;
+            for (int i=0;i<12;i++)      trackbuf[offset++]=0;
+            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;
             trackbuf[offset++]=0xFB;
-            for (i=0;i<258;i++) offset++;
-            for (i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;
+            for (int i=0;i<258;i++)     offset++;
+            for (int i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;
           }
 
           while (offset<6400) 
@@ -324,11 +364,11 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
           }
         }
         int offset=gap1;
-        for (unsigned char i=0;i<numberOfSectors;i++)
+        for (unsigned char sector=0;sector<numberOfSectors;sector++)
         {
-          trackbuf[offset+4]=t;
-          trackbuf[offset+5]=s;
-          trackbuf[offset+6]=i+1;
+          trackbuf[offset+4]=track;
+          trackbuf[offset+5]=side;
+          trackbuf[offset+6]=sectorList[sector]; //sector+1;
           trackbuf[offset+7]=1;
           compute_crc(trackbuf+offset,4+4);
           offset+=4+6;
@@ -343,7 +383,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
     }
     if (header.IsValidHeader())
     {
-      m_SectorNumber=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing);   //17;    // Can't figure out that from the header Oo
+      m_SectorCount=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing,m_SectorOffset);   //17;    // Can't figure out that from the header Oo
       return true;
     }
   }
@@ -359,9 +399,9 @@ bool Floppy::LoadDisk(const char* fileName)
     const FloppyHeader& header(*((FloppyHeader*)m_Buffer));
     if (header.IsValidHeader())
     {
-      m_TrackNumber =header.GetTrackNumber();
-      m_SideNumber  =header.GetSideNumber();
-      m_SectorNumber=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing);   //17;    // Can't figure out that from the header Oo
+      m_TrackCount =header.GetTrackNumber();
+      m_SideCount  =header.GetSideNumber();
+      m_SectorCount=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing,m_SectorOffset);   //17;    // Can't figure out that from the header Oo
       return true;
     }
   }
@@ -413,8 +453,8 @@ unsigned int Floppy::GetDskImageOffset()
 {
   unsigned int offset=256;         // Add the DSK file header size
   offset+=m_CurrentTrack*6400;     // And move to the correct track
-  offset+=m_OffsetFirstSector;     // Add the offset from the start of track to the data of the first sector
-  offset+=m_InterSectorSpacing*(m_CurrentSector-1);
+  //offset+=m_OffsetFirstSector;     // Add the offset from the start of track to the data of the first sector
+  offset+=m_SectorOffset[m_CurrentSector-1];  //   m_InterSectorSpacing*(m_CurrentSector-1);
   return offset;
 }
 
@@ -784,7 +824,7 @@ bool Floppy::ExtractFile(const char *fileName,int trackNumber,int sectorNumber,i
 
   if (trackNumber>=128)
   {
-    trackNumber=(trackNumber-128)+m_TrackNumber;
+    trackNumber=(trackNumber-128)+m_TrackCount;
   }
 
   SetPosition(trackNumber,sectorNumber);
@@ -818,7 +858,7 @@ bool Floppy::ExtractFile(const char *fileName,int trackNumber,int sectorNumber,i
 
 void Floppy::MarkCurrentSectorUsed()
 {
-  int magicValue=(m_SectorNumber*m_CurrentTrack)+m_CurrentSector;
+  int magicValue=(m_SectorCount*m_CurrentTrack)+m_CurrentSector;
   if (m_SectorUsageMap.find(magicValue)!=m_SectorUsageMap.end())
   {
     ShowError("Sector %d was already allocated",magicValue);
@@ -905,7 +945,7 @@ bool Floppy::SaveDescription(const char* fileName) const
 
     file_list_summary << "// Entry #" << counter << " '"<< fileEntry.m_FilePath << "'\n";
     file_list_summary << "// - Starts on ";
-    if (fileEntry.m_StartTrack<m_TrackNumber)
+    if (fileEntry.m_StartTrack<m_TrackCount)
     {
       // First side
       file_list_summary << " track " << fileEntry.m_StartTrack;
@@ -914,8 +954,8 @@ bool Floppy::SaveDescription(const char* fileName) const
     else
     {
       // Second side
-      file_list_summary << "the second side on track " << (fileEntry.m_StartTrack-m_TrackNumber);
-      code_track << fileEntry.m_StartTrack-m_TrackNumber+128;
+      file_list_summary << "the second side on track " << (fileEntry.m_StartTrack-m_TrackCount);
+      code_track << fileEntry.m_StartTrack-m_TrackCount+128;
     }
     file_list_summary << " sector " << fileEntry.m_StartSector << " and is " << fileEntry.m_SectorCount << " sectors long ";
 
@@ -1017,9 +1057,9 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << "//\n";
   layoutInfo << "// Summary for this floppy building session:\n";
   layoutInfo << "//\n";
-  layoutInfo << "#define FLOPPY_SIDE_NUMBER " << m_SideNumber << "    // Number of sides\n";
-  layoutInfo << "#define FLOPPY_TRACK_NUMBER " << m_TrackNumber << "    // Number of tracks\n";
-  layoutInfo << "#define FLOPPY_SECTOR_PER_TRACK " << m_SectorNumber <<  "   // Number of sectors per track\n";
+  layoutInfo << "#define FLOPPY_SIDE_NUMBER " << m_SideCount << "    // Number of sides\n";
+  layoutInfo << "#define FLOPPY_TRACK_NUMBER " << m_TrackCount << "    // Number of tracks\n";
+  layoutInfo << "#define FLOPPY_SECTOR_PER_TRACK " << m_SectorCount <<  "   // Number of sectors per track\n";
   layoutInfo << "\n";
   layoutInfo << "#define FLOPPY_LOADER_TRACK " << m_LoaderTrackPosition <<  "   // Track where the loader is stored\n";
   layoutInfo << "#define FLOPPY_LOADER_SECTOR " << m_LoaderSectorPosition <<  "   // Sector where the loader is stored\n";
@@ -1032,7 +1072,7 @@ bool Floppy::SaveDescription(const char* fileName) const
   layoutInfo << file_list_summary.str();
   layoutInfo << "//\n";
 
-  int totalAvailableSectors=m_TrackNumber*m_SectorNumber*m_SideNumber;
+  int totalAvailableSectors=m_TrackCount*m_SectorCount*m_SideCount;
   layoutInfo << "// " << m_SectorUsageMap.size() << " sectors used, out of " << totalAvailableSectors << ". (" << (m_SectorUsageMap.size()*100)/totalAvailableSectors << "% of the total disk size used)\n";
   layoutInfo << "//\n";
 

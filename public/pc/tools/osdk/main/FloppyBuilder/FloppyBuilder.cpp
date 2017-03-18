@@ -336,11 +336,17 @@ int FloppyBuilder::Main()
         else
         if (tokens[0]=="DefineDisk")
         {
-          if (tokens.size()==4)
+          if ((tokens.size()==4) || (tokens.size()==5))
           {
             int numberOfSides   =std::atoi(tokens[1].c_str());
             int numberOfTracks  =std::atoi(tokens[2].c_str());
             int numberOfSectors =std::atoi(tokens[3].c_str());
+
+            int sectorInterleave=1;
+            if ((tokens.size()==5))
+            {
+              sectorInterleave =std::atoi(tokens[4].c_str());
+            }
 
             if ( numberOfSides!=2 )
             {
@@ -359,7 +365,12 @@ int FloppyBuilder::Main()
               ShowError("Syntax error line (%d), numberOfSectors has to be 17 (so far)\n",lineNumber);
             }
 
-            if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors))
+	    if ( sectorInterleave>=numberOfSectors )
+            {
+              ShowError("Syntax error line (%d), the sector interleave value makes no sense\n",lineNumber);
+            }
+
+            if (!floppy.CreateDisk(numberOfSides,numberOfTracks,numberOfSectors,sectorInterleave))
             {
               ShowError("Can't create the requested disk format\n");
             }

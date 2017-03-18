@@ -69,7 +69,11 @@ this makes it possible to do a multi-pass build process which will not fail beca
 - Added a new set of macro variables: {FileTrack}, {FileSector}, {FileSize} and {FileSizeCompressed}
 - It is now possible to use the -D switch on the command line parameters to add a number of defines to the list of defines exported to the header file.
 
+1.1 - 2016/10/30
+- Added support for sector interleave: The 'DefineDisk' now has a additional parameter which indicates how far the next sector is (defaults to 1 for a linear search)
+
+
 */
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	0
+#define TOOL_VERSION_MINOR	1
