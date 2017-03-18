@@ -13,12 +13,11 @@ extern char *gError_LabelNamePointer;
 
 #define   ANZLAB    5000       /* mal 14 -> Byte   */
 #define   LABMEM    40000L
-#define   MAXLAB    32
-#define   MAXBLK    16
-#define   MAXFILE   7
-#define   MAXLINE   8192		// 2048 -> Explodes with large recursions
+#define   MAXBLK    32                  // Was 16
+#define   MAXFILE   15                  // Was 7
+#define   MAXLINE   16000               // Was 8192		// 2048 -> Explodes with large recursions
 #define   MAX_PREPROCESSOR_BUFFER_SIZE     1000000		// 40000L		// MAX PREPROCESSOR !!!
-#define   ANZDEF    2340      /* mal 14 -> Byte , ANZDEF*14<32768       */
+#define   ANZDEF    10000               // Was 2340      /* mal 14 -> Byte , ANZDEF*14<32768       */
 //#define   TMPMEM    200000L   // Zwischenspeicher von Pass1 nach Pass 2
 #define   TMPMEM    400000L   // Zwischenspeicher von Pass1 nach Pass 2
 
