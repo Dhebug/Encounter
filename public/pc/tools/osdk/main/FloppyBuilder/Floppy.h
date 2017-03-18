@@ -37,7 +37,7 @@ public:
   void SetGeometry(int geometry);
   int GetGeometry() const;
 
-  int FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave) const;    ///< Note: This function will expect valid data to exist past the padding because it needs to scan the data...
+  int FindNumberOfSectors(int& firstSectorOffset,int& sectorInterleave,std::vector<int>& sectorOrder) const;    ///< Note: This function will expect valid data to exist past the padding because it needs to scan the data...
 
 private:
   char          m_Signature[8];   // (MFM_DISK)
@@ -88,7 +88,7 @@ public:
   Floppy();
   ~Floppy();
 
-  bool CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors);
+  bool CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors,int interleave);
   bool LoadDisk(const char* fileName);
   bool SaveDisk(const char* fileName) const;
   bool SaveDescription(const char* fileName) const;
@@ -126,16 +126,16 @@ public:
   {
     m_CurrentSector++;
 
-    if (m_CurrentSector==m_SectorNumber+1) // We reached the end of the track!
+    if (m_CurrentSector==m_SectorCount+1) // We reached the end of the track!
     {
       m_CurrentSector=1;
       m_CurrentTrack++;
-      if (m_CurrentTrack==m_TrackNumber)
+      if (m_CurrentTrack==m_TrackCount)
       {
         // Next side is following on the floppy in the DSK format, so technically we should have nothing to do
         // All the hard work is in the loader
       }
-      if (m_CurrentTrack==(m_TrackNumber*2))
+      if (m_CurrentTrack==(m_TrackCount*2))
       {
         // We have reached the end of the floppy...
         return false;
@@ -152,11 +152,12 @@ private:
 private:
   void*       m_Buffer;
   size_t      m_BufferSize;
-  int         m_TrackNumber;          // 42
-  int         m_SectorNumber;         // 17
-  int         m_SideNumber;           // 2
+  int         m_TrackCount;           // 42
+  int         m_SectorCount;          // 17
+  int         m_SideCount;            // 2
   int         m_OffsetFirstSector;    // 156 (Location of the first byte of data of the first sector)
   int         m_InterSectorSpacing;   // 358 (Number of bytes to skip to go to the next sector: 256+59+43)
+  std::vector<int> m_SectorOffset;
 
   int         m_LoaderTrackPosition;
   int         m_LoaderSectorPosition;
