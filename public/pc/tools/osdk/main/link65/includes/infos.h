@@ -36,9 +36,12 @@ Fixed a number of issues in the linker:
 0.64 - 2016/01/17
 - Fixed the age old problem if includes from assembler sources leading to Unresolved External errors
 
+0.65 - 2017/03/18
+- Fixed some issues in the token pattern matching used to detect labels resulting in #includes containing relative paths to be incorrectly parsed
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	64
+#define TOOL_VERSION_MINOR	65

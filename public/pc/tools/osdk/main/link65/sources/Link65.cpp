@@ -194,6 +194,7 @@ bool gFlagQuiet=false;					// Use -Q option to enable (note: seems to work the o
 bool gFlagLibrarian=false;				// Use -L option to enable
 
 char *label;
+const char* labelPattern=" *+-;:\\\n/\t,()";
 
 
 
@@ -382,7 +383,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
   //
   if ((inpline[0] !=' ') && (inpline[0] != 9))
   {
-    label=strtok(inpline," *+-;\\\n/\t,");
+    label=strtok(inpline,labelPattern);
     if (!label)
     {
       //
@@ -404,7 +405,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         // things to consider as internal linkage. (no need to lookup in the librarie)
         //
         // Read define name
-        label=strtok(NULL," *+-;\\\n/\t,()");
+        label=strtok(NULL,labelPattern);
         return 1;
       }
       else if (!stricmp(label,"#include"))
@@ -418,7 +419,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         //
         // Read define name
         //const char* pcFilename=strtok(NULL," \"*+-;\\\n/\t,()");
-        const char* pcFilename=strtok(NULL," \"*+-;\n/\t,()");
+        const char* pcFilename=strtok(NULL," \"<>");
         if (parseIncludeFiles)
         {
           ParseFile(pcFilename);
@@ -456,7 +457,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
   // Check for JMP or JSR and for the following label
   //
   int status = 0;
-  tmp=strtok(inpline," *+-;\\\n/\t,()");
+  tmp=strtok(inpline,labelPattern);
   while (tmp != NULL)
   {
     if (status == 1)
@@ -481,7 +482,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
     //
     // Get next token in same line. This is the way strtok works
     //
-    tmp=strtok(NULL," *+-;\\\n/\t,()");
+    tmp=strtok(NULL,labelPattern);
   }
   if (tmp)
   {
@@ -497,7 +498,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         //
         // HIGH / LOW syntax
         //
-        tmp=strtok(NULL," *+-;\\\n/\t,()<>");
+        tmp=strtok(NULL," *+-;:\\\n/\t,()<>");
         if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0]))
         {
           label=tmp;
@@ -514,7 +515,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         }
         else
         {
-          tmp=strtok(NULL," *+-;\\\n/\t,()<>");
+          tmp=strtok(NULL," *+-;:\\\n/\t,()<>");
         }
 
         if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0]))
