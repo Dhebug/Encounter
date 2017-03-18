@@ -20,6 +20,6 @@ extern void LoadFile();
 
 #define SetFileAddress(fileIndex,address)      LoaderApiEntryIndex=fileIndex;LoaderApiAddress=address;LoaderApiSetLoadAddress();
 #define LoadFile(fileIndex)                    LoaderApiEntryIndex=fileIndex;LoaderApiLoadFile();
-#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=address;LoaderApiSetLoadAddress();LoaderApiLoadFile();
+#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoaderApiSetLoadAddress();LoaderApiLoadFile();
 
 #endif
