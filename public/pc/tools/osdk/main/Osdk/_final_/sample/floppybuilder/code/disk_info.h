@@ -8,6 +8,7 @@
 #define loader_sector_buffer    $200        ; Location of the 256 bytes buffer used to load the sectors
 #define loader_hires                        ; If commented out, will stay in TEXT mode
 #define loader_debugging                    ; When enabled, will show diagnostic information useful for loader debugging
+;#define loader_
 
 #define wait_status_floppy            30
 
