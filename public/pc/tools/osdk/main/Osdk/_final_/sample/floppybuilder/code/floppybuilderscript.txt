@@ -15,6 +15,7 @@
 ; - Support for file compression in the tool
 ; - Possibility to do partial loads, saves, depacking in realtime
 ;
+FormatVersion 0.20
 ;LoadDiskTemplate default.dsk
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
@@ -23,6 +24,8 @@ OutputFloppyFile ..\build\FloppyBuilderSample.dsk
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1
 ;AddDefine ENABLE_TIMING_DEBUGGING 1
+AddDefine LOADER_SECTOR_BUFFER $200
+AddDefine LOADER_BASE_ZERO_PAGE $F2
 
 ;
 ; This defines the bootsectors to use for the various operating systems
@@ -42,7 +45,7 @@ WriteSector ..\build\files\sector_3.o 				; Sector 3
 ; Now here is the loader code, that one is Microdisc only
 ;
 SetPosition 0 4
-AddFile ..\build\files\loader.o $fd00 				; Sector 4
+WriteLoader ..\build\files\loader.o $fd00 			; Sector 4
 
 ;
 ; From now on we compress data (The loader should not be compressed)
@@ -52,17 +55,27 @@ SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
 ;
 ; Then the files used in the demo
 ;
-AddDefine LOADER_PROGRAM_FIRST {FileIndex}
-AddFile ..\build\files\FirstProgram.o $c000			; The "First program" picture
+AddFile ..\build\files\FirstProgram.o 				; The "First program" picture
+AddDefine LOADER_GAME_PROGRAM {FileIndex}
+AddDefine LOADER_GAME_PROGRAM_ADDRESS $400
+AddDefine LOADER_GAME_PROGRAM_TRACK {FileTrack}
+AddDefine LOADER_GAME_PROGRAM_SECTOR {FileSector}
+AddDefine LOADER_GAME_PROGRAM_SIZE {FileSize}
+AddDefine LOADER_GAME_PROGRAM_SIZE_COMPRESSED {FileSizeCompressed}
 
+AddFile ..\build\files\SecondProgram.o 				; The "Second program" picture
 AddDefine LOADER_PROGRAM_SECOND {FileIndex}
-AddFile ..\build\files\SecondProgram.o $c000		; The "Second program" picture
+AddDefine LOADER_PROGRAM_SECOND_ADDRESS $400
+AddDefine LOADER_PROGRAM_SECOND_TRACK {FileTrack}
+AddDefine LOADER_PROGRAM_SECOND_SECTOR {FileSector}
+AddDefine LOADER_PROGRAM_SECOND_SIZE {FileSize}
+AddDefine LOADER_PROGRAM_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
 
 ;
 ; The fonts
 ;
+AddFile ..\build\files\Font6x8.hir     				; 9900=STD, 9D00=ALT
 AddDefine LOADER_FONT_6x8 {FileIndex}
-AddFile ..\build\files\Font6x8.hir $9900    		; 9900=STD, 9D00=ALT
 
 ;
 ; Some reserved sectors
@@ -72,12 +85,12 @@ ReserveSectors 6                                    ; 5 sectors
 ;
 ; The pictures
 ;
+AddFile ..\build\files\FirstProgram.hir
 AddDefine LOADER_PICTURE_FIRSTPROGRAM {FileIndex}
-AddFile ..\build\files\FirstProgram.hir $a000
 AddDefine LOADER_PICTURE_FIRSTPROGRAM_SIZE {FileSize}
 
+AddFile ..\build\files\SecondProgram.hir 
 AddDefine LOADER_PICTURE_SECONDPROGRAM {FileIndex}
-AddFile ..\build\files\SecondProgram.hir $a000
 AddDefine LOADER_PICTURE_SECONDPROGRAM_SIZE {FileSize}
 
 

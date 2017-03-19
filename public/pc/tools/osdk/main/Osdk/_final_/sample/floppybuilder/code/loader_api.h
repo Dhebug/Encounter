@@ -5,9 +5,8 @@
 #include "floppy_description.h"
 
 #ifdef ASSEMBLER    // 6502 Assembler API
-#define SetFileAddress(fileIndex,address)      ldx #fileIndex:lda #<address:ldy #>address:jsr $fff4
-#define LoadFile(fileIndex)                    ldx #fileIndex:jsr $fff7
-#define LoadFileAt(fileIndex,address)          ldx #fileIndex:lda #<address:ldy #>address:jsr $fff4:jsr $fff7
+#define LoadFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiLoadFileFromDirectory
+#define InitializeFileAt(fileIndex,address)    lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiInitializeFileFromDirectory
 
 #else               // C Compiler API
 extern unsigned char LoaderApiEntryIndex;
@@ -15,11 +14,8 @@ extern unsigned char LoaderApiAddressLow;
 extern unsigned char LoaderApiAddressHigh;
 extern void* LoaderApiAddress;
 
-extern void SetLoadAddress();
-extern void LoadFile();
+#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiLoadFileFromDirectory();
+#define InitializeFileAt(fileIndex,address)    LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiInitializeFileFromDirectory();
 
-#define SetFileAddress(fileIndex,address)      LoaderApiEntryIndex=fileIndex;LoaderApiAddress=address;LoaderApiSetLoadAddress();
-#define LoadFile(fileIndex)                    LoaderApiEntryIndex=fileIndex;LoaderApiLoadFile();
-#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoaderApiSetLoadAddress();LoaderApiLoadFile();
 
 #endif

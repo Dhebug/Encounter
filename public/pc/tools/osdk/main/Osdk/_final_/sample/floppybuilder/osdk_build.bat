@@ -76,7 +76,7 @@ ECHO.
 ECHO Assembling the first part
 
 SET OSDKLINK=
-SET OSDKADDR=$c000
+SET OSDKADDR=$400
 SET OSDKNAME=FirstProgram
 SET OSDKFILE=main_first loader_api
 SET OSDKDISK=
@@ -94,7 +94,7 @@ ECHO.
 ECHO Assembling the second part
 
 SET OSDKLINK=-B
-SET OSDKADDR=$c000
+SET OSDKADDR=$400
 SET OSDKNAME=SecondProgram
 SET OSDKFILE=main_second loader_api
 SET OSDKDISK=

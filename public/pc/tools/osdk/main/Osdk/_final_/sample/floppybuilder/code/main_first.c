@@ -11,7 +11,8 @@
 void main()
 {
 	// Load the first picture at the default address specified in the script
-	LoadFile(LOADER_PICTURE_FIRSTPROGRAM);
+	LoadFileAt(LOADER_PICTURE_FIRSTPROGRAM,0xa000);
 
 	// Quit and return to the loader
+	InitializeFileAt(LOADER_PROGRAM_SECOND,0x400);
 }
