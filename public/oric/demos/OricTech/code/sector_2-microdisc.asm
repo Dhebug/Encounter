@@ -138,6 +138,7 @@ read_one_sector
 	; the correct track.
 	;
 	ldx #FLOPPY_LOADER_TRACK
+	.dsb ((FDC_track_register&3)-((*+3)&3))&3,$ea
 	cpx FDC_track_register
 	beq track_ok
 	
@@ -145,6 +146,7 @@ read_one_sector
 	stx FDC_data
 
 wait_drive2
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 	lda FDC_drq 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
 	bmi wait_drive2
 	
@@ -152,6 +154,7 @@ wait_drive2
 	; Send a SEEK command (change track)
 	;
 	lda #CMD_Seek
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register
 	; 
 	; Command words should only be loaded in the Command Register when the Busy status bit is off (Status bit 0). The one exception is the Force Interrupt command. 
@@ -163,6 +166,7 @@ r_wait_completion
 	dey
 	bne r_wait_completion
 r2_wait_completion
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register
 	lsr
 	bcs r2_wait_completion
@@ -173,6 +177,7 @@ track_ok
 	; Write the sector number in the FDC sector register
 __auto__sector_index
 	lda #FLOPPY_LOADER_SECTOR
+	.dsb ((FDC_sector_register&3)-((*+3)&3))&3,$ea
 	sta FDC_sector_register ;
 	
 	lda #%10000100 			; Force the system to use the Side 0 of the A: drive
@@ -182,6 +187,7 @@ __auto__sector_index
 	; Send a READSECTOR command
 	;
 	lda #CMD_ReadSector
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register
 
 	ldy #wait_status_floppy
@@ -196,8 +202,10 @@ waitcommand
 	;
 	ldy #0
 fetch_bytes_from_FDC
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 	lda FDC_drq
 	bmi fetch_bytes_from_FDC
+	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	lda FDC_data
 __auto_write_address
 	sta FLOPPY_LOADER_ADDRESS,y
@@ -206,6 +214,7 @@ __auto_write_address
 	bne fetch_bytes_from_FDC
 	; Done loading the sector
 	
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register
 	and #$1C
 		
