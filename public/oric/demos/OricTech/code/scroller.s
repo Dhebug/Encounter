@@ -1,7 +1,7 @@
 
 #include "defines.h"
 #include "script.h"
-#include "floppy_description.h"
+#define ASSEMBLER
 #include "loader_api.h"
 
 	.zero
@@ -67,7 +67,7 @@ loop_clear_inner
 
 	// Load files
 	// Load the 6x8 font
-	LoadFile(LOADER_FONT_6x8)
+	LoadFileAt(LOADER_FONT_6x8,$9900)
 
 	// Load the VIP scroll stuff (HAS TO BE BEFORE _BufferCharset30x40)
 	LoadFileAt(LOADER_VIP_SCROLL,_BufferCharset)

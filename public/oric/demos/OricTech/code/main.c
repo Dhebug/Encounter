@@ -346,6 +346,9 @@ void main()
 
 	// Quit
 	System_RestoreIRQ();
+
+	// Quit and return to the loader to fetch the second part of the program
+	InitializeFileAt(LOADER_TECHTECH_SECOND,0xc000);
 //#endif
 }
 #endif
