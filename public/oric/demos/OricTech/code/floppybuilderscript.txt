@@ -15,7 +15,8 @@
 ; - Support for file compression in the tool
 ; - Possibility to do partial loads, saves, depacking in realtime
 ;
-;LoadDiskTemplate default.dsk
+FormatVersion 0.20
+
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
 OutputLayoutFile floppy_description.h
@@ -23,10 +24,12 @@ OutputFloppyFile ..\build\VIP2015.dsk
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1
 ;AddDefine ENABLE_TIMING_DEBUGGING 1
+AddDefine LOADER_SECTOR_BUFFER $200
+AddDefine LOADER_BASE_ZERO_PAGE $F2
 
 ;
 ; This defines the bootsectors to use for the various operating systems
-; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
+; - Jasmin loads the sector 1 of track zero in  and then runs it.
 ; - Microdisc loads the sector 2 of track zero, the address is different on Atmos and Telestrat
 ; - The system requires a third sector containing valid data
 ;
@@ -42,7 +45,7 @@ WriteSector ..\build\files\sector_3.o 				; Sector 3
 ; Now here is the loader code, that one is Microdisc only
 ;
 SetPosition 0 4
-AddFile ..\build\files\loader.o $fd00 				; Sector 4
+WriteLoader ..\build\files\loader.o $fd00 				; Sector 4
 
 ;
 ; From now on we compress data (The loader should not be compressed)
@@ -52,99 +55,109 @@ SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
 ;
 ; Then the files used in the demo
 ;
-AddDefine LOADER_INTRO {FileIndex}
-AddFile ..\build\files\intro.o $c000				; The VIP intro part
+AddFile ..\build\files\intro.o 				; The VIP intro part
+AddDefine LOADER_INTRO_PROGRAM {FileIndex}
+AddDefine LOADER_INTRO_PROGRAM_ADDRESS $c000
+AddDefine LOADER_INTRO_PROGRAM_TRACK {FileTrack}
+AddDefine LOADER_INTRO_PROGRAM_SECTOR {FileSector}
+AddDefine LOADER_INTRO_PROGRAM_SIZE {FileSize}
+AddDefine LOADER_INTRO_PROGRAM_SIZE_COMPRESSED {FileSizeCompressed}
 
-AddDefine LOADER_TECHTECH {FileIndex}
-AddFile ..\build\files\techtech.o $c000				; The Tech Tech part
+AddFile ..\build\files\techtech.o 				; The Tech Tech part
+AddDefine LOADER_TECHTECH_SECOND {FileIndex}
+AddDefine LOADER_TECHTECH_SECOND_ADDRESS $c000
+AddDefine LOADER_TECHTECH_SECOND_TRACK {FileTrack}
+AddDefine LOADER_TECHTECH_SECOND_SECTOR {FileSector}
+AddDefine LOADER_TECHTECH_SECOND_SIZE {FileSize}
+AddDefine LOADER_TECHTECH_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
 
 ;
 ; The fonts
 ;
+AddFile ..\build\files\Font6x8.hir     		; 9900=STD, 9D00=ALT
 AddDefine LOADER_FONT_6x8 {FileIndex}
-AddFile ..\build\files\Font6x8.hir $9900    		; 9900=STD, 9D00=ALT
 
+AddFile ..\build\files\Font6x6.hir 
 AddDefine LOADER_FONT_6x6 {FileIndex}
-AddFile ..\build\files\Font6x6.hir $a000
 
 
 ;
 ; Random logos and pictures
 ;
+AddFile ..\build\files\vip_rasters.hir 
 AddDefine LOADER_VIP_LOGO {FileIndex}
-AddFile ..\build\files\vip_rasters.hir $9900
 AddDefine LOADER_VIP_LOGO_SIZE {FileSize}
 
+AddFile ..\build\files\cloud.hir 
 AddDefine LOADER_CLOUD {FileIndex}
-AddFile ..\build\files\cloud.hir $9900
 AddDefine LOADER_CLOUD_SIZE {FileSize}
 
+AddFile ..\build\files\rain_drop.hir 
 AddDefine LOADER_RAINDROP {FileIndex}
-AddFile ..\build\files\rain_drop.hir $9900
 AddDefine LOADER_RAINDROP_SIZE {FileSize}
 
+AddFile ..\build\files\long_scroller.hir 
 AddDefine LOADER_LONG_SCROLLER {FileIndex}
-AddFile ..\build\files\long_scroller.hir $9900
 AddDefine LOADER_LONG_SCROLLER_SIZE {FileSize}
 
+AddFile ..\build\files\SoundWarning.hir 
 AddDefine LOADER_SOUND_WARNING {FileIndex}
-AddFile ..\build\files\SoundWarning.hir $9900
 AddDefine LOADER_SOUND_WARNING_SIZE {FileSize}
 
 
 ;
 ; The Scrollable VIP logo
 ;
+AddFile ..\build\files\VIPScroll.hir 
 AddDefine LOADER_VIP_SCROLL {FileIndex}
-AddFile ..\build\files\VIPScroll.hir $9800
 AddDefine LOADER_VIP_SCROLL_SIZE {FileSize}
 
+AddFile ..\build\files\font_30x40.hir 
 AddDefine LOADER_FONT_30x40 {FileIndex}
-AddFile ..\build\files\font_30x40.hir $9800
 AddDefine LOADER_FONT_30x40_SIZE {FileSize}
 
+AddFile ..\build\files\overlay.hir 
 AddDefine LOADER_OVERLAY {FileIndex}
-AddFile ..\build\files\overlay.hir $9800
 AddDefine LOADER_OVERLAY_SIZE {FileSize}
 
 ;
 ; Audio
 ;
+AddFile ..\build\files\BoomTschak.raw 						; The kraftwerk music
 AddDefine LOADER_SAMPLE_BOOMTSCHACK {FileIndex}
-AddFile ..\build\files\BoomTschak.raw $400						; The kraftwerk music
 AddDefine LOADER_SAMPLE_BOOMTSCHACK_SIZE {FileSize}
 
+AddFile ..\build\files\SampleDefence.raw 				; The defence sample
 AddDefine LOADER_SAMPLE_DEFENCE {FileIndex}
-AddFile ..\build\files\SampleDefence.raw $400				; The defence sample
 AddDefine LOADER_SAMPLE_DEFENCE_SIZE {FileSize}
 
+AddFile ..\build\files\SampleForce.raw 				; The force sample
 AddDefine LOADER_SAMPLE_FORCE {FileIndex}
-AddFile ..\build\files\SampleForce.raw $400				; The force sample
 AddDefine LOADER_SAMPLE_FORCE_SIZE {FileSize}
 
+AddFile ..\build\files\SampleHa.raw 				; The Ha sample
 AddDefine LOADER_SAMPLE_HA {FileIndex}
-AddFile ..\build\files\SampleHa.raw $400				; The Ha sample
 AddDefine LOADER_SAMPLE_HA_SIZE {FileSize}
 
+AddFile ..\build\files\SampleYeah.raw 				; The Yeah sample
 AddDefine LOADER_SAMPLE_YEAH {FileIndex}
-AddFile ..\build\files\SampleYeah.raw $400				; The Yeah sample
 AddDefine LOADER_SAMPLE_YEAH_SIZE {FileSize}
 
+AddFile ..\build\files\SampleChimeLoopStart.raw 				; The First part of the chime loop sample
 AddDefine LOADER_SAMPLE_CHIME_START {FileIndex}
-AddFile ..\build\files\SampleChimeLoopStart.raw $400				; The First part of the chime loop sample
 AddDefine LOADER_SAMPLE_CHIME_START_SIZE {FileSize}
 
+AddFile ..\build\files\SampleChimeLoopEnd.raw 			 ; The End part of the chime loop sample
 AddDefine LOADER_SAMPLE_CHIME_END {FileIndex}
-AddFile ..\build\files\SampleChimeLoopEnd.raw $400			 ; The End part of the chime loop sample
 AddDefine LOADER_SAMPLE_CHIME_END_SIZE {FileSize}
 
 
+AddFile ..\build\files\SampleMusicNonStop.raw 			 ; Music Non Stop
 AddDefine LOADER_SAMPLE_MUSIC_NON_STOP {FileIndex}
-AddFile ..\build\files\SampleMusicNonStop.raw $400			 ; Music Non Stop
 AddDefine LOADER_SAMPLE_MUSIC_NON_STOP_SIZE {FileSize}
 
+AddFile ..\build\files\SampleTechnoPop.raw 				 ; Techno Pop
 AddDefine LOADER_SAMPLE_TECHNO_POP  {FileIndex}
-AddFile ..\build\files\SampleTechnoPop.raw $400				 ; Techno Pop
 AddDefine LOADER_SAMPLE_TECHNO_POP_SIZE {FileSize}
 
 
@@ -152,6 +165,6 @@ AddDefine LOADER_SAMPLE_TECHNO_POP_SIZE {FileSize}
 ;
 ; YM Music
 ;
+AddFile ..\build\files\ThalionIntro.mym 					; The Thalion music intro
 AddDefine LOADER_INTRO_MUSIC {FileIndex}
-AddFile ..\build\files\ThalionIntro.mym $400					; The Thalion music intro
 AddDefine LOADER_INTRO_MUSIC_SIZE {FileSize}

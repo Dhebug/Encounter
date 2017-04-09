@@ -1,4 +1,5 @@
 
+#define ASSEMBLER
 #include "floppy_description.h"
 #include "defines.h"
 
