@@ -201,8 +201,8 @@ waitcommand
 	; Read the sector data
 	;
 	ldy #0
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea	
 fetch_bytes_from_FDC
-	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 	lda FDC_drq
 	bmi fetch_bytes_from_FDC
 	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea

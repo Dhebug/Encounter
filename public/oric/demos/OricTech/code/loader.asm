@@ -386,24 +386,25 @@ end_change_track
 	sei
 
 	lda current_sector
-__fdc_sector_1	
 	.dsb ((FDC_sector_register&3)-((*+3)&3))&3,$ea
+__fdc_sector_1	
 	sta FDC_sector_register
 	inc current_sector
 		
 	lda current_track                        ; Check if the drive is on the correct track		
+	.dsb ((FDC_track_register&3)-((*+3)&3))&3,$ea	
 __fdc_track_1	
-	.dsb ((FDC_track_register&3)-((*+3)&3))&3,$ea
 	cmp FDC_track_register
 	beq stay_on_the_track
-			
+
+
+	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea	
 __fdc_data_1	
-	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	sta FDC_data                             ; Set the new track
 		
 	lda #CMD_Seek
-__fdc_command_1
 	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
+__fdc_command_1
 	sta FDC_command_register	
 	jsr WaitCompletion
 stay_on_the_track
@@ -415,28 +416,28 @@ __fdc_flags_2
 
 __fdc_readsector
 	lda #CMD_ReadSector
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea	
 __fdc_command_2
-	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register
-
 	jsr WaitCommand
 
 	; Read the sector data
 	ldx #0
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 loop_read_sector
 __fdc_drq_1
-	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 	lda FDC_drq
     bmi loop_read_sector
-__fdc_data_2
+
 	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea    
+__fdc_data_2
 	lda FDC_data
 	sta LOADER_SECTOR_BUFFER,x 		; Store the byte in the sector buffer
 	inx
 	bne loop_read_sector
 
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea	
 __fdc_status_1
-	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register
 	and #$1C
 
@@ -469,9 +470,9 @@ r_wait_completion
 	bne r_wait_completion
 	plp
 
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea	
 r2_wait_completion
 __fdc_status_2
-	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register
 	lsr
 	bcs r2_wait_completion
