@@ -94,7 +94,11 @@ Version 0.24
 - Fixed a problem in the color reduction code failing on a 32bit source image
 - Added support for converting vectorial images in SVG format to either bitmap or MCP40 vectorial format
 
+Version 0.25
+- Fixed the off-by-one error in the tape header when Exporting Oric images to tape format
+
+
 */
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	24
+#define TOOL_VERSION_MINOR	25

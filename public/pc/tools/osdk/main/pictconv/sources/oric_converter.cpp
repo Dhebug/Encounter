@@ -998,7 +998,7 @@ void OricPictureConverter::save_header(long handle,int adress_begin)
     0x00
   };
 
-  int adress_end=adress_begin+m_Buffer.m_buffer_size;
+  int adress_end=adress_begin+m_Buffer.m_buffer_size-1;
   Header[ 8]=(unsigned char)((adress_end>>8)&255);
   Header[ 9]=(unsigned char)( adress_end&255);
   Header[10]=(unsigned char)((adress_begin>>8)&255);
