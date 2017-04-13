@@ -161,7 +161,8 @@ enum OperatorPriority
 #define   A_FMASK   0x0f00	/* segment type mask */
 
 
-#define	  FM_OBJ    0x1000
+#define	  FM_OBJ      0x1000      // Default XA encoding for object files
+#define	  FM_OBJ_CC65 0x0800      // Modified value to make the CC65 toolchain happy
 #define   FM_SIZE   0x2000
 #define   FM_RELOC  0x4000
 #define   FM_CPU    0x8000

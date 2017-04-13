@@ -93,9 +93,9 @@ int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 static const char *copyright=
 {
 #ifdef _WIN32
-	"Cross-Assembler 65xx V2.2.4 ("__TIME__" / "__DATE__") \r\n"
+	"Cross-Assembler 65xx V2.2.5 ("__TIME__" / "__DATE__") \r\n"
 #else
-	"Cross-Assembler 65xx V2.2.4 (No date available) \r\n"
+	"Cross-Assembler 65xx V2.2.5 (No date available) \r\n"
 #endif
 	"(c) 1989-98 by A.Fachat\r\n"
 	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
@@ -113,6 +113,7 @@ static void usage(void)
 		" -W          = no 65816-opcodes\n"
 		" -B          = show lines with block open/close\n"
 		" -c          = produce o65 object instead of executable files (i.e. do not link)\n"
+		" -cc         = almost identical to '-c' except the result is usable with CC65 tools\n"
 		" -o filename = sets output filename, default is 'a.o65'\n"
 		"               A filename of '-' sets stdout as output file\n"
 		" -e filename = sets errorlog filename, default is none\n"
@@ -231,7 +232,21 @@ int main(int argc,char *argv[])
 				break;
 
 			case 'c':
-				fmode |= FM_OBJ;
+                                if (argv[i][2]==0)	
+                                {
+                                  fmode |= FM_OBJ;
+                                }
+                                else
+                                if (argv[i][2]=='c')	
+                                {
+                                  fmode |= FM_OBJ_CC65;
+                                }
+                                else			
+                                {
+                                  // Error
+                                  fprintf(stderr, "Incorrect -c option, use -c for legacy XA export format or -cc for CC65 compatible o65 format \n");
+                                  return 1;
+                                }
 				break;
 
 			case 'v':
