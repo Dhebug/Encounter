@@ -125,12 +125,15 @@ read_one_sector
 	; the correct track.
 	;
 	ldx #loader_track_position
+	.dsb ((FDC_track_register&3)-((*+3)&3))&3,$ea
 	cpx FDC_track_register
 	beq track_ok
 	
+	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	; Write the track number in the FDC data register
 	stx FDC_data
 
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 wait_drive2
 	lda FDC_drq 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
 	bmi wait_drive2
@@ -139,6 +142,7 @@ wait_drive2
 	; Send a SEEK command (change track)
 	;
 	lda #CMD_Seek
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register
 	; 
 	; Command words should only be loaded in the Command Register when the Busy status bit is off (Status bit 0). The one exception is the Force Interrupt command. 
@@ -149,6 +153,7 @@ wait_drive2
 r_wait_completion
 	dey
 	bne r_wait_completion
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 r2_wait_completion
 	lda FDC_status_register
 	lsr
@@ -160,6 +165,7 @@ track_ok
 	; Write the sector number in the FDC sector register
 __auto__sector_index
 	lda #loader_sector_position
+	.dsb ((FDC_sector_register&3)-((*+3)&3))&3,$ea
 	sta FDC_sector_register ;
 	
 	; Interdire les IRQ du fdc ICI !
@@ -171,6 +177,7 @@ __auto__sector_index
 	; Send a READSECTOR command
 	;
 	lda #CMD_ReadSector
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register
 
 	ldy #wait_status_floppy
@@ -184,9 +191,11 @@ waitcommand
 	; Read the sector data
 	;
 	ldy #0
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 fetch_bytes_from_FDC
 	lda FDC_drq
 	bmi fetch_bytes_from_FDC
+	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	lda FDC_data
 __auto_write_address
 	sta location_loader,y
@@ -195,6 +204,7 @@ __auto_write_address
 	bne fetch_bytes_from_FDC
 	; Done loading the sector
 	
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register
 	and #$1C
 		
