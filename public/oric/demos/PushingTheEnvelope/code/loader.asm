@@ -265,18 +265,22 @@ same_track
 #endif
 
 	lda current_sector
+	.dsb ((FDC_sector_register&3)-((*+3)&3))&3,$ea
 	sta FDC_sector_register,y
 	inc current_sector
 	
 	; Check if the drive is on the correct track		
 	lda current_track
+	.dsb ((FDC_track_register&3)-((*+3)&3))&3,$ea
 	cmp FDC_track_register,y	
 	beq stay_on_the_track
 		
+	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	; Set the new track
 	sta FDC_data,y
 		
 	lda #CMD_Seek
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register,y	
 	jsr WaitCompletion
 	
@@ -286,6 +290,7 @@ stay_on_the_track
 	sta FDC_flags,y
 
 	lda #CMD_ReadSector
+	.dsb ((FDC_command_register&3)-((*+3)&3))&3,$ea
 	sta FDC_command_register,y
 
 	;cli
@@ -296,16 +301,18 @@ stay_on_the_track
 	; Read the sector data
 	;
 	ldx #0
+	.dsb (($318&3)-((*+3)&3))&3,$ea
 microdisc_read_data
 	lda $0318
     bmi microdisc_read_data
-
+	;.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	lda FDC_data,y
 	sta $200,x 		; Store the byte in page 2
 	inx
 
 	bne microdisc_read_data
 
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 	lda FDC_status_register,y
 	and #$1C
 
@@ -338,6 +345,8 @@ r_wait_completion
 	bne r_wait_completion
 	plp
 
+	
+	.dsb ((FDC_status_register&3)-((*+3)&3))&3,$ea
 r2_wait_completion
 	lda FDC_status_register,y
 	lsr
