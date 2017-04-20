@@ -429,7 +429,7 @@ __fdc_drq_1
 	lda FDC_drq
     bmi loop_read_sector
 
-	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea    
+	;.dsb ((FDC_data&3)-((*+3)&3))&3,$ea    
 __fdc_data_2
 	lda FDC_data
 	sta LOADER_SECTOR_BUFFER,x 		; Store the byte in the sector buffer

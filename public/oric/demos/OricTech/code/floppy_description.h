@@ -53,11 +53,11 @@ FileSizeHigh .byt >12663,>15045,>760,>576,>8000,>3432,>50,>12173,>8000,>6144,>17
 // Entry #8 '..\build\files\SoundWarning.hir'
 // - Starts on  track 4 sector 2 and is 10 sectors long (2516 compressed bytes: 31% of 8000 bytes).
 // Entry #9 '..\build\files\VIPScroll.hir'
-// - Starts on  track 4 sector 12 and is 6 sectors long (1447 compressed bytes: 23% of 6144 bytes).
+// - Starts on  track 4 sector 12 and is 6 sectors long (1430 compressed bytes: 23% of 6144 bytes).
 // Entry #10 '..\build\files\font_30x40.hir'
-// - Starts on  track 5 sector 1 and is 2 sectors long (492 compressed bytes: 28% of 1733 bytes).
+// - Starts on  track 5 sector 1 and is 2 sectors long (463 compressed bytes: 26% of 1733 bytes).
 // Entry #11 '..\build\files\overlay.hir'
-// - Starts on  track 5 sector 3 and is 4 sectors long (811 compressed bytes: 15% of 5376 bytes).
+// - Starts on  track 5 sector 3 and is 4 sectors long (780 compressed bytes: 14% of 5376 bytes).
 // Entry #12 '..\build\files\BoomTschak.raw'
 // - Starts on  track 5 sector 7 and is 15 sectors long (3661 compressed bytes: 41% of 8812 bytes).
 // Entry #13 '..\build\files\SampleDefence.raw'

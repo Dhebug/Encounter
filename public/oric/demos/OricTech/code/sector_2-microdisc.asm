@@ -145,8 +145,9 @@ read_one_sector
 	; Write the track number in the FDC data register
 	stx FDC_data
 
+	
+	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea	
 wait_drive2
-	.dsb ((FDC_drq&3)-((*+3)&3))&3,$ea
 	lda FDC_drq 				; We are waiting for the drive maybe not useful if drive is ready after the eprom boot
 	bmi wait_drive2
 	
@@ -205,7 +206,7 @@ waitcommand
 fetch_bytes_from_FDC
 	lda FDC_drq
 	bmi fetch_bytes_from_FDC
-	.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
+	;.dsb ((FDC_data&3)-((*+3)&3))&3,$ea
 	lda FDC_data
 __auto_write_address
 	sta FLOPPY_LOADER_ADDRESS,y
