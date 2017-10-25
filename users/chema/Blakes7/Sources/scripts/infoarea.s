@@ -252,13 +252,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "S",93,". Otra c",91,"mara de seguridad.",0 ; String 0
-.asc "Salva tu planeta.",0 ; String 1
-.asc "Todos trabajamos con un fin:",0 ; String 2
-.asc "Hacer la Tierra habitable de nuevo.",0 ; String 3
-.asc "Ese es el plan de la Federaci",94,"n.",0 ; String 4
-.asc "Al",93,"state en el Cuerpo de Seguridad.",0 ; String 5
-.asc "No, gracias.",0 ; String 6
+.asc "Yes, another security camera.",0 ; String 0
+.asc "Save your planet.",0 ; String 1
+.asc "We all work here with one aim:",0 ; String 2
+.asc "To make Earth habitable again.",0 ; String 3
+.asc "That is the Federation's plan.",0 ; String 4
+.asc "Join the Federation Security Corps.",0 ; String 5
+.asc "No, thank you.",0 ; String 6
 res_end
 .)
 
@@ -280,9 +280,9 @@ res_end
 .word (res_end-res_start +4)
 .byt 202
 res_start
-.asc "Necesito un mapa del complejo.",0 ; String 0
-.asc "Necesito las salidas de la ciudad.",0 ; String 1
-.asc "Nada, gracias.",0 ; String 2
+.asc "I need a map of the complex.",0 ; String 0
+.asc "Yes, I need info on the city exits.",0 ; String 1
+.asc "Nothing, thank you.",0 ; String 2
 res_end
 .)
 
@@ -438,24 +438,24 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "Parece encantado de ayudar.",0 ; String 0
-.asc "Buenas, ",126,"qu",92," puedo hacer por usted?",0 ; String 1
-.asc "Ning",95,"n problema. Tenga un buen d",93,"a.",0 ; String 2
-.asc "Ah, por cierto, ",126,"sabe por casualidad",0 ; String 3
-.asc "si han rellenado por fin la m",91,"quina",0 ; String 4
-.asc "de caf",92," del pasillo?",0 ; String 5
-.asc "No, lo siento.",0 ; String 6
-.asc "Vaya. Mi turno acaba enseguida, pero",0 ; String 7
-.asc "necesitaba una taza de caf",92,".",0 ; String 8
-.asc "Lo siento, pero se me han acabado.",0 ; String 9
-.asc "Me llegan m",91,"s ma",35,"ana.",0 ; String 10
-.asc "",126,"Buscaba algo en particular?",0 ; String 11
-.asc "Uy, eso no aparece en los mapas.",0 ; String 12
-.asc "Son ",91,"reas de mantenimiento y est",91,"n",0 ; String 13
-.asc "prohibidas para ciudadanos regulares.",0 ; String 14
-.asc "Mmmm, pero conozco a alguien...",0 ; String 15
-.asc "Pregunte en la puerta 4 del pasillo.",0 ; String 16
-.asc "Vale. Gracias por todo.",0 ; String 17
-.asc "No puedo aceptar regalos, se",35,"or.",0 ; String 18
+.asc "He seems willing to help.",0 ; String 0
+.asc "Good evening. What can I do for you?",0 ; String 1
+.asc "No problem. Have a nice day.",0 ; String 2
+.asc "Uh, by the way, do you know",0 ; String 3
+.asc "if they have refilled the coffee",0 ; String 4
+.asc "machine yet?",0 ; String 5
+.asc "No, sorry.",0 ; String 6
+.asc "It's ok. My shift ends in a minute",0 ; String 7
+.asc "But it'd be nice to have a coffee.",0 ; String 8
+.asc "I'm sorry but I just ran out of them.",0 ; String 9
+.asc "I will receive more tomorrow.",0 ; String 10
+.asc "Are you looking for something specific?",0 ; String 11
+.asc "Oh, that doesn't appear on usual maps.",0 ; String 12
+.asc "They are in maintenance areas, not ",0 ; String 13
+.asc "accessible for regular citizens.",0 ; String 14
+.asc "Mmm, I may know somebody who can help.",0 ; String 15
+.asc "Ask in door 4 in the main corridor.",0 ; String 16
+.asc "Okay, thanks indeed.",0 ; String 17
+.asc "I can't accept anything, sir.",0 ; String 18
 res_end
 .)

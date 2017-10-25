@@ -590,56 +590,56 @@ res_end
 .byt 107
 res_start
 .asc "Blake!",0 ; String 0
-.asc "Mira este mensaje que interceptamos.",0 ; String 1
+.asc "Look at this message we intercepted.",0 ; String 1
 .asc "Ravella...",0 ; String 2
-.asc "La han enviado a Centero para",0 ; String 3
-.asc "interrogarla.",0 ; String 4
-.asc "La destruir",91,"n all",93,".",0 ; String 5
-.asc "Tenemos que evitarlo.",0 ; String 6
-.asc "",126,"Y qu",92," propones?",0 ; String 7
-.asc "La rescataremos.",0 ; String 8
-.asc "Pens",92," que hab",93,"amos quedado en que",0 ; String 9
-.asc "no har",93,"amos nada sin discutirlo",0 ; String 10
-.asc "primero a fondo.",0 ; String 11
-.asc "Tambi",92,"n acordamos que cualquiera",0 ; String 12
-.asc "pod",93,"a dejarlo cuando quisiera.",0 ; String 13
-.asc "Solo dime cu",91,"ndo quieres irte.",0 ; String 14
-.asc "Oh, lo har",92,", pero mientras pienso que",0 ; String 15
-.asc "tenemos derecho a saber que es lo que",0 ; String 16
-.asc "tienes planeado.",0 ; String 17
-.asc "Zen, pon rumbo a Centero.",0 ; String 18
-.asc "Velocidad est",91,"ndar por dos",0 ; String 19
-.asc " Velocidad y rumbo confirmados.",0 ; String 20
-.asc "Eso no se parece para nada a mi idea",0 ; String 21
-.asc "de una discusi",94,"n a fondo.",0 ; String 22
-.asc "Era una l",93,"der de la resistencia.",0 ; String 23
-.asc "Y una gran amiga.",0 ; String 24
-.asc "Otra idealista, pobre pero honesta.",0 ; String 25
-.asc "No puedo esperar a que llegue el",0 ; String 26
-.asc "momento de conocerla.",0 ; String 27
-.asc "",126,"C",94,"mo entraremos en el bloque prisi",94,"n?",0 ; String 28
-.asc "Esas instalaciones est",91,"n apantalladas",0 ; String 29
-.asc "contra esc",91,"neres. Sin informaci",94,"n no",0 ; String 30
-.asc "puedo teleportaros dentro.",0 ; String 31
-.asc "Deber",92,"is encontrar el modo de entrar.",0 ; String 32
-.asc "Conoc",93," un grupo de comerciantes que",0 ; String 33
-.asc "sol",93,"an operar en Centero. Consegu",93,"an",0 ; String 34
-.asc "su suministro de drogas de la base.",0 ; String 35
-.asc "Ten",93,"an un acceso al t",95,"nel de servicio.",0 ; String 36
-.asc "",126,"Ten",93,"an?...",0 ; String 37
-.asc "Los Federales lo averiguaron. Usaron",0 ; String 38
-.asc "gas letal para eliminarlos a todos.",0 ; String 39
-.asc "Entraremos por ah",93,".",0 ; String 40
-.asc "D",93," a Jenna un transpondedor que adapta",0 ; String 41
-.asc "la se",35,"al de la pulsera para que pueda",0 ; String 42
-.asc "atravesar la pantalla. De ese modo",0 ; String 43
-.asc "podr",92," teleportaros, a todos los que",0 ; String 44
-.asc "est",92,"is cerca y llev",92,"is la pulsera, de",0 ; String 45
-.asc "nuevo a bordo, incluso desde una celda",0 ; String 46
-.asc "Perfecto. B",91,"janos, entonces.",0 ; String 47
-.asc "Se entraba a trav",92,"s de una cueva.",0 ; String 48
-.asc "Por aqu",93,".",0 ; String 49
-.asc "Ah",93," est",91,". La cueva al otro lado.",0 ; String 50
-.asc "Pero hab",93,"a un puente para cruzar...",0 ; String 51
+.asc "She's been transferred to Centero for",0 ; String 3
+.asc "interrogation and purging.",0 ; String 4
+.asc "They'll destroy her there.",0 ; String 5
+.asc "We have to prevent it.",0 ; String 6
+.asc "And what do you propose?",0 ; String 7
+.asc "We'll rescue her.",0 ; String 8
+.asc "I thought it was agreed we wouldn't",0 ; String 9
+.asc "do anything without discussing it",0 ; String 10
+.asc "thoroughly.",0 ; String 11
+.asc "It was also agreed that anybody could",0 ; String 12
+.asc "opt out at any time.",0 ; String 13
+.asc "Just tell me when you want to leave.",0 ; String 14
+.asc "Oh, I will. But in the meantime I think",0 ; String 15
+.asc "we have a right to know what it is",0 ; String 16
+.asc "you're planning.",0 ; String 17
+.asc "Zen, set a course for Centero,",0 ; String 18
+.asc "speed standard by two.",0 ; String 19
+.asc " Speed and course confirmed.",0 ; String 20
+.asc "That falls a little short of my idea",0 ; String 21
+.asc "of a thorough discussion.",0 ; String 22
+.asc "She was a leader of the resistance.",0 ; String 23
+.asc "And a good friend.",0 ; String 24
+.asc "Another idealist, poor but honest.",0 ; String 25
+.asc "I shall look forward to our meeting",0 ; String 26
+.asc "with eager anticipation.",0 ; String 27
+.asc "How will we enter the detention area?",0 ; String 28
+.asc "Those installations are shielded",0 ; String 29
+.asc "against scanners. With no information",0 ; String 30
+.asc "I cannot teleport you inside.",0 ; String 31
+.asc "You'll have to find a way in.",0 ; String 32
+.asc "I knew a group of traders who used to",0 ; String 33
+.asc "operate in Centero. They got their",0 ; String 34
+.asc "share of drugs from the base.",0 ; String 35
+.asc "They had access to the service tunnels.",0 ; String 36
+.asc "Had?...",0 ; String 37
+.asc "The Feds found out. They used lethal",0 ; String 38
+.asc "gas to kill everyone.",0 ; String 39
+.asc "That'll be our way in.",0 ; String 40
+.asc "I've given Jenna a transponder which",0 ; String 41
+.asc "will adapt the signal of the bracelet",0 ; String 42
+.asc "so it can pass through the shield.",0 ; String 43
+.asc "That way I can teleport you, and",0 ; String 44
+.asc "anyone wearing a bracelet near you",0 ; String 45
+.asc "back even from inside a cell.",0 ; String 46
+.asc "Great. Put us down, then.",0 ; String 47
+.asc "There was an entrance through a cave.",0 ; String 48
+.asc "This way.",0 ; String 49
+.asc "There you are. That cave over there.",0 ; String 50
+.asc "But there was a bridge to cross...",0 ; String 51
 res_end
 .)

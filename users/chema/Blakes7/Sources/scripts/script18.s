@@ -137,11 +137,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 3
 res_start
-.asc "",125,"Estamos dentro!",0 ; String 0
-.asc "Ven. Escond",91,"monos ah",93,".",0 ; String 1
-.asc "Aqu",93," est",91,"n los controles del nivel.",0 ; String 2
-.asc "Aire, sistemas el",92,"ctricos,",0 ; String 3
-.asc "iluminaci",94,"n, sincronizaci",94,"n horaria...",0 ; String 4
-.asc "Espera aqu",93,". Voy a buscar a Ravella.",0 ; String 5
+.asc "We are inside!",0 ; String 0
+.asc "Come. Let's hide in there.",0 ; String 1
+.asc "Here are the controls of the level.",0 ; String 2
+.asc "Air conditioning, electrical systems,",0 ; String 3
+.asc "illumination, time synchronization...",0 ; String 4
+.asc "Wait here. I'll search for Ravella.",0 ; String 5
 res_end
 .)

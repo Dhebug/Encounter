@@ -43,7 +43,7 @@ res_end
 .word (res_end-res_start +4)
 .byt 5
 res_start
-.asc "Laxante Ultra-Potente.",0 ; String 0
-.asc "No puedo usar el laxante as",93,".",0 ; String 1
+.asc "Super-Strong Laxative.",0 ; String 0
+.asc "Can't use the laxative that way.",0 ; String 1
 res_end
 .)

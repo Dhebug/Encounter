@@ -33,13 +33,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "No se ve el fondo desde aqu",93,".",0 ; String 0
-.asc "Pero hay un saliente unos pocos metros",0 ; String 1
-.asc "m",91,"s abajo...",0 ; String 2
-.asc "Este ",91,"rbol est",91," un poco retorcido.",0 ; String 3
-.asc "De acuerdo, buena idea.",0 ; String 4
-.asc "No te sigo.",0 ; String 5
-.asc "Podr",93,"a descolgarme y bajar...",0 ; String 6
+.asc "Can't see the bottom from here.",0 ; String 0
+.asc "But there is a protruding a few meters",0 ; String 1
+.asc "below...",0 ; String 2
+.asc "This tree looks a bit twisted.",0 ; String 3
+.asc "Okay, good idea.",0 ; String 4
+.asc "I don't follow you.",0 ; String 5
+.asc "I could climb down...",0 ; String 6
 res_end
 .)
 

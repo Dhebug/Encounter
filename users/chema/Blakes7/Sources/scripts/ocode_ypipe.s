@@ -10,10 +10,10 @@
 .word (res_end-res_start +4)
 .byt 31
 res_start
-.asc "Un tubo en Y. No s",92," si deber",93,"a haberlo",0 ; String 0
-.asc "quitado de su sitio.",0 ; String 1
-.asc "Creo que he cogido la idea. ",125,"Mola!",0 ; String 2
-.asc "No s",92," qu",92," quieres hacer.",0 ; String 3
+.asc "A Y-pipe. I am not sure I should have",0 ; String 0
+.asc "removed it from its place.",0 ; String 1
+.asc "I think I got your idea... Nice!",0 ; String 2
+.asc "I don't know what you want to do.",0 ; String 3
 res_end
 .)
 

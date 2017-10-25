@@ -393,44 +393,44 @@ res_end
 .word (res_end-res_start +4)
 .byt 100
 res_start
-.asc "Avon, soy Blake.",0 ; String 0
-.asc "Les he encontrado. S",95,"benos.",0 ; String 1
-.asc "",125,"Jajaja! ",125,"lo sab",93,"a!",0 ; String 2
-.asc "",125,"Atr",91,"s todo el mundo!",0 ; String 3
-.asc "Esto es un arma, ",126,"verdad?",0 ; String 4
-.asc "Llevar",92,"is esta nave a la superficie",0 ; String 5
-.asc "inmediatamente.",0 ; String 6
-.asc "Ya nos estamos alejando del planeta.",0 ; String 7
-.asc "Pues da la vuelta.",0 ; String 8
-.asc "Si nos asesinas no habr",91," manera de",0 ; String 9
-.asc "que puedas pilotar esta nave.",0 ; String 10
-.asc "Yo gobernaba. Un peque",35,"o planeta",0 ; String 11
-.asc "prisi",94,"n con nunca m",91,"s de 500 personas.",0 ; String 12
-.asc "Pero con esto. ",125,"Con esto yo podr",93,"a",0 ; String 13
-.asc "gobernar mil planetas!",0 ; String 14
-.asc "Con esa recompensa ",126,"piensas que",0 ; String 15
-.asc "dudar",93,"a lo m",91,"s m",93,"nimo? -- ",125,"AHORA!",0 ; String 16
-.asc "Yo fui su Sacerdote. Ahora regresar",92,"",0 ; String 17
-.asc "como su dios...",0 ; String 18
-.asc "",A_FWWHITE+A_FWGREEN*8+192,"",125,"SU DIOOOOOOOS!",0 ; String 19
+.asc "Avon, this is Blake.",0 ; String 0
+.asc "I found them! Bring us up.",0 ; String 1
+.asc "Ha ha! I knew it!",0 ; String 2
+.asc "Now stand back all of you!",0 ; String 3
+.asc "I am aiming a weapon, isn't it?",0 ; String 4
+.asc "You'll take this ship down to the",0 ; String 5
+.asc "surface.",0 ; String 6
+.asc "We're already moving away.",0 ; String 7
+.asc "Then get it back.",0 ; String 8
+.asc "If you kill us, there is no way you",0 ; String 9
+.asc "can run this ship.",0 ; String 10
+.asc "I ruled. A small prison planet with",0 ; String 11
+.asc "never more than five hundred people.",0 ; String 12
+.asc "But with this. With this I could rule",0 ; String 13
+.asc "a thousand planets!",0 ; String 14
+.asc "For that prize, do you think I would",0 ; String 15
+.asc "hesitate to kill you? -- NOW!",0 ; String 16
+.asc "I was their priest. I shall return to",0 ; String 17
+.asc "them a god...",0 ; String 18
+.asc "",A_FWWHITE+A_FWGREEN*8+192,"A GOOOOOD!",0 ; String 19
 .asc " ",0 ; String 20
-.asc "",125,"Bien! ",125,"lo teleportaste al espacio!",0 ; String 21
-.asc "Me estaba levantando dolor de cabeza.",0 ; String 22
-.asc "",125,"Blake! Zen ha detectado una flota",0 ; String 23
-.asc "de naves dirigi",92,"ndose a este sistema.",0 ; String 24
-.asc "Los ha identificado como naves de",0 ; String 25
-.asc "persecuci",94,"n de la Federaci",94,"n.",0 ; String 26
-.asc "De acuerdo. Marca un curso para",0 ; String 27
-.asc "alejarnos de ellos. Velocidad m",91,"xima.",0 ; String 28
-.asc "Si somos m",91,"s r",91,"pidos que ellos tenemos",0 ; String 29
-.asc "todo el universo para escondernos.",0 ; String 30
-.asc "Solo que no nos esconderemos.",0 ; String 31
-.asc "Pronto la Federaci",94,"n tendr",91," noticias",0 ; String 32
-.asc "exactas de d",94,"nde estamos.",0 ; String 33
-.asc "O al menos de d",94,"nde hemos estado.",0 ; String 34
-.asc "No te sigo.",0 ; String 35
-.asc "Pero lo haces. Ese es el problema.",0 ; String 36
-.asc "",125,"He dicho que no os mov",91,"is!",0 ; String 37
+.asc "Good! You teleported him into space!",0 ; String 21
+.asc "He was causing me a headache.",0 ; String 22
+.asc "Blake! Zen has detected a fleet",0 ; String 23
+.asc "of ships coming to this system.",0 ; String 24
+.asc "He identified them as Federation",0 ; String 25
+.asc "pursuit ships.",0 ; String 26
+.asc "Okay, set a course to get away from",0 ; String 27
+.asc "them. Maximum speed.",0 ; String 28
+.asc "If we can outrun them, we have the",0 ; String 29
+.asc "whole universe to hide in.",0 ; String 30
+.asc "Except that we're not going to hide.",0 ; String 31
+.asc "Very soon now the Federation ships will",0 ; String 32
+.asc "know exactly where we are.",0 ; String 33
+.asc "Or at least where we've been.",0 ; String 34
+.asc "I don't follow you.",0 ; String 35
+.asc "Oh, but you do. And that's the problem.",0 ; String 36
+.asc "I said don't move!",0 ; String 37
 res_end
 .)
 

@@ -201,7 +201,7 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Seg",95,"n Jenna, esta puerta lleva al",0 ; String 0
-.asc "interior de la base.",0 ; String 1
+.asc "Acording to Jenna, this door leads to",0 ; String 0
+.asc "the interior of the base.",0 ; String 1
 res_end
 .)

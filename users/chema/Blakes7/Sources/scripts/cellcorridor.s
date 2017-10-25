@@ -22,18 +22,18 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Necesito ver a un prisionero.",0 ; String 0
-.asc "Necesito usar el terminal.",0 ; String 1
-.asc "Se acab",94," tu turno. Yo te reemplazo.",0 ; String 2
-.asc "Buena guardia, camarada.",0 ; String 3
-.asc "Pero esto es una excepci",94,"n...",0 ; String 4
-.asc "Bah, ",126,"qui",92,"n se lo va a decir?",0 ; String 5
-.asc "No hay quien encienda un pitillo.'",0 ; String 6
-.asc "Ha subido otra peseta.'",0 ; String 7
-.asc "Tienen cara de hotentote.'",0 ; String 8
-.asc "Tienen cara de canguro.'",0 ; String 9
-.asc "Se moja hasta mi t",93,"a.'",0 ; String 10
-.asc "Ni idea... ",126,"'abracadabra'?",0 ; String 11
+.asc "I need to visit a prisoner.",0 ; String 0
+.asc "I need to use the terminal.",0 ; String 1
+.asc "Your shift's over. I'll replace you.",0 ; String 2
+.asc "Good watch, comrade.",0 ; String 3
+.asc "But this is an exception...",0 ; String 4
+.asc "Bah, who's going to tell him?",0 ; String 5
+.asc "Except for maybe go to hell'.",0 ; String 6
+.asc "If only you could hide your face.'",0 ; String 7
+.asc "This describes everything you are not.'",0 ; String 8
+.asc "Damn, I'm good at telling lies!'",0 ; String 9
+.asc "That's why I always wake up screaming.'",0 ; String 10
+.asc "I have no idea... 'hocus pocus'?",0 ; String 11
 res_end
 .)
 
@@ -382,19 +382,19 @@ res_end
 .word (res_end-res_start +4)
 .byt 221
 res_start
-.asc "Buen d",93,"a, camarada.",0 ; String 0
-.asc "Imposible. No se permiten visitas.",0 ; String 1
-.asc "Son ",94,"rdenes del General.",0 ; String 2
-.asc "Imposible. Nadie puede usarlo.",0 ; String 3
-.asc "Est",91,"s equivocado. Mira el reloj.",0 ; String 4
-.asc "A",95,"n falta una hora.",0 ; String 5
-.asc "Ah, bien. Ya estaba algo cansado.",0 ; String 6
-.asc "",125,"Pero primero el Santo y Se",35,"a!",0 ; String 7
-.asc "Fueron muy serios esta vez.",0 ; String 8
-.asc "Lo siento, pero no puedo.",0 ; String 9
-.asc "Sin Santo y Se",35,"a, no hay cambio.",0 ; String 10
-.asc "Bien. Siguiente.",0 ; String 11
-.asc "",125,"Perfecto! Buen turno camarada.",0 ; String 12
+.asc "Good day, comrade.",0 ; String 0
+.asc "Impossible. No visits allowed.",0 ; String 1
+.asc "Orders from the General.",0 ; String 2
+.asc "Impossible. No one can use it.",0 ; String 3
+.asc "You're mistaken. Look at the clock.",0 ; String 4
+.asc "There's still an hour left.",0 ; String 5
+.asc "Ah... great! I was quite tired.",0 ; String 6
+.asc "But first the watchword!",0 ; String 7
+.asc "They were very serious this time.",0 ; String 8
+.asc "Sorry, but I can't let you.",0 ; String 9
+.asc "No watchword, no shift change.",0 ; String 10
+.asc "Good. Next one.",0 ; String 11
+.asc "Perfect! Have a good shift, comrade.",0 ; String 12
 res_end
 .)
 
@@ -404,11 +404,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "'Debajo del r",93,"o amarillo",0 ; String 0
-.asc "'El kilo de sardineta",0 ; String 1
-.asc "'Esos tipos con bigote",0 ; String 2
-.asc "'Los tipos que fuman puro",0 ; String 3
-.asc "'Cuando llueve en Almer",93,"a",0 ; String 4
+.asc "'My feelings for you no words can tell",0 ; String 0
+.asc "'Oh loving beauty you float with grace",0 ; String 1
+.asc "'Kind, intelligent, loving and hot",0 ; String 2
+.asc "'I love your smile, face, and eyes",0 ; String 3
+.asc "'I see your face when I am dreaming",0 ; String 4
 res_end
 .)
 
@@ -619,25 +619,25 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",125,"Hey! Los civiles no pueden pasar.",0 ; String 0
-.asc "M",91,"rchese inmediatamente.",0 ; String 1
-.asc "Lo siento, se",35,"or.",0 ; String 2
-.asc "Camarada. Nadie puede entrar.",0 ; String 3
-.asc "Son ",94,"rdenes del General.",0 ; String 4
-.asc "De acuerdo. Lo siento camarada.",0 ; String 5
-.asc "S",94,"lo es un reloj.",0 ; String 6
-.asc "Necesito saber la celda primero.",0 ; String 7
-.asc "A ver si encuentro a Ravella...",0 ; String 8
-.asc "Nada. Fijo que usan alg",95,"n c",94,"digo.",0 ; String 9
-.asc " (T",95,". No eres un soldado.)",0 ; String 10
-.asc "",126,"Qu",92," es esa voz de mi cabeza?",0 ; String 11
-.asc " (Por favor, ven por m",93,".)",0 ; String 12
-.asc "",126,"Qui",92,"n eres? ",126,"C",94,"mo est",91,"s en mi mente?",0 ; String 13
-.asc " (Lib",92,"rame y te ayudar",92,".)",0 ; String 14
-.asc " (Estoy en la celda B-3.)",0 ; String 15
-.asc "Vale. Veamos de qu",92," va esto.",0 ; String 16
-.asc "Este no es el bloque correcto.",0 ; String 17
-.asc "Oigo voces en el bloque B.",0 ; String 18
+.asc "Hey! Civilians cannot enter here.",0 ; String 0
+.asc "Leave immediately!",0 ; String 1
+.asc "Sorry, sir.",0 ; String 2
+.asc "Comrade. Nobody can enter here.",0 ; String 3
+.asc "Orders from the General.",0 ; String 4
+.asc "Okay. Sorry, comrade.",0 ; String 5
+.asc "Just a clock.",0 ; String 6
+.asc "I need to know the cell number first.",0 ; String 7
+.asc "Let's see if I find Ravella...",0 ; String 8
+.asc "Nothing. They surely use a code.",0 ; String 9
+.asc " (You. You're not a guard.)",0 ; String 10
+.asc "What is that voice in my head?",0 ; String 11
+.asc " (Please, free me.)",0 ; String 12
+.asc "Who are you? Why are you in my mind?",0 ; String 13
+.asc " (Free me, and I'll help you.)",0 ; String 14
+.asc " (I'm in cell B-3.)",0 ; String 15
+.asc "Okay. Let's find out what's going on.",0 ; String 16
+.asc "This is not the correct block.",0 ; String 17
+.asc "I hear voices in block B.",0 ; String 18
 res_end
 .)
 

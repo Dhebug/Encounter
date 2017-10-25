@@ -381,25 +381,25 @@ res_end
 .byt 2
 res_start
 .asc "Avon.",0 ; String 0
-.asc "",126,"Si?",0 ; String 1
-.asc "Buen disparo.",0 ; String 2
-.asc "Le apuntaba a la cabeza.",0 ; String 3
-.asc "",126,"Por qu",92," arriesgaste tu vida?",0 ; String 4
-.asc "Con el Libertador no nos necesitas.",0 ; String 5
-.asc "Mis probabilidades eran bajas.",0 ; String 6
-.asc "S",94,"lo 2,5 sobre 3. Lo comprob",92,".",0 ; String 7
-.asc "A m",93," no me parecen tan bajas.",0 ; String 8
-.asc "Ya. Estoy tan sorprendido como t",95,".",0 ; String 9
-.asc "Yo no estoy sorprendido.",0 ; String 10
-.asc "Siete pueden manejar esta nave bien.",0 ; String 11
-.asc "Quieres decir seis.",0 ; String 12
-.asc "Te olvidas de Zen.",0 ; String 13
-.asc "No contar",91,"s a esa m",91,"quina como un",0 ; String 14
-.asc "miembro m",91,"s de la tripulaci",94,"n...",0 ; String 15
-.asc "Oh, ",126,"qu",92," dices a eso Zen?",0 ; String 16
-.asc "Muy diplom",91,"tico. Calcula una ruta al",0 ; String 17
-.asc "sector 5,0,2. Velocidad est",91,"ndar por 2.",0 ; String 18
-.asc "",A_FWYELLOW,"Reparto de la serie",0 ; String 19
+.asc "Yes?",0 ; String 1
+.asc "Good shot.",0 ; String 2
+.asc "I was aiming for his head.",0 ; String 3
+.asc "Why did you risk your life for us?",0 ; String 4
+.asc "With the Liberator you don't need us.",0 ; String 5
+.asc "My odds where 2.5 to 3 on survival.",0 ; String 6
+.asc "I checked.",0 ; String 7
+.asc "Sounds like a good probability to me.",0 ; String 8
+.asc "Yeah. I'm as surprised as you are.",0 ; String 9
+.asc "I'm not surprised.",0 ; String 10
+.asc "Seven of us can run this ship properly.",0 ; String 11
+.asc "Six surely.",0 ; String 12
+.asc "You forgot Zen.",0 ; String 13
+.asc "You're not counting that machine as a",0 ; String 14
+.asc "member of the crew...",0 ; String 15
+.asc "Oh, what do you say to that Zen?",0 ; String 16
+.asc "Very diplomatic. Set a course for",0 ; String 17
+.asc "sector 5,0,2. Speed standard-by-two.",0 ; String 18
+.asc "",A_FWYELLOW,"Original TV Series Cast",0 ; String 19
 .asc " ",0 ; String 20
 .asc "",A_FWCYAN,"Blake    ",A_FWWHITE,"Gareth Thomas",0 ; String 21
 .asc "",A_FWCYAN,"Avon     ",A_FWWHITE,"Paul Darrow",0 ; String 22
@@ -411,28 +411,28 @@ res_start
 .asc "",A_FWCYAN,"Servalan ",A_FWWHITE,"Jaqueline Pierce",0 ; String 28
 .asc "",A_FWCYAN,"Travis   ",A_FWWHITE,"Stephen Greif",0 ; String 29
 .asc "",A_FWCYAN,"         ",A_FWWHITE,"Brian Croucher",0 ; String 30
-.asc "",A_FWYELLOW,"LOS 7 DE BLAKE: El Juego de Oric",0 ; String 31
+.asc "",A_FWYELLOW,"BLAKE'S 7: The Oric Game",0 ; String 31
 .asc " ",0 ; String 32
-.asc "",A_FWWHITE,"Espero que hayas disfrutado jugando",0 ; String 33
-.asc "",A_FWWHITE,"este juego tanto como yo haci",92,"ndolo.",0 ; String 34
+.asc "",A_FWWHITE,"I hope you enjoyed playing this game",0 ; String 33
+.asc "",A_FWWHITE,"as much as I enjoyed creating it.",0 ; String 34
 .asc " ",0 ; String 35
-.asc "",A_FWWHITE,"Gracias a todos los que ayudaron con",0 ; String 36
-.asc "",A_FWWHITE,"sugerencias, opiniones y ",91,"nimos",0 ; String 37
-.asc "",A_FWWHITE,"durante todo este proceso.",0 ; String 38
+.asc "",A_FWWHITE,"Many thanks to everyone who helped",0 ; String 36
+.asc "",A_FWWHITE,"with suggestions, feedback, and",0 ; String 37
+.asc "",A_FWWHITE,"encouragement during this process.",0 ; String 38
 .asc " ",0 ; String 39
-.asc "",A_FWWHITE,"Gracias especialmente a la gente",0 ; String 40
-.asc "",A_FWWHITE,"de RetroWiki, Defence-Force,",0 ; String 41
-.asc "",A_FWWHITE,"y AmigaWave. Sois incre",93,"bles.",0 ; String 42
+.asc "",A_FWWHITE,"Special thanks to the incredible",0 ; String 40
+.asc "",A_FWWHITE,"people of RetroWiki, Defence-Force,",0 ; String 41
+.asc "",A_FWWHITE,"and AmigaWave.",0 ; String 42
 .asc " ",0 ; String 43
-.asc "",A_FWWHITE,"Gracias a Greymagick, como siempre, por",0 ; String 44
-.asc "",A_FWWHITE,"su ayuda - y paciencia - inestimables.",0 ; String 45
+.asc "",A_FWWHITE,"Thanks to Greymagick, as usual, for",0 ; String 44
+.asc "",A_FWWHITE,"his invaluable advice - and patience.",0 ; String 45
 .asc " ",0 ; String 46
-.asc "",A_FWWHITE,"Gracias a jojo073 por esos dise",35,"os",0 ; String 47
-.asc "",A_FWWHITE,"geniales tuyos.",0 ; String 48
+.asc "",A_FWWHITE,"Thanks to jojo073 for his incredible",0 ; String 47
+.asc "",A_FWWHITE,"graphic designs.",0 ; String 48
 .asc " ",0 ; String 49
-.asc "",A_FWWHITE,"Y gracias a la comunidad Oric por",0 ; String 50
-.asc "",A_FWWHITE,"estar ah",93,". Esta vez he querido crear",0 ; String 51
-.asc "",A_FWWHITE,"algo realmente especial.",0 ; String 52
+.asc "",A_FWWHITE,"And thanks to the Oric community for",0 ; String 50
+.asc "",A_FWWHITE,"being there. This time I wanted to",0 ; String 51
+.asc "",A_FWWHITE,"create something really special.",0 ; String 52
 .asc " ",0 ; String 53
 .asc "",A_FWYELLOW,"(C)Chema (enguita AT gmail.com) 2017",0 ; String 54
 res_end

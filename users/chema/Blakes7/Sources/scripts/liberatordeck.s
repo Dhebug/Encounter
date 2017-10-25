@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "Todo tipo de paneles y controles.",0 ; String 0
-.asc "Hay que ser un piloto experimentado.",0 ; String 1
+.asc "All kind of panels and controls.",0 ; String 0
+.asc "It takes a very skilled pilot, not me!",0 ; String 1
 res_end
 .)
 
@@ -567,16 +567,16 @@ res_start
 .asc " Jenna Stannis...",0 ; String 0
 .asc " Kerr Avon...",0 ; String 1
 .asc " Roj Blake...",0 ; String 2
-.asc " Tu mente es transparente...",0 ; String 3
-.asc " Imagen implantada.",0 ; String 4
-.asc "",125,"Mam",91,"! ",125,"mam",91," no me dejes!",0 ; String 5
-.asc "",125,"Vuelve! mam",91,"...",0 ; String 6
-.asc "",125,"Hermano! ",125,"cuidado! ",125,"no vayas!...",0 ; String 7
-.asc "No. ",125,"Escucha! ",125,"VAS A MORIR!",0 ; String 8
-.asc " --Alerta: Error leyendo mente...",0 ; String 9
+.asc " Your mind is transparent to me...",0 ; String 3
+.asc " Image implanted.",0 ; String 4
+.asc "Mum, mum, don't leave me!",0 ; String 5
+.asc "Come back! mum...",0 ; String 6
+.asc "Brother! Be careful!, don't go...",0 ; String 7
+.asc "No. Listen to me! You'll DIE!",0 ; String 8
+.asc " --Warning: Error reading mind...",0 ; String 9
 .asc " ",0 ; String 10
-.asc "Blake, ",125,"mira! ",126,"qu",92," es eso?",0 ; String 11
-.asc "Puede ser un sistema defensivo.",0 ; String 12
-.asc "",125,"Jenna! ",125,"Avon! ",125,"resistid!",0 ; String 13
+.asc "Blake! Look! What is that?",0 ; String 11
+.asc "A defensive system, maybe.",0 ; String 12
+.asc "Jenna! Avon! Resist!",0 ; String 13
 res_end
 .)

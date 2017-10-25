@@ -10,38 +10,38 @@
 .word (res_end-res_start +4)
 .byt 102
 res_start
-.asc "La mejor.",0 ; String 0
-.asc "Si se mueve, puedo pilotarla.",0 ; String 1
-.asc "",126,"Qui",92,"n sabe?",0 ; String 2
-.asc "Nadie ha vuelto para decirlo.",0 ; String 3
-.asc "Biom",92,"trica. Reconoce la palma.",0 ; String 4
-.asc "Dif",93,"cil. Pregunta al experto...",0 ; String 5
-.asc "La probabilidad de sobrevivir las",0 ; String 6
-.asc "primeras 30 horas es del 10%.",0 ; String 7
-.asc "Dicen que estos transportes no van",0 ; String 8
-.asc "realmente hasta Cygnus.",0 ; String 9
-.asc "Llegan al espacio profundo y ah",93,"",0 ; String 10
-.asc "te tiran por la escotilla.",0 ; String 11
-.asc "Eres un tonto.",0 ; String 12
-.asc "Si estoy suficientemente asustado.",0 ; String 13
-.asc "Este tipo es dif",93,"cil de romper, pero",0 ; String 14
-.asc "falla mucho, as",93," que suelen llevar",0 ; String 15
-.asc "una tarjeta de acceso adicional.",0 ; String 16
-.asc "Intent",92," robar la suya al guarda",0 ; String 17
-.asc "antes, pero cog",93," su bater",93,"a de",0 ; String 18
-.asc "repuesto. Aqu",93," est",91,". L",91,"stima.",0 ; String 19
-.asc "ERES tonto.",0 ; String 20
-.asc "No estoy seguro, pero lo intentar",92,".",0 ; String 21
-.asc "",125,"Cuenta conmigo!",0 ; String 22
-.asc "Falsear el registro para ganar tiempo.",0 ; String 23
-.asc "Si accedemos a la computadora,",0 ; String 24
-.asc "",126,"es posible?",0 ; String 25
-.asc "Nadie aqu",93," podr",93,"a hacerlo.",0 ; String 26
-.asc "Excepto t",95,".",0 ; String 27
-.asc "Naturalmente.",0 ; String 28
-.asc "",126,"Podr",93,"as pilotarla, Jenna?",0 ; String 29
-.asc "Claro.",0 ; String 30
-.asc "Podr",93,"a tambi",92,"n seducir a un guarda...",0 ; String 31
-.asc "Pero no s",92," c",94,"mo traer a uno.",0 ; String 32
+.asc "Best you could find.",0 ; String 0
+.asc "If it moves, I can fly it.",0 ; String 1
+.asc "Who knows?",0 ; String 2
+.asc "Nobody has ever returned to tell.",0 ; String 3
+.asc "Biometric. Palm recognition type.",0 ; String 4
+.asc "Hard to break. Ask our expert...",0 ; String 5
+.asc "The probability of surviving the",0 ; String 6
+.asc "first 30 hours is below 10%.",0 ; String 7
+.asc "They say these prison ships don't",0 ; String 8
+.asc "actually go all the way to Cygnus.",0 ; String 9
+.asc "They wait until they're in deep space,",0 ; String 10
+.asc "and then dump you out of an airlock.",0 ; String 11
+.asc "You're a fool.",0 ; String 12
+.asc "If I am scared enough...",0 ; String 13
+.asc "Biometric locks are really hard,",0 ; String 14
+.asc "but they are prone to fail, so they",0 ; String 15
+.asc "usually include a keycard override.",0 ; String 16
+.asc "I tried to get the card from the guard",0 ; String 17
+.asc "before, but I took his backup battery",0 ; String 18
+.asc "instead. Here it is. Pity, eh?.",0 ; String 19
+.asc "You ARE a fool.",0 ; String 20
+.asc "Not sure, but I will try.",0 ; String 21
+.asc "Sure. Count me in!",0 ; String 22
+.asc "Fake the logs to gain time to escape.",0 ; String 23
+.asc "With access to the computer,",0 ; String 24
+.asc "could it be done?",0 ; String 25
+.asc "Nobody on this ship could do it.",0 ; String 26
+.asc "Except you.",0 ; String 27
+.asc "Naturally.",0 ; String 28
+.asc "Could you pilot it, Jenna?",0 ; String 29
+.asc "Sure.",0 ; String 30
+.asc "I could use my charm on a guard...",0 ; String 31
+.asc "but I don't know how to lure one in.",0 ; String 32
 res_end
 .)

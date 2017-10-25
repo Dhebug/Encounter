@@ -118,10 +118,10 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Quiero recoger mi ropa.",0 ; String 0
-.asc "No. ",126,"Puede hacer algo?",0 ; String 1
-.asc "S",93,", el c",94,"digo es SP-1999-CH.",0 ; String 2
-.asc "Eso es todo, gracias. Adi",94,"s.",0 ; String 3
+.asc "I want to pick up my clothes.",0 ; String 0
+.asc "No. Is there anything I could do?",0 ; String 1
+.asc "Yes, code is SP-1999-CH.",0 ; String 2
+.asc "That's all, thank you. Bye.",0 ; String 3
 res_end
 .)
 
@@ -270,16 +270,16 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Un extra",35,"o robot est",91," al mostrador.",0 ; String 0
+.asc "A strange robot is at the counter.",0 ; String 0
 .asc " ",0 ; String 1
-.asc " Bienvenido a Lavander",93,"a Fresh, se",35,"or.",0 ; String 2
-.asc " ",126,"Qu",92," puedo hacer por usted?",0 ; String 3
-.asc " A su servicio. Tenga un buen d",93,"a.",0 ; String 4
-.asc " Por supuesto, ",126,"tiene el c",94,"digo?",0 ; String 5
-.asc " Lo siento.",0 ; String 6
-.asc " Compruebe sus mensajes personales,",0 ; String 7
-.asc " deber",93,"a haber recibido el c",94,"digo.",0 ; String 8
-.asc " Claro, se",35,"or. Aqu",93," est",91,".",0 ; String 9
-.asc "No necesito nada de ",92,"l.",0 ; String 10
+.asc " Welcome to Fresh Laundry, sir.",0 ; String 2
+.asc " What can I do for you?",0 ; String 3
+.asc " At your service. Have a nice day.",0 ; String 4
+.asc " Sure, do you have the code?",0 ; String 5
+.asc " Sorry.",0 ; String 6
+.asc " Check your personnal messages,",0 ; String 7
+.asc " you should have received the code.",0 ; String 8
+.asc " Sure, sir. Here it is.",0 ; String 9
+.asc "I don't need anything from him.",0 ; String 10
 res_end
 .)

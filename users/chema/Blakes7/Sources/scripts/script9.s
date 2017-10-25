@@ -158,31 +158,31 @@ res_end
 .word (res_end-res_start +4)
 .byt 100
 res_start
-.asc "",126,"Encontr",94," Blake al resto?",0 ; String 0
-.asc "Aun no. Apuesto a que acabar",91," muerto.",0 ; String 1
-.asc "Para con eso.",0 ; String 2
-.asc "Esta nave vale billones.",0 ; String 3
-.asc "Fijo.",0 ; String 4
-.asc "Podr",93,"as comprar lo que quisieses.",0 ; String 5
-.asc "Probablemente...",0 ; String 6
-.asc "Todo. Pi",92,"nsalo Jenna.",0 ; String 7
-.asc "",126,"Y Blake?",0 ; String 8
-.asc "Qu",92," pasa con ",92,"l.",0 ; String 9
+.asc "Did Blake find the others?",0 ; String 0
+.asc "Not yet. I bet he'll end up killed.",0 ; String 1
+.asc "Quit that.",0 ; String 2
+.asc "This ship is worth billions.",0 ; String 3
+.asc "Sure.",0 ; String 4
+.asc "You could buy anything with this.",0 ; String 5
+.asc "Probably...",0 ; String 6
+.asc "Anything at all. Think of it Jenna.",0 ; String 7
+.asc "But what about Blake?",0 ; String 8
+.asc "What about him.",0 ; String 9
 .asc "No.",0 ; String 10
-.asc "Podr",93,"amos tener un planeta propio.",0 ; String 11
-.asc "No lo vamos a dejar aqu",93,".",0 ; String 12
-.asc "Pero debemos. Es un cruzado.",0 ; String 13
-.asc "Mirar",91," todo esto y s",94,"lo vera un arma",0 ; String 14
-.asc "para utilizar contra la Federaci",94,"n.",0 ; String 15
-.asc "Y no puede ganar. Sabes que no puede.",0 ; String 16
-.asc "",126,"Prefieres ser rica o estar muerta?",0 ; String 17
-.asc "Una hora. Esperaremos una hora.",0 ; String 18
-.asc "",126,"Por qu",92,"? ",126,"para qu",92," esperar?",0 ; String 19
-.asc "Para convencerme a m",93," misma de que le",0 ; String 20
-.asc "dimos una oportunidad.",0 ; String 21
-.asc "Si no ha vuelto para entonces...",0 ; String 22
-.asc "Est",91," bien.",0 ; String 23
-.asc " Mientras, en El Liberador...",0 ; String 24
+.asc "We could own our own planet.",0 ; String 11
+.asc "We're not leaving him here.",0 ; String 12
+.asc "We have to. He's a crusader.",0 ; String 13
+.asc "He'll look upon all this as just a",0 ; String 14
+.asc "weapon to use against the Federation.",0 ; String 15
+.asc "And he can't win. You know he can't.",0 ; String 16
+.asc "What do you want to be rich or dead?",0 ; String 17
+.asc "An hour. We'll wait an hour.",0 ; String 18
+.asc "Why? Why wait?",0 ; String 19
+.asc "Because that way I can convince myself",0 ; String 20
+.asc "that we gave him a fair chance.",0 ; String 21
+.asc "If he's not back by then...",0 ; String 22
+.asc "All right.",0 ; String 23
+.asc " Meanwhile, in The Liberator...",0 ; String 24
 .asc " ",0 ; String 25
 res_end
 .)

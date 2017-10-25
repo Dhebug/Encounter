@@ -329,27 +329,27 @@ res_end
 .byt 200
 res_start
 .asc " ",0 ; String 0
-.asc " Los sistemas funcionan normalmente.",0 ; String 1
-.asc " No se detectan naves en rango.",0 ; String 2
-.asc " La unidad de teletransporte es",0 ; String 3
-.asc " independiente de mis funciones.",0 ; String 4
-.asc " Puedo controlar la climatizaci",94,"n.",0 ; String 5
-.asc " Los sensores detectan dos naves",0 ; String 6
-.asc " apareciendo sobre el horizonte.",0 ; String 7
-.asc " Los datos disponibles los clasifican",0 ; String 8
-.asc " como naves de persecuci",94,"n.",0 ; String 9
-.asc " Confirmado.",0 ; String 10
-.asc " La estimaci",94,"n ser",93,"a de 2.5 contra 3",0 ; String 11
-.asc " de sobrevivir durante el primer a",35,"o.",0 ; String 12
-.asc " Indique rumbo y velocidad, por favor.",0 ; String 13
-.asc "Estos controles son parte de los",0 ; String 14
-.asc "sistemas de Zen.",0 ; String 15
-.asc "",126,"C",94,"mo voy a usarlos?",0 ; String 16
-.asc "Buena idea. Conectar",92," el transmisor",0 ; String 17
-.asc "al indicador del sistema de aire.",0 ; String 18
-.asc "acondicionado.",0 ; String 19
-.asc "No puedo hacer eso.",0 ; String 20
-.asc "Este es Zen: La IA del Libertador.",0 ; String 21
+.asc " All systems functioning normally.",0 ; String 1
+.asc " No ships detected within range.",0 ; String 2
+.asc " The teleport unit is independent",0 ; String 3
+.asc " from my functions.",0 ; String 4
+.asc " I can control the air conditioning.",0 ; String 5
+.asc " Sensors detect two ships appearing",0 ; String 6
+.asc " above the horizon.",0 ; String 7
+.asc " Available data classifies them as",0 ; String 8
+.asc " Federation pursuit ships.",0 ; String 9
+.asc " Confirmed.",0 ; String 10
+.asc " The estimated odds would be of 2.5",0 ; String 11
+.asc " to 3 on survival the first year.",0 ; String 12
+.asc " Please state course and speed.",0 ; String 13
+.asc "These controls are part of Zen's",0 ; String 14
+.asc "systems.",0 ; String 15
+.asc "How would I use them?",0 ; String 16
+.asc "Good idea. I can attach the transmitter",0 ; String 17
+.asc "to the indicator of the air",0 ; String 18
+.asc "conditioning system.",0 ; String 19
+.asc "I can't do that.",0 ; String 20
+.asc "This is Zen: The Libarator's AI.",0 ; String 21
 res_end
 .)
 
@@ -371,10 +371,10 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Zen, informe de todos los sistemas.",0 ; String 0
-.asc "Zen, escaneo completo.",0 ; String 1
-.asc "Zen, ",126,"puedes operar el teletransporte?",0 ; String 2
-.asc "Eso es todo, Zen.",0 ; String 3
+.asc "Zen, full report on all systems.",0 ; String 0
+.asc "Zen, full sensor scan.",0 ; String 1
+.asc "Zen, can you operate the teleport?",0 ; String 2
+.asc "That's all, Zen.",0 ; String 3
 res_end
 .)
 

@@ -10,37 +10,37 @@
 .word (res_end-res_start +4)
 .byt 101
 res_start
-.asc "Avon y yo tomaremos el control de la",0 ; String 0
-.asc "computadora. El resto buscar",91," la",0 ; String 1
-.asc "armer",93,"a y tomar",91," las armas que pueda.",0 ; String 2
-.asc "Dame una s",94,"la raz",94,"n por la que deber",93,"a",0 ; String 3
-.asc "ayudarte.",0 ; String 4
-.asc "Eres un hombre civilizado, Avon.",0 ; String 5
-.asc "En Cygnus Alpha eso no ser",91," una",0 ; String 6
-.asc "caracter",93,"stica de supervivencia.",0 ; String 7
-.asc "Mientras que t",95," me ofreces seguridad.",0 ; String 8
-.asc "No. Una oportunidad de libertad.",0 ; String 9
-.asc "Tienes un ej",92,"rcito de cuatro, Blake.",0 ; String 10
-.asc "",125,"Cuatro y EL! ",126,"De veras piensas que",0 ; String 11
-.asc "puedes tomar el control de la nave?",0 ; String 12
-.asc "Si haces tu parte.",0 ; String 13
-.asc "Si tenemos ",92,"xito ",126,"luego qu",92,"?",0 ; String 14
-.asc "Volver a la Tierra.",0 ; String 15
-.asc "",126,"A la Tierra?",0 ; String 16
-.asc "Sab",93,"a que estabas loco.",0 ; String 17
-.asc "Asesinaron a mi familia y amigos.",0 ; String 18
-.asc "Eliminaron mi pasado y me tuvieron",0 ; String 19
-.asc "narcotizado.",0 ; String 20
-.asc "Al menos sigues vivo.",0 ; String 21
-.asc "No hasta que el hombre sea libre.",0 ; String 22
-.asc "No hasta que el poder vuelva a",0 ; String 23
-.asc "manos de los honestos.",0 ; String 24
-.asc "El dinero es la ",95,"nica realidad.",0 ; String 25
-.asc "",125,"Despierta, Blake!",0 ; String 26
-.asc "Quiz",91,"s ya no est",92,"s narcotizado,",0 ; String 27
-.asc "pero sigues so",35,"ando",0 ; String 28
-.asc "Algunos sue",35,"os merecen la pena.",0 ; String 29
-.asc "No crees eso.",0 ; String 30
-.asc "No, pero quisiera.",0 ; String 31
+.asc "Avon and I will take control of the",0 ; String 0
+.asc "computer. The rest will find the",0 ; String 1
+.asc "armoury and get all the guns you can.",0 ; String 2
+.asc "Give me one good reason why I should",0 ; String 3
+.asc "help you.",0 ; String 4
+.asc "You're a civilized man, Avon.",0 ; String 5
+.asc "On Cygnus Alpha that will not be a",0 ; String 6
+.asc "survival characteristic.",0 ; String 7
+.asc "Whereas you are offering me safety.",0 ; String 8
+.asc "I'm offering you the chance of freedom.",0 ; String 9
+.asc "You've got an army of four, Blake.",0 ; String 10
+.asc "Four and HIM! Do you still think you",0 ; String 11
+.asc "can take over the ship?",0 ; String 12
+.asc "If you do your bit.",0 ; String 13
+.asc "Imagine we succeed. What next?",0 ; String 14
+.asc "Find a way of getting back to Earth.",0 ; String 15
+.asc "Back to Earth?",0 ; String 16
+.asc "I thought you were probably insane.",0 ; String 17
+.asc "They butchered my family, my friends.",0 ; String 18
+.asc "They murdered my past and gave me",0 ; String 19
+.asc "tranquilized dreams.",0 ; String 20
+.asc "At least you're still alive.",0 ; String 21
+.asc "Not until free men can think and",0 ; String 22
+.asc "speak. Not until power is back with",0 ; String 23
+.asc "the honest man.",0 ; String 24
+.asc "Wealth is the only reality.",0 ; String 25
+.asc "Wake up, Blake! You may not be",0 ; String 26
+.asc "tranquilized any longer, but you're",0 ; String 27
+.asc "still dreaming.",0 ; String 28
+.asc "Maybe some dreams are worth having.",0 ; String 29
+.asc "You don't really believe that.",0 ; String 30
+.asc "No, but I'd like to.",0 ; String 31
 res_end
 .)

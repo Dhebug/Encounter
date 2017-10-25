@@ -29,6 +29,6 @@ res_end
 .word (res_end-res_start +4)
 .byt 29
 res_start
-.asc "Un transmisor para operar el rel",92,".",0 ; String 0
+.asc "A transmitter to operate the relay.",0 ; String 0
 res_end
 .)

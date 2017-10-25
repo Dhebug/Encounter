@@ -10,52 +10,52 @@
 .word (res_end-res_start +4)
 .byt 100
 res_start
-.asc "",125,"Hey! ",125,"Calma!",0 ; String 0
-.asc "Odio la violencia personal,",0 ; String 1
-.asc "especialmente si yo soy la persona.",0 ; String 2
-.asc "",125,"Hola!",0 ; String 3
-.asc "",126,"Qui",92,"n eres?",0 ; String 4
+.asc "Easy! Take it easy!",0 ; String 0
+.asc "I hate personal violence,",0 ; String 1
+.asc "especially when I'm the person.",0 ; String 2
+.asc "Hi!",0 ; String 3
+.asc "Who are you?",0 ; String 4
 .asc "Vila Restal.",0 ; String 5
-.asc "Roj Blake. ",126,"Por qu",92," est",91,"s aqu",93,"?",0 ; String 6
-.asc "No tuve eleccion.",0 ; String 7
-.asc "Robo cosas.",0 ; String 8
-.asc "Compulsivo, me temo.",0 ; String 9
-.asc "Me ajustaron la cabeza los mejores",0 ; String 10
-.asc "del campo.",0 ; String 11
-.asc "Pero no se queda ajustada.",0 ; String 12
-.asc "",126,"Cu",91,"l es tu historia?",0 ; String 13
-.asc "Bueno, soy inocente-- ",0 ; String 14
-.asc "al menos de lo que me acusaron.",0 ; String 15
-.asc "Claro...",0 ; String 16
-.asc "",126,"El resto?",0 ; String 17
-.asc "Oh, un grupo muy antisocial. Asesinos,",0 ; String 18
-.asc "tramposos,... contrabandistas...",0 ; String 19
-.asc "-- ladrones -",0 ; String 20
-.asc "-- y esos son los amables.",0 ; String 21
-.asc "",126,"Por qu",92," est",91,"s aqu",93,"?",0 ; String 22
-.asc "Comerciaba por los Mundos Cercanos.",0 ; String 23
-.asc "Soy una comerciante independiente.",0 ; String 24
-.asc "Contrabandista. Una de las buenas:",0 ; String 25
-.asc "Jenna Stannis. Es un honor estar",0 ; String 26
-.asc "preso con ella.",0 ; String 27
-.asc "Me alegro de complacerte.",0 ; String 28
+.asc "Roj Blake. Why are you here?",0 ; String 6
+.asc "They didn't give me a choice.",0 ; String 7
+.asc "I steal things.",0 ; String 8
+.asc "Compulsive, I'm afraid.",0 ; String 9
+.asc "I've had my head adjusted by some",0 ; String 10
+.asc "of the best in the business.",0 ; String 11
+.asc "But it just won't stay adjusted.",0 ; String 12
+.asc "What's your story?",0 ; String 13
+.asc "Well, I'm innocent-- ",0 ; String 14
+.asc "of what I was charged with anyway.",0 ; String 15
+.asc "Of course...",0 ; String 16
+.asc "What about the others?",0 ; String 17
+.asc "Oh, a very antisocial bunch. Murderers,",0 ; String 18
+.asc "liars, cheats, smugglers...",0 ; String 19
+.asc "-- thieves -",0 ; String 20
+.asc "-- and they're the nice people.",0 ; String 21
+.asc "Why are you here?",0 ; String 22
+.asc "I was trading 'round the Near Worlds.",0 ; String 23
+.asc "I'm a free trader.",0 ; String 24
+.asc "A smuggler. She's a big name:",0 ; String 25
+.asc "Jenna Stannis. It's an honor to be",0 ; String 26
+.asc "locked up with her.",0 ; String 27
+.asc "I'm glad you're pleased.",0 ; String 28
 .asc "Blake -- Kerr Avon.",0 ; String 29
-.asc "Con los ordenadores, es el n",95,"mero",0 ; String 30
-.asc "dos de toda la Federaci",94,"n.",0 ; String 31
-.asc "",125,"Casi roba 5 millones!",0 ; String 32
-.asc "",126,"Qui",92,"n es el n",95,"mero uno?",0 ; String 33
-.asc "El que lo pill",94,".",0 ; String 34
-.asc "",126,"Qu",92," pas",94,"?",0 ; String 35
-.asc "Confi",92," en otra gente.",0 ; String 36
-.asc "Blake -- ",92,"l es Olag Gan.",0 ; String 37
-.asc "Tuvo un... bueno...",0 ; String 38
-.asc "incidente con un guardia.",0 ; String 39
-.asc "",125,"No quer",93,"a matarle!",0 ; String 40
-.asc "El estaba armado y yo no.",0 ; String 41
-.asc "Mat",94," a mi compa",35,"era...",0 ; String 42
-.asc "Gan me ha estado cuidando.",0 ; String 43
-.asc "Es un amigo leal.",0 ; String 44
-.asc "Su fuerza y tus... habilidades",0 ; String 45
-.asc "ser",91,"n de mucha ayuda.",0 ; String 46
+.asc "When it comes to computers, he's the",0 ; String 30
+.asc "number two man in all the Federated",0 ; String 31
+.asc "worlds. He nearly stole 5 million!",0 ; String 32
+.asc "Who's the number one?",0 ; String 33
+.asc "The guy who caught him.",0 ; String 34
+.asc "What went wrong?",0 ; String 35
+.asc "I relied on other people.",0 ; String 36
+.asc "Blake -- this is Olag Gan.",0 ; String 37
+.asc "He had an... incident",0 ; String 38
+.asc "with a guard.",0 ; String 39
+.asc "I didn't want to kill him!",0 ; String 40
+.asc "He was armed, and I wasn't.",0 ; String 41
+.asc "He killed my woman...",0 ; String 42
+.asc "Gan takes care of me.",0 ; String 43
+.asc "He is a loyal friend of mine.",0 ; String 44
+.asc "His strength and your... abilities",0 ; String 45
+.asc "will be really helpful.",0 ; String 46
 res_end
 .)

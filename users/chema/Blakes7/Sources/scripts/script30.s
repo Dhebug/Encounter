@@ -164,35 +164,35 @@ res_end
 .word (res_end-res_start +4)
 .byt 250
 res_start
-.asc "Antes de empezar deja que te ense",35,"e",0 ; String 0
-.asc "algo acerca de la mec",91,"nica de este",0 ; String 1
-.asc "juego.",0 ; String 2
-.asc "Pulsa ESC para saltar esta intro.",0 ; String 3
-.asc "La interfaz es la t",93,"pica de apuntar",0 ; String 4
-.asc "y pulsar de las aventuras gr",91,"ficas,",0 ; String 5
-.asc "con 9 comandos. Por defecto haciendo",0 ; String 6
-.asc "clic en cualquier sitio har",91," que",0 ; String 7
-.asc "camine all",93,", si es posible. No tienes",0 ; String 8
-.asc "que dirigirme. Encuentro yo el camino.",0 ; String 9
-.asc "Como casi ning",95,"n usuario de Oric tiene",0 ; String 10
-.asc "rat",94,"n, tambi",92,"n se pueden usar atajos",0 ; String 11
-.asc "de teclado para los comandos.",0 ; String 12
-.asc "Cada uno tiene asignado un n",95,"mero de",0 ; String 13
-.asc "izquierda a derecha y de arriba a abajo",0 ; String 14
-.asc "'Dale' es 1, 'Usa' es 3 o 'Cierra' 7.",0 ; String 15
-.asc "Si pasas el cursor por un objeto y",0 ; String 16
-.asc "pulsas un n",95,"mero, la acci",94,"n asociada",0 ; String 17
-.asc "se ejecutar",91," sobre el objeto.",0 ; String 18
-.asc "Mira a la fotograf",93,"a de tu derecha.",0 ; String 19
-.asc "Pon el cursor sobre ella y pulsa 5.",0 ; String 20
-.asc "Selecciona la foto y pulsa 5 para",0 ; String 21
-.asc "mirarla, por favor.",0 ; String 22
-.asc "F",91,"cil, ",126,"no?. Puedes redefinir las",0 ; String 23
-.asc "teclas para moverte con una mano y",0 ; String 24
-.asc "dar comandos con la otra.",0 ; String 25
-.asc "Pero depende de t",93,"...",0 ; String 26
-.asc "Ahora vamos a por Ravella.",0 ; String 27
-.asc "Tengo que hablar con ella.",0 ; String 28
-.asc "Temo que algo va mal con mi familia.",0 ; String 29
+.asc "Before you start playing, let me show",0 ; String 0
+.asc "you something about the mechanics of",0 ; String 1
+.asc "this game.",0 ; String 2
+.asc "You can press ESC to skip this intro.",0 ; String 3
+.asc "The user interface is the usual point",0 ; String 4
+.asc "and click system of graphic adventures,",0 ; String 5
+.asc "with 9 commands. By default, clicking",0 ; String 6
+.asc "anywhere on the screen will make me",0 ; String 7
+.asc "walk there, if possible. You don't",0 ; String 8
+.asc "have to direct me. I'll find my way.",0 ; String 9
+.asc "As most Oric users do not have a mouse",0 ; String 10
+.asc "in addition to this method, you can",0 ; String 11
+.asc "use shortcuts to actions.",0 ; String 12
+.asc "Each verb is assigned a number, from",0 ; String 13
+.asc "left to right, top to bottom, so",0 ; String 14
+.asc "'Give' is 1, 'Use' is 3 or 'Close' 7.",0 ; String 15
+.asc "If you hover the cursor over an object",0 ; String 16
+.asc "and press a number, the corresponding",0 ; String 17
+.asc "action will be executed.",0 ; String 18
+.asc "Look at the picture on your right.",0 ; String 19
+.asc "Hover the cursor over it, and press 5.",0 ; String 20
+.asc "Select the picture and press 5 to look",0 ; String 21
+.asc "at it, please.",0 ; String 22
+.asc "Easy, isn't it? You could redefine the",0 ; String 23
+.asc "keys to move the cursor with one hand",0 ; String 24
+.asc "and give commands with the other.",0 ; String 25
+.asc "But it is up to you...",0 ; String 26
+.asc "Now, let's go out and find Ravella.",0 ; String 27
+.asc "I have to talk to her about my family.",0 ; String 28
+.asc "I fear something is wrong with them.",0 ; String 29
 res_end
 .)

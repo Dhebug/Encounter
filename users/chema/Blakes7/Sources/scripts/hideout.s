@@ -788,19 +788,19 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Una mesa de control con palancas.",0 ; String 0
-.asc "Esta puerta est",91," cerrada.",0 ; String 1
-.asc "Estos aparatos ya no funcionan.",0 ; String 2
-.asc "Tengo que tirar de ella primero.",0 ; String 3
-.asc "Tengo que empujarla primero.",0 ; String 4
-.asc "Esta es la entrada.",0 ; String 5
-.asc "Pero la puerta est",91," cerrada.",0 ; String 6
-.asc "",125,"Bien! ",125,"Buen trabajo!",0 ; String 7
-.asc "A trav",92,"s de estos t",95,"neles se llega",0 ; String 8
-.asc "al pasillo de servicio de la base.",0 ; String 9
-.asc "A ver si recuerdo el camino...",0 ; String 10
-.asc "No hace falta. La puerta est",91," abierta.",0 ; String 11
-.asc "Los sistemas no tienen energ",93,"a.",0 ; String 12
-.asc "",125,"Funciona! Los sistemas arrancan.",0 ; String 13
+.asc "A control desk with levers.",0 ; String 0
+.asc "This door is closed.",0 ; String 1
+.asc "These controls are not working anymore.",0 ; String 2
+.asc "I have to pull it first.",0 ; String 3
+.asc "I have to push it first.",0 ; String 4
+.asc "This is the entrance.",0 ; String 5
+.asc "But the door is closed.",0 ; String 6
+.asc "Great! Good job!",0 ; String 7
+.asc "Through these tunnels we can reach",0 ; String 8
+.asc "a service corridor of the base.",0 ; String 9
+.asc "Let's see if I can remember the way.",0 ; String 10
+.asc "There's no need. The door is open.",0 ; String 11
+.asc "All the systems are unpowered.",0 ; String 12
+.asc "It worked! Systems are up.",0 ; String 13
 res_end
 .)

@@ -88,10 +88,10 @@ res_end
 .word (res_end-res_start +4)
 .byt 28
 res_start
-.asc "Parece un peque",35,"o dron, pero est",91,"",0 ; String 0
-.asc "roto sin posibilidad de reparaci",94,"n.",0 ; String 1
-.asc "No sabr",93,"a qu",92," hacer con ",92,"l.",0 ; String 2
-.asc "Me pregunto si podr",93,"a hacer algo con",0 ; String 3
-.asc "ese transmisor y ese receptor...",0 ; String 4
+.asc "It looks like a small drone, but it",0 ; String 0
+.asc "seems to be broken beyond repair.",0 ; String 1
+.asc "I wouldn't know what to do with it.",0 ; String 2
+.asc "I wonder if I can make use of that",0 ; String 3
+.asc "transmitter and that receiver...",0 ; String 4
 res_end
 .)

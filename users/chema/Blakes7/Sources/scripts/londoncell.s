@@ -10,36 +10,36 @@
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "Una reja. Estamos en una celda.",0 ; String 0
-.asc "Est",91," cerrada.",0 ; String 1
-.asc "Eso es in",95,"til.",0 ; String 2
-.asc "Ya est",91," cerrada.",0 ; String 3
-.asc "Un cierre sofisticado.",0 ; String 4
-.asc "No puedo operarlo.",0 ; String 5
-.asc "Parece una alarma anti-incendios.",0 ; String 6
-.asc "No llego.",0 ; String 7
-.asc "Nos dijeron que guard",91,"semos nuestros",0 ; String 8
-.asc "efectos aqu",93,".",0 ; String 9
-.asc "Pero nadie tiene nada.",0 ; String 10
-.asc "Mejor no tocarlas.",0 ; String 11
-.asc "Vale, pero no es la t",93,"pica aventura",0 ; String 12
-.asc "donde encuentras una llave tirada",0 ; String 13
-.asc "en la papelera.",0 ; String 14
-.asc "",126,"Ves? S",94,"lo papeles de chicle.",0 ; String 15
-.asc "Fijo que de un hu",92,"sped anterior.",0 ; String 16
-.asc "Coger",92," uno, por si acaso...",0 ; String 17
-.asc "Ya tengo un papel de chicle.",0 ; String 18
-.asc "Papel de chicle. Creo que de aluminio.",0 ; String 19
-.asc "Podr",93,"a envolver algo con esto.",0 ; String 20
-.asc "Eso sali",94," en 'El ",95,"ltimo superviviente'.",0 ; String 21
-.asc "Tengo una idea, pero necesito a Avon.",0 ; String 22
-.asc "Mejor hablo con ",92,"l primero.",0 ; String 23
-.asc "Vamos a conocer a ese cachas antes.",0 ; String 24
-.asc "Una bater",93,"a de repuesto.",0 ; String 25
-.asc "No s",92," qu",92," quieres hacer.",0 ; String 26
-.asc "No tengo que repetir eso.",0 ; String 27
-.asc "Una tarjeta de acceso.",0 ; String 28
-.asc "Mejor la conservo.",0 ; String 29
+.asc "A barred door. We are in a cell.",0 ; String 0
+.asc "It is locked.",0 ; String 1
+.asc "That is useless.",0 ; String 2
+.asc "It is already closed.",0 ; String 3
+.asc "A sophisticated lock.",0 ; String 4
+.asc "I can't operate it.",0 ; String 5
+.asc "It looks like a fire alarm.",0 ; String 6
+.asc "I can't reach it.",0 ; String 7
+.asc "We were told to put our personal",0 ; String 8
+.asc "belongings here.",0 ; String 9
+.asc "But nobody has any.",0 ; String 10
+.asc "Better not touch them.",0 ; String 11
+.asc "Okay... but this is not the typical",0 ; String 12
+.asc "computer adventure where you find",0 ; String 13
+.asc "a key inside the bin.",0 ; String 14
+.asc "See? Just dozens of gum wrappers.",0 ; String 15
+.asc "Probably from a previous lodger.",0 ; String 16
+.asc "I'll take one, just in case...",0 ; String 17
+.asc "I already have one wrapper.",0 ; String 18
+.asc "A gum wrapper. Aluminium, I think.",0 ; String 19
+.asc "I could wrap something with it.",0 ; String 20
+.asc "Oh, I saw this in 'Ultimate Survival'.",0 ; String 21
+.asc "I may have a plan, but I need Avon.",0 ; String 22
+.asc "Better talk to him first.",0 ; String 23
+.asc "Let's meet that strong man, first.",0 ; String 24
+.asc "A backup battery.",0 ; String 25
+.asc "I don't know what you want to do.",0 ; String 26
+.asc "I don't have to do that again.",0 ; String 27
+.asc "A plastic access card.",0 ; String 28
+.asc "I'd better keep it.",0 ; String 29
 res_end
 .)
 
@@ -882,8 +882,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 205
 res_start
-.asc "",126,"C",94,"mo crees que ser",91," Cygnus Alpha?",0 ; String 0
-.asc "As",93," que eres una piloto experta...",0 ; String 1
+.asc "How will Cygnus Alpha be?",0 ; String 0
+.asc "So you're an expert pilot...",0 ; String 1
 res_end
 .)
 
@@ -942,9 +942,9 @@ res_end
 .word (res_end-res_start +4)
 .byt 206
 res_start
-.asc "",126,"Qu",92," sabes de Cygnus Alpha?",0 ; String 0
-.asc "",126,"Sabes c",94,"mo funciona esa cerradura?",0 ; String 1
-.asc "Voy a secuestrar esta nave.",0 ; String 2
+.asc "What do you know about Cygnus Alpha?",0 ; String 0
+.asc "Do you know how that lock works?",0 ; String 1
+.asc "I plan to hijack this ship.",0 ; String 2
 res_end
 .)
 
@@ -1089,8 +1089,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 207
 res_start
-.asc "",126,"Qu",92," has o",93,"do de Cygnus Alpha?",0 ; String 0
-.asc "",126,"Eres bueno abriendo cerraduras?",0 ; String 1
+.asc "Heard anything about Cygnus Alpha?",0 ; String 0
+.asc "Are you good at opening locks?",0 ; String 1
 res_end
 .)
 
@@ -1251,8 +1251,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 208
 res_start
-.asc "",126,"Crees que sobrevivir",91,"s en Cygnus?",0 ; String 0
-.asc "",126,"Est",91,"s dispuesto a intentar escapar?",0 ; String 1
+.asc "Do you think you'll survive in Cygnus?",0 ; String 0
+.asc "Will you be willing to attempt escape?",0 ; String 1
 res_end
 .)
 
@@ -1291,22 +1291,22 @@ res_end
 .word (res_end-res_start +4)
 .byt 221
 res_start
-.asc "De acuerdo. Atr",91,"s y silencio.",0 ; String 0
-.asc "Esta alarma siempre falla.",0 ; String 1
-.asc "La desactiv",92," tres veces en nuestro",0 ; String 2
-.asc "viaje anterior. Se dispara sola.",0 ; String 3
-.asc "A ver..",0 ; String 4
-.asc "Ning",95,"n problema. Vamos.",0 ; String 5
-.asc "",125,"Que no te muevas!",0 ; String 6
-.asc "(Jenna... el guarda...)",0 ; String 7
-.asc "(Aj",91,", te entiendo...)",0 ; String 8
-.asc "Por favor, s",91,"came de aqu",93,".",0 ; String 9
-.asc "Estar",92," MUY agradecida...",0 ; String 10
-.asc "",125,"Silencio, basura!",0 ; String 11
-.asc "",125,"Te pudrir",91,"s en Cygnus!",0 ; String 12
-.asc "Te visito luego, de todas formas.",0 ; String 13
-.asc "",125,"Esta vez lo hice!",0 ; String 14
-.asc "Aqu",93," tienes...",0 ; String 15
+.asc "Okay, stay back and quiet.",0 ; String 0
+.asc "This alarm is always failing.",0 ; String 1
+.asc "I deactivated it three times in our",0 ; String 2
+.asc "last trip. It fires for no reason.",0 ; String 3
+.asc "Let me check..",0 ; String 4
+.asc "Okay. No problem. Let's go.",0 ; String 5
+.asc "I said don't move!",0 ; String 6
+.asc "(Jenna... the guard...)",0 ; String 7
+.asc "(Okay I got you...)",0 ; String 8
+.asc "Please, help me get out of here.",0 ; String 9
+.asc "I will be REALLY grateful...",0 ; String 10
+.asc "Shut up you scum!",0 ; String 11
+.asc "You'll rot in Cygnus!",0 ; String 12
+.asc "I will visit you later, anyway.",0 ; String 13
+.asc "This time I think I got it!",0 ; String 14
+.asc "Here you are...",0 ; String 15
 res_end
 .)
 

@@ -10,10 +10,10 @@
 .word (res_end-res_start +4)
 .byt 45
 res_start
-.asc "Completamente loco. ",125,"Y armado!",0 ; String 0
-.asc "Quiz",91," si entrase en la cabina...",0 ; String 1
-.asc "Buen intento, pero in",95,"til.",0 ; String 2
-.asc "Te matar",92," ",125,"AHORA!",0 ; String 3
+.asc "He's completely mad. And armed!",0 ; String 0
+.asc "Maybe if he entered the cabin...",0 ; String 1
+.asc "Nice try! But useless.",0 ; String 2
+.asc "I will kill you NOW!",0 ; String 3
 res_end
 .)
 

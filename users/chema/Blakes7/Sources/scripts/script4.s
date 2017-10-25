@@ -429,57 +429,57 @@ res_end
 .word (res_end-res_start +4)
 .byt 103
 res_start
-.asc "",A_FWYELLOW,"Todos los sistemas listos.",0 ; String 0
-.asc "",A_FWCYAN,"Compruebe nuestra posici",94,"n.",0 ; String 1
-.asc "",A_FWCYAN,"Nos hemos salido de la ruta.",0 ; String 2
-.asc "",A_FWCYAN,"Deme una lectura de ese eco.",0 ; String 3
-.asc "",A_FWYELLOW,"S",93,", se",35,"or.",0 ; String 4
-.asc "",A_FWCYAN,"",125,"Estos datos deben estar mal!",0 ; String 5
-.asc "",A_FWYELLOW,"Tenemos retorno.",0 ; String 6
-.asc "",A_FWCYAN,"Bien, deme la imagen.",0 ; String 7
-.asc "",A_FWYELLOW,"",125,"No puedo ceerlo!",0 ; String 8
-.asc "",A_FWCYAN,"Ll",92,"venos tan cerca como pueda.",0 ; String 9
-.asc "",A_FWYELLOW,"S",93,", se",35,"or.",0 ; String 10
-.asc "",A_FWYELLOW,"",126,"De d",94,"nde habr",91," salido?",0 ; String 11
-.asc "",A_FWCYAN,"Nunca he visto algo como eso.",0 ; String 12
-.asc "",A_FWCYAN,"Parece a la deriva.",0 ; String 13
-.asc "",A_FWCYAN,"Sr. Raiker, mantenga distancia.",0 ; String 14
-.asc "",A_FWYELLOW,"A la orden, se",35,"or.",0 ; String 15
-.asc "",A_FWYELLOW,"Seg",95,"n los datos, est",91," deshabilitada.",0 ; String 16
-.asc "",A_FWYELLOW,"Sin energ",93,"a, s",94,"lo soporte vital.",0 ; String 17
-.asc "",A_FWYELLOW,"No hay se",35,"ales de vida a bordo.",0 ; String 18
-.asc "",A_FWYELLOW,"No creo que pueda moverse.",0 ; String 19
-.asc "",A_FWYELLOW,"Si est",91," abandonada...",0 ; String 20
-.asc "",A_FWCYAN,"Podr",93,"amos mandar un equipo.",0 ; String 21
-.asc "",A_FWCYAN,"",126,"Qui",92,"n sabe lo que habr",91," dentro?",0 ; String 22
-.asc "",A_FWYELLOW,"",125,"Podr",93,"a valer millones!",0 ; String 23
-.asc "",A_FWCYAN,"No tengo suficiente personal...",0 ; String 24
-.asc "",A_FWCYAN,"y no puedo arriesgar a nadie",0 ; String 25
-.asc "",A_FWCYAN,"abordando una nave desconocida.",0 ; String 26
-.asc "",A_FWCYAN,"Podr",93,"a haber sistemas anti-intrusos.",0 ; String 27
-.asc "",A_FWYELLOW,"Igual hay otra opci",94,"n...",0 ; String 28
-.asc "",A_FWYELLOW,"Los que se amotinaron...",0 ; String 29
-.asc "",A_FWYELLOW,"Que comprueben si es seguro mandar",0 ; String 30
-.asc "",A_FWYELLOW,"un equipo a bordo. Si algo va mal,",0 ; String 31
-.asc "",A_FWYELLOW,"",126,"qui",92,"n va a hacer preguntas?",0 ; String 32
-.asc "",A_FWCYAN,"Buena idea, Sr. Raiker.",0 ; String 33
-.asc "",A_FWCYAN,"Env",93,"e a Blake, Avon, y Stannis.",0 ; String 34
-.asc "",A_FWYELLOW,"",125,"S",93,", se",35,"or!",0 ; String 35
+.asc "",A_FWYELLOW,"All systems working sir.",0 ; String 0
+.asc "",A_FWCYAN,"Let's check our position.",0 ; String 1
+.asc "",A_FWCYAN,"We are surely way off route.",0 ; String 2
+.asc "",A_FWCYAN,"Get me a blind reading on that echo.",0 ; String 3
+.asc "",A_FWYELLOW,"Yes, sir.",0 ; String 4
+.asc "",A_FWCYAN,"These readings have got to be wrong!",0 ; String 5
+.asc "",A_FWYELLOW,"We've got the scan back.",0 ; String 6
+.asc "",A_FWCYAN,"Right, get me a picture.",0 ; String 7
+.asc "",A_FWYELLOW,"I don't believe it!",0 ; String 8
+.asc "",A_FWCYAN,"Take us in as close as you can.",0 ; String 9
+.asc "",A_FWYELLOW,"Yes sir.",0 ; String 10
+.asc "",A_FWYELLOW,"Where could it have come from?",0 ; String 11
+.asc "",A_FWCYAN,"I've never seen a ship like that.",0 ; String 12
+.asc "",A_FWCYAN,"She seems to be drifting.",0 ; String 13
+.asc "",A_FWCYAN,"Mr. Raiker. Maintain this distance.",0 ; String 14
+.asc "",A_FWYELLOW,"Right, sir.",0 ; String 15
+.asc "",A_FWYELLOW,"Readings indicate she is disabled.",0 ; String 16
+.asc "",A_FWYELLOW,"No power, just basic life support.",0 ; String 17
+.asc "",A_FWYELLOW,"No signs of life on board.",0 ; String 18
+.asc "",A_FWYELLOW,"I don't think she could move.",0 ; String 19
+.asc "",A_FWYELLOW,"If she's been completely abandoned...",0 ; String 20
+.asc "",A_FWCYAN,"We could put on a boarding party.",0 ; String 21
+.asc "",A_FWCYAN,"Who knows what could be inside?",0 ; String 22
+.asc "",A_FWYELLOW,"It could be worth millions!",0 ; String 23
+.asc "",A_FWCYAN,"I don't have enough personnel...",0 ; String 24
+.asc "",A_FWCYAN,"and I can't risk anybody boarding an",0 ; String 25
+.asc "",A_FWCYAN,"unknown ship.",0 ; String 26
+.asc "",A_FWCYAN,"There may be some protection system.",0 ; String 27
+.asc "",A_FWYELLOW,"Maybe there is another option...",0 ; String 28
+.asc "",A_FWYELLOW,"Those prisoners who rioted...",0 ; String 29
+.asc "",A_FWYELLOW,"They could check if it's safe",0 ; String 30
+.asc "",A_FWYELLOW,"to send a boarding party across.",0 ; String 31
+.asc "",A_FWYELLOW,"If something goes wrong... who'd care?",0 ; String 32
+.asc "",A_FWCYAN,"Wise idea, Mr Raiker.",0 ; String 33
+.asc "",A_FWCYAN,"Send Blake, Avon, and Stannis.",0 ; String 34
+.asc "",A_FWYELLOW,"Yes, sir!",0 ; String 35
 .asc " ",0 ; String 36
-.asc "",A_FWYELLOW,"",125,"Se",35,"or! ",125,"La nave se est",91," moviendo!",0 ; String 37
-.asc "",A_FWYELLOW,"",125,"Se han soltado y escapan!",0 ; String 38
-.asc "",A_FWCYAN,"",126,"C",94,"mo? ",125,"Estaba deshabilitada!",0 ; String 39
-.asc "",A_FWYELLOW,"",125,"No pueden estar pilot",91,"ndola!",0 ; String 40
-.asc "",A_FWCYAN,"",125,"Det",92,"ngala! ",125,"Use las armas!",0 ; String 41
-.asc "",A_FWYELLOW,"S",93," se",35,"or, preparando armas...",0 ; String 42
-.asc "",A_FWCYAN,"",126,"C",94,"mo se mueven tan deprisa?",0 ; String 43
-.asc "",A_FWYELLOW,"Se salen de rango, se",35,"or.",0 ; String 44
-.asc "",A_FWCYAN,"",125,"S",93,"galas a toda potencia!",0 ; String 45
-.asc "",A_FWYELLOW,"Las he perdido. Han hu",93,"do, se",35,"or.",0 ; String 46
-.asc "",A_FWCYAN,"",126,"Qu",92," hemos hecho?",0 ; String 47
-.asc "",A_FWYELLOW,"Puedo intentar calcular...",0 ; String 48
-.asc "",A_FWCYAN,"D",92,"jelo, Sr. Raiker.",0 ; String 49
-.asc "",A_FWCYAN,"Demasiado Tarde. Emita un informe",0 ; String 50
-.asc "",A_FWCYAN,"y continuemos con la misi",94,"n.",0 ; String 51
+.asc "",A_FWYELLOW,"Sir! The unknown ship is moving!",0 ; String 37
+.asc "",A_FWYELLOW,"They have detached and are escaping!",0 ; String 38
+.asc "",A_FWCYAN,"But how? the ship was disabled!",0 ; String 39
+.asc "",A_FWYELLOW,"They cannot be piloting that!",0 ; String 40
+.asc "",A_FWCYAN,"Intercept it! Use our weapons!",0 ; String 41
+.asc "",A_FWYELLOW,"Yes, sir! Arming weapons...",0 ; String 42
+.asc "",A_FWCYAN,"How can they move so fast?",0 ; String 43
+.asc "",A_FWYELLOW,"They are getting out of range, sir.",0 ; String 44
+.asc "",A_FWCYAN,"Follow them at full speed, Mr. Raiker!",0 ; String 45
+.asc "",A_FWYELLOW,"I've lost them! They're gone, sir",0 ; String 46
+.asc "",A_FWCYAN,"What have we done?",0 ; String 47
+.asc "",A_FWYELLOW,"I can try to calculate...",0 ; String 48
+.asc "",A_FWCYAN,"Leave it, Mr. Raiker.",0 ; String 49
+.asc "",A_FWCYAN,"It's too late. Send a report,",0 ; String 50
+.asc "",A_FWCYAN,"and let's continue our mission.",0 ; String 51
 res_end
 .)

@@ -29,6 +29,6 @@ res_end
 .word (res_end-res_start +4)
 .byt 30
 res_start
-.asc "Un rel",92," operado remotamente.",0 ; String 0
+.asc "A remote operated relay.",0 ; String 0
 res_end
 .)

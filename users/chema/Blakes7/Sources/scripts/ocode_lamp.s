@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 44
 res_start
-.asc "Una primitiva l",91,"mpara de aceite.",0 ; String 0
-.asc "No entiendo qu",92," quieres hacer.",0 ; String 1
+.asc "It is a quite primitive oil lamp.",0 ; String 0
+.asc "I don't know what you want to do.",0 ; String 1
 res_end
 .)
 

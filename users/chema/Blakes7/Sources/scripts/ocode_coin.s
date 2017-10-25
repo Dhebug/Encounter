@@ -49,8 +49,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 6
 res_start
-.asc "Un c",92,"ntimo de cr",92,"dito.",0 ; String 0
-.asc "Una moneda fina, peque",35,"a e in",95,"til.",0 ; String 1
-.asc "No es ",95,"til para esto.",0 ; String 2
+.asc "A cent of credit.",0 ; String 0
+.asc "A small, thin, useless coin.",0 ; String 1
+.asc "It is not useful for this.",0 ; String 2
 res_end
 .)

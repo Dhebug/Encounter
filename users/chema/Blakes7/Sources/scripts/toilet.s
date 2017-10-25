@@ -440,24 +440,24 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Es un mu",35,"eco de palitos.",0 ; String 0
-.asc "",126,"Qu",92," puedo decir? Es un v",91,"ter.",0 ; String 1
-.asc "No, gracias. No tengo ganas.",0 ; String 2
-.asc "Es un lavabo. Nada inusual.",0 ; String 3
-.asc "No necesito lavarme las manos",0 ; String 4
-.asc "Est",91," todo lleno de garabatos. Dice:",0 ; String 5
-.asc "Vaya tela.",0 ; String 6
-.asc "Mira, este dice:",0 ; String 7
-.asc "",125,"Qu",92," malo!.",0 ; String 8
-.asc "Veamos...",0 ; String 9
-.asc "Creo que todos son mal",93,"simos.",0 ; String 10
-.asc "Este se lee mal...",0 ; String 11
-.asc "Madre m",93,"a...",0 ; String 12
-.asc "",126,"Ser",91," este mejor?",0 ; String 13
-.asc "Pues no. No lo era.",0 ; String 14
-.asc "Pone: Fuera de Servicio.",0 ; String 15
-.asc "Ya est",91," llena.",0 ; String 16
-.asc "De acuerdo, la llenar",92," de agua.",0 ; String 17
+.asc "It is a stickman.",0 ; String 0
+.asc "What can I say? It is a WC...",0 ; String 1
+.asc "No, thanks. No need now.",0 ; String 2
+.asc "It is a washbasin. Nothing unusual.",0 ; String 3
+.asc "I don't need to wash my hands.",0 ; String 4
+.asc "There are scribbles everywhere.",0 ; String 5
+.asc "Anyway...",0 ; String 6
+.asc "Look, this one says:",0 ; String 7
+.asc "That is a bad one.",0 ; String 8
+.asc "Let's see...",0 ; String 9
+.asc "I think all of them are terrible.",0 ; String 10
+.asc "This is difficult to read...",0 ; String 11
+.asc "Oh, my...",0 ; String 12
+.asc "Will this one be better?",0 ; String 13
+.asc "No. It wasn't.",0 ; String 14
+.asc "It reads: Out of Order.",0 ; String 15
+.asc "It is already full.",0 ; String 16
+.asc "Okay, I'll fill it up with water.",0 ; String 17
 res_end
 .)
 
@@ -467,15 +467,15 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "'Debajo del r",93,"o amarillo",0 ; String 0
-.asc "no hay quien encienda un pitillo.'",0 ; String 1
-.asc "'El kilo de sardineta",0 ; String 2
-.asc "ha subido otra peseta.'",0 ; String 3
-.asc "'Esos tipos con bigote",0 ; String 4
-.asc "tienen cara de hotentote.'",0 ; String 5
-.asc "'Los tipos que fuman puro",0 ; String 6
-.asc "tienen cara de canguro.'",0 ; String 7
-.asc "'Cuando llueve en Almer",93,"a",0 ; String 8
-.asc "se moja hasta mi t",93,"a.'",0 ; String 9
+.asc "'My feelings for you no words can tell",0 ; String 0
+.asc "Except for maybe go to hell'.",0 ; String 1
+.asc "'Oh loving beauty you float with grace",0 ; String 2
+.asc "If only you could hide your face.'",0 ; String 3
+.asc "'Kind, intelligent, loving and hot",0 ; String 4
+.asc "This describes everything you are not.'",0 ; String 5
+.asc "'I love your smile, face, and eyes",0 ; String 6
+.asc "Damn, I'm good at telling lies!'",0 ; String 7
+.asc "'I see your face when I am dreaming",0 ; String 8
+.asc "That's why I always wake up screaming.'",0 ; String 9
 res_end
 .)

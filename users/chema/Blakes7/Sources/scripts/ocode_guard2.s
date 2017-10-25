@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 15
 res_start
-.asc "De nuevo amenazador...",0 ; String 0
-.asc "Debes estar bromeando...",0 ; String 1
-.asc "",126,"Si, camarada?",0 ; String 2
+.asc "Again quite menacing...",0 ; String 0
+.asc "You must be kidding...",0 ; String 1
+.asc "Yes, comrade?",0 ; String 2
 res_end
 .)
 

@@ -10,37 +10,37 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "La Federaci",94,"n nos cuida.",0 ; String 0
-.asc "Mapas disponibles en informaci",94,"n.",0 ; String 1
-.asc "Los complejos de la Federaci",94,"n son...",0 ; String 2
-.asc "bueno, bastante complejos.",0 ; String 3
-.asc "Amiga Wave - Tu canal retro.",0 ; String 4
-.asc "Todos los domingos a las 10pm.",0 ; String 5
-.asc "No hay noticias por ahora.",0 ; String 6
-.asc "Siempre me pareci",94," rara.",0 ; String 7
-.asc "La puerta a mi habitaci",94,"n.",0 ; String 8
-.asc "La puerta a la enfermer",93,"a.",0 ; String 9
-.asc "La puerta a la sala de control.",0 ; String 10
-.asc "Caf",92,"-O-matic.",0 ; String 11
-.asc "S",94,"lo queda descafeinado...",0 ; String 12
-.asc "Necesito una moneda.",0 ; String 13
-.asc "No s",92," qu",92," quieres hacer.",0 ; String 14
-.asc "No me gusta el descafeinado, pero...",0 ; String 15
-.asc "Buf... por poco.",0 ; String 16
-.asc "Ahora es cuesti",94,"n de tiempo.",0 ; String 17
-.asc "",125,"Eh! ",126,"D",94,"nde vas?",0 ; String 18
-.asc "",126,"No sabes leer? No se puede entrar.",0 ; String 19
-.asc "No acepta moneda tan peque",35,"as.",0 ; String 20
-.asc " (",125,"Clinck!)",0 ; String 21
-.asc " (",125,"Clanck!)",0 ; String 22
-.asc " (",125,"CLINCK!)",0 ; String 23
-.asc " (Se enciende y pide producto)",0 ; String 24
-.asc "No pasa nada. ",126,"Qu",92," esperabas?",0 ; String 25
+.asc "The Federation looks after us.",0 ; String 0
+.asc "Maps available at the info area.",0 ; String 1
+.asc "These Federation complexes are...",0 ; String 2
+.asc "well, quite complex.",0 ; String 3
+.asc "Amiga Wave - Your retro channel.",0 ; String 4
+.asc "Every sunday night at 10pm.",0 ; String 5
+.asc "No news at the moment.",0 ; String 6
+.asc "They always look weird to me.",0 ; String 7
+.asc "That's the door to my room.",0 ; String 8
+.asc "That's the door to the nursery.",0 ; String 9
+.asc "That's the door to the control room.",0 ; String 10
+.asc "Cafe-O-matic.",0 ; String 11
+.asc "There is only decaf left...",0 ; String 12
+.asc "I need a coin first.",0 ; String 13
+.asc "I don't know what you want to do.",0 ; String 14
+.asc "I don't like decaf, but...",0 ; String 15
+.asc "Phew... that was close.",0 ; String 16
+.asc "Now it is a matter of time...",0 ; String 17
+.asc "Hey! Where are you going?",0 ; String 18
+.asc "Can't you read? You can't enter there.",0 ; String 19
+.asc "It doesn't accept such small coins.",0 ; String 20
+.asc " (Clinck!)",0 ; String 21
+.asc " (Clanck!)",0 ; String 22
+.asc " (CLINCK!)",0 ; String 23
+.asc " (It turns on and asks for selection)",0 ; String 24
+.asc "Nothing happens. What did you expect?",0 ; String 25
 .asc " ",0 ; String 26
-.asc "Mejor no arriesgarse otra vez.",0 ; String 27
-.asc "Est",91," cerrada.",0 ; String 28
-.asc "Est",91," encendida, esperando selecci",94,"n.",0 ; String 29
-.asc "Eso es una puerta.",0 ; String 30
+.asc "No need to run the risk again.",0 ; String 27
+.asc "This door is closed.",0 ; String 28
+.asc "It is on, waiting for selection.",0 ; String 29
+.asc "That's a door.",0 ; String 30
 res_end
 .)
 
@@ -973,19 +973,19 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "",126,"D",94,"nde estabas?",0 ; String 0
-.asc "Lo siento, se",35,"or.",0 ; String 1
-.asc "Es dif",93,"cil hacerse con un caf",92,".",0 ; String 2
-.asc "En la m",91,"quina s",94,"lo hay descafeniado.",0 ; String 3
-.asc "Adem",91,"s, la moneda de una se",35,"ora",0 ; String 4
-.asc "se acaba de quedar atascada...",0 ; String 5
-.asc "Tuve que ir hasta el nivel 3.",0 ; String 6
-.asc "Vale, vale... escucha...",0 ; String 7
-.asc "Tengo una emergencia - ",125,"mi est",94,"mago!",0 ; String 8
-.asc "Vigila el equipo, por favor.",0 ; String 9
-.asc "Agh, ",125,"me siento fatal!",0 ; String 10
-.asc "",125,"Por supuesto, se",35,"or!",0 ; String 11
-.asc "",125,"Maldita sea!...",0 ; String 12
+.asc "Where were you?",0 ; String 0
+.asc "Sorry, sir.",0 ; String 1
+.asc "It is difficult to find a coffee.",0 ; String 2
+.asc "The machine has only decaf left.",0 ; String 3
+.asc "And even so, the coin of a woman",0 ; String 4
+.asc "just got stuck inside...",0 ; String 5
+.asc "I had to go to Level 3.",0 ; String 6
+.asc "Okay, okay... Listen...",0 ; String 7
+.asc "I have an urgency - oh my stomach!",0 ; String 8
+.asc "Just keep an eye on the equipment",0 ; String 9
+.asc "Argh, I feel horrible!",0 ; String 10
+.asc "Of course, sir!",0 ; String 11
+.asc "Damn!....",0 ; String 12
 res_end
 .)
 
@@ -1811,28 +1811,28 @@ res_end
 .word (res_end-res_start +4)
 .byt 210
 res_start
-.asc "      ULTIMA HORA",0 ; String 0
-.asc "      -----------",0 ; String 1
-.asc "",A_FWGREEN,"Los datos indican un descenso de .5",0 ; String 2
-.asc "",A_FWGREEN,"en t",94,"xicos en el ",95,"ltimo trimestre.",0 ; String 3
-.asc "",A_FWGREEN,"Aunque el aire es aun venenoso, el",0 ; String 4
-.asc "",A_FWGREEN,"trabajo est",91," dando resultados.",0 ; String 5
-.asc "",A_FWGREEN,"Se ha dado permiso de procreaci",94,"n a",0 ; String 6
-.asc "",A_FWGREEN,"tres parejas m",91,"s en la convocatoria",0 ; String 7
-.asc "",A_FWGREEN,"de este a",35,"o. Enviar solicitudes a",0 ; String 8
-.asc "",A_FWGREEN,"la Agencia de Control de Natalidad.",0 ; String 9
-.asc "",A_FWGREEN,"La Federaci",94,"n ha aprobado un plan de",0 ; String 10
-.asc "",A_FWGREEN,"inversi",94,"n de 200 mill millones para",0 ; String 11
-.asc "",A_FWGREEN,"la construcci",94,"n de un centro de",0 ; String 12
-.asc "",A_FWGREEN,"Control Central aqu",93,", en la Tierra.",0 ; String 13
-.asc "",A_FWGREEN,"Una nueva estaci",94,"n de comunicaciones",0 ; String 14
-.asc "",A_FWGREEN,"se ha desplegado en Saurian Major.",0 ; String 15
-.asc "",A_FWGREEN,"Los expertos indican que mejorar",91,"",0 ; String 16
-.asc "",A_FWGREEN,"notablemente las comunicaciones.",0 ; String 17
-.asc "",A_FWGREEN,"El Planeta Auron ha decidido al fin",0 ; String 18
-.asc "",A_FWGREEN,"unisrse a la Federaci",94,"n Terrana,",0 ; String 19
-.asc "",A_FWGREEN,"pese a la tozudez de su anterior",0 ; String 20
-.asc "",A_FWGREEN,"Gobierno. ",125,"Felicidades!",0 ; String 21
+.asc "     BREAKING NEWS",0 ; String 0
+.asc "     -------------",0 ; String 1
+.asc "",A_FWGREEN,"Scientists report a decrease of .5 in",0 ; String 2
+.asc "",A_FWGREEN,"the air toxics in the last quarter.",0 ; String 3
+.asc "",A_FWGREEN,"Though the air is still deadly, our",0 ; String 4
+.asc "",A_FWGREEN,"work is producing excellent results.",0 ; String 5
+.asc "",A_FWGREEN,"Three more couples have been granted",0 ; String 6
+.asc "",A_FWGREEN,"permission for procreation in this ",0 ; String 7
+.asc "",A_FWGREEN,"year's call. Send applications to the",0 ; String 8
+.asc "",A_FWGREEN,"Population Control Agency.",0 ; String 9
+.asc "",A_FWGREEN,"The Federation has approved a plan to",0 ; String 10
+.asc "",A_FWGREEN,"invest 200 billion credits in the",0 ; String 11
+.asc "",A_FWGREEN,"Main Computer Control Facility here",0 ; String 12
+.asc "",A_FWGREEN,"on planet Earth.",0 ; String 13
+.asc "",A_FWGREEN,"A new communication station has been",0 ; String 14
+.asc "",A_FWGREEN,"deployed in planet Saurian Major.",0 ; String 15
+.asc "",A_FWGREEN,"Experts say it will greatly improve",0 ; String 16
+.asc "",A_FWGREEN,"communications between star systems.",0 ; String 17
+.asc "",A_FWGREEN,"Planet Auron has finally decided to",0 ; String 18
+.asc "",A_FWGREEN,"join the Terran Federation despite",0 ; String 19
+.asc "",A_FWGREEN,"their previous stubborn government.",0 ; String 20
+.asc "",A_FWGREEN,"Congratulations to the citizens!",0 ; String 21
 res_end
 .)
 

@@ -9,7 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/
 
 /* Language */
-#define SPANISH
-//#define ENGLISH
+//#define SPANISH
+#define ENGLISH
 
 

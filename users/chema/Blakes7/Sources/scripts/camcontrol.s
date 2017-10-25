@@ -22,13 +22,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Eh... en realidad, no.",0 ; String 0
-.asc "S",93,". ",126,"Cu",91,"l era el pedido?",0 ; String 1
-.asc "No, pero podr",93,"amos colaborar.",0 ; String 2
-.asc "S",93,"... tengo aqu",93," su pedido.",0 ; String 3
-.asc "Un caf",92,", ",126,"no?",0 ; String 4
-.asc "Un sandwich de queso, ",126,"no?",0 ; String 5
-.asc "",125,"Vaya! Creo que me lo he olvidado.",0 ; String 6
+.asc "Er... not, actually.",0 ; String 0
+.asc "Yes... what did you order?",0 ; String 1
+.asc "No, but we could be of mutual help.",0 ; String 2
+.asc "Yes... I have your order here.",0 ; String 3
+.asc "A coffee, wasn't it?",0 ; String 4
+.asc "A cheese sandwich, wasn't it?",0 ; String 5
+.asc "Uh, oh, I must have forgotten it.",0 ; String 6
 res_end
 .)
 
@@ -193,16 +193,16 @@ res_end
 .word (res_end-res_start +4)
 .byt 221
 res_start
-.asc "",125,"Pues largo de aqu",93,"!",0 ; String 0
-.asc "",126,"Quieres decir que no sabes?",0 ; String 1
-.asc "",125,"Inepto! ",125,"Ve a averiguarlo!",0 ; String 2
-.asc "",126,"Est",91,"s de co",35,"a? ",125,"Largo de aqu",93,"!",0 ; String 3
-.asc "",126,"Y a qu",92," esperas?",0 ; String 4
-.asc "No ped",93," caf",92,", idiota.",0 ; String 5
-.asc "",126,"Un sandwich de queso?",0 ; String 6
-.asc "No. No ped",93," eso...",0 ; String 7
-.asc "Pero me lo quedo... Tengo hambre.",0 ; String 8
-.asc "Ahora, por favor largo de aqu",93,".",0 ; String 9
+.asc "Then get outta here now!",0 ; String 0
+.asc "Do you mean you don't know?",0 ; String 1
+.asc "You inept, go back and find out!",0 ; String 2
+.asc "Are you kidding? Leave now!",0 ; String 3
+.asc "And what are you waiting for?",0 ; String 4
+.asc "I didn't ask for coffee you moron.",0 ; String 5
+.asc "A cheese sandwich?",0 ; String 6
+.asc "No. I didn't order that...",0 ; String 7
+.asc "But I'll take it anyway.. I'm hungry.",0 ; String 8
+.asc "Now, please leave this room.",0 ; String 9
 res_end
 .)
 
@@ -345,17 +345,17 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Una consola de control.",0 ; String 0
-.asc "Puedo desactivar sistemas desde aqu",93,".",0 ; String 1
-.asc "Necesito el c",94,"digo de la c",91,"mara.",0 ; String 2
-.asc "Vale. Desactivar CH-1337.",0 ; String 3
-.asc "",125,"Listo!",0 ; String 4
-.asc "Una pantalla con datos en tiempo real",0 ; String 5
-.asc "sobre variables importantes.",0 ; String 6
-.asc "No entiendo nada.",0 ; String 7
-.asc "Una pantalla con datos del estado de",0 ; String 8
-.asc "los principales sistemas de la ciudad.",0 ; String 9
-.asc "Me suena todo a chino.",0 ; String 10
+.asc "A control console.",0 ; String 0
+.asc "I could deactivate a system from here.",0 ; String 1
+.asc "I need the camera code to deactivate.",0 ; String 2
+.asc "Okay. Deactivate CH-1337.",0 ; String 3
+.asc "Done!",0 ; String 4
+.asc "A screen showing real time data",0 ; String 5
+.asc "about important variables.",0 ; String 6
+.asc "I don't understand anything.",0 ; String 7
+.asc "A screen showing real time data",0 ; String 8
+.asc "about the status of city systems.",0 ; String 9
+.asc "I understand nothing.",0 ; String 10
 res_end
 .)
 
@@ -426,12 +426,12 @@ res_end
 res_start
 .asc " (Zzzzzzz)",0 ; String 0
 .asc " ",0 ; String 1
-.asc "",126,"Uh? Casi me quedo dormido.",0 ; String 2
-.asc "Necesito un caf",92,"...",0 ; String 3
-.asc "",125,"Eh! ",126,"D",94,"nde crees que vas?",0 ; String 4
-.asc "",125,"No puedes estar aqu",93,"!",0 ; String 5
-.asc "Perd",94,"n. Me equivoqu",92," de puerta.",0 ; String 6
-.asc "",126,"Qu",92," es ese ruido?",0 ; String 7
+.asc "Uh? I nearly fall asleep!",0 ; String 2
+.asc "I need some coffee...",0 ; String 3
+.asc "Hey! Where are you going?",0 ; String 4
+.asc "You cannot be here!",0 ; String 5
+.asc "Sorry. I entered the wrong door.",0 ; String 6
+.asc "What is that noise?",0 ; String 7
 res_end
 .)
 
@@ -696,15 +696,15 @@ res_end
 .word (res_end-res_start +4)
 .byt 202
 res_start
-.asc "Una taza de pl",91,"stico con caf",92,"",0 ; String 0
-.asc "de m",91,"quina.",0 ; String 1
-.asc "Una buena dosis de cafe",93,"na.",0 ; String 2
-.asc "Buena idea.",0 ; String 3
-.asc "Lo cambiar",92," por el m",93,"o...",0 ; String 4
-.asc "y esperemos que funcione.",0 ; String 5
-.asc "No s",92," qu",92," quieres hacer.",0 ; String 6
-.asc "No puedo usar eso con la consola.",0 ; String 7
-.asc "Mejor lo dejo ah",93,"...",0 ; String 8
+.asc "A plastic cup with coffee",0 ; String 0
+.asc "from a coffee machine.",0 ; String 1
+.asc "A good dose of caffeine.",0 ; String 2
+.asc "Good idea.",0 ; String 3
+.asc "I will change it for mine...",0 ; String 4
+.asc "and let's hope for the best.",0 ; String 5
+.asc "Don't know what you want to do.",0 ; String 6
+.asc "I cannot use that with the console.",0 ; String 7
+.asc "Better leave it there...",0 ; String 8
 res_end
 .)
 

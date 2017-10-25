@@ -172,9 +172,9 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Una piedra sobresaliendo del agua.",0 ; String 0
-.asc "Esa cueva es la entrada a la base.",0 ; String 1
-.asc "No puedo llegar a la cueva.",0 ; String 2
-.asc "No puedo hacer eso.",0 ; String 3
+.asc "A stone protruding from the water.",0 ; String 0
+.asc "That cave is the entrance to the base.",0 ; String 1
+.asc "I can't reach the cave.",0 ; String 2
+.asc "I can't do that.",0 ; String 3
 res_end
 .)

@@ -90,13 +90,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 9
 res_start
-.asc "Un mapa t",92,"cnico con la salida 172.",0 ; String 0
-.asc "Interesante...",0 ; String 1
-.asc "Se puede alcanzar desde el sistema de",0 ; String 2
-.asc "ventilaci",94,"n de este nivel. ",0 ; String 3
-.asc "Y hay un acceso desde el corredor de",0 ; String 4
-.asc "servicio del pasillo.",0 ; String 5
-.asc "Podr",92," usar el mapa cuando acceda al",0 ; String 6
-.asc "sistema de ventilaci",94,"n.",0 ; String 7
+.asc "A technical map showing exit 172.",0 ; String 0
+.asc "Interesting....",0 ; String 1
+.asc "It is possible to reach it from the",0 ; String 2
+.asc "ventilation system in this level.",0 ; String 3
+.asc "And there is an access inside the",0 ; String 4
+.asc "service corridor.",0 ; String 5
+.asc "I can use the map once I get inside",0 ; String 6
+.asc "the ventilation system.",0 ; String 7
 res_end
 .)

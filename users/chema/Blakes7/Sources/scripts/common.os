@@ -117,7 +117,7 @@ objectcode BOOKS{
 objectcode BOOK{
 	byte a;
 	LookAt:
-		scActorTalk(a,STDESC,18);
+		scActorTalk(sfGetEgo(),STDESC,18);
 		scStopScript();
 	Open:
 		a=sfGetEgo();

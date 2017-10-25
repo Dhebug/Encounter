@@ -143,15 +143,15 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",125,"Travis est",91," a punto de disparar!    ",0 ; String 0
-.asc "",125,"Tengo que hacer algo!",0 ; String 1
-.asc "",125,"Empezar",92," por eliminar a la Auronar!",0 ; String 2
-.asc "",125,"",126,"Qu",92,"?!",0 ; String 3
-.asc "",125,"Disparad! ",125,"Matadlos a todos!",0 ; String 4
-.asc "Zen, enciende el aire acondicionado.",0 ; String 5
-.asc "Blake. Te atrapar",92,".",0 ; String 6
-.asc "No importa el tiempo que me lleve.",0 ; String 7
-.asc "Juro por mi honor que te atrapar",92,".",0 ; String 8
+.asc "Travis is about to shoot!            ",0 ; String 0
+.asc "I have to do something!",0 ; String 1
+.asc "I'll start by killing that Auronar!",0 ; String 2
+.asc "What!?",0 ; String 3
+.asc "Shoot! Kill them all!",0 ; String 4
+.asc "Zen, Turn the air conditioning on...",0 ; String 5
+.asc "Blake. I will get you.",0 ; String 6
+.asc "No matter how long it takes.",0 ; String 7
+.asc "I swear by my honour I will get you.",0 ; String 8
 res_end
 .)
 

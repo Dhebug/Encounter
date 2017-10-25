@@ -283,7 +283,7 @@ res_start
 .byt $ff ; End of response table
 l_LookAt
 .byt SC_ACTOR_TALK
-.byt SF_GETVAL,64, 200	; a
+.byt SF_GET_EGO
 .byt 64, 200
 .byt 18
 .byt SC_STOP_SCRIPT
@@ -499,30 +499,30 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "De metal, compacta y superautom",91,"tica",0 ; String 0
-.asc "con el sistema Fed'Xpresso patentado",0 ; String 1
-.asc "de preparaci",94,"n de capuccinos.",0 ; String 2
-.asc "El dep",94,"sito de agua est",91," vac",93,"o.",0 ; String 3
-.asc "Vale, usar",92," el agua para hacer caf",92,".",0 ; String 4
-.asc "Mira, se ha dejado la sesi",94,"n abierta.",0 ; String 5
-.asc "Acaba de llegarle un mensaje...",0 ; String 6
-.asc "No s",92," qu",92," quieres que haga.",0 ; String 7
-.asc "",126,"Y empaparlo? No, gracias.",0 ; String 8
-.asc "Est",91," bien, fingir",92,"...",0 ; String 9
-.asc "",125,"Ups!",0 ; String 10
-.asc "",125,"Qu",92," diablos!...",0 ; String 11
-.asc "Lo siento mucho...",0 ; String 12
-.asc "",125,"Me has puesto perdido!",0 ; String 13
-.asc "Y a",95,"n no est",91," listo mi otro uniforme.",0 ; String 14
-.asc "Como no sea capaz de limpiarlo...",0 ; String 15
-.asc "Parecen todos libros de historia.",0 ; String 16
-.asc "Aprobados por la Federaci",94,"n, claro.",0 ; String 17
-.asc "'Las Colonias Exteriores'",0 ; String 18
-.asc "No tengo tiempo para leer.",0 ; String 19
-.asc "No lo necesito.",0 ; String 20
-.asc "",125,"Buena idea! Fijo que hay algo ",95,"til",0 ; String 21
-.asc "usado como separador...",0 ; String 22
-.asc "Ah, pues no. S",94,"lo un papel en blanco.",0 ; String 23
-.asc "S",94,"lo es una taza.",0 ; String 24
+.asc "Compact full metal bean-to-cup machine",0 ; String 0
+.asc "with the Fed'Xpresso patented automatic",0 ; String 1
+.asc "cappuccino system.",0 ; String 2
+.asc "The water deposit is empty.",0 ; String 3
+.asc "Ok, I'll use the water to make coffee",0 ; String 4
+.asc "Mmmm... he left the session open...",0 ; String 5
+.asc "He's just had an incoming message...",0 ; String 6
+.asc "I don't know what you mean by that.",0 ; String 7
+.asc "And wet him? No, thank you.",0 ; String 8
+.asc "Okay, I'll pretend...",0 ; String 9
+.asc "OOPS!",0 ; String 10
+.asc "What the...!?",0 ; String 11
+.asc "I'm terribly sorry...",0 ; String 12
+.asc "My uniform! What a mess!",0 ; String 13
+.asc "And my other one is not ready yet...",0 ; String 14
+.asc "Unless I can clean it, you'll see...",0 ; String 15
+.asc "They seem all to be history books.",0 ; String 16
+.asc "Federation approved, of course",0 ; String 17
+.asc "'The outer colonies'",0 ; String 18
+.asc "I don't have time to read now.",0 ; String 19
+.asc "I don't need that.",0 ; String 20
+.asc "Nice idea! Surely there is something",0 ; String 21
+.asc "useful used as page separator...",0 ; String 22
+.asc "Ah, no. It's just an empty paper.",0 ; String 23
+.asc "It is just a cup!",0 ; String 24
 res_end
 .)

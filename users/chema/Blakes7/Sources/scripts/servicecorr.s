@@ -548,33 +548,33 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Conduce al sistema de ventilaci",94,"n.",0 ; String 0
-.asc "La rejilla est",91," atornillada a la pared.",0 ; String 1
-.asc "No puedo.",0 ; String 2
-.asc "Eso no me ayuda a quitar la rejilla.",0 ; String 3
-.asc "Perfecta para la ranura del tornillo.",0 ; String 4
-.asc "Uno m",91,"s... y...",0 ; String 5
-.asc "Listo.",0 ; String 6
-.asc "Es grande, rojo e importante.",0 ; String 7
-.asc "",126,"Por qu",92,"? No hay fuego.",0 ; String 8
-.asc "Es el t",93,"pico cuadro el",92,"ctrico.",0 ; String 9
-.asc "No puedo, est",91," cerrado.",0 ; String 10
-.asc "N",95,"meros, luces y botones.",0 ; String 11
-.asc "No tengo ni idea de c",94,"mo funciona.",0 ; String 12
-.asc "Pulsar",92," un bot",94,"n al azar...",0 ; String 13
-.asc "",125,"Completamente insondable!",0 ; String 14
-.asc "No sabr",93,"a c",94,"mo hacerlo.",0 ; String 15
-.asc "Una v",91,"lvula manual. Esta es f",91,"cil.",0 ; String 16
-.asc "Vamos a girarla...",0 ; String 17
-.asc " (Bip, bip)",0 ; String 18
-.asc " (Bop, bop)",0 ; String 19
-.asc " (Bip, bop)",0 ; String 20
-.asc " (Bop, bip)",0 ; String 21
-.asc "Una barra parpadea en azul y rojo.",0 ; String 22
-.asc "Parpadea un cuadrado azul.",0 ; String 23
-.asc "Dice: 'Nivel de g-beamflux bajo'...",0 ; String 24
-.asc "Dice: 'Squiringenyzer ON'...",0 ; String 25
-.asc "Lo que eso signifique...",0 ; String 26
+.asc "It leads to the ventilation system.",0 ; String 0
+.asc "The grid is firmly screwed to the wall.",0 ; String 1
+.asc "I can't.",0 ; String 2
+.asc "It doesn't help to remove the grid.",0 ; String 3
+.asc "The coin fits in the slot perfectly!",0 ; String 4
+.asc "One more... and...",0 ; String 5
+.asc "Ready.",0 ; String 6
+.asc "It's big, red, and important.",0 ; String 7
+.asc "Why? There's no fire.",0 ; String 8
+.asc "It's the typical electrical cabinet.",0 ; String 9
+.asc "I can't. It's closed.",0 ; String 10
+.asc "Figures, lights and buttons.",0 ; String 11
+.asc "I have no idea how to operate it.",0 ; String 12
+.asc "I'll press a random button...",0 ; String 13
+.asc "This is completely unfathomable!",0 ; String 14
+.asc "I would not know how to.",0 ; String 15
+.asc "A manual valve. This one is easy!",0 ; String 16
+.asc "Okay, let's turn it...",0 ; String 17
+.asc " (Beep, beep)",0 ; String 18
+.asc " (Boop, boop)",0 ; String 19
+.asc " (Beep, boop)",0 ; String 20
+.asc " (Boop, beep)",0 ; String 21
+.asc "A bar is flashing in red and blue.",0 ; String 22
+.asc "A blue square is flashing.",0 ; String 23
+.asc "'Level of g-beamflux low', it says...",0 ; String 24
+.asc "'Squiringenyzer ON', it says...",0 ; String 25
+.asc "Whatever that means...",0 ; String 26
 .asc " ",0 ; String 27
 res_end
 .)

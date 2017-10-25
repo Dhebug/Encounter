@@ -91,11 +91,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 51
 res_start
-.asc "El traspondedor para teleportarnos",0 ; String 0
-.asc "desde este complejo apantallado.",0 ; String 1
-.asc "Proporciona una se",35,"al para fijar el",0 ; String 2
-.asc "sistema de telepore y codifica la",0 ; String 3
-.asc "se",35,"al de los brazaletes cercanos.",0 ; String 4
-.asc "Lo necesito conectado ah",93,".",0 ; String 5
+.asc "The transponder needed for teleporting",0 ; String 0
+.asc "inside this shielded complex.",0 ; String 1
+.asc "It provides a signal for fixing the",0 ; String 2
+.asc "teleport system and encodes the signal",0 ; String 3
+.asc "of the nearby bracelets.",0 ; String 4
+.asc "I need it connected there.",0 ; String 5
 res_end
 .)

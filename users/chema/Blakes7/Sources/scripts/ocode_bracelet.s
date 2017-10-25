@@ -10,17 +10,17 @@
 .word (res_end-res_start +4)
 .byt 35
 res_start
-.asc "Se puede usar para teleportarse y para",0 ; String 0
-.asc "comunicaciones con El Libertador.",0 ; String 1
-.asc "De acuerdo. B",91,"jame.",0 ; String 2
-.asc "S",95,"beme.",0 ; String 3
-.asc "Tengo que estar en la cabina.",0 ; String 4
-.asc "No puedo hacer eso con la pulsera.",0 ; String 5
-.asc "",126,"Qui",92,"n va a operar el teletransporte?",0 ; String 6
-.asc "Es mejor no ir desarmado.",0 ; String 7
-.asc "Zen, apaga el aire acondicionado.",0 ; String 8
-.asc "No necesito regresar ahora.",0 ; String 9
-.asc "No puedo sin el transpondedor.",0 ; String 10
+.asc "I can use it for teleporting and",0 ; String 0
+.asc "communication with the Liberator.",0 ; String 1
+.asc "Okay, put me down.",0 ; String 2
+.asc "Bring me up.",0 ; String 3
+.asc "I have to be in the teleport cabin.",0 ; String 4
+.asc "I can't do that with the bracelet.",0 ; String 5
+.asc "And who will operate the teleport?",0 ; String 6
+.asc "I'd better not go unarmed.",0 ; String 7
+.asc "Zen, turn the air conditioning off.",0 ; String 8
+.asc "I don't need to get back now.",0 ; String 9
+.asc "I can't without the transponder.",0 ; String 10
 res_end
 .)
 

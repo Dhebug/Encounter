@@ -10,27 +10,27 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Sus bendiciones est",92,"n contigo.",0 ; String 0
-.asc "Habla y ser",91,"s escuchado.",0 ; String 1
-.asc "Soy Su seguro servidor.",0 ; String 2
-.asc "",126,"Las almas de la oscuridad exterior",0 ; String 3
-.asc "est",91,"n entre nosotros?",0 ; String 4
-.asc "En la habitaci",94,"n de los novicios.",0 ; String 5
-.asc "Bien. Ven y reza conmigo.",0 ; String 6
-.asc "S",94,"lo de Su mano viene la vida...",0 ; String 7
-.asc "Y de Su ira viene la muerte.",0 ; String 8
-.asc "Con m",91,"s almas para Su trabajo...",0 ; String 9
-.asc "habr",91," una oportunidad para m",93,"...",0 ; String 10
-.asc "... para los fieles...",0 ; String 11
-.asc "de alcanzar el sacerdocio.",0 ; String 12
-.asc "El no te fallar",91,".",0 ; String 13
-.asc "Ser",91,"s recompensado.",0 ; String 14
-.asc "Maestro. He encontrado algo...",0 ; String 15
-.asc "Creo que hay intrusos.",0 ; String 16
-.asc "Imposible. Los prisioneros fueron",0 ; String 17
-.asc "observados desde que aterrizaron.",0 ; String 18
-.asc "Quiz",91,"s alguien m",91,"s vino en su propia",0 ; String 19
-.asc "nave... Mu",92,"stranos.",0 ; String 20
+.asc "His blessings are upon you.",0 ; String 0
+.asc "Speak and He will hear you.",0 ; String 1
+.asc "I am thy true servant.",0 ; String 2
+.asc "The souls from the outer darkness",0 ; String 3
+.asc "are amongst us?",0 ; String 4
+.asc "They are in the place of the novices.",0 ; String 5
+.asc "Good. Come and pray with me.",0 ; String 6
+.asc "Only from His hand comes life...",0 ; String 7
+.asc "And from His wrath comes death.",0 ; String 8
+.asc "With other souls to do His work...",0 ; String 9
+.asc "there will be a chance for me ...",0 ; String 10
+.asc "... for the faithful...",0 ; String 11
+.asc "to rise to the priesthood.",0 ; String 12
+.asc "He will not fail you.",0 ; String 13
+.asc "You will be rewarded.",0 ; String 14
+.asc "Master. I've found something...",0 ; String 15
+.asc "I think there is an intruder.",0 ; String 16
+.asc "Can't be. The prisoners were observed",0 ; String 17
+.asc "from the moment they landed.",0 ; String 18
+.asc "Maybe someone else came in his own",0 ; String 19
+.asc "spaceship... Show us.",0 ; String 20
 res_end
 .)
 

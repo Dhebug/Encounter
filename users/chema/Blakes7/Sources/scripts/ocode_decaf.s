@@ -49,8 +49,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 7
 res_start
-.asc "Un descafeinado.",0 ; String 0
-.asc "F",93,"jate. La taza lo mantiene caliente.",0 ; String 1
-.asc "No s",92," c",94,"mo usarlo de este modo.",0 ; String 2
+.asc "A cup of decaf coffee.",0 ; String 0
+.asc "Neat. These paper cups keep it hot.",0 ; String 1
+.asc "I don't know how to use it this way.",0 ; String 2
 res_end
 .)

@@ -63,6 +63,6 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Mejor cojo el transpondedor primero.",0 ; String 0
+.asc "I'd better get the transponder first.",0 ; String 0
 res_end
 .)

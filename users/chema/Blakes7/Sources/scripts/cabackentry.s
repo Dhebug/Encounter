@@ -10,16 +10,16 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Me parece a m",93," el sistema que hay",0 ; String 0
-.asc "para abrir la verja.",0 ; String 1
-.asc "Barras s",94,"lidas. No creo que pueda",0 ; String 2
-.asc "romperlas f",91,"cilmente.",0 ; String 3
-.asc "Parece que el bloqueador est",91," roto.",0 ; String 4
-.asc "Si tuviese algo como un palo duro...",0 ; String 5
-.asc "Eso no va a ayudar.",0 ; String 6
-.asc "No puedo, con la verja cerrada.",0 ; String 7
-.asc "Buena idea! Funcionar",91,"!",0 ; String 8
-.asc "El arma mantiene la verja arriba.",0 ; String 9
+.asc "It seems to me that it is the system",0 ; String 0
+.asc "to open the gate.",0 ; String 1
+.asc "Solid bars. I don't think I will be",0 ; String 2
+.asc "able to break them.",0 ; String 3
+.asc "It seems the stopper is broken.",0 ; String 4
+.asc "If I had some kind of hard stick...",0 ; String 5
+.asc "That won't help.",0 ; String 6
+.asc "I can't, with the gate closed.",0 ; String 7
+.asc "Nice idea! It will do the trick!",0 ; String 8
+.asc "The gun is keeping the gate up.",0 ; String 9
 res_end
 .)
 

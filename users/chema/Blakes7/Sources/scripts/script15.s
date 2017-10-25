@@ -370,67 +370,67 @@ res_end
 .word (res_end-res_start +4)
 .byt 106
 res_start
-.asc "",A_FWMAGENTA+A_FWCYAN*8+128,"Federaci",94,"n. Comandancia del Espacio.",0 ; String 0
-.asc "Ah, Travis. Pasa. Mi departamento ha",0 ; String 1
-.asc "hecho lo posile para eliminar toda la",0 ; String 2
-.asc "informaci",94,"n sobre Blake y su grupo,",0 ; String 3
-.asc "pero las historias se propagan...",0 ; String 4
-.asc "A tav",92,"s del boca a boca, del rumor,",0 ; String 5
-.asc "cada vez que se cuenta se vuelve m",91,"s",0 ; String 6
-.asc "elaborada y exagerada.",0 ; String 7
-.asc "Cualquier da",35,"o a la Federaci",94,"n se",0 ; String 8
-.asc "atribuye a Blake. El incidente m",91,"s",0 ; String 9
-.asc "peque",35,"o se exagera hasta que se",0 ; String 10
-.asc "convierte en algo her",94,"ico.",0 ; String 11
-.asc "Blake se hace una leyenda.",0 ; String 12
-.asc "Hay que detenerle.",0 ; String 13
-.asc "Soy consciente del peligro de que se",0 ; String 14
-.asc "vuelva una leyenda, pero no hay que",0 ; String 15
-.asc "perder la perspectiva.       ",0 ; String 16
-.asc "Es cierto que Blake comanda una nave",0 ; String 17
-.asc "soberbia, pero no es m",91,"s que un hombre",0 ; String 18
-.asc "ayudado por un pu",35,"ado de criminales.",0 ; String 19
-.asc "Nada m",91,"s. No es invulnerable, ni es",0 ; String 20
-.asc "tampoco un superhombre.",0 ; String 21
-.asc "S",94,"lo es un hombre que ha tenido una",0 ; String 22
-.asc "suerte extrema para evitar su captura",0 ; String 23
-.asc "-- por el momento.",0 ; String 24
-.asc "",A_FWMAGENTA,"Soy consciente de los hechos. Es que",0 ; String 25
-.asc "",A_FWMAGENTA,"simplemente con todos los recursos de",0 ; String 26
-.asc "",A_FWMAGENTA,"que la Federaci",94,"n puede disponer, este",0 ; String 27
-.asc "",A_FWMAGENTA,"hombre vulnerable, pero afortunado,",0 ; String 28
-.asc "",A_FWMAGENTA,"todav",93,"a est",91," causando problemas.",0 ; String 29
-.asc "",A_FWMAGENTA,"Deber",93,"as saber que empieza a haber",0 ; String 30
-.asc "",A_FWMAGENTA,"muchas cr",93,"ticas a tu forma de manejar",0 ; String 31
-.asc "",A_FWMAGENTA,"el asunto Blake.",0 ; String 32
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Eso no es del todo justo. Hubo dos",0 ; String 33
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"ocasiones en las que pude haber acabado",0 ; String 34
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"con Blake. S",94,"lo la insistencia que",0 ; String 35
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"muestra la Administraci",94,"n en que el",0 ; String 36
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Libertador se capture sin da",35,"o alguno",0 ; String 37
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"me detuvo.",0 ; String 38
-.asc "Ya hice esa observaci",94,"n en tu defensa,",0 ; String 39
-.asc "pero ya no puedo seguir poniendo m",91,"s",0 ; String 40
-.asc "excusas. Me encuentro bajo una presi",94,"n",0 ; String 41
-.asc "considerable para reemplazarte.",0 ; String 42
-.asc "",126,"Eh?",0 ; String 43
-.asc "Oh, hasta ahora he resistido esta",0 ; String 44
-.asc "presi",94,"n. Pero ahora necesito que me",0 ; String 45
-.asc "demuestres que no he depositado mi",0 ; String 46
-.asc "confianza en la persona equivocada.",0 ; String 47
-.asc "Creo que mi ",95,"ltimo plan silenciar",91,"",0 ; String 48
-.asc "todas las cr",93,"ticas.",0 ; String 49
-.asc "S",93," que parece un plan excelente. Tiene",0 ; String 50
-.asc "todas las papeletas para ser un ",92,"xito.",0 ; String 51
-.asc "Me alegro de que lo apruebe.",0 ; String 52
-.asc "Oh, Travis, deber",93,"as saberlo mejor.",0 ; String 53
-.asc "En mi posici",94,"n una nunca aprueba nada",0 ; String 54
-.asc "hasta que no se ha convertido en un",0 ; String 55
-.asc "",92,"xito sin paliativos.",0 ; String 56
-.asc "Lo s",92,".",0 ; String 57
-.asc "Sin embargo, tienes mi total apoyo,",0 ; String 58
-.asc "extraoficialmente, por supuesto.",0 ; String 59
-.asc "Por supuesto.",0 ; String 60
+.asc "",A_FWMAGENTA+A_FWCYAN*8+128,"Federation Space Headquarters.",0 ; String 0
+.asc "Ah, Travis. Come in. My department has",0 ; String 1
+.asc "done all in its power to suppress",0 ; String 2
+.asc "information about Blake and his",0 ; String 3
+.asc "actions, but still the stories get out.",0 ; String 4
+.asc "They spread by word of mouth, by rumour",0 ; String 5
+.asc "each time the story is told it is",0 ; String 6
+.asc "elaborated upon.",0 ; String 7
+.asc "Any damage to the Federation is",0 ; String 8
+.asc "attributed to Blake. The smallest",0 ; String 9
+.asc "incident is exaggerated until it",0 ; String 10
+.asc "becomes a major event.",0 ; String 11
+.asc "Blake is becoming a legend.",0 ; String 12
+.asc "He must be stopped.",0 ; String 13
+.asc "I am aware of the danger should Blake",0 ; String 14
+.asc "become a legend. But let us keep this",0 ; String 15
+.asc "matter in its correct perspective.",0 ; String 16
+.asc "It is true that Blake has command of",0 ; String 17
+.asc "a superb space vehicle, but he is just",0 ; String 18
+.asc "a man, backed by a handful of",0 ; String 19
+.asc "criminals, and that is all. He is not",0 ; String 20
+.asc "invulnerable, nor is he superhuman.",0 ; String 21
+.asc "He is just a man, who has been",0 ; String 22
+.asc "extremely lucky to evade capture",0 ; String 23
+.asc "--- so far.",0 ; String 24
+.asc "",A_FWMAGENTA,"I am aware of the facts. They are",0 ; String 25
+.asc "",A_FWMAGENTA,"simply that with all the resources",0 ; String 26
+.asc "",A_FWMAGENTA,"that the Federation can call upon,",0 ; String 27
+.asc "",A_FWMAGENTA,"this one vulnerable, lucky man is still",0 ; String 28
+.asc "",A_FWMAGENTA,"free to cause havoc. I think you should",0 ; String 29
+.asc "",A_FWMAGENTA,"know that there's been considerable",0 ; String 30
+.asc "",A_FWMAGENTA,"criticism of your handling of the",0 ; String 31
+.asc "",A_FWMAGENTA,"Blake affair.",0 ; String 32
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"That's not entirely just. There have",0 ; String 33
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"been two occasions where I could have",0 ; String 34
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"destroyed Blake. It was only the",0 ; String 35
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Administration's insistence that the",0 ; String 36
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Liberator be captured undamaged that",0 ; String 37
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"stopped me.",0 ; String 38
+.asc "I have made that point in your",0 ; String 39
+.asc "defence but I can't go on making",0 ; String 40
+.asc "excuses. I've been under considerable",0 ; String 41
+.asc "pressure to replace you.",0 ; String 42
+.asc "Ohh?",0 ; String 43
+.asc "Oh, so far I have resisted that",0 ; String 44
+.asc "pressure. But now, I need your",0 ; String 45
+.asc "reassurance that my confidence has not",0 ; String 46
+.asc "been misplaced.",0 ; String 47
+.asc "I think my latest plan will silence",0 ; String 48
+.asc "the critics.",0 ; String 49
+.asc "It does seem an excellent plan. It",0 ; String 50
+.asc "should have every chance of success.",0 ; String 51
+.asc "I'm glad you approve.",0 ; String 52
+.asc "Oh, Travis, you know better than that.",0 ; String 53
+.asc "In my position one never approves",0 ; String 54
+.asc "anything until it is an undisputed",0 ; String 55
+.asc "success.",0 ; String 56
+.asc "Yeh.",0 ; String 57
+.asc "However, you have my full support,",0 ; String 58
+.asc "unofficially, of course.",0 ; String 59
+.asc "Of course.",0 ; String 60
 .asc " ",0 ; String 61
 res_end
 .)

@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 23
 res_start
-.asc "Parece fuerte como una roca.",0 ; String 0
-.asc "Estoy listo.",0 ; String 1
-.asc "S",94,"lo dime qu",92," quieres que haga.",0 ; String 2
+.asc "He looks strong as a rock.",0 ; String 0
+.asc "I'm ready.",0 ; String 1
+.asc "Just tell me what you want me to do.",0 ; String 2
 res_end
 .)
 

@@ -86,15 +86,15 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Una correa el",91,"stica de amarre.",0 ; String 0
-.asc "Se utiliza para sujetar el cargamento.",0 ; String 1
-.asc "A ver si puedo cortar un trozo...",0 ; String 2
-.asc "",126,"C",94,"mo quieres que lo utilice?",0 ; String 3
-.asc "La correa est",91," fijada y no puedo",0 ; String 4
-.asc "romperla con las manos.",0 ; String 5
-.asc "Hay c",92,"lulas de energ",93,"a de repuesto.",0 ; String 6
-.asc "Vale, coger",92," una.",0 ; String 7
-.asc "No la necesito.",0 ; String 8
+.asc "An elastic tie down strap.",0 ; String 0
+.asc "It is used to hold down the cargo.",0 ; String 1
+.asc "Let me see if I can cut a piece...",0 ; String 2
+.asc "How do you want me to use it?",0 ; String 3
+.asc "The strap is fastened and I can't break",0 ; String 4
+.asc "it with my bare hands",0 ; String 5
+.asc "A compartment with spare energy cells.",0 ; String 6
+.asc "Okay, I'll take one.",0 ; String 7
+.asc "I don't need it.",0 ; String 8
 res_end
 .)
 

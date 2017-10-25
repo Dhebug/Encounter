@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 39
 res_start
-.asc "De punta larga y magn",92,"tica.",0 ; String 0
-.asc "No puedo usar las tenazas aqu",93,"",0 ; String 1
+.asc "Magnetic long-nose pliers.",0 ; String 0
+.asc "Cannot use the pliers here.",0 ; String 1
 res_end
 .)
 

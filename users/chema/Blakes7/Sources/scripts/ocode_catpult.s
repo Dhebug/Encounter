@@ -10,10 +10,10 @@
 .word (res_end-res_start +4)
 .byt 34
 res_start
-.asc "Un arma mort",93,"fera.",0 ; String 0
-.asc "Con un proyectil apropiado, claro.",0 ; String 1
-.asc "No tengo un proyectil.",0 ; String 2
-.asc "Ind",93,"came el objetivo.",0 ; String 3
+.asc "A deadly weapon.",0 ; String 0
+.asc "With the proper projectile, that is.",0 ; String 1
+.asc "I don't have a projectile.",0 ; String 2
+.asc "Just tell me the target.",0 ; String 3
 res_end
 .)
 

@@ -21,8 +21,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Tengo una cita con Ravella.",0 ; String 0
-.asc "Dice que tiene informaci",94,"n...",0 ; String 1
+.asc "I have a meeting with Ravella.",0 ; String 0
+.asc "She has some information...",0 ; String 1
 res_end
 .)
 
@@ -32,28 +32,28 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "No hay nada interesante.",0 ; String 0
-.asc "Me recuerda a algo....",0 ; String 1
-.asc "Un Mundo Feliz...",0 ; String 2
-.asc "Ravella lo pidi",94," para m",93,".",0 ; String 3
-.asc "Solo es otra l",91,"mpara.",0 ; String 4
-.asc "Mi familia...",0 ; String 5
-.asc "No hay nada interesante por ahora.",0 ; String 6
-.asc "La puerta de salida.",0 ; String 7
-.asc "La ",95,"nica comida que puedo tomar.",0 ; String 8
-.asc "Se lo promet",93," a Ravella.",0 ; String 9
-.asc "Pero odio el queso.",0 ; String 10
-.asc "La taza que compr",92," hace un mes.",0 ; String 11
-.asc "Est",91," vac",93,"a.",0 ; String 12
-.asc "D",92,"jalo aqu",93,".",0 ; String 13
-.asc "Lo quiero en mi habitaci",94,"n.",0 ; String 14
-.asc "No veo por qu",92," lo voy a mover.",0 ; String 15
-.asc "",126,"Para qu",92," quieres que lo coja?",0 ; String 16
-.asc "No tengo tiempo para leer. L",91,"stima.",0 ; String 17
-.asc "Podr",93,"a encenderla, pero ",126,"para qu",92,"?",0 ; String 18
-.asc "No tengo tiempo para ver la tele.",0 ; String 19
-.asc "Ni lo he empezado todav",93,"a.",0 ; String 20
-.asc "Tiene un doblez en la p",91,"gina 172.",0 ; String 21
+.asc "There's nothing of interest.",0 ; String 0
+.asc "It reminds me of something...",0 ; String 1
+.asc "A Brave New World...",0 ; String 2
+.asc "Ravella ordered it for me.",0 ; String 3
+.asc "Just another lamp.",0 ; String 4
+.asc "My family...",0 ; String 5
+.asc "Nothing interesting at the moment.",0 ; String 6
+.asc "My room's exit door.",0 ; String 7
+.asc "The only food I can eat.",0 ; String 8
+.asc "I promised Ravella.",0 ; String 9
+.asc "But I hate cheese.",0 ; String 10
+.asc "The mug I bought last month.",0 ; String 11
+.asc "It is empty.",0 ; String 12
+.asc "I prefer it here.",0 ; String 13
+.asc "I'd like to keep it in my room.",0 ; String 14
+.asc "I don't see the use of moving that.",0 ; String 15
+.asc "Why would I pick that up?",0 ; String 16
+.asc "No time for reading now. Pity.",0 ; String 17
+.asc "I could turn it on, but why?",0 ; String 18
+.asc "No time for watching TV now.",0 ; String 19
+.asc "I have not even started it yet.",0 ; String 20
+.asc "There is a dog-ear on page 172.",0 ; String 21
 res_end
 .)
 

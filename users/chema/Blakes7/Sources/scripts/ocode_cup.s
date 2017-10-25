@@ -10,11 +10,11 @@
 .word (res_end-res_start +4)
 .byt 49
 res_start
-.asc "Una taza de caf",92," grande.",0 ; String 0
-.asc "Est",91," vac",93,"a.",0 ; String 1
-.asc "Est",91," llena de agua.",0 ; String 2
-.asc "Est",91," llena de caf",92,".",0 ; String 3
-.asc "No puedo usar la taza as",93,".",0 ; String 4
+.asc "A big coffee cup.",0 ; String 0
+.asc "It's empty.",0 ; String 1
+.asc "It's full of water.",0 ; String 2
+.asc "It's full of coffee.",0 ; String 3
+.asc "I can't use the cup like that.",0 ; String 4
 res_end
 .)
 

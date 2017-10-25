@@ -43,7 +43,7 @@ res_end
 .word (res_end-res_start +4)
 .byt 8
 res_start
-.asc "Una llave peque",35,"a.",0 ; String 0
-.asc "No puedo usar la llave aqu",93,".",0 ; String 1
+.asc "A small key.",0 ; String 0
+.asc "Can't use the key here.",0 ; String 1
 res_end
 .)

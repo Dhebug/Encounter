@@ -462,25 +462,25 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",126,"Sabes para qu",92," sirve todo esto?",0 ; String 0
-.asc "Es un sistema de teletransporte.",0 ; String 1
-.asc "Necesitas una de esas pulseras.",0 ; String 2
-.asc "Creo que puedo transportarte a ",0 ; String 3
-.asc "cualquier punto, dentro de un rango.",0 ; String 4
-.asc "Entra en la cabina y usa la pulsera.",0 ; String 5
-.asc "Estas pulseras parecen servir como",0 ; String 6
-.asc "dispositivos de comunicaci",94,"n tambi",92,"n. ",0 ; String 7
-.asc "Contiene unos chismes port",91,"tiles.",0 ; String 8
-.asc "Parece alg",95,"n tipo de arma...",0 ; String 9
-.asc "No s",92," c",94,"mo hacerlo funcionar.",0 ; String 10
-.asc "Un mont",94,"n de luces, paneles y teclas.",0 ; String 11
-.asc "Una cabina de aspecto extra",35,"o.",0 ; String 12
-.asc "Coger",92," tambi",92,"n para traer a los dem",91,"s.",0 ; String 13
-.asc "Ya tengo la m",93,"a.",0 ; String 14
-.asc "No te entiendo.",0 ; String 15
-.asc "Bien. Instalar",92," esto aqu",93,"...",0 ; String 16
-.asc "y cuando reciba la se",35,"al, el",0 ; String 17
-.asc "teletransporte se activar",91,".",0 ; String 18
-.asc "",126,"Y a qui",92,"n voy a teleportar?",0 ; String 19
+.asc "Do you know what is all this for?",0 ; String 0
+.asc "I bet it is a Teleport system.",0 ; String 1
+.asc "You need one of those bracelets.",0 ; String 2
+.asc "I think I could teleport you to any",0 ; String 3
+.asc "given coordinates, within a range.",0 ; String 4
+.asc "Go to the cabin and use the bracelet.",0 ; String 5
+.asc "These bracelets seem to serve as",0 ; String 6
+.asc "communication devices aswell. ",0 ; String 7
+.asc "It's full of strange handheld things.",0 ; String 8
+.asc "Some kind of weapon, it seems...",0 ; String 9
+.asc "I don't know how to operate it.",0 ; String 10
+.asc "A lot of lights, panels and switches.",0 ; String 11
+.asc "A strange cabin...",0 ; String 12
+.asc "I will take a few to bring up my crew.",0 ; String 13
+.asc "I already have mine.",0 ; String 14
+.asc "I don't understand.",0 ; String 15
+.asc "Okay. I'll install this here...",0 ; String 16
+.asc "and when it receives the signal, the",0 ; String 17
+.asc "teleport will operate.",0 ; String 18
+.asc "And who will I teleport?",0 ; String 19
 res_end
 .)

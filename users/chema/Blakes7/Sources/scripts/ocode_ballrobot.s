@@ -10,17 +10,17 @@
 .word (res_end-res_start +4)
 .byt 37
 res_start
-.asc "Nunca he visto algo como eso.",0 ; String 0
-.asc "Parece usar alg",95,"n truco mental para",0 ; String 1
-.asc "neutralizar la amenaza. ",0 ; String 2
-.asc "",125,"Tengo que hacer algo o estar",91,"n",0 ; String 3
-.asc "perdidos para siempre!",0 ; String 4
-.asc "Eso no va a funcionar.",0 ; String 5
-.asc "",125,"No te entiendo!",0 ; String 6
-.asc "",125,"Ay!",0 ; String 7
-.asc "",126,"Intentas matarme?",0 ; String 8
-.asc "",125,"Hala! D",92,"jame a mi...",0 ; String 9
-.asc "No tengo un proyectil.",0 ; String 10
+.asc "I have never seen something like that.",0 ; String 0
+.asc "It seems to use some kind of mind",0 ; String 1
+.asc "trick to neutralize the menace. ",0 ; String 2
+.asc "I have to do something or they'll be",0 ; String 3
+.asc "lost forever!",0 ; String 4
+.asc "That won't work.",0 ; String 5
+.asc "I don't understand!",0 ; String 6
+.asc "Ouch!",0 ; String 7
+.asc "Are you trying to kill me?",0 ; String 8
+.asc "Let me doit by myself, will you?",0 ; String 9
+.asc "I don't have a projectile.",0 ; String 10
 res_end
 .)
 

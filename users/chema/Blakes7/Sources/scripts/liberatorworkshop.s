@@ -10,25 +10,25 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Parece un labavo normal.",0 ; String 0
-.asc "Me pregunto si el agua ser",91," potable.",0 ; String 1
-.asc "Ahhh... refrescante...",0 ; String 2
-.asc "El agua drena muy lentamente.",0 ; String 3
-.asc "Algo debe estar atascando el sumidero.",0 ; String 4
-.asc "S",93,"... hay algo aqu",93," dentro...",0 ; String 5
-.asc "",126,"Por qu",92," raz",94,"n iba a hacer eso?",0 ; String 6
-.asc "No puedo desatascarlo con eso.",0 ; String 7
-.asc "Ni idea de para qu",92," sirve esto.",0 ; String 8
-.asc "Arriesgado, pero vamos a hacerlo...",0 ; String 9
-.asc "Mejor deja eso como est",91,".",0 ; String 10
-.asc "Parece una estaci",94,"n de reparaciones.",0 ; String 11
-.asc "Todo equipamiento electr",94,"nico.",0 ; String 12
-.asc "Eso est",91," m",91,"s all",91," de mis habilidades.",0 ; String 13
-.asc "A ver qu",92," podemos hacer...",0 ; String 14
-.asc "No puedo usar la estaci",94,"n con eso.",0 ; String 15
-.asc "Puedo conectar el transmisior a un",0 ; String 16
-.asc "circuito para activar el rel",92," remoto.",0 ; String 17
-.asc "Y ",92,"ste puede operar cualquier sistema.",0 ; String 18
+.asc "An apparently normal sink.",0 ; String 0
+.asc "I wonder if the water is drinkable.",0 ; String 1
+.asc "Ahhh... refreshing...",0 ; String 2
+.asc "The water drains very slowly.",0 ; String 3
+.asc "Something must be clogging the drain.",0 ; String 4
+.asc "Yes... there is something here...",0 ; String 5
+.asc "Why would I do that?",0 ; String 6
+.asc "I can't unclog it with this.",0 ; String 7
+.asc "I've no idea what this is for.",0 ; String 8
+.asc "A bit risky, but let's do it...",0 ; String 9
+.asc "Better leave it alone.",0 ; String 10
+.asc "It seems some kind of repair station.",0 ; String 11
+.asc "Full of electronic equipment.",0 ; String 12
+.asc "That is beyond my abilities.",0 ; String 13
+.asc "Let's see what I can do...",0 ; String 14
+.asc "I can't use the station with this.",0 ; String 15
+.asc "I can attach this transmitter to any",0 ; String 16
+.asc "circuit to activate the relay remotely.",0 ; String 17
+.asc "The relay can be attached anywhere.",0 ; String 18
 res_end
 .)
 
