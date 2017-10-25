@@ -130,13 +130,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 3
 res_start
-.asc "Lo ",95,"nico que puedo comer.",0 ; String 0
-.asc "Se lo promet",93," a Ravella.",0 ; String 1
-.asc "Pero odio el queso.",0 ; String 2
-.asc "Tengo hambre, pero no tanta.",0 ; String 3
-.asc "Es una idea MALVADA...",0 ; String 4
-.asc "Me encanta.",0 ; String 5
-.asc "",126,"De qu",92," iba a servir?",0 ; String 6
-.asc "No parece TAN letal.",0 ; String 7
+.asc "The only food I can eat.",0 ; String 0
+.asc "I promised Ravella.",0 ; String 1
+.asc "But I hate cheese.",0 ; String 2
+.asc "I'm hungry, but not THAT much.",0 ; String 3
+.asc "That is an EVIL idea...",0 ; String 4
+.asc "I LOVE it.",0 ; String 5
+.asc "What would be the use of that?",0 ; String 6
+.asc "It doesn't look THAT lethal.",0 ; String 7
 res_end
 .)

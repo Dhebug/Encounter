@@ -146,13 +146,13 @@ res_end
 .word (res_end-res_start +4)
 .byt 10
 res_start
-.asc "Parece estar al cargo de los sistemas",0 ; String 0
-.asc "de control de este ",91,"rea.",0 ; String 1
-.asc "Podr",93,"a hacer que me arrestasen.",0 ; String 2
-.asc "No entiendo qu",92," quieres hacer.",0 ; String 3
-.asc "",126,"Qu",92,"? ",126,"Qu",92," iba a hacer con eso?",0 ; String 4
-.asc "",126,"Y eso para qu",92," iba a servir?",0 ; String 5
-.asc "",125,"Ah! ",126,"Eres del servicio de cocina?",0 ; String 6
-.asc "",125,"Llevo esperando siglos!",0 ; String 7
+.asc "Seems to be in charge of the control",0 ; String 0
+.asc "of the systems in this area.",0 ; String 1
+.asc "He could get me arrested.",0 ; String 2
+.asc "I don't see what you want to do.",0 ; String 3
+.asc "What? What would I do with that?",0 ; String 4
+.asc "How can that be of any help?",0 ; String 5
+.asc "Ah! are you from the kitchen service?",0 ; String 6
+.asc "I've been waiting for ages!",0 ; String 7
 res_end
 .)

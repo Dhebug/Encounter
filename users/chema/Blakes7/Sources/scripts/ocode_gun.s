@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 36
 res_start
-.asc "Parece un rizador de pelo o el tope de",0 ; String 0
-.asc "una polea grande.",0 ; String 1
+.asc "Tt looks like a hair curl iron or a",0 ; String 0
+.asc "pulley stopper.",0 ; String 1
 res_end
 .)
 

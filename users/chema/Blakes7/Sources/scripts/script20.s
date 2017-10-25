@@ -193,17 +193,17 @@ res_end
 .word (res_end-res_start +4)
 .byt 2
 res_start
-.asc "Sab",93,"a que era una trampa...",0 ; String 0
-.asc "Zen, maniobra fuera del rango de sus",0 ; String 1
-.asc "sensores, manteni",92,"ndolos por debajo",0 ; String 2
-.asc "del horizonte.",0 ; String 3
-.asc "",126,"Qu",92," hago ahora?...",0 ; String 4
-.asc "Podr",93,"a huir por siempre en esta nave.",0 ; String 5
-.asc "No necesito a Blake.",0 ; String 6
-.asc "",125,"No necesito a nadie!",0 ; String 7
-.asc "Zen, ",126,"cuales son las probabilidades de",0 ; String 8
-.asc "que un s",94,"lo hombre se esconda de la",0 ; String 9
-.asc "Federaci",94,"n con el Libertador?",0 ; String 10
-.asc "Est",91," bien. Les rescatar",92," entonces.",0 ; String 11
+.asc "I knew it was a trap...",0 ; String 0
+.asc "Zen, put the Liberator outside",0 ; String 1
+.asc "their sensor range, keeping them",0 ; String 2
+.asc "below the horizon.",0 ; String 3
+.asc "And what do I do now?...",0 ; String 4
+.asc "I could run free forever in this ship.",0 ; String 5
+.asc "I don't need Blake.",0 ; String 6
+.asc "I don't need anybody at all!",0 ; String 7
+.asc "Zen, what are the odds for a single",0 ; String 8
+.asc "man to hide away from the Federation",0 ; String 9
+.asc "with the Liberator?",0 ; String 10
+.asc "Okay. I'll rescue them.",0 ; String 11
 res_end
 .)

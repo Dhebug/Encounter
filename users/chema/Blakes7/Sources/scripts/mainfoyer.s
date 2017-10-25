@@ -22,14 +22,14 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Dijiste que sab",93,"as algo de mi familia.",0 ; String 0
-.asc "No he comido nada en 36 horas.",0 ; String 1
-.asc "Recib",93," el libro que me enviaste.",0 ; String 2
-.asc "Un segundo. Vengo ahora.",0 ; String 3
-.asc "",126,"Es esto alg",95,"n tipo de broma pesada?",0 ; String 4
-.asc "Otra vez no...",0 ; String 5
-.asc "",125,"Pero el aire fuera es letal!",0 ; String 6
-.asc "Entoces nos vemos luego.",0 ; String 7
+.asc "You said you had news about my family.",0 ; String 0
+.asc "I haven't taken anything for 36 hours.",0 ; String 1
+.asc "I received the book you sent me.",0 ; String 2
+.asc "One second. I'll be back.",0 ; String 3
+.asc "Is this some kind of practical joke?",0 ; String 4
+.asc "No, not that again..",0 ; String 5
+.asc "But the outside air is lethal!",0 ; String 6
+.asc "See you later, then.",0 ; String 7
 res_end
 .)
 
@@ -240,31 +240,31 @@ res_end
 .word (res_end-res_start +4)
 .byt 221
 res_start
-.asc "Hola Ravella.",0 ; String 0
-.asc "",126,"Tuviste problemas?",0 ; String 1
-.asc "No. Nada extra",35,"o.",0 ; String 2
-.asc "",125,"Muerto de hambre, claro!",0 ; String 3
-.asc "",126,"Y c",94,"mo te encuentras?",0 ; String 4
-.asc "Bien hecho.",0 ; String 5
-.asc "La comida est",91," llena de supresores.",0 ; String 6
-.asc "Yo no.",0 ; String 7
-.asc "El hombre al que conocer",91,"s hoy.",0 ; String 8
-.asc "Tenemos que tener cuidado.",0 ; String 9
-.asc "La Federaci",94,"n tiene mil ojos.",0 ; String 10
-.asc "Bien. Esconde informaci",94,"n vital.",0 ; String 11
-.asc "Nos dicen la puerta que hay que usar",0 ; String 12
-.asc "para salir de la ciudad de ese modo.",0 ; String 13
-.asc "Eso es lo que quieren que creas.",0 ; String 14
-.asc "Una ",95,"ltima cosa.",0 ; String 15
-.asc "Esa es Ravella.",0 ; String 16
-.asc "",126,"No te preocupa pasar tu vida en un",0 ; String 17
-.asc "estado de tranquilidad inducido a",0 ; String 18
-.asc "trav",92,"s de drogas?",0 ; String 19
-.asc "Ten esto. Puerta 2, taquilla 3B.",0 ; String 20
-.asc "Hay algo para t",93," dentro.",0 ; String 21
-.asc "Yo te espero aqu",93,".",0 ; String 22
-.asc "Ya he hablado con ella.",0 ; String 23
-.asc "Ahora tengo que hacer.",0 ; String 24
+.asc "Hello Ravella.",0 ; String 0
+.asc "Did you have any trouble?",0 ; String 1
+.asc "No. Nothing strange.",0 ; String 2
+.asc "Hungry and thirsty of course!",0 ; String 3
+.asc "And how do you feel?",0 ; String 4
+.asc "Well done.",0 ; String 5
+.asc "The food is full of suppressants.",0 ; String 6
+.asc "Not me.",0 ; String 7
+.asc "The man we are meeting tonight.",0 ; String 8
+.asc "We need to be careful.",0 ; String 9
+.asc "The Federation has eyes everywhere.",0 ; String 10
+.asc "Good. The book hides important info.",0 ; String 11
+.asc "They tell us about the door to use",0 ; String 12
+.asc "to exit the city that way.",0 ; String 13
+.asc "That is what they want you to think.",0 ; String 14
+.asc "Just one last thing.",0 ; String 15
+.asc "That is Ravella.",0 ; String 16
+.asc "Doesn't it bother you that you spend",0 ; String 17
+.asc "your life in a state of drug-induced",0 ; String 18
+.asc "tranquility?",0 ; String 19
+.asc "Take this key. Room 2, locker 3B.",0 ; String 20
+.asc "There is something for you inside.",0 ; String 21
+.asc "I'll wait here.",0 ; String 22
+.asc "I've already talk to her.",0 ; String 23
+.asc "Now I've got things to do.",0 ; String 24
 res_end
 .)
 
@@ -417,23 +417,23 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Omnipresentes.",0 ; String 0
-.asc "El c",94,"digo de la c",91,"mara es CH-1337.",0 ; String 1
-.asc "Una puerta al ",91,"rea de servicio.",0 ; String 2
-.asc "Parece confortable...",0 ; String 3
-.asc "No es momento para descansar.",0 ; String 4
-.asc "Me duele la espalda. Mejor lo dejo.",0 ; String 5
-.asc "Es muy pesado, pero lo intentar",92,"...",0 ; String 6
-.asc "Nada. Demasiado pesado para moverlo.",0 ; String 7
-.asc "",125,"Eh! ",125,"Mira lo que hay aqu",93," debajo!",0 ; String 8
-.asc "Esta c",91,"mara parece apagada.",0 ; String 9
-.asc "No es buena idea.",0 ; String 10
-.asc "La c",91,"mara me captar",91," y el sistema de",0 ; String 11
-.asc "detecci",94,"n autom",91,"tico de intrusos",0 ; String 12
-.asc "lanzar",91," una alarma.",0 ; String 13
-.asc "",126,"Por? S",94,"lo es un corredor de servicio.",0 ; String 14
-.asc "Y pesado tambi",92,"n.",0 ; String 15
-.asc "Fijo que nadie limpia debajo.",0 ; String 16
+.asc "Omnipresent.",0 ; String 0
+.asc "The camera code is CH-1337.",0 ; String 1
+.asc "That is a door to the service area.",0 ; String 2
+.asc "Looks confortable...",0 ; String 3
+.asc "Not the right time for rest.",0 ; String 4
+.asc "My back hurts. Not again.",0 ; String 5
+.asc "It is quite heavy, but I'll try..",0 ; String 6
+.asc "Nope... it's too heavy to move.",0 ; String 7
+.asc "Hey! Look what's down here!",0 ; String 8
+.asc "This camera seems to be off.",0 ; String 9
+.asc "That's not a good idea.",0 ; String 10
+.asc "That camera there would notice me",0 ; String 11
+.asc "and the automatic detection system",0 ; String 12
+.asc "would issue an alarm.",0 ; String 13
+.asc "Why? That's only a service corridor.",0 ; String 14
+.asc "And heavy too...",0 ; String 15
+.asc "I bet nobody cleans beneath it.",0 ; String 16
 res_end
 .)
 

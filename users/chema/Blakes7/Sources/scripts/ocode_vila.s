@@ -10,15 +10,15 @@
 .word (res_end-res_start +4)
 .byt 21
 res_start
-.asc "Un hombre curioso...",0 ; String 0
-.asc "No hay cierre que no pueda abrir...",0 ; String 1
-.asc "si estoy suficientemente asustado.",0 ; String 2
-.asc "No me encuentro bien.",0 ; String 3
-.asc "Voy a ser un gran handicap.",0 ; String 4
-.asc "Tengo un s",93,"ndrome - miedo a los",0 ; String 5
-.asc "espacios cerrados.",0 ; String 6
-.asc "Tiene un nombre...",0 ; String 7
-.asc "",126,"Cobard",93,"a?",0 ; String 8
+.asc "A funny man...",0 ; String 0
+.asc "There isn't a lock I can't open...",0 ; String 1
+.asc "if I'm scared enough.",0 ; String 2
+.asc "I don't feel well.",0 ; String 3
+.asc "I'm going to be a big handicap.",0 ; String 4
+.asc "I've got a condition - a fear of",0 ; String 5
+.asc "enclosed spaces.",0 ; String 6
+.asc "There's a name for it...",0 ; String 7
+.asc "Cowardice?",0 ; String 8
 res_end
 .)
 

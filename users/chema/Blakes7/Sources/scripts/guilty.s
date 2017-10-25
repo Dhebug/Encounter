@@ -172,26 +172,26 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Bajo la autoridad de la Federaci",94,"n",0 ; String 0
-.asc "Terrana, declaramos al acusado",0 ; String 1
-.asc "culpable de los siguientes cargos:",0 ; String 2
-.asc "Secuestro, Asalto a un Menor,",0 ; String 3
-.asc "Intento de Corrupci",94,"n de Menores, y",0 ; String 4
-.asc "Abuso de Menores.",0 ; String 5
-.asc "Estos cr",93,"mines se han declarado de",0 ; String 6
-.asc "Categor",93,"a Nueve y, por tanto, son",0 ; String 7
-.asc "declarados Muy Graves. Roj Blake...",0 ; String 8
-.asc "es la Sentencia de este Tribunal que",0 ; String 9
-.asc "sea transportado a la colonia penal",0 ; String 10
-.asc "en el planeta prisi",94,"n Cygnus Alpha,",0 ; String 11
-.asc "donde permanecer",91," hasta el final de",0 ; String 12
-.asc "su vida natural.",0 ; String 13
+.asc "By the authority of the Terran",0 ; String 0
+.asc "Federation the accused has been found",0 ; String 1
+.asc "guilty on the following charges:",0 ; String 2
+.asc "Kidnapping, Assault on a Minor, ",0 ; String 3
+.asc "Attempting to Corrupt Minors, ",0 ; String 4
+.asc "and Child Abuse.",0 ; String 5
+.asc "His crimes have been accorded a",0 ; String 6
+.asc "Category Nine rating, and as such are",0 ; String 7
+.asc "adjudged most grave. Roj Blake...",0 ; String 8
+.asc "it is the sentence of this tribunal",0 ; String 9
+.asc "that you be transported to the penal",0 ; String 10
+.asc "colony on the planet Cygnus Alpha,",0 ; String 11
+.asc "where you will remain for the rest of",0 ; String 12
+.asc "your natural life.",0 ; String 13
 .asc " ",0 ; String 14
-.asc "",A_FWYELLOW,"",125,"Pero las pruebas son falsas!",0 ; String 15
-.asc "",A_FWYELLOW,"",125,"Los cargos son mentiras!",0 ; String 16
-.asc "Mire bien este planeta y su luna. Es",0 ; String 17
-.asc "la ",95,"ltima vez que podr",91," contemplarlo.",0 ; String 18
-.asc "",A_FWYELLOW,"No. Volver",92,".",0 ; String 19
+.asc "",A_FWYELLOW,"But the evidence is false!",0 ; String 15
+.asc "",A_FWYELLOW,"These charges are lies!",0 ; String 16
+.asc "Take a long look at this planet. It's",0 ; String 17
+.asc "the last time you'll ever see it.",0 ; String 18
+.asc "",A_FWYELLOW,"No, I'm coming back.",0 ; String 19
 .asc "                                        ",0 ; String 20
 res_end
 .)

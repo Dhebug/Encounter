@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 48
 res_start
-.asc "Parece resistente, pese a su peso.",0 ; String 0
-.asc "No puedo usar el tronco con eso.",0 ; String 1
-.asc "Mejor lo dejo aqu",93,".",0 ; String 2
+.asc "Seems resistant, despite its weight.",0 ; String 0
+.asc "I can't use the log with that.",0 ; String 1
+.asc "I'd better keep it there.",0 ; String 2
 res_end
 .)
 

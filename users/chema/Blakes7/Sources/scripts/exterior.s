@@ -307,23 +307,23 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",126,"No recuerdas nada de los tratamientos",0 ; String 0
-.asc "a los que te sometieron?",0 ; String 1
-.asc "No me sometieron a ning",95,"n tratamiento.",0 ; String 2
-.asc "Pens",92," que igual quedaba algo...",0 ; String 3
-.asc "alg",95,"n recuerdo residual.",0 ; String 4
-.asc "",126,"Qu",92," significa esto? Tratamientos... mi",0 ; String 5
-.asc "memoria est",91," perfecta ",126,"Qu",92," ocurre aqu",93,"?",0 ; String 6
-.asc "Lo s",92,". Es dif",93,"cil para t",93,".",0 ; String 7
-.asc "",125,"Dime qu",92," sabes de mi familia!",0 ; String 8
-.asc "Muertos. La Federaci",94,"n los elimin",94,".",0 ; String 9
-.asc "Eras y todav",93,"a eres un l",93,"der de la",0 ; String 10
-.asc "resistencia, pero te capturaron.",0 ; String 11
-.asc "No quer",93,"an convertirte en un m",91,"rtir",0 ; String 12
-.asc "as",93," que borraron tu pasado y te",0 ; String 13
-.asc "convirtieron en un ciudadano modelo.",0 ; String 14
-.asc "",125,"Blake, te necesitamos!",0 ; String 15
-.asc "Todos los l",93,"deres te esperan dentro.",0 ; String 16
+.asc "Don't you remember anything about the",0 ; String 0
+.asc "treatments they gave you?",0 ; String 1
+.asc "I've had no treatments.",0 ; String 2
+.asc "I thought there'd be something left...",0 ; String 3
+.asc "some trace of memory.",0 ; String 4
+.asc "What is this? I've had no treatment, my",0 ; String 5
+.asc "memory is alright; now what's going on?",0 ; String 6
+.asc "I know, I know, it's difficult for you.",0 ; String 7
+.asc "Tell me what you know about my family!",0 ; String 8
+.asc "They're dead. Killed by the Federation.",0 ; String 9
+.asc "You were and still are a leader of the",0 ; String 10
+.asc "resistance, but were captured.",0 ; String 11
+.asc "They didn't want you to become a martyr",0 ; String 12
+.asc "so the Federation erased your past and",0 ; String 13
+.asc "reprogrammed you into a content citizen",0 ; String 14
+.asc "Blake, we need you back!",0 ; String 15
+.asc "All the leaders of dissent wait inside.",0 ; String 16
 res_end
 .)
 
@@ -333,20 +333,20 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "",125,"Una reuni",94,"n encantadora!",0 ; String 0
-.asc "Siento interrumpir pero me temo que",0 ; String 1
-.asc "este juego suyo, Sr. Foster, est",91," a",0 ; String 2
-.asc "punto de terminarse.",0 ; String 3
-.asc "Muchas gracias, Blake.",0 ; String 4
-.asc "Has sido el cebo perfecto.",0 ; String 5
-.asc "Travis, elimina a todo el mundo.",0 ; String 6
-.asc "",125,"A sus ",94,"rdenes Comandante Supremo!",0 ; String 7
-.asc "",126,"Y Blake? ",126,"Le elimino tambi",92,"n?",0 ; String 8
+.asc "What a lovely meeting...!",0 ; String 0
+.asc "I am very sorry to interrupt you but",0 ; String 1
+.asc "I'm afraid this game of yours is coming",0 ; String 2
+.asc "to an end this time, Mr. Foster.",0 ; String 3
+.asc "Thank you very much, Blake.",0 ; String 4
+.asc "You've been the perfect bait.",0 ; String 5
+.asc "Travis, eliminate everyone inside.",0 ; String 6
+.asc "At once, Supreme Commander!",0 ; String 7
+.asc "And what about Blake? Shall I kill him?",0 ; String 8
 .asc "No, Travis.",0 ; String 9
-.asc "No queremos un m",91,"rtir.",0 ; String 10
-.asc "Le tengo reservada una sorpresa.",0 ; String 11
-.asc "Algo que destruir",91," su reputaci",94,"n de",0 ; String 12
-.asc "una vez para siempre.",0 ; String 13
-.asc "Ll",92,"venselo, por favor.",0 ; String 14
+.asc "We don't want a martyr.",0 ; String 10
+.asc "I have a surprise for him.",0 ; String 11
+.asc "Something that will totally destroy",0 ; String 12
+.asc "his reputation forever.",0 ; String 13
+.asc "Take him away, please",0 ; String 14
 res_end
 .)

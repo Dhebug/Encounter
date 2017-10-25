@@ -176,11 +176,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 254
 res_start
-.asc "Ah",93,"...",0 ; String 0
-.asc "Ah",93," est",91,".",0 ; String 1
-.asc "La nave de la Federaci",94,"n tayendo",0 ; String 2
-.asc "nuevos prisioneros.",0 ; String 3
-.asc "",126,"Prisoneros?",0 ; String 4
-.asc "Nuevas almas para La F",92,".",0 ; String 5
+.asc "There...",0 ; String 0
+.asc "There it is.",0 ; String 1
+.asc "The Federation ship bringing in",0 ; String 2
+.asc "prisoners.",0 ; String 3
+.asc "Prisoners?",0 ; String 4
+.asc "New souls for The Faith.",0 ; String 5
 res_end
 .)

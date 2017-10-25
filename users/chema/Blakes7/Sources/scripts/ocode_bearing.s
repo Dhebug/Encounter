@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 32
 res_start
-.asc "Una peque",35,"a bola de acero.",0 ; String 0
-.asc "Probablemente de un rodamiento.",0 ; String 1
-.asc "No puedo usarla de ese modo.",0 ; String 2
+.asc "A small steel ball.",0 ; String 0
+.asc "Probably loose from a bearing.",0 ; String 1
+.asc "I can't use the ball in that way.",0 ; String 2
 res_end
 .)
 

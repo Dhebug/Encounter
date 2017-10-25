@@ -10,14 +10,14 @@
 .word (res_end-res_start +4)
 .byt 20
 res_start
-.asc "Una mujer excepcional...",0 ; String 0
-.asc "Estoy ocupada intentando comprender",0 ; String 1
-.asc "estos controles. Dame algo de tiempo.",0 ; String 2
-.asc "",125,"Est",91," en shock! ",125,"debo darme prisa!",0 ; String 3
-.asc "Debemos encender los sistemas.",0 ; String 4
-.asc "",126,"Alguna idea?",0 ; String 5
-.asc "Estoy contigo.",0 ; String 6
-.asc "",125,"Blake! ",125,"Casi no te reconozco.",0 ; String 7
+.asc "An exceptional woman...",0 ; String 0
+.asc "I'm busy trying to understand these",0 ; String 1
+.asc "alien controls. Gimme some more time.",0 ; String 2
+.asc "She is in shock! I must hurry!",0 ; String 3
+.asc "We must switch on the systems.",0 ; String 4
+.asc "Any idea?",0 ; String 5
+.asc "I'm with you.",0 ; String 6
+.asc "Blake! I barely recognize you!",0 ; String 7
 res_end
 .)
 

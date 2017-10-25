@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 40
 res_start
-.asc "",126,"Ser",91,"n de cromo-vanadio?",0 ; String 0
-.asc "No se puede usar la llave as",93,".",0 ; String 1
+.asc "Chromium-vanadium alloy?",0 ; String 0
+.asc "The wrench cannnot be used that way.",0 ; String 1
 res_end
 .)
 

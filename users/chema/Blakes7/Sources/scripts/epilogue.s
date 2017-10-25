@@ -138,23 +138,23 @@ res_end
 .byt 200
 res_start
 .asc "Ah, Travis.",0 ; String 0
-.asc "Todo el mundo sabe ya lo de tu fiasco.",0 ; String 1
-.asc "Has o",93,"do, seguro que han habido dos",0 ; String 2
-.asc "intentos de atentar contra mi vida.",0 ; String 3
-.asc "S",93,". Estuve muy preocupado.",0 ; String 4
-.asc "Te considero a TI responsable.",0 ; String 5
-.asc "Tu incompetencia ha puesto en riesgo",0 ; String 6
-.asc "mi vida y mi posici",94,"n.",0 ; String 7
-.asc "S",93,", pero eso cambiar",91,". He...",0 ; String 8
-.asc "",125,"D",92,"jalo!",0 ; String 9
-.asc "Capturaremos a Blake y su nacve antes",0 ; String 10
-.asc "o despu",92,"s, pero por ahora quiero poner",0 ; String 11
-.asc "nuestros recursos en algo diferente...",0 ; String 12
-.asc "algo que me dar",91," mucho m",91,"s poder y",0 ; String 13
-.asc "mejorar",91," mi posici",94,"n dentro del Alto",0 ; String 14
-.asc "Mando de la Federaci",94,"n.",0 ; String 15
-.asc "",126,"Si?",0 ; String 16
-.asc "Quiero mostrarte el Proyecto ORAC.",0 ; String 17
-.asc "Te informar",92," de los detalles...",0 ; String 18
+.asc "Everyone's heard about your fiasco...",0 ; String 1
+.asc "You've heard, of course, that there",0 ; String 2
+.asc "have been two attempts on my life.",0 ; String 3
+.asc "I have. I was very concerned.",0 ; String 4
+.asc "I consider YOU responsible.",0 ; String 5
+.asc "Your incompetence has put my life and",0 ; String 6
+.asc "my position at risk.",0 ; String 7
+.asc "Yes, but this WILL change. I have...",0 ; String 8
+.asc "Stop it!",0 ; String 9
+.asc "We will capture Blake and his ship",0 ; String 10
+.asc "sooner or later, but for now I want",0 ; String 11
+.asc "to put all our resources in something",0 ; String 12
+.asc "else... something that will put me in",0 ; String 13
+.asc "a much more powerful position inside",0 ; String 14
+.asc "the Federation High-Command.",0 ; String 15
+.asc "Yes?",0 ; String 16
+.asc "I want to show you Project ORAC.",0 ; String 17
+.asc "I'll debrief you on the details...",0 ; String 18
 res_end
 .)

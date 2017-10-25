@@ -719,45 +719,45 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "La celda que dec",93,"a la voz.",0 ; String 0
-.asc "Esa no es la celda correcta.",0 ; String 1
-.asc "Me llamo Cally y soy del planeta Auron",0 ; String 2
-.asc "Mi gente son los Auronar.",0 ; String 3
-.asc "As",93," que eres tel",92,"pata...",0 ; String 4
-.asc "Y r",91,"pida. Soy una guerrera.",0 ; String 5
-.asc "Me llamo Roj Blake.",0 ; String 6
-.asc "Vengo a rescatar a un miembro de la",0 ; String 7
-.asc "resistencia. Su nombre es Ravella.",0 ; String 8
-.asc "Trajeron a alguien hace unos d",93,"as.",0 ; String 9
-.asc "Podr",93,"a ser ella. Averigu",92,"moslo.",0 ; String 10
+.asc "That is the cell the voice speak about.",0 ; String 0
+.asc "That is not the correct cell number.",0 ; String 1
+.asc "My name is Cally. And I am from Auron.",0 ; String 2
+.asc "My people are the Auronar.",0 ; String 3
+.asc "And so you're telepathic...",0 ; String 4
+.asc "And quick. I am a warrior.",0 ; String 5
+.asc "My name is Roj Blake.",0 ; String 6
+.asc "I came to rescue a member of the",0 ; String 7
+.asc "resistance. Her name is Ravella.",0 ; String 8
+.asc "They brought someone a few days ago.",0 ; String 9
+.asc "It could be her. Come, let's find out.",0 ; String 10
 .asc "Ravella...",0 ; String 11
-.asc "",125,"Blake! ",126,"Viniste a por m",93,"?",0 ; String 12
-.asc "Por supuesto. Te lo deb",93,"a.",0 ; String 13
-.asc "",126,"Qui",92,"n es ella?",0 ; String 14
-.asc "Cally. Me ha ayudado.",0 ; String 15
-.asc "No me f",93,"o de ella...",0 ; String 16
-.asc "Blake, algo va mal...",0 ; String 17
-.asc "No puedo contactar con ella... como...",0 ; String 18
-.asc "",125,"si no fuese un ser vivo!",0 ; String 19
-.asc "",125,"Blake, elim",93,"nala! ",125,"es una esp",93,"a!",0 ; String 20
-.asc "",125,"No lo soy! ",125,"ella lo es!",0 ; String 21
-.asc "",125,"Eh!",0 ; String 22
-.asc "",125,"Blake! ",126,"Qu",92," haces?",0 ; String 23
-.asc "",126,"Ves? ",125,"Es un robot!",0 ; String 24
-.asc "",126,"De qu",92," va todo esto?",0 ; String 25
-.asc "S",92," mi invitado, Blake...",0 ; String 26
-.asc "Esa Auronar casi arruina mi plan.",0 ; String 27
-.asc "Pero de todos modos te tengo.",0 ; String 28
-.asc "Solo que mi peque",35,"o... juguete no",0 ; String 29
-.asc "acab",94,"n en tu nave para capturarla",0 ; String 30
-.asc "as",93," que la rendir",91,"s.",0 ; String 31
-.asc "No lo har",92,", Travis.",0 ; String 32
-.asc "Oh, s",93,". Lo har",91,"s. Tengo a toda tu",0 ; String 33
-.asc "banda capturada. Les har",92," sufrir como",0 ; String 34
-.asc "nunca han imaginado.",0 ; String 35
-.asc "Toma. Ponte uno de estos brazaletes.",0 ; String 36
-.asc "",126,"Para qu",92," sirven?",0 ; String 37
-.asc "Lo ver",91,"s en su momento...",0 ; String 38
+.asc "Blake! You came for me?",0 ; String 12
+.asc "Of course. I owe it to you.",0 ; String 13
+.asc "Who is she?",0 ; String 14
+.asc "She is Cally. She helped me.",0 ; String 15
+.asc "I don't trust her...",0 ; String 16
+.asc "Blake, something's wrong...",0 ; String 17
+.asc "I can't contact her... she is not...",0 ; String 18
+.asc "She is not a living creature!",0 ; String 19
+.asc "Blake, kill her! She is a spy!",0 ; String 20
+.asc "I'm not! She is!",0 ; String 21
+.asc "Hey!",0 ; String 22
+.asc "Blake! What are you doing?",0 ; String 23
+.asc "See? She's a Robot!",0 ; String 24
+.asc "Now, what's this all about?",0 ; String 25
+.asc "Be my guest Blake...",0 ; String 26
+.asc "That Auronar almost ruined my plan.",0 ; String 27
+.asc "But anyway I got you.",0 ; String 28
+.asc "It's just that my... little toy did",0 ; String 29
+.asc "not end in your ship to capture it",0 ; String 30
+.asc "so you'll surrender it, instead.",0 ; String 31
+.asc "I won't, Travis.",0 ; String 32
+.asc "Oh, yes. You will. I have all your",0 ; String 33
+.asc "gang arrested. I'll make them suffer",0 ; String 34
+.asc "as they've never ever imagined.",0 ; String 35
+.asc "Here. Put on one of these bracelets.",0 ; String 36
+.asc "What's this for?",0 ; String 37
+.asc "You'll see in time...",0 ; String 38
 res_end
 .)
 

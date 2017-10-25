@@ -722,20 +722,20 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "",126,"Qu",92," es esto? un papel en blanco...",0 ; String 0
-.asc "",125,"Un momento! se forma una imagen...",0 ; String 1
-.asc "Una foto. ",125,"Ese soy yo!",0 ; String 2
-.asc "Pero ",126,"qui",92,"n es esa gente?",0 ; String 3
-.asc "Y ",126,"d",94,"nde estamos?",0 ; String 4
-.asc "Mi mente... todo est",91," borroso...",0 ; String 5
-.asc "",125,"Me estoy mareando!",0 ; String 6
+.asc "What's this... An empty paper...",0 ; String 0
+.asc "Wait! an image is being formed...",0 ; String 1
+.asc "It's a picture. That's me!",0 ; String 2
+.asc "But who are those people?...",0 ; String 3
+.asc "And where are we?",0 ; String 4
+.asc "My mind... is in darkness..",0 ; String 5
+.asc "Oh! I'm sick!",0 ; String 6
 .asc "Aaaaarghhhh!!",0 ; String 7
-.asc "",126,"Qu",92," ha sido eso?",0 ; String 8
-.asc "Como si un monstruo se asomase a la",0 ; String 9
-.asc "puerta y, de pronto, se marchase...",0 ; String 10
-.asc "La foto se ha borrado de nuevo.",0 ; String 11
-.asc "Ravella tiene mucho que explicar.",0 ; String 12
-.asc "",125,"Es hora de volver a verla!",0 ; String 13
+.asc "What was that?",0 ; String 8
+.asc "As if a monster came out of my closet,",0 ; String 9
+.asc "and suddenly retreated...",0 ; String 10
+.asc "The picture has disappeared again.",0 ; String 11
+.asc "Ravella will have a lot of things to",0 ; String 12
+.asc "explain. Time to meet her again!",0 ; String 13
 res_end
 .)
 
@@ -745,27 +745,27 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Un caldero y una fregona.",0 ; String 0
-.asc "",126,"Cicl",94,"nica? Quiz",91,"s...",0 ; String 1
-.asc "Parece bastante robusta.",0 ; String 2
-.asc "Varios productos de limpieza.",0 ; String 3
-.asc "Pone: Cuidado, suelo h",95,"medo.",0 ; String 4
-.asc "Una taquilla. Nada en especial.",0 ; String 5
-.asc "",125,"No es momento de ponerse a limpiar!",0 ; String 6
-.asc "",126,"Y qu",92," esperas que haga con eso?",0 ; String 7
-.asc "Prefiero que se quede aqu",93,".",0 ; String 8
-.asc "No es ",95,"til para nuestros prop",94,"sitos.",0 ; String 9
-.asc "La taquilla est",91," cerrada.",0 ; String 10
-.asc "Esta taquilla tambi",92,"n est",91," cerrada.",0 ; String 11
-.asc "Y esta tambi",92,"n est",91," cerrada.",0 ; String 12
-.asc "Cerrada. Creo que todas lo est",91,"n.",0 ; String 13
-.asc "La llave no vale para ",92,"sta.",0 ; String 14
-.asc "Tampoco vale para ",92,"sta otra.",0 ; String 15
-.asc "No. No es la de ",92,"sta.",0 ; String 16
-.asc "",125,"Aj",91,"! Entra... ah, que no.",0 ; String 17
-.asc "Esta s",93,". Perfecto.",0 ; String 18
-.asc "Eso no va a ayudar.",0 ; String 19
-.asc "A ver de qu",92," va todo esto.",0 ; String 20
+.asc "A bucket and a mop.",0 ; String 0
+.asc "Cyclonic? Maybe...",0 ; String 1
+.asc "Looks pretty robust.",0 ; String 2
+.asc "Various cleaning products.",0 ; String 3
+.asc "It reads: Warning. Wet floor.",0 ; String 4
+.asc "A locker. Nothing special.",0 ; String 5
+.asc "No time for cleaning now!",0 ; String 6
+.asc "What do you expect me to do with it?",0 ; String 7
+.asc "I prefer to leave it here.",0 ; String 8
+.asc "No use for what we have in hand now.",0 ; String 9
+.asc "The locker is closed.",0 ; String 10
+.asc "This locker is also closed.",0 ; String 11
+.asc "This one is closed too.",0 ; String 12
+.asc "Closed. It seems all are.",0 ; String 13
+.asc "The key does not fit.",0 ; String 14
+.asc "The key doen't fit here either.",0 ; String 15
+.asc "Nope. Not for this one.",0 ; String 16
+.asc "Aha! It fits... uh, no.",0 ; String 17
+.asc "It fits... good.",0 ; String 18
+.asc "That won't help.",0 ; String 19
+.asc "Okay, let's see what this is all about.",0 ; String 20
 res_end
 .)
 

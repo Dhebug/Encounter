@@ -140,26 +140,26 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",125,"Blake! ",125,"Por fin llegas!",0 ; String 0
-.asc "Tem",93,"a que te hubiesen capturado.",0 ; String 1
-.asc "",126,"D",94,"nde est",91," Ravella?",0 ; String 2
-.asc "No apareci",94,". Por eso me llev",94," tanto",0 ; String 3
-.asc "tiempo llegar hasta aqu",93,".",0 ; String 4
-.asc "",125,"Son noticias terribles!",0 ; String 5
-.asc "Pero ven conmigo. Te llevar",92," con el",0 ; String 6
-.asc "resto del grupo.",0 ; String 7
+.asc "Blake! You came at last!",0 ; String 0
+.asc "I was afraid you were captured.",0 ; String 1
+.asc "Where's Ravella?",0 ; String 2
+.asc "She did not appear. That's why it took",0 ; String 3
+.asc "me so long to find a way to come here.",0 ; String 4
+.asc "That is terrible news!",0 ; String 5
+.asc "But come with me, I'll take you to",0 ; String 6
+.asc "the rest of the group.",0 ; String 7
 .asc " SEC CAM H-233 ",0 ; String 8
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"El plan funciona, Comandante Supremo.",0 ; String 9
-.asc "",A_FWMAGENTA,"MI plan funciona, Travis.",0 ; String 10
-.asc "",A_FWMAGENTA,"No pod",93,"an evitar traer a Blake",0 ; String 11
-.asc "",A_FWMAGENTA,"de regreso con el grupo.",0 ; String 12
-.asc "",A_FWMAGENTA,"A",95,"n es un h",92,"roe.",0 ; String 13
-.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Arrestar a Ravella fue un riesgo.",0 ; String 14
-.asc "",A_FWMAGENTA,"S",93,", pero Blake tiene sus recursos",0 ; String 15
-.asc "",A_FWMAGENTA,"y se estaba volviendo un problema.",0 ; String 16
-.asc "",A_FWMAGENTA,"Ahora prepara tu escuadr",94,"n.",0 ; String 17
-.asc "",A_FWMAGENTA,"La resistencia ser",91," eliminada por",0 ; String 18
-.asc "",A_FWMAGENTA,"completo y para siempre esta noche.",0 ; String 19
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"The plan works, Supreme Commander.",0 ; String 9
+.asc "",A_FWMAGENTA,"you mean MY plan works, Travis.",0 ; String 10
+.asc "",A_FWMAGENTA,"They could not avoid trying to bring",0 ; String 11
+.asc "",A_FWMAGENTA,"Blake back to their group.",0 ; String 12
+.asc "",A_FWMAGENTA,"He is still a hero.",0 ; String 13
+.asc "",A_FWWHITE+A_FWGREEN*8+$c0,"Arresting Ravella was risky.",0 ; String 14
+.asc "",A_FWMAGENTA,"Yes, but Blake has his resources",0 ; String 15
+.asc "",A_FWMAGENTA,"and she was becoming a higher risk.",0 ; String 16
+.asc "",A_FWMAGENTA,"Now prepare your squadron.",0 ; String 17
+.asc "",A_FWMAGENTA,"The resistance will be totally",0 ; String 18
+.asc "",A_FWMAGENTA,"obliterated tonight.",0 ; String 19
 .asc "               ",0 ; String 20
 res_end
 .)

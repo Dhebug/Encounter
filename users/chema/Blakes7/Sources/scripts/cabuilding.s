@@ -23,18 +23,18 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Parece fuerte.",0 ; String 0
-.asc "Se oye gente detr",91,"s...",0 ; String 1
-.asc "Mejor busco otra manera de entrar.",0 ; String 2
-.asc "Todav",93,"a est",91,"n algo h",95,"medas...",0 ; String 3
-.asc "Hola, hermano. ",126,"Alg",95,"n problema?",0 ; String 4
-.asc "Sabes que no puedes entrar hasta el",0 ; String 5
-.asc "fin de tu turno. Vuelve a tus",0 ; String 6
-.asc "quehaceres y que El te bendiga.",0 ; String 7
-.asc "Est",91," oscureciendo. Mejor que ponga la",0 ; String 8
-.asc "l",91,"mpara en su sitio. La he estado",0 ; String 9
-.asc "reparando toda la tarde.",0 ; String 10
-.asc "Perfecto. Ya no temeremos a las grues.",0 ; String 11
+.asc "Looks strong.",0 ; String 0
+.asc "I can hear people behind...",0 ; String 1
+.asc "Better find another way in.",0 ; String 2
+.asc "They are still a bit wet...",0 ; String 3
+.asc "Hello, brother. Any problem?",0 ; String 4
+.asc "You know you cannot enter until the",0 ; String 5
+.asc "end of the shift. Go back to your",0 ; String 6
+.asc "duties, and let He bless you.",0 ; String 7
+.asc "It is getting dark. I'd better put the",0 ; String 8
+.asc "lamp in its place. I've been repairing",0 ; String 9
+.asc "it all the evening.",0 ; String 10
+.asc "Perfect. Now we won't fear the grues.",0 ; String 11
 res_end
 .)
 

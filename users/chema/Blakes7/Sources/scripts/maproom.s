@@ -10,22 +10,22 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Jugu",92," a ese juego hace mucho tiempo.",0 ; String 0
-.asc "Ten",93,"as que rescatar a una dama que",0 ; String 1
-.asc "ten",93,"a capturada un gorila gigante.",0 ; String 2
-.asc "El monstruo te lanzaba barriles",0 ; String 3
-.asc "seg",95,"n tu intentabas trepar.",0 ; String 4
-.asc "",125,"Era muy divertido!",0 ; String 5
-.asc "Y m",91,"s dif",93,"cil que este juego.",0 ; String 6
-.asc "Ahora conc",92,"ntrate en esto, venga.",0 ; String 7
-.asc "No sabr",93,"a c",94,"mo usarlo.",0 ; String 8
-.asc "Una impresora. Un modelo peque",35,"o.",0 ; String 9
-.asc "Hay una hoja impresa en la bandeja.",0 ; String 10
-.asc "No puedo hacer eso.",0 ; String 11
-.asc "Una buena colecci",94,"n de ci-fi.",0 ; String 12
-.asc "Cajas de lo m",91,"s extra",35,"o.",0 ; String 13
-.asc "Tazas con s",93,"mbolos de lo m",91,"s friki.",0 ; String 14
-.asc "",125,"No sin el mapa!",0 ; String 15
+.asc "I am sure I played that long time ago.",0 ; String 0
+.asc "You had to rescue a damsel who had",0 ; String 1
+.asc "been kidnapped by a giant ape.",0 ; String 2
+.asc "The monster threw barrels and other",0 ; String 3
+.asc "things at you as you climbed up.",0 ; String 4
+.asc "It was quite fun!",0 ; String 5
+.asc "And more difficult than this game.",0 ; String 6
+.asc "Now concentrate on our task, please.",0 ; String 7
+.asc "I wouldn't know how to use it.",0 ; String 8
+.asc "A printer. A small model.",0 ; String 9
+.asc "There is a printout on the tray",0 ; String 10
+.asc "I cannot do that.",0 ; String 11
+.asc "A good collection of sci-fi books.",0 ; String 12
+.asc "Strange looking boxes.",0 ; String 13
+.asc "Mugs of all sizes with nerd symbols.",0 ; String 14
+.asc "Not without the map!",0 ; String 15
 res_end
 .)
 
@@ -519,21 +519,21 @@ res_end
 .word (res_end-res_start +4)
 .byt 203
 res_start
-.asc "",125,"S",93,", es ciento...",0 ; String 0
-.asc "",125,"S",93,", es doscientos...",0 ; String 1
-.asc "",125,"S",93,", es trescientos...",0 ; String 2
-.asc "",125,"S",93,", es cuatrocientos...",0 ; String 3
-.asc "... veinti...",0 ; String 4
-.asc "... treinta y...",0 ; String 5
-.asc "... cuarenta y...",0 ; String 6
-.asc "... cincuenta y...",0 ; String 7
-.asc "... sesenta y...",0 ; String 8
-.asc "... setenta y...",0 ; String 9
-.asc "... uno!",0 ; String 10
-.asc "... dos!",0 ; String 11
-.asc "... tres!",0 ; String 12
-.asc "... cuatro!",0 ; String 13
-.asc "... cinco!",0 ; String 14
+.asc "Yes, it's one hundred...",0 ; String 0
+.asc "Yes, it's two hundred...",0 ; String 1
+.asc "Yes, it's three hundred...",0 ; String 2
+.asc "Yes, it's four hundred...",0 ; String 3
+.asc "... and twenty...",0 ; String 4
+.asc "... and thirty...",0 ; String 5
+.asc "... and forty...",0 ; String 6
+.asc "... and fifty...",0 ; String 7
+.asc "... and sixty...",0 ; String 8
+.asc "... and seventy...",0 ; String 9
+.asc "... one!",0 ; String 10
+.asc "... two!",0 ; String 11
+.asc "... three!",0 ; String 12
+.asc "... four!",0 ; String 13
+.asc "... five!",0 ; String 14
 res_end
 .)
 
@@ -660,9 +660,9 @@ res_end
 .word (res_end-res_start +4)
 .byt 202
 res_start
-.asc "",126,"No eres el tipo de informaci",94,"n?",0 ; String 0
-.asc "Necesito datos de las salidas.",0 ; String 1
-.asc "Nada, gracias.",0 ; String 2
+.asc "Aren't you the guy of the info desk?",0 ; String 0
+.asc "I need info on the city exits.",0 ; String 1
+.asc "Nothing, thank you.",0 ; String 2
 res_end
 .)
 
@@ -751,28 +751,28 @@ res_end
 .word (res_end-res_start +4)
 .byt 201
 res_start
-.asc "He visto esa cara antes.",0 ; String 0
-.asc "Hola ",126,"buscas algo?",0 ; String 1
-.asc "",126,"Qu",92,"?",0 ; String 2
-.asc "",126,"Para qu",92," querr",93,"a yo eso?",0 ; String 3
-.asc "Ya te dije. 100 cr",92,"ditos.",0 ; String 4
-.asc "",125,"Eh!",0 ; String 5
-.asc "",125,"Ese no lo tengo en la colecci",94,"n!",0 ; String 6
-.asc "Trato hecho. Un segundo.",0 ; String 7
-.asc "Tu mapa est",91," listo. En la impresora.",0 ; String 8
-.asc "Siempre estoy dispuesto a negociar.",0 ; String 9
-.asc "Eh... bueno...",0 ; String 10
-.asc "No. Se parece a mi, pero no estar",93,"a",0 ; String 11
-.asc "involucrado en nada... alegal.",0 ; String 12
-.asc "Podr",93,"a darte informaci",94,"n...",0 ; String 13
-.asc "perto te costar",91," 100 cr",92,"ditos.",0 ; String 14
-.asc "Un precio justo, si me preguntas.",0 ; String 15
-.asc "Ah, est",91,"s de vuelta. Bien.",0 ; String 16
-.asc "Dime el n",95,"mero de la salida.",0 ; String 17
-.asc "Mira, esa est",91," aqu",93," cerca...",0 ; String 18
-.asc "De acuerdo, me quedo con la taza...",0 ; String 19
-.asc "Mmmm. Hay algo mal.",0 ; String 20
-.asc "No encuentro ese n",95,"mero de salida.",0 ; String 21
-.asc "Tienes el mapa en la impresora.",0 ; String 22
+.asc "I have seen this face before.",0 ; String 0
+.asc "Hello. Looking for something?",0 ; String 1
+.asc "What?",0 ; String 2
+.asc "What would I want that for?",0 ; String 3
+.asc "I already told you: 100 credits.",0 ; String 4
+.asc "Hey!!",0 ; String 5
+.asc "That one is missing in my collection!",0 ; String 6
+.asc "You have a deal. One second.",0 ; String 7
+.asc "Your map is printed. Take it.",0 ; String 8
+.asc "Okay. I'm always ready to trade.",0 ; String 9
+.asc "Uh... well...",0 ; String 10
+.asc "No. He looks like me, but he wouldn't",0 ; String 11
+.asc "be involved in anything... un-legal.",0 ; String 12
+.asc "I could provide that information...",0 ; String 13
+.asc "but it would cost you 100 credits.",0 ; String 14
+.asc "A fair price, if you ask me.",0 ; String 15
+.asc "Ah, you are back. Good.",0 ; String 16
+.asc "Tell me the exit number.",0 ; String 17
+.asc "This one seems to be quite near...",0 ; String 18
+.asc "Okay, I'll get the mug...",0 ; String 19
+.asc "Mmmm... something's wrong.",0 ; String 20
+.asc "Can't find that exit number",0 ; String 21
+.asc "Your map is in the printer.",0 ; String 22
 res_end
 .)

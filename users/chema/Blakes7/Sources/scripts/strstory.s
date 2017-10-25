@@ -10,22 +10,22 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",A_FWGREEN,"Resistencia...",0 ; String 0
-.asc "",A_FWMAGENTA,"",125,"TRAIDOR!",0 ; String 1
-.asc "",A_FWRED,"ASESINATO",0 ; String 2
-.asc "",A_FWYELLOW,"Control mental...",0 ; String 3
-.asc "",A_FWCYAN,"DOLOR",0 ; String 4
-.asc "",A_FWWHITE,"SUFRIMIENTO",0 ; String 5
-.asc "",A_FWWHITE,"Calma, Roj Blake.",0 ; String 6
-.asc "",A_FWWHITE,"S",94,"lo fue una pesadilla.",0 ; String 7
+.asc "",A_FWGREEN,"Resistance...",0 ; String 0
+.asc "",A_FWMAGENTA,"TRAITOR!",0 ; String 1
+.asc "",A_FWRED,"MURDER",0 ; String 2
+.asc "",A_FWYELLOW,"Mind Control...",0 ; String 3
+.asc "",A_FWCYAN,"PAIN",0 ; String 4
+.asc "",A_FWWHITE,"SUFFERING",0 ; String 5
+.asc "",A_FWWHITE,"Calm down, Roj Blake.",0 ; String 6
+.asc "",A_FWWHITE,"It was just a nightmare.",0 ; String 7
 .asc " ",0 ; String 8
-.asc "",A_FWWHITE,"Sabes qui",92,"n eres. Tu familia vive",0 ; String 9
-.asc "",A_FWWHITE,"en las colonias exteriores. Ese fue",0 ; String 10
-.asc "",A_FWWHITE,"el trato con la Federaci",94,"n:",0 ; String 11
-.asc "",A_FWWHITE,"10 a",35,"os trabajando aqu",93," para pagar",0 ; String 12
-.asc "",A_FWWHITE,"el transporte y la mudanza.",0 ; String 13
-.asc "",A_FWWHITE,"Y una nueva vida en un mundo limpio.",0 ; String 14
+.asc "",A_FWWHITE,"You know who you are. Your family is",0 ; String 9
+.asc "",A_FWWHITE,"safe in the outer colonies. That was",0 ; String 10
+.asc "",A_FWWHITE,"the deal with the Federation:",0 ; String 11
+.asc "",A_FWWHITE,"10 years working on Earth to pay for",0 ; String 12
+.asc "",A_FWWHITE,"the transport and relocation.",0 ; String 13
+.asc "",A_FWWHITE,"Then start a new life in a clean world.",0 ; String 14
 .asc " ",0 ; String 15
-.asc "",A_FWWHITE,"",126,"Estar",91,"n bien?",0 ; String 16
+.asc "",A_FWWHITE,"Will they be alright?",0 ; String 16
 res_end
 .)

@@ -22,20 +22,20 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Pone:",0 ; String 0
-.asc "Este es el destino de los no creyentes.",0 ; String 1
-.asc "Horripilante.",0 ; String 2
-.asc "A este hombre le han torturado y",0 ; String 3
-.asc "dejado morir atado al poste con",0 ; String 4
-.asc "una cuerda larga y gruesa.",0 ; String 5
-.asc "Bichos repulsivos lo cubren todo",0 ; String 6
-.asc "Est",91,"s de co",35,"a. No voy a tocar la",0 ; String 7
-.asc "cuerda cubierta de todos esos bichos.",0 ; String 8
-.asc "",125,"Funciona! ",125,"Los bichos huyen!",0 ; String 9
-.asc "Podr",93,"a coger la cuerda para luego...",0 ; String 10
-.asc "No s",92," qu",92," quieres decir.",0 ; String 11
-.asc "El cad",91,"ver no, pero la cuerda la cojo.",0 ; String 12
-.asc "No queda nada interesante.",0 ; String 13
+.asc "It reads:",0 ; String 0
+.asc "This is the fate of the non-believers.",0 ; String 1
+.asc "Creepy...",0 ; String 2
+.asc "This man has been tortured and left",0 ; String 3
+.asc "to die here, tied to the post with a",0 ; String 4
+.asc "large, thick rope.",0 ; String 5
+.asc "Nasty bugs cover everything.",0 ; String 6
+.asc "You're kidding. I won't touch the rope",0 ; String 7
+.asc "while covered with those nasty bugs.",0 ; String 8
+.asc "It works! The bugs are running away.",0 ; String 9
+.asc "I could take the rope for later...",0 ; String 10
+.asc "I don't know what you mean.",0 ; String 11
+.asc "Not the corpse, I'll take the rope.",0 ; String 12
+.asc "There is nothing left of interest.",0 ; String 13
 res_end
 .)
 

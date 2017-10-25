@@ -812,8 +812,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Solo es una puerta autom",91,"tica.",0 ; String 0
-.asc "No es momento de volver.",0 ; String 1
-.asc "Parece que est",91,"n echando anuncios.",0 ; String 2
+.asc "It is just an automatic door.",0 ; String 0
+.asc "No time to go back. Just forward.",0 ; String 1
+.asc "They appear to be running ads.",0 ; String 2
 res_end
 .)

@@ -322,36 +322,36 @@ res_end
 .word (res_end-res_start +4)
 .byt 2
 res_start
-.asc "Entendido, Blake.",0 ; String 0
-.asc "Vila y yo iremos.",0 ; String 1
-.asc "",126,"Yo? No, un minuto, hace fr",93,"o ah",93,"",0 ; String 2
-.asc "y soy muy susceptible a las bajas",0 ; String 3
-.asc "temperaturas. ",125,"Tengo el pecho d",92,"bil!",0 ; String 4
-.asc "Tampoco el resto es muy impresionante.",0 ; String 5
-.asc "",126,"Por qu",92," no vas t",95,"?",0 ; String 6
-.asc "T",95," eres prescindible.",0 ; String 7
-.asc "",126,"Y t",95," no?",0 ; String 8
-.asc "No. No soy prescindible, no soy",0 ; String 9
-.asc "est",95,"pido, y no voy a ir.",0 ; String 10
-.asc "Empiezo a pensar que hay trampa.",0 ; String 11
-.asc "No una demasiado buena, entonces.",0 ; String 12
-.asc "Ya estamos sospechando...",0 ; String 13
-.asc "La cosa no est",91," en si sospechas,",0 ; String 14
-.asc "sino en si te cogen.",0 ; String 15
-.asc "Venga Vila. Vamos.",0 ; String 16
-.asc "Jenna, necesito alterar la hora.",0 ; String 17
-.asc "",126,"Se podr",93,"a hacer desde aqu",93,"?",0 ; String 18
-.asc "Fijo, pero no yo. Vila o Avon podr",93,"an.",0 ; String 19
-.asc "Vale. Libertador, ",126,"me o",93,"s?",0 ; String 20
-.asc "Necesito a Avon o Vila aqu",93," abajo.",0 ; String 21
-.asc "Necesito adelantar el reloj una hora.",0 ; String 22
-.asc "",126,"Podr",93,"as?",0 ; String 23
-.asc "D",92,"jame ver...",0 ; String 24
-.asc "Pues s",93,", pero necesito un emisor con...",0 ; String 25
-.asc "Un segundo. P",91,"same el transpondedor.",0 ; String 26
-.asc "Ah",93," est",91,". ",125,"Hecho!",0 ; String 27
-.asc "Bien. Esperad a mi se",35,"al.",0 ; String 28
-.asc "Cu",93,"date.",0 ; String 29
-.asc "Lo har",92,".",0 ; String 30
+.asc "Understood, Blake.",0 ; String 0
+.asc "Vila and I will teleport down.",0 ; String 1
+.asc "Me? No, wait a minute, it's cold out",0 ; String 2
+.asc "there and I'm very susceptible to low",0 ; String 3
+.asc "temperatures. I've got a weak chest!",0 ; String 4
+.asc "The rest of you's not very impressive.",0 ; String 5
+.asc "Why don't you go?",0 ; String 6
+.asc "You are expendable.",0 ; String 7
+.asc "And you're not?",0 ; String 8
+.asc "No, I am not. I am not expendable,",0 ; String 9
+.asc "I'm not stupid, and I'm not going.",0 ; String 10
+.asc "I'm starting to smell a trap here.",0 ; String 11
+.asc "It's not a very good one, then.",0 ; String 12
+.asc "We're suspicious of it already.",0 ; String 13
+.asc "The test is not whether you are",0 ; String 14
+.asc "suspicious but whether you are caught.",0 ; String 15
+.asc "Come on, Vila. Let's go.",0 ; String 16
+.asc "Jenna, we need to hack the clock.",0 ; String 17
+.asc "Could it be done from here?",0 ; String 18
+.asc "Sure, but not by me. Vila or Avon can.",0 ; String 19
+.asc "Okay. Liberator, do you hear me?",0 ; String 20
+.asc "I need Avon or Vila to come down here.",0 ; String 21
+.asc "I need to move the clock forward one",0 ; String 22
+.asc "hour. Can you do it?",0 ; String 23
+.asc "Let me check...",0 ; String 24
+.asc "Yeah. But I need an emitter with...",0 ; String 25
+.asc "One sec. Gimme the transponder.",0 ; String 26
+.asc "See? Done!",0 ; String 27
+.asc "Good. Now wait here for my signal.",0 ; String 28
+.asc "Take care.",0 ; String 29
+.asc "Will do.",0 ; String 30
 res_end
 .)

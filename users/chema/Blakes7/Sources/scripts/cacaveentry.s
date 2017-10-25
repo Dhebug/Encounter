@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "La cuerda para volver arriba.",0 ; String 0
-.asc "La entrada a una cueva.",0 ; String 1
-.asc "Est",91," demasiado oscuro para ver.",0 ; String 2
+.asc "The rope to climb back up.",0 ; String 0
+.asc "The entry of a cave...",0 ; String 1
+.asc "It is too dark to see inside.",0 ; String 2
 res_end
 .)
 

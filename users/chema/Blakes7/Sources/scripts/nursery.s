@@ -22,11 +22,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 220
 res_start
-.asc "Me duele mucho la espalda.",0 ; String 0
-.asc "El est",94,"mago me duele mucho.",0 ; String 1
-.asc "Tengo un estre",35,"imiento horrible.",0 ; String 2
-.asc "Me duele mucho una muela.",0 ; String 3
-.asc "Nada, gracias.",0 ; String 4
+.asc "I have a terrible backache.",0 ; String 0
+.asc "I have a terrible stomachache.",0 ; String 1
+.asc "I have a terrible constipation.",0 ; String 2
+.asc "I have a terrible toothache.",0 ; String 3
+.asc "Nothing, thank you.",0 ; String 4
 res_end
 .)
 
@@ -171,22 +171,22 @@ res_end
 .word (res_end-res_start +4)
 .byt 221
 res_start
-.asc "No me da mucha tranquilidad...",0 ; String 0
-.asc "Hola cari",35,"o. ",126,"C",94,"mo puedo ayudarte?",0 ; String 1
-.asc "Eso es un momento...",0 ; String 2
-.asc "y procedamos AHORA MISMO.",0 ; String 3
-.asc "D",92,"jame coger la jeringuilla larga",0 ; String 4
-.asc "D",92,"jame coger el tubo g",91,"strico",0 ; String 5
-.asc "D",92,"jame coger el enema rectal",0 ; String 6
-.asc "D",92,"jame coger los f",94,"rceps dentales",0 ; String 7
-.asc "Eeee... no gracias.",0 ; String 8
-.asc "Me encuentro mejor. ",125,"Adi",94,"s!",0 ; String 9
-.asc "Al menos toma este laxante.",0 ; String 10
-.asc "",125,"S",94,"lo una gota! Es muy potente.",0 ; String 11
-.asc "",126,"Sabes si por casualidad han rellenado",0 ; String 12
-.asc "la m",91,"quina de caf",92,"?",0 ; String 13
+.asc "Not what I'd call relaxing..",0 ; String 0
+.asc "Hello deary. How can I help?",0 ; String 1
+.asc "Easy as pie...",0 ; String 2
+.asc "and let's proceed NOW.",0 ; String 3
+.asc "Let me get the extra-large syringe",0 ; String 4
+.asc "Let me get the gastric tube",0 ; String 5
+.asc "Let me get the rectal enema",0 ; String 6
+.asc "Let me get the dental forceps",0 ; String 7
+.asc "Err.. no thanks.",0 ; String 8
+.asc "I am feeling much better now. Bye!",0 ; String 9
+.asc "At least take this laxative.",0 ; String 10
+.asc "Just one drop! It's very powerful.",0 ; String 11
+.asc "Do you happen to know if the coffee",0 ; String 12
+.asc "machine has been re-filled?",0 ; String 13
 .asc "No.",0 ; String 14
-.asc "Vaya. Me hace falta un caf",92,".",0 ; String 15
+.asc "Pity. I need a coffee badly.",0 ; String 15
 res_end
 .)
 

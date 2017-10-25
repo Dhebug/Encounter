@@ -275,17 +275,17 @@ res_end
 .word (res_end-res_start +4)
 .byt 100
 res_start
-.asc "Ah",93,". Eso que bloquea la cadena.",0 ; String 0
-.asc "",126,"Qu",92," puede ser?",0 ; String 1
+.asc "There. That thing blocking the chain.",0 ; String 0
+.asc "What could it be?",0 ; String 1
 .asc "Mmmmmm...",0 ; String 2
-.asc "Parece alg",95,"n tipo de arma...",0 ; String 3
-.asc "Tambi",92,"n encontr",92," esto en el suelo.",0 ; String 4
-.asc "Una pulsera.",0 ; String 5
-.asc "Un dispositivo de comunicaciones...",0 ; String 6
-.asc "Igual incluso algo m",91,"s...",0 ; String 7
-.asc "Vinieron por la cueva, por eso robaron",0 ; String 8
-.asc "la l",91,"mpara.",0 ; String 9
-.asc "Vienen a rescatar las Nuevas Almas.",0 ; String 10
-.asc "",125,"Dame la pulsera! ",125,"vamos, r",91,"pido!",0 ; String 11
+.asc "Looks like weapon of some sort...",0 ; String 3
+.asc "I also found this on the floor.",0 ; String 4
+.asc "It is a bracelet.",0 ; String 5
+.asc "Some sort of communication device...",0 ; String 6
+.asc "Maybe even more...",0 ; String 7
+.asc "They came from the cave, that's",0 ; String 8
+.asc "why they stole the lamp.",0 ; String 9
+.asc "They came to rescue the new souls.",0 ; String 10
+.asc "Give me that bracelet and lets go!",0 ; String 11
 res_end
 .)

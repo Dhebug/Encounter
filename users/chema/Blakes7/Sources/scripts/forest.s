@@ -118,8 +118,8 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Unos maderos ca",93,"dos de los ",91,"rboles.",0 ; String 0
-.asc "Oscuro y probablemente peligroso",0 ; String 1
-.asc "No entro ah",93," ni loco.",0 ; String 2
+.asc "Wooden logs, fallen from trees.",0 ; String 0
+.asc "Dark and most probably dangerous.",0 ; String 1
+.asc "I won't enter there. I'm not mad.",0 ; String 2
 res_end
 .)

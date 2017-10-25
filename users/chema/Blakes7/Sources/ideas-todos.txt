@@ -12,6 +12,7 @@ From players of version 1.0
 - Some new typos	- Fabrice (DONE)
 - Telestrat does not boot the game - Fabrice
 - Pressing 2 for pickup over inventory item does it! - Fabrice (DONE)
+- Looking at book in Common Room hangs the game - Steve (DONE)
 
 More from Fabrice
 - two characters have a rather similar appearance (Avon and oops I

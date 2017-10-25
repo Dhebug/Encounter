@@ -10,7 +10,7 @@
 .word (res_end-res_start +4)
 .byt 24
 res_start
-.asc "Una feroz mujer guerrera.",0 ; String 0
+.asc "A fierce woman-warrior.",0 ; String 0
 res_end
 .)
 

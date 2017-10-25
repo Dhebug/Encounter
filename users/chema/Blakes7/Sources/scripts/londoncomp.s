@@ -388,48 +388,48 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Venga. Vamos a hacerlo.",0 ; String 0
-.asc "",125,"Cierra la puerta!",0 ; String 1
-.asc "Listo.",0 ; String 2
-.asc "",125,"Deprisa!",0 ; String 3
-.asc "La computadora es nuestra.",0 ; String 4
-.asc "Esperemos noticias del resto.",0 ; String 5
-.asc " Blake, soy el Comandante Leylan.",0 ; String 6
-.asc " Hemos arrestado a tu banda.",0 ; String 7
-.asc " Tu plan es un fracaso, r",93,"ndete",0 ; String 8
-.asc " y ser",91,"s tratado con indulgencia.",0 ; String 9
-.asc "Esos son tus t",92,"rminos?           ",0 ; String 10
-.asc "Estos los m",93,"os. Entregar",91,"s las armas",0 ; String 11
-.asc "a mis hombres. Mientras controlemos la",0 ; String 12
-.asc "computadora, la nave est",91," perdida.",0 ; String 13
-.asc "Y as",93," estar",91," hasta que cedas.",0 ; String 14
-.asc "Luego nos llevar",91,"s al planeta m",91,"s",0 ; String 15
-.asc "cercano donde podamos desembarcar.",0 ; String 16
-.asc "Si intentan entrar tus hombres aqu",93,",",0 ; String 17
-.asc "destruiremos la computadora.",0 ; String 18
-.asc "Totalmente. Eso es todo.",0 ; String 19
-.asc " Buen intento. Pero escucha.",0 ; String 20
-.asc " Voy a matar a uno de tus amigos cada",0 ; String 21
-.asc " treinta segundos desde ahora.",0 ; String 22
-.asc " Parar",92," cuando os rind",91,"is o me quede,",0 ; String 23
-.asc " sin prisioneros.",0 ; String 24
-.asc " Se acab",94," la conversaci",94,"n, Blake.",0 ; String 25
-.asc "",125,"No puedes hacer eso! Leylan!    ",0 ; String 26
-.asc "He fallado. Abre.",0 ; String 27
-.asc "",126,"Y perder nuestra ",95,"nica oportunidad?",0 ; String 28
-.asc "",125,"Abre la puerta!",0 ; String 29
-.asc "Qu",92," fiasco. Pod",93,"as hacerte con la nave",0 ; String 30
-.asc "dijiste, si hac",93,"a mi parte.",0 ; String 31
-.asc "Lo hice y ",126,"qu",92," pas",94,"?",0 ; String 32
-.asc "Tus tropas van de ac",91," para all",91,"",0 ; String 33
-.asc "buscando alguien a quien rendirse y",0 ; String 34
-.asc "cuando lo consiguen, tu vas detr",91,"s.",0 ; String 35
-.asc "Intentar",92," hacerlo mejor a la pr",94,"xima.",0 ; String 36
-.asc "Hubo una oportunidad. Desperdiciada.",0 ; String 37
-.asc "No habr",91," otra.",0 ; String 38
-.asc "En ese caso podr",91,"s morir contento.",0 ; String 39
-.asc "Contento...",0 ; String 40
-.asc "Sabiendo que ten",93,"as raz",94,"n.",0 ; String 41
+.asc "Okay, let's do it.",0 ; String 0
+.asc "Lock the door!",0 ; String 1
+.asc "Sure. Done.",0 ; String 2
+.asc "Hurry up!",0 ; String 3
+.asc "The computer is under our control.",0 ; String 4
+.asc "Let's wait for news from the others.",0 ; String 5
+.asc " Blake, this is Commander Leylan.",0 ; String 6
+.asc " We have arrested your gang.",0 ; String 7
+.asc " Your plan is a failure. Surrender now,",0 ; String 8
+.asc " and you'll be treated leniently.",0 ; String 9
+.asc "Those are your terms?            ",0 ; String 10
+.asc "These are mine. You will hand over all",0 ; String 11
+.asc "your weapons to my men. Whilst we hold",0 ; String 12
+.asc "the computer, the ship is helpless.",0 ; String 13
+.asc "It'll remain that way until you agree.",0 ; String 14
+.asc "You will then fly this ship to the",0 ; String 15
+.asc "nearest habitable planet where we will",0 ; String 16
+.asc "disembark. Any attempt by your men to",0 ; String 17
+.asc "break into this room and we'll destroy",0 ; String 18
+.asc "the computer. Totally. That's all.",0 ; String 19
+.asc " Nice try. But listen.",0 ; String 20
+.asc " I'm going to kill one of your friends",0 ; String 21
+.asc " every thirty seconds starting now.",0 ; String 22
+.asc " I'll stop when you give yourselves up,",0 ; String 23
+.asc " or I run out of prisoners.",0 ; String 24
+.asc " The talking's over, Blake.",0 ; String 25
+.asc "You can't do that! Leylan!",0 ; String 26
+.asc "I've failed. Let's open the door.",0 ; String 27
+.asc "You're throwing away our only chance.",0 ; String 28
+.asc "Open the door!",0 ; String 29
+.asc "What a fiasco. You could take over the",0 ; String 30
+.asc "ship, you said, if I did my bit.",0 ; String 31
+.asc "Well, I did my bit, and what happened?",0 ; String 32
+.asc "Your troops bumble around looking for",0 ; String 33
+.asc "someone to surrender to, and when",0 ; String 34
+.asc "they've succeeded, you follow suit.",0 ; String 35
+.asc "I'll try and do better next time.",0 ; String 36
+.asc "We had one chance. You wasted it.",0 ; String 37
+.asc "There won't be a next time.",0 ; String 38
+.asc "In which case, you can die content.",0 ; String 39
+.asc "Content...",0 ; String 40
+.asc "Knowing you were right.",0 ; String 41
 res_end
 .)
 

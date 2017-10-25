@@ -10,16 +10,16 @@
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "",125,"Vila! ",125,"Gan!",0 ; String 0
-.asc "Hola hermano, me pregunto si t",95,"...",0 ; String 1
-.asc "",125,"Soy yo! ",125,"Blake!",0 ; String 2
-.asc "",125,"Blake! ",126,"Qu",92," haces aqu",93,"?",0 ; String 3
-.asc "Vengo a por vosotros. ",125,"Tengo una nave!",0 ; String 4
-.asc "",126,"Y c",94,"mo vamos a escapar de aqu",93,"?",0 ; String 5
-.asc "Con estas pulseras. Pon",92,"oslas.",0 ; String 6
-.asc "Qu",92," raro. Pensaba que tra",93,"a tres...",0 ; String 7
-.asc "Habr",92," perdido una en alg",95,"n sitio.",0 ; String 8
-.asc "Listo, ",126,"y ahora?",0 ; String 9
+.asc "Vila! Gan!",0 ; String 0
+.asc "Hello brother. I wondered if you...",0 ; String 1
+.asc "It's me! Blake!",0 ; String 2
+.asc "Blake! What are you doing here?",0 ; String 3
+.asc "I came for you. I've got a spaceship!",0 ; String 4
+.asc "And how will we escape this building?",0 ; String 5
+.asc "With these bracelets. Put them on.",0 ; String 6
+.asc "Strange... I thought I had three...",0 ; String 7
+.asc "I must have lost one...",0 ; String 8
+.asc "Okay, what now?",0 ; String 9
 res_end
 .)
 

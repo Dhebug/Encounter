@@ -10,7 +10,7 @@
 .word (res_end-res_start +4)
 .byt 33
 res_start
-.asc "Una banda el",91,"stica muy resistente.",0 ; String 0
+.asc "A very resistant elastic band.",0 ; String 0
 res_end
 .)
 

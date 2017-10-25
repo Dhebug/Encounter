@@ -82,11 +82,11 @@ res_end
 .word (res_end-res_start +4)
 .byt 200
 res_start
-.asc "Extra",35,"o interior... Impresionante.",0 ; String 0
-.asc "",126,"Podemos negarnos a hacer esto?",0 ; String 1
-.asc "La alternativa es la ejecuci",94,"n.",0 ; String 2
-.asc "He tenido peores ofertas...",0 ; String 3
-.asc "La ejecuci",94,"n puede ser atractiva.",0 ; String 4
-.asc "De acuerdo, vamos all",91,".",0 ; String 5
+.asc "Strange interior... Impressive.",0 ; String 0
+.asc "Could we refuse to do this?",0 ; String 1
+.asc "The alternative is summary execution.",0 ; String 2
+.asc "I've had worse offers...",0 ; String 3
+.asc "Execution may have some appeal.",0 ; String 4
+.asc "Okay, let's go",0 ; String 5
 res_end
 .)

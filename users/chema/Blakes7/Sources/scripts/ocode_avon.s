@@ -10,29 +10,29 @@
 .word (res_end-res_start +4)
 .byt 22
 res_start
-.asc "Un hombre solitario...",0 ; String 0
-.asc "",125,"Est",91," en shock! ",125,"debo darme prisa!",0 ; String 1
-.asc "Tu actitud de h",92,"roe se hace peligrosa.",0 ; String 2
-.asc "Se acab",94,". Quedarse junto a t",93," requiere",0 ; String 3
-.asc "un grado de estupidez del que ya no",0 ; String 4
-.asc "me siento capaz.",0 ; String 5
-.asc "Nunca he entendido por qu",92," es",0 ; String 6
-.asc "necesario volverse irracional s",94,"lo",0 ; String 7
-.asc "para probar que alguien te importa,",0 ; String 8
-.asc "o, de hecho, por qu",92," es necesario",0 ; String 9
-.asc "siquiera probarlo.",0 ; String 10
-.asc "Los manejas con mucha habilidad.",0 ; String 11
-.asc "",126,"Tu crees?",0 ; String 12
-.asc "Pero una muerte ser",91," suficiente.",0 ; String 13
-.asc "Entonces deber",93,"as de tener cuidado.",0 ; String 14
-.asc "Ser",93,"a ir",94,"nico que fuese la tuya.",0 ; String 15
-.asc "",126,"Tienes alguna idea mejor?",0 ; String 16
-.asc "En realidad no. No la tengo.",0 ; String 17
-.asc "",126,"Eso significa que est",91,"s de acuerdo?",0 ; String 18
-.asc "",126,"Tengo elecci",94,"n?",0 ; String 19
-.asc "S",93,".",0 ; String 20
-.asc "Entonces estoy de acuerdo.",0 ; String 21
-.asc "",126,"Qu",92," es ese disfraz?",0 ; String 22
+.asc "An aloof man...",0 ; String 0
+.asc "He is in shock! I must hurry!",0 ; String 1
+.asc "Your hero attitude is becoming a risk.",0 ; String 2
+.asc "I'm finished. Staying with you",0 ; String 3
+.asc "requires a degree of stupidity of",0 ; String 4
+.asc "which I no longer feel capable.",0 ; String 5
+.asc "I have never understood why it should",0 ; String 6
+.asc "be necessary to become irrational in",0 ; String 7
+.asc "order to prove that you care, or,",0 ; String 8
+.asc "indeed, why it should be necessary",0 ; String 9
+.asc "to prove it at all.",0 ; String 10
+.asc "You handle them very skilfully.",0 ; String 11
+.asc "Do I?",0 ; String 12
+.asc "But one death will do it.",0 ; String 13
+.asc "Then you'd better be very careful.",0 ; String 14
+.asc "It would be ironic if it were yours.",0 ; String 15
+.asc "Have you got any better ideas?",0 ; String 16
+.asc "As a matter of fact, no, I haven't.",0 ; String 17
+.asc "Does that mean you agree?",0 ; String 18
+.asc "Do I have a choice?",0 ; String 19
+.asc "Yes.",0 ; String 20
+.asc "Then I agree.",0 ; String 21
+.asc "What is that disguise?",0 ; String 22
 res_end
 .)
 

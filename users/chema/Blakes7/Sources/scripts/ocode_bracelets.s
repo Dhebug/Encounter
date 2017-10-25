@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 42
 res_start
-.asc "Algunas pulseras de m",91,"s, para poder",0 ; String 0
-.asc "traer al resto de mi tripulaci",94,"n.",0 ; String 1
-.asc "Estas pulseras son para los dem",91,"s.",0 ; String 2
+.asc "Some extra bracelets, enough to bring",0 ; String 0
+.asc "the rest of my crew up.",0 ; String 1
+.asc "These are for the rest of the crew.",0 ; String 2
 res_end
 .)
 

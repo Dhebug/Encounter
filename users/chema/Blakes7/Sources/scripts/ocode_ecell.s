@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 52
 res_start
-.asc "Energ",93,"a para una nave entera.",0 ; String 0
-.asc "No puedo usar la c",92,"lula as",93,".",0 ; String 1
+.asc "Energy to power up a whole ship.",0 ; String 0
+.asc "I can't use the cell there.",0 ; String 1
 res_end
 .)
 

@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 38
 res_start
-.asc "Parecen fuertes y afiladas.",0 ; String 0
-.asc "No puedo cortar eso.",0 ; String 1
+.asc "They look strong and sharp.",0 ; String 0
+.asc "I can't cut that.",0 ; String 1
 res_end
 .)
 

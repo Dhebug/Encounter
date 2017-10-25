@@ -49,7 +49,7 @@ res_end
 .word (res_end-res_start +4)
 .byt 4
 res_start
-.asc "La taza que compr",92," el mes pasado.",0 ; String 0
-.asc "Est",91," vac",93,"a.",0 ; String 1
+.asc "The mug I bought last month.",0 ; String 0
+.asc "It is empty.",0 ; String 1
 res_end
 .)

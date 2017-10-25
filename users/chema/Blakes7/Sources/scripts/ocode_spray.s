@@ -10,10 +10,10 @@
 .word (res_end-res_start +4)
 .byt 41
 res_start
-.asc "Repelente de bichos. La etiqueta pone:",0 ; String 0
-.asc "Especialmente indicado para control de",0 ; String 1
-.asc "plagas de tribbles.",0 ; String 2
-.asc "Usar con precauci",94,"n.",0 ; String 3
+.asc "Bug repellent spray.",0 ; String 0
+.asc "The label says: specifically designed",0 ; String 1
+.asc "for infestation of tribbles.",0 ; String 2
+.asc "Use with caution.",0 ; String 3
 res_end
 .)
 

@@ -10,8 +10,8 @@
 .word (res_end-res_start +4)
 .byt 43
 res_start
-.asc "Parece una cuerda fuerte.",0 ; String 0
-.asc "No puedo usar la cuerda con eso.",0 ; String 1
+.asc "Looks like a strong rope.",0 ; String 0
+.asc "I can't use the rope with that.",0 ; String 1
 res_end
 .)
 

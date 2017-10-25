@@ -447,52 +447,52 @@ res_end
 .word (res_end-res_start +4)
 .byt 104
 res_start
-.asc "",126,"Qu",92," ha pasado?",0 ; String 0
-.asc "V",93," a mi madre.",0 ; String 1
-.asc "Me abandonaba... otra vez.",0 ; String 2
-.asc "Y yo a mi hermano a punto de morir,",0 ; String 3
-.asc "y no pod",93,"a hacer nada.",0 ; String 4
-.asc "Esa cosa usaba vuestras mentes y",0 ; String 5
-.asc "recuerdos contra vosotros.",0 ; String 6
-.asc "Supongo que conmigo no pudo por el",0 ; String 7
-.asc "borrado que me hizo la Federaci",94,"n.",0 ; String 8
-.asc "Examinemos la nave...",0 ; String 9
-.asc "Listo. Acabo de devolver la energ",93,"a",0 ; String 10
-.asc "a los sistemas principales.",0 ; String 11
-.asc "Estos controles son muy extra",35,"os.",0 ; String 12
-.asc "D",92,"jame intentar....",0 ; String 13
-.asc "",125,"AAAAAAHHH!",0 ; String 14
-.asc "",125,"Se ha metido en mi cabeza! ",125,"P",91,"rala!",0 ; String 15
-.asc " Bienvenida Jenna Stannis.",0 ; String 16
-.asc "",126,"Qui",92,"n eres?",0 ; String 17
-.asc " Zen. Bienvenido Roj Blake.",0 ; String 18
-.asc "Eres una computadora.",0 ; String 19
-.asc " Lo que t",95," digas, Kerr Avon.",0 ; String 20
-.asc " El Libertador est",91," listo.",0 ; String 21
-.asc " Marque velocidad y rumbo.",0 ; String 22
-.asc "El Libertador...",0 ; String 23
-.asc "S",93,", ese nombre me vino a la cabeza.",0 ; String 24
-.asc "Zen, cierra la escotilla de entrada",0 ; String 25
-.asc "y maniobra la nave lejos del rango",0 ; String 26
-.asc "de La Londres.",0 ; String 27
-.asc " Confirmado...",0 ; String 28
-.asc "Somos libres. Tenemos una nave.",0 ; String 29
-.asc "Podemos ir donde queramos.",0 ; String 30
-.asc "Iremos a Cygnus Alpha.",0 ; String 31
-.asc "Liberaremos al resto del grupo.",0 ; String 32
-.asc "",126,"",125,"COMO DICES!?",0 ; String 33
-.asc "",125,"Con esta nave y una tripulaci",94,"n",0 ; String 34
-.asc "PODEMOS empezar a contraatacar!",0 ; String 35
-.asc "No hablas en serio...",0 ; String 36
-.asc "",126,"Qu",92," alternativa hay?",0 ; String 37
-.asc "Marcharme. Soy libre.",0 ; String 38
-.asc "Y pretendo seguir si",92,"ndolo.",0 ; String 39
-.asc "Y yo necesito una tripulaci",94,"n.",0 ; String 40
-.asc "Zen. Pon rumbo a Cygnus Alpha.",0 ; String 41
-.asc "Velocidad est",91,"ndar.",0 ; String 42
-.asc "Ah, mejor dejo este trozo de tuber",93,"a",0 ; String 43
-.asc "donde estaba.",0 ; String 44
-.asc " El Libertador est",91," en ",94,"rbita estable",0 ; String 45
-.asc " sobre el planeta Cygnus Alpha.",0 ; String 46
+.asc "What happened?",0 ; String 0
+.asc "I saw my mother.",0 ; String 1
+.asc "She was leaving me... again.",0 ; String 2
+.asc "And I saw my brother about to die,",0 ; String 3
+.asc "and I couldn't do anything.",0 ; String 4
+.asc "That... thing... was using your",0 ; String 5
+.asc "minds and memories against you.",0 ; String 6
+.asc "I guess it failed with me, as I had",0 ; String 7
+.asc "my memories erased by the Federation.",0 ; String 8
+.asc "Let's examine the ship...",0 ; String 9
+.asc "Okay. I have powered on the basic",0 ; String 10
+.asc "systems of the ship.",0 ; String 11
+.asc "These controls are strange...",0 ; String 12
+.asc "Let me try....",0 ; String 13
+.asc "AAAAAAHHH!",0 ; String 14
+.asc "She's got into my mind! Stop it!",0 ; String 15
+.asc " Welcome Jenna Stannis.",0 ; String 16
+.asc "Who is it?",0 ; String 17
+.asc " Zen. Welcome Roj Blake.",0 ; String 18
+.asc "You're a computer.",0 ; String 19
+.asc " As you say, Kerr Avon.",0 ; String 20
+.asc " The Liberator is ready.",0 ; String 21
+.asc " Set speed and course.",0 ; String 22
+.asc "The Liberator...",0 ; String 23
+.asc "Yes, that name came to my mind.",0 ; String 24
+.asc "Zen, close the entry hatch and",0 ; String 25
+.asc "manoeuvre the ship away from",0 ; String 26
+.asc "the London's sensor range.",0 ; String 27
+.asc " Confirmed...",0 ; String 28
+.asc "We're free. We've got a ship.",0 ; String 29
+.asc "We can go anywhere we like.",0 ; String 30
+.asc "We will go to Cygnus Alpha.",0 ; String 31
+.asc "We'll free the rest of the group.",0 ; String 32
+.asc "WHAT!?",0 ; String 33
+.asc "With this ship and a full crew, then",0 ; String 34
+.asc "we CAN start fighting back!",0 ; String 35
+.asc "You can't be serious...",0 ; String 36
+.asc "What's the alternative?",0 ; String 37
+.asc "Leave. I'm free.",0 ; String 38
+.asc "And I intend to stay that way.",0 ; String 39
+.asc "And I need a crew.",0 ; String 40
+.asc "Zen. Set course to Cygnus Alpha.",0 ; String 41
+.asc "Speed standard.",0 ; String 42
+.asc "Oh, I'd better put this pipe back",0 ; String 43
+.asc "in its place.",0 ; String 44
+.asc " The Liberator is in stationary",0 ; String 45
+.asc " orbit over planet Cygnus Alpha.",0 ; String 46
 res_end
 .)

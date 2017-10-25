@@ -10,11 +10,11 @@
 .word (res_end-res_start +4)
 .byt 2
 res_start
-.asc "Amenazador...",0 ; String 0
-.asc "Debes estar bromeando...",0 ; String 1
-.asc "Vamos. No se detenga aqu",93,".",0 ; String 2
-.asc "Parece estar dormido...",0 ; String 3
-.asc "Parece ocupado. Mejor le dejo.",0 ; String 4
+.asc "Quite menacing...",0 ; String 0
+.asc "You must be kidding...",0 ; String 1
+.asc "Move along, move along...",0 ; String 2
+.asc "He seems to be asleep...",0 ; String 3
+.asc "He's busy. Better leave him alone.",0 ; String 4
 res_end
 .)
 

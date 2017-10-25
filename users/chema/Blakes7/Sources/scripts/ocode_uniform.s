@@ -10,9 +10,9 @@
 .word (res_end-res_start +4)
 .byt 50
 res_start
-.asc "Un uniforme de soldado.",0 ; String 0
-.asc "Ahora no. No quiero ir por ah",93," con",0 ; String 1
-.asc "un uniforme que me est",91," peque",35,"o.",0 ; String 2
+.asc "A Federation soldier uniform.",0 ; String 0
+.asc "Not now. I don't want to move around",0 ; String 1
+.asc "in a uniform that is small for me.",0 ; String 2
 res_end
 .)
 
