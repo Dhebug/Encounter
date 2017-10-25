@@ -1,0 +1,388 @@
+;
+; Here is the current documentation for the description script.
+; - This file describes what goes on the floppy itself, list of files, boot sectors, locations, ...
+; - The result is stored in a description file which along with the loader code allows the user to load data.
+;
+; Syntax:
+; - Anything at the right of a ; is ignored (commented out)
+; - {FileIndex} is replaced at generation time by the current internal file index, practical for defines generation
+;
+; Things to do:
+; - Be able to define the format of the floppy we want in this file (number of tracks, sectors, sizes)
+; - Suppress the need for a source floppy to clone from
+; - Have a 0/1 parameter for the multiple calls to the tool, with only the last one needing the files
+; - Support for tap files (auto-detect loading area)
+; - Support for file compression in the tool
+; - Possibility to do partial loads, saves, depacking in realtime
+;
+FormatVersion 0.20
+;LoadDiskTemplate default.dsk
+DefineDisk 2 40 17 5							; 2 sides, 42 tracks, 17 sectors, interleave 3
+;DefineDisk 2 80 17 5							; 2 sides, 80 tracks, 17 sectors, interleave 5
+
+OutputLayoutFile floppy_description.h
+OutputFloppyFile ..\build\B7.dsk
+
+;AddDefine LOADER_SHOW_DEBUGINFO 1
+;AddDefine ENABLE_TIMING_DEBUGGING 1
+AddDefine LOADER_SECTOR_BUFFER $200          ; 256 bytes location used by the loader to read or write sectors
+AddDefine LOADER_BASE_ZERO_PAGE $F2          ; Zero page area used during loader operations (13 bytes in this version)
+
+;
+; This defines the bootsectors to use for the various operating systems
+; - Jasmin loads the sector 1 of track zero in $400 and then runs it.
+; - Microdisc loads the sector 2 of track zero, the address is different on Atmos and Telestrat
+; - The system requires a third sector containing valid data
+;
+; Since we do not yet have a valid Jasmin reading code, all this bootsector will do is to 
+; write a message saying that this floppy needs to be booted on a Microdisc compatible system.
+;
+SetPosition 0 1
+WriteSector ..\build\files\sector_1-jasmin.o 		; Sector 1
+WriteSector ..\build\files\sector_2-microdisc.o 	; Sector 2
+WriteSector ..\build\files\sector_3.o 			; Sector 3
+
+;
+; Now here is the loader code, that one is Microdisc only
+;
+SetPosition 0 4
+WriteLoader ..\build\files\loader.o $fd00 ;$fe00 		; Sector 4
+
+;
+; From now on we compress data (The loader should not be compressed)
+;
+SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
+;SetCompressionMode None 	
+
+
+; BLAKE'7 game disk files
+; OASIS engine and tables
+AddFile ..\build\final.out 
+AddDefine LOADER_GAME_PROGRAM {FileIndex}
+AddDefine LOADER_GAME_PROGRAM_ADDRESS $c000
+AddDefine LOADER_GAME_PROGRAM_TRACK {FileTrack}
+AddDefine LOADER_GAME_PROGRAM_SECTOR {FileSector}
+AddDefine LOADER_GAME_PROGRAM_SIZE {FileSize}
+AddDefine LOADER_GAME_PROGRAM_SIZE_COMPRESSED {FileSizeCompressed}
+
+
+; Engine tables that go on lower memory
+AddFile ..\build\files\tables.o 
+AddDefine LOADER_TABLES {FileIndex}
+
+; Some auxiliar functions to be run at the begining
+AddFile ..\build\files\auxiliar.o 
+AddDefine LOADER_AUXILIAR {FileIndex}
+
+; Global resources
+AddFile ..\build\files\script_0.o 		
+AddDefine LOADER_SCRIPT0 {FileIndex}
+AddFile ..\build\files\script_1.o 	
+AddDefine LOADER_SCRIPT1 {FileIndex}
+AddFile ..\build\files\script_2.o 			
+AddDefine LOADER_SCRIPT2 {FileIndex}
+AddFile ..\build\files\script_3.o 			
+AddDefine LOADER_SCRIPT3 {FileIndex}
+AddFile ..\build\files\script_4.o 			
+AddDefine LOADER_SCRIPT4 {FileIndex}
+AddFile ..\build\files\script_5.o 			
+AddDefine LOADER_SCRIPT5 {FileIndex}
+AddFile ..\build\files\script_6.o 			
+AddDefine LOADER_SCRIPT6 {FileIndex}
+AddFile ..\build\files\script_7.o 			
+AddDefine LOADER_SCRIPT7 {FileIndex}
+AddFile ..\build\files\script_8.o 			
+AddDefine LOADER_SCRIPT8 {FileIndex}
+AddFile ..\build\files\script_9.o 			
+AddDefine LOADER_SCRIPT9 {FileIndex}
+AddFile ..\build\files\script_10.o 			
+AddDefine LOADER_SCRIPT10 {FileIndex}
+AddFile ..\build\files\script_11.o 			
+AddDefine LOADER_SCRIPT11 {FileIndex}
+
+
+; Episode 3
+AddFile ..\build\files\script_15.o 			
+AddDefine LOADER_SCRIPT15 {FileIndex}
+AddFile ..\build\files\script_16.o 			
+AddDefine LOADER_SCRIPT16 {FileIndex}
+AddFile ..\build\files\script_17.o 			
+AddDefine LOADER_SCRIPT17 {FileIndex}
+AddFile ..\build\files\script_18.o 			
+AddDefine LOADER_SCRIPT18 {FileIndex}
+AddFile ..\build\files\script_19.o 			
+AddDefine LOADER_SCRIPT19 {FileIndex}
+AddFile ..\build\files\script_20.o 			
+AddDefine LOADER_SCRIPT20 {FileIndex}
+AddFile ..\build\files\script_21.o 			
+AddDefine LOADER_SCRIPT21 {FileIndex}
+
+AddFile ..\build\files\script_30.o 			
+AddDefine LOADER_SCRIPT30 {FileIndex}
+
+
+AddFile ..\build\files\string_main.o 
+AddDefine LOADER_STRINGS {FileIndex}
+AddFile ..\build\files\string_introsvila.o 
+AddDefine LOADER_STRINGSINTROSVILA {FileIndex}
+AddFile ..\build\files\string_londonplan.o 
+AddDefine LOADER_STRINGSLONDONPLAN {FileIndex}
+AddFile ..\build\files\string_londondlg.o 
+AddDefine LOADER_STRINGSLONDONDLG {FileIndex}
+		
+		
+AddFile ..\build\files\obj_blake.o 		
+AddDefine LOADER_OBJBLAKE {FileIndex}
+AddFile ..\build\files\obj_ep2.o 		
+AddDefine LOADER_OBJEP2 {FileIndex}
+AddFile ..\build\files\obj_ep3.o 		
+AddDefine LOADER_OBJEP3 {FileIndex}
+
+
+AddFile ..\build\files\cos_blake.o 	
+AddDefine LOADER_COSBLAKE {FileIndex}
+AddFile ..\build\files\cos_jenna.o 	
+AddDefine LOADER_COSJENNA {FileIndex}
+AddFile ..\build\files\cos_camera.o 	
+AddDefine LOADER_COSCAMERA {FileIndex}
+AddFile ..\build\files\cos_guard.o 
+AddDefine LOADER_COSGUARD {FileIndex}
+AddFile ..\build\files\cos_techcam.o 
+AddDefine LOADER_COSTECHCAM {FileIndex}
+AddFile ..\build\files\cos_man.o 
+AddDefine LOADER_COSMAN {FileIndex}
+AddFile ..\build\files\cos_man2.o 
+AddDefine LOADER_COSMAN2 {FileIndex}
+AddFile ..\build\files\cos_travis.o 
+AddDefine LOADER_COSTRAVIS {FileIndex}
+AddFile ..\build\files\cos_servalan.o 
+AddDefine LOADER_COSSERVALAN {FileIndex}
+AddFile ..\build\files\cos_vila.o 
+AddDefine LOADER_COSVILA {FileIndex}
+AddFile ..\build\files\cos_avon.o 
+AddDefine LOADER_COSAVON {FileIndex}
+AddFile ..\build\files\cos_gan.o 
+AddDefine LOADER_COSGAN {FileIndex}
+AddFile ..\build\files\cos_cally.o 
+AddDefine LOADER_COSCALLY {FileIndex}
+AddFile ..\build\files\cos_bextras.o 
+AddDefine LOADER_COSBEXTRAS {FileIndex}
+AddFile ..\build\files\cos_ball.o 
+AddDefine LOADER_COSBALL {FileIndex}
+AddFile ..\build\files\cos_vargas.o 
+AddDefine LOADER_COSVARGAS {FileIndex}
+AddFile ..\build\files\cos_monk.o 
+AddDefine LOADER_COSMONK {FileIndex}
+
+
+AddFile ..\build\files\ocode_guard.o 	
+AddDefine LOADER_OCODEGUARD {FileIndex}
+AddFile ..\build\files\ocode_sandwich.o 	
+AddDefine LOADER_OCODESANDWICH {FileIndex}
+AddFile ..\build\files\ocode_mug.o 	
+AddDefine LOADER_OCODEMUG {FileIndex}
+AddFile ..\build\files\ocode_key.o 	
+AddDefine LOADER_OCODEKEY {FileIndex}
+AddFile ..\build\files\ocode_laxative.o 	
+AddDefine LOADER_OCODELAXATIVE {FileIndex}
+AddFile ..\build\files\ocode_coin.o 	
+AddDefine LOADER_OCODECOIN {FileIndex}
+AddFile ..\build\files\ocode_decaf.o 	
+AddDefine LOADER_OCODEDECAF {FileIndex}
+AddFile ..\build\files\ocode_map.o 	
+AddDefine LOADER_OCODEMAP {FileIndex}
+AddFile ..\build\files\ocode_techcam.o 	
+AddDefine LOADER_OCODETECHCAM {FileIndex}
+AddFile ..\build\files\ocode_man.o 	
+AddDefine LOADER_OCODEMAN {FileIndex}
+
+AddFile ..\build\files\ocode_vila.o 	
+AddDefine LOADER_OCODEVILA {FileIndex}
+AddFile ..\build\files\ocode_jenna.o 	
+AddDefine LOADER_OCODEJENNA {FileIndex}
+AddFile ..\build\files\ocode_avon.o 	
+AddDefine LOADER_OCODEAVON {FileIndex}
+AddFile ..\build\files\ocode_gan.o 	
+AddDefine LOADER_OCODEGAN {FileIndex}
+
+
+AddFile ..\build\files\ocode_ypipe.o 	
+AddDefine LOADER_OCODEYPIPE {FileIndex}
+AddFile ..\build\files\ocode_bearing.o 	
+AddDefine LOADER_OCODEBEARING {FileIndex}
+AddFile ..\build\files\ocode_cinch.o 	
+AddDefine LOADER_OCODECINCH {FileIndex}
+AddFile ..\build\files\ocode_catpult.o 	
+AddDefine LOADER_OCODECATPULT {FileIndex}
+AddFile ..\build\files\ocode_bracelet.o 	
+AddDefine LOADER_OCODEBRACELET {FileIndex}
+AddFile ..\build\files\ocode_gun.o 	
+AddDefine LOADER_OCODEGUN {FileIndex}
+AddFile ..\build\files\ocode_bracelets.o 	
+AddDefine LOADER_OCODEBRACELETS {FileIndex}
+
+AddFile ..\build\files\ocode_transmitter.o 	
+AddDefine LOADER_OCODETRANSMITTER {FileIndex}
+AddFile ..\build\files\ocode_drone.o 	
+AddDefine LOADER_OCODEDRONE {FileIndex}
+AddFile ..\build\files\ocode_wswitch.o 	
+AddDefine LOADER_OCODEWSWITCH {FileIndex}
+
+
+AddFile ..\build\files\ocode_ballrobot.o 	
+AddDefine LOADER_OCODEBALLROBOT {FileIndex}
+AddFile ..\build\files\ocode_pliers.o 	
+AddDefine LOADER_OCODEPLIERS {FileIndex}
+AddFile ..\build\files\ocode_scissors.o 	
+AddDefine LOADER_OCODESCISSORS {FileIndex}
+AddFile ..\build\files\ocode_wrench.o 	
+AddDefine LOADER_OCODEWRENCH {FileIndex}
+AddFile ..\build\files\ocode_spray.o 	
+AddDefine LOADER_OCODESPRAY {FileIndex}
+AddFile ..\build\files\ocode_rope.o 	
+AddDefine LOADER_OCODEROPE {FileIndex}
+AddFile ..\build\files\ocode_lamp.o 	
+AddDefine LOADER_OCODELAMP {FileIndex}
+AddFile ..\build\files\ocode_vargas.o 	
+AddDefine LOADER_OCODEVARGAS {FileIndex}
+AddFile ..\build\files\ocode_log.o 	
+AddDefine LOADER_OCODELOG {FileIndex}
+AddFile ..\build\files\ocode_cup.o 	
+AddDefine LOADER_OCODECUP {FileIndex}
+
+AddFile ..\build\files\ocode_guard2.o 	
+AddDefine LOADER_OCODEGUARD2 {FileIndex}
+AddFile ..\build\files\ocode_uniform.o 	
+AddDefine LOADER_OCODEUNIFORM {FileIndex}
+AddFile ..\build\files\ocode_cally.o 	
+AddDefine LOADER_OCODECALLY {FileIndex}
+AddFile ..\build\files\ocode_trasponder.o 	
+AddDefine LOADER_OCODETRASPONDER {FileIndex}
+AddFile ..\build\files\ocode_ecell.o 	
+AddDefine LOADER_OCODEECELL {FileIndex}
+
+AddFile ..\build\files\main_theme.o 		
+AddDefine LOADER_MAINTHEME {FileIndex}
+
+AddFile ..\build\files\endep_theme.o 		
+AddDefine LOADER_ENDEPTHEME {FileIndex}
+
+AddFile ..\build\files\final_theme.o 		
+AddDefine LOADER_FINALTHEME {FileIndex}
+
+AddFile ..\build\files\fedmarch_theme.o 		
+AddDefine LOADER_FEDMARCHTHEME {FileIndex}
+
+
+; Rooms
+AddFile ..\build\files\room_intro.o 
+AddDefine LOADER_ROOM0 {FileIndex}
+AddFile ..\build\files\room_episode1.o 		
+AddDefine LOADER_ROOM1 {FileIndex}
+AddFile ..\build\files\room_blakesroom.o 		
+AddDefine LOADER_ROOM2 {FileIndex}
+AddFile ..\build\files\room_dchallway.o 	
+AddDefine LOADER_ROOM3 {FileIndex}
+AddFile ..\build\files\room_foyerA.o 	
+AddDefine LOADER_ROOM4 {FileIndex}
+AddFile ..\build\files\room_maproom.o 
+AddDefine LOADER_ROOM5 {FileIndex}
+AddFile ..\build\files\room_infoarea.o 
+AddDefine LOADER_ROOM6 {FileIndex}
+AddFile ..\build\files\room_servicecorr.o 
+AddDefine LOADER_ROOM7 {FileIndex}
+AddFile ..\build\files\room_serviceexit.o 
+AddDefine LOADER_ROOM8 {FileIndex}
+AddFile ..\build\files\room_nursery.o 
+AddDefine LOADER_ROOM9 {FileIndex}
+AddFile ..\build\files\room_camcontrol.o 
+AddDefine LOADER_ROOM10 {FileIndex}
+AddFile ..\build\files\room_exterior.o 
+AddDefine LOADER_ROOM11 {FileIndex}
+AddFile ..\build\files\room_guilty.o 
+AddDefine LOADER_ROOM12 {FileIndex}
+AddFile ..\build\files\room_locker.o 
+AddDefine LOADER_ROOM13 {FileIndex}
+
+; Episode 2
+AddFile ..\build\files\room_episode2.o 
+AddDefine LOADER_ROOM14 {FileIndex}
+AddFile ..\build\files\room_londoncell.o 
+AddDefine LOADER_ROOM15 {FileIndex}
+AddFile ..\build\files\room_londoncomp.o 
+AddDefine LOADER_ROOM17 {FileIndex}
+AddFile ..\build\files\room_londondeck.o 
+AddDefine LOADER_ROOM18 {FileIndex}
+
+AddFile ..\build\files\room_liberatorpass.o 
+AddDefine LOADER_ROOM20 {FileIndex}
+AddFile ..\build\files\room_liberatorworkshop.o 
+AddDefine LOADER_ROOM21 {FileIndex}
+AddFile ..\build\files\room_liberatordeck.o 
+AddDefine LOADER_ROOM22 {FileIndex}
+AddFile ..\build\files\room_liberatorzen.o 
+AddDefine LOADER_ROOM23 {FileIndex}
+AddFile ..\build\files\room_liberatorteleport.o 
+AddDefine LOADER_ROOM24 {FileIndex}
+AddFile ..\build\files\room_liberatorcargo.o 
+AddDefine LOADER_ROOM25 {FileIndex}
+
+
+AddFile ..\build\files\room_caexterior.o 
+AddDefine LOADER_ROOM30 {FileIndex}
+AddFile ..\build\files\room_capit.o 
+AddDefine LOADER_ROOM31 {FileIndex}
+AddFile ..\build\files\room_cacaveentry.o 
+AddDefine LOADER_ROOM32 {FileIndex}
+AddFile ..\build\files\room_cacave.o 
+AddDefine LOADER_ROOM33 {FileIndex}
+AddFile ..\build\files\room_cabackentry.o 
+AddDefine LOADER_ROOM34 {FileIndex}
+AddFile ..\build\files\room_cahall.o 
+AddDefine LOADER_ROOM35 {FileIndex}
+AddFile ..\build\files\room_cabuilding.o 
+AddDefine LOADER_ROOM36 {FileIndex}
+AddFile ..\build\files\room_cacells.o 
+AddDefine LOADER_ROOM37 {FileIndex}
+
+AddFile ..\build\files\room_episode3.o 
+AddDefine LOADER_ROOM40 {FileIndex}
+AddFile ..\build\files\room_forest.o 
+AddDefine LOADER_ROOM41 {FileIndex}
+AddFile ..\build\files\room_swamp.o 
+AddDefine LOADER_ROOM42 {FileIndex}
+AddFile ..\build\files\room_hideout.o 
+AddDefine LOADER_ROOM43 {FileIndex}
+AddFile ..\build\files\room_tunnel.o 
+AddDefine LOADER_ROOM44 {FileIndex}
+AddFile ..\build\files\room_corridor.o 
+AddDefine LOADER_ROOM45 {FileIndex}
+
+AddFile ..\build\files\room_cellcorridor.o 
+AddDefine LOADER_ROOM47 {FileIndex}
+
+
+AddFile ..\build\files\room_service.o 
+AddDefine LOADER_ROOM49 {FileIndex}
+AddFile ..\build\files\room_toilet.o 
+AddDefine LOADER_ROOM50 {FileIndex}
+AddFile ..\build\files\room_common.o 
+AddDefine LOADER_ROOM51 {FileIndex}
+AddFile ..\build\files\room_laundry.o 
+AddDefine LOADER_ROOM52 {FileIndex}
+AddFile ..\build\files\room_cellentry.o 
+AddDefine LOADER_ROOM53 {FileIndex}
+AddFile ..\build\files\room_cellentry2.o 
+AddDefine LOADER_ROOM54 {FileIndex}
+
+AddFile ..\build\files\room_epilogue.o 
+AddDefine LOADER_ROOM55 {FileIndex}
+
+;
+; Some reserved sectors
+;
+ReserveSectors 7                                    ; 7 sectors
+AddDefine LOADER_SAVESPACE {FileIndex}
+
+
+

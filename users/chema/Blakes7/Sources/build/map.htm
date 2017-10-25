@@ -1,0 +1,3078 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang=fr dir=ltr>
+	<HEAD>
+		<meta name="robots" content="noindex">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<title>B7</title>
+		<link href="D:\Documentos\oric\osdk\documentation\documentation.css" rel="stylesheet" type="text/css">
+	</HEAD>
+	<BODY>
+<hr>
+<center>B7</center>
+<hr>
+<table>
+<tr>
+<td valign=top>
+<a name="Normal"></a>
+<h1>Normal memory</h1>
+<table border>
+<tr>
+<th>Adress</th><th colspan="2">Size</th><th>Name</th>
+</tr>
+<tr>
+<td><b>$400</b></td><td colspan="2" align="right">32</td><td>tab_mul8</td></tr>
+<tr>
+<td>$420</td><td align="right">100</td><td align="right">100</td><td>_YM_FREQUENCIESHI</td></tr>
+<tr>
+<td>$484</td><td align="right">124</td><td align="right">100</td><td>_YM_FREQUENCIESLO</td></tr>
+<tr>
+<td>$4e8</td><td colspan="2" align="right">8</td><td>tab_bit8</td></tr>
+<tr>
+<td>$4f0</td><td colspan="2" align="right">16</td><td>tab_animstate_offsets_hi</td></tr>
+<tr>
+<td><b>$500</b></td><td align="right">256</td><td align="right">240</td><td>_TableDiv6</td></tr>
+<tr>
+<td>$5f0</td><td colspan="2" align="right">16</td><td>tab_animstate_offsets_lo</td></tr>
+<tr>
+<td><b>$600</b></td><td align="right">256</td><td align="right">240</td><td>_HiresAddrLow</td></tr>
+<tr>
+<td>$6f0</td><td colspan="2" align="right">16</td><td>thread_script_pt_lo</td></tr>
+<tr>
+<td><b>$700</b></td><td align="right">256</td><td align="right">240</td><td>_HiresAddrHigh</td></tr>
+<tr>
+<td>$7f0</td><td colspan="2" align="right">16</td><td>thread_script_pt_hi</td></tr>
+<tr>
+<td><b>$800</b></td><td align="right">621</td><td align="right">240</td><td>_TableBit6Reverse</td></tr>
+<tr>
+<td>$8f0</td><td colspan="2" align="right">35</td><td>mirror_codes</td></tr>
+<tr>
+<td>$913</td><td colspan="2" align="right">128</td><td>inverse_table</td></tr>
+<tr>
+<td>$993</td><td colspan="2" align="right">105</td><td>tab_div5</td></tr>
+<tr>
+<td>$9fc</td><td colspan="2" align="right">8</td><td>empty_mask</td></tr>
+<tr>
+<td>$a04</td><td colspan="2" align="right">105</td><td>tab_mod5</td></tr>
+<tr>
+<td>$a6d</td><td align="right">427</td><td align="right">41</td><td>__resource_directories_start, dir_scripts</td></tr>
+<tr>
+<td>$a96</td><td colspan="2" align="right">87</td><td>dir_strings</td></tr>
+<tr>
+<td>$aed</td><td colspan="2" align="right">83</td><td>dir_objects</td></tr>
+<tr>
+<td>$b40</td><td colspan="2" align="right">79</td><td>dir_ocode</td></tr>
+<tr>
+<td>$b8f</td><td colspan="2" align="right">35</td><td>dir_costumes</td></tr>
+<tr>
+<td>$bb2</td><td colspan="2" align="right">93</td><td>dir_rooms</td></tr>
+<tr>
+<td>$c0f</td><td colspan="2" align="right">9</td><td>dir_musics</td></tr>
+<tr>
+<td>$c18</td><td align="right">1172</td><td align="right">100</td><td>__resource_directories_end, logo</td></tr>
+<tr>
+<td>$c7c</td><td colspan="2" align="right">16</td><td>saviconbuff</td></tr>
+<tr>
+<td>$c8c</td><td colspan="2" align="right">14</td><td>ayRealRegister</td></tr>
+<tr>
+<td>$c9a</td><td colspan="2" align="right">3</td><td>ayw_Bank, ayw_PitchLo</td></tr>
+<tr>
+<td>$c9d</td><td colspan="2" align="right">3</td><td>ayw_PitchHi</td></tr>
+<tr>
+<td>$ca0</td><td colspan="2" align="right">1</td><td>ayw_Noise</td></tr>
+<tr>
+<td>$ca1</td><td colspan="2" align="right">1</td><td>ayw_Status</td></tr>
+<tr>
+<td>$ca2</td><td colspan="2" align="right">3</td><td>ayw_Volume</td></tr>
+<tr>
+<td>$ca5</td><td colspan="2" align="right">2</td><td>ayw_EGPeriod</td></tr>
+<tr>
+<td>$ca7</td><td colspan="2" align="right">1</td><td>ayw_Cycle</td></tr>
+<tr>
+<td>$ca8</td><td colspan="2" align="right">3</td><td>ReferenceBlock, ayr_Bank, ayr_PitchLo</td></tr>
+<tr>
+<td>$cab</td><td colspan="2" align="right">3</td><td>ayr_PitchHi</td></tr>
+<tr>
+<td>$cae</td><td colspan="2" align="right">1</td><td>ayr_Noise</td></tr>
+<tr>
+<td>$caf</td><td colspan="2" align="right">1</td><td>ayr_Status</td></tr>
+<tr>
+<td>$cb0</td><td colspan="2" align="right">3</td><td>ayr_Volume</td></tr>
+<tr>
+<td>$cb3</td><td colspan="2" align="right">2</td><td>ayr_EGPeriod</td></tr>
+<tr>
+<td>$cb5</td><td colspan="2" align="right">1</td><td>ayr_Cycle</td></tr>
+<tr>
+<td>$cb6</td><td colspan="2" align="right">12</td><td>menu_title</td></tr>
+<tr>
+<td>$cc2</td><td colspan="2" align="right">37</td><td>menu_str</td></tr>
+<tr>
+<td>$ce7</td><td colspan="2" align="right">31</td><td>vlevel</td></tr>
+<tr>
+<td>$d06</td><td colspan="2" align="right">35</td><td>tspeed</td></tr>
+<tr>
+<td>$d29</td><td colspan="2" align="right">28</td><td>stv</td></tr>
+<tr>
+<td>$d45</td><td colspan="2" align="right">14</td><td>stt</td></tr>
+<tr>
+<td>$d53</td><td colspan="2" align="right">21</td><td>menusave_str</td></tr>
+<tr>
+<td>$d68</td><td colspan="2" align="right">32</td><td>menusave_str2</td></tr>
+<tr>
+<td>$d88</td><td colspan="2" align="right">54</td><td>verbs</td></tr>
+<tr>
+<td>$dbe</td><td colspan="2" align="right">9</td><td>verb_active</td></tr>
+<tr>
+<td>$dc7</td><td colspan="2" align="right">9</td><td>verb_pos_X</td></tr>
+<tr>
+<td>$dd0</td><td colspan="2" align="right">9</td><td>verb_pos_X2</td></tr>
+<tr>
+<td>$dd9</td><td colspan="2" align="right">9</td><td>verb_pos_Y</td></tr>
+<tr>
+<td>$de2</td><td colspan="2" align="right">6</td><td>preps</td></tr>
+<tr>
+<td>$de8</td><td colspan="2" align="right">10</td><td>verb_prep</td></tr>
+<tr>
+<td>$df2</td><td colspan="2" align="right">64</td><td>tab_ascii</td></tr>
+<tr>
+<td>$e32</td><td colspan="2" align="right">61</td><td>redefine_strings</td></tr>
+<tr>
+<td>$e6f</td><td colspan="2" align="right">67</td><td>tab_knames</td></tr>
+<tr>
+<td>$eb2</td><td colspan="2" align="right">5</td><td>tab_banks</td></tr>
+<tr>
+<td>$eb7</td><td colspan="2" align="right">5</td><td>tab_bits</td></tr>
+<tr>
+<td>$ebc</td><td colspan="2" align="right">17</td><td>tab_adj_lcols</td></tr>
+<tr>
+<td>$ecd</td><td colspan="2" align="right">4</td><td>step_anim</td></tr>
+<tr>
+<td>$ed1</td><td colspan="2" align="right">4</td><td>step_inc</td></tr>
+<tr>
+<td>$ed5</td><td colspan="2" align="right">4</td><td>tab_dirs_as</td></tr>
+<tr>
+<td>$ed9</td><td colspan="2" align="right">5</td><td>saytime</td></tr>
+<tr>
+<td>$ede</td><td colspan="2" align="right">4</td><td>vol_table</td></tr>
+<tr>
+<td>$ee2</td><td colspan="2" align="right">3</td><td>SFX_Sounding</td></tr>
+<tr>
+<td>$ee5</td><td colspan="2" align="right">128</td><td>Envelope_table</td></tr>
+<tr>
+<td>$f65</td><td colspan="2" align="right">96</td><td>Ornament_table</td></tr>
+<tr>
+<td>$fc5</td><td colspan="2" align="right">2</td><td>sfx_pic</td></tr>
+<tr>
+<td>$fc7</td><td colspan="2" align="right">6</td><td>List_pic</td></tr>
+<tr>
+<td>$fcd</td><td colspan="2" align="right">2</td><td>sfx_explosion</td></tr>
+<tr>
+<td>$fcf</td><td colspan="2" align="right">15</td><td>List_explosion</td></tr>
+<tr>
+<td>$fde</td><td colspan="2" align="right">2</td><td>sfx_stepA</td></tr>
+<tr>
+<td>$fe0</td><td colspan="2" align="right">12</td><td>List_stepA</td></tr>
+<tr>
+<td>$fec</td><td colspan="2" align="right">2</td><td>sfx_pick</td></tr>
+<tr>
+<td>$fee</td><td colspan="2" align="right">6</td><td>List_pick</td></tr>
+<tr>
+<td>$ff4</td><td colspan="2" align="right">2</td><td>sfx_drop</td></tr>
+<tr>
+<td>$ff6</td><td colspan="2" align="right">6</td><td>List_drop</td></tr>
+<tr>
+<td>$ffc</td><td colspan="2" align="right">3</td><td>sfx_door</td></tr>
+<tr>
+<td>$fff</td><td colspan="2" align="right">12</td><td>List_door</td></tr>
+<tr>
+<td>$100b</td><td colspan="2" align="right">2</td><td>sfx_beeple</td></tr>
+<tr>
+<td>$100d</td><td colspan="2" align="right">6</td><td>List_beeple</td></tr>
+<tr>
+<td>$1013</td><td colspan="2" align="right">2</td><td>sfx_chuic</td></tr>
+<tr>
+<td>$1015</td><td colspan="2" align="right">6</td><td>List_chuic</td></tr>
+<tr>
+<td>$101b</td><td colspan="2" align="right">14</td><td>sfx_success</td></tr>
+<tr>
+<td>$1029</td><td colspan="2" align="right">6</td><td>List_success</td></tr>
+<tr>
+<td>$102f</td><td colspan="2" align="right">11</td><td>sfx_minitune1</td></tr>
+<tr>
+<td>$103a</td><td colspan="2" align="right">10</td><td>List_minitune1</td></tr>
+<tr>
+<td>$1044</td><td colspan="2" align="right">9</td><td>sfx_thrill1</td></tr>
+<tr>
+<td>$104d</td><td colspan="2" align="right">6</td><td>List_thrill1</td></tr>
+<tr>
+<td>$1053</td><td colspan="2" align="right">4</td><td>sfx_teleport</td></tr>
+<tr>
+<td>$1057</td><td colspan="2" align="right">13</td><td>List_teleport</td></tr>
+<tr>
+<td>$1064</td><td colspan="2" align="right">5</td><td>sfx_alert</td></tr>
+<tr>
+<td>$1069</td><td colspan="2" align="right">10</td><td>List_alert</td></tr>
+<tr>
+<td>$1073</td><td colspan="2" align="right">3</td><td>sfx_shoot</td></tr>
+<tr>
+<td>$1076</td><td colspan="2" align="right">6</td><td>List_shoot</td></tr>
+<tr>
+<td>$107c</td><td colspan="2" align="right">2</td><td>sfx_uiA</td></tr>
+<tr>
+<td>$107e</td><td colspan="2" align="right">8</td><td>List_uiA</td></tr>
+<tr>
+<td>$1086</td><td colspan="2" align="right">2</td><td>sfx_uiB</td></tr>
+<tr>
+<td>$1088</td><td colspan="2" align="right">8</td><td>List_uiB</td></tr>
+<tr>
+<td>$1090</td><td colspan="2" align="right">3</td><td>sfx_ESC</td></tr>
+<tr>
+<td>$1093</td><td colspan="2" align="right">8</td><td>List_ESC</td></tr>
+<tr>
+<td>$109b</td><td colspan="2" align="right">3</td><td>sfx_trr</td></tr>
+<tr>
+<td>$109e</td><td colspan="2" align="right">8</td><td>List_trr</td></tr>
+<tr>
+<td>$10a6</td><td colspan="2" align="right">4</td><td>fade_table</td></tr>
+<tr>
+<td>$10aa</td><td colspan="2" align="right">2</td><td>randseed</td></tr>
+<tr>
+<td>$10ac</td><td align="right">780</td><td align="right">760</td><td>__charfont</td></tr>
+<tr>
+<td>$13a4</td><td colspan="2" align="right">1</td><td>nFrameCount</td></tr>
+<tr>
+<td>$13a5</td><td colspan="2" align="right">1</td><td>ActorExecutingAction</td></tr>
+<tr>
+<td>$13a6</td><td colspan="2" align="right">1</td><td>CommandRunning</td></tr>
+<tr>
+<td>$13a7</td><td colspan="2" align="right">1</td><td>LastFrameTime</td></tr>
+<tr>
+<td>$13a8</td><td colspan="2" align="right">1</td><td>dlg_count</td></tr>
+<tr>
+<td>$13a9</td><td colspan="2" align="right">1</td><td>dlg_count2</td></tr>
+<tr>
+<td>$13aa</td><td colspan="2" align="right">1</td><td>dlg_row</td></tr>
+<tr>
+<td>$13ab</td><td colspan="2" align="right">1</td><td>print2buffer</td></tr>
+<tr>
+<td>$13ac</td><td colspan="2" align="right">1</td><td>buffercounter</td></tr>
+<tr>
+<td>$13ad</td><td colspan="2" align="right">1</td><td>double_height</td></tr>
+<tr>
+<td>$13ae</td><td colspan="2" align="right">1</td><td>last_nchars_printed</td></tr>
+<tr>
+<td>$13af</td><td colspan="2" align="right">1</td><td>Cursor_origin_x</td></tr>
+<tr>
+<td>$13b0</td><td colspan="2" align="right">1</td><td>Cursor_origin_y</td></tr>
+<tr>
+<td>$13b1</td><td colspan="2" align="right">1</td><td>MenuShown</td></tr>
+<tr>
+<td>$13b2</td><td colspan="2" align="right">1</td><td>capson</td></tr>
+<tr>
+<td>$13b3</td><td colspan="2" align="right">1</td><td>nWalkBoxes</td></tr>
+<tr>
+<td>$13b4</td><td colspan="2" align="right">2</td><td>pWalkBoxes</td></tr>
+<tr>
+<td>$13b6</td><td colspan="2" align="right">2</td><td>pWalkMatrix</td></tr>
+<tr>
+<td>$13b8</td><td align="right">14</td><td align="right">8</td><td>_KeyBank</td></tr>
+<tr>
+<td>$13c0</td><td colspan="2" align="right">1</td><td>owb</td></tr>
+<tr>
+<td>$13c1</td><td colspan="2" align="right">1</td><td>orig_col</td></tr>
+<tr>
+<td>$13c2</td><td colspan="2" align="right">1</td><td>orig_row</td></tr>
+<tr>
+<td>$13c3</td><td colspan="2" align="right">1</td><td>dest_col</td></tr>
+<tr>
+<td>$13c4</td><td colspan="2" align="right">1</td><td>dest_row</td></tr>
+<tr>
+<td>$13c5</td><td colspan="2" align="right">1</td><td>InPause</td></tr>
+<tr>
+<td>$13c6</td><td align="right">1</td><td align="right">1</td><td>__SaveGameData_start, magic</td></tr>
+<tr>
+<td>$13c7</td><td align="right">181</td><td align="right">1</td><td>__inventory_data_start, nObjectsInventory</td></tr>
+<tr>
+<td>$13c8</td><td colspan="2" align="right">10</td><td>inventory_id</td></tr>
+<tr>
+<td>$13d2</td><td colspan="2" align="right">10</td><td>inventory_flags</td></tr>
+<tr>
+<td>$13dc</td><td colspan="2" align="right">160</td><td>inventory_names</td></tr>
+<tr>
+<td>$147c</td><td align="right">924</td><td align="right">28</td><td>__inventory_data_end, __object_data_start, obj_id</td></tr>
+<tr>
+<td>$1498</td><td colspan="2" align="right">28</td><td>costume_id</td></tr>
+<tr>
+<td>$14b4</td><td colspan="2" align="right">28</td><td>costume_no</td></tr>
+<tr>
+<td>$14d0</td><td colspan="2" align="right">28</td><td>anim_state</td></tr>
+<tr>
+<td>$14ec</td><td colspan="2" align="right">28</td><td>color_speech</td></tr>
+<tr>
+<td>$1508</td><td colspan="2" align="right">28</td><td>room</td></tr>
+<tr>
+<td>$1524</td><td colspan="2" align="right">28</td><td>pos_row</td></tr>
+<tr>
+<td>$1540</td><td colspan="2" align="right">28</td><td>pos_col</td></tr>
+<tr>
+<td>$155c</td><td colspan="2" align="right">28</td><td>walk_row</td></tr>
+<tr>
+<td>$1578</td><td colspan="2" align="right">28</td><td>walk_col</td></tr>
+<tr>
+<td>$1594</td><td colspan="2" align="right">28</td><td>face_dir</td></tr>
+<tr>
+<td>$15b0</td><td colspan="2" align="right">28</td><td>size_rows</td></tr>
+<tr>
+<td>$15cc</td><td colspan="2" align="right">28</td><td>size_cols</td></tr>
+<tr>
+<td>$15e8</td><td colspan="2" align="right">28</td><td>z_plane</td></tr>
+<tr>
+<td>$1604</td><td colspan="2" align="right">28</td><td>direction</td></tr>
+<tr>
+<td>$1620</td><td colspan="2" align="right">28</td><td>flags</td></tr>
+<tr>
+<td>$163c</td><td colspan="2" align="right">28</td><td>anim_speed</td></tr>
+<tr>
+<td>$1658</td><td colspan="2" align="right">448</td><td>obj_names</td></tr>
+<tr>
+<td>$1818</td><td align="right">129</td><td align="right">1</td><td>CurrentFadeEffect, __object_data_end</td></tr>
+<tr>
+<td>$1819</td><td colspan="2" align="right">16</td><td>thread_script_type</td></tr>
+<tr>
+<td>$1829</td><td colspan="2" align="right">16</td><td>thread_script_id</td></tr>
+<tr>
+<td>$1839</td><td colspan="2" align="right">16</td><td>thread_parent_thread</td></tr>
+<tr>
+<td>$1849</td><td colspan="2" align="right">16</td><td>thread_state</td></tr>
+<tr>
+<td>$1859</td><td colspan="2" align="right">16</td><td>thread_timeout</td></tr>
+<tr>
+<td>$1869</td><td colspan="2" align="right">16</td><td>thread_event_mask</td></tr>
+<tr>
+<td>$1879</td><td colspan="2" align="right">16</td><td>thread_offset_lo</td></tr>
+<tr>
+<td>$1889</td><td colspan="2" align="right">16</td><td>thread_offset_hi</td></tr>
+<tr>
+<td>$1899</td><td align="right">1</td><td align="right">1</td><td>_CurrentEgo</td></tr>
+<tr>
+<td>$189a</td><td align="right">1</td><td align="right">1</td><td>_CurrentRoom</td></tr>
+<tr>
+<td>$189b</td><td align="right">1</td><td align="right">1</td><td>_TalkingActor</td></tr>
+<tr>
+<td>$189c</td><td align="right">1</td><td align="right">1</td><td>_CurrentThread</td></tr>
+<tr>
+<td>$189d</td><td align="right">1</td><td align="right">1</td><td>_EntryScript</td></tr>
+<tr>
+<td>$189e</td><td align="right">1</td><td align="right">1</td><td>_ExitScript</td></tr>
+<tr>
+<td>$189f</td><td align="right">1</td><td align="right">1</td><td>_EngineEvents</td></tr>
+<tr>
+<td>$18a0</td><td align="right">1</td><td align="right">1</td><td>_PlayingTuneID</td></tr>
+<tr>
+<td>$18a1</td><td align="right">32</td><td align="right">32</td><td>_VARS</td></tr>
+<tr>
+<td>$18c1</td><td align="right">16</td><td align="right">16</td><td>_FLAGS</td></tr>
+<tr>
+<td>$18d1</td><td align="right">265</td><td align="right">256</td><td>_LSPACE</td></tr>
+<tr>
+<td>$19d1</td><td colspan="2" align="right">1</td><td>first_col_copy</td></tr>
+<tr>
+<td>$19d2</td><td colspan="2" align="right">1</td><td>MouseOff</td></tr>
+<tr>
+<td>$19d3</td><td colspan="2" align="right">1</td><td>VerbsShown</td></tr>
+<tr>
+<td>$19d4</td><td colspan="2" align="right">1</td><td>actor_following</td></tr>
+<tr>
+<td>$19d5</td><td colspan="2" align="right">1</td><td>vol_sel</td></tr>
+<tr>
+<td>$19d6</td><td colspan="2" align="right">1</td><td>override_thread</td></tr>
+<tr>
+<td>$19d7</td><td colspan="2" align="right">2</td><td>override_offset</td></tr>
+<tr>
+<td>$19d9</td><td colspan="2" align="right">1</td><td>ttalk_sel</td></tr>
+<tr>
+<td>$19da</td><td align="right">236</td><td align="right">236</td><td>_GlobalResourceList</td></tr>
+<tr>
+<td>$1ac6</td><td align="right">1</td><td align="right">1</td><td>__SaveGameData_end, first_item_shown</td></tr>
+<tr>
+<td>$1ac7</td><td align="right">476</td><td align="right">28</td><td>__object_dataB_start, tab_tiles_hi</td></tr>
+<tr>
+<td>$1ae3</td><td colspan="2" align="right">28</td><td>tab_tiles_lo</td></tr>
+<tr>
+<td>$1aff</td><td colspan="2" align="right">28</td><td>tab_masks_hi</td></tr>
+<tr>
+<td>$1b1b</td><td colspan="2" align="right">28</td><td>tab_masks_lo</td></tr>
+<tr>
+<td>$1b37</td><td colspan="2" align="right">28</td><td>base_as_pointer_high</td></tr>
+<tr>
+<td>$1b53</td><td colspan="2" align="right">28</td><td>base_as_pointer_low</td></tr>
+<tr>
+<td>$1b6f</td><td colspan="2" align="right">28</td><td>as_pointer_high</td></tr>
+<tr>
+<td>$1b8b</td><td colspan="2" align="right">28</td><td>as_pointer_low</td></tr>
+<tr>
+<td>$1ba7</td><td colspan="2" align="right">28</td><td>command_high</td></tr>
+<tr>
+<td>$1bc3</td><td colspan="2" align="right">28</td><td>command_low</td></tr>
+<tr>
+<td>$1bdf</td><td colspan="2" align="right">28</td><td>subcom_high</td></tr>
+<tr>
+<td>$1bfb</td><td colspan="2" align="right">28</td><td>subcom_low</td></tr>
+<tr>
+<td>$1c17</td><td colspan="2" align="right">28</td><td>var1</td></tr>
+<tr>
+<td>$1c33</td><td colspan="2" align="right">28</td><td>var2</td></tr>
+<tr>
+<td>$1c4f</td><td colspan="2" align="right">28</td><td>var3</td></tr>
+<tr>
+<td>$1c6b</td><td colspan="2" align="right">28</td><td>var4</td></tr>
+<tr>
+<td>$1c87</td><td colspan="2" align="right">28</td><td>stride_step</td></tr>
+<tr>
+<td>$1ca3</td><td align="right">141</td><td align="right">28</td><td>__object_dataB_end, tab_objects</td></tr>
+<tr>
+<td>$1cbf</td><td colspan="2" align="right">1</td><td>nActiveObjects</td></tr>
+<tr>
+<td>$1cc0</td><td colspan="2" align="right">1</td><td>InDialogMode</td></tr>
+<tr>
+<td>$1cc1</td><td colspan="2" align="right">1</td><td>DlgStringRes</td></tr>
+<tr>
+<td>$1cc2</td><td colspan="2" align="right">16</td><td>DlgActiveOptions</td></tr>
+<tr>
+<td>$1cd2</td><td colspan="2" align="right">1</td><td>DlgScript</td></tr>
+<tr>
+<td>$1cd3</td><td colspan="2" align="right">16</td><td>DlgOffsetsLo</td></tr>
+<tr>
+<td>$1ce3</td><td colspan="2" align="right">16</td><td>DlgOffsetsHi</td></tr>
+<tr>
+<td>$1cf3</td><td colspan="2" align="right">1</td><td>camera_command_hi</td></tr>
+<tr>
+<td>$1cf4</td><td colspan="2" align="right">1</td><td>camera_command_lo</td></tr>
+<tr>
+<td>$1cf5</td><td colspan="2" align="right">1</td><td>var_camera</td></tr>
+<tr>
+<td>$1cf6</td><td colspan="2" align="right">1</td><td>var_camera2</td></tr>
+<tr>
+<td>$1cf7</td><td colspan="2" align="right">1</td><td>CurrentEgoEntry</td></tr>
+<tr>
+<td>$1cf8</td><td colspan="2" align="right">1</td><td>RoomChanged</td></tr>
+<tr>
+<td>$1cf9</td><td colspan="2" align="right">2</td><td>pPalette</td></tr>
+<tr>
+<td>$1cfb</td><td colspan="2" align="right">1</td><td>SentenceChanged</td></tr>
+<tr>
+<td>$1cfc</td><td colspan="2" align="right">1</td><td>LookingForObj2</td></tr>
+<tr>
+<td>$1cfd</td><td colspan="2" align="right">1</td><td>CurrentVerb</td></tr>
+<tr>
+<td>$1cfe</td><td colspan="2" align="right">1</td><td>CurrentObject1</td></tr>
+<tr>
+<td>$1cff</td><td colspan="2" align="right">1</td><td>CurrentObject2</td></tr>
+<tr>
+<td><b>$1d00</b></td><td colspan="2" align="right">1</td><td>Obj1FromInventory</td></tr>
+<tr>
+<td>$1d01</td><td colspan="2" align="right">1</td><td>Obj2FromInventory</td></tr>
+<tr>
+<td>$1d02</td><td colspan="2" align="right">1</td><td>SelCurrentVerb</td></tr>
+<tr>
+<td>$1d03</td><td colspan="2" align="right">1</td><td>SelCurrentObject1</td></tr>
+<tr>
+<td>$1d04</td><td colspan="2" align="right">1</td><td>SelCurrentObject2</td></tr>
+<tr>
+<td>$1d05</td><td colspan="2" align="right">1</td><td>SelObj1FromInventory</td></tr>
+<tr>
+<td>$1d06</td><td colspan="2" align="right">1</td><td>SelObj2FromInventory</td></tr>
+<tr>
+<td>$1d07</td><td colspan="2" align="right">1</td><td>tmp_X</td></tr>
+<tr>
+<td>$1d08</td><td colspan="2" align="right">1</td><td>tmp_X2</td></tr>
+<tr>
+<td>$1d09</td><td colspan="2" align="right">1</td><td>tmp_Y</td></tr>
+<tr>
+<td>$1d0a</td><td colspan="2" align="right">1</td><td>temp_code</td></tr>
+<tr>
+<td>$1d0b</td><td colspan="2" align="right">7</td><td>param_blk</td></tr>
+<tr>
+<td>$1d12</td><td colspan="2" align="right">30</td><td>freespace</td></tr>
+<tr>
+<td>$1d30</td><td align="right">33452</td><td align="right">33452</td><td>__resource_memory_start</td></tr>
+<tr>
+<td>$9fdc</td><td align="right">8227</td><td align="right">8196</td><td>__resource_memory_end</td></tr>
+<tr>
+<td>$bfe0</td><td colspan="2" align="right">31</td><td>GenericIJKBits</td></tr>
+</table>
+</td>
+<td valign=top>
+<a name="Overlay"></a>
+<h1>Overlay memory</h1>
+<table border>
+<tr>
+<th>Adress</th><th colspan="2">Size</th><th>Name</th>
+</tr>
+<tr>
+<td><b>$c000</b></td><td align="right">132</td><td align="right">129</td><td>_main, str_buffer</td></tr>
+<tr>
+<td>$c081</td><td colspan="2" align="right">3</td><td>skipj</td></tr>
+<tr>
+<td>$c084</td><td align="right">14</td><td align="right">14</td><td>_restart_game</td></tr>
+<tr>
+<td>$c092</td><td align="right">783</td><td align="right">17</td><td>_main_loop</td></tr>
+<tr>
+<td>$c0a3</td><td colspan="2" align="right">25</td><td>skip5</td></tr>
+<tr>
+<td>$c0bc</td><td colspan="2" align="right">3</td><td>skip</td></tr>
+<tr>
+<td>$c0bf</td><td colspan="2" align="right">7</td><td>flagcursor</td></tr>
+<tr>
+<td>$c0c6</td><td colspan="2" align="right">17</td><td>skip2</td></tr>
+<tr>
+<td>$c0d7</td><td colspan="2" align="right">8</td><td>skip3</td></tr>
+<tr>
+<td>$c0df</td><td colspan="2" align="right">15</td><td>skip4</td></tr>
+<tr>
+<td>$c0ee</td><td colspan="2" align="right">43</td><td>skip6</td></tr>
+<tr>
+<td>$c119</td><td colspan="2" align="right">6</td><td>normal</td></tr>
+<tr>
+<td>$c11f</td><td colspan="2" align="right">13</td><td>skip7</td></tr>
+<tr>
+<td>$c12c</td><td colspan="2" align="right">12</td><td>nochange</td></tr>
+<tr>
+<td>$c138</td><td colspan="2" align="right">10</td><td>ClearHires</td></tr>
+<tr>
+<td>$c142</td><td colspan="2" align="right">4</td><td>loop2</td></tr>
+<tr>
+<td>$c146</td><td colspan="2" align="right">11</td><td>loop</td></tr>
+<tr>
+<td>$c151</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$c152</td><td colspan="2" align="right">2</td><td>add40tmp</td></tr>
+<tr>
+<td>$c154</td><td colspan="2" align="right">9</td><td>addAtmp</td></tr>
+<tr>
+<td>$c15d</td><td colspan="2" align="right">1</td><td>nocarry</td></tr>
+<tr>
+<td>$c15e</td><td colspan="2" align="right">10</td><td>SetInk2</td></tr>
+<tr>
+<td>$c168</td><td colspan="2" align="right">2</td><td>loop</td></tr>
+<tr>
+<td>$c16a</td><td colspan="2" align="right">6</td><td>smc_ink_1</td></tr>
+<tr>
+<td>$c170</td><td colspan="2" align="right">12</td><td>smc_ink_2</td></tr>
+<tr>
+<td>$c17c</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$c17d</td><td colspan="2" align="right">137</td><td>FileStartSector</td></tr>
+<tr>
+<td>$c206</td><td colspan="2" align="right">137</td><td>FileStartTrack</td></tr>
+<tr>
+<td>$c28f</td><td colspan="2" align="right">137</td><td>FileSizeLow</td></tr>
+<tr>
+<td>$c318</td><td colspan="2" align="right">137</td><td>FileSizeHigh</td></tr>
+<tr>
+<td>$c3a1</td><td align="right">29</td><td align="right">1</td><td>_LoaderApiEntryIndex</td></tr>
+<tr>
+<td>$c3a2</td><td colspan="2" align="right">28</td><td>SetLoaderParams</td></tr>
+<tr>
+<td>$c3be</td><td align="right">6</td><td align="right">6</td><td>_LoadApiLoadFileFromDirectory</td></tr>
+<tr>
+<td>$c3c4</td><td align="right">6</td><td align="right">6</td><td>_LoadApiSaveFileFromDirectory</td></tr>
+<tr>
+<td>$c3ca</td><td align="right">4152</td><td align="right">13</td><td>_InitISR</td></tr>
+<tr>
+<td>$c3d7</td><td colspan="2" align="right">23</td><td>irq_routine</td></tr>
+<tr>
+<td>$c3ee</td><td colspan="2" align="right">13</td><td>nojoy</td></tr>
+<tr>
+<td>$c3fb</td><td colspan="2" align="right">3</td><td>skip</td></tr>
+<tr>
+<td>$c3fe</td><td colspan="2" align="right">2</td><td>end, savx</td></tr>
+<tr>
+<td><b>$c400</b></td><td colspan="2" align="right">4</td><td>savy</td></tr>
+<tr>
+<td>$c404</td><td colspan="2" align="right">18</td><td>ReadKeyboard</td></tr>
+<tr>
+<td>$c416</td><td colspan="2" align="right">40</td><td>loop2</td></tr>
+<tr>
+<td>$c43e</td><td colspan="2" align="right">45</td><td>loop1</td></tr>
+<tr>
+<td>$c46b</td><td colspan="2" align="right">5</td><td>skip1</td></tr>
+<tr>
+<td>$c470</td><td colspan="2" align="right">5</td><td>skip2</td></tr>
+<tr>
+<td>$c475</td><td colspan="2" align="right">1</td><td>KeyBankUsed</td></tr>
+<tr>
+<td>$c476</td><td colspan="2" align="right">1</td><td>KeyBitflag</td></tr>
+<tr>
+<td>$c477</td><td colspan="2" align="right">2</td><td>ReadKey</td></tr>
+<tr>
+<td>$c479</td><td colspan="2" align="right">13</td><td>loop</td></tr>
+<tr>
+<td>$c486</td><td colspan="2" align="right">19</td><td>loop2</td></tr>
+<tr>
+<td>$c499</td><td colspan="2" align="right">6</td><td>skip</td></tr>
+<tr>
+<td>$c49f</td><td colspan="2" align="right">1</td><td>oldKey</td></tr>
+<tr>
+<td>$c4a0</td><td colspan="2" align="right">16</td><td>ReadKeyNoBounce</td></tr>
+<tr>
+<td>$c4b0</td><td colspan="2" align="right">3</td><td>retz</td></tr>
+<tr>
+<td>$c4b3</td><td colspan="2" align="right">9</td><td>WaitKey, loop</td></tr>
+<tr>
+<td>$c4bc</td><td colspan="2" align="right">1</td><td>joy_Left</td></tr>
+<tr>
+<td>$c4bd</td><td colspan="2" align="right">36</td><td>ReadIJK</td></tr>
+<tr>
+<td>$c4e1</td><td colspan="2" align="right">16</td><td>lspacep_lo</td></tr>
+<tr>
+<td>$c4f1</td><td colspan="2" align="right">16</td><td>lspacep_hi</td></tr>
+<tr>
+<td>$c501</td><td colspan="2" align="right">4</td><td>InitializeThreads</td></tr>
+<tr>
+<td>$c505</td><td colspan="2" align="right">17</td><td>loop</td></tr>
+<tr>
+<td>$c516</td><td colspan="2" align="right">2</td><td>UpdateThreadPointers</td></tr>
+<tr>
+<td>$c518</td><td colspan="2" align="right">28</td><td>loop</td></tr>
+<tr>
+<td>$c534</td><td colspan="2" align="right">10</td><td>found</td></tr>
+<tr>
+<td>$c53e</td><td colspan="2" align="right">9</td><td>sav, skip</td></tr>
+<tr>
+<td>$c547</td><td colspan="2" align="right">4</td><td>next_thread</td></tr>
+<tr>
+<td>$c54b</td><td colspan="2" align="right">5</td><td>doThreadLoop</td></tr>
+<tr>
+<td>$c550</td><td colspan="2" align="right">30</td><td>loop</td></tr>
+<tr>
+<td>$c56e</td><td colspan="2" align="right">9</td><td>notwaiting</td></tr>
+<tr>
+<td>$c577</td><td colspan="2" align="right">5</td><td>settorun</td></tr>
+<tr>
+<td>$c57c</td><td colspan="2" align="right">34</td><td>notdelayed</td></tr>
+<tr>
+<td>$c59e</td><td colspan="2" align="right">6</td><td>next_thread</td></tr>
+<tr>
+<td>$c5a4</td><td colspan="2" align="right">1</td><td>counter</td></tr>
+<tr>
+<td>$c5a5</td><td colspan="2" align="right">14</td><td>RunThreadOnce</td></tr>
+<tr>
+<td>$c5b3</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$c5b4</td><td colspan="2" align="right">10</td><td>ExecuteThread</td></tr>
+<tr>
+<td>$c5be</td><td colspan="2" align="right">42</td><td>cont</td></tr>
+<tr>
+<td>$c5e8</td><td colspan="2" align="right">6</td><td>exec_address</td></tr>
+<tr>
+<td>$c5ee</td><td colspan="2" align="right">5</td><td>searchScriptID</td></tr>
+<tr>
+<td>$c5f3</td><td colspan="2" align="right">5</td><td>loop</td></tr>
+<tr>
+<td>$c5f8</td><td colspan="2" align="right">14</td><td>id</td></tr>
+<tr>
+<td>$c606</td><td colspan="2" align="right">3</td><td>notthis</td></tr>
+<tr>
+<td>$c609</td><td colspan="2" align="right">1</td><td>found</td></tr>
+<tr>
+<td>$c60a</td><td colspan="2" align="right">9</td><td>LoadAndInstallScript</td></tr>
+<tr>
+<td>$c613</td><td colspan="2" align="right">13</td><td>error</td></tr>
+<tr>
+<td>$c620</td><td colspan="2" align="right">2</td><td>InstallScript</td></tr>
+<tr>
+<td>$c622</td><td colspan="2" align="right">9</td><td>loop</td></tr>
+<tr>
+<td>$c62b</td><td colspan="2" align="right">50</td><td>found</td></tr>
+<tr>
+<td>$c65d</td><td colspan="2" align="right">3</td><td>InstallScriptAtOffset</td></tr>
+<tr>
+<td>$c660</td><td colspan="2" align="right">13</td><td>SetScriptOffsetFromParam</td></tr>
+<tr>
+<td>$c66d</td><td colspan="2" align="right">18</td><td>PurgeScript</td></tr>
+<tr>
+<td>$c67f</td><td colspan="2" align="right">20</td><td>skipov</td></tr>
+<tr>
+<td>$c693</td><td colspan="2" align="right">2</td><td>savx, skip2</td></tr>
+<tr>
+<td>$c695</td><td colspan="2" align="right">16</td><td>skip</td></tr>
+<tr>
+<td>$c6a5</td><td colspan="2" align="right">2</td><td>PurgeLocalScripts</td></tr>
+<tr>
+<td>$c6a7</td><td colspan="2" align="right">15</td><td>loop</td></tr>
+<tr>
+<td>$c6b6</td><td colspan="2" align="right">4</td><td>skip</td></tr>
+<tr>
+<td>$c6ba</td><td colspan="2" align="right">45</td><td>InitEngine</td></tr>
+<tr>
+<td>$c6e7</td><td colspan="2" align="right">28</td><td>loop</td></tr>
+<tr>
+<td>$c703</td><td colspan="2" align="right">10</td><td>loopvars</td></tr>
+<tr>
+<td>$c70d</td><td colspan="2" align="right">10</td><td>loopflags</td></tr>
+<tr>
+<td>$c717</td><td colspan="2" align="right">6</td><td>looplo</td></tr>
+<tr>
+<td>$c71d</td><td colspan="2" align="right">4</td><td>ZeroAllSRB</td></tr>
+<tr>
+<td>$c721</td><td colspan="2" align="right">7</td><td>loop</td></tr>
+<tr>
+<td>$c728</td><td colspan="2" align="right">4</td><td>ClearAllSRB</td></tr>
+<tr>
+<td>$c72c</td><td colspan="2" align="right">25</td><td>loop</td></tr>
+<tr>
+<td>$c745</td><td colspan="2" align="right">8</td><td>TalkCharacter</td></tr>
+<tr>
+<td>$c74d</td><td colspan="2" align="right">14</td><td>doit</td></tr>
+<tr>
+<td>$c75b</td><td colspan="2" align="right">5</td><td>phase2</td></tr>
+<tr>
+<td>$c760</td><td colspan="2" align="right">10</td><td>lateral_talk</td></tr>
+<tr>
+<td>$c76a</td><td colspan="2" align="right">5</td><td>phase2l</td></tr>
+<tr>
+<td>$c76f</td><td colspan="2" align="right">22</td><td>StepCharacterUD</td></tr>
+<tr>
+<td>$c785</td><td colspan="2" align="right">6</td><td>facing_up</td></tr>
+<tr>
+<td>$c78b</td><td colspan="2" align="right">6</td><td>laststep</td></tr>
+<tr>
+<td>$c791</td><td colspan="2" align="right">17</td><td>incp</td></tr>
+<tr>
+<td>$c7a2</td><td colspan="2" align="right">20</td><td>end, nocarry</td></tr>
+<tr>
+<td>$c7b6</td><td colspan="2" align="right">10</td><td>facing_up_2</td></tr>
+<tr>
+<td>$c7c0</td><td colspan="2" align="right">8</td><td>nochangepos</td></tr>
+<tr>
+<td>$c7c8</td><td colspan="2" align="right">5</td><td>savx, skipsfx</td></tr>
+<tr>
+<td>$c7cd</td><td colspan="2" align="right">14</td><td>StepCharacter</td></tr>
+<tr>
+<td>$c7db</td><td colspan="2" align="right">35</td><td>savx, skipsfx</td></tr>
+<tr>
+<td>$c7fe</td><td colspan="2" align="right">3</td><td>otherdir</td></tr>
+<tr>
+<td>$c801</td><td colspan="2" align="right">6</td><td>noincpos</td></tr>
+<tr>
+<td>$c807</td><td colspan="2" align="right">9</td><td>IfInRoomUpdateSRBsp</td></tr>
+<tr>
+<td>$c810</td><td colspan="2" align="right">6</td><td>doit</td></tr>
+<tr>
+<td>$c816</td><td colspan="2" align="right">14</td><td>UpdateSRBsp</td></tr>
+<tr>
+<td>$c824</td><td colspan="2" align="right">1</td><td>endme</td></tr>
+<tr>
+<td>$c825</td><td colspan="2" align="right">29</td><td>doit</td></tr>
+<tr>
+<td>$c842</td><td colspan="2" align="right">2</td><td>nocarrym</td></tr>
+<tr>
+<td>$c844</td><td colspan="2" align="right">17</td><td>notmirror1</td></tr>
+<tr>
+<td>$c855</td><td colspan="2" align="right">17</td><td>noneg</td></tr>
+<tr>
+<td>$c866</td><td colspan="2" align="right">12</td><td>loop, sav_col</td></tr>
+<tr>
+<td>$c872</td><td colspan="2" align="right">3</td><td>dskip</td></tr>
+<tr>
+<td>$c875</td><td colspan="2" align="right">4</td><td>noskip</td></tr>
+<tr>
+<td>$c879</td><td colspan="2" align="right">19</td><td>smc_srbpl</td></tr>
+<tr>
+<td>$c88c</td><td colspan="2" align="right">24</td><td>start_row</td></tr>
+<tr>
+<td>$c8a4</td><td colspan="2" align="right">12</td><td>start_marking</td></tr>
+<tr>
+<td>$c8b0</td><td colspan="2" align="right">12</td><td>skip1</td></tr>
+<tr>
+<td>$c8bc</td><td colspan="2" align="right">12</td><td>skip2</td></tr>
+<tr>
+<td>$c8c8</td><td colspan="2" align="right">12</td><td>skip3</td></tr>
+<tr>
+<td>$c8d4</td><td colspan="2" align="right">12</td><td>skip4</td></tr>
+<tr>
+<td>$c8e0</td><td colspan="2" align="right">12</td><td>skip5</td></tr>
+<tr>
+<td>$c8ec</td><td colspan="2" align="right">12</td><td>skip6</td></tr>
+<tr>
+<td>$c8f8</td><td colspan="2" align="right">16</td><td>skip</td></tr>
+<tr>
+<td>$c908</td><td colspan="2" align="right">5</td><td>nocarrydec</td></tr>
+<tr>
+<td>$c90d</td><td colspan="2" align="right">6</td><td>notmirror</td></tr>
+<tr>
+<td>$c913</td><td colspan="2" align="right">10</td><td>nocarry</td></tr>
+<tr>
+<td>$c91d</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$c91e</td><td colspan="2" align="right">32</td><td>getSRBforTile</td></tr>
+<tr>
+<td>$c93e</td><td colspan="2" align="right">14</td><td>UpdateSRB</td></tr>
+<tr>
+<td>$c94c</td><td colspan="2" align="right">1</td><td>endme</td></tr>
+<tr>
+<td>$c94d</td><td colspan="2" align="right">8</td><td>doit</td></tr>
+<tr>
+<td>$c955</td><td colspan="2" align="right">2</td><td>RenderScreen</td></tr>
+<tr>
+<td>$c957</td><td colspan="2" align="right">6</td><td>loop</td></tr>
+<tr>
+<td>$c95d</td><td colspan="2" align="right">35</td><td>looprot</td></tr>
+<tr>
+<td>$c980</td><td colspan="2" align="right">2</td><td>return_DrawRoomTile, sav_y</td></tr>
+<tr>
+<td>$c982</td><td colspan="2" align="right">2</td><td>sav_x</td></tr>
+<tr>
+<td>$c984</td><td colspan="2" align="right">6</td><td>sav_a</td></tr>
+<tr>
+<td>$c98a</td><td colspan="2" align="right">4</td><td>skip</td></tr>
+<tr>
+<td>$c98e</td><td colspan="2" align="right">24</td><td>DrawRoomTile</td></tr>
+<tr>
+<td>$c9a6</td><td colspan="2" align="right">16</td><td>nocarry2</td></tr>
+<tr>
+<td>$c9b6</td><td colspan="2" align="right">10</td><td>nocarry</td></tr>
+<tr>
+<td>$c9c0</td><td colspan="2" align="right">35</td><td>smc_p</td></tr>
+<tr>
+<td>$c9e3</td><td colspan="2" align="right">11</td><td>loop</td></tr>
+<tr>
+<td>$c9ee</td><td colspan="2" align="right">18</td><td>blank_tile</td></tr>
+<tr>
+<td><b>$ca00</b></td><td colspan="2" align="right">18</td><td>DrawSprites</td></tr>
+<tr>
+<td>$ca12</td><td colspan="2" align="right">3</td><td>doit</td></tr>
+<tr>
+<td>$ca15</td><td colspan="2" align="right">20</td><td>loop</td></tr>
+<tr>
+<td>$ca29</td><td colspan="2" align="right">3</td><td>noproc</td></tr>
+<tr>
+<td>$ca2c</td><td colspan="2" align="right">11</td><td>doit1, smc_tilecol</td></tr>
+<tr>
+<td>$ca37</td><td colspan="2" align="right">7</td><td>doit2</td></tr>
+<tr>
+<td>$ca3e</td><td colspan="2" align="right">7</td><td>doit4</td></tr>
+<tr>
+<td>$ca45</td><td colspan="2" align="right">7</td><td>smc_tilerow</td></tr>
+<tr>
+<td>$ca4c</td><td colspan="2" align="right">7</td><td>doit5</td></tr>
+<tr>
+<td>$ca53</td><td colspan="2" align="right">13</td><td>cont</td></tr>
+<tr>
+<td>$ca60</td><td colspan="2" align="right">25</td><td>smc_row</td></tr>
+<tr>
+<td>$ca79</td><td colspan="2" align="right">50</td><td>smc_udgp</td></tr>
+<tr>
+<td>$caab</td><td colspan="2" align="right">18</td><td>loopcopy, mask_p</td></tr>
+<tr>
+<td>$cabd</td><td colspan="2" align="right">14</td><td>ScreenNoInverse</td></tr>
+<tr>
+<td>$cacb</td><td colspan="2" align="right">13</td><td>graphic_p</td></tr>
+<tr>
+<td>$cad8</td><td colspan="2" align="right">3</td><td>okay</td></tr>
+<tr>
+<td>$cadb</td><td colspan="2" align="right">3</td><td>finished</td></tr>
+<tr>
+<td>$cade</td><td colspan="2" align="right">7</td><td>skip</td></tr>
+<tr>
+<td>$cae5</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$cae8</td><td colspan="2" align="right">16</td><td>mirror_draw_sprite</td></tr>
+<tr>
+<td>$caf8</td><td colspan="2" align="right">50</td><td>smc_udgpi</td></tr>
+<tr>
+<td>$cb2a</td><td colspan="2" align="right">18</td><td>loopcopyi, mask_pi</td></tr>
+<tr>
+<td>$cb3c</td><td colspan="2" align="right">15</td><td>ScreenNoInversei</td></tr>
+<tr>
+<td>$cb4b</td><td colspan="2" align="right">18</td><td>graphic_pi</td></tr>
+<tr>
+<td>$cb5d</td><td colspan="2" align="right">3</td><td>okayi</td></tr>
+<tr>
+<td>$cb60</td><td colspan="2" align="right">10</td><td>finishedi</td></tr>
+<tr>
+<td>$cb6a</td><td colspan="2" align="right">22</td><td>DumpBuffer, endi</td></tr>
+<tr>
+<td>$cb80</td><td colspan="2" align="right">51</td><td>skip</td></tr>
+<tr>
+<td>$cbb3</td><td colspan="2" align="right">11</td><td>nocarry</td></tr>
+<tr>
+<td>$cbbe</td><td colspan="2" align="right">4</td><td>WaitIRQ</td></tr>
+<tr>
+<td>$cbc2</td><td colspan="2" align="right">5</td><td>loop</td></tr>
+<tr>
+<td>$cbc7</td><td colspan="2" align="right">18</td><td>PrepZPlane</td></tr>
+<tr>
+<td>$cbd9</td><td colspan="2" align="right">28</td><td>done1</td></tr>
+<tr>
+<td>$cbf5</td><td colspan="2" align="right">5</td><td>smc_zp</td></tr>
+<tr>
+<td>$cbfa</td><td colspan="2" align="right">11</td><td>zerotile</td></tr>
+<tr>
+<td>$cc05</td><td colspan="2" align="right">19</td><td>calcp</td></tr>
+<tr>
+<td>$cc18</td><td colspan="2" align="right">15</td><td>saveY</td></tr>
+<tr>
+<td>$cc27</td><td colspan="2" align="right">2</td><td>resx</td></tr>
+<tr>
+<td>$cc29</td><td colspan="2" align="right">2</td><td>skipall</td></tr>
+<tr>
+<td>$cc2b</td><td colspan="2" align="right">8</td><td>CameraControl</td></tr>
+<tr>
+<td>$cc33</td><td colspan="2" align="right">10</td><td>doit</td></tr>
+<tr>
+<td>$cc3d</td><td colspan="2" align="right">18</td><td>PanCamera</td></tr>
+<tr>
+<td>$cc4f</td><td colspan="2" align="right">6</td><td>panright</td></tr>
+<tr>
+<td>$cc55</td><td colspan="2" align="right">6</td><td>reached</td></tr>
+<tr>
+<td>$cc5b</td><td colspan="2" align="right">35</td><td>CameraFollowsActor</td></tr>
+<tr>
+<td>$cc7e</td><td colspan="2" align="right">11</td><td>install_sc</td></tr>
+<tr>
+<td>$cc89</td><td colspan="2" align="right">1</td><td>not_far_right</td></tr>
+<tr>
+<td>$cc8a</td><td colspan="2" align="right">25</td><td>not_far_left</td></tr>
+<tr>
+<td>$cca3</td><td colspan="2" align="right">9</td><td>HideMouseIfNecessary</td></tr>
+<tr>
+<td>$ccac</td><td colspan="2" align="right">1</td><td>notindrawarea1</td></tr>
+<tr>
+<td>$ccad</td><td colspan="2" align="right">3</td><td>ScrollForActorRight</td></tr>
+<tr>
+<td>$ccb0</td><td colspan="2" align="right">9</td><td>ScrollRoomRight</td></tr>
+<tr>
+<td>$ccb9</td><td colspan="2" align="right">3</td><td>ScrollForActorLeft</td></tr>
+<tr>
+<td>$ccbc</td><td colspan="2" align="right">6</td><td>ScrollRoomLeft</td></tr>
+<tr>
+<td>$ccc2</td><td colspan="2" align="right">9</td><td>ScrollEnd</td></tr>
+<tr>
+<td>$cccb</td><td colspan="2" align="right">17</td><td>ScrollCommon</td></tr>
+<tr>
+<td>$ccdc</td><td colspan="2" align="right">1</td><td>cont</td></tr>
+<tr>
+<td>$ccdd</td><td colspan="2" align="right">10</td><td>ClearRoomArea</td></tr>
+<tr>
+<td>$cce7</td><td colspan="2" align="right">4</td><td>loop2</td></tr>
+<tr>
+<td>$cceb</td><td colspan="2" align="right">12</td><td>loop</td></tr>
+<tr>
+<td>$ccf7</td><td colspan="2" align="right">11</td><td>PerformFadeEffect</td></tr>
+<tr>
+<td>$cd02</td><td colspan="2" align="right">20</td><td>noclear</td></tr>
+<tr>
+<td>$cd16</td><td colspan="2" align="right">6</td><td>RedrawAllScreen</td></tr>
+<tr>
+<td>$cd1c</td><td colspan="2" align="right">9</td><td>DefaultFading</td></tr>
+<tr>
+<td>$cd25</td><td colspan="2" align="right">8</td><td>RLFading</td></tr>
+<tr>
+<td>$cd2d</td><td colspan="2" align="right">5</td><td>loopcol</td></tr>
+<tr>
+<td>$cd32</td><td colspan="2" align="right">32</td><td>looprow</td></tr>
+<tr>
+<td>$cd52</td><td colspan="2" align="right">8</td><td>LRFading</td></tr>
+<tr>
+<td>$cd5a</td><td colspan="2" align="right">5</td><td>loopcol</td></tr>
+<tr>
+<td>$cd5f</td><td colspan="2" align="right">32</td><td>looprow</td></tr>
+<tr>
+<td>$cd7f</td><td colspan="2" align="right">1</td><td>cur_x</td></tr>
+<tr>
+<td>$cd80</td><td colspan="2" align="right">1</td><td>cur_y</td></tr>
+<tr>
+<td>$cd81</td><td colspan="2" align="right">1</td><td>counter</td></tr>
+<tr>
+<td>$cd82</td><td colspan="2" align="right">14</td><td>SetEgo</td></tr>
+<tr>
+<td>$cd90</td><td colspan="2" align="right">8</td><td>notfound</td></tr>
+<tr>
+<td>$cd98</td><td colspan="2" align="right">13</td><td>ReadOffset</td></tr>
+<tr>
+<td>$cda5</td><td colspan="2" align="right">29</td><td>UpdateRoomPointers</td></tr>
+<tr>
+<td>$cdc2</td><td colspan="2" align="right">40</td><td>loopzplanes</td></tr>
+<tr>
+<td>$cdea</td><td colspan="2" align="right">24</td><td>nozplanes</td></tr>
+<tr>
+<td>$ce02</td><td colspan="2" align="right">16</td><td>nowalkboxes</td></tr>
+<tr>
+<td>$ce12</td><td colspan="2" align="right">11</td><td>palette</td></tr>
+<tr>
+<td>$ce1d</td><td colspan="2" align="right">1</td><td>endpalette</td></tr>
+<tr>
+<td>$ce1e</td><td colspan="2" align="right">31</td><td>LoadNewRoom</td></tr>
+<tr>
+<td>$ce3d</td><td colspan="2" align="right">14</td><td>finish2</td></tr>
+<tr>
+<td>$ce4b</td><td colspan="2" align="right">33</td><td>skip</td></tr>
+<tr>
+<td>$ce6c</td><td colspan="2" align="right">53</td><td>nocompact, savX</td></tr>
+<tr>
+<td>$cea1</td><td colspan="2" align="right">10</td><td>catchme</td></tr>
+<tr>
+<td>$ceab</td><td colspan="2" align="right">9</td><td>loop</td></tr>
+<tr>
+<td>$ceb4</td><td colspan="2" align="right">6</td><td>Savy</td></tr>
+<tr>
+<td>$ceba</td><td colspan="2" align="right">18</td><td>noobjects</td></tr>
+<tr>
+<td>$cecc</td><td colspan="2" align="right">1</td><td>finish</td></tr>
+<tr>
+<td>$cecd</td><td colspan="2" align="right">4</td><td>AnimateCharacters</td></tr>
+<tr>
+<td>$ced1</td><td colspan="2" align="right">13</td><td>loop</td></tr>
+<tr>
+<td>$cede</td><td colspan="2" align="right">5</td><td>skipthis</td></tr>
+<tr>
+<td>$cee3</td><td colspan="2" align="right">15</td><td>AnimateCharacter, subcommand</td></tr>
+<tr>
+<td>$cef2</td><td colspan="2" align="right">15</td><td>nosubcommand, primary_command</td></tr>
+<tr>
+<td>$cf01</td><td colspan="2" align="right">1</td><td>command_completed</td></tr>
+<tr>
+<td>$cf02</td><td colspan="2" align="right">4</td><td>StopCharacterCommands</td></tr>
+<tr>
+<td>$cf06</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$cf10</td><td colspan="2" align="right">16</td><td>WaitTalkQueue</td></tr>
+<tr>
+<td>$cf20</td><td colspan="2" align="right">1</td><td>not_empty</td></tr>
+<tr>
+<td>$cf21</td><td colspan="2" align="right">32</td><td>Say</td></tr>
+<tr>
+<td>$cf41</td><td colspan="2" align="right">1</td><td>preProceedTalk</td></tr>
+<tr>
+<td>$cf42</td><td colspan="2" align="right">31</td><td>ProceedTalk</td></tr>
+<tr>
+<td>$cf61</td><td colspan="2" align="right">2</td><td>savA</td></tr>
+<tr>
+<td>$cf63</td><td colspan="2" align="right">5</td><td>savY</td></tr>
+<tr>
+<td>$cf68</td><td colspan="2" align="right">33</td><td>savX</td></tr>
+<tr>
+<td>$cf89</td><td colspan="2" align="right">11</td><td>timed_talk</td></tr>
+<tr>
+<td>$cf94</td><td colspan="2" align="right">8</td><td>noadj</td></tr>
+<tr>
+<td>$cf9c</td><td colspan="2" align="right">19</td><td>end</td></tr>
+<tr>
+<td>$cfaf</td><td colspan="2" align="right">10</td><td>WalkTo</td></tr>
+<tr>
+<td>$cfb9</td><td colspan="2" align="right">12</td><td>skipthis2</td></tr>
+<tr>
+<td>$cfc5</td><td colspan="2" align="right">27</td><td>skipthis</td></tr>
+<tr>
+<td>$cfe0</td><td colspan="2" align="right">23</td><td>savX</td></tr>
+<tr>
+<td>$cff7</td><td colspan="2" align="right">17</td><td>notimpossible</td></tr>
+<tr>
+<td>$d008</td><td colspan="2" align="right">24</td><td>MoveTo</td></tr>
+<tr>
+<td>$d020</td><td colspan="2" align="right">19</td><td>colmatches</td></tr>
+<tr>
+<td>$d033</td><td colspan="2" align="right">22</td><td>rowmatches</td></tr>
+<tr>
+<td>$d049</td><td colspan="2" align="right">9</td><td>notyet</td></tr>
+<tr>
+<td>$d052</td><td colspan="2" align="right">19</td><td>GetCharToRow</td></tr>
+<tr>
+<td>$d065</td><td colspan="2" align="right">6</td><td>there</td></tr>
+<tr>
+<td>$d06b</td><td colspan="2" align="right">4</td><td>notthere</td></tr>
+<tr>
+<td>$d06f</td><td colspan="2" align="right">8</td><td>lookthere</td></tr>
+<tr>
+<td>$d077</td><td colspan="2" align="right">4</td><td>goup</td></tr>
+<tr>
+<td>$d07b</td><td colspan="2" align="right">6</td><td>dowalk</td></tr>
+<tr>
+<td>$d081</td><td colspan="2" align="right">19</td><td>GetCharToCol</td></tr>
+<tr>
+<td>$d094</td><td colspan="2" align="right">4</td><td>notthere</td></tr>
+<tr>
+<td>$d098</td><td colspan="2" align="right">8</td><td>lookthere</td></tr>
+<tr>
+<td>$d0a0</td><td colspan="2" align="right">4</td><td>goleft</td></tr>
+<tr>
+<td>$d0a4</td><td colspan="2" align="right">3</td><td>dowalk</td></tr>
+<tr>
+<td>$d0a7</td><td colspan="2" align="right">28</td><td>UpdateCharZPlane</td></tr>
+<tr>
+<td>$d0c3</td><td colspan="2" align="right">1</td><td>skip</td></tr>
+<tr>
+<td>$d0c4</td><td colspan="2" align="right">2</td><td>scroll_loop, smc_orgscan</td></tr>
+<tr>
+<td>$d0c6</td><td colspan="2" align="right">2</td><td>smc_destscan</td></tr>
+<tr>
+<td>$d0c8</td><td colspan="2" align="right">816</td><td>loop</td></tr>
+<tr>
+<td>$d3f8</td><td colspan="2" align="right">1</td><td>smc_dex</td></tr>
+<tr>
+<td>$d3f9</td><td colspan="2" align="right">1</td><td>smc_dey</td></tr>
+<tr>
+<td>$d3fa</td><td colspan="2" align="right">7</td><td>smc_endscan</td></tr>
+<tr>
+<td>$d401</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d402</td><td align="right">52</td><td align="right">7</td><td>_scroll_right</td></tr>
+<tr>
+<td>$d409</td><td colspan="2" align="right">33</td><td>doit</td></tr>
+<tr>
+<td>$d42a</td><td colspan="2" align="right">9</td><td>loop3</td></tr>
+<tr>
+<td>$d433</td><td colspan="2" align="right">3</td><td>redraw_and_retNZ</td></tr>
+<tr>
+<td>$d436</td><td align="right">6608</td><td align="right">14</td><td>_scroll_left</td></tr>
+<tr>
+<td>$d444</td><td colspan="2" align="right">33</td><td>doit</td></tr>
+<tr>
+<td>$d465</td><td colspan="2" align="right">12</td><td>loop3</td></tr>
+<tr>
+<td>$d471</td><td colspan="2" align="right">6</td><td>LookDirection</td></tr>
+<tr>
+<td>$d477</td><td colspan="2" align="right">15</td><td>LookDirection_forced, doit</td></tr>
+<tr>
+<td>$d486</td><td colspan="2" align="right">5</td><td>UpdateAnimstate</td></tr>
+<tr>
+<td>$d48b</td><td colspan="2" align="right">26</td><td>UpdateAnimstate2</td></tr>
+<tr>
+<td>$d4a5</td><td colspan="2" align="right">1</td><td>skip</td></tr>
+<tr>
+<td>$d4a6</td><td colspan="2" align="right">11</td><td>SetRoomPalette</td></tr>
+<tr>
+<td>$d4b1</td><td colspan="2" align="right">24</td><td>doit</td></tr>
+<tr>
+<td>$d4c9</td><td colspan="2" align="right">14</td><td>loop, smcp</td></tr>
+<tr>
+<td>$d4d7</td><td colspan="2" align="right">28</td><td>SetBWPalette</td></tr>
+<tr>
+<td>$d4f3</td><td colspan="2" align="right">26</td><td>InitMouse</td></tr>
+<tr>
+<td>$d50d</td><td colspan="2" align="right">9</td><td>ShowMouse</td></tr>
+<tr>
+<td>$d516</td><td colspan="2" align="right">1</td><td>ret</td></tr>
+<tr>
+<td>$d517</td><td colspan="2" align="right">5</td><td>doit</td></tr>
+<tr>
+<td>$d51c</td><td colspan="2" align="right">4</td><td>HideMouse</td></tr>
+<tr>
+<td>$d520</td><td colspan="2" align="right">1</td><td>ret</td></tr>
+<tr>
+<td>$d521</td><td colspan="2" align="right">5</td><td>doit</td></tr>
+<tr>
+<td>$d526</td><td colspan="2" align="right">8</td><td>UpdateMouse</td></tr>
+<tr>
+<td>$d52e</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d52f</td><td colspan="2" align="right">21</td><td>doit</td></tr>
+<tr>
+<td>$d544</td><td colspan="2" align="right">1</td><td>maskattr</td></tr>
+<tr>
+<td>$d545</td><td colspan="2" align="right">20</td><td>PlotCross</td></tr>
+<tr>
+<td>$d559</td><td colspan="2" align="right">17</td><td>skip1</td></tr>
+<tr>
+<td>$d56a</td><td colspan="2" align="right">18</td><td>skip1</td></tr>
+<tr>
+<td>$d57c</td><td colspan="2" align="right">9</td><td>skip1</td></tr>
+<tr>
+<td>$d585</td><td colspan="2" align="right">13</td><td>inside3</td></tr>
+<tr>
+<td>$d592</td><td colspan="2" align="right">12</td><td>inside4</td></tr>
+<tr>
+<td>$d59e</td><td colspan="2" align="right">11</td><td>loopver</td></tr>
+<tr>
+<td>$d5a9</td><td colspan="2" align="right">11</td><td>skip2</td></tr>
+<tr>
+<td>$d5b4</td><td colspan="2" align="right">4</td><td>nocarry</td></tr>
+<tr>
+<td>$d5b8</td><td colspan="2" align="right">5</td><td>endc2</td></tr>
+<tr>
+<td>$d5bd</td><td colspan="2" align="right">9</td><td>IsCursorInvalid</td></tr>
+<tr>
+<td>$d5c6</td><td colspan="2" align="right">7</td><td>indrawarea</td></tr>
+<tr>
+<td>$d5cd</td><td colspan="2" align="right">6</td><td>do</td></tr>
+<tr>
+<td>$d5d3</td><td colspan="2" align="right">17</td><td>do2</td></tr>
+<tr>
+<td>$d5e4</td><td colspan="2" align="right">7</td><td>do3</td></tr>
+<tr>
+<td>$d5eb</td><td colspan="2" align="right">2</td><td>loop, smc_Row</td></tr>
+<tr>
+<td>$d5ed</td><td colspan="2" align="right">11</td><td>smc_Col</td></tr>
+<tr>
+<td>$d5f8</td><td colspan="2" align="right">15</td><td>loop2</td></tr>
+<tr>
+<td>$d607</td><td colspan="2" align="right">13</td><td>skip1</td></tr>
+<tr>
+<td>$d614</td><td colspan="2" align="right">2</td><td>valid</td></tr>
+<tr>
+<td>$d616</td><td colspan="2" align="right">1</td><td>invalid</td></tr>
+<tr>
+<td>$d617</td><td colspan="2" align="right">17</td><td>PixelAddress</td></tr>
+<tr>
+<td>$d628</td><td colspan="2" align="right">5</td><td>tab_routinel</td></tr>
+<tr>
+<td>$d62d</td><td colspan="2" align="right">5</td><td>tab_routineh</td></tr>
+<tr>
+<td>$d632</td><td colspan="2" align="right">5</td><td>old_stat</td></tr>
+<tr>
+<td>$d637</td><td colspan="2" align="right">43</td><td>escape</td></tr>
+<tr>
+<td>$d662</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d663</td><td colspan="2" align="right">3</td><td>menu</td></tr>
+<tr>
+<td>$d666</td><td colspan="2" align="right">18</td><td>acc_mouse</td></tr>
+<tr>
+<td>$d678</td><td colspan="2" align="right">17</td><td>click</td></tr>
+<tr>
+<td>$d689</td><td colspan="2" align="right">1</td><td>skip</td></tr>
+<tr>
+<td>$d68a</td><td colspan="2" align="right">14</td><td>kright</td></tr>
+<tr>
+<td>$d698</td><td colspan="2" align="right">2</td><td>can</td></tr>
+<tr>
+<td>$d69a</td><td colspan="2" align="right">1</td><td>cant</td></tr>
+<tr>
+<td>$d69b</td><td colspan="2" align="right">20</td><td>kleft</td></tr>
+<tr>
+<td>$d6af</td><td colspan="2" align="right">16</td><td>kdown</td></tr>
+<tr>
+<td>$d6bf</td><td colspan="2" align="right">20</td><td>kup</td></tr>
+<tr>
+<td>$d6d3</td><td colspan="2" align="right">7</td><td>ProcessUserInput</td></tr>
+<tr>
+<td>$d6da</td><td colspan="2" align="right">14</td><td>loop</td></tr>
+<tr>
+<td>$d6e8</td><td colspan="2" align="right">9</td><td>UseKB</td></tr>
+<tr>
+<td>$d6f1</td><td colspan="2" align="right">17</td><td>process</td></tr>
+<tr>
+<td>$d702</td><td colspan="2" align="right">3</td><td>smc_command</td></tr>
+<tr>
+<td>$d705</td><td colspan="2" align="right">7</td><td>keysav</td></tr>
+<tr>
+<td>$d70c</td><td colspan="2" align="right">5</td><td>skip</td></tr>
+<tr>
+<td>$d711</td><td colspan="2" align="right">3</td><td>skip2</td></tr>
+<tr>
+<td>$d714</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d715</td><td colspan="2" align="right">5</td><td>joybits</td></tr>
+<tr>
+<td>$d71a</td><td colspan="2" align="right">5</td><td>SetMouseOff</td></tr>
+<tr>
+<td>$d71f</td><td colspan="2" align="right">1</td><td>ret</td></tr>
+<tr>
+<td>$d720</td><td colspan="2" align="right">8</td><td>setitoff</td></tr>
+<tr>
+<td>$d728</td><td colspan="2" align="right">13</td><td>SetMouseOn</td></tr>
+<tr>
+<td>$d735</td><td colspan="2" align="right">14</td><td>FullInitVars</td></tr>
+<tr>
+<td>$d743</td><td colspan="2" align="right">8</td><td>InitVars</td></tr>
+<tr>
+<td>$d74b</td><td colspan="2" align="right">9</td><td>InitVerbs</td></tr>
+<tr>
+<td>$d754</td><td colspan="2" align="right">7</td><td>doit</td></tr>
+<tr>
+<td>$d75b</td><td colspan="2" align="right">62</td><td>loop</td></tr>
+<tr>
+<td>$d799</td><td colspan="2" align="right">3</td><td>ActivateVerb</td></tr>
+<tr>
+<td>$d79c</td><td colspan="2" align="right">5</td><td>DeActivateVerb</td></tr>
+<tr>
+<td>$d7a1</td><td colspan="2" align="right">20</td><td>UpdateVerbColor</td></tr>
+<tr>
+<td>$d7b5</td><td colspan="2" align="right">23</td><td>active</td></tr>
+<tr>
+<td>$d7cc</td><td colspan="2" align="right">19</td><td>auxPixelAddress</td></tr>
+<tr>
+<td>$d7df</td><td colspan="2" align="right">9</td><td>ClearVerbArea</td></tr>
+<tr>
+<td>$d7e8</td><td colspan="2" align="right">4</td><td>looprow</td></tr>
+<tr>
+<td>$d7ec</td><td colspan="2" align="right">14</td><td>loop</td></tr>
+<tr>
+<td>$d7fa</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d7fb</td><td colspan="2" align="right">8</td><td>PointToTile</td></tr>
+<tr>
+<td>$d803</td><td colspan="2" align="right">9</td><td>workwithcol</td></tr>
+<tr>
+<td>$d80c</td><td colspan="2" align="right">7</td><td>getActorPointedTo</td></tr>
+<tr>
+<td>$d813</td><td colspan="2" align="right">9</td><td>loop</td></tr>
+<tr>
+<td>$d81c</td><td colspan="2" align="right">29</td><td>smc_tilecol</td></tr>
+<tr>
+<td>$d839</td><td colspan="2" align="right">12</td><td>skip</td></tr>
+<tr>
+<td>$d845</td><td colspan="2" align="right">8</td><td>ProcessMouseMoves</td></tr>
+<tr>
+<td>$d84d</td><td colspan="2" align="right">9</td><td>next2</td></tr>
+<tr>
+<td>$d856</td><td colspan="2" align="right">24</td><td>next3</td></tr>
+<tr>
+<td>$d86e</td><td colspan="2" align="right">17</td><td>loop</td></tr>
+<tr>
+<td>$d87f</td><td colspan="2" align="right">9</td><td>SaveVCode</td></tr>
+<tr>
+<td>$d888</td><td colspan="2" align="right">18</td><td>normalcolor</td></tr>
+<tr>
+<td>$d89a</td><td colspan="2" align="right">4</td><td>nextv</td></tr>
+<tr>
+<td>$d89e</td><td colspan="2" align="right">1</td><td>notfound</td></tr>
+<tr>
+<td>$d89f</td><td colspan="2" align="right">23</td><td>ininventoryarea</td></tr>
+<tr>
+<td>$d8b6</td><td colspan="2" align="right">10</td><td>object2b</td></tr>
+<tr>
+<td>$d8c0</td><td colspan="2" align="right">3</td><td>isok2</td></tr>
+<tr>
+<td>$d8c3</td><td colspan="2" align="right">3</td><td>nextb</td></tr>
+<tr>
+<td>$d8c6</td><td colspan="2" align="right">5</td><td>none</td></tr>
+<tr>
+<td>$d8cb</td><td colspan="2" align="right">22</td><td>indrawarea</td></tr>
+<tr>
+<td>$d8e1</td><td colspan="2" align="right">3</td><td>o2</td></tr>
+<tr>
+<td>$d8e4</td><td colspan="2" align="right">14</td><td>drawobject</td></tr>
+<tr>
+<td>$d8f2</td><td colspan="2" align="right">6</td><td>object2</td></tr>
+<tr>
+<td>$d8f8</td><td colspan="2" align="right">5</td><td>next</td></tr>
+<tr>
+<td>$d8fd</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$d8fe</td><td colspan="2" align="right">27</td><td>CheckOverItem</td></tr>
+<tr>
+<td>$d919</td><td colspan="2" align="right">7</td><td>checkup</td></tr>
+<tr>
+<td>$d920</td><td colspan="2" align="right">3</td><td>checkdown</td></tr>
+<tr>
+<td>$d923</td><td colspan="2" align="right">3</td><td>none</td></tr>
+<tr>
+<td>$d926</td><td colspan="2" align="right">2</td><td>FindChosenVerb</td></tr>
+<tr>
+<td>$d928</td><td colspan="2" align="right">28</td><td>loop</td></tr>
+<tr>
+<td>$d944</td><td colspan="2" align="right">3</td><td>notfound</td></tr>
+<tr>
+<td>$d947</td><td colspan="2" align="right">2</td><td>found</td></tr>
+<tr>
+<td>$d949</td><td colspan="2" align="right">72</td><td>PrintCommandSentence</td></tr>
+<tr>
+<td>$d991</td><td colspan="2" align="right">35</td><td>skipusecheck</td></tr>
+<tr>
+<td>$d9b4</td><td colspan="2" align="right">19</td><td>skipo1</td></tr>
+<tr>
+<td>$d9c7</td><td colspan="2" align="right">9</td><td>getNamePointer</td></tr>
+<tr>
+<td>$d9d0</td><td colspan="2" align="right">4</td><td>inv1</td></tr>
+<tr>
+<td>$d9d4</td><td colspan="2" align="right">5</td><td>doit</td></tr>
+<tr>
+<td>$d9d9</td><td colspan="2" align="right">6</td><td>PrintObjName</td></tr>
+<tr>
+<td>$d9df</td><td colspan="2" align="right">5</td><td>ProcessMouseClicks</td></tr>
+<tr>
+<td>$d9e4</td><td colspan="2" align="right">12</td><td>doit</td></tr>
+<tr>
+<td>$d9f0</td><td colspan="2" align="right">25</td><td>next</td></tr>
+<tr>
+<td>$da09</td><td colspan="2" align="right">2</td><td>notfound</td></tr>
+<tr>
+<td>$da0b</td><td colspan="2" align="right">19</td><td>found</td></tr>
+<tr>
+<td>$da1e</td><td colspan="2" align="right">1</td><td>noverbchange</td></tr>
+<tr>
+<td>$da1f</td><td colspan="2" align="right">14</td><td>ininventoryarea</td></tr>
+<tr>
+<td>$da2d</td><td colspan="2" align="right">7</td><td>skipsu</td></tr>
+<tr>
+<td>$da34</td><td colspan="2" align="right">13</td><td>skipsd</td></tr>
+<tr>
+<td>$da41</td><td colspan="2" align="right">2</td><td>tweak</td></tr>
+<tr>
+<td>$da43</td><td colspan="2" align="right">6</td><td>shortcutentry</td></tr>
+<tr>
+<td>$da49</td><td colspan="2" align="right">24</td><td>indrawarea</td></tr>
+<tr>
+<td>$da61</td><td colspan="2" align="right">2</td><td>isok</td></tr>
+<tr>
+<td>$da63</td><td colspan="2" align="right">18</td><td>check</td></tr>
+<tr>
+<td>$da75</td><td colspan="2" align="right">16</td><td>needs2</td></tr>
+<tr>
+<td>$da85</td><td colspan="2" align="right">18</td><td>doaction</td></tr>
+<tr>
+<td>$da97</td><td colspan="2" align="right">9</td><td>loop</td></tr>
+<tr>
+<td>$daa0</td><td colspan="2" align="right">12</td><td>ExecCommand</td></tr>
+<tr>
+<td>$daac</td><td colspan="2" align="right">26</td><td>nocommand</td></tr>
+<tr>
+<td>$dac6</td><td colspan="2" align="right">8</td><td>skipthis</td></tr>
+<tr>
+<td>$dace</td><td colspan="2" align="right">6</td><td>dogothere</td></tr>
+<tr>
+<td>$dad4</td><td colspan="2" align="right">12</td><td>skipgo1</td></tr>
+<tr>
+<td>$dae0</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$dae1</td><td colspan="2" align="right">26</td><td>walktocursor</td></tr>
+<tr>
+<td>$dafb</td><td colspan="2" align="right">8</td><td>doit</td></tr>
+<tr>
+<td>$db03</td><td colspan="2" align="right">7</td><td>ok1</td></tr>
+<tr>
+<td>$db0a</td><td colspan="2" align="right">2</td><td>offside</td></tr>
+<tr>
+<td>$db0c</td><td colspan="2" align="right">16</td><td>ok2</td></tr>
+<tr>
+<td>$db1c</td><td colspan="2" align="right">2</td><td>skip</td></tr>
+<tr>
+<td>$db1e</td><td colspan="2" align="right">18</td><td>StopCharAction</td></tr>
+<tr>
+<td>$db30</td><td colspan="2" align="right">10</td><td>skiptalk</td></tr>
+<tr>
+<td>$db3a</td><td colspan="2" align="right">1</td><td>skipaction</td></tr>
+<tr>
+<td>$db3b</td><td colspan="2" align="right">21</td><td>ClearObjects</td></tr>
+<tr>
+<td>$db50</td><td colspan="2" align="right">3</td><td>savy</td></tr>
+<tr>
+<td>$db53</td><td colspan="2" align="right">12</td><td>getObject1Flags</td></tr>
+<tr>
+<td>$db5f</td><td colspan="2" align="right">4</td><td>notinv</td></tr>
+<tr>
+<td>$db63</td><td colspan="2" align="right">9</td><td>getWalkPosOfObject</td></tr>
+<tr>
+<td>$db6c</td><td colspan="2" align="right">12</td><td>cont</td></tr>
+<tr>
+<td>$db78</td><td colspan="2" align="right">22</td><td>default</td></tr>
+<tr>
+<td>$db8e</td><td colspan="2" align="right">6</td><td>left</td></tr>
+<tr>
+<td>$db94</td><td colspan="2" align="right">5</td><td>done</td></tr>
+<tr>
+<td>$db99</td><td colspan="2" align="right">18</td><td>ContinuousExecCommand</td></tr>
+<tr>
+<td>$dbab</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$dbac</td><td colspan="2" align="right">26</td><td>doit</td></tr>
+<tr>
+<td>$dbc6</td><td colspan="2" align="right">15</td><td>usewc</td></tr>
+<tr>
+<td>$dbd5</td><td colspan="2" align="right">12</td><td>wisok</td></tr>
+<tr>
+<td>$dbe1</td><td colspan="2" align="right">11</td><td>usewr</td></tr>
+<tr>
+<td>$dbec</td><td colspan="2" align="right">3</td><td>toofar</td></tr>
+<tr>
+<td>$dbef</td><td colspan="2" align="right">15</td><td>near</td></tr>
+<tr>
+<td>$dbfe</td><td colspan="2" align="right">11</td><td>calculate</td></tr>
+<tr>
+<td>$dc09</td><td colspan="2" align="right">10</td><td>lookleft</td></tr>
+<tr>
+<td>$dc13</td><td colspan="2" align="right">3</td><td>nearandready</td></tr>
+<tr>
+<td>$dc16</td><td colspan="2" align="right">9</td><td>endcommand</td></tr>
+<tr>
+<td>$dc1f</td><td colspan="2" align="right">19</td><td>getObjectOfInterest</td></tr>
+<tr>
+<td>$dc32</td><td colspan="2" align="right">7</td><td>checkob2inv</td></tr>
+<tr>
+<td>$dc39</td><td colspan="2" align="right">3</td><td>targetob1</td></tr>
+<tr>
+<td>$dc3c</td><td colspan="2" align="right">3</td><td>endnc</td></tr>
+<tr>
+<td>$dc3f</td><td colspan="2" align="right">1</td><td>endc</td></tr>
+<tr>
+<td>$dc40</td><td colspan="2" align="right">2</td><td>end</td></tr>
+<tr>
+<td>$dc42</td><td colspan="2" align="right">11</td><td>abs8</td></tr>
+<tr>
+<td>$dc4d</td><td colspan="2" align="right">1</td><td>return</td></tr>
+<tr>
+<td>$dc4e</td><td colspan="2" align="right">11</td><td>RunObjectCode</td></tr>
+<tr>
+<td>$dc59</td><td colspan="2" align="right">3</td><td>inv</td></tr>
+<tr>
+<td>$dc5c</td><td colspan="2" align="right">13</td><td>RunObjectCodeEx</td></tr>
+<tr>
+<td>$dc69</td><td colspan="2" align="right">16</td><td>loopaction</td></tr>
+<tr>
+<td>$dc79</td><td colspan="2" align="right">13</td><td>end</td></tr>
+<tr>
+<td>$dc86</td><td colspan="2" align="right">1</td><td>retme</td></tr>
+<tr>
+<td>$dc87</td><td colspan="2" align="right">8</td><td>default</td></tr>
+<tr>
+<td>$dc8f</td><td colspan="2" align="right">36</td><td>found</td></tr>
+<tr>
+<td>$dcb3</td><td colspan="2" align="right">6</td><td>getObjectEntry</td></tr>
+<tr>
+<td>$dcb9</td><td colspan="2" align="right">8</td><td>loop</td></tr>
+<tr>
+<td>$dcc1</td><td colspan="2" align="right">2</td><td>fail</td></tr>
+<tr>
+<td>$dcc3</td><td colspan="2" align="right">1</td><td>found</td></tr>
+<tr>
+<td>$dcc4</td><td colspan="2" align="right">6</td><td>UpdateObjectPointers</td></tr>
+<tr>
+<td>$dcca</td><td colspan="2" align="right">30</td><td>loop</td></tr>
+<tr>
+<td>$dce8</td><td colspan="2" align="right">8</td><td>next_entry</td></tr>
+<tr>
+<td>$dcf0</td><td colspan="2" align="right">7</td><td>RemoveObjectFromGame</td></tr>
+<tr>
+<td>$dcf7</td><td colspan="2" align="right">1</td><td>retme</td></tr>
+<tr>
+<td>$dcf8</td><td colspan="2" align="right">15</td><td>found</td></tr>
+<tr>
+<td>$dd07</td><td colspan="2" align="right">2</td><td>savx</td></tr>
+<tr>
+<td>$dd09</td><td colspan="2" align="right">8</td><td>skip</td></tr>
+<tr>
+<td>$dd11</td><td colspan="2" align="right">9</td><td>LoadObjectToGame</td></tr>
+<tr>
+<td>$dd1a</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$dd24</td><td colspan="2" align="right">5</td><td>notfound</td></tr>
+<tr>
+<td>$dd29</td><td colspan="2" align="right">18</td><td>found</td></tr>
+<tr>
+<td>$dd3b</td><td colspan="2" align="right">36</td><td>smc_entry</td></tr>
+<tr>
+<td>$dd5f</td><td colspan="2" align="right">106</td><td>setroom</td></tr>
+<tr>
+<td>$ddc9</td><td colspan="2" align="right">3</td><td>noloadcos</td></tr>
+<tr>
+<td>$ddcc</td><td colspan="2" align="right">17</td><td>hascos</td></tr>
+<tr>
+<td>$dddd</td><td colspan="2" align="right">5</td><td>dir</td></tr>
+<tr>
+<td>$dde2</td><td colspan="2" align="right">14</td><td>smc_resid</td></tr>
+<tr>
+<td>$ddf0</td><td colspan="2" align="right">4</td><td>skipgr</td></tr>
+<tr>
+<td>$ddf4</td><td colspan="2" align="right">6</td><td>skip2</td></tr>
+<tr>
+<td>$ddfa</td><td colspan="2" align="right">7</td><td>savy</td></tr>
+<tr>
+<td>$de01</td><td colspan="2" align="right">15</td><td>loopname</td></tr>
+<tr>
+<td>$de10</td><td colspan="2" align="right">12</td><td>AddToDrawingQueue</td></tr>
+<tr>
+<td>$de1c</td><td colspan="2" align="right">8</td><td>getObjNameEntry</td></tr>
+<tr>
+<td>$de24</td><td colspan="2" align="right">7</td><td>getObjNameEntryEx</td></tr>
+<tr>
+<td>$de2b</td><td colspan="2" align="right">17</td><td>loop</td></tr>
+<tr>
+<td>$de3c</td><td colspan="2" align="right">2</td><td>RemoveLocalObjects</td></tr>
+<tr>
+<td>$de3e</td><td colspan="2" align="right">29</td><td>loop</td></tr>
+<tr>
+<td>$de5b</td><td colspan="2" align="right">2</td><td>savy</td></tr>
+<tr>
+<td>$de5d</td><td colspan="2" align="right">3</td><td>next</td></tr>
+<tr>
+<td>$de60</td><td colspan="2" align="right">7</td><td>NukeUnusedCosutmes, UpdateDrawingQueue, postRemovingObjects</td></tr>
+<tr>
+<td>$de67</td><td colspan="2" align="right">23</td><td>loop</td></tr>
+<tr>
+<td>$de7e</td><td colspan="2" align="right">10</td><td>skipuz</td></tr>
+<tr>
+<td>$de88</td><td colspan="2" align="right">3</td><td>next</td></tr>
+<tr>
+<td>$de8b</td><td colspan="2" align="right">13</td><td>SortObjects, loop</td></tr>
+<tr>
+<td>$de98</td><td colspan="2" align="right">43</td><td>nxtel</td></tr>
+<tr>
+<td>$dec3</td><td colspan="2" align="right">8</td><td>chkend</td></tr>
+<tr>
+<td>$decb</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$decc</td><td colspan="2" align="right">71</td><td>SetupCostumePointers</td></tr>
+<tr>
+<td>$df13</td><td colspan="2" align="right">21</td><td>AssignCostume</td></tr>
+<tr>
+<td>$df28</td><td colspan="2" align="right">5</td><td>doit, savy</td></tr>
+<tr>
+<td>$df2d</td><td colspan="2" align="right">39</td><td>savx</td></tr>
+<tr>
+<td>$df54</td><td colspan="2" align="right">2</td><td>savxb</td></tr>
+<tr>
+<td>$df56</td><td colspan="2" align="right">26</td><td>skipnuke</td></tr>
+<tr>
+<td>$df70</td><td colspan="2" align="right">4</td><td>nochange</td></tr>
+<tr>
+<td>$df74</td><td colspan="2" align="right">8</td><td>PutCorrectCostumePointers</td></tr>
+<tr>
+<td>$df7c</td><td colspan="2" align="right">10</td><td>end</td></tr>
+<tr>
+<td>$df86</td><td colspan="2" align="right">1</td><td>end2</td></tr>
+<tr>
+<td>$df87</td><td colspan="2" align="right">5</td><td>ReloadCostumes</td></tr>
+<tr>
+<td>$df8c</td><td colspan="2" align="right">18</td><td>loop</td></tr>
+<tr>
+<td>$df9e</td><td colspan="2" align="right">3</td><td>next</td></tr>
+<tr>
+<td>$dfa1</td><td colspan="2" align="right">3</td><td>savy</td></tr>
+<tr>
+<td>$dfa4</td><td colspan="2" align="right">13</td><td>UpdateCostumePointersForObject</td></tr>
+<tr>
+<td>$dfb1</td><td colspan="2" align="right">10</td><td>skipl</td></tr>
+<tr>
+<td>$dfbb</td><td colspan="2" align="right">2</td><td>savy2</td></tr>
+<tr>
+<td>$dfbd</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$dfbe</td><td colspan="2" align="right">5</td><td>KillCostumes</td></tr>
+<tr>
+<td>$dfc3</td><td colspan="2" align="right">23</td><td>loop</td></tr>
+<tr>
+<td>$dfda</td><td colspan="2" align="right">3</td><td>next</td></tr>
+<tr>
+<td>$dfdd</td><td colspan="2" align="right">3</td><td>savy</td></tr>
+<tr>
+<td>$dfe0</td><td colspan="2" align="right">8</td><td>InitInventory</td></tr>
+<tr>
+<td>$dfe8</td><td colspan="2" align="right">1</td><td>near_rts</td></tr>
+<tr>
+<td>$dfe9</td><td colspan="2" align="right">13</td><td>UpdateInventory</td></tr>
+<tr>
+<td>$dff6</td><td colspan="2" align="right">30</td><td>DrawInventoryEx</td></tr>
+<tr>
+<td>$e014</td><td colspan="2" align="right">28</td><td>noarrowup</td></tr>
+<tr>
+<td>$e030</td><td colspan="2" align="right">8</td><td>noarrowdown</td></tr>
+<tr>
+<td>$e038</td><td colspan="2" align="right">50</td><td>loop</td></tr>
+<tr>
+<td>$e06a</td><td colspan="2" align="right">4</td><td>end</td></tr>
+<tr>
+<td>$e06e</td><td colspan="2" align="right">12</td><td>ClearInventoryArea</td></tr>
+<tr>
+<td>$e07a</td><td colspan="2" align="right">4</td><td>looprow</td></tr>
+<tr>
+<td>$e07e</td><td colspan="2" align="right">14</td><td>loop</td></tr>
+<tr>
+<td>$e08c</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$e08f</td><td colspan="2" align="right">6</td><td>ScrollInventoryDown</td></tr>
+<tr>
+<td>$e095</td><td colspan="2" align="right">6</td><td>doit</td></tr>
+<tr>
+<td>$e09b</td><td colspan="2" align="right">12</td><td>ScrollInventoryUp</td></tr>
+<tr>
+<td>$e0a7</td><td colspan="2" align="right">6</td><td>doit</td></tr>
+<tr>
+<td>$e0ad</td><td colspan="2" align="right">40</td><td>ObjectToInventory</td></tr>
+<tr>
+<td>$e0d5</td><td colspan="2" align="right">2</td><td>savx</td></tr>
+<tr>
+<td>$e0d7</td><td colspan="2" align="right">3</td><td>nonuke</td></tr>
+<tr>
+<td>$e0da</td><td colspan="2" align="right">36</td><td>skip</td></tr>
+<tr>
+<td>$e0fe</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$e108</td><td colspan="2" align="right">19</td><td>end</td></tr>
+<tr>
+<td>$e11b</td><td colspan="2" align="right">3</td><td>skips</td></tr>
+<tr>
+<td>$e11e</td><td colspan="2" align="right">26</td><td>object_not_loaded</td></tr>
+<tr>
+<td>$e138</td><td colspan="2" align="right">29</td><td>skipc</td></tr>
+<tr>
+<td>$e155</td><td colspan="2" align="right">15</td><td>loopn</td></tr>
+<tr>
+<td>$e164</td><td colspan="2" align="right">10</td><td>getInventoryEntry</td></tr>
+<tr>
+<td>$e16e</td><td colspan="2" align="right">8</td><td>loop</td></tr>
+<tr>
+<td>$e176</td><td colspan="2" align="right">2</td><td>notfound</td></tr>
+<tr>
+<td>$e178</td><td colspan="2" align="right">1</td><td>found</td></tr>
+<tr>
+<td>$e179</td><td colspan="2" align="right">8</td><td>ObjectOutOfInventory</td></tr>
+<tr>
+<td>$e181</td><td colspan="2" align="right">46</td><td>doit, loop</td></tr>
+<tr>
+<td>$e1af</td><td colspan="2" align="right">7</td><td>loopn</td></tr>
+<tr>
+<td>$e1b6</td><td colspan="2" align="right">5</td><td>savx</td></tr>
+<tr>
+<td>$e1bb</td><td colspan="2" align="right">16</td><td>endl</td></tr>
+<tr>
+<td>$e1cb</td><td colspan="2" align="right">23</td><td>isPointInWalkBox</td></tr>
+<tr>
+<td>$e1e2</td><td colspan="2" align="right">2</td><td>cont1</td></tr>
+<tr>
+<td>$e1e4</td><td colspan="2" align="right">9</td><td>outside_col</td></tr>
+<tr>
+<td>$e1ed</td><td colspan="2" align="right">22</td><td>skipnegcol</td></tr>
+<tr>
+<td>$e203</td><td colspan="2" align="right">2</td><td>cont2</td></tr>
+<tr>
+<td>$e205</td><td colspan="2" align="right">9</td><td>outside_row</td></tr>
+<tr>
+<td>$e20e</td><td colspan="2" align="right">2</td><td>savY, skipnegrow</td></tr>
+<tr>
+<td>$e210</td><td colspan="2" align="right">6</td><td>savX</td></tr>
+<tr>
+<td>$e216</td><td colspan="2" align="right">23</td><td>getWalkBoxForPoint</td></tr>
+<tr>
+<td>$e22d</td><td colspan="2" align="right">15</td><td>loop</td></tr>
+<tr>
+<td>$e23c</td><td colspan="2" align="right">11</td><td>skip</td></tr>
+<tr>
+<td>$e247</td><td colspan="2" align="right">21</td><td>nocarry</td></tr>
+<tr>
+<td>$e25c</td><td colspan="2" align="right">2</td><td>notevennear</td></tr>
+<tr>
+<td>$e25e</td><td colspan="2" align="right">8</td><td>return</td></tr>
+<tr>
+<td>$e266</td><td colspan="2" align="right">25</td><td>getWalkBoxPointer</td></tr>
+<tr>
+<td>$e27f</td><td colspan="2" align="right">1</td><td>nocarry</td></tr>
+<tr>
+<td>$e280</td><td colspan="2" align="right">8</td><td>getNextWalkBox</td></tr>
+<tr>
+<td>$e288</td><td colspan="2" align="right">20</td><td>loop</td></tr>
+<tr>
+<td>$e29c</td><td colspan="2" align="right">16</td><td>getWalkBoxForCharacter</td></tr>
+<tr>
+<td>$e2ac</td><td colspan="2" align="right">2</td><td>savx</td></tr>
+<tr>
+<td>$e2ae</td><td colspan="2" align="right">3</td><td>savy</td></tr>
+<tr>
+<td>$e2b1</td><td colspan="2" align="right">23</td><td>getWalkCoordinates</td></tr>
+<tr>
+<td>$e2c8</td><td colspan="2" align="right">21</td><td>notinwalkbox</td></tr>
+<tr>
+<td>$e2dd</td><td colspan="2" align="right">19</td><td>cont2</td></tr>
+<tr>
+<td>$e2f0</td><td colspan="2" align="right">17</td><td>dowork</td></tr>
+<tr>
+<td>$e301</td><td colspan="2" align="right">26</td><td>pathfound</td></tr>
+<tr>
+<td>$e31b</td><td colspan="2" align="right">11</td><td>nopathfound</td></tr>
+<tr>
+<td>$e326</td><td colspan="2" align="right">12</td><td>AdjustCoordinates</td></tr>
+<tr>
+<td>$e332</td><td colspan="2" align="right">9</td><td>next</td></tr>
+<tr>
+<td>$e33b</td><td colspan="2" align="right">12</td><td>check_row</td></tr>
+<tr>
+<td>$e347</td><td colspan="2" align="right">9</td><td>next2</td></tr>
+<tr>
+<td>$e350</td><td colspan="2" align="right">8</td><td>end_check</td></tr>
+<tr>
+<td>$e358</td><td colspan="2" align="right">22</td><td>checkme</td></tr>
+<tr>
+<td>$e36e</td><td colspan="2" align="right">30</td><td>nolcorner</td></tr>
+<tr>
+<td>$e38c</td><td colspan="2" align="right">5</td><td>norcorner</td></tr>
+<tr>
+<td>$e391</td><td colspan="2" align="right">71</td><td>commands_lo</td></tr>
+<tr>
+<td>$e3d8</td><td colspan="2" align="right">71</td><td>commands_hi</td></tr>
+<tr>
+<td>$e41f</td><td colspan="2" align="right">17</td><td>AdvanceOffset</td></tr>
+<tr>
+<td>$e430</td><td colspan="2" align="right">4</td><td>end</td></tr>
+<tr>
+<td>$e434</td><td colspan="2" align="right">25</td><td>scChangeRoomAndStop</td></tr>
+<tr>
+<td>$e44d</td><td colspan="2" align="right">8</td><td>scBreakHere</td></tr>
+<tr>
+<td>$e455</td><td colspan="2" align="right">9</td><td>scRestartScript</td></tr>
+<tr>
+<td>$e45e</td><td colspan="2" align="right">3</td><td>scStopScript</td></tr>
+<tr>
+<td>$e461</td><td colspan="2" align="right">3</td><td>ScheduleScript</td></tr>
+<tr>
+<td>$e464</td><td colspan="2" align="right">3</td><td>getObject1stParam</td></tr>
+<tr>
+<td>$e467</td><td colspan="2" align="right">10</td><td>getObjectParam</td></tr>
+<tr>
+<td>$e471</td><td colspan="2" align="right">1</td><td>cont</td></tr>
+<tr>
+<td>$e472</td><td colspan="2" align="right">11</td><td>scWaitForActor</td></tr>
+<tr>
+<td>$e47d</td><td colspan="2" align="right">3</td><td>finished</td></tr>
+<tr>
+<td>$e480</td><td colspan="2" align="right">17</td><td>scDelay</td></tr>
+<tr>
+<td>$e491</td><td colspan="2" align="right">11</td><td>scFollowActor</td></tr>
+<tr>
+<td>$e49c</td><td colspan="2" align="right">6</td><td>skip</td></tr>
+<tr>
+<td>$e4a2</td><td colspan="2" align="right">19</td><td>scPanCamera</td></tr>
+<tr>
+<td>$e4b5</td><td colspan="2" align="right">6</td><td>scSetCameraAt</td></tr>
+<tr>
+<td>$e4bb</td><td colspan="2" align="right">5</td><td>SetCameraCol</td></tr>
+<tr>
+<td>$e4c0</td><td colspan="2" align="right">4</td><td>corr1</td></tr>
+<tr>
+<td>$e4c4</td><td colspan="2" align="right">15</td><td>ok1</td></tr>
+<tr>
+<td>$e4d3</td><td colspan="2" align="right">18</td><td>end</td></tr>
+<tr>
+<td>$e4e5</td><td colspan="2" align="right">1</td><td>doit</td></tr>
+<tr>
+<td>$e4e6</td><td colspan="2" align="right">6</td><td>doit2</td></tr>
+<tr>
+<td>$e4ec</td><td colspan="2" align="right">9</td><td>scSetFadeEffect</td></tr>
+<tr>
+<td>$e4f5</td><td colspan="2" align="right">13</td><td>scCursorOn</td></tr>
+<tr>
+<td>$e502</td><td colspan="2" align="right">3</td><td>setoff</td></tr>
+<tr>
+<td>$e505</td><td colspan="2" align="right">17</td><td>scWaitEvent</td></tr>
+<tr>
+<td>$e516</td><td colspan="2" align="right">12</td><td>scSetObjectAnimState</td></tr>
+<tr>
+<td>$e522</td><td colspan="2" align="right">5</td><td>eobject</td></tr>
+<tr>
+<td>$e527</td><td colspan="2" align="right">12</td><td>scLookDirection</td></tr>
+<tr>
+<td>$e533</td><td colspan="2" align="right">5</td><td>sav</td></tr>
+<tr>
+<td>$e538</td><td colspan="2" align="right">27</td><td>scSetState</td></tr>
+<tr>
+<td>$e553</td><td colspan="2" align="right">10</td><td>inarray</td></tr>
+<tr>
+<td>$e55d</td><td colspan="2" align="right">5</td><td>savy</td></tr>
+<tr>
+<td>$e562</td><td colspan="2" align="right">21</td><td>scSetCostume</td></tr>
+<tr>
+<td>$e577</td><td colspan="2" align="right">2</td><td>oentry</td></tr>
+<tr>
+<td>$e579</td><td colspan="2" align="right">2</td><td>cos</td></tr>
+<tr>
+<td>$e57b</td><td colspan="2" align="right">5</td><td>actor</td></tr>
+<tr>
+<td>$e580</td><td colspan="2" align="right">32</td><td>scLoadRoom</td></tr>
+<tr>
+<td>$e5a0</td><td colspan="2" align="right">4</td><td>normal</td></tr>
+<tr>
+<td>$e5a4</td><td colspan="2" align="right">9</td><td>scSetEgo</td></tr>
+<tr>
+<td>$e5ad</td><td colspan="2" align="right">8</td><td>scWaitForCamera</td></tr>
+<tr>
+<td>$e5b5</td><td colspan="2" align="right">5</td><td>finished</td></tr>
+<tr>
+<td>$e5ba</td><td colspan="2" align="right">12</td><td>scAssign</td></tr>
+<tr>
+<td>$e5c6</td><td colspan="2" align="right">10</td><td>varp</td></tr>
+<tr>
+<td>$e5d0</td><td colspan="2" align="right">3</td><td>local</td></tr>
+<tr>
+<td>$e5d3</td><td colspan="2" align="right">13</td><td>scSetFlag</td></tr>
+<tr>
+<td>$e5e0</td><td colspan="2" align="right">35</td><td>savy</td></tr>
+<tr>
+<td>$e603</td><td colspan="2" align="right">7</td><td>local1</td></tr>
+<tr>
+<td>$e60a</td><td colspan="2" align="right">21</td><td>clear</td></tr>
+<tr>
+<td>$e61f</td><td colspan="2" align="right">7</td><td>local2</td></tr>
+<tr>
+<td>$e626</td><td colspan="2" align="right">24</td><td>scSetObjectPosition</td></tr>
+<tr>
+<td>$e63e</td><td colspan="2" align="right">15</td><td>eobject</td></tr>
+<tr>
+<td>$e64d</td><td colspan="2" align="right">14</td><td>eroom</td></tr>
+<tr>
+<td>$e65b</td><td colspan="2" align="right">30</td><td>skip2</td></tr>
+<tr>
+<td>$e679</td><td colspan="2" align="right">9</td><td>skip</td></tr>
+<tr>
+<td>$e682</td><td colspan="2" align="right">5</td><td>savy</td></tr>
+<tr>
+<td>$e687</td><td colspan="2" align="right">18</td><td>Call2Param</td></tr>
+<tr>
+<td>$e699</td><td colspan="2" align="right">2</td><td>actor</td></tr>
+<tr>
+<td>$e69b</td><td colspan="2" align="right">3</td><td>smc_function</td></tr>
+<tr>
+<td>$e69e</td><td colspan="2" align="right">5</td><td>savy</td></tr>
+<tr>
+<td>$e6a3</td><td colspan="2" align="right">13</td><td>scActorWalkTo</td></tr>
+<tr>
+<td>$e6b0</td><td colspan="2" align="right">13</td><td>scActorTalk</td></tr>
+<tr>
+<td>$e6bd</td><td colspan="2" align="right">36</td><td>scExecuteAction</td></tr>
+<tr>
+<td>$e6e1</td><td colspan="2" align="right">19</td><td>object1done</td></tr>
+<tr>
+<td>$e6f4</td><td colspan="2" align="right">9</td><td>object2done</td></tr>
+<tr>
+<td>$e6fd</td><td colspan="2" align="right">3</td><td>scJumpRel</td></tr>
+<tr>
+<td><b>$e700</b></td><td colspan="2" align="right">8</td><td>scJump_ex</td></tr>
+<tr>
+<td>$e708</td><td colspan="2" align="right">2</td><td>neg</td></tr>
+<tr>
+<td>$e70a</td><td colspan="2" align="right">18</td><td>pos</td></tr>
+<tr>
+<td>$e71c</td><td colspan="2" align="right">13</td><td>scJumpRelIf</td></tr>
+<tr>
+<td>$e729</td><td colspan="2" align="right">6</td><td>doit</td></tr>
+<tr>
+<td>$e72f</td><td colspan="2" align="right">14</td><td>scChainScript</td></tr>
+<tr>
+<td>$e73d</td><td colspan="2" align="right">13</td><td>scSpawnScript</td></tr>
+<tr>
+<td>$e74a</td><td colspan="2" align="right">13</td><td>scSetEvents</td></tr>
+<tr>
+<td>$e757</td><td colspan="2" align="right">15</td><td>scClearEvents</td></tr>
+<tr>
+<td>$e766</td><td colspan="2" align="right">3</td><td>setCurObjandInventoryVals</td></tr>
+<tr>
+<td>$e769</td><td colspan="2" align="right">7</td><td>setCurObjandInventoryValsEx</td></tr>
+<tr>
+<td>$e770</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$e773</td><td colspan="2" align="right">10</td><td>ininv</td></tr>
+<tr>
+<td>$e77d</td><td colspan="2" align="right">41</td><td>scRunObjectCode</td></tr>
+<tr>
+<td>$e7a6</td><td colspan="2" align="right">12</td><td>scDisableVerb</td></tr>
+<tr>
+<td>$e7b2</td><td colspan="2" align="right">9</td><td>vid</td></tr>
+<tr>
+<td>$e7bb</td><td colspan="2" align="right">3</td><td>deactivate</td></tr>
+<tr>
+<td>$e7be</td><td colspan="2" align="right">6</td><td>error_walkbox</td></tr>
+<tr>
+<td>$e7c4</td><td colspan="2" align="right">23</td><td>scSetWalkboxAsWalkable</td></tr>
+<tr>
+<td>$e7db</td><td colspan="2" align="right">9</td><td>walk</td></tr>
+<tr>
+<td>$e7e4</td><td colspan="2" align="right">2</td><td>notwalkable</td></tr>
+<tr>
+<td>$e7e6</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$e7e9</td><td colspan="2" align="right">23</td><td>scSetNextWalkbox</td></tr>
+<tr>
+<td><b>$e800</b></td><td colspan="2" align="right">5</td><td>wb</td></tr>
+<tr>
+<td>$e805</td><td colspan="2" align="right">9</td><td>scPlayTune</td></tr>
+<tr>
+<td>$e80e</td><td colspan="2" align="right">8</td><td>scStopTune</td></tr>
+<tr>
+<td>$e816</td><td colspan="2" align="right">8</td><td>scWaitForTune</td></tr>
+<tr>
+<td>$e81e</td><td colspan="2" align="right">5</td><td>finished</td></tr>
+<tr>
+<td>$e823</td><td colspan="2" align="right">13</td><td>scShowVerbs</td></tr>
+<tr>
+<td>$e830</td><td colspan="2" align="right">12</td><td>HideVerbs</td></tr>
+<tr>
+<td>$e83c</td><td colspan="2" align="right">9</td><td>ShowVerbs</td></tr>
+<tr>
+<td>$e845</td><td colspan="2" align="right">31</td><td>scPrint</td></tr>
+<tr>
+<td>$e864</td><td colspan="2" align="right">27</td><td>scPrintAt</td></tr>
+<tr>
+<td>$e87f</td><td colspan="2" align="right">2</td><td>posX</td></tr>
+<tr>
+<td>$e881</td><td colspan="2" align="right">5</td><td>posY</td></tr>
+<tr>
+<td>$e886</td><td colspan="2" align="right">2</td><td>callprint, stres</td></tr>
+<tr>
+<td>$e888</td><td colspan="2" align="right">5</td><td>stid</td></tr>
+<tr>
+<td>$e88d</td><td colspan="2" align="right">11</td><td>scRedrawScreen</td></tr>
+<tr>
+<td>$e898</td><td colspan="2" align="right">9</td><td>scPutInInventory</td></tr>
+<tr>
+<td>$e8a1</td><td colspan="2" align="right">11</td><td>scClearInventory</td></tr>
+<tr>
+<td>$e8ac</td><td colspan="2" align="right">9</td><td>scRemoveFromInventory</td></tr>
+<tr>
+<td>$e8b5</td><td colspan="2" align="right">13</td><td>params2AX</td></tr>
+<tr>
+<td>$e8c2</td><td colspan="2" align="right">6</td><td>scLoadResource</td></tr>
+<tr>
+<td>$e8c8</td><td colspan="2" align="right">6</td><td>scNukeResource</td></tr>
+<tr>
+<td>$e8ce</td><td colspan="2" align="right">6</td><td>scLockResource</td></tr>
+<tr>
+<td>$e8d4</td><td colspan="2" align="right">6</td><td>scUnlockResource</td></tr>
+<tr>
+<td>$e8da</td><td colspan="2" align="right">9</td><td>scLoadObjectToGame</td></tr>
+<tr>
+<td>$e8e3</td><td colspan="2" align="right">9</td><td>scRemoveObjectFromGame</td></tr>
+<tr>
+<td>$e8ec</td><td colspan="2" align="right">20</td><td>scSetOverrideJump</td></tr>
+<tr>
+<td><b>$e900</b></td><td colspan="2" align="right">8</td><td>scClearRoomArea</td></tr>
+<tr>
+<td>$e908</td><td colspan="2" align="right">12</td><td>scJumpIf</td></tr>
+<tr>
+<td>$e914</td><td colspan="2" align="right">2</td><td>scJump</td></tr>
+<tr>
+<td>$e916</td><td colspan="2" align="right">12</td><td>doit</td></tr>
+<tr>
+<td>$e922</td><td colspan="2" align="right">9</td><td>scLoadDialog</td></tr>
+<tr>
+<td>$e92b</td><td colspan="2" align="right">8</td><td>scStartDialog</td></tr>
+<tr>
+<td>$e933</td><td colspan="2" align="right">8</td><td>scEndDialog</td></tr>
+<tr>
+<td>$e93b</td><td colspan="2" align="right">9</td><td>scActivateDlgOption</td></tr>
+<tr>
+<td>$e944</td><td colspan="2" align="right">8</td><td>option</td></tr>
+<tr>
+<td>$e94c</td><td colspan="2" align="right">23</td><td>scFreezeScript</td></tr>
+<tr>
+<td>$e963</td><td colspan="2" align="right">2</td><td>false</td></tr>
+<tr>
+<td>$e965</td><td colspan="2" align="right">5</td><td>option</td></tr>
+<tr>
+<td>$e96a</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$e96d</td><td colspan="2" align="right">10</td><td>scFreezeAllScripts</td></tr>
+<tr>
+<td>$e977</td><td colspan="2" align="right">7</td><td>false</td></tr>
+<tr>
+<td>$e97e</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$e988</td><td colspan="2" align="right">5</td><td>option</td></tr>
+<tr>
+<td>$e98d</td><td colspan="2" align="right">6</td><td>skip</td></tr>
+<tr>
+<td>$e993</td><td colspan="2" align="right">16</td><td>scTerminateScript</td></tr>
+<tr>
+<td>$e9a3</td><td colspan="2" align="right">5</td><td>end, savy</td></tr>
+<tr>
+<td>$e9a8</td><td colspan="2" align="right">17</td><td>scFadeToBlack</td></tr>
+<tr>
+<td>$e9b9</td><td colspan="2" align="right">16</td><td>loop</td></tr>
+<tr>
+<td>$e9c9</td><td colspan="2" align="right">19</td><td>loopw</td></tr>
+<tr>
+<td>$e9dc</td><td colspan="2" align="right">9</td><td>scPlaySFX</td></tr>
+<tr>
+<td>$e9e5</td><td colspan="2" align="right">9</td><td>scStopSFX</td></tr>
+<tr>
+<td>$e9ee</td><td colspan="2" align="right">9</td><td>scStopCharacter</td></tr>
+<tr>
+<td>$e9f7</td><td colspan="2" align="right">10</td><td>actor</td></tr>
+<tr>
+<td>$ea01</td><td colspan="2" align="right">8</td><td>scSetBWPalette</td></tr>
+<tr>
+<td>$ea09</td><td colspan="2" align="right">8</td><td>scSetRoomPalette</td></tr>
+<tr>
+<td>$ea11</td><td colspan="2" align="right">8</td><td>scMenu</td></tr>
+<tr>
+<td>$ea19</td><td colspan="2" align="right">5</td><td>scSave</td></tr>
+<tr>
+<td>$ea1e</td><td colspan="2" align="right">37</td><td>SaveGame</td></tr>
+<tr>
+<td>$ea43</td><td colspan="2" align="right">2</td><td>ChangeIcon</td></tr>
+<tr>
+<td>$ea45</td><td colspan="2" align="right">32</td><td>loop</td></tr>
+<tr>
+<td>$ea65</td><td colspan="2" align="right">80</td><td>LoadGame, scLoad</td></tr>
+<tr>
+<td>$eab5</td><td colspan="2" align="right">3</td><td>hide</td></tr>
+<tr>
+<td>$eab8</td><td colspan="2" align="right">6</td><td>next</td></tr>
+<tr>
+<td>$eabe</td><td colspan="2" align="right">55</td><td>functions_ptr_hi</td></tr>
+<tr>
+<td>$eaf5</td><td colspan="2" align="right">55</td><td>functions_ptr_lo</td></tr>
+<tr>
+<td>$eb2c</td><td colspan="2" align="right">2</td><td>scriptEvaluateNext</td></tr>
+<tr>
+<td>$eb2e</td><td colspan="2" align="right">6</td><td>scriptEvaluate</td></tr>
+<tr>
+<td>$eb34</td><td colspan="2" align="right">3</td><td>Savx</td></tr>
+<tr>
+<td>$eb37</td><td colspan="2" align="right">12</td><td>doEvaluate</td></tr>
+<tr>
+<td>$eb43</td><td colspan="2" align="right">4</td><td>extended_constant</td></tr>
+<tr>
+<td>$eb47</td><td colspan="2" align="right">19</td><td>eval_function</td></tr>
+<tr>
+<td>$eb5a</td><td colspan="2" align="right">3</td><td>smc_jmpaddr</td></tr>
+<tr>
+<td>$eb5d</td><td colspan="2" align="right">11</td><td>get2param</td></tr>
+<tr>
+<td>$eb68</td><td colspan="2" align="right">7</td><td>sfAdd</td></tr>
+<tr>
+<td>$eb6f</td><td colspan="2" align="right">7</td><td>sfSub</td></tr>
+<tr>
+<td>$eb76</td><td colspan="2" align="right">6</td><td>sfAnd</td></tr>
+<tr>
+<td>$eb7c</td><td colspan="2" align="right">6</td><td>sfOr</td></tr>
+<tr>
+<td>$eb82</td><td colspan="2" align="right">6</td><td>sfNot</td></tr>
+<tr>
+<td>$eb88</td><td colspan="2" align="right">7</td><td>sfIsMusicPlaying</td></tr>
+<tr>
+<td>$eb8f</td><td colspan="2" align="right">7</td><td>sfIsScriptRunning</td></tr>
+<tr>
+<td>$eb96</td><td colspan="2" align="right">19</td><td>loop</td></tr>
+<tr>
+<td>$eba9</td><td colspan="2" align="right">5</td><td>next</td></tr>
+<tr>
+<td>$ebae</td><td colspan="2" align="right">32</td><td>sfIsWalkboxWalkable</td></tr>
+<tr>
+<td>$ebce</td><td colspan="2" align="right">7</td><td>sfIsCameraInAction</td></tr>
+<tr>
+<td>$ebd5</td><td colspan="2" align="right">7</td><td>sfEqual</td></tr>
+<tr>
+<td>$ebdc</td><td colspan="2" align="right">3</td><td>false</td></tr>
+<tr>
+<td>$ebdf</td><td colspan="2" align="right">3</td><td>true</td></tr>
+<tr>
+<td>$ebe2</td><td colspan="2" align="right">9</td><td>sfGE</td></tr>
+<tr>
+<td>$ebeb</td><td colspan="2" align="right">9</td><td>sfLT</td></tr>
+<tr>
+<td>$ebf4</td><td colspan="2" align="right">11</td><td>sfGT</td></tr>
+<tr>
+<td>$ebff</td><td colspan="2" align="right">11</td><td>sfLE</td></tr>
+<tr>
+<td>$ec0a</td><td colspan="2" align="right">30</td><td>sfGetFlag</td></tr>
+<tr>
+<td>$ec28</td><td colspan="2" align="right">2</td><td>local2</td></tr>
+<tr>
+<td>$ec2a</td><td colspan="2" align="right">8</td><td>next, savy</td></tr>
+<tr>
+<td>$ec32</td><td colspan="2" align="right">5</td><td>sfIsActor</td></tr>
+<tr>
+<td>$ec37</td><td colspan="2" align="right">7</td><td>testflag</td></tr>
+<tr>
+<td>$ec3e</td><td colspan="2" align="right">7</td><td>sfIsProp</td></tr>
+<tr>
+<td>$ec45</td><td colspan="2" align="right">13</td><td>sfIsNotMoving</td></tr>
+<tr>
+<td>$ec52</td><td colspan="2" align="right">4</td><td>sfGetEgo</td></tr>
+<tr>
+<td>$ec56</td><td colspan="2" align="right">11</td><td>sfGetTalking</td></tr>
+<tr>
+<td>$ec61</td><td colspan="2" align="right">1</td><td>ok</td></tr>
+<tr>
+<td>$ec62</td><td colspan="2" align="right">13</td><td>getEntryParam</td></tr>
+<tr>
+<td>$ec6f</td><td colspan="2" align="right">1</td><td>cont</td></tr>
+<tr>
+<td>$ec70</td><td colspan="2" align="right">7</td><td>sfGetRow</td></tr>
+<tr>
+<td>$ec77</td><td colspan="2" align="right">7</td><td>sfGetCol</td></tr>
+<tr>
+<td>$ec7e</td><td colspan="2" align="right">7</td><td>sfGetFacing</td></tr>
+<tr>
+<td>$ec85</td><td colspan="2" align="right">7</td><td>sfGetRoom</td></tr>
+<tr>
+<td>$ec8c</td><td colspan="2" align="right">7</td><td>sfGetCostumeID</td></tr>
+<tr>
+<td>$ec93</td><td colspan="2" align="right">7</td><td>sfGetCostumeNo</td></tr>
+<tr>
+<td>$ec9a</td><td colspan="2" align="right">7</td><td>sfGetAnimState</td></tr>
+<tr>
+<td>$eca1</td><td colspan="2" align="right">7</td><td>sfGetWalkRow</td></tr>
+<tr>
+<td>$eca8</td><td colspan="2" align="right">7</td><td>sfGetWalkCol</td></tr>
+<tr>
+<td>$ecaf</td><td colspan="2" align="right">7</td><td>sfGetWalkFaceDir</td></tr>
+<tr>
+<td>$ecb6</td><td colspan="2" align="right">7</td><td>sfGetColorSpeech</td></tr>
+<tr>
+<td>$ecbd</td><td colspan="2" align="right">7</td><td>sfGetSizeX</td></tr>
+<tr>
+<td>$ecc4</td><td colspan="2" align="right">7</td><td>sfGetSizeY</td></tr>
+<tr>
+<td>$eccb</td><td colspan="2" align="right">7</td><td>sfGetAnimSpeeed</td></tr>
+<tr>
+<td>$ecd2</td><td colspan="2" align="right">14</td><td>sfGetState</td></tr>
+<tr>
+<td>$ece0</td><td colspan="2" align="right">3</td><td>inarray</td></tr>
+<tr>
+<td>$ece3</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$ece6</td><td colspan="2" align="right">19</td><td>sfGetWalkbox</td></tr>
+<tr>
+<td>$ecf9</td><td colspan="2" align="right">13</td><td>endwb</td></tr>
+<tr>
+<td>$ed06</td><td colspan="2" align="right">17</td><td>sfGetVal</td></tr>
+<tr>
+<td>$ed17</td><td colspan="2" align="right">2</td><td>local1</td></tr>
+<tr>
+<td>$ed19</td><td colspan="2" align="right">3</td><td>savy</td></tr>
+<tr>
+<td>$ed1c</td><td colspan="2" align="right">3</td><td>sfGetRand</td></tr>
+<tr>
+<td>$ed1f</td><td colspan="2" align="right">10</td><td>sfGetRandInt</td></tr>
+<tr>
+<td>$ed29</td><td colspan="2" align="right">12</td><td>doit</td></tr>
+<tr>
+<td>$ed35</td><td colspan="2" align="right">6</td><td>loop</td></tr>
+<tr>
+<td>$ed3b</td><td colspan="2" align="right">5</td><td>notfound</td></tr>
+<tr>
+<td>$ed40</td><td colspan="2" align="right">4</td><td>found</td></tr>
+<tr>
+<td>$ed44</td><td colspan="2" align="right">20</td><td>sfGetNextWalkbox</td></tr>
+<tr>
+<td>$ed58</td><td colspan="2" align="right">7</td><td>sfGetActorExecutingAction</td></tr>
+<tr>
+<td>$ed5f</td><td colspan="2" align="right">4</td><td>sfGetActionVerb</td></tr>
+<tr>
+<td>$ed63</td><td colspan="2" align="right">7</td><td>sfGetActionObject1</td></tr>
+<tr>
+<td>$ed6a</td><td colspan="2" align="right">2</td><td>empty</td></tr>
+<tr>
+<td>$ed6c</td><td colspan="2" align="right">5</td><td>doit</td></tr>
+<tr>
+<td>$ed71</td><td colspan="2" align="right">4</td><td>ininv</td></tr>
+<tr>
+<td>$ed75</td><td colspan="2" align="right">4</td><td>notinv</td></tr>
+<tr>
+<td>$ed79</td><td colspan="2" align="right">14</td><td>sfGetActionObject2</td></tr>
+<tr>
+<td>$ed87</td><td colspan="2" align="right">4</td><td>sfGetCurrentRoom</td></tr>
+<tr>
+<td>$ed8b</td><td colspan="2" align="right">3</td><td>sfGetRoomCols</td></tr>
+<tr>
+<td>$ed8e</td><td colspan="2" align="right">6</td><td>sfGetCameraCol</td></tr>
+<tr>
+<td>$ed94</td><td colspan="2" align="right">4</td><td>sfGetCameraFollowing</td></tr>
+<tr>
+<td>$ed98</td><td colspan="2" align="right">4</td><td>sfGetFadeEffect</td></tr>
+<tr>
+<td>$ed9c</td><td colspan="2" align="right">13</td><td>sfIsInInventory</td></tr>
+<tr>
+<td>$eda9</td><td colspan="2" align="right">3</td><td>yep</td></tr>
+<tr>
+<td>$edac</td><td colspan="2" align="right">8</td><td>sfDiv, sfGetClosestActor, sfGetDistance, sfGetObjectAt, sfMul</td></tr>
+<tr>
+<td>$edb4</td><td colspan="2" align="right">6</td><td>error_obj</td></tr>
+<tr>
+<td>$edba</td><td colspan="2" align="right">21</td><td>randgen</td></tr>
+<tr>
+<td>$edcf</td><td colspan="2" align="right">4</td><td>print2</td></tr>
+<tr>
+<td>$edd3</td><td colspan="2" align="right">11</td><td>print</td></tr>
+<tr>
+<td>$edde</td><td colspan="2" align="right">15</td><td>loop, text</td></tr>
+<tr>
+<td>$eded</td><td colspan="2" align="right">8</td><td>savx</td></tr>
+<tr>
+<td>$edf5</td><td colspan="2" align="right">16</td><td>cont</td></tr>
+<tr>
+<td>$ee05</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$ee06</td><td align="right">2144</td><td align="right">21</td><td>_init_print</td></tr>
+<tr>
+<td>$ee1b</td><td colspan="2" align="right">4</td><td>ascii2code</td></tr>
+<tr>
+<td>$ee1f</td><td colspan="2" align="right">3</td><td>printnl</td></tr>
+<tr>
+<td>$ee22</td><td colspan="2" align="right">21</td><td>perform_CRLF</td></tr>
+<tr>
+<td>$ee37</td><td colspan="2" align="right">7</td><td>gotoXY, relocate_cursor</td></tr>
+<tr>
+<td>$ee3e</td><td colspan="2" align="right">3</td><td>normal</td></tr>
+<tr>
+<td>$ee41</td><td colspan="2" align="right">8</td><td>cont</td></tr>
+<tr>
+<td>$ee49</td><td colspan="2" align="right">14</td><td>noinctmp0</td></tr>
+<tr>
+<td>$ee57</td><td colspan="2" align="right">24</td><td>put_colcombo</td></tr>
+<tr>
+<td>$ee6f</td><td colspan="2" align="right">8</td><td>put_space</td></tr>
+<tr>
+<td>$ee77</td><td colspan="2" align="right">12</td><td>put_code</td></tr>
+<tr>
+<td>$ee83</td><td colspan="2" align="right">18</td><td>put_char</td></tr>
+<tr>
+<td>$ee95</td><td colspan="2" align="right">16</td><td>nocaps</td></tr>
+<tr>
+<td>$eea5</td><td colspan="2" align="right">6</td><td>cont</td></tr>
+<tr>
+<td>$eeab</td><td colspan="2" align="right">15</td><td>increment_cursor</td></tr>
+<tr>
+<td>$eeba</td><td colspan="2" align="right">5</td><td>skipme</td></tr>
+<tr>
+<td>$eebf</td><td colspan="2" align="right">14</td><td>put_colour_combo2</td></tr>
+<tr>
+<td>$eecd</td><td colspan="2" align="right">15</td><td>loop</td></tr>
+<tr>
+<td>$eedc</td><td colspan="2" align="right">16</td><td>loop2</td></tr>
+<tr>
+<td>$eeec</td><td colspan="2" align="right">6</td><td>put_colour</td></tr>
+<tr>
+<td>$eef2</td><td colspan="2" align="right">14</td><td>put_colour_combo</td></tr>
+<tr>
+<td><b>$ef00</b></td><td colspan="2" align="right">25</td><td>loop</td></tr>
+<tr>
+<td>$ef19</td><td colspan="2" align="right">6</td><td>place_char</td></tr>
+<tr>
+<td>$ef1f</td><td colspan="2" align="right">48</td><td>put_char_direct</td></tr>
+<tr>
+<td>$ef4f</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$ef59</td><td colspan="2" align="right">11</td><td>skip</td></tr>
+<tr>
+<td>$ef64</td><td colspan="2" align="right">4</td><td>skip</td></tr>
+<tr>
+<td>$ef68</td><td colspan="2" align="right">2</td><td>put_double_heigth</td></tr>
+<tr>
+<td>$ef6a</td><td colspan="2" align="right">16</td><td>loop</td></tr>
+<tr>
+<td>$ef7a</td><td colspan="2" align="right">11</td><td>skip</td></tr>
+<tr>
+<td>$ef85</td><td colspan="2" align="right">4</td><td>skip</td></tr>
+<tr>
+<td>$ef89</td><td colspan="2" align="right">1</td><td>colour_0</td></tr>
+<tr>
+<td>$ef8a</td><td colspan="2" align="right">1</td><td>colour_1</td></tr>
+<tr>
+<td>$ef8b</td><td colspan="2" align="right">4</td><td>SearchString</td></tr>
+<tr>
+<td>$ef8f</td><td colspan="2" align="right">2</td><td>cont</td></tr>
+<tr>
+<td>$ef91</td><td colspan="2" align="right">7</td><td>loop</td></tr>
+<tr>
+<td>$ef98</td><td colspan="2" align="right">13</td><td>loopz, out</td></tr>
+<tr>
+<td>$efa5</td><td colspan="2" align="right">6</td><td>nocarry</td></tr>
+<tr>
+<td>$efab</td><td colspan="2" align="right">2</td><td>StringLength</td></tr>
+<tr>
+<td>$efad</td><td colspan="2" align="right">7</td><td>loop</td></tr>
+<tr>
+<td>$efb4</td><td colspan="2" align="right">1</td><td>done</td></tr>
+<tr>
+<td>$efb5</td><td colspan="2" align="right">30</td><td>PrintCentered</td></tr>
+<tr>
+<td>$efd3</td><td colspan="2" align="right">16</td><td>savY</td></tr>
+<tr>
+<td>$efe3</td><td colspan="2" align="right">5</td><td>PrintStringWithXY</td></tr>
+<tr>
+<td>$efe8</td><td colspan="2" align="right">6</td><td>SearchStringAndPrint</td></tr>
+<tr>
+<td>$efee</td><td colspan="2" align="right">12</td><td>LoadAndPrintString</td></tr>
+<tr>
+<td>$effa</td><td colspan="2" align="right">5</td><td>resx</td></tr>
+<tr>
+<td>$efff</td><td colspan="2" align="right">17</td><td>ClearCommandArea</td></tr>
+<tr>
+<td>$f010</td><td colspan="2" align="right">11</td><td>ClearSpeechArea</td></tr>
+<tr>
+<td>$f01b</td><td colspan="2" align="right">6</td><td>ClearArea</td></tr>
+<tr>
+<td>$f021</td><td colspan="2" align="right">4</td><td>loop2</td></tr>
+<tr>
+<td>$f025</td><td colspan="2" align="right">14</td><td>loop</td></tr>
+<tr>
+<td>$f033</td><td colspan="2" align="right">2</td><td>savx</td></tr>
+<tr>
+<td>$f035</td><td colspan="2" align="right">4</td><td>savy</td></tr>
+<tr>
+<td>$f039</td><td colspan="2" align="right">40</td><td>DoMenu</td></tr>
+<tr>
+<td>$f061</td><td colspan="2" align="right">3</td><td>menuwasshown</td></tr>
+<tr>
+<td>$f064</td><td colspan="2" align="right">6</td><td>skipm</td></tr>
+<tr>
+<td>$f06a</td><td colspan="2" align="right">14</td><td>end</td></tr>
+<tr>
+<td>$f078</td><td colspan="2" align="right">10</td><td>DrawMenuFrame</td></tr>
+<tr>
+<td>$f082</td><td colspan="2" align="right">4</td><td>loopl</td></tr>
+<tr>
+<td>$f086</td><td colspan="2" align="right">31</td><td>loopc</td></tr>
+<tr>
+<td>$f0a5</td><td colspan="2" align="right">12</td><td>loop</td></tr>
+<tr>
+<td>$f0b1</td><td colspan="2" align="right">30</td><td>loopv</td></tr>
+<tr>
+<td>$f0cf</td><td colspan="2" align="right">15</td><td>looplo</td></tr>
+<tr>
+<td>$f0de</td><td colspan="2" align="right">19</td><td>skip</td></tr>
+<tr>
+<td>$f0f1</td><td colspan="2" align="right">5</td><td>saytimen</td></tr>
+<tr>
+<td>$f0f6</td><td colspan="2" align="right">10</td><td>MainOptions</td></tr>
+<tr>
+<td><b>$f100</b></td><td colspan="2" align="right">24</td><td>loop</td></tr>
+<tr>
+<td>$f118</td><td colspan="2" align="right">4</td><td>smc_nitems</td></tr>
+<tr>
+<td>$f11c</td><td colspan="2" align="right">13</td><td>loopkey</td></tr>
+<tr>
+<td>$f129</td><td colspan="2" align="right">21</td><td>check2</td></tr>
+<tr>
+<td>$f13e</td><td colspan="2" align="right">22</td><td>check3</td></tr>
+<tr>
+<td>$f154</td><td colspan="2" align="right">4</td><td>check4</td></tr>
+<tr>
+<td>$f158</td><td colspan="2" align="right">1</td><td>cont, cont2</td></tr>
+<tr>
+<td>$f159</td><td colspan="2" align="right">7</td><td>add7timex7, loop</td></tr>
+<tr>
+<td>$f160</td><td colspan="2" align="right">6</td><td>next</td></tr>
+<tr>
+<td>$f166</td><td colspan="2" align="right">9</td><td>UpdateVolumeSetting</td></tr>
+<tr>
+<td>$f16f</td><td colspan="2" align="right">16</td><td>UpdateVolString</td></tr>
+<tr>
+<td>$f17f</td><td colspan="2" align="right">6</td><td>copystr</td></tr>
+<tr>
+<td>$f185</td><td colspan="2" align="right">8</td><td>lcopy</td></tr>
+<tr>
+<td>$f18d</td><td colspan="2" align="right">9</td><td>UpdateTalkTime</td></tr>
+<tr>
+<td>$f196</td><td colspan="2" align="right">10</td><td>loopsayt</td></tr>
+<tr>
+<td>$f1a0</td><td colspan="2" align="right">19</td><td>UpdateTalkTimeString</td></tr>
+<tr>
+<td>$f1b3</td><td colspan="2" align="right">28</td><td>SaveOptions</td></tr>
+<tr>
+<td>$f1cf</td><td colspan="2" align="right">12</td><td>loopkey</td></tr>
+<tr>
+<td>$f1db</td><td colspan="2" align="right">6</td><td>check3</td></tr>
+<tr>
+<td>$f1e1</td><td colspan="2" align="right">43</td><td>CheckForSavedGame</td></tr>
+<tr>
+<td>$f20c</td><td colspan="2" align="right">13</td><td>RedefineKeys</td></tr>
+<tr>
+<td>$f219</td><td colspan="2" align="right">19</td><td>loop</td></tr>
+<tr>
+<td>$f22c</td><td colspan="2" align="right">14</td><td>loopr</td></tr>
+<tr>
+<td>$f23a</td><td colspan="2" align="right">8</td><td>valid</td></tr>
+<tr>
+<td>$f242</td><td colspan="2" align="right">31</td><td>savy</td></tr>
+<tr>
+<td>$f261</td><td colspan="2" align="right">8</td><td>isnum</td></tr>
+<tr>
+<td>$f269</td><td colspan="2" align="right">3</td><td>nan</td></tr>
+<tr>
+<td>$f26c</td><td colspan="2" align="right">3</td><td>num</td></tr>
+<tr>
+<td>$f26f</td><td colspan="2" align="right">10</td><td>increment_vars</td></tr>
+<tr>
+<td>$f279</td><td colspan="2" align="right">6</td><td>DisplayKey</td></tr>
+<tr>
+<td>$f27f</td><td colspan="2" align="right">19</td><td>notspace</td></tr>
+<tr>
+<td>$f292</td><td colspan="2" align="right">3</td><td>letter</td></tr>
+<tr>
+<td>$f295</td><td colspan="2" align="right">9</td><td>auxPrepPointer</td></tr>
+<tr>
+<td>$f29e</td><td colspan="2" align="right">27</td><td>auxNextEntry</td></tr>
+<tr>
+<td>$f2b9</td><td colspan="2" align="right">7</td><td>LocateResource</td></tr>
+<tr>
+<td>$f2c0</td><td colspan="2" align="right">21</td><td>LocateResourceEx, loop</td></tr>
+<tr>
+<td>$f2d5</td><td colspan="2" align="right">8</td><td>not_found</td></tr>
+<tr>
+<td>$f2dd</td><td colspan="2" align="right">8</td><td>SaveListOfGlobalResources</td></tr>
+<tr>
+<td>$f2e5</td><td colspan="2" align="right">25</td><td>loop</td></tr>
+<tr>
+<td>$f2fe</td><td colspan="2" align="right">6</td><td>not_global</td></tr>
+<tr>
+<td>$f304</td><td colspan="2" align="right">8</td><td>LoadGlobalResourcesFromList</td></tr>
+<tr>
+<td>$f30c</td><td colspan="2" align="right">21</td><td>loop</td></tr>
+<tr>
+<td>$f321</td><td colspan="2" align="right">6</td><td>savflags</td></tr>
+<tr>
+<td>$f327</td><td colspan="2" align="right">2</td><td>savy</td></tr>
+<tr>
+<td>$f329</td><td colspan="2" align="right">41</td><td>skiproom</td></tr>
+<tr>
+<td>$f352</td><td colspan="2" align="right">1</td><td>count</td></tr>
+<tr>
+<td>$f353</td><td colspan="2" align="right">13</td><td>LockResource</td></tr>
+<tr>
+<td>$f360</td><td colspan="2" align="right">1</td><td>notinmemory</td></tr>
+<tr>
+<td>$f361</td><td colspan="2" align="right">13</td><td>UnlockResource</td></tr>
+<tr>
+<td>$f36e</td><td colspan="2" align="right">1</td><td>notinmemory</td></tr>
+<tr>
+<td>$f36f</td><td colspan="2" align="right">17</td><td>increment_ref_count</td></tr>
+<tr>
+<td>$f380</td><td colspan="2" align="right">13</td><td>common_ref_count, ok</td></tr>
+<tr>
+<td>$f38d</td><td colspan="2" align="right">13</td><td>decrement_ref_count</td></tr>
+<tr>
+<td>$f39a</td><td colspan="2" align="right">3</td><td>skip</td></tr>
+<tr>
+<td>$f39d</td><td colspan="2" align="right">12</td><td>cmp16</td></tr>
+<tr>
+<td>$f3a9</td><td colspan="2" align="right">1</td><td>ret</td></tr>
+<tr>
+<td>$f3aa</td><td colspan="2" align="right">8</td><td>LoadResource</td></tr>
+<tr>
+<td>$f3b2</td><td colspan="2" align="right">11</td><td>getpointer</td></tr>
+<tr>
+<td>$f3bd</td><td colspan="2" align="right">2</td><td>skip</td></tr>
+<tr>
+<td>$f3bf</td><td colspan="2" align="right">3</td><td>notinmemory</td></tr>
+<tr>
+<td>$f3c2</td><td colspan="2" align="right">6</td><td>GetPointerToResource</td></tr>
+<tr>
+<td>$f3c8</td><td colspan="2" align="right">10</td><td>NukeResource</td></tr>
+<tr>
+<td>$f3d2</td><td colspan="2" align="right">1</td><td>notinmemory</td></tr>
+<tr>
+<td>$f3d3</td><td colspan="2" align="right">1</td><td>LoadActor, LoadSFX</td></tr>
+<tr>
+<td>$f3d4</td><td colspan="2" align="right">4</td><td>LoadScript</td></tr>
+<tr>
+<td>$f3d8</td><td colspan="2" align="right">4</td><td>LoadString</td></tr>
+<tr>
+<td>$f3dc</td><td colspan="2" align="right">4</td><td>LoadObjectCode</td></tr>
+<tr>
+<td>$f3e0</td><td colspan="2" align="right">4</td><td>LoadObject</td></tr>
+<tr>
+<td>$f3e4</td><td colspan="2" align="right">4</td><td>LoadRoom</td></tr>
+<tr>
+<td>$f3e8</td><td colspan="2" align="right">4</td><td>LoadCostume</td></tr>
+<tr>
+<td>$f3ec</td><td colspan="2" align="right">4</td><td>LoadMusic</td></tr>
+<tr>
+<td>$f3f0</td><td colspan="2" align="right">4</td><td>LoadDialog</td></tr>
+<tr>
+<td>$f3f4</td><td colspan="2" align="right">4</td><td>NukeScript</td></tr>
+<tr>
+<td>$f3f8</td><td colspan="2" align="right">4</td><td>NukeString</td></tr>
+<tr>
+<td>$f3fc</td><td colspan="2" align="right">4</td><td>NukeObjectCode</td></tr>
+<tr>
+<td><b>$f400</b></td><td colspan="2" align="right">4</td><td>NukeObject</td></tr>
+<tr>
+<td>$f404</td><td colspan="2" align="right">4</td><td>NukeCostume</td></tr>
+<tr>
+<td>$f408</td><td colspan="2" align="right">4</td><td>NukeMusic</td></tr>
+<tr>
+<td>$f40c</td><td colspan="2" align="right">4</td><td>NukeDialog</td></tr>
+<tr>
+<td>$f410</td><td colspan="2" align="right">18</td><td>NukeRoom</td></tr>
+<tr>
+<td>$f422</td><td colspan="2" align="right">16</td><td>loop</td></tr>
+<tr>
+<td>$f432</td><td colspan="2" align="right">5</td><td>notlocal</td></tr>
+<tr>
+<td>$f437</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$f438</td><td colspan="2" align="right">7</td><td>tab_dirs_hi</td></tr>
+<tr>
+<td>$f43f</td><td colspan="2" align="right">7</td><td>tab_dirs_lo</td></tr>
+<tr>
+<td>$f446</td><td colspan="2" align="right">1</td><td>entry</td></tr>
+<tr>
+<td>$f447</td><td colspan="2" align="right">6</td><td>LoadResourceFromDisk</td></tr>
+<tr>
+<td>$f44d</td><td colspan="2" align="right">9</td><td>fail</td></tr>
+<tr>
+<td>$f456</td><td colspan="2" align="right">9</td><td>failagain</td></tr>
+<tr>
+<td>$f45f</td><td colspan="2" align="right">49</td><td>AuxCopyResource</td></tr>
+<tr>
+<td>$f490</td><td colspan="2" align="right">18</td><td>memcpyloop</td></tr>
+<tr>
+<td>$f4a2</td><td colspan="2" align="right">1</td><td>return</td></tr>
+<tr>
+<td>$f4a3</td><td colspan="2" align="right">19</td><td>CompactMemory</td></tr>
+<tr>
+<td>$f4b6</td><td colspan="2" align="right">19</td><td>loop</td></tr>
+<tr>
+<td>$f4c9</td><td colspan="2" align="right">8</td><td>found</td></tr>
+<tr>
+<td>$f4d1</td><td colspan="2" align="right">13</td><td>loop</td></tr>
+<tr>
+<td>$f4de</td><td colspan="2" align="right">42</td><td>compaction_loop, found</td></tr>
+<tr>
+<td>$f508</td><td colspan="2" align="right">8</td><td>loop</td></tr>
+<tr>
+<td>$f510</td><td colspan="2" align="right">5</td><td>next</td></tr>
+<tr>
+<td>$f515</td><td colspan="2" align="right">38</td><td>finished</td></tr>
+<tr>
+<td>$f53b</td><td colspan="2" align="right">10</td><td>UpdateAllPointers</td></tr>
+<tr>
+<td>$f545</td><td colspan="2" align="right">27</td><td>skipm</td></tr>
+<tr>
+<td>$f560</td><td colspan="2" align="right">1</td><td>skip</td></tr>
+<tr>
+<td>$f561</td><td colspan="2" align="right">14</td><td>TryLoad</td></tr>
+<tr>
+<td>$f56f</td><td colspan="2" align="right">19</td><td>loop1</td></tr>
+<tr>
+<td>$f582</td><td colspan="2" align="right">5</td><td>nocarry</td></tr>
+<tr>
+<td>$f587</td><td colspan="2" align="right">6</td><td>end</td></tr>
+<tr>
+<td>$f58d</td><td colspan="2" align="right">17</td><td>found</td></tr>
+<tr>
+<td>$f59e</td><td colspan="2" align="right">3</td><td>TryLoad2nd</td></tr>
+<tr>
+<td>$f5a1</td><td colspan="2" align="right">55</td><td>loop</td></tr>
+<tr>
+<td>$f5d8</td><td colspan="2" align="right">42</td><td>ldisk</td></tr>
+<tr>
+<td>$f602</td><td colspan="2" align="right">3</td><td>skip</td></tr>
+<tr>
+<td>$f605</td><td colspan="2" align="right">8</td><td>not_found</td></tr>
+<tr>
+<td>$f60d</td><td colspan="2" align="right">18</td><td>sfx_listlo</td></tr>
+<tr>
+<td>$f61f</td><td colspan="2" align="right">18</td><td>sfx_listhi</td></tr>
+<tr>
+<td>$f631</td><td colspan="2" align="right">17</td><td>sfx_priority</td></tr>
+<tr>
+<td>$f642</td><td colspan="2" align="right">18</td><td>pattern_list_lo</td></tr>
+<tr>
+<td>$f654</td><td colspan="2" align="right">18</td><td>pattern_list_hi</td></tr>
+<tr>
+<td>$f666</td><td align="right">737</td><td align="right">11</td><td>__snd_engine_start, l_commands_lo</td></tr>
+<tr>
+<td>$f671</td><td colspan="2" align="right">11</td><td>l_commands_hi</td></tr>
+<tr>
+<td>$f67c</td><td colspan="2" align="right">3</td><td>tab_NoiseFlags</td></tr>
+<tr>
+<td>$f67f</td><td colspan="2" align="right">3</td><td>tab_ToneFlags</td></tr>
+<tr>
+<td>$f682</td><td colspan="2" align="right">9</td><td>DoSetVolume</td></tr>
+<tr>
+<td>$f68b</td><td colspan="2" align="right">34</td><td>EndPatList</td></tr>
+<tr>
+<td>$f6ad</td><td colspan="2" align="right">2</td><td>savx</td></tr>
+<tr>
+<td>$f6af</td><td colspan="2" align="right">1</td><td>notends</td></tr>
+<tr>
+<td>$f6b0</td><td colspan="2" align="right">25</td><td>SetEnvelope</td></tr>
+<tr>
+<td>$f6c9</td><td colspan="2" align="right">25</td><td>SetOrnament</td></tr>
+<tr>
+<td>$f6e2</td><td colspan="2" align="right">12</td><td>NoiseOn</td></tr>
+<tr>
+<td>$f6ee</td><td colspan="2" align="right">10</td><td>NoiseOff</td></tr>
+<tr>
+<td>$f6f8</td><td colspan="2" align="right">12</td><td>ToneOn</td></tr>
+<tr>
+<td>$f704</td><td colspan="2" align="right">10</td><td>ToneOff</td></tr>
+<tr>
+<td>$f70e</td><td colspan="2" align="right">10</td><td>NoiseVal</td></tr>
+<tr>
+<td>$f718</td><td colspan="2" align="right">9</td><td>SetNoteOffset</td></tr>
+<tr>
+<td>$f721</td><td colspan="2" align="right">12</td><td>Loop</td></tr>
+<tr>
+<td>$f72d</td><td colspan="2" align="right">8</td><td>NextPatternList</td></tr>
+<tr>
+<td>$f735</td><td colspan="2" align="right">25</td><td>nextinlist</td></tr>
+<tr>
+<td>$f74e</td><td colspan="2" align="right">15</td><td>command</td></tr>
+<tr>
+<td>$f75d</td><td colspan="2" align="right">8</td><td>smc_command</td></tr>
+<tr>
+<td>$f765</td><td colspan="2" align="right">8</td><td>p_commands_lo</td></tr>
+<tr>
+<td>$f76d</td><td colspan="2" align="right">8</td><td>p_commands_hi</td></tr>
+<tr>
+<td>$f775</td><td colspan="2" align="right">8</td><td>end_pattern</td></tr>
+<tr>
+<td>$f77d</td><td colspan="2" align="right">8</td><td>silence</td></tr>
+<tr>
+<td>$f785</td><td colspan="2" align="right">12</td><td>rest</td></tr>
+<tr>
+<td>$f791</td><td colspan="2" align="right">3</td><td>pat_noise_on</td></tr>
+<tr>
+<td>$f794</td><td colspan="2" align="right">5</td><td>common_noise</td></tr>
+<tr>
+<td>$f799</td><td colspan="2" align="right">6</td><td>pat_noise_off</td></tr>
+<tr>
+<td>$f79f</td><td colspan="2" align="right">6</td><td>pat_tone_on</td></tr>
+<tr>
+<td>$f7a5</td><td colspan="2" align="right">6</td><td>pat_tone_off</td></tr>
+<tr>
+<td>$f7ab</td><td colspan="2" align="right">11</td><td>set_flag</td></tr>
+<tr>
+<td>$f7b6</td><td colspan="2" align="right">2</td><td>ProcessMusic</td></tr>
+<tr>
+<td>$f7b8</td><td colspan="2" align="right">7</td><td>loop_channels</td></tr>
+<tr>
+<td>$f7bf</td><td colspan="2" align="right">4</td><td>continue</td></tr>
+<tr>
+<td>$f7c3</td><td colspan="2" align="right">10</td><td>proceed</td></tr>
+<tr>
+<td>$f7cd</td><td colspan="2" align="right">2</td><td>skipsettingenv</td></tr>
+<tr>
+<td>$f7cf</td><td colspan="2" align="right">8</td><td>process</td></tr>
+<tr>
+<td>$f7d7</td><td colspan="2" align="right">7</td><td>goon</td></tr>
+<tr>
+<td>$f7de</td><td colspan="2" align="right">33</td><td>notdone</td></tr>
+<tr>
+<td>$f7ff</td><td colspan="2" align="right">3</td><td>smc_command</td></tr>
+<tr>
+<td>$f802</td><td colspan="2" align="right">20</td><td>donote, nocommand</td></tr>
+<tr>
+<td>$f816</td><td colspan="2" align="right">2</td><td>end_process</td></tr>
+<tr>
+<td>$f818</td><td colspan="2" align="right">13</td><td>nonewnote</td></tr>
+<tr>
+<td>$f825</td><td colspan="2" align="right">19</td><td>checkenv</td></tr>
+<tr>
+<td>$f838</td><td colspan="2" align="right">24</td><td>bkpme</td></tr>
+<tr>
+<td>$f850</td><td colspan="2" align="right">21</td><td>nothold</td></tr>
+<tr>
+<td>$f865</td><td colspan="2" align="right">5</td><td>doit</td></tr>
+<tr>
+<td>$f86a</td><td colspan="2" align="right">23</td><td>checkorn</td></tr>
+<tr>
+<td>$f881</td><td colspan="2" align="right">13</td><td>skipneg</td></tr>
+<tr>
+<td>$f88e</td><td colspan="2" align="right">2</td><td>done</td></tr>
+<tr>
+<td>$f890</td><td colspan="2" align="right">8</td><td>silenced</td></tr>
+<tr>
+<td>$f898</td><td colspan="2" align="right">6</td><td>hackme, skip</td></tr>
+<tr>
+<td>$f89e</td><td colspan="2" align="right">2</td><td>SendAY, end</td></tr>
+<tr>
+<td>$f8a0</td><td colspan="2" align="right">38</td><td>loop1</td></tr>
+<tr>
+<td>$f8c6</td><td colspan="2" align="right">3</td><td>skip1</td></tr>
+<tr>
+<td>$f8c9</td><td colspan="2" align="right">1</td><td>savx</td></tr>
+<tr>
+<td>$f8ca</td><td colspan="2" align="right">29</td><td>SendAYReg</td></tr>
+<tr>
+<td>$f8e7</td><td colspan="2" align="right">14</td><td>zeros</td></tr>
+<tr>
+<td>$f8f5</td><td colspan="2" align="right">15</td><td>StopSound</td></tr>
+<tr>
+<td>$f904</td><td colspan="2" align="right">2</td><td>skip</td></tr>
+<tr>
+<td>$f906</td><td colspan="2" align="right">22</td><td>loopss</td></tr>
+<tr>
+<td>$f91c</td><td colspan="2" align="right">2</td><td>InitSound</td></tr>
+<tr>
+<td>$f91e</td><td colspan="2" align="right">4</td><td>initend</td></tr>
+<tr>
+<td>$f922</td><td colspan="2" align="right">8</td><td>AYRegDump</td></tr>
+<tr>
+<td>$f92a</td><td colspan="2" align="right">16</td><td>loop</td></tr>
+<tr>
+<td>$f93a</td><td colspan="2" align="right">12</td><td>Note2Pitch</td></tr>
+<tr>
+<td>$f946</td><td colspan="2" align="right">1</td><td>Empty</td></tr>
+<tr>
+<td>$f947</td><td align="right">82</td><td align="right">30</td><td>_StartPlayer</td></tr>
+<tr>
+<td>$f965</td><td colspan="2" align="right">52</td><td>loop</td></tr>
+<tr>
+<td>$f999</td><td align="right">108</td><td align="right">15</td><td>_PlaySfx</td></tr>
+<tr>
+<td>$f9a8</td><td colspan="2" align="right">10</td><td>loop</td></tr>
+<tr>
+<td>$f9b2</td><td colspan="2" align="right">6</td><td>skip</td></tr>
+<tr>
+<td>$f9b8</td><td colspan="2" align="right">72</td><td>savid</td></tr>
+<tr>
+<td><b>$fa00</b></td><td colspan="2" align="right">1</td><td>notfound</td></tr>
+<tr>
+<td>$fa01</td><td colspan="2" align="right">4</td><td>savx</td></tr>
+<tr>
+<td>$fa05</td><td align="right">88</td><td align="right">2</td><td>_StopSFX</td></tr>
+<tr>
+<td>$fa07</td><td colspan="2" align="right">9</td><td>loop</td></tr>
+<tr>
+<td>$fa10</td><td colspan="2" align="right">3</td><td>found</td></tr>
+<tr>
+<td>$fa13</td><td colspan="2" align="right">12</td><td>UpdateSongPointers</td></tr>
+<tr>
+<td>$fa1f</td><td colspan="2" align="right">46</td><td>SetupSongPointers</td></tr>
+<tr>
+<td>$fa4d</td><td colspan="2" align="right">16</td><td>PlayMusic</td></tr>
+<tr>
+<td>$fa5d</td><td align="right">50</td><td align="right">21</td><td>_PlaySong</td></tr>
+<tr>
+<td>$fa72</td><td colspan="2" align="right">5</td><td>PlayTuneCommon</td></tr>
+<tr>
+<td>$fa77</td><td colspan="2" align="right">20</td><td>loop</td></tr>
+<tr>
+<td>$fa8b</td><td colspan="2" align="right">4</td><td>savx</td></tr>
+<tr>
+<td>$fa8f</td><td align="right">351</td><td align="right">25</td><td>LoadAndInstallDialog, __snd_engine_end</td></tr>
+<tr>
+<td>$faa8</td><td colspan="2" align="right">11</td><td>loop</td></tr>
+<tr>
+<td>$fab3</td><td colspan="2" align="right">5</td><td>end</td></tr>
+<tr>
+<td>$fab8</td><td colspan="2" align="right">22</td><td>loop</td></tr>
+<tr>
+<td>$face</td><td colspan="2" align="right">5</td><td>StartDialog</td></tr>
+<tr>
+<td>$fad3</td><td colspan="2" align="right">16</td><td>PrintDialogOptions</td></tr>
+<tr>
+<td>$fae3</td><td colspan="2" align="right">8</td><td>loop1op</td></tr>
+<tr>
+<td>$faeb</td><td colspan="2" align="right">8</td><td>nextop</td></tr>
+<tr>
+<td>$faf3</td><td colspan="2" align="right">3</td><td>skip1op</td></tr>
+<tr>
+<td>$faf6</td><td colspan="2" align="right">15</td><td>notone</td></tr>
+<tr>
+<td>$fb05</td><td colspan="2" align="right">41</td><td>loop</td></tr>
+<tr>
+<td>$fb2e</td><td colspan="2" align="right">8</td><td>next</td></tr>
+<tr>
+<td>$fb36</td><td colspan="2" align="right">3</td><td>end</td></tr>
+<tr>
+<td>$fb39</td><td colspan="2" align="right">17</td><td>EndDialog</td></tr>
+<tr>
+<td>$fb4a</td><td colspan="2" align="right">10</td><td>MMDialogMode</td></tr>
+<tr>
+<td>$fb54</td><td colspan="2" align="right">24</td><td>loop</td></tr>
+<tr>
+<td>$fb6c</td><td colspan="2" align="right">19</td><td>sel</td></tr>
+<tr>
+<td>$fb7f</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$fb80</td><td colspan="2" align="right">13</td><td>MCDialogMode</td></tr>
+<tr>
+<td>$fb8d</td><td colspan="2" align="right">12</td><td>loop</td></tr>
+<tr>
+<td>$fb99</td><td colspan="2" align="right">3</td><td>next</td></tr>
+<tr>
+<td>$fb9c</td><td colspan="2" align="right">1</td><td>end</td></tr>
+<tr>
+<td>$fb9d</td><td colspan="2" align="right">3</td><td>found</td></tr>
+<tr>
+<td>$fba0</td><td colspan="2" align="right">23</td><td>justoneoption</td></tr>
+<tr>
+<td>$fbb7</td><td colspan="2" align="right">31</td><td>justoneoptionentry, savx</td></tr>
+<tr>
+<td>$fbd6</td><td colspan="2" align="right">1</td><td>LastCommandCalled</td></tr>
+<tr>
+<td>$fbd7</td><td colspan="2" align="right">1</td><td>LastFunctionCalled</td></tr>
+<tr>
+<td>$fbd8</td><td colspan="2" align="right">11</td><td>catchEngineException</td></tr>
+<tr>
+<td>$fbe3</td><td colspan="2" align="right">11</td><td>catchScriptException</td></tr>
+<tr>
+<td>$fbee</td><td align="right">18</td><td align="right">18</td><td>__endofOASISresidentpart</td></tr>
+<tr>
+<td><b>$fc00</b></td><td align="right">1004</td><td align="right">1004</td><td>__LoaderStartCode</td></tr>
+<tr>
+<td>$ffec</td><td align="right">3</td><td align="right">3</td><td>_LoaderApiSaveData</td></tr>
+<tr>
+<td>$ffef</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiFileStartSector</td></tr>
+<tr>
+<td>$fff0</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiFileStartTrack</td></tr>
+<tr>
+<td>$fff1</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiFileSize, _LoaderApiFileSizeLow</td></tr>
+<tr>
+<td>$fff2</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiFileSizeHigh</td></tr>
+<tr>
+<td>$fff3</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiJump</td></tr>
+<tr>
+<td>$fff4</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiAddress, _LoaderApiAddressLow</td></tr>
+<tr>
+<td>$fff5</td><td align="right">1</td><td align="right">1</td><td>_LoaderApiAddressHigh</td></tr>
+<tr>
+<td>$fff6</td><td align="right">1</td><td align="right">1</td><td>_LoaderFDCRegisterOffset</td></tr>
+<tr>
+<td>$fff7</td><td align="right">8</td><td align="right">8</td><td>_LoaderApiLoadFile</td></tr>
+</table>
+</td>
+<td valign=top>
+<a name="Zero"></a>
+<h1>Zero page</h1>
+<table border>
+<tr>
+<th>Adress</th><th colspan="2">Size</th><th>Name</th>
+</tr>
+<tr>
+<td><b>$00</b></td><td colspan="2" align="right">2</td><td>tmp0</td></tr>
+<tr>
+<td>$02</td><td colspan="2" align="right">2</td><td>tmp1</td></tr>
+<tr>
+<td>$04</td><td colspan="2" align="right">2</td><td>tmp2</td></tr>
+<tr>
+<td>$06</td><td colspan="2" align="right">2</td><td>tmp3</td></tr>
+<tr>
+<td>$08</td><td colspan="2" align="right">2</td><td>tmp4</td></tr>
+<tr>
+<td>$0a</td><td colspan="2" align="right">2</td><td>tmp5</td></tr>
+<tr>
+<td>$0c</td><td colspan="2" align="right">2</td><td>tmp6</td></tr>
+<tr>
+<td>$0e</td><td colspan="2" align="right">2</td><td>tmp7</td></tr>
+<tr>
+<td>$10</td><td colspan="2" align="right">2</td><td>i_count, op1</td></tr>
+<tr>
+<td>$12</td><td colspan="2" align="right">2</td><td>op2, row</td></tr>
+<tr>
+<td>$14</td><td colspan="2" align="right">2</td><td>tmp</td></tr>
+<tr>
+<td>$16</td><td colspan="2" align="right">1</td><td>vis_col</td></tr>
+<tr>
+<td>$17</td><td colspan="2" align="right">1</td><td>tile_row, vis_row</td></tr>
+<tr>
+<td>$18</td><td colspan="2" align="right">1</td><td>tile_col</td></tr>
+<tr>
+<td>$19</td><td colspan="2" align="right">1</td><td>irq_detected</td></tr>
+<tr>
+<td>$1a</td><td colspan="2" align="right">1</td><td>plotX</td></tr>
+<tr>
+<td>$1b</td><td colspan="2" align="right">1</td><td>plotY</td></tr>
+<tr>
+<td>$1c</td><td colspan="2" align="right">1</td><td>newPlotX</td></tr>
+<tr>
+<td>$1d</td><td colspan="2" align="right">1</td><td>newPlotY</td></tr>
+<tr>
+<td>$1e</td><td colspan="2" align="right">1</td><td>MouseShown</td></tr>
+<tr>
+<td>$1f</td><td colspan="2" align="right">1</td><td>MouseInvalid</td></tr>
+<tr>
+<td>$20</td><td colspan="2" align="right">1</td><td>clickX</td></tr>
+<tr>
+<td>$21</td><td colspan="2" align="right">1</td><td>clickY</td></tr>
+<tr>
+<td>$22</td><td colspan="2" align="right">1</td><td>MouseClicked</td></tr>
+<tr>
+<td>$23</td><td colspan="2" align="right">85</td><td>SRB</td></tr>
+<tr>
+<td>$78</td><td colspan="2" align="right">8</td><td>backbuffer</td></tr>
+<tr>
+<td>$80</td><td colspan="2" align="right">1</td><td>first_col</td></tr>
+<tr>
+<td>$81</td><td colspan="2" align="right">1</td><td>zpTemp01</td></tr>
+<tr>
+<td>$82</td><td colspan="2" align="right">1</td><td>zpTemp02</td></tr>
+<tr>
+<td>$83</td><td colspan="2" align="right">1</td><td>tmprow</td></tr>
+<tr>
+<td>$84</td><td colspan="2" align="right">2</td><td>lvarp</td></tr>
+<tr>
+<td>$86</td><td colspan="2" align="right">2</td><td>lflagp</td></tr>
+<tr>
+<td>$88</td><td colspan="2" align="right">2</td><td>pRoomData</td></tr>
+<tr>
+<td>$8a</td><td colspan="2" align="right">2</td><td>pRoomTileset</td></tr>
+<tr>
+<td>$8c</td><td colspan="2" align="right">1</td><td>nRoomCols</td></tr>
+<tr>
+<td>$8d</td><td colspan="2" align="right">1</td><td>nZPlanes</td></tr>
+<tr>
+<td>$8e</td><td colspan="2" align="right">8</td><td>pZPlaneData</td></tr>
+<tr>
+<td>$96</td><td colspan="2" align="right">8</td><td>pZPlaneTiles</td></tr>
+<tr>
+<td>$9e</td><td colspan="2" align="right">2</td><td>offsetTilecode</td></tr>
+<tr>
+<td>$a0</td><td colspan="2" align="right">2</td><td>pZPlaneTile</td></tr>
+<tr>
+<td>$a2</td><td colspan="2" align="right">1</td><td>mtmp</td></tr>
+<tr>
+<td>$a3</td><td colspan="2" align="right">1</td><td>flag</td></tr>
+<tr>
+<td>$a4</td><td colspan="2" align="right">2</td><td>screen</td></tr>
+<tr>
+<td>$a6</td><td colspan="2" align="right">1</td><td>res_x</td></tr>
+<tr>
+<td>$a7</td><td colspan="2" align="right">1</td><td>res_y</td></tr>
+<tr>
+<td>$a8</td><td colspan="2" align="right">2</td><td>tmpPointer</td></tr>
+<tr>
+<td>$aa</td><td colspan="2" align="right">1</td><td>MusicPlaying</td></tr>
+<tr>
+<td>$ab</td><td colspan="2" align="right">2</td><td>pBase</td></tr>
+<tr>
+<td>$ad</td><td colspan="2" align="right">2</td><td>pcodes_lo</td></tr>
+<tr>
+<td>$af</td><td colspan="2" align="right">2</td><td>pcodes_hi</td></tr>
+<tr>
+<td>$b1</td><td colspan="2" align="right">2</td><td>zpPointer</td></tr>
+<tr>
+<td>$b3</td><td colspan="2" align="right">1</td><td>snd_tmp</td></tr>
+<tr>
+<td>$b4</td><td colspan="2" align="right">3</td><td>ay_savPitch_hi</td></tr>
+<tr>
+<td>$b7</td><td colspan="2" align="right">3</td><td>ay_savPitch_lo</td></tr>
+<tr>
+<td>$ba</td><td colspan="2" align="right">2</td><td>note2pitchtmp</td></tr>
+<tr>
+<td>$bc</td><td colspan="2" align="right">3</td><td>PList_lo</td></tr>
+<tr>
+<td>$bf</td><td colspan="2" align="right">3</td><td>PList_hi</td></tr>
+<tr>
+<td>$c2</td><td colspan="2" align="right">3</td><td>Pattern_lo</td></tr>
+<tr>
+<td>$c5</td><td colspan="2" align="right">3</td><td>Pattern_hi</td></tr>
+<tr>
+<td>$c8</td><td colspan="2" align="right">3</td><td>ListIndexes</td></tr>
+<tr>
+<td>$cb</td><td colspan="2" align="right">3</td><td>NoteCounters</td></tr>
+<tr>
+<td>$ce</td><td colspan="2" align="right">3</td><td>IsResting</td></tr>
+<tr>
+<td>$d1</td><td colspan="2" align="right">3</td><td>NoteOffset</td></tr>
+<tr>
+<td>$d4</td><td colspan="2" align="right">3</td><td>SetVolume</td></tr>
+<tr>
+<td>$d7</td><td colspan="2" align="right">3</td><td>Priority</td></tr>
+<tr>
+<td>$da</td><td colspan="2" align="right">3</td><td>TimerCounter</td></tr>
+<tr>
+<td>$dd</td><td colspan="2" align="right">3</td><td>Envelopes_lo</td></tr>
+<tr>
+<td>$e0</td><td colspan="2" align="right">3</td><td>Envelopes_hi</td></tr>
+<tr>
+<td>$e3</td><td colspan="2" align="right">3</td><td>Ornaments_lo</td></tr>
+<tr>
+<td>$e6</td><td colspan="2" align="right">3</td><td>Ornaments_hi</td></tr>
+<tr>
+<td>$e9</td><td colspan="2" align="right">3</td><td>Env_p</td></tr>
+<tr>
+<td>$ec</td><td colspan="2" align="right">3</td><td>Orn_p</td></tr>
+<tr>
+<td>$ef</td><td colspan="2" align="right">1</td><td>GlobalVolume</td></tr>
+<tr>
+<td>$f0</td><td colspan="2" align="right">1</td><td>Tempo</td></tr>
+<tr>
+<td>$f1</td><td colspan="2" align="right">1</td><td>SfxFlags</td></tr>
+<tr>
+<td>$f2</td><td align="right">13</td><td align="right">13</td><td>_LoaderUsedZP</td></tr>
+</table>
+</td>
+</tr>
+</table>
+<hr>
+<center>Generated by MemMap version 0.4</center>
+<hr>
+	</BODY>
+</HTML>
