@@ -1,0 +1,66 @@
+
+/* Functions */
+
+Logic & Math:
+sfAdd, sfSub, sfMul, sfDiv
+sfAddCarry, sfSubCarry
+sfAnd, sfOr, sfNot
+sfEqual, sfGE, sfGT, sfLE, sfLT
+sfGetRand
+
+Camera:
+sfGetCameraCol
+sfGetCameraFollowing
+sfGetFadeEffect
+sfIsCameraInAction
+
+Room:
+sfGetCurrentRoom
+sfGetRoomCols
+
+
+Object Control:
+sfGetEgo
+sfGetTalking
+sfGetCol, sfGetRow, sfGetFacing, sfGetRoom, sfGetWalkbox, sfGetCostumeID, sfGetCostumeNo, sfGetState  
+sfIsNotMoving, sfGetClosestObject, sfGetDistance, sfGetObjectInPos
+
+Engine:
+sfIsScriptRunning
+sfIsMusicPlaying
+
+/* Commands */
+
+Flow:
+scAssign
+scIfJump
+scJump
+
+ScriptControl:
+scStopScript, scRestartScript, scWaitEvent, scWaitFor, scWaitForCamera, scWaitForTune, scDelay
+scSpawnScript, scCallScript, scFreezeScripts, scEndScript, scSetEvent
+
+Object Actions:
+scWalkTo, scTalk, scSetPos, scSetRoom, scSetFacing
+scSetAnimState, scSetCostume
+
+Camera Actions:
+scPanCamera
+scSetCameraCol
+scSetFadeEffect
+scFollow
+
+Misc:
+scSetEgo
+scChangeRoom
+scPlayMusic, stStopMusic
+scPlaySfx
+scPrint
+scExecuteAction
+scCursorCommand
+
+Resources:
+scLoadResource
+scNukeResource
+scLockResource
+scUnlockResource

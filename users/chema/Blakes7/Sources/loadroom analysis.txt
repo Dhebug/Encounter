@@ -1,0 +1,32 @@
+What to do in LoadRoom
+SCUMM analysis
+There is a LoadRoom script funciton, but it seems to only ensure
+the associated resource is loaded calling ensureResourceLoaded
+The job is done in LoadRoomWithEgo, which is much more complex
+In script_v5 LoadRoom also calls startScene (room.cpp) which does:
+
+-Stop actors talking
+-Call fadeOut and updates fade effects
+-If there is a script running nukeArrays
+-runExitScript -> runs script number in VAR_EXIT_SCRIPT (script.cpp). It may be a single script with different entry points (?)
+-killScriptsAndResources
+-hides actors and initializes things
+-makes sure the room is loaded (ensureResourceLoaded)
+-clearRoomObjects
+-	setupRoomSubBlocks(); -> setup all the room pointers (also called after restoring game)
+				Also gets pointers to the Entry/Exit scripts (inside the room data)
+				and pointers to all the local scripts
+	resetRoomSubBlocks(); -> other dynamic data of the room (such as walkboxes) which can be modified
+				by scripts, so it cannot be called after restoring a game)
+- resetRoomObjects	-> reads from the room data the local objects, load their resources and setup data. (object.cpp)
+- Sets up room width, heigth, max camera movements, etc.
+- Show Actors
+- Mark ego as not positioned and
+- runEntryScript
+- if game version is 1 or 2 it runs script 5
+- 	
+
+When calling runScript, it also calls runScriptNested which executes until script deschedules. Looking at the above code it seems that both the
+entry and exit scripts are run until descheduled, then all are reset.
+
+
