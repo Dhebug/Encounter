@@ -126,7 +126,11 @@ objectcode PULLEY{
 			//scWaitForActor(BLAKE);
 			scStopScript();
 		}
-		
+	Pull:
+		// Repeat this in case the user tries to pull
+		// Because Use also runs up to here
+		if (bPulleyDone) goto LookAt;
+
 		// Player is trying to open the gate
 		if(sfGetAnimstate(GATE)==0){
 			//Gate is closed, open it.
