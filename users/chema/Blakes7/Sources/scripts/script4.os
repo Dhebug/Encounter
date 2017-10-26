@@ -189,6 +189,12 @@ loop3:
 	scShowVerbs(true);
 	scSave();
 	
+	// Simon's bug report: Saving does not keep walkbox state
+	// So let's do this here, which is executing after load the
+	// above savepoint.
+	scSetWalkboxAsWalkable(1,false);
+	scSetWalkboxAsWalkable(11,false);
+	scSetWalkboxAsWalkable(8,false);
 }
 
 
