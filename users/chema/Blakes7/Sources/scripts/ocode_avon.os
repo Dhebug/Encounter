@@ -100,6 +100,12 @@ objectcode AVON
 		//scWaitForActor(BLAKE);
 		scStopScript();
 	TalkTo:
+		if((!bBallDefeated) && (sfGetCurrentRoom()==ROOM_LIBDECK)){
+			// He is shocked
+			scActorTalk(BLAKE,AVON,1);
+			scStopScript();
+		}
+
 		if(!bAvonIntroduced) {
 			scSpawnScript(202);
 			scStopScript();

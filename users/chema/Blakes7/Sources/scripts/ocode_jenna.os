@@ -47,6 +47,12 @@ objectcode JENNA
 		scStopScript();
 
 	TalkTo:
+		if((!bBallDefeated) && (sfGetCurrentRoom()==ROOM_LIBDECK)){
+			// Se is shocked
+			scActorTalk(BLAKE,JENNA,3);
+			scStopScript();
+		}	
+	
 		// If in cygnus orbit she is trying to handle the ship
 		if(bCygnusOrbit){
 			scCursorOn(false);
