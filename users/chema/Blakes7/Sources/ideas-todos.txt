@@ -8,15 +8,16 @@ From players of version 1.0
 ===========================
 
 - "to heads" instead of "two heads" in the release note text - Manuel teira (DONE)
-- No autosave when you get the map - Steve
+- No autosave when you get the map - Steve (PENDING)
 - Some new typos	- Fabrice (DONE)
-- Telestrat does not boot the game - Fabrice
+- Telestrat does not boot the game - Fabrice (PENDING)
 - Pressing 2 for pickup over inventory item does it! - Fabrice (DONE)
 - Looking at book in Common Room hangs the game - Steve (DONE)
 - Saved game does not include walkbox state - Symoon (DONE: HAD TO PATCH INCLUDING UPDATING AFTER scSave)
 - You can talk to stunned Avon and Jenna - Symoon (DONE: Not sure how this was overlooked)
 - When testing the above, Blake entering Deck appeared at a wrong zplane, behind Avon. (PENDING)
-
+- Redefined keys are not saved in savepoint - Jinks (PENDING)
+- When scrolling, the mouse movements may be too quick and ProcessMouseMoves has no time to clear highlighted verb - Steve (PENDING)
 
 More from Fabrice
 - two characters have a rather similar appearance (Avon and oops I
