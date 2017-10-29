@@ -247,6 +247,11 @@ skip6
 	pha
 	jsr ProcessMouseMoves
 	pla
+
+	ldx SelCurrentObject1
+	cpx #$ff
+	beq skip7
+	
 	; If in inventory, prevent another pickup action (bug in version 1.0)
 	ldx plotY
 	cpx #INVENTORY_AREA_FIRSTLINE
@@ -259,7 +264,7 @@ skip6
 	lda #VERB_LOOKAT
 normal	
 	jsr shortcutentry
-	jmp skip7
+	;jmp skip7
 	; Done with the shortcut code
 skip7	
 	; This is to patch the # of irqs
