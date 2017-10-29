@@ -301,22 +301,16 @@ next2
 	lda plotY
 	cmp #(ROOM_ROWS+1)*8	; This is a hack to avoid 'Walk To Exit' when outside room
 	bcs next3
+
+	cmp #(ROOM_ROWS)*8	; And this to avoid leaving a verb higlighted when scrolling
+	bcs next4
+	ldx #$ff
+	jsr updatehighlightverb
+next4	
 	jmp indrawarea
+
 next3	
 	; Cursor is not on a point in room	
-	; Try to disable the Walk To somewhere
-/*	
-	lda SelCurrentVerb
-	cmp #VERB_WALKTO
-	bne skipwt
-	lda SelCurrentObject1
-	cmp #$ff
-	beq skipwt
-	lda #$ff
-	sta SelCurrentObject1
-	inc SentenceChanged
-skipwt
-*/	
 	lda plotX
 	cmp #INVENTORY_AREA_START
 	bcs ininventoryarea
@@ -345,6 +339,7 @@ skipwt
 	jsr _PlaySfx
 samev	
 */
+updatehighlightverb
 	; Save Chosen Verb id for later
 	stx SaveVCode+1	
 
@@ -545,11 +540,8 @@ found
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 PrintCommandSentence
 .(
-;	sty savy+1
 	lda #SFX_UIA
 	jsr _PlaySfx
-;savy
-;	ldy #0
 
 	; State the sentence has been printed
 	lda #0
@@ -562,11 +554,6 @@ PrintCommandSentence
 	; area
 	jsr ClearCommandArea
 	jsr HideMouse
-	; Place text cursor at the information
-	; line
-	;ldx #6
-	;ldy #(ROOM_ROWS)*8+1
-	;jsr gotoXY
 	
 	; Print verb + space
 	ldx #<verbs
@@ -753,7 +740,7 @@ indrawarea
 	beq check
 	lda SelCurrentObject2
 	cmp SelCurrentObject1
-	bne isok
+	bne isok ; META: This could be simplified to bne doaction, as the cmp #$ff is commented now.
 	lda SelObj1FromInventory
 	cmp SelObj2FromInventory
 	beq noverbchange ;rts above
