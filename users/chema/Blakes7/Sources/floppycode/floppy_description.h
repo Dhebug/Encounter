@@ -63,7 +63,7 @@ FileSizeHigh .byt >15360,>4000,>3053,>166,>89,>550,>555,>2029,>1725,>88,>105,>28
 // Entry #13 '..\build\files\script_10.o'
 // - Starts on  track 6 sector 4 and is 3 sectors long (554 compressed bytes: 85% of 650 bytes).
 // Entry #14 '..\build\files\script_11.o'
-// - Starts on  track 6 sector 7 and is 6 sectors long (1286 compressed bytes: 83% of 1541 bytes).
+// - Starts on  track 6 sector 7 and is 6 sectors long (1287 compressed bytes: 83% of 1541 bytes).
 // Entry #15 '..\build\files\script_15.o'
 // - Starts on  track 6 sector 13 and is 7 sectors long (1653 compressed bytes: 71% of 2325 bytes).
 // Entry #16 '..\build\files\script_16.o'

@@ -192,7 +192,7 @@ stringpack STLOCAL{
 	
 	//3
 	"Now stand back all of you!";
-	"I am aiming a weapon, isn't it?";
+	"I am aiming a weapon, am I not?";
 	"You'll take this ship down to the";
 	"surface.";
 	//7
