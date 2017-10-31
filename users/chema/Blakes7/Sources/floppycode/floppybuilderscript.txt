@@ -17,7 +17,9 @@
 ;
 FormatVersion 0.20
 ;LoadDiskTemplate default.dsk
-DefineDisk 2 40 17 5							; 2 sides, 42 tracks, 17 sectors, interleave 3
+
+; Use 40 tracks so the image works for 3" and 5.25" disks too!
+DefineDisk 2 40 17 5							; 2 sides, 42 tracks, 17 sectors, interleave 5
 ;DefineDisk 2 80 17 5							; 2 sides, 80 tracks, 17 sectors, interleave 5
 
 OutputLayoutFile floppy_description.h
@@ -56,6 +58,7 @@ SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
 
 
 ; BLAKE'7 game disk files
+
 ; OASIS engine and tables
 AddFile ..\build\final.out 
 AddDefine LOADER_GAME_PROGRAM {FileIndex}
@@ -74,7 +77,7 @@ AddDefine LOADER_TABLES {FileIndex}
 AddFile ..\build\files\auxiliar.o 
 AddDefine LOADER_AUXILIAR {FileIndex}
 
-; Global resources
+; Global Scripts
 AddFile ..\build\files\script_0.o 		
 AddDefine LOADER_SCRIPT0 {FileIndex}
 AddFile ..\build\files\script_1.o 	
@@ -99,9 +102,6 @@ AddFile ..\build\files\script_10.o
 AddDefine LOADER_SCRIPT10 {FileIndex}
 AddFile ..\build\files\script_11.o 			
 AddDefine LOADER_SCRIPT11 {FileIndex}
-
-
-; Episode 3
 AddFile ..\build\files\script_15.o 			
 AddDefine LOADER_SCRIPT15 {FileIndex}
 AddFile ..\build\files\script_16.o 			
@@ -116,11 +116,10 @@ AddFile ..\build\files\script_20.o
 AddDefine LOADER_SCRIPT20 {FileIndex}
 AddFile ..\build\files\script_21.o 			
 AddDefine LOADER_SCRIPT21 {FileIndex}
-
 AddFile ..\build\files\script_30.o 			
 AddDefine LOADER_SCRIPT30 {FileIndex}
 
-
+; Text packs
 AddFile ..\build\files\string_main.o 
 AddDefine LOADER_STRINGS {FileIndex}
 AddFile ..\build\files\string_introsvila.o 
@@ -129,8 +128,8 @@ AddFile ..\build\files\string_londonplan.o
 AddDefine LOADER_STRINGSLONDONPLAN {FileIndex}
 AddFile ..\build\files\string_londondlg.o 
 AddDefine LOADER_STRINGSLONDONDLG {FileIndex}
-		
-		
+
+; Object definitions		
 AddFile ..\build\files\obj_blake.o 		
 AddDefine LOADER_OBJBLAKE {FileIndex}
 AddFile ..\build\files\obj_ep2.o 		
@@ -138,7 +137,7 @@ AddDefine LOADER_OBJEP2 {FileIndex}
 AddFile ..\build\files\obj_ep3.o 		
 AddDefine LOADER_OBJEP3 {FileIndex}
 
-
+; Costumes
 AddFile ..\build\files\cos_blake.o 	
 AddDefine LOADER_COSBLAKE {FileIndex}
 AddFile ..\build\files\cos_jenna.o 	
@@ -174,7 +173,7 @@ AddDefine LOADER_COSVARGAS {FileIndex}
 AddFile ..\build\files\cos_monk.o 
 AddDefine LOADER_COSMONK {FileIndex}
 
-
+; Object code scripts
 AddFile ..\build\files\ocode_guard.o 	
 AddDefine LOADER_OCODEGUARD {FileIndex}
 AddFile ..\build\files\ocode_sandwich.o 	
@@ -195,7 +194,6 @@ AddFile ..\build\files\ocode_techcam.o
 AddDefine LOADER_OCODETECHCAM {FileIndex}
 AddFile ..\build\files\ocode_man.o 	
 AddDefine LOADER_OCODEMAN {FileIndex}
-
 AddFile ..\build\files\ocode_vila.o 	
 AddDefine LOADER_OCODEVILA {FileIndex}
 AddFile ..\build\files\ocode_jenna.o 	
@@ -204,8 +202,6 @@ AddFile ..\build\files\ocode_avon.o
 AddDefine LOADER_OCODEAVON {FileIndex}
 AddFile ..\build\files\ocode_gan.o 	
 AddDefine LOADER_OCODEGAN {FileIndex}
-
-
 AddFile ..\build\files\ocode_ypipe.o 	
 AddDefine LOADER_OCODEYPIPE {FileIndex}
 AddFile ..\build\files\ocode_bearing.o 	
@@ -220,15 +216,12 @@ AddFile ..\build\files\ocode_gun.o
 AddDefine LOADER_OCODEGUN {FileIndex}
 AddFile ..\build\files\ocode_bracelets.o 	
 AddDefine LOADER_OCODEBRACELETS {FileIndex}
-
 AddFile ..\build\files\ocode_transmitter.o 	
 AddDefine LOADER_OCODETRANSMITTER {FileIndex}
 AddFile ..\build\files\ocode_drone.o 	
 AddDefine LOADER_OCODEDRONE {FileIndex}
 AddFile ..\build\files\ocode_wswitch.o 	
 AddDefine LOADER_OCODEWSWITCH {FileIndex}
-
-
 AddFile ..\build\files\ocode_ballrobot.o 	
 AddDefine LOADER_OCODEBALLROBOT {FileIndex}
 AddFile ..\build\files\ocode_pliers.o 	
@@ -249,7 +242,6 @@ AddFile ..\build\files\ocode_log.o
 AddDefine LOADER_OCODELOG {FileIndex}
 AddFile ..\build\files\ocode_cup.o 	
 AddDefine LOADER_OCODECUP {FileIndex}
-
 AddFile ..\build\files\ocode_guard2.o 	
 AddDefine LOADER_OCODEGUARD2 {FileIndex}
 AddFile ..\build\files\ocode_uniform.o 	
@@ -261,15 +253,13 @@ AddDefine LOADER_OCODETRASPONDER {FileIndex}
 AddFile ..\build\files\ocode_ecell.o 	
 AddDefine LOADER_OCODEECELL {FileIndex}
 
+; Musics
 AddFile ..\build\files\main_theme.o 		
 AddDefine LOADER_MAINTHEME {FileIndex}
-
 AddFile ..\build\files\endep_theme.o 		
 AddDefine LOADER_ENDEPTHEME {FileIndex}
-
 AddFile ..\build\files\final_theme.o 		
 AddDefine LOADER_FINALTHEME {FileIndex}
-
 AddFile ..\build\files\fedmarch_theme.o 		
 AddDefine LOADER_FEDMARCHTHEME {FileIndex}
 
@@ -327,7 +317,6 @@ AddDefine LOADER_ROOM24 {FileIndex}
 AddFile ..\build\files\room_liberatorcargo.o 
 AddDefine LOADER_ROOM25 {FileIndex}
 
-
 AddFile ..\build\files\room_caexterior.o 
 AddDefine LOADER_ROOM30 {FileIndex}
 AddFile ..\build\files\room_capit.o 
@@ -345,6 +334,7 @@ AddDefine LOADER_ROOM36 {FileIndex}
 AddFile ..\build\files\room_cacells.o 
 AddDefine LOADER_ROOM37 {FileIndex}
 
+; Episode 3
 AddFile ..\build\files\room_episode3.o 
 AddDefine LOADER_ROOM40 {FileIndex}
 AddFile ..\build\files\room_forest.o 
@@ -361,7 +351,6 @@ AddDefine LOADER_ROOM45 {FileIndex}
 AddFile ..\build\files\room_cellcorridor.o 
 AddDefine LOADER_ROOM47 {FileIndex}
 
-
 AddFile ..\build\files\room_service.o 
 AddDefine LOADER_ROOM49 {FileIndex}
 AddFile ..\build\files\room_toilet.o 
@@ -374,12 +363,11 @@ AddFile ..\build\files\room_cellentry.o
 AddDefine LOADER_ROOM53 {FileIndex}
 AddFile ..\build\files\room_cellentry2.o 
 AddDefine LOADER_ROOM54 {FileIndex}
-
 AddFile ..\build\files\room_epilogue.o 
 AddDefine LOADER_ROOM55 {FileIndex}
 
 ;
-; Some reserved sectors
+; Some reserved sectors for savepoint
 ;
 ReserveSectors 7                                    ; 7 sectors
 AddDefine LOADER_SAVESPACE {FileIndex}
