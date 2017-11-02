@@ -445,11 +445,11 @@ GenericIJKBits
 
 loading_msg
 #ifdef ENGLISH
-.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.1- Loading game data.. please wait",0
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.2- Loading game data.. please wait",0
 #endif
 
 #ifdef SPANISH
-.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.1- Cargando el juego... un segundo",0
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.2- Cargando el juego... un segundo",0
 #endif
 
 #ifdef IJK_SUPPORT

@@ -120,10 +120,15 @@ _LoaderTemporaryStart
 	lda #<FDC_JASMIN_command_register
 	sta 1+__fdc_command_1
 	sta 1+__fdc_command_2
+	sta 1+__fdc_command_3
 
 	lda #<FDC_JASMIN_status_register
 	sta 1+__fdc_status_1
 	sta 1+__fdc_status_2
+	sta 1+__fdc_status_3
+	sta 1+__fdc_status_4
+	sta 1+__fdc_status_w
+	
 
 	lda #<FDC_JASMIN_track_register
 	sta 1+__fdc_track_1
@@ -147,6 +152,7 @@ _LoaderTemporaryStart
 
 	lda #FDC_JASMIN_Flag_DiscSide
 	sta 1+__fdc_discside
+	sta 1+__fdc_discside1
 
 end_jasmin_init	
 
@@ -225,6 +231,7 @@ __fdc_flags_1
 	lda _LoaderApiFileStartTrack    ; If the track id is larger than 128, it means it is on the other side of the floppy
 	bpl first_side
 	; The file starts on the second side
+__fdc_discside1	
 	ldy #FDC_Flag_DiscSide	    	; Side 1
 	and #%01111111              	; Mask out the extra bit
 first_side
@@ -312,15 +319,18 @@ waitc
 	; What if there is a seek error???
 	; Do the restore_track0 code
 	PROTECT(FDC_status_register)
+__fdc_status_3	
 	lda FDC_status_register
 	and #$18
 	beq stay_on_the_track
 restore_track0		
 	lda #$0c
 	PROTECT(FDC_command_register)
+__fdc_command_3
 	sta FDC_command_register
 	jsr WaitCompletion
 	PROTECT(FDC_status_register)
+__fdc_status_4	
 	lda FDC_status_register
 	and #$10
 	bne restore_track0
@@ -533,6 +543,7 @@ ReadNextSector
 	; CHEMA: loading picture
 	jsr PutLoadPic
 	jsr PrepareTrack
+RetryRead
 __fdc_readsector
 	lda #CMD_ReadSector
 	PROTECT(FDC_command_register)
@@ -557,14 +568,21 @@ __fdc_data_2
 	inx
 	bne loop_read_sector
 
-	; CHEMA: And enable them back
-	cli
+	; Added a loop to wait for the command to finish, as suggeested by Fabrice
 	PROTECT(FDC_status_register)
+busyloop	
 __fdc_status_1
 	lda FDC_status_register
+	lsr
+	bcs busyloop
+	asl	
+
+	; CHEMA: And enable them back
+	cli
+	
 	and #$7c ; Chema changed the original vaue: 1C
 	; Chema: If error repeat forever:
-	bne __fdc_readsector
+	bne RetryRead
 	; CHEMA commented this: 
 	;jsr WaitCompletion
 	;cli
@@ -668,14 +686,14 @@ __fdc_data_w
 	; the command register, because we have been writing 256 bytes to disc, and
 	; it was enough time.
 	PROTECT(FDC_status_register)
+IsBusy	
 __fdc_status_w
 	lda FDC_status_register
-	;bmi __fdc_status_w	; If s7 (NOT READY) is not zero, wait (S7= /READY OR MR).
 	lsr
-	bcs __fdc_status_w	; If S0 (BUSY) is not zero, wait
+	bcs IsBusy	; If S0 (BUSY) is not zero, wait
 	asl
 	and #$7c ; Chema changed the original vaue: 1C
-	bne loopwrite ;__fdc_writesector ; Chema: If error repeat forever:
+	bne loopwrite ; Chema: If error repeat forever:
 	
 	; Now onto next sector
 	inc ptr_destination+1
