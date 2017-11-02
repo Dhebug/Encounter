@@ -247,8 +247,14 @@ __auto_write_address
 	bne fetch_bytes_from_FDC
 	; Done loading the sector
 	
+	; Added a wait for the command to finish, as suggested by Fabrice
 	PROTECT(FDC_status_register)
+busyloop	
 	lda FDC_status_register
+	lsr
+	bcs busyloop
+	asl	
+	
 	and #$7C	; CHEMA: this does not correctly check for errors, see loader.asm it should be (imho) and #$7c, not $1c
 	beq sector_OK
 	dec retry_counter
