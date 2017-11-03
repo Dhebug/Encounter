@@ -240,7 +240,13 @@ waitcommand2
 
 #ifdef CHECK_PARTIAL_SECTOR_LOADING
 	; Chema: this is only needed if checking for partial
-	; loading of a sector
+	; loading of a sector, as we cannot check the STATUS
+	; directly after issuing a command. 
+	; Fabrice provided this table and the code, which takes 21 cycles+extra (ldx and lda below) :
+	; Operation	Next Operation	Delay required (MFM mode)
+	; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
+	; Write to Command Reg.	Read Status bits 1-7	32 µsec
+	; Write Register	Read Same Register	16 µsec
 	ldy #4	
 tempoloop 
 	dey
@@ -250,7 +256,6 @@ tempoloop
 	; Read the sector data
 	;
 	ldy #0
-	
 #ifndef CHECK_PARTIAL_SECTOR_LOADING	
 fetch_bytes_from_FDC
 	lda FDC_drq
