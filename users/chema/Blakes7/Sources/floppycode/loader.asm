@@ -14,6 +14,13 @@
 #define PROTECT13(X)
 #endif
 
+; This is to use the code that checks if an error occurs while loading a sector,
+; so that not all the bytes are tranferred. It checks for the Ready bit in the STATUS
+; which would signal an END OF COMMAND if there is such an error, instead of 
+; finishing when 256 bytes are read.
+; This was suggested by Fabrice Frances
+#define CHECK_PARTIAL_SECTOR_LOADING
+
 ;
 ; VIA registers definition
 ;
@@ -146,6 +153,7 @@ _LoaderTemporaryStart
 
 	lda #<FDC_JASMIN_drq
 	sta 1+__fdc_drq_1
+	sta 1+__fdc_drq_w
 
 	lda #CMD_JASMIN_ReadSector
 	sta 1+__fdc_readsector
@@ -550,13 +558,23 @@ __fdc_readsector
 __fdc_command_2
 	sta FDC_command_register
 
-	; Chema: this is not needed
-	;jsr WaitCommand
+	; CHEMA: This is not needed
+	; jsr WaitCommand
+	
+#ifdef CHECK_PARTIAL_SECTOR_LOADING
+	; Chema: this is only needed if checking for partial
+	; loading of a sector
+	ldy #4	
+tempoloop 
+	dey
+	bne tempoloop 	
+#endif
 
 	; Read the sector data
 	; CHEMA: this is the critical section. Disable IRQs here
 	sei
 	ldx #0
+#ifndef CHECK_PARTIAL_SECTOR_LOADING
 loop_read_sector
 __fdc_drq_1
 	lda FDC_drq
@@ -575,12 +593,33 @@ __fdc_status_1
 	lda FDC_status_register
 	lsr
 	bcs busyloop
-	asl	
-
-	; CHEMA: And enable them back
+#else
+	; This is the code suggested by Fabrice, which
+	; makes use of the STATUS bit to check when the command
+	; finishes, so not only the status flags are correct after
+	; computing CRC, but also if it is aborted due to a read error
+	PROTECT(FDC_status_register)	
+checkbusy	
+__fdc_status_1
+	lda FDC_status_register
+	lsr
+	bcc end_of_command
+waitdrq	
+__fdc_drq_1
+	lda FDC_drq
+	bmi checkbusy
+	PROTECT(FDC_data)
+__fdc_data_2    
+	lda FDC_data
+	sta LOADER_SECTOR_BUFFER,x 		; Store the byte in the sector buffer
+	inx
+	jmp waitdrq
+end_of_command
+#endif	
+	;asl	
+	; CHEMA: And enable interrupts back
 	cli
-	
-	and #$7c ; Chema changed the original vaue: 1C
+	and #($7c>>1) ; Chema changed the original vaue: 1C
 	; Chema: If error repeat forever:
 	bne RetryRead
 	; CHEMA commented this: 
