@@ -20,6 +20,12 @@
 #define PROTECT(X) 
 #endif
 
+; This is to use the code that checks if an error occurs while loading a sector,
+; so that not all the bytes are tranferred. It checks for the Ready bit in the STATUS
+; which would signal an END OF COMMAND if there is such an error, instead of 
+; finishing when 256 bytes are read.
+; This was suggested by Fabrice Frances
+#define CHECK_PARTIAL_SECTOR_LOADING
 
 #define OPCODE_RTS			$60
 
@@ -222,19 +228,30 @@ __auto__sector_index
 	PROTECT(FDC_command_register)
 	sta FDC_command_register
 
-	/* CHEMA: this is not needed
+	; CHEMA: This is not needed
+/*	
 	ldy #wait_status_floppy
-waitcommand
+waitcommand2
 	nop 					; Not useful but for old Floppy drive maybe
 	nop 					; Not useful but for old Floppy drive maybe
 	dey	
-	bne waitcommand
-	*/
-	
+	bne waitcommand2
+*/	
+
+#ifdef CHECK_PARTIAL_SECTOR_LOADING
+	; Chema: this is only needed if checking for partial
+	; loading of a sector
+	ldy #4	
+tempoloop 
+	dey
+	bne tempoloop 	
+#endif
 	;
 	; Read the sector data
 	;
 	ldy #0
+	
+#ifndef CHECK_PARTIAL_SECTOR_LOADING	
 fetch_bytes_from_FDC
 	lda FDC_drq
 	bmi fetch_bytes_from_FDC
@@ -253,9 +270,28 @@ busyloop
 	lda FDC_status_register
 	lsr
 	bcs busyloop
-	asl	
-	
-	and #$7C	; CHEMA: this does not correctly check for errors, see loader.asm it should be (imho) and #$7c, not $1c
+#else
+	; Added the code suggested by Fabrice to deal with
+	; sectors which are loaded only partially
+	PROTECT(FDC_status_register)
+checkbusy	
+	lda FDC_status_register
+	lsr
+	bcc end_of_command
+waitdrq
+	lda FDC_drq
+	bmi checkbusy
+	PROTECT(FDC_data)
+	lda FDC_data
+__auto_write_address
+	sta FLOPPY_LOADER_ADDRESS,y
+	iny
+	jmp waitdrq
+end_of_command	
+	; Done loading the sector
+#endif	
+	;asl
+	and #($7C>>1)	; CHEMA: this does not correctly check for errors, see loader.asm it should be (imho) and #$7c, not $1c
 	beq sector_OK
 	dec retry_counter
 	bne readretryloop
@@ -269,7 +305,7 @@ sector_OK
 	;
 	; Data successfully loaded (we hope)
 	;
-	sei
+	;sei
 	lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
 	sta FDC_flags
 	
