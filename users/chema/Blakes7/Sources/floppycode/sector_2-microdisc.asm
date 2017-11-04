@@ -20,13 +20,7 @@
 #define PROTECT(X) 
 #endif
 
-; This is to use the code that checks if an error occurs while loading a sector,
-; so that not all the bytes are tranferred. It checks for the Ready bit in the STATUS
-; which would signal an END OF COMMAND if there is such an error, instead of 
-; finishing when 256 bytes are read.
-; This was suggested by Fabrice Frances
-#define CHECK_PARTIAL_SECTOR_LOADING
-
+#define OPCODE_RTS			$60
 #define OPCODE_RTS			$60
 
 #define FDC_command_register		$0310
@@ -238,8 +232,7 @@ waitcommand2
 	bne waitcommand2
 */	
 
-#ifdef CHECK_PARTIAL_SECTOR_LOADING
-	; Chema: this is only needed if checking for partial
+	; Chema: this loop is needed if checking for partial
 	; loading of a sector, as we cannot check the STATUS
 	; directly after issuing a command. 
 	; Fabrice provided this table and the code, which takes 21 cycles+extra (ldx and lda below) :
@@ -256,26 +249,6 @@ tempoloop
 	; Read the sector data
 	;
 	ldy #0
-#ifndef CHECK_PARTIAL_SECTOR_LOADING	
-fetch_bytes_from_FDC
-	lda FDC_drq
-	bmi fetch_bytes_from_FDC
-	PROTECT(FDC_data)
-	lda FDC_data
-__auto_write_address
-	sta FLOPPY_LOADER_ADDRESS,y
-
-	iny
-	bne fetch_bytes_from_FDC
-	; Done loading the sector
-	
-	; Added a wait for the command to finish, as suggested by Fabrice
-	PROTECT(FDC_status_register)
-busyloop	
-	lda FDC_status_register
-	lsr
-	bcs busyloop
-#else
 	; Added the code suggested by Fabrice to deal with
 	; sectors which are loaded only partially
 	PROTECT(FDC_status_register)
@@ -294,7 +267,6 @@ __auto_write_address
 	jmp waitdrq
 end_of_command	
 	; Done loading the sector
-#endif	
 	;asl
 	and #($7C>>1)	; CHEMA: this does not correctly check for errors, see loader.asm it should be (imho) and #$7c, not $1c
 	beq sector_OK
