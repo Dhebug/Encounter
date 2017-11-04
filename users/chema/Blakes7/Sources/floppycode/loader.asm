@@ -14,13 +14,6 @@
 #define PROTECT13(X)
 #endif
 
-; This is to use the code that checks if an error occurs while loading a sector,
-; so that not all the bytes are tranferred. It checks for the Ready bit in the STATUS
-; which would signal an END OF COMMAND if there is such an error, instead of 
-; finishing when 256 bytes are read.
-; This was suggested by Fabrice Frances
-#define CHECK_PARTIAL_SECTOR_LOADING
-
 ;
 ; VIA registers definition
 ;
@@ -564,12 +557,11 @@ __fdc_command_2
 	; CHEMA: This is not needed
 	; jsr WaitCommand
 	
-#ifdef CHECK_PARTIAL_SECTOR_LOADING
-	; Chema: this is only needed if checking for partial
+	; Chema: this loop is needed if checking for partial
 	; loading of a sector, as we cannot check the STATUS
 	; directly after issuing a command. 
 	; Fabrice provided this table and the code, which takes 21 cycles+extra (ldx and lda below) :
-	; Operation	Next Operation	Delay required (MFM mode)
+	; Operation		Next Operation		Delay required (MFM mode)
 	; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
 	; Write to Command Reg.	Read Status bits 1-7	32 µsec
 	; Write Register	Read Same Register	16 µsec
@@ -577,30 +569,9 @@ __fdc_command_2
 tempoloop 
 	dey
 	bne tempoloop 	
-#endif
 
 	; Read the sector data
 	ldx #0
-#ifndef CHECK_PARTIAL_SECTOR_LOADING
-loop_read_sector
-__fdc_drq_1
-	lda FDC_drq
-	bmi loop_read_sector
-	PROTECT(FDC_data)
-__fdc_data_2    
-	lda FDC_data
-	sta LOADER_SECTOR_BUFFER,x 		; Store the byte in the sector buffer
-	inx
-	bne loop_read_sector
-
-	; Added a loop to wait for the command to finish, as suggeested by Fabrice
-	PROTECT(FDC_status_register)
-busyloop	
-__fdc_status_1
-	lda FDC_status_register
-	lsr
-	bcs busyloop
-#else
 	; This is the code suggested by Fabrice, which
 	; makes use of the STATUS bit to check when the command
 	; finishes, so not only the status flags are correct after
@@ -622,7 +593,6 @@ __fdc_data_2
 	inx
 	jmp waitdrq
 end_of_command
-#endif	
 	;asl	
 	and #($7c>>1) ; Chema changed the original vaue: 1C
 	; Chema: If error repeat forever:
