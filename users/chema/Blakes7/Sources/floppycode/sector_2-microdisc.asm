@@ -244,7 +244,6 @@ waitcommand2
 tempoloop 
 	dey
 	bne tempoloop 	
-#endif
 	;
 	; Read the sector data
 	;
