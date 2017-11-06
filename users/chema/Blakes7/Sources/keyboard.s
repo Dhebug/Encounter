@@ -116,6 +116,7 @@ all_tests_done
 #else
 	;Clear IRQ event 
 	lda via_t1cl 
+	;bit $03F7
 #endif	
 	; Signal an interrupt has been detected
 	; This serves the purpose of timing and 

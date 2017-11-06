@@ -9,9 +9,11 @@
 #ifdef TELESTRAT_ALIGN
 #define PROTECT(X)  	.dsb (((X)&3)-((*+3)&3))&3,$ea
 #define PROTECT13(X)	.dsb (((X)&3)-((*+13)&3))&3,$ea
+#define PROTECT6(X)	.dsb (((X)&3)-((*+6)&3))&3,$ea
 #else
 #define PROTECT(X) 
 #define PROTECT13(X)
+#define PROTECT6(X)
 #endif
 
 ;
@@ -121,6 +123,7 @@ _LoaderTemporaryStart
 	sta 1+__fdc_command_1
 	sta 1+__fdc_command_2
 	sta 1+__fdc_command_3
+	sta 1+__fdc_command_w
 
 	lda #<FDC_JASMIN_status_register
 	sta 1+__fdc_status_1
@@ -139,14 +142,15 @@ _LoaderTemporaryStart
 	lda #<FDC_JASMIN_data
 	sta 1+__fdc_data_1
 	sta 1+__fdc_data_2
+	sta 1+__fdc_data_w
 
 	lda #<FDC_JASMIN_flags
 	sta 1+__fdc_flags_1
 	sta 1+__fdc_flags_2
 
-	lda #<FDC_JASMIN_drq
-	sta 1+__fdc_drq_1
-	sta 1+__fdc_drq_w
+	;lda #<FDC_JASMIN_drq
+	;sta 1+__fdc_drq_1
+	;sta 1+__fdc_drq_w
 
 	lda #CMD_JASMIN_ReadSector
 	sta 1+__fdc_readsector
@@ -571,30 +575,42 @@ tempoloop
 	bne tempoloop 	
 
 	; Read the sector data
-	ldx #0
+
 	; This is the code suggested by Fabrice, which
 	; makes use of the STATUS bit to check when the command
 	; finishes, so not only the status flags are correct after
-	; computing CRC, but also if it is aborted due to a read error
-	PROTECT(FDC_status_register)	
-checkbusy	
+	; computing CRC, but also if it is aborted due to a read error.
+	; Additionaly, to support the Jasmin, DRQ at FDC_drq cannot be polled
+	; as this signal is not exhibited in any address. One should use bit 1 
+	; of the Status register. BTW, Fabrice provided a code that, after aligning
+	; the first access to the status register, does not need more nops for the data register
+	; so timing for the read loop is correct. In his own words:
+	; Worst case delay :
+	; lda status (2), lsr (2), ror (2), bcc (3), bpl (2), lda status (4), lsr (2), ror (2), bcc (2), lda data (4)
+	; => 25 cycles, that's not bad !
+	; (yeap, I tweaked the code for proper alignment :-)
+
+	ldx #0
+	beq waitdrq   ;<--- always jumps
+checkbusy
+	bpl end_of_command
+	PROTECT(FDC_status_register)
+waitdrq
 __fdc_status_1
 	lda FDC_status_register
 	lsr
-	bcc end_of_command
-waitdrq	
-__fdc_drq_1
-	lda FDC_drq
-	bmi checkbusy
+	ror
+	bcc checkbusy
+	
 	PROTECT(FDC_data)
 __fdc_data_2    
 	lda FDC_data
-	sta LOADER_SECTOR_BUFFER,x 		; Store the byte in the sector buffer
+	sta LOADER_SECTOR_BUFFER,x ; Store the byte in the sector buffer
 	inx
 	jmp waitdrq
 end_of_command
-	;asl	
-	and #($7c>>1) ; Chema changed the original vaue: 1C
+	and #($7c>>2) ; Chema changed the original vaue: 1C
+	
 	; Chema: If error repeat forever:
 	bne RetryRead
 	
@@ -663,7 +679,7 @@ IrqDoNothing
 ; I am re-using the var ptr_destination, though it
 ; is now the ptr to the buffer to write.
 WriteData
-
+/*
 	; Flag we want to start avoiding the cumulus bug in the write sector command
 	inc avoid_cumulus_bug
 	
@@ -709,8 +725,60 @@ __fdc_status_w
 	lda FDC_status_register
 	lsr
 	bcs IsBusy	; If S0 (BUSY) is not zero, wait
-	asl
-	and #$7c ; Chema changed the original vaue: 1C
+	;asl
+	and #($7c>>1) ; Chema changed the original vaue: 1C
+	bne loopwrite ; Chema: If error repeat forever:
+	
+	; Now onto next sector
+	inc ptr_destination+1
+	dec _LoaderApiFileSizeHigh
+	bne loopwrite
+	
+	; Flag we want to stop avoiding the cumulus bug in the write sector command
+	dec avoid_cumulus_bug
+	
+	; Clear loading pic and return
+	jmp ClearLoadingPic	; This is jsr/rts
+*/
+
+	; Flag we want to start avoiding the cumulus bug in the write sector command
+	inc avoid_cumulus_bug
+	
+	jsr SetSideTrackSector
+	lda _LoaderApiAddressLow
+	sta ptr_destination+0
+	lda _LoaderApiAddressHigh
+	sta ptr_destination+1
+loopwrite	
+	jsr PutLoadPic
+	jsr PrepareTrack
+
+	; Writes a sector to disk.
+__fdc_writesector
+	lda #CMD_WriteSector
+	PROTECT(FDC_command_register)
+__fdc_command_w
+	sta FDC_command_register
+	; Write the sector data. Again the critical section.
+	PROTECT6(FDC_status_register)
+	sei
+	ldy #0
+waitdrqw
+__fdc_status_w
+	lda FDC_status_register
+	bpl end_of_commandw
+	lsr
+	ror
+	bcc waitdrqw
+
+	lda (ptr_destination),y
+__fdc_data_w	
+	sta FDC_data
+	iny
+	jmp waitdrqw
+end_of_commandw
+	cli
+	and #($7c>>2) ; Chema changed the original vaue: 1C
 	bne loopwrite ; Chema: If error repeat forever:
 	
 	; Now onto next sector
