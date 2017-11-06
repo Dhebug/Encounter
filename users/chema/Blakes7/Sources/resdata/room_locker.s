@@ -283,7 +283,7 @@ tiles_start
 ; Walkbox Data
 wb_data
 	.byt 001, 015, 014, 016, $01
-	.byt 016, 032, 015, 016, $01
+	.byt 016, 029, 015, 016, $01
 ; Walk matrix
 wb_matrix
 	.byt 0, 1
