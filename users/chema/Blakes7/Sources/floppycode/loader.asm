@@ -679,68 +679,6 @@ IrqDoNothing
 ; I am re-using the var ptr_destination, though it
 ; is now the ptr to the buffer to write.
 WriteData
-/*
-	; Flag we want to start avoiding the cumulus bug in the write sector command
-	inc avoid_cumulus_bug
-	
-	jsr SetSideTrackSector
-	lda _LoaderApiAddressLow
-	sta ptr_destination+0
-	lda _LoaderApiAddressHigh
-	sta ptr_destination+1
-loopwrite	
-	jsr PutLoadPic
-	jsr PrepareTrack
-
-	; Writes a sector to disk.
-__fdc_writesector
-	lda #CMD_WriteSector
-	PROTECT(FDC_command_register)
-__fdc_command_w
-	sta FDC_command_register
-	; Write the sector data. Again the critical section.
-	PROTECT13(FDC_data)
-	sei
-	ldy #0
-loop_write_sector
-	lda (ptr_destination),y
-__fdc_drq_w 
-	bit FDC_drq
-	bmi __fdc_drq_w
-__fdc_data_w	
-	sta FDC_data
-	iny
-	bne loop_write_sector
-
-	cli
-	
-	; Okay we cannot poll $314 bit 7 (why? sure?). We have to use the busy bit
-	; again, but we also need the value of other bits to check for errors.
-	; I am going to suppose that we don't need to wait 24us after the write to
-	; the command register, because we have been writing 256 bytes to disc, and
-	; it was enough time.
-	PROTECT(FDC_status_register)
-IsBusy	
-__fdc_status_w
-	lda FDC_status_register
-	lsr
-	bcs IsBusy	; If S0 (BUSY) is not zero, wait
-	;asl
-	and #($7c>>1) ; Chema changed the original vaue: 1C
-	bne loopwrite ; Chema: If error repeat forever:
-	
-	; Now onto next sector
-	inc ptr_destination+1
-	dec _LoaderApiFileSizeHigh
-	bne loopwrite
-	
-	; Flag we want to stop avoiding the cumulus bug in the write sector command
-	dec avoid_cumulus_bug
-	
-	; Clear loading pic and return
-	jmp ClearLoadingPic	; This is jsr/rts
-*/
-
 	; Flag we want to start avoiding the cumulus bug in the write sector command
 	inc avoid_cumulus_bug
 	
