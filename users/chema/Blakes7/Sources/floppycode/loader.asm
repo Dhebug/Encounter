@@ -8,12 +8,10 @@
 #define TELESTRAT_ALIGN
 #ifdef TELESTRAT_ALIGN
 #define PROTECT(X)  	.dsb (((X)&3)-((*+3)&3))&3,$ea
-#define PROTECT13(X)	.dsb (((X)&3)-((*+13)&3))&3,$ea
-#define PROTECT6(X)	.dsb (((X)&3)-((*+6)&3))&3,$ea
+#define PROTECT2(X,Y)	.dsb (((X)&3)-((*+(Y)+3)&3))&3,$ea
 #else
-#define PROTECT(X) 
-#define PROTECT13(X)
-#define PROTECT6(X)
+#define PROTECT(X)
+#define PROTECT2(X,Y) 
 #endif
 
 ;
@@ -131,6 +129,7 @@ _LoaderTemporaryStart
 	sta 1+__fdc_status_3
 	sta 1+__fdc_status_4
 	sta 1+__fdc_status_w
+	sta 1+__fdc_status_w2
 	
 
 	lda #<FDC_JASMIN_track_register
@@ -592,9 +591,9 @@ tempoloop
 
 	ldx #0
 	beq waitdrq   ;<--- always jumps
+	PROTECT2(FDC_status_register,2)
 checkbusy
 	bpl end_of_command
-	PROTECT(FDC_status_register)
 waitdrq
 __fdc_status_1
 	lda FDC_status_register
@@ -675,8 +674,7 @@ IrqDoNothing
 ; directly to disk (no buffering)
 ; so deals with 256-byte chunks only
 ;-------------------------------------	
-; CHEMA: Okay, 1st attempt for writting routine
-; I am re-using the var ptr_destination, though it
+; CHEMA: I am re-using the var ptr_destination, though it
 ; is now the ptr to the buffer to write.
 WriteData
 	; Flag we want to start avoiding the cumulus bug in the write sector command
@@ -691,34 +689,92 @@ loopwrite
 	jsr PutLoadPic
 	jsr PrepareTrack
 
+	; Begin of critical section
+	sei
+retrywrite	
 	; Writes a sector to disk.
 __fdc_writesector
 	lda #CMD_WriteSector
 	PROTECT(FDC_command_register)
 __fdc_command_w
 	sta FDC_command_register
-	; Write the sector data. Again the critical section.
-	PROTECT6(FDC_status_register)
-	sei
-	ldy #0
+	
+	; According to the datasheet table of needed delays:
+	; Write to Command Reg.	Read Status bits 1-7	32 µsec
+	; The next loop is 31, plus some extra due to the lda/tax
+	; In fact 6 iterations should also do, but this is working
+	; on real hard, so...
+	ldy #7	;2
+w_wait_completion
+	dey	;2
+	bne w_wait_completion ;2+1
+	; = 31 cycles	
+	; ldy #0
+	PROTECT2(FDC_status_register,3)	
+next_byte
+	lda (ptr_destination),y
+	tax
 waitdrqw
 __fdc_status_w
 	lda FDC_status_register
-	bpl end_of_commandw
+	lsr 
+	; We can't test end of command here, as the alingment would add 
+	; 2 nops: too much time.
+	; Check Drq
 	lsr
-	ror
+	bcc waitdrqw
+
+	PROTECT(FDC_data)
+__fdc_data_w	
+	stx FDC_data
+	iny
+	bne next_byte
+end_of_commandw
+	PROTECT(FDC_status_register)	
+__fdc_status_w2
+	lda FDC_status_register
+	and #($3c) ; Chema changed the original vaue: 1C
+	bne retrywrite ; Chema: If error repeat forever:
+	
+/*	
+	; This is the correct loop, which keeps track of all kind
+	; of errors, as it is done when reading data.
+	; However, it is necessary to feed data at the disk
+	; rate, which is (in double density) 250 Kbps, that is
+	; 1 byte ~every 30 usec.
+	; To Fabrice's calculations for reading in the worst case
+	; we must add 5+1 cycles due to the lda (ptr),y and that is
+	; too much: 25 cycles+5 is already 30 usec, add 1 if a page boundary
+	; is crossed.
+	; It might be possible to use self-modifying code here and change
+	; the addressing mode to absolute indexed to gain 1 cicle, but it is
+	; still too close for my taste. Maybe to absolute could do, but there are 3 extra
+	; cycles due to the inc addr vs iny.
+
+	;ldy #0
+	PROTECT(FDC_status_register)	
+waitdrqw
+__fdc_status_w
+	lda FDC_status_register
+	; Check busy
+	lsr 
+	bcc end_of_commandw
+	; Check Drq
+	lsr
 	bcc waitdrqw
 
 	lda (ptr_destination),y
+	PROTECT(FDC_data)
 __fdc_data_w	
 	sta FDC_data
 	iny
 	jmp waitdrqw
 end_of_commandw
-	cli
-	and #($7c>>2) ; Chema changed the original vaue: 1C
-	bne loopwrite ; Chema: If error repeat forever:
-	
+	and #($3c>>2) ; Chema changed the original vaue: 1C
+	bne retrywrite ; Chema: If error repeat forever:
+*/
+
+	cli	
 	; Now onto next sector
 	inc ptr_destination+1
 	dec _LoaderApiFileSizeHigh

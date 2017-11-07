@@ -132,7 +132,7 @@ track_ok
 
 	; This was needed for real Microdisc, I copied it here
 	; Chema: Here is the thing... the COLOR macro takes 14 cycles...
-	; This one is much much longer if wait_status_floppy (30) is used...
+	; This one is a bit longer
 	ldy #3
 waitcommand
 	dey	;2

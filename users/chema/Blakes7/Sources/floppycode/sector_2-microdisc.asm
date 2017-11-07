@@ -184,8 +184,8 @@ r2_wait_completion
 	bcs r2_wait_completion
 	asl
 	*/
-	; Chema: According to the sheet you have to wait 24us before reading the status after a write to 
-	; a command register.
+	; Chema: According to the sheet you have to wait 24us before reading the status
+	;  bit 0 (BUSY) after a write to a command register.
 	ldy #5	;2
 r_wait_completion
 	dey	;2
@@ -199,7 +199,7 @@ r2_wait_completion
 track_ok	
 
 	; Chema: Here is the thing... the COLOR macro takes 14 cycles...
-	; This one is much much longer if wait_status_floppy (30) is used...
+	; This one is a bit longer. I don't know why this has to be put here, but...
 	ldy #3
 waitcommand
 	dey	;2
@@ -235,7 +235,7 @@ waitcommand2
 	; Chema: this loop is needed if checking for partial
 	; loading of a sector, as we cannot check the STATUS
 	; directly after issuing a command. 
-	; Fabrice provided this table and the code, which takes 21 cycles+extra (ldx and lda below) :
+	; Fabrice provided this table and the code, which takes 21 cycles+extra (ldy and lda below) :
 	; Operation	Next Operation	Delay required (MFM mode)
 	; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
 	; Write to Command Reg.	Read Status bits 1-7	32 µsec
@@ -244,6 +244,7 @@ waitcommand2
 tempoloop 
 	dey
 	bne tempoloop 	
+	; time 4*5+2-1=21usec
 	;
 	; Read the sector data
 	;
