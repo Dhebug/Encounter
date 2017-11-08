@@ -129,7 +129,7 @@ _LoaderTemporaryStart
 	sta 1+__fdc_status_3
 	sta 1+__fdc_status_4
 	sta 1+__fdc_status_w
-	sta 1+__fdc_status_w2
+	;sta 1+__fdc_status_w2
 	
 
 	lda #<FDC_JASMIN_track_register
@@ -701,78 +701,44 @@ __fdc_command_w
 	
 	; According to the datasheet table of needed delays:
 	; Write to Command Reg.	Read Status bits 1-7	32 µsec
-	; The next loop is 31, plus some extra due to the lda/tax
-	; In fact 6 iterations should also do, but this is working
-	; on real hard, so...
-	ldy #7	;2
+	; The next loop is 23, plus some extra due to the beq / lda /tax /jmp (3+5+2+3=13)
+	; Total is 36... could do with 4 iterations... perhaps
+	ldy #5	;2
 w_wait_completion
 	dey	;2
 	bne w_wait_completion ;2+1
-	; = 31 cycles	
-	; ldy #0
-	PROTECT2(FDC_status_register,3)	
-next_byte
-	lda (ptr_destination),y
-	tax
+	; = 23 cycles	
+	
+	; This is the correct loop, which keeps track of all kind
+	; of errors, as it is done when reading data.
+	; It is necessary to feed data at the disk
+	; rate, which is (in double density) 250 Kbps, that is
+	; 1 byte ~every 30 usec.
+
+	;ldy #0
+	beq next_byte
+	PROTECT2(FDC_status_register,2)	
+check_busy2
+	bpl end_of_commandw
 waitdrqw
 __fdc_status_w
 	lda FDC_status_register
+	; Check DRQ & BUSY
 	lsr 
-	; We can't test end of command here, as the alingment would add 
-	; 2 nops: too much time.
-	; Check Drq
-	lsr
-	bcc waitdrqw
-
+	ror
+	bcc check_busy2
 	PROTECT(FDC_data)
 __fdc_data_w	
 	stx FDC_data
 	iny
-	bne next_byte
-end_of_commandw
-	PROTECT(FDC_status_register)	
-__fdc_status_w2
-	lda FDC_status_register
-	and #($3c) ; Chema changed the original vaue: 1C
-	bne retrywrite ; Chema: If error repeat forever:
-	
-/*	
-	; This is the correct loop, which keeps track of all kind
-	; of errors, as it is done when reading data.
-	; However, it is necessary to feed data at the disk
-	; rate, which is (in double density) 250 Kbps, that is
-	; 1 byte ~every 30 usec.
-	; To Fabrice's calculations for reading in the worst case
-	; we must add 5+1 cycles due to the lda (ptr),y and that is
-	; too much: 25 cycles+5 is already 30 usec, add 1 if a page boundary
-	; is crossed.
-	; It might be possible to use self-modifying code here and change
-	; the addressing mode to absolute indexed to gain 1 cicle, but it is
-	; still too close for my taste. Maybe to absolute could do, but there are 3 extra
-	; cycles due to the inc addr vs iny.
-
-	;ldy #0
-	PROTECT(FDC_status_register)	
-waitdrqw
-__fdc_status_w
-	lda FDC_status_register
-	; Check busy
-	lsr 
-	bcc end_of_commandw
-	; Check Drq
-	lsr
-	bcc waitdrqw
-
+next_byte
 	lda (ptr_destination),y
-	PROTECT(FDC_data)
-__fdc_data_w	
-	sta FDC_data
-	iny
+	tax
 	jmp waitdrqw
 end_of_commandw
 	and #($3c>>2) ; Chema changed the original vaue: 1C
 	bne retrywrite ; Chema: If error repeat forever:
-*/
+
 
 	cli	
 	; Now onto next sector
