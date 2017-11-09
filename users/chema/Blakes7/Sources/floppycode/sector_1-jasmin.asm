@@ -196,13 +196,12 @@ sector_OK
 	;
 	; Data successfully loaded (we hope)
 	;
-	;sei
-	; This was for Microdisc. In Jasmin it does not work this way.
+	;lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
+	;sta FDC_flags
+	; That was for Microdisc. In Jasmin it does not work this way.
 	; We can enable overlay ram by writing 1s in bit 0 of 
 	; FDC_ovl_control ($03FA) and FDC_rom_control ($03FB) but these have already been
 	; set, and disk side (which accessible in FDC_flags) and drive are correct. Else, how did this boot?
-	;lda #%10000001 			; Disable the FDC (Eprom select + FDC Interrupt request)
-	;sta FDC_flags
 	; There is no way to disable IRQs, but only DRQ issues them, so we need to keep interrupts disabled while
 	; reading/writing data (as done above).
 	
