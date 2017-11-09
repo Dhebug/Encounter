@@ -2,9 +2,23 @@
 #define OPCODE_RTS		$60
 #define OPCODE_JMP              $4C
 
-#define COLOR(color) pha:lda #16+(color&7):sta $bb80+40*27:pla
-#define STOP(color) pha:lda #16+(color&7):sta $bb80+40*27:jmp *:pla
-
+; These macros aling code to avoid the Telestrat bug
+; It seems that maybe older Microdisc units have the
+; same bug, so it is safer to keep them on.
+; The thing is that the instruction following an access to an
+; FDC register must have the lower two bits (0,1) with the same
+; value as the register address.
+; Access length is 3 bytes (e.g. lda FDC_Status), so alignmets of
+; accesses must be:
+; FDC Register		Memory address	Alingmment of access instruction
+; Status/Cmd	(00)	$0310		xxxxxx01
+; Track 	(01)	$0311		xxxxxx10
+; Sector 	(10)	$0312		xxxxxx11
+; Data	 	(11)	$0313		xxxxxx00
+; Two versions: 
+;  - PROTECT(X) aligns an access to FDC register X, made following the macros.
+;  - PROTECT2(X,Y) same but the instruction is Y bytes ahead.
+;
 #define TELESTRAT_ALIGN
 #ifdef TELESTRAT_ALIGN
 #define PROTECT(X)  	.dsb (((X)&3)-((*+3)&3))&3,$ea
@@ -35,50 +49,109 @@
 
 
 ;
-; Microdisc register values
+; Microdisc FDC register access addresses
 ;
 #define FDC_command_register	$0310
 #define FDC_status_register	$0310
 #define FDC_track_register	$0311
 #define FDC_sector_register	$0312
 #define FDC_data		$0313
+
+; On Microdisc, location $314 contains the following flags on write operations
+; bit 7: Eprom select (active low) 
+; bit 6-5: drive select (0 to 3) 
+; bit 4: side select 
+; bit 3: double density enable (0: double density, 1: single density) 
+; bit 2: along with bit 3, selects the data separator clock divisor            (1: double density, 0: single-density) 
+; bit 1: ROMDIS (active low). When 0, internal Basic rom is disabled. 
+; bit 0: enable FDC INTRQ to appear on read location $0314 and to drive cpu IRQ	
+; and $0318 bit 7 contains the state of DRQ
+
 #define FDC_flags		$0314
-#define FDC_drq                 $0318	
+#define FDC_drq                 $0318
 
 #define FDC_Flags_Mask          %10000100       ; Disable ROM/EPROM, no FDC interrupt requests, A drive, Side 0
 #define FDC_Flag_DiscSide       %00010000       ; Accesses second side of the disk
 
+;		COMMAND SUMMARY (models 1791, 1792, 1793, 1794)
+;
+;	Type Command                 b7 b6 b5 b4 b3 b2 b1 b0
+;	  I  Restore                  0  0  0  0  h  V r1 r0
+;	  I  Seek                     0  0  0  1  h  V r1 r0
+;	  I  Step                     0  0  1  T  h  V r1 r0
+;	  I  Step-In                  0  1  0  T  h  V r1 r0
+;	  I  Step-Out                 0  1  1  T  h  V r1 r0
+;	 II  Read Sector              1  0  0  m  S  E  C  0
+;	 II  Write Sector             1  0  1  m  S  E  C a0
+;	III  Read Address             1  1  0  0  0  E  0  0
+;	III  Read Track               1  1  1  0  0  E  0  0
+;	III  Write Track              1  1  1  1  0  E  0  0
+;	 IV  Force Interrupt          1  1  0  1 i3 i2 i1 i0
+;	r1 r0	Stepping Motor Rate
+;	V	Track Number Verify Flag (0: no verify, 1: verify on dest track);
+;	h	Head Load Flag (1: load head at beginning, 0: unload head)
+;	T	Track Update Flag (0: no update, 1: update Track Register)
+;	a0	Data Address Mark (0: FB, 1: F8 (deleted DAM))
+;	C	Side Compare Flag (0: disable side compare, 1: enable side comp)
+;	E	15 ms delay (0: no 15ms delay, 1: 15 ms delay)
+;	S	Side Compare Flag (0: compare for side 0, 1: compare for side 1)
+;	m	Multiple Record Flag (0: single record, 1: multiple records)
+;	i3 i2 i1 i0	Interrupt Condition Flags
+;			i3-i0 = 0 Terminate with no interrupt (INTRQ)
+;			i3 = 1 Immediate interrupt, requires a reset
+;			i2 = 1 Index pulse
+;			i1 = 1 Ready to not ready transition
+;			i0 = 1 Not ready to ready transition
+;	r1 r0 Stepping rate
+;	 0  0    6 ms
+;	 0  1   12 ms
+;	 1  0   20 ms
+;	 1  1   30 ms
+
 #define CMD_ReadSector		$80
 #define CMD_WriteSector		$a0 
-#define CMD_Seek		$1F	; CHEMA: CHECK: Fabrice uses 1C here (6ms stepping rate)
-
-#define wait_status_floppy 	30
+#define CMD_Seek		$1F		; Fabrice uses 1C here (6ms stepping rate), which is faster, but 30ms works with old drives
 
 
 ;
-; Jasmin register values
+; Jasmin FDC register access addresses
 ;
 #define FDC_JASMIN_command_register		$03f4
 #define FDC_JASMIN_status_register		$03f4
 #define FDC_JASMIN_track_register		$03f5
 #define FDC_JASMIN_sector_register		$03f6
 #define FDC_JASMIN_data				$03f7
-#define FDC_JASMIN_flags			$03f8
-#define FDC_JASMIN_drq                 		$03FC	
 
+; In Jasmin there is no location to read DRQ alone.
+; The corresponding bit in the status register should be polled.
+; DRQ line is connected to the system IRQ line so it allows for 
+; interrupt-driven transfers (however, two consecutives bytes are separated by 31.25 micro-seconds)
+; $03F8 bit 0: side select 
+; $03F9 disk controller reset (writing any value will reset the FDC) 
+; $03FA bit 0: overlay ram access (1 means overlay ram enabled) 
+; $03FB bit 0: ROMDIS (1 means internal Basic rom disabled) 
+; $03FC, $03FD, $03FE, $03FF : writing to one of these locations will select the corresponding drive 
+
+#define FDC_JASMIN_flags			$03f8
 #define FDC_JASMIN_Flag_DiscSide       		%00000001
 
+
+; I am not sure why the Read Sector command was redefined for Jasmin 
+; with flags S and E active, but C kept inactive:
+; 	C	Side Compare Flag (0: disable side compare, 1: enable side comp)
+;	E	15 ms delay (0: no 15ms delay, 1: 15 ms delay)
+;	S	Side Compare Flag (0: compare for side 0, 1: compare for side 1)
 #define CMD_JASMIN_ReadSector			$8c
+
+
 
 #include "floppy_description.h"       ; This file is generated by the floppy builder
 
 ;; CHEMA: For the loading picture
-; This could be avoided for a general loader
+; This should be avoided for a general loader
 #define PICLOC 35
 #define LOADINGCOLOR pha:lda color: and #7: ora #1: inc color: sta $bb80+40*27+PICLOC:sta $bb80+40*26+PICLOC:pla
 #define CLEARLOADING pha:lda #0:sta $bb80+40*27+PICLOC:sta $bb80+40*26+PICLOC:pla
-//#define LOADINGCOLOR 
-//#define CLEARLOADING 
 
 	.zero
 	
@@ -112,9 +185,9 @@ nb_dst			.dsb 1
 ;
 _LoaderTemporaryStart
 	sei 				; Make sure interrupts are disabled
-	cld                                 ; Force decimal mode
+	cld                             ; Force decimal mode
 
-	cpx #0                              ; If we are on Jasmin, patch all the FDC related values
+	cpx #0                          ; If we are on Jasmin, patch all the FDC related values
 	beq end_jasmin_init
     
 	lda #<FDC_JASMIN_command_register
@@ -129,9 +202,7 @@ _LoaderTemporaryStart
 	sta 1+__fdc_status_3
 	sta 1+__fdc_status_4
 	sta 1+__fdc_status_w
-	;sta 1+__fdc_status_w2
 	
-
 	lda #<FDC_JASMIN_track_register
 	sta 1+__fdc_track_1
 
@@ -146,10 +217,6 @@ _LoaderTemporaryStart
 	lda #<FDC_JASMIN_flags
 	sta 1+__fdc_flags_1
 	sta 1+__fdc_flags_2
-
-	;lda #<FDC_JASMIN_drq
-	;sta 1+__fdc_drq_1
-	;sta 1+__fdc_drq_w
 
 	lda #CMD_JASMIN_ReadSector
 	sta 1+__fdc_readsector
@@ -184,6 +251,9 @@ end_jasmin_init
 	sta via_t1ch
     
 	; Chema: initialize loading graphics
+	; Copy themo over the set of 4 characters and put
+	; them on the right bottom of the screen
+	; on the text lines
 .(   
     	ldy #31
 loopimg
@@ -203,8 +273,7 @@ loopmsg
 .)
 
 	jsr LoadData		; Load the main game  (parameters are directly initialized in the loader variables at the end of the file)
-	; Chema: let's try to enable IRQs again	
-	cli
+	cli			; Enable IRQs again	
 	jmp _LoaderApiJump	; Give control to the application and hope it knows what to do
 		
 	
@@ -276,7 +345,7 @@ end_side_change
 	sta current_sector
 end_change_track
 
-	lda current_sector			; Update sector to read
+	lda current_sector			 ; Update sector to read
 	PROTECT(FDC_sector_register)
 __fdc_sector_1	
 	sta FDC_sector_register
@@ -296,10 +365,14 @@ __fdc_sector_1
 	; when writing.
 	ldy avoid_cumulus_bug
 	bne retryseek	
+	
+	; If we are already on the correct track, don't issue a SEEK command
 	PROTECT(FDC_track_register)
 __fdc_track_1
 	cmp FDC_track_register
 	beq stay_on_the_track
+	
+	; Do a SEEK command
 retryseek
 	PROTECT(FDC_data)
 __fdc_data_1	
@@ -308,7 +381,7 @@ __fdc_data_1
 	PROTECT(FDC_command_register)
 __fdc_command_1
 	sta FDC_command_register	
-	jsr WaitCompletion			; CHEMA: Wait for the completion of the command
+	jsr WaitCompletion			; Wait for the completion of the command
 .(
 	; Chema: the same 16 cycle wait as in sector_2-microdisc. I am not sure if this
 	; is needed or why, but it was crucial for the disk to boot in sector_2-microdisc
@@ -319,7 +392,7 @@ waitc
 	bne waitc;2+1
 	; = 16 cycles
 .)
-	; CHEMA: added this
+	; Added this for reliability
 	; What if there is a seek error???
 	; Do the restore_track0 code
 	PROTECT(FDC_status_register)
@@ -337,9 +410,10 @@ __fdc_command_3
 __fdc_status_4	
 	lda FDC_status_register
 	and #$10
-	bne restore_track0
-	beq retryseek
+	bne restore_track0	; If error restoring track 0 loop forever
+	beq retryseek		; Now that track0 is restored, do the seek command again
 	
+	; We are now on the track
 stay_on_the_track
 	lda #FDC_Flags_Mask                      ; Apply the side selection mask
 	ora current_side
@@ -359,9 +433,6 @@ LoadData
 	sty __fetchByte+1
 
 	; We have to start somewhere no matter what, compressed or not
- 	;sei
-	; Make sure the microdisc IRQ is disabled	
-	;jsr WaitCompletion
 	jsr SetSideTrackSector
 	
 	clc
@@ -403,15 +474,14 @@ skip_destination_inc1
 	lda ptr_destination+1
 	sbc ptr_destination_end+1
 	bcc read_sectors_loop 
-	;cli 			; Data successfully loaded (we hope), so we restore the interrupts
-	jmp ClearLoadingPic	; CHEMA: Clears the loading picture
-	;rts
+	
+	; Data successfully loaded (we hope)
+	jmp ClearLoadingPic	; CHEMA: Clears the loading picture (jsr/rts)
 
 ;--------------------------------------
 ; This loads data which is compressed
 ;--------------------------------------
 LoadCompressedData
-	;cli
 	; Initialise variables
 	; We try to keep "y" null during all the code, so the block copy routine has to be sure that Y is null on exit
 	lda #1
@@ -453,7 +523,8 @@ skip_destination_inc
 	sbc ptr_destination_end+1
 	bcc unpack_loop  
 	; CHEMA: Clears the loading picture
-	;rts
+	; No need for jmp as it is just below...
+	; it might go into a subroutine, though.
 ;-------------------------------
 ; Clear the loading pic. 
 ; Called as a subroutine elsewhere
@@ -471,11 +542,10 @@ ClearLoadingPic
 ; this can be moved.
 ;---------------------------	
 PutLoadPic
-	LOADINGCOLOR				; CHEMA: loading picture
+	LOADINGCOLOR
 	rts
 	
 back_copy
-	;BreakPoint jmp BreakPoint	
 	; Copy a number of bytes from the already unpacked stream
 	; Here we know that Y is null. So no need for clearing it: Just be sure it's still null at the end.
 	; At this point, the source pointer points to a two byte value that actually contains a 4 bits counter, and a 12 bit offset to point back into the depacked stream.
@@ -509,19 +579,18 @@ back_copy
 
 	; Beware, in that loop, the direction is important since RLE like depacking is done by recopying the
 	; very same byte just copied... Do not make it a reverse loop to achieve some speed gain...
-	.(
+.(
 copy_loop
 	lda (ptr_source_back),y	; Read from already unpacked stream
 	sta (ptr_destination),y	; Write to destination buffer
 	iny
 	cpy nb_dst
 	bne copy_loop
-	.)
+.)
 	ldy #0
 	beq _UnpackEndLoop
 	rts
 
-; Chema: Removed the nops and IRQ sei/cli
 ;-----------------------------------------
 ; Gets the next byte from the stream,
 ; reading data from disk to the buffer
@@ -556,9 +625,6 @@ __fdc_readsector
 	PROTECT(FDC_command_register)
 __fdc_command_2
 	sta FDC_command_register
-
-	; CHEMA: This is not needed
-	; jsr WaitCommand
 	
 	; Chema: this loop is needed if checking for partial
 	; loading of a sector, as we cannot check the STATUS
@@ -610,30 +676,13 @@ __fdc_data_2
 end_of_command
 	and #($7c>>2) ; Chema changed the original vaue: 1C
 	
-	; Chema: If error repeat forever:
+	; If error repeat forever:
 	bne RetryRead
 	
-	; CHEMA commented this: 
-	;jsr WaitCompletion
+	; Finished!
 	cli
 	rts
 
-;-------------------------------
-; Simple waiting loop
-;-------------------------------
-; CHEMA: This is unused now
-/*
-WaitCommand
-	ldx #wait_status_floppy
-waitcommand
-	nop
-	nop
-	dex
-	bne waitcommand
-	rts
-*/
-
-; CHEMA: Made several changes here. Removed the nops, did not disable interrupts for the loop.
 ;---------------------------------------------
 ; Waits for the completion of a command
 ; As we have not set the FDC IRQ we cannot simply
@@ -665,7 +714,6 @@ __fdc_status_2
 ;-----------------------------
 IrqHandler	
 	bit $304
-	;bit $03F7 Chema trying to make Jasmin work :(
 IrqDoNothing
 	rti	
 	
@@ -736,8 +784,8 @@ next_byte
 	tax
 	jmp waitdrqw
 end_of_commandw
-	and #($3c>>2) ; Chema changed the original vaue: 1C
-	bne retrywrite ; Chema: If error repeat forever:
+	and #($3c>>2) 
+	bne retrywrite ; If error repeat forever:
 
 
 	cli	
@@ -760,11 +808,11 @@ end_of_commandw
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 avoid_cumulus_bug	.byt 0
 
+;-----------------------------------------------------------
 ; Chema: And now some data for the loading picture
 ; this is not necessary for a general loading routine 
-
+;----------------------------------------------------------
 color		.byt 1
-
 loadingmsg	.byt 9,124,125
 		.byt 9,126,127
 loadingimg	
