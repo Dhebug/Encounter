@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Started French Trad 		*/
 /****************************/
 
 #include "globals.h"
@@ -42,6 +43,10 @@ stringpack 200{
 #ifdef ENGLISH
 	"I have a meeting with Ravella.";
 	"She has some information...";
+#endif
+#ifdef FRENCH
+	"J'ai une reunion avec Ravella";
+	"Elle a des informations";
 #endif
 #ifdef SPANISH
 	"Tengo una cita con Ravella.";
@@ -88,8 +93,45 @@ stringpack STDESC
 	//20
 	"I have not even started it yet.";
 	"There is a dog-ear on page 172.";
-
 #endif
+
+#ifdef FRENCH
+	"Il n'y a rien d'interessant.";
+	"It reminds me of something...";
+	"A Brave New World...";
+	"Ravella ordered it for me.";
+	
+	// 4
+	"Juste une lampe.";
+	"Ma famille..";
+	"Rien d'interessant pour le moment.";
+	"La porte de sortie.";
+	
+	//8
+	"The only food I can eat.";
+	"I promised Ravella.";
+	"Je hais le fromage";
+	
+	//11
+	"Le mug achete le mois passe.";
+	"Il est vide.";
+	
+	//13
+	"I prefer it here.";
+	"I'd like to keep it in my room.";
+	"I don't see the use of moving that.";
+	"Why would I pick that up?";
+	
+	//17
+	"No time for reading now. Pity.";
+	"I could turn it on, but why?";
+	"No time for watching TV now.";
+	
+	//20
+	"I have not even started it yet.";
+	"There is a dog-ear on page 172.";
+#endif
+
 #ifdef SPANISH
 	"No hay nada interesante.";
 	"Me recuerda a algo....";
