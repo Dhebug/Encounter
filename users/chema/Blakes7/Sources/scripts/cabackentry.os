@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -16,6 +17,25 @@
 stringpack STDESC{
 	/***************************************/
 #ifdef ENGLISH
+	"It seems to me that it is the system";
+	"to open the gate.";
+	"Solid bars. I don't think I will be";
+	"able to break them.";
+	
+	//4
+	"It seems the stopper is broken.";
+	"If I had some kind of hard stick...";
+	
+	//6
+	"That won't help.";
+	"I can't, with the gate closed.";
+	
+	//8
+	"Nice idea! It will do the trick!";
+	"The gun is keeping the gate up.";
+#endif
+
+#ifdef FRENCH
 	"It seems to me that it is the system";
 	"to open the gate.";
 	"Solid bars. I don't think I will be";

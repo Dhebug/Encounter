@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -25,6 +26,28 @@ script 200{
 stringpack STDESC{
 	/***************************************/
 #ifdef ENGLISH
+	"Looks strong.";
+	"I can hear people behind...";
+	//2
+	"Better find another way in.";
+	
+	//3
+	"They are still a bit wet...";
+	
+	//4
+	"Hello, brother. Any problem?";
+	"You know you cannot enter until the";
+	"end of the shift. Go back to your";
+	"duties, and let He bless you.";
+	
+	//8
+	"It is getting dark. I'd better put the";
+	"lamp in its place. I've been repairing";
+	"it all the evening.";
+	"Perfect. Now we won't fear the grues.";
+#endif
+
+#ifdef FRENCH
 	"Looks strong.";
 	"I can hear people behind...";
 	//2
