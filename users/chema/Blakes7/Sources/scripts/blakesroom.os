@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Started French Trad 		*/
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
