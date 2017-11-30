@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -49,6 +50,44 @@ stringpack HALLMAIN{
 	"Maybe someone else came in his own";
 	"spaceship... Show us.";
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"His blessings are upon you.";
+	"Speak and He will hear you.";
+
+	"I am thy true servant.";
+
+	"The souls from the outer darkness";
+	"are amongst us?";
+
+	"They are in the place of the novices.";
+
+	"Good. Come and pray with me.";
+	"Only from His hand comes life...";
+	"And from His wrath comes death.";
+
+	//9
+	"With other souls to do His work...";
+	"there will be a chance for me ...";
+	"... for the faithful...";
+	"to rise to the priesthood.";
+
+	"He will not fail you.";
+	"You will be rewarded."; 
+	
+	//15
+	"Master. I've found something...";
+	"I think there is an intruder.";
+	/***************************************/	
+	
+	"Can't be. The prisoners were observed";
+	"from the moment they landed.";
+	
+	"Maybe someone else came in his own";
+	"spaceship... Show us.";
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	"Sus bendiciones estén contigo.";

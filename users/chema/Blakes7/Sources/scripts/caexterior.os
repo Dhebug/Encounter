@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours   */
 /****************************/
 
 #include "globals.h"
@@ -26,6 +27,28 @@ script 200{
 stringpack STDESC{
 	/***************************************/
 #ifdef ENGLISH
+	"It reads:";
+	"This is the fate of the non-believers.";
+	"Creepy...";
+	
+	//3
+	"This man has been tortured and left";
+	"to die here, tied to the post with a";
+	"large, thick rope.";
+	"Nasty bugs cover everything.";
+	
+	//7
+	"You're kidding. I won't touch the rope";
+	"while covered with those nasty bugs.";
+	//9
+	"It works! The bugs are running away.";
+	"I could take the rope for later...";
+	"I don't know what you mean.";
+	"Not the corpse, I'll take the rope.";
+	"There is nothing left of interest.";
+#endif
+
+#ifdef FRENCH
 	"It reads:";
 	"This is the fate of the non-believers.";
 	"Creepy...";

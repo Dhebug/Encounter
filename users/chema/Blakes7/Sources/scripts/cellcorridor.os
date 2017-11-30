@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -25,6 +26,22 @@
 /* Dialog with the Guard*/
 dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #ifdef ENGLISH
+	option "I need to visit a prisoner." active -> visit;
+	option "I need to use the terminal." active -> terminal;
+	option "Your shift's over. I'll replace you." active -> shift;
+	option "Good watch, comrade." active -> bye;
+	option "But this is an exception..." inactive -> exception;
+	option "Bah, who's going to tell him?" inactive -> whotell;
+	
+	option "Except for maybe go to hell'." inactive -> o1;
+	option "If only you could hide your face.'" inactive -> o2;
+	option "This describes everything you are not.'" inactive -> o3;
+	option "Damn, I'm good at telling lies!'"  inactive -> o4;
+	option "That's why I always wake up screaming.'"  inactive -> o5;
+	option "I have no idea... 'hocus pocus'?" inactive -> o6;
+#endif
+
+#ifdef FRENCH
 	option "I need to visit a prisoner." active -> visit;
 	option "I need to use the terminal." active -> terminal;
 	option "Your shift's over. I'll replace you." active -> shift;
@@ -210,6 +227,22 @@ stringpack DIALOG_STRINGS
 "Perfect! Have a good shift, comrade.";
 #endif
 
+#ifdef FRENCH
+"Good day, comrade.";
+"Impossible. No visits allowed.";
+"Orders from the General.";
+"Impossible. No one can use it.";
+"You're mistaken. Look at the clock.";
+"There's still an hour left.";
+"Ah... great! I was quite tired.";
+"But first the watchword!";
+"They were very serious this time.";
+"Sorry, but I can't let you.";
+"No watchword, no shift change.";
+"Good. Next one.";
+"Perfect! Have a good shift, comrade.";
+#endif
+
 #ifdef SPANISH
 "Buen día, camarada.";
 "Imposible. No se permiten visitas.";
@@ -239,6 +272,16 @@ stringpack STCOUPLETS{
 	"'I love your smile, face, and eyes";
 	"'I see your face when I am dreaming";
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"'My feelings for you no words can tell";
+	"'Oh loving beauty you float with grace";
+	"'Kind, intelligent, loving and hot";
+	"'I love your smile, face, and eyes";
+	"'I see your face when I am dreaming";
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	"'Debajo del río amarillo";
@@ -354,6 +397,32 @@ stringpack STDESC{
 	"This is not the correct block.";
 	"I hear voices in block B.";
 #endif
+
+#ifdef FRENCH
+	"Hey! Civilians cannot enter here.";
+	"Leave immediately!";
+	"Sorry, sir.";
+	"Comrade. Nobody can enter here.";
+	"Orders from the General.";
+	"Okay. Sorry, comrade.";
+	"Just a clock.";
+	"I need to know the cell number first.";
+	"Let's see if I find Ravella...";
+	"Nothing. They surely use a code.";
+	// 10
+	/***************************************/
+	" (You. You're not a guard.)";
+	"What is that voice in my head?";
+	" (Please, free me.)";
+	"Who are you? Why are you in my mind?";
+	" (Free me, and I'll help you.)";
+	" (I'm in cell B-3.)";
+	"Okay. Let's find out what's going on.";
+	//17
+	"This is not the correct block.";
+	"I hear voices in block B.";
+#endif
+
 #ifdef SPANISH
 	"¡Hey! Los civiles no pueden pasar.";
 	"Márchese inmediatamente.";

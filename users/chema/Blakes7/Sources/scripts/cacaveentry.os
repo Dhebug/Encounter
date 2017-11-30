@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -17,6 +18,12 @@ stringpack STDESC{
 	"The rope to climb back up.";
 	"The entry of a cave...";
 	"It is too dark to see inside.";
+#endif
+
+#ifdef FRENCH
+	"The rope to climb back up.";
+	"L'entree de la cave...";
+	"Il fait trop sombre pour voir";
 #endif
 
 #ifdef SPANISH
