@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours   */
 /****************************/
 
 #include "globals.h"
@@ -30,6 +31,28 @@ stringpack STCELLS{
 	
 	"Okay, what now?";
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"Vila! Gan!";
+	
+	"Hello brother. I wondered if you...";
+	"It's me! Blake!";
+	
+	//3
+	"Blake! What are you doing here?";
+	"I came for you. I've got a spaceship!";
+	"And how will we escape this building?";
+	
+	//6
+	"With these bracelets. Put them on.";
+	
+	"Strange... I thought I had three...";
+	"I must have lost one...";
+	
+	"Okay, what now?";
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	"¡Vila! ¡Gan!";

@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR en cours	*/
 /****************************/
 
 #include "globals.h"
@@ -24,6 +25,16 @@
 /* Dialog with the Technician */
 dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #ifdef ENGLISH
+	option "Er... not, actually." active -> enddiag;
+	option "Yes... what did you order?" active -> question;
+	option "No, but we could be of mutual help." active -> favour;
+	option "Yes... I have your order here." active -> haveit;
+	option "A coffee, wasn't it?" inactive -> coffee;
+	option "A cheese sandwich, wasn't it?" inactive -> sandwich;
+	option "Uh, oh, I must have forgotten it." inactive -> enddiag;
+#endif
+
+#ifdef FRENCH
 	option "Er... not, actually." active -> enddiag;
 	option "Yes... what did you order?" active -> question;
 	option "No, but we could be of mutual help." active -> favour;
@@ -132,6 +143,21 @@ stringpack DIALOG_STRINGS
 "Now, please leave this room.";
 #endif
 
+#ifdef FRENCH
+"Then get outta here now!";
+"Do you mean you don't know?";
+"You inept, go back and find out!";
+"Are you kidding? Leave now!";
+"And what are you waiting for?";
+"I didn't ask for coffee you moron.";
+
+//6
+"A cheese sandwich?";
+"No. I didn't order that...";
+"But I'll take it anyway.. I'm hungry.";
+"Now, please leave this room.";
+#endif
+
 #ifdef SPANISH
 "¡Pues largo de aquí!";
 "¿Quieres decir que no sabes?";
@@ -224,6 +250,28 @@ stringpack STDESC
 	"I understand nothing.";
 #endif
 
+#ifdef FRENCH
+	"A control console.";
+	/*
+	+++++++++++++++++++++++++++++++++++++++*/
+	"I could deactivate a system from here.";
+	
+	"I need the camera code to deactivate.";
+	
+	"Okay. Deactivate CH-1337.";
+	"Done!";
+	
+	//5
+	"A screen showing real time data";
+	"about important variables.";
+	"I don't understand anything.";
+		
+	//8
+	"A screen showing real time data";
+	"about the status of city systems.";
+	"I understand nothing.";
+#endif
+
 #ifdef SPANISH
 	"Una consola de control.";
 	/*
@@ -282,6 +330,20 @@ script 200
 stringpack STGUARD
 {
 #ifdef ENGLISH
+	" (Zzzzzzz)";
+	" ";
+	
+	"Uh? I nearly fall asleep!";
+	"I need some coffee...";
+	
+	"Hey! Where are you going?";
+	"You cannot be here!";
+	"Sorry. I entered the wrong door.";
+	
+	"What is that noise?";
+#endif
+
+#ifdef FRENCH
 	" (Zzzzzzz)";
 	" ";
 	
@@ -425,6 +487,22 @@ script 204
 
 stringpack STEXTRA{
 #ifdef ENGLISH
+	"A plastic cup with coffee";
+	"from a coffee machine.";
+	"A good dose of caffeine.";
+	
+	"Good idea.";
+	"I will change it for mine...";
+	"and let's hope for the best.";
+	
+	"Don't know what you want to do.";
+	"I cannot use that with the console.";
+	
+	//8
+	"Better leave it there...";
+#endif
+
+#ifdef FRENCH
 	"A plastic cup with coffee";
 	"from a coffee machine.";
 	"A good dose of caffeine.";
