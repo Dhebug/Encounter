@@ -13,7 +13,7 @@ IF "%OSDK%"=="" GOTO ErCfg
 
 :: Compile the scripts
 pushd scripts
-call ocomp.bat
+::call ocomp.bat
 popd
 IF ERRORLEVEL 1 GOTO Error
 

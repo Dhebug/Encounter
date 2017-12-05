@@ -141,6 +141,11 @@
 ; 	C	Side Compare Flag (0: disable side compare, 1: enable side comp)
 ;	E	15 ms delay (0: no 15ms delay, 1: 15 ms delay)
 ;	S	Side Compare Flag (0: compare for side 0, 1: compare for side 1)
+; True that in 1772 FDD from WD these bits are (for a READ SECTOR command) C=0, E and H:
+;	H 	Motor On Flag (Bit 3) 1=Enable Spin-up Sequence
+; so maybe they are trying to add 15ms of delay and enabling the spin-up sequence, but
+; the Jasmin has a 1773, not a 1772.
+
 #define CMD_JASMIN_ReadSector			$8c
 
 
@@ -615,10 +620,10 @@ __fetchByte
 ReadNextSector
 	; CHEMA: loading picture
 	jsr PutLoadPic
-	jsr PrepareTrack
 	
 	; CHEMA: this is the critical section. Disable IRQs here
-	sei
+	sei	
+	jsr PrepareTrack
 RetryRead
 __fdc_readsector
 	lda #CMD_ReadSector
@@ -735,10 +740,10 @@ WriteData
 	sta ptr_destination+1
 loopwrite	
 	jsr PutLoadPic
-	jsr PrepareTrack
 
 	; Begin of critical section
 	sei
+	jsr PrepareTrack	
 retrywrite	
 	; Writes a sector to disk.
 __fdc_writesector
