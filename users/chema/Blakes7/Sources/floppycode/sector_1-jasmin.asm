@@ -19,6 +19,16 @@
 #define FDC_ovl_control         	$03FA
 #define FDC_rom_control         	$03FB
 
+
+; I am not sure why the Read Sector command is here $8c instead of $80
+; with flags S and E active, but C kept inactive:
+; 	C	Side Compare Flag (0: disable side compare, 1: enable side comp)
+;	E	15 ms delay (0: no 15ms delay, 1: 15 ms delay)
+;	S	Side Compare Flag (0: compare for side 0, 1: compare for side 1)
+; True that in 1772 FDD from WD these bits are (for a READ SECTOR command) C=0, E and H:
+;	H 	Motor On Flag (Bit 3) 1=Enable Spin-up Sequence
+; so maybe they are trying to add 15ms of delay and enabling the spin-up sequence, but
+; the Jasmin has a 1773, not a 1772.
 #define CMD_ReadSector			$8c
 #define CMD_Seek			$1F
 
@@ -49,7 +59,7 @@ retry_counter		.dsb 1	; Number of attempts at loading data (ie: not quite clear 
 
 	*=$400
 
-    jmp JasminStart ;.byt $01,$00,$00
+	jmp JasminStart ;.byt $01,$00,$00
 	.byt $00,$00,$00,$00,$00,$20,$20,$20,$20,$20,$20,$20,$20
 	.byt $00,$00,$03,$00,$00,$00,$01,$00,$53,$45,$44,$4F,$52,$49,$43,$20
 	.byt $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
