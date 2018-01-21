@@ -1,0 +1,151 @@
+﻿GGJ Diversifiers
+
+For those jammers looking to level up or jam on hardcore we have our GGJ16 Diversifiers!
+
+Whether you're looking to add to your personal challenges for Global Game Jam®, or find something to help your game stand out from the crowd, diversifiers are here to help. The diversifiers are a free-for-all voluntary list of secondary constraints, that the individual teams can choose to go for, or not, as they please.
+
+We are getting diversifiers translated into as many languages as possible and will be distributing translations via Site Organisers.
+
+The diversifiers for 2016 are:
+
+* Doable on the ORIC:
+Comic book colours: Your game uses only 4 colours, with an emphasis on contrast
+LEGO Got It Right: There are no spoken or written words in this game. This is even true in the instructions
+The Bard's Tale: 2016 is 400 years since the death of Shakespeare. Build a game around one of his works
+A local game for local people: Make a game that features your country, city, or people that jam around you
+Crowd sourced: Anyone who is watching it can play along!
+No retreat, no surrender: The protagonist is unable to go anywhere but forward, in every situation
+Take Control: Instead of the usual keyboard and console controllers, your game must use a custom controller
+Marco Polo: Create a game that contains no graphical output -- all information is conveyed to the player through audio
+Gandhi’s Game: This game must have zero violence in its game play. Conflicts must have resolutions based on logic
+One hand tied behind my back: Create a game that can be played with only one hand.
+Multijammer: Work cooperatively with other GGJ sites within your own timezone
+Story Mode: No cutscenes, textboxes or interruption of gameplay. Use player actions for all your storytelling 
+Infinite: Your world is procedurally generated
+Loudmouth: All audio assets are created by sounds from your mouth
+What was that?: Any sound featured must not be sourced from the object in the game making that sound
+Work and Play: The game requires the player to code/learn to code to progress
+Won’t somebody think of the children?: Your team must use the works from a child or children
+Common Ground: Make a co-op game playable by players who have very different levels of ability to each other
+
+* Hard to do without major hurdles on the ORIC:
+Where in the world is…: Gameplay or art changes depending on the player's geographical location (GPS, IP location, etc). The game experience is therefore significantly different for players all around the globe
+Companion screen: The game uses a mobile device as an additional screen to show a different mode or portion of the game
+
+* Impossible to do on the ORIC:
+Capture and Play - Bluetooth: Make a game with Bluetooth capabilities in which any bluetooth device near the PC that have the game would interact with something inside the game. (More items, more enemies, another challenger player, or instant co-op, etc)
+
+* Not directly gameplay related:
+Do You Even Care? (sponsored by iThrive Games): Drawing from guidance materials from iThrive's subject matter experts, make a game that teaches empathy to teens. Guidance materials from iThrive's subject matter experts is available from: http://ithrivegames.com/iThrive%20G4H%20Materials.pdf
+Twitch Plays (sponsored by Twitch): Create a live streamed game intended to be played concurrently by the masses on Twitch.
+
+
+
+--------------------------------------------
+https://csdb.dk/forums/?roomid=11&topicid=26608&firstpost=30
+--------------------------------------------
+Ok guys, I finally tested the routine I did up there. Like said before, it only allows 14 bit input ($0000 to $41FF to be more accurate). The reason for this is that M needs one more bit. Ok, some people might want full 16 bit so here is a fixed routine which only has 3 opcodes more:
+
+        LDY #$00    ; R = 0
+        LDX #$07
+        CLC         ; clear bit 16 of M
+.loop
+        TYA
+        ORA stab-1,X
+        STA THI     ; (R ASL 8) | (D ASL 7)
+        LDA MHI
+        BCS .skip0  ; M >= 65536? then T <= M is always true
+        CMP THI
+        BCC .skip1  ; T <= M
+.skip0
+        SBC THI
+        STA MHI     ; M = M - T
+        TYA
+        ORA stab,x
+        TAY         ; R = R OR D
+.skip1
+        ASL MLO
+        ROL MHI     ; M = M ASL 1
+        DEX
+        BNE .loop
+
+        ; last iteration
+
+        BCS .skip2
+        STY THI
+        LDA MLO
+        CMP #$80
+        LDA MHI
+        SBC THI
+        BCC .skip3
+.skip2
+        INY         ; R = R OR D (D is 1 here)
+.skip3
+        RTS
+stab:   .BYTE $01,$02,$04,$08,$10,$20,$40,$80
+
+This routine works perfectly for all values from $0000 to $FFFF. It even works better than BASIC V2 math which for example fails at INT(SQR(X)) sometimes :)
+
+In fact, my small BASIC program which was supposed to test the assembler sqrt routine failed at value 26569. It returned 162 there although 163*163 = 26569, so it said that my asm routine had failed although it was the BASIC V2 math routines which had failed :D
+--------------------------------------------
+https://csdb.dk/forums/?roomid=11&topicid=26608&firstpost=18
+--------------------------------------------
+(part 4: finally some asm)
+
+Taking a slightly modified version of the last pseudo code:
+
+R = 0
+M = N
+D = 128
+for n = 7 to 0
+{
+    T = (R ASL 8) OR (D ASL 7)
+    if (T <= M) then M=M-T : R = R OR D
+    M = M ASL 1
+    D = D LSR 1
+}
+
+T can now be calculated quite easily. The high byte is simply R OR <some stuff> and the low byte is always 0 except for the last iteration where it is 128. The shifting of D is done via a table and voila, here is some 6510 code:
+
+        LDY #$00    ; R = 0
+        LDX #$07
+.loop
+        TYA
+        ORA stab-1,X
+        STA THI     ; (R ASL 8) | (D ASL 7)
+        LDA MHI
+        CMP THI
+        BCC .skip1  ; T <= M
+        SBC THI
+        STA MHI     ; M = M - T
+        TYA
+        ORA stab,x
+        TAY         ; R = R OR D
+.skip1
+        ASL MLO
+        ROL MHI     ; M = M ASL 1
+        DEX
+        BNE .loop
+
+        ; last iteration
+
+        STY THI
+        LDA MLO
+        CMP #$80
+        LDA MHI
+        SBC THI
+        BCC .skip2
+        INY         ; R = R OR D (D is 1 here)
+.skip2
+        RTS
+stab:   .BYTE $01,$02,$04,$08,$10,$20,$40,$80
+
+I hope I didn't make any mistakes in that routine :)
+
+Input is MLO/MHI for N and output is Y-register for int(sqrt(N)).
+
+(Anyone here who would have guessed that a routine like that calculates a square root?)
+--------------------------------------------
+
+
+
