@@ -4,4 +4,4 @@ Cross-Assembler 65xx V2.2.5 (13:39:57 / Apr 13 2017)
 Oric C adaptation and debugging by Mickael Pointier
 Clean Linux port by Jean-Yves Lamoureux
 Remaining space in the demo code:
-($9800 - _EndDemoData) =($9800 - _EndDemoData) =-19968
+($9800 - _EndDemoData) =($9800 - _EndDemoData) =-14080
