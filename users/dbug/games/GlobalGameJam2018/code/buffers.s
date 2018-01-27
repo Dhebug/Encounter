@@ -32,6 +32,85 @@ loop_y
 	rts
 .)
 
+
+
+_MorseTableCount
+  .byt 2       // A
+  .byt 4       // B
+  .byt 4       // C
+  .byt 3      // D
+  .byt 1      // E
+  .byt 4      // F
+  .byt 3      // G
+  .byt 4       // H
+  .byt 2      // I
+  .byt 4       // J
+  .byt 3      // K
+  .byt 4       // L 
+  .byt 2     // M
+  .byt 2     // N
+  .byt 3      // O
+  .byt 4       // P
+  .byt 4       // Q
+  .byt 3      // R
+  .byt 3      // S
+  .byt 1    // T
+  .byt 3      // U 
+  .byt 4       // V
+  .byt 3      // W
+  .byt 4       // X
+  .byt 4       // Y
+  .byt 4       // Z
+  .byt 5        // 1
+  .byt 5        // 2
+  .byt 5        // 3
+  .byt 5        // 4
+  .byt 5        // 5
+  .byt 5        // 6
+  .byt 5        // 7
+  .byt 5        // 8
+  .byt 5        // 9
+  .byt 5        // 0
+
+_MorseTableBitmask
+  .byt %01000000  // A
+  .byt %10000000  // B
+  .byt %10100000  // C
+  .byt %10000000  // D
+  .byt %00000000  // E
+  .byt %00100000  // F
+  .byt %11000000  // G
+  .byt %00000000  // H
+  .byt %00000000  // I
+  .byt %01110000  // J
+  .byt %10100000  // K
+  .byt %01000000  // L 
+  .byt %11000000  // M
+  .byt %10000000  // N
+  .byt %11100000  // O
+  .byt %01100000  // P
+  .byt %11010000  // Q
+  .byt %01000000  // R
+  .byt %00000000  // S
+  .byt %10000000  // T
+  .byt %00100000  // U 
+  .byt %00010000  // V
+  .byt %01100000  // W
+  .byt %10010000  // X
+  .byt %10110000  // Y
+  .byt %11000000  // Z
+  .byt %01111000  // 1
+  .byt %00111000  // 2
+  .byt %00011000  // 3
+  .byt %00001000  // 4
+  .byt %00000000  // 5
+  .byt %10000000  // 6
+  .byt %11000000  // 7
+  .byt %11100000  // 8
+  .byt %11110000  // 9
+  .byt %11111000  // 0
+
+
 	.dsb 256-(*&255)
 	
 _TableModulo6
