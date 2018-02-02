@@ -37,7 +37,8 @@ gen_bitmap()
 	ttf="$1"
 	ptsize="$2"
 	offset="$3"
-	size="8x$((8*${#charset}))"
+	# bug in imagemagick? last column is clipped, so we add one and shave later on
+	size="9x$((8*${#charset}))"
 	x=2
 	y=6
 	TMPSC=/tmp/imsc.txt
@@ -51,7 +52,7 @@ gen_bitmap()
 	fi
 	if [ -n "$ptsize" ]; then
 		convert_args="$convert_args -pointsize $ptsize"
-		out="${out}_$ptsize"
+		out="${out}_${ptsize/\./_}"
 	fi
 	if [ -n "$offset" ]; then
 		x=$(($x + ${offset%,*}))
@@ -72,12 +73,12 @@ gen_bitmap()
 		echo "fill '$BG' " >> $TMPSC
 		echo "rectangle 0,$(($i * 8)) 8,$(($i * 8 + 8)) " >> $TMPSC
 		echo "fill '$FG' " >> $TMPSC
-		echo "text $x,$y '$ec' " >> $TMPSC
+		echo "text $x,$y '${ec}' " >> $TMPSC
 		#convert_args="$convert_args -draw 'text $x,$y $ec'"
 		#echo "$convert_args"
 		y="$(($y + $CHAR_HEIGHT))"
 	done
-	convert_args="$convert_args -draw @$TMPSC"
+	convert_args="$convert_args -draw @$TMPSC -crop 8x$((8*${#charset}))+0+0"
 
 	echo "Generating $size bitmap '$out.png' ..."
 	convert $convert_args "$out.png"
