@@ -35,7 +35,7 @@ FileSizeHigh .byt >3840,>760,>1536,>8000,>8000
 // List of files written to the floppy
 //
 // Entry #0 '..\build\files\game.o'
-// - Starts on  track 0 sector 6 and is 8 sectors long (1832 compressed bytes: 47% of 3840 bytes).
+// - Starts on  track 0 sector 6 and is 8 sectors long (1921 compressed bytes: 50% of 3840 bytes).
 // Entry #1 '..\build\files\Font6x8.hir'
 // - Starts on  track 0 sector 14 and is 3 sectors long (556 compressed bytes: 73% of 760 bytes).
 // Entry #2 '..\build\files\Font6x6.hir'
@@ -54,7 +54,7 @@ FileSizeHigh .byt >3840,>760,>1536,>8000,>8000
 #define LOADER_GAME_PROGRAM_TRACK 0
 #define LOADER_GAME_PROGRAM_SECTOR 134
 #define LOADER_GAME_PROGRAM_SIZE 3840
-#define LOADER_GAME_PROGRAM_SIZE_COMPRESSED 1832
+#define LOADER_GAME_PROGRAM_SIZE_COMPRESSED 1921
 #define LOADER_FONT_6x8 1
 #define LOADER_FONT_6x6 2
 #define LOADER_FONT_6x6_SIZE 1536

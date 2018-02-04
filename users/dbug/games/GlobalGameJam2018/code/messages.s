@@ -224,6 +224,25 @@ _MessageWelcomeToTelegraphHero
 	.byt 0
 
 
+_MessageMorseCodeLetter
+	.byt 13,7,16+4,"Morse code for '"
+_MessageMorse_PATCH_character	
+	.byt "?"                     // This '?' get patched with the actual value of the letter/character to display
+	.byt "' is "
+_MessageMorse_PATCH_code
+	.byt "?"                     // This series of '?' will be patched with dots and dashes representing the morse code value
+	.byt "?"
+	.byt "?"
+	.byt "?"
+	.byt "?"
+	.byt "?"
+	.byt 0
+
+_ArrayDashOrDot
+    .byt "."
+    .byt "-"
+
+
 
 ; What would I do
 _MessagePlayerChoice	.byt 1,12,16+7,"What would Mickael do? ",16+0,0

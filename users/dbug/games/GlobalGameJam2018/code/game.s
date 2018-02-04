@@ -56,9 +56,95 @@ _GameStart
 	jsr _WaitThreeSeconds
 	jsr _WaitThreeSeconds
 
+
+    ; 
+    ; _MorseTableCount
+    ; _MorseTableBitmask
+    ;
+    .(
+    lda #"A"
+    jsr _DisplayMorseString
+    /*
+    sta _MessageMorse_PATCH_character
+    sec
+    sbc #"0" //65   ; Now we have 0
+    tax 
+    lda _MorseTableCount,x            // A=count
+    tay                               // Y=count
+    lda _MorseTableBitmask,x          // A = bitmask
+    sta tmp0
+    ldx #0    
+loop_morse
+    rol tmp0      // Get the dot/dash
+    bcc dot          // Is it a dot
+dash
+    lda #"-"
+	jmp end_dot
+dot
+    lda #"."
+end_dot
+    sta _MessageMorse_PATCH_code,x
+    inx
+    dey 
+	bne loop_morse    
+	lda #" "
+    sta _MessageMorse_PATCH_code,x
+	PRINT_HIRES(_MessageMorseCodeLetter)
+	*/
+	.)
+
+
+    lda #"Z"
+    jsr _DisplayMorseString
+    //sta _MessageMorse_PATCH_character
+	//PRINT_HIRES(_MessageMorseCodeLetter)
+
+    lda #"9"
+    jsr _DisplayMorseString
+    //sta _MessageMorse_PATCH_character
+	//PRINT_HIRES(_MessageMorseCodeLetter)
+
+    ; So things don't wrap forever...
+	jsr _LoopForever
+
+
 	jmp _GameStart
 .)
 
+
+_DisplayMorseString
+    //jmp _DisplayMorseString
+.(
+    sta _MessageMorse_PATCH_character
+    sec
+    sbc #"0" //65   ; Now we have 0
+    //sbc #65   ; Now we have 0
+    tax 
+    lda _MorseTableCount,x            // A=count
+    tay                               // Y=count
+    lda _MorseTableBitmask,x          // A = bitmask
+    sta tmp0
+    ldx #0    
+loop_morse
+    rol tmp0      // Get the dot/dash
+    bcc dot          // Is it a dot
+dash
+    lda #"-"
+	jmp end_dot
+dot
+    lda #"."
+end_dot
+    sta _MessageMorse_PATCH_code,x
+    inx
+    dey 
+	bne loop_morse    
+	lda #5
+    sta _MessageMorse_PATCH_code,x
+
+	PRINT_HIRES(_MessageMorseCodeLetter)
+
+	rts
+.)
 
  
 _SelectOption
