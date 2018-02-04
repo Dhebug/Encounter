@@ -35,6 +35,17 @@ loop_y
 
 
 _MorseTableCount
+  .byt 5        // 0
+  .byt 5        // 1
+  .byt 5        // 2
+  .byt 5        // 3
+  .byt 5        // 4
+  .byt 5        // 5
+  .byt 5        // 6
+  .byt 5        // 7
+  .byt 5        // 8
+  .byt 5        // 9
+  .dsb 7
   .byt 2       // A
   .byt 4       // B
   .byt 4       // C
@@ -61,18 +72,19 @@ _MorseTableCount
   .byt 4       // X
   .byt 4       // Y
   .byt 4       // Z
-  .byt 5        // 1
-  .byt 5        // 2
-  .byt 5        // 3
-  .byt 5        // 4
-  .byt 5        // 5
-  .byt 5        // 6
-  .byt 5        // 7
-  .byt 5        // 8
-  .byt 5        // 9
-  .byt 5        // 0
 
 _MorseTableBitmask
+  .byt %11111000  // 0
+  .byt %01111000  // 1
+  .byt %00111000  // 2
+  .byt %00011000  // 3
+  .byt %00001000  // 4
+  .byt %00000000  // 5
+  .byt %10000000  // 6
+  .byt %11000000  // 7
+  .byt %11100000  // 8
+  .byt %11110000  // 9
+  .dsb 7
   .byt %01000000  // A
   .byt %10000000  // B
   .byt %10100000  // C
@@ -99,16 +111,6 @@ _MorseTableBitmask
   .byt %10010000  // X
   .byt %10110000  // Y
   .byt %11000000  // Z
-  .byt %01111000  // 1
-  .byt %00111000  // 2
-  .byt %00011000  // 3
-  .byt %00001000  // 4
-  .byt %00000000  // 5
-  .byt %10000000  // 6
-  .byt %11000000  // 7
-  .byt %11100000  // 8
-  .byt %11110000  // 9
-  .byt %11111000  // 0
 
 
 	.dsb 256-(*&255)
