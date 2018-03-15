@@ -72,8 +72,11 @@ this makes it possible to do a multi-pass build process which will not fail beca
 1.1 - 2016/10/30
 - Added support for sector interleave: The 'DefineDisk' now has a additional parameter which indicates how far the next sector is (defaults to 1 for a linear search)
 
+1.2 - 2017/12/09
+- Hopefully the CRC of floppies should now be correct (thanks ISS and  ThomH)
+- Gap2 value changed from 0x22 to 0x4E
 
 */
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	1
+#define TOOL_VERSION_MINOR	2

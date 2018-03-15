@@ -301,6 +301,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
 
 
   // Heavily based on MakeDisk and Tap2DSk
+  // Additional comments from "Sedoric a Nu", page 62
   int gap1,gap2,gap3;
 
   switch (numberOfSectors) 
@@ -319,7 +320,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
   }
 
   m_BufferSize=256+numberOfSides*numberOfTracks*6400;
-  m_Buffer=malloc(m_BufferSize);
+  m_Buffer=(unsigned char*)malloc(m_BufferSize);
   if (m_Buffer)
   {
     m_TrackCount =numberOfTracks;      // 42
@@ -346,21 +347,21 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
           }
           for (int sector=0;sector<numberOfSectors;sector++) 
           {
-            for (int i=0;i<12;i++)      trackbuf[offset++]=0;
-            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;
-            trackbuf[offset++]=0xFE;
-            for (int i=0;i<6;i++)       offset++;
-            for (int i=0;i<gap2-12;i++) trackbuf[offset++]=0x22;
-            for (int i=0;i<12;i++)      trackbuf[offset++]=0;
-            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;
-            trackbuf[offset++]=0xFB;
-            for (int i=0;i<258;i++)     offset++;
-            for (int i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;
+            for (int i=0;i<12;i++)      trackbuf[offset++]=0;      // 00 00 00 00 00 00 00 00 00 00 00 00
+            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;   // A1 A1 A1                             Synchronization sequence  
+            trackbuf[offset++]=0xFE;                               // FE
+            for (int i=0;i<6;i++)       offset++;                  // TRACK SIDE SECTOR SIZE CRC CRC       (Size is 1 for 256 bytes large sectors, 2 for 512 bytes)
+            for (int i=0;i<gap2-12;i++) trackbuf[offset++]=0x4E;   // 4E 4E 4E 4E ...                      (more or less depending of gaps)
+            for (int i=0;i<12;i++)      trackbuf[offset++]=0;      // 00 00 00 00 00 00 00 00 00 00 00 00
+            for (int i=0;i<3;i++)       trackbuf[offset++]=0xA1;   // A1 A1 A1                             Synchronization sequence  
+            trackbuf[offset++]=0xFB;                               // FB
+            for (int i=0;i<258;i++)     offset++;                  // 256 bytes of DATA + 2 bytes of CRC
+            for (int i=0;i<gap3-12;i++) trackbuf[offset++]=0x4E;   // 4E 4E 4E 4E ...                      (more or less depending of gaps)
           }
 
           while (offset<6400) 
           {
-            trackbuf[offset++]=0x4E;
+            trackbuf[offset++]=0x4E;                               // End of track padding
           }
         }
         int offset=gap1;
@@ -370,11 +371,11 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
           trackbuf[offset+5]=side;
           trackbuf[offset+6]=sectorList[sector]; //sector+1;
           trackbuf[offset+7]=1;
-          compute_crc(trackbuf+offset,4+4);
+          compute_crc(trackbuf+offset,4+4);      // Compute the CRC of [A1 A1 A1|FE|TRACK SIDE SECTOR SIZE]
           offset+=4+6;
           offset+=gap2;
           memset(trackbuf+offset+4,0,256);
-          compute_crc(trackbuf+offset,4+256);
+          compute_crc(trackbuf+offset,4+256);    // Compute the CRC of [A1 A1 A1|FB|TRACK DATA...]
           offset+=256+6;
           offset+=gap3;
         }
@@ -394,7 +395,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
 
 bool Floppy::LoadDisk(const char* fileName)
 {
-  if (LoadFile(fileName,m_Buffer,m_BufferSize))
+  if (LoadFile(fileName,(void*)m_Buffer,m_BufferSize))
   {
     const FloppyHeader& header(*((FloppyHeader*)m_Buffer));
     if (header.IsValidHeader())
@@ -462,6 +463,7 @@ unsigned int Floppy::GetDskImageOffset()
 // 0x0319 -> 793
 bool Floppy::WriteSector(const char *fileName)
 {
+  bool isOk=true;
   if (!m_AllowMissingFiles)
   {
     if (!m_Buffer)
@@ -484,12 +486,14 @@ bool Floppy::WriteSector(const char *fileName)
       unsigned int sectorOffset=GetDskImageOffset();
       if (m_BufferSize>sectorOffset+256)
       {
-        memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);
+        memset((char*)m_Buffer+sectorOffset,0,256);                           // Clear the entire content of the sector
+        memcpy((char*)m_Buffer+sectorOffset,buffer,bufferSize);               // Copy over the content of the file (maybe less than 256 bytes)
+        compute_crc((unsigned char*)m_Buffer+sectorOffset-4,4+256);           // Compute the CRC of [A1 A1 A1|FB|TRACK DATA...]
       }
       MarkCurrentSectorUsed();
       printf("Boot sector '%s' installed, %u free bytes remaining in this sector.\n",filteredFileName.c_str(),(unsigned int)(256-bufferSize));
 
-      MoveToNextSector();
+      isOk=MoveToNextSector();
       free(buffer);
     }
     else
@@ -497,7 +501,7 @@ bool Floppy::WriteSector(const char *fileName)
       ShowError("Boot Sector file '%s' not found",filteredFileName.c_str());
     }
   }
-  return true;
+  return isOk;
 }
 
 
@@ -551,6 +555,7 @@ bool Floppy::WriteLoader(const char *fileName,int loadAddress)
     MarkCurrentSectorUsed();
     memset((char*)m_Buffer+offset,0,256);
     memcpy((char*)m_Buffer+offset,fileData,sizeToWrite);
+    compute_crc((unsigned char*)m_Buffer+offset-4,4+256);    // Compute the CRC of [A1 A1 A1|FB|TRACK DATA...]
     fileData+=sizeToWrite;
 
     if (!MoveToNextSector())
@@ -741,6 +746,7 @@ bool Floppy::WriteFile(const char *fileName,bool removeHeaderIfPresent,const std
     MarkCurrentSectorUsed();
     memset((char*)m_Buffer+offset,0,256);
     memcpy((char*)m_Buffer+offset,fileData,sizeToWrite);
+    compute_crc((unsigned char*)m_Buffer+offset-4,4+256);           // Compute the CRC of [A1 A1 A1|FB|TRACK DATA...]
     fileData+=sizeToWrite;
 
     if (!MoveToNextSector())
@@ -799,6 +805,7 @@ bool Floppy::ReserveSectors(int sectorCount,int fillValue,const std::map<std::st
 
     MarkCurrentSectorUsed();
     memset((char*)m_Buffer+offset,fillValue,256);
+    compute_crc((unsigned char*)m_Buffer+offset-4,4+256);             // Compute the CRC of [A1 A1 A1|FB|TRACK DATA...]
 
     if (!MoveToNextSector())
     {
