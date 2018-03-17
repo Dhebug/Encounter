@@ -20,6 +20,7 @@
 
 const char *keywords[]=
 {
+  // 128-246: BASIC keywords
   "END","EDIT","STORE","RECALL","TRON","TROFF","POP","PLOT",
   "PULL","LORES","DOKE","REPEAT","UNTIL","FOR","LLIST","LPRINT","NEXT","DATA",
   "INPUT","DIM","CLS","READ","LET","GOTO","RUN","IF","RESTORE","GOSUB","RETURN",
@@ -31,6 +32,7 @@ const char *keywords[]=
   "SGN","INT","ABS","USR","FRE","POS","HEX$","&","SQR","RND","LN","EXP","COS",
   "SIN","TAN","ATN","PEEK","DEEK","LOG","LEN","STR$","VAL","ASC","CHR$","PI",
   "TRUE","FALSE","KEY$","SCRN","POINT","LEFT$","RIGHT$","MID$"
+  // 247- : Error messages
 };
 
 unsigned char head[14]={ 0x16,0x16,0x16,0x24,0,0,0,0,0,0,5,1,0,0 };
@@ -38,9 +40,21 @@ unsigned char head[14]={ 0x16,0x16,0x16,0x24,0,0,0,0,0,0,5,1,0,0 };
 
 
 
-void Tap2Bas(unsigned char *ptr_buffer,size_t file_size)
+void Tap2Bas(unsigned char *ptr_buffer,size_t file_size,const char *destFile)
 {
   unsigned int i, car;
+
+  FILE *out = stdout;
+  if (destFile && (strlen(destFile) != 0))
+  {
+    out = fopen(destFile, "wb");
+  }  
+  if (out == NULL)
+  {
+    printf("Can't open file for writing\n");
+    exit(1);
+  }
+
 
   if (ptr_buffer[0]!=0x16 || ptr_buffer[3]!=0x24)
   {
@@ -55,17 +69,29 @@ void Tap2Bas(unsigned char *ptr_buffer,size_t file_size)
   while (ptr_buffer[i] || ptr_buffer[i+1])
   {
     i+=2;
-    printf(" %u ",ptr_buffer[i]+(ptr_buffer[i+1]<<8));
+    fprintf(out," %u ",ptr_buffer[i]+(ptr_buffer[i+1]<<8));
     i+=2;
     while ((car=ptr_buffer[i++]))
     {
       if (car<128)
-        putchar(car);
+        fputc(car,out);
       else
-        printf("%s",keywords[car-128]);
+      if (car < 247)
+      {
+        fprintf(out,"%s", keywords[car - 128]);
+      }
+      else
+      {
+        // Probably corrupted listing
+        // 247 : NEXT WITHOUT FOR
+        fprintf(out,"CORRUPTED_ERROR_CODE_%u", car);
+      }
     }
-    putchar('\n');
+    fputc('\r',out);
+    fputc('\n', out);
   }
+
+  fclose(out);
 }
 
 
@@ -365,7 +391,7 @@ int main(int argc, char **argv)
     }
     unsigned char *ptr_buffer=(unsigned char*)ptr_buffer_void;
 
-    Tap2Bas(ptr_buffer,file_size);
+    Tap2Bas(ptr_buffer,file_size,nameDst.c_str());
   }
 
   exit(0);
