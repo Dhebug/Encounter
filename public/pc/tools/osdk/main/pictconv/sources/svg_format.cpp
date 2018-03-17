@@ -20,6 +20,8 @@ VectorGraphics::VectorGraphics()
   , m_PrimitiveType(type_Unknown)
   , m_Counter(0)
   , m_Canvas(nullptr)
+  , m_StartX(0.0f)
+  , m_StartY(0.0f)
 {
 }
 
