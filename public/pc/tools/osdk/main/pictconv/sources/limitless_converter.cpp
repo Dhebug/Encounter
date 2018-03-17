@@ -29,6 +29,7 @@
 
 LimitlessPictureConverter::LimitlessPictureConverter() 
   : PictureConverter(MACHINE_LIMITLESS)
+  , m_format(FORMAT_DEFAULT)
 {
   m_Picture.Allocate(320,200,32);  // Default size
 }

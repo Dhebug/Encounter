@@ -97,8 +97,11 @@ Version 0.24
 Version 0.25
 - Fixed the off-by-one error in the tape header when Exporting Oric images to tape format
 
+Version 1.0
+- When failing to load a picture, the error message will now indicate the name of the file
+- Fixed the Atari ST multi-palette export mode
 
 */
 
-#define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	25
+#define TOOL_VERSION_MAJOR	1
+#define TOOL_VERSION_MINOR	0

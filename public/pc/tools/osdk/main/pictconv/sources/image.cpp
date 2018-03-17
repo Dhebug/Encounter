@@ -454,7 +454,7 @@ bool ImageContainer::ReduceColorDepthPerScanline(const std::map<int,AtariClut>* 
 
   for (unsigned int y=0;y<dy;y++)
   {
-    //_BREAK_IF_(y==5);
+    //_BREAK_IF_(y==8);   // Debugging facility: Uncomment to break in the code at a particular line
 
     // Convert the current line
     for (unsigned int x=0;x<dx;x++)
@@ -492,6 +492,14 @@ bool ImageContainer::ReduceColorDepthPerScanline(const std::map<int,AtariClut>* 
     FREE_IMAGE_QUANTIZE quantize;
     if (pReservedPalette)	quantize=FIQ_NNQUANT;	// FIQ_WUQUANT is better than FIQ_NNQUANT in this particular setup... but it fails handling correctly the reserved palettes...
     else			quantize=FIQ_WUQUANT;	// FIQ_WUQUANT is better than FIQ_NNQUANT in this particular setup...
+
+    if (FreeImage_GetBPP(lineCopy) != 24)
+    {
+      // Fix for when we reached this place with 32 bit and 8 bit images.
+      FIBITMAP *dib24 = FreeImage_ConvertTo24Bits(lineCopy);
+      FreeImage_Unload(lineCopy);
+      lineCopy = dib24;
+    }
 
     FIBITMAP *dib8  = FreeImage_ColorQuantizeEx(lineCopy,quantize,16,reservedPalette.size(),pReservedPalette);	
     FIBITMAP *dib32 = FreeImage_ConvertTo32Bits(dib8);
