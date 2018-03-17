@@ -168,6 +168,26 @@ That's particularly useful to make sure that your background color is at index 0
 </pre>
 </li>
 
+<li>-un   Update check
+<pre>
+-u0 => Do not check if files are up to date [default]
+-u1 => Perform a date check on the files and only update if needed
+</pre>
+</li>
+
+<li>-vn   Verbosity.
+<pre>
+-v0 => Silent [default]
+-v1 => Shows information about what PictConv is doing
+</pre>
+</li>
+
+<li>The -u switch defines if the source and destination file timestamps should be compared to avoid costly re-exports
+<pre>
+-u0 => Output 16 values each line
+-n40 => Output 40 values each line
+</pre>
+</li>
 
 <li>The -s switch sets if the swap mode is enabled or not:
 <pre>
