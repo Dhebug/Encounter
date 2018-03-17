@@ -395,7 +395,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
 
 bool Floppy::LoadDisk(const char* fileName)
 {
-  if (LoadFile(fileName,(void*)m_Buffer,m_BufferSize))
+  if (LoadFile(fileName,m_Buffer,m_BufferSize))
   {
     const FloppyHeader& header(*((FloppyHeader*)m_Buffer));
     if (header.IsValidHeader())
