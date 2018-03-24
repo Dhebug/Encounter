@@ -64,7 +64,7 @@ stringpack AVON
 	
 	//11
 	"Los manejas con mucha habilidad.";
-	"¿Tu crees?";
+	"¿Tú crees?";
 	"Pero una muerte será suficiente.";
 	"Entonces deberías de tener cuidado.";
 	"Sería irónico que fuese la tuya.";
