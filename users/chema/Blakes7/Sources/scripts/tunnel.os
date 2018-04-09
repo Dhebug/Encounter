@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -88,6 +89,12 @@ stringpack STDESC{
 /***************************************/
 "Acording to Jenna, this door leads to";
 "the interior of the base.";
+#endif
+
+#ifdef FRENCH
+/***************************************/
+"Selon Jenna, cette porte mene a";
+"l'intérieur de la base.";
 #endif
 
 #ifdef SPANISH

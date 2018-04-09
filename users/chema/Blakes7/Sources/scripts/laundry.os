@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -59,6 +60,14 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "No. Is there anything I could do?" inactive -> nocode;
 	option "Yes, code is SP-1999-CH." inactive -> code;
 	option "That's all, thank you. Bye." active -> bye;
+#endif
+
+#ifdef FRENCH
+	option "Je voudrais recuperer mes vetements." active -> pickup;
+	// [laurentd75]: mismatch between ES and EN sentences, choosing the ES version:
+	option "Non. Pouvez-vous faire quelque chose?" inactive -> nocode;
+	option "Oui, le code est SP-1999-CH." inactive -> code;
+	option "Ce sera tout, merci. Au revoir." active -> bye;
 #endif
 
 #ifdef SPANISH
@@ -143,11 +152,27 @@ stringpack STDESC{
 	" At your service. Have a nice day.";
 	" Sure, do you have the code?";
 	" Sorry.";
-	" Check your personnal messages,";
+	" Check your personal messages,";  // [laurentd75]: correction personnal -> personal
 	" you should have received the code.";
 	" Sure, sir. Here it is.";
 	"I don't need anything from him.";
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"Il y a un étrange robot au comptoir.";
+	" ";
+	" Bienvenue a la Teinturerie Fresh.";
+	" Que puis-je faire pour vous monsieur?";
+	" A votre service. Bonne journée.";
+	" Bien sur, avez-vous le code?";
+	" Non, désolé.";
+	" Vérifiez vos messages personnels,";
+	" vous devriez avoir recu le code.";
+	" Merci, voici votre uniforme monsieur."; //
+	"Je n'ai rien a lui demander.";
+#endif
+
 #ifdef SPANISH
 	/***************************************/	
 	"Un extraño robot está al mostrador.";

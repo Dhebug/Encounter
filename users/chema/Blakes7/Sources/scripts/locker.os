@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -277,6 +278,28 @@ stringpack 201{
 	"explain. Time to meet her again!";
 #endif
 
+#ifdef FRENCH	
+	/***************************************/
+	"Qu'est-ce?... Un papier blanc...";
+	"Un moment... Une image se forme!";
+	"C'est une photo... Mais c'est moi!";
+	"Mais qui sont ces gens?...";
+	"Et ou sommes-nous?";
+	//5
+	"Mon esprit... Tout est confus...";
+	"Oooh... J'ai la tete qui tourne!";
+	//7
+	"Aaaaarghhhh!!";
+	//8
+	"Qu'est-ce que c'était?"; 
+	"Comme si un monstre était sorti du";
+	"placard, et s'en était allé soudain...";
+	//11
+	"La photo a de nouveau disparu...";
+	"Ravella va avoir des choses a";
+	"m'expliquer! Allons la revoir...";
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	"¿Qué es esto? un papel en blanco...";
@@ -289,7 +312,7 @@ stringpack 201{
 	"¡Me estoy mareando!";
 	//7
 	"Aaaaarghhhh!!";
-	//8
+	//8 a
 	"¿Qué ha sido eso?"; 
 	"Como si un monstruo se asomase a la";
 	"puerta y, de pronto, se marchase...";
@@ -336,6 +359,43 @@ stringpack 200{
 	//20
 	"Okay, let's see what this is all about.";
 #endif
+
+#ifdef FRENCH	
+	"Un seau et un balai-serpilliere.";
+	"Cyclonique? Peut-etre...";
+	"Elle a l'air assez solide."; // on parle de l'échelle
+	"Divers produits de nettoyage.";
+	"Il est écrit: Attention -- Sol humide.";
+	"Un casier. Rien de spécial.";
+	
+	//6
+	"Ce n'est pas le moment pour le ménage!";
+	"Que voulez-vous que je fasse avec ca?";
+	"Je préfere laisser ca ici.";
+	"Ca ne nous sera pas utile.";
+	
+	//10
+	"Le casier est fermé.";
+	"Ce casier aussi est fermé.";
+	"Celui-ci est également fermé.";
+	"Fermé. Apparemment, ils le sont tous.";
+	
+	//14
+	"La clé ne rentre pas.";
+	"La clé ne rentre pas ici non plus.";
+	"Non, ca ne rentre pas davantage ici.";
+	"Ah! Ca rentre... Euh, en fait, non...";
+	
+	//18
+	"Ah! La clé rentre... Génial!";
+	
+	//19
+	"Ceci ne va pas m'aider.";
+	
+	//20
+	"Ok, voyons de quoi il retourne.";
+#endif
+
 #ifdef SPANISH
 	"Un caldero y una fregona.";
 	"¿Ciclónica? Quizás...";

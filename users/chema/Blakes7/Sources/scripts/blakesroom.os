@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -45,8 +45,8 @@ stringpack 200{
 	"She has some information...";
 #endif
 #ifdef FRENCH
-	"J'ai une reunion avec Ravella";
-	"Elle a des informations";
+	"J'ai rendez-vous avec Ravella.";  // [laurentd75]: "cita" = "rendez-vous", dans ce contexte
+	"Elle a des informations pour moi...";
 #endif
 #ifdef SPANISH
 	"Tengo una cita con Ravella.";
@@ -96,40 +96,51 @@ stringpack STDESC
 #endif
 
 #ifdef FRENCH
-	"Il n'y a rien d'interessant.";
-	"It reminds me of something...";
-	"A Brave New World...";
-	"Ravella ordered it for me.";
+	"Il n'y a rien d'intéressant.";
+	"Ca me rappelle quelque chose...";
+	"Le Meilleur des Mondes...";
+	"Ravella me l'avait commandé.";
 	
 	// 4
-	"Juste une lampe.";
-	"Ma famille..";
-	"Rien d'interessant pour le moment.";
-	"La porte de sortie.";
+	"C'est juste une autre lampe.";
+	"Ma famille...";
+	"Rien d'intéressant pour le moment.";
+	"La porte de ma chambre.";
 	
 	//8
-	"The only food I can eat.";
-	"I promised Ravella.";
-	"Je hais le fromage";
+	///// [laurentd75]: CAUTION: following 3 sentences also defined in "ocode_sandwich.os"
+	///// [laurentd75]: Note: In fact, the sandwich is the only food Blake can eat because 
+	/////               it is the only food that is not contaminated with Federation drugs (suppressants)
+	///// "La seule nourriture que je peux avaler."; // ou: "La seule chose que je puisse manger.";
+	///// "Le seul repas auquel j'ai droit."; // aliment, pitance, nourriture, mets, aliment, denrée, repas
+	"La seule chose que je puisse manger.";
+	"Je l'ai promis a Ravella.";
+	"Mais je déteste le fromage.";
 	
 	//11
-	"Le mug achete le mois passe.";
+	"J'ai acheté ce mug le mois dernier.";
 	"Il est vide.";
 	
 	//13
-	"I prefer it here.";
-	"I'd like to keep it in my room.";
-	"I don't see the use of moving that.";
-	"Why would I pick that up?";
+	"Je préfere que ca reste ici.";  // [laurentd75]: utiliser "ça" car l'objet peut être masculin ou féminin...
+	"Autant laisser ca dans ma chambre.";
+	"Déplacer ca me parait inutile.";
+	"A quoi bon prendre ca?";
 	
 	//17
-	"No time for reading now. Pity.";
-	"I could turn it on, but why?";
-	"No time for watching TV now.";
+	"Pas le temps de lire, dommage...";
+
+	"Pourquoi irais-je l'allumer?";
+	"Pas le temps de regarder la télé.";
 	
 	//20
-	"I have not even started it yet.";
-	"There is a dog-ear on page 172.";
+	"Je ne l'ai meme pas encore commencé,";
+	// [laurentd75] NOTE: in French, it is necessary to change the page number / code used
+	// because the spelling of "72" is irregular (compared to "52" or "62" for instance)
+	// See "maproom.os" for a detailed explanation
+	// ==> I chose to use "162" instead of "172", and made necessary changes in "maproom.os" 
+	//     for the French version
+	"pourtant la page 162 est cornée. ";
 #endif
 
 #ifdef SPANISH

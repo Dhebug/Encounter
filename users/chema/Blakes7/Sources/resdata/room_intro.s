@@ -1073,6 +1073,38 @@ res_start
 .asc A_FWCYAN,    " Jos","Z"+2," M. (Chema) Enguita - 2017 ",0
 
 #endif
+
+#ifdef FRENCH
+.asc " ",0
+.asc A_FWCYAN, "Defence Force pr","Z"+2,"sente",0	; "Defence Force présente"
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "La Terre...",0
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "... IIIe siecle du 2nd calendrier...",0
+
+; 4
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"Un jeu r","Z"+2,"alis","Z"+2," avec", A_FWYELLOW, "OASIS",0 ; "Un jeu réalisé avec"
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"Bas","Z"+2," sur la s","Z"+2,"rie de la BBC",0 ; "Basé sur la série de la BBC"
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"cr","Z"+2,"Z"+2,"e par Terry Nation",0 ; "créée par Terry Nation"
+
+;7
+;               *----------------------*
+.asc A_FWGREEN, "     Chema     ",0
+.asc A_FWGREEN, "  Dbug & Jede  ",0
+.asc A_FWGREEN, "    jojo073    ",0
+.asc A_FWGREEN, " Dudley Simpson",0
+
+;11				"   Musique originale ",
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"Design & Programmation",0              ; "Design & Programmation"
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"Design des personnages",0              ; "Design des personnages"
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"Graphismes des d","Z"+2,"cors ",0      ; "Graphismes des décors "
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"   Code additionnel   ",0              ; "   Code additionnel   "
+.asc A_FWMAGENTA+A_FWCYAN*8+128,"   Musique originale  ",0;             ; "   Musique originale  "
+
+;16
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "    D","Z"+2,"di","Z"+2," ","A"-1," Fabrice Frances:  ",0 ; "    Dédié à Fabrice Frances:    "
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "  Celui qui a ranim","Z"+2," la flamme ",0                ; "  Celui qui a ranimé la flamme  "
+.asc A_FWCYAN,    " Jos","Z"+2," M. (Chema) Enguita - 2017 ",0                              ; " José M. (Chema) Enguita - 2017 "
+
+#endif
 res_end
 .)
 

@@ -573,6 +573,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -593,6 +596,9 @@ res_start
 	.asc "Controls",0
 #endif
 #ifdef SPANISH
+	.asc "Controles",0
+#endif
+#ifdef FRENCH
 	.asc "Controles",0
 #endif
 res_end	
@@ -618,6 +624,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -641,6 +650,9 @@ res_start
 #ifdef SPANISH
 	.asc "Consola",0
 #endif
+#ifdef FRENCH
+	.asc "Console",0
+#endif
 res_end	
 .)
 
@@ -663,6 +675,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Puerta",0
+#endif
+#ifdef FRENCH
+	.asc "Porte",0
 #endif
 res_end	
 .)
@@ -698,6 +713,9 @@ res_start
 #ifdef SPANISH
 	.asc "Palanca 1",0
 #endif
+#ifdef FRENCH
+	.asc "Levier 1",0
+#endif
 res_end	
 .)
 
@@ -728,6 +746,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Palanca 2",0
+#endif
+#ifdef FRENCH
+	.asc "Levier 2",0
 #endif
 res_end	
 .)
@@ -760,6 +781,9 @@ res_start
 #ifdef SPANISH
 	.asc "Palanca 3",0
 #endif
+#ifdef FRENCH
+	.asc "Levier 3",0
+#endif
 res_end	
 .)
 
@@ -791,6 +815,9 @@ res_start
 #ifdef SPANISH
 	.asc "Palanca 4",0
 #endif
+#ifdef FRENCH
+	.asc "Levier 4",0
+#endif
 res_end	
 .)
 
@@ -813,6 +840,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Salir",0
+#endif
+#ifdef FRENCH
+	.asc "Sortir",0
 #endif
 res_end	
 .)
@@ -845,6 +875,9 @@ res_start
 #ifdef SPANISH
 	.asc "Luz",0
 #endif
+#ifdef FRENCH
+	.asc "Voyant",0 ; LED = "voyant", et non pas "lumiere" ici
+#endif
 res_end	
 .)
 
@@ -875,6 +908,9 @@ res_start
 #ifdef SPANISH
 	.asc "Luz",0
 #endif
+#ifdef FRENCH
+	.asc "Voyant",0 ; LED = "voyant", et non pas "lumiere" ici
+#endif
 res_end	
 .)
 .(
@@ -904,6 +940,9 @@ res_start
 #ifdef SPANISH
 	.asc "Luz",0
 #endif
+#ifdef FRENCH
+	.asc "Voyant",0 ; LED = "voyant", et non pas "lumiere" ici
+#endif
 res_end	
 .)
 .(
@@ -932,6 +971,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Luz",0
+#endif
+#ifdef FRENCH
+	.asc "Voyant",0 ; LED = "voyant", et non pas "lumiere" ici
 #endif
 res_end	
 .)
@@ -963,6 +1005,10 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "C","Z"+2,"lula energ","Z"+3,"a",0
+#endif
+#ifdef FRENCH
+	; "Pile d'énergie" -- cf. obj_ep2.s et liberatorcargo.os et ocode_ecell.os dans ..\scripts
+	.asc "Pile",0  ; "Pile d'énergie" est trop long: peut causer bug affichage si utilisé avec "Jenna Stannis"
 #endif
 res_end	
 .)

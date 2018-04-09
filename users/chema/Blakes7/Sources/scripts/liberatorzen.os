@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -167,9 +168,44 @@ stringpack STZEN{
 	"I can't do that.";
 	
 	//21
-	"This is Zen: The Libarator's AI.";
+	"This is Zen: The Liberator's AI."; // [laurentd75]: corrected: "Libarator's" -> "Liberator's"
 	
 #endif
+
+#ifdef FRENCH	
+	/***************************************/
+	" ";
+	" Tous les systemes sont operationnels.";
+	" Aucun vaisseau détecté a portée.";
+	
+	//3
+	" Le téléporteur est indépendant";
+	" de mes fonctions.";
+	" Je peux controler la climatisation.";
+	
+	//6
+	" Les capteurs détectent deux vaisseaux";
+	" apparaissant au-dessus de l'horizon.";
+	" Selon les données disponibles ce sont";
+	" des vaisseaux de poursuite fédéraux.";
+	" Confirmé.";
+	" Les chances de survie estimées sont";
+	" de 2,5 sur 3 durant la premiere année.";
+	" Veuillez entrer le cap et la vitesse.";
+	
+	//14
+	"Ces commandes font partie des systemes";
+	"de Zen.";
+	"Comment pourrais-je les utiliser?";
+	"Bonne idée. Je peux fixer le ";
+	"transmetteur sur le systeme de ";
+	"climatisation.";
+	"Je ne peux pas faire cela.";
+	
+	//21
+	"Zen est le systeme d'IA du Libérateur."; // ou alors: "Ceci est Zen: systeme d'IA du vaisseau."
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	" ";
@@ -228,6 +264,12 @@ dialog DIALOG: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "Zen, full sensor scan." active -> sensors;
 	option "Zen, can you operate the teleport?" inactive -> teleport;
 	option "That's all, Zen." active -> bye;	
+#endif
+#ifdef FRENCH
+	option "Zen, rapport complet des systemes." active -> systems;
+	option "Zen, scan complet des capteurs." active -> sensors;
+	option "Zen, peux-tu controler le téléporteur?" inactive -> teleport;
+	option "Ce sera tout, Zen." active -> bye;	
 #endif
 #ifdef SPANISH
 	option "Zen, informe de todos los sistemas." active -> systems;

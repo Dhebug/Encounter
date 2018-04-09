@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -18,6 +19,10 @@ stringpack TRANSMITTER{
 #ifdef ENGLISH
 	/**************************************/
 	"A transmitter to operate the relay.";
+#endif
+#ifdef FRENCH
+	/**************************************/
+	"Un transmetteur controlant le relais.";
 #endif
 
 #ifdef SPANISH

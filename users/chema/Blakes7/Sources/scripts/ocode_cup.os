@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -16,6 +17,14 @@ stringpack CUP{
 	"It's full of water.";
 	"It's full of coffee.";
 	"I can't use the cup like that.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Un grand gobelet de café.";	// [laurentd75]: c'est un gobelet (en papier) de café en fait, pas une tasse
+	"Il est vide.";
+	"Il est plein d'eau.";
+	"Il est plein de café.";
+	"Je ne peux l'utiliser de cette facon.";
 #endif
 #ifdef SPANISH
 	/***************************************/

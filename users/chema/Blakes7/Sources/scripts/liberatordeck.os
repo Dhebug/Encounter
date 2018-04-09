@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -21,8 +22,14 @@
 stringpack STDESC{
 #ifdef ENGLISH
 	/***************************************/
-	"All kind of panels and controls.";
+	"All kinds of panels and controls.";
 	"It takes a very skilled pilot, not me!";
+#endif
+
+#ifdef FRENCH
+	/***************************************/
+	"Une myriade d'écrans et de commandes.";
+	"Il faut etre un pilote chevronné...";
 #endif
 
 #ifdef SPANISH
@@ -243,6 +250,28 @@ stringpack 200{
 	"Blake! Look! What is that?";
 	"A defensive system, maybe.";
 	"Jenna! Avon! Resist!";
+#endif
+#ifdef FRENCH
+	/***************************************/
+	" Jenna Stannis...";
+	" Kerr Avon...";
+	" Roj Blake...";
+	//3
+	" Votre esprit est transparent...";
+	" Image implantée.";
+	//5
+	"Maman, maman, ne me laisse pas!";
+	"Reviens! Maman...";
+	//7
+	"Frere! Attention! N'y va pas!...";
+	"Non. Ecoute-moi! Tu vas MOURIR!";
+	//9
+	" --Alerte: erreur de lecture d'esprit.";
+	" ";
+	//11
+	"Blake! Regarde! Qu'est-ce que c'est?";
+	"Un systeme de défense, apparemment.";
+	"Jenna! Avon! Résistez!";
 #endif
 #ifdef SPANISH
 	/***************************************/

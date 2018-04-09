@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -95,6 +96,39 @@ stringpack EPILOGUE{
 	"I'll debrief you on the details...";
 #endif
 
+#ifdef FRENCH
+	/***************************************/
+	"Ah, Travis.";
+	"Tout le monde a appris votre fiasco...";
+	"Vous savez, bien sur, qu'il y a eu";
+	"deux attentats sur ma vie?";
+	
+	//4
+	"Oui. J'étais d'ailleurs tres inquiet.";
+	//5
+	"Je VOUS considere comme responsable.";
+	"Votre incompétence a mis ma vie et";
+	"ma situation en danger.";
+	
+	//8
+	"Oui, mais cela va changer. J'ai...";
+	
+	//9
+	"Taisez-vous!";
+	"Nous capturerons Blake et son vaisseau";
+	"tot ou tard, mais désormais je souhaite";
+	"consacrer toutes nos ressources a autre";
+	"chose... qui m'assurera une situation";
+	"de pouvoir bien supérieure au sein du";
+	"Haut Commandement de la Fédération.";
+	
+	//16
+	"C'est-a-dire?";
+	
+	//17
+	"Je vais vous présenter le projet ORAC."; // "vais" est mieux que "veux" ici, surtout avec la phrase suivante...
+	"Je vous donnerai tous les détails...";
+#endif
 
 #ifdef SPANISH
 	/***************************************/
@@ -115,7 +149,7 @@ stringpack EPILOGUE{
 	
 	//9
 	"¡Déjalo!";
-	"Capturaremos a Blake y su nacve antes";
+	"Capturaremos a Blake y su nave antes";
 	"o después, pero por ahora quiero poner";
 	"nuestros recursos en algo diferente...";
 	"algo que me dará mucho más poder y";

@@ -381,6 +381,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -412,6 +415,9 @@ res_start
 #ifdef SPANISH
 	.asc "P","Z"+4,"ster",0
 #endif
+#ifdef FRENCH
+	.asc "Affiche",0
+#endif
 res_end	
 .)
 
@@ -442,6 +448,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Computadora",0
+#endif
+#ifdef FRENCH
+	.asc "Ordinateur",0
 #endif
 res_end	
 .)
@@ -475,6 +484,9 @@ res_start
 #ifdef SPANISH
 	.asc "Impresora",0
 #endif
+#ifdef FRENCH
+	.asc "Imprimante",0
+#endif
 res_end	
 .)
 
@@ -505,6 +517,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Libros",0
+#endif
+#ifdef FRENCH
+	.asc "Livres",0
 #endif
 res_end	
 .)
@@ -539,6 +554,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cajas",0
 #endif
+#ifdef FRENCH
+	.asc "Boites",0 ; NB: des boites, et non pas des caisses
+#endif
 res_end	
 .)
 
@@ -569,6 +587,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Tazas",0
+#endif
+#ifdef FRENCH
+	.asc "Mugs",0
 #endif
 res_end	
 .)

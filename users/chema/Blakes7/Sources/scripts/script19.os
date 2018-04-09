@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -192,6 +193,57 @@ stringpack STLOCAL{
 "Take care.";
 "Will do.";
 #endif
+
+#ifdef FRENCH
+/***************************************/
+// Gan answers
+"Compris, Blake.";
+"Vila et moi allons nous téléporter.";
+// Vila rants
+"Moi? Non, attendez, il fait froid la-";
+"bas, et je suis sensible aux basses";
+"températures. J'ai la gorge fragile!";
+// Avon jokes
+"Vous autres, vous etes ridicules."; // Littéralement: "Vous autres ne m'impressionnez guere."
+// They argue 6-10
+"Et pourquoi n'irais-tu pas, toi?"; // "Pourquoi n'y vas-tu pas toi?";
+"Parce que toi, on peut te sacrifier.";
+"Et toi, on ne le peut pas sans doute?";
+"Non. Moi je suis indispensable, je ne";
+"suis pas stupide, et je n'irai pas.";
+
+// Is it a trap? 11-15
+"Je commence a suspecter un piege.";
+"Ce n'est pas un tres bon piege alors,";
+"si tu commences déja a te méfier...";
+"Le probleme n'est pas de se méfier ou";
+"non, c'est de tomber dedans ou pas...";
+
+// Let's go
+"Viens Vila, allons-y.";
+
+// 17-21 first part with Jenna (I've put this here afterwards)
+/***************************************/
+"Jenna, il faudrait pirater l'horloge.";
+"Est-ce ca peut etre fait d'ici?";
+"Pas par moi. Mais Vila ou Avon peuvent.";
+
+"Ok. Libérateur, vous m'entendez?";
+"J'ai besoin qu'Avon ou Vila vienne ici.";
+
+// 22
+"J'ai besoin qu'on avance l'horloge";
+"d'une heure. Peux-tu le faire?";
+"Laisse-moi voir...";
+"Oui. Mais il faut un émetteur avec...";
+"Attends. Passe-moi le transpondeur.";
+"Et voila, c'est fait!";
+
+"Ok. Maintenant, attends ici mon signal.";
+"Fais attention.";
+"Oui, ne t'en fais pas.";
+#endif
+
 #ifdef SPANISH
 /***************************************/
 // Gan answers

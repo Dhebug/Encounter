@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -64,15 +65,23 @@ stringpack STDESC
 {
 #ifdef ENGLISH
 /***************************************/
-"Wooden logs, fallen from trees.";
+"Wooden logs, from fallen trees.";  // [laurentd75]: corrected: logs don't FALL from trees, they are FROM fallen trees.
 "Dark and most probably dangerous.";
 "I won't enter there. I'm not mad.";
 
 #endif
 
+#ifdef FRENCH
+/***************************************/
+"Des troncs, d'arbres abattus."; // [laurentd75]: utilisé "troncs" plutot que "rondins" et "abattus" plutot que "tombés"
+"Obscur, et probablement dangereux.";
+"Je n'entre pas la, je ne suis pas fou!";
+
+#endif
+
 #ifdef SPANISH
 /***************************************/
-"Unos maderos caídos de los árboles.";
+"Unos maderos de árboles caídos."; // [laurentd75]: corrected (checked with Chema)
 "Oscuro y probablemente peligroso";
 "No entro ahí ni loco.";
 #endif

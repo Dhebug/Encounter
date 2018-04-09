@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -12,6 +13,10 @@ stringpack CINCH{
 #ifdef ENGLISH	
 	/***************************************/
 	"A very resistant elastic band.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Une bande élastique tres résistante.";
 #endif
 #ifdef SPANISH
 	"Una banda elástica muy resistente.";

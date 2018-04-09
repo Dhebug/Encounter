@@ -67,6 +67,9 @@ res_start
 #ifdef SPANISH
 	.asc "Guardia",0
 #endif
+#ifdef FRENCH
+	.asc "Garde",0
+#endif
 res_end	
 .)
 
@@ -126,6 +129,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taza",0
 #endif	
+#ifdef FRENCH
+	.asc "Mug",0
+#endif
 res_end
 .)
 
@@ -157,6 +163,9 @@ res_start
 #ifdef SPANISH
 	.asc "Laxante",0
 #endif	
+#ifdef FRENCH
+	.asc "Laxatif",0
+#endif
 res_end
 .)
 
@@ -190,6 +199,9 @@ res_start
 #ifdef SPANISH
 	.asc "Moneda",0
 #endif
+#ifdef FRENCH
+	.asc "Piece",0
+#endif
 res_end
 .)
 
@@ -222,6 +234,9 @@ res_start
 #ifdef SPANISH
 	.asc "Descafeinado",0
 #endif
+#ifdef FRENCH
+	.asc "D","Z"+2,"ca",0	; "Déca"
+#endif
 res_end
 .)
 
@@ -251,6 +266,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Llave",0
+#endif
+#ifdef FRENCH
+	.asc "Cl","Z"+2,0 ; "Clé"
 #endif
 res_end
 .)
@@ -288,6 +306,9 @@ res_start
 #ifdef SPANISH
 	.asc "Mapa",0
 #endif
+#ifdef FRENCH
+	.asc "Plan",0
+#endif
 res_end
 .)
 
@@ -318,6 +339,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "T","Z"+2,"cnico",0
+#endif
+#ifdef FRENCH
+	.asc "Technicien",0
 #endif
 res_end	
 .)
@@ -350,6 +374,9 @@ res_start
 #ifdef SPANISH
 	.asc "Empleado",0
 #endif	
+#ifdef FRENCH
+	.asc "Employ","Z"+2,0	; "Employé"
+#endif	
 res_end	
 .)
 
@@ -380,6 +407,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Guardia",0
+#endif
+#ifdef FRENCH
+	.asc "Garde",0
 #endif
 res_end	
 .)

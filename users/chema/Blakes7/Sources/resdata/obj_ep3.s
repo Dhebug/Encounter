@@ -46,6 +46,9 @@ res_start
 #ifdef SPANISH
 	.asc "Tronco",0
 #endif	
+#ifdef FRENCH
+	.asc "Tronc",0
+#endif	
 	
 res_end
 .)
@@ -79,6 +82,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taza",0
 #endif
+#ifdef FRENCH
+	.asc "Gobelet",0
+#endif
 res_end
 .)
 
@@ -110,6 +116,9 @@ res_start
 	.asc "Uniform",0
 #endif
 #ifdef SPANISH
+	.asc "Uniforme",0
+#endif
+#ifdef FRENCH
 	.asc "Uniforme",0
 #endif
 res_end
@@ -168,6 +177,9 @@ res_start
 #ifdef SPANISH
 	.asc "Transpondedor",0
 #endif
+#ifdef FRENCH
+	.asc "Transpondeur",0
+#endif
 res_end	
 .)
 
@@ -199,6 +211,9 @@ res_start
 #ifdef SPANISH
 	.asc "Transmisor",0
 #endif
+#ifdef FRENCH
+	.asc "Transmetteur",0
+#endif
 res_end	
 .)
 
@@ -229,6 +244,12 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Rel","Z"+2," remoto",0
+#endif
+#ifdef FRENCH
+	// [laurentd75]: Need to shorten name to "Relais" otherwise graphical bug  when trying to use wqith "Transmetteur"
+	// ("Utilise Relais distant avec Transmetteur" is 40 chars long...)
+	;;;;;;.asc "Relais distant",0		; ou "relais a distance", ou "télérelais", ou "relais déporté"
+	.asc "Relais",0
 #endif
 res_end	
 .)

@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -342,6 +343,32 @@ stringpack STDESC{
 //12
 "All the systems are unpowered.";
 "It worked! Systems are up.";
+#endif
+
+#ifdef FRENCH
+/***************************************/
+"Une table de controle avec des leviers.";
+"Cette porte est fermée.";
+"Ces commandes ne fonctionnent plus.";
+"Je dois d'abord le tirer.";
+"Je dois d'abord le pousser.";
+
+//5
+"C'est l'entrée.";
+"Mais la porte est fermée.";
+
+//7
+"Super! Bien joué!";
+"Par ces tunnels nous pourrons atteindre";
+"le couloir de service de la base.";
+"Voyons si je peux retrouver le chemin.";
+
+//11
+"Pas la peine, la porte est ouverte.";
+
+//12
+"Les systemes ne sont pas alimentés.";
+"Ca marche! Les systemes sont activés.";
 #endif
 
 #ifdef SPANISH

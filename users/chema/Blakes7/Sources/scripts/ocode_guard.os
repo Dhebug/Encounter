@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -16,6 +17,13 @@ stringpack GUARD
 	"Move along, move along...";
 	"He seems to be asleep...";
 	"He's busy. Better leave him alone.";
+#endif
+#ifdef FRENCH
+	"Plutot menacant...";
+	"Vous plaisantez...";
+	"Allons, ne restez pas la, circulez!";
+	"Il a l'air endormi...";
+	"Il est occupé. Mieux vaut le laisser.";
 #endif
 #ifdef SPANISH
 	"Amenazador...";

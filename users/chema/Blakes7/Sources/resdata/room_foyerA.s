@@ -428,6 +428,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pasillo",0
 #endif
+#ifdef FRENCH
+	.asc "Couloir",0
+#endif
 	
 res_end	
 .)
@@ -460,6 +463,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
+#endif
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
 #endif
 res_end	
 .)
@@ -495,7 +501,9 @@ res_start
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
 #endif
-	
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
+#endif
 res_end	
 .)
 
@@ -518,7 +526,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
-	
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -552,7 +562,10 @@ res_start
 #ifdef SPANISH
 	.asc "Sof","Z"+1,0
 #endif
-	
+#ifdef FRENCH
+	.asc "Canap","Z"+2,0 ; "Canapé"
+#endif
+
 res_end	
 .)
 

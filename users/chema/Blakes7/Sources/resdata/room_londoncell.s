@@ -319,6 +319,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end
 .)
 
@@ -343,6 +346,9 @@ res_start
 #ifdef SPANISH
 	.asc "Alarma",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Alarme",0
+#endif
 res_end
 .)
 
@@ -367,6 +373,9 @@ res_start
 #ifdef SPANISH
 	.asc "Papelera",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Poubelle",0
+#endif
 res_end
 .)
 
@@ -391,6 +400,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cerradura",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Serrure",0
+#endif
 res_end
 .)
 
@@ -415,6 +427,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taquillas",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Casiers",0
+#endif
 res_end
 .)
 
@@ -451,6 +466,9 @@ res_start
 #ifdef SPANISH
 	.asc "Bater","Z"+3,"a",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Batterie",0
+#endif
 res_end
 .)
 
@@ -483,6 +501,9 @@ res_start
 #ifdef SPANISH
 	.asc "Envoltorio",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Emballage",0
+#endif
 res_end
 .)
 
@@ -514,6 +535,12 @@ res_start
 #ifdef SPANISH
 	.asc "Tarjeta",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Carte",0 ;  [laurentd75]: "Carte d'acces" est mieux, mais peut causer un bug d'affichage persistant
+	               ;  si on tente de réaliser l'action "UTILISE Carte d'acces AVEC Jenna Stannis":
+	               ;  Cette phrase fait 40 caracteres, et on a donc un "U" parasite qui s'affiche à gauche de
+	               ;  la zone de commande et qui déstabilise également l'affichage double-hauteur des actions...
+#endif
 res_end
 .)
 

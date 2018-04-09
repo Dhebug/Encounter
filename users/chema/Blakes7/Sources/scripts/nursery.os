@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -23,6 +24,13 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "I have a terrible constipation." active -> constipation;
 	option "I have a terrible toothache." active -> tooth;
 	option "Nothing, thank you." active -> bye;
+#endif
+#ifdef FRENCH
+	option "J'ai tres mal au dos." active -> back;
+	option "J'ai tres mal a l'estomac." active -> stomach;
+	option "J'ai une tres forte constipation." active -> constipation;
+	option "J'ai une horrible rage de dents." active -> tooth;
+	option "Rien, merci." active -> bye;
 #endif
 #ifdef SPANISH
 	option "Me duele mucho la espalda." active -> back;
@@ -121,6 +129,37 @@ stringpack DIALOG_STRINGS
 	"No.";
 	"Pity. I need a coffee badly.";
 #endif
+
+#ifdef FRENCH
+	"Elle me fait un peu peur..."; // not relaxing / no me da tranquilidad => "elle ne me rassure pas vraiment"
+	"Bonjour, qu'est-ce qui vous amene?"; // better than literal translation = "Bonjour tres cher, puis-je vous aider?";
+	
+	
+	//2
+	"Oh, ce n'est rien! Juste un instant,";  // "Oh, attendez-moi juste un instant,";
+	"On va régler ca tout de suite.";
+	//4
+	"je vais chercher la grosse seringue.";
+	"je vais chercher le tube gastrique.";
+	"je vais chercher la poire a lavement.";
+	"je vais prendre les forceps dentaires.";
+	
+	//8
+	"Heu... non merci.";
+	"En fait, ca va déja mieux.. Au revoir!"; //"En fait, je vais déja mieux. Au revoir!";
+
+	//10
+	"Prenez au moins ce laxatif. Mais juste";
+	"une goutte! Il est tres puissant.";
+	
+	//12
+	/*++++++++++++++++++++++++++++++++++++++*/
+	"Savez-vous si la machine a café";
+	"a été réapprovisionnée?";
+	"Non.";
+	"Dommage. J'ai grand besoin d'un café.";
+#endif
+
 #ifdef SPANISH
 	"No me da mucha tranquilidad...";
 	"Hola cariño. ¿Cómo puedo ayudarte?";

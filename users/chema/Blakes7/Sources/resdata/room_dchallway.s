@@ -609,6 +609,9 @@ res_start
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
 #endif
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
+#endif
 res_end	
 .)
 
@@ -642,6 +645,9 @@ res_start
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
 #endif
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
+#endif
 res_end	
 .)
 
@@ -674,6 +680,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
+#endif
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
 #endif
 res_end	
 .)
@@ -711,6 +720,9 @@ res_start
 #ifdef SPANISH
 	.asc "P","Z"+4,"ster",0
 #endif
+#ifdef FRENCH
+	.asc "Affiche",0
+#endif
 res_end	
 .)
 
@@ -742,6 +754,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "P","Z"+4,"ster",0
+#endif
+#ifdef FRENCH
+	.asc "Affiche",0
 #endif
 res_end	
 .)
@@ -775,6 +790,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Informaci","Z"+4,"n",0
+#endif
+#ifdef FRENCH
+	.asc "Informations",0  ; [laurentd75]: don't exceed 12 chars otherwise it overwrites name of "Poster" object.
 #endif
 
 res_end	
@@ -810,6 +828,9 @@ res_start
 #ifdef SPANISH
 	.asc "Escultura",0
 #endif
+#ifdef FRENCH
+	.asc "Sculpture",0
+#endif
 
 res_end	
 .)
@@ -833,6 +854,9 @@ res_start
 #ifdef SPANISH
 	.asc "Informaci","Z"+4,"n",0
 #endif
+#ifdef FRENCH
+	.asc "Accueil",0
+#endif
 
 res_end	
 .)
@@ -855,6 +879,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Vest","Z"+3,"bulo",0
+#endif
+#ifdef FRENCH
+	.asc "Hall de service",0
 #endif
 
 res_end	
@@ -892,6 +919,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Puerta",0
+#endif
+#ifdef FRENCH
+	.asc "Porte",0
 #endif
 res_end	
 .)
@@ -953,6 +983,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -1012,6 +1045,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Puerta",0
+#endif
+#ifdef FRENCH
+	.asc "Porte",0
 #endif
 res_end	
 .)
@@ -1074,6 +1110,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -1133,6 +1172,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Puerta",0
+#endif
+#ifdef FRENCH
+	.asc "Porte",0
 #endif
 res_end	
 .)
@@ -1383,6 +1425,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "M","Z"+1,"quina de caf","Z"+2,0
+#endif
+#ifdef FRENCH
+	.asc "Machine ","A"-1," caf","Z"+2,0 ; "Machine à café"
 #endif
 	
 res_end	

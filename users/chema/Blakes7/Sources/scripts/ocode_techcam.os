@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -90,6 +91,22 @@ stringpack TECHCAM
 	
 	"Ah! are you from the kitchen service?";
 	"I've been waiting for ages!";
+#endif
+#ifdef FRENCH 
+	/*
+	 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+	"Il a l'air d'etre en charge des";
+	"systemes de controle de cette zone.";
+	"Il pourrait me faire arreter.";
+	
+	"Je ne vois pas ce que vous voulez.";
+	
+	"Quoi? Que ferais-je avec ca?";
+	
+	"A quoi cela pourrait-il me servir?";
+	
+	"Ah! Vous etes du service restauration?";
+	"Ca fait des heures que j'attends!";
 #endif
 #ifdef SPANISH
 	/*

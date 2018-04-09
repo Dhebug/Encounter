@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -45,6 +46,33 @@ stringpack STDESC
 	
 	//15
 	"Not without the map!";
+#endif
+
+#ifdef FRENCH
+	/*+++++++++++++++++++++++++++++++++++++*/
+	"J'ai déja joué a ca il y a longtemps.";
+	"Il fallait secourir une demoiselle qui";
+	"avait été capturée par un singe géant.";
+	"Le monstre vous lancait des tonneaux";
+	"et d'autres objets tandis que vous"; 
+	"essayiez de grimper. C'était amusant!";
+	"Et bien plus difficile que ce jeu-la..";
+	"Mais concentrons-nous ici maintenant!";
+	
+	//8
+	"Je ne saurais pas comment l'utiliser.";
+	
+	"Une imprimante. De petit format.";
+	"Il y a une impression dans le bac.";
+	"Je ne peux pas faire cela.";
+	
+	//12
+	"Une belle collection de livres de SF.";
+	"Des boites a l'aspect tres bizarre.";
+	"Des mugs avec des symboles de geeks.";	
+	
+	//15
+	"Pas sans le plan!";
 #endif
 
 #ifdef SPANISH
@@ -312,6 +340,36 @@ dialog DIALOG_2: script DIALOG_SCRIPT2 stringpack DIALOG_OPTIONS2{
 	option "... four!" inactive ->badu;
 	option "... five!" inactive ->badu;
 #endif
+#ifdef FRENCH
+	option "Oui, c'est cent..." active -> goodh;
+	option "Oui, c'est deux cent..." active -> badh;
+	option "Oui, c'est trois cent..." active -> badh;
+	option "Oui, c'est quatre cent..." active -> badh;
+
+	option "... vingt..." inactive ->badd;
+	option "... trente..." inactive ->badd;
+	option "... quarante..." inactive ->badd;
+	option "... cinquante..." inactive ->badd;
+	option "... soixante..." inactive ->goodd;  // [laurentd75] : changed return value from "badd" to "goodd"
+	// [laurentd75] NOTE: for the French version I chose to replace 172 by 162
+	// (as the code from the dog-eared page number in "blakesroom.os" script) 
+	// so that the number spelling rules will work.
+	// (the problem in French is that for the seventies numbers the units are spelt irregularly, see below)
+	// Therefore, I also chose to REMOVE the choice of seventies numbers for the French version
+	// ... But still had to provide a 6th option otherwise there is a graphical bug (copyright sign displayed on last line)
+	// ... So I chose the "eighties" numbers as the units are spelt regularly
+	//option "... soixante-dix..." inactive ->goodd;  // [laurentd75]: commented out, see above
+	option "... quatre-vingt..." inactive ->badd;  // [laurentd75]: need to add 6 options otherwise graphic bug
+	// [laurentd75]: this won't work in French for numbers 71..75:
+	// 71 is spelt "soixante et onze", not "soixante-dix et un"... 
+	// ... same thing thru to 75, spelt "soixante quinze", rather than "soixante-dix cinq" !! :-(
+	// Which is why I commented out the choice of "seventy" for the tens above
+	option "... et un!" inactive ->badu; 
+	option "... deux!" inactive ->goodu;
+	option "... trois!" inactive ->badu;
+	option "... quatre!" inactive ->badu;
+	option "... cinq!" inactive ->badu;
+#endif
 #ifdef SPANISH
 	option "¡Sí, es ciento..." active -> goodh;
 	option "¡Sí, es doscientos..." active -> badh;
@@ -392,6 +450,12 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "Nothing, thank you." active -> bye;
 #endif
 
+#ifdef FRENCH
+	option "Vous etes la personne de l'accueil non?" active -> seenhim;
+	option "J'ai besoin d'infos sur les sorties." active -> exits;
+	option "Rien, merci." active -> bye;
+#endif
+
 #ifdef SPANISH
 	option "¿No eres el tipo de información?" active -> seenhim;
 	option "Necesito datos de las salidas." active -> exits;
@@ -470,7 +534,7 @@ stringpack DIALOG_STRINGS
 	
 	// 18
 	"This one seems to be quite near...";
-	"Okay, I'll get the mug...";
+	"Okay, I'll get the mug..."; // [laurentd75]: should be "I'll take" instead of "I'll get" !
 	
 	//20
 	"Mmmm... something's wrong.";
@@ -478,6 +542,52 @@ stringpack DIALOG_STRINGS
 	
 	//22
 	"Your map is in the printer.";
+#endif
+
+#ifdef FRENCH
+	// Description and initial sentences
+	/*++++++++++++++++++++++++++++++++++++++*/
+	"J'ai déja vu ce visage quelque part...";
+	"Bonjour, vous cherchez quelque chose?";
+	
+	//2
+	"Comment?";
+	"Et pourquoi aurais-je besoin de ca?";
+	"Je vous l'ai déja dit: 100 crédits.";
+	
+	//5
+	"Hé!!";
+	"Celui-ci manque a ma collection!";
+	"Marché conclu. Un instant.";
+	"Votre plan est imprimé. Prenez-le.";
+	
+	//9
+	"Ok. Je suis toujours pret a négocier.";
+	
+	//10
+	"Héhé... et bien, en fait...";
+	"Non. Il me ressemble, mais lui, il ne";
+	"ferait jamais rien... d'illégal...";
+	
+	//13
+	"Je peux vous fournir cette information.";
+	"... mais ca vous coutera 100 crédits.";
+	"Un prix tres honnete, selon moi.";
+	
+	//16
+	"Ah, vous etes de retour. Tres bien.";
+	"Donnez-moi le numéro de la sortie.";
+	
+	// 18
+	"Celle-ci semble etre assez proche...";
+	"D'accord, je prends le mug..."; // [laurentd75]: NB: ES and EN versions differ on this one !!??
+	
+	//20
+	"Hmmm... il y a un probleme.";
+	"Je ne trouve pas ce numéro de sortie.";
+	
+	//22
+	"Votre plan est a l'imprimante.";
 #endif
 
 #ifdef SPANISH

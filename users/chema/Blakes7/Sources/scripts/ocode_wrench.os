@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -12,6 +13,10 @@ stringpack WRENCH{
 #ifdef ENGLISH	
 	"Chromium-vanadium alloy?";
 	"The wrench cannnot be used that way.";
+#endif
+#ifdef FRENCH	
+	"Alliage de chrome-vanadium?";
+	"On ne peut pas l'utiliser comme ca."; // [laurentd75]: Note: wrench=clé à molette / clé anglaise
 #endif
 #ifdef SPANISH
 	"¿Serán de cromo-vanadio?";

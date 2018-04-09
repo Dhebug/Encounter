@@ -263,6 +263,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taller",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Atelier",0
+#endif
 res_end	
 .)
 
@@ -285,6 +288,9 @@ res_start
 #ifdef SPANISH
 	.asc "Muelle",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Quai",0 ; [laurentd75]: NB: "bay" = "quai", et non pas "baie"...
+#endif
 res_end	
 .)
 
@@ -308,6 +314,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puente",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Pont",0
+#endif
 res_end	
 .)
 

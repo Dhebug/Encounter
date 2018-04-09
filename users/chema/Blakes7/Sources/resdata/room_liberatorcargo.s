@@ -421,6 +421,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end
 .)
 
@@ -444,6 +447,9 @@ res_start
 #ifdef SPANISH
 	.asc "Amarres",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Sangle",0  ; [laurentd75]: vérifier si c'est "sangle" ou "bande [élastique]" ici
+#endif
 res_end
 .)
 
@@ -468,6 +474,9 @@ res_start
 #ifdef SPANISH
 	.asc "Compartimento",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Compartiment",0
+#endif
 res_end
 .)
 

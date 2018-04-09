@@ -372,6 +372,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pasillo",0
 #endif
+#ifdef FRENCH
+	.asc "Couloir",0	; "Couloir" better than "Hall" here
+#endif
 res_end	
 .)
 
@@ -406,6 +409,9 @@ res_start
 #ifdef SPANISH
 	.asc "C","Z"+1,"mara",0
 #endif
+#ifdef FRENCH
+	.asc "Cam","Z"+2,"ra",0 ; "Caméra"
+#endif
 res_end	
 .)
 
@@ -430,6 +436,9 @@ res_start
 #ifdef SPANISH
 	.asc "P","Z"+4,"ster grande",0
 #endif
+#ifdef FRENCH
+	.asc "Grande affiche",0
+#endif
 res_end	
 .)
 
@@ -452,6 +461,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "P","Z"+4,"ster peque"," "+3,"o",0
+#endif
+#ifdef FRENCH
+	.asc "Petite affiche",0	; // 14 chars, like in Spanish
 #endif
 res_end	
 .)

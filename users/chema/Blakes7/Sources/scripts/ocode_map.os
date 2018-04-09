@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -52,6 +53,24 @@ stringpack MAP
 	// 6
 	"I can use the map once I get inside";
 	"the ventilation system.";
+#endif
+
+#ifdef FRENCH
+	/*
+	 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+	 
+	 // [laurentd75]: see "blakesroom.os" and "maproom.os": 
+	 // in the French version we need to use 162 instead of 172
+	
+	"Un plan technique avec la sortie 162."; 
+	"Intéressant...";
+	"Il est possible de l'atteindre depuis";
+	"le systeme de ventilation a ce niveau.";
+	"Et il y a un acces depuis le couloir";
+	"de service.";
+	// 6
+	"Je pourrai utiliser le plan des que je";
+	"serai dans le systeme de ventilation.";
 #endif
 
 #ifdef SPANISH

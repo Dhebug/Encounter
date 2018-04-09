@@ -7,16 +7,66 @@
 IF "%OSDK%"=="" GOTO ErCfg
 
 ::
+:: [laurentd75]: ADDED: must now define the target language for game localization
+::               as an argument to this script, or define in in the B7_LANG env
+::               variable. Valid values are: "SPANISH", "ENGLISH", or "FRENCH".
+::
+:: First check for an argument passed to the script
+:: do not propagate env variable modifications outside SETLOCAL / ENDLOCAL
+::
+SETLOCAL
+IF  "%~1"=="" GOTO NoArgs
+echo Using value passed as an argument to set target language for localization
+echo Setting B7_LANG to %~1
+
+set B7_LANG=%~1
+
+:: Now check for value defined in B7_LANG
+:NoArgs
+IF "%B7_LANG%"=="" GOTO ErrLang
+:: Check for valid values in B7_LANG
+IF "%B7_LANG%"=="ENGLISH" GOTO gotLang
+IF "%B7_LANG%"=="SPANISH" GOTO gotLang
+IF "%B7_LANG%"=="FRENCH"  GOTO gotLang
+:: Nope => Error
+GOTO ErrLang
+
+:: Now, generate the "language.h" file dynamically according to
+:: the value of the target language now defined in B7_LANG
+:gotLang
+set langHeader=language.h
+ECHO Generating %langHeader% header file for target language: %B7_LANG%
+@echo./*;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   > %langHeader%
+@echo.;; ------------------------------------------    >> %langHeader%
+@echo.;;                 OASIS                         >> %langHeader%
+@echo.;; Oric Adventure Script Interpreting System     >> %langHeader%
+@echo.;; ------------------------------------------    >> %langHeader%
+@echo.;;             (c) Chema 2015                    >> %langHeader%
+@echo.;;            enguita@gmail.com                  >> %langHeader%
+@echo.;; ------------------------------------------    >> %langHeader%
+@echo.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/  >> %langHeader%
+@echo. >> %langHeader%
+@echo./* Note: this file is generated dynamically  */  >> %langHeader%
+@echo./*       from the osdk_build.bat script      */  >> %langHeader%
+@echo. >> %langHeader%
+@echo./* Target Language for game localization:    */  >> %langHeader%
+@echo.#define %B7_LANG% >> %langHeader%
+@echo. >> %langHeader%
+
+ENDLOCAL
+:: [/laurentd75]
+
+::
 ::[laurentd75]: ADDED - we need the output folders created NOW!
 :: Create the folders we need
-::
 md build
 md build\files
 ::[/laurentd75]
+::
 
 :: Generate character font
 %osdk%\bin\pictconv -f0 -o4__charfont .\data\BFont6x8.png .\build\files\BFont6x8.asm
-:: [laurentd75]: ADDED: also generate specific French font 
+:: [laurentd75]: ADDED - also generate specific French font 
 :: (the resulting .asm file will be included if FRENCH is defined in tables.s)
 %osdk%\bin\pictconv -f0 -o4__charfont .\data\BFont6x8_fr.png .\build\files\BFont6x8_fr.asm
 :: [/laurentd75]
@@ -149,6 +199,23 @@ ECHO The Oric SDK was not configured properly
 ECHO You should have a OSDK environment variable setted to the location of the SDK
 IF "%OSDKBRIEF%"=="" PAUSE
 GOTO End
+
+::
+:: [laurentd75]: ADDED: must now define the target language for game localization
+::               as an argument to this script, or define in in the B7_LANG env
+::               variable. Valid values are: "SPANISH", "ENGLISH", or "FRENCH".
+:: Outputs an error message if no argument was passed or B7_LANG was not set 
+:: and exit
+::
+:ErrLang
+ECHO == ERROR ==
+ECHO The target language for game localization was not defined properly.
+ECHO You should either pass it as an argument to this script, or define it 
+ECHO in the B7_LANG environment variable.
+ECHO Acceptable values are: "ENGLISH", "SPANISH", or "FRENCH".
+IF "%OSDKBRIEF%"=="" PAUSE
+GOTO End
+:: [/laurentd75]
 
 :Error
 ECHO == Errors found ==

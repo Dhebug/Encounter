@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -99,6 +100,39 @@ stringpack 200{
 	"\A_FWMAGENTA Now prepare your squadron.";
 	"\A_FWMAGENTA The resistance will be totally";
 	"\A_FWMAGENTA obliterated tonight.";
+	
+	"               ";//META: Is one just enough?
+#endif
+
+#ifdef FRENCH
+	/**************************************/
+	"Blake! Te voila enfin!";
+	"J'avais peur que tu aies été capturé.";
+	"Mais ou est Ravella?";
+	
+	"Je ne l'ai pas vue. C'est pour ca que";
+	"j'ai mis si longtemps pour arriver ici.";
+	
+	"Mais c'est une terrible nouvelle!";
+	"Enfin bon, viens avec moi, je vais";
+	"te conduire au reste du groupe.";
+	
+	//8
+	" SEC CAM H-233 ";
+	"\A_FWWHITE+A_FWGREEN*8+$c0 Le plan fonctionne, Commandeur Supreme.";
+	//10
+	"\A_FWMAGENTA Vous voulez dire MON plan, Travis.";
+	"\A_FWMAGENTA Ils n'ont pas pu s'empecher d'essayer";
+	"\A_FWMAGENTA de faire revenir Blake dans le groupe.";
+	"\A_FWMAGENTA C'est toujours un héros.";
+	//14
+	"\A_FWWHITE+A_FWGREEN*8+$c0 Arreter Ravella était risqué.";
+	// [laurentd75]: can't really understand the sense of this sentence: "Yes, but Blake has his resources"
+	"\A_FWMAGENTA Oui, mais Blake a ses ressources,"; 
+	"\A_FWMAGENTA et elle devenait un danger plus grand.";
+	"\A_FWMAGENTA Bon, allez préparer votre escadron.";
+	"\A_FWMAGENTA La résistance sera totalement et";
+	"\A_FWMAGENTA a jamais annihilée ce soir.";
 	
 	"               ";//META: Is one just enough?
 #endif

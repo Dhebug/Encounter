@@ -146,6 +146,9 @@ res_start
 #ifdef SPANISH
 	.asc "Robot-bola",0
 #endif	
+#ifdef FRENCH
+	.asc "Robot boule",0
+#endif	
 res_end	
 .)
 
@@ -178,6 +181,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Tubo en Y",0
+#endif	
+#ifdef FRENCH
+	.asc "Tuyau en Y",0
 #endif	
 	
 res_end
@@ -212,6 +218,10 @@ res_start
 #ifdef SPANISH
 	.asc "Bola de acero",0
 #endif		
+#ifdef FRENCH
+	.asc "Bille",0 ; "Bille d'acier" est trop long: peut causer bug affichage si utilisé avec "Clé anglaise" 
+
+#endif		
 res_end
 .)
 
@@ -245,6 +255,12 @@ res_start
 #ifdef SPANISH
 	.asc "Tira de goma",0
 #endif		
+#ifdef FRENCH
+	; -- see ../scripts/liberatorcargo.os
+	;.asc "Sangle ","Z"+2,"lastique",0	; [laurentd75] "Sangle élastique" is 16 chars, and when used with "tuyau en y" it garbles the display
+	                                    ; ("Utiliser Sangle élastique avec tuyau en Y" is 42 chars long... :-( )
+	.asc "Sangle ",0	                ; ==> Use just "Sangle" instead...
+#endif		
 res_end
 .)
 
@@ -276,6 +292,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Tirachinas",0
+#endif		
+#ifdef FRENCH
+	.asc "Fronde",0
 #endif		
 
 res_end
@@ -309,6 +328,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pulsera",0
 #endif		
+#ifdef FRENCH
+	.asc "Bracelet",0
+#endif
 res_end
 .)
 
@@ -341,6 +363,9 @@ res_start
 #ifdef SPANISH
 	.asc "Arma alien",0
 #endif		
+#ifdef FRENCH
+	.asc "Arme d'E.T.",0	; "arme d'extra-terrestre"
+#endif
 res_end
 .)
 
@@ -369,10 +394,13 @@ res_start
 	.byt 0			; direction (0 or LOOK_RIGHT for animstate 0)
 	.byt 0			; animation speed	
 #ifdef ENGLISH	
-	.asc "Scissors",0	;Object's name
+	.asc "Scissors",0	; Object's name
 #endif
 #ifdef SPANISH
 	.asc "Tijeras",0
+#endif			
+#ifdef FRENCH
+	.asc "Ciseaux",0
 #endif			
 res_end
 .)
@@ -405,6 +433,9 @@ res_start
 #ifdef SPANISH
 	.asc "Tenazas",0
 #endif			
+#ifdef FRENCH
+	.asc "Pinces",0
+#endif			
 res_end
 .)
 
@@ -435,6 +466,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Llave inglesa",0
+#endif				
+#ifdef FRENCH
+	.asc "Cl","Z"+2," anglaise",0	; "Clé anglaise"
 #endif				
 res_end
 .)
@@ -468,6 +502,9 @@ res_start
 #ifdef SPANISH
 	.asc "Aerosol",0
 #endif				
+#ifdef FRENCH
+	.asc "A","Z"+2,"rosol",0	; "Aérosol"
+#endif				
 res_end
 .)
 
@@ -500,6 +537,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pulseras",0
 #endif					
+#ifdef FRENCH
+	.asc "Bracelets",0
+#endif
 res_end
 .)
 
@@ -530,6 +570,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cuerda",0
+#endif						
+#ifdef FRENCH
+	.asc "Corde",0
 #endif						
 res_end
 .)
@@ -562,6 +605,9 @@ res_start
 #ifdef SPANISH
 	.asc "L","Z"+1,"mpara",0
 #endif						
+#ifdef FRENCH
+	.asc "Lampe",0
+#endif
 res_end	
 .)
 
@@ -619,6 +665,9 @@ res_start
 #ifdef SPANISH
 	.asc "Monje",0
 #endif						
+#ifdef FRENCH
+	.asc "Moine",0
+#endif						
 res_end	
 .)
 
@@ -648,6 +697,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Monje",0
+#endif						
+#ifdef FRENCH
+	.asc "Moine",0
 #endif						
 res_end	
 .)
@@ -680,6 +732,10 @@ res_start
 #ifdef SPANISH
 	.asc "C","Z"+2,"lula energ","Z"+3,"a",0
 #endif			
+#ifdef FRENCH
+	; "Pile d'énergie" -- cf. room_hideout.s et liberatorcargo.os et ocode_ecell.os dans ../scripts
+	.asc "Pile",0  ; "Pile d'énergie" est trop long: peut causer bug affichage si utilisé avec "Tuyau en Y" ou "Clé anglaise" 
+#endif
 res_end
 .)
 
@@ -710,6 +766,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Dron",0
+#endif
+#ifdef FRENCH
+	.asc "Drone",0
 #endif
 res_end	
 .)

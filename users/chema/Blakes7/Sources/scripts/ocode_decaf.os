@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -31,6 +32,11 @@ stringpack DECAF
 	"A cup of decaf coffee.";
 	"Neat. These paper cups keep it hot.";
 	"I don't know how to use it this way."
+#endif
+#ifdef FRENCH
+	"Un gobelet de café décaféiné.";
+	"Le gobelet le maintient bien chaud.";
+	"Je ne vois pas comment faire."
 #endif
 #ifdef SPANISH
 	"Un descafeinado.";

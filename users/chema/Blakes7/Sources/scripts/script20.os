@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -101,6 +102,26 @@ stringpack STLOCAL{
 	
 	"Okay. I'll rescue them.";
 #endif
+
+#ifdef FRENCH
+	"Je savais que c'était un piege...";
+	"Zen, déplace le Libérateur hors de";
+	"portée de leurs scanners, en les";
+	"maintenant sous l'horizon.";
+	
+	/**************************************/
+	"Que vais-je faire maintenant?...";
+	"Je pourrais m'enfuir avec ce vaisseau.";
+	"Je n'ai pas besoin de Blake.";
+	"Je n'ai besoin de personne!";
+	
+	"Zen, quels sont les chances pour un";
+	"homme seul d'échapper a la Fédération";
+	"en se cachant avec le Libérateur?";
+	
+	"Bon, je vais aller les secourir..."; 
+#endif
+
 #ifdef SPANISH
 	"Sabía que era una trampa...";
 	"Zen, maniobra fuera del rango de sus";

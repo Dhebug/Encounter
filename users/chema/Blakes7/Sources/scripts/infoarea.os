@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -112,6 +113,15 @@ stringpack STDESC
 	"No, thank you.";
 #endif
 
+#ifdef FRENCH
+	"Encore une autre caméra de sécurité...";
+	"Sauve ta planete.";
+	"Nous travaillons tous dans le meme but:";
+	"rendre la Terre habitable de nouveau.";
+	"Ceci est l'objectif de la Fédération."; // [laurentd75]: "objectif" rather than "plan" here
+	"Enrole-toi dans le Service de Sécurité.";
+	"Non merci...";
+#endif
 #ifdef SPANISH
 	"Sí. Otra cámara de seguridad.";
 	"Salva tu planeta.";
@@ -137,6 +147,11 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "I need a map of the complex." inactive -> map;
 	option "Yes, I need info on the city exits." inactive -> exits;
 	option "Nothing, thank you." active -> bye;
+#endif
+#ifdef FRENCH
+	option "Il me faudrait un plan du complexe." inactive -> map;
+	option "Je cherche les sorties de la ville." inactive -> exits;
+	option "Non rien, merci." active -> bye;
 #endif
 #ifdef SPANISH
 	option "Necesito un mapa del complejo." inactive -> map;
@@ -229,6 +244,38 @@ stringpack DIALOG_STRINGS
 	"I can't accept anything, sir.";
 #endif
 
+#ifdef FRENCH
+	/*++++++++++++++++++++++++++++++++++++++*/
+	"Il a l'air disposé a m'aider.";
+	"Bonsoir, que puis-je faire pour vous?";
+	
+	//2
+	"Pas de probleme. Bonne journée.";
+	"Au fait, savez-vous s'ils ont enfin";
+	"réapprovisionné la machine a café";
+	"qui se trouve dans le couloir?";
+	"Non, désolé.";
+	"Tant pis. Mon service finit bientot,";
+	"mais j'aurais bien aimé avoir un café.";
+	//9
+	"Désolé, mais je n'en ai plus.";
+	"J'en recevrai d'autres demain.";
+	"Cherchez-vous une chose en particulier?";
+	//12
+	"Oh, ca n'apparait pas sur les plans.";
+	//"You need tech maps, which are ilegal...";
+	"Elles se trouvent dans les zones";
+	"de service, interdites au public.";  // "de service" ou "d'entretien"...
+	"Mais je connais quelqu'un qui saurait.";
+	//"if you have something to trade.";
+	"Demandez en porte 4 dans le couloir.";
+	//17
+	"Ok, merci beaucoup.";
+	//18
+	"Je ne peux rien accepter, monsieur.";
+#endif
+
+
 #ifdef SPANISH
 	/*++++++++++++++++++++++++++++++++++++++*/
 	"Parece encantado de ayudar.";
@@ -248,7 +295,7 @@ stringpack DIALOG_STRINGS
 	"¿Buscaba algo en particular?";
 	//12
 	"Uy, eso no aparece en los mapas.";
-	"Son áreas de mantenimiento y están";
+	"Son áreas de mantenimiento y están"; // [laurentd75] mismatch with English version: "They are IN maintenance areas"
 	"prohibidas para ciudadanos regulares.";
 	"Mmmm, pero conozco a alguien...";
 	"Pregunte en la puerta 4 del pasillo.";

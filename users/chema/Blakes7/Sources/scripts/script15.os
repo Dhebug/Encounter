@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -237,7 +238,7 @@ stringpack ST_INTRO{
 "success.";
 
 //57
-"Yeh.";
+"I can understand that."; // [laurentd75]: replaced "Yeh." with "I can understand that.";
 //58
 "However, you have my full support,";
 "unofficially, of course.";
@@ -246,15 +247,127 @@ stringpack ST_INTRO{
 //61
 " ";	
 #endif
+
+#ifdef FRENCH
+"\A_FWMAGENTA+A_FWCYAN*8+128 QG de la Fédération Spatiale.";
+	
+/***************************************/
+"Ah, Travis. Entrez. J'ai fait tout ce";
+"qui était en mon pouvoir pour effacer";
+"toute trace de Blake et de ses actions";
+"mais malgré cela la véritable histoire";
+"se répand, par le bouche-a-oreille, la";
+"rumeur... A chaque fois, l'histoire";
+"est enjolivée un peu plus.";
+"Toute attaque contre la Fédération";
+"est attribuée a Blake. Le plus petit";
+"incident est exagéré jusqu'a devenir";
+"un événement majeur.";
+"Blake devient une légende.";
+"Il faut l'arreter.";
+
+//14
+/***************************************/
+"Je suis conscient du risque, si Blake";
+"devenait une légende. Mais gardons a";
+"cette affaire ses justes proportions.";
+"Il est vrai que Blake controle un";
+"superbe vaisseau, mais ce n'est";
+"qu'un homme, allié a une poignée de";
+"criminels, voila tout. Il n'est ni";
+"invulnérable, ni surhumain.";
+"C'est juste un homme qui a été tres";
+"chanceux de pouvoir nous échapper.";
+"-- jusqu'a présent...";
+
+//25
+//***************************************/ // max col: 54
+"\A_FWMAGENTA Examinons les faits alors: avec tous";
+"\A_FWMAGENTA les moyens dont dispose la Fédération,";
+"\A_FWMAGENTA on constate qu'un homme seul, chanceux";
+"\A_FWMAGENTA mais vulnérable, est toujours libre de";
+"\A_FWMAGENTA semer le chaos. Ca parait incroyable.";
+"\A_FWMAGENTA Vous devez savoir qu'il y a de vives";
+"\A_FWMAGENTA critiques a votre encontre quant a";
+"\A_FWMAGENTA votre gestion de l'affaire Blake.";
+
+	// [laurentd75]: autre version, mais finalement moins dans l'esprit de l'original en anglais.
+	//***************************************/ // max col: 54
+	// "\A_FWMAGENTA Je suis consciente des faits: C'est";
+	// "\A_FWMAGENTA juste qu'avec tous les moyens dont";
+	// "\A_FWMAGENTA dispose la Fédération, qu'un seul homme";
+	// "\A_FWMAGENTA chanceux mais vulnérable, puisse encore";
+	// "\A_FWMAGENTA semer le chaos parait incroyable.";
+	// "\A_FWMAGENTA Vous devez savoir qu'il y a de vives";
+	// "\A_FWMAGENTA critiques a votre encontre quant a";
+	// "\A_FWMAGENTA votre gestion de l'affaire Blake.";
+
+//33
+/***************************************/ // maxcol: 66
+"\A_FWWHITE+A_FWGREEN*8+$c0 Ce n'est pas entierement exact. J'ai";
+"\A_FWWHITE+A_FWGREEN*8+$c0 eu deux occasions durant lesquelles";
+"\A_FWWHITE+A_FWGREEN*8+$c0 j'aurais pu en finir avec Blake. Seule";
+"\A_FWWHITE+A_FWGREEN*8+$c0 l'insistance de l'Administration pour";
+"\A_FWWHITE+A_FWGREEN*8+$c0 que le Libérateur soit capturé intact";
+"\A_FWWHITE+A_FWGREEN*8+$c0 m'a fait échouer.";
+
+//39
+/***************************************/
+"J'ai mentionné ce point pour votre";
+"défense, mais je ne peux continuer a";
+"vous trouver des excuses. J'ai subi d'";
+"énormes pressions pour vous remplacer.";
+
+//43
+/***************************************/
+"Vraiment?";
+
+//44
+/***************************************/
+"Oui. Jusqu'a présent, j'ai pu résister";
+"a cette pression. Mais j'ai désormais";
+"besoin que vous me prouviez que ma";
+"confiance n'a pas été mal placée.";
+
+//48
+/***************************************/
+"Je crois que mon dernier plan fera";
+"taire les critiques.";
+
+//50
+/***************************************/
+"Ce plan semble excellent, il devrait";
+"avoir toutes les chances de réussir.";
+
+//52
+"Je suis heureux que vous l'approuviez.";
+
+//53
+"Allons Travis, ne soyez pas naif. Vous";
+"savez bien que dans une position comme";
+"la mienne, on n'approuve rien tant que";
+"ce n'est pas un succes éclatant.";
+
+//57
+"J'en suis conscient.";
+//58
+"Cependant, vous avez tout mon soutien.";
+"De maniere officieuse, naturellement.";
+//60
+"Naturellement.";
+//61
+" ";	
+#endif
+
 #ifdef SPANISH
 	"\A_FWMAGENTA+A_FWCYAN*8+128 Federación. Comandancia del Espacio.";
 
 /***************************************/
 "Ah, Travis. Pasa. Mi departamento ha";
-"hecho lo posile para eliminar toda la";
+"hecho lo posible para eliminar toda la";  // [laurentd75]: corrected "posile" -> "posible"
 "información sobre Blake y su grupo,";
 "pero las historias se propagan...";
-"A tavés del boca a boca, del rumor,";
+"A través del boca a boca, del rumor,";    // [laurentd75]: corrected "tavés" -> "través"
 "cada vez que se cuenta se vuelve más";
 "elaborada y exagerada.";
 "Cualquier daño a la Federación se";

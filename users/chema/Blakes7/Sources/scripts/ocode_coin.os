@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -31,6 +32,13 @@ stringpack COIN
 	"A cent of credit.";
 	"A small, thin, useless coin.";
 	"It is not useful for this.";
+#endif
+#ifdef FRENCH
+	/*
+	 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+	"Un centime de crédit.";
+	"Une petite piece de monnaie inutile.";
+	"Ca n'a aucune utilité pour cela.";
 #endif
 #ifdef SPANISH
 	/*

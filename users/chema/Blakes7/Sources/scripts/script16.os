@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -319,6 +320,100 @@ stringpack ST_INTRO{
 "But there was a bridge to cross...";
 
 #endif
+
+#ifdef FRENCH
+/***************************************/
+// Gan 0,1
+"Blake!";
+"Regarde ce message qu'on a intercepté.";
+//Blake 2
+"Ravella...";
+//Gan 3,4
+"Elle a été transférée sur Centero pour";
+"y etre interrogée et y purger sa peine.";
+//Blake 5,6
+"Ils la détruiront, la-bas...";
+"Nous devons les en empecher.";
+//Avon 7
+"Et que proposes-tu?";
+//Blake 8
+"Nous allons aller la sauver.";
+
+//Avon 9,10,11
+"Je croyais qu'on s'était mis d'accord";
+"qu'on ne ferait rien sans en discuter";
+"de facon approfondie.";
+//Blake 12, 13, 14
+"On était aussi d'accord que chacun";
+"pourrait partir quand il le voudrait.";
+"Si tu souhaites partir, dis-le moi.";
+/***************************************/
+//Avon 15,16,17
+"Oh, je le ferai. Mais en attendant,";
+"je pense que nous avons le droit de";
+"savoir ce que tu projettes de faire."; // ou "ce que tu prépares"
+
+
+
+//Blake 18,19
+"Zen, fais route vers Centero,";
+"vitesse standard fois deux.";
+//Zen, 20
+" Route et vitesse confirmées.";
+//Avon 21, 22
+"Ce n'est pas exactement l'idée que je";
+"me faisais d'une discussion sérieuse.";
+//BLake 23,24
+"C'était une chef de la résistance...";
+"... et une bonne amie.";
+// Avon 25,26,27
+"Une autre idéaliste..."; // [laurentd75]: adding "pauvre mais honnete." would exceed max line length and add nothing to the storyline
+"Il me tarde de la rencontrer afin de";
+"découvrir qui elle est vraiment.";
+
+//Gan 28
+"Comment entrerons-nous dans la prison?";
+//Avon 29,30,31,32
+"Ces installations sont protégées contre"; // [laurentd75] "à l'épreuve des" ou "protégées contre"
+"les scanners. Sans plus d'informations,";
+"je ne peux pas vous y téléporter. Il";
+"faut trouver un autre moyen d'entrer.";
+
+//Jenna  33, 34, 35,36
+"Je connaissais un groupe de trafiquants";
+"sur Centero qui passaient la drogue via";
+"des complices dans la base. Ils avaient";
+"acces aux tunnels de service.";
+
+//Vila  37
+"Ils avaient?...";
+//Jenna 38,39
+"Les Fédéraux l'ont découvert. Ils les";
+"ont tous éliminés avec un gaz mortel.";
+//Blake 40
+"Et bien voila par ou nous entrerons."; // ou: "Et bien ce sera notre porte d'entrée."
+
+/***************************************/
+// At the teleport
+//Avon 41-46
+"J'ai donné un transpondeur a Jenna qui";
+"adapte le signal des bracelets pour"; // [laurentd75]: see also "ocode_trasponder.os"
+"qu'il puisse pénétrer le blindage."; // "qu'il puisse passer a travers le blindage.";
+"De cette facon je pourrai vous faire";
+"revenir, ainsi que quiconque portant";
+"un bracelet, meme depuis une cellule.";
+
+//Blake 47
+"Excellent. Envoie-nous la-bas alors.";
+
+// Jenna 48
+"On entrait a partir d'une grotte.";
+"Par ici...";
+"Voila. Cette grotte la-bas... Mais";
+"il y avait un pont pour traverser...";
+
+#endif
+
 #ifdef SPANISH
 /***************************************/
 // Gan 0,1

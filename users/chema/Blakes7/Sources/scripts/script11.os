@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -248,6 +249,74 @@ stringpack STLOCAL{
 	
 	//37
 	"I said don't move!";
+	
+#endif
+
+#ifdef FRENCH	
+	/***************************************/
+	"Avon, c'est Blake.";
+	"Je les ai trouvés! Ramene-nous!";
+	
+	"Ha ha! Je le savais!";
+	
+	//3
+	"Maintenant, reculez-vous tous!";
+	"J'ai une arme pointée sur vous, non?";
+	"Vous allez faire atterrir ce vaisseau";
+	"a la surface immédiatement.";
+	//7
+	"Mais on s'éloigne déja de la planete.";
+	"Alors faites demi-tour.";
+	
+	//9
+	"Si vous nous tuez, vous ne pourrez";
+	"jamais piloter ce vaisseau.";
+	
+	//11
+	"Je régnais sur une petite planete";
+	"prison de moins de 500 personnes.";
+	"Mais avec ca... Avec ca, je pourrais";
+	"régner sur un millier de planetes!";
+	
+	"Pour un tel enjeu, croyez-vous que";
+	"j'hésiterais a vous tuer? ALLONS!";
+	
+	"J'étais leur pretre... Maintenant";
+	"je vais devenir leur dieu...";
+	
+	"\A_FWWHITE+A_FWGREEN*8+192 LEUR DIEUUU!";
+	" ";
+	//21
+	/***************************************/
+	"Bien! Tu l'as téléporté dans l'espace!";
+	"Il commencait a me faire mal au crane.";
+	
+	//23
+	"Blake! Zen a détecté une flotte de";
+	"vaisseaux venant vers ce systeme.";
+	"Il les a identifiés comme étant des";
+	"vaisseaux de poursuite fédéraux.";
+	
+	//27
+	"Ok, définis un cap pour leur échapper.";
+	"Vitesse maximale.";
+	
+	//29
+	"Si nous pouvons les semer, nous aurons";
+	"l'univers entier pour nous cacher.";
+	
+	//31
+	"Sauf que nous n'allons pas nous cacher.";
+	"Bientot, les vaisseaux de la Fédération";
+	"sauront exactement ou nous sommes.";
+	"Ou au moins ou nous avons été.";
+	
+	//35
+	"Je ne te suis pas.";
+	"Ah, mais si. Et la est le probleme...";
+	
+	//37
+	"J'ai dit ne bougez pas!";
 	
 #endif
 

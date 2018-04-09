@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -48,6 +49,15 @@ stringpack DRONE{
 	"I wouldn't know what to do with it.";
 	"I wonder if I can make use of that";
 	"transmitter and that receiver...";
+#endif
+
+#ifdef FRENCH
+	/***************************************/
+	"On dirait un petit drone, mais il a";
+	"l'air cassé et totalement irréparable.";
+	"Je ne saurais pas quoi en faire.";
+	"Je me demande si je pourrais utiliser";
+	"son transmetteur et son récepteur..."; // on parle du transmetteur et du récepteur du drone
 #endif
 
 #ifdef SPANISH

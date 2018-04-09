@@ -304,6 +304,9 @@ res_start
 #ifdef SPANISH
 	.asc "Camino",0
 #endif
+#ifdef FRENCH
+	.asc "Chemin",0
+#endif
 res_end	
 .)
 
@@ -327,6 +330,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Bosque",0
+#endif
+#ifdef FRENCH
+	.asc "Foret",0
 #endif
 res_end	
 .)
@@ -359,6 +365,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Troncos",0
+#endif
+#ifdef FRENCH
+	.asc "Troncs",0
 #endif
 res_end	
 .)

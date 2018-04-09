@@ -2,6 +2,7 @@
 #include "globals.h"
 
 /* Stringpack for the escape plan in the London */
+/* Traduction FR:laurentd75	*/
 
 stringpack 101{
 #ifdef ENGLISH
@@ -47,6 +48,51 @@ stringpack 101{
 	"You don't really believe that.";
 	"No, but I'd like to.";
 #endif
+
+#ifdef FRENCH
+	"Avon et moi prendrons le controle de";
+	"l'ordinateur. Les autres chercheront";
+	"l'armurerie pour y prendre des armes.";
+	
+	"Donne-moi une seule bonne raison pour"; 
+	"laquelle je devrais t'aider...";
+	
+	"Tu es un homme civilisé, Avon.";
+	"Sur Cygnus Alpha, cela ne constituera";
+	"pas une caractéristique de survie.";
+	
+	"Alors que toi tu m'offres la sécurité?";
+	
+	"Je t'offre une chance d'etre libre...";
+	
+	"Ton armée n'a que 4 recrues, Blake.";
+	"Quatre, et LUI!... Crois-tu toujours";
+	"pouvoir t'emparer de ce vaisseau?";
+	
+	"Si tu joues ton role, oui.";
+	
+	"Et si on réussit, que fait-on apres?"; //Jenna
+	"On essaie de retourner sur Terre.";
+	"Retourner sur Terre?"; // Jenna
+	"Je me doutais bien que tu étais fou...";
+	"Ils ont massacré ma famille, mes amis.";
+	"Ils ont détruit mon passé, m'ont drogué";
+	"et fait vivre une existence factice."; // "pour que je vive une existence factice.";
+	
+	"Au moins, tu es toujours vivant."; // Jenna
+	"Je ne le serai pas avant que les hommes";
+	"ne soient libres, avant que le pouvoir";
+	"ne revienne aux mains de gens honnetes.";
+	
+	"L'argent est la seule réalité.";
+	"Réveille-toi, Blake! Tu n'es peut-etre";
+	"plus drogué, mais tu es toujours en";
+	"train de rever.";
+	"Il y a des reves qui valent le coup."; // Jenna
+	"Tu ne le penses pas vraiment, si?";
+	"Non, mais j'aimerais bien y croire...";
+#endif
+
 
 #ifdef SPANISH
 	/***************************************/

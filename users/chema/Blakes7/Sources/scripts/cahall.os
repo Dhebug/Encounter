@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -53,39 +53,39 @@ stringpack HALLMAIN{
 
 #ifdef FRENCH
 	/***************************************/
-	"His blessings are upon you.";
-	"Speak and He will hear you.";
+	"Parle, et le Seigneur t'entendra."; // [laurentd75]: inverted the 2 sentences for easier understanding in French
+	"Ses bénédictions sont sur toi.";
 
-	"I am thy true servant.";
+	"Je suis votre fidele serviteur.";
 
-	"The souls from the outer darkness";
-	"are amongst us?";
+	"Les ames de l'obscur au-dela";
+	"sont-elles avec nous?";
 
-	"They are in the place of the novices.";
+	"Dans la salle des novices.";
 
-	"Good. Come and pray with me.";
-	"Only from His hand comes life...";
-	"And from His wrath comes death.";
+	"Bien. Viens et prie avec moi.";
+	"Seulement de Sa main surgit la vie...";
+	"Et de Sa colere descend la mort.";
 
 	//9
-	"With other souls to do His work...";
-	"there will be a chance for me ...";
-	"... for the faithful...";
-	"to rise to the priesthood.";
+	"Avec d'autres ames pour Son travail...";
+	"Il y aura une opportunité pour moi...";
+	"... pour tous les fideles...";
+	"de s'élever au rang de pretre.";
 
-	"He will not fail you.";
-	"You will be rewarded."; 
+	"Il ne te faillira pas.";
+	"Tu seras récompensé.";
 	
 	//15
-	"Master. I've found something...";
-	"I think there is an intruder.";
+	"Maitre. J'ai trouve quelque chose...";
+	"Je crois qu'il y a des intrus.";
 	/***************************************/	
 	
-	"Can't be. The prisoners were observed";
-	"from the moment they landed.";
-	
-	"Maybe someone else came in his own";
-	"spaceship... Show us.";
+	"Impossible. Les prisonniers ont été";
+	"surveillés des qu'ils ont atterri.";
+
+	"Quelqu'un d'autre est peut-etre venu";
+	"avec un autre vaisseau? Montrez-nous.";
 #endif
 
 #ifdef SPANISH

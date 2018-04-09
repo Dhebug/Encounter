@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -22,6 +23,20 @@ stringpack BALLROBOT{
 	"Are you trying to kill me?";
 	"Let me doit by myself, will you?";
 	"I don't have a projectile.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Je n'ai jamais rien vu de tel.";
+	"On dirait qu'il a un pouvoir mental";
+	"capable de neutraliser les menaces.";
+	"Je dois trouver quelque chose, sinon";
+	"ils sont perdus a jamais!";
+	"Ca ne fonctionnera pas.";
+	"Je ne vous comprends pas!";
+	"Aie!";
+	"Vous essayez de me tuer, ou quoi?";
+	"Laissez-moi le faire moi-meme alors!";
+	"Je n'ai pas de projectile.";
 #endif
 #ifdef SPANISH
 	/***************************************/

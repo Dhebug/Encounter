@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -70,6 +71,17 @@ stringpack STLOCAL{
 "illumination, time synchronization...";
 "Wait here. I'll search for Ravella.";
 #endif
+
+#ifdef FRENCH	
+/***************************************/
+"Nous sommes a l'intérieur!";
+"Viens. Cachons-nous ici.";
+"Il y a ici les commandes de ce niveau:";
+"Climatisation, systemes électriques,";
+"éclairage, synchronisation horaire...";
+"Attends ici. Je vais chercher Ravella.";
+#endif
+
 #ifdef SPANISH
 "¡Estamos dentro!";
 "Ven. Escondámonos ahí.";

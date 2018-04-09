@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -23,7 +23,7 @@
 #define DIALOG_1	200
 
 
-/* Dialog with the Guard*/
+/* Dialog with the Guard */
 dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #ifdef ENGLISH
 	option "I need to visit a prisoner." active -> visit;
@@ -42,19 +42,27 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #endif
 
 #ifdef FRENCH
-	option "I need to visit a prisoner." active -> visit;
-	option "I need to use the terminal." active -> terminal;
-	option "Your shift's over. I'll replace you." active -> shift;
-	option "Good watch, comrade." active -> bye;
-	option "But this is an exception..." inactive -> exception;
-	option "Bah, who's going to tell him?" inactive -> whotell;
+	option "Je dois voir un prisonnier." active -> visit;
+	option "Je dois utiliser le terminal." active -> terminal;
+	option "Ta garde est finie, je te remplace." active -> shift;
+	option "Bon tour de garde, camarade." active -> bye;
+	option "Mais il s'agit d'une exception..." inactive -> exception;
+	option "Bah, qui va le lui dire?" inactive -> whotell;
 	
-	option "Except for maybe go to hell'." inactive -> o1;
-	option "If only you could hide your face.'" inactive -> o2;
-	option "This describes everything you are not.'" inactive -> o3;
-	option "Damn, I'm good at telling lies!'"  inactive -> o4;
-	option "That's why I always wake up screaming.'"  inactive -> o5;
-	option "I have no idea... 'hocus pocus'?" inactive -> o6;
+	/** NOTE: ici on définit les SECONDES moitiés des proverbes      **/
+	/** dont la première partie est définie dans le bloc             **/
+	/** "stringpack STCOUPLETS" vers le milieu de ce fichier.        **/
+	/** Chaque rime doit commencer et se terminer par une apostrophe **/
+	/** ATTENTION ces définitions doivent etre identiques à celles   **/
+	/** définies dans le script "toilet.os" !!                       **/
+	/** Note: la DERNIERE phrase est utilisée comme réponse lorque   **/
+	/** Blake ne connait pas la 2e partie du couplet                 **/
+	option "c'est qu'il est temps de virer.'" inactive -> o1;
+	option "et réciproquement.'" inactive -> o2;
+	option "le mal bien fait fait bien moins mal'." inactive -> o3;
+	option "je fais mine de bien travailler.'"  inactive -> o4;
+	option "est ton ame en mon automne, hélas!'"  inactive -> o5;
+	option "Aucune idée... 'Abracadabra'?" inactive -> o6;
 #endif
 
 #ifdef SPANISH
@@ -228,19 +236,19 @@ stringpack DIALOG_STRINGS
 #endif
 
 #ifdef FRENCH
-"Good day, comrade.";
-"Impossible. No visits allowed.";
-"Orders from the General.";
-"Impossible. No one can use it.";
-"You're mistaken. Look at the clock.";
-"There's still an hour left.";
-"Ah... great! I was quite tired.";
-"But first the watchword!";
-"They were very serious this time.";
-"Sorry, but I can't let you.";
-"No watchword, no shift change.";
-"Good. Next one.";
-"Perfect! Have a good shift, comrade.";
+"Salut, camarade.";  // utiliser "Salut" plutôt que "Bonjour" ici, car employé aussi par le garde pour dire au-revoir...
+"Désolé. Les visites sont interdites.";
+"Ce sont les ordres du Général.";
+"Désolé. Personne ne doit l'utiliser.";
+"Tu te trompes: regarde l'horloge.";
+"Il reste encore une heure.";
+"Ah, génial! Je commencais a fatiguer.";
+"Mais d'abord, la phrase secrete!"; // "Mais d'abord, le mot de passe!"; // mot de passe, sésame, mot d'ordre, phrase secrete, phrase code ?
+"Ils ont été clairs cette fois."; // dans le contexte c'est plutôt "clair" ou "explicite" que "sérieux"
+"Désolé, mais je ne peux pas.";
+"Sans la phrase secrete, pas de releve.";	// "Sans mot de passe, pas de changement.";
+"Bien. La suivante, maintenant.";	// ou "Le suivant, maintenant" s'il s'agit de "mot de passe"
+"Parfait! Bon tour de garde, camarade.";
 #endif
 
 #ifdef SPANISH
@@ -274,12 +282,18 @@ stringpack STCOUPLETS{
 #endif
 
 #ifdef FRENCH
+	/** NOTE: ici on définit les PREMIERES moitiés des "proverbes"   **/
+	/** dont la seconde partie est définie dans le bloc              **/
+	/** "dialog DIALOG_1" au début du fichier.                       **/
+	/** Chaque rime doit commencer et se terminer par une apostrophe **/
+	/** ATTENTION ces définitions doivent etre identiques à celles   **/
+	/** définies dans le script "toilet.os" !!                       **/
 	/***************************************/
-	"'My feelings for you no words can tell";
-	"'Oh loving beauty you float with grace";
-	"'Kind, intelligent, loving and hot";
-	"'I love your smile, face, and eyes";
-	"'I see your face when I am dreaming";
+	"'Lorsque les mouettes ont pied,";
+	"'Tout avantage a ses inconvénients,";
+	"'Si tu fais le mal, fais-le bien, car";
+	"'Tant qu'on fait mine de bien me payer,";
+	"'Etonnamment monotone et lasse,";
 #endif
 
 #ifdef SPANISH
@@ -399,28 +413,28 @@ stringpack STDESC{
 #endif
 
 #ifdef FRENCH
-	"Hey! Civilians cannot enter here.";
-	"Leave immediately!";
-	"Sorry, sir.";
-	"Comrade. Nobody can enter here.";
-	"Orders from the General.";
-	"Okay. Sorry, comrade.";
-	"Just a clock.";
-	"I need to know the cell number first.";
-	"Let's see if I find Ravella...";
-	"Nothing. They surely use a code.";
+	"Hé! C'est interdit au public, ici!";
+	"Partez d'ici immédiatement!";
+	"Désolé, monsieur.";
+	"Camarade, personne ne doit entrer ici.";
+	"Ce sont les ordres du Général.";
+	"D'accord. Désolé, camarade.";
+	"C'est juste une horloge.";
+	"Il me faut le numéro de cellule avant."; // d'abord, avant
+	"Voyons si je peux trouver Ravella...";
+	"Rien. Ils doivent utiliser un code.";
 	// 10
 	/***************************************/
-	" (You. You're not a guard.)";
-	"What is that voice in my head?";
-	" (Please, free me.)";
-	"Who are you? Why are you in my mind?";
-	" (Free me, and I'll help you.)";
-	" (I'm in cell B-3.)";
-	"Okay. Let's find out what's going on.";
+	" (Toi. Tu n'es pas un garde.)";
+	"Quelle est cette voix dans ma tete?";
+	" (S'il te plait, libere-moi.)";
+	"Qui es-tu ? Que fais-tu dans ma tete?";
+	" (Libere-moi, et je t'aiderai.)";
+	" (Je suis dans la cellule B-3.)";
+	"Ok. Voyons de quoi il retourne.";
 	//17
-	"This is not the correct block.";
-	"I hear voices in block B.";
+	"Ce n'est pas le bon bloc.";
+	"J'entends des voix dans le bloc B.";
 #endif
 
 #ifdef SPANISH

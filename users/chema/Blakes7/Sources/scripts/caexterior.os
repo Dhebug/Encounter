@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours   */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -49,25 +49,25 @@ stringpack STDESC{
 #endif
 
 #ifdef FRENCH
-	"It reads:";
-	"This is the fate of the non-believers.";
-	"Creepy...";
+	"Il est écrit:";
+	"Tel est le destin des non-croyants.";
+	"Ca fait peur...";
 	
 	//3
-	"This man has been tortured and left";
-	"to die here, tied to the post with a";
-	"large, thick rope.";
-	"Nasty bugs cover everything.";
+	"Cet homme a été torturé et on l'a";
+	"laissé mourir, attaché a ce poteau";
+	"avec cette longue corde épaisse.";
+	"Il est couvert d'insectes répugnants.";
 	
 	//7
-	"You're kidding. I won't touch the rope";
-	"while covered with those nasty bugs.";
+	"Pas question de toucher a cette corde";
+	"recouverte de ces insectes ignobles.";
 	//9
-	"It works! The bugs are running away.";
-	"I could take the rope for later...";
-	"I don't know what you mean.";
-	"Not the corpse, I'll take the rope.";
-	"There is nothing left of interest.";
+	"Ca marche, les insectes décampent!";
+	"La corde pourrait m'etre utile...";
+	"Je ne comprends pas.";
+	"Le corps non, mais je prends la corde.";
+	"Il n'y a plus rien d'intéressant.";
 #endif
 
 #ifdef SPANISH

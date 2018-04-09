@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -251,6 +252,48 @@ stringpack 200 {
 	"Whatever that means...";
 	" ";
 #endif
+
+#ifdef FRENCH
+	/*++++++++++++++++++++++++++++++++++++++ */
+	"Ca mene au systeme de ventilation.";
+	"La grille est solidement vissée."; // NB: pas la peine de préciser " au mur."
+	"Je ne peux pas.";
+	//3
+	"Ca ne m'aide pas a enlever la grille.";
+	"La piece va parfaitement dans la fente!";
+	"Un tour de plus, et...";
+	"Voila!";
+	//7
+	"C'est gros, c'est rouge, et tres lourd.";  // NB: Il s'agit de l'extincteur. Autant dire "lourd" plutôt qu'important en francais.
+	"Pourquoi? Il n'y a le feu nulle part.";
+	//9
+	"Une banale armoire électrique.";
+	"Je ne peux pas, c'est fermé.";
+	// 11
+	"Des chiffres, voyants et boutons.";
+	"Aucune idée de comment ca fonctionne.";
+	"Appuyons sur un bouton au hasard...";
+	// 14
+	"Completement incompréhensible!";
+	"Je ne saurais pas comment faire.";
+	//16
+	"Une vanne a volant. Ca, c'est facile!"; // [laurentd75]: válvula manual = vanne / soupape a volant
+	"Ok, essayons de tourner le volant...";
+	//18
+	" (Beep, beep)";
+	" (Boop, boop)";
+	" (Beep, boop)";
+	" (Boop, beep)";
+	//22
+	"Une barre clignote en rouge et bleu.";
+	"Un carré bleu clignote.";
+	"Ca affiche 'Niveau d'ionisation bas'..."; // [laurentd75]: trying to avoid English jargon here :-)
+	"Ca affiche 'Faisceau de flux ACTIF' ?!";
+	//26
+	"Quant a savoir ce que ca signifie...";
+	" ";
+#endif
+
 
 #ifdef SPANISH
 	/*++++++++++++++++++++++++++++++++++++++ */

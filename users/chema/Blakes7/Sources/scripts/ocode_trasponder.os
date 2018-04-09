@@ -4,6 +4,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -53,12 +54,25 @@ stringpack TRASPONDER{
 
 "I need it connected there.";
 #endif
+
+#ifdef FRENCH
+/**************************************/
+"Le transpondeur, nécessaire pour se";
+"téléporter depuis ce complexe blindé.";
+
+"Il fournit un signal pour adapter"; // [laurentd75]: "adapter" is more appropriate than "réparer" here -- see "adapt" in "script16.os"
+"le systeme de téléportation, et encode";
+"le signal des bracelets avoisinants.";
+
+"J'ai besoin qu'il soit connecté la.";
+#endif
+
 #ifdef SPANISH
 "El traspondedor para teleportarnos";
 "desde este complejo apantallado.";
 
 "Proporciona una señal para fijar el";
-"sistema de telepore y codifica la";
+"sistema de teleporte y codifica la"; // [laurentd75]: corrected "telepore" to "teleporte"
 "señal de los brazaletes cercanos.";
 
 "Lo necesito conectado ahí.";

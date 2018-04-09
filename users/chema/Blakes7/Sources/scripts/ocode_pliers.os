@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -12,6 +13,10 @@ stringpack PLIERS{
 #ifdef ENGLISH	
 	"Magnetic long-nose pliers.";
 	"Cannot use the pliers here.";
+#endif
+#ifdef FRENCH	
+	"Des pinces magnétiques a long bec.";
+	"Je ne peux pas utiliser les pinces ici.";
 #endif
 #ifdef SPANISH
 	"De punta larga y magnética.";

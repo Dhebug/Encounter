@@ -316,6 +316,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -338,6 +341,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Garabatos",0
+#endif
+#ifdef FRENCH
+	.asc "Graffitis",0
 #endif
 res_end	
 .)
@@ -362,6 +368,9 @@ res_start
 #ifdef SPANISH
 	.asc "Garabatos",0
 #endif
+#ifdef FRENCH
+	.asc "Graffitis",0
+#endif
 res_end	
 .)
 
@@ -384,6 +393,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Garabatos",0
+#endif
+#ifdef FRENCH
+	.asc "Graffitis",0
 #endif
 res_end	
 .)
@@ -408,6 +420,9 @@ res_start
 #ifdef SPANISH
 	.asc "Garabatos",0
 #endif
+#ifdef FRENCH
+	.asc "Graffitis",0
+#endif
 res_end	
 .)
 
@@ -429,6 +444,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Garabatos",0
+#endif
+#ifdef FRENCH
+	.asc "Graffitis",0
 #endif
 res_end	
 .)
@@ -453,6 +471,9 @@ res_start
 #ifdef SPANISH
 	.asc "Garabatos",0
 #endif
+#ifdef FRENCH
+	.asc "Graffitis",0
+#endif
 res_end	
 .)
 
@@ -475,6 +496,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cartel",0
+#endif
+#ifdef FRENCH
+	.asc "Ecriteau",0
 #endif
 res_end	
 .)
@@ -499,6 +523,9 @@ res_start
 #ifdef SPANISH
 	.asc "Retrete",0
 #endif
+#ifdef FRENCH
+	.asc "Toilettes",0
+#endif
 res_end	
 .)
 
@@ -520,6 +547,9 @@ res_start
 	.asc "Washbasin",0
 #endif
 #ifdef SPANISH
+	.asc "Lavabo",0
+#endif
+#ifdef FRENCH
 	.asc "Lavabo",0
 #endif
 res_end	

@@ -1,5 +1,6 @@
 ﻿
 /* More strings in separate file, so they can be removed from memory */
+/* Traduction FR:laurentd75	*/
 
 #include "globals.h"
 
@@ -59,6 +60,60 @@ stringpack DIALOG_EXTRAS{
 	//31
 	"I could use my charm on a guard...";
 	"but I don't know how to lure one in.";
+#endif
+
+#ifdef FRENCH
+	/**************************************/
+	//0
+	"La meilleure que tu puisses trouver.";
+	"Si ca peut voler, je peux le piloter."; // "Je peux piloter n'importe quoi."; // "Si ca bouge, je peux le piloter."; 
+	"Qui sait? Jamais personne n'en est";
+	"revenu pour en parler...";
+	//4
+	"Biométrique. Analyse la paume de main.";
+	"Dur a leurrer.. Demande a l'expert."; // "casser" ou "percer", ou "leurrer" ou "tromper"
+	"La probabilité de survivre les trente";
+	"premieres heures est de moins de 10%.";
+	
+	//8
+	"On dit que ces vaisseaux-prisons ne"; 
+	"vont jamais jusqu'a Cygnus, en fait."; 
+	"Des qu'ils atteignent l'espace profond"; // "Ils attendent d'etre dans l'espace";
+	"ils t'éjectent a partir d'un sas...";   // "profond pour te jeter d'un sas.";
+	"Tu es bete...";
+	
+	//13
+	"Si c'est pour sauver ma peau, oui..."; // [laurentd75]: fits storyline better than "Si je suis assez effrayé, oui...";
+	"Les serrures biométriques sont sures,";
+	"mais peuvent tomber en panne, alors il";
+	"y a souvent aussi une carte d'acces.";
+	"J'ai tenté de voler celle du garde,";
+	"mais j'ai pris sa batterie de rechange";
+	"a la place, dommage... La voici.";
+	// 20
+	"Tu es VRAIMENT bete!";
+	
+	//21
+	"Pas sur, mais je vais essayer.";
+	"Carrément, je suis partant!";
+		
+	//23
+	"Peut-on falsifier les registres pour";
+	"gagner du temps pour s'échapper, si";
+	"on arrive a accéder a l'ordinateur?";
+
+	//26
+	"Personne sur ce vaisseau ne le peut.";
+	"Personne a part toi, j'imagine...";
+	"Naturellement.";
+
+	//29
+	"Pourrais-tu le piloter, Jenna?";
+	"Sans probleme.";
+	
+	//31
+	"Je pourrais aussi aguicher un garde,";
+	"mais... comment en attirer un ici?";
 #endif
 
 #ifdef SPANISH

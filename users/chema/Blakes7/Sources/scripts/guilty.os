@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -98,6 +99,43 @@ stringpack 200{
 	
 	//19
 	"\A_FWYELLOW No, I'm coming back.";
+	
+	//20
+	"                                        ";
+#endif
+
+#ifdef FRENCH
+	/*++++++++++++++++++++++++++++++++++++++ */
+	"De par l'autorité de la Fédération";
+	"Terrienne, nous déclarons l'accusé";
+	"coupable des charges suivantes:";
+	"Rapt, agression sur un mineur, ";
+	"tentative de corruption de mineur, ";
+	"et abus sur mineur.";
+	
+	//6
+	"Ces crimes sont de neuvieme catégorie,";
+	"et en tant que tels, ils sont jugés";
+	"extremement graves. Roj Blake,...";
+	
+	//9
+	"le tribunal ordonne que vous soyez";
+	"transféré sur la planete Cygnus Alpha";
+	"au sein de la colonie pénitentiaire,";
+	"dans laquelle vous demeurerez pour";
+	"le restant de vos jours.";
+	" ";
+
+	//15
+	"\A_FWYELLOW Mais les preuves ont été truquées!";
+	"\A_FWYELLOW Ces accusations sont mensongeres!";
+	
+	//17
+	"Regardez bien cette planete. C'est la";
+	"derniere fois que vous la contemplez...";
+	
+	//19
+	"\A_FWYELLOW Non, je reviendrai!";
 	
 	//20
 	"                                        ";

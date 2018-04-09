@@ -498,3 +498,16 @@ res_start
 res_end
 .)
 #endif
+#ifdef FRENCH
+.(
+.byt RESOURCE_STRING |$80
+.word res_end-res_start+4
+.byt 200
+res_start
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "Vaisseau:",A_FWGREEN,"  Londres",A_FWYELLOW+A_FWCYAN*8+$c0,0
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "Chargement:",A_FWGREEN,"Prisonniers",A_FWYELLOW+A_FWCYAN*8+$c0,0
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "Destination:",A_FWYELLOW+A_FWCYAN*8+$c0,0
+.asc A_FWGREEN, "P","Z"+2,"nitencier de Cygnus Alpha",A_FWYELLOW+A_FWCYAN*8+$c0,0  ; "Pénitencier de Cygnus Alpha"
+res_end
+.)
+#endif

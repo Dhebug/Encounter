@@ -3,7 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -35,13 +35,15 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #endif
 
 #ifdef FRENCH
-	option "Er... not, actually." active -> enddiag;
-	option "Yes... what did you order?" active -> question;
-	option "No, but we could be of mutual help." active -> favour;
-	option "Yes... I have your order here." active -> haveit;
-	option "A coffee, wasn't it?" inactive -> coffee;
-	option "A cheese sandwich, wasn't it?" inactive -> sandwich;
-	option "Uh, oh, I must have forgotten it." inactive -> enddiag;
+	option "Heu... en fait, non." active -> enddiag;
+	option "Oui. Quelle était votre commande déja?" active -> question;
+	option "Non, mais vous pourriez m'aider..." active -> favour;  // better than "on pourrait s'entraider" 
+		// NB: "Non, mais vous pouvez peut-etre m'aider?" is too long 
+		// Other possibility: "Non, j'ai besoin d'un petit service..." or "Non, j'ai un service a vous demander..."
+	option "Oui... J'ai votre commande ici." active -> haveit;
+	option "C'était un café, n'est-ce pas?" inactive -> coffee;
+	option "C'était bien un sandwich au fromage?" inactive -> sandwich;
+	option "Oh, mince! J'ai du l'oublier..." inactive -> enddiag;
 #endif
 
 #ifdef SPANISH
@@ -144,18 +146,18 @@ stringpack DIALOG_STRINGS
 #endif
 
 #ifdef FRENCH
-"Then get outta here now!";
-"Do you mean you don't know?";
-"You inept, go back and find out!";
-"Are you kidding? Leave now!";
-"And what are you waiting for?";
-"I didn't ask for coffee you moron.";
+"Alors sortez d'ici immédiatement!";
+"Comment? Vous ne le savez pas?"; // "Vous voulez dire que vous ne savez pas?";
+"Quel incapable... Allez donc vérifier!";
+"Vous vous moquez de moi? Sortez d'ici!";
+"Et qu'attendez-vous pour me la donner?"; // better than "Et qu'est-ce que vous attendez?";
+"Je n'ai pas demandé de café, idiot!";
 
 //6
-"A cheese sandwich?";
-"No. I didn't order that...";
-"But I'll take it anyway.. I'm hungry.";
-"Now, please leave this room.";
+"Un sandwich au fromage?";
+"Non, je n'ai jamais commandé ca...";
+"Enfin bon, donnez-le moi... J'ai faim."; // "Enfin bon, je le prends... J'ai faim.";
+"Maintenant, sortez de cette piece.";
 #endif
 
 #ifdef SPANISH
@@ -251,25 +253,25 @@ stringpack STDESC
 #endif
 
 #ifdef FRENCH
-	"A control console.";
+	"Un terminal de commande.";
 	/*
 	+++++++++++++++++++++++++++++++++++++++*/
-	"I could deactivate a system from here.";
+	"D'ici je peux désactiver des systemes.";
 	
-	"I need the camera code to deactivate.";
+	"Il me faut le code de la caméra.";
 	
-	"Okay. Deactivate CH-1337.";
-	"Done!";
+	"Ok. Désactiver CH-1337.";
+	"Voila, c'est fait!"; // "Effectué!"
 	
 	//5
-	"A screen showing real time data";
-	"about important variables.";
-	"I don't understand anything.";
+	"Un écran avec des données en temps réel";
+	"concernant des variables importantes.";
+	"Je n'y comprends rien.";
 		
 	//8
-	"A screen showing real time data";
-	"about the status of city systems.";
-	"I understand nothing.";
+	"Un écran avec des données en temps réel";
+	"sur l'état des systemes de la ville.";
+	"Pour moi, tout ca c'est du chinois.";
 #endif
 
 #ifdef SPANISH
@@ -333,7 +335,7 @@ stringpack STGUARD
 	" (Zzzzzzz)";
 	" ";
 	
-	"Uh? I nearly fall asleep!";
+	"Uh? I nearly fell asleep!"; // [laurentd75] corrected: "fall" --> "fell"
 	"I need some coffee...";
 	
 	"Hey! Where are you going?";
@@ -347,14 +349,14 @@ stringpack STGUARD
 	" (Zzzzzzz)";
 	" ";
 	
-	"Uh? I nearly fall asleep!";
-	"I need some coffee...";
+	"Oh! J'ai failli m'endormir!";
+	"J'ai besoin d'un café...";
 	
-	"Hey! Where are you going?";
-	"You cannot be here!";
-	"Sorry. I entered the wrong door.";
+	"Hé! Ou allez-vous?";
+	"Vous n'avez pas le droit d'etre ici!";
+	"Désolé. Je me suis trompé de porte.";
 	
-	"What is that noise?";
+	"Mais quel est ce bruit?";
 #endif
 
 #ifdef SPANISH
@@ -503,19 +505,19 @@ stringpack STEXTRA{
 #endif
 
 #ifdef FRENCH
-	"A plastic cup with coffee";
-	"from a coffee machine.";
-	"A good dose of caffeine.";
+	"Un gobelet en plastique avec du café";
+	"provenant de la machine.";
+	"Une bonne dose de caféine.";
 	
-	"Good idea.";
-	"I will change it for mine...";
-	"and let's hope for the best.";
+	"Bonne idée.";
+	"Je vais l'échanger avec le mien...";
+	"en espérant que ca marche.";
 	
-	"Don't know what you want to do.";
-	"I cannot use that with the console.";
+	"Que cherchez-vous a faire?";
+	"Je ne peux l'utiliser avec la console.";
 	
 	//8
-	"Better leave it there...";
+	"Il vaut mieux le laisser ici...";
 #endif
 
 #ifdef SPANISH

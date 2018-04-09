@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -39,6 +40,36 @@ stringpack STDESC{
 	"circuit to activate the relay remotely.";
 	"The relay can be attached anywhere.";
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"On dirait un lavabo tout a fait banal.";
+	"Je me demande si l'eau est potable.";
+	"Ahhh... c'est rafraichissant...";
+	"L'eau s'écoule tres lentement.";
+	"Quelque chose doit boucher le siphon.";
+	"Voila... il y a quelque chose ici...";
+	"Pourquoi ferais-je cela?";
+	"Je ne peux pas le déboucher avec ca.";
+	
+	//8
+	"Aucune idée de ce a quoi ca sert.";
+	"Un peu risqué, mais allons-y...";
+	"Mieux vaut le laisser comme il est.";
+	
+	//11
+	"On dirait une station de réparation.";
+	"Remplie d'équipement électronique.";
+	"C'est bien au-dela de mes capacités.";
+	"Voyons-voir ce que je peux faire...";
+	"Je ne peux utiliser la station avec ca.";
+	
+	//16
+	"Je peux fixer ce transmetteur a un";
+	"circuit pour activer le relais distant.";
+	"Le relais peut etre placé n'importe ou.";
+#endif
+
 
 #ifdef SPANISH
 	/***************************************/

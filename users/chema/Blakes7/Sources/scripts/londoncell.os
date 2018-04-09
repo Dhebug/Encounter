@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -77,6 +78,59 @@ stringpack 201{
 	// Keycard
 	"A plastic access card.";
 	"I'd better keep it.";
+#endif
+
+#ifdef FRENCH
+	// Door
+	//++++++++++++++++++++++++++++++++++++++
+	"Une grille. Nous sommes en cellule.";
+	"Elle est verrouillée.";
+	"C'est inutile.";
+	"Elle est déja fermée.";
+	
+	// Lock
+	"Une serrure sophistiquée.";
+	"Je ne peux pas la faire fonctionner.";
+	
+	// Alarm
+	"On dirait une alarme incendie.";
+	"Je ne peux pas l'atteindre.";
+	
+	// Lockers
+	"On nous a dit de mettre nos effets";
+	"personnels ici.";
+	"Mais personne n'en a aucun.";
+	"Mieux vaut ne pas y toucher.";
+	
+	// Bin
+	"Allons... ceci n'est pas l'un de ces";
+	"jeux d'aventure ou l'on trouve une";
+	"clé a l'intérieur d'une poubelle...";
+	"Vous voyez? Juste des emballages de";
+	"chewing-gums, jetés par quelqu'un.";
+	"J'en prends un, juste au cas ou...";
+	"J'ai déja pris un emballage.";
+
+	// Wrapper
+	"Un emballage. En aluminium semble-t-il.";
+	"Je pourrais emballer un truc avec.";
+	"Oh, j'ai vu ca dans 'Ultime Survivant'!";
+
+	// Using one with the other...
+	"J'ai un plan, mais j'ai besoin d'Avon.";
+	"Il faut que je lui en parle d'abord.";	
+	"Parlons d'abord avec ce costaud, la..."; // "Faisons connaissance avec ce costaud.";
+	
+	// Battery
+	"Une batterie de rechange.";
+	"Je ne saisis pas ce que vous voulez.";
+	
+	// No more needed
+	"Je n'ai pas besoin de refaire cela.";
+	
+	// Keycard
+	"Une carte d'acces magnétique."; //  "magnétique" semble mieux que "en plastique" ou "plastifiée"
+	"Mieux vaut la garder.";
 #endif
 
 #ifdef SPANISH
@@ -471,6 +525,11 @@ dialog DLG_JENNA: script DLG_JENNA stringpack DLG_JENNA{
 	option "So you're an expert pilot..." active -> pilot;
 #endif
 
+#ifdef FRENCH
+	option "Comment sera Cygnus Alpha d'apres toi?" active -> cygjenna;
+	option "Donc, tu es une pilote chevronnée..." active -> pilot;
+#endif
+
 #ifdef SPANISH
 	option "¿Cómo crees que será Cygnus Alpha?" active -> cygjenna;
 	option "Así que eres una piloto experta..." active -> pilot;
@@ -501,6 +560,12 @@ dialog DLG_AVON: script DLG_AVON stringpack DLG_AVON{
 	option "What do you know about Cygnus Alpha?" active -> cygavon;
 	option "Do you know how that lock works?" active -> lock;
 	option "I plan to hijack this ship." inactive -> hijack;
+#endif
+
+#ifdef FRENCH
+	option "Que sais-tu a propos de Cygnus Alpha?" active -> cygavon;
+	option "Sais-tu comment la serrure fonctionne?" active -> lock;
+	option "J'ai un plan pour capturer ce vaisseau." inactive -> hijack;
 #endif
 
 #ifdef SPANISH
@@ -568,6 +633,10 @@ dialog DLG_VILA: script DLG_VILA stringpack DLG_VILA{
 #ifdef ENGLISH
 	option "Heard anything about Cygnus Alpha?" active -> cygvila;
 	option "Are you good at opening locks?" inactive -> lockv;
+#endif
+#ifdef FRENCH
+	option "Que sais-tu concernant Cygnus Alpha?" active -> cygvila;
+	option "Es-tu doué pour crocheter des serrures?" inactive -> lockv;
 #endif
 #ifdef SPANISH
 	      //++++++++++++++++++++++++++++++++++++++
@@ -644,6 +713,10 @@ dialog DLG_GAN: script DLG_GAN stringpack DLG_GAN{
 	option "Do you think you'll survive in Cygnus?" active -> cyggan;
 	option "Will you be willing to attempt escape?" active -> escape;
 #endif
+#ifdef FRENCH
+	option "Penses-tu pouvoir survivre sur Cygnus?" active -> cyggan;
+	option "Es-tu disposé a tenter une évasion?" active -> escape;
+#endif
 #ifdef SPANISH
 	      //++++++++++++++++++++++++++++++++++++++
 	option "¿Crees que sobrevivirás en Cygnus?" active -> cyggan;
@@ -692,6 +765,32 @@ stringpack 221{
 	//14
 	"This time I think I got it!";
 	"Here you are...";
+#endif
+
+#ifdef FRENCH
+	"Bon. Restez en arriere, et silence!"; // ou: "restez tranquilles, en silence!"
+	"Cette alarme ne fonctionne pas bien.";
+	"J'ai du la désactiver trois fois lors";
+	"de notre précédent voyage. Elle se";
+	"déclenche sans raison. Voyons voir...";
+	"C'est bon, c'est réglé. On s'en va.";
+	
+	//6
+	"J'ai dit ne bougez pas!";
+	
+	//7
+	"(Jenna... Le garde...)";
+	"(Ok, j'ai compris...)";
+	"Sortez-moi d'ici s'il vous plait,";
+	"et je serai TRES reconnaissante...";
+	//11
+	"Tais-toi, vermine!";
+	"Tu pourriras sur Cygnus!";
+	"Je te verrai plus tard de toute facon.";
+	
+	//14
+	"Cette fois-ci, je l'ai eue!"; // (la carte d'acces...)
+	"Tiens, la voici..."; 
 #endif
 
 #ifdef SPANISH

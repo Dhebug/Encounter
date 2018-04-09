@@ -337,6 +337,9 @@ res_start
 #ifdef SPANISH
 	.asc "Camino",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Chemin",0	;Object's name
+#endif		
 res_end
 .)
 
@@ -368,6 +371,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Porte",0	;Object's name
+#endif		
 res_end	
 .)
 
@@ -398,6 +404,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Ropas",0	;Object's name
+#endif		
+#ifdef FRENCH
+	.asc "Vetements",0	;Object's name
 #endif		
 res_end	
 .)

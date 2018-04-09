@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -97,6 +98,14 @@ stringpack STDESC
 "I can't reach the cave.";
 "I can't do that.";
 
+#endif
+
+#ifdef FRENCH
+/***************************************/
+"Une pierre qui émerge de l'eau.";
+"Cette grotte est l'entrée de la base.";
+"Je ne peux pas atteindre la grotte.";
+"Je ne peux pas faire cela.";
 #endif
 
 #ifdef SPANISH
