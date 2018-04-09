@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -20,6 +21,17 @@ stringpack JENNA
 	"Any idea?";
 	"I'm with you.";
 	"Blake! I barely recognize you!";
+#endif
+#ifdef FRENCH
+	/***************************************/
+	"Une femme exceptionnelle...";
+	"J'essaie de comprendre ces commandes";
+	"extra-terrestres. Il me faut du temps.";
+	"Elle est paralysée! Je dois me hater."; // Elle est choquée! Je dois me dépecher."; / "en état de choc" est trop long
+	"Nous devons allumer ces systemes.";
+	"Une idée?";
+	"Je suis avec toi.";
+	"Blake! Je te reconnais a peine!";
 #endif
 #ifdef SPANISH
 	/***************************************/

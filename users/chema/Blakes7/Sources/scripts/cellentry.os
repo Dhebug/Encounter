@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -308,7 +309,7 @@ script 204{
 stringpack STDESC{
 #ifdef ENGLISH
 	/***************************************/
-	"That is the cell the voice speak about.";
+	"That is the cell the voice spoke about.";  // [laurentd75]: decía = spoke about, not speak about
 	"That is not the correct cell number.";
 	
 	// 2
@@ -364,6 +365,65 @@ stringpack STDESC{
 	
 		
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"C'est la cellule dont parlait la voix.";
+	"Ce n'est pas le bon numéro de cellule.";
+	
+	// 2
+	"Mon nom est Cally. Et je suis d'Auron.";
+	"Ceux de mon peuple sont les Auronar.";
+	"Et donc tu es télépathe...";
+	"Et rapide. Je suis une guerriere.";
+	"Mon nom est Roj Blake.";
+	"Je suis venu secourir un membre de";
+	"la résistance. Son nom est Ravella.";
+	"Ils ont amené quelqu'un récemment.";
+	"Ca pourrait etre elle. Allons vérifier.";
+	
+	//11
+	"Ravella...";
+	"Blake! Tu es venu pour moi?";
+	"Bien sur. Je te devais bien ca.";
+	"Qui est-ce?";
+	"C'est Cally. Elle m'a aidé.";
+	"Je ne lui fais pas confiance...";
+	// 17
+	"Blake, quelque chose ne va pas...";
+	"Impossible de contacter son esprit...";
+	"Comme si ce n'était pas un etre vivant!";
+	//20
+	"Blake, tue-la, c'est une espionne!";
+	"Non c'est faux! C'est elle l'espionne!"; // or: "Non ce n'est pas moi! C'est elle!";
+	"Hé!";
+	//23
+	"Blake! Que fais-tu?";	
+	"Tu vois? C'est un robot!";
+	"Mais qu'est-ce que c'est que ca?";
+	
+	
+	//26
+	"Sois mon invité Blake...";
+	"Cette Auronar a presque ruiné mon plan.";
+	"Mais de toutes facons je te tiens.";
+	"Dommage que mon petit...jouet n'ait pas";
+	"atteint ton vaisseau pour le capturer.";
+	"Tu vas devoir me le livrer toi-meme.";
+	
+	"Je ne le ferai pas, Travis.";
+
+	"Oh si, tu le feras. Je détiens toute";
+	"ta bande. Je les ferai souffrir comme";
+	"jamais ils n'auraient pu l'imaginer.";
+	
+	//36
+	"Vite! Mets l'un de ces bracelets.";
+	"Pour quoi faire?";
+	"Tu le verras le moment venu...";	
+	
+		
+#endif
 #ifdef SPANISH
 	/***************************************/
 	"La celda que decía la voz.";
@@ -389,7 +449,6 @@ stringpack STDESC{
 	"No me fío de ella...";
 	// 17
 	"Blake, algo va mal...";
-	/***************************************/	
 	"No puedo contactar con ella... como...";
 	"¡si no fuese un ser vivo!";
 	//20

@@ -412,8 +412,11 @@ res_start
 	.asc "Sink",0	;Object's name
 #endif
 #ifdef SPANISH
-	.asc "Labavo",0	;Object's name
+	.asc "Lavabo",0	; [laurentd75]: corrected "labavo" -> "lavabo"
 #endif	
+#ifdef FRENCH
+	.asc "Lavabo",0
+#endif
 res_end
 .)
 
@@ -437,6 +440,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end
 .)
 
@@ -460,6 +466,9 @@ res_start
 #ifdef SPANISH
 	.asc "Tuber","Z"+3,"a",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Tuyau en Y",0
+#endif
 
 res_end
 .)
@@ -484,6 +493,9 @@ res_start
 #ifdef SPANISH
 	.asc "Equipo",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Equipement",0  ; [laurentd75]: NB: "matériel" serait mieux ici
+#endif
 res_end
 .)
 

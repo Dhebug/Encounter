@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -320,6 +321,13 @@ stringpack STDESC{
 "It is just an automatic door.";
 "No time to go back. Just forward.";
 "They appear to be running ads."
+#endif
+
+#ifdef FRENCH
+/***************************************/
+"C'est juste une porte automatique.";
+"Ce n'est pas le moment de reculer.";
+"On dirait qu'ils passent des pubs."
 #endif
 
 #ifdef SPANISH

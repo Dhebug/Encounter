@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -15,6 +16,12 @@ stringpack BRACELETS{
 	"Some extra bracelets, enough to bring";
 	"the rest of my crew up.";
 	"These are for the rest of the crew.";
+#endif
+#ifdef FRENCH
+	/***************************************/
+	"Des bracelets supplémentaires, pour";
+	"ramener le reste de mon équipage.";   // ou équipe, car c'est plus une équipe qu'un équipage en fait...
+	"Ils sont pour le reste de l'équipage.";
 #endif
 #ifdef SPANISH
 	/***************************************/

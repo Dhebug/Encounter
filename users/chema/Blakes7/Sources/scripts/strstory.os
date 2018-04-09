@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 // Strings for automatic responses - pack 0
@@ -28,6 +29,28 @@ stringpack 200{
 	"\A_FWWHITE Then start a new life in a clean world.";
 	" ";
 	"\A_FWWHITE Will they be alright?";
+#endif
+#ifdef FRENCH
+	// caution, maxcol 44
+	"\A_FWGREEN Résistance...";
+	"\A_FWMAGENTA TRAITRE!";
+	"\A_FWRED MEURTRE";
+	"\A_FWYELLOW Lavage de cerveau..."; // Better than "Manipulation de l'esprit..",
+	                                    // see https://fr.wikipedia.org/wiki/Blake%27s_7
+	"\A_FWCYAN DOULEUR";
+	"\A_FWWHITE SOUFFRANCE";
+
+	"\A_FWWHITE Calme-toi, Roj Blake.";
+	"\A_FWWHITE C'était juste un cauchemar.";
+	" ";
+	"\A_FWWHITE Tu sais qui tu es. Ta famille vit dans";
+	"\A_FWWHITE les colonies extérieures. C'était le";
+	"\A_FWWHITE marché conclu avec la Fédération:";
+	"\A_FWWHITE 10 ans a travailler pour pouvoir payer"; // "10 ans de travail sur Terre pour payer";
+	"\A_FWWHITE le transport et le déménagement. Puis";
+	"\A_FWWHITE une nouvelle vie dans un monde neuf."; // [laurentd75]: slight change for French version
+	" ";
+	"\A_FWWHITE Est-ce qu'ils vont bien au moins?"; // [laurentd75]: slight change for French version
 #endif
 #ifdef SPANISH
 	"\A_FWGREEN Resistencia...";

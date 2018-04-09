@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -202,6 +203,64 @@ stringpack ST_MAIN{
 	"In which case, you can die content.";
 	"Content...";
 	"Knowing you were right.";
+#endif
+
+#ifdef FRENCH
+	"Ok, allons-y.";
+	"Verrouille la porte!";
+	"C'est fait.";
+	"Dépeche-toi!";
+	"Nous controlons l'ordinateur.";
+	"Attendons des nouvelles des autres.";
+	
+	// 6
+	/***************************************/
+	" Blake, ici le Commandeur Leylan.";
+	" Nous avons arreté votre gang.";
+	" Votre plan est un échec. Rendez-vous,";
+	" et vous serez traités avec indulgence.";
+
+	//10
+	"Ce sont donc vos conditions?           ";  // Extra spaces to erase the previous line
+	"Voici les notres. Déposez vos armes.";
+	"Tant que nous controlons l'ordinateur,";
+	"ce vaisseau est perdu, et le restera";
+	"jusqu'a ce que vous vous rendiez.";
+	"Vous nous conduirez ensuite jusqu'a";
+	"la planete habitable la plus proche,";
+	"et vous nous débarquerez. Si vous";
+	"tentez d'accéder a cette salle, nous";
+	"détruirons l'ordinateur. C'est tout.";
+	
+	//20
+	" Bien essayé. Mais écoutez plutot: je";
+	" vais tuer l'un de vos amis toutes les";
+	" 30 secondes a partir de maintenant.";
+	" J'arreterai lorsque vous vous rendrez";
+	" ou lorsque je les aurai tous tués.";
+	" La discussion est terminée, Blake.";
+	
+	//26
+	"Vous ne pouvez pas faire ca! Leylan!";
+	"Nous avons échoué. Ouvrons la porte.";
+	"Mais on va perdre notre seule chance!";
+	"Ouvre la porte!";
+	
+	//30
+	/***************************************/
+	"Quel fiasco. Tu disais qu'on pouvait";
+	"s'emparer du vaisseau si je jouais mon";
+	"role. Et bien je l'ai fait et qu'est-il";
+	"advenu? Ta petite troupe fait n'importe"; // "advenu? Ton équipe flane, cherchant a";
+	"quoi et finit par se faire prendre,";     // "qui se rendre, et quand ils arrivent";
+	"et toi, tu leur emboites le pas...";      // "a leur fin, tu leur emboites le pas.";
+
+	"Je ferai mieux la prochaine fois.";
+	"Il n'y aura pas de prochaine fois.";  // [laurentd75]: it's better to put this sentence before the following one
+	"On avait une chance et tu l'as gachée.";
+	"Dans ce cas, tu peux mourir heureux...";
+	"Heureux?";
+	"...De savoir que tu avais raison.";
 #endif
 
 #ifdef SPANISH

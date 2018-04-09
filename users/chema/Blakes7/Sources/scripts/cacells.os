@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours   */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -35,22 +35,20 @@ stringpack STCELLS{
 #ifdef FRENCH
 	/***************************************/
 	"Vila! Gan!";
-	
-	"Hello brother. I wondered if you...";
-	"It's me! Blake!";
+	"Bonjour Frere, je me demandais si..."; // [laurentd75]: prisoner talking to a monk here.
+	"C'est moi! Blake!";
 	
 	//3
-	"Blake! What are you doing here?";
-	"I came for you. I've got a spaceship!";
-	"And how will we escape this building?";
+	"Blake! Que fais-tu ici?";
+	"Je suis la pour vous, j'ai un vaisseau!";
+	"Et comment allons-nous nous échapper?";
 	
 	//6
-	"With these bracelets. Put them on.";
+	"Avec ces bracelets. Mettez-les.";
+	"Bizarre, je croyais en avoir trois...";
+	"Je dois en avoir égaré un...";
 	
-	"Strange... I thought I had three...";
-	"I must have lost one...";
-	
-	"Okay, what now?";
+	"C'est bon, et maintenant?";
 #endif
 
 #ifdef SPANISH

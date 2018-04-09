@@ -1,4 +1,7 @@
-﻿/* String pack to split introductions and gain memory */
+﻿
+/* String pack to split introductions and gain memory */
+
+/* Traduction FR:laurentd75	*/
 
 #include "globals.h"
 
@@ -78,6 +81,81 @@ stringpack 100{
 	"His strength and your... abilities";
 	"will be really helpful.";
 #endif
+
+#ifdef FRENCH
+	//+++++++++++++++++++++++++++++++++++++
+	"Hé, doucement! Du calme, la!";
+	"Je hais la violence a la personne, ";
+	"surtout quand c'est moi la personne...";
+	
+	
+	//3
+	"Salut!";
+	"Qui es-tu?";
+	"Vila Restal.";
+	"Moi c'est Roj Blake. Pourquoi es-tu la?";
+
+	//7
+	"Ils ne m'ont pas laissé le choix.";
+	"Je vole des objets...";
+	"de maniere compulsive, en fait.";
+	"Mon cerveau a été guéri par les";
+	"meilleurs spécialistes du domaine.";
+	"Mais j'ai fait une rechute..."; // "Mais la guérison n'a pas duré.";
+
+	//13
+	"Et toi, quelle est ton histoire?";
+	"Et bien, je suis innocent -- ";
+	"de ce dont on m'accuse, en tous cas.";
+	"Naturellement..."; 
+	"Et qu'en est-il des autres?";
+
+	//18
+	"Oh, une belle brochette d'antisociaux:";
+	"meurtriers, menteurs, tricheurs,"; 
+	"voleurs, trafiquants,..."; 
+	"Et ca, ce sont les gens bien..."; 
+	
+	//22
+	"Pourquoi es-tu la?";
+	"Je commercais dans les Mondes Proches.";
+	"Je suis entrepreneuse, a mon compte."; 
+	"Une trafiquante. Parmi les meilleures:";
+	"Jenna Stannis. C'est un honneur que";
+	"d'etre enfermé avec elle."; 
+	"Ravie que ca vous plaise.";
+	
+	//29
+	"Blake -- Kerr Avon.";
+	"Quand il s'agit d'ordinateurs, c'est";
+	"le numéro deux dans tous les Mondes";
+	"Fédérés. Il a failli voler 5 millions!";
+	
+	//33
+	"Qui est le numéro un?";
+	"Celui qui l'a attrapé.";
+	
+	//35
+	"Et pourquoi ca n'a pas marché?";
+	"J'ai du me fier a d'autres personnes.";
+	
+
+	//37
+	"Blake -- voici Olag Gan.";
+	"Il a eu un... incident,";
+	"avec un garde.";
+	"Je ne voulais pas le tuer!";
+	"Il était armé, et moi non.";
+	"Il a tué ma compagne...";
+	
+	//43
+	"Gan prend soin de moi.";
+	"C'est un ami loyal.";
+	
+	"Sa force et tes... capacités";
+	"vont nous etre vraiment utiles.";
+#endif
+
 
 #ifdef SPANISH
 	//+++++++++++++++++++++++++++++++++++++

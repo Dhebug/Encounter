@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -223,6 +224,79 @@ stringpack STLOCAL{
 	"\A_FWYELLOW (C)Chema (enguita AT gmail.com) 2017"
 	
 #endif
+
+#ifdef FRENCH
+	/***************************************/
+	"Avon.";
+	"Oui?";
+	"Joli tir.";
+	"Je visais sa tete...";
+	"Pourquoi avoir risqué ta vie pour nous?";
+	"Tu pouvais partir avec le Libérateur...";
+	"Mes chances de survie étaient";
+	"seulement de 2,5 sur 3. J'ai vérifié.";
+	"C'est assez bon pourtant il me semble?";
+	"Oui. Je suis aussi surpris que toi...";
+	"Mais moi je ne suis pas surpris...";
+	
+	//11
+	"A sept, on controle ce vaisseau.";
+	"A six, tu veux dire...";
+	"Tu oublies Zen...";
+	"Tu ne vas quand meme pas compter cette";
+	"machine comme un membre d'équipage...";
+	"Héhé, qu'as-tu a répondre a ca, Zen?";
+	"Tres diplomate. Fais route vers le";
+	"secteur 5,0,2. Vitesse standard.";  // [laurentd75] "vitesse standard fois 2." is a bit too long and adds nothing to the story...
+	
+	//19
+	
+		    /***************************************/		        
+	"\A_FWYELLOW Casting original de la série TV:";
+	" ";	
+	"\A_FWCYAN Blake    \A_FWWHITE Gareth Thomas";
+	"\A_FWCYAN Avon     \A_FWWHITE Paul Darrow";
+	"\A_FWCYAN Vila     \A_FWWHITE Michael Keating";
+	"\A_FWCYAN Jenna    \A_FWWHITE Sally Knyvette";
+	"\A_FWCYAN Gan      \A_FWWHITE David Jackson";
+	"\A_FWCYAN Cally    \A_FWWHITE Jan Chapell";
+	"\A_FWCYAN Zen      \A_FWWHITE Peter Tuddenham";
+	"\A_FWCYAN Servalan \A_FWWHITE Jaqueline Pierce";
+	"\A_FWCYAN Travis   \A_FWWHITE Stephen Greif";
+	"\A_FWCYAN          \A_FWWHITE Brian Croucher";
+	//" ";
+	//"\A_FWCYAN In memoriam: Gareth Thomas, David Jackson";
+	//"\A_FWCYAN Peter Tuddenham, et Terry Nation";
+	
+	
+	           /***************************************/ // maxcol:56
+	"\A_FWYELLOW BLAKE'S 7: Le jeu Oric";
+	" ";
+	"\A_FWWHITE J'espere que vous avez apprécié ce jeu";
+	"\A_FWWHITE comme j'ai pris plaisir a le créer.";
+	" ";
+	"\A_FWWHITE Merci a tous ceux qui m'ont aidé avec";
+	"\A_FWWHITE leurs suggestions, encouragements et";
+	"\A_FWWHITE retours durant tout le processus.";
+	" ";
+	"\A_FWWHITE Remerciements particuliers aux";
+	"\A_FWWHITE gens formidables de RetroWiki,";
+	"\A_FWWHITE Defence-Force, et AmigaWave.";
+	" ";
+	"\A_FWWHITE Merci a Greymagick, comme toujours,";
+	"\A_FWWHITE pour ses bons conseils et sa patience.";
+	" ";
+	"\A_FWWHITE Merci a jojo073, pour ses incroyables";
+	"\A_FWWHITE designs graphiques.";
+	" ";
+	"\A_FWWHITE Et merci a la communauté Oric d'etre";
+	"\A_FWWHITE la. Cette fois-ci, je voulais créer";
+	"\A_FWWHITE quelque chose de vraiment spécial...";
+	" ";
+	"\A_FWYELLOW (C)Chema (enguita AT gmail.com) 2017"
+	
+#endif
+
 #ifdef SPANISH
 	/***************************************/
 	"Avon.";

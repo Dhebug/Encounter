@@ -639,6 +639,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0	;Object's name
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end
 .)
 
@@ -712,6 +715,9 @@ res_start
 #ifdef SPANISH
 	.asc "Controles",0	;Object's name
 #endif
+#ifdef FRENCH
+	.asc "Siege",0  ; NB: "Siege de commande" is too long, max length 16 ? (see OBJ_NAME_LEN in object.s)
+#endif
 res_end
 .)
 
@@ -734,6 +740,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Controles",0	;Object's name
+#endif
+#ifdef FRENCH
+	.asc "Siege",0 ; NB: "Siege de commande" is too long, object name length 16 char max? (see OBJ_NAME_LEN in object.s)
 #endif
 res_end
 .)
@@ -759,6 +768,9 @@ res_start
 #ifdef SPANISH
 	.asc "Corredor",0	;Object's name
 #endif
+#ifdef FRENCH
+	.asc "Corridor",0
+#endif
 res_end
 .)
 
@@ -783,6 +795,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Controles",0	;Object's name
+#endif
+#ifdef FRENCH
+	.asc "Commandes",0
 #endif
 res_end
 .)

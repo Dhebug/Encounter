@@ -397,6 +397,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cartel",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Ecriteau",0	;Object's name
+#endif	
 res_end
 .)
 
@@ -419,6 +422,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cad","Z"+1,"ver",0	;Object's name
+#endif	
+#ifdef FRENCH
+	.asc "Corps",0	;Object's name
 #endif	
 res_end
 .)
@@ -443,6 +449,9 @@ res_start
 #ifdef SPANISH
 	.asc "Claro",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Clairiere",0	;Object's name
+#endif	
 res_end
 .)
 
@@ -466,6 +475,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Camino",0	;Object's name
+#endif	
+#ifdef FRENCH
+	.asc "Chemin",0	;Object's name
 #endif	
 res_end
 .)

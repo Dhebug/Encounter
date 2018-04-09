@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -34,6 +35,18 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "No, not that again.." inactive -> skeptic;
 	option "But the outside air is lethal!" inactive -> air;
 	option "See you later, then." inactive -> bye;
+#endif
+
+#ifdef FRENCH
+	       /***************************************/
+	option "As-tu des nouvelles de ma famille?" active -> family;
+	option "Je n'ai rien mangé depuis 36 heures." active -> food;
+	option "J'ai recu le livre que tu m'as envoyé." active -> book;	
+	option "Une seconde. Je reviens." active -> exit1;	
+	option "Est-ce que c'est une blague douteuse?" inactive -> skeptic;
+	option "Non, pas ca encore.." inactive -> skeptic;
+	option "Mais l'air extérieur est mortel!" inactive -> air;
+	option "A plus tard, alors." inactive -> bye;
 #endif
 
 #ifdef SPANISH
@@ -183,10 +196,57 @@ stringpack DIALOG_STRINGS
 "There is something for you inside.";
 "I'll wait here.";
 
-"I've already talk to her.";
+"I've already talked to her.";  // [laurentd75]: correction "talk" -> "talked" (past)
 "Now I've got things to do.";
 
 #endif
+
+/*********** FRENCH ********************************/
+
+#ifdef FRENCH
+"Salut Ravella.";	// 0
+"As-tu eu des problemes?";
+"Non. Rien de particulier.";
+
+"Je meurs de faim et de soif, bien sur!"; //3
+
+"Et comment te sens-tu?"; // 4
+"Tu es mieux a jeun..."; // "well done" or "bien hecho" doesn't make sense after he says he's starving!
+"La nourriture est bourrée de drogues..."; // mieux qu'"inhibiteurs" ou tranquilisants, calmants, euphorisants ?
+
+"Moi, non. Mais l'homme que nous";		// 7
+"allons voir ce soir en a, lui.";
+
+"Non, nous devons etre prudents."; //9
+"La Fédération a des yeux partout...";
+
+"Bien. Il contient des infos vitales."; // 11
+"Elles nous indiqueront quelle porte il";
+"faut emprunter pour sortir de la ville.";
+
+"C'est ce qu'ils veulent que tu croies."; //14
+
+"Juste une derniere chose:";
+
+"C'est Ravella.";
+
+//17
+/***************************************/
+"Ca ne te dérange pas de mener ta vie";
+"dans un état de sérénité artificielle";
+"induit par des drogues?";
+
+//20
+"Prends cette clé. Porte 2, casier 3B.";
+"Il y a quelque chose pour toi dedans.";
+"Je t'attendrai ici.";
+
+"Je lui ai déja parlé.";
+"J'ai des choses a faire maintenant.";
+
+#endif
+
+/*********** SPANISH ****************************/
 
 #ifdef SPANISH
 "Hola Ravella.";	// 0
@@ -302,7 +362,7 @@ stringpack DESC_STRINGS
 	"The camera code is CH-1337.";
 	"That is a door to the service area.";
 	// 3
-	"Looks confortable...";
+	"Looks comfortable...";  // [laurentd75]: correction confortable -> comfortable
 	"Not the right time for rest.";
 	
 	"My back hurts. Not again.";
@@ -326,6 +386,37 @@ stringpack DESC_STRINGS
 	"And heavy too...";
 	"I bet nobody cleans beneath it.";
 #endif
+
+#ifdef FRENCH
+	"Omniprésentes, ces caméras...";
+	"Le code de la caméra est CH-1337.";
+	"Une porte vers la zone de service.";
+	// 3
+	"Il a l'air confortable...";
+	"Ce n'est pas le moment de se reposer.";
+	
+	"J'ai mal au dos, il vaut mieux pas...";
+
+	"Il est lourd, mais je vais essayer...";
+	"Non... Il est trop lourd a déplacer.";
+	"Hé! Mais qu'y a-t-il la-dessous?";
+	
+	//9
+	"Cette caméra semble éteinte.";
+	
+	"Ce n'est pas une bonne idée.";
+	"Cette caméra la-haut me détecterait";
+	"et le systeme de surveillance";
+	"automatique déclencherait une alarme.";
+	
+	//14
+	"Pourquoi? C'est un couloir de service.";
+	
+	//15
+	"Et tres lourd aussi!";
+	"Personne ne doit nettoyer en-dessous...";
+#endif
+
 
 #ifdef SPANISH
 	"Omnipresentes.";

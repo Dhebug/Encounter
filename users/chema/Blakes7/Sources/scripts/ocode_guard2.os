@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -18,6 +19,13 @@ stringpack GUARD2
 	"Yes, comrade?";
 
 #endif
+
+#ifdef FRENCH
+	"Toujours aussi menacant...";
+	"Mais vous plaisantez ou quoi?";
+	"Oui, camarade?";
+#endif
+
 #ifdef SPANISH
 	"De nuevo amenazador...";
 	"Debes estar bromeando...";

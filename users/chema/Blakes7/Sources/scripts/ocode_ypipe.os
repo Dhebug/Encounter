@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -15,6 +16,13 @@ stringpack YPIPE{
 	"removed it from its place.";
 	"I think I got your idea... Nice!";
 	"I don't know what you want to do.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Un tuyau en Y. Je ne sais pas si j'ai";
+	"bien fait de le retirer d'ou il était.";
+	"J'ai saisi l'idée... Astucieux!";
+	"Je ne comprends pas ce que vous voulez.";
 #endif
 #ifdef SPANISH
 	/***************************************/

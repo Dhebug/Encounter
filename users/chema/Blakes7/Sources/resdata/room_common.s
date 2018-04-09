@@ -298,6 +298,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -380,6 +383,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taza",0
 #endif
+#ifdef FRENCH
+	.asc "Gobelet",0
+#endif
 res_end	
 .)
 
@@ -403,6 +409,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cafetera",0
 #endif
+#ifdef FRENCH
+	.asc "Machine a caf","Z"+2,0	; "Machine a café"
+#endif
 res_end	
 .)
 
@@ -424,6 +433,9 @@ res_start
 	.asc "Terminal",0
 #endif
 #ifdef SPANISH
+	.asc "Terminal",0
+#endif
+#ifdef FRENCH
 	.asc "Terminal",0
 #endif
 res_end	
@@ -450,6 +462,9 @@ res_start
 #ifdef SPANISH
 	.asc "Libros",0
 #endif
+#ifdef FRENCH
+	.asc "Livres",0
+#endif
 res_end	
 .)
 
@@ -472,6 +487,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Libro",0
+#endif
+#ifdef FRENCH
+	.asc "Livre",0
 #endif
 res_end	
 .)

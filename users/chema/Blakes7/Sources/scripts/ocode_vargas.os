@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -15,6 +16,12 @@ stringpack VARGAS{
 	
 	"Nice try! But useless.";
 	"I will kill you NOW!";
+#endif
+#ifdef FRENCH	
+	"Il est complétement fou. Et armé!";
+	"Mais s'il entrait dans la cabine...";
+	"Bien essayé, mais en vain.";
+	"Je vais te tuer MAINTENANT!";
 #endif
 #ifdef SPANISH
 	"Completamente loco. ¡Y armado!";

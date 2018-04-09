@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -232,7 +233,7 @@ stringpack STDESC{
 	"Unless I can clean it, you'll see...";
 	//16
 	"They seem all to be history books.";
-	"Federation approved, of course";
+	"Federation-approved, of course";
 	"'The outer colonies'";
 	// 19
 	"I don't have time to read now.";
@@ -240,9 +241,43 @@ stringpack STDESC{
 	// 21
 	/***************************************/
 	"Nice idea! Surely there is something";
-	"useful used as page separator...";
+	"useful used as bookmark...";  // [laurentd75]: separador is "bookmark" in English, not "page separator" 
 	"Ah, no. It's just an empty paper.";
 	"It is just a cup!";
+#endif
+#ifdef FRENCH
+	/***************************************/
+	"Machine a cappuccino compacte en métal";
+	"entierement automatique équipée du";
+	"systeme breveté Fed Expresso.";
+
+	"Le réservoir d'eau est vide.";
+	"Ok, je vais mettre l'eau pour le café.";
+	"Hmm... Il a laissé sa session ouverte.";
+	"Il vient de recevoir un message...";
+	"Je ne saisis pas bien votre demande.";
+	"Et l'éclabousser? Non merci.";
+	"Ok, je vais faire mine de trébucher..."; // "Ok, je vais faire semblant de...";
+	"Oups!";
+	"Mais qu'est-ce que...!?";
+	"Je suis vraiment désolé!";
+	"Mon uniforme! Il est tout taché!";
+	"Et l'autre qui n'est pas encore pret...";
+	"Si je n'arrive pas a le nettoyer...";
+	//16
+	"Visiblement, des livres d'histoire,";
+	"approuvés par la Fédération bien sur.";
+	"'Les Colonies Extérieures'";
+	// 19
+	"Pas le temps de lire maintenant.";
+	"Je n'ai aucun besoin de ca.";
+	// 21
+	/***************************************/
+	"Bonne idée! Il y a surement quelque";
+	"chose d'utile qui sert de marque-page.";  /** separador = marque-page **/
+
+	"Ah, non. Juste un papier vierge.";
+	"C'est juste un gobelet en plastique.";
 #endif
 #ifdef SPANISH
 	/***************************************/

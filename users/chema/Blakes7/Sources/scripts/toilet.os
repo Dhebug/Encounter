@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -221,6 +222,41 @@ stringpack STDESC{
 
 #endif
 
+#ifdef FRENCH
+/***************************************/
+"C'est un bonhomme en allumettes.";
+"Et bien, ce sont des toilettes...";
+"Non, merci. Je n'ai pas envie.";
+"C'est un lavabo. Tout a fait banal.";
+"Je me suis déja lavé les mains hier."; // [laurentd75]: funnier thant "Pas besoin de me laver les mains."
+
+//5
+"Il y a des graffitis partout.";
+"Oh la la..."; // [laurentd75]: "Vaya tela": see https://forum.wordreference.com/threads/vaya-tela.742241/?hl=fr
+
+// {laurentd75]: For the sayings (used also as pass-phrases), I tried various styles in French, as the English or 
+// Spanish sayings / refranes could not be translated "as is", and I also adapted the 'comments' made by Blake on them.
+
+"Celui-ci dit:";
+"Hum, pas tres original.";
+
+"Regardons un peu les autres...";
+"Ah, cette maxime-la me plait bien!";
+
+"Celui-ci est difficile a lire...";
+"Je ne suis pas sur d'avoir compris.";
+
+
+"Celui-ci est peut-etre un peu mieux?";
+"Oh, mon dieu, la poésie et moi...";
+
+"Il est écrit 'Hors Service'.";
+
+"J'ai déja mis de l'eau dedans.";
+"Ok, je vais le remplir d'eau.";
+
+#endif
+
 #ifdef SPANISH
 /***************************************/
 "Es un muñeco de palitos.";
@@ -266,6 +302,20 @@ stringpack STCOUPLETS{
 	"Damn, I'm good at telling lies!'";
 	"'I see your face when I am dreaming";
 	"That's why I always wake up screaming.'";
+#endif
+#ifdef FRENCH
+// [laurentd75] - caution, these must be the same definitions as in "cellcorridor.os" !!!
+	/***************************************/
+	"'Lorsque les mouettes ont pied,";	// ou aussi: "horizon pas net, reste à la buvette!"
+	"c'est qu'il est temps de virer'.";
+	"'Tout avantage a ses inconvénients,'";
+	"et réciproquement.'";
+	"'Si tu fais le mal, fais-le bien, car";
+	"le mal bien fait fait bien moins mal'.";
+	"'Tant qu'on fait mine de bien me payer,";
+	"je fais mine de bien travailler.'";
+	"'Etonnamment monotone et lasse,";			// vers holorime de Louise de Vilmorin...
+	"est ton ame en mon automne, hélas!'";
 #endif
 #ifdef SPANISH
 	/***************************************/

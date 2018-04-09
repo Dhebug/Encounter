@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -82,6 +83,24 @@ stringpack STDESC{
 	"Blake. I will get you.";
 	"No matter how long it takes.";
 	"I swear by my honour I will get you.";
+		
+#endif
+#ifdef FRENCH
+	//36
+	/**************************************/
+	"Travis est sur le point de tirer!    ";
+	"Je dois faire quelque chose!";
+	
+	//38
+	"Commencons par tuer cette Auronar!"; // "Je vais déja tuer cette Auronar!";
+	"Mais!?";
+	"Tirez! Tuez-les tous!!";
+	"Zen, branche la climatisation...";
+
+	//6
+	"Blake! Je t'aurai!";
+	"Peu importe le temps que ca prendra,";
+	"je jure sur l'honneur que je t'aurai!";
 		
 #endif
 #ifdef SPANISH

@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -14,6 +15,11 @@ stringpack GAN
 	"He looks strong as a rock.";
 	"I'm ready.";
 	"Just tell me what you want me to do.";
+#endif
+#ifdef FRENCH	
+	"Il a l'air solide comme un roc.";
+	"Je suis pret.";
+	"Dis-moi juste ce que je dois faire.";
 #endif
 #ifdef SPANISH
 	"Parece fuerte como una roca.";

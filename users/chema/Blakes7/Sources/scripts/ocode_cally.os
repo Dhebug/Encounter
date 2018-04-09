@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -14,6 +15,11 @@ stringpack CALLY
 #ifdef ENGLISH
 	/***************************************/
 	"A fierce woman-warrior.";
+
+#endif
+#ifdef FRENCH
+	/***************************************/
+	"Une femme-guerriere féroce.";
 
 #endif
 #ifdef SPANISH
@@ -30,5 +36,4 @@ objectcode CALLY
 		scWaitForActor(a);
 		scStopScript();
 }
-
 

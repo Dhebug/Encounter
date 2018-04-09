@@ -392,6 +392,9 @@ res_start
 #ifdef SPANISH
 	.asc "Camino",0
 #endif
+#ifdef FRENCH
+	.asc "Chemin",0
+#endif
 res_end	
 .)
 
@@ -415,6 +418,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Piedra",0
+#endif
+#ifdef FRENCH
+	.asc "Pierre",0
 #endif
 res_end	
 .)
@@ -440,6 +446,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cueva",0
 #endif
+#ifdef FRENCH
+	.asc "Grotte",0
+#endif
 res_end	
 .)
 
@@ -462,6 +471,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Orilla",0
+#endif
+#ifdef FRENCH
+	.asc "Berge",0 ; // Berge de l'étang
 #endif
 res_end	
 .)

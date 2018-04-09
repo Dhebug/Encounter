@@ -306,6 +306,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puente",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Pont",0
+#endif
 res_end
 .)
 
@@ -330,6 +333,9 @@ res_start
 #ifdef SPANISH
 	.asc "Corredor",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Corridor",0
+#endif
 res_end
 .)
 
@@ -549,6 +555,9 @@ res_start
 #ifdef SPANISH
 	.asc "Controles",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Commandes",0
+#endif
 res_end
 .)
 

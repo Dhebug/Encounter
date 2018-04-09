@@ -383,6 +383,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cueva",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Grotte",0	;Object's name
+#endif		
 res_end
 .)
 
@@ -433,6 +436,9 @@ res_start
 #ifdef SPANISH
 	.asc "Cadena",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Chaine",0	;Object's name
+#endif
 res_end	
 .)
 
@@ -464,6 +470,9 @@ res_start
 #ifdef SPANISH
 	.asc "Verja",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Grille",0	;Object's name
+#endif
 res_end	
 .)
 

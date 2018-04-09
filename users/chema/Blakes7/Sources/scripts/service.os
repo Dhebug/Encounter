@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -42,6 +43,10 @@ stringpack STDESC{
 #ifdef ENGLISH
 	/**************************************/
 	"I'd better get the transponder first.";
+#endif
+#ifdef FRENCH
+	/**************************************/
+	"Prenons d'abord le transpondeur.";
 #endif
 #ifdef SPANISH
 	"Mejor cojo el transpondedor primero.";

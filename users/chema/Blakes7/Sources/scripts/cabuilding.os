@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -48,25 +48,25 @@ stringpack STDESC{
 #endif
 
 #ifdef FRENCH
-	"Looks strong.";
-	"I can hear people behind...";
+	"Elle a l'air solide.";
+	"J'entends des gens derriere...";
 	//2
-	"Better find another way in.";
+	"Mieux vaut chercher une autre voie.";
 	
 	//3
-	"They are still a bit wet...";
+	"Ils sont encore un peu mouillés...";
 	
 	//4
-	"Hello, brother. Any problem?";
-	"You know you cannot enter until the";
-	"end of the shift. Go back to your";
-	"duties, and let He bless you.";
+	"Bonjour, frere. Un probleme ?";
+	"Tu sais que tu ne peux pas entrer";
+	"avant la fin de ta faction. Retourne";
+	"a tes obligations, et sois béni."; // littéralement: // "a tes taches, et qu'Il te bénisse.";
 	
 	//8
-	"It is getting dark. I'd better put the";
-	"lamp in its place. I've been repairing";
-	"it all the evening.";
-	"Perfect. Now we won't fear the grues.";
+	"Il commence a faire sombre. Mieux vaut";
+	"remettre cette lampe a sa place. J'ai";
+	"passé toute la soirée a la réparer.";
+	"Voila. Plus rien a craindre des grues.";
 #endif
 
 #ifdef SPANISH

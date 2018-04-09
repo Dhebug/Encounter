@@ -268,6 +268,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -300,6 +303,9 @@ res_start
 #ifdef SPANISH
 	.asc "Reloj",0
 #endif
+#ifdef FRENCH
+	.asc "Horloge",0
+#endif
 res_end	
 .)
 
@@ -323,6 +329,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Bloque A",0
+#endif
+#ifdef FRENCH
+	.asc "Bloc A",0
 #endif
 res_end	
 .)
@@ -348,6 +357,9 @@ res_start
 #ifdef SPANISH
 	.asc "Bloque B",0
 #endif
+#ifdef FRENCH
+	.asc "Bloc B",0
+#endif
 res_end	
 .)
 
@@ -369,6 +381,9 @@ res_start
 	.asc "Terminal",0
 #endif
 #ifdef SPANISH
+	.asc "Terminal",0
+#endif
+#ifdef FRENCH
 	.asc "Terminal",0
 #endif
 res_end	

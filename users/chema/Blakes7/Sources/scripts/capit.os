@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR en cours	*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -44,19 +44,19 @@ stringpack STDESC{
 
 #ifdef FRENCH
 	/***************************************/
-	"Can't see the bottom from here.";
-	"But there is a protruding a few meters";
-	"below...";
+	"On ne voit pas le fond d'ici.";
+	"Mais il y a une saillie, quelques";
+	"metres en contrebas...";
 	
 	//3
-	"This tree looks a bit twisted.";
+	"Cet arbre semble un peu tordu.";
 	
 	//4
-	"Okay, good idea.";
-	"I don't follow you.";
+	"D'accord, bonne idée.";
+	"Je ne vous suis pas.";
 
 	//6
-	"I could climb down...";
+	"Je pourrais descendre...";
 #endif
 
 #ifdef SPANISH

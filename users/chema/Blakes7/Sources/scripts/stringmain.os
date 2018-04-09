@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 // Strings for automatic responses - pack 0
@@ -25,6 +26,22 @@ stringpack 0{
 	"Let's avoid unnecessary violence.";
 	
 	"Please specify how to use it.";
+#endif
+#ifdef FRENCH
+	"Ca n'a pas l'air de fonctionner.";
+	"Je ne peux pas faire ca.";
+	"Je ne vois pas ce que vous voulez.";
+	"Quoi?!";
+	"Je ne vous suis pas.";
+
+	"Regarder quoi?";
+	"Ok, je regarde... Oh, c'est tres joli!";
+	"Que voulez-vous que je regarde?";
+	"Je ne vois rien d'intéressant.";
+
+	"Evitons toute violence inutile...";
+	
+	"Dites-moi comment je dois l'utiliser.";
 #endif
 #ifdef SPANISH
 	"Eso no parece funcionar.";

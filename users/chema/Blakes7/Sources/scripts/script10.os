@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -132,6 +133,28 @@ script 10{
 	
 	"They came to rescue the new souls.";
 	"Give me that bracelet and lets go!";
+#endif
+
+#ifdef FRENCH
+	/***************************************/
+	"La... Ce truc qui bloque la chaine...";
+	"Qu'est-ce que ca peut bien etre?";
+
+	"Hmmmmm...";
+	"On dirait une espece d'arme...";
+
+	"J'ai aussi trouvé ca sur le sol.";
+	"C'est un bracelet.";
+
+	"Une sorte d'appareil de communication..";
+	"Peut-etre meme plus...";
+	
+	//8
+	"Ils sont arrivés par la grotte, c'est";
+	"pour ca qu'ils ont volé la lampe.";
+	
+	"Ils viennent libérer les Nouvelles Ames";
+	"Donne-moi ce bracelet, et allons-y!";
 #endif
 
 #ifdef SPANISH

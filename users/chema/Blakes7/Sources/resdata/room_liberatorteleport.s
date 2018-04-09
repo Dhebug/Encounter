@@ -403,6 +403,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end
 .)
 
@@ -426,6 +429,9 @@ res_start
 #ifdef SPANISH
 	.asc "Armas",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Armes",0
+#endif
 res_end
 .)
 
@@ -450,6 +456,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pulseras",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Bracelets",0
+#endif
 res_end
 .)
 
@@ -474,6 +483,9 @@ res_start
 #ifdef SPANISH
 	.asc "Controles",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Commandes",0
+#endif
 res_end
 .)
 
@@ -497,6 +509,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cabina",0	;Object's name
+#endif
+#ifdef FRENCH
+	.asc "Cabine",0
 #endif
 res_end
 .)

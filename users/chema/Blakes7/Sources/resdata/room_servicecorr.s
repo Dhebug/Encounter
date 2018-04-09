@@ -361,6 +361,9 @@ res_start
 #ifdef SPANISH
 	.asc "Rejilla",0
 #endif
+#ifdef FRENCH
+	.asc "Grille",0
+#endif
 
 res_end	
 .)
@@ -387,6 +390,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 	
 res_end	
 .)
@@ -411,6 +417,9 @@ res_start
 #ifdef SPANISH
 	.asc "V","Z"+1,"lvula",0
 #endif
+#ifdef FRENCH
+	.asc "Vanne",0
+#endif
 res_end	
 .)
 
@@ -432,6 +441,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Pantalla",0
+#endif
+#ifdef FRENCH
+	.asc "Ecran",0
 #endif
 res_end	
 .)
@@ -455,6 +467,9 @@ res_start
 #ifdef SPANISH
 	.asc "Controles",0
 #endif
+#ifdef FRENCH
+	.asc "Commandes",0
+#endif
 	
 res_end	
 .)
@@ -472,7 +487,15 @@ res_start
 	.byt 23,13		; Walk position (col, row)
 	.byt FACING_UP	; Facing direction for interaction
 	.byt 00			; Color of text
+#ifdef ENGLISH
 	.asc "Panel",0
+#endif
+#ifdef SPANISH
+	.asc "Panel",0
+#endif
+#ifdef FRENCH
+	.asc "Panneau",0
+#endif
 res_end	
 .)
 
@@ -494,6 +517,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Extintor",0
+#endif
+#ifdef FRENCH
+	.asc "Extincteur",0
 #endif
 
 res_end	
@@ -517,6 +543,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Armario",0
+#endif
+#ifdef FRENCH
+	.asc "Armoire",0
 #endif
 	
 res_end	

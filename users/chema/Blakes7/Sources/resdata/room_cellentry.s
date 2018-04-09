@@ -903,6 +903,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -935,6 +938,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -966,6 +972,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Puerta",0
+#endif
+#ifdef FRENCH
+	.asc "Porte",0
 #endif
 res_end	
 .)

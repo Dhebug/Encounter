@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -291,6 +292,83 @@ stringpack ST_LIBERATORFIRST{
 	//45
 	" The Liberator is in stationary";
 	" orbit over planet Cygnus Alpha.";
+#endif
+
+#ifdef FRENCH
+	/*************************************/
+	// Jenna: 0
+	"Que s'est-il passé?";
+	"J'ai vu ma mere.";
+	"Elle m'abandonnait... de nouveau.";
+	
+	// Avon: 3
+	"Et moi, j'ai vu mon frere sur le point";
+	"de mourir, et j'étais impuissant.";
+	
+	// Blake: 5
+	"Cette... chose... utilisait votre";
+	"esprit et vos souvenirs contre vous.";
+	"Ca a du échouer avec moi, car";
+	"la Fédération a effacé mes souvenirs.";
+	
+	// Avon: 9
+	"Examinons ce vaisseau...";
+	"Ok. Je viens d'alimenter les systemes";
+	"principaux du vaisseau.";
+	
+	// Jenna: 12
+	"Ces commandes sont étranges...";
+	"Laisse-moi essayer....";
+	"AAAAAAHHH!";
+	"Il est dans mon esprit! Arretez-le!"; // l'ordinateur => masculin
+
+	// ZEN: 16 - dialogue
+	" Bonjour Jenna Stannis.";
+	"Qui etes-vous?";
+	" Zen. Bienvenue, Roj Blake.";
+	"Tu es un ordinateur?";
+	" En effet, Kerr Avon.";
+	" Le Libérateur est pret.";
+	" Veuillez indiquer cap et vitesse.";
+	
+	//23
+	"Le Libérateur...";
+	"Oui, ce nom m'est venu a l'esprit.";
+	
+	"Zen, ferme le sas d'entrée et";
+	"manoeuvre le vaisseau hors de portée";
+	"des scanners du London.";
+	
+	" Confirmé...";
+	
+	//------
+	
+	//29
+	/*************************************/
+	"Nous sommes libres, avec un vaisseau.";
+	"Nous pouvons aller ou nous voulons.";
+	
+	"Nous irons sur Cygnus Alpha.";
+	"Nous libererons le reste du groupe.";
+	"QUOI!?";
+	"Avec ce vaisseau et un équipage au";
+	"complet, nous POURRONS contrattaquer!"; // contrattaquer, variante de "contre-attaquer", cf. https://bit.ly/2JbN0mU
+	"Tu n'es pas sérieux...";
+	"Quelle est l'alternative?";
+	//38
+	"Partir. Je suis libre.";
+	"Et j'ai l'intention de le rester.";
+	"Et moi, j'ai besoin d'un équipage.";
+	"Zen, fais route vers Cygnus Alpha.";
+	"Vitesse standard.";
+	
+	//43
+	"Oh, je ferais mieux de remettre";
+	"ce tuyau a sa place.";
+	
+	//45
+	" Le Libérateur est en orbite";
+	" stationnaire autour de Cygnus Alpha.";
 #endif
 
 #ifdef SPANISH

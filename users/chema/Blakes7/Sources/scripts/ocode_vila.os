@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -21,6 +22,19 @@ stringpack VILA
 	"enclosed spaces."; 
 	"There's a name for it...";
 	"Cowardice?";
+	
+#endif
+#ifdef FRENCH	
+	"C'est un curieux personnage...";
+	/**************************************/
+	"Il n'y a pas de serrure que je ne";
+	"puisse ouvrir... Si j'ai assez peur.";
+	"Je ne me sens pas bien.";
+	"Je vais etre un gros handicap.";
+	"Je souffre d'un grave syndrome: "; // [laurentd75]: "grave syndrome" en français, plutôt que simplement "syndrome"
+	"la peur des espaces clos."; 
+	"Il y a un nom pour ca...";
+	"La lacheté?";
 	
 #endif
 #ifdef SPANISH

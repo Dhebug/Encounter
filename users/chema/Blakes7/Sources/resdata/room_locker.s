@@ -312,6 +312,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -334,6 +337,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cubo",0
+#endif
+#ifdef FRENCH
+	.asc "Seau",0
 #endif
 res_end	
 .)
@@ -358,6 +364,9 @@ res_start
 #ifdef SPANISH
 	.asc "Aspiradora",0
 #endif
+#ifdef FRENCH
+	.asc "Aspirateur",0
+#endif
 	
 res_end	
 .)
@@ -380,6 +389,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Escalera",0
+#endif
+#ifdef FRENCH
+	.asc "Echelle",0
 #endif
 	
 res_end	
@@ -404,6 +416,9 @@ res_start
 #ifdef SPANISH
 	.asc "Botellas",0
 #endif
+#ifdef FRENCH
+	.asc "Bouteilles",0
+#endif
 
 res_end	
 .)
@@ -426,6 +441,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cartel",0
+#endif
+#ifdef FRENCH
+	.asc "Ecriteau",0
 #endif
 
 res_end	
@@ -453,6 +471,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taquilla",0
 #endif
+#ifdef FRENCH
+	.asc "Casier",0
+#endif
 	
 res_end	
 .)
@@ -475,6 +496,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Taquilla",0
+#endif
+#ifdef FRENCH
+	.asc "Casier",0
 #endif
 res_end	
 .)
@@ -506,6 +530,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taquilla",0
 #endif
+#ifdef FRENCH
+	.asc "Casier",0
+#endif
 res_end	
 .)
 
@@ -528,6 +555,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Taquilla",0
+#endif
+#ifdef FRENCH
+	.asc "Casier",0
 #endif
 res_end	
 .)
@@ -552,6 +582,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taquilla",0
 #endif
+#ifdef FRENCH
+	.asc "Casier",0
+#endif
 res_end	
 .)
 
@@ -573,6 +606,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Taquilla",0
+#endif
+#ifdef FRENCH
+	.asc "Casier",0
 #endif
 res_end	
 .)
@@ -596,6 +632,9 @@ res_start
 #ifdef SPANISH
 	.asc "Taquilla",0
 #endif
+#ifdef FRENCH
+	.asc "Casier",0
+#endif
 res_end	
 .)
 
@@ -617,6 +656,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Taquilla",0
+#endif
+#ifdef FRENCH
+	.asc "Casier",0
 #endif
 res_end	
 .)
@@ -641,6 +683,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Sobre",0
+#endif
+#ifdef FRENCH
+	.asc "Enveloppe",0
 #endif
 res_end	
 .)

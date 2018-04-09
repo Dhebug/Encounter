@@ -426,6 +426,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -457,6 +460,9 @@ res_start
 #ifdef SPANISH
 	.asc "Consola",0
 #endif
+#ifdef FRENCH
+	.asc "Terminal",0 ; [laurentd75]: terminal, plutot que ocnsole en francais
+#endif
 res_end	
 .)
 
@@ -487,6 +493,9 @@ res_start
 	.asc "Coffee",0
 #endif
 #ifdef SPANISH
+	.asc "Caf","Z"+2,0
+#endif
+#ifdef FRENCH
 	.asc "Caf","Z"+2,0
 #endif
 
@@ -523,6 +532,9 @@ res_start
 #ifdef SPANISH
 	.asc "Pantalla",0
 #endif
+#ifdef FRENCH
+	.asc "Ecran",0
+#endif
 res_end	
 .)
 
@@ -553,6 +565,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Pantalla",0
+#endif
+#ifdef FRENCH
+	.asc "Ecran",0
 #endif
 res_end	
 .)

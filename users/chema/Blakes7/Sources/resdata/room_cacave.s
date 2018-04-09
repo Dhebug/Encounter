@@ -511,6 +511,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Sortie",0	;Object's name
+#endif		
 res_end
 .)
 
@@ -533,6 +536,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Pasaje",0	;Object's name
+#endif		
+#ifdef FRENCH
+	.asc "Passage",0	;Object's name
 #endif		
 res_end
 .)

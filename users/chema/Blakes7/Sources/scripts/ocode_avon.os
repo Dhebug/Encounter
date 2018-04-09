@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -46,6 +47,43 @@ stringpack AVON
 	//22
 	"What is that disguise?";
 #endif
+
+#ifdef FRENCH
+	/**************************************/
+	"Un homme solitaire...";
+	"Il est paralysé! je dois me dépecher."; // "Il est choqué. Je dois me dépecher!"; // "en état de choc" est trop long
+	
+	"Ton attitude de héros devient risquée.";
+	
+	"J'en ai assez. Rester avec toi";
+	"requiert un degré de stupidité";
+	"dont je ne me sens plus capable.";
+	
+	"Je n'ai jamais compris pourquoi on";
+	"devrait agir de facon irrationnelle";
+	"juste pour prouver que l'on tient a";
+	"quelqu'un, ni meme d'ailleurs pourquoi";
+	"on devrait avoir a le prouver.";
+	
+	//11
+	"Tu les manies avec beaucoup d'habileté.";
+	"Ah bon?";
+	"Mais une seule mort suffira.";
+	"Alors tu devrais faire attention.";
+	"Ca serait drole si c'etait la tienne.";
+	
+	//16
+	"As-tu une meilleure idée?";
+	"Et bien non, je n'en ai pas.";
+	"Ca signifie que tu es d'accord?";
+	"Est-ce que j'ai le choix?";
+	"Oui.";
+	"Alors je suis d'accord.";	
+
+	//22
+	"Quel est ce déguisement?";
+#endif
+
 #ifdef SPANISH
 	"Un hombre solitario...";
 	"¡Está en shock! ¡debo darme prisa!";

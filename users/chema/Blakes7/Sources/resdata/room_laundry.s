@@ -207,6 +207,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -235,6 +238,9 @@ res_start
 	.asc "Robot",0
 #endif
 #ifdef SPANISH
+	.asc "Robot",0
+#endif
+#ifdef FRENCH
 	.asc "Robot",0
 #endif
 res_end	

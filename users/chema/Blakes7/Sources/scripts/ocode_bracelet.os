@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -25,6 +26,22 @@ stringpack BRACELET
 	"Zen, turn the air conditioning off.";
 	"I don't need to get back now.";
 	"I can't without the transponder.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"On peut l'utiliser pour se téléporter";
+	"et communiquer avec le Libérateur.";
+	"Ok. Téléporte-moi.";
+	"Ramene-moi dans le vaisseau.";  // ou bien: "Ramene-moi.", "Fais-moi revenir", "Remonte-moi dans le vaisseau";
+	//4
+	"Il faut que je sois dans la cabine.";
+	"Je ne peux pas sans le bracelet.";
+	//6
+	"Et qui va actionner le téléporteur?";
+	"Mieux vaudrait ne pas y aller désarmé.";
+	"Zen, éteins la climatisation.";
+	"Pas besoin de revenir maintenant.";
+	"Je ne peux pas sans le transpondeur.";
 #endif
 #ifdef SPANISH
 	/***************************************/

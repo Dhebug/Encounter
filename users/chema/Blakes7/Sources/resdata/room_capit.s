@@ -417,6 +417,9 @@ res_start
 #ifdef SPANISH
 	.asc "Camino",0	;Object's name
 #endif	
+#ifdef FRENCH
+	.asc "Chemin",0	;Object's name
+#endif	
 res_end
 .)
 
@@ -441,6 +444,9 @@ res_start
 #ifdef SPANISH
 	.asc "Arbol",0	;Object's name
 #endif		
+#ifdef FRENCH
+	.asc "Arbre",0	;Object's name
+#endif		
 res_end
 .)
 
@@ -464,6 +470,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Precipicio",0	;Object's name
+#endif		
+#ifdef FRENCH
+	.asc "Pr","Z"+2,"cipice",0	; "Précipice"
 #endif		
 res_end
 .)
@@ -495,6 +504,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Cuerda",0	;Object's name
+#endif		
+#ifdef FRENCH
+	.asc "Corde",0	;Object's name
 #endif		
 res_end	
 .)

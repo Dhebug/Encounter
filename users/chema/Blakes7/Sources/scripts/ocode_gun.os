@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -14,6 +15,11 @@ stringpack GUN{
 	/***************************************/
 	"Tt looks like a hair curl iron or a";
 	"pulley stopper.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"On dirait un fer a friser, ou bien un";
+	"bloqueur de poulie.";
 #endif
 #ifdef SPANISH
 	/***************************************/

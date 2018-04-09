@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -12,6 +13,10 @@ stringpack LAMP{
 #ifdef ENGLISH	
 	"It is a quite primitive oil lamp.";
 	"I don't know what you want to do.";
+#endif
+#ifdef FRENCH	
+	"C'est une lampe a huile primitive.";
+	"Je ne saisis pas ce que vous voulez.";
 #endif
 #ifdef SPANISH
 	"Una primitiva lámpara de aceite.";

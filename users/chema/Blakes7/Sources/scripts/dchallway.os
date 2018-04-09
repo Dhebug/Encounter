@@ -1,7 +1,8 @@
-﻿/****************************/
+/****************************/
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -74,6 +75,51 @@ stringpack 200
 	"This door is closed.";
 	"It is on, waiting for selection.";
 	"That's a door.";
+	
+	//31
+	//"That's a door to the locker room.";
+#endif
+
+#ifdef FRENCH
+	"La Fédération prend soin de nous.";
+	"Plans disponibles a l'accueil.";
+	"Les complexes de la Fédération sont,";
+	"comment dire... tres complexes!";
+	"Amiga Wave - Votre chaine rétro.";
+	"Chaque dimanche soir a 22h.";
+	"Pas d'informations pour l'instant.";
+	"Cette chose m'a toujours paru étrange.";
+	"C'est la porte de ma chambre.";
+	"C'est la porte de l'infirmerie.";	//9
+	"La porte de la salle de controle."; //10
+	"Café-O-matic."; //11
+	"Il reste seulement du décaféiné...";
+	"J'ai besoin d'une piece d'abord.";
+	"Que cherchez-vous a faire?";
+	"Je n'aime pas le déca, mais bon...";
+	
+	"Ouf... J'ai eu chaud."; //16 escaping from nurse
+	"Il n'y a plus qu'a attendre désormais."; // 17 sandwich given
+	
+	"Hé! Ou allez-vous? Vous ne savez pas"; //"Hé! Ou vas-tu?";	// 18 guard forbids entering
+	"lire? Entrée interdite!"; // "Tu ne sais pas lire? Entrée interdite!";
+
+	//20 coffee extended puzzle
+	"Elle n'accepte pas les petites pieces.";
+	" (Clinck!)";
+	" (Clanck!)";
+	" (CLINCK!)";
+	" (Elle s'allume, et attend un choix)";
+	"Rien ne se passe. Qu'espériez-vous?";
+	" ";
+	
+	//27
+	"Mieux vaut ne pas risquer a nouveau.";
+	
+	//28
+	"Cette porte est fermée.";
+	"Elle est allumée, en attente de choix."; //
+	"C'est une porte.";
 	
 	//31
 	//"That's a door to the locker room.";
@@ -542,6 +588,29 @@ stringpack 201{
 	
 	"Damn!....";
 #endif
+
+#ifdef FRENCH
+	/*
+	+++++++++++++++++++++++++++++++++++++
+	*/
+	"Ou étiez-vous passé?";
+	"Désolé, monsieur.";
+	"C'est difficile d'avoir un café.";
+	"Il ne reste plus que du déca,";
+	"et une femme a mis une piece qui est";
+	"restée coincée dans la machine...";
+	"J'ai du aller au niveau 3.";
+	
+	"Ok, Ok... Ecoutez...";
+	"J'ai une urgence - oh, mon estomac!";
+	"Allez surveiller les appareils.";
+	"Ah, je me sens tres mal!";
+	
+	"Tout de suite, monsieur!";
+	
+	"Zut!....";
+#endif
+
 #ifdef SPANISH
 	/*
 	+++++++++++++++++++++++++++++++++++++
@@ -886,6 +955,35 @@ stringpack 210
 	"\A_FWGREEN join the Terran Federation despite";
 	"\A_FWGREEN their previous stubborn government."; 
 	"\A_FWGREEN Congratulations to the citizens!";
+#endif
+#ifdef FRENCH
+	"     DERNIERES NOUVELLES";
+	"     -------------------";
+	"\A_FWGREEN Les données indiquent une baisse de";
+	"\A_FWGREEN la pollution de 0,5 ce trimestre.";
+	"\A_FWGREEN Bien que l'air reste irrespirable,";
+	"\A_FWGREEN notre travail produit des résultats.";
+	
+	"\A_FWGREEN La permission de procréer a été";
+	"\A_FWGREEN accordée a trois nouveaux couples";
+	"\A_FWGREEN cette année. Envoyez vos candidatures";
+	"\A_FWGREEN a l'Agence de Controle des Naissances.";
+	
+	
+	"\A_FWGREEN La Fédération a approuvé un plan d'";
+	"\A_FWGREEN investissement de 200 milliards pour";
+	"\A_FWGREEN la construction d'un nouveau Centre";
+	"\A_FWGREEN de Controle, ici, sur Terre.";
+	
+	"\A_FWGREEN Une nouvelle station de communication";
+	"\A_FWGREEN a été déployée sur Saurian Major.";
+	"\A_FWGREEN Les experts disent qu'elle améliorera";
+	"\A_FWGREEN les communications entre systemes.";
+	
+	"\A_FWGREEN La planete Auron a finalement décidé";
+	"\A_FWGREEN de rejoindre la Fédération Terrienne";
+	"\A_FWGREEN contre l'avis de son gouvernement"; 
+	"\A_FWGREEN précédent. Félicitations!";
 #endif
 #ifdef SPANISH
 	"      ULTIMA HORA";

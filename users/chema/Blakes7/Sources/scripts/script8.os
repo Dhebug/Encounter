@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -89,6 +90,16 @@ stringpack 254{
 	"prisoners.";
 	"Prisoners?";
 	"New souls for The Faith.";
+#endif
+
+#ifdef FRENCH
+	/**************************************/
+	"Ah, le voila...";
+	"Il est la.";
+	"Le vaisseau de la Fédération qui amene";
+	"de nouveaux prisonniers.";
+	"Des prisonniers?";
+	"De nouvelles Ames pour la Foi, plutot.";
 #endif
 
 #ifdef SPANISH

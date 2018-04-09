@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -189,7 +190,7 @@ script 203{
 stringpack FIRSTTELEST {
 #ifdef ENGLISH
 	/**************************************/
-	"Do you know what is all this for?";
+	"Do you know what is all this for?"; // [laurentd75]: NOTE: WRONG TEXT COLOR (this should be spoken by Blake, but is displayed using Avon's colour)
 	"I bet it is a Teleport system.";
 	"You need one of those bracelets.";
 	"I think I could teleport you to any";
@@ -198,7 +199,7 @@ stringpack FIRSTTELEST {
 	
 	//6
 	"These bracelets seem to serve as";
-	"communication devices aswell. ";
+	"communication devices as well. ";
 	
 	//8
 	"It's full of strange handheld things.";
@@ -223,6 +224,45 @@ stringpack FIRSTTELEST {
 	"and when it receives the signal, the";
 	"teleport will operate.";
 	"And who will I teleport?";
+	
+#endif
+
+#ifdef FRENCH
+	/**************************************/
+	"Sais-tu a quoi peut servir tout ca?"; // [laurentd75]: bug? (spoken by Kerr Avon, should be spoken by Blake)
+	"Un systeme de téléportation, je pense.";
+	"Tu as besoin de l'un de ces bracelets.";
+	"Je pense que je pourrais te téléporter";
+	"n'importe ou, dans un périmetre donné.";
+	"Le bracelet s'active dans la cabine.";
+
+	//6
+	"Ces bracelets semblent aussi servir";
+	"de dispositifs de communication.";
+	
+	//8
+	"C'est rempli d'appareils portatifs.";
+	"On dirait des armes extra-terrestres..";
+	
+	//10
+	"Je ne sais pas comment l'utiliser.";
+	"Plein de voyants et de commandes...";
+	
+	//12
+	"C'est une cabine a l'aspect étrange.";
+	
+	//13
+	"J'en prends aussi pour les autres.";
+	"J'ai déja le mien.";
+	
+	//15
+	"Je ne comprends pas.";
+	
+	// 16
+	"Bien. Je vais installer ca ici...";
+	"et quand il recevra le signal, le";
+	"téléporteur s'activera.";
+	"Et qui vais-je téléporter?";
 	
 #endif
 

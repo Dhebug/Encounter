@@ -3,6 +3,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -129,6 +130,54 @@ stringpack 250{
 	"I have to talk to her about my family.";
 	"I fear something is wrong with them.";
 #endif
+
+#ifdef FRENCH
+	/**************************************/
+	"Avant de jouer, laissez-moi vous";
+	"présenter les mécanismes de base";
+	"de ce jeu.";
+	"Pour sauter cette intro, pressez ESC.";
+	"Le jeu utilise l'interface pointer-";
+	"cliquer classique des jeux d'aventure,";
+	"avec 9 commandes. Par défaut, cliquer";
+	"un point a l'écran a pour effet de m'y";
+	"faire déplacer, si c'est possible.";
+	"Et je trouve le chemin tout seul!";
+/*	
+	"Selecting an action and clicking on";
+	"an object will make me go to there,";
+	"if needed, and perform the command.";
+	"The current command is composed in";
+	"a sentence shown below the picture.";
+*/	
+	"Comme presqu'aucun utilisateur Oric";
+	"n'a de souris, il y a aussi des";
+	"raccourcis-clavier pour les actions.";
+	"A chaque verbe est associé un numéro,";
+	"de gauche a droite et de haut en bas:";
+	"1='Donne', 3='Utilise', 7='Ferme'.";
+	"Si vous positionnez le curseur sur un";
+	"objet et appuyez sur un chiffre,";
+	"l'action associée sera exécutée.";
+	"Regardez la photo a votre droite.";
+	"Déplacez-y le curseur et pressez 5.";
+	
+	//21
+	"Sélectionnez la photo et appuyez sur 5";
+	"pour la regarder, s'il vous plait.";
+	
+	//23
+	"Facile, n'est-ce pas? Vous pouvez";
+	"redéfinir les touches de déplacement";
+	"et de commande a votre guise.";
+	
+	"A vous de voir ce qui vous convient...";
+	
+	"Allons voir Ravella maintenant. Je dois";
+	"lui parler de ma famille, j'ai peur qu'";
+	"il ne leur soit arrivé quelque chose...";
+#endif
+
 
 #ifdef SPANISH
 	/**************************************/

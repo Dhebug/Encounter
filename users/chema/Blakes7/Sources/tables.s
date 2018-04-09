@@ -1136,6 +1136,10 @@ loading_msg
 .asc  A_FWMAGENTA+A_FWCYAN*8+128,"Cargando el juego...  un segundo",0
 #endif
 
+#ifdef FRENCH
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"Chargement du jeu...Patience SVP",0
+#endif
+
 #endif
 */
 		
@@ -1151,6 +1155,10 @@ menu_str
 #ifdef SPANISH
 .asc 2,"  R", 6, "Redefinir teclas",7,0
 .asc 2,"  V", 6, "Volumen:",5
+#endif
+#ifdef FRENCH
+.asc 2,"  R", 6, "Red","Z"+2,"finir touches",7,0	; "Redéfinir touches"
+.asc 2,"  V", 6, "Volume:",5
 #endif
 
 vlevel
@@ -1189,6 +1197,23 @@ tspeed
 .asc 3,"  ESC", 6, "Continuar juego",7,0
 #endif
 
+#ifdef FRENCH
+.asc "fort   ", 7,0
+#ifdef SPEECHSOUND
+.asc 2,"  T",6, "Son du dialogue:",5
+#else
+.asc 2,"  T",6, "Vitesse dialogue:",5
+#endif
+tspeed
+#ifdef SPEECHSOUND
+.asc "oui    ", 7,0
+#else
+.asc "normal ", 7,0
+#endif
+.asc   " ",0
+.asc 3,"  ESC", 6, "Revenir au jeu",7,0
+#endif
+
 #ifdef ENGLISH
 stv
 .asc "high   "
@@ -1224,6 +1249,23 @@ stt
 
 #endif
 
+#ifdef FRENCH
+stv
+.asc "fort   "
+.asc "normal "
+.asc "faible "
+.asc "silence"
+stt
+#ifdef SPEECHSOUND
+.asc "non    "
+.asc "oui    "
+#else
+.asc "rapide "
+.asc "normal "
+#endif
+
+#endif
+
 #ifdef ENGLISH
 menusave_str
 .asc 3,"  C", 6, "Continue saved game",7,0
@@ -1237,6 +1279,14 @@ menusave_str
 .asc 3,"  C", 6, "Continua juego",7,0
 menusave_str2
 .asc 3,"  N", 6, "Nuevo",1,"(borra tu progreso)",7,0
+#endif
+#ifdef FRENCH
+menusave_str
+.asc 3,"  C", 6, "Continuer jeu sauvrgard","Z"+2,7,0	; "Continuer jeu sauvegardé"
+menusave_str2
+.asc 3,"  N", 6, "Nouveau",1,"(efface sauvegarde)",7,0  ; // [laurentd75]: Note: "progression" is 1 char too long in French
+;menusave_str3
+;.asc 3,"   ETES-VOUS SUR (Y/N)?",7,0
 #endif
 		
 ; META: TODO: This should go to a resource???
@@ -1266,17 +1316,45 @@ verbs
 .asc "Tira",0
 .asc "Ve a",0
 #endif
+#ifdef FRENCH
+.asc "Donne",0
+.asc "Prends",0
+.asc "Utilise",0
+.asc "Ouvre",0
+.asc "Regarde",0
+.asc "Pousse",0
+.asc "Ferme",0
+.asc "Parle ","A"-1,0	; "Parle à"
+.asc "Tire",0
+.asc "Va vers",0
+#endif
 
 verb_active 	.dsb 9
 
+#ifdef ENGLISH
+verb_pos_X 	.byt 1*6,  7*6, 15*6, 1*6,  7*6, 15*6, 1*6,  7*6, 15*6
+verb_pos_X2 	.byt 5*6, 14*6, 18*6, 5*6, 14*6, 19*6, 5*6, 14*6, 19*6
+verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1 
+#endif
 #ifdef SPANISH
 verb_pos_X 	.byt 1*6,  8*6, 14*6, 1*6,  8*6, 14*6, 1*6,  8*6, 14*6
 verb_pos_X2 	.byt 5*6, 12*6, 17*6, 5*6, 12*6, 20*6, 7*6, 13*6, 18*6
 verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1 
 #endif
-#ifdef ENGLISH
-verb_pos_X 	.byt 1*6,  7*6, 15*6, 1*6,  7*6, 15*6, 1*6,  7*6, 15*6
-verb_pos_X2 	.byt 5*6, 14*6, 18*6, 5*6, 14*6, 19*6, 5*6, 14*6, 19*6
+#ifdef FRENCH
+;; verb_posX: liste des coordonnées X de départ de la première lettre des 9 verbes (les 3 colonnes de verbes doivent être alignées)
+;; verb_posX2: liste des coordonnées X suivant la fin de la dernière lettre de chaque verbe
+;; verb_posY: liste des coordonnées Y de départ de la première lettre des 9 verbes (identique pour chaque groupe de 3 verbes)
+;; -- [laurentd75] -- Try #1 -- BAD
+;;verb_pos_X 	.byt 1*6,  9*6, 18*6, 1*6,  9*6, 18*6, 1*6,  9*6, 18*6
+;;verb_pos_X2 	.byt 6*6, 15*6, 25*6, 6*6, 16*6, 24*6, 6*6, 16*6, 22*6
+; -- [laurentd75] -- Try #2 -- Better, but "Utilise" verb in last column interferes with inventory
+;verb_pos_X 	.byt 1*6,  7*6, 15*6, 1*6,  7*6, 15*6, 1*6,  7*6, 15*6
+;verb_pos_X2 	.byt 6*6, 13*6, 22*6, 6*6, 14*6, 21*6, 6*6, 14*6, 18*6
+;verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1
+; -- [laurentd75] -- Try #3 -- start at position "0*6" to gain some space => OK !!
+verb_pos_X 	.byt 0*6,  6*6, 14*6, 0*6,  6*6, 14*6, 0*6,  6*6, 14*6
+verb_pos_X2 	.byt 5*6, 12*6, 21*6, 5*6, 13*6, 20*6, 5*6, 13*6, 17*6
 verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1 
 #endif
 
@@ -1291,6 +1369,11 @@ verb_prep		.byt 0, $ff, 1, $ff, $ff, $ff, $ff, $ff, $ff, $ff
 #ifdef SPANISH
 .asc "a",0
 .asc "con",0
+verb_prep		.byt 0, $ff, 1, $ff, $ff, $ff, $ff, $ff, $ff, $ff 
+#endif
+#ifdef FRENCH
+.asc "A"-1,0	; "à"
+.asc "avec",0
 verb_prep		.byt 0, $ff, 1, $ff, $ff, $ff, $ff, $ff, $ff, $ff 
 #endif
 		
@@ -1322,6 +1405,13 @@ redefine_strings
 .asc A_FWMAGENTA,"Left..",A_FWWHITE,0
 .asc A_FWMAGENTA,"Right..",A_FWWHITE,0
 .asc A_FWMAGENTA,"Select..",A_FWWHITE,0
+#endif
+#ifdef FRENCH
+.asc A_FWMAGENTA,"Haut..",A_FWWHITE,0
+.asc A_FWMAGENTA,"Bas..",A_FWWHITE,0
+.asc A_FWMAGENTA,"Gauche..",A_FWWHITE,0
+.asc A_FWMAGENTA,"Droite..",A_FWWHITE,0
+.asc A_FWMAGENTA,"S","Z"+2,"lection..",A_FWWHITE,0	; "Sélection"
 #endif
 
 tab_knames
@@ -1565,7 +1655,17 @@ randseed .word $dead 	; will it be $dead again?
 
 	
 ; Include the character font here
+; [laurentd75]: ADDED CONDITIONS TO HANDLE SPECIAL CASE FOR FRENCH FONT
+#ifdef ENGLISH
 #include "build\files\BFont6x8.asm"
+#endif
+#ifdef SPANISH
+#include "build\files\BFont6x8.asm"
+#endif
+#ifdef FRENCH
+#include "build\files\BFont6x8_fr.asm"
+#endif
+; [/laurentd75]
 
 
 

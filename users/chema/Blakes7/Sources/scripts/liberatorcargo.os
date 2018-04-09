@@ -1,4 +1,11 @@
-﻿/* Liberator Cargo bay related scripts */
+﻿/****************************/
+/* Blake's 7: the Oric game */
+/* Using OASIS              */
+/* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
+/****************************/
+
+/* Liberator Cargo bay related scripts */
 
 #include "globals.h"
 
@@ -35,11 +42,30 @@ stringpack 200 {
 	"How do you want me to use it?";
 	
 	"The strap is fastened and I can't break";
- 	"it with my bare hands";
+ 	"it with my bare hands.";
 	
 	"A compartment with spare energy cells.";
 	"Okay, I'll take one.";
 	"I don't need it.";
+
+#endif
+
+#ifdef FRENCH
+	/****************************************/
+	"Une sangle de fixation élastique,";
+	"utilisée pour arrimer le chargement.";
+	
+	"Voyons si je peux en couper un bout...";
+	"Comment voulez-vous que je l'utilise?";
+	
+	"La sangle est fixée, et je ne peux pas";
+ 	"la déchirer a mains nues.";
+	
+	"Il y a un stock de piles d'énergie."; // [laurentd75] cellule/pile d'énergie, ou batterie. 
+	                                       // Référencé dans: ocode_ecell.os et resdata/obj_ep2.s, resdata/room_hideout.s
+
+	"Ok, j'en prends une.";
+	"Je n'en ai pas besoin.";
 
 #endif
 

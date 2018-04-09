@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -40,6 +41,16 @@ stringpack 200{
 	"I've had worse offers...";
 	"Execution may have some appeal.";
 	"Okay, let's go";
+#endif
+
+#ifdef FRENCH
+	/***************************************/
+	"Quel étrange intérieur. Impressionnant.";
+	"Pouvons-nous refuser de faire ca?";
+	"L'alternative est l'exécution sommaire.";
+	"J'ai déja eu des offres bien pires...";
+	"L'exécution pourrait etre séduisante.";
+	"Bon, allons-y.";
 #endif
 
 #ifdef SPANISH

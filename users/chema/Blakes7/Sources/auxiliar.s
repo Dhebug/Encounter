@@ -445,11 +445,15 @@ GenericIJKBits
 
 loading_msg
 #ifdef ENGLISH
-.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.2- Loading game data.. please wait",0
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.3- Loading game data.. please wait",0
 #endif
 
 #ifdef SPANISH
-.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.2- Cargando el juego... un segundo",0
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.3- Cargando el juego... un segundo",0
+#endif
+
+#ifdef FRENCH
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"V1.3- Chargement du jeu...  Patientez",0
 #endif
 
 #ifdef IJK_SUPPORT
@@ -461,6 +465,11 @@ Joy_msg
 #ifdef SPANISH
 .asc  A_FWMAGENTA+A_FWCYAN*8+128,"Detectado joystick IJK",0
 #endif
+
+#ifdef FRENCH
+.asc  A_FWMAGENTA+A_FWCYAN*8+128,"Joystick IJK d","Z"+2,"tect","Z"+2,". ",0	; "Joystick IJK détecté. "
+#endif
+
 #endif
 
 #endif

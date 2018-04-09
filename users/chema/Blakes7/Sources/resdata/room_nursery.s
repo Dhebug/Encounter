@@ -347,6 +347,9 @@ res_start
 #ifdef SPANISH
 	.asc "Salida",0
 #endif
+#ifdef FRENCH
+	.asc "Sortie",0
+#endif
 res_end	
 .)
 
@@ -378,6 +381,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Enfermera",0
+#endif
+#ifdef FRENCH
+	.asc "Infirmiere",0
 #endif
 res_end	
 .)

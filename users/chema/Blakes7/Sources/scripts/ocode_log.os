@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -14,6 +15,12 @@ stringpack WOODENLOG{
 	"Seems resistant, despite its weight.";
 	"I can't use the log with that.";
 	"I'd better keep it there.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Ca parait résistant, malgré son poids.";
+	"Je ne peux utiliser le tronc comme ca."; // [laurentd75]: tronc, rondin ou branche - voir "forest.os"
+	"Mieux vaut le laisser ici.";
 #endif
 #ifdef SPANISH
 	/***************************************/

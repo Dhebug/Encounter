@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -26,6 +27,10 @@ stringpack KEY
 #ifdef ENGLISH	
 	"A small key.";
 	"Can't use the key here.";
+#endif
+#ifdef FRENCH	
+	"Une petite clé.";
+	"Je ne peux pas utiliser la clé ici.";
 #endif
 #ifdef SPANISH
 	"Una llave pequeña.";

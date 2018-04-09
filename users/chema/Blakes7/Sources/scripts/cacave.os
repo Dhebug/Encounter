@@ -2,7 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
-/* Traduction FR done 		*/
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -20,7 +20,7 @@ stringpack STDESC{
 #endif
 
 #ifdef FRENCH
-	"L'entree de la cave...";
+	"C'est l'entrée d'une grotte..."; // [laurentd75]: cave/cueva = grotte, pas cave !!
 #endif
 
 #ifdef SPANISH

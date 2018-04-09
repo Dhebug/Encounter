@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -83,6 +84,23 @@ stringpack SANDWICH
 	"What would be the use of that?";
 	
 	"It doesn't look THAT lethal.";
+#endif
+#ifdef FRENCH
+	/*
+	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+	///// [laurentd75]: CAUTION: following 3 sentences also defined in "blakesroom.os"
+	///// [laurentd75]: Note: In fact, the sandwich is the only food Blake can eat because 
+	/////               it is the only food that is not contaminated with Federation drugs (suppressants)
+	/////"La seule nourriture que je peux avaler."; // ou: "La seule chose que je puisse manger.";
+	///// "Le seul repas auquel j'ai droit."; // aliment, pitance, nourriture, mets, aliment, denrée, repas
+	"La seule chose que je puisse manger.";
+	"Je l'ai promis a Ravella.";
+	"Mais je déteste le fromage.";
+	"J'ai faim, mais PAS A CE POINT...";
+	"Ca, c'est une idée DIABOLIQUE...";
+	"J'ADORE.";
+	"A quoi cela servirait-il?";
+	"Ca n'a pas l'air SI mortel que ca.";
 #endif
 #ifdef SPANISH
 	/*

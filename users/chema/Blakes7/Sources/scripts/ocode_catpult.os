@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -15,6 +16,13 @@ stringpack CATPULT{
 	"With the proper projectile, that is.";
 	"I don't have a projectile.";
 	"Just tell me the target.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Une arme mortelle...";
+	"...si l'on a le projectile adéquat.";
+	"Je n'ai aucun projectile.";
+	"Indiquez-moi simplement la cible.";
 #endif
 #ifdef SPANISH
 	/***************************************/

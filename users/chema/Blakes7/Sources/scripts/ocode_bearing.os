@@ -2,6 +2,7 @@
 /* Blake's 7: the Oric game */
 /* Using OASIS              */
 /* (c) Chema - 2016         */
+/* Traduction FR:laurentd75	*/
 /****************************/
 
 #include "globals.h"
@@ -14,6 +15,12 @@ stringpack BEARING{
 	"A small steel ball.";
 	"Probably loose from a bearing.";
 	"I can't use the ball in that way.";
+#endif
+#ifdef FRENCH	
+	/***************************************/
+	"Une petite bille d'acier.";
+	"Probablement d'un roulement a billes.";
+	"Je ne peux l'utiliser de cette facon.";
 #endif
 #ifdef SPANISH
 	/***************************************/

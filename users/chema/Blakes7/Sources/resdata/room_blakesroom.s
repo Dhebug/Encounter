@@ -359,6 +359,9 @@ res_start
 #ifdef SPANISH
 	.asc "Puerta",0
 #endif
+#ifdef FRENCH
+	.asc "Porte",0
+#endif
 res_end	
 .)
 
@@ -661,6 +664,9 @@ res_start
 #ifdef SPANISH
 	.asc "Caj","Z"+4,"n",0
 #endif
+#ifdef FRENCH
+	.asc "Tiroir",0
+#endif
 res_end
 .)
 
@@ -683,6 +689,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "L","Z"+1,"mpara",0
+#endif
+#ifdef FRENCH
+	.asc "Lampe",0
 #endif
 res_end
 .)
@@ -707,6 +716,9 @@ res_start
 #ifdef SPANISH
 	.asc "Libro",0
 #endif
+#ifdef FRENCH
+	.asc "Livre",0
+#endif
 res_end
 .)
 
@@ -729,6 +741,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Bola",0
+#endif
+#ifdef FRENCH
+	.asc "Boule",0
 #endif
 res_end
 .)
@@ -753,6 +768,9 @@ res_start
 #ifdef SPANISH
 	.asc "Fotograf","Z"+3,"a",0
 #endif
+#ifdef FRENCH
+	.asc "Photo",0
+#endif
 
 res_end
 .)
@@ -776,6 +794,9 @@ res_start
 #endif
 #ifdef SPANISH
 	.asc "Pantalla",0
+#endif
+#ifdef FRENCH
+	.asc "Ecran",0
 #endif
 
 res_end
