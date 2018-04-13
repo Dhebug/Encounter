@@ -94,13 +94,13 @@ stringpack SANDWICH
 	/////"La seule nourriture que je peux avaler."; // ou: "La seule chose que je puisse manger.";
 	///// "Le seul repas auquel j'ai droit."; // aliment, pitance, nourriture, mets, aliment, denrée, repas
 	"La seule chose que je puisse manger.";
-	"Je l'ai promis a Ravella.";
+	"Je l'ai promis à Ravella.";
 	"Mais je déteste le fromage.";
 	"J'ai faim, mais PAS A CE POINT...";
 	"Ca, c'est une idée DIABOLIQUE...";
 	"J'ADORE.";
 	"A quoi cela servirait-il?";
-	"Ca n'a pas l'air SI mortel que ca.";
+	"Ca n'a pas l'air SI mortel que ça.";
 #endif
 #ifdef SPANISH
 	/*

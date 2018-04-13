@@ -406,7 +406,7 @@ res_start
 	.asc "Ropas",0	;Object's name
 #endif		
 #ifdef FRENCH
-	.asc "Vetements",0	;Object's name
+	.asc "V","Z"+3,"tements",0	; "Vêtements"
 #endif		
 res_end	
 .)

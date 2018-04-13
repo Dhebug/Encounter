@@ -20,8 +20,8 @@ stringpack BRACELETS{
 #ifdef FRENCH
 	/***************************************/
 	"Des bracelets supplémentaires, pour";
-	"ramener le reste de mon équipage.";   // ou équipe, car c'est plus une équipe qu'un équipage en fait...
-	"Ils sont pour le reste de l'équipage.";
+	"ramener le reste de mon équipe.";  // c'est plus une "équipe" qu'un "équipage" en fait...
+	"Ils sont pour le reste de l'équipe.";
 #endif
 #ifdef SPANISH
 	/***************************************/

@@ -104,7 +104,7 @@ stringpack STLOCAL{
 #endif
 
 #ifdef FRENCH
-	"Je savais que c'était un piege...";
+	"Je savais que c'était un piège...";
 	"Zen, déplace le Libérateur hors de";
 	"portée de leurs scanners, en les";
 	"maintenant sous l'horizon.";
@@ -116,10 +116,10 @@ stringpack STLOCAL{
 	"Je n'ai besoin de personne!";
 	
 	"Zen, quels sont les chances pour un";
-	"homme seul d'échapper a la Fédération";
+	"homme seul d'échapper à la Fédération";
 	"en se cachant avec le Libérateur?";
 	
-	"Bon, je vais aller les secourir..."; 
+	"Bon, allons quand même les secourir..."; // avec "quand même", plus logique que "Bon, je vais aller les secourir..."; 
 #endif
 
 #ifdef SPANISH

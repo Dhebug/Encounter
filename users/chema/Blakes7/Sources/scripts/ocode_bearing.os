@@ -18,9 +18,9 @@ stringpack BEARING{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"Une petite bille d'acier.";
-	"Probablement d'un roulement a billes.";
-	"Je ne peux l'utiliser de cette facon.";
+	"Une petite bille en acier.";
+	"Probablement d'un roulement à billes.";
+	"Je ne peux l'utiliser de cette façon.";
 #endif
 #ifdef SPANISH
 	/***************************************/

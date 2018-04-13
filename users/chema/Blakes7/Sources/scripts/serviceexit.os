@@ -106,11 +106,11 @@ stringpack 200{
 
 #ifdef FRENCH
 	/**************************************/
-	"Blake! Te voila enfin!";
+	"Blake! Te voilà enfin!";
 	"J'avais peur que tu aies été capturé.";
-	"Mais ou est Ravella?";
+	"Mais où est Ravella?";
 	
-	"Je ne l'ai pas vue. C'est pour ca que";
+	"Je ne l'ai pas vue. C'est pour ça que";
 	"j'ai mis si longtemps pour arriver ici.";
 	
 	"Mais c'est une terrible nouvelle!";
@@ -119,20 +119,20 @@ stringpack 200{
 	
 	//8
 	" SEC CAM H-233 ";
-	"\A_FWWHITE+A_FWGREEN*8+$c0 Le plan fonctionne, Commandeur Supreme.";
+	"\A_FWWHITE+A_FWGREEN*8+$c0 Le plan fonctionne, Commandeur Suprême.";
 	//10
 	"\A_FWMAGENTA Vous voulez dire MON plan, Travis.";
-	"\A_FWMAGENTA Ils n'ont pas pu s'empecher d'essayer";
+	"\A_FWMAGENTA Ils n'ont pas pu s'empêcher d'essayer";
 	"\A_FWMAGENTA de faire revenir Blake dans le groupe.";
 	"\A_FWMAGENTA C'est toujours un héros.";
 	//14
-	"\A_FWWHITE+A_FWGREEN*8+$c0 Arreter Ravella était risqué.";
+	"\A_FWWHITE+A_FWGREEN*8+$c0 Arrêter Ravella était risqué.";
 	// [laurentd75]: can't really understand the sense of this sentence: "Yes, but Blake has his resources"
 	"\A_FWMAGENTA Oui, mais Blake a ses ressources,"; 
 	"\A_FWMAGENTA et elle devenait un danger plus grand.";
 	"\A_FWMAGENTA Bon, allez préparer votre escadron.";
 	"\A_FWMAGENTA La résistance sera totalement et";
-	"\A_FWMAGENTA a jamais annihilée ce soir.";
+	"\A_FWMAGENTA à jamais annihilée ce soir.";
 	
 	"               ";//META: Is one just enough?
 #endif

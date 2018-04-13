@@ -18,8 +18,8 @@ stringpack WOODENLOG{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"Ca parait résistant, malgré son poids.";
-	"Je ne peux utiliser le tronc comme ca."; // [laurentd75]: tronc, rondin ou branche - voir "forest.os"
+	"Ca parait solide, mais c'est lourd!"; // [laurentd75]: plus logique que "Ca parait résistant, malgré son poids.";
+	"Je ne peux utiliser le tronc comme ça."; // [laurentd75]: tronc, rondin ou branche - voir "forest.os"
 	"Mieux vaut le laisser ici.";
 #endif
 #ifdef SPANISH

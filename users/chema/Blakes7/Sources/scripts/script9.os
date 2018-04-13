@@ -111,32 +111,32 @@
 	/***************************************/
 	"Blake a-t-il trouvé les autres?";
 	"Pas encore. Il va se faire tuer...";
-	"Arrete avec ca.";
+	"Arrête avec ça.";
 	"Ce vaisseau vaut des milliards.";
 	"J'imagine.";
-	"On pourrait acheter ce qu'on veut...";
+	"On pourrait s'acheter ce qu'on veut...";
 	"Probablement...";
 	"Tout ce qu'on veut... Pense-y, Jenna.";
-	"Oui mais, et Blake alors?";
-	"Tant pis, on s'en fiche."; // [laurentd75]: ou alors: "Peu m'importe"
+	"Oui, mais, et Blake alors?";
+	"Tant pis, on s'en fiche..."; // [laurentd75]: ou alors: "Peu m'importe"
 	"Non.";
-	"On pourrait avoir une planete a nous.";
+	"On pourrait avoir une planète à nous.";
 	"Pas question de le laisser ici.";
-	"On devrait. C'est un idéaliste.";  // [laurentd75] crusader=un croisé, au sens chevaleresque, idéaliste, militant, activiste...
+	"On devrait... C'est un idéaliste.";  // [laurentd75] crusader=un croisé, au sens chevaleresque, idéaliste, militant, activiste...
 	
 	//14
 	/***************************************/
 	"Lui, il voit ce vaisseau uniquement";
 	"comme une arme contre la Fédération.";
 	"Mais il ne peut pas gagner, tu le sais.";
-	"Que préferes-tu, etre riche, ou morte?";
+	"Que préfères-tu, être riche, ou morte?";
 	
 	//18
 	"Une heure. Attendons juste une heure.";
 	"Mais pourquoi? Pourquoi attendre?";
 	"Parce qu'ainsi, je pourrai considérer";
 	"qu'on lui a laissé une chance.";
-	"S'il n'est pas revenu d'ici la...";
+	"S'il n'est pas revenu d'ici là...";
 	"D'accord.";
 	
 	" Pendant ce temps, dans le Libérateur.."; // [laurentd75] ou bien: " Au meme moment, dans le Libérateur..."

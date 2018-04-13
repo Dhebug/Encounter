@@ -175,13 +175,13 @@ stringpack STZEN{
 #ifdef FRENCH	
 	/***************************************/
 	" ";
-	" Tous les systemes sont operationnels.";
-	" Aucun vaisseau détecté a portée.";
+	" Tous les systèmes sont opérationnels.";
+	" Aucun vaisseau détecté à portée.";
 	
 	//3
 	" Le téléporteur est indépendant";
 	" de mes fonctions.";
-	" Je peux controler la climatisation.";
+	" Je peux contrôler la climatisation.";
 	
 	//6
 	" Les capteurs détectent deux vaisseaux";
@@ -190,20 +190,20 @@ stringpack STZEN{
 	" des vaisseaux de poursuite fédéraux.";
 	" Confirmé.";
 	" Les chances de survie estimées sont";
-	" de 2,5 sur 3 durant la premiere année.";
+	" de 2,5 sur 3 durant la première année.";
 	" Veuillez entrer le cap et la vitesse.";
 	
 	//14
-	"Ces commandes font partie des systemes";
+	"Ces commandes font partie des systèmes";
 	"de Zen.";
 	"Comment pourrais-je les utiliser?";
 	"Bonne idée. Je peux fixer le ";
-	"transmetteur sur le systeme de ";
+	"transmetteur sur le système de ";
 	"climatisation.";
 	"Je ne peux pas faire cela.";
 	
 	//21
-	"Zen est le systeme d'IA du Libérateur."; // ou alors: "Ceci est Zen: systeme d'IA du vaisseau."
+	"Zen est le système d'IA du Libérateur."; // ou alors: "Ceci est Zen: systeme d'IA du vaisseau."
 #endif
 
 #ifdef SPANISH
@@ -266,9 +266,9 @@ dialog DIALOG: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "That's all, Zen." active -> bye;	
 #endif
 #ifdef FRENCH
-	option "Zen, rapport complet des systemes." active -> systems;
+	option "Zen, rapport complet des systèmes." active -> systems;
 	option "Zen, scan complet des capteurs." active -> sensors;
-	option "Zen, peux-tu controler le téléporteur?" inactive -> teleport;
+	option "Zen, peux-tu contrôler le téléporteur?" inactive -> teleport;
 	option "Ce sera tout, Zen." active -> bye;	
 #endif
 #ifdef SPANISH

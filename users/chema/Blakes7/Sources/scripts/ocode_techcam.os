@@ -95,17 +95,17 @@ stringpack TECHCAM
 #ifdef FRENCH 
 	/*
 	 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
-	"Il a l'air d'etre en charge des";
-	"systemes de controle de cette zone.";
-	"Il pourrait me faire arreter.";
+	"Il a l'air d'être en charge des";
+	"systèmes de contrôle de cette zone.";
+	"Il pourrait me faire arrêter.";
 	
 	"Je ne vois pas ce que vous voulez.";
 	
-	"Quoi? Que ferais-je avec ca?";
+	"Quoi? Que ferais-je avec ça?";
 	
 	"A quoi cela pourrait-il me servir?";
 	
-	"Ah! Vous etes du service restauration?";
+	"Ah! Vous êtes du service restauration?";
 	"Ca fait des heures que j'attends!";
 #endif
 #ifdef SPANISH

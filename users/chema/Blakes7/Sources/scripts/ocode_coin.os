@@ -37,7 +37,7 @@ stringpack COIN
 	/*
 	 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 	"Un centime de crédit.";
-	"Une petite piece de monnaie inutile.";
+	"Une petite pièce de monnaie inutile.";
 	"Ca n'a aucune utilité pour cela.";
 #endif
 #ifdef SPANISH

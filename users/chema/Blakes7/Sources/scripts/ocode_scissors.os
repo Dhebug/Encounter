@@ -15,7 +15,7 @@ stringpack SCISSORS{
 	"I can't cut that.";
 #endif
 #ifdef FRENCH	
-	"Ils ont l'air solides et affutés.";
+	"Ils ont l'air solides et affûtés.";
 	"Je ne peux pas couper cela.";
 #endif
 #ifdef SPANISH

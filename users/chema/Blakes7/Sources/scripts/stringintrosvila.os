@@ -84,8 +84,8 @@ stringpack 100{
 
 #ifdef FRENCH
 	//+++++++++++++++++++++++++++++++++++++
-	"Hé, doucement! Du calme, la!";
-	"Je hais la violence a la personne, ";
+	"Hé, doucement! Du calme, là!";
+	"Je hais la violence à la personne, ";
 	"surtout quand c'est moi la personne...";
 	
 	
@@ -93,15 +93,15 @@ stringpack 100{
 	"Salut!";
 	"Qui es-tu?";
 	"Vila Restal.";
-	"Moi c'est Roj Blake. Pourquoi es-tu la?";
+	"Moi c'est Roj Blake. Pourquoi es-tu là?";
 
 	//7
 	"Ils ne m'ont pas laissé le choix.";
 	"Je vole des objets...";
-	"de maniere compulsive, en fait.";
+	"de manière compulsive, en fait.";
 	"Mon cerveau a été guéri par les";
 	"meilleurs spécialistes du domaine.";
-	"Mais j'ai fait une rechute..."; // "Mais la guérison n'a pas duré.";
+	"Mais j'ai fait une rechute..."; // ou "Mais la guérison n'a pas duré.";
 
 	//13
 	"Et toi, quelle est ton histoire?";
@@ -114,16 +114,16 @@ stringpack 100{
 	"Oh, une belle brochette d'antisociaux:";
 	"meurtriers, menteurs, tricheurs,"; 
 	"voleurs, trafiquants,..."; 
-	"Et ca, ce sont les gens bien..."; 
+	"Et ça, ce sont les gens bien..."; 
 	
 	//22
-	"Pourquoi es-tu la?";
-	"Je commercais dans les Mondes Proches.";
-	"Je suis entrepreneuse, a mon compte."; 
+	"Pourquoi es-tu là?";
+	"Je commerçais dans les Mondes Proches.";
+	"Je suis entrepreneuse, à mon compte."; 
 	"Une trafiquante. Parmi les meilleures:";
 	"Jenna Stannis. C'est un honneur que";
-	"d'etre enfermé avec elle."; 
-	"Ravie que ca vous plaise.";
+	"d'être enfermé avec elle."; 
+	"Ravie que ça vous plaise.";
 	
 	//29
 	"Blake -- Kerr Avon.";
@@ -136,8 +136,8 @@ stringpack 100{
 	"Celui qui l'a attrapé.";
 	
 	//35
-	"Et pourquoi ca n'a pas marché?";
-	"J'ai du me fier a d'autres personnes.";
+	"Et pourquoi ça n'a pas marché?";
+	"J'ai du me fier à d'autres personnes.";
 	
 
 	//37
@@ -153,7 +153,7 @@ stringpack 100{
 	"C'est un ami loyal.";
 	
 	"Sa force et tes... capacités";
-	"vont nous etre vraiment utiles.";
+	"vont nous être vraiment utiles.";
 #endif
 
 

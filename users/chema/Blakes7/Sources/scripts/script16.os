@@ -330,10 +330,10 @@ stringpack ST_INTRO{
 "Ravella...";
 //Gan 3,4
 "Elle a été transférée sur Centero pour";
-"y etre interrogée et y purger sa peine.";
+"y être interrogée et y purger sa peine.";
 //Blake 5,6
-"Ils la détruiront, la-bas...";
-"Nous devons les en empecher.";
+"Ils la détruiront, là-bas...";
+"Nous devons les en empêcher.";
 //Avon 7
 "Et que proposes-tu?";
 //Blake 8
@@ -342,7 +342,7 @@ stringpack ST_INTRO{
 //Avon 9,10,11
 "Je croyais qu'on s'était mis d'accord";
 "qu'on ne ferait rien sans en discuter";
-"de facon approfondie.";
+"de manière approfondie.";
 //Blake 12, 13, 14
 "On était aussi d'accord que chacun";
 "pourrait partir quand il le voudrait.";
@@ -383,7 +383,7 @@ stringpack ST_INTRO{
 "Je connaissais un groupe de trafiquants";
 "sur Centero qui passaient la drogue via";
 "des complices dans la base. Ils avaient";
-"acces aux tunnels de service.";
+"accès aux tunnels de service.";
 
 //Vila  37
 "Ils avaient?...";
@@ -391,25 +391,25 @@ stringpack ST_INTRO{
 "Les Fédéraux l'ont découvert. Ils les";
 "ont tous éliminés avec un gaz mortel.";
 //Blake 40
-"Et bien voila par ou nous entrerons."; // ou: "Et bien ce sera notre porte d'entrée."
+"Et bien voilà par où nous entrerons."; // ou: "Et bien ce sera notre porte d'entrée."
 
 /***************************************/
 // At the teleport
 //Avon 41-46
-"J'ai donné un transpondeur a Jenna qui";
+"J'ai donné un transpondeur à Jenna qui";
 "adapte le signal des bracelets pour"; // [laurentd75]: see also "ocode_trasponder.os"
 "qu'il puisse pénétrer le blindage."; // "qu'il puisse passer a travers le blindage.";
 "De cette facon je pourrai vous faire";
 "revenir, ainsi que quiconque portant";
-"un bracelet, meme depuis une cellule.";
+"un bracelet, même depuis une cellule.";
 
 //Blake 47
-"Excellent. Envoie-nous la-bas alors.";
+"Excellent. Envoie-nous là-bas alors.";
 
 // Jenna 48
-"On entrait a partir d'une grotte.";
+"On entrait à partir d'une grotte.";
 "Par ici...";
-"Voila. Cette grotte la-bas... Mais";
+"Voilà. Cette grotte là-bas... Mais";
 "il y avait un pont pour traverser...";
 
 #endif

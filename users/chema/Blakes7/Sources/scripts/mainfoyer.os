@@ -41,10 +41,10 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	       /***************************************/
 	option "As-tu des nouvelles de ma famille?" active -> family;
 	option "Je n'ai rien mangé depuis 36 heures." active -> food;
-	option "J'ai recu le livre que tu m'as envoyé." active -> book;	
+	option "J'ai reçu le livre que tu m'as envoyé." active -> book;	
 	option "Une seconde. Je reviens." active -> exit1;	
 	option "Est-ce que c'est une blague douteuse?" inactive -> skeptic;
-	option "Non, pas ca encore.." inactive -> skeptic;
+	option "Non, pas ça encore.." inactive -> skeptic;
 	option "Mais l'air extérieur est mortel!" inactive -> air;
 	option "A plus tard, alors." inactive -> bye;
 #endif
@@ -205,19 +205,19 @@ stringpack DIALOG_STRINGS
 
 #ifdef FRENCH
 "Salut Ravella.";	// 0
-"As-tu eu des problemes?";
+"As-tu eu des problèmes?";
 "Non. Rien de particulier.";
 
-"Je meurs de faim et de soif, bien sur!"; //3
+"Je meurs de faim et de soif, bien sûr!"; //3
 
 "Et comment te sens-tu?"; // 4
-"Tu es mieux a jeun..."; // "well done" or "bien hecho" doesn't make sense after he says he's starving!
+"Tu es mieux à jeun..."; // "well done" or "bien hecho" doesn't make much sense after he says he's starving!
 "La nourriture est bourrée de drogues..."; // mieux qu'"inhibiteurs" ou tranquilisants, calmants, euphorisants ?
 
 "Moi, non. Mais l'homme que nous";		// 7
 "allons voir ce soir en a, lui.";
 
-"Non, nous devons etre prudents."; //9
+"Non, nous devons être prudents."; //9
 "La Fédération a des yeux partout...";
 
 "Bien. Il contient des infos vitales."; // 11
@@ -226,7 +226,7 @@ stringpack DIALOG_STRINGS
 
 "C'est ce qu'ils veulent que tu croies."; //14
 
-"Juste une derniere chose:";
+"Juste une dernière chose:";
 
 "C'est Ravella.";
 
@@ -241,8 +241,8 @@ stringpack DIALOG_STRINGS
 "Il y a quelque chose pour toi dedans.";
 "Je t'attendrai ici.";
 
-"Je lui ai déja parlé.";
-"J'ai des choses a faire maintenant.";
+"Je lui ai déjà parlé.";
+"J'ai des choses à faire maintenant.";
 
 #endif
 
@@ -398,22 +398,22 @@ stringpack DESC_STRINGS
 	"J'ai mal au dos, il vaut mieux pas...";
 
 	"Il est lourd, mais je vais essayer...";
-	"Non... Il est trop lourd a déplacer.";
-	"Hé! Mais qu'y a-t-il la-dessous?";
+	"Non... Il est trop lourd à déplacer.";
+	"Hé! Mais qu'y a-t-il là-dessous?";
 	
 	//9
 	"Cette caméra semble éteinte.";
 	
 	"Ce n'est pas une bonne idée.";
-	"Cette caméra la-haut me détecterait";
-	"et le systeme de surveillance";
+	"Cette caméra là-haut me détecterait";
+	"et le système de surveillance";
 	"automatique déclencherait une alarme.";
 	
 	//14
 	"Pourquoi? C'est un couloir de service.";
 	
 	//15
-	"Et tres lourd aussi!";
+	"Et très lourd aussi!";
 	"Personne ne doit nettoyer en-dessous...";
 #endif
 

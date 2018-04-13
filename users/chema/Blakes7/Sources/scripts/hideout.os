@@ -347,7 +347,7 @@ stringpack STDESC{
 
 #ifdef FRENCH
 /***************************************/
-"Une table de controle avec des leviers.";
+"Une table de contrôle avec des leviers.";
 "Cette porte est fermée.";
 "Ces commandes ne fonctionnent plus.";
 "Je dois d'abord le tirer.";
@@ -367,8 +367,8 @@ stringpack STDESC{
 "Pas la peine, la porte est ouverte.";
 
 //12
-"Les systemes ne sont pas alimentés.";
-"Ca marche! Les systemes sont activés.";
+"Les systèmes ne sont pas alimentés.";
+"Ca marche! Les systèmes sont activés.";
 #endif
 
 #ifdef SPANISH

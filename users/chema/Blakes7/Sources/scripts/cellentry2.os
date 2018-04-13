@@ -92,14 +92,14 @@ stringpack STDESC{
 	"Je dois faire quelque chose!";
 	
 	//38
-	"Commencons par tuer cette Auronar!"; // "Je vais déja tuer cette Auronar!";
+	"Commençons par tuer cette Auronar!"; // "Je vais déja tuer cette Auronar!";
 	"Mais!?";
 	"Tirez! Tuez-les tous!!";
 	"Zen, branche la climatisation...";
 
 	//6
 	"Blake! Je t'aurai!";
-	"Peu importe le temps que ca prendra,";
+	"Peu importe le temps que ça prendra,";
 	"je jure sur l'honneur que je t'aurai!";
 		
 #endif

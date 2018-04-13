@@ -18,9 +18,9 @@ stringpack VARGAS{
 	"I will kill you NOW!";
 #endif
 #ifdef FRENCH	
-	"Il est complétement fou. Et armé!";
+	"Il est complètement fou. Et armé!";
 	"Mais s'il entrait dans la cabine...";
-	"Bien essayé, mais en vain.";
+	"Bien essayé, mais raté."; // "raté" mieux que "inutile" ou "en vain" en français
 	"Je vais te tuer MAINTENANT!";
 #endif
 #ifdef SPANISH

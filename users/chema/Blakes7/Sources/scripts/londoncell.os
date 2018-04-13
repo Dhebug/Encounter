@@ -83,10 +83,10 @@ stringpack 201{
 #ifdef FRENCH
 	// Door
 	//++++++++++++++++++++++++++++++++++++++
-	"Une grille. Nous sommes en cellule.";
+	"Une grille. Nous sommes en cellule...";
 	"Elle est verrouillée.";
 	"C'est inutile.";
-	"Elle est déja fermée.";
+	"Elle est déjà fermée.";
 	
 	// Lock
 	"Une serrure sophistiquée.";
@@ -104,22 +104,22 @@ stringpack 201{
 	
 	// Bin
 	"Allons... ceci n'est pas l'un de ces";
-	"jeux d'aventure ou l'on trouve une";
-	"clé a l'intérieur d'une poubelle...";
+	"jeux d'aventure où l'on trouve une";
+	"clé à l'intérieur d'une poubelle...";
 	"Vous voyez? Juste des emballages de";
 	"chewing-gums, jetés par quelqu'un.";
-	"J'en prends un, juste au cas ou...";
-	"J'ai déja pris un emballage.";
+	"J'en prends un, juste au cas où...";
+	"J'ai déjà pris un emballage.";
 
 	// Wrapper
 	"Un emballage. En aluminium semble-t-il.";
 	"Je pourrais emballer un truc avec.";
-	"Oh, j'ai vu ca dans 'Ultime Survivant'!";
+	"Oh, j'ai vu ça dans 'Ultime Survivant'!";
 
 	// Using one with the other...
 	"J'ai un plan, mais j'ai besoin d'Avon.";
 	"Il faut que je lui en parle d'abord.";	
-	"Parlons d'abord avec ce costaud, la..."; // "Faisons connaissance avec ce costaud.";
+	"Parlons d'abord avec ce costaud, là..."; // "Faisons connaissance avec ce costaud.";
 	
 	// Battery
 	"Une batterie de rechange.";
@@ -129,7 +129,7 @@ stringpack 201{
 	"Je n'ai pas besoin de refaire cela.";
 	
 	// Keycard
-	"Une carte d'acces magnétique."; //  "magnétique" semble mieux que "en plastique" ou "plastifiée"
+	"Une carte d'accès magnétique."; //  "magnétique" semble mieux que "en plastique" ou "plastifiée" ici
 	"Mieux vaut la garder.";
 #endif
 
@@ -526,7 +526,7 @@ dialog DLG_JENNA: script DLG_JENNA stringpack DLG_JENNA{
 #endif
 
 #ifdef FRENCH
-	option "Comment sera Cygnus Alpha d'apres toi?" active -> cygjenna;
+	option "Comment sera Cygnus Alpha d'après toi?" active -> cygjenna;
 	option "Donc, tu es une pilote chevronnée..." active -> pilot;
 #endif
 
@@ -563,7 +563,7 @@ dialog DLG_AVON: script DLG_AVON stringpack DLG_AVON{
 #endif
 
 #ifdef FRENCH
-	option "Que sais-tu a propos de Cygnus Alpha?" active -> cygavon;
+	option "Que sais-tu à propos de Cygnus Alpha?" active -> cygavon;
 	option "Sais-tu comment la serrure fonctionne?" active -> lock;
 	option "J'ai un plan pour capturer ce vaisseau." inactive -> hijack;
 #endif
@@ -715,7 +715,7 @@ dialog DLG_GAN: script DLG_GAN stringpack DLG_GAN{
 #endif
 #ifdef FRENCH
 	option "Penses-tu pouvoir survivre sur Cygnus?" active -> cyggan;
-	option "Es-tu disposé a tenter une évasion?" active -> escape;
+	option "Es-tu disposé à tenter une évasion?" active -> escape;
 #endif
 #ifdef SPANISH
 	      //++++++++++++++++++++++++++++++++++++++
@@ -768,7 +768,7 @@ stringpack 221{
 #endif
 
 #ifdef FRENCH
-	"Bon. Restez en arriere, et silence!"; // ou: "restez tranquilles, en silence!"
+	"Bon. Restez en arrière, et silence!"; // ou: "restez tranquilles, en silence!"
 	"Cette alarme ne fonctionne pas bien.";
 	"J'ai du la désactiver trois fois lors";
 	"de notre précédent voyage. Elle se";
@@ -781,12 +781,12 @@ stringpack 221{
 	//7
 	"(Jenna... Le garde...)";
 	"(Ok, j'ai compris...)";
-	"Sortez-moi d'ici s'il vous plait,";
+	"Sortez-moi d'ici s'il vous plaît,";
 	"et je serai TRES reconnaissante...";
 	//11
 	"Tais-toi, vermine!";
 	"Tu pourriras sur Cygnus!";
-	"Je te verrai plus tard de toute facon.";
+	"Je te verrai plus tard de toute façon.";
 	
 	//14
 	"Cette fois-ci, je l'ai eue!"; // (la carte d'acces...)

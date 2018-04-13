@@ -50,13 +50,13 @@ stringpack STDESC
 
 #ifdef FRENCH
 	/*+++++++++++++++++++++++++++++++++++++*/
-	"J'ai déja joué a ca il y a longtemps.";
+	"J'ai déjà joué à ça il y a longtemps.";
 	"Il fallait secourir une demoiselle qui";
 	"avait été capturée par un singe géant.";
-	"Le monstre vous lancait des tonneaux";
+	"Le monstre vous lançait des tonneaux";
 	"et d'autres objets tandis que vous"; 
 	"essayiez de grimper. C'était amusant!";
-	"Et bien plus difficile que ce jeu-la..";
+	"Et bien plus difficile que ce jeu-là..";
 	"Mais concentrons-nous ici maintenant!";
 	
 	//8
@@ -68,11 +68,11 @@ stringpack STDESC
 	
 	//12
 	"Une belle collection de livres de SF.";
-	"Des boites a l'aspect tres bizarre.";
+	"Des boîtes à l'aspect très bizarre.";
 	"Des mugs avec des symboles de geeks.";	
 	
 	//15
-	"Pas sans le plan!";
+	"Pas sans prendre le plan!";
 #endif
 
 #ifdef SPANISH
@@ -451,7 +451,7 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #endif
 
 #ifdef FRENCH
-	option "Vous etes la personne de l'accueil non?" active -> seenhim;
+	option "Vous êtes la personne de l'accueil non?" active -> seenhim;
 	option "J'ai besoin d'infos sur les sorties." active -> exits;
 	option "Rien, merci." active -> bye;
 #endif
@@ -534,35 +534,35 @@ stringpack DIALOG_STRINGS
 	
 	// 18
 	"This one seems to be quite near...";
-	"Okay, I'll get the mug..."; // [laurentd75]: should be "I'll take" instead of "I'll get" !
+	"Okay, I'll keep the mug..."; // [laurentd75]: corrected: should be "I'll take" or "I'll keep" instead of "I'll get" !
 	
 	//20
 	"Mmmm... something's wrong.";
 	"Can't find that exit number";
 	
 	//22
-	"Your map is in the printer.";
+	"Your map is at the printer."; // [laurentd75]: "at" the printer, not "in"
 #endif
 
 #ifdef FRENCH
 	// Description and initial sentences
 	/*++++++++++++++++++++++++++++++++++++++*/
-	"J'ai déja vu ce visage quelque part...";
+	"J'ai déjà vu ce visage quelque part...";
 	"Bonjour, vous cherchez quelque chose?";
 	
 	//2
 	"Comment?";
-	"Et pourquoi aurais-je besoin de ca?";
-	"Je vous l'ai déja dit: 100 crédits.";
+	"Et pourquoi aurais-je besoin de ça?";
+	"Je vous l'ai déjà dit: 100 crédits.";
 	
 	//5
-	"Hé!!";
-	"Celui-ci manque a ma collection!";
-	"Marché conclu. Un instant.";
+	"Hé!! Génial!!";
+	"Ce mug manque à ma collection!";
+	"Marché conclu. Un instant...";
 	"Votre plan est imprimé. Prenez-le.";
 	
 	//9
-	"Ok. Je suis toujours pret a négocier.";
+	"Ok. Je suis toujours prêt a négocier.";
 	
 	//10
 	"Héhé... et bien, en fait...";
@@ -571,23 +571,23 @@ stringpack DIALOG_STRINGS
 	
 	//13
 	"Je peux vous fournir cette information.";
-	"... mais ca vous coutera 100 crédits.";
-	"Un prix tres honnete, selon moi.";
+	"... mais ça vous coûtera 100 crédits.";
+	"Un prix très honnête, selon moi.";
 	
 	//16
-	"Ah, vous etes de retour. Tres bien.";
+	"Ah, vous êtes de retour. Très bien.";
 	"Donnez-moi le numéro de la sortie.";
 	
 	// 18
-	"Celle-ci semble etre assez proche...";
-	"D'accord, je prends le mug..."; // [laurentd75]: NB: ES and EN versions differ on this one !!??
+	"Celle-ci semble être assez proche...";
+	"Très bien, je garde le mug..."; 
 	
 	//20
-	"Hmmm... il y a un probleme.";
+	"Hmmm... il y a un problème.";
 	"Je ne trouve pas ce numéro de sortie.";
 	
 	//22
-	"Votre plan est a l'imprimante.";
+	"Votre plan est à l'imprimante.";
 #endif
 
 #ifdef SPANISH

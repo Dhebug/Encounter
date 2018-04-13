@@ -100,13 +100,13 @@ stringpack EPILOGUE{
 	/***************************************/
 	"Ah, Travis.";
 	"Tout le monde a appris votre fiasco...";
-	"Vous savez, bien sur, qu'il y a eu";
+	"Vous savez, bien sûr, qu'il y a eu";
 	"deux attentats sur ma vie?";
 	
 	//4
-	"Oui. J'étais d'ailleurs tres inquiet.";
+	"Oui. J'étais d'ailleurs très inquiet.";
 	//5
-	"Je VOUS considere comme responsable.";
+	"Je VOUS considère comme responsable.";
 	"Votre incompétence a mis ma vie et";
 	"ma situation en danger.";
 	
@@ -116,14 +116,14 @@ stringpack EPILOGUE{
 	//9
 	"Taisez-vous!";
 	"Nous capturerons Blake et son vaisseau";
-	"tot ou tard, mais désormais je souhaite";
-	"consacrer toutes nos ressources a autre";
+	"tôt ou tard, mais désormais je souhaite";
+	"consacrer toutes nos ressources à autre";
 	"chose... qui m'assurera une situation";
 	"de pouvoir bien supérieure au sein du";
 	"Haut Commandement de la Fédération.";
 	
 	//16
-	"C'est-a-dire?";
+	"C'est-à-dire?";
 	
 	//17
 	"Je vais vous présenter le projet ORAC."; // "vais" est mieux que "veux" ici, surtout avec la phrase suivante...

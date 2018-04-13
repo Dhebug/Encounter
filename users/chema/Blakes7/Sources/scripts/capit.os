@@ -46,7 +46,7 @@ stringpack STDESC{
 	/***************************************/
 	"On ne voit pas le fond d'ici.";
 	"Mais il y a une saillie, quelques";
-	"metres en contrebas...";
+	"mètres en contrebas...";
 	
 	//3
 	"Cet arbre semble un peu tordu.";

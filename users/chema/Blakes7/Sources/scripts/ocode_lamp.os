@@ -15,7 +15,7 @@ stringpack LAMP{
 	"I don't know what you want to do.";
 #endif
 #ifdef FRENCH	
-	"C'est une lampe a huile primitive.";
+	"C'est une lampe à huile primitive.";
 	"Je ne saisis pas ce que vous voulez.";
 #endif
 #ifdef SPANISH

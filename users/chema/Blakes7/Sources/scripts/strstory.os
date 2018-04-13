@@ -40,13 +40,13 @@ stringpack 200{
 	"\A_FWCYAN DOULEUR";
 	"\A_FWWHITE SOUFFRANCE";
 
-	"\A_FWWHITE Calme-toi, Roj Blake.";
+	"\A_FWWHITE Calme-toi, Roj Blake.";  // test accents: " - àâçéêèîôùû";
 	"\A_FWWHITE C'était juste un cauchemar.";
 	" ";
 	"\A_FWWHITE Tu sais qui tu es. Ta famille vit dans";
 	"\A_FWWHITE les colonies extérieures. C'était le";
 	"\A_FWWHITE marché conclu avec la Fédération:";
-	"\A_FWWHITE 10 ans a travailler pour pouvoir payer"; // "10 ans de travail sur Terre pour payer";
+	"\A_FWWHITE 10 ans à travailler pour pouvoir payer"; // "10 ans de travail sur Terre pour payer";
 	"\A_FWWHITE le transport et le déménagement. Puis";
 	"\A_FWWHITE une nouvelle vie dans un monde neuf."; // [laurentd75]: slight change for French version
 	" ";

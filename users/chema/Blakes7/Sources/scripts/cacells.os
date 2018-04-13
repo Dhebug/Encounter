@@ -35,12 +35,12 @@ stringpack STCELLS{
 #ifdef FRENCH
 	/***************************************/
 	"Vila! Gan!";
-	"Bonjour Frere, je me demandais si..."; // [laurentd75]: prisoner talking to a monk here.
+	"Bonjour Frère, je me demandais si..."; // [laurentd75]: prisoner talking to a monk here.
 	"C'est moi! Blake!";
 	
 	//3
 	"Blake! Que fais-tu ici?";
-	"Je suis la pour vous, j'ai un vaisseau!";
+	"Je suis là pour vous, j'ai un vaisseau!";
 	"Et comment allons-nous nous échapper?";
 	
 	//6

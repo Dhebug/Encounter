@@ -21,7 +21,7 @@ stringpack WSWITCH{
 #endif
 
 #ifdef FRENCH
-	"Un relais actionné a distance.";
+	"Un relais actionné à distance.";
 #endif
 
 #ifdef SPANISH

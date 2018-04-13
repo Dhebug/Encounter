@@ -20,7 +20,7 @@ stringpack YPIPE{
 #ifdef FRENCH	
 	/***************************************/
 	"Un tuyau en Y. Je ne sais pas si j'ai";
-	"bien fait de le retirer d'ou il était.";
+	"bien fait de le retirer d'où il était.";
 	"J'ai saisi l'idée... Astucieux!";
 	"Je ne comprends pas ce que vous voulez.";
 #endif

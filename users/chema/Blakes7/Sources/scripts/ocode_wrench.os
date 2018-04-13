@@ -16,7 +16,7 @@ stringpack WRENCH{
 #endif
 #ifdef FRENCH	
 	"Alliage de chrome-vanadium?";
-	"On ne peut pas l'utiliser comme ca."; // [laurentd75]: Note: wrench=clé à molette / clé anglaise
+	"On ne peut pas l'utiliser comme ça."; // [laurentd75]: Note: wrench=clé à molette / clé anglaise
 #endif
 #ifdef SPANISH
 	"¿Serán de cromo-vanadio?";

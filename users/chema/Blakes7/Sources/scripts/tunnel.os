@@ -93,7 +93,7 @@ stringpack STDESC{
 
 #ifdef FRENCH
 /***************************************/
-"Selon Jenna, cette porte mene a";
+"Selon Jenna, cette porte mène à";
 "l'intérieur de la base.";
 #endif
 

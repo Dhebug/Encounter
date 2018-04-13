@@ -62,15 +62,15 @@ stringpack MAP
 	 // [laurentd75]: see "blakesroom.os" and "maproom.os": 
 	 // in the French version we need to use 162 instead of 172
 	
-	"Un plan technique avec la sortie 162."; 
+	"Un plan technique de la sortie 162."; 
 	"Intéressant...";
 	"Il est possible de l'atteindre depuis";
-	"le systeme de ventilation a ce niveau.";
-	"Et il y a un acces depuis le couloir";
+	"le système de ventilation à ce niveau.";
+	"Et il y a un accès depuis le couloir";
 	"de service.";
 	// 6
-	"Je pourrai utiliser le plan des que je";
-	"serai dans le systeme de ventilation.";
+	"Je pourrai utiliser le plan dès que je";
+	"serai dans le système de ventilation.";
 #endif
 
 #ifdef SPANISH

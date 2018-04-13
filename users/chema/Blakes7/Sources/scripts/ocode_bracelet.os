@@ -32,7 +32,7 @@ stringpack BRACELET
 	"On peut l'utiliser pour se téléporter";
 	"et communiquer avec le Libérateur.";
 	"Ok. Téléporte-moi.";
-	"Ramene-moi dans le vaisseau.";  // ou bien: "Ramene-moi.", "Fais-moi revenir", "Remonte-moi dans le vaisseau";
+	"Ramène-moi dans le vaisseau.";  // ou bien: "Ramene-moi.", "Fais-moi revenir", "Remonte-moi dans le vaisseau";
 	//4
 	"Il faut que je sois dans la cabine.";
 	"Je ne peux pas sans le bracelet.";

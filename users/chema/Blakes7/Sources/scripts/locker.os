@@ -284,10 +284,10 @@ stringpack 201{
 	"Un moment... Une image se forme!";
 	"C'est une photo... Mais c'est moi!";
 	"Mais qui sont ces gens?...";
-	"Et ou sommes-nous?";
+	"Et où sommes-nous?";
 	//5
 	"Mon esprit... Tout est confus...";
-	"Oooh... J'ai la tete qui tourne!";
+	"Oooh... J'ai la tête qui tourne!";
 	//7
 	"Aaaaarghhhh!!";
 	//8
@@ -296,8 +296,8 @@ stringpack 201{
 	"placard, et s'en était allé soudain...";
 	//11
 	"La photo a de nouveau disparu...";
-	"Ravella va avoir des choses a";
-	"m'expliquer! Allons la revoir...";
+	"Ravella va avoir beaucoup de choses";
+	"à m'expliquer... Allons la revoir!";
 #endif
 
 #ifdef SPANISH
@@ -361,8 +361,8 @@ stringpack 200{
 #endif
 
 #ifdef FRENCH	
-	"Un seau et un balai-serpilliere.";
-	"Cyclonique? Peut-etre...";
+	"Un seau et un balai-serpillière.";
+	"Un modèle cyclonique peut-être...";
 	"Elle a l'air assez solide."; // on parle de l'échelle
 	"Divers produits de nettoyage.";
 	"Il est écrit: Attention -- Sol humide.";
@@ -370,8 +370,8 @@ stringpack 200{
 	
 	//6
 	"Ce n'est pas le moment pour le ménage!";
-	"Que voulez-vous que je fasse avec ca?";
-	"Je préfere laisser ca ici.";
+	"Que voulez-vous que j'en fasse?";
+	"Je préfère laisser ça ici.";
 	"Ca ne nous sera pas utile.";
 	
 	//10
@@ -383,7 +383,7 @@ stringpack 200{
 	//14
 	"La clé ne rentre pas.";
 	"La clé ne rentre pas ici non plus.";
-	"Non, ca ne rentre pas davantage ici.";
+	"Non, ça ne rentre pas davantage ici.";
 	"Ah! Ca rentre... Euh, en fait, non...";
 	
 	//18

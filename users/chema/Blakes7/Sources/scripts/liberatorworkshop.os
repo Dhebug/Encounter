@@ -43,31 +43,31 @@ stringpack STDESC{
 
 #ifdef FRENCH
 	/***************************************/
-	"On dirait un lavabo tout a fait banal.";
+	"On dirait un lavabo tout à fait banal.";
 	"Je me demande si l'eau est potable.";
-	"Ahhh... c'est rafraichissant...";
-	"L'eau s'écoule tres lentement.";
+	"Ahhh... c'est rafraîchissant...";
+	"L'eau s'écoule très lentement.";
 	"Quelque chose doit boucher le siphon.";
-	"Voila... il y a quelque chose ici...";
+	"Voilà... il y a quelque chose ici...";
 	"Pourquoi ferais-je cela?";
-	"Je ne peux pas le déboucher avec ca.";
+	"Je ne peux pas le déboucher avec ça.";
 	
 	//8
-	"Aucune idée de ce a quoi ca sert.";
+	"Aucune idée de ce à quoi ça sert.";
 	"Un peu risqué, mais allons-y...";
 	"Mieux vaut le laisser comme il est.";
 	
 	//11
 	"On dirait une station de réparation.";
 	"Remplie d'équipement électronique.";
-	"C'est bien au-dela de mes capacités.";
+	"C'est bien au-delà de mes capacités.";
 	"Voyons-voir ce que je peux faire...";
-	"Je ne peux utiliser la station avec ca.";
+	"Je ne peux utiliser la station avec ça.";
 	
 	//16
-	"Je peux fixer ce transmetteur a un";
+	"Je peux fixer ce transmetteur à un";
 	"circuit pour activer le relais distant.";
-	"Le relais peut etre placé n'importe ou.";
+	"Le relais peut être placé n'importe où.";
 #endif
 
 

@@ -247,9 +247,9 @@ stringpack STDESC{
 #endif
 #ifdef FRENCH
 	/***************************************/
-	"Machine a cappuccino compacte en métal";
-	"entierement automatique équipée du";
-	"systeme breveté Fed Expresso.";
+	"Machine à cappuccino compacte en métal";
+	"entièrement automatique, équipée du";
+	"système breveté Fed Expresso.";
 
 	"Le réservoir d'eau est vide.";
 	"Ok, je vais mettre l'eau pour le café.";
@@ -262,18 +262,18 @@ stringpack STDESC{
 	"Mais qu'est-ce que...!?";
 	"Je suis vraiment désolé!";
 	"Mon uniforme! Il est tout taché!";
-	"Et l'autre qui n'est pas encore pret...";
-	"Si je n'arrive pas a le nettoyer...";
+	"Et l'autre qui n'est pas encore prêt...";
+	"Si je n'arrive pas à le nettoyer...";
 	//16
 	"Visiblement, des livres d'histoire,";
-	"approuvés par la Fédération bien sur.";
+	"approuvés par la Fédération bien sûr.";
 	"'Les Colonies Extérieures'";
 	// 19
 	"Pas le temps de lire maintenant.";
-	"Je n'ai aucun besoin de ca.";
+	"Je n'ai aucun besoin de ça.";
 	// 21
 	/***************************************/
-	"Bonne idée! Il y a surement quelque";
+	"Bonne idée! Il y a sûrement quelque";
 	"chose d'utile qui sert de marque-page.";  /** separador = marque-page **/
 
 	"Ah, non. Juste un papier vierge.";

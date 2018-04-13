@@ -256,29 +256,29 @@ stringpack ST_INTRO{
 "qui était en mon pouvoir pour effacer";
 "toute trace de Blake et de ses actions";
 "mais malgré cela la véritable histoire";
-"se répand, par le bouche-a-oreille, la";
+"se répand, par le bouche-à-oreille, la";
 "rumeur... A chaque fois, l'histoire";
 "est enjolivée un peu plus.";
 "Toute attaque contre la Fédération";
-"est attribuée a Blake. Le plus petit";
-"incident est exagéré jusqu'a devenir";
+"est attribuée à Blake. Le plus petit";
+"incident est exagéré jusqu'à devenir";
 "un événement majeur.";
 "Blake devient une légende.";
-"Il faut l'arreter.";
+"Il faut l'arrêter.";
 
 //14
 /***************************************/
 "Je suis conscient du risque, si Blake";
-"devenait une légende. Mais gardons a";
+"devenait une légende. Mais gardons à";
 "cette affaire ses justes proportions.";
-"Il est vrai que Blake controle un";
+"Il est vrai que Blake contrôle un";
 "superbe vaisseau, mais ce n'est";
-"qu'un homme, allié a une poignée de";
-"criminels, voila tout. Il n'est ni";
+"qu'un homme, allié à une poignée de";
+"criminels, voilà tout. Il n'est ni";
 "invulnérable, ni surhumain.";
-"C'est juste un homme qui a été tres";
+"C'est juste un homme qui a été très";
 "chanceux de pouvoir nous échapper.";
-"-- jusqu'a présent...";
+"-- jusqu'à présent...";
 
 //25
 //***************************************/ // max col: 54
@@ -286,9 +286,9 @@ stringpack ST_INTRO{
 "\A_FWMAGENTA les moyens dont dispose la Fédération,";
 "\A_FWMAGENTA on constate qu'un homme seul, chanceux";
 "\A_FWMAGENTA mais vulnérable, est toujours libre de";
-"\A_FWMAGENTA semer le chaos. Ca parait incroyable.";
+"\A_FWMAGENTA semer le chaos. Ca paraît incroyable.";
 "\A_FWMAGENTA Vous devez savoir qu'il y a de vives";
-"\A_FWMAGENTA critiques a votre encontre quant a";
+"\A_FWMAGENTA critiques à votre encontre quant à";
 "\A_FWMAGENTA votre gestion de l'affaire Blake.";
 
 	// [laurentd75]: autre version, mais finalement moins dans l'esprit de l'original en anglais.
@@ -299,12 +299,12 @@ stringpack ST_INTRO{
 	// "\A_FWMAGENTA chanceux mais vulnérable, puisse encore";
 	// "\A_FWMAGENTA semer le chaos parait incroyable.";
 	// "\A_FWMAGENTA Vous devez savoir qu'il y a de vives";
-	// "\A_FWMAGENTA critiques a votre encontre quant a";
+	// "\A_FWMAGENTA critiques à votre encontre quant à";
 	// "\A_FWMAGENTA votre gestion de l'affaire Blake.";
 
 //33
 /***************************************/ // maxcol: 66
-"\A_FWWHITE+A_FWGREEN*8+$c0 Ce n'est pas entierement exact. J'ai";
+"\A_FWWHITE+A_FWGREEN*8+$c0 Ce n'est pas entièrement exact. J'ai";
 "\A_FWWHITE+A_FWGREEN*8+$c0 eu deux occasions durant lesquelles";
 "\A_FWWHITE+A_FWGREEN*8+$c0 j'aurais pu en finir avec Blake. Seule";
 "\A_FWWHITE+A_FWGREEN*8+$c0 l'insistance de l'Administration pour";
@@ -314,7 +314,7 @@ stringpack ST_INTRO{
 //39
 /***************************************/
 "J'ai mentionné ce point pour votre";
-"défense, mais je ne peux continuer a";
+"défense, mais je ne peux continuer à";
 "vous trouver des excuses. J'ai subi d'";
 "énormes pressions pour vous remplacer.";
 
@@ -324,8 +324,8 @@ stringpack ST_INTRO{
 
 //44
 /***************************************/
-"Oui. Jusqu'a présent, j'ai pu résister";
-"a cette pression. Mais j'ai désormais";
+"Oui. Jusqu'à présent, j'ai pu résister";
+"à cette pression. Mais j'ai désormais";
 "besoin que vous me prouviez que ma";
 "confiance n'a pas été mal placée.";
 
@@ -343,16 +343,16 @@ stringpack ST_INTRO{
 "Je suis heureux que vous l'approuviez.";
 
 //53
-"Allons Travis, ne soyez pas naif. Vous";
+"Allons Travis, ne soyez pas naif. Vous"; // [laurentd75] : "naïf" -- manque le ï  (i tréma)
 "savez bien que dans une position comme";
 "la mienne, on n'approuve rien tant que";
-"ce n'est pas un succes éclatant.";
+"ce n'est pas un succès éclatant.";
 
 //57
 "J'en suis conscient.";
 //58
 "Cependant, vous avez tout mon soutien.";
-"De maniere officieuse, naturellement.";
+"De manière officieuse, naturellement.";
 //60
 "Naturellement.";
 //61

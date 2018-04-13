@@ -75,7 +75,7 @@ stringpack STDESC
 /***************************************/
 "Des troncs, d'arbres abattus."; // [laurentd75]: utilisé "troncs" plutot que "rondins" et "abattus" plutot que "tombés"
 "Obscur, et probablement dangereux.";
-"Je n'entre pas la, je ne suis pas fou!";
+"Je n'entre pas là, je ne suis pas fou!";
 
 #endif
 

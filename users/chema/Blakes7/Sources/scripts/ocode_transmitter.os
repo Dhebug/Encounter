@@ -22,7 +22,7 @@ stringpack TRANSMITTER{
 #endif
 #ifdef FRENCH
 	/**************************************/
-	"Un transmetteur controlant le relais.";
+	"Un transmetteur contrôlant le relais.";
 #endif
 
 #ifdef SPANISH

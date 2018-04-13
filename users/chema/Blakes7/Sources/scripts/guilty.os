@@ -114,13 +114,13 @@ stringpack 200{
 	"et abus sur mineur.";
 	
 	//6
-	"Ces crimes sont de neuvieme catégorie,";
+	"Ces crimes sont de neuvième catégorie,";
 	"et en tant que tels, ils sont jugés";
-	"extremement graves. Roj Blake,...";
+	"extrêmement graves. Roj Blake,...";
 	
 	//9
 	"le tribunal ordonne que vous soyez";
-	"transféré sur la planete Cygnus Alpha";
+	"transféré sur la planète Cygnus Alpha";
 	"au sein de la colonie pénitentiaire,";
 	"dans laquelle vous demeurerez pour";
 	"le restant de vos jours.";
@@ -128,11 +128,11 @@ stringpack 200{
 
 	//15
 	"\A_FWYELLOW Mais les preuves ont été truquées!";
-	"\A_FWYELLOW Ces accusations sont mensongeres!";
+	"\A_FWYELLOW Ces accusations sont mensongères!";
 	
 	//17
-	"Regardez bien cette planete. C'est la";
-	"derniere fois que vous la contemplez...";
+	"Regardez bien cette planète... C'est la";
+	"dernière fois que vous la contemplez...";
 	
 	//19
 	"\A_FWYELLOW Non, je reviendrai!";

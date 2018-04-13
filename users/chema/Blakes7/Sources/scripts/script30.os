@@ -133,14 +133,14 @@ stringpack 250{
 
 #ifdef FRENCH
 	/**************************************/
-	"Avant de jouer, laissez-moi vous";
-	"présenter les mécanismes de base";
+	"Mais avant de commencer, laissez-moi";
+	"vous présenter les mécanismes de base";
 	"de ce jeu.";
 	"Pour sauter cette intro, pressez ESC.";
 	"Le jeu utilise l'interface pointer-";
 	"cliquer classique des jeux d'aventure,";
 	"avec 9 commandes. Par défaut, cliquer";
-	"un point a l'écran a pour effet de m'y";
+	"un point à l'écran a pour effet de m'y";
 	"faire déplacer, si c'est possible.";
 	"Et je trouve le chemin tout seul!";
 /*	
@@ -154,22 +154,22 @@ stringpack 250{
 	"n'a de souris, il y a aussi des";
 	"raccourcis-clavier pour les actions.";
 	"A chaque verbe est associé un numéro,";
-	"de gauche a droite et de haut en bas:";
+	"de gauche à droite et de haut en bas:";
 	"1='Donne', 3='Utilise', 7='Ferme'.";
 	"Si vous positionnez le curseur sur un";
 	"objet et appuyez sur un chiffre,";
 	"l'action associée sera exécutée.";
-	"Regardez la photo a votre droite.";
-	"Déplacez-y le curseur et pressez 5.";
+	"Regardez la photo à votre droite.";
+	"Déplacez-y le curseur et appuyez sur 5.";
 	
 	//21
 	"Sélectionnez la photo et appuyez sur 5";
-	"pour la regarder, s'il vous plait.";
+	"pour la regarder, s'il vous plaît.";
 	
 	//23
 	"Facile, n'est-ce pas? Vous pouvez";
 	"redéfinir les touches de déplacement";
-	"et de commande a votre guise.";
+	"et de commande à votre guise.";
 	
 	"A vous de voir ce qui vous convient...";
 	

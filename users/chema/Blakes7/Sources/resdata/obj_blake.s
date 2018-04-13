@@ -200,7 +200,7 @@ res_start
 	.asc "Moneda",0
 #endif
 #ifdef FRENCH
-	.asc "Piece",0
+	.asc "Pi","Z"+1,"ce",0 ;  "Pièce"
 #endif
 res_end
 .)

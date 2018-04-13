@@ -55,16 +55,16 @@ stringpack STDESC{
 	
 	//3
 	"Cet homme a été torturé et on l'a";
-	"laissé mourir, attaché a ce poteau";
+	"laissé mourir, attaché à ce poteau";
 	"avec cette longue corde épaisse.";
 	"Il est couvert d'insectes répugnants.";
 	
 	//7
-	"Pas question de toucher a cette corde";
+	"Pas question de toucher à cette corde";
 	"recouverte de ces insectes ignobles.";
 	//9
 	"Ca marche, les insectes décampent!";
-	"La corde pourrait m'etre utile...";
+	"La corde pourrait m'être utile...";
 	"Je ne comprends pas.";
 	"Le corps non, mais je prends la corde.";
 	"Il n'y a plus rien d'intéressant.";

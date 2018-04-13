@@ -60,11 +60,12 @@ stringpack TRASPONDER{
 "Le transpondeur, nécessaire pour se";
 "téléporter depuis ce complexe blindé.";
 
-"Il fournit un signal pour adapter"; // [laurentd75]: "adapter" is more appropriate than "réparer" here -- see "adapt" in "script16.os"
-"le systeme de téléportation, et encode";
+"Il fournit un signal pour adapter"; // [laurentd75]: "adapter" is more appropriate than "réparer" here 
+                                     // -- see "adapt" in "script16.os"
+"le système de téléportation, et encode";
 "le signal des bracelets avoisinants.";
 
-"J'ai besoin qu'il soit connecté la.";
+"J'ai besoin qu'il soit connecté là.";
 #endif
 
 #ifdef SPANISH

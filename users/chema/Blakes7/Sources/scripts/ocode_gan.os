@@ -18,7 +18,7 @@ stringpack GAN
 #endif
 #ifdef FRENCH	
 	"Il a l'air solide comme un roc.";
-	"Je suis pret.";
+	"Je suis prêt.";
 	"Dis-moi juste ce que je dois faire.";
 #endif
 #ifdef SPANISH

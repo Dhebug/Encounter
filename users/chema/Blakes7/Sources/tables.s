@@ -1282,9 +1282,10 @@ menusave_str2
 #endif
 #ifdef FRENCH
 menusave_str
-.asc 3,"  C", 6, "Continuer jeu sauvrgard","Z"+2,7,0	; "Continuer jeu sauvegardé"
+; [laurentd75]: deleted one leading space in the 2 strings below to be able to fit the French text
+.asc 3," C", 6, "Continuer le jeu sauvegard","Z"+2,7,0	; "Continuer le jeu sauvegardé"
 menusave_str2
-.asc 3,"  N", 6, "Nouveau",1,"(efface sauvegarde)",7,0  ; // [laurentd75]: Note: "progression" is 1 char too long in French
+.asc 3," N", 6, "Nouveau",1,"(efface sauvegarde)",7,0  ; // [laurentd75]: Note: "progression" is 1 char too long in French
 ;menusave_str3
 ;.asc 3,"   ETES-VOUS SUR (Y/N)?",7,0
 #endif

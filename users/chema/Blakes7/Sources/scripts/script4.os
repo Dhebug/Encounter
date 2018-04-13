@@ -264,64 +264,64 @@ stringpack ST_LONDONDECK{
 
 #ifdef FRENCH
 	/**************************************<--  max: 38 chars => YELLOW -> col 56, CYAN-> col 54 **/
-	"\A_FWYELLOW Tous les systemes sont opérationnels.";
+	"\A_FWYELLOW Tous les systèmes sont opérationnels.";
 	"\A_FWCYAN Vérifions notre position.";
-	"\A_FWCYAN Nous nous sommes écartés de la route.";
+	"\A_FWCYAN Nous avons certainement du dériver."; // "Nous avons dérivé de notre route."; // "Nous nous sommes écartés de la route.";
 	
 	"\A_FWCYAN Donnez-moi une lecture de cet écho.";
 	"\A_FWYELLOW Oui, monsieur.";
-	"\A_FWCYAN Ces données doivent etre incorrectes!";
+	"\A_FWCYAN Ces données doivent être incorrectes!";
 	"\A_FWYELLOW Nous avons un retour.";
 	"\A_FWCYAN Bien, affichez-moi l'image.";
 	
 	 	
 	"\A_FWYELLOW Je ne peux pas le croire!";
-	"\A_FWCYAN Approchez-vous aussi pres que possible";
+	"\A_FWCYAN Approchez-vous aussi près que possible";
 	"\A_FWYELLOW Oui monsieur.";
-	"\A_FWYELLOW D'ou peut-il bien provenir?";
+	"\A_FWYELLOW D'où peut-il bien provenir?";
 	"\A_FWCYAN Je n'ai jamais vu de vaisseau pareil."; 
-	"\A_FWCYAN Il a l'air d'etre a la dérive.";
-	"\A_FWCYAN M. Raiker, maintenez la distance.";
+	"\A_FWCYAN Il a l'air d'être à la dérive.";
+	"\A_FWCYAN Maintenez la distance, M. Raiker.";
 	"\A_FWYELLOW A vos ordres, monsieur.";
 	
 	"\A_FWYELLOW Selon nos données, il est désemparé."; // "en panne", "désemparé","avarié" ou "hors d'usage" est mieux que "désactivé"
-	"\A_FWYELLOW Seul le systeme de survie fonctionne."; // "systeme de maintien de la vie" : trop long... => "systeme de [sur]vie"?
-	"\A_FWYELLOW Aucun signe de vie a bord.";
-	"\A_FWYELLOW Il ne peut surement plus se déplacer.";
-	"\A_FWYELLOW S'il a été completement abandonné...";
+	"\A_FWYELLOW Seul le système de survie fonctionne."; // "système de maintien de la vie" : trop long... => "système de [sur]vie"?
+	"\A_FWYELLOW Aucun signe de vie à bord.";
+	"\A_FWYELLOW Il ne peut sûrement plus se déplacer.";
+	"\A_FWYELLOW S'il a été complètement abandonné...";
 	"\A_FWCYAN On pourrait envoyer une équipe.";
-	"\A_FWCYAN Qui sait ce qu'il y a a l'intérieur?";
+	"\A_FWCYAN Qui sait ce qu'il y a à l'intérieur?";
 	"\A_FWYELLOW Ca pourrait valoir des millions!";
 	"\A_FWCYAN Je n'ai pas assez de personnel...";
 	"\A_FWCYAN et ne veux risquer la vie de personne";
 	"\A_FWCYAN en pénétrant dans un vaisseau inconnu,";
-	"\A_FWCYAN qui peut avoir un systeme anti-intrus.";
+	"\A_FWCYAN qui peut avoir un système anti-intrus.";
 
-	"\A_FWYELLOW Il y a peut-etre une autre option...";
+	"\A_FWYELLOW Il y a peut-être une autre option...";
 	"\A_FWYELLOW Ces prisonniers qui se sont mutinés...";
 	"\A_FWYELLOW Ils pourraient aller vérifier si on";
 	"\A_FWYELLOW peut envoyer une équipe sans risque.";
-	"\A_FWYELLOW Si ca tourne mal, qui s'en souciera?";
-	"\A_FWCYAN C'est une tres sage idée, M. Raiker.";
+	"\A_FWYELLOW Si ça tourne mal, qui s'en souciera?";
+	"\A_FWCYAN C'est une très sage idée, M. Raiker.";
 	"\A_FWCYAN Envoyez Blake, Avon, et Stannis.";
-	"\A_FWYELLOW Oui, monsieur!";
+	"\A_FWYELLOW Tout de suite, monsieur!";
 	" ";
 
 	"\A_FWYELLOW Monsieur! Le vaisseau se déplace!";
 	"\A_FWYELLOW Ils se sont dégagés et s'échappent!";
 	"\A_FWCYAN Mais comment? Il semblait hors d'usage!"; // le vaisseau était désemparé/avarié/désactivé/immobilisé
-	"\A_FWYELLOW Ils ne peuvent piloter cet engin-la!";
+	"\A_FWYELLOW Ils ne peuvent piloter cet engin-là!";
 	"\A_FWCYAN Interceptez-les! Employez les armes!";
 	"\A_FWYELLOW Oui monsieur! Activation des armes...";
 	"\A_FWCYAN Comment peuvent-ils aller si vite?";
 	"\A_FWYELLOW Ils vont passer hors de portée.";
-	"\A_FWCYAN Suivez-les a pleine vitesse!";
+	"\A_FWCYAN Suivez-les à pleine vitesse!";
 	"\A_FWYELLOW Je les ai perdus! Ils ont disparu!";
 	"\A_FWCYAN Qu'avons-nous fait?";
 	"\A_FWYELLOW Je peux essayer de calculer...";
 	"\A_FWCYAN Laissez, M. Raiker.";
 	"\A_FWCYAN C'est trop tard. Envoyez un rapport,";
-	"\A_FWCYAN et continuons notre mission.";	
+	"\A_FWCYAN et poursuivons notre mission.";	
 #endif
 
 #ifdef SPANISH

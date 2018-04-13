@@ -29,7 +29,7 @@ stringpack STDESC{
 #ifdef FRENCH
 	/***************************************/
 	"Une myriade d'écrans et de commandes.";
-	"Il faut etre un pilote chevronné...";
+	"Il faut être un pilote chevronné...";
 #endif
 
 #ifdef SPANISH
@@ -263,14 +263,14 @@ stringpack 200{
 	"Maman, maman, ne me laisse pas!";
 	"Reviens! Maman...";
 	//7
-	"Frere! Attention! N'y va pas!...";
-	"Non. Ecoute-moi! Tu vas MOURIR!";
+	"Frangin! Attention! N'y va pas!!"; // [laurentd75]: on ne s'adresse pas à son frère en disant "frère!" en français
+	"Non. Ecoute-moi! Tu vas MOURIR!!";
 	//9
 	" --Alerte: erreur de lecture d'esprit.";
 	" ";
 	//11
-	"Blake! Regarde! Qu'est-ce que c'est?";
-	"Un systeme de défense, apparemment.";
+	"Blake, regarde! Qu'est-ce que c'est?";
+	"Un système de défense, apparemment.";
 	"Jenna! Avon! Résistez!";
 #endif
 #ifdef SPANISH

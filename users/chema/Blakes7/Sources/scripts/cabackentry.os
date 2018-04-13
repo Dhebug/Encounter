@@ -36,21 +36,21 @@ stringpack STDESC{
 #endif
 
 #ifdef FRENCH
-	"On dirait qu'il s'agit du systeme";
+	"On dirait qu'il s'agit du système";
 	"d'ouverture de la grille.";
-	"De solides barres. Je ne pense pas";
-	"pouvoir les casser.";
+	"De solides barreaux. Je ne pense pas";
+	"pouvoir les tordre."; // "tordre" plutôt que "casser", pour des barreaux...
 	
 	//4
 	"Apparemment, le bloqueur est cassé.";
-	"Si seulement j'avais un baton ou...";
+	"Si seulement j'avais un bâton ou...";
 	
 	//6
 	"Ca ne va pas m'aider.";
 	"Impossible, avec la grille fermée.";
 	
 	//8
-	"Bonne idée, ca devrait fonctionner!";
+	"Bonne idée, ça devrait fonctionner!";
 	"L'arme maintient la grille ouverte.";
 #endif
 

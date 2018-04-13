@@ -161,7 +161,7 @@ stringpack 200{
 
 #ifdef FRENCH
 	/*++++++++++++++++++++++++++++++++++++++*/
-	"N'as-tu aucun souvenir a propos des";
+	"N'as-tu aucun souvenir à propos des";
 	"traitements qu'ils t'ont fait subir?";
 	"Mais je n'ai subi aucun traitement!";
 	"Je pensais qu'il t'en resterait quelque";
@@ -171,7 +171,7 @@ stringpack 200{
 	"Mais quoi? Je n'ai eu aucun traitement,";
 	"ma mémoire va bien. Qu'y a-t-il enfin?";
 	
-	"Je sais. C'est difficile pour toi.";
+	"Je comprends. C'est dur pour toi..."; // "Je sais. C'est difficile pour toi.";
 	"Dis-moi ce que tu sais sur ma famille!";
 
 	//9
@@ -180,9 +180,9 @@ stringpack 200{
 	"résistance, mais tu as été capturé.";
 	"Ne voulant pas que tu deviennes un";
 	"martyr, ils ont effacé ton passé et";
-	"ont fait de toi un citoyen modele.";
+	"ont fait de toi un citoyen modèle.";
 	"Blake, nous avons besoin de toi! Tous";
-	"les chefs t'attendent a l'intérieur.";  // "les chefs de la résistance sont la.";
+	"les chefs t'attendent à l'intérieur.";  // "les chefs de la résistance sont la.";
 
 #endif
 
@@ -239,25 +239,25 @@ stringpack 201{
 #endif
 #ifdef FRENCH
 	/*++++++++++++++++++++++++++++++++++++++*/
-	"Mais quelle charmante compagnie...!";
+	"Mais quelle charmante réunion...!"; // "réunion" ou "compagnie", ici
 	"Je suis désolée de vous interrompre,";
 	"mais je crains que votre petit jeu ne";
-	"touche a sa fin cette fois, M. Foster.";
+	"touche à sa fin cette fois, M. Foster.";
 	
 	//"Blake, Blake, always causing trouble...";
 	//"You couldn't just behave.";
 	"Merci beaucoup, Blake.";
-	"Vous avez été l'appat idéal.";
-	"Travis, tuez tout le monde la-dedans."; // "Travis, éliminez-les tous.";
+	"Vous avez été l'appât idéal.";
+	"Travis, tuez tout le monde là-dedans."; // "Travis, éliminez-les tous.";
 
-	"A vos ordres, Commandant Supreme!";
+	"A vos ordres, Commandeur Suprême!";
 	"Et Blake? Dois-je aussi l'éliminer?";
 	
 	"Non, Travis.";
 	"Nous ne voulons pas faire de martyr.";
 	"Je lui réserve une suprise."; 
 	"Quelque chose qui détruira totalement";
-	"sa réputation, a jamais.";
+	"sa réputation, à jamais.";
 	"Emmenez-le.";
 #endif
 #ifdef SPANISH

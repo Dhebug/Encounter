@@ -224,35 +224,35 @@ stringpack STDESC{
 
 #ifdef FRENCH
 /***************************************/
-"C'est un bonhomme en allumettes.";
+"C'est juste un dessin d'un bonhomme."; // mieux que "bonhomme allumette", pas trop utilisé en français
 "Et bien, ce sont des toilettes...";
 "Non, merci. Je n'ai pas envie.";
-"C'est un lavabo. Tout a fait banal.";
-"Je me suis déja lavé les mains hier."; // [laurentd75]: funnier thant "Pas besoin de me laver les mains."
+"C'est un lavabo. Tout à fait banal.";
+"Je me suis déjà lavé les mains hier."; // [laurentd75]: funnier than "Pas besoin de me laver les mains."
 
 //5
 "Il y a des graffitis partout.";
-"Oh la la..."; // [laurentd75]: "Vaya tela": see https://forum.wordreference.com/threads/vaya-tela.742241/?hl=fr
+"Oh là là..."; // [laurentd75]: "Vaya tela": see https://forum.wordreference.com/threads/vaya-tela.742241/?hl=fr
 
 // {laurentd75]: For the sayings (used also as pass-phrases), I tried various styles in French, as the English or 
 // Spanish sayings / refranes could not be translated "as is", and I also adapted the 'comments' made by Blake on them.
 
 "Celui-ci dit:";
-"Hum, pas tres original.";
+"Hum, pas très original.";
 
 "Regardons un peu les autres...";
-"Ah, cette maxime-la me plait bien!";
+"Ah, cette maxime-là me plaît bien!";
 
-"Celui-ci est difficile a lire...";
-"Je ne suis pas sur d'avoir compris.";
+"Celui-ci est difficile à lire...";
+"Je ne suis pas sûr d'avoir compris.";
 
 
-"Celui-ci est peut-etre un peu mieux?";
+"Celui-ci est peut-être un peu mieux?";
 "Oh, mon dieu, la poésie et moi...";
 
 "Il est écrit 'Hors Service'.";
 
-"J'ai déja mis de l'eau dedans.";
+"J'ai déjà mis de l'eau dedans.";
 "Ok, je vais le remplir d'eau.";
 
 #endif
@@ -315,7 +315,7 @@ stringpack STCOUPLETS{
 	"'Tant qu'on fait mine de bien me payer,";
 	"je fais mine de bien travailler.'";
 	"'Etonnamment monotone et lasse,";			// vers holorime de Louise de Vilmorin...
-	"est ton ame en mon automne, hélas!'";
+	"est ton âme en mon automne, hélas!'";
 #endif
 #ifdef SPANISH
 	/***************************************/

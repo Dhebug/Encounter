@@ -599,7 +599,7 @@ res_start
 	.asc "Controles",0
 #endif
 #ifdef FRENCH
-	.asc "Controles",0
+	.asc "Contr","Z"+5,"les",0 ; "Contrôles"
 #endif
 res_end	
 .)
@@ -1007,8 +1007,8 @@ res_start
 	.asc "C","Z"+2,"lula energ","Z"+3,"a",0
 #endif
 #ifdef FRENCH
-	; "Pile d'énergie" -- cf. obj_ep2.s et liberatorcargo.os et ocode_ecell.os dans ..\scripts
-	.asc "Pile",0  ; "Pile d'énergie" est trop long: peut causer bug affichage si utilisé avec "Jenna Stannis"
+	; Pile à combustible ou Cellule d'énergie -- cf. obj_ep2.s et liberatorcargo.os et ocode_ecell.os dans ../scripts
+	.asc "Pile",0  ; "Cellule" ou "Pile" -- préciser "d'énergie" est trop long: et peut causer bug affichage si utilisé avec "Jenna Stannis"
 #endif
 res_end	
 .)

@@ -16,8 +16,8 @@ stringpack ECELL{
 #endif
 #ifdef FRENCH	
 	"De l'énergie pour un vaisseau entier.";
-	"Je ne peux pas utiliser la pile ici."; // [laurentd75]: pile/batterie/ou cellule: 
-	                                        // cf. room_hideout.os et liberatorcargo.os, et obj_ep2.s dans ../resdata
+	"Je ne peux pas utiliser la pile ici."; // [laurentd75]: cellule, ou pile:
+	                                        // cf. liberatorcargo.os, et obj_ep2.s et room_hideout.s dans ../resdata
 #endif
 #ifdef SPANISH
 	"Energía para una nave entera.";

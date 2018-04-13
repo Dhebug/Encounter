@@ -36,10 +36,10 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 
 #ifdef FRENCH
 	option "Heu... en fait, non." active -> enddiag;
-	option "Oui. Quelle était votre commande déja?" active -> question;
+	option "Oui. Quelle était votre commande déjà?" active -> question;
 	option "Non, mais vous pourriez m'aider..." active -> favour;  // better than "on pourrait s'entraider" 
-		// NB: "Non, mais vous pouvez peut-etre m'aider?" is too long 
-		// Other possibility: "Non, j'ai besoin d'un petit service..." or "Non, j'ai un service a vous demander..."
+		// NB: "Non, mais vous pouvez peut-être m'aider?" is too long 
+		// Other possibility: "Non, j'ai besoin d'un petit service..." or "Non, j'ai un service à vous demander..."
 	option "Oui... J'ai votre commande ici." active -> haveit;
 	option "C'était un café, n'est-ce pas?" inactive -> coffee;
 	option "C'était bien un sandwich au fromage?" inactive -> sandwich;
@@ -155,9 +155,9 @@ stringpack DIALOG_STRINGS
 
 //6
 "Un sandwich au fromage?";
-"Non, je n'ai jamais commandé ca...";
+"Non, je n'ai jamais commandé ça...";
 "Enfin bon, donnez-le moi... J'ai faim."; // "Enfin bon, je le prends... J'ai faim.";
-"Maintenant, sortez de cette piece.";
+"Maintenant, sortez de cette pièce.";
 #endif
 
 #ifdef SPANISH
@@ -256,12 +256,12 @@ stringpack STDESC
 	"Un terminal de commande.";
 	/*
 	+++++++++++++++++++++++++++++++++++++++*/
-	"D'ici je peux désactiver des systemes.";
+	"D'ici je peux désactiver des systèmes.";
 	
 	"Il me faut le code de la caméra.";
 	
 	"Ok. Désactiver CH-1337.";
-	"Voila, c'est fait!"; // "Effectué!"
+	"Voilà, c'est fait!"; // "Effectué!"
 	
 	//5
 	"Un écran avec des données en temps réel";
@@ -270,8 +270,8 @@ stringpack STDESC
 		
 	//8
 	"Un écran avec des données en temps réel";
-	"sur l'état des systemes de la ville.";
-	"Pour moi, tout ca c'est du chinois.";
+	"sur l'état des systèmes de la ville.";
+	"Pour moi, tout ça c'est du chinois.";
 #endif
 
 #ifdef SPANISH
@@ -352,8 +352,8 @@ stringpack STGUARD
 	"Oh! J'ai failli m'endormir!";
 	"J'ai besoin d'un café...";
 	
-	"Hé! Ou allez-vous?";
-	"Vous n'avez pas le droit d'etre ici!";
+	"Hé! Où allez-vous?";
+	"Vous n'avez pas le droit d'être ici!";
 	"Désolé. Je me suis trompé de porte.";
 	
 	"Mais quel est ce bruit?";
@@ -510,11 +510,11 @@ stringpack STEXTRA{
 	"Une bonne dose de caféine.";
 	
 	"Bonne idée.";
-	"Je vais l'échanger avec le mien...";
-	"en espérant que ca marche.";
+	"Je vais l'échanger avec le mien,";
+	"en espérant que ça marche...";
 	
-	"Que cherchez-vous a faire?";
-	"Je ne peux l'utiliser avec la console.";
+	"Que cherchez-vous à faire?";
+	"Je ne peux l'utiliser avec le terminal.";
 	
 	//8
 	"Il vaut mieux le laisser ici...";

@@ -410,7 +410,7 @@ res_start
 	.asc "Cafetera",0
 #endif
 #ifdef FRENCH
-	.asc "Machine a caf","Z"+2,0	; "Machine a café"
+	.asc "Machine ","A"-1," caf","Z"+2,0	; "Machine à café"
 #endif
 res_end	
 .)

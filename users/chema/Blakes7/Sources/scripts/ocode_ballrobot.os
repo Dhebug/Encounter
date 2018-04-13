@@ -21,7 +21,7 @@ stringpack BALLROBOT{
 	"I don't understand!";
 	"Ouch!";
 	"Are you trying to kill me?";
-	"Let me doit by myself, will you?";
+	"Let me do it by myself, will you?";
 	"I don't have a projectile.";
 #endif
 #ifdef FRENCH	
@@ -29,13 +29,13 @@ stringpack BALLROBOT{
 	"Je n'ai jamais rien vu de tel.";
 	"On dirait qu'il a un pouvoir mental";
 	"capable de neutraliser les menaces.";
-	"Je dois trouver quelque chose, sinon";
-	"ils sont perdus a jamais!";
+	"Je dois faire quelque chose, sinon";
+	"ils sont perdus à jamais!";
 	"Ca ne fonctionnera pas.";
 	"Je ne vous comprends pas!";
-	"Aie!";
+	"Ouille!"; // [laurentd75] we don't have the "ï" character for Aïe!";
 	"Vous essayez de me tuer, ou quoi?";
-	"Laissez-moi le faire moi-meme alors!";
+	"Laissez-moi faire, plutôt!"; // [laurentd75]: Blake means "let me shoot", not "let me kill myself" :-)
 	"Je n'ai pas de projectile.";
 #endif
 #ifdef SPANISH
