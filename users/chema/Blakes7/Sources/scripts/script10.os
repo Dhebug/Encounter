@@ -137,21 +137,21 @@ script 10{
 
 #ifdef FRENCH
 	/***************************************/
-	"La... Ce truc qui bloque la chaine...";
-	"Qu'est-ce que ca peut bien etre?";
+	"Là... Ce truc qui bloque la chaîne...";
+	"Qu'est-ce que ça peut bien être?";
 
 	"Hmmmmm...";
-	"On dirait une espece d'arme...";
+	"On dirait une espèce d'arme...";
 
-	"J'ai aussi trouvé ca sur le sol.";
+	"J'ai aussi trouvé ça sur le sol.";
 	"C'est un bracelet.";
 
 	"Une sorte d'appareil de communication..";
-	"Peut-etre meme plus...";
+	"Et peut-être même davantage...";
 	
 	//8
 	"Ils sont arrivés par la grotte, c'est";
-	"pour ca qu'ils ont volé la lampe.";
+	"pour ça qu'ils ont dérobé la lampe.";
 	
 	"Ils viennent libérer les Nouvelles Ames";
 	"Donne-moi ce bracelet, et allons-y!";

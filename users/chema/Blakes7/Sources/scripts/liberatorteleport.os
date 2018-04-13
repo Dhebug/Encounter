@@ -229,11 +229,11 @@ stringpack FIRSTTELEST {
 
 #ifdef FRENCH
 	/**************************************/
-	"Sais-tu a quoi peut servir tout ca?"; // [laurentd75]: bug? (spoken by Kerr Avon, should be spoken by Blake)
-	"Un systeme de téléportation, je pense.";
+	"Sais-tu à quoi peut servir tout ça?"; // [laurentd75]: bug? (spoken by Kerr Avon, should be spoken by Blake)
+	"Un système de téléportation, je pense.";
 	"Tu as besoin de l'un de ces bracelets.";
 	"Je pense que je pourrais te téléporter";
-	"n'importe ou, dans un périmetre donné.";
+	"n'importe où, dans un périmètre donné.";
 	"Le bracelet s'active dans la cabine.";
 
 	//6
@@ -249,17 +249,17 @@ stringpack FIRSTTELEST {
 	"Plein de voyants et de commandes...";
 	
 	//12
-	"C'est une cabine a l'aspect étrange.";
+	"C'est une cabine à l'aspect étrange.";
 	
 	//13
 	"J'en prends aussi pour les autres.";
-	"J'ai déja le mien.";
+	"J'ai déjà le mien.";
 	
 	//15
 	"Je ne comprends pas.";
 	
 	// 16
-	"Bien. Je vais installer ca ici...";
+	"Bien. Je vais installer ça ici...";
 	"et quand il recevra le signal, le";
 	"téléporteur s'activera.";
 	"Et qui vais-je téléporter?";

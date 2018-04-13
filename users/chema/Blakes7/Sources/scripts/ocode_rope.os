@@ -17,8 +17,8 @@ stringpack ROPE{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"Ca a l'air d'etre une corde solide.";
-	"Je ne peux utiliser la corde avec ca.";
+	"Cette corde a l'air très solide.";
+	"Je ne peux utiliser la corde avec ça.";
 #endif
 #ifdef SPANISH
 	/***************************************/

@@ -219,7 +219,7 @@ res_start
 	.asc "Bola de acero",0
 #endif		
 #ifdef FRENCH
-	.asc "Bille",0 ; "Bille d'acier" est trop long: peut causer bug affichage si utilisé avec "Clé anglaise" 
+	.asc "Bille",0 ; "Bille en acier" est trop long: peut causer bug affichage si utilisé avec "Clé anglaise" 
 
 #endif		
 res_end
@@ -468,7 +468,9 @@ res_start
 	.asc "Llave inglesa",0
 #endif				
 #ifdef FRENCH
-	.asc "Cl","Z"+2," anglaise",0	; "Clé anglaise"
+	; [laurentd75]: ATTENTION: "Utilise Clé anglaise avec Jenna Stannis" fait bugger l'affichage (trop long...)
+	; Malheureusement, il n'existe aucun synonyme plus court ("clé à molette" est plus long..)
+	.asc "Cl","Z"+2," anglaise",0	; "Clé anglaise" 
 #endif				
 res_end
 .)
@@ -733,8 +735,8 @@ res_start
 	.asc "C","Z"+2,"lula energ","Z"+3,"a",0
 #endif			
 #ifdef FRENCH
-	; "Pile d'énergie" -- cf. room_hideout.s et liberatorcargo.os et ocode_ecell.os dans ../scripts
-	.asc "Pile",0  ; "Pile d'énergie" est trop long: peut causer bug affichage si utilisé avec "Tuyau en Y" ou "Clé anglaise" 
+	; "Pile à combustible" ou "Cellule d'énergie" -- cf. room_hideout.s et liberatorcargo.os et ocode_ecell.os dans ../scripts
+	.asc "Pile",0  ; "Pile" ou "Cellule" - préciser "d'énergie" est trop long: peut causer bug affichage si utilisé avec "Tuyau en Y" ou "Clé anglaise" 
 #endif
 res_end
 .)

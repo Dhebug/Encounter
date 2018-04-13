@@ -56,35 +56,35 @@ stringpack HALLMAIN{
 	"Parle, et le Seigneur t'entendra."; // [laurentd75]: inverted the 2 sentences for easier understanding in French
 	"Ses bénédictions sont sur toi.";
 
-	"Je suis votre fidele serviteur.";
+	"Je suis votre fidèle serviteur.";
 
-	"Les ames de l'obscur au-dela";
+	"Les âmes de l'obscur au-delà";
 	"sont-elles avec nous?";
 
 	"Dans la salle des novices.";
 
 	"Bien. Viens et prie avec moi.";
 	"Seulement de Sa main surgit la vie...";
-	"Et de Sa colere descend la mort.";
+	"Et de Sa colère descend la mort.";
 
 	//9
-	"Avec d'autres ames pour Son travail...";
+	"Avec d'autres âmes pour Son travail...";
 	"Il y aura une opportunité pour moi...";
-	"... pour tous les fideles...";
-	"de s'élever au rang de pretre.";
+	"... pour tous les fidèles...";
+	"de s'élever au rang de prêtre.";
 
 	"Il ne te faillira pas.";
 	"Tu seras récompensé.";
 	
 	//15
-	"Maitre. J'ai trouve quelque chose...";
+	"Maître. J'ai trouvé quelque chose...";
 	"Je crois qu'il y a des intrus.";
 	/***************************************/	
 	
 	"Impossible. Les prisonniers ont été";
-	"surveillés des qu'ils ont atterri.";
+	"surveillés dès qu'ils ont atterri.";
 
-	"Quelqu'un d'autre est peut-etre venu";
+	"Quelqu'un d'autre est peut-être venu";
 	"avec un autre vaisseau? Montrez-nous.";
 #endif
 

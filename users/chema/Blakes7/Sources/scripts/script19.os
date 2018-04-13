@@ -200,11 +200,11 @@ stringpack STLOCAL{
 "Compris, Blake.";
 "Vila et moi allons nous téléporter.";
 // Vila rants
-"Moi? Non, attendez, il fait froid la-";
+"Moi? Non, attendez, il fait froid là-";
 "bas, et je suis sensible aux basses";
 "températures. J'ai la gorge fragile!";
 // Avon jokes
-"Vous autres, vous etes ridicules."; // Littéralement: "Vous autres ne m'impressionnez guere."
+"Vous autres, vous êtes ridicules."; // Littéralement: "Vous autres ne m'impressionnez guère."
 // They argue 6-10
 "Et pourquoi n'irais-tu pas, toi?"; // "Pourquoi n'y vas-tu pas toi?";
 "Parce que toi, on peut te sacrifier.";
@@ -213,10 +213,10 @@ stringpack STLOCAL{
 "suis pas stupide, et je n'irai pas.";
 
 // Is it a trap? 11-15
-"Je commence a suspecter un piege.";
-"Ce n'est pas un tres bon piege alors,";
-"si tu commences déja a te méfier...";
-"Le probleme n'est pas de se méfier ou";
+"Je commence à suspecter un piège.";
+"Ce n'est pas un tres bon piège alors,";
+"si tu commences déjà a te méfier...";
+"Le problème n'est pas de se méfier ou";
 "non, c'est de tomber dedans ou pas...";
 
 // Let's go
@@ -224,8 +224,8 @@ stringpack STLOCAL{
 
 // 17-21 first part with Jenna (I've put this here afterwards)
 /***************************************/
-"Jenna, il faudrait pirater l'horloge.";
-"Est-ce ca peut etre fait d'ici?";
+"Jenna, il faudrait trafiquer l'horloge."; // "trafiquer" mieux que "pirater"
+"Est-ce ça peut être fait d'ici?";
 "Pas par moi. Mais Vila ou Avon peuvent.";
 
 "Ok. Libérateur, vous m'entendez?";
@@ -237,7 +237,7 @@ stringpack STLOCAL{
 "Laisse-moi voir...";
 "Oui. Mais il faut un émetteur avec...";
 "Attends. Passe-moi le transpondeur.";
-"Et voila, c'est fait!";
+"Et voilà, c'est fait!";
 
 "Ok. Maintenant, attends ici mon signal.";
 "Fais attention.";

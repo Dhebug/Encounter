@@ -383,7 +383,7 @@ res_start
 	.asc "Enfermera",0
 #endif
 #ifdef FRENCH
-	.asc "Infirmiere",0
+	.asc "Infirmi","Z"+1,"re",0 ; "Infirmière"
 #endif
 res_end	
 .)

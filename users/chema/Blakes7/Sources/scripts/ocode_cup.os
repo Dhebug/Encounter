@@ -20,11 +20,11 @@ stringpack CUP{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"Un grand gobelet de café.";	// [laurentd75]: c'est un gobelet (en papier) de café en fait, pas une tasse
+	"Un grand gobelet à café.";	// [laurentd75]: c'est un gobelet (en papier) à café en fait, pas une tasse
 	"Il est vide.";
 	"Il est plein d'eau.";
 	"Il est plein de café.";
-	"Je ne peux l'utiliser de cette facon.";
+	"Je ne peux l'utiliser de cette façon.";
 #endif
 #ifdef SPANISH
 	/***************************************/

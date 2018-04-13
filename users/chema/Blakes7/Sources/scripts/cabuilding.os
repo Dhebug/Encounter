@@ -49,7 +49,7 @@ stringpack STDESC{
 
 #ifdef FRENCH
 	"Elle a l'air solide.";
-	"J'entends des gens derriere...";
+	"J'entends des gens derrière...";
 	//2
 	"Mieux vaut chercher une autre voie.";
 	
@@ -57,16 +57,16 @@ stringpack STDESC{
 	"Ils sont encore un peu mouillés...";
 	
 	//4
-	"Bonjour, frere. Un probleme ?";
+	"Bonjour, frère. Un problème?";
 	"Tu sais que tu ne peux pas entrer";
 	"avant la fin de ta faction. Retourne";
-	"a tes obligations, et sois béni."; // littéralement: // "a tes taches, et qu'Il te bénisse.";
+	"à tes obligations, et sois béni."; // littéralement: // "è tes taches, et qu'Il te bénisse.";
 	
 	//8
-	"Il commence a faire sombre. Mieux vaut";
-	"remettre cette lampe a sa place. J'ai";
-	"passé toute la soirée a la réparer.";
-	"Voila. Plus rien a craindre des grues.";
+	"Il commence à faire sombre. Mieux vaut";
+	"remettre cette lampe à sa place. J'ai";
+	"passé toute la soirée à la réparer.";
+	"Voilà. Plus rien à craindre des grues.";
 #endif
 
 #ifdef SPANISH

@@ -23,7 +23,7 @@ stringpack UNIFORM
 #ifdef FRENCH
 	/***************************************/
 	"Un uniforme de soldat de la Fédération.";
-	"Plus tard. Je ne tiens pas a déambuler"; // [laurentd75]: trainer, roder, sortir, me balader, crapahuter, déambuler, flaner
+	"Plus tard. Je ne tiens pas à déambuler"; // [laurentd75]: trainer, roder, sortir, me balader, crapahuter, déambuler, flaner
 	"dans un uniforme trop petit pour moi."; // ou "dans un uniforme qui m'est trop petit"
 
 #endif

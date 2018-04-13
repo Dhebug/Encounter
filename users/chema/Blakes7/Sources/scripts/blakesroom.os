@@ -98,7 +98,7 @@ stringpack STDESC
 #ifdef FRENCH
 	"Il n'y a rien d'intéressant.";
 	"Ca me rappelle quelque chose...";
-	"Le Meilleur des Mondes...";
+	"'Le Meilleur des Mondes'...";
 	"Ravella me l'avait commandé.";
 	
 	// 4
@@ -114,7 +114,7 @@ stringpack STDESC
 	///// "La seule nourriture que je peux avaler."; // ou: "La seule chose que je puisse manger.";
 	///// "Le seul repas auquel j'ai droit."; // aliment, pitance, nourriture, mets, aliment, denrée, repas
 	"La seule chose que je puisse manger.";
-	"Je l'ai promis a Ravella.";
+	"Je l'ai promis à Ravella.";
 	"Mais je déteste le fromage.";
 	
 	//11
@@ -122,10 +122,10 @@ stringpack STDESC
 	"Il est vide.";
 	
 	//13
-	"Je préfere que ca reste ici.";  // [laurentd75]: utiliser "ça" car l'objet peut être masculin ou féminin...
-	"Autant laisser ca dans ma chambre.";
-	"Déplacer ca me parait inutile.";
-	"A quoi bon prendre ca?";
+	"Je préfère que ça reste ici.";  // [laurentd75]: utiliser "ça" car l'objet peut être masculin ou féminin...
+	"Autant laisser ça dans ma chambre.";
+	"Déplacer ça me parait inutile.";
+	"A quoi bon prendre ça?";
 	
 	//17
 	"Pas le temps de lire, dommage...";
@@ -134,13 +134,13 @@ stringpack STDESC
 	"Pas le temps de regarder la télé.";
 	
 	//20
-	"Je ne l'ai meme pas encore commencé,";
+	"Je ne l'ai même pas encore commencé,";
 	// [laurentd75] NOTE: in French, it is necessary to change the page number / code used
 	// because the spelling of "72" is irregular (compared to "52" or "62" for instance)
 	// See "maproom.os" for a detailed explanation
 	// ==> I chose to use "162" instead of "172", and made necessary changes in "maproom.os" 
 	//     for the French version
-	"pourtant la page 162 est cornée. ";
+	"pourtant, la page 162 est cornée. ";
 #endif
 
 #ifdef SPANISH

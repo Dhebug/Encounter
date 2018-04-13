@@ -61,7 +61,7 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 	option "et réciproquement.'" inactive -> o2;
 	option "le mal bien fait fait bien moins mal'." inactive -> o3;
 	option "je fais mine de bien travailler.'"  inactive -> o4;
-	option "est ton ame en mon automne, hélas!'"  inactive -> o5;
+	option "est ton âme en mon automne, hélas!'"  inactive -> o5;
 	option "Aucune idée... 'Abracadabra'?" inactive -> o6;
 #endif
 
@@ -242,12 +242,14 @@ stringpack DIALOG_STRINGS
 "Désolé. Personne ne doit l'utiliser.";
 "Tu te trompes: regarde l'horloge.";
 "Il reste encore une heure.";
-"Ah, génial! Je commencais a fatiguer.";
-"Mais d'abord, la phrase secrete!"; // "Mais d'abord, le mot de passe!"; // mot de passe, sésame, mot d'ordre, phrase secrete, phrase code ?
-"Ils ont été clairs cette fois."; // dans le contexte c'est plutôt "clair" ou "explicite" que "sérieux"
-"Désolé, mais je ne peux pas.";
-"Sans la phrase secrete, pas de releve.";	// "Sans mot de passe, pas de changement.";
-"Bien. La suivante, maintenant.";	// ou "Le suivant, maintenant" s'il s'agit de "mot de passe"
+"Ah, génial! Je commencais à fatiguer.";
+"Mais d'abord, la phrase secrète!"; //  phrase secrete, phrase code, sésame, mot d'ordre, mot de passe,
+// [laurentd75]: interverted the following 2 sentences in French because it works better
+"Désolé, mais je ne peux vraiment pas.";
+// NB: dans le contexte c'est plutôt "clair", "strict" ou "explicite" que "sérieux" ci-dessous
+"Les ordres sont les ordres.";  // Mieux que "Ils ont été clairs cette fois."; 
+"Sans la phrase secrète, pas de relève.";
+"Bien. La suivante, maintenant.";	// (Le garde va dire la phrase secrète suivante)
 "Parfait! Bon tour de garde, camarade.";
 #endif
 
@@ -425,11 +427,11 @@ stringpack STDESC{
 	"Rien. Ils doivent utiliser un code.";
 	// 10
 	/***************************************/
-	" (Toi. Tu n'es pas un garde.)";
-	"Quelle est cette voix dans ma tete?";
-	" (S'il te plait, libere-moi.)";
-	"Qui es-tu ? Que fais-tu dans ma tete?";
-	" (Libere-moi, et je t'aiderai.)";
+	" (Toi... Tu n'es pas un garde...)";
+	"Quelle est cette voix dans ma tête?";
+	" (S'il te plait, libère-moi.)";
+	"Qui es-tu ? Que fais-tu dans ma tête?";
+	" (Libère-moi, et je t'aiderai.)";
 	" (Je suis dans la cellule B-3.)";
 	"Ok. Voyons de quoi il retourne.";
 	//17

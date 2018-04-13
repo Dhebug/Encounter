@@ -555,7 +555,7 @@ res_start
 	.asc "Cajas",0
 #endif
 #ifdef FRENCH
-	.asc "Boites",0 ; NB: des boites, et non pas des caisses
+	.asc "Bo","Z"+4,"tes",0 ; "Boîtes" -  NB: des boites, et non pas des caisses
 #endif
 res_end	
 .)

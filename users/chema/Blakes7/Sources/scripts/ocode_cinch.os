@@ -16,7 +16,7 @@ stringpack CINCH{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"Une bande élastique tres résistante.";
+	"Une bande élastique très résistante.";
 #endif
 #ifdef SPANISH
 	"Una banda elástica muy resistente.";

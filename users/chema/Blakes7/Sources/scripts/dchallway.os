@@ -82,30 +82,30 @@ stringpack 200
 
 #ifdef FRENCH
 	"La Fédération prend soin de nous.";
-	"Plans disponibles a l'accueil.";
+	"Plans disponibles à l'accueil.";
 	"Les complexes de la Fédération sont,";
-	"comment dire... tres complexes!";
-	"Amiga Wave - Votre chaine rétro.";
-	"Chaque dimanche soir a 22h.";
+	"comment dire... très complexes!";
+	"Amiga Wave - Votre chaîne rétro.";
+	"Chaque dimanche soir à 22h.";
 	"Pas d'informations pour l'instant.";
 	"Cette chose m'a toujours paru étrange.";
 	"C'est la porte de ma chambre.";
 	"C'est la porte de l'infirmerie.";	//9
-	"La porte de la salle de controle."; //10
+	"La porte de la salle de contrôle."; //10
 	"Café-O-matic."; //11
 	"Il reste seulement du décaféiné...";
-	"J'ai besoin d'une piece d'abord.";
-	"Que cherchez-vous a faire?";
+	"J'ai besoin d'une pièce d'abord...";
+	"Que cherchez-vous à faire?";
 	"Je n'aime pas le déca, mais bon...";
 	
-	"Ouf... J'ai eu chaud."; //16 escaping from nurse
-	"Il n'y a plus qu'a attendre désormais."; // 17 sandwich given
+	"Ouf... J'ai eu chaud!"; //16 escaping from nurse
+	"Il n'y a plus qu'à attendre désormais."; // 17 sandwich given
 	
-	"Hé! Ou allez-vous? Vous ne savez pas"; //"Hé! Ou vas-tu?";	// 18 guard forbids entering
-	"lire? Entrée interdite!"; // "Tu ne sais pas lire? Entrée interdite!";
+	"Hé! Où allez-vous? Vous ne savez pas"; // 18 guard forbids entering
+	"lire? 'Entrée interdite'!";
 
 	//20 coffee extended puzzle
-	"Elle n'accepte pas les petites pieces.";
+	"Elle n'accepte pas les petites pièces.";
 	" (Clinck!)";
 	" (Clanck!)";
 	" (CLINCK!)";
@@ -114,7 +114,7 @@ stringpack 200
 	" ";
 	
 	//27
-	"Mieux vaut ne pas risquer a nouveau.";
+	"Mieux vaut ne pas y retourner..."; // "Mieux vaut ne pas risquer à nouveau..." ou "Ne nous y risquons pas à nouveau..."
 	
 	//28
 	"Cette porte est fermée.";
@@ -595,16 +595,16 @@ stringpack 201{
 	*/
 	"Ou étiez-vous passé?";
 	"Désolé, monsieur.";
-	"C'est difficile d'avoir un café.";
+	"C'est dur d'avoir un café ici.";
 	"Il ne reste plus que du déca,";
-	"et une femme a mis une piece qui est";
+	"et une femme a mis une pièce qui est";
 	"restée coincée dans la machine...";
 	"J'ai du aller au niveau 3.";
 	
 	"Ok, Ok... Ecoutez...";
 	"J'ai une urgence - oh, mon estomac!";
-	"Allez surveiller les appareils.";
-	"Ah, je me sens tres mal!";
+	"Allez surveiller mes appareils.";
+	"Ah, je me sens très mal!";
 	
 	"Tout de suite, monsieur!";
 	
@@ -965,22 +965,22 @@ stringpack 210
 	"\A_FWGREEN notre travail produit des résultats.";
 	
 	"\A_FWGREEN La permission de procréer a été";
-	"\A_FWGREEN accordée a trois nouveaux couples";
+	"\A_FWGREEN accordée à trois nouveaux couples";
 	"\A_FWGREEN cette année. Envoyez vos candidatures";
-	"\A_FWGREEN a l'Agence de Controle des Naissances.";
+	"\A_FWGREEN à l'Agence de Contrôle des Naissances.";
 	
 	
 	"\A_FWGREEN La Fédération a approuvé un plan d'";
 	"\A_FWGREEN investissement de 200 milliards pour";
 	"\A_FWGREEN la construction d'un nouveau Centre";
-	"\A_FWGREEN de Controle, ici, sur Terre.";
+	"\A_FWGREEN de Contrôle, ici, sur Terre.";
 	
 	"\A_FWGREEN Une nouvelle station de communication";
 	"\A_FWGREEN a été déployée sur Saurian Major.";
 	"\A_FWGREEN Les experts disent qu'elle améliorera";
-	"\A_FWGREEN les communications entre systemes.";
+	"\A_FWGREEN les communications entre systèmes.";
 	
-	"\A_FWGREEN La planete Auron a finalement décidé";
+	"\A_FWGREEN La planète Auron a finalement décidé";
 	"\A_FWGREEN de rejoindre la Fédération Terrienne";
 	"\A_FWGREEN contre l'avis de son gouvernement"; 
 	"\A_FWGREEN précédent. Félicitations!";

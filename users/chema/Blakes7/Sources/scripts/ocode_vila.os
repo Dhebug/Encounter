@@ -28,13 +28,13 @@ stringpack VILA
 	"C'est un curieux personnage...";
 	/**************************************/
 	"Il n'y a pas de serrure que je ne";
-	"puisse ouvrir... Si j'ai assez peur.";
+	"puisse ouvrir... Si j'ai assez peur."; // ou bien: "puisse ouvrir... S'il y va de ma vie.";
 	"Je ne me sens pas bien.";
-	"Je vais etre un gros handicap.";
+	"Je vais être un gros handicap.";
 	"Je souffre d'un grave syndrome: "; // [laurentd75]: "grave syndrome" en français, plutôt que simplement "syndrome"
 	"la peur des espaces clos."; 
-	"Il y a un nom pour ca...";
-	"La lacheté?";
+	"Il y a un autre nom pour ça..."; // préciser "un *autre* nom"  en français est mieux
+	"La lâcheté?";
 	
 #endif
 #ifdef SPANISH

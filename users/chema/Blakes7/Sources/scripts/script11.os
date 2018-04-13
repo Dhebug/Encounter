@@ -255,7 +255,7 @@ stringpack STLOCAL{
 #ifdef FRENCH	
 	/***************************************/
 	"Avon, c'est Blake.";
-	"Je les ai trouvés! Ramene-nous!";
+	"Je les ai trouvés! Fais-nous revenir!"; // ou "Ramène-nous"
 	
 	"Ha ha! Je le savais!";
 	
@@ -263,37 +263,37 @@ stringpack STLOCAL{
 	"Maintenant, reculez-vous tous!";
 	"J'ai une arme pointée sur vous, non?";
 	"Vous allez faire atterrir ce vaisseau";
-	"a la surface immédiatement.";
+	"à la surface immédiatement.";
 	//7
-	"Mais on s'éloigne déja de la planete.";
-	"Alors faites demi-tour.";
+	"Mais on s'éloigne déjà de la planète.";
+	"Alors faites demi-tour!";
 	
 	//9
 	"Si vous nous tuez, vous ne pourrez";
-	"jamais piloter ce vaisseau.";
+	"jamais piloter ce vaisseau...";
 	
 	//11
-	"Je régnais sur une petite planete";
+	"Je régnais sur une petite planète";
 	"prison de moins de 500 personnes.";
-	"Mais avec ca... Avec ca, je pourrais";
-	"régner sur un millier de planetes!";
+	"Mais avec ça... Avec ça, je pourrais";
+	"régner sur un millier de planètes!";
 	
 	"Pour un tel enjeu, croyez-vous que";
-	"j'hésiterais a vous tuer? ALLONS!";
+	"j'hésiterais à vous tuer? ALLONS!";
 	
-	"J'étais leur pretre... Maintenant";
+	"J'étais leur prêtre... Maintenant";
 	"je vais devenir leur dieu...";
 	
-	"\A_FWWHITE+A_FWGREEN*8+192 LEUR DIEUUU!";
+	"\A_FWWHITE+A_FWGREEN*8+192 LEUR DIEEUUU!";
 	" ";
 	//21
 	/***************************************/
 	"Bien! Tu l'as téléporté dans l'espace!";
-	"Il commencait a me faire mal au crane.";
+	"Il commencait à me faire mal au crâne.";
 	
 	//23
 	"Blake! Zen a détecté une flotte de";
-	"vaisseaux venant vers ce systeme.";
+	"vaisseaux venant vers ce système.";
 	"Il les a identifiés comme étant des";
 	"vaisseaux de poursuite fédéraux.";
 	
@@ -307,13 +307,13 @@ stringpack STLOCAL{
 	
 	//31
 	"Sauf que nous n'allons pas nous cacher.";
-	"Bientot, les vaisseaux de la Fédération";
-	"sauront exactement ou nous sommes.";
-	"Ou au moins ou nous avons été.";
+	"Bientôt, les vaisseaux de la Fédération";
+	"sauront exactement où nous sommes.";
+	"Ou au moins, où nous avons été.";
 	
 	//35
 	"Je ne te suis pas.";
-	"Ah, mais si. Et la est le probleme...";
+	"Ah, mais si. Et là est le problème...";
 	
 	//37
 	"J'ai dit ne bougez pas!";

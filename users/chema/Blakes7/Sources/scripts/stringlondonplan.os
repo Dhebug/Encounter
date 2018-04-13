@@ -50,28 +50,28 @@ stringpack 101{
 #endif
 
 #ifdef FRENCH
-	"Avon et moi prendrons le controle de";
+	"Avon et moi prendrons le contrôle de";
 	"l'ordinateur. Les autres chercheront";
 	"l'armurerie pour y prendre des armes.";
 	
 	"Donne-moi une seule bonne raison pour"; 
-	"laquelle je devrais t'aider...";
+	"laquelle je devrais t'aider?";
 	
 	"Tu es un homme civilisé, Avon.";
 	"Sur Cygnus Alpha, cela ne constituera";
-	"pas une caractéristique de survie.";
+	"pas une caractéristique de survie...";
 	
 	"Alors que toi tu m'offres la sécurité?";
 	
-	"Je t'offre une chance d'etre libre...";
+	"Je t'offre une chance d'être libre...";
 	
 	"Ton armée n'a que 4 recrues, Blake.";
 	"Quatre, et LUI!... Crois-tu toujours";
 	"pouvoir t'emparer de ce vaisseau?";
 	
-	"Si tu joues ton role, oui.";
+	"Si tu joues ton rôle, oui.";
 	
-	"Et si on réussit, que fait-on apres?"; //Jenna
+	"Et si on réussit, que fait-on après?"; //Jenna
 	"On essaie de retourner sur Terre.";
 	"Retourner sur Terre?"; // Jenna
 	"Je me doutais bien que tu étais fou...";
@@ -79,16 +79,16 @@ stringpack 101{
 	"Ils ont détruit mon passé, m'ont drogué";
 	"et fait vivre une existence factice."; // "pour que je vive une existence factice.";
 	
-	"Au moins, tu es toujours vivant."; // Jenna
+	"Au moins, tu es toujours vivant..."; // Jenna
 	"Je ne le serai pas avant que les hommes";
 	"ne soient libres, avant que le pouvoir";
-	"ne revienne aux mains de gens honnetes.";
+	"ne revienne aux mains de gens honnêtes.";
 	
-	"L'argent est la seule réalité.";
-	"Réveille-toi, Blake! Tu n'es peut-etre";
+	"L'argent est la seule réalité...";
+	"Réveille-toi, Blake! Tu n'es peut-être";
 	"plus drogué, mais tu es toujours en";
-	"train de rever.";
-	"Il y a des reves qui valent le coup."; // Jenna
+	"train de rêver!";
+	"Il y a des rêves qui valent le coup..."; // Jenna
 	"Tu ne le penses pas vraiment, si?";
 	"Non, mais j'aimerais bien y croire...";
 #endif

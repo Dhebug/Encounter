@@ -298,11 +298,11 @@ stringpack ST_LIBERATORFIRST{
 	/*************************************/
 	// Jenna: 0
 	"Que s'est-il passé?";
-	"J'ai vu ma mere.";
+	"J'ai vu ma mère.";
 	"Elle m'abandonnait... de nouveau.";
 	
 	// Avon: 3
-	"Et moi, j'ai vu mon frere sur le point";
+	"Et moi, j'ai vu mon frère sur le point";
 	"de mourir, et j'étais impuissant.";
 	
 	// Blake: 5
@@ -313,27 +313,27 @@ stringpack ST_LIBERATORFIRST{
 	
 	// Avon: 9
 	"Examinons ce vaisseau...";
-	"Ok. Je viens d'alimenter les systemes";
+	"Ok. Je viens d'alimenter les systèmes";
 	"principaux du vaisseau.";
 	
 	// Jenna: 12
 	"Ces commandes sont étranges...";
 	"Laisse-moi essayer....";
 	"AAAAAAHHH!";
-	"Il est dans mon esprit! Arretez-le!"; // l'ordinateur => masculin
+	"Il est dans mon esprit! Arrêtez-le!"; // l'ordinateur => masculin
 
 	// ZEN: 16 - dialogue
 	" Bonjour Jenna Stannis.";
-	"Qui etes-vous?";
+	"Qui êtes-vous?";
 	" Zen. Bienvenue, Roj Blake.";
 	"Tu es un ordinateur?";
 	" En effet, Kerr Avon.";
-	" Le Libérateur est pret.";
+	" Le Libérateur est prêt.";
 	" Veuillez indiquer cap et vitesse.";
 	
 	//23
 	"Le Libérateur...";
-	"Oui, ce nom m'est venu a l'esprit.";
+	"Oui, ce nom m'est venu à l'esprit.";
 	
 	"Zen, ferme le sas d'entrée et";
 	"manoeuvre le vaisseau hors de portée";
@@ -346,10 +346,10 @@ stringpack ST_LIBERATORFIRST{
 	//29
 	/*************************************/
 	"Nous sommes libres, avec un vaisseau.";
-	"Nous pouvons aller ou nous voulons.";
+	"Nous pouvons aller où nous voulons.";
 	
 	"Nous irons sur Cygnus Alpha.";
-	"Nous libererons le reste du groupe.";
+	"Nous libèrerons le reste du groupe.";
 	"QUOI!?";
 	"Avec ce vaisseau et un équipage au";
 	"complet, nous POURRONS contrattaquer!"; // contrattaquer, variante de "contre-attaquer", cf. https://bit.ly/2JbN0mU
@@ -364,7 +364,7 @@ stringpack ST_LIBERATORFIRST{
 	
 	//43
 	"Oh, je ferais mieux de remettre";
-	"ce tuyau a sa place.";
+	"ce tuyau à sa place.";
 	
 	//45
 	" Le Libérateur est en orbite";

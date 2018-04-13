@@ -19,9 +19,9 @@ stringpack GUARD
 	"He's busy. Better leave him alone.";
 #endif
 #ifdef FRENCH
-	"Plutot menacant...";
+	"Plutôt menaçant...";
 	"Vous plaisantez...";
-	"Allons, ne restez pas la, circulez!";
+	"Allons, ne restez pas là, circulez!";
 	"Il a l'air endormi...";
 	"Il est occupé. Mieux vaut le laisser.";
 #endif

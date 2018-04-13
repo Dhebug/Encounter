@@ -27,11 +27,11 @@ stringpack JENNA
 	"Une femme exceptionnelle...";
 	"J'essaie de comprendre ces commandes";
 	"extra-terrestres. Il me faut du temps.";
-	"Elle est paralysée! Je dois me hater."; // Elle est choquée! Je dois me dépecher."; / "en état de choc" est trop long
-	"Nous devons allumer ces systemes.";
+	"Elle est paralysée! Je dois me hâter."; // Elle est choquée! Je dois me dépêcher."; // "en état de choc" est trop long
+	"Nous devons allumer ces systèmes.";
 	"Une idée?";
 	"Je suis avec toi.";
-	"Blake! Je te reconnais a peine!";
+	"Blake! Je te reconnais à peine!";
 #endif
 #ifdef SPANISH
 	/***************************************/

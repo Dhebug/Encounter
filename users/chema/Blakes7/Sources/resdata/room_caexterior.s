@@ -450,7 +450,7 @@ res_start
 	.asc "Claro",0	;Object's name
 #endif	
 #ifdef FRENCH
-	.asc "Clairiere",0	;Object's name
+	.asc "Clairi","Z"+1,"re",0	; "Clairière"
 #endif	
 res_end
 .)

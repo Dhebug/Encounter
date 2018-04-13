@@ -332,7 +332,7 @@ res_start
 	.asc "Bosque",0
 #endif
 #ifdef FRENCH
-	.asc "Foret",0
+	.asc "For","Z"+3,"t",0 ; "Forêt"
 #endif
 res_end	
 .)

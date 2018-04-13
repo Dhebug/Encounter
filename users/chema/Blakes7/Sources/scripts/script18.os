@@ -74,10 +74,10 @@ stringpack STLOCAL{
 
 #ifdef FRENCH	
 /***************************************/
-"Nous sommes a l'intérieur!";
+"Nous sommes à l'intérieur!";
 "Viens. Cachons-nous ici.";
 "Il y a ici les commandes de ce niveau:";
-"Climatisation, systemes électriques,";
+"Climatisation, systèmes électriques,";
 "éclairage, synchronisation horaire...";
 "Attends ici. Je vais chercher Ravella.";
 #endif

@@ -289,7 +289,7 @@ res_start
 	.asc "Muelle",0	;Object's name
 #endif	
 #ifdef FRENCH
-	.asc "Quai",0 ; [laurentd75]: NB: "bay" = "quai", et non pas "baie"...
+	.asc "Soute",0 ; [laurentd75]: "soute" semble mieux que "baie" ou "quai" ou "renfoncement" ici...
 #endif
 res_end	
 .)
@@ -315,7 +315,7 @@ res_start
 	.asc "Puente",0	;Object's name
 #endif	
 #ifdef FRENCH
-	.asc "Pont",0
+	.asc "Passerelle",0 ; "Pont" ou "Passerelle" (mieux, comme dans Star Trek en français...)
 #endif
 res_end	
 .)

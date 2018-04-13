@@ -19,7 +19,7 @@ stringpack CALLY
 #endif
 #ifdef FRENCH
 	/***************************************/
-	"Une femme-guerriere féroce.";
+	"Une femme-guerrière féroce.";
 
 #endif
 #ifdef SPANISH

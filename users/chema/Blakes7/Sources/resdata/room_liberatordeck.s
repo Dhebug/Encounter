@@ -716,7 +716,7 @@ res_start
 	.asc "Controles",0	;Object's name
 #endif
 #ifdef FRENCH
-	.asc "Siege",0  ; NB: "Siege de commande" is too long, max length 16 ? (see OBJ_NAME_LEN in object.s)
+	.asc "Si","Z"+1,"ge",0  ; "Siège" - NB: "Siege de commande" is too long, max length 16 ? (see OBJ_NAME_LEN in object.s)
 #endif
 res_end
 .)
@@ -742,7 +742,7 @@ res_start
 	.asc "Controles",0	;Object's name
 #endif
 #ifdef FRENCH
-	.asc "Siege",0 ; NB: "Siege de commande" is too long, object name length 16 char max? (see OBJ_NAME_LEN in object.s)
+	.asc "Si","Z"+1,"ge",0  ; "Siège" - NB: "Siege de commande" is too long, max length 16 ? (see OBJ_NAME_LEN in object.s)
 #endif
 res_end
 .)

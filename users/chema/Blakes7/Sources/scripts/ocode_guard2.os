@@ -21,7 +21,7 @@ stringpack GUARD2
 #endif
 
 #ifdef FRENCH
-	"Toujours aussi menacant...";
+	"Toujours aussi menaçant...";
 	"Mais vous plaisantez ou quoi?";
 	"Oui, camarade?";
 #endif

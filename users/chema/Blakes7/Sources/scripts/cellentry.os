@@ -375,24 +375,24 @@ stringpack STDESC{
 	"Mon nom est Cally. Et je suis d'Auron.";
 	"Ceux de mon peuple sont les Auronar.";
 	"Et donc tu es télépathe...";
-	"Et rapide. Je suis une guerriere.";
+	"Et rapide. Je suis une guerrière.";
 	"Mon nom est Roj Blake.";
 	"Je suis venu secourir un membre de";
 	"la résistance. Son nom est Ravella.";
 	"Ils ont amené quelqu'un récemment.";
-	"Ca pourrait etre elle. Allons vérifier.";
+	"Ca pourrait être elle. Allons vérifier.";
 	
 	//11
 	"Ravella...";
 	"Blake! Tu es venu pour moi?";
-	"Bien sur. Je te devais bien ca.";
+	"Bien sûr. Je te devais bien ça.";
 	"Qui est-ce?";
 	"C'est Cally. Elle m'a aidé.";
 	"Je ne lui fais pas confiance...";
 	// 17
 	"Blake, quelque chose ne va pas...";
 	"Impossible de contacter son esprit...";
-	"Comme si ce n'était pas un etre vivant!";
+	"Comme si ce n'était pas un être vivant!";
 	//20
 	"Blake, tue-la, c'est une espionne!";
 	"Non c'est faux! C'est elle l'espionne!"; // or: "Non ce n'est pas moi! C'est elle!";
@@ -400,16 +400,16 @@ stringpack STDESC{
 	//23
 	"Blake! Que fais-tu?";	
 	"Tu vois? C'est un robot!";
-	"Mais qu'est-ce que c'est que ca?";
+	"Mais qu'est-ce que c'est que ça?";
 	
 	
 	//26
 	"Sois mon invité Blake...";
 	"Cette Auronar a presque ruiné mon plan.";
-	"Mais de toutes facons je te tiens.";
+	"Mais de toute façon, je te tiens."; // NB: "de toute façon" est normalement toujours au singulier
 	"Dommage que mon petit...jouet n'ait pas";
 	"atteint ton vaisseau pour le capturer.";
-	"Tu vas devoir me le livrer toi-meme.";
+	"Tu vas devoir me le livrer toi-même.";
 	
 	"Je ne le ferai pas, Travis.";
 

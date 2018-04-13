@@ -230,23 +230,23 @@ stringpack STLOCAL{
 	"Avon.";
 	"Oui?";
 	"Joli tir.";
-	"Je visais sa tete...";
+	"Je visais sa tête...";
 	"Pourquoi avoir risqué ta vie pour nous?";
 	"Tu pouvais partir avec le Libérateur...";
 	"Mes chances de survie étaient";
 	"seulement de 2,5 sur 3. J'ai vérifié.";
 	"C'est assez bon pourtant il me semble?";
 	"Oui. Je suis aussi surpris que toi...";
-	"Mais moi je ne suis pas surpris...";
+	"Oh, mais moi je ne suis pas surpris...";
 	
 	//11
-	"A sept, on controle ce vaisseau.";
-	"A six, tu veux dire...";
+	"A nous sept, on contrôle ce vaisseau.";
+	"A nous six, tu veux dire...";
 	"Tu oublies Zen...";
-	"Tu ne vas quand meme pas compter cette";
+	"Tu ne vas quand même pas compter cette";
 	"machine comme un membre d'équipage...";
-	"Héhé, qu'as-tu a répondre a ca, Zen?";
-	"Tres diplomate. Fais route vers le";
+	"Héhé, qu'as-tu à répondre à ça, Zen?";
+	"Très diplomate. Fais route vers le";
 	"secteur 5,0,2. Vitesse standard.";  // [laurentd75] "vitesse standard fois 2." is a bit too long and adds nothing to the story...
 	
 	//19
@@ -272,10 +272,10 @@ stringpack STLOCAL{
 	           /***************************************/ // maxcol:56
 	"\A_FWYELLOW BLAKE'S 7: Le jeu Oric";
 	" ";
-	"\A_FWWHITE J'espere que vous avez apprécié ce jeu";
-	"\A_FWWHITE comme j'ai pris plaisir a le créer.";
+	"\A_FWWHITE J'espère que vous avez apprécié ce jeu";
+	"\A_FWWHITE autant que j'ai eu plaisir à le créer."; // ou "comme j'ai pris plaisir à le créer.";
 	" ";
-	"\A_FWWHITE Merci a tous ceux qui m'ont aidé avec";
+	"\A_FWWHITE Merci à tous ceux qui m'ont aidé avec";
 	"\A_FWWHITE leurs suggestions, encouragements et";
 	"\A_FWWHITE retours durant tout le processus.";
 	" ";
@@ -283,14 +283,14 @@ stringpack STLOCAL{
 	"\A_FWWHITE gens formidables de RetroWiki,";
 	"\A_FWWHITE Defence-Force, et AmigaWave.";
 	" ";
-	"\A_FWWHITE Merci a Greymagick, comme toujours,";
+	"\A_FWWHITE Merci à Greymagick, comme toujours,";
 	"\A_FWWHITE pour ses bons conseils et sa patience.";
 	" ";
-	"\A_FWWHITE Merci a jojo073, pour ses incroyables";
+	"\A_FWWHITE Merci à jojo073, pour ses incroyables";
 	"\A_FWWHITE designs graphiques.";
 	" ";
-	"\A_FWWHITE Et merci a la communauté Oric d'etre";
-	"\A_FWWHITE la. Cette fois-ci, je voulais créer";
+	"\A_FWWHITE Et merci à la communauté Oric d'être";
+	"\A_FWWHITE là. Cette fois-ci, je voulais créer";
 	"\A_FWWHITE quelque chose de vraiment spécial...";
 	" ";
 	"\A_FWYELLOW (C)Chema (enguita AT gmail.com) 2017"

@@ -51,9 +51,9 @@ stringpack AVON
 #ifdef FRENCH
 	/**************************************/
 	"Un homme solitaire...";
-	"Il est paralysé! je dois me dépecher."; // "Il est choqué. Je dois me dépecher!"; // "en état de choc" est trop long
+	"Il est paralysé! je dois me dépêcher."; // "Il est choqué. Je dois me dépêcher!"; // "en état de choc" est trop long
 	
-	"Ton attitude de héros devient risquée.";
+	"Ta posture de héros devient risquée."; // "posture" mieux qu' "attitude" ici?
 	
 	"J'en ai assez. Rester avec toi";
 	"requiert un degré de stupidité";
@@ -61,16 +61,16 @@ stringpack AVON
 	
 	"Je n'ai jamais compris pourquoi on";
 	"devrait agir de facon irrationnelle";
-	"juste pour prouver que l'on tient a";
-	"quelqu'un, ni meme d'ailleurs pourquoi";
-	"on devrait avoir a le prouver.";
+	"juste pour prouver que l'on tient à";
+	"quelqu'un, ni même d'ailleurs pourquoi";
+	"on devrait avoir à le prouver.";
 	
 	//11
 	"Tu les manies avec beaucoup d'habileté.";
 	"Ah bon?";
 	"Mais une seule mort suffira.";
 	"Alors tu devrais faire attention.";
-	"Ca serait drole si c'etait la tienne.";
+	"Ca serait drôle si c'était la tienne.";
 	
 	//16
 	"As-tu une meilleure idée?";

@@ -94,12 +94,12 @@ stringpack 254{
 
 #ifdef FRENCH
 	/**************************************/
-	"Ah, le voila...";
-	"Il est la.";
-	"Le vaisseau de la Fédération qui amene";
+	"Ah, le voilà...";
+	"Il est là...";
+	"Le vaisseau de la Fédération qui amène";
 	"de nouveaux prisonniers.";
 	"Des prisonniers?";
-	"De nouvelles Ames pour la Foi, plutot.";
+	"De nouvelles Ames pour la Foi, plutôt.";
 #endif
 
 #ifdef SPANISH

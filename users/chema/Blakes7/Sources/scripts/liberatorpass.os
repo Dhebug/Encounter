@@ -46,11 +46,11 @@ stringpack 200{
 #ifdef FRENCH
 	/***************************************/
 	"Quel étrange intérieur. Impressionnant.";
-	"Pouvons-nous refuser de faire ca?";
+	"Pouvons-nous refuser de faire ça?";
 	"L'alternative est l'exécution sommaire.";
-	"J'ai déja eu des offres bien pires...";
-	"L'exécution pourrait etre séduisante.";
-	"Bon, allons-y.";
+	"J'ai déjà eu des offres bien pires...";
+	"L'exécution pourrait être séduisante.";
+	"Bon, assez parlé, allons-y!";
 #endif
 
 #ifdef SPANISH

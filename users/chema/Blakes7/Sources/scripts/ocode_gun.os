@@ -18,7 +18,7 @@ stringpack GUN{
 #endif
 #ifdef FRENCH	
 	/***************************************/
-	"On dirait un fer a friser, ou bien un";
+	"On dirait un fer à friser, ou bien un";
 	"bloqueur de poulie.";
 #endif
 #ifdef SPANISH

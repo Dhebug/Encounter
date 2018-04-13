@@ -1078,7 +1078,7 @@ res_start
 .asc " ",0
 .asc A_FWCYAN, "Defence Force pr","Z"+2,"sente",0	; "Defence Force présente"
 .asc A_FWMAGENTA+A_FWCYAN*8+128, "La Terre...",0
-.asc A_FWMAGENTA+A_FWCYAN*8+128, "... IIIe siecle du 2nd calendrier...",0
+.asc A_FWMAGENTA+A_FWCYAN*8+128, "... IIIe si","Z"+1,"cle du 2nd calendrier...",0 ; // "... IIIe siècle du 2nd calendrier..."
 
 ; 4
 .asc A_FWMAGENTA+A_FWCYAN*8+128,"Un jeu r","Z"+2,"alis","Z"+2," avec", A_FWYELLOW, "OASIS",0 ; "Un jeu réalisé avec"

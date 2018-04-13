@@ -115,11 +115,11 @@ stringpack STDESC
 
 #ifdef FRENCH
 	"Encore une autre caméra de sécurité...";
-	"Sauve ta planete.";
-	"Nous travaillons tous dans le meme but:";
+	"Sauve ta planète.";
+	"Nous travaillons tous dans le même but:";
 	"rendre la Terre habitable de nouveau.";
 	"Ceci est l'objectif de la Fédération."; // [laurentd75]: "objectif" rather than "plan" here
-	"Enrole-toi dans le Service de Sécurité.";
+	"Enrôle-toi dans le Service de Sécurité.";
 	"Non merci...";
 #endif
 #ifdef SPANISH
@@ -232,7 +232,7 @@ stringpack DIALOG_STRINGS
 	"Are you looking for something specific?";
 	//12
 	"Oh, that doesn't appear on usual maps.";
-	//"You need tech maps, which are ilegal...";
+	//"You need tech maps, which are illegal...";
 	"They are in maintenance areas, not ";
 	"accessible for regular citizens.";
 	"Mmm, I may know somebody who can help.";
@@ -246,29 +246,29 @@ stringpack DIALOG_STRINGS
 
 #ifdef FRENCH
 	/*++++++++++++++++++++++++++++++++++++++*/
-	"Il a l'air disposé a m'aider.";
+	"Il a l'air disposé à m'aider.";
 	"Bonsoir, que puis-je faire pour vous?";
 	
 	//2
-	"Pas de probleme. Bonne journée.";
+	"Pas de problème. Bonne journée.";
 	"Au fait, savez-vous s'ils ont enfin";
-	"réapprovisionné la machine a café";
+	"réapprovisionné la machine à café";
 	"qui se trouve dans le couloir?";
 	"Non, désolé.";
-	"Tant pis. Mon service finit bientot,";
+	"Tant pis. Mon service finit bientôt,";
 	"mais j'aurais bien aimé avoir un café.";
 	//9
 	"Désolé, mais je n'en ai plus.";
 	"J'en recevrai d'autres demain.";
 	"Cherchez-vous une chose en particulier?";
 	//12
-	"Oh, ca n'apparait pas sur les plans.";
-	//"You need tech maps, which are ilegal...";
+	"Oh, ça n'apparaît pas sur les plans...";
+	//"You need tech maps, which are illegal...";
 	"Elles se trouvent dans les zones";
 	"de service, interdites au public.";  // "de service" ou "d'entretien"...
 	"Mais je connais quelqu'un qui saurait.";
 	//"if you have something to trade.";
-	"Demandez en porte 4 dans le couloir.";
+	"Demandez en porte 4 dans le couloir...";
 	//17
 	"Ok, merci beaucoup.";
 	//18

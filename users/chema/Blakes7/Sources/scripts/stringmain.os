@@ -29,13 +29,13 @@ stringpack 0{
 #endif
 #ifdef FRENCH
 	"Ca n'a pas l'air de fonctionner.";
-	"Je ne peux pas faire ca.";
+	"Je ne peux pas faire ça.";
 	"Je ne vois pas ce que vous voulez.";
 	"Quoi?!";
 	"Je ne vous suis pas.";
 
 	"Regarder quoi?";
-	"Ok, je regarde... Oh, c'est tres joli!";
+	"Ok, je regarde... Oh, c'est très joli!";
 	"Que voulez-vous que je regarde?";
 	"Je ne vois rien d'intéressant.";
 

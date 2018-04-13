@@ -15,7 +15,7 @@ stringpack PLIERS{
 	"Cannot use the pliers here.";
 #endif
 #ifdef FRENCH	
-	"Des pinces magnétiques a long bec.";
+	"Des pinces magnétiques à long bec.";
 	"Je ne peux pas utiliser les pinces ici.";
 #endif
 #ifdef SPANISH

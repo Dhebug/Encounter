@@ -437,7 +437,7 @@ res_start
 	.asc "Cadena",0	;Object's name
 #endif		
 #ifdef FRENCH
-	.asc "Chaine",0	;Object's name
+	.asc "Cha","Z"+4,"ne",0	; "Chaîne"
 #endif
 res_end	
 .)

@@ -63,7 +63,7 @@ dialog DIALOG_1: script DIALOG_SCRIPT stringpack DIALOG_OPTIONS{
 #endif
 
 #ifdef FRENCH
-	option "Je voudrais recuperer mes vetements." active -> pickup;
+	option "Je voudrais récupérer mes vêtements." active -> pickup;
 	// [laurentd75]: mismatch between ES and EN sentences, choosing the ES version:
 	option "Non. Pouvez-vous faire quelque chose?" inactive -> nocode;
 	option "Oui, le code est SP-1999-CH." inactive -> code;
@@ -162,15 +162,15 @@ stringpack STDESC{
 	/***************************************/
 	"Il y a un étrange robot au comptoir.";
 	" ";
-	" Bienvenue a la Teinturerie Fresh.";
+	" Bienvenue à la Teinturerie Fresh.";
 	" Que puis-je faire pour vous monsieur?";
 	" A votre service. Bonne journée.";
-	" Bien sur, avez-vous le code?";
+	" Bien sûr, avez-vous le code?";
 	" Non, désolé.";
 	" Vérifiez vos messages personnels,";
-	" vous devriez avoir recu le code.";
+	" vous devriez avoir reçu le code.";
 	" Merci, voici votre uniforme monsieur."; //
-	"Je n'ai rien a lui demander.";
+	"Je n'ai rien à lui demander.";
 #endif
 
 #ifdef SPANISH
