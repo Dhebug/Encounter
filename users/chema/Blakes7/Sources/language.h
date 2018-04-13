@@ -13,4 +13,6 @@
  
 /* Target Language for game localization:    */  
 #define FRENCH 
+//#define SPANISH
+//#define ENGLISH
  
