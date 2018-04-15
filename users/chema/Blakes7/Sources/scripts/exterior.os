@@ -250,7 +250,7 @@ stringpack 201{
 	"Vous avez été l'appât idéal.";
 	"Travis, tuez tout le monde là-dedans."; // "Travis, éliminez-les tous.";
 
-	"A vos ordres, Commandeur Suprême!";
+	"A vos ordres, Commandant Suprême!";
 	"Et Blake? Dois-je aussi l'éliminer?";
 	
 	"Non, Travis.";

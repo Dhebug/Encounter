@@ -134,8 +134,8 @@ stringpack 250{
 #ifdef FRENCH
 	/**************************************/
 	"Mais avant de commencer, laissez-moi";
-	"vous présenter les mécanismes de base";
-	"de ce jeu.";
+	"vous expliquer les mécanismes de base";
+	"utilisés dans ce jeu.";
 	"Pour sauter cette intro, pressez ESC.";
 	"Le jeu utilise l'interface pointer-";
 	"cliquer classique des jeux d'aventure,";
@@ -169,13 +169,13 @@ stringpack 250{
 	//23
 	"Facile, n'est-ce pas? Vous pouvez";
 	"redéfinir les touches de déplacement";
-	"et de commande à votre guise.";
+	"et de sélection à votre guise.";
 	
 	"A vous de voir ce qui vous convient...";
 	
-	"Allons voir Ravella maintenant. Je dois";
-	"lui parler de ma famille, j'ai peur qu'";
-	"il ne leur soit arrivé quelque chose...";
+	"Allons retrouver Ravella. Je dois lui";
+	"parler de ma famille. J'ai peur qu'il";
+	"ne leur soit arrivé quelque chose...";
 #endif
 
 

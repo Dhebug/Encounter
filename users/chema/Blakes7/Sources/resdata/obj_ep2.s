@@ -364,7 +364,8 @@ res_start
 	.asc "Arma alien",0
 #endif		
 #ifdef FRENCH
-	.asc "Arme d'E.T.",0	; "arme d'extra-terrestre"
+	;.asc "Arme d'E.T.",0	; "arme d'extra-terrestre"
+	.asc "Arme",0 ; [laurentd75]: shortened "Arme d'E.T." to "Arme" to avoid potential graphical bugs when used with "Jenna Stannis"
 #endif
 res_end
 .)
@@ -470,6 +471,7 @@ res_start
 #ifdef FRENCH
 	; [laurentd75]: ATTENTION: "Utilise Clé anglaise avec Jenna Stannis" fait bugger l'affichage (trop long...)
 	; Malheureusement, il n'existe aucun synonyme plus court ("clé à molette" est plus long..)
+	; => on laisse comme ça, l'effet du bug potentiel se limitant à une perturbation mineure de l'affichage
 	.asc "Cl","Z"+2," anglaise",0	; "Clé anglaise" 
 #endif				
 res_end

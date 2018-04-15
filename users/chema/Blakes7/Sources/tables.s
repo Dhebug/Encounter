@@ -1346,16 +1346,10 @@ verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 14
 ;; verb_posX: liste des coordonnées X de départ de la première lettre des 9 verbes (les 3 colonnes de verbes doivent être alignées)
 ;; verb_posX2: liste des coordonnées X suivant la fin de la dernière lettre de chaque verbe
 ;; verb_posY: liste des coordonnées Y de départ de la première lettre des 9 verbes (identique pour chaque groupe de 3 verbes)
-;; -- [laurentd75] -- Try #1 -- BAD
-;;verb_pos_X 	.byt 1*6,  9*6, 18*6, 1*6,  9*6, 18*6, 1*6,  9*6, 18*6
-;;verb_pos_X2 	.byt 6*6, 15*6, 25*6, 6*6, 16*6, 24*6, 6*6, 16*6, 22*6
-; -- [laurentd75] -- Try #2 -- Better, but "Utilise" verb in last column interferes with inventory
-;verb_pos_X 	.byt 1*6,  7*6, 15*6, 1*6,  7*6, 15*6, 1*6,  7*6, 15*6
-;verb_pos_X2 	.byt 6*6, 13*6, 22*6, 6*6, 14*6, 21*6, 6*6, 14*6, 18*6
-;verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1
-; -- [laurentd75] -- Try #3 -- start at position "0*6" to gain some space => OK !!
+; -- [laurentd75]: start at position "0*6" (instead of "1*6") to gain some space => OK !!
 verb_pos_X 	.byt 0*6,  6*6, 14*6, 0*6,  6*6, 14*6, 0*6,  6*6, 14*6
-verb_pos_X2 	.byt 5*6, 12*6, 21*6, 5*6, 13*6, 20*6, 5*6, 13*6, 17*6
+;verb_pos_X2 	.byt 5*6, 12*6, 21*6, 5*6, 13*6, 20*6, 5*6, 13*6, 17*6
+verb_pos_X2 	.byt 5*6, 12*6, 20*6, 5*6, 13*6, 20*6, 5*6, 13*6, 18*6 ; [laurentd75]: maxpos 20, otherwise bugs
 verb_pos_Y 	.byt 144+1, 144+1, 144+1, 144+16+1, 144+16+1, 144+16+1, 144+32+1, 144+32+1, 144+32+1 
 #endif
 

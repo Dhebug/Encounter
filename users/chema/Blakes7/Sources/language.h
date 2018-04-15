@@ -7,12 +7,8 @@
 ;;            enguita@gmail.com                  
 ;; ------------------------------------------    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/  
- 
-/* Note: this file is generated dynamically  */  
-/*       from the osdk_build.bat script      */  
- 
-/* Target Language for game localization:    */  
-#define FRENCH 
+  
 //#define SPANISH
 //#define ENGLISH
+#define FRENCH 
  

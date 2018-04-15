@@ -119,7 +119,7 @@ stringpack 200{
 	
 	//8
 	" SEC CAM H-233 ";
-	"\A_FWWHITE+A_FWGREEN*8+$c0 Le plan fonctionne, Commandeur Suprême.";
+	"\A_FWWHITE+A_FWGREEN*8+$c0 Le plan fonctionne, Commandant Suprême.";
 	//10
 	"\A_FWMAGENTA Vous voulez dire MON plan, Travis.";
 	"\A_FWMAGENTA Ils n'ont pas pu s'empêcher d'essayer";

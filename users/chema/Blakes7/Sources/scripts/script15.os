@@ -343,7 +343,7 @@ stringpack ST_INTRO{
 "Je suis heureux que vous l'approuviez.";
 
 //53
-"Allons Travis, ne soyez pas naif. Vous"; // [laurentd75] : "naïf" -- manque le ï  (i tréma)
+"Allons Travis, ne soyez pas naïf. Vous";
 "savez bien que dans une position comme";
 "la mienne, on n'approuve rien tant que";
 "ce n'est pas un succès éclatant.";
