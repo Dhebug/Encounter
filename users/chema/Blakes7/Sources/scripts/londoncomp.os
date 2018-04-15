@@ -215,7 +215,7 @@ stringpack ST_MAIN{
 	
 	// 6
 	/***************************************/
-	" Blake, ici le commandant Leylan."; // Commandant ici plutôt que Commandeur, que je "réserve" à Servalan
+	" Blake, ici le commandant Leylan.";
 	" Nous avons arrêté votre petit gang.";
 	" Votre plan est un échec. Rendez-vous,";
 	" et vous serez traités avec indulgence.";

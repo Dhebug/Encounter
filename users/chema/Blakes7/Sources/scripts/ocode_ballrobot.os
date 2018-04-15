@@ -33,9 +33,9 @@ stringpack BALLROBOT{
 	"ils sont perdus à jamais!";
 	"Ca ne fonctionnera pas.";
 	"Je ne vous comprends pas!";
-	"Ouille!"; // [laurentd75] we don't have the "ï" character for Aïe!";
+	"Aïe!";
 	"Vous essayez de me tuer, ou quoi?";
-	"Laissez-moi faire, plutôt!"; // [laurentd75]: Blake means "let me shoot", not "let me kill myself" :-)
+	"Laissez-moi faire, plutôt!"; // [laurentd75]: Blake means "let me shoot" here, not "let me kill myself" :-)
 	"Je n'ai pas de projectile.";
 #endif
 #ifdef SPANISH
