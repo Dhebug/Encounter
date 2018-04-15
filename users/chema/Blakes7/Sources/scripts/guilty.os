@@ -107,7 +107,7 @@ stringpack 200{
 #ifdef FRENCH
 	/*++++++++++++++++++++++++++++++++++++++ */
 	"De par l'autorité de la Fédération";
-	"Terrienne, nous déclarons l'accusé";
+	"Terranne, nous déclarons l'accusé";
 	"coupable des charges suivantes:";
 	"Rapt, agression sur un mineur, ";
 	"tentative de corruption de mineur, ";
