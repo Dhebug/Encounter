@@ -981,7 +981,7 @@ stringpack 210
 	"\A_FWGREEN les communications entre systèmes.";
 	
 	"\A_FWGREEN La planète Auron a finalement décidé";
-	"\A_FWGREEN de rejoindre la Fédération Terrienne";
+	"\A_FWGREEN de rejoindre la Fédération Terranne";
 	"\A_FWGREEN contre l'avis de son gouvernement"; 
 	"\A_FWGREEN précédent. Félicitations!";
 #endif
