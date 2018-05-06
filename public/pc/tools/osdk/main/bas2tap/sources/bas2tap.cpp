@@ -131,7 +131,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   std::vector<std::string>::const_iterator lineIt=textData.begin();
   while (lineIt!=textData.end())
   {
-    const std::string& currentLine=*lineIt;
+    const std::string& currentLine=StringTrim(*lineIt);
 
     ++currentLineNumber;
 
