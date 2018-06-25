@@ -132,7 +132,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
   while (lineIt!=textData.end())
   {
     const std::string& currentLine=StringTrim(*lineIt);
-
+    ++lineIt;
     ++currentLineNumber;
 
     if (!currentLine.empty())
@@ -157,17 +157,31 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
       }
       else
       {
-        // Standard line
-        buf[i++]=0;
-        buf[i++]=0;
-
         int number=get_value(ligne,-1);
         if (number<0)
         {
+          char car = *ligne++;
+          if (car != 0)
+          {
+            char car2 = *ligne++;
+            if ((car == '\'') || (car == ';') || ( (car == '/') && (car2 == '/'))  )
+            {
+              // We accept the usual C, Assembler and BASIC comments are actual comments that do not count as normal lines
+              // Technically we could have used a decent pre-processor, or even a full file filter, but I'm aiming at "more bangs for the bucks" approach.
+              // If necessary we can refactor later
+              continue;
+            }
+          }
+
           // Mike: Need to add better diagnostic here
           ShowError("Missing line number in file %s line %d",currentFile.c_str(),currentLineNumber);
           break;
         }
+
+        // Standard line
+        buf[i++] = 0;
+        buf[i++] = 0;
+
         buf[i++]=number&0xFF;
         buf[i++]=number>>8;
 
@@ -223,7 +237,6 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
         buf[i++]=0;
       }
     }
-    ++lineIt;
   }
   buf[i++]=0;
   buf[i++]=0;
