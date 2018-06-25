@@ -1,4 +1,4 @@
-/*
+ /*
 
 Change history for the Bas2Tap
 
@@ -14,9 +14,12 @@ Change history for the Bas2Tap
 1.1 - 2018/04/07
 - Added filtering of strings before parsing, to remove superfluous spaces, tabs and other carriage returns before starting the syntax conversion pass
 
+1.2 - 2018/06/25
+- Support for pure comments without line numbers (accepts lines starting by ' or ; or //)
+
 */
 
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	1
+#define TOOL_VERSION_MINOR	2
 
