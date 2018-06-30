@@ -111,7 +111,7 @@ int search_keyword(const char *str)
 
 
 
-void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useColor)
+void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useColor,bool optimize)
 {
   unsigned char buf[48192];
   unsigned int end, lastptr, adr;
@@ -127,7 +127,7 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
 
   std::string currentFile=sourceFile;
   int currentLineNumber=0;
-  int i=0;
+  unsigned char* bufPtr = buf;
   std::vector<std::string>::const_iterator lineIt=textData.begin();
   while (lineIt!=textData.end())
   {
@@ -179,11 +179,11 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
         }
 
         // Standard line
-        buf[i++] = 0;
-        buf[i++] = 0;
+        *bufPtr++ = 0;
+        *bufPtr++ = 0;
 
-        buf[i++]=number&0xFF;
-        buf[i++]=number>>8;
+        *bufPtr++ =number&0xFF;
+        *bufPtr++ =number>>8;
 
         ptr=0;
         rem=0;
@@ -196,25 +196,29 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
         {
           if (rem)
           {
-            if (color)
+            char value = ligne[ptr++];
+            if (!optimize)
             {
-              color=false;
-              buf[i++]=27;	// ESCAPE
-              buf[i++]='B';	// GREEN labels
+              if (color)
+              {
+                color=false;
+                *bufPtr++ =27;	// ESCAPE
+                *bufPtr++ ='B';	// GREEN labels
+              }
+              *bufPtr++ =value;
             }
-            buf[i++]=ligne[ptr++];
           }
           else
           if (string)
           {
             if (ligne[ptr]=='"') string=0;
-            buf[i++]=ligne[ptr++];
+            *bufPtr++ =ligne[ptr++];
           }
           else
           if (data)
           {
             if (ligne[ptr]==':') data=0;
-            buf[i++]=ligne[ptr++];
+            *bufPtr++ =ligne[ptr++];
           }
           else
           {
@@ -225,27 +229,28 @@ void Bas2Tap(const char *sourceFile,const char *destFile,bool autoRun,bool useCo
             if (ligne[ptr]=='"') string=1;
             if (keyw>=0)
             {
-              buf[i++]=keyw+128;
+              *bufPtr++ =keyw+128;
               ptr+=strlen(keywords[keyw]);
             }
             else
             {
-              buf[i++]=ligne[ptr++];
+              *bufPtr++ =ligne[ptr++];
             }
           }
         }
-        buf[i++]=0;
+        *bufPtr++ = 0;
       }
     }
   }
-  buf[i++]=0;
-  buf[i++]=0;
+  *bufPtr++ = 0;
+  *bufPtr++ = 0;
 
   //following line modified by Wilfrid AVRILLON (Waskol) 06/20/2009
   //It should follow this rule of computation : End_Address=Start_Address+File_Size-1
   //Let's assume a 1 byte program, it starts at address #501 and ends at address #501 (Address=Address+1-1) !
   //It was a blocking issue for various utilities (tap2wav for instance)
   //end=0x501+i-1;	        //end=0x501+i;
+  int i = bufPtr - buf;
   end=0x501+i;
 
   if (autoRun)	head[7]=0x80;	// Autorun for basic :)
@@ -346,7 +351,8 @@ int main(int argc, char **argv)
     "  -b2t[0|1] for converting to tape format with autorun (1) or not (0)\r\n"
     "  -t2b for converting from tape format text\r\n"
     "  -color[0|1] for enabling colored comments"
-	"\r\n"
+    "  -optimize[0|1] for allowing for optimizations (disabling comments, etc...)"
+    "\r\n"
     "Example:\r\n"
     "  {ApplicationName} -b2t1 final.txt osdk.tap\r\n"
     "  {ApplicationName} -t2b osdk.tap program.txt\r\n"
@@ -355,6 +361,7 @@ int main(int argc, char **argv)
   bool basicToTape=true;
   bool autoRun=true;
   bool useColor=false;
+  bool optimize = false;
 
   ArgumentParser argumentParser(argc,argv);
 
@@ -378,6 +385,12 @@ int main(int argc, char **argv)
       // Handling of color codes
       useColor=argumentParser.GetBooleanValue(false);
     }
+    else
+    if (argumentParser.IsSwitch("-optimize"))
+    {
+      // Handling of optimization (disables color if enabled)
+      optimize =argumentParser.GetBooleanValue(false);
+    }
   }
 
   if (argumentParser.GetParameterCount()!=NB_ARG)
@@ -391,7 +404,7 @@ int main(int argc, char **argv)
 
   if (basicToTape)
   {
-    Bas2Tap(nameSrc.c_str(),nameDst.c_str(),autoRun,useColor);
+    Bas2Tap(nameSrc.c_str(),nameDst.c_str(),autoRun,useColor, optimize);
   }
   else
   {
