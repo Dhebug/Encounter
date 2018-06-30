@@ -17,9 +17,12 @@ Change history for the Bas2Tap
 1.2 - 2018/06/25
 - Support for pure comments without line numbers (accepts lines starting by ' or ; or //)
 
+1.3 - 2018/06/30
+- Added a -optimize option (used to disable things like comments)
+
 */
 
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	2
+#define TOOL_VERSION_MINOR	3
 
