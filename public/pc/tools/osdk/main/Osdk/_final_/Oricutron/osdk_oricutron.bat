@@ -39,8 +39,9 @@ COPY build\symbols %OSDK%\Oricutron\symbols >NUL
 :: Execute the emulator in fullscreen default mode
 ::
 :RunDefault
-CD %OSDK%\Oricutron
+PUSHD %OSDK%\Oricutron
 START %OSDKORICUTRON%
+POPD
 GOTO End
 
 
