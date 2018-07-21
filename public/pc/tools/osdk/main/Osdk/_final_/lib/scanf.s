@@ -5,7 +5,7 @@
 ; it seems difficult to avoid adding a buffer to the unbuffered Oric input,
 ; this consumes a lot of space, but how to do it differently ?
 
-scanbuf	reserve 256
+scanbuf	.dsb 256
 
 _scanf 
 	lda #<scanbuf

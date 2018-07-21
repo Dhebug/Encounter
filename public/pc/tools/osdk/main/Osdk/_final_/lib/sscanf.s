@@ -1,6 +1,9 @@
 ;
 ; sscanf(char buf[],const char *format,...)
 ;
+numberscan .word 0
+signscan   .byt 0
+fieldcount .byt 0
 
 _sscanf 
 	ldy #0
@@ -49,8 +52,6 @@ matchwhitespace
 	beq endscan
 	iny
 	jmp scanform
-
-fieldcount db 0
 
 scanfloat
 	iny
@@ -163,8 +164,6 @@ endscanstr
 	sta (op2),y
 	jmp incfieldcount
 
-numberscan dw 0
-signscan   db 0
 scanint
 	iny
 	sty saveptrform
