@@ -1,4 +1,4 @@
-/* macros for the 16 bit code generator (version 1.29) F.Frances */
+/* macros v1.30 for the 6502 code generator, F.Frances */
 
 #define DB(n)\
 	.byt n ;\
@@ -619,7 +619,7 @@ skip ;\
 	ldy #y2 ;\
 	adc ptr2,y ;\
 	sta tmp3 ;\
-	lda #y1+1 ;\
+	ldy #y1+1 ;\
 	lda ptr1,y ;\
 	ldy #y2+1 ;\
 	adc ptr2,y ;\
@@ -987,7 +987,7 @@ skip ;\
 	ldy #y2 ;\
 	sbc ptr2,y ;\
 	sta tmp3 ;\
-	lda #y1+1 ;\
+	ldy #y1+1 ;\
 	lda ptr1,y ;\
 	ldy #y2+1 ;\
 	sbc ptr2,y ;\
@@ -1119,7 +1119,7 @@ skip ;\
 	ldy #y2 ;\
 	and ptr2,y ;\
 	sta tmp3 ;\
-	lda #y1+1 ;\
+	ldy #y1+1 ;\
 	lda ptr1,y ;\
 	ldy #y2+1 ;\
 	and ptr2,y ;\
@@ -1247,7 +1247,7 @@ skip ;\
 	ldy #y2 ;\
 	eor ptr2,y ;\
 	sta tmp3 ;\
-	lda #y1+1 ;\
+	ldy #y1+1 ;\
 	lda ptr1,y ;\
 	ldy #y2+1 ;\
 	eor ptr2,y ;\
@@ -1375,7 +1375,7 @@ skip ;\
 	ldy #y2 ;\
 	ora ptr2,y ;\
 	sta tmp3 ;\
-	lda #y1+1 ;\
+	ldy #y1+1 ;\
 	lda ptr1,y ;\
 	ldy #y2+1 ;\
 	ora ptr2,y ;\
@@ -4655,22 +4655,28 @@ skip ;\
 	jsr adr ;\
 
 #define CALLV_D(tmp,size)\
+    .( ;\
 	lda tmp ;\
-	sta *+11 ;\
+	sta call+1;\
 	lda tmp+1 ;\
-	sta *+7 ;\
+	sta call+2 ;\
 	ldy #size ;\
+call ;\
 	jsr 0000 ;\
+    .) ;\
 
 #define CALLV_I(ptr,y2,size)\
+    .( ;\
 	ldy #y2 ;\
 	lda ptr,y ;\
-	sta *+12 ;\
+	sta call+1 ;\
 	iny ;\
 	lda ptr,y ;\
-	sta *+7 ;\
+	sta call+2 ;\
 	ldy #size ;\
+call ;\
 	jsr 0000 ;\
+    .) ;\
 
 #define CALLW_CD(adr,size,tmp)\
 	ldy #size ;\
@@ -4710,20 +4716,26 @@ skip ;\
 	jmp label ;\
 
 #define JUMP_D(tmp)\
+    .( ;\
 	lda tmp ;\
-	sta *+9 ;\
+	sta jump+1 ;\
 	lda tmp+1 ;\
-	sta *+5 ;\
+	sta jump+2 ;\
+jump ;\
 	jmp 0000 ;\
+    .) ;\
 
 #define JUMP_I(ptr1,y1)\
+    .( ;\
 	ldy #y1 ;\
 	lda ptr1,y ;\
-	sta *+10 ;\
+	sta jump+1 ;\
 	iny ;\
 	lda ptr1,y ;\
-	sta *+5 ;\
+	sta jump+2 ;\
+jump ;\
 	jmp 0000 ;\
+    .) ;\
 
 #define FLOAD1_C(tmp)\
 	lda #<(tmp) ;\
