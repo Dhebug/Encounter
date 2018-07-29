@@ -187,12 +187,44 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
   const char *ptr_line=(const char *)ptr_buffer_void;
   const char *ptr_read=ptr_line;
 
+#if 0
+  //
+  // Check the BOM (Byte Order Mark) in case we got ourself a UTF8 file
+  // https://en.wikipedia.org/wiki/Byte_order_mark
+  //
+  // 0xEF 0xBB 0xBF  -> UTF-8 
+  // 0xFF 0xFE       -> UTF-16 (Little Endian)
+  // 0xFE 0xFF       -> UTF-16 (Big Endian)
+  if (file_size > 1)
+  {
+    const unsigned char* ptr_bom((const unsigned char*)ptr_read);
+    switch (*ptr_bom)
+    {
+    case 0xEF:  // UTF-8 Check      
+      if ( (file_size<3) || (ptr_bom[1]!=0xBB) || (ptr_bom[2] != 0xBF) )
+      {
+        // Not a valid UTF8 text file
+        return false;
+      }
+      ptr_line += 3;
+      ptr_read += 3;
+      break;
+
+    case 0xFF:  // UTF-16 LE Check
+    case 0xFE:  // UTF-16 BE Check      
+      return false;  // We do not yet support UTF-16 for text files (UTF16 is an horrible format anyway).
+    }
+
+  }
+#endif
+
+
   bool flag_new_line=true;
 
   int line_count=0;
   int longest_line=0;
 
-  while (1)
+  while (true)
   {
     char car=*ptr_read++;
     switch (car)
@@ -239,58 +271,8 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
       flag_new_line=false;
       break;
     }
-
-    /*
-    switch (car)
-    {
-    case 0:
-    case 0x0D:
-    {
-    //
-    // Find a end of line.
-    // Patch it with a "0"
-    // and insert the line in the container
-    //
-    int size_line=ptr_read-ptr_line-1;
-    std::string	new_line(ptr_line,size_line);
-    cTextData.push_back(new_line);
-
-    line_count++;
-
-    if (size_line>longest_line)
-    {
-    longest_line=size_line;
-    }
-
-    if (!car)
-    {
-    //
-    // Finished parsing
-    //
-    free(ptr_buffer_void);
-    return true;
-    }
-    ptr_line=ptr_read;
-    flag_new_line=true;
-    }
-    break;
-
-    case 0x0A:
-    if (flag_new_line)
-    {
-    //
-    // Skip leading 0x0A
-    //
-    ptr_line++;
-    }
-    break;
-
-    default:
-    flag_new_line=false;
-    break;
-    }
-    */
   }
+  return true;
 }
 
 bool IsUpToDate(const char* sourceFile,const char* targetFile)
@@ -347,6 +329,25 @@ std::string StringTrim(const std::string& cInputString,const std::string& cFilte
   // Returns an empty string: This case means that basically the input string contains ONLY characters that needed to be filtered out
   return "";
 }
+
+
+std::string StringSplit(std::string& inputString, const std::string& filteredOutCharacterList)
+{
+  std::string leftSplit;
+  size_t startPos=inputString.find_first_of(filteredOutCharacterList);
+  if (startPos!=std::string::npos)
+  {
+    leftSplit=inputString.substr(0,startPos);
+    inputString=inputString.substr(startPos+1);
+  }
+  else
+  {
+    std::swap(inputString,leftSplit);
+  }
+  inputString=StringTrim(inputString, filteredOutCharacterList);
+  return leftSplit;
+}
+
 
 std::string StringMakeLabel(const std::string& sourceString)
 {

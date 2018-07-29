@@ -204,7 +204,8 @@ extern unsigned char gLZ77_XorMask;
 // Preprocessing and filtering
 //
 int StringReplace(std::string& cMainString,const std::string& cSearchedString,const std::string& cReplaceString);
-std::string StringTrim(const std::string& cInputString,const std::string& cFilteredOutCharacterList=" \t\f\v\n\r");
+std::string StringTrim(const std::string& inputString,const std::string& filteredOutCharacterList=" \t\f\v\n\r");      ///< Returns a filtered out version of the input string not starting or ending with any of the filter list characters
+std::string StringSplit(std::string& inputString,const std::string& filteredOutCharacterList =" \t\f\v\n\r");          ///< Search for the first character present in the filter list, extract this part from the input string and returns it (kind of like strtok)
 std::string StringFormat(const char* pFormatString,...);
 std::string StringMakeLabel(const std::string& sourceString);
 
