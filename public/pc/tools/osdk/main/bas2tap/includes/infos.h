@@ -20,9 +20,16 @@ Change history for the Bas2Tap
 1.3 - 2018/06/30
 - Added a -optimize option (used to disable things like comments)
 
+2.0 - 2018/07/25
+- Added support for labels and auto-numbering (use § as a keyword to expand to the current line number)
+- Added support for escape sequences to directly integrate carriage return or attribute changes inside strings without having to use CHR$ (use the character ~ as the ESCape prefix)
+- Added a basic support for #defines 
+- The -optimize option now also filters out as much whitespace as possible
+
+
 */
 
 
-#define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	3
+#define TOOL_VERSION_MAJOR	2
+#define TOOL_VERSION_MINOR	0
 
