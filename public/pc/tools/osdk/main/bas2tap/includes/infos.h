@@ -26,10 +26,14 @@ Change history for the Bas2Tap
 - Added a basic support for #defines 
 - The -optimize option now also filters out as much whitespace as possible
 
+2.1 - 2018/07/25
+- The DATA instruction should not be usable with defines
+- Correctly filtered out comments at the end of a #define...
 
 */
 
 
 #define TOOL_VERSION_MAJOR	2
-#define TOOL_VERSION_MINOR	0
+#define TOOL_VERSION_MINOR	1
+
 
