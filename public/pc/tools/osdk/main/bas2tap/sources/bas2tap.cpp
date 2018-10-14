@@ -473,8 +473,8 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
               //"#define DEFINE_NAME REPLACEMENT_VALUE"
               ligne += 7;
               std::string line(StringTrim(ligne));
-              std::string defineName  = StringTrim(StringSplit(line, ": \t"));
-              std::string defineValue = StringTrim(line);
+              std::string defineName  = StringTrim(StringSplit(line, " \t"));
+              std::string defineValue = StringTrim(StringSplit(line, "' \t"));
 
               const char* ptrDefineName = defineName.c_str();
               std::string potentialUsableName = GetPotentialSymbolName(ptrDefineName);
@@ -750,9 +750,25 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
             else
             if (isData)
             {
+              // Data is a very special system where nothing is tokenized, so you can have FOR or THEN, they will be interpreted as normal strings
               if (car == ':')
               {
                 isData = false;
+              }
+              else
+              if (car == '"')
+              {
+                isQuotedString = true;
+              }
+              else
+              {
+                auto previousPtr = bufPtr;
+                ProcessPossibleLineNumber(bufPtr, ligne, false, optimize);
+                ProcessOptionalWhiteSpace(bufPtr, ligne, optimize);
+                if (previousPtr != bufPtr)
+                {
+                  continue;
+                }
               }
               *bufPtr++ = *ligne++;
             }
@@ -836,6 +852,7 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
                      || (keyw == Token_SymbolPlus)
                      || (keyw == Token_SymbolDivide)
                      || (keyw == Token_SymbolPlus)
+                     || (keyw == Token_TO) 
                      || (keyw == Token_THEN) 
                      || (keyw == Token_ELSE)))
                 {
