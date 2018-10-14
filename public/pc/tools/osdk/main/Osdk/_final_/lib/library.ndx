@@ -241,5 +241,7 @@
 	_OsdkTableMod6
 -overlay.s
 	_is_overlay_enabled
-
+-sedoric.s
+    _sedoric
+    
 
