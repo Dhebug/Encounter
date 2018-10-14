@@ -17,6 +17,16 @@
 
 		<h1>Version history</h1>
 
+<p id=dateentry>Version 1.12 - July 29th 2018</p>
+	<ul>
+                <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 2.0, with support for labels, defines, escape codes and binary optimization</li>
+                <li>Updated macros for the C compiler from version 1.29 to 1.30 (fixes in the ADDW_IID, SUBW_IID, ANDW_IID, XORW_IID and ORW_IID which used the wrong register to access the source pointer).</li>
+		<li>Fixed the BomberZ sample program to use the new Bas2Tap syntax</li>
+                <li>Fixed the library functions 'scanf' and 'sscanf' (For some reason these files had not been converted to use the XA syntax when we switched from FRASM)</li>
+                <li>Upgraded the version of Sedoric 3 used by Tap2DSK with the patch that improves the handling of the "insert master disk" prompt</li>
+                <li>Modified the Oricutron batch file to use PUSHD/POPD instead of CD, this makes it possible to start the emulator even when the project is on another disk drive location</li>
+	</ul>
+
 <p id=dateentry>Version 1.11 - March 17th 2018</p>
 	<ul>
                 <li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 1.2 (fixed issues with gap2 and crc values)</li>
@@ -45,7 +55,7 @@
 		<li>The build script is now correctly setting up XA: If you use 65816 or 65c02 instructions they will be refused with an error message</li>
 		<li>Upgraded <A href="doc_linker.htm">Link65</A> to the version 0.64 (fixed a bunch of problems with include files and external symbols)</li>
 		<li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 0.19 (Better error handling).</li>
-        <li>Improved the FloppyBuilder sample program with a new API file to make it easier to use</li>
+                <li>Improved the FloppyBuilder sample program with a new API file to make it easier to use</li>
 	</ul>
 
 <p id=dateentry>Version 1.7 - January 7th 2016</p>
@@ -60,7 +70,7 @@
 	<ul>
 		<li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to the version 0.22 (Fixed the -o0/-o1 documentation error, and made the -f5 charmap mode actually work)</li>
 		<li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 0.17 (data can now be extracted from an existing DSK file, parser and macro expansion improvements).</li>
-        <li>Upgraded <A href="doc_ym2mym.htm">Ym2Mym</A> to the version 1.6 (music can now be truncated and faded out)</li>
+                <li>Upgraded <A href="doc_ym2mym.htm">Ym2Mym</A> to the version 1.6 (music can now be truncated and faded out)</li>
 		<li>Disabled the verbose messages displayed by old2mfm.</li>
 	</ul>
 
@@ -71,9 +81,9 @@
 
 <p id=dateentry>Version 1.4 - December the 12st 2014</p>
 	<ul>
-        <li>Upgraded <A href="doc_oricutron.htm">Oricutron</A> to the version 1.2</li>
-        <li>Upgraded <A href="doc_ym2mym.htm">Ym2Mym</A> to the version 1.5</li>
-		<li>Updated the documentation.</li>
+                <li>Upgraded <A href="doc_oricutron.htm">Oricutron</A> to the version 1.2</li>
+                <li>Upgraded <A href="doc_ym2mym.htm">Ym2Mym</A> to the version 1.5</li>
+                <li>Updated the documentation.</li>
 	</ul>
 
 <p id=dateentry>Version 1.3 - September the 20st 2014</p>

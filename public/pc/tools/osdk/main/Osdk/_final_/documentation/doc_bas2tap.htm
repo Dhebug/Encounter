@@ -60,11 +60,77 @@ to a tape file format that can later be loaded on the emulator -or played on a r
 	</li>
 </ul>
 
+<p id=chapter>Extended BASIC</p>
+
+<p>By default Bas2Tap will expect the source program to contain line numbers, you can enable the extended BASIC features using one of the commands starting by the # symbol.
+    Here is a list of what you can use:
+</p>
+
+<ul>
+	<li>#labels
+		<p>This command enables the mode labels with automatic generation of line numbers. You can mix and match sections of code with or without line numbers as long as the resulting merge content stays logical with line numbers increasing.
+		</p>
+                <p>Labels have to start on the column zero, and can be followed by one or two colon-separated values, one giving the new reference line number and the other being the increment. The § symbol can be used to get the current line number.
+                </p>
+		<pre>
+                my_label
+                   PRINT"The current line number is ";§
+		anotherLabel:+5
+                   PRINT"Now lines are increasing by multiple of 5"
+                farLabel:32000
+                   PRINT"We are now at line 32000"
+                   GOTO my_label
+		</pre>
+	</li>
+
+	<li>#optimize
+		<p>This parameter removes all white spaces and comments to the exported binary file. This makes debugging much harder, but it also can reduce a typical program size by a few kilobytes easily.
+		</p>
+	</li>
+
+	<li>#define name value
+		<p>Just defines a symbol and gives it a value. Please note that the name can't contain any Oric BASIC instruction name, so things like "CONTAINER" (contains CONT) or "DEEPPIT" (contains PI) are not allowed (but "Container" and "DeepPit" should be fine)
+		</p>
+		<pre>
+                #define Cross 1
+                #define Circle 2
+                   A=Cross:B=Circle
+		</pre>
+	</li>
+
+	<li>~
+		<p>The tilde character must be followed by a letter in either upper or lower case. Upper case ones will be exported as the equivalent of CHR$(27)+letter (so can be used to insert attributes, color changes, etc...) while lower case ones will be exported as one byte control code, such as carriage return and cursor down.
+		</p>
+
+		<pre>
+                PRINT@15,11;"~N~CLOADING"
+                PRINT@15,12;"~N~ALOADING"
+                I$=I$+"a plastic bag~m~j"
+		</pre>
+	</li>
+</ul>
+
 
 <p id=chapter>History</p>
 
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
+
+<p id=dateentry>Version 2.0</p>
+- Added support for labels and auto-numbering (use § as a keyword to expand to the current line number)<br>
+- Added support for escape sequences to directly integrate carriage return or attribute changes inside strings without having to use CHR$ (use the character ~ as the ESCape prefix)<br>
+- Added a basic support for #defines <br>
+- The -optimize option now also filters out as much whitespace as possible<br>
+
+<p id=dateentry>Version 1.3</p>
+- Added a -optimize option (used to disable things like comments)<br>
+
+
+<p id=dateentry>Version 1.2</p>
+- Support for pure comments without line numbers (accepts lines starting by ' or ; or //)<br>
+
+<p id=dateentry>Version 1.1</p>
+- Added filtering of strings before parsing, to remove superfluous spaces, tabs and other carriage returns before starting the syntax conversion pass<br>
 
 <p id=dateentry>Version 1.0</p>
 - Added the handling of token codes over 246 to allow the dump of corrupted files, these will have a CORRUPTED_ERROR_CODE_nnn message at the location of the corrupted data (in this particular case it was the game ENCOUNTER from Severn Software at line 11150 having a "NEXT WITHOUT FOR" message displayed
