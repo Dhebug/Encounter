@@ -4014,6 +4014,12 @@ skip ;\
 	bne *+5 ;\
 	jmp label ;\
 
+#define EQ0W_C(tmp,label)\
+	lda #<(tmp) ;\
+	ora #>(tmp) ;\
+	bne *+5 ;\
+	jmp label ;\
+	
 #define EQW_DC(tmp2,cte1,label)\
 	lda #<(cte1) ;\
 	eor tmp2 ;\
