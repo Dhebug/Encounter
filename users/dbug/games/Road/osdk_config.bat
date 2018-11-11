@@ -5,7 +5,7 @@
 ::
 SET OSDKADDR=$600
 SET OSDKNAME=RACING
-SET OSDKFILE=main vbl keyboard resol font table costable road
+SET OSDKFILE=main profile vbl keyboard resol font table costable road
 
 
 

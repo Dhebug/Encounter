@@ -1,4 +1,44 @@
 
+#include "profile.h"
+
+
+// int RoadMiddleTable[128];
+// int RoadOffsetTable[128];
+
+_TurnLeftSimple
+.(
+	ldy #0
+loop
+	clc
+	lda _RoadMiddleTable,y
+	adc _RoadOffsetTable,y
+	sta _RoadMiddleTable,y
+	iny
+	lda _RoadMiddleTable,y
+	adc _RoadOffsetTable,y
+	sta _RoadMiddleTable,y
+	iny
+	bne loop
+	rts
+.)
+
+_TurnRightSimple
+.(
+	ldy #0
+loop
+	sec
+	lda _RoadMiddleTable,y
+	sbc _RoadOffsetTable,y
+	sta _RoadMiddleTable,y
+	iny
+	lda _RoadMiddleTable,y
+	sbc _RoadOffsetTable,y
+	sta _RoadMiddleTable,y
+	iny
+	bne loop
+	rts
+.)
+
 
 #define SCREN_ROAD_START	$a000+72*40+1
 

@@ -14,7 +14,9 @@ CALL osdk_config.bat
 ::
 :: Run the emulator using the common batch
 ::
+del %OSDK%\Oricutron\printer_out.txt
 CALL %OSDK%\bin\execute.bat
+copy %OSDK%\Oricutron\printer_out.txt profile.txt
 GOTO End
 
 ::
