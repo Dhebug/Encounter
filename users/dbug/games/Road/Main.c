@@ -1,7 +1,3 @@
-
-
-#include	"lib.h"
-
 // --------------------------------------
 // Racing
 // --------------------------------------
@@ -25,6 +21,12 @@
 // editor. So perhaps the text will not be
 // displayed correctly with other OS.
 
+#include "lib.h"
+#include "profile.h"
+
+
+extern void TurnLeftSimple();
+extern void TurnRightSimple();
 
 void VSync();
 
@@ -107,6 +109,8 @@ void ScrollColors()
 	char	*adr;
 	int		position;
 
+	PROFILE_ENTER(ROUTINE_SCROLL_COLORS);
+
 	position=Position;
 	Position+=2;
 	adr=((char*)0xa000)+40*72;
@@ -122,6 +126,7 @@ void ScrollColors()
 
 		adr+=40;
 	}
+	PROFILE_LEAVE(ROUTINE_SCROLL_COLORS);
 }
 
 
@@ -171,8 +176,10 @@ void RoadDraw()
 	unsigned int dx;
 	int	x,y;
 
+	PROFILE_ENTER(ROUTINE_DRAW_ROAD);
 	ScrollColors();		
 
+	PROFILE_ENTER(ROUTINE_DRAW_LOOP);
 	for (y=0;y<128;y++)
 	{
 		x=RoadMiddleTable[y]/256;
@@ -204,33 +211,44 @@ void RoadDraw()
 		draw(dx,0,0);
 		*/
 	}
+	PROFILE_LEAVE(ROUTINE_DRAW_LOOP);
+	PROFILE_LEAVE(ROUTINE_DRAW_ROAD);
 }
 
 
 void TurnLeft(unsigned char count)
 {
 	unsigned char y;
-
+	PROFILE_ENTER(ROUTINE_TURN_LOOP);
 	while (count--)
 	{
+		TurnLeftSimple();
+		/*
 		for (y=0;y<128;y++)
 		{
 			RoadMiddleTable[y]+=RoadOffsetTable[y];
 		}
+		*/
 	}
+	PROFILE_LEAVE(ROUTINE_TURN_LOOP);
 }
 
 void TurnRight(unsigned char count)
 {
 	unsigned char y;
+	PROFILE_ENTER(ROUTINE_TURN_LOOP);
 
 	while (count--)
 	{
+		TurnRightSimple();
+		/*
 		for (y=0;y<128;y++)
 		{
 			RoadMiddleTable[y]-=RoadOffsetTable[y];
 		}
+		*/
 	}
+	PROFILE_LEAVE(ROUTINE_TURN_LOOP);
 }
 
 
@@ -250,21 +268,33 @@ void RacingTest()
 	{
 		for (x=0;x<128;x++)
 		{
+			ProfilerNextFrame();
+			PROFILE_ENTER(ROUTINE_MAIN_LOOP);
 			//RoadErase();
 			RoadDraw();
 			TurnLeft(1);
+			PROFILE_LEAVE(ROUTINE_MAIN_LOOP);
+			ProfilerDisplay();
 		}
 		for (x=0;x<256;x++)
 		{
+			ProfilerNextFrame();
+			PROFILE_ENTER(ROUTINE_MAIN_LOOP);
 			//RoadErase();
 			RoadDraw();
 			TurnRight(1);
+			PROFILE_LEAVE(ROUTINE_MAIN_LOOP);
+			ProfilerDisplay();
 		}
 		for (x=0;x<128;x++)
 		{
+			ProfilerNextFrame();
+			PROFILE_ENTER(ROUTINE_MAIN_LOOP);
 			//RoadErase();
 			RoadDraw();
 			TurnLeft(1);
+			PROFILE_LEAVE(ROUTINE_MAIN_LOOP);
+			ProfilerDisplay();
 		}
 	}
 }
@@ -275,6 +305,7 @@ void RacingTest()
 
 void main()
 {
+	ProfilerInitialize();
 	hires();
 
 	//
@@ -284,10 +315,23 @@ void main()
 	CreateDivTable();
 
 	RacingTest();
+	ProfilerTerminate();
 }
 
 
+/*
 
+Profiling results:
+
+Frame:0014 Time=1BB1E0
+0x01 1BB174 MainLoop
+1x01 1B3DFC DrawRoad
+2x01 00ABD7 ScrollColors
+3x01 006F5E TurnLoop
+4x01 1A8F2F DrawLoop
+5x00 000000 Asm
+
+*/
 
 
 
