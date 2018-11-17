@@ -958,49 +958,94 @@ _FxTitle_NameList
 	.byt 0
 
 
+; Alternative implementation for scroller:
+; Generate a buffer of 199 LDA $a000+40*1,x STA $a000+40*0,x -> 3+3=6 bytes * 199 = 1194 bytes
+; $BD $00 $A0   LDA $a000,x
+; $9D $00 $A0   STA $a000,x
+; $60           RTS
+
+_FxTitleScroll_GenerateCopyBuffer
+	;jmp _FxTitleScroll_GenerateCopyBuffer
+.(
+	lda #<$a000
+	sta tmp0+0
+	lda #>$a000
+	sta tmp0+1
+
+	lda #<_Final_Scroll_Buffer
+	sta tmp1+0
+	lda #>_Final_Scroll_Buffer
+	sta tmp1+1
+
+	ldx #198
+loop
+	ldy #3
+	lda #$9D          ; STA abs,x
+	sta (tmp1),y
+	iny
+	lda tmp0+0
+	sta (tmp1),y
+	iny
+	lda tmp0+1
+	sta (tmp1),y
+	iny
+
+	clc
+	lda tmp0+0
+	adc #40
+	sta tmp0+0
+	lda tmp0+1
+	adc #0
+	sta tmp0+1
+
+	ldy #0
+	lda #$BD          ; LDA abs,x
+	sta (tmp1),y
+	iny
+	lda tmp0+0
+	sta (tmp1),y
+	iny
+	lda tmp0+1
+	sta (tmp1),y
+	iny
+
+
+	clc
+	lda tmp1+0
+	adc #6
+	sta tmp1+0
+	lda tmp1+1
+	adc #0
+	sta tmp1+1
+
+	dex 
+	bne loop	
+
+	ldy #0
+	lda #$60          ; RTS
+	sta (tmp1),y
+
+	rts
+.)
+
+
+
 _FxTitle_Scroll
 .(
 	lda #28
 	sta tmp2
 big_loop
-	lda #<$a000	
-	sta tmp0+0
-	clc
-	adc #80
-	sta tmp1+0
-	lda #>$a000	
-	sta tmp0+1
-	adc #0
-	sta tmp1+1
 
-	ldx #198
-loop_y
-	ldy #0
-	lda (tmp1),y
-	sta (tmp0),y
-	iny
-	// Skip the "black ink" area
-	iny
-loop_x
-	lda (tmp1),y
-	sta (tmp0),y
-	iny
-	cpy #40
+	ldx #0
+	jsr _Final_Scroll_Buffer
+
+	ldx #2
+loop_x	
+	jsr _Final_Scroll_Buffer
+	inx 
+	cpx #40
 	bne loop_x
-
-	clc
-	lda tmp1+0
-	sta tmp0+0
-	adc #40
-	sta tmp1+0
-	lda tmp1+1
-	sta tmp0+1
-	adc #0
-	sta tmp1+1
-		
-	dex
-	bne loop_y
-
+	
 	//jsr _VSync
 
 	dec tmp2
@@ -1049,6 +1094,8 @@ _Fx_DrawTitle
 	jsr _VScroll_GenerateScrollMapping
 	jsr _FxTitle_InitBorderColors
 
+	jsr _FxTitleScroll_GenerateCopyBuffer
+
 	lda #<_FxTitle_NameList	
 	sta greetings_pointer+0
 	lda #>_FxTitle_NameList	
@@ -1059,7 +1106,6 @@ _Fx_DrawTitle
 	lda #30
 	sta tmp3
 loop
-	
 	jsr _Mandel_DisplayGreetings
 	jsr _FxTitle_Scroll
 	dec tmp3

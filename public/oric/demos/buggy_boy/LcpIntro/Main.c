@@ -748,6 +748,11 @@ void main()
 	//
 	TablesInit();
 
+	// TEST OPTIMIZE SCROLLER
+	//goto Mandelbrot;
+	//goto EndScroller;
+	// TEST OPTIMIZE SCROLLER
+
 
 	//Fx_PcWarning();	
 	//while (1);
@@ -935,6 +940,7 @@ void main()
 		//
 		// Mandelbrot
 		//
+Mandelbrot:			
 		SwitchToHires();
 		ClearHiresScreen();
 
@@ -967,6 +973,7 @@ void main()
 		//
 		// End scroller with thanks
 		//
+EndScroller:			
 		SwitchToHires();
 		ClearHiresScreen();
 		Fx_DrawTitle();

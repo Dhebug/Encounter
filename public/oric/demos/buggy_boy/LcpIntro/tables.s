@@ -370,7 +370,8 @@ _CosTable				.dsb 256
 //
 // A serie of buffers that will contain the one pixel shifted version of scrolls
 //
-_RotateTableRight			//.dsb 256*6	
+_RotateTableRight			//.dsb 256*6
+_Final_Scroll_Buffer
 _Scroll_Circular_Buffer
 _Scroll_Circular_Buffer_0	.dsb 256
 _Scroll_Circular_Buffer_1	.dsb 256
