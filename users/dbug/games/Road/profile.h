@@ -1,7 +1,7 @@
 //
 // User settings
 //
-#define PROFILER_ENABLE			// Comment out to disable profiling
+//#define PROFILER_ENABLE			// Comment out to disable profiling
 #define PROFILER_USE_PRINTER	// Comment out to disable the usage of printer
 #define PROFILER_USE_NAMES		// Comment out to disable the usage of function names
 
@@ -16,21 +16,17 @@
 // List of routines (need an enum !)
 // Should have incrementing numbers, finishing by PROFILER_ROUTINE_COUNT as the number of routines to profile
 //
-#define ROUTINE_MAIN_LOOP			0
-#define ROUTINE_DRAW_ROAD			1
-#define ROUTINE_SCROLL_COLORS 		2
-#define ROUTINE_TURN_LOOP			3
-#define ROUTINE_DRAW_LOOP			4
-//#define ROUTINE_UNUSED				5
-#define PROFILER_ROUTINE_COUNT   	5	
+#define ROUTINE_DRAW_ROAD			0
+#define ROUTINE_SCROLL_COLORS 		1
+#define ROUTINE_TURN_LOOP			2
+#define ROUTINE_DRAW_LOOP			3
+#define PROFILER_ROUTINE_COUNT   	4	
 
 
-FUNCTIONNAME(ROUTINE_MAIN_LOOP,"MainLoop")
 FUNCTIONNAME(ROUTINE_DRAW_ROAD,"DrawRoad")
 FUNCTIONNAME(ROUTINE_SCROLL_COLORS,"ScrollColors")
 FUNCTIONNAME(ROUTINE_TURN_LOOP,"TurnLoop")
 FUNCTIONNAME(ROUTINE_DRAW_LOOP,"DrawLoop")
-//FUNCTIONNAME(ROUTINE_UNUSED,"---")
 FUNCTIONNAME(PROFILER_ROUTINE_COUNT,0)	// End marker
 	
 
