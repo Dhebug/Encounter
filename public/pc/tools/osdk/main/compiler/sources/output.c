@@ -1,6 +1,12 @@
 /* C compiler: output functions */
 
 #include "c.h"
+#ifdef __unix__
+#include <unistd.h>
+#elif defined(_WIN32) || defined(_WIN64)
+#include <io.h>
+#endif
+
 
 static char buf1[4*1024], buf2[512];	/* output buffers */
 static struct io {
@@ -9,9 +15,9 @@ static struct io {
 	char *buffer;			/* buffer proper */
 	char *limit;			/* high water limit */
 } iob[] = {
-	0, 0, 0, 0,
-	1, buf1, buf1, buf1 + sizeof buf1 - 80,
-	2, buf2, buf2, buf2 + sizeof buf2 - 80
+	{ 0, 0, 0, 0},
+	{1, buf1, buf1, buf1 + sizeof buf1 - 80},
+	{2, buf2, buf2, buf2 + sizeof buf2 - 80}
 }, *io[] = {
 	&iob[0],			/* used by stringf */
 	&iob[1],			/* standard output */
@@ -22,8 +28,11 @@ static int fd = 1;			/* current output file */
 char *bp = buf1;			/* current output buffer pointer */
 
 /* fprint - formatted output to file descriptor f */
-void fprint(int f, char *fmt, ...) 
-{
+#ifdef __STDC__
+void fprint(int f, char *fmt, ...) {
+#else
+void fprint(f, fmt, va_alist) char *fmt; va_dcl {
+#endif
 	va_list ap;
 
 	va_init(ap, fmt);
@@ -43,18 +52,20 @@ void outflush() {
 
 /* outs - output string s */
 void outs(s) char *s; {
-	char *p;
+	char *p = bp;
 
-	for (p = bp; *p = *s++; p++)
-		;
+	while (*s) *p++ = *s++;
 	bp = p;
 	if (bp > io[fd]->limit)
 		outflush();
 }
 
 /* print - formatted output to standard output */
-void print(char *fmt, ...) 
-{
+#ifdef __STDC__
+void print(char *fmt, ...) {
+#else
+void print(fmt, va_alist) char *fmt; va_dcl {
+#endif
 	va_list ap;
 
 	va_init(ap, fmt);
@@ -63,8 +74,11 @@ void print(char *fmt, ...)
 }
 
 /* stringf - formatted output to a saved string */
-char *stringf(char *fmt, ...) 
-{
+#ifdef __STDC__
+char *stringf(char *fmt, ...) {
+#else
+char *stringf(fmt, va_alist) char *fmt; va_dcl {
+#endif
 	char buf[MAXLINE];
 	va_list ap;
 
@@ -82,7 +96,7 @@ char *stringf(char *fmt, ...)
 }
 
 /* vfprint - formatted output to file descriptor f */
-void vfprint(f, fmt, ap) char *fmt; va_list ap; {
+void vfprint(f, fmt, ap) int f; char *fmt; va_list ap; {
 	if (f == 1)
 		vprint(fmt, ap);
 	else {
@@ -98,19 +112,18 @@ void vfprint(f, fmt, ap) char *fmt; va_list ap; {
 }
 
 /* vprint - formatted output to standard output */
-void vprint(fmt, ap) char *fmt; va_list ap; 
-{
+//#pragma optimize( "", off )
+
+void vprint(fmt, ap) char *fmt; va_list ap; {
 	char buf[40], *s;
 
 	for (; *fmt; fmt++)
 		if (*fmt == '%')
-			switch (*++fmt) 
-		{
+			switch (*++fmt) {
 			case 'c':
 				*bp++ = va_arg(ap, int);
 				break;
-			case 'd': 
-				{
+			case 'd': {
 				int n = va_arg(ap, int);
 				unsigned m;
 				s = buf + sizeof buf;
@@ -169,13 +182,11 @@ void vprint(fmt, ap) char *fmt; va_list ap;
 				outtype(ty ? ty : voidtype);
 				break;
 				}
-
-			case 'w': 
-				{	/* print a source coordinate */
+			case 'w': {	/* print a source coordinate */
 				Coordinate *p = va_arg(ap, Coordinate *);
 				if (p->file && *p->file)
-					print("%s(", p->file);
-				print("%d)", p->y);
+					print("%s:", p->file);
+				print("%d", p->y);
 				break;
 				}
 			default:
@@ -185,3 +196,5 @@ void vprint(fmt, ap) char *fmt; va_list ap;
 		else if ((*bp++ = *fmt) == '\n' && bp > io[fd]->limit)
 			outflush();
 }
+
+//#pragma optimize( "", on )

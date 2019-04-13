@@ -142,7 +142,6 @@ xx(EOI,		127,	0,	0,	0,	EOI,	"end of input")
 #undef yy
 #undef zz
 
-/*
 #ifndef __STDC__
 #ifndef FLOAT
 #define FLOAT	1 
@@ -200,4 +199,3 @@ xx(EOI,		127,	0,	0,	0,	EOI,	"end of input")
 #define EOI	127 
 #endif
 #endif
-*/

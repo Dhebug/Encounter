@@ -22,7 +22,7 @@ static struct type {		/* type list entries: */
 	struct tynode type;		/* the type */
 	struct type *link;		/* next type on the hash chain */
 } *typetable[128];		/* current set of types */
-static int maxlevel;		/* maximum scope level of entries in typetable */ 
+static int maxlevel;		/* maximum scope level of entries in typetable */
 
 dclproto(static Field check,(Type, Type, Field, int));
 dclproto(static Type funcl,(Type, List));
@@ -61,7 +61,7 @@ void typeInit() {
 }
 
 /* array - construct the type `array 0..n-1 of ty' with alignment a or ty's */
-Type array(ty, n, a) Type ty; {
+Type array(Type ty, int n, int a) {
 	if (ty && isfunc(ty)) {
 		error("illegal type `array of %t'\n", ty);
 		return array(inttype, n, 0);
@@ -91,7 +91,7 @@ Type atop(ty) Type ty; {
 }
 
 /* check - check ty for ambiguous inherited fields, return augmented field set */
-static Field check(ty, top, inherited, off) Type ty, top; Field inherited; {
+static Field check(ty, top, inherited, off) Type ty, top; Field inherited; int off; {
 	Field p;
 
 	for (p = ty->u.sym->u.s.flist; p; p = p->link)
@@ -134,8 +134,8 @@ Type composite(ty1, ty2) Type ty1, ty2; {
 	case POINTER:
 		return ptr(composite(ty1->type, ty2->type));
 	case ARRAY: {
-		Type ty;
-		if (ty = composite(ty1->type, ty2->type)) {
+		Type ty = composite(ty1->type, ty2->type);
+		if (ty) {
 			if (ty1->size && ty1->type->size && ty2->size == 0)
 				return array(ty, ty1->size/ty1->type->size, ty1->align);
 			if (ty2->size && ty2->type->size && ty1->size == 0)
@@ -145,9 +145,9 @@ Type composite(ty1, ty2) Type ty1, ty2; {
 		break;
 		}
 	case FUNCTION: {
-		Type ty;
 		List list = 0;
-		if (ty = composite(ty1->type, ty2->type)) {
+		Type ty = composite(ty1->type, ty2->type);
+		if (ty) {
 			Type *p1, *p2, proto = 0;
 			if (ty1->u.proto && ty2->u.proto == 0)
 				return func(ty, ty1->u.proto);
@@ -202,7 +202,7 @@ Type deref(ty) Type ty; {
 }
 
 /* eqtype - is ty1==ty2?  handles arrays & functions; return ret if ty1==ty2, but one is incomplete */
-int eqtype(ty1, ty2, ret) Type ty1, ty2; {
+int eqtype(ty1, ty2, ret) Type ty1, ty2; int ret; {
 	if (ty1 == ty2)
 		return 1;
 	if (ty1->op != ty2->op)
@@ -214,8 +214,8 @@ int eqtype(ty1, ty2, ret) Type ty1, ty2; {
 		if (eqtype(ty1->type, ty2->type, ret)) {
 			if (ty1->size == ty2->size)
 				return 1;
-			if (ty1->size == 0 && ty2->size >  0
-			||  ty1->size >  0 && ty2->size == 0)
+			if ((ty1->size == 0 && ty2->size >  0)
+			||  (ty1->size >  0 && ty2->size == 0))
 				return ret;
 		}
 		break;
@@ -232,7 +232,7 @@ int eqtype(ty1, ty2, ret) Type ty1, ty2; {
 				for ( ; *p1; p1++) {
 					Type ty = unqual(*p1);
 					if (promote(ty) != ty || ty == floattype
-					|| ty == voidtype && p1 != ty1->u.proto)
+					|| (ty == voidtype && p1 != ty1->u.proto))
 						return 0;
 				}
 				return 1;
@@ -310,9 +310,8 @@ Field fieldlist(ty) Type ty; {
 
 /* fieldref - find field name of type ty, return entry */
 Field fieldref(name, ty) char *name; Type ty; {
-	Field p;
-
-	if (p = isfield(name, unqual(ty)->u.sym->u.s.flist)) {
+	Field p = isfield(name, unqual(ty)->u.sym->u.s.flist);
+	if (p) {
 		if (xref) {
 			Symbol q;
 			assert(unqual(ty)->u.sym->u.s.ftab);
@@ -351,7 +350,7 @@ Type func(ty, proto) Type ty, *proto; {
 
 /* funcl - construct the type `function (list) returning ty' */
 static Type funcl(ty, list) Type ty; List list; {
-	return func(ty, (Type *)ltoa(list, (Generic *)alloc((length(list) + 1)*sizeof (Type))));
+	return func(ty, (Type *)list_to_a(list, (Generic *)alloc((length(list) + 1)*sizeof (Type))));
 }
 
 /* hasproto - true iff ty has no function types or they all have prototypes */
@@ -404,13 +403,13 @@ Field newfield(name, ty, fty) char *name; Type ty, fty; {
 }
 
 /* newstruct - install a new structure/union/enum depending on op */
-Type newstruct(op, tag) char *tag; {
+Type newstruct(op, tag) int op; char *tag; {
 	Symbol p;
 
 	if (!tag || *tag == '\0')  /* anonymous structure/union/enum */
 		tag = stringd(genlabel(1));
 	if ((p = lookup(tag, types)) && (p->scope == level
-	|| p->scope == PARAM && level == PARAM+1)) {
+	|| (p->scope == PARAM && level == PARAM+1))) {
 		if (p->type->op == op && !p->defined)
 			return p->type;
 		error("redeclaration of `%s'\n", tag);
@@ -518,7 +517,7 @@ void printproto(p, callee) Symbol p, callee[]; {
 }
 
 /* printtype - print details of type ty on fd */
-void printtype(ty, fd) Type ty; {
+void printtype(Type ty, int fd) {
 	switch (ty->op) {
 	case STRUCT: case UNION: {
 		Field p;
@@ -536,7 +535,7 @@ void printtype(ty, fd) Type ty; {
 		int i;
 		Symbol p;
 		fprint(fd, "enum %s {", ty->u.sym->name);
-		for (i = 0; p = ty->u.sym->u.idlist[i]; i++) {
+		for (i = 0; (p = ty->u.sym->u.idlist[i]); i++) {
 			if (i > 0)
 				fprint(fd, ",");
 			fprint(fd, "%s=%d", p->name, p->u.value);
@@ -555,13 +554,13 @@ Type ptr(ty) Type ty; {
 }
 
 /* qual - construct the type `op ty' where op is CONST or VOLATILE */
-Type qual(op, ty) Type ty; {
+Type qual(int op, Type ty) {
 	if (isarray(ty))
 		ty = tynode(ARRAY, qual(op, ty->type), ty->size,
 			ty->align, 0);
 	else if (isfunc(ty))
 		warning("qualified function type ignored\n");
-	else if (isconst(ty) && op == CONST || isvolatile(ty) && op == VOLATILE)
+	else if ((isconst(ty) && op == CONST) || (isvolatile(ty) && op == VOLATILE))
 		error("illegal type `%k %t'\n", op, ty);
 	else {
 		int i;
@@ -624,7 +623,8 @@ int ttob(ty) Type ty; {
 }
 
 /* tynode - allocate and initialize a type node */
-static Type tynode(op, type, size, align, ptr) Type type; Generic ptr; {
+static Type tynode(int op, Type type, int size, int align, Generic ptr)
+{
 	int i = (opindex(op)^((unsigned)type>>2))&(sizeof typetable/sizeof typetable[0]-1);
 	struct type *tn;
 
@@ -665,8 +665,8 @@ char *typestring(ty, str) Type ty; char *str; {
 			break;
 		case STRUCT: case UNION: case ENUM:
 			assert(ty->u.sym);
-			if (p = findtype(ty))
-				return *str ? stringf("%s %s", p->name, str) : p->name;
+			p = findtype(ty);
+			if (p) return *str ? stringf("%s %s", p->name, str) : p->name;
 			if (*ty->u.sym->name >= '1' && *ty->u.sym->name <= '9')
 				warning("unnamed %k in prototype\n", ty->op);
 			if (*str)
@@ -682,8 +682,8 @@ char *typestring(ty, str) Type ty; char *str; {
 			str = stringf(isarray(ty->type) || isfunc(ty->type) ? "(*%s)" : "*%s", str);
 			break;
 		case FUNCTION:
-			if (p = findtype(ty))
-				return *str ? stringf("%s %s", p->name, str) : p->name;
+			p = findtype(ty);
+			if (p) return *str ? stringf("%s %s", p->name, str) : p->name;
 			if (ty->u.proto == 0)
 				str = stringf("%s()", str);
 			else {
@@ -698,8 +698,8 @@ char *typestring(ty, str) Type ty; char *str; {
 			}
 			break;
 		case ARRAY:
-			if (p = findtype(ty))
-				return *str ? stringf("%s %s", p->name, str) : p->name;
+			p = findtype(ty);
+			if (p) return *str ? stringf("%s %s", p->name, str) : p->name;
 			if (ty->type && ty->type->size > 0)
 				str = stringf("%s[%d]", str, ty->size/ty->type->size);
 			else

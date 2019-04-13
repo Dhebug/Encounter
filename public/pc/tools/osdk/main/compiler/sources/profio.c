@@ -5,12 +5,20 @@
  *    name
  *    ... (#files-1 times)
  *    #functions
- *    name file# x y count caller file x y 
+ *    name file# x y count caller file x y
  *    ... (#functions-1 times)
  *    #points
  *    file# x y count
  *    ... (#points-1 times)
  */
+#include <string.h>
+#include <fcntl.h>
+#ifdef __unix__
+#include <unistd.h>
+#elif defined(_WIN32) || defined(_WIN64)
+#include <io.h>
+#endif
+
 
 struct file {			/* per-file prof.out data: */
 	struct file *link;		/* link to next file */
@@ -42,11 +50,11 @@ struct file {			/* per-file prof.out data: */
 static FILE *fp;
 #else
 #include "c.h"
-//#define EOF -1
+#define EOF -1
 #define ngetc() (*cp == 0 ? EOF : *cp == '\n' ? (cp++, nextline(), '\n') : *cp++)
-dclproto(extern void qsort,(struct count *, int, int, int (*)(const void *, const void *)));
 #endif
 
+dclproto(extern void qsort,(struct count *, int, int, int (*)(const void *, const void *)));
 dclproto(static void acaller,(char *, char *, int, int, int, struct func *));
 dclproto(static int compare,(struct count *, struct count *));
 dclproto(static struct func *afunction,(char *, char *, int, int, int));
@@ -57,7 +65,7 @@ dclproto(static int getd,(void));
 dclproto(static char *getstr,(void));
 
 /* acaller - add caller and site (file,x,y) to callee's callers list */
-static void acaller(caller, file, x, y, count, callee) char *caller, *file; struct func *callee; {
+static void acaller(caller, file, x, y, count, callee) char *caller, *file; int x, y, count; struct func *callee; {
 	struct caller *q;
 
 	assert(callee);
@@ -82,7 +90,7 @@ static void acaller(caller, file, x, y, count, callee) char *caller, *file; stru
 }
 
 /* afunction - add function name and its data to file's function list */
-static struct func *afunction(name, file, x, y, count) char *name, *file; {
+static struct func *afunction(name, file, x, y, count) char *name, *file; int x, y, count; {
 	struct file *p = findfile(file);
 	struct func *q;
 
@@ -106,8 +114,8 @@ static struct func *afunction(name, file, x, y, count) char *name, *file; {
 	return q;
 }
 
-/* apoint - append execution point i to file's data */ 
-static void apoint(i, file, x, y, count) char *file; {
+/* apoint - append execution point i to file's data */
+static void apoint(i, file, x, y, count) char *file; int i,x,y,count; {
 	struct file *p = findfile(file);
 
 	assert(p);
@@ -144,7 +152,7 @@ static int compare(a, b) struct count *a, *b; {
 }
 
 /* findcount - return count associated with (file,x,y) or -1 */
-int findcount(file, x, y) char *file; {
+int findcount(file, x, y) char *file; int x,y; {
 	static struct file *cursor;
 
 	if (cursor == 0 || cursor->name != file)
@@ -293,7 +301,7 @@ int process(file) char *file; {
 			qsort(p->counts, p->count, sizeof *p->counts,
 				(dclproto(int (*),(const void *, const void *)))
 				compare);
-		
+
 		return 1;
 	}
 #endif

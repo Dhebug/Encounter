@@ -55,9 +55,9 @@ static List freenodes;		/* free list nodes */
 
 /* append - append x to list, return new list */
 List append(x, list) Generic x; List list; {
-	List new;
+	List new = freenodes;
 
-	if (new = freenodes)
+	if (new)
 		freenodes = freenodes->link;
 	else
 		new = (List)alloc(sizeof *new);
@@ -83,7 +83,7 @@ int length(list) List list; {
 }
 
 /* ltoa - convert list to an 0-terminated array in a[0..length(list)] */
-Generic *ltoa(list, a) List list; Generic a[]; {
+Generic *list_to_a(list, a) List list; Generic a[]; {
 	int i = 0;
 
 	if (a == 0)
@@ -112,7 +112,7 @@ char *string(str) char *str; {
 }
 
 /* stringd - convert n to a string, return pointer to saved string */
-char *stringd(n) {
+char *stringd(int n) {
 	char str[30], *s = &str[30];
 	unsigned m;
 
@@ -133,20 +133,21 @@ char *stringd(n) {
 }
 
 /* stringn - save copy of str[0..n-1], return pointer to copy */
-char *stringn(str, n) char *str; {
+char *stringn(char *str, int n) {
 	int i;
 	unsigned int h;
 	char *s1, *s2, *end;
 	struct string *p;
 
 	assert(str);
-	if (n > 0 && str[0] >= '0' && str[0] <= '9')
+	if (n > 0 && str[0] >= '0' && str[0] <= '9') {
 		if (n == 1)
 			return nums[str[0]-'0'];
 		else if (str[1] >= '0' && str[1] <= '9' && n == 2)
 			return nums[10*(str[0]-'0') + str[1]-'0'];
+	}
 	for (h = 0, i = n, end = str; i > 0; i--)
-		h = (h<<1) + scatter[*end++];
+		h = (h<<1) + scatter[(int)*end++];
 	h &= TABLESIZE-1;
 	for (p = buckets[h]; p; p = p->link)
 		if (n == p->len)

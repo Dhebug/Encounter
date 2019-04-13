@@ -1,6 +1,8 @@
 /* C compiler: tree simplification and constant folding */
 
 #include "c.h"
+#include <stdio.h>
+#include <assert.h>
 
 int needconst;		/* >=1 if parsing a constant expression */
 
@@ -11,12 +13,14 @@ dclproto(static int mul,(double, double, double, double, int));
 dclproto(static int sub,(double, double, double, double, int));
 
 /* add - return 1 if min <= x+y <= max, 0 otherwise */
-static int add(x, y, min, max, needconst) double x, y, min, max; {
-	int cond = x == 0 || y == 0
-	|| x < 0 && y < 0 && x >= min - y
-	|| x < 0 && y > 0
-	|| x > 0 && y < 0
-	|| x > 0 && y > 0 && x <= max - y;
+static int add(x, y, min, max, needconst) double x, y, min, max;  int needconst; {
+	int cond =
+        x == 0
+    ||  y == 0
+	|| (x < 0 && y < 0 && x >= min - y)
+	|| (x < 0 && y > 0)
+	|| (x > 0 && y < 0)
+	|| (x > 0 && y > 0 && x <= max - y);
 	if (!cond && needconst) {
 		warning("overflow in constant expression\n");
 		cond = 1;
@@ -25,7 +29,7 @@ static int add(x, y, min, max, needconst) double x, y, min, max; {
 }
 
 /* addrnode - create a tree for addressing expression p+n, type ty */
-static Tree addrnode(p, n, ty) Symbol p; Type ty; {
+static Tree addrnode(p, n, ty) Symbol p; int n; Type ty; {
 	Symbol q = (Symbol)talloc(sizeof *q);
 	Tree e;
 	static struct symbol z;
@@ -61,10 +65,9 @@ static Tree addrnode(p, n, ty) Symbol p; Type ty; {
 }
 
 /* div - return 1 if min <= x/y <= max, 0 otherwise */
-static int div(x, y, min, max, needconst) double x, y, min, max; {
+static int div(x, y, min, max, needconst) double x, y, min, max; int needconst; {
 	int cond;
 
-	&min;
 	if (x < 0) x = -x;
 	if (y < 0) y = -y;
 	cond = y != 0 && (y > 1 || x <= max*y);
@@ -87,12 +90,14 @@ int ispow2(u) unsigned u; {
 }
 
 /* mul - return 1 if min <= x*y <= max, 0 otherwise */
-static int mul(x, y, min, max, needconst) double x, y, min, max; {
-	int cond = x > -1 && x <= 1 || y > -1 && y <= 1
-	|| x < 0 && y < 0 && -x <= max/-y
-	|| x < 0 && y > 0 &&  x >= min/y
-	|| x > 0 && y < 0 &&  x >= min/y
-	|| x > 0 && y > 0 &&  x <= max/y;
+static int mul(x, y, min, max, needconst) double x, y, min, max; int needconst; {
+	int cond =
+	   (x > -1 && x <= 1)
+    || (y > -1 && y <= 1)
+	|| (x < 0 && y < 0 && -x <= max/-y)
+	|| (x < 0 && y > 0 &&  x >= min/y)
+	|| (x > 0 && y < 0 &&  x >= min/y)
+	|| (x > 0 && y > 0 &&  x <= max/y);
 	if (!cond && needconst) {
 		warning("overflow in constant expression\n");
 		cond = 1;
@@ -148,7 +153,7 @@ static int mul(x, y, min, max, needconst) double x, y, min, max; {
 #define identity(X,Y,TYPE,VAR,VAL) if (X->op == CNST+TYPE && X->u.v.VAR == VAL) return Y
 
 /* simplify - build node for op, simplifying and folding constants, if possible */
-Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
+Tree simplify(op, ty, l, r) int op; Type ty; Tree l, r; {
 	int n;
 	Tree p;
 
@@ -200,13 +205,14 @@ Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
 		if (l->op == RIGHT && isstruct(l->type))	/* f().x */
 			return tree(RIGHT, ty, l->kids[0],
 				simplify(ADD+P, ty, l->kids[1], r));
-		if (l->op == RIGHT)
+		if (l->op == RIGHT) {
 			if (l->kids[1])
 				return tree(RIGHT, ty, l->kids[0],
 					simplify(ADD+P, ty, l->kids[1], r));
 			else
 				return tree(RIGHT, ty,
 					simplify(ADD+P, ty, l->kids[0], r), 0);
+		}
 		break;
 	case ADD+U:
 		foldcnst(U,u,+,unsignedtype);
@@ -250,8 +256,8 @@ Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
 		break;
 	case CVC+I:  cvtcnst(C,      inttype,p->u.v.i  = (l->u.v.sc&0200 ? (~0<<8) : 0)|(l->u.v.sc&0377)); break;
 	case CVC+U:  cvtcnst(C, unsignedtype,p->u.v.u  = l->u.v.uc); break;
-	case CVD+F: xcvtcnst(D,    floattype,p->u.v.f  = (float)l->u.v.d,l->u.v.d,-FLT_MAX,FLT_MAX); break;
-	case CVD+I: xcvtcnst(D,      inttype,p->u.v.i  = (int)l->u.v.d,l->u.v.d,INT_MIN,INT_MAX); break;
+	case CVD+F: xcvtcnst(D,    floattype,p->u.v.f  = l->u.v.d,l->u.v.d,-FLT_MAX,FLT_MAX); break;
+	case CVD+I: xcvtcnst(D,      inttype,p->u.v.i  = l->u.v.d,l->u.v.d,INT_MIN,INT_MAX); break;
 	case CVF+D:  cvtcnst(F,   doubletype,p->u.v.d  = l->u.v.f);  break;
 	case CVI+C: xcvtcnst(I,     chartype,p->u.v.sc = l->u.v.i,l->u.v.i,SCHAR_MIN,SCHAR_MAX); break;
 	case CVI+D:  cvtcnst(I,   doubletype,p->u.v.d  = l->u.v.i);  break;
@@ -285,7 +291,7 @@ Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
 #endif
 		xfoldcnst(I,i,/,inttype,div,INT_MIN,INT_MAX);
 		break;
-	case DIV+U:		
+	case DIV+U:
 		identity(r,l,U,u,1);
 		if (r->op == CNST+U && r->u.v.u == 0)
 			break;
@@ -371,7 +377,7 @@ Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
 #endif
 		xfoldcnst(I,i,%,inttype,div,INT_MIN,INT_MAX);
 		break;
-	case MOD+U:		
+	case MOD+U:
 		if (r->op == CNST+U && ispow2(r->u.v.u))	/* l%2^n => l&(2^n-1) */
 			return bitnode(BAND, l,
 				constnode(r->u.v.u - 1, unsignedtype));
@@ -492,7 +498,7 @@ Tree simplify(op, ty, l, r) Type ty; Tree l, r; {
 }
 
 /* sub - return 1 if min <= x-y <= max, 0 otherwise */
-static int sub(x, y, min, max, needconst) double x, y, min, max; {
+static int sub(x, y, min, max, needconst) double x, y, min, max; int needconst; {
 	return add(x, -y, min, max, needconst);
 }
 

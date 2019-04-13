@@ -1,8 +1,4 @@
 /* C compiler: definitions */
-#ifdef POSIX
-#include <unistd.h>
-#endif
-
 /* default sizes */
 #define MAXLINE   512		/* maximum output line length */
 #define MAXTOKEN   32		/* maximum token length */
@@ -10,13 +6,17 @@
 #define HASHSIZE  128		/* default hash table size */
 #define MEMINCR    10		/* blocks (1kb) allocated per arena */
 
+#if defined(__LCC__) || defined(_MSC_VER)
+#ifndef __STDC__
+#define __STDC__ 1
+#endif
+#endif
 
 #include "ops.h"
+#include <assert.h>
 
-#include <stdio.h>
+#ifdef __STDC__
 #include <stdarg.h>
-#include <string.h>
-
 #define va_init va_start
 
 typedef enum tokencode {
@@ -28,6 +28,17 @@ typedef enum tokencode {
 
 #define dclproto(func,args) func args
 typedef void *Generic;
+#else
+#include <varargs.h>
+#define va_init(a,b) va_start(a)
+
+#define xx(a,b,c,d,e,f,g)
+#include "token.h"
+typedef int Typeop;
+
+#define dclproto(func,args) func()
+typedef char *Generic;
+#endif
 
 typedef struct list {		/* lists: */
 	Generic x;			/* element */
@@ -40,16 +51,14 @@ typedef struct node *Node;	/* dag nodes */
 typedef struct tree *Tree;	/* tree nodes */
 typedef struct field *Field;	/* struct/union fields */
 typedef struct swtch *Swtch;	/* switch data */
-
-typedef union value
-{	/* constant values: */
+typedef union value {	/* constant values: */
 	char sc;		/* signed */
 	short ss;		/* signed */
 	int i;			/* signed */
 	unsigned char uc;
 	unsigned short us;
 	unsigned int u;
-	float f;
+	double f;
 	double d;
 	char *p;		/* pointer to anything */
 } Value;
@@ -59,31 +68,31 @@ typedef struct coord {	/* source coordinates: */
 	unsigned short x, y;	/* x,y position in file */
 } Coordinate;
 
-void address(Symbol, Symbol, int);
-void asmcode(char *, Symbol []);
-void defaddress(Symbol);
-void defconst(int, Value);
-void defstring(int, char *);
-void defsymbol(Symbol);
-void emit(Node);
-void export(Symbol);
-void function(Symbol, Symbol [], Symbol [], int);
-Node gen(Node);
-void global(Symbol);
-void import(Symbol);
-void local(Symbol);
-void progbeg(int, char **);
-void progend(void);
-void segment(int);
-void space(int);
+dclproto(extern void address,(Symbol, Symbol, int));
+dclproto(extern void asmcode,(char *, Symbol []));
+dclproto(extern void defaddress,(Symbol));
+dclproto(extern void defconst,(int, Value));
+dclproto(extern void defstring,(int, char *));
+dclproto(extern void defsymbol,(Symbol));
+dclproto(extern void emit,(Node));
+dclproto(extern void export,(Symbol));
+dclproto(extern void function,(Symbol, Symbol [], Symbol [], int));
+dclproto(extern Node gen,(Node));
+dclproto(extern void global,(Symbol));
+dclproto(extern void import,(Symbol));
+dclproto(extern void local,(Symbol));
+dclproto(extern void progbeg,(int, char **));
+dclproto(extern void progend,(void));
+dclproto(extern void segment,(int));
+dclproto(extern void space,(int));
 /* symbol table */
-void stabblock(int, int, Symbol*);
-void stabend(Coordinate *, Symbol, Coordinate **, Symbol *, Symbol *);
-void stabfend(Symbol, int);
-void stabinit(char *, int, char *[]);
-void stabline(Coordinate *);
-void stabsym(Symbol);
-void stabtype(Symbol);
+dclproto(extern void stabblock,(int, int, Symbol*));
+dclproto(extern void stabend,(Coordinate *, Symbol, Coordinate **, Symbol *, Symbol *));
+dclproto(extern void stabfend,(Symbol, int));
+dclproto(extern void stabinit,(char *, int, char *[]));
+dclproto(extern void stabline,(Coordinate *));
+dclproto(extern void stabsym,(Symbol));
+dclproto(extern void stabtype,(Symbol));
 
 #include "config.h"
 #ifndef MAXKIDS
@@ -93,17 +102,18 @@ void stabtype(Symbol);
 #define MAXSYMS 3
 #endif
 #ifndef blockbeg
-void blockbeg(Env *);
+dclproto(extern void blockbeg,(Env *));
 #endif
 #ifndef blockend
-void blockend(Env *);
+dclproto(extern void blockend,(Env *));
 #endif
 #ifndef JUMP_ON_RETURN
 #define JUMP_ON_RETURN 0
 #endif
 
 /* limits */
-#ifdef __LCC__
+#if 1
+//#ifdef __LCC__
 #include <limits.h>
 #include <float.h>
 #else
@@ -116,15 +126,15 @@ void blockend(Env *);
 #define MB_LEN_MAX	1
 
 #define UCHAR_MAX	0xff
-#define USHRT_MAX	0xffff
-#define UINT_MAX	0xffffffff
-#define ULONG_MAX	0xffffffffL
+#define USHRT_MAX	0xff
+#define UINT_MAX	0xffff
+#define ULONG_MAX	0xffffL
 
 #define CHAR_MAX	SCHAR_MAX
 #define SCHAR_MAX	0x7f
-#define SHRT_MAX	0x7fff
-#define INT_MAX		0x7fffffff
-#define LONG_MAX	0x7fffffffL
+#define SHRT_MAX	0x7f
+#define INT_MAX	0x7fff
+#define LONG_MAX	0x7fffL
 
 #define CHAR_MIN	SCHAR_MIN
 #define SCHAR_MIN	(-SCHAR_MAX-1)
@@ -192,46 +202,50 @@ typedef struct {
 	unsigned short typeno;
 } Xtype;
 
+#ifdef __STDC__
 enum { CODE=1, BSS, DATA, LIT, SYM };	/* logical segments */
 enum { CONSTANTS=1, LABELS, GLOBAL, PARAM, LOCAL };
-
+#else
+#define CODE	1
+#define BSS	2
+#define DATA	3
+#define LIT	4
+#define SYM	5
+#define CONSTANTS 1
+#define LABELS	2
+#define GLOBAL	3
+#define PARAM	4
+#define LOCAL	5
+#endif
 
 /* misc. macros */
 #define roundup(x,n) (((x)+((n)-1))&(~((n)-1)))
 #define utod(x)	(2.*(int)((unsigned)(x)>>1)+(int)((x)&1))
 #ifdef NDEBUG
 #define assert(c)
-#else
-#define assert(c) ((c) || fatal(__FILE__,"assertion failure at line %d\n",\
-	__LINE__))
+//#else
+//#define assert(c) ((c) || fatal(__FILE__,"assertion failure at line %d\n",__LINE__))
 #endif
-
-#ifndef strtod
-dclproto(extern double strtod,(char *, char **));
-#endif
-
 
 /* C library */
-#ifndef _POSIX_VERSION
-int atoi(char *);
-int close(int);
-int creat(char *, int);
-void exit(int);
-Generic malloc(unsigned);
-int read(int, char *, int);
-int open(char *, int);
-long strtol(char *, char **, int);
-int sprintf(char *, const char *, ...);
-char *strchr(const char *, int);
-int strcmp(const char *, const char *);
-unsigned strlen(const char *);
-//char *strncmp(const char *, const char *, unsigned);
-//char *strncpy(char *, const char *, unsigned);
-int write(int, char *, int);
-#else
-#define _strdup strdup
+#ifdef OLDOLDOLD
+dclproto(extern double strtod,(char *, char **));
+dclproto(extern int atoi,(char *));
+dclproto(extern int close,(int));
+dclproto(extern int creat,(char *, int));
+dclproto(extern void exit,(int));
+dclproto(extern Generic malloc,(unsigned));
+dclproto(extern int open,(char *, int));
+dclproto(extern int read,(int, char *, int));
+dclproto(extern long strtol,(char *, char **, int));
+dclproto(extern int sprintf,(char *, const char *, ...));
+dclproto(extern char *strchr,(const char *, int));
+dclproto(extern int strcmp,(const char *, const char *));
+dclproto(extern unsigned strlen,(const char *));
+dclproto(extern char *strncmp,(const char *, const char *, unsigned));
+dclproto(extern char *strncpy,(char *, const char *, unsigned));
+dclproto(extern int write,(int, char *, int));
 #endif
-
 
 struct node {		/* dag nodes: */
 	Opcode op;		/* operator */
@@ -283,11 +297,24 @@ struct arena {			/* storage allocation arena: */
 	}
 typedef struct code *Code;
 struct code {		/* code list entries: */
-
+#ifdef __STDC__
 	enum {
 		Blockbeg, Blockend, Local, Address, Defpoint,
 		Label, Start, Asm, Gen, Jump, Switch } kind;
-
+#else
+	int kind;
+#define Blockbeg	0
+#define Blockend	1
+#define Local		2
+#define Address		3
+#define Defpoint	4
+#define Label		5
+#define Start		6
+#define Asm		7
+#define Gen		8
+#define Jump		9
+#define Switch		10
+#endif
 	Code prev;			/* previous code node */
 	Code next;			/* next code node */
 	union {
@@ -377,100 +404,100 @@ struct field {		/* struct/union fields: */
 #define isscalar(t)	(unqual(t)->op <= POINTER || unqual(t)->op == ENUM)
 #define isenum(t)	(unqual(t)->op == ENUM)
 #define widen(t)	(isint(t) || isenum(t) ? INT : ttob(t))
-
-
-void addlocal(Symbol);
-Code code(int);
-void emitcode(void);
-void gencode(Symbol [], Symbol []);
-Node listnodes(Tree, int, int);
-Node jump(int);
-Node newnode(int, Node, Node, Symbol);
-Node node(int, Node, Node, Symbol);
-void printdag(Node, int);
-void walk(Tree, int, int);
+dclproto(extern void addlocal,(Symbol));
+dclproto(extern Code code,(int));
+/*G*/dclproto(extern void emitcode,(void));
+/*G*/dclproto(extern void gencode,(Symbol [], Symbol []));
+dclproto(extern Node listnodes,(Tree, int, int));
+dclproto(extern Node jump,(int));
+/*G*/dclproto(extern Node newnode,(int, Node, Node, Symbol));
+dclproto(extern Node node,(int, Node, Node, Symbol));
+dclproto(extern void printdag,(Node, int));
+dclproto(extern void walk,(Tree, int, int));
 extern struct code codehead;
 extern Code codelist;
 extern int nodecount;
-void compound(int, Swtch, int);
-void finalize(void);
-void program(void);
-Type typename(void);
+dclproto(extern void compound,(int, Swtch, int));
+dclproto(extern void finalize,(void));
+dclproto(extern void program,(void));
+dclproto(extern Type typename,(void));
 extern Symbol cfunc;
 extern char *fname;
 extern Symbol retv;
-int genconst(Tree, int);
-int hascall(Tree);
-int nodeid(Tree);
-char *opname(int);
-int *printed(int);
-void printtree(Tree, int);
-Tree retype(Tree, Type);
-Tree root(Tree);
-Tree texpr(Tree (*)(int), int);
-void tfree(void);
-Tree tree(int, Type, Tree, Tree);
+dclproto(extern int genconst,(Tree, int));
+dclproto(extern int hascall,(Tree));
+dclproto(extern int nodeid,(Tree));
+dclproto(extern char *opname,(int));
+dclproto(extern int *printed,(int));
+dclproto(extern void printtree,(Tree, int));
+dclproto(extern Tree retype,(Tree, Type));
+dclproto(extern Tree root,(Tree));
+dclproto(extern Tree texpr,(Tree (*)(int), int));
+dclproto(extern void tfree,(void));
+dclproto(extern Tree tree,(int, Type, Tree, Tree));
 extern int ntree;
-Tree addrof(Tree);
-Tree asgn(Symbol, Tree);
-Type assign(Type, Tree);
-Tree cast(Tree, Type);
-Tree cond(Tree);
-Tree conditional(int);
-Tree constexpr(int);
-Tree expr0(int);
-Tree expr(int);
-Tree expr1(int);
-Tree field(Tree, char *);
-char *funcname(Tree);
-Tree idnode(Symbol);
-Tree incr(int, Tree, Tree);
-int intexpr(int, int);
-Tree lvalue(Tree);
-Tree pointer(Tree);
-Type promote(Type);
-Tree right(Tree, Tree);
-Tree rvalue(Tree);
-Tree cvtconst(Tree);
-void defglobal(Symbol, int);
-void defpointer(Symbol);
-void doconst(Symbol, Generic);
-void initglobal(Symbol, int);
-Type initializer(Type, int);
-Tree structexp(Type, Symbol);
-void swtoseg(int);
-void inputInit(int);
-void inputstring(char *);
-void fillbuf(void);
-void nextline(void);
+dclproto(extern Tree addrof,(Tree));
+dclproto(extern Tree asgn,(Symbol, Tree));
+dclproto(extern Type assign,(Type, Tree));
+dclproto(extern Tree cast,(Tree, Type));
+dclproto(extern Tree cond,(Tree));
+dclproto(extern Tree conditional,(int));
+dclproto(extern Tree constexpr,(int));
+dclproto(extern Tree expr0,(int));
+dclproto(extern Tree expr,(int));
+dclproto(extern Tree expr1,(int));
+dclproto(extern Tree field,(Tree, char *));
+dclproto(extern char *funcname,(Tree));
+dclproto(extern Tree idnode,(Symbol));
+dclproto(extern Tree incr,(int, Tree, Tree));
+dclproto(extern int intexpr,(int, int));
+dclproto(extern Tree lvalue,(Tree));
+dclproto(extern Tree pointer,(Tree));
+dclproto(extern Type promote,(Type));
+dclproto(extern Tree right,(Tree, Tree));
+dclproto(extern Tree rvalue,(Tree));
+dclproto(extern Tree cvtconst,(Tree));
+dclproto(extern void defglobal,(Symbol, int));
+dclproto(extern void defpointer,(Symbol));
+dclproto(extern void doconst,(Symbol, Generic));
+dclproto(extern void initglobal,(Symbol, int));
+dclproto(extern Type initializer,(Type, int));
+dclproto(extern Tree structexp,(Type, Symbol));
+dclproto(extern void swtoseg,(int));
+dclproto(extern void inputInit,(int));
+dclproto(extern void inputstring,(char *));
+dclproto(extern void fillbuf,(void));
+dclproto(extern void nextline,(void));
 extern unsigned char *cp;
 extern char *file;
 extern char *firstfile;
 extern unsigned char *limit;
 extern char *line;
 extern int lineno;
-int getchr(void);
-int gettok(void);
+dclproto(extern int getchr,(void));
+dclproto(extern int gettok,(void));
 extern char kind[];
 extern Coordinate src;
+#ifdef __STDC__
 extern enum tokencode t;
+#else
+extern int t;
+#endif
 extern char *token;
 extern Symbol tsym;
-int main(int, char **);
-Symbol mkstr(char *);
-Symbol mksymbol(int, char *,Type);
+dclproto(extern int main,(int, char **));
+dclproto(extern Symbol mkstr,(char *));
+dclproto(extern Symbol mksymbol,(int, char *,Type));
 extern int Aflag;
 extern int Pflag;
 extern Symbol YYnull;
-extern int glevel;
+/*G*/extern int glevel;
 extern int xref;
-void bbinit(char *);
+dclproto(void bbinit,(char *));
 extern int ncalled;
 extern int npoints;
-void traceinit(char *);
-
-typedef struct
-{
+dclproto(void traceinit,(char *));
+typedef struct {
 	List entry;
 	List exit;
 	List returns;
@@ -478,132 +505,128 @@ typedef struct
 	List calls;
 	List end;
 } Events;
-
 extern Events events;
-typedef void (*Apply)(Generic, Generic, Generic);
-void attach(Apply, Generic, List *);
-void apply(List, Generic, Generic);
-void fprint(int, char *, ...);
-void print(char *, ...);
-
-char *stringf(char *, ...);
-
-
-void outflush(void);
-void outs(char *);
-void vfprint(int, char *, va_list);
-void vprint(char *, va_list);
-extern char *bp;
-void error(char *, ...);
-int fatal(char *, char *, int);
-void warning(char *, ...);
-int expect(int);
-void skipto(int, char *);
-void test(int, char *);
+dclproto(typedef void (*Apply),(Generic, Generic, Generic));
+dclproto(extern void attach,(Apply, Generic, List *));
+dclproto(extern void apply,(List, Generic, Generic));
+/*G*/dclproto(extern void fprint,(int, char *, ...));
+/*G*/dclproto(extern void print,(char *, ...));
+/*G*/dclproto(extern char *stringf,(char *, ...));
+/*G*/dclproto(extern void outflush,(void));
+/*G*/dclproto(extern void outs,(char *));
+dclproto(extern void vfprint,(int, char *, va_list));
+dclproto(extern void vprint,(char *, va_list));
+/*G*/extern char *bp;
+dclproto(extern void error,(char *, ...));
+/*G*/dclproto(extern int fatal,(char *, char *, int));
+dclproto(extern void warning,(char *, ...));
+dclproto(extern int expect,(int));
+dclproto(extern void skipto,(int, char *));
+dclproto(extern void test,(int, char *));
 extern int errcnt;
 extern int errlimit;
 extern int wflag;
-int process(char *);
-int findfunc(char *, char *);
-int findcount(char *, int, int);
-Tree asgnnode(int, Tree, Tree);
-Tree bitnode(int, Tree, Tree);
-Tree callnode(Tree, Type, Tree);
-Tree condnode(Tree, Tree, Tree);
-Tree constnode(unsigned int, Type);
-Tree eqnode(int, Tree, Tree);
-Tree shnode(int, Tree, Tree);
-void typeerror(int, Tree, Tree);
-Tree (*opnode[])(int, Tree, Tree);
-Tree simplify(int, Type, Tree, Tree);
-int ispow2(unsigned u);
-char *vtoa(Type, Value);
+dclproto(extern int process,(char *));
+dclproto(extern int findfunc,(char *, char *));
+dclproto(extern int findcount,(char *, int, int));
+dclproto(extern Tree asgnnode,(int, Tree, Tree));
+dclproto(extern Tree bitnode,(int, Tree, Tree));
+dclproto(extern Tree callnode,(Tree, Type, Tree));
+dclproto(extern Tree condnode,(Tree, Tree, Tree));
+dclproto(extern Tree constnode,(unsigned int, Type));
+dclproto(extern Tree eqnode,(int, Tree, Tree));
+dclproto(extern Tree shnode,(int, Tree, Tree));
+dclproto(extern void typeerror,(int, Tree, Tree));
+dclproto(extern Tree (*opnode[]),(int, Tree, Tree));
+dclproto(extern Tree simplify,(int, Type, Tree, Tree));
+dclproto(extern int ispow2,(unsigned u));
+dclproto(extern char *vtoa,(Type, Value));
 extern int needconst;
-void definelab(int);
-Code definept(Coordinate *);
-void equatelab(Symbol, Symbol);
-void flushequ(void);
-void retcode(Tree, int);
-void statement(int, Swtch, int);
+dclproto(extern void definelab,(int));
+dclproto(extern Code definept,(Coordinate *));
+dclproto(extern void equatelab,(Symbol, Symbol));
+dclproto(extern void flushequ,(void));
+dclproto(extern void retcode,(Tree, int));
+dclproto(extern void statement,(int, Swtch, int));
 extern float density;
 extern int refinc;
-char *allocate(int, Arena *);
-void deallocate(Arena *);
-extern Arena permanent;
-extern Arena transient;
-List append(Generic, List);
-int length(List);
-Generic *ltoa(List, Generic []);
-char *string(char *);
-char *stringd(int);
-char *stringn(char *, int);
-Symbol constant(Type, Value);
-void enterscope(void);
-void exitscope(void);
-void fielduses(Symbol, Generic);
-Symbol findlabel(int);
-Symbol findtype(Type);
-void foreach(Table, int, void (*)(Symbol, Generic), Generic);
-Symbol genident(int, Type, int);
-int genlabel(int);
-Symbol install(char *, Table *, int);
-Symbol intconst(int);
-void locus(Table, Coordinate *);
-Symbol lookup(char *, Table);
-Symbol newconst(Value v,int tc);
-Symbol newtemp(int, int);
-void rmtemps(int, int);
-void release(Symbol);
-void setuses(Table);
-Table table(Table, int);
-Symbol temporary(int, Type);
-void use(Symbol, Coordinate);
+/*G*/dclproto(extern char *allocate,(int, Arena *));
+dclproto(extern void deallocate,(Arena *));
+/*G*/extern Arena permanent;
+/*G*/extern Arena transient;
+dclproto(extern List append,(Generic, List));
+dclproto(extern int length,(List));
+dclproto(extern Generic *list_to_a,(List, Generic []));
+/*G*/dclproto(extern char *string,(char *));
+/*G*/dclproto(extern char *stringd,(int));
+dclproto(extern char *stringn,(char *, int));
+dclproto(extern Symbol constant,(Type, Value));
+dclproto(extern void enterscope,(void));
+dclproto(extern void exitscope,(void));
+dclproto(extern void fielduses,(Symbol, Generic));
+dclproto(extern Symbol findlabel,(int));
+dclproto(extern Symbol findtype,(Type));
+/*G*/dclproto(extern void foreach,(Table, int, void (*)(Symbol, Generic), Generic));
+dclproto(extern Symbol genident,(int, Type, int));
+/*G*/dclproto(extern int genlabel,(int));
+dclproto(extern Symbol install,(char *, Table *, int));
+dclproto(extern Symbol intconst,(int));
+dclproto(extern void locus,(Table, Coordinate *));
+dclproto(extern Symbol lookup,(char *, Table));
+/*G*/dclproto(extern Symbol newconst,(Value, int));
+/*G*/dclproto(extern Symbol newtemp,(int, int));
+dclproto(extern void rmtemps,(int, int));
+dclproto(extern void release,(Symbol));
+dclproto(extern void setuses,(Table));
+dclproto(extern Table table,(Table, int));
+dclproto(extern Symbol temporary,(int, Type));
+dclproto(extern void use,(Symbol, Coordinate));
 extern int bnumber;
 extern Table constants;
 extern Table externals;
 extern Table globals;
 extern Table identifiers;
 extern Table labels[2];
-extern Table types;
+/*G*/extern Table types;
 extern int level;
 extern List symbols;
-void typeInit(void);
-Type array(Type, int, int);
-Type atop(Type);
-void checkfields(Type);
-Type composite(Type, Type);
-Symbol deftype(char *, Type, Coordinate *);
-Type deref(Type);
-int eqtype(Type, Type, int);
-Field extends(Type, Type);
-Field fieldlist(Type);
-Field fieldref(char *, Type);
-Type freturn(Type);
-Type func(Type, Type *);
-int hasproto(Type);
-Field newfield(char *, Type, Type);
-Type newstruct(int, char *);
-void outtype(Type);
-void printdecl(Symbol, Type);
-void printproto(Symbol, Symbol *);
-void printtype(Type, int);
-Type ptr(Type);
-Type qual(int, Type);
-void rmtypes(void);
-int ttob(Type);
-char *typestring(Type, char *);
-int variadic(Type);
-extern Type chartype;
+dclproto(extern void typeInit,(void));
+dclproto(extern Type array,(Type, int, int));
+dclproto(extern Type atop,(Type));
+dclproto(extern void checkfields,(Type));
+dclproto(extern Type composite,(Type, Type));
+dclproto(extern Symbol deftype,(char *, Type, Coordinate *));
+dclproto(extern Type deref,(Type));
+dclproto(extern int eqtype,(Type, Type, int));
+dclproto(extern Field extends,(Type, Type));
+/*G*/dclproto(extern Field fieldlist,(Type));
+dclproto(extern Field fieldref,(char *, Type));
+/*G*/dclproto(extern Type freturn,(Type));
+dclproto(extern Type func,(Type, Type *));
+dclproto(extern int hasproto,(Type));
+dclproto(extern Field newfield,(char *, Type, Type));
+dclproto(extern Type newstruct,(int, char *));
+dclproto(extern void outtype,(Type));
+dclproto(extern void printdecl,(Symbol, Type));
+dclproto(extern void printproto,(Symbol, Symbol *));
+dclproto(extern void printtype,(Type, int));
+dclproto(extern Type ptr,(Type));
+dclproto(extern Type qual,(int, Type));
+dclproto(extern void rmtypes,(void));
+/*G*/dclproto(extern int ttob,(Type));
+dclproto(extern char *typestring,(Type, char *));
+/*G*/dclproto(extern int variadic,(Type));
+/*G*/extern Type chartype;
 extern Type doubletype;
 extern Type floattype;
-extern Type inttype;
+/*G*/extern Type inttype;
 extern Type longdouble;
 extern Type longtype;
 extern Type shorttype;
 extern Type signedchar;
-extern Type unsignedchar;
+/*G*/extern Type unsignedchar;
 extern Type unsignedlong;
-extern Type unsignedshort;
+/*G*/extern Type unsignedshort;
 extern Type unsignedtype;
 extern Type voidptype;
 extern Type voidtype;

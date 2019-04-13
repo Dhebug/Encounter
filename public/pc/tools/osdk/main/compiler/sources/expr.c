@@ -135,7 +135,7 @@ static Tree call(f, fty, src) Tree f; Type fty; Coordinate src; {
 						n + 1, funcname(f), q->type, *proto);
 				proto++;
 			} else {
-				if (fty->u.proto && *proto == 0)
+				if (fty->u.proto && (proto == 0 || *proto == 0))
 					error("too many arguments to %s\n", funcname(f));
 				q = value(q);
 				if (q->type == floattype)
@@ -167,7 +167,7 @@ static Tree call(f, fty, src) Tree f; Type fty; Coordinate src; {
 				}
 				q = tree(RIGHT, ptr(q->type), root(q), lvalue(idnode(t1)));
 			}
-				
+
 #endif
 			if (hascall(q))
 				r = tree(RIGHT, voidtype, r, q);
@@ -299,7 +299,7 @@ Tree cond(p) Tree p; {
 }
 
 /* conditional - parse expression and cast to conditional */
-Tree conditional(tok) {
+Tree conditional(int tok) {
 	Tree p = expr(tok);
 
 	if (Aflag > 1 && isfunc(p->type))
@@ -308,7 +308,7 @@ Tree conditional(tok) {
 }
 
 /* constexpr - parse a constant expression */
-Tree constexpr(tok) {
+Tree constexpr(int tok) {
 	Tree p;
 
 	needconst++;
@@ -318,12 +318,12 @@ Tree constexpr(tok) {
 }
 
 /* expr0 - parse an expression for side effect */
-Tree expr0(tok) {
+Tree expr0(int tok) {
 	return root(expr(tok));
 }
 
 /* expr - parse an expression */
-Tree expr(tok) {
+Tree expr(int tok) {
 	Tree p = expr1(0);
 
 	while (t == ',') {
@@ -344,7 +344,7 @@ Tree expr(tok) {
 }
 
 /* expr1 - parse assignments */
-Tree expr1(tok) {
+Tree expr1(int tok) {
 	Tree p = expr2();
 
 	while (t == '=' || (prec[t] >= 6 && prec[t] <= 8)
@@ -394,7 +394,7 @@ static Tree expr2() {
 }
 
 /* expr3 - parse expressions at precedence level k */
-static Tree expr3(k) {
+static Tree expr3(int k) {
 	int k1;
 	Tree p = prefix();
 
@@ -410,7 +410,7 @@ static Tree expr3(k) {
 				r = right(e, pointer(expr3(k1 + (k1>5))));
 			} else
 				r = pointer(expr3(k1 + (k1>5)));
-			p = (*opnode[op])(oper[op], p, r); 
+			p = (*opnode[op])(oper[op], p, r);
 		}
 	return p;
 }
@@ -491,12 +491,12 @@ Tree idnode(p) Symbol p; {
 }
 
 /* incr - construct tree for e1 op= e2 */
-Tree incr(op, e1, e2) Tree e1, e2; {
+Tree incr(int op, Tree e1, Tree e2) {
 	return asgnnode(ASGN, e1, (*opnode[op])(oper[op], e1, e2));
 }
 
 /* intexpr - parse a constant expression and return int value, default n */
-int intexpr(tok, n) {
+int intexpr(int tok, int n) {
 	Tree p = constexpr(tok);
 
 	needconst++;
@@ -659,7 +659,7 @@ static Tree prefix() {
 		if (isarith(p->type))
 			p = cast(p, promote(p->type));
 		else
-			typeerror(ADD, p, 0); 
+			typeerror(ADD, p, 0);
 		break;
 	case '-':
 		t = gettok();
@@ -681,7 +681,7 @@ static Tree prefix() {
 			Type ty = promote(p->type);
 			p = simplify(BCOM, ty, cast(p, ty), 0);
 		} else
-			typeerror(BCOM, p, 0); 
+			typeerror(BCOM, p, 0);
 		break;
 	case '!':
 		t = gettok();
@@ -689,7 +689,7 @@ static Tree prefix() {
 		if (isscalar(p->type))
 			p = simplify(NOT, inttype, cond(p), 0);
 		else
-			typeerror(NOT, p, 0); 
+			typeerror(NOT, p, 0);
 		break;
 	case INCR: case DECR: {
 		Opcode op = t;
@@ -836,7 +836,7 @@ static Tree primary() {
 		break;
 	case SCON:
 		tsym->u.c.v.p = stringn(tsym->u.c.v.p, tsym->type->size);
-		tsym = constant(tsym->type, tsym->u.c.v); 
+		tsym = constant(tsym->type, tsym->u.c.v);
 		if (tsym->u.c.loc == 0)
 			tsym->u.c.loc = genident(STATIC, tsym->type, GLOBAL);
 		p = idnode(tsym->u.c.loc);

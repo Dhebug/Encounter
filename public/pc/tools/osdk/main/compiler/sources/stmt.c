@@ -39,7 +39,7 @@ dclproto(static void visit,(struct equate *));
 dclproto(static void whilestmt,(int, struct swtch *, int));
 
 /* branch - jump to lab */
-static void branch(lab) {
+static void branch(int lab) {
 	Code cp;
 
 	walk(0, 0, 0);
@@ -51,7 +51,8 @@ static void branch(lab) {
 			Symbol old = findlabel(lab);
 			equatelab(cp->u.node->syms[0], old);
 			old->ref++;
-			if (cp->prev->next = cp->next)
+			cp->prev->next = cp->next;
+			if (cp->next)
 				cp->next->prev = cp->prev;
 			else
 				codelist = cp->prev;
@@ -67,7 +68,7 @@ static void branch(lab) {
 }
 
 /* caselabel - add a label to the current switch list */
-static void caselabel(swp, val, lab) struct swtch *swp; {
+static void caselabel(swp, val, lab) int val,lab; struct swtch *swp; {
 	int k;
 
 	if (swp->ncases >= swp->size) {
@@ -80,7 +81,7 @@ static void caselabel(swp, val, lab) struct swtch *swp; {
 			swp->values[k] = vals[k];
 			swp->labels[k] = labs[k];
 		}
-	}	
+	}
 	for (k = swp->ncases; k > 0 && swp->values[k-1] >= val; k--) {
 		swp->values[k] = swp->values[k-1];
 		swp->labels[k] = swp->labels[k-1];
@@ -95,12 +96,12 @@ static void caselabel(swp, val, lab) struct swtch *swp; {
 }
 
 /* cmp - generate code for `if (p op n) goto lab' for integer n */
-static void cmp(op, p, n, lab) Symbol p; {
+static void cmp(int op, Symbol p, int n, int lab) {
 	listnodes(eqnode(op, cast(idnode(p), inttype), constnode(n, inttype)), lab, 0);
 }
 
 /* definelab - define a label */
-void definelab(lab) {
+void definelab(int lab) {
 	Code cp;
 
 	walk(0, 0, 0);
@@ -140,7 +141,7 @@ Code definept(p) Coordinate *p; {
 }
 
 /* dostmt - do statement while ( expression ) */
-static void dostmt(lab, swp, lev) struct swtch *swp; {
+static void dostmt(lab, swp, lev) int lab, lev; struct swtch *swp; {
 	refinc *= 10;
 	t = gettok();
 	definelab(lab);
@@ -169,7 +170,7 @@ void equatelab(new, old) Symbol new, old; {
 		else if (e->new == old)
 			equlist->oldlink = e;
 }
-	
+
 /* flushequ - flush deferred equates */
 void flushequ() {
 	for ( ; equlist; equlist = equlist->link)
@@ -201,7 +202,7 @@ static int foldcond(e1, e2) Tree e1, e2; {
 }
 
 /* forstmt - for ( [expr1] ; [expr2] ; [expr3] ) statement */
-static void forstmt(lab, swp, lev) struct swtch *swp; {
+static void forstmt(lab, swp, lev) int lab,lev; struct swtch *swp; {
 	Tree e1, e2, e3;
 	Coordinate pt2, pt3;
 	static char follow[] = { IF, ID, '}', 0 };
@@ -265,7 +266,7 @@ static void forstmt(lab, swp, lev) struct swtch *swp; {
 }
 
 /* ifstmt - if ( expression ) statement [ else statement ] */
-static void ifstmt(lab, loop, swp, lev) struct swtch *swp; {
+static void ifstmt(lab, loop, swp, lev) int lab,loop,lev; struct swtch *swp; {
 	t = gettok();
 	expect('(');
 	definept(0);
@@ -313,7 +314,7 @@ static Symbol localaddr(p) Tree p; {
 }
 
 /* retcode - return p from the current function */
-void retcode(p, lab) Tree p; {
+void retcode(Tree p, int lab) {
 	if (p == 0) {
 		if (events.returns)
 			apply(events.returns, (Generic)cfunc, (Generic)0);
@@ -321,7 +322,8 @@ void retcode(p, lab) Tree p; {
 	} else {
 		Type ty;
 		p = pointer(p);
-		if (ty = assign(freturn(cfunc->type), p))
+		ty = assign(freturn(cfunc->type), p);
+		if (ty)
 			p = cast(p, ty);
 		else
 			error("illegal return type; found `%t' expected `%t'\n",
@@ -364,7 +366,7 @@ void retcode(p, lab) Tree p; {
 }
 
 /* statement - parse statements */
-void statement(loop, swp, lev) struct swtch *swp; {
+void statement(loop, swp, lev) int loop,lev; struct swtch *swp; {
 	int lab, ref = refinc;
 
 	if (Aflag >= 2 && lev == 15)
@@ -533,14 +535,12 @@ static void stmtlabel(label) char *label; {
 }
 
 /* swcode - generate switch decision code for buckets b[lb..ub] */
-static int swcode(swp, b, lb, ub, n) struct swtch *swp; int b[]; 
-{
+static int swcode(swp, b, lb, ub, n) struct swtch *swp; int lb, ub, n, b[]; {
 	int hilab, k, l, lolab, median, u, *v;
 
 	v = swp->values;
-	median = (int) (((float)v[b[lb]] + (float)v[b[ub+1]-1] + 1)/2);
-	for (l = lb, u = ub; l <= u; ) 
-	{
+	median = ((float)v[b[lb]] + (float)v[b[ub+1]-1] + 1)/2;
+	for (l = lb, u = ub; l <= u; ) {
 		k = (l + u)/2;
 		if (v[b[k]] > median)
 			u = k - 1;
@@ -625,7 +625,7 @@ static void swgen(swp) struct swtch *swp; {
 		buckets[n] = k;
 		while (n > 0) {
 			float d = den(k, n-1);
-			if (d < density || k < swp->ncases - 1 && d < den(k+1, n))
+			if (d < density || (k < swp->ncases - 1 && d < den(k+1, n)))
 				break;
 			n--;
 		}
@@ -635,7 +635,7 @@ static void swgen(swp) struct swtch *swp; {
 }
 
 /* swstmt - switch ( expression ) statement */
-static void swstmt(loop, lab, lev) {
+static void swstmt(int loop, int lab, int lev) {
 	Tree e;
 	struct swtch sw;
 	Code head, tail;
@@ -696,7 +696,7 @@ static void visit(p) struct equate *p; {
 }
 
 /* whilestmt - while ( expression ) statement */
-static void whilestmt(lab, swp, lev) struct swtch *swp; {
+static void whilestmt(lab, swp, lev) int lab, lev; struct swtch *swp; {
 	Coordinate pt;
 	Tree e;
 

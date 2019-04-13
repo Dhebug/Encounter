@@ -1,6 +1,7 @@
 /* C compiler: error reporting */
 
 #include "c.h"
+extern void exit(int);
 
 int errcnt;		/* number of compilation errors */
 int errlimit = 20;	/* compilation error limit */
@@ -9,48 +10,19 @@ int wflag;		/* != 0 to suppress warning messages */
 dclproto(static void printtoken,(void));
 
 /* error - issue error message */
-/*
-void error(char *fmt, ...) 
-{
+#if defined(__STDC__) || defined(_MSC_VER)
+void error(char *fmt, ...) {
+#else
+void error(fmt, va_alist) char *fmt; va_dcl {
+#endif
 	va_list ap;
 
 	va_init(ap, fmt);
 	if (firstfile != file && firstfile && *firstfile)
-		fprint(2, "%s: ", firstfile);		// omit
+		fprint(2, "%s: ", firstfile);		/* omit */
 	fprint(2, "%w: ", &src);
 	vfprint(2, fmt, ap);
-	if (++errcnt >= errlimit) 
-	{
-		errcnt = -1;
-		error("too many errors\n");
-		exit(1);
-	}
-	va_end(ap);
-}
-*/
-
-
-// Actuellement:
-// =============
-// main.c:203: syntax error; found `void' expecting `;'
-//
-// Ce que l'on veut:
-// =================
-// C:\sources\pc\Tools\Oric\rcc16\LCC1.9\C\Error.c(62) : error C2054: expected '(' to follow 's'
-
-void error(char *fmt, ...) 
-{
-	va_list ap;
-
-	va_init(ap, fmt);
-	if (firstfile != file && firstfile && *firstfile)
-	{
-		fprint(2, "%s: ", firstfile);		// omit
-	}
-	fprint(2, "%w: ", &src);
-	vfprint(2, fmt, ap);
-	if (++errcnt >= errlimit) 
-	{
+	if (++errcnt >= errlimit) {
 		errcnt = -1;
 		error("too many errors\n");
 		exit(1);
@@ -58,15 +30,9 @@ void error(char *fmt, ...)
 	va_end(ap);
 }
 
-
-
-
-//
 /* expect - advance if t is tok, otherwise issue message */
-int expect(tok) 
-{
-	if (t == tok) 
-	{
+int expect(int tok) {
+	if (t == tok) {
 		t = gettok();
 		return t;
 	}
@@ -78,12 +44,8 @@ int expect(tok)
 	return 0;
 }
 
-
-  
-
 /* fatal - issue fatal error message and exit */
-int fatal(name, fmt, n) char *name, *fmt; 
-{
+int fatal(char *name, char *fmt, int n) {
 	*bp++ = '\n';
 	outflush();
 	error("compiler error in %s--", name);
@@ -124,7 +86,7 @@ static void printtoken() {
 }
 
 /* skipto - skip input up to tok U set, for a token where kind[t] is in set */
-void skipto(tok, set) char set[]; {
+void skipto(int tok, char set[]) {
 	int n;
 	char *s;
 
@@ -154,7 +116,7 @@ void skipto(tok, set) char set[]; {
 }
 
 /* test - check for token tok, skip to tok U set, if necessary */
-void test(tok, set) char set[]; {
+void test(int tok, char set[])  {
 	if (t == tok)
 		t = gettok();
 	else {
@@ -166,8 +128,11 @@ void test(tok, set) char set[]; {
 }
 
 /* warning - issue warning error message */
-void warning(char *fmt, ...) 
-{
+#ifdef __STDC__
+void warning(char *fmt, ...) {
+#else
+void warning(fmt, va_alist) char *fmt; va_dcl {
+#endif
 	va_list ap;
 
 	va_init(ap, fmt);

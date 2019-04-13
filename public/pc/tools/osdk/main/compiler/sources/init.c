@@ -20,7 +20,7 @@ dclproto(static int initstruct,(int, Type, int));
 dclproto(static Tree initvalue,(Type));
 
 /* defglobal - define a global or static variable in segment seg */
-void defglobal(p, seg) Symbol p; {
+void defglobal(Symbol p, int seg) {
 	swtoseg(p->u.seg = seg);
 	if (p->sclass != STATIC)
 		export(p);
@@ -93,7 +93,7 @@ static void genchar(p, sp) Symbol p; struct structexp *sp; {
 }
 
 /* genconst - generate/check constant expression e; return size */
-int genconst(e, def) Tree e; {
+int genconst(Tree e, int def) {
 	for (;;)
 		switch (generic(e->op)) {
 		case ADDRG:
@@ -132,7 +132,7 @@ int genconst(e, def) Tree e; {
 }
 
 /* genspace - generate n bytes of space or 0's */
-static void genspace(n, sp) struct structexp *sp; {
+static void genspace(n, sp) int n; struct structexp *sp; {
 	if (sp == 0)
 		space(n);
 	else if (n <= inttype->size)
@@ -157,13 +157,13 @@ static void genspace(n, sp) struct structexp *sp; {
 }
 
 /* initarray - initialize array of ty of <= len bytes; if len == 0, go to } */
-static int initarray(len, ty, lev) Type ty; {
+static int initarray(len, ty, lev) int len,lev; Type ty; {
 	int n = 0;
 
 	do {
 		initializer(ty, lev);
 		n += ty->size;
-		if (len > 0 && n >= len || t != ',')
+		if ((len > 0 && n >= len) || t != ',')
 			break;
 		t = gettok();
 	} while (t != '}');
@@ -171,7 +171,7 @@ static int initarray(len, ty, lev) Type ty; {
 }
 
 /* initchar - initialize array of <= len ty characters; if len == 0, go to } */
-static int initchar(len, ty) Type ty; {
+static int initchar(int len, Type ty) {
 	int n = 0;
 	char buf[16], *s = buf;
 
@@ -179,7 +179,8 @@ static int initchar(len, ty) Type ty; {
 		if (current) {
 			Type aty;
 			Tree e = expr1(0);
-			if (aty = assign(ty, e))
+			aty = assign(ty, e);
+			if (aty)
 				genasgn(cast(e, aty), current);
 			else
 				error("invalid initialization type; found `%t' expected `%s'\n",
@@ -192,7 +193,7 @@ static int initchar(len, ty) Type ty; {
 				s = buf;
 			}
 		}
-		if (len > 0 && n >= len || t != ',')
+		if ((len > 0 && n >= len) || t != ',')
 			break;
 		t = gettok();
 	} while (t != '}');
@@ -202,7 +203,7 @@ static int initchar(len, ty) Type ty; {
 }
 
 /* initend - finish off an initialization at level lev; accepts trailing comma */
-static void initend(lev, follow) char follow[]; {
+static void initend(lev, follow) int lev; char follow[]; {
 	if (lev == 0 && t == ',')
 		t = gettok();
 	test('}', follow);
@@ -246,9 +247,9 @@ static int initfields(p, q) Field p, q; {
 	do {
 		i = initvalue(inttype)->u.v.i;
 		if (fieldsize(p) < 8*p->type->size) {
-			if (p->type == inttype && i >= 0 && (i&~(fieldmask(p)>>1)) !=  0
-			||  p->type == inttype && i <  0 && (i| (fieldmask(p)>>1)) != ~0
-			||  p->type == unsignedtype      && (i& ~fieldmask(p)))
+			if ((p->type == inttype && i >= 0 && (i&~(fieldmask(p)>>1)) !=  0)
+			||  (p->type == inttype && i <  0 && (i| (fieldmask(p)>>1)) != ~0)
+			||  (p->type == unsignedtype      && (i& ~fieldmask(p))))
 				warning("initializer exceeds bit-field width\n");
 			i &= fieldmask(p);
 		}
@@ -275,7 +276,7 @@ static int initfields(p, q) Field p, q; {
 }
 
 /* initglobal - a new global identifier p, possibly initialized */
-void initglobal(p, flag) Symbol p; {
+void initglobal(Symbol p, int flag) {
 	Type ty;
 
 	if (t == '=' || flag) {
@@ -299,7 +300,7 @@ void initglobal(p, flag) Symbol p; {
 }
 
 /* initializer - constexpr | { constexpr ( , constexpr )* [ , ] } */
-Type initializer(ty, lev) Type ty; {
+Type initializer(Type ty, int lev) {
 	int n = 0;
 	Tree e;
 	Type aty;
@@ -316,7 +317,8 @@ Type initializer(ty, lev) Type ty; {
 		} else
 			e = expr1(0);
 		e = pointer(e);
-		if (aty = assign(ty, e))
+		aty = assign(ty, e);
+		if (aty)
 			e = cast(e, aty);
 		else
 			error("invalid initialization type; found `%t' expected `%t'\n",
@@ -402,7 +404,7 @@ Type initializer(ty, lev) Type ty; {
 			error("missing { in initialization of `%t'\n", ty);
 			n = initarray(aty->size, aty, lev + 1);
 		}
-	}	
+	}
 	if (ty->size) {
 		if (n > ty->size)
 			error("too many initializers\n");
@@ -416,7 +418,7 @@ Type initializer(ty, lev) Type ty; {
 }
 
 /* initstruct - initialize a struct ty of <= len bytes; if len == 0, go to } */
-static int initstruct(len, ty, lev) Type ty; {
+static int initstruct(int len, Type ty, int lev) {
 	int a, n = 0;
 	Field p = ty->u.sym->u.s.flist;
 
@@ -444,7 +446,7 @@ static int initstruct(len, ty, lev) Type ty; {
 			genspace(a - n%a, current);
 			n = roundup(n, a);
 		}
-		if (len > 0 && n >= len || t != ',')
+		if ((len > 0 && n >= len) || t != ',')
 			break;
 		t = gettok();
 	} while (t != '}');
@@ -458,7 +460,8 @@ static Tree initvalue(ty) Type ty; {
 
 	needconst++;
 	e = expr1(0);
-	if (aty = assign(ty, e))
+	aty = assign(ty, e);
+	if (aty)
 		e = cast(e, aty);
 	else {
 		error("invalid initialization type; found `%t' expected `%s'\n",
@@ -488,7 +491,7 @@ Tree structexp(ty, t1) Type ty; Symbol t1; {
 }
 
 /* swtoseg - switch to segment seg, if necessary */
-void swtoseg(seg) {
+void swtoseg(int seg) {
 	if (curseg != seg)
 		segment(seg);
 	curseg = seg;

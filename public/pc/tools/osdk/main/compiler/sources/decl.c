@@ -3,12 +3,12 @@
 #include "c.h"
 
 Symbol cfunc = 0;		/* current function */
-char *fname = 0;		/* current function name */
+char *fname=0;          /* function name */
 Symbol retv;			/* return value location for structs */
 
 static List autos;		/* auto locals for current block */
-static int funcdclr;		/* declarator has parameters */	
-static int nglobals;		/* number of external ids */	
+static int funcdclr;		/* declarator has parameters */
+static int nglobals;		/* number of external ids */
 static int regcount;		/* number of explicit register declarations */
 static List registers;		/* register locals for current block */
 
@@ -59,15 +59,16 @@ static void checkref(p, cl) Symbol p; Generic cl; {
 		p->sclass = REGISTER;
 	if (p->scope > PARAM && (q = lookup(p->name, externals))) {
 		q->ref += p->ref;
-	} else if (p->sclass == STATIC && !p->defined)
+	} else if (p->sclass == STATIC && !p->defined) {
 		if (p->ref > 0)
 			error("undefined static `%t %s'\n", p->type, p->name);
 		else if (isfunc(p->type))
 			warning("undefined static `%t %s'\n", p->type, p->name);
+	}
 }
 
 /* compound - { ( decl ; )* statement* } */
-void compound(loop, swp, lev) struct swtch *swp; {
+void compound(int loop, struct swtch *swp, int lev) {
 	Symbol p;
 	Code cp;
 	int i, j, nregs;
@@ -88,11 +89,11 @@ void compound(loop, swp, lev) struct swtch *swp; {
 		apply(events.entry, (Generic)cfunc, (Generic)0);
 	expect('{');
 	while (kind[t] == CHAR || kind[t] == STATIC
-	|| t == ID && tsym && tsym->sclass == TYPEDEF && (level < LOCAL || getchr() != ':'))
+	|| (t == ID && tsym && tsym->sclass == TYPEDEF && (level < LOCAL || getchr() != ':')))
 		decl(dcllocal, 0);
 	nregs = length(registers);
-	cp->u.block.locals = (Symbol *)ltoa(registers, (Generic *)talloc((nregs + length(autos) + 1)*sizeof(Symbol)));
-	ltoa(autos, (Generic *)&cp->u.block.locals[nregs]);
+	cp->u.block.locals = (Symbol *)list_to_a(registers, (Generic *)talloc((nregs + length(autos) + 1)*sizeof(Symbol)));
+	list_to_a(autos, (Generic *)&cp->u.block.locals[nregs]);
 	while (kind[t] == IF || kind[t] == ID)
 		statement(loop, swp, lev);
 	walk(0, 0, 0);
@@ -112,7 +113,7 @@ void compound(loop, swp, lev) struct swtch *swp; {
 }
 
 /* dclglobal - called from decl to declare a global */
-static Symbol dclglobal(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos; {
+static Symbol dclglobal(int sclass, char *id, Type ty, Coordinate *pos) {
 	Symbol p, q;
 
 	if (sclass == 0 || sclass == REGISTER)
@@ -163,7 +164,7 @@ static Symbol dclglobal(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos;
 }
 
 /* dcllocal - called from decl to declare a local */
-static Symbol dcllocal(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos; {
+static Symbol dcllocal(int sclass, char *id, Type ty, Coordinate *pos) {
 	Symbol p, q;
 
 	if (isfunc(ty)) {
@@ -272,7 +273,7 @@ static Symbol dcllocal(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos; 
 }
 
 /* dclparam - called from decl to declare a parameter */
-static Symbol dclparam(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos; {
+static Symbol dclparam(int sclass, char *id, Type ty, Coordinate *pos) {
 	Symbol p;
 
 	if ((p = lookup(id, identifiers)) && p->scope == level
@@ -305,7 +306,7 @@ static Symbol dclparam(sclass, id, ty, pos) char *id; Type ty; Coordinate *pos; 
 }
 
 /* dclr - declarator */
-static Type dclr(basety, id, lev) Type basety; char **id; {
+static Type dclr(Type basety, char **id, int lev) {
 	Type ty;
 
 	for (ty = dclr1(id, lev); ty; ty = ty->type)
@@ -331,7 +332,7 @@ static Type dclr(basety, id, lev) Type basety; char **id; {
 }
 
 /* dclr1 - ( id |  * ( const | volatile )* | '(' dclr1 ')' ) ( (...) | [...] )* */
-static Type dclr1(id, lev) char **id; {
+static Type dclr1(char **id, int lev) {
 	Type ty = 0;
 
 	switch (t) {
@@ -401,7 +402,9 @@ static Type dclr1(id, lev) char **id; {
 
 /* decl - type [ dclr ( , dclr )* ] ; */
 static void decl(dcl, eflag)
-dclproto(Symbol (*dcl),(int, char *, Type, Coordinate *)); {
+dclproto(Symbol (*dcl),(int, char *, Type, Coordinate *));
+int eflag;
+{
 	int sclass;
 	char *id = 0;
 	Type ty, ty1;
@@ -424,8 +427,7 @@ dclproto(Symbol (*dcl),(int, char *, Type, Coordinate *)); {
 					error("invalid use of `typedef'\n");
 					sclass = EXTERN;
 				}
-				funcdecl(sclass, fname = id, ty1, pt);
-				fname = 0;
+				funcdecl(sclass, id, ty1, pt);
 				return;
 			} else if (funcdclr)
 				{ foreach(identifiers, level, checkparam, (Generic)0); exitscope(); }
@@ -457,7 +459,7 @@ dclproto(Symbol (*dcl),(int, char *, Type, Coordinate *)); {
 }
 
 /* doextern - import external declared in a block, if necessary, propagate flags */
-static void doextern(p, cl) Symbol p; Generic cl; {
+static void doextern(Symbol p, Generic cl){
 	Symbol q;
 
 	if (q = lookup(p->name, identifiers))
@@ -469,7 +471,7 @@ static void doextern(p, cl) Symbol p; Generic cl; {
 }
 
 /* doglobal - finalize tentative definitions, check for imported symbols */
-static void doglobal(p, cl) Symbol p; Generic cl; {
+static void doglobal(Symbol p, Generic cl) {
 	if (p->sclass == TYPEDEF || p->sclass == ENUM || p->defined) {
 		if (Pflag && !isfunc(p->type) && !p->generated)
 			printdecl(p, p->type);
@@ -562,7 +564,7 @@ static Type enumdecl() {
 			ty->type = inttype;
 		ty->size = ty->type->size;
 		ty->align = ty->type->align;
-		ty->u.sym->u.idlist = (Symbol *)ltoa(idlist, (Generic *)alloc((length(idlist) + 1)*sizeof(Symbol)));
+		ty->u.sym->u.idlist = (Symbol *)list_to_a(idlist, (Generic *)alloc((length(idlist) + 1)*sizeof(Symbol)));
 		ty->u.sym->defined = 1;
 	} else if ((p = lookup(tag, types)) && p->type->op == ENUM) {
 		if (*tag && xref)
@@ -577,7 +579,7 @@ static Type enumdecl() {
 }
 
 /* fields - ( type dclr ( , dclr )* ; )* */
-static void fields(ty) Type ty; {
+static void fields(Type ty) {
 	int n = 0, bits, off, overflow = 0;
 	Field p, *q;
 
@@ -690,7 +692,7 @@ static void fields(ty) Type ty; {
 	}
 	checkfields(ty);
 }
-	
+
 /* finalize - finalize tentative definitions, constants, check unref'd statics */
 void finalize() {
 	if (xref) {
@@ -705,12 +707,12 @@ void finalize() {
 }
 
 dclproto(static void fillcallees,(Symbol, Generic));
-static void fillcallees(p, cl) Symbol p; Generic cl; {
+static void fillcallees(Symbol p, Generic cl) {
 	*(List *)cl = append(p, *(List *)cl);
 }
 
 /* funcdecl - ... ( ... ) decl* compound */
-static void funcdecl(sclass, id, ty, pt) char *id; Type ty; Coordinate pt; {
+static void funcdecl(int sclass, char *id, Type ty, Coordinate pt) {
 	int i, n;
 	Code rp;
 	Symbol *callee, *caller, p;
@@ -724,7 +726,7 @@ static void funcdecl(sclass, id, ty, pt) char *id; Type ty; Coordinate pt; {
 	n = length(callees);
 	if (Aflag >= 2 && n > 31)
 		warning("more than 31 parameters in function `%s'\n", id);
-	caller = (Symbol *)ltoa(callees, (Generic *)0);
+	caller = (Symbol *)list_to_a(callees, (Generic *)0);
 	callee = (Symbol *)talloc((n + 1)*sizeof *caller);
 	for (i = 0; p = caller[i]; i++) {
 		callee[--n] = p;
@@ -822,7 +824,7 @@ static void funcdecl(sclass, id, ty, pt) char *id; Type ty; Coordinate pt; {
 }
 
 /* newstyle - process function arguments for new-style definition */
-static Type newstyle(ty, caller, callee) Type ty; Symbol caller[], callee[]; {
+static Type newstyle(Type ty, Symbol caller[], Symbol callee[]) {
 	int i;
 
 	for (i = 0; callee[i]; i++) {
@@ -837,7 +839,7 @@ static Type newstyle(ty, caller, callee) Type ty; Symbol caller[], callee[]; {
 }
 
 /* oldparam - check that p is an old-style parameter, and patch callee[i] */
-static void oldparam(p, cl) Symbol p; Generic cl; {
+static void oldparam(Symbol p, Generic cl) {
 	Symbol *callee = (Symbol *)cl;
 	int i;
 
@@ -850,7 +852,7 @@ static void oldparam(p, cl) Symbol p; Generic cl; {
 }
 
 /* oldstyle - process function arguments for old-style definition */
-static Type oldstyle(name, ty, caller, callee) char *name; Type ty; Symbol caller[], callee[]; {
+static Type oldstyle(char *name, Type ty, Symbol caller[], Symbol callee[]) {
 	int i;
 	Symbol p;
 
@@ -883,11 +885,11 @@ static Type oldstyle(name, ty, caller, callee) char *name; Type ty; Symbol calle
 			error("conflicting argument declarations for function `%s'\n", name);
 		ty = func(freturn(ty), p->type->u.proto);
 	} else
-		ty = func(freturn(ty), 0); 
+		ty = func(freturn(ty), 0);
 	return ty;
 }
 /* parameters - [id ( , id )* | type dclr ( , type dclr )*] */
-static Type *parameters(lev) {
+static Type *parameters(int lev) {
 	Type *proto = 0;
 
 	enterscope();
@@ -928,7 +930,7 @@ static Type *parameters(lev) {
 				break;
 			t = gettok();
 		}
-		proto = (Type *)ltoa(list, (Generic *)alloc((n + 1)*sizeof (Type)));
+		proto = (Type *)list_to_a(list, (Generic *)alloc((n + 1)*sizeof (Type)));
 	} else if (t == ID) {
 		for (;;) {
 			if (t != ID) {
@@ -952,14 +954,14 @@ static Type *parameters(lev) {
 	return proto;
 }
 /* checkparam - check for old-style param list; called at ends of parameters */
-static void checkparam(p, cl) Symbol p; Generic cl; {
+static void checkparam(Symbol p, Generic cl) {
 	if (p->type == 0)
 		error("extraneous specification for formal parameter `%s'\n", p->name);
 }
 /* program - decl* */
 void program() {
 	int n;
-	
+
 	level = GLOBAL;
 	for (n= 0; t != EOI; n++)
 		if (kind[t] == CHAR || kind[t] == STATIC || t == ID)
@@ -976,7 +978,7 @@ void program() {
 }
 
 /* structdcl - ( struct | union )  ( [ id ] { ( field; )+ } | id ) */
-static Type structdcl(op) {
+static Type structdcl(int op) {
 	char *tag;
 	Type ty;
 	Symbol p;
@@ -1019,7 +1021,7 @@ static Type structdcl(op) {
 }
 
 /* tnode - allocate a type node */
-static Type tnode(op, type) Type type; {
+static Type tnode(int op, Type type) {
 	Type ty = (Type) talloc(sizeof *ty);
 
 	ty->op = op;
@@ -1028,7 +1030,7 @@ static Type tnode(op, type) Type type; {
 }
 
 /* type - parse basic storage class and type specification */
-static Type type(lev, sclass) int *sclass; {
+static Type type(int lev, int *sclass) {
 	int cls, cons, *p, sign, size, tt, type, vol;
 	Type ty = 0;
 
@@ -1061,7 +1063,7 @@ static Type type(lev, sclass) int *sclass; {
 			break;
 		case ENUM:
 			ty = enumdecl();
-			break; 
+			break;
 		case STRUCT: case UNION:
 			ty = structdcl(t);
 			break;
