@@ -93,7 +93,7 @@ int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 static const char *copyright=
 {
 #ifdef _WIN32
-	"Cross-Assembler 65xx V2.2.5 ("__TIME__" / "__DATE__") \r\n"
+	"Cross-Assembler 65xx V2.2.5 (" __TIME__ " / " __DATE__ ") \r\n"
 #else
 	"Cross-Assembler 65xx V2.2.5 (No date available) \r\n"
 #endif
