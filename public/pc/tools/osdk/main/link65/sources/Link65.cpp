@@ -158,6 +158,14 @@ int _chdir(const char* Directory)
 #define MAX_LINE_SIZE	4096	// XA is limited to 2048
 
 
+enum LabelState
+{
+  e_NoLabel,
+  e_NewLabel,
+  e_LabelReference
+};
+
+
 
 // Structure for labels in a pair of : label_name/resolved_flag
 struct ReferencedLabelEntry_c
@@ -214,7 +222,7 @@ bool ParseFile(const std::string& filename);
 
 
 
-std::string FilterLine(const std::string& cSourceLine)
+std::string FilterLine(const std::string& cSourceLine,bool keepQuotedStrings)
 {
   static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
 
@@ -240,39 +248,42 @@ std::string FilterLine(const std::string& cSourceLine)
         // Found start of quoted string
         do
         {
-          outline+=car;
+          if (keepQuotedStrings)
+          {
+            outline+=car;
+          }
           car=*source_line++;
         }
         while (car && (car!='\"'));
-        if (car)
+        if (car && keepQuotedStrings)
         {
           outline+=car;
         }
       }
       else
-        if (car==';')
-        {
-          // Found start of assembler line comment - just stop here
-          return outline;
-        }
-        else
-          if ( (car=='/') && (*source_line=='*') )
-          {
-            // Found start of C block comment
-            source_line++;
-            flag_in_comment_bloc=true;
-          }
-          else
-            if ( (car=='/') && (*source_line=='/') )
-            {
-              // Found start of C++ line comment - just stop here
-              return outline;
-            }
-            else
-            {
-              // Any other character
-              outline+=car;
-            }
+      if (car==';')
+      {
+        // Found start of assembler line comment - just stop here
+        return outline;
+      }
+      else
+      if ( (car=='/') && (*source_line=='*') )
+      {
+        // Found start of C block comment
+        source_line++;
+        flag_in_comment_bloc=true;
+      }
+      else
+      if ( (car=='/') && (*source_line=='/') )
+      {
+        // Found start of C++ line comment - just stop here
+        return outline;
+      }
+      else
+      {
+        // Any other character
+        outline+=car;
+      }
     }
   }
   return outline;
@@ -361,22 +372,24 @@ C:\OSDK\BIN\link65.exe -d C:\OSDK\lib/ -o C:\OSDK\TMP\linked.s -s C:\OSDK\TMP\ -
 // Return defined labels in label var, with return value of 1
 // Return labels used by JSR, JMP, LDA, STA in label var, with ret value of 2
 //
-int parseline(const std::string cInputLine,bool parseIncludeFiles)
+LabelState parseline(char* inpline,bool parseIncludeFiles)
 {
   char *tmp;
 
+  /*
   char inpline[MAX_LINE_SIZE+1];
   assert(sizeof(inpline)>cInputLine.size());
   strncpy(inpline,cInputLine.c_str(),MAX_LINE_SIZE);
   inpline[MAX_LINE_SIZE]=0;
+  */
 
   int len=strlen(inpline);
 
   //
   // Return if comment line or too small line
   //
-  if (inpline[0] ==';')	return 0;
-  if (len < 2)				return 0;
+  if (inpline[0] ==';')	  return e_NoLabel;
+  if (len < 2)		  return e_NoLabel;
 
   //
   // Is a label defined..? (first char in line is what we want)
@@ -389,7 +402,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
       //
       // No token was found
       //
-      return 0;
+      return e_NoLabel;
     }
 
     if (label[0]=='#')
@@ -406,7 +419,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         //
         // Read define name
         label=strtok(NULL,labelPattern);
-        return 1;
+        return e_NewLabel;
       }
       else if (!stricmp(label,"#include"))
       {
@@ -422,7 +435,14 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         const char* pcFilename=strtok(NULL," \"<>");
         if (parseIncludeFiles)
         {
-          ParseFile(pcFilename);
+          if (!pcFilename)
+          {
+            ShowError("Invalid or missing filename after #include directive");
+          }
+          else
+          {
+            ParseFile(pcFilename);
+          }
         }
         /*
         if (!stricmp(pcFilename,"GenericEditorRoutines.s"))
@@ -431,26 +451,26 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         }
         ParseFile(pcFilename);
         */
-        return 0;
+        return e_NoLabel;
       }
       //
       // Other '#' directives are not considered as labels.
       //
-      return 0;
+      return e_NoLabel;
     }
     else
-      if ((label[0]=='.') && ((label[1]=='(') || (label[1]==')')) )
-      {
-        // Opening or closing a local scope, not considered as label
-        return 0;
-      }
-      else
-      {
-        //
-        // Something else (probably a label)
-        //
-        return 1;
-      }
+    if ((label[0]=='.') && ((label[1]=='(') || (label[1]==')')) )
+    {
+      // Opening or closing a local scope, not considered as label
+      return e_NoLabel;
+    }
+    else
+    {
+      //
+      // Something else (probably a label)
+      //
+      return e_NewLabel;
+    }
   }
 
   //
@@ -489,7 +509,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
     if ((status == 1)  && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0]))
     {
       label = tmp;
-      return(2);
+      return e_LabelReference;
     }
     if ((status == 1) && (tmp[0] == '#') )
     {
@@ -502,7 +522,7 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0]))
         {
           label=tmp;
-          return 2;
+          return e_LabelReference;
         }
       }
       else
@@ -521,12 +541,12 @@ int parseline(const std::string cInputLine,bool parseIncludeFiles)
         if (tmp != NULL && tmp[0] != '$' && tmp[0] != '(' && tmp[0] != '#' && !isdigit(tmp[0]))
         {
           label=tmp;
-          return 2;
+          return e_LabelReference;
         }
       }
     }
   }
-  return 0;
+  return e_NoLabel;
 }
 
 
@@ -585,36 +605,56 @@ bool ParseFile(const std::string& filename)
     //  Get line file and parse it
     const std::string& cCurrentLine=*cItText;
 
-    std::string cFilteredLine=FilterLine(cCurrentLine);
-    int state=parseline(cFilteredLine,parseIncludeFiles);
-
-    std::string cFoundLabel;
-    if (state && label)
+    // test
+#if 0
+    if (cCurrentLine.find("_califragilistic")!=std::string::npos)
     {
-      cFoundLabel=label;
+      i=0;
     }
+#endif
 
-    //  Oh, a label defined. Stuff it in storage
-    if (state==1)
+    std::string cFilteredLine=FilterLine(cCurrentLine,true/*false*/);  // removing quoted strings unfortunately fails on #include...
+
+    char inpline[MAX_LINE_SIZE+1];
+    assert(sizeof(inpline)>cFilteredLine.size());
+    strncpy(inpline,cFilteredLine.c_str(),MAX_LINE_SIZE);
+    inpline[MAX_LINE_SIZE]=0;
+    
+    char* nexToken=inpline-1;
+
+    while (nexToken)
     {
-      std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cFoundLabel);
-      if (cIt!=gDefinedLabelsList.end())
+      char* tokenPtr=nexToken+1;
+      nexToken=strchr(tokenPtr,':');
+      LabelState state=parseline(tokenPtr,parseIncludeFiles);
+
+      std::string cFoundLabel;
+      if ((state!=e_NoLabel) && label)
       {
-        // Found the label in the list.
-        // It's a duplicate definition... does not mean it's an error, because XA handles allows local labels !
-        //printf("\nError ! Duplicate label : %s\n",label);
-        //outall();
-        //exit(1);
-        //break;
+        cFoundLabel=label;
+      }
+
+      //  Oh, a label defined. Stuff it in storage
+      if (state == e_NewLabel)
+      {
+        std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cFoundLabel);
+        if (cIt!=gDefinedLabelsList.end())
+        {
+          // Found the label in the list.
+          // It's a duplicate definition... does not mean it's an error, because XA handles allows local labels !
+          //printf("\nError ! Duplicate label : %s\n",label);
+          //outall();
+          //exit(1);
+          //break;
+        }
+        else
+        {
+          // Insert new label in the set
+          gDefinedLabelsList.insert(cFoundLabel);
+        }
       }
       else
-      {
-        // Insert new label in the set
-        gDefinedLabelsList.insert(cFoundLabel);
-      }
-    }
-    else
-      if (state == 2)
+      if (state == e_LabelReference)
       {
         // A label reference.
         // Store it if not already in list.
@@ -638,7 +678,8 @@ bool ParseFile(const std::string& filename)
           gReferencedLabelsList.push_back(cLabelEntry);
         }
       }
-      ++cItText;
+    }
+    ++cItText;
   }
 
   return true;
@@ -1096,7 +1137,7 @@ int main(int argc,char **argv)
       }
       else
       {
-        std::string cFilteredLine=FilterLine(cCurrentLine);
+        std::string cFilteredLine=FilterLine(cCurrentLine,true);
         fprintf(gofile,"%s\r\n",cFilteredLine.c_str());
       }
       ++cItText;

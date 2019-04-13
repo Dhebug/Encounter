@@ -39,9 +39,12 @@ Fixed a number of issues in the linker:
 0.65 - 2017/03/18
 - Fixed some issues in the token pattern matching used to detect labels resulting in #includes containing relative paths to be incorrectly parsed
 
+0.66 - 2019/04/06
+- The new macro file generate lines that contain multiple instructions, the linker stopped at the first encountered instruction, this new version correctly parses that
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	65
+#define TOOL_VERSION_MINOR	66
