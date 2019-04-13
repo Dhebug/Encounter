@@ -157,6 +157,13 @@ int get_value(const char *&ptr_arg,long default_value)
 }
 
 
+#if 0
+// Actually not in use anymore...?
+2>d:\svn\public\pc\tools\osdk\main\sampletweaker\main.cpp(170) : error C2556 : 'float log2(double)' : overloaded function differs only by return type from 'double log2(double)'
+2>c:\program files(x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(506) : note: see declaration of 'log2'
+2>d:\svn\public\pc\tools\osdk\main\sampletweaker\main.cpp(169) : error C2371 : 'log2' : redefinition; different basic types
+2>c:\program files(x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(506) : note: see declaration of 'log2'
+
 // Calculates log2 of number.  
 // http://www-crca.ucsd.edu/~msp/techniques/v0.08/book-html/node8.html
 // http://poi.ribbon.free.fr/tmp/freq2regs.htm
@@ -171,7 +178,7 @@ float log2( double n )
   // log(n)/log(2) is log2.  
   return (float)(log( n ) / log( 2.0 ));
 }
-
+#endif
 
 void main(int argc,char *argv[]) 
 {
