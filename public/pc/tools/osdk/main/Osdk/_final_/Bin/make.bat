@@ -49,6 +49,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
+SET OSDKVERSION=1.14RC
 
 ::
 :: Create a build directory if it does not exist
@@ -77,7 +78,7 @@ MD %OSDKT% >NUL
 :: Display a compilation message
 :: Note: Should find a way to disable the adress display for BASIC programs... kind of lame
 ::
-ECHO Building the program %OSDKNAME% at adress %OSDKADDR%
+ECHO Building the program %OSDKNAME% at adress %OSDKADDR% [OSDK %OSDKVERSION%]
 
 
 ::
@@ -166,7 +167,7 @@ IF "%OSDKBRIEF%"=="" ECHO   - compile
 IF ERRORLEVEL 1 GOTO ErFailure
 
 IF "%OSDKBRIEF%"=="" ECHO   - convert C to assembly code
-%OSDKB%\cpp.exe -lang-c++ -imacros %OSDK%\macro\macros.h -traditional -P %OSDKT%\%1.c2 %OSDKT%\%1.s
+%OSDKB%\cpp.exe -lang-c++ -imacros %OSDK%\macro\macros.h  -DXA -traditional -P %OSDKT%\%1.c2 %OSDKT%\%1.s
 
 IF "%OSDKBRIEF%"=="" ECHO   - cleanup output
 ::%OSDKB%\tr < %OSDKT%\%1.s > %OSDKT%\%1
