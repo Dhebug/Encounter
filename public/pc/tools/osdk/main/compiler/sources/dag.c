@@ -18,7 +18,7 @@ dclproto(static int haskid,(Node, Node));
 dclproto(static Node labelnode,(int));
 dclproto(static Node list,(Node));
 dclproto(static void reset,(void));
-static void remove_node(Node);
+dclproto(static void remove,(Node));
 dclproto(static void trash,(Node));
 dclproto(static void typestab,(Symbol, Generic));
 #ifdef NODAG
@@ -27,7 +27,7 @@ dclproto(static Node undag1,(Node, Node));
 #endif
 
 /* addlocal - add local p to list of locals for the current block */
-void addlocal(p) Symbol p; {
+void addlocal(Symbol p) {
 	if (!p->defined) {
 		code(Local)->u.var = p;
 		p->defined = 1;
@@ -36,7 +36,7 @@ void addlocal(p) Symbol p; {
 }
 
 /* code - allocate a code node of kind and append to the code list */
-Code code(kind) {
+Code code(int kind) {
 	Code cp;
 
 	if (kind > Label) {
@@ -54,15 +54,14 @@ Code code(kind) {
 }
 
 /* dagnode - allocate a dag with the given fields */
-static struct dag *dagnode(op, l, r, sym) Node l, r; Symbol sym; {
+static struct dag *dagnode(int op, Node l, Node r, Symbol sym)
+{
 	register struct dag *p = (struct dag *) talloc(sizeof *p);
 
 	BZERO(p, struct dag);
 	p->node.op = op;
-	if (p->node.kids[0] = l)
-		++l->count;
-	if (p->node.kids[1] = r)
-		++r->count;
+	p->node.kids[0] = l; if (l) l->count++;
+	p->node.kids[1] = r; if (r) r->count++;
 	p->node.syms[0] = sym;
 	return p;
 }
@@ -124,13 +123,13 @@ void emitcode() {
 				defaddress(cp->u.swtch.labels[i]->u.l.equatedto);
 			}
 			break;
-			}
+		}
 		}
 	src = save;
 }
 
 /* fixup - re-aim equated labels to the true label */
-static void fixup(p) Node p; {
+static void fixup(Node p) {
 	for ( ; p; p = p->link)
 		switch (generic(p->op)) {
 		case JUMP:
@@ -145,7 +144,7 @@ static void fixup(p) Node p; {
 }
 
 /* gencode - generate code for the current function */
-void gencode(caller, callee) Symbol caller[], callee[]; {
+void gencode(Symbol caller[], Symbol callee[]) {
 	int i;
 	Code bp, cp;
 	Symbol p, q;
@@ -214,7 +213,7 @@ void gencode(caller, callee) Symbol caller[], callee[]; {
 }
 
 /* haskid - does p appear as an operand in t? */
-static int haskid(p, t) Node p, t; {
+static int haskid(Node p, Node t) {
 	if (t == 0)
 		return 0;
 	else if (p == t)
@@ -224,7 +223,7 @@ static int haskid(p, t) Node p, t; {
 }
 
 /* labelnode - list and return a LABEL node for label lab */
-static Node labelnode(lab) {
+static Node labelnode(int lab) {
 	assert(lab);
 	if (islabel(nodelist)) {
 		equatelab(findlabel(lab), nodelist->syms[0]);
@@ -234,7 +233,7 @@ static Node labelnode(lab) {
 }
 
 /* list - list node p unless it's already listed; return p */
-static Node list(p) Node p; {
+static Node list(Node p){
 	if (p && p->link == 0) {
 		if (nodelist) {
 			p->link = nodelist->link;
@@ -250,7 +249,7 @@ static Node list(p) Node p; {
 }
 
 /* listnodes - walk tree tp, building and listing dag nodes in execution order */
-Node listnodes(tp, tlab, flab) Tree tp; {
+Node listnodes(Tree tp, int tlab, int flab) {
 	Opcode op;
 	Node p, l, r;
 
@@ -292,29 +291,25 @@ Node listnodes(tp, tlab, flab) Tree tp; {
 		trash(0);
 		listnodes(tp->kids[0], 0, flab = genlabel(2));
 		trash(0);
-		if (q = tp->kids[1])
-		{
+		q = tp->kids[1];
+		if (q) {
 			assert(q->op == RIGHT);
 			listnodes(q->kids[0], 0, 0);
-			if (islabel(nodelist))
-			{
+			if (islabel(nodelist)) {
 				equatelab(nodelist->syms[0], findlabel(flab + 1));
-				remove_node(nodelist);
+				remove(nodelist);
 			}
 			trash(0);
 		}
-		if (q && q->kids[1])
-		{
+		if (q && q->kids[1]) {
 			list(jump(flab + 1));
 			labelnode(flab);
 			listnodes(q->kids[1], 0, 0);
-			if (islabel(nodelist))
-			{
+			if (islabel(nodelist)) {
 				equatelab(nodelist->syms[0], findlabel(flab + 1));
-				remove_node(nodelist);
+				remove(nodelist);
 			}
-		}
-		else
+		} else
 			labelnode(flab);
 		p = labelnode(flab + 1);
 		trash(0);
@@ -441,11 +436,11 @@ Node listnodes(tp, tlab, flab) Tree tp; {
 				unsigned int fmask = fieldmask(p);
 				unsigned int mask = fmask<<fieldright(p);
 				Tree q = tp->kids[1];
-				if (q->op == CNST+I && q->u.v.i == 0
-				||  q->op == CNST+U && q->u.v.u == 0)
+				if ((q->op == CNST+I && q->u.v.i == 0)
+				||  (q->op == CNST+U && q->u.v.u == 0))
 					q = bitnode(BAND, x, constnode(~mask, unsignedtype));
-				else if (q->op == CNST+I && (q->u.v.i&fmask) == fmask
-				||       q->op == CNST+U && (q->u.v.u&fmask) == fmask)
+				else if ((q->op == CNST+I && (q->u.v.i&fmask) == fmask)
+				||       (q->op == CNST+U && (q->u.v.u&fmask) == fmask))
 					q = bitnode(BOR, x, constnode(mask, unsignedtype));
 				else
 					q = bitnode(BOR,
@@ -556,7 +551,7 @@ Node listnodes(tp, tlab, flab) Tree tp; {
 }
 
 /* jump - return tree for a jump to lab */
-Node jump(lab) {
+Node jump(int lab) {
 	Symbol p = findlabel(lab);
 
 	p->ref++;
@@ -564,12 +559,12 @@ Node jump(lab) {
 }
 
 /* newnode - allocate a node with the given fields */
-Node newnode(op, l, r, sym) Node l, r; Symbol sym; {
+Node newnode(int op, Node l, Node r, Symbol sym) {
 	return &dagnode(op, l, r, sym)->node;
 }
 
 /* node - search for a node with the given fields, or allocate it */
-Node node(op, l, r, sym) Node l, r; Symbol sym; {
+Node node(int op, Node l, Node r, Symbol sym) {
 	int i = (opindex(op)^((unsigned)sym>>2))&(NBUCKETS-1);
 	register struct dag *p;
 
@@ -588,10 +583,11 @@ dclproto(static void printdag1,(Node, int, int));
 dclproto(static void printnode,(Node, int, int));
 
 /* printdag - print dag p on fd, or the node list if p == 0 */
-void printdag(p, fd) Node p; {
+void printdag(Node p, int fd) {
 	printed(0);
 	if (p == 0) {
-		if (p = nodelist)
+		p = nodelist;
+		if (p)
 			do {
 				p = p->link;
 				printdag1(p, fd, 0);
@@ -603,7 +599,7 @@ void printdag(p, fd) Node p; {
 }
 
 /* printdag1 - recursively print dag p */
-static void printdag1(p, fd, lev) Node p; {
+static void printdag1(Node p, int fd, int lev) {
 	int id, i;
 
 	if (p == 0 || *printed(id = nodeid((Tree)p)))
@@ -615,7 +611,7 @@ static void printdag1(p, fd, lev) Node p; {
 }
 
 /* printnode - print fields of dag p */
-static void printnode(p, fd, lev) Node p; {
+static void printnode(Node p, int fd, int lev) {
 	if (p) {
 		int i, id = nodeid((Tree)p);
 		fprint(fd, "%c%d%s", lev == 0 ? '\'' : '#', id,
@@ -629,11 +625,9 @@ static void printnode(p, fd, lev) Node p; {
 	}
 }
 
-/* remove_node - remove node p from the node list */
-static void remove_node(p) Node p;
-{
-	if (nodelist)
-	{
+/* remove - remove node p from the node list */
+static void remove(Node p) {
+	if (nodelist) {
 		Node q = nodelist;
 		for ( ; q->link != p && q->link != nodelist; q = q->link)
 			;
@@ -651,24 +645,26 @@ static void reset() {
 }
 
 /* trash - preclude future links to rvalue of p or all values */
-static void trash(p) Node p; {
+static void trash(Node p) {
 	if (p) {
 		register int i;
 		register struct dag *q, **r;
 		for (i = 0; i < NBUCKETS; i++)
-			for (r = &buckets[i]; q = *r; )
-				if (generic(q->node.op) == INDIR && (!isaddrop(q->node.kids[0]->op)
-				|| q->node.kids[0]->syms[0] == p->syms[0])) {
+			for (r = &buckets[i]; *r; ) {
+                q = *r;
+				if (generic(q->node.op) == INDIR
+                    && (!isaddrop(q->node.kids[0]->op) || q->node.kids[0]->syms[0] == p->syms[0])) {
 					*r = q->hlink;
 					--nodecount;
 				} else
 					r = &q->hlink;
+			}
 	} else if (nodecount > 0)
 		reset();
 }
 
 /* typestab - emit stab entries for p */
-static void typestab(p, cl) Symbol p; Generic cl; {
+static void typestab(Symbol p, Generic cl){
 	if (!isfunc(p->type) && (p->sclass == EXTERN || p->sclass == STATIC))
 		stabsym(p);
 	else if (p->sclass == TYPEDEF || p->sclass == 0)
@@ -677,7 +673,7 @@ static void typestab(p, cl) Symbol p; Generic cl; {
 
 #ifdef NODAG
 /* undag - replace multiply-referenced nodes in nodelist by temporaries, return new nodelist */
-static Node undag(nodelist) Node nodelist; {
+static Node undag(Node nodelist) {
 	Node p, pred;
 	struct node head;
 
@@ -741,7 +737,7 @@ static Node undag(nodelist) Node nodelist; {
 }
 
 /* undag1 - return a reference to the temporary holding value of p, or p */
-static Node undag1(p, root) Node p, root; {
+static Node undag1(Node p, Node root) {
 	Node e;
 	static Type *btot[] = { 0, &floattype, &doubletype, &chartype,
 		&shorttype, &inttype, &unsignedtype, &voidptype };
@@ -808,7 +804,7 @@ static Node undag1(p, root) Node p, root; {
 #endif
 
 /* walk - list tree tp, generate code for current node list, reset node list */
-void walk(tp, tlab, flab) Tree tp; {
+void walk(Tree tp, int tlab, int flab) {
 	listnodes(tp, tlab, flab);
 	if (nodelist) {
 		trash(0);

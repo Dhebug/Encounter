@@ -18,9 +18,6 @@
     <ClCompile Include="sources\dag.c">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="sources\debug.c">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="sources\decl.c">
       <Filter>sources</Filter>
     </ClCompile>

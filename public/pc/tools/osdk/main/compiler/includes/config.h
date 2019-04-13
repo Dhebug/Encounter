@@ -19,19 +19,22 @@ typedef struct {
 	int offset;	/* max offset of locals in current sub-block */
 } Env;
 
+enum symboltype { UNKNOWN, GLOBALVAR, LOCALVAR, TEMPORARY, PARAMETER, ARGBUILD};
+
 typedef struct {
 	char	*name;		/* node's result external representation */
 	char	adrmode;	/* addressing mode of the result */
 	Symbol	result;		/* operator's result */
-	int	argoffset;	/* offset pour ARG et CALL */
+	int		argoffset;	/* offset pour ARG et CALL */
+    unsigned int busy;  /* busy state for CALL */
 	Node	next;		/* next node on linearized list */
 	char	optimized;
 	char	visited;
 } Xnode;
 
 typedef struct {
-	char	*name;		/* name for back end */
-	char	adrmode;
+	char	*name;			/* name for back end */
+	char	adrmode;		/* addressing mode */
 } Xsymbol;
 
 #define stabblock(a,b,c)

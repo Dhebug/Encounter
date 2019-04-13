@@ -1,24 +1,27 @@
 /* C compiler: tree management */
 
 #include "c.h"
+#include <stdlib.h>
+
 
 static struct arena first[] = {
-	0, 0, 0, &first[0], 0,
-	0, 0, 0, &first[1], 0,
+	{0, 0, 0, &first[0], 0},
+	{0, 0, 0, &first[1], 0},
 };
 Arena permanent = &first[0];	/* permanent storage */
 Arena transient = &first[1];	/* transient storage; released at function end */
 static Arena freearenas;	/* list of free arenas */
 
 /* allocate - allocate n bytes in arena **p, adding a new arena if necessary */
-char *allocate(n, p) Arena *p; {
+char *allocate(int n, Arena *p) {
 	Arena ap = *p;
 
 	while (ap->avail + n > ap->limit)
 		if (ap->next) {		/* move to next arena */
 			ap = ap->next;
 			ap->avail = (char *)ap + roundup(sizeof *ap, sizeof (double));
-		} else if (ap->next = freearenas) {
+		} else if (freearenas) {
+		    ap->next = freearenas;
 			freearenas = freearenas->next;
 			ap = ap->next;
 			ap->avail = (char *)ap + roundup(sizeof *ap, sizeof (double));
@@ -27,7 +30,7 @@ char *allocate(n, p) Arena *p; {
 		} else {		/* allocate a new arena */
 			int m = n + MEMINCR*1024 + roundup(sizeof *ap, sizeof (double));
 			ap->next = (Arena) malloc(m);
-			assert(ap->next && (int)ap->next >= 0);
+			assert(ap->next);
 			if ((char *)ap->next == ap->limit) /* extend previous arena? */
 				ap->limit = (char *)ap->next + m;
 			else {			/* link to a new arena */
@@ -84,7 +87,7 @@ int hascall(p) Tree p; {
 }
 
 /* opname - return string for operator op */
-char *opname(op) {
+char *opname(int op) {
 	static char *opnames[] = {
 	"",
 #define NEEDNAMES
@@ -114,7 +117,7 @@ char *opname(op) {
 int ntree = 0;			/* next free tree in trees */
 static struct tree trees[100];	/* default allocation area for trees */
 
-Tree tree(op, type, left, right) Type type; Tree left, right; {
+Tree tree(op, type, left, right) int op; Type type; Tree left, right; {
 	register Tree p;
 
 	if (ntree < sizeof trees/sizeof trees[0])
@@ -182,7 +185,7 @@ Tree root(p) Tree p; {
 			/* de-construct e++ construction */
 			return p->kids[0]->kids[1];
 		/* fall thru */
-	case EQ:  case NE:  case GT:   case GE:  case LE:  case LT: 
+	case EQ:  case NE:  case GT:   case GE:  case LE:  case LT:
 	case ADD: case SUB: case MUL:  case DIV: case MOD:
 	case LSH: case RSH: case BAND: case BOR: case BXOR:
 		p = tree(RIGHT, p->type, root(p->kids[0]), root(p->kids[1]));
@@ -210,7 +213,7 @@ Tree root(p) Tree p; {
 }
 
 /* texpr - parse an expression via f(tok), allocating trees in transient area */
-Tree texpr(f, tok) dclproto(Tree (*f),(int)); {
+Tree texpr(f, tok) int tok; dclproto(Tree (*f),(int)); {
 	int n = ntree;
 	Tree p;
 
@@ -248,7 +251,7 @@ int nodeid(p) Tree p; {
 }
 
 /* printed - return pointer to ids[id].printed */
-int *printed(id) {
+int *printed(int id) {
 	if (id)
 		return &ids[id].printed;
 	nid = 1;
@@ -256,13 +259,13 @@ int *printed(id) {
 }
 
 /* printtree - print tree p on fd */
-void printtree(p, fd) Tree p; {
+void printtree(Tree p, int fd) {
 	(void)printed(0);
 	printtree1(p, fd, 1);
 }
 
 /* printtree1 - recursively print tree p */
-static void printtree1(p, fd, lev) Tree p; {
+static void printtree1(p, fd, lev)int fd,lev; Tree p; {
 	int i;
 	static char blanks[] = "                                         ";
 

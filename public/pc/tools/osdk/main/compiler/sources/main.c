@@ -1,13 +1,18 @@
 /* C compiler: main program */
+
 #include "version.h"
 #include "c.h"
+#include <string.h>
+#include <fcntl.h>
+#ifdef __unix__
+#include <unistd.h>
+#elif defined(_WIN32) || defined(_WIN64)
+#include <io.h>
+#endif
 
-static void compile(char *);
-static int doargs(int,char **);
-static void emitYYnull();
-static Type ftype(Type,Type);
-static void typestab(Symbol, Generic);
-
+extern void exit(int);
+extern double strtod(const char *, char **);
+extern long strtol(const char *, char **, int);
 
 int Aflag;			/* >= 0 if -A specified */
 int Pflag;			/* != 0 if -P specified */
@@ -21,13 +26,16 @@ static char *progname;		/* argv[0] */
 
 List loci, tables;		/* current (locus,table) lists */
 
+dclproto(static void compile,(char *));
+dclproto(static int doargs,(int, char **));
+dclproto(static void emitYYnull,(void));
+dclproto(static Type ftype,(Type, Type));
+dclproto(static void typestab,(Symbol, Generic));
 
-
-int main(int argc,char *argv[]) 
-{
+int main(int argc, char *argv[]) {
 	Symbol symroot = 0;		/* root of the global symbols */
 	static Events z;
-	
+
 	assert(MAXKIDS >= 2);
 	assert(MAXSYMS >= 2);
 	progname = argv[0];
@@ -44,7 +52,9 @@ int main(int argc,char *argv[])
 	}
 	if (outfile && *outfile != '-') {
 		close(1);
-		if (creat(outfile, 0666) != 1) {
+                #define _S_IWRITE       0x0080          /* write permission, owner */
+                if (creat(outfile, _S_IWRITE) != 1) {
+		//if (creat(outfile, 0666) != 1) {
 			fprint(2, "%s: can't write %s\n", argv[0], outfile);
 			exit(1);
 		}
@@ -67,9 +77,9 @@ int main(int argc,char *argv[])
 		src.x = 0;
 		src.y = lineno;
 		if (glevel > 2 || xref)
-			stabend(&src, symroot, (Coordinate **)ltoa(append((Generic)0, loci), 0),
-			(Symbol *)ltoa(append((Generic)0, tables), 0),
-			symbols ? (Symbol *)ltoa(symbols, 0) : 0);
+			stabend(&src, symroot, (Coordinate **)list_to_a(append((Generic)0, loci), 0),
+				(Symbol *)list_to_a(append((Generic)0, tables), 0),
+				symbols ? (Symbol *)list_to_a(symbols, 0) : 0);
 		else
 			stabend(&src, 0, 0, 0, 0);
 	}
@@ -91,112 +101,85 @@ static void compile(str) char *str; {
 }
 
 /* doargs - process program arguments, removing top-half arguments from argv */
-static int doargs(argc, argv) char *argv[]; 
-{
+static int doargs(int argc, char *argv[])  {
 	char *s;
 	int i, j, x;
 	Symbol p;
-	
+
 	for (i = j = 1; i < argc; i++)
 		if (strcmp(argv[i], "-g") == 0)
 			glevel = 2;
-		else 
-		if (strncmp(argv[i], "-g", 2) == 0 && argv[i][2] && argv[i][2] >= '0' && argv[i][2] <= '9')
+		else if (strncmp(argv[i], "-g", 2) == 0
+		&& argv[i][2] && argv[i][2] >= '0' && argv[i][2] <= '9')
 			glevel = argv[i][2] - '0';
-		else
-		if (strcmp(argv[i], "-x") == 0)
+		else if (strcmp(argv[i], "-x") == 0)
 			xref++;
-		else
-		if (strcmp(argv[i], "-A") == 0)
+		else if (strcmp(argv[i], "-A") == 0)
 			Aflag++;
-		else
-		if (strcmp(argv[i], "-P") == 0)
+		else if (strcmp(argv[i], "-P") == 0)
 			Pflag++;
-		else
-		if (strcmp(argv[i], "-w") == 0)
+		else if (strcmp(argv[i], "-w") == 0)
 			wflag++;
-		else
-		if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "-C") == 0 || strncmp(argv[i], "-a", 2) == 0)
+		else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "-C") == 0
+		|| strncmp(argv[i], "-a", 2) == 0)
 			bbinit(argv[i]);
-		else 
-		if (strcmp(argv[i], "-n") == 0) 
-		{
-			if (!YYnull) 
-			{
+		else if (strcmp(argv[i], "-n") == 0) {
+			if (!YYnull) {
 				YYnull = mksymbol(EXTERN, "_YYnull", ftype(voidtype, inttype));
 				YYnull->sclass = STATIC;
 			}
-		} 
-		else 
-		if (strncmp(argv[i], "-t", 2) == 0)
+		} else if (strncmp(argv[i], "-t", 2) == 0)
 			traceinit(&argv[i][2]);
-		else 
-		if (strcmp(argv[i], "-v") == 0)
+		else if (strcmp(argv[i], "-v") == 0)
 			fprint(2, "%s version %d.%d\n", progname, VERSION>>8, VERSION&0xff);
-		else 
-		if (strncmp(argv[i], "-s", 2) == 0)
-			density = (float)strtod(&argv[i][2], (char **)0);
-		else 
-		if (strncmp(argv[i], "-e", 2) == 0) 
-		{
+		else if (strncmp(argv[i], "-s", 2) == 0)
+			density = strtod(&argv[i][2], (char **)0);
+		else if (strncmp(argv[i], "-e", 2) == 0) {
 			if ((x = strtol(&argv[i][2], (char **)0, 0)) > 0)
 				errlimit = x;
-		} 
-		else 
-		if ((s = strchr(argv[i], '=')) &&
-			(p = lookup(stringn(argv[i], s - argv[i]), types))) 
-		{
-			if (*s == '=') 
-			{
+		} else if ((s = strchr(argv[i], '=')) &&
+			(p = lookup(stringn(argv[i], s - argv[i]), types))) {
+			if (*s == '=') {
 				if ((x = strtol(s + 1, &s, 0)) > 0)
 					p->type->size = x;
 			}
-			if (*s == ',') 
-			{
+			if (*s == ',') {
 				if ((x = strtol(s + 1, &s, 0)) > 0)
 					p->type->align = x;
 			}
 			if (*s++ == ',')
 				p->addressed = !(*s == 0 || *s == '0');
-		} 
-		else 
-		if (strcmp(argv[i], "-") == 0 || *argv[i] != '-') 
-		{
+		} else if (strcmp(argv[i], "-") == 0 || *argv[i] != '-') {
 			if (infile == 0)
 				infile = argv[i];
 			else if (outfile == 0)
 				outfile = argv[i];
 			else
 				argv[j++] = argv[i];
-		} 
-		else 
-		{
+		} else {
 			if (strcmp(argv[i], "-XP") == 0)
 				argv[i] = "-p";
 			else if (strncmp(argv[i], "-X", 2) == 0)
 				*++argv[i] = '-';
 			argv[j++] = argv[i];
 		}
-		argv[j] = 0;
-		return j;
+	argv[j] = 0;
+	return j;
 }
 
-
 /* emitYYnull - compile definition for _YYnull, if referenced */
-static void emitYYnull() 
-{
-	if (YYnull && YYnull->ref > 0) 
-	{
+static void emitYYnull() {
+	if (YYnull && YYnull->ref > 0) {
 		Aflag = 0;
 		YYnull->defined = 0;
 		YYnull = 0;
 		compile(stringf("static char *_YYfile = \"%s\";\n", file));
 		compile("static void _YYnull(int line,...) {\n\
-				char buf[200];\n\
-				sprintf(buf, \"null pointer dereferenced @%s:%d\\n\", _YYfile, line);\n\
-				write(2, buf, strlen(buf));\n\
-				abort();\n\
-	}\n");
+	char buf[200];\n\
+	sprintf(buf, \"null pointer dereferenced @%s:%d\\n\", _YYfile, line);\n\
+	write(2, buf, strlen(buf));\n\
+	abort();\n\
+}\n");
 	} else if (YYnull)
 		YYnull->ref = 1000;
 }
@@ -204,16 +187,16 @@ static void emitYYnull()
 /* ftype - return a function type for `rty function (ty,...)' */
 static Type ftype(rty, ty) Type rty, ty; {
 	List list = append(ty, 0);
-	
+
 	list = append(voidtype, list);
-	return func(rty, (Type *)ltoa(list, (Generic *)alloc((length(list) + 1)*sizeof (Type))));
+	return func(rty, (Type *)list_to_a(list, (Generic *)alloc((length(list) + 1)*sizeof (Type))));
 }
 
 /* mkstr - make a string constant */
 Symbol mkstr(str) char *str; {
 	Value v;
 	Symbol p;
-	
+
 	v.p = str;
 	p = constant(array(chartype, strlen(v.p) + 1, 0), v);
 	if (p->u.c.loc == 0)
@@ -222,9 +205,9 @@ Symbol mkstr(str) char *str; {
 }
 
 /* mksymbol - make a symbol for name, install in &globals if sclass==EXTERN */
-Symbol mksymbol(sclass, name, ty) char *name; Type ty; {
+Symbol mksymbol(sclass, name, ty) int sclass; char *name; Type ty; {
 	Symbol p;
-	
+
 	if (sclass == EXTERN)
 		p = install(string(name), &globals, 1);
 	else {
@@ -294,7 +277,7 @@ static void bbcall(yycounts, cp, e) Symbol yycounts; Coordinate *cp; Tree *e; {
 	Value v;
 	union coordinate u;
 	Symbol p = genident(STATIC, array(voidptype, 0, 0), GLOBAL);
-	
+
 	defglobal(p, LIT);
 	defpointer(cp->file ? mkstr(cp->file)->u.c.loc : 0);
 	defpointer(mkstr(cfunc->name)->u.c.loc);
@@ -309,7 +292,7 @@ static void bbcall(yycounts, cp, e) Symbol yycounts; Coordinate *cp; Tree *e; {
 /* bbentry - return tree for `_prologue(&afunc, &YYlink)' */
 static void bbentry(yylink, f) Symbol yylink, f; {
 	static Symbol p;
-	
+
 	afunc = genident(STATIC, array(voidptype, 4, 0), GLOBAL);
 	if (p == 0)
 		p = mksymbol(EXTERN, "_prologue", ftype(inttype, voidptype));
@@ -321,7 +304,7 @@ static void bbentry(yylink, f) Symbol yylink, f; {
 /* bbexit - return tree for `_epilogue(&afunc)' */
 static void bbexit(yylink, f, e) Symbol yylink, f; Tree e; {
 	static Symbol p;
-	
+
 	if (p == 0)
 		p = mksymbol(EXTERN, "_epilogue", ftype(inttype, voidptype));
 	walk(callnode(pointer(idnode(p)), freturn(p->type),
@@ -333,15 +316,16 @@ static int bbfile(file) char *file; {
 	if (file) {
 		List lp;
 		int i = 1;
-		if (lp = filelist)
+		lp = filelist;
+		if (lp)
 			do {
 				lp = lp->link;
 				if (((Symbol)lp->x)->u.c.v.p == file)
 					return i;
 				i++;
 			} while (lp != filelist);
-			filelist = append(mkstr(file), filelist);
-			return i;
+		filelist = append(mkstr(file), filelist);
+		return i;
 	}
 	return 0;
 }
@@ -350,7 +334,7 @@ static int bbfile(file) char *file; {
 static void bbfunc(yylink, f) Symbol yylink, f; {
 	Value v;
 	union coordinate u;
-	
+
 	defglobal(afunc, DATA);
 	defpointer(funclist);
 	defpointer(0);
@@ -365,7 +349,7 @@ static void bbfunc(yylink, f) Symbol yylink, f; {
 /* bbincr - build tree to increment execution point at *cp */
 static void bbincr(yycounts, cp, e) Symbol yycounts; Coordinate *cp; Tree *e; {
 	struct map *mp = (struct map *)maplist->x;
-	
+
 	/* append *cp to source map */
 	if (mp->size >= sizeof mp->u/sizeof mp->u[0]) {
 		mp = (struct map *)alloc(sizeof *mp);
@@ -406,7 +390,7 @@ static void bbvars(yylink) Symbol yylink; {
 	Value v;
 	struct map **mp;
 	Symbol coords, files, *p;
-	
+
 	if (!YYcounts && !yylink)
 		return;
 	if (YYcounts) {
@@ -417,24 +401,24 @@ static void bbvars(yylink) Symbol yylink; {
 	}
 	files = genident(STATIC, array(ptr(chartype), 1, 0), GLOBAL);
 	defglobal(files, LIT);
-	for (p = (Symbol *)ltoa(filelist, 0); *p; p++)
+	for (p = (Symbol *)list_to_a(filelist, 0); *p; p++)
 		defpointer((*p)->u.c.loc);
 	defpointer(0);
 	coords = genident(STATIC, array(unsignedtype, n, 0), GLOBAL);
 	defglobal(coords, LIT);
-	for (i = n, mp = (struct map **)ltoa(maplist, 0); *mp; i -= (*mp)->size, mp++)
+	for (i = n, mp = (struct map **)list_to_a(maplist, 0); *mp; i -= (*mp)->size, mp++)
 		for (j = 0; j < (*mp)->size; j++)
 			defconst(U, (v.u = (*mp)->u[j].coord, v));
-		if (i > 0)
-			space(i*coords->type->type->size);
-		defpointer(0);
-		defglobal(yylink, DATA);
-		defpointer(0);
-		defconst(U, (v.u = n, v));
-		defpointer(YYcounts);
-		defpointer(coords);
-		defpointer(files);
-		defpointer(funclist);
+	if (i > 0)
+		space(i*coords->type->type->size);
+	defpointer(0);
+	defglobal(yylink, DATA);
+	defpointer(0);
+	defconst(U, (v.u = n, v));
+	defpointer(YYcounts);
+	defpointer(coords);
+	defpointer(files);
+	defpointer(funclist);
 }
 
 static char *fmt, *fp, *fmtend;	/* format string, current & limit pointer */
@@ -449,27 +433,29 @@ dclproto(static void tracevalue,(Tree, int));
 
 /* appendstr - append str to the evolving format string, expanding it if necessary */
 static void appendstr(str) char *str; {
-	do
-	if (fp == fmtend)
-		if (fp) {
-			char *s = (char *)talloc(2*(fmtend - fmt));
-			strncpy(s, fmt, fmtend - fmt);
-			fp = s + (fmtend - fmt);
-			fmtend = s + 2*(fmtend - fmt);
-			fmt = s;
-		} else {
-			fp = fmt = (char *)talloc(80);
-			fmtend = fmt + 80;
+	do {
+		if (fp == fmtend) {
+			if (fp) {
+				char *s = (char *)talloc(2*(fmtend - fmt));
+				strncpy(s, fmt, fmtend - fmt);
+				fp = s + (fmtend - fmt);
+				fmtend = s + 2*(fmtend - fmt);
+				fmt = s;
+			} else {
+				fp = fmt = (char *)talloc(80);
+				fmtend = fmt + 80;
+			}
 		}
-		while (*fp++ = *str++);
-		fp--;
+		*fp++ = *str;
+	} while (*str++);
+	fp--;
 }
 
 /* tracecall - generate code to trace entry to f */
 static void tracecall(printer, f) Symbol printer, f; {
 	int i;
 	Symbol counter = genident(STATIC, inttype, GLOBAL);
-	
+
 	defglobal(counter, BSS);
 	space(counter->type->size);
 	frameno = genident(AUTO, inttype, level);
@@ -493,7 +479,7 @@ static void tracecall(printer, f) Symbol printer, f; {
 static void tracefinis(printer) Symbol printer; {
 	Tree *ap;
 	Symbol p;
-	
+
 	*fp = 0;
 	p = mkstr(string(fmt));
 	for (ap = &args; *ap; ap = &(*ap)->kids[1])
@@ -507,7 +493,7 @@ static void tracefinis(printer) Symbol printer; {
 /* traceinit - initialize for tracing */
 void traceinit(print) char *print; {
 	static Symbol printer;
-	
+
 	if (!printer) {
 		printer = mksymbol(STATIC, print && *print ? print : "printf",
 			ftype(voidtype, ptr(chartype)));
@@ -531,9 +517,9 @@ static void tracereturn(printer, f, e) Symbol printer, f; Tree e; {
 }
 
 /* tracevalue - append format and argument to print the value of e */
-static void tracevalue(e, lev) Tree e; {
+static void tracevalue(Tree e, int lev) {
 	Type ty = unqual(e->type);
-	
+
 	switch (ty->op) {
 	case CHAR:
 		appendstr("'\\x%2x'");
@@ -543,7 +529,7 @@ static void tracevalue(e, lev) Tree e; {
 			appendstr("0x%x");
 		else /* fall thru */
 	case INT:
-		appendstr("%d");
+			appendstr("%d");
 		break;
 	case UNSIGNED:
 		appendstr("0x%x");
@@ -574,7 +560,7 @@ static void tracevalue(e, lev) Tree e; {
 		}
 		appendstr("}");
 		return;
-				 }
+		}
 	case UNION:
 		appendstr("("); appendstr(typestring(ty, "")); appendstr("){...}");
 		return;
@@ -615,7 +601,7 @@ struct entry {
 
 void attach(func, cl, list) Apply func; Generic cl; List *list; {
 	struct entry *p = (struct entry *)alloc(sizeof *p);
-	
+
 	p->func = func;
 	p->cl = cl;
 	*list = append((Generic)p, *list);

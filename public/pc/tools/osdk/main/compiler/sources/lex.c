@@ -1,24 +1,35 @@
 /* C compiler: lexical analysis */
-#include "c.h"
 
-int printf(const char *,...);
+#include "c.h"
+extern double strtod(const char *, char **);
 
 char kind[] = {		/* token kind, i.e., classification */
 #define xx(a,b,c,d,e,f,g) f,
 #include "token.h"
 };
 Coordinate src;		/* current source coordinate */
+#ifdef __STDC__
 enum tokencode t;
+#else
+int t;
+#endif
 char *token;		/* current token */
 Symbol tsym;		/* symbol table entry for current token */
 
 static struct symbol tval;	/* symbol for constants */
 
+#ifdef __STDC__
 enum { BLANK=01, NEWLINE=02, LETTER=04, DIGIT=010, HEX=020, BAD=040 };
+#else
+#define BLANK	01
+#define NEWLINE	02
+#define	LETTER	04
+#define DIGIT	010
+#define HEX	020
+#define	BAD	040	/* non-portable characters */
+#endif
 
-
-static unsigned char map[256] =
-{
+static unsigned char map[256] = {
 /* 000 nul */	BAD,
 /* 001 soh */	BAD,
 /* 002 stx */	BAD,
@@ -284,7 +295,7 @@ dclproto(static Symbol fcon,(void));
 dclproto(static Symbol icon,(unsigned int, int));
 
 /* asmargs - break out %name in string p, fill in argv, returned edited string */
-static char *asmargs(p, argv, size) Symbol p, argv[]; {
+static char *asmargs(p, argv, size) Symbol p, argv[]; int size; {
 	int n = 0;
 	char *s1, *s2, str[MAXLINE];
 
@@ -293,9 +304,9 @@ static char *asmargs(p, argv, size) Symbol p, argv[]; {
 		return "";
 	}
 	for (s2 = str, s1 = p->u.c.v.p; *s1; )
-		if ((*s2++ = *s1++) == '%' && *s1 && map[*s1]&LETTER) {
+		if ((*s2++ = *s1++) == '%' && *s1 && map[(int)*s1]&LETTER) {
 			char *t = s1;
-			while (*t && map[*t]&(LETTER|DIGIT))
+			while (*t && map[(int)*t]&(LETTER|DIGIT))
 				t++;
 			if ((argv[n] = lookup(stringn(s1, t - s1), identifiers))
 			&& argv[n]->sclass != TYPEDEF && argv[n]->sclass != ENUM) {
@@ -341,7 +352,7 @@ static void assem() {
 }
 
 /* backslash - get next character with \'s interpreted in q ... q */
-static int backslash(q) {
+static int backslash(int q) {
 	int c;
 
 	switch (*cp++) {
@@ -404,93 +415,47 @@ static int errno;
 #endif
 
 /* fcon - scan for tail of a floating constant, set token, return symbol */
-static Symbol fcon()
-{
+static Symbol fcon() {
 	char *s = token;
 	int n = 0;
 
-	//__asm { int 3 };
-
 	while (s < (char *)cp)
-	{
 		n += *s++ - '0';
-	}
-
 	if (*cp == '.')
-	{
-		for (cp++;map[*cp]&DIGIT; cp++)
-		{
+		for (cp++; map[*cp]&DIGIT; cp++)
 			n += *cp - '0';
-		}
-	}
-
-	if (*cp == 'e' || *cp == 'E')
-	{
+	if (*cp == 'e' || *cp == 'E') {
 		if (*++cp == '-' || *cp == '+')
-		{
 			cp++;
-		}
-
 		if (map[*cp]&DIGIT)
-		{
-			do
-			{
-				cp++;
-			}
-			while (map[*cp]&DIGIT);
-		}
+			do cp++; while (map[*cp]&DIGIT);
 		else
-		{
 			error("invalid floating constant\n");
-		}
 	}
-
 	if (n == 0)
-	{
 		tval.u.c.v.d = 0.0;
-	}
-	else
-	{
-		double temp_double;
+	else {
 		char c = *cp;
 		*cp = 0;
 		errno = 0;
-
-		temp_double=strtod(token, (char **)0);
-		tval.u.c.v.d = temp_double;
+		tval.u.c.v.d = strtod(token, (char **)0);
 		if (errno == ERANGE)
-		{
 			warning("overflow in floating constant `%s'\n", token);
-		}
 		*cp = c;
 	}
-
-	if (*cp == 'f' || *cp == 'F')
-	{
+	if (*cp == 'f' || *cp == 'F') {
 		char c = *++cp;
 		*cp = 0;
-
-		//printf("==> Float constant:%g\r\n",tval.u.c.v.d);
-		//__asm { int 3 };
-
 		if (tval.u.c.v.d > FLT_MAX)
-		{
 			warning("overflow in floating constant `%s'\n", token);
-		}
 		tval.type = floattype;
-		tval.u.c.v.f = (float)tval.u.c.v.d;
+		tval.u.c.v.f = tval.u.c.v.d;
 		*cp = c;
-	}
-	else
-	if (*cp == 'l' || *cp == 'L')
-	{
+	} else if (*cp == 'l' || *cp == 'L') {
 		cp++;
 		tval.type = longdouble;
-	}
-	else
-	{
+	} else
 		tval.type = doubletype;
-	}
 	return &tval;
 }
 
@@ -587,25 +552,7 @@ int gettok() {
 				cp = rcp;
 				tsym = icon(n, overflow);
 				return ICON;
-			}
-            else if (*token == '0' && (*rcp == 'b' || *rcp == 'B')) {
-				while (*++rcp) {
-					if (*rcp=='0' || *rcp=='1')
-						d = *rcp - '0';
-					else
-						break;
-					if (n&~((unsigned)-1 >> 1))
-						overflow++;
-					else
-						n = (n<<1) + d;
-				}
-				if ((char *)rcp - token <= 2)
-					error("invalid binary constant\n");
-				cp = rcp;
-				tsym = icon(n, overflow);
-				return ICON;
-			}
-            else if (*token == '0') {
+			} else if (*token == '0') {
 				int err = 0;
 				for ( ; map[*rcp]&DIGIT; rcp++) {
 					if (*rcp == '8' || *rcp == '9')
@@ -682,7 +629,8 @@ int gettok() {
 					} else if (map[c]&BAD)
 						nbad++;
 					if (s < &cbuf[sizeof cbuf] - 2)
-						*s++ = c;
+                                                *s++ = c;
+// FF: pour traduire vers un jeu de caractere cible:  *s++ = chartranslation[c] ;
 				}
 				if (*cp == cbuf[0])
 					cp++;
@@ -824,14 +772,14 @@ int gettok() {
 	return EOI;
 }
 /* icon - scan for tail of an integer constant n, set token, return symbol */
-static Symbol icon(n, overflow) unsigned n; {
+static Symbol icon(unsigned n, int overflow) {
 	int u = 0;
 
 	if (*cp == 'u' || *cp == 'U')
 		u = *cp++;
 	if (*cp == 'l' || *cp == 'L')
-		*cp++;
-	if (u == 0 && *cp == 'u' || *cp == 'U')
+		cp++;
+	if ((u == 0 && *cp == 'u') || *cp == 'U')
 		u = *cp++;
 	if (overflow) {
 		char c = *cp;

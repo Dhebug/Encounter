@@ -16,7 +16,7 @@ dclproto(Tree (*opnode[]),(int, Tree, Tree)) = {
 };
 
 /* addnode - construct tree for l + r */
-static Tree addnode(op, l, r) Tree l, r; {
+static Tree addnode(int op, Tree l, Tree r) {
 	int n;
 	Type ty = inttype;
 
@@ -40,14 +40,14 @@ static Tree addnode(op, l, r) Tree l, r; {
 }
 
 /* andnode - construct tree for l [&& ||] r */
-static Tree andnode(op, l, r) Tree l, r; {
+static Tree andnode(int op, Tree l, Tree r) {
 	if (!isscalar(l->type) || !isscalar(r->type))
 		typeerror(op, l, r);
 	return simplify(op, inttype, cond(l), cond(r));
 }
 
 /* asgnnode - construct tree for l = r */
-Tree asgnnode(op, l, r) Tree l, r; {
+Tree asgnnode(int op, Tree l, Tree r) {
 	Type aty, ty;
 
 	r = pointer(r);
@@ -62,13 +62,14 @@ Tree asgnnode(op, l, r) Tree l, r; {
 	aty = l->type;
 	if (isptr(aty))
 		aty = unqual(aty)->type;
-	if (isconst(aty) || (isstruct(aty) && unqual(aty)->u.sym->u.s.cfields))
+	if (isconst(aty) || (isstruct(aty) && unqual(aty)->u.sym->u.s.cfields)) {
 		if (isaddrop(l->op) && !l->u.sym->computed && !l->u.sym->generated)
 			error("assignment to const identifier `%s'\n", l->u.sym->name);
 		else
 			error("assignment to const location\n");
+    }
 	r = cast(r, ty);
-	if (l->op == FIELD && fieldsize(l->u.field) < 8*l->u.field->type->size)
+	if (l->op == FIELD && fieldsize(l->u.field) < 8*l->u.field->type->size) {
 		if (isunsigned(l->u.field->type))
 			r = bitnode(BAND, r,
 				constnode(fieldmask(l->u.field), unsignedtype));
@@ -89,6 +90,7 @@ Tree asgnnode(op, l, r) Tree l, r; {
 				r = shnode(LSH, r, constnode(n, inttype));
 			r = shnode(RSH, r, constnode(n, inttype));
 		}
+	}
 	if (isstruct(ty)) {
 		if (r->op == RIGHT && r->kids[0] && r->kids[0]->op == CALL+B
 		&& isaddrop(l->op)) {
@@ -113,7 +115,7 @@ Tree asgnnode(op, l, r) Tree l, r; {
 }
 
 /* binary - usual arithmetic conversions, return target type */
-static Type binary(xty, yty) Type xty, yty; {
+static Type binary(Type xty, Type yty) {
 	if (isdouble(xty) || isdouble(yty))
 		return doubletype;
 	if (xty == floattype || yty == floattype)
@@ -124,7 +126,7 @@ static Type binary(xty, yty) Type xty, yty; {
 }
 
 /* bitnode - construct tree for l [& | ^ %] r */
-Tree bitnode(op, l, r) Tree l, r; {
+Tree bitnode(int op, Tree l, Tree r) {
 	Type ty = inttype;
 
 	if (isint(l->type) && isint(r->type)) {
@@ -143,7 +145,7 @@ Tree bitnode(op, l, r) Tree l, r; {
 }
 
 /* callnode - construct call node to f, return type ty, arguments args */
-Tree callnode(f, ty, args) Tree f, args; Type ty; {
+Tree callnode(Tree f, Type ty, Tree args) {
 	Tree p;
 
 	if (args)
@@ -168,7 +170,7 @@ Tree callnode(f, ty, args) Tree f, args; Type ty; {
 }
 
 /* cmpnode - construct tree for l [< <= >= >] r */
-static Tree cmpnode(op, l, r) Tree l, r; {
+static Tree cmpnode(int op, Tree l, Tree r) {
 	Type ty = unsignedtype;
 
 	if (isarith(l->type) && isarith(r->type)) {
@@ -184,7 +186,7 @@ static Tree cmpnode(op, l, r) Tree l, r; {
 }
 
 /* compatible - are ty1 & ty2 sans qualifiers pointers to compatible object or incomplete types? */
-static int compatible(ty1, ty2) Type ty1, ty2; {
+static int compatible(Type ty1, Type ty2) {
 	if (isptr(ty1) && isptr(ty2)) {
 		do {
 			ty1 = unqual(ty1->type);
@@ -196,17 +198,17 @@ static int compatible(ty1, ty2) Type ty1, ty2; {
 }
 
 /* condnode - build a tree for e ? l : r */
-Tree condnode(e, l, r) Tree e, l, r; {
+Tree condnode(Tree e, Tree l, Tree r) {
 	Symbol t1 = 0;
 	Type ty = 0, lty = l->type, rty = r->type;
 	Tree p;
-	
+
 	if (isarith(lty) && isarith(rty)) {
 		ty = binary(lty, rty);
 		l = cast(l, ty);
 		r = cast(r, ty);
 	} else if (eqtype(lty, rty, 1)
-	|| isptr(lty) && isint(rty) && assign(lty, r))
+	|| (isptr(lty) && isint(rty) && assign(lty, r)))
 		ty = unqual(lty);
 	else if (isptr(rty) && isint(lty) && assign(rty, l))
 		ty = unqual(rty);
@@ -254,7 +256,7 @@ Tree condnode(e, l, r) Tree e, l, r; {
 }
 
 /* constnode - return a tree for a constant n of type ty (int or unsigned) */
-Tree constnode(n, ty) unsigned n; Type ty; {
+Tree constnode(unsigned n, Type ty) {
 	Tree p;
 
 	if (isarray(ty))
@@ -266,7 +268,7 @@ Tree constnode(n, ty) unsigned n; Type ty; {
 }
 
 /* eqnode - construct tree for l [== !=] r */
-Tree eqnode(op, l, r) Tree l, r; {
+Tree eqnode(int op, Tree l, Tree r) {
 	if (isint(l->type) && isptr(r->type))
 		return eqnode(op, r, l);
 	if (isptr(l->type) && isint(r->type)) {
@@ -277,10 +279,8 @@ Tree eqnode(op, l, r) Tree l, r; {
 				op == EQ ? "==" : "!=");
 		return simplify(op + U, inttype, l, r);
 	}
-	if (isptr(l->type) && !isfunc(l->type->type)
-	&& (r->type == voidptype || unqual(r->type->type) == voidtype)
-	||  isptr(r->type) && !isfunc(r->type->type)
-	&& (l->type == voidptype || unqual(l->type->type) == voidtype)) {
+	if ((isptr(l->type) && !isfunc(l->type->type) && (r->type == voidptype || unqual(r->type->type) == voidtype))
+	||  (isptr(r->type) && !isfunc(r->type->type) && (l->type == voidptype || unqual(l->type->type) == voidtype))) {
 		l = cast(l, unsignedtype);
 		r = cast(r, unsignedtype);
 		return simplify(op + U, inttype, l, r);
@@ -289,7 +289,7 @@ Tree eqnode(op, l, r) Tree l, r; {
 }
 
 /* mulnode - construct tree for l [* /] r */
-static Tree mulnode(op, l, r) Tree l, r; {
+static Tree mulnode(int op, Tree l, Tree r){
 	Type ty = inttype;
 
 	if (isarith(l->type) && isarith(r->type)) {
@@ -302,7 +302,7 @@ static Tree mulnode(op, l, r) Tree l, r; {
 }
 
 /* shnode - construct tree for l [>> <<] r */
-Tree shnode(op, l, r) Tree l, r; {
+Tree shnode(int op, Tree l, Tree r) {
 	Type ty = inttype;
 
 	if (isint(l->type) && isint(r->type)) {
@@ -315,7 +315,7 @@ Tree shnode(op, l, r) Tree l, r; {
 }
 
 /* subnode - construct tree for l - r */
-static Tree subnode(op, l, r) Tree l, r; {
+static Tree subnode(int op, Tree l, Tree r) {
 	int n;
 	Type ty = inttype;
 
@@ -343,18 +343,34 @@ static Tree subnode(op, l, r) Tree l, r; {
 }
 
 /* typeerror - issue "operands of op have illegal types `l' and `r'" */
-void typeerror(op, l, r) Tree l, r; {
+void typeerror(int op, Tree l, Tree r) {
 	int i;
 	static struct { Opcode op; char *name; } ops[] = {
-		ASGN, "=",	INDIR, "*",	NEG,  "-",
-		ADD,  "+",	SUB,   "-",	LSH,  "<<",
-		MOD,  "%",	RSH,   ">>",	BAND, "&",
-		BCOM, "~",	BOR,   "|",	BXOR, "^",
-		DIV,  "/",	MUL,   "*",	EQ,   "==",
-		GE,   ">=",	GT,    ">",	LE,   "<=",
-		LT,   "<",	NE,    "!=",	AND,  "&&",
-		NOT,  "!",	OR,    "||",	COND, "?:",
-		0, 0
+		{ ASGN,  "="},
+		{ INDIR, "*"},
+		{ NEG,   "-"},
+		{ ADD,   "+"},
+		{ SUB,   "-"},
+		{ LSH,  "<<"},
+		{ MOD,   "%"},
+		{ RSH,  ">>"},
+		{ BAND,  "&"},
+		{ BCOM,  "~"},
+		{ BOR,   "|"},
+		{ BXOR,  "^"},
+		{ DIV,   "/"},
+		{ MUL,   "*"},
+		{ EQ,   "=="},
+		{ GE,   ">="},
+		{ GT,    ">"},
+		{ LE,   "<="},
+		{ LT,    "<"},
+		{ NE,   "!="},
+		{ AND,  "&&"},
+		{ NOT,   "!"},
+		{ OR,   "||"},
+		{ COND, "?:"},
+		{ 0, 0}
 	};
 
 	op = generic(op);

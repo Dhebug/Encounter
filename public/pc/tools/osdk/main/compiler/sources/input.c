@@ -1,6 +1,12 @@
 /* C compiler: input processing */
 
 #include "c.h"
+#include <string.h>
+#ifdef __unix__
+#include <unistd.h>
+#elif defined(_WIN32) || defined(_WIN64)
+#include <io.h>
+#endif
 
 unsigned char *cp;	/* current input character */
 char *file;		/* current input file name */
@@ -17,7 +23,7 @@ dclproto(static void pragma,(void));
 dclproto(static void resynch,(void));
 
 /* inputInit - initialize input processing */
-void inputInit(fd) {
+void inputInit(int fd) {
 	limit = cp = &buffer[MAXTOKEN + 1];
 	lineno = 0;
 	file = 0;			/* omit */
@@ -29,7 +35,7 @@ void inputInit(fd) {
 /* inputstring - arrange to read str as next input */
 void inputstring(str) char *str; {
 	limit = cp = &buffer[MAXTOKEN+1];
-	while (*limit++ = *str++)
+	while ((*limit++ = *str++))
 		;
 	*limit = '\n';
 	bsize = 0;
@@ -87,7 +93,7 @@ static void pragma() {
 			if ((t = gettok()) == ID && tsym) {
 				tsym->ref++;
 				use(tsym, src);
-			}	
+			}
 		}
 }
 
@@ -141,9 +147,10 @@ static void resynch() {
 	} else if (Aflag >= 2 && *cp != '\n')
 		warning("unrecognized control line\n");
 	while (*cp)
-		if (*cp++ == '\n')
+		if (*cp++ == '\n') {
 			if (cp == limit + 1)
 				nextline();
 			else
 				break;
+		}
 }
