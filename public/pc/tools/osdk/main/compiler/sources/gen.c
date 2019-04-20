@@ -16,14 +16,20 @@
  * This 6502 backend aims to be kept as simple as possible by introducing an
  * intermediate language of macros, so that most of the time, there's a one to
  * one correspondence between the Operator Nodes passed by the frontend and
- * the macros emitted by the backend. Recently, I added a graph output feature
- * (-G) and renamed a little the macros to emphasize this one to one
- * correspondence...
- *
+ * the macros emitted by the backend. However, lcc's frontend was designed
+ * for working straight forward with backends for RISC processors with
+ * a load/store architecture and many registers so that operations only take
+ * registers operand. The 6502 instead has a single register that can be used
+ * in operations whilst the second operand is in memory. So, I designed this
+ * 6502 backend to use pseudo-registers in zero-page (this seems natural),
+ * but also to propagate addressing-mode information in order to exploit
+ * some 6502 addressing modes. This way it becomes possible to optimize the
+ * generated code by combining the load/store operations provided by the
+ * frontend with the operations on pseudo-registers and/or memory.
  */
 
 
-char *version="/* 16-bit code V1.34 */\n";
+char *version="/* 16-bit code V1.35 */\n";
 #include "c.h"
 #include <string.h>
 #include <stdio.h>
@@ -297,10 +303,10 @@ void defstring(int len, char *s) {
     if (graph_output) return;
     while (len > 0) {
         if (s[0]==';' || s[0]<32 || s[0]==127) {
-            print("\tDB($%x)\n",*s++);
+            print("\tDB($%x)\n",(unsigned char)*s++);
             len--;
             while (len>0 && (s[0]==';' || s[0]<32 || s[0]==127)) {
-                print("\tDB($%x)\n",*s++);
+                print("\tDB($%x)\n",(unsigned char)*s++);
                 len--;
             }
             print("\n");
