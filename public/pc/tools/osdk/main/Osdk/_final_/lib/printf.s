@@ -60,39 +60,41 @@ endform
 printfloat
 	iny
 	sty saveptrform
-        clc
-        lda sp
-        adc saveptrarg
-        tax
-        lda sp+1
-        adc #0
-        tay
-        txa
-        jsr load_acc1
-        jsr $E0D5
-        sta op2
-        sty op2+1
-        clc
-        lda saveptrarg
-        adc #5
-        sta saveptrarg
+	clc
+	lda sp
+	adc saveptrarg
+	tax
+	lda sp+1
+	adc #0
+	tay
+	txa
+	jsr load_acc1
+	jsr $E0D5
+	sta op2
+	sty op2+1
+	clc
+	lda saveptrarg
+	adc #5
+	sta saveptrarg
 	ldy #0
 	jmp prtsloop
         
 formfield
 	iny
 	lda (tmp),y
-        cmp #$64        ; 'd'
+	cmp #$64        ; 'd'
 	beq printint
-        cmp #$66        ; 'f'
-        beq printfloat
-        cmp #$73        ; 's'
+	cmp #"u"        ; 'u'
+	beq printuint
+	cmp #$66        ; 'f'
+	beq printfloat
+	cmp #$73        ; 's'
 	beq printstr
-        cmp #$63        ; 'c'
+	cmp #$63        ; 'c'
 	beq printchar
-        cmp #$78        ; 'x'
+	cmp #$78        ; 'x'
 	beq printhex
-        jmp charput
+	jmp charput
 printchar
 	sty saveptrform
 	ldy saveptrarg
@@ -127,11 +129,23 @@ prtsloop
 endprts
 	ldy saveptrform
 	jmp formloop
+
 printint
 	iny
 	sty saveptrform
 	jsr nextarg
 	jsr itoa
+	stx op2
+	sta op2+1
+	ldy #0
+	jmp prtsloop
+
+printuint
+	iny
+	sty saveptrform
+	jsr nextarg
+zabo jmp zabo	
+	jsr uitoa
 	stx op2
 	sta op2+1
 	ldy #0

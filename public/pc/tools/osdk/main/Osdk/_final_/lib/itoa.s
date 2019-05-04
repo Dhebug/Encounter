@@ -24,7 +24,6 @@ itoa
 	sbc op2+1
 	sta op2+1
 
-uitoa
 itoaloop
 	jsr udiv10
 	pha
@@ -49,6 +48,11 @@ poploop
 	ldx #<bufconv
 	lda #>bufconv
 	rts
+
+uitoa
+	ldy #0
+	sty bufconv
+	jmp itoaloop
 
 bufconv
 	.byt 0,0,0,0,0,0,0,0,0,0,0,0
