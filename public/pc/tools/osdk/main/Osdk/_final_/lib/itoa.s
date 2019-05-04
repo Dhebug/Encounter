@@ -9,12 +9,9 @@ _itoa
 	lda (sp),y
 	sta op2+1
 
-	jsr itoa
-	rts
-
-bufconv
-	.byt 0,0,0,0,0,0,0,0,0,0,0,0
 itoa
+	ldy #0
+	sty bufconv
 	lda op2+1
 	bpl uitoa
 	lda #$2D	; minus sign
@@ -28,8 +25,6 @@ itoa
 	sta op2+1
 
 uitoa
-	ldy #0
-	sty bufconv
 itoaloop
 	jsr udiv10
 	pha
@@ -38,7 +33,6 @@ itoaloop
 	ora op2+1
 	bne itoaloop
 	
-	ldx #0
 	lda bufconv
 	beq poploop
 	inx
@@ -55,7 +49,10 @@ poploop
 	ldx #<bufconv
 	lda #>bufconv
 	rts
-			
+
+bufconv
+	.byt 0,0,0,0,0,0,0,0,0,0,0,0
+
 ;
 ; udiv10 op2= op2 / 10 and A= tmp2 % 10
 ;
