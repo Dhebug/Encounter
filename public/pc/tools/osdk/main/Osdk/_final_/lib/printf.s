@@ -144,7 +144,6 @@ printuint
 	iny
 	sty saveptrform
 	jsr nextarg
-zabo jmp zabo	
 	jsr uitoa
 	stx op2
 	sta op2+1
