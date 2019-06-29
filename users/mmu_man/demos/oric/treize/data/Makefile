@@ -11,6 +11,7 @@ PICS= \
 
 
 TARGETS := \
+	TUNEDORI.s \
 	logoa13_c.s logoa13.h \
 	logovip1_c.s logovip1.h \
 	logovip2_c.s logovip2.h \
@@ -363,11 +364,11 @@ hobbitonbrushhand.ttf:
 fonts: elvencommonspeak.ttf hobbitonbrushhand.ttf
 
 
-SYNTORIC.ym: SYNTORIC.out
+TUNEDORI.ym: TUNEDORI.out
 
-SYNTORIC.mym: SYNTORIC.ym
+TUNEDORI.mym: TUNEDORI.ym
 
-SYNTORIC.s: SYNTORIC.mym
+TUNEDORI.s: TUNEDORI.mym
 
 %.ym: %.out
 	# truncated:

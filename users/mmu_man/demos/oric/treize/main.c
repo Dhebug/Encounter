@@ -48,7 +48,7 @@ char ScrollScrollerLine = 0;
 
 #define	SCROLLER_START_ADDR 0xa000+SCROLLER_OFFSET
 
-#define VIP_SCROLL_LINES 1
+#define VIP_SCROLL_LINES 4
 
 extern unsigned char ScrollerCommand;
 extern unsigned char ScrollerCommandParam1;
@@ -222,8 +222,8 @@ void EffectScrollUp()
 	if (pass > 4)
 		return;
 	// scroll up
-//	memcpy((unsigned char *)0xa000, (unsigned char *)0xa000+40*VIP_SCROLL_LINES, 40*(200-VIP_SCROLL_LINES));
-ScrollHiresUp1();
+	memcpy((unsigned char *)0xa000, (unsigned char *)0xa000+40*VIP_SCROLL_LINES, 40*(200-VIP_SCROLL_LINES));
+//ScrollHiresUp1();
 	memcpy((unsigned char *)0xa000+40*(200-VIP_SCROLL_LINES), p, 40*VIP_SCROLL_LINES);
 	p += 40*VIP_SCROLL_LINES;
 	i += VIP_SCROLL_LINES;
