@@ -111,7 +111,7 @@ _MessageScroller
 	.asc "   Le salon de la (re)creation numerique !           "
 	.byt SCROLLER_BOTTOM_TEXT
 	.word _BottomDates
-	.asc "    du 10 au 12 Novembre 2017        "
+	.asc "    du 1 au 3 Novembre 2019        "
 	.byt SCROLLER_BOTTOM_TEXT
 	.word _BottomPlace
 	.asc "      a Tain l'Hermitage             "
