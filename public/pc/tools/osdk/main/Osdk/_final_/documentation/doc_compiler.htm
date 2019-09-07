@@ -18,15 +18,35 @@
 		<h1>The Compiler</h1>
 
 <p id=chapter>Description</p>
-
 <p>RCC16 is an Oric targeted version of the LCC Compiler.
 </p>
 
 <p>This compiler is decently ANSI compliant, and event support C++ comments as well as standard C comments. 
 </p>
 
-<p>Optimisation level can be modified using the OSDKCOMP variable. By default this variable will be initialized to -O2 value,
-but you can try -O3 for more aggresive optimizations.
+
+The "official" source repository whre all the changes for the compiler are made before they reach the OSDK is Fabrice Frances' <a href="https://github.com/Oric4ever/lcc65">GitHub</a>
+
+<p>Here is the primary source for the C Cross-Compiler targetting the 6502 processor that is included in the OSDK (Oric Software Development Kit). I am (Fabrice) putting it here so that it eventually becomes more familiar to people willing to maintain it in the long term...
+
+<p>Also, in order to increase its maintenability, I will try to progressively document what my 6502 code generator does. If you are interested in it, the first thing to read is Hanson & Fraser's interfacing document (docs/INTERFAC.pdf): the lcc65 compiler is built from Hanson & Fraser's frontend, and my small 6502 backend (6502/src/gen.c).
+
+<p>The frontend supplies the backend with forest of dags (directed acyclic graphs), the backend is responsible for code generation. The following options are accepted by the backend and affect the generated output; comparison of these outputs give a better understanding of what the backend does...
+<ul>
+<li><p>-G generates a graph output (in Graphviz dot format) instead of code output. The output is a representation of the forests of dags produced by the frontend, which means that the backend doesn't do any work (except transformation of Hanson & Fraser's internal structures to Graphviz dot format). For example, the visual representation of the compilation of tests/torture_test.c file gives the graph (tests/torture_test.dot), which once converted to pdf ("dot -Tpdf torture_test.dot") can be graphically seen in tests/torture_test.pdf.
+
+<li><p>-O0 transforms the graph into code. More precisely, for each function, the backend first linearizes the forest of dags given by the frontend, allocates temporary variables to hold the result of operators, defines a number of "operand handling modes" (Constants, Direct, ZeroPage, Indirect, Y-Indexed) that will be used for optimizing the code in the advanced -O2 and -O3 optimizations, and generates 16-bit macro-instructions instead of 6502 opcodes in order to keep the generator small.
+
+<li><p>-O1 removes the leaf nodes of the graph (ADDRG, ADDRF, ADDRL, CNST) so that their value become direct operands of the nodes above them. At the same time, this removes the need for the associated temporary variables.
+
+<li><p>-O2 allocates some parameters and some local variables into "virtual-registers" in zero-page: these zero-page variables are of course faster than the normal parameters or local variables which are accessed on a software stack (i.e using indirect Y-indexed access). -O2 also does some simple optimizations like converting additions/substractions with 1 to INC/DEC operations, special treatment of 1-bit shifts or equality with 0, removal of some un-necessary conversions between chars/ints/unsigned ints, removal of function prologue/epilogue when possible.
+
+<li><p>-O3 is an attempt for more agressive optimizations, trying to remove some indirection nodes (ASGN, INDIR) of usual code patterns so that addressing mode of the 16-bit macros integrates the additional indirection.
+</ul>
+<p>Last but not least, you have to know that the sources of the lcc frontend are very old (these are from LCC 1.9), written in K&R style (yeah!), so if you compile them you will get zillions of warnings. Moreover, I was told it is very difficult to compile them on Windows with Visual Studio, so I have added a project file for Code::Blocks in the src directory. Of course Linux users have a simple Makefile that should work on most systems.
+
+
+<p>Optimisation level can be modified using the OSDKCOMP variable: Since OSDK 1.14 this variable will be initialized by default to -O3 value (used to be -O2).
 </p>
 
 
@@ -49,6 +69,17 @@ but you can try -O3 for more aggresive optimizations.
 <p>Some functions are just quick hacks done by directly calling the ROM functions.
 Unfortunately, ROM releases are different, and thus any code calling these functions will work only on ATMOS.
 </p>
+
+<p id=chapter>Historic</p>
+
+<p>Here is the list of all releases with a short description of things that changed:
+</p>
+
+<p id=dateentry>Version 1.36</p>
+ - fixes for the -O0 output
+
+<p id=dateentry>Version 1.35</p>
+ - defstring is used by the frontend not only to define strings (signed char data) but also for initializing unsigned char arrays. In this case, defstring will receive char data with possible negative char values which have to be printed as their corresponding unsigned char value.
 
 
 

@@ -40,6 +40,40 @@ It typically perform a 50% compression ratio on code and graphics.
 </pre>
 
 
+<p id=chapter>Switches</p>
+<ul>
+
+<li>The -u switch is used to decompress a file: Note that only files packed with a header (-p1 or -p2) can be unpacked (and you need to pass the correct -m0/-m1 values matching the one used when compressing the data)
+
+<p>
+<pre>
+-p0 => No header
+-p1 => Save with short header [default]
+-p2 => Save with long header</pre>
+See below for the explanation regarding how this switch changes the format.
+</p>
+</li>
+
+<li>The -p switch defines the packing mode:
+<p>
+<pre>
+-p0 => No header
+-p1 => Save with short header [default]
+-p2 => Save with long header</pre>
+See below for the explanation regarding how this switch changes the format.
+</p>
+</li>
+
+
+<li>The -m switch selects the meaning of the bits in the encoding mask
+<pre>
+-m0 => 0=copy bytes / 1=new byte [default]
+-m1 => 0=new byte   / 1=copy bytes</pre>
+This is just to allow code optimization, some platforms are more comfortable branching on true, some prefer to branch on false. Just make sure the code handles that when depacking.
+</li>
+
+</ul>
+
 <p id=chapter>Packed file format</p>
 
 <p>The format of packed files is actually very simple, and is mostly based on a 8 bytes header
@@ -89,11 +123,15 @@ To unpack these files you need to use another routine.
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
 
-<p id=dateentry>Version 0.004</p>
+<p id=dateentry>Version 0.5</p>
+ - Added the -mn and -p2 options
+
+
+<p id=dateentry>Version 0.4</p>
  - Added p0/p1 mode to pack a file without appending the header. 
  Very usefull when you want to spare a maximum of bytes in a minigame compo...
  
-<p id=dateentry>Version 0.001-0.003</p>
+<p id=dateentry>Version 0.1-0.3</p>
  - First released version
 
 

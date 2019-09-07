@@ -70,31 +70,31 @@ extern int play(int soundchanels,int noisechanels,int envelop,int volume);
 #define CHAN_2   2
 #define CHAN_3   3
 
-#define NOTE_C   1
-#define NOTE_C-  2
-#define NOTE_D   3
-#define NOTE_D-  4
-#define NOTE_E   5
-#define NOTE_F   6
-#define NOTE_F-  7
-#define NOTE_G   8
-#define NOTE_G-  9
-#define NOTE_A  10
-#define NOTE_A- 11
-#define NOTE_B  12
+#define NOTE_C        1
+#define NOTE_C_SHARP  2
+#define NOTE_D        3
+#define NOTE_D_SHARP  4
+#define NOTE_E        5
+#define NOTE_F        6
+#define NOTE_F_SHARP  7
+#define NOTE_G        8
+#define NOTE_G_SHARP  9
+#define NOTE_A        10
+#define NOTE_A_SHARP  11
+#define NOTE_B        12
 
-#define NOTE_DO    1
-#define NOTE_DO-   2
-#define NOTE_RE    3
-#define NOTE_RE-   4
-#define NOTE_MI    5
-#define NOTE_FA    6
-#define NOTE_FA-   7
-#define NOTE_SOL   8
-#define NOTE_SOL-  9
-#define NOTE_LA   10
-#define NOTE_LA-  11
-#define NOTE_SI   12
+#define NOTE_DO         1
+#define NOTE_DO_DIESE   2
+#define NOTE_RE         3
+#define NOTE_RE_DIESE   4
+#define NOTE_MI         5
+#define NOTE_FA         6
+#define NOTE_FA_DIESE   7
+#define NOTE_SOL        8
+#define NOTE_SOL_DIESE  9
+#define NOTE_LA         10
+#define NOTE_LA_DIESE   11
+#define NOTE_SI         12
 
 extern int music(int channel,int octave,int key,int volume);
 

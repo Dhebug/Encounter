@@ -17,28 +17,48 @@
 
 		<h1>Version history</h1>
 
+<p id=dateentry>Version 1.15 - September 7th 2019</p>
+	<ul>
+        <li>Upgraded the <A href="doc_compiler.htm">C Compiler</A> to version 1.38 by integrating all the latest changes from Fabrice Frances: Fixes some issues found by Goyo and Retroric regarding encoding of data tables by the compiler.</li>
+        <li>Changed back the default compile optimization level from -O3 to -O2 - there are still some cases of bad code generation</li>
+        <li>Fixed a problem with include/sys/sound.h containing invalid symbols that don't compile correctly</li>
+	</ul>
+
+<p id=dateentry>Version 1.14 - June 8th 2019</p>
+	<ul>
+        <li>Upgraded the <A href="doc_compiler.htm">C Compiler</A> to version 1.36 by integrating all the latest changes from Fabrice Frances: Better code generator, float/int conversion fixes, better error handling.</li>
+        <li>Changed the default compile optimization level from -O2 to -O3 - providing significantly better code generation, both in size and speed</li>
+		<li>Upgraded <A href="doc_linker.htm">Link65</A> to the version 0.66: The new macro file generate lines that contain multiple instructions, the linker stopped at the first encountered instruction, this new version correctly parses that</li>
+        <li>The code generator macro file is now compatible with both XA and FRASM</li>
+        <li>Updated <A href="doc_filepack.htm">FilePack</A> version number to 0.2 to 0.5 after somebody reported an issue with a veryyyyyyy old version which happened to have the same version number of a much more recent one.</li>
+        <li>Tap2Dsk 2.1.1: Added a fix to avoid the tool to stay stuck on tapes with incorrect size specified in their headers</li>
+        <li>Fixed a problem with itoa not correctly processing negative numbers (the "-" was overwritten by the number printing routine). Also took the opportunity to optimize the code (removed the jsr itoa / rts as well as an unnecessary x register clearing (it's set to zero when we are back from udiv10)</li>
+        <li>Added support for %u to printf</li>
+        <li>A new environment variable, OSDKVERSION contains the version number of the SDK, it is shown when building a program</li>
+	</ul>
+
 <p id=dateentry>Version 1.13 - October 14th 2018</p>
 	<ul>
-                <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 2.1, with better handling of defines and DATA instructions</li>
-                <li>Added a missing EQ0W_C macro for the C compiler.</li>
+        <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 2.1, with better handling of defines and DATA instructions</li>
+        <li>Added a missing EQ0W_C macro for the C compiler.</li>
 		<li>Added a missing reference to Sedoric in the library index file</li>
 	</ul>
 
 <p id=dateentry>Version 1.12 - July 29th 2018</p>
 	<ul>
-                <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 2.0, with support for labels, defines, escape codes and binary optimization</li>
-                <li>Updated macros for the C compiler from version 1.29 to 1.30 (fixes in the ADDW_IID, SUBW_IID, ANDW_IID, XORW_IID and ORW_IID which used the wrong register to access the source pointer).</li>
+        <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 2.0, with support for labels, defines, escape codes and binary optimization</li>
+        <li>Updated macros for the C compiler from version 1.29 to 1.30 (fixes in the ADDW_IID, SUBW_IID, ANDW_IID, XORW_IID and ORW_IID which used the wrong register to access the source pointer).</li>
 		<li>Fixed the BomberZ sample program to use the new Bas2Tap syntax</li>
-                <li>Fixed the library functions 'scanf' and 'sscanf' (For some reason these files had not been converted to use the XA syntax when we switched from FRASM)</li>
-                <li>Upgraded the version of Sedoric 3 used by Tap2DSK with the patch that improves the handling of the "insert master disk" prompt</li>
-                <li>Modified the Oricutron batch file to use PUSHD/POPD instead of CD, this makes it possible to start the emulator even when the project is on another disk drive location</li>
+        <li>Fixed the library functions 'scanf' and 'sscanf' (For some reason these files had not been converted to use the XA syntax when we switched from FRASM)</li>
+        <li>Upgraded the version of Sedoric 3 used by Tap2DSK with the patch that improves the handling of the "insert master disk" prompt</li>
+        <li>Modified the Oricutron batch file to use PUSHD/POPD instead of CD, this makes it possible to start the emulator even when the project is on another disk drive location</li>
 	</ul>
 
 <p id=dateentry>Version 1.11 - March 17th 2018</p>
 	<ul>
-                <li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 1.2 (fixed issues with gap2 and crc values)</li>
-                <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 1.0, now correctly handles corrupted programs using out of range tokens as well as saving to a file instead of stdout</li>
-                <li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to version 1.0 (Fixed some error handling as well as a minor issue in the Atari multipalette conversion)</li>
+        <li>Upgraded <A href="doc_floppybuilder.htm">FloppyBuilder</A> to version 1.2 (fixed issues with gap2 and crc values)</li>
+        <li>Upgraded <A href="doc_bas2tap.htm">Bas2Tap</A> to version 1.0, now correctly handles corrupted programs using out of range tokens as well as saving to a file instead of stdout</li>
+        <li>Upgraded <A href="doc_pictconv.htm">PictConv</A> to version 1.0 (Fixed some error handling as well as a minor issue in the Atari multipalette conversion)</li>
 	</ul>
 
 <p id=dateentry>Version 1.10 - April 13th 2017</p>
