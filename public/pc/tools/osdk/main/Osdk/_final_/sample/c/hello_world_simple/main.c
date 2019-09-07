@@ -3,6 +3,7 @@
 //
 
 #include <lib.h>
+#include <sys/sound.h>
 
 void main()
 {

@@ -49,7 +49,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-SET OSDKVERSION=1.14RC3
+SET OSDKVERSION=1.15
 
 ::
 :: Create a build directory if it does not exist
@@ -160,7 +160,7 @@ IF "%OSDKBRIEF%"=="" ECHO Compiling %1.C
 
 IF "%OSDKBRIEF%"=="" ECHO   - preprocess
 :: the -DATMOS is for Contiki
-%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include -D__16BIT__ -D__NOFLOAT__ -DATMOS -DOSDKNAME_%OSDKNAME% -nostdinc %1.c %OSDKT%\%1.c
+%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include -D__16BIT__ -D__NOFLOAT__ -DATMOS -DOSDKNAME_%OSDKNAME% -DOSDKVER=\"%OSDKVERSION%\" -nostdinc %1.c %OSDKT%\%1.c
 
 IF "%OSDKBRIEF%"=="" ECHO   - compile
 %OSDKB%\compiler.exe -N%1 %OSDKCOMP% %OSDKT%\%1.c >%OSDKT%\%1.c2
