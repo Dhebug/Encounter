@@ -452,6 +452,13 @@ int ArgumentParser::GetIntegerValue(int default_value)
   return ::get_value(m_ptr_arg,default_value);
 }
 
+double ArgumentParser::GetDoubleValue(double default_value)
+{
+  return ::get_double(m_ptr_arg,default_value);
+}
+
+
+
 bool ArgumentParser::GetBooleanValue(bool default_value)
 {
   int nValue;
@@ -507,11 +514,22 @@ std::string get_string(const char *&ptr_arg)
 
 int get_value(const char *&ptr_arg,long default_value)
 {
-  char*ptr_end;
-  long value;
-
   if (!ptr_arg)	return 0;
-  value=strtoul(ptr_arg,&ptr_end,10);
+  char*ptr_end;
+  long value=strtoul(ptr_arg,&ptr_end,10);
+  if (ptr_arg==ptr_end)
+  {
+    value=default_value;
+  }
+  ptr_arg=ptr_end;
+  return value;
+}
+
+double get_double(const char *&ptr_arg,double default_value)
+{
+  if (!ptr_arg)	return 0.0;
+  char*ptr_end;
+  double value=strtod(ptr_arg,&ptr_end);
   if (ptr_arg==ptr_end)
   {
     value=default_value;

@@ -67,6 +67,7 @@ public:
 
   std::string GetStringValue();
   int GetIntegerValue(int default_value);
+  double GetDoubleValue(double default_value);
   bool GetBooleanValue(bool default_value);
   bool GetSeparator(const char* ptr_separator_list);
   const char* GetRemainingStuff();
@@ -86,6 +87,7 @@ protected:
 
 bool get_switch(const char *&ptr_arg,const char *ptr_switch);
 int get_value(const char *&ptr_arg,long default_value);
+double get_double(const char *&ptr_arg,double default_value);
 std::string get_string(const char *&ptr_arg);
 
 
