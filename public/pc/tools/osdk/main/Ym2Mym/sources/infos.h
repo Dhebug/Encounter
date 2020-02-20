@@ -9,7 +9,7 @@ Change history for the Ym2Mym
 - Added a rude YM5 loader. Skips most of the header.
 
 1.0 - 2013/12/18
-- Added support for retuning (Atari ST songs are at 2mhz, Amstrad ones at 1mhz)
+- Added support for retuning (Atari ST songs are at 2mhz, Amstrad ones at 1mhz, ZX Spectrum at 1.7734mz)
 - Added rude support for YM6 format (also skips most of the header)
 
 1.1 - 2014/01/12
@@ -35,10 +35,13 @@ Change history for the Ym2Mym
 1.7 - 2015/05/29
 - Added a -f flag that can be used to export the music to WAV format instead of MYM
 
+1.8 - 2020/01/18
+- Modified the semantics of the -t flag (now means Target Frequency) and added a -r flag (Reference Frequency) which both accept decimal values (like 1.0, 2.0 or 1.77340)
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	7
+#define TOOL_VERSION_MINOR	8
 
