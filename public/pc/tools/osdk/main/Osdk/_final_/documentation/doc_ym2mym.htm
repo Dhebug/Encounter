@@ -56,6 +56,48 @@ The MYM files are basically YM files that have been uncompressed and recompresse
 Ym2MYm can be used to perform this conversion. It will work only on YM files that do not use special timer effects such as digidrums or sid.
 </div>
 
+<p id=chapter>Retuning</p>
+
+<p>There are multiple machines using variants of the AY or YM soudchip, but they don't all use the same clock frequency: If you attempt at replaying a music made originally for another machine, and if it had a different clock, the resulting music will play at a different frequency than the original.
+</p>
+<p>
+If you want to preserve the original sound of the music, it is necessary to retune the register values so they compensate for the difference in frequency. In YM2MYM this is simply achieved by declaring the frequency of the source machine (using -r) and the one of the target machine (using -t).
+</p>
+<p>
+Originally the tool was made to play Atari ST musics on the Oric computers, so by default, the tool will assume a 2MHz source clock and 1MHz target clock, but you can specify any arbitrary value.
+</p>
+<p>
+For reference, here is the known clock speed of a few machines:
+</p>
+<ul>
+<li>Oric: 1MHz
+<li>Amstrad CPC: 1MHz
+<li>Sinclair Spectrum: 1.7734MHz
+<li>Atari ST: 2MHz
+</ul>
+<p>
+Due to the fact that the soundchip registers have a specific range of valid values (from 0 to 4095 for the notes, from 0 to 65535 for the enveloppe duration and from 0 to 31 for the noise frequency), it is possible that the retuning results in a value being out of range, which obviously will also impact how the music sounds.
+</p>
+<p>
+When this happen, the tool will display some warning message indicating how often the truncation happened, and how bad the truncation was. If you are lucky you will not notice, but the tool will also indicate at which position the worse case happened, so you can eventually tweak the tune.
+</p>
+<p>
+Example:
+</p>
+<pre>
+Found some clamping issues when retuning "data\Great Giana Sisters 1 - title.ym"'s frequency from 1MHz to 1.7734MHz at 50fps:
+- 'Channel A' overflowed 560 times (maximum was 5077 [over 4095] at time position 3'17" (frame 9858)
+- 'Noise Channel' overflowed 5070 times (maximum was 54 [over 31] at time position 0'27" (frame 1376)
+</pre>
+<p>
+As a final note, we'd like to point out that if technically speaking the AY and YM chips are register compatible and behave mostly the same, they are not identical chip, so in practice the same music can sound different depending on how it uses volume changes and enveloppes:
+</p>
+<ul>
+<li>Note transitions seem smoother on the YM (thanks to the higher internal accuracy)
+<li>The output from the AY is louder.
+<li>The YM output is cleaner
+</ul>
+
 
 <p id=chapter>Utilisation</p>
 
@@ -69,17 +111,26 @@ Ym2MYm can be used to perform this conversion. It will work only on YM files tha
 <p id=chapter>Switches</p>
 
 <ul>
-	<li>-tn Tuning
+
+    <li>-rn Reference Clock
 		<br>
-		The Atari ST soundchip has a 2mhz frequency, while most 8bit machines (including the Oric) have a 1mhz soundchip.
-		<br>
-		This means that in order to replay correctly an Atari ST music on the Oric we have to double the value of the frequency registers else the music will play too low which will result in ugly waveforms and low notes.
-		<ul>
-			<li>-t0 => No retune</li>
-			<li>-t1 => Double frequency [default]</li>
-			<br>
+        <ul>
+            <li>-r1        => Oric, Amstrad CPC</li>
+            <li>-r1.773400 => ZX Spectrum</li>
+            <li>-r2        => Atari ST [default]</li>
+    		<br>
 		</ul>
 	</li>
+
+    <li>-tn Target Clock
+    	<ul>
+            <li>-t0        => Use Reference (no retune)</li>
+            <li>-t1.0      => Oric, Amstrad CPC [default]</li>
+            <li>-t1.773400 => ZX Spectrum</li>
+            <li>-t2.0      => Atari ST</li>
+            <br>
+    	</ul>
+   	</li>
 
 	<li>-vn Verbosity
 		<br>
@@ -126,6 +177,17 @@ Ym2MYm can be used to perform this conversion. It will work only on YM files tha
 
 <p id=chapter>History</p>
 
+<p id=dateentry>Version 1.8</p>
+<ul>
+	<li>Modified the semantics of the -t flag (now means Target Frequency) and added a -r flag (Reference Frequency) which both accept decimal values (like 1.0, 2.0 or 1.77340)</li>
+</ul>
+
+<p id=dateentry>Version 1.7</p>
+<ul>
+	<li>Added a -f flag that can be used to export the music to WAV format instead of MYM</li>
+</ul>
+
+
 <p id=dateentry>Version 1.6</p>
 <ul>
 	<li>Added the -dt/-df flags to shorten musics</li>
@@ -160,7 +222,7 @@ Ym2MYm can be used to perform this conversion. It will work only on YM files tha
 
 <p id=dateentry>Version 1.0</p>
 <ul>
-	<li>Added support for retuning (Atari ST songs are at 2mhz, Amstrad ones at 1mhz)</li>
+	<li>Added support for retuning (Atari ST songs are at 2MHz, Amstrad ones at 1MHz)</li>
 	<li>Added rude support for YM6 format (also skips most of the header)</li>
 </ul>
 
