@@ -997,7 +997,7 @@ int main(int argc, char **argv)
     "Bas2Tap",
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
-    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     "\r\n"
     "Authors:\r\n"
     "  Fabrice Frances (original version) \r\n"

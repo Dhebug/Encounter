@@ -283,7 +283,7 @@ int main(int argc,char *argv[])
     "MemMap",
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
-    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     "\r\n"
     "Author:\r\n"
     "  Pointier Mickael\r\n"

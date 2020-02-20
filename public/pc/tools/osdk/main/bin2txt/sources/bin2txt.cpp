@@ -50,10 +50,10 @@ int main(int argc,char *argv[])
 		"Bin2Txt",
 		TOOL_VERSION_MAJOR,
 		TOOL_VERSION_MINOR,
-		"{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+		"{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK (http://www.osdk.org)\r\n"
 		"\r\n"
 		"Author:\r\n"
-		"  (c) 1998-2006 Pointier Mickael \r\n"
+		"  (c) 1998-2020 Pointier Mickael \r\n"
 		"\r\n"
 		"Purpose:\r\n"
 		"  Converting a binary file to a text format that can be later reused in a program\r\n"
