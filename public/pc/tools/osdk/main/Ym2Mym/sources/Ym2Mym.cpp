@@ -120,9 +120,9 @@ public:
     durationMode=DurationModeKeepAll;
     exportFormat=ExportFormatMym;
     m_FramesPerSecond=50;          // 50hz    (PAL)
-    m_ReferenceFrequency=2000000;  // 2Mhz    (Atari ST)
-    m_TargetFrequency   =1000000;  // 1Mhz    (Oric, Amstrad)
-    //                =1773400;  // 1.77Mhz (ZX Spectrum)   
+    m_ReferenceFrequency=2000000;  // 2MHz    (Atari ST)
+    m_TargetFrequency   =1000000;  // 1MHz    (Oric, Amstrad)
+    //                =1773400;  // 1.77MHz (ZX Spectrum)   
     flagVerbosity=false;
     flag_header=false;
     m_InterleavedFormat=true;
@@ -612,7 +612,7 @@ int MymExporter::Main()
     }
     if (m_FoundClampingIssues)
     {
-      printf("Found some clamping issues when retuning \"%s\"'s frequency from %gmhz to %gmhz at %dfps:\n",sourceFilename,m_ReferenceFrequency/1000000.0f,m_TargetFrequency/1000000.0f,m_FramesPerSecond);
+      printf("Found some clamping issues when retuning \"%s\"'s frequency from %gMHz to %gMHz at %dfps:\n",sourceFilename,m_ReferenceFrequency/1000000.0f,m_TargetFrequency/1000000.0f,m_FramesPerSecond);
       for (int clampedValue=0;clampedValue<_ClampedValue_Count_;clampedValue++)
       {
         g_ClampedValueParameters[clampedValue].ReportClampingIssues(m_FramesPerSecond);
@@ -947,7 +947,7 @@ bool MymExporter::ExportWav()
     wavHeader.byte_per_sample=2;
   }
 
-  unsigned int soundchipClock  =2000000;                            // The YM in the ST is at 2mhz
+  unsigned int soundchipClock  =2000000;                            // The YM in the ST is at 2MHz
   //unsigned int bytesPerSample  =1;                                  // Should be 1 for 8bit mono, 2 for 8bit stereo
   unsigned int framePerSecond  =50;                                 // Should be 50, 60 or 71 
   unsigned int samplesPerSecond=25033;                              // 25khz on the ATARI STE
@@ -982,7 +982,7 @@ bool MymExporter::ExportWav()
 
   // We are going to use an alternate method.
   // Instead of simulating per row, it's going to be per register.
-  // At 2mhz, we get 80 cycles between each value
+  // At 2MHz, we get 80 cycles between each value
   {
     ptrWrite=destinationBuffer;
 
