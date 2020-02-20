@@ -44,7 +44,7 @@ int __cdecl main(int argc,char *argv[])
     #ifdef _WIN32
     "{ApplicationName} - Version {ApplicationVersion} - (" __DATE__ " / " __TIME__ ") - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     #else
-    "{ApplicationName} - Version {ApplicationVersion} - (Missing Date) - This program is a part of the OSDK\r\n"
+    "{ApplicationName} - Version {ApplicationVersion} - (Missing Date) - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     #endif
     "\r\n"
     "Author:\r\n"
