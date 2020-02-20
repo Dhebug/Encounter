@@ -29,6 +29,7 @@ AYC information: http://www.cpcwiki.eu/index.php/AYC
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include "infos.h"
 #include "common.h"
@@ -45,6 +46,50 @@ enum DurationMode
   DurationModeTruncateMode,
   DurationModeFade
 };
+
+enum ClampedValue
+{
+  ClampedValueChannelA,
+  ClampedValueChannelB,
+  ClampedValueChannelC,
+  ClampedValueChannelNoise,
+  ClampedValueChannelEnveloppe,
+  _ClampedValue_Count_
+};
+
+
+struct ClampledValueParameters
+{
+  void ReportClampingIssues(int framesPerSecond)
+  {
+    if (m_OverflowCount)
+    {
+      int framePosition=m_FramePosition;
+      int minutes=framePosition/(framesPerSecond*60);
+      framePosition-=minutes*(framesPerSecond*60);
+      int seconds=framePosition/framesPerSecond;
+      framePosition-=seconds*framesPerSecond;
+
+      printf("- '%s' overflowed %d times (maximum was %lld [over %lld] at time position %d'%d\" (frame %d)\n",m_ParameterName,m_OverflowCount,m_OverflowMax+m_MaxValue,m_MaxValue,minutes,seconds,m_FramePosition);
+    }
+  }
+
+  const char* m_ParameterName;
+  int64_t     m_MaxValue;
+  int         m_OverflowCount;
+  int         m_FramePosition;
+  int64_t     m_OverflowMax;
+};
+
+ClampledValueParameters g_ClampedValueParameters[_ClampedValue_Count_]=
+{
+  {"Channel A"    , 4095,0,0,0},
+  {"Channel B"    , 4095,0,0,0},
+  {"Channel C"    , 4095,0,0,0},
+  {"Noise Channel",   31,0,0,0},
+  {"Envelope"     ,65535,0,0,0}
+};
+
 
 enum ExportFormat
 {
@@ -74,10 +119,13 @@ public:
     duration=0;
     durationMode=DurationModeKeepAll;
     exportFormat=ExportFormatMym;
-    retune_music=1;
+    m_FramesPerSecond=50;          // 50hz    (PAL)
+    m_ReferenceFrequency=2000000;  // 2Mhz    (Atari ST)
+    m_TargetFrequency   =1000000;  // 1Mhz    (Oric, Amstrad)
+    //                =1773400;  // 1.77Mhz (ZX Spectrum)   
     flagVerbosity=false;
     flag_header=false;
-    interleavedFormat=true;
+    m_InterleavedFormat=true;
     adress_start=0;
     m_FrameCount=0;
     length=0;
@@ -85,6 +133,8 @@ public:
     cBufferSize=0;
     sourceFilename=nullptr;
     m_FlagStereo=false;
+
+    m_FoundClampingIssues=false;
   }
 
   int Main();
@@ -94,6 +144,29 @@ public:
 
   void writebits(unsigned data,int bits,char* &ptrWrite);
 
+
+
+  int64_t ClampValue(ClampedValue clampedValue,int64_t sourceValue,int frameNumber)
+  {
+    ClampledValueParameters& parameters(g_ClampedValueParameters[clampedValue]);
+
+    sourceValue&=parameters.m_MaxValue;
+    int64_t value=(sourceValue*m_TargetFrequency)/m_ReferenceFrequency;
+
+    if (value>parameters.m_MaxValue) 
+    {
+      m_FoundClampingIssues=true;
+      parameters.m_OverflowCount++;
+      if (value-parameters.m_MaxValue > parameters.m_OverflowMax)
+      {
+        parameters.m_OverflowMax=value-parameters.m_MaxValue;
+        parameters.m_FramePosition=frameNumber;
+      }
+      value=parameters.m_MaxValue;
+    }
+    return value;
+  }
+
 private:
   MymExporter();  // N/A
 
@@ -102,11 +175,14 @@ private:
   int duration;
   DurationMode durationMode;
   ExportFormat exportFormat;
-  int retune_music;
+  int m_FramesPerSecond;
+  int m_ReferenceFrequency;
+  int m_TargetFrequency;
   bool flagVerbosity;
   bool flag_header;
-  bool interleavedFormat;
+  bool m_InterleavedFormat;
   bool m_FlagStereo;
+  bool m_FoundClampingIssues;
 
   unsigned long m_FrameCount;     // Number of frames
   unsigned long length;         // Song length (frameCount*14)
@@ -133,22 +209,29 @@ int main(int argc,char *argv[])
     "Ym2Mym",
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
-    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK\r\n"
+    "{ApplicationName} - Version {ApplicationVersion} - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     "\r\n"
     "Author:\r\n"
     "  First version by Marq/Lieves!Tuore & Fit (marq@iki.fi) \r\n"
     "  More recent updates by Pointier Mickael \r\n"
     "\r\n"
     "Purpose:\r\n"
-    "  Convert Atari ST/Amstrad musics from the YM to MYM format.\r\n"
+    "  Convert Atari ST/Amstrad/MSX/ZX Spectrum musics from the YM to MYM format.\r\n"
     "\r\n"
     "Usage:\r\n"
     "  {ApplicationName} source.ym destination.mym [load adress] [header name] \r\n"
     "\r\n"
     "Switches:\r\n"
-    " -tn   Tuning\r\n"
-    "       -t0 => No retune\r\n"
-    "       -t1 => Double frequency [default]\r\n"
+    " -rn   Reference Clock\r\n"
+    "       -r1        => Oric, Amstrad CPC \r\n"
+    "       -r1.773400 => ZX Spectrum \r\n"
+    "       -r2        => Atari ST [default] \r\n"
+    "\r\n"
+    " -tn   Target Clock\r\n"
+    "       -t0        => Use Reference (no retune)\r\n"
+    "       -t1.0      => Oric, Amstrad CPC [default]\r\n"
+    "       -t1.773400 => ZX Spectrum\r\n"
+    "       -t2.0      => Atari ST\r\n"
     "\r\n"
     " -fn   Format\r\n"
     "       -f0 => MYM format[default]\r\n"
@@ -182,16 +265,37 @@ int main(int argc,char *argv[])
 }
 
 
+
+
 int MymExporter::Main()
 {
   while (ProcessNextArgument())
   {
+    if (IsSwitch("-r"))
+    {
+      //format: [-r]
+      // 	1.0      => Oric, Amstrad CPC 
+      //        1.773400 => ZX Spectrum
+      //        2.0      => Atari ST [default]
+      m_ReferenceFrequency=(int)(GetDoubleValue(2.0)*1000000); // We use megahertz
+      if (!m_ReferenceFrequency)
+      {
+        ShowError("Reference Frequency should probably be between 1.0 and 2.0 (megahertz)");
+      }
+    }
+    else
     if (IsSwitch("-t"))
     {
       //format: [-t]
-      //	0 => No retune
-      // 	1 => Double frequency [default]
-      retune_music=GetIntegerValue(0);
+      //	0        => Use Reference (no retune)
+      // 	1.0      => Oric, Amstrad CPC [default]
+      //        1.773400 => ZX Spectrum
+      //        2.0      => Atari ST
+      m_TargetFrequency=(int)(GetDoubleValue(1.0)*1000000); // We use megahertz
+      if (!m_TargetFrequency)
+      {
+        m_TargetFrequency=m_ReferenceFrequency;
+      }
     }
     else
     if (IsSwitch("-v"))
@@ -397,7 +501,7 @@ int MymExporter::Main()
     sourceData+=3;            //  Skip first 3 bytes of info
     if (!((*sourceData++)&1))
     {
-      interleavedFormat=false;
+      m_InterleavedFormat=false;
       //printf("Only interleaved data supported.\n");
       //return(EXIT_FAILURE);
     }
@@ -448,7 +552,7 @@ int MymExporter::Main()
       return(EXIT_FAILURE);
     }
     memset(data[n],0,m_FrameCount+FRAG);
-    if (interleavedFormat)
+    if (m_InterleavedFormat)
     {
       // R0 R0 R0 R0 R0 R0 R0... | R1 R1 R1 R1 ... | R13 R13 R13 R13
       memcpy(data[n],sourceData,m_FrameCount);
@@ -471,7 +575,7 @@ int MymExporter::Main()
     }
   }
 
-  if (retune_music)
+  if (m_ReferenceFrequency != m_TargetFrequency)
   {
     unsigned int frame;
     if (flagVerbosity)
@@ -480,25 +584,39 @@ int MymExporter::Main()
     }
     for (frame=0;frame<=length/REGS;frame++)
     {
-      int freqA=   ( ((data[1][frame])<<8) | (data[0][frame]) )>>1;
-      int freqB=   ( ((data[3][frame])<<8) | (data[2][frame]) )>>1;
-      int freqC=   ( ((data[5][frame])<<8) | (data[4][frame]) )>>1;
-      int freqEnv= ( ((data[12][frame])<<8) | (data[11][frame]) )>>1;
-      int freqNoise= data[6][frame]>>1;
+      int64_t freqA=   ( ((data[1][frame])<<8) | (data[0][frame]) );
+      int64_t freqB=   ( ((data[3][frame])<<8) | (data[2][frame]) );
+      int64_t freqC=   ( ((data[5][frame])<<8) | (data[4][frame]) );
+      int64_t freqEnv= ( ((data[12][frame])<<8) | (data[11][frame]) );
+      int64_t freqNoise= data[6][frame];
+
+      freqA     = ClampValue(ClampedValueChannelA,freqA,frame);             // 12 bit register (8+4)
+      freqB     = ClampValue(ClampedValueChannelB,freqB,frame);             // 12 bit register (8+4)
+      freqC     = ClampValue(ClampedValueChannelC,freqC,frame);             // 12 bit register (8+4)
+      freqEnv   = ClampValue(ClampedValueChannelEnveloppe,freqEnv,frame);   // 16 bit register (8+8)
+      freqNoise = ClampValue(ClampedValueChannelNoise,freqNoise,frame);     //  5 bit register
 
       data[0][frame]=freqA & 255;
-      data[1][frame]=(freqA>>8);
+      data[1][frame]=(freqA>>8) & 255;
 
       data[2][frame]=freqB & 255;
-      data[3][frame]=(freqB>>8);
+      data[3][frame]=(freqB>>8) & 255;
 
       data[4][frame]=freqC & 255;
-      data[5][frame]=(freqC>>8);
+      data[5][frame]=(freqC>>8) & 255;
 
-      data[6][frame]=freqNoise;
+      data[6][frame]=freqNoise & 255;
 
       data[11][frame]=freqEnv & 255;
-      data[12][frame]=(freqEnv>>8);
+      data[12][frame]=(freqEnv>>8) & 255;
+    }
+    if (m_FoundClampingIssues)
+    {
+      printf("Found some clamping issues when retuning \"%s\"'s frequency from %gmhz to %gmhz at %dfps:\n",sourceFilename,m_ReferenceFrequency/1000000.0f,m_TargetFrequency/1000000.0f,m_FramesPerSecond);
+      for (int clampedValue=0;clampedValue<_ClampedValue_Count_;clampedValue++)
+      {
+        g_ClampedValueParameters[clampedValue].ReportClampingIssues(m_FramesPerSecond);
+      }
     }
   }
 
@@ -893,9 +1011,13 @@ bool MymExporter::ExportWav()
       {
         reloadCounter=samplesPerFrame;
         
-        cycleSumIncrement[0]=3*(0xFFFFFFFF/((((data[1][frame]&15)<<8) | data[0][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
-        cycleSumIncrement[1]=3*(0xFFFFFFFF/((((data[3][frame]&15)<<8) | data[2][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
-        cycleSumIncrement[2]=3*(0xFFFFFFFF/((((data[5][frame]&15)<<8) | data[4][frame])));       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[0]=1+((data[1][frame]&15)<<8) | data[0][frame];       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[1]=1+((data[3][frame]&15)<<8) | data[2][frame];       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[2]=1+((data[5][frame]&15)<<8) | data[4][frame];       // Delay in cycles before changes, the shorter, the faster it goes
+
+        cycleSumIncrement[0]=3*(0xFFFFFFFF/cycleSumIncrement[0]);       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[1]=3*(0xFFFFFFFF/cycleSumIncrement[1]);       // Delay in cycles before changes, the shorter, the faster it goes
+        cycleSumIncrement[2]=3*(0xFFFFFFFF/cycleSumIncrement[2]);       // Delay in cycles before changes, the shorter, the faster it goes
         control=data[7][frame];
         volume[0] =data[8][frame];
         volume[1] =data[9][frame];
