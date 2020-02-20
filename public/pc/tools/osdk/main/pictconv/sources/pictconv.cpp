@@ -42,13 +42,13 @@ int __cdecl main(int argc,char *argv[])
     TOOL_VERSION_MAJOR,
     TOOL_VERSION_MINOR,
     #ifdef _WIN32
-    "{ApplicationName} - Version {ApplicationVersion} - (" __DATE__ " / " __TIME__ ") - This program is a part of the OSDK\r\n"
+    "{ApplicationName} - Version {ApplicationVersion} - (" __DATE__ " / " __TIME__ ") - This program is a part of the OSDK (http://www.osdk.org)\r\n"
     #else
     "{ApplicationName} - Version {ApplicationVersion} - (Missing Date) - This program is a part of the OSDK\r\n"
     #endif
     "\r\n"
     "Author:\r\n"
-    "  (c) 2002-2015 Pointier Mickael \r\n"
+    "  (c) 2002-2020 Pointier Mickael \r\n"
     "\r\n"
     "Usage:\r\n"
     "  {ApplicationName} [switches] <source picture> <destination file>\r\n"
