@@ -1,0 +1,168 @@
+//
+// BLD Script for generating walls !
+//
+
+DefVar	end$
+DefVar	toto$
+DefVar	y
+DefVar	value_low
+DefVar	value_high
+
+end$=Chr$(13)+Chr$(10)
+
+toto$=""
+
+
+//
+// Generate the DRAW table
+//
+/*
+_DrawColumn
+	; Draw 200 lines
+	sta $a000+40*0  ,x
+	sta $a000+40*199,x
+
+	; Draw 198 lines
+	sta $a000+40*1  ,x
+	sta $a000+40*198,x
+
+	; Draw 196 lines
+	sta $a000+40*2  ,x
+	...	
+	rts
+*/
+toto$=toto$+"_DrawColumn"+end$
+y=0
+Do
+	toto$=toto$+" sta $a000+"+Str$(40*y)+",x"+end$
+	toto$=toto$+" sta $a000+"+Str$(40*(199-y))+",x"+end$
+	y=y+1
+	ExitIf y=100
+Loop
+toto$=toto$+" rts"+end$
+
+
+//
+// Generate the ERASE table
+//
+/*
+_EraseColumn
+	sta $a000+40*99  ,0 
+	sta $a000+40*100 ,0 
+
+	sta $a000+40*98  ,0 
+	sta $a000+40*101 ,0 
+
+	sta $a000+40*97  ,0 
+	sta $a000+40*102 ,0 
+
+	...
+	sta $a000+40*0  ,x
+	sta $a000+40*199,x
+	rts
+*/
+toto$=toto$+"_EraseColumn"+end$
+y=0
+Do
+	toto$=toto$+" sta $a000+"+Str$(40*(100-y))+",x"+end$
+	toto$=toto$+" sta $a000+"+Str$(40*(199-(100-y)))+",x"+end$
+	y=y+1
+	ExitIf y=100
+Loop
+toto$=toto$+" rts"+end$
+
+
+
+//
+// Generate the *6 table
+// 200*6 => 1200
+//
+toto$=toto$+end$+end$+end$
+
+// Low part
+toto$=toto$+"_TableMul6Low"+end$
+y=0
+value_low=0
+value_high=0
+Do
+	toto$=toto$+" .byt "+Str$(value_low)+end$
+	y=y+1
+	value_low=value_low+6
+	If (value_low>255)
+		value_low=value_low-256
+		value_high=value_high+1
+	EndIf
+	ExitIf y=200
+Loop
+
+toto$=toto$+end$+end$+end$
+
+// High part
+toto$=toto$+"_TableMul6High"+end$
+y=0
+value_low=0
+value_high=0
+Do
+	toto$=toto$+" .byt "+Str$(value_high)+end$
+	y=y+1
+	value_low=value_low+6
+	If (value_low>255)
+		value_low=value_low-256
+		value_high=value_high+1
+	EndIf
+	ExitIf y=200
+Loop
+
+
+
+
+//
+// Save the table
+//
+SaveVar toto$ "gencode.s"
+
+
+
+
+
+
+/*
+
+
+; X is the column number
+; Simply jump at _DrawColumn+Y*6 to display things 
+
+_DrawColumn
+	; Draw 200 lines
+	sta $a000+40*0  ,x
+	sta $a000+40*199,x
+
+	; Draw 198 lines
+	sta $a000+40*1  ,x
+	sta $a000+40*198,x
+
+	; Draw 196 lines
+	sta $a000+40*2  ,x
+	...	
+	rts
+
+
+
+_EraseColumn
+	sta $a000+40*99  ,0 
+	sta $a000+40*100 ,0 
+
+	sta $a000+40*98  ,0 
+	sta $a000+40*101 ,0 
+
+	sta $a000+40*97  ,0 
+	sta $a000+40*102 ,0 
+
+	...
+	sta $a000+40*0  ,x
+	sta $a000+40*199,x
+	rts
+	  
+
+*/
+
