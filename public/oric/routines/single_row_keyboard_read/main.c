@@ -35,18 +35,22 @@ void main()
     printf("Down Arrow\n");
     printf("Space\n");
     printf("Left Shift\n");
+    printf("< ,\n");
+    printf("> .\n");
 
     InitIRQ();
 	while (1)
 	{
-        poke(0xbb80+40*2,(gKey & LEFT_ARROW)?16+1:16+2);
-        poke(0xbb80+40*3,(gKey & RIGHT_ARROW)?16+1:16+2);
-        poke(0xbb80+40*4,(gKey & UP_ARROW)?16+1:16+2);
-        poke(0xbb80+40*5,(gKey & DOWN_ARROW)?16+1:16+2);
-        poke(0xbb80+40*6,(gKey & SPACE)?16+1:16+2);
-        poke(0xbb80+40*7,(gKey & LEFT_SHIFT)?16+1:16+2);
+        poke(0xbb80+40*2,(gKey & KEY_LEFT_ARROW)?16+1:16+2);
+        poke(0xbb80+40*3,(gKey & KEY_RIGHT_ARROW)?16+1:16+2);
+        poke(0xbb80+40*4,(gKey & KEY_UP_ARROW)?16+1:16+2);
+        poke(0xbb80+40*5,(gKey & KEY_DOWN_ARROW)?16+1:16+2);
+        poke(0xbb80+40*6,(gKey & KEY_SPACE)?16+1:16+2);
+        poke(0xbb80+40*7,(gKey & KEY_LEFT_SHIFT)?16+1:16+2);
+        poke(0xbb80+40*8,(gKey & KEY_LESS_THAN)?16+1:16+2);
+        poke(0xbb80+40*9,(gKey & KEY_GREATER_THAN)?16+1:16+2);
 
-        sprintf((char *)(0xbb80+40*8),"%c gKey=%u  ",16+4,gKey);
+        sprintf((char *)(0xbb80+40*10),"%c gKey=%u  ",16+4,gKey);
 	}   
 }
 

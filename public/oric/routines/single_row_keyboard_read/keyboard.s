@@ -92,7 +92,7 @@ irq_routine
 .)
 
 
-values_code .byt $df,$7f,$f7,$bf,$fe,$ef
+values_code .byt $df,$7f,$f7,$bf,$fe,$ef,$fd,$fb
 
 ReadKeyboard
 .(
@@ -103,7 +103,7 @@ ReadKeyboard
     ldy #04
     sty via_portb
 
-    ldx #5
+    ldx #7
 loop_read
 
     ; Write Column Register Number to PortA
