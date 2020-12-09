@@ -1,0 +1,208 @@
+-header.s
+        r0
+        ap
+        fp
+        sp
+        tmp0
+        tmp1
+        tmp2
+        tmp3
+        tmp4
+        tmp5
+        tmp6
+        tmp7
+        op1
+        op2
+        tmp
+        retstack
+        enter
+        leave
+-irq.s
+        _install_irq_handler
+        _chain_irq_handler
+        _uninstall_irq_handler
+-ctype.s
+        _ctype_
+-div.s
+        div16i
+        mod16i
+        resignmod
+        resign
+        unsign
+        unsign1
+        unsign2
+        div16u
+        udiv2
+        udiv3
+        mod16u
+        zerodiv
+-ggeneral.s
+        getXparm
+        getXloop
+        grexit
+        grexit2
+-gotoxy.s
+        _gotoxy
+-gpchar.s
+        _getchar
+        _putchar
+-graphics.s
+        _curset
+        _curmov
+        _draw
+        _hchar
+        _fill
+        _paper
+        _ink
+        _circle
+        _point
+        _pattern
+-grsimple.s
+        _hires
+        _text
+        _ping
+        _shoot
+        _zap
+        _explode
+        _kbdclick1
+        _kbdclick2
+        _key
+        key001
+        _cls
+        _lores0
+        _lores1
+        _get
+-istring.s
+        _isalpha
+        _isupper
+        _islower
+        _isdigit
+        _isxdigi
+        _isspace
+        _ispunct
+        _isalnum
+        _isprint
+        _iscntrl
+        _isascii
+-itoa.s
+        _itoa
+        itoa
+        udiv10
+        udiv10lp
+-libc.s
+        _exit
+        reterr
+        retzero
+        false
+        true
+-memcpy.s
+        _memcpy
+-mult.s
+        mul16u
+        mult1
+        mult2
+        mul16i
+-oric.s
+        _peek
+        _deek
+        _poke
+        _doke
+        _call
+-printf.s
+        _printf
+-lprintf.s
+        _lprintf
+-sedoric.s
+        _sedoric
+-sound.s
+        _play
+        _music
+        _sound
+-strcpy.s
+        _strcpy
+        _strcpymc
+        get_2ptr
+-strdup.s
+        _strdup
+-strcmp.s
+        _strcmp
+-strcmpi.s
+        _strcmpi
+-strlen.s
+        _strlen
+-tail.s
+        endcode
+-tape.s
+        _cwrite
+        _cread
+        _cwritehdr
+        _creadsync
+-tstring.s
+        _toupper
+        _touppermc
+        _tolower
+        _toascii
+-strcat.s
+        _strcat
+-strchr.s
+        _strchr
+-strrchr.s
+        _strrchr
+-strcspn.s
+        _strcspn
+-strspn.s
+        _strspn
+-strlwr.s
+        _strlwr
+-strupr.s
+        _strupr
+-strrev.s
+        _strrev
+-strpbrk.s
+        _strpbrk
+-strset.s
+        _strset
+-stpcpy.s
+        _stpcpy
+-strstr.s
+        _strstr
+-strtok.s
+        _strtok
+-strncat.s
+        _strncat
+-strncmp.s
+        _strncmp
+-strncpy.s
+        _strncpy
+-strncmpi.s
+        _strncmpi
+-strnset.s
+        _strnset
+-malloc.s
+        _stacksize
+        _heapovh
+        _heapstart
+        _heapend
+        _heapdesc
+        _nheapdesc
+        _nheapbytes
+        _heapsize
+        _heapinit
+        _heapupdate
+        _malloc
+        _mallocmc
+-free.s
+        _free
+        _freemc
+-realloc.s
+        _realloc
+-memset.s
+        _memset
+-setjmp.s
+        __setjmp
+        _longjmp
+-disk.s
+	_init_disk
+	_sect_read
+	_sect_write
+
