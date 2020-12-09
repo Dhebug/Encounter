@@ -669,6 +669,8 @@ skip :\
 skip :\
  .)  :\
 
+#define INCW_Z INCW_D
+
 #define DECW_D(var1)\
  lda var1 :\
  .( :\
@@ -677,6 +679,8 @@ skip :\
 skip :\
  .)  :\
  dec var1 :\
+
+#define DECW_Z DECW_D
 
 #define ADDW_DDD(tmp1,tmp2,tmp3)\
  clc :\
