@@ -40,6 +40,13 @@ SET OSDKCOMP=-O2
 :Comp
 
 
+::
+:: Set the default path to the Oric Libraries
+:: if no user defined OSDKLIB was found
+::
+IF NOT "%OSDKLIB%"=="" GOTO Lib
+SET OSDKLIB=%OSDK%\lib/
+:Lib
 
 SET OSDKB=%OSDK%\BIN
 SET OSDKT=%OSDK%\TMP
@@ -49,7 +56,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-SET OSDKVERSION=1.15
+SET OSDKVERSION=1.17
 
 ::
 :: Create a build directory if it does not exist
@@ -232,7 +239,7 @@ GOTO End
 ECHO Linking
 ::ECHO %OSDKLINKLIST%
 cd 
-ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -f -q %OSDKLINKLIST% >%OSDKT%\link.bat
+ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDKLIB% -o %OSDKT%\linked.s -f -q %OSDKLINKLIST% >%OSDKT%\link.bat
 ::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
 ::pause
 CALL %OSDKT%\link.bat
