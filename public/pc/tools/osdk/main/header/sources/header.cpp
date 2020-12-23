@@ -100,6 +100,7 @@ unsigned char Header[]=
 		"  -a[0/1] for autorun (1) or non autorun (0)\r\n"
 		"  -h[0/1] for header (1) or no header (0)\r\n"
 		"  -s[0/1] for showing size of file (1) or not (0)\r\n"
+                "  -b[0/1] for setting as BASIC (0) or BINARY (1)\r\n"
 		"\r\n"
 		"Exemple:\r\n"
 		"  {ApplicationName} -a1 final.out osdk.tap $500\r\n"
@@ -109,6 +110,7 @@ unsigned char Header[]=
 	bool flag_auto=true;
 	bool flag_header=true;
 	bool flag_display_size=true;
+        bool flag_binary=true;
 
 	ArgumentParser cArgumentParser(argc,argv);
 
@@ -136,6 +138,14 @@ unsigned char Header[]=
 			//	0 => suppress display of size
 			// 	1 => show size of generated file (default)
 			flag_display_size=cArgumentParser.GetBooleanValue(true);
+		}
+		else
+		if (cArgumentParser.IsSwitch("-b"))
+		{
+			//format: [-b]
+			//	0 => BASIC
+			// 	1 => BINARY
+			flag_binary=cArgumentParser.GetBooleanValue(true);
 		}
 	}
 
@@ -223,8 +233,11 @@ unsigned char Header[]=
 		int adress_end	=adress_start+filesize-1;
 		//flag_auto=true;
 
-		if (flag_auto)	Header[7]=0xC7;
-		else			Header[7]=0;
+		if (flag_binary)  Header[6]=0x80;
+		else		  Header[6]=0;
+
+		if (flag_auto)	  Header[7]=0xC7;
+		else		  Header[7]=0;
 
 		Header[10]=(adress_start>>8);
 		Header[11]=(adress_start&255);
