@@ -63,6 +63,16 @@ This switch is particularly interesting for people coding size limited programs,
 <p>To enable this feature in your own programs, just modify your OSDK_CONFIG.BAT file, and add the following:
 </p>
 
+<p>The -b switch sets the value 00 (BASIC) or 80 (Binary) in the tape header
+This switch is particularly important if you are planning to convert a BASIC tape program to a text file, in which case you need to pass -b0
+</p>
+<pre>
+-s0 => No size information is displayed
+-s1 => Display size informations in the output
+</pre>
+<p>To enable this feature in your own programs, just modify your OSDK_CONFIG.BAT file, and add the following:
+</p>
+
 <pre>
 	SET OSDKHEAD=-S1
 </pre>
@@ -73,6 +83,9 @@ This switch is particularly interesting for people coding size limited programs,
 
 <p>Here is the list of all releases with a short description of things that changed:
 </p>
+
+<p id=dateentry>Version 1.0</p>
+ - Added the flag -b to specify if the converted file should expose 00 (BASIC) or 80 (Binary) in the header<br />
 
 <p id=dateentry>Version 0.2</p>
  - The address can now be specified with either $ or 0x as an hexadecimal prefix<br />
