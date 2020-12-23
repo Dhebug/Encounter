@@ -551,35 +551,12 @@ LabelState parseline(char* inpline,bool parseIncludeFiles)
 
 
 
-void outall()
-{
-#ifndef _POSIX_VERSION
-  flushall();
-#endif
-  fcloseall();
-}
-
-//
-// Simple function that prints error message/calls outall.
-// Simplifies the look of the main program
-//
-void linkerror(const char *msg)
-{
-  printf(msg);
-  outall();
-}
-
-
-
-
 bool ParseFile(const std::string& filename)
 {
   std::vector<std::string> cTextData;
   if (!LoadText(filename.c_str(),cTextData))
   {
-    printf("\nCannot open %s \n",filename.c_str());
-    outall();
-    exit(1);
+    ShowError("\nCannot open %s \n",filename.c_str());
   }
 
   if (gFlagVerbose)
@@ -695,8 +672,7 @@ bool LoadLibrary(const std::string& path_library_files)
   std::vector<std::string> cTextData;
   if (!LoadText(ndxstr.c_str(),cTextData))
   {
-    printf("Cannot open Index file : %s \n",ndxstr.c_str());
-    exit(1);
+    ShowError("Cannot open Index file : %s \n",ndxstr.c_str());
   }
 
   if (gFlagVerbose)
@@ -727,9 +703,7 @@ bool LoadLibrary(const std::string& path_library_files)
         {
           if (cLabelEntry.file_name==gLibraryReferencesList[i].file_name)
           {
-            printf("Duplicate file %s in lib index\n",cLabelEntry.file_name.c_str());
-            outall();
-            exit(1);
+            ShowError("Duplicate file %s in lib index\n",cLabelEntry.file_name.c_str());
           }
         }
       }
@@ -738,8 +712,7 @@ bool LoadLibrary(const std::string& path_library_files)
         // Found a label. Check if already used, if not put it in table
         if (cLabelEntry.file_name.size()<2)
         {
-          linkerror("Error with file line indicator\n");
-          exit(1);
+          ShowError("Error with file line indicator\n");
         }
 
         cLabelEntry.label_name=cCurrentLine;
@@ -749,9 +722,7 @@ bool LoadLibrary(const std::string& path_library_files)
         {
           if (cLabelEntry.label_name==gLibraryReferencesList[i].label_name)
           {
-            printf("Duplicate label %s in lib index file\n",cLabelEntry.label_name.c_str());
-            outall();
-            exit(1);
+            ShowError("Duplicate label %s in lib index file\n",cLabelEntry.label_name.c_str());
           }
         }
 
@@ -1050,8 +1021,7 @@ int main(int argc,char **argv)
       printf("%s\n",cLabelName.c_str());
       ++cIt;
     }
-    outall();
-    return(0);
+    return 0;
   }
   else
   {
@@ -1070,8 +1040,7 @@ int main(int argc,char **argv)
 
   if (state == 1)
   {
-    linkerror("Errors durink link.\n");
-    exit(1);
+    ShowError("Errors durink link.\n");
   }
 
 
@@ -1079,8 +1048,7 @@ int main(int argc,char **argv)
   FILE *gofile=fopen(output_file_name.c_str(),"wb");
   if (!gofile)
   {
-    linkerror("Cannot open output file for writing\n");
-    exit(1);
+    ShowError("Cannot open output file for writing\n");
   }
 
   //
@@ -1121,9 +1089,7 @@ int main(int argc,char **argv)
     std::vector<std::string> cTextData;
     if (!LoadText(gInputFileList[k].m_cFileName.c_str(),cTextData))
     {
-      printf("\nCannot open %s \n",gInputFileList[k].m_cFileName.c_str());
-      outall();
-      exit(1);
+      ShowError("\nCannot open %s \n",gInputFileList[k].m_cFileName.c_str());
     }
 
     std::vector<std::string>::const_iterator cItText=cTextData.begin();
@@ -1143,9 +1109,7 @@ int main(int argc,char **argv)
       ++cItText;
     }
   }
-
-  outall();
-  return(0);
+  return 0;
 }
 
 

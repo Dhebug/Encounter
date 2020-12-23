@@ -42,9 +42,12 @@ Fixed a number of issues in the linker:
 0.66 - 2019/04/06
 - The new macro file generate lines that contain multiple instructions, the linker stopped at the first encountered instruction, this new version correctly parses that
 
+0.67 - 2020/12/18
+- Error messages now indicate that they came from the Linker, because a generic "Error, can't load xxxx" was not very informative
+
 */
 
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	66
+#define TOOL_VERSION_MINOR	67
