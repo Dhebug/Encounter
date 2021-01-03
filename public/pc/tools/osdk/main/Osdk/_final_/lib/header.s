@@ -270,7 +270,7 @@ true
 #define	VIA_T2LL       	$0308  ; Timer 2 low-order latches/counter
 #define	VIA_T2CH       	$0309  ; Timer 2 high-order counter
 #define	VIA_SR        	$030A  ; Shift Register (Buggy on many Oric, do not use) 
-#define VIA_ACR         $300B  ; Auxiliary Control Register
+#define VIA_ACR         $030B  ; Auxiliary Control Register
 #define	VIA_PCR        	$030C  ; Peripheral Control Register
 #define	VIA_IFR			$030D  ; Interupt Flag Register
 #define	VIA_IER			$030E  ; Interupt Enable Register
