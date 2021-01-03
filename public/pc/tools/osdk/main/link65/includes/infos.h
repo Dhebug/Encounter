@@ -30,7 +30,7 @@ Fixed a number of issues in the linker:
 - (WIP) The old linked filtered out comments, need to implement this feature as well
 - removed some test code
 - fixed the loading of symbols from the library index  file
-- Fixed a problem of text file parsings. Mixed unix/dos cariage return would result in very long lines (containing many lines), leading to some crashes later on.
+- Fixed a problem of text file parsings. Mixed unix/dos carriage return would result in very long lines (containing many lines), leading to some crashes later on.
 - Also fixed a problem in reporting the parsed files.
 
 0.64 - 2016/01/17
@@ -46,7 +46,6 @@ Fixed a number of issues in the linker:
 - Error messages now indicate that they came from the Linker, because a generic "Error, can't load xxxx" was not very informative
 
 */
-
 
 
 #define TOOL_VERSION_MAJOR	0
