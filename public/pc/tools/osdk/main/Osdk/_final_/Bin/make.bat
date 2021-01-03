@@ -56,7 +56,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-SET OSDKVERSION=1.17
+SET OSDKVERSION=1.18
 
 ::
 :: Create a build directory if it does not exist
@@ -348,3 +348,4 @@ GOTO End
 
 
 :End
+Pause
