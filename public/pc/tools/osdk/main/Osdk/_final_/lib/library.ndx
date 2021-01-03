@@ -243,5 +243,12 @@
 	_is_overlay_enabled
 -sedoric.s
     _sedoric
-    
+-joystick.s
+    _joystick_type_select
+    _joystick_read
+    _joystick_read_pase
+    _joystick_read_ijk
+    _joystick_read_telestrat
+    _joystick_read_opel
+    _joystick_read_dktronics
 
