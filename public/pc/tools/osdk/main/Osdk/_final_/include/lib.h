@@ -203,4 +203,62 @@ extern unsigned int pcrand();
 #define srand(seed) if (0) {} else {randseedLow=(seed);randseedTop=0;}
 #define rand() 		(rand32()?(randseedTop & 0x7fff):(randseedTop & 0x7fff))
 
+
+//
+// Joystick stuff
+//
+enum
+{
+	JOYSTICK_INTERFACE_NOTHING,         // 0 - Default handler that does nothing
+	JOYSTICK_INTERFACE_IJK,             // 1 - IJK / Egoist / Stingy interfaces
+	JOYSTICK_INTERFACE_PASE,            // 2 - PASE / Altai interfaces
+	JOYSTICK_INTERFACE_TELESTRAT,       // 3 - Telestrat / Twilighte
+	JOYSTICK_INTERFACE_OPEL,            // 4 - OPEL interface
+	JOYSTICK_INTERFACE_DKTRONICS,       // 5 - Dk'Tronics interface
+	_JOYSTICK_INTERFACE_COUNT_
+};
+
+enum                                    // Bitmask
+{
+	JOYSTICK_RIGHT = 1<<0,              //  1
+	JOYSTICK_LEFT  = 1<<1,              //  2
+	JOYSTICK_FIRE  = 1<<2,              //  4
+	JOYSTICK_DOWN  = 1<<3,              //  8
+    JOYSTICK_UP    = 1<<4               // 16
+};
+
+extern unsigned char OsdkJoystickType;  // Defaults to JOYSTICK_INTERFACE_NOTHING
+void joystick_type_select();            // Set OsdkJoystickType first, and then call select
+
+extern unsigned char OsdkJoystick_0;    // Left port status
+extern unsigned char OsdkJoystick_1;    // Right port status
+void joystick_read();                   // Should be called 50 times per second
+
+//
+// These macros can be used as Prefix and Suffix of any function called from an IRQ.
+// They are designed to save the temporary registers used by the C compiler.
+// Please note that these macros are probably saving way too much data, and will 
+// probably be modified in the future to be less costly, but in the mean time they
+// will do :)
+//
+#define SAVE_COMPILER_REGISTERS asm(         \
+"\n.(\nphp;pha;txa;pha;tya;pha;\n"    \
+" ldx #0\n" \
+"copy_loop\n" \
+" lda zp_compiler_save_start,x\n" \
+" pha\n" \
+" inx\n" \
+" cpx #zp_compiler_save_end-zp_compiler_save_start\n" \
+" bne copy_loop\n.)\n") {
+
+#define RESTORE_COMPILER_REGISTER } asm(         \
+"\n.(\nldx #zp_compiler_save_end-zp_compiler_save_start-1\n" \
+"copy_loop2\n" \
+" pla\n" \
+" sta zp_compiler_save_start,x\n" \
+" dex\n" \
+" bpl copy_loop2\n" \
+ "pla;tay;pla;tax;pla;plp\n.)\n")
+
+
 #endif // __LIB_H_
