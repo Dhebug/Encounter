@@ -427,7 +427,8 @@ int eflag;
 					error("invalid use of `typedef'\n");
 					sclass = EXTERN;
 				}
-				funcdecl(sclass, id, ty1, pt);
+				funcdecl(sclass, fname = id, ty1, pt);
+				fname = 0;
 				return;
 			} else if (funcdclr)
 				{ foreach(identifiers, level, checkparam, (Generic)0); exitscope(); }

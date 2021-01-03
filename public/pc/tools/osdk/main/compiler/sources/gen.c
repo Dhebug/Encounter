@@ -29,7 +29,7 @@
  */
 
 
-char *version="/* 16-bit code V1.38 */\n";
+char *version="/* 16-bit code V1.39 */\n";
 #include "c.h"
 #include <string.h>
 #include <stdio.h>
