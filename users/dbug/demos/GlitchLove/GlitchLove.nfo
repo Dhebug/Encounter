@@ -1,0 +1,374 @@
+========================================
+
+  /$$$$$$  /$$ /$$   /$$               /$$      
+ /$$__  $$| $$|__/  | $$              | $$      
+| $$  \__/| $$ /$$ /$$$$$$    /$$$$$$$| $$$$$$$ 
+| $$ /$$$$| $$| $$|_  $$_/   /$$_____/| $$__  $$
+| $$|_  $$| $$| $$  | $$    | $$      | $$  \ $$
+| $$  \ $$| $$| $$  | $$ /$$| $$      | $$  | $$
+|  $$$$$$/| $$| $$  |  $$$$/|  $$$$$$$| $$  | $$
+ \______/ |__/|__/   \___/   \_______/|__/  |__/
+                                                
+                                                                                              
+ /$$                                            
+| $$                                            
+| $$        /$$$$$$  /$$    /$$ /$$$$$$         
+| $$       /$$__  $$|  $$  /$$//$$__  $$        
+| $$      | $$  \ $$ \  $$/$$/| $$$$$$$$        
+| $$      | $$  | $$  \  $$$/ | $$_____/        
+| $$$$$$$$|  $$$$$$/   \  $/  |  $$$$$$$        
+|________/ \______/     \_/    \_______/                              
+========================================
+  My Oric entry for the LoveByte party
+     256 bytes "low end" category.
+========================================
+       Release date: March 2021
+	   (#25 out of 35 entries)
+========================================
+    ___      __                     
+   /   \___ / _| ___ _ __   ___ ___ 
+  / /\ / _ \ |_ / _ \ '_ \ / __/ _ \
+ / /_//  __/  _|  __/ | | | (__  __/
+/___,' \___|_|  \___|_| |_|\___\___|
+   ___                  
+  / __\__  _ __ ___ ___ 
+ / _\/ _ \| '__/ __/ _ \
+/ / | (_) | | | (__  __/
+\/   \___/|_|  \___\___|
+
+========================================
+About this intro:
+========================================
+This is my second ever attempt at size 
+coding on the Oric, my previous attempt
+was in 2006 with the "256 zooming circles"
+
+https://www.pouet.net/prod.php?which=57062
+
+This one is based on the old one, but
+with quite many improvements:
+- The is sound
+- The canvas area has quadrupled
+- There's some actual text on the top
+
+You can see the source code at the end
+of this file.
+
+========================================
+File Size and Headers.
+========================================
+Regarding headers, the binary payload is
+actualy 242 bytes, with a 14 bytes header.
+
+The first uploaded version (d.tap) had a 
+18 bytes header by mistake, the proper one
+(GlitchLov.tap) has the 14 bytes header
+and is indeed 256 bytes long.
+
+Note that this is a TAPE file, it could 
+have been provided as a DSK file, in which
+case the headers would have been part of
+the virtual floppy, and this intro would
+have had 14 more bytes to play with.
+
+Does not really matter, does it :D ?
+
+========================================
+How can I watch this?:
+========================================
+That's easy.
+You either have a real Oric Atmos or 
+Pravetz 8D you just convert it to a sample
+and load it from tape.
+
+Or you don't have an Oric, in which case
+you can use one of the many Oric emulators
+now available.
+
+The emulator of choice these days is 
+Oricutron, developed by Xeron, which has
+the benefit of running on a multitude of
+different operating systems, of being open
+source, and still developed:
+
+- http://code.google.com/p/oriculator/
+
+As usual the source code will be available
+on the subversion repository (after the
+party)
+- http://miniserve.defence-force.org/svn
+and the video will be uploaded on youtube
+
+========================================
+Credits:
+========================================
+Dbug: The rest
+
+========================================
+To contact us:
+========================================
+
+Website:
+- http://www.defence-force.org
+	
+irc:
+- #oric on IRCnet 
+
+	
+Other Defence Force Oric productions:
+-------------------------------------
+Zerofr - Released at Kindergarden 2014 (Norway)
+- http://www.pouet.net/prod.php?which=64343
+
+Pushing The Envelope - Released at Payback 2014 (Finland)
+- http://www.pouet.net/prod.php?which=62468
+
+AlchimieGarden - Released at Alchimie X 2013
+- http://www.pouet.net/prod.php?which=62129
+
+Born In 1983 - Released at Solskogen 2013
+- http://www.pouet.net/prod.php?which=61573
+
+3k FreeCell - Released at @party 2013
+- http://www.pouet.net/prod.php?which=61475
+
+Buggy Boy - Made for LCP Party 2004 (Sweden)
+- http://www.pouet.net/prod.php?which=13000
+
+Barbitoric - Made for Alternative Party 2003 (Finland):
+- http://www.pouet.net/prod.php?which=8558
+
+Assembly 2002 invtro - Made for Assembly 2002 (Finland):
+- http://www.pouet.net/prod.php?which=6977
+
+Quintessential - Released at the VIP4 (FRANCE) demo party in 2002:
+- http://www.pouet.net/prod.php?which=6864
+
+Oric Giga Demo - Released at the VIP3 (FRANCE) demo party in 2001:
+- http://www.pouet.net/prod.php?which=3102
+
+STNICCC C64 Revisited - Released at the STNICCC 2000 (HOLLAND) demo party in 2000:
+- http://www.pouet.net/prod.php?which=3105	
+	
+Just Oric - Released at the Volcanic 4 (FRANCE) in 1997
+- http://www.pouet.net/prod.php?which=3131
+
+
+Other Defence Force Atari productions:
+-------------------------------------
+Save The Earth - Made for the 20th anniversary of the Atari STe
+- http://pouet.net/prod.php?which=54106
+
+
+========================================
+Source code:
+========================================
+
+; --------------------------------------
+; 256 bytes intro for the Lovebyte party
+;        (Works only on ROM 1.1)
+; --------------------------------------
+; (c) 2021 Mickael Pointier
+
+#define ROM_PARAMS    $2e0
+
+
+  .zero
+
+  *= $50
+
+circle_ray      .dsb 1
+
+tmp0        .dsb 1
+tmp1        .dsb 1
+
+ptr_src       .dsb 2
+ptr_src2      .dsb 2
+
+ptr_dst       .dsb 2
+
+  .text
+
+_main
+  sei                   ; More CPU time, and no more blinking cursor !
+  lda #3                ; Allow using HIRES drawing commands
+  sta $2c0              
+  
+  ; -----------------------------------------------------
+  ; Fill the TEXT screen area with a bunch of ALT characters which will be used as a pseudo framebuffer.
+  ; 48 characters are used, with the 6x8 character definition organized over a 8x6 matrix, that gives a 48x48 pixels definition
+  ; -----------------------------------------------------
+  
+  lda #<$bb80       ; TEXT screen address
+  sta ptr_src+0
+  lda #>$bb80
+  sta ptr_src+1
+  
+  ldx #28
+loop_y_pattern  
+
+  ldy #39
+loop_x_pattern
+  lda tmp0
+  bne skip_reset_char
+  lda #48
+skip_reset_char 
+  sec
+  sbc #6
+  sta tmp0
+  
+  clc
+  lda #"@"|128
+  adc tmp0
+  adc tmp1
+  
+  sta (ptr_src),y     ; Write character in video memory
+  dey
+  bne loop_x_pattern
+
+  sty tmp0
+  
+  ; End of line, we write the color attribute at the begining, and update line pointers...
+  lda #9               ; ALT gr
+  sta (ptr_src),y
+  iny 
+  lda #3               ; Yellow Ink
+  sta (ptr_src),y
+  
+  ldy tmp1
+  iny
+  cpy #6
+  bne skip_reset_6
+  ldy #0
+skip_reset_6  
+  sty tmp1
+
+  jsr IncPtrSrc
+      
+  dex
+  bne loop_y_pattern
+
+
+  ; -----------------------------------------------------
+  ;                Draw the LOVEBYTE logo
+  ;          (and clear the HIRES parameters area)
+  ; -----------------------------------------------------
+  ldx #12+4
+loop_lovebyte_message 
+  lda LoveByteMessage-1,x
+
+  sta $bb80+40*2-1+5,x          ; Draw the top part of the LOVEBYTE message
+  sta $bb80+40*3-1+5,x          ; Draw the bottom part of the LOVEBYTE message
+
+  sta $bb80+40*24-1+25-4,x          ; Draw the top part of the LOVEBYTE message
+  sta $bb80+40*25-1+25-4,x          ; Draw the bottom part of the LOVEBYTE message
+
+  lda #0
+  sta ROM_PARAMS-1,x           ; Clean the HIRES parameter area
+  dex
+  bne loop_lovebyte_message
+  
+
+  ; -----------------------------------------------------
+  ;                Big loop that draws circles 
+  ;              and makes a lof horrible noise
+  ; -----------------------------------------------------
+  lda #2              ; 1=DRAW 2=INVERSE 3=NOTHING 
+    sta ROM_PARAMS+3  ; Set the FB parameter to "inverse"    
+BigLoop   
+  jsr $fab5     ; Shoot
+
+  ; Draw a first animated circle
+  lda #55
+  sta $219            ; ROM_CURX
+  sta $21a            ; ROM_CURY
+
+  inc $213      ; ROM_PATTERN register (create some binary wobbly patterns on the circles)
+  lda $213
+  and #31
+  sta ROM_PARAMS+1
+  and #15
+  bne no_zero_pattern
+  jsr $fae1       ; ZAP
+no_zero_pattern
+          
+  jsr $f37f       ; CIRCLE (ROM 1.1)
+  jsr $fa9f       ; ping
+    
+
+
+  ;
+  ; Let's dump a 24x24 pixels area of the HIRES screen to the redefined characters area :D
+  ;
+  lda #<$a000       ; HIRES screen address
+  sta ptr_src+0
+  lda #>$a000
+  sta ptr_src+1
+  
+  lda #<$b800+8*"@"   ; ALTernate character set address
+  sta ptr_dst+0
+  lda #>$b800+8*"@"
+  sta ptr_dst+1
+
+  ldx #8
+  stx tmp0
+loop_x
+  
+  ldx #48
+loop_y  
+  clc                  ; Compute the secondary pointer to create the mirror picture
+  lda ptr_src+0
+  adc #<40*48
+  sta ptr_src2+0
+  lda ptr_src+1
+  adc #>40*48
+  sta ptr_src2+1
+    
+  ldy #8
+  lda (ptr_src),y   ; Top right
+  ora (ptr_src2),y  ; Bottom right
+  ldy #0
+  ora (ptr_src),y   ; Top left
+  ora (ptr_src2),y  ; Bottom left
+    
+  sta (ptr_dst),y     ; Update the char map
+
+  jsr IncPtrSrc
+  
+  inc ptr_dst+0
+  bne skip_dst
+  inc ptr_dst+1
+skip_dst
+
+  dex
+  bne loop_y
+
+  clc
+  lda ptr_src+0
+  adc #<(-40*48)+1    ; Rewind
+  sta ptr_src+0
+  lda ptr_src+1
+  adc #>(-40*48)+1
+  sta ptr_src+1
+    
+  dec tmp0
+  bne loop_x
+  beq BigLoop
+
+  
+IncPtrSrc 
+  clc
+  lda ptr_src+0
+  adc #40
+  sta ptr_src+0
+  bcc skip_src
+  inc ptr_src+1
+skip_src  
+  rts
+
+LoveByteMessage
+  .byt 14,6,"L","O"+128,"VEBYTE",3,"Dbug",9  ; Double Height blinking
+
+
+
+
