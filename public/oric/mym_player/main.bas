@@ -18,7 +18,7 @@
 180 REM
 200 PRINT "Loading "+A$
 210 LOAD"MUSIC"+A$+".BIN"
-200 PRINT "Currently playing music "+A$
+215 PRINT "Currently playing music "+A$
 220 CALL#6500
 230 PRINT"Press a key to continue"
 240  GET A$
