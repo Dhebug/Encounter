@@ -88,7 +88,7 @@ Most compilers implement their own version of this keyword ...
 
 /* MSVC does not have lrintf */
 #ifdef _MSC_VER
-static INLINE long lrintf(float f){
+static INLINE long opj_lrintf(float f){
 	int i;
 
 	_asm{
