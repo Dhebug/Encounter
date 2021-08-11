@@ -235,7 +235,7 @@ void ask_name(char *name)
       printf("Stored name is %s, enter new name (or RETURN to keep): ",name);
     else
       printf("Program has no stored name, enter a name: ");
-    gets(reply);
+    gets_s(reply,sizeof(reply));
     if (reply[0]) strcpy(name,reply);
   } while (name[0]==0);
 }
