@@ -33,15 +33,7 @@ char *version="/* 16-bit code V1.39 */\n";
 #include "c.h"
 #include <string.h>
 #include <stdio.h>
-#ifdef _MSC_VER
-// http://gel.sourceforge.net/examples/stdbool_8h-source.php
-#define false   0
-#define true    1
-#define bool    _Bool
-typedef int     _Bool;
-#else
-#include <stdbool.h>   // Not available on VS2010
-#endif
+#include <stdbool.h>   // Not available on VS2010, but available on VS2019
 extern void exit(int);
 
 static bool graph_output;    /* output forest of dags from frontend */

@@ -221,11 +221,6 @@ enum { CONSTANTS=1, LABELS, GLOBAL, PARAM, LOCAL };
 /* misc. macros */
 #define roundup(x,n) (((x)+((n)-1))&(~((n)-1)))
 #define utod(x)	(2.*(int)((unsigned)(x)>>1)+(int)((x)&1))
-#ifdef NDEBUG
-#define assert(c)
-//#else
-//#define assert(c) ((c) || fatal(__FILE__,"assertion failure at line %d\n",__LINE__))
-#endif
 
 /* C library */
 #ifdef OLDOLDOLD
