@@ -14,7 +14,7 @@ Current status
   AY:    99% done.
   Video: 100% done
   Tape:  99% done (.TAP, .ORT and .WAV supported)
-  Disk:  Reading/Writing sectors works. No track read/write.
+  Disk:  90% done (single-density mode not supported)
 
 
 
@@ -45,8 +45,14 @@ Credits
   Peter Gordon
 
 
-  MacOS X port
-  ------------
+  BeOS/Haiku port
+  ---------------
+
+  Francois Revol
+
+
+  macOS port
+  ----------
 
   Francois Revol
   Kamel Biskri
@@ -79,6 +85,10 @@ Credits
   Iss
 
 
+  CH376 support
+  -------------
+
+  Offset (cpc) & Jede
 
 
 Thanks
@@ -136,6 +146,8 @@ Here are all the options:
 
                        "microdisc" or "m" for Microdisc
                        "jasmin" or "j" for Jasmin
+                       "bd500" or "b" for ByteDrive BD-500
+                       "pravetz" or "p" for Pravetz-8D FDC
 
   -s / --symbols     = Load symbols from a file
   -f / --fullscreen  = Run oricutron fullscreen
@@ -146,7 +158,7 @@ Here are all the options:
                        "opengl" for OpenGL
 
   -b / --debug       = Start oricutron in the debugger
-  -r / --breakpoint  = Set a breakpoint
+  -r / --breakpoint  = Set a breakpoint (See NOTE2)
   -h / --help        = Print command line help and quit
 
   --turbotape on|off = Enable or disable turbotape
@@ -154,10 +166,31 @@ Here are all the options:
   --vsynchack on|off = Enable or disable VSync hack
   --scanlines on|off = Enable or disable scanline simulation
 
+  --serial_address N = Set serial card base address to N (default is $31C)
+                        where N is decimal or hexadecimal within the range of $31c..$3fc
+                         (i.e. 796, 0x31c, $31C represent the same value)
+
+  --serial <type>    = Set serial card back-end emulation:
+                        'none' - no serial
+                        'loopback' - for testing - all TX data is returned to RX
+                        'modem[:port]' - emulates com port with attached modem,
+                                         only minimal AT command set is supported and
+                                         data is redirected to TCP. Default port is 23 (telnet)
+
+                        'com:115200,8,N,1,<device>' - use real or virtual <device> on host as emulated ACIA.
+                                         Baudrate, data bits, parity and stop bits can be set as needed
+                                   ex.:  Windows: 'com:115200,8,N,1,COM1'
+                                         Linux:   'com:19200,8,N,1,/dev/ttyS0'
+                                                  'com:115200,8,N,1,/dev/ttyUSB0'
+
 NOTE: If you are not sure what machine or drive type is required for a disk or
 tape image, just pass the filename without any options and Oricutron will
 try and autodetect for you.
 
+NOTE2: List with many breakpoints can be loaded from command line. Use default switches -r or --breakpoint,
+but instead of an address, specify filename prefixed with ':'. The file is plain text file, which contains
+desired breakpoint-addresses - one per line using the same syntax as in the monitor. Breakpoints can be set
+with absolute addresses or with symbols (loaded with command line switches -s or --symbols).
 
 Examples:
 
@@ -168,7 +201,7 @@ oricutron -m1 -tBUILD/foo.tap -sBUILD/symbols -b
 oricutron --drive microdisc --disk demos/barbitoric.dsk --fullscreen
 oricutron -ddemos/barbitoric.dsk -f
 oricutron --turbotape off tapes/hobbit.tap
-
+oricutron -s myproject.sym -r :myprojectbp.txt
 
 
 Keys
@@ -186,6 +219,7 @@ Keys
   F6       - Toggle warp speed
   F7       - Save all modified disks
   Shift+F7 - Save all modified disks to new disk images
+  F8       - Toggle fullscreen
   F9       - Save tape output
   F10      - Start/Stop AVI capture
   F11      - Copy text screen to clipboard (BeOS, Linux & Windows)
@@ -253,12 +287,14 @@ Commands:
   bcm <bp id>           - Clear mem breakpoint
   bl                    - List breakpoints
   blm                   - List mem breakpoints
-  bs <addr>             - Set breakpoint
+  bs <addr> [zc]        - Set breakpoint
   bsm <addr> [rwc]      - Set mem breakpoint
   bz                    - Zap breakpoints
   bzm                   - Zap mem breakpoints
   d <addr>              - Disassemble
-  df <addr> <end> <file>- Disassemble to file
+  fd <addr> <end> <file>- Disassemble to file
+  fw <addr> <len> <file>- Write mem to BIN file
+  fr <addr> <file>      - Read BIN file to mem
   m <addr>              - Dump memory
   mm <addr> <value>     - Modify memory
   mw <addr>             - Memory watch at addr
@@ -274,16 +310,25 @@ Commands:
   sl <file>             - Load user symbols
   sx <file>             - Export user symbols
   sz                    - Zap user symbols
-  wm <addr> <len> <file>- Write mem to disk
 
 
 
 Breakpoints
 ===========
 
-There are two types of breakpoints. "Normal" breakpoints trigger when the CPU
+There are two types of breakpoint. "Normal" breakpoints trigger when the CPU
 is about to execute an instruction at the breakpoint address. "Memory" breakpoints
 trigger when the breakpoint address is accessed or modified.
+
+Normal breakpoints can use 'z' and/or 'c' modifiers.
+bs $0c00           <-- Break when the CPU is about to execute code at $0c00
+bs $0c00 z         <-- Break when the CPU is about to execute code at $0c00
+                       and set cycles counter to 0
+bs $0c00 zc        <-- Set cycles counter to 0 and continues
+bs $0c00 c         <-- Continues execution (i.e. disabled breakpoint)
+
+The main purpose of these modifiers is to make cycle counting easier.
+If symbols are loaded, they can be used instead of absolute addresses.
 
 There are three ways a memory breakpoint can be triggered; when the CPU is about
 to read the address (r), and the CPU is about to write the address (w), or after the
@@ -300,18 +345,19 @@ bsm $0c00 rwc      <-- Break just before the CPU accesses $0c00, or just after i
 
 
 
-International Keyboards under Linux and Mac OS X
-================================================
+International Keyboards under Linux and macOS
+=============================================
 
-There are lots of problems with some international keyboards under Linux and Mac OS X.
-The best way to cope with them is to install an UK or US keyboard definition and to
-switch to it *before* starting oricutron.
+There are lots of problems with some international keyboards under Linux
+and macOS. The best way to cope with them is to install an UK or US
+keyboard definition and to switch to it *before* starting oricutron.
 
-Under Mac OS X you can do that in the "System Preferences", "Keyboard", "Input sources".
-Click on the + and search for the UK or US keyboard.
+Under macOS you can do that in the "System Preferences", "Keyboard", "Input
+Sources". Click on the + and search for the UK or US keyboard.
 
-Under Ubuntu you can do that in the System menu, select Preferences, and then select
-Keyboard. In the Keyboard Preferences dialog, select the Layouts tab, and click Add.
+Under Ubuntu you can do that in the System menu, select Preferences, and
+then select Keyboard. In the Keyboard Preferences dialog, select the
+Layouts tab, and click Add.
 
 For a better solution look under "Visual Keyboard" down here.
 
@@ -351,7 +397,7 @@ Oricutron can emulate ACIA at address #31C (standard address for Telestrat).
 The emulation works for Oric, Atmos, Telestrat and Pravetz and can be used
 together with any disk type.
 
-The emulated ACIA communicates with the out-side world trough back-ends.
+The emulated ACIA communicates with the out-side world through back-ends.
 Back-ends can be configured from 'oricutron.cfg' or from command line
 (see default 'oricutron.cfg' for usage).
 
@@ -372,8 +418,84 @@ ATS0?       - returns 'AUTOANSWER OFF' or 'AUTOANSWER ON' depend on current seve
 ATH0        - disconnect currently connected sockets
 +++         - if connected switches to command mode
 ATO         - returns from command mode to online
-ATD ip:port - connects as client to ip:port. 'ip' can be any host name (ex.:localhost) or the real IP (ex.:127.0.0.1) on LAN or in Internet. ADTP and ATDT are alternative for compatibility.
+ATD ip:port - connects as client to ip:port. 'ip' can be any host name (ex.:localhost) or the real IP (ex.:127.0.0.1) on LAN or in Internet. ATDP and ATDT are alternative for compatibility.
 
+
+CH376 card emulation
+====================
+
+Oricutron runs ch376 chip. This chip is able to read a sdcard and a usbkey
+(and USB port). This chip handles FAT32. usbdrive/ folder is the CH376
+emulation folder. It means that when we asked ch376 to read usbkey, it
+reads in this folder. Please note, that read/write are emulated (see below for emulated ch376 command ). Please note that emulation runs only in
+telestrat mode. Atmos can run this chip, but the rom had not been release yet (and the card with the rom).
+
+Orix (http://orix.oric.org) works with this chip mainly. Don't modify ch376
+emulation: contact Jede (jede@oric.org). Because this emulation is used
+also in ACE emulator (cpc emulation). Offset and me are trying to keep the
+same emulation. It's easier to work together than alone.
+
+CH376 command emulated :
+- CH376_CMD_GET_IC_VER
+- CH376_CMD_CHECK_EXIST
+- CH376_CMD_SET_USB_MODE
+- CH376_CMD_GET_STATUS
+- CH376_CMD_RD_USB_DATA0
+- CH376_CMD_WR_REQ_DATA
+- CH376_CMD_SET_FILE_NAME
+- CH376_CMD_DISK_MOUNT
+- CH376_CMD_FILE_OPEN
+- CH376_CMD_FILE_ENUM_GO
+- CH376_CMD_FILE_CREATE
+- CH376_CMD_FILE_ERASE (not emulated under linux)
+- CH376_CMD_FILE_CLOSE
+- CH376_CMD_BYTE_LOCATE
+- CH376_CMD_BYTE_READ
+- CH376_CMD_BYTE_RD_GO
+- CH376_CMD_BYTE_WRITE
+- CH376_CMD_BYTE_WR_GO
+- CH376_CMD_DISK_QUERY
+- CH376_CMD_DIR_CREATE (not emulated under linux)
+- CH376_CMD_DISK_RD_GO
+
+Known bug :
+Under windows, API's file does not send "." and ".." entries when we read the content on the folder. It's a problem because ch376 chip send these
+entries, when we ask to this chip to read the content of a directory.
+
+If someone wants to emulate CH376_CMD_DIR_CREATE and CH376_CMD_FILE_ERASE. It's easy to do : it justs need to copy WIN32 function and replace DeleteFile
+ and CreateDir with rm() and mkdir(). But it's not done because we are not able to test it.
+
+CH376 emulation added for :
+CH376_CMD_FILE_ERASE suppress a file
+CH376_CMD_DIR_CREATE create folder
+
+Twilighte board emulation 
+===============
+The twilighte board is working on atmos (and Oric-1). It disables internal Oric ROM and add 64 banks (by bank switching).
+It adds 32 banks of ROM (eeprom) and 32 banks of RAM (Static RAM saved with a battery).
+EEprom can be programmed from Orix command line.
+The board handles ch376 (sdcard/usbdrive/usb/hid controler).
+And the board adds 2 joysticks ports.
+
+The emulation, for instance, handles 32 ROM banks and 32 RAM banks. It emulates this bank switching. 
+
+Board is not working with a microdisc. But jasmin does (mainly because jasmin does not replace rom at boot).
+
+Anyway, on Telestrat, orix can start floppy disk because FDC is present. 
+
+Not emulated parts :
+* joysticks
+* eeprom programming sequence
+* loading ROM into RAM bank (which could emulate RAM saved with battery)
+* save on disk any modification into RAM bank (whic could emulate RAM saved with battery)
+* ch376 is not fully supported in the emulation mode. There is a lot of others functionnalities which are missing on ch376 emulation
+
+To activate the plugin, you must activate twilighte_board option in oricutron.cfg
+
+Update twilighte.cfg plugin in plugins/twilighte_card/twilighte.cfg if you want to load others roms.
+
+For basic11 rom which handles joysticks and .tap load from sdcard or usbdrive, you have to download basic.tgz here : http://repo.orix.oric.org/dists/official/tgz/6502/
+And you need to replace twilbankrom06 with the rom in basic11.tgz.
 
 
 ROM patch files
