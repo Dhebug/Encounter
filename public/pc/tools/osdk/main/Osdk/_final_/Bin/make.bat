@@ -1,5 +1,31 @@
 @ECHO OFF
 ::ECHO ON
+::
+:: List of environment variables used by the system
+::
+:: Set by the user:
+:: - OSDK - Points to the root folder of where the OSDK is installed, you can change it to point to other versions when doing testing
+:: - OSDKNAME - Name of the program (defaults to "OSDK" if not defined)
+:: - OSDKADDR - Start address of the program (defaults to $600 if not defined)
+:: - OSDKCOMP - Can be used to override compiler flags such as optimization level (default to "-O2" if not defined)
+:: - OSDKCPPFLAGS - To pass additional data to the C preprocessor (Currently LCC65)
+:: - OSDKXAPARAMS - To pass additional data to the 6502 assembler (Currently XA)
+:: - OSDKTAPNAME - Name of the TAP file (defaults to "OSDK" if not defined)
+:: - OSDKDISK - Name of the DSK file, if undefined, the DSK generation is skipped
+:: - OSDKINIST - Sedoric initialization string ran on floppy boot
+::
+:: Derived from the above, or used internally
+:: - OSDKVERSION - Used to show the version of the OSDK used to build a project (eg: "1.18")
+:: - OSDKLIB - Set to OSDK\lib, which contains the libraries linked to the projects (used by Pinforic to point to custom libraries)
+:: - OSDKB - Set to OSDK\BIN, which contains all the OSDK binary executables
+:: - OSDKT - Set to OSDK\TMP, which is where the temporary build artificats are stored when building a project
+:: - OSDKLINKLIST - Contains the list of all the modules the Linker will have to process during the Link phase
+:: - OCC - Can't remember, possibly some very old stuff? Like "Oric C Compiler"
+:: - TMP - Set to the same location as OSDKT to get any temporary written to the same location
+:: - TEMP - Set to the same location as OSDKT to get any temporary written to the same location
+:: - LCC65 - Set to the same location as OSDK (possibly not used anymore)
+:: - LCC65DIR - Set to the same location as OSDK (possibly not used anymore)
+::
 
 ::
 :: Initial checks to verify that everything is fine.
@@ -56,7 +82,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-SET OSDKVERSION=1.18
+SET OSDKVERSION=1.19
 
 ::
 :: Create a build directory if it does not exist
@@ -167,7 +193,7 @@ IF "%OSDKBRIEF%"=="" ECHO Compiling %1.C
 
 IF "%OSDKBRIEF%"=="" ECHO   - preprocess
 :: the -DATMOS is for Contiki
-%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include -D__16BIT__ -D__NOFLOAT__ -DATMOS -DOSDKNAME_%OSDKNAME% -DOSDKVER=\"%OSDKVERSION%\" -nostdinc %1.c %OSDKT%\%1.c
+%OSDKB%\cpp.exe -lang-c++ -I %OSDK%\include %OSDKCPPFLAGS% -D__16BIT__ -D__NOFLOAT__ -DATMOS -DOSDKNAME_%OSDKNAME% -DOSDKVER=\"%OSDKVERSION%\" -nostdinc %1.c %OSDKT%\%1.c
 
 IF "%OSDKBRIEF%"=="" ECHO   - compile
 %OSDKB%\compiler.exe -N%1 %OSDKCOMP% %OSDKT%\%1.c >%OSDKT%\%1.c2
