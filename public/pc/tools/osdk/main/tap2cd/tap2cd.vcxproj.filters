@@ -26,6 +26,8 @@
     <None Include="sources\loader_df.s">
       <Filter>sources</Filter>
     </None>
+    <None Include="sources\createloader.bat" />
+    <None Include="sources\readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\tap2cd.c">
