@@ -8,7 +8,7 @@ int needconst;		/* >=1 if parsing a constant expression */
 
 dclproto(static int add,(double, double, double, double, int));
 dclproto(static Tree addrnode,(Symbol, int, Type));
-dclproto(static int div,(double, double, double, double, int));
+dclproto(static int divide,(double, double, double, double, int));
 dclproto(static int mul,(double, double, double, double, int));
 dclproto(static int sub,(double, double, double, double, int));
 
@@ -65,7 +65,7 @@ static Tree addrnode(p, n, ty) Symbol p; int n; Type ty; {
 }
 
 /* div - return 1 if min <= x/y <= max, 0 otherwise */
-static int div(x, y, min, max, needconst) double x, y, min, max; int needconst; {
+static int divide(x, y, min, max, needconst) double x, y, min, max; int needconst; {
 	int cond;
 
 	if (x < 0) x = -x;
@@ -103,6 +103,8 @@ static int mul(x, y, min, max, needconst) double x, y, min, max; int needconst; 
 		cond = 1;
 	}
 	return cond;
+
+/* sub - return 1 if min <= x-y <= max, 0 otherwise */
 }
 
 #define xcvtcnst(FTYPE,TTYPE,EXP,VAR,MIN,MAX) \
@@ -277,10 +279,10 @@ Tree simplify(op, ty, l, r) int op; Type ty; Tree l, r; {
 	case CVU+P:  cvtcnst(U,    voidptype,p->u.v.p  = (char *)l->u.v.u);  break;
 	case CVU+S:  cvtcnst(U,unsignedshort,p->u.v.us = l->u.v.u);  break;
 	case DIV+D:
-		xfoldcnst(D,d,/,doubletype,div,-DBL_MAX,DBL_MAX);
+		xfoldcnst(D,d,/,doubletype, divide,-DBL_MAX,DBL_MAX);
 		break;
 	case DIV+F:
-		xfoldcnst(F,f,/,floattype,div,-FLT_MAX,FLT_MAX);
+		xfoldcnst(F,f,/,floattype, divide,-FLT_MAX,FLT_MAX);
 		break;
 	case DIV+I:
 		identity(r,l,I,i,1);
@@ -289,7 +291,7 @@ Tree simplify(op, ty, l, r) int op; Type ty; Tree l, r; {
 		&& !div((double)l->u.v.i, (double)r->u.v.i, (double)INT_MIN, (double)INT_MAX, 0))
 			break;
 #endif
-		xfoldcnst(I,i,/,inttype,div,INT_MIN,INT_MAX);
+		xfoldcnst(I,i,/,inttype, divide,INT_MIN,INT_MAX);
 		break;
 	case DIV+U:
 		identity(r,l,U,u,1);
@@ -372,10 +374,10 @@ Tree simplify(op, ty, l, r) int op; Type ty; Tree l, r; {
 			break;
 #ifdef mips
 		if (l->op == CNST+I && r->op == CNST+I && r->u.v.i == -1
-		&& !div((double)l->u.v.i, (double)r->u.v.i, (double)INT_MIN, (double)INT_MAX, 0))
+		&& !divide((double)l->u.v.i, (double)r->u.v.i, (double)INT_MIN, (double)INT_MAX, 0))
 			break;
 #endif
-		xfoldcnst(I,i,%,inttype,div,INT_MIN,INT_MAX);
+		xfoldcnst(I,i,%,inttype, divide,INT_MIN,INT_MAX);
 		break;
 	case MOD+U:
 		if (r->op == CNST+U && ispow2(r->u.v.u))	/* l%2^n => l&(2^n-1) */
@@ -497,7 +499,6 @@ Tree simplify(op, ty, l, r) int op; Type ty; Tree l, r; {
 	return tree(op, ty, l, r);
 }
 
-/* sub - return 1 if min <= x-y <= max, 0 otherwise */
 static int sub(x, y, min, max, needconst) double x, y, min, max; int needconst; {
 	return add(x, -y, min, max, needconst);
 }
