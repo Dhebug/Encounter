@@ -9,7 +9,7 @@
 :: - OSDKADDR - Start address of the program (defaults to $600 if not defined)
 :: - OSDKCOMP - Can be used to override compiler flags such as optimization level (default to "-O2" if not defined)
 :: - OSDKCPPFLAGS - To pass additional data to the C preprocessor (Currently LCC65)
-:: - OSDKXAPARAMS - To pass additional data to the 6502 assembler (Currently XA)
+:: - OSDKXAPARAMS - To pass additional data to the 6502 assembler (Currently XA and defaults to "-C -W" if not defined)
 :: - OSDKTAPNAME - Name of the TAP file (defaults to "OSDK" if not defined)
 :: - OSDKDISK - Name of the DSK file, if undefined, the DSK generation is skipped
 :: - OSDKINIST - Sedoric initialization string ran on floppy boot
@@ -64,6 +64,14 @@ SET OSDKADDR=$600
 IF NOT "%OSDKCOMP%"=="" GOTO Comp
 SET OSDKCOMP=-O2
 :Comp
+
+::
+:: Set XA to disable 65C02 and 65816 instructions by default
+:: if the user did not specify anything else
+::
+IF NOT "%OSDKXAPARAMS%"=="" GOTO EndXaParams
+SET OSDKXAPARAMS=-W -C
+:EndXaParams
 
 
 ::
@@ -279,7 +287,7 @@ IF ERRORLEVEL 1 GOTO ErFailure
 :: (-W -C are meant to disallow the 65816 and 65c02 instructions)
 ::%OSDKB%\xa.exe %OSDKT%\linked.s -o final.out -e xaerr.txt -l xalbl.txt
 ECHO Assembling
-%OSDKB%\xa.exe -W -C %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA %OSDKXAPARAMS% -DOSDKNAME_%OSDKNAME%
+%OSDKB%\xa.exe %OSDKT%\linked.s -o build\final.out -e build\xaerr.txt -l build\symbols -bt %OSDKADDR% -DASSEMBLER=XA %OSDKXAPARAMS% -DOSDKNAME_%OSDKNAME%
 IF NOT EXIST "build\final.out" GOTO ErFailure
 
 
