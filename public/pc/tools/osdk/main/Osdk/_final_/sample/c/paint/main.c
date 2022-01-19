@@ -109,7 +109,12 @@ void main()
 {
     hires();
 
+#if 0
 	memcpy((unsigned char*)0xa000,LabelPicture,8000);
+#else
+    curset(120,100,3);
+    circle(50,1);
+#endif    
 
     doke(630,0);
     paint(120,100);
