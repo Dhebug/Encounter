@@ -13,8 +13,13 @@ set OSDKDISK=%OSDKNAME%
 
 :: Convert the graphical and audio data
 %OSDKB%\pictconv -u1 -m0 -f6 -o4-TitlePicture data\title.png build\title_picture.s
+%OSDKB%\pictconv -u1 -m0 -f1 -o4-CreditsPicture data\credits.png build\credits_picture.s
+%OSDKB%\pictconv -u1 -m0 -f1 -o4-MapPicture data\map.png build\map_picture.s
+
+:: Convert the medieval looking character set
 %OSDKB%\pictconv -m0 -f0 -o1 data\font_6x8_oncial.png build\font_6x8.tap
 
+:: Convert the music for the intro
 %OSDK%\bin\ym2mym -h0 -m15872 data\music.ym build\music.mym
 %OSDKB%\bin2txt -s1 -f2 build\music.mym build\music.s _Music
 

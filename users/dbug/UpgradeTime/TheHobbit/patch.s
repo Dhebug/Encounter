@@ -11,6 +11,10 @@
 ; - 1.3 - 2022-02-24 [Dbug] Replaced the system font by a fancy one ("oncial") to make the game feel a bit more atmospheric
 ; - 1.4 - 2022-02-25 [Dbug] Added an intro picture based on the original game manual artwork
 ; - 1.5 - 2022-02-26 [Dbug] The intro picture now appears with an unroll effect, and a music play in the background
+; - 1.6 - 2022-03-12 [Dbug] Added Thror's map as well as a credit picture to the intro, with two new display effects
+;                           Added a menu to toggle the sound ON/OFF
+;                           Added a menu to allow the player to start the original version of the game
+;                           Fixed the brief flash of white corruption appearing when the game starts by clearing the entire video memory area
 ;
 ; TODO list:
 ; - Modify the SAVE and LOAD code to use the floppy disk instead of tape
@@ -24,6 +28,7 @@
 ; - The $405-$414 area contains a JMP table on various ROM routines patched to different addresses depending if an Oric 1 or Atmos is detected  (See: https://forum.defence-force.org/viewtopic.php?p=26656#p26656)
 ; - The saving code is called multiple time for various areas, totally about 3623 bytes (see: https://forum.defence-force.org/viewtopic.php?p=26664#p26664)
 ;
+#include "common.h"
 
 	.zero
 
@@ -36,6 +41,13 @@ tmp0	.dsb 2
     *= $924E
 
 StartPatch
+    ; Check the top of memory flags to see if the user wants to install the improved edition patch
+    lda FlagPlayImproved
+    bne install_patch    
+    ; Looks like the user wants to try the original unmodified game!
+    jmp start_game
+
+install_patch
 ;pause  jmp pause        ; Uncomment to stop auto-running
 	sei              ; We need to disable the IRQ at least during the ROM to RAM copy
 
@@ -148,6 +160,27 @@ loop_patch
     bne loop_patch
     .)
 
+clear_video
+    .(
+    ; Clean the entire screen area from $A000 to $BFFF with zeroes (BLACK INK attribute) to avoid the nasty white garbage flash on startup
+    lda #<$a000
+    sta tmp0+0
+    lda #>$a000
+    sta tmp0+1
+
+    lda #0
+    ldx #32
+next_page
+    tay
+clear_page
+    sta (tmp0),y
+    dey
+    bne clear_page
+
+    inc tmp0+1
+    dex
+    bne next_page
+    .)
 
 start_game
     cli                  ; Enable the IRQ again
@@ -179,7 +212,7 @@ ComputeScreenAddress
 
 
 ; And some final information string, so we can easily find which version people are swapping around
-    .byt "Improved Hobbit v1.5 - Please report any issue to dbug@defence-force.org"
+    .byt "Improved Hobbit v1.6 - Please report any issue to dbug@defence-force.org"
 
 ; Just so log code to check how large this patch data has become
 EndPatch

@@ -1,12 +1,7 @@
 ;
 ; This intro is still heavy work in progress, with bits of code ripped out from "MymPlayer" and "Pushing The Enveloppe"
 ;
-#define VIA_1				$30f
-#define VIA_2				$30c
-
-#define BASIC_KEY           $2df   ; Latest key from keyboard, bit 7 set if valid
-
-#define PLAY_MUSIC
+#include "common.h"
 
 	.zero
 
@@ -14,8 +9,14 @@
 
 tmp0				.dsb 2
 tmp1				.dsb 2
+tmp2				.dsb 2
+tmp3				.dsb 2
+tmp4				.dsb 2
+tmp5				.dsb 2
+tmp6				.dsb 2
+tmp7				.dsb 2
 
-pos_y				.dsb 1
+should_quit         .dsb 1
 
 _DecodedByte		.dsb 1		; Byte being currently decoded from the MYM stream
 _DecodeBitCounter	.dsb 1		; Number of bits we can read in the current byte
@@ -41,28 +42,270 @@ _FrameLoadBalancer	.dsb 1		; We depack a new frame every 9 VBLs, this way the 14
 
 _Main
 .(
+	lda #0
+	sta should_quit
+
+#ifdef PLAY_MUSIC
+	lda #MessageON-MessageOFF
+#else
+	lda 0
+#endif	
+	sta FlagPlayMusic
+
+	lda #MessageImproved-MessageOriginal
+	sta FlagPlayImproved
+
 	jsr StartMusic
 	jsr SwitchToHires
+
+	jsr PrintMessages
+
+loop_attract_mode
+	; Show the title picture with Smaug the dragon
+	lda #<_TitlePicture-1
+	ldx #>_TitlePicture-1
 	jsr _InitTransitionData
+
 	jsr StartPictureUnroll
-loop
-	jsr _VSync
+loop_show_title
 	jsr PictureUnrollFrame
-	jsr _VSync
+	jsr DelayBetweenFrames
+	bne end_attract_mode
 
-	lda BASIC_KEY                  ; Key
-	bpl loop
+	lda _TransitionDone
+	beq loop_show_title
 
+	; Wait a bit
+	jsr DelayBetweenPictures
+	bne end_attract_mode
+
+	; Show Thror's map picture
+	lda #<_MapPicture-1
+	ldx #>_MapPicture-1
+	jsr _InitTransitionData
+
+	jsr StartPictureFromTopAndBottom
+loop_show_map
+	jsr PictureFromTopAndBottomFrame
+	jsr DelayBetweenFrames
+	bne end_attract_mode
+
+	lda _TransitionDone
+	beq loop_show_map
+
+	; Wait a bit
+	jsr DelayBetweenPictures
+	bne end_attract_mode
+
+	; Show credits's scroll picture
+	lda #<_CreditsPicture-1
+	ldx #>_CreditsPicture-1
+	jsr _InitTransitionData
+
+	jsr StartPictureVenicianStore
+loop_show_credits
+	jsr PictureVenicianStoreFrame
+	jsr DelayBetweenFrames
+	bne end_attract_mode
+
+	lda _TransitionDone
+	beq loop_show_credits
+
+	; Wait a bit
+	jsr DelayBetweenPictures
+	bne end_attract_mode
+
+	jmp loop_attract_mode
+
+end_attract_mode
 	jsr SwitchToText
 	jsr EndMusic
 	rts	
 .)	
 
 
+PrintMessages
+.(
+	.(
+	; Patch the message to indicate the proper status for the sound
+	ldy FlagPlayMusic
+	ldx #0
+loop	
+	lda MessageOFF,y
+	sta MessageSoundOnOff,x
+	iny
+	inx
+	cpx #MessageON-MessageOFF
+	bne loop
+	.)
+
+	.(
+	; Patch the message to indicate the proper status for the version to play
+	ldy FlagPlayImproved
+	ldx #0
+loop	
+	lda MessageOriginal,y
+	sta MessageVersionImprovedOriginal,x
+	iny
+	inx
+	cpx #MessageImproved-MessageOriginal
+	bne loop
+	.)
+
+	.(
+	; Display the options text
+	ldx #MessageOptionsEnd-MessageOptions
+loop	
+	lda MessageOptions-1,x
+	sta $bb80+40*26+0-1,x
+	dex
+	bne loop
+	.)
+
+	.(
+	; Display the blinking "press space to play"
+	ldx #MessagePressEnd-MessagePressPlay
+loop	
+	lda MessagePressPlay-1,x
+	sta $bb80+40*27+8-1,x
+	dex
+	bne loop
+	.)
+	rts
+.)
+
+MessageOptions
+	.byt 3,"[S] Sound"
+MessageSoundOnOff	
+	.byt " ON  [V] Play"
+MessageVersionImprovedOriginal
+	.byt " Improved Version"
+MessageOptionsEnd
+
+MessageOFF .byt 1,"OFF",3
+MessageON  .byt 2,"ON ",3
+
+MessageOriginal  .byt 1,"Original",3
+MessageImproved  .byt 2,"Improved",3
+
+MessagePressPlay
+	.byt 12,4,"Press [SPACE] to play"   ; Blue blinking text
+MessagePressEnd
+
+
+CheckKeyboard
+.(
+	lda BASIC_KEY                  ; Latest key from keyboard, bit 7 set if valid
+	bmi key_pressed
+
+continue
+	jsr PrintMessages
+
+	lda #0
+	sta BASIC_KEY
+	rts
+
+key_pressed ;jmp quit    	
+	cmp #" "+128                ; "SPACE" to quit
+	beq quit
+
+	cmp #"S"+128                ; "S" to toggle sound off and on
+	bne skip_sound_toggle
+	lda FlagPlayMusic
+	eor #MessageON-MessageOFF	; Lenght of the ON/OFF message
+	sta FlagPlayMusic
+	bne continue
+	jsr StopSound            	; Make sure to stop the YM to avoid sounnnnnnnnnnnnnnnnnnnnnddddddddd
+	jmp continue
+skip_sound_toggle	
+
+	cmp #"V"+128                ; "V" to toggle between original and improved version
+	bne skip_version_toggle
+	lda FlagPlayImproved
+	eor #MessageImproved-MessageOriginal	; Lenght of the Improved/Original message
+	sta FlagPlayImproved
+	jmp continue
+skip_version_toggle
+
+	; Entual other options
+	jmp continue
+
+quit	
+	lda #1
+	sta should_quit
+	rts
+.)
+
+
+DelayBetweenFrames
+.(
+	jsr _VSync
+	jsr _VSync
+	jmp CheckKeyboard
+.)
+
+DelayBetweenPictures
+.(
+	ldx #50*3                        ; We wait three seconds
+	stx counter
+loop	
+	jsr DelayBetweenFrames
+	bne quit
+	dec counter
+	bne loop
+	lda #0
+quit
+	rts
+.)
+
+
+CopyTextFontToHires
+.(
+    ; ROM Font is stored from $FC78 to $FF77 = 768 bytes = 3*256
+    ; We recopy whatever is in the original RAM version of from (from $B400 to $B7FF) to the ROM area.
+    ; The first 32 characters are skipped because they are not actually displayable.
+    ldx #0
+loop_copy_font
+    lda $B400+8*32+256*0,x
+    sta $9800+8*32+256*0,x
+    lda $B400+8*32+256*1,x
+    sta $9800+8*32+256*1,x
+    lda $B400+8*32+256*2,x
+    sta $9800+8*32+256*2,x
+    dex
+    bne loop_copy_font
+	rts
+.)
+
+CopyHiresFontToText
+.(
+    ; ROM Font is stored from $FC78 to $FF77 = 768 bytes = 3*256
+    ; We recopy whatever is in the original RAM version of from (from $B400 to $B7FF) to the ROM area.
+    ; The first 32 characters are skipped because they are not actually displayable.
+    ldx #0
+loop_copy_font        
+    lda $9800+8*32+256*0,x
+    sta $B400+8*32+256*0,x
+    lda $9800+8*32+256*1,x
+    sta $B400+8*32+256*1,x
+    lda $9800+8*32+256*2,x
+    sta $B400+8*32+256*2,x
+    dex
+    bne loop_copy_font
+	rts
+.)
+
+
 ClearVideo
-	;jmp SwitchToHires
 .(
 	; Clean the entire screen area from $A000 to $BFFF with zeroes (BLACK INK attribute)
+	sei
+
+	lda FlagPlayImproved
+	pha
+	lda FlagPlayMusic		; Temporarily save the flags at the end of the memory because they are going to be wiped out
+	pha 
+
 	lda #<$a000
 	sta tmp0+0
 	lda #>$a000
@@ -80,12 +323,22 @@ clear_page
 	inc tmp0+1
 	dex
 	bne next_page
+
+	pla 
+	sta FlagPlayMusic
+	pla
+	sta FlagPlayImproved
+
+	cli
 	rts
 .)
 
 
 SwitchToHires
 .(	
+	; Move the font so we can still display stuff
+	jsr CopyTextFontToHires
+
 	; Clean the entire screen area from $A000 to $BFFF with zeroes (BLACK INK attribute)
 	jsr ClearVideo
 
@@ -105,7 +358,13 @@ SwitchToText
 	lda #26
 	sta $bfdf
 
-	jmp _VSync
+	jsr _VSync
+	jsr _VSync
+	jsr _VSync
+	jsr _VSync
+
+	; Move back the font
+	jmp CopyHiresFontToText	
 .)
 
 
@@ -136,12 +395,14 @@ StartPictureUnroll
 	rts
 .)
 
-
 PictureUnrollFrame
 .(
 	ldy pos_y
 	cpy #216
 	bne do_frame
+
+	lda #1
+	sta _TransitionDone
 	rts
 
 do_frame
@@ -186,13 +447,162 @@ loop
 .)
 
 
+StartPictureVenicianStore
+.(
+	ldy #0
+	sty pos_y
+	rts
+.)
 
+; A simple copy with multiple simultaneous displayed bands
+; tmp0 -> tmp1 
+; tmp2 -> tmp3 
+; tmp4 -> tmp5
+; tmp6 -> tmp7 
+PictureVenicianStoreFrame
+.(
+	ldx pos_y
+	cpx #50
+	bne do_frame
+
+	lda #1
+	sta _TransitionDone
+	rts
+
+do_frame
+	lda _PictureLoadBufferAddrLow,x
+	sta tmp0+0
+	lda _PictureLoadBufferAddrHigh,x
+	sta tmp0+1
+
+	lda _ScreenAddrLow,x
+	sta tmp1+0
+	lda _ScreenAddrHigh,x
+	sta tmp1+1
+
+
+	lda _PictureLoadBufferAddrLow+50,x
+	sta tmp2+0
+	lda _PictureLoadBufferAddrHigh+50,x
+	sta tmp2+1
+
+	lda _ScreenAddrLow+50,x
+	sta tmp3+0
+	lda _ScreenAddrHigh+50,x
+	sta tmp3+1
+
+	lda _PictureLoadBufferAddrLow+100,x
+	sta tmp4+0
+	lda _PictureLoadBufferAddrHigh+100,x
+	sta tmp4+1
+
+	lda _ScreenAddrLow+100,x
+	sta tmp5+0
+	lda _ScreenAddrHigh+100,x
+	sta tmp5+1
+
+
+	lda _PictureLoadBufferAddrLow+150,x
+	sta tmp6+0
+	lda _PictureLoadBufferAddrHigh+150,x
+	sta tmp6+1
+
+	lda _ScreenAddrLow+150,x
+	sta tmp7+0
+	lda _ScreenAddrHigh+150,x
+	sta tmp7+1
+
+	; Copy from right to left to limit the attribute corruption effects
+	ldy #40
+loop
+	lda (tmp0),y
+	sta (tmp1),y
+
+	lda (tmp2),y
+	sta (tmp3),y
+
+	lda (tmp4),y
+	sta (tmp5),y
+
+	lda (tmp6),y
+	sta (tmp7),y
+
+	dey
+	bne loop
+
+	inc pos_y
+	rts
+.)
+
+
+
+StartPictureFromTopAndBottom
+.(
+	ldy #0
+	sty pos_y
+	ldy #199
+	sty pos_y2
+	rts
+.)
+
+; A simple copy from the top and bottom at the same time
+; tmp0 -> tmp1 
+; tmp2 -> tmp3 
+PictureFromTopAndBottomFrame
+.(
+	ldx pos_y
+	cpx #100
+	bne do_frame
+
+	lda #1
+	sta _TransitionDone
+	rts
+
+do_frame
+	ldy pos_y2
+
+	lda _PictureLoadBufferAddrLow,x
+	sta tmp0+0
+	lda _PictureLoadBufferAddrHigh,x
+	sta tmp0+1
+
+	lda _ScreenAddrLow,x
+	sta tmp1+0
+	lda _ScreenAddrHigh,x
+	sta tmp1+1
+
+	lda _PictureLoadBufferAddrLow,y
+	sta tmp2+0
+	lda _PictureLoadBufferAddrHigh,y
+	sta tmp2+1
+
+	lda _ScreenAddrLow,y
+	sta tmp3+0
+	lda _ScreenAddrHigh,y
+	sta tmp3+1
+
+	; Copy from right to left to limit the attribute corruption effects
+	ldy #40
+loop
+	lda (tmp0),y
+	sta (tmp1),y
+	lda (tmp2),y
+	sta (tmp3),y
+	dey
+	bne loop
+
+	inc pos_y
+	dec pos_y2
+	rts
+.)
+
+
+
+; Call with A:X containing the picture location
 _InitTransitionData
 .(
-	lda #<_TitlePicture-1
 	sta tmp0+0
-	lda #>_TitlePicture-1
-	sta tmp0+1
+	stx tmp0+1
 
 	lda #<$a000-1
 	sta tmp1+0
@@ -243,6 +653,8 @@ loop
 	bne loop	
 	.)
 
+	lda #0
+	sta _TransitionDone
 	rts
 .)
 
@@ -358,6 +770,14 @@ __auto_6
 	sta $246
 
 	; Stop the sound
+	jsr StopSound
+
+	pla
+	plp
+	rts	
+
+StopSound
+.(
 	lda #8
 	ldx #0
 	jsr WriteRegister
@@ -369,10 +789,8 @@ __auto_6
 	lda #10
 	ldx #0
 	jsr WriteRegister
-
-	pla
-	plp
-	rts	
+	rts
+.)
 
 
 _50hzFlipFlop			.byt 0
@@ -393,9 +811,10 @@ irq_handler
 	sta _50hzFlipFlop
 	beq skipFrame
 
-#ifdef PLAY_MUSIC
+	lda FlagPlayMusic
+	beq end_music
 	jsr _Mym_PlayFrame
-#endif	
+end_music
 	inc _VblCounter
 
 skipFrame
@@ -966,6 +1385,13 @@ _PlayerRegBits
 	; Wave form
 	.byt 8
 
+_TransitionDone				.byt 0	
+
+pos_y						.byt 0
+pos_y2						.byt 0
+counter                		.byt 0
+
+
 _MusicData
 #include "build\music.s"             ; Generated by ym2mym + bin2txt
 MusicEnd
@@ -973,7 +1399,11 @@ MusicEnd
 _TitlePicture
 #include "build\title_picture.s"     ; Generated by pictconv
 
-	.bss 
+_CreditsPicture
+#include "build\credits_picture.s"   ; Generated by pictconv
+
+_MapPicture
+#include "build\map_picture.s"       ; Generated by pictconv
 
 	.dsb 256-(*&255)
 
@@ -989,4 +1419,8 @@ _PictureLoadBufferAddrHigh  .dsb 256
 _EmptySourceScanLine 		.dsb 256			; Only zeroes, can be used for special effects
 _EmptyDestinationScanLine 	.dsb 256			; Only zeroes, can be used for special effects
 
+; Just so log code to check how large this patch data has become
+_End
+#echo Intro size:
+#print (_End - _Main) 
 
