@@ -55,8 +55,12 @@ _Main
 	lda #MessageImproved-MessageOriginal
 	sta FlagPlayImproved
 
+	lda #MessageCharsetModified-MessageCharsetOriginal
+	sta FlagCharsetStyle
+
 	jsr StartMusic
 	jsr SwitchToHires
+	jsr MakeRomFontCopy
 
 	jsr PrintMessages
 
@@ -153,6 +157,19 @@ loop
 	.)
 
 	.(
+	; Patch the message to indicate the select character set
+	ldy FlagCharsetStyle
+	ldx #0
+loop	
+	lda MessageCharsetOriginal,y
+	sta MessageCharsetOldNew,x
+	iny
+	inx
+	cpx #MessageCharsetModified-MessageCharsetOriginal
+	bne loop
+	.)
+
+	.(
 	; Display the options text
 	ldx #MessageOptionsEnd-MessageOptions
 loop	
@@ -163,11 +180,21 @@ loop
 	.)
 
 	.(
+	; Display the second set of options
+	ldx #MessageOptionsCharsetEnd-MessageOptionsCharset
+loop	
+	lda MessageOptionsCharset-1,x
+	sta $bb80+40*27+0-1,x
+	dex
+	bne loop
+	.)
+
+	.(
 	; Display the blinking "press space to play"
 	ldx #MessagePressEnd-MessagePressPlay
 loop	
 	lda MessagePressPlay-1,x
-	sta $bb80+40*27+8-1,x
+	sta $bb80+40*25+8-1,x
 	dex
 	bne loop
 	.)
@@ -187,6 +214,17 @@ MessageON  .byt 2,"ON ",3
 
 MessageOriginal  .byt 1,"Original",3
 MessageImproved  .byt 2,"Improved",3
+
+MessageOptionsCharset
+	.byt 3,"[C] Use the"
+MessageCharsetOldNew
+	.byt " Modified Character set"
+	.byt 4,"v1.7"
+MessageOptionsCharsetEnd
+
+MessageCharsetOriginal  .byt 1,"Original",3
+MessageCharsetModified  .byt 2,"Medieval",3
+
 
 MessagePressPlay
 	.byt 12,4,"Press [SPACE] to play"   ; Blue blinking text
@@ -226,6 +264,15 @@ skip_sound_toggle
 	sta FlagPlayImproved
 	jmp continue
 skip_version_toggle
+
+	cmp #"C"+128                ; "C" to toggle between original and modified character sets
+	bne skip_charset_toggle
+	lda FlagCharsetStyle
+	eor #MessageCharsetModified-MessageCharsetOriginal	; Lenght of the Original/Modified message
+	sta FlagCharsetStyle
+	jsr SwapHiresFont
+	jmp continue
+skip_charset_toggle
 
 	; Entual other options
 	jmp continue
@@ -295,16 +342,64 @@ loop_copy_font
 	rts
 .)
 
+MakeRomFontCopy
+.(
+    ; ROM Font is stored from $FC78 to $FF77 = 768 bytes = 3*256
+    ; We recopy whatever is in the original RAM version of from (from $B400 to $B7FF) to the ROM area.
+    ; The first 32 characters are skipped because they are not actually displayable.
+    ldx #0
+loop_copy_font
+    lda $FC78+256*0,x
+	sta _ExtraFontCopy+8*32+256*0,x
+    lda $FC78+256*1,x
+	sta _ExtraFontCopy+8*32+256*1,x
+    lda $FC78+256*2,x
+	sta _ExtraFontCopy+8*32+256*2,x
+    dex
+    bne loop_copy_font
+	rts
+.)
+
+SwapHiresFont
+.(
+    ldx #0
+loop_copy_font        
+    lda $9800+8*32+256*0,x
+	ldy _ExtraFontCopy+8*32+256*0,x
+	sta _ExtraFontCopy+8*32+256*0,x
+	tya
+    sta $9800+8*32+256*0,x
+
+    lda $9800+8*32+256*1,x
+	ldy _ExtraFontCopy+8*32+256*1,x
+	sta _ExtraFontCopy+8*32+256*1,x
+	tya
+    sta $9800+8*32+256*1,x
+
+    lda $9800+8*32+256*2,x
+	ldy _ExtraFontCopy+8*32+256*2,x
+	sta _ExtraFontCopy+8*32+256*2,x
+	tya
+    sta $9800+8*32+256*2,x
+
+    dex
+    bne loop_copy_font
+	rts
+	rts
+.)
+
 
 ClearVideo
 .(
 	; Clean the entire screen area from $A000 to $BFFF with zeroes (BLACK INK attribute)
 	sei
 
-	lda FlagPlayImproved
+	lda FlagPlayImproved   ; Temporarily save the flags at the end of the memory because they are going to be wiped out
 	pha
-	lda FlagPlayMusic		; Temporarily save the flags at the end of the memory because they are going to be wiped out
+	lda FlagPlayMusic		
 	pha 
+	lda FlagCharsetStyle
+	pha
 
 	lda #<$a000
 	sta tmp0+0
@@ -324,6 +419,8 @@ clear_page
 	dex
 	bne next_page
 
+	pla 
+	sta FlagCharsetStyle
 	pla 
 	sta FlagPlayMusic
 	pla
@@ -1418,6 +1515,8 @@ _PictureLoadBufferAddrHigh  .dsb 256
 
 _EmptySourceScanLine 		.dsb 256			; Only zeroes, can be used for special effects
 _EmptyDestinationScanLine 	.dsb 256			; Only zeroes, can be used for special effects
+
+_ExtraFontCopy              .dsb 768            ; Used to do the fancy font swap            
 
 ; Just so log code to check how large this patch data has become
 _End

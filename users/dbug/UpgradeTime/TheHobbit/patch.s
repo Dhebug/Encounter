@@ -15,6 +15,7 @@
 ;                           Added a menu to toggle the sound ON/OFF
 ;                           Added a menu to allow the player to start the original version of the game
 ;                           Fixed the brief flash of white corruption appearing when the game starts by clearing the entire video memory area
+; - 1.7 - 2022-03-28 [Dbug] Added a menu option to allow switching between the original and custom fonts
 ;
 ; TODO list:
 ; - Modify the SAVE and LOAD code to use the floppy disk instead of tape
@@ -41,14 +42,6 @@ tmp0	.dsb 2
     *= $924E
 
 StartPatch
-    ; Check the top of memory flags to see if the user wants to install the improved edition patch
-    lda FlagPlayImproved
-    bne install_patch    
-    ; Looks like the user wants to try the original unmodified game!
-    jmp start_game
-
-install_patch
-;pause  jmp pause        ; Uncomment to stop auto-running
 	sei              ; We need to disable the IRQ at least during the ROM to RAM copy
 
 copy_rom_to_ram
@@ -84,7 +77,31 @@ loop_page
     inc tmp0+1
     bne loop_external
     .)
-    
+
+copy_ram_font_to_rom
+    .(
+    ; ROM Font is stored from $FC78 to $FF77 = 768 bytes = 3*256
+    ; We recopy whatever is in the original RAM version of from (from $B400 to $B7FF) to the ROM area.
+    ; The first 32 characters are skipped because they are not actually displayable.
+    ldx #0
+loop_patch        
+    lda $B400+8*32+256*0,x
+    sta $fc78+256*0-8,x
+    lda $B400+8*32+256*1,x
+    sta $fc78+256*1-8,x
+    lda $B400+8*32+256*2,x
+    sta $fc78+256*2-8,x
+    dex
+    bne loop_patch
+    .)
+
+    ; Check the top of memory flags to see if the user wants to install the improved edition patch
+    lda FlagPlayImproved
+    bne install_patch    
+    ; Looks like the user wants to try the original unmodified game!
+    jmp start_game
+
+install_patch
 
 generate_tables
     .(
@@ -138,28 +155,11 @@ patch_hobbit
     ldx #SizeComputeScreenAddress
 loop_patch        
     lda ComputeScreenAddress-1,x
-    sta $7A22-1,x
+    sta Hobbit_ComputeScreenAddress-1,x
     dex
     bne loop_patch
     .)
     
-copy_ram_font_to_rom
-    .(
-    ; ROM Font is stored from $FC78 to $FF77 = 768 bytes = 3*256
-    ; We recopy whatever is in the original RAM version of from (from $B400 to $B7FF) to the ROM area.
-    ; The first 32 characters are skipped because they are not actually displayable.
-    ldx #0
-loop_patch        
-    lda $B400+8*32+256*0,x
-    sta $fc78+256*0-8,x
-    lda $B400+8*32+256*1,x
-    sta $fc78+256*1-8,x
-    lda $B400+8*32+256*2,x
-    sta $fc78+256*2-8,x
-    dex
-    bne loop_patch
-    .)
-
 clear_video
     .(
     ; Clean the entire screen area from $A000 to $BFFF with zeroes (BLACK INK attribute) to avoid the nasty white garbage flash on startup
@@ -188,7 +188,7 @@ start_game
 
 ComputeScreenAddress
  .(
-    * = $7A22           ; This routine is assembled at a different address than the rest of the program
+    * = Hobbit_ComputeScreenAddress           ; This routine is assembled at a different address than the rest of the program
  begin
     ; Mul 40
     ldx $31
@@ -212,7 +212,7 @@ ComputeScreenAddress
 
 
 ; And some final information string, so we can easily find which version people are swapping around
-    .byt "Improved Hobbit v1.6 - Please report any issue to dbug@defence-force.org"
+    .byt "Improved Hobbit v1.7 - Please report any issue to dbug@defence-force.org"
 
 ; Just so log code to check how large this patch data has become
 EndPatch
@@ -221,11 +221,11 @@ EndPatch
 
     .bss
 
-    *= $C855    ; Erase the FOR command
+    *= BASIC_FOR      ; Erase the FOR command
 _Div6 			.dsb 256     ;  Values divided by 6
 _Mod6 			.dsb 256     ;  Values modulo 6
 
-    *= $F37F    ; Erase the CIRCLE command
+    *= BASIC_CIRCLE   ; Erase the CIRCLE command
 _HiresAddrLow	.dsb 128     ;  Values multiplied by 40 + a000
 _HiresAddrHigh	.dsb 128     ;  Values multiplied by 40 + a000
 
