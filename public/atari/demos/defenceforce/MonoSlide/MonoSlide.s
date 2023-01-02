@@ -6,6 +6,8 @@
 ;        - Idea came from the 2020 MindBender and the Monochrome compo -
 ;               Thanks to Tat for the 64bit rotation suggestion
 ;
+;                         Tested with Devpac / GenST
+;
 ; 268 bytes
 
 enable_proper_setup		equ 0    ; Enables the tabbed out code for easier testing
