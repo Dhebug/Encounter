@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	i=0;
 	while(1) {
 		buf[i++]=0; buf[i++]=0;
-		if(fscanf(in,"%u",&number)==0) break;
+		if(fscanf(in,"%u",&number)<=0) break;
 		buf[i++]=number&0xFF; buf[i++]=number>>8;
 		j=0; while((ligne[j]=getc(in))!='\n') j++; ligne[j]=0;
 		ptr=0; rem=0; string=0; data=0;
