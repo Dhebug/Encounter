@@ -44,9 +44,9 @@ FUNCTIONNAME(PROFILER_ROUTINE_COUNT,0)	// End marker
 
 #ifdef PROFILER_ASM
 // Assembler API
-#define PROFILE_ENTER(id)	.byte $08,$48,$a9,id,$20,<_ProfilerEnterFunctionAsm,>_ProfilerEnterFunctionAsm,$68,$28
-#define PROFILE_LEAVE(id)	.byte $08,$48,$a9,id,$20,<_ProfilerLeaveFunctionAsm,>_ProfilerLeaveFunctionAsm,$68,$28
-#define PROFILE(id)         .byte $08,$08,$08,$48,$a9,id,$20,<_ProfilerEnterFunctionStack,>_ProfilerEnterFunctionStack,$68,$28
+#define PROFILE_ENTER(id)	.byte $08,$48,$a9,id,$20,<_ProfilerEnterFunctionAsm,>_ProfilerEnterFunctionAsm,$68,$28             // php / pha / lda #id / JSR _ProfilerEnterFunctionAsm / pla / plp
+#define PROFILE_LEAVE(id)	.byte $08,$48,$a9,id,$20,<_ProfilerLeaveFunctionAsm,>_ProfilerLeaveFunctionAsm,$68,$28             // php / pha / lda #id / JSR _ProfilerLeaveFunctionAsm / pla / plp
+#define PROFILE(id)         .byte $08,$08,$08,$48,$a9,id,$20,<_ProfilerEnterFunctionStack,>_ProfilerEnterFunctionStack,$68,$28 // php / php / php / pha / lda #id / JSR _ProfilerEnterFunctionStack / pla / plp
 
 #else
 // C API
