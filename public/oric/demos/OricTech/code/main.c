@@ -2,6 +2,9 @@
 // VIP 2015
 // (c) 2015 Dbug / Defence Force
 //
+// v1.0: Original release at the VIP party
+// v1.1: Fixed a typo in the scroller (2005 instead of 2015) and centered the text properly
+//
 
 #include <lib.h>
 
