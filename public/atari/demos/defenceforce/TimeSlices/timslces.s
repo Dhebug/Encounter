@@ -17,8 +17,8 @@
 ; History:
 ; - v1.0 released at STNICCC
 ; - v1.1 with STe detection fix for non standard cookies and monochrome screen detection
+; - v1.2 actually fixed the monochrome screen detection, was not actually properly working... (facepalm)
 ;
-
 
 
 enable_keep_going     equ 0
@@ -270,8 +270,9 @@ SupervisorMain
 .found_ste 
  st machine_is_ste
   
- cmp.b #2,$ffff8260.w
- bne UnsupportedMachine                 ; We only run in high resolution
+ move.b $ffff8260.w,d0
+ and.b #2,d0
+ beq UnsupportedMachine                 ; We only run in high resolution
  
  ;
  ; Save all the hardware addresses we are going to modify
