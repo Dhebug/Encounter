@@ -90,7 +90,7 @@ SET TEMP=%OSDKT%
 SET OCC=%OSDK%
 SET LCC65=%OSDK%
 SET LCC65DIR=%OSDK%
-SET OSDKVERSION=1.19
+SET OSDKVERSION=1.20
 
 ::
 :: Create a build directory if it does not exist
@@ -172,7 +172,7 @@ DEL BUILD\%OSDKPACK%.* >NUL
 :: depending of their type
 ::
 :FileLoop
-IF "%1"=="" GOTO Finished
+IF "%1"=="" GOTO DoneProcessingFileList
 
 ::ECHO %1 >%OSDKT%\linktemp.txt
 ::COPY /b %OSDKT%\link.bat+%OSDKT%\linktemp.txt %OSDKT%\link.bat
@@ -251,19 +251,10 @@ GOTO FileLoop
 :: Perform final linking and binary conversion
 :: of compiled files
 ::
-:Finished
+:DoneProcessingFileList
 
-:: Do we have a BASIC program ?
-IF NOT EXIST %OSDKT%\%OSDKNAME%.bas GOTO Link
-
-::ECHO Generating line numbers
-::%OSDKB%\Labels2Num %OSDKT%\%OSDKNAME%.bas %OSDKT%\%OSDKNAME%.bas2 1 1
-
-ECHO Generating TAPE file 
-%OSDKB%\Bas2Tap -b2t1 -color1 %OSDKT%\%OSDKNAME%.bas build\%OSDKNAME%.tap
-
-IF ERRORLEVEL 1 GOTO ErFailure
-GOTO End
+:: Do we have some actual binary content
+if "%OSDKLINKLIST%"=="" GOTO BasicLoader
 
 :Link
 ::
@@ -273,6 +264,7 @@ GOTO End
 ECHO Linking
 ::ECHO %OSDKLINKLIST%
 cd 
+::ECHO ON
 ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDKLIB% -o %OSDKT%\linked.s -f -q %OSDKLINKLIST% >%OSDKT%\link.bat
 ::ECHO %OSDKB%\link65.exe %OSDKLINK% -d %OSDK%\lib/ -o %OSDKT%\linked.s -s %OSDKT%\ -f -q %OSDKFILE% >%OSDKT%\link.bat
 ::pause
@@ -318,13 +310,35 @@ set OSDKADDR=%OSDKPACKADDR%
 ::
 :: Append the tape header
 ::
-ECHO Creating final program %OSDKNAME%.TAP
+ECHO Creating TAPE image %OSDKNAME%.TAP
 %OSDKB%\header.exe %OSDKHEAD% build\final.out build\%OSDKNAME%.tap %OSDKADDR%
 %OSDKB%\taptap.exe ren build\%OSDKNAME%.tap %OSDKTAPNAME% 0
 
 :BuildOk
 ECHO Build of %OSDKNAME%.tap finished
 
+:BasicLoader
+:: Do we have a BASIC program ?
+IF NOT EXIST %OSDKT%\%OSDKNAME%.bas GOTO EndBasicLoader
+
+::ECHO ON
+if "%OSDKLINKLIST%"=="" GOTO NoRenamePayload
+ECHO Preparing payload for the BASIC program
+del build\payload.tap
+ren build\%OSDKNAME%.tap payload.tap
+:NoRenamePayload
+
+ECHO Generating TAPE file from BASIC source code
+%OSDKB%\Bas2Tap -b2t1 -color1 %OSDKT%\%OSDKNAME%.bas build\%OSDKNAME%.tap
+
+IF NOT EXIST build\payload.tap GOTO NoPayload
+copy /b build\%OSDKNAME%.tap+build\payload.tap build\%OSDKNAME%.tap > NUL
+:NoPayload
+
+IF ERRORLEVEL 1 GOTO ErFailure
+::GOTO End
+
+:EndBasicLoader
 
 ::
 :: Generate the DSK file. If OSDKFILE is empty we assume (hm hmmm) that the caller is packaging itself with floppybuilder. (WIP)
@@ -332,8 +346,7 @@ ECHO Build of %OSDKNAME%.tap finished
 IF "%OSDKDISK%"=="" GOTO EndBuildDisk
 IF "%OSDKFILE%"=="" GOTO EndBuildDisk
 
-::%OSDK%\bin\DskTool.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
-%OSDK%\bin\tap2dsk.exe -n%OSDKDNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk.exe -n%OSDKNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
 %OSDK%\bin\old2mfm.exe build\%OSDKNAME%.DSK
 
 :EndBuildDisk
