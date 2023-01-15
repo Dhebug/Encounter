@@ -1093,7 +1093,7 @@ bool SetCurrentDirectory(const std::string& fullPath)
 #ifdef WIN32
   return _chdir(fullPath.c_str()) == 0;
 #else
-  return chdir(getcwd, fullPath.c_str()) == 0;
+  return chdir(fullPath.c_str()) == 0;
 #endif
 }
 
