@@ -93,9 +93,9 @@ int TablePcSegment[_eSEGMENT_MAX_];	/* segments */
 static const char *copyright=
 {
 #ifdef _WIN32
-	"Cross-Assembler 65xx V2.2.5 (" __TIME__ " / " __DATE__ ") \r\n"
+	"Cross-Assembler 65xx V2.2.6 (" __TIME__ " / " __DATE__ ") \r\n"
 #else
-	"Cross-Assembler 65xx V2.2.5 (No date available) \r\n"
+	"Cross-Assembler 65xx V2.2.6 (No date available) \r\n"
 #endif
 	"(c) 1989-98 by A.Fachat\r\n"
 	"65816 opcodes and modes coded by Jolse Maginnis\r\n"
@@ -375,7 +375,7 @@ int main(int argc,char *argv[])
 	 }
 	 if (!gOutputFileHandle)
 	 {
-		 fprintf(stderr, "Couldn't open output file!\n");
+		 fprintf(stderr, "Couldn't open output file %s!\n", ptr_output_filename ? ptr_output_filename :"?");
 		 exit(1);
 	 }
 
@@ -417,6 +417,7 @@ int main(int argc,char *argv[])
 		 {
 			 sprintf(out, "Couldn't open source file '%s'!\n", cSourceFilename.c_str());
 			 logout(out);
+			 return 1;
 		 }
 	 }
 
