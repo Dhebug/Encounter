@@ -78,6 +78,8 @@ this makes it possible to do a multi-pass build process which will not fail beca
 
 1.3 - 2023/01/15
 - Forced the current working directory to match the location of the description file so relative paths location can be predicted and stable
+- Made a change to the FormatVersion parsing, version 0.x are now rejected with a proper error message instead of "AddFile does not have a size anymore"
+- Added the 'AllowImpossibleFloppies' command to accept floppies with 256 tracks (about 2 megabytes of data)
 
 */
 

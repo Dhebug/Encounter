@@ -27,7 +27,7 @@ FloppyHeader::~FloppyHeader()
 {
 }
 
-bool FloppyHeader::IsValidHeader() const
+bool FloppyHeader::IsValidHeader(bool allowImpossibleFloppies) const
 {
   if (memcmp(m_Signature,"MFM_DISK",8)!=0)    return false;
 
@@ -35,7 +35,7 @@ bool FloppyHeader::IsValidHeader() const
   if ((sideNumber<1) || (sideNumber>2))       return false;
 
   int trackNumber=GetTrackNumber();
-  if ((trackNumber<30) || (trackNumber>82))   return false;
+  if ((trackNumber<30) || (trackNumber> (allowImpossibleFloppies ? 256 : 82)))    return false;
 
   return true;
 }
@@ -210,6 +210,7 @@ Floppy::Floppy()
   ,m_CompressionMode(e_CompressionNone)
   ,m_AllFilesAreResolved(true)
   ,m_AllowMissingFiles(false)
+  ,m_AllowImpossibleFloppies(false)
   ,m_LastFileWithMetadata(0)
   ,m_LoaderTrackPosition(0)
   ,m_LoaderSectorPosition(0)
@@ -323,6 +324,8 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
   m_Buffer=(unsigned char*)malloc(m_BufferSize);
   if (m_Buffer)
   {
+    memset(m_Buffer,0,m_BufferSize);
+
     m_TrackCount =numberOfTracks;      // 42
     m_SectorCount=numberOfSectors;     // 17
     m_SideCount  =numberOfSides;       // 2
@@ -337,7 +340,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
     unsigned char* trackbuf=(unsigned char*)m_Buffer+256;
     for (unsigned char side=0;side<numberOfSides;side++)
     {
-      for (unsigned char track=0;track<numberOfTracks;track++) 
+      for (unsigned int track=0;track<numberOfTracks;track++) 
       {
         {
           int offset=0;
@@ -367,7 +370,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
         int offset=gap1;
         for (unsigned char sector=0;sector<numberOfSectors;sector++)
         {
-          trackbuf[offset+4]=track;
+          trackbuf[offset+4]=(unsigned char)track;
           trackbuf[offset+5]=side;
           trackbuf[offset+6]=sectorList[sector]; //sector+1;
           trackbuf[offset+7]=1;
@@ -382,7 +385,7 @@ bool Floppy::CreateDisk(int numberOfSides,int numberOfTracks,int numberOfSectors
         trackbuf+=6400;
       }
     }
-    if (header.IsValidHeader())
+    if (header.IsValidHeader(m_AllowImpossibleFloppies))
     {
       m_SectorCount=header.FindNumberOfSectors(m_OffsetFirstSector,m_InterSectorSpacing,m_SectorOffset);   //17;    // Can't figure out that from the header Oo
       return true;

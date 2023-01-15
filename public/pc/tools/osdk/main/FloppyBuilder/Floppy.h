@@ -24,7 +24,7 @@ public:
 
   void Clear();
 
-  bool IsValidHeader() const;
+  bool IsValidHeader(bool allowImpossibleFloppies = false) const;
 
   void SetSignature(const char signature[8]);
 
@@ -41,9 +41,9 @@ public:
 
 private:
   char          m_Signature[8];   // (MFM_DISK)
-  unsigned char m_Sides[4];       // :     4 bytes (2)
-  unsigned char m_Tracks[4];      // :    4 bytes (42/$2A)
-  unsigned char m_Geometry[4];    // :  4 bytes (1)
+  unsigned char m_Sides[4];       // :   4 bytes (2)
+  unsigned char m_Tracks[4];      // :   4 bytes (42/$2A)
+  unsigned char m_Geometry[4];    // :   4 bytes (1)
   unsigned char m_Padding[236];   // : 236 bytes (000000...00000 )
 };
 
@@ -115,6 +115,16 @@ public:
     m_AllowMissingFiles=allowMissingFiles;
   }
 
+  bool GetAllowImpossibleFloppies() const
+  {
+    return m_AllowMissingFiles;
+  }
+
+  void AllowImpossibleFloppies(bool allowImpossibleFloppies)
+  {
+    m_AllowImpossibleFloppies=allowImpossibleFloppies;
+  }
+
   unsigned int SetPosition(int track,int sector)
   {
     m_CurrentSector=sector;
@@ -169,8 +179,9 @@ private:
   std::set<int>       m_SectorUsageMap;
 
   CompressionMode     m_CompressionMode;
-  bool                                              m_AllFilesAreResolved;
-  bool                                              m_AllowMissingFiles;
+  bool                m_AllFilesAreResolved;
+  bool                m_AllowMissingFiles;
+  bool                m_AllowImpossibleFloppies; 
 
   std::vector<FileEntry>                            m_FileEntries;
   std::vector<std::pair<std::string,std::string>>   m_DefineList;
