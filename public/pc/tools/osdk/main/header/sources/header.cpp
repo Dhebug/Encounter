@@ -60,7 +60,7 @@ unsigned char Header[]=
 	0x00,	// 11
 
 	0x00,	// 12
-	0x00	// 12
+	0x00	// 13
 };
 
 
@@ -100,7 +100,7 @@ unsigned char Header[]=
 		"  -a[0/1] for autorun (1) or non autorun (0)\r\n"
 		"  -h[0/1] for header (1) or no header (0)\r\n"
 		"  -s[0/1] for showing size of file (1) or not (0)\r\n"
-                "  -b[0/1] for setting as BASIC (0) or BINARY (1)\r\n"
+		"  -b[0/1] for setting as BASIC (0) or BINARY (1)\r\n"
 		"\r\n"
 		"Exemple:\r\n"
 		"  {ApplicationName} -a1 final.out osdk.tap $500\r\n"
@@ -110,7 +110,7 @@ unsigned char Header[]=
 	bool flag_auto=true;
 	bool flag_header=true;
 	bool flag_display_size=true;
-        bool flag_binary=true;
+	bool flag_binary=true;
 
 	ArgumentParser cArgumentParser(argc,argv);
 
