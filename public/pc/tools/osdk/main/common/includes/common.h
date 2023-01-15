@@ -116,6 +116,22 @@ void SplitPath(const char* Path,char* Drive,char* Directory,char*Filename,char* 
 void MakePath(char* Path,const char* Drive,const char* Directory,const char* File,const char* Extension);
 int StringCheckFileExtensionList(const std::string& cCompleteFilePath,const std::string& cExtensionsToCheck);
 
+std::string GetCurrentDirectory();
+bool SetCurrentDirectory(const std::string& fullPath);
+
+
+// Not a particularly impressive class, all it does is to store the current working directory
+// eventually allow to change it, and then restores it when going out of scope.
+class DirectoryChanger
+{
+public:
+  DirectoryChanger();
+  DirectoryChanger(const std::string& newPath);
+  ~DirectoryChanger();
+
+private:
+  std::string   m_PreviousDirectory;
+};
 
 
 class PathSplitter
