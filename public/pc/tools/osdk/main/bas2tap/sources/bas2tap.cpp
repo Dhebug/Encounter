@@ -170,8 +170,6 @@ unsigned char head[14]={ 0x16,0x16,0x16,0x24,0,0,0,0,0,0,5,1,0,0 };
 
 void Tap2Bas(unsigned char *ptr_buffer,size_t file_size,const char *destFile)
 {
-  unsigned int i, car;
-
   FILE *out = stdout;
   if (destFile && (strlen(destFile) != 0))
   {
@@ -192,14 +190,14 @@ void Tap2Bas(unsigned char *ptr_buffer,size_t file_size,const char *destFile)
   {
     ShowError("Not a BASIC file");
   }
-  i=13;
+  unsigned int i=13;
   while (ptr_buffer[i++]);
   while (ptr_buffer[i] || ptr_buffer[i+1])
   {
     i+=2;
     fprintf(out," %u ",ptr_buffer[i]+(ptr_buffer[i+1]<<8));
     i+=2;
-    while ((car=ptr_buffer[i++]))
+    while (unsigned int car=ptr_buffer[i++])
     {
       if (car<128)
         fputc(car,out);
@@ -325,7 +323,7 @@ std::string GetPotentialSymbolName(const char*& ligne)
 }
 
 
-void ProcessPossibleLineNumber(unsigned char*& bufPtr, const char*& ligne,bool shouldValidateLineNumber, bool optimize)
+bool ProcessPossibleLineNumberLabelOrDefine(unsigned char*& bufPtr, const char*& ligne,bool shouldValidateLineNumber, bool optimize)
 {
   // Should have one or more (comma separated) numbers, variables, or labels.
   char car = ProcessOptionalWhiteSpace(bufPtr, ligne,optimize);
@@ -343,20 +341,13 @@ void ProcessPossibleLineNumber(unsigned char*& bufPtr, const char*& ligne,bool s
     {
       ShowError("Can't find line number %d referred by jump instruction in file %s line number line %d", lineNumber, m_CurrentFileName.c_str(), m_CurrentLineNumber);
     }
+    return true;
   }
   else
   if (IsValidLabelName(car))
   {
     // Label Name (or variable)
     std::string potentialLabelName = GetPotentialSymbolName(ligne);
-    /*
-    std::string potentialLabelName;
-    while ((IsValidLabelName(car = *ligne) || IsValidLineNumber(*ligne)) && (search_keyword(ligne)<0))
-    {
-      potentialLabelName += car;
-      ligne++;
-    }
-    */
 
     if (!potentialLabelName.empty())
     {
@@ -389,8 +380,10 @@ void ProcessPossibleLineNumber(unsigned char*& bufPtr, const char*& ligne,bool s
           bufPtr += sprintf((char*)bufPtr, "%s", potentialLabelName.c_str());
         }
       }
+  	  return true;
     }
   }
+  return false;
 }
 
 
@@ -461,7 +454,7 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
               shouldSkip = true;
             }
             else
-            if (memicmp(ligne, "#optimize", 7) == 0)
+            if (memicmp(ligne, "#optimize", 9) == 0)
             {
               //"#optimize"
               optimize = true;
@@ -487,14 +480,84 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
                 }
               }
 
-
               m_Defines[defineName] = defineValue;
 
               shouldSkip = true;
             }
             else
+            if (memicmp(ligne, "#import", 7) == 0)
             {
-              ShowError("Unknown preprocessor directive in file %s line number line %d", m_CurrentFileName.c_str(), lineData.sourceNumber);
+              // #import "path_to_the_symbols_file"
+              ligne += 7;
+              std::string importPathName(StringTrim(ligne));  // We may want to trim out things like comments, etc...
+              auto startQuote = importPathName.find('"', 0);
+              auto endQuote = importPathName.find('"', 1);
+
+              if ((startQuote != 0) || (endQuote == std::string::npos))
+              {
+                ShowError("#import directive in file %s line number line %d should be followed by a quoted path", m_CurrentFileName.c_str(), lineData.sourceNumber);
+              }
+              importPathName = importPathName.substr(startQuote + 1, endQuote - startQuote - 1);  // Keep the part between the quotes
+
+              void* ptr_buffer_void;
+              size_t size_buffer_src;
+
+              //
+              // Load the symbol file (XA format)
+              //
+              if (!LoadFile(importPathName.c_str(), ptr_buffer_void, size_buffer_src))
+              {
+                ShowError("Unable to load symbol file '%s'", importPathName.c_str());
+              }
+
+              unsigned char* ptr_buffer = (unsigned char*)ptr_buffer_void;
+
+              char* ptr_tok = strtok((char*)ptr_buffer, " \r\n");
+              while (ptr_tok)
+              {
+                int symbolAddress = strtol(ptr_tok, 0, 16);    // Address
+                ptr_tok = strtok(0, " \r\n");          // Name
+                if (*ptr_tok == '_')
+                {
+                  // We are only interested in symbols with external linkage
+                  ++ptr_tok;
+                  std::string defineName(ptr_tok);
+
+                  const char* ptrDefineName = ptr_tok;
+                  std::string potentialUsableName = GetPotentialSymbolName(ptrDefineName);
+                  if (potentialUsableName != defineName)
+                  {
+                    int keyw = search_keyword(ptrDefineName);
+                    if (keyw >= 0)
+                    {
+                      ShowError("Define named '%s' in file %s contains the name of a BASIC instruction '%s'", defineName.c_str(), importPathName.c_str(), keywords[keyw]);
+                    }
+                  }
+                  m_Defines[defineName] = std::to_string(symbolAddress);
+                }
+                ptr_tok = strtok(0, " \r\n");
+              }
+
+              /*
+              const char* ptrDefineName = defineName.c_str();
+              std::string potentialUsableName = GetPotentialSymbolName(ptrDefineName);
+              if (potentialUsableName != defineName)
+              {
+                int keyw = search_keyword(ptrDefineName);
+                if (keyw >= 0)
+                {
+                  ShowError("Define named '%s' in file %s line number line %d contains the name of a BASIC instruction '%s'", defineName.c_str(), m_CurrentFileName.c_str(), lineData.sourceNumber, keywords[keyw]);
+                }
+              }
+
+
+              m_Defines[defineName] = defineValue;
+              */
+              shouldSkip = true;
+            }
+            else
+            {
+              ShowError("%s\r\nUnknown preprocessor directive in file %s line number line %d", ligne, m_CurrentFileName.c_str(), lineData.sourceNumber);
             }
           }
           else
@@ -672,7 +735,7 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
           }
           else
           {
-            ShowError("Unknown preprocessor directive in file %s line number line %d", m_CurrentFileName.c_str(), m_CurrentLineNumber);
+            ShowError("%s\r\nUnknown preprocessor directive in file %s line number line %d", ligne, m_CurrentFileName.c_str(), lineData.sourceNumber);
           }
         }
         else
@@ -763,7 +826,7 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
               else
               {
                 auto previousPtr = bufPtr;
-                ProcessPossibleLineNumber(bufPtr, ligne, false, optimize);
+                ProcessPossibleLineNumberLabelOrDefine(bufPtr, ligne, false, optimize);
                 ProcessOptionalWhiteSpace(bufPtr, ligne, optimize);
                 if (previousPtr != bufPtr)
                 {
@@ -820,14 +883,14 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
               if (car == '(')
               {
                 *bufPtr++ = *ligne++;  // Open parenthesis
-                ProcessPossibleLineNumber(bufPtr, ligne, false, optimize);
+                ProcessPossibleLineNumberLabelOrDefine(bufPtr, ligne, false, optimize);
                 continue;
               }
               else
               if (car == ',')
               {
                 *bufPtr++ = *ligne++;  // comma
-                ProcessPossibleLineNumber(bufPtr, ligne, false, optimize);
+                ProcessPossibleLineNumberLabelOrDefine(bufPtr, ligne, false, optimize);
                 continue;
               }
 
@@ -847,6 +910,7 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
                        ((keyw == Token_GOTO) 
                      || (keyw == Token_GOSUB) 
                      || (keyw == Token_RESTORE) 
+                     || (keyw == Token_CALL) 
                      || (keyw == Token_SymbolEqual)
                      || (keyw == Token_SymbolMinus)
                      || (keyw == Token_SymbolPlus)
@@ -867,13 +931,16 @@ void Bas2Tap(const char *sourceFile, const char *destFile, bool autoRun, bool us
                   }
                   // Should have one or more (comma separated) numbers, variables, or labels.
                   bool shouldValidateLineNumber = ! ( (keyw == Token_SymbolEqual) || (keyw == Token_SymbolMinus) || (keyw == Token_SymbolPlus) || (keyw == Token_SymbolMultiply) || (keyw == Token_SymbolDivide));
-                  ProcessPossibleLineNumber(bufPtr, ligne, shouldValidateLineNumber,optimize);
+                  ProcessPossibleLineNumberLabelOrDefine(bufPtr, ligne, shouldValidateLineNumber,optimize);
                   ProcessOptionalWhiteSpace(bufPtr, ligne, optimize);
                 }
               }
               else
               {
-                *bufPtr++ = *ligne++;
+                if (!ProcessPossibleLineNumberLabelOrDefine(bufPtr, ligne, false, optimize))
+                {
+                  *bufPtr++ = *ligne++;
+                }
               }
             }
           }
