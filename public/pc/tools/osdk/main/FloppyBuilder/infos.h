@@ -76,7 +76,10 @@ this makes it possible to do a multi-pass build process which will not fail beca
 - Hopefully the CRC of floppies should now be correct (thanks ISS and  ThomH)
 - Gap2 value changed from 0x22 to 0x4E
 
+1.3 - 2023/01/15
+- Forced the current working directory to match the location of the description file so relative paths location can be predicted and stable
+
 */
 
 #define TOOL_VERSION_MAJOR	1
-#define TOOL_VERSION_MINOR	2
+#define TOOL_VERSION_MINOR	3

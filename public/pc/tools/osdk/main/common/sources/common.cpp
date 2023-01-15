@@ -11,6 +11,7 @@
 /* for getch() */
 #include <conio.h>
 #include <windows.h>
+#include <direct.h>
 
 #ifdef DeleteFile
 #undef DeleteFile
@@ -574,29 +575,29 @@ int ConvertAdress(const char *ptr_value)
       adress+=car-'0';
     }
     else
-      if ((car>='a') && (car<='f'))
-      {
+    if ((car>='a') && (car<='f'))
+    {
+    if (base!=16)
+    {
+        ShowError("Only hexadecimal values prefixed by a '$' can contain letters");
+    }
+    adress*=base;
+    adress+=car-'a'+10;
+    }
+    else
+    if ((car>='A') && (car<='F'))
+    {
         if (base!=16)
         {
-          ShowError("Only hexadecimal values prefixed by a '$' can contain letters");
+        ShowError("Only hexadecimal values prefixed by a '$' can contain letters");
         }
         adress*=base;
-        adress+=car-'a'+10;
-      }
-      else
-        if ((car>='A') && (car<='F'))
-        {
-          if (base!=16)
-          {
-            ShowError("Only hexadecimal values prefixed by a '$' can contain letters");
-          }
-          adress*=base;
-          adress+=car-'A'+10;
-        }
-        else
-        {
-          ShowError("Unknow character in the adress value");
-        }
+        adress+=car-'A'+10;
+    }
+    else
+    {
+        ShowError("Unknow character in the adress value");
+    }
   }
 
   if ((adress<0x0000) || (adress>0xFFFF))
@@ -1075,4 +1076,42 @@ bool PathSplitter::HasExtension(const char* extension) const
   return stricmp(m_extension.c_str(),extension)==0;
 }
 
+
+std::string GetCurrentDirectory()
+{
+  char buffer[FILENAME_MAX]; //create string buffer to hold path
+#ifdef WIN32
+  _getcwd(buffer, FILENAME_MAX);
+#else
+  getcwd(buffer, FILENAME_MAX);
+#endif
+  return buffer;
+}
+
+bool SetCurrentDirectory(const std::string& fullPath)
+{
+#ifdef WIN32
+  return _chdir(fullPath.c_str()) == 0;
+#else
+  return chdir(getcwd, fullPath.c_str()) == 0;
+#endif
+}
+
+
+DirectoryChanger::DirectoryChanger()
+{
+  m_PreviousDirectory = GetCurrentDirectory();
+}
+
+DirectoryChanger::DirectoryChanger(const std::string& newPath)
+{
+  m_PreviousDirectory = GetCurrentDirectory();
+  SetCurrentDirectory(newPath);
+}
+
+
+DirectoryChanger::~DirectoryChanger()
+{
+  SetCurrentDirectory(m_PreviousDirectory);
+}
 

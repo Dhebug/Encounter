@@ -242,7 +242,7 @@ int FloppyBuilder::Main()
         {
           // Let's say it's metadata
           std::string metaItem=StringTrim(item,"[]");
-          std::size_t found = metaItem.find(":");
+          found = metaItem.find(":");
           if (found!=std::string::npos)
           {
             // Comments, just skip them
@@ -581,6 +581,8 @@ int FloppyBuilder::Main()
   if (!extract)
   {
     // We write the resulting files only in 'init' or 'build' mode
+    PathSplitter pathSplitter(description_name);
+    DirectoryChanger directoryChanger(pathSplitter.GetFilePath());
     if (!floppy.SaveDescription(outputLayoutFileName.c_str()))
     {
       ShowError("Failed saving description '%s'\n",outputLayoutFileName.c_str());
