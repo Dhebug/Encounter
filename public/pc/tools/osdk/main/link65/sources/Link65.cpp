@@ -168,23 +168,26 @@ enum LabelState
 
 
 // Structure for labels in a pair of : label_name/resolved_flag
-struct ReferencedLabelEntry_c
+struct ReferencedLabelEntry
 {
-  bool		m_bIsResolved;
+  bool		    m_IsResolved = false;
   std::string label_name;
+  std::string file_name;
+  int         line_number = 0;
+  int         reference_count = 0;
 };
 
 // Lib index structure in pair of : label_name/file_containing_label
-struct LabelEntry_c
+struct LabelEntry
 {
   std::string label_name;
   std::string file_name;
 };
 
-class FileEntry_c
+class FileEntry
 {
 public:
-  FileEntry_c() :
+  FileEntry() :
     m_nSortPriority(0)
   {}
 
@@ -209,9 +212,9 @@ const char* labelPattern=" *+-;:\\\n/\t,()";
 
 // gInputFileList contains filenames to be linked.
 // nflist is 1 for file given in command line or 0 for files given from lib file index, 2 for tail. It's used for sort...
-std::vector<FileEntry_c>			gInputFileList;
-std::vector<LabelEntry_c>			gLibraryReferencesList;
-std::vector<ReferencedLabelEntry_c>	gReferencedLabelsList;
+std::vector<FileEntry>			gInputFileList;
+std::vector<LabelEntry>			gLibraryReferencesList;
+std::vector<ReferencedLabelEntry>	gReferencedLabelsList;
 std::set<std::string>				gDefinedLabelsList;
 
 
@@ -553,8 +556,8 @@ LabelState parseline(char* inpline,bool parseIncludeFiles)
 
 bool ParseFile(const std::string& filename)
 {
-  std::vector<std::string> cTextData;
-  if (!LoadText(filename.c_str(),cTextData))
+  std::vector<std::string> textData;
+  if (!LoadText(filename.c_str(),textData))
   {
     ShowError("\nCannot open %s \n",filename.c_str());
   }
@@ -576,11 +579,13 @@ bool ParseFile(const std::string& filename)
   unsigned int i;
 
   // Scanning the file
-  std::vector<std::string>::const_iterator cItText=cTextData.begin();
-  while (cItText!=cTextData.end())
+  int line_number = 0;
+  std::vector<std::string>::const_iterator itText=textData.begin();
+  while (itText!=textData.end())
   {
     //  Get line file and parse it
-    const std::string& cCurrentLine=*cItText;
+    const std::string& currentLine=*itText;
+    ++line_number;
 
     // test
 #if 0
@@ -590,11 +595,11 @@ bool ParseFile(const std::string& filename)
     }
 #endif
 
-    std::string cFilteredLine=FilterLine(cCurrentLine,true/*false*/);  // removing quoted strings unfortunately fails on #include...
+    std::string filteredLine=FilterLine(currentLine,true/*false*/);  // removing quoted strings unfortunately fails on #include...
 
     char inpline[MAX_LINE_SIZE+1];
-    assert(sizeof(inpline)>cFilteredLine.size());
-    strncpy(inpline,cFilteredLine.c_str(),MAX_LINE_SIZE);
+    assert(sizeof(inpline)>filteredLine.size());
+    strncpy(inpline,filteredLine.c_str(),MAX_LINE_SIZE);
     inpline[MAX_LINE_SIZE]=0;
     
     char* nexToken=inpline-1;
@@ -605,16 +610,16 @@ bool ParseFile(const std::string& filename)
       nexToken=strchr(tokenPtr,':');
       LabelState state=parseline(tokenPtr,parseIncludeFiles);
 
-      std::string cFoundLabel;
+      std::string foundLabel;
       if ((state!=e_NoLabel) && label)
       {
-        cFoundLabel=label;
+        foundLabel=label;
       }
 
       //  Oh, a label defined. Stuff it in storage
       if (state == e_NewLabel)
       {
-        std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cFoundLabel);
+        std::set<std::string>::iterator cIt=gDefinedLabelsList.find(foundLabel);
         if (cIt!=gDefinedLabelsList.end())
         {
           // Found the label in the list.
@@ -627,7 +632,7 @@ bool ParseFile(const std::string& filename)
         else
         {
           // Insert new label in the set
-          gDefinedLabelsList.insert(cFoundLabel);
+          gDefinedLabelsList.insert(foundLabel);
         }
       }
       else
@@ -635,28 +640,32 @@ bool ParseFile(const std::string& filename)
       {
         // A label reference.
         // Store it if not already in list.
-        bool bUndefinedLabel=true;
+        bool undefinedLabel=true;
         for (i=0;i<gReferencedLabelsList.size();i++)
         {
-          if (gReferencedLabelsList[i].label_name==cFoundLabel)
+          if (gReferencedLabelsList[i].label_name == foundLabel)
           {
-            bUndefinedLabel=false;
+            ++gReferencedLabelsList[i].reference_count;    // One more reference
+            undefinedLabel=false;
             break;
           }
         }
 
-        if (bUndefinedLabel)
+        if (undefinedLabel)
         {
           // Allocate memory for label name and store it
-          ReferencedLabelEntry_c cLabelEntry;
-          cLabelEntry.label_name		=cFoundLabel;
-          cLabelEntry.m_bIsResolved	=false;
+          ReferencedLabelEntry labelEntry;
+          labelEntry.label_name		 = foundLabel;
+          labelEntry.m_IsResolved  = false;
+          labelEntry.file_name     = filename;         // Store the filename of the first reference to the label
+          labelEntry.line_number   = line_number;      // as well as the line number, to make it easier to locate issue
+          labelEntry.reference_count = 1;
 
-          gReferencedLabelsList.push_back(cLabelEntry);
+          gReferencedLabelsList.push_back(labelEntry);
         }
       }
     }
-    ++cItText;
+    ++itText;
   }
 
   return true;
@@ -678,7 +687,7 @@ bool LoadLibrary(const std::string& path_library_files)
   if (gFlagVerbose)
     printf("Reading lib index file\n");
 
-  LabelEntry_c cLabelEntry;
+  LabelEntry cLabelEntry;
   cLabelEntry.file_name	="";
   cLabelEntry.label_name	="";
 
@@ -853,7 +862,7 @@ int main(int argc,char **argv)
     if (cArgumentParser.IsParameter())
     {
       // Not a switch
-      FileEntry_c cFileEntry;
+      FileEntry cFileEntry;
 
       if (gFlagIncludeHeader && gInputFileList.empty())
       {
@@ -905,7 +914,7 @@ int main(int argc,char **argv)
   {
     // Now put the tail.s .
     // Give it nflist of 2 to put it last in file list after the sort
-    FileEntry_c cFileEntry;
+    FileEntry cFileEntry;
     cFileEntry.m_cFileName	  =path_library_files;
     cFileEntry.m_cFileName   +="tail.s";
     cFileEntry.m_nSortPriority=2;
@@ -936,15 +945,15 @@ int main(int argc,char **argv)
     //
     // Check if used labels are defined inside the files
     //
-    std::vector<ReferencedLabelEntry_c>::iterator cItReferenced=gReferencedLabelsList.begin();
+    std::vector<ReferencedLabelEntry>::iterator cItReferenced=gReferencedLabelsList.begin();
     while  (cItReferenced!=gReferencedLabelsList.end())
     {
-      ReferencedLabelEntry_c& cLabelEntry=*cItReferenced;
+      ReferencedLabelEntry& cLabelEntry=*cItReferenced;
       std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cLabelEntry.label_name);
       if (cIt!=gDefinedLabelsList.end())
       {
         // Found the label in the definition list
-        cLabelEntry.m_bIsResolved=true;
+        cLabelEntry.m_IsResolved=true;
       }
       ++cItReferenced;
     }
@@ -956,20 +965,20 @@ int main(int argc,char **argv)
       for (i=0;i<gReferencedLabelsList.size();i++)
       {
         // Unresolved label and -l option off. If -l option is on don't care
-        ReferencedLabelEntry_c& cReferencedLabelEntry=gReferencedLabelsList[i];
-        if (!cReferencedLabelEntry.m_bIsResolved)
+        ReferencedLabelEntry& cReferencedLabelEntry=gReferencedLabelsList[i];
+        if (!cReferencedLabelEntry.m_IsResolved)
         {
           // Act for unresolved label
           for (j=0;j<gLibraryReferencesList.size();j++)
           {
-            LabelEntry_c& cLabelEntry=gLibraryReferencesList[j];
+            LabelEntry& cLabelEntry=gLibraryReferencesList[j];
             // If in lib file index, take file and put it in gInputFileList if not already there
             if (cReferencedLabelEntry.label_name==cLabelEntry.label_name)
             {
               bool labstate=true;
               for (l=0;l<gInputFileList.size();l++)
               {
-                FileEntry_c& cFileEntry=gInputFileList[l];
+                FileEntry& cFileEntry=gInputFileList[l];
                 if (cFileEntry.m_cFileName==cLabelEntry.file_name)
                 {
                   labstate=false;
@@ -980,7 +989,7 @@ int main(int argc,char **argv)
               // Not present : labstate == 1 , insert file in list
               if (labstate)
               {
-                FileEntry_c	cNewEntry;
+                FileEntry	cNewEntry;
                 gInputFileList.push_back(cNewEntry);
 
                 // NICE TRICK : Insert lib file in file list to be processed immediately.
@@ -989,7 +998,7 @@ int main(int argc,char **argv)
                 {
                   gInputFileList[l]=gInputFileList[l-1];
                 }
-                FileEntry_c& cFileEntry=gInputFileList[k+1];
+                FileEntry& cFileEntry=gInputFileList[k+1];
                 cFileEntry.m_cFileName		=cLabelEntry.file_name;
                 cFileEntry.m_nSortPriority	=1;
               }
@@ -1029,10 +1038,10 @@ int main(int argc,char **argv)
     // Print them all before exiting
     for (i=0;i<gReferencedLabelsList.size();i++)
     {
-      ReferencedLabelEntry_c& cReferencedLabelEntry=gReferencedLabelsList[i];
-      if (!cReferencedLabelEntry.m_bIsResolved)
+      ReferencedLabelEntry& referencedLabelEntry=gReferencedLabelsList[i];
+      if (!referencedLabelEntry.m_IsResolved)
       {
-        printf("Unresolved external: %s\n",cReferencedLabelEntry.label_name.c_str());
+        printf("Unresolved external: %s, first referenced in %s(%d) [referenced %d times]\n",referencedLabelEntry.label_name.c_str(), referencedLabelEntry.file_name.c_str(), referencedLabelEntry.line_number, referencedLabelEntry.reference_count);
         state=1;
       }
     }

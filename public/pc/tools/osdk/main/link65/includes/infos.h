@@ -45,8 +45,11 @@ Fixed a number of issues in the linker:
 0.67 - 2020/12/18
 - Error messages now indicate that they came from the Linker, because a generic "Error, can't load xxxx" was not very informative
 
+0.68 - 2023/01/18
+- The 'Unresolved external: <name>' now also specify the filename and line number of the first place where the symbol was requested, as well as the total number of references.
+
 */
 
 
 #define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	67
+#define TOOL_VERSION_MINOR	68
