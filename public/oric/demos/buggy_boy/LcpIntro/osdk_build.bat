@@ -19,10 +19,6 @@ CALL osdk_config.bat
 ::
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 
-ECHO Building DSK file
-%OSDK%\bin\tap2dsk build\%OSDKNAME%.TAP build\%OSDKNAME%.dsk
-%OSDK%\bin\old2mfm build\%OSDKNAME%.dsk
-
 GOTO End
 
 

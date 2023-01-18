@@ -51,7 +51,7 @@ _TableBit6Reverse
 	.byt 32,16,8,4,2,1
 
 
-#define e	tmp1	; 2 bytes in zero page
+#define err	tmp1	; 2 bytes in zero page
 #define i	tmp1+2	; 1 byte in zp
 #define s1	tmp1+3	; 0=dec 2=inc 4=nop
 #define s2	tmp1+4	; 0=dec 2=inc 4=nop
@@ -352,24 +352,24 @@ end_choice
 	stx i
 
 
-	; Initialise e
+	; Initialise err
 	clc
 	lda dy
 	adc dy
 	sta _path_e_dy_0+1	; dy
-	sta e
+	sta err
 	lda #0
 	adc #0
 	sta _path_e_dy_1+1	; dy+1
-	sta 1+e
+	sta 1+err
 
 	sec
-	lda e
+	lda err
 	sbc dx
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 	sbc #0
-	sta 1+e
+	sta 1+err
 
 
 
@@ -406,7 +406,7 @@ outer_loop
 .)
 
 inner_loop
-	lda 1+e
+	lda 1+err
 	bmi end_inner_loop
 
 _inner_patch	
@@ -426,14 +426,14 @@ skip
 
 	; e=e-2*dx
 	sec
-	lda e
+	lda err
 _path_e_dx_0
 	sbc #0
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 _path_e_dx_1
 	sbc #0
-	sta 1+e
+	sta 1+err
 
 	bpl _inner_patch
 end_inner_loop
@@ -443,14 +443,14 @@ _outer_patch
 
 	; e=e+2*dy
 	clc
-	lda e
+	lda err
 _path_e_dy_0
 	adc #0
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 _path_e_dy_1
 	adc #0
-	sta 1+e
+	sta 1+err
 
 	dec i
 	bne outer_loop
@@ -522,19 +522,19 @@ end_choice
 	lda dy
 	adc dy
 	sta _path_e_dy_0+1	; dy
-	sta e
+	sta err
 	lda #0
 	adc #0
 	sta _path_e_dy_1+1	; dy+1
-	sta 1+e
+	sta 1+err
 
 	sec
-	lda e
+	lda err
 	sbc dx
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 	sbc #0
-	sta 1+e
+	sta 1+err
 
 
 
@@ -575,7 +575,7 @@ outer_loop
 .)
 
 inner_loop
-	lda 1+e
+	lda 1+err
 	bmi end_inner_loop
 
 _inner_patch
@@ -585,14 +585,14 @@ _inner_patch
 
 	; e=e-2*dx
 	sec
-	lda e
+	lda err
 _path_e_dx_0
 	sbc #0
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 _path_e_dx_1
 	sbc #0
-	sta 1+e
+	sta 1+err
 
 	bpl _inner_patch
 end_inner_loop
@@ -612,14 +612,14 @@ skip
 
 	; e=e+2*dy
 	clc
-	lda e
+	lda err
 _path_e_dy_0
 	adc #0
-	sta e
-	lda 1+e
+	sta err
+	lda 1+err
 _path_e_dy_1
 	adc #0
-	sta 1+e
+	sta 1+err
 
 	dec i
 	bne outer_loop
