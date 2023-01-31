@@ -55,7 +55,6 @@ class ArgumentParser
 {
 public:
   ArgumentParser(int argc,char *argv[]);
-  ~ArgumentParser() {}
 
   const char* GetParameter(int nParameterIndex);
   int GetParameterCount();
@@ -73,7 +72,7 @@ public:
   const char* GetRemainingStuff();
 
 private:
-  ArgumentParser();
+  ArgumentParser() = delete;
 
 protected:
   int		m_argc;
