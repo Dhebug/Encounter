@@ -1,16 +1,10 @@
 /*==============================================================================
 
-							 Header
+							                 Header
 
 ==[Description]=================================================================
 
 This program will add a oric header to any binary file
-
-==[History]=====================================================================
-
-
-==[ToDo]========================================================================
-
 
 ==============================================================================*/
 
@@ -25,8 +19,6 @@ This program will add a oric header to any binary file
 #include <sys/stat.h>
 
 #ifdef _WIN32
-#include <conio.h>
-#include <io.h>
 #else
 #include <sys/stat.h>
 #define _open  open
@@ -112,40 +104,40 @@ unsigned char Header[]=
 	bool flag_display_size=true;
 	bool flag_binary=true;
 
-	ArgumentParser cArgumentParser(argc,argv);
+	ArgumentParser argumentParser(argc,argv);
 
-	while (cArgumentParser.ProcessNextArgument())
+	while (argumentParser.ProcessNextArgument())
 	{
-		if (cArgumentParser.IsSwitch("-a"))
+		if (argumentParser.IsSwitch("-a"))
 		{
-			//format: [-a]
+			//format: -a[0/1]
 			//	0 => non auto
 			// 	1 => perform auto run
-			flag_auto=cArgumentParser.GetBooleanValue(true);
+			flag_auto=argumentParser.GetBooleanValue(true);
 		}
 		else
-		if (cArgumentParser.IsSwitch("-h"))
+		if (argumentParser.IsSwitch("-h"))
 		{
-			//format: [-h]
+			//format: -h[0/1]
 			//	0 => suppress header
 			// 	1 => save header (default)
-			flag_header=cArgumentParser.GetBooleanValue(true);
+			flag_header=argumentParser.GetBooleanValue(true);
 		}
 		else
-		if (cArgumentParser.IsSwitch("-s"))
+		if (argumentParser.IsSwitch("-s"))
 		{
-			//format: [-s]
+			//format: -s[0/1]
 			//	0 => suppress display of size
 			// 	1 => show size of generated file (default)
-			flag_display_size=cArgumentParser.GetBooleanValue(true);
+			flag_display_size=argumentParser.GetBooleanValue(true);
 		}
 		else
-		if (cArgumentParser.IsSwitch("-b"))
+		if (argumentParser.IsSwitch("-b"))
 		{
-			//format: [-b]
+			//format: -b[0/1]
 			//	0 => BASIC
 			// 	1 => BINARY
-			flag_binary=cArgumentParser.GetBooleanValue(true);
+			flag_binary=argumentParser.GetBooleanValue(true);
 		}
 	}
 
@@ -153,7 +145,7 @@ unsigned char Header[]=
 	int	adress_start=0;
 	if (flag_header)
 	{
-		if (cArgumentParser.GetParameterCount()!=3)
+		if (argumentParser.GetParameterCount()!=3)
 		{
 			//
 			// Wrong number of arguments
@@ -164,11 +156,11 @@ unsigned char Header[]=
 		//
 		// Check start address
 		//
-		adress_start=ConvertAdress(cArgumentParser.GetParameter(2));
+		adress_start=ConvertAdress(argumentParser.GetParameter(2));
 	}
 	else
 	{
-		if (cArgumentParser.GetParameterCount()!=2)
+		if (argumentParser.GetParameterCount()!=2)
 		{
 			//
 			// Wrong number of arguments
@@ -182,7 +174,7 @@ unsigned char Header[]=
 	//
 	// Read file
 	//
-	const char *filename_src=cArgumentParser.GetParameter(0);
+	const char *filename_src=argumentParser.GetParameter(0);
 	int filesize = 0;
 #ifdef _WIN32
 	struct _finddata_t 	file_info;
@@ -196,8 +188,8 @@ unsigned char Header[]=
 	stat(filename_src, &st);
 	filesize = st.st_size;
 #endif
-	int handle_src=_open(filename_src,O_BINARY|O_RDONLY,0);
-    if (handle_src==-1)
+	const int handle_src=_open(filename_src,O_BINARY|O_RDONLY,0);
+  if (handle_src==-1)
 	{
 		ShowError("unable to open source file");
 	}
@@ -217,8 +209,8 @@ unsigned char Header[]=
 	//
 	// Write file
 	//
-	const char *filename_dst=cArgumentParser.GetParameter(1);
-	int handle_dst=_open(filename_dst,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE);
+	const char *filename_dst=argumentParser.GetParameter(1);
+	const int handle_dst=_open(filename_dst,O_BINARY|O_WRONLY|_O_TRUNC|_O_CREAT,_S_IREAD|_S_IWRITE);
     if (handle_dst==-1)
 	{
 		ShowError("unable to create destination file");
@@ -261,7 +253,7 @@ unsigned char Header[]=
 		size_header=0;
 
 		char *ptr_header=(char*)ptr_buf;
-                ptr_header[filesize]=0;
+		ptr_header[filesize]=0;
 
 		// Skip synchronization bytes
 		// 16 16 16 24
@@ -321,7 +313,6 @@ unsigned char Header[]=
 	{
 		printf("File '%s' is %d bytes long (%d bytes header and %d bytes of data)\n",filename_dst,(int)(size_header+filesize),(int)size_header,filesize);
 	}
-
 
 	exit(0);
 }
