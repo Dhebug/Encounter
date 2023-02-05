@@ -44,14 +44,14 @@ static int g_nVersionMajor;
 static int g_nVersionMinor;
 
 
-void SetApplicationParameters(const char* pcApplicationName,int nVersionMajor,int nVersionMinor,const char* pcUsageMessage)
+void SetApplicationParameters(const char* pcApplicationName,int versionMajor,int versionMinor,const char* pcUsageMessage)
 {
   g_cApplicationName=pcApplicationName;
 
-  g_nVersionMajor=nVersionMajor;
-  g_nVersionMinor=nVersionMinor;
+  g_nVersionMajor=versionMajor;
+  g_nVersionMinor=versionMinor;
   char cTempBuffer[256];
-  sprintf(cTempBuffer,"%d.%03d",nVersionMajor,nVersionMinor);
+  sprintf(cTempBuffer,"%d.%03d",versionMajor,versionMinor);
   g_cVersionString=cTempBuffer;
 
   g_cUsageMessage=pcUsageMessage;
@@ -59,103 +59,103 @@ void SetApplicationParameters(const char* pcApplicationName,int nVersionMajor,in
 
 
 
-void ShowError(const char *pFormatString,...)
+void ShowError(const char *formatString,...)
 {
-  std::string cErrorMessage;
+  std::string errorMessage;
 
-  if (pFormatString)
+  if (formatString)
   {
     // Message will be something like: "MyApplication.exe: Something goes wrong, sorry !"
 
     va_list va;
     char    temp[4096];
 
-    va_start(va,pFormatString);
-    int nChar=vsprintf(temp,pFormatString,va);
+    va_start(va,formatString);
+    const int length=vsprintf(temp,formatString,va);
     va_end(va);
-    if ((unsigned int)nChar>=sizeof(temp))
+    if ((unsigned int)length>=sizeof(temp))
     {
       temp[sizeof(temp)-1]=0;
     }
 
-    cErrorMessage=g_cApplicationName+": "+ temp;
+    errorMessage=g_cApplicationName+": "+ temp;
   }
   else
   {
-    cErrorMessage=g_cUsageMessage;
-    StringReplace(cErrorMessage,"{ApplicationName}"	,g_cApplicationName);
-    StringReplace(cErrorMessage,"{ApplicationVersion}"	,g_cVersionString);
+    errorMessage=g_cUsageMessage;
+    StringReplace(errorMessage,"{ApplicationName}"	,g_cApplicationName);
+    StringReplace(errorMessage,"{ApplicationVersion}"	,g_cVersionString);
   }
 
   // Show the resulting message on screen
-  printf("\r\n%s\r\n",cErrorMessage.c_str());
+  printf("\r\n%s\r\n",errorMessage.c_str());
   getch();
   exit(1);
 }
 
 
 
-bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize)
+bool LoadFile(const char* fileName,void* &pcBuffer,size_t &bufferSize)
 {
   // get the size of the file
   struct stat file_info;
 
-  if (stat(pcFileName, &file_info)== -1)
+  if (stat(fileName, &file_info)== -1)
   {
     return false;
   }
 
   // open the file
-  cBufferSize=file_info.st_size;
-  int nHandle=open(pcFileName,O_BINARY|O_RDONLY,0);
-  if (nHandle==-1)
+  bufferSize=file_info.st_size;
+  const int handle=open(fileName,O_BINARY|O_RDONLY,0);
+  if (handle==-1)
   {
     return false;
   }
 
   // allocate some memory
-  pcBuffer=malloc(cBufferSize+1);
+  pcBuffer=malloc(bufferSize+1);
   if (!pcBuffer)
   {
-    close(nHandle);
+    close(handle);
     return false;
   }
 
   // read file content
-  if (read(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
+  if (read(handle,pcBuffer,bufferSize)!=(int)bufferSize)
   {
     free(pcBuffer);
-    close(nHandle);
+    close(handle);
     return false;
   }
-  close(nHandle);
+  close(handle);
 
   // Add a null terminator in the additional byte
   char *pcCharBuffer=(char*)pcBuffer;
-  pcCharBuffer[cBufferSize]=0;
+  pcCharBuffer[bufferSize]=0;
 
   return true;
 }
 
 
-bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize)
+bool SaveFile(const char* fileName,const void* pcBuffer,size_t bufferSize)
 {
   // Open file
-  int nHandle=open(pcFileName,O_BINARY|O_WRONLY|O_TRUNC|O_CREAT,S_IREAD|S_IWRITE);
-  if (nHandle==-1)
+  int handle=open(fileName,O_BINARY|O_WRONLY|O_TRUNC|O_CREAT,S_IREAD|S_IWRITE);
+  if (handle==-1)
   {
     return false;
   }
 
   // Save data
-  if (write(nHandle,pcBuffer,cBufferSize)!=(int)cBufferSize)
+  if (write(handle,pcBuffer,bufferSize)!=(int)bufferSize)
   {
-    close(nHandle);
+    close(handle);
     return false;
   }
 
   // close handle
-  close(nHandle);
+  close(handle);
 
   return true;
 }
@@ -174,13 +174,13 @@ bool DeleteFile(const char* pcFileName)
 * Compute the lenght of the longest line during
 * the process
 */
-bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
+bool LoadText(const char* fileName,std::vector<std::string>& textData)
 {
-  cTextData.clear();
+  textData.clear();
 
   void* ptr_buffer_void;
   size_t file_size;
-  if (!LoadFile(pcFileName,ptr_buffer_void,file_size))
+  if (!LoadFile(fileName,ptr_buffer_void,file_size))
   {
     return false;
   }
@@ -241,7 +241,7 @@ bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData)
         //
         int size_line=ptr_read-ptr_line-1;
         std::string	new_line(ptr_line,size_line);
-        cTextData.push_back(new_line);
+        textData.push_back(new_line);
 
         line_count++;
 
@@ -298,33 +298,33 @@ bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile)
 }
 
 
-int StringReplace(std::string& cMainString,const std::string& cSearchedString,const std::string& cReplaceString)
+int StringReplace(std::string& mainString,const std::string& rearchedString,const std::string& replaceString)
 {
   int nReplaceCount=0;
   std::string::size_type pos=0;
   while (1)
   {
-    pos=cMainString.find(cSearchedString,pos);
+    pos=mainString.find(rearchedString,pos);
     if (pos==std::string::npos)
     {
       break;
     }
-    cMainString.replace(pos,cSearchedString.size(),cReplaceString);
-    pos+=cReplaceString.size();
+    mainString.replace(pos,rearchedString.size(),replaceString);
+    pos+=replaceString.size();
     ++nReplaceCount;
   }
   return nReplaceCount;
 }
 
-std::string StringTrim(const std::string& cInputString,const std::string& cFilteredOutCharacterList)
+std::string StringTrim(const std::string& inputString,const std::string& filteredOutCharacterList)
 {
-  size_t nStartPos=cInputString.find_first_not_of(cFilteredOutCharacterList);
-  if (nStartPos!=std::string::npos)
+  const size_t startPos=inputString.find_first_not_of(filteredOutCharacterList);
+  if (startPos!=std::string::npos)
   {
-    size_t nEndPos=cInputString.find_last_not_of(cFilteredOutCharacterList);
-    if (nEndPos!=std::string::npos) 
+    const size_t endPos=inputString.find_last_not_of(filteredOutCharacterList);
+    if (endPos!=std::string::npos) 
     {
-      return cInputString.substr(nStartPos,(nEndPos-nStartPos)+1);
+      return inputString.substr(startPos,(endPos-startPos)+1);
     }
   }
   // Returns an empty string: This case means that basically the input string contains ONLY characters that needed to be filtered out
@@ -335,7 +335,7 @@ std::string StringTrim(const std::string& cInputString,const std::string& cFilte
 std::string StringSplit(std::string& inputString, const std::string& filteredOutCharacterList)
 {
   std::string leftSplit;
-  size_t startPos=inputString.find_first_of(filteredOutCharacterList);
+  const size_t startPos=inputString.find_first_of(filteredOutCharacterList);
   if (startPos!=std::string::npos)
   {
     leftSplit=inputString.substr(0,startPos);
@@ -384,15 +384,15 @@ ArgumentParser::ArgumentParser(int argc,char *argv[]) :
   m_remaining_argc--;
 }
 
-const char* ArgumentParser::GetParameter(int nParameterIndex)
+const char* ArgumentParser::GetParameter(int parameterIndex)
 {
-  int nIndex=m_first_param+nParameterIndex;
-  if (nIndex>=m_argc)
+  int index=m_first_param+parameterIndex;
+  if (index>=m_argc)
   {
     // Wrong !
     return "";
   }
-  return m_argv[nIndex];
+  return m_argv[index];
 }
 
 int ArgumentParser::GetParameterCount()
@@ -431,8 +431,8 @@ bool ArgumentParser::IsParameter()
   {
     return false;
   }
-  char cCar=*m_ptr_arg;
-  if ((!cCar) || (cCar=='-'))
+  char car=*m_ptr_arg;
+  if ((!car) || (car=='-'))
   {
     return false;
   }
@@ -462,11 +462,11 @@ double ArgumentParser::GetDoubleValue(double default_value)
 
 bool ArgumentParser::GetBooleanValue(bool default_value)
 {
-  int nValue;
-  if (default_value)	nValue=1;
-  else				nValue=0;
-  nValue=::get_value(m_ptr_arg,nValue);
-  if (nValue)	return true;
+  int value;
+  if (default_value)	value=1;
+  else				value=0;
+  value=::get_value(m_ptr_arg,value);
+  if (value)	return true;
   else		return false;
 }
 
@@ -508,9 +508,9 @@ bool get_switch(const char *&ptr_arg,const char *ptr_switch)
 std::string get_string(const char *&ptr_arg)
 {
   if (!ptr_arg)	return 0;
-  std::string cStringValue=std::string(ptr_arg);
-  ptr_arg+=cStringValue.size();
-  return cStringValue;
+  std::string stringValue=std::string(ptr_arg);
+  ptr_arg+=stringValue.size();
+  return stringValue;
 }
 
 int get_value(const char *&ptr_arg,long default_value)
@@ -609,15 +609,15 @@ int ConvertAdress(const char *ptr_value)
 }
 
 
-std::string StringFormat(const char* pFormatString,...)
+std::string StringFormat(const char* formatString,...)
 {
   va_list		va;
   char		temp[4096];
 
-  va_start(va,pFormatString);
-  int nChar=vsprintf(temp,pFormatString,va);
+  va_start(va,formatString);
+  const int length=vsprintf(temp,formatString,va);
   va_end(va);
-  if ((unsigned int)nChar>=sizeof(temp))
+  if ((unsigned int)length>=sizeof(temp))
   {
     temp[sizeof(temp)-1]=0;
   }
@@ -644,12 +644,12 @@ public:
 
 private:
   const void*	m_ptr;
-  bool		m_bReadBigEndian;
+  bool		m_ReadBigEndian;
 };
 
 DataReader::DataReader() :
   m_ptr(0),
-  m_bReadBigEndian(false)
+  m_ReadBigEndian(false)
 {
 }
 
@@ -667,84 +667,84 @@ const void *DataReader::GetPointer()
   return m_ptr;
 }
 
-void DataReader::SetEndian(bool bIsBigEndian)
+void DataReader::SetEndian(bool isBigEndian)
 {
-  m_bReadBigEndian=bIsBigEndian;
+  m_ReadBigEndian=isBigEndian;
 }
 
 bool DataReader::GetEndian()
 {
-  return m_bReadBigEndian;
+  return m_ReadBigEndian;
 }
 
-unsigned int DataReader::GetValue(int nSizeValue)
+unsigned int DataReader::GetValue(int sizeValue)
 {
-  unsigned int nvalue=0;
+  unsigned int value=0;
   unsigned char* ptr=(unsigned char*)m_ptr;
 
-  if (m_bReadBigEndian)
+  if (m_ReadBigEndian)
   {
     // Big endian
     // msb...lsb
-    switch (nSizeValue)
+    switch (sizeValue)
     {
     case 1:
-      nvalue|=(ptr[0]<<0);
+      value|=(ptr[0]<<0);
       break;
 
     case 2:
-      nvalue|=(ptr[1]<<0);
-      nvalue|=(ptr[0]<<8);
+      value|=(ptr[1]<<0);
+      value|=(ptr[0]<<8);
       break;
 
     case 4:
-      nvalue|=(ptr[3]<<0);
-      nvalue|=(ptr[2]<<8);
-      nvalue|=(ptr[1]<<16);
-      nvalue|=(ptr[0]<<24);
+      value|=(ptr[3]<<0);
+      value|=(ptr[2]<<8);
+      value|=(ptr[1]<<16);
+      value|=(ptr[0]<<24);
     }
   }
   else
   {
     // Little endian
     // lsb...msb
-    switch (nSizeValue)
+    switch (sizeValue)
     {
     case 1:
-      nvalue|=(ptr[0]<<0);
+      value|=(ptr[0]<<0);
       break;
 
     case 2:
-      nvalue|=(ptr[0]<<0);
-      nvalue|=(ptr[1]<<8);
+      value|=(ptr[0]<<0);
+      value|=(ptr[1]<<8);
       break;
 
     case 4:
-      nvalue|=(ptr[0]<<0);
-      nvalue|=(ptr[1]<<8);
-      nvalue|=(ptr[2]<<16);
-      nvalue|=(ptr[3]<<24);
+      value|=(ptr[0]<<0);
+      value|=(ptr[1]<<8);
+      value|=(ptr[2]<<16);
+      value|=(ptr[3]<<24);
     }
   }
 
-  ptr+=nSizeValue;
+  ptr+=sizeValue;
   m_ptr=(void*)ptr;
-  return nvalue;
+  return value;
 }
 
 
 
 
 TextFileGenerator::TextFileGenerator() :
-  m_nDataSize(1),
-  m_nFileType(_eLanguage_Undefined_),
-  m_nEndianness(_eEndianness_Little),
-  m_nNumericBase(_eNumericBase_Hexadecimal),
-  m_nValuesPerLine(16),
-  m_bEnableLineNumber(false),
-  m_nFirstLineNumber(10),
-  m_nIncrementLineNumber(10),
-  m_cLabelName("DefaultLabelName")
+  m_DataSize(1),
+  m_FileType(_eLanguage_Undefined_),
+  m_Endianness(_eEndianness_Little),
+  m_NumericBase(_eNumericBase_Hexadecimal),
+  m_ValuesPerLine(16),
+  m_EnableLineNumber(false),
+  m_FirstLineNumber(10),
+  m_IncrementLineNumber(10),
+  m_LabelName("DefaultLabelName")
 {
 }
 
@@ -753,160 +753,160 @@ TextFileGenerator::~TextFileGenerator()
 }
 
 
-std::string TextFileGenerator::ConvertData(const void* pSourceData,size_t nFileSize)
+std::string TextFileGenerator::ConvertData(const void* sourceData,size_t fileSize)
 {
-  std::string cDestString;
+  std::string destString;
 
-  if ( ((nFileSize/m_nDataSize)*m_nDataSize)!=nFileSize)
+  if ( ((fileSize/m_DataSize)*m_DataSize)!=fileSize)
   {
     ShowError("The filesize must be a multiple of the data size.");
   }
 
-  DataReader cDataReader;
+  DataReader dataReader;
 
-  cDataReader.SetPointer(pSourceData);
-  if (m_nEndianness==_eEndianness_Big)
+  dataReader.SetPointer(sourceData);
+  if (m_Endianness==_eEndianness_Big)
   {
-    cDataReader.SetEndian(true);
+    dataReader.SetEndian(true);
   }
   else
   {
-    cDataReader.SetEndian(false);
+    dataReader.SetEndian(false);
   }
 
-  std::string cHeaderFormatString;
-  std::string cFooterFormatString;
-  std::string cHeaderPreLine;
-  std::string cEntryFormat;
-  std::string cEntrySeparator;
+  std::string headerFormatString;
+  std::string footerFormatString;
+  std::string headerPreLine;
+  std::string entryFormat;
+  std::string entrySeparator;
 
-  bool bAddSeparatorOnEndOfLine=false;
+  bool addSeparatorOnEndOfLine=false;
 
-  switch (m_nFileType)
+  switch (m_FileType)
   {
   case eLanguage_C:
-    cHeaderPreLine="\t";
-    cEntrySeparator=",";
-    bAddSeparatorOnEndOfLine=true;
-    m_bEnableLineNumber=false;
-    switch (m_nDataSize)
+    headerPreLine="\t";
+    entrySeparator=",";
+    addSeparatorOnEndOfLine=true;
+    m_EnableLineNumber=false;
+    switch (m_DataSize)
     {
     case 1:
-      cHeaderFormatString="unsigned char %s[%d]=\r\n{\r\n";	// unsigned char _SampleQuiTue[]={
-      cEntryFormat="0x%02x";
+      headerFormatString="unsigned char %s[%d]=\r\n{\r\n";	// unsigned char _SampleQuiTue[]={
+      entryFormat="0x%02x";
       break;
     case 2:
-      cHeaderFormatString="unsigned short %s[%d]=\r\n{\r\n";	// unsigned short _SampleQuiTue[]={
-      cEntryFormat="0x%04x";
+      headerFormatString="unsigned short %s[%d]=\r\n{\r\n";	// unsigned short _SampleQuiTue[]={
+      entryFormat="0x%04x";
       break;
     case 4:
-      cHeaderFormatString="unsigned long %s[%d]=\r\n{\r\n";	// unsigned long _SampleQuiTue[]={
-      cEntryFormat="0x%08x";
+      headerFormatString="unsigned long %s[%d]=\r\n{\r\n";	// unsigned long _SampleQuiTue[]={
+      entryFormat="0x%08x";
       break;
     }
-    cFooterFormatString="};";
+    footerFormatString="};";
     break;
 
   case eLanguage_Assembler:
-    cHeaderFormatString=m_cLabelName+"\r\n";	// _SampleQuiTue
-    cEntrySeparator=",";
-    m_bEnableLineNumber=false;
-    switch (m_nDataSize)
+    headerFormatString=m_LabelName+"\r\n";	// _SampleQuiTue
+    entrySeparator=",";
+    m_EnableLineNumber=false;
+    switch (m_DataSize)
     {
     case 1:
-      cHeaderPreLine="\t.byt ";
-      cEntryFormat="$%02x";
+      headerPreLine="\t.byt ";
+      entryFormat="$%02x";
       break;
     case 2:
-      cHeaderPreLine="\t.word ";
-      cEntryFormat="$%04x";
+      headerPreLine="\t.word ";
+      entryFormat="$%04x";
       break;
     case 4:
-      cHeaderPreLine="\t.long ";
-      cEntryFormat="$%08x";
+      headerPreLine="\t.long ";
+      entryFormat="$%08x";
       break;
     }
     break;
 
   case eLanguage_BASIC:
     // Basic supports only uppercase hexadecimal letters !
-    cHeaderFormatString=StringFormat("%d REM %s \r\n",m_nFirstLineNumber,m_cLabelName.c_str());	// nnnn REM _SampleQuiTue
-    m_nFirstLineNumber+=m_nIncrementLineNumber;
-    cHeaderPreLine="DATA ";
-    cEntryFormat="#%d";
-    m_bEnableLineNumber=true;
-    switch (m_nDataSize)
+    headerFormatString=StringFormat("%d REM %s \r\n",m_FirstLineNumber,m_LabelName.c_str());	// nnnn REM _SampleQuiTue
+    m_FirstLineNumber+=m_IncrementLineNumber;
+    headerPreLine="DATA ";
+    entryFormat="#%d";
+    m_EnableLineNumber=true;
+    switch (m_DataSize)
     {
     case 1:
-      cEntryFormat="#%02X";
+      entryFormat="#%02X";
       break;
     case 2:
-      cEntryFormat="#%04X";
+      entryFormat="#%04X";
       break;
     case 4:
-      cEntryFormat="#%08X";	// That one will probably fail on most 8 bits basics
+      entryFormat="#%08X";	// That one will probably fail on most 8 bits basics
       break;
     }
-    cEntrySeparator=",";
+    entrySeparator=",";
     break;
   }
 
-  if (m_nNumericBase==_eNumericBase_Decimal)
+  if (m_NumericBase==_eNumericBase_Decimal)
   {
     // Set to decimal output
-    cEntryFormat="%d";
+    entryFormat="%d";
   }
 
-  int file_size=nFileSize;
-  int nEntryCount=(file_size+m_nDataSize-1)/m_nDataSize;
+  int file_size=fileSize;
+  int entryCount=(file_size+m_DataSize-1)/m_DataSize;
 
   // To avoid numerous memory allocation, pre allocate a string long enough
-  cDestString="";
-  cDestString.reserve(nFileSize*5);
+  destString="";
+  destString.reserve(fileSize*5);
 
   // Block header
-  cDestString+=StringFormat(cHeaderFormatString.c_str(),m_cLabelName.c_str(),nEntryCount);	// unsigned char _SampleQuiTue[]={
+  destString+=StringFormat(headerFormatString.c_str(),m_LabelName.c_str(),entryCount);	// unsigned char _SampleQuiTue[]={
   while (file_size>0)
   {
     // Line numbers
-    if (m_bEnableLineNumber)
+    if (m_EnableLineNumber)
     {
-      cDestString+=StringFormat("%d ",m_nFirstLineNumber);
-      m_nFirstLineNumber+=m_nIncrementLineNumber;
+      destString+=StringFormat("%d ",m_FirstLineNumber);
+      m_FirstLineNumber+=m_IncrementLineNumber;
     }
 
     // Line header
-    cDestString+=cHeaderPreLine;
+    destString+=headerPreLine;
 
     // Content of the line
-    for (unsigned long x=0;x<m_nValuesPerLine;x++)
+    for (unsigned long x=0;x<m_ValuesPerLine;x++)
     {
-      unsigned long c=cDataReader.GetValue(m_nDataSize);
-      file_size-=m_nDataSize;
-      cDestString+=StringFormat(cEntryFormat.c_str(),c);
-      if ((x!=(m_nValuesPerLine-1)) && file_size)
+      unsigned long c=dataReader.GetValue(m_DataSize);
+      file_size-=m_DataSize;
+      destString+=StringFormat(entryFormat.c_str(),c);
+      if ((x!=(m_ValuesPerLine-1)) && file_size)
       {
-        cDestString+=cEntrySeparator;
+        destString+=entrySeparator;
       }
       if (file_size<=0)	break;
     }
 
     // Optional last separator (for C)
-    if (bAddSeparatorOnEndOfLine && (file_size>0))
+    if (addSeparatorOnEndOfLine && (file_size>0))
     {
-      cDestString+=cEntrySeparator;
+      destString+=entrySeparator;
     }
 
     // End of line carriage return
-    cDestString+="\r\n";
+    destString+="\r\n";
   }
   // Block footer
-  cDestString+=cFooterFormatString;
+  destString+=footerFormatString;
 
   // End of file carriage return
-  cDestString+="\r\n";
+  destString+="\r\n";
 
-  return cDestString;
+  return destString;
 }
 
 
