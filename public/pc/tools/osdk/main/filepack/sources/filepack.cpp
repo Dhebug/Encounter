@@ -73,24 +73,24 @@ int main(int argc,char *argv[])
   bool flag_pack=true;
   gLZ77_XorMask=0;
 
-  ArgumentParser cArgumentParser(argc,argv);
+  ArgumentParser argumentParser(argc,argv);
 
-  while (cArgumentParser.ProcessNextArgument())
+  while (argumentParser.ProcessNextArgument())
   {
-    if (cArgumentParser.IsSwitch("-u"))	// Unpack
+    if (argumentParser.IsSwitch("-u"))	// Unpack
     {
       flag_pack=false;
     }
     else
-    if (cArgumentParser.IsSwitch("-p"))	// Pack data
+    if (argumentParser.IsSwitch("-p"))	// Pack data
     {
       flag_pack=true;
-      headerType=cArgumentParser.GetIntegerValue(1);
+      headerType=argumentParser.GetIntegerValue(1);
     }
     else
-    if (cArgumentParser.IsSwitch("-m"))	// Pack data
+    if (argumentParser.IsSwitch("-m"))	// Pack data
     {
-      if (cArgumentParser.GetBooleanValue(true))
+      if (argumentParser.GetBooleanValue(true))
       {
         gLZ77_XorMask=255;	// Invert the bitmask
       }
@@ -102,7 +102,7 @@ int main(int argc,char *argv[])
   }
 
 
-  if (cArgumentParser.GetParameterCount()!=NB_ARG)
+  if (argumentParser.GetParameterCount()!=NB_ARG)
   {
     ShowError(0);
   }
@@ -112,11 +112,11 @@ int main(int argc,char *argv[])
   // Copy last parameters
   //
   char	source_name[_MAX_PATH];
-  strncpy(source_name	,cArgumentParser.GetParameter(0),sizeof(source_name));
+  strncpy(source_name	,argumentParser.GetParameter(0),sizeof(source_name));
   source_name[sizeof(source_name)-1]=0;
 
   char	dest_name[_MAX_PATH];
-  strncpy(dest_name	,cArgumentParser.GetParameter(1),sizeof(dest_name));
+  strncpy(dest_name	,argumentParser.GetParameter(1),sizeof(dest_name));
   dest_name[sizeof(dest_name)-1]=0;
 
 
