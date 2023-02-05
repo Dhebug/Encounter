@@ -46,7 +46,7 @@
 //
 // Argument parsing, error handling
 //
-void SetApplicationParameters(const char* pcApplicationName,int nVersionMajor,int nVersionMinor,const char* pcUsageMessage);
+void SetApplicationParameters(const char* pcApplicationName,int versionMajor,int versionMinor,const char* pcUsageMessage);
 
 void ShowError(const char *pcMessage,...);
 
@@ -93,7 +93,7 @@ std::string get_string(const char *&ptr_arg);
 //
 // File loading and saving
 //
-bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize);
+bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize);          ///< Note: One more byte is allocated and set to zero at the end of the buffer
 bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize);
 bool DeleteFile(const char* pcFileName);
 
@@ -257,38 +257,38 @@ public:
   TextFileGenerator();
   ~TextFileGenerator();
 
-  void SetDataSize(int nDataSize)			    { m_nDataSize=nDataSize; }
-  void SetFileType(Language_e nFileType)		    { m_nFileType=nFileType; }
-  void SetEndianness(Endianness_e nEndianness)		    { m_nEndianness=nEndianness; }
-  void SetNumericBase(NumericBase_e nNumericBase)	    { m_nNumericBase=nNumericBase; }
-  void SetValuesPerLine(unsigned int nValuesPerLine)	    { m_nValuesPerLine=nValuesPerLine; }
-  void SetLabel(const std::string& cLabel)		    { m_cLabelName=cLabel; }
-  void SetLineNumber(int nLineNumber)			    { m_nFirstLineNumber=nLineNumber; }
-  void SetIncrementLineNumber(int nIncrementLineNumber)	    { m_nIncrementLineNumber=nIncrementLineNumber; }
+  void SetDataSize(int dataSize)			                    { m_DataSize=dataSize; }
+  void SetFileType(Language_e fileType)		                { m_FileType=fileType; }
+  void SetEndianness(Endianness_e endianness)		          { m_Endianness=endianness; }
+  void SetNumericBase(NumericBase_e numericBase)	        { m_NumericBase=numericBase; }
+  void SetValuesPerLine(unsigned int valuesPerLine)	      { m_ValuesPerLine=valuesPerLine; }
+  void SetLabel(const std::string& label)		              { m_LabelName=label; }
+  void SetLineNumber(int lineNumber)			                { m_FirstLineNumber=lineNumber; }
+  void SetIncrementLineNumber(int incrementLineNumber)	  { m_IncrementLineNumber=incrementLineNumber; }
 
-  int GetDataSize()		    { return m_nDataSize; }
-  Language_e GetFileType()	    { return m_nFileType; }
-  Endianness_e GetEndianness()	    { return m_nEndianness; }
-  NumericBase_e GetNumericBase()    { return m_nNumericBase; }
-  unsigned int GetValuesPerLine()   { return m_nValuesPerLine; }
-  const std::string& GetLabel()	    { return m_cLabelName; }
-  int GetLineNumber()		    { return m_nFirstLineNumber; }
-  int GetIncrementLineNumber()	    { return m_nIncrementLineNumber; }
+  int GetDataSize()	const	              { return m_DataSize; }
+  Language_e GetFileType() const        { return m_FileType; }
+  Endianness_e GetEndianness() const    { return m_Endianness; }
+  NumericBase_e GetNumericBase() const  { return m_NumericBase; }
+  unsigned int GetValuesPerLine()	const { return m_ValuesPerLine; }
+  const std::string& GetLabel() const   { return m_LabelName; }
+  int GetLineNumber() const             { return m_FirstLineNumber; }
+  int GetIncrementLineNumber() const    { return m_IncrementLineNumber; }
 
-  std::string ConvertData(const void* pSourceData,size_t nFileSize);
+  std::string ConvertData(const void* sourceData,size_t fileSize);
 
 private:
-  int		  m_nDataSize;
-  Language_e	  m_nFileType;
-  Endianness_e	  m_nEndianness;
-  NumericBase_e	  m_nNumericBase;
-  unsigned int	  m_nValuesPerLine;
+  int		          m_DataSize;
+  Language_e	    m_FileType;
+  Endianness_e	  m_Endianness;
+  NumericBase_e	  m_NumericBase;
+  unsigned int	  m_ValuesPerLine;
 
-  bool		  m_bEnableLineNumber;
-  int		  m_nFirstLineNumber;
-  int		  m_nIncrementLineNumber;
+  bool		        m_EnableLineNumber;
+  int		          m_FirstLineNumber;
+  int		          m_IncrementLineNumber;
 
-  std::string	  m_cLabelName;
+  std::string	    m_LabelName;
 };
 
 
