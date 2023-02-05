@@ -6,10 +6,6 @@ MemMap
 
 Generate an html file representing the memory map of provided files.
 
-==[History]=====================================================================
-
-==[ToDo]========================================================================
-
 ==============================================================================*/
 
 #pragma warning( disable : 4706)
@@ -19,9 +15,6 @@ Generate an html file representing the memory map of provided files.
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
-#ifdef _WIN32
-#include <io.h>
-#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -202,8 +195,8 @@ void Section::Generate(std::string &html)
     std::set<Block>::iterator it=m_map_data.begin();
     while (it!=m_map_data.end())
     {
-      Block& block=const_cast<Block&>(*it);
-      int address =block.m_address;
+      const Block& block=const_cast<Block&>(*it);
+      const int address =block.m_address;
       const std::set<std::string>& labels=block.m_labels;
       ++it;
 
@@ -301,21 +294,21 @@ int main(int argc,char *argv[])
 
   INPUT_FORMAT inputFormat=INPUT_FORMAT_ORIC_XA;		// 0=XA / 1=Devpac
 
-  ArgumentParser cArgumentParser(argc,argv);
+  ArgumentParser argumentParser(argc,argv);
 
-  while (cArgumentParser.ProcessNextArgument())
+  while (argumentParser.ProcessNextArgument())
   {
-    if (cArgumentParser.IsSwitch("-f"))
+    if (argumentParser.IsSwitch("-f"))
     {
       //format: [-f]
       //	0 => XA (Oric)
       // 	1 => Devpac (Atari)
-      inputFormat=(INPUT_FORMAT)cArgumentParser.GetIntegerValue(INPUT_FORMAT_ORIC_XA);
+      inputFormat=(INPUT_FORMAT)argumentParser.GetIntegerValue(INPUT_FORMAT_ORIC_XA);
     }
   }
 
 
-  if (cArgumentParser.GetParameterCount()!=NB_ARG)
+  if (argumentParser.GetParameterCount()!=NB_ARG)
   {
     ShowError(0);
   }
@@ -324,10 +317,10 @@ int main(int argc,char *argv[])
   //
   // Copy last parameters
   //
-  std::string	source_name(cArgumentParser.GetParameter(0));
-  std::string	dest_name(cArgumentParser.GetParameter(1));
-  std::string	project_name(cArgumentParser.GetParameter(2));
-  std::string	css_name(cArgumentParser.GetParameter(3));
+  std::string	source_name(argumentParser.GetParameter(0));
+  std::string	dest_name(argumentParser.GetParameter(1));
+  std::string	project_name(argumentParser.GetParameter(2));
+  std::string	css_name(argumentParser.GetParameter(3));
 
   /*
   printf("\n0=%s\n",source_name.c_str());
@@ -354,27 +347,27 @@ int main(int argc,char *argv[])
   //
   // Parse the file, and generate the list of values
   //
-  std::map<std::string,Section>	Sections;
+  std::map<std::string,Section>	sections;
 
   switch (inputFormat)
   {
   case INPUT_FORMAT_ORIC_XA:
     {
-      Section& section_zeropage=Sections["Zero"];
+      Section& section_zeropage=sections["Zero"];
       section_zeropage.m_anchor_name	="Zero";
       section_zeropage.m_section_name	="Zero page";
       section_zeropage.m_adress_size	=2;
       section_zeropage.m_begin_adress	=0x0;
       section_zeropage.m_end_adress	=0xFF;
 
-      Section& section_normal=Sections["Normal"];
+      Section& section_normal=sections["Normal"];
       section_normal.m_anchor_name	="Normal";
       section_normal.m_section_name	="Normal memory";
       section_normal.m_adress_size	=4;
       section_normal.m_begin_adress	=0x400;
       section_normal.m_end_adress		=0xBFFF;
 
-      Section& section_overlay=Sections["Overlay"];
+      Section& section_overlay=sections["Overlay"];
       section_overlay.m_anchor_name	="Overlay";
       section_overlay.m_section_name	="Overlay memory";
       section_overlay.m_adress_size	=4;
@@ -385,28 +378,28 @@ int main(int argc,char *argv[])
 
   case INPUT_FORMAT_ATARI_DEVPAC:
     {
-      Section& section_zeropage=Sections["Text"];
+      Section& section_zeropage=sections["Text"];
       section_zeropage.m_anchor_name	="Text";
       section_zeropage.m_section_name	="Section TEXT";
       section_zeropage.m_adress_size	=4;
       section_zeropage.m_begin_adress	=0x00;
       section_zeropage.m_end_adress	=0xFFFFFF;
 
-      Section& section_normal=Sections["Data"];
+      Section& section_normal=sections["Data"];
       section_normal.m_anchor_name	="Data";
       section_normal.m_section_name	="Section DATA";
       section_normal.m_adress_size	=4;
       section_normal.m_begin_adress	=0x00;
       section_normal.m_end_adress		=0xFFFFFF;
 
-      Section& section_overlay=Sections["Bss"];
+      Section& section_overlay=sections["Bss"];
       section_overlay.m_anchor_name	="Bss";
       section_overlay.m_section_name	="Section BSS";
       section_overlay.m_adress_size	=4;
       section_overlay.m_begin_adress	=0x00;
       section_overlay.m_end_adress	=0xFFFFFF;
 
-      Section& section_rs=Sections["RS"];
+      Section& section_rs=sections["RS"];
       section_rs.m_anchor_name	="RS";
       section_rs.m_section_name	="RS offsets";
       section_rs.m_adress_size	=4;
@@ -432,17 +425,17 @@ int main(int argc,char *argv[])
         if (value<256)
         {
           // Zero page
-          Sections["Zero"].AddSymbol(value,ptr_tok);
+          sections["Zero"].AddSymbol(value,ptr_tok);
         }
         else
           if (value>=0xc000)
           {
             // Overlay memory
-            Sections["Overlay"].AddSymbol(value,ptr_tok);
+            sections["Overlay"].AddSymbol(value,ptr_tok);
           }
           else
           {
-            Sections["Normal"].AddSymbol(value,ptr_tok);
+            sections["Normal"].AddSymbol(value,ptr_tok);
           }
       }
       break;
@@ -462,14 +455,14 @@ int main(int argc,char *argv[])
         {
           ptr_tok=strtok(0," \r\n");
           token=ptr_tok;
-          if (token=="A")	section="RS";
+          if (token=="A")	      section="RS";
           else if (token=="B")	section="Bss";
           else if (token=="T")	section="Text";
           else if (token=="D")	section="Data";
         }
         while (token.size()==1);
 
-        Sections[section].AddSymbol(value,token);
+        sections[section].AddSymbol(value,token);
       }
     }
     ptr_tok=strtok(0," \r\n");
@@ -487,8 +480,8 @@ int main(int argc,char *argv[])
   html+="<table>\r\n";
   html+="<tr>\r\n";
 
-  std::map<std::string,Section>::iterator it(Sections.begin());
-  while (it!=Sections.end())
+  std::map<std::string,Section>::iterator it(sections.begin());
+  while (it!=sections.end())
   {
     Section& section=it->second;
     if (section.HasData())
