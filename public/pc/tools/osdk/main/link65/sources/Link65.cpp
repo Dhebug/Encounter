@@ -188,12 +188,12 @@ class FileEntry
 {
 public:
   FileEntry() :
-    m_nSortPriority(0)
+    m_SortPriority(0)
   {}
 
 public:
-  std::string	m_cFileName;
-  int			m_nSortPriority;
+  std::string	m_FileName;
+  int			    m_SortPriority;
 };
 
 
@@ -225,14 +225,14 @@ bool ParseFile(const std::string& filename);
 
 
 
-std::string FilterLine(const std::string& cSourceLine,bool keepQuotedStrings)
+std::string FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
 {
   static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
 
   std::string outline;
   outline.reserve(MAX_LINE_SIZE);
 
-  const char* source_line=cSourceLine.c_str();
+  const char* source_line=sourceLine.c_str();
   while (char car=*source_line++)
   {
     if (flag_in_comment_bloc)						// In a C block comment - that one may have been started on another line
@@ -392,7 +392,7 @@ LabelState parseline(char* inpline,bool parseIncludeFiles)
   // Return if comment line or too small line
   //
   if (inpline[0] ==';')	  return e_NoLabel;
-  if (len < 2)		  return e_NoLabel;
+  if (len < 2)		        return e_NoLabel;
 
   //
   // Is a label defined..? (first char in line is what we want)
@@ -435,16 +435,16 @@ LabelState parseline(char* inpline,bool parseIncludeFiles)
         //
         // Read define name
         //const char* pcFilename=strtok(NULL," \"*+-;\\\n/\t,()");
-        const char* pcFilename=strtok(NULL," \"<>");
+        const char* filename=strtok(NULL," \"<>");
         if (parseIncludeFiles)
         {
-          if (!pcFilename)
+          if (!filename)
           {
             ShowError("Invalid or missing filename after #include directive");
           }
           else
           {
-            ParseFile(pcFilename);
+            ParseFile(filename);
           }
         }
         /*
@@ -792,113 +792,113 @@ int main(int argc,char **argv)
   std::string path_source_files("");
   std::string output_file_name("go.s");
 
-  ArgumentParser cArgumentParser(argc,argv);
+  ArgumentParser argumentParser(argc,argv);
 
-  while (cArgumentParser.ProcessNextArgument())
+  while (argumentParser.ProcessNextArgument())
   {
-    if (cArgumentParser.IsSwitch("-q") || cArgumentParser.IsSwitch("-Q"))
+    if (argumentParser.IsSwitch("-q") || argumentParser.IsSwitch("-Q"))
     {
       // Quiet mode.
       gFlagQuiet=true;
     }
     else
-    if (cArgumentParser.IsSwitch("-l") || cArgumentParser.IsSwitch("-L"))
+    if (argumentParser.IsSwitch("-l") || argumentParser.IsSwitch("-L"))
     {
       // Print out defined labels (Useful when building lib index files)
       gFlagLibrarian=true;
     }
     else
-    if (cArgumentParser.IsSwitch("-v") || cArgumentParser.IsSwitch("-V"))
+    if (argumentParser.IsSwitch("-v") || argumentParser.IsSwitch("-V"))
     {
       // Verbose output.
       gFlagVerbose=true;
     }
     else
-    if (cArgumentParser.IsSwitch("-d") || cArgumentParser.IsSwitch("-D"))
+    if (argumentParser.IsSwitch("-d") || argumentParser.IsSwitch("-D"))
     {
       // Directory to find library files.Next arg in line is the dir name. e.g : link65 -d /usr/oric/lib/ test.s
-      if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+      if (!argumentParser.ProcessNextArgument() || !argumentParser.IsParameter())
       {
         printf(" Must have dir name after -d option\n");
         exit(1);
       }
-      path_library_files=cArgumentParser.GetStringValue();
+      path_library_files=argumentParser.GetStringValue();
     }
     else
-    if (cArgumentParser.IsSwitch("-s") || cArgumentParser.IsSwitch("-S"))
+    if (argumentParser.IsSwitch("-s") || argumentParser.IsSwitch("-S"))
     {
       // Directory to find source files.Next arg in line is the dir name
-      if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+      if (!argumentParser.ProcessNextArgument() || !argumentParser.IsParameter())
       {
         printf(" Must have dir name after -s option\n");
         exit(1);
       }
-      path_source_files=cArgumentParser.GetStringValue();
+      path_source_files=argumentParser.GetStringValue();
     }
     else
-    if (cArgumentParser.IsSwitch("-o") || cArgumentParser.IsSwitch("-O"))
+    if (argumentParser.IsSwitch("-o") || argumentParser.IsSwitch("-O"))
     {
       // Output file. Default is go.s . Next arg in line is the file name. e.g : link65 -o out.s test.s
-      if (!cArgumentParser.ProcessNextArgument() || !cArgumentParser.IsParameter())
+      if (!argumentParser.ProcessNextArgument() || !argumentParser.IsParameter())
       {
         printf(" Must have file name after -o option\n");
         exit(1);
       }
-      output_file_name=cArgumentParser.GetStringValue();
+      output_file_name=argumentParser.GetStringValue();
     }
     else
-    if (cArgumentParser.IsSwitch("-b") || cArgumentParser.IsSwitch("-B"))
+    if (argumentParser.IsSwitch("-b") || argumentParser.IsSwitch("-B"))
     {
       // Bare linking, does not add "header" and "tail" to the list
       gFlagIncludeHeader=false;
     }
     else
-    if (cArgumentParser.IsSwitch("-f") || cArgumentParser.IsSwitch("-F"))
+    if (argumentParser.IsSwitch("-f") || argumentParser.IsSwitch("-F"))
     {
       // Enable the #file directive (require expanded XA assembler)
       gFlagEnableFileDirective=true;
     }
     else
-    if (cArgumentParser.IsParameter())
+    if (argumentParser.IsParameter())
     {
       // Not a switch
-      FileEntry cFileEntry;
+      FileEntry fileEntry;
 
       if (gFlagIncludeHeader && gInputFileList.empty())
       {
         // header.s is the first file used.
         // So reserve the 0 place in array for after option scanning, to put there the dir name too if needed.
-        cFileEntry.m_cFileName	  =path_library_files;
-        cFileEntry.m_cFileName   +="header.s";
-        cFileEntry.m_nSortPriority=0;
-        gInputFileList.push_back(cFileEntry);
+        fileEntry.m_FileName	  =path_library_files;
+        fileEntry.m_FileName   +="header.s";
+        fileEntry.m_SortPriority=0;
+        gInputFileList.push_back(fileEntry);
       }
 
       //
       // Then we add the new file
       //
-      cFileEntry.m_cFileName	  =path_source_files;
-      cFileEntry.m_cFileName   +=cArgumentParser.GetStringValue();
-      cFileEntry.m_nSortPriority=1;
-      gInputFileList.push_back(cFileEntry);
+      fileEntry.m_FileName	  =path_source_files;
+      fileEntry.m_FileName   +=argumentParser.GetStringValue();
+      fileEntry.m_SortPriority=1;
+      gInputFileList.push_back(fileEntry);
     }
     else
-    if (cArgumentParser.IsSwitch("-c"))
+    if (argumentParser.IsSwitch("-c"))
     {
       //comments: [-c]
       //	0 => remove comments
       // 	1 => keep comments
-      gFlagKeepComments=cArgumentParser.GetBooleanValue(false);
+      gFlagKeepComments=argumentParser.GetBooleanValue(false);
     }
     else
     {
       // Unknown argument
-      printf("Invalid option %s \n",cArgumentParser.GetRemainingStuff());
+      printf("Invalid option %s \n",argumentParser.GetRemainingStuff());
       exit(1);
     }
   }
 
-  if (cArgumentParser.GetParameterCount())
+  if (argumentParser.GetParameterCount())
   {
     ShowError(0);
   }
@@ -914,11 +914,11 @@ int main(int argc,char **argv)
   {
     // Now put the tail.s .
     // Give it nflist of 2 to put it last in file list after the sort
-    FileEntry cFileEntry;
-    cFileEntry.m_cFileName	  =path_library_files;
-    cFileEntry.m_cFileName   +="tail.s";
-    cFileEntry.m_nSortPriority=2;
-    gInputFileList.push_back(cFileEntry);
+    FileEntry fileEntry;
+    fileEntry.m_FileName	  =path_library_files;
+    fileEntry.m_FileName   +="tail.s";
+    fileEntry.m_SortPriority=2;
+    gInputFileList.push_back(fileEntry);
   }
 
 
@@ -940,22 +940,22 @@ int main(int argc,char **argv)
 
     //char filename[255];
     //strcpy(filename,gInputFileList[k].m_cFileName.c_str());
-    ParseFile(gInputFileList[k].m_cFileName);
+    ParseFile(gInputFileList[k].m_FileName);
 
     //
     // Check if used labels are defined inside the files
     //
-    std::vector<ReferencedLabelEntry>::iterator cItReferenced=gReferencedLabelsList.begin();
-    while  (cItReferenced!=gReferencedLabelsList.end())
+    std::vector<ReferencedLabelEntry>::iterator itReferenced=gReferencedLabelsList.begin();
+    while  (itReferenced!=gReferencedLabelsList.end())
     {
-      ReferencedLabelEntry& cLabelEntry=*cItReferenced;
-      std::set<std::string>::iterator cIt=gDefinedLabelsList.find(cLabelEntry.label_name);
-      if (cIt!=gDefinedLabelsList.end())
+      ReferencedLabelEntry& labelEntry=*itReferenced;
+      std::set<std::string>::iterator it=gDefinedLabelsList.find(labelEntry.label_name);
+      if (it!=gDefinedLabelsList.end())
       {
         // Found the label in the definition list
-        cLabelEntry.m_IsResolved=true;
+        labelEntry.m_IsResolved=true;
       }
-      ++cItReferenced;
+      ++itReferenced;
     }
 
     if (!gFlagLibrarian)
@@ -965,21 +965,21 @@ int main(int argc,char **argv)
       for (i=0;i<gReferencedLabelsList.size();i++)
       {
         // Unresolved label and -l option off. If -l option is on don't care
-        ReferencedLabelEntry& cReferencedLabelEntry=gReferencedLabelsList[i];
-        if (!cReferencedLabelEntry.m_IsResolved)
+        ReferencedLabelEntry& referencedLabelEntry=gReferencedLabelsList[i];
+        if (!referencedLabelEntry.m_IsResolved)
         {
           // Act for unresolved label
           for (j=0;j<gLibraryReferencesList.size();j++)
           {
-            LabelEntry& cLabelEntry=gLibraryReferencesList[j];
+            LabelEntry& labelEntry=gLibraryReferencesList[j];
             // If in lib file index, take file and put it in gInputFileList if not already there
-            if (cReferencedLabelEntry.label_name==cLabelEntry.label_name)
+            if (referencedLabelEntry.label_name==labelEntry.label_name)
             {
               bool labstate=true;
               for (l=0;l<gInputFileList.size();l++)
               {
                 FileEntry& cFileEntry=gInputFileList[l];
-                if (cFileEntry.m_cFileName==cLabelEntry.file_name)
+                if (cFileEntry.m_FileName==labelEntry.file_name)
                 {
                   labstate=false;
                   break;
@@ -989,8 +989,8 @@ int main(int argc,char **argv)
               // Not present : labstate == 1 , insert file in list
               if (labstate)
               {
-                FileEntry	cNewEntry;
-                gInputFileList.push_back(cNewEntry);
+                FileEntry	newEntry;
+                gInputFileList.push_back(newEntry);
 
                 // NICE TRICK : Insert lib file in file list to be processed immediately.
                 // With this labels used by the lib file will be resolved, without the need for multiple passes
@@ -999,8 +999,8 @@ int main(int argc,char **argv)
                   gInputFileList[l]=gInputFileList[l-1];
                 }
                 FileEntry& cFileEntry=gInputFileList[k+1];
-                cFileEntry.m_cFileName		=cLabelEntry.file_name;
-                cFileEntry.m_nSortPriority	=1;
+                cFileEntry.m_FileName		=labelEntry.file_name;
+                cFileEntry.m_SortPriority	=1;
               }
               else
               {
@@ -1023,12 +1023,12 @@ int main(int argc,char **argv)
     // If -l option just print labels and then exit
     printf("\nDefined Labels : \n");
 
-    std::set<std::string>::iterator cIt=gDefinedLabelsList.begin();
-    while (cIt!=gDefinedLabelsList.end())
+    std::set<std::string>::iterator it=gDefinedLabelsList.begin();
+    while (it!=gDefinedLabelsList.end())
     {
-      const std::string& cLabelName=*cIt;
+      const std::string& cLabelName=*it;
       printf("%s\n",cLabelName.c_str());
-      ++cIt;
+      ++it;
     }
     return 0;
   }
@@ -1076,7 +1076,7 @@ int main(int argc,char **argv)
   {
     if (gFlagVerbose)
     {
-      printf("Linking %s\n",gInputFileList[k].m_cFileName.c_str());
+      printf("Linking %s\n",gInputFileList[k].m_FileName.c_str());
     }
 
     //
@@ -1089,33 +1089,33 @@ int main(int argc,char **argv)
       char dummy[_MAX_PATH];
 
       getcwd(current_directory,_MAX_PATH);
-      _splitpath(gInputFileList[k].m_cFileName.c_str(),dummy,dummy,filename,dummy);
+      _splitpath(gInputFileList[k].m_FileName.c_str(),dummy,dummy,filename,dummy);
 
       fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
     }
 
     // Mike: The code should really reuse the previously loaded/parsed files
-    std::vector<std::string> cTextData;
-    if (!LoadText(gInputFileList[k].m_cFileName.c_str(),cTextData))
+    std::vector<std::string> textData;
+    if (!LoadText(gInputFileList[k].m_FileName.c_str(),textData))
     {
-      ShowError("\nCannot open %s \n",gInputFileList[k].m_cFileName.c_str());
+      ShowError("\nCannot open %s \n",gInputFileList[k].m_FileName.c_str());
     }
 
-    std::vector<std::string>::const_iterator cItText=cTextData.begin();
-    while (cItText!=cTextData.end())
+    std::vector<std::string>::const_iterator itText=textData.begin();
+    while (itText!=textData.end())
     {
       //  Get line file and parse it
-      const std::string& cCurrentLine=*cItText;
+      const std::string& currentLine=*itText;
       if (gFlagKeepComments)
       {
-        fprintf(gofile,"%s\r\n",cCurrentLine.c_str());
+        fprintf(gofile,"%s\r\n",currentLine.c_str());
       }
       else
       {
-        std::string cFilteredLine=FilterLine(cCurrentLine,true);
-        fprintf(gofile,"%s\r\n",cFilteredLine.c_str());
+        std::string filteredLine=FilterLine(currentLine,true);
+        fprintf(gofile,"%s\r\n",filteredLine.c_str());
       }
-      ++cItText;
+      ++itText;
     }
   }
   return 0;
