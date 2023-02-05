@@ -23,9 +23,6 @@ First version Mick: Fri  13/09/96  16:16:14
 #include <stdarg.h>
 #include <ctype.h>
 #include <fcntl.h>
-#ifdef _WIN32
-#include <io.h>
-#endif
 #include <string.h>
 
 #include "infos.h"
@@ -33,12 +30,7 @@ First version Mick: Fri  13/09/96  16:16:14
 #include "common.h"
 
 
-
-
-
 #define NB_ARG	3
-
-
 
 
 int main(int argc,char *argv[])
@@ -71,77 +63,77 @@ int main(int argc,char *argv[])
 		);
 
 
-	TextFileGenerator cTextFileGenerator;
+	TextFileGenerator textFileGenerator;
 
-	ArgumentParser cArgumentParser(argc,argv);
+	ArgumentParser argumentParser(argc,argv);
 
-	while (cArgumentParser.ProcessNextArgument())
+	while (argumentParser.ProcessNextArgument())
 	{
-		if (cArgumentParser.IsSwitch("-s"))
+		if (argumentParser.IsSwitch("-s"))
 		{
-			cTextFileGenerator.SetDataSize(cArgumentParser.GetIntegerValue(1));
+			textFileGenerator.SetDataSize(argumentParser.GetIntegerValue(1));
 		}
 		else
-		if (cArgumentParser.IsSwitch("-e"))
+		if (argumentParser.IsSwitch("-e"))
 		{
-			cTextFileGenerator.SetEndianness((TextFileGenerator::Endianness_e)cArgumentParser.GetIntegerValue(TextFileGenerator::_eEndianness_Undefined_));
+			textFileGenerator.SetEndianness((TextFileGenerator::Endianness_e)argumentParser.GetIntegerValue(TextFileGenerator::_eEndianness_Undefined_));
 		}
 		else
-		if (cArgumentParser.IsSwitch("-f"))
+		if (argumentParser.IsSwitch("-f"))
 		{
-			cTextFileGenerator.SetFileType((TextFileGenerator::Language_e)cArgumentParser.GetIntegerValue(TextFileGenerator::_eLanguage_Undefined_));
+			textFileGenerator.SetFileType((TextFileGenerator::Language_e)argumentParser.GetIntegerValue(TextFileGenerator::_eLanguage_Undefined_));
 		}
 		else
-		if (cArgumentParser.IsSwitch("-h"))
+		if (argumentParser.IsSwitch("-h"))
 		{
-			cTextFileGenerator.SetNumericBase((TextFileGenerator::NumericBase_e)cArgumentParser.GetIntegerValue(TextFileGenerator::_eNumericBase_Undefined_));
+			textFileGenerator.SetNumericBase((TextFileGenerator::NumericBase_e)argumentParser.GetIntegerValue(TextFileGenerator::_eNumericBase_Undefined_));
 		}
 		else
-		if (cArgumentParser.IsSwitch("-l"))
+		if (argumentParser.IsSwitch("-l"))
 		{
-			cTextFileGenerator.SetLineNumber(cArgumentParser.GetIntegerValue(10));
-			if (cArgumentParser.GetSeparator(":"))
+			textFileGenerator.SetLineNumber(argumentParser.GetIntegerValue(10));
+			if (argumentParser.GetSeparator(":"))
 			{
-				cTextFileGenerator.SetIncrementLineNumber(cArgumentParser.GetIntegerValue(10));
+				textFileGenerator.SetIncrementLineNumber(argumentParser.GetIntegerValue(10));
 			}
 		}
 		else
-		if (cArgumentParser.IsSwitch("-n"))
+		if (argumentParser.IsSwitch("-n"))
 		{
-			cTextFileGenerator.SetValuesPerLine(cArgumentParser.GetIntegerValue(16));
+			textFileGenerator.SetValuesPerLine(argumentParser.GetIntegerValue(16));
 		}
 	}
 
-    if (cArgumentParser.GetParameterCount()!=NB_ARG)
-    {
-		ShowError(0);
-    }
+  if (argumentParser.GetParameterCount() != NB_ARG)
+  {
+    ShowError(0);
+  }
 
-	std::string NameSrc(cArgumentParser.GetParameter(0));
-	std::string NameDst(cArgumentParser.GetParameter(1));
-	cTextFileGenerator.SetLabel(cArgumentParser.GetParameter(2));
+	std::string nameSrc(argumentParser.GetParameter(0));
+	std::string nameDst(argumentParser.GetParameter(1));
+	textFileGenerator.SetLabel(argumentParser.GetParameter(2));
 
-	printf("Converting <%s> to <%s> with label <%s>\n",NameSrc.c_str(),NameDst.c_str(),cTextFileGenerator.GetLabel().c_str());
+	printf("Converting <%s> to <%s> with label <%s>\n",nameSrc.c_str(),nameDst.c_str(),textFileGenerator.GetLabel().c_str());
 
 	void* ptr_buffer_void;
 	size_t file_size;
-	if (!LoadFile(NameSrc.c_str(),ptr_buffer_void,file_size))
+	if (!LoadFile(nameSrc.c_str(),ptr_buffer_void,file_size))
 	{
 		ShowError("Unable to load the source file");
 	}
 	printf("Size Read:%d\n",(signed int) file_size);
-	unsigned char *BigBuffer=(unsigned char*)ptr_buffer_void;
+	unsigned char *bigBuffer=(unsigned char*)ptr_buffer_void;
 
-	std::string cDestString(cTextFileGenerator.ConvertData(BigBuffer,file_size));
+	std::string destString(textFileGenerator.ConvertData(bigBuffer,file_size));
 
-	if (!SaveFile(NameDst.c_str(),cDestString.c_str(),cDestString.size()))
+	if (!SaveFile(nameDst.c_str(),destString.c_str(),destString.size()))
 	{
 		ShowError("Unable to save the destination file");
 	}
 
-	free(BigBuffer);
+	free(bigBuffer);
 
-    exit(0);
+  exit(0);
 }
 
 
