@@ -390,11 +390,9 @@ bool Linker::ParseFile(const std::string& filename)
 
   // Scanning the file
   int line_number = 0;
-  std::vector<std::string>::const_iterator itText=textData.begin();
-  while (itText!=textData.end())
+  for (const std::string& currentLine : textData)
   {
     //  Get line file and parse it
-    const std::string& currentLine=*itText;
     ++line_number;
 
     // test
@@ -413,7 +411,6 @@ bool Linker::ParseFile(const std::string& filename)
     inpline[MAX_LINE_SIZE]=0;
     
     char* nexToken=inpline-1;
-
     while (nexToken)
     {
       char* tokenPtr=nexToken+1;
@@ -429,8 +426,7 @@ bool Linker::ParseFile(const std::string& filename)
       //  Oh, a label defined. Stuff it in storage
       if (state == e_NewLabel)
       {
-        std::set<std::string>::iterator it=m_DefinedLabelsList.find(foundLabel);
-        if (it!=m_DefinedLabelsList.end())
+        if (m_DefinedLabelsList.find(foundLabel) != m_DefinedLabelsList.end())
         {
           // Found the label in the list.
           // It's a duplicate definition... does not mean it's an error, because XA handles allows local labels !
@@ -475,7 +471,6 @@ bool Linker::ParseFile(const std::string& filename)
         }
       }
     }
-    ++itText;
   }
 
   return true;
@@ -701,27 +696,22 @@ int Linker::Main()
     //
     // Check if used labels are defined inside the files
     //
-    std::vector<ReferencedLabelEntry>::iterator itReferenced=m_ReferencedLabelsList.begin();
-    while  (itReferenced!=m_ReferencedLabelsList.end())
+    for  (ReferencedLabelEntry& labelEntry : m_ReferencedLabelsList)
     {
-      ReferencedLabelEntry& labelEntry=*itReferenced;
-      std::set<std::string>::iterator it=m_DefinedLabelsList.find(labelEntry.label_name);
-      if (it!=m_DefinedLabelsList.end())
+      if (m_DefinedLabelsList.find(labelEntry.label_name) != m_DefinedLabelsList.end())
       {
         // Found the label in the definition list
         labelEntry.m_IsResolved=true;
       }
-      ++itReferenced;
     }
 
     if (!m_FlagLibrarian)
     {
       // Check for not resolved labels.
       // If defined in lib file index then insert their file right after in the list
-      for (unsigned int i=0;i<m_ReferencedLabelsList.size();i++)
+      for (const ReferencedLabelEntry& referencedLabelEntry : m_ReferencedLabelsList)
       {
         // Unresolved label and -l option off. If -l option is on don't care
-        ReferencedLabelEntry& referencedLabelEntry=m_ReferencedLabelsList[i];
         if (!referencedLabelEntry.m_IsResolved)
         {
           // Act for unresolved label
@@ -750,11 +740,11 @@ int Linker::Main()
                 // With this labels used by the lib file will be resolved, without the need for multiple passes
                 for (unsigned int l=m_InputFileList.size()-1;l>k+1;l--)
                 {
-                  m_InputFileList[l]=m_InputFileList[l-1];
+                  m_InputFileList[l] = m_InputFileList[l-1];
                 }
-                FileEntry& fileEntry=m_InputFileList[k+1];
-                fileEntry.m_FileName		=labelEntry.file_name;
-                fileEntry.m_SortPriority	=1;
+                FileEntry& fileEntry      = m_InputFileList[k+1];
+                fileEntry.m_FileName      = labelEntry.file_name;
+                fileEntry.m_SortPriority  = 1;
               }
               else
               {
@@ -851,11 +841,9 @@ int Linker::Main()
       ShowError("\nCannot open %s \n", inputFile.m_FileName.c_str());
     }
 
-    std::vector<std::string>::const_iterator itText=textData.begin();
-    while (itText!=textData.end())
+    for (const std::string& currentLine : textData)
     {
       //  Get line file and parse it
-      const std::string& currentLine=*itText;
       if (m_FlagKeepComments)
       {
         fprintf(gofile,"%s\r\n",currentLine.c_str());
@@ -865,7 +853,6 @@ int Linker::Main()
         std::string filteredLine=FilterLine(currentLine,true);
         fprintf(gofile,"%s\r\n",filteredLine.c_str());
       }
-      ++itText;
     }
   }
   return 0;
