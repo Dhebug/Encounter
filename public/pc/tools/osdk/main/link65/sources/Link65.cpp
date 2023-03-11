@@ -93,9 +93,11 @@ public:
   int Main();
 
   bool ParseFile(const std::string& filename);
-  LabelState parseline(char* inpline, bool parseIncludeFiles);
+  LabelState Parseline(char* inpline, bool parseIncludeFiles);
 
   bool LoadLibrary(const std::string& path_library_files);
+
+  void AddInputFile(const std::string& filePath, int sortPriority);
 
 public:
   bool m_FlagKeepComments = false;			        ///< Use -C option to control
@@ -190,6 +192,13 @@ std::string FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
 }
 
 
+void Linker::AddInputFile(const std::string& filePath, int sortPriority)
+{
+  FileEntry fileEntry;
+  fileEntry.m_FileName = filePath;
+  fileEntry.m_SortPriority = sortPriority;
+  m_InputFileList.push_back(fileEntry);
+}
 
 //
 // Parse a line. Mask out comment lines and null lines.
@@ -197,7 +206,7 @@ std::string FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
 // Return defined labels in label var, with return value of 1
 // Return labels used by JSR, JMP, LDA, STA in label var, with ret value of 2
 //
-LabelState Linker::parseline(char* inpline,bool parseIncludeFiles)
+LabelState Linker::Parseline(char* inpline,bool parseIncludeFiles)
 {
   int len=strlen(inpline);
 
@@ -260,13 +269,6 @@ LabelState Linker::parseline(char* inpline,bool parseIncludeFiles)
             ParseFile(filename);
           }
         }
-        /*
-        if (!stricmp(pcFilename,"GenericEditorRoutines.s"))
-        {
-        printf("toto");
-        }
-        ParseFile(pcFilename);
-        */
         return e_NoLabel;
       }
       //
@@ -415,7 +417,7 @@ bool Linker::ParseFile(const std::string& filename)
     {
       char* tokenPtr=nexToken+1;
       nexToken=strchr(tokenPtr,':');
-      LabelState state=parseline(tokenPtr,parseIncludeFiles);
+      LabelState state=Parseline(tokenPtr,parseIncludeFiles);
 
       std::string foundLabel;
       if ((state!=e_NoLabel) && m_CurrentToken)
@@ -619,25 +621,17 @@ int Linker::Main()
     if (IsParameter())
     {
       // Not a switch
-      FileEntry fileEntry;
-
       if (m_FlagIncludeHeader && m_InputFileList.empty())
       {
         // header.s is the first file used.
         // So reserve the 0 place in array for after option scanning, to put there the dir name too if needed.
-        fileEntry.m_FileName	  =m_PathLibraryFiles;
-        fileEntry.m_FileName   +="header.s";
-        fileEntry.m_SortPriority=0;
-        m_InputFileList.push_back(fileEntry);
+        AddInputFile(m_PathLibraryFiles + "header.s" ,0);
       }
 
       //
       // Then we add the new file
       //
-      fileEntry.m_FileName	  =m_PathSourceFiles;
-      fileEntry.m_FileName   +=GetStringValue();
-      fileEntry.m_SortPriority=1;
-      m_InputFileList.push_back(fileEntry);
+      AddInputFile(m_PathSourceFiles + GetStringValue(), 1);
     }
     else
     if (IsSwitch("-c"))
@@ -671,11 +665,7 @@ int Linker::Main()
   {
     // Now put the tail.s .
     // Give it nflist of 2 to put it last in file list after the sort
-    FileEntry fileEntry;
-    fileEntry.m_FileName	  =m_PathLibraryFiles;
-    fileEntry.m_FileName   +="tail.s";
-    fileEntry.m_SortPriority=2;
-    m_InputFileList.push_back(fileEntry);
+    AddInputFile(m_PathLibraryFiles + "tail.s", 2);
   }
 
 
@@ -760,7 +750,7 @@ int Linker::Main()
   if (m_FlagVerbose)
     printf("\nend scanning files \n\n");
 
-  int state=0;
+  bool gotLinkError = false;
 
   if (m_FlagLibrarian)
   {
@@ -782,12 +772,12 @@ int Linker::Main()
       if (!referencedLabelEntry.m_IsResolved)
       {
         printf("Unresolved external: %s, first referenced in %s(%d) [referenced %d times]\n",referencedLabelEntry.label_name.c_str(), referencedLabelEntry.file_name.c_str(), referencedLabelEntry.line_number, referencedLabelEntry.reference_count);
-        state=1;
+        gotLinkError=true;
       }
     }
   }
 
-  if (state == 1)
+  if (gotLinkError)
   {
     ShowError("Errors durink link.\n");
   }
