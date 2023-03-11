@@ -4,9 +4,6 @@ The 6502 Linker, for the lcc or similar, that produce .s files to be processed l
 (See infos.h for details and version history)
 
 */
-
-
-
 #include "infos.h"
 
 #define _GNU_SOURCE 1 /* for fcloseall() */
@@ -24,119 +21,6 @@ The 6502 Linker, for the lcc or similar, that produce .s files to be processed l
 #include <limits.h>
 #define stricmp strcasecmp
 #define _MAX_PATH PATH_MAX
-// From https://groups.google.com/forum/#!topic/gnu.gcc.help/0dKxhmV4voE
-void _splitpath(const char* Path,char* Drive,char* Directory,char*
-                Filename,char* Extension)
-{
-  char* CopyOfPath = (char*) Path;
-  int Counter = 0;
-  int Last = 0;
-  int Rest = 0;
-
-  // no drives available in linux .
-  // extensions are not common in linux
-  // but considered anyway
-  Drive = NULL;
-
-  while(*CopyOfPath != '\0')
-  {
-    // search for the last slash
-    while(*CopyOfPath != '/' && *CopyOfPath != '\0')
-    {
-      CopyOfPath++;
-      Counter++;
-    }
-    if(*CopyOfPath == '/')
-    {
-      CopyOfPath++;
-      Counter++;
-      Last = Counter;
-    }
-    else
-      Rest = Counter - Last;
-  }
-  // directory is the first part of the path until the
-  // last slash appears
-  strncpy(Directory,Path,Last);
-  // strncpy doesnt add a '\0'
-  Directory[Last] = '\0';
-  // Filename is the part behind the last slahs
-  strcpy(Filename,CopyOfPath -= Rest);
-  // get extension if there is any
-  while(*Filename != '\0')
-  {
-    // the part behind the point is called extension in windows systems
-    // at least that is what i thought apperantly the '.' is used as part
-    // of the extension too .
-    if(*Filename == '.')
-    {
-      while(*Filename != '\0')
-      {
-        *Extension = *Filename;
-        Extension++;
-        Filename++;
-      }
-    }
-    if(*Filename != '\0')
-    {Filename++;}
-  }
-  *Extension = '\0';
-  return;
-}
-
-// Abstract:   Make a path out of its parts
-// Parameters: Path: Object to be made
-//             Drive: Logical drive , only for compatibility , notconsidered
-//             Directory: Directory part of path
-//             Filename: File part of path
-//             Extension: Extension part of path (includes the leading point)
-// Returns:    Path is changed
-// Comment:    Note that the concept of an extension is not available in Linux,
-//             nevertheless it is considered
-
-void _makepath(char* Path,const char* Drive,const char* Directory,
-               const char* File,const char* Extension)
-{
-  while(*Drive != '\0' && Drive != NULL)
-  {
-    *Path = *Drive;
-    Path++;
-    Drive++;
-  }
-  while(*Directory != '\0' && Directory != NULL)
-  {
-    *Path = *Directory;
-    Path ++;
-    Directory ++;
-  }
-  while(*File != '\0' && File != NULL)
-  {
-    *Path = *File;
-    Path ++;
-    File ++;
-  }
-  while(*Extension != '\0' && Extension != NULL)
-  {
-    *Path = *Extension;
-    Path ++;
-    Extension ++;
-  }
-  *Path = '\0';
-  return;
-}
-
-// Abstract:   Change the current working directory
-// Parameters: Directory: The Directory which should be the workingdirectory.
-// Returns:    0 for success , other for error
-// Comment:    The command doesnt fork() , thus the directory is changed for
-//             The actual process and not for a forked one which would betrue
-//             for system("cd DIR");
-
-int _chdir(const char* Directory)
-{
-  chdir(Directory);
-  return 0;
-}
 #endif
 
 
@@ -305,82 +189,7 @@ std::string FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
   return outline;
 }
 
-#if 0
-std::string FilterLine(const std::string& cSourceLine)
-{
-  static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
 
-  char inpline[MAX_LINE_SIZE+1];
-  assert(sizeof(inpline)>cSourceLine.size());
-  strcpy(inpline,cSourceLine.c_str());
-
-  //
-  // Checking for a end of C bloc comment
-  //
-  if (flag_in_comment_bloc)
-  {
-    char *ptr_line=strstr(inpline,"*/");
-    if (ptr_line)
-    {
-      //
-      // Finalize the comment
-      //
-      *ptr_line=0;
-      strcpy(inpline+2,ptr_line);
-      flag_in_comment_bloc=false;
-    }
-    else
-    {
-      //
-      // We are still in the bloc
-      //
-      inpline[0]=0;
-    }
-  }
-
-  //
-  // Filtering of C++ like comments
-  //
-  {
-    char *ptr_line=strstr(inpline,"//");
-    if (ptr_line)
-    {
-      *ptr_line=0;
-    }
-  }
-
-  //
-  // Filtering of assembly comments
-  //
-  {
-    char *ptr_line=strchr(inpline,';');
-    if (ptr_line)
-    {
-      *ptr_line=0;
-    }
-  }
-
-  //
-  // Checking for a beginning of C bloc comment
-  //
-  if (!flag_in_comment_bloc)
-  {
-    char *ptr_line=strstr(inpline,"/*");
-    if (ptr_line)
-    {
-      *ptr_line=0;
-      flag_in_comment_bloc=true;
-    }
-  }
-
-  return std::string(inpline);
-}
-#endif
-
-
-/*
-C:\OSDK\BIN\link65.exe -d C:\OSDK\lib/ -o C:\OSDK\TMP\linked.s -s C:\OSDK\TMP\ -q main
-*/
 
 //
 // Parse a line. Mask out comment lines and null lines.
@@ -390,15 +199,6 @@ C:\OSDK\BIN\link65.exe -d C:\OSDK\lib/ -o C:\OSDK\TMP\linked.s -s C:\OSDK\TMP\ -
 //
 LabelState Linker::parseline(char* inpline,bool parseIncludeFiles)
 {
-  char *tmp;
-
-  /*
-  char inpline[MAX_LINE_SIZE+1];
-  assert(sizeof(inpline)>cInputLine.size());
-  strncpy(inpline,cInputLine.c_str(),MAX_LINE_SIZE);
-  inpline[MAX_LINE_SIZE]=0;
-  */
-
   int len=strlen(inpline);
 
   //
@@ -493,7 +293,7 @@ LabelState Linker::parseline(char* inpline,bool parseIncludeFiles)
   // Check for JMP or JSR and for the following label
   //
   int status = 0;
-  tmp=strtok(inpline,gLabelPattern);
+  char* tmp=strtok(inpline,gLabelPattern);
   while (tmp != NULL)
   {
     if (status == 1)
@@ -701,26 +501,22 @@ bool Linker::LoadLibrary(const std::string& path_library_files)
   labelEntry.file_name	="";
   labelEntry.label_name	="";
 
-  std::vector<std::string>::const_iterator itText=textData.begin();
-  while (itText!=textData.end())
+  for (const std::string& lineEntry : textData)
   {
     //  Get line file and parse it
-    std::string currentLine=StringTrim(*itText);
-
-    // Lines that indicate files start with -
-    //if (cCurrentLine[0] < 32)
-    //	break;
+    std::string currentLine=StringTrim(lineEntry);
 
     if (!currentLine.empty())
     {
+      // Lines that indicate files start with -
       if (currentLine[0] == '-')
       {
         // Found a file indicator. Check if already used, if not start using it in table
         labelEntry.file_name=path_library_files+(currentLine.c_str()+1);
         // check for duplicate
-        for (const auto& libraryEntry : m_LibraryReferencesList)
+        for (const LabelEntry& existingEntry : m_LibraryReferencesList)
         {
-          if (labelEntry.file_name == libraryEntry.file_name)
+          if (labelEntry.file_name == existingEntry.file_name)
           {
             ShowError("Duplicate file %s in lib index\n",labelEntry.file_name.c_str());
           }
@@ -737,9 +533,9 @@ bool Linker::LoadLibrary(const std::string& path_library_files)
         labelEntry.label_name=currentLine;
 
         // Check if label is duplicate
-        for (const auto& libraryEntry : m_LibraryReferencesList)
+        for (const LabelEntry& existingEntry : m_LibraryReferencesList)
         {
-          if (labelEntry.label_name == libraryEntry.label_name)
+          if (labelEntry.label_name == existingEntry.label_name)
           {
             ShowError("Duplicate label %s in lib index file\n",labelEntry.label_name.c_str());
           }
@@ -749,7 +545,6 @@ bool Linker::LoadLibrary(const std::string& path_library_files)
         m_LibraryReferencesList.push_back(labelEntry);
       }
     }
-    ++itText;
   }
 
   return true;
@@ -930,16 +725,14 @@ int Linker::Main()
         if (!referencedLabelEntry.m_IsResolved)
         {
           // Act for unresolved label
-          for (unsigned int j=0;j<m_LibraryReferencesList.size();j++)
+          for (const LabelEntry& labelEntry : m_LibraryReferencesList)
           {
-            LabelEntry& labelEntry=m_LibraryReferencesList[j];
             // If in lib file index, take file and put it in gInputFileList if not already there
             if (referencedLabelEntry.label_name==labelEntry.label_name)
             {
               bool labstate=true;
-              for (unsigned int l=0;l<m_InputFileList.size();l++)
+              for (const FileEntry& fileEntry : m_InputFileList)
               {
-                FileEntry& fileEntry=m_InputFileList[l];
                 if (fileEntry.m_FileName==labelEntry.file_name)
                 {
                   labstate=false;
@@ -984,12 +777,9 @@ int Linker::Main()
     // If -l option just print labels and then exit
     printf("\nDefined Labels : \n");
 
-    std::set<std::string>::iterator it=m_DefinedLabelsList.begin();
-    while (it!=m_DefinedLabelsList.end())
+    for (const std::string& labelName : m_DefinedLabelsList)
     {
-      const std::string& labelName=*it;
       printf("%s\n",labelName.c_str());
-      ++it;
     }
     return 0;
   }
@@ -997,7 +787,7 @@ int Linker::Main()
   {
     // Check for Unresolved external references.
     // Print them all before exiting
-    for (const auto& referencedLabelEntry : m_ReferencedLabelsList)
+    for (const ReferencedLabelEntry& referencedLabelEntry : m_ReferencedLabelsList)
     {
       if (!referencedLabelEntry.m_IsResolved)
       {
@@ -1049,7 +839,7 @@ int Linker::Main()
       char dummy[_MAX_PATH];
 
       getcwd(current_directory,_MAX_PATH);
-      _splitpath(inputFile.m_FileName.c_str(),dummy,dummy,filename,dummy);
+      SplitPath(inputFile.m_FileName.c_str(),dummy,dummy,filename,dummy);
 
       fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
     }
