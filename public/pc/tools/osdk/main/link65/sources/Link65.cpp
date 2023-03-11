@@ -224,9 +224,9 @@ public:
   char *m_CurrentToken = nullptr;               ///< Contains the last value read from strtok while parsing files
 
   // Init the path_library_files variable with default library directory and the output_file_name var with the default go.s
-  std::string m_PathLibraryFiles = "lib6502\\";  ///< Directory to find library files (Set by -d)
-  std::string m_PathSourceFiles = "";            ///< Directory to find source files (set by -s)
-  std::string m_OutputFileName = "go.s";         ///< Output file (set by -o)
+  std::string m_PathLibraryFiles = "lib6502\\";         ///< Directory to find library files (Set by -d)
+  std::string m_PathSourceFiles = "";                   ///< Directory to find source files (set by -s)
+  std::string m_OutputFileName = "go.s";                ///< Output file (set by -o)
 
   
   std::vector<FileEntry>			m_InputFileList;                ///< contains filenames to be linked based on 'm_SortPriority' for the order.
@@ -572,7 +572,7 @@ bool Linker::ParseFile(const std::string& filename)
   std::vector<std::string> textData;
   if (!LoadText(filename.c_str(),textData))
   {
-    ShowError("\nCannot open %s \n",filename.c_str());
+    ShowError("\nCannot open %s \n", filename.c_str());
   }
 
   if (m_FlagVerbose)
@@ -588,9 +588,6 @@ bool Linker::ParseFile(const std::string& filename)
     parseIncludeFiles=true;
   }
 
-
-  unsigned int i;
-
   // Scanning the file
   int line_number = 0;
   std::vector<std::string>::const_iterator itText=textData.begin();
@@ -602,7 +599,7 @@ bool Linker::ParseFile(const std::string& filename)
 
     // test
 #if 0
-    if (cCurrentLine.find("_califragilistic")!=std::string::npos)
+    if (currentLine.find("_califragilistic")!=std::string::npos)
     {
       i=0;
     }
@@ -632,8 +629,8 @@ bool Linker::ParseFile(const std::string& filename)
       //  Oh, a label defined. Stuff it in storage
       if (state == e_NewLabel)
       {
-        std::set<std::string>::iterator cIt=m_DefinedLabelsList.find(foundLabel);
-        if (cIt!=m_DefinedLabelsList.end())
+        std::set<std::string>::iterator it=m_DefinedLabelsList.find(foundLabel);
+        if (it!=m_DefinedLabelsList.end())
         {
           // Found the label in the list.
           // It's a duplicate definition... does not mean it's an error, because XA handles allows local labels !
@@ -654,11 +651,11 @@ bool Linker::ParseFile(const std::string& filename)
         // A label reference.
         // Store it if not already in list.
         bool undefinedLabel=true;
-        for (i=0;i<m_ReferencedLabelsList.size();i++)
+        for (auto& labelEntry : m_ReferencedLabelsList)
         {
-          if (m_ReferencedLabelsList[i].label_name == foundLabel)
+          if (labelEntry.label_name == foundLabel)
           {
-            ++m_ReferencedLabelsList[i].reference_count;    // One more reference
+            ++labelEntry.reference_count;    // One more reference
             undefinedLabel=false;
             break;
           }
@@ -721,9 +718,9 @@ bool Linker::LoadLibrary(const std::string& path_library_files)
         // Found a file indicator. Check if already used, if not start using it in table
         labelEntry.file_name=path_library_files+(currentLine.c_str()+1);
         // check for duplicate
-        for (unsigned int i=0;i<m_LibraryReferencesList.size();i++)
+        for (const auto& libraryEntry : m_LibraryReferencesList)
         {
-          if (labelEntry.file_name==m_LibraryReferencesList[i].file_name)
+          if (labelEntry.file_name == libraryEntry.file_name)
           {
             ShowError("Duplicate file %s in lib index\n",labelEntry.file_name.c_str());
           }
@@ -740,9 +737,9 @@ bool Linker::LoadLibrary(const std::string& path_library_files)
         labelEntry.label_name=currentLine;
 
         // Check if label is duplicate
-        for (unsigned int i=0;i<m_LibraryReferencesList.size();i++)
+        for (const auto& libraryEntry : m_LibraryReferencesList)
         {
-          if (labelEntry.label_name==m_LibraryReferencesList[i].label_name)
+          if (labelEntry.label_name == libraryEntry.label_name)
           {
             ShowError("Duplicate label %s in lib index file\n",labelEntry.label_name.c_str());
           }
@@ -895,12 +892,8 @@ int Linker::Main()
   // Open and scan Index file for labels - file pair list
   LoadLibrary(m_PathLibraryFiles);
 
-  int state;
-  unsigned int i,j;
-  unsigned int k,l;
-
   // Scanning files loop
-  for (k=0;k<m_InputFileList.size();k++)
+  for (unsigned int k=0;k<m_InputFileList.size();k++)
   {
     // Skip header.s file if gFlagLibrarian option is on
     if (m_FlagLibrarian && k == 0)
@@ -908,8 +901,6 @@ int Linker::Main()
       k=1;
     }
 
-    //char filename[255];
-    //strcpy(filename,gInputFileList[k].m_cFileName.c_str());
     ParseFile(m_InputFileList[k].m_FileName);
 
     //
@@ -932,24 +923,24 @@ int Linker::Main()
     {
       // Check for not resolved labels.
       // If defined in lib file index then insert their file right after in the list
-      for (i=0;i<m_ReferencedLabelsList.size();i++)
+      for (unsigned int i=0;i<m_ReferencedLabelsList.size();i++)
       {
         // Unresolved label and -l option off. If -l option is on don't care
         ReferencedLabelEntry& referencedLabelEntry=m_ReferencedLabelsList[i];
         if (!referencedLabelEntry.m_IsResolved)
         {
           // Act for unresolved label
-          for (j=0;j<m_LibraryReferencesList.size();j++)
+          for (unsigned int j=0;j<m_LibraryReferencesList.size();j++)
           {
             LabelEntry& labelEntry=m_LibraryReferencesList[j];
             // If in lib file index, take file and put it in gInputFileList if not already there
             if (referencedLabelEntry.label_name==labelEntry.label_name)
             {
               bool labstate=true;
-              for (l=0;l<m_InputFileList.size();l++)
+              for (unsigned int l=0;l<m_InputFileList.size();l++)
               {
-                FileEntry& cFileEntry=m_InputFileList[l];
-                if (cFileEntry.m_FileName==labelEntry.file_name)
+                FileEntry& fileEntry=m_InputFileList[l];
+                if (fileEntry.m_FileName==labelEntry.file_name)
                 {
                   labstate=false;
                   break;
@@ -964,13 +955,13 @@ int Linker::Main()
 
                 // NICE TRICK : Insert lib file in file list to be processed immediately.
                 // With this labels used by the lib file will be resolved, without the need for multiple passes
-                for (l=m_InputFileList.size()-1;l>k+1;l--)
+                for (unsigned int l=m_InputFileList.size()-1;l>k+1;l--)
                 {
                   m_InputFileList[l]=m_InputFileList[l-1];
                 }
-                FileEntry& cFileEntry=m_InputFileList[k+1];
-                cFileEntry.m_FileName		=labelEntry.file_name;
-                cFileEntry.m_SortPriority	=1;
+                FileEntry& fileEntry=m_InputFileList[k+1];
+                fileEntry.m_FileName		=labelEntry.file_name;
+                fileEntry.m_SortPriority	=1;
               }
               else
               {
@@ -986,7 +977,7 @@ int Linker::Main()
   if (m_FlagVerbose)
     printf("\nend scanning files \n\n");
 
-  state=0;
+  int state=0;
 
   if (m_FlagLibrarian)
   {
@@ -996,8 +987,8 @@ int Linker::Main()
     std::set<std::string>::iterator it=m_DefinedLabelsList.begin();
     while (it!=m_DefinedLabelsList.end())
     {
-      const std::string& cLabelName=*it;
-      printf("%s\n",cLabelName.c_str());
+      const std::string& labelName=*it;
+      printf("%s\n",labelName.c_str());
       ++it;
     }
     return 0;
@@ -1006,9 +997,8 @@ int Linker::Main()
   {
     // Check for Unresolved external references.
     // Print them all before exiting
-    for (i=0;i<m_ReferencedLabelsList.size();i++)
+    for (const auto& referencedLabelEntry : m_ReferencedLabelsList)
     {
-      ReferencedLabelEntry& referencedLabelEntry=m_ReferencedLabelsList[i];
       if (!referencedLabelEntry.m_IsResolved)
       {
         printf("Unresolved external: %s, first referenced in %s(%d) [referenced %d times]\n",referencedLabelEntry.label_name.c_str(), referencedLabelEntry.file_name.c_str(), referencedLabelEntry.line_number, referencedLabelEntry.reference_count);
@@ -1042,11 +1032,11 @@ int Linker::Main()
 
 
   // Get lines from all files and put them in go.s
-  for (k=0;k<m_InputFileList.size();k++)
+  for (const auto& inputFile : m_InputFileList)
   {
     if (m_FlagVerbose)
     {
-      printf("Linking %s\n",m_InputFileList[k].m_FileName.c_str());
+      printf("Linking %s\n", inputFile.m_FileName.c_str());
     }
 
     //
@@ -1059,16 +1049,16 @@ int Linker::Main()
       char dummy[_MAX_PATH];
 
       getcwd(current_directory,_MAX_PATH);
-      _splitpath(m_InputFileList[k].m_FileName.c_str(),dummy,dummy,filename,dummy);
+      _splitpath(inputFile.m_FileName.c_str(),dummy,dummy,filename,dummy);
 
       fprintf(gofile,"#file \"%s\\%s.s\"\r\n",current_directory,filename);
     }
 
     // Mike: The code should really reuse the previously loaded/parsed files
     std::vector<std::string> textData;
-    if (!LoadText(m_InputFileList[k].m_FileName.c_str(),textData))
+    if (!LoadText(inputFile.m_FileName.c_str(),textData))
     {
-      ShowError("\nCannot open %s \n",m_InputFileList[k].m_FileName.c_str());
+      ShowError("\nCannot open %s \n", inputFile.m_FileName.c_str());
     }
 
     std::vector<std::string>::const_iterator itText=textData.begin();
