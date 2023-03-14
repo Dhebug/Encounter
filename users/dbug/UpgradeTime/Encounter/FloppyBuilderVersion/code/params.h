@@ -20,6 +20,21 @@
 #define KEY_RETURN		12
 
 
+#define via_portb               $0300 
+#define	via_ddrb				$0302	
+#define	via_ddra				$0303
+#define via_t1cl                $0304 
+#define via_t1ch                $0305 
+#define via_t1ll                $0306 
+#define via_t1lh                $0307 
+#define via_t2ll                $0308 
+#define via_t2lh                $0309 
+#define via_sr                  $030A 
+#define via_acr                 $030b 
+#define via_pcr                 $030c 
+#define via_ifr                 $030D 
+#define via_ier                 $030E 
+#define via_porta               $030f 
 
 
 

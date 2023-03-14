@@ -12,6 +12,11 @@ IF "%OSDK%"=="" GOTO ErCfg
 CALL osdk_config.bat
 
 ::
+:: Run the build
+::
+CALL osdk_build.bat
+IF ERRORLEVEL 1 GOTO Error
+::
 :: Run the emulator using the common batch
 ::
 CALL %OSDK%\bin\execute.bat
@@ -29,4 +34,5 @@ IF "%OSDKBRIEF%"=="" PAUSE
 GOTO End
 
 :End
+:Error 
 ::pause
