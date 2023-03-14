@@ -13,45 +13,16 @@
 
 #include "params.h"
 
-#define        	via_portb               $0300 
-#define		via_ddrb		$0302	
-#define		via_ddra		$0303
-#define        	via_t1cl                $0304 
-#define        	via_t1ch                $0305 
-#define        	via_t1ll                $0306 
-#define        	via_t1lh                $0307 
-#define        	via_t2ll                $0308 
-#define        	via_t2lh                $0309 
-#define        	via_sr                  $030A 
-#define        	via_acr                 $030b 
-#define        	via_pcr                 $030c 
-#define        	via_ifr                 $030D 
-#define        	via_ier                 $030E 
-#define        	via_porta               $030f 
-
-
 	.zero
 
 zpTemp01			.byt 0
 zpTemp02			.byt 0
 tmprow				.byt 0
 
-;isr_plays_sound		.byt 0
-
-_VblCounter					.dsb 1
-;irq_save_a				.dsb 1
-;irq_save_x				.dsb 1
-;irq_save_y				.dsb 1
-
 	.text 
 
-
 oldKey 			.byt 0
-irq_detected	.byt 0 	; Signal if an interrupt occured
-
-
-_KeyBank .dsb 8   ; The virtual Key Matrix
-
+_KeyBank 		.dsb 8   ; The virtual Key Matrix
 
 ; Usually it is a good idea to keep 0 all the unused
 ; entries, as it speeds up things. Z=1 means no key
@@ -67,111 +38,7 @@ tab_ascii
     .asc "8","L","0","/",KEY_RSHIFT,KEY_RETURN,0,"+"
 
 
-_System_InstallIRQ_SimpleVbl
-	//jmp _System_InstallIRQ_SimpleVbl
-.(
-	sei
 
-	lda $306
-	sta VIA_Restore_Low+1
-	lda $307
-	sta VIA_Restore_High+1
-
-	lda $FFFE
-	sta IRQ_Restore_Low+1
-	lda $FFFF
-	sta IRQ_Restore_High+1
-
-	;  Set the VIA parameters to get a 50hz IRQ
-	lda #<19966		; 20000
-	sta $306
-	lda #>19966		; 20000
-	sta $307
-
-	lda #0
-	sta _VblCounter
-	
-	; Install interrupt (this works only if overlay ram is accessible)
-	lda #<_50Hz_InterruptHandler
-	sta $FFFE
-	lda #>_50Hz_InterruptHandler
-	sta $FFFF
-
-	cli
-	rts	
-.)
-
-
-
-_System_RestoreIRQ_SimpleVbl
-	//jmp _System_RestoreIRQ_SimpleVbl
-.(
-	sei
-
-	;  Restore the VIA
-+VIA_Restore_Low	
-	lda #$12
-	sta $306
-+VIA_Restore_High
-	lda #$12
-	sta $307
-	
-	; Restore the IRQ handler
-+IRQ_Restore_Low	
-	lda #$12
-	sta $FFFE
-+IRQ_Restore_High
-	lda #$23
-	sta $FFFF
-
-	cli
-	rts	
-.)
-
-
-
-_50Hz_InterruptHandler 
-.(
-	bit $304
-	inc _VblCounter
-
-	pha
-	txa
-	pha
-	tya
-	pha
-
-	; Just to show the IRQ is running... blinks a cursor at 50hz at the bottom right of the screen
-	//lda $bfdf
-	//eor #128
-	//sta $bfdf
-
-	; Signal an interrupt has been detected
-	; This serves the purpose of timing and 
-	; synchronizing with the vertical retrace
-	inc irq_detected
-	
-	; Process keyboard
-	jsr ReadKeyboard
-			
-  dec Milliseconds
-  bne skip_count_down
-
-  lda #50
-  sta Milliseconds
-
-  jsr CountSecondDown
-
-skip_count_down  
-
-	; Restore regs and return
-	pla
-	tay
-	pla
-	tax
-	pla
-	rti 
-.)
 
 ReadKeyboard
 .(
@@ -310,31 +177,14 @@ retz
 	rts
 .)
 
-;;;;;;;;;;;;;;;;;;;;;;
+
 ; Wait for a keypress
-;;;;;;;;;;;;;;;;;;;;;;
 _WaitKey
 .(
-	;lda #0
-	;sta oldKey
 loop
-	jsr WaitIRQ
+	jsr _WaitIRQ
 	jsr ReadKeyNoBounce
 	beq loop
 	rts	
 .)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Waits for a signaled IRQ
-; event to occur
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-WaitIRQ
-.(
-	lda #0
-	sta irq_detected
-loop
-	lda irq_detected
-	beq loop
-	rts
-.)

@@ -71,9 +71,10 @@ ECHO Assembling the first part
 SET OSDKLINK=
 SET OSDKADDR=$400
 SET OSDKNAME=IntroProgram
-SET OSDKFILE=intro_main loader_api keyboard time display
+SET OSDKFILE=%OSDKFILE_INTRO%
 SET OSDKDISK=
 CALL %OSDK%\bin\make.bat %OSDKFILE%
+IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o
 copy build\symbols ..\build\symbols_IntroProgram
 
@@ -89,9 +90,10 @@ ECHO Assembling the second part
 SET OSDKLINK=
 SET OSDKADDR=$400
 SET OSDKNAME=GameProgram
-SET OSDKFILE=game_main loader_api keyboard time display
+SET OSDKFILE=%OSDKFILE_GAME%
 SET OSDKDISK=
 CALL %OSDK%\bin\make.bat %OSDKFILE%
+IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o
 copy build\symbols ..\build\symbols_GameProgram
 :blaskip
@@ -121,4 +123,4 @@ ECHO.
 ECHO An Error has happened. Build stopped
 
 :End
-pause
+::pause
