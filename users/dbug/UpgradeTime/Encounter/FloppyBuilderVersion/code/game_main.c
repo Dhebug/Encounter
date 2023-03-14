@@ -18,7 +18,11 @@ extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 // Display.h
 extern unsigned char ImageBuffer[40*128];
 extern void ClearHiresWindow();
+extern void ClearTextWindow();
 extern void BlitBufferToHiresWindow();
+
+// Time.h
+extern void DisplayClock();
 
 int k;
 
@@ -52,7 +56,15 @@ void main()
 	// 
 	System_InstallIRQ_SimpleVbl();
 
+	ClearTextWindow();
+	poke(0xbb80+40*0,31);  // Switch to HIRES
+	poke(0xa000+40*128,26);  // Switch to TEXT
+
+	// Load the charset
+	LoadFileAt(LOADER_FONT_6x8,0xb500);
+
 	LoadScene();
+	DisplayClock();
 
 	InputBufferPos=0;
 	InputBuffer[InputBufferPos]=0;
@@ -83,7 +95,7 @@ void main()
 		// Arrows:  -> All on Bank 4
 
 		int shift=0;
-		sprintf((char*)0xbb80+40*25,"> %s| ",InputBuffer);
+		sprintf((char*)0xbb80+40*27,"> %s| ",InputBuffer);
 		k=WaitKey();
 		if ((KeyBank[4] & 16))	// SHIFT code
 		{
