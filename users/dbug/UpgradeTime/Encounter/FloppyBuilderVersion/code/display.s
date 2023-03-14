@@ -38,6 +38,22 @@ loop
   rts
 .)
 
+; Full Oric display is 240x224
+; The top graphic window is 240x128
+; Which leaves us with a 240x96 text area at the bottom (12 lines )
+; 40*12 = 480
+_ClearTextWindow  
+.(
+  lda #" "   ;lda #"x" ;+1+4
+  ldx #0
+loop
+  sta $bb80+40*16+256*0,x
+  sta $bfdf-256,x
+  dex
+  bne loop
+  rts
+.)
+
 
 ; A000-B3FF 5120 bytes of half HIRES (240x128 resolution)
 ; Exactly 20*256

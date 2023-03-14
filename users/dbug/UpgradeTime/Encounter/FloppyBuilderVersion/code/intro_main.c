@@ -22,12 +22,18 @@ extern void BlitBufferToHiresWindow();
 int k;
 
 
+extern char Text_CopyrightSevernSoftware[];
+extern char Text_CopyrightDefenceForce[];
+extern char Text_FirstLine[];
+
 void main()
 {
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0x9900);
 
-	//strcpy((char*)0xbb80+40*27,"Intro");
+	strcpy((char*)0xbb80+40*25,Text_FirstLine);
+	strcpy((char*)0xbb80+40*26,Text_CopyrightSevernSoftware);
+	strcpy((char*)0xbb80+40*27,Text_CopyrightDefenceForce);
 
 	// Load the first picture at the default address specified in the script
 	LoadFileAt(LOADER_PICTURE_TITLE,0xa000);
