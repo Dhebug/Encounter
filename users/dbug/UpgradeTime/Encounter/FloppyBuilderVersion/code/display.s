@@ -112,6 +112,6 @@ loop
 
 * = $C000
 
-_ImageBuffer    .dsb 40*128
+_ImageBuffer    .dsb 40*200
 
 
