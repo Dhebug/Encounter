@@ -125,7 +125,7 @@ skip2   ;Proceed to next row
 ; Reads a key (single press, but repeating) and returns his ASCII value in reg X. 
 ; Z=1 if no keypress detected.
 
-ReadKey
+_ReadKey
 .(
 	ldx #7
 loop
@@ -163,9 +163,9 @@ skip
 
 ; Read a single key, same as before but no repeating.
 
-ReadKeyNoBounce
+_ReadKeyNoBounce
 .(
-	jsr ReadKey
+	jsr _ReadKey
 	cpx oldKey
 	beq retz
 	stx oldKey
@@ -183,7 +183,7 @@ _WaitKey
 .(
 loop
 	jsr _WaitIRQ
-	jsr ReadKeyNoBounce
+	jsr _ReadKeyNoBounce
 	beq loop
 	rts	
 .)
