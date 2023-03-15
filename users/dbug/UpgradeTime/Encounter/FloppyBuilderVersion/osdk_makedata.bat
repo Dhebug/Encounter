@@ -11,7 +11,13 @@ popd
 
 :: Pictures
 SET PICTCONV=%OSDK%\Bin\PictConv
+SET HEADER=%OSDK%\Bin\header
+SET XA=%OSDK%\Bin\Xa
 SET TARGET=build\files
+
+:: Hi-Score table
+%XA% -o %TARGET%\scores.bin data\scores.s
+%HEADER% -h1 %TARGET%\scores.bin %TARGET%\scores.tap $9c00
 
 :: Character sets
 SET PARAMS=-u1 -m0 -f0 -o2
