@@ -72,6 +72,12 @@ AddDefine LOADER_PROGRAM_SECOND_SIZE {FileSize}
 AddDefine LOADER_PROGRAM_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
 
 ;
+; The scores
+;
+AddFile ..\build\files\scores.bin
+AddDefine LOADER_HIGH_SCORES {FileIndex}
+
+;
 ; The fonts
 ;
 AddFile ..\build\files\font_6x8_mystery.fnt 		; 9900=STD, 9D00=ALT
