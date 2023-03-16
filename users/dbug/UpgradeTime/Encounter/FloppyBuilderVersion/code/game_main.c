@@ -142,10 +142,7 @@ void main()
 	while (k!=13);
 
 	// Just to let the last click sound to keep playing
-	WaitIRQ();
-	WaitIRQ();
-	WaitIRQ();
-	WaitIRQ();
+	WaitFrames(4);
 
 	System_RestoreIRQ_SimpleVbl();
 
