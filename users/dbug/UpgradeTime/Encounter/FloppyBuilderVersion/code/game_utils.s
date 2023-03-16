@@ -3,9 +3,10 @@
 
 IrqTasks
 .(
-	; Process keyboard
-	jsr ReadKeyboard
-			
+    ; Process keyboard
+    jsr ReadKeyboard
+    jsr SoundUpdate
+            
     ; "Realtime" Clock
     .(
     dec Milliseconds

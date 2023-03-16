@@ -5,92 +5,14 @@
 
 #include <lib.h>
 
-#include "params.h"
+#include "common.h"
 
-#include "loader_api.h"
-
-extern void System_InstallIRQ_SimpleVbl();
-extern void System_RestoreIRQ_SimpleVbl();
-extern void WaitIRQ();
-
-extern char WaitKey();
-extern char ReadKey();
-extern char ReadKeyNoBounce();
-
-// Display.h
-extern unsigned char ImageBuffer[40*200];
-
-extern char Text_CopyrightSevernSoftware[];
-extern char Text_CopyrightDefenceForce[];
-extern char Text_FirstLine[];
-extern char Text_HowToPlay[];
-extern char Text_MovementVerbs[];
-extern char Text_Notes[];
-
-int k;
-
-char gIsHires = 1;
-char* gPrintAddress = (char*)0xbb80;
-
-void SetLineAddress(char* address)
-{
-	gPrintAddress=address;
-}
-
-void PrintLine(const char* message)
-{
-	strcpy(gPrintAddress,message);	
-	gPrintAddress+=40;
-}
-
-
-void Text(char paperColor,char inkColor)
-{
-	int y;
-	memset((char*)0xa000,paperColor,0xbfe0-0xa000);	
-	poke(0xbfdf,26);
-	WaitIRQ();
-	WaitIRQ();
-	if (gIsHires)
-	{
-		memcpy((char*)0xb500,(char*)0x9900,8*96);
-		gIsHires=0;	
-	}
-	for (y=0;y<28;y++)
-	{
-		poke(0xbb80+y*40+1,inkColor);
-		memset(0xbb80+y*40+2,32,38);
-	}
-}
-
-
-void Hires(char paperColor,char inkColor)
-{
-	int y;
-	if (!gIsHires)
-	{
-		memcpy((char*)0x9900,(char*)0xb500,8*96);
-		gIsHires=1;
-	}
-	memset((char*)0xa000,paperColor,0xbfe0-0xa000);   // Blinks for some reason, bug in memset???
-	poke(0xbfdf,31);
-	WaitIRQ();
-	WaitIRQ();
-	for (y=0;y<200;y++) 
-	{
-		poke(0xa000+y*40+0,paperColor);
-		poke(0xa000+y*40+1,inkColor);
-	}
-	for (y=0;y<3;y++)
-	{
-		poke(0xbb80+40*25+y*40+0,paperColor);
-		poke(0xbb80+40*25+y*40+1,inkColor);
-	}
-}
 
 
 int Wait(int frameCount)
-{
+{	
+	int k;
+
 	while (frameCount--)
 	{
 		WaitIRQ();
@@ -98,11 +20,17 @@ int Wait(int frameCount)
 		k=ReadKey();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
+			PlaySound(KeyClickLData);
+			WaitIRQ();
+			WaitIRQ();
+			WaitIRQ();
+			WaitIRQ();
 			return 1;
 		}
 	}
 	return 0;
 }
+
 
 int DisplayIntroPage()
 {
