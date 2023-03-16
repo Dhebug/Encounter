@@ -83,6 +83,8 @@ int DisplayUserManual()
 //
 // Typewriter intro style presentation.
 // Characters are displayed one by one, and it's possible to quit at any time
+//
+// Now we could do something smarter, write at the bottom of the screen and scroll up the result
 // 
 int DisplayStory()
 {
@@ -90,7 +92,7 @@ int DisplayStory()
 
 	Text(16+7,0);
 
-	SetLineAddress((char*)0xbb80+40*2+2);
+	SetLineAddress((char*)0xbb80+40*26+2);
 
 	// By using || it's possible to early exit the function when the player presses a key
 	result = TypeWriterPrintCharacter("Wednesday, September 1st, 1982\n\n\n")
@@ -114,7 +116,6 @@ int DisplayStory()
 	{
 		if (car=='\n')
 		{
-			gPrintAddress+=40;
 			line=gPrintAddress;
 			if (Wait(5+(rand()&3)))
 			{
@@ -126,6 +127,7 @@ int DisplayStory()
 			{
 				return 1;
 			}
+			memcpy((char*)0xbb80,(char*)0xbb80+40,40*27);  // Scroll up the entire screen
 		}
 		else
 		if (car==' ')
