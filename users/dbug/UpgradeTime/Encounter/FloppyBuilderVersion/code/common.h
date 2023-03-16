@@ -46,5 +46,9 @@ extern void SetLineAddress(char* address);
 extern void PrintLine(const char* message);
 extern void Text(char paperColor,char inkColor);
 extern void Hires(char paperColor,char inkColor);
+extern void WaitFrames(int frames);
+
+extern char gIsHires;
+extern char* gPrintAddress;
 
 

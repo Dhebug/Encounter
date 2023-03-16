@@ -31,15 +31,19 @@ void PrintLine(const char* message)
 void Text(char paperColor,char inkColor)
 {
 	int y;
-	memset((char*)0xa000,paperColor,0xbfe0-0xa000);	
-	poke(0xbfdf,26);
-	WaitIRQ();
-	WaitIRQ();
 	if (gIsHires)
 	{
+    	memset((char*)0xa000,paperColor,0xbfe0-0xa000);	
+        poke(0xbfdf,26);
+        WaitIRQ();
+        WaitIRQ();
 		memcpy((char*)0xb500,(char*)0x9900,8*96);
 		gIsHires=0;	
-	}
+    }
+    else
+    {
+    	memset((char*)0xbb80,paperColor,0xbfe0-0xbb80);	
+    }
 	for (y=0;y<28;y++)
 	{
 		poke(0xbb80+y*40+1,inkColor);
@@ -72,4 +76,10 @@ void Hires(char paperColor,char inkColor)
 	}
 }
 
-
+void WaitFrames(int frames)
+{
+    while (frames--)
+    {
+        WaitIRQ();
+    }
+}
