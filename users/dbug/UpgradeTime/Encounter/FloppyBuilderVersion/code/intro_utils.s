@@ -3,9 +3,9 @@
 
 IrqTasks
 .(
-	; Process keyboard
-	jsr ReadKeyboard
-
+    ; Process keyboard
+    jsr ReadKeyboard
+    jsr SoundUpdate
     rts    
 .)
 

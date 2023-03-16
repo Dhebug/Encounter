@@ -4,25 +4,8 @@
 //
 #include <lib.h>
 
-#include "params.h"
+#include "common.h"
 
-#include "loader_api.h"
-
-extern void System_InstallIRQ_SimpleVbl();
-extern void System_RestoreIRQ_SimpleVbl();
-
-extern char WaitKey();
-
-extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
-
-// Display.h
-extern unsigned char ImageBuffer[40*128];
-extern void ClearHiresWindow();
-extern void ClearTextWindow();
-extern void BlitBufferToHiresWindow();
-
-// Time.h
-extern void DisplayClock();
 
 int k;
 
@@ -116,18 +99,25 @@ void main()
 			{
 				InputBufferPos--;
 				InputBuffer[InputBufferPos]=0;
+				PlaySound(KeyClickHData);
 			}
 			break;
 
 		case KEY_RETURN:
 			if (strcmp(InputBuffer,"LOAD")==0)
 			{
+				PlaySound(KeyClickHData);
 				LoadScene();
 			}
 			else
 			if (strcmp(InputBuffer,"QUIT")==0)
 			{
+				PlaySound(KeyClickHData);
 				k=13;
+			}
+			else
+			{
+				PlaySound(PingData);
 			}
 			break;
 
@@ -143,12 +133,19 @@ void main()
 				{
 					InputBuffer[InputBufferPos++]=k;
 					InputBuffer[InputBufferPos]=0;
+					PlaySound(KeyClickLData);
 				}
 			}
 			break;
 		}
 	}
 	while (k!=13);
+
+	// Just to let the last click sound to keep playing
+	WaitIRQ();
+	WaitIRQ();
+	WaitIRQ();
+	WaitIRQ();
 
 	System_RestoreIRQ_SimpleVbl();
 

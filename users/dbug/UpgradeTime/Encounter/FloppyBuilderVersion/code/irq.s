@@ -95,6 +95,7 @@ _50Hz_InterruptHandler
 
 
 ; Waits for the next IRQ
+_VSync
 _WaitIRQ
 .(
 	lda _VblCounter
@@ -104,3 +105,24 @@ loop
 	rts
 .)
 
+
+
+_Breakpoint
+	jmp _Breakpoint
+_DoNothing
+	rts
+
+
+
+_Temporize
+	ldy #1
+temporize_outer
+	ldx #0
+temporize_inner
+	dex
+	bne temporize_inner
+
+	dey
+	bne temporize_outer
+
+	rts
