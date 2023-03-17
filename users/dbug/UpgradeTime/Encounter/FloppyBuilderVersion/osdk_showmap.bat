@@ -7,10 +7,10 @@
 IF "%OSDK%"=="" GOTO ErCfg
 
 
-%osdk%\bin\MemMap.exe build\symbols_FirstProgram map_first.htm First %OSDK%\documentation\documentation.css
-%osdk%\bin\MemMap.exe build\symbols_SecondProgram map_second.htm Second %OSDK%\documentation\documentation.css
-explorer map_first.htm 
-explorer map_second.htm
+%osdk%\bin\MemMap.exe build\symbols_IntroProgram map_intro.htm First %OSDK%\documentation\documentation.css
+%osdk%\bin\MemMap.exe build\symbols_GameProgram map_game.htm Second %OSDK%\documentation\documentation.css
+explorer map_intro.htm 
+explorer map_game.htm
 
 
 GOTO End

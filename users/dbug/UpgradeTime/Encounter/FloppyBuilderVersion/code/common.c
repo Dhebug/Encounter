@@ -9,6 +9,8 @@
 char gIsHires = 1;
 char* gPrintAddress = (char*)0xbb80;
 
+ score_entry gHighScores[SCORE_COUNT];
+
 
 void PlaySound(const char* registerList)
 {

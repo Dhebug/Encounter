@@ -7,6 +7,17 @@
 
 #include "common.h"
 
+// intro_utils
+extern char Text_FirstLine[];
+extern char Text_CopyrightSevernSoftware[];
+extern char Text_CopyrightDefenceForce[];
+
+extern char Text_HowToPlay[];
+extern char Text_MovementVerbs[];
+extern char Text_Notes[];
+
+extern char Text_Leaderboard[];
+
 
 // Some quite ugly function which waits a certain number of frames
 // while detecting key presses and returns 1 if either space or enter are pressed
@@ -103,55 +114,96 @@ int DisplayStory()
 	|| TypeWriterPrintCharacter("...using lethal force if necessary.\n\n\n")
 	|| TypeWriterPrintCharacter("I parked my car on the market place\nand approached discretely by foot to\n")
 	|| TypeWriterPrintCharacter("not alert them from my presence...\n\n")
-	|| Wait(500);
+	|| Wait(50*2);
 
 	return result;
 }
 
- int TypeWriterPrintCharacter(const char* message)
- {
+int TypeWriterPrintCharacter(const char *message)
+{
 	char car;
-	char* line=gPrintAddress;
-	while (car=*message++)
+	char *line = gPrintAddress;
+	while (car = *message++)
 	{
-		if (car=='\n')
+		if (car == '\n')
 		{
-			line=gPrintAddress;
-			if (Wait(5+(rand()&3)))
+			line = gPrintAddress;
+			if (Wait(5 + (rand() & 3)))
 			{
 				return 1;
 			}
 			PlaySound(KeyClickLData);
-			//PlaySound(PingData);
-			if (Wait(20+(rand()&15)))
+			// PlaySound(PingData);
+			if (Wait(20 + (rand() & 15)))
 			{
 				return 1;
 			}
-			memcpy((char*)0xbb80,(char*)0xbb80+40,40*27);  // Scroll up the entire screen
+			memcpy((char *)0xbb80, (char *)0xbb80 + 40, 40 * 27); // Scroll up the entire screen
 		}
-		else
-		if (car==' ')
+		else if (car == ' ')
 		{
-			*line++=car;
-			//PlaySound(KeyClickLData);
-			if (Wait(5+(rand()&3)))
+			*line++ = car;
+			// PlaySound(KeyClickLData);
+			if (Wait(5 + (rand() & 3)))
 			{
 				return 1;
 			}
 		}
 		else
 		{
-			*line++=car;
+			*line++ = car;
 			PlaySound(KeyClickHData);
 		}
-		if (Wait(3+(rand()&3)))
+		if (Wait(2 + (rand() & 3)))
 		{
 			return 1;
 		}
 	}
 	return 0;
- }
+}
 
+
+int DisplayHighScoresTable()
+{
+	int entry;
+	int score;
+	unsigned char condition;
+	score_entry* ptrScore=gHighScores;
+
+	Text(16+0,7);
+
+	if (ptrScore->condition == e_SCORE_UNNITIALIZED)
+	{
+		// Load the high score table on the first access
+		LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+	}
+
+	SetLineAddress((char*)0xbb80+40*0+0);
+
+	PrintLine(Text_Leaderboard);
+
+	for (entry=0;entry<SCORE_COUNT;entry++)
+	{		
+		gPrintAddress+=40;
+		memcpy(gPrintAddress,ptrScore->name,16);
+		
+		score=ptrScore->score-32768;
+		sprintf(gPrintAddress+16+((score>=0)?1:0),"%c%d",4,score);
+
+		condition=ptrScore->condition;
+		if (condition<=e_SCORE_GAVE_UP)
+		{
+			sprintf(gPrintAddress+22,"%s",gScoreConditionsArray[condition]);
+		}
+		ptrScore++;		
+		if (Wait(10))
+		{
+			return 1;
+		}
+	}
+
+	return Wait(50*2);
+}
 
 
 void main()
@@ -168,6 +220,11 @@ void main()
 	while (1)
 	{
 		if (DisplayIntroPage())
+		{
+			break;
+		}
+
+		if (DisplayHighScoresTable())
 		{
 			break;
 		}
