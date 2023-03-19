@@ -70,7 +70,7 @@ loop
   lda TimeHours-1,x
   ;sta $bfdf-6,x
   ;sta $bb80+16*40+39-6,x
-  sta $bb80+16*40+39-6-1,x
+  sta $bb80+27*40+39-6-1,x
   dex
   bpl loop  
 

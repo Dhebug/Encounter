@@ -1,8 +1,14 @@
+//
+// Misc settings for the game testing
+//
+//#define ENABLE_INTRO         // Comment out to skip the intro
 
-/*This keys don't have an ASCII code assigned, so we will
- use consecutive values outside the usual alphanumeric 
- space.
-*/
+
+// RControl -> Bank0 & 16
+// LControl -> Bank2 & 16
+// LShift   -> Bank4 & 16 
+// RShift   -> Bank7 & 16 
+// Arrows:  -> All on Bank 4
 
 // Modifier keys
 #define KEY_LSHIFT		1
@@ -18,6 +24,7 @@
 #define KEY_ESC			10
 #define KEY_DEL			11
 #define KEY_RETURN		12
+
 
 
 #define via_portb               $0300 

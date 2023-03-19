@@ -9,6 +9,7 @@ IrqTasks
     rts    
 .)
 
+    .text   // could be .data if we setup the base address properly
 
 _Text_FirstLine                  .byt 16+3,4,"                                        ",0
 _Text_CopyrightSevernSoftware    .byt 16+3,4,"  Encounter ",96," 1983 Severn Software    ",0

@@ -8,6 +8,7 @@ extern void System_InstallIRQ_SimpleVbl();
 extern void System_RestoreIRQ_SimpleVbl();
 extern void WaitIRQ();
 
+extern unsigned char VblCounter;
 
 // Keyboard
 extern char WaitKey();
@@ -37,6 +38,8 @@ extern char KeyClickLData[];
 // Common
 extern void SetLineAddress(char* address);
 extern void PrintLine(const char* message);
+extern void PrintWord(const char* message);
+
 extern void Text(char paperColor,char inkColor);
 extern void Hires(char paperColor,char inkColor);
 extern void WaitFrames(int frames);
