@@ -132,6 +132,7 @@ AddFile ..\build\files\30.hir
 AddFile ..\build\files\31.hir
 AddFile ..\build\files\32.hir
 AddFile ..\build\files\33.hir
+AddFile ..\build\files\341.hir    ; bedroom with sleeping man
 AddFile ..\build\files\35.hir
 AddFile ..\build\files\36.hir
 AddFile ..\build\files\37.hir
@@ -148,7 +149,6 @@ AddFile ..\build\files\242.hir
 
 ; Additional scenes for the room with the sleeping thug
 AddFile ..\build\files\340.hir
-AddFile ..\build\files\341.hir
 AddFile ..\build\files\342.hir
 
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}

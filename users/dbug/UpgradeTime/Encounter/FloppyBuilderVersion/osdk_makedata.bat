@@ -37,7 +37,7 @@ SET PARAMS=-u1 -m0 -f6 -o2
 :: 6 - You are on a narrow path.
 :: 7 - You have fallen into a deep pit
 :: 8 - You are near to an old-fashioned well.
-:: 9 - You are in a dark forest.
+:: 9 - You are in a wooded avenue.
 :: 10 - You are on a wide gravel drive
 :: 11 - You are in an open area of tarmac
 :: 12 - You are in a beautiful garden

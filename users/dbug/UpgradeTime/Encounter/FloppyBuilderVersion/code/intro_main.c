@@ -211,6 +211,7 @@ void main()
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0x9900);
 
+#ifdef ENABLE_INTRO
 	// Load the first picture at the default address specified in the script
 	LoadFileAt(LOADER_PICTURE_TITLE,ImageBuffer);
 
@@ -241,6 +242,7 @@ void main()
 	}
 
 	System_RestoreIRQ_SimpleVbl();
+#endif
 
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_PROGRAM_SECOND,0x400);

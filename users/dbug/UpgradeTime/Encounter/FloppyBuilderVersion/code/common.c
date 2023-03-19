@@ -29,6 +29,15 @@ void PrintLine(const char* message)
 	gPrintAddress+=40;
 }
 
+ void PrintWord(const char* message)
+ {
+	char car;
+	while (car=*message++)
+	{
+		*gPrintAddress++=car;
+	}
+ }
+
 
 void Text(char paperColor,char inkColor)
 {
