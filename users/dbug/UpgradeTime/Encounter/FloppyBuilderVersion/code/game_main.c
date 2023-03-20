@@ -14,8 +14,28 @@ char gInputBufferPos;
 char gTextBuffer[80];    // Temp
 
 
+void ClearMessageWindow(unsigned char paperColor)
+{
+	int i;
+	char* ptrScreen=(char*)0xbb80+40*18;
+	for (i=18;i<=23;i++)
+	{
+		*ptrScreen=paperColor;
+		memset(ptrScreen+1,32,39);
+		ptrScreen+=40;
+	}
+}
 
-void PrintSceneInformation()
+
+void PrintStatusMessage(char color,const char* message)
+{
+	char* ptrScreen=(char*)0xbb80+40*22;
+	memset(ptrScreen+1,32,39);
+	sprintf(ptrScreen+1,"%c%s",color,message);
+}
+
+
+void PrintSceneDirections()
 {
 	location* locationPtr = &gLocations[gCurrentLocation];
 	unsigned char* directions = locationPtr->directions;
@@ -30,11 +50,6 @@ void PrintSceneInformation()
 			exitCount++;
 		}
 	}
-
-	// Print the description of the place at the top (centered)
-	memset((char*)0xbb80+16*40+1,' ',39);
-	messageLength=strlen(locationPtr->description);
-	strcpy((char*)0xbb80+16*40+20-messageLength/2,locationPtr->description);
 
 	// Print the directions under (also centered)
 	memset((char*)0xbb80+17*40+1,' ',39);
@@ -79,26 +94,74 @@ void PrintSceneInformation()
 }
 
 
+void PrintSceneObjects()
+{
+	int i;
+	int itemCount = 0;
+	int item;
+
+	for (item=0;item<e_ITEM_COUNT_;item++)
+	{
+		if (gItems[item].location == gCurrentLocation)
+		{
+			itemCount++;
+		}
+	}
+
+	// Print any item in the location
+	if (itemCount)
+	{
+		char first=1;
+		char* ptrScreen=(char*)0xbb80+40*18;
+		for (item=0;item<e_ITEM_COUNT_;item++)
+		{
+			if (gItems[item].location == gCurrentLocation)
+			{
+				if (first)
+				{
+					// The first item on the screen is shown a bit differently
+					sprintf(ptrScreen+1,"%cI can see %s",3,gItems[item].description);					
+					ptrScreen+=40;
+					first=0;
+				}
+				else
+				{
+					sprintf(ptrScreen+1,"%c%s",3,gItems[item].description);					
+					ptrScreen+=40;
+				}
+			}
+		}
+	}
+	else
+	{
+		sprintf((char*)0xbb80+40*18+1,"%c%s",3,"There is nothing of interest here");
+	}
+}
+
+void PrintSceneInformation()
+{
+	location* locationPtr = &gLocations[gCurrentLocation];
+	int messageLength = 0;
+
+	// Print the description of the place at the top (centered)
+	memset((char*)0xbb80+16*40+1,' ',39);
+	messageLength=strlen(locationPtr->description);
+	strcpy((char*)0xbb80+16*40+20-messageLength/2,locationPtr->description);
+
+	PrintSceneDirections();
+
+	PrintSceneObjects();
+}
+
+
 void LoadScene()
 {
+	ClearMessageWindow(16+4);
+
 	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation+1,ImageBuffer);	
 	BlitBufferToHiresWindow();
 
 	PrintSceneInformation();
-}
-
-
-// Lines 18 to 23, with blue background
-void ScrollMessage()
-{
-	memcpy((char*)0xbb80+40*18,(char*)0xbb80+40*19, 40*5);
-	memset((char*)0xbb80+40*23+2,32,38);
-}
-
-void PrintMessage(const char* message,char color)
-{
-	ScrollMessage();
-	sprintf((char*)0xbb80+40*23+1,"%c%s",color,message);
 }
 
 
@@ -109,8 +172,9 @@ void PlayerMove(unsigned char direction)
 	unsigned char requestedScene = gLocations[gCurrentLocation].directions[direction];
 	if (requestedScene==e_LOCATION_NONE)
 	{
+		PrintStatusMessage(1,"Impossible to move in that direction");
 		PlaySound(PingData);
-		PrintMessage("Impossible to move in that direction",1);		
+		WaitFrames(75);
 	}
 	else
 	{
@@ -150,14 +214,12 @@ void main()
 	do
 	{
 		int shift=0;
-		//sprintf((char*)0xbb80+40*22+1,"%cWhat are you going to do now?",6);
 		if (askQuestion)
 		{
-			ScrollMessage();
-			PrintMessage("What are you going to do now?",6);
-			ScrollMessage();
+			PrintStatusMessage(2,"What are you going to do now?");
 			askQuestion=0;
 		}
+
 		do
 		{
 			WaitIRQ();
