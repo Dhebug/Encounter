@@ -61,6 +61,65 @@ enum LOCATIONS
     e_LOCATION_NONE             =255                   // To indicate we can't go in this particular location
 };
 
+// Define the various items
+enum ITEMS
+{
+	// Define the various items
+	// Containers first
+	e_ITEM_TobaccoTin    		= 0,          // an empty tobacco tin
+	e_ITEM_Bucket        		= 1,          // a wooden bucket
+	e_ITEM_CardboardBox  		= 2,          // a cardboard box
+	e_ITEM_FishingNet    		= 3,          // a fishing net
+	e_ITEM_PlasticBag    		= 4,          // a plastic bag
+	e_ITEM__Last_Container      = 4,          // ----- END CONTAINERS MARKER
+	// Then normal items
+	e_ITEM_YoungGirl  			= 5,         // a young girl
+	e_ITEM_BrokenWindow  		= 6,          // the window is broken
+	e_ITEM_OpenSafe  			= 7,          // an open safe
+	e_ITEM_BlackDust  			= 8,          // black dust
+	e_ITEM_OpenPanel  			= 9,          // an open panel on wall
+	e_ITEM_LockedPanel  		= 10,         // a locked panel on the wall
+	e_ITEM_YellowPowder  		= 11,         // gritty yellow powder
+	e_ITEM_SmallHoleInDoor 		= 12,         // a small hole in the door
+	e_ITEM_Water  				= 13,         // some water
+	e_ITEM_LargeDove  			= 14,         // a large dove
+	e_ITEM_Twine  				= 15,         // some twine
+	e_ITEM_SilverKnife  		= 16,         // a silver knife
+	e_ITEM_Ladder  				= 17,         // a ladder
+	e_ITEM_AbandonedCar  		= 18,         // an abandoned car
+	e_ITEM_AlsatianDog  		= 19,         // Alsatian dog
+	e_ITEM_Meat  				= 20,         // a joint of meat
+	e_ITEM_Bread  				= 21,         // some brown bread
+	e_ITEM_RollOfTape  			= 22,         // a roll of sticky tape
+	e_ITEM_ChemistryBook  		= 23,         // a chemistry book
+	e_ITEM_BoxOfMatches  		= 24,         // a box of matches
+	e_ITEM_SnookerCue  			= 25,         // a snooker cue
+	e_ITEM_Thug  				= 26,         // a Thug
+	e_ITEM_HeavySafe  			= 27,         // a heavy safe
+	e_ITEM_PrintedNote  		= 28,         // a printed note
+	e_ITEM_Rope  				= 29,         // a length of rope
+	e_ITEM_RopeHangingFromWindow= 30,         // a rope hangs from the window
+	e_ITEM_RollOfToiletPaper  	= 31,         // a roll of toilet tissue~
+	e_ITEM_HosePipe  			= 32,         // a hose-pipe
+	e_ITEM_Petrol  				= 33,         // some petrol
+	e_ITEM_BrokenGlass  		= 34,         // broken glass
+	e_ITEM_AcidBurn  			= 35,         // an acid burn
+	e_ITEM_SmallBottle  		= 36,         // a small bottle
+	e_ITEM_Fuse  				= 37,         // a fuse
+	e_ITEM_GunPowder  			= 38,         // some gunpowder
+	e_ITEM_Keys  				= 39,         // a set of keys
+	e_ITEM_Newspaper     		= 40,         // A newspaper
+	e_ITEM_Bomb  				= 41,         // a bomb
+	e_ITEM_Pistol 				= 42,         // a pistol
+	e_ITEM_Bullets  			= 43,         // three .38 bullets
+	e_ITEM_YoungGirlOnFloor  	= 44,         // a young girl tied up on the floor
+	e_ITEM_COUNT_ 				= 45,         //  ----- END MARKER
+
+	e_ITEM__Reserved      		= 45,          // Reserved entry code (not sure it's needed)
+
+	// End marker
+};
+
 extern unsigned char gCurrentLocation;
 
 //unsigned char 
@@ -80,7 +139,17 @@ typedef struct
     const char* description;
 } location;
 
+typedef struct
+{
+	const char* abreviation;        // How it's called in the game when you want to interact with it
+	const char* description;        // Full description of the object in the world
+	unsigned char location;         // Where the object is in the world
+    const char* flags;
+    const char* containers;
+} item;
+
 extern location gLocations[e_LOCATION_COUNT_];
+extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
 

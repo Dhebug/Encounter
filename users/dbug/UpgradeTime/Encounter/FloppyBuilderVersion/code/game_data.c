@@ -38,7 +38,7 @@ location gLocations[e_LOCATION_COUNT_] =
 
     { e_LOCATION_APPLE_TREES       , e_LOCATION_GREENHOUSE        , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are in a vegetable plot"},           // e_LOCATION_VEGSGARDEN   
     { e_LOCATION_NONE              , e_LOCATION_TENNISCOURT       , e_LOCATION_TILEDPATIO        , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are standing by a fish pond"},       // e_LOCATION_FISHPND         
-    { e_LOCATION_NONE              , e_LOCATION_SUNLOUNGE         , e_LOCATION_APPLE_TREES       , e_LOCATION_FISHPND           , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are on a tiled patio"},              // e_LOCATION_TILEDPATIO - and above it is a barred window 
+    { e_LOCATION_SUNLOUNGE         , e_LOCATION_SUNLOUNGE         , e_LOCATION_APPLE_TREES       , e_LOCATION_FISHPND           , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are on a tiled patio"},              // e_LOCATION_TILEDPATIO - and above it is a barred window 
 
     { e_LOCATION_NONE              , e_LOCATION_VEGSGARDEN        , e_LOCATION_NONE              , e_LOCATION_TILEDPATIO        , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are in an apple orchard"},           // e_LOCATION_APPLE_TREES     
     { e_LOCATION_CELLAR            , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "This room is even darker than the last"},// e_LOCATION_DARKCELLARROOM   
@@ -75,3 +75,54 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "The girl room (openned lock)"},          // e_LOCATION_GIRLROOM         
 };
 
+
+// The flags and usable containers are copied from the BASIC version.
+// The final version will contain actual bit-masks
+item gItems[e_ITEM_COUNT_] =
+{ //  Abrev  Description                             Location                    Flags       Usable Containers
+    { "TIN"	,"an empty tobacco tin"					,e_LOCATION_LOUNGE			,""			,""},                                            // e_ITEM_TobaccoTin    		
+    { "BUC"	,"a wooden bucket"						,e_LOCATION_WELL			,""			,""},                                            // e_ITEM_Bucket        		
+    { "BOX"	,"a cardboard box"						,e_LOCATION_GREENHOUSE		,""			,""},                                            // e_ITEM_CardboardBox  		
+    { "NET"	,"a fishing net"						,e_LOCATION_FISHPND		    ,""			,""},                                            // e_ITEM_FishingNet    		
+    { "BAG"	,"a plastic bag"						,e_LOCATION_MARKETPLACE	    ,""			,""},                                            // e_ITEM_PlasticBag    		
+    { "..."	,"a young girl"							,99							,""			,""},                                            // e_ITEM_YoungGirl  		
+    { "..."	,"the window is broken"					,99							,""			,""},                                            // e_ITEM_BrokenWindow  		
+    { "..."	,"an open safe"							,99							,"H"		,""},                                            // e_ITEM_OpenSafe  			
+    { "DUS"	,"black dust"							,e_LOCATION_DARKTUNNEL		,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_BlackDust  			
+    { "..."	,"an open panel on wall"				,99							,""			,""},                                            // e_ITEM_OpenPanel  			
+    { "PAN"	,"a locked panel on the wall"			,e_LOCATION_DARKCELLARROOM	,""			,""},                                            // e_ITEM_LockedPanel  		
+    { "POW"	,"gritty yellow powder"					,e_LOCATION_INSIDEHOLE		,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_YellowPowder  		
+    { "..."	,"a small hole in the door"				,99							,""			,""},                                            // e_ITEM_SmallHoleInDoor 		
+    { "WAT"	,"some water"							,e_LOCATION_WELL			,"D"		,"BUC,BAG,TIN"},                                 // e_ITEM_Water  				
+    { "DOV"	,"a large dove"							,e_LOCATION_WOODEDAVENUE	,""			,"BUC,BOX,NET"},                                 // e_ITEM_LargeDove  			
+    { "TWI"	,"some twine"							,e_LOCATION_GREENHOUSE		,""			,""},                                            // e_ITEM_Twine  				
+    { "KNI"	,"a silver knife"						,e_LOCATION_VEGSGARDEN		,""			,""},                                            // e_ITEM_SilverKnife  		
+    { "LAD"	,"a ladder"								,e_LOCATION_APPLE_TREES	    ,""			,""},                                            // e_ITEM_Ladder  				
+    { "CAR"	,"an abandoned car"						,e_LOCATION_TARMACAREA		,"H"		,""},                                            // e_ITEM_AbandonedCar  		
+    { "DOG"	,"an alsatian growling at you"			,e_LOCATION_ENTRANCEHALL	,""			,""},                                            // e_ITEM_AlsatianDog  		
+    { "MEA"	,"a joint of meat"						,e_LOCATION_DININGROOM		,""			,""},                                            // e_ITEM_Meat  				
+    { "BRE"	,"some brown bread"						,e_LOCATION_DININGROOM		,""			,""},                                            // e_ITEM_Bread  				
+    { "TAP"	,"a roll of sticky tape"				,e_LOCATION_LIBRARY		    ,""			,""},                                            // e_ITEM_RollOfTape  			
+    { "BOO"	,"a chemistry book"						,e_LOCATION_LIBRARY		    ,""			,""},                                            // e_ITEM_ChemistryBook  		
+    { "MAT"	,"a box of matches"						,e_LOCATION_KITCHEN		    ,""			,""},                                            // e_ITEM_BoxOfMatches  		
+    { "CUE"	,"a snooker cue"						,e_LOCATION_GAMESROOM		,""			,"" },                                           // e_ITEM_SnookerCue  			
+    { "THU"	,"a thug asleep on the bed"				,e_LOCATION_MASTERBEDROOM	,"H"		,""},                                            // e_ITEM_Thug  				
+    { "SAF"	,"a heavy safe"							,e_LOCATION_CELLAR 		    ,"H"		,""},                                            // e_ITEM_HeavySafe  			
+    { "NOT"	,"a printed note"						,e_LOCATION_BOXROOM		    ,""			,""},                                            // e_ITEM_PrintedNote  		
+    { "ROP"	,"a length of rope"						,e_LOCATION_WELL			,""			,""},                                            // e_ITEM_Rope  				
+    { "..."	,"a rope hangs from the window"			,99							,""			,""},                                            // e_ITEM_RopeHangingFromWindow
+    { "TIS"	,"a roll of toilet tissue"				,e_LOCATION_TINY_WC		    ,""			,""},                                            // e_ITEM_RollOfToiletPaper  	
+    { "HOS"	,"a hose-pipe"							,e_LOCATION_ZENGARDEN		,""			,""},                                            // e_ITEM_HosePipe  			
+    { "PET"	,"some petrol"							,99 						,"D"		,"BUC,BAG,TIN"},                                 // e_ITEM_Petrol  				
+    { "GLA"	,"broken glass"							,99							,""			,""},                                            // e_ITEM_BrokenGlass  		
+    { "..."	,"an acid burn"							,99							,""			,""},                                            // e_ITEM_AcidBurn  			
+    { "BOT"	,"a small bottle"						,99							,""			,""},                                            // e_ITEM_SmallBottle  		
+    { "FUS"	,"a fuse"								,99							,""			,""},                                            // e_ITEM_Fuse  				
+    { "GUN"	,"some gunpowder"						,99							,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_GunPowder  			
+    { "KEY"	,"a set of keys"						,e_LOCATION_MAINSTREET		,""			,""},                                            // e_ITEM_Keys  				
+    { "NEW"	,"a newspaper"							,e_LOCATION_MARKETPLACE	    ,""			,""},                                            // e_ITEM_Newspaper     		
+    { "BOM"	,"a bomb"								,99							,""			,""},                                            // e_ITEM_Bomb  				
+    { "PIS"	,"a pistol"								,99							,""			,""},                                            // e_ITEM_Pistol 				
+    { "BUL"	,"three .38 bullets"					,e_LOCATION_DARKCELLARROOM	,""			,""},                                            // e_ITEM_Bullets  			
+    { "GIR"	,"a young girl tied up on the floor"	,e_LOCATION_GIRLROOM		,""			,""},                                            // e_ITEM_YoungGirlOnFloor  	
+};
