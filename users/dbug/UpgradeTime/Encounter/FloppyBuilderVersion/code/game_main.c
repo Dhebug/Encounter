@@ -11,7 +11,75 @@
 char gInputBuffer[40];
 char gInputBufferPos;
 
+char gWordCount;          	// How many tokens/word did we find in the input buffer
+char gWordBuffer[10];     	// One byte identifier of each of the identified words
+char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
+
 char gTextBuffer[80];    // Temp
+
+
+// At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
+unsigned char ParseInputBuffer()
+{
+	unsigned char wordId;
+	char car;
+	char done;
+	char* separatorPtr;
+	char* inputPtr = gInputBuffer;
+
+	memset(gWordBuffer,e_WORD_COUNT_,sizeof(gWordBuffer));
+	memset(gWordPosBuffer,0,sizeof(gWordPosBuffer));
+
+	gWordCount=0;
+	done = 0;
+
+	// While we have not reached the null terminator
+	while ((!done) && (car=*inputPtr)
+	)
+	{
+		if (car==' ')
+		{
+			// We automagically filter out the spaces
+			inputPtr++;
+		}
+		else
+		{
+			// This is not a space, so we assume it is the start of a word
+			gWordPosBuffer[gWordCount] = inputPtr-gInputBuffer;
+
+			// Search the end
+			separatorPtr=inputPtr;
+			while (*separatorPtr && (*separatorPtr!=' '))
+			{
+				separatorPtr++;
+			}
+			if (*separatorPtr == 0)
+			{
+				done = 1;
+			}
+			else
+			{
+				*separatorPtr=0;
+			}
+
+			// Now that we have identified the begining and end of the word, check if it's in our vocabulary list
+			gWordBuffer[gWordCount]=e_WORD_COUNT_;
+			for (wordId=0;wordId<e_WORD_COUNT_;wordId++)
+			{
+				if (strcmp(inputPtr,gWordsArray[wordId])==0)
+				{
+					// Found the word in the list, we mark down the token id and continue searching
+					gWordBuffer[gWordCount] = wordId;
+					gWordCount++;
+					break;
+				}
+			}
+			inputPtr = separatorPtr+1;
+		}
+	}
+
+	return gWordCount;
+}
 
 
 void ClearMessageWindow(unsigned char paperColor)
@@ -94,6 +162,23 @@ void PrintSceneDirections()
 }
 
 
+// Very basic version of the inventory, does not check anything, 
+// displays a maximum of 7 items before it starts overwriting the clock
+void PrintInventory()
+{
+	int item;
+	int inventoryCell =0 ;
+	memset((char*)0xbb80+40*24,32,40*4-8);  // 8 characters at the end of the inventory for the clock
+	for (item=0;item<e_ITEM_COUNT_;item++)
+	{
+		if (gItems[item].location == e_LOCATION_INVENTORY)
+		{
+			memcpy((char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20,gItems[item].description,strlen(gItems[item].description));
+			inventoryCell++;
+		}
+	}
+}
+
 void PrintSceneObjects()
 {
 	int i;
@@ -151,6 +236,8 @@ void PrintSceneInformation()
 	PrintSceneDirections();
 
 	PrintSceneObjects();
+
+	PrintInventory();
 }
 
 
@@ -185,6 +272,46 @@ void PlayerMove(unsigned char direction)
 }
 
 
+void TakeItem(unsigned char itemId)
+{
+	if (itemId>e_ITEM_COUNT_)
+	{
+		PrintStatusMessage(1,"You can only take something you see");
+		PlaySound(PingData);
+		WaitFrames(75);
+	}
+	else
+	{
+		if (gItems[itemId].location!=gCurrentLocation)
+		{
+			PrintStatusMessage(1,"I don't see this item here");
+			PlaySound(PingData);
+			WaitFrames(75);
+		}
+		else
+		{
+			gItems[itemId].location = e_LOCATION_INVENTORY;
+			LoadScene();
+		}
+	}
+}
+
+
+void DropItem(unsigned char itemId)
+{
+	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOCATION_INVENTORY) )
+	{
+		PrintStatusMessage(1,"You can only drop something you have");
+		PlaySound(PingData);
+		WaitFrames(75);
+	}
+	else
+	{
+		gItems[itemId].location = gCurrentLocation;
+		LoadScene();
+	}
+}
+
 
 void main()
 {
@@ -217,6 +344,7 @@ void main()
 		if (askQuestion)
 		{
 			PrintStatusMessage(2,"What are you going to do now?");
+			memset((char*)0xbb80+40*23+1,' ',39);
 			askQuestion=0;
 		}
 
@@ -245,51 +373,62 @@ void main()
 			break;
 
 		case KEY_RETURN:
-			if (strcmp(gInputBuffer,"N")==0)
+			if (ParseInputBuffer())
 			{
-				PlayerMove(e_DIRECTION_NORTH);
+				// Check the first word
+				switch (gWordBuffer[0])
+				{
+				//
+				// Movement
+				//
+				case e_WORD_NORTH:
+					PlayerMove(e_DIRECTION_NORTH);
+					break;
+				case e_WORD_SOUTH:
+					PlayerMove(e_DIRECTION_SOUTH);
+					break;
+				case e_WORD_EAST:
+					PlayerMove(e_DIRECTION_EAST);
+					break;
+				case e_WORD_WEST:
+					PlayerMove(e_DIRECTION_WEST);
+					break;
+				case e_WORD_UP:
+					PlayerMove(e_DIRECTION_UP);
+					break;
+				case e_WORD_DOWN:
+					PlayerMove(e_DIRECTION_DOWN);
+					break;
+
+				//
+				// Action
+				//
+				case e_WORD_TAKE:
+					TakeItem(gWordBuffer[1]);
+					break;
+				case e_WORD_DROP:
+					DropItem(gWordBuffer[1]);
+					break;
+
+				//
+				// Meta
+				//
+				case e_WORD_QUIT:
+					PlaySound(KeyClickHData);
+					k=13;
+					break;
+				default:
+					PlaySound(PingData);
+
+				}
+
 			}
 			else
-			if (strcmp(gInputBuffer,"S")==0)
 			{
-				PlayerMove(e_DIRECTION_SOUTH);
-			}
-			else
-			if (strcmp(gInputBuffer,"E")==0)
-			{
-				PlayerMove(e_DIRECTION_EAST);
-			}
-			else
-			if (strcmp(gInputBuffer,"W")==0)
-			{
-				PlayerMove(e_DIRECTION_WEST);
-			}
-			else
-			if (strcmp(gInputBuffer,"U")==0)
-			{
-				PlayerMove(e_DIRECTION_UP);
-			}
-			else
-			if (strcmp(gInputBuffer,"D")==0)
-			{
-				PlayerMove(e_DIRECTION_DOWN);
-			}
-			else
-			if (strcmp(gInputBuffer,"LOAD")==0)
-			{
-				PlaySound(KeyClickHData);
-				LoadScene();
-			}
-			else
-			if (strcmp(gInputBuffer,"QUIT")==0)
-			{
-				PlaySound(KeyClickHData);
-				k=13;
-			}
-			else
-			{
+				// No word recognized
 				PlaySound(PingData);
 			}
+
 			gInputBufferPos=0;
 			gInputBuffer[gInputBufferPos]=0;
 			askQuestion = 1;

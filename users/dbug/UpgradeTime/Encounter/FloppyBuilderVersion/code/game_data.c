@@ -126,3 +126,68 @@ item gItems[e_ITEM_COUNT_] =
     { "BUL"	,"three .38 bullets"					,e_LOCATION_DARKCELLARROOM	,""			,""},                                            // e_ITEM_Bullets  			
     { "GIR"	,"a young girl tied up on the floor"	,e_LOCATION_GIRLROOM		,""			,""},                                            // e_ITEM_YoungGirlOnFloor  	
 };
+
+const char* gWordsArray[e_WORD_COUNT_] =
+{
+    // Items
+    "TIN",  // e_ITEM_TobaccoTin    		
+    "BUC",  // e_ITEM_Bucket        		
+    "BOX",  // e_ITEM_CardboardBox  		
+    "NET",  // e_ITEM_FishingNet    		
+    "BAG",  // e_ITEM_PlasticBag    		
+    "...",  // e_ITEM_YoungGirl  		
+    "...",  // e_ITEM_BrokenWindow  		
+    "...",  // e_ITEM_OpenSafe  			
+    "DUS",  // e_ITEM_BlackDust  			
+    "...",  // e_ITEM_OpenPanel  			
+    "PAN",  // e_ITEM_LockedPanel  		
+    "POW",  // e_ITEM_YellowPowder  		
+    "...",  // e_ITEM_SmallHoleInDoor 		
+    "WAT",  // e_ITEM_Water  				
+    "DOV",  // e_ITEM_LargeDove  			
+    "TWI",  // e_ITEM_Twine  				
+    "KNI",  // e_ITEM_SilverKnife  		
+    "LAD",  // e_ITEM_Ladder  				
+    "CAR",  // e_ITEM_AbandonedCar  		
+    "DOG",  // e_ITEM_AlsatianDog  		
+    "MEA",  // e_ITEM_Meat  				
+    "BRE",  // e_ITEM_Bread  				
+    "TAP",  // e_ITEM_RollOfTape  			
+    "BOO",  // e_ITEM_ChemistryBook  		
+    "MAT",  // e_ITEM_BoxOfMatches  		
+    "CUE",  // e_ITEM_SnookerCue  			
+    "THU",  // e_ITEM_Thug  				
+    "SAF",  // e_ITEM_HeavySafe  			
+    "NOT",  // e_ITEM_PrintedNote  		
+    "ROP",  // e_ITEM_Rope  				
+    "...",  // e_ITEM_RopeHangingFromWindow
+    "TIS",  // e_ITEM_RollOfToiletPaper  	
+    "HOS",  // e_ITEM_HosePipe  			
+    "PET",  // e_ITEM_Petrol  				
+    "GLA",  // e_ITEM_BrokenGlass  		
+    "...",  // e_ITEM_AcidBurn  			
+    "BOT",  // e_ITEM_SmallBottle  		
+    "FUS",  // e_ITEM_Fuse  				
+    "GUN",  // e_ITEM_GunPowder  			
+    "KEY",  // e_ITEM_Keys  				
+    "NEW",  // e_ITEM_Newspaper     		
+    "BOM",  // e_ITEM_Bomb  				
+    "PIS",  // e_ITEM_Pistol 				
+    "BUL",  // e_ITEM_Bullets  			
+    "GIR",  // e_ITEM_YoungGirlOnFloor
+
+    // Directions
+    "N", 
+    "S", 
+    "E", 
+    "W", 
+    "U", 
+    "D", 
+
+    // Misc instructions
+    "TAKE",
+    "DROP",
+
+    // Last instruction
+    "QUIT"
+};

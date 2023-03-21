@@ -120,6 +120,30 @@ enum ITEMS
 	// End marker
 };
 
+// For practical reasons we reuse the item ids in the list of words
+// followed by the actual instructions
+enum WORDS
+{
+	// [0-44] Items 
+	// see enum ITEMS
+
+	// [45-51] Directions 
+    e_WORD_NORTH = e_ITEM_COUNT_,
+    e_WORD_SOUTH ,
+    e_WORD_EAST  ,
+    e_WORD_WEST  ,
+    e_WORD_UP    ,
+    e_WORD_DOWN  ,
+
+	// In-game instructions
+	e_WORD_TAKE  ,
+	e_WORD_DROP  ,
+
+	// Meta instructions
+	e_WORD_QUIT  ,
+	e_WORD_COUNT_
+};
+
 extern unsigned char gCurrentLocation;
 
 //unsigned char 
@@ -152,4 +176,6 @@ extern location gLocations[e_LOCATION_COUNT_];
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
+
+extern const char* gWordsArray[e_WORD_COUNT_];
 
