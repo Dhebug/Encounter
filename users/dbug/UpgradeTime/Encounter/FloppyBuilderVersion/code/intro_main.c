@@ -211,7 +211,13 @@ void main()
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0x9900);
 
-#ifdef ENABLE_INTRO
+#ifndef ENABLE_INTRO
+	// By using a goto instead of a comment or #ifdefing out the whole code block,
+	// we ensure that the code is actually compiled, so that limits the chances to
+	// break the intro when working on the game
+	goto endIntro;
+#endif
+
 	// Load the first picture at the default address specified in the script
 	LoadFileAt(LOADER_PICTURE_TITLE,ImageBuffer);
 
@@ -242,8 +248,10 @@ void main()
 	}
 
 	System_RestoreIRQ_SimpleVbl();
-#endif
 
+#ifndef ENABLE_INTRO
+endIntro:
+#endif
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_PROGRAM_SECOND,0x400);
 }
