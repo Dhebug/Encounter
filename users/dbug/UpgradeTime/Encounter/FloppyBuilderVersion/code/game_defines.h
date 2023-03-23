@@ -165,17 +165,23 @@ typedef struct
 
 typedef struct
 {
-	const char* abreviation;        // How it's called in the game when you want to interact with it
 	const char* description;        // Full description of the object in the world
 	unsigned char location;         // Where the object is in the world
     const char* flags;
     const char* containers;
 } item;
 
+typedef struct 
+{
+	const char* word;				// How it's actually written
+    unsigned char id;				// The matching id
+} keyword;
+
+
 extern location gLocations[e_LOCATION_COUNT_];
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
 
-extern const char* gWordsArray[e_WORD_COUNT_];
+extern keyword gWordsArray[];
 

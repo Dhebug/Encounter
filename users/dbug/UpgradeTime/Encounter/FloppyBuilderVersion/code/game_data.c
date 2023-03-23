@@ -80,114 +80,128 @@ location gLocations[e_LOCATION_COUNT_] =
 // The final version will contain actual bit-masks
 item gItems[e_ITEM_COUNT_] =
 { //  Abrev  Description                             Location                    Flags       Usable Containers
-    { "TIN"	,"an empty tobacco tin"					,e_LOCATION_LOUNGE			,""			,""},                                            // e_ITEM_TobaccoTin    		
-    { "BUC"	,"a wooden bucket"						,e_LOCATION_WELL			,""			,""},                                            // e_ITEM_Bucket        		
-    { "BOX"	,"a cardboard box"						,e_LOCATION_GREENHOUSE		,""			,""},                                            // e_ITEM_CardboardBox  		
-    { "NET"	,"a fishing net"						,e_LOCATION_FISHPND		    ,""			,""},                                            // e_ITEM_FishingNet    		
-    { "BAG"	,"a plastic bag"						,e_LOCATION_MARKETPLACE	    ,""			,""},                                            // e_ITEM_PlasticBag    		
-    { "..."	,"a young girl"							,99							,""			,""},                                            // e_ITEM_YoungGirl  		
-    { "..."	,"the window is broken"					,99							,""			,""},                                            // e_ITEM_BrokenWindow  		
-    { "..."	,"an open safe"							,99							,"H"		,""},                                            // e_ITEM_OpenSafe  			
-    { "DUS"	,"black dust"							,e_LOCATION_DARKTUNNEL		,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_BlackDust  			
-    { "..."	,"an open panel on wall"				,99							,""			,""},                                            // e_ITEM_OpenPanel  			
-    { "PAN"	,"a locked panel on the wall"			,e_LOCATION_DARKCELLARROOM	,""			,""},                                            // e_ITEM_LockedPanel  		
-    { "POW"	,"gritty yellow powder"					,e_LOCATION_INSIDEHOLE		,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_YellowPowder  		
-    { "..."	,"a small hole in the door"				,99							,""			,""},                                            // e_ITEM_SmallHoleInDoor 		
-    { "WAT"	,"some water"							,e_LOCATION_WELL			,"D"		,"BUC,BAG,TIN"},                                 // e_ITEM_Water  				
-    { "DOV"	,"a large dove"							,e_LOCATION_WOODEDAVENUE	,""			,"BUC,BOX,NET"},                                 // e_ITEM_LargeDove  			
-    { "TWI"	,"some twine"							,e_LOCATION_GREENHOUSE		,""			,""},                                            // e_ITEM_Twine  				
-    { "KNI"	,"a silver knife"						,e_LOCATION_VEGSGARDEN		,""			,""},                                            // e_ITEM_SilverKnife  		
-    { "LAD"	,"a ladder"								,e_LOCATION_APPLE_TREES	    ,""			,""},                                            // e_ITEM_Ladder  				
-    { "CAR"	,"an abandoned car"						,e_LOCATION_TARMACAREA		,"H"		,""},                                            // e_ITEM_AbandonedCar  		
-    { "DOG"	,"an alsatian growling at you"			,e_LOCATION_ENTRANCEHALL	,""			,""},                                            // e_ITEM_AlsatianDog  		
-    { "MEA"	,"a joint of meat"						,e_LOCATION_DININGROOM		,""			,""},                                            // e_ITEM_Meat  				
-    { "BRE"	,"some brown bread"						,e_LOCATION_DININGROOM		,""			,""},                                            // e_ITEM_Bread  				
-    { "TAP"	,"a roll of sticky tape"				,e_LOCATION_LIBRARY		    ,""			,""},                                            // e_ITEM_RollOfTape  			
-    { "BOO"	,"a chemistry book"						,e_LOCATION_LIBRARY		    ,""			,""},                                            // e_ITEM_ChemistryBook  		
-    { "MAT"	,"a box of matches"						,e_LOCATION_KITCHEN		    ,""			,""},                                            // e_ITEM_BoxOfMatches  		
-    { "CUE"	,"a snooker cue"						,e_LOCATION_GAMESROOM		,""			,"" },                                           // e_ITEM_SnookerCue  			
-    { "THU"	,"a thug asleep on the bed"				,e_LOCATION_MASTERBEDROOM	,"H"		,""},                                            // e_ITEM_Thug  				
-    { "SAF"	,"a heavy safe"							,e_LOCATION_CELLAR 		    ,"H"		,""},                                            // e_ITEM_HeavySafe  			
-    { "NOT"	,"a printed note"						,e_LOCATION_BOXROOM		    ,""			,""},                                            // e_ITEM_PrintedNote  		
-    { "ROP"	,"a length of rope"						,e_LOCATION_WELL			,""			,""},                                            // e_ITEM_Rope  				
-    { "..."	,"a rope hangs from the window"			,99							,""			,""},                                            // e_ITEM_RopeHangingFromWindow
-    { "TIS"	,"a roll of toilet tissue"				,e_LOCATION_TINY_WC		    ,""			,""},                                            // e_ITEM_RollOfToiletPaper  	
-    { "HOS"	,"a hose-pipe"							,e_LOCATION_ZENGARDEN		,""			,""},                                            // e_ITEM_HosePipe  			
-    { "PET"	,"some petrol"							,99 						,"D"		,"BUC,BAG,TIN"},                                 // e_ITEM_Petrol  				
-    { "GLA"	,"broken glass"							,99							,""			,""},                                            // e_ITEM_BrokenGlass  		
-    { "..."	,"an acid burn"							,99							,""			,""},                                            // e_ITEM_AcidBurn  			
-    { "BOT"	,"a small bottle"						,99							,""			,""},                                            // e_ITEM_SmallBottle  		
-    { "FUS"	,"a fuse"								,99							,""			,""},                                            // e_ITEM_Fuse  				
-    { "GUN"	,"some gunpowder"						,99							,""			,"BUC,BOX,BAG,TIN"},                             // e_ITEM_GunPowder  			
-    { "KEY"	,"a set of keys"						,e_LOCATION_MAINSTREET		,""			,""},                                            // e_ITEM_Keys  				
-    { "NEW"	,"a newspaper"							,e_LOCATION_MARKETPLACE	    ,""			,""},                                            // e_ITEM_Newspaper     		
-    { "BOM"	,"a bomb"								,99							,""			,""},                                            // e_ITEM_Bomb  				
-    { "PIS"	,"a pistol"								,99							,""			,""},                                            // e_ITEM_Pistol 				
-    { "BUL"	,"three .38 bullets"					,e_LOCATION_DARKCELLARROOM	,""			,""},                                            // e_ITEM_Bullets  			
-    { "GIR"	,"a young girl tied up on the floor"	,e_LOCATION_GIRLROOM		,""			,""},                                            // e_ITEM_YoungGirlOnFloor  	
+    { "an empty tobacco tin"                 ,e_LOCATION_LOUNGE          ,""         ,""},                                            // e_ITEM_TobaccoTin           
+    { "a wooden bucket"                      ,e_LOCATION_WELL            ,""         ,""},                                            // e_ITEM_Bucket               
+    { "a cardboard box"                      ,e_LOCATION_GREENHOUSE      ,""         ,""},                                            // e_ITEM_CardboardBox         
+    { "a fishing net"                        ,e_LOCATION_FISHPND         ,""         ,""},                                            // e_ITEM_FishingNet           
+    { "a plastic bag"                        ,e_LOCATION_MARKETPLACE     ,""         ,""},                                            // e_ITEM_PlasticBag           
+    { "a young girl"                         ,99                         ,""         ,""},                                            // e_ITEM_YoungGirl        
+    { "the window is broken"                 ,99                         ,""         ,""},                                            // e_ITEM_BrokenWindow         
+    { "an open safe"                         ,99                         ,"H"        ,""},                                            // e_ITEM_OpenSafe             
+    { "black dust"                           ,e_LOCATION_DARKTUNNEL      ,""         ,"BUC,BOX,BAG,TIN"},                             // e_ITEM_BlackDust            
+    { "an open panel on wall"                ,99                         ,""         ,""},                                            // e_ITEM_OpenPanel            
+    { "a locked panel on the wall"           ,e_LOCATION_DARKCELLARROOM  ,""         ,""},                                            // e_ITEM_LockedPanel          
+    { "gritty yellow powder"                 ,e_LOCATION_INSIDEHOLE      ,""         ,"BUC,BOX,BAG,TIN"},                             // e_ITEM_YellowPowder         
+    { "a small hole in the door"             ,99                         ,""         ,""},                                            // e_ITEM_SmallHoleInDoor      
+    { "some water"                           ,e_LOCATION_WELL            ,"D"        ,"BUC,BAG,TIN"},                                 // e_ITEM_Water                
+    { "a large dove"                         ,e_LOCATION_WOODEDAVENUE    ,""         ,"BUC,BOX,NET"},                                 // e_ITEM_LargeDove            
+    { "some twine"                           ,e_LOCATION_GREENHOUSE      ,""         ,""},                                            // e_ITEM_Twine                
+    { "a silver knife"                       ,e_LOCATION_VEGSGARDEN      ,""         ,""},                                            // e_ITEM_SilverKnife          
+    { "a ladder"                             ,e_LOCATION_APPLE_TREES     ,""         ,""},                                            // e_ITEM_Ladder               
+    { "an abandoned car"                     ,e_LOCATION_TARMACAREA      ,"H"        ,""},                                            // e_ITEM_AbandonedCar         
+    { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,""         ,""},                                            // e_ITEM_AlsatianDog          
+    { "a joint of meat"                      ,e_LOCATION_DININGROOM      ,""         ,""},                                            // e_ITEM_Meat                 
+    { "some brown bread"                     ,e_LOCATION_DININGROOM      ,""         ,""},                                            // e_ITEM_Bread                
+    { "a roll of sticky tape"                ,e_LOCATION_LIBRARY         ,""         ,""},                                            // e_ITEM_RollOfTape           
+    { "a chemistry book"                     ,e_LOCATION_LIBRARY         ,""         ,""},                                            // e_ITEM_ChemistryBook        
+    { "a box of matches"                     ,e_LOCATION_KITCHEN         ,""         ,""},                                            // e_ITEM_BoxOfMatches         
+    { "a snooker cue"                        ,e_LOCATION_GAMESROOM       ,""         ,"" },                                           // e_ITEM_SnookerCue           
+    { "a thug asleep on the bed"             ,e_LOCATION_MASTERBEDROOM   ,"H"        ,""},                                            // e_ITEM_Thug                 
+    { "a heavy safe"                         ,e_LOCATION_CELLAR          ,"H"        ,""},                                            // e_ITEM_HeavySafe            
+    { "a printed note"                       ,e_LOCATION_BOXROOM         ,""         ,""},                                            // e_ITEM_PrintedNote          
+    { "a length of rope"                     ,e_LOCATION_WELL            ,""         ,""},                                            // e_ITEM_Rope                 
+    { "a rope hangs from the window"         ,99                         ,""         ,""},                                            // e_ITEM_RopeHangingFromWindow
+    { "a roll of toilet tissue"              ,e_LOCATION_TINY_WC         ,""         ,""},                                            // e_ITEM_RollOfToiletPaper    
+    { "a hose-pipe"                          ,e_LOCATION_ZENGARDEN       ,""         ,""},                                            // e_ITEM_HosePipe             
+    { "some petrol"                          ,99                         ,"D"        ,"BUC,BAG,TIN"},                                 // e_ITEM_Petrol               
+    { "broken glass"                         ,99                         ,""         ,""},                                            // e_ITEM_BrokenGlass          
+    { "an acid burn"                         ,99                         ,""         ,""},                                            // e_ITEM_AcidBurn             
+    { "a small bottle"                       ,99                         ,""         ,""},                                            // e_ITEM_SmallBottle          
+    { "a fuse"                               ,99                         ,""         ,""},                                            // e_ITEM_Fuse                 
+    { "some gunpowder"                       ,99                         ,""         ,"BUC,BOX,BAG,TIN"},                             // e_ITEM_GunPowder            
+    { "a set of keys"                        ,e_LOCATION_MAINSTREET      ,""         ,""},                                            // e_ITEM_Keys                 
+    { "a newspaper"                          ,e_LOCATION_MARKETPLACE     ,""         ,""},                                            // e_ITEM_Newspaper            
+    { "a bomb"                               ,99                         ,""         ,""},                                            // e_ITEM_Bomb                 
+    { "a pistol"                             ,99                         ,""         ,""},                                            // e_ITEM_Pistol               
+    { "three .38 bullets"                    ,e_LOCATION_DARKCELLARROOM  ,""         ,""},                                            // e_ITEM_Bullets              
+    { "a young girl tied up on the floor"    ,e_LOCATION_GIRLROOM        ,""         ,""},                                            // e_ITEM_YoungGirlOnFloor     
 };
 
-const char* gWordsArray[e_WORD_COUNT_] =
+keyword gWordsArray[] =
 {
-    // Items
-    "TIN",  // e_ITEM_TobaccoTin    		
-    "BUC",  // e_ITEM_Bucket        		
-    "BOX",  // e_ITEM_CardboardBox  		
-    "NET",  // e_ITEM_FishingNet    		
-    "BAG",  // e_ITEM_PlasticBag    		
-    "...",  // e_ITEM_YoungGirl  		
-    "...",  // e_ITEM_BrokenWindow  		
-    "...",  // e_ITEM_OpenSafe  			
-    "DUS",  // e_ITEM_BlackDust  			
-    "...",  // e_ITEM_OpenPanel  			
-    "PAN",  // e_ITEM_LockedPanel  		
-    "POW",  // e_ITEM_YellowPowder  		
-    "...",  // e_ITEM_SmallHoleInDoor 		
-    "WAT",  // e_ITEM_Water  				
-    "DOV",  // e_ITEM_LargeDove  			
-    "TWI",  // e_ITEM_Twine  				
-    "KNI",  // e_ITEM_SilverKnife  		
-    "LAD",  // e_ITEM_Ladder  				
-    "CAR",  // e_ITEM_AbandonedCar  		
-    "DOG",  // e_ITEM_AlsatianDog  		
-    "MEA",  // e_ITEM_Meat  				
-    "BRE",  // e_ITEM_Bread  				
-    "TAP",  // e_ITEM_RollOfTape  			
-    "BOO",  // e_ITEM_ChemistryBook  		
-    "MAT",  // e_ITEM_BoxOfMatches  		
-    "CUE",  // e_ITEM_SnookerCue  			
-    "THU",  // e_ITEM_Thug  				
-    "SAF",  // e_ITEM_HeavySafe  			
-    "NOT",  // e_ITEM_PrintedNote  		
-    "ROP",  // e_ITEM_Rope  				
-    "...",  // e_ITEM_RopeHangingFromWindow
-    "TIS",  // e_ITEM_RollOfToiletPaper  	
-    "HOS",  // e_ITEM_HosePipe  			
-    "PET",  // e_ITEM_Petrol  				
-    "GLA",  // e_ITEM_BrokenGlass  		
-    "...",  // e_ITEM_AcidBurn  			
-    "BOT",  // e_ITEM_SmallBottle  		
-    "FUS",  // e_ITEM_Fuse  				
-    "GUN",  // e_ITEM_GunPowder  			
-    "KEY",  // e_ITEM_Keys  				
-    "NEW",  // e_ITEM_Newspaper     		
-    "BOM",  // e_ITEM_Bomb  				
-    "PIS",  // e_ITEM_Pistol 				
-    "BUL",  // e_ITEM_Bullets  			
-    "GIR",  // e_ITEM_YoungGirlOnFloor
+    // Containers
+    { "TIN",    e_ITEM_TobaccoTin           },  // e_ITEM_TobaccoTin            
+    { "BUCKET", e_ITEM_Bucket               },  // e_ITEM_Bucket                
+    { "BOX",    e_ITEM_CardboardBox         },  // e_ITEM_CardboardBox          
+    { "NET",    e_ITEM_FishingNet           },  // e_ITEM_FishingNet            
+    { "BAG",    e_ITEM_PlasticBag           },  // e_ITEM_PlasticBag            
+    // Then normal items
+    { "GIRL",   e_ITEM_YoungGirl            },  // e_ITEM_YoungGirl         
+    //{ "GIRL",e_ITEM_YoungGirlOnFloor     },  // e_ITEM_YoungGirlOnFloor - Girl, girl on the floor, etc... should be the same item, but with flags
+    { "WINDOW", e_ITEM_BrokenWindow         },  // e_ITEM_BrokenWindow          
+    { "SAFE",   e_ITEM_OpenSafe             },  // e_ITEM_OpenSafe              
+    { "DUST",   e_ITEM_BlackDust            },  // e_ITEM_BlackDust             
+    { "PANEL",  e_ITEM_OpenPanel            },  // e_ITEM_OpenPanel             
+    //{ "PANEL",e_ITEM_LockedPanel          },  // e_ITEM_LockedPanel  - Open and Locked panels should be the same item, but with flags
+    { "POWDER", e_ITEM_YellowPowder         },  // e_ITEM_YellowPowder          
+    //{ "...",e_ITEM_SmallHoleInDoor      },  // e_ITEM_SmallHoleInDoor       
+    { "WATER",  e_ITEM_Water                },  // e_ITEM_Water                 
+    { "DOVE",   e_ITEM_LargeDove            },  // e_ITEM_LargeDove             
+    { "TWINE",  e_ITEM_Twine                },  // e_ITEM_Twine                 
+    { "KNIFE",  e_ITEM_SilverKnife          },  // e_ITEM_SilverKnife       
+    { "LADDER", e_ITEM_Ladder               },  // e_ITEM_Ladder                
+    { "CAR",    e_ITEM_AbandonedCar         },  // e_ITEM_AbandonedCar          
+    { "DOG",    e_ITEM_AlsatianDog          },  // e_ITEM_AlsatianDog       
+    { "MEAT",   e_ITEM_Meat                 },  // e_ITEM_Meat                  
+    { "BREAD",  e_ITEM_Bread                },  // e_ITEM_Bread                 
+    { "TAPE",   e_ITEM_RollOfTape           },  // e_ITEM_RollOfTape            
+    { "BOOK",   e_ITEM_ChemistryBook        },  // e_ITEM_ChemistryBook         
+    { "MATCHES",e_ITEM_BoxOfMatches         },  // e_ITEM_BoxOfMatches          
+    { "CUE",    e_ITEM_SnookerCue           },  // e_ITEM_SnookerCue            
+    { "THUG",   e_ITEM_Thug                 },  // e_ITEM_Thug                  
+    { "SAFE",   e_ITEM_HeavySafe            },  // e_ITEM_HeavySafe             
+    { "NOTE",   e_ITEM_PrintedNote          },  // e_ITEM_PrintedNote       
+    { "ROPE",   e_ITEM_Rope                 },  // e_ITEM_Rope                  
+    //{ "...",e_ITEM_RopeHangingFromWindow},  // e_ITEM_RopeHangingFromWindow
+    { "TISSUE", e_ITEM_RollOfToiletPaper    },  // e_ITEM_RollOfToiletPaper     
+    { "HOSE",   e_ITEM_HosePipe             },  // e_ITEM_HosePipe              
+    { "PETROL", e_ITEM_Petrol               },  // e_ITEM_Petrol                
+    { "GLASS",  e_ITEM_BrokenGlass          },  // e_ITEM_BrokenGlass       
+    //{ "...",e_ITEM_AcidBurn             },  // e_ITEM_AcidBurn              
+    { "BOTTLE", e_ITEM_SmallBottle          },  // e_ITEM_SmallBottle       
+    { "FUSE",   e_ITEM_Fuse                 },  // e_ITEM_Fuse                  
+    { "GUN",    e_ITEM_GunPowder            },  // e_ITEM_GunPowder             
+    { "KEYS",   e_ITEM_Keys                 },  // e_ITEM_Keys                  
+    { "NEWSPAPER",e_ITEM_Newspaper            },  // e_ITEM_Newspaper             
+    { "BOMB",   e_ITEM_Bomb                 },  // e_ITEM_Bomb                  
+    { "PISTOL", e_ITEM_Pistol               },  // e_ITEM_Pistol                
+    { "BULLETS",e_ITEM_Bullets              },  // e_ITEM_Bullets           
 
     // Directions
-    "N", 
-    "S", 
-    "E", 
-    "W", 
-    "U", 
-    "D", 
+    { "N", e_WORD_NORTH },
+    { "S", e_WORD_SOUTH },
+    { "E", e_WORD_EAST  },
+    { "W", e_WORD_WEST  },
+    { "U", e_WORD_UP    },
+    { "D", e_WORD_DOWN  },
+
+    { "NORTH", e_WORD_NORTH },
+    { "SOUT", e_WORD_SOUTH },
+    { "EAST", e_WORD_EAST  },
+    { "WEST", e_WORD_WEST  },
+    { "UP", e_WORD_UP    },
+    { "DOWN", e_WORD_DOWN  },
 
     // Misc instructions
-    "TAKE",
-    "DROP",
+    { "TAKE", e_WORD_TAKE },
+    { "GET" , e_WORD_TAKE },
+
+    { "DROP", e_WORD_DROP },
+    { "PUT" , e_WORD_DROP },
 
     // Last instruction
-    "QUIT"
+    { "QUIT", e_WORD_QUIT },
+
+    // Sentinelle
+    { 0,  e_WORD_COUNT_ }
 };
