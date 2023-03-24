@@ -107,6 +107,15 @@ void PrintStatusMessage(char color,const char* message)
 }
 
 
+void PrintErrorMessage(const char* message)
+{
+	PrintStatusMessage(1,message);
+	PlaySound(PingData);
+	WaitFrames(75);
+}
+
+
+
 void PrintSceneDirections()
 {
 	location* locationPtr = &gLocations[gCurrentLocation];
@@ -263,9 +272,7 @@ void PlayerMove(unsigned char direction)
 	unsigned char requestedScene = gLocations[gCurrentLocation].directions[direction];
 	if (requestedScene==e_LOCATION_NONE)
 	{
-		PrintStatusMessage(1,"Impossible to move in that direction");
-		PlaySound(PingData);
-		WaitFrames(75);
+		PrintErrorMessage("Impossible to move in that direction");
 	}
 	else
 	{
@@ -280,22 +287,26 @@ void TakeItem(unsigned char itemId)
 {
 	if (itemId>e_ITEM_COUNT_)
 	{
-		PrintStatusMessage(1,"You can only take something you see");
-		PlaySound(PingData);
-		WaitFrames(75);
+		PrintErrorMessage("You can only take something you see");
 	}
 	else
 	{
-		if (gItems[itemId].location!=gCurrentLocation)
+		item* itemPtr=&gItems[itemId];
+		if (itemPtr->location!=gCurrentLocation)
 		{
-			PrintStatusMessage(1,"I don't see this item here");
-			PlaySound(PingData);
-			WaitFrames(75);
+			PrintErrorMessage("I don't see this item here");
 		}
 		else
 		{
-			gItems[itemId].location = e_LOCATION_INVENTORY;
-			LoadScene();
+			if (itemPtr->flags & ITEM_FLAG_HEAVY)
+			{
+				PrintErrorMessage("This is too heavy");
+			}
+			else
+			{
+				itemPtr->location = e_LOCATION_INVENTORY;
+				LoadScene();
+			}
 		}
 	}
 }
@@ -305,9 +316,7 @@ void DropItem(unsigned char itemId)
 {
 	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOCATION_INVENTORY) )
 	{
-		PrintStatusMessage(1,"You can only drop something you have");
-		PlaySound(PingData);
-		WaitFrames(75);
+		PrintErrorMessage("You can only drop something you have");
 	}
 	else
 	{
@@ -334,7 +343,11 @@ void main()
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0xb500);
 
+#ifdef TESTING_MODE
+	gCurrentLocation =e_LOCATION_CELLAR;
+#else
 	gCurrentLocation = e_LOCATION_MARKETPLACE;
+#endif	
 
 	LoadScene();
 	DisplayClock();
