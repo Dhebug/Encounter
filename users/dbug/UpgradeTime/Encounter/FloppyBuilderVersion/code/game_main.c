@@ -8,6 +8,7 @@
 
 #include "game_defines.h"
 
+char gAskQuestion;
 char gInputBuffer[40];
 char gInputBufferPos;
 
@@ -16,6 +17,18 @@ char gWordBuffer[10];     	// One byte identifier of each of the identified word
 char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
 
 char gTextBuffer[80];    // Temp
+
+
+typedef WORDS (*AnswerProcessingFun)();
+
+extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback);
+
+void ResetInput()
+{
+	gAskQuestion = 1;	
+	gInputBufferPos=0;
+	gInputBuffer[gInputBufferPos]=0;
+}
 
 
 // At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
@@ -35,8 +48,7 @@ unsigned char ParseInputBuffer()
 	done = 0;
 
 	// While we have not reached the null terminator
-	while ((!done) && (car=*inputPtr)
-	)
+	while ((!done) && (car=*inputPtr))
 	{
 		if (car==' ')
 		{
@@ -115,6 +127,13 @@ void PrintErrorMessage(const char* message)
 }
 
 
+void PrintInformationMessage(const char* message)
+{
+	PrintStatusMessage(3,message);
+	//PlaySound(PingData);
+	WaitFrames(75);
+}
+
 
 void PrintSceneDirections()
 {
@@ -178,17 +197,45 @@ void PrintSceneDirections()
 // Very basic version of the inventory, does not check anything, 
 // displays a maximum of 7 items before it starts overwriting the clock
 void PrintInventory()
-{
-	int item;
-	int inventoryCell =0 ;
+{	
+	int itemId;
+	int inventoryCell =0;
+	item* itemPtr = gItems;
 	memset((char*)0xbb80+40*24,32,40*4-8);  // 8 characters at the end of the inventory for the clock
-	for (item=0;item<e_ITEM_COUNT_;item++)
+	for (itemId=0;itemId<e_ITEM_COUNT_;itemId++)
 	{
-		if (gItems[item].location == e_LOCATION_INVENTORY)
+		if (itemPtr->location == e_LOCATION_INVENTORY)
 		{
-			memcpy((char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20,gItems[item].description,strlen(gItems[item].description));
+			int descriptionLength = strlen(itemPtr->description);
+			char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
+			memcpy(screenPtr,itemPtr->description , descriptionLength);
+#if 0			
+			// Ideally it would be nice to be able to display things like
+			// - An empty plastic bag
+			// - A tin box full of dust
+			// - A bucket filled with petrol
+			//
+			// This is technically not very difficult to do, but we only have 3.5 lines of 40 characters
+			// So probably should wait a bit until the whole UI layout is 100% fixed
+			if (itemPtr->flags & ITEM_FLAG_IS_CONTAINER)
+			{
+				screenPtr += descriptionLength;
+				if (itemPtr->associated_item == 255)
+				{
+					// Empty container
+					memcpy(screenPtr," (empty)",7);
+				}
+				else
+				{
+					// Contains something
+					memcpy(screenPtr," ->",2);
+				}
+			}
+#endif			
+
 			inventoryCell++;
 		}
+		++itemPtr;
 	}
 }
 
@@ -283,6 +330,30 @@ void PlayerMove(unsigned char direction)
 }
 
 
+// Will have to standardize
+WORDS ProcessContainerAnswer()
+{
+	// Check the first word: We expects a container id
+	switch (gWordBuffer[0])
+	{
+	case e_ITEM_TobaccoTin:      // an empty tobacco tin
+	case e_ITEM_Bucket:          // a wooden bucket
+	case e_ITEM_CardboardBox:    // a cardboard box
+	case e_ITEM_FishingNet:      // a fishing net
+	case e_ITEM_PlasticBag:      // a plastic bag
+	case e_ITEM_SmallBottle:   	 // a small bottle
+		// We return the name of the object
+		return gWordBuffer[0];
+
+	default:
+		// No idea what that is, but definitely not a container
+		return e_WORD_QUIT;
+	}
+	// Continue
+ 	return e_WORD_CONTINUE;
+}
+
+
 void TakeItem(unsigned char itemId)
 {
 	if (itemId>e_ITEM_COUNT_)
@@ -291,22 +362,60 @@ void TakeItem(unsigned char itemId)
 	}
 	else
 	{
+		// The item is in the scene
 		item* itemPtr=&gItems[itemId];
-		if (itemPtr->location!=gCurrentLocation)
+		if (itemPtr->location == e_LOCATION_INVENTORY)
+		{
+			PrintErrorMessage("You already have this item");
+		}
+		else
+		if (itemPtr->location != gCurrentLocation)
 		{
 			PrintErrorMessage("I don't see this item here");
 		}
 		else
+		if (itemPtr->flags & ITEM_FLAG_HEAVY)
 		{
-			if (itemPtr->flags & ITEM_FLAG_HEAVY)
+			PrintErrorMessage("This is too heavy");
+		}
+		else
+		if (itemPtr->usable_containers)
+		{
+			// Requires a container
+			WORDS containerId = AskInput("Carry it in what?",ProcessContainerAnswer);
+			if (containerId == e_WORD_QUIT)
 			{
-				PrintErrorMessage("This is too heavy");
+				PrintErrorMessage("Don't be ridiculous");
 			}
 			else
 			{
-				itemPtr->location = e_LOCATION_INVENTORY;
-				LoadScene();
+				item* containerPtr=&gItems[containerId];
+				if (containerPtr->location != e_LOCATION_INVENTORY)
+				{
+					PrintErrorMessage("You don't have this container");  // Technically could be optimized at a later stage to automatically pick the item if it's in the scene
+				}
+				else
+				if (containerPtr->associated_item != 255)
+				{
+					PrintErrorMessage("Sorry, that's full already");
+				}
+				else
+				{
+					// Looks like we have both the item and an empty container!
+					itemPtr->location 			= e_LOCATION_INVENTORY;
+					itemPtr->associated_item 	= containerId;
+
+					containerPtr->associated_item = itemId;
+
+					LoadScene();
+				}
 			}
+		}
+		else
+		{
+			// Can just be picked-up
+			itemPtr->location = e_LOCATION_INVENTORY;
+			LoadScene();
 		}
 	}
 }
@@ -320,17 +429,52 @@ void DropItem(unsigned char itemId)
 	}
 	else
 	{
-		gItems[itemId].location = gCurrentLocation;
+		item* itemPtr=&gItems[itemId];
+		if (itemPtr->flags & ITEM_FLAG_IS_CONTAINER)
+		{
+			// When the item is a container we need to drop both the container and the content
+			item* containerPtr=itemPtr;
+			itemId = containerPtr->associated_item;
+			itemPtr = &gItems[itemId];
+
+			// Put the container on the ground
+			containerPtr->location        = gCurrentLocation;
+		}
+
+		if (itemPtr->associated_item != 255)
+		{
+			// Remove the item from the container
+			item* containerPtr=&gItems[itemPtr->associated_item];
+			containerPtr->associated_item = 255;
+			itemPtr->associated_item      = 255;
+		}
+
+		if (itemPtr->flags & ITEM_FLAG_EVAPORATES)
+		{
+			// Special items like water of petrol go back to where they were or disappear
+			if (itemId == e_ITEM_Water)
+			{
+				itemPtr->location = e_LOCATION_WELL;
+				PrintInformationMessage("The water drains away");
+			}
+			else
+			{
+				itemPtr->location = 99;
+				PrintInformationMessage("The petrol evaporates");
+			}
+		}
+		else
+		{
+			// Normal items stay on the same location
+			itemPtr->location        = gCurrentLocation;
+		}		
 		LoadScene();
 	}
 }
 
 
-void main()
+void Initializations()
 {
-	int k;
-	int askQuestion = 1;
-
 	// erase the screen
 	memset((char*)0xa000,0,8000);
 
@@ -344,25 +488,89 @@ void main()
 	LoadFileAt(LOADER_FONT_6x8,0xb500);
 
 #ifdef TESTING_MODE
-	gCurrentLocation =e_LOCATION_CELLAR;
+	// Add here any change to the scenario to easily check things
+	gCurrentLocation =e_LOCATION_DARKTUNNEL;
+	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
+	// In normal gameplay, the player starts from the marketplace with an empty inventory
 	gCurrentLocation = e_LOCATION_MARKETPLACE;
 #endif	
 
 	LoadScene();
 	DisplayClock();
 
-	gInputBufferPos=0;
-	gInputBuffer[gInputBufferPos]=0;
+	ResetInput();
+}
 
-	do
+
+WORDS ProcessAnswer()
+{
+	// Check the first word
+	switch (gWordBuffer[0])
 	{
-		int shift=0;
-		if (askQuestion)
+	//
+	// Movement
+	//
+	case e_WORD_NORTH:
+		PlayerMove(e_DIRECTION_NORTH);
+		break;
+	case e_WORD_SOUTH:
+		PlayerMove(e_DIRECTION_SOUTH);
+		break;
+	case e_WORD_EAST:
+		PlayerMove(e_DIRECTION_EAST);
+		break;
+	case e_WORD_WEST:
+		PlayerMove(e_DIRECTION_WEST);
+		break;
+	case e_WORD_UP:
+		PlayerMove(e_DIRECTION_UP);
+		break;
+	case e_WORD_DOWN:
+		PlayerMove(e_DIRECTION_DOWN);
+		break;
+
+	//
+	// Action
+	//
+	case e_WORD_TAKE:
+		TakeItem(gWordBuffer[1]);
+		break;
+	case e_WORD_DROP:
+		DropItem(gWordBuffer[1]);
+		break;
+
+	//
+	// Meta
+	//
+	case e_WORD_QUIT:
+		PlaySound(KeyClickHData);
+		// Quit
+		return e_WORD_QUIT;
+		break;
+
+	default:
+		PlaySound(PingData);
+		break;
+	}
+	// Continue
+ 	return e_WORD_CONTINUE;
+}
+
+
+WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback)
+{
+	int k;
+	int shift=0;
+
+	ResetInput();	
+	while (1)
+	{
+		if (gAskQuestion)
 		{
-			PrintStatusMessage(2,"What are you going to do now?");
+			PrintStatusMessage(2,inputMessage);
 			memset((char*)0xbb80+40*23+1,' ',39);
-			askQuestion=0;
+			gAskQuestion=0;
 		}
 
 		do
@@ -392,63 +600,24 @@ void main()
 		case KEY_RETURN:
 			if (ParseInputBuffer())
 			{
-				// Check the first word
-				switch (gWordBuffer[0])
+				WORDS answer = callback();
+				if (answer !=e_WORD_CONTINUE)
 				{
-				//
-				// Movement
-				//
-				case e_WORD_NORTH:
-					PlayerMove(e_DIRECTION_NORTH);
-					break;
-				case e_WORD_SOUTH:
-					PlayerMove(e_DIRECTION_SOUTH);
-					break;
-				case e_WORD_EAST:
-					PlayerMove(e_DIRECTION_EAST);
-					break;
-				case e_WORD_WEST:
-					PlayerMove(e_DIRECTION_WEST);
-					break;
-				case e_WORD_UP:
-					PlayerMove(e_DIRECTION_UP);
-					break;
-				case e_WORD_DOWN:
-					PlayerMove(e_DIRECTION_DOWN);
-					break;
-
-				//
-				// Action
-				//
-				case e_WORD_TAKE:
-					TakeItem(gWordBuffer[1]);
-					break;
-				case e_WORD_DROP:
-					DropItem(gWordBuffer[1]);
-					break;
-
-				//
-				// Meta
-				//
-				case e_WORD_QUIT:
-					PlaySound(KeyClickHData);
-					k=13;
-					break;
-				default:
-					PlaySound(PingData);
-
+					// Quit
+					return answer;
 				}
-
+				else
+				{
+					// Continue
+					ResetInput();
+					gAskQuestion = 1;
+				}
 			}
 			else
 			{
 				// No word recognized
 				PlaySound(PingData);
 			}
-
-			gInputBufferPos=0;
-			gInputBuffer[gInputBufferPos]=0;
-			askQuestion = 1;
 			break;
 
 		default:
@@ -469,7 +638,14 @@ void main()
 			break;
 		}
 	}
-	while (k!=13);
+}
+
+
+void main()
+{
+	Initializations();	
+
+	AskInput("What are you going to do now?",ProcessAnswer);
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);
