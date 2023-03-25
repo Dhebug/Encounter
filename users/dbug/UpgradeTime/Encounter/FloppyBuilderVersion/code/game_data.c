@@ -76,56 +76,74 @@ location gLocations[e_LOCATION_COUNT_] =
 };
 
 
+//
+// These macros can be used to generate the list of containers that can be 
+// used with a specific item: You can't get powder in a net, neither can you
+// store water in a cardboard box (or at least not for very long)
+//
+#define CONTAINER_MASK1(a)          (1<<(a))
+#define CONTAINER_MASK2(a,b)        (CONTAINER_MASK1(a)+(1<<(b)))
+#define CONTAINER_MASK3(a,b,c)      (CONTAINER_MASK2(a,b)+(1<<(c)))
+#define CONTAINER_MASK4(a,b,c,d)    (CONTAINER_MASK3(a,b,c)+(1<<(d)))
+
+
 // The flags and usable containers are copied from the BASIC version.
 // The final version will contain actual bit-masks
 item gItems[e_ITEM_COUNT_] =
-{ //   Description                            Location                    Flags                      Usable Containers
-    { "an empty tobacco tin"                 ,e_LOCATION_LOUNGE          ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_TobaccoTin           
-    { "a wooden bucket"                      ,e_LOCATION_WELL            ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bucket               
-    { "a cardboard box"                      ,e_LOCATION_GREENHOUSE      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_CardboardBox         
-    { "a fishing net"                        ,e_LOCATION_FISHPND         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_FishingNet           
-    { "a plastic bag"                        ,e_LOCATION_MARKETPLACE     ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_PlasticBag           
-    { "a young girl"                         ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirl        
-    { "the window is broken"                 ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenWindow         
-    { "an open safe"                         ,99                         ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_OpenSafe             
-    { "black dust"                           ,e_LOCATION_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,"BUC,BOX,BAG,TIN"},                            // e_ITEM_BlackDust            
-    { "an open panel on wall"                ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_OpenPanel            
-    { "a locked panel on the wall"           ,e_LOCATION_DARKCELLARROOM  ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_LockedPanel          
-    { "gritty yellow powder"                 ,e_LOCATION_INSIDEHOLE      ,ITEM_FLAG_DEFAULT         ,"BUC,BOX,BAG,TIN"},                            // e_ITEM_YellowPowder         
-    { "a small hole in the door"             ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallHoleInDoor      
-    { "some water"                           ,e_LOCATION_WELL            ,ITEM_FLAG_EVAPORATES      ,"BUC,BAG,TIN"},                                // e_ITEM_Water                
-    { "a large dove"                         ,e_LOCATION_WOODEDAVENUE    ,ITEM_FLAG_DEFAULT         ,"BUC,BOX,NET"},                                // e_ITEM_LargeDove            
-    { "some twine"                           ,e_LOCATION_GREENHOUSE      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Twine                
-    { "a silver knife"                       ,e_LOCATION_VEGSGARDEN      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
-    { "a ladder"                             ,e_LOCATION_APPLE_TREES     ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
-    { "an abandoned car"                     ,e_LOCATION_TARMACAREA      ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AbandonedCar         
-    { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AlsatianDog          
-    { "a joint of meat"                      ,e_LOCATION_DININGROOM      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
-    { "some brown bread"                     ,e_LOCATION_DININGROOM      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
-    { "a roll of sticky tape"                ,e_LOCATION_LIBRARY         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
-    { "a chemistry book"                     ,e_LOCATION_LIBRARY         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
-    { "a box of matches"                     ,e_LOCATION_KITCHEN         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
-    { "a snooker cue"                        ,e_LOCATION_GAMESROOM       ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
-    { "a thug asleep on the bed"             ,e_LOCATION_MASTERBEDROOM   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_Thug                 
-    { "a heavy safe"                         ,e_LOCATION_CELLAR          ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_HeavySafe            
-    { "a printed note"                       ,e_LOCATION_BOXROOM         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_PrintedNote          
-    { "a length of rope"                     ,e_LOCATION_WELL            ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Rope                 
-    { "a rope hangs from the window"         ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RopeHangingFromWindow
-    { "a roll of toilet tissue"              ,e_LOCATION_TINY_WC         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
-    { "a hose-pipe"                          ,e_LOCATION_ZENGARDEN       ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HosePipe             
-    { "some petrol"                          ,99                         ,ITEM_FLAG_EVAPORATES      ,"BUC,BAG,TIN"},                                // e_ITEM_Petrol               
-    { "broken glass"                         ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenGlass          
-    { "an acid burn"                         ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AcidBurn             
-    { "a small bottle"                       ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallBottle          
-    { "a fuse"                               ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Fuse                 
-    { "some gunpowder"                       ,99                         ,ITEM_FLAG_DEFAULT         ,"BUC,BOX,BAG,TIN"},                            // e_ITEM_GunPowder            
-    { "a set of keys"                        ,e_LOCATION_MAINSTREET      ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Keys                 
-    { "a newspaper"                          ,e_LOCATION_MARKETPLACE     ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Newspaper            
-    { "a bomb"                               ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bomb                 
-    { "a pistol"                             ,99                         ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Pistol               
-    { "three .38 bullets"                    ,e_LOCATION_DARKCELLARROOM  ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bullets              
-    { "a young girl tied up on the floor"    ,e_LOCATION_GIRLROOM        ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirlOnFloor     
+{   //           Item                              World               Associated    Generic               Containers usable
+    //           description                       location            item          flags                 with this specific item
+    // Containers
+    { "an empty tobacco tin"                 ,e_LOCATION_LOUNGE          ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_TobaccoTin           
+    { "a wooden bucket"                      ,e_LOCATION_WELL            ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_Bucket               
+    { "a cardboard box"                      ,e_LOCATION_GREENHOUSE      ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_CardboardBox         
+    { "a fishing net"                        ,e_LOCATION_FISHPND         ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_FishingNet           
+    { "a plastic bag"                        ,e_LOCATION_MARKETPLACE     ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_PlasticBag           
+    { "a small bottle"                       ,99                         ,255   ,ITEM_FLAG_IS_CONTAINER    ,0},                                            // e_ITEM_SmallBottle          
+
+    // Items requiring containers
+    { "black dust"                           ,e_LOCATION_DARKTUNNEL      ,255   ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_BlackDust            
+    { "gritty yellow powder"                 ,e_LOCATION_INSIDEHOLE      ,255   ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_YellowPowder         
+    { "some petrol"                          ,99                         ,255   ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Petrol               
+    { "some water"                           ,e_LOCATION_WELL            ,255   ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Water                
+
+    // Normal items
+    { "a locked panel on the wall"           ,e_LOCATION_DARKCELLARROOM  ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_LockedPanel          
+    { "an open panel on wall"                ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_OpenPanel            
+    { "a small hole in the door"             ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallHoleInDoor      
+    { "the window is broken"                 ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenWindow         
+    { "a large dove"                         ,e_LOCATION_WOODEDAVENUE    ,255   ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                                // e_ITEM_LargeDove            
+    { "some twine"                           ,e_LOCATION_GREENHOUSE      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Twine                
+    { "a silver knife"                       ,e_LOCATION_VEGSGARDEN      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
+    { "a ladder"                             ,e_LOCATION_APPLE_TREES     ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
+    { "an abandoned car"                     ,e_LOCATION_TARMACAREA      ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AbandonedCar         
+    { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AlsatianDog          
+    { "a joint of meat"                      ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
+    { "some brown bread"                     ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
+    { "a roll of sticky tape"                ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
+    { "a chemistry book"                     ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
+    { "a box of matches"                     ,e_LOCATION_KITCHEN         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
+    { "a snooker cue"                        ,e_LOCATION_GAMESROOM       ,255   ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
+    { "a thug asleep on the bed"             ,e_LOCATION_MASTERBEDROOM   ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_Thug                 
+    { "a heavy safe"                         ,e_LOCATION_CELLAR          ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_HeavySafe            
+    { "a printed note"                       ,e_LOCATION_BOXROOM         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_PrintedNote          
+    { "a length of rope"                     ,e_LOCATION_WELL            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Rope                 
+    { "a rope hangs from the window"         ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RopeHangingFromWindow
+    { "a roll of toilet tissue"              ,e_LOCATION_TINY_WC         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
+    { "a hose-pipe"                          ,e_LOCATION_ZENGARDEN       ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HosePipe             
+    { "an open safe"                         ,99                         ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_OpenSafe             
+    { "broken glass"                         ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenGlass          
+    { "an acid burn"                         ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AcidBurn             
+    { "a young girl"                         ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirl        
+    { "a fuse"                               ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Fuse                 
+    { "some gunpowder"                       ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_GunPowder            
+    { "a set of keys"                        ,e_LOCATION_MAINSTREET      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Keys                 
+    { "a newspaper"                          ,e_LOCATION_MARKETPLACE     ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Newspaper            
+    { "a bomb"                               ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bomb                 
+    { "a pistol"                             ,99                         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Pistol               
+    { "three .38 bullets"                    ,e_LOCATION_DARKCELLARROOM  ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bullets              
+    { "a young girl tied up on the floor"    ,e_LOCATION_GIRLROOM        ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirlOnFloor     
 };
+
 
 keyword gWordsArray[] =
 {

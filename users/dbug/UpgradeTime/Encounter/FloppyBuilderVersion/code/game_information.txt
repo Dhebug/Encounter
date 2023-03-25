@@ -1,0 +1,69 @@
+Some help regarding the game:
+
+
+The items and containers:
+- The black dust (from the tunel), yellow powder (from the pit) or gun powder (made) can only be stored in the bucket, cardboard box, bag or tobacco tin
+- Petrol (from the car) and water (from the well) evaporates/disappear when dropped and can only be stored in the bucket, bag or tobacco tin
+- The dove (in the woods) can only be carried in the bucket (??? seems wrong), cardboard box or net
+- The small bottle (from the safe in the cellar) contains acid
+- To recover the petrol (from the car) the player need to open the tank of the car, and then syphon to a container using the garden hose
+
+Role of items:
+- The acid in the small bottle can be used to make a small hole in the padlocked room
+- The pistol (from the thug) must be loaded with the bullets (from the dark cellar room)
+
+Throwing items:
+- The dog loves the meat 
+- The dove loves the bread 
+- The cue can be used to kill the dog, and also smash the window on the tiled patio
+- The knife can be used to kill the dog, or thrown at the girl so she can cut her bonds
+- The bottle can be thrown at the padlocked door
+- The rope can be thrown to the girl so she can climb down
+
+Opening things:
+- The padlocked door is locked and cannot be open
+- The window on the tiled patio is 30 feet up (9.14 meters)
+- The screw cap of the small bottle is stuck and cannot be removed
+- The car is empty, so is the trunk, but the car tank can be opened to reveal the petrol
+- The safe in the cellar is closed and can only be opened with the bomb and contains the small bottle of acid
+- The panel in the cellar is closed and contains the controls for the alarm (many lights and a button)
+
+Building things:
+- Gun powder is made of yellow powder and black dust (all need to be in one of the containers)
+- The fuse is made from a roll of toilet paper and petrol
+- The bomb is made of the fuse, gun powder and tobacco tin
+
+Blowing things up:
+- Using the matches on the bomb results in the player dying in the blast 
+- The bomb works to open the safe
+- The bomb does not work on the padlocked door
+
+Reading things:
+- The note indicates that all the dangerous chemicals have been moved to the safe in the basement
+- There is a chemistry book that indicates how to make explosives
+
+Climbing:
+- The ladder is too short to reach the windows on the tiled patio
+- The ladder is tall enough to climb out of the pit
+
+Frisking:
+- If you search the thug (after it's incapacited) you can find a pistol (not loaded ???)
+
+Killing:
+- The thug can be strangled with the twine, rope or garden hose
+- The thug can be stabbed with the cue or the knife
+- The thug can be hit with the cue
+- The thug can be made to suffocate from the plastic bag on this head
+- Failing to kill the thug results in the player death
+- The dog can be killed with the pistol (when loaded)
+- In theory the thug could also be killed with the pistol, but since you need to kill him to get it...
+
+Point to ellucidate
+- The alarm when the window gets broken can be stopped with the panel in the basement, but can also be disabled before that
+- When the alarm is ringing, you only have a few moves to do something before getting caught
+
+
+
+Suggested changes:
+- Attach the rope to the cue, then throw it to the window to break it, so the girl can use the cue to keep the rope attached properly to the wall while she climbs down
+

@@ -71,17 +71,20 @@ enum ITEMS
 	e_ITEM_CardboardBox  		= 2,          // a cardboard box
 	e_ITEM_FishingNet    		= 3,          // a fishing net
 	e_ITEM_PlasticBag    		= 4,          // a plastic bag
-	e_ITEM__Last_Container      = 4,          // ----- END CONTAINERS MARKER
+	e_ITEM_SmallBottle  		= 5,          // a small bottle
+	e_ITEM__Last_Container      = 5,          // ----- END CONTAINERS MARKER
+
+	// Items requiring containers
+	e_ITEM_BlackDust  			= 6,          // black dust
+	e_ITEM_YellowPowder  		= 7,          // gritty yellow powder
+	e_ITEM_Petrol  				= 8,          // some petrol
+	e_ITEM_Water  				= 9,          // some water
+
 	// Then normal items
-	e_ITEM_YoungGirl  			= 5,         // a young girl
-	e_ITEM_BrokenWindow  		= 6,          // the window is broken
-	e_ITEM_OpenSafe  			= 7,          // an open safe
-	e_ITEM_BlackDust  			= 8,          // black dust
-	e_ITEM_OpenPanel  			= 9,          // an open panel on wall
 	e_ITEM_LockedPanel  		= 10,         // a locked panel on the wall
-	e_ITEM_YellowPowder  		= 11,         // gritty yellow powder
+	e_ITEM_OpenPanel  			= 11,         // an open panel on wall
 	e_ITEM_SmallHoleInDoor 		= 12,         // a small hole in the door
-	e_ITEM_Water  				= 13,         // some water
+	e_ITEM_BrokenWindow  		= 13,          // the window is broken
 	e_ITEM_LargeDove  			= 14,         // a large dove
 	e_ITEM_Twine  				= 15,         // some twine
 	e_ITEM_SilverKnife  		= 16,         // a silver knife
@@ -101,10 +104,10 @@ enum ITEMS
 	e_ITEM_RopeHangingFromWindow= 30,         // a rope hangs from the window
 	e_ITEM_RollOfToiletPaper  	= 31,         // a roll of toilet tissue~
 	e_ITEM_HosePipe  			= 32,         // a hose-pipe
-	e_ITEM_Petrol  				= 33,         // some petrol
+	e_ITEM_OpenSafe  			= 33,          // an open safe
 	e_ITEM_BrokenGlass  		= 34,         // broken glass
 	e_ITEM_AcidBurn  			= 35,         // an acid burn
-	e_ITEM_SmallBottle  		= 36,         // a small bottle
+	e_ITEM_YoungGirl  			= 36,         // a young girl
 	e_ITEM_Fuse  				= 37,         // a fuse
 	e_ITEM_GunPowder  			= 38,         // some gunpowder
 	e_ITEM_Keys  				= 39,         // a set of keys
@@ -122,7 +125,7 @@ enum ITEMS
 
 // For practical reasons we reuse the item ids in the list of words
 // followed by the actual instructions
-enum WORDS
+typedef enum 
 {
 	// [0-44] Items 
 	// see enum ITEMS
@@ -141,8 +144,12 @@ enum WORDS
 
 	// Meta instructions
 	e_WORD_QUIT  ,
-	e_WORD_COUNT_
-};
+	e_WORD_COUNT_,
+
+	// Additional values for the parser
+	e_WORD_CONTINUE
+
+} WORDS;
 
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
@@ -171,10 +178,11 @@ typedef struct
 
 typedef struct
 {
-	const char* description;        // Full description of the object in the world
-	unsigned char location;         // Where the object is in the world
-    unsigned char flags;            // Special flags on what can be done with the item
-    const char* containers;
+	const char* description;        	// Full description of the object in the world
+	unsigned char location;         	// Where the object is in the world
+	unsigned char associated_item;      // For the item<->container association
+    unsigned char flags;            	// Special flags on what can be done with the item
+    unsigned char usable_containers;	// Bit masks representing the possible containers to store the item
 } item;
 
 typedef struct 
