@@ -273,6 +273,8 @@ BlitDataTable
   BLIT_INFO(BLIT_OR   ,ArrowRight  ,_ImageBuffer+20+40*116,3, 9)                 // East Arrow
   BLIT_INFO(BLIT_OR   ,ArrowLeft   ,_ImageBuffer+17+40*116,3, 9)                 // West Arrow
   ; Should have two more entries for UP and DOWN there
+  BLIT_INFO(BLIT_OR   ,ArrowUp     ,_ImageBuffer+20+40*129,2, 7)                 // Up Arrow
+  BLIT_INFO(BLIT_OR   ,ArrowDown   ,_ImageBuffer+18+40*129,2, 7)                 // Down Arrow
   .byt 0
 
 
@@ -382,6 +384,24 @@ ArrowBottom ; Patch at 19,120
  .byt %000011,%111000
  .byt %000001,%110000
  .byt %000000,%100000
+
+ArrowUp ; Patch at 20,129
+ .byt %000000,%000111
+ .byt %000000,%000011
+ .byt %000000,%001101
+ .byt %000000,%001000
+ .byt %000000,%111000
+ .byt %000000,%100000
+ .byt %000011,%100000
+
+ArrowDown ; Patch at 18,129
+ .byt %111000,%000000
+ .byt %001000,%000000
+ .byt %001110,%000000
+ .byt %000010,%000000
+ .byt %000011,%010000
+ .byt %000000,%110000
+ .byt %000001,%110000
 
 
 // Needs 6 characters to copy the 36x8 bottom part of the arrow block
