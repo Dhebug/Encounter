@@ -19,6 +19,7 @@ char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can b
 char gTextBuffer[80];    // Temp
 
 
+
 typedef WORDS (*AnswerProcessingFun)();
 
 extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback);
@@ -98,18 +99,6 @@ unsigned char ParseInputBuffer()
 }
 
 
-void ClearMessageWindow(unsigned char paperColor)
-{
-	int i;
-	char* ptrScreen=(char*)0xbb80+40*18;
-	for (i=18;i<=23;i++)
-	{
-		*ptrScreen=paperColor;
-		memset(ptrScreen+1,32,39);
-		ptrScreen+=40;
-	}
-}
-
 
 void PrintStatusMessage(char color,const char* message)
 {
@@ -152,7 +141,7 @@ void PrintSceneDirections()
 	}
 
 	// Print the directions under (also centered)
-	memset((char*)0xbb80+17*40+1,' ',39);
+	memset((char*)0xbb80+18*40+1,' ',39);
 	if (exitCount)
 	{
 		SetLineAddress(gTextBuffer);
@@ -181,6 +170,7 @@ void PrintSceneDirections()
 				{
 					PrintWord(", ");
 				}
+				gFlagDirections|= (1<<direction);
 			}
 		}
 		*gPrintAddress=0;  // Make sure to null terminate the string
@@ -190,7 +180,7 @@ void PrintSceneDirections()
 		strcpy(gTextBuffer,"There seems to be no way out");
 	}
 	messageLength=strlen(gTextBuffer);
-	strcpy((char*)0xbb80+17*40+20-messageLength/2,gTextBuffer);
+	strcpy((char*)0xbb80+18*40+20-messageLength/2,gTextBuffer);
 }
 
 
@@ -257,7 +247,7 @@ void PrintSceneObjects()
 	if (itemCount)
 	{
 		char first=1;
-		char* ptrScreen=(char*)0xbb80+40*18;
+		char* ptrScreen=(char*)0xbb80+40*19;
 		for (item=0;item<e_ITEM_COUNT_;item++)
 		{
 			if (gItems[item].location == gCurrentLocation)
@@ -279,7 +269,7 @@ void PrintSceneObjects()
 	}
 	else
 	{
-		sprintf((char*)0xbb80+40*18+1,"%c%s",3,"There is nothing of interest here");
+		sprintf((char*)0xbb80+40*19+1,"%c%s",3,"There is nothing of interest here");
 	}
 }
 
@@ -289,9 +279,13 @@ void PrintSceneInformation()
 	int messageLength = 0;
 
 	// Print the description of the place at the top (centered)
-	memset((char*)0xbb80+16*40+1,' ',39);
+	memset((char*)0xbb80+17*40+1,' ',39);
 	messageLength=strlen(locationPtr->description);
-	strcpy((char*)0xbb80+16*40+20-messageLength/2,locationPtr->description);
+	strcpy((char*)0xbb80+17*40+20-messageLength/2,locationPtr->description);
+
+	poke(0xbb80+16*40+16,9);                      // ALT charset
+	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
+	poke(0xbb80+16*40+23,8);                      // STD charset
 
 	PrintSceneDirections();
 
@@ -306,9 +300,10 @@ void LoadScene()
 	ClearMessageWindow(16+4);
 
 	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation+1,ImageBuffer);	
-	BlitBufferToHiresWindow();
 
 	PrintSceneInformation();
+
+	BlitBufferToHiresWindow();
 }
 
 
@@ -330,7 +325,6 @@ void PlayerMove(unsigned char direction)
 }
 
 
-// Will have to standardize
 WORDS ProcessContainerAnswer()
 {
 	// Check the first word: We expects a container id

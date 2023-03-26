@@ -27,6 +27,12 @@ SET PARAMS=-u1 -m0 -f0 -o2
 SET PARAMS=-u1 -m0 -f6 -o2
 %PICTCONV% %PARAMS% data\title.png %TARGET%\title.hir
 
+:: Arrow block (Temp file that needs to be copied in the display.s file)
+SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks
+%PICTCONV% %PARAMS% data\arrow_block_masks.png build\mask.s
+
+
+
 :: Here we have the list of 240x128 pictures
 ::
 :: 1 - You are in a deserted market square
