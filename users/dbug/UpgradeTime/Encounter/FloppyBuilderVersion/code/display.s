@@ -139,74 +139,58 @@ loop_bottom
   rts
 .)
 
+
 _DrawArrows
 .(
-  ; ArrowBlockMasks -> 102,111 -> 17,111
-  ; The block itself is 32x18 pixels (6 bytes wide)
-  ; The top 18 pixels is the AND mask, the bottom 18 pixels are the OR mask
-  lda #<ArrowBlockMasks
+  ; Hack the bitmask to add the arrow bitmap background as elements to always draw
+  lda _gFlagDirections
+  asl
+  asl
+  ora #3
+  sta _gFlagDirections
+
+  ; Iterate over the list of all bitmap elements, and draw them if the bit is activated in the mask variable
+  ldx #0
+loop_draw_arrow  
+  lda BlitDataTable+0,x   ; Blit mode (AND/ORA)
+  beq end_draw_arrow
+  sta BlitOperation
+
+  lsr _gFlagDirections
+  bcc skip_draw
+
+  lda BlitDataTable+1,x   ; Source graphics
   sta tmp0+0
-  lda #>ArrowBlockMasks
+  lda BlitDataTable+2,x
   sta tmp0+1
 
-  lda #18+8
-  sta height
-
-  lda #6
-  sta width
-  
-  lda #<_ImageBuffer+17+40*110
+  lda BlitDataTable+3,x   ; Destination
   sta tmp1+0
-  lda #>_ImageBuffer+17+40*110
-  sta tmp1+1
-  
-  lda #$31            ; and (tmp0),y
-  sta BlitOperation
-  jsr BlitBloc
-
-  lda #18+8
-  sta height
-
-  lda #6
-  sta width
-
-  lda #<_ImageBuffer+17+40*110
-  sta tmp1+0
-  lda #>_ImageBuffer+17+40*110
+  lda BlitDataTable+4,x
   sta tmp1+1
 
-  lda #$11            ; ora (tmp0),y
-  sta BlitOperation
-  jsr BlitBloc
+  lda BlitDataTable+5,x   ; Dimensions
+  sta width
+  lda BlitDataTable+6,x
+  sta height
   
-  ; Then add the individual arrows over
-  lda _gFlagDirections
-  and #1
-  beq no_north
-  jsr PatchArrowTop  
-no_north  
+  txa                     ; I wish we had phx/plx on the base 6502
+  pha 
+  jsr BlitBloc
+  pla
+  tax
 
-  lda _gFlagDirections
-  and #2
-  beq no_south
-  jsr PatchArrowBottom
-no_south  
-
-  lda _gFlagDirections
-  and #4
-  beq no_east
-  jsr PatchArrowRight  
-no_east  
-
-  lda _gFlagDirections
-  and #8
-  beq no_west
-  jsr PatchArrowLeft  
-no_west  
+skip_draw  
+  txa
+  clc
+  adc #7
+  tax
+  jmp loop_draw_arrow
+end_draw_arrow
  
   jsr PatchArrowCharacters
 
-  ; Reset the direction
+  ; Reset the direction (note: Will happen automatically when the UP and DOWN cases are handled)
   lda #0
   sta _gFlagDirections
   rts
@@ -272,96 +256,24 @@ loop
 .)
 
 
+#define BLIT_AND $31    
+#define BLIT_OR  $11
 
-PatchArrowTop
-.(
-  lda #<ArrowTop
-  sta tmp0+0
-  lda #>ArrowTop
-  sta tmp0+1
+#define BLIT_INFO(opcode,source,destination,width,height)  .byt opcode,<source,>source,<destination,>destination,width,height
 
-  lda #6
-  sta height
-
-  lda #2
-  sta width
-  
-  lda #<_ImageBuffer+19+40*112
-  sta tmp1+0
-  lda #>_ImageBuffer+19+40*112
-  sta tmp1+1
-  
-  jmp BlitBloc
-.)
-
-PatchArrowLeft
-.(
-  lda #<ArrowLeft
-  sta tmp0+0
-  lda #>ArrowLeft
-  sta tmp0+1
-
-  lda #9
-  sta height
-
-  lda #3
-  sta width
-  
-  lda #<_ImageBuffer+17+40*116
-  sta tmp1+0
-  lda #>_ImageBuffer+17+40*116
-  sta tmp1+1
-  
-  jmp BlitBloc
-.)
-
-
-PatchArrowRight
-.(
-  lda #<ArrowRight
-  sta tmp0+0
-  lda #>ArrowRight
-  sta tmp0+1
-
-  lda #9
-  sta height
-
-  lda #3
-  sta width
-
-  lda #<_ImageBuffer+20+40*82
-  sta tmp1+0
-  lda #>_ImageBuffer+20+40*82
-  sta tmp1+1
-  
-  lda #<_ImageBuffer+20+40*116
-  sta tmp1+0
-  lda #>_ImageBuffer+20+40*116
-  sta tmp1+1
-  
-  jmp BlitBloc
-.)
-
-PatchArrowBottom
-.(
-  lda #<ArrowBottom
-  sta tmp0+0
-  lda #>ArrowBottom
-  sta tmp0+1
-
-  lda #13
-  sta height
-
-  lda #2
-  sta width
-  
-  lda #<_ImageBuffer+19+40*120
-  sta tmp1+0
-  lda #>_ImageBuffer+19+40*120
-  sta tmp1+1
-  
-  jmp BlitBloc
-.)
+BlitDataTable
+  ; ArrowBlockMasks -> 102,111 -> 17,111
+  ; The block itself is 32x18 pixels (6 bytes wide)
+  ; The top 18 pixels is the AND mask, the bottom 18 pixels are the OR mask
+  BLIT_INFO(BLIT_AND  ,ArrowBlockMasks+0    ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (AND masked)
+  BLIT_INFO(BLIT_OR   ,ArrowBlockMasks+6*26 ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (OR masked)
+  ; The four directional arrows
+  BLIT_INFO(BLIT_OR   ,ArrowTop    ,_ImageBuffer+19+40*112,2, 6)                 // North Arrow
+  BLIT_INFO(BLIT_OR   ,ArrowBottom ,_ImageBuffer+19+40*120,2,13)                 // South Arrow
+  BLIT_INFO(BLIT_OR   ,ArrowRight  ,_ImageBuffer+20+40*116,3, 9)                 // East Arrow
+  BLIT_INFO(BLIT_OR   ,ArrowLeft   ,_ImageBuffer+17+40*116,3, 9)                 // West Arrow
+  ; Should have two more entries for UP and DOWN there
+  .byt 0
 
 
 BlitBloc
