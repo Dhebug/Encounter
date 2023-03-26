@@ -1,0 +1,42 @@
+Original memory map
+-------------------
+0000-00FF Page 0 - Scratch pad
+0100-01FF Page 1 - CPU Stack
+0200-02FF Page 2 - System variables
+0300-03FF Page 3 - I/O
+0400-04FF Page 4 - Used by Sedoric
+0500-97FF USER BASIC (37632 bytes)
+9800-9C00 1024 bytes of STD charset (HIRES)
+9C00-A000 1024 bytes of ALT charset (HIRES) Used by highscores (456 bytes)
+A000-B3FF 5120 bytes of half HIRES (240x128 resolution)
+B400-B7FF 1024 bytes of STD charset (TEXT)
+B800-BB7F  896 bytes of ALT charset (TEXT)
+BB80-BFDF 1119 bytes of TEXT mode
+BFE0-BFFF 32 spare bytes between the screen and the ROM
+C000-FFFF ROM/RAM - 16KB
+-------------------------------------------
+
+C/Assembler version memory map (TODO)
+-------------------
+0000-00FF Page 0 - Scratch pad
+0100-01FF Page 1 - CPU Stack
+0200-02FF Page 2 - System variables
+0300-03FF Page 3 - I/O
+0400-9FFF 39936 bytes - All the area from the page 4 to the start of the HIRES screen is available for the game
+A000-B3FF  5120 bytes of half HIRES (240x128 resolution)
+B400-B7FF  1024 bytes of STD charset (TEXT)
+B800-BB7F   896 bytes of ALT charset (TEXT)
+BB80-BDFF   640 bytes of top of TEXT mode hidden by the HIRES content or is it?  0xBB80 contains the attribute to switch to HIRES, the 639 remaining bytes should be free to use
+BE00-BFDF   480 bytes of TEXT mode (12 lines of 40 characters)
+BFE0-BFFF    32 bytes - Spare bytes between the screen and the ROM
+C000-DF3F  8000 bytes - Image buffer
+DF40-FDFF  7872 bytes - [available]
+FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
+
+-------------------------------------------
+Current game size: 16902 (2023-03-26)
+
+--------------
+240x128 images -> 5120 bytes
+compressed with FilePack, final size between 759 and 4313 bytes (greenhouse), average size 2016 bytes
+--------------
