@@ -1,11 +1,11 @@
 
-
+#include "common.h"
 
 void ClearMessageWindow(unsigned char paperColor)
 {
 	int i;
-	char* ptrScreen=(char*)0xbb80+40*19;
-	for (i=19;i<=23;i++)
+	char* ptrScreen=(char*)0xbb80+40*18;
+	for (i=18;i<=23;i++)
 	{
 		*ptrScreen=paperColor;
 		memset(ptrScreen+1,32,39);
@@ -24,7 +24,6 @@ void InitializeGraphicMode()
 	// CYAN on BLACK for the scene description
 	poke(0xBB80+40*16,7);   // Line with the arrow character and the clock
 	poke(0xBB80+40*17,6);    
-	poke(0xBB80+40*18,6);
 
 	// BLUE background for the log output
 	ClearMessageWindow(16+4);
@@ -34,6 +33,9 @@ void InitializeGraphicMode()
 	poke(0xBB80+40*25,16);
 	poke(0xBB80+40*26,16);
 	poke(0xBB80+40*27,16);
+
+	// Initialize the ALT charset numbers
+	memcpy((char*)0xb800+'0'*8,gSevenDigitDisplay,8*11);
 }
 
 

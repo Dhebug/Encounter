@@ -129,58 +129,15 @@ void PrintSceneDirections()
 	location* locationPtr = &gLocations[gCurrentLocation];
 	unsigned char* directions = locationPtr->directions;
 	int direction;
-	int exitCount = 0;
-	int messageLength = 0;
 
+	gFlagDirections = 0;
 	for (direction=0;direction<e_DIRECTION_COUNT_;direction++)
 	{
 		if (directions[direction]!=e_LOCATION_NONE)
 		{
-			exitCount++;
+			gFlagDirections|= (1<<direction);
 		}
 	}
-
-	// Print the directions under (also centered)
-	memset((char*)0xbb80+18*40+1,' ',39);
-	if (exitCount)
-	{
-		SetLineAddress(gTextBuffer);
-		
-		if (exitCount==1)
-		{
-			PrintWord("The only exit is ");
-		}
-		else
-		{
-			PrintWord("Exits lead ");
-		}
-
-		for (direction=0;direction<e_DIRECTION_COUNT_;direction++)
-		{
-			if (directions[direction]!=e_LOCATION_NONE)
-			{
-				PrintWord(gDirectionsArray[direction]);
-				exitCount--;
-				if (exitCount==1)
-				{
-					PrintWord(" and ");
-				}
-				else
-				if (exitCount)
-				{
-					PrintWord(", ");
-				}
-				gFlagDirections|= (1<<direction);
-			}
-		}
-		*gPrintAddress=0;  // Make sure to null terminate the string
-	}
-	else
-	{
-		strcpy(gTextBuffer,"There seems to be no way out");
-	}
-	messageLength=strlen(gTextBuffer);
-	strcpy((char*)0xbb80+18*40+20-messageLength/2,gTextBuffer);
 }
 
 
@@ -247,7 +204,7 @@ void PrintSceneObjects()
 	if (itemCount)
 	{
 		char first=1;
-		char* ptrScreen=(char*)0xbb80+40*19;
+		char* ptrScreen=(char*)0xbb80+40*18;
 		for (item=0;item<e_ITEM_COUNT_;item++)
 		{
 			if (gItems[item].location == gCurrentLocation)
@@ -269,7 +226,7 @@ void PrintSceneObjects()
 	}
 	else
 	{
-		sprintf((char*)0xbb80+40*19+1,"%c%s",3,"There is nothing of interest here");
+		sprintf((char*)0xbb80+40*18+1,"%c%s",3,"There is nothing of interest here");
 	}
 }
 
@@ -285,7 +242,6 @@ void PrintSceneInformation()
 
 	poke(0xbb80+16*40+16,9);                      // ALT charset
 	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
-	poke(0xbb80+16*40+23,8);                      // STD charset
 
 	PrintSceneDirections();
 
