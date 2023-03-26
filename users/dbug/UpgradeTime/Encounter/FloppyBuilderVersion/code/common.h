@@ -21,7 +21,7 @@ extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 // Display
 extern unsigned char ImageBuffer[40*200];    // Compositing buffer, used to mix together the scene image, frame, arrows, etc...
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
-
+extern char gSevenDigitDisplay[];
 
 // Audio
 extern void PlaySound(const char* registerList);
