@@ -2,7 +2,7 @@
 // Misc settings for the game testing
 //
 //#define ENABLE_INTRO         // Comment out to skip the intro
-//#define TESTING_MODE         // Comment out to play normally
+#define TESTING_MODE         // Comment out to play normally
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16
