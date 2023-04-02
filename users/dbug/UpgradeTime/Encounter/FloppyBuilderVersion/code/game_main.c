@@ -255,11 +255,19 @@ void LoadScene()
 {
 	ClearMessageWindow(16+4);
 
+#if 1
 	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation+1,ImageBuffer);	
+#else
+	memset(ImageBuffer,64+1,40*128);
+#endif	
 
 	PrintSceneInformation();
 
 	BlitBufferToHiresWindow();
+	
+#if 1
+	PrintFancyFont(50,50,"This is a test",0);
+#endif	
 }
 
 
@@ -428,7 +436,7 @@ void Initializations()
 	// erase the screen
 	memset((char*)0xa000,0,8000);
 
-	// 
+	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
 
  	// Setup the Hires/Text mixed graphic mode
@@ -436,6 +444,10 @@ void Initializations()
 
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0xb500);
+
+	// Perform some initializations for the text display system
+	ComputeFancyFontWidth();
+	GenerateShiftBuffer();
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things

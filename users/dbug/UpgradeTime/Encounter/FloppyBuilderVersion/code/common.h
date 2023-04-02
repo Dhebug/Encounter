@@ -22,11 +22,15 @@ extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 extern unsigned char ImageBuffer[40*200];    // Compositing buffer, used to mix together the scene image, frame, arrows, etc...
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 extern char gSevenDigitDisplay[];            // Bitmap to redefine a few characters so they look like an old style watch drawn with LED or LCD segments
+extern char gFont12x14[];                    // The 12x14 italics font
+extern char gFont12x14Width[];               // Width (in pixel) of each of the characters in the fancy font
 extern char gTableModulo6[];                 // Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
 extern char gTableDivBy6[];                  // Given a X value, returns the value divide by 6 (used to locate the proper byte in a scanline)
+extern char gShiftBuffer[];                  // Used to display graphics at any arbitrary position instead of on multiples of 6
 extern char gBitPixelMask[];                 // Bitmap with each possible combination of pixel to mask to draw a vertical line
 extern char gBitPixelMaskLeft[];             // Bitmap with each possible left endings - used to draw horizontal segments
 extern char gBitPixelMaskRight[];            // Bitmap with each possible right endings - used to draw horizontal segments
+
 
 // Audio
 extern void PlaySound(const char* registerList);
@@ -52,6 +56,10 @@ extern void WaitFrames(int frames);
 
 extern char gIsHires;
 extern char* gPrintAddress;
+
+
+// game_misc
+extern void PrintFancyFont(unsigned char xPos,unsigned char yPos,const char* message, unsigned char inverted);
 
 /*
 ;

@@ -39,3 +39,69 @@ void InitializeGraphicMode()
 }
 
 
+
+void PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char* message, unsigned char inverted)
+{
+	int xPos;
+	int y;
+	int car;
+	char width;
+	char* fontPtr;
+	char* targetPtr;
+	char* shiftTablePtr;
+	char* targetScanlinePtr;
+	char* baseLinePtr = (char*)0xa000+(yPos*40);
+
+	xPos = xPosStart;
+	while (car=*message++)
+	{
+		if (car<0)
+		{
+			xPos += car;
+		}
+		else
+		if (car==13)
+		{
+			// Carriage return followed by number of scanlines to jump
+			xPos = xPosStart;
+			baseLinePtr+=40*(*message++);
+		}
+		else
+		{
+			car -= 32;
+			width=gFont12x14Width[car];
+			targetPtr = baseLinePtr+gTableDivBy6[xPos];
+			shiftTablePtr = gShiftBuffer+(gTableModulo6[xPos]*64*2);
+			xPos += width+1;
+			fontPtr = gFont12x14+car*2;
+			while (width>0)
+			{
+				// Draw the 14 scanlines of each character vertically one by one.
+				targetScanlinePtr=targetPtr;
+				for (y=0;y<14;y++)
+				{
+					// Read one byte from the character
+					char v = (fontPtr[y*95*2] & 63);
+
+					// And use the shift table to get the left and right parts shifted by the right amount
+					if (inverted)
+					{
+						targetScanlinePtr[0] &= (~shiftTablePtr[v*2+0])|64;
+						targetScanlinePtr[1] &= (~shiftTablePtr[v*2+1])|64;
+					}
+					else
+					{
+						targetScanlinePtr[0] |= shiftTablePtr[v*2+0];
+						targetScanlinePtr[1] |= shiftTablePtr[v*2+1];
+					}
+
+					targetScanlinePtr += 40;
+				}
+				++targetPtr;
+				++fontPtr;
+				width-=6;
+			}
+		}
+	}
+}
+
