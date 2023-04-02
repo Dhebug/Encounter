@@ -23,6 +23,12 @@ SET TARGET=build\files
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\font_6x8_mystery.png %TARGET%\font_6x8_mystery.fnt
 
+:: The 12x14 font
+:: palatino_linotype_italics_size_10_font.png
+SET PARAMS=-u1 -m0 -f0 -o4_Font12x14
+%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png build\12x14_font.s
+
+
 :: Title picture
 SET PARAMS=-u1 -m0 -f6 -o2
 %PICTCONV% %PARAMS% data\title.png %TARGET%\title.hir
