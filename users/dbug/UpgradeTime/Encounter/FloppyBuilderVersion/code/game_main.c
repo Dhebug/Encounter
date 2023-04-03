@@ -264,10 +264,8 @@ void LoadScene()
 	PrintSceneInformation();
 
 	BlitBufferToHiresWindow();
-	
-#if 1
-	PrintFancyFont(50,50,"This is a test",0);
-#endif	
+
+	HandleByteStream(gLocations[gCurrentLocation].script);
 }
 
 
@@ -451,7 +449,7 @@ void Initializations()
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
-	gCurrentLocation =e_LOCATION_DARKTUNNEL;
+	gCurrentLocation =e_LOCATION_DARKALLEY;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory

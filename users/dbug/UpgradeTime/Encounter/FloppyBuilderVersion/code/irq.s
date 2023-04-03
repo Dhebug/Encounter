@@ -112,6 +112,14 @@ _Breakpoint
 _DoNothing
 	rts
 
+; Stop the program while blinking the bottom right corner with psychedelic colors
+_Panic
+	lda #16+1
+	sta $BFDF
+	lda #16+2
+	sta $BFDF
+	jmp _Panic
+	rts
 
 
 _Temporize

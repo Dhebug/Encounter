@@ -173,7 +173,8 @@ extern unsigned char gCurrentLocation;
 typedef struct 
 {
     unsigned char directions[e_DIRECTION_COUNT_];   // The six possible directions (NSEWUP)
-    const char* description;
+    const char* description;                        // The one line description of the place, displayed at the top of the TEXT area
+	const char* script;                             // Additional list of commands to add elements to the graphical view (speech bubble, etc...)
 } location;
 
 typedef struct

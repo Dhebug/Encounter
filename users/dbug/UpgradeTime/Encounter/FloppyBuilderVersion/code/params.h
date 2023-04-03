@@ -44,4 +44,7 @@
 #define via_porta               $030f 
 
 
+#define COMMAND_END      0
+#define COMMAND_BUBBLE   1
+#define COMMAND_TEXT     2
 
