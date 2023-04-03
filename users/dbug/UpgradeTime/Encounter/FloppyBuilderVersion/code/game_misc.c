@@ -1,5 +1,6 @@
 
 #include "common.h"
+#include "params.h"
 
 void ClearMessageWindow(unsigned char paperColor)
 {
@@ -40,7 +41,100 @@ void InitializeGraphicMode()
 
 
 
-void PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char* message, unsigned char inverted)
+
+void DrawHorizontalLine(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char fillValue)
+{
+	char* drawPtr;
+	char* baseLinePtr = (char*)0xa000+(yPos*40);
+	char* leftPtr  = baseLinePtr+gTableDivBy6[xPos];
+	char* rightPtr = baseLinePtr+gTableDivBy6[xPos+width-1];
+
+	char leftModulo = gTableModulo6[xPos];
+	char rightModulo = gTableModulo6[xPos+width-1];
+
+	char leftPixelFillMask = gBitPixelMaskLeft[leftModulo];
+	char rightPixeFillMask = gBitPixelMaskRight[rightModulo];
+
+	if (leftPtr == rightPtr)
+	{
+		// Special case where the start and the end are the same
+		*leftPtr = (*leftPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64) | (fillValue & leftPixelFillMask & rightPixeFillMask);
+	}
+	else
+	{
+		*leftPtr  = ((*leftPtr) & (~leftPixelFillMask|64)) | (fillValue & leftPixelFillMask);
+
+		drawPtr=leftPtr+1;
+		while (drawPtr!=rightPtr)
+		{
+			*drawPtr++ = fillValue;
+		}
+		*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (fillValue & rightPixeFillMask);
+
+	}
+}
+
+void DrawVerticalLine(unsigned char xPos, unsigned char yPos, unsigned char height, unsigned char fillValue)
+{
+	char* baseLinePtr = (char*)0xa000+(yPos*40)+gTableDivBy6[xPos];
+	char bitMask = gBitPixelMask[gTableModulo6[xPos]];
+	while (height--)
+	{
+		*baseLinePtr = (*baseLinePtr) & (~(bitMask)|64) | (fillValue & bitMask);
+		baseLinePtr+=40;
+	}
+}
+
+void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
+{
+	DrawHorizontalLine(xPos,yPos		,width,fillValue);
+	DrawHorizontalLine(xPos,yPos+height-1,width,fillValue);
+	DrawVerticalLine(xPos+width-1,yPos	,height,fillValue);
+	DrawVerticalLine(xPos		,yPos	,height,fillValue);
+}
+
+void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
+{
+	int x;
+	int y;
+	char* drawPtr;
+	char* baseLinePtr = (char*)0xa000+(yPos*40);
+	char* leftPtr  = baseLinePtr+gTableDivBy6[xPos];
+	char* rightPtr = baseLinePtr+gTableDivBy6[xPos+width-1];
+
+	char leftModulo = gTableModulo6[xPos];
+	char rightModulo = gTableModulo6[xPos+width-1];
+
+	char leftPixelFillMask = gBitPixelMaskLeft[leftModulo];
+	char rightPixeFillMask = gBitPixelMaskRight[rightModulo];
+
+	for (y=0;y<height;y++)
+	{
+		if (leftPtr == rightPtr)
+		{
+			// Special case where the start and the end are the same
+			*leftPtr = (*leftPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64);
+		}
+		else
+		{
+			*leftPtr  = ((*leftPtr) & (~leftPixelFillMask|64)) | (fillValue & leftPixelFillMask);
+
+			drawPtr=leftPtr+1;
+			while (drawPtr!=rightPtr)
+			{
+				*drawPtr++ = fillValue;
+			}
+			*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (fillValue & rightPixeFillMask);
+
+		}
+
+		leftPtr+=40;
+		rightPtr+=40;
+	}
+}
+
+
+const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char* message, unsigned char inverted)
 {
 	int xPos;
 	int y;
@@ -103,5 +197,70 @@ void PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char* messa
 			}
 		}
 	}
+	return message;
 }
+
+
+// The various commands:
+// - COMMAND_END indicates the end of the stream
+// - e_BYTECODE_BUBBLE draws speech bubble and requires a number of parameters:
+//   - Number of bubbles
+//   - Main color
+//   - For each bubble: X,Y,W,H,
+// - e_BYTECODE_TEXT
+//   - x,y,message
+void HandleByteStream(const char* byteStream)
+{
+	if (byteStream)
+	{
+		char code;
+		while (code=*byteStream++)  // COMMAND_END is zero
+		{
+			switch (code)
+			{
+			case COMMAND_BUBBLE:
+				{
+					unsigned char index;
+					unsigned char count = *byteStream++;
+					unsigned char color = *byteStream++;
+					const char* coordinates = byteStream;				
+					for (index=0;index<count;index++)
+					{
+						unsigned char x = *coordinates++;
+						unsigned char y = *coordinates++;
+						unsigned char w = *coordinates++;
+						unsigned char h = *coordinates++;
+						DrawRectangleOutline(x-1,y-1,w+2,h+2,color);
+					}
+
+					color ^= 63;
+
+					for (index=0;index<count;index++)
+					{
+						unsigned char x = *byteStream++;
+						unsigned char y = *byteStream++;
+						unsigned char w = *byteStream++;
+						unsigned char h = *byteStream++;
+						DrawFilledRectangle(x,y,w,h,color);
+					}
+				}
+				break;
+
+			case COMMAND_TEXT:
+				{
+					unsigned char x = *byteStream++;
+					unsigned char y = *byteStream++;
+					unsigned char color = *byteStream++;
+					byteStream = PrintFancyFont(x,y,byteStream,color);
+				}
+				break;	
+
+			default:			// That's not supposed to happen
+				Panic();
+				break;
+			}
+		}
+	}
+}
+
 

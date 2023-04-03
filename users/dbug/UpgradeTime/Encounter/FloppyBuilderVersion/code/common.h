@@ -7,6 +7,7 @@
 extern void System_InstallIRQ_SimpleVbl();
 extern void System_RestoreIRQ_SimpleVbl();
 extern void WaitIRQ();
+extern void Panic();                         // Stop the program while blinking the bottom right corner with psychedelic colors
 
 extern unsigned char VblCounter;
 
@@ -59,7 +60,21 @@ extern char* gPrintAddress;
 
 
 // game_misc
-extern void PrintFancyFont(unsigned char xPos,unsigned char yPos,const char* message, unsigned char inverted);
+extern const char* PrintFancyFont(unsigned char xPos,unsigned char yPos,const char* message, unsigned char inverted);
+extern void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue);
+extern void DrawVerticalLine(unsigned char xPos, unsigned char yPos, unsigned char height, unsigned char fillValue);
+extern void DrawHorizontalLine(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char fillValue);
+extern void HandleByteStream(const char* byteStream);
+
+// game_text
+extern char gTextLowerCaseAlphabet[];
+
+extern char gDescriptionTeenagerRoom[];
+extern char gDescriptionDarkTunel[];
+extern char gDescriptionMarketPlace[];
+extern char gDescriptionDarkAlley[];
+
+
 
 /*
 ;
