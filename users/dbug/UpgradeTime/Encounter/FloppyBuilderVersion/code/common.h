@@ -24,13 +24,22 @@ extern unsigned char ImageBuffer[40*200];    // Compositing buffer, used to mix 
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 extern char gSevenDigitDisplay[];            // Bitmap to redefine a few characters so they look like an old style watch drawn with LED or LCD segments
 extern char gFont12x14[];                    // The 12x14 italics font
-extern char gFont12x14Width[];               // Width (in pixel) of each of the characters in the fancy font
-extern char gTableModulo6[];                 // Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
-extern char gTableDivBy6[];                  // Given a X value, returns the value divide by 6 (used to locate the proper byte in a scanline)
-extern char gShiftBuffer[];                  // Used to display graphics at any arbitrary position instead of on multiples of 6
-extern char gBitPixelMask[];                 // Bitmap with each possible combination of pixel to mask to draw a vertical line
-extern char gBitPixelMaskLeft[];             // Bitmap with each possible left endings - used to draw horizontal segments
-extern char gBitPixelMaskRight[];            // Bitmap with each possible right endings - used to draw horizontal segments
+extern unsigned char gFont12x14Width[];      // Width (in pixel) of each of the characters in the fancy font
+extern unsigned char gTableModulo6[];        // Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
+extern unsigned char gTableDivBy6[];         // Given a X value, returns the value divided by 6 (used to locate the proper byte in a scanline)
+extern unsigned char gTableMulBy40Low[];     // Given a x value, returns the low byte of the value multiplied by 40 (used to locate the proper scanline)
+extern unsigned char gTableMulBy40High[];    // Given a x value, returns the high byte of the value multiplied by 40 (used to locate the proper scanline)
+extern unsigned char gShiftBuffer[];         // Used to display graphics at any arbitrary position instead of on multiples of 6
+extern unsigned char gBitPixelMask[];        // Bitmap with each possible combination of pixel to mask to draw a vertical line
+extern unsigned char gBitPixelMaskLeft[];    // Bitmap with each possible left endings - used to draw horizontal segments
+extern unsigned char gBitPixelMaskRight[];   // Bitmap with each possible right endings - used to draw horizontal segments
+
+extern unsigned char* gDrawAddress;
+extern unsigned char gDrawPosX;
+extern unsigned char gDrawPosY;
+extern unsigned char gDrawWidth;
+extern unsigned char gDrawHeight;
+extern unsigned char gDrawPattern;
 
 
 // Audio
@@ -62,8 +71,8 @@ extern char* gPrintAddress;
 // game_misc
 extern const char* PrintFancyFont(unsigned char xPos,unsigned char yPos,const char* message, unsigned char inverted);
 extern void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue);
-extern void DrawVerticalLine(unsigned char xPos, unsigned char yPos, unsigned char height, unsigned char fillValue);
-extern void DrawHorizontalLine(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char fillValue);
+extern void DrawVerticalLine();
+extern void DrawHorizontalLine();
 extern void HandleByteStream(const char* byteStream);
 
 // game_text

@@ -446,6 +446,7 @@ void Initializations()
 	// Perform some initializations for the text display system
 	ComputeFancyFontWidth();
 	GenerateShiftBuffer();
+	GenerateMul40Table();
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
