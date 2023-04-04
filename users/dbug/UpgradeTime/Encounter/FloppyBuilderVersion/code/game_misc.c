@@ -40,49 +40,6 @@ void InitializeGraphicMode()
 }
 
 
-
-
-void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
-{
-	int x;
-	int y;
-	char* drawPtr;
-	char* baseLinePtr = (char*)0xa000+(yPos*40);
-	char* leftPtr  = baseLinePtr+gTableDivBy6[xPos];
-	char* rightPtr = baseLinePtr+gTableDivBy6[xPos+width-1];
-
-	char leftModulo = gTableModulo6[xPos];
-	char rightModulo = gTableModulo6[xPos+width-1];
-
-	char leftPixelFillMask = gBitPixelMaskLeft[leftModulo];
-	char rightPixeFillMask = gBitPixelMaskRight[rightModulo];
-
-	for (y=0;y<height;y++)
-	{
-		if (leftPtr == rightPtr)
-		{
-			// Special case where the start and the end are the same
-			*leftPtr = (*leftPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64);
-		}
-		else
-		{
-			*leftPtr  = ((*leftPtr) & (~leftPixelFillMask|64)) | (fillValue & leftPixelFillMask);
-
-			drawPtr=leftPtr+1;
-			while (drawPtr!=rightPtr)
-			{
-				*drawPtr++ = fillValue;
-			}
-			*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (fillValue & rightPixeFillMask);
-
-		}
-
-		leftPtr+=40;
-		rightPtr+=40;
-	}
-}
-
-
 void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
 {
 	gDrawAddress = (unsigned char*)0xa000;
@@ -182,6 +139,7 @@ const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char
 //   - x,y,color,message
 void HandleByteStream(const char* byteStream)
 {
+	gDrawAddress = (unsigned char*)0xa000;
 	if (byteStream)
 	{
 		char code;
@@ -208,11 +166,13 @@ void HandleByteStream(const char* byteStream)
 
 					for (index=0;index<count;index++)
 					{
-						unsigned char x = *byteStream++;
-						unsigned char y = *byteStream++;
-						unsigned char w = *byteStream++;
-						unsigned char h = *byteStream++;
-						DrawFilledRectangle(x,y,w,h,color);
+
+						gDrawPattern = color;
+						gDrawPosX    = *byteStream++;
+						gDrawPosY    = *byteStream++;
+						gDrawWidth   = *byteStream++;
+						gDrawHeight  = *byteStream++;
+						DrawFilledRectangle();
 					}
 				}
 				break;

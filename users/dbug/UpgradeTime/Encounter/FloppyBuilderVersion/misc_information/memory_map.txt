@@ -43,6 +43,7 @@ FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
 2023-04-03 - Game size: 27378 bytes (most of it from the font display system and associated tables)
 2023-04-04 - Game size: 26984 bytes (reduced a bit after converting DrawVerticalLine to assembler)
 2023-04-04 - Game size: 26152 bytes (reduced a bit after converting DrawHorizontalLine to assembler)
+2023-04-04 - Game size: 24947 bytes (reduced a bit after converting DrawFilledRectangle to assembler)
 
 -------------------------------------------
                 Storage status
