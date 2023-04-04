@@ -42,56 +42,54 @@ void InitializeGraphicMode()
 
 
 
-void DrawHorizontalLine(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char fillValue)
+void DrawHorizontalLine()
 {
-	char* drawPtr;
-	char* baseLinePtr = (char*)0xa000+(yPos*40);
-	char* leftPtr  = baseLinePtr+gTableDivBy6[xPos];
-	char* rightPtr = baseLinePtr+gTableDivBy6[xPos+width-1];
+	char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
+	char* drawPtr  = baseLinePtr+gTableDivBy6[gDrawPosX];
+	char* rightPtr = baseLinePtr+gTableDivBy6[gDrawPosX+gDrawWidth-1];
 
-	char leftModulo = gTableModulo6[xPos];
-	char rightModulo = gTableModulo6[xPos+width-1];
+	char leftPixelFillMask = gBitPixelMaskLeft[gTableModulo6[gDrawPosX]];
+	char rightPixeFillMask = gBitPixelMaskRight[gTableModulo6[gDrawPosX+gDrawWidth-1]];
 
-	char leftPixelFillMask = gBitPixelMaskLeft[leftModulo];
-	char rightPixeFillMask = gBitPixelMaskRight[rightModulo];
-
-	if (leftPtr == rightPtr)
+	if (drawPtr == rightPtr)
 	{
 		// Special case where the start and the end are the same
-		*leftPtr = (*leftPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64) | (fillValue & leftPixelFillMask & rightPixeFillMask);
+		*drawPtr = (*drawPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64) | (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
 	}
 	else
 	{
-		*leftPtr  = ((*leftPtr) & (~leftPixelFillMask|64)) | (fillValue & leftPixelFillMask);
+		*drawPtr++  = ((*drawPtr) & (~leftPixelFillMask|64)) | (gDrawPattern & leftPixelFillMask);
 
-		drawPtr=leftPtr+1;
 		while (drawPtr!=rightPtr)
 		{
-			*drawPtr++ = fillValue;
+			*drawPtr++ = gDrawPattern;
 		}
-		*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (fillValue & rightPixeFillMask);
-
+		*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (gDrawPattern & rightPixeFillMask);
 	}
 }
 
-void DrawVerticalLine(unsigned char xPos, unsigned char yPos, unsigned char height, unsigned char fillValue)
-{
-	char* baseLinePtr = (char*)0xa000+(yPos*40)+gTableDivBy6[xPos];
-	char bitMask = gBitPixelMask[gTableModulo6[xPos]];
-	while (height--)
-	{
-		*baseLinePtr = (*baseLinePtr) & (~(bitMask)|64) | (fillValue & bitMask);
-		baseLinePtr+=40;
-	}
-}
 
 void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
 {
-	DrawHorizontalLine(xPos,yPos		,width,fillValue);
-	DrawHorizontalLine(xPos,yPos+height-1,width,fillValue);
-	DrawVerticalLine(xPos+width-1,yPos	,height,fillValue);
-	DrawVerticalLine(xPos		,yPos	,height,fillValue);
+	gDrawAddress = (unsigned char*)0xa000;
+
+	gDrawWidth	= width;
+	gDrawHeight	= height;
+	gDrawPattern= fillValue;
+
+	gDrawPosX	= xPos;
+	gDrawPosY	= yPos;
+	DrawVerticalLine();
+	DrawHorizontalLine();
+
+	gDrawPosX	= xPos+width-1;
+	DrawVerticalLine();
+
+	gDrawPosX	= xPos;
+	gDrawPosY	= yPos+height-1;
+	DrawHorizontalLine();
 }
+
 
 void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
 {
@@ -142,7 +140,7 @@ const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char
 	char width;
 	char* fontPtr;
 	char* targetPtr;
-	char* shiftTablePtr;
+	unsigned char* shiftTablePtr;
 	char* targetScanlinePtr;
 	char* baseLinePtr = (char*)0xa000+(yPos*40);
 
@@ -203,12 +201,12 @@ const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char
 
 // The various commands:
 // - COMMAND_END indicates the end of the stream
-// - e_BYTECODE_BUBBLE draws speech bubble and requires a number of parameters:
+// - COMMAND_BUBBLE draws speech bubble and requires a number of parameters:
 //   - Number of bubbles
 //   - Main color
 //   - For each bubble: X,Y,W,H,
-// - e_BYTECODE_TEXT
-//   - x,y,message
+// - COMMAND_TEXT
+//   - x,y,color,message
 void HandleByteStream(const char* byteStream)
 {
 	if (byteStream)

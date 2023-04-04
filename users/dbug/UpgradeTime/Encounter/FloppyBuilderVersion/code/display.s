@@ -8,6 +8,77 @@ height  .dsb 1
 
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 
+_gDrawAddress .word 0
+_gDrawPosX    .byt 0
+_gDrawPosY    .byt 0
+_gDrawWidth   .byt 0
+_gDrawHeight  .byt 0
+_gDrawPattern .byt 0
+
+
+
+_DrawVerticalLine
+.(
+  ; char* baseLinePtr = (char*)0xa000+(gDrawPosY*40)
+  ldx _gDrawPosY
+  clc 
+  lda _gDrawAddress+0
+  adc _gTableMulBy40Low,x
+  sta tmp0+0
+
+  lda _gDrawAddress+1
+  adc _gTableMulBy40High,x
+  sta tmp0+1
+
+  ; +gTableDivBy6[gDrawPosX];
+  ldx _gDrawPosX
+  clc
+  lda tmp0+0
+  adc _gTableDivBy6,x
+  sta tmp0+0
+
+  lda tmp0+1
+  adc #0
+  sta tmp0+1
+
+  ; char bitMask = gBitPixelMask[gTableModulo6[gDrawPosX]];
+  lda _gTableModulo6,x
+  tax
+  lda _gBitPixelMask,x
+  sta tmp1                  ; bitMask
+
+  and _gDrawPattern
+  sta tmp2                  ; (gDrawPattern & bitMask);
+
+  lda tmp1
+  ora #64
+  eor #%00111111            ; (~(bitMask)|64)
+  sta tmp1
+
+  ldx _gDrawHeight
+loop  
+  ; *baseLinePtr = (*baseLinePtr) & (~(bitMask)|64) | (gDrawPattern & bitMask);
+  lda (tmp0),y
+  and tmp1
+  ora tmp2
+  sta (tmp0),y
+
+  ; baseLinePtr+=40;
+  clc
+  lda tmp0+0
+  adc #40
+  sta tmp0+0
+  lda tmp0+1
+  adc #0
+  sta tmp0+1
+
+  dex
+  bne loop
+
+  rts
+.)
+
+
 ; A000-B3FF 5120 bytes of half HIRES (240x128 resolution)
 ; Exactly 20*256
 _ClearHiresWindow  
