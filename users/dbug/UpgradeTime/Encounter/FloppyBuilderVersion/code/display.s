@@ -17,6 +17,124 @@ _gDrawPattern .byt 0
 
 
 
+_DrawHorizontalLine
+.(
+  ;char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
+  ldx _gDrawPosY
+  clc 
+  lda _gDrawAddress+0
+  adc _gTableMulBy40Low,x
+  sta tmp0+0
+
+  lda _gDrawAddress+1
+  adc _gTableMulBy40High,x
+  sta tmp0+1                   ; baseLinePtr
+
+  ;char* drawPtr  = baseLinePtr+gTableDivBy6[gDrawPosX];
+  ; +gTableDivBy6[gDrawPosX];
+  ldx _gDrawPosX
+  clc
+  lda _gTableDivBy6,x
+  sta tmp1                     ; leftOffset
+  adc tmp0+0
+  sta tmp0+0
+
+  lda tmp0+1
+  adc #0
+  sta tmp0+1                   ; drawPtr
+
+  ;char leftPixelFillMask = gBitPixelMaskLeft[gTableModulo6[gDrawPosX]];
+  lda _gTableModulo6,x
+  tax
+  lda _gBitPixelMaskLeft,x
+  ora #64
+  sta tmp2+0                 ; leftPixelFillMask
+  eor #%00111111
+  sta tmp2+1                 ; leftPixelFillMask (inverted for masking)
+
+  ;char* rightPtr = baseLinePtr
+  ; +gTableDivBy6[gDrawPosX+gDrawWidth-1];
+  clc
+  lda _gDrawPosX
+  adc _gDrawWidth
+  tax
+  dex
+  sec
+  lda _gTableDivBy6,x
+  sbc tmp1
+  sta tmp1              ; byteCount
+
+  ;char rightPixeFillMask = gBitPixelMaskRight[gTableModulo6[gDrawPosX+gDrawWidth-1]];
+  lda _gTableModulo6,x
+  tax
+  lda _gBitPixelMaskRight,x
+  ora #64
+  sta tmp3+0                  ; rightPixeFillMask
+  eor #%00111111
+  sta tmp3+1                  ; rightPixeFillMask (inverted for masking)
+
+  ; if (byteCount==0)
+  lda tmp1
+  bne multiple_byte
+
+  ; tmp0 -> drawPtr
+  ; tmp1 -> byteCount
+  ; tmp2 -> leftPixelFillMask (normal / inverted)
+  ; tmp3 -> rightPixeFillMask (normal / inverted)
+
+one_byte
+  ; Special case where the start and the end are the same
+  ; *drawPtr = (*drawPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64) | (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
+  lda _gDrawPattern
+  and tmp2+0
+  and tmp3+0
+  sta tmp4             ; (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
+
+  ldy #0
+  lda (tmp0),y
+  and tmp2+1           ; & (~(leftPixelFillMask & rightPixeFillMask)|64) 
+  and tmp3+1
+  ora tmp4             ; | (gDrawPattern & leftPixelFillMask);
+  sta (tmp0),y
+  rts
+
+multiple_byte  
+  ; *drawPtr++  = ((*drawPtr) & (~leftPixelFillMask|64)) | (gDrawPattern & leftPixelFillMask);
+  lda _gDrawPattern
+  and tmp2+0
+  sta tmp4             ; (gDrawPattern & leftPixelFillMask);
+
+  ldy #0
+  lda (tmp0),y
+  and tmp2+1           ; & (~leftPixelFillMask|64))
+  ora tmp4             ; | (gDrawPattern & leftPixelFillMask);
+  sta (tmp0),y
+
+  ; while (--byteCount)  *drawPtr++ = gDrawPattern; 
+  lda _gDrawPattern
+repeat_loop  
+  dec tmp1
+  beq end_repeat
+  iny
+  sta (tmp0),y
+  jmp repeat_loop
+
+end_repeat    
+  ; *drawPtr = ((*drawPtr) & (~rightPixeFillMask|64)) | (gDrawPattern & rightPixeFillMask);
+  lda _gDrawPattern
+  and tmp3+0
+  sta tmp4             ; (gDrawPattern & rightPixeFillMask);
+
+  iny
+  lda (tmp0),y
+  and tmp3+1           ; & (~rightPixeFillMask|64))
+  ora tmp4             ; | (gDrawPattern & rightPixeFillMask);
+  sta (tmp0),y
+
+  rts
+.)
+
+
 _DrawVerticalLine
 .(
   ; char* baseLinePtr = (char*)0xa000+(gDrawPosY*40)
@@ -55,6 +173,7 @@ _DrawVerticalLine
   eor #%00111111            ; (~(bitMask)|64)
   sta tmp1
 
+  ldy #0
   ldx _gDrawHeight
 loop  
   ; *baseLinePtr = (*baseLinePtr) & (~(bitMask)|64) | (gDrawPattern & bitMask);

@@ -42,55 +42,6 @@ void InitializeGraphicMode()
 
 
 
-void DrawHorizontalLine()
-{
-	char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
-	char* drawPtr  = baseLinePtr+gTableDivBy6[gDrawPosX];
-	char* rightPtr = baseLinePtr+gTableDivBy6[gDrawPosX+gDrawWidth-1];
-
-	char leftPixelFillMask = gBitPixelMaskLeft[gTableModulo6[gDrawPosX]];
-	char rightPixeFillMask = gBitPixelMaskRight[gTableModulo6[gDrawPosX+gDrawWidth-1]];
-
-	if (drawPtr == rightPtr)
-	{
-		// Special case where the start and the end are the same
-		*drawPtr = (*drawPtr) & (~(leftPixelFillMask & rightPixeFillMask)|64) | (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
-	}
-	else
-	{
-		*drawPtr++  = ((*drawPtr) & (~leftPixelFillMask|64)) | (gDrawPattern & leftPixelFillMask);
-
-		while (drawPtr!=rightPtr)
-		{
-			*drawPtr++ = gDrawPattern;
-		}
-		*rightPtr = ((*rightPtr) & (~rightPixeFillMask|64)) | (gDrawPattern & rightPixeFillMask);
-	}
-}
-
-
-void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
-{
-	gDrawAddress = (unsigned char*)0xa000;
-
-	gDrawWidth	= width;
-	gDrawHeight	= height;
-	gDrawPattern= fillValue;
-
-	gDrawPosX	= xPos;
-	gDrawPosY	= yPos;
-	DrawVerticalLine();
-	DrawHorizontalLine();
-
-	gDrawPosX	= xPos+width-1;
-	DrawVerticalLine();
-
-	gDrawPosX	= xPos;
-	gDrawPosY	= yPos+height-1;
-	DrawHorizontalLine();
-}
-
-
 void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
 {
 	int x;
@@ -129,6 +80,28 @@ void DrawFilledRectangle(unsigned char xPos, unsigned char yPos, unsigned char w
 		leftPtr+=40;
 		rightPtr+=40;
 	}
+}
+
+
+void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
+{
+	gDrawAddress = (unsigned char*)0xa000;
+
+	gDrawWidth	= width;
+	gDrawHeight	= height;
+	gDrawPattern= fillValue;
+
+	gDrawPosX	= xPos;
+	gDrawPosY	= yPos;
+	DrawVerticalLine();
+	DrawHorizontalLine();
+
+	gDrawPosX	= xPos+width-1;
+	DrawVerticalLine();
+
+	gDrawPosX	= xPos;
+	gDrawPosY	= yPos+height-1;
+	DrawHorizontalLine();
 }
 
 

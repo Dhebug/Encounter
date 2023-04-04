@@ -67,3 +67,11 @@ Point to ellucidate
 Suggested changes:
 - Attach the rope to the cue, then throw it to the window to break it, so the girl can use the cue to keep the rope attached properly to the wall while she climbs down
 
+
+
+Versions of the game:
+- Oric version in 1983 by Severn Software
+- Spectrum version in 1983 by Severn Software
+- C64 version in 1984 by Severn Software
+- Sharp MZ version in 1984 by Solo Software
+- Einstein version in 1984 by Solo Software

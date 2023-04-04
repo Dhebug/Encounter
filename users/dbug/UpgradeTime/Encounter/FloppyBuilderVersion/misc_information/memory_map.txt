@@ -42,6 +42,7 @@ FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
 2023-03-26 - Game size: 16902 bytes / Available low ram: 23034 bytes / Available overlay ram: 7872 bytes / 639 bytes available in the TOP half of the TEXT screen
 2023-04-03 - Game size: 27378 bytes (most of it from the font display system and associated tables)
 2023-04-04 - Game size: 26984 bytes (reduced a bit after converting DrawVerticalLine to assembler)
+2023-04-04 - Game size: 26152 bytes (reduced a bit after converting DrawHorizontalLine to assembler)
 
 -------------------------------------------
                 Storage status
