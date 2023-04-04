@@ -686,6 +686,31 @@ loop_scroll_inner
 .)
 
 
+; Generate the 16bit table with y*40 values
+; This is used to access any specific scanline in the back buffer (or screen) without any multiplication
+_GenerateMul40Table
+.(
+  ldx #0
+  stx _gTableMulBy40Low
+  stx _gTableMulBy40High
+
+loop
+  clc
+  lda _gTableMulBy40Low,x
+  adc #40
+  sta _gTableMulBy40Low+1,x
+
+  lda _gTableMulBy40High,x
+  adc #0
+  sta _gTableMulBy40High+1,x
+
+  inx 
+  cpx #127
+  bne loop  
+  rts
+.)
+
+
 ; Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
 _gTableModulo6
   .byt 0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5,0,1,2,3,4,5
@@ -914,6 +939,11 @@ _gFont12x14Width
 ; the complete shifted graphics
 _gShiftBuffer
   .dsb 64*2*6           ; 768 bytes
+
+; Contains all the combination of X*40 to access specific scanlines
+_gTableMulBy40Low     .dsb 128
+_gTableMulBy40High    .dsb 128
+
 
     .bss
 
