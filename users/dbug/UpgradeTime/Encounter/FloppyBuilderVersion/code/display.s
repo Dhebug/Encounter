@@ -16,8 +16,7 @@ _gDrawHeight  .byt 0
 _gDrawPattern .byt 0
 
 
-
-_DrawHorizontalLine
+_DrawFilledRectangle
 .(
   ;char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
   ldx _gDrawPosY
@@ -73,6 +72,10 @@ _DrawHorizontalLine
   eor #%00111111
   sta tmp3+1                  ; rightPixeFillMask (inverted for masking)
 
+  ldx _gDrawHeight
+loop_next_line
+  stx tmp5
+
   ; if (byteCount==0)
   lda tmp1
   bne multiple_byte
@@ -90,13 +93,20 @@ one_byte
   and tmp3+0
   sta tmp4             ; (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
 
+  lda tmp2+0
+  and tmp3+0
+  ora #64
+  eor #%00111111
+  sta tmp4+1
+
   ldy #0
   lda (tmp0),y
-  and tmp2+1           ; & (~(leftPixelFillMask & rightPixeFillMask)|64) 
-  and tmp3+1
-  ora tmp4             ; | (gDrawPattern & leftPixelFillMask);
+  ;and tmp2+1           ; & (~(leftPixelFillMask & rightPixeFillMask)|64) 
+  ;and tmp3+1
+  and tmp4+1
+  ora tmp4             ; | (gDrawPattern & leftPixelFillMask & rightPixeFillMask);
   sta (tmp0),y
-  rts
+  jmp next_line
 
 multiple_byte  
   ; *drawPtr++  = ((*drawPtr) & (~leftPixelFillMask|64)) | (gDrawPattern & leftPixelFillMask);
@@ -112,8 +122,9 @@ multiple_byte
 
   ; while (--byteCount)  *drawPtr++ = gDrawPattern; 
   lda _gDrawPattern
+  ldx tmp1
 repeat_loop  
-  dec tmp1
+  dex 
   beq end_repeat
   iny
   sta (tmp0),y
@@ -131,58 +142,8 @@ end_repeat
   ora tmp4             ; | (gDrawPattern & rightPixeFillMask);
   sta (tmp0),y
 
-  rts
-.)
-
-
-_DrawVerticalLine
-.(
-  ; char* baseLinePtr = (char*)0xa000+(gDrawPosY*40)
-  ldx _gDrawPosY
-  clc 
-  lda _gDrawAddress+0
-  adc _gTableMulBy40Low,x
-  sta tmp0+0
-
-  lda _gDrawAddress+1
-  adc _gTableMulBy40High,x
-  sta tmp0+1
-
-  ; +gTableDivBy6[gDrawPosX];
-  ldx _gDrawPosX
-  clc
-  lda tmp0+0
-  adc _gTableDivBy6,x
-  sta tmp0+0
-
-  lda tmp0+1
-  adc #0
-  sta tmp0+1
-
-  ; char bitMask = gBitPixelMask[gTableModulo6[gDrawPosX]];
-  lda _gTableModulo6,x
-  tax
-  lda _gBitPixelMask,x
-  sta tmp1                  ; bitMask
-
-  and _gDrawPattern
-  sta tmp2                  ; (gDrawPattern & bitMask);
-
-  lda tmp1
-  ora #64
-  eor #%00111111            ; (~(bitMask)|64)
-  sta tmp1
-
-  ldy #0
-  ldx _gDrawHeight
-loop  
-  ; *baseLinePtr = (*baseLinePtr) & (~(bitMask)|64) | (gDrawPattern & bitMask);
-  lda (tmp0),y
-  and tmp1
-  ora tmp2
-  sta (tmp0),y
-
-  ; baseLinePtr+=40;
+next_line
+  ; leftPtr+=40;
   clc
   lda tmp0+0
   adc #40
@@ -191,9 +152,37 @@ loop
   adc #0
   sta tmp0+1
 
+  ldx tmp5
   dex
-  bne loop
+  bne loop_next_line
 
+  rts
+.)
+
+
+
+_DrawHorizontalLine
+.(
+  lda _gDrawHeight
+  pha
+  lda #1
+  sta _gDrawHeight
+  jsr _DrawFilledRectangle
+  pla
+  sta _gDrawHeight
+  rts
+.)
+
+
+_DrawVerticalLine
+.(
+  lda _gDrawWidth
+  pha
+  lda #1
+  sta _gDrawWidth
+  jsr _DrawFilledRectangle
+  pla
+  sta _gDrawWidth
   rts
 .)
 
