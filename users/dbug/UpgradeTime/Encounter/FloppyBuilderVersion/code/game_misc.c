@@ -44,43 +44,44 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 {
 	gDrawAddress = (unsigned char*)0xa000;
 
-	gDrawWidth	= width;
-	gDrawHeight	= height;
 	gDrawPattern= fillValue;
 
 	gDrawPosX	= xPos;
-	gDrawPosY	= yPos;
+	gDrawPosY	= yPos+1;
+	gDrawWidth	= width;
+	gDrawHeight	= height-2;
 	DrawVerticalLine();
+
+	gDrawPosX	= xPos+1;
+	gDrawPosY	= yPos;
+	gDrawWidth	= width-2;
+	gDrawHeight	= height;
 	DrawHorizontalLine();
 
 	gDrawPosX	= xPos+width-1;
+	gDrawPosY	= yPos+1;
+	gDrawWidth	= width+1;
+	gDrawHeight	= height-2;
 	DrawVerticalLine();
 
-	gDrawPosX	= xPos;
+	gDrawPosX	= xPos+1;
 	gDrawPosY	= yPos+height-1;
+	gDrawWidth	= width-2;
+	gDrawHeight	= height;
 	DrawHorizontalLine();
 }
 
 
-const char* PrintFancyFont()
+void PrintFancyFont()
 {
 	int xPos;
 	int y;
 	int car;
-	char width;
-	char* fontPtr;
-	char* targetPtr;
-	unsigned char* shiftTablePtr;
-	char* targetScanlinePtr;
 	unsigned char xPosStart = gDrawPosX;
-	unsigned char yPos 		= gDrawPosY;
-	const char* message 	= gDrawExtraData;
-	unsigned char inverted 	= gDrawPattern;
-	char* baseLinePtr = (char*)0xa000+(yPos*40);
-
+	char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
 
 	xPos = xPosStart;
-	while (car=*message++)
+	while (car=*gDrawExtraData++)
 	{
 		if (car<0)
 		{
@@ -91,46 +92,47 @@ const char* PrintFancyFont()
 		{
 			// Carriage return followed by number of scanlines to jump
 			xPos = xPosStart;
-			baseLinePtr+=40*(*message++);
+			baseLinePtr+=40*(*gDrawExtraData++);
 		}
 		else
 		{
 			car -= 32;
-			width=gFont12x14Width[car];
-			targetPtr = baseLinePtr+gTableDivBy6[xPos];
-			shiftTablePtr = gShiftBuffer+(gTableModulo6[xPos]*64*2);
-			xPos += width+1;
-			fontPtr = gFont12x14+car*2;
-			while (width>0)
 			{
-				// Draw the 14 scanlines of each character vertically one by one.
-				targetScanlinePtr=targetPtr;
-				for (y=0;y<14;y++)
+				char width=gFont12x14Width[car];
+				char* targetPtr = baseLinePtr+gTableDivBy6[xPos];
+				unsigned char* shiftTablePtr = gShiftBuffer+(gTableModulo6[xPos]*64*2);
+				char* fontPtr = gFont12x14+car*2;
+				xPos += width+1;
+				while (width>0)
 				{
-					// Read one byte from the character
-					char v = (fontPtr[y*95*2] & 63);
-
-					// And use the shift table to get the left and right parts shifted by the right amount
-					if (inverted)
+					// Draw the 14 scanlines of each character vertically one by one.
+					char* targetScanlinePtr=targetPtr;
+					for (y=0;y<14;y++)
 					{
-						targetScanlinePtr[0] &= (~shiftTablePtr[v*2+0])|64;
-						targetScanlinePtr[1] &= (~shiftTablePtr[v*2+1])|64;
-					}
-					else
-					{
-						targetScanlinePtr[0] |= shiftTablePtr[v*2+0];
-						targetScanlinePtr[1] |= shiftTablePtr[v*2+1];
-					}
+						// Read one byte from the character
+						char v = (fontPtr[y*95*2] & 63);
 
-					targetScanlinePtr += 40;
+						// And use the shift table to get the left and right parts shifted by the right amount
+						if (gDrawPattern)
+						{
+							targetScanlinePtr[0] &= (~shiftTablePtr[v*2+0])|64;
+							targetScanlinePtr[1] &= (~shiftTablePtr[v*2+1])|64;
+						}
+						else
+						{
+							targetScanlinePtr[0] |= shiftTablePtr[v*2+0];
+							targetScanlinePtr[1] |= shiftTablePtr[v*2+1];
+						}
+
+						targetScanlinePtr += 40;
+					}
+					++targetPtr;
+					++fontPtr;
+					width-=6;
 				}
-				++targetPtr;
-				++fontPtr;
-				width-=6;
 			}
 		}
 	}
-	return message;
 }
 
 
@@ -152,6 +154,39 @@ void HandleByteStream(const char* byteStream)
 		{
 			switch (code)
 			{
+			case COMMAND_RECTANGLE:
+				{
+					gDrawPosX    = *byteStream++;
+					gDrawPosY    = *byteStream++;
+					gDrawWidth   = *byteStream++;
+					gDrawHeight  = *byteStream++;
+					gDrawPattern = *byteStream++;
+					DrawFilledRectangle();
+				}
+				break;
+
+			case COMMAND_FILL_RECTANGLE:
+				{
+					gDrawPosX    = *byteStream++;
+					gDrawPosY    = *byteStream++;
+					gDrawWidth   = *byteStream++;
+					gDrawHeight  = *byteStream++;
+					gDrawPattern = *byteStream++;
+					DrawFilledRectangle();
+				}
+				break;
+
+			case COMMAND_TEXT:
+				{
+					gDrawPosX 		= *byteStream++;
+					gDrawPosY 		= *byteStream++;
+					gDrawPattern 	= *byteStream++;
+					gDrawExtraData  = byteStream;
+					PrintFancyFont();
+					byteStream = gDrawExtraData;    // modified by the PrintFancyFont function
+				}
+				break;	
+
 			case COMMAND_BUBBLE:
 				{
 					unsigned char index;
@@ -168,29 +203,32 @@ void HandleByteStream(const char* byteStream)
 					}
 
 					color ^= 63;
+					gDrawPattern = color;
 
+					coordinates = byteStream;
 					for (index=0;index<count;index++)
 					{
-
-						gDrawPattern = color;
 						gDrawPosX    = *byteStream++;
 						gDrawPosY    = *byteStream++;
 						gDrawWidth   = *byteStream++;
 						gDrawHeight  = *byteStream++;
 						DrawFilledRectangle();
 					}
+
+					color ^= 63;
+					gDrawPattern 	= color;
+					for (index=0;index<count;index++)
+					{
+						gDrawPosX    	= *coordinates++ + *byteStream++;
+						gDrawPosY    	= *coordinates++ + *byteStream++;
+						gDrawWidth   	= *coordinates++; 		// Ignored
+						gDrawHeight  	= *coordinates++;		// Ignored
+						gDrawExtraData  = byteStream;
+						PrintFancyFont();
+						byteStream = gDrawExtraData;    // modified by the PrintFancyFont function
+					}
 				}
 				break;
-
-			case COMMAND_TEXT:
-				{
-					gDrawPosX 		= *byteStream++;
-					gDrawPosY 		= *byteStream++;
-					gDrawPattern 	= *byteStream++;
-					gDrawExtraData  = byteStream;
-					byteStream = PrintFancyFont();
-				}
-				break;	
 
 			default:			// That's not supposed to happen
 				Panic();

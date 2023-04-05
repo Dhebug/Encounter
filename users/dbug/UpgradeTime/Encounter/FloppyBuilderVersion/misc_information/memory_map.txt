@@ -46,6 +46,7 @@ FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
 2023-04-04 - Game size: 24947 bytes (reduced a bit after converting DrawFilledRectangle to assembler)
 2023-04-04 - Game size: 24883 bytes (reduced a bit after changing DrawVerticalLine and DrawHorizontalLine to call DrawFilledRectangle)
 2023-04-05 - Game size: 24778 bytes (reduced a bit after changing PrintFancyFont to use global variables for parameters)
+2023-04-05 - Game size: 24744 bytes (reduced a bit after changing PrintFancyFont to modify gDrawExtraData instead of returning the new value)
 
 -------------------------------------------
                 Storage status
