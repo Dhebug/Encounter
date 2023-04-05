@@ -62,7 +62,7 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 }
 
 
-const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char* message, unsigned char inverted)
+const char* PrintFancyFont()
 {
 	int xPos;
 	int y;
@@ -72,7 +72,12 @@ const char* PrintFancyFont(unsigned char xPosStart,unsigned char yPos,const char
 	char* targetPtr;
 	unsigned char* shiftTablePtr;
 	char* targetScanlinePtr;
+	unsigned char xPosStart = gDrawPosX;
+	unsigned char yPos 		= gDrawPosY;
+	const char* message 	= gDrawExtraData;
+	unsigned char inverted 	= gDrawPattern;
 	char* baseLinePtr = (char*)0xa000+(yPos*40);
+
 
 	xPos = xPosStart;
 	while (car=*message++)
@@ -179,10 +184,11 @@ void HandleByteStream(const char* byteStream)
 
 			case COMMAND_TEXT:
 				{
-					unsigned char x = *byteStream++;
-					unsigned char y = *byteStream++;
-					unsigned char color = *byteStream++;
-					byteStream = PrintFancyFont(x,y,byteStream,color);
+					gDrawPosX 		= *byteStream++;
+					gDrawPosY 		= *byteStream++;
+					gDrawPattern 	= *byteStream++;
+					gDrawExtraData  = byteStream;
+					byteStream = PrintFancyFont();
 				}
 				break;	
 

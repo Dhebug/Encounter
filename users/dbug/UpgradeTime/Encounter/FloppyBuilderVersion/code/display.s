@@ -8,7 +8,8 @@ height  .dsb 1
 
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 
-_gDrawAddress .word 0
+_gDrawAddress   .word 0
+_gDrawExtraData .word 0
 _gDrawPosX    .byt 0
 _gDrawPosY    .byt 0
 _gDrawWidth   .byt 0
