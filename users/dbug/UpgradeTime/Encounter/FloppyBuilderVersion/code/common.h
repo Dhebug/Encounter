@@ -35,6 +35,7 @@ extern unsigned char gBitPixelMaskLeft[];    // Bitmap with each possible left e
 extern unsigned char gBitPixelMaskRight[];   // Bitmap with each possible right endings - used to draw horizontal segments
 
 extern unsigned char* gDrawAddress;
+extern const char* gDrawExtraData;
 extern unsigned char gDrawPosX;
 extern unsigned char gDrawPosY;
 extern unsigned char gDrawWidth;
@@ -69,7 +70,7 @@ extern char* gPrintAddress;
 
 
 // game_misc
-extern const char* PrintFancyFont(unsigned char xPos,unsigned char yPos,const char* message, unsigned char inverted);
+extern const char* PrintFancyFont();
 extern void DrawFilledRectangle();
 extern void DrawVerticalLine();
 extern void DrawHorizontalLine();
