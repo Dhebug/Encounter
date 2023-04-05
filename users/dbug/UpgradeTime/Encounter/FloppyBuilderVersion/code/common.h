@@ -70,7 +70,7 @@ extern char* gPrintAddress;
 
 
 // game_misc
-extern const char* PrintFancyFont();
+extern void PrintFancyFont();
 extern void DrawFilledRectangle();
 extern void DrawVerticalLine();
 extern void DrawHorizontalLine();

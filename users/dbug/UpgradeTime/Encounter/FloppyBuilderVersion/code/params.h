@@ -44,7 +44,12 @@
 #define via_porta               $030f 
 
 
-#define COMMAND_END      0
-#define COMMAND_BUBBLE   1
-#define COMMAND_TEXT     2
+#define OFFSET(x,y) x,y
+#define RECTANGLE(x,y,w,h) x,y,w,h
+
+#define COMMAND_END             0
+#define COMMAND_RECTANGLE       1
+#define COMMAND_FILL_RECTANGLE  2
+#define COMMAND_TEXT            3
+#define COMMAND_BUBBLE          4
 
