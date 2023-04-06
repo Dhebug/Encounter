@@ -77,10 +77,9 @@ void PrintFancyFont()
 	int xPos;
 	int y;
 	int car;
-	unsigned char xPosStart = gDrawPosX;
 	char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
 
-	xPos = xPosStart;
+	xPos = gDrawPosX;
 	while (car=*gDrawExtraData++)
 	{
 		if (car<0)
@@ -91,7 +90,7 @@ void PrintFancyFont()
 		if (car==13)
 		{
 			// Carriage return followed by number of scanlines to jump
-			xPos = xPosStart;
+			xPos = gDrawPosX;
 			baseLinePtr+=40*(*gDrawExtraData++);
 		}
 		else
@@ -110,7 +109,7 @@ void PrintFancyFont()
 					for (y=0;y<14;y++)
 					{
 						// Read one byte from the character
-						char v = (fontPtr[y*95*2] & 63);
+						char v = *fontPtr & 63;
 
 						// And use the shift table to get the left and right parts shifted by the right amount
 						if (gDrawPattern)
@@ -124,10 +123,11 @@ void PrintFancyFont()
 							targetScanlinePtr[1] |= shiftTablePtr[v*2+1];
 						}
 
+						fontPtr           += 95*2;
 						targetScanlinePtr += 40;
 					}
 					++targetPtr;
-					++fontPtr;
+					fontPtr = fontPtr - (95*2*14) +1;
 					width-=6;
 				}
 			}
