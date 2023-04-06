@@ -17,6 +17,288 @@ _gDrawHeight  .byt 0
 _gDrawPattern .byt 0
 
 
+
+; tmp0  -> screen
+; tmp1  -> character string
+; tmp2  -> x / y position
+; tmp3  -> current character
+; tmp4  -> width / v
+; tmp5  -> targetPtr
+; tmp6  -> shiftTablePtr
+; tmp7  -> fontPtr
+; reg0  -> targetScanlinePtr
+.(
+baseLinePtr   = tmp0
+messagePtr    = tmp1
+x_position    = tmp2
+y_position    = tmp2+1
+width_char    = tmp4
+font_byte     = tmp4+1
+targetPtr     = tmp5
+shiftTablePtr = tmp6
+fontPtr       = tmp7
+scanlinePtr   = reg0
+
+end_of_string
+  ; Update the pointer
+  clc
+  lda messagePtr+0
+  adc #1
+  sta _gDrawExtraData+0
+  lda messagePtr+1
+  adc #0
+  sta _gDrawExtraData+1
+
+  rts
+
++_PrintFancyFont
+  ; Depending of the request pattern, we auto-modify the code 
+  ; to avoid having a test and branch in the inner loop
+  lda _gDrawPattern
+  and #63
+  bne or_mode
+
+and_mode                 ; Black text over white background
+  ldy #%01111111
+  ldx #$31               ; and (zp),y
+  bne continue_mode
+
+or_mode                  ; White text over black background
+  ldy #%00000000
+  ldx #$11               ; ora (zp),y
+
+continue_mode
+  sty auto_eor_1__+1
+  sty auto_eor_2__+1
+
+  stx auto_or_and_1__
+  stx auto_or_and_2__
+
+  ;char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
+  ldx _gDrawPosY
+  clc 
+  lda _gDrawAddress+0
+  adc _gTableMulBy40Low,x
+  sta baseLinePtr+0
+
+  lda _gDrawAddress+1
+  adc _gTableMulBy40High,x
+  sta baseLinePtr+1
+
+  ; Copy the pointer to the string
+  lda _gDrawExtraData+0
+  sta messagePtr+0
+  lda _gDrawExtraData+1
+  sta messagePtr+1
+
+  lda _gDrawPosX
+  sta x_position
+  lda _gDrawPosY
+  sta y_position
+
+loop_character
+  ; Fetch the next character from the string
+  ; 0    -> End of string
+  ; 13   -> Carriage return (used to handle multi-line strings) followed by a scanline count
+  ; <0   -> Horizontal offset to simulate kerning tables
+  ; >=32 -> Normal ASCII characters in the 32-127 range
+  ldy #0
+  lda (messagePtr),y
+  beq end_of_string
+  bmi negative_value
+  cmp #13
+  bne normal_character
+
+carriage_return  
+  ; Reset the position to the left margin
+  lda _gDrawPosX
+  sta x_position
+
+  ; Increment message pointer to fetch the scanline count
+  .(  
+  inc messagePtr+0
+  bne skip
+  inc messagePtr+1
+skip
+  .)  
+
+  ;	Update the baseline pointer 
+  lda (messagePtr),y
+  tax 
+  clc 
+  lda baseLinePtr+0
+  adc _gTableMulBy40Low,x
+  sta baseLinePtr+0
+
+  lda baseLinePtr+1
+  adc _gTableMulBy40High,x
+  sta baseLinePtr+1
+
+  bne continue
+
+
+negative_value
+  ; xPos += car;
+  clc
+  adc x_position
+  sta x_position
+
+continue 
+  .(  ; Increment message pointer
+  inc messagePtr+0
+  bne skip
+  inc messagePtr+1
+skip
+  .)  
+  bne loop_character
+
+
+normal_character
+  ; Convert the character input from [32-127] to [0-95] because we are using many look-up tables
+  sec
+  sbc #32
+
+  ; Get the width (in pixels) of the current character (used to do proper proportional font handling)
+  tax
+  ldy _gFont12x14Width,x
+  sty width_char
+
+  ; Locate the bitmap definition for this character in the 1140x14 bitmap. Each character is two bytes wide and 14 scanlines tall
+  asl                   ; characters are two bytes wide
+  clc
+  adc #<_gFont12x14
+  sta fontPtr+0
+  lda #0
+  adc #>_gFont12x14
+  sta fontPtr+1
+
+  ; Using the current x coordinate in the scanline, we compute the actual position on the screen where to start drawing the character
+  lda x_position 
+  tax                   ; Keep the original current X value for later
+  sec                   ; +1 because we don't want the characters to be glued together
+  adc width_char
+  sta x_position
+
+  ;clc                  ; Already at zero thanks to the prevous adc
+  lda baseLinePtr+0
+  adc _gTableDivBy6,x
+  sta targetPtr+0
+  lda baseLinePtr+1
+  adc #0
+  sta targetPtr+1
+
+  ; The shift table contains all the combinations of 6 pixels patterns shifted by 0 to 5 pixels to the right.
+  ; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild the complete shifted graphics
+  lda _gTableModulo6,x
+  lsr                      ; The lsr + ror is equivalent to multiply by 128 the 16 bit value
+  sta shiftTablePtr+1      ; Store the divided by two value in the most significant byte
+  lda #0
+  ror                      ; Get back the carry at the top of the least significant byte
+  sta shiftTablePtr+0
+
+  ; Then we add the base address of the buffer, we could not do that in the previous pass because the carry was alrady used for the ror trick
+  clc
+  lda shiftTablePtr+0
+  adc #<_gShiftBuffer
+  sta shiftTablePtr+0
+  lda shiftTablePtr+1
+  adc #>_gShiftBuffer
+  sta shiftTablePtr+1
+
+  dec width_char
+column_loop  
+  ; Draw the 14 scanlines of each character vertically one by one.
+  lda targetPtr+0
+  sta scanlinePtr+0
+  lda targetPtr+1
+  sta scanlinePtr+1
+
+  ldx #14
+scanline_loop  
+  ; Read one byte from the character
+  ; char v = (*fontPtr & 63)<<1;
+  ldy #0
+  lda (fontPtr),y
+  and #63
+  asl
+  sta font_byte         ; (v & 63) << 1
+
+  ; And use the shift table to get the left and right parts shifted by the right amount
+  ;	targetScanlinePtr[0] &= (~shiftTablePtr[v+0])|64;
+  ldy font_byte
+  lda (shiftTablePtr),y
+auto_eor_1__
+  eor #%00111111
+  ldy #0
+auto_or_and_1__
+  and (scanlinePtr),y
+  sta (scanlinePtr),y
+
+  ;	targetScanlinePtr[1] &= (~shiftTablePtr[v+1])|64;
+  ldy font_byte
+  iny
+  lda (shiftTablePtr),y
+auto_eor_2__
+  eor #%00111111
+  ldy #1
+auto_or_and_2__
+  and (scanlinePtr),y
+  sta (scanlinePtr),y
+
+  ; Next scanline of the font
+  .(
+  clc
+  lda fontPtr+0
+  adc #95*2
+  sta fontPtr+0
+  bcc skip
+  inc fontPtr+1
+skip  
+  .)
+
+  ; Next scanline on the screen
+  .(
+  clc
+  lda scanlinePtr+0
+  adc #40
+  sta scanlinePtr+0
+  bcc skip
+  inc scanlinePtr+1
+skip  
+  .)
+
+  dex 
+  bne scanline_loop
+
+  ; Move to the next screen column
+  .(
+  inc targetPtr+0
+  bne skip
+  inc targetPtr+1
+skip  
+  .)
+
+  ; fontPtr = fontPtr - (95*2*14) +1;
+  sec
+  lda fontPtr+0
+  sbc #<95*2*14-1
+  sta fontPtr+0
+  lda fontPtr+1
+  sbc #>95*2*14-1
+  sta fontPtr+1
+
+  ; width-=6;
+  sec
+  lda width_char
+  sbc #6
+  sta width_char
+
+  ; while (width>0)
+  bpl column_loop
+  jmp continue  
+.)
+
+
 _DrawFilledRectangle
 .(
   ;char* baseLinePtr = (char*)0xa000+(gDrawPosY*40);
