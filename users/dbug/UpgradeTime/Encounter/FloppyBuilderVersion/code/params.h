@@ -52,4 +52,5 @@
 #define COMMAND_FILL_RECTANGLE  2
 #define COMMAND_TEXT            3
 #define COMMAND_BUBBLE          4
+#define COMMAND_WAIT            5
 

@@ -83,8 +83,22 @@ extern char gDescriptionTeenagerRoom[];
 extern char gDescriptionDarkTunel[];
 extern char gDescriptionMarketPlace[];
 extern char gDescriptionDarkAlley[];
-
-
+extern char gDescriptionRoad[];
+extern char gDescriptionMainStreet[];
+extern char gDescriptionNarrowPath[];
+extern char gDescriptionInThePit[];
+extern char gDescriptionTarmacArea[];
+extern char gDescriptionOldWell[];
+extern char gDescriptionWoodedAvenue[];
+extern char gDescriptionGravelDrive[];
+extern char gDescriptionZenGarden[];
+extern char gDescriptionFrontLawn[];
+extern char gDescriptionGreenHouse[];
+extern char gDescriptionTennisCourt[];
+extern char gDescriptionVegetableGarden[];
+extern char gDescriptionFishPond[];
+extern char gDescriptionTiledPatio[];
+extern char gDescriptionAppleOrchard[];
 
 /*
 ;

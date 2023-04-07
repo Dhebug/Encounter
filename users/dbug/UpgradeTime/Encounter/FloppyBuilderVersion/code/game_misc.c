@@ -166,6 +166,18 @@ void HandleByteStream(const char* byteStream)
 				}
 				break;
 
+			case COMMAND_WAIT:
+				{
+					unsigned int delay = *byteStream++;
+					if (!delay)
+					{
+						delay <<= 8;
+						delay |= *byteStream++;
+					}
+					WaitFrames(delay);				
+				}
+				break;
+
 			default:			// That's not supposed to happen
 				Panic();
 				break;
