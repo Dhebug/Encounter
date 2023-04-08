@@ -163,13 +163,107 @@ _gDescriptionTiledPatio
     .byt OFFSET(1,0),"is accessible from here",0
     .byt COMMAND_END
 
-
 _gDescriptionAppleOrchard
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(5,5,136,15)
     .byt RECTANGLE(5,17,139,15)
     .byt OFFSET(1,0),"The best kind o",255-2,"f apples:",0
     .byt OFFSET(1,0),"sweet",255-1,", crunchy and juicy",0
+    .byt COMMAND_END
+
+_gDescriptionEntranceHall
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(124,5,111,14)
+    .byt RECTANGLE(187,17,48,11)
+    .byt OFFSET(1,0),"Quite an impressive",0
+    .byt OFFSET(1,0),"staircase",0
+    .byt COMMAND_END
+
+_gDescriptionLibrary
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,86,119,11)
+    .byt RECTANGLE(5,97,110,15)
+    .byt OFFSET(1,0),"Books, fireplace, and",0
+    .byt OFFSET(1,0),"a com",255-2,"f",255-2,"ortable chair",0
+    .byt COMMAND_END
+
+_gDescriptionNarrowPassage
+    .byt COMMAND_BUBBLE,3,127
+    .byt RECTANGLE(5,48,122,13)
+    .byt RECTANGLE(12,68,98,15)
+    .byt RECTANGLE(37,90,52,15)
+    .byt OFFSET(1,0),"Either they love dark",0
+    .byt OFFSET(1,0),"or they f",255-2,"orgot to",0
+    .byt OFFSET(1,0),"pay their",0
+
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(75,110,26,11)
+    .byt OFFSET(1,0),"bills",0
+
+    .byt COMMAND_END
+
+_gDescriptionEntranceLounge
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,105,11)
+    .byt RECTANGLE(5,15,49,15)
+    .byt OFFSET(1,0),"Looks like someone",0
+    .byt OFFSET(1,0),"had fun",0
+    .byt COMMAND_END
+
+_gDescriptionDiningRoom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,95,69,13)
+    .byt RECTANGLE(5,107,84,15)
+    .byt OFFSET(1,0),"Two plates...",0
+    .byt OFFSET(1,0),"...good to know",0
+    .byt COMMAND_END
+
+_gDescriptionGamesRoom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(142,5,93,13)
+    .byt RECTANGLE(164,16,71,15)
+    .byt OFFSET(1,0),"T",255-2,"op o",255-2,"f the range",0
+    .byt OFFSET(1,0),"video system",0
+
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(175,40,60,15)
+    .byt OFFSET(1,0),"Impressive",0
+    .byt COMMAND_END
+
+_gDescriptionSunLounge
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(112,5,123,15)
+    .byt OFFSET(1,0),"No rest ",255-2,"f",255-2,"or the weary",0
+    .byt COMMAND_END
+
+_gDescriptionKitchen
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,71,11)
+    .byt RECTANGLE(5,16,41,12)
+    .byt OFFSET(1,0),"A very basic",0
+    .byt OFFSET(1,0),"kitchen",0
+    .byt COMMAND_END
+
+_gDescriptionNarrowStaircase
+    .byt COMMAND_BUBBLE,1,127
+    .byt RECTANGLE(5,5,95,15)
+    .byt OFFSET(1,0),"Watch your step",0
+    .byt COMMAND_END
+
+_gDescriptionCellar
+    .byt COMMAND_BUBBLE,2,127
+    .byt RECTANGLE(75,15,90,12)
+    .byt RECTANGLE(80,25,67,15)
+    .byt OFFSET(1,0),"Is that a Franz",0
+    .byt OFFSET(1,0),"Jager safe?",0
+    .byt COMMAND_END
+
+_gDescriptionDarkerCellar
+    .byt COMMAND_BUBBLE,2,127
+    .byt RECTANGLE(5,99,104,12)
+    .byt RECTANGLE(5,109,77,13)
+    .byt OFFSET(1,0),"The window seems",0
+    .byt OFFSET(1,0),"to be occulted",0
     .byt COMMAND_END
 
 #if 0
