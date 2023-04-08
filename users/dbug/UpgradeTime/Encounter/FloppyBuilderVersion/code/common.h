@@ -99,6 +99,17 @@ extern char gDescriptionVegetableGarden[];
 extern char gDescriptionFishPond[];
 extern char gDescriptionTiledPatio[];
 extern char gDescriptionAppleOrchard[];
+extern char gDescriptionEntranceHall[];
+extern char gDescriptionLibrary[];
+extern char gDescriptionNarrowPassage[];
+extern char gDescriptionEntranceLounge[];
+extern char gDescriptionDiningRoom[];
+extern char gDescriptionGamesRoom[];
+extern char gDescriptionSunLounge[];
+extern char gDescriptionKitchen[];
+extern char gDescriptionNarrowStaircase[];
+extern char gDescriptionCellar[];
+extern char gDescriptionDarkerCellar[];
 
 /*
 ;
