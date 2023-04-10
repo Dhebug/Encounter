@@ -266,6 +266,105 @@ _gDescriptionDarkerCellar
     .byt OFFSET(1,0),"to be occulted",0
     .byt COMMAND_END
 
+_gDescriptionStaircase
+    .byt COMMAND_BUBBLE,3,64
+    .byt RECTANGLE(16,8,32,15)
+    .byt RECTANGLE(179,8,39,12)
+    .byt RECTANGLE(60,72,119,15)
+    .byt OFFSET(1,0),"Left?",0
+    .byt OFFSET(1,0),"Right?",0
+    .byt OFFSET(1,0),"does it really matter?",0
+    .byt COMMAND_END
+
+_gDescriptionMainLanding
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(47,70,143,15)
+    .byt OFFSET(1,0),"Nice view from up there",0
+    .byt COMMAND_END
+
+_gDescriptionEastGallery
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,90,12)
+    .byt RECTANGLE(20,17,34,12)
+    .byt OFFSET(1,0),"Boring corridor:",0
+    .byt OFFSET(1,0),"Check",0
+    .byt COMMAND_END
+
+_gDescriptionChildBedroom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,96,74,12)
+    .byt RECTANGLE(5,107,85,15)
+    .byt OFFSET(1,0),"Let me guess:",0
+    .byt OFFSET(1,0),"Teenager room?",0
+    .byt COMMAND_END
+
+_gDescriptionGuestBedroom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,6,92,12)
+    .byt RECTANGLE(5,17,71,15)
+    .byt OFFSET(1,0),"Simple and ",255-2,"f",255-2,"resh",0
+    .byt OFFSET(1,0),"f",255-2,"or a change",0
+    .byt COMMAND_END
+
+_gDescriptionShowerRoom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(149,5,86,12)
+    .byt RECTANGLE(152,16,83,13)
+    .byt OFFSET(1,0),"I will need one",0
+    .byt OFFSET(1,0),"when I'm done",0
+    .byt COMMAND_END
+
+_gDescriptionWestGallery
+    .byt COMMAND_BUBBLE,2,127
+    .byt RECTANGLE(85,81,72,13)
+    .byt RECTANGLE(60,92,112,13)
+    .byt OFFSET(1,0),"Is that Steel",0
+    .byt OFFSET(1,0),"behind the Curtain?",0
+    .byt COMMAND_END
+
+_gDescriptionBoxRoom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,63,11)
+    .byt RECTANGLE(5,16,59,11)
+    .byt OFFSET(1,0),"A practical",0
+    .byt OFFSET(1,0),"little room",0
+    .byt COMMAND_END
+
+_gDescriptionClassyBathRoom
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(132,5,103,15)
+    .byt OFFSET(1,0),"Looks comfortable",0
+    .byt COMMAND_END
+
+_gDescriptionTinyToilet
+    .byt COMMAND_BUBBLE,1,64
+    .byt RECTANGLE(137,5,98,15)
+    .byt OFFSET(1,0),"Sparklingly clean",0
+    .byt COMMAND_END
+
+_gDescriptionMasterBedRoom
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,124,15)
+    .byt RECTANGLE(5,16,84,15)
+    .byt OFFSET(1,0),"This will make things",0
+    .byt OFFSET(1,0),"notably easier...",0
+    .byt COMMAND_END
+
+
+
+_gDescriptionPadlockedRoom
+    .byt COMMAND_BUBBLE,4,64
+    .byt RECTANGLE(5,5,41,11)
+    .byt RECTANGLE(125,16,110,11)
+    .byt RECTANGLE(131,53,104,15)
+    .byt RECTANGLE(140,90,74,15)
+    .byt OFFSET(1,0),"Damn...",0
+    .byt OFFSET(1,0),"I will never be able",0
+    .byt OFFSET(1,0),"to pick these locks",0
+    .byt OFFSET(1,0),"fast enough!",0
+    .byt COMMAND_END
+
+
 #if 0
     // Performance testing
     .byt COMMAND_BUBBLE,2,127
