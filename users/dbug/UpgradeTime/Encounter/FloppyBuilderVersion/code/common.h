@@ -110,6 +110,20 @@ extern char gDescriptionKitchen[];
 extern char gDescriptionNarrowStaircase[];
 extern char gDescriptionCellar[];
 extern char gDescriptionDarkerCellar[];
+extern char gDescriptionStaircase[];
+extern char gDescriptionMainLanding[];
+extern char gDescriptionEastGallery[];
+extern char gDescriptionChildBedroom[];
+extern char gDescriptionGuestBedroom[];
+extern char gDescriptionShowerRoom[];
+extern char gDescriptionWestGallery[];
+extern char gDescriptionBoxRoom[];
+extern char gDescriptionClassyBathRoom[];
+extern char gDescriptionTinyToilet[];
+extern char gDescriptionMasterBedRoom[];
+extern char gDescriptionPadlockedRoom[];
+
+
 
 /*
 ;
