@@ -8,8 +8,10 @@ height  .dsb 1
 
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 
-_gDrawAddress   .word 0
-_gDrawExtraData .word 0
+_gDrawPatternAddress .word 0
+_gDrawAddress       .word 0
+_gDrawExtraData     .word 0
+
 _gDrawPosX    .byt 0
 _gDrawPosY    .byt 0
 _gDrawWidth   .byt 0
@@ -666,8 +668,134 @@ _BlitBufferToHiresWindow
   jsr _DrawArrows
 
   lda #26
-  sta _ImageBuffer+40*128-1   ; Force back to TEXT
+  sta _ImageBuffer+40*128   ; Force back to TEXT
 
+#if 1
+  jsr _CrossFadeBufferToHiresWindow
+#else
+  jsr _BlitBufferToHiresWindowInternal
+#endif
+  rts
+.)
+
+
+_CrossFadeBufferToHiresWindow
+.(
+  lda #<_6x6DitherMatrix+6*0
+  sta _gDrawPatternAddress+0
+  lda #>_6x6DitherMatrix+6*0
+  sta _gDrawPatternAddress+1
+
+  ldx #0
+loop
+  txa
+  pha 
+
+  sei
+  jsr _BlitBufferToHiresWindowInternalWithMasking
+  cli
+
+  .(  
+  clc 
+  lda _gDrawPatternAddress+0
+  adc #6
+  sta _gDrawPatternAddress+0
+  bcc skip
+  inc _gDrawPatternAddress+1
+skip  
+  .)
+
+  pla
+  tax
+  inx
+  cpx #13
+  bne loop
+  rts
+.)
+
+
+_BlitBufferToHiresWindowInternalWithMasking
+.(
+  ; Initialize the source position
+  lda #<_ImageBuffer+0
+  sta auto_source_ptr__+1
+  lda #>_ImageBuffer+0
+  sta auto_source_ptr__+2
+
+  ; Initialize the target position
+  lda #<$A000+0
+  sta auto_screen_ptr1__+1
+  sta auto_screen_ptr2__+1
+  sta auto_screen_ptr3__+1
+  lda #>$A000+0
+  sta auto_screen_ptr1__+2
+  sta auto_screen_ptr2__+2
+  sta auto_screen_ptr3__+2
+
+  ; Set the pattern pointer
+  lda _gDrawPatternAddress+0
+  sta auto_pattern_table__+1
+  lda _gDrawPatternAddress+1
+  sta auto_pattern_table__+2
+
+  ldx #0
+loop_next_line
+
+  ; Selecting the proper dithering pattern based on the vertical position
+  lda _gTableModulo6,x    ; Value between 0 and 5
+  tay
+auto_pattern_table__  
+  lda $1234,y               ; Get the pattern
+  sta auto_and_pattern__+1  ; Save the source image pattern (inverted)
+
+  ; while (--byteCount)  *drawPtr++ = gDrawPattern; 
+  ldy #39
+repeat_loop  
+
+  ; First unroll
+auto_screen_ptr1__  
+  lda $a000,y          ; 4 - Read the graphics
+auto_source_ptr__  
+  eor _ImageBuffer,y   ; 4 - Read source graphics
+auto_and_pattern__  
+  and #%01010101       ; 2 - Mask out the bits we don't want
+auto_screen_ptr2__  
+  eor $a000,y          ; 4 - Write back to screen
+auto_screen_ptr3__  
+  sta $a000,y          ; 5 - Write back to screen
+  dey                  ; 2  = 21 cycles per byte (40*128*21 = 107520)
+
+  bpl repeat_loop
+
+  ; Point both the source and target pointers to the next scanline.
+  ; Both buffers are aligned on the same page, so no need to increment them separately
+  .(
+  clc
+  lda auto_source_ptr__+1
+  adc #40
+  sta auto_source_ptr__+1
+  sta auto_screen_ptr1__+1
+  sta auto_screen_ptr2__+1
+  sta auto_screen_ptr3__+1
+  bcc skip 
+  inc auto_source_ptr__+2    ; 6
+  inc auto_screen_ptr1__+2   ; 6
+  inc auto_screen_ptr2__+2   ; 6
+  inc auto_screen_ptr3__+2   ; 6 -> 24
+skip  
+  .)
+
+  inx
+  cpx #128
+  bne loop_next_line
+end
+  rts
+.)
+
+
+
+_BlitBufferToHiresWindowInternal
+.(
   ldx #0
 loop
   lda _ImageBuffer+256*0,x
@@ -712,8 +840,6 @@ loop
   sta $a000+256*19,x
   dex
   bne loop
-
-  ;jsr _Breakpoint
   rts
 .)
 
@@ -1391,6 +1517,17 @@ _gFont12x14
   .byt $40,$40,$40,$40
 _Font12x14End
 
+; 16 block of 6x6 pixels arranged vertically, 6x96 pixels bitmap
+; 13 values on the top for ordered dither
+;  3 values at the end with some growing circle
+_6x6DitherMatrix
+  .byt $40,$40,$40,$40,$40,$40,$41,$40,$44,$40,$40,$40,$51,$40,$44,$40
+  .byt $51,$40,$55,$40,$44,$40,$55,$40,$55,$40,$55,$40,$55,$40,$55,$62
+  .byt $55,$48,$55,$62,$55,$6a,$55,$6a,$55,$6a,$5d,$6a,$77,$6a,$5d,$6a
+  .byt $7f,$6a,$7f,$6a,$7f,$6a,$7f,$6a,$7f,$7b,$7f,$6a,$7f,$6e,$7f,$7b
+  .byt $7f,$6e,$7f,$7f,$7f,$7b,$7f,$7e,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
+  .byt $73,$73,$7f,$7f,$7f,$73,$61,$61,$73,$7f,$73,$61,$40,$40,$61,$73
+
 
 ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gFont12x14Width
@@ -1411,6 +1548,8 @@ _gTableMulBy40High    .dsb 128
 
 * = $C000
 
+; Screeen is in $A000 = %10100000 00000000
+; Buffer is in  $C000 = %11000000 00000000 -> Same address, +8192 bytes
 _ImageBuffer    .dsb 40*200
 
 
