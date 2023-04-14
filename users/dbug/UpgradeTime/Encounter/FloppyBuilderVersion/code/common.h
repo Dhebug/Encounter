@@ -20,6 +20,12 @@ extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 
 
 // Display
+extern void PrintFancyFont();
+extern void DrawFilledRectangle();
+extern void DrawVerticalLine();
+extern void DrawHorizontalLine();
+extern void BlitRectangle();
+
 extern unsigned char ImageBuffer[40*200];    // Compositing buffer, used to mix together the scene image, frame, arrows, etc...
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 extern char gSevenDigitDisplay[];            // Bitmap to redefine a few characters so they look like an old style watch drawn with LED or LCD segments
@@ -35,6 +41,7 @@ extern unsigned char gBitPixelMaskLeft[];    // Bitmap with each possible left e
 extern unsigned char gBitPixelMaskRight[];   // Bitmap with each possible right endings - used to draw horizontal segments
 
 extern unsigned char* gDrawAddress;
+extern unsigned char* gDrawPatternAddress;
 extern const char* gDrawExtraData;
 extern unsigned char gDrawPosX;
 extern unsigned char gDrawPosY;
@@ -70,10 +77,6 @@ extern char* gPrintAddress;
 
 
 // game_misc
-extern void PrintFancyFont();
-extern void DrawFilledRectangle();
-extern void DrawVerticalLine();
-extern void DrawHorizontalLine();
 extern void HandleByteStream(const char* byteStream);
 
 // game_text

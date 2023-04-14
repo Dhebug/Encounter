@@ -23,6 +23,10 @@ SET TARGET=build\files
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\font_6x8_mystery.png %TARGET%\font_6x8_mystery.fnt
 
+:: 6x6 dither matrix
+SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
+%PICTCONV% %PARAMS% data\6x6_dither_matrix.png build\6x6_dither_matrix.s
+
 :: The 12x14 font
 :: palatino_linotype_italics_size_10_font.png
 SET PARAMS=-u1 -m0 -f0 -o4_Font12x14

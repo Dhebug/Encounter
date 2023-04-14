@@ -450,7 +450,7 @@ void Initializations()
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
-	gCurrentLocation =e_LOCATION_PADLOCKED_ROOM;
+	gCurrentLocation =e_LOCATION_MARKETPLACE;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
