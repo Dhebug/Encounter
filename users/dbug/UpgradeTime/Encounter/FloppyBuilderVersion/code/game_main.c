@@ -265,7 +265,7 @@ void LoadScene()
 
 	BlitBufferToHiresWindow();
 
-	HandleByteStream(gLocations[gCurrentLocation].script);
+	SetByteStream(gLocations[gCurrentLocation].script);
 }
 
 
@@ -537,6 +537,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback)
 		do
 		{
 			WaitIRQ();
+			HandleByteStream();
 			k=ReadKeyNoBounce();
 			sprintf((char*)0xbb80+40*23+1,"%c>%s%c           ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
 		}
