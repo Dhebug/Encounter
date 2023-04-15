@@ -54,3 +54,5 @@
 #define COMMAND_BUBBLE          4
 #define COMMAND_WAIT            5
 
+#define DELAY_FIRST_BUBBLE      25
+

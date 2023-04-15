@@ -77,7 +77,12 @@ extern char* gPrintAddress;
 
 
 // game_misc
-extern void HandleByteStream(const char* byteStream);
+extern void HandleByteStream();
+extern void SetByteStream(const char* byteStream);
+
+extern const char* gCurrentStream;
+extern unsigned int gDelayStream;
+
 
 // game_text
 extern char gTextLowerCaseAlphabet[];

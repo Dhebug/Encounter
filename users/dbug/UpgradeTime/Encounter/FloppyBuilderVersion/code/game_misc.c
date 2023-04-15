@@ -72,6 +72,17 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 }
 
 
+const char* gCurrentStream = 0;
+unsigned int gDelayStream = 0;
+
+void SetByteStream(const char* byteStream)
+{
+	gCurrentStream = byteStream;
+	gDelayStream   = 0;
+}
+
+
+
 // The various commands:
 // - COMMAND_END indicates the end of the stream
 // - COMMAND_BUBBLE draws speech bubble and requires a number of parameters:
@@ -80,55 +91,76 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 //   - For each bubble: X,Y,W,H,
 // - COMMAND_TEXT
 //   - x,y,color,message
-void HandleByteStream(const char* byteStream)
+void HandleByteStream()
 {
-	gDrawAddress = (unsigned char*)0xa000;
-	if (byteStream)
+	if (gDelayStream)
+	{
+		// _VblCounter
+		gDelayStream--;
+		return;
+	}
+
+	if (gCurrentStream)
 	{
 		char code;
-		while (code=*byteStream++)  // COMMAND_END is zero
+		gDrawAddress = (unsigned char*)0xa000;
+		while (1)
 		{
+			code=*gCurrentStream++;
 			switch (code)
 			{
+			case COMMAND_END:
+				SetByteStream(0);
+				return;
+
+			case COMMAND_WAIT:
+				gDelayStream = *gCurrentStream++;
+				if (!gDelayStream)
+				{
+					gDelayStream <<= 8;
+					gDelayStream |= *gCurrentStream++;
+				}
+				return;
+
 			case COMMAND_RECTANGLE:
 				{
-					gDrawPosX    = *byteStream++;
-					gDrawPosY    = *byteStream++;
-					gDrawWidth   = *byteStream++;
-					gDrawHeight  = *byteStream++;
-					gDrawPattern = *byteStream++;
+					gDrawPosX    = *gCurrentStream++;
+					gDrawPosY    = *gCurrentStream++;
+					gDrawWidth   = *gCurrentStream++;
+					gDrawHeight  = *gCurrentStream++;
+					gDrawPattern = *gCurrentStream++;
 					DrawFilledRectangle();
 				}
 				break;
 
 			case COMMAND_FILL_RECTANGLE:
 				{
-					gDrawPosX    = *byteStream++;
-					gDrawPosY    = *byteStream++;
-					gDrawWidth   = *byteStream++;
-					gDrawHeight  = *byteStream++;
-					gDrawPattern = *byteStream++;
+					gDrawPosX    = *gCurrentStream++;
+					gDrawPosY    = *gCurrentStream++;
+					gDrawWidth   = *gCurrentStream++;
+					gDrawHeight  = *gCurrentStream++;
+					gDrawPattern = *gCurrentStream++;
 					DrawFilledRectangle();
 				}
 				break;
 
 			case COMMAND_TEXT:
 				{
-					gDrawPosX 		= *byteStream++;
-					gDrawPosY 		= *byteStream++;
-					gDrawPattern 	= *byteStream++;
-					gDrawExtraData  = byteStream;
+					gDrawPosX 		= *gCurrentStream++;
+					gDrawPosY 		= *gCurrentStream++;
+					gDrawPattern 	= *gCurrentStream++;
+					gDrawExtraData  = gCurrentStream;
 					PrintFancyFont();
-					byteStream = gDrawExtraData;    // modified by the PrintFancyFont function
+					gCurrentStream = gDrawExtraData;    // modified by the PrintFancyFont function
 				}
 				break;	
 
 			case COMMAND_BUBBLE:
 				{
 					unsigned char index;
-					unsigned char count = *byteStream++;
-					unsigned char color = *byteStream++;
-					const char* coordinates = byteStream;				
+					unsigned char count = *gCurrentStream++;
+					unsigned char color = *gCurrentStream++;
+					const char* coordinates = gCurrentStream;				
 					for (index=0;index<count;index++)
 					{
 						unsigned char x = *coordinates++;
@@ -141,13 +173,13 @@ void HandleByteStream(const char* byteStream)
 					color ^= 63;
 					gDrawPattern = color;
 
-					coordinates = byteStream;
+					coordinates = gCurrentStream;
 					for (index=0;index<count;index++)
 					{
-						gDrawPosX    = *byteStream++;
-						gDrawPosY    = *byteStream++;
-						gDrawWidth   = *byteStream++;
-						gDrawHeight  = *byteStream++;
+						gDrawPosX    = *gCurrentStream++;
+						gDrawPosY    = *gCurrentStream++;
+						gDrawWidth   = *gCurrentStream++;
+						gDrawHeight  = *gCurrentStream++;
 						DrawFilledRectangle();
 					}
 
@@ -155,26 +187,14 @@ void HandleByteStream(const char* byteStream)
 					gDrawPattern 	= color;
 					for (index=0;index<count;index++)
 					{
-						gDrawPosX    	= *coordinates++ + *byteStream++;
-						gDrawPosY    	= *coordinates++ + *byteStream++;
+						gDrawPosX    	= *coordinates++ + *gCurrentStream++;
+						gDrawPosY    	= *coordinates++ + *gCurrentStream++;
 						gDrawWidth   	= *coordinates++; 		// Ignored
 						gDrawHeight  	= *coordinates++;		// Ignored
-						gDrawExtraData  = byteStream;
+						gDrawExtraData  = gCurrentStream;
 						PrintFancyFont();
-						byteStream = gDrawExtraData;    // modified by the PrintFancyFont function
+						gCurrentStream = gDrawExtraData;    // modified by the PrintFancyFont function
 					}
-				}
-				break;
-
-			case COMMAND_WAIT:
-				{
-					unsigned int delay = *byteStream++;
-					if (!delay)
-					{
-						delay <<= 8;
-						delay |= *byteStream++;
-					}
-					WaitFrames(delay);				
 				}
 				break;
 
