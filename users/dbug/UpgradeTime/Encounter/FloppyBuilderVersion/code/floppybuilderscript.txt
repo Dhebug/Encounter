@@ -141,6 +141,7 @@ AddFile ..\build\files\39.hir
 AddFile ..\build\files\40.hir
 AddFile ..\build\files\41.hir
 AddFile ..\build\files\42.hir
+AddFile ..\build\files\43.hir
 
 ; Additional scenes for the main hallway with the dog
 AddFile ..\build\files\240.hir

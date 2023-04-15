@@ -87,6 +87,7 @@ SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks
 :: 40 - You are in an ornate bathroom
 :: 41 - This is the west gallery
 :: 42 - You are on the main landing
+:: 43 - Outside a deep pit
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\no_picture.png %TARGET%\NONE.hir
 %PICTCONV% %PARAMS% data\deserted_market_square.png %TARGET%\1.hir
@@ -136,6 +137,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\ornate_bathroom.png %TARGET%\40.hir
 %PICTCONV% %PARAMS% data\west_gallery.png %TARGET%\41.hir
 %PICTCONV% %PARAMS% data\main_landing.png %TARGET%\42.hir
+%PICTCONV% %PARAMS% data\pit_outside.png %TARGET%\43.hir
 
 
 ::pause

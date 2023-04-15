@@ -22,7 +22,7 @@ location gLocations[e_LOCATION_COUNT_] =
 
     { e_LOCATION_WOODEDAVENUE      , e_LOCATION_MARKETPLACE       , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are in a dark, damp tunnel"          ,gDescriptionDarkTunel},         // e_LOCATION_DARKTUNNEL     
     { e_LOCATION_GRAVELDRIVE       , e_LOCATION_DARKALLEY         , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are on the main street"              ,gDescriptionMainStreet},        // e_LOCATION_MAINSTREET     
-    { e_LOCATION_TARMACAREA        , e_LOCATION_ROAD              , e_LOCATION_INSIDEHOLE        , e_LOCATION_MAINSTREET        , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are on a narrow path"                ,gDescriptionNarrowPath},        // e_LOCATION_NARROWPATH     
+    { e_LOCATION_TARMACAREA        , e_LOCATION_ROAD              , e_LOCATION_OUTSIDE_PIT       , e_LOCATION_MAINSTREET        , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are on a narrow path"                ,gDescriptionNarrowPath},        // e_LOCATION_NARROWPATH     
 
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You have fallen into a deep pit"         ,gDescriptionInThePit},          // e_LOCATION_INSIDEHOLE
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_WOODEDAVENUE      , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are near to an old-fashioned well"   ,gDescriptionOldWell},           // e_LOCATION_WELL           
@@ -71,6 +71,8 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_NONE              , e_LOCATION_EASTGALLERY       , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "You are in an ornate bathroom"           ,gDescriptionClassyBathRoom},    // e_LOCATION_CLASSY_BATHROOM  
     { e_LOCATION_PADLOCKED_ROOM    , e_LOCATION_GUESTBEDROOM      , e_LOCATION_UP_STAIRS         , e_LOCATION_BOXROOM           , e_LOCATION_NONE              , e_LOCATION_NONE              , "This is the west gallery"                ,gDescriptionWestGallery},       // e_LOCATION_WESTGALLERY      
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_EASTGALLERY       , e_LOCATION_WESTGALLERY       , e_LOCATION_NONE              , e_LOCATION_LARGE_STAIRCASE   , "You are on the main landing"             ,gDescriptionMainLanding},       // e_LOCATION_UP_STAIRS        
+
+    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_INSIDEHOLE        , "Outside a deep pit"                      ,gDescriptionOutsidePit},        // e_LOCATION_OUTSIDE_PIT
 
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , "The girl room (openned lock)"            ,0},                             // e_LOCATION_GIRLROOM (technically this room cannot be accessed, so do not need description)        
 };

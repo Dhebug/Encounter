@@ -130,7 +130,7 @@ extern char gDescriptionClassyBathRoom[];
 extern char gDescriptionTinyToilet[];
 extern char gDescriptionMasterBedRoom[];
 extern char gDescriptionPadlockedRoom[];
-
+extern char gDescriptionOutsidePit[];
 
 
 /*
