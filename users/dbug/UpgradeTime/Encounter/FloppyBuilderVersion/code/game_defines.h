@@ -55,8 +55,9 @@ enum LOCATIONS
 	e_LOCATION_CLASSY_BATHROOM  =39,
 	e_LOCATION_WESTGALLERY      =40,
 	e_LOCATION_UP_STAIRS        =41,
-	e_LOCATION_GIRLROOM         =42,
-    e_LOCATION_COUNT_           =43,
+	e_LOCATION_OUTSIDE_PIT      =42,
+	e_LOCATION_GIRLROOM         =43,
+    e_LOCATION_COUNT_           =44,
     e_LOCATION_INVENTORY        =e_LOCATION_COUNT_,    // Special location for the player's inventory
     e_LOCATION_NONE             =255                   // To indicate we can't go in this particular location
 };

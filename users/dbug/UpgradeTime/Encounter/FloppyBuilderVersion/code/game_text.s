@@ -79,6 +79,16 @@ _gDescriptionInThePit
     .byt OFFSET(1,0),"from outside",0
     .byt COMMAND_END
 
+_gDescriptionOutsidePit
+    .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,94,98,15)
+    .byt RECTANGLE(5,103,55,19)
+    .byt OFFSET(1,0),"Are they digging",0
+    .byt OFFSET(1,4),"for gold?",0
+    .byt COMMAND_END
+
+
 _gDescriptionTarmacArea
     .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
     .byt COMMAND_BUBBLE,2,64
