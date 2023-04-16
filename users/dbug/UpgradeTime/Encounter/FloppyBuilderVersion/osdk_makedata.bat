@@ -42,6 +42,11 @@ SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks
 %PICTCONV% %PARAMS% data\arrow_block_masks.png build\mask.s
 
 
+:: Masked out sprites
+SET PARAMS=-u1 -m0 -f3 -o2
+%PICTCONV% %PARAMS% data\masked_the_end.png %TARGET%\the_end.msk
+%PICTCONV% %PARAMS% data\masked_dog.png %TARGET%\dog.msk
+
 
 :: Here we have the list of 240x128 pictures
 ::

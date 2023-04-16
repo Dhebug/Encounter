@@ -19,7 +19,7 @@ _PsgNeedUpdate  .byt 1
 
     .text
 
- Update the sound generator
+; Update the sound generator
 SoundUpdate    
 .(
 	lda _PsgNeedUpdate

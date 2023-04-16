@@ -35,7 +35,6 @@ C000-DF3F  8000 bytes - Image buffer
 DF40-FDFF  7872 bytes - [available]
 FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
 
-
 -------------------------------------------
                 Memory status
 -------------------------------------------
@@ -49,6 +48,7 @@ FE00-FFFF   512 bytes - FloppyBuilder loader (may get larger when adding saving)
 2023-04-05 - Game size: 24744 bytes (reduced a bit after changing PrintFancyFont to modify gDrawExtraData instead of returning the new value)
 2023-04-05 - Game size: 24749 bytes - With the assembler version of PrintFancyFont
 2023-04-05 - Game size: 25896 bytes - Added a number of textual descriptions for the scenes
+2023-04-05 - Game size: 28354 bytes - Added support for sprites with masking (temporary code written in C just as a prototype/proof of concept)
 
 -------------------------------------------
                 Storage status
