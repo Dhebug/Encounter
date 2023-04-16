@@ -265,7 +265,68 @@ void LoadScene()
 
 	BlitBufferToHiresWindow();
 
+#if 1
 	SetByteStream(gLocations[gCurrentLocation].script);
+#endif
+
+#if 1	  // Sprite test
+
+#if 1
+	LoadFileAt(LOADER_SPRITE_DOG,ImageBuffer);			// The dog is a 240x128 image with all the current dog graphics
+	{
+		int x,y;
+		unsigned char* image=ImageBuffer;
+		char* screen=(char*)0xa000;
+
+		for (y=0;y<128;y++)
+		{
+			for (x=0;x<40;x++)
+			{
+				char car=*image++;
+				char background=screen[x];
+				if (!(car&128))
+				{
+					background &= 1+2+4;
+				}
+				if (!(car&64))
+				{
+					background &= 8+16+32;
+				}
+
+				screen[x] = background | (car&63) | 64;
+			}
+			screen+=40;
+		}
+	}
+#else	
+	LoadFileAt(LOADER_SPRITE_THE_END,ImageBuffer);		// The End is a 120x95 image -> 95 lines of 20 bytes
+	{
+		int x,y;
+		unsigned char* image=ImageBuffer;
+		char* screen=(char*)0xa000+10+40*16;
+
+		for (y=0;y<95;y++)
+		{
+			for (x=0;x<20;x++)
+			{
+				char car=*image++;
+				char background=screen[x];
+				if (!(car&128))
+				{
+					background &= 1+2+4;
+				}
+				if (!(car&64))
+				{
+					background &= 8+16+32;
+				}
+
+				screen[x] = background | (car&63) | 64;
+			}
+			screen+=40;
+		}
+	}
+#endif
+#endif
 }
 
 
@@ -450,7 +511,7 @@ void Initializations()
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
-	gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
+	gCurrentLocation =e_LOCATION_ENTRANCEHALL;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory

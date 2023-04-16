@@ -692,7 +692,7 @@ loop
   pha 
 
   sei
-  jsr _BlitBufferToHiresWindowInternalWithMasking
+  jsr _BlendBufferToHiresWindowInternal
   cli
 
   .(  
@@ -714,7 +714,7 @@ skip
 .)
 
 
-_BlitBufferToHiresWindowInternalWithMasking
+_BlendBufferToHiresWindowInternal
 .(
   ; Initialize the source position
   lda #<_ImageBuffer+0
@@ -1543,7 +1543,6 @@ _gShiftBuffer
 _gTableMulBy40Low     .dsb 128
 _gTableMulBy40High    .dsb 128
 
-
     .bss
 
 * = $C000
@@ -1551,5 +1550,6 @@ _gTableMulBy40High    .dsb 128
 ; Screeen is in $A000 = %10100000 00000000
 ; Buffer is in  $C000 = %11000000 00000000 -> Same address, +8192 bytes
 _ImageBuffer    .dsb 40*200
+_ImageBufferEnd
 
 

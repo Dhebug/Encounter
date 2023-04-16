@@ -154,3 +154,9 @@ AddFile ..\build\files\342.hir
 
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
+; All the sprites
+AddFile ..\build\files\the_end.msk                      
+AddDefine LOADER_SPRITE_THE_END {FileIndex}
+
+AddFile ..\build\files\dog.msk                      
+AddDefine LOADER_SPRITE_DOG {FileIndex}
