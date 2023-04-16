@@ -514,7 +514,7 @@ _ClearTextWindow
   ldx #0
 loop
   sta $bb80+40*16+256*0,x
-  sta $bfdf-256,x
+  sta $bfdf-255,x
   dex
   bne loop
   rts
