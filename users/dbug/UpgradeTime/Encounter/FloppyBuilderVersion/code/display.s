@@ -1,4 +1,6 @@
 
+#include "params.h"
+
   .zero
 
 width   .dsb 1
@@ -1527,29 +1529,4 @@ _6x6DitherMatrix
   .byt $7f,$6a,$7f,$6a,$7f,$6a,$7f,$6a,$7f,$7b,$7f,$6a,$7f,$6e,$7f,$7b
   .byt $7f,$6e,$7f,$7f,$7f,$7b,$7f,$7e,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
   .byt $73,$73,$7f,$7f,$7f,$73,$61,$61,$73,$7f,$73,$61,$40,$40,$61,$73
-
-
-; Width (in pixels) of each of the 95 characters in the 12x14 font
-_gFont12x14Width
- .dsb 95
-
-; Contains all the combinations of 6 pixels patterns shifted by 0 to 5 pixels to the right.
-; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild
-; the complete shifted graphics
-_gShiftBuffer
-  .dsb 64*2*6           ; 768 bytes
-
-; Contains all the combination of X*40 to access specific scanlines
-_gTableMulBy40Low     .dsb 128
-_gTableMulBy40High    .dsb 128
-
-    .bss
-
-* = $C000
-
-; Screeen is in $A000 = %10100000 00000000
-; Buffer is in  $C000 = %11000000 00000000 -> Same address, +8192 bytes
-_ImageBuffer    .dsb 40*200
-_ImageBufferEnd
-
 
