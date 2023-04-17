@@ -251,15 +251,3 @@
     _joystick_read_telestrat
     _joystick_read_opel
     _joystick_read_dktronics
--disk.s
-	_LoaderApiFileStartSector
-	_LoaderApiFileStartTrack                          
-	_LoaderApiFileSize       
-	_LoaderApiFileSizeLow 	 
-	_LoaderApiFileSizeHigh 	 	                         
-	_LoaderApiJump		     
-	_LoaderApiAddress        
-	_LoaderApiAddressLow 	 
-	_LoaderApiAddressHigh 	 	                         
-	_LoaderFDCRegisterOffset 	                         
-	_LoaderApiLoadFile		 

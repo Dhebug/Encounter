@@ -1,4 +1,6 @@
 
+ .text
+
 ;
 ; This area is used as a stack.
 ; it should be protected !
