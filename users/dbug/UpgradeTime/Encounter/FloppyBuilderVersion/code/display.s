@@ -11,15 +11,96 @@ height  .dsb 1
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 
 _gDrawPatternAddress .word 0
-_gDrawAddress       .word 0
-_gDrawExtraData     .word 0
+_gDrawSourceAddress  .word 0
+_gDrawAddress        .word 0
+_gDrawExtraData      .word 0
 
-_gDrawPosX    .byt 0
-_gDrawPosY    .byt 0
-_gDrawWidth   .byt 0
-_gDrawHeight  .byt 0
-_gDrawPattern .byt 0
+_gDrawPosX      .byt 0
+_gDrawPosY      .byt 0
+_gDrawWidth     .byt 0
+_gDrawHeight    .byt 0
+_gDrawPattern   .byt 0
+_gSourceStride  .byt 0
 
+
+.(
+sourcePtr   = tmp0
+targetPtr   = tmp1
+saveY       = tmp2
+
++_BlitSprite
+
+  lda _gDrawSourceAddress+0
+  sta sourcePtr+0
+  lda _gDrawSourceAddress+1
+  sta sourcePtr+1
+
+  lda _gDrawAddress+0
+  sta targetPtr+0
+  lda _gDrawAddress+1
+  sta targetPtr+1
+
+  ldx _gDrawHeight
+loop_y
+  stx saveY
+
+  ldy _gDrawWidth
+  dey
+loop_x
+  lda (sourcePtr),y        ; Read the source byte
+  
+  rol
+  rol
+  rol
+  and #3                   ; The two top bits are used as an index in the mask table
+  tax
+  ;ldx #3
+
+  lda (targetPtr),y        ; Read the target
+  and _TableMask,x         ; Mask out what we don't want based on the table
+  ora (sourcePtr),y        ; Merge-in the source content
+  
+  and #63+64
+  ;ora #64
+  sta (targetPtr),y        ; Write back to the target
+  dey
+  bpl loop_x
+
+  ; Next scanlines on the source
+  .(
+  clc
+  lda sourcePtr+0
+  adc _gSourceStride
+  sta sourcePtr+0
+  bcc skip
+  inc sourcePtr+1
+skip  
+  .)
+
+  ; Next scanlines on the target
+  .(
+  clc
+  lda targetPtr+0
+  adc #40
+  sta targetPtr+0
+  bcc skip
+  inc targetPtr+1
+skip  
+  .)
+
+  ldx saveY
+  dex
+  bne loop_y
+
+  rts
+.)
+
+
+_TableMask
+  .byt %11000000            ; 00...... Completely erase the background
+  .byt %11000111            ; 01......
+  .byt %11111000            ; 10......
+  .byt %11111111            ; 11...... Keep the background unmodified
 
 
 ; tmp0  -> screen
@@ -672,10 +753,10 @@ _BlitBufferToHiresWindow
   lda #26
   sta _ImageBuffer+40*128   ; Force back to TEXT
 
-#if 1
-  jsr _CrossFadeBufferToHiresWindow
-#else
+#ifdef DISABLE_FADES
   jsr _BlitBufferToHiresWindowInternal
+#else
+  jsr _CrossFadeBufferToHiresWindow
 #endif
   rts
 .)

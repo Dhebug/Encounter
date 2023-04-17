@@ -272,59 +272,28 @@ void LoadScene()
 #if 1	  // Sprite test
 
 #if 1
-	LoadFileAt(LOADER_SPRITE_DOG,ImageBuffer);			// The dog is a 240x128 image with all the current dog graphics
-	{
-		int x,y;
-		unsigned char* image=ImageBuffer;
-		char* screen=(char*)0xa000;
+	LoadFileAt(LOADER_SPRITE_DOG,SecondImageBuffer);			// The dog is a 240x128 image with all the current dog graphics
 
-		for (y=0;y<128;y++)
-		{
-			for (x=0;x<40;x++)
-			{
-				char car=*image++;
-				char background=screen[x];
-				if (!(car&128))
-				{
-					background &= 1+2+4;
-				}
-				if (!(car&64))
-				{
-					background &= 8+16+32;
-				}
+	gDrawWidth	 	= 40;
+	gDrawHeight	 	= 128;
+	gSourceStride   = 40;
+	gDrawSourceAddress 	= SecondImageBuffer;
+	gDrawAddress 	= ImageBuffer;
+	//gDrawAddress 		= (unsigned char*)0xa000;
 
-				screen[x] = background | (car&63) | 64;
-			}
-			screen+=40;
-		}
-	}
+	BlitSprite();
 #else	
-	LoadFileAt(LOADER_SPRITE_THE_END,ImageBuffer);		// The End is a 120x95 image -> 95 lines of 20 bytes
-	{
-		int x,y;
-		unsigned char* image=ImageBuffer;
-		char* screen=(char*)0xa000+10+40*16;
+	LoadFileAt(LOADER_SPRITE_THE_END,SecondImageBuffer);		// The End is a 120x95 image -> 95 lines of 20 bytes
 
-		for (y=0;y<95;y++)
-		{
-			for (x=0;x<20;x++)
-			{
-				char car=*image++;
-				char background=screen[x];
-				if (!(car&128))
-				{
-					background &= 1+2+4;
-				}
-				if (!(car&64))
-				{
-					background &= 8+16+32;
-				}
+	gDrawWidth	 		= 20;
+	gDrawHeight	 		= 95;
+	gSourceStride   	= 20;
+	gDrawSourceAddress 	= SecondImageBuffer;
+	gDrawAddress 		= ImageBuffer+10+40*16;
+	//gDrawAddress 		= (unsigned char*)0xa000+10+40*16;
 
-				screen[x] = background | (car&63) | 64;
-			}
-			screen+=40;
-		}
-	}
+	BlitSprite();
+#endif
 #endif
 #endif
 }

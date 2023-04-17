@@ -26,7 +26,8 @@ extern void DrawVerticalLine();
 extern void DrawHorizontalLine();
 extern void BlitRectangle();
 
-extern unsigned char ImageBuffer[40*200];    // Compositing buffer, used to mix together the scene image, frame, arrows, etc...
+extern unsigned char ImageBuffer[];          // 240x128 compositing buffer, used to mix together the scene image, frame, arrows, etc...
+extern unsigned char SecondImageBuffer[];    // Second 240x128 buffer
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 extern char gSevenDigitDisplay[];            // Bitmap to redefine a few characters so they look like an old style watch drawn with LED or LCD segments
 extern char gFont12x14[];                    // The 12x14 italics font
@@ -41,6 +42,7 @@ extern unsigned char gBitPixelMaskLeft[];    // Bitmap with each possible left e
 extern unsigned char gBitPixelMaskRight[];   // Bitmap with each possible right endings - used to draw horizontal segments
 
 extern unsigned char* gDrawAddress;
+extern unsigned char* gDrawSourceAddress;
 extern unsigned char* gDrawPatternAddress;
 extern const char* gDrawExtraData;
 extern unsigned char gDrawPosX;
@@ -48,6 +50,7 @@ extern unsigned char gDrawPosY;
 extern unsigned char gDrawWidth;
 extern unsigned char gDrawHeight;
 extern unsigned char gDrawPattern;
+extern unsigned char gSourceStride;
 
 
 // Audio

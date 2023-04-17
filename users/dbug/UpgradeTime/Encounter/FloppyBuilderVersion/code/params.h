@@ -3,6 +3,7 @@
 //
 //#define ENABLE_INTRO         // Comment out to skip the intro
 #define TESTING_MODE         // Comment out to play normally
+//#define DISABLE_FADES        // Comment out to enable the fancy fades
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16
