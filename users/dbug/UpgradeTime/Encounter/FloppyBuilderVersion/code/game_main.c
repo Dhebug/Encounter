@@ -261,15 +261,9 @@ void LoadScene()
 	memset(ImageBuffer,64+1,40*128);
 #endif	
 
-	PrintSceneInformation();
 
-	BlitBufferToHiresWindow();
 
-#if 1
-	SetByteStream(gLocations[gCurrentLocation].script);
-#endif
-
-#if 1	  // Sprite test
+#if 0	  // Sprite test
 
 #if 1
 	LoadFileAt(LOADER_SPRITE_DOG,SecondImageBuffer);			// The dog is a 240x128 image with all the current dog graphics
@@ -295,7 +289,20 @@ void LoadScene()
 	BlitSprite();
 #endif
 #endif
+
+	PrintSceneInformation();
+
+#if 1
+	// Set the byte stream pointer
+	SetByteStream(gLocations[gCurrentLocation].script);
+
+	// And run the first set of commands for this scene
+	HandleByteStream();
 #endif
+
+	BlitBufferToHiresWindow();
+
+	//TrashFreeMemory();
 }
 
 
@@ -480,7 +487,9 @@ void Initializations()
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
-	gCurrentLocation =e_LOCATION_ENTRANCEHALL;
+	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
+	//gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
+	gCurrentLocation =e_LOCATION_WELL;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory

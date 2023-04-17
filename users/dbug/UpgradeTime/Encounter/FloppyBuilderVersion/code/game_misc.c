@@ -1,6 +1,7 @@
 
 #include "common.h"
 #include "params.h"
+#include "game_defines.h"
 
 void ClearMessageWindow(unsigned char paperColor)
 {
@@ -72,7 +73,7 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 }
 
 
-const char* gCurrentStream = 0;
+//const char* gCurrentStream = 0;
 unsigned int gDelayStream = 0;
 
 void SetByteStream(const char* byteStream)
@@ -154,6 +155,59 @@ void HandleByteStream()
 					gCurrentStream = gDrawExtraData;    // modified by the PrintFancyFont function
 				}
 				break;	
+
+			case COMMAND_BITMAP:
+				{
+					unsigned char loaderId = *gCurrentStream++;
+					if (gFlagCurrentSpriteSheet!=loaderId)
+					{
+						// We only load the image if it's not already the one in memory
+						LoadFileAt(loaderId,SecondImageBuffer);
+						gFlagCurrentSpriteSheet=loaderId;
+					}
+					gDrawWidth 		= *gCurrentStream++;
+					gDrawHeight 	= *gCurrentStream++;
+					gSourceStride 	= *gCurrentStream++;
+					gDrawSourceAddress =  (unsigned char*) *gCurrentStreamInt++;
+					gDrawAddress       =  (unsigned char*) *gCurrentStreamInt++;
+					BlitSprite();
+				}
+				break;	
+
+			case COMMAND_FADE_BUFFER:
+				BlitBufferToHiresWindow();
+				break;
+
+			case COMMAND_JUMP:
+				gCurrentStreamInt =  (unsigned int*) *gCurrentStreamInt++;
+				break;
+
+			case COMMAND_JUMP_IF_TRUE:
+			case COMMAND_JUMP_IF_FALSE:
+				{
+					unsigned int* jumpLocation = (unsigned int*) *gCurrentStreamInt++;
+					char check = 0;
+					switch (*gCurrentStream++)
+					{
+					case OPERATOR_CHECK_ITEM_LOCATION:
+						{
+							unsigned char itemId     = *gCurrentStream++;
+							unsigned char locationId = *gCurrentStream++;
+							check =  (gItems[itemId].location == locationId);
+						}
+						break;
+
+					default:			// That's not supposed to happen
+						Panic();
+					}
+					// code
+					if ( (check && (code==COMMAND_JUMP_IF_TRUE)) || 
+					    (!check && (code==COMMAND_JUMP_IF_FALSE)) )
+					{
+						gCurrentStreamInt = jumpLocation;
+					}
+				}
+				break;
 
 			case COMMAND_BUBBLE:
 				{

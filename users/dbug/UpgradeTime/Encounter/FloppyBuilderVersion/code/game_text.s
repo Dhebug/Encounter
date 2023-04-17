@@ -1,5 +1,7 @@
 
 #include "params.h"
+#include "floppy_description.h"
+#include "game_enums.h"
 
     .text
 
@@ -64,7 +66,7 @@ _gDescriptionNarrowPath
     .byt OFFSET(1,0),"f",255-1,"lood gates o",255-2,"f heaven?",0
     .byt COMMAND_END
 
-_gDescriptionInThePit
+_gDescriptionInThePit   
     .byt COMMAND_WAIT,50*2
     .byt COMMAND_BUBBLE,1,127
     .byt RECTANGLE(6,8,86,11)
@@ -77,6 +79,16 @@ _gDescriptionInThePit
     .byt COMMAND_BUBBLE,1,127
     .byt RECTANGLE(82,94,74,15)
     .byt OFFSET(1,0),"from outside",0
+    
+    .byt COMMAND_WAIT,50*2
+    ; Draw the 'The End' logo
+    .byt COMMAND_BITMAP,LOADER_SPRITE_THE_END
+    .byt BLOCK_SIZE(20,95)
+    .byt STRIDE(20)
+    .word _SecondImageBuffer
+    .word _ImageBuffer+(40*16)+10
+    ; Should probably have a "game over" command
+    .byt COMMAND_FADE_BUFFER
     .byt COMMAND_END
 
 _gDescriptionOutsidePit
@@ -99,6 +111,39 @@ _gDescriptionTarmacArea
     .byt COMMAND_END
 
 _gDescriptionOldWell
+    ; e_LOCATION_WELL / e_ITEM_Bucket / e_ITEM_Rope
+.(
+    ; Is the Bucket near the Well?
+    .byt COMMAND_JUMP_IF_FALSE
+    .word no_bucket
+    .byt OPERATOR_CHECK_ITEM_LOCATION
+    .byt e_ITEM_Bucket
+    .byt e_LOCATION_WELL
+    ; Draw the Bucket 
+    .byt COMMAND_BITMAP,LOADER_SPRITE_ITEMS
+    .byt BLOCK_SIZE(6,35)
+    .byt STRIDE(40)
+    .word _SecondImageBuffer
+    .word _ImageBuffer+(40*86)+24
+no_bucket    
+.)
+    ;
+.(    
+    ; Is the Rope near the Well?
+    .byt COMMAND_JUMP_IF_FALSE
+    .word no_rope
+    .byt OPERATOR_CHECK_ITEM_LOCATION
+    .byt e_ITEM_Rope
+    .byt e_LOCATION_WELL
+    ; Draw the Rope
+    .byt COMMAND_BITMAP,LOADER_SPRITE_ITEMS
+    .byt BLOCK_SIZE(7,44)
+    .byt STRIDE(40)
+    .word _SecondImageBuffer+7
+    .word _ImageBuffer+(40*35)+26
+no_rope    
+.)
+    ;
     .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(111,5,124,12)
@@ -200,12 +245,20 @@ _gDescriptionAppleOrchard
     .byt COMMAND_END
 
 _gDescriptionEntranceHall
+    ; Draw the dog growling in the entrance
+    .byt COMMAND_BITMAP,LOADER_SPRITE_DOG
+    .byt BLOCK_SIZE(13,66)
+    .byt STRIDE(40)
+    .word _SecondImageBuffer+(40*61)+0
+    .word _ImageBuffer+(40*56)+25
+    ;
     .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(124,5,111,14)
     .byt RECTANGLE(187,17,48,11)
     .byt OFFSET(1,0),"Quite an impressive",0
     .byt OFFSET(1,0),"staircase",0
+    ;
     .byt COMMAND_END
 
 _gDescriptionLibrary

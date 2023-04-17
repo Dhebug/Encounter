@@ -46,6 +46,8 @@
 
 
 #define OFFSET(x,y) x,y
+#define BLOCK_SIZE(w,h) w,h
+#define STRIDE(b) b
 #define RECTANGLE(x,y,w,h) x,y,w,h
 
 #define COMMAND_END             0
@@ -54,6 +56,13 @@
 #define COMMAND_TEXT            3
 #define COMMAND_BUBBLE          4
 #define COMMAND_WAIT            5
+#define COMMAND_BITMAP          6
+#define COMMAND_FADE_BUFFER     7
+#define COMMAND_JUMP            8      // Really, that's a GOTO :p
+#define COMMAND_JUMP_IF_TRUE    9
+#define COMMAND_JUMP_IF_FALSE   10
+
+#define OPERATOR_CHECK_ITEM_LOCATION 0
 
 #define DELAY_FIRST_BUBBLE      25
 

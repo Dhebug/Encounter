@@ -160,3 +160,6 @@ AddDefine LOADER_SPRITE_THE_END {FileIndex}
 
 AddFile ..\build\files\dog.msk                      
 AddDefine LOADER_SPRITE_DOG {FileIndex}
+
+AddFile ..\build\files\items.msk                      
+AddDefine LOADER_SPRITE_ITEMS {FileIndex}
