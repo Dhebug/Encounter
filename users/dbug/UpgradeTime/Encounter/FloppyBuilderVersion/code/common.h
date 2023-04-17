@@ -52,6 +52,7 @@ extern unsigned char gDrawHeight;
 extern unsigned char gDrawPattern;
 extern unsigned char gSourceStride;
 
+extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded "sprite" image
 
 // Audio
 extern void PlaySound(const char* registerList);
@@ -84,6 +85,7 @@ extern void HandleByteStream();
 extern void SetByteStream(const char* byteStream);
 
 extern const char* gCurrentStream;
+extern const unsigned int* gCurrentStreamInt;
 extern unsigned int gDelayStream;
 
 

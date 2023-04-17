@@ -1,6 +1,11 @@
 
     .text
 
+_gCurrentStream
+_gCurrentStreamInt
+    .word 0
+
+
 IrqTasks
 .(
     ; Process keyboard

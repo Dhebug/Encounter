@@ -9,6 +9,7 @@ height  .dsb 1
     .text
 
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
+_gFlagCurrentSpriteSheet  .byt 255  ; Index of the currently loaded "sprite" image
 
 _gDrawPatternAddress .word 0
 _gDrawSourceAddress  .word 0
