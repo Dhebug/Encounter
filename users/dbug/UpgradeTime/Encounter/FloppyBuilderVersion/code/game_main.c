@@ -489,7 +489,8 @@ void Initializations()
 	// Add here any change to the scenario to easily check things
 	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
 	//gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
-	gCurrentLocation =e_LOCATION_WELL;
+	//gCurrentLocation =e_LOCATION_WELL;
+	gCurrentLocation =e_LOCATION_ENTRANCEHALL;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory

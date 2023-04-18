@@ -44,12 +44,14 @@
 #define via_ier                 $030E 
 #define via_porta               $030f 
 
+#define DELAY_FIRST_BUBBLE      25
 
 #define OFFSET(x,y) x,y
 #define BLOCK_SIZE(w,h) w,h
 #define STRIDE(b) b
 #define RECTANGLE(x,y,w,h) x,y,w,h
 
+// Command opcodes
 #define COMMAND_END             0
 #define COMMAND_RECTANGLE       1
 #define COMMAND_FILL_RECTANGLE  2
@@ -62,7 +64,10 @@
 #define COMMAND_JUMP_IF_TRUE    9
 #define COMMAND_JUMP_IF_FALSE   10
 
+// Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
 
-#define DELAY_FIRST_BUBBLE      25
+#define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
+#define CHECK_ITEM(item,location)            OPERATOR_CHECK_ITEM_LOCATION,item,location
 
+#define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst

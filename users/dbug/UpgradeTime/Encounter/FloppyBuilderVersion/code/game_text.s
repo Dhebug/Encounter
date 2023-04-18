@@ -111,39 +111,17 @@ _gDescriptionTarmacArea
     .byt COMMAND_END
 
 _gDescriptionOldWell
-    ; e_LOCATION_WELL / e_ITEM_Bucket / e_ITEM_Rope
-.(
-    ; Is the Bucket near the Well?
-    .byt COMMAND_JUMP_IF_FALSE
-    .word no_bucket
-    .byt OPERATOR_CHECK_ITEM_LOCATION
-    .byt e_ITEM_Bucket
-    .byt e_LOCATION_WELL
-    ; Draw the Bucket 
-    .byt COMMAND_BITMAP,LOADER_SPRITE_ITEMS
-    .byt BLOCK_SIZE(6,35)
-    .byt STRIDE(40)
-    .word _SecondImageBuffer
-    .word _ImageBuffer+(40*86)+24
+    ; Is the Bucket near the Well?    
+    JUMP_IF_FALSE(no_bucket,CHECK_ITEM(e_ITEM_Bucket,e_LOCATION_WELL))    
+      DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(6,35),40,_SecondImageBuffer,_ImageBuffer+(40*86)+24)    ; Draw the Bucket 
 no_bucket    
-.)
-    ;
-.(    
-    ; Is the Rope near the Well?
-    .byt COMMAND_JUMP_IF_FALSE
-    .word no_rope
-    .byt OPERATOR_CHECK_ITEM_LOCATION
-    .byt e_ITEM_Rope
-    .byt e_LOCATION_WELL
-    ; Draw the Rope
-    .byt COMMAND_BITMAP,LOADER_SPRITE_ITEMS
-    .byt BLOCK_SIZE(7,44)
-    .byt STRIDE(40)
-    .word _SecondImageBuffer+7
-    .word _ImageBuffer+(40*35)+26
+    
+    ; Is the Rope near the Well?      
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM(e_ITEM_Rope,e_LOCATION_WELL))    
+      DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(7,44),40,_SecondImageBuffer+7,_ImageBuffer+(40*35)+26)  ; Draw the Rope
 no_rope    
-.)
-    ;
+
+    ; Then show the messages
     .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(111,5,124,12)
@@ -246,11 +224,9 @@ _gDescriptionAppleOrchard
 
 _gDescriptionEntranceHall
     ; Draw the dog growling in the entrance
-    .byt COMMAND_BITMAP,LOADER_SPRITE_DOG
-    .byt BLOCK_SIZE(13,66)
-    .byt STRIDE(40)
-    .word _SecondImageBuffer+(40*61)+0
-    .word _ImageBuffer+(40*56)+25
+    JUMP_IF_FALSE(no_dog,CHECK_ITEM(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(13,66),40,_SecondImageBuffer+(40*61)+0,_ImageBuffer+(40*56)+26)    ; Draw the Growling dog
+no_dog
     ;
     .byt COMMAND_WAIT,DELAY_FIRST_BUBBLE
     .byt COMMAND_BUBBLE,2,64
@@ -469,49 +445,3 @@ _gDescriptionPadlockedRoom
     .byt OFFSET(1,0),"fast enough!",0
     .byt COMMAND_END
 
-
-#if 0
-    // Performance testing
-    .byt COMMAND_BUBBLE,2,127
-    .byt RECTANGLE(53,45,83,14)
-    .byt RECTANGLE(36,58,100,15)
-    .byt OFFSET(1,0),"Rats, gra",255-2,"f",255-3,"f",255-1,"itti,",0
-    .byt OFFSET(1,0),"and used syringes.",0
-
-    ; Funny way to make an outlined text
-    .byt COMMAND_TEXT
-    .byt 8,8
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 10,8
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 8,9
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 10,9
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 8,10
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 10,10
-    .byt 64
-    .byt "This is a multine line message",13,10,"Second line!",0
-
-    .byt COMMAND_TEXT
-    .byt 9,9
-    .byt 127
-    .byt "This is a multine line message",13,10,"Second line!",0
-#endif
-    .byt COMMAND_END
