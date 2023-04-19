@@ -118,7 +118,7 @@ item gItems[e_ITEM_COUNT_] =
     { "a silver knife"                       ,e_LOCATION_VEGSGARDEN      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
     { "a ladder"                             ,e_LOCATION_APPLE_TREES     ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
     { "an abandoned car"                     ,e_LOCATION_TARMACAREA      ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AbandonedCar         
-    { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AlsatianDog          
+    { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AlsatianDog          
     { "a joint of meat"                      ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
     { "some brown bread"                     ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
     { "a roll of sticky tape"                ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
@@ -215,6 +215,11 @@ keyword gWordsArray[] =
     // Misc instructions
     { "TAKE", e_WORD_TAKE },
     { "GET" , e_WORD_TAKE },
+    { "KILL", e_WORD_KILL },
+#ifdef ENABLE_CHEATS
+    { "REVIVE", e_WORD_REVIVE },
+    { "TICKLE", e_WORD_TICKLE },
+#endif    
 
     { "DROP", e_WORD_DROP },
     { "PUT" , e_WORD_DROP },

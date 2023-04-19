@@ -1,5 +1,6 @@
 
 #include "game_enums.h"
+#include "params.h"
 
 // The various locations
 enum DIRECTIONS
@@ -32,6 +33,11 @@ typedef enum
 	// In-game instructions
 	e_WORD_TAKE  ,
 	e_WORD_DROP  ,
+    e_WORD_KILL  ,
+#ifdef ENABLE_CHEATS
+    e_WORD_REVIVE,
+    e_WORD_TICKLE,
+#endif    
 
 	// Meta instructions
 	e_WORD_QUIT  ,
@@ -42,11 +48,6 @@ typedef enum
 
 } WORDS;
 
-#define ITEM_FLAG_DEFAULT 			0    // Nothing special
-#define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
-#define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
-#define ITEM_FLAG_HEAVY   			4    // Impossible to move: Too Heavy
-#define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
 
 extern unsigned char gCurrentLocation;
 

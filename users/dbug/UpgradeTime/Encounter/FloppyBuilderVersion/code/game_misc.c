@@ -197,6 +197,14 @@ void HandleByteStream()
 						}
 						break;
 
+					case OPERATOR_CHECK_ITEM_FLAG:
+						{
+							unsigned char itemId     = *gCurrentStream++;
+							unsigned char flagId     = *gCurrentStream++;
+							check =  (gItems[itemId].flags & flagId);
+						}
+						break;
+
 					default:			// That's not supposed to happen
 						Panic();
 					}

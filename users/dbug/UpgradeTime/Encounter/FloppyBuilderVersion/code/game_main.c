@@ -490,7 +490,8 @@ void Initializations()
 	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
 	//gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
 	//gCurrentLocation =e_LOCATION_WELL;
-	gCurrentLocation =e_LOCATION_ENTRANCEHALL;
+	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
+	gCurrentLocation =e_LOCATION_LAWN;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
@@ -540,6 +541,113 @@ WORDS ProcessAnswer()
 	case e_WORD_DROP:
 		DropItem(gWordBuffer[1]);
 		break;
+
+	case e_WORD_KILL:
+		{
+			unsigned char itemId=gWordBuffer[1];
+			item* itemPtr=&gItems[itemId];
+			if (itemPtr->location != gCurrentLocation)
+			{
+				PrintErrorMessage("It's not here");
+			}
+			else
+			if (itemPtr->flags & ITEM_FLAG_DEAD)
+			{
+				PrintErrorMessage("Already dead");
+			}
+			else
+			{
+				// Normally we should ask how, check the weapon, etc...
+				// Right now it's just to check things
+				switch (itemId)
+				{
+				case e_ITEM_Thug:
+					itemPtr->flags|=ITEM_FLAG_DEAD;
+					LoadScene();
+					break;
+
+				case e_ITEM_AlsatianDog:
+					itemPtr->flags|=ITEM_FLAG_DEAD;
+					LoadScene();
+					break;
+
+				case e_ITEM_YoungGirl:
+					PrintErrorMessage("You are supposed to save her");
+					break;
+				}
+			}
+		}
+		break;
+
+#ifdef ENABLE_CHEATS
+	case e_WORD_REVIVE:
+		{
+			unsigned char itemId=gWordBuffer[1];
+			item* itemPtr=&gItems[itemId];
+			if (itemPtr->location != gCurrentLocation)
+			{
+				PrintErrorMessage("It's not here");
+			}
+			else
+			if (!itemPtr->flags & ITEM_FLAG_DEAD)
+			{
+				PrintErrorMessage("Not dead");
+			}
+			else
+			{
+				// We revive the characters to debug and test  more easily
+				switch (itemId)
+				{
+				case e_ITEM_Thug:
+					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					LoadScene();
+					break;
+
+				case e_ITEM_AlsatianDog:
+					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					LoadScene();
+					break;
+				}
+			}
+		}
+		break;
+
+	case e_WORD_TICKLE:
+		{
+			unsigned char itemId=gWordBuffer[1];
+			item* itemPtr=&gItems[itemId];
+			if (itemPtr->location != gCurrentLocation)
+			{
+				PrintErrorMessage("It's not here");
+			}
+			else
+			if (itemPtr->flags & ITEM_FLAG_DEAD)
+			{
+				PrintErrorMessage("Dead don't move");
+			}
+			else
+			{
+				// The tickling is just a way to trigger the attack sequence
+				switch (itemId)
+				{
+				case e_ITEM_Thug:
+					gLocations[gCurrentLocation].script = gDescriptionThugAttacking;
+					LoadScene();
+					break;
+
+				case e_ITEM_AlsatianDog:
+					gLocations[gCurrentLocation].script = gDescriptionDogAttacking;
+					LoadScene();
+					break;
+
+				case e_ITEM_YoungGirl:
+					PrintErrorMessage("Probably impropriate");
+					break;
+				}
+			}
+		}
+		break;
+#endif    
 
 	//
 	// Meta

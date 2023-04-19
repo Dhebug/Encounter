@@ -4,6 +4,7 @@
 //#define ENABLE_INTRO         // Comment out to skip the intro
 #define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
+#define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16
@@ -66,8 +67,13 @@
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
+#define OPERATOR_CHECK_ITEM_FLAG     1
 
+#define END                                  .byt COMMAND_END
+#define WAIT(duration)                       .byt COMMAND_WAIT,duration
+#define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
-#define CHECK_ITEM(item,location)            OPERATOR_CHECK_ITEM_LOCATION,item,location
+#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
+#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
