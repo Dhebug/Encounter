@@ -107,3 +107,14 @@
 
 #define	e_ITEM__Reserved      		 45          // Reserved entry code (not sure it's needed)
 // End marker
+
+
+#define ITEM_FLAG_DEFAULT 			0    // Nothing special
+#define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
+#define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
+#define ITEM_FLAG_HEAVY   			4    // Impossible to move: Too Heavy
+#define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
+#define ITEM_FLAG_DEAD             16    // Used to indicate that something is not alive anymore (ex: Dog, Thug )
+#define ITEM_FLAG_FREE_2           32    // -- available
+#define ITEM_FLAG_FREE_3           64    // -- available
+#define ITEM_FLAG_FREE_4          128    // -- available
