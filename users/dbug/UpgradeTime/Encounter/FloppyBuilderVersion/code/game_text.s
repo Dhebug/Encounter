@@ -35,7 +35,7 @@ _gDescriptionDarkAlley
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(153,85,83,14)
     .byt RECTANGLE(136,98,100,15)
-    .byt OFFSET(1,0),"Rats, gra",255-2,"f",255-3,"f",255-1,"itti,",0
+    .byt OFFSET(1,0),"Rats, graf",255-1,"f",255-1,"itti,",0
     .byt OFFSET(1,0),"and used syringes.",0
     END
 
@@ -60,10 +60,10 @@ _gDescriptionMainStreet
 _gDescriptionNarrowPath
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(124,5,105,12)
-    .byt RECTANGLE(104,17,130,15)
+    .byt RECTANGLE(130,5,105,12)
+    .byt RECTANGLE(109,17,126,15)
     .byt OFFSET(1,0),"Are these the open",0
-    .byt OFFSET(1,0),"f",255-1,"lood gates o",255-2,"f heaven?",0
+    .byt OFFSET(1,0),"f",256-1,"lood gates of heaven?",0
     END
 
 _gDescriptionInThePit   
@@ -264,8 +264,6 @@ _gDescriptionDogAttacking
     WAIT(50*2)                              ; Wait a couple seconds
     JUMP(_gDescriptionGameOverLost)         ; Game Over
 
-_gDescriptionThugAttacking
-    END
 
 
 _gDescriptionLibrary
@@ -454,14 +452,65 @@ _gDescriptionTinyToilet
     END
 
 _gDescriptionMasterBedRoom
+    ; Is there a thug in the master bedroom
+    JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOCATION_MASTERBEDROOM))
+
+    ; Draw the shoes at the bottom of the bed
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
+
+    ; Is the thug alive?
+    JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DEAD))
+      ; Draw the dead thug 
+      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),40,_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
+      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),40,_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
+      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
+      ; Text describing the dead thug
+      WAIT(DELAY_FIRST_BUBBLE)
+      .byt COMMAND_BUBBLE,2,64
+      .byt RECTANGLE(5,5,89,14)
+      .byt RECTANGLE(5,17,115,15)
+      .byt OFFSET(1,0),"Let's call that a ",0
+      .byt OFFSET(1,0),34,"Collateral Damage",34,0
+      END
+
+thug_alive
+    ; Draw the thug Sleeping
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,37),40,_SecondImageBuffer+40*91,_ImageBuffer+40*52+17)   ; Thug sleeping
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(8,23),40,_SecondImageBuffer+32,_ImageBuffer+40*33+30)       ; Zzzz over the head
+    ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(5,5,124,15)
     .byt RECTANGLE(5,16,84,15)
     .byt OFFSET(1,0),"This will make things",0
     .byt OFFSET(1,0),"notably easier...",0
+    ; Should probably have a "game over" command
+    END
+    
+end_thug    
+    ; Draw the message
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,124,15)
+    .byt RECTANGLE(5,16,84,15)
+    .byt OFFSET(1,0),"This was make things",0
+    .byt OFFSET(1,0),"notably easier...",0
+    ; Should probably have a "game over" command
+    .byt COMMAND_FADE_BUFFER
     END
 
+_gDescriptionThugAttacking
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(14,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
+    ; Draw the message
+    WAIT(50*2)                              ; Wait a couple seconds
+    .byt COMMAND_BUBBLE,2,64
+    .byt RECTANGLE(5,5,111,11)
+    .byt RECTANGLE(60,16,69,15)
+    .byt OFFSET(1,0),"This was a mistake:",0
+    .byt OFFSET(1,0),"My last one",0
+    WAIT(50*2)                              ; Wait a couple seconds
+    JUMP(_gDescriptionGameOverLost)         ; Game Over
 
 
 _gDescriptionPadlockedRoom

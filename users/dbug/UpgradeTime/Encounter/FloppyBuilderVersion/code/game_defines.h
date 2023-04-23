@@ -86,6 +86,7 @@ typedef struct
 
 
 extern location gLocations[e_LOCATION_COUNT_];
+extern location* gCurrentLocationPtr;
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];

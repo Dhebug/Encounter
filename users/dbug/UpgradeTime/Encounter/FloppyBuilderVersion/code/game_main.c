@@ -253,6 +253,8 @@ void PrintSceneInformation()
 
 void LoadScene()
 {
+	gCurrentLocationPtr = &gLocations[gCurrentLocation];
+
 	ClearMessageWindow(16+4);
 
 #if 1
@@ -491,7 +493,10 @@ void Initializations()
 	//gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
 	//gCurrentLocation =e_LOCATION_WELL;
 	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
-	gCurrentLocation =e_LOCATION_LAWN;
+	//gCurrentLocation =e_LOCATION_LAWN;
+	gCurrentLocation =e_LOCATION_MASTERBEDROOM;
+	//gCurrentLocation =e_LOCATION_MARKETPLACE;
+	//gCurrentLocation =e_LOCATION_NARROWPATH;
 	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
@@ -563,11 +568,13 @@ WORDS ProcessAnswer()
 				{
 				case e_ITEM_Thug:
 					itemPtr->flags|=ITEM_FLAG_DEAD;
+					itemPtr->description="a dead thug";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					itemPtr->flags|=ITEM_FLAG_DEAD;
+					itemPtr->description="a dead dog";
 					LoadScene();
 					break;
 
@@ -600,11 +607,13 @@ WORDS ProcessAnswer()
 				{
 				case e_ITEM_Thug:
 					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					itemPtr->description="a thug asleep on the bed";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					itemPtr->description="an alsatian growling at you";
 					LoadScene();
 					break;
 				}
@@ -631,12 +640,14 @@ WORDS ProcessAnswer()
 				switch (itemId)
 				{
 				case e_ITEM_Thug:
-					gLocations[gCurrentLocation].script = gDescriptionThugAttacking;
+					gCurrentLocationPtr->script = gDescriptionThugAttacking;
+					itemPtr->description="a thug shooting at me";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
-					gLocations[gCurrentLocation].script = gDescriptionDogAttacking;
+					gCurrentLocationPtr->script = gDescriptionDogAttacking;
+					itemPtr->description="a dog jumping at me";
 					LoadScene();
 					break;
 

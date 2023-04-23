@@ -4,6 +4,7 @@
 
 
 unsigned char gCurrentLocation = e_LOCATION_MARKETPLACE;
+location* gCurrentLocationPtr = 0;
  
  /*
     e_DIRECTION_NORTH = 0,
