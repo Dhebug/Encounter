@@ -163,3 +163,7 @@ AddDefine LOADER_SPRITE_DOG {FileIndex}
 
 AddFile ..\build\files\items.msk                      
 AddDefine LOADER_SPRITE_ITEMS {FileIndex}
+
+AddFile ..\build\files\thug.msk
+AddDefine LOADER_SPRITE_THUG {FileIndex}
+
