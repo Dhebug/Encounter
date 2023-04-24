@@ -26,6 +26,7 @@ CountSecondDown
   ldx #"9"
   stx TimeSeconds+1
 
++Count10SecondsDown
   ldx TimeSeconds+0
   dex
   stx TimeSeconds+0
@@ -34,6 +35,7 @@ CountSecondDown
   ldx #"5"
   stx TimeSeconds+0
 
++CountMinuteDown
   ; Count down the minutes
   ldx TimeMinutes+1
   dex

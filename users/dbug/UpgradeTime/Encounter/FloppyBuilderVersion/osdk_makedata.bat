@@ -120,9 +120,6 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\gloomy_narrow_steps.png %TARGET%\22.hir
 %PICTCONV% %PARAMS% data\lounge.png %TARGET%\23.hir
 %PICTCONV% %PARAMS% data\imposing_entrance_hall.png %TARGET%\24.hir
-%PICTCONV% %PARAMS% data\imposing_entrance_hall_with_dog_growling.png %TARGET%\241.hir
-%PICTCONV% %PARAMS% data\imposing_entrance_hall_with_dog_dead.png %TARGET%\240.hir
-%PICTCONV% %PARAMS% data\imposing_entrance_hall_dog_attacking.png %TARGET%\242.hir
 %PICTCONV% %PARAMS% data\library.png %TARGET%\25.hir
 %PICTCONV% %PARAMS% data\dinning_room.png %TARGET%\26.hir
 %PICTCONV% %PARAMS% data\sweeping_staircase.png %TARGET%\27.hir
@@ -132,9 +129,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\narrow_passage.png %TARGET%\31.hir
 %PICTCONV% %PARAMS% data\guest_bedroom.png %TARGET%\32.hir
 %PICTCONV% %PARAMS% data\child_bedroom.png %TARGET%\33.hir
-%PICTCONV% %PARAMS% data\master_bedroom_dead_man.png %TARGET%\340.hir
-%PICTCONV% %PARAMS% data\master_bedroom.png %TARGET%\341.hir
-%PICTCONV% %PARAMS% data\master_bedroom_player_dead.png %TARGET%\342.hir
+%PICTCONV% %PARAMS% data\master_bedroom.png %TARGET%\34.hir
 %PICTCONV% %PARAMS% data\tiled_shower_room.png %TARGET%\35.hir
 %PICTCONV% %PARAMS% data\tiny_toilet.png %TARGET%\36.hir
 %PICTCONV% %PARAMS% data\east_gallery.png %TARGET%\37.hir
