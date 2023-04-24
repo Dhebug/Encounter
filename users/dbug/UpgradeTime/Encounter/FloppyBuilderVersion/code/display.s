@@ -765,24 +765,25 @@ _BlitBufferToHiresWindow
 
 _CrossFadeBufferToHiresWindow
 .(
-  lda #<_6x6DitherMatrix+6*0
+  lda #<_6x6DitherMatrix+6*2
   sta _gDrawPatternAddress+0
-  lda #>_6x6DitherMatrix+6*0
+  lda #>_6x6DitherMatrix+6*2
   sta _gDrawPatternAddress+1
 
-  ldx #0
+  ldx #1
 loop
   txa
   pha 
 
   sei
   jsr _BlendBufferToHiresWindowInternal
+  jsr Count10SecondsDown
   cli
 
   .(  
   clc 
   lda _gDrawPatternAddress+0
-  adc #6
+  adc #6*2
   sta _gDrawPatternAddress+0
   bcc skip
   inc _gDrawPatternAddress+1
@@ -791,6 +792,7 @@ skip
 
   pla
   tax
+  inx
   inx
   cpx #13
   bne loop
