@@ -206,9 +206,9 @@ int main(int argc, char *argv[])
 
   printf("Tap2dsk V2.1.1\n");
 
-  if (argc<2) 
+  if (argc<3) 
   {
-    fprintf(stderr,"Usage: tap2dsk [-c<paper_color>:<ink_color>] [-n<disk_label>] [-i<init_string>] <tape_image1> ...<tape_imageN> <old_disk_image>\n");
+    fprintf(stderr,"Usage: tap2dsk [-c<paper_color>:<ink_color>] [-n<disk_label>] [-i<init_string>] <tape_image1> [...<tape_imageN>] <old_disk_image>\n");
     exit(1);
   }
 
