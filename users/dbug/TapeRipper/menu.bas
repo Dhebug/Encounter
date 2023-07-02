@@ -10,6 +10,7 @@ start
     PRINT"- H: Display help"
     PRINT"- R: Start ripping"
     PRINT"- P: Change prefix [";NM$;"]"
+    PRINT"- S: Tape Speed: ";:IF PEEK(#24D) THEN PRINT"SLOW" ELSE PRINT"FAST"
     PRINT"- L: List all rips"
     PRINT"- T: Test ripped file"
     PRINT"- Q: Quit"
@@ -18,6 +19,7 @@ loop
     IF K$="H" OR K$="h" THEN GOTO help_page_1
     IF K$="R" OR K$="r" THEN GOTO start_rip
     IF K$="P" OR K$="p" THEN GOTO change_prefix
+    IF K$="S" OR K$="s" THEN GOTO change_speed
     IF K$="L" OR K$="l" THEN GOTO list_rips
     IF K$="T" OR K$="t" THEN GOTO test_rip
     IF K$="Q" OR K$="q" THEN GOTO quit
@@ -46,6 +48,10 @@ quit
 ' BFFE 1
 ' BFFF 0
 ' C000 ---- ROM
+
+change_speed
+    IF PEEK(#24D) THEN POKE #24D,0 ELSE POKE #24D,1
+    GOTO start
 
 ' Write the 'NNNN-000.TR1' string in top of memory
 ' This will be used by the Assembly module as the
@@ -169,8 +175,8 @@ help_page_2
 display_title
     CLS
     PRINT"~Q"
-    PRINT"~T~C~JTapeRipper 2.0 - "+CHR$(96)+" Defence Force"
-    PRINT"~T~C~JTapeRipper 2.0 - "+CHR$(96)+" Defence Force"
+    PRINT"~T~C~JTapeRipper 2.1 - "+CHR$(96)+" Defence Force"
+    PRINT"~T~C~JTapeRipper 2.1 - "+CHR$(96)+" Defence Force"
     PRINT"~Q"
     PRINT
     RETURN
