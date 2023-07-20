@@ -172,7 +172,7 @@ enum SCORE_CONDITION
 
 typedef struct 
 {
-    int             score;          // The score can actually be negative if the player is doing stupid things on purpose
+    int             score;          // The score can actually be negative if the player is doing stupid things on purpose (plus or minus 32768 because of assembler reasons)
     unsigned char   condition;      // The reason why the game ended (victory, abandon, death, ...)
     unsigned char   name[16];       // The name of the character  
 } score_entry;

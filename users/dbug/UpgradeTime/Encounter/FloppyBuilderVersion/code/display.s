@@ -1614,3 +1614,4 @@ _6x6DitherMatrix
   .byt $7f,$6e,$7f,$7f,$7f,$7b,$7f,$7e,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
   .byt $73,$73,$7f,$7f,$7f,$73,$61,$61,$73,$7f,$73,$61,$40,$40,$61,$73
 
+_gHighScores          .dsb 512   ; 456 bytes of actual score data, padded to 512 bytes for the saving system

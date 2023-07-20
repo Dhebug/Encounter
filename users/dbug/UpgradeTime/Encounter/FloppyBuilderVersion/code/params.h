@@ -1,7 +1,7 @@
 //
 // Misc settings for the game testing
 //
-//#define ENABLE_INTRO         // Comment out to skip the intro
+#define ENABLE_INTRO         // Comment out to skip the intro
 #define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
 #define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
