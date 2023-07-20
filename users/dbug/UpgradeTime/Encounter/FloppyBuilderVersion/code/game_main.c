@@ -22,7 +22,7 @@ char gTextBuffer[80];    // Temp
 
 typedef WORDS (*AnswerProcessingFun)();
 
-extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback);
+extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens);
 
 void ResetInput()
 {
@@ -377,7 +377,7 @@ void TakeItem(unsigned char itemId)
 		if (itemPtr->usable_containers)
 		{
 			// Requires a container
-			WORDS containerId = AskInput("Carry it in what?",ProcessContainerAnswer);
+			WORDS containerId = AskInput("Carry it in what?",ProcessContainerAnswer,1 );
 			if (containerId == e_WORD_QUIT)
 			{
 				PrintErrorMessage("Don't be ridiculous");
@@ -586,6 +586,42 @@ WORDS ProcessAnswer()
 		}
 		break;
 
+	case e_WORD_FRISK:
+	case e_WORD_SEARCH:
+		{
+			unsigned char itemId=gWordBuffer[1];
+			item* itemPtr=&gItems[itemId];
+			if (itemPtr->location != gCurrentLocation)
+			{
+				PrintErrorMessage("It's not here");
+			}
+			else
+			{
+				// Eventual list of things we can search
+				switch (itemId)
+				{
+				case e_ITEM_Thug:
+					if (!(itemPtr->flags & ITEM_FLAG_DEAD))
+					{
+						PrintErrorMessage("I should subdue him first");
+					}
+					else
+					if (gItems[e_ITEM_Pistol].location!=e_LOCATION_NONE)
+					{
+						PrintErrorMessage("You've already frisked him");
+					}
+					else
+					{
+						gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
+						PrintInformationMessage("You found something interesting");
+						LoadScene();
+					}
+					break;
+				}
+			}
+		}
+		break;
+
 #ifdef ENABLE_CHEATS
 	case e_WORD_REVIVE:
 		{
@@ -596,7 +632,7 @@ WORDS ProcessAnswer()
 				PrintErrorMessage("It's not here");
 			}
 			else
-			if (!itemPtr->flags & ITEM_FLAG_DEAD)
+			if (!(itemPtr->flags & ITEM_FLAG_DEAD))
 			{
 				PrintErrorMessage("Not dead");
 			}
@@ -678,7 +714,7 @@ WORDS ProcessAnswer()
 }
 
 
-WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback)
+WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens)
 {
 	int k;
 	int shift=0;
@@ -719,7 +755,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback)
 			break;
 
 		case KEY_RETURN:
-			if (ParseInputBuffer())
+			if (!checkTockens || ParseInputBuffer())
 			{
 				WORDS answer = callback();
 				if (answer !=e_WORD_CONTINUE)
@@ -766,7 +802,7 @@ void main()
 {
 	Initializations();	
 
-	AskInput("What are you going to do now?",ProcessAnswer);
+	AskInput("What are you going to do now?",ProcessAnswer,1);
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);

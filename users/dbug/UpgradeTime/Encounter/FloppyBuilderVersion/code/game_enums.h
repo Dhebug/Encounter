@@ -47,7 +47,7 @@
 #define	e_LOCATION_GIRLROOM         43
 #define e_LOCATION_COUNT_           44
 #define e_LOCATION_INVENTORY        e_LOCATION_COUNT_    // Special location for the player's inventory
-#define e_LOCATION_NONE             255                   // To indicate we can't go in this particular location
+#define e_LOCATION_NONE             255                  // To indicate we can't go in this particular location
 
 
 // Define the various items
