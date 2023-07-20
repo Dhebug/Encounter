@@ -83,6 +83,9 @@ AddDefine LOADER_HIGH_SCORES {FileIndex}
 AddFile ..\build\files\font_6x8_mystery.fnt 		; 9900=STD, 9D00=ALT
 AddDefine LOADER_FONT_6x8 {FileIndex}
 
+AddFile ..\build\files\font_6x8_typewriter.fnt 		; 9900=STD, 9D00=ALT
+AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
+
 ;
 ; Some reserved sectors
 ;
@@ -93,6 +96,13 @@ AddDefine LOADER_FONT_6x8 {FileIndex}
 ;
 AddFile ..\build\files\title.hir
 AddDefine LOADER_PICTURE_TITLE {FileIndex}
+
+AddFile ..\build\files\intro_private_investigator.hir
+AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR {FileIndex}
+
+AddFile ..\build\files\intro_typewriter.hir
+AddDefine INTRO_PICTURE_TYPEWRITER {FileIndex}
+
 
 ; No location - actual error
 AddFile ..\build\files\NONE.hir

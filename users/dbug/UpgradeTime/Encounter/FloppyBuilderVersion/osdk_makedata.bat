@@ -22,6 +22,7 @@ SET TARGET=build\files
 :: Character sets
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\font_6x8_mystery.png %TARGET%\font_6x8_mystery.fnt
+%PICTCONV% %PARAMS% data\font_6x8_typewriter.png %TARGET%\font_6x8_typewriter.fnt
 
 :: 6x6 dither matrix
 SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
@@ -36,6 +37,12 @@ SET PARAMS=-u1 -m0 -f0 -o4_Font12x14
 :: Title picture
 SET PARAMS=-u1 -m0 -f6 -o2
 %PICTCONV% %PARAMS% data\title.png %TARGET%\title.hir
+
+:: Intro graphics
+SET PARAMS=-u1 -m0 -f0 -o2
+%PICTCONV% %PARAMS% data\intro_private_investigator.png %TARGET%\intro_private_investigator.hir
+%PICTCONV% %PARAMS% data\intro_typewriter.png %TARGET%\intro_typewriter.hir
+
 
 :: Arrow block (Temp file that needs to be copied in the display.s file)
 SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks
