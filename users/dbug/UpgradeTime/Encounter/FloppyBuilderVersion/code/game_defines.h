@@ -34,6 +34,8 @@ typedef enum
 	e_WORD_TAKE  ,
 	e_WORD_DROP  ,
     e_WORD_KILL  ,
+    e_WORD_FRISK ,
+    e_WORD_SEARCH,
 #ifdef ENABLE_CHEATS
     e_WORD_REVIVE,
     e_WORD_TICKLE,
