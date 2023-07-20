@@ -6,6 +6,8 @@
 
   ;*=$FFEF
 
+_LoaderApiSaveData	  =$FFEC  
+
 _LoaderApiFileStartSector =$FFEF
 _LoaderApiFileStartTrack  =$FFF0
 
@@ -57,3 +59,10 @@ _LoadApiLoadFileFromDirectory
     jsr _LoadApiInitializeFileFromDirectory
 	jmp _LoaderApiLoadFile
 
+; CHEMA: Support saving
+; Assumes that _LoaderApiEntryIndex contains a valid value (temp)
+; As well as _LoaderApiAddress
+; It fills the rest
+_LoadApiSaveFileFromDirectory
+	jsr _LoadApiInitializeFileFromDirectory
+	jmp _LoaderApiSaveData

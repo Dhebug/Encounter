@@ -44,7 +44,7 @@ WriteSector ..\build\files\sector_3.o 				; Sector 3
 ; Now here is the loader code, that one is Microdisc only
 ;
 SetPosition 0 4
-WriteLoader ..\build\files\loader.o $fe00 			; Sector 4
+WriteLoader ..\build\files\loader.o $fd00 			; Sector 4
 
 ;
 ; From now on we compress data (The loader should not be compressed)

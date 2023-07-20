@@ -18,6 +18,7 @@ char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can b
 
 char gTextBuffer[80];    // Temp
 
+int gScore;
 
 
 typedef WORDS (*AnswerProcessingFun)();
@@ -230,6 +231,64 @@ void PrintSceneObjects()
 	}
 }
 
+
+void PrintScore()
+{
+	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,7);
+}
+
+WORDS ProcessPlayerNameAnswer()
+{
+	// We accept anything, it's the player name so...
+	return e_WORD_QUIT;
+}
+
+void HandleHighScore()
+{
+	int entry;
+	int score;
+	score_entry* ptrScore=gHighScores;
+
+	// Load the highscores from the disk
+	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+
+	for (entry=0;entry<SCORE_COUNT;entry++)
+	{		
+		// Check if our score is higher than the next one in the list
+		score=ptrScore->score-32768;
+		if (gScore>score)
+		{	
+			// First, we scroll down the rest, but since we don't have "memmov" we need to manually start from the end
+			// else the result will be corrupted because of overwrites.
+			score_entry* ptrScoreCopy = gHighScores+SCORE_COUNT-1;
+			while (ptrScoreCopy>ptrScore)
+			{
+				--ptrScoreCopy;
+				ptrScoreCopy[1] = ptrScoreCopy[0];
+			}
+
+			// Ask the player their name
+			AskInput("New highscore! Your name please?",ProcessPlayerNameAnswer, 0);
+			ptrScore->score = gScore+32768;
+			ptrScore->condition = e_SCORE_GAVE_UP;  // Need to get that from the game
+			memset(ptrScore->name,' ',16);          // Fille the entry with spaces
+			if (gInputBufferPos>16)
+			{
+				// Just copy the first 16 characters if it's too long
+				gInputBufferPos=16;
+			}
+			// Force the name to the right to be formatted like the rest of the default scores
+			memcpy(ptrScore->name+16-gInputBufferPos,gInputBuffer,gInputBufferPos);
+
+			// Save back the highscores in the slot
+			SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+			return;
+		}
+		++ptrScore;
+	}
+}
+
+
 void PrintSceneInformation()
 {
 	location* locationPtr = &gLocations[gCurrentLocation];
@@ -242,6 +301,8 @@ void PrintSceneInformation()
 
 	poke(0xbb80+16*40+16,9);                      // ALT charset
 	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
+
+	PrintScore();
 
 	PrintSceneDirections();
 
@@ -503,6 +564,8 @@ void Initializations()
 	gCurrentLocation = e_LOCATION_MARKETPLACE;
 #endif	
 
+	gScore = 0;
+
 	LoadScene();
 	DisplayClock();
 
@@ -567,12 +630,14 @@ WORDS ProcessAnswer()
 				switch (itemId)
 				{
 				case e_ITEM_Thug:
+					gScore+=50;
 					itemPtr->flags|=ITEM_FLAG_DEAD;
 					itemPtr->description="a dead thug";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
+					gScore+=50;
 					itemPtr->flags|=ITEM_FLAG_DEAD;
 					itemPtr->description="a dead dog";
 					LoadScene();
@@ -612,6 +677,7 @@ WORDS ProcessAnswer()
 					}
 					else
 					{
+						gScore+=50;
 						gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
 						PrintInformationMessage("You found something interesting");
 						LoadScene();
@@ -701,6 +767,7 @@ WORDS ProcessAnswer()
 	//
 	case e_WORD_QUIT:
 		PlaySound(KeyClickHData);
+		HandleHighScore();
 		// Quit
 		return e_WORD_QUIT;
 		break;
