@@ -6,7 +6,7 @@
  ;  1 byte for the game ending condition
  ; 16 bytes for the name (padded with spaces)
  ;-------------------------------------------
- ; 19 bytes per entry * 24 entries = 456 bytes total
+ ; 19 bytes per entry * 24 entries = 456 bytes total - But we save 512 because of the save system
  ;
 #define ENTRY(type,score,name) .word (score+32768) : .byt type : .asc name
 
@@ -37,11 +37,13 @@ StartScores
  ENTRY(6,-150,"     Adrian Monk")
  ENTRY(3,-200,"C. Auguste Dupin")
  ENTRY(5,-250,"   Insp Clouseau")
+ .dsb 56         ; Padding
 EndScores
 
+
 ; Basic sanity checking, in case I break the macros, or forget some bytes...
-#if ((EndScores-StartScores)<>456)
-#echo Scores table should be 456 bytes long, but it is:
+#if ((EndScores-StartScores)<>512)
+#echo Scores table should be 512 bytes long, but it is:
 #print (EndScores-StartScores) 
 #else
 #echo Scores table successfully exported

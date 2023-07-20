@@ -72,12 +72,6 @@ AddDefine LOADER_PROGRAM_SECOND_SIZE {FileSize}
 AddDefine LOADER_PROGRAM_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
 
 ;
-; The scores
-;
-AddFile ..\build\files\scores.bin
-AddDefine LOADER_HIGH_SCORES {FileIndex}
-
-;
 ; The fonts
 ;
 AddFile ..\build\files\font_6x8_mystery.fnt 		; 9900=STD, 9D00=ALT
@@ -166,4 +160,12 @@ AddDefine LOADER_SPRITE_ITEMS {FileIndex}
 
 AddFile ..\build\files\thug.msk
 AddDefine LOADER_SPRITE_THUG {FileIndex}
+
+;
+; The scores: They should be uncompressed because they are going to be overwritten
+;
+SetCompressionMode None 						; So far only two modes: 'None' and 'FilePack'
+AddFile ..\build\files\scores.bin
+AddDefine LOADER_HIGH_SCORES {FileIndex}
+AddDefine LOADER_HIGH_SCORES_SIZE {FileSize}
 
