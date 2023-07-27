@@ -361,7 +361,7 @@ int TypeWriterPrintCharacter(const char *message)
 			{
 				return 1;
 			}
-			PlaySound(KeyClickLData);
+			PlaySound(TypeWriterData);
 			// PlaySound(PingData);
 			if (Wait(20 + (rand() & 15)))
 			{
@@ -370,7 +370,7 @@ int TypeWriterPrintCharacter(const char *message)
 		}
 		else if (car == ' ')
 		{
-			PlaySound(KeyClickLData);
+			PlaySound(TypeWriterData);
 			gXPos++;
 			line++;
 			DisplayPaperSheet();
@@ -382,7 +382,7 @@ int TypeWriterPrintCharacter(const char *message)
 		else
 		{
 			char* charset=(char*)0x9900+(car-32)*8;
-			PlaySound(KeyClickHData);
+			PlaySound(TypeWriterData);
 			line[40*0] = (charset[0]^63)|64;
 			line[40*1] = (charset[1]^63)|64;
 			line[40*2] = (charset[2]^63)|64;

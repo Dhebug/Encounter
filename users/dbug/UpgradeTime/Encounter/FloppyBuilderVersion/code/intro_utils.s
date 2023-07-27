@@ -1,11 +1,16 @@
 
     .text
 
-IrqTasks
+IrqTasksHighSpeed
+.(
+    jmp SoundUpdateHighSpeed
+.)
+
+IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
-    jsr SoundUpdate
+    jsr SoundUpdate50hz
     rts    
 .)
 

@@ -77,3 +77,15 @@
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
+
+// Audio commands
+#define SOUND_NOT_PLAYING        255
+
+#define SOUND_COMMAND_END        0      // End of the sound
+#define SOUND_COMMAND_END_FRAME  1      // End of command list for this frame
+#define SOUND_COMMAND_SET_BANK   2      // Change a complete set of sounds: <14 values copied to registers 0 to 13>
+#define SOUND_COMMAND_SET_VALUE  3      // Set a register value: <register index> <value to set>
+#define SOUND_COMMAND_ADD_VALUE  4      // Add to a register:    <register index> <value to add>
+#define SOUND_COMMAND_REPEAT     5      // Defines the start of a block that will repeat "n" times: <repeat count>
+#define SOUND_COMMAND_ENDREPEAT  6      // Defines the end of a repeating block
+
