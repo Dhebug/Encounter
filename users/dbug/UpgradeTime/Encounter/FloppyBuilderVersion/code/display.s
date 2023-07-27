@@ -24,58 +24,6 @@ _gDrawPattern   .byt 0
 _gSourceStride  .byt 0
 
 
-; Hacked version of the lib memcpy with an additional mask. 
-; This is temporary, will be replace by some code that does both the main image and borders for the typewriter sequence
-_masked_memcpy
-.(
-	jsr get_2ptr
-	ldy #4
-	sec
-	lda #0
-	sbc (sp),y
-	sta tmp
-	tax
-	iny
-	cmp #1
-	lda (sp),y
-	adc #0
-	tay
-	beq return
-
-	sec
-	lda op1
-	sbc tmp
-	sta auto_dest+1
-	lda op1+1
-	sbc #0
-	sta auto_dest+2
-
-	sec
-	lda op2
-	sbc tmp
-	sta memcpyloop+1
-	lda op2+1
-	sbc #0
-	sta memcpyloop+2
-
-memcpyloop
-	lda $2211,x
-+_masked_memcpy_pattern = *+1
-  and #$ff  
-auto_dest  
-	sta $5544,x
-	inx
-	bne memcpyloop
-	inc memcpyloop+2
-	inc auto_dest+2
-	dey
-	bne memcpyloop
-return
-	rts
-.)
-
-	
-
 
 .(
 sourcePtr   = tmp0

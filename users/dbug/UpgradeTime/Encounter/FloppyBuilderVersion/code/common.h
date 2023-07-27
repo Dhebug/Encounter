@@ -70,7 +70,7 @@ extern char ZapData[];
 extern char KeyClickHData[];
 extern char KeyClickLData[];
 extern char TypeWriterData[];
-
+extern char SpaceBarData[];
 
 // Common
 extern void SetLineAddress(char* address);

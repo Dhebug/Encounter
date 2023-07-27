@@ -18,7 +18,22 @@ extern char Text_Notes[];
 
 extern char Text_Leaderboard[];
 
+
+extern unsigned char TypeWriterPaperWidth;
+extern unsigned char TypeWriterBorderWidth;
+extern unsigned char TypeWriterPaperPattern;
+
+extern char* TypeWriterPaperRead;
+extern char* TypeWriterPaperWrite;
+extern char* TypeWriterBorderRead;
+extern char* TypeWriterBorderWrite;
+
+extern void CopyTypeWriterLine();
+
+
+
 unsigned char ImageBuffer2[40*200];
+
 
 
 // Some quite ugly function which waits a certain number of frames
@@ -28,6 +43,26 @@ int Wait(int frameCount)
 	int k;
 
 	while (frameCount--)
+	{
+		WaitIRQ();
+
+		k=ReadKey();
+		if ((k==KEY_RETURN) || (k==' ') )
+		{
+			//PlaySound(KeyClickLData);
+			WaitFrames(4);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+
+int Wait2(unsigned int frameCount,unsigned char referenceFrame)
+{	
+	int k;
+
+	while ( (VblCounter-referenceFrame) < frameCount)
 	{
 		WaitIRQ();
 
@@ -208,6 +243,7 @@ int DisplayStory()
 	|| Wait(50*2);
 
 #if 0
+    while (1) {}
 	memcpy((char*)0xa000,ImageBuffer,8000);       // Show the entire text picture to make sure the text looks ok
 	while(1) {}
 #endif
@@ -215,66 +251,17 @@ int DisplayStory()
 	return result;
 }
 
-// Temporary table with the offset for the text "compression" to simulate the rotation of the paper out of the machine
-char TableRotateOffset[]=
-{
-	40,40,40,40,40,40,40,40,
-	40,40,40,40,40,40,40,40,
-	40,40,40,40,40,40,40,40,
-	40,40,40,40,40,40,40,40,
-	40,40,40,40,40,40,40,40,
 
-	40*2,40,40,40,40,40,40,40,
-	40*2,40,40,40,40*2,40,40,40,
-	40*2,40,40*2,40,40,40*2,40,40,
-	40*2,40,40*2,40,40*2,40,40*2,40,
-	40*2,40*2,40*2,40,40*2,40*2,40*2,40,
-	40*2,40*2,40*2,40*2,40*2,40*2,40*2,40*2,
+extern char TableRotateOffset[];
+extern char TableDitherPatternOffset[];
 
-	40*3,40*2,40*2,40*2,40*2,40*2,40*2,40*2,
-	40*3,40*2,40*2,40*2,40*3,40*2,40*2,40*2,
-	40*3,40*2,40*2,40*2,40*3,40*2,40*2,40*2,
-	40*3,40*3,40*2,40*2,40*3,40*2,40*3,40*2,
-	40*3,40*3,40*3,40*3,40*3,40*3,40*3,40*3,
-};
-
-// Temporary table with the dithering pattern for the paper out of the machine to appear darker
-char TableDitherPatternOffset[]=
-{
-	255,255,255,255,255,255,255,255,
-	255,255,255,255,255,255,255,255,
-	255,255,255,255,255,255,255,255,
-	255,255,255,255,255,255,255,255,
-	255,255,255,255,255,255,255,255,
-
-	85,255,255,255,106,255,255,255,
-	85,255,255,255,106,255,255,255,
-
-	85,255,106,255,85,255,106,255,
-	85,255,106,255,85,255,106,255,
-
-	85,106,85,106,85,106,85,106,
-	85,106,85,106,85,106,85,106,
-	64,106,85,106,64,106,85,106,
-	64,106,64,85,64,106,64,85,
-	64,64,64,64,64,64,64,64,
-	85,106,85,106,85,106,85,106,
-	85,106,85,106,85,106,85,106,
-	85,106,85,106,85,106,85,106,
-	85,106,85,106,85,106,85,106,
-	85,106,85,106,85,106,85,106,
-	64,64,64,64,64,64,64,64,
-};
-
-extern int masked_memcpy(void *dst, void *src, int n);
-extern unsigned char masked_memcpy_pattern;
 
 void DisplayPaperSheet()
 {
-#if 0	
+#if 0
 	// Debugging code
-	gXPos = 20; //18;
-	gYPos = 5;
+	gXPos = 17;
+	gYPos = 25;
 #endif		
 	{
 	int y;
@@ -309,23 +296,31 @@ void DisplayPaperSheet()
 	sprintf((char*)0xbb80+40*27,"DO:%d SO:%d BO:%d",destOffset, sourceOffset,borderOffset);
 #endif
 
+    TypeWriterPaperWidth  = width;
+    TypeWriterBorderWidth = borderWidth;
+
+    TypeWriterBorderRead  = sourcePtrBackground+borderOffset-1;
+    TypeWriterBorderWrite = destPtr+borderOffset-1;
+
 	// Print the paper
 	for (y=0;y<height;y++)
 	{
 		destPtr            -=40;
 		sourcePtr          -=TableRotateOffset[y];
-		sourcePtrBackground-=40;
+		TypeWriterBorderRead -=40;
+        TypeWriterBorderWrite-=40;
 		if (sourcePtr<(char*)ImageBuffer)
 		{
 			break;
 		}
 		if ( (destPtr<(char*)0xa000+(120*40)) || (destPtr>(char*)0xa000+(126*40)) )
 		{
-			// Left or right side of the desktop
-			memcpy(destPtr+borderOffset, sourcePtrBackground+borderOffset,borderWidth);
-			// Actual page
-			masked_memcpy_pattern=TableDitherPatternOffset[y];
-			masked_memcpy(destPtr+destOffset, sourcePtr+sourceOffset, width);
+            TypeWriterPaperPattern=TableDitherPatternOffset[y];
+
+            TypeWriterPaperRead   = sourcePtr+sourceOffset-1;           
+            TypeWriterPaperWrite  = destPtr+destOffset-1;
+
+            CopyTypeWriterLine();
 		}
 	}		
 	}
@@ -336,12 +331,12 @@ void CarriageReturn()
 {
 	gYPos++;
 	DisplayPaperSheet();
-	while (gXPos>0)
+	while (gXPos>2)
 	{
 		gXPos-=2;
 		DisplayPaperSheet();
 	}
-	gXPos=0;
+	gXPos=1;
 	DisplayPaperSheet();
 }
 
@@ -357,12 +352,6 @@ int TypeWriterPrintCharacter(const char *message)
 			line = gPrintAddress;
 
 			CarriageReturn();
-			if (Wait(5 + (rand() & 3)))
-			{
-				return 1;
-			}
-			PlaySound(TypeWriterData);
-			// PlaySound(PingData);
 			if (Wait(20 + (rand() & 15)))
 			{
 				return 1;
@@ -370,17 +359,19 @@ int TypeWriterPrintCharacter(const char *message)
 		}
 		else if (car == ' ')
 		{
-			PlaySound(TypeWriterData);
+            unsigned char referenceFrame=VblCounter;
+			PlaySound(SpaceBarData);
 			gXPos++;
 			line++;
 			DisplayPaperSheet();
-			if (Wait(3 + (rand() & 3)))
+			if (Wait2(4 + (rand() & 7),referenceFrame))
 			{
 				return 1;
 			}
 		}
 		else
 		{
+            unsigned char referenceFrame=VblCounter;
 			char* charset=(char*)0x9900+(car-32)*8;
 			PlaySound(TypeWriterData);
 			line[40*0] = (charset[0]^63)|64;
@@ -395,10 +386,10 @@ int TypeWriterPrintCharacter(const char *message)
 			gXPos++;
 			line++;
 			DisplayPaperSheet();
-		}
-		if (Wait(1 + (rand() & 1)))
-		{
-			return 1;
+            if (Wait2(3 + (rand() & 7),referenceFrame))
+            {
+                return 1;
+            }
 		}
 	}
 	return 0;
