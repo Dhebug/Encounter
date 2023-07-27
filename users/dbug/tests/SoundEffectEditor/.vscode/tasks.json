@@ -1,0 +1,20 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+
+    // https://code.visualstudio.com/Docs/editor/tasks
+    // https://code.visualstudio.com/docs/editor/variables-reference
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "osdk_build_and_run",
+            "type": "shell",
+            "command": "${workspaceFolder}\\osdk_execute.bat",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
+  
