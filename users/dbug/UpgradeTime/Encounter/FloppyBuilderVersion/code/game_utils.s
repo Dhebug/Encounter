@@ -6,11 +6,17 @@ _gCurrentStreamInt
     .word 0
 
 
-IrqTasks
+
+IrqTasksHighSpeed
+.(
+    jmp SoundUpdateHighSpeed
+.)
+
+IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
-    jsr SoundUpdate
+    jsr SoundUpdate50hz
             
     ; "Realtime" Clock
     .(

@@ -57,6 +57,10 @@ extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded 
 // Audio
 extern void PlaySound(const char* registerList);
 
+extern const char* SoundDataPointer;
+extern unsigned char PsgPlayPosition;
+extern unsigned char PsgPlayLoopIndex;
+
 extern char PsgNeedUpdate;
 extern char PsgVirtualRegisters[];
 extern char ExplodeData[];
@@ -65,6 +69,7 @@ extern char PingData[];
 extern char ZapData[];
 extern char KeyClickHData[];
 extern char KeyClickLData[];
+extern char TypeWriterData[];
 
 
 // Common
