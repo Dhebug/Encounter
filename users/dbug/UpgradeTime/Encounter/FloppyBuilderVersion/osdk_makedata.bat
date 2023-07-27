@@ -27,6 +27,8 @@ SET PARAMS=-u1 -m0 -f0 -o2
 :: 6x6 dither matrix
 SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
 %PICTCONV% %PARAMS% data\6x6_dither_matrix.png build\6x6_dither_matrix.s
+%PICTCONV% %PARAMS% data\typewriter_dithering_pattern.png build\typewriter_dithering_pattern.s
+
 
 :: The 12x14 font
 :: palatino_linotype_italics_size_10_font.png
