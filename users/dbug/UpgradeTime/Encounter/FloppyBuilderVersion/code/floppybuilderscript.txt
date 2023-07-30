@@ -148,6 +148,10 @@ AddFile ..\build\files\42.hir
 AddFile ..\build\files\43.hir
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
+; Additional images
+AddFile ..\build\files\newspaper.hir
+AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
+
 ; All the sprites
 AddFile ..\build\files\the_end.msk                      
 AddDefine LOADER_SPRITE_THE_END {FileIndex}
