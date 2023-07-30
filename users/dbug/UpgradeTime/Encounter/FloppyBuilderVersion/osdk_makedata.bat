@@ -149,6 +149,8 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\main_landing.png %TARGET%\42.hir
 %PICTCONV% %PARAMS% data\pit_outside.png %TARGET%\43.hir
 
+:: Other 240x128 full screen images which are not locations
+%PICTCONV% %PARAMS% data\newspaper.png %TARGET%\newspaper.hir
 
 ::pause
 

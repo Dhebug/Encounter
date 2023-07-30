@@ -140,7 +140,7 @@ item gItems[e_ITEM_COUNT_] =
     { "a fuse"                               ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Fuse                 
     { "some gunpowder"                       ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_GunPowder            
     { "a set of keys"                        ,e_LOCATION_MAINSTREET      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Keys                 
-    { "a newspaper"                          ,e_LOCATION_MARKETPLACE     ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Newspaper            
+    { "a newspaper"                          ,e_LOCATION_INVENTORY       ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Newspaper            
     { "a bomb"                               ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bomb                 
     { "a pistol"                             ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Pistol               
     { "three .38 bullets"                    ,e_LOCATION_DARKCELLARROOM  ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bullets              
@@ -226,6 +226,8 @@ keyword gWordsArray[] =
 
     { "DROP", e_WORD_DROP },
     { "PUT" , e_WORD_DROP },
+
+    { "READ" , e_WORD_READ },
 
     // Last instruction
     { "QUIT", e_WORD_QUIT },

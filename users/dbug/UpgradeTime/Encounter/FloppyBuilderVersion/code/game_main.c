@@ -288,6 +288,12 @@ void HandleHighScore()
 	}
 }
 
+void PrintTopDescription(const char* message)
+{
+    int messageLength = messageLength=strlen(message);
+	memset((char*)0xbb80+17*40+1,' ',39);
+	strcpy((char*)0xbb80+17*40+20-messageLength/2,message);
+}
 
 void PrintSceneInformation()
 {
@@ -295,9 +301,7 @@ void PrintSceneInformation()
 	int messageLength = 0;
 
 	// Print the description of the place at the top (centered)
-	memset((char*)0xbb80+17*40+1,' ',39);
-	messageLength=strlen(locationPtr->description);
-	strcpy((char*)0xbb80+17*40+20-messageLength/2,locationPtr->description);
+    PrintTopDescription(locationPtr->description);
 
 	poke(0xbb80+16*40+16,9);                      // ALT charset
 	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
@@ -529,6 +533,48 @@ void DropItem(unsigned char itemId)
 }
 
 
+void ReadItem(unsigned char itemId)
+{
+	if (itemId<e_ITEM_COUNT_)
+    {
+        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
+        {
+            switch (itemId)
+            {
+            case e_ITEM_Newspaper:
+                ClearMessageWindow(16+4);
+                LoadFileAt(LOADER_PICTURE_NEWSPAPER,ImageBuffer);
+                PrintTopDescription("The Daily Telegraph, September 29th");
+                BlitBufferToHiresWindow();
+				PrintInformationMessage("I have to find her fast...");
+                WaitFrames(50*2);
+				PrintInformationMessage("...I hope she is fine!");
+                WaitFrames(50*2);
+                LoadScene();
+                break;
+
+            case e_ITEM_PrintedNote:
+				PrintInformationMessage("The note says: I moved your dangerous chemicals into the safe in the basement - Dad");
+                break;
+
+            case e_ITEM_ChemistryBook:
+				PrintInformationMessage("That's quite an advanced chemistry book, with recipes for all kind of dangerous products.");
+                break;
+            }
+
+        }
+        else
+        {
+            PrintErrorMessage("This item does not seem to be present");
+        }
+    }
+    else
+	{
+		PrintErrorMessage("I do not know what this item is");
+	}
+}
+
+
 void Initializations()
 {
 	// erase the screen
@@ -555,10 +601,10 @@ void Initializations()
 	//gCurrentLocation =e_LOCATION_WELL;
 	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
 	//gCurrentLocation =e_LOCATION_LAWN;
-	gCurrentLocation =e_LOCATION_MASTERBEDROOM;
-	//gCurrentLocation =e_LOCATION_MARKETPLACE;
+	//gCurrentLocation =e_LOCATION_MASTERBEDROOM;
+	////gCurrentLocation =e_LOCATION_MARKETPLACE;
 	//gCurrentLocation =e_LOCATION_NARROWPATH;
-	gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
+	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
 	gCurrentLocation = e_LOCATION_MARKETPLACE;
@@ -609,6 +655,10 @@ WORDS ProcessAnswer()
 	case e_WORD_DROP:
 		DropItem(gWordBuffer[1]);
 		break;
+
+    case e_WORD_READ:
+		ReadItem(gWordBuffer[1]);
+        break;
 
 	case e_WORD_KILL:
 		{
