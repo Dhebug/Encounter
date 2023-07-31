@@ -122,7 +122,7 @@ item gItems[e_ITEM_COUNT_] =
     { "an alsatian growling at you"          ,e_LOCATION_ENTRANCEHALL    ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AlsatianDog          
     { "a joint of meat"                      ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
     { "some brown bread"                     ,e_LOCATION_DININGROOM      ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
-    { "a roll of sticky tape"                ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
+    { "a roll of sticky tape"                ,e_LOCATION_BOXROOM         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
     { "a chemistry book"                     ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
     { "a box of matches"                     ,e_LOCATION_KITCHEN         ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
     { "a snooker cue"                        ,e_LOCATION_GAMESROOM       ,255   ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
@@ -145,6 +145,8 @@ item gItems[e_ITEM_COUNT_] =
     { "a pistol"                             ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Pistol               
     { "three .38 bullets"                    ,e_LOCATION_DARKCELLARROOM  ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bullets              
     { "a young girl tied up on the floor"    ,e_LOCATION_GIRLROOM        ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirlOnFloor     
+    { "a couple chemistry recipes"           ,e_LOCATION_NONE            ,255   ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryRecipes     
+    { "a map of the United Kingdom"          ,e_LOCATION_LIBRARY         ,255   ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_UnitedKingdomMap   
 };
 
 
@@ -197,6 +199,9 @@ keyword gWordsArray[] =
     { "BOMB",   e_ITEM_Bomb                 },  // e_ITEM_Bomb                  
     { "PISTOL", e_ITEM_Pistol               },  // e_ITEM_Pistol                
     { "BULLETS",e_ITEM_Bullets              },  // e_ITEM_Bullets           
+    { "RECIPES",e_ITEM_ChemistryRecipes     },
+    { "MAP"    ,e_ITEM_UnitedKingdomMap     },
+    
 
     // Directions
     { "N", e_WORD_NORTH },
@@ -229,6 +234,10 @@ keyword gWordsArray[] =
 
     { "READ" , e_WORD_READ },
 
+    { "LOOK"    , e_WORD_LOOK },
+    { "EXAMINE" , e_WORD_LOOK },
+    { "INSPECT" , e_WORD_LOOK },
+    
     // Last instruction
     { "QUIT", e_WORD_QUIT },
 

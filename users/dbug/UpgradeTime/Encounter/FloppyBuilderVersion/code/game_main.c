@@ -533,6 +533,14 @@ void DropItem(unsigned char itemId)
 }
 
 
+void ShowFullScreenItem(int image_id, const char* description)
+{
+    ClearMessageWindow(16+4);
+    LoadFileAt(image_id,ImageBuffer);
+    PrintTopDescription(description);
+    BlitBufferToHiresWindow();
+}
+
 void ReadItem(unsigned char itemId)
 {
 	if (itemId<e_ITEM_COUNT_)
@@ -542,10 +550,7 @@ void ReadItem(unsigned char itemId)
             switch (itemId)
             {
             case e_ITEM_Newspaper:
-                ClearMessageWindow(16+4);
-                LoadFileAt(LOADER_PICTURE_NEWSPAPER,ImageBuffer);
-                PrintTopDescription("The Daily Telegraph, September 29th");
-                BlitBufferToHiresWindow();
+                ShowFullScreenItem(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th");
 				PrintInformationMessage("I have to find her fast...");
                 WaitFrames(50*2);
 				PrintInformationMessage("...I hope she is fine!");
@@ -554,14 +559,48 @@ void ReadItem(unsigned char itemId)
                 break;
 
             case e_ITEM_PrintedNote:
-				PrintInformationMessage("The note says: I moved your dangerous chemicals into the safe in the basement - Dad");
+                ShowFullScreenItem(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note");
+                WaitFrames(50*2);
+				PrintInformationMessage("That could be useful...");
+                WaitFrames(50*2);
+				PrintInformationMessage("...if I can access it!");
+                WaitFrames(50*2);
+                LoadScene();
                 break;
 
             case e_ITEM_ChemistryBook:
-				PrintInformationMessage("That's quite an advanced chemistry book, with recipes for all kind of dangerous products.");
+                ShowFullScreenItem(LOADER_PICTURE_SCIENCE_BOOK,"A science book");
+                WaitFrames(50*2);
+				PrintInformationMessage("I don't understand much...");
+                WaitFrames(50*2);
+				PrintInformationMessage("...but looks like someone took notes.");
+                WaitFrames(50*2);
+                if (gItems[e_ITEM_ChemistryRecipes].location==e_LOCATION_NONE)
+                {
+                    // If the recipes were not yet found, they now appear at the current location
+                    gItems[e_ITEM_ChemistryRecipes].location = gCurrentLocation;
+                }
+                LoadScene();
+                break;
+
+            case e_ITEM_ChemistryRecipes:
+                ShowFullScreenItem(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes");
+                WaitFrames(50*2);
+				PrintInformationMessage("I can definitely use these...");
+                WaitFrames(50*2);
+				PrintInformationMessage("...just need to find the materials.");
+                WaitFrames(50*2);
+                LoadScene();
+                break;
+
+            case e_ITEM_PlasticBag:
+                PrintErrorMessage("It's just a white generic bag");
+                break;
+
+            default:
+                PrintErrorMessage("I can't read that");
                 break;
             }
-
         }
         else
         {
@@ -573,6 +612,43 @@ void ReadItem(unsigned char itemId)
 		PrintErrorMessage("I do not know what this item is");
 	}
 }
+
+
+void InspectItem(unsigned char itemId)
+{
+	if (itemId<e_ITEM_COUNT_)
+    {
+        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
+        {
+            switch (itemId)
+            {
+            case e_ITEM_UnitedKingdomMap:
+                ShowFullScreenItem(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom");
+				PrintInformationMessage("It shows Ireland, Wales and England");
+                WaitFrames(50*2);
+                LoadScene();
+                break;
+
+            case e_ITEM_ChemistryBook:
+				PrintInformationMessage("A thick book with some boomarks");
+                break;
+
+            default:
+                PrintErrorMessage("Nothing special");
+                break;
+            }
+        }
+        else
+        {
+            PrintErrorMessage("This item does not seem to be present");
+        }
+    }
+    else
+	{
+		PrintErrorMessage("I do not know what this item is");
+	}
+}
+
 
 
 void Initializations()
@@ -604,6 +680,7 @@ void Initializations()
 	//gCurrentLocation =e_LOCATION_MASTERBEDROOM;
 	////gCurrentLocation =e_LOCATION_MARKETPLACE;
 	//gCurrentLocation =e_LOCATION_NARROWPATH;
+    gCurrentLocation = e_LOCATION_LIBRARY;
 	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
@@ -658,6 +735,10 @@ WORDS ProcessAnswer()
 
     case e_WORD_READ:
 		ReadItem(gWordBuffer[1]);
+        break;
+
+    case e_WORD_LOOK:
+		InspectItem(gWordBuffer[1]);
         break;
 
 	case e_WORD_KILL:
