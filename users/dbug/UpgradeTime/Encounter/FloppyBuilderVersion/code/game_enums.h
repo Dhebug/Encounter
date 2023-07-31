@@ -103,9 +103,11 @@
 #define	e_ITEM_Pistol 				 42         // a pistol
 #define	e_ITEM_Bullets  			 43         // three .38 bullets
 #define	e_ITEM_YoungGirlOnFloor  	 44         // a young girl tied up on the floor
-#define	e_ITEM_COUNT_ 				 45         //  ----- END MARKER
+#define	e_ITEM_ChemistryRecipes   	 45         // a sheet of paper with a few recipes on things to build
+#define	e_ITEM_UnitedKingdomMap   	 46         // the map of the UK in the library
+#define	e_ITEM_COUNT_ 				 47         //  ----- END MARKER
 
-#define	e_ITEM__Reserved      		 45          // Reserved entry code (not sure it's needed)
+#define	e_ITEM__Reserved      		 47         // Reserved entry code (not sure it's needed)
 // End marker
 
 

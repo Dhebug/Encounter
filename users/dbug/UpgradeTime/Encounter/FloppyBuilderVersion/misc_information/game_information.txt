@@ -97,3 +97,19 @@ Newpapers:
 - Daily Star
 - Daily Mirror
 - The Times
+
+Thermite:
+https://en.wikipedia.org/wiki/Thermite
+Goldschmidt process
+The thermite (thermit) reaction was discovered in 1893 and patented in 1895 by German chemist Hans Goldschmidt.[9][10]
+
+Red iron(III) oxide (Fe2O3, commonly known as rust) is the most common iron oxide used in thermite.[13][14][15] Black iron(II,III) oxide (Fe3O4, magnetite) also works.[16] 
+Other oxides are occasionally used, such as MnO2 in manganese thermite, Cr2O3 in chromium thermite, SiO2 (quartz) in silicon thermite, or copper(II) oxide in copper thermite, 
+but only for specialized purposes.[16] All of these examples use aluminium as the reactive metal.
+
+Although the reactants are stable at room temperature, they burn with an extremely intense exothermic reaction when they are heated to ignition
+
+
+
+
+

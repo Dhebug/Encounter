@@ -152,6 +152,18 @@ AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 AddFile ..\build\files\newspaper.hir
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
+AddFile ..\build\files\handwritten_note.hir
+AddDefine LOADER_PICTURE_HANDWRITTEN_NOTE {FileIndex}
+
+AddFile ..\build\files\science_book.hir
+AddDefine LOADER_PICTURE_SCIENCE_BOOK {FileIndex}
+
+AddFile ..\build\files\chemistry_recipes.hir
+AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
+
+AddFile ..\build\files\united_kingdom_map.hir
+AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
+
 ; All the sprites
 AddFile ..\build\files\the_end.msk                      
 AddDefine LOADER_SPRITE_THE_END {FileIndex}
