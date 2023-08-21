@@ -3,6 +3,9 @@
 
 #include "loader_api.h"
 
+
+#define assert(expression)   if (!(expression)) { Panic(); }
+
 // Irq
 extern void System_InstallIRQ_SimpleVbl();
 extern void System_RestoreIRQ_SimpleVbl();

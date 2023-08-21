@@ -105,9 +105,11 @@
 #define	e_ITEM_YoungGirlOnFloor  	 44         // a young girl tied up on the floor
 #define	e_ITEM_ChemistryRecipes   	 45         // a sheet of paper with a few recipes on things to build
 #define	e_ITEM_UnitedKingdomMap   	 46         // the map of the UK in the library
-#define	e_ITEM_COUNT_ 				 47         //  ----- END MARKER
+#define	e_ITEM_LadderInTheHole       47         // a ladder in the hole
+#define	e_ITEM_RopeAttachedToATree   48         // a rope hangs from the window
+#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER
 
-#define	e_ITEM__Reserved      		 47         // Reserved entry code (not sure it's needed)
+#define	e_ITEM__Reserved      		 49         // Reserved entry code (not sure it's needed)
 // End marker
 
 
@@ -117,6 +119,6 @@
 #define ITEM_FLAG_HEAVY   			4    // Impossible to move: Too Heavy
 #define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
 #define ITEM_FLAG_DEAD             16    // Used to indicate that something is not alive anymore (ex: Dog, Thug )
-#define ITEM_FLAG_FREE_2           32    // -- available
+#define ITEM_FLAG_ALIAS_ITEM       32    // Used to indicate that this is an alternate item for special use
 #define ITEM_FLAG_FREE_3           64    // -- available
 #define ITEM_FLAG_FREE_4          128    // -- available

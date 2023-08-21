@@ -66,7 +66,23 @@ _gDescriptionNarrowPath
     .byt OFFSET(1,0),"f",256-1,"lood gates of heaven?",0
     END
 
-_gDescriptionInThePit   
+_gDescriptionInThePit
+.(
+    JUMP_IF_TRUE(has_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INVENTORY))    
+    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))    
+    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_LOCATION(e_ITEM_RopeAttachedToATree,e_LOCATION_OUTSIDE_PIT))    
+    JUMP(cannot_escape_pit);            ; The player has no way to escape the pit
+
+draw_ladder
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
+has_ladder
+    END
+
+rope_attached_to_tree
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*37)+51,_ImageBuffer+(40*39)+19)    ; Draw the rope 
+    END
+
+cannot_escape_pit
     WAIT(50*2)
     .byt COMMAND_BUBBLE,1,127
     .byt RECTANGLE(6,8,86,11)
@@ -83,8 +99,24 @@ _gDescriptionInThePit
     WAIT(50*2)                      ; Wait a couple seconds for dramatic effect
     
     JUMP(_gDescriptionGameOverLost);            ; Draw the 'The End' logo
+.)
+
 
 _gDescriptionOutsidePit
+.(
+    JUMP_IF_TRUE(ladder_in_hole,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))    
+    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_LOCATION(e_ITEM_RopeAttachedToATree,e_LOCATION_OUTSIDE_PIT))    
+    JUMP(digging_for_gold);            ; Generic message if the ladder or rope are not present
+
+ladder_in_hole
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,34),40,_SecondImageBuffer+25,_ImageBuffer+(40*53)+20)    ; Draw the ladder 
+    END
+
+rope_attached_to_tree
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(5,49),40,_SecondImageBuffer+30,_ImageBuffer+(40*38)+21)    ; Draw the rope 
+    END
+
+digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
     .byt RECTANGLE(5,94,98,15)
@@ -92,7 +124,7 @@ _gDescriptionOutsidePit
     .byt OFFSET(1,0),"Are they digging",0
     .byt OFFSET(1,4),"for gold?",0
     END
-
+.)
 
 _gDescriptionTarmacArea
     WAIT(DELAY_FIRST_BUBBLE)

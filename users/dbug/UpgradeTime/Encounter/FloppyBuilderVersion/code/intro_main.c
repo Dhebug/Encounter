@@ -181,10 +181,17 @@ int DisplayStory()
 			screen_position_bottom -=40*2;
 			size_bottom            +=40*2;
 
-			VSync();
+			//VSync();
+            if (Wait(1))
+            {
+                return 1;
+            }
 		}
 
-		Wait(50*2);
+		if (Wait(50*2))
+        {
+            return 1;
+        }
 
 		for (y=0;y<45;y+=2)
 		{
@@ -197,11 +204,18 @@ int DisplayStory()
 			screen_position_bottom +=40*2*2;
 			size_bottom            -=40*2*2;
 
-			VSync();
+			//VSync();
+            if (Wait(1))
+            {
+                return 1;
+            }
 		}
 	}
 
-	Wait(50*2);
+	if (Wait(50*2))
+    {
+        return 1;
+    }
 #else
 	// Just show directly the composite image with the office and the typewriter
 	memcpy((char*)0xa000   		,ImageBuffer+40*57    	,40*86);

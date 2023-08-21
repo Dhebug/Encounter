@@ -416,7 +416,7 @@ WORDS ProcessContainerAnswer()
 
 void TakeItem(unsigned char itemId)
 {
-	if (itemId>e_ITEM_COUNT_)
+	if (itemId>=e_ITEM_COUNT_)
 	{
 		PrintErrorMessage("You can only take something you see");
 	}
@@ -424,16 +424,33 @@ void TakeItem(unsigned char itemId)
 	{
 		// The item is in the scene
 		item* itemPtr=&gItems[itemId];
+        item* itemAliasPtr=itemPtr;
+
 		if (itemPtr->location == e_LOCATION_INVENTORY)
 		{
 			PrintErrorMessage("You already have this item");
+            return;
 		}
-		else
+		
 		if (itemPtr->location != gCurrentLocation)
 		{
-			PrintErrorMessage("I don't see this item here");
+            int itemAlias;
+            for (itemAlias=0;itemAlias<e_ITEM_COUNT_;itemAlias++)
+            {
+                itemAliasPtr=&gItems[itemAlias];
+                if ( (itemAliasPtr->location==gCurrentLocation) && (itemAliasPtr->flags & ITEM_FLAG_ALIAS_ITEM) && (itemAliasPtr->associated_item == itemId) )
+                {
+                    break;
+                }
+            }
+            if (itemAlias == e_ITEM_COUNT_)
+            {
+    			PrintErrorMessage("I don't see this item here");
+                return;
+            }
 		}
-		else
+		
+
 		if (itemPtr->flags & ITEM_FLAG_HEAVY)
 		{
 			PrintErrorMessage("This is too heavy");
@@ -474,7 +491,8 @@ void TakeItem(unsigned char itemId)
 		else
 		{
 			// Can just be picked-up
-			itemPtr->location = e_LOCATION_INVENTORY;
+			itemAliasPtr->location = e_LOCATION_NONE;          // Can actually be the same pointer, literaly aliasing!
+			itemPtr->location      = e_LOCATION_INVENTORY;     // Which means that one should be done after
 			LoadScene();
 		}
 	}
@@ -541,66 +559,13 @@ void ShowFullScreenItem(int image_id, const char* description)
     BlitBufferToHiresWindow();
 }
 
-void ReadItem(unsigned char itemId)
+char ItemCheck(unsigned char itemId)
 {
 	if (itemId<e_ITEM_COUNT_)
     {
         if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
         {
-            switch (itemId)
-            {
-            case e_ITEM_Newspaper:
-                ShowFullScreenItem(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th");
-				PrintInformationMessage("I have to find her fast...");
-                WaitFrames(50*2);
-				PrintInformationMessage("...I hope she is fine!");
-                WaitFrames(50*2);
-                LoadScene();
-                break;
-
-            case e_ITEM_PrintedNote:
-                ShowFullScreenItem(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note");
-                WaitFrames(50*2);
-				PrintInformationMessage("That could be useful...");
-                WaitFrames(50*2);
-				PrintInformationMessage("...if I can access it!");
-                WaitFrames(50*2);
-                LoadScene();
-                break;
-
-            case e_ITEM_ChemistryBook:
-                ShowFullScreenItem(LOADER_PICTURE_SCIENCE_BOOK,"A science book");
-                WaitFrames(50*2);
-				PrintInformationMessage("I don't understand much...");
-                WaitFrames(50*2);
-				PrintInformationMessage("...but looks like someone took notes.");
-                WaitFrames(50*2);
-                if (gItems[e_ITEM_ChemistryRecipes].location==e_LOCATION_NONE)
-                {
-                    // If the recipes were not yet found, they now appear at the current location
-                    gItems[e_ITEM_ChemistryRecipes].location = gCurrentLocation;
-                }
-                LoadScene();
-                break;
-
-            case e_ITEM_ChemistryRecipes:
-                ShowFullScreenItem(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes");
-                WaitFrames(50*2);
-				PrintInformationMessage("I can definitely use these...");
-                WaitFrames(50*2);
-				PrintInformationMessage("...just need to find the materials.");
-                WaitFrames(50*2);
-                LoadScene();
-                break;
-
-            case e_ITEM_PlasticBag:
-                PrintErrorMessage("It's just a white generic bag");
-                break;
-
-            default:
-                PrintErrorMessage("I can't read that");
-                break;
-            }
+            return 1;
         }
         else
         {
@@ -610,90 +575,269 @@ void ReadItem(unsigned char itemId)
     else
 	{
 		PrintErrorMessage("I do not know what this item is");
+	}
+    return 0; // Cannot use
+}
+
+void ReadItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+        switch (itemId)
+        {
+        case e_ITEM_Newspaper:
+            ShowFullScreenItem(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th");
+            PrintInformationMessage("I have to find her fast...");
+            WaitFrames(50*2);
+            PrintInformationMessage("...I hope she is fine!");
+            WaitFrames(50*2);
+            LoadScene();
+            break;
+
+        case e_ITEM_PrintedNote:
+            ShowFullScreenItem(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note");
+            WaitFrames(50*2);
+            PrintInformationMessage("That could be useful...");
+            WaitFrames(50*2);
+            PrintInformationMessage("...if I can access it!");
+            WaitFrames(50*2);
+            LoadScene();
+            break;
+
+        case e_ITEM_ChemistryBook:
+            ShowFullScreenItem(LOADER_PICTURE_SCIENCE_BOOK,"A science book");
+            WaitFrames(50*2);
+            PrintInformationMessage("I don't understand much...");
+            WaitFrames(50*2);
+            PrintInformationMessage("...but looks like someone took notes.");
+            WaitFrames(50*2);
+            if (gItems[e_ITEM_ChemistryRecipes].location==e_LOCATION_NONE)
+            {
+                // If the recipes were not yet found, they now appear at the current location
+                gItems[e_ITEM_ChemistryRecipes].location = gCurrentLocation;
+            }
+            LoadScene();
+            break;
+
+        case e_ITEM_ChemistryRecipes:
+            ShowFullScreenItem(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes");
+            WaitFrames(50*2);
+            PrintInformationMessage("I can definitely use these...");
+            WaitFrames(50*2);
+            PrintInformationMessage("...just need to find the materials.");
+            WaitFrames(50*2);
+            LoadScene();
+            break;
+
+        case e_ITEM_PlasticBag:
+            PrintErrorMessage("It's just a white generic bag");
+            break;
+
+        default:
+            PrintErrorMessage("I can't read that");
+            break;
+        }
+	}
+}
+
+
+void ActionClimbLadder()
+{    
+    char ladderLocation = gItems[e_ITEM_Ladder].location;
+    if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
+    {
+        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
+        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
+        if (ladderLocation == e_LOCATION_INVENTORY)
+        {
+            PrintInformationMessage("You position the ladder properly");
+            LoadScene();
+            WaitFrames(50*1);
+        }
+        PrintInformationMessage("You climb up the ladder");
+        WaitFrames(50*1);
+        gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
+        LoadScene();
+    }
+    else
+    if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
+    {
+        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
+        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
+        if (ladderLocation == e_LOCATION_INVENTORY)
+        {
+            PrintInformationMessage("You position the ladder properly");
+            LoadScene();
+            WaitFrames(50*1);
+        }
+        PrintInformationMessage("You climb down the ladder");
+        WaitFrames(50*1);
+        gCurrentLocation = e_LOCATION_INSIDEHOLE;
+        LoadScene();
+    }
+    else
+    {
+        PrintErrorMessage("I can't use it here");
+    }
+}
+
+
+void ActionClimbRope()
+{    
+    char ropeLocation = gItems[e_ITEM_Rope].location;
+    if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
+    {
+        if (gItems[e_ITEM_RopeAttachedToATree].location == e_LOCATION_OUTSIDE_PIT)
+        {
+            gItems[e_ITEM_Rope].location                    = e_LOCATION_INSIDEHOLE;
+            gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
+            PrintInformationMessage("You climb up the rope");
+            WaitFrames(50*1);
+            gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
+            LoadScene();
+        }
+        else
+        {
+            PrintErrorMessage("You can't attach the rope");
+        }
+    }
+    else
+    if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
+    {
+        gItems[e_ITEM_Rope].location                    = e_LOCATION_INSIDEHOLE;
+        gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
+        if (ropeLocation == e_LOCATION_INVENTORY)
+        {
+            PrintInformationMessage("You attach the rope to the tree");
+            LoadScene();
+            WaitFrames(50*1);
+        }
+        PrintInformationMessage("You climb down the rope");
+        WaitFrames(50*1);
+        gCurrentLocation = e_LOCATION_INSIDEHOLE;
+        LoadScene();
+    }
+    else
+    {
+        PrintErrorMessage("I can't use it here");
+    }
+}
+
+void UseItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+        switch (itemId)
+        {
+        case e_ITEM_Ladder:
+        case e_ITEM_LadderInTheHole:
+            {    
+                if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
+                {
+                    char ladderLocation = gItems[e_ITEM_Ladder].location;
+                    if (ladderLocation == e_LOCATION_INVENTORY)
+                    {
+                        PrintInformationMessage("You position the ladder properly");
+                        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
+                        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
+                        LoadScene();
+                    }
+                    else
+                    if (ladderLocation == e_LOCATION_INSIDEHOLE)
+                    {
+                        PrintErrorMessage("The ladder is already in the hole");
+                    }
+                }
+                else
+                {
+                    PrintErrorMessage("I can't use it here");
+                }
+            }
+            break;
+
+        case e_ITEM_Rope:
+        case e_ITEM_RopeAttachedToATree:
+            //ActionClimbRope();
+            break;
+
+        default:
+            PrintErrorMessage("I don't know how to use that");
+            break;
+        }
+    }
+}
+
+
+void ClimbItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+		switch (itemId)
+		{
+		case e_ITEM_Ladder:
+        case e_ITEM_LadderInTheHole:
+            {    
+                if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
+                {
+                    char ladderLocation = gItems[e_ITEM_Ladder].location;
+                    if (ladderLocation == e_LOCATION_INVENTORY)
+                    {
+                        PrintErrorMessage("It needs to be positionned first");
+                    }
+                    else
+                    if (ladderLocation == e_LOCATION_INSIDEHOLE)
+                    {
+                        gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
+                        LoadScene();
+                    }
+                }
+                else
+                {
+                    PrintErrorMessage("I can't use it here");
+                }
+            }
+			//ActionClimbLadder();
+			break;
+
+        case e_ITEM_Rope:
+        case e_ITEM_RopeAttachedToATree:
+            ActionClimbRope();
+            break;
+
+		default:
+			PrintErrorMessage("I don't know how to climb that");
+			break;
+		}
 	}
 }
 
 
 void InspectItem(unsigned char itemId)
 {
-	if (itemId<e_ITEM_COUNT_)
+	if (ItemCheck(itemId))
     {
-        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
-        {
-            switch (itemId)
-            {
-            case e_ITEM_UnitedKingdomMap:
-                ShowFullScreenItem(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom");
-				PrintInformationMessage("It shows Ireland, Wales and England");
-                WaitFrames(50*2);
-                LoadScene();
-                break;
+		switch (itemId)
+		{
+		case e_ITEM_UnitedKingdomMap:
+			ShowFullScreenItem(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom");
+			PrintInformationMessage("It shows Ireland, Wales and England");
+			WaitFrames(50*2);
+			LoadScene();
+			break;
 
-            case e_ITEM_ChemistryBook:
-				PrintInformationMessage("A thick book with some boomarks");
-                break;
+		case e_ITEM_ChemistryBook:
+			PrintInformationMessage("A thick book with some boomarks");
+			break;
 
-            default:
-                PrintErrorMessage("Nothing special");
-                break;
-            }
-        }
-        else
-        {
-            PrintErrorMessage("This item does not seem to be present");
-        }
-    }
-    else
-	{
-		PrintErrorMessage("I do not know what this item is");
+		default:
+			PrintErrorMessage("Nothing special");
+			break;
+		}
 	}
 }
 
 
 
-void Initializations()
-{
-	// erase the screen
-	memset((char*)0xa000,0,8000);
-
-	// Install the 50hz IRQ
-	System_InstallIRQ_SimpleVbl();
-
- 	// Setup the Hires/Text mixed graphic mode
-	InitializeGraphicMode();      
-
-	// Load the charset
-	LoadFileAt(LOADER_FONT_6x8,0xb500);
-
-	// Perform some initializations for the text display system
-	ComputeFancyFontWidth();
-	GenerateShiftBuffer();
-	GenerateMul40Table();
-
-#ifdef TESTING_MODE
-	// Add here any change to the scenario to easily check things
-	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
-	//gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
-	//gCurrentLocation =e_LOCATION_WELL;
-	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
-	//gCurrentLocation =e_LOCATION_LAWN;
-	//gCurrentLocation =e_LOCATION_MASTERBEDROOM;
-	////gCurrentLocation =e_LOCATION_MARKETPLACE;
-	//gCurrentLocation =e_LOCATION_NARROWPATH;
-    gCurrentLocation = e_LOCATION_LIBRARY;
-	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
-#else
-	// In normal gameplay, the player starts from the marketplace with an empty inventory
-	gCurrentLocation = e_LOCATION_MARKETPLACE;
-#endif	
-
-	gScore = 0;
-
-	LoadScene();
-	DisplayClock();
-
-	ResetInput();
-}
 
 
 WORDS ProcessAnswer()
@@ -735,6 +879,14 @@ WORDS ProcessAnswer()
 
     case e_WORD_READ:
 		ReadItem(gWordBuffer[1]);
+        break;
+
+    case e_WORD_USE:
+		UseItem(gWordBuffer[1]);
+        break;
+
+    case e_WORD_CLIMB:
+		ClimbItem(gWordBuffer[1]);
         break;
 
     case e_WORD_LOOK:
@@ -993,6 +1145,54 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 			break;
 		}
 	}
+}
+
+
+void Initializations()
+{
+	// erase the screen
+	memset((char*)0xa000,0,8000);
+
+	// Install the 50hz IRQ
+	System_InstallIRQ_SimpleVbl();
+
+ 	// Setup the Hires/Text mixed graphic mode
+	InitializeGraphicMode();      
+
+	// Load the charset
+	LoadFileAt(LOADER_FONT_6x8,0xb500);
+
+	// Perform some initializations for the text display system
+	ComputeFancyFontWidth();
+	GenerateShiftBuffer();
+	GenerateMul40Table();
+
+#ifdef TESTING_MODE
+	// Add here any change to the scenario to easily check things
+	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
+	gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
+    gItems[e_ITEM_Rope].location = e_LOCATION_INVENTORY;
+    gItems[e_ITEM_Ladder].location          = e_LOCATION_INVENTORY;
+    //gItems[e_ITEM_LadderInTheHole].location = e_LOCATION_OUTSIDE_PIT;
+	//gCurrentLocation =e_LOCATION_WELL;
+	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
+	//gCurrentLocation =e_LOCATION_LAWN;
+	//gCurrentLocation =e_LOCATION_MASTERBEDROOM;
+	////gCurrentLocation =e_LOCATION_MARKETPLACE;
+	//gCurrentLocation =e_LOCATION_NARROWPATH;
+    //gCurrentLocation = e_LOCATION_LIBRARY;
+	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
+#else
+	// In normal gameplay, the player starts from the marketplace with an empty inventory
+	gCurrentLocation = e_LOCATION_MARKETPLACE;
+#endif	
+
+	gScore = 0;
+
+	LoadScene();
+	DisplayClock();
+
+	ResetInput();
 }
 
 
