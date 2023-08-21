@@ -1,8 +1,8 @@
 //
 // Misc settings for the game testing
 //
-//#define ENABLE_INTRO         // Comment out to skip the intro
-#define TESTING_MODE         // Comment out to play normally
+#define ENABLE_INTRO         // Comment out to skip the intro
+//#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
 #define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
 
@@ -72,6 +72,7 @@
 #define END                                  .byt COMMAND_END
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
+#define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
