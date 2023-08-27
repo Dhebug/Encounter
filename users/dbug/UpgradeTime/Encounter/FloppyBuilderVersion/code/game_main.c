@@ -271,14 +271,14 @@ void HandleHighScore()
 			AskInput("New highscore! Your name please?",ProcessPlayerNameAnswer, 0);
 			ptrScore->score = gScore+32768;
 			ptrScore->condition = e_SCORE_GAVE_UP;  // Need to get that from the game
-			memset(ptrScore->name,' ',16);          // Fille the entry with spaces
-			if (gInputBufferPos>16)
+			memset(ptrScore->name,' ',15);          // Fill the entry with spaces
+			if (gInputBufferPos>15)
 			{
 				// Just copy the first 16 characters if it's too long
-				gInputBufferPos=16;
+				gInputBufferPos=15;
 			}
 			// Force the name to the right to be formatted like the rest of the default scores
-			memcpy(ptrScore->name+16-gInputBufferPos,gInputBuffer,gInputBufferPos);
+			memcpy(ptrScore->name+15-gInputBufferPos,gInputBuffer,gInputBufferPos);
 
 			// Save back the highscores in the slot
 			SaveFileAt(LOADER_HIGH_SCORES,gHighScores);

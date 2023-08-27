@@ -92,6 +92,7 @@ copy_loop
     cpy #(_END_-_BEGIN_)
     bne copy_loop
     
+
     jmp FINAL_ADRESS
 _end_relocator_
 
@@ -103,16 +104,33 @@ _end_relocator_
      *=FINAL_ADRESS
 
 _BEGIN_
+    ; We relocated the bootsector in 9800 (in the 256 unused bytes of the standard font)
+    ; We have to make sure to not overwrite 9800-98FF else we basically delete ourself!
+
+    ;
+    ; Copy the font from 9800 to B400
+    ;
+    ldx #0
+copy_font    
+    lda $b500,x
+    sta $9900,x
+    lda $b600,x
+    sta $9A00,x
+    lda $b700,x
+    sta $9B00,x
+    dex
+    bne copy_font
+
     ;
     ; Switch to HIRES
-    ;
-    ldy #39 			; From $9900 to $c000 is 39 pages (9984 bytes)
+    ;    
+    ldy #36 			; From $9c00 to $c000 is 39 pages (9984 bytes)
     lda #0
 loop_hires_outer	
     tax
 loop_hires_inner
 __auto_hires
-    sta $9900,x
+    sta $9c00,x
     inx
     bne loop_hires_inner
     inc __auto_hires+2
@@ -121,8 +139,22 @@ __auto_hires
     
     lda #30				; Write hires switch
     sta $bfdf
-    
-    
+
+    ;
+    ; Print the name of the game with the version number
+    ; 
+    ldx #OsdkNameEnd-OsdkNameStart-1
+copy_name    
+    lda OsdkNameStart,x
+    sta $bfb8,x
+    dex
+    bpl copy_name
+
+#if 0
+    ; 108 -> ok
+    ; 109 -> corruption
+    .dsb 110   ; 112
+#else
     ;
     ; Read sector data
     ; 
@@ -201,9 +233,9 @@ __auto__sector_index
     ; directly after issuing a command. 
     ; Fabrice provided this table and the code, which takes 21 cycles+extra (ldy and lda below) :
     ; Operation	Next Operation	Delay required (MFM mode)
-    ; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
-    ; Write to Command Reg.	Read Status bits 1-7	32 µsec
-    ; Write Register	Read Same Register	16 µsec
+    ; Write to Command Reg.	Read Busy Bit (bit 0)	24 Âµsec
+    ; Write to Command Reg.	Read Status bits 1-7	32 Âµsec
+    ; Write Register	Read Same Register	16 Âµsec
     ldy #4	
 tempoloop 
     dey	
@@ -253,10 +285,15 @@ sector_OK
     
     ldx #0                      ; 0 = Microdisc initialisation code
     jmp FLOPPY_LOADER_ADDRESS
-
+#endif
 
 sector_counter    .byt (($FFFF-FLOPPY_LOADER_ADDRESS)+1)/256
 
+OsdkNameStart
+    .byt "OSDKNAME"
+    .byt " v"
+    .byt "VERSION"
+OsdkNameEnd
 
 _END_
 

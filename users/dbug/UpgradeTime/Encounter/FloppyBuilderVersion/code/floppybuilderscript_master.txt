@@ -19,7 +19,7 @@ FormatVersion 0.20
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
 OutputLayoutFile floppy_description.h
-OutputFloppyFile ..\build\EncounterHD-FR.dsk 
+OutputFloppyFile ..\build\OSDKDISK
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1
 ;AddDefine ENABLE_TIMING_DEBUGGING 1
@@ -74,14 +74,18 @@ AddDefine LOADER_PROGRAM_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
 ;
 ; The fonts
 ;
-
+#ifdef LANGUAGE_FR
 AddFile ..\build\files\font_6x8_mystery_fr.fnt 		; 9900=STD, 9D00=ALT
-
+#else // LANGUAGE_EN
+AddFile ..\build\files\font_6x8_mystery.fnt 		; 9900=STD, 9D00=ALT
+#endif
 AddDefine LOADER_FONT_6x8 {FileIndex}
 
-
+#ifdef LANGUAGE_FR
 AddFile ..\build\files\font_6x8_typewriter_fr.fnt 		; 9900=STD, 9D00=ALT
-
+#else // LANGUAGE_EN
+AddFile ..\build\files\font_6x8_typewriter.fnt 		; 9900=STD, 9D00=ALT
+#endif
 AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
 
 ;

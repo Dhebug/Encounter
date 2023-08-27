@@ -432,15 +432,15 @@ int DisplayHighScoresTable()
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		
 		gPrintAddress+=40;
-		memcpy(gPrintAddress,ptrScore->name,16);
+		memcpy(gPrintAddress,ptrScore->name,15);
 		
 		score=ptrScore->score-32768;
-		sprintf(gPrintAddress+16+((score>=0)?1:0),"%c%d",4,score);
+		sprintf(gPrintAddress+15+((score>=0)?1:0),"%c%d",4,score);
 
 		condition=ptrScore->condition;
 		if (condition<=e_SCORE_GAVE_UP)
 		{
-			sprintf(gPrintAddress+22,"%s",gScoreConditionsArray[condition]);
+			sprintf(gPrintAddress+20,"%s",gScoreConditionsArray[condition]);
 		}
 		ptrScore++;		
 		if (Wait(10))

@@ -4,8 +4,10 @@
 
 _EndText
 
+#if DISPLAYINFO=1
 #echo Remaining space:
 #print ($9800 - *)  
+#endif
 
     .bss
 

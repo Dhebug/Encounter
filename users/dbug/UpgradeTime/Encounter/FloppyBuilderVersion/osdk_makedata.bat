@@ -1,9 +1,13 @@
 
 :: Create the folders we need
-md build
+if not exist "build" md build
 pushd build
-md files
+if not exist "files" md files
 popd
+
+echo.
+echo ============ Converting assets ============
+echo.
 
 ::
 :: Build data for the demo, is that a Slide Disk, or a Music Show?
@@ -22,7 +26,10 @@ SET TARGET=build\files
 :: Character sets
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\font_6x8_mystery.png %TARGET%\font_6x8_mystery.fnt
+%PICTCONV% %PARAMS% data\font_6x8_mystery_fr.png %TARGET%\font_6x8_mystery_fr.fnt
+
 %PICTCONV% %PARAMS% data\font_6x8_typewriter.png %TARGET%\font_6x8_typewriter.fnt
+%PICTCONV% %PARAMS% data\font_6x8_typewriter_fr.png %TARGET%\font_6x8_typewriter_fr.fnt
 
 :: 6x6 dither matrix
 SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix

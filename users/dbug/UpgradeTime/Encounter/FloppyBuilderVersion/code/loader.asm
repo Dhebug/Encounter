@@ -592,9 +592,9 @@ __fdc_command_2
     ; directly after issuing a command. 
     ; Fabrice provided this table and the code, which takes 21 cycles+extra (ldx and lda below) :
     ; Operation		Next Operation		Delay required (MFM mode)
-    ; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
-    ; Write to Command Reg.	Read Status bits 1-7	32 µsec
-    ; Write Register	Read Same Register	16 µsec
+    ; Write to Command Reg.	Read Busy Bit (bit 0)	24 Âµsec
+    ; Write to Command Reg.	Read Status bits 1-7	32 Âµsec
+    ; Write Register	Read Same Register	16 Âµsec
     ldy #4	
 tempoloop 
     dey
@@ -708,7 +708,7 @@ __fdc_command_w
     sta FDC_command_register
     
     ; According to the datasheet table of needed delays:
-    ; Write to Command Reg.	Read Status bits 1-7	32 µsec
+    ; Write to Command Reg.	Read Status bits 1-7	32 Âµsec
     ; The next loop is 23, plus some extra due to the beq / lda /tax /jmp (3+5+2+3=13)
     ; Total is 36... could do with 4 iterations... perhaps
     ldy #5	;2
@@ -811,9 +811,10 @@ _VectorNMI          .word IrqDoNothing              ; $FFFA-$FFFB - NMI Vector (
 _VectorReset        .word IrqDoNothing              ; $FFFC-$FFFD - RESET Vector (Usually points to $F88F)
 _VectorIRQ          .word IrqHandler                ; $FFFE-$FFFF - IRQ Vector (Normally points to $0244)
 
-#echo Remaining space in the loader code:
+#if DISPLAYINFO=1
+#echo Remaining space in the loader code: 
 #print (_Vectors - _EndLoaderCode) 
-
+#endif
 #endif
 
 ; End of the loader - Nothing should come after because it's out of the addressable memory range :)
