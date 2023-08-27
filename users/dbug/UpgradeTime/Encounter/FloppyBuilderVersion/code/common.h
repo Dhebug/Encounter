@@ -182,7 +182,7 @@ typedef struct
 {
     int             score;          // The score can actually be negative if the player is doing stupid things on purpose (plus or minus 32768 because of assembler reasons)
     unsigned char   condition;      // The reason why the game ended (victory, abandon, death, ...)
-    unsigned char   name[16];       // The name of the character  
+    unsigned char   name[15];       // The name of the character  
 } score_entry;
 
 extern score_entry gHighScores[SCORE_COUNT];

@@ -10,6 +10,8 @@ IF "%OSDK%"=="" GOTO ErCfg
 :: Set the build paremeters
 ::
 CALL osdk_config.bat
+SET LANGUAGE=%TEST_LANGUAGE%
+CALL osdk_config.bat
 
 ::
 :: Run the build
