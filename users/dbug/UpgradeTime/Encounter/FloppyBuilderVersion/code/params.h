@@ -6,6 +6,7 @@
 #define INTRO_SHOW_LEADERBOARD          // Comment out to hide the leaderboard
 #define INTRO_SHOW_USER_MANUAL          // Comment out to hide the instructions page
 #define INTRO_SHOW_STORY                // Comment out to hide the typewriter story page
+#define INTRO_SHOW_STORY_SCROLL         // Comment out to disable the office parallax scroll
 
 //#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
