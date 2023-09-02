@@ -12,9 +12,7 @@ extern char Text_FirstLine[];
 extern char Text_CopyrightSevernSoftware[];
 extern char Text_CopyrightDefenceForce[];
 
-extern char Text_HowToPlay[];
-extern char Text_MovementVerbs[];
-extern char Text_Notes[];
+extern char Text_GameInstructions[];
 
 extern char Text_Leaderboard[];
 
@@ -101,32 +99,7 @@ int DisplayUserManual()
 	Text(16+3,0);
 
 	SetLineAddress((char*)0xbb80+40*1+2);
-	PrintLine(Text_HowToPlay);
-	PrintLine("");
-	PrintLine("Your task is to find and rescue a");
-	PrintLine("young girl kidnapped by thugs.");
-	PrintLine("");
-	PrintLine("Give orders using VERBS and NOUNS");
-	PrintLine("eg:EMP(ty) BOT(tle) or GET KEY(s)");
-	PrintLine("");
-	PrintLine(Text_MovementVerbs);
-	PrintLine("");
-	PrintLine("N:NORTH S:SOUTH   GET DROP THROW KILL");
-	PrintLine("W:WEST E:EAST     HIT MAKE CLIMB QUIT"   );
-	PrintLine("U:UP D:DOWN       OPEN LOAD FRISK USE");
-	PrintLine("L:Look                READ PRESS BLOW");
-	PrintLine(Text_Notes);
-	PrintLine("");
-	PrintLine("Everything you need is here but you");
-	PrintLine("may have to manufacture some items.");
-	PrintLine("");
-	PrintLine("The mission fails if the movement or");
-	PrintLine("alarm counters reaches zero.");
-	PrintLine("");
-	PrintLine("Drawing and annotating a map helps." );
-	PrintLine("");
-	PrintLine("Good luck, you will need it..." );
-
+    PrintMultiLine(Text_GameInstructions);
 	return Wait(50*2);
  }
 
@@ -471,27 +444,33 @@ void main()
 
 	while (1)
 	{
-#if 1
+#ifdef INTRO_SHOW_TITLE_PICTURE
 		if (DisplayIntroPage())
 		{
 			break;
 		}
+#endif        
 
+#ifdef INTRO_SHOW_LEADERBOARD
 		if (DisplayHighScoresTable())
 		{
 			break;
 		}
+#endif
 
+#ifdef INTRO_SHOW_USER_MANUAL
 		if (DisplayUserManual())
 		{
 			break;
 		}
 #endif
 
+#ifdef INTRO_SHOW_STORY
 		if (DisplayStory())
 		{
 			break;
 		}
+#endif
 	}
 
 	System_RestoreIRQ_SimpleVbl();

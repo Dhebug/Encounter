@@ -1,7 +1,12 @@
 //
 // Misc settings for the game testing
 //
-#define ENABLE_INTRO         // Comment out to skip the intro
+#define ENABLE_INTRO                    // Comment out to skip the intro
+#define INTRO_SHOW_TITLE_PICTURE        // Comment out to hide the title picture
+#define INTRO_SHOW_LEADERBOARD          // Comment out to hide the leaderboard
+#define INTRO_SHOW_USER_MANUAL          // Comment out to hide the instructions page
+#define INTRO_SHOW_STORY                // Comment out to hide the typewriter story page
+
 //#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
 #define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
@@ -89,4 +94,8 @@
 #define SOUND_COMMAND_ADD_VALUE  4      // Add to a register:    <register index> <value to add>
 #define SOUND_COMMAND_REPEAT     5      // Defines the start of a block that will repeat "n" times: <repeat count>
 #define SOUND_COMMAND_ENDREPEAT  6      // Defines the end of a repeating block
+
+// Text commands
+#define TEXT_END                 255
+#define TEXT_CRLF                254
 

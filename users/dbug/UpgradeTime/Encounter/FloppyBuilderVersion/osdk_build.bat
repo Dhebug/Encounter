@@ -22,12 +22,26 @@ call osdk_makedata.bat
 :: Returned into BUILD_LANGUAGES
 call osdk_config.bat
 
-:: For each language, build the version
+:: For each language, build the version, making sure to write down if we built the test version.
+:: If it was not part of BUILD_LANGUAGES then we need to build it separately.
+:: This is for making it easier and faster to build stuff during development, just keep BUILD_LANGUAGES undefined and change TEST_LANGUAGE to test
+SET TEST_BUILT=
 for %%i in (%BUILD_LANGUAGES%) do (
   SET LANGUAGE=%%i
+  if "%LANGUAGE%"=="%TEST_LANGUAGE%" (
+    SET TEST_BUILT=%LANGUAGE%
+  )
   call _build.bat
   IF ERRORLEVEL 1 GOTO Error
 )
+
+:: If the test language was not part of the build list, we build it
+if NOT "%TEST_BUILT%"=="%TEST_LANGUAGE%" (
+  SET LANGUAGE=%TEST_LANGUAGE%
+  call _build.bat
+)
+
+:Done
 
 :: Build successful!
 ECHO.
