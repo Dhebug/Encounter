@@ -15,6 +15,7 @@ extern char Text_CopyrightDefenceForce[];
 extern char Text_GameInstructions[];
 
 extern char Text_Leaderboard[];
+extern char Text_TypeWriterMessage[];
 
 
 extern unsigned char TypeWriterPaperWidth;
@@ -123,7 +124,7 @@ int DisplayStory()
 	LoadFileAt(INTRO_PICTURE_PRIVATE_INVESTIGATOR,ImageBuffer);
 	LoadFileAt(INTRO_PICTURE_TYPEWRITER			 ,ImageBuffer2);
 
-#if 1
+#ifdef INTRO_SHOW_STORY_SCROLL
 	// Animation scrolling the office and the typewriter for cinematic effect
 	{
 		int y;
@@ -219,14 +220,7 @@ int DisplayStory()
 	gYPos=0;
 
 	// By using || it's possible to early exit the function when the player presses a key
-	result = TypeWriterPrintCharacter("Wednesday, September 1st, 1982\n\n\n")
-	//|| TypeWriterPrintCharacter("I remember it like if it was yesterday\n\n")  // Too long
-	|| TypeWriterPrintCharacter("My client had asked me to save their\ndaughter who had been kidnapped by\n")
-	|| TypeWriterPrintCharacter("some vilains who hide in a posh house\nin the middle of nowhere.\n\n")
-	|| TypeWriterPrintCharacter("I was given carte blanche on how to\nsolve the issue...\n")
-	|| TypeWriterPrintCharacter("...using lethal force if necessary.\n\n\n")
-	|| TypeWriterPrintCharacter("I parked my car on the market place\nand approached discretely by foot to\n")
-	|| TypeWriterPrintCharacter("not alert them from my presence...\n\n")
+    result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
 	|| Wait(50*2);
 
 #if 0
@@ -333,7 +327,7 @@ int TypeWriterPrintCharacter(const char *message)
 	char *line = gPrintAddress;
 	while (car = *message++)
 	{
-		if (car == '\n')
+		if ( (car == 10) || (car == 13) )
 		{
 			gPrintAddress+=40*8;
 			line = gPrintAddress;

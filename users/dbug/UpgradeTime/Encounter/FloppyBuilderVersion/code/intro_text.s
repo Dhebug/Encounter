@@ -96,3 +96,35 @@ _Text_SCORE_SIMPLY_VANISHED      .byt 7,"Simply Vanished!",0
 _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 #endif
 
+;
+; Typeweriter intro.
+; (use 13 to do carriage returns)
+;
+_Text_TypeWriterMessage 
+#ifdef LANGUAGE_FR
+	.byt "Mercredi 1er septembre 1982",13,13,13
+	.byt "Mon client m'a demand{ de sauver",13
+    .byt "sa fille kidnapp{e par des brigants",13
+	.byt "cach{s dans une maison bourgeoise",13
+    .byt "au milieu de nul part.",13,13
+	.byt "J'avais carte blanche pour",13
+    .byt "regler le probl}me...",13
+	.byt "...force lethale autoris{e.",13,13,13
+	.byt "Gar{ sur la place du march{",13
+    .byt "j'approchais a pied pour ne pas",13
+	.byt "les alerter...",13,13
+    .byt 0
+#else // LANGUAGE_EN
+	.byt "Wednesday, September 1st, 1982",13,13,13
+	.byt "My client had asked me to save their",13
+    .byt "daughter who had been kidnapped by",13
+	.byt "some vilains who hide in a posh house",13
+    .byt "in the middle of nowhere.",13,13
+	.byt "I was given carte blanche on how to",13
+    .byt "solve the issue...",13
+	.byt "...using lethal force if necessary.",13,13,13
+	.byt "I parked my car on the market place",13
+    .byt "and approached discretely by foot to",13
+	.byt "not alert them from my presence...",13,13
+    .byt 0
+#endif
