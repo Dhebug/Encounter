@@ -13,6 +13,7 @@
 :: - OSDKTAPNAME - Name of the TAP file (defaults to "OSDK" if not defined)
 :: - OSDKDISK - Name of the DSK file, if undefined, the DSK generation is skipped
 :: - OSDKINIST - Sedoric initialization string ran on floppy boot
+:: - OSDKTAP2DSKPARAMS - Extra parameters to the Tap2DSK
 ::
 :: Derived from the above, or used internally
 :: - OSDKVERSION - Used to show the version of the OSDK used to build a project (eg: "1.18")
@@ -193,7 +194,7 @@ ECHO You should specify the name of the files without any extension. The files h
 ECHO to be all in the same level directory and should not have the same names.
 ECHO -- ERROR ==
 IF "%OSDKBRIEF%"=="" PAUSE
-GOTO End
+GOTO ErrorLevelEnd
 
 
 :Compile
@@ -346,7 +347,7 @@ IF ERRORLEVEL 1 GOTO ErFailure
 IF "%OSDKDISK%"=="" GOTO EndBuildDisk
 IF "%OSDKFILE%"=="" GOTO EndBuildDisk
 
-%OSDK%\bin\tap2dsk.exe -n%OSDKNAME% -i%OSDKINIST% %OSDKDISK% build\%OSDKNAME%.tap build\%OSDKNAME%.dsk
+%OSDK%\bin\tap2dsk.exe -n%OSDKNAME% -i%OSDKINIST% %OSDKTAP2DSKPARAMS% build\%OSDKNAME%.tap build\%OSDKDISK%.dsk
 %OSDK%\bin\old2mfm.exe build\%OSDKNAME%.DSK
 
 :EndBuildDisk
@@ -363,7 +364,7 @@ GOTO End
 :ErFailure
 ECHO ERROR : Build failed.
 IF "%OSDKBRIEF%"=="" PAUSE
-GOTO End
+GOTO ErrorLevelEnd
 
 
 
@@ -376,7 +377,7 @@ ECHO This batch file is supposed to compile files.
 ECHO You should specify one or more files to compile.
 ECHO -- ERROR ==
 IF "%OSDKBRIEF%"=="" PAUSE
-GOTO End
+GOTO ErrorLevelEnd
 
 
 ::
@@ -388,11 +389,14 @@ ECHO The Oric SDK was not configured properly
 ECHO You should have a OSDK environment variable setted to the location of the SDK
 ECHO -- ERROR ==
 IF "%OSDKBRIEF%"=="" PAUSE
+GOTO ErrorLevelEnd
+
+
+:ErrorLevelEnd
+:: Set the ERRORLEVEL to 1 so it can be check by other scripts
+:: See https://ss64.com/nt/errorlevel.html
+(CALL)
 GOTO End
 
-
-
-
-
 :End
-Pause
+::Pause
