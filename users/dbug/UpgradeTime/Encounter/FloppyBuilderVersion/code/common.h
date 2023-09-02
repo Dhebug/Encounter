@@ -78,6 +78,7 @@ extern char SpaceBarData[];
 // Common
 extern void SetLineAddress(char* address);
 extern void PrintLine(const char* message);
+extern void PrintMultiLine(const char* message);
 extern void PrintWord(const char* message);
 
 extern void Text(char paperColor,char inkColor);

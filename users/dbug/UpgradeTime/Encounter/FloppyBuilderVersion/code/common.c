@@ -31,8 +31,35 @@ void PrintLine(const char* message)
 	gPrintAddress+=40;
 }
 
- void PrintWord(const char* message)
- {
+
+void PrintMultiLine(const char* message)
+{
+    char* printAddress=gPrintAddress;
+    while (1)
+    {
+        char car = *message++;
+        if (car>=0)
+        {
+            *printAddress++=car;
+        }
+        else
+        {
+            switch ((unsigned char)car)
+            {
+            case TEXT_END:
+                return;
+                
+            case TEXT_CRLF:
+                gPrintAddress+=40;
+                printAddress=gPrintAddress;
+                break;
+            }
+        }
+    }
+}
+
+void PrintWord(const char* message)
+{
 	char car;
 	while (car=*message++)
 	{
