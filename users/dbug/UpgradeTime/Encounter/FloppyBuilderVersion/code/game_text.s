@@ -5,8 +5,81 @@
 
     .text
 
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters : é:{ è:} ê:| à:@
+#endif
+
+// Small feedback messages and prompts
+#ifdef LANGUAGE_FR
+_gTextAskInput              .byt "Quels sont vos instructions ?",0
+_gTextNothingHere           .byt "Il n'y a rien d'important ici",0
+_gTextCanSee                .byt "Je vois",0
+_gTextScore                 .byt "Score:",0
+_gTextHighScoreAskForName   .byt "Nouveau top score ! Votre name SVP ?",0
+_gTextCarryInWhat           .byt "Transporte dans quoi ?",0
+_gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
+_gTextWaterDrainsAways      .byt "L'eau s'écoule",0
+_gTextClimbUpLadder         .byt "Vous grimpez l'échelle",0
+_gTextClimbDownLadder       .byt "Vous descendez l'échelle",0
+_gTextPositionLadder        .byt "Vous mettez l'échelle en place",0
+_gTextClimbUpRope           .byt "Vous grimpez la corde",0
+_gTextClimbDownRope         .byt "Vous descendez la corde",0
+_gTextAttachRopeToTree      .byt "Vous attachez la corde à l'arbre",0
+#else
+_gTextAskInput              .byt "What are you going to do now?",0
+_gTextNothingHere           .byt "There is nothing of interest here",0
+_gTextCanSee                .byt "I can see",0
+_gTextScore                 .byt "Score:",0
+_gTextHighScoreAskForName   .byt "New highscore! Your name please?",0
+_gTextCarryInWhat           .byt "Carry it in what?",0
+_gTextPetrolEvaporates      .byt "The petrol evaporates",0
+_gTextWaterDrainsAways      .byt "The water drains away",0
+_gTextClimbUpLadder         .byt "You climb up the ladder",0
+_gTextClimbDownLadder       .byt "You climb down the ladder",0
+_gTextPositionLadder        .byt "You position the ladder properly",0
+_gTextClimbUpRope           .byt "You climb up the rope",0
+_gTextClimbDownRope         .byt "You climb down the rope",0
+_gTextAttachRopeToTree      .byt "You attach the rope to the tree",0
+#endif
+
+// Error messages 
+#ifdef LANGUAGE_FR
+_gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
+_gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
+_gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
+_gTextErrorTooHeavy         .byt "C'est trop lourd",0
+_gTextErrorRidiculous       .byt "Ne soyez pas ridicule",0
+_gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
+_gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
+_gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
+_gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
+_gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
+_gTextErrorCannotRead       .byt "Je ne peux pas lire ca",0
+_gTextErrorCannotUseHere    .byt "Pas utilisable ici",0
+_gTextErrorDontKnowUsage    .byt "Je ne sais pas l'utiliser",0
+_gTextErrorCannotAttachRope .byt "Impossible de l'attacher",0
+_gTextErrorLadderInHole     .byt "L'échelle est déja dans le trou",0
+#else
+_gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
+_gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
+_gTextErrorAlreadyHaveItem  .byt "You already have this item",0
+_gTextErrorTooHeavy         .byt "This is too heavy",0
+_gTextErrorRidiculous       .byt "Don't be ridiculous",0
+_gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
+_gTextErrorMissingContainer .byt "You don't have this container",0
+_gTextErrorDropNotHave      .byt "You can only drop something you have",0
+_gTextErrorUnknownItem      .byt "I do not know what this item is",0
+_gTextErrorItemNotPresent   .byt "This item does not seem to be present",0
+_gTextErrorCannotRead       .byt "I can't read that",0
+_gTextErrorCannotUseHere    .byt "I can't use it here",0
+_gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
+_gTextErrorCannotAttachRope .byt "You can't attach the rope",0
+_gTextErrorLadderInHole     .byt "The ladder is already in the hole",0
+#endif
+
 _gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
 
+// Scene descriptions
 _gDescriptionTeenagerRoom         .byt "T",255-2,"eenager r",255-1,"oom?",0
 
 _gDescriptionNone

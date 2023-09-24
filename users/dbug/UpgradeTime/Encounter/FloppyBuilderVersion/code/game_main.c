@@ -213,7 +213,7 @@ void PrintSceneObjects()
 				if (first)
 				{
 					// The first item on the screen is shown a bit differently
-					sprintf(ptrScreen+1,"%cI can see %s",3,gItems[item].description);					
+					sprintf(ptrScreen+1,"%c%s %s",3,gTextCanSee,gItems[item].description); // "I can see"
 					ptrScreen+=40;
 					first=0;
 				}
@@ -227,14 +227,14 @@ void PrintSceneObjects()
 	}
 	else
 	{
-		sprintf((char*)0xbb80+40*18+1,"%c%s",3,"There is nothing of interest here");
+		sprintf((char*)0xbb80+40*18+1,"%c%s",3,gTextNothingHere);  // "There is nothing of interest here"
 	}
 }
 
 
 void PrintScore()
 {
-	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,7);
+	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
 }
 
 WORDS ProcessPlayerNameAnswer()
@@ -268,7 +268,7 @@ void HandleHighScore()
 			}
 
 			// Ask the player their name
-			AskInput("New highscore! Your name please?",ProcessPlayerNameAnswer, 0);
+			AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
 			ptrScore->score = gScore+32768;
 			ptrScore->condition = e_SCORE_GAVE_UP;  // Need to get that from the game
 			memset(ptrScore->name,' ',15);          // Fill the entry with spaces
@@ -380,7 +380,7 @@ void PlayerMove(unsigned char direction)
 	unsigned char requestedScene = gLocations[gCurrentLocation].directions[direction];
 	if (requestedScene==e_LOCATION_NONE)
 	{
-		PrintErrorMessage("Impossible to move in that direction");
+		PrintErrorMessage(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
 	}
 	else
 	{
@@ -418,7 +418,7 @@ void TakeItem(unsigned char itemId)
 {
 	if (itemId>=e_ITEM_COUNT_)
 	{
-		PrintErrorMessage("You can only take something you see");
+		PrintErrorMessage(gTextErrorCantTakeNoSee);   // "You can only take something you see"
 	}
 	else
 	{
@@ -428,7 +428,7 @@ void TakeItem(unsigned char itemId)
 
 		if (itemPtr->location == e_LOCATION_INVENTORY)
 		{
-			PrintErrorMessage("You already have this item");
+			PrintErrorMessage(gTextErrorAlreadyHaveItem);    // "You already have this item"
             return;
 		}
 		
@@ -445,7 +445,7 @@ void TakeItem(unsigned char itemId)
             }
             if (itemAlias == e_ITEM_COUNT_)
             {
-    			PrintErrorMessage("I don't see this item here");
+    			PrintErrorMessage(gTextErrorCantTakeNoSee);   // "I don't see this item here");
                 return;
             }
 		}
@@ -453,28 +453,28 @@ void TakeItem(unsigned char itemId)
 
 		if (itemPtr->flags & ITEM_FLAG_HEAVY)
 		{
-			PrintErrorMessage("This is too heavy");
+			PrintErrorMessage(gTextErrorTooHeavy);   // "This is too heavy");
 		}
 		else
 		if (itemPtr->usable_containers)
 		{
 			// Requires a container
-			WORDS containerId = AskInput("Carry it in what?",ProcessContainerAnswer,1 );
+			WORDS containerId = AskInput(gTextCarryInWhat,ProcessContainerAnswer,1 );    // "Carry it in what?"
 			if (containerId == e_WORD_QUIT)
 			{
-				PrintErrorMessage("Don't be ridiculous");
+				PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
 			}
 			else
 			{
 				item* containerPtr=&gItems[containerId];
 				if (containerPtr->location != e_LOCATION_INVENTORY)
 				{
-					PrintErrorMessage("You don't have this container");  // Technically could be optimized at a later stage to automatically pick the item if it's in the scene
+					PrintErrorMessage(gTextErrorMissingContainer);  // "You don't have this container" - Technically could be optimized at a later stage to automatically pick the item if it's in the scene
 				}
 				else
 				if (containerPtr->associated_item != 255)
 				{
-					PrintErrorMessage("Sorry, that's full already");
+					PrintErrorMessage(gTextErrorAlreadyFull);    // "Sorry, that's full already"
 				}
 				else
 				{
@@ -503,7 +503,7 @@ void DropItem(unsigned char itemId)
 {
 	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOCATION_INVENTORY) )
 	{
-		PrintErrorMessage("You can only drop something you have");
+		PrintErrorMessage(gTextErrorDropNotHave);  // "You can only drop something you have"
 	}
 	else
 	{
@@ -533,12 +533,12 @@ void DropItem(unsigned char itemId)
 			if (itemId == e_ITEM_Water)
 			{
 				itemPtr->location = e_LOCATION_WELL;
-				PrintInformationMessage("The water drains away");
+				PrintInformationMessage(gTextWaterDrainsAways);  // "The water drains away"
 			}
 			else
 			{
 				itemPtr->location = 99;
-				PrintInformationMessage("The petrol evaporates");
+				PrintInformationMessage(gTextPetrolEvaporates);  // "The petrol evaporates"
 			}
 		}
 		else
@@ -569,12 +569,12 @@ char ItemCheck(unsigned char itemId)
         }
         else
         {
-            PrintErrorMessage("This item does not seem to be present");
+            PrintErrorMessage(gTextErrorItemNotPresent);   // "This item does not seem to be present"
         }
     }
     else
 	{
-		PrintErrorMessage("I do not know what this item is");
+		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
 	}
     return 0; // Cannot use
 }
@@ -634,7 +634,7 @@ void ReadItem(unsigned char itemId)
             break;
 
         default:
-            PrintErrorMessage("I can't read that");
+            PrintErrorMessage(gTextErrorCannotRead);     // "I can't read that"
             break;
         }
 	}
@@ -650,11 +650,11 @@ void ActionClimbLadder()
         gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
         if (ladderLocation == e_LOCATION_INVENTORY)
         {
-            PrintInformationMessage("You position the ladder properly");
+            PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
             LoadScene();
             WaitFrames(50*1);
         }
-        PrintInformationMessage("You climb up the ladder");
+        PrintInformationMessage(gTextClimbUpLadder);   // "You climb up the ladder"
         WaitFrames(50*1);
         gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
         LoadScene();
@@ -666,18 +666,18 @@ void ActionClimbLadder()
         gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
         if (ladderLocation == e_LOCATION_INVENTORY)
         {
-            PrintInformationMessage("You position the ladder properly");
+            PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
             LoadScene();
             WaitFrames(50*1);
         }
-        PrintInformationMessage("You climb down the ladder");
+        PrintInformationMessage(gTextClimbDownLadder);   // "You climb down the ladder"
         WaitFrames(50*1);
         gCurrentLocation = e_LOCATION_INSIDEHOLE;
         LoadScene();
     }
     else
     {
-        PrintErrorMessage("I can't use it here");
+        PrintErrorMessage(gTextErrorCannotUseHere);    // "I can't use it here"
     }
 }
 
@@ -691,14 +691,14 @@ void ActionClimbRope()
         {
             gItems[e_ITEM_Rope].location                    = e_LOCATION_INSIDEHOLE;
             gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
-            PrintInformationMessage("You climb up the rope");
+            PrintInformationMessage(gTextClimbUpRope);    // "You climb up the rope"
             WaitFrames(50*1);
             gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
             LoadScene();
         }
         else
         {
-            PrintErrorMessage("You can't attach the rope");
+            PrintErrorMessage(gTextErrorCannotAttachRope);   // "You can't attach the rope"
         }
     }
     else
@@ -708,18 +708,18 @@ void ActionClimbRope()
         gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
         if (ropeLocation == e_LOCATION_INVENTORY)
         {
-            PrintInformationMessage("You attach the rope to the tree");
+            PrintInformationMessage(gTextAttachRopeToTree);   // "You attach the rope to the tree"
             LoadScene();
             WaitFrames(50*1);
         }
-        PrintInformationMessage("You climb down the rope");
+        PrintInformationMessage(gTextClimbDownRope);   // "You climb down the rope"
         WaitFrames(50*1);
         gCurrentLocation = e_LOCATION_INSIDEHOLE;
         LoadScene();
     }
     else
     {
-        PrintErrorMessage("I can't use it here");
+        PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
     }
 }
 
@@ -737,7 +737,7 @@ void UseItem(unsigned char itemId)
                     char ladderLocation = gItems[e_ITEM_Ladder].location;
                     if (ladderLocation == e_LOCATION_INVENTORY)
                     {
-                        PrintInformationMessage("You position the ladder properly");
+                        PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
                         gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
                         gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
                         LoadScene();
@@ -750,7 +750,7 @@ void UseItem(unsigned char itemId)
                 }
                 else
                 {
-                    PrintErrorMessage("I can't use it here");
+                    PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
                 }
             }
             break;
@@ -793,7 +793,7 @@ void ClimbItem(unsigned char itemId)
                 }
                 else
                 {
-                    PrintErrorMessage("I can't use it here");
+                    PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
                 }
             }
 			//ActionClimbLadder();
@@ -1200,7 +1200,7 @@ void main()
 {
 	Initializations();	
 
-	AskInput("What are you going to do now?",ProcessAnswer,1);
+	AskInput(gTextAskInput,ProcessAnswer,1);
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);

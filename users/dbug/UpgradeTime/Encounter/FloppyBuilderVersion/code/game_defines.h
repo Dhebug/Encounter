@@ -96,6 +96,35 @@ extern location* gCurrentLocationPtr;
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
-
 extern keyword gWordsArray[];
 
+// Small feedback messages and prompts
+extern const char gTextAskInput[];              // "What are you going to do now?"
+extern const char gTextNothingHere[];           // "There is nothing of interest here"
+extern const char gTextCanSee[];                // "I can see"
+extern const char gTextScore[];                 // "Score:"
+extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
+extern const char gTextCarryInWhat[];           // "Carry it in what?"
+extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
+extern const char gTextWaterDrainsAways[];      // "The water drains away"
+extern const char gTextClimbUpLadder[];         // "You climb up the ladder"
+extern const char gTextClimbDownLadder[];       // "You climb down the ladder"
+extern const char gTextPositionLadder[];        // "You position the ladder properly"
+extern const char gTextClimbUpRope[];           // "You climb up the rope"
+extern const char gTextClimbDownRope[];         // "You climb down the rope"
+extern const char gTextAttachRopeToTree[];      // "You attach the rope to the tree"
+
+// Error messages 
+extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
+extern const char gTextErrorCantTakeNoSee[];    // "You can only take something you see"
+extern const char gTextErrorAlreadyHaveItem[];  // "You already have this item"
+extern const char gTextErrorTooHeavy[];         // "This is too heavy"
+extern const char gTextErrorRidiculous[];       // "Don't be ridiculous"
+extern const char gTextErrorAlreadyFull[];      // "Sorry, that's full already"
+extern const char gTextErrorMissingContainer[]; // "You don't have this container"
+extern const char gTextErrorDropNotHave[];      // "You can only drop something you have"
+extern const char gTextErrorUnknownItem[];      // "I do not know what this item is"
+extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
+extern const char gTextErrorCannotRead[];       // "I can't read that"
+extern const char gTextErrorCannotUseHere[];    // "I can't use it here"
+extern const char gTextErrorCannotAttachRope[]; // "You can't attach the rope"
