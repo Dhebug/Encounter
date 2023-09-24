@@ -205,6 +205,17 @@ unsigned char Header[]=
 	//
 	_read(handle_src,ptr_buf,filesize);
 
+	// Eventually strip the SEDORIC header if the file was extracted with Oric DSK Manager
+	if (filesize >= 12)
+	{
+		// Check the first 7 bytes to see if the signature is inside
+		if (memcmp(ptr_buf, "SEDORIC", 7) == 0)
+		{
+			filesize -= 12;
+			memmove(ptr_buf, (char*)ptr_buf + 12, filesize);
+		}
+	}
+
 
 	//
 	// Write file
