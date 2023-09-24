@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 The 6502 Linker, for the lcc or similar, that produce .s files to be processed later by a cross assembler
 (See infos.h for details and version history)
@@ -92,7 +92,7 @@ public:
 
   int Main();
 
-  bool ParseFile(const std::string& filename);
+  bool ParseFile(const std::string& filename, const std::vector<std::string>& searchPaths);
   LabelState Parseline(char* inpline, bool parseIncludeFiles);
 
   bool LoadLibrary(const std::string& path_library_files);
@@ -112,6 +112,7 @@ public:
   // Init the path_library_files variable with default library directory and the output_file_name var with the default go.s
   std::string m_PathLibraryFiles = "lib6502\\";         ///< Directory to find library files (Set by -d)
   std::string m_PathSourceFiles = "";                   ///< Directory to find source files (set by -s)
+  std::vector<std::string> m_PathHeaderFiles = {""};    ///< Directories to find header files (set by -i)
   std::string m_OutputFileName = "go.s";                ///< Output file (set by -o)
 
   
@@ -266,7 +267,7 @@ LabelState Linker::Parseline(char* inpline,bool parseIncludeFiles)
           }
           else
           {
-            ParseFile(filename);
+            ParseFile(filename, m_PathHeaderFiles);
           }
         }
         return e_NoLabel;
@@ -369,10 +370,17 @@ LabelState Linker::Parseline(char* inpline,bool parseIncludeFiles)
 
 
 
-bool Linker::ParseFile(const std::string& filename)
+bool Linker::ParseFile(const std::string& filename, const std::vector<std::string>& searchPaths)
 {
   std::vector<std::string> textData;
-  if (!LoadText(filename.c_str(),textData))
+  for (const auto& path : searchPaths)
+  {
+    if (LoadText(path+filename, textData))
+    {
+      break;
+    }
+  }
+  if (textData.empty())
   {
     ShowError("\nCannot open %s \n", filename.c_str());
   }
@@ -595,6 +603,17 @@ int Linker::Main()
       m_PathSourceFiles=GetStringValue();
     }
     else
+    if (IsSwitch("-i") || IsSwitch("-I"))
+    {
+      // Directory to find header  files.Next arg in line is the dir name
+      if (!ProcessNextArgument() || !IsParameter())
+      {
+        printf(" Must have dir name after -h option\n");
+        exit(1);
+      }
+      m_PathHeaderFiles.push_back(GetStringValue());
+    }
+    else
     if (IsSwitch("-o") || IsSwitch("-O"))
     {
       // Output file. Default is go.s . Next arg in line is the file name. e.g : link65 -o out.s test.s
@@ -681,7 +700,7 @@ int Linker::Main()
       k=1;
     }
 
-    ParseFile(m_InputFileList[k].m_FileName);
+    ParseFile(m_InputFileList[k].m_FileName, {""});
 
     //
     // Check if used labels are defined inside the files
@@ -879,6 +898,7 @@ int main(int argc, char* argv[])
       "  -d : Directory to find library files.Next arg in line is the dir name.\r\n"
       "       e.g : link65 -d /usr/oric/lib/ test.s\r\n"
       "  -s : Directory to find source files.Next arg in line is the dir name.\r\n"
+      "  -i : Directory to find include files.Next arg in line is the dir name.\r\n"
       "  -o : Output file. Default is go.s . Next arg in line is the file name.\r\n"
       "       e.g : link65 -o out.s test.s\r\n"
       "  -l : Print out defined labels.Usefull when building lib index files.\r\n"
