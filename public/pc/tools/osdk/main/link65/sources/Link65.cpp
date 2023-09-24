@@ -35,6 +35,7 @@ The 6502 Linker, for the lcc or similar, that produce .s files to be processed l
 #include <string>
 #include <set>
 #include <cctype>
+#include <map>
 
 #define NB_ARG	2
 
@@ -99,6 +100,8 @@ public:
 
   void AddInputFile(const std::string& filePath, int sortPriority);
 
+  void FilterLine(const std::string& sourceLine, bool keepQuotedStrings);
+
 public:
   bool m_FlagKeepComments = false;			        ///< Use -C option to control
   bool m_FlagIncludeHeader = true;			        ///< Use -B option to force to 0
@@ -115,7 +118,11 @@ public:
   std::vector<std::string> m_PathHeaderFiles = {""};    ///< Directories to find header files (set by -i)
   std::string m_OutputFileName = "go.s";                ///< Output file (set by -o)
 
-  
+  bool m_FlagInCommentBloc = false;			                    ///< Used by the parser to know that we are currently parsing a bloc of comments
+  const char* m_InputLinePtr = nullptr;                     ///< Used by the parser to fetch characters from the source
+  std::string m_FilteredLine;                               ///< Contains the output after FilterLine has been called
+  std::map<std::string, std::string>  m_StringReplacement;  ///< Used for fancy manipulations of text, including localization (replacing accentuated characters by others)
+
   std::vector<FileEntry>			m_InputFileList;                ///< contains filenames to be linked based on 'm_SortPriority' for the order.
   std::vector<LabelEntry>			m_LibraryReferencesList;
   std::vector<ReferencedLabelEntry>	m_ReferencedLabelsList;
@@ -123,73 +130,136 @@ public:
 };
 
 
-
-
-std::string FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
+void Linker::FilterLine(const std::string& sourceLine,bool keepQuotedStrings)
 {
-  static bool flag_in_comment_bloc=false;			// Used by the parser to know that we are currently parsing a bloc of comments
+  m_FilteredLine.clear();
+  m_FilteredLine.reserve(MAX_LINE_SIZE);
 
-  std::string outline;
-  outline.reserve(MAX_LINE_SIZE);
-
-  const char* source_line=sourceLine.c_str();
-  while (char car=*source_line++)
+  bool foundNonWhiteSpace = false;
+  m_InputLinePtr=sourceLine.c_str();
+  while (char car=*m_InputLinePtr++)
   {
-    if (flag_in_comment_bloc)						// In a C block comment - that one may have been started on another line
+    if (m_FlagInCommentBloc)						// In a C block comment - that one may have been started on another line
     {
-      if ( (car=='*') && (*source_line=='/') )
+      if ( (car=='*') && (*m_InputLinePtr=='/') )
       {
         // Found end of C block comment
-        source_line++;
-        flag_in_comment_bloc=false;
+        m_InputLinePtr++;
+        m_FlagInCommentBloc=false;
       }
     }
     else
     {
-      if (car=='\"')
+      if ((car == ' ') || (car == '\t'))
       {
-        // Found start of quoted string
-        do
+        // White space
+        m_FilteredLine += car;
+      }
+      else
+      {
+        // Not white space
+        if (car == '#')
         {
-          if (keepQuotedStrings)
+          bool addCar = true;
+          if (!foundNonWhiteSpace)
           {
-            outline+=car;
+            // This # is the first character of the line, so it must be a #define, #include, #ifdef, #pragma, etc...
+            std::string line(StringTrim(m_InputLinePtr));
+            std::string token = StringTrim(StringSplit(line, " \t"));
+            if (token=="pragma")
+            {
+              token = StringTrim(StringSplit(line, " \t"));
+              if (token == "osdk")
+              {
+                token = StringTrim(StringSplit(line, " \t"));
+                if (token == "replace_characters")
+                {
+                  m_StringReplacement.clear();
+
+                  std::string separator = StringTrim(StringSplit(line, " \t"));
+                  if (!separator.empty())
+                  {                
+                    while (true)
+                    {
+                      std::string replacementPair = StringTrim(StringSplit(line, " \t"));
+                      if (replacementPair.empty())
+                      {
+                        break;
+                      }
+                      std::string searchedToken = StringTrim(StringSplit(replacementPair, separator));
+                      std::string replaceToken = replacementPair;
+                      m_StringReplacement[searchedToken] = replaceToken;
+                    }
+                  }
+                }
+                m_InputLinePtr = sourceLine.c_str() + sourceLine.length();
+                addCar = false;
+              }
+            }
+            foundNonWhiteSpace = foundNonWhiteSpace;
           }
-          car=*source_line++;
+
+          if (addCar)
+          {
+            // Probably a # in some immediate assembler value
+            m_FilteredLine += car;
+          }
         }
-        while (car && (car!='\"'));
-        if (car && keepQuotedStrings)
+        else
+        if (car=='\"')
         {
-          outline+=car;
+          // Found start of quoted string
+          do
+          {
+            if (keepQuotedStrings)
+            {
+              m_FilteredLine+=car;
+            }
+            car=*m_InputLinePtr++;
+          }
+          while (car && (car!='\"'));
+          if (car && keepQuotedStrings)
+          {
+            m_FilteredLine+=car;
+          }
         }
-      }
-      else
-      if (car==';')
-      {
-        // Found start of assembler line comment - just stop here
-        return outline;
-      }
-      else
-      if ( (car=='/') && (*source_line=='*') )
-      {
-        // Found start of C block comment
-        source_line++;
-        flag_in_comment_bloc=true;
-      }
-      else
-      if ( (car=='/') && (*source_line=='/') )
-      {
-        // Found start of C++ line comment - just stop here
-        return outline;
-      }
-      else
-      {
-        // Any other character
-        outline+=car;
+        else
+        if (car==';')
+        {
+          // Found start of assembler line comment - just stop here
+          return;
+        }
+        else
+        if ( (car=='/') && (*m_InputLinePtr=='*') )
+        {
+          // Found start of C block comment
+          m_InputLinePtr++;
+          m_FlagInCommentBloc=true;
+        }
+        else
+        if ( (car=='/') && (*m_InputLinePtr=='/') )
+        {
+          // Found start of C++ line comment - just stop here
+          return;
+        }
+        else
+        {
+          // Any other character
+          m_FilteredLine+=car;
+        }
+        foundNonWhiteSpace = true;
       }
     }
   }
-  return outline;
+
+  // Definitely not optimal: If a replacement table is active, just brute force replacing the characters
+  if (!m_StringReplacement.empty())
+  {
+    for (const auto& replacementPair : m_StringReplacement)
+    {
+      StringReplace(m_FilteredLine, replacementPair.first, replacementPair.second);
+    }
+  }
 }
 
 
@@ -209,7 +279,7 @@ void Linker::AddInputFile(const std::string& filePath, int sortPriority)
 //
 LabelState Linker::Parseline(char* inpline,bool parseIncludeFiles)
 {
-  int len=strlen(inpline);
+  const int len=strlen(inpline);
 
   //
   // Return if comment line or too small line
@@ -399,6 +469,7 @@ bool Linker::ParseFile(const std::string& filename, const std::vector<std::strin
   }
 
   // Scanning the file
+  m_FlagInCommentBloc = false;
   int line_number = 0;
   for (const std::string& currentLine : textData)
   {
@@ -413,7 +484,8 @@ bool Linker::ParseFile(const std::string& filename, const std::vector<std::strin
     }
 #endif
 
-    std::string filteredLine=FilterLine(currentLine,true/*false*/);  // removing quoted strings unfortunately fails on #include...
+    FilterLine(currentLine, true/*false*/);  // removing quoted strings unfortunately fails on #include...
+    std::string filteredLine = m_FilteredLine;
 
     char inpline[MAX_LINE_SIZE+1];
     assert(sizeof(inpline)>filteredLine.size());
@@ -850,6 +922,7 @@ int Linker::Main()
       ShowError("\nCannot open %s \n", inputFile.m_FileName.c_str());
     }
 
+    m_FlagInCommentBloc = false;
     for (const std::string& currentLine : textData)
     {
       //  Get line file and parse it
@@ -859,8 +932,8 @@ int Linker::Main()
       }
       else
       {
-        std::string filteredLine=FilterLine(currentLine,true);
-        fprintf(gofile,"%s\r\n",filteredLine.c_str());
+        FilterLine(currentLine,true);
+        fprintf(gofile,"%s\r\n", m_FilteredLine.c_str());
       }
     }
   }

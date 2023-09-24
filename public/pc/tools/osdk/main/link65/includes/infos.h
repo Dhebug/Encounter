@@ -51,6 +51,9 @@ Fixed a number of issues in the linker:
 1.00 - 2023/09/24
 - Added a "-i" option to provide alternative include file paths
 
+1.01 - 2023/09/24
+- Added support for a "#pragma osdk replace_characters" directive used to perform localization of texts (experimental)
+
 */
 
 
