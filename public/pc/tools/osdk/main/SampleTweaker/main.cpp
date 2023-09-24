@@ -389,7 +389,33 @@ void main(int argc,char *argv[])
       *ptr_dst++=store;
     }
   }
+/*
+#elif 1  // ORIC 2BIT CODE
+  size_buffer_dst = (size_buffer_src / 4) + 1;                  // +1 for the 00 final
+  ptr_buffer_dst = new unsigned char[size_buffer_dst];
 
+  // Convert to 2 bit sample,
+  // each byte contains four sample values; one per nibble
+  unsigned char* ptr_src = ptr_buffer;
+  unsigned char* ptr_dst = ptr_buffer_dst;
+  for (int i = 0; i < (size_buffer_dst - 1); i++)
+  {
+    unsigned char b0 = (*ptr_src++) * 3 / 255;
+    unsigned char b1 = (*ptr_src++) * 3 / 255;
+    unsigned char b2 = (*ptr_src++) * 3 / 255;
+    unsigned char b3 = (*ptr_src++) * 3 / 255;
+
+    unsigned char b = (b3 << 6) | (b2 << 4) | (b1 << 2) | (b0);
+    if (!b)
+    {
+      // To avoid a spurious null terminator
+      b=1;
+    }
+    *ptr_dst++ = b;
+  }
+  // Null terminator
+  *ptr_dst++ = 0;
+  */
 #else   // ORIC 4BIT CODE
   size_buffer_dst=(size_buffer_src/2)+1;                  // +1 for the 00 final
   ptr_buffer_dst=new unsigned char[size_buffer_dst];
