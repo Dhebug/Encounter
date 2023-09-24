@@ -97,7 +97,8 @@ bool LoadFile(const char* pcFileName,void* &pcBuffer,size_t &cBufferSize);      
 bool SaveFile(const char* pcFileName,const void* pcBuffer,size_t cBufferSize);
 bool DeleteFile(const char* pcFileName);
 
-bool LoadText(const char* pcFileName,std::vector<std::string>& cTextData);
+bool LoadText(const std::string& fileName,std::vector<std::string>& textData);
+bool LoadText(const char* pcFileName,std::vector<std::string>& textData);
 
 bool IsUpToDate(const char* sourceFile,const char* targetFile);
 bool IsUpToDate(const std::string& sourceFile,const std::string& targetFile);
@@ -290,6 +291,33 @@ private:
 
   std::string	    m_LabelName;
 };
+
+
+
+class TapeHeader
+{
+public:
+  enum Type_e
+  {
+    eTypeUndefined,
+    eTypeBASIC,
+    eTypeBinary,
+    eTypeArray
+  };
+
+public:
+
+  bool Read(const void* buffer, size_t bufferSize);
+  bool Read(std::vector<unsigned char> buffer);
+
+public:
+  Type_e        m_Type = eTypeUndefined;         ///< Type of the content (BASIC, binary data, array)
+  bool          m_AutoStart = false;             ///< Does the program automatically starts after loading
+  unsigned int  m_StartAddress = 0;              ///< From 0x0000 to 0xFFFF
+  unsigned int  m_EndAddress = 0;                ///< From 0x0000 to 0xFFFF
+  std::string   m_Name;
+};
+
 
 
 #endif // _COMMON_H_

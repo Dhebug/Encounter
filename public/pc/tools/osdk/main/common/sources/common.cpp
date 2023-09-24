@@ -89,7 +89,7 @@ void ShowError(const char *formatString,...)
 
   // Show the resulting message on screen
   printf("\r\n%s\r\n",errorMessage.c_str());
-  getch();
+  //getch();   // Could probably be a command line parameter option the caller can provide to ask to add a pause on error.
   exit(1);
 }
 
@@ -174,6 +174,11 @@ bool DeleteFile(const char* pcFileName)
 * Compute the lenght of the longest line during
 * the process
 */
+bool LoadText(const std::string& fileName, std::vector<std::string>& textData)
+{
+  return LoadText(fileName.c_str(), textData);
+}
+
 bool LoadText(const char* fileName,std::vector<std::string>& textData)
 {
   textData.clear();
@@ -631,40 +636,39 @@ std::string StringFormat(const char* formatString,...)
 class DataReader
 {
 public:
-  DataReader();
-  ~DataReader();
+  DataReader(const void* ptr, size_t bufferSize);
 
-  void SetPointer(const void* ptr);
-  const void *GetPointer();
+  void SetPointer(const void* ptr, size_t bufferSize);
+  const void *GetPointer() const;
 
-  void SetEndian(bool bIsBigEndian);
-  bool GetEndian();
+  void SetEndian(bool isBigEndian);
+  bool GetEndian() const;
 
-  unsigned int GetValue(int nSizeValue);
+  unsigned int GetValue(int sizeValue);
+
+  uint8_t GetU8();
+  uint16_t GetU16();
 
 private:
-  const void*	m_ptr;
-  bool		m_ReadBigEndian;
+  const unsigned char* m_CurPtr = nullptr;
+  const unsigned char* m_EndPtr = nullptr;
+  bool		             m_ReadBigEndian = false;
 };
 
-DataReader::DataReader() :
-  m_ptr(0),
-  m_ReadBigEndian(false)
+DataReader::DataReader(const void* ptr, size_t bufferSize)
 {
+  SetPointer(ptr, bufferSize);
 }
 
-DataReader::~DataReader()
+void DataReader::SetPointer(const void* ptr, size_t bufferSize)
 {
+  m_CurPtr = (const unsigned char*)ptr;
+  m_EndPtr = m_CurPtr + bufferSize;
 }
 
-void DataReader::SetPointer(const void* ptr)
+const void *DataReader::GetPointer() const
 {
-  m_ptr=ptr;
-}
-
-const void *DataReader::GetPointer()
-{
-  return m_ptr;
+  return m_CurPtr;
 }
 
 void DataReader::SetEndian(bool isBigEndian)
@@ -672,63 +676,77 @@ void DataReader::SetEndian(bool isBigEndian)
   m_ReadBigEndian=isBigEndian;
 }
 
-bool DataReader::GetEndian()
+bool DataReader::GetEndian() const
 {
   return m_ReadBigEndian;
 }
 
+
+uint8_t DataReader::GetU8()
+{
+  if (m_CurPtr < m_EndPtr)
+  {
+    return *m_CurPtr++;
+  }
+  return 0;
+}
+
+uint16_t DataReader::GetU16()
+{
+  return (uint16_t)GetValue(2);
+}
+
 unsigned int DataReader::GetValue(int sizeValue)
 {
-  unsigned int value=0;
-  unsigned char* ptr=(unsigned char*)m_ptr;
-
-  if (m_ReadBigEndian)
-  {
-    // Big endian
-    // msb...lsb
-    switch (sizeValue)
+  unsigned int value = 0;
+  if (m_CurPtr+sizeValue <= m_EndPtr)
+  {  
+    if (m_ReadBigEndian)
     {
-    case 1:
-      value|=(ptr[0]<<0);
-      break;
+      // Big endian
+      // msb...lsb
+      switch (sizeValue)
+      {
+      case 1:
+        value|=(m_CurPtr[0]<<0);
+        break;
 
-    case 2:
-      value|=(ptr[1]<<0);
-      value|=(ptr[0]<<8);
-      break;
+      case 2:
+        value|=(m_CurPtr[1]<<0);
+        value|=(m_CurPtr[0]<<8);
+        break;
 
-    case 4:
-      value|=(ptr[3]<<0);
-      value|=(ptr[2]<<8);
-      value|=(ptr[1]<<16);
-      value|=(ptr[0]<<24);
+      case 4:
+        value|=(m_CurPtr[3]<<0);
+        value|=(m_CurPtr[2]<<8);
+        value|=(m_CurPtr[1]<<16);
+        value|=(m_CurPtr[0]<<24);
+      }
     }
-  }
-  else
-  {
-    // Little endian
-    // lsb...msb
-    switch (sizeValue)
+    else
     {
-    case 1:
-      value|=(ptr[0]<<0);
-      break;
+      // Little endian
+      // lsb...msb
+      switch (sizeValue)
+      {
+      case 1:
+        value|=(m_CurPtr[0]<<0);
+        break;
 
-    case 2:
-      value|=(ptr[0]<<0);
-      value|=(ptr[1]<<8);
-      break;
+      case 2:
+        value|=(m_CurPtr[0]<<0);
+        value|=(m_CurPtr[1]<<8);
+        break;
 
-    case 4:
-      value|=(ptr[0]<<0);
-      value|=(ptr[1]<<8);
-      value|=(ptr[2]<<16);
-      value|=(ptr[3]<<24);
+      case 4:
+        value|=(m_CurPtr[0]<<0);
+        value|=(m_CurPtr[1]<<8);
+        value|=(m_CurPtr[2]<<16);
+        value|=(m_CurPtr[3]<<24);
+      }
     }
+    m_CurPtr += sizeValue;
   }
-
-  ptr+=sizeValue;
-  m_ptr=(void*)ptr;
   return value;
 }
 
@@ -762,9 +780,7 @@ std::string TextFileGenerator::ConvertData(const void* sourceData,size_t fileSiz
     ShowError("The filesize must be a multiple of the data size.");
   }
 
-  DataReader dataReader;
-
-  dataReader.SetPointer(sourceData);
+  DataReader dataReader(sourceData, fileSize);
   if (m_Endianness==_eEndianness_Big)
   {
     dataReader.SetEndian(true);
@@ -1115,3 +1131,104 @@ DirectoryChanger::~DirectoryChanger()
   SetCurrentDirectory(m_PreviousDirectory);
 }
 
+
+
+/*
+      0x16,	// 0 Synchro
+      0x16,	// 1
+      0x16,	// 2
+      0x24,	// 3
+
+      0x00,	// 4
+      0x00,	// 5
+
+      0x80,	// 6
+
+      0x00,	// 7  $80=BASIC Autostart $C7=Assembly autostart
+
+      0xbf,	// 8  End address
+      0x40,	// 9
+
+      0xa0,	// 10 Start address
+      0x00,	// 11
+
+      0x00	// 12
+*/
+
+bool TapeHeader::Read(std::vector<unsigned char> buffer)
+{
+  return Read(buffer.data(), buffer.size());
+}
+
+
+bool TapeHeader::Read(const void* buffer,size_t bufferSize)
+{
+  DataReader dataReader(buffer, bufferSize);
+  dataReader.SetEndian(true);
+
+  // Skip synchronization bytes
+  unsigned char syncBytes;
+  while ((syncBytes=dataReader.GetU8()) == 0x16);
+  if (syncBytes != 0x24)
+  {
+    //ShowError("bad header");
+    return false;
+  }
+
+  dataReader.GetU8();  // Dummy byte
+  dataReader.GetU8();  // Dummy byte
+
+  unsigned char programType = dataReader.GetU8();  // $80=BASIC Autostart $C7=Assembly autostart
+  unsigned char autoStart   = dataReader.GetU8();  // 
+  uint16_t endAddress       = dataReader.GetU16();
+  uint16_t startAddress     = dataReader.GetU16();
+
+  dataReader.GetU8();  // Dummy byte
+
+  // Fetch the name
+  std::string name;
+  unsigned char nameBytes;
+  while (nameBytes = dataReader.GetU8())
+  {
+    name += nameBytes;
+  };
+
+  // Store the information
+  if (programType == 0x80)
+  {
+    m_Type = eTypeBASIC;
+  }
+  else
+  {
+    m_Type = eTypeBinary;
+  }
+
+  if (autoStart == 0xC7)
+  {
+    m_AutoStart = true;
+  }
+  else
+  {
+    m_AutoStart = false;
+  }
+
+  m_Name         = name;
+  m_StartAddress = startAddress;
+  m_EndAddress   = endAddress;
+  return true;
+}
+
+/*
+bool TapeHeader::SkipSynchronizationBytes()
+{
+  // Skip synchronization bytes
+// 16 16 16 24
+  while (*ptr_header == 0x16)	ptr_header++;
+  if (*ptr_header != 0x24)
+  {
+    ShowError("bad header");
+  }
+
+  return false;
+}
+*/
