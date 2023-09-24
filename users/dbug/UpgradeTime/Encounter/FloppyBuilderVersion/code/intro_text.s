@@ -2,6 +2,11 @@
 
     .text   // could be .data if we setup the base address properly
 
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters : é:{ è:} ê:| à:@
+#endif
+
+
 ;
 ; Title screen
 ;
@@ -16,29 +21,29 @@ _Text_CopyrightDefenceForce      .byt 16+3,4,"Redux Additions ",96," 2023 Defenc
 _Text_GameInstructions
     .byt 1,"           Comment jouer",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Votre tache est de trouver et sauver",TEXT_CRLF
-	.byt "une fille kidnapp{e par des voyous.",TEXT_CRLF
+    .byt "Votre tache est de trouver et sauver",TEXT_CRLF
+    .byt "une fille kidnappée par des voyous.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Give orders using VERBS and NOUNS",TEXT_CRLF
-	.byt "ex:VID(e) SEA(u) ou DON(ne) CLE(fs)",TEXT_CRLF
+    .byt "Donnez les ordres avec VERBES et NOMS",TEXT_CRLF
+    .byt "ex:VID(e) SEA(u) ou DON(ne) CLE(fs)",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"  MOUVEMENT            VERBES",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "N:NORD S:SUD    PRENDS POSE LANCE TUE",TEXT_CRLF
-	.byt "O:OUEST E:EST  FABRIQUE GRIMPE QUITTE",TEXT_CRLF
-	.byt "H:HAUT B:BAS     OUVRE CHARGE FOUILLE",TEXT_CRLF
-	.byt "R:REGARDE           LIT PRESSE FRAPPE",TEXT_CRLF
+    .byt "N:NORD S:SUD    PRENDS POSE LANCE TUE",TEXT_CRLF
+    .byt "O:OUEST E:EST  FABRIQUE GRIMPE QUITTE",TEXT_CRLF
+    .byt "H:HAUT B:BAS     OUVRE CHARGE FOUILLE",TEXT_CRLF
+    .byt "R:REGARDE           LIT PRESSE FRAPPE",TEXT_CRLF
     .byt 1,"              NOTES",0,"    TIRE SIPHONE",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Tout ce dont vous avez besoin est la",TEXT_CRLF
-	.byt "mais etre bricoleur peut aider.",TEXT_CRLF
+    .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
+    .byt "mais être bricoleur peut aider.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "La mission {choue si le temps restant",TEXT_CRLF
-	.byt "ou l'alarme tombent a z{ro.",TEXT_CRLF
+    .byt "La mission échoue si le temps restant",TEXT_CRLF
+    .byt "ou l'alarme tombent a zéro.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Tracez une carte et annotez la.",TEXT_CRLF
+    .byt "Tracez une carte et annotez la.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Bonne chance, vous en aurez besoin!"
+    .byt "Bonne chance, vous en aurez besoin!"
     .byt TEXT_END
 #else// LANGUAGE_EN
 _Text_GameInstructions
