@@ -48,8 +48,11 @@ Fixed a number of issues in the linker:
 0.68 - 2023/01/18
 - The 'Unresolved external: <name>' now also specify the filename and line number of the first place where the symbol was requested, as well as the total number of references.
 
+1.00 - 2023/09/24
+- Added a "-i" option to provide alternative include file paths
+
 */
 
 
-#define TOOL_VERSION_MAJOR	0
-#define TOOL_VERSION_MINOR	68
+#define TOOL_VERSION_MAJOR	1
+#define TOOL_VERSION_MINOR	0
