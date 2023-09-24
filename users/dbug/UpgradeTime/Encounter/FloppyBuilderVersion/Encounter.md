@@ -83,6 +83,23 @@ Example:
 >_Text_Leaderboard                .byt 16+1,3,"            Leaderboard",0  
 >#endif  
 
+### Character set
+The Oric computers only have 96 displayable characters (standard 7bit ASCII from 32 to 127), which is insufficient to encode all the accents and special characters used in various languages.
+
+The usual method is to sacrifice some characters (like the unused punctuation or symbols like {|}@£...) and redefine them so they appear as different characters.
+
+This works perfectly, but it's relatively uncomfortable to have to type "|tre" instead of "être" or "mang{" instead of "mangé".
+
+To solve this issue, it is possible to define substitution strings rules for each language.
+
+For French, the current mapping is the following:
+
+>#ifdef LANGUAGE_FR  
+>#pragma osdk replace_characters : é:{ è:} ê:| à:@  
+>#endif  
+
+and empty "#pragma osdk replace_characters" cancels the replacement rule.
+
 ### Selective build
 Since testing things gets frustrating when you have to go through a sequence of irrelevant things before accessing what you want, the system allows disabling a number of things.
 
