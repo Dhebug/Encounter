@@ -745,7 +745,7 @@ void UseItem(unsigned char itemId)
                     else
                     if (ladderLocation == e_LOCATION_INSIDEHOLE)
                     {
-                        PrintErrorMessage("The ladder is already in the hole");
+                        PrintErrorMessage(gTextErrorLadderInHole);  // "The ladder is already in the hole"
                     }
                 }
                 else
@@ -761,7 +761,7 @@ void UseItem(unsigned char itemId)
             break;
 
         default:
-            PrintErrorMessage("I don't know how to use that");
+            PrintErrorMessage(gTextErrorDontKnowUsage);   // "I don't know how to use that"
             break;
         }
     }
@@ -782,7 +782,7 @@ void ClimbItem(unsigned char itemId)
                     char ladderLocation = gItems[e_ITEM_Ladder].location;
                     if (ladderLocation == e_LOCATION_INVENTORY)
                     {
-                        PrintErrorMessage("It needs to be positionned first");
+                        PrintErrorMessage(gTextErrorNeedPositionned);   // "It needs to be positionned first"
                     }
                     else
                     if (ladderLocation == e_LOCATION_INSIDEHOLE)
@@ -805,7 +805,7 @@ void ClimbItem(unsigned char itemId)
             break;
 
 		default:
-			PrintErrorMessage("I don't know how to climb that");
+			PrintErrorMessage(gTextErrorCantClimbThat);     // "I don't know how to climb that"
 			break;
 		}
 	}
@@ -899,12 +899,12 @@ WORDS ProcessAnswer()
 			item* itemPtr=&gItems[itemId];
 			if (itemPtr->location != gCurrentLocation)
 			{
-				PrintErrorMessage("It's not here");
+				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
 			if (itemPtr->flags & ITEM_FLAG_DEAD)
 			{
-				PrintErrorMessage("Already dead");
+				PrintErrorMessage(gTextErrorAlreadyDead);  // "Already dead"
 			}
 			else
 			{
@@ -915,19 +915,19 @@ WORDS ProcessAnswer()
 				case e_ITEM_Thug:
 					gScore+=50;
 					itemPtr->flags|=ITEM_FLAG_DEAD;
-					itemPtr->description="a dead thug";
+					itemPtr->description=gTextDeadThug;   // "a dead thug";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					gScore+=50;
 					itemPtr->flags|=ITEM_FLAG_DEAD;
-					itemPtr->description="a dead dog";
+					itemPtr->description=gTextDeadDog;  // "a dead dog";
 					LoadScene();
 					break;
 
 				case e_ITEM_YoungGirl:
-					PrintErrorMessage("You are supposed to save her");
+					PrintErrorMessage(gTextErrorShouldSaveGirl);  // "You are supposed to save her"
 					break;
 				}
 			}
@@ -941,7 +941,7 @@ WORDS ProcessAnswer()
 			item* itemPtr=&gItems[itemId];
 			if (itemPtr->location != gCurrentLocation)
 			{
-				PrintErrorMessage("It's not here");
+				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
 			{
@@ -951,18 +951,18 @@ WORDS ProcessAnswer()
 				case e_ITEM_Thug:
 					if (!(itemPtr->flags & ITEM_FLAG_DEAD))
 					{
-						PrintErrorMessage("I should subdue him first");
+						PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
 					}
 					else
 					if (gItems[e_ITEM_Pistol].location!=e_LOCATION_NONE)
 					{
-						PrintErrorMessage("You've already frisked him");
+						PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
 					}
 					else
 					{
 						gScore+=50;
 						gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
-						PrintInformationMessage("You found something interesting");
+						PrintInformationMessage(gTextFoundSomething);                // "You found something interesting"
 						LoadScene();
 					}
 					break;
@@ -978,12 +978,12 @@ WORDS ProcessAnswer()
 			item* itemPtr=&gItems[itemId];
 			if (itemPtr->location != gCurrentLocation)
 			{
-				PrintErrorMessage("It's not here");
+				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
 			if (!(itemPtr->flags & ITEM_FLAG_DEAD))
 			{
-				PrintErrorMessage("Not dead");
+				PrintErrorMessage(gTextNotDead);    // "Not dead"
 			}
 			else
 			{
@@ -992,13 +992,13 @@ WORDS ProcessAnswer()
 				{
 				case e_ITEM_Thug:
 					itemPtr->flags&=~ITEM_FLAG_DEAD;
-					itemPtr->description="a thug asleep on the bed";
+					itemPtr->description=gTextThugAsleepOnBed;     // "a thug asleep on the bed";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					itemPtr->flags&=~ITEM_FLAG_DEAD;
-					itemPtr->description="an alsatian growling at you";
+					itemPtr->description=gTextDogGrowlingAtYou;     // "an alsatian growling at you"
 					LoadScene();
 					break;
 				}
@@ -1012,12 +1012,12 @@ WORDS ProcessAnswer()
 			item* itemPtr=&gItems[itemId];
 			if (itemPtr->location != gCurrentLocation)
 			{
-				PrintErrorMessage("It's not here");
+				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
 			if (itemPtr->flags & ITEM_FLAG_DEAD)
 			{
-				PrintErrorMessage("Dead don't move");
+				PrintErrorMessage(gTextErrorDeadDontMove);  // "Dead don't move"
 			}
 			else
 			{
@@ -1026,18 +1026,18 @@ WORDS ProcessAnswer()
 				{
 				case e_ITEM_Thug:
 					gCurrentLocationPtr->script = gDescriptionThugAttacking;
-					itemPtr->description="a thug shooting at me";
+					itemPtr->description=gTextThugShootingAtMe;    // "a thug shooting at me"
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					gCurrentLocationPtr->script = gDescriptionDogAttacking;
-					itemPtr->description="a dog jumping at me";
+					itemPtr->description=gTextDogJumpingAtMe;     // "a dog jumping at me"
 					LoadScene();
 					break;
 
 				case e_ITEM_YoungGirl:
-					PrintErrorMessage("Probably impropriate");
+					PrintErrorMessage(gTextErrorInappropriate);   // "Probably impropriate"
 					break;
 				}
 			}
