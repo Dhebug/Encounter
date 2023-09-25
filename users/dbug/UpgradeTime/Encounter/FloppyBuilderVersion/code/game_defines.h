@@ -113,6 +113,14 @@ extern const char gTextPositionLadder[];        // "You position the ladder prop
 extern const char gTextClimbUpRope[];           // "You climb up the rope"
 extern const char gTextClimbDownRope[];         // "You climb down the rope"
 extern const char gTextAttachRopeToTree[];      // "You attach the rope to the tree"
+extern const char gTextDeadDog[];               // "a dead dog"
+extern const char gTextDeadThug[];              // "a dead thug"
+extern const char gTextFoundSomething[];        // "You found something interesting"
+extern const char gTextDogGrowlingAtYou[];      // "an alsatian growling at you"
+extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
+extern const char gTextNotDead[];               // "Not dead" - Debugging text
+extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
+extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
 
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
@@ -127,4 +135,16 @@ extern const char gTextErrorUnknownItem[];      // "I do not know what this item
 extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
 extern const char gTextErrorCannotRead[];       // "I can't read that"
 extern const char gTextErrorCannotUseHere[];    // "I can't use it here"
+extern const char gTextErrorDontKnowUsage[];    // "I don't know how to use that"
 extern const char gTextErrorCannotAttachRope[]; // "You can't attach the rope"
+extern const char gTextErrorLadderInHole[];     // "The ladder is already in the hole"
+extern const char gTextErrorCantClimbThat[];    // "I don't know how to climb that"
+extern const char gTextErrorNeedPositionned[];  // "It needs to be positionned first"
+extern const char gTextErrorItsNotHere[];       // "It's not here"
+extern const char gTextErrorAlreadyDead[];      // "Already dead"
+extern const char gTextErrorShouldSaveGirl[];   // "You are supposed to save her"
+extern const char gTextErrorShouldSubdue[];     // "I should subdue him first"
+extern const char gTextErrorAlreadySearched[];  // "You've already frisked him"
+extern const char gTextErrorInappropriate[];    // "Probably inappropriate"
+extern const char gTextErrorDeadDontMove[];     // "Dead don't move"
+

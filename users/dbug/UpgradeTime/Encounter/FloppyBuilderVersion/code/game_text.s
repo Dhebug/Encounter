@@ -25,6 +25,14 @@ _gTextPositionLadder        .byt "Vous mettez l'échelle en place",0
 _gTextClimbUpRope           .byt "Vous grimpez la corde",0
 _gTextClimbDownRope         .byt "Vous descendez la corde",0
 _gTextAttachRopeToTree      .byt "Vous attachez la corde à l'arbre",0
+_gTextDeadDog               .byt "un chien mort",0
+_gTextDeadThug              .byt "un malfaiteur mort",0
+_gTextFoundSomething        .byt "Vous avez trouvé quelque chose",0
+_gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
+_gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
+_gTextNotDead               .byt "Pas mort",0                                // Debugging text
+_gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
+_gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -40,6 +48,14 @@ _gTextPositionLadder        .byt "You position the ladder properly",0
 _gTextClimbUpRope           .byt "You climb up the rope",0
 _gTextClimbDownRope         .byt "You climb down the rope",0
 _gTextAttachRopeToTree      .byt "You attach the rope to the tree",0
+_gTextDeadDog               .byt "a dead dog",0
+_gTextDeadThug              .byt "a dead thug",0
+_gTextFoundSomething        .byt "You found something interesting",0
+_gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
+_gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
+_gTextNotDead               .byt "Not dead",0                                // Debugging text
+_gTextDogJumpingAtMe        .byt "a dog jumping at me",0
+_gTextThugShootingAtMe      .byt "a thug shooting at me",0
 #endif
 
 // Error messages 
@@ -59,6 +75,15 @@ _gTextErrorCannotUseHere    .byt "Pas utilisable ici",0
 _gTextErrorDontKnowUsage    .byt "Je ne sais pas l'utiliser",0
 _gTextErrorCannotAttachRope .byt "Impossible de l'attacher",0
 _gTextErrorLadderInHole     .byt "L'échelle est déja dans le trou",0
+_gTextErrorCantClimbThat    .byt "Je ne sais pas grimper ca",0
+_gTextErrorNeedPositionned  .byt "Ca doit d'abort être en place",0
+_gTextErrorItsNotHere       .byt "Ca n'est pas là",0
+_gTextErrorAlreadyDead      .byt "Déjà mort",0
+_gTextErrorShouldSaveGirl   .byt "Vous êtes censé la sauver",0
+_gTextErrorShouldSubdue     .byt "Il faut d'abord le maitriser",0
+_gTextErrorAlreadySearched  .byt "Vous l'avez déjà fouillé",0
+_gTextErrorInappropriate    .byt "Probablement inapproprié",0
+_gTextErrorDeadDontMove     .byt "Les morts ne bougent pas",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -75,6 +100,15 @@ _gTextErrorCannotUseHere    .byt "I can't use it here",0
 _gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
 _gTextErrorCannotAttachRope .byt "You can't attach the rope",0
 _gTextErrorLadderInHole     .byt "The ladder is already in the hole",0
+_gTextErrorCantClimbThat    .byt "I don't know how to climb that",0
+_gTextErrorNeedPositionned  .byt "It needs to be positionned first",0
+_gTextErrorItsNotHere       .byt "It's not here",0
+_gTextErrorAlreadyDead      .byt "Already dead",0
+_gTextErrorShouldSaveGirl   .byt "You are supposed to save her",0
+_gTextErrorShouldSubdue     .byt "I should subdue him first",0
+_gTextErrorAlreadySearched  .byt "You've already frisked him",0
+_gTextErrorInappropriate    .byt "Probably inappropriate",0
+_gTextErrorDeadDontMove     .byt "Dead don't move",0
 #endif
 
 _gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
