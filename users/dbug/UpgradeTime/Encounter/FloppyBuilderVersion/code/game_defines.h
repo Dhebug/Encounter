@@ -148,3 +148,62 @@ extern const char gTextErrorAlreadySearched[];  // "You've already frisked him"
 extern const char gTextErrorInappropriate[];    // "Probably inappropriate"
 extern const char gTextErrorDeadDontMove[];     // "Dead don't move"
 
+// Places
+extern const char gTextLocationMarketPlace[];          // "You are in a deserted market square"     
+extern const char gTextLocationDarkAlley[];            // "You are in a dark, seedy alley"          
+extern const char gTextLocationRoad[];                 // "A long road stretches ahead of you"      
+
+extern const char gTextLocationDarkTunel[];            // "You are in a dark, damp tunnel"          
+extern const char gTextLocationMainStreet[];           // "You are on the main street"              
+extern const char gTextLocationNarrowPath[];           // "You are on a narrow path"                
+
+extern const char gTextLocationInThePit[];             // "You are insided a deep pit"              
+extern const char gTextLocationOldWell[];              // "You are near to an old-fashioned well"   
+extern const char gTextLocationWoodedAvenue[];         // "You are in a wooded avenue"              
+
+extern const char gTextLocationGravelDrive[];          // "You are on a wide gravel drive"          
+extern const char gTextLocationTarmacArea[];           // "You are in an open area of tarmac"       
+extern const char gTextLocationZenGarden[];            // "You are in a relaxing zen garden"        
+
+extern const char gTextLocationFrontLawn[];            // "You are on a huge area of lawn"          
+extern const char gTextLocationGreenHouse[];           // "You are in a small greenhouse"           
+extern const char gTextLocationTennisCourt[];          // "You are on a lawn tennis court"          
+
+extern const char gTextLocationVegetableGarden[];      // "You are in a vegetable plot"             
+extern const char gTextLocationFishPond[];             // "You are standing by a fish pond"         
+extern const char gTextLocationTiledPatio[];           // "You are on a tiled patio"                
+
+extern const char gTextLocationAppleOrchard[];         // "You are in an apple orchard"             
+extern const char gTextLocationDarkerCellar[];         // "This room is even darker than the last"  
+extern const char gTextLocationCellar[];               // "This is a cold, damp cellar"             
+
+extern const char gTextLocationNarrowStaircase[];      // "You are on some gloomy, narrow steps"    
+extern const char gTextLocationEntranceLounge[];       // "You are in the lounge"                   
+extern const char gTextLocationEntranceHall[];         // "You are in an imposing entrance hall"    
+
+extern const char gTextLocationLibrary[];              // "This looks like a library"               
+extern const char gTextLocationDiningRoom[];           // "A dining room, or so it appears"         
+extern const char gTextLocationStaircase[];            // "You are on a sweeping staircase"         
+
+extern const char gTextLocationGamesRoom[];            // "This looks like a games room"            
+extern const char gTextLocationSunLounge[];            // "You find yourself in a sun-lounge"       
+extern const char gTextLocationKitchen[];              // "This is obviously the kitchen"           
+
+extern const char gTextLocationNarrowPassage[];        // "You are in a narrow passage"             
+extern const char gTextLocationGuestBedroom[];         // "This seems to be a guest bedroom"        
+extern const char gTextLocationChildBedroom[];         // "This is a child's bedroom"               
+
+extern const char gTextLocationMasterBedRoom[];        // "This must be the master bedroom"         
+extern const char gTextLocationShowerRoom[];           // "You are in a tiled shower-room"          
+extern const char gTextLocationTinyToilet[];           // "This is a tiny toilet"                   
+
+extern const char gTextLocationEastGallery[];          // "You have found the east gallery"         
+extern const char gTextLocationBoxRoom[];              // "This is a small box-room"                
+extern const char gTextLocationPadlockedRoom[];        // "You see a padlocked steel-plated door"   
+
+extern const char gTextLocationClassyBathRoom[];       // "You are in an ornate bathroom"           
+extern const char gTextLocationWestGallery[];          // "This is the west gallery"                
+extern const char gTextLocationMainLanding[];          // "You are on the main landing"             
+
+extern const char gTextLocationOutsidePit[];           // "Outside a deep pit"          
+extern const char gTextLocationGirlRoomOpenned[];      // "The girl room (openned lock)"
