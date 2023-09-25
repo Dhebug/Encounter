@@ -680,7 +680,7 @@ int Linker::Main()
       // Directory to find header  files.Next arg in line is the dir name
       if (!ProcessNextArgument() || !IsParameter())
       {
-        printf(" Must have dir name after -h option\n");
+        printf(" Must have dir name after -i option\n");
         exit(1);
       }
       m_PathHeaderFiles.push_back(GetStringValue());
