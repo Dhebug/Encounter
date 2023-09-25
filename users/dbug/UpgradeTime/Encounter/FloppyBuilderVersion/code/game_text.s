@@ -111,6 +111,131 @@ _gTextErrorInappropriate    .byt "Probably inappropriate",0
 _gTextErrorDeadDontMove     .byt "Dead don't move",0
 #endif
 
+// Places
+#ifdef LANGUAGE_FR
+//                                      0         1         2         3
+//                                      0123456789012345678901234567890123456789
+_gTextLocationMarketPlace         .byt "Vous êtes sur la place du marché",0
+_gTextLocationDarkAlley           .byt "Vous êtes dans une allée sombre",0
+_gTextLocationRoad                .byt "Une longue route s'étend devant vous",0
+
+_gTextLocationDarkTunel           .byt "Vous êtes dans un tunnel humide",0
+_gTextLocationMainStreet          .byt "Vous êtes dans la rue principale",0
+_gTextLocationNarrowPath          .byt "Vous êtes sur un chemin étroit",0
+
+_gTextLocationInThePit            .byt "Vous êtes au fond d'un trou",0
+_gTextLocationOldWell             .byt "Vous êtes prês d'un vieux puit",0
+_gTextLocationWoodedAvenue        .byt "Vous êtes dans une allée arbroisée",0
+
+_gTextLocationGravelDrive         .byt "Vous êtes sur un passage gravilloné",0
+_gTextLocationTarmacArea          .byt "Vous êtes sur une zone asphaltée",0
+_gTextLocationZenGarden           .byt "Vous êtes dans un jarding zen relaxant",0
+
+_gTextLocationFrontLawn           .byt "Vous êtes sur une large pelouse",0
+_gTextLocationGreenHouse          .byt "Vous êtes dans une petite serre",0
+_gTextLocationTennisCourt         .byt "Vous êtes sur un cours de tennis",0
+
+_gTextLocationVegetableGarden     .byt "Vous êtes dans un jardin potagé",0
+_gTextLocationFishPond            .byt "Vous êtes près d'un bac a poisson",0
+_gTextLocationTiledPatio          .byt "Vous êtes sur un patio carellé",0
+
+_gTextLocationAppleOrchard        .byt "Vous êtes dans une pommeraie",0
+_gTextLocationDarkerCellar        .byt "Cette pièce est encore plus sombre",0
+_gTextLocationCellar              .byt "Une cave frigide et humide",0
+
+_gTextLocationNarrowStaircase     .byt "Vous êtes dans un escalier étroit",0
+_gTextLocationEntranceLounge      .byt "Vous êtes dans un salon",0
+_gTextLocationEntranceHall        .byt "Vous êtes dans un hall imposant",0
+
+_gTextLocationLibrary             .byt "Probablement une bibliothèque",0
+_gTextLocationDiningRoom          .byt "Apparement une salle a manger",0
+_gTextLocationStaircase           .byt "Vous êtes dans un large escalier",0
+
+_gTextLocationGamesRoom           .byt "La salle de jeux",0
+_gTextLocationSunLounge           .byt "Le solarium",0
+_gTextLocationKitchen             .byt "Visiblement la cuisine",0
+
+_gTextLocationNarrowPassage       .byt "Vous êtes dans un passage étroit",0
+_gTextLocationGuestBedroom        .byt "Une chambre d'amis",0
+_gTextLocationChildBedroom        .byt "La chambre d'un enfant",0
+
+_gTextLocationMasterBedRoom       .byt "La chambre principale",0
+_gTextLocationShowerRoom          .byt "Une salle de bain carellée",0
+_gTextLocationTinyToilet          .byt "Des petites toilettes",0
+
+_gTextLocationEastGallery         .byt "La gallerie est",0
+_gTextLocationBoxRoom             .byt "Une petite loge",0
+_gTextLocationPadlockedRoom       .byt "Une porte blindée cadenassée",0
+
+_gTextLocationClassyBathRoom      .byt "Une salle de bain luxieuse",0
+_gTextLocationWestGallery         .byt "La gallerie ouest",0
+_gTextLocationMainLanding         .byt "Vous êtes sur le palier principal",0
+
+_gTextLocationOutsidePit          .byt "En dehors d'un trou profond",0
+
+_gTextLocationGirlRoomOpenned     .byt "La pièce avec la fille (ouverte)",0
+#else
+_gTextLocationMarketPlace         .byt "You are in a deserted market square",0
+_gTextLocationDarkAlley           .byt "You are in a dark, seedy alley",0
+_gTextLocationRoad                .byt "A long road stretches ahead of you",0
+
+_gTextLocationDarkTunel           .byt "You are in a dark, damp tunnel",0
+_gTextLocationMainStreet          .byt "You are on the main street",0
+_gTextLocationNarrowPath          .byt "You are on a narrow path",0
+
+_gTextLocationInThePit            .byt "You are insided a deep pit",0
+_gTextLocationOldWell             .byt "You are near to an old-fashioned well",0
+_gTextLocationWoodedAvenue        .byt "You are in a wooded avenue",0
+
+_gTextLocationGravelDrive         .byt "You are on a wide gravel drive",0
+_gTextLocationTarmacArea          .byt "You are in an open area of tarmac",0
+_gTextLocationZenGarden           .byt "You are in a relaxing zen garden",0
+
+_gTextLocationFrontLawn           .byt "You are on a huge area of lawn",0
+_gTextLocationGreenHouse          .byt "You are in a small greenhouse",0
+_gTextLocationTennisCourt         .byt "You are on a lawn tennis court",0
+
+_gTextLocationVegetableGarden     .byt "You are in a vegetable plot",0
+_gTextLocationFishPond            .byt "You are standing by a fish pond",0
+_gTextLocationTiledPatio          .byt "You are on a tiled patio",0
+
+_gTextLocationAppleOrchard        .byt "You are in an apple orchard",0
+_gTextLocationDarkerCellar        .byt "This room is even darker than the last",0
+_gTextLocationCellar              .byt "This is a cold, damp cellar",0
+
+_gTextLocationNarrowStaircase     .byt "You are on some gloomy, narrow steps",0
+_gTextLocationEntranceLounge      .byt "You are in the lounge",0
+_gTextLocationEntranceHall        .byt "You are in an imposing entrance hall",0
+
+_gTextLocationLibrary             .byt "This looks like a library",0
+_gTextLocationDiningRoom          .byt "A dining room, or so it appears",0
+_gTextLocationStaircase           .byt "You are on a sweeping staircase",0
+
+_gTextLocationGamesRoom           .byt "This looks like a games room",0
+_gTextLocationSunLounge           .byt "You find yourself in a sun-lounge",0
+_gTextLocationKitchen             .byt "This is obviously the kitchen",0
+
+_gTextLocationNarrowPassage       .byt "You are in a narrow passage",0
+_gTextLocationGuestBedroom        .byt "This seems to be a guest bedroom",0
+_gTextLocationChildBedroom        .byt "This is a child's bedroom",0
+
+_gTextLocationMasterBedRoom       .byt "This must be the master bedroom",0
+_gTextLocationShowerRoom          .byt "You are in a tiled shower-room",0
+_gTextLocationTinyToilet          .byt "This is a tiny toilet",0
+
+_gTextLocationEastGallery         .byt "You have found the east gallery",0
+_gTextLocationBoxRoom             .byt "This is a small box-room",0
+_gTextLocationPadlockedRoom       .byt "You see a padlocked steel-plated door",0
+
+_gTextLocationClassyBathRoom      .byt "You are in an ornate bathroom",0
+_gTextLocationWestGallery         .byt "This is the west gallery",0
+_gTextLocationMainLanding         .byt "You are on the main landing",0
+
+_gTextLocationOutsidePit          .byt "Outside a deep pit",0
+
+_gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
+#endif
+
 _gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
 
 // Scene descriptions
