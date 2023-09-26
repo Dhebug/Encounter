@@ -236,6 +236,116 @@ _gTextLocationOutsidePit          .byt "Outside a deep pit",0
 _gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
 #endif
 
+
+// Items
+#ifdef LANGUAGE_FR
+// Containers
+_gTextItemTobaccoTin              .byt "une boîte à tabac vide",0
+_gTextItemBucket                  .byt "un seau en bois",0
+_gTextItemCardboardBox            .byt "une boite en carton",0
+_gTextItemFishingNet              .byt "un filet de pêche",0
+_gTextItemPlasticBag              .byt "un sac en plastique",0
+_gTextItemSmallBottle             .byt "une petite bouteille",0
+// Items requiring containers
+_gTextItemBlackDust               .byt "de la poudre noire",0
+_gTextItemYellowPowder            .byt "poudre jaune granuleuse",0
+_gTextItemPetrol                  .byt "du pétrole",0
+_gTextItemWater                   .byt "de l'eau",0
+// Normal items
+_gTextItemLockedPanel             .byt "un paneau mural verouillé",0
+_gTextItemOpenPanel               .byt "un paneau mural ouvert",0
+_gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
+_gTextItemBrokenWindow            .byt "une vitre brisée",0
+_gTextItemLargeDove               .byt "une grosse colombe",0
+_gTextItemTwine                   .byt "un peu de ficelle",0
+_gTextItemSilverKnife             .byt "un coueau en argent",0
+_gTextItemLadder                  .byt "une échelle",0
+_gTextItemAbandonedCar            .byt "une voiture abandonnée",0
+_gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
+_gTextItemMeat                    .byt "un morceau de viande",0
+_gTextItemBread                   .byt "du pain complet",0
+_gTextItemRollOfTape              .byt "un rouleau de bande adhésive",0
+_gTextItemChemistryBook           .byt "un livre de chimie",0
+_gTextItemBoxOfMatches            .byt "une boite d'allumettes",0
+_gTextItemSnookerCue              .byt "une queue de billard",0
+_gTextItemThug                    .byt "un voyou endormi sur le lit",0
+_gTextItemHeavySafe               .byt "un gros coffre fort",0
+_gTextItemPrintedNote             .byt "une note imprimée",0
+_gTextItemRope                    .byt "une longueur de corde",0
+_gTextItemRopeHangingFromWindow   .byt "une core qui pend de la fenêtre",0
+_gTextItemRollOfToiletPaper       .byt "un rouleau de papier toilette",0
+_gTextItemHosePipe                .byt "un tuyau d'arrosage",0
+_gTextItemOpenSafe                .byt "un coffre fort ouvert",0
+_gTextItemBrokenGlass             .byt "des morceaux de glace",0
+_gTextItemAcidBurn                .byt "une brulure d'acide",0
+_gTextItemYoungGirl               .byt "une jeune fille",0
+_gTextItemFuse                    .byt "un fusible",0
+_gTextItemGunPowder               .byt "de la poudre à cannon",0
+_gTextItemKeys                    .byt "un jeu de clefs",0
+_gTextItemNewspaper               .byt "un journal",0
+_gTextItemBomb                    .byt "une bombe",0
+_gTextItemPistol                  .byt "un pistolet",0
+_gTextItemBullets                 .byt "trois balles de calibre .38",0
+_gTextItemYoungGirlOnFloor        .byt "une jeunne fille attachée au sol",0
+_gTextItemChemistryRecipes        .byt "des formules de chimie",0
+_gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
+_gTextItemLadderInTheHole         .byt "une échelle dans un trou",0
+_gTextItemeRopeAttachedToATree    .byt "une corde attachée à un arbre",0
+#else
+// Containers
+_gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
+_gTextItemBucket                  .byt "a wooden bucket",0                    
+_gTextItemCardboardBox            .byt "a cardboard box",0                    
+_gTextItemFishingNet              .byt "a fishing net",0                      
+_gTextItemPlasticBag              .byt "a plastic bag",0                      
+_gTextItemSmallBottle             .byt "a small bottle",0                     
+// Items requiring containers
+_gTextItemBlackDust               .byt "black dust",0                         
+_gTextItemYellowPowder            .byt "gritty yellow powder",0               
+_gTextItemPetrol                  .byt "some petrol",0                        
+_gTextItemWater                   .byt "some water",0                         
+// Normal items
+_gTextItemLockedPanel             .byt "a locked panel on the wall",0         
+_gTextItemOpenPanel               .byt "an open panel on wall",0              
+_gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
+_gTextItemBrokenWindow            .byt "the window is broken",0               
+_gTextItemLargeDove               .byt "a large dove",0                       
+_gTextItemTwine                   .byt "some twine",0                         
+_gTextItemSilverKnife             .byt "a silver knife",0                     
+_gTextItemLadder                  .byt "a ladder",0                           
+_gTextItemAbandonedCar            .byt "an abandoned car",0                   
+_gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
+_gTextItemMeat                    .byt "a joint of meat",0                    
+_gTextItemBread                   .byt "some brown bread",0                   
+_gTextItemRollOfTape              .byt "a roll of sticky tape",0              
+_gTextItemChemistryBook           .byt "a chemistry book",0                   
+_gTextItemBoxOfMatches            .byt "a box of matches",0                   
+_gTextItemSnookerCue              .byt "a snooker cue",0                      
+_gTextItemThug                    .byt "a thug asleep on the bed",0           
+_gTextItemHeavySafe               .byt "a heavy safe",0                       
+_gTextItemPrintedNote             .byt "a printed note",0                     
+_gTextItemRope                    .byt "a length of rope",0                   
+_gTextItemRopeHangingFromWindow   .byt "a rope hangs from the window",0       
+_gTextItemRollOfToiletPaper       .byt "a roll of toilet tissue",0            
+_gTextItemHosePipe                .byt "a hose-pipe",0                        
+_gTextItemOpenSafe                .byt "an open safe",0                       
+_gTextItemBrokenGlass             .byt "broken glass",0                       
+_gTextItemAcidBurn                .byt "an acid burn",0                       
+_gTextItemYoungGirl               .byt "a young girl",0                        
+_gTextItemFuse                    .byt "a fuse",0                             
+_gTextItemGunPowder               .byt "some gunpowder",0                     
+_gTextItemKeys                    .byt "a set of keys",0                      
+_gTextItemNewspaper               .byt "a newspaper",0                        
+_gTextItemBomb                    .byt "a bomb",0                             
+_gTextItemPistol                  .byt "a pistol",0                           
+_gTextItemBullets                 .byt "three .38 bullets",0                  
+_gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0  
+_gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0         
+_gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
+_gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
+_gTextItemeRopeAttachedToATree    .byt "a rope attached to a tree",0
+#endif
+
 _gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
 
 // Scene descriptions
@@ -256,10 +366,17 @@ _gDescriptionDarkTunel
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt RECTANGLE(4,100,108,15)
+    .byt RECTANGLE(4,106,63,15)
+    .byt OFFSET(1,0),"La place du marché",0
+    .byt OFFSET(1,4),"est désertée",0
+#else
     .byt RECTANGLE(4,100,95,15)
     .byt RECTANGLE(4,106,59,15)
     .byt OFFSET(1,0),"The market place",0
     .byt OFFSET(1,4),"is deserted",0
+#endif    
     END
 
 _gDescriptionDarkAlley

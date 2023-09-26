@@ -39,8 +39,9 @@ SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
 
 :: The 12x14 font
 :: palatino_linotype_italics_size_10_font.png
-SET PARAMS=-u1 -m0 -f0 -o4_Font12x14
-%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png build\12x14_font.s
+SET PARAMS=-u1 -m0 -f0 -o4Font12x14
+%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png code\generated_12x14_font.s
+%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font_fr.png code\generated_12x14_font_fr.s
 
 
 :: Title picture
@@ -158,6 +159,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 :: Other 240x128 full screen images which are not locations
 %PICTCONV% %PARAMS% data\newspaper.png %TARGET%\newspaper.hir
+%PICTCONV% %PARAMS% data\newspaper_fr.png %TARGET%\newspaper_fr.hir
 %PICTCONV% %PARAMS% data\handwritten_note.png %TARGET%\handwritten_note.hir
 %PICTCONV% %PARAMS% data\science_book.png %TARGET%\science_book.hir
 %PICTCONV% %PARAMS% data\chemistry_recipes.png %TARGET%\chemistry_recipes.hir

@@ -153,7 +153,9 @@ AddFile ..\build\files\43.hir
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
 ; Additional images
-AddFile ..\build\files\newspaper.hir
+
+AddFile ..\build\files\newspaper_fr.hir
+
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
 AddFile ..\build\files\handwritten_note.hir

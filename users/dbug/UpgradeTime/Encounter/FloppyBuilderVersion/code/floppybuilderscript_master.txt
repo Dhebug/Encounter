@@ -157,7 +157,11 @@ AddFile ..\build\files\43.hir
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
 ; Additional images
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\newspaper_fr.hir
+#else // LANGUAGE_EN
 AddFile ..\build\files\newspaper.hir
+#endif
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
 AddFile ..\build\files\handwritten_note.hir
