@@ -5,11 +5,14 @@
 
     .text
 
+_StartGameTextData
+
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i
 #endif
 
 // Small feedback messages and prompts
+_StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
 _gTextAskInput              .byt "Quels sont vos instructions ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
@@ -57,8 +60,10 @@ _gTextNotDead               .byt "Not dead",0                                // 
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
 #endif
+_EndMessagesAndPrompts
 
 // Error messages 
+_StartErrorMessages
 #ifdef LANGUAGE_FR
 _gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
@@ -110,8 +115,11 @@ _gTextErrorAlreadySearched  .byt "You've already frisked him",0
 _gTextErrorInappropriate    .byt "Probably inappropriate",0
 _gTextErrorDeadDontMove     .byt "Dead don't move",0
 #endif
+_EndErrorMessages
+
 
 // Places
+_StartLocationNames
 #ifdef LANGUAGE_FR
 //                                      0         1         2         3
 //                                      0123456789012345678901234567890123456789
@@ -235,9 +243,10 @@ _gTextLocationOutsidePit          .byt "Outside a deep pit",0
 
 _gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
 #endif
-
+_EndLocationNames
 
 // Items
+_StartItemNames
 #ifdef LANGUAGE_FR
 // Containers
 _gTextItemTobaccoTin              .byt "une boîte à tabac vide",0
@@ -345,10 +354,13 @@ _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0
 _gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
 _gTextItemeRopeAttachedToATree    .byt "a rope attached to a tree",0
 #endif
+_EndItemNames
 
 _gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
 
+
 // Scene descriptions
+_StartSceneScripts
 _gDescriptionTeenagerRoom         .byt "T",255-2,"eenager r",255-1,"oom?",0
 
 _gDescriptionNone
@@ -913,4 +925,17 @@ _gDescriptionGameOverLost
     ; Should probably have a "game over" command
     .byt COMMAND_FADE_BUFFER
     END
+_EndSceneScripts
+
+_EndGameTextData
+
+;
+; Print statistics about the size of things
+;
+#print Total size of game text content = (_EndGameTextData - _StartGameTextData)
+#print - Messages and prompts = (_EndMessagesAndPrompts - _StartMessagesAndPrompts)
+#print - Error messages = (_EndErrorMessages - _StartErrorMessages)
+#print - Location names = (_EndLocationNames - _StartLocationNames)
+#print - Item names = (_EndItemNames - _StartItemNames)
+#print - Scene scripts = (_EndSceneScripts - _StartSceneScripts)
 
