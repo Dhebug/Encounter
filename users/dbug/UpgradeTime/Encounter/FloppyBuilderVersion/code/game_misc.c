@@ -219,6 +219,7 @@ void HandleByteStream()
 
 			case COMMAND_BUBBLE:
 				{
+                    unsigned char car;
 					unsigned char index;
 					unsigned char count = *gCurrentStream++;
 					unsigned char color = *gCurrentStream++;
@@ -227,8 +228,16 @@ void HandleByteStream()
 					{
 						unsigned char x = *coordinates++;
 						unsigned char y = *coordinates++;
-						unsigned char w = *coordinates++;
-						unsigned char h = *coordinates++;
+                        unsigned char w = 2;
+						unsigned char h = 15;
+                        coordinates++;           // offset y
+                        while (car=*coordinates++)  // Skip string
+                        {
+                            if (car>127)    w+=(char)car;
+                            else            w+=gFont12x14Width[car-32]+1;
+
+                        }
+                        //sprintf((char*)0xbb80+40*(20+index),"%d %d %d %d ",x,y,w,h);
 						DrawRectangleOutline(x-1,y-1,w+2,h+2,color);
 					}
 
@@ -238,25 +247,35 @@ void HandleByteStream()
 					coordinates = gCurrentStream;
 					for (index=0;index<count;index++)
 					{
-						gDrawPosX    = *gCurrentStream++;
-						gDrawPosY    = *gCurrentStream++;
-						gDrawWidth   = *gCurrentStream++;
-						gDrawHeight  = *gCurrentStream++;
+						gDrawPosX    = *coordinates++;
+						gDrawPosY    = *coordinates++;
+						gDrawHeight  = 15;
+                        coordinates++;           // offset y
+                        gDrawWidth=2;
+                        while (car=*coordinates++)  // Skip string
+                        {
+                            if (car>127)    gDrawWidth+=(char)car;
+                            else            gDrawWidth+=gFont12x14Width[car-32]+1;
+                        }
+
 						DrawFilledRectangle();
 					}
 
 					color ^= 63;
 					gDrawPattern 	= color;
+					coordinates = gCurrentStream;
 					for (index=0;index<count;index++)
 					{
-						gDrawPosX    	= *coordinates++ + *gCurrentStream++;
-						gDrawPosY    	= *coordinates++ + *gCurrentStream++;
-						gDrawWidth   	= *coordinates++; 		// Ignored
-						gDrawHeight  	= *coordinates++;		// Ignored
-						gDrawExtraData  = gCurrentStream;
+						gDrawPosX    	= *coordinates++;
+						gDrawPosY    	= *coordinates++;
+						gDrawHeight  	= 15;
+						gDrawPosX      += 1;   // offset x
+						gDrawPosY      += *coordinates++;  // offset y
+						gDrawExtraData  = coordinates;
 						PrintFancyFont();
-						gCurrentStream = gDrawExtraData;    // modified by the PrintFancyFont function
+						coordinates = gDrawExtraData;    // modified by the PrintFancyFont function
 					}
+                    gCurrentStream = coordinates;
 				}
 				break;
 

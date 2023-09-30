@@ -369,62 +369,49 @@ _gDescriptionNone
 _gDescriptionDarkTunel
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,4,172,15)
-    .byt RECTANGLE(4,13,114,16)
-    .byt OFFSET(1,0),"Like most tunnels: dark, damp,",0
-    .byt OFFSET(1,1),"and somewhat scary.",0
+    .byt 4,4,0,"Like most tunnels: dark, damp,",0
+    .byt 4,13,1,"and somewhat scary.",0
     END
 
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
 #ifdef LANGUAGE_FR    
-    .byt RECTANGLE(4,100,108,15)
-    .byt RECTANGLE(4,106,63,15)
-    .byt OFFSET(1,0),"La place du marché",0
-    .byt OFFSET(1,4),"est désertée",0
+    .byt 4,100,0,"La place du marché",0
+    .byt 4,106,4,"est désertée",0
 #else
-    .byt RECTANGLE(4,100,95,15)
-    .byt RECTANGLE(4,106,59,15)
-    .byt OFFSET(1,0),"The market place",0
-    .byt OFFSET(1,4),"is deserted",0
+    .byt 4,100,0,"The market place",0
+    .byt 4,106,4,"is deserted",0
 #endif    
     END
+
 
 _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(153,85,83,14)
-    .byt RECTANGLE(136,98,100,15)
-    .byt OFFSET(1,0),"Rats, graf",255-1,"f",255-1,"itti,",0
-    .byt OFFSET(1,0),"and used syringes.",0
+    .byt 153,85,0,"Rats, graf",255-1,"f",255-1,"itti,",0
+    .byt 136,98,0,"and used syringes.",0
     END
 
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,100,87,11)
-    .byt RECTANGLE(4,106,69,15)
-    .byt OFFSET(1,0),"All roads lead...",0
-    .byt OFFSET(1,4),"...somewhere?",0
+    .byt 4,100,0,"All roads lead...",0
+    .byt 4,106,4,"...somewhere?",0
     END
 
 _gDescriptionMainStreet
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,4,64,12)
-    .byt RECTANGLE(4,16,93,11)
-    .byt OFFSET(1,0),"A good old",0
-    .byt OFFSET(4,0),"medieval church",0
+    .byt 4,4,0,"A good old",0
+    .byt 4,16,0,"medieval church",0
     END
 
 _gDescriptionNarrowPath
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(130,5,105,12)
-    .byt RECTANGLE(109,17,126,15)
-    .byt OFFSET(1,0),"Are these the open",0
-    .byt OFFSET(1,0),"f",256-1,"lood gates of heaven?",0
+    .byt 130,5,0,"Are these the open",0
+    .byt 109,17,0,"f",256-1,"lood gates of heaven?",0
     END
 
 _gDescriptionInThePit
@@ -446,16 +433,13 @@ rope_attached_to_tree
 cannot_escape_pit
     WAIT(50*2)
     .byt COMMAND_BUBBLE,1,127
-    .byt RECTANGLE(6,8,86,11)
-    .byt OFFSET(1,0),"It did not look",0
+    .byt 6,8,0,"It did not look",0
     WAIT(50)
     .byt COMMAND_BUBBLE,1,127
-    .byt RECTANGLE(176,42,54,15)
-    .byt OFFSET(1,0),"that deep",0
+    .byt 176,42,0,"that deep",0
     WAIT(50)
     .byt COMMAND_BUBBLE,1,127
-    .byt RECTANGLE(82,94,74,15)
-    .byt OFFSET(1,0),"from outside",0
+    .byt 82,94,0,"from outside",0
     
     WAIT(50*2)                      ; Wait a couple seconds for dramatic effect
     
@@ -480,20 +464,16 @@ rope_attached_to_tree
 digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,94,98,15)
-    .byt RECTANGLE(5,103,55,19)
-    .byt OFFSET(1,0),"Are they digging",0
-    .byt OFFSET(1,4),"for gold?",0
+    .byt 5,94,0,"Are they digging",0
+    .byt 5,103,4,"for gold?",0
     END
 .)
 
 _gDescriptionTarmacArea
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(149,5,86,11)
-    .byt RECTANGLE(152,15,82,11)
-    .byt OFFSET(1,0),"Ashes to Ashes",0
-    .byt OFFSET(1,0),"Rust to Rust...",0
+    .byt 149,5,0,"Ashes to Ashes",0
+    .byt 152,15,0,"Rust to Rust...",0
     END
 
 _gDescriptionOldWell
@@ -510,102 +490,79 @@ no_rope
     ; Then show the messages
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(111,5,124,12)
-    .byt RECTANGLE(158,16,75,11)
-    .byt OFFSET(1,0),"This well looks as old",0
-    .byt OFFSET(1,0),"as the church",0
+    .byt 111,5,0,"This well looks as old",0
+    .byt 158,16,0,"as the church",0
     END
 
 _gDescriptionWoodedAvenue
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,4,144,16)
-    .byt RECTANGLE(4,14,129,16)
-    .byt OFFSET(1,0),"These trees have probably",0
-    .byt OFFSET(1,1),"witnessed many things",0
+    .byt 4,4,0,"These trees have probably",0
+    .byt 4,14,1,"witnessed many things",0
     END
 
 _gDescriptionGravelDrive
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,64
-    .byt RECTANGLE(127,86,108,11)
-    .byt RECTANGLE(143,97,92,11)
-    .byt RECTANGLE(182,107,53,15)
-    .byt OFFSET(1,0),"Kind o",255-2,"f impressive",0
-    .byt OFFSET(1,0),"when seen from",0
-    .byt OFFSET(1,0),"f",255-2,"ar away",0
+    .byt 127,86,0,"Kind o",255-2,"f impressive",0
+    .byt 143,97,0,"when seen from",0
+    .byt 182,107,0,"f",255-2,"ar away",0
     END
 
 _gDescriptionZenGarden
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,4,139,11)
-    .byt RECTANGLE(4,15,72,16)
-    .byt OFFSET(1,0),"A Japanese Zen Garden?",0
-    .byt OFFSET(1,1),"In England?",0
+    .byt 4,4,0,"A Japanese Zen Garden?",0
+    .byt 4,15,1,"In England?",0
     END
 
 _gDescriptionFrontLawn
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,93,11)
-    .byt RECTANGLE(5,15,84,16)
-    .byt OFFSET(1,0),"The per",255-2,"f",255-2,"ect home",0
-    .byt OFFSET(1,1),"f",255-2,"or egomaniacs",0
+    .byt 5,5,0,"The per",255-2,"f",255-2,"ect home",0
+    .byt 5,15,1,"f",255-2,"or egomaniacs",0
     END
 
 _gDescriptionGreenHouse
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,96,80,15)
-    .byt RECTANGLE(4,107,98,16)
-    .byt OFFSET(1,0),"Obviously f",255-2,"or",0
-    .byt OFFSET(1,1),34,"Therapeutic use",34,0
+    .byt 4,96,0,"Obviously f",255-2,"or",0
+    .byt 4,107,1,"Therapeutic use",34,0
     END
 
 _gDescriptionTennisCourt
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(4,4,107,12)
-    .byt RECTANGLE(4,15,150,15)
-    .byt OFFSET(1,0),"That's more like it:",0
-    .byt OFFSET(1,0),"a proper lawn tennis court",0
+    .byt 4,4,0,"That's more like it:",0
+    .byt 4,15,0,"a proper lawn tennis court",0
     END
 
 _gDescriptionVegetableGarden
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(134,5,100,12)
-    .byt RECTANGLE(136,15,98,16)
-    .byt OFFSET(1,0),"Not the best spot",0
-    .byt OFFSET(1,1),"to grow tomatoes",0
+    .byt 134,5,0,"Not the best spot",0
+    .byt 136,15,1,"to grow tomatoes",0
     END
 
 _gDescriptionFishPond
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,116,12)
-    .byt RECTANGLE(5,17,116,15)
-    .byt OFFSET(1,0),"Some o",255-2,"f these f",255-1,"ishes",0
-    .byt OFFSET(1,0),"are sur",255-1,"prinsingly big",0
+    .byt 5,5,0,"Some of these f",255-1,"ishes",0
+    .byt 5,17,0,"are sur",255-1,"prinsingly big",0
     END
 
 _gDescriptionTiledPatio
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(93,5,143,11)
-    .byt RECTANGLE(110,15,126,15)
-    .byt OFFSET(1,0),"The house's back entrance",0
-    .byt OFFSET(1,0),"is accessible from here",0
+    .byt 93,5,0,"The house's back entrance",0
+    .byt 110,15,0,"is accessible from here",0
     END
 
 _gDescriptionAppleOrchard
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,136,15)
-    .byt RECTANGLE(5,17,139,15)
-    .byt OFFSET(1,0),"The best kind o",255-2,"f apples:",0
-    .byt OFFSET(1,0),"sweet",255-1,", crunchy and juicy",0
+    .byt 5,5,0,"The best kind o",255-2,"f apples:",0
+    .byt 5,17,0,"sweet",255-1,", crunchy and juicy",0
     END
 
 _gDescriptionEntranceHall
@@ -619,10 +576,8 @@ _gDescriptionEntranceHall
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_BUBBLE,2,64
-      .byt RECTANGLE(5,5,89,14)
-      .byt RECTANGLE(5,17,115,15)
-      .byt OFFSET(1,0),"Let's call that a ",0
-      .byt OFFSET(1,0),34,"Collateral Damage",34,0
+      .byt 5,5,0,"Let's call that a ",0
+      .byt 5,17,0,"Collateral Damage",34,0
       END
       
 dog_alive
@@ -631,20 +586,16 @@ dog_alive
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,139,15)
-    .byt RECTANGLE(5,19,120,15)
-    .byt OFFSET(1,0),"O",255-2,"f course there is a dog.",0
-    .byt OFFSET(1,0),"There's always a dog.",0
+    .byt 5,5,0,"O",255-2,"f course there is a dog.",0
+    .byt 5,19,0,"There's always a dog.",0
     END
 
 end_dog
     ; Some generic message in case the dog is not there (probably not displayed right now)
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(124,5,111,14)
-    .byt RECTANGLE(187,17,48,11)
-    .byt OFFSET(1,0),"Quite an impressive",0
-    .byt OFFSET(1,0),"staircase",0
+    .byt 124,5,0,"Quite an impressive",0
+    .byt 187,17,0,"staircase",0
     END
 
 _gDescriptionDogAttacking
@@ -652,8 +603,7 @@ _gDescriptionDogAttacking
      ;
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(5,108,35,15)
-    .byt OFFSET(1,0),"Oops...",0
+    .byt 5,108,0,"Oops...",0
     WAIT(50*2)                              ; Wait a couple seconds
     JUMP(_gDescriptionGameOverLost)         ; Game Over
 
@@ -662,186 +612,146 @@ _gDescriptionDogAttacking
 _gDescriptionLibrary
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,86,119,11)
-    .byt RECTANGLE(5,97,110,15)
-    .byt OFFSET(1,0),"Books, fireplace, and",0
-    .byt OFFSET(1,0),"a com",255-2,"f",255-2,"ortable chair",0
+    .byt 5,86,0,"Books, fireplace, and",0
+    .byt 5,97,0,"a com",255-2,"f",255-2,"ortable chair",0
     END
 
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,127
-    .byt RECTANGLE(5,48,122,13)
-    .byt RECTANGLE(12,68,98,15)
-    .byt RECTANGLE(37,90,52,15)
-    .byt OFFSET(1,0),"Either they love dark",0
-    .byt OFFSET(1,0),"or they f",255-2,"orgot to",0
-    .byt OFFSET(1,0),"pay their",0
+    .byt 5,48,0,"Either they love dark",0
+    .byt 12,68,0,"or they f",255-2,"orgot to",0
+    .byt 37,90,0,"pay their",0
 
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(75,110,26,11)
-    .byt OFFSET(1,0),"bills",0
-
+    .byt 75,110,0,"bills",0
     END
 
 _gDescriptionEntranceLounge
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,105,11)
-    .byt RECTANGLE(5,15,49,15)
-    .byt OFFSET(1,0),"Looks like someone",0
-    .byt OFFSET(1,0),"had fun",0
+    .byt 5,5,0,"Looks like someone",0
+    .byt 5,15,0,"had fun",0
     END
 
 _gDescriptionDiningRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,95,69,13)
-    .byt RECTANGLE(5,107,84,15)
-    .byt OFFSET(1,0),"Two plates...",0
-    .byt OFFSET(1,0),"...good to know",0
+    .byt 5,95,0,"Two plates...",0
+    .byt 5,107,0,"...good to know",0
     END
 
 _gDescriptionGamesRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(142,5,93,13)
-    .byt RECTANGLE(164,16,71,15)
-    .byt OFFSET(1,0),"T",255-2,"op o",255-2,"f the range",0
-    .byt OFFSET(1,0),"video system",0
+    .byt 142,5,0,"T",255-2,"op o",255-2,"f the range",0
+    .byt 164,16,0,"video system",0
 
     WAIT(50)
 
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(175,40,60,15)
-    .byt OFFSET(1,0),"Impressive",0
+    .byt 175,40,0,"Impressive",0
     END
 
 _gDescriptionSunLounge
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(112,5,123,15)
-    .byt OFFSET(1,0),"No rest ",255-2,"f",255-2,"or the weary",0
+    .byt 112,5,0,"No rest ",255-2,"f",255-2,"or the weary",0
     END
 
 _gDescriptionKitchen
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,71,11)
-    .byt RECTANGLE(5,16,41,12)
-    .byt OFFSET(1,0),"A very basic",0
-    .byt OFFSET(1,0),"kitchen",0
+    .byt 5,5,0,"A very basic",0
+    .byt 5,16,0,"kitchen",0
     END
 
 _gDescriptionNarrowStaircase
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,127
-    .byt RECTANGLE(5,5,95,15)
-    .byt OFFSET(1,0),"Watch your step",0
+    .byt 5,5,0,"Watch your step",0
     END
 
 _gDescriptionCellar
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
-    .byt RECTANGLE(75,15,90,12)
-    .byt RECTANGLE(80,25,67,15)
-    .byt OFFSET(1,0),"Is that a Franz",0
-    .byt OFFSET(1,0),"Jager safe?",0
+    .byt 75,15,0,"Is that a Franz",0
+    .byt 80,25,0,"Jager safe?",0
     END
 
 _gDescriptionDarkerCellar
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
-    .byt RECTANGLE(5,99,104,12)
-    .byt RECTANGLE(5,109,77,13)
-    .byt OFFSET(1,0),"The window seems",0
-    .byt OFFSET(1,0),"to be occulted",0
+    .byt 5,99,0,"The window seems",0
+    .byt 5,109,0,"to be occulted",0
     END
 
 _gDescriptionStaircase
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,64
-    .byt RECTANGLE(16,8,32,15)
-    .byt RECTANGLE(179,8,39,12)
-    .byt RECTANGLE(60,72,119,15)
-    .byt OFFSET(1,0),"Left?",0
-    .byt OFFSET(1,0),"Right?",0
-    .byt OFFSET(1,0),"does it really matter?",0
+    .byt 16,8,0,"Left?",0
+    .byt 179,8,0,"Right?",0
+    .byt 60,72,0,"does it really matter?",0
     END
 
 _gDescriptionMainLanding
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(47,70,143,15)
-    .byt OFFSET(1,0),"Nice view from up there",0
+    .byt 47,70,0,"Nice view from up there",0
     END
 
 _gDescriptionEastGallery
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,90,12)
-    .byt RECTANGLE(20,17,34,12)
-    .byt OFFSET(1,0),"Boring corridor:",0
-    .byt OFFSET(1,0),"Check",0
+    .byt 5,5,0,"Boring corridor:",0
+    .byt 20,17,0,"Check",0
     END
 
 _gDescriptionChildBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,96,74,12)
-    .byt RECTANGLE(5,107,85,15)
-    .byt OFFSET(1,0),"Let me guess:",0
-    .byt OFFSET(1,0),"Teenager room?",0
+    .byt 5,96,0,"Let me guess:",0
+    .byt 5,107,0,"Teenager room?",0
     END
 
 _gDescriptionGuestBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,6,92,12)
-    .byt RECTANGLE(5,17,71,15)
-    .byt OFFSET(1,0),"Simple and ",255-2,"f",255-2,"resh",0
-    .byt OFFSET(1,0),"f",255-2,"or a change",0
+    .byt 5,6,0,"Simple and ",255-2,"f",255-2,"resh",0
+    .byt 5,17,0,"f",255-2,"or a change",0
     END
 
 _gDescriptionShowerRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(149,5,86,12)
-    .byt RECTANGLE(152,16,83,13)
-    .byt OFFSET(1,0),"I will need one",0
-    .byt OFFSET(1,0),"when I'm done",0
+    .byt 149,5,0,"I will need one",0
+    .byt 152,16,0,"when I'm done",0
     END
 
 _gDescriptionWestGallery
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
-    .byt RECTANGLE(85,81,72,13)
-    .byt RECTANGLE(60,92,112,13)
-    .byt OFFSET(1,0),"Is that Steel",0
-    .byt OFFSET(1,0),"behind the Curtain?",0
+    .byt 85,81,0,"Is that Steel",0
+    .byt 60,92,0,"behind the Curtain?",0
     END
 
 _gDescriptionBoxRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,63,11)
-    .byt RECTANGLE(5,16,59,11)
-    .byt OFFSET(1,0),"A practical",0
-    .byt OFFSET(1,0),"little room",0
+    .byt 5,5,0,"A practical",0
+    .byt 5,16,0,"little room",0
     END
 
 _gDescriptionClassyBathRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(132,5,103,15)
-    .byt OFFSET(1,0),"Looks comfortable",0
+    .byt 132,5,0,"Looks comfortable",0
     END
 
 _gDescriptionTinyToilet
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt RECTANGLE(137,5,98,15)
-    .byt OFFSET(1,0),"Sparklingly clean",0
+    .byt 137,5,0,"Sparklingly clean",0
     END
 
 _gDescriptionMasterBedRoom
@@ -860,10 +770,8 @@ _gDescriptionMasterBedRoom
       ; Text describing the dead thug
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_BUBBLE,2,64
-      .byt RECTANGLE(5,5,89,14)
-      .byt RECTANGLE(5,17,115,15)
-      .byt OFFSET(1,0),"Let's call that a ",0
-      .byt OFFSET(1,0),34,"Collateral Damage",34,0
+      .byt 5,5,0,"Let's call that a ",0
+      .byt 5,17,0,"Collateral Damage",34,0
       END
 
 thug_alive
@@ -873,10 +781,8 @@ thug_alive
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,124,15)
-    .byt RECTANGLE(5,16,84,15)
-    .byt OFFSET(1,0),"This will make things",0
-    .byt OFFSET(1,0),"notably easier...",0
+    .byt 5,5,0,"This will make things",0
+    .byt 5,16,0,"notably easier...",0
     ; Should probably have a "game over" command
     END
     
@@ -884,10 +790,8 @@ end_thug
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,124,15)
-    .byt RECTANGLE(5,16,84,15)
-    .byt OFFSET(1,0),"This was make things",0
-    .byt OFFSET(1,0),"notably easier...",0
+    .byt 5,5,0,"This was make things",0
+    .byt 5,16,0,"notably easier...",0
     ; Should probably have a "game over" command
     .byt COMMAND_FADE_BUFFER
     END
@@ -898,24 +802,19 @@ _gDescriptionThugAttacking
     ; Draw the message
     WAIT(50*2)                              ; Wait a couple seconds
     .byt COMMAND_BUBBLE,2,64
-    .byt RECTANGLE(5,5,111,11)
-    .byt RECTANGLE(60,16,69,15)
-    .byt OFFSET(1,0),"This was a mistake:",0
-    .byt OFFSET(1,0),"My last one",0
+    .byt 5,5,0,"This was a mistake:",0
+    .byt 60,16,0,"My last one",0
     WAIT(50*2)                              ; Wait a couple seconds
     JUMP(_gDescriptionGameOverLost)         ; Game Over
 
 
 _gDescriptionPadlockedRoom
+    WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,4,64
-    .byt RECTANGLE(5,5,41,11)
-    .byt RECTANGLE(125,16,110,11)
-    .byt RECTANGLE(131,53,104,15)
-    .byt RECTANGLE(140,90,74,15)
-    .byt OFFSET(1,0),"Damn...",0
-    .byt OFFSET(1,0),"I will never be able",0
-    .byt OFFSET(1,0),"to pick these locks",0
-    .byt OFFSET(1,0),"fast enough!",0
+    .byt 5,5,0,"Damn...",0
+    .byt 125,16,0,"I will never be able",0
+    .byt 131,53,0,"to pick these locks",0
+    .byt 140,90,0,"fast enough!",0
     END
 
 
