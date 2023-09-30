@@ -171,11 +171,27 @@ ErrorCode Preprocessor::command_echo(char *t)
 	return E_OK;
 }
 
+// There are now two possible syntaxes:
+// #print expression
+// #print some stuff to print = expression 
 ErrorCode Preprocessor::command_print(char *t)
 {
 	int f,a,er;
 	
-	logout(t);
+	char* equalPtr = strchr(t, '=');
+	if (equalPtr)
+	{
+		// Found a "=" symbol: We print out the left hand side expression as is, and move the pointer to after the expression
+    *equalPtr++ = 0;
+    logout(t);
+    t = equalPtr;
+	}
+	else
+	{
+		// No "=" symbol found
+    logout(t);
+	}
+
 	if ((er=pp_replace(BufferLine,t,-1,m_CurrentListIndex)))
 	{
 		logout("\n");
@@ -185,7 +201,7 @@ ErrorCode Preprocessor::command_print(char *t)
 	{
 		logout("=");
 		logout(BufferLine);
-		logout("=");
+		logout("= ");
 		er=b_term(BufferLine,&a,&f,TablePcSegment[gCurrentSegment]);
 		if (er)
 		{
