@@ -100,8 +100,6 @@ extern unsigned int gDelayStream;
 
 
 // game_text
-extern char gTextLowerCaseAlphabet[];
-
 extern char gDescriptionTeenagerRoom[];
 extern char gDescriptionDarkTunel[];
 extern char gDescriptionMarketPlace[];

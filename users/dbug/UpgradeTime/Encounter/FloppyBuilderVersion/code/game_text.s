@@ -362,12 +362,11 @@ _gTextItemeRopeAttachedToATree    .byt "a rope attached to a tree",0
 #endif
 _EndItemNames
 
-_gTextLowerCaseAlphabet    .byt "abcde",255-2,"f",255-2,"ghi",255-2,"jklmnopqrstuvwxyz",0
 
 
 // Scene descriptions
 _StartSceneScripts
-_gDescriptionTeenagerRoom         .byt "T",255-2,"eenager r",255-1,"oom?",0
+_gDescriptionTeenagerRoom         .byt "Teenager room?",0
 
 _gDescriptionNone
     END
@@ -395,8 +394,13 @@ _gDescriptionMarketPlace
 _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 153,85,0,"Rats, graf",255-1,"f",255-1,"itti,",0
+#ifdef LANGUAGE_FR    
+    .byt 153,85,0,"Rats, graffitti,",0
     .byt 136,98,0,"and used syringes.",0
+#else
+    .byt 153,85,0,"Rats, graffittis,",0
+    .byt 136,98,0,"et seringues.",0
+#endif    
     END
 
 _gDescriptionRoad
@@ -417,7 +421,7 @@ _gDescriptionNarrowPath
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
     .byt 130,5,0,"Are these the open",0
-    .byt 109,17,0,"f",256-1,"lood gates of heaven?",0
+    .byt 109,17,0,"flood gates of heaven?",0
     END
 
 _gDescriptionInThePit
@@ -510,9 +514,9 @@ _gDescriptionWoodedAvenue
 _gDescriptionGravelDrive
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,64
-    .byt 127,86,0,"Kind o",255-2,"f impressive",0
+    .byt 127,86,0,"Kind of impressive",0
     .byt 143,97,0,"when seen from",0
-    .byt 182,107,0,"f",255-2,"ar away",0
+    .byt 182,107,0,"far away",0
     END
 
 _gDescriptionZenGarden
@@ -525,14 +529,14 @@ _gDescriptionZenGarden
 _gDescriptionFrontLawn
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"The per",255-2,"f",255-2,"ect home",0
-    .byt 5,15,1,"f",255-2,"or egomaniacs",0
+    .byt 5,5,0,"The perfect home",0
+    .byt 5,15,1,"for egomaniacs",0
     END
 
 _gDescriptionGreenHouse
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 4,96,0,"Obviously f",255-2,"or",0
+    .byt 4,96,0,"Obviously for",0
     .byt 4,107,1,"Therapeutic use",34,0
     END
 
@@ -553,8 +557,8 @@ _gDescriptionVegetableGarden
 _gDescriptionFishPond
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"Some of these f",255-1,"ishes",0
-    .byt 5,17,0,"are sur",255-1,"prinsingly big",0
+    .byt 5,5,0,"Some of these fishes",0
+    .byt 5,17,0,"are surprinsingly big",0
     END
 
 _gDescriptionTiledPatio
@@ -567,8 +571,8 @@ _gDescriptionTiledPatio
 _gDescriptionAppleOrchard
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"The best kind o",255-2,"f apples:",0
-    .byt 5,17,0,"sweet",255-1,", crunchy and juicy",0
+    .byt 5,5,0,"The best kind of apples:",0
+    .byt 5,17,0,"sweet, crunchy and juicy",0
     END
 
 _gDescriptionEntranceHall
@@ -592,7 +596,7 @@ dog_alive
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"O",255-2,"f course there is a dog.",0
+    .byt 5,5,0,"Of course there is a dog.",0
     .byt 5,19,0,"There's always a dog.",0
     END
 
@@ -619,14 +623,14 @@ _gDescriptionLibrary
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
     .byt 5,86,0,"Books, fireplace, and",0
-    .byt 5,97,0,"a com",255-2,"f",255-2,"ortable chair",0
+    .byt 5,97,0,"a comfortable chair",0
     END
 
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,127
     .byt 5,48,0,"Either they love dark",0
-    .byt 12,68,0,"or they f",255-2,"orgot to",0
+    .byt 12,68,0,"or they forgot to",0
     .byt 37,90,0,"pay their",0
 
     .byt COMMAND_BUBBLE,1,64
@@ -650,7 +654,7 @@ _gDescriptionDiningRoom
 _gDescriptionGamesRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 142,5,0,"T",255-2,"op o",255-2,"f the range",0
+    .byt 142,5,0,"Top of the range",0
     .byt 164,16,0,"video system",0
 
     WAIT(50)
@@ -662,7 +666,7 @@ _gDescriptionGamesRoom
 _gDescriptionSunLounge
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
-    .byt 112,5,0,"No rest ",255-2,"f",255-2,"or the weary",0
+    .byt 112,5,0,"No rest for the weary",0
     END
 
 _gDescriptionKitchen
@@ -723,8 +727,8 @@ _gDescriptionChildBedroom
 _gDescriptionGuestBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,6,0,"Simple and ",255-2,"f",255-2,"resh",0
-    .byt 5,17,0,"f",255-2,"or a change",0
+    .byt 5,6,0,"Simple and fresh",0
+    .byt 5,17,0,"for a change",0
     END
 
 _gDescriptionShowerRoom
