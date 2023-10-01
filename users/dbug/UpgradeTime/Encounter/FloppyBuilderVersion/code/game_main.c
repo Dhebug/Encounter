@@ -550,15 +550,6 @@ void DropItem(unsigned char itemId)
 	}
 }
 
-
-void ShowFullScreenItem(int image_id, const char* description)
-{
-    ClearMessageWindow(16+4);
-    LoadFileAt(image_id,ImageBuffer);
-    PrintTopDescription(description);
-    BlitBufferToHiresWindow();
-}
-
 char ItemCheck(unsigned char itemId)
 {
 	if (itemId<e_ITEM_COUNT_)
@@ -586,31 +577,17 @@ void ReadItem(unsigned char itemId)
         switch (itemId)
         {
         case e_ITEM_Newspaper:
-            ShowFullScreenItem(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th");
-            PrintInformationMessage("I have to find her fast...");
-            WaitFrames(50*2);
-            PrintInformationMessage("...I hope she is fine!");
-            WaitFrames(50*2);
+            PlayStream(gSceneActionReadNewsPaper);
             LoadScene();
             break;
 
         case e_ITEM_PrintedNote:
-            ShowFullScreenItem(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note");
-            WaitFrames(50*2);
-            PrintInformationMessage("That could be useful...");
-            WaitFrames(50*2);
-            PrintInformationMessage("...if I can access it!");
-            WaitFrames(50*2);
+            PlayStream(gSceneActionReadPrintedNote);
             LoadScene();
             break;
 
         case e_ITEM_ChemistryBook:
-            ShowFullScreenItem(LOADER_PICTURE_SCIENCE_BOOK,"A science book");
-            WaitFrames(50*2);
-            PrintInformationMessage("I don't understand much...");
-            WaitFrames(50*2);
-            PrintInformationMessage("...but looks like someone took notes.");
-            WaitFrames(50*2);
+            PlayStream(gSceneActionReadChemistryBook);
             if (gItems[e_ITEM_ChemistryRecipes].location==e_LOCATION_NONE)
             {
                 // If the recipes were not yet found, they now appear at the current location
@@ -620,17 +597,12 @@ void ReadItem(unsigned char itemId)
             break;
 
         case e_ITEM_ChemistryRecipes:
-            ShowFullScreenItem(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes");
-            WaitFrames(50*2);
-            PrintInformationMessage("I can definitely use these...");
-            WaitFrames(50*2);
-            PrintInformationMessage("...just need to find the materials.");
-            WaitFrames(50*2);
+            PlayStream(gSceneActionReadChemistryRecipes);
             LoadScene();
             break;
 
         case e_ITEM_PlasticBag:
-            PrintErrorMessage("It's just a white generic bag");
+            PrintErrorMessage(gTextAGenericWhiteBag);    // "It's just a white generic bag"
             break;
 
         default:
@@ -819,18 +791,16 @@ void InspectItem(unsigned char itemId)
 		switch (itemId)
 		{
 		case e_ITEM_UnitedKingdomMap:
-			ShowFullScreenItem(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom");
-			PrintInformationMessage("It shows Ireland, Wales and England");
-			WaitFrames(50*2);
+            PlayStream(gSceneActionInspectMap);
 			LoadScene();
 			break;
 
 		case e_ITEM_ChemistryBook:
-			PrintInformationMessage("A thick book with some boomarks");
+			PrintInformationMessage(gTextThickBookBookmarks);   // "A thick book with some boomarks"
 			break;
 
 		default:
-			PrintErrorMessage("Nothing special");
+			PrintErrorMessage(gTextErrorNothingSpecial);    // "Nothing special"
 			break;
 		}
 	}
@@ -1182,6 +1152,10 @@ void Initializations()
 	//gCurrentLocation =e_LOCATION_NARROWPATH;
     //gCurrentLocation = e_LOCATION_LIBRARY;
 	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
+
+    gItems[e_ITEM_ChemistryBook].location          = e_LOCATION_INVENTORY;
+    gCurrentLocation =e_LOCATION_LIBRARY;
+    
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
 	gCurrentLocation = e_LOCATION_MARKETPLACE;

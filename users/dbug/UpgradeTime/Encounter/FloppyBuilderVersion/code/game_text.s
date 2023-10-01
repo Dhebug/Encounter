@@ -36,6 +36,8 @@ _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
 _gTextNotDead               .byt "Pas mort",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
 _gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
+_gTextAGenericWhiteBag      .byt "Juste un sac blanc normal",0
+_gTextThickBookBookmarks    .byt "Un livre épais avec des marques",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -59,6 +61,8 @@ _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
 _gTextNotDead               .byt "Not dead",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
+_gTextAGenericWhiteBag      .byt "It's just a white generic bag",0
+_gTextThickBookBookmarks    .byt "A thick book with some boomarks",0
 #endif
 _EndMessagesAndPrompts
 
@@ -89,6 +93,7 @@ _gTextErrorShouldSubdue     .byt "Il faut d'abord le maitriser",0
 _gTextErrorAlreadySearched  .byt "Vous l'avez déjà fouillé",0
 _gTextErrorInappropriate    .byt "Probablement inapproprié",0
 _gTextErrorDeadDontMove     .byt "Les morts ne bougent pas",0
+_gTextErrorNothingSpecial   .byt "Rien de spécial",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -114,6 +119,7 @@ _gTextErrorShouldSubdue     .byt "I should subdue him first",0
 _gTextErrorAlreadySearched  .byt "You've already frisked him",0
 _gTextErrorInappropriate    .byt "Probably inappropriate",0
 _gTextErrorDeadDontMove     .byt "Dead don't move",0
+_gTextErrorNothingSpecial   .byt "Nothing special",0
 #endif
 _EndErrorMessages
 
@@ -826,6 +832,54 @@ _gDescriptionGameOverLost
     END
 _EndSceneScripts
 
+
+// Scene actions
+_StartSceneActions
+
+_gSceneActionReadNewsPaper
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th",0
+    .byt COMMAND_INFO_MESSAGE,"I have to find her fast...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...I hope she is fine!",0
+    WAIT(50*2)
+    END
+
+_gSceneActionReadPrintedNote
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"That could be useful...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...if I can access it!",0
+    WAIT(50*2)
+    END
+
+_gSceneActionReadChemistryRecipes
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"I can definitely use these...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...just need to find the materials.",0
+    WAIT(50*2)
+    END
+
+_gSceneActionReadChemistryBook
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_SCIENCE_BOOK,"A science book",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"I don't understand much...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...but looks like someone took notes.",0
+    WAIT(50*2)
+    END
+
+_gSceneActionInspectMap
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_UK_MAP,"A map of the United Kingdom",0
+    .byt COMMAND_INFO_MESSAGE,"It shows Ireland, Wales and England",0
+    WAIT(50*2)
+    END
+
+_EndSceneActions
+
+
 _EndGameTextData
 
 ;
@@ -837,4 +891,6 @@ _EndGameTextData
 #print - Location names = (_EndLocationNames - _StartLocationNames)
 #print - Item names = (_EndItemNames - _StartItemNames)
 #print - Scene scripts = (_EndSceneScripts - _StartSceneScripts)
+#print - Scene actions = (_EndSceneActions - _StartSceneActions)
+
 

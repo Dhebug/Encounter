@@ -121,6 +121,8 @@ extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
 extern const char gTextNotDead[];               // "Not dead" - Debugging text
 extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
 extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
+extern const char gTextAGenericWhiteBag[];      // "It's just a white generic bag"
+extern const char gTextThickBookBookmarks[];    // "A thick book with some boomarks"
 
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
@@ -147,6 +149,7 @@ extern const char gTextErrorShouldSubdue[];     // "I should subdue him first"
 extern const char gTextErrorAlreadySearched[];  // "You've already frisked him"
 extern const char gTextErrorInappropriate[];    // "Probably inappropriate"
 extern const char gTextErrorDeadDontMove[];     // "Dead don't move"
+extern const char gTextErrorNothingSpecial[];   // "Nothing special"
 
 // Places
 extern const char gTextLocationMarketPlace[];          // "You are in a deserted market square"     
@@ -261,4 +264,11 @@ extern const char gTextItemChemistryRecipes[];        // "a couple chemistry rec
 extern const char gTextItemUnitedKingdomMap[];        // "a map of the United Kingdom"        
 extern const char gTextItemLadderInTheHole[];         // "a ladder in a hole"                 
 extern const char gTextItemeRopeAttachedToATree[];    // "a rope attached to a tree"
+
+// Scene actions
+extern const char gSceneActionReadNewsPaper[];
+extern const char gSceneActionReadPrintedNote[];
+extern const char gSceneActionReadChemistryRecipes[];
+extern const char gSceneActionReadChemistryBook[];
+extern const char gSceneActionInspectMap[];
 

@@ -83,6 +83,20 @@ void SetByteStream(const char* byteStream)
 }
 
 
+void PlayStream(const char* byteStream)
+{
+    const char* originalByteStream = gCurrentStream;
+	gCurrentStream = byteStream;
+	gDelayStream   = 0;
+
+    do
+    {
+        WaitIRQ();
+        HandleByteStream();
+    }
+    while (gCurrentStream);
+}
+
 
 // The various commands:
 // - COMMAND_END indicates the end of the stream
@@ -156,6 +170,13 @@ void HandleByteStream()
 				}
 				break;	
 
+            case COMMAND_INFO_MESSAGE:
+				{
+                    PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
+					gCurrentStream += strlen(gCurrentStream)+1;
+				}
+				break;	
+
 			case COMMAND_BITMAP:
 				{
 					unsigned char loaderId = *gCurrentStream++;
@@ -173,6 +194,19 @@ void HandleByteStream()
 					BlitSprite();
 				}
 				break;	
+
+            case COMMAND_FULLSCREEN_ITEM:
+                {
+					unsigned char loaderId = *gCurrentStream++;
+
+                    ClearMessageWindow(16+4);
+                    LoadFileAt(loaderId,ImageBuffer);
+                    PrintTopDescription(gCurrentStream);
+                    BlitBufferToHiresWindow();
+
+					gCurrentStream += strlen(gCurrentStream)+1;
+                }
+                break;
 
 			case COMMAND_FADE_BUFFER:
 				BlitBufferToHiresWindow();
