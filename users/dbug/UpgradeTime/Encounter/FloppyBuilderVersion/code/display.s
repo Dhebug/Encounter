@@ -125,6 +125,9 @@ targetPtr     = tmp5
 shiftTablePtr = tmp6
 fontPtr       = tmp7
 scanlinePtr   = reg0
+prev_char     = reg1
+cur_char      = reg2
+kerning       = reg3
 
 end_of_string
   ; Update the pointer
@@ -183,7 +186,15 @@ continue_mode
   lda _gDrawPosY
   sta y_position
 
+  ; Reset the kerning
+  lda #0
+  sta cur_char
+
 loop_character
+  ; The kerning works with pairs of characters, so we need to keep track of the previous and next character
+  lda cur_char
+  sta prev_char
+
   ; Fetch the next character from the string
   ; 0    -> End of string
   ; 13   -> Carriage return (used to handle multi-line strings) followed by a scanline count
@@ -191,6 +202,7 @@ loop_character
   ; >=32 -> Normal ASCII characters in the 32-127 range
   ldy #0
   lda (messagePtr),y
+  sta cur_char          ; -- test
   beq end_of_string
   bmi negative_value
   cmp #13
@@ -256,11 +268,40 @@ normal_character
   adc #<_gFont12x14
   sta fontPtr+0
   lda #0
+  sta kerning           ; By default, no kerning adjustment to apply
+  tax                   ; x=0
   adc #>_gFont12x14
   sta fontPtr+1
 
+  ; Search in the kerning table for a matching prev/cur combination of characters
+  ; We could store somewhere in the font (size table?) if it's even worth looking at all to avoid the lookup for some letters
+  .(
+loop_kerning
+  lda _gFont12x14Kerning+0,x     
+  beq end_kerning
+  cmp prev_char                   ; Check the first character
+  bne next_pair
+  lda cur_char
+  cmp _gFont12x14Kerning+1,x      ; Check the second character
+  bne next_pair
+
+  lda _gFont12x14Kerning+2,x      ; Store the associated kerning value
+  sta kerning
+  bne end_kerning
+
+next_pair  
+  inx
+  inx
+  inx
+  bne loop_kerning
+end_kerning  
+  .)
+    
+
   ; Using the current x coordinate in the scanline, we compute the actual position on the screen where to start drawing the character
   lda x_position 
+  sec
+  sbc kerning           ; Subract the kerning value to group together closer some combinations of letters
   tax                   ; Keep the original current X value for later
   sec                   ; +1 because we don't want the characters to be glued together
   adc width_char
@@ -1432,6 +1473,27 @@ _gBitPixelMaskRight
   .byt %111110
   .byt %111111
 
+; Kerning table: Pairs of characters associated with a value subtracted to the x position of the second character
+_gFont12x14Kerning
+  .byt "ff",2
+  .byt "fi",1
+  .byt "fa",2
+  .byt "fe",2
+  .byt "fo",2
+  .byt "ij",2
+  .byt "ig",1
+  .byt "Ja",2
+  .byt "op",1
+  .byt "Of",1
+  .byt "ro",1
+  .byt "rd",1
+  .byt "rk",1
+  .byt "rp",1
+  .byt "if",1
+  .byt "da",1
+  .byt "th",1
+  .byt "Th",1
+  .byt 0           ; End of table
 
 ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _gFont12x14
