@@ -70,6 +70,8 @@
 #define COMMAND_JUMP            8      // Really, that's a GOTO :p
 #define COMMAND_JUMP_IF_TRUE    9
 #define COMMAND_JUMP_IF_FALSE   10
+#define COMMAND_INFO_MESSAGE    11 
+#define COMMAND_FULLSCREEN_ITEM 12
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
