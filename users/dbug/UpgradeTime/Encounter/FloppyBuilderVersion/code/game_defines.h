@@ -243,7 +243,7 @@ extern const char gTextItemBoxOfMatches[];            // "a box of matches"
 extern const char gTextItemSnookerCue[];              // "a snooker cue"                      
 extern const char gTextItemThug[];                    // "a thug asleep on the bed"           
 extern const char gTextItemHeavySafe[];               // "a heavy safe"                       
-extern const char gTextItemPrintedNote[];             // "a printed note"                     
+extern const char gTextItemHandWrittenNote[];         // "a hand written note"                     
 extern const char gTextItemRope[];                    // "a length of rope"                   
 extern const char gTextItemRopeHangingFromWindow[];   // "a rope hangs from the window"       
 extern const char gTextItemRollOfToiletPaper[];       // "a roll of toilet tissue"            
@@ -267,7 +267,7 @@ extern const char gTextItemeRopeAttachedToATree[];    // "a rope attached to a t
 
 // Scene actions
 extern const char gSceneActionReadNewsPaper[];
-extern const char gSceneActionReadPrintedNote[];
+extern const char gSceneActionReadHandWrittenNote[];
 extern const char gSceneActionReadChemistryRecipes[];
 extern const char gSceneActionReadChemistryBook[];
 extern const char gSceneActionInspectMap[];

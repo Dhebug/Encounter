@@ -1,4 +1,5 @@
 
+#include "params.h"
 #include "game_defines.h"
 #include "common.h"
 
@@ -128,7 +129,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemSnookerCue                ,e_LOCATION_GAMESROOM       ,255           ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
     { gTextItemThug                      ,e_LOCATION_MASTERBEDROOM   ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_Thug                 
     { gTextItemHeavySafe                 ,e_LOCATION_CELLAR          ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_HeavySafe            
-    { gTextItemPrintedNote               ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_PrintedNote          
+    { gTextItemHandWrittenNote           ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandWrittenNote          
     { gTextItemRope                      ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Rope                 
     { gTextItemRopeHangingFromWindow     ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM         ,0},                                            // e_ITEM_RopeHangingFromWindow
     { gTextItemRollOfToiletPaper         ,e_LOCATION_TINY_WC         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
@@ -155,11 +156,20 @@ item gItems[e_ITEM_COUNT_] =
 keyword gWordsArray[] =
 {
     // Containers
+#ifdef LANGUAGE_FR    
+    { "TABATIERE" ,e_ITEM_TobaccoTin           },  // e_ITEM_TobaccoTin            
+    { "SEAU"    ,e_ITEM_Bucket               },  // e_ITEM_Bucket                
+    { "BOITE"   ,e_ITEM_CardboardBox         },  // e_ITEM_CardboardBox          
+    { "FILET"   ,e_ITEM_FishingNet           },  // e_ITEM_FishingNet            
+    { "SAC"     ,e_ITEM_PlasticBag           },  // e_ITEM_PlasticBag            
+#else
     { "TIN",    e_ITEM_TobaccoTin           },  // e_ITEM_TobaccoTin            
     { "BUCKET", e_ITEM_Bucket               },  // e_ITEM_Bucket                
     { "BOX",    e_ITEM_CardboardBox         },  // e_ITEM_CardboardBox          
     { "NET",    e_ITEM_FishingNet           },  // e_ITEM_FishingNet            
     { "BAG",    e_ITEM_PlasticBag           },  // e_ITEM_PlasticBag            
+#endif    
+
     // Then normal items
     { "GIRL",   e_ITEM_YoungGirl            },  // e_ITEM_YoungGirl         
     //{ "GIRL",e_ITEM_YoungGirlOnFloor     },  // e_ITEM_YoungGirlOnFloor - Girl, girl on the floor, etc... should be the same item, but with flags
@@ -185,7 +195,7 @@ keyword gWordsArray[] =
     { "CUE",    e_ITEM_SnookerCue           },  // e_ITEM_SnookerCue            
     { "THUG",   e_ITEM_Thug                 },  // e_ITEM_Thug                  
     { "SAFE",   e_ITEM_HeavySafe            },  // e_ITEM_HeavySafe             
-    { "NOTE",   e_ITEM_PrintedNote          },  // e_ITEM_PrintedNote       
+    { "NOTE",   e_ITEM_HandWrittenNote      },  // e_ITEM_HandWrittenNote       
     { "ROPE",   e_ITEM_Rope                 },  // e_ITEM_Rope                  
     //{ "...",e_ITEM_RopeHangingFromWindow},  // e_ITEM_RopeHangingFromWindow
     { "TISSUE", e_ITEM_RollOfToiletPaper    },  // e_ITEM_RollOfToiletPaper     
@@ -206,6 +216,21 @@ keyword gWordsArray[] =
     
 
     // Directions
+#ifdef LANGUAGE_FR    
+    { "N", e_WORD_NORTH },
+    { "S", e_WORD_SOUTH },
+    { "E", e_WORD_EAST  },
+    { "O", e_WORD_WEST  },
+    { "M", e_WORD_UP    },
+    { "D", e_WORD_DOWN  },
+
+    { "NORD", e_WORD_NORTH },
+    { "SUD", e_WORD_SOUTH },
+    { "EST", e_WORD_EAST  },
+    { "OUEST", e_WORD_WEST  },
+    { "MONTE", e_WORD_UP    },
+    { "DESCEND", e_WORD_DOWN  },
+#else
     { "N", e_WORD_NORTH },
     { "S", e_WORD_SOUTH },
     { "E", e_WORD_EAST  },
@@ -214,22 +239,39 @@ keyword gWordsArray[] =
     { "D", e_WORD_DOWN  },
 
     { "NORTH", e_WORD_NORTH },
-    { "SOUT", e_WORD_SOUTH },
+    { "SOUTH", e_WORD_SOUTH },
     { "EAST", e_WORD_EAST  },
     { "WEST", e_WORD_WEST  },
     { "UP", e_WORD_UP    },
     { "DOWN", e_WORD_DOWN  },
+#endif    
 
     // Misc instructions
-    { "TAKE", e_WORD_TAKE },
-    { "GET" , e_WORD_TAKE },
-    { "KILL", e_WORD_KILL },
-    { "FRISK", e_WORD_FRISK },
-    { "SEARCH", e_WORD_SEARCH },
-#ifdef ENABLE_CHEATS
-    { "REVIVE", e_WORD_REVIVE },
-    { "TICKLE", e_WORD_TICKLE },
-#endif    
+#ifdef LANGUAGE_FR    
+    { "PREND"   , e_WORD_TAKE },
+    { "RAMASSE" , e_WORD_TAKE },
+    { "TUE"     , e_WORD_KILL },
+    { "FOUILLE" , e_WORD_FRISK },
+    { "CHERCHE" , e_WORD_SEARCH },
+
+    { "LACHE"   , e_WORD_DROP },
+    { "POSE"    , e_WORD_DROP },
+
+    { "UTILISE" , e_WORD_USE },
+
+    { "GRIMPE"  , e_WORD_CLIMB },
+
+    { "LIT"     , e_WORD_READ },
+
+    { "REGARDE" , e_WORD_LOOK },
+    { "EXAMINE" , e_WORD_LOOK },
+    { "INSPECTE", e_WORD_LOOK },
+#else
+    { "TAKE"    , e_WORD_TAKE },
+    { "GET"     , e_WORD_TAKE },
+    { "KILL"    , e_WORD_KILL },
+    { "FRISK"   , e_WORD_FRISK },
+    { "SEARCH"  , e_WORD_SEARCH },
 
     { "DROP", e_WORD_DROP },
     { "PUT" , e_WORD_DROP },
@@ -243,7 +285,13 @@ keyword gWordsArray[] =
     { "LOOK"    , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
     { "INSPECT" , e_WORD_LOOK },
-    
+#endif
+
+#ifdef ENABLE_CHEATS
+    { "REVIVE", e_WORD_REVIVE },
+    { "TICKLE", e_WORD_TICKLE },
+#endif    
+
     // Last instruction
     { "QUIT", e_WORD_QUIT },
 

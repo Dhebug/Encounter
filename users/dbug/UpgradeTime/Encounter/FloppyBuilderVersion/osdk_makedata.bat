@@ -160,7 +160,10 @@ SET PARAMS=-u1 -m0 -f0 -o2
 :: Other 240x128 full screen images which are not locations
 %PICTCONV% %PARAMS% data\newspaper.png %TARGET%\newspaper.hir
 %PICTCONV% %PARAMS% data\newspaper_fr.png %TARGET%\newspaper_fr.hir
+
 %PICTCONV% %PARAMS% data\handwritten_note.png %TARGET%\handwritten_note.hir
+%PICTCONV% %PARAMS% data\handwritten_note_fr.png %TARGET%\handwritten_note_fr.hir
+
 %PICTCONV% %PARAMS% data\science_book.png %TARGET%\science_book.hir
 %PICTCONV% %PARAMS% data\chemistry_recipes.png %TARGET%\chemistry_recipes.hir
 %PICTCONV% %PARAMS% data\united_kingdom_map.png %TARGET%\united_kingdom_map.hir

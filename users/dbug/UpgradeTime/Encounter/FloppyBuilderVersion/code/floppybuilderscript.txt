@@ -158,7 +158,9 @@ AddFile ..\build\files\newspaper_fr.hir
 
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
-AddFile ..\build\files\handwritten_note.hir
+
+AddFile ..\build\files\handwritten_note_fr.hir
+
 AddDefine LOADER_PICTURE_HANDWRITTEN_NOTE {FileIndex}
 
 AddFile ..\build\files\science_book.hir

@@ -86,7 +86,7 @@
 #define	e_ITEM_SnookerCue  			 25         // a snooker cue
 #define	e_ITEM_Thug  				 26         // a Thug
 #define	e_ITEM_HeavySafe  			 27         // a heavy safe
-#define	e_ITEM_PrintedNote  		 28         // a printed note
+#define	e_ITEM_HandWrittenNote  	 28         // a hand written note
 #define	e_ITEM_Rope  				 29         // a length of rope
 #define	e_ITEM_RopeHangingFromWindow 30         // a rope hangs from the window
 #define	e_ITEM_RollOfToiletPaper  	 31         // a roll of toilet tissue~

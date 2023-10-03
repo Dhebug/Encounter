@@ -581,8 +581,8 @@ void ReadItem(unsigned char itemId)
             LoadScene();
             break;
 
-        case e_ITEM_PrintedNote:
-            PlayStream(gSceneActionReadPrintedNote);
+        case e_ITEM_HandWrittenNote:
+            PlayStream(gSceneActionReadHandWrittenNote);
             LoadScene();
             break;
 
