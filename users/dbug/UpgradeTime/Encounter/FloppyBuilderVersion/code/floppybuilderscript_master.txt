@@ -164,7 +164,11 @@ AddFile ..\build\files\newspaper.hir
 #endif
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\handwritten_note_fr.hir
+#else // LANGUAGE_EN
 AddFile ..\build\files\handwritten_note.hir
+#endif
 AddDefine LOADER_PICTURE_HANDWRITTEN_NOTE {FileIndex}
 
 AddFile ..\build\files\science_book.hir

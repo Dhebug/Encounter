@@ -255,7 +255,7 @@ _EndLocationNames
 _StartItemNames
 #ifdef LANGUAGE_FR
 // Containers
-_gTextItemTobaccoTin              .byt "une boîte à tabac vide",0
+_gTextItemTobaccoTin              .byt "une tabatière vide",0
 _gTextItemBucket                  .byt "un seau en bois",0
 _gTextItemCardboardBox            .byt "une boite en carton",0
 _gTextItemFishingNet              .byt "un filet de pêche",0
@@ -285,7 +285,7 @@ _gTextItemBoxOfMatches            .byt "une boite d'allumettes",0
 _gTextItemSnookerCue              .byt "une queue de billard",0
 _gTextItemThug                    .byt "un voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros coffre fort",0
-_gTextItemPrintedNote             .byt "une note imprimée",0
+_gTextItemHandWrittenNote         .byt "une note manuscripte",0
 _gTextItemRope                    .byt "une longueur de corde",0
 _gTextItemRopeHangingFromWindow   .byt "une core qui pend de la fenêtre",0
 _gTextItemRollOfToiletPaper       .byt "un rouleau de papier toilette",0
@@ -338,7 +338,7 @@ _gTextItemBoxOfMatches            .byt "a box of matches",0
 _gTextItemSnookerCue              .byt "a snooker cue",0                      
 _gTextItemThug                    .byt "a thug asleep on the bed",0           
 _gTextItemHeavySafe               .byt "a heavy safe",0                       
-_gTextItemPrintedNote             .byt "a printed note",0                     
+_gTextItemHandWrittenNote         .byt "a hand written note",0                     
 _gTextItemRope                    .byt "a length of rope",0                   
 _gTextItemRopeHangingFromWindow   .byt "a rope hangs from the window",0       
 _gTextItemRollOfToiletPaper       .byt "a roll of toilet tissue",0            
@@ -395,11 +395,11 @@ _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
 #ifdef LANGUAGE_FR    
-    .byt 153,85,0,"Rats, graffitti,",0
-    .byt 136,98,0,"and used syringes.",0
-#else
     .byt 153,85,0,"Rats, graffittis,",0
     .byt 136,98,0,"et seringues.",0
+#else
+    .byt 153,85,0,"Rats, graffitti,",0
+    .byt 136,98,0,"and used syringes.",0
 #endif    
     END
 
@@ -848,7 +848,7 @@ _gSceneActionReadNewsPaper
     WAIT(50*2)
     END
 
-_gSceneActionReadPrintedNote
+_gSceneActionReadHandWrittenNote
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note",0
     WAIT(50*2)
     .byt COMMAND_INFO_MESSAGE,"That could be useful...",0
