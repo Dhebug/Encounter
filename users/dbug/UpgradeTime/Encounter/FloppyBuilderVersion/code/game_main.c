@@ -127,8 +127,7 @@ void PrintInformationMessage(const char* message)
 
 void PrintSceneDirections()
 {
-	location* locationPtr = &gLocations[gCurrentLocation];
-	unsigned char* directions = locationPtr->directions;
+	unsigned char* directions = gLocations[gCurrentLocation].directions;
 	int direction;
 
 	gFlagDirections = 0;
@@ -189,7 +188,6 @@ void PrintInventory()
 
 void PrintSceneObjects()
 {
-	int i;
 	int itemCount = 0;
 	int item;
 
@@ -203,25 +201,16 @@ void PrintSceneObjects()
 
 	// Print any item in the location
 	if (itemCount)
-	{
-		char first=1;
+	{        
+        const char* ptrMessage=gTextCanSee;
 		char* ptrScreen=(char*)0xbb80+40*18;
 		for (item=0;item<e_ITEM_COUNT_;item++)
 		{
 			if (gItems[item].location == gCurrentLocation)
 			{
-				if (first)
-				{
-					// The first item on the screen is shown a bit differently
-					sprintf(ptrScreen+1,"%c%s %s",3,gTextCanSee,gItems[item].description); // "I can see"
-					ptrScreen+=40;
-					first=0;
-				}
-				else
-				{
-					sprintf(ptrScreen+1,"%c%s",3,gItems[item].description);					
-					ptrScreen+=40;
-				}
+				sprintf(ptrScreen+1,"%c%s%s",3,ptrMessage,gItems[item].description); // "I can see"
+                ptrMessage="";
+				ptrScreen+=40;
 			}
 		}
 	}
@@ -231,11 +220,6 @@ void PrintSceneObjects()
 	}
 }
 
-
-void PrintScore()
-{
-	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
-}
 
 WORDS ProcessPlayerNameAnswer()
 {
@@ -297,16 +281,15 @@ void PrintTopDescription(const char* message)
 
 void PrintSceneInformation()
 {
-	location* locationPtr = &gLocations[gCurrentLocation];
-	int messageLength = 0;
-
 	// Print the description of the place at the top (centered)
-    PrintTopDescription(locationPtr->description);
+    PrintTopDescription(gLocations[gCurrentLocation].description);
 
+    // The redefined charcters to draw the bottom part of the directional arrows \v/
 	poke(0xbb80+16*40+16,9);                      // ALT charset
 	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
 
-	PrintScore();
+    // Display the score
+	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
 
 	PrintSceneDirections();
 

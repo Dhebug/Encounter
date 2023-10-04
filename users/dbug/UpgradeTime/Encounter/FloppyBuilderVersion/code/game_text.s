@@ -16,7 +16,7 @@ _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
 _gTextAskInput              .byt "Quels sont vos instructions ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
-_gTextCanSee                .byt "Je vois",0
+_gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextHighScoreAskForName   .byt "Nouveau top score ! Votre name SVP ?",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
@@ -41,7 +41,7 @@ _gTextThickBookBookmarks    .byt "Un livre épais avec des marques",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
-_gTextCanSee                .byt "I can see",0
+_gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextHighScoreAskForName   .byt "New highscore! Your name please?",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
@@ -851,9 +851,15 @@ _gSceneActionReadNewsPaper
 _gSceneActionReadHandWrittenNote
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note",0
     WAIT(50*2)
+#ifdef LANGUAGE_FR
+    .byt COMMAND_INFO_MESSAGE,"Ca pourrait être utile...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...si je peux y accéder !",0
+#else
     .byt COMMAND_INFO_MESSAGE,"That could be useful...",0
     WAIT(50*2)
     .byt COMMAND_INFO_MESSAGE,"...if I can access it!",0
+#endif    
     WAIT(50*2)
     END
 
