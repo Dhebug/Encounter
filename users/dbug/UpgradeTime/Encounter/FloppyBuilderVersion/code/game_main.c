@@ -127,7 +127,7 @@ void PrintInformationMessage(const char* message)
 
 void PrintSceneDirections()
 {
-	unsigned char* directions = gLocations[gCurrentLocation].directions;
+	unsigned char* directions = gCurrentLocationPtr->directions;
 	int direction;
 
 	gFlagDirections = 0;
@@ -282,7 +282,7 @@ void PrintTopDescription(const char* message)
 void PrintSceneInformation()
 {
 	// Print the description of the place at the top (centered)
-    PrintTopDescription(gLocations[gCurrentLocation].description);
+    PrintTopDescription(gCurrentLocationPtr->description);
 
     // The redefined charcters to draw the bottom part of the directional arrows \v/
 	poke(0xbb80+16*40+16,9);                      // ALT charset
@@ -344,7 +344,7 @@ void LoadScene()
 
 #if 1
 	// Set the byte stream pointer
-	SetByteStream(gLocations[gCurrentLocation].script);
+	SetByteStream(gCurrentLocationPtr->script);
 
 	// And run the first set of commands for this scene
 	HandleByteStream();
@@ -358,9 +358,7 @@ void LoadScene()
 
 void PlayerMove(unsigned char direction)
 {
-	location* locationPtr = &gLocations[gCurrentLocation];
-
-	unsigned char requestedScene = gLocations[gCurrentLocation].directions[direction];
+	unsigned char requestedScene = gCurrentLocationPtr->directions[direction];
 	if (requestedScene==e_LOCATION_NONE)
 	{
 		PrintErrorMessage(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
