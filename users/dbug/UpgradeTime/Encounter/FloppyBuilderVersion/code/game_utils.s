@@ -1,4 +1,10 @@
 
+    .zero
+
+_gCurrentLocation       .dsb 1
+_gCurrentLocationPtr    .dsb 2
+
+
     .text
 
 _gCurrentStream
