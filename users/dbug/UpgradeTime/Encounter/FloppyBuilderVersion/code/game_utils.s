@@ -4,13 +4,7 @@
 _gCurrentLocation       .dsb 1
 _gCurrentLocationPtr    .dsb 2
 
-
     .text
-
-_gCurrentStream
-_gCurrentStreamInt
-    .word 0
-
 
 
 IrqTasksHighSpeed

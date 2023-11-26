@@ -1143,6 +1143,8 @@ void Initializations()
 #endif	
 
 	gScore = 0;
+    gCurrentStream = 0;
+    gDelayStream = 0;
 
 	LoadScene();
 	DisplayClock();
