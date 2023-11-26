@@ -33,8 +33,13 @@
 #define KEY_DEL			11
 #define KEY_RETURN		12
 
+// 6502 opcodes for dynamic code patching
+#define OPCODE_RTS              $60
+#define OPCODE_JMP              $4C
+#define OPCODE_BNE              $D0
+#define OPCODE_BEQ              $F0
 
-
+// Page 3 / VIA addresses
 #define via_portb               $0300 
 #define	via_ddrb				$0302	
 #define	via_ddra				$0303
@@ -72,6 +77,8 @@
 #define COMMAND_JUMP_IF_FALSE   10
 #define COMMAND_INFO_MESSAGE    11 
 #define COMMAND_FULLSCREEN_ITEM 12
+#define COMMAND_STOP_BREAKPOINT 13
+#define _COMMAND_COUNT          14
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0

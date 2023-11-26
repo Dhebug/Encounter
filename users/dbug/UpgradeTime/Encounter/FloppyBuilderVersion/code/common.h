@@ -96,6 +96,7 @@ extern void PlayStream(const char* byteStream);
 
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;
+extern char gCurrentStreamStop;
 extern unsigned int gDelayStream;
 
 

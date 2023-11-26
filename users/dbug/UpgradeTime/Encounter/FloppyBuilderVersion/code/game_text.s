@@ -379,6 +379,14 @@ _gDescriptionDarkTunel
     END
 
 _gDescriptionMarketPlace
+#if 1 // Debugging/testing code
+    WAIT(1)
+    .byt COMMAND_FILL_RECTANGLE,10,10,50,50,127
+    .byt COMMAND_FILL_RECTANGLE,20,20,20,20,0
+    .byt COMMAND_TEXT,10,10,64,"TEST!",0
+    ;.byt COMMAND_STOP_BREAKPOINT
+    WAIT(255)
+#endif
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
 #ifdef LANGUAGE_FR    
