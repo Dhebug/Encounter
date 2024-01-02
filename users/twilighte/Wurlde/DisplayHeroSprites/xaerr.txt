@@ -1,3 +1,0 @@
-Cross-Assembler 65xx V2.1.4f 20apr1998 (c) 1989-98 by A.Fachat
-65816 opcodes and modes coded by Jolse Maginnis
-Oric C adaptation and debugging by Mickael Pointier

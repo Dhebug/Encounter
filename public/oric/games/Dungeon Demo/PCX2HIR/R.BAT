@@ -1,1 +1,0 @@
-convert ..\pic\next.pcx

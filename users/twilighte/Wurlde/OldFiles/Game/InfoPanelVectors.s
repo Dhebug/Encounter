@@ -1,3 +1,0 @@
-;InfoPanelVectors.s
-
-#define

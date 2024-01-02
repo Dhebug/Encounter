@@ -1,8 +1,0 @@
-0400 JasminBootStrap
-0441 LoadSector
-042b loop1
-043b TempVector
-0458 vector1
-0449 loop3
-044e loop1
-045e loop2

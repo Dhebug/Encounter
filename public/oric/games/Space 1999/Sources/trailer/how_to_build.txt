@@ -1,8 +1,0 @@
-1. Make sure you have the OSDK installed, if not download it from http://osdk.defence-force.org and install it
-2. Run osdk_makedata.bat, this will convert the content of the Graphics folder as oric compatible data
-3. Run osdk_build.bat, this will build the project, creating a BUILD folder containing the DSK file
-4. Run osdk_execute.bat, this will launch an emulator and automatically run the DSK image file
-5. Profit !
-
-Enjoy :)
-

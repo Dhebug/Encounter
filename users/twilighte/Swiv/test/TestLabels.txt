@@ -1,7 +1,0 @@
-0500 Script_ScrubShutteredGunpost
-051e lblLoop
-0524 lblLoop
-052e lblLoop
-053f lblLoop
-0549 lblLoop
-054f lblLoop

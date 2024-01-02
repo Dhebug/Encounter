@@ -1,7 +1,0 @@
-Current TODO list
-
-Neaten up the code.  Bullfrog coding standards FTW.
-Resolve the file locked crash
-Refactor the output code to use a single common path and derived saver class
-Improve realtime playback handling
-Add support for 'Novaload' style fast save format

@@ -1,1 +1,0 @@
-;Script_ETrainWagonCoal.s

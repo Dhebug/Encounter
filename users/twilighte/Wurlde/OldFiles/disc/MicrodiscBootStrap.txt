@@ -1,8 +1,0 @@
-0400 MicroDiscBootStrap
-043e LoadSector
-0428 loop1
-0438 Page2Code
-0453 vector1
-0446 loop3
-044b loop1
-0459 loop2

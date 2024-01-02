@@ -1,8 +1,0 @@
-16
-D:\oric\dev\bin\cpp.exe -lang-c++ -I include -D__16BIT__ -D__NOFLOAT__ -nostdinc $
-D:\oric\dev\bin\rcc16.exe $
-D:\oric\dev\bin\convert.bat -lang-c++ -imacros macros.h -traditional -P $
-D:\oric\dev\bin\trb.bat $
-D:\oric\dev\bin\link65.exe -d d:\oric\dev\lib16/ -q $
-D:\oric\dev\bin\frasm.exe -o 6502.out $
-D:\oric\dev\bin\hex2oric.exe -o $

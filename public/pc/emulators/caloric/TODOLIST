@@ -1,8 +1,0 @@
-<@_Twilighte_> uhf... a breakdown of AY Registers in the same display format as your 6502 instructions would be very useful :)
-
- <@_Twilighte_> a graphic window of memory usage would also be useful
-
-23:02 <@_Dbug_> Even better: Record the position of the PC for each byte which has been written :)
-23:02 <@_Dbug_> With a quick lookup in the disassembler when clicking in the "memory map" to find out the routine who wrote what
-
- <@_Twilighte_> sound options like checkboxes for each channel and configuration for stereo split would be nice

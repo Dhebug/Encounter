@@ -1,4 +1,0 @@
-%OSDK%\bin\xa diskdata.s -o diskdata.out -l diskdata.lab
-%OSDK%\bin\header -a0 diskdata.out diskdata.tap $500
-%OSDK%\bin\taptap ren diskdata.tap "DATA" 0
-pause

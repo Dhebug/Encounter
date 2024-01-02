@@ -1,3 +1,0 @@
-;FurnitureGraphics.s
-
-
