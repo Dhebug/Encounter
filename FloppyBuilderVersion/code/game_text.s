@@ -1,6 +1,6 @@
 
 #include "params.h"
-#include "floppy_description.h"
+#include "../build/floppy_description.h"
 #include "game_enums.h"
 
     .text

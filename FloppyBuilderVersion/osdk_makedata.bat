@@ -40,8 +40,8 @@ SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
 :: The 12x14 font
 :: palatino_linotype_italics_size_10_font.png
 SET PARAMS=-u1 -m0 -f0 -o4Font12x14
-%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png code\generated_12x14_font.s
-%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font_fr.png code\generated_12x14_font_fr.s
+%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png build\generated_12x14_font.s
+%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font_fr.png build\generated_12x14_font_fr.s
 
 
 :: Title picture

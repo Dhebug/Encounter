@@ -2,7 +2,7 @@
 // FloppyBuilder/Loader system
 // Compatible with both C and Assembler modules
 //
-#include "floppy_description.h"
+#include "../build/floppy_description.h"
 
 #ifdef ASSEMBLER    // 6502 Assembler API
 #define LoadFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiLoadFileFromDirectory

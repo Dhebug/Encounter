@@ -18,7 +18,7 @@
 FormatVersion 0.20
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
-OutputLayoutFile floppy_description.h
+OutputLayoutFile ..\build\floppy_description.h
 OutputFloppyFile ..\build\EncounterHD-EN.dsk 
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1

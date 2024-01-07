@@ -1498,9 +1498,9 @@ _gFont12x14Kerning
 ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _gFont12x14
 #ifdef LANGUAGE_FR    
-#include "generated_12x14_font_fr.s"
+#include "..\build\generated_12x14_font_fr.s"
 #else
-#include "generated_12x14_font.s"
+#include "..\build\generated_12x14_font.s"
 #endif
 _Font12x14End
 
