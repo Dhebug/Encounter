@@ -29,6 +29,24 @@ _PsgPlayLoopIndex	    .byt 255     ; No loop defined
 
     .text
 
+_PlaySoundAsm
+.(
+	sei
+    
+    lda _param0+0                        ; Update the register list
+    sta _SoundDataPointer+0
+    lda _param0+1
+    sta _SoundDataPointer+1
+
+    lda #0
+	sta _PsgPlayPosition                 ; 255 = Done playing
+    lda #255
+	sta _PsgPlayLoopIndex                ; Reset the loop position
+
+	cli
+    rts
+.)
+
 
 SoundUpdateHighSpeed
 .(

@@ -58,7 +58,7 @@ extern unsigned char gSourceStride;
 extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded "sprite" image
 
 // Audio
-extern void PlaySound(const char* registerList);
+#define PlaySound(registerList)                 { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
 
 extern const char* SoundDataPointer;
 extern unsigned char PsgPlayPosition;

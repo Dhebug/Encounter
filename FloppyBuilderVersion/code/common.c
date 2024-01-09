@@ -11,15 +11,6 @@ char* gPrintAddress = (char*)0xbb80;
 
 
 
-void PlaySound(const char* registerList)
-{
-	Sei();
-	SoundDataPointer=registerList;
-	PsgPlayPosition=0;                   // 255 = Done playing
-	PsgPlayLoopIndex=255;                // Reset the loop position
-	Cli();
-}
-
 void SetLineAddress(char* address)
 {
 	gPrintAddress=address;
