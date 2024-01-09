@@ -100,15 +100,6 @@ unsigned char ParseInputBuffer()
 }
 
 
-
-void PrintStatusMessage(char color,const char* message)
-{
-	char* ptrScreen=(char*)0xbb80+40*22;
-	memset(ptrScreen+1,32,39);
-	sprintf(ptrScreen+1,"%c%s",color,message);
-}
-
-
 void PrintErrorMessage(const char* message)
 {
 	PrintStatusMessage(1,message);

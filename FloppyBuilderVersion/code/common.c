@@ -116,10 +116,3 @@ void Hires(char paperColor,char inkColor)
 	}
 }
 
-void WaitFrames(int frames)
-{
-    while (frames--)
-    {
-        WaitIRQ();
-    }
-}

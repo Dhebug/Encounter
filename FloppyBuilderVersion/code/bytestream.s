@@ -238,3 +238,46 @@ _ByteStreamCommandTEXT
     sta _gCurrentStream+1
     rts
 
+
+; reg0=color
+; reg1+0/+1=pointer to message
+_PrintStatusMessageAsm
+    ;rts
+    ;jmp _PrintStatusMessageAsm
+.(
+    ; char* ptrScreen=(char*)0xbb80+40*22;
+    lda #<($bb80+40*22)
+    sta tmp0+0
+    lda #>($bb80+40*22)
+    sta tmp0+1
+
+    ; Write the color code
+    ldy #1
+    lda _param0
+    sta (tmp0),y
+
+    ; Write the message
+    lda #<($bb80+40*22+2)
+    sta tmp0+0
+    lda #>($bb80+40*22+2)
+    sta tmp0+1
+
+    ldy #0
+loop_message    
+    lda (_param1),y
+    beq end_message
+    sta (tmp0),y
+    iny
+    jmp loop_message
+end_message    
+
+    ; Clear the rest of the line
+    lda #32
+loop_clear
+    sta (tmp0),y
+    iny
+    cpy #39-2
+    bne loop_clear
+
+    rts
+.)

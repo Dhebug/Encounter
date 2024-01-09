@@ -133,6 +133,19 @@ skip_50hz_task
 
 
 
+; param0+0/param0+1=number of frames to wait
+_WaitFramesAsm
+.(
+loop
+    jsr _WaitIRQ    ; Uses A register
+    dec _param0+0
+    bne loop
+    dec _param0+1
+    bpl loop
+    rts
+.)
+
+
 ; Waits for the next IRQ
 _VSync
 _WaitIRQ

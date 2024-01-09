@@ -1,4 +1,9 @@
 
+    .zero
+
+; Used by both the intro and the game
+_param0 .dsb 2
+_param1 .dsb 2
 
     .text
 

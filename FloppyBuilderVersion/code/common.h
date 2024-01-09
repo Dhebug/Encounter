@@ -83,7 +83,19 @@ extern void PrintWord(const char* message);
 
 extern void Text(char paperColor,char inkColor);
 extern void Hires(char paperColor,char inkColor);
-extern void WaitFrames(int frames);
+
+union ParamType
+{
+    unsigned char uchar;
+    unsigned int uint;
+    const void* ptr;
+};
+
+extern union ParamType param0;
+extern union ParamType param1;
+
+#define WaitFrames(frames)                 { param0.uint=frames;asm("jsr _WaitFramesAsm"); }
+#define PrintStatusMessage(color,message)  { param0.uchar=color;param1.ptr=message;asm("jsr _PrintStatusMessageAsm"); } 
 
 extern char gIsHires;
 extern char* gPrintAddress;
