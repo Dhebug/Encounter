@@ -32,6 +32,28 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandFULLSCREEN_ITEM
     .word _ByteStreamCommandStopBreakpoint
 
+; _param0=pointer to the new byteStream
+_PlayStreamAsm
+.(
+    lda _param0+0
+    sta _gCurrentStream+0
+    lda _param0+1
+    sta _gCurrentStream+1
+
+    lda #0
+	sta _gDelayStream
+
+loop
+    jsr _WaitIRQ
+    jsr _HandleByteStream
+    lda _gCurrentStream+0
+    bne loop
+    lda _gCurrentStream+1
+    bne loop
+
+    rts
+.)
+
 
 ; Fetch the value in _gCurrentStream, increment the pointer, return the value in X
 _ByteStreamGetNextByte
@@ -239,8 +261,8 @@ _ByteStreamCommandTEXT
     rts
 
 
-; reg0=color
-; reg1+0/+1=pointer to message
+; _param0=color
+; _param1+0/+1=pointer to message
 _PrintStatusMessageAsm
     ;rts
     ;jmp _PrintStatusMessageAsm

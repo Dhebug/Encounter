@@ -103,8 +103,8 @@ extern char* gPrintAddress;
 
 // game_misc
 extern void HandleByteStream();
-extern void SetByteStream(const char* byteStream);
-extern void PlayStream(const char* byteStream);
+#define SetByteStream(frames)                 { gCurrentStream=frames;gDelayStream=0; }
+#define PlayStream(byteStream)                { param0.ptr=byteStream;asm("jsr _PlayStreamAsm"); }
 
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;

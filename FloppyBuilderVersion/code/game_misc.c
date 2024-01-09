@@ -77,28 +77,6 @@ void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char 
 }
 
 
-void SetByteStream(const char* byteStream)
-{
-	gCurrentStream = byteStream;
-	gDelayStream   = 0;
-}
-
-
-void PlayStream(const char* byteStream)
-{
-    const char* originalByteStream = gCurrentStream;
-	gCurrentStream = byteStream;
-	gDelayStream   = 0;
-
-    do
-    {
-        WaitIRQ();
-        HandleByteStream();
-    }
-    while (gCurrentStream);
-}
-
-
 void ByteStreamCommandINFO_MESSAGE()
 {
     PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
