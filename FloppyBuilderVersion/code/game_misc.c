@@ -33,38 +33,6 @@ void InitializeGraphicMode()
 }
 
 
-void DrawRectangleOutline(unsigned char xPos, unsigned char yPos, unsigned char width, unsigned char height, unsigned char fillValue)
-{
-	gDrawAddress = (unsigned char*)0xa000;
-
-	gDrawPattern= fillValue;
-
-	gDrawPosX	= xPos;
-	gDrawPosY	= yPos+1;
-	gDrawWidth	= width;
-	gDrawHeight	= height-2;
-	DrawVerticalLine();
-
-	gDrawPosX	= xPos+1;
-	gDrawPosY	= yPos;
-	gDrawWidth	= width-2;
-	gDrawHeight	= height;
-	DrawHorizontalLine();
-
-	gDrawPosX	= xPos+width-1;
-	gDrawPosY	= yPos+1;
-	gDrawWidth	= width+1;
-	gDrawHeight	= height-2;
-	DrawVerticalLine();
-
-	gDrawPosX	= xPos+1;
-	gDrawPosY	= yPos+height-1;
-	gDrawWidth	= width-2;
-	gDrawHeight	= height;
-	DrawHorizontalLine();
-}
-
-
 void ByteStreamCommandINFO_MESSAGE()
 {
     PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string

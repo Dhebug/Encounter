@@ -86,13 +86,15 @@ extern void Hires(char paperColor,char inkColor);
 
 union ParamType
 {
-    unsigned char uchar;
-    unsigned int uint;
-    const void* ptr;
+    unsigned char uchar;        // One single byte
+    unsigned char uchars[2];    // Array of two bytes
+    unsigned int uint;          // One 16 bit value
+    const void* ptr;            // One pointer
 };
 
 extern union ParamType param0;
 extern union ParamType param1;
+extern union ParamType param2;
 
 #define WaitFrames(frames)                 { param0.uint=frames;asm("jsr _WaitFramesAsm"); }
 #define PrintStatusMessage(color,message)  { param0.uchar=color;param1.ptr=message;asm("jsr _PrintStatusMessageAsm"); } 
@@ -107,6 +109,8 @@ extern void HandleByteStream();
 #define PlayStream(byteStream)                { param0.ptr=byteStream;asm("jsr _PlayStreamAsm"); }
  
 #define ClearMessageWindow(paperColor)        { param0.uchar=paperColor;asm("jsr _ClearMessageWindowAsm"); }
+
+#define DrawRectangleOutline(xPos,yPos,width,height,fillValue)  { param0.uchar=xPos;param0.uchars[1]=yPos;param1.uchar=width;param1.uchars[1]=height;param2.uchar=fillValue;asm("jsr _DrawRectangleOutlineAsm"); }
 
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;

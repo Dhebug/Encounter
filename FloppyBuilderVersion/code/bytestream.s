@@ -344,3 +344,71 @@ loop_column
     rts
 .)
 
+; param0 +0 = xPos
+; param0 +1 = yPos
+; param1 +0 = width
+; param1 +1 = height
+; param2 +0 = fillValue
+_DrawRectangleOutlineAsm
+.(
+    ; Pointer to first hires window
+    lda #<$a000
+    sta _gDrawAddress+0
+    lda #>$a000
+    sta _gDrawAddress+1
+
+    lda _param2+0
+    sta _gDrawPattern  ; fillValue
+
+    ; Left side
+    lda _param0+0
+	sta _gDrawPosX     ; xPos
+
+    ldx _param0+1
+    inx
+	stx _gDrawPosY     ; yPos+1
+
+    ldx _param1+1
+    dex
+    dex
+	stx _gDrawHeight   ; height-2
+
+;a jmp a
+
+	jsr _DrawVerticalLine
+
+    ; Right side
+    clc
+    lda _param0+0
+    adc _param1+0
+    sec
+    sbc #1
+	sta _gDrawPosX     ; xPos+width-1
+
+	jsr _DrawVerticalLine
+
+    ; Top side
+    ldx _param0+0
+    inx
+	stx _gDrawPosX     ; xPos+1
+
+    dec _gDrawPosY     ; yPos
+
+    ldx _param1+0
+    dex
+    dex
+	stx _gDrawWidth    ; width-2
+
+	jsr _DrawHorizontalLine
+
+    ; Bottom side
+    clc
+    lda _param0+1
+    adc _param1+1
+    sec
+    sbc #1
+	sta _gDrawPosY     ; yPos+height-1
+
+	jmp _DrawHorizontalLine
+.)    
+
