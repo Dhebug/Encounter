@@ -105,6 +105,8 @@ extern char* gPrintAddress;
 extern void HandleByteStream();
 #define SetByteStream(frames)                 { gCurrentStream=frames;gDelayStream=0; }
 #define PlayStream(byteStream)                { param0.ptr=byteStream;asm("jsr _PlayStreamAsm"); }
+ 
+#define ClearMessageWindow(paperColor)        { param0.uchar=paperColor;asm("jsr _ClearMessageWindowAsm"); }
 
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;

@@ -303,3 +303,44 @@ loop_clear
 
     rts
 .)
+
+
+
+; _param0=paper color
+_ClearMessageWindowAsm
+.(
+    ; Pointer to first line of the "window"
+    lda #<$bb80+40*18
+    sta tmp0+0
+    lda #>$bb80+40*18
+    sta tmp0+1
+
+    ldx #1+23-18
+loop_line
+    ; Erase the 39 last characters of that line
+    ldy #39
+    lda #32
+loop_column
+    sta (tmp0),y
+    dey
+    bne loop_column
+
+    ; Paper color at the start of the line
+    lda _param0
+    sta (tmp0),y
+
+    ; Next line
+    clc
+    lda tmp0+0
+    adc #40
+    sta tmp0+0
+    lda tmp0+1
+    adc #0
+    sta tmp0+1
+
+    dex
+    bne loop_line
+
+    rts
+.)
+

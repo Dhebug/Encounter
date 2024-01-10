@@ -7,18 +7,6 @@ typedef void (*ByteStreamCallback)();
 extern ByteStreamCallback ByteStreamCallbacks[_COMMAND_COUNT];
 
 
-void ClearMessageWindow(unsigned char paperColor)
-{
-	int i;
-	char* ptrScreen=(char*)0xbb80+40*18;
-	for (i=18;i<=23;i++)
-	{
-		*ptrScreen=paperColor;
-		memset(ptrScreen+1,32,39);
-		ptrScreen+=40;
-	}
-}
-
 
 void InitializeGraphicMode()
 {
