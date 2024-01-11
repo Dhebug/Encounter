@@ -324,6 +324,32 @@ _PrintInformationMessageAsm
     jmp _WaitFramesAsm
 .)
 
+
+; _param0+0/+1=pointer to message
+_PrintErrorMessageAsm
+.(
+    ; Set the color
+    lda #1
+    sta _param1
+
+    ; Print the message
+    jsr _PrintStatusMessageAsm
+
+    ; Play a 'Ping' sound
+    ldx #<_PingData
+    ldy #>_PingData
+    jsr _PlaySoundAsmXY
+
+    ; Wait 75 frames
+    lda #75
+    sta _param0+0
+    lda #0
+    sta _param0+1
+
+    jmp _WaitFramesAsm
+.)
+
+
 ; _param0=paper color
 _ClearMessageWindowAsm
 .(

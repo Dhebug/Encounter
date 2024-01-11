@@ -100,14 +100,6 @@ unsigned char ParseInputBuffer()
 }
 
 
-void PrintErrorMessage(const char* message)
-{
-	PrintStatusMessage(1,message);
-	PlaySound(PingData);
-	WaitFrames(75);
-}
-
-
 void PrintSceneDirections()
 {
 	unsigned char* directions = gCurrentLocationPtr->directions;

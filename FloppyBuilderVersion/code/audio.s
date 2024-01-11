@@ -29,14 +29,13 @@ _PsgPlayLoopIndex	    .byt 255     ; No loop defined
 
     .text
 
-_PlaySoundAsm
-.(
+_PlaySoundAsm                            ; When called from C using the virtual registers
+    ldx _param0+0                        
+    ldy _param0+1
+_PlaySoundAsmXY                          ; Direct assembler call using XY registers
 	sei
-    
-    lda _param0+0                        ; Update the register list
-    sta _SoundDataPointer+0
-    lda _param0+1
-    sta _SoundDataPointer+1
+    stx _SoundDataPointer+0              ; Update the register list
+    sty _SoundDataPointer+1
 
     lda #0
 	sta _PsgPlayPosition                 ; 255 = Done playing
@@ -45,7 +44,6 @@ _PlaySoundAsm
 
 	cli
     rts
-.)
 
 
 SoundUpdateHighSpeed
