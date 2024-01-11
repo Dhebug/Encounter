@@ -261,8 +261,8 @@ _ByteStreamCommandTEXT
     rts
 
 
-; _param0=color
-; _param1+0/+1=pointer to message
+; _param0+0/+1=pointer to message
+; _param1=color
 _PrintStatusMessageAsm
     ;rts
     ;jmp _PrintStatusMessageAsm
@@ -275,7 +275,7 @@ _PrintStatusMessageAsm
 
     ; Write the color code
     ldy #1
-    lda _param0
+    lda _param1
     sta (tmp0),y
 
     ; Write the message
@@ -286,7 +286,7 @@ _PrintStatusMessageAsm
 
     ldy #0
 loop_message    
-    lda (_param1),y
+    lda (_param0),y
     beq end_message
     sta (tmp0),y
     iny
@@ -305,6 +305,24 @@ loop_clear
 .)
 
 
+; _param0+0/+1=pointer to message
+_PrintInformationMessageAsm
+.(
+    ; Set the color
+    lda #3
+    sta _param1
+
+    ; Print the message
+    jsr _PrintStatusMessageAsm
+
+    ; Wait 75 frames
+    lda #75
+    sta _param0+0
+    lda #0
+    sta _param0+1
+
+    jmp _WaitFramesAsm
+.)
 
 ; _param0=paper color
 _ClearMessageWindowAsm
@@ -412,3 +430,18 @@ _DrawRectangleOutlineAsm
 	jmp _DrawHorizontalLine
 .)    
 
+
+/*
+_ByteStreamCommandINFO_MESSAGE
+.(
+    rts
+.)
+*/
+
+/*
+void ByteStreamCommandINFO_MESSAGE()
+{
+    PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
+	gCurrentStream += strlen(gCurrentStream)+1;
+}
+*/

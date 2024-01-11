@@ -97,7 +97,8 @@ extern union ParamType param1;
 extern union ParamType param2;
 
 #define WaitFrames(frames)                 { param0.uint=frames;asm("jsr _WaitFramesAsm"); }
-#define PrintStatusMessage(color,message)  { param0.uchar=color;param1.ptr=message;asm("jsr _PrintStatusMessageAsm"); } 
+#define PrintStatusMessage(color,message)  { param0.ptr=message;param1.uchar=color;asm("jsr _PrintStatusMessageAsm"); } 
+#define PrintInformationMessage(message)   { param0.ptr=message;asm("jsr _PrintInformationMessageAsm"); } 
 
 extern char gIsHires;
 extern char* gPrintAddress;

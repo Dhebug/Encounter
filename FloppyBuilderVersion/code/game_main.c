@@ -108,14 +108,6 @@ void PrintErrorMessage(const char* message)
 }
 
 
-void PrintInformationMessage(const char* message)
-{
-	PrintStatusMessage(3,message);
-	//PlaySound(PingData);
-	WaitFrames(75);
-}
-
-
 void PrintSceneDirections()
 {
 	unsigned char* directions = gCurrentLocationPtr->directions;
