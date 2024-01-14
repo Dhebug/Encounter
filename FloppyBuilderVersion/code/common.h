@@ -81,8 +81,8 @@ extern void PrintLine(const char* message);
 extern void PrintMultiLine(const char* message);
 extern void PrintWord(const char* message);
 
-extern void Text(char paperColor,char inkColor);
-extern void Hires(char paperColor,char inkColor);
+#define Text(paperColor,inkColor)          { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _TextAsm"); }
+#define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }
 
 union ParamType
 {
