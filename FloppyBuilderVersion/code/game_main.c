@@ -247,12 +247,6 @@ void HandleHighScore()
 	}
 }
 
-void PrintTopDescription(const char* message)
-{
-    int messageLength = messageLength=strlen(message);
-	memset((char*)0xbb80+17*40+1,' ',39);
-	strcpy((char*)0xbb80+17*40+20-messageLength/2,message);
-}
 
 void PrintSceneInformation()
 {

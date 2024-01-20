@@ -51,18 +51,6 @@ void ByteStreamCommandBITMAP()
 }
 
 
-void ByteStreamCommandFULLSCREEN_ITEM()
-{
-	unsigned char loaderId = *gCurrentStream++;
-
-    ClearMessageWindow(16+4);
-    LoadFileAt(loaderId,ImageBuffer);
-    PrintTopDescription(gCurrentStream);
-    BlitBufferToHiresWindow();
-
-	gCurrentStream += strlen(gCurrentStream)+1;
-}
-
 
 unsigned int* jumpLocation;
 char check = 0;

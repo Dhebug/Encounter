@@ -263,6 +263,74 @@ _ByteStreamCommandTEXT
 
 
 ; _param0+0/+1=pointer to message
+; Returns len in y and a
+_GetStringLen
+.(
+    ldy #0
+loop    
+    lda (_param0),y
+    beq end_loop2
+    iny
+    jmp loop
+
+end_loop2
+    tya
+    rts
+.)
+
+
+; Adjust the pointer to the next position (_param0+y+1)
+_Adjust_gStreamNextPtr
+.(
+    tya
+    sec
+    adc _param0+0
+    sta _gStreamNextPtr+0
+    lda _param0+1
+    adc #0
+    sta _gStreamNextPtr+1
+
+    rts
+.)
+
+; _param0+0/+1=pointer to message
+_PrintTopDescriptionAsm
+.(
+    ;int messageLength = messageLength=strlen(message);
+    jsr _GetStringLen
+    lsr
+    sta _param1  ; Store len/2 for later
+
+    ; memset((char*)0xbb80+17*40+1,' ',39);
+    lda #<$bb80+17*40+1:ldy #0:sta (sp),y:iny:lda #>$bb80+17*40+1:sta (sp),y
+    lda #" ":iny:sta (sp),y:iny:lda #0:sta (sp),y
+    lda #<39:iny:sta (sp),y:iny:lda #>39:sta (sp),y
+    jsr _memset
+
+	;strcpy((char*)0xbb80+17*40+20-messageLength/2,message);
+    sec
+    lda #<$bb80+17*40+20
+    sbc _param1              ; len/2 from above
+    sta tmp0+0
+    lda #>$bb80+17*40+20
+    sbc #0
+    sta tmp0+1
+
+    ldy #0
+loop
+    lda (_param0),y
+    beq end_loop2
+    sta (tmp0),y
+    iny
+    jmp loop
+
+end_loop2
+    ; Adjust the pointer to the next position (_param0+y+1)
+    jmp _Adjust_gStreamNextPtr
+.)
+
+
+; _param0+0/+1=pointer to message
 ; _param1=color
 _PrintStatusMessageAsm
     ;rts
@@ -294,13 +362,7 @@ loop_message
     jmp loop_message
 end_message    
     ; Adjust the pointer to the next position (_param0+y+1)
-    tya
-    sec
-    adc _param0+0
-    sta _gStreamNextPtr+0
-    lda _param0+1
-    adc #0
-    sta _gStreamNextPtr+1
+    jsr _Adjust_gStreamNextPtr
 
     ; Clear the rest of the line
     lda #32
@@ -487,4 +549,43 @@ _DrawRectangleOutlineAsm
 	jmp _DrawHorizontalLine
 .)    
 
+
+; Used by scenes like showing the newspaper or the map of england
+; - Loads an image
+; - Display a title string
+; - Fades the image in
+_ByteStreamCommandFULLSCREEN_ITEM
+.(  
+    ; _param0=paper color
+    ; ClearMessageWindow(16+4);
+    lda #16+4
+    sta _param0+0
+    jsr _ClearMessageWindowAsm
+
+	; unsigned char loaderId = *gCurrentStream++;
+    ; LoadFileAt(loaderId,ImageBuffer);
+    jsr _ByteStreamGetNextByte
+    stx _LoaderApiEntryIndex
+    lda #<_ImageBuffer
+    sta _LoaderApiAddressLow
+    lda #>_ImageBuffer
+    sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory
+
+    ; PrintTopDescription(gCurrentStream);
+    lda _gCurrentStream+0
+    sta _param0+0
+    lda _gCurrentStream+1
+    sta _param0+1
+    jsr _PrintTopDescriptionAsm
+
+	;gCurrentStream += strlen(gCurrentStream)+1;
+    lda _gStreamNextPtr+0
+    sta _gCurrentStream+0
+    lda _gStreamNextPtr+1
+    sta _gCurrentStream+1
+
+    ; BlitBufferToHiresWindow();
+    jmp _BlitBufferToHiresWindow
+.)
 

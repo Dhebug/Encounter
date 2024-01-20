@@ -100,6 +100,7 @@ extern union ParamType param2;
 #define PrintStatusMessage(color,message)  { param0.ptr=message;param1.uchar=color;asm("jsr _PrintStatusMessageAsm"); } 
 #define PrintInformationMessage(message)   { param0.ptr=message;asm("jsr _PrintInformationMessageAsm"); } 
 #define PrintErrorMessage(message)         { param0.ptr=message;asm("jsr _PrintErrorMessageAsm"); } 
+#define PrintTopDescription(message)       { param0.ptr=message;asm("jsr _PrintTopDescriptionAsm"); } 
 
 extern char gIsHires;
 extern char* gPrintAddress;
@@ -115,6 +116,7 @@ extern void HandleByteStream();
 #define DrawRectangleOutline(xPos,yPos,width,height,fillValue)  { param0.uchar=xPos;param0.uchars[1]=yPos;param1.uchar=width;param1.uchars[1]=height;param2.uchar=fillValue;asm("jsr _DrawRectangleOutlineAsm"); }
 
 extern void ByteStreamCommandINFO_MESSAGE();
+extern void ByteStreamCommandFULLSCREEN_ITEM();
 
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;
