@@ -13,6 +13,7 @@ _gCurrentStreamStop     .dsb 1
 _gDelayStream           .dsb 2
 
 _gStreamItemPtr         .dsb 2
+_gStreamNextPtr         .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
 
     .text 
 
@@ -292,6 +293,14 @@ loop_message
     iny
     jmp loop_message
 end_message    
+    ; Adjust the pointer to the next position (_param0+y+1)
+    tya
+    sec
+    adc _param0+0
+    sta _gStreamNextPtr+0
+    lda _param0+1
+    adc #0
+    sta _gStreamNextPtr+1
 
     ; Clear the rest of the line
     lda #32
@@ -348,6 +357,28 @@ _PrintErrorMessageAsm
 
     jmp _WaitFramesAsm
 .)
+
+; Uses _gCurrentStream and _gStreamNextPtr
+_ByteStreamCommandINFO_MESSAGE
+.(
+    ; PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
+    ; _param0+0/+1=pointer to message (stored in gCurrentStream)
+    lda _gCurrentStream+0
+    sta _param0+0
+    lda  _gCurrentStream+1
+    sta _param0+1
+
+    jsr _PrintInformationMessageAsm  
+
+    ; gCurrentStream += strlen(gCurrentStream)+1;
+    lda _gStreamNextPtr+0
+    sta _gCurrentStream+0
+    lda _gStreamNextPtr+1
+    sta _gCurrentStream+1
+
+    rts
+.)
+
 
 
 ; _param0=paper color
@@ -457,17 +488,3 @@ _DrawRectangleOutlineAsm
 .)    
 
 
-/*
-_ByteStreamCommandINFO_MESSAGE
-.(
-    rts
-.)
-*/
-
-/*
-void ByteStreamCommandINFO_MESSAGE()
-{
-    PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
-	gCurrentStream += strlen(gCurrentStream)+1;
-}
-*/

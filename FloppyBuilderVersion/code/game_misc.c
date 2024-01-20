@@ -33,13 +33,6 @@ void InitializeGraphicMode()
 }
 
 
-void ByteStreamCommandINFO_MESSAGE()
-{
-    PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
-	gCurrentStream += strlen(gCurrentStream)+1;
-}
-
-
 void ByteStreamCommandBITMAP()
 {
 	unsigned char loaderId = *gCurrentStream++;

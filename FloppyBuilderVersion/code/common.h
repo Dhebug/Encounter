@@ -114,6 +114,8 @@ extern void HandleByteStream();
 
 #define DrawRectangleOutline(xPos,yPos,width,height,fillValue)  { param0.uchar=xPos;param0.uchars[1]=yPos;param1.uchar=width;param1.uchars[1]=height;param2.uchar=fillValue;asm("jsr _DrawRectangleOutlineAsm"); }
 
+extern void ByteStreamCommandINFO_MESSAGE();
+
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;
 extern char gCurrentStreamStop;
