@@ -896,31 +896,31 @@ _DrawArrows
   ; Iterate over the list of all bitmap elements, and draw them if the bit is activated in the mask variable
   ldx #0
 loop_draw_arrow  
-  lda BlitDataTable+0,x   ; Blit mode (AND/ORA)
+  lda _BlitDataTable+0,x   ; Blit mode (AND/ORA)
   beq end_draw_arrow
   sta BlitOperation
 
   lsr _gFlagDirections
   bcc skip_draw
 
-  lda BlitDataTable+1,x   ; Source graphics
+  lda _BlitDataTable+1,x   ; Source graphics
   sta tmp0+0
-  lda BlitDataTable+2,x
+  lda _BlitDataTable+2,x
   sta tmp0+1
 
-  lda BlitDataTable+3,x   ; Destination
+  lda _BlitDataTable+3,x   ; Destination
   sta tmp1+0
-  lda BlitDataTable+4,x
+  lda _BlitDataTable+4,x
   sta tmp1+1
 
-  lda BlitDataTable+5,x   ; Dimensions
+  lda _BlitDataTable+5,x   ; Dimensions
   sta width
-  lda BlitDataTable+6,x
+  lda _BlitDataTable+6,x
   sta height
   
   txa                     ; I wish we had phx/plx on the base 6502
   pha 
-  jsr BlitBloc
+  jsr _BlitBloc
   pla
   tax
 
@@ -1131,12 +1131,12 @@ loop
 
 #define BLIT_INFO(opcode,source,destination,width,height)  .byt opcode,<source,>source,<destination,>destination,width,height
 
-BlitDataTable
+_BlitDataTable
   ; ArrowBlockMasks -> 102,111 -> 17,111
   ; The block itself is 32x18 pixels (6 bytes wide)
   ; The top 18 pixels is the AND mask, the bottom 18 pixels are the OR mask
-  BLIT_INFO(BLIT_AND  ,ArrowBlockMasks+0    ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (AND masked)
-  BLIT_INFO(BLIT_OR   ,ArrowBlockMasks+6*26 ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (OR masked)
+  BLIT_INFO(BLIT_AND  ,_ArrowBlockMasks+0    ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (AND masked)
+  BLIT_INFO(BLIT_OR   ,_ArrowBlockMasks+6*26 ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (OR masked)
   ; The four directional arrows
   BLIT_INFO(BLIT_OR   ,ArrowTop    ,_ImageBuffer+19+40*112,2, 6)                 // North Arrow
   BLIT_INFO(BLIT_OR   ,ArrowBottom ,_ImageBuffer+19+40*120,2,13)                 // South Arrow
@@ -1148,7 +1148,7 @@ BlitDataTable
   .byt 0
 
 
-BlitBloc
+_BlitBloc
 .(
 loop_y  
   ldy #0
@@ -1187,7 +1187,7 @@ loop_x
 
 ; From arrow_block_masks.png
 ; Contains two 36x28 pixels elements: The top half should be ANDed and the bottom half to be ORed with the image
-ArrowBlockMasks  
+_ArrowBlockMasks  
 	.byt $7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$5f,$7f,$7f,$7f,$7f,$7c,$47
 	.byt $7f,$7f,$7f,$7f,$70,$41,$7f,$7f,$7f,$7f,$40,$40,$5f,$7f,$7f,$7c
 	.byt $40,$40,$47,$7f,$7f,$70,$40,$40,$41,$7f,$7f,$40,$40,$40,$40,$5f

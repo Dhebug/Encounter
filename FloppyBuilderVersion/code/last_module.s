@@ -14,6 +14,8 @@ _EndText
 #print Remaining space = ($9800 - *)  
 #endif
 
+_free_to_use_text = osdk_end+1 ; *+256
+
     .bss
 
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
@@ -24,25 +26,26 @@ _gFont12x14Width      .dsb 95
 ; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild
 ; the complete shifted graphics
 _gShiftBuffer         .dsb 64*2*6           ; 768 bytes
-_free_to_use_1        .dsb 1024-768-95
+_free_to_use_9b5f     .dsb 1024-768-95
 
 * = $9C00             ; ALT charset for HIRES mode: 1024 bytes
-_free_to_use_2        .dsb 1024
+_free_to_use_9c00     .dsb 1024
 
 * = $A000             ; Top of the HIRES screen: 8000 bytes
 
 * = $B400             ; STD charset for TEXT mode (the 256 first bytes are not displayable)
 _Attribute_TEXT       .dsb 1        ; Contains the attribute to switch to TEXT mode
-_free_to_use_3        .dsb 255
+_free_to_use_b401     .dsb 255
 
 * = $B800             ; ALT charset for TEXT mode (the 256 first bytes are not displayable)
 ; Contains all the combination of X*40 to access specific scanlines
 _gTableMulBy40Low     .dsb 128
 _gTableMulBy40High    .dsb 128
+_maybe_free_to_use    ; Need to check
 
 * = $BB80             ; Top of the TEXT screen: 1120 bytes
 _Attribute_HIRES      .dsb 1        ; Contains the attribute to switch to HIRES mode
-_free_to_use_4        .dsb 479
+_free_to_use_bb81     .dsb 479
 
 * = $C000             ; Start of the ROM/Overlay ram
 
@@ -51,7 +54,7 @@ _free_to_use_4        .dsb 479
 _ImageBuffer          .dsb 40*128   ; 128 lines of HIRES
 _ImageBufferEnd       .dsb 40*8     ; an extra 8 lines to make things more practical with the redefined characters
 _SecondImageBuffer    .dsb 40*128   ; A second buffer that can store a full image
-_free_to_use_5
+_free_to_use_e940
 
 
 
