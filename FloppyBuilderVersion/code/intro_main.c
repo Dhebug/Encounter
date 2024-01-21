@@ -473,6 +473,6 @@ void main()
 endIntro:
 #endif
 	// Quit and return to the loader
-	InitializeFileAt(LOADER_PROGRAM_SECOND,0x400);
+	InitializeFileAt(LOADER_GAME_PROGRAM,LOADER_GAME_PROGRAM_ADDRESS);   // 0x400
 }
 

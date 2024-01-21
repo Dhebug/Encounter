@@ -1,3 +1,5 @@
+#include "params.h"
+
 ;
 ; Based on the loader version modified by Chema and Fabrice used in Blake's 7
 ; This version has the following changes:
@@ -789,6 +791,7 @@ _Vectors
 ; Chema: WriteSupport
 _LoaderApiSaveData              .byt OPCODE_JMP,<WriteData,>WriteData   ; $FFEC-$FFEE
 
+#ifdef ENABLE_INTRO
 _LoaderApiFileStartSector       .byt LOADER_INTRO_PROGRAM_SECTOR        ; $FFEF
 _LoaderApiFileStartTrack        .byt LOADER_INTRO_PROGRAM_TRACK         ; $FFF0
 
@@ -803,6 +806,22 @@ _LoaderApiAddressLow            .byt <LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF4
 _LoaderApiAddressHigh           .byt >LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF5
 _LoaderXxxxxx_available         .byt 0                                  ; $FFF6
 _LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
+#else  // Directly load the game
+_LoaderApiFileStartSector       .byt LOADER_GAME_PROGRAM_SECTOR         ; $FFEF
+_LoaderApiFileStartTrack        .byt LOADER_GAME_PROGRAM_TRACK          ; $FFF0
+
+_LoaderApiFileSize
+_LoaderApiFileSizeLow           .byt <LOADER_GAME_PROGRAM_SIZE          ; $FFF1
+_LoaderApiFileSizeHigh          .byt >LOADER_GAME_PROGRAM_SIZE          ; $FFF2
+
+; Could have a JMP here as well to launch the loaded program
+_LoaderApiJump                  .byt OPCODE_JMP                         ; $FFF3
+_LoaderApiAddress
+_LoaderApiAddressLow            .byt <LOADER_GAME_PROGRAM_ADDRESS       ; $FFF4
+_LoaderApiAddressHigh           .byt >LOADER_GAME_PROGRAM_ADDRESS       ; $FFF5
+_LoaderXxxxxx_available         .byt 0                                  ; $FFF6
+_LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
+#endif
 
 ;
 ; These three HAVE to be at these precise adresses, they map to hardware registers
