@@ -119,6 +119,8 @@ extern void ByteStreamCommandINFO_MESSAGE();
 extern void ByteStreamCommandFULLSCREEN_ITEM();
 extern void ByteStreamCommandBITMAP();
 
+extern void InitializeGraphicMode();
+
 extern const char* gCurrentStream;
 extern const unsigned int* gCurrentStreamInt;
 extern char gCurrentStreamStop;

@@ -630,3 +630,39 @@ image_already_loaded
 .)
 
 
+
+_InitializeGraphicMode
+.(
+    jsr _ClearTextWindow
+
+    lda #31|128
+    sta $bb80+40*0  	   ; Switch to HIRES, using video inverse to keep the 6 pixels white
+
+    lda #26
+	sta $a000+40*128       ; Switch to TEXT
+
+	; from the old BASIC code, will fix later
+	; CYAN on BLACK for the scene description
+    lda #7
+	sta $BB80+40*16    ; Line with the arrow character and the clock
+    lda #6
+	sta $BB80+40*17
+
+	; BLUE background for the log output
+	lda #16+4
+    sta _param0
+    jsr _ClearMessageWindowAsm
+
+	; BLACK background for the inventory area
+    lda #16
+	sta $BB80+40*24
+	sta $BB80+40*25
+	sta $BB80+40*26
+	sta $BB80+40*27
+
+	; Initialize the ALT charset numbers
+    lda #<$b800+"0"*8:ldy #0:sta (sp),y:iny:lda #>$b800+"0"*8:sta (sp),y
+    lda #<_gSevenDigitDisplay:iny:sta (sp),y:iny:lda #>_gSevenDigitDisplay:sta (sp),y
+    lda #<8*11 :iny:sta (sp),y:iny:lda #>8*11:sta (sp),y
+    jmp _memcpy  
+.)

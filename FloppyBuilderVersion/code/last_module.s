@@ -49,6 +49,10 @@ _TEXT_MEMORY_START
 _Attribute_HIRES      .dsb 1        ; Contains the attribute to switch to HIRES mode
 _free_to_use_bb81     .dsb 479
 
+* = $BB80+40*16
+_TEXT_BOTTOM_VIEW__START
+
+
 * = $C000             ; Start of the ROM/Overlay ram
 
 ; Screeen is in $A000 = %10100000 00000000
