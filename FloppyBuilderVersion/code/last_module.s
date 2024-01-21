@@ -32,6 +32,7 @@ _free_to_use_9b5f     .dsb 1024-768-95
 _free_to_use_9c00     .dsb 1024
 
 * = $A000             ; Top of the HIRES screen: 8000 bytes
+_HIRES_MEMORY_START
 
 * = $B400             ; STD charset for TEXT mode (the 256 first bytes are not displayable)
 _Attribute_TEXT       .dsb 1        ; Contains the attribute to switch to TEXT mode
@@ -44,6 +45,7 @@ _gTableMulBy40High    .dsb 128
 _maybe_free_to_use    ; Need to check
 
 * = $BB80             ; Top of the TEXT screen: 1120 bytes
+_TEXT_MEMORY_START
 _Attribute_HIRES      .dsb 1        ; Contains the attribute to switch to HIRES mode
 _free_to_use_bb81     .dsb 479
 

@@ -33,24 +33,6 @@ void InitializeGraphicMode()
 }
 
 
-void ByteStreamCommandBITMAP()
-{
-	unsigned char loaderId = *gCurrentStream++;
-	if (gFlagCurrentSpriteSheet!=loaderId)
-	{
-		// We only load the image if it's not already the one in memory
-		LoadFileAt(loaderId,SecondImageBuffer);
-		gFlagCurrentSpriteSheet=loaderId;
-	}
-	gDrawWidth 		= *gCurrentStream++;
-	gDrawHeight 	= *gCurrentStream++;
-	gSourceStride 	= *gCurrentStream++;
-	gDrawSourceAddress =  (unsigned char*) *gCurrentStreamInt++;
-	gDrawAddress       =  (unsigned char*) *gCurrentStreamInt++;
-	BlitSprite();
-}
-
-
 
 unsigned int* jumpLocation;
 char check = 0;

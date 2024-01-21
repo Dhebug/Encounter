@@ -589,3 +589,44 @@ _ByteStreamCommandFULLSCREEN_ITEM
     jmp _BlitBufferToHiresWindow
 .)
 
+
+_ByteStreamCommandBITMAP
+.( 
+	; unsigned char loaderId = *gCurrentStream++;
+    jsr _ByteStreamGetNextByte
+    cpx _gFlagCurrentSpriteSheet
+    beq image_already_loaded             ; We only load the image if it's not already the one in memory
+    
+    ; Load the requested bitmap
+    stx _gFlagCurrentSpriteSheet
+    stx _LoaderApiEntryIndex
+    lda #<_SecondImageBuffer
+    sta _LoaderApiAddressLow
+    lda #>_SecondImageBuffer
+    sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory    
+
+image_already_loaded
+    ; Load the coordinates and draw the sprite
+    ; These should probably be optimize with a simple function that takes a bit mask of which variables to update
+    jsr _ByteStreamGetNextByte
+    stx _gDrawWidth
+    jsr _ByteStreamGetNextByte
+    stx _gDrawHeight
+    jsr _ByteStreamGetNextByte
+    stx _gSourceStride
+
+    jsr _ByteStreamGetNextByte
+    stx _gDrawSourceAddress+0
+    jsr _ByteStreamGetNextByte
+    stx _gDrawSourceAddress+1
+
+    jsr _ByteStreamGetNextByte
+    stx _gDrawAddress+0
+    jsr _ByteStreamGetNextByte
+    stx _gDrawAddress+1
+
+    jmp _BlitSprite
+.)
+
+
