@@ -29,6 +29,8 @@ extern void DrawVerticalLine();
 extern void DrawHorizontalLine();
 extern void BlitRectangle();
 
+extern void ByteStreamCommandBUBBLE();
+
 extern unsigned char ImageBuffer[];          // 240x128 compositing buffer, used to mix together the scene image, frame, arrows, etc...
 extern unsigned char SecondImageBuffer[];    // Second 240x128 buffer
 extern char gFlagDirections;                 // Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)

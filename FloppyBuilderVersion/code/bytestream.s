@@ -61,11 +61,11 @@ _ByteStreamGetNextByte
 .(
     ldy #0
     lda (_gCurrentStream),y
-    tax
     inc _gCurrentStream+0
     bne skip    
     inc _gCurrentStream+1
 skip
+    tax
     rts
 .)
 
@@ -666,3 +666,181 @@ _InitializeGraphicMode
     lda #<8*11 :iny:sta (sp),y:iny:lda #>8*11:sta (sp),y
     jmp _memcpy  
 .)
+
+
+_count        .dsb 1
+_coordinates  .dsb 2
+tmpCount      .dsb 1
+
+_ByteStreamCommandBUBBLE
+.(
+    jsr _ByteStreamGetNextByte     ; Number of bubbles 
+    stx _count
+
+    jsr _ByteStreamGetNextByte     ; Color pattern
+    stx _gDrawPattern
+
+    lda _gCurrentStream+0          ; Memorize the pointer for the later passes
+    sta _coordinates+0
+    lda _gCurrentStream+1
+    sta _coordinates+1
+
+    ;
+    ; Draw the black outline of the speech bubble
+    ;
+    .( 
+    ldx _count
+    stx tmpCount
+loop_bubble
+    jsr _ByteStreamGetNextByte  ; X Pos
+    dex
+    stx _param0+0
+
+    jsr _ByteStreamGetNextByte  ; Y Pos
+    dex
+    stx _param0+1
+
+    jsr _ByteStreamGetNextByte   ; Skip offset Y
+
+    lda #2+2
+    sta _param1+0       ; Initial width
+
+    lda #15+2
+    sta _param1+1       ; Initial height
+
+    lda _gDrawPattern
+    sta _param2+0       ; Pattern
+
+    ; Iterate over the string
+loop_compute_size
+    jsr _ByteStreamGetNextByte
+    beq end_compute_size
+    bmi offset
+character            ; Get the character width from the font information gFont12x14Width[car-32]+1;
+    sec
+    lda _param1+0
+    adc _gFont12x14Width-32,x
+    sta _param1+0    
+    bne loop_compute_size
+offset               ; Signed offset to handle things like AV or To properly
+    clc
+    txa
+    adc _param1+0
+    sta _param1+0    
+    bne loop_compute_size
+end_compute_size
+
+    jsr _DrawRectangleOutlineAsm
+
+    dec tmpCount
+    bne loop_bubble
+    .)
+
+    ;
+    ; Fill the bubble rectangles with the opposite color
+    ;
+    lda _gDrawPattern
+    eor #63
+    sta _gDrawPattern
+
+    .( 
+    ; Restore the coordinates
+    lda _coordinates+0
+    sta _gCurrentStream+0
+    lda _coordinates+1
+    sta _gCurrentStream+1
+
+    ldx _count
+    stx tmpCount
+loop_bubble
+    jsr _ByteStreamGetNextByte  ; X Pos
+    stx _gDrawPosX
+
+    jsr _ByteStreamGetNextByte  ; Y Pos
+    stx _gDrawPosY
+
+    jsr _ByteStreamGetNextByte   ; Skip offset Y
+
+    lda #15
+    sta _gDrawHeight
+
+    lda #2
+    sta _gDrawWidth       ; Initial width
+
+    ; Iterate over the string
+loop_compute_size
+    jsr _ByteStreamGetNextByte
+    beq end_compute_size
+    bmi offset
+character         ; Get the character width from the font information gFont12x14Width[car-32]+1;
+    sec
+    lda _gDrawWidth
+    adc _gFont12x14Width-32,x
+    sta _gDrawWidth
+    bne loop_compute_size
+offset             ; Signed offset to handle things like AV or To properly
+    clc
+    txa
+    adc _gDrawWidth
+    sta _gDrawWidth
+    bne loop_compute_size
+end_compute_size
+
+    jsr _DrawFilledRectangle
+
+    dec tmpCount
+    bne loop_bubble
+    .)
+    
+    ;
+    ; Print the actual text in the original color
+    ;
+    lda _gDrawPattern
+    eor #63
+    sta _gDrawPattern
+
+    .( 
+    ; Restore the coordinates
+    lda _coordinates+0
+    sta _gCurrentStream+0
+    lda _coordinates+1
+    sta _gCurrentStream+1
+
+    ldx _count
+    stx tmpCount
+loop_bubble
+    jsr _ByteStreamGetNextByte  ; X Pos
+    inx                         ; Offset X
+    stx _gDrawPosX
+
+    jsr _ByteStreamGetNextByte  ; Y Pos
+    stx _gDrawPosY
+
+    jsr _ByteStreamGetNextByte  ; Offset Y
+    clc
+    txa
+    adc _gDrawPosY
+    sta _gDrawPosY
+
+    lda #15
+    sta _gDrawHeight
+
+    lda _gCurrentStream+0
+    sta _gDrawExtraData+0
+    lda _gCurrentStream+1
+    sta _gDrawExtraData+1
+    
+    jsr _PrintFancyFont
+
+    lda _gDrawExtraData+0
+    sta _gCurrentStream+0
+    lda _gDrawExtraData+1
+    sta _gCurrentStream+1
+
+    dec tmpCount
+    bne loop_bubble
+    .)
+
+    rts
+.)
+
