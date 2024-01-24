@@ -197,7 +197,7 @@ _gTextLocationDarkTunel           .byt "You are in a dark, damp tunnel",0
 _gTextLocationMainStreet          .byt "You are on the main street",0
 _gTextLocationNarrowPath          .byt "You are on a narrow path",0
 
-_gTextLocationInThePit            .byt "You are insided a deep pit",0
+_gTextLocationInThePit            .byt "You are inside a deep pit",0
 _gTextLocationOldWell             .byt "You are near to an old-fashioned well",0
 _gTextLocationWoodedAvenue        .byt "You are in a wooded avenue",0
 
@@ -379,14 +379,6 @@ _gDescriptionDarkTunel
     END
 
 _gDescriptionMarketPlace
-#if 1 // Debugging/testing code
-    WAIT(1)
-    .byt COMMAND_FILL_RECTANGLE,10,10,50,50,127
-    .byt COMMAND_FILL_RECTANGLE,20,20,20,20,0
-    .byt COMMAND_TEXT,10,10,64,"TEST!",0
-    ;.byt COMMAND_STOP_BREAKPOINT
-    WAIT(255)
-#endif
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
 #ifdef LANGUAGE_FR    
@@ -396,6 +388,14 @@ _gDescriptionMarketPlace
     .byt 4,100,0,"The market place",0
     .byt 4,106,4,"is deserted",0
 #endif    
+
+blinky_shop
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "grayed out"
+    WAIT(50) 
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "fully drawn"
+    WAIT(50)
+    JUMP(blinky_shop)
+
     END
 
 
