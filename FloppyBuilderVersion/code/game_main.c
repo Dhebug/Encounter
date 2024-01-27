@@ -7,6 +7,7 @@
 #include "common.h"
 
 #include "game_defines.h"
+#include "score.h"
 
 char gAskQuestion;
 char gInputBuffer[40];
@@ -17,8 +18,6 @@ char gWordBuffer[10];     	// One byte identifier of each of the identified word
 char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
 
 char gTextBuffer[80];    // Temp
-
-extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
 
 
 typedef WORDS (*AnswerProcessingFun)();

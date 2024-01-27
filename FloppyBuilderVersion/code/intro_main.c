@@ -6,6 +6,7 @@
 #include <lib.h>
 
 #include "common.h"
+#include "score.h"
 
 // intro_utils
 extern char Text_FirstLine[];
