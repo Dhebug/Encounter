@@ -52,6 +52,10 @@ _free_to_use_bb81     .dsb 479
 * = $BB80+40*16
 _TEXT_BOTTOM_VIEW__START
 
+* = $BFE0                           ; The 32 bytes of RAM between the end of the screen and the start of the ROM
+_32_Bytes_BufferStart
+_gScore              .dsb 2         ; Current highscore for the player
+_32_Bytes_BufferRemaining
 
 * = $C000             ; Start of the ROM/Overlay ram
 

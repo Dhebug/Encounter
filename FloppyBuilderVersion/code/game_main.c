@@ -18,7 +18,7 @@ char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can b
 
 char gTextBuffer[80];    // Temp
 
-int gScore;
+extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
 
 
 typedef WORDS (*AnswerProcessingFun)();
