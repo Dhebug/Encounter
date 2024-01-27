@@ -1,6 +1,6 @@
 //
 // EncounterHD - Main Game
-// (c) 2020-2023 Dbug / Defence Force
+// (c) 2020-2024 Dbug / Defence Force
 //
 #include <lib.h>
 

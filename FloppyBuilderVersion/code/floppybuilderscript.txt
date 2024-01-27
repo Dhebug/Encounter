@@ -64,12 +64,12 @@ AddDefine LOADER_INTRO_PROGRAM_SIZE {FileSize}
 AddDefine LOADER_INTRO_PROGRAM_SIZE_COMPRESSED {FileSizeCompressed}
 
 AddFile ..\build\files\GameProgram.o 				; The actual game
-AddDefine LOADER_PROGRAM_SECOND {FileIndex}
-;AddDefine LOADER_PROGRAM_SECOND_ADDRESS $400
-;AddDefine LOADER_PROGRAM_SECOND_TRACK {FileTrack}
-;AddDefine LOADER_PROGRAM_SECOND_SECTOR {FileSector}
-AddDefine LOADER_PROGRAM_SECOND_SIZE {FileSize}
-AddDefine LOADER_PROGRAM_SECOND_SIZE_COMPRESSED {FileSizeCompressed}
+AddDefine LOADER_GAME_PROGRAM {FileIndex}
+AddDefine LOADER_GAME_PROGRAM_ADDRESS 1024          ; $400 - In decimal so both C and ASM programs can load it
+AddDefine LOADER_GAME_PROGRAM_TRACK {FileTrack}
+AddDefine LOADER_GAME_PROGRAM_SECTOR {FileSector}
+AddDefine LOADER_GAME_PROGRAM_SIZE {FileSize}
+AddDefine LOADER_GAME_PROGRAM_SIZE_COMPRESSED {FileSizeCompressed}
 
 ;
 ; The fonts
