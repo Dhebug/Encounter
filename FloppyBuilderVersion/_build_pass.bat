@@ -8,7 +8,7 @@ setlocal
 IF "%LANGUAGE%"=="" GOTO ErCfg
 
 :: Call XA to rebuild the loader
-ECHO == Assembling bootsectors ==
+ECHO %ESC%[96m== Assembling bootsectors ==%ESC%[0m
 %osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DVERSION=%VERSION% sector_1-jasmin.asm -o ..\build\files\sector_1-jasmin.o
 IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DVERSION=%VERSION% sector_2-microdisc.asm -o ..\build\files\sector_2-microdisc.o -l ..\build\files\sector_2-microdisc.symbols.txt
@@ -17,17 +17,17 @@ IF ERRORLEVEL 1 GOTO Error
 IF ERRORLEVEL 1 GOTO Error
 
 ECHO.
-ECHO == Assembling loader ==
+ECHO %ESC%[96m== Assembling loader ==%ESC%[0m
 %osdk%\bin\xa -DASSEMBLER=XA -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o
 IF ERRORLEVEL 1 GOTO Error
 
 ::IF NOT EXIST BUILD\symbols GOTO NoSymbol
 
 ::
-:: Main program
+:: Intro program
 ::
 ECHO.
-ECHO == Compiling the intro ==
+ECHO %ESC%[96m== Compiling the intro ==%ESC%[0m
 
 SET OSDKLINK=
 SET OSDKADDR=$400
@@ -44,7 +44,7 @@ copy build\symbols ..\build\symbols_IntroProgram >NUL
 :: Main program
 ::
 ECHO.
-ECHO == Compiling the game ==
+ECHO %ESC%[96m== Compiling the game ==%ESC%[0m
 
 SET OSDKLINK=
 SET OSDKADDR=$400
@@ -65,7 +65,7 @@ goto End
 
 :Error
 ECHO.
-ECHO An Error has happened. Build stopped
+ECHO %ESC%[41mAn Error has happened. Build stopped%ESC%[0m
 
 :End
 

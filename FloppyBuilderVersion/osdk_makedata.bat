@@ -5,8 +5,12 @@ pushd build
 if not exist "files" md files
 popd
 
+:: Create a ESC environment variable containing the escape character
+:: See: https://gist.github.com/mlocati/fdabcaeb8071d5c75a2d51712db24011#file-win10colors-cmd
+for /F %%a in ('"prompt $E$S & echo on & for %%b in (1) do rem"') do set "ESC=%%a"
+
 echo.
-echo ============ Converting assets ============
+echo %ESC%[93m============ Converting assets ============%ESC%[0m
 echo.
 
 ::

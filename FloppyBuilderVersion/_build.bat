@@ -8,7 +8,7 @@ setlocal
 IF "%LANGUAGE%"=="" GOTO ErCfg
 
 echo.
-echo ============ Building the %LANGUAGE% version of the game ============
+echo %ESC%[93m============ Building the %LANGUAGE% version of the game ============%ESC%[0m
 echo.
 
 ::

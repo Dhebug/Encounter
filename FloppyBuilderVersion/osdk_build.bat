@@ -1,6 +1,20 @@
 @ECHO OFF
 setlocal
 
+:: Create a ESC environment variable containing the escape character
+:: See: https://gist.github.com/mlocati/fdabcaeb8071d5c75a2d51712db24011#file-win10colors-cmd
+for /F %%a in ('"prompt $E$S & echo on & for %%b in (1) do rem"') do set "ESC=%%a"
+
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo %ESC%[1mBuild started: %date% %time%%ESC%[0m
+
 ::
 :: Initial check.
 :: Verify if the SDK is correctly configurated
@@ -50,7 +64,10 @@ goto End
 
 :Error
 ECHO.
-ECHO An Error has happened. Build stopped
+ECHO %ESC%[41mAn Error has happened. Build stopped%ESC%[0m
 
 :End
 ::pause
+echo %ESC%[1mBuild completed: %date% %time%%ESC%[0m
+echo.
+echo.
