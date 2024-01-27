@@ -40,6 +40,24 @@ copy build\final.out ..\build\files\IntroProgram.o >NUL
 copy build\symbols ..\build\symbols_IntroProgram >NUL
 ::pause
 
+
+::
+:: Outro program
+::
+ECHO.
+ECHO %ESC%[96m== Compiling the outro ==%ESC%[0m
+
+SET OSDKLINK=
+SET OSDKADDR=$400
+SET OSDKNAME=OutroProgram
+SET OSDKFILE=%OSDKFILE_OUTRO%
+SET OSDKDISK=
+CALL %OSDK%\bin\make.bat %OSDKFILE%
+IF ERRORLEVEL 1 GOTO Error
+copy build\final.out ..\build\files\OutroProgram.o >NUL
+copy build\symbols ..\build\symbols_OutroProgram >NUL
+::pause
+
 ::
 :: Main program
 ::

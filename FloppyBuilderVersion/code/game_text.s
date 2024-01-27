@@ -18,7 +18,6 @@ _gTextAskInput              .byt "Quels sont vos instructions ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
-_gTextHighScoreAskForName   .byt "Nouveau top score ! Votre name SVP ?",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
 _gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
 _gTextWaterDrainsAways      .byt "L'eau s'écoule",0
@@ -43,7 +42,6 @@ _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
-_gTextHighScoreAskForName   .byt "New highscore! Your name please?",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextPetrolEvaporates      .byt "The petrol evaporates",0
 _gTextWaterDrainsAways      .byt "The water drains away",0

@@ -103,7 +103,6 @@ extern const char gTextAskInput[];              // "What are you going to do now
 extern const char gTextNothingHere[];           // "There is nothing of interest here"
 extern const char gTextCanSee[];                // "I can see"
 extern const char gTextScore[];                 // "Score:"
-extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
 extern const char gTextCarryInWhat[];           // "Carry it in what?"
 extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
 extern const char gTextWaterDrainsAways[];      // "The water drains away"

@@ -40,4 +40,5 @@ extern const char* gScoreConditionsArray[];
 
 extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
 
+extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
 

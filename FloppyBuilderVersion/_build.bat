@@ -55,7 +55,7 @@ IF ERRORLEVEL 1 GOTO Error
 
 :: Call FloppyBuilder another time to build the final disk
 ECHO.
-ECHO == Building final floppy ==
+ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt
 popd
 goto End
