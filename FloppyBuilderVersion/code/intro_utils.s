@@ -14,6 +14,8 @@ IrqTasks50hz
     rts    
 .)
 
+_DrawArrows
+    rts
 
 _CopyTypeWriterLine
 .(

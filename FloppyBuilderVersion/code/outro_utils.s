@@ -14,6 +14,13 @@ IrqTasks50hz
     rts    
 .)
 
+// Called from on the blitt functions
+Count10SecondsDown
+    rts
+
+_DrawArrows
+    rts
+    
 
 /*
     .text   // could be .data if we setup the base address properly

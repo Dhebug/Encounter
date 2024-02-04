@@ -8,7 +8,6 @@ height  .dsb 1
 
     .text
 
-_gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 _gFlagCurrentSpriteSheet  .byt 255  ; Index of the currently loaded "sprite" image
 
 _gDrawPatternAddress .word 0
@@ -700,18 +699,18 @@ loop_sides
   bne loop_sides
 
   ; The three lines at the bottom
-  ldx #19
+  ldx #20
 loop_bottom
   lda #%01111111
   sta _ImageBuffer+40*126-1,x
-  sta _ImageBuffer+40*126-1+40-19,x
+  sta _ImageBuffer+40*126-1+40-20,x
 
   lda #%01000000
   sta _ImageBuffer+40*125-1,x
   sta _ImageBuffer+40*127-1,x
 
-  sta _ImageBuffer+40*125-1+40-19,x
-  sta _ImageBuffer+40*127-1+40-19,x
+  sta _ImageBuffer+40*125-1+40-20,x
+  sta _ImageBuffer+40*127-1+40-20,x
 
   dex
   bne loop_bottom
@@ -730,62 +729,6 @@ loop_bottom
   rts
 .)
 
-
-_DrawArrows
-.(
-  ; Hack the bitmask to add the arrow bitmap background as elements to always draw
-  lda _gFlagDirections
-  asl
-  asl
-  ora #3
-  sta _gFlagDirections
-
-  ; Iterate over the list of all bitmap elements, and draw them if the bit is activated in the mask variable
-  ldx #0
-loop_draw_arrow  
-  lda _BlitDataTable+0,x   ; Blit mode (AND/ORA)
-  beq end_draw_arrow
-  sta BlitOperation
-
-  lsr _gFlagDirections
-  bcc skip_draw
-
-  lda _BlitDataTable+1,x   ; Source graphics
-  sta tmp0+0
-  lda _BlitDataTable+2,x
-  sta tmp0+1
-
-  lda _BlitDataTable+3,x   ; Destination
-  sta tmp1+0
-  lda _BlitDataTable+4,x
-  sta tmp1+1
-
-  lda _BlitDataTable+5,x   ; Dimensions
-  sta width
-  lda _BlitDataTable+6,x
-  sta height
-  
-  txa                     ; I wish we had phx/plx on the base 6502
-  pha 
-  jsr _BlitBloc
-  pla
-  tax
-
-skip_draw  
-  txa
-  clc
-  adc #7
-  tax
-  jmp loop_draw_arrow
-end_draw_arrow
- 
-  jsr PatchArrowCharacters
-
-  ; Reset the direction (note: Will happen automatically when the UP and DOWN cases are handled)
-  lda #0
-  sta _gFlagDirections
-  rts
-.)
 
 ; A000-B3FF 5120 bytes of half HIRES (240x128 resolution)
 ; Exactly 20*256
@@ -972,153 +915,6 @@ loop
   rts
 .)
 
-
-#define BLIT_AND $31    
-#define BLIT_OR  $11
-
-#define BLIT_INFO(opcode,source,destination,width,height)  .byt opcode,<source,>source,<destination,>destination,width,height
-
-_BlitDataTable
-  ; ArrowBlockMasks -> 102,111 -> 17,111
-  ; The block itself is 32x18 pixels (6 bytes wide)
-  ; The top 18 pixels is the AND mask, the bottom 18 pixels are the OR mask
-  BLIT_INFO(BLIT_AND  ,_ArrowBlockMasks+0    ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (AND masked)
-  BLIT_INFO(BLIT_OR   ,_ArrowBlockMasks+6*26 ,_ImageBuffer+17+40*110,6, 26)       // Arrow block (OR masked)
-  ; The four directional arrows
-  BLIT_INFO(BLIT_OR   ,ArrowTop    ,_ImageBuffer+19+40*112,2, 6)                 // North Arrow
-  BLIT_INFO(BLIT_OR   ,ArrowBottom ,_ImageBuffer+19+40*120,2,13)                 // South Arrow
-  BLIT_INFO(BLIT_OR   ,ArrowRight  ,_ImageBuffer+20+40*116,3, 9)                 // East Arrow
-  BLIT_INFO(BLIT_OR   ,ArrowLeft   ,_ImageBuffer+17+40*116,3, 9)                 // West Arrow
-  ; Should have two more entries for UP and DOWN there
-  BLIT_INFO(BLIT_OR   ,ArrowUp     ,_ImageBuffer+20+40*129,2, 7)                 // Up Arrow
-  BLIT_INFO(BLIT_OR   ,ArrowDown   ,_ImageBuffer+18+40*129,2, 7)                 // Down Arrow
-  .byt 0
-
-
-_BlitBloc
-.(
-loop_y  
-  ldy #0
-  ldx width
-loop_x
-  lda (tmp1),y
-+BlitOperation  
-  ora (tmp0),y
-  ora #64
-  ;eor (tmp0),y  
-  sta (tmp1),y
-  iny
-  dex
-  bne loop_x
-
-  clc
-  lda tmp0+0
-  adc width
-  sta tmp0+0
-  lda tmp0+1
-  adc #0
-  sta tmp0+1
-
-  clc
-  lda tmp1+0
-  adc #40
-  sta tmp1+0
-  lda tmp1+1
-  adc #0
-  sta tmp1+1
-
-  dec height
-  bne loop_y
-  rts
-.)
-
-; From arrow_block_masks.png
-; Contains two 36x28 pixels elements: The top half should be ANDed and the bottom half to be ORed with the image
-_ArrowBlockMasks  
-	.byt $7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$5f,$7f,$7f,$7f,$7f,$7c,$47
-	.byt $7f,$7f,$7f,$7f,$70,$41,$7f,$7f,$7f,$7f,$40,$40,$5f,$7f,$7f,$7c
-	.byt $40,$40,$47,$7f,$7f,$70,$40,$40,$41,$7f,$7f,$40,$40,$40,$40,$5f
-	.byt $7c,$40,$40,$40,$40,$47,$78,$40,$40,$40,$40,$43,$7c,$40,$40,$40
-	.byt $40,$47,$7e,$40,$40,$40,$40,$4f,$7f,$40,$40,$40,$40,$5f,$7f,$60
-	.byt $40,$40,$40,$7f,$7f,$70,$40,$40,$41,$7f,$40,$78,$40,$40,$43,$60
-	.byt $5a,$4c,$40,$40,$46,$40,$40,$42,$40,$40,$48,$40,$40,$40,$40,$40
-	.byt $40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40
-	.byt $40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40
-	.byt $40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$60
-	.byt $40,$40,$40,$40,$43,$58,$40,$40,$40,$40,$4c,$66,$40,$40,$40,$40
-	.byt $71,$51,$60,$40,$40,$43,$42,$68,$58,$40,$40,$4c,$41,$50,$46,$40
-	.byt $40,$70,$60,$60,$61,$60,$43,$45,$40,$40,$54,$58,$44,$4a,$40,$40
-	.byt $4a,$44,$49,$55,$54,$45,$55,$52,$44,$6a,$68,$62,$6a,$64,$42,$55
-	.byt $41,$50,$55,$48,$41,$4a,$40,$60,$4a,$50,$40,$64,$41,$50,$44,$60
-	.byt $40,$52,$42,$68,$49,$40,$40,$48,$41,$50,$42,$40,$5a,$44,$42,$68
-	.byt $44,$4b,$40,$42,$55,$55,$48,$40,$40,$41,$4a,$6a,$50,$40,$40,$40
-	.byt $65,$54,$60,$40,$40,$40,$52,$69,$40,$40,$40,$40,$49,$52,$40,$40
-	.byt $40,$40,$44,$64,$40,$40,$40,$40,$42,$48,$40,$40,$40,$40,$41,$50
-	.byt $40,$40,$40,$40,$40,$60,$40,$40
-
-
-ArrowTop ; Patch at 19,112
- .byt %000000,%100000
- .byt %000001,%110000
- .byt %000111,%111100
- .byt %000001,%110000
- .byt %000001,%110000
- .byt %000000,%100000
-
-ArrowLeft ; Patch at 17,116
- .byt %000000,%000001,%100000
- .byt %000000,%000111,%000000
- .byt %000000,%011111,%000000
- .byt %000001,%111111,%111100
- .byt %000000,%111111,%111100
- .byt %000000,%011111,%000000
- .byt %000000,%001111,%000000
- .byt %000000,%000110,%000000
- .byt %000000,%000010,%000000
-
-ArrowRight ; Patch at 20,116
- .byt %000000,%110000,%000000
- .byt %000000,%011100,%000000
- .byt %000000,%011111,%000000
- .byt %000111,%111111,%110000
- .byt %000111,%111111,%100000
- .byt %000000,%011111,%000000
- .byt %000000,%011110,%000000
- .byt %000000,%001100,%000000
- .byt %000000,%001000,%000000
-
-ArrowBottom ; Patch at 19,120
- .byt %000000,%100000
- .byt %000001,%110000
- .byt %000001,%110000
- .byt %000001,%110000
- .byt %000011,%111000
- .byt %000011,%111000
- .byt %000011,%111000
- .byt %011111,%111111
- .byt %001111,%111110
- .byt %000111,%111100
- .byt %000011,%111000
- .byt %000001,%110000
- .byt %000000,%100000
-
-ArrowUp ; Patch at 20,129
- .byt %000000,%000111
- .byt %000000,%000011
- .byt %000000,%001101
- .byt %000000,%001000
- .byt %000000,%111000
- .byt %000000,%100000
- .byt %000011,%100000
-
-ArrowDown ; Patch at 18,129
- .byt %111000,%000000
- .byt %001000,%000000
- .byt %001110,%000000
- .byt %000010,%000000
- .byt %000011,%010000
- .byt %000000,%110000
- .byt %000001,%110000
 
 
 _gSevenDigitDisplay

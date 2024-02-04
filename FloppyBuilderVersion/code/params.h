@@ -1,7 +1,8 @@
 //
 // Misc settings for the game testing
 //
-#define ENABLE_INTRO                    // Comment out to skip the intro
+//#define ENABLE_INTRO                    // Comment out to skip the intro
+//#define ENABLE_GAME                     // Comment out to disable the game (and go in the outro immediately)
 #define INTRO_SHOW_TITLE_PICTURE        // Comment out to hide the title picture
 #define INTRO_SHOW_LEADERBOARD          // Comment out to hide the leaderboard
 #define INTRO_SHOW_USER_MANUAL          // Comment out to hide the instructions page

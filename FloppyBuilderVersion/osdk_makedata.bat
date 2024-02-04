@@ -57,6 +57,10 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\intro_private_investigator.png %TARGET%\intro_private_investigator.hir
 %PICTCONV% %PARAMS% data\intro_typewriter.png %TARGET%\intro_typewriter.hir
 
+:: Outro graphics
+SET PARAMS=-u1 -m0 -f0 -o2
+%PICTCONV% %PARAMS% data\outro_desk.png %TARGET%\outro_desk.hir
+
 
 :: Arrow block (Temp file that needs to be copied in the display.s file)
 SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks

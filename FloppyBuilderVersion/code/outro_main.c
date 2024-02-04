@@ -85,6 +85,18 @@ void main()
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
 
+
+    // Load the desk picture
+    LoadFileAt(OUTRO_PICTURE_DESK,ImageBuffer);
+    //memcpy((char*)0xa000,ImageBuffer,40*128);
+
+    memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
+	BlitBufferToHiresWindow();
+
+
+
+
+
 	ResetInput();
 
 	HandleHighScore();

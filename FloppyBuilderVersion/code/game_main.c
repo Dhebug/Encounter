@@ -912,7 +912,9 @@ void main()
 {
 	Initializations();	
 
+#ifdef ENABLE_GAME
 	AskInput(gTextAskInput,ProcessAnswer,1);
+#endif
 
     // Clear the bottom of the screen
     memset(0xbb80+40*17,16+0,40*11);        // Bottom half

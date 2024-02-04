@@ -109,6 +109,9 @@ AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR {FileIndex}
 AddFile ..\build\files\intro_typewriter.hir
 AddDefine INTRO_PICTURE_TYPEWRITER {FileIndex}
 
+; Outro graphics
+AddFile ..\build\files\outro_desk.hir
+AddDefine OUTRO_PICTURE_DESK {FileIndex}
 
 ; No location - actual error
 AddFile ..\build\files\NONE.hir
