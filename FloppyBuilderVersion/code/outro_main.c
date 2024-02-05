@@ -77,6 +77,43 @@ void HandleHighScore()
 }
 
 
+// Some quite ugly function which waits a certain number of frames
+// while detecting key presses and returns 1 if either space or enter are pressed
+int Wait(int frameCount)
+{	
+	int k;
+
+	while (frameCount--)
+	{
+		WaitIRQ();
+
+		k=ReadKey();
+		if ((k==KEY_RETURN) || (k==' ') )
+		{
+			//PlaySound(KeyClickLData);
+			WaitFrames(4);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//#define TEST_MODE
+
+int DisplayText(const char* text)
+{
+	//Text(16+3,0);
+#ifdef TEST_MODE    
+    memset(0xbb80+40*16,'.',40*12);   // erase the bottom part of the screen
+#else
+    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
+#endif
+	SetLineAddress((char*)0xbb80+40*16+1);
+    PrintMultiLine(text);
+	return Wait(50*4);
+ }
+
+
 
 void main()
 {
@@ -93,16 +130,28 @@ void main()
     memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
 	BlitBufferToHiresWindow();
 
-
-
-
-
+#ifndef TEST_MODE
+    // Ask the name
 	ResetInput();
 
 	HandleHighScore();
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);
+#endif
+
+#ifdef TEST_MODE    
+    while (1)
+#endif    
+    {
+        DisplayText(gTextThanks);
+        DisplayText(gTextCredits);
+        DisplayText(gTextGameDescription);
+        DisplayText(gTextExternalInformation);
+    }
+
+    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
+
 
 	System_RestoreIRQ_SimpleVbl();
 

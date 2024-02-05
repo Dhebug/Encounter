@@ -42,3 +42,8 @@ extern int gScore;          // Moved to the last 32 bytes so it can be shared wi
 
 extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
 
+extern const char gTextThanks[];
+extern const char gTextCredits[];
+extern const char gTextGameDescription[];
+extern const char gTextExternalInformation[];
+
