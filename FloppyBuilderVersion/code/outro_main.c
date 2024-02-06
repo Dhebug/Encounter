@@ -128,7 +128,27 @@ void main()
     //memcpy((char*)0xa000,ImageBuffer,40*128);
 
     memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
-	BlitBufferToHiresWindow();
+	BlitBufferToHiresWindow();              // Show the empty desk
+
+    LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
+
+    // Show the paper
+    gDrawWidth  = 28;
+    gDrawHeight = 92;
+    gSourceStride = 40;
+    gDrawSourceAddress = SecondImageBuffer;
+    gDrawAddress       = ImageBuffer+35*40+6;
+    BlitSprite();
+    //BlitBufferToHiresWindow();  // Show the paper
+
+    // Show the glass
+    gDrawWidth  = 10;
+    gDrawHeight = 62;
+    gSourceStride = 40;
+    gDrawSourceAddress = SecondImageBuffer+30;
+    gDrawAddress       = ImageBuffer+61*40+30;
+    BlitSprite();
+    BlitBufferToHiresWindow();  // Show the glass
 
 #ifndef TEST_MODE
     // Ask the name
@@ -140,18 +160,73 @@ void main()
 	WaitFrames(4);
 #endif
 
+    // Show the camera
+    gDrawWidth  = 10;
+    gDrawHeight = 55;
+    gSourceStride = 40;
+    gDrawSourceAddress = SecondImageBuffer+63*40+30;
+    gDrawAddress       = ImageBuffer+5*40+1;
+    BlitSprite();
+    BlitBufferToHiresWindow();  // Show the camera
+
 #ifdef TEST_MODE    
     while (1)
 #endif    
     {
         DisplayText(gTextThanks);
+
+    LoadFileAt(OUTRO_SPRITE_PHOTOS,SecondImageBuffer);  // Photos + glass of whisky
+
+    // Show the first photo
+    gDrawWidth  = 17;
+    gDrawHeight = 75;
+    gSourceStride = 20;
+    gDrawSourceAddress = SecondImageBuffer;
+    gDrawAddress       = ImageBuffer+37*40+20;
+    BlitSprite();
+
+    // Show the glass of whisky
+    gDrawWidth  = 10;
+    gDrawHeight = 62;
+    gSourceStride = 20;
+    gDrawSourceAddress = SecondImageBuffer+155*20+10;
+    gDrawAddress       = ImageBuffer+61*40+30;
+    BlitSprite();
+
+    BlitBufferToHiresWindow();  // Show the first photo
+
         DisplayText(gTextCredits);
+
+    // Show the second photo
+    gDrawWidth  = 17;
+    gDrawHeight = 75;
+    gSourceStride = 20;
+    gDrawSourceAddress = SecondImageBuffer+20*76;
+    gDrawAddress       = ImageBuffer+56*40+13;
+    BlitSprite();
+    BlitBufferToHiresWindow();  // Show the second photo
+
         DisplayText(gTextGameDescription);
+
+    // Show the third photo
+    gDrawWidth  = 10;
+    gDrawHeight = 61;
+    gSourceStride = 20;
+    gDrawSourceAddress = SecondImageBuffer+20*155;
+    gDrawAddress       = ImageBuffer+48*40+16;
+    BlitSprite();
+    BlitBufferToHiresWindow();  // Show the third photo
+
         DisplayText(gTextExternalInformation);
+
+        DisplayText(gTextGreetings);
     }
 
     memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
 
+
+    memset(ImageBuffer,64,40*128);    // Erase the image in the view
+	BlitBufferToHiresWindow();
 
 	System_RestoreIRQ_SimpleVbl();
 

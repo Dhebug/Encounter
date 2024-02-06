@@ -117,6 +117,13 @@ AddDefine INTRO_PICTURE_TYPEWRITER {FileIndex}
 AddFile ..\build\files\outro_desk.hir
 AddDefine OUTRO_PICTURE_DESK {FileIndex}
 
+AddFile ..\build\files\masked_element_outro.msk
+AddDefine OUTRO_SPRITE_DESK {FileIndex}
+
+AddFile ..\build\files\masked_element_outro_photos.msk
+AddDefine OUTRO_SPRITE_PHOTOS {FileIndex}
+
+
 ; No location - actual error
 AddFile ..\build\files\NONE.hir
 AddDefine LOADER_PICTURE_LOCATIONS_START {FileIndex}

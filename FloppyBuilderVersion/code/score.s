@@ -64,6 +64,39 @@ _gTextExternalInformation
     .byt 5,"  many other Oric games and demos.",TEXT_CRLF
     .byt TEXT_END
 
+_gTextGreetings
+    .byt TEXT_CRLF
+    .byt 6,"Greetings to all the people who keep",TEXT_CRLF
+    .byt 6,"releasing great software for the Oric:",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 3,"Rax - Iss - Andre C - Fabrizio Caruzo",TEXT_CRLF
+    .byt 1,"Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
+    .byt 5,"   Xeron - h0ffman - Inufuto - Kyex",TEXT_CRLF
+    .byt 4,"  Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
+    .byt 6,"  Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
+    .byt 7,"  Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
+    .byt 2,"    DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
+    .byt TEXT_END
+
+; Rax & Iss - Wizard's Lair, Speed Ball, Memory, Mine Sweeper, Pong, cc65 chess, FIFTEEN PUZZLE, FLAPPY ORIC, TREASURE, LUNAR MISSION, BOCCO'S ADVENTURES , ORIC XMAS 2019 
+; André C. - Rapidoric, RADAR ORIC, RADAR ORIC 2 , VISUCAR 
+; Fabrizio Caruzo - Cross Horde, CROSS BOMBER, CROSS SNAKE, XSHOOT   
+; Dom - D Pessan - Meutres a Venise, Athanor 2
+; Xahmol - Xander Mol - ORIC SCREEN EDITOR, Ludo
+; Jibe - Google Earth, CHEMINS DE GALDEON, LES, FLAPPY ORIC 3D
+; Xeron & h0ffman - Iris - No Problem (demo)
+; Inufuto - Ascend, Lift
+; David Murray, Dusan Strakl, Simon Luce - Attack of the Petscii Robots
+; Kyex - Awele-Kalaha
+; Dunric, Minter, Chema - Castle Belmar
+; 6502Nerd - Dflat
+; Assinie - Comal, Focal, TEST JOYSTICKS
+; Bieno, Chema & Dom - EL PRISIONERO 
+; BOBMAR - Robert Martin - TETRISKOV
+; Hugo Labrande - TRISTAM ISLAND
+; DJChloe - Chlo� AVRILLON - ORIC KONG 2019 
+; Romualdl - HITORIC,  LIGHTS OUT 
+; DrPsy, Totoshampoin - ORIC JEWEL
 #endif
 
 
