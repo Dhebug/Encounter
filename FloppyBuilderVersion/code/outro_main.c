@@ -100,18 +100,53 @@ int Wait(int frameCount)
 
 //#define TEST_MODE
 
-int DisplayText(const char* text)
+char TextBuffer[40*12];
+
+int DisplayText(const char* text,int delay)
 {
-	//Text(16+3,0);
+    int x;
+    char* screenPtr=(char*)0xbb80+40*16;
+    char* sourcePtr=TextBuffer;
+
 #ifdef TEST_MODE    
-    memset(0xbb80+40*16,'.',40*12);   // erase the bottom part of the screen
+    memset(TextBuffer,'.',40*12);   // erase the bottom part of the screen
 #else
-    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
+    memset(TextBuffer,' ',40*12);   // erase the bottom part of the screen
 #endif
-	SetLineAddress((char*)0xbb80+40*16+1);
+    memcpy(screenPtr,sourcePtr,40*12);  // Force erase the screen in case there was still something there
+
+	SetLineAddress((char*)TextBuffer+1);
     PrintMultiLine(text);
-	return Wait(50*4);
- }
+
+    // Appear
+    for (x=0;x<40;x++)
+    {
+        int y;
+        for (y=0;y<12;y++)
+        {
+            screenPtr[y*40]=sourcePtr[y*40];
+        }
+        screenPtr++;
+        sourcePtr++;
+        WaitIRQ();
+    }
+
+    // Wait a bit
+    Wait(delay);
+
+    // Disppear
+    for (x=0;x<40;x++)
+    {
+        int y;
+        screenPtr--;
+        sourcePtr--;
+        for (y=0;y<12;y++)
+        {
+            screenPtr[y*40]=' ';   // Space
+        }
+        WaitIRQ();
+    }
+}
 
 
 
@@ -130,6 +165,7 @@ void main()
     memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
 	BlitBufferToHiresWindow();              // Show the empty desk
 
+#ifndef TEST_MODE
     LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
 
     // Show the paper
@@ -150,7 +186,6 @@ void main()
     BlitSprite();
     BlitBufferToHiresWindow();  // Show the glass
 
-#ifndef TEST_MODE
     // Ask the name
 	ResetInput();
 
@@ -158,7 +193,6 @@ void main()
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);
-#endif
 
     // Show the camera
     gDrawWidth  = 10;
@@ -168,12 +202,13 @@ void main()
     gDrawAddress       = ImageBuffer+5*40+1;
     BlitSprite();
     BlitBufferToHiresWindow();  // Show the camera
+#endif
 
 #ifdef TEST_MODE    
     while (1)
 #endif    
     {
-        DisplayText(gTextThanks);
+        DisplayText(gTextThanks,50*5);
 
     LoadFileAt(OUTRO_SPRITE_PHOTOS,SecondImageBuffer);  // Photos + glass of whisky
 
@@ -195,7 +230,7 @@ void main()
 
     BlitBufferToHiresWindow();  // Show the first photo
 
-        DisplayText(gTextCredits);
+        DisplayText(gTextCredits,50*8);
 
     // Show the second photo
     gDrawWidth  = 17;
@@ -206,7 +241,7 @@ void main()
     BlitSprite();
     BlitBufferToHiresWindow();  // Show the second photo
 
-        DisplayText(gTextGameDescription);
+        DisplayText(gTextGameDescription,50*12);
 
     // Show the third photo
     gDrawWidth  = 10;
@@ -217,9 +252,9 @@ void main()
     BlitSprite();
     BlitBufferToHiresWindow();  // Show the third photo
 
-        DisplayText(gTextExternalInformation);
+        DisplayText(gTextExternalInformation,50*12);
 
-        DisplayText(gTextGreetings);
+        DisplayText(gTextGreetings,50*16);
     }
 
     memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
