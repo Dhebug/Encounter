@@ -108,6 +108,8 @@ int DisplayText(const char* text,int delay)
     char* screenPtr=(char*)0xbb80+40*16;
     char* sourcePtr=TextBuffer;
 
+    //delay=1;
+
 #ifdef TEST_MODE    
     memset(TextBuffer,'.',40*12);   // erase the bottom part of the screen
 #else
@@ -149,6 +151,7 @@ int DisplayText(const char* text,int delay)
 }
 
 
+#define AddSprite(width,height,stride,src_offset,dst_offset)  {  gDrawWidth=width;gDrawHeight=height;gSourceStride=stride;gDrawSourceAddress=SecondImageBuffer+src_offset; gDrawAddress=ImageBuffer+dst_offset;BlitSprite(); }
 
 void main()
 {
@@ -167,24 +170,10 @@ void main()
 
 #ifndef TEST_MODE
     LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
-
-    // Show the paper
-    gDrawWidth  = 28;
-    gDrawHeight = 92;
-    gSourceStride = 40;
-    gDrawSourceAddress = SecondImageBuffer;
-    gDrawAddress       = ImageBuffer+35*40+6;
-    BlitSprite();
-    //BlitBufferToHiresWindow();  // Show the paper
-
-    // Show the glass
-    gDrawWidth  = 10;
-    gDrawHeight = 62;
-    gSourceStride = 40;
-    gDrawSourceAddress = SecondImageBuffer+30;
-    gDrawAddress       = ImageBuffer+61*40+30;
-    BlitSprite();
-    BlitBufferToHiresWindow();  // Show the glass
+   
+    AddSprite(28,92,40,0,35*40+6);          // Add the letter
+    AddSprite(10,62,40,30,61*40+30);        // Add the glass of whisky
+    BlitBufferToHiresWindow();
 
     // Ask the name
 	ResetInput();
@@ -194,68 +183,51 @@ void main()
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);
 
-    // Show the camera
-    gDrawWidth  = 10;
-    gDrawHeight = 55;
-    gSourceStride = 40;
-    gDrawSourceAddress = SecondImageBuffer+63*40+30;
-    gDrawAddress       = ImageBuffer+5*40+1;
-    BlitSprite();
-    BlitBufferToHiresWindow();  // Show the camera
+    AddSprite(10,55,40,63*40+30,5*40+1);   // Add the Polaroid camera
+    BlitBufferToHiresWindow();
 #endif
 
 #ifdef TEST_MODE    
-    while (1)
+    while (1){
 #endif    
-    {
-        DisplayText(gTextThanks,50*5);
+    // =============================== Thank you ===============================
+    DisplayText(gTextThanks,50*5);
 
     LoadFileAt(OUTRO_SPRITE_PHOTOS,SecondImageBuffer);  // Photos + glass of whisky
+    
+    AddSprite(17,75,20,0,37*40+20);             // Add the first photo hidden behind the glass
+    AddSprite(10,62,20,152*20+10,61*40+30);     // Add the glass of whisky on top of the glass
+    BlitBufferToHiresWindow();
 
-    // Show the first photo
-    gDrawWidth  = 17;
-    gDrawHeight = 75;
-    gSourceStride = 20;
-    gDrawSourceAddress = SecondImageBuffer;
-    gDrawAddress       = ImageBuffer+37*40+20;
-    BlitSprite();
+    // =============================== Credits ===============================
+    DisplayText(gTextCredits,50*8);
+    
+    AddSprite(17,75,20,20*76,56*40+13);         // Add the second photo
+    AddSprite(10,25,20,20*213,84*40+30);        // Lower the glass content
+    BlitBufferToHiresWindow();
 
-    // Show the glass of whisky
-    gDrawWidth  = 10;
-    gDrawHeight = 62;
-    gSourceStride = 20;
-    gDrawSourceAddress = SecondImageBuffer+155*20+10;
-    gDrawAddress       = ImageBuffer+61*40+30;
-    BlitSprite();
+    // =============================== About the game ===============================
+    DisplayText(gTextGameDescription,50*12);
+    
+    AddSprite(10,61,20,20*152,48*40+16);        // Add the third photo
+    AddSprite(10,22,20,20*215+10,88*40+30);     // Lower the glass content even more
+    BlitBufferToHiresWindow();
 
-    BlitBufferToHiresWindow();  // Show the first photo
+    // =============================== External Information ===============================
+    DisplayText(gTextExternalInformation,50*12);
 
-        DisplayText(gTextCredits,50*8);
+    AddSprite(10,20,20,20*238,92*40+30);     // Lower the glass content even more
+    BlitBufferToHiresWindow();
 
-    // Show the second photo
-    gDrawWidth  = 17;
-    gDrawHeight = 75;
-    gSourceStride = 20;
-    gDrawSourceAddress = SecondImageBuffer+20*76;
-    gDrawAddress       = ImageBuffer+56*40+13;
-    BlitSprite();
-    BlitBufferToHiresWindow();  // Show the second photo
+    // =============================== Greetings ===============================
+    DisplayText(gTextGreetings,50*16);
 
-        DisplayText(gTextGameDescription,50*12);
+    AddSprite(10,17,20,20*238+10,96*40+30);     // Lower the glass content even more
+    BlitBufferToHiresWindow();
 
-    // Show the third photo
-    gDrawWidth  = 10;
-    gDrawHeight = 61;
-    gSourceStride = 20;
-    gDrawSourceAddress = SecondImageBuffer+20*155;
-    gDrawAddress       = ImageBuffer+48*40+16;
-    BlitSprite();
-    BlitBufferToHiresWindow();  // Show the third photo
-
-        DisplayText(gTextExternalInformation,50*12);
-
-        DisplayText(gTextGreetings,50*16);
+#ifdef TEST_MODE    
     }
+#endif    
 
     memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
 
