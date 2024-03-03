@@ -178,6 +178,8 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\chemistry_recipes.png %TARGET%\chemistry_recipes.hir
 %PICTCONV% %PARAMS% data\united_kingdom_map.png %TARGET%\united_kingdom_map.hir
 
+:: Severn Software and Defence Force logos
+%PICTCONV% %PARAMS% data\defence-force_logo.png %TARGET%\logos.hir
 
 ::pause
 

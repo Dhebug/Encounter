@@ -92,7 +92,7 @@ int DisplayIntroPage()
 
 	memcpy((char*)0xa000,ImageBuffer,8000);
 
-	return Wait(50*2);
+	return Wait(50*5);
 }
 
 
@@ -102,7 +102,7 @@ int DisplayUserManual()
 
 	SetLineAddress((char*)0xbb80+40*1+2);
     PrintMultiLine(Text_GameInstructions);
-	return Wait(50*2);
+	return Wait(50*8);
  }
 
 

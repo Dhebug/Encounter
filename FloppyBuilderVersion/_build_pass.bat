@@ -24,8 +24,28 @@ IF ERRORLEVEL 1 GOTO Error
 ::IF NOT EXIST BUILD\symbols GOTO NoSymbol
 
 ::
+:: Splash program
+::
+IF "%OSDKFILE_SPLASH%"=="" GOTO EndSplash
+ECHO.
+ECHO %ESC%[96m== Compiling the splash screen ==%ESC%[0m
+
+SET OSDKLINK=
+SET OSDKADDR=$400
+SET OSDKNAME=IntroProgram
+SET OSDKFILE=%OSDKFILE_SPLASH%
+SET OSDKDISK=
+CALL %OSDK%\bin\make.bat %OSDKFILE%
+IF ERRORLEVEL 1 GOTO Error
+copy build\final.out ..\build\files\SplashProgram.o >NUL
+copy build\symbols ..\build\symbols_SplashProgram >NUL
+:EndSplash
+
+
+::
 :: Intro program
 ::
+IF "%OSDKFILE_INTRO%"=="" GOTO EndIntro
 ECHO.
 ECHO %ESC%[96m== Compiling the intro ==%ESC%[0m
 
@@ -38,12 +58,13 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
 copy build\symbols ..\build\symbols_IntroProgram >NUL
-::pause
+:EndIntro
 
 
 ::
 :: Outro program
 ::
+IF "%OSDKFILE_OUTRO%"=="" GOTO EndOutro
 ECHO.
 ECHO %ESC%[96m== Compiling the outro ==%ESC%[0m
 
@@ -56,11 +77,13 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
 copy build\symbols ..\build\symbols_OutroProgram >NUL
-::pause
+:EndOutro
+
 
 ::
 :: Main program
 ::
+IF "%OSDKFILE_GAME%"=="" GOTO EndGame
 ECHO.
 ECHO %ESC%[96m== Compiling the game ==%ESC%[0m
 
@@ -73,7 +96,8 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
 copy build\symbols ..\build\symbols_GameProgram >NUL
-:blaskip
+:EndGame
+
 
 :: Call FloppyBuilder once to create loader.cod
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt >NUL
