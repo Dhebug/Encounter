@@ -136,6 +136,13 @@ skip_50hz_task
 ; param0+0/param0+1=number of frames to wait
 _WaitFramesAsm
 .(
+    ; Do we have a zero number of frames???
+    lda _param0+0
+    bne loop
+    lda _param0+1
+    bne loop
+    rts
+
 loop
     jsr _WaitIRQ    ; Uses A register
     dec _param0+0
