@@ -123,7 +123,7 @@ _Text_TypeWriterMessage
 	.byt "Wednesday, September 1st, 1982",13,13,13
 	.byt "My client had asked me to save their",13
     .byt "daughter who had been kidnapped by",13
-	.byt "some vilains who hide in a posh house",13
+	.byt "some villains who hide in a posh house",13
     .byt "in the middle of nowhere.",13,13
 	.byt "I was given carte blanche on how to",13
     .byt "solve the issue...",13
