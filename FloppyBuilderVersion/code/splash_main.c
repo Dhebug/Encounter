@@ -203,7 +203,7 @@ int DisplayLogosWithPreshift()
     if (SetupColors(16+7,0,16+4,0))       return 1;
     memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
     DrawPreshiftLogos();
-    if (ShowLogoAnimation(74,74+5,100))   return 1;
+    if (ShowLogoAnimation(74,74+5,90))   return 1;
 
     return 0;
 }
