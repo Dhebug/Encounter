@@ -131,6 +131,13 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 
 		switch (k)
 		{
+#ifdef MODULE_GAME            
+#ifdef ENABLE_CHEATS
+        case KEY_ESC:
+            GameDebugger();
+            break;
+#endif            
+#endif
 		case KEY_DEL:  // We use DEL as Backspace
 			if (gInputBufferPos)
 			{
