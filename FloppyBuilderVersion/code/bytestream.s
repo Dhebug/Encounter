@@ -155,13 +155,15 @@ _ByteStreamCommandJUMP
 
 
 _ByteStreamCommandJUMP_IF_TRUE
-    lda #OPCODE_BEQ
+    lda #OPCODE_BEQ                          // F0
     bne common
 _ByteStreamCommandJUMP_IF_FALSE
-    lda #OPCODE_BNE
+    lda #OPCODE_BNE                          // D0
 common
 .(
-    sta conditionCheck+0
+    sta _auto_conditionCheck+0
+    eor #OPCODE_BEQ-OPCODE_BNE               //  0b100000
+    sta _auto_conditionCheck2+0
     ldy #2
     lda (_gCurrentStream),y
     bne checkItemFlag
@@ -175,7 +177,9 @@ checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0
     lda (_gCurrentStream),y      // location id
     ldy #2
     cmp (_gStreamItemPtr),y      // gItems->location (+2)
-    jmp conditionCheck
+_auto_conditionCheck    
+    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    jmp _ByteStreamMoveBy5
 
 checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     ; check =  (gItems[itemId].flags & flagId);
@@ -185,10 +189,8 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     iny
     lda (_gCurrentStream),y      // flag ID
     ldy #4
-    cmp (_gStreamItemPtr),y      // gItems->flags (+4)
-    ;jmp conditionCheck
-
-conditionCheck
+    and (_gStreamItemPtr),y      // gItems->flags (+4)
+_auto_conditionCheck2
     bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
 
 +_ByteStreamMoveBy5    ; Continue (jump not taken)
