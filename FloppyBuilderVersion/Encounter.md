@@ -110,3 +110,6 @@ Since testing things gets frustrating when you have to go through a sequence of 
 You can edit **params.h** and comment out a bunch of defines to enable or disables parts of the game and intro.
 
 
+# Additional documentation:
+You may also consult these pages
+- [Game locations](documentation/locations.md)
