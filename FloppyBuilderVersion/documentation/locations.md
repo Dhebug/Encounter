@@ -1,6 +1,3 @@
-This is Work In Progress content
-----
-
 > [!WARNING]  
 > This page contains potential spoilers for the game.  
 > If you plan to play the game, you should probably refrain to go farther!
@@ -71,6 +68,8 @@ The pit contains some **sulfur** which can be mixed with the **salpeter** to cre
 ![Game location image](../data/huge_area_lawn.png)
 
 ## You are in a relaxing zen garden
+The garden contains a **hose pipe**
+
 ![Game location image](../data/beautiful_garden.png)
 
 ## You are on a lawn tennis court
@@ -121,7 +120,7 @@ In the library you will find a **chemistry book** providing some **chemistry rec
 ![Game location image](../data/library.png)
 
 ## A dining room, or so it appears
-On the dinning table is a **joint of meat** which the **dog** will surrely appreciate.
+On the dinning table is a **joint of meat** which the **dog** will surrely appreciate, as well as some **bread** designed to attract the **dove**.
 
 ![Game location image](../data/dinning_room.png)
 
@@ -152,9 +151,13 @@ The kitchen contains a **box of matches**
 ![Game location image](../data/west_gallery.png)
 
 ## You see a padlocked steel-plated door
+This reinforced **door** blocks the player to access to the **kidnapped girl**.
+
 ![Game location image](../data/padlocked_steel_door.png)
 
 ## This is a small box-room
+Contains a small **note** informing the player that some stuff is stored in the **safe** in the basement.
+
 ![Game location image](../data/small_box_room.png)
 
 ## This seems to be a guest bedroom
@@ -170,9 +173,13 @@ The kitchen contains a **box of matches**
 ![Game location image](../data/ornate_bathroom.png)
 
 ## This must be the master bedroom
+A **thug** is sleeping on the bed, he has a bunch of things in his pockets.
+
 ![Game location image](../data/master_bedroom.png)
 
 ## This is a tiny toilet
+Here you can find a **roll of toilet paper**
+
 ![Game location image](../data/tiny_toilet.png)
 
 ## This is a child's bedroom
@@ -183,9 +190,13 @@ The kitchen contains a **box of matches**
 ![Game location image](../data/gloomy_narrow_steps.png)
 
 ## This is a cold, damp cellar
+The cellar contains a **safe** which has some **dangerous chemicals** in it, including a small **bottle of acid**.
+
 ![Game location image](../data/cold_damp_cellar.png)
 
 ## This room is even darker than the last
+This is where you find the **control panel** that control the **alarm**.
+
 ![Game location image](../data/even_darker_room.png)
 
 
