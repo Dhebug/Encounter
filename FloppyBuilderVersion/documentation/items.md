@@ -18,11 +18,16 @@ typedef struct
 
 extern item gItems[e_ITEM_COUNT_];
 ```
+**See:**
+- [game_enums.h](../code/game_enums.h) for the list of all items
+- [game_defines.h](../code/game_defines.h) for the structures and declarations
 
+----
 # Items
 There are quite a few items available in the game, some are directly usable, some are just container for other items, some need to be fabricated by combining other items.
 
 ## Containers
+These have no purpose their own, they are just here to allow the player to transport or perform action on hard to transport items
 |Item|Description|Define|
 |-|-|-|
 |**an empty tobacco tin**|Used to transport things or build a bomb|e_ITEM_TobaccoTin
@@ -33,6 +38,7 @@ There are quite a few items available in the game, some are directly usable, som
 |**a small bottle**|Originally contained a strong acid|e_ITEM_SmallBottle
 
 ## Items requiring containers to use
+These items cannot just be collected, you need some adequate containers to transport them
 |Item|Description|Define|
 |-|-|-|
 |**black dust**|Component for the black powder|e_ITEM_BlackDust|
@@ -41,6 +47,7 @@ There are quite a few items available in the game, some are directly usable, som
 |**some water**|Not actually used|e_ITEM_Water|
 
 ## Normal items
+These are items you will find around in the various locations
 |Item|Description|Define|
 |-|-|-|
 |**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel<br>e_ITEM_OpenPanel|
@@ -70,10 +77,15 @@ There are quite a few items available in the game, some are directly usable, som
 |**three .38 bullets**|Bullets for the pistol, found in another room|e_ITEM_Bullets|
 |**a couple chemistry recipes**|Found in the chemistry book in the library|e_ITEM_ChemistryRecipes|
 |**a map of the United Kingdom**|Some decorative element on the wall of the library, the idea is to provide some information about why there is a kidnapping|e_ITEM_UnitedKingdomMap|
-|**a fuse**|Made with the toilet paper roll and the petrol|e_ITEM_Fuse|
-|**some gunpowder**|Made by mixing salpeter and sulfur|e_ITEM_GunPowder|
-|**a bomb**|The combinaison of various items resulting in a quite powerful device|e_ITEM_Bomb|
 |**a young girl**|The hostage we need to free|e_ITEM_YoungGirl<br>e_ITEM_YoungGirlOnFloor|
 |**broken glass**|Result of breaking the window|e_ITEM_BrokenGlass|
 |**an acid burn**|Result of the acid|e_ITEM_AcidBurn|
+
+## Constructed items
+The following items have to be created by the player by performing some actions on the other items
+|Item|Description|Define|
+|-|-|-|
+|**a fuse**|Made with the toilet paper roll and the petrol|e_ITEM_Fuse|
+|**some gunpowder**|Made by mixing salpeter and sulfur|e_ITEM_GunPowder|
+|**a bomb**|The combinaison of various items resulting in a quite powerful device|e_ITEM_Bomb|
 

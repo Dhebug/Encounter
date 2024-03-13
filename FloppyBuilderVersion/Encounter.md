@@ -42,5 +42,8 @@ To test the game on a real floppy things get complicated, but there are multiple
 # Additional documentation:
 You may also consult these pages
 - [Game locations](documentation/locations.md)
+- [Game Items](documentation/items.md)
+- [Game solution](documentation/solution.md)
 - [Localization](documentation/localization.md)
-
+- [Scripting](documentation/scripting.md)
+- [Audio](documentation/audio.md)

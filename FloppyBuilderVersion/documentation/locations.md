@@ -28,7 +28,14 @@ extern unsigned char gCurrentLocation;
 extern location* gCurrentLocationPtr;
 ```
 
+**See:**
+- [game_enums.h](../code/game_enums.h) for the list of all locations
+- [game_defines.h](../code/game_defines.h) for the structures and declarations
+- [Scripting](scripting.md) for more details about how the **script** commands work
+
+
 ----
+# Description of the various locations
 
 Here are information about the various locations you can reach in the game, grouped geographically:
 - The village area
