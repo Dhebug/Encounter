@@ -11,6 +11,7 @@ IrqTasks50hz
     ; Process keyboard
     jsr ReadKeyboard
     jsr SoundUpdate50hz
+    jsr _PlayMusicFrame
     rts    
 .)
 

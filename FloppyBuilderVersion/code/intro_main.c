@@ -421,6 +421,11 @@ int DisplayHighScoresTable()
 }
 
 
+extern char Intro_Subsong0[];
+extern char Typewriter_Subsong1[];
+
+#define PlayMusic(music)    { param0.ptr=music;asm("jsr _StartMusic"); }
+
 void main()
 {
 	// Load the charset
@@ -435,6 +440,7 @@ void main()
 #endif
 
 	// Install the IRQ so we can use the keyboard
+    PlayMusic(Intro_Subsong0);
 	System_InstallIRQ_SimpleVbl();
 
 	while (1)
@@ -461,14 +467,17 @@ void main()
 #endif
 
 #ifdef INTRO_SHOW_STORY
+        PlayMusic(Typewriter_Subsong1);
 		if (DisplayStory())
 		{
 			break;
 		}
+        PlayMusic(Intro_Subsong0);
 #endif
 	}
 
 	System_RestoreIRQ_SimpleVbl();
+    EndMusic();
 
 #ifndef ENABLE_INTRO
 endIntro:
