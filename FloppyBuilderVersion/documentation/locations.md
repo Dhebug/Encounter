@@ -55,14 +55,14 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/old_fashioned_well.png)|Near the well you will find a **bucket** as well as some **rope**, and obviously some **water**.|
 |**You are in a dark, seedy alley**|e_LOCATION_DARKALLEY|
 |![Game location image](../data/dark_seedy_alley.png)|This where you find the **plastic bag**|
-|**A long road stretches ahead of you**|e_LOCATION_ROAD|
-|![Game location image](../data/long_road_stretch.png)||
 |**You are on the main street**|e_LOCATION_MAINSTREET|
 |![Game location image](../data/main_street.png)||
-|**You are on a narrow path**|e_LOCATION_NARROWPATH|
-|![Game location image](../data/narrow_path.png)||
 |**You are in an open area of tarmac**|e_LOCATION_TARMACAREA|
 |![Game location image](../data/wide_area_tarmac.png)|The **car** is a source of **rusted** metal and **petrol**|
+|**You are on a narrow path**|e_LOCATION_NARROWPATH|
+|![Game location image](../data/narrow_path.png)||
+|**A long road stretches ahead of you**|e_LOCATION_ROAD|
+|![Game location image](../data/long_road_stretch.png)||
 |**Outside a deep pit**|e_LOCATION_OUTSIDE_PIT
 |![Game location image](../data/pit_outside.png)|This location did not exist in the original 1983 game, just going "east" would make you fall down in to the pit.<br>By adding this location, the player has to make a conscious effort instead of being surprised.|
 |**You are inside a deep pit**|e_LOCATION_INSIDEHOLE|
