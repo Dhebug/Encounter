@@ -10,7 +10,7 @@
 - [Technical considerations](#technical-considerations)
   - [Graphical choices](#graphical-choices)
   - [Video mode](#video-mode)
-  - [Fades and transisions](#fades-and-transisions)
+  - [Fades and transitions](#fades-and-transitions)
 
 # Game design discussion
 
@@ -108,7 +108,7 @@ Due to these considerations, the small directional cross at the center of the sc
 - The top half of the cross is drawn on the HIRES part of the screen
 - The bottom half is made of 5 redefined characters from the ALTernate charset
 
-## Fades and transisions
+## Fades and transitions
 Since the game is all in Black & White, it can easily look quite dry, so to make it less boring I decided to try to "cross-fade" the scenes.
 
 Since the Oric does not have any bitplans or color palettes, the "fade" effect had to be done at the pixel level, in this particular case using some dithering matrix patterns to select which of the pixels to mask-in/mask-out from both images.

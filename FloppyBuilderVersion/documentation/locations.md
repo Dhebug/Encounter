@@ -96,7 +96,7 @@ Here are information about the various locations you can reach in the game, grou
 |**You are in an apple orchard**|e_LOCATION_APPLE_TREES|
 |![Game location image](../data/apple_orchard.png)|Here you can find a **ladder** which can be used to go down the **pit**|
 |**You are in a vegetable plot**|e_LOCATION_VEGSGARDEN|
-|![Game location image](../data/vegetable_plot.png)|A **knife** is lying around.<br>On the wall you can see the small window to the basement dark room.|
+|![Game location image](../data/vegetable_plot.png)|A **knife** is lying around.<br>On the wall you can see the small window to the basement dark room.<br>See: 'Soupirail', 'Fenêtres de trémie', 'Vasistas', 'Hopper window', 'Kellerfenster'|
 |**You are in a small greenhouse**|e_LOCATION_GREENHOUSE|
 |![Game location image](../data/in_small_greenhouse.png)|The greenhouse contains a **cardboard box**|
 
