@@ -3,6 +3,14 @@
 > If you plan to play the game, you should probably refrain to go farther!
 >
 > For more information, you can safely read [Encounter.md](../Encounter.md)
+- [Game design discussion](#game-design-discussion)
+  - [The original game](#the-original-game)
+  - [Modern adventure games](#modern-adventure-games)
+  - [Encounter HD](#encounter-hd)
+- [Technical considerations](#technical-considerations)
+  - [Graphical choices](#graphical-choices)
+  - [Video mode](#video-mode)
+  - [Fades and transisions](#fades-and-transisions)
 
 # Game design discussion
 

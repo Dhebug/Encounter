@@ -3,6 +3,10 @@
 > If you plan to play the game, you should probably refrain to go farther!
 >
 > For more information, you can safely read [Encounter.md](../Encounter.md)
+- [The original game - Severn Software (1983)](#the-original-game---severn-software-1983)
+  - [Overview and general hints:](#overview-and-general-hints)
+  - [Walkthrough:](#walkthrough)
+- [The 2024 HD version](#the-2024-hd-version)
 
 Here you will find the solution (at last one of them) of both the original 1983 game and this new 2024 versio of Encounter.
 

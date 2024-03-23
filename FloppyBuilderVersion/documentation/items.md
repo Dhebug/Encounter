@@ -4,6 +4,14 @@
 >
 > For more information, you can safely read [Encounter.md](../Encounter.md)
 
+- [Items in the code](#items-in-the-code)
+- [Items](#items)
+	- [Containers](#containers)
+	- [Items requiring containers to use](#items-requiring-containers-to-use)
+	- [Normal items](#normal-items)
+	- [Constructed items](#constructed-items)
+
+
 # Items in the code 
 Items are defined in a static array containing all the information about each item: 
 ```

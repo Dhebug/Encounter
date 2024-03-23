@@ -1,3 +1,12 @@
+
+- [Localization](#localization)
+  - [osdk\_config.bat](#osdk_configbat)
+  - [floppy builder script](#floppy-builder-script)
+  - [Text](#text)
+  - [Character set](#character-set)
+  - [Fonts](#fonts)
+  - [Selective build](#selective-build)
+
 ## Localization
 Don't expect industry standard localization tools with translation memory: You will have to edit source files to change or add text.
 

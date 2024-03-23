@@ -1,3 +1,11 @@
+
+- [Audio](#audio)
+  - [Sound Effects](#sound-effects)
+    - [Commands](#commands)
+    - [Example](#example)
+  - [Music](#music)
+
+
 # Audio
 
 ## Sound Effects

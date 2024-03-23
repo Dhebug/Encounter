@@ -3,6 +3,16 @@
 > If you plan to play the game, you should probably refrain to go farther!
 >
 > For more information, you can safely read [Encounter.md](../Encounter.md)
+- [Locations](#locations)
+- [Locations in the code](#locations-in-the-code)
+- [Description of the various locations](#description-of-the-various-locations)
+- [The village](#the-village)
+- [Outside the manor](#outside-the-manor)
+- [The manor](#the-manor)
+  - [The first floor](#the-first-floor)
+  - [The second floor](#the-second-floor)
+  - [The basement](#the-basement)
+
 
 # Locations
 There are about 40 locations in the game, some can be directly accessed while some other require the player to do special actions such as opening a lock of bypassing an oponent or some other dangerous trap.

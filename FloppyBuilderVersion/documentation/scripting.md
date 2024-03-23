@@ -1,4 +1,12 @@
 **WIP**
+- [Scripting](#scripting)
+  - [Features](#features)
+  - [The concept](#the-concept)
+  - [Commands](#commands)
+  - [Examples](#examples)
+    - [Scene bubbles](#scene-bubbles)
+    - [Full screen items](#full-screen-items)
+    - [Animations](#animations)
 
 # Scripting
 Somes games have hardcoded logic, some are completely data-driven, Encounter is somewhat in-between, with most of the player actions directly coded in normal language, while the scenes themselves use a tiny scripting system designed to be memory efficient
