@@ -1290,6 +1290,7 @@ _gFont12x14Kerning
   .byt "da",1
   .byt "th",1
   .byt "Th",1
+  .byt "To",2
   .byt 0           ; End of table
 
 ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes

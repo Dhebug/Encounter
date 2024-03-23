@@ -412,22 +412,37 @@ _gDescriptionDarkAlley
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 4,95,0,"Tous les chemins mènent...",0
+    .byt 4,106,0,"...quelque part?",0
+#else    
     .byt 4,100,0,"All roads lead...",0
     .byt 4,106,4,"...somewhere?",0
+#endif    
     END
 
 _gDescriptionMainStreet
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 4,4,0,"Une bonne vieille",0
+    .byt 4,16,0,"église médiévale",0
+#else    
     .byt 4,4,0,"A good old",0
     .byt 4,16,0,"medieval church",0
+#endif    
     END
 
 _gDescriptionNarrowPath
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 130,5,0,"Serait-ce les",0
+    .byt 129,17,0,"portes du Paradis?",0
+#else    
     .byt 130,5,0,"Are these the open",0
     .byt 109,17,0,"flood gates of heaven?",0
+#endif    
     END
 
 _gDescriptionInThePit
@@ -506,8 +521,13 @@ no_rope
     ; Then show the messages
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 121,5,0,"Ce puit semble aussi",0
+    .byt 138,16,0,"vieux que l'église",0
+#else
     .byt 111,5,0,"This well looks as old",0
     .byt 158,16,0,"as the church",0
+#endif    
     END
 
 _gDescriptionWoodedAvenue
