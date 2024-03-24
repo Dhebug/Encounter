@@ -8,7 +8,7 @@
         {
             "label": "osdk_build_and_run",
             "type": "shell",
-            "command": "D:\\svn\\users\\dbug\\UpgradeTime\\Encounter\\FloppyBuilderVersion\\osdk_execute.bat",
+            "command": "osdk_execute.bat",
             "group": {
                 "kind": "build",
                 "isDefault": true
