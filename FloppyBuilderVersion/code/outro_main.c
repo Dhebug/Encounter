@@ -117,7 +117,7 @@ int DisplayText(const char* text,int delay)
 #endif
     memcpy(screenPtr,sourcePtr,40*12);  // Force erase the screen in case there was still something there
 
-	SetLineAddress((char*)TextBuffer+1);
+	SetLineAddress((char*)TextBuffer);
     PrintMultiLine(text);
 
     // Appear

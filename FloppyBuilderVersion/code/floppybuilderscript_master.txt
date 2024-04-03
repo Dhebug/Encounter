@@ -131,7 +131,11 @@ AddDefine OUTRO_PICTURE_DESK {FileIndex}
 AddFile ..\build\files\masked_element_outro.msk
 AddDefine OUTRO_SPRITE_DESK {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\masked_element_outro_photos_fr.msk
+#else
 AddFile ..\build\files\masked_element_outro_photos.msk
+#endif
 AddDefine OUTRO_SPRITE_PHOTOS {FileIndex}
 
 
