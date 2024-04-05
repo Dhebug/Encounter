@@ -372,8 +372,13 @@ _gDescriptionNone
 _gDescriptionDarkTunel
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 4,4,0,"Un tunnel ordinaire: sombre,",0
+    .byt 4,13,1,"humide et inquiétant.",0
+#else    
     .byt 4,4,0,"Like most tunnels: dark, damp,",0
     .byt 4,13,1,"and somewhat scary.",0
+#endif    
     END
 
 _gDescriptionMarketPlace
@@ -401,8 +406,8 @@ _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
 #ifdef LANGUAGE_FR    
-    .byt 153,85,0,"Rats, graffittis,",0
-    .byt 136,98,0,"et seringues.",0
+    .byt 145,90,0,"Rats, graffittis,",0
+    .byt 160,103,0,"et seringues.",0
 #else
     .byt 153,85,0,"Rats, graffitti,",0
     .byt 136,98,0,"and used syringes.",0
@@ -464,14 +469,25 @@ rope_attached_to_tree
 cannot_escape_pit
     WAIT(50*2)
     .byt COMMAND_BUBBLE,1,127
+#ifdef LANGUAGE_FR    
+    .byt 6,8,0,"Ca ne semblait",0
+#else    
     .byt 6,8,0,"It did not look",0
+#endif    
     WAIT(50)
     .byt COMMAND_BUBBLE,1,127
+#ifdef LANGUAGE_FR    
+    .byt 156,42,0,"pas si profond",0
+#else    
     .byt 176,42,0,"that deep",0
+#endif    
     WAIT(50)
     .byt COMMAND_BUBBLE,1,127
+#ifdef LANGUAGE_FR    
+    .byt 82,94,0,"vu de là haut",0
+#else    
     .byt 82,94,0,"from outside",0
-    
+#endif    
     WAIT(50*2)                      ; Wait a couple seconds for dramatic effect
     
     JUMP(_gDescriptionGameOverLost);            ; Draw the 'The End' logo

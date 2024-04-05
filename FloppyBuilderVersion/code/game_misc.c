@@ -92,7 +92,7 @@ void GameDebugger()
         currentLine+=40;
 
         sprintf(currentLine,"%s",gLocations[gCurrentLocation].description);    
-        sprintf(currentLine+36,"|%d ",gCurrentLocation);    
+        sprintf(currentLine+36,"-%d ",gCurrentLocation);    
         currentLine+=40;
         currentLine+=40;
 
@@ -169,7 +169,7 @@ void GameDebugger()
             sprintf(currentLine,"Loc:%s",gLocations[itemPtr->location].description);    
             break;
         }
-        sprintf(currentLine+36,"|%d ",itemPtr->location);    
+        sprintf(currentLine+36,"-%d ",itemPtr->location);    
         currentLine+=40;
 
         // Erase the last line if the decription was too long and overflew onto the next line
