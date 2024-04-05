@@ -1289,18 +1289,24 @@ _gFont12x14Kerning
   .byt "Ja",2
   .byt "op",1
   .byt "Of",1
-  .byt "ro",1
+  .byt "ra",1
   .byt "rd",1
+  .byt "re",1
   .byt "rk",1
+  .byt "ro",1
   .byt "rp",1
   .byt "if",1
   .byt "da",1
   .byt "th",1
   .byt "Th",1
+  .byt "to",1
   .byt "To",2
+  .byt "Us",1
+  .byt "'e",2
 #ifdef LANGUAGE_FR    
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
   .byt "là",2
+  .byt "tô",1
 #else
 #endif
   .byt 0           ; End of table

@@ -73,11 +73,11 @@ To provide some cartoony feeling, the game is using the scripting system to disp
 Delays are done with the COMMAND_WAIT instruction, while the COMMAND_BUBBLE is used to display the text bubbles
 ```
 _gDescriptionRoad
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
-    .byt 4,100,0,"All roads lead...",0
-    .byt 4,106,4,"...somewhere?",0
-    END
+    WAIT(DELAY_FIRST_BUBBLE)              // Initial delay
+    .byt COMMAND_BUBBLE,2,64              // "Draw speech bubble", two text entries, 64=Black text on white, 127=White text
+    .byt 4,100,0,"All roads lead...",0    // X position, Y position, vertical text offset, first text, null terminator
+    .byt 4,106,4,"...somewhere?",0        // X position, Y position, vertical text offset, second text, null terminator
+    END                                   // End of script
 ```
 
 ### Full screen items

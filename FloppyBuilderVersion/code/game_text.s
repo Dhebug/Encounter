@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
 #endif
 
 // Small feedback messages and prompts
@@ -519,8 +519,13 @@ digging_for_gold
 _gDescriptionTarmacArea
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 119,5,0,"De cendres à cendres",0
+    .byt 124,13,3,"De rouille à rouille",0
+#else
     .byt 149,5,0,"Ashes to Ashes",0
     .byt 152,15,0,"Rust to Rust...",0
+#endif    
     END
 
 _gDescriptionOldWell
@@ -549,72 +554,123 @@ no_rope
 _gDescriptionWoodedAvenue
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 4,4,0,"Ces arbres ont probablement",0
+    .byt 4,15,0,"été témoin de beaucoup de choses",0
+#else
     .byt 4,4,0,"These trees have probably",0
     .byt 4,14,1,"witnessed many things",0
+#endif    
     END
 
 _gDescriptionGravelDrive
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,64
+#ifdef LANGUAGE_FR   
+    .byt 180,86,0,"Plutôt",0
+    .byt 150,97,0,"impressionnant",0
+    .byt 176,107,2,"vu de loin",0
+#else
     .byt 127,86,0,"Kind of impressive",0
     .byt 143,97,0,"when seen from",0
     .byt 182,107,0,"far away",0
+#endif    
     END
 
 _gDescriptionZenGarden
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 9,5,0,"Un jardin zen japonais ?",0
+    .byt 5,17,0,"En Angleterre ?",0
+#else    
     .byt 4,4,0,"A Japanese Zen Garden?",0
     .byt 4,15,1,"In England?",0
+#endif    
     END
 
 _gDescriptionFrontLawn
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 5,5,0,"La maison parfaite",0
+    .byt 5,15,0,"pour les égocentriques",0
+#else    
     .byt 5,5,0,"The perfect home",0
     .byt 5,15,1,"for egomaniacs",0
+#endif    
     END
 
 _gDescriptionGreenHouse
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 4,5,0,"Evidemment pour",0
+    .byt 4,17,0,34,"Usage thérapeutique",34,0
+#else
     .byt 4,96,0,"Obviously for",0
-    .byt 4,107,1,"Therapeutic use",34,0
+    .byt 4,107,1,34,"Therapeutic use",34,0
+#endif
     END
 
 _gDescriptionTennisCourt
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 5,5,0,"Bein voila: Un vrai court",0
+    .byt 5,16,0,"de tennis sur gazon",0
+#else
     .byt 4,4,0,"That's more like it:",0
     .byt 4,15,0,"a proper lawn tennis court",0
+#endif    
     END
 
 _gDescriptionVegetableGarden
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 102,5,0,"Pas le meilleur endroit",0
+    .byt 97,15,0,"faire pousser des tomates",0
+#else    
     .byt 134,5,0,"Not the best spot",0
     .byt 136,15,1,"to grow tomatoes",0
+#endif
     END
 
 _gDescriptionFishPond
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 5,5,0,"Certains de ces poissons",0
+    .byt 5,17,0,"sont étonnamment gros",0
+#else    
     .byt 5,5,0,"Some of these fishes",0
     .byt 5,17,0,"are surprinsingly big",0
+#endif    
     END
 
 _gDescriptionTiledPatio
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 107,5,0,"Ici on accède à l'entrée",0
+    .byt 125,13,3,"arrière de la maison",0
+#else
     .byt 93,5,0,"The house's back entrance",0
     .byt 110,15,0,"is accessible from here",0
+#endif    
     END
 
 _gDescriptionAppleOrchard
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR   
+    .byt 5,5,0,"La meilleure sorte de pommes:",0
+    .byt 5,17,0,"sucrées, croquantes et juteuses",0
+#else 
     .byt 5,5,0,"The best kind of apples:",0
     .byt 5,17,0,"sweet, crunchy and juicy",0
+#endif
     END
 
 _gDescriptionEntranceHall
@@ -638,8 +694,13 @@ dog_alive
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"Of course there is a dog.",0
-    .byt 5,19,0,"There's always a dog.",0
+#ifdef LANGUAGE_FR
+    .byt 5,5,0,"Bien sur qu'il y a un chien",0
+    .byt 5,17,0,"Il y a toujours un chien",0
+#else
+    .byt 5,5,0,"Of course there is a dog",0
+    .byt 5,19,0,"There's always a dog",0
+#endif    
     END
 
 end_dog
@@ -664,8 +725,13 @@ _gDescriptionDogAttacking
 _gDescriptionLibrary
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 5,99,0,"Livres, cheminée et",0
+    .byt 5,105,4,"un bon fauteuil",0
+#else
     .byt 5,86,0,"Books, fireplace, and",0
     .byt 5,97,0,"a comfortable chair",0
+#endif    
     END
 
 _gDescriptionNarrowPassage
@@ -682,15 +748,25 @@ _gDescriptionNarrowPassage
 _gDescriptionEntranceLounge
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR       
+    .byt 5,5,0,"On dirait que quelqu'un",0
+    .byt 12,13,4,"s'est bien amusé",0
+#else    
     .byt 5,5,0,"Looks like someone",0
     .byt 5,15,0,"had fun",0
+#endif    
     END
 
 _gDescriptionDiningRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+    .byt 5,100,0,"Deux assiettes...",0
+    .byt 5,107,4,"...bon à savoir",0
+#else
     .byt 5,95,0,"Two plates...",0
     .byt 5,107,0,"...good to know",0
+#endif    
     END
 
 _gDescriptionGamesRoom
@@ -721,21 +797,35 @@ _gDescriptionKitchen
 _gDescriptionNarrowStaircase
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,127
+#ifdef LANGUAGE_FR       
+    .byt 5,5,0,"Attention à la marche",0
+#else
     .byt 5,5,0,"Watch your step",0
+#endif    
     END
 
 _gDescriptionCellar
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
+#ifdef LANGUAGE_FR       
+    .byt 45,15,0,"Est-ce un coffre-fort",0
+    .byt 70,25,0,"Franz Jager ?",0
+#else
     .byt 75,15,0,"Is that a Franz",0
     .byt 80,25,0,"Jager safe?",0
+#endif    
     END
 
 _gDescriptionDarkerCellar
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
+#ifdef LANGUAGE_FR   
+    .byt 5,99,0,"La fenêtre semble",0
+    .byt 5,106,4,"occultée",0
+#else
     .byt 5,99,0,"The window seems",0
     .byt 5,109,0,"to be occulted",0
+#endif    
     END
 
 _gDescriptionStaircase
