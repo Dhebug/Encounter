@@ -714,8 +714,13 @@ loop_bubble
     sta _param2+0       ; Pattern
 
     ; Iterate over the string
+    lda #0
+    sta cur_char
 loop_compute_size
+    ldx cur_char
+    stx prev_char
     jsr _ByteStreamGetNextByte
+    stx cur_char
     beq end_compute_size
     bmi offset
 character            ; Get the character width from the font information gFont12x14Width[car-32]+1;
@@ -723,6 +728,14 @@ character            ; Get the character width from the font information gFont12
     lda _param1+0
     adc _gFont12x14Width-32,x
     sta _param1+0    
+
+    ; prev_char + cur_char -> kerning
+    jsr _GetKerningValue
+    sec
+    lda _param1+0    
+    sbc kerning
+    sta _param1+0    
+      
     bne loop_compute_size
 offset               ; Signed offset to handle things like AV or To properly
     clc
@@ -770,8 +783,13 @@ loop_bubble
     sta _gDrawWidth       ; Initial width
 
     ; Iterate over the string
+    lda #0
+    sta cur_char
 loop_compute_size
+    ldx cur_char
+    stx prev_char
     jsr _ByteStreamGetNextByte
+    stx cur_char
     beq end_compute_size
     bmi offset
 character         ; Get the character width from the font information gFont12x14Width[car-32]+1;
@@ -779,6 +797,14 @@ character         ; Get the character width from the font information gFont12x14
     lda _gDrawWidth
     adc _gFont12x14Width-32,x
     sta _gDrawWidth
+
+    ; prev_char + cur_char -> kerning
+    jsr _GetKerningValue
+    sec
+    lda _gDrawWidth
+    sbc kerning
+    sta _gDrawWidth
+
     bne loop_compute_size
 offset             ; Signed offset to handle things like AV or To properly
     clc

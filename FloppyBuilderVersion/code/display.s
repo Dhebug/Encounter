@@ -6,6 +6,10 @@
 width   .dsb 1
 height  .dsb 1    
 
+prev_char     = reg1
+cur_char      = reg2
+kerning       = reg3
+
     .text
 
 _gFlagCurrentSpriteSheet  .byt 255  ; Index of the currently loaded "sprite" image
@@ -125,9 +129,6 @@ targetPtr     = tmp5
 shiftTablePtr = tmp6
 fontPtr       = tmp7
 scanlinePtr   = reg0
-prev_char     = reg1
-cur_char      = reg2
-kerning       = reg3
 
 end_of_string
   ; Update the pointer
@@ -268,36 +269,12 @@ normal_character
   adc #<_gFont12x14
   sta fontPtr+0
   lda #0
-  sta kerning           ; By default, no kerning adjustment to apply
-  tax                   ; x=0
   adc #>_gFont12x14
   sta fontPtr+1
 
-  ; Search in the kerning table for a matching prev/cur combination of characters
-  ; We could store somewhere in the font (size table?) if it's even worth looking at all to avoid the lookup for some letters
-  .(
-loop_kerning
-  lda _gFont12x14Kerning+0,x     
-  beq end_kerning
-  cmp prev_char                   ; Check the first character
-  bne next_pair
-  lda cur_char
-  cmp _gFont12x14Kerning+1,x      ; Check the second character
-  bne next_pair
-
-  lda _gFont12x14Kerning+2,x      ; Store the associated kerning value
-  sta kerning
-  bne end_kerning
-
-next_pair  
-  inx
-  inx
-  inx
-  bne loop_kerning
-end_kerning  
-  .)
-    
-
+  ; prev_char + cur_char -> kerning
+  jsr _GetKerningValue
+   
   ; Using the current x coordinate in the scanline, we compute the actual position on the screen where to start drawing the character
   lda x_position 
   sec
@@ -425,6 +402,36 @@ skip
   bpl column_loop
   jmp continue  
 .)
+
+
+  ; Search in the kerning table for a matching prev/cur combination of characters
+  ; We could store somewhere in the font (size table?) if it's even worth looking at all to avoid the lookup for some letters
+_GetKerningValue  
+  .(
+  lda #0
+  sta kerning           ; By default, no kerning adjustment to apply
+  tax                   ; x=0
+loop_kerning
+  lda _gFont12x14Kerning+0,x     
+  beq end_kerning
+  cmp prev_char                   ; Check the first character
+  bne next_pair
+  lda cur_char
+  cmp _gFont12x14Kerning+1,x      ; Check the second character
+  bne next_pair
+
+  lda _gFont12x14Kerning+2,x      ; Store the associated kerning value
+  sta kerning
+  bne end_kerning
+
+next_pair  
+  inx
+  inx
+  inx
+  bne loop_kerning
+end_kerning  
+  rts
+  .)
 
 
 _DrawFilledRectangle
@@ -1291,6 +1298,11 @@ _gFont12x14Kerning
   .byt "th",1
   .byt "Th",1
   .byt "To",2
+#ifdef LANGUAGE_FR    
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i
+  .byt "là",2
+#else
+#endif
   .byt 0           ; End of table
 
 ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
