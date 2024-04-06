@@ -511,8 +511,13 @@ rope_attached_to_tree
 digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,94,0,"Are they digging",0
-    .byt 5,103,4,"for gold?",0
+#ifdef LANGUAGE_FR    
+    .byt 5,93,0,"Cherchent ils",0
+    .byt 5,101,4,"de l'or ?",0
+#else
+    .byt 5,90,0,"Are they digging",0
+    .byt 8,103,0,"for gold?",0
+#endif    
     END
 .)
 
@@ -871,14 +876,23 @@ _gDescriptionStaircase
 _gDescriptionMainLanding
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
+#ifdef LANGUAGE_FR    
+    .byt 53,70,0,"Belle vue de là-haut",0
+#else
     .byt 47,70,0,"Nice view from up there",0
+#endif    
     END
 
 _gDescriptionEastGallery
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 5,5,0,"Couloir ennuyeux:",0
+    .byt 20,13,4,"Vérifié",0
+#else
     .byt 5,5,0,"Boring corridor:",0
     .byt 20,17,0,"Check",0
+#endif    
     END
 
 _gDescriptionChildBedroom
@@ -920,27 +934,47 @@ _gDescriptionShowerRoom
 _gDescriptionWestGallery
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,127
+#ifdef LANGUAGE_FR    
+    .byt 85,81,0,"Est-ce de l'acier",0
+    .byt 60,92,0,"derrière le rideau ?",0
+#else
     .byt 85,81,0,"Is that Steel",0
     .byt 60,92,0,"behind the Curtain?",0
+#endif    
     END
 
 _gDescriptionBoxRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 5,5,0,"Une petite pièce",0
+    .byt 5,12,4,"utilitaire",0
+#else
     .byt 5,5,0,"A practical",0
     .byt 5,16,0,"little room",0
+#endif    
     END
 
 _gDescriptionClassyBathRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
+#ifdef LANGUAGE_FR    
+    .byt 132,5,0,"Semble comfortable",0
+#else
     .byt 132,5,0,"Looks comfortable",0
+#endif    
     END
 
 _gDescriptionTinyToilet
     WAIT(DELAY_FIRST_BUBBLE)
+#ifdef LANGUAGE_FR    
+    .byt COMMAND_BUBBLE,2,64
+    .byt 160,5,0,"Une propreté",0
+    .byt 173,13,4,"étincelante",0
+#else
     .byt COMMAND_BUBBLE,1,64
     .byt 137,5,0,"Sparklingly clean",0
+#endif    
     END
 
 _gDescriptionMasterBedRoom
@@ -1010,10 +1044,17 @@ _gDescriptionThugAttacking
 _gDescriptionPadlockedRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,4,64
+#ifdef LANGUAGE_FR    
+    .byt 5,5,0,"Damn...",0
+    .byt 135,16,0,"Je ne pourrai pas",0
+    .byt 131,53,0,"ouvrir ces serrures",0
+    .byt 140,90,0,"assez vite !",0
+#else
     .byt 5,5,0,"Damn...",0
     .byt 125,16,0,"I will never be able",0
     .byt 131,53,0,"to pick these locks",0
     .byt 140,90,0,"fast enough!",0
+#endif    
     END
 
 
