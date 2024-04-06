@@ -1297,9 +1297,11 @@ _gFont12x14Kerning
   .byt "rp",1
   .byt "if",1
   .byt "da",1
+  .byt "ta",1
+  .byt "te",1
   .byt "th",1
-  .byt "Th",1
   .byt "to",1
+  .byt "Th",1
   .byt "To",2
   .byt "Us",1
   .byt "'e",2
@@ -1307,6 +1309,7 @@ _gFont12x14Kerning
 #pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
   .byt "là",2
   .byt "tô",1
+  .byt "tè",1
 #else
 #endif
   .byt 0           ; End of table

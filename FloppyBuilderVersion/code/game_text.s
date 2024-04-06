@@ -737,12 +737,21 @@ _gDescriptionLibrary
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,127
+#ifdef LANGUAGE_FR
+    .byt 5,48,0,"Soit ils aiment le noir",0
+    .byt 12,68,0,"soit ils ont oublié",0
+    .byt 27,88,0,"de payer leurs",0
+#else
     .byt 5,48,0,"Either they love dark",0
     .byt 12,68,0,"or they forgot to",0
-    .byt 37,90,0,"pay their",0
-
+    .byt 37,88,0,"pay their",0
+#endif
     .byt COMMAND_BUBBLE,1,64
-    .byt 75,110,0,"bills",0
+#ifdef LANGUAGE_FR    
+    .byt 55,108,0,"factures",0
+#else
+    .byt 75,108,0,"bills",0
+#endif    
     END
 
 _gDescriptionEntranceLounge
@@ -772,26 +781,43 @@ _gDescriptionDiningRoom
 _gDescriptionGamesRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+    .byt 155,5,0,"Système vidéo",0
+    .byt 151,16,0,"haut de gamme",0
+#else
     .byt 142,5,0,"Top of the range",0
     .byt 164,16,0,"video system",0
-
+#endif
     WAIT(50)
 
     .byt COMMAND_BUBBLE,1,64
+#ifdef LANGUAGE_FR    
+    .byt 151,40,0,"Impressionnant",0
+#else
     .byt 175,40,0,"Impressive",0
+#endif    
     END
 
 _gDescriptionSunLounge
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,1,64
+#ifdef LANGUAGE_FR    
+    .byt 80,5,0,"Pas de répit pour les braves",0
+#else
     .byt 112,5,0,"No rest for the weary",0
+#endif    
     END
 
 _gDescriptionKitchen
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
-    .byt 5,5,0,"A very basic",0
-    .byt 5,16,0,"kitchen",0
+#ifdef LANGUAGE_FR    
+    .byt 5,5,0,"Une cuisine",0
+    .byt 5,16,0,"bien équipée",0
+#else
+    .byt 5,5,0,"A well equipped",0
+    .byt 5,14,4,"kitchen",0
+#endif    
     END
 
 _gDescriptionNarrowStaircase
@@ -831,9 +857,15 @@ _gDescriptionDarkerCellar
 _gDescriptionStaircase
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,3,64
+#ifdef LANGUAGE_FR    
+    .byt 16,8,0,"Gauche ?",0
+    .byt 179,8,0,"Droite ?",0
+    .byt 45,72,0,"est-ce vraiment important ?",0
+#else
     .byt 16,8,0,"Left?",0
     .byt 179,8,0,"Right?",0
     .byt 60,72,0,"does it really matter?",0
+#endif    
     END
 
 _gDescriptionMainLanding
@@ -852,22 +884,37 @@ _gDescriptionEastGallery
 _gDescriptionChildBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+    .byt 5,86,0,"Laisse-moi deviner:",0
+    .byt 5,94,4,"Chambre d'adolescent ?",0
+#else
     .byt 5,96,0,"Let me guess:",0
     .byt 5,107,0,"Teenager room?",0
+#endif    
     END
 
 _gDescriptionGuestBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+    .byt 5,6,0,"Simple et rafraichissant",0
+    .byt 5,17,0,"pour changer",0
+#else
     .byt 5,6,0,"Simple and fresh",0
     .byt 5,17,0,"for a change",0
+#endif    
     END
 
 _gDescriptionShowerRoom
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR    
+    .byt 145,5,0,"J'en aurai besoin",0
+    .byt 136,16,0,"quand j'aurai fini",0
+#else
     .byt 149,5,0,"I will need one",0
     .byt 152,16,0,"when I'm done",0
+#endif    
     END
 
 _gDescriptionWestGallery
@@ -912,8 +959,13 @@ _gDescriptionMasterBedRoom
       ; Text describing the dead thug
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+      .byt 10,5,0,"Appelons cela un",0
+      .byt 5,18,0,34,"dommage collatéral",34,0
+#else
       .byt 5,5,0,"Let's call that a ",0
-      .byt 5,17,0,"Collateral Damage",34,0
+      .byt 5,17,0,34,"Collateral Damage",34,0
+#endif      
       END
 
 thug_alive
@@ -923,8 +975,13 @@ thug_alive
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BUBBLE,2,64
+#ifdef LANGUAGE_FR
+    .byt 5,5,0,"Cela rendra les choses",0
+    .byt 5,16,0,"nettement plus faciles...",0
+#else
     .byt 5,5,0,"This will make things",0
     .byt 5,16,0,"notably easier...",0
+#endif    
     ; Should probably have a "game over" command
     END
     
