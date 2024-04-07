@@ -214,7 +214,11 @@ AddFile ..\build\files\united_kingdom_map.hir
 AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 
 ; All the sprites
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\the_end_fr.msk
+#else
 AddFile ..\build\files\the_end.msk                      
+#endif
 AddDefine LOADER_SPRITE_THE_END {FileIndex}
 
 AddFile ..\build\files\dog.msk                      
