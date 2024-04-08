@@ -22,7 +22,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandRECTANGLE
     .word _ByteStreamCommandFILL_RECTANGLE
     .word _ByteStreamCommandTEXT
-    .word _ByteStreamCommandBUBBLE
+    .word _ByteStreamCommand_WHITE_BUBBLE
+    .word _ByteStreamCommand_BLACK_BUBBLE
     .word _ByteStreamCommandWait
     .word _ByteStreamCommandBITMAP
     .word _ByteStreamCommandFADE_BUFFER
@@ -674,13 +675,17 @@ _count        .dsb 1
 _coordinates  .dsb 2
 tmpCount      .dsb 1
 
-_ByteStreamCommandBUBBLE
+ _ByteStreamCommand_WHITE_BUBBLE
+    ldx #64                        ; White on Black Color pattern
+    jmp draw_bubble
+ _ByteStreamCommand_BLACK_BUBBLE
+    ldx #127                       ; White on Black Color pattern
+draw_bubble
 .(
+    stx _gDrawPattern
+
     jsr _ByteStreamGetNextByte     ; Number of bubbles 
     stx _count
-
-    jsr _ByteStreamGetNextByte     ; Color pattern
-    stx _gDrawPattern
 
     lda _gCurrentStream+0          ; Memorize the pointer for the later passes
     sta _coordinates+0

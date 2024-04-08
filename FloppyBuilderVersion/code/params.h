@@ -40,6 +40,8 @@
 #define OPCODE_JMP              $4C
 #define OPCODE_BNE              $D0
 #define OPCODE_BEQ              $F0
+#define OPCODE_CLC              $18
+#define OPCODE_SEC              $38
 
 // Page 3 / VIA addresses
 #define via_portb               $0300 
@@ -70,17 +72,18 @@
 #define COMMAND_RECTANGLE       1
 #define COMMAND_FILL_RECTANGLE  2
 #define COMMAND_TEXT            3
-#define COMMAND_BUBBLE          4
-#define COMMAND_WAIT            5
-#define COMMAND_BITMAP          6
-#define COMMAND_FADE_BUFFER     7
-#define COMMAND_JUMP            8      // Really, that's a GOTO :p
-#define COMMAND_JUMP_IF_TRUE    9
-#define COMMAND_JUMP_IF_FALSE   10
-#define COMMAND_INFO_MESSAGE    11 
-#define COMMAND_FULLSCREEN_ITEM 12
-#define COMMAND_STOP_BREAKPOINT 13
-#define _COMMAND_COUNT          14
+#define COMMAND_WHITE_BUBBLE    4
+#define COMMAND_BLACK_BUBBLE    5
+#define COMMAND_WAIT            6
+#define COMMAND_BITMAP          7
+#define COMMAND_FADE_BUFFER     8
+#define COMMAND_JUMP            9      // Really, that's a GOTO :p
+#define COMMAND_JUMP_IF_TRUE    10
+#define COMMAND_JUMP_IF_FALSE   11
+#define COMMAND_INFO_MESSAGE    12 
+#define COMMAND_FULLSCREEN_ITEM 13
+#define COMMAND_STOP_BREAKPOINT 14
+#define _COMMAND_COUNT          15
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0

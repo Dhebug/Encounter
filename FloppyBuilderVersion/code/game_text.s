@@ -371,7 +371,7 @@ _gDescriptionNone
 
 _gDescriptionDarkTunel
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 4,4,0,"Un tunnel ordinaire: sombre,",0
     .byt 4,13,1,"humide et inquiétant.",0
@@ -383,7 +383,7 @@ _gDescriptionDarkTunel
 
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 4,100,0,"La place du marché",0
     .byt 4,106,4,"est désertée",0
@@ -404,7 +404,7 @@ blinky_shop
 
 _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 145,90,0,"Rats, graffittis,",0
     .byt 160,103,0,"et seringues.",0
@@ -416,7 +416,7 @@ _gDescriptionDarkAlley
 
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 4,95,0,"Tous les chemins mènent...",0
     .byt 4,106,0,"...quelque part?",0
@@ -428,7 +428,7 @@ _gDescriptionRoad
 
 _gDescriptionMainStreet
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 4,4,0,"Une bonne vieille",0
     .byt 4,16,0,"église médiévale",0
@@ -440,7 +440,7 @@ _gDescriptionMainStreet
 
 _gDescriptionNarrowPath
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 130,5,0,"Serait-ce les",0
     .byt 129,17,0,"portes du Paradis?",0
@@ -468,21 +468,21 @@ rope_attached_to_tree
 
 cannot_escape_pit
     WAIT(50*2)
-    .byt COMMAND_BUBBLE,1,127
+    .byt COMMAND_BLACK_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 6,8,0,"Ca ne semblait",0
 #else    
     .byt 6,8,0,"It did not look",0
 #endif    
     WAIT(50)
-    .byt COMMAND_BUBBLE,1,127
+    .byt COMMAND_BLACK_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 156,42,0,"pas si profond",0
 #else    
     .byt 176,42,0,"that deep",0
 #endif    
     WAIT(50)
-    .byt COMMAND_BUBBLE,1,127
+    .byt COMMAND_BLACK_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 82,94,0,"vu de là haut",0
 #else    
@@ -510,7 +510,7 @@ rope_attached_to_tree
 
 digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 5,93,0,"Cherchent ils",0
     .byt 5,101,4,"de l'or ?",0
@@ -523,7 +523,7 @@ digging_for_gold
 
 _gDescriptionTarmacArea
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 119,5,0,"De cendres à cendres",0
     .byt 124,13,3,"De rouille à rouille",0
@@ -546,7 +546,7 @@ no_rope
 
     ; Then show the messages
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 121,5,0,"Ce puit semble aussi",0
     .byt 138,16,0,"vieux que l'église",0
@@ -558,7 +558,7 @@ no_rope
 
 _gDescriptionWoodedAvenue
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 4,4,0,"Ces arbres ont probablement",0
     .byt 4,15,0,"été témoin de beaucoup de choses",0
@@ -570,7 +570,7 @@ _gDescriptionWoodedAvenue
 
 _gDescriptionGravelDrive
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,3,64
+    .byt COMMAND_WHITE_BUBBLE,3
 #ifdef LANGUAGE_FR   
     .byt 180,86,0,"Plutôt",0
     .byt 150,97,0,"impressionnant",0
@@ -584,7 +584,7 @@ _gDescriptionGravelDrive
 
 _gDescriptionZenGarden
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 9,5,0,"Un jardin zen japonais ?",0
     .byt 5,17,0,"En Angleterre ?",0
@@ -596,7 +596,7 @@ _gDescriptionZenGarden
 
 _gDescriptionFrontLawn
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 5,5,0,"La maison parfaite",0
     .byt 5,15,0,"pour les égocentriques",0
@@ -608,7 +608,7 @@ _gDescriptionFrontLawn
 
 _gDescriptionGreenHouse
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 4,5,0,"Evidemment pour",0
     .byt 4,17,0,34,"Usage thérapeutique",34,0
@@ -620,7 +620,7 @@ _gDescriptionGreenHouse
 
 _gDescriptionTennisCourt
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 5,5,0,"Bein voila: Un vrai court",0
     .byt 5,16,0,"de tennis sur gazon",0
@@ -632,7 +632,7 @@ _gDescriptionTennisCourt
 
 _gDescriptionVegetableGarden
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 102,5,0,"Pas le meilleur endroit",0
     .byt 97,15,0,"faire pousser des tomates",0
@@ -644,7 +644,7 @@ _gDescriptionVegetableGarden
 
 _gDescriptionFishPond
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 5,5,0,"Certains de ces poissons",0
     .byt 5,17,0,"sont étonnamment gros",0
@@ -656,7 +656,7 @@ _gDescriptionFishPond
 
 _gDescriptionTiledPatio
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 107,5,0,"Ici on accède à l'entrée",0
     .byt 125,13,3,"arrière de la maison",0
@@ -668,7 +668,7 @@ _gDescriptionTiledPatio
 
 _gDescriptionAppleOrchard
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 5,5,0,"La meilleure sorte de pommes:",0
     .byt 5,17,0,"sucrées, croquantes et juteuses",0
@@ -688,7 +688,7 @@ _gDescriptionEntranceHall
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
-      .byt COMMAND_BUBBLE,2,64
+      .byt COMMAND_WHITE_BUBBLE,2
       .byt 5,5,0,"Let's call that a ",0
       .byt 5,17,0,"Collateral Damage",34,0
       END
@@ -698,7 +698,7 @@ dog_alive
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(13,66),40,_SecondImageBuffer+(40*61)+0,_ImageBuffer+(40*56)+26)    
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 5,5,0,"Bien sur qu'il y a un chien",0
     .byt 5,17,0,"Il y a toujours un chien",0
@@ -711,7 +711,7 @@ dog_alive
 end_dog
     ; Some generic message in case the dog is not there (probably not displayed right now)
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
     .byt 124,5,0,"Quite an impressive",0
     .byt 187,17,0,"staircase",0
     END
@@ -720,7 +720,7 @@ _gDescriptionDogAttacking
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
      ;
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
     .byt 5,108,0,"Oops...",0
     WAIT(50*2)                              ; Wait a couple seconds
     JUMP(_gDescriptionGameOverLost)         ; Game Over
@@ -729,7 +729,7 @@ _gDescriptionDogAttacking
 
 _gDescriptionLibrary
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 5,99,0,"Livres, cheminée et",0
     .byt 5,105,4,"un bon fauteuil",0
@@ -741,7 +741,7 @@ _gDescriptionLibrary
 
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,3,127
+    .byt COMMAND_BLACK_BUBBLE,3
 #ifdef LANGUAGE_FR
     .byt 5,48,0,"Soit ils aiment le noir",0
     .byt 12,68,0,"soit ils ont oublié",0
@@ -751,7 +751,7 @@ _gDescriptionNarrowPassage
     .byt 12,68,0,"or they forgot to",0
     .byt 37,88,0,"pay their",0
 #endif
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 55,108,0,"factures",0
 #else
@@ -761,7 +761,7 @@ _gDescriptionNarrowPassage
 
 _gDescriptionEntranceLounge
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR       
     .byt 5,5,0,"On dirait que quelqu'un",0
     .byt 12,13,4,"s'est bien amusé",0
@@ -773,7 +773,7 @@ _gDescriptionEntranceLounge
 
 _gDescriptionDiningRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 5,100,0,"Deux assiettes...",0
     .byt 5,107,4,"...bon à savoir",0
@@ -785,7 +785,7 @@ _gDescriptionDiningRoom
 
 _gDescriptionGamesRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 155,5,0,"Système vidéo",0
     .byt 151,16,0,"haut de gamme",0
@@ -795,7 +795,7 @@ _gDescriptionGamesRoom
 #endif
     WAIT(50)
 
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 151,40,0,"Impressionnant",0
 #else
@@ -805,7 +805,7 @@ _gDescriptionGamesRoom
 
 _gDescriptionSunLounge
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 80,5,0,"Pas de répit pour les braves",0
 #else
@@ -815,7 +815,7 @@ _gDescriptionSunLounge
 
 _gDescriptionKitchen
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 5,5,0,"Une cuisine",0
     .byt 5,16,0,"bien équipée",0
@@ -827,7 +827,7 @@ _gDescriptionKitchen
 
 _gDescriptionNarrowStaircase
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,1,127
+    .byt COMMAND_BLACK_BUBBLE,1
 #ifdef LANGUAGE_FR       
     .byt 5,5,0,"Attention à la marche",0
 #else
@@ -837,7 +837,7 @@ _gDescriptionNarrowStaircase
 
 _gDescriptionCellar
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,127
+    .byt COMMAND_BLACK_BUBBLE,2
 #ifdef LANGUAGE_FR       
     .byt 45,15,0,"Est-ce un coffre-fort",0
     .byt 70,25,0,"Franz Jager ?",0
@@ -849,7 +849,7 @@ _gDescriptionCellar
 
 _gDescriptionDarkerCellar
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,127
+    .byt COMMAND_BLACK_BUBBLE,2
 #ifdef LANGUAGE_FR   
     .byt 5,99,0,"La fenêtre semble",0
     .byt 5,106,4,"occultée",0
@@ -861,7 +861,7 @@ _gDescriptionDarkerCellar
 
 _gDescriptionStaircase
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,3,64
+    .byt COMMAND_WHITE_BUBBLE,3
 #ifdef LANGUAGE_FR    
     .byt 16,8,0,"Gauche ?",0
     .byt 179,8,0,"Droite ?",0
@@ -875,7 +875,7 @@ _gDescriptionStaircase
 
 _gDescriptionMainLanding
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 53,70,0,"Belle vue de là-haut",0
 #else
@@ -885,7 +885,7 @@ _gDescriptionMainLanding
 
 _gDescriptionEastGallery
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 5,5,0,"Couloir ennuyeux:",0
     .byt 20,13,4,"Vérifié",0
@@ -897,7 +897,7 @@ _gDescriptionEastGallery
 
 _gDescriptionChildBedroom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 5,86,0,"Laisse-moi deviner:",0
     .byt 5,94,4,"Chambre d'adolescent ?",0
@@ -909,7 +909,7 @@ _gDescriptionChildBedroom
 
 _gDescriptionGuestBedroom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 5,6,0,"Simple et rafraichissant",0
     .byt 5,17,0,"pour changer",0
@@ -921,7 +921,7 @@ _gDescriptionGuestBedroom
 
 _gDescriptionShowerRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 145,5,0,"J'en aurai besoin",0
     .byt 136,16,0,"quand j'aurai fini",0
@@ -933,7 +933,7 @@ _gDescriptionShowerRoom
 
 _gDescriptionWestGallery
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,127
+    .byt COMMAND_BLACK_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 85,81,0,"Est-ce de l'acier",0
     .byt 60,92,0,"derrière le rideau ?",0
@@ -945,7 +945,7 @@ _gDescriptionWestGallery
 
 _gDescriptionBoxRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
     .byt 5,5,0,"Une petite pièce",0
     .byt 5,12,4,"utilitaire",0
@@ -957,7 +957,7 @@ _gDescriptionBoxRoom
 
 _gDescriptionClassyBathRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR    
     .byt 132,5,0,"Semble comfortable",0
 #else
@@ -968,11 +968,11 @@ _gDescriptionClassyBathRoom
 _gDescriptionTinyToilet
     WAIT(DELAY_FIRST_BUBBLE)
 #ifdef LANGUAGE_FR    
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
     .byt 160,5,0,"Une propreté",0
     .byt 173,13,4,"étincelante",0
 #else
-    .byt COMMAND_BUBBLE,1,64
+    .byt COMMAND_WHITE_BUBBLE,1
     .byt 137,5,0,"Sparklingly clean",0
 #endif    
     END
@@ -992,7 +992,7 @@ _gDescriptionMasterBedRoom
       DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
       ; Text describing the dead thug
       WAIT(DELAY_FIRST_BUBBLE)
-      .byt COMMAND_BUBBLE,2,64
+      .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
       .byt 10,5,0,"Appelons cela un",0
       .byt 5,18,0,34,"dommage collatéral",34,0
@@ -1008,7 +1008,7 @@ thug_alive
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(8,23),40,_SecondImageBuffer+32,_ImageBuffer+40*33+30)       ; Zzzz over the head
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR
     .byt 5,5,0,"Cela rendra les choses",0
     .byt 5,16,0,"nettement plus faciles...",0
@@ -1022,7 +1022,7 @@ thug_alive
 end_thug    
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
     .byt 5,5,0,"This was make things",0
     .byt 5,16,0,"notably easier...",0
     ; Should probably have a "game over" command
@@ -1034,7 +1034,7 @@ _gDescriptionThugAttacking
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(14,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
     ; Draw the message
     WAIT(50*2)                              ; Wait a couple seconds
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
     .byt 5,5,0,"This was a mistake:",0
     .byt 60,16,0,"My last one",0
     WAIT(50*2)                              ; Wait a couple seconds
@@ -1043,7 +1043,7 @@ _gDescriptionThugAttacking
 
 _gDescriptionPadlockedRoom
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,4,64
+    .byt COMMAND_WHITE_BUBBLE,4
 #ifdef LANGUAGE_FR    
     .byt 5,5,0,"Damn...",0
     .byt 135,16,0,"Je ne pourrai pas",0

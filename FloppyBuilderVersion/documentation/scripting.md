@@ -38,17 +38,18 @@ Scripts can also loop and branch, basic conditions are supported.
 #define COMMAND_RECTANGLE       1
 #define COMMAND_FILL_RECTANGLE  2
 #define COMMAND_TEXT            3
-#define COMMAND_BUBBLE          4
-#define COMMAND_WAIT            5
-#define COMMAND_BITMAP          6
-#define COMMAND_FADE_BUFFER     7
-#define COMMAND_JUMP            8      // Really, that's a GOTO :p
-#define COMMAND_JUMP_IF_TRUE    9
-#define COMMAND_JUMP_IF_FALSE   10
-#define COMMAND_INFO_MESSAGE    11 
-#define COMMAND_FULLSCREEN_ITEM 12
-#define COMMAND_STOP_BREAKPOINT 13
-#define _COMMAND_COUNT          14
+#define COMMAND_WHITE_BUBBLE    4
+#define COMMAND_BLACK_BUBBLE    5
+#define COMMAND_WAIT            6
+#define COMMAND_BITMAP          7
+#define COMMAND_FADE_BUFFER     8
+#define COMMAND_JUMP            9      // Really, that's a GOTO :p
+#define COMMAND_JUMP_IF_TRUE    10
+#define COMMAND_JUMP_IF_FALSE   11
+#define COMMAND_INFO_MESSAGE    12 
+#define COMMAND_FULLSCREEN_ITEM 13
+#define COMMAND_STOP_BREAKPOINT 14
+#define _COMMAND_COUNT          15
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
@@ -70,11 +71,11 @@ Scripts can also loop and branch, basic conditions are supported.
 ### Scene bubbles
 To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
 
-Delays are done with the COMMAND_WAIT instruction, while the COMMAND_BUBBLE is used to display the text bubbles
+Delays are done with the COMMAND_WAIT instruction, while the COMMAND_WHITE_BUBBLE and COMMAND_BLACK_BUBBLE is used to display the text bubbles
 ```
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)              // Initial delay
-    .byt COMMAND_BUBBLE,2,64              // "Draw speech bubble", two text entries, 64=Black text on white, 127=White text
+    .byt COMMAND_WHITE_BUBBLE,2           // "Draw black on white background speech bubble", two text entries
     .byt 4,100,0,"All roads lead...",0    // X position, Y position, vertical text offset, first text, null terminator
     .byt 4,106,4,"...somewhere?",0        // X position, Y position, vertical text offset, second text, null terminator
     END                                   // End of script
@@ -107,7 +108,7 @@ The system does not support moving objects, but it's good enough for things that
 ```
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_BUBBLE,2,64
+    .byt COMMAND_WHITE_BUBBLE,2
     .byt 4,100,0,"The market place",0
     .byt 4,106,4,"is deserted",0
 blinky_shop
