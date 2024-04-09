@@ -411,6 +411,8 @@ _GetKerningValue
   lda #0
   sta kerning           ; By default, no kerning adjustment to apply
   tax                   ; x=0
+  lda prev_char
+  beq end_kerning       ; No kerning to solve for the very first character
 loop_kerning
   lda _gFont12x14Kerning+0,x     
   beq end_kerning
@@ -422,7 +424,7 @@ loop_kerning
 
   lda _gFont12x14Kerning+2,x      ; Store the associated kerning value
   sta kerning
-  bne end_kerning
+  rts
 
 next_pair  
   inx

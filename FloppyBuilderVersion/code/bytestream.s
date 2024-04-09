@@ -675,6 +675,9 @@ _count        .dsb 1
 _coordinates  .dsb 2
 tmpCount      .dsb 1
 
+_BubblesWidth .dsb 10              ; TODO: Should adjust and check based on the max number of bubbles
+
+
  _ByteStreamCommand_WHITE_BUBBLE
     ldx #64                        ; White on Black Color pattern
     jmp draw_bubble
@@ -685,7 +688,7 @@ draw_bubble
     stx _gDrawPattern
 
     jsr _ByteStreamGetNextByte     ; Number of bubbles 
-    stx _count
+    stx _count                     ; Should not exceed the size of _BubblesWidth
 
     lda _gCurrentStream+0          ; Memorize the pointer for the later passes
     sta _coordinates+0
@@ -749,6 +752,10 @@ offset               ; Signed offset to handle things like AV or To properly
     sta _param1+0    
     bne loop_compute_size
 end_compute_size
+    ; Store the value
+    lda _param1+0
+    ldx tmpCount
+    sta _BubblesWidth,x
 
     jsr _DrawRectangleOutlineAsm
 
@@ -784,40 +791,17 @@ loop_bubble
     lda #15
     sta _gDrawHeight
 
-    lda #2
-    sta _gDrawWidth       ; Initial width
-
     ; Iterate over the string
-    lda #0
-    sta cur_char
 loop_compute_size
-    ldx cur_char
-    stx prev_char
     jsr _ByteStreamGetNextByte
-    stx cur_char
-    beq end_compute_size
-    bmi offset
-character         ; Get the character width from the font information gFont12x14Width[car-32]+1;
-    sec
-    lda _gDrawWidth
-    adc _gFont12x14Width-32,x
-    sta _gDrawWidth
-
-    ; prev_char + cur_char -> kerning
-    jsr _GetKerningValue
-    sec
-    lda _gDrawWidth
-    sbc kerning
-    sta _gDrawWidth
-
     bne loop_compute_size
-offset             ; Signed offset to handle things like AV or To properly
-    clc
-    txa
-    adc _gDrawWidth
+
+    ; Restore the computed width
+    ldx tmpCount
+    sec
+    lda _BubblesWidth,x
+    sbc #2
     sta _gDrawWidth
-    bne loop_compute_size
-end_compute_size
 
     jsr _DrawFilledRectangle
 
