@@ -109,7 +109,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Water                
 
     // Normal items
-    { gTextItemLockedPanel               ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_LockedPanel          
+    { gTextItemLockedPanel               ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED        ,0},                                            // e_ITEM_LockedPanel          
     { gTextItemOpenPanel                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_OpenPanel            
     { gTextItemSmallHoleInDoor           ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallHoleInDoor      
     { gTextItemBrokenWindow              ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenWindow         
@@ -117,22 +117,22 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemTwine                     ,e_LOCATION_GREENHOUSE      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Twine                
     { gTextItemSilverKnife               ,e_LOCATION_VEGSGARDEN      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
     { gTextItemLadder                    ,e_LOCATION_APPLE_TREES     ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
-    { gTextItemAbandonedCar              ,e_LOCATION_TARMACAREA      ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AbandonedCar         
-    { gTextItemAlsatianDog               ,e_LOCATION_ENTRANCEHALL    ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_AlsatianDog          
+    { gTextItemAbandonedCar              ,e_LOCATION_TARMACAREA      ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AbandonedCar         
+    { gTextItemAlsatianDog               ,e_LOCATION_ENTRANCEHALL    ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AlsatianDog          
     { gTextItemMeat                      ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
     { gTextItemBread                     ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
     { gTextItemRollOfTape                ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
     { gTextItemChemistryBook             ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
     { gTextItemBoxOfMatches              ,e_LOCATION_KITCHEN         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
     { gTextItemSnookerCue                ,e_LOCATION_GAMESROOM       ,255           ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
-    { gTextItemThug                      ,e_LOCATION_MASTERBEDROOM   ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_Thug                 
-    { gTextItemHeavySafe                 ,e_LOCATION_CELLAR          ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_HeavySafe            
+    { gTextItemThug                      ,e_LOCATION_MASTERBEDROOM   ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_Thug                 
+    { gTextItemHeavySafe                 ,e_LOCATION_CELLAR          ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                                            // e_ITEM_HeavySafe            
     { gTextItemHandWrittenNote           ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandWrittenNote          
     { gTextItemRope                      ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Rope                 
-    { gTextItemRopeHangingFromWindow     ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM         ,0},                                            // e_ITEM_RopeHangingFromWindow
+    { gTextItemRopeHangingFromWindow     ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeHangingFromWindow
     { gTextItemRollOfToiletPaper         ,e_LOCATION_TINY_WC         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
     { gTextItemHosePipe                  ,e_LOCATION_ZENGARDEN       ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HosePipe             
-    { gTextItemOpenSafe                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_OpenSafe             
+    { gTextItemOpenSafe                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_OpenSafe             
     { gTextItemBrokenGlass               ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenGlass          
     { gTextItemAcidBurn                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AcidBurn             
     { gTextItemYoungGirl                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirl        
@@ -145,9 +145,10 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemBullets                   ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bullets              
     { gTextItemYoungGirlOnFloor          ,e_LOCATION_GIRLROOM        ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirlOnFloor     
     { gTextItemChemistryRecipes          ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryRecipes     
-    { gTextItemUnitedKingdomMap          ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_HEAVY           ,0},                                            // e_ITEM_UnitedKingdomMap   
+    { gTextItemUnitedKingdomMap          ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_UnitedKingdomMap   
     { gTextItemLadderInTheHole           ,e_LOCATION_NONE            ,e_ITEM_Ladder ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_LadderInTheHole               
-    { gTextItemeRopeAttachedToATree      ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeAttachedToATree
+    { gTextItemRopeAttachedToATree       ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeAttachedToATree
+    { gTextItemClosedCurtain             ,e_LOCATION_WESTGALLERY     ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                                            // e_ITEM_Curtain
 };
 
 
@@ -211,6 +212,7 @@ keyword gWordsArray[] =
     { "BULLETS",e_ITEM_Bullets              },  // e_ITEM_Bullets           
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
+    { "CURTAIN",e_ITEM_Curtain              },  // e_ITEM_Curtain
     
 
     // Directions
@@ -275,6 +277,9 @@ keyword gWordsArray[] =
     { "PUT" , e_WORD_DROP },
 
     { "USE" , e_WORD_USE },
+
+    { "OPEN" , e_WORD_OPEN },
+    { "CLOSE" , e_WORD_CLOSE },
 
     { "CLIMB", e_WORD_CLIMB },
 

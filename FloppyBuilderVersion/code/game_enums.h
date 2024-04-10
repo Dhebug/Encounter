@@ -107,18 +107,19 @@
 #define	e_ITEM_UnitedKingdomMap   	 46         // the map of the UK in the library
 #define	e_ITEM_LadderInTheHole       47         // a ladder in the hole
 #define	e_ITEM_RopeAttachedToATree   48         // a rope hangs from the window
-#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER
+#define e_ITEM_Curtain               49         // a thick curtain
+#define	e_ITEM_COUNT_ 				 50         //  ----- END MARKER
 
-#define	e_ITEM__Reserved      		 49         // Reserved entry code (not sure it's needed)
+#define	e_ITEM__Reserved      		 50         // Reserved entry code (not sure it's needed)
 // End marker
 
 
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
 #define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
-#define ITEM_FLAG_HEAVY   			4    // Impossible to move: Too Heavy
+#define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
 #define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
 #define ITEM_FLAG_DEAD             16    // Used to indicate that something is not alive anymore (ex: Dog, Thug )
 #define ITEM_FLAG_ALIAS_ITEM       32    // Used to indicate that this is an alternate item for special use
-#define ITEM_FLAG_FREE_3           64    // -- available
+#define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
 #define ITEM_FLAG_FREE_4          128    // -- available

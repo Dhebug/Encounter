@@ -34,6 +34,8 @@ typedef enum
 	e_WORD_TAKE  ,
 	e_WORD_DROP  ,
     e_WORD_USE   ,
+    e_WORD_OPEN  ,
+    e_WORD_CLOSE ,
     e_WORD_READ  ,
     e_WORD_CLIMB ,
     e_WORD_LOOK  ,
@@ -127,7 +129,7 @@ extern const char gTextThickBookBookmarks[];    // "A thick book with some booma
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
 extern const char gTextErrorCantTakeNoSee[];    // "You can only take something you see"
 extern const char gTextErrorAlreadyHaveItem[];  // "You already have this item"
-extern const char gTextErrorTooHeavy[];         // "This is too heavy"
+extern const char gTextErrorCannotDo[];         // "I can't do it"
 extern const char gTextErrorRidiculous[];       // "Don't be ridiculous"
 extern const char gTextErrorAlreadyFull[];      // "Sorry, that's full already"
 extern const char gTextErrorMissingContainer[]; // "You don't have this container"
@@ -262,7 +264,9 @@ extern const char gTextItemYoungGirlOnFloor[];        // "a young girl tied up o
 extern const char gTextItemChemistryRecipes[];        // "a couple chemistry recipes"         
 extern const char gTextItemUnitedKingdomMap[];        // "a map of the United Kingdom"        
 extern const char gTextItemLadderInTheHole[];         // "a ladder in a hole"                 
-extern const char gTextItemeRopeAttachedToATree[];    // "a rope attached to a tree"
+extern const char gTextItemRopeAttachedToATree[];     // "a rope attached to a tree"
+extern const char gTextItemClosedCurtain[];           // "a closed curtain"
+extern const char gTextItemOpenedCurtain[];           // "an opened curtain"
 
 // Scene actions
 extern const char gSceneActionReadNewsPaper[];

@@ -74,6 +74,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %PICTCONV% %PARAMS% data\masked_dog.png %TARGET%\dog.msk
 %PICTCONV% %PARAMS% data\masked_items.png %TARGET%\items.msk
 %PICTCONV% %PARAMS% data\masked_thug.png %TARGET%\thug.msk
+%PICTCONV% %PARAMS% data\masked_safe_room.png %TARGET%\safe_room.msk
 %PICTCONV% %PARAMS% data\masked_element_outro.png %TARGET%\masked_element_outro.msk
 %PICTCONV% %PARAMS% data\masked_element_outro_photos.png %TARGET%\masked_element_outro_photos.msk
 %PICTCONV% %PARAMS% data\masked_element_outro_photos_fr.png %TARGET%\masked_element_outro_photos_fr.msk
