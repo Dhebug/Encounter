@@ -119,7 +119,7 @@ void GameDebugger()
         {
             sprintf(currentLine+26,"NEED-CONTAINER");
         }
-        if (itemPtr->flags & ITEM_FLAG_HEAVY)    
+        if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)    
         {
             sprintf(currentLine+35,"HEAVY");
         }

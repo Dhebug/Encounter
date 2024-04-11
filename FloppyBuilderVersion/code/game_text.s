@@ -70,7 +70,7 @@ _StartErrorMessages
 _gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
-_gTextErrorTooHeavy         .byt "C'est trop lourd",0
+_gTextErrorCannotDo         .byt "Je ne peux pas le faire",0
 _gTextErrorRidiculous       .byt "Ne soyez pas ridicule",0
 _gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
@@ -96,7 +96,7 @@ _gTextErrorNothingSpecial   .byt "Rien de spécial",0
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
 _gTextErrorAlreadyHaveItem  .byt "You already have this item",0
-_gTextErrorTooHeavy         .byt "This is too heavy",0
+_gTextErrorCannotDo         .byt "I can't do that",0
 _gTextErrorRidiculous       .byt "Don't be ridiculous",0
 _gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
 _gTextErrorMissingContainer .byt "You don't have this container",0
@@ -303,7 +303,9 @@ _gTextItemYoungGirlOnFloor        .byt "une jeunne fille attachée au sol",0
 _gTextItemChemistryRecipes        .byt "des formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
 _gTextItemLadderInTheHole         .byt "une échelle dans un trou",0
-_gTextItemeRopeAttachedToATree    .byt "une corde attachée à un arbre",0
+_gTextItemRopeAttachedToATree     .byt "une corde attachée à un arbre",0
+_gTextItemClosedCurtain           .byt "un rideau fermé",0
+_gTextItemOpenedCurtain           .byt "un rideau ouvert",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -356,7 +358,9 @@ _gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0
 _gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0         
 _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
 _gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
-_gTextItemeRopeAttachedToATree    .byt "a rope attached to a tree",0
+_gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
+_gTextItemClosedCurtain           .byt "a closed curtain",0
+_gTextItemOpenedCurtain           .byt "an opened curtain",0
 #endif
 _EndItemNames
 
@@ -932,6 +936,20 @@ _gDescriptionShowerRoom
     END
 
 _gDescriptionWestGallery
+    ; Is the curtain closed?
+    JUMP_IF_FALSE(curtain_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
+:curtain_closed
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(8,62),40,_SecondImageBuffer+0,_ImageBuffer+40*5+20)       ; Closed curtain
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_BLACK_BUBBLE,1
+#ifdef LANGUAGE_FR    
+    .byt 70,81,0,"Au théatre ce soir...",0
+#else
+    .byt 55,81,0,"At the theater tonight...",0
+#endif    
+    END
+
+:curtain_open    
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BLACK_BUBBLE,2
 #ifdef LANGUAGE_FR    

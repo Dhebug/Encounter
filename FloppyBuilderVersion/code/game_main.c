@@ -271,9 +271,9 @@ void TakeItem(unsigned char itemId)
 		}
 		
 
-		if (itemPtr->flags & ITEM_FLAG_HEAVY)
+		if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
 		{
-			PrintErrorMessage(gTextErrorTooHeavy);   // "This is too heavy");
+			PrintErrorMessage(gTextErrorCannotDo);   // "I can't do it");
 		}
 		else
 		if (itemPtr->usable_containers)
@@ -560,6 +560,57 @@ void UseItem(unsigned char itemId)
 }
 
 
+void OpenItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+        switch (itemId)
+        {
+        case e_ITEM_Curtain:
+            {    
+                item* currentItem = &gItems[e_ITEM_Curtain];
+                if (currentItem->flags & ITEM_FLAG_CLOSED)
+                {
+                    currentItem->description = gTextItemOpenedCurtain;
+                    currentItem->flags &= ~ITEM_FLAG_CLOSED;
+                    gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_PADLOCKED_ROOM;                   
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+        }
+        PrintErrorMessage(gTextErrorCannotDo);   // "I can't do that"
+    }
+}
+
+
+void CloseItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+        switch (itemId)
+        {
+        case e_ITEM_Curtain:
+            {    
+                item* currentItem = &gItems[e_ITEM_Curtain];
+                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
+                {
+                    currentItem->description = gTextItemOpenedCurtain;
+                    currentItem->flags |= ITEM_FLAG_CLOSED;
+                    gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_NONE;
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+        }
+        PrintErrorMessage(gTextErrorCannotDo);   // "I can't do that"
+    }
+}
+
+
+
 void ClimbItem(unsigned char itemId)
 {
 	if (ItemCheck(itemId))
@@ -673,6 +724,14 @@ WORDS ProcessAnswer()
 
     case e_WORD_USE:
 		UseItem(gWordBuffer[1]);
+        break;
+
+    case e_WORD_OPEN:
+		OpenItem(gWordBuffer[1]);
+        break;
+
+    case e_WORD_CLOSE:
+		CloseItem(gWordBuffer[1]);
         break;
 
     case e_WORD_CLIMB:
