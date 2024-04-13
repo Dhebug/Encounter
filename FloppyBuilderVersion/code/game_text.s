@@ -306,6 +306,7 @@ _gTextItemLadderInTheHole         .byt "une échelle dans un trou",0
 _gTextItemRopeAttachedToATree     .byt "une corde attachée à un arbre",0
 _gTextItemClosedCurtain           .byt "un rideau fermé",0
 _gTextItemOpenedCurtain           .byt "un rideau ouvert",0
+_gTextItemHandheldGame            .byt "un jeu portable",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -361,6 +362,7 @@ _gTextItemLadderInTheHole         .byt "a ladder in a hole",0
 _gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
 _gTextItemClosedCurtain           .byt "a closed curtain",0
 _gTextItemOpenedCurtain           .byt "an opened curtain",0
+_gTextItemHandheldGame            .byt "a handheld game",0
 #endif
 _EndItemNames
 
@@ -1132,6 +1134,18 @@ _gSceneActionReadChemistryBook
 _gSceneActionInspectMap
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_UK_MAP,"A map of the United Kingdom",0
     .byt COMMAND_INFO_MESSAGE,"It shows Ireland, Wales and England",0
+    WAIT(50*2)
+    END
+
+_gSceneActionInspectGame
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game",0
+    .byt COMMAND_INFO_MESSAGE,"State of the art hardware!",0
+    WAIT(50*2)
+    END
+
+_gSceneActionPlayGame
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game",0
+    .byt COMMAND_INFO_MESSAGE,"Hum... looks like it crashed?",0
     WAIT(50*2)
     END
 

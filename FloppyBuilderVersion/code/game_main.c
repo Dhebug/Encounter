@@ -552,6 +552,11 @@ void UseItem(unsigned char itemId)
             //ActionClimbRope();
             break;
 
+        case e_ITEM_HandheldGame:
+            PlayStream(gSceneActionPlayGame);
+			LoadScene();
+            break;
+
         default:
             PrintErrorMessage(gTextErrorDontKnowUsage);   // "I don't know how to use that"
             break;
@@ -668,6 +673,11 @@ void InspectItem(unsigned char itemId)
 
 		case e_ITEM_ChemistryBook:
 			PrintInformationMessage(gTextThickBookBookmarks);   // "A thick book with some boomarks"
+			break;
+
+        case e_ITEM_HandheldGame:
+            PlayStream(gSceneActionInspectGame);
+			LoadScene();
 			break;
 
 		default:

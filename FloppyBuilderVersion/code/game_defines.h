@@ -267,6 +267,8 @@ extern const char gTextItemLadderInTheHole[];         // "a ladder in a hole"
 extern const char gTextItemRopeAttachedToATree[];     // "a rope attached to a tree"
 extern const char gTextItemClosedCurtain[];           // "a closed curtain"
 extern const char gTextItemOpenedCurtain[];           // "an opened curtain"
+extern const char gTextItemHandheldGame[];            // "a handheld game"
+
 
 // Scene actions
 extern const char gSceneActionReadNewsPaper[];
@@ -274,4 +276,5 @@ extern const char gSceneActionReadHandWrittenNote[];
 extern const char gSceneActionReadChemistryRecipes[];
 extern const char gSceneActionReadChemistryBook[];
 extern const char gSceneActionInspectMap[];
-
+extern const char gSceneActionInspectGame[];
+extern const char gSceneActionPlayGame[];

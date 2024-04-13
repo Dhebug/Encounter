@@ -148,7 +148,8 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemUnitedKingdomMap          ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_UnitedKingdomMap   
     { gTextItemLadderInTheHole           ,e_LOCATION_NONE            ,e_ITEM_Ladder ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_LadderInTheHole               
     { gTextItemRopeAttachedToATree       ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeAttachedToATree
-    { gTextItemClosedCurtain             ,e_LOCATION_WESTGALLERY     ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                                            // e_ITEM_Curtain
+    { gTextItemClosedCurtain             ,e_LOCATION_WESTGALLERY     ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                           // e_ITEM_Curtain
+    { gTextItemHandheldGame              ,e_LOCATION_CHILDBEDROOM    ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandheldGame
 };
 
 
@@ -213,6 +214,11 @@ keyword gWordsArray[] =
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
     { "CURTAIN",e_ITEM_Curtain              },  // e_ITEM_Curtain
+
+    { "HANDHELD",e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
+    { "GAME"    ,e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
+
+    
     
 
     // Directions

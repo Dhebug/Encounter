@@ -108,9 +108,10 @@
 #define	e_ITEM_LadderInTheHole       47         // a ladder in the hole
 #define	e_ITEM_RopeAttachedToATree   48         // a rope hangs from the window
 #define e_ITEM_Curtain               49         // a thick curtain
-#define	e_ITEM_COUNT_ 				 50         //  ----- END MARKER
+#define e_ITEM_HandheldGame          50         // a handheld game
+#define	e_ITEM_COUNT_ 				 51         //  ----- END MARKER
 
-#define	e_ITEM__Reserved      		 50         // Reserved entry code (not sure it's needed)
+#define	e_ITEM__Reserved      		 51         // Reserved entry code (not sure it's needed)
 // End marker
 
 

@@ -213,6 +213,13 @@ AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 AddFile ..\build\files\united_kingdom_map.hir
 AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 
+AddFile ..\build\files\donkey_kong_top.hir
+AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
+
+AddFile ..\build\files\donkey_kong_playing.hir
+AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
+
+
 ; All the sprites
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\the_end_fr.msk
