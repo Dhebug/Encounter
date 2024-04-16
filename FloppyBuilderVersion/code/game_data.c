@@ -299,6 +299,7 @@ keyword gWordsArray[] =
 #ifdef ENABLE_CHEATS
     { "REVIVE", e_WORD_REVIVE },
     { "TICKLE", e_WORD_TICKLE },
+    { "INVOKE", e_WORD_INVOKE },
 #endif    
 
     // Last instruction

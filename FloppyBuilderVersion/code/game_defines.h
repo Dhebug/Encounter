@@ -45,6 +45,7 @@ typedef enum
 #ifdef ENABLE_CHEATS
     e_WORD_REVIVE,
     e_WORD_TICKLE,
+    e_WORD_INVOKE,
 #endif    
 
 	// Meta instructions

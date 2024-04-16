@@ -902,6 +902,16 @@ WORDS ProcessAnswer()
 			}
 		}
 		break;
+
+    case e_WORD_INVOKE:
+        {
+            // Wherever they are, give a specific item to the user
+			unsigned char itemId=gWordBuffer[1];
+			item* itemPtr=&gItems[itemId];
+            itemPtr->location = e_LOCATION_INVENTORY;
+            LoadScene();            
+        }
+        break;
 #endif    
 
 	//
