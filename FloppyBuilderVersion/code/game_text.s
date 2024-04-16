@@ -458,21 +458,14 @@ _gDescriptionNarrowPath
 
 _gDescriptionInThePit
 .(
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE))
+    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+no_rope    
+
     JUMP_IF_TRUE(has_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INVENTORY))    
-    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))    
-    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_LOCATION(e_ITEM_RopeAttachedToATree,e_LOCATION_OUTSIDE_PIT))    
-    JUMP(cannot_escape_pit);            ; The player has no way to escape the pit
+    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))  
 
-draw_ladder
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
-has_ladder
-    END
-
-rope_attached_to_tree
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*37)+51,_ImageBuffer+(40*39)+19)    ; Draw the rope 
-    END
-
-cannot_escape_pit
+cannot_escape_pit    ; The player has no way to escape the pit
     WAIT(50*2)
     .byt COMMAND_BLACK_BUBBLE,1
 #ifdef LANGUAGE_FR    
@@ -497,13 +490,27 @@ cannot_escape_pit
     WAIT(50*2)                      ; Wait a couple seconds for dramatic effect
     
     JUMP(_gDescriptionGameOverLost);            ; Draw the 'The End' logo
+
+draw_ladder
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
+has_ladder
+    END
+
+rope_attached_to_tree
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*51)+37,_ImageBuffer+(40*39)+19)    ; Draw the rope 
+    END
 .)
 
 
 _gDescriptionOutsidePit
 .(
-    JUMP_IF_TRUE(ladder_in_hole,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))    
-    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_LOCATION(e_ITEM_RopeAttachedToATree,e_LOCATION_OUTSIDE_PIT))    
+    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_TRUE(ladder_in_hole,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+no_ladder
+
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+no_rope    
     JUMP(digging_for_gold);            ; Generic message if the ladder or rope are not present
 
 ladder_in_hole
@@ -685,13 +692,14 @@ _gDescriptionAppleOrchard
     END
 
 _gDescriptionEntranceHall
+.(
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
 
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
       ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*10)+15)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_WHITE_BUBBLE,2
@@ -701,16 +709,14 @@ _gDescriptionEntranceHall
       
 dog_alive
     ; Draw the Growling dog
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(13,66),40,_SecondImageBuffer+(40*61)+0,_ImageBuffer+(40*56)+26)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,37),40,_SecondImageBuffer+(40*24)+0,_ImageBuffer+(40*18)+18)    
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,2
+    .byt COMMAND_WHITE_BUBBLE,1
 #ifdef LANGUAGE_FR
-    .byt 5,5,0,"Bien sur qu'il y a un chien",0
-    .byt 5,17,0,"Il y a toujours un chien",0
+    .byt 5,105,0,"Serait-ce Cerbère ?",0
 #else
-    .byt 5,5,0,"Of course there is a dog",0
-    .byt 5,19,0,"There's always a dog",0
+    .byt 5,105,0,"Is that Cerberus?",0
 #endif    
     END
 
@@ -721,15 +727,7 @@ end_dog
     .byt 124,5,0,"Quite an impressive",0
     .byt 187,17,0,"staircase",0
     END
-
-_gDescriptionDogAttacking
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
-     ;
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,1
-    .byt 5,108,0,"Oops...",0
-    WAIT(50*2)                              ; Wait a couple seconds
-    JUMP(_gDescriptionGameOverLost)         ; Game Over
+.)
 
 
 
@@ -866,6 +864,54 @@ _gDescriptionDarkerCellar
     END
 
 _gDescriptionStaircase
+.(
+    ; Is there a dog in the entrance
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+
+    ; Is the dog dead?
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
+      ; Draw the dead dog
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
+      ; Text describing the dead dog
+      WAIT(DELAY_FIRST_BUBBLE)
+      .byt COMMAND_WHITE_BUBBLE,2
+      .byt 5,5,0,"Let's call that a ",0
+      .byt 5,17,0,"Collateral Damage",34,0
+      END
+      
+dog_alive
+    ; Draw the Growling dog
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(13,66),40,_SecondImageBuffer+(40*61)+0,_ImageBuffer+(40*56)+26)    
+    ; Text describing the growling dog
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,2
+#ifdef LANGUAGE_FR
+    .byt 5,5,0,"Bien sur qu'il y a un chien",0
+    .byt 5,17,0,"Il y a toujours un chien",0
+#else
+    .byt 5,5,0,"Of course there is a dog",0
+    .byt 5,19,0,"There's always a dog",0
+#endif    
+    END
+
+end_dog
+    ; Some generic message in case the dog is not there (probably not displayed right now)
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,2
+    .byt 124,5,0,"Quite an impressive",0
+    .byt 187,17,0,"staircase",0
+    END
+.)    
+
+_gDescriptionDogAttacking
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
+     ;
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,1
+    .byt 5,108,0,"Oops...",0
+    WAIT(50*2)                              ; Wait a couple seconds
+    JUMP(_gDescriptionGameOverLost)         ; Game Over
+    /*
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,3
 #ifdef LANGUAGE_FR    

@@ -88,7 +88,7 @@
 #define	e_ITEM_HeavySafe  			 27         // a heavy safe
 #define	e_ITEM_HandWrittenNote  	 28         // a hand written note
 #define	e_ITEM_Rope  				 29         // a length of rope
-#define	e_ITEM_RopeHangingFromWindow 30         // a rope hangs from the window
+#define e_ITEM_HandheldGame          30         // a handheld game
 #define	e_ITEM_RollOfToiletPaper  	 31         // a roll of toilet tissue~
 #define	e_ITEM_HosePipe  			 32         // a hose-pipe
 #define	e_ITEM_OpenSafe  			 33          // an open safe
@@ -105,13 +105,10 @@
 #define	e_ITEM_YoungGirlOnFloor  	 44         // a young girl tied up on the floor
 #define	e_ITEM_ChemistryRecipes   	 45         // a sheet of paper with a few recipes on things to build
 #define	e_ITEM_UnitedKingdomMap   	 46         // the map of the UK in the library
-#define	e_ITEM_LadderInTheHole       47         // a ladder in the hole
-#define	e_ITEM_RopeAttachedToATree   48         // a rope hangs from the window
-#define e_ITEM_Curtain               49         // a thick curtain
-#define e_ITEM_HandheldGame          50         // a handheld game
-#define	e_ITEM_COUNT_ 				 51         //  ----- END MARKER
+#define e_ITEM_Curtain               47         // a thick curtain
+#define	e_ITEM_COUNT_ 				 48         //  ----- END MARKER
 
-#define	e_ITEM__Reserved      		 51         // Reserved entry code (not sure it's needed)
+#define	e_ITEM__Reserved      		 48         // Reserved entry code (not sure it's needed)
 // End marker
 
 
@@ -121,6 +118,6 @@
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
 #define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
 #define ITEM_FLAG_DEAD             16    // Used to indicate that something is not alive anymore (ex: Dog, Thug )
-#define ITEM_FLAG_ALIAS_ITEM       32    // Used to indicate that this is an alternate item for special use
+#define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
 #define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
 #define ITEM_FLAG_FREE_4          128    // -- available

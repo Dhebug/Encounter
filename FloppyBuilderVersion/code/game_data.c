@@ -118,7 +118,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemSilverKnife               ,e_LOCATION_VEGSGARDEN      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
     { gTextItemLadder                    ,e_LOCATION_APPLE_TREES     ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
     { gTextItemAbandonedCar              ,e_LOCATION_TARMACAREA      ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AbandonedCar         
-    { gTextItemAlsatianDog               ,e_LOCATION_ENTRANCEHALL    ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AlsatianDog          
+    { gTextItemAlsatianDog               ,e_LOCATION_LARGE_STAIRCASE ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AlsatianDog          
     { gTextItemMeat                      ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
     { gTextItemBread                     ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
     { gTextItemRollOfTape                ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
@@ -129,7 +129,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemHeavySafe                 ,e_LOCATION_CELLAR          ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                                            // e_ITEM_HeavySafe            
     { gTextItemHandWrittenNote           ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandWrittenNote          
     { gTextItemRope                      ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Rope                 
-    { gTextItemRopeHangingFromWindow     ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeHangingFromWindow
+    { gTextItemHandheldGame              ,e_LOCATION_CHILDBEDROOM    ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandheldGame
     { gTextItemRollOfToiletPaper         ,e_LOCATION_TINY_WC         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
     { gTextItemHosePipe                  ,e_LOCATION_ZENGARDEN       ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HosePipe             
     { gTextItemOpenSafe                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_OpenSafe             
@@ -146,10 +146,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemYoungGirlOnFloor          ,e_LOCATION_GIRLROOM        ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirlOnFloor     
     { gTextItemChemistryRecipes          ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryRecipes     
     { gTextItemUnitedKingdomMap          ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_UnitedKingdomMap   
-    { gTextItemLadderInTheHole           ,e_LOCATION_NONE            ,e_ITEM_Ladder ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_LadderInTheHole               
-    { gTextItemRopeAttachedToATree       ,e_LOCATION_NONE            ,e_ITEM_Rope   ,ITEM_FLAG_ALIAS_ITEM      ,0},                                            // e_ITEM_RopeAttachedToATree
     { gTextItemClosedCurtain             ,e_LOCATION_WESTGALLERY     ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                           // e_ITEM_Curtain
-    { gTextItemHandheldGame              ,e_LOCATION_CHILDBEDROOM    ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandheldGame
 };
 
 

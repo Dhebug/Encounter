@@ -137,10 +137,42 @@ void PrintSceneInformation()
 	PrintInventory();
 }
 
+void MoveObjectsIfNecessary()
+{
+    switch (gCurrentLocation)
+    {
+    case e_LOCATION_OUTSIDE_PIT:
+        if ( (gItems[e_ITEM_Rope].location==e_LOCATION_INSIDEHOLE) && (gItems[e_ITEM_Rope].flags & ITEM_FLAG_ATTACHED))
+        {
+            gItems[e_ITEM_Rope].location=e_LOCATION_OUTSIDE_PIT;
+        }
+        if ( (gItems[e_ITEM_Ladder].location==e_LOCATION_INSIDEHOLE))
+        {
+            gItems[e_ITEM_Ladder].location=e_LOCATION_OUTSIDE_PIT;
+        }
+        break;
+
+    case e_LOCATION_INSIDEHOLE:
+        if ( (gItems[e_ITEM_Rope].location==e_LOCATION_OUTSIDE_PIT) && (gItems[e_ITEM_Rope].flags & ITEM_FLAG_ATTACHED))
+        {
+            gItems[e_ITEM_Rope].location=e_LOCATION_INSIDEHOLE;
+        }
+        if ( (gItems[e_ITEM_Ladder].location==e_LOCATION_OUTSIDE_PIT) && (gItems[e_ITEM_Ladder].flags & ITEM_FLAG_ATTACHED))
+        {
+            gItems[e_ITEM_Ladder].location=e_LOCATION_INSIDEHOLE;
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
+
 
 void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
+    MoveObjectsIfNecessary();
 
 	ClearMessageWindow(16+4);
 
@@ -258,7 +290,7 @@ void TakeItem(unsigned char itemId)
             for (itemAlias=0;itemAlias<e_ITEM_COUNT_;itemAlias++)
             {
                 itemAliasPtr=&gItems[itemAlias];
-                if ( (itemAliasPtr->location==gCurrentLocation) && (itemAliasPtr->flags & ITEM_FLAG_ALIAS_ITEM) && (itemAliasPtr->associated_item == itemId) )
+                if (itemAliasPtr->location==gCurrentLocation)
                 {
                     break;
                 }
@@ -313,6 +345,16 @@ void TakeItem(unsigned char itemId)
 			// Can just be picked-up
 			itemAliasPtr->location = e_LOCATION_NONE;          // Can actually be the same pointer, literaly aliasing!
 			itemPtr->location      = e_LOCATION_INVENTORY;     // Which means that one should be done after
+            itemPtr->flags &= ~ITEM_FLAG_ATTACHED;             // If the item was attached, we detach it
+            switch (itemId)
+            {
+            case e_ITEM_Rope:
+                itemPtr->description = gTextItemRope;
+                break;
+            case e_ITEM_Ladder:
+                itemPtr->description = gTextItemLadder;
+                break;
+            }
 			LoadScene();
 		}
 	}
@@ -439,7 +481,6 @@ void ActionClimbLadder()
     if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
     {
         gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
-        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
         if (ladderLocation == e_LOCATION_INVENTORY)
         {
             PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
@@ -455,7 +496,6 @@ void ActionClimbLadder()
     if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
     {
         gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
-        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
         if (ladderLocation == e_LOCATION_INVENTORY)
         {
             PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
@@ -479,10 +519,9 @@ void ActionClimbRope()
     char ropeLocation = gItems[e_ITEM_Rope].location;
     if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
     {
-        if (gItems[e_ITEM_RopeAttachedToATree].location == e_LOCATION_OUTSIDE_PIT)
+        if ( (gItems[e_ITEM_Rope].location == e_LOCATION_INSIDEHOLE) && (gItems[e_ITEM_Rope].flags & ITEM_FLAG_ATTACHED) )
         {
-            gItems[e_ITEM_Rope].location                    = e_LOCATION_INSIDEHOLE;
-            gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
+            gItems[e_ITEM_Rope].location           = e_LOCATION_OUTSIDE_PIT;
             PrintInformationMessage(gTextClimbUpRope);    // "You climb up the rope"
             WaitFrames(50*1);
             gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
@@ -496,8 +535,8 @@ void ActionClimbRope()
     else
     if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
     {
-        gItems[e_ITEM_Rope].location                    = e_LOCATION_INSIDEHOLE;
-        gItems[e_ITEM_RopeAttachedToATree].location     = e_LOCATION_OUTSIDE_PIT;
+        gItems[e_ITEM_Rope].location           = e_LOCATION_OUTSIDE_PIT;
+        gItems[e_ITEM_Rope].flags |= ITEM_FLAG_ATTACHED;
         if (ropeLocation == e_LOCATION_INVENTORY)
         {
             PrintInformationMessage(gTextAttachRopeToTree);   // "You attach the rope to the tree"
@@ -522,7 +561,6 @@ void UseItem(unsigned char itemId)
         switch (itemId)
         {
         case e_ITEM_Ladder:
-        case e_ITEM_LadderInTheHole:
             {    
                 if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
                 {
@@ -530,8 +568,9 @@ void UseItem(unsigned char itemId)
                     if (ladderLocation == e_LOCATION_INVENTORY)
                     {
                         PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
-                        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
-                        gItems[e_ITEM_LadderInTheHole].location  = e_LOCATION_OUTSIDE_PIT;      // The ladder stays inside the hole
+                        gItems[e_ITEM_Ladder].location = e_LOCATION_OUTSIDE_PIT;        // The ladder stays inside the hole
+                        gItems[e_ITEM_Ladder].flags |= ITEM_FLAG_ATTACHED;              // The ladder is ready to be used
+                        gItems[e_ITEM_Ladder].description = gTextItemLadderInTheHole;
                         LoadScene();
                     }
                     else
@@ -548,8 +587,7 @@ void UseItem(unsigned char itemId)
             break;
 
         case e_ITEM_Rope:
-        case e_ITEM_RopeAttachedToATree:
-            //ActionClimbRope();
+            ActionClimbRope();
             break;
 
         case e_ITEM_HandheldGame:
@@ -623,7 +661,6 @@ void ClimbItem(unsigned char itemId)
 		switch (itemId)
 		{
 		case e_ITEM_Ladder:
-        case e_ITEM_LadderInTheHole:
             {    
                 if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
                 {
@@ -648,7 +685,6 @@ void ClimbItem(unsigned char itemId)
 			break;
 
         case e_ITEM_Rope:
-        case e_ITEM_RopeAttachedToATree:
             ActionClimbRope();
             break;
 

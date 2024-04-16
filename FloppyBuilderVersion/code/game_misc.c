@@ -127,9 +127,9 @@ void GameDebugger()
         {
             sprintf(currentLine+15,"EVAPORATES");
         }
-        if (itemPtr->flags & ITEM_FLAG_ALIAS_ITEM)    
+        if (itemPtr->flags & ITEM_FLAG_ATTACHED)    
         {
-            sprintf(currentLine+15,"ALIAS");
+            sprintf(currentLine+15,"ATTACHED");
         }
         if (itemPtr->flags & ITEM_FLAG_DEAD)    
         {
