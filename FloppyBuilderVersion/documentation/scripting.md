@@ -3,7 +3,16 @@
   - [Features](#features)
   - [The concept](#the-concept)
   - [Commands](#commands)
+    - [END](#end)
+    - [WAIT](#wait)
+    - [JUMP](#jump)
+    - [JUMP\_IF\_TRUE](#jump_if_true)
+    - [JUMP\_IF\_FALSE](#jump_if_false)
+    - [CHECK\_ITEM\_LOCATION](#check_item_location)
+    - [CHECK\_ITEM\_FLAG](#check_item_flag)
   - [Examples](#examples)
+    - [Delays](#delays)
+    - [Jumps and conditions](#jumps-and-conditions)
     - [Scene bubbles](#scene-bubbles)
     - [Full screen items](#full-screen-items)
     - [Animations](#animations)
@@ -65,8 +74,53 @@ Scripts can also loop and branch, basic conditions are supported.
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 ```
+### END
+Just a single byte containg the COMMAND_END opcode. 
+This signals the end of the script.
+
+### WAIT
+Two bytes command containg the COMMAND_WAIT opcode, followed by the number of frames.
+
+### JUMP
+Three bytes command containg the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
+
+### JUMP_IF_TRUE
+Seven bytes command containg the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+
+### JUMP_IF_FALSE
+Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+
+### CHECK_ITEM_LOCATION
+Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
+
+### CHECK_ITEM_FLAG
+Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
+
 
 ## Examples
+
+### Delays
+To provide some pacing, delays can be used to interrupt the execution of a script for a period of time.
+
+The delays are encoded as frame numbers on a single byte, which means the maximum duration of a delay is about 5 seconds. 
+If you need a longer delay, just put a few more delay instructions.
+```
+ WAIT(50)              // Wait one second
+```
+
+### Jumps and conditions 
+Scripts by default are executed instruction by instruction, but it's possible to jump around.
+
+In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
+```
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+no_rope    
+    JUMP(digging_for_gold);            ; Generic message if the ladder or rope are not present
+rope_attached_to_tree    
+    (...)
+digging_for_gold
+```
 
 ### Scene bubbles
 To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
@@ -119,6 +173,7 @@ blinky_shop
     JUMP(blinky_shop)
     END
 ```
+
 
 **See:**
 - [game_enums.h](../code/game_enums.h) for the list of all locations
