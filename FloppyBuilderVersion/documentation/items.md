@@ -26,6 +26,10 @@ typedef struct
 
 extern item gItems[e_ITEM_COUNT_];
 ```
+
+> [!NOTE]  
+> If the size of the **item** structure changes, the code in **_ByteStreamComputeItemPtr** ([bytestream.s](../code/bytestream.h)) has to be adapted else the scripting code will not work properly (and probably crash) when accessing any item flag or location.
+
 **See:**
 - [game_enums.h](../code/game_enums.h) for the list of all items
 - [game_defines.h](../code/game_defines.h) for the structures and declarations
