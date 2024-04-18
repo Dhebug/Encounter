@@ -698,7 +698,7 @@ _gDescriptionAppleOrchard
 _gDescriptionEntranceHall
 .(
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
 
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
@@ -713,7 +713,8 @@ _gDescriptionEntranceHall
       
 dog_alive
     ; Draw the Growling dog
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,37),40,_SecondImageBuffer+(40*24)+0,_ImageBuffer+(40*18)+18)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,30),40,_SecondImageBuffer+(40*31)+0,_ImageBuffer+(40*25)+18)    
+
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,1
@@ -722,6 +723,25 @@ dog_alive
 #else
     .byt 5,105,0,"Is that Cerberus?",0
 #endif    
+dog_growls
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*20)+18)    
+    WAIT(15)
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*19)+19)    
+    WAIT(10)
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*18)+18)    
+    WAIT(12)
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*17)+17)    
+    WAIT(8)
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*16)+18)    
+    WAIT(10)
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    WAIT(50)
+    JUMP(dog_growls)
     END
 
 end_dog
@@ -733,6 +753,64 @@ end_dog
     END
 .)
 
+
+_gDescriptionStaircase
+.(
+    ; Is there a dog in the entrance
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+
+    ; Is the dog dead?
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
+      ; Draw the dead dog
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
+      ; Text describing the dead dog
+      WAIT(DELAY_FIRST_BUBBLE)
+      .byt COMMAND_WHITE_BUBBLE,2
+      .byt 5,5,0,"Let's call that a ",0
+      .byt 5,17,0,"Collateral Damage",34,0
+      END
+      
+dog_alive
+    ; If the dog is alive, it will jump on our face now
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
+     ;
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,1
+    .byt 5,108,0,"Oops...",0
+    WAIT(50*2)                              ; Wait a couple seconds
+    JUMP(_gDescriptionGameOverLost)         ; Game Over
+
+end_dog
+    ; Some generic message in case the dog is not there (probably not displayed right now)
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,2
+    .byt 124,5,0,"Quite an impressive",0
+    .byt 187,17,0,"staircase",0
+    END
+.)    
+
+_gDescriptionDogAttacking
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
+     ;
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,1
+    .byt 5,108,0,"Oops...",0
+    WAIT(50*2)                              ; Wait a couple seconds
+    JUMP(_gDescriptionGameOverLost)         ; Game Over
+    /*
+    WAIT(DELAY_FIRST_BUBBLE)
+    .byt COMMAND_WHITE_BUBBLE,3
+#ifdef LANGUAGE_FR    
+    .byt 16,8,0,"Gauche ?",0
+    .byt 179,8,0,"Droite ?",0
+    .byt 45,72,0,"est-ce vraiment important ?",0
+#else
+    .byt 16,8,0,"Left?",0
+    .byt 179,8,0,"Right?",0
+    .byt 60,72,0,"does it really matter?",0
+#endif    
+    END
+    */
 
 
 _gDescriptionLibrary
@@ -875,67 +953,7 @@ _gDescriptionDarkerCellar
 #endif    
     END
 
-_gDescriptionStaircase
-.(
-    ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
 
-    ; Is the dog dead?
-    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
-      ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
-      ; Text describing the dead dog
-      WAIT(DELAY_FIRST_BUBBLE)
-      .byt COMMAND_WHITE_BUBBLE,2
-      .byt 5,5,0,"Let's call that a ",0
-      .byt 5,17,0,"Collateral Damage",34,0
-      END
-      
-dog_alive
-    ; Draw the Growling dog
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(13,66),40,_SecondImageBuffer+(40*61)+0,_ImageBuffer+(40*56)+26)    
-    ; Text describing the growling dog
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,2
-#ifdef LANGUAGE_FR
-    .byt 5,5,0,"Bien sur qu'il y a un chien",0
-    .byt 5,17,0,"Il y a toujours un chien",0
-#else
-    .byt 5,5,0,"Of course there is a dog",0
-    .byt 5,19,0,"There's always a dog",0
-#endif    
-    END
-
-end_dog
-    ; Some generic message in case the dog is not there (probably not displayed right now)
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,2
-    .byt 124,5,0,"Quite an impressive",0
-    .byt 187,17,0,"staircase",0
-    END
-.)    
-
-_gDescriptionDogAttacking
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
-     ;
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,1
-    .byt 5,108,0,"Oops...",0
-    WAIT(50*2)                              ; Wait a couple seconds
-    JUMP(_gDescriptionGameOverLost)         ; Game Over
-    /*
-    WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,3
-#ifdef LANGUAGE_FR    
-    .byt 16,8,0,"Gauche ?",0
-    .byt 179,8,0,"Droite ?",0
-    .byt 45,72,0,"est-ce vraiment important ?",0
-#else
-    .byt 16,8,0,"Left?",0
-    .byt 179,8,0,"Right?",0
-    .byt 60,72,0,"does it really matter?",0
-#endif    
-    END
 
 _gDescriptionMainLanding
     WAIT(DELAY_FIRST_BUBBLE)

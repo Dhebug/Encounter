@@ -141,6 +141,24 @@ void MoveObjectsIfNecessary()
 {
     switch (gCurrentLocation)
     {
+    case e_LOCATION_ENTRANCEHALL:
+        if (gItems[e_ITEM_AlsatianDog].location==e_LOCATION_LARGE_STAIRCASE)
+        {
+            gItems[e_ITEM_AlsatianDog].location=e_LOCATION_ENTRANCEHALL;
+        }
+        break;
+
+    case e_LOCATION_LARGE_STAIRCASE:
+        if (gItems[e_ITEM_AlsatianDog].location==e_LOCATION_ENTRANCEHALL)
+        {
+            gItems[e_ITEM_AlsatianDog].location=e_LOCATION_LARGE_STAIRCASE;
+            if (! (gItems[e_ITEM_AlsatianDog].flags&ITEM_FLAG_DEAD))
+            {
+                gItems[e_ITEM_AlsatianDog].description=gTextDogJumpingAtMe;
+            }
+        }
+        break;
+
     case e_LOCATION_OUTSIDE_PIT:
         if ( (gItems[e_ITEM_Rope].location==e_LOCATION_INSIDEHOLE) && (gItems[e_ITEM_Rope].flags & ITEM_FLAG_ATTACHED))
         {
