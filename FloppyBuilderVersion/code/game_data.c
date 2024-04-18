@@ -109,8 +109,8 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Water                
 
     // Normal items
-    { gTextItemLockedPanel               ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED        ,0},                                            // e_ITEM_LockedPanel          
-    { gTextItemOpenPanel                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_OpenPanel            
+    { gTextItemLockedPanel               ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED        ,0},                            // e_ITEM_LockedPanel
+    { gTextItemFridge                    ,e_LOCATION_KITCHEN         ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED      ,0},                            // e_ITEM_Fridge
     { gTextItemSmallHoleInDoor           ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallHoleInDoor      
     { gTextItemBrokenWindow              ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenWindow         
     { gTextItemLargeDove                 ,e_LOCATION_WOODEDAVENUE    ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                                // e_ITEM_LargeDove            
@@ -119,7 +119,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemLadder                    ,e_LOCATION_APPLE_TREES     ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
     { gTextItemAbandonedCar              ,e_LOCATION_TARMACAREA      ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AbandonedCar         
     { gTextItemAlsatianDog               ,e_LOCATION_LARGE_STAIRCASE ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_AlsatianDog          
-    { gTextItemMeat                      ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
+    { gTextItemMeat                      ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Meat                 
     { gTextItemBread                     ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
     { gTextItemRollOfTape                ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
     { gTextItemChemistryBook             ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
@@ -173,7 +173,8 @@ keyword gWordsArray[] =
     { "WINDOW", e_ITEM_BrokenWindow         },  // e_ITEM_BrokenWindow          
     //{ "SAFE",   e_ITEM_OpenSafe             },  // e_ITEM_OpenSafe  - Open and locked safe should be the same item, but with flags            
     { "DUST",   e_ITEM_BlackDust            },  // e_ITEM_BlackDust             
-    { "PANEL",  e_ITEM_OpenPanel            },  // e_ITEM_OpenPanel             
+    { "PANEL",  e_ITEM_LockedPanel            },  // e_ITEM_LockedPanel             
+    { "FRIDGE",  e_ITEM_Fridge              },  // e_ITEM_Fridge
     //{ "PANEL",e_ITEM_LockedPanel          },  // e_ITEM_LockedPanel  - Open and Locked panels should be the same item, but with flags
     { "POWDER", e_ITEM_YellowPowder         },  // e_ITEM_YellowPowder          
     //{ "...",e_ITEM_SmallHoleInDoor      },  // e_ITEM_SmallHoleInDoor       

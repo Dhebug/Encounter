@@ -180,6 +180,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\science_book.png %TARGET%\science_book.hir
 %PICTCONV% %PARAMS% data\chemistry_recipes.png %TARGET%\chemistry_recipes.hir
 %PICTCONV% %PARAMS% data\united_kingdom_map.png %TARGET%\united_kingdom_map.hir
+%PICTCONV% %PARAMS% data\fridge_door.png %TARGET%\fridge_door.hir
 
 %PICTCONV% %PARAMS% data\donkey_kong_top.png %TARGET%\donkey_kong_top.hir
 %PICTCONV% %PARAMS% data\donkey_kong_playing.png %TARGET%\donkey_kong_playing.hir

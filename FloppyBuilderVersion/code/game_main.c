@@ -607,16 +607,35 @@ void OpenItem(unsigned char itemId)
 {
 	if (ItemCheck(itemId))
     {
+        item* currentItem = &gItems[itemId];
         switch (itemId)
         {
         case e_ITEM_Curtain:
             {    
-                item* currentItem = &gItems[e_ITEM_Curtain];
                 if (currentItem->flags & ITEM_FLAG_CLOSED)
                 {
                     currentItem->description = gTextItemOpenedCurtain;
                     currentItem->flags &= ~ITEM_FLAG_CLOSED;
                     gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_PADLOCKED_ROOM;                   
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+
+        case e_ITEM_Fridge:
+            {    
+                if (currentItem->flags & ITEM_FLAG_CLOSED)
+                {
+                    currentItem->description = gTextItemOpenFridge;
+                    currentItem->flags &= ~ITEM_FLAG_CLOSED;
+
+                    currentItem = &gItems[e_ITEM_Meat];
+                    if (currentItem->location==e_LOCATION_NONE)
+                    {
+                        // If the meat was in the fridge, we now have it inside the kitchen
+                        currentItem->location=e_LOCATION_KITCHEN;
+                    }
                     LoadScene();
                     return;
                 }
@@ -632,16 +651,28 @@ void CloseItem(unsigned char itemId)
 {
 	if (ItemCheck(itemId))
     {
+        item* currentItem = &gItems[itemId];
         switch (itemId)
         {
         case e_ITEM_Curtain:
             {    
-                item* currentItem = &gItems[e_ITEM_Curtain];
                 if (!(currentItem->flags & ITEM_FLAG_CLOSED))
                 {
                     currentItem->description = gTextItemOpenedCurtain;
                     currentItem->flags |= ITEM_FLAG_CLOSED;
                     gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_NONE;
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+
+        case e_ITEM_Fridge:
+            {    
+                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
+                {
+                    currentItem->description = gTextItemFridge;
+                    currentItem->flags |= ITEM_FLAG_CLOSED;
                     LoadScene();
                     return;
                 }
@@ -715,6 +746,11 @@ void InspectItem(unsigned char itemId)
             PlayStream(gSceneActionInspectGame);
 			LoadScene();
 			break;
+
+        case e_ITEM_Fridge:
+            PlayStream(gSceneActionFridgeDoor);
+			LoadScene();
+            break;
 
 		default:
 			PrintErrorMessage(gTextErrorNothingSpecial);    // "Nothing special"

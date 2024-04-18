@@ -62,7 +62,7 @@ These items cannot just be collected, you need some adequate containers to trans
 These are items you will find around in the various locations
 |Item|Description|Define|
 |-|-|-|
-|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel<br>e_ITEM_OpenPanel|
+|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel<br>e_ITEM_LockedPanel|
 |**a small hole in the door**|The metal door can be pierced using some acid (in the original game)|e_ITEM_SmallHoleInDoor|
 |**the window is broken**|The kidnapped girl can escape through the window if you break it and provide her with a rope.|e_ITEM_BrokenWindow|
 |**a large dove**|The dove can be captured with the fishing net and used to distract the dog|e_ITEM_LargeDove|

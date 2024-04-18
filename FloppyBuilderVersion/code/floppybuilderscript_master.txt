@@ -219,6 +219,8 @@ AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
 AddFile ..\build\files\donkey_kong_playing.hir
 AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
 
+AddFile ..\build\files\fridge_door.hir
+AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
 
 ; All the sprites
 #ifdef LANGUAGE_FR

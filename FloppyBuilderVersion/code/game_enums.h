@@ -68,10 +68,10 @@
 #define	e_ITEM_Water  				 9          // some water
 
 // Then normal items
-#define	e_ITEM_LockedPanel  		 10         // a locked panel on the wall
-#define	e_ITEM_OpenPanel  			 11         // an open panel on wall
+#define	e_ITEM_LockedPanel  		 10         // a locked panel on the wall / an open panel on wall
+#define	e_ITEM_Fridge  			     11         // a fridge
 #define	e_ITEM_SmallHoleInDoor 		 12         // a small hole in the door
-#define	e_ITEM_BrokenWindow  		 13          // the window is broken
+#define	e_ITEM_BrokenWindow  		 13         // the window is broken
 #define	e_ITEM_LargeDove  			 14         // a large dove
 #define	e_ITEM_Twine  				 15         // some twine
 #define	e_ITEM_SilverKnife  		 16         // a silver knife

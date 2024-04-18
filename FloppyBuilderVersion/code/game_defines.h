@@ -229,6 +229,8 @@ extern const char gTextItemWater[];                   // "some water"
 // Normal items
 extern const char gTextItemLockedPanel[];             // "a locked panel on the wall"         
 extern const char gTextItemOpenPanel[];               // "an open panel on wall"              
+extern const char gTextItemFridge[];                  // "a fridge"
+extern const char gTextItemOpenFridge[];              // "an open fridge"
 extern const char gTextItemSmallHoleInDoor[];         // "a small hole in the door"           
 extern const char gTextItemBrokenWindow[];            // "the window is broken"               
 extern const char gTextItemLargeDove[];               // "a large dove"                       
@@ -279,3 +281,4 @@ extern const char gSceneActionReadChemistryBook[];
 extern const char gSceneActionInspectMap[];
 extern const char gSceneActionInspectGame[];
 extern const char gSceneActionPlayGame[];
+extern const char gSceneActionFridgeDoor[];

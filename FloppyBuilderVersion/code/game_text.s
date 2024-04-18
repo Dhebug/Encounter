@@ -267,6 +267,8 @@ _gTextItemWater                   .byt "de l'eau",0
 // Normal items
 _gTextItemLockedPanel             .byt "un paneau mural verouillé",0
 _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
+_gTextItemFridge                  .byt "un réfrigérateur",0
+_gTextItemOpenFridge              .byt "un réfrigérateur ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
 _gTextItemBrokenWindow            .byt "une vitre brisée",0
 _gTextItemLargeDove               .byt "une grosse colombe",0
@@ -323,6 +325,8 @@ _gTextItemWater                   .byt "some water",0
 // Normal items
 _gTextItemLockedPanel             .byt "a locked panel on the wall",0         
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
+_gTextItemFridge                  .byt "a fridge",0
+_gTextItemOpenFridge              .byt "an open fridge",0
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemBrokenWindow            .byt "the window is broken",0               
 _gTextItemLargeDove               .byt "a large dove",0                       
@@ -818,6 +822,12 @@ _gDescriptionSunLounge
     END
 
 _gDescriptionKitchen
+.(
+    ; Is the firdge open?
+    JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
+:fridge_closed
+
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,2
 #ifdef LANGUAGE_FR    
@@ -828,6 +838,8 @@ _gDescriptionKitchen
     .byt 5,14,4,"kitchen",0
 #endif    
     END
+.)
+
 
 _gDescriptionNarrowStaircase
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1194,6 +1206,15 @@ _gSceneActionPlayGame
     .byt COMMAND_INFO_MESSAGE,"Hum... looks like it crashed?",0
     WAIT(50*2)
     END
+
+_gSceneActionFridgeDoor
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge",0
+    .byt COMMAND_INFO_MESSAGE,"Looks like a happy familly...",0
+    WAIT(50*2)
+    .byt COMMAND_INFO_MESSAGE,"...I wonder where they are?",0
+    WAIT(50*2)
+    END
+
 
 _EndSceneActions
 
