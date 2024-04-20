@@ -2,7 +2,7 @@
 #include "game_enums.h"
 #include "params.h"
 
-// The various locations
+// The various locations: These have to be in the same order as the e_WORD_xxx directions
 enum DIRECTIONS
 {
     e_DIRECTION_NORTH = 0,
@@ -22,7 +22,7 @@ typedef enum
 	// [0-44] Items 
 	// see enum ITEMS
 
-	// [45-51] Directions 
+	// [45-51] Directions: These have to be in the same order as the DIRECTIONS enum
     e_WORD_NORTH = e_ITEM_COUNT_,
     e_WORD_SOUTH ,
     e_WORD_EAST  ,
@@ -91,9 +91,19 @@ typedef struct
 
 typedef struct 
 {
-	const char* word;				// How it's actually written
-    unsigned char id;				// The matching id
+	const char* word;				// How it's actually written (ex: "Take")
+    unsigned char id;				// The matching id           (ex: e_WORD_TAKE)
 } keyword;
+
+
+typedef void (*callback)();
+
+typedef struct
+{
+    unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
+    callback function;                 // Pointer to the routine to call (ex: TakeItem())
+} action_mapping;
+
 
 
 extern location gLocations[e_LOCATION_COUNT_];
@@ -102,6 +112,7 @@ extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
+extern action_mapping gActionMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"

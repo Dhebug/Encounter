@@ -315,3 +315,58 @@ keyword gWordsArray[] =
     // Sentinelle
     { 0,  e_WORD_COUNT_ }
 };
+
+
+
+extern void PlayerMove();
+extern void TakeItem();
+extern void DropItem();
+extern void ReadItem();
+extern void UseItem();
+extern void CombineItems();
+extern void OpenItem();
+extern void CloseItem();
+extern void ClimbItem();
+extern void InspectItem();
+extern void Kill();
+extern void Frisk();
+extern void ThrowItem();
+
+#ifdef ENABLE_CHEATS
+extern void Revive();
+extern void Tickle();
+extern void Invoke();
+#endif
+
+action_mapping gActionMappingsArray[] =
+{
+    // End Marker
+    { e_WORD_NORTH, PlayerMove },
+    { e_WORD_SOUTH, PlayerMove },
+    { e_WORD_EAST, PlayerMove },
+    { e_WORD_WEST, PlayerMove },
+    { e_WORD_UP, PlayerMove },
+    { e_WORD_DOWN, PlayerMove },
+
+    { e_WORD_TAKE, TakeItem },
+
+    { e_WORD_DROP, DropItem },
+    { e_WORD_READ, ReadItem },
+    { e_WORD_USE, UseItem },
+    { e_WORD_COMBINE, CombineItems },
+    { e_WORD_OPEN, OpenItem },
+    { e_WORD_CLOSE, CloseItem },
+    { e_WORD_CLIMB, ClimbItem },
+
+    { e_WORD_LOOK, InspectItem },
+    { e_WORD_KILL, Kill },
+    { e_WORD_FRISK, Frisk },
+    { e_WORD_SEARCH, Frisk },
+    { e_WORD_THROW, ThrowItem },
+#ifdef ENABLE_CHEATS
+    { e_WORD_REVIVE, Revive },
+    { e_WORD_TICKLE, Tickle },
+    { e_WORD_INVOKE, Invoke },
+#endif
+    { e_WORD_COUNT_, 0 }
+};

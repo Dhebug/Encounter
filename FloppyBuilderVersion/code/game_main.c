@@ -245,8 +245,9 @@ void LoadScene()
 }
 
 
-void PlayerMove(unsigned char direction)
+void PlayerMove()
 {
+    unsigned char direction = gWordBuffer[0]-e_WORD_NORTH;
 	unsigned char requestedScene = gCurrentLocationPtr->directions[direction];
 	if (requestedScene==e_LOCATION_NONE)
 	{
@@ -284,8 +285,9 @@ WORDS ProcessContainerAnswer()
 }
 
 
-void TakeItem(unsigned char itemId)
+void TakeItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (itemId>=e_ITEM_COUNT_)
 	{
 		PrintErrorMessage(gTextErrorCantTakeNoSee);   // "You can only take something you see"
@@ -379,8 +381,9 @@ void TakeItem(unsigned char itemId)
 }
 
 
-void DropItem(unsigned char itemId)
+void DropItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOCATION_INVENTORY) )
 	{
 		PrintErrorMessage(gTextErrorDropNotHave);  // "You can only drop something you have"
@@ -450,8 +453,9 @@ char ItemCheck(unsigned char itemId)
     return 0; // Cannot use
 }
 
-void ReadItem(unsigned char itemId)
+void ReadItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         switch (itemId)
@@ -572,8 +576,9 @@ void ActionClimbRope()
     }
 }
 
-void UseItem(unsigned char itemId)
+void UseItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         switch (itemId)
@@ -621,10 +626,170 @@ void UseItem(unsigned char itemId)
 }
 
 
+void Kill()
+{
+    unsigned char itemId=gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
+    if (itemPtr->location != gCurrentLocation)
+    {
+        PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
+    }
+    else
+    if (itemPtr->flags & ITEM_FLAG_DISABLED)
+    {
+        PrintErrorMessage(gTextErrorAlreadyDead);  // "Already dead"
+    }
+    else
+    {
+        // Normally we should ask how, check the weapon, etc...
+        // Right now it's just to check things
+        switch (itemId)
+        {
+        case e_ITEM_Thug:
+            gScore+=50;
+            itemPtr->flags|=ITEM_FLAG_DISABLED;
+            itemPtr->description=gTextDeadThug;   // "a dead thug";
+            LoadScene();
+            break;
+
+        case e_ITEM_AlsatianDog:
+            gScore+=50;
+            itemPtr->flags|=ITEM_FLAG_DISABLED;
+            itemPtr->description=gTextDogLying;  // "a dog lying";
+            LoadScene();
+            break;
+
+        case e_ITEM_YoungGirl:
+            PrintErrorMessage(gTextErrorShouldSaveGirl);  // "You are supposed to save her"
+            break;
+        }
+    }
+}
+
+
+void Frisk()
+{
+    unsigned char itemId=gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
+    if (itemPtr->location != gCurrentLocation)
+    {
+        PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
+    }
+    else
+    {
+        // Eventual list of things we can search
+        switch (itemId)
+        {
+        case e_ITEM_Thug:
+            if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
+            {
+                PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
+            }
+            else
+            if (gItems[e_ITEM_Pistol].location!=e_LOCATION_NONE)
+            {
+                PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
+            }
+            else
+            {
+                gScore+=50;
+                gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
+                PrintInformationMessage(gTextFoundSomething);                // "You found something interesting"
+                LoadScene();
+            }
+            break;
+        }
+    }
+}
+
+#ifdef ENABLE_CHEATS
+void Revive()
+{
+    unsigned char itemId=gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
+    if (itemPtr->location != gCurrentLocation)
+    {
+        PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
+    }
+    else
+    if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
+    {
+        PrintErrorMessage(gTextNotDead);    // "Not dead"
+    }
+    else
+    {
+        // We revive the characters to debug and test  more easily
+        switch (itemId)
+        {
+        case e_ITEM_Thug:
+            itemPtr->flags&=~ITEM_FLAG_DISABLED;
+            itemPtr->description=gTextThugAsleepOnBed;     // "a thug asleep on the bed";
+            LoadScene();
+            break;
+
+        case e_ITEM_AlsatianDog:
+            itemPtr->flags&=~ITEM_FLAG_DISABLED;
+            itemPtr->description=gTextDogGrowlingAtYou;     // "an alsatian growling at you"
+            LoadScene();
+            break;
+        }
+    }
+}
+
+void Tickle()
+{
+    unsigned char itemId=gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
+    if (itemPtr->location != gCurrentLocation)
+    {
+        PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
+    }
+    else
+    if (itemPtr->flags & ITEM_FLAG_DISABLED)
+    {
+        PrintErrorMessage(gTextErrorDeadDontMove);  // "Dead don't move"
+    }
+    else
+    {
+        // The tickling is just a way to trigger the attack sequence
+        switch (itemId)
+        {
+        case e_ITEM_Thug:
+            gCurrentLocationPtr->script = gDescriptionThugAttacking;
+            itemPtr->description=gTextThugShootingAtMe;    // "a thug shooting at me"
+            LoadScene();
+            break;
+
+        case e_ITEM_AlsatianDog:
+            gCurrentLocationPtr->script = gDescriptionDogAttacking;
+            itemPtr->description=gTextDogJumpingAtMe;     // "a dog jumping at me"
+            LoadScene();
+            break;
+
+        case e_ITEM_YoungGirl:
+            PrintErrorMessage(gTextErrorInappropriate);   // "Probably impropriate"
+            break;
+        }
+    }
+}
+
+void Invoke()
+{
+    // Wherever they are, give a specific item to the user
+    unsigned char itemId=gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
+    itemPtr->location = e_LOCATION_INVENTORY;
+    LoadScene();            
+}
+#endif    
+
+
 #define COMBINATOR(firstItem,secondItem)    ((firstItem&255)|((secondItem&255)<<8))
 
-void CombineItems(unsigned char firstItemId,unsigned char secondaryItemId)
+void CombineItems()
 {
+    unsigned char firstItemId     = gWordBuffer[1];
+    unsigned char secondaryItemId = gWordBuffer[2];
 	if (ItemCheck(firstItemId) && ItemCheck(secondaryItemId))
     {
         switch (COMBINATOR(firstItemId,secondaryItemId))
@@ -646,8 +811,9 @@ void CombineItems(unsigned char firstItemId,unsigned char secondaryItemId)
 }
 
 
-void OpenItem(unsigned char itemId)
+void OpenItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         item* currentItem = &gItems[itemId];
@@ -709,8 +875,9 @@ void OpenItem(unsigned char itemId)
 }
 
 
-void CloseItem(unsigned char itemId)
+void CloseItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         item* currentItem = &gItems[itemId];
@@ -759,8 +926,9 @@ void CloseItem(unsigned char itemId)
 
 
 
-void ClimbItem(unsigned char itemId)
+void ClimbItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
 		switch (itemId)
@@ -801,8 +969,9 @@ void ClimbItem(unsigned char itemId)
 }
 
 
-void InspectItem(unsigned char itemId)
+void InspectItem()
 {
+    unsigned char itemId = gWordBuffer[1];    
 	if (ItemCheck(itemId))
     {
 		switch (itemId)
@@ -833,8 +1002,9 @@ void InspectItem(unsigned char itemId)
 	}
 }
 
-void ThrowItem(unsigned char itemId)
+void ThrowItem()
 {
+    unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         item* itemPtr=&gItems[itemId];
@@ -869,7 +1039,7 @@ void ThrowItem(unsigned char itemId)
 			break;
 		}
         // By default we drop the item if we try to throw it and nothing special happens
-        DropItem(itemId);
+        DropItem();
 	}
 }
 
@@ -878,248 +1048,29 @@ void ThrowItem(unsigned char itemId)
 WORDS ProcessAnswer()
 {
 	// Check the first word
-	switch (gWordBuffer[0])
-	{
-	//
-	// Movement
-	//
-	case e_WORD_NORTH:
-		PlayerMove(e_DIRECTION_NORTH);
-		break;
-	case e_WORD_SOUTH:
-		PlayerMove(e_DIRECTION_SOUTH);
-		break;
-	case e_WORD_EAST:
-		PlayerMove(e_DIRECTION_EAST);
-		break;
-	case e_WORD_WEST:
-		PlayerMove(e_DIRECTION_WEST);
-		break;
-	case e_WORD_UP:
-		PlayerMove(e_DIRECTION_UP);
-		break;
-	case e_WORD_DOWN:
-		PlayerMove(e_DIRECTION_DOWN);
-		break;
-
-	//
-	// Action
-	//
-	case e_WORD_TAKE:
-		TakeItem(gWordBuffer[1]);
-		break;
-	case e_WORD_DROP:
-		DropItem(gWordBuffer[1]);
-		break;
-
-    case e_WORD_READ:
-		ReadItem(gWordBuffer[1]);
-        break;
-
-    case e_WORD_USE:
-		UseItem(gWordBuffer[1]);
-        break;
-
-    case e_WORD_COMBINE:
-		CombineItems(gWordBuffer[1],gWordBuffer[2]);
-        break;
-
-    case e_WORD_OPEN:
-		OpenItem(gWordBuffer[1]);
-        break;
-
-    case e_WORD_CLOSE:
-		CloseItem(gWordBuffer[1]);
-        break;
-
-    case e_WORD_CLIMB:
-		ClimbItem(gWordBuffer[1]);
-        break;
-
-    case e_WORD_LOOK:
-		InspectItem(gWordBuffer[1]);
-        break;
-
-	case e_WORD_KILL:
-		{
-			unsigned char itemId=gWordBuffer[1];
-			item* itemPtr=&gItems[itemId];
-			if (itemPtr->location != gCurrentLocation)
-			{
-				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
-			}
-			else
-			if (itemPtr->flags & ITEM_FLAG_DISABLED)
-			{
-				PrintErrorMessage(gTextErrorAlreadyDead);  // "Already dead"
-			}
-			else
-			{
-				// Normally we should ask how, check the weapon, etc...
-				// Right now it's just to check things
-				switch (itemId)
-				{
-				case e_ITEM_Thug:
-					gScore+=50;
-					itemPtr->flags|=ITEM_FLAG_DISABLED;
-					itemPtr->description=gTextDeadThug;   // "a dead thug";
-					LoadScene();
-					break;
-
-				case e_ITEM_AlsatianDog:
-					gScore+=50;
-					itemPtr->flags|=ITEM_FLAG_DISABLED;
-					itemPtr->description=gTextDogLying;  // "a dog lying";
-					LoadScene();
-					break;
-
-				case e_ITEM_YoungGirl:
-					PrintErrorMessage(gTextErrorShouldSaveGirl);  // "You are supposed to save her"
-					break;
-				}
-			}
-		}
-		break;
-
-	case e_WORD_FRISK:
-	case e_WORD_SEARCH:
-		{
-			unsigned char itemId=gWordBuffer[1];
-			item* itemPtr=&gItems[itemId];
-			if (itemPtr->location != gCurrentLocation)
-			{
-				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
-			}
-			else
-			{
-				// Eventual list of things we can search
-				switch (itemId)
-				{
-				case e_ITEM_Thug:
-					if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
-					{
-						PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
-					}
-					else
-					if (gItems[e_ITEM_Pistol].location!=e_LOCATION_NONE)
-					{
-						PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
-					}
-					else
-					{
-						gScore+=50;
-						gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
-						PrintInformationMessage(gTextFoundSomething);                // "You found something interesting"
-						LoadScene();
-					}
-					break;
-				}
-			}
-		}
-		break;
-
-    case e_WORD_THROW:
-   		ThrowItem(gWordBuffer[1]);
-        break;
-
-#ifdef ENABLE_CHEATS
-	case e_WORD_REVIVE:
-		{
-			unsigned char itemId=gWordBuffer[1];
-			item* itemPtr=&gItems[itemId];
-			if (itemPtr->location != gCurrentLocation)
-			{
-				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
-			}
-			else
-			if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
-			{
-				PrintErrorMessage(gTextNotDead);    // "Not dead"
-			}
-			else
-			{
-				// We revive the characters to debug and test  more easily
-				switch (itemId)
-				{
-				case e_ITEM_Thug:
-					itemPtr->flags&=~ITEM_FLAG_DISABLED;
-					itemPtr->description=gTextThugAsleepOnBed;     // "a thug asleep on the bed";
-					LoadScene();
-					break;
-
-				case e_ITEM_AlsatianDog:
-					itemPtr->flags&=~ITEM_FLAG_DISABLED;
-					itemPtr->description=gTextDogGrowlingAtYou;     // "an alsatian growling at you"
-					LoadScene();
-					break;
-				}
-			}
-		}
-		break;
-
-	case e_WORD_TICKLE:
-		{
-			unsigned char itemId=gWordBuffer[1];
-			item* itemPtr=&gItems[itemId];
-			if (itemPtr->location != gCurrentLocation)
-			{
-				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
-			}
-			else
-			if (itemPtr->flags & ITEM_FLAG_DISABLED)
-			{
-				PrintErrorMessage(gTextErrorDeadDontMove);  // "Dead don't move"
-			}
-			else
-			{
-				// The tickling is just a way to trigger the attack sequence
-				switch (itemId)
-				{
-				case e_ITEM_Thug:
-					gCurrentLocationPtr->script = gDescriptionThugAttacking;
-					itemPtr->description=gTextThugShootingAtMe;    // "a thug shooting at me"
-					LoadScene();
-					break;
-
-				case e_ITEM_AlsatianDog:
-					gCurrentLocationPtr->script = gDescriptionDogAttacking;
-					itemPtr->description=gTextDogJumpingAtMe;     // "a dog jumping at me"
-					LoadScene();
-					break;
-
-				case e_ITEM_YoungGirl:
-					PrintErrorMessage(gTextErrorInappropriate);   // "Probably impropriate"
-					break;
-				}
-			}
-		}
-		break;
-
-    case e_WORD_INVOKE:
-        {
-            // Wherever they are, give a specific item to the user
-			unsigned char itemId=gWordBuffer[1];
-			item* itemPtr=&gItems[itemId];
-            itemPtr->location = e_LOCATION_INVENTORY;
-            LoadScene();            
-        }
-        break;
-#endif    
-
-	//
-	// Meta
-	//
-	case e_WORD_QUIT:
+    action_mapping* actionMappingPtr = gActionMappingsArray;
+    unsigned char actionId=gWordBuffer[0];
+    if (actionId==e_WORD_QUIT)
+    {
+		// Quit the game
 		PlaySound(KeyClickHData);
-		// Quit
 		return e_WORD_QUIT;
-		break;
+    }
 
-	default:
-		PlaySound(PingData);
-		break;
-	}
-	// Continue
+    while (actionMappingPtr->id!=e_WORD_COUNT_)
+    {
+        if (actionMappingPtr->id==actionId)
+        {
+            // call the callback
+            actionMappingPtr->function();
+            // Continue
+            return e_WORD_CONTINUE;
+        }
+        actionMappingPtr++;
+    }
+
+	// Not recognized: Warn the player and continue
+	PlaySound(PingData);
  	return e_WORD_CONTINUE;
 }
 
