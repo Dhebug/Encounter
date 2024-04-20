@@ -27,7 +27,7 @@ _gTextPositionLadder        .byt "Vous mettez l'échelle en place",0
 _gTextClimbUpRope           .byt "Vous grimpez la corde",0
 _gTextClimbDownRope         .byt "Vous descendez la corde",0
 _gTextAttachRopeToTree      .byt "Vous attachez la corde à l'arbre",0
-_gTextDeadDog               .byt "un chien mort",0
+_gTextDogLying              .byt "un chien immobile",0
 _gTextDeadThug              .byt "un malfaiteur mort",0
 _gTextFoundSomething        .byt "Vous avez trouvé quelque chose",0
 _gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
@@ -51,7 +51,7 @@ _gTextPositionLadder        .byt "You position the ladder properly",0
 _gTextClimbUpRope           .byt "You climb up the rope",0
 _gTextClimbDownRope         .byt "You climb down the rope",0
 _gTextAttachRopeToTree      .byt "You attach the rope to the tree",0
-_gTextDeadDog               .byt "a dead dog",0
+_gTextDogLying              .byt "a dog lying",0
 _gTextDeadThug              .byt "a dead thug",0
 _gTextFoundSomething        .byt "You found something interesting",0
 _gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
@@ -711,7 +711,7 @@ _gDescriptionEntranceHall
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*10)+15)    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*24+7,_ImageBuffer+(40*44)+18)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_WHITE_BUBBLE,2
@@ -770,7 +770,7 @@ _gDescriptionStaircase
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(17,34),40,_SecondImageBuffer+40*95,_ImageBuffer+(40*93)+12)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       .byt COMMAND_WHITE_BUBBLE,2
@@ -780,7 +780,7 @@ _gDescriptionStaircase
       
 dog_alive
     ; If the dog is alive, it will jump on our face now
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
      ;
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,1

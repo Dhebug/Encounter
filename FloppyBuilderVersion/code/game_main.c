@@ -851,6 +851,7 @@ void ThrowItem(unsigned char itemId)
                         //PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
                         dogItemPtr->flags |= ITEM_FLAG_DISABLED;
+                        dogItemPtr->description = gTextDogLying;
                     }
                     else                                              // Normal meat -> The dog eats it
                     {
@@ -968,7 +969,7 @@ WORDS ProcessAnswer()
 				case e_ITEM_AlsatianDog:
 					gScore+=50;
 					itemPtr->flags|=ITEM_FLAG_DISABLED;
-					itemPtr->description=gTextDeadDog;  // "a dead dog";
+					itemPtr->description=gTextDogLying;  // "a dog lying";
 					LoadScene();
 					break;
 

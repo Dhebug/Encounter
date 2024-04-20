@@ -117,7 +117,7 @@ extern const char gTextPositionLadder[];        // "You position the ladder prop
 extern const char gTextClimbUpRope[];           // "You climb up the rope"
 extern const char gTextClimbDownRope[];         // "You climb down the rope"
 extern const char gTextAttachRopeToTree[];      // "You attach the rope to the tree"
-extern const char gTextDeadDog[];               // "a dead dog"
+extern const char gTextDogLying[];              // "a dog lying"
 extern const char gTextDeadThug[];              // "a dead thug"
 extern const char gTextFoundSomething[];        // "You found something interesting"
 extern const char gTextDogGrowlingAtYou[];      // "an alsatian growling at you"
