@@ -47,6 +47,7 @@
 #define	e_LOCATION_GIRLROOM         43
 #define e_LOCATION_COUNT_           44
 #define e_LOCATION_INVENTORY        e_LOCATION_COUNT_    // Special location for the player's inventory
+#define e_LOCATION_GONE_FOREVER     254                  // To indicate this item is not available anymore
 #define e_LOCATION_NONE             255                  // To indicate we can't go in this particular location
 
 
@@ -66,49 +67,49 @@
 #define	e_ITEM_YellowPowder  		 7          // gritty yellow powder
 #define	e_ITEM_Petrol  				 8          // some petrol
 #define	e_ITEM_Water  				 9          // some water
+#define	e_ITEM_LargeDove  			 10         // a large dove
+#define	e_ITEM_GunPowder  			 11         // some gunpowder
+#define	e_ITEM__Last_Transportable   11         // ----- END TRANSPORTABLE MARKER
 
 // Then normal items
-#define	e_ITEM_LockedPanel  		 10         // a locked panel on the wall / an open panel on wall
-#define	e_ITEM_Fridge  			     11         // a fridge
-#define	e_ITEM_SmallHoleInDoor 		 12         // a small hole in the door
-#define	e_ITEM_BrokenWindow  		 13         // the window is broken
-#define	e_ITEM_LargeDove  			 14         // a large dove
-#define	e_ITEM_Twine  				 15         // some twine
-#define	e_ITEM_SilverKnife  		 16         // a silver knife
-#define	e_ITEM_Ladder  				 17         // a ladder
-#define	e_ITEM_AbandonedCar  		 18         // an abandoned car
-#define	e_ITEM_AlsatianDog  		 19         // Alsatian dog
-#define	e_ITEM_Meat  				 20         // a joint of meat
-#define	e_ITEM_Bread  				 21         // some brown bread
-#define	e_ITEM_RollOfTape  			 22         // a roll of sticky tape
-#define	e_ITEM_ChemistryBook  		 23         // a chemistry book
-#define	e_ITEM_BoxOfMatches  		 24         // a box of matches
-#define	e_ITEM_SnookerCue  			 25         // a snooker cue
-#define	e_ITEM_Thug  				 26         // a Thug
-#define	e_ITEM_HeavySafe  			 27         // a heavy safe
-#define	e_ITEM_HandWrittenNote  	 28         // a hand written note
-#define	e_ITEM_Rope  				 29         // a length of rope
-#define e_ITEM_HandheldGame          30         // a handheld game
-#define	e_ITEM_RollOfToiletPaper  	 31         // a roll of toilet tissue~
-#define	e_ITEM_HosePipe  			 32         // a hose-pipe
-#define	e_ITEM_OpenSafe  			 33          // an open safe
+#define	e_ITEM_LockedPanel  		 12         // a locked panel on the wall / an open panel on wall
+#define	e_ITEM_Fridge  			     13         // a fridge
+#define	e_ITEM_SmallHoleInDoor 		 14         // a small hole in the door
+#define	e_ITEM_BrokenWindow  		 15         // the window is broken
+#define	e_ITEM_Twine  				 16         // some twine
+#define	e_ITEM_SilverKnife  		 17         // a silver knife
+#define	e_ITEM_Ladder  				 18         // a ladder
+#define	e_ITEM_AbandonedCar  		 19         // an abandoned car
+#define	e_ITEM_AlsatianDog  		 20         // Alsatian dog
+#define	e_ITEM_Meat  				 21         // a joint of meat
+#define	e_ITEM_Bread  				 22         // some brown bread
+#define	e_ITEM_RollOfTape  			 23         // a roll of sticky tape
+#define	e_ITEM_ChemistryBook  		 24         // a chemistry book
+#define	e_ITEM_BoxOfMatches  		 25         // a box of matches
+#define	e_ITEM_SnookerCue  			 26         // a snooker cue
+#define	e_ITEM_Thug  				 27         // a Thug
+#define	e_ITEM_HeavySafe  			 28         // a heavy safe
+#define	e_ITEM_HandWrittenNote  	 29         // a hand written note
+#define	e_ITEM_Rope  				 30         // a length of rope
+#define e_ITEM_HandheldGame          31         // a handheld game
+#define	e_ITEM_RollOfToiletPaper  	 32         // a roll of toilet tissue~
+#define	e_ITEM_HosePipe  			 33         // a hose-pipe
 #define	e_ITEM_BrokenGlass  		 34         // broken glass
 #define	e_ITEM_AcidBurn  			 35         // an acid burn
 #define	e_ITEM_YoungGirl  			 36         // a young girl
 #define	e_ITEM_Fuse  				 37         // a fuse
-#define	e_ITEM_GunPowder  			 38         // some gunpowder
-#define	e_ITEM_Keys  				 39         // a set of keys
-#define	e_ITEM_Newspaper     		 40         // A newspaper
-#define	e_ITEM_Bomb  				 41         // a bomb
-#define	e_ITEM_Pistol 				 42         // a pistol
-#define	e_ITEM_Bullets  			 43         // three .38 bullets
-#define	e_ITEM_YoungGirlOnFloor  	 44         // a young girl tied up on the floor
-#define	e_ITEM_ChemistryRecipes   	 45         // a sheet of paper with a few recipes on things to build
-#define	e_ITEM_UnitedKingdomMap   	 46         // the map of the UK in the library
-#define e_ITEM_Curtain               47         // a thick curtain
-#define	e_ITEM_COUNT_ 				 48         //  ----- END MARKER
-
-#define	e_ITEM__Reserved      		 48         // Reserved entry code (not sure it's needed)
+#define	e_ITEM_Keys  				 38         // a set of keys
+#define	e_ITEM_Newspaper     		 39         // A newspaper
+#define	e_ITEM_Bomb  				 40         // a bomb
+#define	e_ITEM_Pistol 				 41         // a pistol
+#define	e_ITEM_Bullets  			 42         // three .38 bullets
+#define	e_ITEM_YoungGirlOnFloor  	 43         // a young girl tied up on the floor
+#define	e_ITEM_ChemistryRecipes   	 44         // a sheet of paper with a few recipes on things to build
+#define	e_ITEM_UnitedKingdomMap   	 45         // the map of the UK in the library
+#define e_ITEM_Curtain               46         // a thick curtain
+#define e_ITEM_Medicinecabinet       47         // a thick curtain
+#define e_ITEM_SedativePills         48         // some sedative pills
+#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER
 // End marker
 
 
@@ -117,7 +118,7 @@
 #define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
 #define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
-#define ITEM_FLAG_DEAD             16    // Used to indicate that something is not alive anymore (ex: Dog, Thug )
+#define ITEM_FLAG_DISABLED          16    // Used to indicate that something is not active anymore (ex: Dog, Thug )
 #define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
 #define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
-#define ITEM_FLAG_FREE_4          128    // -- available
+#define ITEM_FLAG_TRANSFORMED     128    // For items that get transformed (drugged meat)

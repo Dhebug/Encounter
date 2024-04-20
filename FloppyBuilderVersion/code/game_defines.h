@@ -34,6 +34,7 @@ typedef enum
 	e_WORD_TAKE  ,
 	e_WORD_DROP  ,
     e_WORD_USE   ,
+    e_WORD_COMBINE, 
     e_WORD_OPEN  ,
     e_WORD_CLOSE ,
     e_WORD_READ  ,
@@ -42,6 +43,7 @@ typedef enum
     e_WORD_KILL  ,
     e_WORD_FRISK ,
     e_WORD_SEARCH,
+    e_WORD_THROW, 
 #ifdef ENABLE_CHEATS
     e_WORD_REVIVE,
     e_WORD_TICKLE,
@@ -271,7 +273,10 @@ extern const char gTextItemRopeAttachedToATree[];     // "a rope attached to a t
 extern const char gTextItemClosedCurtain[];           // "a closed curtain"
 extern const char gTextItemOpenedCurtain[];           // "an opened curtain"
 extern const char gTextItemHandheldGame[];            // "a handheld game"
-
+extern const char gTextItemMedicineCabinet[];         // "a medicine cabinet"
+extern const char gTextItemOpenMedicineCabinet[];     // "an open medicine cabinet"
+extern const char gTextItemSedativePills[];           // "some sedative pills"
+extern const char gTextItemSedativeLacedMeat[];       // "druggd meat"
 
 // Scene actions
 extern const char gSceneActionReadNewsPaper[];
@@ -282,3 +287,4 @@ extern const char gSceneActionInspectMap[];
 extern const char gSceneActionInspectGame[];
 extern const char gSceneActionPlayGame[];
 extern const char gSceneActionFridgeDoor[];
+extern const char gSceneActionDogEatingMeat[];

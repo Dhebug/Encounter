@@ -105,15 +105,16 @@ item gItems[e_ITEM_COUNT_] =
     // Items requiring containers
     { gTextItemBlackDust                 ,e_LOCATION_DARKTUNNEL      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_BlackDust            
     { gTextItemYellowPowder              ,e_LOCATION_INSIDEHOLE      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_YellowPowder         
-    { gTextItemPetrol                    ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Petrol               
-    { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                                // e_ITEM_Water                
-
+    { gTextItemPetrol                    ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                     // e_ITEM_Petrol               
+    { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},                     // e_ITEM_Water                
+    { gTextItemLargeDove                 ,e_LOCATION_WOODEDAVENUE    ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                   // e_ITEM_LargeDove            
+    { gTextItemGunPowder                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_GunPowder            
+    
     // Normal items
     { gTextItemLockedPanel               ,e_LOCATION_DARKCELLARROOM  ,255           ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED        ,0},                            // e_ITEM_LockedPanel
     { gTextItemFridge                    ,e_LOCATION_KITCHEN         ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED      ,0},                            // e_ITEM_Fridge
     { gTextItemSmallHoleInDoor           ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SmallHoleInDoor      
     { gTextItemBrokenWindow              ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenWindow         
-    { gTextItemLargeDove                 ,e_LOCATION_WOODEDAVENUE    ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                                // e_ITEM_LargeDove            
     { gTextItemTwine                     ,e_LOCATION_GREENHOUSE      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Twine                
     { gTextItemSilverKnife               ,e_LOCATION_VEGSGARDEN      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SilverKnife          
     { gTextItemLadder                    ,e_LOCATION_APPLE_TREES     ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Ladder               
@@ -123,7 +124,7 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemBread                     ,e_LOCATION_DININGROOM      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bread                
     { gTextItemRollOfTape                ,e_LOCATION_BOXROOM         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfTape           
     { gTextItemChemistryBook             ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryBook        
-    { gTextItemBoxOfMatches              ,e_LOCATION_KITCHEN         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
+    { gTextItemBoxOfMatches              ,e_LOCATION_LOUNGE          ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BoxOfMatches         
     { gTextItemSnookerCue                ,e_LOCATION_GAMESROOM       ,255           ,ITEM_FLAG_DEFAULT         ,ITEM_FLAG_DEFAULT },                           // e_ITEM_SnookerCue           
     { gTextItemThug                      ,e_LOCATION_MASTERBEDROOM   ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_Thug                 
     { gTextItemHeavySafe                 ,e_LOCATION_CELLAR          ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                                            // e_ITEM_HeavySafe            
@@ -132,12 +133,10 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemHandheldGame              ,e_LOCATION_CHILDBEDROOM    ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HandheldGame
     { gTextItemRollOfToiletPaper         ,e_LOCATION_TINY_WC         ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_RollOfToiletPaper    
     { gTextItemHosePipe                  ,e_LOCATION_ZENGARDEN       ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_HosePipe             
-    { gTextItemOpenSafe                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_OpenSafe             
     { gTextItemBrokenGlass               ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_BrokenGlass          
     { gTextItemAcidBurn                  ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_AcidBurn             
     { gTextItemYoungGirl                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_YoungGirl        
     { gTextItemFuse                      ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Fuse                 
-    { gTextItemGunPowder                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_GunPowder            
     { gTextItemKeys                      ,e_LOCATION_MAINSTREET      ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Keys                 
     { gTextItemNewspaper                 ,e_LOCATION_INVENTORY       ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Newspaper            
     { gTextItemBomb                      ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_Bomb                 
@@ -147,6 +146,8 @@ item gItems[e_ITEM_COUNT_] =
     { gTextItemChemistryRecipes          ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_ChemistryRecipes     
     { gTextItemUnitedKingdomMap          ,e_LOCATION_LIBRARY         ,255           ,ITEM_FLAG_IMMOVABLE       ,0},                                            // e_ITEM_UnitedKingdomMap   
     { gTextItemClosedCurtain             ,e_LOCATION_WESTGALLERY     ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                           // e_ITEM_Curtain
+    { gTextItemMedicineCabinet           ,e_LOCATION_KITCHEN         ,255           ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED       ,0},                           // e_ITEM_Medicinecabinet
+    { gTextItemSedativePills             ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,0},                                            // e_ITEM_SedativePills     
 };
 
 
@@ -171,7 +172,6 @@ keyword gWordsArray[] =
     { "GIRL",   e_ITEM_YoungGirl            },  // e_ITEM_YoungGirl         
     //{ "GIRL",e_ITEM_YoungGirlOnFloor     },  // e_ITEM_YoungGirlOnFloor - Girl, girl on the floor, etc... should be the same item, but with flags
     { "WINDOW", e_ITEM_BrokenWindow         },  // e_ITEM_BrokenWindow          
-    //{ "SAFE",   e_ITEM_OpenSafe             },  // e_ITEM_OpenSafe  - Open and locked safe should be the same item, but with flags            
     { "DUST",   e_ITEM_BlackDust            },  // e_ITEM_BlackDust             
     { "PANEL",  e_ITEM_LockedPanel            },  // e_ITEM_LockedPanel             
     { "FRIDGE",  e_ITEM_Fridge              },  // e_ITEM_Fridge
@@ -212,6 +212,9 @@ keyword gWordsArray[] =
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
     { "CURTAIN",e_ITEM_Curtain              },  // e_ITEM_Curtain
+    { "CABINET",e_ITEM_Medicinecabinet      },  // e_ITEM_Medicinecabinet
+    { "PILLS"  ,e_ITEM_SedativePills        },  // e_ITEM_SedativePills
+    { "SEDATIVES",e_ITEM_SedativePills      },  // e_ITEM_SedativePills
 
     { "HANDHELD",e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
     { "GAME"    ,e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
@@ -257,11 +260,14 @@ keyword gWordsArray[] =
     { "TUE"     , e_WORD_KILL },
     { "FOUILLE" , e_WORD_FRISK },
     { "CHERCHE" , e_WORD_SEARCH },
+    { "LANCE"   , e_WORD_THROW },
 
     { "LACHE"   , e_WORD_DROP },
     { "POSE"    , e_WORD_DROP },
 
     { "UTILISE" , e_WORD_USE },
+
+    { "COMBINE" , e_WORD_COMBINE },
 
     { "GRIMPE"  , e_WORD_CLIMB },
 
@@ -276,11 +282,14 @@ keyword gWordsArray[] =
     { "KILL"    , e_WORD_KILL },
     { "FRISK"   , e_WORD_FRISK },
     { "SEARCH"  , e_WORD_SEARCH },
+    { "THROW"   , e_WORD_THROW },
 
     { "DROP", e_WORD_DROP },
     { "PUT" , e_WORD_DROP },
 
     { "USE" , e_WORD_USE },
+
+    { "COMBINE" , e_WORD_COMBINE },
 
     { "OPEN" , e_WORD_OPEN },
     { "CLOSE" , e_WORD_CLOSE },

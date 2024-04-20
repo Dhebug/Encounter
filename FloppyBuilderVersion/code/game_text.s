@@ -309,6 +309,10 @@ _gTextItemRopeAttachedToATree     .byt "une corde attachée à un arbre",0
 _gTextItemClosedCurtain           .byt "un rideau fermé",0
 _gTextItemOpenedCurtain           .byt "un rideau ouvert",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
+_gTextItemMedicineCabinet         .byt "une armoire à pharmacie",0
+_gTextItemOpenMedicineCabinet     .byt "une armoire à pharmacie ouverte",0
+_gTextItemSedativePills           .byt "des somnifères",0
+_gTextItemSedativeLacedMeat       .byt "viande droggée",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -367,6 +371,10 @@ _gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
 _gTextItemClosedCurtain           .byt "a closed curtain",0
 _gTextItemOpenedCurtain           .byt "an opened curtain",0
 _gTextItemHandheldGame            .byt "a handheld game",0
+_gTextItemMedicineCabinet         .byt "a medicine cabinet",0
+_gTextItemOpenMedicineCabinet     .byt "an open medicine cabinet",0
+_gTextItemSedativePills           .byt "some sedative pills",0
+_gTextItemSedativeLacedMeat       .byt "drugged meat",0
 #endif
 _EndItemNames
 
@@ -701,7 +709,7 @@ _gDescriptionEntranceHall
     JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
 
     ; Is the dog dead?
-    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*10)+15)    
       ; Text describing the dead dog
@@ -760,7 +768,7 @@ _gDescriptionStaircase
     JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
 
     ; Is the dog dead?
-    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DEAD))
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(12,27),40,_SecondImageBuffer,_ImageBuffer+(40*90)+27)    
       ; Text describing the dead dog
@@ -901,10 +909,15 @@ _gDescriptionSunLounge
 
 _gDescriptionKitchen
 .(
-    ; Is the firdge open?
+    ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
 :fridge_closed
+
+    ; Is the medicine cabinet open?
+    JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
+:medicine_cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,2
@@ -1081,7 +1094,7 @@ _gDescriptionMasterBedRoom
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
 
     ; Is the thug alive?
-    JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DEAD))
+    JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
       ; Draw the dead thug 
       DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),40,_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
       DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),40,_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
@@ -1230,6 +1243,12 @@ _gSceneActionFridgeDoor
     .byt COMMAND_INFO_MESSAGE,"Looks like a happy familly...",0
     WAIT(50*2)
     .byt COMMAND_INFO_MESSAGE,"...I wonder where they are?",0
+    WAIT(50*2)
+    END
+
+_gSceneActionDogEatingMeat
+    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!",0
+    .byt COMMAND_INFO_MESSAGE,"Glad it's not me there!",0
     WAIT(50*2)
     END
 

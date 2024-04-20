@@ -222,6 +222,10 @@ AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
 AddFile ..\build\files\fridge_door.hir
 AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
 
+AddFile ..\build\files\dog_eating_meat.hir
+AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
+
+
 ; All the sprites
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\the_end_fr.msk

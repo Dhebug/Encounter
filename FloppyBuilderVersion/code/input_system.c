@@ -178,7 +178,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 					k |= 32;
 				}
 
-				if (gInputBufferPos<20)
+				if (gInputBufferPos<35)
 				{
 					gInputBuffer[gInputBufferPos++]=k;
 					gInputBuffer[gInputBufferPos]=0;

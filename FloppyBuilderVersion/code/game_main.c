@@ -152,7 +152,7 @@ void MoveObjectsIfNecessary()
         if (gItems[e_ITEM_AlsatianDog].location==e_LOCATION_ENTRANCEHALL)
         {
             gItems[e_ITEM_AlsatianDog].location=e_LOCATION_LARGE_STAIRCASE;
-            if (! (gItems[e_ITEM_AlsatianDog].flags&ITEM_FLAG_DEAD))
+            if (! (gItems[e_ITEM_AlsatianDog].flags&ITEM_FLAG_DISABLED))
             {
                 gItems[e_ITEM_AlsatianDog].description=gTextDogJumpingAtMe;
             }
@@ -621,6 +621,31 @@ void UseItem(unsigned char itemId)
 }
 
 
+#define COMBINATOR(firstItem,secondItem)    ((firstItem&255)|((secondItem&255)<<8))
+
+void CombineItems(unsigned char firstItemId,unsigned char secondaryItemId)
+{
+	if (ItemCheck(firstItemId) && ItemCheck(secondaryItemId))
+    {
+        switch (COMBINATOR(firstItemId,secondaryItemId))
+        {
+        case COMBINATOR(e_ITEM_Meat,e_ITEM_SedativePills):
+        case COMBINATOR(e_ITEM_SedativePills,e_ITEM_Meat):
+            {    
+                gItems[e_ITEM_SedativePills].location = e_LOCATION_GONE_FOREVER;       // The sedative are gone from the game
+                gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;                    // We now have some drugged meat in our inventory
+                LoadScene();
+            }
+            break;
+
+        default:
+            PrintErrorMessage(gTextErrorDontKnowUsage);   // "I don't know how to use that"
+            break;
+        }
+    }
+}
+
+
 void OpenItem(unsigned char itemId)
 {
 	if (ItemCheck(itemId))
@@ -649,6 +674,25 @@ void OpenItem(unsigned char itemId)
                     currentItem->flags &= ~ITEM_FLAG_CLOSED;
 
                     currentItem = &gItems[e_ITEM_Meat];
+                    if (currentItem->location==e_LOCATION_NONE)
+                    {
+                        // If the meat was in the fridge, we now have it inside the kitchen
+                        currentItem->location=e_LOCATION_KITCHEN;
+                    }
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+
+        case e_ITEM_Medicinecabinet:
+            {    
+                if (currentItem->flags & ITEM_FLAG_CLOSED)
+                {
+                    currentItem->description = gTextItemOpenMedicineCabinet;
+                    currentItem->flags &= ~ITEM_FLAG_CLOSED;
+
+                    currentItem = &gItems[e_ITEM_SedativePills];
                     if (currentItem->location==e_LOCATION_NONE)
                     {
                         // If the meat was in the fridge, we now have it inside the kitchen
@@ -690,6 +734,18 @@ void CloseItem(unsigned char itemId)
                 if (!(currentItem->flags & ITEM_FLAG_CLOSED))
                 {
                     currentItem->description = gTextItemFridge;
+                    currentItem->flags |= ITEM_FLAG_CLOSED;
+                    LoadScene();
+                    return;
+                }
+            }
+            break;
+
+        case e_ITEM_Medicinecabinet:
+            {    
+                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
+                {
+                    currentItem->description = gTextItemMedicineCabinet;
                     currentItem->flags |= ITEM_FLAG_CLOSED;
                     LoadScene();
                     return;
@@ -777,7 +833,44 @@ void InspectItem(unsigned char itemId)
 	}
 }
 
+void ThrowItem(unsigned char itemId)
+{
+	if (ItemCheck(itemId))
+    {
+        item* itemPtr=&gItems[itemId];
+		switch (itemId)
+		{
+		case e_ITEM_Meat:
+            if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
+            {
+                item* dogItemPtr=&gItems[e_ITEM_AlsatianDog];
+                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))            // The dog only eats if it's alive
+                {
+                    if (itemPtr->flags & ITEM_FLAG_TRANSFORMED)       // Modified meat -> The dog eats it and sleep after 30ish minutes
+                    {
+                        //PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
+                        itemPtr->location = e_LOCATION_GONE_FOREVER;
+                        dogItemPtr->flags |= ITEM_FLAG_DISABLED;
+                    }
+                    else                                              // Normal meat -> The dog eats it
+                    {
+                        itemPtr->location = e_LOCATION_GONE_FOREVER;
+                        //PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
+                    }
+                    PlayStream(gSceneActionDogEatingMeat);                    
+                    LoadScene();
+                    return;
+                }
+            }
+			break;
 
+		default:
+			break;
+		}
+        // By default we drop the item if we try to throw it and nothing special happens
+        DropItem(itemId);
+	}
+}
 
 
 
@@ -826,6 +919,10 @@ WORDS ProcessAnswer()
 		UseItem(gWordBuffer[1]);
         break;
 
+    case e_WORD_COMBINE:
+		CombineItems(gWordBuffer[1],gWordBuffer[2]);
+        break;
+
     case e_WORD_OPEN:
 		OpenItem(gWordBuffer[1]);
         break;
@@ -851,7 +948,7 @@ WORDS ProcessAnswer()
 				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
-			if (itemPtr->flags & ITEM_FLAG_DEAD)
+			if (itemPtr->flags & ITEM_FLAG_DISABLED)
 			{
 				PrintErrorMessage(gTextErrorAlreadyDead);  // "Already dead"
 			}
@@ -863,14 +960,14 @@ WORDS ProcessAnswer()
 				{
 				case e_ITEM_Thug:
 					gScore+=50;
-					itemPtr->flags|=ITEM_FLAG_DEAD;
+					itemPtr->flags|=ITEM_FLAG_DISABLED;
 					itemPtr->description=gTextDeadThug;   // "a dead thug";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
 					gScore+=50;
-					itemPtr->flags|=ITEM_FLAG_DEAD;
+					itemPtr->flags|=ITEM_FLAG_DISABLED;
 					itemPtr->description=gTextDeadDog;  // "a dead dog";
 					LoadScene();
 					break;
@@ -898,7 +995,7 @@ WORDS ProcessAnswer()
 				switch (itemId)
 				{
 				case e_ITEM_Thug:
-					if (!(itemPtr->flags & ITEM_FLAG_DEAD))
+					if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
 					{
 						PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
 					}
@@ -920,6 +1017,10 @@ WORDS ProcessAnswer()
 		}
 		break;
 
+    case e_WORD_THROW:
+   		ThrowItem(gWordBuffer[1]);
+        break;
+
 #ifdef ENABLE_CHEATS
 	case e_WORD_REVIVE:
 		{
@@ -930,7 +1031,7 @@ WORDS ProcessAnswer()
 				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
-			if (!(itemPtr->flags & ITEM_FLAG_DEAD))
+			if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
 			{
 				PrintErrorMessage(gTextNotDead);    // "Not dead"
 			}
@@ -940,13 +1041,13 @@ WORDS ProcessAnswer()
 				switch (itemId)
 				{
 				case e_ITEM_Thug:
-					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					itemPtr->flags&=~ITEM_FLAG_DISABLED;
 					itemPtr->description=gTextThugAsleepOnBed;     // "a thug asleep on the bed";
 					LoadScene();
 					break;
 
 				case e_ITEM_AlsatianDog:
-					itemPtr->flags&=~ITEM_FLAG_DEAD;
+					itemPtr->flags&=~ITEM_FLAG_DISABLED;
 					itemPtr->description=gTextDogGrowlingAtYou;     // "an alsatian growling at you"
 					LoadScene();
 					break;
@@ -964,7 +1065,7 @@ WORDS ProcessAnswer()
 				PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
 			}
 			else
-			if (itemPtr->flags & ITEM_FLAG_DEAD)
+			if (itemPtr->flags & ITEM_FLAG_DISABLED)
 			{
 				PrintErrorMessage(gTextErrorDeadDontMove);  // "Dead don't move"
 			}

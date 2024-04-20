@@ -131,7 +131,7 @@ void GameDebugger()
         {
             sprintf(currentLine+15,"ATTACHED");
         }
-        if (itemPtr->flags & ITEM_FLAG_DEAD)    
+        if (itemPtr->flags & ITEM_FLAG_DISABLED)    
         {
             sprintf(currentLine+9,"DEAD");
         }
