@@ -35,7 +35,6 @@ _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
 _gTextNotDead               .byt "Pas mort",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
 _gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
-_gTextAGenericWhiteBag      .byt "Juste un sac blanc normal",0
 _gTextThickBookBookmarks    .byt "Un livre épais avec des marques",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
@@ -59,7 +58,6 @@ _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
 _gTextNotDead               .byt "Not dead",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
-_gTextAGenericWhiteBag      .byt "It's just a white generic bag",0
 _gTextThickBookBookmarks    .byt "A thick book with some boomarks",0
 #endif
 _EndMessagesAndPrompts
@@ -1181,77 +1179,92 @@ _StartSceneActions
 
 _gSceneActionReadNewsPaper
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th",0
-    .byt COMMAND_INFO_MESSAGE,"I have to find her fast...",0
+    INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...I hope she is fine!",0
+    INFO_MESSAGE("...I hope she is fine!")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionReadHandWrittenNote
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note",0
     WAIT(50*2)
 #ifdef LANGUAGE_FR
-    .byt COMMAND_INFO_MESSAGE,"Ca pourrait être utile...",0
+    INFO_MESSAGE("Ca pourrait être utile...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...si je peux y accéder !",0
+    INFO_MESSAGE("...si je peux y accéder !")
 #else
-    .byt COMMAND_INFO_MESSAGE,"That could be useful...",0
+    INFO_MESSAGE("That could be useful...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...if I can access it!",0
+    INFO_MESSAGE("...if I can access it!")
 #endif    
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionReadChemistryRecipes
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes",0
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"I can definitely use these...",0
+    INFO_MESSAGE("I can definitely use these...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...just need to find the materials.",0
+    INFO_MESSAGE("...just need to find the materials.")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
+
 
 _gSceneActionReadChemistryBook
+.(
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_SCIENCE_BOOK,"A science book",0
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"I don't understand much...",0
+    INFO_MESSAGE("I don't understand much...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...but looks like someone took notes.",0
+    INFO_MESSAGE("...oh, I found something!")
     WAIT(50*2)
-    END
+    // If the recipes were not yet found, they now appear at the current location
+    JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_NONE))
+    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_LIBRARY)
+recipe_already_found
+    END_AND_REFRESH
+.)
+
 
 _gSceneActionInspectMap
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_UK_MAP,"A map of the United Kingdom",0
-    .byt COMMAND_INFO_MESSAGE,"It shows Ireland, Wales and England",0
+    INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
     END
 
 _gSceneActionInspectGame
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game",0
-    .byt COMMAND_INFO_MESSAGE,"State of the art hardware!",0
+    INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END
 
 _gSceneActionPlayGame
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game",0
-    .byt COMMAND_INFO_MESSAGE,"Hum... looks like it crashed?",0
+    INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
     END
 
 _gSceneActionFridgeDoor
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge",0
-    .byt COMMAND_INFO_MESSAGE,"Looks like a happy familly...",0
+    INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...I wonder where they are?",0
+    INFO_MESSAGE("...I wonder where they are?")
     WAIT(50*2)
     END
 
 _gSceneActionDogEatingMeat
     .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!",0
-    .byt COMMAND_INFO_MESSAGE,"Glad it's not me there!",0
+    INFO_MESSAGE("Glad it's not me there!")
     WAIT(50*2)
     END
 
+_gSceneActionExaminePlasticBag
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Juste un sac blanc normal")
+#else
+    ERROR_MESSAGE("It's just a white generic bag")
+#endif    
+    END
 
 _EndSceneActions
 

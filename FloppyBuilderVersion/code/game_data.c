@@ -370,3 +370,16 @@ action_mapping gActionMappingsArray[] =
 #endif
     { e_WORD_COUNT_, 0 }
 };
+
+
+stream_mapping gReadItemMappingsArray[] =
+{
+    // End Marker
+    { e_ITEM_Newspaper, gSceneActionReadNewsPaper },
+    { e_ITEM_HandWrittenNote, gSceneActionReadHandWrittenNote },
+    { e_ITEM_ChemistryRecipes, gSceneActionReadChemistryRecipes },
+    { e_ITEM_PlasticBag, gSceneActionExaminePlasticBag },
+    { e_ITEM_ChemistryBook, gSceneActionReadChemistryBook },    
+
+    { 255, 0 }
+};

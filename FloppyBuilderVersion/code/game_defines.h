@@ -105,6 +105,12 @@ typedef struct
 } action_mapping;
 
 
+typedef struct
+{
+    unsigned char id;				// The id of the item (ex: e_ITEM_Newspaper)
+    void* stream;                   // Pointer to a stream
+} stream_mapping;
+
 
 extern location gLocations[e_LOCATION_COUNT_];
 extern location* gCurrentLocationPtr;
@@ -113,6 +119,7 @@ extern item gItems[e_ITEM_COUNT_];
 extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
 extern action_mapping gActionMappingsArray[];
+extern stream_mapping gReadItemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -136,7 +143,6 @@ extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
 extern const char gTextNotDead[];               // "Not dead" - Debugging text
 extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
 extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
-extern const char gTextAGenericWhiteBag[];      // "It's just a white generic bag"
 extern const char gTextThickBookBookmarks[];    // "A thick book with some boomarks"
 
 // Error messages 
@@ -299,3 +305,4 @@ extern const char gSceneActionInspectGame[];
 extern const char gSceneActionPlayGame[];
 extern const char gSceneActionFridgeDoor[];
 extern const char gSceneActionDogEatingMeat[];
+extern const char gSceneActionExaminePlasticBag[];

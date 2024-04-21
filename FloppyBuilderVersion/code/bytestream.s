@@ -9,7 +9,7 @@
 
 _gCurrentStream
 _gCurrentStreamInt      .dsb 2
-_gCurrentStreamStop     .dsb 1
+_gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
 
 _gStreamItemPtr         .dsb 2
@@ -33,7 +33,10 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandINFO_MESSAGE
     .word _ByteStreamCommandFULLSCREEN_ITEM
     .word _ByteStreamCommandStopBreakpoint
-
+    .word _ByteStreamCommandEndAndRefresh
+    .word _ByteStreamCommandERROR_MESSAGE
+    .word _ByteStreamCommandSetItemLocation
+    
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
 .(
@@ -44,16 +47,29 @@ _PlayStreamAsm
 
     lda #0
 	sta _gDelayStream
+    sta _gCurrentStreamStop
 
 loop
     jsr _WaitIRQ
-    jsr _HandleByteStream
+    jsr _HandleByteStream        ; Eventually perform a delay if gDelayStream is set
+
+    lda _gCurrentStreamStop
+    and #FLAG_END_STREAM
+    bne stream_stop
+
     lda _gCurrentStream+0
     bne loop
     lda _gCurrentStream+1
     bne loop
 
     rts
+stream_stop
+    lda _gCurrentStreamStop
+    and #FLAG_REFRESH_SCENE
+    beq quit
+    jmp _LoadScene
+quit    
+    rts    
 .)
 
 
@@ -118,14 +134,25 @@ _ByteStreamCommandStopBreakpoint
 
 
 _ByteStreamCommandEnd
+.(
+    lda #FLAG_END_STREAM   ; Stop
++_ByteStreamCommandEndWithStopCode
+    sta _gCurrentStreamStop
     lda #0
 	sta _gCurrentStream+0
     sta _gCurrentStream+1
 	sta _gDelayStream
 
-    lda #1
-    sta _gCurrentStreamStop
     rts
+.)
+
+
+_ByteStreamCommandEndAndRefresh
+.(
+    ;jmp _ByteStreamCommandEndAndRefresh
+    lda #FLAG_END_STREAM|FLAG_REFRESH_SCENE   ; Stop and refresh scene
+    jmp _ByteStreamCommandEndWithStopCode
+.)
 
 
 _ByteStreamCommandWait
@@ -133,7 +160,7 @@ _ByteStreamCommandWait
     jsr _ByteStreamGetNextByte
     stx _gDelayStream+0
   
-    lda #1
+    lda #FLAG_WAIT
     sta _gCurrentStreamStop
     rts
 
@@ -195,14 +222,31 @@ _auto_conditionCheck2
     bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
 
 +_ByteStreamMoveBy5    ; Continue (jump not taken)
+    lda #5
++_ByteStreamMoveByA    
     clc 
-    lda _gCurrentStream+0
-    adc #5
+    adc _gCurrentStream+0
     sta _gCurrentStream+0
     lda _gCurrentStream+1
     adc #0
     sta _gCurrentStream+1
     rts
+.)
+
+
+; Can be used to set the location of any item
+_ByteStreamCommandSetItemLocation
+.(
+    ldy #0
+    lda (_gCurrentStream),y      // item ID
+    jsr _ByteStreamComputeItemPtr
+    iny
+    lda (_gCurrentStream),y      // location id
+    ldy #2
+    sta (_gStreamItemPtr),y      // gItems->location (+2) = location id    
+
+    lda #2
+    jmp _ByteStreamMoveByA
 .)
 
 
@@ -444,6 +488,27 @@ _ByteStreamCommandINFO_MESSAGE
     rts
 .)
 
+; PrintErrorMessage(gTextAGenericWhiteBag);    // "It's just a white generic bag"
+; Uses _gCurrentStream and _gStreamNextPtr
+_ByteStreamCommandERROR_MESSAGE
+.(
+    ; PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
+    ; _param0+0/+1=pointer to message (stored in gCurrentStream)
+    lda _gCurrentStream+0
+    sta _param0+0
+    lda  _gCurrentStream+1
+    sta _param0+1
+
+    jsr _PrintErrorMessageAsm  
+
+    ; gCurrentStream += strlen(gCurrentStream)+1;
+    lda _gStreamNextPtr+0
+    sta _gCurrentStream+0
+    lda _gStreamNextPtr+1
+    sta _gCurrentStream+1
+
+    rts
+.)
 
 
 ; _param0=paper color

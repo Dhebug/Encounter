@@ -83,19 +83,26 @@
 #define COMMAND_INFO_MESSAGE    12 
 #define COMMAND_FULLSCREEN_ITEM 13
 #define COMMAND_STOP_BREAKPOINT 14
-#define _COMMAND_COUNT          15
+#define COMMAND_END_AND_REFRESH 15
+#define COMMAND_ERROR_MESSAGE   16
+#define COMMAND_SET_ITEM_LOCATION   17
+#define _COMMAND_COUNT          18
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
 #define OPERATOR_CHECK_ITEM_FLAG     1
 
 #define END                                  .byt COMMAND_END
+#define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+#define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
+#define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define SET_ITEM_LOCATION(item,location)     .byt COMMAND_SET_ITEM_LOCATION,item,location
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 
@@ -113,4 +120,9 @@
 // Text commands
 #define TEXT_END                 255
 #define TEXT_CRLF                254
+
+// End command
+#define FLAG_END_STREAM          1
+#define FLAG_WAIT                2
+#define FLAG_REFRESH_SCENE       4
 

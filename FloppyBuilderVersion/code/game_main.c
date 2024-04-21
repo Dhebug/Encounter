@@ -458,41 +458,20 @@ void ReadItem()
     unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
-        switch (itemId)
+        // Check the first word
+        stream_mapping* actionMappingPtr = gReadItemMappingsArray;
+        while (actionMappingPtr->id!=255)
         {
-        case e_ITEM_Newspaper:
-            PlayStream(gSceneActionReadNewsPaper);
-            LoadScene();
-            break;
-
-        case e_ITEM_HandWrittenNote:
-            PlayStream(gSceneActionReadHandWrittenNote);
-            LoadScene();
-            break;
-
-        case e_ITEM_ChemistryBook:
-            PlayStream(gSceneActionReadChemistryBook);
-            if (gItems[e_ITEM_ChemistryRecipes].location==e_LOCATION_NONE)
+            if (actionMappingPtr->id==itemId)
             {
-                // If the recipes were not yet found, they now appear at the current location
-                gItems[e_ITEM_ChemistryRecipes].location = gCurrentLocation;
+                // call the callback
+                PlayStream(actionMappingPtr->stream);
+                //LoadScene();
+                return ;
             }
-            LoadScene();
-            break;
-
-        case e_ITEM_ChemistryRecipes:
-            PlayStream(gSceneActionReadChemistryRecipes);
-            LoadScene();
-            break;
-
-        case e_ITEM_PlasticBag:
-            PrintErrorMessage(gTextAGenericWhiteBag);    // "It's just a white generic bag"
-            break;
-
-        default:
-            PrintErrorMessage(gTextErrorCannotRead);     // "I can't read that"
-            break;
+            actionMappingPtr++;
         }
+        PrintErrorMessage(gTextErrorCannotRead);     // "I can't read that"
 	}
 }
 
@@ -649,13 +628,6 @@ void Kill()
             gScore+=50;
             itemPtr->flags|=ITEM_FLAG_DISABLED;
             itemPtr->description=gTextDeadThug;   // "a dead thug";
-            LoadScene();
-            break;
-
-        case e_ITEM_AlsatianDog:
-            gScore+=50;
-            itemPtr->flags|=ITEM_FLAG_DISABLED;
-            itemPtr->description=gTextDogLying;  // "a dog lying";
             LoadScene();
             break;
 

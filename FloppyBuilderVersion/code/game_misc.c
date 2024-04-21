@@ -42,7 +42,7 @@ void HandleByteStream()
             }
             ByteStreamCallbacks[command]();
 		}
-        while (!gCurrentStreamStop);
+        while (!gCurrentStreamStop);   // Can be triggered by END, WAIT, END_AND_REFRESH
 	}
 }
 
