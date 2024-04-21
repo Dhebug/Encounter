@@ -1014,19 +1014,17 @@ void ThrowItem()
             if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
             {
                 item* dogItemPtr=&gItems[e_ITEM_AlsatianDog];
-                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))            // The dog only eats if it's alive
+                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))          // The dog only eats if it's alive
                 {
-                    if (itemPtr->flags & ITEM_FLAG_TRANSFORMED)       // Modified meat -> The dog eats it and sleep after 30ish minutes
+                    if (itemPtr->flags & ITEM_FLAG_TRANSFORMED)         // Modified meat -> The dog eats it and sleep after 30ish minutes
                     {
-                        //PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
                         dogItemPtr->flags |= ITEM_FLAG_DISABLED;
                         dogItemPtr->description = gTextDogLying;
                     }
-                    else                                              // Normal meat -> The dog eats it
+                    else                                                // Normal meat -> The dog eats it
                     {
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
-                        //PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
                     }
                     PlayStream(gSceneActionDogEatingMeat);                    
                     LoadScene();
@@ -1034,6 +1032,27 @@ void ThrowItem()
                 }
             }
 			break;
+
+		case e_ITEM_SilverKnife:
+		case e_ITEM_SnookerCue:
+            if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
+            {
+                item* dogItemPtr=&gItems[e_ITEM_AlsatianDog];
+                itemPtr->location = e_LOCATION_LARGE_STAIRCASE;   // The knife is now in the stairs
+                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))        // The dog can only be killed if it's alive
+                {
+                    dogItemPtr->flags |= ITEM_FLAG_DISABLED;          // The dog is dead
+                    dogItemPtr->description = gTextDogLying;
+                    gScore+=50;
+                }
+                else
+                {
+                    PrintErrorMessage(gTextErrorAlreadyDealtWith);  // "Not a problem anymore"
+                }
+                LoadScene();
+                return;
+            }
+            break;
 
 		default:
 			break;
