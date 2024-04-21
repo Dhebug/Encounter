@@ -54,6 +54,7 @@ char gDebuggerItemId=0;   // Global so it get remembered from the last time we w
 void GameDebugger()
 {
     // Description of scenes is on line 17
+    char increment;
     char car;
     location* locationPtr=0;
     item* itemPtr=0;
@@ -62,7 +63,7 @@ void GameDebugger()
 
     while (1)
     {
-       	int shift=0;
+       	char shift=0;
 
         while (gDebuggerItemId<0)
         {
@@ -93,8 +94,7 @@ void GameDebugger()
 
         sprintf(currentLine,"%s",gLocations[gCurrentLocation].description);    
         sprintf(currentLine+36,"-%d ",gCurrentLocation);    
-        currentLine+=40;
-        currentLine+=40;
+        currentLine+=80;
 
         // Items from 0 to e_ITEM_COUNT_-1
         itemPtr=&gItems[gDebuggerItemId];
@@ -182,42 +182,34 @@ void GameDebugger()
 			shift=1;
 		}
 
-        if (car==KEY_ESC)
+        increment=shift?5:1;
+        switch (car)
         {
+        case KEY_ESC:
+            LoadScene();
+            return;
+
+        case KEY_LEFT:
+            gDebuggerItemId-=increment;
+            break;
+        case KEY_RIGHT:
+            gDebuggerItemId+=increment;
+            break;
+
+        case KEY_UP:
+            gCurrentLocation-=increment;
+            break;
+        case KEY_DOWN:
+            gCurrentLocation+=increment;
+            break;
+
+        case KEY_RETURN:
+            if (itemPtr->location<e_LOCATION_COUNT_)
+            {
+                gCurrentLocation=itemPtr->location;
+            }
             break;
         }
-        else
-        {
-            switch (car)
-            {
-            case KEY_LEFT:
-                if (shift)   gDebuggerItemId-=5;
-                else         gDebuggerItemId--;
-                break;
-            case KEY_RIGHT:
-                if (shift)   gDebuggerItemId+=5;
-                else         gDebuggerItemId++;
-                break;
-
-            case KEY_UP:
-                if (shift)   gCurrentLocation-=5;
-                else         gCurrentLocation--;
-                break;
-            case KEY_DOWN:
-                if (shift)   gCurrentLocation+=5;
-                else         gCurrentLocation++;
-                break;
-
-            case KEY_RETURN:
-                if (itemPtr->location<e_LOCATION_COUNT_)
-                {
-                    gCurrentLocation=itemPtr->location;
-                }
-                break;
-            }
-        }
     }
-
-    LoadScene();
 }
 #endif
