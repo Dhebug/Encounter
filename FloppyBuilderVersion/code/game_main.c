@@ -466,7 +466,6 @@ void ReadItem()
             {
                 // call the callback
                 PlayStream(actionMappingPtr->stream);
-                //LoadScene();
                 return ;
             }
             actionMappingPtr++;

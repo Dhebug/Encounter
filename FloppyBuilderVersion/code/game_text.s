@@ -1233,7 +1233,7 @@ _gSceneActionInspectMap
     END
 
 _gSceneActionInspectGame
-    DISPLAY_IMAGE(OADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END
