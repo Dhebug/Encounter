@@ -85,7 +85,7 @@ _gTextErrorLadderInHole     .byt "L'échelle est déja dans le trou",0
 _gTextErrorCantClimbThat    .byt "Je ne sais pas grimper ca",0
 _gTextErrorNeedPositionned  .byt "Ca doit d'abort être en place",0
 _gTextErrorItsNotHere       .byt "Ca n'est pas là",0
-_gTextErrorAlreadyDead      .byt "Déjà mort",0
+_gTextErrorAlreadyDealtWith .byt "Plus un problème",0
 _gTextErrorShouldSaveGirl   .byt "Vous êtes censé la sauver",0
 _gTextErrorShouldSubdue     .byt "Il faut d'abord le maitriser",0
 _gTextErrorAlreadySearched  .byt "Vous l'avez déjà fouillé",0
@@ -111,7 +111,7 @@ _gTextErrorLadderInHole     .byt "The ladder is already in the hole",0
 _gTextErrorCantClimbThat    .byt "I don't know how to climb that",0
 _gTextErrorNeedPositionned  .byt "It needs to be positionned first",0
 _gTextErrorItsNotHere       .byt "It's not here",0
-_gTextErrorAlreadyDead      .byt "Already dead",0
+_gTextErrorAlreadyDealtWith .byt "Not a problem anymore",0
 _gTextErrorShouldSaveGirl   .byt "You are supposed to save her",0
 _gTextErrorShouldSubdue     .byt "I should subdue him first",0
 _gTextErrorAlreadySearched  .byt "You've already frisked him",0

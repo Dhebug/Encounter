@@ -637,7 +637,7 @@ void Kill()
     else
     if (itemPtr->flags & ITEM_FLAG_DISABLED)
     {
-        PrintErrorMessage(gTextErrorAlreadyDead);  // "Already dead"
+        PrintErrorMessage(gTextErrorAlreadyDealtWith);  // "Not a problem anymore"
     }
     else
     {

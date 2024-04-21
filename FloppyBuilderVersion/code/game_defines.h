@@ -158,7 +158,7 @@ extern const char gTextErrorLadderInHole[];     // "The ladder is already in the
 extern const char gTextErrorCantClimbThat[];    // "I don't know how to climb that"
 extern const char gTextErrorNeedPositionned[];  // "It needs to be positionned first"
 extern const char gTextErrorItsNotHere[];       // "It's not here"
-extern const char gTextErrorAlreadyDead[];      // "Already dead"
+extern const char gTextErrorAlreadyDealtWith[]; // "Not a problem anymore"
 extern const char gTextErrorShouldSaveGirl[];   // "You are supposed to save her"
 extern const char gTextErrorShouldSubdue[];     // "I should subdue him first"
 extern const char gTextErrorAlreadySearched[];  // "You've already frisked him"
