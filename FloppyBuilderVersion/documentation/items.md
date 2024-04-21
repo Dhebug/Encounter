@@ -78,7 +78,7 @@ These are items you will find around in the various locations
 |**a box of matches**|Used to ignite the bomb|e_ITEM_BoxOfMatches|
 |**a snooker cue**|Can be used as a weapon, but also to break the window|e_ITEM_SnookerCue|
 |**a thug asleep on the bed**|There are a few items in his pockets, if you can take control of the situation|e_ITEM_Thug|
-|**a heavy safe**|The safe is in the basement and contains chemicals|e_ITEM_HeavySafe<br>e_ITEM_OpenSafe|
+|**a heavy safe**|The safe is in the basement and contains chemicals|e_ITEM_HeavySafe<br>e_ITEM_HeavySafe|
 |**a hand written note**|The note is a help for the player telling them to investigate the safe in the basement|e_ITEM_HandWrittenNote|
 |**a length of rope**|The rope is necessary for the girl to escape, but can also be used around the tree to escape the pit|e_ITEM_Rope<br>e_ITEM_RopeHangingFromWindow<br>e_ITEM_RopeAttachedToATree|
 |**a roll of toilet tissue**|The toilet roll can be used to build some fuse for the bomb|e_ITEM_RollOfToiletPaper|
