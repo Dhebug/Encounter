@@ -176,10 +176,10 @@ These are done by small scripts
   (...)
 
 _gSceneActionReadNewsPaper
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th",0
-    .byt COMMAND_INFO_MESSAGE,"I have to find her fast...",0
+    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
+    INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
-    .byt COMMAND_INFO_MESSAGE,"...I hope she is fine!",0
+    INFO_MESSAGE("...I hope she is fine!")
     WAIT(50*2)
     END
 ```
