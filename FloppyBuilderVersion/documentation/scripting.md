@@ -4,12 +4,17 @@
   - [The concept](#the-concept)
   - [Commands](#commands)
     - [END](#end)
+    - [END\_AND\_REFRESH](#end_and_refresh)
     - [WAIT](#wait)
     - [JUMP](#jump)
     - [JUMP\_IF\_TRUE](#jump_if_true)
     - [JUMP\_IF\_FALSE](#jump_if_false)
     - [CHECK\_ITEM\_LOCATION](#check_item_location)
     - [CHECK\_ITEM\_FLAG](#check_item_flag)
+    - [INFO\_MESSAGE](#info_message)
+    - [ERROR\_MESSAGE](#error_message)
+    - [DISPLAY\_IMAGE](#display_image)
+    - [DRAW\_BITMAP](#draw_bitmap)
   - [Examples](#examples)
     - [Delays](#delays)
     - [Jumps and conditions](#jumps-and-conditions)
@@ -58,25 +63,37 @@ Scripts can also loop and branch, basic conditions are supported.
 #define COMMAND_INFO_MESSAGE    12 
 #define COMMAND_FULLSCREEN_ITEM 13
 #define COMMAND_STOP_BREAKPOINT 14
-#define _COMMAND_COUNT          15
+#define COMMAND_END_AND_REFRESH 15
+#define COMMAND_ERROR_MESSAGE   16
+#define COMMAND_SET_ITEM_LOCATION   17
+#define _COMMAND_COUNT          18
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
 #define OPERATOR_CHECK_ITEM_FLAG     1
 
 #define END                                  .byt COMMAND_END
+#define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+#define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
+#define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define SET_ITEM_LOCATION(item,location)     .byt COMMAND_SET_ITEM_LOCATION,item,location
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
+#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
 ```
 ### END
 Just a single byte containg the COMMAND_END opcode. 
 This signals the end of the script.
+
+### END_AND_REFRESH
+Similar to END, except it also forces the entire scene to refresh.
+Generally used when the player perform actions resulting in items being modified or moved.
 
 ### WAIT
 Two bytes command containg the COMMAND_WAIT opcode, followed by the number of frames.
@@ -95,6 +112,19 @@ Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed 
 
 ### CHECK_ITEM_FLAG
 Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
+
+### INFO_MESSAGE
+Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by a null terminated string containing the message to display
+
+### ERROR_MESSAGE
+Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the message is printed out as an error 
+
+### DISPLAY_IMAGE
+Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display
+Used to display a full screen image, like the map of the UK or the newspapwer with a subtitle
+
+### DRAW_BITMAP
+Nine bytes operator containg the COMMAND_BITMAP opcode, followed by the id of the image containing the data, width and height of the block to display, source stride, and the address of the source and destination
 
 
 ## Examples

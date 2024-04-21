@@ -105,6 +105,7 @@
 #define SET_ITEM_LOCATION(item,location)     .byt COMMAND_SET_ITEM_LOCATION,item,location
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
+#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
 
 // Audio commands
 #define SOUND_NOT_PLAYING        255

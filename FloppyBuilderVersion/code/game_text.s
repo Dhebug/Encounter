@@ -1178,7 +1178,7 @@ _EndSceneScripts
 _StartSceneActions
 
 _gSceneActionReadNewsPaper
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th",0
+    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
     INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
     INFO_MESSAGE("...I hope she is fine!")
@@ -1186,7 +1186,7 @@ _gSceneActionReadNewsPaper
     END_AND_REFRESH
 
 _gSceneActionReadHandWrittenNote
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note",0
+    DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note")
     WAIT(50*2)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait être utile...")
@@ -1201,7 +1201,7 @@ _gSceneActionReadHandWrittenNote
     END_AND_REFRESH
 
 _gSceneActionReadChemistryRecipes
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes",0
+    DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes")
     WAIT(50*2)
     INFO_MESSAGE("I can definitely use these...")
     WAIT(50*2)
@@ -1212,7 +1212,7 @@ _gSceneActionReadChemistryRecipes
 
 _gSceneActionReadChemistryBook
 .(
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_SCIENCE_BOOK,"A science book",0
+    DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK,"A science book")
     WAIT(50*2)
     INFO_MESSAGE("I don't understand much...")
     WAIT(50*2)
@@ -1227,25 +1227,25 @@ recipe_already_found
 
 
 _gSceneActionInspectMap
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_UK_MAP,"A map of the United Kingdom",0
+    DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
     END
 
 _gSceneActionInspectGame
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game",0
+    DISPLAY_IMAGE(OADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END
 
 _gSceneActionPlayGame
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game",0
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
     INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
     END
 
 _gSceneActionFridgeDoor
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge",0
+    DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
     INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
     INFO_MESSAGE("...I wonder where they are?")
@@ -1253,7 +1253,7 @@ _gSceneActionFridgeDoor
     END
 
 _gSceneActionDogEatingMeat
-    .byt COMMAND_FULLSCREEN_ITEM,LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!",0
+    DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
     INFO_MESSAGE("Glad it's not me there!")
     WAIT(50*2)
     END
