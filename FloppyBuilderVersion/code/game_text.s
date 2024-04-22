@@ -36,6 +36,7 @@ _gTextNotDead               .byt "Pas mort",0                                // 
 _gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
 _gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
 _gTextThickBookBookmarks    .byt "Un livre épais avec des marques",0
+_gTextDoveEatingBread       .byt "une comlombe qui picore",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -59,6 +60,7 @@ _gTextNotDead               .byt "Not dead",0                                // 
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
 _gTextThickBookBookmarks    .byt "A thick book with some boomarks",0
+_gTextDoveEatingBread       .byt "a dove eating bread crumbs",0
 #endif
 _EndMessagesAndPrompts
 
@@ -1256,7 +1258,13 @@ _gSceneActionDogEatingMeat
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
     INFO_MESSAGE("Glad it's not me there!")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
+
+_gSceneActionDoveEatingBread
+    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
+    INFO_MESSAGE("Maybe I can catch it now?")
+    WAIT(50*2)
+    END_AND_REFRESH
 
 _gSceneActionExaminePlasticBag
 #ifdef LANGUAGE_FR

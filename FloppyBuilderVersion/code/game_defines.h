@@ -144,6 +144,7 @@ extern const char gTextNotDead[];               // "Not dead" - Debugging text
 extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
 extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
 extern const char gTextThickBookBookmarks[];    // "A thick book with some boomarks"
+extern const char gTextDoveEatingBread[];       // "a dove eating bread crumbs"
 
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
@@ -306,3 +307,4 @@ extern const char gSceneActionPlayGame[];
 extern const char gSceneActionFridgeDoor[];
 extern const char gSceneActionDogEatingMeat[];
 extern const char gSceneActionExaminePlasticBag[];
+extern const char gSceneActionDoveEatingBread[];

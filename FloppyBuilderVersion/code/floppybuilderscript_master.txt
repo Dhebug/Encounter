@@ -225,6 +225,8 @@ AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
 AddFile ..\build\files\dog_eating_meat.hir
 AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
 
+AddFile ..\build\files\dove_eating_breadcrumbs.hir
+AddDefine LOADER_PICTURE_DOVE_EATING_BREADCRUMBS {FileIndex}
 
 ; All the sprites
 #ifdef LANGUAGE_FR

@@ -355,6 +355,9 @@ void TakeItem()
     case e_ITEM_Ladder:
         itemPtr->description = gTextItemLadder;
         break;
+    case e_ITEM_LargeDove:
+        itemPtr->description = gTextItemLargeDove;
+        break;
     }
     LoadScene();
 }
@@ -960,6 +963,18 @@ void ThrowItem()
         item* itemPtr=&gItems[itemId];
 		switch (itemId)
 		{
+		case e_ITEM_Bread:
+            if (gCurrentLocation==e_LOCATION_WOODEDAVENUE)
+            {
+                item* doveItemPtr=&gItems[e_ITEM_LargeDove];
+                doveItemPtr->flags &= ~ITEM_FLAG_IMMOVABLE;
+                doveItemPtr->description = gTextDoveEatingBread;
+                PlayStream(gSceneActionDoveEatingBread);                    
+                //LoadScene();
+                return;
+            }
+			break;
+
 		case e_ITEM_Meat:
             if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
             {
