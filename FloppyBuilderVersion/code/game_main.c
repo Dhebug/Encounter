@@ -575,7 +575,6 @@ void UseItem()
 
         case e_ITEM_HandheldGame:
             PlayStream(gSceneActionPlayGame);
-			LoadScene();
             break;
 
         default:
@@ -752,6 +751,7 @@ void CombineItems()
             {    
                 gItems[e_ITEM_SedativePills].location = e_LOCATION_GONE_FOREVER;       // The sedative are gone from the game
                 gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;                    // We now have some drugged meat in our inventory
+                gItems[e_ITEM_Meat].description = gTextItemSedativeLacedMeat;
                 LoadScene();
             }
             break;
@@ -931,7 +931,6 @@ void InspectItem()
 		{
 		case e_ITEM_UnitedKingdomMap:
             PlayStream(gSceneActionInspectMap);
-			LoadScene();
 			break;
 
 		case e_ITEM_ChemistryBook:
@@ -940,12 +939,10 @@ void InspectItem()
 
         case e_ITEM_HandheldGame:
             PlayStream(gSceneActionInspectGame);
-			LoadScene();
 			break;
 
         case e_ITEM_Fridge:
             PlayStream(gSceneActionFridgeDoor);
-			LoadScene();
             break;
 
 		default:
@@ -970,7 +967,6 @@ void ThrowItem()
                 doveItemPtr->flags &= ~ITEM_FLAG_IMMOVABLE;
                 doveItemPtr->description = gTextDoveEatingBread;
                 PlayStream(gSceneActionDoveEatingBread);                    
-                //LoadScene();
                 return;
             }
 			break;
@@ -992,7 +988,6 @@ void ThrowItem()
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
                     }
                     PlayStream(gSceneActionDogEatingMeat);                    
-                    LoadScene();
                     return;
                 }
             }

@@ -1232,19 +1232,19 @@ _gSceneActionInspectMap
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionInspectGame
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionPlayGame
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
     INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
@@ -1252,7 +1252,7 @@ _gSceneActionFridgeDoor
     WAIT(50*2)
     INFO_MESSAGE("...I wonder where they are?")
     WAIT(50*2)
-    END
+    END_AND_REFRESH
 
 _gSceneActionDogEatingMeat
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
