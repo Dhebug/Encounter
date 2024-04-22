@@ -288,96 +288,75 @@ WORDS ProcessContainerAnswer()
 void TakeItem()
 {
     unsigned char itemId = gWordBuffer[1];
+    item* itemPtr=&gItems[itemId];
 	if (itemId>=e_ITEM_COUNT_)
 	{
 		PrintErrorMessage(gTextErrorCantTakeNoSee);   // "You can only take something you see"
+        return;
 	}
-	else
-	{
-		// The item is in the scene
-		item* itemPtr=&gItems[itemId];
-        item* itemAliasPtr=itemPtr;
 
-		if (itemPtr->location == e_LOCATION_INVENTORY)
-		{
-			PrintErrorMessage(gTextErrorAlreadyHaveItem);    // "You already have this item"
+    // The item is in the scene
+    if (itemPtr->location == e_LOCATION_INVENTORY)
+    {
+        PrintErrorMessage(gTextErrorAlreadyHaveItem);    // "You already have this item"
+        return;
+    }
+    
+    if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
+    {
+        PrintErrorMessage(gTextErrorCannotDo);   // "I can't do it");
+        return;
+    }
+
+    if (itemPtr->usable_containers)
+    {
+        // Requires a container
+        WORDS containerId = AskInput(gTextCarryInWhat,ProcessContainerAnswer,1 );    // "Carry it in what?"
+        if ( (containerId == e_WORD_QUIT) || (!(itemPtr->usable_containers & (1<<containerId))) )
+        {
+            PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
             return;
-		}
-		
-		if (itemPtr->location != gCurrentLocation)
-		{
-            int itemAlias;
-            for (itemAlias=0;itemAlias<e_ITEM_COUNT_;itemAlias++)
+        }
+        else
+        {
+            item* containerPtr=&gItems[containerId];
+            if (containerPtr->location != e_LOCATION_INVENTORY)
             {
-                itemAliasPtr=&gItems[itemAlias];
-                if (itemAliasPtr->location==gCurrentLocation)
+                // We do not have this container...
+                if (containerPtr->location!=gCurrentLocation)
                 {
-                    break;
+                    PrintErrorMessage(gTextErrorMissingContainer);  // "You don't have this container" 
+                    return;
                 }
+                // But it's on the scene, so we pick-it up automatically
+                containerPtr->location = e_LOCATION_INVENTORY;
             }
-            if (itemAlias == e_ITEM_COUNT_)
+
+            if (containerPtr->associated_item != 255)
             {
-    			PrintErrorMessage(gTextErrorCantTakeNoSee);   // "I don't see this item here");
+                PrintErrorMessage(gTextErrorAlreadyFull);    // "Sorry, that's full already"
                 return;
             }
-		}
-		
 
-		if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
-		{
-			PrintErrorMessage(gTextErrorCannotDo);   // "I can't do it");
-		}
-		else
-		if (itemPtr->usable_containers)
-		{
-			// Requires a container
-			WORDS containerId = AskInput(gTextCarryInWhat,ProcessContainerAnswer,1 );    // "Carry it in what?"
-			if (containerId == e_WORD_QUIT)
-			{
-				PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
-			}
-			else
-			{
-				item* containerPtr=&gItems[containerId];
-				if (containerPtr->location != e_LOCATION_INVENTORY)
-				{
-					PrintErrorMessage(gTextErrorMissingContainer);  // "You don't have this container" - Technically could be optimized at a later stage to automatically pick the item if it's in the scene
-				}
-				else
-				if (containerPtr->associated_item != 255)
-				{
-					PrintErrorMessage(gTextErrorAlreadyFull);    // "Sorry, that's full already"
-				}
-				else
-				{
-					// Looks like we have both the item and an empty container!
-					itemPtr->location 			= e_LOCATION_INVENTORY;
-					itemPtr->associated_item 	= containerId;
+            // Looks like we have both the item and an empty container!
+            itemPtr->associated_item 	  = containerId;
+            containerPtr->associated_item = itemId;
+        }
+    }
 
-					containerPtr->associated_item = itemId;
-
-					LoadScene();
-				}
-			}
-		}
-		else
-		{
-			// Can just be picked-up
-			itemAliasPtr->location = e_LOCATION_NONE;          // Can actually be the same pointer, literaly aliasing!
-			itemPtr->location      = e_LOCATION_INVENTORY;     // Which means that one should be done after
-            itemPtr->flags &= ~ITEM_FLAG_ATTACHED;             // If the item was attached, we detach it
-            switch (itemId)
-            {
-            case e_ITEM_Rope:
-                itemPtr->description = gTextItemRope;
-                break;
-            case e_ITEM_Ladder:
-                itemPtr->description = gTextItemLadder;
-                break;
-            }
-			LoadScene();
-		}
-	}
+    // Common part for all items (in containers or not)
+    itemPtr->location = e_LOCATION_INVENTORY;    // The item is now in our inventory
+    itemPtr->flags   &= ~ITEM_FLAG_ATTACHED;     // If the item was attached, we detach it
+    switch (itemId)
+    {
+    case e_ITEM_Rope:
+        itemPtr->description = gTextItemRope;
+        break;
+    case e_ITEM_Ladder:
+        itemPtr->description = gTextItemLadder;
+        break;
+    }
+    LoadScene();
 }
 
 
