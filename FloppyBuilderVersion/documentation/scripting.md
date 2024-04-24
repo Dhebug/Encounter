@@ -13,6 +13,11 @@
     - [CHECK\_ITEM\_FLAG](#check_item_flag)
     - [INFO\_MESSAGE](#info_message)
     - [ERROR\_MESSAGE](#error_message)
+    - [SET\_ITEM\_LOCATION](#set_item_location)
+    - [SET\_ITEM\_FLAGS](#set_item_flags)
+    - [UNSET\_ITEM\_FLAGS](#unset_item_flags)
+    - [SET\_ITEM\_DESCRIPTION](#set_item_description)
+    - [SET\_LOCATION\_DIRECTION](#set_location_direction)
     - [DISPLAY\_IMAGE](#display_image)
     - [DRAW\_BITMAP](#draw_bitmap)
   - [Examples](#examples)
@@ -66,7 +71,11 @@ Scripts can also loop and branch, basic conditions are supported.
 #define COMMAND_END_AND_REFRESH 15
 #define COMMAND_ERROR_MESSAGE   16
 #define COMMAND_SET_ITEM_LOCATION   17
-#define _COMMAND_COUNT          18
+#define COMMAND_SET_ITEM_FLAGS  18
+#define COMMAND_UNSET_ITEM_FLAGS 19
+#define COMMAND_SET_ITEM_DESCRIPTION 20
+#define COMMAND_SET_LOCATION_DIRECTION 21
+#define _COMMAND_COUNT          22
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
@@ -82,7 +91,15 @@ Scripts can also loop and branch, basic conditions are supported.
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
-#define SET_ITEM_LOCATION(item,location)     .byt COMMAND_SET_ITEM_LOCATION,item,location
+
+// Items
+#define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
+#define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
+#define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,flags
+#define SET_ITEM_DESCRIPTION(item,description)  .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
+
+// Locations
+#define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 #define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
@@ -118,6 +135,21 @@ Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by
 
 ### ERROR_MESSAGE
 Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the message is printed out as an error 
+
+### SET_ITEM_LOCATION
+Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it
+
+### SET_ITEM_FLAGS
+Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
+
+### UNSET_ITEM_FLAGS
+Three bytes command containg the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
+
+### SET_ITEM_DESCRIPTION
+Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, followed by the id of the item, then a null terminated string containing the description
+
+### SET_LOCATION_DIRECTION
+Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
 
 ### DISPLAY_IMAGE
 Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display

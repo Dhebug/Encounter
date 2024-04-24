@@ -2,18 +2,6 @@
 #include "game_enums.h"
 #include "params.h"
 
-// The various locations: These have to be in the same order as the e_WORD_xxx directions
-enum DIRECTIONS
-{
-    e_DIRECTION_NORTH = 0,
-    e_DIRECTION_SOUTH = 1,
-    e_DIRECTION_EAST  = 2,
-    e_DIRECTION_WEST  = 3,
-    e_DIRECTION_UP    = 4,   // Seldomly used (to go to the house upper floor and basement)
-    e_DIRECTION_DOWN  = 5,   // Seldomly used (to go to the house upper floor and basement)
-    e_DIRECTION_COUNT_
-};
-
 
 // For practical reasons we reuse the item ids in the list of words
 // followed by the actual instructions
@@ -308,3 +296,7 @@ extern const char gSceneActionFridgeDoor[];
 extern const char gSceneActionDogEatingMeat[];
 extern const char gSceneActionExaminePlasticBag[];
 extern const char gSceneActionDoveEatingBread[];
+
+extern const char gSceneActionCloseCurtain[];
+extern const char gSceneActionCloseFridge[];
+extern const char gSceneActionCloseMedicineCabinet[];

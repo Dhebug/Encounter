@@ -329,7 +329,7 @@ _gTextItemWater                   .byt "some water",0
 // Normal items
 _gTextItemLockedPanel             .byt "a locked panel on the wall",0         
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
-_gTextItemFridge                  .byt "a fridge",0
+_gTextItemFridge                  .byt "a fridge",0                        // TODO: Use _gSceneActionCloseFridge description
 _gTextItemOpenFridge              .byt "an open fridge",0
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemBrokenWindow            .byt "the window is broken",0               
@@ -368,10 +368,10 @@ _gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0
 _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
 _gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
 _gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
-_gTextItemClosedCurtain           .byt "a closed curtain",0
+_gTextItemClosedCurtain           .byt "a closed curtain",0             // TODO: Use _gSceneActionCloseCurtain description
 _gTextItemOpenedCurtain           .byt "an opened curtain",0
 _gTextItemHandheldGame            .byt "a handheld game",0
-_gTextItemMedicineCabinet         .byt "a medicine cabinet",0
+_gTextItemMedicineCabinet         .byt "a medicine cabinet",0           // TODO: Use _gSceneActionCloseMedicineCabinet description
 _gTextItemOpenMedicineCabinet     .byt "an open medicine cabinet",0
 _gTextItemSedativePills           .byt "some sedative pills",0
 _gTextItemSedativeLacedMeat       .byt "drugged meat",0
@@ -1273,6 +1273,36 @@ _gSceneActionExaminePlasticBag
     ERROR_MESSAGE("It's just a white generic bag")
 #endif    
     END
+
+
+_gSceneActionCloseCurtain
+.(
+    JUMP_IF_TRUE(curtain_already_closed,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
+    UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
+    SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
+    SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)
+:curtain_already_closed
+    END_AND_REFRESH
+.)
+
+_gSceneActionCloseFridge
+.(
+    JUMP_IF_TRUE(fridge_already_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
+    SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)
+:fridge_already_closed
+    END_AND_REFRESH
+.)
+
+_gSceneActionCloseMedicineCabinet
+.(
+    JUMP_IF_TRUE(medicine_cabinet_already_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
+    SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)
+:medicine_cabinet_already_closed
+    END_AND_REFRESH
+.)
 
 _EndSceneActions
 

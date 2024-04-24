@@ -833,47 +833,23 @@ void CloseItem()
     unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
-        item* currentItem = &gItems[itemId];
         switch (itemId)
         {
         case e_ITEM_Curtain:
-            {    
-                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
-                {
-                    currentItem->description = gTextItemOpenedCurtain;
-                    currentItem->flags |= ITEM_FLAG_CLOSED;
-                    gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_NONE;
-                    LoadScene();
-                    return;
-                }
-            }
+            PlayStream(gSceneActionCloseCurtain);
             break;
 
         case e_ITEM_Fridge:
-            {    
-                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
-                {
-                    currentItem->description = gTextItemFridge;
-                    currentItem->flags |= ITEM_FLAG_CLOSED;
-                    LoadScene();
-                    return;
-                }
-            }
+            PlayStream(gSceneActionCloseFridge);
             break;
 
         case e_ITEM_Medicinecabinet:
-            {    
-                if (!(currentItem->flags & ITEM_FLAG_CLOSED))
-                {
-                    currentItem->description = gTextItemMedicineCabinet;
-                    currentItem->flags |= ITEM_FLAG_CLOSED;
-                    LoadScene();
-                    return;
-                }
-            }
+            PlayStream(gSceneActionCloseMedicineCabinet);
             break;
+
+        default:
+            PrintErrorMessage(gTextErrorCannotDo);   // "I can't do that"
         }
-        PrintErrorMessage(gTextErrorCannotDo);   // "I can't do that"
     }
 }
 

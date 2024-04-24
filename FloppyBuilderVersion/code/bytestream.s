@@ -12,7 +12,8 @@ _gCurrentStreamInt      .dsb 2
 _gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
 
-_gStreamItemPtr         .dsb 2
+_gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
+_gStreamLocationPtr     .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
 _gStreamNextPtr         .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
 
     .text 
@@ -36,6 +37,10 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandEndAndRefresh
     .word _ByteStreamCommandERROR_MESSAGE
     .word _ByteStreamCommandSetItemLocation
+    .word _ByteStreamCommandSetItemFlags
+    .word _ByteStreamCommandUnSetItemFlags
+    .word _ByteStreamCommandSetItemDescription
+    .word _ByteStreamCommandSetLocationDirection
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -89,6 +94,8 @@ skip
 
 ; A=Item ID
 ; Return a pointer on the item in _gStreamItemPtr
+; sizeof(item) = 6
+; 6 = 4n+2n = n<<2 + n<<1
 _ByteStreamComputeItemPtr
     // Item ID
     sta _gStreamItemPtr+0
@@ -126,6 +133,56 @@ _ByteStreamComputeItemPtr
     sta _gStreamItemPtr+1
 
     rts
+
+
+; A=Location ID
+; Return a pointer on the location in _gStreamLocationPtr
+; sizeof(location) = 10 
+; 10 = 8n+2n = n<<3 + n<<1
+_ByteStreamComputeLocationPtr
+    // Item ID
+    sta tmp0+0
+    sta _gStreamLocationPtr+0
+    lda #0
+    sta tmp0+1
+    sta _gStreamLocationPtr+1
+
+    // x2
+    asl tmp0+0
+    rol tmp0+1
+
+    // x2
+    asl _gStreamLocationPtr+0
+    rol _gStreamLocationPtr+1
+
+    // x4
+    asl _gStreamLocationPtr+0
+    rol _gStreamLocationPtr+1
+
+    // x8
+    asl _gStreamLocationPtr+0
+    rol _gStreamLocationPtr+1
+
+    // x10
+    clc
+    lda _gStreamLocationPtr+0
+    adc tmp0+0
+    sta _gStreamLocationPtr+0
+    lda _gStreamLocationPtr+1
+    adc tmp0+1
+    sta _gStreamLocationPtr+1
+
+    // Item pointer
+    clc
+    lda _gStreamLocationPtr+0
+    adc #<_gLocations
+    sta _gStreamLocationPtr+0
+    lda _gStreamLocationPtr+1
+    adc #>_gLocations
+    sta _gStreamLocationPtr+1
+
+    rts
+
 
 
 _ByteStreamCommandStopBreakpoint
@@ -235,6 +292,7 @@ _auto_conditionCheck2
 
 
 ; Can be used to set the location of any item
+; .byt COMMAND_SET_ITEM_LOCATION,item,location
 _ByteStreamCommandSetItemLocation
 .(
     ldy #0
@@ -246,6 +304,94 @@ _ByteStreamCommandSetItemLocation
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id    
 
     lda #2
+    jmp _ByteStreamMoveByA
+.)
+
+// .byt COMMAND_SET_ITEM_FLAGS,item,flags
+ _ByteStreamCommandSetItemFlags
+ .(
+    ldy #0
+    lda (_gCurrentStream),y      // item ID
+    jsr _ByteStreamComputeItemPtr
+
+    iny
+    lda (_gCurrentStream),y      // flag mask
+    ldy #4                       
+    ora (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
+    sta (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
+
+    lda #2
+    jmp _ByteStreamMoveByA
+ .)
+
+; .byt COMMAND_UNSET_ITEM_FLAGS,item,flags
+ _ByteStreamCommandUnSetItemFlags
+ .(
+    ldy #0
+    lda (_gCurrentStream),y      // item ID
+    jsr _ByteStreamComputeItemPtr
+
+    iny    
+    lda (_gCurrentStream),y      // flag mask
+    ldy #4                       
+    and (_gStreamItemPtr),y      // gItems->flags (+4) &= flag mask
+    sta (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
+
+    lda #2
+    jmp _ByteStreamMoveByA
+ .)
+
+; .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
+_ByteStreamCommandSetItemDescription
+.(
+    ldy #0
+    lda (_gCurrentStream),y      // item ID
+    jsr _ByteStreamComputeItemPtr
+
+    lda #1
+    jsr _ByteStreamMoveByA
+
+    ldy #0
+    lda _gCurrentStream+0
+    sta (_gStreamItemPtr),y      // gItems->description (+0) = <_gCurrentStream
+    iny
+    lda _gCurrentStream+1
+    sta (_gStreamItemPtr),y      // gItems->description (+1) = >_gCurrentStream
+
+    ; Find the null terminator
+    ldy #0
+search_loop
+    lda (_gCurrentStream),y      // item ID
+    beq found_zero
+    iny
+    bne search_loop
+
+found_zero
+    iny
+    tya
+
+    jmp _ByteStreamMoveByA
+.)
+
+;                                     +0       +1        +2
+; .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
+_ByteStreamCommandSetLocationDirection
+.(
+    ldy #0
+    lda (_gCurrentStream),y      // location ID
+    jsr _ByteStreamComputeLocationPtr
+
+    ldy #1
+    lda (_gCurrentStream),y      // Direction to update
+    sta tmp0
+
+    ldy #2
+    lda (_gCurrentStream),y      // New value for this direction
+
+    ldy tmp0
+    sta (_gStreamLocationPtr),y  // _gStreamLocationPtr->directions[requested direction] (+0) = new value
+
+    lda #3
     jmp _ByteStreamMoveByA
 .)
 

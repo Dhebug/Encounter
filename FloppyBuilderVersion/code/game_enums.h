@@ -1,5 +1,15 @@
 
 
+// The various locations: These have to be in the same order as the e_WORD_xxx directions
+#define e_DIRECTION_NORTH  0
+#define e_DIRECTION_SOUTH  1
+#define e_DIRECTION_EAST   2
+#define e_DIRECTION_WEST   3
+#define e_DIRECTION_UP     4   // Seldomly used (to go to the house upper floor and basement)
+#define e_DIRECTION_DOWN   5   // Seldomly used (to go to the house upper floor and basement)
+#define e_DIRECTION_COUNT_ 6 
+
+
 // Define the various locations
 #define	e_LOCATION_MARKETPLACE       0
 #define	e_LOCATION_DARKALLEY         1
