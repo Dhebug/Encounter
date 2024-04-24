@@ -24,10 +24,10 @@ Locations are defined in a static array containing all the locations:
 ```
 typedef struct 
 {
-    unsigned char directions[e_DIRECTION_COUNT_];   // The six possible directions (NSEWUP)
-    const char* description;                        // The one line description of the place, displayed at the top of the TEXT area
-	const char* script;                             // Additional list of commands to add elements to the graphical view (speech bubble, etc...)
-} location;
+  unsigned char directions[e_DIRECTION_COUNT_];   // +0 The six possible directions (NSEWUP)
+  const char* description;                        // +6 The one line description of the place, displayed at the top of the TEXT area
+  const char* script;                             // +8 Additional list of commands to add elements to the graphical view (speech bubble, etc...)
+} location;  // sizeof = 10 bytes
 
 extern location gLocations[e_LOCATION_COUNT_];      // Array containing all the locations
 ```

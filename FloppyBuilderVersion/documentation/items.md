@@ -17,12 +17,12 @@ Items are defined in a static array containing all the information about each it
 ```
 typedef struct
 {
-	const char* description;        	// Full description of the object in the world
-	unsigned char location;         	// Where the object is in the world
-	unsigned char associated_item;      // For the item<->container association
-    unsigned char flags;            	// Special flags on what can be done with the item
-    unsigned char usable_containers;	// Bit masks representing the possible containers to store the item
-} item;
+	const char* description;        	// +0 Full description of the object in the world
+	unsigned char location;         	// +2 Where the object is in the world
+	unsigned char associated_item;      // +3 For the item<->container association
+	unsigned char flags;            	// +4 Special flags on what can be done with the item
+	unsigned char usable_containers;	// +5 Bit masks representing the possible containers to store the item
+} item;  // sizeof = 6 bytes
 
 extern item gItems[e_ITEM_COUNT_];
 ```
