@@ -108,6 +108,7 @@ extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
 extern action_mapping gActionMappingsArray[];
 extern stream_mapping gReadItemMappingsArray[];
+extern stream_mapping gCloseItemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -300,3 +301,6 @@ extern const char gSceneActionDoveEatingBread[];
 extern const char gSceneActionCloseCurtain[];
 extern const char gSceneActionCloseFridge[];
 extern const char gSceneActionCloseMedicineCabinet[];
+
+extern const char gSceneActionCannotDo[];
+extern const char gSceneActionCannotRead[];

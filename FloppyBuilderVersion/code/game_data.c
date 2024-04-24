@@ -373,13 +373,22 @@ action_mapping gActionMappingsArray[] =
 
 
 stream_mapping gReadItemMappingsArray[] =
-{
-    // End Marker
+{    
     { e_ITEM_Newspaper, gSceneActionReadNewsPaper },
     { e_ITEM_HandWrittenNote, gSceneActionReadHandWrittenNote },
     { e_ITEM_ChemistryRecipes, gSceneActionReadChemistryRecipes },
     { e_ITEM_PlasticBag, gSceneActionExaminePlasticBag },
     { e_ITEM_ChemistryBook, gSceneActionReadChemistryBook },    
 
-    { 255, 0 }
+    { 255, gSceneActionCannotRead }  // End Marker
+};
+
+
+stream_mapping gCloseItemMappingsArray[] =
+{    
+    { e_ITEM_Curtain            , gSceneActionCloseCurtain },
+    { e_ITEM_Fridge             , gSceneActionCloseFridge },
+    { e_ITEM_Medicinecabinet    , gSceneActionCloseMedicineCabinet },
+
+    { 255, gSceneActionCannotDo }  // End Marker
 };

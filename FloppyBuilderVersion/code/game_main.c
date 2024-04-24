@@ -435,24 +435,14 @@ char ItemCheck(unsigned char itemId)
     return 0; // Cannot use
 }
 
+
 void ReadItem()
 {
     unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
         // Check the first word
-        stream_mapping* actionMappingPtr = gReadItemMappingsArray;
-        while (actionMappingPtr->id!=255)
-        {
-            if (actionMappingPtr->id==itemId)
-            {
-                // call the callback
-                PlayStream(actionMappingPtr->stream);
-                return ;
-            }
-            actionMappingPtr++;
-        }
-        PrintErrorMessage(gTextErrorCannotRead);     // "I can't read that"
+        DispatchStream(gReadItemMappingsArray,itemId);
 	}
 }
 
@@ -833,23 +823,7 @@ void CloseItem()
     unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
-        switch (itemId)
-        {
-        case e_ITEM_Curtain:
-            PlayStream(gSceneActionCloseCurtain);
-            break;
-
-        case e_ITEM_Fridge:
-            PlayStream(gSceneActionCloseFridge);
-            break;
-
-        case e_ITEM_Medicinecabinet:
-            PlayStream(gSceneActionCloseMedicineCabinet);
-            break;
-
-        default:
-            PrintErrorMessage(gTextErrorCannotDo);   // "I can't do that"
-        }
+        DispatchStream(gCloseItemMappingsArray,itemId);
     }
 }
 

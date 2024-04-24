@@ -78,6 +78,35 @@ quit
 .)
 
 
+; _param0=id of the element we are searching for in the table
+; _param1=pointer to a table with id:stream pointer
+_DispatchStream
+.(
+    ldy #0
+search_loop    
+    lda (_param1),y     ; Check the ID in the table
+    iny
+    cmp _param0         ; Does that match the ID we are looking for?
+    beq found_it
+    cmp #255            ; Or is it the end of the table?
+    beq found_it
+
+    iny
+    iny
+    jmp search_loop
+
+found_it    
+    lda (_param1),y     ; Copy the stream pointer to _param0
+    sta _param0+0
+    iny
+    lda (_param1),y
+    sta _param0+1
+
+    jmp _PlayStreamAsm
+.)
+
+
+
 ; Fetch the value in _gCurrentStream, increment the pointer, return the value in X
 _ByteStreamGetNextByte
 .(

@@ -70,14 +70,12 @@ _StartErrorMessages
 _gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
-_gTextErrorCannotDo         .byt "Je ne peux pas le faire",0
 _gTextErrorRidiculous       .byt "Ne soyez pas ridicule",0
 _gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
-_gTextErrorCannotRead       .byt "Je ne peux pas lire ca",0
 _gTextErrorCannotUseHere    .byt "Pas utilisable ici",0
 _gTextErrorDontKnowUsage    .byt "Je ne sais pas l'utiliser",0
 _gTextErrorCannotAttachRope .byt "Impossible de l'attacher",0
@@ -96,14 +94,12 @@ _gTextErrorNothingSpecial   .byt "Rien de spécial",0
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
 _gTextErrorAlreadyHaveItem  .byt "You already have this item",0
-_gTextErrorCannotDo         .byt "I can't do that",0
 _gTextErrorRidiculous       .byt "Don't be ridiculous",0
 _gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
 _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
 _gTextErrorItemNotPresent   .byt "This item does not seem to be present",0
-_gTextErrorCannotRead       .byt "I can't read that",0
 _gTextErrorCannotUseHere    .byt "I can't use it here",0
 _gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
 _gTextErrorCannotAttachRope .byt "You can't attach the rope",0
@@ -1301,6 +1297,30 @@ _gSceneActionCloseMedicineCabinet
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
     SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)
 :medicine_cabinet_already_closed
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionCannotDo
+.(
++_gTextErrorCannotDo = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je ne peux pas le faire")
+#else
+    ERROR_MESSAGE("I can't do that")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionCannotRead
+.(
++_gTextErrorCannotRead = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je ne peux pas lire ca")
+#else
+    ERROR_MESSAGE("I can't read that")
+#endif    
     END_AND_REFRESH
 .)
 
