@@ -35,7 +35,6 @@ _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
 _gTextNotDead               .byt "Pas mort",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
 _gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
-_gTextThickBookBookmarks    .byt "Un livre épais avec des marques",0
 _gTextDoveEatingBread       .byt "une comlombe qui picore",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
@@ -59,7 +58,6 @@ _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
 _gTextNotDead               .byt "Not dead",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
-_gTextThickBookBookmarks    .byt "A thick book with some boomarks",0
 _gTextDoveEatingBread       .byt "a dove eating bread crumbs",0
 #endif
 _EndMessagesAndPrompts
@@ -89,7 +87,6 @@ _gTextErrorShouldSubdue     .byt "Il faut d'abord le maitriser",0
 _gTextErrorAlreadySearched  .byt "Vous l'avez déjà fouillé",0
 _gTextErrorInappropriate    .byt "Probablement inapproprié",0
 _gTextErrorDeadDontMove     .byt "Les morts ne bougent pas",0
-_gTextErrorNothingSpecial   .byt "Rien de spécial",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -113,7 +110,6 @@ _gTextErrorShouldSubdue     .byt "I should subdue him first",0
 _gTextErrorAlreadySearched  .byt "You've already frisked him",0
 _gTextErrorInappropriate    .byt "Probably inappropriate",0
 _gTextErrorDeadDontMove     .byt "Dead don't move",0
-_gTextErrorNothingSpecial   .byt "Nothing special",0
 #endif
 _EndErrorMessages
 
@@ -1236,17 +1232,43 @@ _gSceneActionInspectGame
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionPlayGame
-    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
-    INFO_MESSAGE("Hum... looks like it crashed?")
+_gSceneActionInspectChemistryBook
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un livre épais avec des marques")
+#else    
+    INFO_MESSAGE("A thick book with some bookmarks")
+#endif    
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionFridgeDoor
+_gSceneActionInspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
     INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
     INFO_MESSAGE("...I wonder where they are?")
+    WAIT(50*2)
+    END_AND_REFRESH
+
+_gSceneActionInspectMedicineCabinet
+.(
+    ; Is the medicine cabinet open?
+    JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
+medicine_cabinet_open
+    DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN,"Inside the medicine cabinet")
+    INFO_MESSAGE("I can use some of that.")
+    WAIT(50*2)
+    END_AND_REFRESH
+
+medicine_cabinet_closed
+    DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET,"A closed medicine cabinet")
+    INFO_MESSAGE("Not much to see when closed.")
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+_gSceneActionPlayGame
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
+    INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
     END_AND_REFRESH
 
@@ -1323,6 +1345,19 @@ _gSceneActionCannotRead
 #endif    
     END_AND_REFRESH
 .)
+
+_gSceneActionNothingSpecial
+.(
++gTextErrorNothingSpecial = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Rien de spécial")
+#else
+    ERROR_MESSAGE("Nothing special")
+#endif    
+    END_AND_REFRESH
+.)
+
+
 
 _EndSceneActions
 

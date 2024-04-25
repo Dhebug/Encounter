@@ -436,16 +436,6 @@ char ItemCheck(unsigned char itemId)
 }
 
 
-void ReadItem()
-{
-    unsigned char itemId = gWordBuffer[1];
-	if (ItemCheck(itemId))
-    {
-        // Check the first word
-        DispatchStream(gReadItemMappingsArray,itemId);
-	}
-}
-
 
 void ActionClimbLadder()
 {    
@@ -818,6 +808,16 @@ void OpenItem()
 }
 
 
+void ReadItem()
+{
+    unsigned char itemId = gWordBuffer[1];
+	if (ItemCheck(itemId))
+    {
+        DispatchStream(gReadItemMappingsArray,itemId);
+	}
+}
+
+
 void CloseItem()
 {
     unsigned char itemId = gWordBuffer[1];
@@ -827,6 +827,15 @@ void CloseItem()
     }
 }
 
+
+void InspectItem()
+{
+    unsigned char itemId = gWordBuffer[1];    
+	if (ItemCheck(itemId))
+    {
+        DispatchStream(gInspectItemMappingsArray,itemId);
+	}
+}
 
 
 void ClimbItem()
@@ -871,36 +880,6 @@ void ClimbItem()
 	}
 }
 
-
-void InspectItem()
-{
-    unsigned char itemId = gWordBuffer[1];    
-	if (ItemCheck(itemId))
-    {
-		switch (itemId)
-		{
-		case e_ITEM_UnitedKingdomMap:
-            PlayStream(gSceneActionInspectMap);
-			break;
-
-		case e_ITEM_ChemistryBook:
-			PrintInformationMessage(gTextThickBookBookmarks);   // "A thick book with some boomarks"
-			break;
-
-        case e_ITEM_HandheldGame:
-            PlayStream(gSceneActionInspectGame);
-			break;
-
-        case e_ITEM_Fridge:
-            PlayStream(gSceneActionFridgeDoor);
-            break;
-
-		default:
-			PrintErrorMessage(gTextErrorNothingSpecial);    // "Nothing special"
-			break;
-		}
-	}
-}
 
 void ThrowItem()
 {

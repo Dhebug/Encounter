@@ -374,11 +374,11 @@ action_mapping gActionMappingsArray[] =
 
 stream_mapping gReadItemMappingsArray[] =
 {    
-    { e_ITEM_Newspaper, gSceneActionReadNewsPaper },
-    { e_ITEM_HandWrittenNote, gSceneActionReadHandWrittenNote },
-    { e_ITEM_ChemistryRecipes, gSceneActionReadChemistryRecipes },
-    { e_ITEM_PlasticBag, gSceneActionExaminePlasticBag },
-    { e_ITEM_ChemistryBook, gSceneActionReadChemistryBook },    
+    { e_ITEM_Newspaper          , gSceneActionReadNewsPaper },
+    { e_ITEM_HandWrittenNote    , gSceneActionReadHandWrittenNote },
+    { e_ITEM_ChemistryRecipes   , gSceneActionReadChemistryRecipes },
+    { e_ITEM_PlasticBag         , gSceneActionExaminePlasticBag },
+    { e_ITEM_ChemistryBook      , gSceneActionReadChemistryBook },    
 
     { 255, gSceneActionCannotRead }  // End Marker
 };
@@ -391,4 +391,16 @@ stream_mapping gCloseItemMappingsArray[] =
     { e_ITEM_Medicinecabinet    , gSceneActionCloseMedicineCabinet },
 
     { 255, gSceneActionCannotDo }  // End Marker
+};
+
+
+stream_mapping gInspectItemMappingsArray[] =
+{    
+    { e_ITEM_UnitedKingdomMap   , gSceneActionInspectMap },
+    { e_ITEM_ChemistryBook      , gSceneActionInspectChemistryBook },
+    { e_ITEM_HandheldGame       , gSceneActionInspectGame },
+    { e_ITEM_Fridge             , gSceneActionInspectFridgeDoor },
+    { e_ITEM_Medicinecabinet    , gSceneActionInspectMedicineCabinet },
+
+    { 255, gSceneActionNothingSpecial }  // End Marker
 };

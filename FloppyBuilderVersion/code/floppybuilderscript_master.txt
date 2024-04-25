@@ -222,6 +222,12 @@ AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
 AddFile ..\build\files\fridge_door.hir
 AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
 
+AddFile ..\build\files\medicine_cabinet.hir
+AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
+
+AddFile ..\build\files\medicine_cabinet_open.hir
+AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
+
 AddFile ..\build\files\dog_eating_meat.hir
 AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
 

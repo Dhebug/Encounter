@@ -106,9 +106,11 @@ extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
+
 extern action_mapping gActionMappingsArray[];
 extern stream_mapping gReadItemMappingsArray[];
 extern stream_mapping gCloseItemMappingsArray[];
+extern stream_mapping gInspectItemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -132,7 +134,6 @@ extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
 extern const char gTextNotDead[];               // "Not dead" - Debugging text
 extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
 extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
-extern const char gTextThickBookBookmarks[];    // "A thick book with some boomarks"
 extern const char gTextDoveEatingBread[];       // "a dove eating bread crumbs"
 
 // Error messages 
@@ -292,8 +293,11 @@ extern const char gSceneActionReadChemistryRecipes[];
 extern const char gSceneActionReadChemistryBook[];
 extern const char gSceneActionInspectMap[];
 extern const char gSceneActionInspectGame[];
+extern const char gSceneActionInspectChemistryBook[];
+extern const char gSceneActionInspectFridgeDoor[];
+extern const char gSceneActionInspectMedicineCabinet[];
+
 extern const char gSceneActionPlayGame[];
-extern const char gSceneActionFridgeDoor[];
 extern const char gSceneActionDogEatingMeat[];
 extern const char gSceneActionExaminePlasticBag[];
 extern const char gSceneActionDoveEatingBread[];
@@ -304,3 +308,5 @@ extern const char gSceneActionCloseMedicineCabinet[];
 
 extern const char gSceneActionCannotDo[];
 extern const char gSceneActionCannotRead[];
+extern const char gSceneActionNothingSpecial[];
+
