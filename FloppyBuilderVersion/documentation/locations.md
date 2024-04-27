@@ -56,9 +56,9 @@ Here are information about the various locations you can reach in the game, grou
 |Image|Description|
 |-|-|
 |**You are in a deserted market square**|e_LOCATION_MARKETPLACE|
-|![Game location image](../data/deserted_market_square.png)|This is where the player starts their adventure.|
+|![Game location image](../data/loc_market_square.png)|This is where the player starts their adventure.|
 |**You are in a dark, damp tunnel**|e_LOCATION_DARKTUNNEL|
-|![Game location image](../data/dark_damp_tunel.png)|This humid tunnel contains **salpeter** you can use to make **explosive powder**.|
+|![Game location image](../data/loc_tunel.png)|This humid tunnel contains **salpeter** you can use to make **explosive powder**.|
 |**You are in a wooded avenue**|e_LOCATION_WOODEDAVENUE|
 |![Game location image](../data/dark_forest.png)|Contains a **dove** that you can capture with the **fishing net**.|
 |**You are near to an old-fashioned well**|e_LOCATION_WELL|
@@ -94,7 +94,7 @@ Here are information about the various locations you can reach in the game, grou
 |**You are on a tiled patio**|e_LOCATION_TILEDPATIO|
 |![Game location image](../data/barred_window.png)|Above the passage is the **window** of the room where the **hostage** is being kept.<br>Trying to break the window triggers the **alarm**|
 |**You are in an apple orchard**|e_LOCATION_APPLE_TREES|
-|![Game location image](../data/apple_orchard.png)|Here you can find a **ladder** which can be used to go down the **pit**|
+|![Game location image](../data/loc_orchard.png)|Here you can find a **ladder** which can be used to go down the **pit**|
 |**You are in a vegetable plot**|e_LOCATION_VEGSGARDEN|
 |![Game location image](../data/vegetable_plot.png)|A **knife** is lying around.<br>On the wall you can see the small window to the basement dark room.<br>See: 'Soupirail', 'Fenêtres de trémie', 'Vasistas', 'Hopper window', 'Kellerfenster'|
 |**You are in a small greenhouse**|e_LOCATION_GREENHOUSE|
@@ -106,11 +106,11 @@ Here are information about the various locations you can reach in the game, grou
 |Image|Description|
 |-|-|
 |**You are in an imposing entrance hall**|e_LOCATION_ENTRANCEHALL|
-|![Game location image](../data/imposing_entrance_hall.png)|The entrance hall is guardeed by a very angry **dog**|
+|![Game location image](../data/loc_entrance_hall.png)|The entrance hall is guardeed by a very angry **dog**|
 |**You are in the lounge**|e_LOCATION_LOUNGE|
-|![Game location image](../data/lounge.png)|Here you can find a **tobacco tin** container.|
+|![Game location image](../data/loc_lounge.png)|Here you can find a **tobacco tin** container.|
 |**This looks like a library**|e_LOCATION_LIBRARY|
-|![Game location image](../data/library.png)|In the library you will find a **chemistry book** providing some **chemistry recepies** as well as a **map** of England.|
+|![Game location image](../data/loc_library.png)|In the library you will find a **chemistry book** providing some **chemistry recepies** as well as a **map** of England.|
 |**A dining room, or so it appears**|e_LOCATION_DININGROOM|
 |![Game location image](../data/dinning_room.png)|On the dinning table is a **joint of meat** which the **dog** will surrely appreciate, as well as some **bread** designed to attract the **dove**.|
 |**This looks like a games room**|e_LOCATION_GAMESROOM|
@@ -118,7 +118,7 @@ Here are information about the various locations you can reach in the game, grou
 |**You find yourself in a sun-lounge**|e_LOCATION_SUNLOUNGE|
 |![Game location image](../data/sun_lounge.png)||
 |**This is obviously the kitchen**|e_LOCATION_KITCHEN|
-|![Game location image](../data/kitchen.png)|The kitchen contains a **box of matches** |
+|![Game location image](../data/loc_kitchen.png)|The kitchen contains a **box of matches** |
 |**You are in a narrow passage**|e_LOCATION_NARROWPASSAGE|
 |![Game location image](../data/narrow_passage.png)||
 
@@ -137,7 +137,7 @@ Here are information about the various locations you can reach in the game, grou
 |**This is a small box-room**|e_LOCATION_BOXROOM|
 |![Game location image](../data/small_box_room.png)|Contains a small **note** informing the player that some stuff is stored in the **safe** in the basement.|
 |**This seems to be a guest bedroom**|e_LOCATION_GUESTBEDROOM|
-|![Game location image](../data/guest_bedroom.png)||
+|![Game location image](../data/loc_guest_bedroom.png)||
 |**You are in a tiled shower-room**|e_LOCATION_SHOWERROOM|
 ![Game location image](../data/tiled_shower_room.png)
 |**You have found the east gallery**|e_LOCATION_EASTGALLERY|
@@ -145,11 +145,11 @@ Here are information about the various locations you can reach in the game, grou
 |**You are in an ornate bathroom**|e_LOCATION_CLASSY_BATHROOM|
 |![Game location image](../data/ornate_bathroom.png)||
 |**This must be the master bedroom**|e_LOCATION_MASTERBEDROOM|
-|![Game location image](../data/master_bedroom.png)|A **thug** is sleeping on the bed, he has a bunch of things in his pockets.|
+|![Game location image](../data/loc_master_bedroom.png)|A **thug** is sleeping on the bed, he has a bunch of things in his pockets.|
 |**This is a tiny toilet**|e_LOCATION_TINY_WC|
 |![Game location image](../data/tiny_toilet.png)|Here you can find a **roll of toilet paper**|
 |**This is a child's bedroom**|e_LOCATION_CHILDBEDROOM|
-|![Game location image](../data/child_bedroom.png)||
+|![Game location image](../data/loc_child_bedroom.png)||
 
 ## The basement
 |Image|Description|
@@ -157,7 +157,7 @@ Here are information about the various locations you can reach in the game, grou
 |**You are on some gloomy, narrow steps**|e_LOCATION_NARROWSTAIRCASE|
 |![Game location image](../data/gloomy_narrow_steps.png)||
 |**This is a cold, damp cellar**|e_LOCATION_CELLAR|
-|![Game location image](../data/cold_damp_cellar.png)|The cellar contains a **safe** which has some **dangerous chemicals** in it, including a small **bottle of acid**.|
+|![Game location image](../data/loc_cellar.png)|The cellar contains a **safe** which has some **dangerous chemicals** in it, including a small **bottle of acid**.|
 |**This room is even darker than the last**|e_LOCATION_DARKCELLARROOM||
 |![Game location image](../data/even_darker_room.png)|This is where you find the **control panel** that control the **alarm**.|
 
