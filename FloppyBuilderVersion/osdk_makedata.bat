@@ -143,7 +143,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\loc_tennis_court.png %TARGET%\15.hir
 %PICTCONV% %PARAMS% data\loc_vegetable_plot.png %TARGET%\16.hir
 %PICTCONV% %PARAMS% data\loc_fish_pond.png %TARGET%\17.hir
-%PICTCONV% %PARAMS% data\loc_window.png %TARGET%\18.hir
+%PICTCONV% %PARAMS% data\loc_rear_entrance.png %TARGET%\18.hir
 %PICTCONV% %PARAMS% data\loc_orchard.png %TARGET%\19.hir
 %PICTCONV% %PARAMS% data\loc_dark_room.png %TARGET%\20.hir
 %PICTCONV% %PARAMS% data\loc_cellar.png %TARGET%\21.hir

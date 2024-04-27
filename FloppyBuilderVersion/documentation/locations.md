@@ -92,7 +92,7 @@ Here are information about the various locations you can reach in the game, grou
 |**You are standing by a fish pond**|e_LOCATION_FISHPND|
 |![Game location image](../data/loc_fish_pond.png)|This is where you find the **fishing net**|
 |**You are on a tiled patio**|e_LOCATION_TILEDPATIO|
-|![Game location image](../data/loc_window.png)|Above the passage is the **window** of the room where the **hostage** is being kept.<br>Trying to break the window triggers the **alarm**|
+|![Game location image](../data/loc_rear_entrance.png)|Above the passage is the **window** of the room where the **hostage** is being kept.<br>Trying to break the window triggers the **alarm**|
 |**You are in an apple orchard**|e_LOCATION_APPLE_TREES|
 |![Game location image](../data/loc_orchard.png)|Here you can find a **ladder** which can be used to go down the **pit**|
 |**You are in a vegetable plot**|e_LOCATION_VEGSGARDEN|
