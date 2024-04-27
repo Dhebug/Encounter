@@ -37,20 +37,21 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 :: 6x6 dither matrix
 SET PARAMS=-u1 -m0 -f0 -o4_6x6DitherMatrix
-%PICTCONV% %PARAMS% data\6x6_dither_matrix.png build\6x6_dither_matrix.s
-%PICTCONV% %PARAMS% data\typewriter_dithering_pattern.png build\typewriter_dithering_pattern.s
+%PICTCONV% %PARAMS% data\pattern_6x6_dither_matrix.png build\6x6_dither_matrix.s
+%PICTCONV% %PARAMS% data\pattern_typewriter_dithering.png build\typewriter_dithering_pattern.s
 
 
 :: The 12x14 font
 :: palatino_linotype_italics_size_10_font.png
 SET PARAMS=-u1 -m0 -f0 -o4Font12x14
-%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font.png build\generated_12x14_font.s
-%PICTCONV% %PARAMS% data\palatino_linotype_italics_size_10_font_fr.png build\generated_12x14_font_fr.s
+%PICTCONV% %PARAMS% data\font_palatino_linotype_italics_size_10.png build\generated_12x14_font.s
+%PICTCONV% %PARAMS% data\font_palatino_linotype_italics_size_10_fr.png build\generated_12x14_font_fr.s
+
 
 
 :: Title picture
 SET PARAMS=-u1 -m0 -f6 -o2
-%PICTCONV% %PARAMS% data\title.png %TARGET%\title.hir
+%PICTCONV% %PARAMS% data\intro_title_picture.png %TARGET%\title.hir
 
 :: Intro graphics
 SET PARAMS=-u1 -m0 -f0 -o2
@@ -64,7 +65,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 :: Arrow block (Temp file that needs to be copied in the display.s file)
 SET PARAMS=-u1 -m0 -f0 -o4_ArrowBlockMasks
-%PICTCONV% %PARAMS% data\arrow_block_masks.png build\mask.s
+%PICTCONV% %PARAMS% data\masks_arrow_block.png build\mask.s
 
 
 :: Masked out sprites
@@ -192,7 +193,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 
 :: Severn Software and Defence Force logos
-%PICTCONV% %PARAMS% data\defence-force_logo.png %TARGET%\logos.hir
+%PICTCONV% %PARAMS% data\intro_defence-force_logo.png %TARGET%\logos.hir
 
 ::pause
 
