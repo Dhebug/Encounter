@@ -126,10 +126,10 @@ SET PARAMS=-u1 -m0 -f3 -o2
 :: 43 - Outside a deep pit
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\no_picture.png %TARGET%\NONE.hir
-%PICTCONV% %PARAMS% data\deserted_market_square.png %TARGET%\1.hir
+%PICTCONV% %PARAMS% data\loc_market_square.png %TARGET%\1.hir
 %PICTCONV% %PARAMS% data\dark_seedy_alley.png %TARGET%\2.hir
 %PICTCONV% %PARAMS% data\long_road_stretch.png %TARGET%\3.hir
-%PICTCONV% %PARAMS% data\dark_damp_tunel.png %TARGET%\4.hir
+%PICTCONV% %PARAMS% data\loc_tunel.png %TARGET%\4.hir
 %PICTCONV% %PARAMS% data\main_street.png %TARGET%\5.hir
 %PICTCONV% %PARAMS% data\narrow_path.png %TARGET%\6.hir
 %PICTCONV% %PARAMS% data\fallen_deep_pit.png %TARGET%\7.hir
@@ -144,22 +144,22 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\vegetable_plot.png %TARGET%\16.hir
 %PICTCONV% %PARAMS% data\fish_pond.png %TARGET%\17.hir
 %PICTCONV% %PARAMS% data\barred_window.png %TARGET%\18.hir
-%PICTCONV% %PARAMS% data\apple_orchard.png %TARGET%\19.hir
+%PICTCONV% %PARAMS% data\loc_orchard.png %TARGET%\19.hir
 %PICTCONV% %PARAMS% data\even_darker_room.png %TARGET%\20.hir
-%PICTCONV% %PARAMS% data\cold_damp_cellar.png %TARGET%\21.hir
+%PICTCONV% %PARAMS% data\loc_cellar.png %TARGET%\21.hir
 %PICTCONV% %PARAMS% data\gloomy_narrow_steps.png %TARGET%\22.hir
-%PICTCONV% %PARAMS% data\lounge.png %TARGET%\23.hir
-%PICTCONV% %PARAMS% data\imposing_entrance_hall.png %TARGET%\24.hir
-%PICTCONV% %PARAMS% data\library.png %TARGET%\25.hir
+%PICTCONV% %PARAMS% data\loc_lounge.png %TARGET%\23.hir
+%PICTCONV% %PARAMS% data\loc_entrance_hall.png %TARGET%\24.hir
+%PICTCONV% %PARAMS% data\loc_library.png %TARGET%\25.hir
 %PICTCONV% %PARAMS% data\dinning_room.png %TARGET%\26.hir
 %PICTCONV% %PARAMS% data\sweeping_staircase.png %TARGET%\27.hir
 %PICTCONV% %PARAMS% data\games_room.png %TARGET%\28.hir
 %PICTCONV% %PARAMS% data\sun_lounge.png %TARGET%\29.hir
-%PICTCONV% %PARAMS% data\kitchen.png %TARGET%\30.hir
+%PICTCONV% %PARAMS% data\loc_kitchen.png %TARGET%\30.hir
 %PICTCONV% %PARAMS% data\narrow_passage.png %TARGET%\31.hir
-%PICTCONV% %PARAMS% data\guest_bedroom.png %TARGET%\32.hir
-%PICTCONV% %PARAMS% data\child_bedroom.png %TARGET%\33.hir
-%PICTCONV% %PARAMS% data\master_bedroom.png %TARGET%\34.hir
+%PICTCONV% %PARAMS% data\loc_guest_bedroom.png %TARGET%\32.hir
+%PICTCONV% %PARAMS% data\loc_child_bedroom.png %TARGET%\33.hir
+%PICTCONV% %PARAMS% data\loc_master_bedroom.png %TARGET%\34.hir
 %PICTCONV% %PARAMS% data\tiled_shower_room.png %TARGET%\35.hir
 %PICTCONV% %PARAMS% data\tiny_toilet.png %TARGET%\36.hir
 %PICTCONV% %PARAMS% data\east_gallery.png %TARGET%\37.hir
