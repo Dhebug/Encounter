@@ -75,7 +75,7 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/loc_road_stretch.png)||
 |**Outside a deep pit**|e_LOCATION_OUTSIDE_PIT
 |![Game location image](../data/loc_outside_pit.png)|This location did not exist in the original 1983 game, just going "east" would make you fall down in to the pit.<br>By adding this location, the player has to make a conscious effort instead of being surprised.|
-|**You are inside a deep pit**|e_LOCATION_INSIDEHOLE|
+|**You are inside a deep pit**|e_LOCATION_INSIDE_PIT|
 |![Game location image](../data/loc_inside_pit.png)|The pit contains some **sulfur** which can be mixed with the **salpeter** to create the **explosive powder**|
 
 # Outside the manor

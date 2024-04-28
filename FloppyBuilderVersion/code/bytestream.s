@@ -275,9 +275,10 @@ _ByteStreamCommandJUMP_IF_FALSE
     lda #OPCODE_BNE                          // D0
 common
 .(
-    sta _auto_conditionCheck+0
+    sta _auto_conditionCheckItemLocation+0
+    sta _auto_conditionCheckPlayerLocation+0
     eor #OPCODE_BEQ-OPCODE_BNE               //  0b100000
-    sta _auto_conditionCheck2+0
+    sta _auto_conditionCheckItemFlag+0       // Item flags check is inverted
     ldy #2
     lda (_gCurrentStream),y
     bne checkItemFlag
@@ -291,11 +292,24 @@ checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0
     lda (_gCurrentStream),y      // location id
     ldy #2
     cmp (_gStreamItemPtr),y      // gItems->location (+2)
-_auto_conditionCheck    
+_auto_conditionCheckItemLocation
     bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
     jmp _ByteStreamMoveBy5
 
+checkPlayerLocation              // OPERATOR_CHECK_PLAYER_LOCATION 2 
+    ; check =  (gItems[itemId].location == locationId);
+    iny
+    lda (_gCurrentStream),y      // location id
+    ldy #2
+    cmp _gCurrentLocation         // Player position
+_auto_conditionCheckPlayerLocation    
+    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    lda #4
+    jmp _ByteStreamMoveByA
+
 checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
+    cmp #OPERATOR_CHECK_ITEM_FLAG
+    bne checkPlayerLocation
     ; check =  (gItems[itemId].flags & flagId);
     iny
     lda (_gCurrentStream),y      // item ID
@@ -304,7 +318,7 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     lda (_gCurrentStream),y      // flag ID
     ldy #4
     and (_gStreamItemPtr),y      // gItems->flags (+4)
-_auto_conditionCheck2
+_auto_conditionCheckItemFlag
     bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
 
 +_ByteStreamMoveBy5    ; Continue (jump not taken)
@@ -419,6 +433,8 @@ _ByteStreamCommandSetLocationDirection
 
     ldy tmp0
     sta (_gStreamLocationPtr),y  // _gStreamLocationPtr->directions[requested direction] (+0) = new value
+
+    jsr _PrintSceneDirections
 
     lda #3
     jmp _ByteStreamMoveByA

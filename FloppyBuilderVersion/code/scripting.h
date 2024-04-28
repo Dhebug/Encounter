@@ -32,8 +32,13 @@
 #define _COMMAND_COUNT          22
 
 // Operator opcodes
-#define OPERATOR_CHECK_ITEM_LOCATION 0
-#define OPERATOR_CHECK_ITEM_FLAG     1
+#define OPERATOR_CHECK_ITEM_LOCATION   0
+#define OPERATOR_CHECK_ITEM_FLAG       1
+#define OPERATOR_CHECK_PLAYER_LOCATION 2
+
+#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
+#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+#define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
 
 #define END                                  .byt COMMAND_END
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
@@ -41,10 +46,9 @@
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
-#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
-#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location

@@ -21,12 +21,6 @@ _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
 _gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
 _gTextWaterDrainsAways      .byt "L'eau s'écoule",0
-_gTextClimbUpLadder         .byt "Vous grimpez l'échelle",0
-_gTextClimbDownLadder       .byt "Vous descendez l'échelle",0
-_gTextPositionLadder        .byt "Vous mettez l'échelle en place",0
-_gTextClimbUpRope           .byt "Vous grimpez la corde",0
-_gTextClimbDownRope         .byt "Vous descendez la corde",0
-_gTextAttachRopeToTree      .byt "Vous attachez la corde à l'arbre",0
 _gTextDogLying              .byt "un chien immobile",0
 _gTextDeadThug              .byt "un malfaiteur mort",0
 _gTextFoundSomething        .byt "Vous avez trouvé quelque chose",0
@@ -44,12 +38,6 @@ _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextPetrolEvaporates      .byt "The petrol evaporates",0
 _gTextWaterDrainsAways      .byt "The water drains away",0
-_gTextClimbUpLadder         .byt "You climb up the ladder",0
-_gTextClimbDownLadder       .byt "You climb down the ladder",0
-_gTextPositionLadder        .byt "You position the ladder properly",0
-_gTextClimbUpRope           .byt "You climb up the rope",0
-_gTextClimbDownRope         .byt "You climb down the rope",0
-_gTextAttachRopeToTree      .byt "You attach the rope to the tree",0
 _gTextDogLying              .byt "a dog lying",0
 _gTextDeadThug              .byt "a dead thug",0
 _gTextFoundSomething        .byt "You found something interesting",0
@@ -96,7 +84,7 @@ _gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
 _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
-_gTextErrorItemNotPresent   .byt "This item does not seem to be present",0
+_gTextErrorItemNotPresent   .byt "Can't see it here",0
 _gTextErrorCannotUseHere    .byt "I can't use it here",0
 _gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
 _gTextErrorCannotAttachRope .byt "You can't attach the rope",0
@@ -462,12 +450,14 @@ _gDescriptionNarrowPath
 
 _gDescriptionInThePit
 .(
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE))
+    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_NONE)      ; Disable the UP direction
+
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
     JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 no_rope    
 
     JUMP_IF_TRUE(has_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INVENTORY))    
-    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))  
+    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))  
 
 cannot_escape_pit    ; The player has no way to escape the pit
     WAIT(50*2)
@@ -496,11 +486,13 @@ cannot_escape_pit    ; The player has no way to escape the pit
     JUMP(_gDescriptionGameOverLost);            ; Draw the 'The End' logo
 
 draw_ladder
+    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                   ; Enable the UP direction
     DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
 has_ladder
     END
 
 rope_attached_to_tree
+    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                           ; Enable the UP direction
     DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*51)+37,_ImageBuffer+(40*39)+19)    ; Draw the rope 
     END
 .)
@@ -1358,6 +1350,38 @@ _gSceneActionNothingSpecial
 .)
 
 
+_gSceneActionUseLadder
+.(
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
+cannot_use_ladder_here
+    ERROR_MESSAGE("Can't use it there")
+    END_AND_REFRESH
+
+around_the_pit
+    INFO_MESSAGE("You position the ladder properly")
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionUseRope
+.(
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
+cannot_use_rope_here
+    ERROR_MESSAGE("Can't use it there")
+    END_AND_REFRESH
+
+around_the_pit
+    INFO_MESSAGE("You attach the rope to the tree")
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
+    END_AND_REFRESH
+.)
+
+
 
 _gMoveItemsToEntranceHall
 .(
@@ -1380,13 +1404,14 @@ end_dog_check
 _gMoveItemsToOutsidePit
 .(
     ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
 end_rope_check
 
-    ; If the ladder is inside the pit and is attached to the tree, we move it outside the pit
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))
+    ; If the ladder is inside the pit and is in place, we move it outside the pit
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
 end_ladder_check
     END
@@ -1397,12 +1422,13 @@ _gMoveItemsToInsidePit
     ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE)
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT)
 end_rope_check
 
-    ; If the ladder is outside the pit and is attached to the tree, we move it inside the pit
+    ; If the ladder is outside the pit and is in place, we move it inside the pit
     JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE)
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT)
 end_ladder_check
     END
 .)

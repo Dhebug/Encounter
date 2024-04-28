@@ -388,132 +388,6 @@ char ItemCheck(unsigned char itemId)
 
 
 
-void ActionClimbLadder()
-{    
-    char ladderLocation = gItems[e_ITEM_Ladder].location;
-    if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
-    {
-        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
-        if (ladderLocation == e_LOCATION_INVENTORY)
-        {
-            PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
-            LoadScene();
-            WaitFrames(50*1);
-        }
-        PrintInformationMessage(gTextClimbUpLadder);   // "You climb up the ladder"
-        WaitFrames(50*1);
-        gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
-        LoadScene();
-    }
-    else
-    if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
-    {
-        gItems[e_ITEM_Ladder].location           = e_LOCATION_INSIDEHOLE;       // The ladder stays inside the hole
-        if (ladderLocation == e_LOCATION_INVENTORY)
-        {
-            PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
-            LoadScene();
-            WaitFrames(50*1);
-        }
-        PrintInformationMessage(gTextClimbDownLadder);   // "You climb down the ladder"
-        WaitFrames(50*1);
-        gCurrentLocation = e_LOCATION_INSIDEHOLE;
-        LoadScene();
-    }
-    else
-    {
-        PrintErrorMessage(gTextErrorCannotUseHere);    // "I can't use it here"
-    }
-}
-
-
-void ActionClimbRope()
-{    
-    char ropeLocation = gItems[e_ITEM_Rope].location;
-    if (gCurrentLocation == e_LOCATION_INSIDEHOLE)
-    {
-        if ( (gItems[e_ITEM_Rope].location == e_LOCATION_INSIDEHOLE) && (gItems[e_ITEM_Rope].flags & ITEM_FLAG_ATTACHED) )
-        {
-            gItems[e_ITEM_Rope].location           = e_LOCATION_OUTSIDE_PIT;
-            PrintInformationMessage(gTextClimbUpRope);    // "You climb up the rope"
-            WaitFrames(50*1);
-            gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
-            LoadScene();
-        }
-        else
-        {
-            PrintErrorMessage(gTextErrorCannotAttachRope);   // "You can't attach the rope"
-        }
-    }
-    else
-    if (gCurrentLocation == e_LOCATION_OUTSIDE_PIT)
-    {
-        gItems[e_ITEM_Rope].location           = e_LOCATION_OUTSIDE_PIT;
-        gItems[e_ITEM_Rope].flags |= ITEM_FLAG_ATTACHED;
-        if (ropeLocation == e_LOCATION_INVENTORY)
-        {
-            PrintInformationMessage(gTextAttachRopeToTree);   // "You attach the rope to the tree"
-            LoadScene();
-            WaitFrames(50*1);
-        }
-        PrintInformationMessage(gTextClimbDownRope);   // "You climb down the rope"
-        WaitFrames(50*1);
-        gCurrentLocation = e_LOCATION_INSIDEHOLE;
-        LoadScene();
-    }
-    else
-    {
-        PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
-    }
-}
-
-void UseItem()
-{
-    unsigned char itemId = gWordBuffer[1];
-	if (ItemCheck(itemId))
-    {
-        switch (itemId)
-        {
-        case e_ITEM_Ladder:
-            {    
-                if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
-                {
-                    char ladderLocation = gItems[e_ITEM_Ladder].location;
-                    if (ladderLocation == e_LOCATION_INVENTORY)
-                    {
-                        PrintInformationMessage(gTextPositionLadder);  // "You position the ladder properly"
-                        gItems[e_ITEM_Ladder].location = e_LOCATION_OUTSIDE_PIT;        // The ladder stays inside the hole
-                        gItems[e_ITEM_Ladder].flags |= ITEM_FLAG_ATTACHED;              // The ladder is ready to be used
-                        gItems[e_ITEM_Ladder].description = gTextItemLadderInTheHole;
-                        LoadScene();
-                    }
-                    else
-                    if (ladderLocation == e_LOCATION_INSIDEHOLE)
-                    {
-                        PrintErrorMessage(gTextErrorLadderInHole);  // "The ladder is already in the hole"
-                    }
-                }
-                else
-                {
-                    PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
-                }
-            }
-            break;
-
-        case e_ITEM_Rope:
-            ActionClimbRope();
-            break;
-
-        case e_ITEM_HandheldGame:
-            PlayStream(gSceneActionPlayGame);
-            break;
-
-        default:
-            PrintErrorMessage(gTextErrorDontKnowUsage);   // "I don't know how to use that"
-            break;
-        }
-    }
-}
 
 
 void Kill()
@@ -789,45 +663,12 @@ void InspectItem()
 }
 
 
-void ClimbItem()
+void UseItem()
 {
-    unsigned char itemId = gWordBuffer[1];
+    unsigned char itemId = gWordBuffer[1];    
 	if (ItemCheck(itemId))
     {
-		switch (itemId)
-		{
-		case e_ITEM_Ladder:
-            {    
-                if ( (gCurrentLocation == e_LOCATION_OUTSIDE_PIT) || (gCurrentLocation == e_LOCATION_INSIDEHOLE) )
-                {
-                    char ladderLocation = gItems[e_ITEM_Ladder].location;
-                    if (ladderLocation == e_LOCATION_INVENTORY)
-                    {
-                        PrintErrorMessage(gTextErrorNeedPositionned);   // "It needs to be positionned first"
-                    }
-                    else
-                    if (ladderLocation == e_LOCATION_INSIDEHOLE)
-                    {
-                        gCurrentLocation = e_LOCATION_OUTSIDE_PIT;
-                        LoadScene();
-                    }
-                }
-                else
-                {
-                    PrintErrorMessage(gTextErrorCannotUseHere);   // "I can't use it here"
-                }
-            }
-			//ActionClimbLadder();
-			break;
-
-        case e_ITEM_Rope:
-            ActionClimbRope();
-            break;
-
-		default:
-			PrintErrorMessage(gTextErrorCantClimbThat);     // "I don't know how to climb that"
-			break;
-		}
+        DispatchStream(gUseItemMappingsArray,itemId);
 	}
 }
 

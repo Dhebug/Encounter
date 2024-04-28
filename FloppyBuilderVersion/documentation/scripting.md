@@ -7,17 +7,23 @@
     - [END\_AND\_REFRESH](#end_and_refresh)
     - [WAIT](#wait)
     - [JUMP](#jump)
-    - [JUMP\_IF\_TRUE](#jump_if_true)
-    - [JUMP\_IF\_FALSE](#jump_if_false)
-    - [CHECK\_ITEM\_LOCATION](#check_item_location)
-    - [CHECK\_ITEM\_FLAG](#check_item_flag)
-    - [INFO\_MESSAGE](#info_message)
-    - [ERROR\_MESSAGE](#error_message)
-    - [SET\_ITEM\_LOCATION](#set_item_location)
-    - [SET\_ITEM\_FLAGS](#set_item_flags)
-    - [UNSET\_ITEM\_FLAGS](#unset_item_flags)
-    - [SET\_ITEM\_DESCRIPTION](#set_item_description)
-    - [SET\_LOCATION\_DIRECTION](#set_location_direction)
+    - [Conditional jumps](#conditional-jumps)
+      - [JUMP\_IF\_TRUE](#jump_if_true)
+      - [JUMP\_IF\_FALSE](#jump_if_false)
+    - [Operators](#operators)
+      - [CHECK\_ITEM\_LOCATION](#check_item_location)
+      - [CHECK\_ITEM\_FLAG](#check_item_flag)
+      - [CHECK\_PLAYER\_LOCATION](#check_player_location)
+    - [Providing information to the player](#providing-information-to-the-player)
+      - [INFO\_MESSAGE](#info_message)
+      - [ERROR\_MESSAGE](#error_message)
+    - [Changing item properties](#changing-item-properties)
+      - [SET\_ITEM\_LOCATION](#set_item_location)
+      - [SET\_ITEM\_FLAGS](#set_item_flags)
+      - [UNSET\_ITEM\_FLAGS](#unset_item_flags)
+      - [SET\_ITEM\_DESCRIPTION](#set_item_description)
+    - [Changing locations properties](#changing-locations-properties)
+      - [SET\_LOCATION\_DIRECTION](#set_location_direction)
     - [DISPLAY\_IMAGE](#display_image)
     - [DRAW\_BITMAP](#draw_bitmap)
   - [Examples](#examples)
@@ -118,39 +124,55 @@ Two bytes command containg the COMMAND_WAIT opcode, followed by the number of fr
 ### JUMP
 Three bytes command containg the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
 
-### JUMP_IF_TRUE
+---
+### Conditional jumps
+These two instructions require an operator to evaluate if the condition is true or false
+#### JUMP_IF_TRUE
 Seven bytes command containg the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 
-### JUMP_IF_FALSE
+#### JUMP_IF_FALSE
 Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 
-### CHECK_ITEM_LOCATION
+---
+### Operators
+These operators should be used with either JUMP_IF_TRUE or JUMP_IF_FALSE
+#### CHECK_ITEM_LOCATION
 Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
 
-### CHECK_ITEM_FLAG
+#### CHECK_ITEM_FLAG
 Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
 
-### INFO_MESSAGE
+#### CHECK_PLAYER_LOCATION
+Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
+
+---
+### Providing information to the player
+#### INFO_MESSAGE
 Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by a null terminated string containing the message to display
 
-### ERROR_MESSAGE
+#### ERROR_MESSAGE
 Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the message is printed out as an error 
 
-### SET_ITEM_LOCATION
+---
+### Changing item properties
+#### SET_ITEM_LOCATION
 Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it
 
-### SET_ITEM_FLAGS
+#### SET_ITEM_FLAGS
 Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
 
-### UNSET_ITEM_FLAGS
+#### UNSET_ITEM_FLAGS
 Three bytes command containg the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
 
-### SET_ITEM_DESCRIPTION
+#### SET_ITEM_DESCRIPTION
 Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, followed by the id of the item, then a null terminated string containing the description
 
-### SET_LOCATION_DIRECTION
+---
+### Changing locations properties
+#### SET_LOCATION_DIRECTION
 Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
 
+---
 ### DISPLAY_IMAGE
 Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display
 Used to display a full screen image, like the map of the UK or the newspapwer with a subtitle

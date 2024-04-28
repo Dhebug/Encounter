@@ -24,7 +24,7 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_GRAVELDRIVE       , e_LOCATION_DARKALLEY         , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationMainStreet               ,gDescriptionMainStreet},        // e_LOCATION_MAINSTREET     
     { e_LOCATION_TARMACAREA        , e_LOCATION_ROAD              , e_LOCATION_OUTSIDE_PIT       , e_LOCATION_MAINSTREET        , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationNarrowPath               ,gDescriptionNarrowPath},        // e_LOCATION_NARROWPATH     
 
-    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationInThePit                 ,gDescriptionInThePit},          // e_LOCATION_INSIDEHOLE
+    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationInThePit                 ,gDescriptionInThePit},          // e_LOCATION_INSIDE_PIT
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_WOODEDAVENUE      , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationOldWell                  ,gDescriptionOldWell},           // e_LOCATION_WELL           
     { e_LOCATION_ZENGARDEN         , e_LOCATION_DARKTUNNEL        , e_LOCATION_GRAVELDRIVE       , e_LOCATION_WELL              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationWoodedAvenue             ,gDescriptionWoodedAvenue},      // e_LOCATION_WOODEDAVENUE   
 
@@ -72,7 +72,7 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_NONE              , e_LOCATION_GUESTBEDROOM      , e_LOCATION_UP_STAIRS         , e_LOCATION_BOXROOM           , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationWestGallery              ,gDescriptionWestGallery},       // e_LOCATION_WESTGALLERY      
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_EASTGALLERY       , e_LOCATION_WESTGALLERY       , e_LOCATION_NONE              , e_LOCATION_LARGE_STAIRCASE   , gTextLocationMainLanding              ,gDescriptionMainLanding},       // e_LOCATION_UP_STAIRS        
 
-    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_INSIDEHOLE        , gTextLocationOutsidePit               ,gDescriptionOutsidePit},        // e_LOCATION_OUTSIDE_PIT
+    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_INSIDE_PIT        , gTextLocationOutsidePit               ,gDescriptionOutsidePit},        // e_LOCATION_OUTSIDE_PIT
 
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationGirlRoomOpenned          ,0},                             // e_LOCATION_GIRLROOM (technically this room cannot be accessed, so do not need description)        
 };
@@ -104,7 +104,7 @@ item gItems[e_ITEM_COUNT_] =
 
     // Items requiring containers
     { gTextItemBlackDust                 ,e_LOCATION_DARKTUNNEL      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_BlackDust            
-    { gTextItemYellowPowder              ,e_LOCATION_INSIDEHOLE      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_YellowPowder         
+    { gTextItemYellowPowder              ,e_LOCATION_INSIDE_PIT      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_YellowPowder         
     { gTextItemPetrol                    ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Petrol               
     { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Water                
     { gTextItemLargeDove                 ,e_LOCATION_WOODEDAVENUE    ,255           ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                   // e_ITEM_LargeDove            
@@ -269,8 +269,6 @@ keyword gWordsArray[] =
 
     { "COMBINE" , e_WORD_COMBINE },
 
-    { "GRIMPE"  , e_WORD_CLIMB },
-
     { "LIT"     , e_WORD_READ },
 
     { "REGARDE" , e_WORD_LOOK },
@@ -293,8 +291,6 @@ keyword gWordsArray[] =
 
     { "OPEN" , e_WORD_OPEN },
     { "CLOSE" , e_WORD_CLOSE },
-
-    { "CLIMB", e_WORD_CLIMB },
 
     { "READ" , e_WORD_READ },
 
@@ -356,7 +352,6 @@ action_mapping gActionMappingsArray[] =
     { e_WORD_COMBINE, CombineItems },
     { e_WORD_OPEN, OpenItem },
     { e_WORD_CLOSE, CloseItem },
-    { e_WORD_CLIMB, ClimbItem },
 
     { e_WORD_LOOK, InspectItem },
     { e_WORD_KILL, Kill },
@@ -406,12 +401,21 @@ stream_mapping gInspectItemMappingsArray[] =
 };
 
 
+stream_mapping gUseItemMappingsArray[] =
+{    
+    { e_ITEM_Ladder             , gSceneActionUseLadder },
+    { e_ITEM_Rope               , gSceneActionUseRope },
+    { e_ITEM_HandheldGame       , gSceneActionPlayGame },
+
+    { 255, gSceneActionNothingSpecial }  // End Marker
+};
+
 stream_mapping gMoveItemsMappingsArray[] =
 {    
     { e_LOCATION_ENTRANCEHALL       , gMoveItemsToEntranceHall },
     { e_LOCATION_LARGE_STAIRCASE    , gMoveItemsToStaircase },
     { e_LOCATION_OUTSIDE_PIT        , gMoveItemsToOutsidePit },
-    { e_LOCATION_INSIDEHOLE         , gMoveItemsToInsidePit },
+    { e_LOCATION_INSIDE_PIT         , gMoveItemsToInsidePit },
 
     { 255, gDoNothingScript }  // End Marker
 };

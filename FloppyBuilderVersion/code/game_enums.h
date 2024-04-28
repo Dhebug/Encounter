@@ -17,7 +17,7 @@
 #define	e_LOCATION_DARKTUNNEL        3
 #define	e_LOCATION_MAINSTREET        4
 #define	e_LOCATION_NARROWPATH        5
-#define	e_LOCATION_INSIDEHOLE        6
+#define	e_LOCATION_INSIDE_PIT        6
 #define	e_LOCATION_WELL              7
 #define	e_LOCATION_WOODEDAVENUE      8
 #define	e_LOCATION_GRAVELDRIVE       9 

@@ -26,7 +26,6 @@ typedef enum
     e_WORD_OPEN  ,
     e_WORD_CLOSE ,
     e_WORD_READ  ,
-    e_WORD_CLIMB ,
     e_WORD_LOOK  ,
     e_WORD_KILL  ,
     e_WORD_FRISK ,
@@ -111,6 +110,7 @@ extern action_mapping gActionMappingsArray[];
 extern stream_mapping gReadItemMappingsArray[];
 extern stream_mapping gCloseItemMappingsArray[];
 extern stream_mapping gInspectItemMappingsArray[];
+extern stream_mapping gUseItemMappingsArray[];
 extern stream_mapping gMoveItemsMappingsArray[];
 
 // Small feedback messages and prompts
@@ -121,12 +121,6 @@ extern const char gTextScore[];                 // "Score:"
 extern const char gTextCarryInWhat[];           // "Carry it in what?"
 extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
 extern const char gTextWaterDrainsAways[];      // "The water drains away"
-extern const char gTextClimbUpLadder[];         // "You climb up the ladder"
-extern const char gTextClimbDownLadder[];       // "You climb down the ladder"
-extern const char gTextPositionLadder[];        // "You position the ladder properly"
-extern const char gTextClimbUpRope[];           // "You climb up the rope"
-extern const char gTextClimbDownRope[];         // "You climb down the rope"
-extern const char gTextAttachRopeToTree[];      // "You attach the rope to the tree"
 extern const char gTextDogLying[];              // "a dog lying"
 extern const char gTextDeadThug[];              // "a dead thug"
 extern const char gTextFoundSomething[];        // "You found something interesting"
@@ -310,6 +304,9 @@ extern const char gSceneActionCloseMedicineCabinet[];
 extern const char gSceneActionCannotDo[];
 extern const char gSceneActionCannotRead[];
 extern const char gSceneActionNothingSpecial[];
+
+extern const char gSceneActionUseLadder[];
+extern const char gSceneActionUseRope[];
 
 // Item move
 extern const char gMoveItemsToEntranceHall[];
