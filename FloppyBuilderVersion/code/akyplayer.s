@@ -14,17 +14,19 @@
 ; VERSION 0.10 - 07/2019
 ; =============================================================================
 
+#include "params.h"
+
 ; === > ORIC 1/ATMOS <===
-#define VIA_ORA       $30F
-#define VIA_PCR       $30C
-#define F_SET_REG     $FF
-#define F_INACTIVE    $DD
-#define F_WRITE_DATA  $FD   
+;#define VIA_ORA       $30F
+;#define VIA_PCR       $30C
+;#define F_SET_REG     $FF
+;#define F_INACTIVE    $DD
+;#define F_WRITE_DATA  $FD   
 
 
 	.zero
 
-ptDATA          .dsb 2   ; = $02      ; +$03
+ptr_music          .dsb 2   ; = $02      ; +$03
 pt2_DT          .dsb 2   ;= $04      ; +$05
 
     .zero
@@ -45,6 +47,7 @@ PLY_AKY_PSGREGISTER11       .byt 0
 PLY_AKY_PSGREGISTER12       .byt 0
 PLY_AKY_PSGREGISTER13       .byt 0
 
+save_x     .byt 0
 
 ; =============================================================================
 ;Is there a loaded Player Configuration source? If no, use a default configuration.
@@ -119,490 +122,441 @@ PLY_AKY_PSGREGISTER13       .byt 0
 ; Initializes the player.
 ; _param0+0/+1 contains the pointer to the song header
 _StartMusic
-            LDA _param0+0    ; #<Main_Subsong0                                  
-            STA ptDATA
-            LDA _param0+1    ;#>Main_Subsong0
-            STA ptDATA+1
-            ;Skips the header.
-            LDY #01                                             ;Skips the format version.
-            LDA (ptDATA),Y                                      ;Channel count.
-            STA ACCA
-            CLC
-            LDA ptDATA                                           
-            ADC #(1+1)          
-            STA ptDATA
-            LDA ptDATA+1
-            ADC #00
-            STA ptDATA+1                                           
-                                                                
-PLY_AKY_INIT_SKIPHEADERLOOP                                     ;There is always at least one PSG to skip.
-            CLC
-            LDA ptDATA                                           
-            ADC #4
-            STA ptDATA
-            LDA ptDATA+1
-            ADC #00
-            STA ptDATA+1
-            LDA ACCA                                           
-            SEC
-            SBC #03                                             ;A PSG is three channels.
-            BEQ PLY_AKY_INIT_SKIPHEADEREND
-            STA ACCA                      
-            BCS PLY_AKY_INIT_SKIPHEADERLOOP                     ;Security in case of the PSG channel is not a multiple of 3.
-PLY_AKY_INIT_SKIPHEADEREND 
-            LDA ptDATA                                           
-            STA PLY_AKY_PATTERNFRAMECOUNTER_OVER+1
-            LDA ptDATA+1
-            STA PLY_AKY_PATTERNFRAMECOUNTER_OVER+5              ;ptData now points on the Linker.
-            LDA #$18        ; CLC                               
-            STA PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
-            STA PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
-            STA PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
-            LDA #<01                                            
-            STA PLY_AKY_PATTERNFRAMECOUNTER+1                   
-            LDA #>01
-            STA PLY_AKY_PATTERNFRAMECOUNTER+5
-            RTS
+.(
+    lda _param0+0    ; #<Main_Subsong0                                  
+    sta ptr_music
+    lda _param0+1    ;#>Main_Subsong0
+    sta ptr_music+1
+    ;Skips the header.
+    ldy #1                                             ;Skips the format version.
+    lda (ptr_music),Y                                      ;Channel count.
+    sta ACCA
+    clc
+    lda ptr_music                                           
+    adc #(1+1)          
+    sta ptr_music
+    lda ptr_music+1
+    adc #0
+    sta ptr_music+1                                           
+
+scan_header_loop                                     ;There is always at least one PSG to skip.
+    clc
+    lda ptr_music                                           
+    adc #4
+    sta ptr_music
+    lda ptr_music+1
+    adc #0
+    sta ptr_music+1
+
+    lda ACCA                                           
+    sec
+    sbc #3                                             ;A PSG is three channels.
+    beq end_header_loop
+
+    sta ACCA                      
+    BCS scan_header_loop                     ;Security in case of the PSG channel is not a multiple of 3.
+
+end_header_loop 
+    lda ptr_music                                           
+    sta _auto_linker_low
+    lda ptr_music+1
+    sta _auto_linker_high              ;ptData now points on the Linker.
+    lda #OPCODE_CLC
+    sta PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
+    sta PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
+    sta PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
+    lda #<01                                            
+    sta _auto_pattern_low                   
+    lda #>01
+    sta _auto_pattern_high
+
+    lda #OPCODE_NOP
+    sta _auto_play_stop   ; Enable the music player frame callback
+    rts
+.)
 
 _EndMusic
+    lda #0
+    sta _MusicMixerMask   ; Release all the reserved channels
+    lda #OPCODE_RTS
+    sta _auto_play_stop   ; Disable the music player frame callback
     jmp _PsgStopSound
 
 ; Plays the music. It must have been initialized before.
 _PlayMusicFrame
+_auto_play_stop 
+    rts
+    lda #1
+    sta _PsgNeedUpdate
             
 PLY_AKY_PATTERNFRAMECOUNTER 
-            LDA #$01                                            
-            STA ptDATA
-            LDA #$00
-            STA ptDATA+1
-            LDA ptDATA
+_auto_pattern_low = *+1
+    lda #$01                                            
+    sta ptr_music
+_auto_pattern_high = *+1    
+    lda #$00
+    sta ptr_music+1
+    lda ptr_music
 .(
-            BNE label
-            DEC ptDATA+1
+    bne label
+    dec ptr_music+1
 label 
 .)           
-            DEC ptDATA            
-            LDA ptDATA                                          
-            ORA ptDATA+1                                           
-            BEQ PLY_AKY_PATTERNFRAMECOUNTER_OVER                
-            LDA ptDATA                                          
-            STA PLY_AKY_PATTERNFRAMECOUNTER+1
-            LDA ptDATA+1
-            STA PLY_AKY_PATTERNFRAMECOUNTER+5
-            JMP PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK    
+    dec ptr_music            
+    lda ptr_music                                          
+    ora ptr_music+1                                           
+    beq PLY_AKY_PATTERNFRAMECOUNTER_OVER                
+    lda ptr_music                                          
+    sta _auto_pattern_low
+    lda ptr_music+1
+    sta _auto_pattern_high
+    jmp PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK    
+
 PLY_AKY_PATTERNFRAMECOUNTER_OVER
 ;The pattern is not over.
-PLY_AKY_PTLINKER 
-            LDA #$AC                                            ;Points on the Pattern of the linker.
-            STA pt2_DT
-            LDA #$AC
-            STA pt2_DT+1
-            LDY #00                                             ;Gets the duration of the Pattern, or 0 if end of the song.
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            STA ptDATA+1
-            ORA ptDATA                                           
-            BNE PLY_AKY_LINKERNOTENDSONG                        
-            ;End of the song. Where to loop?
-            INY                                                 
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            ;We directly point on the frame counter of the pattern to loop to.
-            STA pt2_DT+1                                        
-            LDA ptDATA
-            STA pt2_DT
-            ;Gets the duration again. No need to check the end of the song,
-            ;we know it contains at least one pattern.
-            LDY #00                                             
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            STA ptDATA+1
+;PLY_AKY_PTLINKER 
+_auto_linker_low = *+1
+    lda #$AC                                            ;Points on the Pattern of the linker.
+    sta pt2_DT
+_auto_linker_high = *+1
+    lda #$AC
+    sta pt2_DT+1
+    ldy #0                                             ;Gets the duration of the Pattern, or 0 if end of the song.
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    sta ptr_music+1
+    ora ptr_music                                           
+    bne PLY_AKY_LINKERNOTENDSONG      
+
+end_of_song                      
+    ;End of the song. Where to loop?
+    iny                                                 
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    ;We directly point on the frame counter of the pattern to loop to.
+    sta pt2_DT+1                                        
+    lda ptr_music
+    sta pt2_DT
+    ;Gets the duration again. No need to check the end of the song,
+    ;we know it contains at least one pattern.
+    ldy #0                                             
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    sta ptr_music+1
+
 PLY_AKY_LINKERNOTENDSONG
-            LDA ptDATA
-            STA PLY_AKY_PATTERNFRAMECOUNTER+1                   
-            LDA ptDATA+1
-            STA PLY_AKY_PATTERNFRAMECOUNTER+5
-            INY                                                 
-            LDA (pt2_DT),Y                                      
-            STA PLY_AKY_CHANNEL1_PTTRACK+1
-            INY
-            LDA (pt2_DT),Y
-            STA PLY_AKY_CHANNEL1_PTTRACK+5
-            INY                                                 
-            LDA (pt2_DT),Y                                      
-            STA PLY_AKY_CHANNEL2_PTTRACK+1
-            INY
-            LDA (pt2_DT),Y
-            STA PLY_AKY_CHANNEL2_PTTRACK+5
-            INY                                                 
-            LDA (pt2_DT),Y                                      
-            STA PLY_AKY_CHANNEL3_PTTRACK+1
-            INY
-            LDA (pt2_DT),Y
-            STA PLY_AKY_CHANNEL3_PTTRACK+5
-            CLC
-            LDA pt2_DT                                          
-            ADC #08                                             ; fix pt2_DT value                                          
-            STA PLY_AKY_PATTERNFRAMECOUNTER_OVER+1
-            LDA pt2_DT+1
-            ADC #00
-            STA PLY_AKY_PATTERNFRAMECOUNTER_OVER+5
-            ;Resets the RegisterBlocks of the channel >1. The first one is skipped so there is no need to do so.
-            LDA #01                                             
-            STA PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK+1  
-            STA PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK+1  
-            JMP PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK_OVER
+    lda ptr_music
+    sta _auto_pattern_low                   
+    lda ptr_music+1
+    sta _auto_pattern_high
+    iny      
+                                               
+    lda (pt2_DT),Y                                      
+    sta _auto_chan1_track_low
+    iny
+    lda (pt2_DT),Y
+    sta _auto_chan1_track_high
+    iny                                                 
+    lda (pt2_DT),Y                                      
+    sta _auto_chan2_track_low
+    iny
+    lda (pt2_DT),Y
+    sta _auto_chan2_track_high
+    iny                                                 
+    lda (pt2_DT),Y                                      
+    sta _auto_chan3_track_low
+    iny
+    lda (pt2_DT),Y
+    sta _auto_chan3_track_high
+
+    clc
+    lda pt2_DT                                          
+    adc #8                                             ; fix pt2_DT value                                          
+    sta _auto_linker_low
+    lda pt2_DT+1
+    adc #0
+    sta _auto_linker_high
+
+    ;Resets the RegisterBlocks of the channel >1. The first one is skipped so there is no need to do so.
+    lda #1                                             
+    sta PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK+1  
+    sta PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK+1  
+    jmp PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK_OVER
 
 ; =====================================
 ;Reading the Tracks.
 ; =====================================
 PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK 
-            LDA #01                                             ;Frames to wait before reading the next RegisterBlock. 0 = finished.
-            STA ACCA                                           
-            DEC ACCA
-            BNE PLY_AKY_CHANNEL1_REGISTERBLOCK_PROCESS          
+    lda #01                                             ;Frames to wait before reading the next RegisterBlock. 0 = finished.
+    sta ACCA                                           
+    dec ACCA
+    bne PLY_AKY_CHANNEL1_REGISTERBLOCK_PROCESS          
 PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK_OVER
-            ;This RegisterBlock is finished. Reads the next one from the Track.
-            ;Obviously, starts at the initial state.
-            LDA #$18                                            ; Carry clear (return to initial state)                             
-            STA PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
+    ;This RegisterBlock is finished. Reads the next one from the Track.
+    ;Obviously, starts at the initial state.
+    lda #OPCODE_CLC                                            ; Carry clear (return to initial state)                             
+    sta PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
 PLY_AKY_CHANNEL1_PTTRACK 
-            LDA #$AC                                            ;Points on the Track.
-            STA pt2_DT
-            LDA #$AC
-            STA pt2_DT+1
-    
-            LDY #00                                             ;Gets the duration.
-            LDA (pt2_DT),Y
-            STA ACCA
-            INY                                                 ;Reads the RegisterBlock address.
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            STA ptDATA+1
-            CLC
-            LDA pt2_DT
-            ADC #03         
-            STA PLY_AKY_CHANNEL1_PTTRACK+1                      
-            LDA pt2_DT+1
-            ADC #00
-            STA PLY_AKY_CHANNEL1_PTTRACK+5
-    
-            LDA ptDATA                                           
-            STA PLY_AKY_CHANNEL1_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL1_PTREGISTERBLOCK+5
-            ;A is the duration of the block.
+_auto_chan1_track_low = *+1
+    lda #$AC                                            ;Points on the Track.
+    sta pt2_DT
+_auto_chan1_track_high = *+1
+    lda #$AC
+    sta pt2_DT+1
+
+    ldy #00                                             ;Gets the duration.
+    lda (pt2_DT),Y
+    sta ACCA
+    iny                                                 ;Reads the RegisterBlock address.
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    sta ptr_music+1
+    clc
+    lda pt2_DT
+    adc #03         
+    sta _auto_chan1_track_low                      
+    lda pt2_DT+1
+    adc #00
+    sta _auto_chan1_track_high
+
+    lda ptr_music                                           
+    sta PLY_AKY_CHANNEL1_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL1_PTREGISTERBLOCK+5
+    ;A is the duration of the block.
 PLY_AKY_CHANNEL1_REGISTERBLOCK_PROCESS
-            ;Processes the RegisterBlock, whether it is the current one or a new one.
-            LDA ACCA                                           
-            STA PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK+1
+    ;Processes the RegisterBlock, whether it is the current one or a new one.
+    lda ACCA                                           
+    sta PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK+1
 
 PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK 
-            LDA #$01                                            ;Frames to wait before reading the next RegisterBlock. 0 = finished.
-            STA ACCA                                           
-            DEC ACCA
-            BNE PLY_AKY_CHANNEL2_REGISTERBLOCK_PROCESS          
+    lda #$01                                            ;Frames to wait before reading the next RegisterBlock. 0 = finished.
+    sta ACCA                                           
+    dec ACCA
+    bne PLY_AKY_CHANNEL2_REGISTERBLOCK_PROCESS          
 PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK_OVER
-            ;This RegisterBlock is finished. Reads the next one from the Track.
-            ;Obviously, starts at the initial state.
-            LDA #$18                                            ; Carry clear (return to initial state)
-            STA PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
+    ;This RegisterBlock is finished. Reads the next one from the Track.
+    ;Obviously, starts at the initial state.
+    lda #OPCODE_CLC                                            ; Carry clear (return to initial state)
+    sta PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
 PLY_AKY_CHANNEL2_PTTRACK 
-            LDA #$AC                                            ;Points on the Track.
-            STA pt2_DT
-            LDA #$AC
-            STA pt2_DT+1                                         
-    
-            LDY #00                                             ;Gets the duration.
-            LDA (pt2_DT),Y
-            STA ACCA
-            INY                                                 ;Reads the RegisterBlock address.
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            STA ptDATA+1
-            CLC
-            LDA pt2_DT
-            ADC #03                                             
-            STA PLY_AKY_CHANNEL2_PTTRACK+1                      
-            LDA pt2_DT+1
-            ADC #00
-            STA PLY_AKY_CHANNEL2_PTTRACK+5
-    
-            LDA ptDATA                                           
-            STA PLY_AKY_CHANNEL2_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL2_PTREGISTERBLOCK+5
-            ;A is the duration of the block.
+_auto_chan2_track_low = *+1
+    lda #$AC                                            ;Points on the Track.
+    sta pt2_DT
+_auto_chan2_track_high = *+1    
+    lda #$AC
+    sta pt2_DT+1                                         
+
+    ldy #00                                             ;Gets the duration.
+    lda (pt2_DT),Y
+    sta ACCA
+    iny                                                 ;Reads the RegisterBlock address.
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    sta ptr_music+1
+    clc
+    lda pt2_DT
+    adc #03                                             
+    sta _auto_chan2_track_low                      
+    lda pt2_DT+1
+    adc #00
+    sta _auto_chan2_track_high
+
+    lda ptr_music                                           
+    sta PLY_AKY_CHANNEL2_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL2_PTREGISTERBLOCK+5
+    ;A is the duration of the block.
 PLY_AKY_CHANNEL2_REGISTERBLOCK_PROCESS
-            ;Processes the RegisterBlock, whether it is the current one or a new one.
-            LDA ACCA                                           
-            STA PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK+1
+    ;Processes the RegisterBlock, whether it is the current one or a new one.
+    lda ACCA                                           
+    sta PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK+1
 
 PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK 
-            LDA #$01                                            ;Frames to wait before reading the next RegisterBlock. 0 = finished.
-            STA ACCA                                           
-            DEC ACCA
-            BNE PLY_AKY_CHANNEL3_REGISTERBLOCK_PROCESS          
+    lda #$01                                            ;Frames to wait before reading the next RegisterBlock. 0 = finished.
+    sta ACCA                                           
+    dec ACCA
+    bne PLY_AKY_CHANNEL3_REGISTERBLOCK_PROCESS          
 PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK_OVER
-            ;This RegisterBlock is finished. Reads the next one from the Track.
-            ;Obviously, starts at the initial state.
-            LDA #$18                                            ; Carry clear (return to initial state)
-            STA PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
+    ;This RegisterBlock is finished. Reads the next one from the Track.
+    ;Obviously, starts at the initial state.
+    lda #OPCODE_CLC                                            ; Carry clear (return to initial state)
+    sta PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
 
 PLY_AKY_CHANNEL3_PTTRACK 
-            LDA #$AC                                            ;Points on the Track.
-            STA pt2_DT
-            LDA #$AC
-            STA pt2_DT+1                                        
-    
-            LDY #00                                             ;Gets the duration.
-            LDA (pt2_DT),Y
-            STA ACCA
-            INY                                                 ;Reads the RegisterBlock address.
-            LDA (pt2_DT),Y
-            STA ptDATA
-            INY
-            LDA (pt2_DT),Y
-            STA ptDATA+1
-            CLC
-            LDA pt2_DT
-            ADC #03        
-            STA PLY_AKY_CHANNEL3_PTTRACK+1                     
-            LDA pt2_DT+1
-            ADC #00
-            STA PLY_AKY_CHANNEL3_PTTRACK+5
-    
-            LDA ptDATA                                          
-            STA PLY_AKY_CHANNEL3_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL3_PTREGISTERBLOCK+5
-            ;A is the duration of the block.
+_auto_chan3_track_low = *+1
+    lda #$AC                                            ;Points on the Track.
+    sta pt2_DT
+_auto_chan3_track_high = *+1
+    lda #$AC
+    sta pt2_DT+1                                        
+
+    ldy #00                                             ;Gets the duration.
+    lda (pt2_DT),Y
+    sta ACCA
+    iny                                                 ;Reads the RegisterBlock address.
+    lda (pt2_DT),Y
+    sta ptr_music
+    iny
+    lda (pt2_DT),Y
+    sta ptr_music+1
+    clc
+    lda pt2_DT
+    adc #03        
+    sta _auto_chan3_track_low                     
+    lda pt2_DT+1
+    adc #00
+    sta _auto_chan3_track_high
+
+    lda ptr_music                                          
+    sta PLY_AKY_CHANNEL3_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL3_PTREGISTERBLOCK+5
+    ;A is the duration of the block.
 PLY_AKY_CHANNEL3_REGISTERBLOCK_PROCESS
-            ;Processes the RegisterBlock, whether it is the current one or a new one. 
-            LDA ACCA                                          
-            STA PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK+1
+    ;Processes the RegisterBlock, whether it is the current one or a new one. 
+    lda ACCA                                          
+    sta PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK+1
 
 ; =====================================
-;Reading the RegisterBlock.
+; Reading the RegisterBlock.
 ; =====================================
-            LDA #08
-            STA volumeRegister                                  ; first volume register
-            LDX #00                                             ; first frequency register
-            LDY #00                                             ; Y = 0 (all the time)
-            ; Register 7 with default values: fully sound-open but noise-close.
-            ;R7 has been shift twice to the left, it will be shifted back as the channels are treated.
-            LDA #$E0
-            STA r7                                               
-            ;Channel 1            
+    lda #08
+    sta volumeRegister                                  ; first volume register
+    LDX #00                                             ; first frequency register
+    ldy #00                                             ; Y = 0 (all the time)
+    ; Register 7 with default values: fully sound-open but noise-close.
+    ;R7 has been shift twice to the left, it will be shifted back as the channels are treated.
+    lda #$E0
+    sta r7                                               
+    ;Channel 1            
 PLY_AKY_CHANNEL1_PTREGISTERBLOCK
-            LDA #$AC                                            ;Points on the data of the RegisterBlock to read.
-            STA ptDATA
-            LDA #$AC
-            STA ptDATA+1
+    lda #$AC                                            ;Points on the data of the RegisterBlock to read.
+    sta ptr_music
+    lda #$AC
+    sta ptr_music+1
 PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE
-            CLC                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
-            JSR PLY_AKY_READREGISTERBLOCK
-            LDA #$38                                            ; opcode for SEC (no more initial state)
-            STA PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE
-            LDA ptDATA                                          ;This is new pointer on the RegisterBlock.
-            STA PLY_AKY_CHANNEL1_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL1_PTREGISTERBLOCK+5
-    
-            ;Channel 2
-            ;Shifts the R7 for the next channels.
-            LSR r7                                                  
+    clc                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
+    JSR PLY_AKY_READREGISTERBLOCK
+    lda #OPCODE_SEC                                            ; opcode for SEC (no more initial state)
+    sta PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE
+    lda ptr_music                                          ;This is new pointer on the RegisterBlock.
+    sta PLY_AKY_CHANNEL1_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL1_PTREGISTERBLOCK+5
+
+    ;Channel 2
+    ;Shifts the R7 for the next channels.
+    lsr r7                                                  
 PLY_AKY_CHANNEL2_PTREGISTERBLOCK 
-            LDA #$AC                                            ;Points on the data of the RegisterBlock to read.
-            STA ptDATA
-            LDA #$AC
-            STA ptDATA+1
+    lda #$AC                                            ;Points on the data of the RegisterBlock to read.
+    sta ptr_music
+    lda #$AC
+    sta ptr_music+1
 PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE
-            CLC                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
-            JSR PLY_AKY_READREGISTERBLOCK
-            LDA #$38                                            ; opcode for SEC (no more initial state)
-            STA PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE
-            LDA ptDATA                                          ;This is new pointer on the RegisterBlock.
-            STA PLY_AKY_CHANNEL2_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL2_PTREGISTERBLOCK+5
-    
-            ;Channel 3
-            ;Shifts the R7 for the next channels.
-            ROR r7                                                  
+    clc                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
+    jsr PLY_AKY_READREGISTERBLOCK
+    lda #OPCODE_SEC                                            ; opcode for SEC (no more initial state)
+    sta PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE
+    lda ptr_music                                          ;This is new pointer on the RegisterBlock.
+    sta PLY_AKY_CHANNEL2_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL2_PTREGISTERBLOCK+5
+
+    ;Channel 3
+    ;Shifts the R7 for the next channels.
+    ror r7                                                  
 PLY_AKY_CHANNEL3_PTREGISTERBLOCK
-            LDA #$AC                                            ;Points on the data of the RegisterBlock to read.
-            STA ptDATA
-            LDA #$AC
-            STA ptDATA+1
+    lda #$AC                                            ;Points on the data of the RegisterBlock to read.
+    sta ptr_music
+    lda #$AC
+    sta ptr_music+1
 PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE
-            CLC                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
-            JSR PLY_AKY_READREGISTERBLOCK
-            LDA #$38                                            ; opcode for SEC (no more initial state)
-            STA PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE
-            LDA ptDATA                                          ;This is new pointer on the RegisterBlock.
-            STA PLY_AKY_CHANNEL3_PTREGISTERBLOCK+1
-            LDA ptDATA+1
-            STA PLY_AKY_CHANNEL3_PTREGISTERBLOCK+5
+    clc                                                 ; Clear C (initial STATE) / Set C (non initial STATE)
+    JSR PLY_AKY_READREGISTERBLOCK
+    lda #OPCODE_SEC                                            ; opcode for SEC (no more initial state)
+    sta PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE
+    lda ptr_music                                          ;This is new pointer on the RegisterBlock.
+    sta PLY_AKY_CHANNEL3_PTREGISTERBLOCK+1
+    lda ptr_music+1
+    sta PLY_AKY_CHANNEL3_PTREGISTERBLOCK+5
     
-;Almost all the channel specific registers have been sent. Now sends the remaining registers (6, 7, 11, 12, 13).
-;Register 7. Note that managing register 7 before 6/11/12 is done on purpose.
-#if 0
-            ; Original code
-            LDA #07                                             ; Register 7 
-            STA VIA_ORA         ; $30F
-            LDA #F_SET_REG      ; $FF  -> $            
-            STA VIA_PCR         ; $30C
-            LDA #F_INACTIVE     ; $DD  -> $               
-            STA VIA_PCR         ; $30C
-
-            LDA r7      
-            STA VIA_ORA         ; $30F
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR         ; $30C
-            LDA #F_INACTIVE                        
-            STA VIA_PCR         ; $30C
-#else
-            ; Based on the Oric ROM code
-
-            LDA #07         ; Register 7 
-            STA $030F       ; Send the YM register number to port A of 6522.
-
-            LDA $030C  		; Set CA2 (BC1 of 8912) to 1,
-            ORA #$EE  		; set CB2 (BDIR of 8912) to 1.
-            STA $030C  		; 8912 latches the address.
-            AND #$11  		; Set CA2 and CB2 to 0, BC1 and
-            ORA #$CC  		; BDIR in inactive state.
-            STA $030C
-            PHA
-
-            LDA r7      
-            ORA #$40        ; Only for the Register 7 (to avoid messing with the I/O port)
-            STA $030F       ; Send data to 8912 register.
-
-            PLA
-            ORA #$EC  		; Set CA2 to 0 and CB2 to 1,
-            STA $030C  		; 8912 latches data.
-            AND #$11  		; Set CA2 and CB2 to 0, BC1 and
-            ORA #$CC 		; BDIR in inactive state.
-            STA $030C
-#endif
+    ; Almost all the channel specific registers have been sent. Now sends the remaining registers (6, 7, 11, 12, 13).
+    ; Register 7. Note that managing register 7 before 6/11/12 is done on purpose.
+    lda r7                           ; Register 7
+    sta _MusicPsgmixer               ; Should probably do some magic to avoid overwriting the special effect values on the other channels
 
 #ifdef PLY_AKY_USE_Noise                                       ;CONFIG SPECIFIC
-            LDA #06                                             ; Register 6
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA PLY_AKY_PSGREGISTER6        
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    lda PLY_AKY_PSGREGISTER6         ; Register 6
+    sta _PsgfreqNoise
 #endif
 
 #ifdef PLY_CFG_UseHardwareSounds                               ;CONFIG SPECIFIC
-            LDA #11                                             ; Register 11
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA PLY_AKY_PSGREGISTER11       
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA #12                                             ; Register 12 
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA PLY_AKY_PSGREGISTER12       
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
+    lda PLY_AKY_PSGREGISTER11         ; Register 11
+    sta _PsgfreqShape+0
+ 
+    lda PLY_AKY_PSGREGISTER12         ; Register 12 
+    sta _PsgfreqShape+1 
+    
 PLY_AKY_PSGREGISTER13_CODE
-            LDA PLY_AKY_PSGREGISTER13
+    lda PLY_AKY_PSGREGISTER13
 PLY_AKY_PSGREGISTER13_RETRIG
-            CMP #$FF                                            ;If IsRetrig?, force the R13 to be triggered.                            
-            BEQ PLY_AKY_PSGREGISTER13_END
-            STA PLY_AKY_PSGREGISTER13_RETRIG+1
+    CMP #$FF                                            ;If IsRetrig?, force the R13 to be triggered.                            
+    beq PLY_AKY_PSGREGISTER13_END
+    sta PLY_AKY_PSGREGISTER13_RETRIG+1
 
-            LDA #13                                             ; Register 13
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA PLY_AKY_PSGREGISTER13       
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    lda PLY_AKY_PSGREGISTER13         ; Register 13
+    sta _PsgenvShape                  ; Probably need a way to avoid the retrig of enveloppe in audio.s
 PLY_AKY_PSGREGISTER13_END
 #endif
 PLY_AKY_EXIT 
 
-            RTS       
+            rts       
 ; -----------------------------------------------------------------------------
 ;Generic code interpreting the RegisterBlock
 ; IN:   PtData = First Byte
 ;       Carry = 0 = initial state, 1 = non-initial state. 
 ; -----------------------------------------------------------------------------
 PLY_AKY_READREGISTERBLOCK
-            PHP                                                 ; save c
-            LDA (ptDATA),Y
-            STA ACCA
-            INC ptDATA
+    PHP                                                 ; save c
+    lda (ptr_music),Y
+    sta ACCA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            PLP                                                 ; restore c
+    
+    PLP                                                 ; restore c
 .(            
-            BCC label
-            JMP PLY_AKY_RRB_NONINITIALSTATE                     
-label 
-.)           
-
-            ;Initial state.
-            ROR ACCA
-.(            
-            BCC label
-            JMP PLY_AKY_RRB_IS_SOFTWAREONLYORSOFTWAREANDHARDWARE
+    bcc label
+    jmp PLY_AKY_RRB_NONINITIALSTATE                     
 label 
 .)           
 
+    ;Initial state.
+    ror ACCA
+.(            
+    bcc label
+    jmp PLY_AKY_RRB_IS_SOFTWAREONLYORSOFTWAREANDHARDWARE
+label 
+.)           
 
-            ROR ACCA
+
+    ror ACCA
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
-            BCS PLY_AKY_RRB_IS_HARDWAREONLY
+    BCS PLY_AKY_RRB_IS_HARDWAREONLY
 #endif
 ; -----------------------------------------------------------------------------
 ;Generic code interpreting the RegisterBlock - Initial state.
@@ -620,386 +574,307 @@ label
 ;       Y = 0
 ; -----------------------------------------------------------------------------
 PLY_AKY_RRB_IS_NOSOFTWARENOHARDWARE
-            ;No software no hardware.
-            ROR ACCA                                           ;Noise?
-            BCC PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_READVOLUME
-            ;There is a noise. Reads it.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
+    ;No software no hardware.
+    ror ACCA                                           ;Noise?
+    bcc PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_READVOLUME
+    ;There is a noise. Reads it.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open)
-            STA r7
-            
+    
+    ;Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open)
+    sta r7
+    
 PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_READVOLUME
-            ;The volume is now in b0-b3.
-            ;and %1111      ;No need, the bit 7 was 0.
+    ;The volume is now in b0-b3.
+    ;and %1111      ;No need, the bit 7 was 0.
 
-            ;Sends the volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Sends the volume.
+    stx save_x
+    ldx volumeRegister
+    lda ACCA
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
 
-            LDA ACCA
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-    
-            INC volumeRegister                                  ;Increases the volume register.
-            INX                                                 ;Increases the frequency register.
-            INX
-    
-            ;Closes the sound channel.
-            LDA r7
-            ORA #%00000100                                      ; set bit 2 (close)
-            STA r7
-            RTS
+    inc volumeRegister                                  ;Increases the volume register.
+    inx                                                 ;Increases the frequency register.
+    inx
+
+    ;Closes the sound channel.
+    lda r7
+    ora #%00000100                                      ; set bit 2 (close)
+    sta r7
+    rts
 ; -------------------------------------
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 PLY_AKY_RRB_IS_HARDWAREONLY
-            ;Retrig?
-            ROR ACCA
-            BCC PLY_AKY_RRB_IS_HO_NORETRIG
-            LDA ACCA
-            ORA #%10000000                                      
-            STA ACCA   
-            STA PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
+    ;Retrig?
+    ror ACCA
+    bcc PLY_AKY_RRB_IS_HO_NORETRIG
+    lda ACCA
+    ora #%10000000                                      
+    sta ACCA   
+    sta PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
 PLY_AKY_RRB_IS_HO_NORETRIG
-            ;Noise?
-            ROR ACCA 
-            BCC PLY_AKY_RRB_IS_HO_NONOISE
-            ;Reads the noise.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
+    ;Noise?
+    ror ACCA 
+    bcc PLY_AKY_RRB_IS_HO_NONOISE
+    ;Reads the noise.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
            
-            ;Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open)
-            STA r7
+    ;Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open)
+    sta r7
 PLY_AKY_RRB_IS_HO_NONOISE
-            ;The envelope.
-            LDA ACCA
-            AND #15
-            STA PLY_AKY_PSGREGISTER13
-            ;Copies the hardware period.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER11
-            INC ptDATA
+    ;The envelope.
+    lda ACCA
+    and #15
+    sta PLY_AKY_PSGREGISTER13
+    ;Copies the hardware period.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER11
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER12
-            INC ptDATA
+    
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER12
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Closes the sound channel.
-            LDA r7
-            ORA #%00000100                                      ; set bit 2 (close)
-            STA r7
+    
+    ;Closes the sound channel.
+    lda r7
+    ora #%00000100                                      ; set bit 2 (close)
+    sta r7
 
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    stx save_x
+    ldx volumeRegister
+    lda #$FF                                            ;Value (volume to 16)
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
 
-            LDA #$FF                                            ;Value (volume to 16)
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC volumeRegister                                  ;Increases the volume register.                              
-            INX                                                 ;Increases the frequency register (mandatory!).
-            INX
-            RTS
+    inc volumeRegister                                  ;Increases the volume register.                              
+    inx                                                 ;Increases the frequency register (mandatory!).
+    inx
+    rts
 #endif
 
 ; -------------------------------------
 PLY_AKY_RRB_IS_SOFTWAREONLYORSOFTWAREANDHARDWARE
-            ;Another decision to make about the sound type.
-            ROR ACCA
+    ;Another decision to make about the sound type.
+    ror ACCA
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 .(            
-            BCC label
-            JMP PLY_AKY_RRB_IS_SOFTWAREANDHARDWARE
+    bcc label
+    jmp PLY_AKY_RRB_IS_SOFTWAREANDHARDWARE
 label 
 .)           
 
 #endif
 
-            ;Software only. Structure: 0vvvvntt.
-            ;Noise?
-            ROR ACCA
-            BCC PLY_AKY_RRB_IS_SOFTWAREONLY_NONOISE
-            ;Noise. Reads it.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
+    ;Software only. Structure: 0vvvvntt.
+    ;Noise?
+    ror ACCA
+    bcc PLY_AKY_RRB_IS_SOFTWAREONLY_NONOISE
+    ;Noise. Reads it.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open)
-            STA r7
+    
+    ;Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open)
+    sta r7
 
 PLY_AKY_RRB_IS_SOFTWAREONLY_NONOISE
-            ;Reads the volume (now b0-b3).
-            ;Note: we do NOT peform a "and %1111" because we know the bit 7 of the original byte is 0, so the bit 4 is currently 0. Else the hardware volume would be on!
-            ;Sends the volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA ACCA
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Reads the volume (now b0-b3).
+    ;Note: we do NOT peform a "and %1111" because we know the bit 7 of the original byte is 0, so the bit 4 is currently 0. Else the hardware volume would be on!
+    ;Sends the volume.
+    stx save_x
+    ldx volumeRegister
+    lda ACCA
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
+    
+    inc volumeRegister                                  ;Increases the volume register.
             
-            INC volumeRegister                                  ;Increases the volume register.
-                 
-            ;Sends the LSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Sends the LSB software frequency.
+    ;Reads the software period.
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
 
-            ;Reads the software period.
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC ptDATA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-      
-            INX                                                ;Increases the frequency register.         
-   
-            ;Sends the MSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
 
-            ;Reads the software period.
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    inx                                                ;Increases the frequency register.         
 
-            INC ptDATA
+    ;Sends the MSB software frequency.
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
+
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-         
-            INX                                                 ;Increases the frequency register.   
-            RTS
+    
+    inx                                                 ;Increases the frequency register.   
+    rts
+
+
 ; -------------------------------------
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 PLY_AKY_RRB_IS_SOFTWAREANDHARDWARE
-            ;Retrig?
-            ROR ACCA
+    ;Retrig?
+    ror ACCA
 #ifdef PLY_CFG_UseRetrig                                       ;CONFIG SPECIFIC
-            BCC PLY_AKY_RRB_IS_SAH_NORETRIG
-            LDA ACCA
-            ORA #%10000000                                      
-            STA PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
-            STA ACCA
+    bcc PLY_AKY_RRB_IS_SAH_NORETRIG
+    lda ACCA
+    ora #%10000000                                      
+    sta PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
+    sta ACCA
 PLY_AKY_RRB_IS_SAH_NORETRIG
 #endif
-            ;Noise?
-            ROR ACCA
+    ;Noise?
+    ror ACCA
 #ifdef PLY_AKY_USE_SoftAndHard_Noise_Agglomerated              ;CONFIG SPECIFIC
-            BCC PLY_AKY_RRB_IS_SAH_NONOISE
-            ;Reads the noise.
+    bcc PLY_AKY_RRB_IS_SAH_NONOISE
+    ;Reads the noise.
 
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open noise)
-            STA r7
+    
+    ;Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open noise)
+    sta r7
 
 PLY_AKY_RRB_IS_SAH_NONOISE
 #endif
-            ;The envelope.
-            LDA ACCA
-            AND #15                         
-            STA PLY_AKY_PSGREGISTER13
 
-            ;Sends the LSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;The envelope.
+    lda ACCA
+    and #15                         
+    sta PLY_AKY_PSGREGISTER13
 
-            ;Reads the software period.
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-    
-            INC ptDATA
+    ;Sends the LSB software frequency.
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x   
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
-label 
-.)           
-           
-            INX                                                 ;Increases the frequency register.           
-                   
-            ;Sends the MSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            ;Reads the software period.
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC ptDATA
-.(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
     
-            INX                                                ;Increases the frequency register.
+    inx                                                 ;Increases the frequency register.           
             
-            ;Sets the hardware volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA #$FF                                            ;Value (volume to 16).
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-   
-            INC volumeRegister                                  ;Increases the volume register.                            
-
-            ;Copies the hardware period. 
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER11
-            INC ptDATA
+    ;Sends the MSB software frequency.
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-          
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER12
-            INC ptDATA
+    
+    inx                                                ;Increases the frequency register.
+    
+    ;Sets the hardware volume.
+    stx save_x
+    ldx volumeRegister
+    lda #$FF                                            ;Value (volume to 16).
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
+
+    inc volumeRegister                                  ;Increases the volume register.                            
+
+    ;Copies the hardware period. 
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER11
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-            
-            RTS
+    
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER12
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
+label 
+.)              
+    rts
 #endif
 
 ; -------------------------------------
-            ;Manages the loop. This code is put here so that no jump needs to be coded when its job is done.
+    ;Manages the loop. This code is put here so that no jump needs to be coded when its job is done.
 PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_LOOP
-            ;Loops. Reads the next pointer to this RegisterBlock.
-            LDA (ptDATA),Y
-            STA ACCA
-            INC ptDATA
+    ;Loops. Reads the next pointer to this RegisterBlock.
+    lda (ptr_music),Y
+    sta ACCA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Makes another iteration to read the new data.
-            ;Since we KNOW it is not an initial state (because no jump goes to an initial state), we can directly go to the right branching.
-            ;Reads the first byte.
-            LDA (ptDATA),Y
-            STA ptDATA+1
-            LDA ACCA
-            STA ptDATA
-            LDA (ptDATA),Y
-            STA ACCA
-            INC ptDATA
+    
+    ;Makes another iteration to read the new data.
+    ;Since we KNOW it is not an initial state (because no jump goes to an initial state), we can directly go to the right branching.
+    ;Reads the first byte.
+    lda (ptr_music),Y
+    sta ptr_music+1
+    lda ACCA
+    sta ptr_music
+    lda (ptr_music),Y
+    sta ACCA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
           
@@ -1007,468 +882,403 @@ label
 ;Generic code interpreting the RegisterBlock - Non initial state. See comment about the Initial state for the registers ins/outs.
 ; -----------------------------------------------------------------------------
 PLY_AKY_RRB_NONINITIALSTATE
-            ROR ACCA
-            BCS PLY_AKY_RRB_NIS_SOFTWAREONLYORSOFTWAREANDHARDWARE
-            ROR ACCA
+    ror ACCA
+    BCS PLY_AKY_RRB_NIS_SOFTWAREONLYORSOFTWAREANDHARDWARE
+    ror ACCA
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 .(            
-            BCC label
-            JMP PLY_AKY_RRB_NIS_HARDWAREONLY
-label 
-.)           
-           
-#endif
-            ;No software, no hardware, OR loop.
-            LDA ACCA
-            STA ACCB
-            AND #03                                             ;Bit 3:loop?/volume bit 0, bit 2: volume?
-            CMP #02                                             ;If no volume, yet the volume is >0, it means loop.
-            BEQ PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_LOOP
-            ;No loop: so "no software no hardware".
-            ;Closes the sound channel.
-            LDA r7
-            ORA #%00000100                                      ; set bit 2 (close sound)
-            STA r7
-            ;Volume? bit 2 - 2.
-            LDA ACCB
-            ROR
-            BCC PLY_AKY_RRB_NIS_NOVOLUME
-            AND #15
-            STA ACCA
-
-            ;Sends the volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA ACCA
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-PLY_AKY_RRB_NIS_NOVOLUME
-            ;Sadly, have to lose a bit of CPU here, as this must be done in all cases.
-            INC volumeRegister                                  ;Next volume register.
-            INX                                                 ;Next frequency registers.
-            INX
-
-            ;Noise? Was on bit 7, but there has been two shifts. We can't use A, it may have been modified by the volume AND.           
-            LDA #%00100000                                      ; bit 7-2
-            BIT ACCB
-.(            
-            BNE label
-            RTS
-label 
-.)           
-
-            ;Noise.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
-.(            
-            BNE label
-            INC ptDATA+1
-label 
-.)           
-           
-            ;Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open noise)
-            STA r7               
-            RTS
-; -------------------------------------
-PLY_AKY_RRB_NIS_SOFTWAREONLYORSOFTWAREANDHARDWARE
-            ;Another decision to make about the sound type.
-            ROR ACCA
-#ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
-.(            
-            BCC label
-            JMP PLY_AKY_RRB_NIS_SOFTWAREANDHARDWARE
-label 
-.)           
-                   
-#endif
-            ;Software only. Structure: mspnoise lsp v  v  v  v  (0  1).
-            LDA ACCA
-            STA ACCB
-            ;Gets the volume (already shifted).
-            AND #15
-            STA ACCA
-            ;Sends the volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA ACCA
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC volumeRegister                                   ;Increases the volume register.
-            ;LSP? (Least Significant byte of Period). Was bit 6, but now shifted.
-            LDA #%00010000                                      ; bit 6-2
-            BIT ACCB
-            BEQ PLY_AKY_RRB_NIS_SOFTWAREONLY_NOLSP
-                
-            ;Sends the LSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC ptDATA
-.(            
-            BNE label
-            INC ptDATA+1
-label 
-.)           
-           
-                                                                ; frequency register is not incremented on purpose.
-PLY_AKY_RRB_NIS_SOFTWAREONLY_NOLSP
-            ;MSP AND/OR (Noise and/or new Noise)? (Most Significant byte of Period).
-            LDA #%00100000                                      ; bit 7-2
-            BIT ACCB
-            BNE PLY_AKY_RRB_NIS_SOFTWAREONLY_MSPANDMAYBENOISE
-            ;Bit of loss of CPU, but has to be done in all cases.
-            INX
-            INX
-            RTS
-; -------------------------------------
-PLY_AKY_RRB_NIS_SOFTWAREONLY_MSPANDMAYBENOISE
-            ;MSP and noise?, in the next byte. nipppp (n = newNoise? i = isNoise? p = MSB period).
-            LDA (ptDATA),Y                                      ;Useless bits at the end, not a problem.
-            STA ACCA
-            INC ptDATA
-.(            
-            BNE label
-            INC ptDATA+1
-label 
-.)           
-           
-            ;Sends the MSB software frequency.
-            INX                                                 ;Was not increased before.
-
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            LDA ACCA
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-  
-            INX                                                 ;Increases the frequency register.
-            ROL ACCA                                            ;Carry is isNoise?
-.(            
-            BCS label
-            RTS                     
-            ;Opens the noise channel.
-label 
-.)           
-            LDA r7                                              ; reset bit 5 (open)
-            AND #%11011111
-            STA r7
-            ;Is there a new noise value? If yes, gets the noise.
-            ROL ACCA 
-.(            
-            BCS label
-            RTS
+    bcc label
+    jmp PLY_AKY_RRB_NIS_HARDWAREONLY
 label 
 .)           
     
-            ;Gets the noise.
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER6
-            INC ptDATA
+#endif
+    ;No software, no hardware, OR loop.
+    lda ACCA
+    sta ACCB
+    and #03                                             ;Bit 3:loop?/volume bit 0, bit 2: volume?
+    CMP #02                                             ;If no volume, yet the volume is >0, it means loop.
+    beq PLY_AKY_RRB_NIS_NOSOFTWARENOHARDWARE_LOOP
+    ;No loop: so "no software no hardware".
+    ;Closes the sound channel.
+    lda r7
+    ora #%00000100                                      ; set bit 2 (close sound)
+    sta r7
+    ;Volume? bit 2 - 2.
+    lda ACCB
+    ror
+    bcc PLY_AKY_RRB_NIS_NOVOLUME
+    and #15
+    sta ACCA
+
+    ;Sends the volume.
+    stx save_x
+    ldx volumeRegister
+    lda ACCA
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
+
+PLY_AKY_RRB_NIS_NOVOLUME
+    ;Sadly, have to lose a bit of CPU here, as this must be done in all cases.
+    inc volumeRegister                                  ;Next volume register.
+    inx                                                 ;Next frequency registers.
+    inx
+
+    ;Noise? Was on bit 7, but there has been two shifts. We can't use A, it may have been modified by the volume and.           
+    lda #%00100000                                      ; bit 7-2
+    bit ACCB
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    rts
+label 
+.)           
+
+    ;Noise.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
+label 
+.)           
+    
+    ;Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open noise)
+    sta r7               
+    rts
+
+
+
+
+PLY_AKY_RRB_NIS_SOFTWAREONLYORSOFTWAREANDHARDWARE
+    ;Another decision to make about the sound type.
+    ror ACCA
+#ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
+.(            
+    bcc label
+    jmp PLY_AKY_RRB_NIS_SOFTWAREANDHARDWARE
+label 
+.)           
+            
+#endif
+    ;Software only. Structure: mspnoise lsp v  v  v  v  (0  1).
+    lda ACCA
+    sta ACCB
+    ;Gets the volume (already shifted).
+    and #15
+    sta ACCA
+
+    ;Sends the volume.
+    stx save_x
+    ldx volumeRegister
+    lda ACCA
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
+
+    inc volumeRegister                                   ;Increases the volume register.
+    ;LSP? (Least Significant byte of Period). Was bit 6, but now shifted.
+    lda #%00010000                                      ; bit 6-2
+    bit ACCB
+    beq PLY_AKY_RRB_NIS_SOFTWAREONLY_NOLSP
+        
+    ;Sends the LSB software frequency.
+    ;lda FreqRegister
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
+
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
 label 
 .)           
            
-            RTS
+                                                        ; frequency register is not incremented on purpose.
+PLY_AKY_RRB_NIS_SOFTWAREONLY_NOLSP
+    ;MSP and/OR (Noise and/or new Noise)? (Most Significant byte of Period).
+    lda #%00100000                                      ; bit 7-2
+    bit ACCB
+    bne PLY_AKY_RRB_NIS_SOFTWAREONLY_MSPANDMAYBENOISE
+    ;Bit of loss of CPU, but has to be done in all cases.
+    inx
+    inx
+    rts
+; -------------------------------------
+PLY_AKY_RRB_NIS_SOFTWAREONLY_MSPANDMAYBENOISE
+    ;MSP and noise?, in the next byte. nipppp (n = newNoise? i = isNoise? p = MSB period).
+    lda (ptr_music),Y                                      ;Useless bits at the end, not a problem.
+    sta ACCA
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
+label 
+.)           
+    
+    ;Sends the MSB software frequency.
+    inx                                                 ;Was not increased before.
+
+    ;lda FreqRegister
+    lda ACCA
+    sta _MusicPsgVirtualRegisters,x
+
+    inx                                                 ;Increases the frequency register.
+    rol ACCA                                            ;Carry is isNoise?
+.(            
+    BCS label
+    rts                     
+    ;Opens the noise channel.
+label 
+.)           
+    lda r7                                              ; reset bit 5 (open)
+    and #%11011111
+    sta r7
+    ;Is there a new noise value? If yes, gets the noise.
+    rol ACCA 
+.(            
+    BCS label
+    rts
+label 
+.)           
+
+    ;Gets the noise.
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER6
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
+label 
+.)             
+    rts
+
+
 ; -------------------------------------
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 PLY_AKY_RRB_NIS_HARDWAREONLY
-            ;Gets the envelope (initially on b2-b4, but currently on b0-b2). It is on 3 bits, must be encoded on 4. Bit 0 must be 0.
-            ROL ACCA                    
-            LDA ACCA 
-            STA ACCB
-            AND #14                 
-            STA PLY_AKY_PSGREGISTER13
-            ;Closes the sound channel.
-            LDA r7
-            ORA #%00000100                                      ; set bit 2 (close)
-            STA r7
-            ;Hardware volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Gets the envelope (initially on b2-b4, but currently on b0-b2). It is on 3 bits, must be encoded on 4. Bit 0 must be 0.
+    rol ACCA                    
+    lda ACCA 
+    sta ACCB
+    and #14                 
+    sta PLY_AKY_PSGREGISTER13
+    ;Closes the sound channel.
+    lda r7
+    ora #%00000100                                      ; set bit 2 (close)
+    sta r7
 
-            LDA #$FF                                            ;Value (16, hardware volume).
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-    
-            INC volumeRegister                                  ;Increases the volume register.
-            INX                                                ;Increases the frequency register.
-            INX
-    
-            ;LSB for hardware period? Currently on b6.
-            LDA ACCB
-            ROL
-            ROL
-            STA ACCA
-            BCC PLY_AKY_RRB_NIS_HARDWAREONLY_NOLSB
+    ;Hardware volume.
+    stx save_x
+    ldx volumeRegister
+    lda #$FF                                            ;Value (16, hardware volume).
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
 
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER11
-            INC ptDATA
+    inc volumeRegister                                  ;Increases the volume register.
+    inx                                                ;Increases the frequency register.
+    inx
+
+    ;LSB for hardware period? Currently on b6.
+    lda ACCB
+    rol
+    rol
+    sta ACCA
+    bcc PLY_AKY_RRB_NIS_HARDWAREONLY_NOLSB
+
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER11
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
+    
 PLY_AKY_RRB_NIS_HARDWAREONLY_NOLSB
-            ;MSB for hardware period?
-            ROL ACCA
-            BCC PLY_AKY_RRB_NIS_HARDWAREONLY_NOMSB
+    ;MSB for hardware period?
+    rol ACCA
+    bcc PLY_AKY_RRB_NIS_HARDWAREONLY_NOMSB
 
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER12
-            INC ptDATA
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER12
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
            
 PLY_AKY_RRB_NIS_HARDWAREONLY_NOMSB
-            ;Noise or retrig?
-            ROL ACCA
+    ;Noise or retrig?
+    rol ACCA
 .(            
-            BCC label
-            JMP PLY_AKY_RRB_NIS_HARDWARE_SHARED_NOISEORRETRIG_ANDSTOP
+    bcc label
+    jmp PLY_AKY_RRB_NIS_HARDWARE_SHARED_NOISEORRETRIG_ANDSTOP
 label 
 .)           
-           RTS
+    rts
 #endif
 
 ; -------------------------------------
 #ifdef PLY_AKY_USE_SoftAndHard_Agglomerated                    ;CONFIG SPECIFIC
 PLY_AKY_RRB_NIS_SOFTWAREANDHARDWARE
-            ;Hardware volume.
-            LDA volumeRegister
-            STA VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Hardware volume.
+    stx save_x
+    ldx volumeRegister
+    lda #$FF                                            ;Value (16, hardware volume).
+    sta _MusicPsgVirtualRegisters,x
+    ldx save_x
 
-            LDA #$FF                                            ;Value (16 = hardware volume).
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    inc volumeRegister                                  ;Increases the volume register.
+    ;LSB of hardware period?
+    ror ACCA
+    bcc PLY_AKY_RRB_NIS_SAHH_AFTERLSBH
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER11
+    inc ptr_music
+.(            
+    bne label
+    inc ptr_music+1
+label 
+.)           
     
-            INC volumeRegister                                  ;Increases the volume register.
-            ;LSB of hardware period?
-            ROR ACCA
-            BCC PLY_AKY_RRB_NIS_SAHH_AFTERLSBH
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER11
-            INC ptDATA
-.(            
-            BNE label
-            INC ptDATA+1
-label 
-.)           
-           
 PLY_AKY_RRB_NIS_SAHH_AFTERLSBH
-            ;MSB of hardware period?
-            ROR ACCA
-            BCC PLY_AKY_RRB_NIS_SAHH_AFTERMSBH
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER12
-            INC ptDATA
+    ;MSB of hardware period?
+    ror ACCA
+    bcc PLY_AKY_RRB_NIS_SAHH_AFTERMSBH
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER12
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
+    
 PLY_AKY_RRB_NIS_SAHH_AFTERMSBH
-            ;LSB of software period?
-            LDA ACCA
-            ROR
-            BCC PLY_AKY_RRB_NIS_SAHH_AFTERLSBS
-            STA ACCB
+    ;LSB of software period?
+    lda ACCA
+    ror
+    bcc PLY_AKY_RRB_NIS_SAHH_AFTERLSBS
+    sta ACCB
 
-            ;Sends the LSB software frequency.
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;Sends the LSB software frequency.
+    ;lda FreqRegister
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
 
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC ptDATA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-                                                                ; frequency register not increased on purpose.
-            LDA ACCB
+    
+                                                        ; frequency register not increased on purpose.
+    lda ACCB
 PLY_AKY_RRB_NIS_SAHH_AFTERLSBS
-            ;MSB of software period?
-            ROR 
-            BCC PLY_AKY_RRB_NIS_SAHH_AFTERMSBS
-            STA ACCB
+    ;MSB of software period?
+    ror 
+    bcc PLY_AKY_RRB_NIS_SAHH_AFTERMSBS
+    sta ACCB
 
-            ;Sends the MSB software frequency.
-            INX
+    ;Sends the MSB software frequency.
+    inx
 
-            ;LDA FreqRegister
-            STX VIA_ORA     
-            LDA #F_SET_REG                      
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
+    ;lda FreqRegister
+    lda (ptr_music),Y
+    sta _MusicPsgVirtualRegisters,x
 
-            LDA (ptDATA),Y
-            STA VIA_ORA
-            LDA #F_WRITE_DATA                        
-            STA VIA_PCR
-            LDA #F_INACTIVE                        
-            STA VIA_PCR
-
-            INC ptDATA
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-   
-            DEX                                                 ;Yup. Will be compensated below.
 
-            LDA ACCB                      
+    DEX                                                 ;Yup. Will be compensated below.
+
+    lda ACCB                      
 PLY_AKY_RRB_NIS_SAHH_AFTERMSBS
-            ;A bit of loss of CPU, but this has to be done every time!
-            INX                
-            INX                
+    ;A bit of loss of CPU, but this has to be done every time!
+    inx                
+    inx                
 
-            ;New hardware envelope?
-            ROR
-            STA ACCA 
-            BCC PLY_AKY_RRB_NIS_SAHH_AFTERENVELOPE
-            LDA (ptDATA),Y
-            STA PLY_AKY_PSGREGISTER13
-            INC ptDATA
+    ;New hardware envelope?
+    ror
+    sta ACCA 
+    bcc PLY_AKY_RRB_NIS_SAHH_AFTERENVELOPE
+    lda (ptr_music),Y
+    sta PLY_AKY_PSGREGISTER13
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
+    
 PLY_AKY_RRB_NIS_SAHH_AFTERENVELOPE
-            ;Retrig and/or noise?
-            LDA ACCA
-            ROR
+    ;Retrig and/or noise?
+    lda ACCA
+    ror
 .(            
-            BCS label
-            RTS
+    BCS label
+    rts
 label 
 .)           
 
 #endif
 
+
 #ifdef PLY_CFG_UseHardwareSounds                               ;CONFIG SPECIFIC
-            ;This code is shared with the HardwareOnly. It reads the Noise/Retrig byte, interprets it and exits.
+    ;This code is shared with the HardwareOnly. It reads the Noise/Retrig byte, interprets it and exits.
 PLY_AKY_RRB_NIS_HARDWARE_SHARED_NOISEORRETRIG_ANDSTOP
-            ;Noise or retrig. Reads the next byte.
-            LDA (ptDATA),Y
-            INC ptDATA
+    ;Noise or retrig. Reads the next byte.
+    lda (ptr_music),Y
+    inc ptr_music
 .(            
-            BNE label
-            INC ptDATA+1
+    bne label
+    inc ptr_music+1
 label 
 .)           
-           
-            ;Retrig?
-            ROR 
+    
+    ;Retrig?
+    ror 
 #ifdef PLY_CFG_UseRetrig                                       ;CONFIG SPECIFIC
-            BCC PLY_AKY_RRB_NIS_S_NOR_NORETRIG
-            ORA #%10000000
-            STA PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
+    bcc PLY_AKY_RRB_NIS_S_NOR_NORETRIG
+    ora #%10000000
+    sta PLY_AKY_PSGREGISTER13_RETRIG+1                  ;A value to make sure the retrig is performed, yet A can still be use.
 PLY_AKY_RRB_NIS_S_NOR_NORETRIG
 #endif
 
 #ifdef PLY_AKY_USE_SoftAndHard_Noise_Agglomerated              ;CONFIG SPECIFIC
-            ;Noise? If no, nothing more to do.
-            ROR
-            STA ACCA
+    ;Noise? If no, nothing more to do.
+    ror
+    sta ACCA
 .(            
-            BCS label
-            RTS
+    BCS label
+    rts
 label 
 .)           
 
-            ;Noise. Opens the noise channel.
-            LDA r7
-            AND #%11011111                                      ; reset bit 5 (open)
-            STA r7
-            LDA ACCA
-            ;Is there a new noise value? If yes, gets the noise.
-            ROR
+    ;Noise. Opens the noise channel.
+    lda r7
+    and #%11011111                                      ; reset bit 5 (open)
+    sta r7
+    lda ACCA
+    ;Is there a new noise value? If yes, gets the noise.
+    ror
 .(            
-            BCS label
-            RTS
+    BCS label
+    rts
 label 
 .)           
-           ;Sets the noise.
-            STA PLY_AKY_PSGREGISTER6
+    ;Sets the noise.
+    sta PLY_AKY_PSGREGISTER6
 #endif
-            RTS
+    rts
 #endif
 
 

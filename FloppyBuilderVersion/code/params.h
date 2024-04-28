@@ -9,6 +9,7 @@
 #define INTRO_SHOW_USER_MANUAL          // Comment out to hide the instructions page
 #define INTRO_SHOW_STORY                // Comment out to hide the typewriter story page
 #define INTRO_SHOW_STORY_SCROLL         // Comment out to disable the office parallax scroll
+//#define INTRO_ENABLE_SOUNDBOARD         // Comment out to disable the sound testing module
 
 #define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
@@ -36,6 +37,7 @@
 #define KEY_RETURN		12
 
 // 6502 opcodes for dynamic code patching
+#define OPCODE_NOP              $EA
 #define OPCODE_RTS              $60
 #define OPCODE_JMP              $4C
 #define OPCODE_BNE              $D0

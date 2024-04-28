@@ -60,7 +60,8 @@ extern unsigned char gSourceStride;
 extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded "sprite" image
 
 // Audio
-#define PlaySound(registerList)                 { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
+#define PlaySound(registerList)         { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
+#define PlayMusic(music)                { param0.ptr=music+1;MusicMixerMask=music[0];asm("jsr _StartMusic"); }
 
 extern const char* SoundDataPointer;
 extern unsigned char PsgPlayPosition;
@@ -76,6 +77,20 @@ extern char KeyClickHData[];
 extern char KeyClickLData[];
 extern char TypeWriterData[];
 extern char SpaceBarData[];
+
+extern unsigned int PsgfreqA;
+extern unsigned int PsgfreqB;
+extern unsigned int PsgfreqC;
+extern unsigned char PsgfreqNoise;
+extern unsigned char Psgmixer;
+extern unsigned char PsgvolumeA;
+extern unsigned char PsgvolumeB;
+extern unsigned char PsgvolumeC;
+extern unsigned int PsgfreqShape;
+extern unsigned char PsgenvShape;
+
+extern unsigned char MusicMixerMask;
+
 
 // Common
 extern void SetLineAddress(char* address);

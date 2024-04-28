@@ -13,12 +13,26 @@ _PsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
 _PsgfreqB		.byt 0,0    ;  2 3    Chanel B Frequency
 _PsgfreqC		.byt 0,0    ;  4 5    Chanel C Frequency
 _PsgfreqNoise	.byt 0      ;  6      Chanel sound generator
-_Psgmixer		.byt 0      ;  7      Mixer/Selector
+_Psgmixer		.byt 255    ;  7      Mixer/Selector -> Everything is disabled by default
 _PsgvolumeA		.byt 0      ;  8      Volume A
 _PsgvolumeB		.byt 0      ;  9      Volume B
 _PsgvolumeC		.byt 0      ; 10      Volume C
 _PsgfreqShape   .byt 0,0    ; 11 12   Wave period
 _PsgenvShape    .byt 0      ; 13      Wave form
+
+_MusicPsgVirtualRegisters
+_MusicPsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
+_MusicPsgfreqB		.byt 0,0    ;  2 3    Chanel B Frequency
+_MusicPsgfreqC		.byt 0,0    ;  4 5    Chanel C Frequency
+_MusicPsgfreqNoise	.byt 0      ;  6      Chanel sound generator
+_MusicPsgmixer		.byt 255    ;  7      Mixer/Selector -> Everything is disabled by default
+_MusicPsgvolumeA	.byt 0      ;  8      Volume A
+_MusicPsgvolumeB	.byt 0      ;  9      Volume B
+_MusicPsgvolumeC	.byt 0      ; 10      Volume C
+_MusicPsgfreqShape  .byt 0,0    ; 11 12   Wave period
+_MusicPsgenvShape   .byt 0      ; 13      Wave form
+
+_MusicMixerMask     .byt 0      ; By default no channels are reserved for the music
 
 _PsgNeedUpdate  .byt 0
 
@@ -45,10 +59,24 @@ _PlaySoundAsmXY                          ; Direct assembler call using XY regist
 	cli
     rts
 
+CommandSetBank
+    ldx #0
+copy_bank
+    lda (_SoundDataPointer),y
+    iny
+    sta _PsgVirtualRegisters,x
+    inx
+    cpx #14
+    bne copy_bank
+    sty _PsgPlayPosition        ; Save the new command position
+    lda #2
+    sta _PsgNeedUpdate
+    ;jsr SendBankToPsg           ; Sent all the sounds to the YM
+    jmp read_command
 
 SoundUpdateHighSpeed
 .(
-read_command
++read_command
     ldy _PsgPlayPosition
     cpy #SOUND_NOT_PLAYING                   ; Playing anything?
     beq end_replay
@@ -81,21 +109,6 @@ CommandEndSound
 CommandEndFrame
     sty _PsgPlayPosition        ; Save the new command position
     rts	
-
-CommandSetBank
-    ldx #0
-copy_bank
-    lda (_SoundDataPointer),y
-    iny
-    sta _PsgVirtualRegisters,x
-    inx
-    cpx #14
-    bne copy_bank
-    sty _PsgPlayPosition        ; Save the new command position
-    lda #2
-    sta _PsgNeedUpdate
-    ;jsr SendBankToPsg           ; Sent all the sounds to the YM
-    jmp read_command
 
 CommandAddValue
     lda (_SoundDataPointer),y    ; Register to change
@@ -168,13 +181,69 @@ end_loop
 SoundUpdate50hz    
 .(
     lda _PsgNeedUpdate
-    beq skip_update
+    bne continue
+    rts
+continue
 
     and #1
     sta _PsgNeedUpdate
 
+    ; Experimental code: Mixing sound effects with a music track
+.(
+    lda _MusicMixerMask
+    ror
+    bcc end_channel_1_for_music 
+    ldx _MusicPsgfreqA+0
+    stx _PsgfreqA+0
+    ldx _MusicPsgfreqA+1
+    stx _PsgfreqA+1
+    ldx _MusicPsgvolumeA+0
+    stx _PsgvolumeA+0
+end_channel_1_for_music    
+
+    ror
+    bcc end_channel_2_for_music 
+    ldx _MusicPsgfreqB+0
+    stx _PsgfreqB+0
+    ldx _MusicPsgfreqB+1
+    stx _PsgfreqB+1
+    ldx _MusicPsgvolumeB+0
+    stx _PsgvolumeB+0
+end_channel_2_for_music    
+
+    ror
+    bcc end_channel_3_for_music 
+    ldx _MusicPsgfreqC+0
+    stx _PsgfreqC+0
+    ldx _MusicPsgfreqC+1
+    stx _PsgfreqC+1
+    ldx _MusicPsgvolumeC+0
+    stx _PsgvolumeC+0
+end_channel_3_for_music    
+
+    lda _MusicMixerMask
+    beq end_music_mixer
+    eor #255
+    and _Psgmixer 
+    sta _Psgmixer
+
+    lda _MusicPsgmixer
+    and _MusicMixerMask
+    ora _Psgmixer 
+    sta _Psgmixer
+
+    ldx _MusicPsgfreqShape+0
+    stx _PsgfreqShape+0
+    ldx _MusicPsgfreqShape+1
+    stx _PsgfreqShape+1
+    ldx _MusicPsgenvShape
+    stx _PsgenvShape
+end_music_mixer
+.)        
+    ; Test
+
     lda _Psgmixer
-    ora #%11000000
+    ora #%11000000         ; Making sure we don't break things connected to the IO ports (like the keyboard)
     sta _Psgmixer
 
     ldy #0

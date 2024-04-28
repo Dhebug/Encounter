@@ -30,6 +30,8 @@ extern char* TypeWriterBorderWrite;
 
 extern void CopyTypeWriterLine();
 
+extern char Intro_Subsong0[];
+extern char Typewriter_Subsong1[];
 
 
 unsigned char ImageBuffer2[40*200];
@@ -220,9 +222,15 @@ int DisplayStory()
 	gXPos=0;
 	gYPos=0;
 
+    // Now we start the second music
+    PlayMusic(Typewriter_Subsong1);
+
 	// By using || it's possible to early exit the function when the player presses a key
     result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
 	|| Wait(50*2);
+
+    // And we restore the main music track
+    PlayMusic(Intro_Subsong0);
 
 #if 0
     while (1) {}
@@ -421,10 +429,128 @@ int DisplayHighScoresTable()
 }
 
 
-extern char Intro_Subsong0[];
-extern char Typewriter_Subsong1[];
 
-#define PlayMusic(music)    { param0.ptr=music;asm("jsr _StartMusic"); }
+#ifdef INTRO_ENABLE_SOUNDBOARD    
+void PrintYMRegisters()
+{
+    char i;
+    char* address;
+    unsigned char mixer=Psgmixer;
+    SetLineAddress((char*)0xbb80+40*4+2);
+    address=gPrintAddress+10;
+    sprintf(address+40*0,"%d   ", PsgfreqA);
+    sprintf(address+40*1,"%d   ", PsgfreqB);
+    sprintf(address+40*2,"%d   ", PsgfreqC);
+    sprintf(address+40*3,"%d   ", PsgfreqNoise);
+    sprintf(address+40*4,"%d   ", mixer);
+    //poke(address+40*4+4,'0');
+  
+    sprintf(address+40*2+8,"Snd Nse");
+    sprintf(address+40*3+8,"ABC ABC");
+    for (i=0;i<6;i++)
+    {
+        poke(address+40*4+8+i+((i>=3)?1:0),'1'-(mixer&1));
+        mixer>>=1;
+    }
+    
+    sprintf(address+40*5,"%d   ", PsgvolumeA);
+    sprintf(address+40*6,"%d   ", PsgvolumeB);
+    sprintf(address+40*7,"%d   ", PsgvolumeC);
+    sprintf(address+40*8,"%d   ", PsgfreqShape);
+    sprintf(address+40*9,"%d   ", PsgenvShape);
+}
+
+void SoundBoard()
+{
+    Text(16+3,0);
+    SetLineAddress((char*)0xbb80+40*0+2);
+
+    PrintLine("1/2=Select music 0=Stop music");
+    PrintLine("P=PING Z=ZAP X=Explode S=Shoot");
+    PrintLine("K/L=Key click SPACE/Other=Type writer");
+
+    SetLineAddress((char*)0xbb80+40*4+2);
+    PrintLine("Freq A");
+    PrintLine("Freq B");
+    PrintLine("Freq C");
+    PrintLine("Noise");
+    PrintLine("Mixer");
+    PrintLine("Vol A");
+    PrintLine("Vol B");
+    PrintLine("Vol C");
+    PrintLine("Freq Env");
+    PrintLine("Shap Env");
+
+    while (1)
+    {
+        char car;
+
+        VSync();
+        PrintYMRegisters();
+
+        car = ReadKeyNoBounce();
+        switch (car)
+        {
+        case 0:
+            break;
+
+        case '0':
+        case ')':
+            EndMusic();
+            break;
+
+        case '1':
+        case '!':
+            PlayMusic(Intro_Subsong0);
+            break;
+
+        case '2':
+        case '@':
+            PlayMusic(Typewriter_Subsong1);
+            break;
+
+        case 'Z':
+        case 'z':
+            PlaySound(ZapData);
+            break;
+
+        case 'K':
+        case 'k':
+            PlaySound(KeyClickHData);
+            break;
+
+        case 'L':
+        case 'l':
+            PlaySound(KeyClickLData);
+            break;
+
+        case 'X':
+        case 'x':
+            PlaySound(ExplodeData);
+            break;
+
+        case 'S':
+        case 's':
+            PlaySound(ShootData);
+            break;
+
+        case 'P':
+        case 'p':
+            PlaySound(PingData);
+            break;
+
+        case 32:
+        case 13:
+            PlaySound(SpaceBarData);
+            break;
+
+        default:  
+            PlaySound(TypeWriterData);
+            break;
+        }
+    }
+}
+#endif
 
 void main()
 {
@@ -440,9 +566,12 @@ void main()
 #endif
 
 	// Install the IRQ so we can use the keyboard
-    PlayMusic(Intro_Subsong0);
 	System_InstallIRQ_SimpleVbl();
 
+#ifdef INTRO_ENABLE_SOUNDBOARD    
+    SoundBoard();
+#else    
+    PlayMusic(Intro_Subsong0);
 	while (1)
 	{
 #ifdef INTRO_SHOW_TITLE_PICTURE
@@ -467,14 +596,13 @@ void main()
 #endif
 
 #ifdef INTRO_SHOW_STORY
-        PlayMusic(Typewriter_Subsong1);
 		if (DisplayStory())
 		{
 			break;
 		}
-        PlayMusic(Intro_Subsong0);
 #endif
 	}
+#endif
 
 	System_RestoreIRQ_SimpleVbl();
     EndMusic();
