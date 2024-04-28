@@ -111,6 +111,7 @@ extern action_mapping gActionMappingsArray[];
 extern stream_mapping gReadItemMappingsArray[];
 extern stream_mapping gCloseItemMappingsArray[];
 extern stream_mapping gInspectItemMappingsArray[];
+extern stream_mapping gMoveItemsMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -309,4 +310,12 @@ extern const char gSceneActionCloseMedicineCabinet[];
 extern const char gSceneActionCannotDo[];
 extern const char gSceneActionCannotRead[];
 extern const char gSceneActionNothingSpecial[];
+
+// Item move
+extern const char gMoveItemsToEntranceHall[];
+extern const char gMoveItemsToStaircase[];
+extern const char gMoveItemsToOutsidePit[];
+extern const char gMoveItemsToInsidePit[];
+
+extern const char gDoNothingScript[];
 

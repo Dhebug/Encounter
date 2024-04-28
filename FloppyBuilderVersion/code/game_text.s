@@ -1359,6 +1359,60 @@ _gSceneActionNothingSpecial
 
 
 
+_gMoveItemsToEntranceHall
+.(
+    ; If the dog is in the staircase, we move it to the entrance hall
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL)
+end_dog_check
+    END
+.)
+
+_gMoveItemsToStaircase
+.(
+    ; If the dog is in the entrance hall, we move it to the staircase
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE)
+end_dog_check
+    END
+.)
+
+_gMoveItemsToOutsidePit
+.(
+    ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
+end_rope_check
+
+    ; If the ladder is inside the pit and is attached to the tree, we move it outside the pit
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+end_ladder_check
+    END
+.)
+
+_gMoveItemsToInsidePit
+.(
+    ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDEHOLE)
+end_rope_check
+
+    ; If the ladder is outside the pit and is attached to the tree, we move it inside the pit
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDEHOLE)
+end_ladder_check
+    END
+.)
+
+_gDoNothingScript
+.(
+    END
+.)
+
+
 _EndSceneActions
 
 
