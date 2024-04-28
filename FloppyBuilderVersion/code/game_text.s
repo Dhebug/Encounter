@@ -904,12 +904,12 @@ _gDescriptionKitchen
     ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
-:fridge_closed
+fridge_closed
 
     ; Is the medicine cabinet open?
     JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
-:medicine_cabinet_closed
+medicine_cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,2
@@ -1021,7 +1021,7 @@ _gDescriptionShowerRoom
 _gDescriptionWestGallery
     ; Is the curtain closed?
     JUMP_IF_FALSE(curtain_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
-:curtain_closed
+curtain_closed
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(8,62),40,_SecondImageBuffer+0,_ImageBuffer+40*5+20)       ; Closed curtain
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BLACK_BUBBLE,1
@@ -1032,7 +1032,7 @@ _gDescriptionWestGallery
 #endif    
     END
 
-:curtain_open    
+curtain_open    
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_BLACK_BUBBLE,2
 #ifdef LANGUAGE_FR    
@@ -1300,7 +1300,7 @@ _gSceneActionCloseCurtain
     UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
     SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
     SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)
-:curtain_already_closed
+curtain_already_closed
     END_AND_REFRESH
 .)
 
@@ -1309,7 +1309,7 @@ _gSceneActionCloseFridge
     JUMP_IF_TRUE(fridge_already_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
     SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)
-:fridge_already_closed
+fridge_already_closed
     END_AND_REFRESH
 .)
 
@@ -1318,7 +1318,7 @@ _gSceneActionCloseMedicineCabinet
     JUMP_IF_TRUE(medicine_cabinet_already_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
     SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)
-:medicine_cabinet_already_closed
+medicine_cabinet_already_closed
     END_AND_REFRESH
 .)
 
