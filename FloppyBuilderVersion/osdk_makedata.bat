@@ -195,6 +195,13 @@ SET PARAMS=-u1 -m0 -f0 -o2
 :: Severn Software and Defence Force logos
 %PICTCONV% %PARAMS% data\intro_defence-force_logo.png %TARGET%\logos.hir
 
+
+:: Music
+bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music.s
+bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter.s
+
+
+
 ::pause
 
 

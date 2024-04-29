@@ -30,8 +30,8 @@ extern char* TypeWriterBorderWrite;
 
 extern void CopyTypeWriterLine();
 
-extern char Intro_Subsong0[];
-extern char Typewriter_Subsong1[];
+extern char IntroMusic[];
+extern char TypewriterMusic[];
 
 
 unsigned char ImageBuffer2[40*200];
@@ -223,14 +223,14 @@ int DisplayStory()
 	gYPos=0;
 
     // Now we start the second music
-    PlayMusic(Typewriter_Subsong1);
+    PlayMusic(TypewriterMusic);
 
 	// By using || it's possible to early exit the function when the player presses a key
     result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
 	|| Wait(50*2);
 
     // And we restore the main music track
-    PlayMusic(Intro_Subsong0);
+    PlayMusic(IntroMusic);
 
 #if 0
     while (1) {}
@@ -501,12 +501,12 @@ void SoundBoard()
 
         case '1':
         case '!':
-            PlayMusic(Intro_Subsong0);
+            PlayMusic(IntroMusic);
             break;
 
         case '2':
         case '@':
-            PlayMusic(Typewriter_Subsong1);
+            PlayMusic(TypewriterMusic);
             break;
 
         case 'Z':
@@ -571,7 +571,7 @@ void main()
 #ifdef INTRO_ENABLE_SOUNDBOARD    
     SoundBoard();
 #else    
-    PlayMusic(Intro_Subsong0);
+    PlayMusic(IntroMusic);
 	while (1)
 	{
 #ifdef INTRO_SHOW_TITLE_PICTURE

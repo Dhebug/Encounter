@@ -4,6 +4,7 @@
     - [Commands](#commands)
     - [Example](#example)
   - [Music](#music)
+    - [Exporting musics](#exporting-musics)
 
 
 # Audio
@@ -83,5 +84,40 @@ _SpaceBarData   .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$08,%1111011
 
 ## Music
 The musics are using the Arkos Tracker 2 format running at 50hz
+### Exporting musics
+The source format of the Arkos Tracker 2 tunes is "AKS", but to use on the Oric we need to convert them to the "AKY" format, using the 6502 source code variant.
 
-**TODO**
+This export can be done in the Arkos Tracker using the Export menu, but can also be automated using the command line tools present in the "tool" folder of the tracker (these have been copied to be "bin" folder).
+
+Here are the options of the exporter:
+```
+Converts to AKY any song that can be loaded into Arkos Tracker 2.
+Usage: SongToAky [-s <subsong number>] [-p <comma separated psg numbers>] [-reladr] [--exportAsBinary] [--encodingAddress <address>] [--labelPrefix <prefix>] [--sourceProfile <z80/68000/6502acme/6502mads>] [-spadr <address>] [-spcom "<xxx>"] [-spskipcom] [-spbyte "<xxx>"] [-spword "<xxx>"] [-spstr "<xxx>"] [-spprelbl "<xxx>"] [-sppostlbl "<xxx>"] [-spbig] [--exportPlayerConfig] <path to input song> <path to output AKY>
+
+<path to input song>               Path and filename to the song to load.
+<path to output AKY>               Path and filename to the AKY file to create.
+-s, --subsong                      The subsong number (>=1). 1 is default.
+-p, --psgs                         The PSG numbers (>=1), comma separated (example: 1,2,3. 1 is default).
+-bin, --exportAsBinary             If present, exports as a binary file. If not, exports as source (default).
+-adr, --encodingAddress            If present, encodes the file to this address (may be hex (0xa000 for example)). Mandatory if encoding as binary.
+--labelPrefix                      Useful for source generation. Indicates a prefix to all the labels.
+--sourceProfile                    When generating the sources, indicates what source profile to use (among z80, 68000, 6502acme, 6502mads). Default is z80. If the export is binary, z80 must be chosen. Mnemonics can be overridden by the other related command line parameters.
+-spadr                             When generating the sources, overrides the mnemonic to set the current address ("org" for example). Can be put between "".
+-spcom                             When generating the sources, overrides the string to declare a comment (";" for example). Can be put between "".
+-spskipcom                         When generating the sources, skips the comments if present.
+-spbyte                            When generating the sources, overrides the mnemonic to declare a byte ("db" for example). Can be put between "".
+-spword                            When generating the sources, overrides the mnemonic to declare a word ("dw" for example). Can be put between "".
+-spstr                             When generating the sources, overrides the mnemonic to declare a string ("ds" for example). Can be put between "".
+-spprelbl                          When generating the sources, defines a prefix to every label ("." for example). Can be put between "".
+-sppostlbl                         When generating the sources, defines a postfix to every label (":" for example). Can be put between "".
+-spbig                             When generating the sources, declares big-endianness if present.
+-spomt                             When generating the sources, only one mnemonic type per line, if present.
+--exportPlayerConfig               Exports a player configuration source file, if present.
+-reladr                            If present, all the encoded label references will be relative to the start of the song (for example: "dw myLabel - songStart"). Useful mostly for Atari ST players.
+```
+
+For OSDK compatibility, we select the **6502acme** export format, but with different keywords for the encoding (**.byt** instead of **db** and **.word** instead of **dw**), which gives the following command line:
+
+> bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\<source file>.aks code\<target file>.s
+
+
