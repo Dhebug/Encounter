@@ -61,7 +61,7 @@ extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded 
 
 // Audio
 #define PlaySound(registerList)         { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
-#define PlayMusic(music)                { param0.ptr=music+1;MusicMixerMask=music[0];asm("jsr _StartMusic"); }
+#define PlayMusic(music)                { param0.ptr=music+1+2;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[2];asm("jsr _StartMusic"); }
 
 extern const char* SoundDataPointer;
 extern unsigned char PsgPlayPosition;
