@@ -12,7 +12,9 @@
 # Audio
 
 ## Sound Effects
-The sound effects system is using a custom system running at 200hz
+The sound effects system is using a custom system running at 200hz.
+> [!NOTE]  
+> The sound effects can be disabled in [params.h](../code/params.h) by commenting out **ENABLE_SOUND_EFFECTS**
 
 For performance reason, the sound system maintains its own copy of the AY sound register, and then update the sound chip.
 ```
@@ -85,7 +87,10 @@ _SpaceBarData   .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$08,%1111011
 - [audio.s](../code/audio.s) for the sound engine implementation
 
 ## Music
-The musics are using the Arkos Tracker 2 format running at 50hz
+The musics are using the Arkos Tracker 2 format running at 50hz.
+> [!NOTE]  
+> The music can be disabled in [params.h](../code/params.h) by commenting out **ENABLE_MUSIC**
+
 ### Exporting musics
 The source format of the Arkos Tracker 2 tunes is "AKS", but to use on the Oric we need to convert them to the "AKY" format, using the 6502 source code variant.
 

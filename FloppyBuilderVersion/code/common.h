@@ -60,8 +60,17 @@ extern unsigned char gSourceStride;
 extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded "sprite" image
 
 // Audio
+#ifdef ENABLE_SOUND_EFFECTS
 #define PlaySound(registerList)         { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
+#else
+#define PlaySound(registerList)         { }
+#endif
+
+#ifdef ENABLE_MUSIC
 #define PlayMusic(music)                { param0.ptr=music+1+2;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[2];asm("jsr _StartMusic"); }
+#else
+#define PlayMusic(music)                { }
+#endif
 
 extern const char* SoundDataPointer;
 extern unsigned char PsgPlayPosition;
