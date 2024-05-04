@@ -42,6 +42,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
 copy build\symbols ..\build\symbols_SplashProgram >NUL
+IF %TEST_MODULE%==SPLASH COPY build\symbols %OSDK%\Oricutron\symbols >NUL
 :EndSplash
 
 
@@ -62,6 +63,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
 copy build\symbols ..\build\symbols_IntroProgram >NUL
+IF %TEST_MODULE%==INTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
 :EndIntro
 
 
@@ -82,6 +84,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
 copy build\symbols ..\build\symbols_OutroProgram >NUL
+IF %TEST_MODULE%==OUTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
 :EndOutro
 
 
@@ -102,7 +105,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
 copy build\symbols ..\build\symbols_GameProgram >NUL
-COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+IF %TEST_MODULE%==GAME COPY build\symbols %OSDK%\Oricutron\symbols >NUL
 :EndGame
 
 
