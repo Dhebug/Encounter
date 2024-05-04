@@ -66,6 +66,8 @@ extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded 
 extern const char* SoundDataPointer;
 extern unsigned char PsgPlayPosition;
 extern unsigned char PsgPlayLoopIndex;
+extern unsigned char MusicLoopIndex;    // Just a simple counter incrementing each time a new pattern starts
+extern unsigned char MusicEvent;        // Value from the event track for the music
 
 extern char PsgNeedUpdate;
 extern char PsgVirtualRegisters[];

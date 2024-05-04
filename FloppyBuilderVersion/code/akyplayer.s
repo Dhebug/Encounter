@@ -26,8 +26,11 @@
 
 	.zero
 
-ptr_music          .dsb 2   ; = $02      ; +$03
-pt2_DT          .dsb 2   ;= $04      ; +$05
+ptr_music           .dsb 2   ; = $02      ; +$03
+ptr_music_events    .dsb 2
+event_counter       .dsb 2
+
+pt2_DT              .dsb 2   ;= $04      ; +$05
 
     .zero
     //.text
@@ -48,6 +51,9 @@ PLY_AKY_PSGREGISTER12       .byt 0
 PLY_AKY_PSGREGISTER13       .byt 0
 
 save_x     .byt 0
+
+_MusicLoopIndex .byt 0          ; Just a simple counter incrementing each time a new pattern starts
+_MusicEvent     .byt 0          ; Value from the event track for the music
 
 ; =============================================================================
 ;Is there a loaded Player Configuration source? If no, use a default configuration.
@@ -119,14 +125,81 @@ save_x     .byt 0
 
 ; =============================================================================
 
+ProcessEvent
+.(
+    ;jmp ProcessEvent
+
+    ; Decrement counter
+    lda event_counter+0
+    bne skip
+    lda event_counter+1
+    beq FetchNextEvent            ; Did we reached zero?
+    dec event_counter+1
+skip 
+    dec event_counter+0
+    rts
+
++FetchNextEvent
+    ; Read the 16 bit frame counter
+    ldy #0
+    lda (ptr_music_events),y
+    sta event_counter+0
+    iny
+    lda (ptr_music_events),y
+    sta event_counter+1
+    iny
+
+    ; If the frame counter value is 0, it means it's the end of the sequence
+    lda event_counter+0
+    ora event_counter+1
+    beq end_of_sequence
+
+    ; Else we force decrement the counter
+    jsr ProcessEvent
+
+    ; Then the 8 bit event value
+    lda (ptr_music_events),y
+    sta _MusicEvent
+
+    ; Point to the next entry
+    clc
+    lda ptr_music_events+0
+    adc #3
+    sta ptr_music_events+0
+    lda ptr_music_events+1
+    adc #0
+    sta ptr_music_events+1
+    rts
+
+end_of_sequence
+    ; Read the 16 bit event loop pointer
+    lda (ptr_music_events),y
+    tax
+    iny
+    lda (ptr_music_events),y
+    stx ptr_music_events+0
+    sta ptr_music_events+1
+    jmp FetchNextEvent
+.)
+
 ; Initializes the player.
 ; _param0+0/+1 contains the pointer to the song header
 _StartMusic
 .(
-    lda _param0+0    ; #<Main_Subsong0                                  
+    lda #0
+    sta _MusicLoopIndex
+
+    lda _param0+0           ; Save the pointer to the music 
     sta ptr_music
-    lda _param0+1    ;#>Main_Subsong0
+    lda _param0+1
     sta ptr_music+1
+
+    lda _param1+0           ; And the pointer to the events
+    sta ptr_music_events+0
+    lda _param1+1
+    sta ptr_music_events+1
+    jsr FetchNextEvent
+
     ;Skips the header.
     ldy #1                                             ;Skips the format version.
     lda (ptr_music),Y                                      ;Channel count.
@@ -178,6 +251,7 @@ end_header_loop
 _EndMusic
     lda #0
     sta _MusicMixerMask   ; Release all the reserved channels
+    sta _MusicLoopIndex
     lda #OPCODE_RTS
     sta _auto_play_stop   ; Disable the music player frame callback
     jmp _PsgStopSound
@@ -186,6 +260,7 @@ _EndMusic
 _PlayMusicFrame
 _auto_play_stop 
     rts
+    jsr ProcessEvent
     lda #1
     sta _PsgNeedUpdate
             
@@ -215,6 +290,7 @@ label
 PLY_AKY_PATTERNFRAMECOUNTER_OVER
 ;The pattern is not over.
 ;PLY_AKY_PTLINKER 
+    inc _MusicLoopIndex
 _auto_linker_low = *+1
     lda #$AC                                            ;Points on the Pattern of the linker.
     sta pt2_DT

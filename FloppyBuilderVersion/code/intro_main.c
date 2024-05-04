@@ -458,6 +458,8 @@ void PrintYMRegisters()
     sprintf(address+40*7,"%d   ", PsgvolumeC);
     sprintf(address+40*8,"%d   ", PsgfreqShape);
     sprintf(address+40*9,"%d   ", PsgenvShape);
+
+    sprintf(address+40*11,"Pattern:%d Event:%d", MusicLoopIndex,MusicEvent);
 }
 
 void SoundBoard()
