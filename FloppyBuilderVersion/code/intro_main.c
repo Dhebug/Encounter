@@ -34,7 +34,12 @@ extern char IntroMusic[];
 extern char TypewriterMusic[];
 
 
-unsigned char ImageBuffer2[40*200];
+extern unsigned char ImageBuffer2[40*200];
+
+unsigned char CompressedTitleImage[LOADER_PICTURE_TITLE_SIZE_COMPRESSED];
+
+extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED];
+extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];
 
 
 
@@ -80,10 +85,11 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 }
 
 
+// Before calling this function, CompressedTitleImage must have been properly populated with the compressed title picture
 int DisplayIntroPage()
 {
-	// Load the first picture at the default address specified in the script
-	LoadFileAt(LOADER_PICTURE_TITLE,ImageBuffer);
+	// Uncompress the preloaded title picture
+    file_unpack_raw(ImageBuffer,CompressedTitleImage,8000);
 
 	Hires(16+3,4);
 
@@ -123,9 +129,9 @@ int DisplayStory()
 
 	Hires(16,0);
 
-	// Load the images
-	LoadFileAt(INTRO_PICTURE_PRIVATE_INVESTIGATOR,ImageBuffer);
-	LoadFileAt(INTRO_PICTURE_TYPEWRITER			 ,ImageBuffer2);
+	// Decompress the images
+    file_unpack_raw(ImageBuffer,CompressedOfficeImage,8000);
+    file_unpack_raw(ImageBuffer2,CompressedTypeWriterImage,8000);
 
 #ifdef INTRO_SHOW_STORY_SCROLL
 	// Animation scrolling the office and the typewriter for cinematic effect
@@ -395,12 +401,6 @@ int DisplayHighScoresTable()
 
 	Text(16+0,7);
 
-	if (ptrScore->condition == e_SCORE_UNNITIALIZED)
-	{
-		// Load the high score table on the first access
-		LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
-	}
-
 	SetLineAddress((char*)0xbb80+40*0+0);
 
 	PrintLine(Text_Leaderboard);
@@ -565,6 +565,26 @@ void main()
 	// we ensure that the code is actually compiled, so that limits the chances to
 	// break the intro when working on the game
 	goto endIntro;
+#endif
+
+    //
+    // Loading data perturbs the music playing, so to avoid scruntches we preload the big bitmaps.
+    // Since we don't have enough memory to store many 8000 bytes images, we keep them compressed.
+    //
+#ifdef INTRO_SHOW_TITLE_PICTURE
+    // Load the title picture
+    LoadFileUncompressedAt(LOADER_PICTURE_TITLE,CompressedTitleImage,LOADER_PICTURE_TITLE_SIZE_COMPRESSED);
+#endif
+
+#ifdef INTRO_SHOW_LEADERBOARD
+    // Load the high score table on the first access
+    LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+#endif
+
+#ifdef INTRO_SHOW_STORY
+    // Load the two pictures of the "private investigator" intro    
+    LoadFileUncompressedAt(INTRO_PICTURE_PRIVATE_INVESTIGATOR,CompressedOfficeImage,INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED);
+    LoadFileUncompressedAt(INTRO_PICTURE_TYPEWRITER,CompressedTypeWriterImage,INTRO_PICTURE_TYPEWRITER_COMPRESSED);
 #endif
 
 	// Install the IRQ so we can use the keyboard

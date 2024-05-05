@@ -10,6 +10,10 @@ _param2 .dsb 2
 
 _EndText
 
+#ifdef MODULE_INTRO
+_ImageBuffer2   .dsb 40*200
+_OOPS2          .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
+#endif
 #if DISPLAYINFO=1
 #print Remaining space = ($9800 - *)  
 #endif
@@ -18,6 +22,10 @@ _free_to_use_text = osdk_end+1 ; *+256
 
     .bss
 
+#ifdef MODULE_INTRO
+* = $9800             ; STD charset for HIRES mode: 1024 bytes
+_STD_Charset
+#else
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
 ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gFont12x14Width      .dsb 95
@@ -27,6 +35,7 @@ _gFont12x14Width      .dsb 95
 ; the complete shifted graphics
 _gShiftBuffer         .dsb 64*2*6           ; 768 bytes
 _free_to_use_9b5f     .dsb 1024-768-95
+#endif
 
 * = $9C00             ; ALT charset for HIRES mode: 1024 bytes
 _free_to_use_9c00     .dsb 1024
@@ -61,12 +70,29 @@ _32_Bytes_BufferRemaining
 
 ; Screeen is in $A000 = %10100000 00000000
 ; Buffer is in  $C000 = %11000000 00000000 -> Same address, +8192 bytes
+#ifdef MODULE_GAME
 _ImageBuffer          .dsb 40*128   ; 128 lines of HIRES
 _ImageBufferEnd       .dsb 40*8     ; an extra 8 lines to make things more practical with the redefined characters
 _SecondImageBuffer    .dsb 40*128   ; A second buffer that can store a full image
 _free_to_use_e940
+#endif
 
+#ifdef MODULE_INTRO
+_ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
+_OOPS                       .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
+_CompressedOfficeImage      .dsb INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED
+_CompressedTypeWriterImage  .dsb INTRO_PICTURE_TYPEWRITER_COMPRESSED
+_free_to_user_overlay
+#endif
 
+#ifdef MODULE_SPLASH
+_ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
+#endif
+
+#ifdef MODULE_OUTRO
+_ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
+_SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a full image
+#endif
 
 * = $fe00
 _DiskLoader
