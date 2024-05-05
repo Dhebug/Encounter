@@ -114,12 +114,15 @@ AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
 ;
 AddFile ..\build\files\title.hir
 AddDefine LOADER_PICTURE_TITLE {FileIndex}
+AddDefine LOADER_PICTURE_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
 
 AddFile ..\build\files\intro_private_investigator.hir
 AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR {FileIndex}
+AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED {FileSizeCompressed}
 
 AddFile ..\build\files\intro_typewriter.hir
 AddDefine INTRO_PICTURE_TYPEWRITER {FileIndex}
+AddDefine INTRO_PICTURE_TYPEWRITER_COMPRESSED {FileSizeCompressed}
 
 AddFile ..\build\files\logos.hir
 AddDefine INTRO_PICTURE_LOGOS {FileIndex}

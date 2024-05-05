@@ -15,8 +15,16 @@ extern unsigned char LoaderApiAddressLow;
 extern unsigned char LoaderApiAddressHigh;
 extern void* LoaderApiAddress;
 
+extern unsigned char LoaderApiFileSizeLow;
+extern unsigned char LoaderApiFileSizeHigh;
+extern unsigned int LoaderApiFileSize;
+
+extern unsigned char LoaderApiFileStartSector;
+
 #define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiLoadFileFromDirectory();
 #define SaveFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiSaveFileFromDirectory();
 #define InitializeFileAt(fileIndex,address)    LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiInitializeFileFromDirectory();
+
+#define LoadFileUncompressedAt(fileIndex,address,compressedSize)  LoaderApiEntryIndex=fileIndex;LoadApiInitializeFileFromDirectory();LoaderApiAddress=(void*)address;LoaderApiFileSize=compressedSize;LoaderApiFileStartSector&=127;LoaderApiLoadFile();
 
 #endif
