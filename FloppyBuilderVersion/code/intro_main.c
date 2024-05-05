@@ -42,6 +42,11 @@ extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SI
 extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];
 
 
+int gXPos=0;
+int gYPos=0;
+char gStoryShownAlready = 0;
+char gGameStarting = 0;
+
 
 // Some quite ugly function which waits a certain number of frames
 // while detecting key presses and returns 1 if either space or enter are pressed
@@ -114,8 +119,6 @@ int DisplayUserManual()
  }
 
 
-int gXPos=0;
-int gYPos=0;
 
 //
 // Typewriter intro style presentation.
@@ -125,7 +128,7 @@ int gYPos=0;
 // 
 int DisplayStory()
 {
-	int result;
+	int result = 0;
 
 	Hires(16,0);
 
@@ -135,108 +138,124 @@ int DisplayStory()
 
 #ifdef INTRO_SHOW_STORY_SCROLL
 	// Animation scrolling the office and the typewriter for cinematic effect
-	{
-		int y;
-		int size_top;
-		int size_bottom;
-		char* screen_position_top;
-		char* screen_position_bottom;
+    if ( (!gGameStarting) || (gGameStarting && !gStoryShownAlready) )
+    {
+        {
+            int y;
+            int size_top;
+            int size_bottom;
+            char* screen_position_top;
+            char* screen_position_bottom;
 
-		unsigned char* buffer_start_top;
-		unsigned char* buffer_start_bottom;
+            unsigned char* buffer_start_top;
+            unsigned char* buffer_start_bottom;
 
-		buffer_start_top    = ImageBuffer;
-		buffer_start_bottom = ImageBuffer2;
+            buffer_start_top    = ImageBuffer;
+            buffer_start_bottom = ImageBuffer2;
 
-		screen_position_top   =(char*)0xa000;
-		screen_position_bottom=(char*)0xa000+40*200;
+            screen_position_top   =(char*)0xa000;
+            screen_position_bottom=(char*)0xa000+40*200;
 
-		size_top=8000;
-		size_bottom=0;
-		for (y=0;y<=100;y++)
-		{
-			memcpy(screen_position_top   	,buffer_start_top    ,size_top);
-			memcpy(screen_position_bottom	,buffer_start_bottom ,size_bottom);
+            size_top=8000;
+            size_bottom=0;
+            for (y=0;y<=100;y++)
+            {
+                memcpy(screen_position_top   	,buffer_start_top    ,size_top);
+                memcpy(screen_position_bottom	,buffer_start_bottom ,size_bottom);
 
-			buffer_start_top +=40;
-			size_top         -=40*2;
+                buffer_start_top +=40;
+                size_top         -=40*2;
 
-			screen_position_bottom -=40*2;
-			size_bottom            +=40*2;
+                screen_position_bottom -=40*2;
+                size_bottom            +=40*2;
 
-			//VSync();
-            if (Wait(1))
+                //VSync();
+                if (Wait(1))
+                {
+                    return 1;
+                }
+            }
+
+            if (Wait(50*2))
             {
                 return 1;
             }
-		}
 
-		if (Wait(50*2))
+            for (y=0;y<45;y+=2)
+            {
+                memcpy(screen_position_top   	,buffer_start_top    ,size_top);
+                memcpy(screen_position_bottom	,buffer_start_bottom ,size_bottom);
+
+                buffer_start_top -=40*2;
+                size_top         +=40*2*2;
+
+                screen_position_bottom +=40*2*2;
+                size_bottom            -=40*2*2;
+
+                //VSync();
+                if (Wait(1))
+                {
+                    return 1;
+                }
+            }
+
+            gStoryShownAlready = 1;
+        }
+
+        if (Wait(50*2))
         {
             return 1;
         }
-
-		for (y=0;y<45;y+=2)
-		{
-			memcpy(screen_position_top   	,buffer_start_top    ,size_top);
-			memcpy(screen_position_bottom	,buffer_start_bottom ,size_bottom);
-
-			buffer_start_top -=40*2;
-			size_top         +=40*2*2;
-
-			screen_position_bottom +=40*2*2;
-			size_bottom            -=40*2*2;
-
-			//VSync();
-            if (Wait(1))
-            {
-                return 1;
-            }
-		}
-	}
-
-	if (Wait(50*2))
+    }
+    else
     {
-        return 1;
+        // Just show directly the composite image with the office and the typewriter
+        memcpy((char*)0xa000   		,ImageBuffer+40*57    	,40*86);
+        memcpy((char*)0xa000+40*86	,ImageBuffer2 			,40*114);
     }
 #else
 	// Just show directly the composite image with the office and the typewriter
 	memcpy((char*)0xa000   		,ImageBuffer+40*57    	,40*86);
 	memcpy((char*)0xa000+40*86	,ImageBuffer2 			,40*114);
 #endif
-	// Copy the composite image to the image buffer to rebuild the background
-	memcpy(ImageBuffer2,(char*)0xa000,8000);
+
+    if (gGameStarting)
+    {
+        // Now we start the second music
+        PlayMusic(TypewriterMusic);
+
+        // Copy the composite image to the image buffer to rebuild the background
+        memcpy(ImageBuffer2,(char*)0xa000,8000);
 
 
-	// Prepare the image buffer by drawing a one pixel outline on the paper.
-	// For performance reason the paper is limited to 39 columns so the logic to complete the left 
-	// and right borders can be simplified by eliminating the case where the paper is shown in the
-	// center of the screen without any border to draw at all.
-	memset(ImageBuffer,127,8000);    		// All white
-	{
-		int y;
-		for (y=0;y<200;y++)
-		{
-			ImageBuffer[y*40]   =127&~32;
-			ImageBuffer[y*40+38]=127&~1;
-		}
-	}
-	memset(ImageBuffer,64,39);       		// Top is black
-	memset(ImageBuffer+40*199,64,39);       // Bottom is black
+        // Prepare the image buffer by drawing a one pixel outline on the paper.
+        // For performance reason the paper is limited to 39 columns so the logic to complete the left 
+        // and right borders can be simplified by eliminating the case where the paper is shown in the
+        // center of the screen without any border to draw at all.
+        memset(ImageBuffer,127,8000);    		// All white
+        {
+            int y;
+            for (y=0;y<200;y++)
+            {
+                ImageBuffer[y*40]   =127&~32;
+                ImageBuffer[y*40+38]=127&~1;
+            }
+        }
+        memset(ImageBuffer,64,39);       		// Top is black
+        memset(ImageBuffer+40*199,64,39);       // Bottom is black
 
-	SetLineAddress((char*)ImageBuffer+40*8+1);
-	gXPos=0;
-	gYPos=0;
+        SetLineAddress((char*)ImageBuffer+40*8+1);
+        gXPos=0;
+        gYPos=0;
 
-    // Now we start the second music
-    PlayMusic(TypewriterMusic);
+        // By using || it's possible to early exit the function when the player presses a key
+        result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
+        || Wait(50*2);
 
-	// By using || it's possible to early exit the function when the player presses a key
-    result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
-	|| Wait(50*2);
-
-    // And we restore the main music track
-    PlayMusic(IntroMusic);
+        // And we restore the main music track
+        //PlayMusic(IntroMusic);
+        EndMusic();
+    }
 
 #if 0
     while (1) {}
@@ -624,6 +643,17 @@ void main()
 		}
 #endif
 	}
+#endif
+
+    //
+    // Now we display the typewriter
+    //
+    gGameStarting = 1;
+#ifdef INTRO_SHOW_STORY
+    if (DisplayStory())
+    {
+        //break;
+    }
 #endif
 
 	System_RestoreIRQ_SimpleVbl();
