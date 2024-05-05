@@ -608,6 +608,8 @@ void main()
 
 	System_RestoreIRQ_SimpleVbl();
     EndMusic();
+    PsgStopSoundAndForceUpdate();
+
 
 #ifndef ENABLE_INTRO
 endIntro:

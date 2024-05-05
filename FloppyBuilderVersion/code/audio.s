@@ -258,7 +258,7 @@ register_loop
     cpy #14
     bne register_loop
 skip_update	
-rts
+    rts
 .)
 
 
@@ -292,6 +292,13 @@ _PsgSetRegister
     rts
 .)
 
+
+; The default "StopSound" will only work if the IRQ is running, and does not filter the music mask
+_PsgStopSoundAndForceUpdate
+    lda #0
+    sta _MusicMixerMask
+    jsr _PsgStopSound
+    jmp SoundUpdate50hz
 
 _PsgStopSound
 .(
