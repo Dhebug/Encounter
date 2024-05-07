@@ -109,7 +109,7 @@ extern void PrintLine(const char* message);
 extern void PrintMultiLine(const char* message);
 extern void PrintWord(const char* message);
 
-extern void UnlockAchievement(unsigned char assignment);     // TODO: Should probably be somewhere else, but good enough right now
+#define UnlockAchievement(assignment)      { param0.uchar=assignment;asm("jsr _UnlockAchievementAsm"); }
 
 #define Text(paperColor,inkColor)          { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _TextAsm"); }
 #define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }

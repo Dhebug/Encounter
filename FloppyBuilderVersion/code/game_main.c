@@ -514,12 +514,14 @@ void Tickle()
         case e_ITEM_Thug:
             gCurrentLocationPtr->script = gDescriptionThugAttacking;
             itemPtr->description=gTextThugShootingAtMe;    // "a thug shooting at me"
+            UnlockAchievement(ACHIEVEMENT_SHOT_BY_THUG);
             LoadScene();
             break;
 
         case e_ITEM_AlsatianDog:
             gCurrentLocationPtr->script = gDescriptionDogAttacking;
             itemPtr->description=gTextDogJumpingAtMe;     // "a dog jumping at me"
+            UnlockAchievement(ACHIEVEMENT_MAIMED_BY_DOG);
             LoadScene();
             break;
 

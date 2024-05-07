@@ -68,6 +68,14 @@ void HandleHighScore()
 			// Force the name to the right to be formatted like the rest of the default scores
 			memcpy(ptrScore->name+15-gInputBufferPos,gInputBuffer,gInputBufferPos);
 
+            // This is a highscore
+            UnlockAchievement(ACHIEVEMENT_GOT_A_HIGHSCORE);
+            if (entry==0)
+            {
+                // Which also happens to be the best score
+                UnlockAchievement(ACHIEVEMENT_GOT_THE_BEST_SCORE);
+            }
+
 			// Save back the highscores in the slot
             memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
 			SaveFileAt(LOADER_HIGH_SCORES,gHighScores);

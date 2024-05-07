@@ -61,4 +61,3 @@ extern const char gTextGameDescription[];
 extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];
 
-extern void UnlockAchievement(unsigned char assignment);

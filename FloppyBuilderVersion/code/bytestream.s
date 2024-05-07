@@ -41,6 +41,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandUnSetItemFlags
     .word _ByteStreamCommandSetItemDescription
     .word _ByteStreamCommandSetLocationDirection
+    .word _ByteStreamCommandUnlockAchievement
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -440,6 +441,17 @@ _ByteStreamCommandSetLocationDirection
     jmp _ByteStreamMoveByA
 .)
 
+
+_ByteStreamCommandUnlockAchievement
+.(
+    ldy #0
+    lda (_gCurrentStream),y             // Achievement value
+    sta _param0
+    jsr _UnlockAchievementAsm
+
+    lda #1
+    jmp _ByteStreamMoveByA
+.)
 
 _ByteStreamCommandFetchRectangleData
 .(

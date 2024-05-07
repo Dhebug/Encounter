@@ -481,9 +481,9 @@ cannot_escape_pit    ; The player has no way to escape the pit
 #else    
     .byt 82,94,0,"from outside",0
 #endif    
-    WAIT(50*2)                      ; Wait a couple seconds for dramatic effect
-    
-    JUMP(_gDescriptionGameOverLost);            ; Draw the 'The End' logo
+    WAIT(50*2)                                      ; Wait a couple seconds for dramatic effect
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)   ; Achievement!
+    JUMP(_gDescriptionGameOverLost);                ; Draw the 'The End' logo
 
 draw_ladder
     SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                   ; Enable the UP direction
@@ -787,8 +787,9 @@ _gDescriptionDogAttacking
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,1
     .byt 5,108,0,"Oops...",0
-    WAIT(50*2)                              ; Wait a couple seconds
-    JUMP(_gDescriptionGameOverLost)         ; Game Over
+    WAIT(50*2)                                      ; Wait a couple seconds
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)   ; Achievement!
+    JUMP(_gDescriptionGameOverLost)                 ; Game Over
     /*
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,3
@@ -1130,8 +1131,9 @@ _gDescriptionThugAttacking
     .byt COMMAND_WHITE_BUBBLE,2
     .byt 5,5,0,"This was a mistake:",0
     .byt 60,16,0,"My last one",0
-    WAIT(50*2)                              ; Wait a couple seconds
-    JUMP(_gDescriptionGameOverLost)         ; Game Over
+    WAIT(50*2)                                      ; Wait a couple seconds
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SHOT_BY_THUG)    ; Achievement!
+    JUMP(_gDescriptionGameOverLost)                 ; Game Over
 
 
 _gDescriptionPadlockedRoom
@@ -1169,6 +1171,7 @@ _gSceneActionReadNewsPaper
     WAIT(50*2)
     INFO_MESSAGE("...I hope she is fine!")
     WAIT(50*2)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!    
     END_AND_REFRESH
 
 _gSceneActionReadHandWrittenNote
@@ -1184,6 +1187,7 @@ _gSceneActionReadHandWrittenNote
     INFO_MESSAGE("...if I can access it!")
 #endif    
     WAIT(50*2)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     END_AND_REFRESH
 
 _gSceneActionReadChemistryRecipes
@@ -1193,6 +1197,7 @@ _gSceneActionReadChemistryRecipes
     WAIT(50*2)
     INFO_MESSAGE("...just need to find the materials.")
     WAIT(50*2)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     END_AND_REFRESH
 
 
@@ -1208,6 +1213,7 @@ _gSceneActionReadChemistryBook
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_NONE))
     SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_LIBRARY)
 recipe_already_found
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     END_AND_REFRESH
 .)
 
@@ -1362,6 +1368,7 @@ around_the_pit
     INFO_MESSAGE("You position the ladder properly")
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_LADDER)
     END_AND_REFRESH
 .)
 
@@ -1378,6 +1385,7 @@ around_the_pit
     INFO_MESSAGE("You attach the rope to the tree")
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
     END_AND_REFRESH
 .)
 

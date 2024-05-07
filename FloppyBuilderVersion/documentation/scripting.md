@@ -24,6 +24,8 @@
       - [SET\_ITEM\_DESCRIPTION](#set_item_description)
     - [Changing locations properties](#changing-locations-properties)
       - [SET\_LOCATION\_DIRECTION](#set_location_direction)
+    - [Scoring and achievements](#scoring-and-achievements)
+      - [UNLOCK\_ACHIEVEMENT](#unlock_achievement)
     - [DISPLAY\_IMAGE](#display_image)
     - [DRAW\_BITMAP](#draw_bitmap)
   - [Examples](#examples)
@@ -81,7 +83,8 @@ Scripts can also loop and branch, basic conditions are supported.
 #define COMMAND_UNSET_ITEM_FLAGS 19
 #define COMMAND_SET_ITEM_DESCRIPTION 20
 #define COMMAND_SET_LOCATION_DIRECTION 21
-#define _COMMAND_COUNT          22
+#define COMMAND_UNLOCK_ACHIEVEMENT 22
+#define _COMMAND_COUNT          23
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION 0
@@ -97,6 +100,8 @@ Scripts can also loop and branch, basic conditions are supported.
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+
+#define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
@@ -171,6 +176,12 @@ Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, fol
 ### Changing locations properties
 #### SET_LOCATION_DIRECTION
 Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
+
+---
+### Scoring and achievements
+#### UNLOCK_ACHIEVEMENT
+Two bytes command containg the COMMAND_UNLOCK_ACHIEVEMENT opcode, followed by the achievement id.
+This would typically be used when the player does something worth remembering.
 
 ---
 ### DISPLAY_IMAGE

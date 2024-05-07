@@ -29,7 +29,8 @@
 #define COMMAND_UNSET_ITEM_FLAGS 19
 #define COMMAND_SET_ITEM_DESCRIPTION 20
 #define COMMAND_SET_LOCATION_DIRECTION 21
-#define _COMMAND_COUNT          22
+#define COMMAND_UNLOCK_ACHIEVEMENT 22
+#define _COMMAND_COUNT          23
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -49,6 +50,7 @@
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
 
+#define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location

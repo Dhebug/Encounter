@@ -59,8 +59,9 @@ void PrintWord(const char* message)
 
 
 // TODO: Should probably be somewhere else, but good enough right now
-void UnlockAchievement(unsigned char assignment)
+void UnlockAchievementAsm()
 {
+    unsigned char assignment = param0.uchar;
     unsigned char* assignementPtr = &gAchievements[assignment/8];
     unsigned char bitmask = 1<<(assignment&7);
     unsigned char previousValue = *assignementPtr;
