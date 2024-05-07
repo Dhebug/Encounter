@@ -54,8 +54,9 @@ Typically the setup will be in charge of checking the state of the game to draw 
 Scripts can also loop and branch, basic conditions are supported.
 
 # Commands
+The commands are all defined in [scripting.h](../code/scripting.h) and implemented in [bytestream.s](../code/bytestream.s) and most of them use references to locations and item ids defined in [game_enums.h](../code/game_enums.h).
 
-```
+```C
 #define OFFSET(x,y) x,y
 #define BLOCK_SIZE(w,h) w,h
 #define STRIDE(b) b
@@ -119,15 +120,15 @@ Scripts can also loop and branch, basic conditions are supported.
 ## END
 Just a single byte containg the COMMAND_END opcode. 
 This signals the end of the script.
-```
-  ; End of script
+```c
+  // End of script
   END
 ```
 ## END_AND_REFRESH
 Similar to END, except it also forces the entire scene to refresh.
 Generally used when the player perform actions resulting in items being modified or moved.
-```
-  ; End of script (and trigger a full refresh)
+```c
+  // End of script (and trigger a full refresh)
   END_AND_REFRESH
 ```
 ## WAIT
@@ -137,15 +138,15 @@ To provide some pacing, delays can be used to interrupt the execution of a scrip
 
 The delays are encoded as frame numbers on a single byte, which means the maximum duration of a delay is about 5 seconds. 
 If you need a longer delay, just put a few more delay instructions.
-```
-  ; Wait one second (50 frames)
+```c
+  // Wait one second (50 frames)
   WAIT(50)
 ```
 
 ## JUMP
 Three bytes command containg the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
-```
-  ; Jumps to the 'dog_growls' label
+```c
+  // Jumps to the 'dog_growls' label
   JUMP(dog_growls)
   (...)
 dog_growls
@@ -155,68 +156,88 @@ dog_growls
 These two instructions require an operator to evaluate if the condition is true or false
 ### JUMP_IF_TRUE
 Seven bytes command containg the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+```c
+  // Jump to the label 'around_the_pit' if the expression is true
+  JUMP_IF_TRUE(around_the_pit,/*<check expression>*/)
+  (...)
+around_the_pit    
+```
 
 ### JUMP_IF_FALSE
 Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+```c
+  // Jump to the label 'around_the_pit' if the expression is false
+  JUMP_IF_FALSE(around_the_pit,/*<check expression>*/)
+  (...)
+around_the_pit    
+```
 
 ---
 ## Operators
 These operators should be used with either JUMP_IF_TRUE or JUMP_IF_FALSE
 ### CHECK_ITEM_LOCATION
 Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
-
+```c
+  /*<conditional jump instruction>*/ CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT) 
+```
 ### CHECK_ITEM_FLAG
 Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
+```c
+  /*<conditional jump instruction>*/ CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
+```
 
 ### CHECK_PLAYER_LOCATION
 Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
+```c
+  /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT)
+```
 
 ---
 ## Providing information to the player
 ### INFO_MESSAGE
 Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by a null terminated string containing the message to display
-```
-  ; Print a message in the main TEXT window
+```C
+  // Print a message in the main TEXT window
   INFO_MESSAGE("I have to find her fast...")
 ```
 ### ERROR_MESSAGE
 Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the message is printed out as an error 
-```
-  ; Print an error message with a sound effect 
+```C
+  // Print an error message with a sound effect 
   ERROR_MESSAGE("I can't do that")
 ```  
 ---
 ## Changing item properties
 ### SET_ITEM_LOCATION
 Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it
-```
-  ; Change the location of the ladder
+```c
+  // Change the location of the ladder
   SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
 ```  
 ### SET_ITEM_FLAGS
 Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
-```
-  ; Mask-in some flags of the ladder
+```c
+  // Mask-in some flags of the ladder
   SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 ```  
 ### UNSET_ITEM_FLAGS
 Three bytes command containg the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
-```
-  ; Mask-out some flags on the curtain
+```c
+  // Mask-out some flags on the curtain
   UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
 ```
 ### SET_ITEM_DESCRIPTION
 Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, followed by the id of the item, then a null terminated string containing the description
-```
-  ; Change the description of the curtain object
+```c
+  // Change the description of the curtain object
   SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
 ```
 ---
 ## Changing locations properties
 ### SET_LOCATION_DIRECTION
 Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
-```
-  ; Enable the UP direction
+```c
+  // Enable the UP direction
   SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)
 ```
 ---
@@ -224,8 +245,8 @@ Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed 
 ### UNLOCK_ACHIEVEMENT
 Two bytes command containg the COMMAND_UNLOCK_ACHIEVEMENT opcode, followed by the achievement id.
 This would typically be used when the player does something worth remembering.
-```
-  ; Achievement unlocked: Fell into the pit
+```c
+  // Achievement unlocked: Fell into the pit
   UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)
 ```
 
@@ -233,14 +254,14 @@ This would typically be used when the player does something worth remembering.
 ## DISPLAY_IMAGE
 Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display
 Used to display a full screen image, like the map of the UK or the newspapwer with a subtitle
-```
-  ; Show the image of the dog eating some meat
+```c
+  // Show the image of the dog eating some meat
   DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
 ```  
 ## DRAW_BITMAP
 Nine bytes operator containg the COMMAND_BITMAP opcode, followed by the id of the image containing the data, width and height of the block to display, source stride, and the address of the source and destination
-```
-  ; Draw the ladder
+```c
+  // Draw the ladder
   DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
 ```  
 
@@ -251,11 +272,11 @@ Obviously a proper script would use a combination of all these commands.
 Scripts by default are executed instruction by instruction, but it's possible to jump around.
 
 In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
-```
+```c
     JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
     JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 no_rope    
-    JUMP(digging_for_gold);            ; Generic message if the ladder or rope are not present
+    JUMP(digging_for_gold);            // Generic message if the ladder or rope are not present
 rope_attached_to_tree    
     (...)
 digging_for_gold
@@ -265,7 +286,7 @@ digging_for_gold
 To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
 
 Delays are done with the COMMAND_WAIT instruction, while the COMMAND_WHITE_BUBBLE and COMMAND_BLACK_BUBBLE is used to display the text bubbles
-```
+```c
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)              // Initial delay
     .byt COMMAND_WHITE_BUBBLE,2           // "Draw black on white background speech bubble", two text entries
@@ -278,7 +299,7 @@ _gDescriptionRoad
 Some of the actions done by the player, like reading the newspaper, or looking at the map in the library result in the game loading a fullscreen image, then show some comments about the action.
 
 These are done by small scripts
-```
+```c
   (...)
   // Show the newspaper content
   PlayStream(gSceneActionReadNewsPaper);
@@ -298,16 +319,16 @@ Animations are done by updating the graphics on the scene, waiting a bit, updati
 
 The system does not support moving objects, but it's good enough for things that change state or cycling animations.
 
-```
+```c
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
     .byt COMMAND_WHITE_BUBBLE,2
     .byt 4,100,0,"The market place",0
     .byt 4,106,4,"is deserted",0
 blinky_shop
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "grayed out"
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    // Draw the Fish Shop "grayed out"
     WAIT(50) 
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "fully drawn"
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    // Draw the Fish Shop "fully drawn"
     WAIT(50)
     JUMP(blinky_shop)
     END
