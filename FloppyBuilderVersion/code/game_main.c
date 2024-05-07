@@ -557,6 +557,7 @@ void CombineItems()
                 gItems[e_ITEM_SedativePills].location = e_LOCATION_GONE_FOREVER;       // The sedative are gone from the game
                 gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;                    // We now have some drugged meat in our inventory
                 gItems[e_ITEM_Meat].description = gTextItemSedativeLacedMeat;
+                UnlockAchievement(ACHIEVEMENT_DRUGGED_THE_MEAT);
                 LoadScene();
             }
             break;
@@ -584,6 +585,7 @@ void OpenItem()
                     currentItem->description = gTextItemOpenedCurtain;
                     currentItem->flags &= ~ITEM_FLAG_CLOSED;
                     gCurrentLocationPtr->directions[e_DIRECTION_NORTH]=e_LOCATION_PADLOCKED_ROOM;                   
+                    UnlockAchievement(ACHIEVEMENT_OPENED_THE_CURTAIN);
                     LoadScene();
                     return;
                 }
@@ -603,6 +605,7 @@ void OpenItem()
                         // If the meat was in the fridge, we now have it inside the kitchen
                         currentItem->location=e_LOCATION_KITCHEN;
                     }
+                    UnlockAchievement(ACHIEVEMENT_OPENED_THE_FRIDGE);
                     LoadScene();
                     return;
                 }
@@ -622,6 +625,7 @@ void OpenItem()
                         // If the meat was in the fridge, we now have it inside the kitchen
                         currentItem->location=e_LOCATION_KITCHEN;
                     }
+                    UnlockAchievement(ACHIEVEMENT_OPENED_THE_CABINET);
                     LoadScene();
                     return;
                 }
@@ -703,10 +707,12 @@ void ThrowItem()
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
                         dogItemPtr->flags |= ITEM_FLAG_DISABLED;
                         dogItemPtr->description = gTextDogLying;
+                        UnlockAchievement(ACHIEVEMENT_DRUGGED_THE_DOG);
                     }
                     else                                                // Normal meat -> The dog eats it
                     {
                         itemPtr->location = e_LOCATION_GONE_FOREVER;
+                        UnlockAchievement(ACHIEVEMENT_DOG_ATE_THE_MEAT);
                     }
                     PlayStream(gSceneActionDogEatingMeat);                    
                     return;
@@ -724,6 +730,7 @@ void ThrowItem()
                 {
                     dogItemPtr->flags |= ITEM_FLAG_DISABLED;          // The dog is dead
                     dogItemPtr->description = gTextDogLying;
+                    UnlockAchievement(ACHIEVEMENT_KILLED_THE_DOG);
                     gScore+=50;
                 }
                 else
@@ -754,6 +761,7 @@ WORDS ProcessAnswer()
     {
 		// Quit the game
 		PlaySound(KeyClickHData);
+        UnlockAchievement(ACHIEVEMENT_GAVE_UP);
 		return e_WORD_QUIT;
     }
 
@@ -832,6 +840,8 @@ void Initializations()
 
 void main()
 {
+    UnlockAchievement(ACHIEVEMENT_LAUNCHED_THE_GAME);
+
 	Initializations();	
 
 #ifdef ENABLE_GAME

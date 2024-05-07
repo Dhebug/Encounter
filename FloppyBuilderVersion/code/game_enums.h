@@ -122,13 +122,72 @@
 #define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER
 // End marker
 
-
+// Flags for the items
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
 #define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
 #define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
-#define ITEM_FLAG_DISABLED          16    // Used to indicate that something is not active anymore (ex: Dog, Thug )
+#define ITEM_FLAG_DISABLED          16   // Used to indicate that something is not active anymore (ex: Dog, Thug )
 #define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
 #define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
 #define ITEM_FLAG_TRANSFORMED     128    // For items that get transformed (drugged meat)
+
+// Achievements
+#define ACHIEVEMENT_SOLVED_THE_CASE     0
+#define ACHIEVEMENT_MAIMED_BY_DOG       1
+#define ACHIEVEMENT_SHOT_BY_THUG        2
+#define ACHIEVEMENT_FELL_INTO_PIT       3
+#define ACHIEVEMENT_TRIPPED_ALARM       4
+#define ACHIEVEMENT_RAN_OUT_OF_TIME     5
+#define ACHIEVEMENT_BLOWN_INTO_BITS     6
+#define ACHIEVEMENT_SIMPLY_VANISHED     7
+
+#define ACHIEVEMENT_GAVE_UP             8
+#define ACHIEVEMENT_LAUNCHED_THE_GAME   9   // It's kind of a basic one...
+#define ACHIEVEMENT_WATCHED_THE_INTRO   10
+#define ACHIEVEMENT_READ_THE_NEWSPAPER  11
+#define ACHIEVEMENT_READ_THE_BOOK       12
+#define ACHIEVEMENT_READ_THE_NOTE       13
+#define ACHIEVEMENT_READ_THE_RECIPES    14
+#define ACHIEVEMENT_OPENED_THE_FRIDGE   15
+
+#define ACHIEVEMENT_OPENED_THE_CABINET  16
+#define ACHIEVEMENT_DRUGGED_THE_MEAT    17
+#define ACHIEVEMENT_KILLED_THE_DOG      18
+#define ACHIEVEMENT_DRUGGED_THE_DOG     19
+#define ACHIEVEMENT_CHASED_THE_DOG      20
+#define ACHIEVEMENT_KILLED_THE_THUG     21
+#define ACHIEVEMENT_DRUGGED_THE_THUG    22
+#define ACHIEVEMENT_CAPTURED_THE_DOVE   23
+
+#define ACHIEVEMENT_USED_THE_ROPE       24
+#define ACHIEVEMENT_USED_THE_LADDER     25
+#define ACHIEVEMENT_EXAMINED_THE_MAP    26
+#define ACHIEVEMENT_EXAMINED_THE_GAME   27
+#define ACHIEVEMENT_OPENED_THE_SAFE     28
+#define ACHIEVEMENT_OPENED_THE_PANEL    29
+#define ACHIEVEMENT_BUILT_A_FUSE        30
+#define ACHIEVEMENT_BUILT_A_BOMB        31
+
+#define ACHIEVEMENT_MADE_BLACK_POWDER   32
+#define ACHIEVEMENT_FRISKED_THE_THUG    33
+#define ACHIEVEMENT_USED_THE_ACID       34
+#define ACHIEVEMENT_MADE_THERMITE       35
+#define ACHIEVEMENT_PIERCED_THE_DOOR    36
+#define ACHIEVEMENT_OPENED_THE_CURTAIN  37
+#define ACHIEVEMENT_GAVE_THE_KNIFE      38
+#define ACHIEVEMENT_GAVE_THE_ROPE       39
+
+#define ACHIEVEMENT_WATCHED_THE_OUTRO   40
+#define ACHIEVEMENT_GOT_A_HIGHSCORE     41
+#define ACHIEVEMENT_GOT_THE_BEST_SCORE  42
+#define ACHIEVEMENT_DOG_ATE_THE_MEAT    43
+#define ACHIEVEMENT_FREE_2              44
+#define ACHIEVEMENT_FREE_3              45
+#define ACHIEVEMENT_FREE_4              46
+#define ACHIEVEMENT_FREE_5              47
+
+#define	ACHIEVEMENT_COUNT_ 				48      //  Can't have more than 48 achievements
+#define ACHIEVEMENT_BYTE_COUNT           6
+

@@ -63,7 +63,9 @@ _TEXT_BOTTOM_VIEW__START
 
 * = $BFE0                           ; The 32 bytes of RAM between the end of the screen and the start of the ROM
 _32_Bytes_BufferStart
-_gScore              .dsb 2         ; Current highscore for the player
+_gScore                 .dsb 2         ; Current highscore for the player
+_gAchievements          .dsb 6         ; Enough for 6*8=48 achievements
+_gAchievementsChanged   .dsb 1         ; Set to 1 to indicate the game that the achievements have changed and need to be resaved
 _32_Bytes_BufferRemaining
 
 * = $C000             ; Start of the ROM/Overlay ram

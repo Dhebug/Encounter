@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "score.h"
+#include "game_enums.h"
 
 // intro_utils
 extern char Text_FirstLine[];
@@ -16,6 +17,7 @@ extern char Text_CopyrightDefenceForce[];
 extern char Text_GameInstructions[];
 
 extern char Text_Leaderboard[];
+extern char Text_Achievements[];
 extern char Text_TypeWriterMessage[];
 
 
@@ -448,6 +450,58 @@ int DisplayHighScoresTable()
 }
 
 
+extern char* AchievementMessages[ACHIEVEMENT_COUNT_];
+extern char Text_AchievementStillLocked[];
+extern char Text_AchievementCount[];
+extern char Text_AchievementNone[];
+
+
+int DisplayAchievements()
+{
+	Text(16+4,7);
+
+	SetLineAddress((char*)0xbb80+40*0+0);
+	PrintLine(Text_Achievements);
+    {
+    	int entry;
+        int unlockedCount = 0;
+        unsigned char achievementOffset = 0;
+        unsigned char achievementMask = 1;
+        gPrintAddress+=40+1;
+        for (entry=0;entry<ACHIEVEMENT_COUNT_;entry++)
+        {		
+            char* achievementMessage = AchievementMessages[entry];
+            if (achievementMask==0)
+            {
+                achievementMask=1;
+                achievementOffset++;
+            }
+            if (!(gAchievements[achievementOffset] & achievementMask))
+            {
+                achievementMessage = Text_AchievementStillLocked;
+            }
+            else
+            {
+                unlockedCount++;
+            }
+            sprintf(gPrintAddress,"%s",achievementMessage);
+            gPrintAddress+=20;
+            achievementMask <<= 1;
+        }
+        if (unlockedCount)
+        {
+            sprintf((char*)0xbb80+40*27,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
+        }
+        else
+        {
+            sprintf((char*)0xbb80+40*27,Text_AchievementNone);
+        }
+    }
+
+	return Wait(50*2);
+}
+
+
 
 #ifdef INTRO_ENABLE_SOUNDBOARD    
 void PrintYMRegisters()
@@ -595,9 +649,10 @@ void main()
     LoadFileUncompressedAt(LOADER_PICTURE_TITLE,CompressedTitleImage,LOADER_PICTURE_TITLE_SIZE_COMPRESSED);
 #endif
 
-#ifdef INTRO_SHOW_LEADERBOARD
+#if defined(INTRO_SHOW_LEADERBOARD) || defined(INTRO_SHOW_ACHIEVEMENTS)
     // Load the high score table on the first access
-    LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+    LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
+    memcpy(gAchievements,gSaveGameFile.achievements,ACHIEVEMENT_BYTE_COUNT);
 #endif
 
 #ifdef INTRO_SHOW_STORY
@@ -642,6 +697,14 @@ void main()
 			break;
 		}
 #endif
+
+#ifdef INTRO_SHOW_ACHIEVEMENTS
+		if (DisplayAchievements())
+		{
+			break;
+		}
+#endif
+        UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
 	}
 #endif
 
@@ -660,6 +723,12 @@ void main()
     EndMusic();
     PsgStopSoundAndForceUpdate();
 
+    if (gAchievementsChanged)
+    {        
+        // Save back the highscores in the slot
+        SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+        gAchievementsChanged=0;
+    }
 
 #ifndef ENABLE_INTRO
 endIntro:

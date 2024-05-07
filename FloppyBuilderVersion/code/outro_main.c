@@ -69,7 +69,9 @@ void HandleHighScore()
 			memcpy(ptrScore->name+15-gInputBufferPos,gInputBuffer,gInputBufferPos);
 
 			// Save back the highscores in the slot
+            memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
 			SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+            gAchievementsChanged=0;
 			return;
 		}
 		++ptrScore;
@@ -179,6 +181,14 @@ void main()
 	ResetInput();
 
 	HandleHighScore();
+
+    if (gAchievementsChanged)
+    {        
+        // Save back the highscores in the slot
+        memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
+        SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+        gAchievementsChanged=0;
+    }
 
 	// Just to let the last click sound to keep playing
 	WaitFrames(4);

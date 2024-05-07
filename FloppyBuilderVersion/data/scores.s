@@ -37,7 +37,7 @@ StartScores
  ENTRY(6,-150,"    Adrian Monk")
  ENTRY(3,-200,"C.Auguste Dupin")
  ENTRY(5,-250,"  Insp Clouseau")
- .dsb 56+24         ; Padding
+ .dsb 56+24         ; Padding (forced to zero)
 EndScores
 
 

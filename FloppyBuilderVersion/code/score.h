@@ -1,4 +1,6 @@
 
+#include "game_enums.h"
+
 /*
 ;
 ; Data generator for the high scores
@@ -28,6 +30,7 @@ enum SCORE_CONDITION
     e_SCORE_GAVE_UP         = 9
 };
 
+
 typedef struct 
 {
     int             score;          // The score can actually be negative if the player is doing stupid things on purpose (plus or minus 32768 because of assembler reasons)
@@ -35,10 +38,20 @@ typedef struct
     unsigned char   name[15];       // The name of the character  
 } score_entry;
 
+typedef struct
+{
+    score_entry scores[SCORE_COUNT];   // 18*24=432
+    unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 6*8=48 achievements
+    char free_data[80-ACHIEVEMENT_BYTE_COUNT];
+} save_game_file;                      // sizeof(save_game_file)=512
+
 extern score_entry gHighScores[SCORE_COUNT];  //char gHighScores[512];  
+extern save_game_file gSaveGameFile;          // Actually points to the same location as gHighScores
 extern const char* gScoreConditionsArray[];
 
-extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
+extern int gScore;                              // Moved to the last 32 bytes so it can be shared with the other modules
+extern unsigned char gAchievements[];           // Moved to the last 32 bytes so it can be shared with the other modules
+extern unsigned char gAchievementsChanged;      // Moved to the last 32 bytes so it can be shared with the other modules
 
 extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
 
@@ -48,3 +61,4 @@ extern const char gTextGameDescription[];
 extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];
 
+extern void UnlockAchievement(unsigned char assignment);
