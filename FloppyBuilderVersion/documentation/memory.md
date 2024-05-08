@@ -7,7 +7,7 @@ Memory
   - [Overlay memory and floppy disk drive](#overlay-memory-and-floppy-disk-drive)
   - [FloppyBuilder system](#floppybuilder-system)
   - [System ROM](#system-rom)
-- [Memory in Encounter](#memory-in-encounter)
+- [Memory available in Encounter](#memory-available-in-encounter)
   - [Reserved locations](#reserved-locations)
     - [Page 1 - 6502 processor stack](#page-1---6502-processor-stack)
     - [Page 3 - Input/Output area](#page-3---inputoutput-area)
@@ -19,6 +19,9 @@ Memory
     - [Page 4 to charsets](#page-4-to-charsets)
     - [Overlay memory](#overlay-memory)
   - [Total free memory](#total-free-memory)
+- [Memory usage in Encounter](#memory-usage-in-encounter)
+  - [Data sharing](#data-sharing)
+  - [Loader API](#loader-api)
 
 ## Memory in general
 On modern machines, with a lot of RAM and virtual memory, optimizing memory usage is mostly a thing of the past: Doing it may definitely improve performance, but it's not an actual requirement to get things running at all.
@@ -59,7 +62,7 @@ The choice was made to not use the ROM at all, which means we have to initialize
 
 In exchange, we gain full liberty on how we use the memory, including pages 0, 1 and 2.
 
-# Memory in Encounter
+# Memory available in Encounter
 So, we have much more memory available with this system than we would have with a normal game on tape or even using a standard Sedoric format, but that does not mean we can do whatever we want.
 
 ## Reserved locations
@@ -112,6 +115,59 @@ So, in total, here what we have available assuming a worse case situation (HIRES
 - 15616 bytes - Overlay memory
 -------------------------------
 Total = 54016
+
+# Memory usage in Encounter
+Encounter is split in four distinct modules:
+- Splash/Jingle
+- The intro sequence
+- The actual game
+- The high-score/credits outro
+
+Each module have their own individual memory usage, the only shared elements are:
+- The loader module in the last 768 bytes of memory
+- The 32 byte zone from $BFE0 to $BFFF
+
+## Data sharing
+To provide some context to the game when moving from a module to another, the 32bytes buffer is used to keep information.
+
+The memory locations are specified in [last_module.s](../code/last_module.s)
+> [!NOTE]  
+> Should probably have a C struct to cleanly wrap that to the main code.
+```c
+* = $BFE0  // The 32 bytes of RAM between the end of the screen and the start of the ROM
+
+_32_Bytes_BufferStart
+_gScore                 .dsb 2   // Current highscore for the player
+_gAchievements          .dsb 6   // Enough for 6*8=48 achievements
+_gAchievementsChanged   .dsb 1   // Set to 1 to indicate the game that the achievements have changed and need to be resaved
+_32_Bytes_BufferRemaining
+
+* = $C000  //Start of the ROM/Overlay ram
+```
+By having the current score and the achievement info in higher memory, the main game does not have to keep the entire high score file in memory at all time, it is loaded or saved only in the intro and outro modules.
+
+## Loader API
+Since the loader module is installed in memory during the boot sequence and never moves, the simplest way to implement an API to perform disk operation was to reserve some addresses directly at the end of the module at fixed locations. These are defined in the [loader api](../code/loader_api.s) file.
+```c
+_LoaderApiSaveData	     =$FFEC  
+
+_LoaderApiFileStartSector=$FFEF
+_LoaderApiFileStartTrack =$FFF0
+
+_LoaderApiFileSize       =$FFF1
+_LoaderApiFileSizeLow 	 =$FFF1
+_LoaderApiFileSizeHigh 	 =$FFF2
+
+_LoaderApiJump		     =$FFF3
+_LoaderApiAddress        =$FFF4
+_LoaderApiAddressLow 	 =$FFF4
+_LoaderApiAddressHigh 	 =$FFF5
+
+_LoaderFDCRegisterOffset =$FFF6
+
+_LoaderApiLoadFile		 =$FFF7
+```
+Since the addresses are fixed in memory, there is no need for relocation or fancy bindings, the lodding/saving code just writes the values at these fixes addresses and call the various vectors, like "LoadFile" (jsr $FFF7) and "SaveData" (jsr $FFEC).
 
 
 ----
