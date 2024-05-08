@@ -35,7 +35,7 @@ The Oric Atmos 48K actually has 64KB of RAM, it just happens that the top 16KB o
 
 When a floppy disk drive (Microdisc or Jasmin) is connected to the Oric, it comes with a controller board providing the missing circuitry as well as a boot ROM able to bootstrap the system.
 
-The 16KB of RAM become available under the name of "Overlay memory", and are used by the system to store the DOS, generally with a bit of RAM in page 4 sacrificied to handle the dispatching between BASIC ROM and DOS RAM depending of what the user or applications are doing.
+The 16KB of RAM become available under the name of "Overlay memory", and are used by the system to store the DOS, generally with a bit of RAM in page[^1] 4 sacrificied to handle the dispatching between BASIC ROM and DOS RAM depending of what the user or applications are doing.
 
 ## FloppyBuilder system
 A proper DOS is useful when you need to be able to create or delete files, rename them, modify them, etc... which requires maintaining some directory structure to keep track of the location of files, handling fragmentation, etc...
@@ -114,5 +114,5 @@ So, in total, here what we have available assuming a worse case situation (HIRES
 Total = 54016
 
 
-
-
+----
+[^1] You can think of the 65536 bytes of memory as being made of 256 "pages" of 256 bytes.
