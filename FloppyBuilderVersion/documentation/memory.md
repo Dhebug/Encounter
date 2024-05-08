@@ -23,7 +23,9 @@ Memory
   - [Data sharing](#data-sharing)
   - [Loader API](#loader-api)
   - [Modules memory layout](#modules-memory-layout)
-  - [Showing free memory](#showing-free-memory)
+    - [Showing free memory](#showing-free-memory)
+    - [Symbol files and memory maps](#symbol-files-and-memory-maps)
+  - [Individual notes about the various modules](#individual-notes-about-the-various-modules)
     - [Splash/Jingle sequence](#splashjingle-sequence)
     - [Intro sequence](#intro-sequence)
     - [Main game](#main-game)
@@ -176,7 +178,7 @@ _LoaderApiLoadFile       =$FFF7
 Since the addresses are fixed in memory, there is no need for relocation or fancy bindings, the lodding/saving code just writes the values at these fixes addresses and call the various vectors, like "LoadFile" (jsr $FFF7) and "SaveData" (jsr $FFEC).
 
 ## Modules memory layout
-Each of the module has their own memory layout, most automatically laid out by the linker and assembler when assembling together all the zero page, text, data and  bss sections.
+Each of the module has their own memory layout, most automatically laid out by the linker and assembler when assembling together all the zero page[^3], text, data and  bss sections.
 
 The [last_module.s](../code/last_module.s) file is special and has to be placed at the very end of the list of files in each module:
 ```
@@ -193,7 +195,7 @@ This is where most of the fancy trickery to get more memory is done:
 - Defining symbols for buffers in overlay memory
 - Defining symbols in tricky areas like unused parts of the character sets
 
-## Showing free memory
+### Showing free memory
 The last_module.s file is also where the "Remaining space" message printed at build time comes from:
 ```c
 #if DISPLAYINFO=1
@@ -237,6 +239,63 @@ this is simply achieved by using the symbols to compute and print the size at co
 #print - Scene actions = (_EndSceneActions - _StartSceneActions)
 ```
 
+### Symbol files and memory maps
+The compilation of each module results in the creation of a specific file (symbols_SplashProgram, symbols_IntroProgram, symbols_GameProgram, symbols_OutroProgram) containing all the symbols for this specific module.
+
+The content typically looks like that:
+```
+0050 zp_compiler_save_start
+0050 ap
+0052 fp
+0054 sp
+0056 tmp0
+0058 tmp1
+(...)
+10c5 _main
+0412 enter
+0424 noregstosave
+041c savereg
+(...)
+0538 Lsplash_main132
+04d8 Lsplash_main131
+12cb IrqTasks50hz
+165f ReadKeyboard
+12cf _gIsHires
+12d0 _gPrintAddress
+(...)
+bfe2 _gAchievements
+bfe8 _gAchievementsChanged
+bfe9 _32_Bytes_BufferRemaining
+fe00 _DiskLoader
+6000 osdk_check
+```
+The main use of these symbol files is to provide symbols when debugging the code in an emulator, it's easier to read **JSR ReadKeyboard** than **JSR $165f**.
+
+A second usage is the generation of easy to read "map files" showing tables with all the symbols sorted, with display of how much memory is used by each of the symbols.
+
+The OSDK provides the MemMap.exe program which can convert these files into HTML files, by default the osdk_showmap.bat script is used to generate them, resulting in this type of output:
+
+![Memory map](images/memmap.png)
+The three columns represent the three main memory types:
+- The symbols defined from $100 to $BFFF, called "Normal memory"
+- Anything defined in the $C000 to $FFFF range, called "Overlay memory"
+- And anything defined in $00 to $FF range, called "Zero page"
+
+Each of these columns has two sections:
+- At the top is the list, sorted from larged to smallest of the various memory zones located for the memory type
+- At the bottom is the list of all labels sorted increasingly
+
+The address shown in bold indicate it is aligned on a multiple of 256[^2]
+
+And finally, the size of each section is shown, calculated based on how many bytes separate one label from another.
+
+Global labels (starting by _) have two Size values, the additional one represented hos many bytes separates this label from the next global label, so by smartly using a _ prefix, you can fine grain the reports.
+
+This tool is quite practical to find the worse offenders as well as where you have free memory, or locate places that should have been alligned by are not.
+
+
+## Individual notes about the various modules
+(This is a work in progress)
 ### Splash/Jingle sequence
 ### Intro sequence
 ### Main game
@@ -245,3 +304,5 @@ this is simply achieved by using the symbols to compute and print the size at co
 
 ----
 [^1]: You can think of the 65536 bytes of memory as being made of 256 "pages" of 256 bytes.
+[^2]: Quite a few operations are faster on the 6502 if you do not cross a page boundary
+[^3]: Operations done in zero page are faster for the 6502 because there is one less byte to load to compute the location in memory
