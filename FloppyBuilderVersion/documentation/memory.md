@@ -115,4 +115,4 @@ Total = 54016
 
 
 ----
-[^1] You can think of the 65536 bytes of memory as being made of 256 "pages" of 256 bytes.
+[^1]: You can think of the 65536 bytes of memory as being made of 256 "pages" of 256 bytes.
