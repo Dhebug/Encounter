@@ -22,6 +22,12 @@ Memory
 - [Memory usage in Encounter](#memory-usage-in-encounter)
   - [Data sharing](#data-sharing)
   - [Loader API](#loader-api)
+  - [Modules memory layout](#modules-memory-layout)
+  - [Showing free memory](#showing-free-memory)
+    - [Splash/Jingle sequence](#splashjingle-sequence)
+    - [Intro sequence](#intro-sequence)
+    - [Main game](#main-game)
+    - [End credits](#end-credits)
 
 ## Memory in general
 On modern machines, with a lot of RAM and virtual memory, optimizing memory usage is mostly a thing of the past: Doing it may definitely improve performance, but it's not an actual requirement to get things running at all.
@@ -149,25 +155,92 @@ By having the current score and the achievement info in higher memory, the main 
 ## Loader API
 Since the loader module is installed in memory during the boot sequence and never moves, the simplest way to implement an API to perform disk operation was to reserve some addresses directly at the end of the module at fixed locations. These are defined in the [loader api](../code/loader_api.s) file.
 ```c
-_LoaderApiSaveData	     =$FFEC  
+_LoaderApiSaveData       =$FFEC  
 
 _LoaderApiFileStartSector=$FFEF
 _LoaderApiFileStartTrack =$FFF0
 
 _LoaderApiFileSize       =$FFF1
-_LoaderApiFileSizeLow 	 =$FFF1
-_LoaderApiFileSizeHigh 	 =$FFF2
+_LoaderApiFileSizeLow    =$FFF1
+_LoaderApiFileSizeHigh   =$FFF2
 
-_LoaderApiJump		     =$FFF3
+_LoaderApiJump           =$FFF3
 _LoaderApiAddress        =$FFF4
-_LoaderApiAddressLow 	 =$FFF4
-_LoaderApiAddressHigh 	 =$FFF5
+_LoaderApiAddressLow     =$FFF4
+_LoaderApiAddressHigh    =$FFF5
 
 _LoaderFDCRegisterOffset =$FFF6
 
-_LoaderApiLoadFile		 =$FFF7
+_LoaderApiLoadFile       =$FFF7
 ```
 Since the addresses are fixed in memory, there is no need for relocation or fancy bindings, the lodding/saving code just writes the values at these fixes addresses and call the various vectors, like "LoadFile" (jsr $FFF7) and "SaveData" (jsr $FFEC).
+
+## Modules memory layout
+Each of the module has their own memory layout, most automatically laid out by the linker and assembler when assembling together all the zero page, text, data and  bss sections.
+
+The [last_module.s](../code/last_module.s) file is special and has to be placed at the very end of the list of files in each module:
+```
+:: These are the definition of the various files used by each module.
+:: After a module has been built once, and as long as the files are not deleted, you can
+:: then comment out the line to speed up compile time.
+:: Obviously remember to enable them again else the changes you make will not be rebuilt!
+SET OSDKFILE_SPLASH=splash_main splash_utils display_basic loader_api irq keyboard distorter costable last_module
+SET OSDKFILE_INTRO=intro_main score common intro_utils intro_text loader_api irq audio keyboard time display_basic akyplayer last_module
+SET OSDKFILE_GAME=game_main input_system bytestream common game_misc game_data game_text game_utils loader_api irq audio keyboard time display_basic display last_module
+SET OSDKFILE_OUTRO=outro_main score outro_text input_system common outro_utils loader_api irq audio keyboard display_basic display last_module
+```
+This is where most of the fancy trickery to get more memory is done:
+- Defining symbols for buffers in overlay memory
+- Defining symbols in tricky areas like unused parts of the character sets
+
+## Showing free memory
+The last_module.s file is also where the "Remaining space" message printed at build time comes from:
+```c
+#if DISPLAYINFO=1
+#print Remaining space = ($9800 - *)  
+#endif
+```
+like for example in this terminal output:
+```
+== Compiling the intro ==
+Building the program IntroProgram at adress $400 [OSDK 1.20]
+Linking
+Assembling
+Remaining space = ($9800 - *)  = 7028
+Creating TAPE image IntroProgram.TAP
+File 'build\IntroProgram.tap' is 31134 bytes long (14 bytes header and 31120 bytes of data)
+Build of IntroProgram.tap finished
+```
+
+using the #print statement can be done directly in the modules to clearly show which part of the program take room, like for example in the game:
+```
+Total size of game text content = (_EndGameTextData - _StartGameTextData)= 7371
+- Messages and prompts = (_EndMessagesAndPrompts - _StartMessagesAndPrompts)= 331
+- Error messages = (_EndErrorMessages - _StartErrorMessages)= 594
+- Location names = (_EndLocationNames - _StartLocationNames)= 1323
+- Item names = (_EndItemNames - _StartItemNames)= 1002
+- Scene scripts = (_EndSceneScripts - _StartSceneScripts)= 2823
+- Scene actions = (_EndSceneActions - _StartSceneActions)= 1298
+Remaining space = ($9800 - *)  = 2292
+```
+this is simply achieved by using the symbols to compute and print the size at compile time:
+```c
+//
+// Print statistics about the size of things
+//
+#print Total size of game text content = (_EndGameTextData - _StartGameTextData)
+#print - Messages and prompts = (_EndMessagesAndPrompts - _StartMessagesAndPrompts)
+#print - Error messages = (_EndErrorMessages - _StartErrorMessages)
+#print - Location names = (_EndLocationNames - _StartLocationNames)
+#print - Item names = (_EndItemNames - _StartItemNames)
+#print - Scene scripts = (_EndSceneScripts - _StartSceneScripts)
+#print - Scene actions = (_EndSceneActions - _StartSceneActions)
+```
+
+### Splash/Jingle sequence
+### Intro sequence
+### Main game
+### End credits
 
 
 ----
