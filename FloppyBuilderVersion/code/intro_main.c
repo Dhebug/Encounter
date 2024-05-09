@@ -348,9 +348,10 @@ void CarriageReturn()
 {
 	gYPos++;
 	DisplayPaperSheet();
+    PlaySound(ScrollPageData);
 	while (gXPos>2)
 	{
-		gXPos-=2;
+		gXPos-=4;
 		DisplayPaperSheet();
 	}
 	gXPos=1;
@@ -377,7 +378,14 @@ int TypeWriterPrintCharacter(const char *message)
 		else if (car == ' ')
 		{
             unsigned char referenceFrame=VblCounter;
-			PlaySound(SpaceBarData);
+            if (gXPos>35)
+            {
+    			PlaySound(PingData);
+            }
+            else
+            {
+    			PlaySound(SpaceBarData);
+            }
 			gXPos++;
 			line++;
 			DisplayPaperSheet();
@@ -390,7 +398,14 @@ int TypeWriterPrintCharacter(const char *message)
 		{
             unsigned char referenceFrame=VblCounter;
 			char* charset=(char*)0x9900+(car-32)*8;
-			PlaySound(TypeWriterData);
+            if (gXPos>35)
+            {
+    			PlaySound(PingData);
+            }
+            else
+            {
+    			PlaySound(TypeWriterData);
+            }
 			line[40*0] = (charset[0]^63)|64;
 			line[40*1] = (charset[1]^63)|64;
 			line[40*2] = (charset[2]^63)|64;
@@ -619,6 +634,11 @@ void SoundBoard()
             PlaySound(SpaceBarData);
             break;
 
+        case 't':
+        case 'T':
+            PlaySound(ScrollPageData);
+            break;
+
         default:  
             PlaySound(TypeWriterData);
             break;
@@ -667,6 +687,7 @@ void main()
 #ifdef INTRO_ENABLE_SOUNDBOARD    
     SoundBoard();
 #else    
+#ifdef INTRO_ENABLE_ATTRACT_MODE
     PlayMusic(IntroMusic);
 	while (1)
 	{
@@ -706,6 +727,7 @@ void main()
 #endif
         UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
 	}
+#endif
 #endif
 
     //

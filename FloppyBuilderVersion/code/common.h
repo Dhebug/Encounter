@@ -88,6 +88,7 @@ extern char KeyClickHData[];
 extern char KeyClickLData[];
 extern char TypeWriterData[];
 extern char SpaceBarData[];
+extern char ScrollPageData[];
 
 extern unsigned int PsgfreqA;
 extern unsigned int PsgfreqB;
