@@ -3,6 +3,11 @@ Audio
 
 - [Audio](#audio)
 - [The AY-3-8912](#the-ay-3-8912)
+  - [Registers](#registers)
+  - [Mixer (Register 7)](#mixer-register-7)
+  - [Amplitude (Registers 8, 9 and 10)](#amplitude-registers-8-9-and-10)
+  - [Sample sound](#sample-sound)
+  - [Enveloppe (Registers 11, 12 and 13)](#enveloppe-registers-11-12-and-13)
   - [Sound Effects](#sound-effects)
     - [Commands](#commands)
     - [Example](#example)
@@ -13,32 +18,77 @@ Audio
     - [Using the music and events in the game](#using-the-music-and-events-in-the-game)
 
 # The AY-3-8912
-The Oric machines are equiped with a General Instruments AY-3-8912 sound generator chip.
+The Oric machines are equiped with a General Instruments AY-3-8912 sound generator chip running at 1mhz.
 
 This chip is relatively common and exists in various models made by both General Instruments (AY-xxx) and Yamaha (YM-xxx) used in the Atari ST, some Sinclair Spectrum, MSX as well as Amstrad computers.
 
 The chip in the Oric has three independent audio outputs but also a general purpose I/O port which on the Oric is connected to the keyboard[^1].
 
+If you are interested, you can find the [datasheet](https://library.defence-force.org/books/content/datasheet/general_instrument_ay-3-8912.pdf) in the Oric library.
+
 Here is the list of all the registers:
 
+## Registers
 |Register|Description|Content
 |-|-|-|
-|R0|Channel A Tone Period|8 bits
-|R1|^Channel A Tone Period|4 bits
-|R2|Channel B Tone Period|8 bits
-|R3|Channel B Tone Period|4bits
-|R4|Channel C Tone Period|8 bits
-|R5|Channel C Tone Period|4 bits
+|R0|Channel A Tone Period|Bottom 8 bits
+|R1||Top 4 bits
+|R2|Channel B Tone Period|Bottom 8 bits
+|R3||Top 4bits
+|R4|Channel C Tone Period|Bottom 8 bits
+|R5||Top 4 bits
 |R6|Noise Period|5 bits
-|R7|Mixer|xPCBACBA
+|R7|Mixer|See next table
 |R8|Channel A Amplitude|0-15 or 16
 |R9|Channel B Amplitude|0-15 or 16
 |R10|Channel C Amplitude|0-15 or 16
-|R11|Envelope Period|8 bits
-|R12|Envelope Period|8 bits
+|R11|Envelope Period|Bottom 8 bits
+|R12||Top 8 bits
 |R13|Envelope Shape|4 bits
 |R14|I/O port|8bits
 
+## Mixer (Register 7)
+The register 7 is important and requires a bit more details
+
+|Bit|Use|0|1
+|-|-|-|-|
+|0|Channel A tone register|ON|OFF|
+|1|Channel B tone register|ON|OFF|
+|2|Channel C tone register|ON|OFF|
+|3|Channel A noise register|ON|OFF|
+|4|Channel B noise register|ON|OFF|
+|5|Channel C noise register|ON|OFF|
+|6|I/O port direction|Input|Output|
+|7|Unused|x|x|
+
+The important thing to notice is that the logic is inverted: When the bit is set, the corresponding channel is MUTED, so if you want the sound to play, you need to have the value set to 0.
+
+## Amplitude (Registers 8, 9 and 10)
+Each of the 3 channels accepts a value between 0 and 15 controling the amplitude (volume) on this channel: A value of 0 represents a voltage of 0v on the output of the D/A convertd, while a value of 15 outputs 1v.
+
+The amplitude can also be set to the value 16, which means the volume is controlled by the envelope generator.
+
+When the three channels are used at the same time, we can then output a value from 0 to 3v on the D/A output.
+
+![D/A Converter Output](images/ay_volume_output.png)
+
+## Sample sound
+Not important for this project but relevant for people wanting to replay sampled sound: The fact that the muting is done by forcing high the channel output means that there is actually power going out, just that because it stays at a constant level, you do not hear any sound.
+
+But even when a channel is muted, you can still change the amplitude (volume), so you can actually replay sampled sounds by muting a channel to force it to always output voltage, then modulate the amplitude at the frequency you want to replay a sample.
+
+Unfortunately the amplitude levels are logarithmic, so you need to conver the volume to change it back to a linear value to avoid distortion.
+
+## Enveloppe (Registers 11, 12 and 13)
+The envelope generator is an alternative way to control the volume of a chanel by automatically increasing or lowering the volue to generate various triangular and saw-tooth shapes.
+
+![Envelope shape](images/ay_envelope.png)
+
+The system is quite limited, but works nicely to generate metalic or gritty sounds which require quick updates without using any CPU power.
+
+The main limitation is that there is only one genrator for all three chanels, so you can't have different shapes or frequencies on the different channels, and the volume cannot be controled anymore.
+
+One important thing to remember: Each time the value of register 13 (envelope shape) is modified, the whole envelope generation resets[^2].
 
 ## Sound Effects
 The sound effects system is using a custom system running at 200hz.
@@ -247,3 +297,5 @@ Then call **PlayMusic(IntroMusic);** to start the music and **EndMusic();** to s
 
 ---
 [^1]: This is quite important, if you don't set-up the chip registers properly, you may end up losing access to the keyboard, so be careful when playing with the registers 7 (which control the port direction) and 14 (which is used for the data transfer).
+
+[^2]: This is the main reason why when recording "register dumps" you need to precisely record if the register 13 was touched or not, else when being replayed the music will not sound quite right.
