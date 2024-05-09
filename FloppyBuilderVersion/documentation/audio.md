@@ -8,14 +8,15 @@ Audio
   - [Amplitude (Registers 8, 9 and 10)](#amplitude-registers-8-9-and-10)
   - [Sample sound](#sample-sound)
   - [Enveloppe (Registers 11, 12 and 13)](#enveloppe-registers-11-12-and-13)
-  - [Sound Effects](#sound-effects)
-    - [Commands](#commands)
-    - [Example](#example)
-    - [Creating new sounds](#creating-new-sounds)
-  - [Music](#music)
-    - [Exporting musics](#exporting-musics)
-    - [Exporting the events](#exporting-the-events)
-    - [Using the music and events in the game](#using-the-music-and-events-in-the-game)
+- [Sound Effects](#sound-effects)
+  - [Commands](#commands)
+  - [Example](#example)
+  - [Creating new sounds](#creating-new-sounds)
+- [Music](#music)
+  - [Exporting musics](#exporting-musics)
+  - [Exporting the events](#exporting-the-events)
+  - [Using the music and events in the game](#using-the-music-and-events-in-the-game)
+- [Combining Music and Sound](#combining-music-and-sound)
 
 # The AY-3-8912
 The Oric machines are equiped with a General Instruments AY-3-8912 sound generator chip running at 1mhz.
@@ -90,7 +91,7 @@ The main limitation is that there is only one genrator for all three chanels, so
 
 One important thing to remember: Each time the value of register 13 (envelope shape) is modified, the whole envelope generation resets[^2].
 
-## Sound Effects
+# Sound Effects
 The sound effects system is using a custom system running at 200hz.
 > [!NOTE]  
 > The sound effects can be disabled in [params.h](../code/params.h) by commenting out **ENABLE_SOUND_EFFECTS**
@@ -113,7 +114,7 @@ The reason is that some of the registers need to be updated at the bit level (li
 
 By having this "cache", we don't have to read back the values.
 
-### Commands
+## Commands
 ```c
 // Audio commands
 #define SOUND_NOT_PLAYING        255
@@ -127,7 +128,7 @@ By having this "cache", we don't have to read back the values.
 #define SOUND_COMMAND_ENDREPEAT  6      // Defines the end of a repeating block
 ```
 
-### Example
+## Example
 ```c ; A FREQ (LOW|HIGH), B FREQ (LOW|HIGH), C FREQ (LOW|HIGH), N FREQ, CONTROL, A VOL, B VOL, C VOL, ENV (LOW|HIGH)
 ;                                           0   1   2   3   4   5   6   7   8   9   10  11  12  13
 _ExplodeData    .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$1F,$07,$10,$10,$10,$00,$18,$00,SOUND_COMMAND_END
@@ -162,7 +163,7 @@ _SpaceBarData   .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$08,%1111011
                 .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END                    // Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 ```
-### Creating new sounds
+## Creating new sounds
 The Encounter project comes with a built-in "sound board" that can be used to quickly check the various sounds and how they interact with the music.
 You can easily enable the sound board by enabling both **INTRO_ENABLE_SOUNDBOARD** and **ENABLE_INTRO** defines in [params.h](../code/params.h)
 
@@ -182,6 +183,15 @@ I'll let you read the manual to understand how it works, but basically you can l
 
 Right now there is no direct way to import the sound in the engine, but that can be partly simplified by using the Export option.
 
+![AY Sound FX Editor v0.6 Export](images/ay_sound_fx_editor_export.png)
+
+The CVS export contains all the information for one channel:
+- Tone enabled (0/1)
+- Noise enabled (0/1)
+- Tone period (0-4095)
+- Noise period (0-31)
+- Volume (0-15)
+
 
 
 **See also:**
@@ -191,12 +201,12 @@ Right now there is no direct way to import the sound in the engine, but that can
 - Chema's [sound engine](https://forum.defence-force.org/viewtopic.php?p=9151#p9151)
  
 
-## Music
+# Music
 The musics are using the Arkos Tracker 2 format running at 50hz.
 > [!NOTE]  
 > The music can be disabled in [params.h](../code/params.h) by commenting out **ENABLE_MUSIC**
 
-### Exporting musics
+## Exporting musics
 The source format of the Arkos Tracker 2 tunes is "AKS", but to use on the Oric we need to convert them to the "AKY" format, using the 6502 source code variant.
 
 This export can be done in the Arkos Tracker using the Export menu, but can also be automated using the command line tools present in the "tool" folder of the tracker (these have been copied to be "bin" folder).
@@ -232,7 +242,7 @@ For OSDK compatibility, we select the **6502acme** export format, but with diffe
 
 > bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\<source file>.aks code\<target file>.s
 
-### Exporting the events
+## Exporting the events
 Events are not technically part of the music, but they are practical to synchronize the music with whatever happens on the screen.
 
 These need to be exported separately
@@ -278,7 +288,7 @@ Events_Loop
   .word Events_Loop // Loops here.
 ```
 
-### Using the music and events in the game
+## Using the music and events in the game
 First you need to have **akyplayer.s** in the project, and then include the music using something like that:
 
 ```c
@@ -294,6 +304,15 @@ events
 The first word is a pointer to the events table, followed by a byte containing a bitmask used by the sound mixer to determine how many channels from the musics should be taken into consideration, which is important when you want to play sound effects while a music track is playing.
 
 Then call **PlayMusic(IntroMusic);** to start the music and **EndMusic();** to stop it
+
+
+# Combining Music and Sound
+It's technically possible to replay sound effects using the Arkos tracker, but by running at 50hz that would not be sufficient to replay sounds of good enough quality.
+
+I had to come up with a way to share the sound system, which as indicated previously uses a bit mask on the music to indicate which registers are used by the music and which ones are free for use by the sound effects.
+
+The code uses two tables for the AY register values, plus some flags, definitely not optimal and may be revisited at some point.
+
 
 ---
 [^1]: This is quite important, if you don't set-up the chip registers properly, you may end up losing access to the keyboard, so be careful when playing with the registers 7 (which control the port direction) and 14 (which is used for the data transfer).
