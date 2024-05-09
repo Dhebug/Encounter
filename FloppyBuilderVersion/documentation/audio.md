@@ -19,6 +19,27 @@ This chip is relatively common and exists in various models made by both General
 
 The chip in the Oric has three independent audio outputs but also a general purpose I/O port which on the Oric is connected to the keyboard[^1].
 
+Here is the list of all the registers:
+
+|Register|Description|Content
+|-|-|-|
+|R0|Channel A Tone Period|8 bits
+|R1|^Channel A Tone Period|4 bits
+|R2|Channel B Tone Period|8 bits
+|R3|Channel B Tone Period|4bits
+|R4|Channel C Tone Period|8 bits
+|R5|Channel C Tone Period|4 bits
+|R6|Noise Period|5 bits
+|R7|Mixer|xPCBACBA
+|R8|Channel A Amplitude|0-15 or 16
+|R9|Channel B Amplitude|0-15 or 16
+|R10|Channel C Amplitude|0-15 or 16
+|R11|Envelope Period|8 bits
+|R12|Envelope Period|8 bits
+|R13|Envelope Shape|4 bits
+|R14|I/O port|8bits
+
+
 ## Sound Effects
 The sound effects system is using a custom system running at 200hz.
 > [!NOTE]  
