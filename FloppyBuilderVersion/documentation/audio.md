@@ -1,15 +1,23 @@
+Audio
+=====
 
 - [Audio](#audio)
+- [The AY-3-8912](#the-ay-3-8912)
   - [Sound Effects](#sound-effects)
     - [Commands](#commands)
     - [Example](#example)
+    - [Creating new sounds](#creating-new-sounds)
   - [Music](#music)
     - [Exporting musics](#exporting-musics)
     - [Exporting the events](#exporting-the-events)
     - [Using the music and events in the game](#using-the-music-and-events-in-the-game)
 
+# The AY-3-8912
+The Oric machines are equiped with a General Instruments AY-3-8912 sound generator chip.
 
-# Audio
+This chip is relatively common and exists in various models made by both General Instruments (AY-xxx) and Yamaha (YM-xxx) used in the Atari ST, some Sinclair Spectrum, MSX as well as Amstrad computers.
+
+The chip in the Oric has three independent audio outputs but also a general purpose I/O port which on the Oric is connected to the keyboard[^1].
 
 ## Sound Effects
 The sound effects system is using a custom system running at 200hz.
@@ -17,25 +25,25 @@ The sound effects system is using a custom system running at 200hz.
 > The sound effects can be disabled in [params.h](../code/params.h) by commenting out **ENABLE_SOUND_EFFECTS**
 
 For performance reason, the sound system maintains its own copy of the AY sound register, and then update the sound chip.
-```
+```c
 _PsgVirtualRegisters
-_PsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
-_PsgfreqB		.byt 0,0    ;  2 3    Chanel B Frequency
-_PsgfreqC		.byt 0,0    ;  4 5    Chanel C Frequency
-_PsgfreqNoise	.byt 0      ;  6      Chanel sound generator
-_Psgmixer		.byt 0      ;  7      Mixer/Selector
-_PsgvolumeA		.byt 0      ;  8      Volume A
-_PsgvolumeB		.byt 0      ;  9      Volume B
-_PsgvolumeC		.byt 0      ; 10      Volume C
-_PsgfreqShape   .byt 0,0    ; 11 12   Wave period
-_PsgenvShape    .byt 0      ; 13      Wave form
+_PsgfreqA     .byt 0,0    //  0 1    Chanel A Frequency
+_PsgfreqB     .byt 0,0    //  2 3    Chanel B Frequency
+_PsgfreqC     .byt 0,0    //  4 5    Chanel C Frequency
+_PsgfreqNoise .byt 0      //  6      Chanel sound generator
+_Psgmixer     .byt 0      //  7      Mixer/Selector
+_PsgvolumeA   .byt 0      //  8      Volume A
+_PsgvolumeB   .byt 0      //  9      Volume B
+_PsgvolumeC   .byt 0      // 10      Volume C
+_PsgfreqShape .byt 0,0    // 11 12   Wave period
+_PsgenvShape  .byt 0      // 13      Wave form
 ```
 The reason is that some of the registers need to be updated at the bit level (like the mixer register #7), and due to the way the AY chip is interfaced with the Oric, it requires some heavy VIA twidling to perform any operations.
 
 By having this "cache", we don't have to read back the values.
 
 ### Commands
-```
+```c
 // Audio commands
 #define SOUND_NOT_PLAYING        255
 
@@ -49,7 +57,7 @@ By having this "cache", we don't have to read back the values.
 ```
 
 ### Example
-```; A FREQ (LOW|HIGH), B FREQ (LOW|HIGH), C FREQ (LOW|HIGH), N FREQ, CONTROL, A VOL, B VOL, C VOL, ENV (LOW|HIGH)
+```c ; A FREQ (LOW|HIGH), B FREQ (LOW|HIGH), C FREQ (LOW|HIGH), N FREQ, CONTROL, A VOL, B VOL, C VOL, ENV (LOW|HIGH)
 ;                                           0   1   2   3   4   5   6   7   8   9   10  11  12  13
 _ExplodeData    .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$1F,$07,$10,$10,$10,$00,$18,$00,SOUND_COMMAND_END
 _ShootData      .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$0F,$07,$10,$10,$10,$00,$08,$00,SOUND_COMMAND_END
@@ -60,8 +68,8 @@ _KeyClickLData  .byt SOUND_COMMAND_SET_BANK,$2F,$00,$00,$00,$00,$00,$00,$3E,$10,
 _ZapData        .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$00,$3E,$0F,$00,$00,$00,$00,$00,SOUND_COMMAND_END_FRAME
                 .byt SOUND_COMMAND_REPEAT,40
                 .byt SOUND_COMMAND_ADD_VALUE,0,2,SOUND_COMMAND_END_FRAME
-                .byt SOUND_COMMAND_ENDREPEAT			
-                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END       ; Finally set the volume to 0
+                .byt SOUND_COMMAND_ENDREPEAT      
+                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END       // Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 
 // 200 hz version
@@ -71,7 +79,7 @@ _TypeWriterData .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$05,%1111011
                 .byt SOUND_COMMAND_SET_VALUE,$06,$02,SOUND_COMMAND_SET_VALUE,$08,$0D,SOUND_COMMAND_END_FRAME
                 .byt SOUND_COMMAND_SET_VALUE,$06,$01,SOUND_COMMAND_SET_VALUE,$08,$0a,SOUND_COMMAND_END_FRAME
                 .byt SOUND_COMMAND_SET_VALUE,$06,$01,SOUND_COMMAND_SET_VALUE,$08,$07,SOUND_COMMAND_END_FRAME
-                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END                    ; Finally set the volume to 0
+                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END                    // Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 
 _SpaceBarData   .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$08,%11110111,$03,$00,$00,$00,$00,$00,SOUND_COMMAND_END_FRAME
@@ -80,11 +88,37 @@ _SpaceBarData   .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$08,%1111011
                 .byt SOUND_COMMAND_SET_VALUE,$06,$05,SOUND_COMMAND_SET_VALUE,$08,$0D,SOUND_COMMAND_END_FRAME
                 .byt SOUND_COMMAND_SET_VALUE,$06,$04,SOUND_COMMAND_SET_VALUE,$08,$0a,SOUND_COMMAND_END_FRAME
                 .byt SOUND_COMMAND_SET_VALUE,$06,$03,SOUND_COMMAND_SET_VALUE,$08,$07,SOUND_COMMAND_END_FRAME
-                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END                    ; Finally set the volume to 0
+                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END                    // Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 ```
-**See:**
+### Creating new sounds
+The Encounter project comes with a built-in "sound board" that can be used to quickly check the various sounds and how they interact with the music.
+You can easily enable the sound board by enabling both **INTRO_ENABLE_SOUNDBOARD** and **ENABLE_INTRO** defines in [params.h](../code/params.h)
+
+To create new sounds this is not particularly practical because the project takes some time to rebuild, so instead I suggest using a combination of AY Sound FX Editor and SoundEffetEditor
+
+There are two versions of the AY Sound Fx Editor:
+- The [original one](https://shiru.untergrund.net/software.shtml) by Shiru
+- The [improved one](https://github.com/Threetwosevensixseven/ayfxedit-improved) by 32767
+
+In my tests I used the improved one, but had to use the [v0.6-full](https://github.com/Threetwosevensixseven/ayfxedit-improved/releases/tag/v0.6-full) release due to some missing Delphi dependencies (rtl250.bpl)
+
+After launching the program you should see something like that:
+
+![AY Sound FX Editor v0.6](images/ay_sound_fx_editor.png)
+
+I'll let you read the manual to understand how it works, but basically you can load and save sounds in a bank, navigate between the various sounds, and the editing is as simple as just using the mouse to click in the bars to change the values, then press ENTER to preview the sound.
+
+Right now there is no direct way to import the sound in the engine, but that can be partly simplified by using the Export option.
+
+
+
+**See also:**
 - [audio.s](../code/audio.s) for the sound engine implementation
+- Goyo's 2019 [soundgen](https://forum.defence-force.org/viewtopic.php?p=25483#p25483)
+- Rax's [SNDFX GEN](https://forum.defence-force.org/viewtopic.php?p=25431#p25431)
+- Chema's [sound engine](https://forum.defence-force.org/viewtopic.php?p=9151#p9151)
+ 
 
 ## Music
 The musics are using the Arkos Tracker 2 format running at 50hz.
@@ -159,29 +193,28 @@ For OSDK compatibility, we select the **6502acme** export format, but with diffe
 > bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\<source file>.aks code\<target file>.s
 
 Here is typically what an event file would look like:
-```
-; Events generated by Arkos Tracker 2.
-
+```c
+// Events generated by Arkos Tracker 2.
 Events
-	.word 769	; Wait for 768 frames.
-	.byt 0
+  .word 769 // Wait for 768 frames.
+  .byt 0
 
 Events_Loop
-	.word 769	; Wait for 768 frames.
-	.byt 0
+  .word 769 // Wait for 768 frames.
+  .byt 0
 
-	.word 0	; End of sequence.
-	.word Events_Loop	; Loops here.
+  .word 0   // End of sequence.
+  .word Events_Loop // Loops here.
 ```
 
 ### Using the music and events in the game
 First you need to have **akyplayer.s** in the project, and then include the music using something like that:
 
-```
+```c
 _IntroMusic
 .(
     .dw events
-    .byt 1+2+4+8+16+32        ; All the three channels are used
+    .byt 1+2+4+8+16+32        // All the three channels are used
 #include "intro_music.s"
 events
 #include "intro_music_events.s"
@@ -191,3 +224,5 @@ The first word is a pointer to the events table, followed by a byte containing a
 
 Then call **PlayMusic(IntroMusic);** to start the music and **EndMusic();** to stop it
 
+---
+[^1]: This is quite important, if you don't set-up the chip registers properly, you may end up losing access to the keyboard, so be careful when playing with the registers 7 (which control the port direction) and 14 (which is used for the data transfer).

@@ -574,15 +574,15 @@ PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE
 
 #ifdef PLY_AKY_USE_Noise                                       ;CONFIG SPECIFIC
     lda PLY_AKY_PSGREGISTER6         ; Register 6
-    sta _PsgfreqNoise
+    sta _MusicPsgfreqNoise
 #endif
 
 #ifdef PLY_CFG_UseHardwareSounds                               ;CONFIG SPECIFIC
     lda PLY_AKY_PSGREGISTER11         ; Register 11
-    sta _PsgfreqShape+0
+    sta _MusicPsgfreqShape+0
  
     lda PLY_AKY_PSGREGISTER12         ; Register 12 
-    sta _PsgfreqShape+1 
+    sta _MusicPsgfreqShape+1 
     
 PLY_AKY_PSGREGISTER13_CODE
     lda PLY_AKY_PSGREGISTER13
@@ -592,7 +592,9 @@ PLY_AKY_PSGREGISTER13_RETRIG
     sta PLY_AKY_PSGREGISTER13_RETRIG+1
 
     lda PLY_AKY_PSGREGISTER13         ; Register 13
-    sta _PsgenvShape                  ; Probably need a way to avoid the retrig of enveloppe in audio.s
+    sta _MusicPsgenvShape             ; Probably need a way to avoid the retrig of enveloppe in audio.s
+    lda #1
+    sta _MusicPsgenvReset             ; Indicate the IRQ code that yes we want to update the register
 PLY_AKY_PSGREGISTER13_END
 #endif
 PLY_AKY_EXIT 

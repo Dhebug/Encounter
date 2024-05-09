@@ -19,6 +19,7 @@ _PsgvolumeB		.byt 0      ;  9      Volume B
 _PsgvolumeC		.byt 0      ; 10      Volume C
 _PsgfreqShape   .byt 0,0    ; 11 12   Wave period
 _PsgenvShape    .byt 0      ; 13      Wave form
+_PsgenvReset    .byt 0      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
 
 _MusicPsgVirtualRegisters
 _MusicPsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
@@ -31,6 +32,7 @@ _MusicPsgvolumeB	.byt 0      ;  9      Volume B
 _MusicPsgvolumeC	.byt 0      ; 10      Volume C
 _MusicPsgfreqShape  .byt 0,0    ; 11 12   Wave period
 _MusicPsgenvShape   .byt 0      ; 13      Wave form
+_MusicPsgenvReset   .byt 0      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
 
 _MusicMixerMask     .byt 0      ; By default no channels are reserved for the music
 
@@ -71,6 +73,8 @@ copy_bank
     sty _PsgPlayPosition        ; Save the new command position
     lda #2
     sta _PsgNeedUpdate
+    lda #1
+    sta _PsgenvReset             ; Indicate that we want to force the Env register
     ;jsr SendBankToPsg           ; Sent all the sounds to the YM
     jmp read_command
 
@@ -145,6 +149,10 @@ CommandSetValue
     ldy _SoundRoutineTmp+0
     lda _SoundRoutineTmp+1
     sta _PsgVirtualRegisters,y
+    cpy #13
+    bne no_env_change
+    sty _PsgenvReset
+no_env_change    
     tax
 
     ; Update the real register
@@ -189,8 +197,10 @@ continue
     sta _PsgNeedUpdate
 
     ; Experimental code: Mixing sound effects with a music track
+    ; Voice ABC / Noise ABC / Enveloppe
 .(
-    lda _MusicMixerMask
+    lda _MusicMixerMask            ; E CBA CBA
+
     ror
     bcc end_channel_1_for_music 
     ldx _MusicPsgfreqA+0
@@ -221,6 +231,21 @@ end_channel_2_for_music
     stx _PsgvolumeC+0
 end_channel_3_for_music    
 
+    lda _MusicMixerMask            ; E CBA CBA
+    and #%1000                     ; E CBA
+    
+    beq end_enveloppe_for_music 
+    ldx _MusicPsgfreqShape+0
+    stx _PsgfreqShape+0
+    ldx _MusicPsgfreqShape+1
+    stx _PsgfreqShape+1
+    ldx _MusicPsgenvShape
+    stx _PsgenvShape
+    lda _MusicPsgenvReset
+    sta _PsgenvReset
+end_enveloppe_for_music    
+    
+
     lda _MusicMixerMask
     beq end_music_mixer
     eor #255
@@ -232,12 +257,6 @@ end_channel_3_for_music
     ora _Psgmixer 
     sta _Psgmixer
 
-    ldx _MusicPsgfreqShape+0
-    stx _PsgfreqShape+0
-    ldx _MusicPsgfreqShape+1
-    stx _PsgfreqShape+1
-    ldx _MusicPsgenvShape
-    stx _PsgenvShape
 end_music_mixer
 .)        
     ; Test
@@ -248,15 +267,23 @@ end_music_mixer
 
     ldy #0
 register_loop
-    ldx	_PsgVirtualRegisters,y
-
-    ; y=register number
-    ; x=value to write
-    jsr _PsgSetRegister
+    ldx	_PsgVirtualRegisters,y   
+    jsr _PsgSetRegister   ; y=register number /  x=value to write
 
     iny
-    cpy #14
+    cpy #13
     bne register_loop
+
+    ; Special case for the Envelope shape - Changing it resets the envelope
+    lda _PsgenvReset
+    beq skip_update
+
+    ldx	_PsgVirtualRegisters,y
+    jsr _PsgSetRegister   ; y=register number /  x=value to write
+
+    lda #0
+    sta _PsgenvReset      ; Reset, so we don't update it next time
+
 skip_update	
     rts
 .)
