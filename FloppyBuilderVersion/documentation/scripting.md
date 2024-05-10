@@ -36,11 +36,6 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [UNLOCK\_ACHIEVEMENT](#unlock_achievement)
   - [DISPLAY\_IMAGE](#display_image)
   - [DRAW\_BITMAP](#draw_bitmap)
-- [More complex examples](#more-complex-examples)
-  - [Jumps and conditions](#jumps-and-conditions)
-  - [Scene bubbles](#scene-bubbles)
-  - [Full screen items](#full-screen-items)
-  - [Animations](#animations)
 
 
 # Features
@@ -103,13 +98,18 @@ _gDescriptionDarkTunel
 #endif    
     END                              // End of script
 ```
+To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
+
+Delays are done with the **WAIT** instruction, while the **WHITE_BUBBLE** (or **BLACK_BUBBLE**) and **_BUBBLE_LINE** are used to display the text bubbles.
+
 When running the game, when the tunnel location is accessed, the player will see the following:
 
 ![](images/scripting_location_dark_tunnel.png)
 
 Because of the END instruction, this script stops there and is not active anymore, but a script does not have to finish, in which case it will keep running in the background until the player moves to another location or some internal flags ends up impacting the script flow.
 
-The market place script is more complex and shows a blinking neon sign[^1]:
+The market place script is more complex and shows a blinking neon sign[^1] done by updating the graphics on the scene, waiting a bit, updating graphics again, looping, etc...
+
 
 ```c
 _gDescriptionMarketPlace
@@ -131,23 +131,30 @@ blinky_shop                          // Label
 ```
 Which will result in the following sequence:
 
-![](images/scripting_location_blinking_sign.gif)
+![Blinking Neon Sign](images/scripting_location_blinking_sign.gif)
 
+The system does not support moving objects, but it's good enough for things that change state or cycling animations.
 
 ### Action scripts
 Action scripts are triggered when the player do some explicit action like using an object, looking at something, etc...
 
-Here is a very simple script which just prints a simple text if the player inspects the chemistry book
+Some of the actions done by the player, like reading the newspaper, or looking at the map in the library result in the game loading a fullscreen image, then show some comments about the action.
+
+Here is a very simple script which shows a picture of a newspaper with somme comments, if the player decides to read it
 ```c
-_gSceneActionInspectChemistryBook
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un livre épais avec des marques")
-#else    
-    INFO_MESSAGE("A thick book with some bookmarks")
-#endif    
+_gSceneActionReadNewsPaper
+    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
+    INFO_MESSAGE("I have to find her fast...")
+    WAIT(50*2)
+    INFO_MESSAGE("...I hope she is fine!")
     WAIT(50*2)
     END_AND_REFRESH
 ```
+And here is what that looks like in the game.
+
+![Reading newspaper](images/scripting_newspaper.png)
+
+Actions can also trigger other scripts, change variables, move things around, etc... 
 
 ### Game script
 > [!WARNING]  
@@ -286,6 +293,21 @@ Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address o
   (...)
 around_the_pit    
 ```
+---
+It is possible to use combinations of JUMP_IF_TRUE and JUMP_IF_FALSE to handle more complex scenearios, it's not super elegant but it works just fine.
+
+In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
+```c
+  // Is there a rope?
+  JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+  // Ok there is a rope, but is it attached to the tree?
+  JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+no_rope    
+  JUMP(digging_for_gold);     // Generic message if the ladder or rope are not present
+rope_attached_to_tree    
+  (...)
+digging_for_gold
+```
 
 ---
 ## Operators
@@ -380,74 +402,6 @@ Nine bytes operator containg the COMMAND_BITMAP opcode, followed by the id of th
   DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
 ```  
 
-# More complex examples
-Obviously a proper script would use a combination of all these commands.
-
-## Jumps and conditions 
-Scripts by default are executed instruction by instruction, but it's possible to jump around.
-
-In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
-```c
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
-    JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-no_rope    
-    JUMP(digging_for_gold);            // Generic message if the ladder or rope are not present
-rope_attached_to_tree    
-    (...)
-digging_for_gold
-```
-
-## Scene bubbles
-To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
-
-Delays are done with the COMMAND_WAIT instruction, while the COMMAND_WHITE_BUBBLE and COMMAND_BLACK_BUBBLE is used to display the text bubbles
-```c
-_gDescriptionRoad
-    WAIT(DELAY_FIRST_BUBBLE)                   // Initial delay
-    WHITE_BUBBLE(2)                            // "Draw black on white background speech bubble", two text entries
-    _BUBBLE_LINE(4,100,0,"All roads lead...")  // X position, Y position, vertical text offset, first text
-    _BUBBLE_LINE(4,106,4,"...somewhere?")      // X position, Y position, vertical text offset, second text
-    END                                        // End of script
-```
-
-## Full screen items
-Some of the actions done by the player, like reading the newspaper, or looking at the map in the library result in the game loading a fullscreen image, then show some comments about the action.
-
-These are done by small scripts
-```c
-  (...)
-  // Show the newspaper content
-  PlayStream(gSceneActionReadNewsPaper);
-  (...)
-
-_gSceneActionReadNewsPaper
-    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
-    INFO_MESSAGE("I have to find her fast...")
-    WAIT(50*2)
-    INFO_MESSAGE("...I hope she is fine!")
-    WAIT(50*2)
-    END
-```
-
-## Animations 
-Animations are done by updating the graphics on the scene, waiting a bit, updating graphics again, looping, etc...
-
-The system does not support moving objects, but it's good enough for things that change state or cycling animations.
-
-```c
-_gDescriptionMarketPlace
-    WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(2)
-    _BUBBLE_LINE(4,100,0,"The market place")
-    _BUBBLE_LINE(4,106,4,"is deserted")
-blinky_shop
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    // Draw the Fish Shop "grayed out"
-    WAIT(50) 
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    // Draw the Fish Shop "fully drawn"
-    WAIT(50)
-    JUMP(blinky_shop)
-    END
-```
 
 
 **See:**
