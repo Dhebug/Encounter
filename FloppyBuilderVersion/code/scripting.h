@@ -41,15 +41,22 @@
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 #define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
 
+// Flow control
 #define END                                  .byt COMMAND_END
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
+
+// Text
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
+#define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
+#define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
 
+// Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 
 // Items

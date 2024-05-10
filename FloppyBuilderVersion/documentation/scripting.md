@@ -5,7 +5,11 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
 
 - [Scripting](#scripting)
 - [Features](#features)
-- [The concept](#the-concept)
+  - [The concept](#the-concept)
+  - [Types of scripts](#types-of-scripts)
+    - [Location scripts](#location-scripts)
+    - [Action scripts](#action-scripts)
+    - [Game script](#game-script)
 - [Commands](#commands)
   - [END](#end)
   - [END\_AND\_REFRESH](#end_and_refresh)
@@ -40,11 +44,11 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
 
 
 # Features
-The main feature of the scripts is to populate the scene images with the proper content, like speech bubles and items, or draw the game-over sequence.
+The main feature of the scripts is to populate the scene images with the proper content, like speech bubles and items, or draw the game-over sequence, but also to handle in a memory efficient way the most common actions the player can do (like use an item, read something, etc...)
 
 The [location](locations.md) structure contains a **script** field with a pointer to a script executed each time a scene is drawn.
 
-# The concept
+## The concept
 A script is just a sequence of commands, a byte stream really, with a final "end" command.
 
 A stream is launched with the **PlayStream** function, and the bytecode execute all the commands immediately until it either reach the end of the stream or encounter a "Wait" instruction, this basically is the equivalent of having a "setup" phase followed by some more stuff happening later.
@@ -52,6 +56,107 @@ A stream is launched with the **PlayStream** function, and the bytecode execute 
 Typically the setup will be in charge of checking the state of the game to draw and print different elements depending of the context, and the rest will be these description bubbles which appear over time to make the game "more alive" than a standard text adventure game.
 
 Scripts can also loop and branch, basic conditions are supported.
+
+## Types of scripts
+Technically, all the scripts can use all the commands, but there are three main use cases for scripts:
+### Location scripts
+Each of the in-game [location](locations.md) has an associated script pointer, which in Encounter is used to display the description bubbles, draw relevant items in the scene, or check for game-over conditions.
+
+Let's examine two of the first locations, the **market place** and the **dark tunel**, these are defined like that in the [game_data.c](../code/game_data.c):
+```c
+location gLocations[e_LOCATION_COUNT_] =
+{ 
+  { // e_LOCATION_MARKETPLACE     
+    e_LOCATION_DARKTUNNEL,      // Location to the North
+    e_LOCATION_NONE,            // Location to the South
+    e_LOCATION_DARKALLEY,       // Location to the East
+    e_LOCATION_NONE,            // Location to the West
+    e_LOCATION_NONE,            // Location going up
+    e_LOCATION_NONE,            // Location going down
+    gTextLocationMarketPlace,   // Description
+    gDescriptionMarketPlace     // Script
+  },         
+  { // e_LOCATION_DARKTUNNEL 
+    e_LOCATION_WOODEDAVENUE,    // Location to the North
+    e_LOCATION_MARKETPLACE,     // Location to the South
+    e_LOCATION_NONE,            // Location to the East
+    e_LOCATION_NONE,            // Location to the West
+    e_LOCATION_NONE,            // Location going up
+    e_LOCATION_NONE,            // Location going down
+    gTextLocationDarkTunel,     // Description
+    gDescriptionDarkTunel       // Script
+  },
+  (...)
+}
+```
+The dark tunel script is the simplest one, it just shows some text bubbles commenting about the scene:
+```c
+_gDescriptionDarkTunel
+    WAIT(DELAY_FIRST_BUBBLE)         // Wait about a quarter of a second
+    WHITE_BUBBLE(2)                  // This bubble has two line entries
+#ifdef LANGUAGE_FR                   // Line entries for the French version
+    _BUBBLE_LINE(4,4,0,"Un tunnel ordinaire: sombre,")
+    _BUBBLE_LINE(4,13,1,"humide et inquiétant.")
+#else                                // Line entries for other versions (English is default)
+    _BUBBLE_LINE(4,4,0,"Like most tunnels: dark, damp,")
+    _BUBBLE_LINE(4,13,1,"and somewhat scary.")
+#endif    
+    END                              // End of script
+```
+When running the game, when the tunnel location is accessed, the player will see the following:
+
+![](images/scripting_location_dark_tunnel.png)
+
+Because of the END instruction, this script stops there and is not active anymore, but a script does not have to finish, in which case it will keep running in the background until the player moves to another location or some internal flags ends up impacting the script flow.
+
+The market place script is more complex and shows a blinking neon sign[^1]:
+
+```c
+_gDescriptionMarketPlace
+    WAIT(DELAY_FIRST_BUBBLE)         // Wait about a quarter of a second
+    WHITE_BUBBLE(2)                  // This bubble has two line entries
+#ifdef LANGUAGE_FR                   // Line entries for the French version    
+    _BUBBLE_LINE(4,100,0,"La place du marché")
+    _BUBBLE_LINE(4,106,4,"est désertée")
+#else                                // Line entries for other versions (English is default)
+    _BUBBLE_LINE(4,100,0,"The market place")
+    _BUBBLE_LINE(4,106,4,"is deserted")
+#endif    
+blinky_shop                          // Label
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    // Draw the Fish Shop "grayed out"
+    WAIT(50)                         // Wait one second
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    // Draw the Fish Shop "fully drawn"
+    WAIT(50)                         // Wait one second
+    JUMP(blinky_shop)                // Jump to the label
+```
+Which will result in the following sequence:
+
+![](images/scripting_location_blinking_sign.gif)
+
+
+### Action scripts
+Action scripts are triggered when the player do some explicit action like using an object, looking at something, etc...
+
+Here is a very simple script which just prints a simple text if the player inspects the chemistry book
+```c
+_gSceneActionInspectChemistryBook
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un livre épais avec des marques")
+#else    
+    INFO_MESSAGE("A thick book with some bookmarks")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+```
+
+### Game script
+> [!WARNING]  
+> TODO: This section is possibly not valid anymore.
+
+There is only a single game script for the entire game, but technically it should be trivial to have multiple ones or change it at run time.
+
+The purpose of this script is to do book-keeping and adjustments independently of where the player is located.
+
 
 # Commands
 The commands are all defined in [scripting.h](../code/scripting.h) and implemented in [bytestream.s](../code/bytestream.s) and most of them use references to locations and item ids defined in [game_enums.h](../code/game_enums.h).
@@ -89,26 +194,36 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define _COMMAND_COUNT          23
 
 // Operator opcodes
-#define OPERATOR_CHECK_ITEM_LOCATION 0
-#define OPERATOR_CHECK_ITEM_FLAG     1
+#define OPERATOR_CHECK_ITEM_LOCATION   0
+#define OPERATOR_CHECK_ITEM_FLAG       1
+#define OPERATOR_CHECK_PLAYER_LOCATION 2
 
+#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
+#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+#define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
+
+// Flow control
 #define END                                  .byt COMMAND_END
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
-#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
-#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+
+// Text
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
+#define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
+#define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
 
+// Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
 #define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
-#define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,flags
+#define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
 #define SET_ITEM_DESCRIPTION(item,description)  .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
 
 // Locations
@@ -288,11 +403,11 @@ To provide some cartoony feeling, the game is using the scripting system to disp
 Delays are done with the COMMAND_WAIT instruction, while the COMMAND_WHITE_BUBBLE and COMMAND_BLACK_BUBBLE is used to display the text bubbles
 ```c
 _gDescriptionRoad
-    WAIT(DELAY_FIRST_BUBBLE)              // Initial delay
-    .byt COMMAND_WHITE_BUBBLE,2           // "Draw black on white background speech bubble", two text entries
-    .byt 4,100,0,"All roads lead...",0    // X position, Y position, vertical text offset, first text, null terminator
-    .byt 4,106,4,"...somewhere?",0        // X position, Y position, vertical text offset, second text, null terminator
-    END                                   // End of script
+    WAIT(DELAY_FIRST_BUBBLE)                   // Initial delay
+    WHITE_BUBBLE(2)                            // "Draw black on white background speech bubble", two text entries
+    _BUBBLE_LINE(4,100,0,"All roads lead...")  // X position, Y position, vertical text offset, first text
+    _BUBBLE_LINE(4,106,4,"...somewhere?")      // X position, Y position, vertical text offset, second text
+    END                                        // End of script
 ```
 
 ## Full screen items
@@ -322,9 +437,9 @@ The system does not support moving objects, but it's good enough for things that
 ```c
 _gDescriptionMarketPlace
     WAIT(DELAY_FIRST_BUBBLE)
-    .byt COMMAND_WHITE_BUBBLE,2
-    .byt 4,100,0,"The market place",0
-    .byt 4,106,4,"is deserted",0
+    WHITE_BUBBLE(2)
+    _BUBBLE_LINE(4,100,0,"The market place")
+    _BUBBLE_LINE(4,106,4,"is deserted")
 blinky_shop
     DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    // Draw the Fish Shop "grayed out"
     WAIT(50) 
@@ -337,3 +452,6 @@ blinky_shop
 
 **See:**
 - [game_enums.h](../code/game_enums.h) for the list of all locations
+
+---
+[^1]: The syntax to draw bitmaps is horrible, but it will be simplified at some point
