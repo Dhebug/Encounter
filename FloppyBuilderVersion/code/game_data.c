@@ -410,12 +410,3 @@ stream_mapping gUseItemMappingsArray[] =
     { 255, gSceneActionNothingSpecial }  // End Marker
 };
 
-stream_mapping gMoveItemsMappingsArray[] =
-{    
-    { e_LOCATION_ENTRANCEHALL       , gMoveItemsToEntranceHall },
-    { e_LOCATION_LARGE_STAIRCASE    , gMoveItemsToStaircase },
-    { e_LOCATION_OUTSIDE_PIT        , gMoveItemsToOutsidePit },
-    { e_LOCATION_INSIDE_PIT         , gMoveItemsToInsidePit },
-
-    { 255, gDoNothingScript }  // End Marker
-};

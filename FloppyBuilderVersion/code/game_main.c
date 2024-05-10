@@ -141,7 +141,6 @@ void PrintSceneInformation()
 void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
-    DispatchStream(gMoveItemsMappingsArray,gCurrentLocation);
 
 	ClearMessageWindow(16+4);
 
@@ -151,44 +150,14 @@ void LoadScene()
 	memset(ImageBuffer,64+1,40*128);
 #endif	
 
-
-
-#if 0	  // Sprite test
-
-#if 1
-	LoadFileAt(LOADER_SPRITE_DOG,SecondImageBuffer);			// The dog is a 240x128 image with all the current dog graphics
-
-	gDrawWidth	 	= 40;
-	gDrawHeight	 	= 128;
-	gSourceStride   = 40;
-	gDrawSourceAddress 	= SecondImageBuffer;
-	gDrawAddress 	= ImageBuffer;
-	//gDrawAddress 		= (unsigned char*)0xa000;
-
-	BlitSprite();
-#else	
-	LoadFileAt(LOADER_SPRITE_THE_END,SecondImageBuffer);		// The End is a 120x95 image -> 95 lines of 20 bytes
-
-	gDrawWidth	 		= 20;
-	gDrawHeight	 		= 95;
-	gSourceStride   	= 20;
-	gDrawSourceAddress 	= SecondImageBuffer;
-	gDrawAddress 		= ImageBuffer+10+40*16;
-	//gDrawAddress 		= (unsigned char*)0xa000+10+40*16;
-
-	BlitSprite();
-#endif
-#endif
-
-	PrintSceneInformation();
-
-#if 1
 	// Set the byte stream pointer
 	SetByteStream(gCurrentLocationPtr->script);
 
 	// And run the first set of commands for this scene
 	HandleByteStream();
-#endif
+
+    // We need to print the scene information *after* the script has been launched, else the moved items will not appear until the next refresh
+	PrintSceneInformation();
 
 	BlitBufferToHiresWindow();
 

@@ -449,6 +449,19 @@ _gDescriptionNarrowPath
 
 _gDescriptionInThePit
 .(
+    ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT)
+end_rope_check
+
+    ; If the ladder is outside the pit and is in place, we move it inside the pit
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT)
+end_ladder_check
+
+    ; Check items
     SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_NONE)      ; Disable the UP direction
 
     JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
@@ -499,6 +512,19 @@ rope_attached_to_tree
 
 _gDescriptionOutsidePit
 .(
+    ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
+end_rope_check
+
+    ; If the ladder is inside the pit and is in place, we move it outside the pit
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+end_ladder_check
+
+    ; Check items
     JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
     JUMP_IF_TRUE(ladder_in_hole,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
 no_ladder
@@ -688,6 +714,11 @@ _gDescriptionAppleOrchard
 
 _gDescriptionEntranceHall
 .(
+    ; If the dog is in the staircase, we move it to the entrance hall to simplify the rest of the code
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL)
+end_dog_check
+
     ; Is there a dog in the entrance
     JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
 
@@ -747,6 +778,11 @@ end_dog
 
 _gDescriptionStaircase
 .(
+    ; If the dog is in the entrance hall, we move it to the staircase to simplify the rest of the code
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE)
+end_dog_check
+
     ; Is there a dog in the entrance
     JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
 
@@ -1389,56 +1425,6 @@ around_the_pit
 .)
 
 
-
-_gMoveItemsToEntranceHall
-.(
-    ; If the dog is in the staircase, we move it to the entrance hall
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL)
-end_dog_check
-    END
-.)
-
-_gMoveItemsToStaircase
-.(
-    ; If the dog is in the entrance hall, we move it to the staircase
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE)
-end_dog_check
-    END
-.)
-
-_gMoveItemsToOutsidePit
-.(
-    ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
-end_rope_check
-
-    ; If the ladder is inside the pit and is in place, we move it outside the pit
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
-end_ladder_check
-    END
-.)
-
-_gMoveItemsToInsidePit
-.(
-    ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT)
-end_rope_check
-
-    ; If the ladder is outside the pit and is in place, we move it inside the pit
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT)
-end_ladder_check
-    END
-.)
 
 _gDoNothingScript
 .(
