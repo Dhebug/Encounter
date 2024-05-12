@@ -1246,7 +1246,7 @@ _gSceneActionReadChemistryBook
     WAIT(50*2)
     // If the recipes were not yet found, they now appear at the current location
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_NONE))
-    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_LIBRARY)
+    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_INVENTORY)
 recipe_already_found
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     END_AND_REFRESH
@@ -1433,6 +1433,68 @@ _gDoNothingScript
 
 
 _EndSceneActions
+
+
+_gReadItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Newspaper          , _gSceneActionReadNewsPaper)
+    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _gSceneActionReadHandWrittenNote)
+    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _gSceneActionReadChemistryRecipes)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
+    VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
+
+
+_gCloseItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionCloseFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionCloseMedicineCabinet )
+    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+
+_gInspectItemMappingsArray
+    VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _gSceneActionInspectMap)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionInspectChemistryBook)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionInspectGame)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionInspectFridgeDoor)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionInspectMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_PlasticBag         , _gSceneActionExaminePlasticBag)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+
+_gUseItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Ladder             , _gSceneActionUseLadder)
+    VALUE_MAPPING(e_ITEM_Rope               , _gSceneActionUseRope)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionPlayGame)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+
+
+
+_gActionMappingsArray   
+    VALUE_MAPPING(e_WORD_NORTH, _PlayerMove)
+    VALUE_MAPPING(e_WORD_SOUTH, _PlayerMove)
+    VALUE_MAPPING(e_WORD_EAST, _PlayerMove)
+    VALUE_MAPPING(e_WORD_WEST, _PlayerMove)
+    VALUE_MAPPING(e_WORD_UP, _PlayerMove)
+    VALUE_MAPPING(e_WORD_DOWN, _PlayerMove)
+
+    VALUE_MAPPING(e_WORD_TAKE, _TakeItem)
+
+    VALUE_MAPPING(e_WORD_DROP, _DropItem)
+    VALUE_MAPPING(e_WORD_READ, _ReadItem)
+    VALUE_MAPPING(e_WORD_USE, _UseItem)
+    VALUE_MAPPING(e_WORD_COMBINE, _CombineItems)
+    VALUE_MAPPING(e_WORD_OPEN, _OpenItem)
+    VALUE_MAPPING(e_WORD_CLOSE, _CloseItem)
+
+    VALUE_MAPPING(e_WORD_LOOK, _InspectItem)
+    VALUE_MAPPING(e_WORD_KILL, _Kill)
+    VALUE_MAPPING(e_WORD_FRISK, _Frisk)
+    VALUE_MAPPING(e_WORD_SEARCH, _Frisk)
+    VALUE_MAPPING(e_WORD_THROW, _ThrowItem)
+#ifdef ENABLE_CHEATS
+    VALUE_MAPPING(e_WORD_REVIVE, _Revive)
+    VALUE_MAPPING(e_WORD_TICKLE, _Tickle)
+    VALUE_MAPPING(e_WORD_INVOKE, _Invoke)
+#endif
+    VALUE_MAPPING(e_WORD_COUNT_, 0)
+    // End Marker
 
 
 _EndGameTextData

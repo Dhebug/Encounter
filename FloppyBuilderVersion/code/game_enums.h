@@ -61,8 +61,7 @@
 #define e_LOCATION_NONE             255                  // To indicate we can't go in this particular location
 
 
-// Define the various items
-// Define the various items
+// Define the various items, followed by instructions to simplify the parser
 // Containers first
 #define	e_ITEM_TobaccoTin    		 0          // an empty tobacco tin
 #define	e_ITEM_Bucket        		 1          // a wooden bucket
@@ -119,8 +118,39 @@
 #define e_ITEM_Curtain               46         // a thick curtain
 #define e_ITEM_Medicinecabinet       47         // a thick curtain
 #define e_ITEM_SedativePills         48         // some sedative pills
-#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER
-// End marker
+#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER - Free until 127, after are action words
+// For practical reasons we reuse the item ids in the list of words followed by the actual instructions
+// Directions: These have to be in the same order as the DIRECTIONS enum
+#define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_
+#define	e_WORD_SOUTH                 129
+#define	e_WORD_EAST                  130
+#define	e_WORD_WEST                  131
+#define	e_WORD_UP                    132
+#define	e_WORD_DOWN                  133
+// In-game instructions
+#define	e_WORD_TAKE                  134
+#define	e_WORD_DROP                  135
+#define	e_WORD_USE                   136
+#define	e_WORD_COMBINE               137
+#define	e_WORD_OPEN                  138
+#define	e_WORD_CLOSE                 139
+#define	e_WORD_READ                  140
+#define	e_WORD_LOOK                  141
+#define	e_WORD_KILL                  142
+#define	e_WORD_FRISK                 143
+#define	e_WORD_SEARCH                144
+#define	e_WORD_THROW                 145
+#ifdef ENABLE_CHEATS
+#define	e_WORD_REVIVE                146
+#define	e_WORD_TICKLE                147
+#define	e_WORD_INVOKE                148
+#endif    
+// Meta instructions
+#define	e_WORD_QUIT                  149
+#define	e_WORD_COUNT_                150
+// Additional values for the parser
+#define	e_WORD_CONTINUE              151
+
 
 // Flags for the items
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special

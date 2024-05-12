@@ -90,3 +90,9 @@
 #define FLAG_END_STREAM          1
 #define FLAG_WAIT                2
 #define FLAG_REFRESH_SCENE       4
+
+
+//
+#define VALUE_MAPPING(value,address)       .byt value,<address,>address
+
+

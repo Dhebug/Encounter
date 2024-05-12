@@ -176,24 +176,7 @@ void PlayerMove()
 
 WORDS ProcessContainerAnswer()
 {
-	// Check the first word: We expects a container id
-	switch (gWordBuffer[0])
-	{
-	case e_ITEM_TobaccoTin:      // an empty tobacco tin
-	case e_ITEM_Bucket:          // a wooden bucket
-	case e_ITEM_CardboardBox:    // a cardboard box
-	case e_ITEM_FishingNet:      // a fishing net
-	case e_ITEM_PlasticBag:      // a plastic bag
-	case e_ITEM_SmallBottle:   	 // a small bottle
-		// We return the name of the object
-		return gWordBuffer[0];
-
-	default:
-		// No idea what that is, but definitely not a container
-		return e_WORD_QUIT;
-	}
-	// Continue
- 	return e_WORD_CONTINUE;
+    return gWordBuffer[0];
 }
 
 
@@ -224,7 +207,7 @@ void TakeItem()
     {
         // Requires a container
         WORDS containerId = AskInput(gTextCarryInWhat,ProcessContainerAnswer,1 );    // "Carry it in what?"
-        if ( (containerId == e_WORD_QUIT) || (!(itemPtr->usable_containers & (1<<containerId))) )
+        if ( (containerId >= e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
         {
             PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
             return;

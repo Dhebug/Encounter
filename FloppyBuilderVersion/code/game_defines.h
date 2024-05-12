@@ -2,50 +2,7 @@
 #include "game_enums.h"
 #include "params.h"
 
-
-// For practical reasons we reuse the item ids in the list of words
-// followed by the actual instructions
-typedef enum 
-{
-	// [0-44] Items 
-	// see enum ITEMS
-
-	// [45-51] Directions: These have to be in the same order as the DIRECTIONS enum
-    e_WORD_NORTH = e_ITEM_COUNT_,
-    e_WORD_SOUTH ,
-    e_WORD_EAST  ,
-    e_WORD_WEST  ,
-    e_WORD_UP    ,
-    e_WORD_DOWN  ,
-
-	// In-game instructions
-	e_WORD_TAKE  ,
-	e_WORD_DROP  ,
-    e_WORD_USE   ,
-    e_WORD_COMBINE, 
-    e_WORD_OPEN  ,
-    e_WORD_CLOSE ,
-    e_WORD_READ  ,
-    e_WORD_LOOK  ,
-    e_WORD_KILL  ,
-    e_WORD_FRISK ,
-    e_WORD_SEARCH,
-    e_WORD_THROW, 
-#ifdef ENABLE_CHEATS
-    e_WORD_REVIVE,
-    e_WORD_TICKLE,
-    e_WORD_INVOKE,
-#endif    
-
-	// Meta instructions
-	e_WORD_QUIT  ,
-	e_WORD_COUNT_,
-
-	// Additional values for the parser
-	e_WORD_CONTINUE
-
-} WORDS;
-
+typedef unsigned char WORDS;
 
 extern unsigned char gCurrentLocation;
 
@@ -281,31 +238,6 @@ extern const char gTextItemSedativePills[];           // "some sedative pills"
 extern const char gTextItemSedativeLacedMeat[];       // "druggd meat"
 
 // Scene actions
-extern const char gSceneActionReadNewsPaper[];
-extern const char gSceneActionReadHandWrittenNote[];
-extern const char gSceneActionReadChemistryRecipes[];
-extern const char gSceneActionReadChemistryBook[];
-extern const char gSceneActionInspectMap[];
-extern const char gSceneActionInspectGame[];
-extern const char gSceneActionInspectChemistryBook[];
-extern const char gSceneActionInspectFridgeDoor[];
-extern const char gSceneActionInspectMedicineCabinet[];
-
-extern const char gSceneActionPlayGame[];
 extern const char gSceneActionDogEatingMeat[];
-extern const char gSceneActionExaminePlasticBag[];
 extern const char gSceneActionDoveEatingBread[];
-
-extern const char gSceneActionCloseCurtain[];
-extern const char gSceneActionCloseFridge[];
-extern const char gSceneActionCloseMedicineCabinet[];
-
-extern const char gSceneActionCannotDo[];
-extern const char gSceneActionCannotRead[];
-extern const char gSceneActionNothingSpecial[];
-
-extern const char gSceneActionUseLadder[];
-extern const char gSceneActionUseRope[];
-
-extern const char gDoNothingScript[];
 
