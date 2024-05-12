@@ -110,14 +110,6 @@ void PrintSceneObjects()
 }
 
 
-WORDS ProcessPlayerNameAnswer()
-{
-	// We accept anything, it's the player name so...
-	return e_WORD_QUIT;
-}
-
-
-
 void PrintSceneInformation()
 {
 	// Print the description of the place at the top (centered)
