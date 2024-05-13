@@ -34,6 +34,7 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [SET\_LOCATION\_DIRECTION](#set_location_direction)
   - [Scoring and achievements](#scoring-and-achievements)
     - [UNLOCK\_ACHIEVEMENT](#unlock_achievement)
+    - [INCREASE\_SCORE](#increase_score)
   - [DISPLAY\_IMAGE](#display_image)
   - [DRAW\_BITMAP](#draw_bitmap)
 
@@ -198,7 +199,8 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define COMMAND_SET_ITEM_DESCRIPTION 20
 #define COMMAND_SET_LOCATION_DIRECTION 21
 #define COMMAND_UNLOCK_ACHIEVEMENT 22
-#define _COMMAND_COUNT          23
+#define COMMAND_INCREASE_SCORE 23
+#define _COMMAND_COUNT          24
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -226,6 +228,7 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
+#define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
@@ -385,6 +388,14 @@ This would typically be used when the player does something worth remembering.
 ```c
   // Achievement unlocked: Fell into the pit
   UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)
+```
+
+### INCREASE_SCORE
+Two bytes command containg the COMMAND_INCREASE_SCORE opcode, followed by the number of points to add to the score.
+This would typically be used when the player does something worthy of rewarding for the high-score.
+```c
+  // Give 50 points to the player
+  INCREASE_SCORE(50)
 ```
 
 ---
