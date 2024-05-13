@@ -368,40 +368,6 @@ void Kill()
 }
 
 
-void Frisk()
-{
-    unsigned char itemId=gWordBuffer[1];
-    item* itemPtr=&gItems[itemId];
-    if (itemPtr->location != gCurrentLocation)
-    {
-        PrintErrorMessage(gTextErrorItsNotHere);   // "It's not here"
-    }
-    else
-    {
-        // Eventual list of things we can search
-        switch (itemId)
-        {
-        case e_ITEM_Thug:
-            if (!(itemPtr->flags & ITEM_FLAG_DISABLED))
-            {
-                PrintErrorMessage(gTextErrorShouldSubdue);    // "I should subdue him first"
-            }
-            else
-            if (gItems[e_ITEM_Pistol].location!=e_LOCATION_NONE)
-            {
-                PrintErrorMessage(gTextErrorAlreadySearched);  // "You've already frisked him"
-            }
-            else
-            {
-                gScore+=50;
-                gItems[e_ITEM_Pistol].location = e_LOCATION_MASTERBEDROOM;
-                PrintInformationMessage(gTextFoundSomething);                // "You found something interesting"
-                LoadScene();
-            }
-            break;
-        }
-    }
-}
 
 #ifdef ENABLE_CHEATS
 void Revive()
@@ -619,6 +585,16 @@ void UseItem()
 	if (ItemCheck(itemId))
     {
         DispatchStream(gUseItemMappingsArray,itemId);
+	}
+}
+
+
+void Frisk()
+{
+    unsigned char itemId = gWordBuffer[1];    
+	if (ItemCheck(itemId))
+    {
+        DispatchStream(gSearchtemMappingsArray,itemId);
 	}
 }
 

@@ -23,7 +23,6 @@ _gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
 _gTextWaterDrainsAways      .byt "L'eau s'écoule",0
 _gTextDogLying              .byt "un chien immobile",0
 _gTextDeadThug              .byt "un malfaiteur mort",0
-_gTextFoundSomething        .byt "Vous avez trouvé quelque chose",0
 _gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
 _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
 _gTextNotDead               .byt "Pas mort",0                                // Debugging text
@@ -40,7 +39,6 @@ _gTextPetrolEvaporates      .byt "The petrol evaporates",0
 _gTextWaterDrainsAways      .byt "The water drains away",0
 _gTextDogLying              .byt "a dog lying",0
 _gTextDeadThug              .byt "a dead thug",0
-_gTextFoundSomething        .byt "You found something interesting",0
 _gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
 _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
 _gTextNotDead               .byt "Not dead",0                                // Debugging text
@@ -71,8 +69,6 @@ _gTextErrorNeedPositionned  .byt "Ca doit d'abort être en place",0
 _gTextErrorItsNotHere       .byt "Ca n'est pas là",0
 _gTextErrorAlreadyDealtWith .byt "Plus un problème",0
 _gTextErrorShouldSaveGirl   .byt "Vous êtes censé la sauver",0
-_gTextErrorShouldSubdue     .byt "Il faut d'abord le maitriser",0
-_gTextErrorAlreadySearched  .byt "Vous l'avez déjà fouillé",0
 _gTextErrorInappropriate    .byt "Probablement inapproprié",0
 _gTextErrorDeadDontMove     .byt "Les morts ne bougent pas",0
 #else
@@ -94,8 +90,6 @@ _gTextErrorNeedPositionned  .byt "It needs to be positionned first",0
 _gTextErrorItsNotHere       .byt "It's not here",0
 _gTextErrorAlreadyDealtWith .byt "Not a problem anymore",0
 _gTextErrorShouldSaveGirl   .byt "You are supposed to save her",0
-_gTextErrorShouldSubdue     .byt "I should subdue him first",0
-_gTextErrorAlreadySearched  .byt "You've already frisked him",0
 _gTextErrorInappropriate    .byt "Probably inappropriate",0
 _gTextErrorDeadDontMove     .byt "Dead don't move",0
 #endif
@@ -1425,6 +1419,36 @@ around_the_pit
 .)
 
 
+_gSceneActionSearchThug
+.(
+    JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Il faut d'abord le maitriser");
+#else
+    ERROR_MESSAGE("I should subdue him first");
+#endif    
+    END
+
+thug_disabled
+    JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOCATION_NONE))
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Vous l'avez déjà fouillé");
+#else    
+    ERROR_MESSAGE("You've already frisked him");
+#endif    
+    END
+
+found_items
+    SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOCATION_MASTERBEDROOM)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous avez trouvé quelque chose")
+#else    
+    INFO_MESSAGE("You found something interesting")
+#endif    
+    INCREASE_SCORE(50)
+    END_AND_REFRESH
+.)
+
 
 _gDoNothingScript
 .(
@@ -1464,6 +1488,9 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionPlayGame)
     VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
 
+_gSearchtemMappingsArray
+    VALUE_MAPPING(e_ITEM_Thug               , _gSceneActionSearchThug)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
 
 
 _gActionMappingsArray   

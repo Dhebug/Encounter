@@ -42,6 +42,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandSetItemDescription
     .word _ByteStreamCommandSetLocationDirection
     .word _ByteStreamCommandUnlockAchievement
+    .word _ByteStreamCommandIncreaseScore
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -442,6 +443,7 @@ _ByteStreamCommandSetLocationDirection
 .)
 
 
+; .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 _ByteStreamCommandUnlockAchievement
 .(
     ldy #0
@@ -452,6 +454,24 @@ _ByteStreamCommandUnlockAchievement
     lda #1
     jmp _ByteStreamMoveByA
 .)
+
+; .byt COMMAND_INCREASE_SCORE,points
+_ByteStreamCommandIncreaseScore
+.(
+    ldy #0
+    lda (_gCurrentStream),y             // Number of points
+    clc
+    adc _gScore+0                       // Add to existing score
+    sta _gScore+0
+
+    lda #0
+    adc _gScore+1
+    sta _gScore+1
+
+    lda #1
+    jmp _ByteStreamMoveByA
+.)
+
 
 _ByteStreamCommandFetchRectangleData
 .(

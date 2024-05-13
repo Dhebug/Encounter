@@ -68,6 +68,7 @@ extern stream_mapping gReadItemMappingsArray[];
 extern stream_mapping gCloseItemMappingsArray[];
 extern stream_mapping gInspectItemMappingsArray[];
 extern stream_mapping gUseItemMappingsArray[];
+extern stream_mapping gSearchtemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -79,7 +80,6 @@ extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
 extern const char gTextWaterDrainsAways[];      // "The water drains away"
 extern const char gTextDogLying[];              // "a dog lying"
 extern const char gTextDeadThug[];              // "a dead thug"
-extern const char gTextFoundSomething[];        // "You found something interesting"
 extern const char gTextDogGrowlingAtYou[];      // "an alsatian growling at you"
 extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
 extern const char gTextNotDead[];               // "Not dead" - Debugging text
@@ -108,8 +108,6 @@ extern const char gTextErrorNeedPositionned[];  // "It needs to be positionned f
 extern const char gTextErrorItsNotHere[];       // "It's not here"
 extern const char gTextErrorAlreadyDealtWith[]; // "Not a problem anymore"
 extern const char gTextErrorShouldSaveGirl[];   // "You are supposed to save her"
-extern const char gTextErrorShouldSubdue[];     // "I should subdue him first"
-extern const char gTextErrorAlreadySearched[];  // "You've already frisked him"
 extern const char gTextErrorInappropriate[];    // "Probably inappropriate"
 extern const char gTextErrorDeadDontMove[];     // "Dead don't move"
 extern const char gTextErrorNothingSpecial[];   // "Nothing special"
