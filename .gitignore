@@ -1,10 +1,10 @@
 build
-FloppyBuilderVersion/code/floppybuilderscript.txt
-FloppyBuilderVersion/map_game.htm
-FloppyBuilderVersion/map_intro.htm
-FloppyBuilderVersion/map_outro.htm
-FloppyBuilderVersion/map_splash.htm
-FloppyBuilderVersion/data/wip_content
-FloppyBuilderVersion/.VSCodeCounter/
+code/floppybuilderscript.txt
+map_game.htm
+map_intro.htm
+map_outro.htm
+map_splash.htm
+data/wip_content
+.VSCodeCounter/
 *copy.*
 *- Copy*
