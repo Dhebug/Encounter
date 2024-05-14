@@ -6,6 +6,10 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
 - [Scripting](#scripting)
 - [Features](#features)
   - [The concept](#the-concept)
+  - [Benefits](#benefits)
+    - [Portability](#portability)
+    - [Size](#size)
+    - [Dynamic loading](#dynamic-loading)
   - [Types of scripts](#types-of-scripts)
     - [Location scripts](#location-scripts)
     - [Action scripts](#action-scripts)
@@ -52,6 +56,104 @@ A stream is launched with the **PlayStream** function, and the bytecode execute 
 Typically the setup will be in charge of checking the state of the game to draw and print different elements depending of the context, and the rest will be these description bubbles which appear over time to make the game "more alive" than a standard text adventure game.
 
 Scripts can also loop and branch, basic conditions are supported.
+
+## Benefits
+Obviously an interpreted byte stream will never run as fast as native assembler (or even C) code, but there are some valid reasons to do that: 
+### Portability
+If all the game logic is written in assembler (a logical choice when targeting a retro computer), it requires a lot of effort to port to a different architecture (say from 6502 to Z80). 
+
+When using a scripting system, you just need to convert the "code interpreter" and if that's done properly, the scripts will run just fine on the new target without requiring any change.
+
+### Size
+Obviously the various instructions used by the scripting system need to be implemented, so the code comes with a fixed price, but the idea is that this cost is amortized as soon as a specific command is used more than once.
+
+Let see an example with the "increase score" command.
+
+First we have two bytes used in the dispatcher to map each of the commands opcodes to the function that is going to perform the operation.
+```c
+_ByteStreamCallbacks
+    .word _ByteStreamCommandEnd
+    (...)
+    .word _ByteStreamCommandIncreaseScore
+```
+Then obviously we have the code that perform the operation, which in this case is just "getting the next byte" which contains the value we want to add to the score (a 16bit variable in normal memory), and finally move the stream pointer to the next instruction, which is a grand total of 24 bytes.
+```c
+; .byt COMMAND_INCREASE_SCORE,points
+_ByteStreamCommandIncreaseScore
+.(
+    ldy #0
+    lda (_gCurrentStream),y             // Number of points
+    clc
+    adc _gScore+0                       // Add to existing score
+    sta _gScore+0
+
+    lda #0
+    adc _gScore+1
+    sta _gScore+1
+
+    lda #1                              // Move the stream pointer by one byte
+    jmp _ByteStreamMoveByA
+.)
+```
+Then when we use this code in the scripts, it's just two bytes:
+```c
+  INCREASE_SCORE(42)   // Expands to .byt COMMAND_INCREASE_SCORE,42
+```
+If we ever only use this instruction once, the total cost is:
+- 2 bytes for the table entry
+- +24 bytes for the implementation
+- +2 bytes for the script instance
+- = 28 bytes
+
+How much would cost a single instance in C?
+```c
+   gScore+=50;   // Add 50 points to the player score
+```
+Well, it's a 16 bit variable to which we add a 8 bit value, and generally the code gets converted to this:
+```c
+    clc
+    lda _gScore+0
+    adc #50                   // Add to existing score
+    sta _gScore+0
+    lda _gScore+1
+    adc #0
+    sta _gScore+1
+```
+which is a grand total of 17 bytes instead of 28, and also runs much faster.
+
+What about if we wanted to increment the score twice?
+- Script version: (2+24)+2*2 = 30 bytes
+- Normal code: 17*2 = 34 bytes
+
+So we just need TWO uses to already start gaining memory compared to the normal code.
+
+The situation get better if we try to use a subfunction to perform the addition, but we have to use the registers to pass the parameters, using the stack would take much more room:
+```c
+  lda #50                     //  2 bytes
+  jsr AddToScore              // +3 bytes = 5 bytes
+
+AddToScore
+    clc                       // 1
+    adc _gScore+0             // 3
+    sta _gScore+0             // 3
+    lda _gScore+1             // 3
+    adc #0                    // 2
+    sta _gScore+1             // 3
+    rts                       // 1 = 16 bytes
+```
+Which gives us:
+- 16+5=21 bytes for the first call (which beats the 2+24+2=28 for the script)
+- 16+5*2=26 for the second call (which beats the (2+24)+2*2=30 for the script)
+- 16+5*3=31 for the second call (which beats the (2+24)+2*3=32 for the script)
+- 16+5*4=36 for the second call (which does not beats the (2+24)+2*4=34 for the script)
+
+The score adding is a best case scenario for the native code because there is only one value to pass, the 6502 only has three registers, so for more complicated situations we would have to use some proper parameter passing methods, either by filling a structure or pushing on the stack... and in no way would the result be more compact than what the script provides.
+
+### Dynamic loading
+This is not used in Encounter, but technicaly the scripts could easily be loaded from disk with the scenes, which would solve the problems coming with the limited amount of memory on the machine.
+
+The reason why this could be done is that the data is directly placed as parameters of the instructions instead of using pointers, so for example all the string messages are directly embeded in the script, which means no searching, linking or relocating is required.
+
 
 ## Types of scripts
 Technically, all the scripts can use all the commands, but there are three main use cases for scripts:
