@@ -10,6 +10,10 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [Portability](#portability)
     - [Size](#size)
     - [Dynamic loading](#dynamic-loading)
+  - [Disadvantages](#disadvantages)
+    - [A new syntax to learn](#a-new-syntax-to-learn)
+    - [Worse performance](#worse-performance)
+    - [Wonky syntax](#wonky-syntax)
   - [Types of scripts](#types-of-scripts)
     - [Location scripts](#location-scripts)
     - [Action scripts](#action-scripts)
@@ -154,6 +158,40 @@ This is not used in Encounter, but technicaly the scripts could easily be loaded
 
 The reason why this could be done is that the data is directly placed as parameters of the instructions instead of using pointers, so for example all the string messages are directly embeded in the script, which means no searching, linking or relocating is required.
 
+## Disadvantages
+Of course it's not all rainbows and unicorns, scripting languages have their issues as well.
+### A new syntax to learn
+Probably obvious, but by definition it's a new language that nobody else knows, so there's some kind of barier to entry.
+
+The trick is to design something called DSL (Domain Specific Language) instead of a general purpose language: You do not want or need a complete set of operations, you just need what is necessary to implement what you game logic needs, ideally by implementing big expressive instructions with a simple syntax.
+
+For example, instead of allowing the user to aquire a pointer or reference to an entity that can then be manipulated, instead you can implement instructions that can directly act on the most important properties of an entity.
+
+Where in Encounter's scripting language you have to do this:
+```c
+  // Change the location of the ladder
+  SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+```  
+in a more classical language you would find something like that:
+```c
+  // Change the location of the ladder
+  item=GetItem(e_ITEM_Ladder)
+  item.SetLocation(e_LOCATION_OUTSIDE_PIT)
+```  
+One could argue that the second style is much more powerful (it is), but it's also much more complex and does not promote consistency of style, because you could must probably have done that as well:
+```c
+  // Change the location of the ladder
+  GetItem(e_ITEM_Ladder).SetLocation(e_LOCATION_OUTSIDE_PIT)
+```  
+I find a simple boring language that does not afford a lot of flexibility, does not have life time consideration, memory allocation, etc... easier to use when writing scripts.
+
+### Worse performance
+Since the script is parsed byte by byte, the execution is definitely slower than native code, but contrary to BASIC, it's not a general purpose language where you execute time critical loops and arithmetic operations... all the script does is to execute now and then series of meta instructions that does a lot of things, which events out the cost of the parsing. 
+
+### Wonky syntax
+I could have written a proper syntax, then a compiler to generate the code, but I've already spent too much time doing some tooling, so instead it's all implemented with pre-processor macros.
+
+But technically it could have been done with a real tool, so it's just something I need to deal with and get the game out!
 
 ## Types of scripts
 Technically, all the scripts can use all the commands, but there are three main use cases for scripts:
