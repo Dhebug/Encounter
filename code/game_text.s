@@ -21,14 +21,12 @@ _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
 _gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
 _gTextWaterDrainsAways      .byt "L'eau s'écoule",0
-_gTextDogLying              .byt "un chien immobile",0
 _gTextDeadThug              .byt "un malfaiteur mort",0
 _gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
 _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
 _gTextNotDead               .byt "Pas mort",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
 _gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
-_gTextDoveEatingBread       .byt "une comlombe qui picore",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -37,14 +35,12 @@ _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextPetrolEvaporates      .byt "The petrol evaporates",0
 _gTextWaterDrainsAways      .byt "The water drains away",0
-_gTextDogLying              .byt "a dog lying",0
 _gTextDeadThug              .byt "a dead thug",0
 _gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
 _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
 _gTextNotDead               .byt "Not dead",0                                // Debugging text
 _gTextDogJumpingAtMe        .byt "a dog jumping at me",0
 _gTextThugShootingAtMe      .byt "a thug shooting at me",0
-_gTextDoveEatingBread       .byt "a dove eating bread crumbs",0
 #endif
 _EndMessagesAndPrompts
 
@@ -1299,18 +1295,6 @@ _gSceneActionPlayGame
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionDogEatingMeat
-    DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
-    INFO_MESSAGE("Glad it's not me there!")
-    WAIT(50*2)
-    END_AND_REFRESH
-
-_gSceneActionDoveEatingBread
-    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
-    INFO_MESSAGE("Maybe I can catch it now?")
-    WAIT(50*2)
-    END_AND_REFRESH
-
 _gSceneActionExaminePlasticBag
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Juste un sac blanc normal")
@@ -1450,6 +1434,119 @@ found_items
 .)
 
 
+_gSceneActionThrowBread
+.(
+    JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOCATION_WOODEDAVENUE))
+give_bread_to_dove
+    // The bread is going away, but the bird is now possible to catch
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOCATION_GONE_FOREVER)
+    UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une colombe qui picore")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a dove eating bread crumbs")
+#endif    
+//+_gSceneActionDoveEatingBread
+    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
+    INFO_MESSAGE("Maybe I can catch it now?")
+    WAIT(50*2)
+    END_AND_REFRESH
+
+not_in_wooded_avenue
+    // In other locations we just drop the bread where we are
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOCATION_CURRENT)
+    END_AND_REFRESH
+.)
+
+
+
+_gScemeActionCommonDogDisabled
+.(
+    INCREASE_SCORE(50)
+    SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
+#ifdef LANGUAGE_FR   
++_gTextDogLying = *+2
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un chien immobile")
+#else    
++_gTextDogLying = *+2
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a dog lying")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionThrowMeat
+.(
+    // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
+    JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+dog_eating_the_meat
+    DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
+    INFO_MESSAGE("Glad it's not me there!")
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_GONE_FOREVER)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
+    WAIT(50*2)    
+    JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
+    INCREASE_SCORE(50)
+    JUMP(_gScemeActionCommonDogDisabled)
+done
+    END_AND_REFRESH
+
+nothing_to_eat_the_meat
+    // In other locations we just drop the meat where we are
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_CURRENT)
+    END_AND_REFRESH
+ .)
+
+
+
+_gSceneActionThrowKnife
+.(
+    // We only throw the knife if:
+    // - We are in the entrance hall and the dog is still alive
+    // - We are in the sleeping room and the thug is still alive
+    JUMP_IF_FALSE(drop_knife,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(drop_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+
+    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
+    JUMP(_gScemeActionCommonDogDisabled)
+
+drop_knife    
+    // In other locations we just drop the item where we are
+    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_CURRENT)
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionThrowSnookerCue
+.(
+    // We only throw the snooker cue if:
+    // - We are in the entrance hall and the dog is still alive
+    // - We are in the sleeping room and the thug is still alive
+    JUMP_IF_FALSE(drop_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(drop_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+
+    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
+    INCREASE_SCORE(50)
+    JUMP(_gScemeActionCommonDogDisabled)
+
+drop_snooker_cue    
+    // In other locations we just drop the item where we are
+    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_CURRENT)
+    END_AND_REFRESH
+.)
+
+
+_gDropCurrentItem
+.(
+    SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOCATION_CURRENT)
+    END_AND_REFRESH
+.)
+
+
 _gDoNothingScript
 .(
     END
@@ -1465,7 +1562,6 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _gSceneActionReadChemistryRecipes)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
     VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
-
 
 _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
@@ -1491,6 +1587,13 @@ _gUseItemMappingsArray
 _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_Thug               , _gSceneActionSearchThug)
     VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+
+_gThrowItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Bread              , _gSceneActionThrowBread)
+    VALUE_MAPPING(e_ITEM_Meat               , _gSceneActionThrowMeat)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _gSceneActionThrowKnife)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _gSceneActionThrowSnookerCue)
+    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
 
 
 _gActionMappingsArray   

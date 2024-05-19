@@ -4,6 +4,7 @@
 ; This is not definitely not as fast as pure assembler, but it's much more compact
 ;
 #include "params.h"
+#include "game_enums.h"
 
     .zero 
 
@@ -12,6 +13,7 @@ _gCurrentStreamInt      .dsb 2
 _gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
 
+_gCurrentItem           .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
 _gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
 _gStreamLocationPtr     .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
 _gStreamNextPtr         .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
@@ -84,6 +86,10 @@ quit
 ; _param1=pointer to a table with id:stream pointer
 _DispatchStream
 .(
+    ; Store the item id into "CurrentItem"
+    lda _param0
+    sta _gCurrentItem
+
     ldy #0
 search_loop    
     lda (_param1),y     ; Check the ID in the table
@@ -123,11 +129,23 @@ skip
 .)
 
 
+; Fetches the next byte from the stream and if matches e_ITEM_CURRENT replaces by _gCurrentItem
+; Then uses the value to compute the _gStreamItemPtr pointer
+_ByteStreamFetchItemID
+.(
+    lda (_gCurrentStream),y      // item ID
+    cmp #e_ITEM_CURRENT
+    bne keep_item_id
+use_current_item_id    
+    lda _gCurrentItem            // Use the current item
+keep_item_id    
+    iny
+    ; fall-through into _ByteStreamComputeItemPtr
 ; A=Item ID
 ; Return a pointer on the item in _gStreamItemPtr
 ; sizeof(item) = 6
 ; 6 = 4n+2n = n<<2 + n<<1
-_ByteStreamComputeItemPtr
++_ByteStreamComputeItemPtr
     // Item ID
     sta _gStreamItemPtr+0
     lda #0
@@ -164,6 +182,10 @@ _ByteStreamComputeItemPtr
     sta _gStreamItemPtr+1
 
     rts
+.)
+
+
+
 
 
 ; A=Location ID
@@ -288,9 +310,7 @@ common
 checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0 
     ; check =  (gItems[itemId].location == locationId);
     iny
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-    iny
+    jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // location id
     ldy #2
     cmp (_gStreamItemPtr),y      // gItems->location (+2)
@@ -314,9 +334,7 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     bne checkPlayerLocation
     ; check =  (gItems[itemId].flags & flagId);
     iny
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-    iny
+    jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // flag ID
     ldy #4
     and (_gStreamItemPtr),y      // gItems->flags (+4)
@@ -341,9 +359,7 @@ _auto_conditionCheckItemFlag
 _ByteStreamCommandSetItemLocation
 .(
     ldy #0
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-    iny
+    jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // location id
     cmp #e_LOCATION_CURRENT
     bne store_location
@@ -360,10 +376,7 @@ store_location
  _ByteStreamCommandSetItemFlags
  .(
     ldy #0
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-
-    iny
+    jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // flag mask
     ldy #4                       
     ora (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
@@ -377,10 +390,7 @@ store_location
  _ByteStreamCommandUnSetItemFlags
  .(
     ldy #0
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-
-    iny    
+    jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // flag mask
     ldy #4                       
     and (_gStreamItemPtr),y      // gItems->flags (+4) &= flag mask
@@ -394,9 +404,7 @@ store_location
 _ByteStreamCommandSetItemDescription
 .(
     ldy #0
-    lda (_gCurrentStream),y      // item ID
-    jsr _ByteStreamComputeItemPtr
-
+    jsr _ByteStreamFetchItemID
     lda #1
     jsr _ByteStreamMoveByA
 

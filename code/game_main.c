@@ -604,71 +604,7 @@ void ThrowItem()
     unsigned char itemId = gWordBuffer[1];
 	if (ItemCheck(itemId))
     {
-        item* itemPtr=&gItems[itemId];
-		switch (itemId)
-		{
-		case e_ITEM_Bread:
-            if (gCurrentLocation==e_LOCATION_WOODEDAVENUE)
-            {
-                item* doveItemPtr=&gItems[e_ITEM_LargeDove];
-                doveItemPtr->flags &= ~ITEM_FLAG_IMMOVABLE;
-                doveItemPtr->description = gTextDoveEatingBread;
-                PlayStream(gSceneActionDoveEatingBread);                    
-                return;
-            }
-			break;
-
-		case e_ITEM_Meat:
-            if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
-            {
-                item* dogItemPtr=&gItems[e_ITEM_AlsatianDog];
-                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))          // The dog only eats if it's alive
-                {
-                    if (itemPtr->flags & ITEM_FLAG_TRANSFORMED)         // Modified meat -> The dog eats it and sleep after 30ish minutes
-                    {
-                        itemPtr->location = e_LOCATION_GONE_FOREVER;
-                        dogItemPtr->flags |= ITEM_FLAG_DISABLED;
-                        dogItemPtr->description = gTextDogLying;
-                        UnlockAchievement(ACHIEVEMENT_DRUGGED_THE_DOG);
-                    }
-                    else                                                // Normal meat -> The dog eats it
-                    {
-                        itemPtr->location = e_LOCATION_GONE_FOREVER;
-                        UnlockAchievement(ACHIEVEMENT_DOG_ATE_THE_MEAT);
-                    }
-                    PlayStream(gSceneActionDogEatingMeat);                    
-                    return;
-                }
-            }
-			break;
-
-		case e_ITEM_SilverKnife:
-		case e_ITEM_SnookerCue:
-            if (gCurrentLocation==e_LOCATION_ENTRANCEHALL)
-            {
-                item* dogItemPtr=&gItems[e_ITEM_AlsatianDog];
-                itemPtr->location = e_LOCATION_LARGE_STAIRCASE;   // The knife is now in the stairs
-                if (!(dogItemPtr->flags & ITEM_FLAG_DISABLED))        // The dog can only be killed if it's alive
-                {
-                    dogItemPtr->flags |= ITEM_FLAG_DISABLED;          // The dog is dead
-                    dogItemPtr->description = gTextDogLying;
-                    UnlockAchievement(ACHIEVEMENT_KILLED_THE_DOG);
-                    gScore+=50;
-                }
-                else
-                {
-                    PrintErrorMessage(gTextErrorAlreadyDealtWith);  // "Not a problem anymore"
-                }
-                LoadScene();
-                return;
-            }
-            break;
-
-		default:
-			break;
-		}
-        // By default we drop the item if we try to throw it and nothing special happens
-        DropItem();
+        DispatchStream(gThrowItemMappingsArray,itemId);
 	}
 }
 

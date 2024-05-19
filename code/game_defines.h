@@ -5,6 +5,7 @@
 typedef unsigned char WORDS;
 
 extern unsigned char gCurrentLocation;
+extern unsigned char gCurrentItem;
 
 //unsigned char 
 // We have 43 locations.
@@ -69,6 +70,7 @@ extern stream_mapping gCloseItemMappingsArray[];
 extern stream_mapping gInspectItemMappingsArray[];
 extern stream_mapping gUseItemMappingsArray[];
 extern stream_mapping gSearchtemMappingsArray[];
+extern stream_mapping gThrowItemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"
@@ -78,14 +80,12 @@ extern const char gTextScore[];                 // "Score:"
 extern const char gTextCarryInWhat[];           // "Carry it in what?"
 extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
 extern const char gTextWaterDrainsAways[];      // "The water drains away"
-extern const char gTextDogLying[];              // "a dog lying"
 extern const char gTextDeadThug[];              // "a dead thug"
 extern const char gTextDogGrowlingAtYou[];      // "an alsatian growling at you"
 extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
 extern const char gTextNotDead[];               // "Not dead" - Debugging text
 extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
 extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
-extern const char gTextDoveEatingBread[];       // "a dove eating bread crumbs"
 
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"
@@ -234,8 +234,4 @@ extern const char gTextItemMedicineCabinet[];         // "a medicine cabinet"
 extern const char gTextItemOpenMedicineCabinet[];     // "an open medicine cabinet"
 extern const char gTextItemSedativePills[];           // "some sedative pills"
 extern const char gTextItemSedativeLacedMeat[];       // "druggd meat"
-
-// Scene actions
-extern const char gSceneActionDogEatingMeat[];
-extern const char gSceneActionDoveEatingBread[];
 

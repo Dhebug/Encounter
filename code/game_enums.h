@@ -120,6 +120,7 @@
 #define e_ITEM_Medicinecabinet       47         // a thick curtain
 #define e_ITEM_SedativePills         48         // some sedative pills
 #define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_CURRENT               49         // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
 #define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_
