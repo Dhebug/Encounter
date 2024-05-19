@@ -345,6 +345,10 @@ _ByteStreamCommandSetItemLocation
     jsr _ByteStreamComputeItemPtr
     iny
     lda (_gCurrentStream),y      // location id
+    cmp #e_LOCATION_CURRENT
+    bne store_location
+    lda _gCurrentLocation        // Use the current player location
+store_location    
     ldy #2
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id    
 

@@ -57,6 +57,7 @@
 #define	e_LOCATION_GIRLROOM         43
 #define e_LOCATION_COUNT_           44
 #define e_LOCATION_INVENTORY        e_LOCATION_COUNT_    // Special location for the player's inventory
+#define e_LOCATION_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
 #define e_LOCATION_GONE_FOREVER     254                  // To indicate this item is not available anymore
 #define e_LOCATION_NONE             255                  // To indicate we can't go in this particular location
 
