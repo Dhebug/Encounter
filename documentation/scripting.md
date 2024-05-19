@@ -489,11 +489,26 @@ Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the
 ---
 ## Changing item properties
 ### SET_ITEM_LOCATION
-Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it
+Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it.
+
+There are a few different types of locations:
+- Actual locations in the game (e_LOCATION_MARKETPLACE, e_LOCATION_CELLAR, e_LOCATION_MAINSTREET ...)
+- e_LOCATION_INVENTORY, which represents any item in the player's inventory
+- e_LOCATION_NONE location, used for when an item is not yet available (maybe the player need to do something)
+- e_LOCATION_GONE_FOREVER, used when we want to definitely take an item out of the game
+- e_LOCATION_CURRENT, which contains the id of wherever the player is currently located
+
 ```c
-  // Change the location of the ladder
+  // Move the ladder into the pit
   SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+
+  // Give the keys to the player
+  SET_ITEM_LOCATION(e_ITEM_Keys,e_LOCATION_INVENTORY)
+
+  // Drop the knife at the current location
+  SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_CURRENT)
 ```  
+
 ### SET_ITEM_FLAGS
 Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
 ```c
