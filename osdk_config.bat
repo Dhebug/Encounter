@@ -14,9 +14,13 @@ SET TEST_LANGUAGE=EN
 
 :: Module for which we want to enable the debug symbols.
 ::SET TEST_MODULE=SPLASH
-SET TEST_MODULE=INTRO
-::SET TEST_MODULE=GAME
+::SET TEST_MODULE=INTRO
+SET TEST_MODULE=GAME
 ::SET TEST_MODULE=OUTRO
+
+:: Breakpoints for the various modules
+SET BREAKPOINTS_GAME=_AskInput,_Initializations
+
 
 SET FINAL_TARGET_DISK=S:\EncounterHD-EN.dsk
 

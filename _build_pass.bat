@@ -45,6 +45,7 @@ IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
 copy build\symbols ..\build\symbols_SplashProgram >NUL
 IF %TEST_MODULE%==SPLASH COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+IF %TEST_MODULE%==SPLASH SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
 :EndSplash
 
 
@@ -67,6 +68,7 @@ IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
 copy build\symbols ..\build\symbols_IntroProgram >NUL
 IF %TEST_MODULE%==INTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+IF %TEST_MODULE%==INTRO SET BREAKPOINTS=%BREAKPOINTS_INTRO%
 :EndIntro
 
 
@@ -89,6 +91,7 @@ IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
 copy build\symbols ..\build\symbols_OutroProgram >NUL
 IF %TEST_MODULE%==OUTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+IF %TEST_MODULE%==OUTRO SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
 :EndOutro
 
 
@@ -111,8 +114,22 @@ IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
 copy build\symbols ..\build\symbols_GameProgram >NUL
 IF %TEST_MODULE%==GAME COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
 
+::
+:: Generate the breakpoint file is necessary:
+:: Each of the symbols mentionned in the BREAKPOINTS variable is exported in a text file
+:: each line contains a single entry starting by "bs" (Breakpoint Set) followed by the symbol namme.
+::
+setlocal EnableDelayedExpansion
+(for %%a in (%BREAKPOINTS%) do (
+  set "out=%%~a"  
+  echo bs !out:@= !
+))> %OSDK%\Oricutron\Breakpoints.txt
+type %OSDK%\Oricutron\Breakpoints.txt
+endlocal
+set OSDKBREAKPOINTS=:Breakpoints.txt
 
 :: Call FloppyBuilder once to create loader.cod
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt >NUL
