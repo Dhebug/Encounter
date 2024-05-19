@@ -46,7 +46,12 @@ typedef void (*callback)();
 typedef struct
 {
     unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
-    callback function;                 // Pointer to the routine to call (ex: TakeItem())
+    unsigned char flag;             // Used to determine what the other field means
+    union 
+    {
+        callback function;              // Pointer to the routine to call (ex: TakeItem())
+        void* stream;                   // Pointer to a stream
+    } u;
 } action_mapping;
 
 

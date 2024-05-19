@@ -549,66 +549,6 @@ void OpenItem()
 }
 
 
-void ReadItem()
-{
-    unsigned char itemId = gWordBuffer[1];
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gReadItemMappingsArray,itemId);
-	}
-}
-
-
-void CloseItem()
-{
-    unsigned char itemId = gWordBuffer[1];
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gCloseItemMappingsArray,itemId);
-    }
-}
-
-
-void InspectItem()
-{
-    unsigned char itemId = gWordBuffer[1];    
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gInspectItemMappingsArray,itemId);
-	}
-}
-
-
-void UseItem()
-{
-    unsigned char itemId = gWordBuffer[1];    
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gUseItemMappingsArray,itemId);
-	}
-}
-
-
-void Frisk()
-{
-    unsigned char itemId = gWordBuffer[1];    
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gSearchtemMappingsArray,itemId);
-	}
-}
-
-
-void ThrowItem()
-{
-    unsigned char itemId = gWordBuffer[1];
-	if (ItemCheck(itemId))
-    {
-        DispatchStream(gThrowItemMappingsArray,itemId);
-	}
-}
-
-
 
 WORDS ProcessAnswer()
 {
@@ -626,9 +566,21 @@ WORDS ProcessAnswer()
     while (actionMappingPtr->id!=e_WORD_COUNT_)
     {
         if (actionMappingPtr->id==actionId)
-        {
-            // call the callback
-            actionMappingPtr->function();
+        {            
+            if (actionMappingPtr->flag==0)
+            {
+                // call the callback
+                actionMappingPtr->u.function();
+            }
+            else
+            {
+                // Run the stream
+                unsigned char itemId = gWordBuffer[1];
+                if (ItemCheck(itemId))
+                {
+                    DispatchStream(actionMappingPtr->u.stream,itemId);
+                }
+            }
             // Continue
             return e_WORD_CONTINUE;
         }

@@ -95,6 +95,7 @@
 
 
 //
-#define VALUE_MAPPING(value,address)       .byt value,<address,>address
+#define VALUE_MAPPING(value,address)            .byt value,<address,>address
+#define VALUE_MAPPING2(value,flag,address)      .byt value,flag,<address,>address
 
 

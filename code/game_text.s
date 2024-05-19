@@ -1597,33 +1597,33 @@ _gThrowItemMappingsArray
 
 
 _gActionMappingsArray   
-    VALUE_MAPPING(e_WORD_NORTH, _PlayerMove)
-    VALUE_MAPPING(e_WORD_SOUTH, _PlayerMove)
-    VALUE_MAPPING(e_WORD_EAST, _PlayerMove)
-    VALUE_MAPPING(e_WORD_WEST, _PlayerMove)
-    VALUE_MAPPING(e_WORD_UP, _PlayerMove)
-    VALUE_MAPPING(e_WORD_DOWN, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_SOUTH     ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_EAST      ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_WEST      ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_UP        ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_DOWN      ,0, _PlayerMove)
 
-    VALUE_MAPPING(e_WORD_TAKE, _TakeItem)
+    VALUE_MAPPING2(e_WORD_TAKE      ,0, _TakeItem)
 
-    VALUE_MAPPING(e_WORD_DROP, _DropItem)
-    VALUE_MAPPING(e_WORD_READ, _ReadItem)
-    VALUE_MAPPING(e_WORD_USE, _UseItem)
-    VALUE_MAPPING(e_WORD_COMBINE, _CombineItems)
-    VALUE_MAPPING(e_WORD_OPEN, _OpenItem)
-    VALUE_MAPPING(e_WORD_CLOSE, _CloseItem)
+    VALUE_MAPPING2(e_WORD_DROP      ,0, _DropItem)
+    VALUE_MAPPING2(e_WORD_COMBINE   ,0, _CombineItems)
+    VALUE_MAPPING2(e_WORD_OPEN      ,0, _OpenItem)
+    VALUE_MAPPING2(e_WORD_KILL      ,0, _Kill)
+    VALUE_MAPPING2(e_WORD_READ      ,1, _gReadItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_USE       ,1, _gUseItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_CLOSE     ,1, _gCloseItemMappingsArray)
 
-    VALUE_MAPPING(e_WORD_LOOK, _InspectItem)
-    VALUE_MAPPING(e_WORD_KILL, _Kill)
-    VALUE_MAPPING(e_WORD_FRISK, _Frisk)
-    VALUE_MAPPING(e_WORD_SEARCH, _Frisk)
-    VALUE_MAPPING(e_WORD_THROW, _ThrowItem)
-#ifdef ENABLE_CHEATS
-    VALUE_MAPPING(e_WORD_REVIVE, _Revive)
-    VALUE_MAPPING(e_WORD_TICKLE, _Tickle)
-    VALUE_MAPPING(e_WORD_INVOKE, _Invoke)
+    VALUE_MAPPING2(e_WORD_LOOK      ,1, _gInspectItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_FRISK     ,1, _gSearchtemMappingsArray)
+    VALUE_MAPPING2(e_WORD_SEARCH    ,1, _gSearchtemMappingsArray)
+    VALUE_MAPPING2(e_WORD_THROW     ,1, _gThrowItemMappingsArray)
+#ifdef ENABLE_CHEATS       
+    VALUE_MAPPING2(e_WORD_REVIVE      ,0, _Revive)
+    VALUE_MAPPING2(e_WORD_TICKLE      ,0, _Tickle)
+    VALUE_MAPPING2(e_WORD_INVOKE      ,0, _Invoke)
 #endif
-    VALUE_MAPPING(e_WORD_COUNT_, 0)
+    VALUE_MAPPING2(e_WORD_COUNT_    ,0, 0)
     // End Marker
 
 
