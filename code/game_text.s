@@ -1632,6 +1632,7 @@ _EndGameTextData
 ;
 ; Print statistics about the size of things
 ;
+#if DISPLAYINFO=1
 #print Total size of game text content = (_EndGameTextData - _StartGameTextData)
 #print - Messages and prompts = (_EndMessagesAndPrompts - _StartMessagesAndPrompts)
 #print - Error messages = (_EndErrorMessages - _StartErrorMessages)
@@ -1639,5 +1640,5 @@ _EndGameTextData
 #print - Item names = (_EndItemNames - _StartItemNames)
 #print - Scene scripts = (_EndSceneScripts - _StartSceneScripts)
 #print - Scene actions = (_EndSceneActions - _StartSceneActions)
-
+#endif
 
