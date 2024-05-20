@@ -238,7 +238,6 @@ _gTextItemWater                   .byt "de l'eau",0
 _gTextItemLockedPanel             .byt "un paneau mural verouillé",0
 _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
 _gTextItemFridge                  .byt "un réfrigérateur",0
-_gTextItemOpenFridge              .byt "un réfrigérateur ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
 _gTextItemBrokenWindow            .byt "une vitre brisée",0
 _gTextItemLargeDove               .byt "une grosse colombe",0
@@ -277,10 +276,8 @@ _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
 _gTextItemLadderInTheHole         .byt "une échelle dans un trou",0
 _gTextItemRopeAttachedToATree     .byt "une corde attachée à un arbre",0
 _gTextItemClosedCurtain           .byt "un rideau fermé",0
-_gTextItemOpenedCurtain           .byt "un rideau ouvert",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemMedicineCabinet         .byt "une armoire à pharmacie",0
-_gTextItemOpenMedicineCabinet     .byt "une armoire à pharmacie ouverte",0
 _gTextItemSedativePills           .byt "des somnifères",0
 _gTextItemSedativeLacedMeat       .byt "viande droggée",0
 #else
@@ -300,7 +297,6 @@ _gTextItemWater                   .byt "some water",0
 _gTextItemLockedPanel             .byt "a locked panel on the wall",0         
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
 _gTextItemFridge                  .byt "a fridge",0                        // TODO: Use _gSceneActionCloseFridge description
-_gTextItemOpenFridge              .byt "an open fridge",0
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemBrokenWindow            .byt "the window is broken",0               
 _gTextItemLargeDove               .byt "a large dove",0                       
@@ -339,10 +335,8 @@ _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0
 _gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
 _gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
 _gTextItemClosedCurtain           .byt "a closed curtain",0             // TODO: Use _gSceneActionCloseCurtain description
-_gTextItemOpenedCurtain           .byt "an opened curtain",0
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemMedicineCabinet         .byt "a medicine cabinet",0           // TODO: Use _gSceneActionCloseMedicineCabinet description
-_gTextItemOpenMedicineCabinet     .byt "an open medicine cabinet",0
 _gTextItemSedativePills           .byt "some sedative pills",0
 _gTextItemSedativeLacedMeat       .byt "drugged meat",0
 #endif
@@ -1304,6 +1298,79 @@ _gSceneActionExaminePlasticBag
     END
 
 
+
+
+/*
+                     ██████╗ ██████╗ ███████╗███╗   ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+                    ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+                    ██║   ██║██████╔╝█████╗  ██╔██╗ ██║    ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+                    ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+                    ╚██████╔╝██║     ███████╗██║ ╚████║    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+                     ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                                                                                    
+*/
+_gSceneActionOpenCurtain
+.(
+    JUMP_IF_FALSE(curtain_already_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))        ; Is the curtain closed?
+    UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
+    SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_PADLOCKED_ROOM)  ; We can now access the padlocked room
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un rideau ouvert")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an opened curtain")
+#endif        
+curtain_already_open
+    END_AND_REFRESH
+.)
+
+; TODO: Messages to indicate that the fridge it already open or that we have already found something
+; Probably need a string table/id system to easily reuse messages.
+_gSceneActionOpenFridge
+.(    
+    JUMP_IF_FALSE(fridge_already_open,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))   ; Is the fridge closed?
+    UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                     ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                    ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                       ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur ouvert")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open fridge")
+#endif        
+    JUMP_IF_FALSE(meat_already_found,CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_NONE))   ; If the meat still hidden (in the fridge)? 
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_KITCHEN)                                    ; It's now visible inside the kitchen
+meat_already_found
+fridge_already_open    
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionOpenMedicineCabinet
+.(
+    JUMP_IF_FALSE(cabinet_already_open,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))    ; Is the medicine cabinet closed?
+    UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                       ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie ouverte")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine cabinet")
+#endif        
+    JUMP_IF_FALSE(pills_already_found,CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_NONE))    ; Are the pills still hidden (in the cabinet)? 
+    SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_KITCHEN)                                      ; It's now visible inside the kitchen
+pills_already_found
+cabinet_already_open    
+    END_AND_REFRESH
+.)
+
+
+/* 
+
+                  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+                 ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+                 ██║     ██║     ██║   ██║███████╗█████╗      ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+                 ██║     ██║     ██║   ██║╚════██║██╔══╝      ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+                 ╚██████╗███████╗╚██████╔╝███████║███████╗    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+                  ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+
+*/                                                                                             
 _gSceneActionCloseCurtain
 .(
     JUMP_IF_TRUE(curtain_already_closed,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
@@ -1369,6 +1436,17 @@ _gSceneActionNothingSpecial
 .)
 
 
+/*
+
+                ██╗   ██╗███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+                ██║   ██║██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+                ██║   ██║███████╗█████╗      ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+                ██║   ██║╚════██║██╔══╝      ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+                ╚██████╔╝███████║███████╗    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+                 ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                                                                            
+*/
+
 _gSceneActionUseLadder
 .(
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
@@ -1403,6 +1481,16 @@ around_the_pit
 .)
 
 
+/*
+
+            ███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+            ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+            ███████╗█████╗  ███████║██████╔╝██║     ███████║    ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+            ╚════██║██╔══╝  ██╔══██║██╔══██╗██║     ██╔══██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+            ███████║███████╗██║  ██║██║  ██║╚██████╗██║  ██║    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+            ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                                                                                                   
+*/
 _gSceneActionSearchThug
 .(
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
@@ -1434,6 +1522,16 @@ found_items
 .)
 
 
+/*
+
+                ████████╗██╗  ██╗██████╗  ██████╗ ██╗    ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+                ╚══██╔══╝██║  ██║██╔══██╗██╔═══██╗██║    ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+                   ██║   ███████║██████╔╝██║   ██║██║ █╗ ██║    ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+                   ██║   ██╔══██║██╔══██╗██║   ██║██║███╗██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+                   ██║   ██║  ██║██║  ██║╚██████╔╝╚███╔███╔╝    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+                   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                                                                                                            
+*/
 _gSceneActionThrowBread
 .(
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOCATION_WOODEDAVENUE))
@@ -1563,6 +1661,12 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
     VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
 
+_gOpenItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionOpenCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionOpenFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionOpenMedicineCabinet )
+    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+
 _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
     VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionCloseFridge)
@@ -1608,10 +1712,10 @@ _gActionMappingsArray
 
     VALUE_MAPPING2(e_WORD_DROP      ,0, _DropItem)
     VALUE_MAPPING2(e_WORD_COMBINE   ,0, _CombineItems)
-    VALUE_MAPPING2(e_WORD_OPEN      ,0, _OpenItem)
     VALUE_MAPPING2(e_WORD_KILL      ,0, _Kill)
     VALUE_MAPPING2(e_WORD_READ      ,1, _gReadItemMappingsArray)
     VALUE_MAPPING2(e_WORD_USE       ,1, _gUseItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_OPEN      ,1, _gOpenItemMappingsArray)
     VALUE_MAPPING2(e_WORD_CLOSE     ,1, _gCloseItemMappingsArray)
 
     VALUE_MAPPING2(e_WORD_LOOK      ,1, _gInspectItemMappingsArray)
