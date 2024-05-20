@@ -14,6 +14,7 @@ echo.
 echo.
 echo.
 echo %ESC%[1mBuild started: %date% %time%%ESC%[0m
+set ENCOUNTER_BUILD_START=%time%
 
 ::
 :: Initial check.
@@ -78,6 +79,11 @@ ECHO %ESC%[41mAn Error has happened. Build stopped%ESC%[0m
 
 :End
 ::pause
+set OSDK_BUILD_START=%ENCOUNTER_BUILD_START%
+set OSDK_BUILD_END=%time%
+call %OSDK%\bin\ComputeTime.bat
 echo %ESC%[1mBuild completed: %date% %time%%ESC%[0m
+ECHO Total build time: %OSDK_BUILD_TIME%
+
 echo.
 echo.

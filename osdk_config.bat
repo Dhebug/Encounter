@@ -29,6 +29,7 @@ SET OSDKADDR=
 SET OSDKFILE=
 SET OSDKNAME=EncounterHD-%LANGUAGE%
 SET OSDKDISK=%OSDKNAME%.dsk
+SET OSDKVERBOSITY=1
 
 :: These are the definition of the various files used by each module.
 :: After a module has been built once, and as long as the files are not deleted, you can

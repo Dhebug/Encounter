@@ -14,8 +14,9 @@ echo %ESC%[93m============ Converting assets ============%ESC%[0m
 echo.
 
 ::
-:: Build data for the demo, is that a Slide Disk, or a Music Show?
+:: Build data for the game
 ::
+set OSDK_BUILD_START=%time%
 
 :: Pictures
 SET PICTCONV=%OSDK%\Bin\PictConv
@@ -202,6 +203,10 @@ bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music
 
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music_events.s
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter_events.s
+
+set OSDK_BUILD_END=%time%
+call %OSDK%\bin\ComputeTime.bat
+ECHO Assets conversion finished in %OSDK_BUILD_TIME%
 
 ::pause
 
