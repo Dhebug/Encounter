@@ -44,13 +44,13 @@ IF ERRORLEVEL 1 GOTO Error
 ECHO ---------------- 1st pass ---------------- 
 set DISPLAYINFO=0
 SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DDISPLAYINFO=0
-call ..\_build_pass.bat > NUL
+call ..\bin\_build_pass.bat > NUL
 ::IF ERRORLEVEL 1 GOTO Error
 
 ECHO ---------------- 2nd pass ---------------- 
 set DISPLAYINFO=1
 SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DDISPLAYINFO=1
-call ..\_build_pass.bat
+call ..\bin\_build_pass.bat
 IF ERRORLEVEL 1 GOTO Error
 
 :: Call FloppyBuilder another time to build the final disk

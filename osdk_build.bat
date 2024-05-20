@@ -45,14 +45,14 @@ for %%i in (%BUILD_LANGUAGES%) do (
   if "%LANGUAGE%"=="%TEST_LANGUAGE%" (
     SET TEST_BUILT=%LANGUAGE%
   )
-  call _build.bat
+  call bin\_build.bat
   IF ERRORLEVEL 1 GOTO Error
 )
 
 :: If the test language was not part of the build list, we build it
 if NOT "%TEST_BUILT%"=="%TEST_LANGUAGE%" (
   SET LANGUAGE=%TEST_LANGUAGE%
-  call _build.bat
+  call bin\_build.bat
 )
 
 :Done
