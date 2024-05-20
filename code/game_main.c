@@ -287,26 +287,11 @@ void DropItem()
 			itemPtr->associated_item      = 255;
 		}
 
-		if (itemPtr->flags & ITEM_FLAG_EVAPORATES)
-		{
-			// Special items like water of petrol go back to where they were or disappear
-			if (itemId == e_ITEM_Water)
-			{
-				itemPtr->location = e_LOCATION_WELL;
-				PrintInformationMessage(gTextWaterDrainsAways);  // "The water drains away"
-			}
-			else
-			{
-				itemPtr->location = 99;
-				PrintInformationMessage(gTextPetrolEvaporates);  // "The petrol evaporates"
-			}
-		}
-		else
-		{
-			// Normal items stay on the same location
-			itemPtr->location        = gCurrentLocation;
-		}		
-		LoadScene();
+        // Execute the steam to perform any item specific operation
+        if (ItemCheck(itemId))
+        {
+            DispatchStream(gDropItemMappingsArray,itemId);
+        }
 	}
 }
 

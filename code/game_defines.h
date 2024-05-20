@@ -76,6 +76,7 @@ extern stream_mapping gInspectItemMappingsArray[];
 extern stream_mapping gUseItemMappingsArray[];
 extern stream_mapping gSearchtemMappingsArray[];
 extern stream_mapping gThrowItemMappingsArray[];
+extern stream_mapping gDropItemMappingsArray[];
 
 // Small feedback messages and prompts
 extern const char gTextAskInput[];              // "What are you going to do now?"

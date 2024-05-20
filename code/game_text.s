@@ -30,8 +30,6 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
-_gTextPetrolEvaporates      .byt "Le pétrole s'évapore",0
-_gTextWaterDrainsAways      .byt "L'eau s'écoule",0
 _gTextDeadThug              .byt "un malfaiteur mort",0
 _gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
 _gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
@@ -44,8 +42,6 @@ _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
-_gTextPetrolEvaporates      .byt "The petrol evaporates",0
-_gTextWaterDrainsAways      .byt "The water drains away",0
 _gTextDeadThug              .byt "a dead thug",0
 _gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
 _gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
@@ -1676,6 +1672,30 @@ drop_snooker_cue
 .)
 
 
+
+_gSceneActionDropWater
+.(
+    SET_ITEM_LOCATION(e_ITEM_Water,e_LOCATION_WELL)             ; Put back the water into the well
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("L'eau s'écoule")
+#else
+    INFO_MESSAGE("The water drains away")
+#endif    
+    END_AND_REFRESH
+.)
+
+_gSceneActionDropPetrol
+.(
+    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOCATION_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Le pétrole s'évapore")
+#else
+    INFO_MESSAGE("The petrol evaporates")
+#endif    
+    END_AND_REFRESH
+.)
+
+
 _gDropCurrentItem
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOCATION_CURRENT)
@@ -1737,6 +1757,10 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_SnookerCue         , _gSceneActionThrowSnookerCue)
     VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
 
+_gDropItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Water              , _gSceneActionDropWater)
+    VALUE_MAPPING(e_ITEM_Petrol             , _gSceneActionDropPetrol)
+    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
 
 _gActionMappingsArray   
     VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)

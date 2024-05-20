@@ -159,8 +159,8 @@
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
 #define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
-#define ITEM_FLAG_EVAPORATES        8    // Used to the water and petrol when you try to drop them
-#define ITEM_FLAG_DISABLED          16   // Used to indicate that something is not active anymore (ex: Dog, Thug )
+#define ITEM_FLAG_free_to_use       8    // ----- free to use -----
+#define ITEM_FLAG_DISABLED         16    // Used to indicate that something is not active anymore (ex: Dog, Thug )
 #define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
 #define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
 #define ITEM_FLAG_TRANSFORMED     128    // For items that get transformed (drugged meat)

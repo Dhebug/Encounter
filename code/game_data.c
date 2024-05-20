@@ -105,8 +105,8 @@ item gItems[e_ITEM_COUNT_] =
     // Items requiring containers
     { gTextItemBlackDust                 ,e_LOCATION_DARKTUNNEL      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_BlackDust            
     { gTextItemYellowPowder              ,e_LOCATION_INSIDE_PIT      ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_YellowPowder         
-    { gTextItemPetrol                    ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Petrol               
-    { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_EVAPORATES      ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Water                
+    { gTextItemPetrol                    ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Petrol               
+    { gTextItemWater                     ,e_LOCATION_WELL            ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin)},       // e_ITEM_Water                
     { gTextItemLargeDove                 ,e_LOCATION_WOODEDAVENUE    ,255           ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet)},                   // e_ITEM_LargeDove            
     { gTextItemGunPowder                 ,e_LOCATION_NONE            ,255           ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox)},                            // e_ITEM_GunPowder            
     

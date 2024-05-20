@@ -123,10 +123,6 @@ void GameDebugger()
         {
             sprintf(currentLine+35,"HEAVY");
         }
-        if (itemPtr->flags & ITEM_FLAG_EVAPORATES)    
-        {
-            sprintf(currentLine+15,"EVAPORATES");
-        }
         if (itemPtr->flags & ITEM_FLAG_ATTACHED)    
         {
             sprintf(currentLine+15,"ATTACHED");
