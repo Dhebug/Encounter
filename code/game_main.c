@@ -240,21 +240,7 @@ void TakeItem()
     }
 
     // Common part for all items (in containers or not)
-    itemPtr->location = e_LOCATION_INVENTORY;    // The item is now in our inventory
-    itemPtr->flags   &= ~ITEM_FLAG_ATTACHED;     // If the item was attached, we detach it
-    switch (itemId)
-    {
-    case e_ITEM_Rope:
-        itemPtr->description = gTextItemRope;
-        break;
-    case e_ITEM_Ladder:
-        itemPtr->description = gTextItemLadder;
-        break;
-    case e_ITEM_LargeDove:
-        itemPtr->description = gTextItemLargeDove;
-        break;
-    }
-    LoadScene();
+    DispatchStream(gTakeItemMappingsArray,itemId);
 }
 
 

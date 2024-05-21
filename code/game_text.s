@@ -273,10 +273,8 @@ _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
 _gTextItemFridge                  .byt "un réfrigérateur",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
 _gTextItemBrokenWindow            .byt "une vitre brisée",0
-_gTextItemLargeDove               .byt "une grosse colombe",0
 _gTextItemTwine                   .byt "un peu de ficelle",0
 _gTextItemSilverKnife             .byt "un coueau en argent",0
-_gTextItemLadder                  .byt "une échelle",0
 _gTextItemAbandonedCar            .byt "une voiture abandonnée",0
 _gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
 _gTextItemMeat                    .byt "un morceau de viande",0
@@ -288,7 +286,6 @@ _gTextItemSnookerCue              .byt "une queue de billard",0
 _gTextItemThug                    .byt "un voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros coffre fort",0
 _gTextItemHandWrittenNote         .byt "une note manuscripte",0
-_gTextItemRope                    .byt "une longueur de corde",0
 _gTextItemRopeHangingFromWindow   .byt "une core qui pend de la fenêtre",0
 _gTextItemRollOfToiletPaper       .byt "un rouleau de papier toilette",0
 _gTextItemHosePipe                .byt "un tuyau d'arrosage",0
@@ -306,8 +303,6 @@ _gTextItemBullets                 .byt "trois balles de calibre .38",0
 _gTextItemYoungGirlOnFloor        .byt "une jeunne fille attachée au sol",0
 _gTextItemChemistryRecipes        .byt "des formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
-_gTextItemLadderInTheHole         .byt "une échelle dans un trou",0
-_gTextItemRopeAttachedToATree     .byt "une corde attachée à un arbre",0
 _gTextItemClosedCurtain           .byt "un rideau fermé",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemMedicineCabinet         .byt "une armoire à pharmacie",0
@@ -332,10 +327,8 @@ _gTextItemOpenPanel               .byt "an open panel on wall",0
 _gTextItemFridge                  .byt "a fridge",0                        // TODO: Use _gSceneActionCloseFridge description
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemBrokenWindow            .byt "the window is broken",0               
-_gTextItemLargeDove               .byt "a large dove",0                       
 _gTextItemTwine                   .byt "some twine",0                         
 _gTextItemSilverKnife             .byt "a silver knife",0                     
-_gTextItemLadder                  .byt "a ladder",0                           
 _gTextItemAbandonedCar            .byt "an abandoned car",0                   
 _gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
 _gTextItemMeat                    .byt "a joint of meat",0                    
@@ -347,7 +340,6 @@ _gTextItemSnookerCue              .byt "a snooker cue",0
 _gTextItemThug                    .byt "a thug asleep on the bed",0           
 _gTextItemHeavySafe               .byt "a heavy safe",0                       
 _gTextItemHandWrittenNote         .byt "a hand written note",0                     
-_gTextItemRope                    .byt "a length of rope",0                   
 _gTextItemRopeHangingFromWindow   .byt "a rope hangs from the window",0       
 _gTextItemRollOfToiletPaper       .byt "a roll of toilet tissue",0            
 _gTextItemHosePipe                .byt "a hose-pipe",0                        
@@ -365,8 +357,6 @@ _gTextItemBullets                 .byt "three .38 bullets",0
 _gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0  
 _gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0         
 _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
-_gTextItemLadderInTheHole         .byt "a ladder in a hole",0      
-_gTextItemRopeAttachedToATree     .byt "a rope attached to a tree",0
 _gTextItemClosedCurtain           .byt "a closed curtain",0             // TODO: Use _gSceneActionCloseCurtain description
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemMedicineCabinet         .byt "a medicine cabinet",0           // TODO: Use _gSceneActionCloseMedicineCabinet description
@@ -1570,6 +1560,11 @@ around_the_pit
     INFO_MESSAGE("You position the ladder properly")
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle dans un trou")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder in a hole")
+#endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_LADDER)
     END_AND_REFRESH
 .)
@@ -1587,6 +1582,11 @@ around_the_pit
     INFO_MESSAGE("You attach the rope to the tree")
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une corde attachée à un arbre")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a rope attached to a tree")
+#endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
     END_AND_REFRESH
 .)
@@ -1764,6 +1764,78 @@ _gScemeActionCommonDogDisabled
 
 
 
+/* MARK: Take Item
+
+████████╗ █████╗ ██╗  ██╗███████╗    ██╗████████╗███████╗███╗   ███╗
+╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝    ██║╚══██╔══╝██╔════╝████╗ ████║
+   ██║   ███████║█████╔╝ █████╗      ██║   ██║   █████╗  ██╔████╔██║
+   ██║   ██╔══██║██╔═██╗ ██╔══╝      ██║   ██║   ██╔══╝  ██║╚██╔╝██║
+   ██║   ██║  ██║██║  ██╗███████╗    ██║   ██║   ███████╗██║ ╚═╝ ██║
+   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝ */
+
+_gTakeItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Rope              , _gSceneActionTakeRope)
+    VALUE_MAPPING(e_ITEM_Ladder            , _gSceneActionTakeLadder)
+    VALUE_MAPPING(e_ITEM_LargeDove         , _gSceneActionTakeDove)
+    VALUE_MAPPING(255, _gSceneActionTakeCommon)  // End Marker
+
+    /*
+    itemPtr->location = e_LOCATION_INVENTORY;    // The item is now in our inventory
+    itemPtr->flags   &= ~ITEM_FLAG_ATTACHED;     // If the item was attached, we detach it
+    switch (itemId)
+    {
+    case e_ITEM_Rope:
+        itemPtr->description = gTextItemRope;
+        break;
+    case e_ITEM_Ladder:
+        itemPtr->description = gTextItemLadder;
+        break;
+    case e_ITEM_LargeDove:
+        itemPtr->description = gTextItemLargeDove;
+        break;
+    }
+    LoadScene();
+    */
+
+_gSceneActionTakeRope
+.(
++_gTextItemRope = *+2
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une longueur de corde")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a length of rope")
+#endif    
+    JUMP(_gSceneActionTakeCommon)
+.)
+
+_gSceneActionTakeLadder
+.(
++_gTextItemLadder = *+2
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder")
+#endif    
+    JUMP(_gSceneActionTakeCommon)
+.)
+
+_gSceneActionTakeDove
+.(
++_gTextItemLargeDove = *+2
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une grosse colombe")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a large dove")
+#endif    
+    JUMP(_gSceneActionTakeCommon)
+.)
+
+_gSceneActionTakeCommon
+.(
+    SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOCATION_INVENTORY)  ; The item is now in our inventory
+    UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Drop Action

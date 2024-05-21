@@ -70,12 +70,7 @@ extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
 
 extern action_mapping gActionMappingsArray[];
-extern stream_mapping gReadItemMappingsArray[];
-extern stream_mapping gCloseItemMappingsArray[];
-extern stream_mapping gInspectItemMappingsArray[];
-extern stream_mapping gUseItemMappingsArray[];
-extern stream_mapping gSearchtemMappingsArray[];
-extern stream_mapping gThrowItemMappingsArray[];
+extern stream_mapping gTakeItemMappingsArray[];
 extern stream_mapping gDropItemMappingsArray[];
 
 // Small feedback messages and prompts
@@ -230,8 +225,6 @@ extern const char gTextItemBullets[];                 // "three .38 bullets"
 extern const char gTextItemYoungGirlOnFloor[];        // "a young girl tied up on the floor"  
 extern const char gTextItemChemistryRecipes[];        // "a couple chemistry recipes"         
 extern const char gTextItemUnitedKingdomMap[];        // "a map of the United Kingdom"        
-extern const char gTextItemLadderInTheHole[];         // "a ladder in a hole"                 
-extern const char gTextItemRopeAttachedToATree[];     // "a rope attached to a tree"
 extern const char gTextItemClosedCurtain[];           // "a closed curtain"
 extern const char gTextItemHandheldGame[];            // "a handheld game"
 extern const char gTextItemMedicineCabinet[];         // "a medicine cabinet"
