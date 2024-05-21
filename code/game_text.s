@@ -12,16 +12,24 @@ _StartGameTextData
 #endif
 
 
-/*
+/* MARK: Generic Messages
 
- ██████╗ ███████╗███╗   ██╗███████╗██████╗ ██╗ ██████╗    ███╗   ███╗███████╗███████╗███████╗ █████╗  ██████╗ ███████╗███████╗
-██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██║██╔════╝    ████╗ ████║██╔════╝██╔════╝██╔════╝██╔══██╗██╔════╝ ██╔════╝██╔════╝
-██║  ███╗█████╗  ██╔██╗ ██║█████╗  ██████╔╝██║██║         ██╔████╔██║█████╗  ███████╗███████╗███████║██║  ███╗█████╗  ███████╗
-██║   ██║██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██║██║         ██║╚██╔╝██║██╔══╝  ╚════██║╚════██║██╔══██║██║   ██║██╔══╝  ╚════██║
-╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║╚██████╗    ██║ ╚═╝ ██║███████╗███████║███████║██║  ██║╚██████╔╝███████╗███████║
- ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝    ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝
-                                                                                                                              
-*/
+      ::::::::  :::::::::: ::::    ::: :::::::::: :::::::::  ::::::::::: ::::::::              
+    :+:    :+: :+:        :+:+:   :+: :+:        :+:    :+:     :+:    :+:    :+:              
+   +:+        +:+        :+:+:+  +:+ +:+        +:+    +:+     +:+    +:+                      
+  :#:        +#++:++#   +#+ +:+ +#+ +#++:++#   +#++:++#:      +#+    +#+                       
+ +#+   +#+# +#+        +#+  +#+#+# +#+        +#+    +#+     +#+    +#+                        
+#+#    #+# #+#        #+#   #+#+# #+#        #+#    #+#     #+#    #+#    #+#                  
+########  ########## ###    #### ########## ###    ### ########### ########                    
+        :::   :::   :::::::::: ::::::::   ::::::::      :::      ::::::::  :::::::::: :::::::: 
+      :+:+: :+:+:  :+:       :+:    :+: :+:    :+:   :+: :+:   :+:    :+: :+:       :+:    :+: 
+    +:+ +:+:+ +:+ +:+       +:+        +:+         +:+   +:+  +:+        +:+       +:+         
+   +#+  +:+  +#+ +#++:++#  +#++:++#++ +#++:++#++ +#++:++#++: :#:        +#++:++#  +#++:++#++   
+  +#+       +#+ +#+              +#+        +#+ +#+     +#+ +#+   +#+# +#+              +#+    
+ #+#       #+# #+#       #+#    #+# #+#    #+# #+#     #+# #+#    #+# #+#       #+#    #+#     
+###       ### ########## ########   ########  ###     ###  ########  ########## ########   */
+
+
 // Small feedback messages and prompts
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
@@ -99,7 +107,7 @@ _gTextErrorDeadDontMove     .byt "Dead don't move",0
 _EndErrorMessages
 
 
-/*
+/* MARK: Location Descriptions
 
 ██╗      ██████╗  ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗    ██████╗ ███████╗███████╗ ██████╗██████╗ ██╗██████╗ ████████╗██╗ ██████╗ ███╗   ██╗███████╗
 ██║     ██╔═══██╗██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -236,16 +244,15 @@ _gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
 _EndLocationNames
 
 
-/*
+/* MARK: Items
 
 ██╗████████╗███████╗███╗   ███╗███████╗
 ██║╚══██╔══╝██╔════╝████╗ ████║██╔════╝
 ██║   ██║   █████╗  ██╔████╔██║███████╗
 ██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║
 ██║   ██║   ███████╗██║ ╚═╝ ██║███████║
-╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝
-                                       
-*/
+╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝ */
+
 _StartItemNames
 #ifdef LANGUAGE_FR
 // Containers
@@ -369,16 +376,15 @@ _gTextItemSedativeLacedMeat       .byt "drugged meat",0
 _EndItemNames
 
 
-/*
+/* MARK: Scene descriptions
 
 ███████╗ ██████╗███████╗███╗   ██╗███████╗    ██████╗ ███████╗███████╗ ██████╗██████╗ ██╗██████╗ ████████╗██╗ ██████╗ ███╗   ██╗███████╗
 ██╔════╝██╔════╝██╔════╝████╗  ██║██╔════╝    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
 ███████╗██║     █████╗  ██╔██╗ ██║█████╗      ██║  ██║█████╗  ███████╗██║     ██████╔╝██║██████╔╝   ██║   ██║██║   ██║██╔██╗ ██║███████╗
 ╚════██║██║     ██╔══╝  ██║╚██╗██║██╔══╝      ██║  ██║██╔══╝  ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║   ██║██║   ██║██║╚██╗██║╚════██║
 ███████║╚██████╗███████╗██║ ╚████║███████╗    ██████╔╝███████╗███████║╚██████╗██║  ██║██║██║        ██║   ██║╚██████╔╝██║ ╚████║███████║
-╚══════╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-                                                                                                                                        
-*/
+╚══════╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ */
+
 _StartSceneScripts
 _gDescriptionTeenagerRoom         .byt "Teenager room?",0
 
@@ -1218,6 +1224,28 @@ _EndSceneScripts
 // Scene actions
 _StartSceneActions
 
+
+/* MARK: Read Action
+
+ ██▀███  ▓█████ ▄▄▄      ▓█████▄     ▄▄▄       ▄████▄  ▄▄▄█████▓ ██▓ ▒█████   ███▄    █ 
+▓██ ▒ ██▒▓█   ▀▒████▄    ▒██▀ ██▌   ▒████▄    ▒██▀ ▀█  ▓  ██▒ ▓▒▓██▒▒██▒  ██▒ ██ ▀█   █ 
+▓██ ░▄█ ▒▒███  ▒██  ▀█▄  ░██   █▌   ▒██  ▀█▄  ▒▓█    ▄ ▒ ▓██░ ▒░▒██▒▒██░  ██▒▓██  ▀█ ██▒
+▒██▀▀█▄  ▒▓█  ▄░██▄▄▄▄██ ░▓█▄   ▌   ░██▄▄▄▄██ ▒▓▓▄ ▄██▒░ ▓██▓ ░ ░██░▒██   ██░▓██▒  ▐▌██▒
+░██▓ ▒██▒░▒████▒▓█   ▓██▒░▒████▓     ▓█   ▓██▒▒ ▓███▀ ░  ▒██▒ ░ ░██░░ ████▓▒░▒██░   ▓██░
+░ ▒▓ ░▒▓░░░ ▒░ ░▒▒   ▓▒█░ ▒▒▓  ▒     ▒▒   ▓▒█░░ ░▒ ▒  ░  ▒ ░░   ░▓  ░ ▒░▒░▒░ ░ ▒░   ▒ ▒ 
+  ░▒ ░ ▒░ ░ ░  ░ ▒   ▒▒ ░ ░ ▒  ▒      ▒   ▒▒ ░  ░  ▒       ░     ▒ ░  ░ ▒ ▒░ ░ ░░   ░ ▒░
+  ░░   ░    ░    ░   ▒    ░ ░  ░      ░   ▒   ░          ░       ▒ ░░ ░ ░ ▒     ░   ░ ░ 
+   ░        ░  ░     ░  ░   ░             ░  ░░ ░                ░      ░ ░           ░ 
+                          ░                   ░                                           */
+
+_gReadItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Newspaper          , _gSceneActionReadNewsPaper)
+    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _gSceneActionReadHandWrittenNote)
+    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _gSceneActionReadChemistryRecipes)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
+    VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
+
+
 _gSceneActionReadNewsPaper
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
     INFO_MESSAGE("I have to find her fast...")
@@ -1269,6 +1297,25 @@ recipe_already_found
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     END_AND_REFRESH
 .)
+
+
+/* MARK: Inspect Action
+
+.___                                     __   
+|   | ____   ____________   ____   _____/  |_ 
+|   |/    \ /  ___/\____ \_/ __ \_/ ___\   __\
+|   |   |  \\___ \ |  |_> >  ___/\  \___|  |  
+|___|___|  /____  >|   __/ \___  >\___  >__|  
+         \/     \/ |__|        \/     \/      */
+
+_gInspectItemMappingsArray
+    VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _gSceneActionInspectMap)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionInspectChemistryBook)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionInspectGame)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionInspectFridgeDoor)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionInspectMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_PlasticBag         , _gSceneActionExaminePlasticBag)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
 
 
 _gSceneActionInspectMap
@@ -1334,14 +1381,20 @@ _gSceneActionExaminePlasticBag
 
 
 
-/*
-                     ██████╗ ██████╗ ███████╗███╗   ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
-                    ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
-                    ██║   ██║██████╔╝█████╗  ██╔██╗ ██║    ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
-                    ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
-                    ╚██████╔╝██║     ███████╗██║ ╚████║    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
-                     ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                                                                                    
-*/
+/* MARK: Open Action
+
+ ██████╗ ██████╗ ███████╗███╗   ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+██║   ██║██████╔╝█████╗  ██╔██╗ ██║    ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+╚██████╔╝██║     ███████╗██║ ╚████║    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝*/
+_gOpenItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionOpenCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionOpenFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionOpenMedicineCabinet )
+    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+
 _gSceneActionOpenCurtain
 .(
     JUMP_IF_FALSE(curtain_already_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))        ; Is the curtain closed?
@@ -1395,16 +1448,22 @@ cabinet_already_open
 .)
 
 
-/* 
 
-                  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
-                 ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
-                 ██║     ██║     ██║   ██║███████╗█████╗      ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
-                 ██║     ██║     ██║   ██║╚════██║██╔══╝      ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
-                 ╚██████╗███████╗╚██████╔╝███████║███████╗    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
-                  ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+/* MARK: Close Action
 
-*/                                                                                             
+ ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+██║     ██║     ██║   ██║███████╗█████╗      ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
+██║     ██║     ██║   ██║╚════██║██╔══╝      ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
+╚██████╗███████╗╚██████╔╝███████║███████╗    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ */              
+
+_gCloseItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionCloseFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionCloseMedicineCabinet )
+    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+
 _gSceneActionCloseCurtain
 .(
     JUMP_IF_TRUE(curtain_already_closed,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
@@ -1434,6 +1493,16 @@ medicine_cabinet_already_closed
     END_AND_REFRESH
 .)
 
+
+/* MARK: Generic Answers
+
+      ::::::::  :::::::::: ::::    ::: :::::::::: :::::::::  ::::::::::: ::::::::              :::     ::::    :::  ::::::::  :::       ::: :::::::::: :::::::::   :::::::: 
+    :+:    :+: :+:        :+:+:   :+: :+:        :+:    :+:     :+:    :+:    :+:           :+: :+:   :+:+:   :+: :+:    :+: :+:       :+: :+:        :+:    :+: :+:    :+: 
+   +:+        +:+        :+:+:+  +:+ +:+        +:+    +:+     +:+    +:+                 +:+   +:+  :+:+:+  +:+ +:+        +:+       +:+ +:+        +:+    +:+ +:+         
+  :#:        +#++:++#   +#+ +:+ +#+ +#++:++#   +#++:++#:      +#+    +#+                +#++:++#++: +#+ +:+ +#+ +#++:++#++ +#+  +:+  +#+ +#++:++#   +#++:++#:  +#++:++#++   
+ +#+   +#+# +#+        +#+  +#+#+# +#+        +#+    +#+     +#+    +#+                +#+     +#+ +#+  +#+#+#        +#+ +#+ +#+#+ +#+ +#+        +#+    +#+        +#+    
+#+#    #+# #+#        #+#   #+#+# #+#        #+#    #+#     #+#    #+#    #+#         #+#     #+# #+#   #+#+# #+#    #+#  #+#+# #+#+#  #+#        #+#    #+# #+#    #+#     
+########  ########## ###    #### ########## ###    ### ########### ########          ###     ### ###    ####  ########    ###   ###   ########## ###    ###  ########   */              
 
 _gSceneActionCannotDo
 .(
@@ -1470,16 +1539,24 @@ _gSceneActionNothingSpecial
 .)
 
 
-/*
 
-                ██╗   ██╗███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
-                ██║   ██║██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
-                ██║   ██║███████╗█████╗      ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║
-                ██║   ██║╚════██║██╔══╝      ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
-                ╚██████╔╝███████║███████╗    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
-                 ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-                                                                            
-*/
+
+/* MARK: Use Action
+
+:::    :::  ::::::::  ::::::::::          :::      :::::::: ::::::::::: ::::::::::: ::::::::  ::::    ::: 
+:+:    :+: :+:    :+: :+:               :+: :+:   :+:    :+:    :+:         :+:    :+:    :+: :+:+:   :+: 
++:+    +:+ +:+        +:+              +:+   +:+  +:+           +:+         +:+    +:+    +:+ :+:+:+  +:+ 
++#+    +:+ +#++:++#++ +#++:++#        +#++:++#++: +#+           +#+         +#+    +#+    +:+ +#+ +:+ +#+ 
++#+    +#+        +#+ +#+             +#+     +#+ +#+           +#+         +#+    +#+    +#+ +#+  +#+#+# 
+#+#    #+# #+#    #+# #+#             #+#     #+# #+#    #+#    #+#         #+#    #+#    #+# #+#   #+#+# 
+ ########   ########  ##########      ###     ###  ########     ###     ########### ########  ###    #### */
+
+_gUseItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Ladder             , _gSceneActionUseLadder)
+    VALUE_MAPPING(e_ITEM_Rope               , _gSceneActionUseRope)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionPlayGame)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+
 
 _gSceneActionUseLadder
 .(
@@ -1515,7 +1592,7 @@ around_the_pit
 .)
 
 
-/*
+/* MARK: Search Action
 
             ███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
             ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1525,6 +1602,12 @@ around_the_pit
             ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
                                                                                                    
 */
+
+_gSearchtemMappingsArray
+    VALUE_MAPPING(e_ITEM_Thug               , _gSceneActionSearchThug)
+    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+
+
 _gSceneActionSearchThug
 .(
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
@@ -1556,7 +1639,7 @@ found_items
 .)
 
 
-/*
+/* MARK: Throw action
 
                 ████████╗██╗  ██╗██████╗  ██████╗ ██╗    ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
                 ╚══██╔══╝██║  ██║██╔══██╗██╔═══██╗██║    ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1566,6 +1649,15 @@ found_items
                    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
                                                                                                             
 */
+
+_gThrowItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Bread              , _gSceneActionThrowBread)
+    VALUE_MAPPING(e_ITEM_Meat               , _gSceneActionThrowMeat)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _gSceneActionThrowKnife)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _gSceneActionThrowSnookerCue)
+    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
+
+
 _gSceneActionThrowBread
 .(
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOCATION_WOODEDAVENUE))
@@ -1587,22 +1679,6 @@ give_bread_to_dove
 not_in_wooded_avenue
     // In other locations we just drop the bread where we are
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOCATION_CURRENT)
-    END_AND_REFRESH
-.)
-
-
-
-_gScemeActionCommonDogDisabled
-.(
-    INCREASE_SCORE(50)
-    SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
-#ifdef LANGUAGE_FR   
-+_gTextDogLying = *+2
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un chien immobile")
-#else    
-+_gTextDogLying = *+2
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a dog lying")
-#endif    
     END_AND_REFRESH
 .)
 
@@ -1672,6 +1748,45 @@ drop_snooker_cue
 .)
 
 
+_gScemeActionCommonDogDisabled
+.(
+    INCREASE_SCORE(50)
+    SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
+#ifdef LANGUAGE_FR   
++_gTextDogLying = *+2
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un chien immobile")
+#else    
++_gTextDogLying = *+2
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a dog lying")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+
+
+
+/* MARK: Drop Action
+
+ .S_sSSs     .S_sSSs      sSSs_sSSs     .S_sSSs           .S_SSSs      sSSs  sdSS_SSSSSSbs   .S    sSSs_sSSs     .S_sSSs    
+.SS~YS%%b   .SS~YS%%b    d%%SP~YS%%b   .SS~YS%%b         .SS~SSSSS    d%%SP  YSSS~S%SSSSSP  .SS   d%%SP~YS%%b   .SS~YS%%b   
+S%S   `S%b  S%S   `S%b  d%S'     `S%b  S%S   `S%b        S%S   SSSS  d%S'         S%S       S%S  d%S'     `S%b  S%S   `S%b  
+S%S    S%S  S%S    S%S  S%S       S%S  S%S    S%S        S%S    S%S  S%S          S%S       S%S  S%S       S%S  S%S    S%S  
+S%S    S&S  S%S    d*S  S&S       S&S  S%S    d*S        S%S SSSS%S  S&S          S&S       S&S  S&S       S&S  S%S    S&S  
+S&S    S&S  S&S   .S*S  S&S       S&S  S&S   .S*S        S&S  SSS%S  S&S          S&S       S&S  S&S       S&S  S&S    S&S  
+S&S    S&S  S&S_sdSSS   S&S       S&S  S&S_sdSSS         S&S    S&S  S&S          S&S       S&S  S&S       S&S  S&S    S&S  
+S&S    S&S  S&S~YSY%b   S&S       S&S  S&S~YSSY          S&S    S&S  S&S          S&S       S&S  S&S       S&S  S&S    S&S  
+S*S    d*S  S*S   `S%b  S*b       d*S  S*S               S*S    S&S  S*b          S*S       S*S  S*b       d*S  S*S    S*S  
+S*S   .S*S  S*S    S%S  S*S.     .S*S  S*S               S*S    S*S  S*S.         S*S       S*S  S*S.     .S*S  S*S    S*S  
+S*S_sdSSS   S*S    S&S   SSSbs_sdSSS   S*S               S*S    S*S   SSSbs       S*S       S*S   SSSbs_sdSSS   S*S    S*S  
+SSS~YSSY    S*S    SSS    YSSP~YSSY    S*S               SSS    S*S    YSSP       S*S       S*S    YSSP~YSSY    S*S    SSS  
+            SP                         SP                       SP                SP        SP                  SP          
+            Y                          Y                        Y                 Y         Y                   Y           */
+
+_gDropItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Water              , _gSceneActionDropWater)
+    VALUE_MAPPING(e_ITEM_Petrol             , _gSceneActionDropPetrol)
+    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
 
 _gSceneActionDropWater
 .(
@@ -1712,55 +1827,15 @@ _gDoNothingScript
 _EndSceneActions
 
 
-_gReadItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Newspaper          , _gSceneActionReadNewsPaper)
-    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _gSceneActionReadHandWrittenNote)
-    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _gSceneActionReadChemistryRecipes)
-    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
-    VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
+/* MARK: Main Action Mapping
 
-_gOpenItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionOpenCurtain)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionOpenFridge)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionOpenMedicineCabinet )
-    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+.88b  d88.  .d8b.  d888888b d8b   db       .d8b.   .o88b. d888888b d888888b  .d88b.  d8b   db      .88b  d88.  .d8b.  d8888b. d8888b. d888888b d8b   db  d888b  
+88'YbdP`88 d8' `8b   `88'   888o  88      d8' `8b d8P  Y8 `~~88~~'   `88'   .8P  Y8. 888o  88      88'YbdP`88 d8' `8b 88  `8D 88  `8D   `88'   888o  88 88' Y8b 
+88  88  88 88ooo88    88    88V8o 88      88ooo88 8P         88       88    88    88 88V8o 88      88  88  88 88ooo88 88oodD' 88oodD'    88    88V8o 88 88      
+88  88  88 88~~~88    88    88 V8o88      88~~~88 8b         88       88    88    88 88 V8o88      88  88  88 88~~~88 88~~~   88~~~      88    88 V8o88 88  ooo 
+88  88  88 88   88   .88.   88  V888      88   88 Y8b  d8    88      .88.   `8b  d8' 88  V888      88  88  88 88   88 88      88        .88.   88  V888 88. ~8~ 
+YP  YP  YP YP   YP Y888888P VP   V8P      YP   YP  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P      YP  YP  YP YP   YP 88      88      Y888888P VP   V8P  Y888P   */
 
-_gCloseItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionCloseFridge)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionCloseMedicineCabinet )
-    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
-
-_gInspectItemMappingsArray
-    VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _gSceneActionInspectMap)
-    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionInspectChemistryBook)
-    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionInspectGame)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionInspectFridgeDoor)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionInspectMedicineCabinet)
-    VALUE_MAPPING(e_ITEM_PlasticBag         , _gSceneActionExaminePlasticBag)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
-
-_gUseItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Ladder             , _gSceneActionUseLadder)
-    VALUE_MAPPING(e_ITEM_Rope               , _gSceneActionUseRope)
-    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionPlayGame)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
-
-_gSearchtemMappingsArray
-    VALUE_MAPPING(e_ITEM_Thug               , _gSceneActionSearchThug)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
-
-_gThrowItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Bread              , _gSceneActionThrowBread)
-    VALUE_MAPPING(e_ITEM_Meat               , _gSceneActionThrowMeat)
-    VALUE_MAPPING(e_ITEM_SilverKnife        , _gSceneActionThrowKnife)
-    VALUE_MAPPING(e_ITEM_SnookerCue         , _gSceneActionThrowSnookerCue)
-    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
-
-_gDropItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Water              , _gSceneActionDropWater)
-    VALUE_MAPPING(e_ITEM_Petrol             , _gSceneActionDropPetrol)
-    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
 
 _gActionMappingsArray   
     VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)
