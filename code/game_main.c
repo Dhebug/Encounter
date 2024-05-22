@@ -314,17 +314,6 @@ void Invoke()
 #endif    
 
 
-void CombineItems()
-{
-    unsigned char firstItemId     = gWordBuffer[1];
-    unsigned char secondaryItemId = gWordBuffer[2];
-	if (ItemCheck(firstItemId) && ItemCheck(secondaryItemId))
-    {
-        DispatchStream2(gAssembleItemMappingsArray,firstItemId,secondaryItemId);
-    }
-}
-
-
 WORDS ProcessAnswer()
 {
 	// Check the first word
@@ -342,19 +331,31 @@ WORDS ProcessAnswer()
     {
         if (actionMappingPtr->id==actionId)
         {            
-            if (actionMappingPtr->flag==0)
-            {
-                // call the callback
-                actionMappingPtr->u.function();
-            }
-            else
+            unsigned char flags = actionMappingPtr->flag;
+            if (flags & FLAG_MAPPING_STREAM)
             {
                 // Run the stream
                 unsigned char itemId = gWordBuffer[1];
                 if (ItemCheck(itemId))
                 {
-                    DispatchStream(actionMappingPtr->u.stream,itemId);
+                    if (flags & FLAG_MAPPING_TWO_ITEMS)
+                    {
+                        unsigned char itemId2 = gWordBuffer[2];
+                        if (ItemCheck(itemId2))
+                        {
+                            DispatchStream2(actionMappingPtr->u.stream,itemId,itemId2);
+                        }
+                    }
+                    else
+                    {
+                        DispatchStream(actionMappingPtr->u.stream,itemId);
+                    }
                 }
+            }
+            else
+            {
+                // call the callback
+                actionMappingPtr->u.function();
             }
             // Continue
             return e_WORD_CONTINUE;

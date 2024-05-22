@@ -1202,32 +1202,34 @@ _StartSceneActions
 88  88  88 88   88   .88.   88  V888      88   88 Y8b  d8    88      .88.   `8b  d8' 88  V888      88  88  88 88   88 88      88        .88.   88  V888 88. ~8~ 
 YP  YP  YP YP   YP Y888888P VP   V8P      YP   YP  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P      YP  YP  YP YP   YP 88      88      Y888888P VP   V8P  Y888P   */
 
+;                  Word opcode       Function or Stream          Flags
+_gActionMappingsArray
+    ; Implemented as actual C/Assembler functions
+    WORD_MAPPING(e_WORD_NORTH     ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_SOUTH     ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_EAST      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_WEST      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_UP        ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_DOWN      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
 
-_gActionMappingsArray   
-    VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_SOUTH     ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_EAST      ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_WEST      ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_UP        ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_DOWN      ,0, _PlayerMove)
+    WORD_MAPPING(e_WORD_TAKE      ,_TakeItem                  ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,FLAG_MAPPING_DEFAULT)
 
-    VALUE_MAPPING2(e_WORD_TAKE      ,0, _TakeItem)
-
-    VALUE_MAPPING2(e_WORD_DROP      ,0, _DropItem)
-    VALUE_MAPPING2(e_WORD_COMBINE   ,0, _CombineItems)
-    VALUE_MAPPING2(e_WORD_READ      ,1, _gReadItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_USE       ,1, _gUseItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_OPEN      ,1, _gOpenItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_CLOSE     ,1, _gCloseItemMappingsArray)
-
-    VALUE_MAPPING2(e_WORD_LOOK      ,1, _gInspectItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_FRISK     ,1, _gSearchtemMappingsArray)
-    VALUE_MAPPING2(e_WORD_SEARCH    ,1, _gSearchtemMappingsArray)
-    VALUE_MAPPING2(e_WORD_THROW     ,1, _gThrowItemMappingsArray)
 #ifdef ENABLE_CHEATS       
-    VALUE_MAPPING2(e_WORD_INVOKE      ,0, _Invoke)
+    WORD_MAPPING(e_WORD_INVOKE    ,_Invoke                    ,FLAG_MAPPING_DEFAULT)
 #endif
-    VALUE_MAPPING2(e_WORD_COUNT_    ,0, 0)
+    ; Implemented as script streams
+    WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
+    WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_USE       ,_gUseItemMappingsArray     ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_OPEN      ,_gOpenItemMappingsArray    ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_CLOSE     ,_gCloseItemMappingsArray   ,FLAG_MAPPING_STREAM)
+
+    WORD_MAPPING(e_WORD_LOOK      ,_gInspectItemMappingsArray ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_FRISK     ,_gSearchtemMappingsArray   ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_SEARCH    ,_gSearchtemMappingsArray   ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_THROW     ,_gThrowItemMappingsArray   ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_COUNT_    ,0, 0)
     // End Marker
 
 
@@ -1240,7 +1242,7 @@ d8P  Y8 .8P  Y8. 88'YbdP`88 88  `8D   `88'   888o  88 88'
 Y8b  d8 `8b  d8' 88  88  88 88   8D   .88.   88  V888 88.     
  `Y88P'  `Y88P'  YP  YP  YP Y8888P' Y888888P VP   V8P Y88888P  */
 
-_gAssembleItemMappingsArray
+_gCombineItemMappingsArray
     VALUE_MAPPING2(e_ITEM_Meat,e_ITEM_SedativePills    ,_gSceneCombineMeatWithPills)
     VALUE_MAPPING2(e_ITEM_SedativePills,e_ITEM_Meat    ,_gSceneCombineMeatWithPills)
 
