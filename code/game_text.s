@@ -1701,7 +1701,7 @@ dog_eating_the_meat
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
     INCREASE_SCORE(50)
-    JUMP(_gScemeActionCommonDogDisabled)
+    JUMP(_gSceneActionCommonDogDisabled)
 done
     END_AND_REFRESH
 
@@ -1723,7 +1723,7 @@ _gSceneActionThrowKnife
 
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
-    JUMP(_gScemeActionCommonDogDisabled)
+    JUMP(_gSceneActionCommonDogDisabled)
 
 drop_knife    
     // In other locations we just drop the item where we are
@@ -1743,7 +1743,7 @@ _gSceneActionThrowSnookerCue
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
     INCREASE_SCORE(50)
-    JUMP(_gScemeActionCommonDogDisabled)
+    JUMP(_gSceneActionCommonDogDisabled)
 
 drop_snooker_cue    
     // In other locations we just drop the item where we are
@@ -1752,7 +1752,7 @@ drop_snooker_cue
 .)
 
 
-_gScemeActionCommonDogDisabled
+_gSceneActionCommonDogDisabled
 .(
     INCREASE_SCORE(50)
     SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
