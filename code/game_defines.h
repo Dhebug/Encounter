@@ -70,6 +70,8 @@ extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
 
 extern action_mapping gActionMappingsArray[];
+extern action_mapping gAssembleItemMappingsArray[];
+
 extern stream_mapping gTakeItemMappingsArray[];
 extern stream_mapping gDropItemMappingsArray[];
 

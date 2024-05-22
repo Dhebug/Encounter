@@ -99,7 +99,7 @@ search_loop
     cmp #255            ; Or is it the end of the table?
     beq found_it
 
-    iny
+    iny                 ; Skip the callback/stream pointer
     iny
     jmp search_loop
 
@@ -113,6 +113,45 @@ found_it
     jmp _PlayStreamAsm
 .)
 
+
+; _param0=id of the first element we are searching for in the table
+; _param1=pointer to a table with id:stream pointer
+; _param2=id of the second element we are searching for in the table
+_DispatchStream2
+.(
+    ; Store the item id into "CurrentItem"
+    lda _param0
+    sta _gCurrentItem
+
+    ldy #0
+search_loop    
+    lda (_param1),y     ; Get the first ID from the table
+    iny
+    tax                 ; Copy to X
+    lda (_param1),y     ; Check the second in the table
+    iny
+    cmp #255            ; Is it the end of the table?
+    beq found_it
+
+    cpx _param0         ; Does that match the first ID we are looking for?
+    bne no_match
+    cmp _param2         ; Does that match the second ID we are looking for?
+    bne no_match
+
+found_it    
+    lda (_param1),y     ; Copy the stream pointer to _param0
+    sta _param0+0
+    iny
+    lda (_param1),y
+    sta _param0+1
+
+    jmp _PlayStreamAsm
+
+no_match
+    iny                 ; Skip the callback/stream pointer
+    iny
+    jmp search_loop
+.)
 
 
 ; Fetch the value in _gCurrentStream, increment the pointer, return the value in X

@@ -314,31 +314,13 @@ void Invoke()
 #endif    
 
 
-#define COMBINATOR(firstItem,secondItem)    ((firstItem&255)|((secondItem&255)<<8))
-
 void CombineItems()
 {
     unsigned char firstItemId     = gWordBuffer[1];
     unsigned char secondaryItemId = gWordBuffer[2];
 	if (ItemCheck(firstItemId) && ItemCheck(secondaryItemId))
     {
-        switch (COMBINATOR(firstItemId,secondaryItemId))
-        {
-        case COMBINATOR(e_ITEM_Meat,e_ITEM_SedativePills):
-        case COMBINATOR(e_ITEM_SedativePills,e_ITEM_Meat):
-            {    
-                gItems[e_ITEM_SedativePills].location = e_LOCATION_GONE_FOREVER;       // The sedative are gone from the game
-                gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;                    // We now have some drugged meat in our inventory
-                gItems[e_ITEM_Meat].description = gTextItemSedativeLacedMeat;
-                UnlockAchievement(ACHIEVEMENT_DRUGGED_THE_MEAT);
-                LoadScene();
-            }
-            break;
-
-        default:
-            PrintErrorMessage(gTextErrorDontKnowUsage);   // "I don't know how to use that"
-            break;
-        }
+        DispatchStream2(gAssembleItemMappingsArray,firstItemId,secondaryItemId);
     }
 }
 

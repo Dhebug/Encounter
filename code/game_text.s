@@ -287,7 +287,6 @@ _gTextItemClosedCurtain           .byt "un rideau fermé",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemMedicineCabinet         .byt "une armoire à pharmacie",0
 _gTextItemSedativePills           .byt "des somnifères",0
-_gTextItemSedativeLacedMeat       .byt "viande droggée",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -341,7 +340,6 @@ _gTextItemClosedCurtain           .byt "a closed curtain",0             // TODO:
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemMedicineCabinet         .byt "a medicine cabinet",0           // TODO: Use _gSceneActionCloseMedicineCabinet description
 _gTextItemSedativePills           .byt "some sedative pills",0
-_gTextItemSedativeLacedMeat       .byt "drugged meat",0
 #endif
 _EndItemNames
 
@@ -1231,6 +1229,37 @@ _gActionMappingsArray
 #endif
     VALUE_MAPPING2(e_WORD_COUNT_    ,0, 0)
     // End Marker
+
+
+/* MARK: Combine 👨‍🏭
+
+ .o88b.  .d88b.  .88b  d88. d8888b. d888888b d8b   db d88888b 
+d8P  Y8 .8P  Y8. 88'YbdP`88 88  `8D   `88'   888o  88 88'     
+8P      88    88 88  88  88 88oooY'    88    88V8o 88 88ooooo 
+8b      88    88 88  88  88 88~~~b.    88    88 V8o88 88~~~~~ 
+Y8b  d8 `8b  d8' 88  88  88 88   8D   .88.   88  V888 88.     
+ `Y88P'  `Y88P'  YP  YP  YP Y8888P' Y888888P VP   V8P Y88888P  */
+
+_gAssembleItemMappingsArray
+    VALUE_MAPPING2(e_ITEM_Meat,e_ITEM_SedativePills    ,_gSceneCombineMeatWithPills)
+    VALUE_MAPPING2(e_ITEM_SedativePills,e_ITEM_Meat    ,_gSceneCombineMeatWithPills)
+
+    VALUE_MAPPING2(255,255    ,_gSceneActionCannotDo)
+
+
+_gSceneCombineMeatWithPills
+.(
+    SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_GONE_FOREVER)      ; The sedative are gone from the game
+    SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
+#ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"viande droggée")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged meat")
+#endif    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!    
+    END_AND_REFRESH
+.)
+
 
 
 
