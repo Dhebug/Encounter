@@ -257,7 +257,6 @@ keyword gWordsArray[] =
 #ifdef LANGUAGE_FR    
     { "PREND"   , e_WORD_TAKE },
     { "RAMASSE" , e_WORD_TAKE },
-    { "TUE"     , e_WORD_KILL },
     { "FOUILLE" , e_WORD_FRISK },
     { "CHERCHE" , e_WORD_SEARCH },
     { "LANCE"   , e_WORD_THROW },
@@ -277,7 +276,6 @@ keyword gWordsArray[] =
 #else
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },
-    { "KILL"    , e_WORD_KILL },
     { "FRISK"   , e_WORD_FRISK },
     { "SEARCH"  , e_WORD_SEARCH },
     { "THROW"   , e_WORD_THROW },
@@ -300,8 +298,6 @@ keyword gWordsArray[] =
 #endif
 
 #ifdef ENABLE_CHEATS
-    { "REVIVE", e_WORD_REVIVE },
-    { "TICKLE", e_WORD_TICKLE },
     { "INVOKE", e_WORD_INVOKE },
 #endif    
 

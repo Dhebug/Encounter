@@ -71,17 +71,7 @@ _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
-_gTextErrorCannotUseHere    .byt "Pas utilisable ici",0
 _gTextErrorDontKnowUsage    .byt "Je ne sais pas l'utiliser",0
-_gTextErrorCannotAttachRope .byt "Impossible de l'attacher",0
-_gTextErrorLadderInHole     .byt "L'échelle est déja dans le trou",0
-_gTextErrorCantClimbThat    .byt "Je ne sais pas grimper ca",0
-_gTextErrorNeedPositionned  .byt "Ca doit d'abort être en place",0
-_gTextErrorItsNotHere       .byt "Ca n'est pas là",0
-_gTextErrorAlreadyDealtWith .byt "Plus un problème",0
-_gTextErrorShouldSaveGirl   .byt "Vous êtes censé la sauver",0
-_gTextErrorInappropriate    .byt "Probablement inapproprié",0
-_gTextErrorDeadDontMove     .byt "Les morts ne bougent pas",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -92,17 +82,7 @@ _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
-_gTextErrorCannotUseHere    .byt "I can't use it here",0
 _gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
-_gTextErrorCannotAttachRope .byt "You can't attach the rope",0
-_gTextErrorLadderInHole     .byt "The ladder is already in the hole",0
-_gTextErrorCantClimbThat    .byt "I don't know how to climb that",0
-_gTextErrorNeedPositionned  .byt "It needs to be positionned first",0
-_gTextErrorItsNotHere       .byt "It's not here",0
-_gTextErrorAlreadyDealtWith .byt "Not a problem anymore",0
-_gTextErrorShouldSaveGirl   .byt "You are supposed to save her",0
-_gTextErrorInappropriate    .byt "Probably inappropriate",0
-_gTextErrorDeadDontMove     .byt "Dead don't move",0
 #endif
 _EndErrorMessages
 
@@ -1215,7 +1195,46 @@ _EndSceneScripts
 _StartSceneActions
 
 
-/* MARK: Read Action
+/* MARK: Main Action Mapping
+
+.88b  d88.  .d8b.  d888888b d8b   db       .d8b.   .o88b. d888888b d888888b  .d88b.  d8b   db      .88b  d88.  .d8b.  d8888b. d8888b. d888888b d8b   db  d888b  
+88'YbdP`88 d8' `8b   `88'   888o  88      d8' `8b d8P  Y8 `~~88~~'   `88'   .8P  Y8. 888o  88      88'YbdP`88 d8' `8b 88  `8D 88  `8D   `88'   888o  88 88' Y8b 
+88  88  88 88ooo88    88    88V8o 88      88ooo88 8P         88       88    88    88 88V8o 88      88  88  88 88ooo88 88oodD' 88oodD'    88    88V8o 88 88      
+88  88  88 88~~~88    88    88 V8o88      88~~~88 8b         88       88    88    88 88 V8o88      88  88  88 88~~~88 88~~~   88~~~      88    88 V8o88 88  ooo 
+88  88  88 88   88   .88.   88  V888      88   88 Y8b  d8    88      .88.   `8b  d8' 88  V888      88  88  88 88   88 88      88        .88.   88  V888 88. ~8~ 
+YP  YP  YP YP   YP Y888888P VP   V8P      YP   YP  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P      YP  YP  YP YP   YP 88      88      Y888888P VP   V8P  Y888P   */
+
+
+_gActionMappingsArray   
+    VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_SOUTH     ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_EAST      ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_WEST      ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_UP        ,0, _PlayerMove)
+    VALUE_MAPPING2(e_WORD_DOWN      ,0, _PlayerMove)
+
+    VALUE_MAPPING2(e_WORD_TAKE      ,0, _TakeItem)
+
+    VALUE_MAPPING2(e_WORD_DROP      ,0, _DropItem)
+    VALUE_MAPPING2(e_WORD_COMBINE   ,0, _CombineItems)
+    VALUE_MAPPING2(e_WORD_READ      ,1, _gReadItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_USE       ,1, _gUseItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_OPEN      ,1, _gOpenItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_CLOSE     ,1, _gCloseItemMappingsArray)
+
+    VALUE_MAPPING2(e_WORD_LOOK      ,1, _gInspectItemMappingsArray)
+    VALUE_MAPPING2(e_WORD_FRISK     ,1, _gSearchtemMappingsArray)
+    VALUE_MAPPING2(e_WORD_SEARCH    ,1, _gSearchtemMappingsArray)
+    VALUE_MAPPING2(e_WORD_THROW     ,1, _gThrowItemMappingsArray)
+#ifdef ENABLE_CHEATS       
+    VALUE_MAPPING2(e_WORD_INVOKE      ,0, _Invoke)
+#endif
+    VALUE_MAPPING2(e_WORD_COUNT_    ,0, 0)
+    // End Marker
+
+
+
+/* MARK: Read Action 📖
 
  ██▀███  ▓█████ ▄▄▄      ▓█████▄     ▄▄▄       ▄████▄  ▄▄▄█████▓ ██▓ ▒█████   ███▄    █ 
 ▓██ ▒ ██▒▓█   ▀▒████▄    ▒██▀ ██▌   ▒████▄    ▒██▀ ▀█  ▓  ██▒ ▓▒▓██▒▒██▒  ██▒ ██ ▀█   █ 
@@ -1289,7 +1308,7 @@ recipe_already_found
 .)
 
 
-/* MARK: Inspect Action
+/* MARK: Inspect Action 🔍
 
 .___                                     __   
 |   | ____   ____________   ____   _____/  |_ 
@@ -1371,7 +1390,7 @@ _gSceneActionExaminePlasticBag
 
 
 
-/* MARK: Open Action
+/* MARK: Open Action 📦➡
 
  ██████╗ ██████╗ ███████╗███╗   ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
 ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1439,7 +1458,7 @@ cabinet_already_open
 
 
 
-/* MARK: Close Action
+/* MARK: Close Action ➡📦
 
  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
 ██╔════╝██║     ██╔═══██╗██╔════╝██╔════╝    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1484,54 +1503,10 @@ medicine_cabinet_already_closed
 .)
 
 
-/* MARK: Generic Answers
-
-      ::::::::  :::::::::: ::::    ::: :::::::::: :::::::::  ::::::::::: ::::::::              :::     ::::    :::  ::::::::  :::       ::: :::::::::: :::::::::   :::::::: 
-    :+:    :+: :+:        :+:+:   :+: :+:        :+:    :+:     :+:    :+:    :+:           :+: :+:   :+:+:   :+: :+:    :+: :+:       :+: :+:        :+:    :+: :+:    :+: 
-   +:+        +:+        :+:+:+  +:+ +:+        +:+    +:+     +:+    +:+                 +:+   +:+  :+:+:+  +:+ +:+        +:+       +:+ +:+        +:+    +:+ +:+         
-  :#:        +#++:++#   +#+ +:+ +#+ +#++:++#   +#++:++#:      +#+    +#+                +#++:++#++: +#+ +:+ +#+ +#++:++#++ +#+  +:+  +#+ +#++:++#   +#++:++#:  +#++:++#++   
- +#+   +#+# +#+        +#+  +#+#+# +#+        +#+    +#+     +#+    +#+                +#+     +#+ +#+  +#+#+#        +#+ +#+ +#+#+ +#+ +#+        +#+    +#+        +#+    
-#+#    #+# #+#        #+#   #+#+# #+#        #+#    #+#     #+#    #+#    #+#         #+#     #+# #+#   #+#+# #+#    #+#  #+#+# #+#+#  #+#        #+#    #+# #+#    #+#     
-########  ########## ###    #### ########## ###    ### ########### ########          ###     ### ###    ####  ########    ###   ###   ########## ###    ###  ########   */              
-
-_gSceneActionCannotDo
-.(
-+_gTextErrorCannotDo = *+1    
-#ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je ne peux pas le faire")
-#else
-    ERROR_MESSAGE("I can't do that")
-#endif    
-    END_AND_REFRESH
-.)
-
-
-_gSceneActionCannotRead
-.(
-+_gTextErrorCannotRead = *+1    
-#ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je ne peux pas lire ca")
-#else
-    ERROR_MESSAGE("I can't read that")
-#endif    
-    END_AND_REFRESH
-.)
-
-_gSceneActionNothingSpecial
-.(
-+gTextErrorNothingSpecial = *+1    
-#ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Rien de spécial")
-#else
-    ERROR_MESSAGE("Nothing special")
-#endif    
-    END_AND_REFRESH
-.)
 
 
 
-
-/* MARK: Use Action
+/* MARK: Use Action ✋
 
 :::    :::  ::::::::  ::::::::::          :::      :::::::: ::::::::::: ::::::::::: ::::::::  ::::    ::: 
 :+:    :+: :+:    :+: :+:               :+: :+:   :+:    :+:    :+:         :+:    :+:    :+: :+:+:   :+: 
@@ -1592,7 +1567,7 @@ around_the_pit
 .)
 
 
-/* MARK: Search Action
+/* MARK: Search Action 🕵️‍♀️
 
             ███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
             ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║  ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1639,7 +1614,7 @@ found_items
 .)
 
 
-/* MARK: Throw action
+/* MARK: Throw action ⚾
 
                 ████████╗██╗  ██╗██████╗  ██████╗ ██╗    ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
                 ╚══██╔══╝██║  ██║██╔══██╗██╔═══██╗██║    ██║    ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
@@ -1764,7 +1739,7 @@ _gScemeActionCommonDogDisabled
 
 
 
-/* MARK: Take Item
+/* MARK: Take Item 🛄
 
 ████████╗ █████╗ ██╗  ██╗███████╗    ██╗████████╗███████╗███╗   ███╗
 ╚══██╔══╝██╔══██╗██║ ██╔╝██╔════╝    ██║╚══██╔══╝██╔════╝████╗ ████║
@@ -1838,7 +1813,7 @@ _gSceneActionTakeCommon
 .)
 
 
-/* MARK: Drop Action
+/* MARK: Drop Action 💧
 
  .S_sSSs     .S_sSSs      sSSs_sSSs     .S_sSSs           .S_SSSs      sSSs  sdSS_SSSSSSbs   .S    sSSs_sSSs     .S_sSSs    
 .SS~YS%%b   .SS~YS%%b    d%%SP~YS%%b   .SS~YS%%b         .SS~SSSSS    d%%SP  YSSS~S%SSSSSP  .SS   d%%SP~YS%%b   .SS~YS%%b   
@@ -1896,48 +1871,53 @@ _gDoNothingScript
 .)
 
 
+/* MARK: Generic Answers ⚠
+
+      ::::::::  :::::::::: ::::    ::: :::::::::: :::::::::  ::::::::::: ::::::::              :::     ::::    :::  ::::::::  :::       ::: :::::::::: :::::::::   :::::::: 
+    :+:    :+: :+:        :+:+:   :+: :+:        :+:    :+:     :+:    :+:    :+:           :+: :+:   :+:+:   :+: :+:    :+: :+:       :+: :+:        :+:    :+: :+:    :+: 
+   +:+        +:+        :+:+:+  +:+ +:+        +:+    +:+     +:+    +:+                 +:+   +:+  :+:+:+  +:+ +:+        +:+       +:+ +:+        +:+    +:+ +:+         
+  :#:        +#++:++#   +#+ +:+ +#+ +#++:++#   +#++:++#:      +#+    +#+                +#++:++#++: +#+ +:+ +#+ +#++:++#++ +#+  +:+  +#+ +#++:++#   +#++:++#:  +#++:++#++   
+ +#+   +#+# +#+        +#+  +#+#+# +#+        +#+    +#+     +#+    +#+                +#+     +#+ +#+  +#+#+#        +#+ +#+ +#+#+ +#+ +#+        +#+    +#+        +#+    
+#+#    #+# #+#        #+#   #+#+# #+#        #+#    #+#     #+#    #+#    #+#         #+#     #+# #+#   #+#+# #+#    #+#  #+#+# #+#+#  #+#        #+#    #+# #+#    #+#     
+########  ########## ###    #### ########## ###    ### ########### ########          ###     ### ###    ####  ########    ###   ###   ########## ###    ###  ########   */              
+
+_gSceneActionCannotDo
+.(
++_gTextErrorCannotDo = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je ne peux pas le faire")
+#else
+    ERROR_MESSAGE("I can't do that")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_gSceneActionCannotRead
+.(
+//+_gTextErrorCannotRead = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je ne peux pas lire ca")
+#else
+    ERROR_MESSAGE("I can't read that")
+#endif    
+    END_AND_REFRESH
+.)
+
+_gSceneActionNothingSpecial
+.(
+//+gTextErrorNothingSpecial = *+1    
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Rien de spécial")
+#else
+    ERROR_MESSAGE("Nothing special")
+#endif    
+    END_AND_REFRESH
+.)
+
+
 _EndSceneActions
 
-
-/* MARK: Main Action Mapping
-
-.88b  d88.  .d8b.  d888888b d8b   db       .d8b.   .o88b. d888888b d888888b  .d88b.  d8b   db      .88b  d88.  .d8b.  d8888b. d8888b. d888888b d8b   db  d888b  
-88'YbdP`88 d8' `8b   `88'   888o  88      d8' `8b d8P  Y8 `~~88~~'   `88'   .8P  Y8. 888o  88      88'YbdP`88 d8' `8b 88  `8D 88  `8D   `88'   888o  88 88' Y8b 
-88  88  88 88ooo88    88    88V8o 88      88ooo88 8P         88       88    88    88 88V8o 88      88  88  88 88ooo88 88oodD' 88oodD'    88    88V8o 88 88      
-88  88  88 88~~~88    88    88 V8o88      88~~~88 8b         88       88    88    88 88 V8o88      88  88  88 88~~~88 88~~~   88~~~      88    88 V8o88 88  ooo 
-88  88  88 88   88   .88.   88  V888      88   88 Y8b  d8    88      .88.   `8b  d8' 88  V888      88  88  88 88   88 88      88        .88.   88  V888 88. ~8~ 
-YP  YP  YP YP   YP Y888888P VP   V8P      YP   YP  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P      YP  YP  YP YP   YP 88      88      Y888888P VP   V8P  Y888P   */
-
-
-_gActionMappingsArray   
-    VALUE_MAPPING2(e_WORD_NORTH     ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_SOUTH     ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_EAST      ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_WEST      ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_UP        ,0, _PlayerMove)
-    VALUE_MAPPING2(e_WORD_DOWN      ,0, _PlayerMove)
-
-    VALUE_MAPPING2(e_WORD_TAKE      ,0, _TakeItem)
-
-    VALUE_MAPPING2(e_WORD_DROP      ,0, _DropItem)
-    VALUE_MAPPING2(e_WORD_COMBINE   ,0, _CombineItems)
-    VALUE_MAPPING2(e_WORD_KILL      ,0, _Kill)
-    VALUE_MAPPING2(e_WORD_READ      ,1, _gReadItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_USE       ,1, _gUseItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_OPEN      ,1, _gOpenItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_CLOSE     ,1, _gCloseItemMappingsArray)
-
-    VALUE_MAPPING2(e_WORD_LOOK      ,1, _gInspectItemMappingsArray)
-    VALUE_MAPPING2(e_WORD_FRISK     ,1, _gSearchtemMappingsArray)
-    VALUE_MAPPING2(e_WORD_SEARCH    ,1, _gSearchtemMappingsArray)
-    VALUE_MAPPING2(e_WORD_THROW     ,1, _gThrowItemMappingsArray)
-#ifdef ENABLE_CHEATS       
-    VALUE_MAPPING2(e_WORD_REVIVE      ,0, _Revive)
-    VALUE_MAPPING2(e_WORD_TICKLE      ,0, _Tickle)
-    VALUE_MAPPING2(e_WORD_INVOKE      ,0, _Invoke)
-#endif
-    VALUE_MAPPING2(e_WORD_COUNT_    ,0, 0)
-    // End Marker
 
 
 _EndGameTextData
