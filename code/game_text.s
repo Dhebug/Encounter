@@ -250,7 +250,6 @@ _gTextItemWater                   .byt "de l'eau",0
 // Normal items
 _gTextItemLockedPanel             .byt "un paneau mural verouillé",0
 _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
-_gTextItemFridge                  .byt "un réfrigérateur",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
 _gTextItemBrokenWindow            .byt "une vitre brisée",0
 _gTextItemTwine                   .byt "un peu de ficelle",0
@@ -283,9 +282,7 @@ _gTextItemBullets                 .byt "trois balles de calibre .38",0
 _gTextItemYoungGirlOnFloor        .byt "une jeunne fille attachée au sol",0
 _gTextItemChemistryRecipes        .byt "des formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
-_gTextItemClosedCurtain           .byt "un rideau fermé",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
-_gTextItemMedicineCabinet         .byt "une armoire à pharmacie",0
 _gTextItemSedativePills           .byt "des somnifères",0
 #else
 // Containers
@@ -303,7 +300,6 @@ _gTextItemWater                   .byt "some water",0
 // Normal items
 _gTextItemLockedPanel             .byt "a locked panel on the wall",0         
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
-_gTextItemFridge                  .byt "a fridge",0                        // TODO: Use _gSceneActionCloseFridge description
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemBrokenWindow            .byt "the window is broken",0               
 _gTextItemTwine                   .byt "some twine",0                         
@@ -336,9 +332,7 @@ _gTextItemBullets                 .byt "three .38 bullets",0
 _gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0  
 _gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0         
 _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
-_gTextItemClosedCurtain           .byt "a closed curtain",0             // TODO: Use _gSceneActionCloseCurtain description
 _gTextItemHandheldGame            .byt "a handheld game",0
-_gTextItemMedicineCabinet         .byt "a medicine cabinet",0           // TODO: Use _gSceneActionCloseMedicineCabinet description
 _gTextItemSedativePills           .byt "some sedative pills",0
 #endif
 _EndItemNames
@@ -1243,13 +1237,13 @@ Y8b  d8 `8b  d8' 88  88  88 88   8D   .88.   88  V888 88.
  `Y88P'  `Y88P'  YP  YP  YP Y8888P' Y888888P VP   V8P Y88888P  */
 
 _gCombineItemMappingsArray
-    VALUE_MAPPING2(e_ITEM_Meat,e_ITEM_SedativePills    ,_gSceneCombineMeatWithPills)
-    VALUE_MAPPING2(e_ITEM_SedativePills,e_ITEM_Meat    ,_gSceneCombineMeatWithPills)
+    VALUE_MAPPING2(e_ITEM_Meat,e_ITEM_SedativePills    ,_CombineMeatWithPills)
+    VALUE_MAPPING2(e_ITEM_SedativePills,e_ITEM_Meat    ,_CombineMeatWithPills)
 
-    VALUE_MAPPING2(255,255    ,_gSceneActionCannotDo)
+    VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
-_gSceneCombineMeatWithPills
+_CombineMeatWithPills
 .(
     SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_GONE_FOREVER)      ; The sedative are gone from the game
     SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
@@ -1261,6 +1255,7 @@ _gSceneCombineMeatWithPills
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!    
     END_AND_REFRESH
 .)
+
 
 
 
@@ -1279,14 +1274,14 @@ _gSceneCombineMeatWithPills
                           ░                   ░                                           */
 
 _gReadItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Newspaper          , _gSceneActionReadNewsPaper)
-    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _gSceneActionReadHandWrittenNote)
-    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _gSceneActionReadChemistryRecipes)
-    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionReadChemistryBook)
-    VALUE_MAPPING(255, _gSceneActionCannotRead)  // End Marker
+    VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
+    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _ReadHandWrittenNote)
+    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _ReadChemistryRecipes)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _ReadChemistryBook)
+    VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
 
-_gSceneActionReadNewsPaper
+_ReadNewsPaper
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
     INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
@@ -1295,7 +1290,8 @@ _gSceneActionReadNewsPaper
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!    
     END_AND_REFRESH
 
-_gSceneActionReadHandWrittenNote
+
+_ReadHandWrittenNote
     DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note")
     WAIT(50*2)
 #ifdef LANGUAGE_FR
@@ -1311,7 +1307,8 @@ _gSceneActionReadHandWrittenNote
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     END_AND_REFRESH
 
-_gSceneActionReadChemistryRecipes
+
+_ReadChemistryRecipes
     DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes")
     WAIT(50*2)
     INFO_MESSAGE("I can definitely use these...")
@@ -1322,7 +1319,7 @@ _gSceneActionReadChemistryRecipes
     END_AND_REFRESH
 
 
-_gSceneActionReadChemistryBook
+_ReadChemistryBook
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK,"A science book")
     WAIT(50*2)
@@ -1339,6 +1336,9 @@ recipe_already_found
 .)
 
 
+
+
+
 /* MARK: Inspect Action 🔍
 
 .___                                     __   
@@ -1349,28 +1349,30 @@ recipe_already_found
          \/     \/ |__|        \/     \/      */
 
 _gInspectItemMappingsArray
-    VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _gSceneActionInspectMap)
-    VALUE_MAPPING(e_ITEM_ChemistryBook      , _gSceneActionInspectChemistryBook)
-    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionInspectGame)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionInspectFridgeDoor)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionInspectMedicineCabinet)
-    VALUE_MAPPING(e_ITEM_PlasticBag         , _gSceneActionExaminePlasticBag)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+    VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _InspectMap)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _InspectChemistryBook)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _InspectGame)
+    VALUE_MAPPING(e_ITEM_Fridge             , _InspectFridgeDoor)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
+    VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
-_gSceneActionInspectMap
+_InspectMap
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionInspectGame
+
+_InspectGame
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionInspectChemistryBook
+
+_InspectChemistryBook
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un livre épais avec des marques")
 #else    
@@ -1379,7 +1381,8 @@ _gSceneActionInspectChemistryBook
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionInspectFridgeDoor
+
+_InspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
     INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
@@ -1387,7 +1390,8 @@ _gSceneActionInspectFridgeDoor
     WAIT(50*2)
     END_AND_REFRESH
 
-_gSceneActionInspectMedicineCabinet
+
+_InspectMedicineCabinet
 .(
     ; Is the medicine cabinet open?
     JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
@@ -1404,13 +1408,8 @@ medicine_cabinet_closed
     END_AND_REFRESH
 .)
 
-_gSceneActionPlayGame
-    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
-    INFO_MESSAGE("Hum... looks like it crashed?")
-    WAIT(50*2)
-    END_AND_REFRESH
 
-_gSceneActionExaminePlasticBag
+_InspectPlasticBag
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Juste un sac blanc normal")
 #else
@@ -1429,30 +1428,33 @@ _gSceneActionExaminePlasticBag
 ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║    ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║
 ╚██████╔╝██║     ███████╗██║ ╚████║    ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝*/
-_gOpenItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionOpenCurtain)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionOpenFridge)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionOpenMedicineCabinet )
-    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
 
-_gSceneActionOpenCurtain
+_gOpenItemMappingsArray
+    VALUE_MAPPING(e_ITEM_Curtain            , _OpenCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _OpenFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _OpenMedicineCabinet)
+    VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
+
+
+_OpenCurtain
 .(
     JUMP_IF_FALSE(curtain_already_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))        ; Is the curtain closed?
     UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
     SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_PADLOCKED_ROOM)  ; We can now access the padlocked room
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un rideau ouvert")
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau ouvert")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an opened curtain")
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened curtain")
 #endif        
 curtain_already_open
     END_AND_REFRESH
 .)
 
+
 ; TODO: Messages to indicate that the fridge it already open or that we have already found something
 ; Probably need a string table/id system to easily reuse messages.
-_gSceneActionOpenFridge
+_OpenFridge
 .(    
     JUMP_IF_FALSE(fridge_already_open,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))   ; Is the fridge closed?
     UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                     ; Open it!
@@ -1470,7 +1472,7 @@ fridge_already_open
 .)
 
 
-_gSceneActionOpenMedicineCabinet
+_OpenMedicineCabinet
 .(
     JUMP_IF_FALSE(cabinet_already_open,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))    ; Is the medicine cabinet closed?
     UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                       ; Open it!
@@ -1489,6 +1491,7 @@ cabinet_already_open
 
 
 
+
 /* MARK: Close Action ➡📦
 
  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -1499,15 +1502,21 @@ cabinet_already_open
  ╚═════╝╚══════╝ ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ */              
 
 _gCloseItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Curtain            , _gSceneActionCloseCurtain)
-    VALUE_MAPPING(e_ITEM_Fridge             , _gSceneActionCloseFridge)
-    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _gSceneActionCloseMedicineCabinet )
-    VALUE_MAPPING(255, _gSceneActionCannotDo)  // End Marker
+    VALUE_MAPPING(e_ITEM_Curtain            , _CloseCurtain)
+    VALUE_MAPPING(e_ITEM_Fridge             , _CloseFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _CloseMedicineCabinet)
+    VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
-_gSceneActionCloseCurtain
+
+_CloseCurtain
 .(
     JUMP_IF_TRUE(curtain_already_closed,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
++_gTextItemClosedCurtain = *+2    
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau fermé")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
+#endif    
     UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
     SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
     SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)
@@ -1515,19 +1524,31 @@ curtain_already_closed
     END_AND_REFRESH
 .)
 
-_gSceneActionCloseFridge
+
+_CloseFridge
 .(
     JUMP_IF_TRUE(fridge_already_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
++_gTextItemFridge = *+2    
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
+#endif    
     SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)
 fridge_already_closed
     END_AND_REFRESH
 .)
 
-_gSceneActionCloseMedicineCabinet
+
+_CloseMedicineCabinet
 .(
     JUMP_IF_TRUE(medicine_cabinet_already_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
++_gTextItemMedicineCabinet = *+2    
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
+#endif    
     SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)
 medicine_cabinet_already_closed
     END_AND_REFRESH
@@ -1548,13 +1569,13 @@ medicine_cabinet_already_closed
  ########   ########  ##########      ###     ###  ########     ###     ########### ########  ###    #### */
 
 _gUseItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Ladder             , _gSceneActionUseLadder)
-    VALUE_MAPPING(e_ITEM_Rope               , _gSceneActionUseRope)
-    VALUE_MAPPING(e_ITEM_HandheldGame       , _gSceneActionPlayGame)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+    VALUE_MAPPING(e_ITEM_Ladder             , _UseLadder)
+    VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
+    VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
+    VALUE_MAPPING(255                       , _MessageNothingSpecial)   ; Default option
 
 
-_gSceneActionUseLadder
+_UseLadder
 .(
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
@@ -1576,7 +1597,7 @@ around_the_pit
 .)
 
 
-_gSceneActionUseRope
+_UseRope
 .(
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
@@ -1598,6 +1619,16 @@ around_the_pit
 .)
 
 
+_UseGame
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
+    INFO_MESSAGE("Hum... looks like it crashed?")
+    WAIT(50*2)
+    END_AND_REFRESH
+
+
+
+
+
 /* MARK: Search Action 🕵️‍♀️
 
             ███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -1610,11 +1641,11 @@ around_the_pit
 */
 
 _gSearchtemMappingsArray
-    VALUE_MAPPING(e_ITEM_Thug               , _gSceneActionSearchThug)
-    VALUE_MAPPING(255, _gSceneActionNothingSpecial)  // End Marker
+    VALUE_MAPPING(e_ITEM_Thug     , _SearchThug)
+    VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 
-_gSceneActionSearchThug
+_SearchThug
 .(
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
 #ifdef LANGUAGE_FR
@@ -1645,6 +1676,8 @@ found_items
 .)
 
 
+
+
 /* MARK: Throw action ⚾
 
                 ████████╗██╗  ██╗██████╗  ██████╗ ██╗    ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -1657,14 +1690,14 @@ found_items
 */
 
 _gThrowItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Bread              , _gSceneActionThrowBread)
-    VALUE_MAPPING(e_ITEM_Meat               , _gSceneActionThrowMeat)
-    VALUE_MAPPING(e_ITEM_SilverKnife        , _gSceneActionThrowKnife)
-    VALUE_MAPPING(e_ITEM_SnookerCue         , _gSceneActionThrowSnookerCue)
-    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
+    VALUE_MAPPING(e_ITEM_Bread              , _ThrowBread)
+    VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
+    VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
 
-_gSceneActionThrowBread
+_ThrowBread
 .(
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOCATION_WOODEDAVENUE))
 give_bread_to_dove
@@ -1689,7 +1722,7 @@ not_in_wooded_avenue
 .)
 
 
-_gSceneActionThrowMeat
+_ThrowMeat
 .(
     // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
     JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
@@ -1703,7 +1736,7 @@ dog_eating_the_meat
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
     INCREASE_SCORE(50)
-    JUMP(_gSceneActionCommonDogDisabled)
+    JUMP(_CommonDogDisabled)
 done
     END_AND_REFRESH
 
@@ -1715,7 +1748,7 @@ nothing_to_eat_the_meat
 
 
 
-_gSceneActionThrowKnife
+_ThrowKnife
 .(
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
@@ -1725,7 +1758,7 @@ _gSceneActionThrowKnife
 
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
-    JUMP(_gSceneActionCommonDogDisabled)
+    JUMP(_CommonDogDisabled)
 
 drop_knife    
     // In other locations we just drop the item where we are
@@ -1734,7 +1767,7 @@ drop_knife
 .)
 
 
-_gSceneActionThrowSnookerCue
+_ThrowSnookerCue
 .(
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
@@ -1745,7 +1778,7 @@ _gSceneActionThrowSnookerCue
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
     INCREASE_SCORE(50)
-    JUMP(_gSceneActionCommonDogDisabled)
+    JUMP(_CommonDogDisabled)
 
 drop_snooker_cue    
     // In other locations we just drop the item where we are
@@ -1754,7 +1787,7 @@ drop_snooker_cue
 .)
 
 
-_gSceneActionCommonDogDisabled
+_CommonDogDisabled
 .(
     INCREASE_SCORE(50)
     SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
@@ -1770,6 +1803,9 @@ _gSceneActionCommonDogDisabled
 
 
 
+
+
+
 /* MARK: Take Item 🛄
 
 ████████╗ █████╗ ██╗  ██╗███████╗    ██╗████████╗███████╗███╗   ███╗
@@ -1780,30 +1816,13 @@ _gSceneActionCommonDogDisabled
    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝ */
 
 _gTakeItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Rope              , _gSceneActionTakeRope)
-    VALUE_MAPPING(e_ITEM_Ladder            , _gSceneActionTakeLadder)
-    VALUE_MAPPING(e_ITEM_LargeDove         , _gSceneActionTakeDove)
-    VALUE_MAPPING(255, _gSceneActionTakeCommon)  // End Marker
+    VALUE_MAPPING(e_ITEM_Rope              , _TakeRope)
+    VALUE_MAPPING(e_ITEM_Ladder            , _TakeLadder)
+    VALUE_MAPPING(e_ITEM_LargeDove         , _TakeDove)
+    VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
-    /*
-    itemPtr->location = e_LOCATION_INVENTORY;    // The item is now in our inventory
-    itemPtr->flags   &= ~ITEM_FLAG_ATTACHED;     // If the item was attached, we detach it
-    switch (itemId)
-    {
-    case e_ITEM_Rope:
-        itemPtr->description = gTextItemRope;
-        break;
-    case e_ITEM_Ladder:
-        itemPtr->description = gTextItemLadder;
-        break;
-    case e_ITEM_LargeDove:
-        itemPtr->description = gTextItemLargeDove;
-        break;
-    }
-    LoadScene();
-    */
 
-_gSceneActionTakeRope
+_TakeRope
 .(
 +_gTextItemRope = *+2
 #ifdef LANGUAGE_FR   
@@ -1811,10 +1830,11 @@ _gSceneActionTakeRope
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a length of rope")
 #endif    
-    JUMP(_gSceneActionTakeCommon)
+    JUMP(_TakeCommon)
 .)
 
-_gSceneActionTakeLadder
+
+_TakeLadder
 .(
 +_gTextItemLadder = *+2
 #ifdef LANGUAGE_FR   
@@ -1822,10 +1842,11 @@ _gSceneActionTakeLadder
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder")
 #endif    
-    JUMP(_gSceneActionTakeCommon)
+    JUMP(_TakeCommon)
 .)
 
-_gSceneActionTakeDove
+
+_TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
@@ -1833,15 +1854,20 @@ _gSceneActionTakeDove
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a large dove")
 #endif    
-    JUMP(_gSceneActionTakeCommon)
+    JUMP(_TakeCommon)
 .)
 
-_gSceneActionTakeCommon
+
+_TakeCommon
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOCATION_INVENTORY)  ; The item is now in our inventory
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
     END_AND_REFRESH
 .)
+
+
+
+
 
 
 /* MARK: Drop Action 💧
@@ -1862,11 +1888,12 @@ SSS~YSSY    S*S    SSS    YSSP~YSSY    S*S               SSS    S*S    YSSP     
             Y                          Y                        Y                 Y         Y                   Y           */
 
 _gDropItemMappingsArray
-    VALUE_MAPPING(e_ITEM_Water              , _gSceneActionDropWater)
-    VALUE_MAPPING(e_ITEM_Petrol             , _gSceneActionDropPetrol)
-    VALUE_MAPPING(255, _gDropCurrentItem)  // End Marker
+    VALUE_MAPPING(e_ITEM_Water          , _DropWater)
+    VALUE_MAPPING(e_ITEM_Petrol         , _DropPetrol)
+    VALUE_MAPPING(255                   , _DropCurrentItem)  ; Default option
 
-_gSceneActionDropWater
+
+_DropWater
 .(
     SET_ITEM_LOCATION(e_ITEM_Water,e_LOCATION_WELL)             ; Put back the water into the well
 #ifdef LANGUAGE_FR   
@@ -1877,7 +1904,8 @@ _gSceneActionDropWater
     END_AND_REFRESH
 .)
 
-_gSceneActionDropPetrol
+
+_DropPetrol
 .(
     SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOCATION_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
 #ifdef LANGUAGE_FR   
@@ -1889,7 +1917,7 @@ _gSceneActionDropPetrol
 .)
 
 
-_gDropCurrentItem
+_DropCurrentItem
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOCATION_CURRENT)
     END_AND_REFRESH
@@ -1902,6 +1930,8 @@ _gDoNothingScript
 .)
 
 
+
+
 /* MARK: Generic Answers ⚠
 
       ::::::::  :::::::::: ::::    ::: :::::::::: :::::::::  ::::::::::: ::::::::              :::     ::::    :::  ::::::::  :::       ::: :::::::::: :::::::::   :::::::: 
@@ -1912,7 +1942,7 @@ _gDoNothingScript
 #+#    #+# #+#        #+#   #+#+# #+#        #+#    #+#     #+#    #+#    #+#         #+#     #+# #+#   #+#+# #+#    #+#  #+#+# #+#+#  #+#        #+#    #+# #+#    #+#     
 ########  ########## ###    #### ########## ###    ### ########### ########          ###     ### ###    ####  ########    ###   ###   ########## ###    ###  ########   */              
 
-_gSceneActionCannotDo
+_ErrorCannotDo
 .(
 +_gTextErrorCannotDo = *+1    
 #ifdef LANGUAGE_FR
@@ -1924,7 +1954,7 @@ _gSceneActionCannotDo
 .)
 
 
-_gSceneActionCannotRead
+_ErrorCannotRead
 .(
 //+_gTextErrorCannotRead = *+1    
 #ifdef LANGUAGE_FR
@@ -1935,7 +1965,7 @@ _gSceneActionCannotRead
     END_AND_REFRESH
 .)
 
-_gSceneActionNothingSpecial
+_MessageNothingSpecial
 .(
 //+gTextErrorNothingSpecial = *+1    
 #ifdef LANGUAGE_FR
