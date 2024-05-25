@@ -50,6 +50,13 @@
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 
+#ifdef ASSEMBLER
+#define IF_TRUE(expression,label)            .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression   
+#define IF_FALSE(expression,label)           .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression 
+#define ELSE(else,endif)          else = *+3: .byt COMMAND_JUMP,<endif,>endif                                          
+#define ENDIF(endif)              endif
+#endif
+
 // Text
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0

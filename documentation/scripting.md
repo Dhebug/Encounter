@@ -242,7 +242,14 @@ _gDescriptionDarkTunel
 To provide some cartoony feeling, the game is using the scripting system to display some messages over time.
 
 Delays are done with the **WAIT** instruction, while the **WHITE_BUBBLE** (or **BLACK_BUBBLE**) and **_BUBBLE_LINE** are used to display the text bubbles.
+```c
+#define COMMAND_WHITE_BUBBLE nn
+#define COMMAND_BLACK_BUBBLE nn
 
+#define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
+#define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
+#define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
+```
 When running the game, when the tunnel location is accessed, the player will see the following:
 
 ![](images/scripting_location_dark_tunnel.png)
@@ -316,73 +323,19 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define RECTANGLE(x,y,w,h) x,y,w,h
 
 // Command opcodes
-#define COMMAND_END             0
 #define COMMAND_RECTANGLE       1
 #define COMMAND_FILL_RECTANGLE  2
 #define COMMAND_TEXT            3
-#define COMMAND_WHITE_BUBBLE    4
-#define COMMAND_BLACK_BUBBLE    5
-#define COMMAND_WAIT            6
-#define COMMAND_BITMAP          7
 #define COMMAND_FADE_BUFFER     8
-#define COMMAND_JUMP            9      // Really, that's a GOTO :p
-#define COMMAND_JUMP_IF_TRUE    10
-#define COMMAND_JUMP_IF_FALSE   11
-#define COMMAND_INFO_MESSAGE    12 
-#define COMMAND_FULLSCREEN_ITEM 13
 #define COMMAND_STOP_BREAKPOINT 14
-#define COMMAND_END_AND_REFRESH 15
-#define COMMAND_ERROR_MESSAGE   16
-#define COMMAND_SET_ITEM_LOCATION   17
-#define COMMAND_SET_ITEM_FLAGS  18
-#define COMMAND_UNSET_ITEM_FLAGS 19
-#define COMMAND_SET_ITEM_DESCRIPTION 20
-#define COMMAND_SET_LOCATION_DIRECTION 21
-#define COMMAND_UNLOCK_ACHIEVEMENT 22
-#define COMMAND_INCREASE_SCORE 23
 #define _COMMAND_COUNT          24
-
-// Operator opcodes
-#define OPERATOR_CHECK_ITEM_LOCATION   0
-#define OPERATOR_CHECK_ITEM_FLAG       1
-#define OPERATOR_CHECK_PLAYER_LOCATION 2
-
-#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
-#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
-#define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
-
-// Flow control
-#define END                                  .byt COMMAND_END
-#define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
-#define WAIT(duration)                       .byt COMMAND_WAIT,duration
-#define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
-#define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
-#define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
-
-// Text
-#define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
-#define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
-#define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
-#define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
-#define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
-
-// Meta game
-#define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
-#define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
-
-// Items
-#define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
-#define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
-#define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
-#define SET_ITEM_DESCRIPTION(item,description)  .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
-
-// Locations
-#define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
-
-#define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
-#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
 ```
 ## END
+```c
+#define COMMAND_END nn
+#define END             .byt COMMAND_END
+```
+
 Just a single byte containg the COMMAND_END opcode. 
 This signals the end of the script.
 ```c
@@ -390,6 +343,10 @@ This signals the end of the script.
   END
 ```
 ## END_AND_REFRESH
+```c
+#define COMMAND_END_AND_REFRESH nn
+#define END_AND_REFRESH           .byt COMMAND_END_AND_REFRESH
+```
 Similar to END, except it also forces the entire scene to refresh.
 Generally used when the player perform actions resulting in items being modified or moved.
 ```c
@@ -397,6 +354,10 @@ Generally used when the player perform actions resulting in items being modified
   END_AND_REFRESH
 ```
 ## WAIT
+```c
+#define COMMAND_WAIT nn
+#define WAIT(duration)    .byt COMMAND_WAIT,duration
+```
 Two bytes command containg the COMMAND_WAIT opcode, followed by the number of frames.
 
 To provide some pacing, delays can be used to interrupt the execution of a script for a period of time.
@@ -409,6 +370,10 @@ If you need a longer delay, just put a few more delay instructions.
 ```
 
 ## JUMP
+```c
+#define COMMAND_JUMP nn
+#define JUMP(label)     .byt COMMAND_JUMP,<label,>label
+```
 Three bytes command containg the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
 ```c
   // Jumps to the 'dog_growls' label
@@ -420,6 +385,10 @@ dog_growls
 ## Conditional jumps
 These two instructions require an operator to evaluate if the condition is true or false
 ### JUMP_IF_TRUE
+```c
+#define COMMAND_JUMP_IF_TRUE nn
+#define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
+```
 Seven bytes command containg the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 ```c
   // Jump to the label 'around_the_pit' if the expression is true
@@ -429,6 +398,10 @@ around_the_pit
 ```
 
 ### JUMP_IF_FALSE
+```c
+#define COMMAND_JUMP_IF_FALSE nn
+#define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
+```
 Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 ```c
   // Jump to the label 'around_the_pit' if the expression is false
@@ -456,6 +429,10 @@ digging_for_gold
 ## Operators
 These operators should be used with either JUMP_IF_TRUE or JUMP_IF_FALSE
 ### CHECK_ITEM_LOCATION
+```c
+#define OPERATOR_CHECK_ITEM_LOCATION
+#define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
+```
 Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
 ```c
   /*<conditional jump instruction>*/ CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT) 
@@ -463,10 +440,18 @@ Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed 
 ### CHECK_ITEM_FLAG
 Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
 ```c
+#define OPERATOR_CHECK_ITEM_FLAG
+#define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
+```
+```c
   /*<conditional jump instruction>*/ CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 ```
 
 ### CHECK_PLAYER_LOCATION
+```c
+#define OPERATOR_CHECK_PLAYER_LOCATION 
+#define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
+```
 Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
 ```c
   /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT)
@@ -475,12 +460,20 @@ Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed 
 ---
 ## Providing information to the player
 ### INFO_MESSAGE
+```C
+#define COMMAND_INFO_MESSAGE nn
+#define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
+```
 Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by a null terminated string containing the message to display
 ```C
   // Print a message in the main TEXT window
   INFO_MESSAGE("I have to find her fast...")
 ```
 ### ERROR_MESSAGE
+```C
+#define COMMAND_ERROR_MESSAGE nn
+#define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+```
 Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the message is printed out as an error 
 ```C
   // Print an error message with a sound effect 
@@ -489,6 +482,10 @@ Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the
 ---
 ## Changing item properties
 ### SET_ITEM_LOCATION
+```C
+#define COMMAND_SET_ITEM_LOCATION nn
+#define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
+```  
 Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it.
 
 There are a few different types of locations:
@@ -510,18 +507,30 @@ There are a few different types of locations:
 ```  
 
 ### SET_ITEM_FLAGS
+```C
+#define COMMAND_SET_ITEM_FLAGS  nn
+#define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
+```  
 Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
 ```c
   // Mask-in some flags of the ladder
   SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 ```  
 ### UNSET_ITEM_FLAGS
+```C
+#define COMMAND_UNSET_ITEM_FLAGS n
+#define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
+```  
 Three bytes command containg the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
 ```c
   // Mask-out some flags on the curtain
   UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
 ```
 ### SET_ITEM_DESCRIPTION
+```C
+#define COMMAND_SET_ITEM_DESCRIPTION nn
+#define SET_ITEM_DESCRIPTION(item,description)  .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
+```  
 Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, followed by the id of the item, then a null terminated string containing the description
 ```c
   // Change the description of the curtain object
@@ -530,6 +539,10 @@ Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, fol
 ---
 ## Changing locations properties
 ### SET_LOCATION_DIRECTION
+```C
+#define COMMAND_SET_LOCATION_DIRECTION nn
+#define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
+```  
 Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
 ```c
   // Enable the UP direction
@@ -538,6 +551,10 @@ Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed 
 ---
 ## Scoring and achievements
 ### UNLOCK_ACHIEVEMENT
+```c
+#define COMMAND_UNLOCK_ACHIEVEMENT nn
+#define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
+```
 Two bytes command containg the COMMAND_UNLOCK_ACHIEVEMENT opcode, followed by the achievement id.
 This would typically be used when the player does something worth remembering.
 ```c
@@ -546,6 +563,10 @@ This would typically be used when the player does something worth remembering.
 ```
 
 ### INCREASE_SCORE
+```c
+#define COMMAND_INCREASE_SCORE nn
+#define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
+```
 Two bytes command containg the COMMAND_INCREASE_SCORE opcode, followed by the number of points to add to the score.
 This would typically be used when the player does something worthy of rewarding for the high-score.
 ```c
@@ -555,6 +576,10 @@ This would typically be used when the player does something worthy of rewarding 
 
 ---
 ## DISPLAY_IMAGE
+```c
+#define COMMAND_FULLSCREEN_ITEM nn
+#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
+```
 Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display
 Used to display a full screen image, like the map of the UK or the newspapwer with a subtitle
 ```c
@@ -562,6 +587,10 @@ Used to display a full screen image, like the map of the UK or the newspapwer wi
   DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
 ```  
 ## DRAW_BITMAP
+```c
+#define COMMAND_BITMAP nn
+#define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
+```
 Nine bytes operator containg the COMMAND_BITMAP opcode, followed by the id of the image containing the data, width and height of the block to display, source stride, and the address of the source and destination
 ```c
   // Draw the ladder

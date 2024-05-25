@@ -1391,22 +1391,21 @@ _InspectFridgeDoor
     END_AND_REFRESH
 
 
+
 _InspectMedicineCabinet
 .(
     ; Is the medicine cabinet open?
-    JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
-medicine_cabinet_open
-    DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN,"Inside the medicine cabinet")
-    INFO_MESSAGE("I can use some of that.")
-    WAIT(50*2)
-    END_AND_REFRESH
-
-medicine_cabinet_closed
-    DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET,"A closed medicine cabinet")
-    INFO_MESSAGE("Not much to see when closed.")
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
+        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN,"Inside the medicine cabinet")
+        INFO_MESSAGE("I can use some of that.")
+    ELSE(else,open)
+        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET,"A closed medicine cabinet")
+        INFO_MESSAGE("Not much to see when closed.")
+    ENDIF(open)
     WAIT(50*2)
     END_AND_REFRESH
 .)
+
 
 
 _InspectPlasticBag
@@ -1438,16 +1437,16 @@ _gOpenItemMappingsArray
 
 _OpenCurtain
 .(
-    JUMP_IF_FALSE(curtain_already_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))        ; Is the curtain closed?
-    UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
-    SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_PADLOCKED_ROOM)  ; We can now access the padlocked room
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau ouvert")
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),open)                                  ; Is the curtain closed?
+        UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
+        SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_PADLOCKED_ROOM)  ; We can now access the padlocked room
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau ouvert")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened curtain")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened curtain")
 #endif        
-curtain_already_open
+    ENDIF(open)
     END_AND_REFRESH
 .)
 
@@ -1456,36 +1455,36 @@ curtain_already_open
 ; Probably need a string table/id system to easily reuse messages.
 _OpenFridge
 .(    
-    JUMP_IF_FALSE(fridge_already_open,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))   ; Is the fridge closed?
-    UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                     ; Open it!
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                    ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                       ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur ouvert")
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),open)                               ; Is the fridge closed?
+        UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                        ; Open it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                       ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur ouvert")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open fridge")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open fridge")
 #endif        
-    JUMP_IF_FALSE(meat_already_found,CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_NONE))   ; If the meat still hidden (in the fridge)? 
-    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_KITCHEN)                                    ; It's now visible inside the kitchen
-meat_already_found
-fridge_already_open    
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
+            SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_KITCHEN)                                   ; It's now visible inside the kitchen
+        ENDIF(meat)
+    ENDIF(open)
     END_AND_REFRESH
 .)
 
 
 _OpenMedicineCabinet
 .(
-    JUMP_IF_FALSE(cabinet_already_open,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))    ; Is the medicine cabinet closed?
-    UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                       ; Open it!
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie ouverte")
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),open)                      ; Is the medicine cabinet closed?
+        UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                               ; Open it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie ouverte")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine cabinet")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine cabinet")
 #endif        
-    JUMP_IF_FALSE(pills_already_found,CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_NONE))    ; Are the pills still hidden (in the cabinet)? 
-    SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_KITCHEN)                                      ; It's now visible inside the kitchen
-pills_already_found
-cabinet_already_open    
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
+            SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_KITCHEN)                          ; It's now visible inside the kitchen
+        ENDIF(pills)
+    ENDIF(open)
     END_AND_REFRESH
 .)
 
@@ -1510,47 +1509,46 @@ _gCloseItemMappingsArray
 
 _CloseCurtain
 .(
-    JUMP_IF_TRUE(curtain_already_closed,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
-+_gTextItemClosedCurtain = *+2    
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau fermé")
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),curtain)                               ; Is the curtain open?
+        SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                              ; Close it!
+        SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)             ; The room behind is not accessible anymore
++_gTextItemClosedCurtain = *+2                                                                       ; Description used by default when the game starts
+#ifdef LANGUAGE_FR                                                                                   ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau fermé")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
 #endif    
-    UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
-    SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
-    SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)
-curtain_already_closed
+    ENDIF(curtain)
     END_AND_REFRESH
 .)
 
 
 _CloseFridge
 .(
-    JUMP_IF_TRUE(fridge_already_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
-+_gTextItemFridge = *+2    
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),fridge)                                ; Is the fridge open?
+        SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                              ; Close it!
++_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
 #endif    
-    SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)
-fridge_already_closed
+    ENDIF(fridge)
     END_AND_REFRESH
 .)
 
 
 _CloseMedicineCabinet
 .(
-    JUMP_IF_TRUE(medicine_cabinet_already_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
-+_gTextItemMedicineCabinet = *+2    
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),cabinet)                      ; Is the cabinet open?
+        SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                     ; Close it!
++_gTextItemMedicineCabinet = *+2                                                                    ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
 #endif    
-    SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)
-medicine_cabinet_already_closed
+    ENDIF(cabinet)
     END_AND_REFRESH
 .)
 
