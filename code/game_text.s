@@ -1692,6 +1692,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
     VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
+    VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
     VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
 
@@ -1744,6 +1745,22 @@ nothing_to_eat_the_meat
     END_AND_REFRESH
  .)
 
+
+_FreeDove
+.(    
+    INFO_MESSAGE("The dove flies away")                                         ; When left anywhere, the dove will manage to fly away
+    SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOCATION_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
+    // The dog will only chase the dove if the dog is where we are and is still alive and kicking
+    JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_CURRENT))
+    JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+        DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE,"Run Forrest, Run!")      ; Show the picture with the dog running after the dove
+        INFO_MESSAGE("Hopefully he will not catch the dove")
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
+        SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_GONE_FOREVER)           ; And the dog is now gone forever
+        WAIT(50*2)    
+nothing_to_chase_the_dove
+    END_AND_REFRESH
+ .)
 
 
 _ThrowKnife
@@ -1888,6 +1905,7 @@ SSS~YSSY    S*S    SSS    YSSP~YSSY    S*S               SSS    S*S    YSSP     
 _gDropItemMappingsArray
     VALUE_MAPPING(e_ITEM_Water          , _DropWater)
     VALUE_MAPPING(e_ITEM_Petrol         , _DropPetrol)
+    VALUE_MAPPING(e_ITEM_LargeDove      , _FreeDove)
     VALUE_MAPPING(255                   , _DropCurrentItem)  ; Default option
 
 

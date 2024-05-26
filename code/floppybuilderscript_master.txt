@@ -237,6 +237,9 @@ AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
 AddFile ..\build\files\dove_eating_breadcrumbs.hir
 AddDefine LOADER_PICTURE_DOVE_EATING_BREADCRUMBS {FileIndex}
 
+AddFile ..\build\files\dog_chasing_dove.hir
+AddDefine LOADER_PICTURE_DOG_CHASING_DOVE {FileIndex}
+
 ; All the sprites
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\the_end_fr.msk

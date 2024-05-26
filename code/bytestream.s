@@ -168,6 +168,19 @@ skip
 .)
 
 
+_ByteStreamFetchLocationID
+.(
+    lda (_gCurrentStream),y      // location ID
+    cmp #e_LOCATION_CURRENT
+    bne keep_location_id
+use_current_location_id    
+    lda _gCurrentLocation        // Use the current location
+keep_location_id    
+    iny
+    rts
+.)
+
+
 ; Fetches the next byte from the stream and if matches e_ITEM_CURRENT replaces by _gCurrentItem
 ; Then uses the value to compute the _gStreamItemPtr pointer
 _ByteStreamFetchItemID
@@ -350,7 +363,7 @@ checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0
     ; check =  (gItems[itemId].location == locationId);
     iny
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // location id
+    jsr _ByteStreamFetchLocationID // location id
     ldy #2
     cmp (_gStreamItemPtr),y      // gItems->location (+2)
 _auto_conditionCheckItemLocation
@@ -360,7 +373,7 @@ _auto_conditionCheckItemLocation
 checkPlayerLocation              // OPERATOR_CHECK_PLAYER_LOCATION 2 
     ; check =  (gItems[itemId].location == locationId);
     iny
-    lda (_gCurrentStream),y      // location id
+    jsr _ByteStreamFetchLocationID // location id
     ldy #2
     cmp _gCurrentLocation         // Player position
 _auto_conditionCheckPlayerLocation    

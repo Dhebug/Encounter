@@ -191,6 +191,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 %PICTCONV% %PARAMS% data\view_dog_eating_meat.png %TARGET%\dog_eating_meat.hir
 %PICTCONV% %PARAMS% data\view_dove_eating_breadcrumbs.png %TARGET%\dove_eating_breadcrumbs.hir
+%PICTCONV% %PARAMS% data\view_dog_chasing_dove.png %TARGET%\dog_chasing_dove.hir
 
 
 :: Severn Software and Defence Force logos
