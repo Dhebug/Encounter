@@ -48,7 +48,7 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_DININGROOM        , e_LOCATION_NONE              , e_LOCATION_ENTRANCEHALL      , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationEntranceLounge           ,gDescriptionEntranceLounge},    // e_LOCATION_LOUNGE     
     { e_LOCATION_NARROWPASSAGE     , e_LOCATION_LAWN              , e_LOCATION_NONE              , e_LOCATION_LOUNGE            , e_LOCATION_LARGE_STAIRCASE   , e_LOCATION_NONE              , gTextLocationEntranceHall             ,gDescriptionEntranceHall},      // e_LOCATION_ENTRANCEHALL    
 
-    { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NARROWPASSAGE     , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationLibrary                  ,gDescriptionLibrary},           // e_LOCATION_LIBRARY         
+    { e_LOCATION_NONE              , e_LOCATION_STUDY_ROOM        , e_LOCATION_NONE              , e_LOCATION_NARROWPASSAGE     , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationLibrary                  ,gDescriptionLibrary},           // e_LOCATION_LIBRARY         
     { e_LOCATION_GAMESROOM         , e_LOCATION_LOUNGE            , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationDiningRoom               ,gDescriptionDiningRoom},        // e_LOCATION_DININGROOM      
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_UP_STAIRS         , e_LOCATION_ENTRANCEHALL      , gTextLocationStaircase                ,gDescriptionStaircase},         // e_LOCATION_LARGE_STAIRCASE 
 
@@ -73,6 +73,8 @@ location gLocations[e_LOCATION_COUNT_] =
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_EASTGALLERY       , e_LOCATION_WESTGALLERY       , e_LOCATION_NONE              , e_LOCATION_LARGE_STAIRCASE   , gTextLocationMainLanding              ,gDescriptionMainLanding},       // e_LOCATION_UP_STAIRS        
 
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NARROWPATH        , e_LOCATION_NONE              , e_LOCATION_INSIDE_PIT        , gTextLocationOutsidePit               ,gDescriptionOutsidePit},        // e_LOCATION_OUTSIDE_PIT
+
+    { e_LOCATION_LIBRARY           , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationStudyRoom                ,gDescriptionStudyRoom},         // e_LOCATION_STUDY_ROOM
 
     { e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , gTextLocationGirlRoomOpenned          ,0},                             // e_LOCATION_GIRLROOM (technically this room cannot be accessed, so do not need description)        
 };

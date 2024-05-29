@@ -158,6 +158,7 @@ _gTextLocationWestGallery         .byt "La gallerie ouest",0
 _gTextLocationMainLanding         .byt "Vous êtes sur le palier principal",0
 
 _gTextLocationOutsidePit          .byt "En dehors d'un trou profond",0
+_gTextLocationStudyRoom           .byt "Le centre des affaires",0
 
 _gTextLocationGirlRoomOpenned     .byt "La pièce avec la fille (ouverte)",0
 #else
@@ -218,6 +219,7 @@ _gTextLocationWestGallery         .byt "This is the west gallery",0
 _gTextLocationMainLanding         .byt "You are on the main landing",0
 
 _gTextLocationOutsidePit          .byt "Outside a deep pit",0
+_gTextLocationStudyRoom           .byt "Where serious Business happens",0
 
 _gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
 #endif
@@ -838,6 +840,22 @@ _gDescriptionLibrary
     _BUBBLE_LINE(5,97,0,"a comfortable chair")
 #endif    
     END
+
+
+_gDescriptionStudyRoom
+.(
+    WAIT(DELAY_FIRST_BUBBLE)
+    WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+    _BUBBLE_LINE(150,5,0,"Tradition et")
+    _BUBBLE_LINE(177,17,0,"technologie")
+#else
+    _BUBBLE_LINE(150,5,0,"Tradition meets")
+    _BUBBLE_LINE(177,17,0,"technology")
+#endif    
+    END
+.)
+
 
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)

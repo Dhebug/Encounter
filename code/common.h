@@ -205,6 +205,7 @@ extern char gDescriptionTinyToilet[];
 extern char gDescriptionMasterBedRoom[];
 extern char gDescriptionPadlockedRoom[];
 extern char gDescriptionOutsidePit[];
+extern char gDescriptionStudyRoom[];
 //
 extern char gDescriptionDogAttacking[];
 extern char gDescriptionThugAttacking[];

@@ -190,6 +190,7 @@ AddFile ..\build\files\40.hir
 AddFile ..\build\files\41.hir
 AddFile ..\build\files\42.hir
 AddFile ..\build\files\43.hir
+AddFile ..\build\files\44.hir
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
 ; Additional images

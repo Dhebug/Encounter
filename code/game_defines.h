@@ -161,6 +161,7 @@ extern const char gTextLocationWestGallery[];          // "This is the west gall
 extern const char gTextLocationMainLanding[];          // "You are on the main landing"             
 
 extern const char gTextLocationOutsidePit[];           // "Outside a deep pit"          
+extern const char gTextLocationStudyRoom[];            // "Where serious Business happens"
 extern const char gTextLocationGirlRoomOpenned[];      // "The girl room (openned lock)"
 
 // Items

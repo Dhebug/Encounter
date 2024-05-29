@@ -111,6 +111,8 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/loc_lounge.png)|Here you can find a **tobacco tin** container.|
 |**This looks like a library**|e_LOCATION_LIBRARY|
 |![Game location image](../data/loc_library.png)|In the library you will find a **chemistry book** providing some **chemistry recepies** as well as a **map** of England.|
+|**Where serious Business happens**|e_LOCATION_STUDY_ROOM|
+|![Game location image](../data/loc_study_room.png)|This room is empty, but may contain the **dart gun** among the hunting equipment|
 |**A dining room, or so it appears**|e_LOCATION_DININGROOM|
 |![Game location image](../data/loc_dinning_room.png)|On the dinning table is a **joint of meat** which the **dog** will surrely appreciate, as well as some **bread** designed to attract the **dove**.|
 |**This looks like a games room**|e_LOCATION_GAMESROOM|
