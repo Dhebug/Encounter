@@ -180,6 +180,26 @@ WORDS ProcessContainerAnswer()
 }
 
 
+char ItemCheck(unsigned char itemId)
+{
+	if (itemId<e_ITEM_COUNT_)
+    {
+        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
+        {
+            return 1;
+        }
+        else
+        {
+            PrintErrorMessage(gTextErrorItemNotPresent);   // "This item does not seem to be present"
+        }
+    }
+    else
+	{
+		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
+	}
+    return 0; // Cannot use
+}
+
 void TakeItem()
 {
     unsigned char itemId = gWordBuffer[1];
@@ -281,25 +301,6 @@ void DropItem()
 	}
 }
 
-char ItemCheck(unsigned char itemId)
-{
-	if (itemId<e_ITEM_COUNT_)
-    {
-        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
-        {
-            return 1;
-        }
-        else
-        {
-            PrintErrorMessage(gTextErrorItemNotPresent);   // "This item does not seem to be present"
-        }
-    }
-    else
-	{
-		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
-	}
-    return 0; // Cannot use
-}
 
 
 #ifdef ENABLE_CHEATS
