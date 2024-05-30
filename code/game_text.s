@@ -71,7 +71,6 @@ _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
-_gTextErrorDontKnowUsage    .byt "Je ne sais pas l'utiliser",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -82,7 +81,6 @@ _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
-_gTextErrorDontKnowUsage    .byt "I don't know how to use that",0
 #endif
 _EndErrorMessages
 
