@@ -38,7 +38,7 @@ _gItems
     // Normal items
     ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOCATION_DARKCELLARROOM  ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED)        // e_ITEM_LockedPanel
     ITEM_NORMAL( _gTextItemFridge                ,e_LOCATION_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Fridge
-    ITEM_NORMAL( _gTextItemSmallHoleInDoor       ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SmallHoleInDoor      
+    ITEM_NORMAL( _gTextItemSedativePills         ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SedativePills     
     ITEM_NORMAL( _gTextItemBrokenWindow          ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenWindow         
     ITEM_NORMAL( _gTextItemTwine                 ,e_LOCATION_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Twine                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOCATION_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
@@ -59,7 +59,7 @@ _gItems
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOCATION_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_RollOfToiletPaper    
     ITEM_NORMAL( _gTextItemHosePipe              ,e_LOCATION_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HosePipe             
     ITEM_NORMAL( _gTextItemBrokenGlass           ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenGlass          
-    ITEM_NORMAL( _gTextItemAcidBurn              ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_AcidBurn             
+    ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOCATION_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_YoungGirl        
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
     ITEM_NORMAL( _gTextItemKeys                  ,e_LOCATION_MAINSTREET      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Keys                 
@@ -67,10 +67,7 @@ _gItems
     ITEM_NORMAL( _gTextItemBomb                  ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bomb                 
     ITEM_NORMAL( _gTextItemPistol                ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Pistol               
     ITEM_NORMAL( _gTextItemBullets               ,e_LOCATION_DARKCELLARROOM  ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bullets              
-    ITEM_NORMAL( _gTextItemYoungGirlOnFloor      ,e_LOCATION_GIRLROOM        ,ITEM_FLAG_DEFAULT)                         // e_ITEM_YoungGirlOnFloor     
     ITEM_NORMAL( _gTextItemChemistryRecipes      ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ChemistryRecipes     
     ITEM_NORMAL( _gTextItemUnitedKingdomMap      ,e_LOCATION_LIBRARY         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_UnitedKingdomMap   
     ITEM_NORMAL( _gTextItemClosedCurtain         ,e_LOCATION_WESTGALLERY     ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Curtain
-    ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOCATION_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
-    ITEM_NORMAL( _gTextItemSedativePills         ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SedativePills     
-
+    

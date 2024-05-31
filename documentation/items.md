@@ -62,8 +62,7 @@ These items cannot just be collected, you need some adequate containers to trans
 These are items you will find around in the various locations
 |Item|Description|Define|
 |-|-|-|
-|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel<br>e_ITEM_LockedPanel|
-|**a small hole in the door**|The metal door can be pierced using some acid (in the original game)|e_ITEM_SmallHoleInDoor|
+|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel|
 |**the window is broken**|The kidnapped girl can escape through the window if you break it and provide her with a rope.|e_ITEM_BrokenWindow|
 |**a large dove**|The dove can be captured with the fishing net and used to distract the dog|e_ITEM_LargeDove|
 |**some twine**|The twine can be used to control the thug|e_ITEM_Twine|
@@ -80,7 +79,7 @@ These are items you will find around in the various locations
 |**a thug asleep on the bed**|There are a few items in his pockets, if you can take control of the situation|e_ITEM_Thug|
 |**a heavy safe**|The safe is in the basement and contains chemicals|e_ITEM_HeavySafe<br>e_ITEM_HeavySafe|
 |**a hand written note**|The note is a help for the player telling them to investigate the safe in the basement|e_ITEM_HandWrittenNote|
-|**a length of rope**|The rope is necessary for the girl to escape, but can also be used around the tree to escape the pit|e_ITEM_Rope<br>e_ITEM_RopeHangingFromWindow<br>e_ITEM_RopeAttachedToATree|
+|**a length of rope**|The rope is necessary for the girl to escape, but can also be used around the tree to escape the pit|e_ITEM_Rope<br>e_ITEM_RopeAttachedToATree|
 |**a roll of toilet tissue**|The toilet roll can be used to build some fuse for the bomb|e_ITEM_RollOfToiletPaper|
 |**a hose-pipe**|This tube can be used to get the petrol out of the car tank|e_ITEM_HosePipe|
 |**a set of keys**|Found ouside the house, they open the panel with the alarm (probably fell from the pockets of the owner)|e_ITEM_Keys|
@@ -89,9 +88,8 @@ These are items you will find around in the various locations
 |**three .38 bullets**|Bullets for the pistol, found in another room|e_ITEM_Bullets|
 |**a couple chemistry recipes**|Found in the chemistry book in the library|e_ITEM_ChemistryRecipes|
 |**a map of the United Kingdom**|Some decorative element on the wall of the library, the idea is to provide some information about why there is a kidnapping|e_ITEM_UnitedKingdomMap|
-|**a young girl**|The hostage we need to free|e_ITEM_YoungGirl<br>e_ITEM_YoungGirlOnFloor|
+|**a young girl**|The hostage we need to free|e_ITEM_YoungGirl|
 |**broken glass**|Result of breaking the window|e_ITEM_BrokenGlass|
-|**an acid burn**|Result of the acid|e_ITEM_AcidBurn|
 
 ## Constructed items
 The following items have to be created by the player by performing some actions on the other items

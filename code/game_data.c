@@ -24,14 +24,11 @@ keyword gWordsArray[] =
 
     // Then normal items
     { "GIRL",   e_ITEM_YoungGirl            },  // e_ITEM_YoungGirl         
-    //{ "GIRL",e_ITEM_YoungGirlOnFloor     },  // e_ITEM_YoungGirlOnFloor - Girl, girl on the floor, etc... should be the same item, but with flags
     { "WINDOW", e_ITEM_BrokenWindow         },  // e_ITEM_BrokenWindow          
     { "DUST",   e_ITEM_BlackDust            },  // e_ITEM_BlackDust             
-    { "PANEL",  e_ITEM_LockedPanel            },  // e_ITEM_LockedPanel             
+    { "PANEL",  e_ITEM_LockedPanel          },  // e_ITEM_LockedPanel             
     { "FRIDGE",  e_ITEM_Fridge              },  // e_ITEM_Fridge
-    //{ "PANEL",e_ITEM_LockedPanel          },  // e_ITEM_LockedPanel  - Open and Locked panels should be the same item, but with flags
     { "POWDER", e_ITEM_YellowPowder         },  // e_ITEM_YellowPowder          
-    //{ "...",e_ITEM_SmallHoleInDoor      },  // e_ITEM_SmallHoleInDoor       
     { "WATER",  e_ITEM_Water                },  // e_ITEM_Water                 
     { "DOVE",   e_ITEM_LargeDove            },  // e_ITEM_LargeDove             
     { "TWINE",  e_ITEM_Twine                },  // e_ITEM_Twine                 
@@ -49,12 +46,10 @@ keyword gWordsArray[] =
     { "SAFE",   e_ITEM_HeavySafe            },  // e_ITEM_HeavySafe             
     { "NOTE",   e_ITEM_HandWrittenNote      },  // e_ITEM_HandWrittenNote       
     { "ROPE",   e_ITEM_Rope                 },  // e_ITEM_Rope                  
-    //{ "...",e_ITEM_RopeHangingFromWindow},  // e_ITEM_RopeHangingFromWindow
     { "TISSUE", e_ITEM_RollOfToiletPaper    },  // e_ITEM_RollOfToiletPaper     
     { "HOSE",   e_ITEM_HosePipe             },  // e_ITEM_HosePipe              
     { "PETROL", e_ITEM_Petrol               },  // e_ITEM_Petrol                
     { "GLASS",  e_ITEM_BrokenGlass          },  // e_ITEM_BrokenGlass       
-    //{ "...",e_ITEM_AcidBurn             },  // e_ITEM_AcidBurn              
     { "BOTTLE", e_ITEM_SmallBottle          },  // e_ITEM_SmallBottle       
     { "FUSE",   e_ITEM_Fuse                 },  // e_ITEM_Fuse                  
     { "GUN",    e_ITEM_GunPowder            },  // e_ITEM_GunPowder             

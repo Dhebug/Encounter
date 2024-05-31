@@ -85,7 +85,7 @@
 // Then normal items
 #define	e_ITEM_LockedPanel  		 12         // a locked panel on the wall / an open panel on wall
 #define	e_ITEM_Fridge  			     13         // a fridge
-#define	e_ITEM_SmallHoleInDoor 		 14         // a small hole in the door
+#define	e_ITEM_SedativePills 		 14         // some sedative pills
 #define	e_ITEM_BrokenWindow  		 15         // the window is broken
 #define	e_ITEM_Twine  				 16         // some twine
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
@@ -106,7 +106,7 @@
 #define	e_ITEM_RollOfToiletPaper  	 32         // a roll of toilet tissue~
 #define	e_ITEM_HosePipe  			 33         // a hose-pipe
 #define	e_ITEM_BrokenGlass  		 34         // broken glass
-#define	e_ITEM_AcidBurn  			 35         // an acid burn
+#define e_ITEM_Medicinecabinet       35         // a thick curtain
 #define	e_ITEM_YoungGirl  			 36         // a young girl
 #define	e_ITEM_Fuse  				 37         // a fuse
 #define	e_ITEM_Keys  				 38         // a set of keys
@@ -114,14 +114,11 @@
 #define	e_ITEM_Bomb  				 40         // a bomb
 #define	e_ITEM_Pistol 				 41         // a pistol
 #define	e_ITEM_Bullets  			 42         // three .38 bullets
-#define	e_ITEM_YoungGirlOnFloor  	 43         // a young girl tied up on the floor
-#define	e_ITEM_ChemistryRecipes   	 44         // a sheet of paper with a few recipes on things to build
-#define	e_ITEM_UnitedKingdomMap   	 45         // the map of the UK in the library
-#define e_ITEM_Curtain               46         // a thick curtain
-#define e_ITEM_Medicinecabinet       47         // a thick curtain
-#define e_ITEM_SedativePills         48         // some sedative pills
-#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER - Free until 127, after are action words
-#define e_ITEM_CURRENT               49         // For the scripting, so the current objects can be accessed from various scripts
+#define	e_ITEM_ChemistryRecipes   	 43         // a sheet of paper with a few recipes on things to build
+#define	e_ITEM_UnitedKingdomMap   	 44         // the map of the UK in the library
+#define e_ITEM_Curtain               45         // a thick curtain
+#define	e_ITEM_COUNT_ 				 46         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_CURRENT               46         // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
 #define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_
