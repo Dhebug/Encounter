@@ -24,6 +24,10 @@ WORDS ProcessPlayerNameAnswer()
 	return e_WORD_QUIT;
 }
 
+char ProcessFoundToken(WORDS wordId)
+{
+    return 1;
+}
 
 void PrintStatusMessageAsm()
 {

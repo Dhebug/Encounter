@@ -38,6 +38,7 @@ unsigned char ParseInputBuffer()
 	unsigned char wordId;
 	char car;
 	char done;
+    char keepSearching;
 	keyword* keywordPtr;
 	char* separatorPtr;
 	char* inputPtr = gInputBuffer;
@@ -79,18 +80,20 @@ unsigned char ParseInputBuffer()
 			// Now that we have identified the begining and end of the word, check if it's in our vocabulary list
 			gWordBuffer[gWordCount]=e_WORD_COUNT_;
 			keywordPtr = gWordsArray;
-			while (keywordPtr->word)   // The list is terminated by a null pointer entry
+            keepSearching = 1;
+			while (keepSearching && keywordPtr->word)   // The list is terminated by a null pointer entry
 			{
 				// Right now we do a full comparison of the words, but technically we could restrict to only a few significant characters.
 				if (strcmp(inputPtr,keywordPtr->word)==0)
 				{
 					// Found the word in the list, we mark down the token id and continue searching
-					gWordBuffer[gWordCount] = keywordPtr->id;
-					gWordCount++;
-					break;
+                    unsigned char itemId = keywordPtr->id;
+					gWordBuffer[gWordCount] = itemId;
+                    keepSearching = !ProcessFoundToken(itemId);
 				}
 				++keywordPtr;
 			}
+			gWordCount++;
 			inputPtr = separatorPtr+1;
 		}
 	}

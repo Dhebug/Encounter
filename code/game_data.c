@@ -53,8 +53,9 @@ keyword gWordsArray[] =
     { "BOTTLE", e_ITEM_SmallBottle          },  // e_ITEM_SmallBottle       
     { "FUSE",   e_ITEM_Fuse                 },  // e_ITEM_Fuse                  
     { "GUN",    e_ITEM_GunPowder            },  // e_ITEM_GunPowder             
+    { "GUN",    e_ITEM_DartGun              },  // e_ITEM_DartGun             
     { "KEYS",   e_ITEM_Keys                 },  // e_ITEM_Keys                  
-    { "NEWSPAPER",e_ITEM_Newspaper            },  // e_ITEM_Newspaper             
+    { "NEWSPAPER",e_ITEM_Newspaper          },  // e_ITEM_Newspaper             
     { "BOMB",   e_ITEM_Bomb                 },  // e_ITEM_Bomb                  
     { "PISTOL", e_ITEM_Pistol               },  // e_ITEM_Pistol                
     { "BULLETS",e_ITEM_Bullets              },  // e_ITEM_Bullets           
@@ -62,6 +63,7 @@ keyword gWordsArray[] =
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
     { "CURTAIN",e_ITEM_Curtain              },  // e_ITEM_Curtain
     { "CABINET",e_ITEM_Medicinecabinet      },  // e_ITEM_Medicinecabinet
+    { "CABINET",e_ITEM_GunCabinet           },  // e_ITEM_Medicinecabinet
     { "PILLS"  ,e_ITEM_SedativePills        },  // e_ITEM_SedativePills
     { "SEDATIVES",e_ITEM_SedativePills      },  // e_ITEM_SedativePills
 

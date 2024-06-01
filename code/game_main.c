@@ -179,6 +179,27 @@ WORDS ProcessContainerAnswer()
     return gWordBuffer[0];
 }
 
+char ProcessFoundToken(WORDS wordId)
+{
+    if (wordId < e_ITEM_COUNT_)
+    {
+        // It's an item
+        if (gItems[wordId].location == e_LOCATION_INVENTORY)
+        {
+            return 1;
+        }
+        if (gItems[wordId].location == gCurrentLocation)
+        {
+            return 1;
+        }
+    }
+    else
+    {
+        return 1;
+    }
+    return 0;
+}
+
 
 char ItemCheck(unsigned char itemId)
 {

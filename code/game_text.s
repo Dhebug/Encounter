@@ -284,6 +284,7 @@ _gTextItemChemistryRecipes        .byt "des formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemSedativePills           .byt "des somnifères",0
+_gTextItemDartGun                 .byt "un lance fléchettes",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -334,6 +335,7 @@ _gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0
 _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemSedativePills           .byt "some sedative pills",0
+_gTextItemDartGun                 .byt "a dart gun",0
 #endif
 _EndItemNames
 
@@ -842,6 +844,11 @@ _gDescriptionLibrary
 
 _gDescriptionStudyRoom
 .(
+    ; Is the gun cabinet open?
+    JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,50),40,_SecondImageBuffer+40*0+8,_ImageBuffer+40*13+24)       ; Cabinet open
+cabinet_closed
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1448,6 +1455,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_Curtain            , _OpenCurtain)
     VALUE_MAPPING(e_ITEM_Fridge             , _OpenFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _OpenMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -1505,6 +1513,30 @@ _OpenMedicineCabinet
 .)
 
 
+_OpenGunCabinet
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),open)                           ; Is the gun cabinet closed?
+        UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                    ; Open it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une armoire à armes ouverte")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun cabinett")
+#endif        
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
+            DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET,"Gun cabinet upper drawer")         ; Show what we found!
+            SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_STUDY_ROOM)                             ; It's now visible inside the study room
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Une seule fléchette, mieux que rien!")
+#else
+            INFO_MESSAGE("Only one dart, better than nothing!")
+#endif    
+            WAIT(50*2)
+        ENDIF(dartgun)
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
 
 
 /* MARK: Close Action ➡📦
@@ -1520,6 +1552,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Curtain            , _CloseCurtain)
     VALUE_MAPPING(e_ITEM_Fridge             , _CloseFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _CloseMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_GunCabinet         , _CloseGunCabinet)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -1569,7 +1602,19 @@ _CloseMedicineCabinet
 .)
 
 
-
+_CloseGunCabinet
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),cabinet)                           ; Is the cabinet open?
+        SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                          ; Close it!
++_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une armoire à armes")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun cabinet")
+#endif    
+    ENDIF(cabinet)
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Use Action ✋
