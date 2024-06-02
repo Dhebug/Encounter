@@ -38,24 +38,12 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
-_gTextDeadThug              .byt "un malfaiteur mort",0
-_gTextDogGrowlingAtYou      .byt "un alsacien menacant",0
-_gTextThugAsleepOnBed       .byt "un malfaiteur assoupi sur le lit",0
-_gTextNotDead               .byt "Pas mort",0                                // Debugging text
-_gTextDogJumpingAtMe        .byt "un chien qui me saute dessus",0
-_gTextThugShootingAtMe      .byt "un malfaiteur qui me tire dessus",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
-_gTextDeadThug              .byt "a dead thug",0
-_gTextDogGrowlingAtYou      .byt "an alsatian growling at you",0
-_gTextThugAsleepOnBed       .byt "a thug asleep on the bed",0
-_gTextNotDead               .byt "Not dead",0                                // Debugging text
-_gTextDogJumpingAtMe        .byt "a dog jumping at me",0
-_gTextThugShootingAtMe      .byt "a thug shooting at me",0
 #endif
 _EndMessagesAndPrompts
 
@@ -1631,7 +1619,12 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Ladder             , _UseLadder)
     VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
-    VALUE_MAPPING(255                       , _MessageNothingSpecial)   ; Default option
+    VALUE_MAPPING(e_ITEM_Bread              , _ThrowBread)
+    VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
+    VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
+    VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
 _UseLadder
@@ -1685,7 +1678,37 @@ _UseGame
     END_AND_REFRESH
 
 
+_UseDartGun
+    DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART,"You shoot your only dart")
+    SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_GONE_FOREVER)                      ; The player can only use the dart gun once
 
+    // - We are in the entrance hall and the dog is still alive
+    JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Fait de beau rêves")
+#else    
+        INFO_MESSAGE("Sweet dreams doggy")
+#endif    
+        JUMP(_CommonDogDisabled)
+snoozed_dog
+
+    // - We are in the sleeping room and the thug is still alive
+    JUMP_IF_FALSE(snoozed_thug,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_TRUE(snoozed_thug,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_THUG)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Fait de beau rêves")
+#else    
+        INFO_MESSAGE("Sweet dreams scumbag")
+#endif    
+        JUMP(_CommonThugDisabled)
+snoozed_thug    
+
+    ;INFO_MESSAGE("Hum... looks like it crashed?")
+    WAIT(50*2)
+    END_AND_REFRESH
 
 
 /* MARK: Search Action 🕵️‍♀️
@@ -1828,15 +1851,21 @@ _ThrowKnife
 .(
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
+    JUMP_IF_FALSE(dog_knife,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(dog_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
+        JUMP(_CommonDogDisabled)
+dog_knife    
+
     // - We are in the sleeping room and the thug is still alive
-    JUMP_IF_FALSE(drop_knife,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
-    JUMP_IF_TRUE(drop_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_FALSE(thug_knife,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_TRUE(thug_knife,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
+        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_MASTERBEDROOM)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_THUG)
+        JUMP(_CommonThugDisabled)
+thug_knife    
 
-    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
-    JUMP(_CommonDogDisabled)
-
-drop_knife    
     // In other locations we just drop the item where we are
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_CURRENT)
     END_AND_REFRESH
@@ -1847,16 +1876,21 @@ _ThrowSnookerCue
 .(
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
+    JUMP_IF_FALSE(dog_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_TRUE(dog_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
+        JUMP(_CommonDogDisabled)
+dog_snooker_cue    
+
     // - We are in the sleeping room and the thug is still alive
-    JUMP_IF_FALSE(drop_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
-    JUMP_IF_TRUE(drop_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_FALSE(thug_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_TRUE(thug_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
+        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_MASTERBEDROOM)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_THUG)
+        JUMP(_CommonThugDisabled)
+thug_snooker_cue    
 
-    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
-    INCREASE_SCORE(50)
-    JUMP(_CommonDogDisabled)
-
-drop_snooker_cue    
     // In other locations we just drop the item where we are
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_CURRENT)
     END_AND_REFRESH
@@ -1867,18 +1901,28 @@ _CommonDogDisabled
 .(
     INCREASE_SCORE(50)
     SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
-#ifdef LANGUAGE_FR   
 +_gTextDogLying = *+2
+#ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un chien immobile")
 #else    
-+_gTextDogLying = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a dog lying")
 #endif    
     END_AND_REFRESH
 .)
 
 
-
+_CommonThugDisabled
+.(
+    INCREASE_SCORE(50)
+    SET_ITEM_FLAGS(e_ITEM_Thug,ITEM_FLAG_DISABLED)
++_gTextDeadThug = *+2
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"un voyou hors d'état de nuire")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive thug")
+#endif    
+    END_AND_REFRESH
+.)
 
 
 

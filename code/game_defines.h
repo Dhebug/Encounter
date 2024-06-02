@@ -80,14 +80,6 @@ extern const char gTextNothingHere[];           // "There is nothing of interest
 extern const char gTextCanSee[];                // "I can see"
 extern const char gTextScore[];                 // "Score:"
 extern const char gTextCarryInWhat[];           // "Carry it in what?"
-extern const char gTextPetrolEvaporates[];      // "The petrol evaporates"
-extern const char gTextWaterDrainsAways[];      // "The water drains away"
-extern const char gTextDeadThug[];              // "a dead thug"
-extern const char gTextDogGrowlingAtYou[];      // "an alsatian growling at you"
-extern const char gTextThugAsleepOnBed[];       // "a thug asleep on the bed",0
-extern const char gTextNotDead[];               // "Not dead" - Debugging text
-extern const char gTextDogJumpingAtMe[];        // "a dog jumping at me"
-extern const char gTextThugShootingAtMe[];      // "a thug shooting at me"
 
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that direction"

@@ -244,6 +244,9 @@ AddDefine LOADER_PICTURE_DOG_CHASING_DOVE {FileIndex}
 AddFile ..\build\files\drawer_gun_cabinet.hir
 AddDefine LOADER_PICTURE_DRAWER_GUN_CABINET {FileIndex}
 
+AddFile ..\build\files\shooting_dart.hir
+AddDefine LOADER_PICTURE_SHOOTING_DART {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR
