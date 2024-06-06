@@ -119,8 +119,9 @@
 #define e_ITEM_Curtain               45         // a thick curtain
 #define e_ITEM_GunCabinet            46         // a gun cabinet
 #define e_ITEM_DartGun               47         // a dart gun
-#define	e_ITEM_COUNT_ 				 48         //  ----- END MARKER - Free until 127, after are action words
-#define e_ITEM_CURRENT               48         // For the scripting, so the current objects can be accessed from various scripts
+#define e_ITEM_BasementWindow        48         // a basement window
+#define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_CURRENT               49         // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
 #define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_

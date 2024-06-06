@@ -72,4 +72,5 @@ _gItems
     ITEM_NORMAL( _gTextItemClosedCurtain         ,e_LOCATION_WESTGALLERY     ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Curtain
     ITEM_NORMAL( _gTextItemClosedGunCabinet      ,e_LOCATION_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_GunCabinet
     ITEM_NORMAL( _gTextItemDartGun               ,e_LOCATION_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_DartGun
+    ITEM_NORMAL( _gTextItemBasementWindow        ,e_LOCATION_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_BasementWindow
     

@@ -70,6 +70,8 @@ keyword gWordsArray[] =
     { "HANDHELD",e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
     { "GAME"    ,e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
 
+    { "WINDOW"  ,e_ITEM_BasementWindow      },  // e_ITEM_HandheldGame
+    
     
     
 

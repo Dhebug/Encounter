@@ -273,6 +273,7 @@ _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemSedativePills           .byt "des somnifères",0
 _gTextItemDartGun                 .byt "un lance fléchettes",0
+_gTextItemBasementWindow          .byt "une fenêtre basse",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -324,6 +325,7 @@ _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemSedativePills           .byt "some sedative pills",0
 _gTextItemDartGun                 .byt "a dart gun",0
+_gTextItemBasementWindow          .byt "a basement window",0
 #endif
 _EndItemNames
 
@@ -1366,6 +1368,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _InspectFridgeDoor)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
+    VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1417,7 +1420,19 @@ _InspectMedicineCabinet
     END_AND_REFRESH
 .)
 
-
+_InspectBasementWindow
+.(
+    ; Is the black tape removed from the basement window?
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
+        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW,"A basement window")
+        INFO_MESSAGE("I can see the basement room")
+    ELSE(else,open)
+        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"A dark basement window")
+        INFO_MESSAGE("Was it painted black?")
+    ENDIF(open)
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
 
 _InspectPlasticBag
 #ifdef LANGUAGE_FR
@@ -1444,6 +1459,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _OpenFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _OpenMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
+    VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -1525,6 +1541,10 @@ _OpenGunCabinet
     END_AND_REFRESH
 .)
 
+
+_OpenBasementWindow
+    ERROR_MESSAGE("It is locked from the inside")
+    END
 
 
 /* MARK: Close Action ➡📦

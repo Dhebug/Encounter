@@ -197,6 +197,8 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\view_drawer_gun_cabinet.png %TARGET%\drawer_gun_cabinet.hir
 %PICTCONV% %PARAMS% data\view_shooting_dart.png %TARGET%\shooting_dart.hir
 
+%PICTCONV% %PARAMS% data\view_basement_window.png %TARGET%\basement_window.hir
+%PICTCONV% %PARAMS% data\view_basement_window_darkened.png %TARGET%\basement_window_darkened.hir
 
 :: Severn Software and Defence Force logos
 %PICTCONV% %PARAMS% data\intro_defence-force_logo.png %TARGET%\logos.hir

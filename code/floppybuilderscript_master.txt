@@ -247,6 +247,12 @@ AddDefine LOADER_PICTURE_DRAWER_GUN_CABINET {FileIndex}
 AddFile ..\build\files\shooting_dart.hir
 AddDefine LOADER_PICTURE_SHOOTING_DART {FileIndex}
 
+AddFile ..\build\files\basement_window.hir
+AddDefine LOADER_PICTURE_BASEMENT_WINDOW {FileIndex}
+
+AddFile ..\build\files\basement_window_darkened.hir
+AddDefine LOADER_PICTURE_BASEMENT_WINDOW_DARK {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR
