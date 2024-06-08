@@ -473,7 +473,8 @@ cannot_escape_pit    ; The player has no way to escape the pit
 #endif    
     WAIT(50*2)                                      ; Wait a couple seconds for dramatic effect
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)   ; Achievement!
-    JUMP(_gDescriptionGameOverLost);                ; Draw the 'The End' logo
+    GAME_OVER(e_SCORE_FELL_INTO_PIT)                ; The game is now over
+    JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
 
 draw_ladder
     SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                   ; Enable the UP direction
@@ -777,12 +778,12 @@ end_dog_check
       
 dog_alive
     ; If the dog is alive, it will jump on our face now
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
-     ;
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
     _BUBBLE_LINE(5,108,0,"Oops...")
     WAIT(50*2)                              ; Wait a couple seconds
+    GAME_OVER(e_SCORE_MAIMED_BY_DOG)        ; The game is now over
     JUMP(_gDescriptionGameOverLost)         ; Game Over
 
 end_dog
@@ -794,6 +795,7 @@ end_dog
     END
 .)    
 
+/*
 _gDescriptionDogAttacking
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
      ;
@@ -803,6 +805,7 @@ _gDescriptionDogAttacking
     WAIT(50*2)                                      ; Wait a couple seconds
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)   ; Achievement!
     JUMP(_gDescriptionGameOverLost)                 ; Game Over
+    */
     /*
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(3)
@@ -1167,6 +1170,7 @@ _gDescriptionThugAttacking
     _BUBBLE_LINE(60,16,0,"My last one")
     WAIT(50*2)                                      ; Wait a couple seconds
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SHOT_BY_THUG)    ; Achievement!
+    GAME_OVER(e_SCORE_SHOT_BY_THUG)                 ; The game is now over
     JUMP(_gDescriptionGameOverLost)                 ; Game Over
 
 
@@ -1543,8 +1547,16 @@ _OpenGunCabinet
 
 
 _OpenBasementWindow
-    ERROR_MESSAGE("It is locked from the inside")
-    END
+    DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
+    INFO_MESSAGE("It is locked from the inside...")
+    WAIT(50*2)
+    INFO_MESSAGE("...maybe shake it a bit?")
+    WAIT(50*2)
+    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
+    ERROR_MESSAGE("You triggered the alarm!")
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
+    GAME_OVER(e_SCORE_TRIPPED_ALARM)
+    JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
 
 
 /* MARK: Close Action ➡📦

@@ -30,8 +30,9 @@
 #define COMMAND_SET_ITEM_DESCRIPTION 20
 #define COMMAND_SET_LOCATION_DIRECTION 21
 #define COMMAND_UNLOCK_ACHIEVEMENT 22
-#define COMMAND_INCREASE_SCORE 23
-#define _COMMAND_COUNT          24
+#define COMMAND_INCREASE_SCORE  23
+#define COMMAND_GAME_OVER       24
+#define _COMMAND_COUNT          25
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -67,6 +68,7 @@
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 #define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
+#define GAME_OVER(condition)                 .byt COMMAND_GAME_OVER,condition
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location

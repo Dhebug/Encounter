@@ -62,8 +62,8 @@ void HandleHighScore()
 			// Ask the player their name
 			AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
 			ptrScore->score = gScore+32768;
-			ptrScore->condition = e_SCORE_GAVE_UP;  // Need to get that from the game
-			memset(ptrScore->name,' ',15);          // Fill the entry with spaces
+			ptrScore->condition = gGameOverCondition;   // Need to get that from the game
+			memset(ptrScore->name,' ',15);              // Fill the entry with spaces
 			if (gInputBufferPos>15)
 			{
 				// Just copy the first 16 characters if it's too long

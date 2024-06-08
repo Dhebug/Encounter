@@ -254,6 +254,8 @@ AddDefine LOADER_PICTURE_BASEMENT_WINDOW {FileIndex}
 AddFile ..\build\files\basement_window_darkened.hir
 AddDefine LOADER_PICTURE_BASEMENT_WINDOW_DARK {FileIndex}
 
+AddFile ..\build\files\view_alarm_triggered.hir
+AddDefine LOADER_PICTURE_ALARM_TRIGGERED {FileIndex}
 
 ; All the sprites
 #ifdef LANGUAGE_FR

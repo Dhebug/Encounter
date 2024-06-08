@@ -130,6 +130,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 :: 44 - A bright cellar room
 SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\no_picture.png %TARGET%\NONE.hir
+
 %PICTCONV% %PARAMS% data\loc_market_square.png %TARGET%\0.hir
 %PICTCONV% %PARAMS% data\loc_seedy_alley.png %TARGET%\1.hir
 %PICTCONV% %PARAMS% data\loc_road_stretch.png %TARGET%\2.hir
@@ -203,6 +204,8 @@ SET PARAMS=-u1 -m0 -f0 -o2
 
 %PICTCONV% %PARAMS% data\view_basement_window.png %TARGET%\basement_window.hir
 %PICTCONV% %PARAMS% data\view_basement_window_darkened.png %TARGET%\basement_window_darkened.hir
+
+%PICTCONV% %PARAMS% data\view_alarm_triggered.png %TARGET%\view_alarm_triggered.hir
 
 :: Severn Software and Defence Force logos
 %PICTCONV% %PARAMS% data\intro_defence-force_logo.png %TARGET%\logos.hir

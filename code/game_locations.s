@@ -75,5 +75,7 @@ _gLocations
 
     LOCATION(e_LOCATION_LIBRARY           , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , _gTextLocationStudyRoom                ,_gDescriptionStudyRoom)         // e_LOCATION_STUDY_ROOM
 
+    LOCATION(e_LOCATION_CELLAR            , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , _gTextLocationDarkerCellar             ,_gDescriptionDarkerCellar)      // e_LOCATION_BRIGHTCELLARROOM   
+
     LOCATION(e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , e_LOCATION_NONE              , _gTextLocationGirlRoomOpenned          ,0)                              // e_LOCATION_GIRLROOM (technically this room cannot be accessed, so do not need description)        
 

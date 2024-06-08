@@ -45,6 +45,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandSetLocationDirection
     .word _ByteStreamCommandUnlockAchievement
     .word _ByteStreamCommandIncreaseScore
+    .word _ByteStreamCommandGameOver
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -531,6 +532,18 @@ _ByteStreamCommandIncreaseScore
     lda #0
     adc _gScore+1
     sta _gScore+1
+
+    lda #1
+    jmp _ByteStreamMoveByA
+.)
+
+
+; .byt COMMAND_GAME_OVER,condition
+_ByteStreamCommandGameOver
+.(
+    ldy #0
+    lda (_gCurrentStream),y             // Gameover condition
+    sta _gGameOverCondition
 
     lda #1
     jmp _ByteStreamMoveByA

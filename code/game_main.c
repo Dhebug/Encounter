@@ -10,6 +10,7 @@
 #include "input_system.h"
 
 extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
+extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so it can be shared with the other modules
 
 
 
@@ -379,6 +380,14 @@ WORDS ProcessAnswer()
                 // call the callback
                 actionMappingPtr->u.function();
             }
+
+            // Test for game over
+            if (gGameOverCondition!=0)
+            {
+                // The player has reached a game over condition
+                return e_WORD_QUIT;
+            }
+
             // Continue
             return e_WORD_CONTINUE;
         }
@@ -438,6 +447,7 @@ void Initializations()
 	gScore = 0;
     gCurrentStream = 0;
     gDelayStream = 0;
+    gGameOverCondition = 0;
 
 	LoadScene();
 	DisplayClock();

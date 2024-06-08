@@ -222,3 +222,15 @@
 #define	ACHIEVEMENT_COUNT_ 				48      //  Can't have more than 48 achievements
 #define ACHIEVEMENT_BYTE_COUNT           6
 
+
+// Game end conditions
+#define e_SCORE_UNNITIALIZED     0
+#define e_SCORE_SOLVED_THE_CASE  1
+#define e_SCORE_MAIMED_BY_DOG    2
+#define e_SCORE_SHOT_BY_THUG     3
+#define e_SCORE_FELL_INTO_PIT    4
+#define e_SCORE_TRIPPED_ALARM    5
+#define e_SCORE_RAN_OUT_OF_TIME  6
+#define e_SCORE_BLOWN_INTO_BITS  7
+#define e_SCORE_SIMPLY_VANISHED  8
+#define e_SCORE_GAVE_UP          9

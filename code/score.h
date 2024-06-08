@@ -16,20 +16,6 @@
 */
 #define SCORE_COUNT  24
 
-enum SCORE_CONDITION
-{
-    e_SCORE_UNNITIALIZED    = 0,
-    e_SCORE_SOLVED_THE_CASE = 1,
-    e_SCORE_MAIMED_BY_DOG   = 2,
-    e_SCORE_SHOT_BY_THUG    = 3,
-    e_SCORE_FELL_INTO_PIT   = 4,
-    e_SCORE_TRIPPED_ALARM   = 5,
-    e_SCORE_RAN_OUT_OF_TIME = 6,
-    e_SCORE_BLOWN_INTO_BITS = 7,
-    e_SCORE_SIMPLY_VANISHED = 8,
-    e_SCORE_GAVE_UP         = 9
-};
-
 
 typedef struct 
 {
@@ -52,6 +38,7 @@ extern const char* gScoreConditionsArray[];
 extern int gScore;                              // Moved to the last 32 bytes so it can be shared with the other modules
 extern unsigned char gAchievements[];           // Moved to the last 32 bytes so it can be shared with the other modules
 extern unsigned char gAchievementsChanged;      // Moved to the last 32 bytes so it can be shared with the other modules
+extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so it can be shared with the other modules
 
 extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
 
