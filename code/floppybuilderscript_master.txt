@@ -144,9 +144,10 @@ AddDefine OUTRO_SPRITE_PHOTOS {FileIndex}
 
 ; No location - actual error
 AddFile ..\build\files\NONE.hir
-AddDefine LOADER_PICTURE_LOCATIONS_START {FileIndex}
 
 ; All the locations
+AddFile ..\build\files\0.hir
+AddDefine LOADER_PICTURE_LOCATIONS_START {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\1.hir
 AddFile ..\build\files\2.hir
 AddFile ..\build\files\3.hir

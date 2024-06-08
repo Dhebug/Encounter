@@ -137,7 +137,7 @@ void LoadScene()
 	ClearMessageWindow(16+4);
 
 #if 1
-	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation+1,ImageBuffer);	
+	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation,ImageBuffer);	
 #else
 	memset(ImageBuffer,64+1,40*128);
 #endif	
