@@ -1191,11 +1191,11 @@ _gDescriptionPadlockedRoom
     END
 
 
-_gDescriptionGameOverLost
-    ; Draw the 'The End' logo
-    DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)
-    ; Should probably have a "game over" command
-    .byt COMMAND_FADE_BUFFER
+; This function assumes the GAME_OVER(xxx) has been called already
+_gDescriptionGameOverLost    
+    DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
+    WAIT(50*2)                                                                                             ; Wait a couple seconds
+    .byt COMMAND_FADE_BUFFER                                                                               ; Fade Out
     END
 _EndSceneScripts
 

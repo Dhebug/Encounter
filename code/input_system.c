@@ -105,6 +105,7 @@ unsigned char ParseInputBuffer()
 
 WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens)
 {
+    WORDS callbackOutput;
 	int k;
 	int shift=0;
 
@@ -121,7 +122,11 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 		do
 		{
 			WaitIRQ();
-			HandleByteStream();
+            callbackOutput=AskInputCallback();
+            if (callbackOutput!=e_WORD_CONTINUE)
+            {
+                return callbackOutput;
+            }
 			k=ReadKeyNoBounce();
 			sprintf((char*)0xbb80+40*23+1,"%c>%s%c           ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
 		}

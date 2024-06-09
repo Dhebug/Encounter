@@ -175,6 +175,17 @@ void PlayerMove()
 }
 
 
+WORDS AskInputCallback()
+{
+    HandleByteStream();
+    if ( (gGameOverCondition!=0) && (gCurrentStream==0) )
+    {
+        // The player has reached a game over condition and the end of the current stream
+        return e_WORD_QUIT;
+    }
+    return e_WORD_CONTINUE;
+}
+
 WORDS ProcessContainerAnswer()
 {
     return gWordBuffer[0];

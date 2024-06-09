@@ -14,8 +14,10 @@
 
 // Bunch of "no-op" functions and tables, these are required by the game, but not for the high scores
 keyword gWordsArray[] = { { 0,  e_WORD_COUNT_ } };
-void HandleByteStream()
-{    
+
+WORDS AskInputCallback()
+{   
+    return e_WORD_CONTINUE;
 }
 
 WORDS ProcessPlayerNameAnswer()
