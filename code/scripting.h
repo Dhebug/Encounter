@@ -32,7 +32,8 @@
 #define COMMAND_UNLOCK_ACHIEVEMENT 22
 #define COMMAND_INCREASE_SCORE  23
 #define COMMAND_GAME_OVER       24
-#define _COMMAND_COUNT          25
+#define COMMAND_SET_DESCRIPTION 25
+#define _COMMAND_COUNT          26
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -64,6 +65,7 @@
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
+#define SET_DESCRIPTION(description)         .byt COMMAND_SET_DESCRIPTION,description,0
 
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement

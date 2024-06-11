@@ -92,7 +92,7 @@ void GameDebugger()
         sprintf(currentLine,"%c%c$%x:Location %d",16+4,3,locationPtr,gCurrentLocation);    
         currentLine+=40;
 
-        sprintf(currentLine,"%s",gLocations[gCurrentLocation].description);    
+        //sprintf(currentLine,"%s",gLocations[gCurrentLocation].description);      // Description is now in the script
         sprintf(currentLine+36,"-%d ",gCurrentLocation);    
         currentLine+=80;
 
@@ -162,7 +162,7 @@ void GameDebugger()
             break;
 
         default:
-            sprintf(currentLine,"Loc:%s",gLocations[itemPtr->location].description);    
+            //sprintf(currentLine,"Loc:%s",gLocations[itemPtr->location].description);    
             break;
         }
         sprintf(currentLine+36,"-%d ",itemPtr->location);    

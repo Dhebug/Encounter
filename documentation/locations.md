@@ -25,9 +25,8 @@ Locations are defined in a static array containing all the locations:
 typedef struct 
 {
   unsigned char directions[e_DIRECTION_COUNT_];   // +0 The six possible directions (NSEWUP)
-  const char* description;                        // +6 The one line description of the place, displayed at the top of the TEXT area
-  const char* script;                             // +8 Additional list of commands to add elements to the graphical view (speech bubble, etc...)
-} location;  // sizeof = 10 bytes
+  const char* script;                             // +6 Additional list of commands to add elements to the graphical view (speech bubble, etc...)
+} location;  // sizeof = 8 bytes
 
 extern location gLocations[e_LOCATION_COUNT_];      // Array containing all the locations
 ```
@@ -37,6 +36,9 @@ The current location of the player is stored in a global variable, and a pointer
 extern unsigned char gCurrentLocation;
 extern location* gCurrentLocationPtr;
 ```
+
+> [!NOTE]  
+> If the size of the **location** structure changes, the code in **_ByteStreamComputeLocationPtr** ([bytestream.s](../code/bytestream.h)) has to be adapted else the scripting code will not work properly (and probably crash) when accessing any location.
 
 **See:**
 - [game_enums.h](../code/game_enums.h) for the list of all locations

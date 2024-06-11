@@ -46,6 +46,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandUnlockAchievement
     .word _ByteStreamCommandIncreaseScore
     .word _ByteStreamCommandGameOver
+    .word _ByteStreamCommandSetDescription
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -243,19 +244,13 @@ keep_item_id
 
 ; A=Location ID
 ; Return a pointer on the location in _gStreamLocationPtr
-; sizeof(location) = 10 
+; sizeof(location) = 8 
 ; 10 = 8n+2n = n<<3 + n<<1
 _ByteStreamComputeLocationPtr
-    // Item ID
-    sta tmp0+0
+    // Location ID
     sta _gStreamLocationPtr+0
     lda #0
-    sta tmp0+1
     sta _gStreamLocationPtr+1
-
-    // x2
-    asl tmp0+0
-    rol tmp0+1
 
     // x2
     asl _gStreamLocationPtr+0
@@ -268,15 +263,6 @@ _ByteStreamComputeLocationPtr
     // x8
     asl _gStreamLocationPtr+0
     rol _gStreamLocationPtr+1
-
-    // x10
-    clc
-    lda _gStreamLocationPtr+0
-    adc tmp0+0
-    sta _gStreamLocationPtr+0
-    lda _gStreamLocationPtr+1
-    adc tmp0+1
-    sta _gStreamLocationPtr+1
 
     // Item pointer
     clc
@@ -468,6 +454,7 @@ _ByteStreamCommandSetItemDescription
     lda _gCurrentStream+1
     sta (_gStreamItemPtr),y      // gItems->description (+1) = >_gCurrentStream
 
++FindNullTerminator
     ; Find the null terminator
     ldy #0
 search_loop
@@ -483,6 +470,29 @@ found_zero
     jmp _ByteStreamMoveByA
 .)
 
+; .byt COMMAND_SET_DESCRIPTION,description,0
+_ByteStreamCommandSetDescription
+.(
+    ;jsr _Panic
+    
+    ; Use the current pointer as the string address
+    ldy #0
+    lda _gCurrentStream+0
+    sta _param0+0
+    sta _gDescription+0
+    iny
+    lda _gCurrentStream+1
+    sta _param0+1
+    sta _gDescription+1
+
+    ; Print the description
+    jsr _PrintTopDescriptionAsm
+
+    ; Skip to the end of the string
+    jmp FindNullTerminator
+.)
+
+
 ;                                     +0       +1        +2
 ; .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
 _ByteStreamCommandSetLocationDirection
@@ -491,11 +501,11 @@ _ByteStreamCommandSetLocationDirection
     lda (_gCurrentStream),y      // location ID
     jsr _ByteStreamComputeLocationPtr
 
-    ldy #1
+    iny
     lda (_gCurrentStream),y      // Direction to update
     sta tmp0
 
-    ldy #2
+    iny
     lda (_gCurrentStream),y      // New value for this direction
 
     ldy tmp0
@@ -506,6 +516,7 @@ _ByteStreamCommandSetLocationDirection
     lda #3
     jmp _ByteStreamMoveByA
 .)
+
 
 
 ; .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement

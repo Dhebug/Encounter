@@ -87,125 +87,9 @@ _StartLocationNames
 #ifdef LANGUAGE_FR
 //                                      0         1         2         3
 //                                      0123456789012345678901234567890123456789
-_gTextLocationMarketPlace         .byt "Vous êtes sur la place du marché",0
-_gTextLocationDarkAlley           .byt "Vous êtes dans une allée sombre",0
-_gTextLocationRoad                .byt "Une longue route s'étend devant vous",0
-
-_gTextLocationDarkTunel           .byt "Vous êtes dans un tunnel humide",0
-_gTextLocationMainStreet          .byt "Vous êtes dans la rue principale",0
-_gTextLocationNarrowPath          .byt "Vous êtes sur un chemin étroit",0
-
-_gTextLocationInThePit            .byt "Vous êtes au fond d'un trou",0
-_gTextLocationOldWell             .byt "Vous êtes prês d'un vieux puit",0
-_gTextLocationWoodedAvenue        .byt "Vous êtes dans une allée arbroisée",0
-
-_gTextLocationGravelDrive         .byt "Vous êtes sur un passage gravilloné",0
-_gTextLocationTarmacArea          .byt "Vous êtes sur une zone asphaltée",0
-_gTextLocationZenGarden           .byt "Vous êtes dans un jarding zen relaxant",0
-
-_gTextLocationFrontLawn           .byt "Vous êtes sur une large pelouse",0
-_gTextLocationGreenHouse          .byt "Vous êtes dans une petite serre",0
-_gTextLocationTennisCourt         .byt "Vous êtes sur un cours de tennis",0
-
-_gTextLocationVegetableGarden     .byt "Vous êtes dans un jardin potagé",0
-_gTextLocationFishPond            .byt "Vous êtes près d'un bac a poisson",0
-_gTextLocationTiledPatio          .byt "Vous êtes sur un patio carellé",0
-
-_gTextLocationAppleOrchard        .byt "Vous êtes dans une pommeraie",0
-_gTextLocationDarkerCellar        .byt "Cette pièce est encore plus sombre",0
-_gTextLocationCellar              .byt "Une cave frigide et humide",0
-
-_gTextLocationNarrowStaircase     .byt "Vous êtes dans un escalier étroit",0
-_gTextLocationEntranceLounge      .byt "Vous êtes dans un salon",0
-_gTextLocationEntranceHall        .byt "Vous êtes dans un hall imposant",0
-
-_gTextLocationLibrary             .byt "Probablement une bibliothèque",0
-_gTextLocationDiningRoom          .byt "Apparement une salle a manger",0
-_gTextLocationStaircase           .byt "Vous êtes dans un large escalier",0
-
-_gTextLocationGamesRoom           .byt "La salle de jeux",0
-_gTextLocationSunLounge           .byt "Le solarium",0
-_gTextLocationKitchen             .byt "Visiblement la cuisine",0
-
-_gTextLocationNarrowPassage       .byt "Vous êtes dans un passage étroit",0
-_gTextLocationGuestBedroom        .byt "Une chambre d'amis",0
-_gTextLocationChildBedroom        .byt "La chambre d'un enfant",0
-
-_gTextLocationMasterBedRoom       .byt "La chambre principale",0
-_gTextLocationShowerRoom          .byt "Une salle de bain carellée",0
-_gTextLocationTinyToilet          .byt "Des petites toilettes",0
-
-_gTextLocationEastGallery         .byt "La gallerie est",0
-_gTextLocationBoxRoom             .byt "Une petite loge",0
-_gTextLocationPadlockedRoom       .byt "Une porte blindée cadenassée",0
-
-_gTextLocationClassyBathRoom      .byt "Une salle de bain luxieuse",0
-_gTextLocationWestGallery         .byt "La gallerie ouest",0
-_gTextLocationMainLanding         .byt "Vous êtes sur le palier principal",0
-
-_gTextLocationOutsidePit          .byt "En dehors d'un trou profond",0
-_gTextLocationStudyRoom           .byt "Le centre des affaires",0
 
 _gTextLocationGirlRoomOpenned     .byt "La pièce avec la fille (ouverte)",0
 #else
-_gTextLocationMarketPlace         .byt "You are in a deserted market square",0
-_gTextLocationDarkAlley           .byt "You are in a dark, seedy alley",0
-_gTextLocationRoad                .byt "A long road stretches ahead of you",0
-
-_gTextLocationDarkTunel           .byt "You are in a dark, damp tunnel",0
-_gTextLocationMainStreet          .byt "You are on the main street",0
-_gTextLocationNarrowPath          .byt "You are on a narrow path",0
-
-_gTextLocationInThePit            .byt "You are inside a deep pit",0
-_gTextLocationOldWell             .byt "You are near to an old-fashioned well",0
-_gTextLocationWoodedAvenue        .byt "You are in a wooded avenue",0
-
-_gTextLocationGravelDrive         .byt "You are on a wide gravel drive",0
-_gTextLocationTarmacArea          .byt "You are in an open area of tarmac",0
-_gTextLocationZenGarden           .byt "You are in a relaxing zen garden",0
-
-_gTextLocationFrontLawn           .byt "You are on a huge area of lawn",0
-_gTextLocationGreenHouse          .byt "You are in a small greenhouse",0
-_gTextLocationTennisCourt         .byt "You are on a lawn tennis court",0
-
-_gTextLocationVegetableGarden     .byt "You are in a vegetable plot",0
-_gTextLocationFishPond            .byt "You are standing by a fish pond",0
-_gTextLocationTiledPatio          .byt "You are on a tiled patio",0
-
-_gTextLocationAppleOrchard        .byt "You are in an apple orchard",0
-_gTextLocationDarkerCellar        .byt "This room is even darker than the last",0
-_gTextLocationCellar              .byt "This is a cold, damp cellar",0
-
-_gTextLocationNarrowStaircase     .byt "You are on some gloomy, narrow steps",0
-_gTextLocationEntranceLounge      .byt "You are in the lounge",0
-_gTextLocationEntranceHall        .byt "You are in an imposing entrance hall",0
-
-_gTextLocationLibrary             .byt "This looks like a library",0
-_gTextLocationDiningRoom          .byt "A dining room, or so it appears",0
-_gTextLocationStaircase           .byt "You are on a sweeping staircase",0
-
-_gTextLocationGamesRoom           .byt "This looks like a games room",0
-_gTextLocationSunLounge           .byt "You find yourself in a sun-lounge",0
-_gTextLocationKitchen             .byt "This is obviously the kitchen",0
-
-_gTextLocationNarrowPassage       .byt "You are in a narrow passage",0
-_gTextLocationGuestBedroom        .byt "This seems to be a guest bedroom",0
-_gTextLocationChildBedroom        .byt "This is a child's bedroom",0
-
-_gTextLocationMasterBedRoom       .byt "This must be the master bedroom",0
-_gTextLocationShowerRoom          .byt "You are in a tiled shower-room",0
-_gTextLocationTinyToilet          .byt "This is a tiny toilet",0
-
-_gTextLocationEastGallery         .byt "You have found the east gallery",0
-_gTextLocationBoxRoom             .byt "This is a small box-room",0
-_gTextLocationPadlockedRoom       .byt "You see a padlocked steel-plated door",0
-
-_gTextLocationClassyBathRoom      .byt "You are in an ornate bathroom",0
-_gTextLocationWestGallery         .byt "This is the west gallery",0
-_gTextLocationMainLanding         .byt "You are on the main landing",0
-
-_gTextLocationOutsidePit          .byt "Outside a deep pit",0
-_gTextLocationStudyRoom           .byt "Where serious Business happens",0
 
 _gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
 #endif
@@ -346,6 +230,11 @@ _gDescriptionNone
     END
 
 _gDescriptionDarkTunel
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un tunnel humide")
+#else
+    SET_DESCRIPTION("You are in a dark, damp tunnel")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -357,7 +246,14 @@ _gDescriptionDarkTunel
 #endif    
     END
 
+
 _gDescriptionMarketPlace
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur la place du marché")
+#else
+    SET_DESCRIPTION("You are in a deserted market square")
+#endif    
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -378,6 +274,11 @@ blinky_shop
 
 
 _gDescriptionDarkAlley
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans une allée sombre")
+#else
+    SET_DESCRIPTION("You are in a dark, seedy alley")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -389,7 +290,13 @@ _gDescriptionDarkAlley
 #endif    
     END
 
+
 _gDescriptionRoad
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une longue route s'étend devant vous")
+#else
+    SET_DESCRIPTION("A long road stretches ahead of you")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -401,7 +308,13 @@ _gDescriptionRoad
 #endif    
     END
 
+
 _gDescriptionMainStreet
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans la rue principale")
+#else
+    SET_DESCRIPTION("You are on the main street")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -413,7 +326,13 @@ _gDescriptionMainStreet
 #endif    
     END
 
+
 _gDescriptionNarrowPath
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur un chemin étroit")
+#else
+    SET_DESCRIPTION("You are on a narrow path")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -425,8 +344,15 @@ _gDescriptionNarrowPath
 #endif    
     END
 
+
 _gDescriptionInThePit
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes au fond d'un trou")
+#else
+    SET_DESCRIPTION("You are inside a deep pit")
+#endif    
+
     ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
@@ -491,6 +417,11 @@ rope_attached_to_tree
 
 _gDescriptionOutsidePit
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("En dehors d'un trou profond")
+#else
+    SET_DESCRIPTION("Outside a deep pit")
+#endif    
     ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
@@ -534,7 +465,13 @@ digging_for_gold
     END
 .)
 
+
 _gDescriptionTarmacArea
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur une zone asphaltée")
+#else
+    SET_DESCRIPTION("You are in an open area of tarmac")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -546,7 +483,13 @@ _gDescriptionTarmacArea
 #endif    
     END
 
+
 _gDescriptionOldWell
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes prês d'un vieux puit")
+#else
+    SET_DESCRIPTION("You are near to an old-fashioned well")
+#endif    
     ; Is the Bucket near the Well?    
     JUMP_IF_FALSE(no_bucket,CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOCATION_WELL))    
       DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(6,35),40,_SecondImageBuffer,_ImageBuffer+(40*86)+24)    ; Draw the Bucket 
@@ -569,7 +512,13 @@ no_rope
 #endif    
     END
 
+
 _gDescriptionWoodedAvenue
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans une allée arbroisée")
+#else
+    SET_DESCRIPTION("You are in a wooded avenue")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -581,7 +530,13 @@ _gDescriptionWoodedAvenue
 #endif    
     END
 
+
 _gDescriptionGravelDrive
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur un passage gravilloné")
+#else
+    SET_DESCRIPTION("You are on a wide gravel drive")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(3)
 #ifdef LANGUAGE_FR   
@@ -595,7 +550,13 @@ _gDescriptionGravelDrive
 #endif    
     END
 
+
 _gDescriptionZenGarden
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un jardin zen relaxant")
+#else
+    SET_DESCRIPTION("You are in a relaxing zen garden")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -607,7 +568,13 @@ _gDescriptionZenGarden
 #endif    
     END
 
+
 _gDescriptionFrontLawn
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur une large pelouse")
+#else
+    SET_DESCRIPTION("You are on a huge area of lawn")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -619,7 +586,13 @@ _gDescriptionFrontLawn
 #endif    
     END
 
+
 _gDescriptionGreenHouse
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans une petite serre")
+#else
+    SET_DESCRIPTION("You are in a small greenhouse")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -631,7 +604,13 @@ _gDescriptionGreenHouse
 #endif
     END
 
+
 _gDescriptionTennisCourt
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur un cours de tennis")
+#else
+    SET_DESCRIPTION("You are on a lawn tennis court")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -643,7 +622,13 @@ _gDescriptionTennisCourt
 #endif    
     END
 
+
 _gDescriptionVegetableGarden
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un jardin potagé")
+#else
+    SET_DESCRIPTION("You are in a vegetable plot")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -655,7 +640,13 @@ _gDescriptionVegetableGarden
 #endif
     END
 
+
 _gDescriptionFishPond
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes près d'un bac a poisson")
+#else
+    SET_DESCRIPTION("You are standing by a fish pond")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -667,7 +658,13 @@ _gDescriptionFishPond
 #endif    
     END
 
+
 _gDescriptionTiledPatio
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur un patio carellé")
+#else
+    SET_DESCRIPTION("You are on a tiled patio")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -679,7 +676,13 @@ _gDescriptionTiledPatio
 #endif    
     END
 
+
 _gDescriptionAppleOrchard
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans une pommeraie")
+#else
+    SET_DESCRIPTION("You are in an apple orchard")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -693,6 +696,11 @@ _gDescriptionAppleOrchard
 
 _gDescriptionEntranceHall
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un hall imposant")
+#else
+    SET_DESCRIPTION("You are in an imposing entrance hall")
+#endif    
     ; If the dog is in the staircase, we move it to the entrance hall to simplify the rest of the code
     JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
     SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL)
@@ -757,6 +765,11 @@ end_dog
 
 _gDescriptionStaircase
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un large escalier")
+#else
+    SET_DESCRIPTION("You are on a sweeping staircase")
+#endif    
     ; If the dog is in the entrance hall, we move it to the staircase to simplify the rest of the code
     JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
     SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE)
@@ -795,34 +808,13 @@ end_dog
     END
 .)    
 
-/*
-_gDescriptionDogAttacking
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+14,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog
-     ;
-    WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(1)
-    _BUBBLE_LINE(5,108,0,"Oops...")
-    WAIT(50*2)                                      ; Wait a couple seconds
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)   ; Achievement!
-    JUMP(_gDescriptionGameOverLost)                 ; Game Over
-    */
-    /*
-    WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(3)
-#ifdef LANGUAGE_FR    
-    .byt 16,8,0,"Gauche ?",0
-    .byt 179,8,0,"Droite ?",0
-    .byt 45,72,0,"est-ce vraiment important ?",0
-#else
-    .byt 16,8,0,"Left?",0
-    .byt 179,8,0,"Right?",0
-    .byt 60,72,0,"does it really matter?",0
-#endif    
-    END
-    */
-
 
 _gDescriptionLibrary
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Probablement une bibliothèque")
+#else
+    SET_DESCRIPTION("This looks like a library")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -837,6 +829,11 @@ _gDescriptionLibrary
 
 _gDescriptionStudyRoom
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Le centre des affaires")
+#else
+    SET_DESCRIPTION("Where serious Business happens")
+#endif    
     ; Is the gun cabinet open?
     JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,50),40,_SecondImageBuffer+40*0+8,_ImageBuffer+40*13+24)       ; Cabinet open
@@ -856,6 +853,11 @@ cabinet_closed
 
 
 _gDescriptionNarrowPassage
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un passage étroit")
+#else
+    SET_DESCRIPTION("You are in a narrow passage")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(3)
 #ifdef LANGUAGE_FR
@@ -875,7 +877,13 @@ _gDescriptionNarrowPassage
 #endif    
     END
 
+
 _gDescriptionEntranceLounge
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un salon")
+#else
+    SET_DESCRIPTION("You are in the lounge")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR       
@@ -887,7 +895,13 @@ _gDescriptionEntranceLounge
 #endif    
     END
 
+
 _gDescriptionDiningRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Apparement une salle a manger")
+#else
+    SET_DESCRIPTION("A dining room, or so it appears")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -899,7 +913,13 @@ _gDescriptionDiningRoom
 #endif    
     END
 
+
 _gDescriptionGamesRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("La salle de jeux")
+#else
+    SET_DESCRIPTION("This looks like a games room")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -919,7 +939,13 @@ _gDescriptionGamesRoom
 #endif    
     END
 
+
 _gDescriptionSunLounge
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Le solarium")
+#else
+    SET_DESCRIPTION("You find yourself in a sun-lounge")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -929,8 +955,14 @@ _gDescriptionSunLounge
 #endif    
     END
 
+
 _gDescriptionKitchen
 .(
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Visiblement la cuisine")
+#else
+    SET_DESCRIPTION("This is obviously the kitchen")
+#endif    
     ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
@@ -955,6 +987,11 @@ medicine_cabinet_closed
 
 
 _gDescriptionNarrowStaircase
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes dans un escalier étroit")
+#else
+    SET_DESCRIPTION("You are on some gloomy, narrow steps")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR       
@@ -964,7 +1001,13 @@ _gDescriptionNarrowStaircase
 #endif    
     END
 
+
 _gDescriptionCellar
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une cave frigide et humide")
+#else
+    SET_DESCRIPTION("This is a cold, damp cellar")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(2)
 #ifdef LANGUAGE_FR       
@@ -976,7 +1019,19 @@ _gDescriptionCellar
 #endif    
     END
 
+
 _gDescriptionDarkerCellar
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Cette pièce est encore plus sombre")
+#else
+    SET_DESCRIPTION("This room is even darker than the last")
+#endif    
+    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_DARKCELLARROOM))  
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     ; Draw the ladder
+                _IMAGE(0,40)
+                _BUFFER(29,7)
+no_ladder
+
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -986,11 +1041,17 @@ _gDescriptionDarkerCellar
     _BUBBLE_LINE(5,99,0,"The window seems")
     _BUBBLE_LINE(5,109,0,"to be occulted")
 #endif    
+
     END
 
 
 
 _gDescriptionMainLanding
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Vous êtes sur le palier principal")
+#else
+    SET_DESCRIPTION("You are on the main landing")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -1000,7 +1061,13 @@ _gDescriptionMainLanding
 #endif    
     END
 
+
 _gDescriptionEastGallery
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("La gallerie est")
+#else
+    SET_DESCRIPTION("You have found the east gallery")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1012,7 +1079,13 @@ _gDescriptionEastGallery
 #endif    
     END
 
+
 _gDescriptionChildBedroom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("La chambre d'un enfant")
+#else
+    SET_DESCRIPTION("This is a child's bedroom")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1024,7 +1097,13 @@ _gDescriptionChildBedroom
 #endif    
     END
 
+
 _gDescriptionGuestBedroom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une chambre d'amis")
+#else
+    SET_DESCRIPTION("This seems to be a guest bedroom")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1036,7 +1115,13 @@ _gDescriptionGuestBedroom
 #endif    
     END
 
+
 _gDescriptionShowerRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une salle de bain carellée")
+#else
+    SET_DESCRIPTION("You are in a tiled shower-room")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1048,7 +1133,13 @@ _gDescriptionShowerRoom
 #endif    
     END
 
+
 _gDescriptionWestGallery
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("La gallerie ouest")
+#else
+    SET_DESCRIPTION("This is the west gallery")
+#endif    
     ; Is the curtain closed?
     JUMP_IF_FALSE(curtain_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
 curtain_closed
@@ -1074,7 +1165,13 @@ curtain_open
 #endif    
     END
 
+
 _gDescriptionBoxRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une petite loge")
+#else
+    SET_DESCRIPTION("This is a small box-room")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1086,7 +1183,13 @@ _gDescriptionBoxRoom
 #endif    
     END
 
+
 _gDescriptionClassyBathRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une salle de bain luxieuse")
+#else
+    SET_DESCRIPTION("You are in an ornate bathroom")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -1096,7 +1199,13 @@ _gDescriptionClassyBathRoom
 #endif    
     END
 
+
 _gDescriptionTinyToilet
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Des petites toilette")
+#else
+    SET_DESCRIPTION("This is a tiny toilet")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
 #ifdef LANGUAGE_FR    
     WHITE_BUBBLE(2)
@@ -1108,7 +1217,13 @@ _gDescriptionTinyToilet
 #endif    
     END
 
+
 _gDescriptionMasterBedRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("La chambre principale")
+#else
+    SET_DESCRIPTION("This must be the master bedroom")
+#endif    
     ; Is there a thug in the master bedroom
     JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOCATION_MASTERBEDROOM))
 
@@ -1160,6 +1275,7 @@ end_thug
     .byt COMMAND_FADE_BUFFER
     END
 
+
 _gDescriptionThugAttacking
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(14,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
@@ -1175,6 +1291,11 @@ _gDescriptionThugAttacking
 
 
 _gDescriptionPadlockedRoom
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une porte blindée cadenassée")
+#else
+    SET_DESCRIPTION("You see a padlocked steel-plated door")
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(4)
 #ifdef LANGUAGE_FR    

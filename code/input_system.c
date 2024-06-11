@@ -107,11 +107,11 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 {
     WORDS callbackOutput;
 	int k;
-	int shift=0;
+	int shift;
 
 	ResetInput();	
 	while (1)
-	{
+	{        
 		if (gAskQuestion)
 		{
 			PrintStatusMessage(2,inputMessage);
@@ -136,6 +136,10 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 		{
 			shift=1;
 		}
+        else
+        {
+            shift=0;
+        }
 
 		switch (k)
 		{

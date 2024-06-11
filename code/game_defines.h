@@ -21,7 +21,6 @@ extern unsigned char gCurrentItem;
 typedef struct 
 {
     unsigned char directions[e_DIRECTION_COUNT_];   // The six possible directions (NSEWUP)
-    const char* description;                        // The one line description of the place, displayed at the top of the TEXT area
 	const char* script;                             // Additional list of commands to add elements to the graphical view (speech bubble, etc...)
 } location;
 
@@ -64,6 +63,7 @@ typedef struct
 
 extern location gLocations[e_LOCATION_COUNT_];
 extern location* gCurrentLocationPtr;
+extern char* gDescription;
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];

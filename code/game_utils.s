@@ -1,8 +1,9 @@
 
     .zero
 
-_gCurrentLocation       .dsb 1
-_gCurrentLocationPtr    .dsb 2
+_gCurrentLocation           .dsb 1
+_gCurrentLocationPtr        .dsb 2
+_gDescription               .dsb 2
 
     .text
 
