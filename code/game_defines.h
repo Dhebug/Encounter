@@ -61,9 +61,10 @@ typedef struct
 } stream_mapping;
 
 
-extern location gLocations[e_LOCATION_COUNT_];
+extern location gLocations[e_LOC_COUNT_];
 extern location* gCurrentLocationPtr;
 extern char* gDescription;
+extern unsigned char gSceneImage;
 extern item gItems[e_ITEM_COUNT_];
 
 extern const char* gDirectionsArray[];

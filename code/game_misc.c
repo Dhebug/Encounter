@@ -76,17 +76,17 @@ void GameDebugger()
 
         while (gCurrentLocation<0)
         {
-            gCurrentLocation += e_LOCATION_COUNT_;
+            gCurrentLocation += e_LOC_COUNT_;
         }
-        while (gCurrentLocation>=e_LOCATION_COUNT_)
+        while (gCurrentLocation>=e_LOC_COUNT_)
         {
-            gCurrentLocation -= e_LOCATION_COUNT_;
+            gCurrentLocation -= e_LOC_COUNT_;
         }
 
         currentLine=(char*)0xbb80+40*17;
         memset(currentLine,' ',40*11);
 
-        // Locations from 0 to e_LOCATION_COUNT_-1
+        // Locations from 0 to e_LOC_COUNT_-1
         locationPtr=&gLocations[gCurrentLocation];
         // Memory location and id
         sprintf(currentLine,"%c%c$%x:Location %d",16+4,3,locationPtr,gCurrentLocation);    
@@ -153,11 +153,11 @@ void GameDebugger()
         // Item location
         switch (itemPtr->location)
         {
-        case e_LOCATION_INVENTORY:
+        case e_LOC_INVENTORY:
             sprintf(currentLine,"Loc:INVENTORY");    
             break;
 
-        case e_LOCATION_NONE:
+        case e_LOC_NONE:
             sprintf(currentLine,"Loc:DISABLED");    
             break;
 
@@ -200,7 +200,7 @@ void GameDebugger()
             break;
 
         case KEY_RETURN:
-            if (itemPtr->location<e_LOCATION_COUNT_)
+            if (itemPtr->location<e_LOC_COUNT_)
             {
                 gCurrentLocation=itemPtr->location;
             }

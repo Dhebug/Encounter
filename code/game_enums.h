@@ -11,57 +11,56 @@
 
 
 // Define the various locations
-#define	e_LOCATION_MARKETPLACE       0
-#define	e_LOCATION_DARKALLEY         1
-#define	e_LOCATION_ROAD              2
-#define	e_LOCATION_DARKTUNNEL        3
-#define	e_LOCATION_MAINSTREET        4
-#define	e_LOCATION_NARROWPATH        5
-#define	e_LOCATION_INSIDE_PIT        6
-#define	e_LOCATION_WELL              7
-#define	e_LOCATION_WOODEDAVENUE      8
-#define	e_LOCATION_GRAVELDRIVE       9 
-#define	e_LOCATION_TARMACAREA       10
-#define	e_LOCATION_ZENGARDEN        11
-#define	e_LOCATION_LAWN             12
-#define	e_LOCATION_GREENHOUSE       13
-#define	e_LOCATION_TENNISCOURT      14
-#define	e_LOCATION_VEGSGARDEN       15
-#define	e_LOCATION_FISHPND          16
-#define	e_LOCATION_TILEDPATIO       17
-#define	e_LOCATION_APPLE_TREES      18
-#define e_LOCATION_DARKCELLARROOM   19
-#define	e_LOCATION_CELLAR           20
-#define	e_LOCATION_NARROWSTAIRCASE  21
-#define	e_LOCATION_LOUNGE           22
-#define	e_LOCATION_ENTRANCEHALL     23
-#define	e_LOCATION_LIBRARY          24
-#define	e_LOCATION_DININGROOM       25
-#define	e_LOCATION_LARGE_STAIRCASE  26
-#define	e_LOCATION_GAMESROOM        27
-#define	e_LOCATION_SUNLOUNGE        28
-#define	e_LOCATION_KITCHEN          29
-#define	e_LOCATION_NARROWPASSAGE    30 
-#define	e_LOCATION_GUESTBEDROOM     31
-#define	e_LOCATION_CHILDBEDROOM     32
-#define	e_LOCATION_MASTERBEDROOM    33
-#define	e_LOCATION_SHOWERROOM       34
-#define	e_LOCATION_TINY_WC          35
-#define	e_LOCATION_EASTGALLERY      36
-#define	e_LOCATION_BOXROOM          37
-#define	e_LOCATION_PADLOCKED_ROOM   38
-#define	e_LOCATION_CLASSY_BATHROOM  39
-#define	e_LOCATION_WESTGALLERY      40
-#define	e_LOCATION_UP_STAIRS        41
-#define	e_LOCATION_OUTSIDE_PIT      42
-#define e_LOCATION_STUDY_ROOM       43
-#define e_LOCATION_BRIGHTCELLARROOM 44
-#define	e_LOCATION_GIRLROOM         45
-#define e_LOCATION_COUNT_           46
-#define e_LOCATION_INVENTORY        e_LOCATION_COUNT_    // Special location for the player's inventory
-#define e_LOCATION_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
-#define e_LOCATION_GONE_FOREVER     254                  // To indicate this item is not available anymore
-#define e_LOCATION_NONE             255                  // To indicate we can't go in this particular location
+#define	e_LOC_MARKETPLACE       0
+#define	e_LOC_DARKALLEY         1
+#define	e_LOC_ROAD              2
+#define	e_LOC_DARKTUNNEL        3
+#define	e_LOC_MAINSTREET        4
+#define	e_LOC_NARROWPATH        5
+#define	e_LOC_INSIDE_PIT        6
+#define	e_LOC_WELL              7
+#define	e_LOC_WOODEDAVENUE      8
+#define	e_LOC_GRAVELDRIVE       9 
+#define	e_LOC_TARMACAREA       10
+#define	e_LOC_ZENGARDEN        11
+#define	e_LOC_LAWN             12
+#define	e_LOC_GREENHOUSE       13
+#define	e_LOC_TENNISCOURT      14
+#define	e_LOC_VEGSGARDEN       15
+#define	e_LOC_FISHPND          16
+#define	e_LOC_TILEDPATIO       17
+#define	e_LOC_APPLE_TREES      18
+#define e_LOC_DARKCELLARROOM   19
+#define	e_LOC_CELLAR           20
+#define	e_LOC_NARROWSTAIRCASE  21
+#define	e_LOC_LOUNGE           22
+#define	e_LOC_ENTRANCEHALL     23
+#define	e_LOC_LIBRARY          24
+#define	e_LOC_DININGROOM       25
+#define	e_LOC_LARGE_STAIRCASE  26
+#define	e_LOC_GAMESROOM        27
+#define	e_LOC_SUNLOUNGE        28
+#define	e_LOC_KITCHEN          29
+#define	e_LOC_NARROWPASSAGE    30 
+#define	e_LOC_GUESTBEDROOM     31
+#define	e_LOC_CHILDBEDROOM     32
+#define	e_LOC_MASTERBEDROOM    33
+#define	e_LOC_SHOWERROOM       34
+#define	e_LOC_TINY_WC          35
+#define	e_LOC_EASTGALLERY      36
+#define	e_LOC_BOXROOM          37
+#define	e_LOC_PADLOCKED_ROOM   38
+#define	e_LOC_CLASSY_BATHROOM  39
+#define	e_LOC_WESTGALLERY      40
+#define	e_LOC_UP_STAIRS        41
+#define	e_LOC_OUTSIDE_PIT      42
+#define e_LOC_STUDY_ROOM       43
+#define	e_LOC_CELLAR_WINDOW    44
+#define e_LOC_COUNT_           45
+#define e_LOC_INVENTORY        e_LOC_COUNT_         // Special location for the player's inventory
+#define e_LOC_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
+#define e_LOC_GONE_FOREVER     254                  // To indicate this item is not available anymore
+#define e_LOC_NONE             255                  // To indicate we can't go in this particular location
 
 
 // Define the various items, followed by instructions to simplify the parser
@@ -95,7 +94,7 @@
 #define	e_ITEM_AlsatianDog  		 20         // Alsatian dog
 #define	e_ITEM_Meat  				 21         // a joint of meat
 #define	e_ITEM_Bread  				 22         // some brown bread
-#define	e_ITEM_RollOfTape  			 23         // a roll of sticky tape
+#define	e_ITEM_BlackTape  			 23         // black tape
 #define	e_ITEM_ChemistryBook  		 24         // a chemistry book
 #define	e_ITEM_BoxOfMatches  		 25         // a box of matches
 #define	e_ITEM_SnookerCue  			 26         // a snooker cue

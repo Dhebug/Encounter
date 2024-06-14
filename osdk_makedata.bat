@@ -175,7 +175,11 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\loc_landing.png %TARGET%\41.hir
 %PICTCONV% %PARAMS% data\loc_outside_pit.png %TARGET%\42.hir
 %PICTCONV% %PARAMS% data\loc_study_room.png %TARGET%\43.hir
-%PICTCONV% %PARAMS% data\loc_dark_room_sunlight.png %TARGET%\44.hir
+%PICTCONV% %PARAMS% data\loc_basement_window_darkened.png %TARGET%\44.hir
+
+:: Scene variants
+%PICTCONV% %PARAMS% data\loc_dark_room_sunlight.png %TARGET%\loc_cellar_bright.hir
+%PICTCONV% %PARAMS% data\loc_basement_window_cleared.png %TARGET%\loc_basement_window_cleared.hir
 
 
 :: Other 240x128 full screen images which are not locations

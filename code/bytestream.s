@@ -34,7 +34,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandJUMP_IF_TRUE
     .word _ByteStreamCommandJUMP_IF_FALSE
     .word _ByteStreamCommandINFO_MESSAGE
-    .word _ByteStreamCommandFULLSCREEN_ITEM
+    .word _ByteStreamCommandDISPLAY_IMAGE
     .word _ByteStreamCommandStopBreakpoint
     .word _ByteStreamCommandEndAndRefresh
     .word _ByteStreamCommandERROR_MESSAGE
@@ -47,6 +47,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandIncreaseScore
     .word _ByteStreamCommandGameOver
     .word _ByteStreamCommandSetDescription
+    .word _ByteStreamCommandSetSceneImage
+    .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -173,7 +175,7 @@ skip
 _ByteStreamFetchLocationID
 .(
     lda (_gCurrentStream),y      // location ID
-    cmp #e_LOCATION_CURRENT
+    cmp #e_LOC_CURRENT
     bne keep_location_id
 use_current_location_id    
     lda _gCurrentLocation        // Use the current location
@@ -400,7 +402,7 @@ _ByteStreamCommandSetItemLocation
     ldy #0
     jsr _ByteStreamFetchItemID
     lda (_gCurrentStream),y      // location id
-    cmp #e_LOCATION_CURRENT
+    cmp #e_LOC_CURRENT
     bne store_location
     lda _gCurrentLocation        // Use the current player location
 store_location    
@@ -490,6 +492,25 @@ _ByteStreamCommandSetDescription
 
     ; Skip to the end of the string
     jmp FindNullTerminator
+.)
+
+
+; .byt COMMAND_SET_LOCATION_PICTURE,imageId
+_ByteStreamCommandSetSceneImage
+.(
+    ldy #0
+    lda (_gCurrentStream),y      // Image ID
+    sta _gSceneImage
+
+    ; TODO: In theory should implement that so we don't have double loading
+    ;LoadFileAt(gSceneImage,ImageBuffer);	
+    lda _gSceneImage:sta _LoaderApiEntryIndex
+    lda #<_ImageBuffer:sta _LoaderApiAddressLow
+    lda #>_ImageBuffer:sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory
+
+    lda #1
+    jmp _ByteStreamMoveByA
 .)
 
 
@@ -933,7 +954,16 @@ _DrawRectangleOutlineAsm
 ; - Loads an image
 ; - Display a title string
 ; - Fades the image in
-_ByteStreamCommandFULLSCREEN_ITEM
+; .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
+_ByteStreamCommandDISPLAY_IMAGE
+.(
+    jsr _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
+    ; BlitBufferToHiresWindow();
+    jmp _BlitBufferToHiresWindow
+.)
+
+; .byt COMMAND_FULLSCREEN_ITEM_NOBLIT,imagedId,description,0
+_ByteStreamCommandDISPLAY_IMAGE_NOBLIT
 .(  
     ; _param0=paper color
     ; ClearMessageWindow(16+4);
@@ -964,8 +994,7 @@ _ByteStreamCommandFULLSCREEN_ITEM
     lda _gStreamNextPtr+1
     sta _gCurrentStream+1
 
-    ; BlitBufferToHiresWindow();
-    jmp _BlitBufferToHiresWindow
+    rts
 .)
 
 

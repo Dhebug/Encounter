@@ -20,7 +20,7 @@
 #define COMMAND_JUMP_IF_TRUE    10
 #define COMMAND_JUMP_IF_FALSE   11
 #define COMMAND_INFO_MESSAGE    12 
-#define COMMAND_FULLSCREEN_ITEM 13
+#define COMMAND_DISPLAY_IMAGE   13
 #define COMMAND_STOP_BREAKPOINT 14
 #define COMMAND_END_AND_REFRESH 15
 #define COMMAND_ERROR_MESSAGE   16
@@ -33,7 +33,9 @@
 #define COMMAND_INCREASE_SCORE  23
 #define COMMAND_GAME_OVER       24
 #define COMMAND_SET_DESCRIPTION 25
-#define _COMMAND_COUNT          26
+#define COMMAND_SET_SCENE_IMAGE 26
+#define COMMAND_DISPLAY_IMAGE_NOBLIT 27
+#define _COMMAND_COUNT          28
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -80,9 +82,20 @@
 
 // Locations
 #define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
+#define SET_SCENE_IMAGE(imageId)                     .byt COMMAND_SET_SCENE_IMAGE,imageId
+
 
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
-#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
+#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId,description,0
+#define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId,description,0
+#define FADE_BUFFER()                                .byt COMMAND_FADE_BUFFER
+
+#define BLIT_BLOCK(imageId,w,h)      .byt COMMAND_BITMAP,imageId,w,h,40
+#define _BUFFER(x,y)                 .byt <_ImageBuffer+x+(40*y),>_ImageBuffer+x+(40*y)
+#define _IMAGE(x,y)                  .byt <_SecondImageBuffer+x+(40*y),>_SecondImageBuffer+x+(40*y)
+#define _SCREEN(x,y)                 .byt <$a000+x+(40*y),>$a000+x+(40*y)
+
+
 
 // Audio commands
 #define SOUND_NOT_PLAYING        255

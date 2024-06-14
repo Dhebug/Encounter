@@ -157,7 +157,7 @@ _gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
 _gTextItemHandheldGame            .byt "un jeu portable",0
 _gTextItemSedativePills           .byt "des somnifères",0
 _gTextItemDartGun                 .byt "un lance fléchettes",0
-_gTextItemBasementWindow          .byt "une fenêtre basse",0
+_gTextItemBlackTape               .byt "du ruban adhésif noir",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
@@ -209,7 +209,7 @@ _gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0
 _gTextItemHandheldGame            .byt "a handheld game",0
 _gTextItemSedativePills           .byt "some sedative pills",0
 _gTextItemDartGun                 .byt "a dart gun",0
-_gTextItemBasementWindow          .byt "a basement window",0
+_gTextItemBlackTape               .byt "some black adhesive tape",0
 #endif
 _EndItemNames
 
@@ -229,6 +229,7 @@ _gDescriptionTeenagerRoom         .byt "Teenager room?",0
 _gDescriptionNone
     END
 
+// MARK: Dark Tunel
 _gDescriptionDarkTunel
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un tunnel humide")
@@ -247,6 +248,7 @@ _gDescriptionDarkTunel
     END
 
 
+// MARK: Market Place
 _gDescriptionMarketPlace
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur la place du marché")
@@ -265,14 +267,20 @@ _gDescriptionMarketPlace
 #endif    
 
 blinky_shop
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*116)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "grayed out"
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,8,11)                     ; Draw the Fish Shop "grayed out"
+               _IMAGE(32,116)
+               _SCREEN(11,14)
     WAIT(50) 
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(8,11),40,_SecondImageBuffer+(40*104)+32,$a000+(14*40)+11)    ; Draw the Fish Shop "fully drawn"
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,8,11)                     ; Draw the Fish Shop "fully drawn"
+               _IMAGE(32,104)
+               _SCREEN(11,14)
+    
     WAIT(50)
     JUMP(blinky_shop)
     ;END
 
 
+// MARK: Dark Alley
 _gDescriptionDarkAlley
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une allée sombre")
@@ -291,6 +299,7 @@ _gDescriptionDarkAlley
     END
 
 
+// MARK: Road
 _gDescriptionRoad
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une longue route s'étend devant vous")
@@ -309,6 +318,7 @@ _gDescriptionRoad
     END
 
 
+// MARK: Main Street
 _gDescriptionMainStreet
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans la rue principale")
@@ -327,6 +337,7 @@ _gDescriptionMainStreet
     END
 
 
+// MARK: Narrow Path
 _gDescriptionNarrowPath
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur un chemin étroit")
@@ -345,6 +356,7 @@ _gDescriptionNarrowPath
     END
 
 
+// MARK: In the Pit
 _gDescriptionInThePit
 .(
 #ifdef LANGUAGE_FR       
@@ -354,26 +366,26 @@ _gDescriptionInThePit
 #endif    
 
     ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_INSIDE_PIT)
 end_rope_check
 
     ; If the ladder is outside the pit and is in place, we move it inside the pit
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT))
     JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_INSIDE_PIT)
 end_ladder_check
 
     ; Check items
-    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_NONE)      ; Disable the UP direction
+    SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_NONE)      ; Disable the UP direction
 
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 no_rope    
 
-    JUMP_IF_TRUE(has_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INVENTORY))    
-    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))  
+    JUMP_IF_TRUE(has_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_INVENTORY))    
+    JUMP_IF_TRUE(draw_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_INSIDE_PIT))  
 
 cannot_escape_pit    ; The player has no way to escape the pit
     WAIT(50*2)
@@ -403,18 +415,22 @@ cannot_escape_pit    ; The player has no way to escape the pit
     JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
 
 draw_ladder
-    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                   ; Enable the UP direction
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
+    SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)                   ; Enable the UP direction
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,50)                     ; Draw the ladder 
+               _IMAGE(36,0)
+               _BUFFER(19,40)
+
 has_ladder
     END
 
 rope_attached_to_tree
-    SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)                           ; Enable the UP direction
+    SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)                           ; Enable the UP direction
     DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*51)+37,_ImageBuffer+(40*39)+19)    ; Draw the rope 
     END
 .)
 
 
+// MARK: Outside pit
 _gDescriptionOutsidePit
 .(
 #ifdef LANGUAGE_FR       
@@ -423,23 +439,23 @@ _gDescriptionOutsidePit
     SET_DESCRIPTION("Outside a deep pit")
 #endif    
     ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
-    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_INSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
 end_rope_check
 
     ; If the ladder is inside the pit and is in place, we move it outside the pit
-    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_INSIDE_PIT))
+    JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_INSIDE_PIT))
     JUMP_IF_FALSE(end_ladder_check,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT)
 end_ladder_check
 
     ; Check items
-    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT))
     JUMP_IF_TRUE(ladder_in_hole,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
 no_ladder
 
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT))
     JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 no_rope    
     JUMP(digging_for_gold);            ; Generic message if the ladder or rope are not present
@@ -466,6 +482,7 @@ digging_for_gold
 .)
 
 
+// MARK: Tarmac Area
 _gDescriptionTarmacArea
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur une zone asphaltée")
@@ -484,6 +501,7 @@ _gDescriptionTarmacArea
     END
 
 
+// MARK: Old Well
 _gDescriptionOldWell
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes prês d'un vieux puit")
@@ -491,12 +509,12 @@ _gDescriptionOldWell
     SET_DESCRIPTION("You are near to an old-fashioned well")
 #endif    
     ; Is the Bucket near the Well?    
-    JUMP_IF_FALSE(no_bucket,CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOCATION_WELL))    
+    JUMP_IF_FALSE(no_bucket,CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOC_WELL))    
       DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(6,35),40,_SecondImageBuffer,_ImageBuffer+(40*86)+24)    ; Draw the Bucket 
 no_bucket    
     
     ; Is the Rope near the Well?      
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_WELL))    
+    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_WELL))    
       DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(7,44),40,_SecondImageBuffer+7,_ImageBuffer+(40*35)+26)  ; Draw the Rope
 no_rope    
 
@@ -513,6 +531,7 @@ no_rope
     END
 
 
+// MARK: Wooded Avenue
 _gDescriptionWoodedAvenue
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une allée arbroisée")
@@ -531,6 +550,7 @@ _gDescriptionWoodedAvenue
     END
 
 
+// MARK: Gravel Drive
 _gDescriptionGravelDrive
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur un passage gravilloné")
@@ -551,6 +571,7 @@ _gDescriptionGravelDrive
     END
 
 
+// MARK: Zen Garden
 _gDescriptionZenGarden
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un jardin zen relaxant")
@@ -569,6 +590,7 @@ _gDescriptionZenGarden
     END
 
 
+// MARK: Front Lawn
 _gDescriptionFrontLawn
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur une large pelouse")
@@ -587,6 +609,7 @@ _gDescriptionFrontLawn
     END
 
 
+// MARK: Green House
 _gDescriptionGreenHouse
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une petite serre")
@@ -605,6 +628,7 @@ _gDescriptionGreenHouse
     END
 
 
+// MARK: Tennis Court
 _gDescriptionTennisCourt
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur un cours de tennis")
@@ -623,10 +647,16 @@ _gDescriptionTennisCourt
     END
 
 
+// MARK: Vegetable Garden
 _gDescriptionVegetableGarden
+    SET_ITEM_LOCATION(e_ITEM_BasementWindow,e_LOC_VEGSGARDEN)     ; The window is in the garden
 #ifdef LANGUAGE_FR       
+_gTextItemBasementWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre basse")
     SET_DESCRIPTION("Vous êtes dans un jardin potagé")
 #else
+_gTextItemBasementWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement window")
     SET_DESCRIPTION("You are in a vegetable plot")
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)
@@ -641,6 +671,7 @@ _gDescriptionVegetableGarden
     END
 
 
+// MARK: Fish Pond
 _gDescriptionFishPond
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes près d'un bac a poisson")
@@ -659,6 +690,7 @@ _gDescriptionFishPond
     END
 
 
+// MARK: Tiled Patio
 _gDescriptionTiledPatio
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur un patio carellé")
@@ -677,6 +709,7 @@ _gDescriptionTiledPatio
     END
 
 
+// MARK: Apple Orchard
 _gDescriptionAppleOrchard
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une pommeraie")
@@ -694,6 +727,8 @@ _gDescriptionAppleOrchard
 #endif
     END
 
+
+// MARK: Entrance Hall
 _gDescriptionEntranceHall
 .(
 #ifdef LANGUAGE_FR       
@@ -702,12 +737,12 @@ _gDescriptionEntranceHall
     SET_DESCRIPTION("You are in an imposing entrance hall")
 #endif    
     ; If the dog is in the staircase, we move it to the entrance hall to simplify the rest of the code
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL)
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL)
 end_dog_check
 
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL))
 
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
@@ -763,6 +798,7 @@ end_dog
 .)
 
 
+// MARK: Staircase
 _gDescriptionStaircase
 .(
 #ifdef LANGUAGE_FR       
@@ -771,12 +807,12 @@ _gDescriptionStaircase
     SET_DESCRIPTION("You are on a sweeping staircase")
 #endif    
     ; If the dog is in the entrance hall, we move it to the staircase to simplify the rest of the code
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_ENTRANCEHALL))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE)
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL))
+    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE)
 end_dog_check
 
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_LARGE_STAIRCASE))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE))
 
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
@@ -809,6 +845,8 @@ end_dog
 .)    
 
 
+
+// MARK: Library
 _gDescriptionLibrary
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Probablement une bibliothèque")
@@ -827,6 +865,7 @@ _gDescriptionLibrary
     END
 
 
+// MARK: Study Room
 _gDescriptionStudyRoom
 .(
 #ifdef LANGUAGE_FR       
@@ -852,6 +891,7 @@ cabinet_closed
 .)
 
 
+// MARK: Narrow Passage
 _gDescriptionNarrowPassage
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un passage étroit")
@@ -878,6 +918,7 @@ _gDescriptionNarrowPassage
     END
 
 
+// MARK: Entrance Lounge
 _gDescriptionEntranceLounge
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un salon")
@@ -896,6 +937,7 @@ _gDescriptionEntranceLounge
     END
 
 
+// MARK: Dining Room
 _gDescriptionDiningRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Apparement une salle a manger")
@@ -914,6 +956,7 @@ _gDescriptionDiningRoom
     END
 
 
+// MARK: Game Room
 _gDescriptionGamesRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La salle de jeux")
@@ -940,6 +983,7 @@ _gDescriptionGamesRoom
     END
 
 
+// MARK: Sun Lounge
 _gDescriptionSunLounge
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Le solarium")
@@ -956,6 +1000,7 @@ _gDescriptionSunLounge
     END
 
 
+// MARK: Kitchen
 _gDescriptionKitchen
 .(
 #ifdef LANGUAGE_FR       
@@ -986,6 +1031,7 @@ medicine_cabinet_closed
 .)
 
 
+// MARK: Narrow Staircase
 _gDescriptionNarrowStaircase
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un escalier étroit")
@@ -1002,6 +1048,7 @@ _gDescriptionNarrowStaircase
     END
 
 
+// MARK: Cellar Safe
 _gDescriptionCellar
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une cave frigide et humide")
@@ -1020,16 +1067,38 @@ _gDescriptionCellar
     END
 
 
+// MARK: Darker Cellar
+// TODO: Hide the locked panel
+// TODO: Activate the window "it's too high"
 _gDescriptionDarkerCellar
+.(
+    SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_DARKCELLARROOM)         ; The window is visible
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
+        SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
 #ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Cette pièce est encore plus sombre")
+        SET_DESCRIPTION("La fenêtre éclaire la pièce")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre")
 #else
-    SET_DESCRIPTION("This room is even darker than the last")
+        SET_DESCRIPTION("The room gets light from the window")
 #endif    
-    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_DARKCELLARROOM))  
+        SET_ITEM_LOCATION(e_ITEM_LockedPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a window")
+        // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
+    ELSE(else,open)
+#ifdef LANGUAGE_FR       
+        SET_DESCRIPTION("Cette pièce est encore plus sombre")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre noircie")
+#else
+        SET_DESCRIPTION("This room is even darker than the last")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened window")
+#endif    
+    ENDIF(open)
+
+    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     ; Draw the ladder
                 _IMAGE(0,40)
                 _BUFFER(29,7)
+        SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)      ; Enable the UP direction
 no_ladder
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1039,13 +1108,45 @@ no_ladder
     _BUBBLE_LINE(5,106,4,"occultée")
 #else
     _BUBBLE_LINE(5,99,0,"The window seems")
-    _BUBBLE_LINE(5,109,0,"to be occulted")
+    _BUBBLE_LINE(5,109,0,"to be covered")
 #endif    
-
     END
+.)
 
 
+// MARK: Cellar Window
+_gDescriptionCellarWindow
+.(
+    ; Inspecting the window in the cellar
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),bright)
+        //DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED,"A basement window")
+        SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
+#ifdef LANGUAGE_FR       
+        SET_DESCRIPTION("Il n'y a plus d'adhésif sur la fenêtre")
+#else
+        SET_DESCRIPTION("The window is now free of tape")
+#endif
+    ELSE(bright,dark)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK,"A dark basement window")
+#ifdef LANGUAGE_FR       
+        SET_DESCRIPTION("La fenêtre est occultée")
+#else
+        SET_DESCRIPTION("The window is covered in black tape")
+#endif    
+    ENDIF(dark)
 
+    ; Is the ladder in place?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,12,28)                     ; Draw the ladder
+                _IMAGE(7,100)
+                _BUFFER(14,101)
+    ENDIF(ladder)
+    FADE_BUFFER()      ; Make sure everything appears on the screen
+    END
+.)
+
+
+// MARK: Main Landing
 _gDescriptionMainLanding
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur le palier principal")
@@ -1062,6 +1163,7 @@ _gDescriptionMainLanding
     END
 
 
+// MARK: East Gallery
 _gDescriptionEastGallery
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La gallerie est")
@@ -1080,6 +1182,7 @@ _gDescriptionEastGallery
     END
 
 
+// MARK: Child Bedroom
 _gDescriptionChildBedroom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La chambre d'un enfant")
@@ -1098,6 +1201,7 @@ _gDescriptionChildBedroom
     END
 
 
+// MARK: Guest Bedroom
 _gDescriptionGuestBedroom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une chambre d'amis")
@@ -1116,6 +1220,7 @@ _gDescriptionGuestBedroom
     END
 
 
+// MARK: Shower Room
 _gDescriptionShowerRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une salle de bain carellée")
@@ -1134,6 +1239,7 @@ _gDescriptionShowerRoom
     END
 
 
+// MARK: West Gallery
 _gDescriptionWestGallery
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La gallerie ouest")
@@ -1166,6 +1272,7 @@ curtain_open
     END
 
 
+// MARK: Box Room
 _gDescriptionBoxRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une petite loge")
@@ -1184,6 +1291,7 @@ _gDescriptionBoxRoom
     END
 
 
+// MARK: Classy Bathroom
 _gDescriptionClassyBathRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une salle de bain luxieuse")
@@ -1200,6 +1308,7 @@ _gDescriptionClassyBathRoom
     END
 
 
+// MARK: Tiny Toilet
 _gDescriptionTinyToilet
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Des petites toilette")
@@ -1218,6 +1327,7 @@ _gDescriptionTinyToilet
     END
 
 
+// MARK: Master Bedroom
 _gDescriptionMasterBedRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La chambre principale")
@@ -1225,7 +1335,7 @@ _gDescriptionMasterBedRoom
     SET_DESCRIPTION("This must be the master bedroom")
 #endif    
     ; Is there a thug in the master bedroom
-    JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOC_MASTERBEDROOM))
 
     ; Draw the shoes at the bottom of the bed
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
@@ -1272,7 +1382,7 @@ end_thug
     _BUBBLE_LINE(5,5,0,"This was make things")
     _BUBBLE_LINE(5,16,0,"notably easier...")
     ; Should probably have a "game over" command
-    .byt COMMAND_FADE_BUFFER
+    FADE_BUFFER()
     END
 
 
@@ -1290,6 +1400,7 @@ _gDescriptionThugAttacking
     JUMP(_gDescriptionGameOverLost)                 ; Game Over
 
 
+// MARK: Padlocked Room
 _gDescriptionPadlockedRoom
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une porte blindée cadenassée")
@@ -1316,7 +1427,7 @@ _gDescriptionPadlockedRoom
 _gDescriptionGameOverLost    
     DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
-    .byt COMMAND_FADE_BUFFER                                                                               ; Fade Out
+    FADE_BUFFER()
     END
 _EndSceneScripts
 
@@ -1383,7 +1494,7 @@ _gCombineItemMappingsArray
 
 _CombineMeatWithPills
 .(
-    SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_GONE_FOREVER)      ; The sedative are gone from the game
+    SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_GONE_FOREVER)      ; The sedative are gone from the game
     SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
 #ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
     SET_ITEM_DESCRIPTION(e_ITEM_Meat,"viande droggée")
@@ -1466,8 +1577,8 @@ _ReadChemistryBook
     INFO_MESSAGE("...oh, I found something!")
     WAIT(50*2)
     // If the recipes were not yet found, they now appear at the current location
-    JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_NONE))
-    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOCATION_INVENTORY)
+    JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_NONE))
+    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_INVENTORY)
 recipe_already_found
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     END_AND_REFRESH
@@ -1547,14 +1658,36 @@ _InspectMedicineCabinet
 
 _InspectBasementWindow
 .(
-    ; Is the black tape removed from the basement window?
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
-        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW,"A basement window")
-        INFO_MESSAGE("I can see the basement room")
-    ELSE(else,open)
-        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"A dark basement window")
-        INFO_MESSAGE("Was it painted black?")
-    ENDIF(open)
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),elsecellar)
+    .(
+        ; Inspecting the window in the cellar
+        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED,"A basement window")
+            INFO_MESSAGE("C'est plutôt haut")
+        ELSE(else,open)
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK,"A dark basement window")
+            INFO_MESSAGE("It's quite high")
+        ENDIF(open)
+        ; Is the ladder in place?
+        JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
+            BLIT_BLOCK(LOADER_SPRITE_ITEMS,12,28)                     ; Draw the ladder
+                    _IMAGE(7,100)
+                    _BUFFER(14,101)
+no_ladder
+        FADE_BUFFER()      ; Make sure everything appears on the screen
+    .)
+    ELSE(elsecellar,cellar)
+    .(
+        ; Inspecting the window in the garden (or other places)
+        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
+            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW,"A basement window")
+            INFO_MESSAGE("I can see the basement room")
+        ELSE(else,open)
+            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"A dark basement window")
+            INFO_MESSAGE("Was it painted black?")
+        ENDIF(open)
+    .)
+    ENDIF(cellar)
     WAIT(50*2)
     END_AND_REFRESH
 .)
@@ -1592,7 +1725,7 @@ _OpenCurtain
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),open)                                  ; Is the curtain closed?
         UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
-        SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_PADLOCKED_ROOM)  ; We can now access the padlocked room
+        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PADLOCKED_ROOM)  ; We can now access the padlocked room
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau ouvert")
@@ -1616,8 +1749,8 @@ _OpenFridge
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open fridge")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
-            SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_KITCHEN)                                   ; It's now visible inside the kitchen
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
+            SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
         ENDIF(meat)
     ENDIF(open)
     END_AND_REFRESH
@@ -1634,8 +1767,8 @@ _OpenMedicineCabinet
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine cabinet")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
-            SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOCATION_KITCHEN)                          ; It's now visible inside the kitchen
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
+            SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
         ENDIF(pills)
     ENDIF(open)
     END_AND_REFRESH
@@ -1652,9 +1785,9 @@ _OpenGunCabinet
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun cabinett")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
             DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET,"Gun cabinet upper drawer")         ; Show what we found!
-            SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_STUDY_ROOM)                             ; It's now visible inside the study room
+            SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Une seule fléchette, mieux que rien!")
 #else
@@ -1701,7 +1834,7 @@ _CloseCurtain
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),curtain)                               ; Is the curtain open?
         SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                              ; Close it!
-        SET_LOCATION_DIRECTION(e_LOCATION_WESTGALLERY,e_DIRECTION_NORTH,e_LOCATION_NONE)             ; The room behind is not accessible anymore
+        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_NONE)             ; The room behind is not accessible anymore
 +_gTextItemClosedCurtain = *+2                                                                       ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                   ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau fermé")
@@ -1782,20 +1915,21 @@ _gUseItemMappingsArray
 
 _UseLadder
 .(
-    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
-    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
+    JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
+    JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM))
 cannot_use_ladder_here
     ERROR_MESSAGE("Can't use it there")
     END_AND_REFRESH
 
-around_the_pit
+install_the_ladder
     INFO_MESSAGE("You position the ladder properly")
-    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle dans un trou")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle prête à grimper")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder in a hole")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder ready to climb")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_LADDER)
     END_AND_REFRESH
@@ -1804,15 +1938,15 @@ around_the_pit
 
 _UseRope
 .(
-    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT))
-    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOCATION_OUTSIDE_PIT))
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
+    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
 cannot_use_rope_here
     ERROR_MESSAGE("Can't use it there")
     END_AND_REFRESH
 
 around_the_pit
     INFO_MESSAGE("You attach the rope to the tree")
-    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT)
+    SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une corde attachée à un arbre")
@@ -1833,10 +1967,10 @@ _UseGame
 
 _UseDartGun
     DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART,"You shoot your only dart")
-    SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOCATION_GONE_FOREVER)                      ; The player can only use the dart gun once
+    SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_GONE_FOREVER)                      ; The player can only use the dart gun once
 
     // - We are in the entrance hall and the dog is still alive
-    JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
 #ifdef LANGUAGE_FR   
@@ -1848,7 +1982,7 @@ _UseDartGun
 snoozed_dog
 
     // - We are in the sleeping room and the thug is still alive
-    JUMP_IF_FALSE(snoozed_thug,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_FALSE(snoozed_thug,CHECK_PLAYER_LOCATION(e_LOC_MASTERBEDROOM))
     JUMP_IF_TRUE(snoozed_thug,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_THUG)
 #ifdef LANGUAGE_FR   
@@ -1891,7 +2025,7 @@ _SearchThug
     END
 
 thug_disabled
-    JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOCATION_NONE))
+    JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_NONE))
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Vous l'avez déjà fouillé");
 #else    
@@ -1900,7 +2034,7 @@ thug_disabled
     END
 
 found_items
-    SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOCATION_MASTERBEDROOM)
+    SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez trouvé quelque chose")
 #else    
@@ -1935,10 +2069,10 @@ _gThrowItemMappingsArray
 
 _ThrowBread
 .(
-    JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOCATION_WOODEDAVENUE))
+    JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
 give_bread_to_dove
     // The bread is going away, but the bird is now possible to catch
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOCATION_GONE_FOREVER)
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
     UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une colombe qui picore")
@@ -1953,7 +2087,7 @@ give_bread_to_dove
 
 not_in_wooded_avenue
     // In other locations we just drop the bread where we are
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOCATION_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
     END_AND_REFRESH
 .)
 
@@ -1961,12 +2095,12 @@ not_in_wooded_avenue
 _ThrowMeat
 .(
     // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
-    JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
 dog_eating_the_meat
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
     INFO_MESSAGE("Glad it's not me there!")
-    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_GONE_FOREVER)
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
     WAIT(50*2)    
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
@@ -1978,7 +2112,7 @@ done
 
 nothing_to_eat_the_meat
     // In other locations we just drop the meat where we are
-    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOCATION_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_CURRENT)
     END_AND_REFRESH
  .)
 
@@ -1986,14 +2120,14 @@ nothing_to_eat_the_meat
 _FreeDove
 .(    
     INFO_MESSAGE("The dove flies away")                                         ; When left anywhere, the dove will manage to fly away
-    SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOCATION_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
+    SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
     // The dog will only chase the dove if the dog is where we are and is still alive and kicking
-    JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_CURRENT))
+    JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_CURRENT))
     JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE,"Run Forrest, Run!")      ; Show the picture with the dog running after the dove
         INFO_MESSAGE("Hopefully he will not catch the dove")
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
-        SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOCATION_GONE_FOREVER)           ; And the dog is now gone forever
+        SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
         WAIT(50*2)    
 nothing_to_chase_the_dove
     END_AND_REFRESH
@@ -2004,23 +2138,23 @@ _ThrowKnife
 .(
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
-    JUMP_IF_FALSE(dog_knife,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(dog_knife,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(dog_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
-        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_LARGE_STAIRCASE)
+        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_LARGE_STAIRCASE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
         JUMP(_CommonDogDisabled)
 dog_knife    
 
     // - We are in the sleeping room and the thug is still alive
-    JUMP_IF_FALSE(thug_knife,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_FALSE(thug_knife,CHECK_PLAYER_LOCATION(e_LOC_MASTERBEDROOM))
     JUMP_IF_TRUE(thug_knife,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
-        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_MASTERBEDROOM)
+        SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_MASTERBEDROOM)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_THUG)
         JUMP(_CommonThugDisabled)
 thug_knife    
 
     // In other locations we just drop the item where we are
-    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
     END_AND_REFRESH
 .)
 
@@ -2029,23 +2163,23 @@ _ThrowSnookerCue
 .(
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
-    JUMP_IF_FALSE(dog_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_ENTRANCEHALL))
+    JUMP_IF_FALSE(dog_snooker_cue,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(dog_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
-        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_LARGE_STAIRCASE)
+        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_LARGE_STAIRCASE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
         JUMP(_CommonDogDisabled)
 dog_snooker_cue    
 
     // - We are in the sleeping room and the thug is still alive
-    JUMP_IF_FALSE(thug_snooker_cue,CHECK_PLAYER_LOCATION(e_LOCATION_MASTERBEDROOM))
+    JUMP_IF_FALSE(thug_snooker_cue,CHECK_PLAYER_LOCATION(e_LOC_MASTERBEDROOM))
     JUMP_IF_TRUE(thug_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
-        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_MASTERBEDROOM)
+        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_MASTERBEDROOM)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_THUG)
         JUMP(_CommonThugDisabled)
 thug_snooker_cue    
 
     // In other locations we just drop the item where we are
-    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOCATION_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
     END_AND_REFRESH
 .)
 
@@ -2092,6 +2226,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_Rope              , _TakeRope)
     VALUE_MAPPING(e_ITEM_Ladder            , _TakeLadder)
     VALUE_MAPPING(e_ITEM_LargeDove         , _TakeDove)
+    VALUE_MAPPING(e_ITEM_BlackTape         , _TakeBlackTape)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -2131,9 +2266,22 @@ _TakeDove
 .)
 
 
+_TakeBlackTape
+.(
+    SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Le ruban n'est pas réutilisable")
+#else    
+    INFO_MESSAGE("The tape cannot be reused")
+#endif    
+    WAIT(50)
+    END_AND_REFRESH
+.)
+
+
 _TakeCommon
 .(
-    SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOCATION_INVENTORY)  ; The item is now in our inventory
+    SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOC_INVENTORY)  ; The item is now in our inventory
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
     END_AND_REFRESH
 .)
@@ -2169,7 +2317,7 @@ _gDropItemMappingsArray
 
 _DropWater
 .(
-    SET_ITEM_LOCATION(e_ITEM_Water,e_LOCATION_WELL)             ; Put back the water into the well
+    SET_ITEM_LOCATION(e_ITEM_Water,e_LOC_WELL)             ; Put back the water into the well
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("L'eau s'écoule")
 #else
@@ -2181,7 +2329,7 @@ _DropWater
 
 _DropPetrol
 .(
-    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOCATION_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
+    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Le pétrole s'évapore")
 #else
@@ -2193,7 +2341,7 @@ _DropPetrol
 
 _DropCurrentItem
 .(
-    SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOCATION_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT)
     END_AND_REFRESH
 .)
 

@@ -170,18 +170,18 @@ For example, instead of allowing the user to aquire a pointer or reference to an
 Where in Encounter's scripting language you have to do this:
 ```c
   // Change the location of the ladder
-  SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+  SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT)
 ```  
 in a more classical language you would find something like that:
 ```c
   // Change the location of the ladder
   item=GetItem(e_ITEM_Ladder)
-  item.SetLocation(e_LOCATION_OUTSIDE_PIT)
+  item.SetLocation(e_LOC_OUTSIDE_PIT)
 ```  
 One could argue that the second style is much more powerful (it is), but it's also much more complex and does not promote consistency of style, because you could must probably have done that as well:
 ```c
   // Change the location of the ladder
-  GetItem(e_ITEM_Ladder).SetLocation(e_LOCATION_OUTSIDE_PIT)
+  GetItem(e_ITEM_Ladder).SetLocation(e_LOC_OUTSIDE_PIT)
 ```  
 I find a simple boring language that does not afford a lot of flexibility, does not have life time consideration, memory allocation, etc... easier to use when writing scripts.
 
@@ -200,26 +200,24 @@ Each of the in-game [location](locations.md) has an associated script pointer, w
 
 Let's examine two of the first locations, the **market place** and the **dark tunel**, these are defined like that in the [game_data.c](../code/game_data.c):
 ```c
-location gLocations[e_LOCATION_COUNT_] =
+location gLocations[e_LOC_COUNT_] =
 { 
-  { // e_LOCATION_MARKETPLACE     
-    e_LOCATION_DARKTUNNEL,      // Location to the North
-    e_LOCATION_NONE,            // Location to the South
-    e_LOCATION_DARKALLEY,       // Location to the East
-    e_LOCATION_NONE,            // Location to the West
-    e_LOCATION_NONE,            // Location going up
-    e_LOCATION_NONE,            // Location going down
-    gTextLocationMarketPlace,   // Description
+  { // e_LOC_MARKETPLACE     
+    e_LOC_DARKTUNNEL,      // Location to the North
+    e_LOC_NONE,            // Location to the South
+    e_LOC_DARKALLEY,       // Location to the East
+    e_LOC_NONE,            // Location to the West
+    e_LOC_NONE,            // Location going up
+    e_LOC_NONE,            // Location going down
     gDescriptionMarketPlace     // Script
   },         
-  { // e_LOCATION_DARKTUNNEL 
-    e_LOCATION_WOODEDAVENUE,    // Location to the North
-    e_LOCATION_MARKETPLACE,     // Location to the South
-    e_LOCATION_NONE,            // Location to the East
-    e_LOCATION_NONE,            // Location to the West
-    e_LOCATION_NONE,            // Location going up
-    e_LOCATION_NONE,            // Location going down
-    gTextLocationDarkTunel,     // Description
+  { // e_LOC_DARKTUNNEL 
+    e_LOC_WOODEDAVENUE,    // Location to the North
+    e_LOC_MARKETPLACE,     // Location to the South
+    e_LOC_NONE,            // Location to the East
+    e_LOC_NONE,            // Location to the West
+    e_LOC_NONE,            // Location going up
+    e_LOC_NONE,            // Location going down
     gDescriptionDarkTunel       // Script
   },
   (...)
@@ -415,7 +413,7 @@ It is possible to use combinations of JUMP_IF_TRUE and JUMP_IF_FALSE to handle m
 In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
 ```c
   // Is there a rope?
-  JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOCATION_OUTSIDE_PIT))
+  JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT))
   // Ok there is a rope, but is it attached to the tree?
   JUMP_IF_TRUE(rope_attached_to_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 no_rope    
@@ -435,7 +433,7 @@ These operators should be used with either JUMP_IF_TRUE or JUMP_IF_FALSE
 ```
 Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
 ```c
-  /*<conditional jump instruction>*/ CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT) 
+  /*<conditional jump instruction>*/ CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT) 
 ```
 ### CHECK_ITEM_FLAG
 Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
@@ -454,7 +452,7 @@ Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by t
 ```
 Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
 ```c
-  /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOCATION_INSIDE_PIT)
+  /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT)
 ```
 
 ---
@@ -489,21 +487,21 @@ Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the
 Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it.
 
 There are a few different types of locations:
-- Actual locations in the game (e_LOCATION_MARKETPLACE, e_LOCATION_CELLAR, e_LOCATION_MAINSTREET ...)
-- e_LOCATION_INVENTORY, which represents any item in the player's inventory
-- e_LOCATION_NONE location, used for when an item is not yet available (maybe the player need to do something)
-- e_LOCATION_GONE_FOREVER, used when we want to definitely take an item out of the game
-- e_LOCATION_CURRENT, which contains the id of wherever the player is currently located
+- Actual locations in the game (e_LOC_MARKETPLACE, e_LOC_CELLAR, e_LOC_MAINSTREET ...)
+- e_LOC_INVENTORY, which represents any item in the player's inventory
+- e_LOC_NONE location, used for when an item is not yet available (maybe the player need to do something)
+- e_LOC_GONE_FOREVER, used when we want to definitely take an item out of the game
+- e_LOC_CURRENT, which contains the id of wherever the player is currently located
 
 ```c
   // Move the ladder into the pit
-  SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOCATION_OUTSIDE_PIT)
+  SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT)
 
   // Give the keys to the player
-  SET_ITEM_LOCATION(e_ITEM_Keys,e_LOCATION_INVENTORY)
+  SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_INVENTORY)
 
   // Drop the knife at the current location
-  SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOCATION_CURRENT)
+  SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
 ```  
 
 ### SET_ITEM_FLAGS
@@ -546,7 +544,7 @@ Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, fol
 Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
 ```c
   // Enable the UP direction
-  SET_LOCATION_DIRECTION(e_LOCATION_INSIDE_PIT,e_DIRECTION_UP,e_LOCATION_OUTSIDE_PIT)
+  SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)
 ```
 ---
 ## Scoring and achievements

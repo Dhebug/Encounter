@@ -38,7 +38,7 @@ keyword gWordsArray[] =
     { "DOG",    e_ITEM_AlsatianDog          },  // e_ITEM_AlsatianDog       
     { "MEAT",   e_ITEM_Meat                 },  // e_ITEM_Meat                  
     { "BREAD",  e_ITEM_Bread                },  // e_ITEM_Bread                 
-    { "TAPE",   e_ITEM_RollOfTape           },  // e_ITEM_RollOfTape            
+    { "TAPE",   e_ITEM_BlackTape            },  // e_ITEM_BlackTape            
     { "BOOK",   e_ITEM_ChemistryBook        },  // e_ITEM_ChemistryBook         
     { "MATCHES",e_ITEM_BoxOfMatches         },  // e_ITEM_BoxOfMatches          
     { "CUE",    e_ITEM_SnookerCue           },  // e_ITEM_SnookerCue            

@@ -23,7 +23,7 @@ void PrintSceneDirections()
 	gFlagDirections = 0;
 	for (direction=0;direction<e_DIRECTION_COUNT_;direction++)
 	{
-		if (directions[direction]!=e_LOCATION_NONE)
+		if (directions[direction]!=e_LOC_NONE)
 		{
 			gFlagDirections|= (1<<direction);
 		}
@@ -41,7 +41,7 @@ void PrintInventory()
 	memset((char*)0xbb80+40*24,32,40*4-8);  // 8 characters at the end of the inventory for the clock
 	for (itemId=0;itemId<e_ITEM_COUNT_;itemId++)
 	{
-		if (itemPtr->location == e_LOCATION_INVENTORY)
+		if (itemPtr->location == e_LOC_INVENTORY)
 		{
 			int descriptionLength = strlen(itemPtr->description);
 			char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
@@ -134,17 +134,17 @@ void PrintSceneInformation()
 void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
-
+	// Set the byte stream pointer
+	SetByteStream(gCurrentLocationPtr->script);
+    gSceneImage = LOADER_PICTURE_LOCATIONS_START+gCurrentLocation;
+    
 	ClearMessageWindow(16+4);
 
 #if 1
-	LoadFileAt(LOADER_PICTURE_LOCATIONS_START+gCurrentLocation,ImageBuffer);	
+	LoadFileAt(gSceneImage,ImageBuffer);	
 #else
 	memset(ImageBuffer,64+1,40*128);
 #endif	
-
-	// Set the byte stream pointer
-	SetByteStream(gCurrentLocationPtr->script);
 
 	// And run the first set of commands for this scene
 	HandleByteStream();
@@ -162,7 +162,7 @@ void PlayerMove()
 {
     unsigned char direction = gWordBuffer[0]-e_WORD_NORTH;
 	unsigned char requestedScene = gCurrentLocationPtr->directions[direction];
-	if (requestedScene==e_LOCATION_NONE)
+	if (requestedScene==e_LOC_NONE)
 	{
 		PrintErrorMessage(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
 	}
@@ -196,7 +196,7 @@ char ProcessFoundToken(WORDS wordId)
     if (wordId < e_ITEM_COUNT_)
     {
         // It's an item
-        if (gItems[wordId].location == e_LOCATION_INVENTORY)
+        if (gItems[wordId].location == e_LOC_INVENTORY)
         {
             return 1;
         }
@@ -217,7 +217,7 @@ char ItemCheck(unsigned char itemId)
 {
 	if (itemId<e_ITEM_COUNT_)
     {
-        if ( (gItems[itemId].location==e_LOCATION_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
+        if ( (gItems[itemId].location==e_LOC_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
         {
             return 1;
         }
@@ -244,7 +244,7 @@ void TakeItem()
 	}
 
     // The item is in the scene
-    if (itemPtr->location == e_LOCATION_INVENTORY)
+    if (itemPtr->location == e_LOC_INVENTORY)
     {
         PrintErrorMessage(gTextErrorAlreadyHaveItem);    // "You already have this item"
         return;
@@ -268,7 +268,7 @@ void TakeItem()
         else
         {
             item* containerPtr=&gItems[containerId];
-            if (containerPtr->location != e_LOCATION_INVENTORY)
+            if (containerPtr->location != e_LOC_INVENTORY)
             {
                 // We do not have this container...
                 if (containerPtr->location!=gCurrentLocation)
@@ -277,7 +277,7 @@ void TakeItem()
                     return;
                 }
                 // But it's on the scene, so we pick-it up automatically
-                containerPtr->location = e_LOCATION_INVENTORY;
+                containerPtr->location = e_LOC_INVENTORY;
             }
 
             if (containerPtr->associated_item != 255)
@@ -300,7 +300,7 @@ void TakeItem()
 void DropItem()
 {
     unsigned char itemId = gWordBuffer[1];
-	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOCATION_INVENTORY) )
+	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOC_INVENTORY) )
 	{
 		PrintErrorMessage(gTextErrorDropNotHave);  // "You can only drop something you have"
 	}
@@ -342,7 +342,7 @@ void Invoke()
     // Wherever they are, give a specific item to the user
     unsigned char itemId=gWordBuffer[1];
     item* itemPtr=&gItems[itemId];
-    itemPtr->location = e_LOCATION_INVENTORY;
+    itemPtr->location = e_LOC_INVENTORY;
     LoadScene();            
 }
 #endif    

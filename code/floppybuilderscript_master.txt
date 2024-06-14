@@ -192,7 +192,15 @@ AddFile ..\build\files\41.hir
 AddFile ..\build\files\42.hir
 AddFile ..\build\files\43.hir
 AddFile ..\build\files\44.hir
+AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
+
+AddFile ..\build\files\loc_cellar_bright.hir
+AddDefine LOADER_PICTURE_CELLAR_BRIGHT {FileIndex}
+
+AddFile ..\build\files\loc_basement_window_cleared.hir
+AddDefine LOADER_PICTURE_CELLAR_WINDOW_CLEARED {FileIndex}
+
 
 ; Additional images
 #ifdef LANGUAGE_FR
