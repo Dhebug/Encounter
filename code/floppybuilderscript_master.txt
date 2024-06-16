@@ -112,7 +112,7 @@ AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
 ;
 ; The pictures
 ;
-AddFile ..\build\files\title.hir
+AddFile ..\build\files\intro_title_picture.hir
 AddDefine LOADER_PICTURE_TITLE {FileIndex}
 AddDefine LOADER_PICTURE_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
 
@@ -124,7 +124,7 @@ AddFile ..\build\files\intro_typewriter.hir
 AddDefine INTRO_PICTURE_TYPEWRITER {FileIndex}
 AddDefine INTRO_PICTURE_TYPEWRITER_COMPRESSED {FileSizeCompressed}
 
-AddFile ..\build\files\logos.hir
+AddFile ..\build\files\intro_defence-force_logo.hir
 AddDefine INTRO_PICTURE_LOGOS {FileIndex}
 
 ; Outro graphics
@@ -143,59 +143,59 @@ AddDefine OUTRO_SPRITE_PHOTOS {FileIndex}
 
 
 ; No location - actual error
-AddFile ..\build\files\NONE.hir
+AddFile ..\build\files\no_picture.hir
 
 ; All the locations
-AddFile ..\build\files\0.hir
+AddFile ..\build\files\loc_market_square.hir
 AddDefine LOADER_PICTURE_LOCATIONS_START {FileIndex}       ; The define is for the file entry above.
-AddFile ..\build\files\1.hir
-AddFile ..\build\files\2.hir
-AddFile ..\build\files\3.hir
-AddFile ..\build\files\4.hir
-AddFile ..\build\files\5.hir
-AddFile ..\build\files\6.hir
-AddFile ..\build\files\7.hir
-AddFile ..\build\files\8.hir
-AddFile ..\build\files\9.hir
-AddFile ..\build\files\10.hir
-AddFile ..\build\files\11.hir
-AddFile ..\build\files\12.hir
-AddFile ..\build\files\13.hir
-AddFile ..\build\files\14.hir
-AddFile ..\build\files\15.hir
-AddFile ..\build\files\16.hir
-AddFile ..\build\files\17.hir
-AddFile ..\build\files\18.hir
-AddFile ..\build\files\19.hir
-AddFile ..\build\files\20.hir
-AddFile ..\build\files\21.hir
-AddFile ..\build\files\22.hir
-AddFile ..\build\files\23.hir
-AddFile ..\build\files\24.hir
-AddFile ..\build\files\25.hir
-AddFile ..\build\files\26.hir
-AddFile ..\build\files\27.hir
-AddFile ..\build\files\28.hir
-AddFile ..\build\files\29.hir
-AddFile ..\build\files\30.hir
-AddFile ..\build\files\31.hir
-AddFile ..\build\files\32.hir
-AddFile ..\build\files\33.hir
-AddFile ..\build\files\34.hir    ; bedroom with sleeping man
-AddFile ..\build\files\35.hir
-AddFile ..\build\files\36.hir
-AddFile ..\build\files\37.hir
-AddFile ..\build\files\38.hir
-AddFile ..\build\files\39.hir
-AddFile ..\build\files\40.hir
-AddFile ..\build\files\41.hir
-AddFile ..\build\files\42.hir
-AddFile ..\build\files\43.hir
-AddFile ..\build\files\44.hir
+AddFile ..\build\files\loc_seedy_alley.hir
+AddFile ..\build\files\loc_road_stretch.hir
+AddFile ..\build\files\loc_tunel.hir
+AddFile ..\build\files\loc_main_street.hir
+AddFile ..\build\files\loc_east_road.hir
+AddFile ..\build\files\loc_inside_pit.hir
+AddFile ..\build\files\loc_well.hir
+AddFile ..\build\files\loc_wooded_avenue.hir
+AddFile ..\build\files\loc_gravel_drive.hir
+AddFile ..\build\files\loc_parking.hir
+AddFile ..\build\files\loc_garden.hir
+AddFile ..\build\files\loc_lawn.hir
+AddFile ..\build\files\loc_greenhouse.hir
+AddFile ..\build\files\loc_tennis_court.hir
+AddFile ..\build\files\loc_vegetable_plot.hir
+AddFile ..\build\files\loc_fish_pond.hir
+AddFile ..\build\files\loc_rear_entrance.hir
+AddFile ..\build\files\loc_orchard.hir
+AddFile ..\build\files\loc_dark_room.hir
+AddFile ..\build\files\loc_cellar.hir
+AddFile ..\build\files\loc_narrow_steps.hir
+AddFile ..\build\files\loc_lounge.hir
+AddFile ..\build\files\loc_entrance_hall.hir
+AddFile ..\build\files\loc_library.hir
+AddFile ..\build\files\loc_dinning_room.hir
+AddFile ..\build\files\loc_staircase.hir
+AddFile ..\build\files\loc_games_room.hir
+AddFile ..\build\files\loc_sun_lounge.hir
+AddFile ..\build\files\loc_kitchen.hir
+AddFile ..\build\files\loc_narrow_passage.hir
+AddFile ..\build\files\loc_guest_bedroom.hir
+AddFile ..\build\files\loc_child_bedroom.hir
+AddFile ..\build\files\loc_master_bedroom.hir
+AddFile ..\build\files\loc_shower_room.hir
+AddFile ..\build\files\loc_toilet.hir
+AddFile ..\build\files\loc_east_gallery.hir
+AddFile ..\build\files\loc_box_room.hir
+AddFile ..\build\files\loc_steel_door.hir
+AddFile ..\build\files\loc_bathroom.hir
+AddFile ..\build\files\loc_west_gallery.hir
+AddFile ..\build\files\loc_landing.hir
+AddFile ..\build\files\loc_outside_pit.hir
+AddFile ..\build\files\loc_study_room.hir
+AddFile ..\build\files\loc_basement_window_darkened.hir
 AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
-AddFile ..\build\files\loc_cellar_bright.hir
+AddFile ..\build\files\loc_dark_room_sunlight.hir
 AddDefine LOADER_PICTURE_CELLAR_BRIGHT {FileIndex}
 
 AddFile ..\build\files\loc_basement_window_cleared.hir
@@ -204,41 +204,41 @@ AddDefine LOADER_PICTURE_CELLAR_WINDOW_CLEARED {FileIndex}
 
 ; Additional images
 #ifdef LANGUAGE_FR
-AddFile ..\build\files\newspaper_fr.hir
+AddFile ..\build\files\view_newspaper_fr.hir
 #else // LANGUAGE_EN
-AddFile ..\build\files\newspaper.hir
+AddFile ..\build\files\view_newspaper.hir
 #endif
 AddDefine LOADER_PICTURE_NEWSPAPER {FileIndex}
 
 #ifdef LANGUAGE_FR
-AddFile ..\build\files\handwritten_note_fr.hir
+AddFile ..\build\files\view_handwritten_note_fr.hir
 #else // LANGUAGE_EN
-AddFile ..\build\files\handwritten_note.hir
+AddFile ..\build\files\view_handwritten_note.hir
 #endif
 AddDefine LOADER_PICTURE_HANDWRITTEN_NOTE {FileIndex}
 
-AddFile ..\build\files\science_book.hir
+AddFile ..\build\files\view_science_book.hir
 AddDefine LOADER_PICTURE_SCIENCE_BOOK {FileIndex}
 
-AddFile ..\build\files\chemistry_recipes.hir
+AddFile ..\build\files\view_chemistry_recipes.hir
 AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 
-AddFile ..\build\files\united_kingdom_map.hir
+AddFile ..\build\files\view_united_kingdom_map.hir
 AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 
-AddFile ..\build\files\donkey_kong_top.hir
+AddFile ..\build\files\view_donkey_kong_top.hir
 AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
 
-AddFile ..\build\files\donkey_kong_playing.hir
+AddFile ..\build\files\view_donkey_kong_playing.hir
 AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
 
-AddFile ..\build\files\fridge_door.hir
+AddFile ..\build\files\view_fridge_door.hir
 AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
 
-AddFile ..\build\files\medicine_cabinet.hir
+AddFile ..\build\files\view_medicine_cabinet.hir
 AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
 
-AddFile ..\build\files\medicine_cabinet_open.hir
+AddFile ..\build\files\view_medicine_cabinet_open.hir
 AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
 
 AddFile ..\build\files\view_alarm_panel.hir
@@ -247,25 +247,25 @@ AddDefine LOADER_PICTURE_ALARM_PANEL {FileIndex}
 AddFile ..\build\files\view_alarm_panel_open.hir
 AddDefine LOADER_PICTURE_ALARM_PANEL_OPEN {FileIndex}
 
-AddFile ..\build\files\dog_eating_meat.hir
+AddFile ..\build\files\view_dog_eating_meat.hir
 AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
 
-AddFile ..\build\files\dove_eating_breadcrumbs.hir
+AddFile ..\build\files\view_dove_eating_breadcrumbs.hir
 AddDefine LOADER_PICTURE_DOVE_EATING_BREADCRUMBS {FileIndex}
 
-AddFile ..\build\files\dog_chasing_dove.hir
+AddFile ..\build\files\view_dog_chasing_dove.hir
 AddDefine LOADER_PICTURE_DOG_CHASING_DOVE {FileIndex}
 
-AddFile ..\build\files\drawer_gun_cabinet.hir
+AddFile ..\build\files\view_drawer_gun_cabinet.hir
 AddDefine LOADER_PICTURE_DRAWER_GUN_CABINET {FileIndex}
 
-AddFile ..\build\files\shooting_dart.hir
+AddFile ..\build\files\view_shooting_dart.hir
 AddDefine LOADER_PICTURE_SHOOTING_DART {FileIndex}
 
-AddFile ..\build\files\basement_window.hir
+AddFile ..\build\files\view_basement_window.hir
 AddDefine LOADER_PICTURE_BASEMENT_WINDOW {FileIndex}
 
-AddFile ..\build\files\basement_window_darkened.hir
+AddFile ..\build\files\view_basement_window_darkened.hir
 AddDefine LOADER_PICTURE_BASEMENT_WINDOW_DARK {FileIndex}
 
 AddFile ..\build\files\view_alarm_triggered.hir
@@ -273,22 +273,22 @@ AddDefine LOADER_PICTURE_ALARM_TRIGGERED {FileIndex}
 
 ; All the sprites
 #ifdef LANGUAGE_FR
-AddFile ..\build\files\the_end_fr.msk
+AddFile ..\build\files\masked_the_end_fr.msk
 #else
-AddFile ..\build\files\the_end.msk                      
+AddFile ..\build\files\masked_the_end.msk                      
 #endif
 AddDefine LOADER_SPRITE_THE_END {FileIndex}
 
-AddFile ..\build\files\dog.msk                      
+AddFile ..\build\files\masked_dog.msk                      
 AddDefine LOADER_SPRITE_DOG {FileIndex}
 
-AddFile ..\build\files\items.msk                      
+AddFile ..\build\files\masked_items.msk                      
 AddDefine LOADER_SPRITE_ITEMS {FileIndex}
 
-AddFile ..\build\files\thug.msk
+AddFile ..\build\files\masked_thug.msk
 AddDefine LOADER_SPRITE_THUG {FileIndex}
 
-AddFile ..\build\files\safe_room.msk
+AddFile ..\build\files\masked_safe_room.msk
 AddDefine LOADER_SPRITE_SAFE_ROOM {FileIndex}
 
 ;

@@ -63,7 +63,7 @@ goto End
 :Error
 ::Errors are reported by the top script
 ::ECHO.
-::ECHO An Error has happened. Build stopped
+ECHO An Error has happened. Build stopped
 
 :End
 ::pause

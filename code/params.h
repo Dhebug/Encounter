@@ -1,21 +1,23 @@
 //
 // Misc settings for the game testing
 //
-//#define ENABLE_SPLASH                   // Comment out to skip the splash screen with the Severn Software and Defence Force logo
-//#define ENABLE_INTRO                    // Comment out to skip the intro
+#define ENABLE_SPLASH                   // Comment out to skip the splash screen with the Severn Software and Defence Force logo
+#define ENABLE_INTRO                    // Comment out to skip the intro
 #define ENABLE_GAME                     // Comment out to disable the game (and go in the outro immediately)
+#define INTRO_ENABLE_ATTRACT_MODE       // Comment out to skip to the type writer section
 #define INTRO_SHOW_TITLE_PICTURE        // Comment out to hide the title picture
 #define INTRO_SHOW_LEADERBOARD          // Comment out to hide the leaderboard
+#define INTRO_SHOW_ACHIEVEMENTS         // Comment out to hide the achievements
 #define INTRO_SHOW_USER_MANUAL          // Comment out to hide the instructions page
 #define INTRO_SHOW_STORY                // Comment out to hide the typewriter story page
 #define INTRO_SHOW_STORY_SCROLL         // Comment out to disable the office parallax scroll
 //#define INTRO_ENABLE_SOUNDBOARD         // Comment out to disable the sound testing module
-//#define ENABLE_MUSIC                    // Comment out to disable the music
-//#define ENABLE_SOUND_EFFECTS            // Comment out to disable sound effects
+#define ENABLE_MUSIC                    // Comment out to disable the music
+#define ENABLE_SOUND_EFFECTS            // Comment out to disable sound effects
 
-#define TESTING_MODE         // Comment out to play normally
+//#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
-#define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
+//#define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16

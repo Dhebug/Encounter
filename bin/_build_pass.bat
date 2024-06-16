@@ -132,10 +132,18 @@ endlocal
 set OSDKBREAKPOINTS=:Breakpoints.txt
 
 :: Call FloppyBuilder once to create loader.cod
-%osdk%\bin\FloppyBuilder build floppybuilderscript.txt >NUL
+%osdk%\bin\FloppyBuilder build floppybuilderscript.txt >..\build\floppy_builder_error.txt
+IF ERRORLEVEL 1 GOTO FloppyBuilderError
 
 popd
 goto End
+
+:FloppyBuilderError
+:: Prints the floppy builder error in red to make sure we don't miss it
+ECHO %ESC%[41m
+type ..\build\floppy_builder_error.txt
+ECHO %ESC%[0m
+popd
 
 :Error
 ECHO.

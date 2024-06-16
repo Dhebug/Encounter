@@ -1319,9 +1319,9 @@ _gFont12x14Kerning
 ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _gFont12x14
 #ifdef LANGUAGE_FR    
-#include "..\build\generated_12x14_font_fr.s"
+#include "..\build\files\font_palatino_linotype_italics_size_10_fr.s"
 #else
-#include "..\build\generated_12x14_font.s"
+#include "..\build\files\font_palatino_linotype_italics_size_10.s"
 #endif
 _Font12x14End
 
@@ -1329,10 +1329,4 @@ _Font12x14End
 ; 13 values on the top for ordered dither
 ;  3 values at the end with some growing circle
 _6x6DitherMatrix
-  .byt $40,$40,$40,$40,$40,$40,$41,$40,$44,$40,$40,$40,$51,$40,$44,$40
-  .byt $51,$40,$55,$40,$44,$40,$55,$40,$55,$40,$55,$40,$55,$40,$55,$62
-  .byt $55,$48,$55,$62,$55,$6a,$55,$6a,$55,$6a,$5d,$6a,$77,$6a,$5d,$6a
-  .byt $7f,$6a,$7f,$6a,$7f,$6a,$7f,$6a,$7f,$7b,$7f,$6a,$7f,$6e,$7f,$7b
-  .byt $7f,$6e,$7f,$7f,$7f,$7b,$7f,$7e,$7f,$7f,$7f,$7f,$7f,$7f,$7f,$7f
-  .byt $73,$73,$7f,$7f,$7f,$73,$61,$61,$73,$7f,$73,$61,$40,$40,$61,$73
-
+#include "..\build\files\pattern_6x6_dither_matrix.s"
