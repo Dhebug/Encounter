@@ -241,6 +241,12 @@ AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
 AddFile ..\build\files\medicine_cabinet_open.hir
 AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
 
+AddFile ..\build\files\view_alarm_panel.hir
+AddDefine LOADER_PICTURE_ALARM_PANEL {FileIndex}
+
+AddFile ..\build\files\view_alarm_panel_open.hir
+AddDefine LOADER_PICTURE_ALARM_PANEL_OPEN {FileIndex}
+
 AddFile ..\build\files\dog_eating_meat.hir
 AddDefine LOADER_PICTURE_DOG_EATING_MEAT {FileIndex}
 

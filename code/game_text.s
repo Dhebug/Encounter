@@ -1605,6 +1605,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
+    VALUE_MAPPING(e_ITEM_LockedPanel        , _InspectPanel)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1655,6 +1656,22 @@ _InspectMedicineCabinet
     WAIT(50*2)
     END_AND_REFRESH
 .)
+
+
+_InspectPanel
+.(
+    ; Is the alarm panel open?
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_LockedPanel,ITEM_FLAG_CLOSED),else)
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN,"An openn alarm panel")
+        INFO_MESSAGE("Can be used to disable the alarm.")
+    ELSE(else,open)
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL,"A closed alarm panel")
+        INFO_MESSAGE("Not much to see when closed.")
+    ENDIF(open)
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
 
 _InspectBasementWindow
 .(

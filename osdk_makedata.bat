@@ -193,8 +193,12 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %PICTCONV% %PARAMS% data\view_chemistry_recipes.png %TARGET%\chemistry_recipes.hir
 %PICTCONV% %PARAMS% data\view_united_kingdom_map.png %TARGET%\united_kingdom_map.hir
 %PICTCONV% %PARAMS% data\view_fridge_door.png %TARGET%\fridge_door.hir
+
 %PICTCONV% %PARAMS% data\view_medicine_cabinet.png %TARGET%\medicine_cabinet.hir
 %PICTCONV% %PARAMS% data\view_medicine_cabinet_open.png %TARGET%\medicine_cabinet_open.hir
+
+%PICTCONV% %PARAMS% data\view_alarm_panel.png %TARGET%\view_alarm_panel.hir
+%PICTCONV% %PARAMS% data\view_alarm_panel_open.png %TARGET%\view_alarm_panel_open.hir
 
 %PICTCONV% %PARAMS% data\view_donkey_kong_top.png %TARGET%\donkey_kong_top.hir
 %PICTCONV% %PARAMS% data\view_donkey_kong_playing.png %TARGET%\donkey_kong_playing.hir
