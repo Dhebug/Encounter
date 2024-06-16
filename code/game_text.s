@@ -337,12 +337,12 @@ _gDescriptionMainStreet
     END
 
 
-// MARK: Narrow Path
-_gDescriptionNarrowPath
+// MARK: Eastern Road
+_gDescriptionEasternRoad
 #ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur un chemin étroit")
+    SET_DESCRIPTION("Vous êtes sur la route de l'est")
 #else
-    SET_DESCRIPTION("You are on a narrow path")
+    SET_DESCRIPTION("You are along the eastern road")
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -482,8 +482,8 @@ digging_for_gold
 .)
 
 
-// MARK: Tarmac Area
-_gDescriptionTarmacArea
+// MARK: Parking Place
+_gDescriptionParkingPlace
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur une zone asphaltée")
 #else
@@ -1031,8 +1031,8 @@ medicine_cabinet_closed
 .)
 
 
-// MARK: Narrow Staircase
-_gDescriptionNarrowStaircase
+// MARK: Basement Stairs
+_gDescriptionBasementStairs
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans un escalier étroit")
 #else

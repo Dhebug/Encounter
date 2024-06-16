@@ -146,7 +146,7 @@ AddDefine OUTRO_SPRITE_PHOTOS {FileIndex}
 AddFile ..\build\files\no_picture.hir
 
 ; All the locations
-AddFile ..\build\files\loc_market_square.hir
+AddFile ..\build\files\loc_market_place.hir
 AddDefine LOADER_PICTURE_LOCATIONS_START {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_seedy_alley.hir
 AddFile ..\build\files\loc_road_stretch.hir
@@ -158,7 +158,7 @@ AddFile ..\build\files\loc_well.hir
 AddFile ..\build\files\loc_wooded_avenue.hir
 AddFile ..\build\files\loc_gravel_drive.hir
 AddFile ..\build\files\loc_parking.hir
-AddFile ..\build\files\loc_garden.hir
+AddFile ..\build\files\loc_zen_garden.hir
 AddFile ..\build\files\loc_lawn.hir
 AddFile ..\build\files\loc_greenhouse.hir
 AddFile ..\build\files\loc_tennis_court.hir

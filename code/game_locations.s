@@ -17,33 +17,33 @@ _gLocations
     //       North                     South                     East                      West                      Up                        Down                     Script
     LOCATION(e_LOC_DARKTUNNEL        , e_LOC_NONE              , e_LOC_DARKALLEY         , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionMarketPlace)       // e_LOC_MARKETPLACE    
     LOCATION(e_LOC_MAINSTREET        , e_LOC_NONE              , e_LOC_ROAD              , e_LOC_MARKETPLACE       , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionDarkAlley)         // e_LOC_DARKALLEY      
-    LOCATION(e_LOC_NARROWPATH        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_DARKALLEY         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionRoad)              // e_LOC_ROAD      
+    LOCATION(e_LOC_EASTERN_ROAD      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_DARKALLEY         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionRoad)              // e_LOC_ROAD      
 
     LOCATION(e_LOC_WOODEDAVENUE      , e_LOC_MARKETPLACE       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionDarkTunel)         // e_LOC_DARKTUNNEL     
-    LOCATION(e_LOC_GRAVELDRIVE       , e_LOC_DARKALLEY         , e_LOC_NARROWPATH        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionMainStreet)        // e_LOC_MAINSTREET     
-    LOCATION(e_LOC_TARMACAREA        , e_LOC_ROAD              , e_LOC_OUTSIDE_PIT       , e_LOC_MAINSTREET        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionNarrowPath)        // e_LOC_NARROWPATH     
+    LOCATION(e_LOC_GRAVELDRIVE       , e_LOC_DARKALLEY         , e_LOC_EASTERN_ROAD      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionMainStreet)        // e_LOC_MAINSTREET     
+    LOCATION(e_LOC_PARKING_PLACE     , e_LOC_ROAD              , e_LOC_OUTSIDE_PIT       , e_LOC_MAINSTREET        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionEasternRoad)       // e_LOC_EASTERN_ROAD     
 
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionInThePit)          // e_LOC_INSIDE_PIT
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionOldWell)           // e_LOC_WELL           
     LOCATION(e_LOC_ZENGARDEN         , e_LOC_DARKTUNNEL        , e_LOC_GRAVELDRIVE       , e_LOC_WELL              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionWoodedAvenue)      // e_LOC_WOODEDAVENUE   
 
-    LOCATION(e_LOC_LAWN              , e_LOC_MAINSTREET        , e_LOC_TARMACAREA        , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGravelDrive)       // e_LOC_GRAVELDRIVE   
-    LOCATION(e_LOC_GREENHOUSE        , e_LOC_NARROWPATH        , e_LOC_NONE              , e_LOC_GRAVELDRIVE       , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionTarmacArea)        // e_LOC_TARMACAREA      
+    LOCATION(e_LOC_LAWN              , e_LOC_MAINSTREET        , e_LOC_PARKING_PLACE     , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGravelDrive)       // e_LOC_GRAVELDRIVE   
+    LOCATION(e_LOC_GREENHOUSE        , e_LOC_EASTERN_ROAD      , e_LOC_NONE              , e_LOC_GRAVELDRIVE       , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionParkingPlace)      // e_LOC_PARKING_PLACE      
     LOCATION(e_LOC_TENNISCOURT       , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionZenGarden)         // e_LOC_ZENGARDEN       
 
     LOCATION(e_LOC_ENTRANCEHALL      , e_LOC_GRAVELDRIVE       , e_LOC_GREENHOUSE        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionFrontLawn)         // e_LOC_LAWN  
-    LOCATION(e_LOC_VEGSGARDEN        , e_LOC_TARMACAREA        , e_LOC_NONE              , e_LOC_LAWN              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGreenHouse)        // e_LOC_GREENHOUSE      
+    LOCATION(e_LOC_VEGSGARDEN        , e_LOC_PARKING_PLACE     , e_LOC_NONE              , e_LOC_LAWN              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGreenHouse)        // e_LOC_GREENHOUSE      
     LOCATION(e_LOC_FISHPND           , e_LOC_ZENGARDEN         , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionTennisCourt)       // e_LOC_TENNISCOURT     
 
-    LOCATION(e_LOC_APPLE_TREES       , e_LOC_GREENHOUSE        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionVegetableGarden)   // e_LOC_VEGSGARDEN   
+    LOCATION(e_LOC_ORCHARD           , e_LOC_GREENHOUSE        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionVegetableGarden)   // e_LOC_VEGSGARDEN   
     LOCATION(e_LOC_NONE              , e_LOC_TENNISCOURT       , e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionFishPond)          // e_LOC_FISHPND         
-    LOCATION(e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_APPLE_TREES       , e_LOC_FISHPND           , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionTiledPatio)        // e_LOC_TILEDPATIO - and above it is a barred window 
+    LOCATION(e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_ORCHARD           , e_LOC_FISHPND           , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionTiledPatio)        // e_LOC_TILEDPATIO - and above it is a barred window 
 
-    LOCATION(e_LOC_NONE              , e_LOC_VEGSGARDEN        , e_LOC_NONE              , e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionAppleOrchard)      // e_LOC_APPLE_TREES     
+    LOCATION(e_LOC_NONE              , e_LOC_VEGSGARDEN        , e_LOC_NONE              , e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionAppleOrchard)      // e_LOC_ORCHARD     
     LOCATION(e_LOC_CELLAR            , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              ,_gDescriptionDarkerCellar)       // e_LOC_DARKCELLARROOM   
-    LOCATION(e_LOC_NONE              , e_LOC_DARKCELLARROOM    , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NARROWSTAIRCASE   , e_LOC_NONE              , _gDescriptionCellar)            // e_LOC_CELLAR           
+    LOCATION(e_LOC_NONE              , e_LOC_DARKCELLARROOM    , e_LOC_NONE              , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , e_LOC_NONE              , _gDescriptionCellar)            // e_LOC_CELLAR           
 
-    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_KITCHEN           , e_LOC_CELLAR            , _gDescriptionNarrowStaircase)   // e_LOC_NARROWSTAIRCASE  
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_KITCHEN           , e_LOC_CELLAR            , _gDescriptionBasementStairs)    // e_LOC_BASEMENT_STAIRS  
     LOCATION(e_LOC_DININGROOM        , e_LOC_NONE              , e_LOC_ENTRANCEHALL      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionEntranceLounge)    // e_LOC_LOUNGE     
     LOCATION(e_LOC_NARROWPASSAGE     , e_LOC_LAWN              , e_LOC_NONE              , e_LOC_LOUNGE            , e_LOC_LARGE_STAIRCASE   , e_LOC_NONE              , _gDescriptionEntranceHall)      // e_LOC_ENTRANCEHALL    
 
@@ -53,7 +53,7 @@ _gLocations
 
     LOCATION(e_LOC_NONE              , e_LOC_DININGROOM        , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGamesRoom)         // e_LOC_GAMESROOM        
     LOCATION(e_LOC_TILEDPATIO        , e_LOC_NARROWPASSAGE     , e_LOC_KITCHEN           , e_LOC_GAMESROOM         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionSunLounge)         // e_LOC_SUNLOUNGE        
-    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_NARROWSTAIRCASE   , _gDescriptionKitchen)           // e_LOC_KITCHEN    
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , _gDescriptionKitchen)           // e_LOC_KITCHEN    
 
     LOCATION(e_LOC_SUNLOUNGE         , e_LOC_ENTRANCEHALL      , e_LOC_LIBRARY           , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionNarrowPassage)     // e_LOC_NARROWPASSAGE   
     LOCATION(e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SHOWERROOM        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGuestBedroom)      // e_LOC_GUESTBEDROOM     
@@ -71,7 +71,7 @@ _gLocations
     LOCATION(e_LOC_NONE              , e_LOC_GUESTBEDROOM      , e_LOC_UP_STAIRS         , e_LOC_BOXROOM           , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionWestGallery)       // e_LOC_WESTGALLERY      
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_EASTGALLERY       , e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_LARGE_STAIRCASE   , _gDescriptionMainLanding)       // e_LOC_UP_STAIRS        
 
-    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NARROWPATH        , e_LOC_NONE              , e_LOC_INSIDE_PIT        , _gDescriptionOutsidePit)        // e_LOC_OUTSIDE_PIT
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_EASTERN_ROAD      , e_LOC_NONE              , e_LOC_INSIDE_PIT        , _gDescriptionOutsidePit)        // e_LOC_OUTSIDE_PIT
 
     LOCATION(e_LOC_LIBRARY           , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionStudyRoom)         // e_LOC_STUDY_ROOM
 

@@ -58,7 +58,7 @@ Here are information about the various locations you can reach in the game, grou
 |Image|Description|
 |-|-|
 |**You are in a deserted market square**|e_LOC_MARKETPLACE|
-|![Game location image](../data/loc_market_square.png)|This is where the player starts their adventure.|
+|![Game location image](../data/loc_market_place.png)|This is where the player starts their adventure.|
 |**You are in a dark, damp tunnel**|e_LOC_DARKTUNNEL|
 |![Game location image](../data/loc_tunel.png)|This humid tunnel contains **salpeter** you can use to make **explosive powder**.|
 |**You are in a wooded avenue**|e_LOC_WOODEDAVENUE|
@@ -69,9 +69,9 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/loc_seedy_alley.png)|This where you find the **plastic bag**|
 |**You are on the main street**|e_LOC_MAINSTREET|
 |![Game location image](../data/loc_main_street.png)||
-|**You are in an open area of tarmac**|e_LOC_TARMACAREA|
+|**You are in an open area of tarmac**|e_LOC_PARKING_PLACE|
 |![Game location image](../data/loc_parking.png)|The **car** is a source of **rusted** metal and **petrol**|
-|**You are on a narrow path**|e_LOC_NARROWPATH|
+|**You are on the eastern road**|e_LOC_EASTERN_ROAD|
 |![Game location image](../data/loc_east_road.png)||
 |**A long road stretches ahead of you**|e_LOC_ROAD|
 |![Game location image](../data/loc_road_stretch.png)||
@@ -88,14 +88,14 @@ Here are information about the various locations you can reach in the game, grou
 ||**You are on a huge area of lawn**|e_LOC_LAWN|
 |![Game location image](../data/loc_lawn.png)||
 |**You are in a relaxing zen garden**|e_LOC_ZENGARDEN|
-|![Game location image](../data/loc_garden.png)|The garden contains a **hose pipe**|
+|![Game location image](../data/loc_zen_garden.png)|The garden contains a **hose pipe**|
 |**You are on a lawn tennis court**|e_LOC_TENNISCOURT|
 |![Game location image](../data/loc_tennis_court.png)||
 |**You are standing by a fish pond**|e_LOC_FISHPND|
 |![Game location image](../data/loc_fish_pond.png)|This is where you find the **fishing net**|
 |**You are on a tiled patio**|e_LOC_TILEDPATIO|
 |![Game location image](../data/loc_rear_entrance.png)|Above the passage is the **window** of the room where the **hostage** is being kept.<br>Trying to break the window triggers the **alarm**|
-|**You are in an apple orchard**|e_LOC_APPLE_TREES|
+|**You are in an apple orchard**|e_LOC_ORCHARD|
 |![Game location image](../data/loc_orchard.png)|Here you can find a **ladder** which can be used to go down the **pit**|
 |**You are in a vegetable plot**|e_LOC_VEGSGARDEN|
 |![Game location image](../data/loc_vegetable_plot.png)|A **knife** is lying around.<br>On the wall you can see the small window to the basement dark room.<br>See: 'Soupirail', 'Fenêtres de trémie', 'Vasistas', 'Hopper window', 'Kellerfenster'|
@@ -158,7 +158,7 @@ Here are information about the various locations you can reach in the game, grou
 ## The basement
 |Image|Description|
 |-|-|
-|**You are on some gloomy, narrow steps**|e_LOC_NARROWSTAIRCASE|
+|**You are on some gloomy, narrow steps**|e_LOC_BASEMENT_STAIRS|
 |![Game location image](../data/loc_narrow_steps.png)||
 |**This is a cold, damp cellar**|e_LOC_CELLAR|
 |![Game location image](../data/loc_cellar.png)|The cellar contains a **safe** which has some **dangerous chemicals** in it, including a small **bottle of acid**.|

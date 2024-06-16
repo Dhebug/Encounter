@@ -42,8 +42,8 @@ _gItems
     ITEM_NORMAL( _gTextItemBrokenWindow          ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenWindow         
     ITEM_NORMAL( _gTextItemTwine                 ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Twine                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
-    ITEM_NORMAL( _gTextItemLadder                ,e_LOC_APPLE_TREES     ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
-    ITEM_NORMAL( _gTextItemAbandonedCar          ,e_LOC_TARMACAREA      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AbandonedCar         
+    ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
+    ITEM_NORMAL( _gTextItemAbandonedCar          ,e_LOC_PARKING_PLACE   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AbandonedCar         
     ITEM_NORMAL( _gTextItemAlsatianDog           ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlsatianDog          
     ITEM_NORMAL( _gTextItemMeat                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Meat                 
     ITEM_NORMAL( _gTextItemBread                 ,e_LOC_DININGROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bread                

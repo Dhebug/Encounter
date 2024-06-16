@@ -94,7 +94,7 @@ SET TARGET_EXTENSION=.hir
 
 %CONVERT% no_picture
 
-%CONVERT% loc_market_square
+%CONVERT% loc_market_place
 %CONVERT% loc_seedy_alley
 %CONVERT% loc_road_stretch
 %CONVERT% loc_tunel
@@ -105,7 +105,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_wooded_avenue
 %CONVERT% loc_gravel_drive
 %CONVERT% loc_parking
-%CONVERT% loc_garden
+%CONVERT% loc_zen_garden
 %CONVERT% loc_lawn
 %CONVERT% loc_greenhouse
 %CONVERT% loc_tennis_court

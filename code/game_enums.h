@@ -16,12 +16,12 @@
 #define	e_LOC_ROAD              2
 #define	e_LOC_DARKTUNNEL        3
 #define	e_LOC_MAINSTREET        4
-#define	e_LOC_NARROWPATH        5
+#define	e_LOC_EASTERN_ROAD      5
 #define	e_LOC_INSIDE_PIT        6
 #define	e_LOC_WELL              7
 #define	e_LOC_WOODEDAVENUE      8
 #define	e_LOC_GRAVELDRIVE       9 
-#define	e_LOC_TARMACAREA       10
+#define	e_LOC_PARKING_PLACE    10
 #define	e_LOC_ZENGARDEN        11
 #define	e_LOC_LAWN             12
 #define	e_LOC_GREENHOUSE       13
@@ -29,10 +29,10 @@
 #define	e_LOC_VEGSGARDEN       15
 #define	e_LOC_FISHPND          16
 #define	e_LOC_TILEDPATIO       17
-#define	e_LOC_APPLE_TREES      18
+#define	e_LOC_ORCHARD          18
 #define e_LOC_DARKCELLARROOM   19
 #define	e_LOC_CELLAR           20
-#define	e_LOC_NARROWSTAIRCASE  21
+#define	e_LOC_BASEMENT_STAIRS  21
 #define	e_LOC_LOUNGE           22
 #define	e_LOC_ENTRANCEHALL     23
 #define	e_LOC_LIBRARY          24

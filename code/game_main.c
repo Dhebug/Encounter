@@ -433,26 +433,44 @@ void Initializations()
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
-	//gCurrentLocation =e_LOCATION_INSIDEHOLE;
-	gCurrentLocation =e_LOCATION_OUTSIDE_PIT;
-    gItems[e_ITEM_Rope].location = e_LOCATION_INVENTORY;
-    gItems[e_ITEM_Ladder].location          = e_LOCATION_INVENTORY;
-    //gItems[e_ITEM_LadderInTheHole].location = e_LOCATION_OUTSIDE_PIT;
-	//gCurrentLocation =e_LOCATION_WELL;
-	//gCurrentLocation =e_LOCATION_ENTRANCEHALL;
-	//gCurrentLocation =e_LOCATION_LAWN;
-	//gCurrentLocation =e_LOCATION_MASTERBEDROOM;
-	////gCurrentLocation =e_LOCATION_MARKETPLACE;
-	//gCurrentLocation =e_LOCATION_NARROWPATH;
-    //gCurrentLocation = e_LOCATION_LIBRARY;
-	//gItems[e_ITEM_PlasticBag].location = e_LOCATION_INVENTORY;
+	//gCurrentLocation =e_LOC_INSIDE_PIT;
+	//gCurrentLocation =e_LOC_OUTSIDE_PIT;
+    //gItems[e_ITEM_Rope].location           = e_LOC_INVENTORY;
+    //gItems[e_ITEM_Rope].flags |= ITEM_FLAG_ATTACHED;
 
-    gItems[e_ITEM_ChemistryBook].location          = e_LOCATION_INVENTORY;
-    gCurrentLocation =e_LOCATION_LIBRARY;
-    
+    //gItems[e_ITEM_Ladder].location           = e_LOC_INVENTORY;
+
+	//gCurrentLocation =e_LOC_WELL;
+	//gCurrentLocation =e_LOC_ENTRANCEHALL;
+	//gCurrentLocation =e_LOC_LAWN;
+	//gCurrentLocation =e_LOC_MASTERBEDROOM;
+	////gCurrentLocation =e_LOC_MARKETPLACE;
+	//gCurrentLocation =e_LOC_EASTERN_ROAD;
+    //gCurrentLocation = e_LOC_LIBRARY;
+	//gItems[e_ITEM_PlasticBag].location = e_LOC_INVENTORY;
+
+    //gItems[e_ITEM_ChemistryBook].location          = e_LOC_INVENTORY;
+    //gItems[e_ITEM_AlsatianDog].location          = e_LOC_LARGE_STAIRCASE;
+    /*
+    gCurrentLocation = e_LOC_ENTRANCEHALL; // e_LOC_LARGE_STAIRCASE; // 40; //e_LOC_EASTERN_ROAD; //e_LOC_WELL; e_LOC_LIBRARY;
+    gItems[e_ITEM_Meat].location = e_LOC_INVENTORY;  // Instead we now have some drugged meat in our inventory    
+    gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;   // The drug is 
+    gItems[e_ITEM_Meat].description = gTextItemSedativeLacedMeat;
+
+    gItems[e_ITEM_SilverKnife].location           = e_LOC_INVENTORY;
+    gItems[e_ITEM_SnookerCue].location           = e_LOC_INVENTORY;
+    */
+
+   /*
+   gCurrentLocation = e_LOC_WOODEDAVENUE;
+   gItems[e_ITEM_CardboardBox].location = e_LOC_INVENTORY;
+   gItems[e_ITEM_FishingNet].location   = e_LOC_INVENTORY;
+   */
+   //gCurrentLocation = e_LOC_ENTRANCEHALL;  //e_LOC_KITCHEN;
+   gCurrentLocation = e_LOC_DARKCELLARROOM;  //e_LOC_DARKCELLARROOM;
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
-	gCurrentLocation = e_LOCATION_MARKETPLACE;
+	gCurrentLocation = e_LOC_MARKETPLACE;
 #endif	
 
 	gScore = 0;
