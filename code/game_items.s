@@ -35,11 +35,11 @@ _gItems
     ITEM( _gTextItemLargeDove             ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet))                     // e_ITEM_LargeDove            
     ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_GunPowder            
 
-    // Normal items
-    ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT|ITEM_FLAG_CLOSED)        // e_ITEM_LockedPanel
+    // Normal items|
+    ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED|ITEM_FLAG_LOCKED)      // e_ITEM_AlarmPanel
     ITEM_NORMAL( _gTextItemFridge                ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Fridge
     ITEM_NORMAL( _gTextItemSedativePills         ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SedativePills     
-    ITEM_NORMAL( _gTextItemBrokenWindow          ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenWindow         
+    ITEM_NORMAL( _gTextItemBasementWindow        ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_BasementWindow
     ITEM_NORMAL( _gTextItemTwine                 ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Twine                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
     ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
@@ -72,6 +72,6 @@ _gItems
     ITEM_NORMAL( _gTextItemClosedCurtain         ,e_LOC_WESTGALLERY     ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Curtain
     ITEM_NORMAL( _gTextItemClosedGunCabinet      ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_GunCabinet
     ITEM_NORMAL( _gTextItemDartGun               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_DartGun
-    ITEM_NORMAL( _gTextItemBasementWindow        ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_BasementWindow
+    ITEM_NORMAL( _gTextItemAlarmSwitch           ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DEFAULT)     // e_ITEM_AlarmSwitch
     
     

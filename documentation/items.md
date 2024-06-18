@@ -62,8 +62,7 @@ These items cannot just be collected, you need some adequate containers to trans
 These are items you will find around in the various locations
 |Item|Description|Define|
 |-|-|-|
-|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_LockedPanel|
-|**the window is broken**|The kidnapped girl can escape through the window if you break it and provide her with a rope.|e_ITEM_BrokenWindow|
+|**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_AlarmPanel|
 |**a large dove**|The dove can be captured with the fishing net and used to distract the dog|e_ITEM_LargeDove|
 |**some twine**|The twine can be used to control the thug|e_ITEM_Twine|
 |**a silver knife**|The knife is there to help defend the player|e_ITEM_SilverKnife|

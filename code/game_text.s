@@ -120,10 +120,9 @@ _gTextItemYellowPowder            .byt "poudre jaune granuleuse",0
 _gTextItemPetrol                  .byt "du pétrole",0
 _gTextItemWater                   .byt "de l'eau",0
 // Normal items
-_gTextItemLockedPanel             .byt "un paneau mural verouillé",0
+//_gTextItemAlarmSwitch             .byt "un bouton en position marche",0
 _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
-_gTextItemBrokenWindow            .byt "une vitre brisée",0
 _gTextItemTwine                   .byt "un peu de ficelle",0
 _gTextItemSilverKnife             .byt "un coueau en argent",0
 _gTextItemAbandonedCar            .byt "une voiture abandonnée",0
@@ -172,10 +171,9 @@ _gTextItemYellowPowder            .byt "gritty yellow powder",0
 _gTextItemPetrol                  .byt "some petrol",0                        
 _gTextItemWater                   .byt "some water",0                         
 // Normal items
-_gTextItemLockedPanel             .byt "a locked panel on the wall",0         
+//_gTextItemAlarmSwitch             .byt "a button in ON position",0
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
-_gTextItemBrokenWindow            .byt "the window is broken",0               
 _gTextItemTwine                   .byt "some twine",0                         
 _gTextItemSilverKnife             .byt "a silver knife",0                     
 _gTextItemAbandonedCar            .byt "an abandoned car",0                   
@@ -1081,8 +1079,17 @@ _gDescriptionDarkerCellar
 #else
         SET_DESCRIPTION("The room gets light from the window")
 #endif    
-        SET_ITEM_LOCATION(e_ITEM_LockedPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
+        SET_ITEM_LOCATION(e_ITEM_AlarmPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a window")
+
+        ; Is the alarm panel open?
+        JUMP_IF_TRUE(alarm_panel_closed,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,16)                     ; Draw the open panel
+                    _IMAGE(8,51)
+                    _BUFFER(25,24)
+        //DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
+alarm_panel_closed
+
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
     ELSE(else,open)
 #ifdef LANGUAGE_FR       
@@ -1117,6 +1124,8 @@ no_ladder
 // MARK: Cellar Window
 _gDescriptionCellarWindow
 .(
+    SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_CELLAR_WINDOW)         ; The window is visible
+
     ; Inspecting the window in the cellar
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),bright)
         //DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED,"A basement window")
@@ -1605,7 +1614,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
-    VALUE_MAPPING(e_ITEM_LockedPanel        , _InspectPanel)
+    VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1661,8 +1670,8 @@ _InspectMedicineCabinet
 _InspectPanel
 .(
     ; Is the alarm panel open?
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_LockedPanel,ITEM_FLAG_CLOSED),else)
-        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN,"An openn alarm panel")
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),else)
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN,"An open alarm panel")
         INFO_MESSAGE("Can be used to disable the alarm.")
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL,"A closed alarm panel")
@@ -1735,6 +1744,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _OpenMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
+    VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -1817,17 +1827,50 @@ _OpenGunCabinet
 .)
 
 
+_OpenAlarmPanel
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                    ; Is the alarm panel locked?
+        ERROR_MESSAGE("The door is locked")
+        WAIT(50*2)
+    ELSE(locked,unlocked)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
+            UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
+            UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                 ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                             ; Update the description 
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme ouverte")
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm panel")
+#endif        
+            SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_DARKCELLARROOM)                         ; The alarm button is now visible 
+        ENDIF(open)
+        JUMP(_InspectPanel)
+    ENDIF(unlocked)
+    END_AND_REFRESH
+.)
+
+
 _OpenBasementWindow
-    DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
-    INFO_MESSAGE("It is locked from the inside...")
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement)                               ; Are we on the basement side...
+        INFO_MESSAGE("The frame is stuck...")                                                   
+    ELSE(basement,garden)                                                                      ; ...or on the vegetable garden side of the window?
+        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
+        INFO_MESSAGE("It is locked from the inside...")
+    ENDIF(garden)
     WAIT(50*2)
     INFO_MESSAGE("...maybe shake it a bit?")
     WAIT(50*2)
-    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
-    ERROR_MESSAGE("You triggered the alarm!")
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
-    GAME_OVER(e_SCORE_TRIPPED_ALARM)
-    JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                        ; Is the alarm active...
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
+        ERROR_MESSAGE("You triggered the alarm!")
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
+        GAME_OVER(e_SCORE_TRIPPED_ALARM)
+        JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
+    ELSE(on,off)                                                                               ; ...or was it disabled by the player?
+        INFO_MESSAGE("Nothing happens...")
+    ENDIF(off)
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Close Action ➡📦
@@ -1844,6 +1887,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _CloseFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _CloseMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _CloseGunCabinet)
+    VALUE_MAPPING(e_ITEM_AlarmPanel         , _CloseAlarmPanel)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -1908,6 +1952,24 @@ _CloseGunCabinet
 .)
 
 
+_CloseAlarmPanel
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
+        SET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                                  ; Close it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                  ; And get an achievement for that action
++_gTextItemLockedPanel = *+2       
+#ifdef LANGUAGE_FR                                                                          ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme fermée")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm panel")
+#endif        
+        SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                    ; The alarm button is now invisible 
+    ENDIF(open)
+    JUMP(_InspectPanel)
+.)
+
+
+
 /* MARK: Use Action ✋
 
 :::    :::  ::::::::  ::::::::::          :::      :::::::: ::::::::::: ::::::::::: ::::::::  ::::    ::: 
@@ -1927,6 +1989,8 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
+    VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
+    VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2013,6 +2077,50 @@ snoozed_thug
     ;INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
     END_AND_REFRESH
+
+
+_UseKeys
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
+            UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
+            INFO_MESSAGE("The door is now unlocked")
+#ifdef LANGUAGE_FR                                                                             ; Update the description 
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme déverouillée")
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm panel")
+#endif        
+            WAIT(50*1)
+        ENDIF(locked)
+    ENDIF(cellar)
+
+   END_AND_REFRESH
+.)
+
+
+_UseAlarmSwitch
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
+        SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
+        INFO_MESSAGE("The alarm is now disabled")
+#ifdef LANGUAGE_FR                                                                      ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un bouton en position arrêt")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a switch in OFF position")
+#endif        
+    ELSE(on,off)
+        UNSET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                         ; Enable the alarm 
+        INFO_MESSAGE("The alarm is now disabled")
++_gTextItemAlarmSwitch = *+2
+#ifdef LANGUAGE_FR                                                                      ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un bouton en position marche")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a switch in ON position")
+#endif        
+    ENDIF(off)
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Search Action 🕵️‍♀️

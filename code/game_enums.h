@@ -83,10 +83,10 @@
 #define	e_ITEM__Last_Transportable   11         // ----- END TRANSPORTABLE MARKER
 
 // Then normal items
-#define	e_ITEM_LockedPanel  		 12         // a locked panel on the wall / an open panel on wall
+#define	e_ITEM_AlarmPanel  		     12         // a locked panel on the wall / an open panel on wall
 #define	e_ITEM_Fridge  			     13         // a fridge
 #define	e_ITEM_SedativePills 		 14         // some sedative pills
-#define	e_ITEM_BrokenWindow  		 15         // the window is broken
+#define e_ITEM_BasementWindow        15         // a basement window
 #define	e_ITEM_Twine  				 16         // some twine
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
 #define	e_ITEM_Ladder  				 18         // a ladder
@@ -119,7 +119,7 @@
 #define e_ITEM_Curtain               45         // a thick curtain
 #define e_ITEM_GunCabinet            46         // a gun cabinet
 #define e_ITEM_DartGun               47         // a dart gun
-#define e_ITEM_BasementWindow        48         // a basement window
+#define e_ITEM_AlarmSwitch           48         // a alarm switch
 #define	e_ITEM_COUNT_ 				 49         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               49         // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
@@ -157,7 +157,7 @@
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
 #define ITEM_FLAG_NEEDS_CONTAINER 	2    // This item needs to be transported in a container
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
-#define ITEM_FLAG_free_to_use       8    // ----- free to use -----
+#define ITEM_FLAG_LOCKED            8    // For item which are locked
 #define ITEM_FLAG_DISABLED         16    // Used to indicate that something is not active anymore (ex: Dog, Thug )
 #define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
 #define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed

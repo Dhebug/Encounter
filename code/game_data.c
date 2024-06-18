@@ -9,68 +9,68 @@ keyword gWordsArray[] =
 {
     // Containers
 #ifdef LANGUAGE_FR    
-    { "TABATIERE" ,e_ITEM_TobaccoTin           },  // e_ITEM_TobaccoTin            
-    { "SEAU"    ,e_ITEM_Bucket               },  // e_ITEM_Bucket                
-    { "BOITE"   ,e_ITEM_CardboardBox         },  // e_ITEM_CardboardBox          
-    { "FILET"   ,e_ITEM_FishingNet           },  // e_ITEM_FishingNet            
-    { "SAC"     ,e_ITEM_PlasticBag           },  // e_ITEM_PlasticBag            
+    { "TABATIERE" ,e_ITEM_TobaccoTin         },      
+    { "SEAU"    ,e_ITEM_Bucket               },      
+    { "BOITE"   ,e_ITEM_CardboardBox         },      
+    { "FILET"   ,e_ITEM_FishingNet           },      
+    { "SAC"     ,e_ITEM_PlasticBag           },      
 #else
-    { "TIN",    e_ITEM_TobaccoTin           },  // e_ITEM_TobaccoTin            
-    { "BUCKET", e_ITEM_Bucket               },  // e_ITEM_Bucket                
-    { "BOX",    e_ITEM_CardboardBox         },  // e_ITEM_CardboardBox          
-    { "NET",    e_ITEM_FishingNet           },  // e_ITEM_FishingNet            
-    { "BAG",    e_ITEM_PlasticBag           },  // e_ITEM_PlasticBag            
+    { "TIN",    e_ITEM_TobaccoTin           },      
+    { "BUCKET", e_ITEM_Bucket               },      
+    { "BOX",    e_ITEM_CardboardBox         },      
+    { "NET",    e_ITEM_FishingNet           },      
+    { "BAG",    e_ITEM_PlasticBag           },      
 #endif    
 
     // Then normal items
-    { "GIRL",   e_ITEM_YoungGirl            },  // e_ITEM_YoungGirl         
-    { "WINDOW", e_ITEM_BrokenWindow         },  // e_ITEM_BrokenWindow          
-    { "DUST",   e_ITEM_BlackDust            },  // e_ITEM_BlackDust             
-    { "PANEL",  e_ITEM_LockedPanel          },  // e_ITEM_LockedPanel             
-    { "FRIDGE",  e_ITEM_Fridge              },  // e_ITEM_Fridge
-    { "POWDER", e_ITEM_YellowPowder         },  // e_ITEM_YellowPowder          
-    { "WATER",  e_ITEM_Water                },  // e_ITEM_Water                 
-    { "DOVE",   e_ITEM_LargeDove            },  // e_ITEM_LargeDove             
-    { "TWINE",  e_ITEM_Twine                },  // e_ITEM_Twine                 
-    { "KNIFE",  e_ITEM_SilverKnife          },  // e_ITEM_SilverKnife       
-    { "LADDER", e_ITEM_Ladder               },  // e_ITEM_Ladder                
-    { "CAR",    e_ITEM_AbandonedCar         },  // e_ITEM_AbandonedCar          
-    { "DOG",    e_ITEM_AlsatianDog          },  // e_ITEM_AlsatianDog       
-    { "MEAT",   e_ITEM_Meat                 },  // e_ITEM_Meat                  
-    { "BREAD",  e_ITEM_Bread                },  // e_ITEM_Bread                 
-    { "TAPE",   e_ITEM_BlackTape            },  // e_ITEM_BlackTape            
-    { "BOOK",   e_ITEM_ChemistryBook        },  // e_ITEM_ChemistryBook         
-    { "MATCHES",e_ITEM_BoxOfMatches         },  // e_ITEM_BoxOfMatches          
-    { "CUE",    e_ITEM_SnookerCue           },  // e_ITEM_SnookerCue            
-    { "THUG",   e_ITEM_Thug                 },  // e_ITEM_Thug                  
-    { "SAFE",   e_ITEM_HeavySafe            },  // e_ITEM_HeavySafe             
-    { "NOTE",   e_ITEM_HandWrittenNote      },  // e_ITEM_HandWrittenNote       
-    { "ROPE",   e_ITEM_Rope                 },  // e_ITEM_Rope                  
-    { "TISSUE", e_ITEM_RollOfToiletPaper    },  // e_ITEM_RollOfToiletPaper     
-    { "HOSE",   e_ITEM_HosePipe             },  // e_ITEM_HosePipe              
-    { "PETROL", e_ITEM_Petrol               },  // e_ITEM_Petrol                
-    { "GLASS",  e_ITEM_BrokenGlass          },  // e_ITEM_BrokenGlass       
-    { "BOTTLE", e_ITEM_SmallBottle          },  // e_ITEM_SmallBottle       
-    { "FUSE",   e_ITEM_Fuse                 },  // e_ITEM_Fuse                  
-    { "GUN",    e_ITEM_GunPowder            },  // e_ITEM_GunPowder             
-    { "DART",   e_ITEM_DartGun              },  // e_ITEM_DartGun             
-    { "KEYS",   e_ITEM_Keys                 },  // e_ITEM_Keys                  
-    { "NEWSPAPER",e_ITEM_Newspaper          },  // e_ITEM_Newspaper             
-    { "BOMB",   e_ITEM_Bomb                 },  // e_ITEM_Bomb                  
-    { "PISTOL", e_ITEM_Pistol               },  // e_ITEM_Pistol                
-    { "BULLETS",e_ITEM_Bullets              },  // e_ITEM_Bullets           
+    { "GIRL",   e_ITEM_YoungGirl            },  
+    { "DUST",   e_ITEM_BlackDust            },  
+    { "PANEL",  e_ITEM_AlarmPanel           },  
+    { "SWITCH", e_ITEM_AlarmSwitch         },  
+    { "FRIDGE",  e_ITEM_Fridge              },  
+    { "POWDER", e_ITEM_YellowPowder         },  
+    { "WATER",  e_ITEM_Water                },  
+    { "DOVE",   e_ITEM_LargeDove            },  
+    { "TWINE",  e_ITEM_Twine                },  
+    { "KNIFE",  e_ITEM_SilverKnife          },  
+    { "LADDER", e_ITEM_Ladder               },  
+    { "CAR",    e_ITEM_AbandonedCar         },  
+    { "DOG",    e_ITEM_AlsatianDog          },  
+    { "MEAT",   e_ITEM_Meat                 },  
+    { "BREAD",  e_ITEM_Bread                },  
+    { "TAPE",   e_ITEM_BlackTape            },  
+    { "BOOK",   e_ITEM_ChemistryBook        },  
+    { "MATCHES",e_ITEM_BoxOfMatches         },  
+    { "CUE",    e_ITEM_SnookerCue           },  
+    { "THUG",   e_ITEM_Thug                 },  
+    { "SAFE",   e_ITEM_HeavySafe            },  
+    { "NOTE",   e_ITEM_HandWrittenNote      },  
+    { "ROPE",   e_ITEM_Rope                 },  
+    { "TISSUE", e_ITEM_RollOfToiletPaper    },  
+    { "HOSE",   e_ITEM_HosePipe             },  
+    { "PETROL", e_ITEM_Petrol               },  
+    { "GLASS",  e_ITEM_BrokenGlass          },  
+    { "BOTTLE", e_ITEM_SmallBottle          },  
+    { "FUSE",   e_ITEM_Fuse                 },  
+    { "GUN",    e_ITEM_GunPowder            },  
+    { "DART",   e_ITEM_DartGun              },  
+    { "KEYS",   e_ITEM_Keys                 },  
+    { "NEWSPAPER",e_ITEM_Newspaper          },  
+    { "BOMB",   e_ITEM_Bomb                 },  
+    { "PISTOL", e_ITEM_Pistol               },  
+    { "BULLETS",e_ITEM_Bullets              },  
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
-    { "CURTAIN",e_ITEM_Curtain              },  // e_ITEM_Curtain
-    { "CABINET",e_ITEM_Medicinecabinet      },  // e_ITEM_Medicinecabinet
-    { "CABINET",e_ITEM_GunCabinet           },  // e_ITEM_Medicinecabinet
-    { "PILLS"  ,e_ITEM_SedativePills        },  // e_ITEM_SedativePills
-    { "SEDATIVES",e_ITEM_SedativePills      },  // e_ITEM_SedativePills
+    { "CURTAIN",e_ITEM_Curtain              },  
+    { "CABINET",e_ITEM_Medicinecabinet      },  
+    { "CABINET",e_ITEM_GunCabinet           },  
+    { "PILLS"  ,e_ITEM_SedativePills        },  
+    { "SEDATIVES",e_ITEM_SedativePills      },  
 
-    { "HANDHELD",e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
-    { "GAME"    ,e_ITEM_HandheldGame        },  // e_ITEM_HandheldGame
+    { "HANDHELD",e_ITEM_HandheldGame        },  
+    { "GAME"    ,e_ITEM_HandheldGame        },  
 
-    { "WINDOW"  ,e_ITEM_BasementWindow      },  // e_ITEM_HandheldGame
+    { "WINDOW"  ,e_ITEM_BasementWindow      },  
     
     
     

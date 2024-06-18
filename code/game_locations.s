@@ -40,7 +40,7 @@ _gLocations
     LOCATION(e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_ORCHARD           , e_LOC_FISHPND           , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionTiledPatio)        // e_LOC_TILEDPATIO - and above it is a barred window 
 
     LOCATION(e_LOC_NONE              , e_LOC_VEGSGARDEN        , e_LOC_NONE              , e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionAppleOrchard)      // e_LOC_ORCHARD     
-    LOCATION(e_LOC_CELLAR            , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              ,_gDescriptionDarkerCellar)       // e_LOC_DARKCELLARROOM   
+    LOCATION(e_LOC_CELLAR            , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionDarkerCellar)      // e_LOC_DARKCELLARROOM   
     LOCATION(e_LOC_NONE              , e_LOC_DARKCELLARROOM    , e_LOC_NONE              , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , e_LOC_NONE              , _gDescriptionCellar)            // e_LOC_CELLAR           
 
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_KITCHEN           , e_LOC_CELLAR            , _gDescriptionBasementStairs)    // e_LOC_BASEMENT_STAIRS  
