@@ -56,7 +56,8 @@
 #define	e_LOC_OUTSIDE_PIT      42
 #define e_LOC_STUDY_ROOM       43
 #define	e_LOC_CELLAR_WINDOW    44
-#define e_LOC_COUNT_           45
+#define e_LOC_FRONT_ENTRANCE   45
+#define e_LOC_COUNT_           46
 #define e_LOC_INVENTORY        e_LOC_COUNT_         // Special location for the player's inventory
 #define e_LOC_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
 #define e_LOC_GONE_FOREVER     254                  // To indicate this item is not available anymore

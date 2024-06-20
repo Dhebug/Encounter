@@ -796,6 +796,16 @@ end_dog
 .)
 
 
+// MARK: Front Entrance
+_gDescriptionFrontDoor
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une entrée impressionante")
+#else
+    SET_DESCRIPTION("An impressive entrance door")
+#endif    
+    END
+
+
 // MARK: Staircase
 _gDescriptionStaircase
 .(

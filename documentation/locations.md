@@ -87,6 +87,8 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/loc_gravel_drive.png)||
 ||**You are on a huge area of lawn**|e_LOC_LAWN|
 |![Game location image](../data/loc_lawn.png)||
+||**A massive front door**|e_LOC_FRONT_DOOR|
+|![Game location image](../data/loc_front_entrance.png)||
 |**You are in a relaxing zen garden**|e_LOC_ZENGARDEN|
 |![Game location image](../data/loc_zen_garden.png)|The garden contains a **hose pipe**|
 |**You are on a lawn tennis court**|e_LOC_TENNISCOURT|
