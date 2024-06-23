@@ -28,7 +28,7 @@ _gLocations
     LOCATION(e_LOC_ZENGARDEN         , e_LOC_DARKTUNNEL        , e_LOC_GRAVELDRIVE       , e_LOC_WELL              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionWoodedAvenue)      // e_LOC_WOODEDAVENUE   
 
     LOCATION(e_LOC_LAWN              , e_LOC_MAINSTREET        , e_LOC_PARKING_PLACE     , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGravelDrive)       // e_LOC_GRAVELDRIVE   
-    LOCATION(e_LOC_GREENHOUSE        , e_LOC_EASTERN_ROAD      , e_LOC_NONE              , e_LOC_GRAVELDRIVE       , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionParkingPlace)      // e_LOC_PARKING_PLACE      
+    LOCATION(e_LOC_GREENHOUSE        , e_LOC_EASTERN_ROAD      , e_LOC_ABANDONED_CAR     , e_LOC_GRAVELDRIVE       , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionParkingPlace)      // e_LOC_PARKING_PLACE      
     LOCATION(e_LOC_TENNISCOURT       , e_LOC_WOODEDAVENUE      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionZenGarden)         // e_LOC_ZENGARDEN       
 
     LOCATION(e_LOC_FRONT_ENTRANCE    , e_LOC_GRAVELDRIVE       , e_LOC_GREENHOUSE        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionFrontLawn)         // e_LOC_LAWN  
@@ -78,4 +78,6 @@ _gLocations
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_DARKCELLARROOM    , _gDescriptionCellarWindow)      // e_LOC_CELLAR_WINDOW 
 
     LOCATION(e_LOC_NONE              , e_LOC_LAWN              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionFrontDoor)         // e_LOC_FRONT_ENTRANCE 
+
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_PARKING_PLACE     , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionAbandonedCar)      // e_LOC_ABANDONED_CAR 
 

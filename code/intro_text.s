@@ -106,6 +106,48 @@ _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 ;
 #ifdef LANGUAGE_FR
 _Text_Achievements                .byt 16+3,1,"          Badges collectés",0
+_Text_AchievementStillLocked      .byt 6,"     <?>",7,0
+_Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
+_Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
+_Text_AchievementLaunchedTheGame  .byt "Launched the game",0
+_Text_AchievementWatchedTheIntro  .byt "Watched the intro",0
+_Text_AchievementReadTheNewspaper .byt "Read the newspaper",0
+_Text_AchievementReadTheBook      .byt "Read the book",0
+_Text_AchievementReadTheNote      .byt "Read the note",0
+_Text_AchievementReadTheRecipes   .byt "Read the recipes",0
+_Text_AchievementOpenedTheFridge  .byt "Opened the fridge",0
+_Text_AchievementOpenedTheCabinet .byt "Opened the cabinet",0
+_Text_AchievementDruggedTheMeat   .byt "Drugged the meat",0
+_Text_AchievementKilledTheDog     .byt "Killed the dog",0
+_Text_AchievementDruggedTheDog    .byt "Drugged the dog",0
+_Text_AchievementChasedTheDog     .byt "Chased the dog",0
+_Text_AchievementKilledTheThug    .byt "Killed the thug",0
+_Text_AchievementDruggedTheThug   .byt "Drugged the thug",0
+_Text_AchievementCapturedTheDove  .byt "Captured the dove",0
+_Text_AchievementUsedTheRope      .byt "Used the rope",0
+_Text_AchievementUsedTheLadder    .byt "Used the ladder",0
+_Text_AchievementExaminedTheMap   .byt "Examined the map",0
+_Text_AchievementExaminedTheGame  .byt "Examined the game",0
+_Text_AchievementOpenedTheSafe    .byt "Opened the safe",0
+_Text_AchievementOpenedThePanel   .byt "Opened the panel",0
+_Text_AchievementBuiltAFuse       .byt "Built a fuse",0
+_Text_AchievementBuiltABomb       .byt "Built a bomb",0
+_Text_AchievementMadeBlackPowder  .byt "Made blackpowder",0
+_Text_AchievementFrikedTheThug    .byt "Frisked the thug",0
+_Text_AchievementUsedTheAcid      .byt "Used the acid",0
+_Text_AchievementMadeThermite     .byt "Made thermite",0
+_Text_AchievementPiercedTheDoor   .byt "Pierced the door",0
+_Text_AchievementOpenedTheCurtain .byt "Opened the curtain",0
+_Text_AchievementGaveTheKnife     .byt "Gave the knife",0
+_Text_AchievementGaveTheRope      .byt "Gave the rope",0
+_Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
+_Text_AchievementGotAHighscore    .byt "Got a highscore",0
+_Text_AchievementGotTheBestScore  .byt "Got the best score",0
+_Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
+_Text_AchievementFree2            .byt "Free 2",0
+_Text_AchievementFree3            .byt "Free 3",0
+_Text_AchievementFree4            .byt "Free 4",0
+_Text_AchievementFree5            .byt "Free 5",0
 #else // LANGUAGE_EN
 _Text_Achievements                .byt 16+3,1,"        Achievements unlocked",0
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0

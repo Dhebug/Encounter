@@ -140,6 +140,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_study_room
 %CONVERT% loc_basement_window_darkened
 %CONVERT% loc_front_entrance
+%CONVERT% loc_abandoned_car
 
 %CONVERT% font_6x8_mystery
 

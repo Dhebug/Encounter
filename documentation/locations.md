@@ -70,7 +70,9 @@ Here are information about the various locations you can reach in the game, grou
 |**You are on the main street**|e_LOC_MAINSTREET|
 |![Game location image](../data/loc_main_street.png)||
 |**You are in an open area of tarmac**|e_LOC_PARKING_PLACE|
-|![Game location image](../data/loc_parking.png)|The **car** is a source of **rusted** metal and **petrol**|
+|![Game location image](../data/loc_parking.png)||
+|**An abandone car**|e_LOC_ABANDONED_CAR|
+|![Game location image](../data/loc_abandoned_car.png)|The **car** is a source of **rusted** metal and **petrol**|
 |**You are on the eastern road**|e_LOC_EASTERN_ROAD|
 |![Game location image](../data/loc_east_road.png)||
 |**A long road stretches ahead of you**|e_LOC_ROAD|

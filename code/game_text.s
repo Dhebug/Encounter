@@ -805,6 +805,14 @@ _gDescriptionFrontDoor
 #endif    
     END
 
+// MARK: Abandoned Car
+_gDescriptionAbandonedCar
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une voiture abandonnée")
+#else
+    SET_DESCRIPTION("An abandoned car")
+#endif    
+    END
 
 // MARK: Staircase
 _gDescriptionStaircase

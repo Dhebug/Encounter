@@ -130,6 +130,7 @@ S
 E
 D
 D [Note there is a heavy safe here]
+S
 USE KEYS [A red button appears]
 PRESS BUTTON
 ```
