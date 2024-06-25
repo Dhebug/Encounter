@@ -86,6 +86,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_element_outro
 %CONVERT% masked_element_outro_photos
 %CONVERT% masked_element_outro_photos_fr
+%CONVERT% masked_car_parts
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations

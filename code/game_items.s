@@ -74,4 +74,6 @@ _gItems
     ITEM_NORMAL( _gTextItemDartGun               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_DartGun
     ITEM_NORMAL( _gTextItemAlarmSwitch           ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DEFAULT)     // e_ITEM_AlarmSwitch
     
+    ITEM_NORMAL( _gTextItemCarTrunk              ,e_LOC_ABANDONED_CAR   ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CarTrunk
+    ITEM_NORMAL( _gTextItemCarDoor               ,e_LOC_ABANDONED_CAR   ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CarDoor
     

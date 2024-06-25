@@ -499,6 +499,28 @@ _gDescriptionParkingPlace
     END
 
 
+// MARK: Abandoned Car
+_gDescriptionAbandonedCar
+#ifdef LANGUAGE_FR       
+    SET_DESCRIPTION("Une voiture abandonnée")
+#else
+    SET_DESCRIPTION("An abandoned car")
+#endif    
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),trunk)   ; Is the trunk closed?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,21,94)                       ; Draw the open trunk
+                _IMAGE(0,0)
+                _BUFFER(2,0)
+    ENDIF(trunk)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),door)     ; Is the door open?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,9,71)                        ; Draw the open door
+                _IMAGE(31,0)
+                _BUFFER(31,9)
+    ENDIF(door)
+
+    END
+
+
 // MARK: Old Well
 _gDescriptionOldWell
 #ifdef LANGUAGE_FR       
@@ -805,14 +827,6 @@ _gDescriptionFrontDoor
 #endif    
     END
 
-// MARK: Abandoned Car
-_gDescriptionAbandonedCar
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une voiture abandonnée")
-#else
-    SET_DESCRIPTION("An abandoned car")
-#endif    
-    END
 
 // MARK: Staircase
 _gDescriptionStaircase
@@ -1763,6 +1777,8 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
+    VALUE_MAPPING(e_ITEM_CarTrunk           , _OpenCarTrunk)
+    VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -1891,6 +1907,34 @@ _OpenBasementWindow
 .)
 
 
+_OpenCarTrunk
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),open)                             ; Is the trunk closed?
+        UNSET_ITEM_FLAGS(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED)                                      ; Open it!
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"un coffre ouvert")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"an open car trunk")
+#endif        
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
+_OpenCarDoor
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                              ; Is the door closed?
+        UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une porte ouverte")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car door")
+#endif        
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
 /* MARK: Close Action ➡📦
 
  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -1906,6 +1950,8 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _CloseMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _CloseGunCabinet)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _CloseAlarmPanel)
+    VALUE_MAPPING(e_ITEM_CarTrunk           , _CloseCarTrunk)
+    VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -1984,6 +2030,36 @@ _CloseAlarmPanel
         SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                    ; The alarm button is now invisible 
     ENDIF(open)
     JUMP(_InspectPanel)
+.)
+
+
+_CloseCarTrunk
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),open)                            ; Is the trunk open?
+        SET_ITEM_FLAGS(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED)                                        ; Close it!
++_gTextItemCarTrunk = *+2        
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"un coffre de voiture")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"a car trunk")
+#endif        
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
+_CloseCarDoor
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                             ; Is the door open?
+        SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                         ; Close it!
++_gTextItemCarDoor = *+2        
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une porte ouverte")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car door")
+#endif        
+    ENDIF(open)
+    END_AND_REFRESH
 .)
 
 
