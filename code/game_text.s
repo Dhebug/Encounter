@@ -125,7 +125,7 @@ _gTextItemOpenPanel               .byt "un paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
 _gTextItemTwine                   .byt "un peu de ficelle",0
 _gTextItemSilverKnife             .byt "un coueau en argent",0
-_gTextItemAbandonedCar            .byt "une voiture abandonnée",0
+_gTextItemMixTape                 .byt "une compil sur K7",0
 _gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
 _gTextItemMeat                    .byt "un morceau de viande",0
 _gTextItemBread                   .byt "du pain complet",0
@@ -176,7 +176,7 @@ _gTextItemOpenPanel               .byt "an open panel on wall",0
 _gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
 _gTextItemTwine                   .byt "some twine",0                         
 _gTextItemSilverKnife             .byt "a silver knife",0                     
-_gTextItemAbandonedCar            .byt "an abandoned car",0                   
+_gTextItemMixTape                 .byt "a mixtape",0
 _gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
 _gTextItemMeat                    .byt "a joint of meat",0                    
 _gTextItemBread                   .byt "some brown bread",0                   
@@ -506,11 +506,11 @@ _gDescriptionAbandonedCar
 #else
     SET_DESCRIPTION("An abandoned car")
 #endif    
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),trunk)   ; Is the trunk closed?
-        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,21,94)                       ; Draw the open trunk
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot)     ; Is the boot closed?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,21,94)                       ; Draw the open boot
                 _IMAGE(0,0)
                 _BUFFER(2,0)
-    ENDIF(trunk)
+    ENDIF(boot)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),door)     ; Is the door open?
         BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,9,71)                        ; Draw the open door
@@ -1647,6 +1647,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
+    VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1750,6 +1751,7 @@ no_ladder
     END_AND_REFRESH
 .)
 
+
 _InspectPlasticBag
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Juste un sac blanc normal")
@@ -1758,6 +1760,16 @@ _InspectPlasticBag
 #endif    
     END
 
+
+_InspectMixTape
+    DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE,"Best Of 1981-1982")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une compilation faite maison !")
+#else
+    INFO_MESSAGE("Home made mixtape!")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
 
 
 
@@ -1777,7 +1789,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
-    VALUE_MAPPING(e_ITEM_CarTrunk           , _OpenCarTrunk)
+    VALUE_MAPPING(e_ITEM_CarBoot            , _OpenCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
@@ -1907,14 +1919,14 @@ _OpenBasementWindow
 .)
 
 
-_OpenCarTrunk
+_OpenCarBoot
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),open)                             ; Is the trunk closed?
-        UNSET_ITEM_FLAGS(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED)                                      ; Open it!
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                             ; Is the boot closed?
+        UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                      ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"un coffre ouvert")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un coffre ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"an open car trunk")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car boot")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -1930,6 +1942,9 @@ _OpenCarDoor
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car door")
 #endif        
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
+            SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
+        ENDIF(mixtape)
     ENDIF(open)
     END_AND_REFRESH
 .)
@@ -1950,7 +1965,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _CloseMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _CloseGunCabinet)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _CloseAlarmPanel)
-    VALUE_MAPPING(e_ITEM_CarTrunk           , _CloseCarTrunk)
+    VALUE_MAPPING(e_ITEM_CarBoot            , _CloseCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
@@ -2033,15 +2048,15 @@ _CloseAlarmPanel
 .)
 
 
-_CloseCarTrunk
+_CloseCarBoot
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED),open)                            ; Is the trunk open?
-        SET_ITEM_FLAGS(e_ITEM_CarTrunk,ITEM_FLAG_CLOSED)                                        ; Close it!
-+_gTextItemCarTrunk = *+2        
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                            ; Is the boot open?
+        SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                        ; Close it!
++_gTextItemCarBoot = *+2        
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"un coffre de voiture")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un coffre de voiture")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTrunk,"a car trunk")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car boot")
 #endif        
     ENDIF(open)
     END_AND_REFRESH

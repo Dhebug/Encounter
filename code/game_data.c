@@ -34,11 +34,12 @@ keyword gWordsArray[] =
     { "TWINE",  e_ITEM_Twine                },  
     { "KNIFE",  e_ITEM_SilverKnife          },  
     { "LADDER", e_ITEM_Ladder               },  
-    { "CAR",    e_ITEM_AbandonedCar         },  
     { "DOG",    e_ITEM_AlsatianDog          },  
     { "MEAT",   e_ITEM_Meat                 },  
     { "BREAD",  e_ITEM_Bread                },  
     { "TAPE",   e_ITEM_BlackTape            },  
+    { "TAPE",   e_ITEM_MixTape              },  
+    { "MIXTAPE",e_ITEM_MixTape              },  // Synonym of Tape
     { "BOOK",   e_ITEM_ChemistryBook        },  
     { "MATCHES",e_ITEM_BoxOfMatches         },  
     { "CUE",    e_ITEM_SnookerCue           },  
@@ -72,7 +73,7 @@ keyword gWordsArray[] =
 
     { "WINDOW"  ,e_ITEM_BasementWindow      },  
     
-    { "TRUNK"   ,e_ITEM_CarTrunk      },  
+    { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
     
     

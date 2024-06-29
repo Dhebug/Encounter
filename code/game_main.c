@@ -239,17 +239,22 @@ void TakeItem()
     item* itemPtr=&gItems[itemId];
 	if (itemId>=e_ITEM_COUNT_)
 	{
-		PrintErrorMessage(gTextErrorCantTakeNoSee);   // "You can only take something you see"
+		PrintErrorMessage(gTextErrorCantTakeNoSee);     // "You can only take something you see"
         return;
 	}
-
-    // The item is in the scene
-    if (itemPtr->location == e_LOC_INVENTORY)
+    
+    if (itemPtr->location == e_LOC_INVENTORY)           // Do we already have the item?
     {
-        PrintErrorMessage(gTextErrorAlreadyHaveItem);    // "You already have this item"
+        PrintErrorMessage(gTextErrorAlreadyHaveItem);   // "You already have this item"
         return;
     }
-    
+
+    if (itemPtr->location != gCurrentLocation)          // Is the item in the scene?
+    {
+        PrintErrorMessage(gTextErrorItemNotPresent);    // "This item does not seem to be present"
+        return;
+    }
+
     if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
     {
         PrintErrorMessage(gTextErrorCannotDo);   // "I can't do it");

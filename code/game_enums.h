@@ -92,7 +92,7 @@
 #define	e_ITEM_Twine  				 16         // some twine
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
 #define	e_ITEM_Ladder  				 18         // a ladder
-#define	e_ITEM_AbandonedCar  		 19         // an abandoned car
+#define	e_ITEM_MixTape      		 19         // a mix tape
 #define	e_ITEM_AlsatianDog  		 20         // Alsatian dog
 #define	e_ITEM_Meat  				 21         // a joint of meat
 #define	e_ITEM_Bread  				 22         // some brown bread
@@ -122,7 +122,7 @@
 #define e_ITEM_GunCabinet            46         // a gun cabinet
 #define e_ITEM_DartGun               47         // a dart gun
 #define e_ITEM_AlarmSwitch           48         // a alarm switch
-#define e_ITEM_CarTrunk              49         // the car trunk
+#define e_ITEM_CarBoot               49         // the car boot
 #define e_ITEM_CarDoor               50         // the car door
 #define	e_ITEM_COUNT_ 				 51         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               51         // For the scripting, so the current objects can be accessed from various scripts

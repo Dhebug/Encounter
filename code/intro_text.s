@@ -258,7 +258,7 @@ _AchievementMessages
 ;
 _Text_TypeWriterMessage 
 #ifdef LANGUAGE_FR
-	.byt "Mercredi 1er septembre 1982",13,13,13
+	.byt "Mercredi 29 septembre 1982",13,13,13
 	.byt "Mon client m'a demand{ de sauver",13
     .byt "sa fille kidnapp{e par des brigants",13
 	.byt "cach{s dans une maison bourgeoise",13
@@ -271,7 +271,7 @@ _Text_TypeWriterMessage
 	.byt "les alerter...",13,13
     .byt 0
 #else // LANGUAGE_EN
-	.byt "Wednesday, September 1st, 1982",13,13,13
+	.byt "Wednesday, September 29, 1982",13,13,13
 	.byt "My client had asked me to save their",13
     .byt "daughter who had been kidnapped by",13
 	.byt "some villains who hide in a posh house",13

@@ -273,6 +273,10 @@ AddDefine LOADER_PICTURE_BASEMENT_WINDOW_DARK {FileIndex}
 AddFile ..\build\files\view_alarm_triggered.hir
 AddDefine LOADER_PICTURE_ALARM_TRIGGERED {FileIndex}
 
+AddFile ..\build\files\view_mixtape.hir
+AddDefine LOADER_PICTURE_MIXTAPE {FileIndex}
+
+
 ; All the sprites
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\masked_the_end_fr.msk
