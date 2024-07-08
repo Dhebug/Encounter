@@ -50,6 +50,26 @@ char gStoryShownAlready = 0;
 char gGameStarting = 0;
 
 
+void FadeToBlack()
+{
+    char y;
+    char* ptrTop   =(char*)0xa000;
+    char* ptrBottom=ptrTop+200*40;
+    char blocHeight=3;
+
+    for (y=0;y<=100/blocHeight;y++)
+    {
+        int blocSize=40*blocHeight;
+        memset(ptrTop,64,blocSize);
+        ptrTop+=blocSize;
+
+        ptrBottom-=blocSize;
+        memset(ptrBottom,64,blocSize);
+        WaitIRQ();
+    }
+}
+
+
 // Some quite ugly function which waits a certain number of frames
 // while detecting key presses and returns 1 if either space or enter are pressed
 int Wait(int frameCount)
@@ -283,38 +303,38 @@ void DisplayPaperSheet()
 	{
 	int y;
 	int height                 = (gYPos+2)*8;
-	char* sourcePtr            = (char*)ImageBuffer+height*40;
-	char* destPtr              = (char*)0xa000       + (136*40) - (gYPos*8+8)*40+height*40;
-	char* sourcePtrBackground  = (char*)ImageBuffer2 + (136*40) - (gYPos*8+8)*40+height*40;
+    int heightBy40             = height*40;
+	char* sourcePtr            = (char*)ImageBuffer+heightBy40;
+    int globalOffset           = (136*40) - (gYPos*8+8)*40+heightBy40;
+	char* destPtr              = (char*)0xa000       + globalOffset;
+	char* sourcePtrBackground  = (char*)ImageBuffer2 + globalOffset;
 
-	int borderWidth  = 19-gXPos;
-	int width        = 0;
 	int borderOffset = 0;
 	int sourceOffset = 0;
 	int destOffset   = 0;
 
-	if (borderWidth>0)
+    if (gXPos<19)
 	{
 		// Border on the left side of the paper
-		borderOffset = 0;
-		destOffset   = borderWidth;
+		borderOffset          = 0;
+        TypeWriterBorderWidth = 19-gXPos;
+		destOffset            = TypeWriterBorderWidth;
 	}
 	else
 	{
 		// Border on the right side	of the paper
-		borderWidth  = gXPos-18;
-		borderOffset = 40-borderWidth;
-		sourceOffset = borderWidth-1;
+		TypeWriterBorderWidth = gXPos-18;
+		borderOffset          = 40-TypeWriterBorderWidth;
+		sourceOffset          = TypeWriterBorderWidth-1;
 	}
-	width        = 40-borderWidth;
+	TypeWriterPaperWidth = 40-TypeWriterBorderWidth;
 #if 0	
 	sprintf((char*)0xbb80+40*25,"gXPos:%d gYPos:%d",gXPos,gYPos);
 	sprintf((char*)0xbb80+40*26,"W:%d BW:%d",width,borderWidth);
 	sprintf((char*)0xbb80+40*27,"DO:%d SO:%d BO:%d",destOffset, sourceOffset,borderOffset);
 #endif
 
-    TypeWriterPaperWidth  = width;
-    TypeWriterBorderWidth = borderWidth;
+    //TypeWriterBorderWidth = borderWidth;
 
     TypeWriterBorderRead  = sourcePtrBackground+borderOffset-1;
     TypeWriterBorderWrite = destPtr+borderOffset-1;
@@ -675,7 +695,7 @@ void main()
     memcpy(gAchievements,gSaveGameFile.achievements,ACHIEVEMENT_BYTE_COUNT);
 #endif
 
-#ifdef INTRO_SHOW_STORY
+#if defined(INTRO_SHOW_STORY) || defined(INTRO_SHOW_STORY_SCROLL)
     // Load the two pictures of the "private investigator" intro    
     LoadFileUncompressedAt(INTRO_PICTURE_PRIVATE_INVESTIGATOR,CompressedOfficeImage,INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED);
     LoadFileUncompressedAt(INTRO_PICTURE_TYPEWRITER,CompressedTypeWriterImage,INTRO_PICTURE_TYPEWRITER_COMPRESSED);
@@ -734,12 +754,17 @@ void main()
     // Now we display the typewriter
     //
     gGameStarting = 1;
-#ifdef INTRO_SHOW_STORY
+#if defined(INTRO_SHOW_STORY) || defined(INTRO_SHOW_STORY_SCROLL)
     if (DisplayStory())
     {
         //break;
     }
 #endif
+
+    //
+    // Fade to black
+    //
+    FadeToBlack();
 
 	System_RestoreIRQ_SimpleVbl();
     EndMusic();

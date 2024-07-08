@@ -53,14 +53,15 @@ _Text_GameInstructions
 	.byt "young girl kidnapped by thugs.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Give orders using VERBS and NOUNS",TEXT_CRLF
-	.byt "eg:EMP(ty) BOT(tle) or GET KEY(s)",TEXT_CRLF
+	.byt "eg:DROP BOTTLE or GET KEYS",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"   MOVEMENT            VERBS",TEXT_CRLF,TEXT_CRLF
-	.byt "N:NORTH S:SOUTH   GET DROP THROW KILL",TEXT_CRLF
-	.byt "W:WEST E:EAST     HIT MAKE CLIMB QUIT",TEXT_CRLF
-	.byt "U:UP D:DOWN       OPEN LOAD FRISK USE",TEXT_CRLF
-	.byt "L:Look                READ PRESS BLOW",TEXT_CRLF
-    .byt 1,"              NOTES",0,"    SHOOT SIPHON",TEXT_CRLF
+	.byt "N:NORTH U:UP       TAKE/GET DROP/PUT",TEXT_CRLF
+	.byt "S:SOUTH D:DOWN     THROW COMBINE USE",TEXT_CRLF
+	.byt "E:EAST               EXAMINE/INSPECT",TEXT_CRLF
+	.byt "W:WEST             READ SEARCH/FRISK",TEXT_CRLF
+    .byt "                     OPEN CLOSE QUIT",TEXT_CRLF
+    .byt 1,"              NOTES",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Everything you need is here but you",TEXT_CRLF
 	.byt "may have to manufacture some items.",TEXT_CRLF
@@ -271,16 +272,13 @@ _Text_TypeWriterMessage
 	.byt "les alerter...",13,13
     .byt 0
 #else // LANGUAGE_EN
-	.byt "Wednesday, September 29, 1982",13,13,13
-	.byt "My client had asked me to save their",13
-    .byt "daughter who had been kidnapped by",13
-	.byt "some villains who hide in a posh house",13
-    .byt "in the middle of nowhere.",13,13
-	.byt "I was given carte blanche on how to",13
-    .byt "solve the issue...",13
-	.byt "...using lethal force if necessary.",13,13,13
-	.byt "I parked my car on the market place",13
-    .byt "and approached discretely by foot to",13
-	.byt "not alert them from my presence...",13,13
+	.byt "September 29, 1982",13,13
+	.byt "My mission: Rescue a girl from her",13
+    .byt "captors within a secluded, upscale",13
+    .byt "residence.",13,13
+    .byt "With a license to operate freely,",13
+    .byt "potentially with force, I stationed",13
+    .byt "my car at the local market and",13
+    .byt "advanced covertly by foot.",13,13
     .byt 0
 #endif
