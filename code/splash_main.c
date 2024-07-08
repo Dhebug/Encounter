@@ -196,14 +196,14 @@ int DisplayLogosWithPreshift()
     if (SetupColors(16+0,7,16+4,6))       return 1;
     memcpy(LabelPicture0,ImageBuffer+97*40,51*40);
     DrawPreshiftLogos();
-    if (ShowLogoAnimation(51,0,100))      return 1;
+    if (ShowLogoAnimation(51,0,90))      return 1;
 
 
     // Scroll the Defence Force logo up the river: Logo is 74 lines tall, from line 5 to 78
     if (SetupColors(16+7,0,16+4,0))       return 1;
     memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
     DrawPreshiftLogos();
-    if (ShowLogoAnimation(74,74+5,90))   return 1;
+    if (ShowLogoAnimation(74,74+5,60))   return 1;
 
     return 0;
 }
