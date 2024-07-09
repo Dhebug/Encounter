@@ -50,23 +50,42 @@ char gStoryShownAlready = 0;
 char gGameStarting = 0;
 
 
-void FadeToBlack()
+int FadeToBlack()
 {
-    char y;
-    char* ptrTop   =(char*)0xa000;
-    char* ptrBottom=ptrTop+200*40;
-    char blocHeight=3;
+    char y,height;
+    char* ptrTop;
+    char* ptrBottom;
+    char blocHeight;
+    if (gIsHires)
+    {
+        height    =200/2;
+        blocHeight=3;
+        ptrTop    =(char*)0xa000;
+        ptrBottom =ptrTop+200*40;
+        memset((char*)0xbb80+25*40,0,3*40);   // Erase the last 3 lines of the TEXT part of the HIRES screen
+    }
+    else
+    {
+        height    =28/2;
+        blocHeight=1;
+        ptrTop    =(char*)0xbb80;
+        ptrBottom =ptrTop+28*40;
+    }
 
-    for (y=0;y<=100/blocHeight;y++)
+    for (y=0;y<=height/blocHeight;y++)
     {
         int blocSize=40*blocHeight;
-        memset(ptrTop,64,blocSize);
+        memset(ptrTop,0,blocSize);
         ptrTop+=blocSize;
 
         ptrBottom-=blocSize;
-        memset(ptrBottom,64,blocSize);
-        WaitIRQ();
+        memset(ptrBottom,0,blocSize);
+        if (Wait(1))
+        {
+            return 1;
+        }
     }
+    return 0;
 }
 
 
@@ -112,6 +131,15 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 }
 
 
+int WaitAndFade(int frameCount)
+{
+	if (Wait(frameCount))
+    {
+        return 1;
+    }
+    return FadeToBlack();
+}
+
 // Before calling this function, CompressedTitleImage must have been properly populated with the compressed title picture
 int DisplayIntroPage()
 {
@@ -127,7 +155,7 @@ int DisplayIntroPage()
 
 	memcpy((char*)0xa000,ImageBuffer,8000);
 
-	return Wait(50*5);
+    return WaitAndFade(50*5);
 }
 
 
@@ -137,7 +165,7 @@ int DisplayUserManual()
 
 	SetLineAddress((char*)0xbb80+40*1+2);
     PrintMultiLine(Text_GameInstructions);
-	return Wait(50*8);
+    return WaitAndFade(50*12);
  }
 
 
@@ -285,7 +313,7 @@ int DisplayStory()
 	while(1) {}
 #endif
 
-	return result;
+	return FadeToBlack() | result;
 }
 
 
@@ -480,8 +508,7 @@ int DisplayHighScoresTable()
 			return 1;
 		}
 	}
-
-	return Wait(50*2);
+    return WaitAndFade(50*7);
 }
 
 
@@ -533,7 +560,7 @@ int DisplayAchievements()
         }
     }
 
-	return Wait(50*2);
+    return WaitAndFade(50*5);
 }
 
 
