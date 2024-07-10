@@ -21,16 +21,33 @@ extern unsigned char CosTable[];         // Originally contains non signed value
 extern DrawPreshiftLogos();
 
 
-int angle;
-int angle2;
-int angle3;
-int angle4;
-int offset;
-int sourceOffset;
-int verticalSourceOffset;
-int maxVerticalSourceOffset;
+extern unsigned char  angle;
+extern unsigned char  angle2;
+extern unsigned char  angle3;
+extern unsigned char  angle4;
+extern unsigned char  y;
+extern unsigned char  position;
+extern unsigned char stopMoving;
 
-int y,position,stopMoving;
+extern unsigned char height;
+extern unsigned char startPosition;
+extern unsigned int frameCount;
+
+extern unsigned char* ptrSrc;
+extern unsigned char* ptrDst;
+extern unsigned char* ptrDstBottom;
+
+extern int offset;
+extern int sourceOffset;
+extern int verticalSourceOffset;
+extern int maxVerticalSourceOffset;
+
+extern unsigned char* Copy38Source;
+extern unsigned char* Copy38Target;
+extern unsigned char* Erase38Target;
+
+extern void Copy38Bytes();
+extern void Erase38Bytes();
 
 
 
@@ -68,7 +85,7 @@ void PatchCosTable()
 
 
 
-int ShowLogoAnimation(unsigned char height,unsigned char startPosition, unsigned int frameCount)
+int ShowLogoAnimation()
 {
     stopMoving = 0;
     position = startPosition;
@@ -77,9 +94,9 @@ int ShowLogoAnimation(unsigned char height,unsigned char startPosition, unsigned
 
     while (frameCount--)
     {
-        unsigned char* ptrSrc=(unsigned char*)LabelPicture0;
-        unsigned char* ptrDst=(unsigned char*)0xa000+(125-position)*40;
-        unsigned char* ptrDstBottom=(unsigned char*)0xa000+(125+position/2)*40;
+        ptrSrc=(unsigned char*)LabelPicture0+2;
+        ptrDst=(unsigned char*)0xa000+(125-position)*40+2;
+        ptrDstBottom=(unsigned char*)0xa000+(125+position/2)*40;
 
         angle2=angle;
         angle3=angle;
@@ -94,11 +111,14 @@ int ShowLogoAnimation(unsigned char height,unsigned char startPosition, unsigned
             {
                 if (y<height)
                 {
-                    memcpy(ptrDst+2,ptrSrc+2,40-2);
+                    Copy38Source = ptrSrc;
+                    Copy38Target = ptrDst;
+                    Copy38Bytes();
                 }
                 else
                 {
-                    memset(ptrDst+2,64,40-2);
+                    Erase38Target = ptrDst;
+                    Erase38Bytes();
                 }
             }
             if (y&1)
@@ -108,11 +128,14 @@ int ShowLogoAnimation(unsigned char height,unsigned char startPosition, unsigned
 
                 if ((y<height) && ((sourceOffset+verticalSourceOffset)<maxVerticalSourceOffset) ) 
                 {
-                    memcpy(ptrDstBottom+2,DistorterTable[offset]+sourceOffset+2+verticalSourceOffset,40-2);
+                    Copy38Source = DistorterTable[offset]+sourceOffset+2+verticalSourceOffset;
+                    Copy38Target = ptrDstBottom+2;
+                    Copy38Bytes();
                 }
                 else
                 {
-                    memset(ptrDstBottom+2,64,40-2);
+                    Erase38Target = ptrDstBottom+2;
+                    Erase38Bytes();
                 }
                 sourceOffset+=80;
                 ptrDstBottom-=40;
@@ -125,10 +148,12 @@ int ShowLogoAnimation(unsigned char height,unsigned char startPosition, unsigned
             ptrDst+=40;
             ptrSrc+=40;
         }
+        /*
         if (Wait(1))
         {
             return 1;
         }
+        */
 
         if (position<height+5)
         {
@@ -192,18 +217,27 @@ int DisplayLogosWithPreshift()
 
     PatchCosTable();
 
+    //while (1)  // TEST
+    {
     // Scroll the Servern Software up the river: Logo is 51 lines tall, from line 97 to 147
     if (SetupColors(16+0,7,16+4,6))       return 1;
     memcpy(LabelPicture0,ImageBuffer+97*40,51*40);
     DrawPreshiftLogos();
-    if (ShowLogoAnimation(51,0,90))      return 1;
+    height        = 51;
+    startPosition = 0;
+    frameCount    = 90;
+    if (ShowLogoAnimation())      return 1;
 
 
     // Scroll the Defence Force logo up the river: Logo is 74 lines tall, from line 5 to 78
     if (SetupColors(16+7,0,16+4,0))       return 1;
     memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
     DrawPreshiftLogos();
-    if (ShowLogoAnimation(74,74+5,60))   return 1;
+    height        = 74;
+    startPosition = 74+5;
+    frameCount    = 60;
+    if (ShowLogoAnimation())   return 1;
+    }
 
     return 0;
 }
