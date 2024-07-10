@@ -518,6 +518,11 @@ _gDescriptionAbandonedCar
                 _BUFFER(31,9)
     ENDIF(door)
 
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),tank)     ; Is the tank open?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,2,24)                        ; Draw the open tank
+                _IMAGE(0,95)
+                _BUFFER(21,73)
+    ENDIF(tank)
     END
 
 
@@ -1791,6 +1796,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
     VALUE_MAPPING(e_ITEM_CarBoot            , _OpenCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
+    VALUE_MAPPING(e_ITEM_CarTank            , _OpenCarPetrolTank)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -1950,6 +1956,24 @@ _OpenCarDoor
 .)
 
 
+_OpenCarPetrolTank
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                              ; Is the petrol tank closed?
+        UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
+#ifdef LANGUAGE_FR                                                                              ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence ouvert")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol tank")
+#endif        
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
+            SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
+        ENDIF(petrol)
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
+
 /* MARK: Close Action ➡📦
 
  ██████╗██╗      ██████╗ ███████╗███████╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -1967,6 +1991,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _CloseAlarmPanel)
     VALUE_MAPPING(e_ITEM_CarBoot            , _CloseCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
+    VALUE_MAPPING(e_ITEM_CarTank            , _CloseCarPetrolTank)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -2077,6 +2102,23 @@ _CloseCarDoor
     END_AND_REFRESH
 .)
 
+
+_CloseCarPetrolTank
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                            ; Is the petrol tank open?
+        SET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                        ; Close it!
++_gTextItemCarPetrolTank = *+2        
+#ifdef LANGUAGE_FR                                                                             ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence")
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol tank")
+#endif        
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)                 ; If the petrol was not collected
+            SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
+        ENDIF(petrol)
+    ENDIF(open)
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Use Action ✋
