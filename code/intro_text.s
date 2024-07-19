@@ -146,7 +146,7 @@ _Text_AchievementGaveTheRope      .byt "Gave the rope",0
 _Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
 _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
-_Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
+_Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
 _Text_AchievementFree2            .byt "Free 2",0
 _Text_AchievementFree3            .byt "Free 3",0
 _Text_AchievementFree4            .byt "Free 4",0
@@ -191,7 +191,7 @@ _Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
 _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
 _Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
-_Text_AchievementFree2            .byt "Free 2",0
+_Text_AchievementUsedHosePipe     .byt "Used the hose pipe",0
 _Text_AchievementFree3            .byt "Free 3",0
 _Text_AchievementFree4            .byt "Free 4",0
 _Text_AchievementFree5            .byt "Free 5",0
@@ -248,7 +248,7 @@ _AchievementMessages
     .word _Text_AchievementGotAHighscore    ; "Got a highscore"
     .word _Text_AchievementGotTheBestScore  ; "Got the best score"
     .word _Text_AchievementDogAteTheMeat    ; "Dog ate the meat"
-    .word _Text_AchievementFree2            ; "Free 2"
+    .word _Text_AchievementUsedHosePipe     ; "Used the hose pipe"
     .word _Text_AchievementFree3            ; "Free 3"
     .word _Text_AchievementFree4            ; "Free 4"
     .word _Text_AchievementFree5            ; "Free 5"

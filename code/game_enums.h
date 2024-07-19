@@ -218,7 +218,7 @@
 #define ACHIEVEMENT_GOT_A_HIGHSCORE     41
 #define ACHIEVEMENT_GOT_THE_BEST_SCORE  42
 #define ACHIEVEMENT_DOG_ATE_THE_MEAT    43
-#define ACHIEVEMENT_FREE_2              44
+#define ACHIEVEMENT_USED_HOSE_PIPE      44
 #define ACHIEVEMENT_FREE_3              45
 #define ACHIEVEMENT_FREE_4              46
 #define ACHIEVEMENT_FREE_5              47

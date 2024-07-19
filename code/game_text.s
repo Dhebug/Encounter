@@ -501,6 +501,7 @@ _gDescriptionParkingPlace
 
 // MARK: Abandoned Car
 _gDescriptionAbandonedCar
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une voiture abandonnée")
 #else
@@ -523,7 +524,14 @@ _gDescriptionAbandonedCar
                 _IMAGE(0,95)
                 _BUFFER(21,73)
     ENDIF(tank)
+
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED),hose)   ; Is the hose in the tank?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,3,53)                        ; Draw the hose pipe
+                _IMAGE(37,72)
+                _BUFFER(21,75)
+    ENDIF(hose)
     END
+.)
 
 
 // MARK: Old Well
@@ -1963,11 +1971,8 @@ _OpenCarPetrolTank
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol tank")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
-            SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
-        ENDIF(petrol)
     ENDIF(open)
     END_AND_REFRESH
 .)
@@ -2081,7 +2086,7 @@ _CloseCarBoot
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un coffre de voiture")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car boot")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car _boot")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -2096,7 +2101,7 @@ _CloseCarDoor
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une porte ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car door")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car _door")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -2111,11 +2116,17 @@ _CloseCarPetrolTank
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol tank")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol _tank")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)                 ; If the petrol was not collected
             SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
         ENDIF(petrol)
+
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
+                SET_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_INVENTORY)                             ; Then we need to remove it again
+            ENDIF(hose2)
+        ENDIF(hose)
     ENDIF(open)
     END_AND_REFRESH
 .)
@@ -2142,6 +2153,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
     VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
+    VALUE_MAPPING(e_ITEM_HosePipe           , _UseHosePipe)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2270,6 +2282,36 @@ _UseAlarmSwitch
 #endif        
     ENDIF(off)
     WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_UseHosePipe
+.(
+    JUMP_IF_TRUE(abandonned_car,CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR))
+cannot_use_rope_here
+    ERROR_MESSAGE("Can't use it there")
+    END_AND_REFRESH
+
+abandonned_car
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),closed)                     ; Is the petrol tank open?
+        ERROR_MESSAGE("The tank is closed")
+        END_AND_REFRESH
+    ENDIF(closed)
+
+    INFO_MESSAGE("You put the hose in the tank")
+    SET_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_ABANDONED_CAR)
+    SET_ITEM_FLAGS(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
+        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
+    ENDIF(petrol)
+
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"un tuyeau dans le réservoir")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"a _hose in the petrol tank")
+#endif    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE_PIPE)
     END_AND_REFRESH
 .)
 
