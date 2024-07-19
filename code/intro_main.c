@@ -10,9 +10,7 @@
 #include "game_enums.h"
 
 // intro_utils
-extern char Text_FirstLine[];
-extern char Text_CopyrightSevernSoftware[];
-extern char Text_CopyrightDefenceForce[];
+extern char Text_TitlePicture[];
 
 extern char Text_GameInstructions[];
 
@@ -148,10 +146,9 @@ int DisplayIntroPage()
 
 	Hires(16+3,4);
 
-	SetLineAddress((char*)0xbb80+40*25);
-	PrintLine(Text_FirstLine);
-	PrintLine(Text_CopyrightSevernSoftware);
-	PrintLine(Text_CopyrightDefenceForce);
+    gPrintWidth=40;
+    gPrintTerminator=TEXT_END;
+	PrintStringAt(Text_TitlePicture,0xbb80+40*25);
 
 	memcpy((char*)0xa000,ImageBuffer,8000);
 
@@ -163,8 +160,9 @@ int DisplayUserManual()
 {
 	Text(16+3,0);
 
-	SetLineAddress((char*)0xbb80+40*1+2);
-    PrintMultiLine(Text_GameInstructions);
+    gPrintWidth=40;
+    gPrintTerminator=TEXT_END;
+    PrintStringAt(Text_GameInstructions,0xbb80+40*1+2);
     return WaitAndFade(50*12);
  }
 
@@ -485,9 +483,9 @@ int DisplayHighScoresTable()
 
 	Text(16+0,7);
 
-	SetLineAddress((char*)0xbb80+40*0+0);
-
-	PrintLine(Text_Leaderboard);
+    gPrintWidth=40;
+    gPrintTerminator=TEXT_END;
+	PrintStringAt(Text_Leaderboard,0xbb80+40*0+0);
 
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		
@@ -522,8 +520,9 @@ int DisplayAchievements()
 {
 	Text(16+4,7);
 
-	SetLineAddress((char*)0xbb80+40*0+0);
-	PrintLine(Text_Achievements);
+    gPrintWidth=40;
+    gPrintTerminator=TEXT_END;
+	PrintStringAt(Text_Achievements,0xbb80+40*0+0);
     {
     	int entry;
         int unlockedCount = 0;
@@ -602,21 +601,21 @@ void SoundBoard()
     Text(16+3,0);
     SetLineAddress((char*)0xbb80+40*0+2);
 
-    PrintLine("1/2=Select music 0=Stop music");
-    PrintLine("P=PING Z=ZAP X=Explode S=Shoot");
-    PrintLine("K/L=Key click SPACE/Other=Type writer");
+    PrintString("1/2=Select music 0=Stop music");
+    PrintString("P=PING Z=ZAP X=Explode S=Shoot");
+    PrintString("K/L=Key click SPACE/Other=Type writer");
 
     SetLineAddress((char*)0xbb80+40*4+2);
-    PrintLine("Freq A");
-    PrintLine("Freq B");
-    PrintLine("Freq C");
-    PrintLine("Noise");
-    PrintLine("Mixer");
-    PrintLine("Vol A");
-    PrintLine("Vol B");
-    PrintLine("Vol C");
-    PrintLine("Freq Env");
-    PrintLine("Shap Env");
+    PrintString("Freq A");
+    PrintString("Freq B");
+    PrintString("Freq C");
+    PrintString("Noise");
+    PrintString("Mixer");
+    PrintString("Vol A");
+    PrintString("Vol B");
+    PrintString("Vol C");
+    PrintString("Freq Env");
+    PrintString("Shap Env");
 
     while (1)
     {

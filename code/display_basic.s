@@ -1,10 +1,182 @@
 
 #include "params.h"
 
+    .zero
+
+_gPrintAddress      .dsb 2
+_gPrintPos          .dsb 1
+
     .text
 
-_gIsHires       .byt 1
-_gPrintAddress  .word $bb80;
+_gIsHires           .byt 1
+_gPrintWidth        .byt 40
+_gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
+
+
+
+_spaceCounter  .dsb 1
+_wasTruncated  .dsb 1
+_car           .dsb 1
+_wordLength    .dsb 1    
+_isHighlighted .dsb 1
+
+
+; Should probably be in a separate "text.s"
+_PrintSpacesIfAny
+.(
+    ; if (spaceCounter && !wasTruncated)
+    ldx _spaceCounter
+    beq no_spaces
+    lda _wasTruncated
+    bne skip
+
+    lda #32         ; Space
+    ldy _gPrintPos
+print_spaces
+    sta (_gPrintAddress),y
+    iny
+    dex
+    bne print_spaces
+    sty _gPrintPos
+
+skip    
+    ; spaceCounter=0;
+    lda #0
+    sta _spaceCounter
+no_spaces    
+    rts
+.)
+
+#if 1
+; _param0 +0/+1 = pointer to the string
+_PrintStringInternal
+    ;jmp _PrintStringInternal
+.(  
+    lda #0
+    sta _isHighlighted
+    sta _spaceCounter
+    sta _wasTruncated
+
+loop
+    ldy #0
+    lda (_param0),y
+    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
+    beq quit
+    cmp #" "                // Space
+    beq space
+    cmp #TEXT_CRLF          // Carriage return
+    beq carriage_return
+    cmp #"_"                // Highlighted word prefix
+    beq highlighter
+    bne normal_character
+
+quit
+    jsr _PrintSpacesIfAny
+    lda #0
+    sta _gPrintTerminator   // Resets the terminator to zero (maybe?)
+    rts
+
+space    
+    inc _spaceCounter
+    jsr _IncrementParam0
+    jmp loop
+
+carriage_return    
+    lda #0
+    sta _wasTruncated
+    sta _gPrintPos
+    jsr _Add40ToPrintAddress
+    jsr _IncrementParam0
+    jmp loop
+
+highlighter
+    lda #128
+    sta _isHighlighted
+    jsr _IncrementParam0
+    jmp loop
+
+normal_character
+    ; Find the length of the next word
+    iny
+loop_find_word_end
+    lda (_param0),y
+    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
+    beq found_word_end
+    cmp #" "                // Space
+    beq found_word_end
+    cmp #TEXT_CRLF          // Carriage return
+    beq found_word_end
+    iny
+
+    jmp loop_find_word_end
+found_word_end
+    ; Length is in Y
+
+    ; Does it fit? 
+    tya
+    tax 
+    clc
+    adc _gPrintPos
+    adc _spaceCounter
+    cmp _gPrintWidth
+    bmi end_wrap_test
+    beq end_wrap_test
+.(    
+    ; Does not fit
+    lda #1
+    sta _wasTruncated
+
+    lda #0
+    sta _gPrintPos
+
+    jsr _Add40ToPrintAddress
+.)
+end_wrap_test
+    stx tmp0
+    jsr _PrintSpacesIfAny    ; Changes X
+    ldx tmp0
+
+    ; Print the actual word
+    ; Word lenght in X
+loop_print_word
+    ldy #0
+    lda (_param0),y
+    jsr _IncrementParam0
+    ora _isHighlighted
+
+    ldy _gPrintPos
+    sta (_gPrintAddress),y
+    inc _gPrintPos
+
+    dex
+    bne loop_print_word
+
+    lda #0
+    sta _isHighlighted
+    sta _wasTruncated
+    jmp loop
+
+.)
+#endif
+
+_IncrementParam0
+.(
+  inc _param0+0
+  bne skip
+  inc _param0+1
+skip
+  rts
+.)
+
+_Add40ToPrintAddress
+  clc
+  lda _gPrintAddress+0
+  adc #40
+  sta _gPrintAddress+0
+  lda _gPrintAddress+1
+  adc #0
+  sta _gPrintAddress+1
+  rts
 
 
 _Add40ToTmp0

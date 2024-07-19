@@ -105,10 +105,9 @@ extern unsigned char MusicMixerMask;
 
 
 // Common
-extern void SetLineAddress(char* address);
-extern void PrintLine(const char* message);
-extern void PrintMultiLine(const char* message);
-extern void PrintWord(const char* message);
+#define SetLineAddress(address)            { gPrintAddress=address; }
+#define PrintStringAt(message,address)     { param0.ptr=message;gPrintAddress=(char*)address;gPrintPos=0;asm("jsr _PrintStringInternal"); } 
+#define PrintString(message)               { param0.ptr=message;asm("jsr _PrintStringInternal"); } 
 
 #define UnlockAchievement(assignment)      { param0.uchar=assignment;asm("jsr _UnlockAchievementAsm"); }
 
@@ -135,7 +134,9 @@ extern union ParamType param2;
 
 extern char gIsHires;
 extern char* gPrintAddress;
-
+extern unsigned char gPrintWidth;
+extern unsigned char gPrintPos;
+extern unsigned char gPrintTerminator;
 
 // game_misc
 extern void HandleByteStream();

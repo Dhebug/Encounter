@@ -133,7 +133,7 @@ _gTextExternalInformation
 _gTextGreetings
     .byt TEXT_CRLF
     .byt 6," Greetings to all the people who keep",TEXT_CRLF
-    .byt 6," releasing great software for the Oric:",TEXT_CRLF
+    .byt 6,"releasing great software for the Oric:",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3," Rax - Iss - Andre C - Fabrizio Caruzo",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF

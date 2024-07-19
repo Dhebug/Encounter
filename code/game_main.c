@@ -45,7 +45,9 @@ void PrintInventory()
 		{
 			int descriptionLength = strlen(itemPtr->description);
 			char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
-			memcpy(screenPtr,itemPtr->description , descriptionLength);
+            gPrintWidth=38;
+            PrintStringAt(itemPtr->description,screenPtr);
+
 #if 0			
 			// Ideally it would be nice to be able to display things like
 			// - An empty plastic bag
@@ -78,6 +80,7 @@ void PrintInventory()
 
 void PrintSceneObjects()
 {
+    char itemPrinted = 0;
 	int itemCount = 0;
 	int item;
 
@@ -92,17 +95,21 @@ void PrintSceneObjects()
 	// Print any item in the location
 	if (itemCount)
 	{        
-        const char* ptrMessage=gTextCanSee;
-		char* ptrScreen=(char*)0xbb80+40*18;
-		for (item=0;item<e_ITEM_COUNT_;item++)
-		{
-			if (gItems[item].location == gCurrentLocation)
-			{
-				sprintf(ptrScreen+1,"%c%s%s",3,ptrMessage,gItems[item].description); // "I can see"
-                ptrMessage="";
-				ptrScreen+=40;
-			}
-		}
+        gPrintWidth=38;
+        PrintStringAt(gTextCanSee,0xbb80+40*18+2);
+        for (item=0;item<e_ITEM_COUNT_;item++)
+        {
+            if (gItems[item].location == gCurrentLocation)
+            {
+                if (itemPrinted)
+                {
+                    PrintString(", ");
+                }
+                PrintString(gItems[item].description);
+                itemPrinted = 1;
+            }
+        }
+        PrintString(".");
 	}
 	else
 	{

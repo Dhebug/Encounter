@@ -10,9 +10,11 @@
 ;
 ; Title screen
 ;
-_Text_FirstLine                  .byt 16+3,4,"                                        ",0
-_Text_CopyrightSevernSoftware    .byt 16+3,4,"  Encounter ",96," 1983 Severn Software    ",0
-_Text_CopyrightDefenceForce      .byt 16+3,4,"Redux Additions ",96," 2024 Defence-Force ",31,0
+_Text_TitlePicture               
+    .byt 16+3,4,TEXT_CRLF
+    .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
+    .byt 16+3,4,"Redux Additions ",96," 2024 Defence-Force ",31
+    .byt TEXT_END
 
 ;
 ; Manual
@@ -79,7 +81,7 @@ _Text_GameInstructions
 ; Leaderboard
 ;
 #ifdef LANGUAGE_FR
-_Text_Leaderboard                .byt 16+1,3,"            Classement",0
+_Text_Leaderboard                .byt 16+1,3,"            Classement",TEXT_CRLF,TEXT_END
 _Text_SCORE_SOLVED_THE_CASE      .byt 2,"R{solu le cas",0
 _Text_SCORE_MAIMED_BY_DOG        .byt 5,"Mutil{ par un chien",0
 _Text_SCORE_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
@@ -90,7 +92,7 @@ _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
 _Text_SCORE_SIMPLY_VANISHED      .byt 7,"A disparu !",0
 _Text_SCORE_GAVE_UP              .byt 5,"A abandonn{...",0
 #else // LANGUAGE_EN
-_Text_Leaderboard                .byt 16+1,3,"            Leaderboard",0
+_Text_Leaderboard                .byt 16+1,3,"            Leaderboard",TEXT_CRLF,TEXT_END
 _Text_SCORE_SOLVED_THE_CASE      .byt 2,"Solved the case",0
 _Text_SCORE_MAIMED_BY_DOG        .byt 5,"Maimed by a dog",0
 _Text_SCORE_SHOT_BY_THUG         .byt 1,"Shot by a thug",0
@@ -106,7 +108,7 @@ _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 ; Achievements
 ;
 #ifdef LANGUAGE_FR
-_Text_Achievements                .byt 16+3,1,"          Badges collectés",0
+_Text_Achievements                .byt 16+3,1,"          Badges collectés",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
 _Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
@@ -150,7 +152,7 @@ _Text_AchievementFree3            .byt "Free 3",0
 _Text_AchievementFree4            .byt "Free 4",0
 _Text_AchievementFree5            .byt "Free 5",0
 #else // LANGUAGE_EN
-_Text_Achievements                .byt 16+3,1,"        Achievements unlocked",0
+_Text_Achievements                .byt 16+3,1,"        Achievements unlocked",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
 _Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0

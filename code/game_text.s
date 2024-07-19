@@ -166,10 +166,10 @@ _gTextItemFishingNet              .byt "a fishing net",0
 _gTextItemPlasticBag              .byt "a plastic bag",0                      
 _gTextItemSmallBottle             .byt "a small bottle",0                     
 // Items requiring containers
-_gTextItemBlackDust               .byt "black dust",0                         
-_gTextItemYellowPowder            .byt "gritty yellow powder",0               
-_gTextItemPetrol                  .byt "some petrol",0                        
-_gTextItemWater                   .byt "some water",0                         
+_gTextItemBlackDust               .byt "black _dust",0                         
+_gTextItemYellowPowder            .byt "gritty yellow _powder",0               
+_gTextItemPetrol                  .byt "some _petrol",0                        
+_gTextItemWater                   .byt "some _water",0                         
 // Normal items
 //_gTextItemAlarmSwitch             .byt "a button in ON position",0
 _gTextItemOpenPanel               .byt "an open panel on wall",0              
@@ -197,7 +197,7 @@ _gTextItemYoungGirl               .byt "a young girl",0
 _gTextItemFuse                    .byt "a fuse",0                             
 _gTextItemGunPowder               .byt "some gunpowder",0                     
 _gTextItemKeys                    .byt "a set of keys",0                      
-_gTextItemNewspaper               .byt "a newspaper",0                        
+_gTextItemNewspaper               .byt "a _newspaper",0                        
 _gTextItemBomb                    .byt "a bomb",0                             
 _gTextItemPistol                  .byt "a pistol",0                           
 _gTextItemBullets                 .byt "three .38 bullets",0                  

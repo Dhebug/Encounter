@@ -133,8 +133,9 @@ int DisplayText(const char* text,int delay)
 #endif
     memcpy(screenPtr,sourcePtr,40*12);  // Force erase the screen in case there was still something there
 
-	SetLineAddress((char*)TextBuffer);
-    PrintMultiLine(text);
+    gPrintWidth = 40;
+    gPrintTerminator=TEXT_END;    
+    PrintStringAt(text,TextBuffer);
 
     // Appear
     for (x=0;x<40;x++)
