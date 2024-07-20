@@ -11,7 +11,7 @@ _gPrintPos          .dsb 1
 _gIsHires           .byt 1
 _gPrintWidth        .byt 40
 _gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
-
+_gShowHighlights    .byt 0
 
 
 _spaceCounter  .dsb 1
@@ -60,14 +60,11 @@ _PrintStringInternal
 loop
     ldy #0
     lda (_param0),y
-    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
-    beq quit
     cmp #" "                // Space
     beq space
     cmp #TEXT_CRLF          // Carriage return
     beq carriage_return
-    cmp #"_"                // Highlighted word prefix
-    beq highlighter
+    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
     bne normal_character
 
 quit
@@ -89,12 +86,6 @@ carriage_return
     jsr _IncrementParam0
     jmp loop
 
-highlighter
-    lda #128
-    sta _isHighlighted
-    jsr _IncrementParam0
-    jmp loop
-
 normal_character
     ; Find the length of the next word
     iny
@@ -106,9 +97,14 @@ loop_find_word_end
     beq found_word_end
     cmp #TEXT_CRLF          // Carriage return
     beq found_word_end
+    //cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
+    //beq found_word_end_and_eat_character
     iny
 
     jmp loop_find_word_end
+
+//found_word_end_and_eat_character    
+
 found_word_end
     ; Length is in Y
 
@@ -142,12 +138,24 @@ loop_print_word
     ldy #0
     lda (_param0),y
     jsr _IncrementParam0
-    ora _isHighlighted
 
+    cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
+    bne skip_highlighter
+    lda _gShowHighlights
+    beq no_highlights
+
+    lda _isHighlighted
+    eor #128
+    sta _isHighlighted
+no_highlights
+    jmp next_car
+    
+skip_highlighter
+    ora _isHighlighted
     ldy _gPrintPos
     sta (_gPrintAddress),y
     inc _gPrintPos
-
+next_car
     dex
     bne loop_print_word
 

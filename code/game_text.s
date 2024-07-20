@@ -121,50 +121,50 @@ _gTextItemPetrol                  .byt "du pétrole",0
 _gTextItemWater                   .byt "de l'eau",0
 // Normal items
 //_gTextItemAlarmSwitch             .byt "un bouton en position marche",0
-_gTextItemOpenPanel               .byt "un paneau mural ouvert",0
-_gTextItemSmallHoleInDoor         .byt "un petit trou dans la porte",0
-_gTextItemTwine                   .byt "un peu de ficelle",0
-_gTextItemSilverKnife             .byt "un coueau en argent",0
-_gTextItemMixTape                 .byt "une compil sur K7",0
+_gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
+_gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
+_gTextItemTwine                   .byt "un peu de _ficelle",0
+_gTextItemSilverKnife             .byt "un _couteau en argent",0
+_gTextItemMixTape                 .byt "une _compil sur K7",0
 _gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
-_gTextItemMeat                    .byt "un morceau de viande",0
-_gTextItemBread                   .byt "du pain complet",0
-_gTextItemRollOfTape              .byt "un rouleau de bande adhésive",0
-_gTextItemChemistryBook           .byt "un livre de chimie",0
-_gTextItemBoxOfMatches            .byt "une boite d'allumettes",0
-_gTextItemSnookerCue              .byt "une queue de billard",0
-_gTextItemThug                    .byt "un voyou endormi sur le lit",0
-_gTextItemHeavySafe               .byt "un gros coffre fort",0
-_gTextItemHandWrittenNote         .byt "une note manuscripte",0
-_gTextItemRopeHangingFromWindow   .byt "une core qui pend de la fenêtre",0
-_gTextItemRollOfToiletPaper       .byt "un rouleau de papier toilette",0
-_gTextItemHosePipe                .byt "un tuyau d'arrosage",0
-_gTextItemOpenSafe                .byt "un coffre fort ouvert",0
-_gTextItemBrokenGlass             .byt "des morceaux de glace",0
+_gTextItemMeat                    .byt "un morceau de _viande",0
+_gTextItemBread                   .byt "du _pain complet",0
+_gTextItemRollOfTape              .byt "un rouleau de _bande adhésive",0
+_gTextItemChemistryBook           .byt "un _livre de chimie",0
+_gTextItemBoxOfMatches            .byt "une boite d'_allumettes",0
+_gTextItemSnookerCue              .byt "une _queue de billard",0
+_gTextItemThug                    .byt "un _voyou endormi sur le lit",0
+_gTextItemHeavySafe               .byt "un gros _coffre fort",0
+_gTextItemHandWrittenNote         .byt "une _note manuscripte",0
+_gTextItemRopeHangingFromWindow   .byt "une _corde qui pend de la fenêtre",0
+_gTextItemRollOfToiletPaper       .byt "un _rouleau de papier toilette",0
+_gTextItemHosePipe                .byt "un _tuyau d'arrosage",0
+_gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
+_gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
 _gTextItemYoungGirl               .byt "une jeune fille",0
-_gTextItemFuse                    .byt "un fusible",0
-_gTextItemGunPowder               .byt "de la poudre à cannon",0
-_gTextItemKeys                    .byt "un jeu de clefs",0
-_gTextItemNewspaper               .byt "un journal",0
-_gTextItemBomb                    .byt "une bombe",0
-_gTextItemPistol                  .byt "un pistolet",0
-_gTextItemBullets                 .byt "trois balles de calibre .38",0
-_gTextItemYoungGirlOnFloor        .byt "une jeunne fille attachée au sol",0
-_gTextItemChemistryRecipes        .byt "des formules de chimie",0
-_gTextItemUnitedKingdomMap        .byt "une carte du royaume uni",0
-_gTextItemHandheldGame            .byt "un jeu portable",0
-_gTextItemSedativePills           .byt "des somnifères",0
-_gTextItemDartGun                 .byt "un lance fléchettes",0
-_gTextItemBlackTape               .byt "du ruban adhésif noir",0
+_gTextItemFuse                    .byt "un _fusible",0
+_gTextItemGunPowder               .byt "de la _poudre à cannon",0
+_gTextItemKeys                    .byt "un jeu de _clefs",0
+_gTextItemNewspaper               .byt "un _journal",0
+_gTextItemBomb                    .byt "une _bombe",0
+_gTextItemPistol                  .byt "un _pistolet",0
+_gTextItemBullets                 .byt "trois _balles de calibre .38",0
+_gTextItemYoungGirlOnFloor        .byt "une jeune _fille attachée au sol",0
+_gTextItemChemistryRecipes        .byt "des _formules de chimie",0
+_gTextItemUnitedKingdomMap        .byt "une _carte du royaume uni",0
+_gTextItemHandheldGame            .byt "un _jeu portable",0
+_gTextItemSedativePills           .byt "des _somnifères",0
+_gTextItemDartGun                 .byt "un _lance fléchettes",0
+_gTextItemBlackTape               .byt "du _ruban adhésif noir",0
 #else
 // Containers
-_gTextItemTobaccoTin              .byt "an empty tobacco tin",0               
-_gTextItemBucket                  .byt "a wooden bucket",0                    
-_gTextItemCardboardBox            .byt "a cardboard box",0                    
-_gTextItemFishingNet              .byt "a fishing net",0                      
-_gTextItemPlasticBag              .byt "a plastic bag",0                      
-_gTextItemSmallBottle             .byt "a small bottle",0                     
+_gTextItemTobaccoTin              .byt "an empty tobacco _tin",0               
+_gTextItemBucket                  .byt "a wooden _bucket",0                    
+_gTextItemCardboardBox            .byt "a cardboard _box",0                    
+_gTextItemFishingNet              .byt "a fishing _net",0                      
+_gTextItemPlasticBag              .byt "a plastic _bag",0                      
+_gTextItemSmallBottle             .byt "a small _bottle",0                     
 // Items requiring containers
 _gTextItemBlackDust               .byt "black _dust",0                         
 _gTextItemYellowPowder            .byt "gritty yellow _powder",0               
@@ -172,42 +172,42 @@ _gTextItemPetrol                  .byt "some _petrol",0
 _gTextItemWater                   .byt "some _water",0                         
 // Normal items
 //_gTextItemAlarmSwitch             .byt "a button in ON position",0
-_gTextItemOpenPanel               .byt "an open panel on wall",0              
-_gTextItemSmallHoleInDoor         .byt "a small hole in the door",0           
-_gTextItemTwine                   .byt "some twine",0                         
-_gTextItemSilverKnife             .byt "a silver knife",0                     
-_gTextItemMixTape                 .byt "a mixtape",0
+_gTextItemOpenPanel               .byt "an open _panel on wall",0              
+_gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0           
+_gTextItemTwine                   .byt "some _twine",0                         
+_gTextItemSilverKnife             .byt "a silver _knife",0                     
+_gTextItemMixTape                 .byt "a _mixtape",0
 _gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
-_gTextItemMeat                    .byt "a joint of meat",0                    
-_gTextItemBread                   .byt "some brown bread",0                   
-_gTextItemRollOfTape              .byt "a roll of sticky tape",0              
-_gTextItemChemistryBook           .byt "a chemistry book",0                   
-_gTextItemBoxOfMatches            .byt "a box of matches",0                   
-_gTextItemSnookerCue              .byt "a snooker cue",0                      
-_gTextItemThug                    .byt "a thug asleep on the bed",0           
-_gTextItemHeavySafe               .byt "a heavy safe",0                       
-_gTextItemHandWrittenNote         .byt "a hand written note",0                     
-_gTextItemRopeHangingFromWindow   .byt "a rope hangs from the window",0       
-_gTextItemRollOfToiletPaper       .byt "a roll of toilet tissue",0            
-_gTextItemHosePipe                .byt "a hose-pipe",0                        
-_gTextItemOpenSafe                .byt "an open safe",0                       
+_gTextItemMeat                    .byt "a joint of _meat",0                    
+_gTextItemBread                   .byt "some brown _bread",0                   
+_gTextItemRollOfTape              .byt "a roll of sticky _tape",0              
+_gTextItemChemistryBook           .byt "a chemistry _book",0                   
+_gTextItemBoxOfMatches            .byt "a box of _matches",0                   
+_gTextItemSnookerCue              .byt "a snooker _cue",0                      
+_gTextItemThug                    .byt "a _thug asleep on the bed",0           
+_gTextItemHeavySafe               .byt "a heavy _safe",0                       
+_gTextItemHandWrittenNote         .byt "a hand written _note",0                     
+_gTextItemRopeHangingFromWindow   .byt "a _rope hangs from the window",0       
+_gTextItemRollOfToiletPaper       .byt "a roll of toilet _tissue",0            
+_gTextItemHosePipe                .byt "a _hose_-pipe",0                        
+_gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
 _gTextItemAcidBurn                .byt "an acid burn",0                       
 _gTextItemYoungGirl               .byt "a young girl",0                        
-_gTextItemFuse                    .byt "a fuse",0                             
-_gTextItemGunPowder               .byt "some gunpowder",0                     
-_gTextItemKeys                    .byt "a set of keys",0                      
+_gTextItemFuse                    .byt "a _fuse",0                             
+_gTextItemGunPowder               .byt "some _gunpowder",0                     
+_gTextItemKeys                    .byt "a set of _keys",0                      
 _gTextItemNewspaper               .byt "a _newspaper",0                        
-_gTextItemBomb                    .byt "a bomb",0                             
-_gTextItemPistol                  .byt "a pistol",0                           
-_gTextItemBullets                 .byt "three .38 bullets",0                  
+_gTextItemBomb                    .byt "a _bomb",0                             
+_gTextItemPistol                  .byt "a _pistol",0                           
+_gTextItemBullets                 .byt "three .38 _bullets",0                  
 _gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0  
-_gTextItemChemistryRecipes        .byt "a couple chemistry recipes",0         
-_gTextItemUnitedKingdomMap        .byt "a map of the United Kingdom",0        
-_gTextItemHandheldGame            .byt "a handheld game",0
-_gTextItemSedativePills           .byt "some sedative pills",0
-_gTextItemDartGun                 .byt "a dart gun",0
-_gTextItemBlackTape               .byt "some black adhesive tape",0
+_gTextItemChemistryRecipes        .byt "a couple chemistry _recipes",0         
+_gTextItemUnitedKingdomMap        .byt "a _map of the United Kingdom",0        
+_gTextItemHandheldGame            .byt "a handheld _game",0
+_gTextItemSedativePills           .byt "some sedative _pills",0
+_gTextItemDartGun                 .byt "a dart _gun",0
+_gTextItemBlackTape               .byt "some black adhesive _tape",0
 #endif
 _EndItemNames
 
@@ -685,11 +685,11 @@ _gDescriptionVegetableGarden
     SET_ITEM_LOCATION(e_ITEM_BasementWindow,e_LOC_VEGSGARDEN)     ; The window is in the garden
 #ifdef LANGUAGE_FR       
 _gTextItemBasementWindow = *+1
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre basse")
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre basse")
     SET_DESCRIPTION("Vous êtes dans un jardin potagé")
 #else
 _gTextItemBasementWindow = *+1
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement window")
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement _window")
     SET_DESCRIPTION("You are in a vegetable plot")
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)
@@ -2171,9 +2171,9 @@ install_the_ladder
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle prête à grimper")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle prête à grimper")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder ready to climb")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a _ladder ready to climb")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_LADDER)
     END_AND_REFRESH
@@ -2393,9 +2393,9 @@ give_bread_to_dove
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
     UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une colombe qui picore")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
 #else
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a dove eating bread crumbs")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
 #endif    
 //+_gSceneActionDoveEatingBread
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
@@ -2564,9 +2564,9 @@ _TakeLadder
 .(
 +_gTextItemLadder = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une échelle")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a ladder")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a _ladder")
 #endif    
     JUMP(_TakeCommon)
 .)
@@ -2576,9 +2576,9 @@ _TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une grosse colombe")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une grosse _colombe")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a large dove")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a large _dove")
 #endif    
     JUMP(_TakeCommon)
 .)

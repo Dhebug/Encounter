@@ -137,6 +137,7 @@ extern char* gPrintAddress;
 extern unsigned char gPrintWidth;
 extern unsigned char gPrintPos;
 extern unsigned char gPrintTerminator;
+extern unsigned char gShowHighlights;
 
 // game_misc
 extern void HandleByteStream();

@@ -182,6 +182,9 @@ void PlayerMove()
 }
 
 
+char ShowingKeyWords = 0;
+char ShouldShowKeyWords = 0;
+
 WORDS AskInputCallback()
 {
     HandleByteStream();
@@ -190,6 +193,20 @@ WORDS AskInputCallback()
         // The player has reached a game over condition and the end of the current stream
         return e_WORD_QUIT;
     }
+
+    // When the player presses SHIFT we redraw the item list with highlights
+    ShouldShowKeyWords = (KeyBank[4] & 16);
+    if (ShowingKeyWords != ShouldShowKeyWords)
+    {
+        gShowHighlights = ShouldShowKeyWords;
+
+        PrintSceneObjects();
+
+        PrintInventory();
+
+        ShowingKeyWords = ShouldShowKeyWords;
+    }
+
     return e_WORD_CONTINUE;
 }
 
