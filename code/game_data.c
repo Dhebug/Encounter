@@ -24,11 +24,11 @@ keyword gWordsArray[] =
 
     // Then normal items
     { "GIRL",   e_ITEM_YoungGirl            },  
-    { "DUST",   e_ITEM_BlackDust            },  
+    { "SALTPETRE",   e_ITEM_Saltpetre       },  
     { "PANEL",  e_ITEM_AlarmPanel           },  
-    { "SWITCH", e_ITEM_AlarmSwitch         },  
+    { "SWITCH", e_ITEM_AlarmSwitch          },  
     { "FRIDGE",  e_ITEM_Fridge              },  
-    { "POWDER", e_ITEM_YellowPowder         },  
+    { "SULPHUR", e_ITEM_Sulphur             },  
     { "WATER",  e_ITEM_Water                },  
     { "DOVE",   e_ITEM_LargeDove            },  
     { "TWINE",  e_ITEM_Twine                },  
@@ -47,7 +47,7 @@ keyword gWordsArray[] =
     { "SAFE",   e_ITEM_HeavySafe            },  
     { "NOTE",   e_ITEM_HandWrittenNote      },  
     { "ROPE",   e_ITEM_Rope                 },  
-    { "TISSUE", e_ITEM_RollOfToiletPaper    },  
+    { "ROLL",   e_ITEM_ToiletRoll           },  
     { "HOSE",   e_ITEM_HosePipe             },  
     { "PETROL", e_ITEM_Petrol               },  
     { "GLASS",  e_ITEM_BrokenGlass          },  

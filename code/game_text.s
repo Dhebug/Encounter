@@ -115,8 +115,8 @@ _gTextItemFishingNet              .byt "un filet de pêche",0
 _gTextItemPlasticBag              .byt "un sac en plastique",0
 _gTextItemSmallBottle             .byt "une petite bouteille",0
 // Items requiring containers
-_gTextItemBlackDust               .byt "de la poudre noire",0
-_gTextItemYellowPowder            .byt "poudre jaune granuleuse",0
+_gTextItemBlackDust               .byt "du salpêtre",0
+_gTextItemYellowPowder            .byt "du soufre",0
 _gTextItemPetrol                  .byt "du pétrole",0
 _gTextItemWater                   .byt "de l'eau",0
 // Normal items
@@ -137,13 +137,13 @@ _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre fort",0
 _gTextItemHandWrittenNote         .byt "une _note manuscripte",0
 _gTextItemRopeHangingFromWindow   .byt "une _corde qui pend de la fenêtre",0
-_gTextItemRollOfToiletPaper       .byt "un _rouleau de papier toilette",0
+_gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
 _gTextItemHosePipe                .byt "un _tuyau d'arrosage",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
 _gTextItemYoungGirl               .byt "une jeune fille",0
-_gTextItemFuse                    .byt "un _fusible",0
+_gTextItemFuse                    .byt "une _mêche",0
 _gTextItemGunPowder               .byt "de la _poudre à cannon",0
 _gTextItemKeys                    .byt "un jeu de _clefs",0
 _gTextItemNewspaper               .byt "un _journal",0
@@ -166,8 +166,8 @@ _gTextItemFishingNet              .byt "a fishing _net",0
 _gTextItemPlasticBag              .byt "a plastic _bag",0                      
 _gTextItemSmallBottle             .byt "a small _bottle",0                     
 // Items requiring containers
-_gTextItemBlackDust               .byt "black _dust",0                         
-_gTextItemYellowPowder            .byt "gritty yellow _powder",0               
+_gTextItemBlackDust               .byt "some _saltpetre",0
+_gTextItemYellowPowder            .byt "some _sulphur",0
 _gTextItemPetrol                  .byt "some _petrol",0                        
 _gTextItemWater                   .byt "some _water",0                         
 // Normal items
@@ -188,7 +188,7 @@ _gTextItemThug                    .byt "a _thug asleep on the bed",0
 _gTextItemHeavySafe               .byt "a heavy _safe",0                       
 _gTextItemHandWrittenNote         .byt "a hand written _note",0                     
 _gTextItemRopeHangingFromWindow   .byt "a _rope hangs from the window",0       
-_gTextItemRollOfToiletPaper       .byt "a roll of toilet _tissue",0            
+_gTextItemRollOfToiletPaper       .byt "a toilet _roll",0            
 _gTextItemHosePipe                .byt "a _hose_-pipe",0                        
 _gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
@@ -1540,8 +1540,9 @@ Y8b  d8 `8b  d8' 88  88  88 88   8D   .88.   88  V888 88.
  `Y88P'  `Y88P'  YP  YP  YP Y8888P' Y888888P VP   V8P Y88888P  */
 
 _gCombineItemMappingsArray
-    VALUE_MAPPING2(e_ITEM_Meat,e_ITEM_SedativePills    ,_CombineMeatWithPills)
-    VALUE_MAPPING2(e_ITEM_SedativePills,e_ITEM_Meat    ,_CombineMeatWithPills)
+    COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_Meat        ,_CombineMeatWithPills)
+    COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
+    COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1559,6 +1560,25 @@ _CombineMeatWithPills
     END_AND_REFRESH
 .)
 
+
+_CombinePetrolWithTP
+.(
+    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                          ; The Petrol is back into the car (but useless)
+    SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_TINY_WC)                   ; The TP is back into the toilets (but useless)
+    SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_CURRENT)                         ; We now have a fuse for our bomb
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
+    END_AND_REFRESH
+.)
+
+
+_CombineSulfurWithSalpetre
+.(
+    SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_DARKTUNNEL)                 ; The saltpetre is back into the tunel (but useless)
+    SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_INSIDE_PIT)                   ; The sulphur is back into the pit (but useless)
+    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have gunpowder for our bomb
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
+    END_AND_REFRESH
+.)
 
 
 

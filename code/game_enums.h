@@ -76,8 +76,8 @@
 #define	e_ITEM__Last_Container       5          // ----- END CONTAINERS MARKER
 
 // Items requiring containers
-#define	e_ITEM_BlackDust  			 6          // black dust
-#define	e_ITEM_YellowPowder  		 7          // gritty yellow powder
+#define	e_ITEM_Saltpetre  			 6          // some saltpetre
+#define	e_ITEM_Sulphur               7          // some sulphur
 #define	e_ITEM_Petrol  				 8          // some petrol
 #define	e_ITEM_Water  				 9          // some water
 #define	e_ITEM_LargeDove  			 10         // a large dove
@@ -105,7 +105,7 @@
 #define	e_ITEM_HandWrittenNote  	 29         // a hand written note
 #define	e_ITEM_Rope  				 30         // a length of rope
 #define e_ITEM_HandheldGame          31         // a handheld game
-#define	e_ITEM_RollOfToiletPaper  	 32         // a roll of toilet tissue~
+#define	e_ITEM_ToiletRoll            32         // a roll of toilet tissue~
 #define	e_ITEM_HosePipe  			 33         // a hose-pipe
 #define	e_ITEM_BrokenGlass  		 34         // broken glass
 #define e_ITEM_Medicinecabinet       35         // a thick curtain

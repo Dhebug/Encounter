@@ -28,8 +28,8 @@ _gItems
     ITEM_CONTAINER( _gTextItemSmallBottle ,e_LOC_NONE            )  // e_ITEM_SmallBottle          
 
     // Items requiring containers
-    ITEM( _gTextItemBlackDust             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_BlackDust            
-    ITEM( _gTextItemYellowPowder          ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_YellowPowder         
+    ITEM( _gTextItemBlackDust             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre            
+    ITEM( _gTextItemYellowPowder          ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
     ITEM( _gTextItemPetrol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Petrol               
     ITEM( _gTextItemWater                 ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Water                
     ITEM( _gTextItemLargeDove             ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet))                     // e_ITEM_LargeDove            
@@ -56,7 +56,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHandWrittenNote       ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandWrittenNote          
     ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Rope                 
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
-    ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_RollOfToiletPaper    
+    ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ToiletRoll    
     ITEM_NORMAL( _gTextItemHosePipe              ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HosePipe             
     ITEM_NORMAL( _gTextItemBrokenGlass           ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenGlass          
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet

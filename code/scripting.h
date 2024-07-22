@@ -121,6 +121,7 @@
 // Value mapping
 #define VALUE_MAPPING(value,address)            .byt value,<address,>address
 #define VALUE_MAPPING2(value1,value2,address)   .byt value1,value2,<address,>address
+#define COMBINE_MAPPING(value1,value2,address)  .byt value1,value2,<address,>address,value2,value1,<address,>address
 #define WORD_MAPPING(value,address,flag)        .byt value,flag,<address,>address
 
 #define FLAG_MAPPING_DEFAULT             0

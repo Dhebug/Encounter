@@ -53,8 +53,8 @@ These have no purpose their own, they are just here to allow the player to trans
 These items cannot just be collected, you need some adequate containers to transport them
 |Item|Description|Define|
 |-|-|-|
-|**black dust**|Component for the black powder|e_ITEM_BlackDust|
-|**gritty yellow powder**|Component for the black powder|e_ITEM_YellowPowder|
+|**black dust**|Component for the black powder|e_ITEM_Saltpetre|
+|**gritty yellow powder**|Component for the black powder|e_ITEM_Sulphur|
 |**some petrol**|Component for the fuse|e_ITEM_Petrol|
 |**some water**|Not actually used|e_ITEM_Water|
 
@@ -79,7 +79,7 @@ These are items you will find around in the various locations
 |**a heavy safe**|The safe is in the basement and contains chemicals|e_ITEM_HeavySafe<br>e_ITEM_HeavySafe|
 |**a hand written note**|The note is a help for the player telling them to investigate the safe in the basement|e_ITEM_HandWrittenNote|
 |**a length of rope**|The rope is necessary for the girl to escape, but can also be used around the tree to escape the pit|e_ITEM_Rope<br>e_ITEM_RopeAttachedToATree|
-|**a roll of toilet tissue**|The toilet roll can be used to build some fuse for the bomb|e_ITEM_RollOfToiletPaper|
+|**a roll of toilet tissue**|The toilet roll can be used to build some fuse for the bomb|e_ITEM_ToiletRoll|
 |**a hose-pipe**|This tube can be used to get the petrol out of the car tank|e_ITEM_HosePipe|
 |**a set of keys**|Found ouside the house, they open the panel with the alarm (probably fell from the pockets of the owner)|e_ITEM_Keys|
 |**a newspaper**|Present in the inventory of the player at the start to provide some information|e_ITEM_Newspaper|
