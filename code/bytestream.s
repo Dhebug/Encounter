@@ -718,40 +718,54 @@ _PrintStatusMessageAsm
     ; char* ptrScreen=(char*)0xbb80+40*22;
     lda #<($bb80+40*22)
     sta tmp0+0
+    sta tmp1+0
     lda #>($bb80+40*22)
     sta tmp0+1
-
+    sta tmp1+1
++_PrintStatusMessageAddr
     ; Write the color code
     ldy #1
     lda _param1
     sta (tmp0),y
+    sta (tmp1),y
+
+    ; Clear the rest of the line
+    lda #32
+loop_clear
+    iny
+    sta (tmp0),y
+    sta (tmp1),y
+    cpy #39
+    bne loop_clear
 
     ; Write the message
-    lda #<($bb80+40*22+2)
+    clc
+    lda tmp0+0
+    adc #2
     sta tmp0+0
-    lda #>($bb80+40*22+2)
+    lda tmp0+1
+    adc #0
     sta tmp0+1
+
+    clc
+    lda tmp1+0
+    adc #2
+    sta tmp1+0
+    lda tmp1+1
+    adc #0
+    sta tmp1+1
 
     ldy #0
 loop_message    
     lda (_param0),y
     beq end_message
     sta (tmp0),y
+    sta (tmp1),y
     iny
     jmp loop_message
 end_message    
     ; Adjust the pointer to the next position (_param0+y+1)
-    jsr _Adjust_gStreamNextPtr
-
-    ; Clear the rest of the line
-    lda #32
-loop_clear
-    sta (tmp0),y
-    iny
-    cpy #39-2
-    bne loop_clear
-
-    rts
+    jmp _Adjust_gStreamNextPtr
 .)
 
 
@@ -809,7 +823,22 @@ _ByteStreamCommandINFO_MESSAGE
     lda  _gCurrentStream+1
     sta _param0+1
 
-    jsr _PrintInformationMessageAsm  
+    ; Set the double height attribute
+    lda #10
+    sta _param1
+
+    ; Set a different screen location for the big messages
+    lda #<($bb80+40*20)
+    sta tmp0+0
+    lda #>($bb80+40*20)
+    sta tmp0+1
+    lda #<($bb80+40*21)
+    sta tmp1+0
+    lda #>($bb80+40*21)
+    sta tmp1+1
+    
+    jsr _PrintStatusMessageAddr
+
 
     ; gCurrentStream += strlen(gCurrentStream)+1;
     lda _gStreamNextPtr+0

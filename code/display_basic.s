@@ -17,7 +17,7 @@ _gShowHighlights    .byt 0
 _spaceCounter  .dsb 1
 _wasTruncated  .dsb 1
 _car           .dsb 1
-_wordLength    .dsb 1    
+_lengthFixing  .dsb 1    // If we find a control character, it does not count as part of the word
 _isHighlighted .dsb 1
 
 
@@ -59,11 +59,14 @@ _PrintStringInternal
 
 loop
     ldy #0
+    sty _lengthFixing
     lda (_param0),y
     cmp #" "                // Space
     beq space
     cmp #TEXT_CRLF          // Carriage return
     beq carriage_return
+    cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
+    beq highlighter_character
     cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
     bne normal_character
 
@@ -86,6 +89,8 @@ carriage_return
     jsr _IncrementParam0
     jmp loop
 
+highlighter_character
+    inc _lengthFixing       // The word starts by "_"
 normal_character
     ; Find the length of the next word
     iny
@@ -97,8 +102,10 @@ loop_find_word_end
     beq found_word_end
     cmp #TEXT_CRLF          // Carriage return
     beq found_word_end
-    //cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
-    //beq found_word_end_and_eat_character
+    cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
+    bne skip_highlight
+    inc _lengthFixing
+skip_highlight
     iny
 
     jmp loop_find_word_end
@@ -111,6 +118,8 @@ found_word_end
     ; Does it fit? 
     tya
     tax 
+    sec
+    sbc _lengthFixing    ; Make sure to remove any control character we found
     clc
     adc _gPrintPos
     adc _spaceCounter

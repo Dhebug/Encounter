@@ -53,7 +53,8 @@ keyword gWordsArray[] =
     { "GLASS",  e_ITEM_BrokenGlass          },  
     { "BOTTLE", e_ITEM_SmallBottle          },  
     { "FUSE",   e_ITEM_Fuse                 },  
-    { "GUN",    e_ITEM_GunPowder            },  
+    { "GUNPOWDER", e_ITEM_GunPowder            },  
+    { "MIX",    e_ITEM_GunPowder            },  
     { "DART",   e_ITEM_DartGun              },  
     { "KEYS",   e_ITEM_Keys                 },  
     { "NEWSPAPER",e_ITEM_Newspaper          },  
@@ -77,6 +78,7 @@ keyword gWordsArray[] =
     { "DOOR"    ,e_ITEM_CarDoor      },  
     { "TANK"    ,e_ITEM_CarTank      },  
     
+    { "MORTAR"  ,e_ITEM_MortarAndPestle  },  
     
 
     // Directions

@@ -108,7 +108,7 @@ _EndLocationNames
 _StartItemNames
 #ifdef LANGUAGE_FR
 // Containers
-_gTextItemTobaccoTin              .byt "une tabatière vide",0
+_gTextItemTobaccoTin              .byt "une tabatière",0
 _gTextItemBucket                  .byt "un seau en bois",0
 _gTextItemCardboardBox            .byt "une boite en carton",0
 _gTextItemFishingNet              .byt "un filet de pêche",0
@@ -144,7 +144,7 @@ _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
 _gTextItemYoungGirl               .byt "une jeune fille",0
 _gTextItemFuse                    .byt "une _mêche",0
-_gTextItemGunPowder               .byt "de la _poudre à cannon",0
+_gTextItemGunPowder               .byt "un _mix grumeleux",0
 _gTextItemKeys                    .byt "un jeu de _clefs",0
 _gTextItemNewspaper               .byt "un _journal",0
 _gTextItemBomb                    .byt "une _bombe",0
@@ -157,9 +157,10 @@ _gTextItemHandheldGame            .byt "un _jeu portable",0
 _gTextItemSedativePills           .byt "des _somnifères",0
 _gTextItemDartGun                 .byt "un _lance fléchettes",0
 _gTextItemBlackTape               .byt "du _ruban adhésif noir",0
+_gTextItemMortarAndPestle         .byt "un mortier et pilon",0
 #else
 // Containers
-_gTextItemTobaccoTin              .byt "an empty tobacco _tin",0               
+_gTextItemTobaccoTin              .byt "a tobacco _tin",0               
 _gTextItemBucket                  .byt "a wooden _bucket",0                    
 _gTextItemCardboardBox            .byt "a cardboard _box",0                    
 _gTextItemFishingNet              .byt "a fishing _net",0                      
@@ -195,7 +196,7 @@ _gTextItemBrokenGlass             .byt "broken glass",0
 _gTextItemAcidBurn                .byt "an acid burn",0                       
 _gTextItemYoungGirl               .byt "a young girl",0                        
 _gTextItemFuse                    .byt "a _fuse",0                             
-_gTextItemGunPowder               .byt "some _gunpowder",0                     
+_gTextItemGunPowder               .byt "a rough _powder mix",0
 _gTextItemKeys                    .byt "a set of _keys",0                      
 _gTextItemNewspaper               .byt "a _newspaper",0                        
 _gTextItemBomb                    .byt "a _bomb",0                             
@@ -208,6 +209,7 @@ _gTextItemHandheldGame            .byt "a handheld _game",0
 _gTextItemSedativePills           .byt "some sedative _pills",0
 _gTextItemDartGun                 .byt "a dart _gun",0
 _gTextItemBlackTape               .byt "some black adhesive _tape",0
+_gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
 #endif
 _EndItemNames
 
@@ -1120,12 +1122,12 @@ _gDescriptionDarkerCellar
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
 #ifdef LANGUAGE_FR       
         SET_DESCRIPTION("La fenêtre éclaire la pièce")
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre")
 #else
         SET_DESCRIPTION("The room gets light from the window")
 #endif    
         SET_ITEM_LOCATION(e_ITEM_AlarmPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a window")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
 
         ; Is the alarm panel open?
         JUMP_IF_TRUE(alarm_panel_closed,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))
@@ -1139,10 +1141,10 @@ alarm_panel_closed
     ELSE(else,open)
 #ifdef LANGUAGE_FR       
         SET_DESCRIPTION("Cette pièce est encore plus sombre")
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une fenêtre noircie")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre noircie")
 #else
         SET_DESCRIPTION("This room is even darker than the last")
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened window")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
 #endif    
     ENDIF(open)
 
@@ -1552,9 +1554,9 @@ _CombineMeatWithPills
     SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_GONE_FOREVER)      ; The sedative are gone from the game
     SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
 #ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
-    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"viande droggée")
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"_viande droggée")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged meat")
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged _meat")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!    
     END_AND_REFRESH
@@ -1575,8 +1577,13 @@ _CombineSulfurWithSalpetre
 .(
     SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_DARKTUNNEL)                 ; The saltpetre is back into the tunel (but useless)
     SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_INSIDE_PIT)                   ; The sulphur is back into the pit (but useless)
-    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have gunpowder for our bomb
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
+    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
+
+    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
+    INFO_MESSAGE("It's mixed...")
+    WAIT(50*2)
+    INFO_MESSAGE("...but there are some large clumps")
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -1835,9 +1842,9 @@ _OpenCurtain
         SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PADLOCKED_ROOM)  ; We can now access the padlocked room
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau ouvert")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened curtain")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -1852,9 +1859,9 @@ _OpenFridge
         UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                        ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                       ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur ouvert")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open fridge")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open _fridge")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
             SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
@@ -1870,9 +1877,9 @@ _OpenMedicineCabinet
         UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                               ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie ouverte")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine cabinet")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine _cabinet")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
             SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
@@ -1888,9 +1895,9 @@ _OpenGunCabinet
         UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                    ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une armoire à armes ouverte")
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun cabinett")
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
             DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET,"Gun cabinet upper drawer")         ; Show what we found!
@@ -1917,9 +1924,9 @@ _OpenAlarmPanel
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
             UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                 ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme ouverte")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme ouverte")
 #else
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm panel")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm _panel")
 #endif        
             SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_DARKCELLARROOM)                         ; The alarm button is now visible 
         ENDIF(open)
@@ -1958,9 +1965,9 @@ _OpenCarBoot
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                             ; Is the boot closed?
         UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                      ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un coffre ouvert")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car boot")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car _boot")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -1972,9 +1979,9 @@ _OpenCarDoor
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                              ; Is the door closed?
         UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une porte ouverte")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car door")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open _car door")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
             SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
@@ -1989,7 +1996,7 @@ _OpenCarPetrolTank
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                              ; Is the petrol tank closed?
         UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence ouvert")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence ouvert")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
 #endif        
@@ -2027,9 +2034,9 @@ _CloseCurtain
         SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_NONE)             ; The room behind is not accessible anymore
 +_gTextItemClosedCurtain = *+2                                                                       ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                   ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un rideau fermé")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau fermé")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
+        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed _curtain")
 #endif    
     ENDIF(curtain)
     END_AND_REFRESH
@@ -2042,9 +2049,9 @@ _CloseFridge
         SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                              ; Close it!
 +_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un réfrigérateur")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a fridge")
+        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a _fridge")
 #endif    
     ENDIF(fridge)
     END_AND_REFRESH
@@ -2057,9 +2064,9 @@ _CloseMedicineCabinet
         SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                     ; Close it!
 +_gTextItemMedicineCabinet = *+2                                                                    ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une armoire à pharmacie")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine cabinet")
+        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine _cabinet")
 #endif    
     ENDIF(cabinet)
     END_AND_REFRESH
@@ -2072,9 +2079,9 @@ _CloseGunCabinet
         SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                          ; Close it!
 +_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une armoire à armes")
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun cabinet")
+        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun _cabinet")
 #endif    
     ENDIF(cabinet)
     END_AND_REFRESH
@@ -2088,9 +2095,9 @@ _CloseAlarmPanel
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                  ; And get an achievement for that action
 +_gTextItemLockedPanel = *+2       
 #ifdef LANGUAGE_FR                                                                          ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme fermée")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme fermée")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm panel")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm _panel")
 #endif        
         SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                    ; The alarm button is now invisible 
     ENDIF(open)
@@ -2104,7 +2111,7 @@ _CloseCarBoot
         SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                        ; Close it!
 +_gTextItemCarBoot = *+2        
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un coffre de voiture")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre de voiture")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car _boot")
 #endif        
@@ -2119,7 +2126,7 @@ _CloseCarDoor
         SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarDoor = *+2        
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une porte ouverte")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car _door")
 #endif        
@@ -2134,7 +2141,7 @@ _CloseCarPetrolTank
         SET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                        ; Close it!
 +_gTextItemCarPetrolTank = *+2        
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un réservoir d'essence")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol _tank")
 #endif        
@@ -2174,6 +2181,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
     VALUE_MAPPING(e_ITEM_HosePipe           , _UseHosePipe)
+    VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2213,9 +2221,9 @@ around_the_pit
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une corde attachée à un arbre")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde attachée à un arbre")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a rope attached to a tree")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope attached to a tree")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
     END_AND_REFRESH
@@ -2269,9 +2277,9 @@ _UseKeys
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
             INFO_MESSAGE("The door is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une centrale d'alarme déverouillée")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
 #else
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm panel")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
 #endif        
             WAIT(50*1)
         ENDIF(locked)
@@ -2287,18 +2295,18 @@ _UseAlarmSwitch
         SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
         INFO_MESSAGE("The alarm is now disabled")
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un bouton en position arrêt")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position arrêt")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a switch in OFF position")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in OFF position")
 #endif        
     ELSE(on,off)
         UNSET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                         ; Enable the alarm 
         INFO_MESSAGE("The alarm is now disabled")
 +_gTextItemAlarmSwitch = *+2
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un bouton en position marche")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position marche")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a switch in ON position")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in ON position")
 #endif        
     ENDIF(off)
     WAIT(50*2)
@@ -2327,13 +2335,50 @@ abandonned_car
     ENDIF(petrol)
 
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"un tuyeau dans le réservoir")
+    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"un _tuyeau dans le réservoir")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"a _hose in the petrol tank")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE_PIPE)
     END_AND_REFRESH
 .)
+
+
+
+_UseMortar
+.(
+    JUMP_IF_TRUE(has_powder,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT))
+    JUMP_IF_TRUE(has_powder,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_INVENTORY))
+cannot_use_mortar
+    ERROR_MESSAGE("Nothing to use it with")
+    END_AND_REFRESH
+
+has_powder
+    JUMP_IF_FALSE(made_gun_powder,CHECK_ITEM_FLAG(e_ITEM_GunPowder,ITEM_FLAG_TRANSFORMED))
+already_done    
+    ERROR_MESSAGE("It's already mixed")
+    END_AND_REFRESH
+
+
+made_gun_powder
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_GunPowder,"de la _poudre à cannon")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_GunPowder,"some _gunpowder")
+#endif    
+    SET_ITEM_FLAGS(e_ITEM_GunPowder,ITEM_FLAG_TRANSFORMED)               ; It's now ready to use
+
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
+
+    DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
+    INFO_MESSAGE("Homemade Gun powder...")
+    WAIT(50*2)
+    INFO_MESSAGE("...need a proper canister to store it")
+    WAIT(50*2)
+
+    END_AND_REFRESH
+.)
+
 
 
 /* MARK: Search Action 🕵️‍♀️
@@ -2528,9 +2573,9 @@ _CommonDogDisabled
     SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
 +_gTextDogLying = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un chien immobile")
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un _chien immobile")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a dog lying")
+    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a _dog lying")
 #endif    
     END_AND_REFRESH
 .)
@@ -2542,9 +2587,9 @@ _CommonThugDisabled
     SET_ITEM_FLAGS(e_ITEM_Thug,ITEM_FLAG_DISABLED)
 +_gTextDeadThug = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"un voyou hors d'état de nuire")
+    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"un _voyou hors d'état de nuire")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive thug")
+    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive _thug")
 #endif    
     END_AND_REFRESH
 .)
@@ -2572,9 +2617,9 @@ _TakeRope
 .(
 +_gTextItemRope = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une longueur de corde")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une longueur de _corde")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a length of rope")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a length of _rope")
 #endif    
     JUMP(_TakeCommon)
 .)

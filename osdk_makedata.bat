@@ -173,6 +173,8 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_basement_window_darkened
 %CONVERT% view_alarm_triggered
 %CONVERT% view_mixtape
+%CONVERT% view_rough_powder
+%CONVERT% view_mortar_and_pestle
 
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo

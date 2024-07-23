@@ -125,8 +125,9 @@
 #define e_ITEM_CarBoot               49         // the car boot
 #define e_ITEM_CarDoor               50         // the car door
 #define e_ITEM_CarTank               51         // the car petrol tank
-#define	e_ITEM_COUNT_ 				 52         //  ----- END MARKER - Free until 127, after are action words
-#define e_ITEM_CURRENT               52         // For the scripting, so the current objects can be accessed from various scripts
+#define e_ITEM_MortarAndPestle       52         // a mortar and pestle
+#define	e_ITEM_COUNT_ 				 53         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
 #define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_

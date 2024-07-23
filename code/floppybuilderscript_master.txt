@@ -276,6 +276,11 @@ AddDefine LOADER_PICTURE_ALARM_TRIGGERED {FileIndex}
 AddFile ..\build\files\view_mixtape.hir
 AddDefine LOADER_PICTURE_MIXTAPE {FileIndex}
 
+AddFile ..\build\files\view_rough_powder.hir
+AddDefine LOADER_PICTURE_ROUGH_POWDER_MIX {FileIndex}
+
+AddFile ..\build\files\view_mortar_and_pestle.hir
+AddDefine LOADER_PICTURE_MORTAR_AND_PESTLE {FileIndex}
 
 ; All the sprites
 #ifdef LANGUAGE_FR

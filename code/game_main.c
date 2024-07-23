@@ -101,8 +101,9 @@ void PrintSceneObjects()
         {
             if (gItems[item].location == gCurrentLocation)
             {
-                if (itemPrinted)
+                if (itemPrinted && (gPrintPos+2)<=gPrintWidth)
                 {
+                    // We only print the comma if we already have an item printed out, and we are not at the start of a new line
                     PrintString(", ");
                 }
                 PrintString(gItems[item].description);
