@@ -413,6 +413,7 @@ __fdc_flags_2
 ; X=File index
 ;----------------------------------------
 LoadData
+    jsr StartAccess
     ldy #0
     sty __fetchByte+1
     
@@ -507,7 +508,7 @@ skip_destination_inc
     sbc ptr_destination_end+1
     bcc unpack_loop  
 ClearLoadingPic	
-    rts
+    jmp EndAccess
     
 
 back_copy
@@ -677,6 +678,7 @@ __fdc_status_2
 ;-----------------------------
 IrqHandler	
     bit $304
+    jsr RefreshAccessIndicator            ; So we get the access indicator between modules
 IrqDoNothing
     rti	
 
@@ -770,17 +772,55 @@ end_of_commandw
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 avoid_cumulus_bug	.byt 0
 
+
+; Blinking light indicator in the bottom right of the screen
+StartAccess
+    php
+    sei
+    lda $bfdf                  ; Save the current loading indicator byte value
+    sta auto_restore_indicator
+    lda #OPCODE_NOP             ; Enable the IRQ handler
+    sta auto_nop_or_rts
+    plp
+    rts
+
+EndAccess
+    php
+    sei
+    lda #OPCODE_RTS             ; Disable the IRQ handler
+    sta auto_nop_or_rts
+auto_restore_indicator=*+1    
+    lda #1                     ; Restore the loading indicator byte value
+    sta $bfdf
+    plp
+    rts
+
+
+RefreshAccessIndicator
+auto_nop_or_rts    
+    nop               ; NOP or RTS depending
+    pha
+    lda $BFDF
+    clc
+    adc #16+1
+    and #16+7
+    sta $BFDF
+    pla
+	rts
+
+
+
 _EndLoaderCode
 
 ;
 ; This is free memory that can be used, when it reaches zero then the loader start address should be changed
 ;
 
-    .dsb $FFEC - _EndLoaderCode
+    .dsb $FFE9 - _EndLoaderCode
 
 _Vectors
 
-#if ( _Vectors <> $FFEC )
+#if ( _Vectors <> $FFE9 )
 #error - Vector address is incorrect, loader will crash
 #else
 
@@ -789,6 +829,7 @@ _Vectors
 ;
 
 ; Chema: WriteSupport
+_LoaderApiLoadingAnimation      .byt OPCODE_JMP,<RefreshAccessIndicator,>RefreshAccessIndicator   ; $FFE9-$FFEB
 _LoaderApiSaveData              .byt OPCODE_JMP,<WriteData,>WriteData   ; $FFEC-$FFEE
 
 #ifdef ENABLE_SPLASH
@@ -843,6 +884,10 @@ _LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-
 ;
 ; These three HAVE to be at these precise adresses, they map to hardware registers
 ;
+#if ( * <> $FFFA )
+#error - Vector address is incorrect, loader will crash
+#else
+
 _VectorNMI          .word IrqDoNothing              ; $FFFA-$FFFB - NMI Vector (Usually points to $0247)
 _VectorReset        .word IrqDoNothing              ; $FFFC-$FFFD - RESET Vector (Usually points to $F88F)
 _VectorIRQ          .word IrqHandler                ; $FFFE-$FFFF - IRQ Vector (Normally points to $0244)

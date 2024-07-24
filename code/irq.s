@@ -120,6 +120,9 @@ InterruptHandler
     inc _VblCounter
     jsr IrqTasks50hz
 
+    ; Call the loader "RGB flash" disk access indicator
+    jsr _LoaderApiLoadingAnimation
+
 skip_50hz_task
 	
     ; Restore regs and return

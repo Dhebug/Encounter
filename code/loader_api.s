@@ -6,7 +6,8 @@
 
   ;*=$FFEF
 
-_LoaderApiSaveData	  =$FFEC  
+_LoaderApiLoadingAnimation = $FFE9
+_LoaderApiSaveData	       =$FFEC  
 
 _LoaderApiFileStartSector =$FFEF
 _LoaderApiFileStartTrack  =$FFF0
