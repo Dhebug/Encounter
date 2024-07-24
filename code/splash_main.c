@@ -49,6 +49,8 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
+BUILD_MARKER
+
 
 
 // Some quite ugly function which waits a certain number of frames

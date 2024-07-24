@@ -103,6 +103,7 @@ extern unsigned char PsgenvShape;
 
 extern unsigned char MusicMixerMask;
 
+#define BUILD_MARKER  const char gBuildMarker[] = "Build ID: " VERSION " " __DATE__ " at " __TIME__;
 
 // Common
 #define SetLineAddress(address)            { gPrintAddress=address; }
