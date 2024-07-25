@@ -51,11 +51,15 @@ _Text_GameInstructions
 _Text_GameInstructions
     .byt 1,"           How to play",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Your task is to find and rescue a",TEXT_CRLF
-	.byt "young girl kidnapped by thugs.",TEXT_CRLF
+    .byt "You have two hours to find and rescue",TEXT_CRLF
+	.byt "a young girl kidnapped by thugs.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "The mission fails if you get detected",TEXT_CRLF
+	.byt "or if you run out of time.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Give orders using VERBS and NOUNS",TEXT_CRLF
-	.byt "eg:DROP BOTTLE or GET KEYS",TEXT_CRLF
+	;.byt "eg:DROP BOTTLE or GET KEYS",TEXT_CRLF
+    .byt "eg: GET KEYS or COMBINE BREAD BUTTER",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"   MOVEMENT            VERBS",TEXT_CRLF,TEXT_CRLF
 	.byt "N:NORTH U:UP       TAKE/GET DROP/PUT",TEXT_CRLF
@@ -67,9 +71,6 @@ _Text_GameInstructions
     .byt TEXT_CRLF
 	.byt "Everything you need is here but you",TEXT_CRLF
 	.byt "may have to manufacture some items.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "The mission fails if the movement or",TEXT_CRLF
-	.byt "alarm counters reaches zero.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Drawing and annotating a map helps.",TEXT_CRLF
     .byt TEXT_CRLF
