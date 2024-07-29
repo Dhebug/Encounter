@@ -1688,6 +1688,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
     VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
+    VALUE_MAPPING(e_ITEM_HeavySafe          , _InspectSafe)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1793,15 +1794,19 @@ no_ladder
 
 
 _InspectPlasticBag
+.(
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Juste un sac blanc normal")
 #else
     ERROR_MESSAGE("It's just a white generic bag")
 #endif    
     END
+.)
+
 
 
 _InspectMixTape
+.(
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE,"Best Of 1981-1982")
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une compilation faite maison !")
@@ -1810,6 +1815,20 @@ _InspectMixTape
 #endif    
     WAIT(50*2)
     END_AND_REFRESH
+.)
+
+
+_InspectSafe
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il est gros, mais semble fragile")
+#else
+    INFO_MESSAGE("It's big, but not that sturdy")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
 
 
 

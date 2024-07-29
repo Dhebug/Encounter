@@ -282,6 +282,13 @@ AddDefine LOADER_PICTURE_ROUGH_POWDER_MIX {FileIndex}
 AddFile ..\build\files\view_mortar_and_pestle.hir
 AddDefine LOADER_PICTURE_MORTAR_AND_PESTLE {FileIndex}
 
+AddFile ..\build\files\view_safe_door.hir
+AddDefine LOADER_PICTURE_SAFE_DOOR {FileIndex}
+
+AddFile ..\build\files\view_explosion.hir
+AddDefine LOADER_PICTURE_EXPLOSION {FileIndex}
+
+
 ; All the sprites
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\masked_the_end_fr.msk
