@@ -1,5 +1,6 @@
 
 #define DELAY_FIRST_BUBBLE      25
+#define DELAY_INFO_MESSAGE      50*4
 
 #define OFFSET(x,y) x,y
 #define BLOCK_SIZE(w,h) w,h

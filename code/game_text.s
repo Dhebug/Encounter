@@ -1545,6 +1545,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_Meat        ,_CombineMeatWithPills)
     COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
+    COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1581,12 +1582,26 @@ _CombineSulfurWithSalpetre
 
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
     INFO_MESSAGE("It's mixed...")
-    WAIT(50*2)
+    WAIT(DELAY_INFO_MESSAGE)
     INFO_MESSAGE("...but there are some large clumps")
-    WAIT(50*2)
+    WAIT(DELAY_INFO_MESSAGE)
     END_AND_REFRESH
 .)
 
+
+_CombineGunPowderWithFuse
+.(
+    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_NONE)                       ; The gunpowder is gone
+    SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
+    SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
+
+    DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
+    INFO_MESSAGE("The explosive is ready...")
+    WAIT(DELAY_INFO_MESSAGE)
+    INFO_MESSAGE("...but it needs to be attached")
+    WAIT(DELAY_INFO_MESSAGE)
+    END_AND_REFRESH
+.)
 
 
 
@@ -2201,6 +2216,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
     VALUE_MAPPING(e_ITEM_HosePipe           , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
+    VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2398,6 +2414,13 @@ made_gun_powder
     END_AND_REFRESH
 .)
 
+
+
+_UseBomb
+.(
+    ERROR_MESSAGE("It's already mixed")
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Search Action 🕵️‍♀️

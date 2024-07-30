@@ -288,6 +288,9 @@ AddDefine LOADER_PICTURE_SAFE_DOOR {FileIndex}
 AddFile ..\build\files\view_explosion.hir
 AddDefine LOADER_PICTURE_EXPLOSION {FileIndex}
 
+AddFile ..\build\files\view_ready_to_blow.hir
+AddDefine LOADER_PICTURE_READY_TO_BLOW {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR
