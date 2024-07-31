@@ -285,11 +285,17 @@ AddDefine LOADER_PICTURE_MORTAR_AND_PESTLE {FileIndex}
 AddFile ..\build\files\view_safe_door.hir
 AddDefine LOADER_PICTURE_SAFE_DOOR {FileIndex}
 
+AddFile ..\build\files\view_safe_door_with_bomb.hir
+AddDefine LOADER_PICTURE_SAFE_DOOR_WITH_BOMB {FileIndex}
+
 AddFile ..\build\files\view_explosion.hir
 AddDefine LOADER_PICTURE_EXPLOSION {FileIndex}
 
 AddFile ..\build\files\view_ready_to_blow.hir
 AddDefine LOADER_PICTURE_READY_TO_BLOW {FileIndex}
+
+AddFile ..\build\files\view_sticky_bomb.hir
+AddDefine LOADER_PICTURE_STICKY_BOMB {FileIndex}
 
 
 ; All the sprites

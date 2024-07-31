@@ -158,6 +158,7 @@ _gTextItemSedativePills           .byt "des _somnifères",0
 _gTextItemDartGun                 .byt "un _lance fléchettes",0
 _gTextItemBlackTape               .byt "du _ruban adhésif noir",0
 _gTextItemMortarAndPestle         .byt "un mortier et pilon",0
+_gTextItemAdhesive                .byt "de l'_adhésif",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -210,6 +211,7 @@ _gTextItemSedativePills           .byt "some sedative _pills",0
 _gTextItemDartGun                 .byt "a dart _gun",0
 _gTextItemBlackTape               .byt "some black adhesive _tape",0
 _gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
+_gTextItemAdhesive                .byt "some _adhesive",0
 #endif
 _EndItemNames
 
@@ -1095,6 +1097,19 @@ _gDescriptionBasementStairs
 
 // MARK: Cellar Safe
 _gDescriptionCellar
+.(    
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,6,99)                        ; Draw the open damaged door
+                _IMAGE(34,0)
+                _BUFFER(30,16)
+    ELSE(else,safe_open)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; If the bomb installed
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                    _IMAGE(8,67)
+                    _BUFFER(30,43)
+        ENDIF(bomb)
+    ENDIF(safe_open)
+
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une cave frigide et humide")
 #else
@@ -1109,7 +1124,9 @@ _gDescriptionCellar
     _BUBBLE_LINE(75,15,0,"Is that a Franz")
     _BUBBLE_LINE(80,25,0,"Jager safe?")
 #endif    
+
     END
+.)
 
 
 // MARK: Darker Cellar
@@ -1546,6 +1563,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
+    COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1593,6 +1611,7 @@ _CombineGunPowderWithFuse
 .(
     SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_NONE)                       ; The gunpowder is gone
     SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
+    SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
@@ -1603,6 +1622,23 @@ _CombineGunPowderWithFuse
     END_AND_REFRESH
 .)
 
+
+_CombineBombWithAdhesive
+.(
+    SET_ITEM_LOCATION(e_ITEM_Adhesive,e_LOC_NONE)                        ; The adhesive is gone
+    SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED)                    ; We now have a sticky bomb
+#ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe collante")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a sticky _bomb")
+#endif    
+    DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB,"Ready to install!")
+    INFO_MESSAGE("Should be ready to use now...")
+    WAIT(DELAY_INFO_MESSAGE)
+    INFO_MESSAGE("...need to safely ignite it though!")
+    WAIT(DELAY_INFO_MESSAGE)
+    END_AND_REFRESH
+.)
 
 
 /* MARK: Read Action 📖
@@ -2418,7 +2454,15 @@ made_gun_powder
 
 _UseBomb
 .(
-    ERROR_MESSAGE("It's already mixed")
+    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
+        ERROR_MESSAGE("I should not use it here")
+        END_AND_REFRESH
+    ENDIF(cellar)
+
+    DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION,"KA BOOM!")
+    INFO_MESSAGE("I should go somewhere safe")
+    WAIT(DELAY_INFO_MESSAGE)
+
     END_AND_REFRESH
 .)
 
