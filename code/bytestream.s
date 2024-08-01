@@ -49,6 +49,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandSetDescription
     .word _ByteStreamCommandSetSceneImage
     .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
+    .word _ByteStreamCommand_CLEAR_TEXT_AREA
+
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -1024,6 +1026,17 @@ _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     sta _gCurrentStream+1
 
     rts
+.)
+
+
+; .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
+_ByteStreamCommand_CLEAR_TEXT_AREA
+.(
+    ; _param0=paper color
+    ; ClearMessageWindow(16+4);
+    jsr _ByteStreamGetNextByte
+    stx _param0+0
+    jmp _ClearMessageWindowAsm
 .)
 
 

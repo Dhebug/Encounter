@@ -36,7 +36,8 @@
 #define COMMAND_SET_DESCRIPTION 25
 #define COMMAND_SET_SCENE_IMAGE 26
 #define COMMAND_DISPLAY_IMAGE_NOBLIT 27
-#define _COMMAND_COUNT          28
+#define COMMAND_CLEAR_TEXT_AREA 28
+#define _COMMAND_COUNT          29
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -69,6 +70,7 @@
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
 #define SET_DESCRIPTION(description)         .byt COMMAND_SET_DESCRIPTION,description,0
+#define CLEAR_TEXT_AREA(paper_color)         .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
 
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement

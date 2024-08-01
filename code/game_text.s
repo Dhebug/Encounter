@@ -1097,13 +1097,14 @@ _gDescriptionBasementStairs
 
 // MARK: Cellar Safe
 _gDescriptionCellar
-.(    
+.(  
+    ; First, initialize the scene to look proper  
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,6,99)                        ; Draw the open damaged door
                 _IMAGE(34,0)
                 _BUFFER(30,16)
     ELSE(else,safe_open)
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; If the bomb installed
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; Is the bomb installed?
             BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
                     _IMAGE(8,67)
                     _BUFFER(30,43)
@@ -1125,6 +1126,81 @@ _gDescriptionCellar
     _BUBBLE_LINE(80,25,0,"Jager safe?")
 #endif    
 
+    ; Then we check if the player stroke the matches
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED),matches)    ; Are the matches on fire?
+        ; We set a few values right now, because the player can leave the script before it is finished.
+        ; If these values are not set before the first WAIT instruction, the game will be broken.
+        SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_NONE)                    ; The bomb is gone
+        SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE)            ; Don't need the matches anymore
+        UNSET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED); ; Un-strike the matches (just so the test above does not trigger a second time)
+        UNSET_ITEM_FLAGS(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED)          ; The safe is now open
+
+#ifdef LANGUAGE_FR                                                   ; Rename the safe to "an open safe"
+        SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"un _coffre ouvert")
+#else    
+        SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"a open _safe")
+#endif    
+
+        //DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+        CLEAR_TEXT_AREA(1)
+        INFO_MESSAGE("I should go somewhere safe")
+
+        WAIT(50*2)
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*1,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*2,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        CLEAR_TEXT_AREA(5)
+        INFO_MESSAGE("Hello?")
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*3,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*4,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        CLEAR_TEXT_AREA(4)
+        INFO_MESSAGE("Still there?")
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*5,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+                _IMAGE(8+3*6,67)
+                _SCREEN(30,43)
+
+        WAIT(50)
+
+        DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION,"KA BOOM!")
+        CLEAR_TEXT_AREA(1)
+        INFO_MESSAGE("Well... I warned you, didn't I?")
+
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
+        GAME_OVER(e_SCORE_FELL_INTO_PIT)                            ; The game is now over
+
+        WAIT(50*2)
+
+        JUMP(_gDescriptionGameOverLost)                             ; Draw the 'The End' logo    
+    ENDIF(matches)
+
     END
 .)
 
@@ -1135,6 +1211,7 @@ _gDescriptionCellar
 _gDescriptionDarkerCellar
 .(
     SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_DARKCELLARROOM)         ; The window is visible
+    .(
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
 #ifdef LANGUAGE_FR       
@@ -1164,6 +1241,7 @@ alarm_panel_closed
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
 #endif    
     ENDIF(open)
+    .)
 
     JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     ; Draw the ladder
@@ -1171,6 +1249,27 @@ alarm_panel_closed
                 _BUFFER(29,7)
         SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)      ; Enable the UP direction
 no_ladder
+
+    ; Make sure the safe looks correct
+    .(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                        ; Draw the open damaged door
+                _IMAGE(14,0)
+                _BUFFER(20,17)
+    ELSE(else,safe_open)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; Is the bomb installed?
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                     ; Draw the bomb attached to the closed door
+                    _IMAGE(17,0)
+                    _BUFFER(20,17)
+        ENDIF(bomb)
+    ENDIF(safe_open)
+    .)
+
+    ; Draw the explosion?
+    .(
+
+    .)
+
 
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(2)
@@ -1565,6 +1664,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
+    COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1628,7 +1728,7 @@ _CombineBombWithAdhesive
 .(
     SET_ITEM_LOCATION(e_ITEM_Adhesive,e_LOC_NONE)                        ; The adhesive is gone
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED)                    ; We now have a sticky bomb
-#ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
+#ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe collante")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a sticky _bomb")
@@ -1649,7 +1749,12 @@ _CombineStickyBombWithSafe
         END_AND_REFRESH
     ENDIF(sticky)
 
-    SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The adhesive is gone
+#ifdef LANGUAGE_FR                                                           ; Rename the sticky bomb to "bomb on the doort"
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe sur la porte")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a _bomb on the door")
+#endif    
+    SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The bomb is now in the room
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
     INFO_MESSAGE("Everything is in place...")
@@ -1659,6 +1764,12 @@ _CombineStickyBombWithSafe
     END_AND_REFRESH
 .)
 
+
+_CombineBombWithMatches
+.(
+    SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED);    // Strike the matches!
+    END_AND_REFRESH
+.)
 
 
 
@@ -1892,7 +2003,12 @@ _InspectMixTape
 
 _InspectSafe
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),else)    ; Is the bomb installed?
+        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+    ELSE(else,nobomb)
+        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
+    ENDIF(nobomb)
+
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il est gros, mais semble fragile")
 #else
@@ -2274,6 +2390,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_HosePipe           , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
+    VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2481,13 +2598,19 @@ _UseBomb
     ENDIF(cellar)
     JUMP(_CombineStickyBombWithSafe)
 
-    /*
-    DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION,"KA BOOM!")
-    INFO_MESSAGE("I should go somewhere safe")
-    WAIT(DELAY_INFO_MESSAGE)
+.)
 
-    END_AND_REFRESH
-    */
+_UseMatches
+.(
+    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
+        ERROR_MESSAGE("I can't use it here")
+        END_AND_REFRESH
+    ENDIF(cellar)
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),safe)
+        ERROR_MESSAGE("The safe is already open")
+        END_AND_REFRESH
+    ENDIF(safe)
+    JUMP(_CombineBombWithMatches)
 .)
 
 
