@@ -1564,6 +1564,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
+    COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1635,10 +1636,30 @@ _CombineBombWithAdhesive
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB,"Ready to install!")
     INFO_MESSAGE("Should be ready to use now...")
     WAIT(DELAY_INFO_MESSAGE)
+    INFO_MESSAGE("...need to install it!")
+    WAIT(DELAY_INFO_MESSAGE)
+    END_AND_REFRESH
+.)
+
+
+_CombineStickyBombWithSafe
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
+        ERROR_MESSAGE("It needs to stick to the door")
+        END_AND_REFRESH
+    ENDIF(sticky)
+
+    SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The adhesive is gone
+    SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
+    DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+    INFO_MESSAGE("Everything is in place...")
+    WAIT(DELAY_INFO_MESSAGE)
     INFO_MESSAGE("...need to safely ignite it though!")
     WAIT(DELAY_INFO_MESSAGE)
     END_AND_REFRESH
 .)
+
+
 
 
 /* MARK: Read Action 📖
@@ -2455,15 +2476,18 @@ made_gun_powder
 _UseBomb
 .(
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
-        ERROR_MESSAGE("I should not use it here")
+        ERROR_MESSAGE("I can't use it here")
         END_AND_REFRESH
     ENDIF(cellar)
+    JUMP(_CombineStickyBombWithSafe)
 
+    /*
     DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION,"KA BOOM!")
     INFO_MESSAGE("I should go somewhere safe")
     WAIT(DELAY_INFO_MESSAGE)
 
     END_AND_REFRESH
+    */
 .)
 
 
