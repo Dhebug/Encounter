@@ -159,6 +159,7 @@ _gTextItemDartGun                 .byt "un _lance fléchettes",0
 _gTextItemBlackTape               .byt "du _ruban adhésif noir",0
 _gTextItemMortarAndPestle         .byt "un mortier et pilon",0
 _gTextItemAdhesive                .byt "de l'_adhésif",0
+_gTextItemAcid                    .byt "un _acide puissant",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -212,6 +213,7 @@ _gTextItemDartGun                 .byt "a dart _gun",0
 _gTextItemBlackTape               .byt "some black adhesive _tape",0
 _gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
 _gTextItemAdhesive                .byt "some _adhesive",0
+_gTextItemAcid                    .byt "some strong _acid",0
 #endif
 _EndItemNames
 
@@ -1132,6 +1134,7 @@ _gDescriptionCellar
         ; If these values are not set before the first WAIT instruction, the game will be broken.
         SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_NONE)                    ; The bomb is gone
         SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE)            ; Don't need the matches anymore
+        SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CURRENT)                 ; The acid is now visible
         UNSET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED); ; Un-strike the matches (just so the test above does not trigger a second time)
         UNSET_ITEM_FLAGS(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED)          ; The safe is now open
 
@@ -2843,6 +2846,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_Ladder            , _TakeLadder)
     VALUE_MAPPING(e_ITEM_LargeDove         , _TakeDove)
     VALUE_MAPPING(e_ITEM_BlackTape         , _TakeBlackTape)
+    VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -2892,6 +2896,17 @@ _TakeBlackTape
 #endif    
     WAIT(50)
     END_AND_REFRESH
+.)
+
+_TakeAcid
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID,"ACME XX121 Acid")
+    INFO_MESSAGE("This stuff is highly dangerous!")
+    WAIT(DELAY_INFO_MESSAGE)
+    INFO_MESSAGE("...could go through a ship hull!")
+    WAIT(DELAY_INFO_MESSAGE)
+
+    JUMP(_TakeCommon)
 .)
 
 

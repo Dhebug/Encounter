@@ -78,4 +78,5 @@ _gItems
     ITEM_NORMAL( _gTextItemCarPetrolTank         ,e_LOC_ABANDONED_CAR   ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CarTank
     ITEM_NORMAL( _gTextItemMortarAndPestle       ,e_LOC_KITCHEN         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MortarAndPestle
     ITEM_NORMAL( _gTextItemAdhesive              ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Adhesive
+    ITEM_NORMAL( _gTextItemAcid                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Acid
     

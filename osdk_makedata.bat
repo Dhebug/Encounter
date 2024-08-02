@@ -180,6 +180,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_explosion
 %CONVERT% view_ready_to_blow
 %CONVERT% view_sticky_bomb
+%CONVERT% view_corrosive_liquid
 
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo

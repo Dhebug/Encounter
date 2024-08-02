@@ -297,6 +297,9 @@ AddDefine LOADER_PICTURE_READY_TO_BLOW {FileIndex}
 AddFile ..\build\files\view_sticky_bomb.hir
 AddDefine LOADER_PICTURE_STICKY_BOMB {FileIndex}
 
+AddFile ..\build\files\view_corrosive_liquid.hir
+AddDefine LOADER_PICTURE_CORROSIVE_LIQUID {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR

@@ -69,6 +69,7 @@ keyword gWordsArray[] =
     { "PILLS"  ,e_ITEM_SedativePills        },  
     { "SEDATIVES",e_ITEM_SedativePills      },  
     { "ADHESIVE",e_ITEM_Adhesive            },  
+    { "ACID"    ,e_ITEM_Acid                },  
 
     { "HANDHELD",e_ITEM_HandheldGame        },  
     { "GAME"    ,e_ITEM_HandheldGame        },  
