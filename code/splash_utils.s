@@ -34,6 +34,8 @@ IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
+    jsr _PlayMusicFrame
+    jsr SoundUpdate50hz
     rts    
 .)
 
@@ -67,4 +69,15 @@ loop
 	dex
 	bpl loop
 	rts
+.)
+
+
+
+_JingleMusic
+.(
+    .dw events
+    .byt 1+2+4+8+16+32        ; All the three channels are used
+#include "splash_music.s"
+events
+#include "splash_music_events.s"
 .)

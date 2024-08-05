@@ -187,9 +187,11 @@ SET TARGET_EXTENSION=.hir
 
 
 :: Music
+bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_jingle.aks code\splash_music.s
 bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music.s
 bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter.s
 
+bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_jingle.aks code\splash_music_events.s
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music_events.s
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter_events.s
 

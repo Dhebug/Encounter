@@ -49,6 +49,8 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
+extern char JingleMusic[];
+
 BUILD_MARKER
 
 
@@ -255,6 +257,8 @@ void main()
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
 
+    PlayMusic(JingleMusic);
+
     // Display the Severn Software and Defence Force logos
 	DisplayLogosWithPreshift();
 
@@ -262,6 +266,8 @@ void main()
     SetupColors(16+0,7,16+0,6);
 
 	System_RestoreIRQ_SimpleVbl();
+    EndMusic();
+    PsgStopSoundAndForceUpdate();
 
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_INTRO_PROGRAM,LOADER_INTRO_PROGRAM_ADDRESS);   // 0x400

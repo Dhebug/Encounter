@@ -2,7 +2,7 @@
 
 Events
 Events_Loop
-	.word 1537	; Wait for 1536 frames.
+	.word 257	; Wait for 256 frames.
 	.byt 0
 
 	.word 0	; End of sequence.

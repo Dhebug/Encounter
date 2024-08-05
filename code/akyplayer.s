@@ -231,20 +231,20 @@ scan_header_loop                                     ;There is always at least o
 
 end_header_loop 
     lda ptr_music                                           
-    sta _auto_linker_low
+    sta auto_linker_low
     lda ptr_music+1
-    sta _auto_linker_high              ;ptData now points on the Linker.
+    sta auto_linker_high              ;ptData now points on the Linker.
     lda #OPCODE_CLC
     sta PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
     sta PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
     sta PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
     lda #<01                                            
-    sta _auto_pattern_low                   
+    sta auto_pattern_low                   
     lda #>01
-    sta _auto_pattern_high
+    sta auto_pattern_high
 
     lda #OPCODE_NOP
-    sta _auto_play_stop   ; Enable the music player frame callback
+    sta auto_play_stop   ; Enable the music player frame callback
     rts
 .)
 
@@ -253,22 +253,22 @@ _EndMusic
     sta _MusicMixerMask   ; Release all the reserved channels
     sta _MusicLoopIndex
     lda #OPCODE_RTS
-    sta _auto_play_stop   ; Disable the music player frame callback
+    sta auto_play_stop   ; Disable the music player frame callback
     jmp _PsgStopSound
 
 ; Plays the music. It must have been initialized before.
 _PlayMusicFrame
-_auto_play_stop 
+auto_play_stop 
     rts
     jsr ProcessEvent
     lda #1
     sta _PsgNeedUpdate
             
 PLY_AKY_PATTERNFRAMECOUNTER 
-_auto_pattern_low = *+1
+auto_pattern_low = *+1
     lda #$01                                            
     sta ptr_music
-_auto_pattern_high = *+1    
+auto_pattern_high = *+1    
     lda #$00
     sta ptr_music+1
     lda ptr_music
@@ -282,19 +282,19 @@ label
     ora ptr_music+1                                           
     beq PLY_AKY_PATTERNFRAMECOUNTER_OVER                
     lda ptr_music                                          
-    sta _auto_pattern_low
+    sta auto_pattern_low
     lda ptr_music+1
-    sta _auto_pattern_high
+    sta auto_pattern_high
     jmp PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK    
 
 PLY_AKY_PATTERNFRAMECOUNTER_OVER
 ;The pattern is not over.
 ;PLY_AKY_PTLINKER 
     inc _MusicLoopIndex
-_auto_linker_low = *+1
+auto_linker_low = *+1
     lda #$AC                                            ;Points on the Pattern of the linker.
     sta pt2_DT
-_auto_linker_high = *+1
+auto_linker_high = *+1
     lda #$AC
     sta pt2_DT+1
     ldy #0                                             ;Gets the duration of the Pattern, or 0 if end of the song.
@@ -328,36 +328,36 @@ end_of_song
 
 PLY_AKY_LINKERNOTENDSONG
     lda ptr_music
-    sta _auto_pattern_low                   
+    sta auto_pattern_low                   
     lda ptr_music+1
-    sta _auto_pattern_high
+    sta auto_pattern_high
     iny      
                                                
     lda (pt2_DT),Y                                      
-    sta _auto_chan1_track_low
+    sta auto_chan1_track_low
     iny
     lda (pt2_DT),Y
-    sta _auto_chan1_track_high
+    sta auto_chan1_track_high
     iny                                                 
     lda (pt2_DT),Y                                      
-    sta _auto_chan2_track_low
+    sta auto_chan2_track_low
     iny
     lda (pt2_DT),Y
-    sta _auto_chan2_track_high
+    sta auto_chan2_track_high
     iny                                                 
     lda (pt2_DT),Y                                      
-    sta _auto_chan3_track_low
+    sta auto_chan3_track_low
     iny
     lda (pt2_DT),Y
-    sta _auto_chan3_track_high
+    sta auto_chan3_track_high
 
     clc
     lda pt2_DT                                          
     adc #8                                             ; fix pt2_DT value                                          
-    sta _auto_linker_low
+    sta auto_linker_low
     lda pt2_DT+1
     adc #0
-    sta _auto_linker_high
+    sta auto_linker_high
 
     ;Resets the RegisterBlocks of the channel >1. The first one is skipped so there is no need to do so.
     lda #1                                             
@@ -379,10 +379,10 @@ PLY_AKY_CHANNEL1_WAITBEFORENEXTREGISTERBLOCK_OVER
     lda #OPCODE_CLC                                            ; Carry clear (return to initial state)                             
     sta PLY_AKY_CHANNEL1_REGISTERBLOCKLINESTATE_OPCODE  
 PLY_AKY_CHANNEL1_PTTRACK 
-_auto_chan1_track_low = *+1
+auto_chan1_track_low = *+1
     lda #$AC                                            ;Points on the Track.
     sta pt2_DT
-_auto_chan1_track_high = *+1
+auto_chan1_track_high = *+1
     lda #$AC
     sta pt2_DT+1
 
@@ -398,10 +398,10 @@ _auto_chan1_track_high = *+1
     clc
     lda pt2_DT
     adc #03         
-    sta _auto_chan1_track_low                      
+    sta auto_chan1_track_low                      
     lda pt2_DT+1
     adc #00
-    sta _auto_chan1_track_high
+    sta auto_chan1_track_high
 
     lda ptr_music                                           
     sta PLY_AKY_CHANNEL1_PTREGISTERBLOCK+1
@@ -424,10 +424,10 @@ PLY_AKY_CHANNEL2_WAITBEFORENEXTREGISTERBLOCK_OVER
     lda #OPCODE_CLC                                            ; Carry clear (return to initial state)
     sta PLY_AKY_CHANNEL2_REGISTERBLOCKLINESTATE_OPCODE  
 PLY_AKY_CHANNEL2_PTTRACK 
-_auto_chan2_track_low = *+1
+auto_chan2_track_low = *+1
     lda #$AC                                            ;Points on the Track.
     sta pt2_DT
-_auto_chan2_track_high = *+1    
+auto_chan2_track_high = *+1    
     lda #$AC
     sta pt2_DT+1                                         
 
@@ -443,10 +443,10 @@ _auto_chan2_track_high = *+1
     clc
     lda pt2_DT
     adc #03                                             
-    sta _auto_chan2_track_low                      
+    sta auto_chan2_track_low                      
     lda pt2_DT+1
     adc #00
-    sta _auto_chan2_track_high
+    sta auto_chan2_track_high
 
     lda ptr_music                                           
     sta PLY_AKY_CHANNEL2_PTREGISTERBLOCK+1
@@ -470,10 +470,10 @@ PLY_AKY_CHANNEL3_WAITBEFORENEXTREGISTERBLOCK_OVER
     sta PLY_AKY_CHANNEL3_REGISTERBLOCKLINESTATE_OPCODE  
 
 PLY_AKY_CHANNEL3_PTTRACK 
-_auto_chan3_track_low = *+1
+auto_chan3_track_low = *+1
     lda #$AC                                            ;Points on the Track.
     sta pt2_DT
-_auto_chan3_track_high = *+1
+auto_chan3_track_high = *+1
     lda #$AC
     sta pt2_DT+1                                        
 
@@ -489,10 +489,10 @@ _auto_chan3_track_high = *+1
     clc
     lda pt2_DT
     adc #03        
-    sta _auto_chan3_track_low                     
+    sta auto_chan3_track_low                     
     lda pt2_DT+1
     adc #00
-    sta _auto_chan3_track_high
+    sta auto_chan3_track_high
 
     lda ptr_music                                          
     sta PLY_AKY_CHANNEL3_PTREGISTERBLOCK+1
