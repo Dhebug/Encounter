@@ -410,7 +410,24 @@ _ByteStreamCommandSetItemLocation
 store_location    
     ldy #2
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id    
-
+    
+    ; If the item is in a container and the location is not the inventory, we need to empty it
+    cmp #e_LOC_INVENTORY
+    beq end_container
+    iny
+    lda (_gStreamItemPtr),y      // gItems->associated_item (+3) = read associated_item id    
+    cmp #255
+    beq end_container
+    pha
+    lda #255
+    sta (_gStreamItemPtr),y      // gItems->associated_item (+3) = clear associated_item id in item  
+    pla
+    jsr _ByteStreamComputeItemPtr  // Get the container pointer
+    lda #255
+    sta (_gStreamItemPtr),y      // gItems->associated_item (+3) = clear associated_item id  in container
+end_container
+    
+    
     lda #2
     jmp _ByteStreamMoveByA
 .)
@@ -781,13 +798,8 @@ _PrintInformationMessageAsm
     ; Print the message
     jsr _PrintStatusMessageAsm
 
-    ; Wait 75 frames
-    lda #75
-    sta _param0+0
-    lda #0
-    sta _param0+1
-
-    jmp _WaitFramesAsm
+    ; Wait a bit after the message is displayed
+    jmp _WaitAfterMessage
 .)
 
 
@@ -806,6 +818,12 @@ _PrintErrorMessageAsm
     ldy #>_PingData
     jsr _PlaySoundAsmXY
 
+    ; Wait a bit after the message is displayed
+    jmp _WaitAfterMessage
+.)
+
+_WaitAfterMessage
+.(
     ; Wait 75 frames
     lda #75
     sta _param0+0
@@ -814,6 +832,7 @@ _PrintErrorMessageAsm
 
     jmp _WaitFramesAsm
 .)
+
 
 ; Uses _gCurrentStream and _gStreamNextPtr
 _ByteStreamCommandINFO_MESSAGE
@@ -848,8 +867,10 @@ _ByteStreamCommandINFO_MESSAGE
     lda _gStreamNextPtr+1
     sta _gCurrentStream+1
 
-    rts
+    ; Wait a bit after the message is displayed
+    jmp _WaitAfterMessage
 .)
+
 
 ; PrintErrorMessage(gTextAGenericWhiteBag);    // "It's just a white generic bag"
 ; Uses _gCurrentStream and _gStreamNextPtr

@@ -14,7 +14,7 @@ extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so
 
 
 
-
+// MARK:Print Directions
 void PrintSceneDirections()
 {
 	unsigned char* directions = gCurrentLocationPtr->directions;
@@ -33,6 +33,7 @@ void PrintSceneDirections()
 
 // Very basic version of the inventory, does not check anything, 
 // displays a maximum of 7 items before it starts overwriting the clock
+// MARK:Print Inventory
 void PrintInventory()
 {	
 	int itemId;
@@ -78,6 +79,7 @@ void PrintInventory()
 	}
 }
 
+// MARK:Print Objects
 void PrintSceneObjects()
 {
     char itemPrinted = 0;
@@ -119,6 +121,7 @@ void PrintSceneObjects()
 }
 
 
+// MARK:Display Scenes
 void PrintSceneInformation()
 {
 	// Print the description of the place at the top (centered)
@@ -138,7 +141,7 @@ void PrintSceneInformation()
 	PrintInventory();
 }
 
-
+// MARK:Load Scene
 void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
@@ -166,6 +169,7 @@ void LoadScene()
 }
 
 
+// MARK:Player Move
 void PlayerMove()
 {
     unsigned char direction = gWordBuffer[0]-e_WORD_NORTH;
@@ -186,6 +190,7 @@ void PlayerMove()
 char ShowingKeyWords = 0;
 char ShouldShowKeyWords = 0;
 
+// MARK:Input Callback
 WORDS AskInputCallback()
 {
     HandleByteStream();
@@ -216,6 +221,7 @@ WORDS ProcessContainerAnswer()
     return gWordBuffer[0];
 }
 
+// MARK:Token Check
 char ProcessFoundToken(WORDS wordId)
 {
     if (wordId < e_ITEM_COUNT_)
@@ -238,6 +244,7 @@ char ProcessFoundToken(WORDS wordId)
 }
 
 
+// MARK:Item Checks
 char ItemCheck(unsigned char itemId)
 {
 	if (itemId<e_ITEM_COUNT_)
@@ -253,11 +260,12 @@ char ItemCheck(unsigned char itemId)
     }
     else
 	{
-		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
+		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"        
 	}
     return 0; // Cannot use
 }
 
+// MARK:Take Item
 void TakeItem()
 {
     unsigned char itemId = gWordBuffer[1];
@@ -327,6 +335,7 @@ void TakeItem()
 }
 
 
+// MARK:Drop Item
 void DropItem()
 {
     unsigned char itemId = gWordBuffer[1];
@@ -337,30 +346,23 @@ void DropItem()
 	else
 	{
 		item* itemPtr=&gItems[itemId];
-		if (itemPtr->flags & ITEM_FLAG_IS_CONTAINER)
-		{
-			// When the item is a container we need to drop both the container and the content
-			item* containerPtr=itemPtr;
-			itemId = containerPtr->associated_item;
-			itemPtr = &gItems[itemId];
+        unsigned char linkedItemId = itemPtr->associated_item;
 
-			// Put the container on the ground
-			containerPtr->location        = gCurrentLocation;
-		}
-
-		if (itemPtr->associated_item != 255)
-		{
-			// Remove the item from the container
-			item* containerPtr=&gItems[itemPtr->associated_item];
-			containerPtr->associated_item = 255;
-			itemPtr->associated_item      = 255;
-		}
-
-        // Execute the steam to perform any item specific operation
-        if (ItemCheck(itemId))
+        itemPtr->location = gCurrentLocation;
+        if (linkedItemId != 255)
         {
-            DispatchStream(gDropItemMappingsArray,itemId);
+            // Break the link between the two items
+            item* linkedItemPtr=&gItems[linkedItemId];
+            itemPtr->associated_item = 255;
+            linkedItemPtr->associated_item = 255;
+            if (itemPtr->flags & ITEM_FLAG_IS_CONTAINER)
+            {
+                // When the item is a container we need to drop both the container and the content
+                linkedItemPtr->location = gCurrentLocation;
+                DispatchStream(gDropItemMappingsArray,linkedItemId);    // Execute the stream to perform any item specific operation
+            }
         }
+        DispatchStream(gDropItemMappingsArray,itemId);    // Execute the stream to perform any item specific operation
 	}
 }
 
@@ -377,7 +379,7 @@ void Invoke()
 }
 #endif    
 
-
+// MARK:Answer
 WORDS ProcessAnswer()
 {
 	// Check the first word
@@ -402,6 +404,8 @@ WORDS ProcessAnswer()
                 unsigned char itemId = gWordBuffer[1];
                 if (ItemCheck(itemId))
                 {
+                	ClearMessageWindow(16+4);
+
                     if (flags & FLAG_MAPPING_TWO_ITEMS)
                     {
                         unsigned char itemId2 = gWordBuffer[2];
@@ -441,7 +445,7 @@ WORDS ProcessAnswer()
 }
 
 
-
+// MARK:Inits
 void Initializations()
 {
 	// erase the screen
@@ -515,6 +519,7 @@ void Initializations()
 }
 
 
+// MARK:main
 void main()
 {
     UnlockAchievement(ACHIEVEMENT_LAUNCHED_THE_GAME);

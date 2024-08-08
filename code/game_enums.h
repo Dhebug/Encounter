@@ -81,11 +81,11 @@
 #define	e_ITEM_Petrol  				 8          // some petrol
 #define	e_ITEM_Water  				 9          // some water
 #define	e_ITEM_LargeDove  			 10         // a large dove
-#define	e_ITEM_GunPowder  			 11         // some gunpowder
-#define	e_ITEM__Last_Transportable   11         // ----- END TRANSPORTABLE MARKER
+#define	e_ITEM_PowderMix  			 11         // some gunpowder
+#define	e_ITEM_GunPowder  			 12         // some gunpowder
+#define	e_ITEM__Last_Transportable   12         // ----- END TRANSPORTABLE MARKER
 
 // Then normal items
-#define	e_ITEM_AlarmPanel  		     12         // a locked panel on the wall / an open panel on wall
 #define	e_ITEM_Fridge  			     13         // a fridge
 #define	e_ITEM_SedativePills 		 14         // some sedative pills
 #define e_ITEM_BasementWindow        15         // a basement window
@@ -128,7 +128,8 @@
 #define e_ITEM_MortarAndPestle       52         // a mortar and pestle
 #define e_ITEM_Adhesive              53         // some adhesive
 #define e_ITEM_Acid                  54         // some acid
-#define	e_ITEM_COUNT_ 				 55         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_AlarmPanel  		     55         // a locked panel on the wall / an open panel on wall
+#define	e_ITEM_COUNT_ 				 56         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

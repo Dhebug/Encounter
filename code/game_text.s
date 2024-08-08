@@ -144,7 +144,8 @@ _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
 _gTextItemYoungGirl               .byt "une jeune fille",0
 _gTextItemFuse                    .byt "une _mêche",0
-_gTextItemGunPowder               .byt "un _mix grumeleux",0
+_gTextItemPowderMix               .byt "un _mix grumeleux",0
+_gTextItemGunPowder               .byt "de la _poudre à cannon",0
 _gTextItemKeys                    .byt "un jeu de _clefs",0
 _gTextItemNewspaper               .byt "un _journal",0
 _gTextItemBomb                    .byt "une _bombe",0
@@ -198,7 +199,8 @@ _gTextItemBrokenGlass             .byt "broken glass",0
 _gTextItemAcidBurn                .byt "an acid burn",0                       
 _gTextItemYoungGirl               .byt "a young girl",0                        
 _gTextItemFuse                    .byt "a _fuse",0                             
-_gTextItemGunPowder               .byt "a rough _powder mix",0
+_gTextItemPowderMix               .byt "a rough powder _mix",0
+_gTextItemGunPowder               .byt "some _gunpowder",0
 _gTextItemKeys                    .byt "a set of _keys",0                      
 _gTextItemNewspaper               .byt "a _newspaper",0                        
 _gTextItemBomb                    .byt "a _bomb",0                             
@@ -1698,15 +1700,15 @@ _CombinePetrolWithTP
 
 _CombineSulfurWithSalpetre
 .(
-    SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_DARKTUNNEL)                 ; The saltpetre is back into the tunel (but useless)
-    SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_INSIDE_PIT)                   ; The sulphur is back into the pit (but useless)
-    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
+    SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_NONE)                       ; The saltpetre is gone
+    SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_NONE)                         ; The sulphur is gone
+    SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
 
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
     INFO_MESSAGE("It's mixed...")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     INFO_MESSAGE("...but there are some large clumps")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -1720,9 +1722,9 @@ _CombineGunPowderWithFuse
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
     INFO_MESSAGE("The explosive is ready...")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     INFO_MESSAGE("...but it needs to be attached")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -1738,9 +1740,9 @@ _CombineBombWithAdhesive
 #endif    
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB,"Ready to install!")
     INFO_MESSAGE("Should be ready to use now...")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     INFO_MESSAGE("...need to install it!")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -1761,9 +1763,9 @@ _CombineStickyBombWithSafe
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
     INFO_MESSAGE("Everything is in place...")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     INFO_MESSAGE("...need to safely ignite it though!")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -1875,6 +1877,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
     VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
     VALUE_MAPPING(e_ITEM_HeavySafe          , _InspectSafe)
+    VALUE_MAPPING(e_ITEM_Thug               , _InspectThug)
+    VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -1981,12 +1985,13 @@ no_ladder
 
 _InspectPlasticBag
 .(
+    //CLEAR_TEXT_AREA(4)
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Juste un sac blanc normal")
+    INFO_MESSAGE("Juste un sac blanc normal")
 #else
-    ERROR_MESSAGE("It's just a white generic bag")
+    INFO_MESSAGE("It's just a white generic bag")
 #endif    
-    END
+    END_AND_REFRESH
 .)
 
 
@@ -2021,6 +2026,31 @@ _InspectSafe
     END_AND_REFRESH
 .)
 
+
+_InspectThug
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED),alive)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il dort")
+#else
+        INFO_MESSAGE("He is sleeping")
+#endif    
+    ELSE(alive,dead)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il ne bouge plus")
+#else
+        INFO_MESSAGE("He is not moving")
+#endif    
+        WAIT(50*2)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Peut-être à t'il des trucs utiles?")
+#else
+        INFO_MESSAGE("Maybe he has useful items?")
+#endif    
+    ENDIF(dead)
+
+    END_AND_REFRESH    
+.)
 
 
 /* MARK: Open Action 📦➡
@@ -2559,26 +2589,15 @@ abandonned_car
 
 _UseMortar
 .(
-    JUMP_IF_TRUE(has_powder,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT))
-    JUMP_IF_TRUE(has_powder,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_INVENTORY))
+    JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT))
+    JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_INVENTORY))
 cannot_use_mortar
     ERROR_MESSAGE("Nothing to use it with")
     END_AND_REFRESH
 
-has_powder
-    JUMP_IF_FALSE(made_gun_powder,CHECK_ITEM_FLAG(e_ITEM_GunPowder,ITEM_FLAG_TRANSFORMED))
-already_done    
-    ERROR_MESSAGE("It's already mixed")
-    END_AND_REFRESH
-
-
 made_gun_powder
-#ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_GunPowder,"de la _poudre à cannon")
-#else    
-    SET_ITEM_DESCRIPTION(e_ITEM_GunPowder,"some _gunpowder")
-#endif    
-    SET_ITEM_FLAGS(e_ITEM_GunPowder,ITEM_FLAG_TRANSFORMED)               ; It's now ready to use
+    SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_NONE)                       ; The rough powder mix is gone
+    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have proper gun powder
 
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
 
@@ -2654,6 +2673,7 @@ thug_disabled
 
 found_items
     SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM)
+    SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_MASTERBEDROOM)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez trouvé quelque chose")
 #else    
@@ -2902,9 +2922,9 @@ _TakeAcid
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID,"ACME XX121 Acid")
     INFO_MESSAGE("This stuff is highly dangerous!")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
     INFO_MESSAGE("...could go through a ship hull!")
-    WAIT(DELAY_INFO_MESSAGE)
+    WAIT(50*2)
 
     JUMP(_TakeCommon)
 .)

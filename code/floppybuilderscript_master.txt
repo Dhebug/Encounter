@@ -192,9 +192,9 @@ AddFile ..\build\files\loc_landing.hir
 AddFile ..\build\files\loc_outside_pit.hir
 AddFile ..\build\files\loc_study_room.hir
 AddFile ..\build\files\loc_basement_window_darkened.hir
+AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
 AddFile ..\build\files\loc_front_entrance.hir
 AddFile ..\build\files\loc_abandoned_car.hir
-AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
 AddFile ..\build\files\loc_dark_room_sunlight.hir
