@@ -36,47 +36,45 @@ void PrintSceneDirections()
 // MARK:Print Inventory
 void PrintInventory()
 {	
+    int pass;
 	int itemId;
 	int inventoryCell =0;
-	item* itemPtr = gItems;
-	memset((char*)0xbb80+40*24,32,40*4-8);  // 8 characters at the end of the inventory for the clock
-	for (itemId=0;itemId<e_ITEM_COUNT_;itemId++)
-	{
-		if (itemPtr->location == e_LOC_INVENTORY)
-		{
-			int descriptionLength = strlen(itemPtr->description);
-			char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
-            gPrintWidth=38;
-            PrintStringAt(itemPtr->description,screenPtr);
+	memset((char*)0xbb80+40*24,32,40*4);
+    gPrintWidth=38;
+    for (pass=0;pass<2;pass++)
+    {
+    	item* itemPtr = gItems;
+        for (itemId=0;itemId<e_ITEM_COUNT_;itemId++)
+        {
+            if (itemPtr->location == e_LOC_INVENTORY)
+            {
+                char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
+                unsigned char associatedItemId = itemPtr->associated_item;
 
-#if 0			
-			// Ideally it would be nice to be able to display things like
-			// - An empty plastic bag
-			// - A tin box full of dust
-			// - A bucket filled with petrol
-			//
-			// This is technically not very difficult to do, but we only have 3.5 lines of 40 characters
-			// So probably should wait a bit until the whole UI layout is 100% fixed
-			if (itemPtr->flags & ITEM_FLAG_IS_CONTAINER)
-			{
-				screenPtr += descriptionLength;
-				if (itemPtr->associated_item == 255)
-				{
-					// Empty container
-					memcpy(screenPtr," (empty)",7);
-				}
-				else
-				{
-					// Contains something
-					memcpy(screenPtr," ->",2);
-				}
-			}
-#endif			
-
-			inventoryCell++;
-		}
-		++itemPtr;
-	}
+                if (pass==0)
+                {
+                    // First pass: Only the containers with something inside
+                    if ( (itemPtr->flags & ITEM_FLAG_IS_CONTAINER) && (associatedItemId!=255) )
+                    {
+                        PrintStringAt(itemPtr->description,screenPtr);  // Print the container
+                        PrintString(":");
+                        PrintString(gItems[associatedItemId].description);
+                        inventoryCell+=2;
+                    }
+                }
+                else
+                {
+                    // Second pass: Everything else
+                    if (associatedItemId==255)
+                    {
+                        PrintStringAt(itemPtr->description,screenPtr);  // Print the container
+                        inventoryCell++;
+                    }
+                }
+            }
+            ++itemPtr;
+        }
+    }
 }
 
 // MARK:Print Objects
@@ -103,16 +101,27 @@ void PrintSceneObjects()
         {
             if (gItems[item].location == gCurrentLocation)
             {
-                if (itemPrinted && (gPrintPos+2)<=gPrintWidth)
+                if (itemPrinted) 
                 {
                     // We only print the comma if we already have an item printed out, and we are not at the start of a new line
-                    PrintString(", ");
+                    if ((gPrintPos+1)<=gPrintWidth)
+                    {
+                        PrintString(",");
+                    }
+                    if ((gPrintPos+1)<=gPrintWidth)
+                    {
+                        PrintString(" ");
+                    }
                 }
                 PrintString(gItems[item].description);
                 itemPrinted = 1;
             }
         }
-        PrintString(".");
+        if ((gPrintPos+2)<=gPrintWidth)
+        {
+            // We only print the final dot if we already have an item printed out, and we are not at the start of a new line
+            PrintString(".");
+        }
 	}
 	else
 	{

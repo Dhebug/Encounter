@@ -138,7 +138,7 @@ _gTextItemHeavySafe               .byt "un gros _coffre fort",0
 _gTextItemHandWrittenNote         .byt "une _note manuscripte",0
 _gTextItemRopeHangingFromWindow   .byt "une _corde qui pend de la fenêtre",0
 _gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
-_gTextItemHosePipe                .byt "un _tuyau d'arrosage",0
+_gTextItemHose                    .byt "un _tuyau d'arrosage",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
@@ -193,7 +193,7 @@ _gTextItemHeavySafe               .byt "a heavy _safe",0
 _gTextItemHandWrittenNote         .byt "a hand written _note",0                     
 _gTextItemRopeHangingFromWindow   .byt "a _rope hangs from the window",0       
 _gTextItemRollOfToiletPaper       .byt "a toilet _roll",0            
-_gTextItemHosePipe                .byt "a _hose_-pipe",0                        
+_gTextItemHose                    .byt "a garden _hose",0                        
 _gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
 _gTextItemAcidBurn                .byt "an acid burn",0                       
@@ -533,7 +533,7 @@ _gDescriptionAbandonedCar
                 _BUFFER(21,73)
     ENDIF(tank)
 
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED),hose)   ; Is the hose in the tank?
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose)       ; Is the hose in the tank?
         BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,3,53)                        ; Draw the hose pipe
                 _IMAGE(37,72)
                 _BUFFER(21,75)
@@ -2389,9 +2389,9 @@ _CloseCarPetrolTank
             SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
         ENDIF(petrol)
 
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
-            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
-                SET_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_INVENTORY)                             ; Then we need to remove it again
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
+                SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_INVENTORY)                             ; Then we need to remove it again
             ENDIF(hose2)
         ENDIF(hose)
     ENDIF(open)
@@ -2420,7 +2420,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
     VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
-    VALUE_MAPPING(e_ITEM_HosePipe           , _UseHosePipe)
+    VALUE_MAPPING(e_ITEM_Hose           , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
@@ -2570,18 +2570,18 @@ abandonned_car
     ENDIF(closed)
 
     INFO_MESSAGE("You put the hose in the tank")
-    SET_ITEM_LOCATION(e_ITEM_HosePipe,e_LOC_ABANDONED_CAR)
-    SET_ITEM_FLAGS(e_ITEM_HosePipe,ITEM_FLAG_ATTACHED)
+    SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR)
+    SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
         SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
     ENDIF(petrol)
 
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"un _tuyeau dans le réservoir")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyeau dans le réservoir")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_HosePipe,"a _hose in the petrol tank")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose in the petrol tank")
 #endif    
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE_PIPE)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE)
     END_AND_REFRESH
 .)
 

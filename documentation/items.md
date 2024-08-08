@@ -80,7 +80,7 @@ These are items you will find around in the various locations
 |**a hand written note**|The note is a help for the player telling them to investigate the safe in the basement|e_ITEM_HandWrittenNote|
 |**a length of rope**|The rope is necessary for the girl to escape, but can also be used around the tree to escape the pit|e_ITEM_Rope<br>e_ITEM_RopeAttachedToATree|
 |**a roll of toilet tissue**|The toilet roll can be used to build some fuse for the bomb|e_ITEM_ToiletRoll|
-|**a hose-pipe**|This tube can be used to get the petrol out of the car tank|e_ITEM_HosePipe|
+|**a garden-hose**|This tube can be used to get the petrol out of the car tank|e_ITEM_Hose|
 |**a set of keys**|Found ouside the house, they open the panel with the alarm (probably fell from the pockets of the owner)|e_ITEM_Keys|
 |**a newspaper**|Present in the inventory of the player at the start to provide some information|e_ITEM_Newspaper|
 |**a pistol**|Owned by the sleeping thug|e_ITEM_Pistol|

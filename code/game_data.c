@@ -48,7 +48,7 @@ keyword gWordsArray[] =
     { "NOTE",   e_ITEM_HandWrittenNote      },  
     { "ROPE",   e_ITEM_Rope                 },  
     { "ROLL",   e_ITEM_ToiletRoll           },  
-    { "HOSE",   e_ITEM_HosePipe             },  
+    { "HOSE",   e_ITEM_Hose                 },  
     { "PETROL", e_ITEM_Petrol               },  
     { "GLASS",  e_ITEM_BrokenGlass          },  
     { "BOTTLE", e_ITEM_SmallBottle          },  

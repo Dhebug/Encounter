@@ -106,7 +106,7 @@
 #define	e_ITEM_Rope  				 30         // a length of rope
 #define e_ITEM_HandheldGame          31         // a handheld game
 #define	e_ITEM_ToiletRoll            32         // a roll of toilet tissue~
-#define	e_ITEM_HosePipe  			 33         // a hose-pipe
+#define	e_ITEM_Hose  			     33         // a garden hose
 #define	e_ITEM_BrokenGlass  		 34         // broken glass
 #define e_ITEM_Medicinecabinet       35         // a thick curtain
 #define	e_ITEM_YoungGirl  			 36         // a young girl
@@ -222,7 +222,7 @@
 #define ACHIEVEMENT_GOT_A_HIGHSCORE     41
 #define ACHIEVEMENT_GOT_THE_BEST_SCORE  42
 #define ACHIEVEMENT_DOG_ATE_THE_MEAT    43
-#define ACHIEVEMENT_USED_HOSE_PIPE      44
+#define ACHIEVEMENT_USED_HOSE           44
 #define ACHIEVEMENT_FREE_3              45
 #define ACHIEVEMENT_FREE_4              46
 #define ACHIEVEMENT_FREE_5              47

@@ -57,7 +57,7 @@ _gItems
     ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Rope                 
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ToiletRoll    
-    ITEM_NORMAL( _gTextItemHosePipe              ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HosePipe             
+    ITEM_NORMAL( _gTextItemHose                  ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Hose             
     ITEM_NORMAL( _gTextItemBrokenGlass           ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BrokenGlass          
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_YoungGirl        
