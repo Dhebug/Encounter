@@ -88,6 +88,9 @@ void PrintSceneObjects()
 	int itemCount = 0;
 	int item;
 
+	//memset((char*)TemporaryBuffer479,' ',40*4);
+    memcpy(TemporaryBuffer479,(char*)0xbb80+40*18,40*4);
+
 	for (item=0;item<e_ITEM_COUNT_;item++)
 	{
 		if (gItems[item].location == gCurrentLocation)
@@ -100,7 +103,7 @@ void PrintSceneObjects()
 	if (itemCount)
 	{        
         gPrintWidth=38;
-        PrintStringAt(gTextCanSee,0xbb80+40*18+2);
+        PrintStringAt(gTextCanSee,TemporaryBuffer479+2);
         for (item=0;item<e_ITEM_COUNT_;item++)
         {
             if (gItems[item].location == gCurrentLocation)
@@ -129,8 +132,9 @@ void PrintSceneObjects()
 	}
 	else
 	{
-		sprintf((char*)0xbb80+40*18+1,"%c%s",3,gTextNothingHere);  // "There is nothing of interest here"
+		sprintf((char*)TemporaryBuffer479+1,"%c%s",3,gTextNothingHere);  // "There is nothing of interest here"
 	}
+	memcpy((char*)0xbb80+40*18,TemporaryBuffer479,40*4);
 }
 
 

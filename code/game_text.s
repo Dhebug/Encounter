@@ -2908,6 +2908,7 @@ _TakeDove
 
 _TakeBlackTape
 .(
+    CLEAR_TEXT_AREA(4)
     SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Le ruban n'est pas réutilisable")
