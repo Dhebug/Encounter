@@ -31,15 +31,17 @@ void PrintSceneDirections()
 }
 
 
-// Very basic version of the inventory, does not check anything, 
-// displays a maximum of 7 items before it starts overwriting the clock
 // MARK:Print Inventory
+// The inventory display is done in two passes, using an intermediate buffer to limit flickering.
+// The first pass displays all the non empty containers and their associated content
+// The second pass displays the rest
+// And finally the buffer is copied back to video memory.
 void PrintInventory()
 {	
     int pass;
 	int itemId;
 	int inventoryCell =0;
-	memset((char*)0xbb80+40*24,32,40*4);
+	memset((char*)TemporaryBuffer479,' ',40*4);
     gPrintWidth=38;
     for (pass=0;pass<2;pass++)
     {
@@ -48,7 +50,7 @@ void PrintInventory()
         {
             if (itemPtr->location == e_LOC_INVENTORY)
             {
-                char* screenPtr = (char*)0xbb80+40*(24+inventoryCell/2)+(inventoryCell&1)*20;
+                char* screenPtr = (char*)TemporaryBuffer479+40*(inventoryCell/2)+(inventoryCell&1)*20;
                 unsigned char associatedItemId = itemPtr->associated_item;
 
                 if (pass==0)
@@ -75,7 +77,9 @@ void PrintInventory()
             ++itemPtr;
         }
     }
+	memcpy((char*)0xbb80+40*24,TemporaryBuffer479,40*4);
 }
+
 
 // MARK:Print Objects
 void PrintSceneObjects()

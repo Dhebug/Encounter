@@ -56,7 +56,7 @@ _maybe_free_to_use    ; Need to check
 * = $BB80             ; Top of the TEXT screen: 1120 bytes
 _TEXT_MEMORY_START
 _Attribute_HIRES      .dsb 1        ; Contains the attribute to switch to HIRES mode
-_free_to_use_bb81     .dsb 479
+_TemporaryBuffer479   .dsb 479      ; Can be used as a temporary scratch pad for operations like clean update of the inventory display
 
 * = $BB80+40*16
 _TEXT_BOTTOM_VIEW__START
