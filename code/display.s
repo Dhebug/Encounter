@@ -1003,7 +1003,7 @@ _gSevenDigitDisplay
  .byt %011100
  .byt %100010
  .byt %100010
- .byt %000000
+ .byt %011100
  .byt %100010
  .byt %100010
  .byt %011100
