@@ -207,6 +207,9 @@ void PlayerMove()
 char ShowingKeyWords = 0;
 char ShouldShowKeyWords = 0;
 
+char OneHourAlarmWarningShown = 0;
+extern char OneHourAlarmWarning[];
+
 // MARK:Input Callback
 WORDS AskInputCallback()
 {
@@ -215,6 +218,18 @@ WORDS AskInputCallback()
     {
         // The player has reached a game over condition and the end of the current stream
         return e_WORD_QUIT;
+    }
+
+    // We check the Hours digit to see if it reached zero
+    // If it does then we play the "hurry up" sequence!
+    if ( (TimeHours=='0') && (!OneHourAlarmWarningShown) )
+    {
+        // Should probably add a check to not interrupt import scripts
+        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+        const char* savedStream = gCurrentStream;
+        PlayStream(OneHourAlarmWarning);
+        gCurrentStream = savedStream;
+        OneHourAlarmWarningShown=1;
     }
 
     // When the player presses SHIFT we redraw the item list with highlights

@@ -300,6 +300,9 @@ AddDefine LOADER_PICTURE_STICKY_BOMB {FileIndex}
 AddFile ..\build\files\view_corrosive_liquid.hir
 AddDefine LOADER_PICTURE_CORROSIVE_LIQUID {FileIndex}
 
+AddFile ..\build\files\view_watch.hir
+AddDefine LOADER_PICTURE_WATCH_ALARM {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR
@@ -323,6 +326,9 @@ AddDefine LOADER_SPRITE_SAFE_ROOM {FileIndex}
 
 AddFile ..\build\files\masked_car_parts.msk
 AddDefine LOADER_SPRITE_CAR_PARTS {FileIndex}
+
+AddFile ..\build\files\masked_beep.msk
+AddDefine LOADER_SPRITE_BEEP {FileIndex}
 
 
 ;

@@ -87,6 +87,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_element_outro_photos
 %CONVERT% masked_element_outro_photos_fr
 %CONVERT% masked_car_parts
+%CONVERT% masked_beep
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations
@@ -181,6 +182,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_ready_to_blow
 %CONVERT% view_sticky_bomb
 %CONVERT% view_corrosive_liquid
+%CONVERT% view_watch
 
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo

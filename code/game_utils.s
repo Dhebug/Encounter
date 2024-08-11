@@ -22,11 +22,11 @@ IrqTasks50hz
             
     ; "Realtime" Clock
     .(
-    dec Milliseconds
+    dec _TimeMilliseconds
     bne skip_count_down
 
     lda #50
-    sta Milliseconds
+    sta _TimeMilliseconds
 
     jsr CountSecondDown
 skip_count_down  

@@ -21,6 +21,11 @@ extern char ReadKeyNoBounce();
 
 extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 
+// Time
+extern unsigned char TimeMillisecond;        // Actual value in milliseconds
+extern unsigned char TimeHours;              // One hour digit ready to be printed (ASCII format not numerical value)
+extern unsigned char TimeMinutes[2];         // Two minutes digits ready to be printed (ASCII format not numerical value)
+extern unsigned char TimeSeconds[2];         // Two seconds digits ready to be printed (ASCII format not numerical value)
 
 // Display
 extern void PrintFancyFont();

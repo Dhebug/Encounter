@@ -1881,6 +1881,22 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
+_OneHourAlarmWarning
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
+
+    WAIT(50)
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    WAIT(50)
+    INFO_MESSAGE("Already one hour passed!")
+
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    WAIT(50)
+    INFO_MESSAGE("I need to hurry up!")
+    WAIT(50)
+
+    END_AND_REFRESH
+.)
 
 _InspectMap
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")

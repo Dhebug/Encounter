@@ -8,9 +8,9 @@ CountSecondDown
   ; Make the ":" symbol between the hour and minute blink every second
   ; ":" = 58 = 111010
   ; " " = 32 = 100000
-  lda TimeMinutesDots
+  lda _TimeMinutesDots
   eor #%11010
-  sta TimeMinutesDots
+  sta _TimeMinutesDots
   cmp #":"
   bne end_count_down
 
@@ -18,50 +18,50 @@ CountSecondDown
   ;jsr PlaySoundSeconds
 
   ; Count down the seconds
-  ldx TimeSeconds+1
+  ldx _TimeSeconds+1
   dex
-  stx TimeSeconds+1
+  stx _TimeSeconds+1
   cpx #"0"-1
   bne end_count_down
   ldx #"9"
-  stx TimeSeconds+1
+  stx _TimeSeconds+1
 
 +Count10SecondsDown
-  ldx TimeSeconds+0
+  ldx _TimeSeconds+0
   dex
-  stx TimeSeconds+0
+  stx _TimeSeconds+0
   cpx #"0"-1
   bne end_count_down
   ldx #"5"
-  stx TimeSeconds+0
+  stx _TimeSeconds+0
 
 +CountMinuteDown
   ; Count down the minutes
-  ldx TimeMinutes+1
+  ldx _TimeMinutes+1
   dex
-  stx TimeMinutes+1
+  stx _TimeMinutes+1
   cpx #"0"-1
   bne end_count_down
   ldx #"9"
-  stx TimeMinutes+1
+  stx _TimeMinutes+1
 
-  ldx TimeMinutes+0
+  ldx _TimeMinutes+0
   dex
-  stx TimeMinutes+0
+  stx _TimeMinutes+0
   cpx #"0"-1
   bne end_count_down
   ldx #"5"
-  stx TimeMinutes+0
+  stx _TimeMinutes+0
   
   ; Count down the hour
-  ldx TimeHours
+  ldx _TimeHours
   dex
-  stx TimeHours
+  stx _TimeHours
   cpx #"0"-1
   bne end_count_down
   ; GAME OVER!
   ldx #"9"
-  stx TimeHours
+  stx _TimeHours
   
 end_count_down
 
@@ -69,7 +69,7 @@ end_count_down
   ; Display
   ldx #6+1
 loop
-  lda TimeHours-1,x
+  lda _TimeHours-1,x
   ;sta $bfdf-6,x
   sta $bb80+16*40+39-6-1-2,x
   ;sta $bb80+27*40+39-6-1,x
@@ -82,16 +82,17 @@ loop
 
 
 
-Milliseconds    .byt 100
+_TimeMilliseconds    
+    .byt 100
     .byt 1        ; RED - TEMPS COLOR
-TimeHours
+_TimeHours
     .byt "2"
-TimeMinutesDots    
+_TimeMinutesDots    
     .byt ":"      ; : = 58   space = 32
-TimeMinutes    
+_TimeMinutes    
     .byt "0"
     .byt "0"
     .byt ":"
-TimeSeconds    
+_TimeSeconds    
     .byt "0"
     .byt "0"
