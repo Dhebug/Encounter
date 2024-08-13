@@ -288,6 +288,9 @@ AddDefine LOADER_PICTURE_SAFE_DOOR {FileIndex}
 AddFile ..\build\files\view_safe_door_with_bomb.hir
 AddDefine LOADER_PICTURE_SAFE_DOOR_WITH_BOMB {FileIndex}
 
+AddFile ..\build\files\view_safe_door_open.hir
+AddDefine LOADER_PICTURE_SAFE_DOOR_OPEN {FileIndex}
+
 AddFile ..\build\files\view_explosion.hir
 AddDefine LOADER_PICTURE_EXPLOSION {FileIndex}
 

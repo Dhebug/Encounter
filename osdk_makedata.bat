@@ -178,6 +178,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_mortar_and_pestle
 %CONVERT% view_safe_door
 %CONVERT% view_safe_door_with_bomb
+%CONVERT% view_safe_door_open
 %CONVERT% view_explosion
 %CONVERT% view_ready_to_blow
 %CONVERT% view_sticky_bomb

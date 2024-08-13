@@ -1136,7 +1136,7 @@ _gDescriptionCellar
         ; If these values are not set before the first WAIT instruction, the game will be broken.
         SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_NONE)                    ; The bomb is gone
         SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE)            ; Don't need the matches anymore
-        SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CURRENT)                 ; The acid is now visible
+        //SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CURRENT)                 ; The acid is now visible (need to inspect the safe now)
         UNSET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED); ; Un-strike the matches (just so the test above does not trigger a second time)
         UNSET_ITEM_FLAGS(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED)          ; The safe is now open
 
@@ -2027,17 +2027,34 @@ _InspectMixTape
 
 _InspectSafe
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),else)    ; Is the bomb installed?
-        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
-    ELSE(else,nobomb)
-        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
-    ENDIF(nobomb)
-
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),elseclose)       ; Is the safe closed?
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),else)           ; Is the bomb installed?
+            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il est gros, mais semble fragile")
+            INFO_MESSAGE("Espérons qu'il va survivre")
 #else
-    INFO_MESSAGE("It's big, but not that sturdy")
+            INFO_MESSAGE("Hopefully it will survive the blow")
 #endif    
+        ELSE(else,nobomb)
+            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Il est gros, mais semble fragile")
+#else
+            INFO_MESSAGE("It's big, but not that sturdy")
+#endif    
+        ENDIF(nobomb)
+    ELSE(elseclose,safeopen)
+        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN,"Some stuff broke")
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
+            SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
+        ENDIF(acid)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Quasiment rien de brisé!")
+#else
+        INFO_MESSAGE("Most of the stuff is intact!")
+#endif    
+    ENDIF(safeopen)
+
     WAIT(50*2)
     END_AND_REFRESH
 .)
