@@ -38,8 +38,8 @@ SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE%
 %OSDK%\bin\cpp.exe -P -DOSDKDISK=%OSDKDISK% -DLANGUAGE_%LANGUAGE% floppybuilderscript_master.txt floppybuilderscript.txt
 
 :: Call FloppyBuilder once to create loader.cod
-%osdk%\bin\FloppyBuilder init floppybuilderscript.txt >NUL
-IF ERRORLEVEL 1 GOTO Error
+%osdk%\bin\FloppyBuilder init floppybuilderscript.txt >..\build\floppy_builder_error.txt
+IF ERRORLEVEL 1 GOTO FloppyBuilderError
 
 ECHO ---------------- 1st pass ---------------- 
 set DISPLAYINFO=0
@@ -59,6 +59,14 @@ ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt
 popd
 goto End
+
+
+:FloppyBuilderError
+:: Prints the floppy builder error in red to make sure we don't miss it
+ECHO %ESC%[41m
+type ..\build\floppy_builder_error.txt
+ECHO %ESC%[0m
+popd
 
 :Error
 ::Errors are reported by the top script
