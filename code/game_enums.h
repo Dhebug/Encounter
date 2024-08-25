@@ -129,7 +129,8 @@
 #define e_ITEM_Adhesive              53         // some adhesive
 #define e_ITEM_Acid                  54         // some acid
 #define	e_ITEM_AlarmPanel  		     55         // a locked panel on the wall / an open panel on wall
-#define	e_ITEM_COUNT_ 				 56         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_SecurityDoor		     56         // a security door
+#define	e_ITEM_COUNT_ 				 57         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

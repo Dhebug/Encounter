@@ -79,7 +79,9 @@ keyword gWordsArray[] =
     { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
     { "TANK"    ,e_ITEM_CarTank      },  
-    
+
+    { "DOOR"    ,e_ITEM_SecurityDoor },  
+
     { "MORTAR"  ,e_ITEM_MortarAndPestle  },  
     
 

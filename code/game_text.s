@@ -161,6 +161,7 @@ _gTextItemBlackTape               .byt "du _ruban adhésif noir",0
 _gTextItemMortarAndPestle         .byt "un mortier et pilon",0
 _gTextItemAdhesive                .byt "de l'_adhésif",0
 _gTextItemAcid                    .byt "un _acide puissant",0
+_gTextItemSecurityDoor            .byt "une _porte blindée",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -216,6 +217,7 @@ _gTextItemBlackTape               .byt "some black adhesive _tape",0
 _gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
 _gTextItemAdhesive                .byt "some _adhesive",0
 _gTextItemAcid                    .byt "some strong _acid",0
+_gTextItemSecurityDoor            .byt "a security _door",0
 #endif
 _EndItemNames
 
@@ -1877,6 +1879,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_HeavySafe          , _InspectSafe)
     VALUE_MAPPING(e_ITEM_Thug               , _InspectThug)
     VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
+    VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 _OneHourAlarmWarning
@@ -2080,6 +2083,25 @@ _InspectThug
 #endif    
     ENDIF(dead)
 
+    END_AND_REFRESH    
+.)
+
+
+_InspectPanicRoomDoor
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Impossible de deviner le code...")
+#else
+    INFO_MESSAGE("Impossible to guess that code...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La porte est elle vulnérable?")
+#else
+    INFO_MESSAGE("Maybe the door itself is vulnerable?")
+#endif    
+    WAIT(50*2)
     END_AND_REFRESH    
 .)
 
