@@ -37,7 +37,9 @@
 #define COMMAND_SET_SCENE_IMAGE 26
 #define COMMAND_DISPLAY_IMAGE_NOBLIT 27
 #define COMMAND_CLEAR_TEXT_AREA 28
-#define _COMMAND_COUNT          29
+#define COMMAND_GOSUB           29
+#define COMMAND_RETURN          30
+#define _COMMAND_COUNT          31
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -55,6 +57,8 @@
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
+#define GOSUB(label)                         .byt COMMAND_GOSUB,<label,>label
+#define RETURN                               .byt COMMAND_RETURN
 
 #ifdef ASSEMBLER
 #define IF_TRUE(expression,label)            .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression   

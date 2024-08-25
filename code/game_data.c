@@ -83,7 +83,10 @@ keyword gWordsArray[] =
     { "DOOR"    ,e_ITEM_SecurityDoor },  
 
     { "MORTAR"  ,e_ITEM_MortarAndPestle  },  
-    
+
+    { "CLAY"    ,e_ITEM_Clay },  
+    { "SUIT"    ,e_ITEM_ProtectionSuit },  
+
 
     // Directions
 #ifdef LANGUAGE_FR    

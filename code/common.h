@@ -164,7 +164,6 @@ extern void ByteStreamCommandBITMAP();
 extern void InitializeGraphicMode();
 
 extern const char* gCurrentStream;
-extern const unsigned int* gCurrentStreamInt;
 extern char gCurrentStreamStop;
 extern unsigned int gDelayStream;
 

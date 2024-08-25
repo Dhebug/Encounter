@@ -8,8 +8,7 @@
 
     .zero 
 
-_gCurrentStream
-_gCurrentStreamInt      .dsb 2
+_gCurrentStream         .dsb 2
 _gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
 
@@ -17,6 +16,7 @@ _gCurrentItem           .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set 
 _gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
 _gStreamLocationPtr     .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
 _gStreamNextPtr         .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
+_gStreamReturnPtr       .dsb 2   ; The ONE level of subfunction we are allowed to call using GOSUB and RETURN
 
     .text 
 
@@ -50,6 +50,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandSetSceneImage
     .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     .word _ByteStreamCommand_CLEAR_TEXT_AREA
+    .word _ByteStreamCommand_GOSUB
+    .word _ByteStreamCommand_RETURN
 
     
 ; _param0=pointer to the new byteStream
@@ -322,8 +324,39 @@ _ByteStreamCommandFADE_BUFFER
     jmp _BlitBufferToHiresWindow
 
 
+; We can only use GOSUB once, and then we need to RETURN
+; Multiple level of GOSUB are not supported, and calling another stream while we are in a GOSUB will probably cause havok
+ _ByteStreamCommand_GOSUB
+    ; Store the current pointer+2 into the return register
+    clc
+    lda _gCurrentStream+0
+    adc #2
+    sta _gStreamReturnPtr+0
+    lda _gCurrentStream+1
+    adc #0
+    sta _gStreamReturnPtr+1
+
+    ; Then overwrite the current stream pointer with the one provided in the GOSUB instruction parameters
+    ldy #0
+    lda (_gCurrentStream),y
+    tax                           ; Temporary so we don't change the stream pointer while using it
+    iny
+    lda (_gCurrentStream),y
+    stx _gCurrentStream+0
+    sta _gCurrentStream+1
+    rts
+
+
+; We can only use RETURN if GOSUB has been called before
+ _ByteStreamCommand_RETURN
+    lda _gStreamReturnPtr+0
+    sta _gCurrentStream+0
+    lda _gStreamReturnPtr+1
+    sta _gCurrentStream+1
+    rts
+
+
 _ByteStreamCommandJUMP
-    //gCurrentStreamInt =  (unsigned int*) *gCurrentStreamInt++;
     ldy #0
     lda (_gCurrentStream),y
     tax                           ; Temporary so we don't change the stream pointer while using it

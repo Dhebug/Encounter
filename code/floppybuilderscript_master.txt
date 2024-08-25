@@ -306,6 +306,9 @@ AddDefine LOADER_PICTURE_CORROSIVE_LIQUID {FileIndex}
 AddFile ..\build\files\view_watch.hir
 AddDefine LOADER_PICTURE_WATCH_ALARM {FileIndex}
 
+AddFile ..\build\files\view_protection_suit.hir
+AddDefine LOADER_PICTURE_PROTECTION_SUIT {FileIndex}
+
 AddFile ..\build\files\view_panic_room_digicode.hir
 AddDefine LOADER_PICTURE_DOOR_DIGICODE {FileIndex}
 

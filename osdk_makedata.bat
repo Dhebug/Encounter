@@ -184,6 +184,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_sticky_bomb
 %CONVERT% view_corrosive_liquid
 %CONVERT% view_watch
+%CONVERT% view_protection_suit
 %CONVERT% view_panic_room_digicode
 
 :: Severn Software and Defence Force logos

@@ -162,6 +162,8 @@ _gTextItemMortarAndPestle         .byt "un mortier et pilon",0
 _gTextItemAdhesive                .byt "de l'_adhésif",0
 _gTextItemAcid                    .byt "un _acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
+_gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
+_gTextItemProtectionSuit          .byt "une tenue EPI",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -218,6 +220,8 @@ _gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
 _gTextItemAdhesive                .byt "some _adhesive",0
 _gTextItemAcid                    .byt "some strong _acid",0
 _gTextItemSecurityDoor            .byt "a security _door",0
+_gTextItemDriedOutClay            .byt "some dried out _clay",0
+_gTextItemProtectionSuit          .byt "a protection _suit",0
 #endif
 _EndItemNames
 
@@ -1880,6 +1884,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Thug               , _InspectThug)
     VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
+    VALUE_MAPPING(e_ITEM_ProtectionSuit     , _InspectProtectionSuit)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 _OneHourAlarmWarning
@@ -2102,6 +2107,13 @@ _InspectPanicRoomDoor
     INFO_MESSAGE("Maybe the door itself is vulnerable?")
 #endif    
     WAIT(50*2)
+    END_AND_REFRESH    
+.)
+
+
+_InspectProtectionSuit
+.(
+    GOSUB(_ShowProtectionSuit)
     END_AND_REFRESH    
 .)
 
@@ -2920,6 +2932,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_LargeDove         , _TakeDove)
     VALUE_MAPPING(e_ITEM_BlackTape         , _TakeBlackTape)
     VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
+    VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -2984,6 +2997,13 @@ _TakeAcid
 .)
 
 
+_TakeProtectionSuit
+.(
+    GOSUB(_ShowProtectionSuit)
+    JUMP(_TakeCommon)
+.)
+
+
 _TakeCommon
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOC_INVENTORY)  ; The item is now in our inventory
@@ -2992,6 +3012,17 @@ _TakeCommon
 .)
 
 
+
+
+_ShowProtectionSuit
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT,"PRO-TEC Personal Protection Equipment")
+    INFO_MESSAGE("Protection against pesticides...")
+    WAIT(50*2)
+    INFO_MESSAGE("...and other types of noxious fumes")
+    WAIT(50*2)
+    RETURN
+.)
 
 
 
