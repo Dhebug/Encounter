@@ -1577,25 +1577,23 @@ _gDescriptionThugAttacking
     JUMP(_gDescriptionGameOverLost)                 ; Game Over
 
 
-// MARK: Padlocked Room
-_gDescriptionPadlockedRoom
+// MARK: Panic Room Door
+_gDescriptionPanicRoomDoor
 #ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une porte blindée cadenassée")
+    SET_DESCRIPTION("L'entrée d'une chambre forte")
 #else
-    SET_DESCRIPTION("You see a padlocked steel-plated door")
+    SET_DESCRIPTION("A panic room entrance")
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(4)
+    WHITE_BUBBLE(3)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(135,16,0,"Je ne pourrai pas")
-    _BUBBLE_LINE(131,53,0,"ouvrir ces serrures")
-    _BUBBLE_LINE(140,90,0,"assez vite !")
+    _BUBBLE_LINE(135,16,0,"Ils ont mis")
+    _BUBBLE_LINE(131,53,0,"les gros moyen!")
 #else
     _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(125,16,0,"I will never be able")
-    _BUBBLE_LINE(131,53,0,"to pick these locks")
-    _BUBBLE_LINE(140,90,0,"fast enough!")
+    _BUBBLE_LINE(168,70,0,"That's some")
+    _BUBBLE_LINE(138,85,0,"serious hardware!")
 #endif    
     END
 
@@ -2112,7 +2110,7 @@ _OpenCurtain
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),open)                                  ; Is the curtain closed?
         UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
-        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PADLOCKED_ROOM)  ; We can now access the padlocked room
+        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PANIC_ROOM_DOOR)           ; We can now access the panic room
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau ouvert")

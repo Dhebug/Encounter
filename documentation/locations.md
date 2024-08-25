@@ -140,7 +140,7 @@ Here are information about the various locations you can reach in the game, grou
 |![Game location image](../data/loc_landing.png)||
 |**This is the west gallery**|e_LOC_WESTGALLERY|
 |![Game location image](../data/loc_west_gallery.png)||
-|**You see a padlocked steel-plated door**|e_LOC_PADLOCKED_ROOM|
+|**You see a padlocked steel-plated door**|e_LOC_PANIC_ROOM_DOOR|
 |![Game location image](../data/loc_steel_door.png)|This reinforced **door** blocks the player to access to the **kidnapped girl**.|
 |**This is a small box-room**|e_LOC_BOXROOM|
 |![Game location image](../data/loc_box_room.png)|Contains a small **note** informing the player that some stuff is stored in the **safe** in the basement.|

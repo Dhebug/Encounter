@@ -65,7 +65,7 @@ _gLocations
 
     LOCATION(e_LOC_CLASSY_BATHROOM   , e_LOC_CHILDBEDROOM      , e_LOC_MASTERBEDROOM     , e_LOC_UP_STAIRS         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionEastGallery)       // e_LOC_EASTGALLERY      
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionBoxRoom)           // e_LOC_BOXROOM          
-    LOCATION(e_LOC_NONE              , e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionPadlockedRoom)     // e_LOC_PADLOCKED_ROOM   
+    LOCATION(e_LOC_NONE              , e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionPanicRoomDoor)     // e_LOC_PANIC_ROOM_DOOR   
 
     LOCATION(e_LOC_NONE              , e_LOC_EASTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionClassyBathRoom)    // e_LOC_CLASSY_BATHROOM  
     LOCATION(e_LOC_NONE              , e_LOC_GUESTBEDROOM      , e_LOC_UP_STAIRS         , e_LOC_BOXROOM           , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionWestGallery)       // e_LOC_WESTGALLERY      

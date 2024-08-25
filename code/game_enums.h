@@ -49,7 +49,7 @@
 #define	e_LOC_TINY_WC          35
 #define	e_LOC_EASTGALLERY      36
 #define	e_LOC_BOXROOM          37
-#define	e_LOC_PADLOCKED_ROOM   38
+#define	e_LOC_PANIC_ROOM_DOOR  38
 #define	e_LOC_CLASSY_BATHROOM  39
 #define	e_LOC_WESTGALLERY      40
 #define	e_LOC_UP_STAIRS        41
