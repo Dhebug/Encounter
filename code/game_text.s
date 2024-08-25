@@ -2489,6 +2489,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
+    VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2698,6 +2699,24 @@ _UseMatches
         END_AND_REFRESH
     ENDIF(safe)
     JUMP(_CombineBombWithMatches)
+.)
+
+
+_UseProtectionSuit
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES,"PRO-TEC Personal Protection Equipment")
+    INFO_MESSAGE("It seems to fit well...")
+    WAIT(50*2)
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
+        ; The player is in front of the Panic Room
+        INFO_MESSAGE("...let's experiment!")
+        WAIT(50*2)
+    ELSE(panic_room,not_panic_room)
+        ; The player is anywhere else
+        INFO_MESSAGE("...but it's of no use here")
+        WAIT(50*2)
+    ENDIF(not_panic_room)
+    END_AND_REFRESH
 .)
 
 
