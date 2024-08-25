@@ -550,6 +550,7 @@ _gDescriptionAbandonedCar
 
 // MARK: Old Well
 _gDescriptionOldWell
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes prês d'un vieux puit")
 #else
@@ -565,6 +566,9 @@ no_bucket
       DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(7,44),40,_SecondImageBuffer+7,_ImageBuffer+(40*35)+26)  ; Draw the Rope
 no_rope    
 
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     ; Then show the messages
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -576,6 +580,7 @@ no_rope
     _BUBBLE_LINE(158,16,0,"as the church")
 #endif    
     END
+.)
 
 
 // MARK: Wooded Avenue
@@ -658,11 +663,16 @@ _gDescriptionFrontLawn
 
 // MARK: Green House
 _gDescriptionGreenHouse
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une petite serre")
 #else
     SET_DESCRIPTION("You are in a small greenhouse")
 #endif    
+
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -673,6 +683,7 @@ _gDescriptionGreenHouse
     .byt 4,107,1,34,"Therapeutic use",34,0
 #endif
     END
+.)
 
 
 // MARK: Tennis Court
@@ -720,11 +731,16 @@ _gTextItemBasementWindow = *+1
 
 // MARK: Fish Pond
 _gDescriptionFishPond
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes près d'un bac a poisson")
 #else
     SET_DESCRIPTION("You are standing by a fish pond")
 #endif    
+
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -735,7 +751,7 @@ _gDescriptionFishPond
     _BUBBLE_LINE(5,17,0,"are surprinsingly big")
 #endif    
     END
-
+.)
 
 // MARK: Tiled Patio
 _gDescriptionTiledPatio
@@ -1075,6 +1091,9 @@ fridge_closed
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
 medicine_cabinet_closed
 
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1405,11 +1424,16 @@ _gDescriptionGuestBedroom
 
 // MARK: Shower Room
 _gDescriptionShowerRoom
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une salle de bain carellée")
 #else
     SET_DESCRIPTION("You are in a tiled shower-room")
 #endif    
+
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1420,7 +1444,7 @@ _gDescriptionShowerRoom
     _BUBBLE_LINE(152,16,0,"when I'm done")
 #endif    
     END
-
+.)
 
 // MARK: West Gallery
 _gDescriptionWestGallery
@@ -1476,11 +1500,16 @@ _gDescriptionBoxRoom
 
 // MARK: Classy Bathroom
 _gDescriptionClassyBathRoom
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une salle de bain luxieuse")
 #else
     SET_DESCRIPTION("You are in an ornate bathroom")
 #endif    
+
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -1489,15 +1518,21 @@ _gDescriptionClassyBathRoom
     _BUBBLE_LINE(132,5,0,"Looks comfortable")
 #endif    
     END
+.)
 
 
 // MARK: Tiny Toilet
 _gDescriptionTinyToilet
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Des petites toilette")
 #else
     SET_DESCRIPTION("This is a tiny toilet")
 #endif    
+
+    ; Spawn water if required
+    GOSUB(_SpawnWaterIfNotEquipped)
+
     WAIT(DELAY_FIRST_BUBBLE)
 #ifdef LANGUAGE_FR    
     WHITE_BUBBLE(2)
@@ -1508,7 +1543,7 @@ _gDescriptionTinyToilet
     _BUBBLE_LINE(137,5,0,"Sparklingly clean")
 #endif    
     END
-
+.)
 
 // MARK: Master Bedroom
 _gDescriptionMasterBedRoom
@@ -3107,6 +3142,15 @@ _gDoNothingScript
 .)
 
 
+/* MARK: Misc Stuff
+*/
+_SpawnWaterIfNotEquipped
+.(
+    IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_Water,e_LOC_INVENTORY),water)
+        SET_ITEM_LOCATION(e_ITEM_Water,e_LOC_CURRENT)                    ; It's now visible at the curent location
+    ENDIF(water)
+    RETURN
+.)
 
 
 /* MARK: Generic Answers ⚠
