@@ -315,6 +315,9 @@ AddDefine LOADER_PICTURE_SHOWING_GLOVES {FileIndex}
 AddFile ..\build\files\view_panic_room_digicode.hir
 AddDefine LOADER_PICTURE_DOOR_DIGICODE {FileIndex}
 
+AddFile ..\build\files\view_panic_room_clay.hir
+AddDefine LOADER_PICTURE_DOOR_WITH_CLAY {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR

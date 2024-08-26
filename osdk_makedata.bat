@@ -187,6 +187,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_protection_suit
 %CONVERT% view_safety_gloves
 %CONVERT% view_panic_room_digicode
+%CONVERT% view_panic_room_clay
 
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo

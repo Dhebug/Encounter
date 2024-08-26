@@ -1620,24 +1620,45 @@ _gDescriptionThugAttacking
 
 // MARK: Panic Room Door
 _gDescriptionPanicRoomDoor
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("L'entrée d'une chambre forte")
 #else
     SET_DESCRIPTION("A panic room entrance")
 #endif    
-    WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(3)
-#ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(135,16,0,"Ils ont mis")
-    _BUBBLE_LINE(131,53,0,"les gros moyen!")
-#else
-    _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(168,70,0,"That's some")
-    _BUBBLE_LINE(138,85,0,"serious hardware!")
-#endif    
-    END
 
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,13)                            ; Draw the clay attached to the door
+                _IMAGE(13,51)
+                _BUFFER(15,73)
+    ENDIF(attached)
+
+    WAIT(DELAY_FIRST_BUBBLE)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),no_clay)       ; Is the clay attached?
+        WHITE_BUBBLE(3)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(5,5,0,"Damn...")
+        _BUBBLE_LINE(135,16,0,"Ils ont mis")
+        _BUBBLE_LINE(131,53,0,"les gros moyen!")
+#else
+        _BUBBLE_LINE(5,5,0,"Damn...")
+        _BUBBLE_LINE(168,70,0,"That's some")
+        _BUBBLE_LINE(138,85,0,"serious hardware!")
+#endif    
+    ELSE(no_clay,else)
+        WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(135,16,0,"On dirait")
+        _BUBBLE_LINE(131,53,0,"un sourire :)")
+#else
+        _BUBBLE_LINE(153,70,0,"Almost looks")
+        _BUBBLE_LINE(148,85,0,"like a smile :)")
+#endif    
+    ENDIF(else)
+
+    END
+.)
 
 ; This function assumes the GAME_OVER(xxx) has been called already
 _gDescriptionGameOverLost    
@@ -1709,6 +1730,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
+    COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1814,6 +1836,24 @@ _CombineBombWithMatches
     SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED);    // Strike the matches!
     END_AND_REFRESH
 .)
+
+
+_CombineClayWithWater
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
+        ERROR_MESSAGE("It's already wet!")
+        END_AND_REFRESH
+    ENDIF(wet)
+
+#ifdef LANGUAGE_FR                                                     ; Rename the dry clay to wet clay
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'argile humide")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some wet _clay")
+#endif    
+    SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
+    END_AND_REFRESH
+.)
+
 
 
 
@@ -2525,6 +2565,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
+    VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2753,6 +2794,37 @@ _UseProtectionSuit
     ENDIF(not_panic_room)
     END_AND_REFRESH
 .)
+
+
+_UseClay
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
+        ERROR_MESSAGE("It's already in place!")
+        END_AND_REFRESH
+    ENDIF(attached)
+
+    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
+        ERROR_MESSAGE("I can't use it here")
+        END_AND_REFRESH
+    ENDIF(panic_room)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
+        ERROR_MESSAGE("It's too dry!")
+        END_AND_REFRESH
+    ENDIF(wet)
+
+    SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_PANIC_ROOM_DOOR)                ; The clay is now in the room
+    SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_ATTACHED)                      ; The clay is now attached to the door
+
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY,"A real piece of art!")
+    INFO_MESSAGE("Ok, that should be good enough...")
+    WAIT(50*2)
+    INFO_MESSAGE("...now just need to fill it!")
+    WAIT(50*2)
+
+    END_AND_REFRESH
+.)
+
 
 
 /* MARK: Search Action 🕵️‍♀️
