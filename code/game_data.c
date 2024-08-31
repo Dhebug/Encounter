@@ -81,6 +81,7 @@ keyword gWordsArray[] =
     { "TANK"    ,e_ITEM_CarTank      },  
 
     { "DOOR"    ,e_ITEM_SecurityDoor },  
+    { "HOLE"    ,e_ITEM_HoleInDoor },  
 
     { "MORTAR"  ,e_ITEM_MortarAndPestle  },  
 

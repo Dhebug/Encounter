@@ -58,7 +58,8 @@
 #define	e_LOC_CELLAR_WINDOW    44
 #define e_LOC_FRONT_ENTRANCE   45
 #define e_LOC_ABANDONED_CAR    46
-#define e_LOC_COUNT_           47
+#define e_LOC_HOSTAGE_ROOM     47
+#define e_LOC_COUNT_           48
 #define e_LOC_INVENTORY        e_LOC_COUNT_         // Special location for the player's inventory
 #define e_LOC_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
 #define e_LOC_GONE_FOREVER     254                  // To indicate this item is not available anymore
@@ -132,7 +133,8 @@
 #define	e_ITEM_SecurityDoor		     56         // a security door
 #define	e_ITEM_Clay    		         57         // some dried out clay
 #define	e_ITEM_ProtectionSuit	     58         // a protection suit
-#define	e_ITEM_COUNT_ 				 59         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_HoleInDoor            59         // a hole in the door
+#define	e_ITEM_COUNT_ 				 60         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

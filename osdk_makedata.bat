@@ -149,6 +149,7 @@ SET TARGET_EXTENSION=.hir
 :: Scene variants
 %CONVERT% loc_dark_room_sunlight
 %CONVERT% loc_basement_window_cleared
+%CONVERT% loc_steel_door_with_goggles
 
 :: Other 240x128 full screen images which are not locations
 %CONVERT% view_newspaper
@@ -188,6 +189,11 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_safety_gloves
 %CONVERT% view_panic_room_digicode
 %CONVERT% view_panic_room_clay
+%CONVERT% view_panic_room_pouring_acid
+%CONVERT% view_panic_room_acid_burning
+%CONVERT% view_panic_room_acid_hole
+%CONVERT% view_panic_room_girl_attached
+%CONVERT% view_panic_room_girl_sitting
 
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo

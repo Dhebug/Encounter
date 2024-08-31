@@ -164,6 +164,7 @@ _gTextItemAcid                    .byt "un _acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
 _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
+_gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -222,6 +223,7 @@ _gTextItemAcid                    .byt "some strong _acid",0
 _gTextItemSecurityDoor            .byt "a security _door",0
 _gTextItemDriedOutClay            .byt "some dried out _clay",0
 _gTextItemProtectionSuit          .byt "a protection _suit",0
+_gTextItemHoleInDoor              .byt "a _hole in the door",0
 #endif
 _EndItemNames
 
@@ -1446,13 +1448,26 @@ _gDescriptionShowerRoom
     END
 .)
 
+
 // MARK: West Gallery
 _gDescriptionWestGallery
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("La gallerie ouest")
 #else
     SET_DESCRIPTION("This is the west gallery")
 #endif    
+    ; If the suit is equiped, we remove it
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+        UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
+#ifdef LANGUAGE_FR    
+        INFO_MESSAGE("Il faut que j'enlève cette combinaison")
+#else
+        INFO_MESSAGE("I need to remove that suit")
+#endif        
+        WAIT(50*2)
+    ENDIF(suit)
+
     ; Is the curtain closed?
     JUMP_IF_FALSE(curtain_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
 curtain_closed
@@ -1477,6 +1492,7 @@ curtain_open
     _BUBBLE_LINE(60,92,0,"behind the Curtain?")
 #endif    
     END
+.)
 
 
 // MARK: Box Room
@@ -1627,26 +1643,42 @@ _gDescriptionPanicRoomDoor
     SET_DESCRIPTION("A panic room entrance")
 #endif    
 
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,14)                        ; Draw the acid hole
+                _IMAGE(18,50)
+                _BUFFER(15,72)
+        WAIT(DELAY_FIRST_BUBBLE)
+        WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(135,16,0,"Elle est moins")
+        _BUBBLE_LINE(131,53,0,"sécurisée maintenant")
+#else
+        _BUBBLE_LINE(153,70,0,"Definitelly less")
+        _BUBBLE_LINE(148,85,0,"secure now")
+#endif    
+        END
+    ENDIF(acid)
+
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+        SET_SCENE_IMAGE(LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES)                ; Then we show the view with the googles on
+        WAIT(DELAY_FIRST_BUBBLE)
+        WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(135,16,0,"C'est un peu")
+        _BUBBLE_LINE(131,53,0,"oppressant")
+#else
+        _BUBBLE_LINE(153,70,0,"It's kind of")
+        _BUBBLE_LINE(148,85,0,"oppressing")
+#endif    
+        END
+    ENDIF(suit)
+
+
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,13)                            ; Draw the clay attached to the door
                 _IMAGE(13,51)
                 _BUFFER(15,73)
-    ENDIF(attached)
-
-    WAIT(DELAY_FIRST_BUBBLE)
-
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),no_clay)       ; Is the clay attached?
-        WHITE_BUBBLE(3)
-#ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(5,5,0,"Damn...")
-        _BUBBLE_LINE(135,16,0,"Ils ont mis")
-        _BUBBLE_LINE(131,53,0,"les gros moyen!")
-#else
-        _BUBBLE_LINE(5,5,0,"Damn...")
-        _BUBBLE_LINE(168,70,0,"That's some")
-        _BUBBLE_LINE(138,85,0,"serious hardware!")
-#endif    
-    ELSE(no_clay,else)
+        WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
         _BUBBLE_LINE(135,16,0,"On dirait")
@@ -1655,8 +1687,21 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(153,70,0,"Almost looks")
         _BUBBLE_LINE(148,85,0,"like a smile :)")
 #endif    
-    ENDIF(else)
+        END
+    ENDIF(attached)
 
+    ; Default message if nothing has been changed (no clay, no hole, no protection suit...)
+    WAIT(DELAY_FIRST_BUBBLE)
+    WHITE_BUBBLE(3)
+#ifdef LANGUAGE_FR    
+    _BUBBLE_LINE(5,5,0,"Damn...")
+    _BUBBLE_LINE(135,16,0,"Ils ont mis")
+    _BUBBLE_LINE(131,53,0,"les gros moyen!")
+#else
+    _BUBBLE_LINE(5,5,0,"Damn...")
+    _BUBBLE_LINE(168,70,0,"That's some")
+    _BUBBLE_LINE(138,85,0,"serious hardware!")
+#endif    
     END
 .)
 
@@ -1960,6 +2005,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _InspectProtectionSuit)
+    VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 _OneHourAlarmWarning
@@ -2169,19 +2215,52 @@ _InspectThug
 
 _InspectPanicRoomDoor
 .(
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
+        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Home-made peep-hole")
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Ils ne plaisantaient pas...")
+#else
+        INFO_MESSAGE("They were not lying...")
+#endif    
+        WAIT(50*2)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("...c'était un acide puissant !")
+#else
+        INFO_MESSAGE("...that was a strong acid!")
+#endif    
+        WAIT(50*2)
+    ELSE(acid,clay)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
+            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY,"First prize at school?")
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Un joli petit barrage...")
+#else
+            INFO_MESSAGE("A nice little damn...")
+#endif    
+            WAIT(50*2)
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("...plus qu'à le remplir !")
+#else
+            INFO_MESSAGE("...just need to fill it!")
+#endif    
+            WAIT(50*2)
+        ELSE(attached,nothing)
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Impossible de deviner le code...")
+            INFO_MESSAGE("Impossible de deviner le code...")
 #else
-    INFO_MESSAGE("Impossible to guess that code...")
+            INFO_MESSAGE("Impossible to guess that code...")
 #endif    
-    WAIT(50*2)
+            WAIT(50*2)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("La porte est elle vulnérable?")
+            INFO_MESSAGE("La porte est elle vulnérable?")
 #else
-    INFO_MESSAGE("Maybe the door itself is vulnerable?")
+            INFO_MESSAGE("Maybe the door itself is vulnerable?")
 #endif    
-    WAIT(50*2)
+            WAIT(50*2)
+        ENDIF(nothing)
+    ENDIF(clay)
+
     END_AND_REFRESH    
 .)
 
@@ -2189,6 +2268,25 @@ _InspectPanicRoomDoor
 _InspectProtectionSuit
 .(
     GOSUB(_ShowProtectionSuit)
+    END_AND_REFRESH    
+.)
+
+
+_InspectHoleInDoor
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_ATTACHED,"A damsel in distress")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La victime est attachée...")
+#else
+    INFO_MESSAGE("The victim is restrained...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("...elle a besoin de notre aide !")
+#else
+    INFO_MESSAGE("...she needs our help!")
+#endif    
+    WAIT(50*2)
     END_AND_REFRESH    
 .)
 
@@ -2566,6 +2664,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
+    VALUE_MAPPING(e_ITEM_Acid               , _UseAcid)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -2784,8 +2883,9 @@ _UseProtectionSuit
     INFO_MESSAGE("It seems to fit well...")
     WAIT(50*2)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
-        ; The player is in front of the Panic Room
+        ; The player is in front of the Panic Room, we can now equip the protection suit
         INFO_MESSAGE("...let's experiment!")
+        SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)        
         WAIT(50*2)
     ELSE(panic_room,not_panic_room)
         ; The player is anywhere else
@@ -2826,6 +2926,37 @@ _UseClay
 .)
 
 
+_UseAcid
+.(
+    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)    ; Are we in the proper location to use the acid?
+        ERROR_MESSAGE("I can't use it here")
+        END_AND_REFRESH
+    ENDIF(panic_room)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
+        ERROR_MESSAGE("Needs something to contain the acid")
+        END_AND_REFRESH
+    ENDIF(attached)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+        ERROR_MESSAGE("Needs some protection equipment first")
+        END_AND_REFRESH
+    ENDIF(suit)
+
+    ; Show the clay image
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID,"Burning")
+    WAIT(50*2)
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING,"Burning")
+    WAIT(50*2)
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"A hole")
+    WAIT(50*2)
+
+    SET_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR)            ; There is now a hole in the door
+    SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_NONE)                             ; The clay has vanished
+    SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE)                             ; The acid is gone as well
+
+    END_AND_REFRESH
+.)
 
 /* MARK: Search Action 🕵️‍♀️
 

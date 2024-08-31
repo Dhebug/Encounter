@@ -203,6 +203,8 @@ AddDefine LOADER_PICTURE_CELLAR_BRIGHT {FileIndex}
 AddFile ..\build\files\loc_basement_window_cleared.hir
 AddDefine LOADER_PICTURE_CELLAR_WINDOW_CLEARED {FileIndex}
 
+AddFile ..\build\files\loc_steel_door_with_goggles.hir
+AddDefine LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES {FileIndex}
 
 ; Additional images
 #ifdef LANGUAGE_FR
@@ -317,6 +319,21 @@ AddDefine LOADER_PICTURE_DOOR_DIGICODE {FileIndex}
 
 AddFile ..\build\files\view_panic_room_clay.hir
 AddDefine LOADER_PICTURE_DOOR_WITH_CLAY {FileIndex}
+
+AddFile ..\build\files\view_panic_room_pouring_acid.hir
+AddDefine LOADER_PICTURE_DOOR_POURING_ACID {FileIndex}
+
+AddFile ..\build\files\view_panic_room_acid_burning.hir
+AddDefine LOADER_PICTURE_DOOR_ACID_BURNING {FileIndex}
+
+AddFile ..\build\files\view_panic_room_acid_hole.hir
+AddDefine LOADER_PICTURE_DOOR_WITH_HOLE {FileIndex}
+
+AddFile ..\build\files\view_panic_room_girl_attached.hir
+AddDefine LOADER_PICTURE_HOLE_GIRL_ATTACHED {FileIndex}
+
+AddFile ..\build\files\view_panic_room_girl_sitting.hir
+AddDefine LOADER_PICTURE_HOLE_GIRL_FREE {FileIndex}
 
 
 ; All the sprites
