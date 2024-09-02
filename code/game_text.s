@@ -2945,17 +2945,23 @@ _UseAcid
         END_AND_REFRESH
     ENDIF(suit)
 
-    ; Show the clay image
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID,"Burning")
+    ; Cut scene, Action!
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID,"Step 1: Pour the acid")
     WAIT(50*2)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING,"Burning")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING,"Step 2: Let it burn")
     WAIT(50*2)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"A hole")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Result: A large hole!")
+    INFO_MESSAGE("Large enough to peek through...")
     WAIT(50*2)
+    INFO_MESSAGE("...or even pass objects?")
+    WAIT(50*2)
+
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ACID)
 
     SET_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR)            ; There is now a hole in the door
     SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_NONE)                             ; The clay has vanished
     SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE)                             ; The acid is gone as well
+    SET_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_NONE)                   ; We don't need the protection suit
 
     END_AND_REFRESH
 .)
@@ -3122,6 +3128,8 @@ thug_knife
 .)
 
 
+
+
 _ThrowSnookerCue
 .(
     // We only throw the snooker cue if:
@@ -3211,9 +3219,9 @@ _TakeLadder
 .(
 +_gTextItemLadder = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle courte")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a _ladder")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a short _ladder")
 #endif    
     JUMP(_TakeCommon)
 .)
@@ -3223,9 +3231,9 @@ _TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une grosse _colombe")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une grosse _colombe")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a large _dove")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a large _dove")
 #endif    
     JUMP(_TakeCommon)
 .)
