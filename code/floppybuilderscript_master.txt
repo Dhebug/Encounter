@@ -335,6 +335,9 @@ AddDefine LOADER_PICTURE_HOLE_GIRL_ATTACHED {FileIndex}
 AddFile ..\build\files\view_panic_room_girl_sitting.hir
 AddDefine LOADER_PICTURE_HOLE_GIRL_FREE {FileIndex}
 
+AddFile ..\build\files\view_panic_room_window.hir
+AddDefine LOADER_PICTURE_PANIC_ROOM_WINDOW {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR
@@ -362,6 +365,8 @@ AddDefine LOADER_SPRITE_CAR_PARTS {FileIndex}
 AddFile ..\build\files\masked_beep.msk
 AddDefine LOADER_SPRITE_BEEP {FileIndex}
 
+AddFile ..\build\files\maked_panic_room_window.msk
+AddDefine LOADER_SPRITE_PANIC_ROOM_WINDOW {FileIndex}
 
 ;
 ; The scores: They should be uncompressed because they are going to be overwritten
