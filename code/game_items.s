@@ -84,3 +84,5 @@ _gItems
     ITEM_NORMAL( _gTextItemDriedOutClay          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Clay
     ITEM_NORMAL( _gTextItemProtectionSuit        ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ProtectionSuit
     ITEM_NORMAL( _gTextItemHoleInDoor            ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_HoleInDoor
+    ITEM_NORMAL( _gTextItemHighUpWindow          ,e_LOC_TILEDPATIO      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_PanicRoomWindow
+    

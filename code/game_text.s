@@ -165,6 +165,7 @@ _gTextItemSecurityDoor            .byt "une _porte blindée",0
 _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
+_gTextItemHighUpWindow            .byt "une _fenêtre inaccessible",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -224,6 +225,7 @@ _gTextItemSecurityDoor            .byt "a security _door",0
 _gTextItemDriedOutClay            .byt "some dried out _clay",0
 _gTextItemProtectionSuit          .byt "a protection _suit",0
 _gTextItemHoleInDoor              .byt "a _hole in the door",0
+_gTextItemHighUpWindow            .byt "an inaccessible _window",0
 #endif
 _EndItemNames
 

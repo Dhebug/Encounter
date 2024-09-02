@@ -75,6 +75,7 @@ keyword gWordsArray[] =
     { "GAME"    ,e_ITEM_HandheldGame        },  
 
     { "WINDOW"  ,e_ITEM_BasementWindow      },  
+    { "WINDOW"  ,e_ITEM_PanicRoomWindow     },  
     
     { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
