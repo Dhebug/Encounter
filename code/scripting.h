@@ -39,7 +39,9 @@
 #define COMMAND_CLEAR_TEXT_AREA 28
 #define COMMAND_GOSUB           29
 #define COMMAND_RETURN          30
-#define _COMMAND_COUNT          31
+#define COMMAND_DO_ONCE         31
+#define COMMAND_SET_CUT_SCENE   32
+#define _COMMAND_COUNT          33
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -55,16 +57,19 @@
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
+#define DO_ONCE(label)                       .byt COMMAND_DO_ONCE,1,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 #define GOSUB(label)                         .byt COMMAND_GOSUB,<label,>label
 #define RETURN                               .byt COMMAND_RETURN
+#define SET_CUT_SCENE(flag)                  .byt COMMAND_SET_CUT_SCENE,flag
 
 #ifdef ASSEMBLER
 #define IF_TRUE(expression,label)            .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression   
 #define IF_FALSE(expression,label)           .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression 
 #define ELSE(else,endif)          else = *+3: .byt COMMAND_JUMP,<endif,>endif                                          
 #define ENDIF(endif)              endif
+#define ENDDO(enddo)              enddo
 #endif
 
 // Text

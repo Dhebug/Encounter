@@ -153,6 +153,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_steel_door_with_goggles
 
 :: Other 240x128 full screen images which are not locations
+%CONVERT% view_rough_map
 %CONVERT% view_newspaper
 %CONVERT% view_newspaper_fr
 %CONVERT% view_handwritten_note

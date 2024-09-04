@@ -41,6 +41,15 @@ void HandleByteStream()
                 Panic();
             }
             ByteStreamCallbacks[command]();
+
+            if (gStreamCutScene)
+            {
+                while (gDelayStream)
+                {
+                    gDelayStream--;
+                    WaitIRQ();                   
+                }
+            }
 		}
         while (!gCurrentStreamStop);   // Can be triggered by END, WAIT, END_AND_REFRESH
 	}

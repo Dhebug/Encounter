@@ -11,6 +11,7 @@
 _gCurrentStream         .dsb 2
 _gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
+_gStreamCutScene        .dsb 1   ; 1 = In a cut scene
 
 _gCurrentItem           .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
 _gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
@@ -52,6 +53,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_CLEAR_TEXT_AREA
     .word _ByteStreamCommand_GOSUB
     .word _ByteStreamCommand_RETURN
+    .word _ByteStreamCommand_DO_ONCE
+    .word _ByteStreamCommand_SET_CUTSCENE
 
     
 ; _param0=pointer to the new byteStream
@@ -65,6 +68,7 @@ _PlayStreamAsm
     lda #0
 	sta _gDelayStream
     sta _gCurrentStreamStop
+    sta _gStreamCutScene
 
 loop
     jsr _WaitIRQ
@@ -311,14 +315,19 @@ _ByteStreamCommandEndAndRefresh
 
 
 _ByteStreamCommandWait
+.(
     ; In theory the delay could be 8 or 16 bits based on the value, but the code does not use that at the moment
     jsr _ByteStreamGetNextByte
     stx _gDelayStream+0
-  
+
+    ; If we are in a cutscene we don't count WAIT instructions as a way to go back to gameplay
+    lda _gStreamCutScene
+    bne end_stream_stop
     lda #FLAG_WAIT
     sta _gCurrentStreamStop
+end_stream_stop    
     rts
-
+.)
 
 _ByteStreamCommandFADE_BUFFER
     jmp _BlitBufferToHiresWindow
@@ -356,6 +365,40 @@ _ByteStreamCommandFADE_BUFFER
     rts
 
 
+; .byt COMMAND_SET_CUT_SCENE,flag
+_ByteStreamCommand_SET_CUTSCENE
+.(
+    ldy #0
+    lda (_gCurrentStream),y       ; Get the cut scene flag
+    sta _gStreamCutScene
+    lda #1
+    jmp _ByteStreamMoveByA
+.)
+
+; .byt COMMAND_DO_ONCE,1,<label,>label
+_ByteStreamCommand_DO_ONCE
+.(
+    ldy #0
+    lda (_gCurrentStream),y       ; Get the counter
+    bne not_done
+    iny
+    lda (_gCurrentStream),y       ; Script address
+    tax                           ; Temporary so we don't change the stream pointer while using it
+    iny
+    lda (_gCurrentStream),y
+    stx _gCurrentStream+0
+    sta _gCurrentStream+1
+    rts
+not_done    
+    tax                            ; Decrement the counter
+    dex
+    txa
+    sta (_gCurrentStream),y        ; Write down the counter
+    lda #3                         ; Skip counter and address
+    jmp _ByteStreamMoveByA
+.)
+
+; .byt COMMAND_JUMP,<label,>label
 _ByteStreamCommandJUMP
     ldy #0
     lda (_gCurrentStream),y
@@ -367,7 +410,7 @@ _ByteStreamCommandJUMP
     rts
 
 
-
+; .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 _ByteStreamCommandJUMP_IF_TRUE
     lda #OPCODE_BEQ                          // F0
     bne common

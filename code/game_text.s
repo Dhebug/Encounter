@@ -266,12 +266,19 @@ _gDescriptionDarkTunel
 
 // MARK: Market Place
 _gDescriptionMarketPlace
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur la place du marché")
 #else
     SET_DESCRIPTION("You are in a deserted market square")
 #endif    
 
+    .(
+    DO_ONCE(intro_sequence)
+        SET_CUT_SCENE(1)
+        FADE_BUFFER();
+    ENDDO(intro_sequence)
+    .)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -281,6 +288,34 @@ _gDescriptionMarketPlace
     _BUBBLE_LINE(4,100,0,"The market place")
     _BUBBLE_LINE(4,106,4,"is deserted")
 #endif    
+
+    ; This should be shown only once at the start.
+    ; Should probably disable the keyboard inputs
+    .(
+    DO_ONCE(intro_sequence)
+        //SET_CUT_SCENE(1)
+        //FADE_BUFFER();
+        //SET_DESCRIPTION("")
+        WAIT(50*2)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
+        FADE_BUFFER();
+        INFO_MESSAGE("I'll have to come back here...")
+        WAIT(50*2)
+        INFO_MESSAGE("...when I'm done")
+        WAIT(50*2)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")
+        FADE_BUFFER();
+        INFO_MESSAGE("I only have two hours...")
+        WAIT(50*2)
+        INFO_MESSAGE("...make them count!")
+        WAIT(50*2)
+        
+        ; Back to the market place
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
+        FADE_BUFFER();
+        SET_CUT_SCENE(0)
+    ENDDO(intro_sequence)
+    .)
 
 blinky_shop
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,8,11)                     ; Draw the Fish Shop "grayed out"

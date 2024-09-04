@@ -207,6 +207,9 @@ AddFile ..\build\files\loc_steel_door_with_goggles.hir
 AddDefine LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES {FileIndex}
 
 ; Additional images
+AddFile ..\build\files\view_rough_map.hir
+AddDefine LOADER_PICTURE_ROUGH_MAP {FileIndex}
+
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_newspaper_fr.hir
 #else // LANGUAGE_EN

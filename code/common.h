@@ -166,6 +166,7 @@ extern void InitializeGraphicMode();
 extern const char* gCurrentStream;
 extern char gCurrentStreamStop;
 extern unsigned int gDelayStream;
+extern char gStreamCutScene;
 
 
 // game_text
