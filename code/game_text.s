@@ -329,7 +329,7 @@ blinky_shop
     WAIT(50)
     JUMP(blinky_shop)
     ;END
-
+.)
 
 // MARK: Dark Alley
 _gDescriptionDarkAlley
@@ -1813,6 +1813,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -2309,7 +2310,27 @@ _InspectProtectionSuit
 .)
 
 
+; From the hole in the door we can see three situations:
+; - The girl is on the floor with bindings
+; - The girl is sitting on the floor after being freed
+; - The room is empty
 _InspectHoleInDoor
+.(
+    ; We only draw the girl if she's actually in the room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
+            GOSUB(_ShowGirlInRoomWithBindings)
+        ELSE(girl_restrained,girl_freed)
+            GOSUB(_ShowGirlInRoomWithoutBindings)
+        ENDIF(girl_freed)
+    ELSE(girl_in_room,room_empty)
+        GOSUB(_ShowEmptyHostageRoom)
+    ENDIF(room_empty)
+    END_AND_REFRESH    
+.)
+
+
+_ShowGirlInRoomWithBindings
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_ATTACHED,"A damsel in distress")
 #ifdef LANGUAGE_FR
@@ -2324,8 +2345,46 @@ _InspectHoleInDoor
     INFO_MESSAGE("...she needs our help!")
 #endif    
     WAIT(50*2)
-    END_AND_REFRESH    
+    RETURN
 .)
+
+
+_ShowGirlInRoomWithoutBindings
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_FREE,"No more bindings")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle a coupé ses restraintes...")
+#else
+    INFO_MESSAGE("She cut her bindings...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("...mais comment s'échapper?")
+#else
+    INFO_MESSAGE("...now for the escape?")
+#endif    
+    WAIT(50*2)
+    RETURN
+.)
+
+
+_ShowEmptyHostageRoom
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_FREE,"Empty panic room")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La pièce est vide...")
+#else
+    INFO_MESSAGE("The room is empty...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("...elle doit être dehors maintenant")
+#else
+    INFO_MESSAGE("...she must be outside by now")
+#endif    
+    WAIT(50*2)
+.)
+
 
 
 /* MARK: Open Action 📦➡
@@ -2695,7 +2754,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
     VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
-    VALUE_MAPPING(e_ITEM_Hose           , _UseHosePipe)
+    VALUE_MAPPING(e_ITEM_Hose               , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
@@ -3157,6 +3216,12 @@ dog_knife
         JUMP(_CommonThugDisabled)
 thug_knife    
 
+    // - We are in front of the panic room and the hole was made
+    JUMP_IF_FALSE(acid_hole_knife,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
+    JUMP_IF_FALSE(acid_hole_knife,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
+        JUMP(_CommonGaveTheKnifeToTheGirl)
+acid_hole_knife    
+
     // In other locations we just drop the item where we are
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
     END_AND_REFRESH
@@ -3214,6 +3279,33 @@ _CommonThugDisabled
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive _thug")
 #endif    
+    END_AND_REFRESH
+.)
+
+
+_CommonGaveTheKnifeToTheGirl
+.(
+    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_HOSTAGE_ROOM)
+
+    ; Draw the picture with the attached girl
+    GOSUB(_ShowGirlInRoomWithBindings)
+
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_KNIFE,20,111,20)    ; Draw the patch with the knife through the hole
+            _IMAGE(0,0)
+            _BUFFER(10,17)
+    FADE_BUFFER()      ; Make sure everything appears on the screen
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Le couteau passe par le trou...")
+#else
+    INFO_MESSAGE("The knife fits the hole...")
+#endif    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_THE_KNIFE)
+    UNSET_ITEM_FLAGS(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED)
+    WAIT(50*2)
+
+    ; Draw the picture with the girl without her bindings
+    GOSUB(_ShowGirlInRoomWithoutBindings)
+
     END_AND_REFRESH
 .)
 

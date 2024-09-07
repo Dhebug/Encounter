@@ -371,6 +371,10 @@ AddDefine LOADER_SPRITE_BEEP {FileIndex}
 AddFile ..\build\files\maked_panic_room_window.msk
 AddDefine LOADER_SPRITE_PANIC_ROOM_WINDOW {FileIndex}
 
+AddFile ..\build\files\masked_hole_with_knife.msk
+AddDefine LOADER_SPRITE_HOLE_WITH_KNIFE {FileIndex}
+
+
 ;
 ; The scores: They should be uncompressed because they are going to be overwritten
 ;

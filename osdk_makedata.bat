@@ -89,6 +89,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_car_parts
 %CONVERT% masked_beep
 %CONVERT% maked_panic_room_window
+%CONVERT% masked_hole_with_knife
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations

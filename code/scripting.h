@@ -102,7 +102,8 @@
 #define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId,description,0
 #define FADE_BUFFER()                                .byt COMMAND_FADE_BUFFER
 
-#define BLIT_BLOCK(imageId,w,h)      .byt COMMAND_BITMAP,imageId,w,h,40
+#define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h,40
+#define BLIT_BLOCK_STRIDE(imageId,w,h,stride)        .byt COMMAND_BITMAP,imageId,w,h,stride
 #define _BUFFER(x,y)                 .byt <_ImageBuffer+x+(40*y),>_ImageBuffer+x+(40*y)
 #define _IMAGE(x,y)                  .byt <_SecondImageBuffer+x+(40*y),>_SecondImageBuffer+x+(40*y)
 #define _SCREEN(x,y)                 .byt <$a000+x+(40*y),>$a000+x+(40*y)
