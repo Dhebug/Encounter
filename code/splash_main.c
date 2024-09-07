@@ -49,7 +49,9 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
+#ifdef ENABLE_MUSIC
 extern char JingleMusic[];
+#endif
 
 BUILD_MARKER
 
@@ -91,6 +93,8 @@ void PatchCosTable()
 
 int ShowLogoAnimation()
 {
+	int k;
+
     stopMoving = 0;
     position = startPosition;
 
@@ -158,6 +162,11 @@ int ShowLogoAnimation()
             return 1;
         }
         */
+		k=ReadKey();
+		if ((k==KEY_RETURN) || (k==' ') )
+		{
+			return 1;
+		}
 
         if (position<height+5)
         {
@@ -212,9 +221,6 @@ int SetupColors(unsigned char paperTop,unsigned char inkTop,unsigned char paperB
 
 int DisplayLogosWithPreshift()
 {
-	// Load the first picture at the default address specified in the script
-	LoadFileAt(INTRO_PICTURE_LOGOS,ImageBuffer);
-
 	Hires(16+0,4);
 
     memset((char*)0xa000,64,8000);
@@ -254,19 +260,29 @@ void main()
 	//LoadFileAt(LOADER_FONT_6x8,0x9900);              // Art Deco font
 	LoadFileAt(LOADER_FONT_TYPEWRITER_6x8,0x9900);     // Typewriter font
 
+	// Load the first picture at the default address specified in the script
+	LoadFileAt(INTRO_PICTURE_LOGOS,ImageBuffer);
+
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
 
+#ifdef ENABLE_MUSIC
     PlayMusic(JingleMusic);
+#endif    
 
     // Display the Severn Software and Defence Force logos
 	DisplayLogosWithPreshift();
 
     // Clear the screen
     SetupColors(16+0,7,16+0,6);
+    
+    // Ensure that the screen is erased even if the player pressed a key
+    memset((char*)0xa000,64,8000);
 
 	System_RestoreIRQ_SimpleVbl();
+#ifdef ENABLE_MUSIC
     EndMusic();
+#endif    
     PsgStopSoundAndForceUpdate();
 
 	// Quit and return to the loader

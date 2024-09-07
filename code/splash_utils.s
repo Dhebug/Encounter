@@ -73,7 +73,7 @@ loop
 .)
 
 
-
+#ifdef ENABLE_MUSIC
 _JingleMusic
 .(
     .dw events
@@ -82,3 +82,4 @@ _JingleMusic
 events
 #include "splash_music_events.s"
 .)
+#endif

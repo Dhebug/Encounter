@@ -168,6 +168,12 @@ extern char gCurrentStreamStop;
 extern unsigned int gDelayStream;
 extern char gStreamCutScene;
 
+#ifdef ENABLE_DEBUG_TEXT
+#define DEBUG_TEXT(text)   { sprintf((char*)0xbb80+40*27,"%c%s(%d): %s%c",16+1,  __FILE__ , __LINE__ , text, 1); }
+#else
+#define DEBUG_TEXT(text)   
+#endif
+
 // printer
 #ifdef ENABLE_PRINTER
 #define PrinterSendString(message)   {  param0.ptr=message;asm("lda _param0+0:ldx _param0+1:jsr _PrinterSendStringAsm"); }

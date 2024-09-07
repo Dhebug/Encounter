@@ -14,7 +14,11 @@
 //#define INTRO_ENABLE_SOUNDBOARD         // Comment out to disable the sound testing module
 #define ENABLE_MUSIC                    // Comment out to disable the music
 #define ENABLE_SOUND_EFFECTS            // Comment out to disable sound effects
+
+//#define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
+#ifdef MODULE_GAME
 #define ENABLE_PRINTER                  // Mostly for testers, to get the game solution
+#endif
 
 //#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades

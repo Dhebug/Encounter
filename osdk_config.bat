@@ -2,8 +2,10 @@
 
 ::
 :: Set the build paremeters
-::
-SET VERSION=0.1
+:: 0.1 - Most of the original versions sents to XiA
+:: 0.2 - Test version with new intro music
+:: 0.3 - Test version with the new game start that shows the map, and printer output
+SET VERSION=0.3
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
 ::SET BUILD_LANGUAGES=EN,FR

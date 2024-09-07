@@ -806,6 +806,9 @@ void main()
 #ifndef ENABLE_INTRO
 endIntro:
 #endif
+    // Ensure that the screen is erased even if the player pressed a key
+    memset((char*)0xa000,64,8000);
+
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_GAME_PROGRAM,LOADER_GAME_PROGRAM_ADDRESS);   // 0x400
 }
