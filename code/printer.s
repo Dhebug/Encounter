@@ -51,6 +51,8 @@ valid
 ; A character to send
 _PrinterSendCharAsm
 .(
+    bit _gUsePrinter
+    bvc end_send_char
     php
     sei
     sta $301		; Send A to port A of 6522
@@ -66,6 +68,7 @@ loop_wait 		; Wait in a loop until active transition of CA1
     and #2
     beq loop_wait	; acknowledging the byte
     lda $30d
+end_send_char    
     rts
 .)
 
@@ -78,5 +81,8 @@ _PrinterSendCrlfAsm
     ;rts 
 .)
 
+#else
+_PrinterSendString
+    rts
   
 #endif // ENABLE_PRINTER 

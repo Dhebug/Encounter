@@ -442,6 +442,22 @@ void Invoke()
 }
 #endif    
 
+#ifdef ENABLE_PRINTER
+void PrinterEnableDisable()
+{
+    if (gUsePrinter)
+    {
+        PrintStatusMessage(5,"Printer Output Disabled");
+    }
+    gUsePrinter = gUsePrinter?0:255;
+    if (gUsePrinter)
+    {
+        PrintStatusMessage(2,"Printer Output Enabled");
+    }
+    WaitFrames(50);
+}
+#endif
+
 // MARK:Answer
 WORDS ProcessAnswer()
 {
@@ -587,6 +603,8 @@ void Initializations()
 // MARK:main
 void main()
 {
+    gUsePrinter = 0;
+
     UnlockAchievement(ACHIEVEMENT_LAUNCHED_THE_GAME);
 
 	Initializations();	

@@ -162,9 +162,10 @@
 #endif    
 // Meta instructions
 #define	e_WORD_QUIT                  146
-#define	e_WORD_COUNT_                147
+#define e_WORD_PRINT                 147
+#define	e_WORD_COUNT_                148
 // Additional values for the parser
-#define	e_WORD_CONTINUE              148
+#define	e_WORD_CONTINUE              149
 
 
 // Flags for the items

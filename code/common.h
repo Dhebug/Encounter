@@ -181,6 +181,8 @@ extern char gStreamCutScene;
 #define PrinterSendChar(character)   { asm("lda #character:jsr _PrinterSendCharAsm"); }
 #define PrinterSendCrlf()            { asm("jsr _PrinterSendCrlfAsm"); }
 #endif
+extern char gUsePrinter;            // 0 or 255
+
 
 // game_text
 extern char gDescriptionTeenagerRoom[];
