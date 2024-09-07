@@ -40,8 +40,9 @@ IrqTasks50hz
 .)
 
 
-
-
+; No-op to avoid a linker bug
+_PrinterSendStringAsm
+    rts
 
 
 _Copy38Bytes

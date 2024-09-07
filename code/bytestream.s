@@ -818,6 +818,12 @@ _PrintStatusMessageAsm
     sta tmp0+1
     sta tmp1+1
 +_PrintStatusMessageAddr
+#ifdef ENABLE_PRINTER    
+    lda _param0+0
+    ldx _param0+1
+    jsr _PrinterSendStringAsm
+    jsr _PrinterSendCrlfAsm
+#endif
     ; Write the color code
     ldy #1
     lda _param1

@@ -18,6 +18,8 @@ IrqTasks50hz
 Count10SecondsDown
     rts
 
+; No-op to avoid a linker bug
+_PrinterSendStringAsm
 _DrawArrows
     rts
     

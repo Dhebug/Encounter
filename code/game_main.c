@@ -41,6 +41,11 @@ void PrintInventory()
     int pass;
 	int itemId;
 	int inventoryCell =0;
+
+#ifdef ENABLE_PRINTER    
+    PrinterSendString("\n- Inventory: ");
+#endif
+
 	memset((char*)TemporaryBuffer479,' ',40*4);
     gPrintWidth=38;
     for (pass=0;pass<2;pass++)
@@ -62,6 +67,9 @@ void PrintInventory()
                         PrintString(":");
                         PrintString(gItems[associatedItemId].description);
                         inventoryCell+=2;
+                    #ifdef ENABLE_PRINTER    
+                        PrinterSendString(", ");
+                    #endif
                     }
                 }
                 else
@@ -71,6 +79,9 @@ void PrintInventory()
                     {
                         PrintStringAt(itemPtr->description,screenPtr);  // Print the container
                         inventoryCell++;
+                    #ifdef ENABLE_PRINTER    
+                        PrinterSendString(", ");
+                    #endif
                     }
                 }
             }
@@ -87,6 +98,10 @@ void PrintSceneObjects()
     char itemPrinted = 0;
 	int itemCount = 0;
 	int item;
+
+#ifdef ENABLE_PRINTER    
+    PrinterSendString("\n- Scene items: ");
+#endif
 
 	//memset((char*)TemporaryBuffer479,' ',40*4);
     memcpy(TemporaryBuffer479,(char*)0xbb80+40*18,40*4);
@@ -151,11 +166,27 @@ void PrintSceneInformation()
     // Display the score
 	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
 
+#ifdef ENABLE_PRINTER
+    // If the printer is enable, we print the content
+    // sta $bb80+16*40+39-6-1-2,x
+    PrinterSendString("\n\n--------[");
+    PrinterSendMemory((char*)0xbb80+40*17,40);                    // You are in a deserted market square 
+    PrinterSendString("][");
+    PrinterSendMemory((char*)0xbb80+40*16+30,10);                 // Time stamp
+    PrinterSendString("][");
+    PrinterSendMemory((char*)0xbb80+40*16+0,13);                  // Score
+    PrinterSendString("]--------");
+#endif    
+
 	PrintSceneDirections();
 
 	PrintSceneObjects();
 
 	PrintInventory();
+
+#ifdef ENABLE_PRINTER
+    PrinterSendCrlf();
+#endif    
 }
 
 // MARK:Load Scene
@@ -480,6 +511,8 @@ WORDS ProcessAnswer()
 // MARK:Inits
 void Initializations()
 {
+    PrinterSendString("\n\n\n--------< New Game started >--------\n\n");
+
 	// erase the screen
 	memset((char*)0xa000,0,8000);
 

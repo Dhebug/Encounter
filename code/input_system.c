@@ -114,7 +114,10 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 	{        
 		if (gAskQuestion)
 		{
-			PrintStatusMessage(2,inputMessage);
+#ifdef ENABLE_PRINTER
+            PrinterSendCrlf();
+#endif    
+			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
 			memset((char*)0xbb80+40*23+1,' ',39);
 			gAskQuestion=0;
 		}
@@ -160,6 +163,10 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 			break;
 
 		case KEY_RETURN:
+#ifdef ENABLE_PRINTER
+            PrinterSendMemory((char*)0xbb80+40*23+2,38);    // Player input
+            PrinterSendString("\n\n");
+#endif
 			if (!checkTockens || ParseInputBuffer())
 			{
 				WORDS answer = callback();
