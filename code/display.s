@@ -1304,6 +1304,7 @@ _gFont12x14Kerning
   .byt "th",1
   .byt "to",1
   .byt "Th",1
+  .byt "Te",2
   .byt "To",2
   .byt "Us",1
   .byt "'e",2

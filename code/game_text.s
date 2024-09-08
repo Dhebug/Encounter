@@ -2390,8 +2390,7 @@ _ShowGirlInRoomWithoutBindings
     WAIT(50)
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,15,59,17)    ; Draw the patch with the Thank You! spech bubble
             _IMAGE_STRIDE(0,92,17)
-            _BUFFER(18,2)
-    FADE_BUFFER();
+            _SCREEN(18,2)
     WAIT(50)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...mais comment s'échapper?")
@@ -2399,6 +2398,21 @@ _ShowGirlInRoomWithoutBindings
     INFO_MESSAGE("...now for the escape?")
 #endif    
     WAIT(50*2)
+    FADE_BUFFER();
+    WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+    _BUBBLE_LINE(135,16,0,"Elle est moins")
+    _BUBBLE_LINE(131,53,0,"sécurisée maintenant")
+#else
+    _BUBBLE_LINE(10,50,0,"Tell me what to do!")
+    _BUBBLE_LINE(15,65,0,"I can help!")
+#endif    
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,2,14,17)    ; Draw the small speech bubble triangle to connec to the Thank You! spech bubble
+            _IMAGE_STRIDE(15,0,17)
+            _SCREEN(17,36)
+
+    WAIT(50*3)
+
     RETURN
 .)
 
