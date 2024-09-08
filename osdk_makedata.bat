@@ -90,6 +90,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_beep
 %CONVERT% maked_panic_room_window
 %CONVERT% masked_hole_with_knife
+%CONVERT% masked_hole_with_girl_attached
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations
@@ -195,7 +196,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_panic_room_pouring_acid
 %CONVERT% view_panic_room_acid_burning
 %CONVERT% view_panic_room_acid_hole
-%CONVERT% view_panic_room_girl_attached
+%CONVERT% view_panic_room_hole
 %CONVERT% view_panic_room_girl_sitting
 %CONVERT% view_panic_room_window
 

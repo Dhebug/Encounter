@@ -1690,7 +1690,7 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(135,16,0,"Elle est moins")
         _BUBBLE_LINE(131,53,0,"sécurisée maintenant")
 #else
-        _BUBBLE_LINE(153,70,0,"Definitelly less")
+        _BUBBLE_LINE(153,70,0,"Definitely less")
         _BUBBLE_LINE(148,85,0,"secure now")
 #endif    
         END
@@ -2337,13 +2337,33 @@ _InspectHoleInDoor
 
 _ShowGirlInRoomWithBindings
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_ATTACHED,"A damsel in distress")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"A damsel in distress")     ; Draw the base image with the hole over an empty room
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
+            _IMAGE_STRIDE(0,0,17)
+            _BUFFER(10,26)
+    FADE_BUFFER();
+
+    WAIT(50)
+
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,11,33,17)    ; Draw the patch with the MMPH speech bubble
+            _IMAGE_STRIDE(0,75,17)
+            _BUFFER(11,26)
+    FADE_BUFFER();
+
+    WAIT(50)
+
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La victime est attachée...")
 #else
     INFO_MESSAGE("The victim is restrained...")
 #endif    
-    WAIT(50*2)
+    WAIT(50)
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
+            _IMAGE_STRIDE(0,108,17)
+            _BUFFER(22,67)
+    FADE_BUFFER();
+    WAIT(50)
+
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...elle a besoin de notre aide !")
 #else
