@@ -335,9 +335,6 @@ AddDefine LOADER_PICTURE_DOOR_WITH_HOLE {FileIndex}
 AddFile ..\build\files\view_panic_room_hole.hir
 AddDefine LOADER_PICTURE_HOLE {FileIndex}
 
-AddFile ..\build\files\view_panic_room_girl_sitting.hir
-AddDefine LOADER_PICTURE_HOLE_GIRL_FREE {FileIndex}
-
 AddFile ..\build\files\view_panic_room_window.hir
 AddDefine LOADER_PICTURE_PANIC_ROOM_WINDOW {FileIndex}
 
@@ -373,6 +370,9 @@ AddDefine LOADER_SPRITE_PANIC_ROOM_WINDOW {FileIndex}
 
 AddFile ..\build\files\masked_hole_with_girl_attached.msk
 AddDefine LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED {FileIndex}
+
+AddFile ..\build\files\masked_hole_with_girl_free.msk
+AddDefine LOADER_SPRITE_HOLE_WITH_GIRL_FREE {FileIndex}
 
 AddFile ..\build\files\masked_hole_with_knife.msk
 AddDefine LOADER_SPRITE_HOLE_WITH_KNIFE {FileIndex}

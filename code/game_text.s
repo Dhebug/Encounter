@@ -2376,13 +2376,23 @@ _ShowGirlInRoomWithBindings
 
 _ShowGirlInRoomWithoutBindings
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_FREE,"No more bindings")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"No more bindings")     ; Draw the base image with the hole over an empty room
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+            _IMAGE_STRIDE(0,0,17)
+            _BUFFER(12,16)
+    FADE_BUFFER();
+
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle a coupé ses restraintes...")
 #else
     INFO_MESSAGE("She cut her bindings...")
 #endif    
-    WAIT(50*2)
+    WAIT(50)
+    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,15,59,17)    ; Draw the patch with the Thank You! spech bubble
+            _IMAGE_STRIDE(0,92,17)
+            _BUFFER(18,2)
+    FADE_BUFFER();
+    WAIT(50)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...mais comment s'échapper?")
 #else
@@ -2395,7 +2405,7 @@ _ShowGirlInRoomWithoutBindings
 
 _ShowEmptyHostageRoom
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_HOLE_GIRL_FREE,"Empty panic room")
+    DISPLAY_IMAGE(LOADER_PICTURE_HOLE,"Empty panic room")
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
 #else
