@@ -165,7 +165,6 @@ _gTextItemSecurityDoor            .byt "une _porte blindée",0
 _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
-_gTextItemHighUpWindow            .byt "une _fenêtre inaccessible",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -225,7 +224,6 @@ _gTextItemSecurityDoor            .byt "a security _door",0
 _gTextItemDriedOutClay            .byt "some dried out _clay",0
 _gTextItemProtectionSuit          .byt "a protection _suit",0
 _gTextItemHoleInDoor              .byt "a _hole in the door",0
-_gTextItemHighUpWindow            .byt "an inaccessible _window",0
 #endif
 _EndItemNames
 
@@ -794,6 +792,18 @@ _gDescriptionFishPond
 
 // MARK: Tiled Patio
 _gDescriptionTiledPatio
+.(
+    ; Move the panic room window here if the girl is freed
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_unrestrained)
+        SET_ITEM_LOCATION(e_ITEM_PanicRoomWindow,e_LOC_TILEDPATIO)
++_gTextItemHighUpWindow = *+2        
+#ifdef LANGUAGE_FR                                                                                   ; Update the description 
+        SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"une _fenêtre inaccessible");
+#else        
+        SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"an inaccessible _window");
+#endif        
+    ENDIF(girl_unrestrained)
+
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes sur un patio carellé")
 #else
@@ -809,7 +819,7 @@ _gDescriptionTiledPatio
     _BUBBLE_LINE(110,15,0,"is accessible from here")
 #endif    
     END
-
+.)
 
 // MARK: Apple Orchard
 _gDescriptionAppleOrchard
@@ -1674,6 +1684,24 @@ _gDescriptionThugAttacking
 // MARK: Panic Room Door
 _gDescriptionPanicRoomDoor
 .(
+    ; Move the panic room window here if the girl is freed
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_unrestrained)
+        SET_ITEM_LOCATION(e_ITEM_PanicRoomWindow,e_LOC_PANIC_ROOM_DOOR)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),closed)
+#ifdef LANGUAGE_FR       
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"la _fenêtre de la chambre forte");
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"the panic room _window");
+#endif        
+        ELSE(closed,openened)
+#ifdef LANGUAGE_FR       
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"la _fenêtre ouverte de la chambre forte");
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"the open panic room _window");
+#endif        
+        ENDIF(openened)
+    ENDIF(girl_unrestrained)
+
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("L'entrée d'une chambre forte")
 #else
@@ -2041,6 +2069,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
+    VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _InspectPanicRoomWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
     VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
     VALUE_MAPPING(e_ITEM_HeavySafe          , _InspectSafe)
@@ -2168,6 +2197,22 @@ no_ladder
     END_AND_REFRESH
 .)
 
+
+
+_InspectPanicRoomWindow
+.(  
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room_door)      ; Are we trying to look at the window from the hole in the door?
+        DISPLAY_IMAGE(LOADER_PICTURE_HOLE,"An open alarm panel")
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Impossible de la voir par le trou")
+#else
+        INFO_MESSAGE("I can't see it through the hole")
+#endif    
+        WAIT(50*2)        
+    ELSE(panic_room_door,else)                                                 ; Or are we on the tiled patio looking at the window from below?
+        GOSUB(_ShowGirlAtTheWindow)
+    ENDIF(else)
+.)
 
 _InspectPlasticBag
 .(
@@ -2382,31 +2427,50 @@ _ShowGirlInRoomWithoutBindings
             _BUFFER(12,16)
     FADE_BUFFER();
 
+    ; We show the message and the "thank you" only once.
+    DO_ONCE(thank_you)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle a coupé ses restraintes...")
+        INFO_MESSAGE("Elle a coupé ses restraintes...")
 #else
-    INFO_MESSAGE("She cut her bindings...")
+        INFO_MESSAGE("She cut her bindings...")
 #endif    
-    WAIT(50)
-    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,15,59,17)    ; Draw the patch with the Thank You! spech bubble
-            _IMAGE_STRIDE(0,92,17)
-            _SCREEN(18,2)
-    WAIT(50)
+        WAIT(50)
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,15,59,17)    ; Draw the patch with the Thank You! spech bubble
+                _IMAGE_STRIDE(0,92,17)
+                _SCREEN(18,2)
+        WAIT(50)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...mais comment s'échapper?")
+        INFO_MESSAGE("...mais comment s'échapper?")
 #else
-    INFO_MESSAGE("...now for the escape?")
+        INFO_MESSAGE("...now for the escape?")
 #endif    
+    ENDDO(thank_you)
+
     WAIT(50*2)
     FADE_BUFFER();
-    WHITE_BUBBLE(2)
+
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),closed)
+        ; The window is still closed
+        WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(135,16,0,"Elle est moins")
-    _BUBBLE_LINE(131,53,0,"sécurisée maintenant")
+        _BUBBLE_LINE(135,16,0,"Dites mois quoi faire !")
+        _BUBBLE_LINE(131,53,0,"Je peux aider !")
 #else
-    _BUBBLE_LINE(10,50,0,"Tell me what to do!")
-    _BUBBLE_LINE(15,65,0,"I can help!")
+        _BUBBLE_LINE(10,50,0,"Tell me what to do!")
+        _BUBBLE_LINE(15,65,0,"I can help!")
 #endif    
+    ELSE(closed,open)
+        ; The window is now opened
+        WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(135,16,0,"La fenêtre est ouverte maintenant.")
+        _BUBBLE_LINE(131,53,0,"Mais je ne peux pas descendre...")
+#else
+        _BUBBLE_LINE(10,50,0,"The window is open now.")
+        _BUBBLE_LINE(15,65,0,"But I can't climb down...")
+#endif    
+    ENDIF(open)
+
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,2,14,17)    ; Draw the small speech bubble triangle to connec to the Thank You! spech bubble
             _IMAGE_STRIDE(15,0,17)
             _SCREEN(17,36)
@@ -2436,6 +2500,48 @@ _ShowEmptyHostageRoom
 
 
 
+_ShowGirlAtTheWindow
+.(
+    ; Base image with the wall and the closed window
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_open)
+        ; Show the shutters open
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,18,26)                     ; Draw the open shutters
+                _IMAGE(0,0)
+                _BUFFER(11,0)
+        FADE_BUFFER() 
+        WAIT(50)
+
+        ; Show the girl at the window
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,18)                     ; Draw the girl in the window
+                _IMAGE(0,26)
+                _BUFFER(18,4)
+        FADE_BUFFER() 
+        WAIT(50)
+
+        ; Show the girl's message to the player
+        WHITE_BUBBLE(1)
+#ifdef LANGUAGE_FR   
+        _BUBBLE_LINE(107,15,0,"C'est trop haut pour sauter!")
+#else
+        _BUBBLE_LINE(93,25,0,"It's too high to jump!")
+#endif    
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
+                _IMAGE(4,31)
+                _SCREEN(19,15)
+
+        WAIT(50*2)
+
+    ELSE(window_open,window_closed)
+        FADE_BUFFER() 
+        INFO_MESSAGE("Impossible to access from here")
+        WAIT(50*2)        
+    ENDIF(window_closed)
+
+    RETURN
+.)
+
+
 /* MARK: Open Action 📦➡
 
  ██████╗ ██████╗ ███████╗███╗   ██╗     █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗
@@ -2455,6 +2561,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarBoot            , _OpenCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _OpenCarPetrolTank)
+    VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _OpenPanicRoomWindow)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -2469,6 +2576,17 @@ _OpenCurtain
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
 #endif        
+    ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
+_OpenPanicRoomWindow
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
+        UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
+        ; The description will get updated automatically by _gDescriptionPanicRoomDoor
+        GOSUB(_ShowGirlAtTheWindow)
     ENDIF(open)
     END_AND_REFRESH
 .)
