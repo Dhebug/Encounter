@@ -90,6 +90,8 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_beep
 %CONVERT% maked_panic_room_window
 %CONVERT% masked_hole_with_knife
+%CONVERT% masked_hole_with_rope
+%CONVERT% masked_hole_with_cue
 %CONVERT% masked_hole_with_girl_attached
 %CONVERT% masked_hole_with_girl_free
 
