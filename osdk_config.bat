@@ -24,7 +24,7 @@ SET TEST_MODULE=GAME
 SET BREAKPOINTS_GAME=_AskInput,_Initializations
 
 
-SET FINAL_TARGET_DISK=S:\EncounterHD-EN.dsk
+SET FINAL_TARGET_DISK=G:\games\EncounterHD-EN.dsk
 
 SET OSDKBRIEF=NOPAUSE
 SET OSDKADDR=
@@ -32,6 +32,11 @@ SET OSDKFILE=
 SET OSDKNAME=EncounterHD-%LANGUAGE%
 SET OSDKDISK=%OSDKNAME%.dsk
 SET OSDKVERBOSITY=1
+
+:: Emulator settings
+SET OSDKEMUL=ORICUTRON
+SET OSDKEMULPARAMS=-R soft --scanlines off
+SET OSDKEMULPARAMS=-R opengl --scanlines on
 
 :: These are the definition of the various files used by each module.
 :: After a module has been built once, and as long as the files are not deleted, you can
