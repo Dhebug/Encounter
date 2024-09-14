@@ -89,7 +89,6 @@ copy_loop
     lda ($00),y  
     sta FINAL_ADRESS,y
     iny
-    cpy #(_END_-_BEGIN_)
     bne copy_loop
     
 
@@ -124,7 +123,7 @@ copy_font
     ;
     ; Switch to HIRES
     ;    
-    ldy #36 			; From $9c00 to $c000 is 39 pages (9984 bytes)
+    ldy #36 			; From $9c00 to $c000 is 36 pages (9216 bytes)
     lda #0
 loop_hires_outer	
     tax
@@ -293,6 +292,7 @@ OsdkNameStart
     .byt "OSDKNAME"
     .byt " v"
     .byt "VERSION"
+    .byt "M"
 OsdkNameEnd
 
 _END_

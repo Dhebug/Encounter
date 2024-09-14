@@ -5,25 +5,26 @@
 	;.bss
 
   ;*=$FFEF
+_LoaderApiSystemType       =$FFE8 ;  0=Microdisc, 1=Jasmin
 
-_LoaderApiLoadingAnimation = $FFE9
+_LoaderApiLoadingAnimation =$FFE9
 _LoaderApiSaveData	       =$FFEC  
 
-_LoaderApiFileStartSector =$FFEF
-_LoaderApiFileStartTrack  =$FFF0
+_LoaderApiFileStartSector  =$FFEF
+_LoaderApiFileStartTrack   =$FFF0
 
-_LoaderApiFileSize       =$FFF1
-_LoaderApiFileSizeLow 	 =$FFF1
-_LoaderApiFileSizeHigh 	 =$FFF2
+_LoaderApiFileSize         =$FFF1
+_LoaderApiFileSizeLow 	   =$FFF1
+_LoaderApiFileSizeHigh 	   =$FFF2
 
-_LoaderApiJump		     =$FFF3
-_LoaderApiAddress        =$FFF4
-_LoaderApiAddressLow 	 =$FFF4
-_LoaderApiAddressHigh 	 =$FFF5
+_LoaderApiJump		       =$FFF3
+_LoaderApiAddress          =$FFF4
+_LoaderApiAddressLow 	   =$FFF4
+_LoaderApiAddressHigh 	   =$FFF5
 
-_LoaderFDCRegisterOffset =$FFF6
+_LoaderFDCRegisterOffset   =$FFF6
 
-_LoaderApiLoadFile		 =$FFF7
+_LoaderApiLoadFile		   =$FFF7
 
 	.text
 

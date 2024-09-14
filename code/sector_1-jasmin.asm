@@ -69,16 +69,31 @@ JasminStart
     ;
     
     sei               	; Disable interruptions
+
+    ;
+    ; Copy the font from 9800 to B400
+    ;
+    ldx #0
+copy_font    
+    lda $b500,x
+    sta $9900,x
+    lda $b600,x
+    sta $9A00,x
+    lda $b700,x
+    sta $9B00,x
+    dex
+    bne copy_font
+
     ;
     ; Switch to HIRES
     ;
-    ldy #39 			; From $9900 to $c000 is 39 pages (9984 bytes)
+    ldy #36			; From $9c00 to $c000 is 36 pages (9216 bytes)
     lda #0
 loop_hires_outer	
     tax
 loop_hires_inner
 __auto_hires
-    sta $9900,x
+    sta $9c00,x
     inx
     bne loop_hires_inner
     inc __auto_hires+2
@@ -87,6 +102,17 @@ __auto_hires
     
     lda #30				; Write hires switch
     sta $bfdf
+
+    ;
+    ; Print the name of the game with the version number
+    ; 
+    ldx #OsdkNameEnd-OsdkNameStart-1
+copy_name    
+    lda OsdkNameStart,x
+    sta $bfb8,x
+    dex
+    bpl copy_name
+
     ; Enable Overlay ram
     lda #1
     sta FDC_ovl_control ; Enable Overlay
@@ -215,6 +241,13 @@ sector_OK
     jmp FLOPPY_LOADER_ADDRESS
     
 sector_counter      .byt (($FFFF-FLOPPY_LOADER_ADDRESS)+1)/256
+
+OsdkNameStart
+    .byt "OSDKNAME"
+    .byt " v"
+    .byt "VERSION"
+    .byt "J"
+OsdkNameEnd
 
 _END_
 

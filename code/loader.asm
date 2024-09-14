@@ -195,6 +195,7 @@ _LoaderTemporaryStart
     sei                             ; Make sure interrupts are disabled
     cld                             ; Force decimal mode
     
+    stx _LoaderApiSystemType        ; We store the information so it's easy to retrieve later
     cpx #0                          ; If we are on Jasmin, patch all the FDC related values
     beq end_jasmin_init
     
@@ -816,35 +817,36 @@ _EndLoaderCode
 ; This is free memory that can be used, when it reaches zero then the loader start address should be changed
 ;
 
-    .dsb $FFE9 - _EndLoaderCode
+    .dsb $FFE8 - _EndLoaderCode
 
 _Vectors
 
-#if ( _Vectors <> $FFE9 )
+#if ( _Vectors <> $FFE8 )
 #error - Vector address is incorrect, loader will crash
 #else
 
 ;
 ; Here are the functions that the user can call from his own application
 ;
+_LoaderApiSystemType            .byt 0                                  ; $FFE8 - 0=Microdisc, 1=Jasmin
 
 ; Chema: WriteSupport
 _LoaderApiLoadingAnimation      .byt OPCODE_JMP,<RefreshAccessIndicator,>RefreshAccessIndicator   ; $FFE9-$FFEB
 _LoaderApiSaveData              .byt OPCODE_JMP,<WriteData,>WriteData   ; $FFEC-$FFEE
 
 #ifdef ENABLE_SPLASH
-_LoaderApiFileStartSector       .byt LOADER_SPLASH_PROGRAM_SECTOR        ; $FFEF
-_LoaderApiFileStartTrack        .byt LOADER_SPLASH_PROGRAM_TRACK         ; $FFF0
+_LoaderApiFileStartSector       .byt LOADER_SPLASH_PROGRAM_SECTOR       ; $FFEF
+_LoaderApiFileStartTrack        .byt LOADER_SPLASH_PROGRAM_TRACK        ; $FFF0
 
 _LoaderApiFileSize
-_LoaderApiFileSizeLow           .byt <LOADER_SPLASH_PROGRAM_SIZE         ; $FFF1
-_LoaderApiFileSizeHigh          .byt >LOADER_SPLASH_PROGRAM_SIZE         ; $FFF2
+_LoaderApiFileSizeLow           .byt <LOADER_SPLASH_PROGRAM_SIZE        ; $FFF1
+_LoaderApiFileSizeHigh          .byt >LOADER_SPLASH_PROGRAM_SIZE        ; $FFF2
 
 ; Could have a JMP here as well to launch the loaded program
 _LoaderApiJump                  .byt OPCODE_JMP                         ; $FFF3
 _LoaderApiAddress
-_LoaderApiAddressLow            .byt <LOADER_SPLASH_PROGRAM_ADDRESS      ; $FFF4
-_LoaderApiAddressHigh           .byt >LOADER_SPLASH_PROGRAM_ADDRESS      ; $FFF5
+_LoaderApiAddressLow            .byt <LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF4
+_LoaderApiAddressHigh           .byt >LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF5
 _LoaderXxxxxx_available         .byt 0                                  ; $FFF6
 _LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
 #else
