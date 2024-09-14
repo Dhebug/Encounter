@@ -112,6 +112,10 @@ end_replay
     rts
 
 CommandEndFrame
+    ldx _PsgPlayLoopIndex       ; 0 is the first valid loop index
+    lda _PsgPlayLoopCount,x     ; We are still looping
+    bne skip_pointer_update
+
     tya
     clc
     adc _SoundDataPointer+0
@@ -121,6 +125,7 @@ CommandEndFrame
     sta _SoundDataPointer+1
 
     ldy #0
+skip_pointer_update    
     sty _PsgPlayPosition        ; Save the new command position
     rts	
 
