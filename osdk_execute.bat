@@ -18,6 +18,7 @@ CALL osdk_config.bat
 ::
 CALL osdk_build.bat
 IF ERRORLEVEL 1 GOTO Error
+
 ::
 :: Run the emulator using the common batch
 ::
