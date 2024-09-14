@@ -110,6 +110,14 @@ AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
 ;ReserveSectors 6                                    ; 5 sectors
 
 ;
+; Special assets for the system information
+;
+#ifdef PRODUCT_TYPE_TEST_MODE
+AddFile ..\build\files\view_oric_motherboard.hir
+AddDefine LOADER_PICTURE_MOTHERBOARD {FileIndex}
+#endif
+
+;
 ; The pictures
 ;
 AddFile ..\build\files\intro_title_picture.hir
@@ -155,6 +163,7 @@ AddFile ..\build\files\loc_main_street.hir
 AddFile ..\build\files\loc_east_road.hir
 AddFile ..\build\files\loc_inside_pit.hir
 AddFile ..\build\files\loc_well.hir
+AddDefine LOADER_PICTURE_LOCATIONS_WELL {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_wooded_avenue.hir
 AddFile ..\build\files\loc_gravel_drive.hir
 AddFile ..\build\files\loc_parking.hir
@@ -169,6 +178,7 @@ AddFile ..\build\files\loc_orchard.hir
 AddFile ..\build\files\loc_dark_room.hir
 AddFile ..\build\files\loc_cellar.hir
 AddFile ..\build\files\loc_narrow_steps.hir
+AddDefine LOADER_PICTURE_LOCATIONS_STEPS {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_lounge.hir
 AddFile ..\build\files\loc_entrance_hall.hir
 AddFile ..\build\files\loc_library.hir
@@ -183,6 +193,7 @@ AddFile ..\build\files\loc_child_bedroom.hir
 AddFile ..\build\files\loc_master_bedroom.hir
 AddFile ..\build\files\loc_shower_room.hir
 AddFile ..\build\files\loc_toilet.hir
+AddDefine LOADER_PICTURE_LOCATIONS_TOILET {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_east_gallery.hir
 AddFile ..\build\files\loc_box_room.hir
 AddFile ..\build\files\loc_steel_door.hir

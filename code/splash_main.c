@@ -7,6 +7,19 @@
 
 #include "common.h"
 
+
+
+#ifdef ENABLE_MUSIC
+extern char JingleMusic[];
+#endif
+
+
+#ifdef PRODUCT_TYPE_TEST_MODE
+#include "system_testing.c"
+#else
+//
+// Normal splash screen
+//
 extern unsigned char LabelPicture0[2960];
 extern unsigned char LabelPicture1[2960];
 extern unsigned char LabelPicture2[2960];

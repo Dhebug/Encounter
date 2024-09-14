@@ -202,6 +202,9 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_panic_room_hole
 %CONVERT% view_panic_room_window
 
+:: Special picture for the system information
+%CONVERT% view_oric_motherboard
+
 :: Severn Software and Defence Force logos
 %CONVERT% intro_defence-force_logo
 
