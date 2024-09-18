@@ -5,7 +5,7 @@
 :: 0.1 - Most of the original versions sents to XiA
 :: 0.2 - Test version with new intro music
 :: 0.3 - Test version with the new game start that shows the map, and printer output
-SET VERSION=0.3
+SET VERSION=0.4
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
