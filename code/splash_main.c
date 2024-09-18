@@ -62,10 +62,6 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
-#ifdef ENABLE_MUSIC
-extern char JingleMusic[];
-#endif
-
 BUILD_MARKER
 
 
@@ -302,3 +298,4 @@ void main()
 	InitializeFileAt(LOADER_INTRO_PROGRAM,LOADER_INTRO_PROGRAM_ADDRESS);   // 0x400
 }
 
+#endif
