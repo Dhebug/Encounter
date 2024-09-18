@@ -2914,10 +2914,10 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Ladder             , _UseLadder)
     VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
-    VALUE_MAPPING(e_ITEM_Bread              , _ThrowBread)
-    VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
-    VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
-    VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
+    VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
+    VALUE_MAPPING(e_ITEM_Meat               , _UseMeat)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _UseKnife)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _UseSnookerCue)
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
     VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
@@ -2954,8 +2954,34 @@ install_the_ladder
 .)
 
 
+_ThrowRope
 _UseRope
 .(
+    // - We are in front of the panic room and the hole was made
+    JUMP_IF_FALSE(acid_hole_rope,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
+    JUMP_IF_FALSE(acid_hole_rope,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
+        SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT)    
+        SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR   
+        SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde dans la chambre forte")
+#else    
+        SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
+#endif    
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                _IMAGE_STRIDE(0,0,17)
+                _BUFFER(12,16)
+        FADE_BUFFER();
+
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_ROPE,11,94,11)    ; Draw the patch with the rope through the hole
+                _IMAGE_STRIDE(0,0,11)
+                _BUFFER(16,34)
+        FADE_BUFFER()      ; Make sure everything appears on the screen
+        WAIT(50*2)
+        END_AND_REFRESH    
+acid_hole_rope
+
+    ; Else check the pit
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
 cannot_use_rope_here
@@ -2972,7 +2998,7 @@ around_the_pit
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope attached to a tree")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
-    END_AND_REFRESH
+    END_AND_REFRESH    
 .)
 
 
@@ -3293,10 +3319,11 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
     VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
+    VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
     VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
     VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
-
+_UseBread
 _ThrowBread
 .(
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
@@ -3322,6 +3349,7 @@ not_in_wooded_avenue
 .)
 
 
+_UseMeat
 _ThrowMeat
 .(
     // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
@@ -3364,6 +3392,7 @@ nothing_to_chase_the_dove
  .)
 
 
+_UseKnife
 _ThrowKnife
 .(
     // We only throw the knife if:
@@ -3396,7 +3425,7 @@ acid_hole_knife
 
 
 
-
+_UseSnookerCue
 _ThrowSnookerCue
 .(
     // We only throw the snooker cue if:
@@ -3415,6 +3444,29 @@ dog_snooker_cue
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_THUG)
         JUMP(_CommonThugDisabled)
 thug_snooker_cue    
+
+    // - We are in front of the panic room and the hole was made
+    JUMP_IF_FALSE(acid_hole_cue,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
+    JUMP_IF_FALSE(acid_hole_cue,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
+        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)    
+        SET_ITEM_FLAGS(e_ITEM_SnookerCue,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR       
+        SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"une _queue de billard dans la chambre forte");
+#else
+        SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room");
+#endif       
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                _IMAGE_STRIDE(0,0,17)
+                _BUFFER(12,16)
+        FADE_BUFFER();
+
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_CUE,14,111,14)    ; Draw the patch with the cue through the hole
+                _IMAGE_STRIDE(0,0,14)
+                _BUFFER(12,17)
+        FADE_BUFFER()      ; Make sure everything appears on the screen
+        WAIT(50*2)
+acid_hole_cue
 
     // In other locations we just drop the item where we are
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
