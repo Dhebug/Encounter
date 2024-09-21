@@ -2518,6 +2518,19 @@ _ShowGirlAtTheWindow
 .(
     ; Base image with the wall and the closed window
     DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    ; Base image with the wall and the closed window as seen from the inside
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"Closed Window")
+    FADE_BUFFER() 
+    WAIT(50*2)
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_OPEN,"Openned Window")
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    ; Base image with the wall and the closed window
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_open)
         ; Show the shutters open
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,18,26)                     ; Draw the open shutters
@@ -2529,7 +2542,7 @@ _ShowGirlAtTheWindow
         ; Show the girl at the window
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,18)                     ; Draw the girl in the window
                 _IMAGE(0,26)
-                _BUFFER(18,4)
+                _BUFFER(20,4)
         FADE_BUFFER() 
         WAIT(50)
 
@@ -2542,7 +2555,7 @@ _ShowGirlAtTheWindow
 #endif    
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
                 _IMAGE(4,31)
-                _SCREEN(19,15)
+                _SCREEN(21,15)
 
         WAIT(50*2)
 
