@@ -328,6 +328,9 @@ AddDefine LOADER_PICTURE_PROTECTION_SUIT {FileIndex}
 AddFile ..\build\files\view_safety_gloves.hir
 AddDefine LOADER_PICTURE_SHOWING_GLOVES {FileIndex}
 
+AddFile ..\build\files\view_cue_with_rope.hir
+AddDefine LOADER_PICTURE_CUE_WITH_ROPE {FileIndex}
+
 AddFile ..\build\files\view_panic_room_digicode.hir
 AddDefine LOADER_PICTURE_DOOR_DIGICODE {FileIndex}
 

@@ -1847,6 +1847,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
+    COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1970,6 +1971,19 @@ _CombineClayWithWater
     END_AND_REFRESH
 .)
 
+
+
+_CombineCueWithRope
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE,"A flimsy contraption")
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("La queue ne va pas résister...")
+#else
+    INFO_MESSAGE("The cue is not strong enough...")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
 
 
 
