@@ -88,7 +88,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_element_outro_photos_fr
 %CONVERT% masked_car_parts
 %CONVERT% masked_beep
-%CONVERT% maked_panic_room_window
+%CONVERT% masked_panic_room_window
 %CONVERT% masked_hole_with_knife
 %CONVERT% masked_hole_with_rope
 %CONVERT% masked_hole_with_cue

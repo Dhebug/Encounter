@@ -382,7 +382,7 @@ AddDefine LOADER_SPRITE_CAR_PARTS {FileIndex}
 AddFile ..\build\files\masked_beep.msk
 AddDefine LOADER_SPRITE_BEEP {FileIndex}
 
-AddFile ..\build\files\maked_panic_room_window.msk
+AddFile ..\build\files\masked_panic_room_window.msk
 AddDefine LOADER_SPRITE_PANIC_ROOM_WINDOW {FileIndex}
 
 AddFile ..\build\files\masked_hole_with_girl_attached.msk
