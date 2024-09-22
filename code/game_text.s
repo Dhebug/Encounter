@@ -2514,21 +2514,33 @@ _ShowEmptyHostageRoom
 
 
 
+
+_ShowOpeningWindow
+.(
+    ; Show the view from the outside with the closed shutters
+    DISPLAY_IMAGE(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
+    WAIT(50*2)
+
+    ; Load the base image with the wall and the closed window and shutters
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    ; Then add the sprites showing the window being opened
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                     ; Draw the top part of the open window
+            _IMAGE(0,0)
+            _BUFFER(0,0)
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
+            _IMAGE(0,84)
+            _BUFFER(0,84)
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    RETURN
+.)
+
 _ShowGirlAtTheWindow
 .(
-    ; Base image with the wall and the closed window
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
-    FADE_BUFFER() 
-    WAIT(50*2)
-
-    ; Base image with the wall and the closed window as seen from the inside
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"Closed Window")
-    FADE_BUFFER() 
-    WAIT(50*2)
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_OPEN,"Openned Window")
-    FADE_BUFFER() 
-    WAIT(50*2)
-
     ; Base image with the wall and the closed window
     DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_open)
@@ -2613,8 +2625,15 @@ _OpenPanicRoomWindow
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
         UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
         ; The description will get updated automatically by _gDescriptionPanicRoomDoor
+        GOSUB(_ShowOpeningWindow)
         GOSUB(_ShowGirlAtTheWindow)
-    ENDIF(open)
+    ELSE(open,else)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Elle est déjà ouverte");
+#else
+        ERROR_MESSAGE("It's already open");
+#endif        
+    ENDIF(else)
     END_AND_REFRESH
 .)
 

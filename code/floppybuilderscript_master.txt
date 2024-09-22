@@ -355,9 +355,6 @@ AddDefine LOADER_PICTURE_PANIC_ROOM_WINDOW {FileIndex}
 AddFile ..\build\files\view_top_window_closed.hir
 AddDefine LOADER_PICTURE_TOP_WINDOW_CLOSED {FileIndex}
 
-AddFile ..\build\files\view_top_window_open.hir
-AddDefine LOADER_PICTURE_TOP_WINDOW_OPEN {FileIndex}
-
 
 ; All the sprites
 #ifdef LANGUAGE_FR
@@ -402,6 +399,9 @@ AddDefine LOADER_SPRITE_HOLE_WITH_ROPE {FileIndex}
 
 AddFile ..\build\files\masked_hole_with_cue.msk
 AddDefine LOADER_SPRITE_HOLE_WITH_CUE {FileIndex}
+
+AddFile ..\build\files\masked_top_window.msk
+AddDefine LOADER_SPRITE_TOP_WINDOW {FileIndex}
 
 
 ;
