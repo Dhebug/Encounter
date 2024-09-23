@@ -17,6 +17,7 @@ CountSecondDown
   ; Do a small tick
   ;jsr PlaySoundSeconds
 
++Count1SecondsDown
   ; Count down the seconds
   ldx _TimeSeconds+1
   dex

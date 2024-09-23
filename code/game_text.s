@@ -244,6 +244,17 @@ _gDescriptionMarketPlace
     SET_DESCRIPTION("You are in a deserted market square")
 #endif    
 
+    ; Is the girl here?
+    JUMP_IF_FALSE(girl_not_here,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_MARKETPLACE))
+        ; She's here, we won!
+        ; Victory!
+        SET_CUT_SCENE(1)
+        FADE_BUFFER();
+        WAIT(50)                                  ; Wait a couple seconds
+        GAME_OVER(e_SCORE_SOLVED_THE_CASE)        ; The game is now over
+        JUMP(_gDescriptionGameOverWon)            ; Draw the 'The End' logo
+girl_not_here
+
     .(
     DO_ONCE(intro_sequence)
         SET_CUT_SCENE(1)
@@ -786,14 +797,17 @@ _gDescriptionTiledPatio
 
     ; Draw the girl if she's here
     JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
+        SET_ITEM_FLAGS(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED)                   ; From now on she will follow us
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(23,0)
                 _BUFFER(0,17)
         FADE_BUFFER() 
         WAIT(50)
+
+        ; Print the "Thank you" message (only once)
         .(
         DO_ONCE(thank_you)
-        WHITE_BUBBLE(1)
+            WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
             _BUBBLE_LINE(12,50,0,"Merci !")
 #else
@@ -809,17 +823,16 @@ _gDescriptionTiledPatio
         ENDDO(thank_you)
         .)
 
+        ; Print the "I'll follow you" message
         WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
         _BUBBLE_LINE(12,50,0,"Je vais vous suivre !")
 #else
         _BUBBLE_LINE(12,50,0,"I'll follow you!")
-#endif   
-        
+#endif           
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
                 _IMAGE(6,31)
                 _SCREEN(3,40)
-        
 girl_is_outside        
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1793,6 +1806,7 @@ _gDescriptionPanicRoomDoor
 .)
 
 ; This function assumes the GAME_OVER(xxx) has been called already
+_gDescriptionGameOverWon
 _gDescriptionGameOverLost    
     DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
@@ -2206,22 +2220,6 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
-_OneHourAlarmWarning
-.(
-    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
-
-    WAIT(50)
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
-    WAIT(50)
-    INFO_MESSAGE("Already one hour passed!")
-
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
-    WAIT(50)
-    INFO_MESSAGE("I need to hurry up!")
-    WAIT(50)
-
-    END_AND_REFRESH
-.)
 
 _InspectMap
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
@@ -4059,6 +4057,34 @@ _MessageNothingSpecial
     END_AND_REFRESH
 .)
 
+
+; This is a script that is run before the setup of a scene is done.
+; In the current status it is used to get the girl to follow us
+_LoadSceneScript
+.(
+    ; If the girl is "attached" we move her to the playe current location
+    JUMP_IF_FALSE(end_girl_following,CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED))
+        SET_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_CURRENT)
+end_girl_following
+    END
+.)
+
+_OneHourAlarmWarning
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
+
+    WAIT(50)
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    WAIT(50)
+    INFO_MESSAGE("Already one hour passed!")
+
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    WAIT(50)
+    INFO_MESSAGE("I need to hurry up!")
+    WAIT(50)
+
+    END_AND_REFRESH
+.)
 
 _EndSceneActions
 

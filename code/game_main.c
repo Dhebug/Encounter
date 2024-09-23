@@ -12,6 +12,7 @@
 extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
 extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so it can be shared with the other modules
 
+extern char LoadSceneScript[];
 
 
 // MARK:Print Directions
@@ -193,9 +194,11 @@ void PrintSceneInformation()
 void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
+    gSceneImage = LOADER_PICTURE_LOCATIONS_START+gCurrentLocation;
+    PlayStream(LoadSceneScript);    
+
 	// Set the byte stream pointer
 	SetByteStream(gCurrentLocationPtr->script);
-    gSceneImage = LOADER_PICTURE_LOCATIONS_START+gCurrentLocation;
     
 	ClearMessageWindow(16+4);
 

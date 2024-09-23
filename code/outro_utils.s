@@ -15,6 +15,7 @@ IrqTasks50hz
 .)
 
 // Called from on the blitt functions
+Count1SecondsDown
 Count10SecondsDown
     rts
 
