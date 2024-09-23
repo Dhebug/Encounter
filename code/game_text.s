@@ -2216,16 +2216,17 @@ no_ladder
 _InspectPanicRoomWindow
 .(  
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room_door)      ; Are we trying to look at the window from the hole in the door?
-        DISPLAY_IMAGE(LOADER_PICTURE_HOLE,"An open alarm panel")
+        DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED,"The window and shutters are closed")
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Impossible de la voir par le trou")
+        INFO_MESSAGE("Hmmm, intéressant...")
 #else
-        INFO_MESSAGE("I can't see it through the hole")
+        INFO_MESSAGE("Hmmm, interesting...")
 #endif    
         WAIT(50*2)        
     ELSE(panic_room_door,else)                                                 ; Or are we on the tiled patio looking at the window from below?
         GOSUB(_ShowGirlAtTheWindow)
     ENDIF(else)
+    END_AND_REFRESH
 .)
 
 _InspectPlasticBag
@@ -2626,6 +2627,10 @@ _OpenPanicRoomWindow
         UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
         ; The description will get updated automatically by _gDescriptionPanicRoomDoor
         GOSUB(_ShowOpeningWindow)
+
+        ; Check the status of the alarm... and if it's active, trigger it!
+        JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
+
         GOSUB(_ShowGirlAtTheWindow)
     ELSE(open,else)
 #ifdef LANGUAGE_FR
@@ -2734,16 +2739,24 @@ _OpenBasementWindow
     WAIT(50*2)
     INFO_MESSAGE("...maybe shake it a bit?")
     WAIT(50*2)
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                        ; Is the alarm active...
-        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
-        ERROR_MESSAGE("You triggered the alarm!")
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
-        GAME_OVER(e_SCORE_TRIPPED_ALARM)
-        JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
-    ELSE(on,off)                                                                               ; ...or was it disabled by the player?
-        INFO_MESSAGE("Nothing happens...")
-    ENDIF(off)
+    ; Check the status of the alarm... and if it's active, trigger it!
+    JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Rien ne se passe...")
+#else
+    INFO_MESSAGE("Nothing happens...")
+#endif    
     END_AND_REFRESH
+.)
+
+
+_AlarmTriggered
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
+    ERROR_MESSAGE("You triggered the alarm!")
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
+    GAME_OVER(e_SCORE_TRIPPED_ALARM)
+    JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
 .)
 
 
