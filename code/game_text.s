@@ -73,29 +73,6 @@ _gTextErrorItemNotPresent   .byt "Can't see it here",0
 _EndErrorMessages
 
 
-/* MARK: Location Descriptions
-
-██╗      ██████╗  ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗    ██████╗ ███████╗███████╗ ██████╗██████╗ ██╗██████╗ ████████╗██╗ ██████╗ ███╗   ██╗███████╗
-██║     ██╔═══██╗██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
-██║     ██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║    ██║  ██║█████╗  ███████╗██║     ██████╔╝██║██████╔╝   ██║   ██║██║   ██║██╔██╗ ██║███████╗
-██║     ██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║    ██║  ██║██╔══╝  ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║   ██║██║   ██║██║╚██╗██║╚════██║
-███████╗╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║    ██████╔╝███████╗███████║╚██████╗██║  ██║██║██║        ██║   ██║╚██████╔╝██║ ╚████║███████║
-╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-                                                                                                                                                              
-*/
-_StartLocationNames
-#ifdef LANGUAGE_FR
-//                                      0         1         2         3
-//                                      0123456789012345678901234567890123456789
-
-_gTextLocationGirlRoomOpenned     .byt "La pièce avec la fille (ouverte)",0
-#else
-
-_gTextLocationGirlRoomOpenned     .byt "The girl room (openned lock)",0
-#endif
-_EndLocationNames
-
-
 /* MARK: Items
 
 ██╗████████╗███████╗███╗   ███╗███████╗
@@ -136,13 +113,12 @@ _gTextItemSnookerCue              .byt "une _queue de billard",0
 _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre fort",0
 _gTextItemHandWrittenNote         .byt "une _note manuscripte",0
-_gTextItemRopeHangingFromWindow   .byt "une _corde qui pend de la fenêtre",0
 _gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
 _gTextItemHose                    .byt "un _tuyau d'arrosage",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemAcidBurn                .byt "une brulure d'acide",0
-_gTextItemYoungGirl               .byt "une jeune fille",0
+_gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une _mêche",0
 _gTextItemPowderMix               .byt "un _mix grumeleux",0
 _gTextItemGunPowder               .byt "de la _poudre à cannon",0
@@ -151,7 +127,6 @@ _gTextItemNewspaper               .byt "un _journal",0
 _gTextItemBomb                    .byt "une _bombe",0
 _gTextItemPistol                  .byt "un _pistolet",0
 _gTextItemBullets                 .byt "trois _balles de calibre .38",0
-_gTextItemYoungGirlOnFloor        .byt "une jeune _fille attachée au sol",0
 _gTextItemChemistryRecipes        .byt "des _formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une _carte du royaume uni",0
 _gTextItemHandheldGame            .byt "un _jeu portable",0
@@ -195,13 +170,12 @@ _gTextItemSnookerCue              .byt "a snooker _cue",0
 _gTextItemThug                    .byt "a _thug asleep on the bed",0           
 _gTextItemHeavySafe               .byt "a heavy _safe",0                       
 _gTextItemHandWrittenNote         .byt "a hand written _note",0                     
-_gTextItemRopeHangingFromWindow   .byt "a _rope hangs from the window",0       
 _gTextItemRollOfToiletPaper       .byt "a toilet _roll",0            
 _gTextItemHose                    .byt "a garden _hose",0                        
 _gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
 _gTextItemAcidBurn                .byt "an acid burn",0                       
-_gTextItemYoungGirl               .byt "a young girl",0                        
+_gTextItemYoungGirl               .byt "a young _girl",0                        
 _gTextItemFuse                    .byt "a _fuse",0                             
 _gTextItemPowderMix               .byt "a rough powder _mix",0
 _gTextItemGunPowder               .byt "some _gunpowder",0
@@ -210,7 +184,6 @@ _gTextItemNewspaper               .byt "a _newspaper",0
 _gTextItemBomb                    .byt "a _bomb",0                             
 _gTextItemPistol                  .byt "a _pistol",0                           
 _gTextItemBullets                 .byt "three .38 _bullets",0                  
-_gTextItemYoungGirlOnFloor        .byt "a young girl tied up on the floor",0  
 _gTextItemChemistryRecipes        .byt "a couple chemistry _recipes",0         
 _gTextItemUnitedKingdomMap        .byt "a _map of the United Kingdom",0        
 _gTextItemHandheldGame            .byt "a handheld _game",0
@@ -790,6 +763,7 @@ _gDescriptionFishPond
     END
 .)
 
+
 // MARK: Tiled Patio
 _gDescriptionTiledPatio
 .(
@@ -809,6 +783,45 @@ _gDescriptionTiledPatio
 #else
     SET_DESCRIPTION("You are on a tiled patio")
 #endif    
+
+    ; Draw the girl if she's here
+    JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
+                _IMAGE(23,0)
+                _BUFFER(0,17)
+        FADE_BUFFER() 
+        WAIT(50)
+        .(
+        DO_ONCE(thank_you)
+        WHITE_BUBBLE(1)
+#ifdef LANGUAGE_FR   
+            _BUBBLE_LINE(12,50,0,"Merci !")
+#else
+            _BUBBLE_LINE(12,50,0,"Thank you!")
+#endif   
+            
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
+                    _IMAGE(6,31)
+                    _SCREEN(3,40)
+            WAIT(50*2)
+            FADE_BUFFER() 
+            WAIT(50)
+        ENDDO(thank_you)
+        .)
+
+        WHITE_BUBBLE(1)
+#ifdef LANGUAGE_FR   
+        _BUBBLE_LINE(12,50,0,"Je vais vous suivre !")
+#else
+        _BUBBLE_LINE(12,50,0,"I'll follow you!")
+#endif   
+        
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
+                _IMAGE(6,31)
+                _SCREEN(3,40)
+        
+girl_is_outside        
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -1112,6 +1125,15 @@ _gDescriptionSunLounge
 #else
     SET_DESCRIPTION("You find yourself in a sun-lounge")
 #endif    
+
+    ; Draw the girl if she's on the tiled patio (because we can see it from the sun lounge)
+    JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
+        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,8,40)                     ; Draw the girl on the small wall outside on the view
+                _IMAGE(31,78)
+                _BUFFER(8,8)
+        FADE_BUFFER() 
+girl_is_outside        
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -1848,6 +1870,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
+    COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
 
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
@@ -1981,6 +2004,95 @@ _CombineCueWithRope
 #else
     INFO_MESSAGE("The cue is not strong enough...")
 #endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+; This operation is only doable if both the window and rope are available
+_CombineWindowWithRope
+.( 
+    ; In order to combine the window and the rope, first she needs to have been given the rope
+    JUMP_IF_TRUE(rope_in_the_room,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE))
+#ifdef LANGUAGE_FR       
+        ERROR_MESSAGE("Peut-être lui passer la corde?");
+#else
+        ERROR_MESSAGE("Maybe give her the rope first?");
+#endif       
+        JUMP(end)
+rope_in_the_room
+
+    ; Is the window open?
+    JUMP_IF_FALSE(window_open,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED))
+#ifdef LANGUAGE_FR       
+        ERROR_MESSAGE("La fenêtre est toujours fermée!");
+#else
+        ERROR_MESSAGE("Should probably open the window first!");
+#endif       
+        JUMP(end)
+window_open
+
+    ; Is the window broken?
+    JUMP_IF_TRUE(window_broken,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED))
+#ifdef LANGUAGE_FR       
+        ERROR_MESSAGE("Peut-être casser la vitre?");
+#else
+        ERROR_MESSAGE("Maybe break the window first?");
+#endif       
+        JUMP(end)
+window_broken
+
+    ; Is the rope attached?
+    JUMP_IF_FALSE(rope_not_attached,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+#ifdef LANGUAGE_FR       
+        ERROR_MESSAGE("Elle est déjà attachée!");
+#else
+        ERROR_MESSAGE("It's already attached!");
+#endif       
+        JUMP(end)
+rope_not_attached
+
+    ; Everything is good!
+    ; We can attach the rope!
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Attachons la corde")
+#else
+    INFO_MESSAGE("Let's attach the rope")
+#endif    
+    SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)     ; The rope is now attached to the window
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde qui pend de la fenêtre")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope hangs from the window")
+#endif    
+
+    ; Now we can show that to the player
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    ; Then add the sprites showing the window being opened
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
+            _IMAGE(0,0)
+            _BUFFER(0,0)
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
+            _IMAGE(0,84)
+            _BUFFER(0,84)
+    ; Then add the sprite showing the broken window
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                     ; Draw the bottom part of the open window
+            _IMAGE(9,84)
+            _BUFFER(21,49)
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    ; Then add the sprite showing the attached rope
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
+            _IMAGE(14,84)
+            _BUFFER(19,59)
+    FADE_BUFFER() 
+    WAIT(50*2)
+
+    ; Now we show the outside view with the girl at the window
+    GOSUB(_ShowGirlAtTheWindow)
+
+end    
     WAIT(50*2)
     END_AND_REFRESH
 .)
@@ -2511,10 +2623,51 @@ _ShowEmptyHostageRoom
     INFO_MESSAGE("...she must be outside by now")
 #endif    
     WAIT(50*2)
+    RETURN
 .)
 
 
 
+_ShowOpenWindow
+.(
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    ; Then add the sprites showing the window being opened
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
+            _IMAGE(0,0)
+            _BUFFER(0,0)
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
+            _IMAGE(0,84)
+            _BUFFER(0,84)
+    FADE_BUFFER() 
+    WAIT(50*2)
+    RETURN
+.)
+
+_ShowCueBreakingTheWindow
+.(
+    ; Then add the sprite showing the cue
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,60)                     ; Draw the cue going to smash the window
+            _IMAGE(31,0)
+            _BUFFER(22,68)
+    FADE_BUFFER() 
+    WAIT(50*2)
+    RETURN
+.)
+
+_ShowBrokenWindow
+.(
+    ; Erase any eventual remnant of the cue smashing the window
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,60)                     ; Delete the cue going to smash the window
+            _IMAGE(35,0)
+            _BUFFER(22,68)
+    ; Then add the sprite showing the broken window
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                     ; Draw the broken window pane
+            _IMAGE(9,84)
+            _BUFFER(21,49)
+    FADE_BUFFER() 
+    WAIT(50*2)
+    RETURN
+.)
 
 _ShowOpeningWindow
 .(
@@ -2536,7 +2689,6 @@ _ShowOpeningWindow
             _BUFFER(0,84)
     FADE_BUFFER() 
     WAIT(50*2)
-
     RETURN
 .)
 
@@ -2549,28 +2701,56 @@ _ShowGirlAtTheWindow
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,18,26)                     ; Draw the open shutters
                 _IMAGE(0,0)
                 _BUFFER(11,0)
+
+        ; Show the rope going down the window if it's attached
+        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))            
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,9,5)                      ; Draw the snooker cue with the top of the rope
+                    _IMAGE(4,26)
+                    _BUFFER(15,18)                    
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,1,105)                     ; Draw the rope going down
+                    _IMAGE(39,0)
+                    _BUFFER(19,23)
+rope_going_down
+                
         FADE_BUFFER() 
         WAIT(50)
 
-        ; Show the girl at the window
-        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,18)                     ; Draw the girl in the window
-                _IMAGE(0,26)
-                _BUFFER(20,4)
-        FADE_BUFFER() 
-        WAIT(50)
+        ; Show the girl at the window if she's still in the room of course
+        JUMP_IF_FALSE(girl_at_the_window,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM))
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,18)                     ; Draw the girl in the window
+                    _IMAGE(0,26)
+                    _BUFFER(20,4)
+            FADE_BUFFER() 
+            WAIT(50)
 
-        ; Show the girl's message to the player
-        WHITE_BUBBLE(1)
+        ; Is the rope attached?
+        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_not_attached)
+            ; The rope is not attached
+            ; Show the girl's message to the player        
+            WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
-        _BUBBLE_LINE(107,15,0,"C'est trop haut pour sauter!")
+            _BUBBLE_LINE(107,15,0,"C'est trop haut pour sauter!")
 #else
-        _BUBBLE_LINE(93,25,0,"It's too high to jump!")
+            _BUBBLE_LINE(93,25,0,"It's too high to jump!")
 #endif    
-        BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
-                _IMAGE(4,31)
-                _SCREEN(21,15)
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
+                    _IMAGE(4,31)
+                    _SCREEN(21,15)
+        ELSE(rope_not_attached,rope_attached)
+            ; The rope is attached
+            WHITE_BUBBLE(1)
+#ifdef LANGUAGE_FR   
+            _BUBBLE_LINE(107,15,0,"Je peux le faire !")
+#else
+            _BUBBLE_LINE(93,25,0,"I can do that!")
+#endif    
+            BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
+                    _IMAGE(4,31)
+                    _SCREEN(21,15)
+        ENDIF(rope_attached)
 
         WAIT(50*2)
+girl_at_the_window        
 
     ELSE(window_open,window_closed)
         FADE_BUFFER() 
@@ -3019,24 +3199,61 @@ _UseRope
     // - We are in front of the panic room and the hole was made
     JUMP_IF_FALSE(acid_hole_rope,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
     JUMP_IF_FALSE(acid_hole_rope,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
-        SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT)    
-        SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE)
-#ifdef LANGUAGE_FR   
-        SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde dans la chambre forte")
-#else    
-        SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
+        ; Check if the rope is already in the panic room
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE),rope_in_the_room)
+            ; If the rope is attached to the window, then the girl escapes and appears on the tiled patio outside
+            ; If the rope is in the room, the only option is to attach it to the window if it's open and broken
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+                SET_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO) ; The girl is now outside on the patio
+                SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO)      ; And we move the rope outside
+                GOSUB(_ShowGirlAtTheWindow)                          ; We show the girl...
+#ifdef LANGUAGE_FR
+                INFO_MESSAGE("On y va !!!")
+#else
+                INFO_MESSAGE("Let's go!!!")
 #endif    
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
-        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
-                _IMAGE_STRIDE(0,0,17)
-                _BUFFER(12,16)
-        FADE_BUFFER();
+                ; Erase the girl at the window
+                BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,22)                     ; Draw the girl in the window
+                        _IMAGE(9,0)
+                        _BUFFER(20,0)
 
-        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_ROPE,11,94,11)    ; Draw the patch with the rope through the hole
-                _IMAGE_STRIDE(0,0,11)
-                _BUFFER(16,34)
-        FADE_BUFFER()      ; Make sure everything appears on the screen
-        WAIT(50*2)
+                ; Draw the girl going down the rope
+                BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,13,79)    ; Draw the girl with the    message
+                        _IMAGE(0,49)
+                        _BUFFER(13,49)
+                FADE_BUFFER() 
+                WAIT(50*2)
+
+            ELSE(rope_attached,rope_not_attached)
+#ifdef LANGUAGE_FR       
+                ERROR_MESSAGE("La corde n'est pas attachée");
+#else
+                ERROR_MESSAGE("The rope is not attached");
+#endif       
+            ENDIF(rope_not_attached)
+            WAIT(50*2)
+            END_AND_REFRESH
+        ELSE(rope_in_the_room,rope_not_in_the_room)
+            ; If the rope is not in the room, we pass it to the girl through the hole
+            SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT)    
+            SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR   
+            SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde dans la chambre forte")
+#else    
+            SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
+#endif    
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                    _IMAGE_STRIDE(0,0,17)
+                    _BUFFER(12,16)
+            FADE_BUFFER();
+
+            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_ROPE,11,94,11)    ; Draw the patch with the rope through the hole
+                    _IMAGE_STRIDE(0,0,11)
+                    _BUFFER(16,34)
+            FADE_BUFFER()      ; Make sure everything appears on the screen
+            WAIT(50*2)
+            ENDIF(rope_not_in_the_room)
         END_AND_REFRESH    
 acid_hole_rope
 
@@ -3507,24 +3724,51 @@ thug_snooker_cue
     // - We are in front of the panic room and the hole was made
     JUMP_IF_FALSE(acid_hole_cue,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
     JUMP_IF_FALSE(acid_hole_cue,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
-        SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)    
-        SET_ITEM_FLAGS(e_ITEM_SnookerCue,ITEM_FLAG_IMMOVABLE)
-#ifdef LANGUAGE_FR       
-        SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"une _queue de billard dans la chambre forte");
+        ; Check if the cue is already in the panic room
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_SnookerCue,ITEM_FLAG_IMMOVABLE),cue_in_the_room)
+            ; If the cue is in the room, the only option is to break the window if it's open
+            IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_open)
+                ; The window is open: Let's smash it with the cue
+                GOSUB(_ShowOpenWindow)
+                GOSUB(_ShowCueBreakingTheWindow)
+#ifdef LANGUAGE_FR
+                INFO_MESSAGE("La queue brise la vitre")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room");
+                INFO_MESSAGE("The cue smashes the window")
+#endif    
+                GOSUB(_ShowBrokenWindow)
+                SET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED)   ; The window is now broken
+                SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_GONE_FOREVER)     ; We don't need the cue anymore
+            ELSE(window_open,window_closed)
+                ; The window is closed
+#ifdef LANGUAGE_FR       
+                ERROR_MESSAGE("La fenêtre est toujours fermée!");
+#else
+                ERROR_MESSAGE("Should probably open the window first!");
 #endif       
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
-        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
-                _IMAGE_STRIDE(0,0,17)
-                _BUFFER(12,16)
-        FADE_BUFFER();
+            ENDIF(window_closed)
+        ELSE(cue_in_the_room,cue_not_in_the_room)
+            ; If the cue is not in the room, we pass it to the girl through the hole
+            SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)    
+            SET_ITEM_FLAGS(e_ITEM_SnookerCue,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR       
+            SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"une _queue de billard dans la chambre forte");
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room");
+#endif       
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                    _IMAGE_STRIDE(0,0,17)
+                    _BUFFER(12,16)
+            FADE_BUFFER();
 
-        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_CUE,14,111,14)    ; Draw the patch with the cue through the hole
-                _IMAGE_STRIDE(0,0,14)
-                _BUFFER(12,17)
-        FADE_BUFFER()      ; Make sure everything appears on the screen
-        WAIT(50*2)
+            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_CUE,14,111,14)    ; Draw the patch with the cue through the hole
+                    _IMAGE_STRIDE(0,0,14)
+                    _BUFFER(12,17)
+            FADE_BUFFER()      ; Make sure everything appears on the screen
+            WAIT(50*2)
+        ENDIF(cue_not_in_the_room)
+        END_AND_REFRESH
 acid_hole_cue
 
     // In other locations we just drop the item where we are
@@ -3829,7 +4073,6 @@ _EndGameTextData
 #print Total size of game text content = (_EndGameTextData - _StartGameTextData)
 #print - Messages and prompts = (_EndMessagesAndPrompts - _StartMessagesAndPrompts)
 #print - Error messages = (_EndErrorMessages - _StartErrorMessages)
-#print - Location names = (_EndLocationNames - _StartLocationNames)
 #print - Item names = (_EndItemNames - _StartItemNames)
 #print - Scene scripts = (_EndSceneScripts - _StartSceneScripts)
 #print - Scene actions = (_EndSceneActions - _StartSceneActions)
