@@ -35,8 +35,10 @@ extern char TypewriterMusic[];
 
 
 extern unsigned char ImageBuffer2[40*200];
+extern unsigned char GradientTable[];
 
 unsigned char CompressedTitleImage[LOADER_PICTURE_TITLE_SIZE_COMPRESSED];
+unsigned char UnCompressedGameTitle[LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED];
 
 extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED];
 extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];
@@ -141,8 +143,26 @@ int WaitAndFade(int frameCount)
 // Before calling this function, CompressedTitleImage must have been properly populated with the compressed title picture
 int DisplayIntroPage()
 {
-	// Uncompress the preloaded title picture
+	// Uncompress the preloaded title picture (240x200)
     file_unpack_raw(ImageBuffer,CompressedTitleImage,8000);
+
+    {
+        // Paint the logo
+        int y;
+        unsigned char* ptr=UnCompressedGameTitle;
+        for (y=0;y<39;y++)
+        {
+            ptr[0]=16+3;       // Yellow paper
+            ptr[1]=3;          // Yellow ink
+            ptr+=40;
+        }
+
+    }
+
+	// Copy the preloaded game title picture (240x39) on top
+    // Note: for some reason, using the compressed picture ended up with a corrupted last line
+    memcpy(ImageBuffer+40*2,UnCompressedGameTitle,40*39);
+
 
 	Hires(16+3,4);
 
@@ -152,7 +172,27 @@ int DisplayIntroPage()
 
 	memcpy((char*)0xa000,ImageBuffer,8000);
 
-    return WaitAndFade(50*5);
+    {
+        // Color cycle the logo
+        int frame;
+        for (frame=0;frame<50*5;frame++)
+        {
+            int y;
+            unsigned char* ptr=(unsigned char*)0xa000+40*3;
+            unsigned char* ptrGradient=GradientTable+(frame&127);
+            for (y=0;y<39;y++)
+            {
+                ptr[1]=ptrGradient[y]&7;          // Magenta ink
+                ptr+=40;
+            }
+            if (Wait(1))
+            {
+                return 1;
+            }
+
+        }
+    }
+    return FadeToBlack();
 }
 
 
@@ -713,6 +753,7 @@ void main()
 #ifdef INTRO_SHOW_TITLE_PICTURE
     // Load the title picture
     LoadFileUncompressedAt(LOADER_PICTURE_TITLE,CompressedTitleImage,LOADER_PICTURE_TITLE_SIZE_COMPRESSED);
+    LoadFileAt(LOADER_PICTURE_GAME_TITLE,UnCompressedGameTitle);    
 #endif
 
 #if defined(INTRO_SHOW_LEADERBOARD) || defined(INTRO_SHOW_ACHIEVEMENTS)

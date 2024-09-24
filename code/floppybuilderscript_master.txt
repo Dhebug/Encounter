@@ -124,6 +124,11 @@ AddFile ..\build\files\intro_title_picture.hir
 AddDefine LOADER_PICTURE_TITLE {FileIndex}
 AddDefine LOADER_PICTURE_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
 
+AddFile ..\build\files\intro_game_title.hir
+AddDefine LOADER_PICTURE_GAME_TITLE {FileIndex}
+AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED {FileSize}
+AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
+
 AddFile ..\build\files\intro_private_investigator.hir
 AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR {FileIndex}
 AddDefine INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED {FileSizeCompressed}

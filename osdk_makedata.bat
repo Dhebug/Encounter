@@ -67,6 +67,7 @@ SET PARAMS=-u1 -m0 -f6 -o2
 SET PARAMS=-u1 -m0 -f0 -o2
 %CONVERT% intro_private_investigator
 %CONVERT% intro_typewriter
+%CONVERT% intro_game_title
 
 :: Outro graphics (black and white)
 SET PARAMS=-u1 -m0 -f0 -o2

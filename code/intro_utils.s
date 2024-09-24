@@ -67,6 +67,28 @@ _gScoreConditionsArray
 _TableDitherPatternOffset
 #include "..\build\files\pattern_typewriter_dithering.s"
 
+
+_GradientTable
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+
+    .byt 3,1,1,3,3,1,3,3,3,3
+    .byt 2,3,3,2,2,3,2,2,2,2
+    .byt 6,2,2,6,6,2,6,6,6,6
+    .byt 4,6,6,4,4,6,4,4,4,4
+    .byt 1,4,4,1,1,4,1,1,1,1
+    .byt 5,1,1,5,5,1,5,5,5,5
+    .byt 4,5,5,4,4,5,4,4,4,4
+    .byt 6,4,4,6,6,4,6,6,6,6
+    .byt 3,6,6,3,3,6,3,3,3,3
+
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+    .byt 3,3,3,3,3,3,3,3,3,3
+
 // Temporary table with the offset for the text "compression" to simulate the rotation of the paper out of the machine
 _TableRotateOffset
 	.byt 40,40,40,40,40,40,40,40,
