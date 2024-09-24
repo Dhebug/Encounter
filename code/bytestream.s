@@ -55,6 +55,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_RETURN
     .word _ByteStreamCommand_DO_ONCE
     .word _ByteStreamCommand_SET_CUTSCENE
+    .word _ByteStreamCommand_PLAY_SOUND
 
     
 ; _param0=pointer to the new byteStream
@@ -372,6 +373,21 @@ _ByteStreamCommand_SET_CUTSCENE
     lda (_gCurrentStream),y       ; Get the cut scene flag
     sta _gStreamCutScene
     lda #1
+    jmp _ByteStreamMoveByA
+.)
+
+; param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
+; .byt COMMAND_PLAY_SOUND,<sound,>sound
+_ByteStreamCommand_PLAY_SOUND
+.(
+    ldy #0
+    lda (_gCurrentStream),y       ; Get the sound file address (low byte)
+    sta _param0+0
+    iny
+    lda (_gCurrentStream),y       ; Get the sound file address (high byte)
+    sta _param0+1
+    jsr _PlaySoundAsm
+    lda #2
     jmp _ByteStreamMoveByA
 .)
 

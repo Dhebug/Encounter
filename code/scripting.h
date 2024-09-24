@@ -41,7 +41,8 @@
 #define COMMAND_RETURN          30
 #define COMMAND_DO_ONCE         31
 #define COMMAND_SET_CUT_SCENE   32
-#define _COMMAND_COUNT          33
+#define COMMAND_PLAY_SOUND      33
+#define _COMMAND_COUNT          34
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -96,7 +97,7 @@
 #define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
 #define SET_SCENE_IMAGE(imageId)                     .byt COMMAND_SET_SCENE_IMAGE,imageId
 
-
+// Graphics
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 #define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId,description,0
 #define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId,description,0
@@ -109,6 +110,8 @@
 #define _IMAGE_STRIDE(x,y,stride)                    .byt <_SecondImageBuffer+x+(stride*y),>_SecondImageBuffer+x+(stride*y)
 #define _SCREEN(x,y)                                 .byt <$a000+x+(40*y),>$a000+x+(40*y)
 
+// Sound 
+#define PLAY_SOUND(sound)                            .byt COMMAND_PLAY_SOUND,<sound,>sound
 
 
 // Audio commands

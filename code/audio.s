@@ -1,6 +1,8 @@
 
 #include "params.h"
 
+; See D:\_music_\ayfxedit for the editor tool
+
     .zero
 
 _SoundDataPointer 	.dsb 2
@@ -368,3 +370,11 @@ _ZapData        .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$00,$3E,$0F,
                 .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END       ; Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 
+_WatchBeepData  .byt SOUND_COMMAND_SET_BANK,$00,$10,$00,$00,$00,$00,$00,$3E,$06,$00,$00,$00,$00,$00   ; Start sound
+				.byt SOUND_COMMAND_REPEAT,3                                                           ; 3 times
+					.byt SOUND_COMMAND_SET_VALUE,$08,$06,SOUND_COMMAND_END_FRAME                          ; Start sound
+					.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
+					.byt SOUND_COMMAND_SET_VALUE,$08,$00,SOUND_COMMAND_END_FRAME                          ; Stop sound
+					.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
+				.byt SOUND_COMMAND_ENDREPEAT
+				.byt SOUND_COMMAND_END

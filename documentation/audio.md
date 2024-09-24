@@ -175,6 +175,8 @@ There are two versions of the AY Sound Fx Editor:
 
 In my tests I used the improved one, but had to use the [v0.6-full](https://github.com/Threetwosevensixseven/ayfxedit-improved/releases/tag/v0.6-full) release due to some missing Delphi dependencies (rtl250.bpl)
 
+Personal Note: The tool is located on D:\_music_\ayfxedit
+
 After launching the program you should see something like that:
 
 ![AY Sound FX Editor v0.6](images/ay_sound_fx_editor.png)

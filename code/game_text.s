@@ -287,6 +287,7 @@ girl_not_here
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")
         FADE_BUFFER();
+        PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
         INFO_MESSAGE("I only have two hours...")
         WAIT(50*2)
         INFO_MESSAGE("...make them count!")
@@ -2892,7 +2893,7 @@ _OpenAlarmPanel
     ELSE(locked,unlocked)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
-            UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                 ; And get an achievement for that action
+            UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_PANEL)                                   ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme ouverte")
 #else
@@ -4075,6 +4076,7 @@ _OneHourAlarmWarning
 
     WAIT(50)
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     WAIT(50)
     INFO_MESSAGE("Already one hour passed!")
 
