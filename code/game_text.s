@@ -232,6 +232,40 @@ _gDescriptionDarkTunel
     _BUBBLE_LINE(4,4,0,"Like most tunnels: dark, damp,")
     _BUBBLE_LINE(4,13,1,"and somewhat scary.")
 #endif    
+    ; Could probably have an animation of a droplet falling down (like the animated FISH shop)
+    ; and have the plic a single sound that plays at the same time
+    ;PLAY_SOUND(_WaterDrip)                                   ; Play the plic, ploc background sound
+
+falling_water_drop
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet at the top
+               _IMAGE(18,0)
+               _SCREEN(24,24)
+    WAIT(1)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet falling
+               _IMAGE(19,0)
+               _SCREEN(24,24)
+    WAIT(1)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet falling
+               _IMAGE(20,0)
+               _SCREEN(24,24)
+    WAIT(1)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet falling
+               _IMAGE(21,0)
+               _SCREEN(24,24)
+    WAIT(1)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet falling
+               _IMAGE(22,0)
+               _SCREEN(24,24)
+    WAIT(1)
+    PLAY_SOUND(_WaterDrip)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet splashing
+               _IMAGE(23,0)
+               _SCREEN(24,24)
+    WAIT_RANDOM(50,127)
+    WAIT_RANDOM(0,255)
+
+    JUMP(falling_water_drop)
+
     END
 
 

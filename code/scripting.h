@@ -127,6 +127,23 @@
 #define SOUND_COMMAND_REPEAT     5      // Defines the start of a block that will repeat "n" times: <repeat count>
 #define SOUND_COMMAND_ENDREPEAT  6      // Defines the end of a repeating block
 
+
+#define REG_A_FREQ_LOW	  0     ; Chanel A Frequency (lower 8 bits)
+#define REG_A_FREQ_HI	  1     ; Chanel A Frequency (higher 4 bits)
+#define REG_B_FREQ_LOW	  2     ; Chanel B Frequency (lower 8 bits)
+#define REG_B_FREQ_HI	  3     ; Chanel B Frequency (higher 4 bits)
+#define REG_C_FREQ_LOW	  4     ; Chanel C Frequency (lower 8 bits)
+#define REG_C_FREQ_HI	  5     ; Chanel C Frequency (higher 4 bits)
+#define REG_NOISE_FREQ	  6     ; Chanel sound generator (0-31)
+#define REG_MIXER		  7     ; Mixer/Selector -> Everything is disabled by default
+#define REG_A_VOLUME	  8     ; Volume A
+#define REG_B_VOLUME      9     ; Volume B
+#define REG_C_VOLUME	 10     ; Volume C
+#define REG_ENV_LOW      11     ; Wave period
+#define REG_ENV_HI       12     ; Wave period
+#define REG_ENV_SHAPE    13     ; Wave form
+
+
 // Text commands
 #define TEXT_END                 255
 #define TEXT_CRLF                254

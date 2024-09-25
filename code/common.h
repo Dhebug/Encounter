@@ -95,6 +95,7 @@ extern char TypeWriterData[];
 extern char SpaceBarData[];
 extern char ScrollPageData[];
 extern char WatchBeepData[];
+extern char WaterDrip[];
 extern char FlickeringLight[];
 
 extern unsigned int PsgfreqA;
