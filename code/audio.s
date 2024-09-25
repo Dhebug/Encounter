@@ -378,3 +378,11 @@ _WatchBeepData  .byt SOUND_COMMAND_SET_BANK,$00,$10,$00,$00,$00,$00,$00,$3E,$06,
 					.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
 				.byt SOUND_COMMAND_ENDREPEAT
 				.byt SOUND_COMMAND_END
+
+_FlickeringLight    .byt SOUND_COMMAND_SET_BANK,$00,$00  ,$00,$00  ,$00,$00  ,$05  ,%110111 , 8,$00,$00  ,$00,$00  ,$00
+                    .byt SOUND_COMMAND_END_FRAME
+                    .byt SOUND_COMMAND_SET_VALUE,8,6                           ; Cut the volume
+                    .byt SOUND_COMMAND_END_FRAME
+                    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
+				    .byt SOUND_COMMAND_END
+

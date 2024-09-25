@@ -56,6 +56,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_DO_ONCE
     .word _ByteStreamCommand_SET_CUTSCENE
     .word _ByteStreamCommand_PLAY_SOUND
+    .word _ByteStreamCommand_WAIT_RANDOM
 
     
 ; _param0=pointer to the new byteStream
@@ -315,12 +316,13 @@ _ByteStreamCommandEndAndRefresh
 .)
 
 
+; .byt COMMAND_WAIT,duration
 _ByteStreamCommandWait
 .(
     ; In theory the delay could be 8 or 16 bits based on the value, but the code does not use that at the moment
     jsr _ByteStreamGetNextByte
     stx _gDelayStream+0
-
+ 
     ; If we are in a cutscene we don't count WAIT instructions as a way to go back to gameplay
     lda _gStreamCutScene
     bne end_stream_stop
@@ -329,6 +331,33 @@ _ByteStreamCommandWait
 end_stream_stop    
     rts
 .)
+
+
+;.byt COMMAND_WAIT_RANDOM,base_duration,rand_mask
+_ByteStreamCommand_WAIT_RANDOM
+.(
+    ; In theory the delay could be 8 or 16 bits based on the value, but the code does not use that at the moment
+    jsr _ByteStreamGetNextByte
+    stx _gDelayStream+0
+
+    ; Call the internal 32 bit randomize function, result is in _randseedLow+0/+1/+2/+3
+    jsr _rand32
+    jsr _ByteStreamGetNextByte
+    txa
+    and _randseedLow+0
+    clc
+    adc _gDelayStream+0
+    sta _gDelayStream+0
+    
+    ; If we are in a cutscene we don't count WAIT instructions as a way to go back to gameplay
+    lda _gStreamCutScene
+    bne end_stream_stop
+    lda #FLAG_WAIT
+    sta _gCurrentStreamStop
+end_stream_stop    
+    rts
+.)
+
 
 _ByteStreamCommandFADE_BUFFER
     jmp _BlitBufferToHiresWindow

@@ -42,7 +42,8 @@
 #define COMMAND_DO_ONCE         31
 #define COMMAND_SET_CUT_SCENE   32
 #define COMMAND_PLAY_SOUND      33
-#define _COMMAND_COUNT          34
+#define COMMAND_WAIT_RANDOM     34     
+#define _COMMAND_COUNT          35
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -57,6 +58,7 @@
 #define END                                  .byt COMMAND_END
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
+#define WAIT_RANDOM(base_duration,rand_mask) .byt COMMAND_WAIT_RANDOM,base_duration,rand_mask
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
 #define DO_ONCE(label)                       .byt COMMAND_DO_ONCE,1,<label,>label
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression

@@ -330,6 +330,19 @@ _gDescriptionDarkAlley
     _BUBBLE_LINE(153,85,0,"Rats, graffitti,")
     _BUBBLE_LINE(136,98,0,"and used syringes.")
 #endif    
+
+blinky_light_bulb
+    PLAY_SOUND(_FlickeringLight)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,11)                     ; Draw the bright light
+               _IMAGE(28,117)
+               _SCREEN(4,37)
+    WAIT_RANDOM(5,15)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,11)                     ; Draw the non working (dark) light
+               _IMAGE(28,106)
+               _SCREEN(4,37)  
+    WAIT_RANDOM(10,255)
+    JUMP(blinky_light_bulb)
+
     END
 
 
