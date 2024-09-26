@@ -1,10 +1,14 @@
-
+#include "params.h"
 
     .text
 
 CountSecondDown
     ;jmp CountSecondDown
 .(
++Count1SecondsDown
+_auto_nop_rts
+  nop                     ; This get patched by a RTS when the countdown reached zero
+
   ; Make the ":" symbol between the hour and minute blink every second
   ; ":" = 58 = 111010
   ; " " = 32 = 100000
@@ -17,7 +21,6 @@ CountSecondDown
   ; Do a small tick
   ;jsr PlaySoundSeconds
 
-+Count1SecondsDown
   ; Count down the seconds
   ldx _TimeSeconds+1
   dex
@@ -60,9 +63,16 @@ CountSecondDown
   stx _TimeHours
   cpx #"0"-1
   bne end_count_down
-  ; GAME OVER!
+
+  ; Count-Down reached zero:
+  ; We stop the counter
+  lda #OPCODE_RTS
+  sta _auto_nop_rts
+
+  ; We inform the game there is a GAME OVER condition
   ldx #"9"
   stx _TimeHours
+  rts
   
 end_count_down
 

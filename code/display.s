@@ -773,7 +773,10 @@ loop
   sei
   jsr _BlendBufferToHiresWindowInternal
   ;jsr Count10SecondsDown                    ; With 10 seconds decrements, impossible to possibly win the game at all
-  jsr Count1SecondsDown                      ; Let's try with 1 second instead
+  jsr Count1SecondsDown                      ; Let's try with 1 second instead: Duration: 1:30:30 remaining with 1 second per fade
+  jsr Count1SecondsDown
+  jsr Count1SecondsDown
+  jsr Count1SecondsDown                      ; Let's try with 4 seconds
   cli
 
   .(  

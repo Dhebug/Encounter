@@ -4136,6 +4136,7 @@ end_girl_following
     END
 .)
 
+
 _OneHourAlarmWarning
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
@@ -4152,6 +4153,26 @@ _OneHourAlarmWarning
     WAIT(50)
 
     END_AND_REFRESH
+.)
+
+
+_TimeOutGameOver
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
+
+    WAIT(50)
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
+    WAIT(50)
+    INFO_MESSAGE("I was too slow...")
+
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    WAIT(50)
+    INFO_MESSAGE("...I have to abort the mission")
+    WAIT(50)
+
+    GAME_OVER(e_SCORE_RAN_OUT_OF_TIME)      ; The game is now over
+    JUMP(_gDescriptionGameOverLost)         ; Game Over
 .)
 
 _EndSceneActions

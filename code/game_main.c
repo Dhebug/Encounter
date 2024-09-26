@@ -243,6 +243,7 @@ char ShouldShowKeyWords = 0;
 
 char OneHourAlarmWarningShown = 0;
 extern char OneHourAlarmWarning[];
+extern char TimeOutGameOver[];
 
 // MARK:Input Callback
 WORDS AskInputCallback()
@@ -264,6 +265,14 @@ WORDS AskInputCallback()
         PlayStream(OneHourAlarmWarning);
         gCurrentStream = savedStream;
         OneHourAlarmWarningShown=1;
+    }
+    if (TimeHours=='9')
+    {
+        // Should probably add a check to not interrupt import scripts
+        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+        const char* savedStream = gCurrentStream;
+        PlayStream(TimeOutGameOver);
+        gCurrentStream = savedStream;
     }
 
     // When the player presses SHIFT we redraw the item list with highlights
