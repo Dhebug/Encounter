@@ -3816,9 +3816,15 @@ thug_snooker_cue
             SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room");
 #endif       
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
-            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
-                    _IMAGE_STRIDE(0,0,17)
-                    _BUFFER(12,16)
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
+                BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
+                        _IMAGE_STRIDE(0,0,17)
+                        _BUFFER(10,26)
+            ELSE(girl_restrained,girl_freed)
+                BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                        _IMAGE_STRIDE(0,0,17)
+                        _BUFFER(12,16)
+            ENDIF(girl_freed)
             FADE_BUFFER();
 
             BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_CUE,14,111,14)    ; Draw the patch with the cue through the hole
