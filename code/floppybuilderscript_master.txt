@@ -360,6 +360,12 @@ AddDefine LOADER_PICTURE_PANIC_ROOM_WINDOW {FileIndex}
 AddFile ..\build\files\view_top_window_closed.hir
 AddDefine LOADER_PICTURE_TOP_WINDOW_CLOSED {FileIndex}
 
+AddFile ..\build\files\view_austin_mini.hir
+AddDefine LOADER_PICTURE_AUSTIN_MINI {FileIndex}
+
+AddFile ..\build\files\view_news_saved.hir
+AddDefine LOADER_PICTURE_NEWS_SAVED {FileIndex}
+
 
 ; All the sprites
 #ifdef LANGUAGE_FR

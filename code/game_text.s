@@ -283,8 +283,21 @@ _gDescriptionMarketPlace
         ; She's here, we won!
         ; Victory!
         SET_CUT_SCENE(1)
-        FADE_BUFFER();
-        WAIT(50)                                  ; Wait a couple seconds
+        FADE_BUFFER();                            ; Show the market place
+        WAIT(DELAY_FIRST_BUBBLE)
+        WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR    
+        _BUBBLE_LINE(4,100,0,"Nous l'avons fait !")
+        _BUBBLE_LINE(4,106,4,"Plus qu'a rentrer à la maison")
+#else
+        _BUBBLE_LINE(90,70,0,"We did it!")
+        _BUBBLE_LINE(70,80,0,"Time to go home!")
+#endif    
+        WAIT(50*4)                                ; Wait a couple seconds
+        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")
+        WAIT(50*2)                                ; Wait a couple seconds
+        DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED,"The Daily Telegraph, September 30th")
+        WAIT(50*4)                                ; Wait a couple seconds
         GAME_OVER(e_SCORE_SOLVED_THE_CASE)        ; The game is now over
         JUMP(_gDescriptionGameOverWon)            ; Draw the 'The End' logo
 girl_not_here

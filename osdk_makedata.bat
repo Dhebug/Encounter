@@ -205,6 +205,8 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_panic_room_hole
 %CONVERT% view_panic_room_window
 %CONVERT% view_top_window_closed
+%CONVERT% view_austin_mini
+%CONVERT% view_news_saved
 
 :: Special picture for the system information
 %CONVERT% view_oric_motherboard
