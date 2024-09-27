@@ -46,6 +46,12 @@ void HandleHighScore()
 	// Load the highscores from the disk
 	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
 
+    // Show a congratulation/failure message related to their actual ending condition
+    gPrintWidth = 40;
+    gPrintTerminator=0;    
+    PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*17);
+
+
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		
 		// Check if our score is higher than the next one in the list

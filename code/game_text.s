@@ -1369,7 +1369,7 @@ _gDescriptionCellar
         INFO_MESSAGE("Well... I warned you, didn't I?")
 
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
-        GAME_OVER(e_SCORE_FELL_INTO_PIT)                            ; The game is now over
+        GAME_OVER(e_SCORE_BLOWN_INTO_BITS)                          ; The game is now over
 
         WAIT(50*2)
 
