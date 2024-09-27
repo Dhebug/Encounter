@@ -605,9 +605,10 @@ void Initializations()
     gDelayStream = 0;
     gGameOverCondition = 0;
 
+#ifdef ENABLE_GAME
 	LoadScene();
 	DisplayClock();
-
+#endif
 	ResetInput();
 }
 
@@ -623,6 +624,10 @@ void main()
 
 #ifdef ENABLE_GAME
 	AskInput(gTextAskInput,ProcessAnswer,1);
+#else
+    // Directly go to the end credits    
+    gScore = 999;
+    gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
 #endif
 
     // Clear the bottom of the screen
