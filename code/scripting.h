@@ -42,8 +42,10 @@
 #define COMMAND_DO_ONCE         31
 #define COMMAND_SET_CUT_SCENE   32
 #define COMMAND_PLAY_SOUND      33
-#define COMMAND_WAIT_RANDOM     34     
-#define _COMMAND_COUNT          35
+#define COMMAND_WAIT_RANDOM     34
+#define COMMAND_START_CLOCK     35
+#define COMMAND_STOP_CLOCK      36     
+#define _COMMAND_COUNT          37
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -88,6 +90,10 @@
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 #define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
 #define GAME_OVER(condition)                 .byt COMMAND_GAME_OVER,condition
+
+#define START_CLOCK                          .byt COMMAND_START_CLOCK
+#define STOP_CLOCK                           .byt COMMAND_STOP_CLOCK
+
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location

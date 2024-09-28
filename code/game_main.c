@@ -590,7 +590,7 @@ void Initializations()
    gItems[e_ITEM_FishingNet].location   = e_LOC_INVENTORY;
    */
    //gCurrentLocation = e_LOC_ENTRANCEHALL;  //e_LOC_KITCHEN;
-   gCurrentLocation = e_LOC_DARKCELLARROOM;  //e_LOC_DARKCELLARROOM;
+   StartClock();
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
 	gCurrentLocation = e_LOC_MARKETPLACE;

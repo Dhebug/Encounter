@@ -2,12 +2,23 @@
 
     .text
 
+_StartClock
+    lda #OPCODE_NOP
+    sta _auto_nop_rts
+    rts
+
+_StopClock
+    lda #OPCODE_RTS
+    sta _auto_nop_rts
+    rts
+
+
 CountSecondDown
     ;jmp CountSecondDown
 .(
 +Count1SecondsDown
-_auto_nop_rts
-  nop                     ; This get patched by a RTS when the countdown reached zero
++_auto_nop_rts
+  rts                     ; This get patched by a RTS when the countdown reached zero
 
   ; Make the ":" symbol between the hour and minute blink every second
   ; ":" = 58 = 111010
@@ -66,8 +77,7 @@ _auto_nop_rts
 
   ; Count-Down reached zero:
   ; We stop the counter
-  lda #OPCODE_RTS
-  sta _auto_nop_rts
+  jsr _StopClock
 
   ; We inform the game there is a GAME OVER condition
   ldx #"9"

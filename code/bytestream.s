@@ -57,6 +57,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_CUTSCENE
     .word _ByteStreamCommand_PLAY_SOUND
     .word _ByteStreamCommand_WAIT_RANDOM
+    .word _ByteStreamCommand_START_CLOCK
+    .word _ByteStreamCommand_STOP_CLOCK
 
     
 ; _param0=pointer to the new byteStream
@@ -720,6 +722,15 @@ _ByteStreamCommandGameOver
     lda #1
     jmp _ByteStreamMoveByA
 .)
+
+; .byt COMMAND_START_CLOCK
+_ByteStreamCommand_START_CLOCK
+    jmp _StartClock
+
+; .byt COMMAND_STOP_CLOCK
+_ByteStreamCommand_STOP_CLOCK
+    jmp _StopClock
+
 
 
 _ByteStreamCommandFetchRectangleData

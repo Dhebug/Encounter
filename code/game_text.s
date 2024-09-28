@@ -283,6 +283,7 @@ _gDescriptionMarketPlace
         ; She's here, we won!
         ; Victory!
         SET_CUT_SCENE(1)
+        STOP_CLOCK
         FADE_BUFFER();                            ; Show the market place
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
@@ -343,6 +344,7 @@ girl_not_here
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
         FADE_BUFFER();
+        START_CLOCK
         SET_CUT_SCENE(0)
     ENDDO(intro_sequence)
     .)
