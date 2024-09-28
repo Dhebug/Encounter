@@ -3221,6 +3221,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
     VALUE_MAPPING(e_ITEM_Acid               , _UseAcid)
+    VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
@@ -3673,16 +3674,17 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
     VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
     VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
+    VALUE_MAPPING(e_ITEM_FishingNet         , _ThrowNet)
     VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
 _UseBread
 _ThrowBread
 .(
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
+
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
 give_bread_to_dove
-    // The bread is going away, but the bird is now possible to catch
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
-    UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
+    // The bird is now possible to catch
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
 #else
@@ -3690,13 +3692,13 @@ give_bread_to_dove
 #endif    
 //+_gSceneActionDoveEatingBread
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Elle est attrapable maintenant")
+#else
     INFO_MESSAGE("Maybe I can catch it now?")
+#endif    
     WAIT(50*2)
-    END_AND_REFRESH
-
 not_in_wooded_avenue
-    // In other locations we just drop the bread where we are
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
     END_AND_REFRESH
 .)
 
@@ -3775,6 +3777,32 @@ acid_hole_knife
     END_AND_REFRESH
 .)
 
+
+_UseNet
+_ThrowNet
+.(
+    INFO_MESSAGE("_ThrowNet")
+
+    // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bred
+    JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
+        UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("La colombe est prise dans le filet")
+        SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe empêtrée")
+#else    
+        INFO_MESSAGE("The dove is caught in the net")
+        SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
+#endif    
+        END_AND_REFRESH
+dove_net    
+
+    // In other locations we just drop the item where we are
+    SET_ITEM_LOCATION(e_ITEM_FishingNet,e_LOC_CURRENT)
+    END_AND_REFRESH
+.)
 
 
 _UseSnookerCue
