@@ -3595,6 +3595,7 @@ _UseAcid
     SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_NONE)                             ; The clay has vanished
     SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE)                             ; The acid is gone as well
     SET_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_NONE)                   ; We don't need the protection suit
+    UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)            ; 
 
     END_AND_REFRESH
 .)
