@@ -269,6 +269,7 @@ WORDS AskInputCallback()
         const char* savedStream = gCurrentStream;
         PlayStream(TimeOutGameOver);
         gCurrentStream = savedStream;
+        return e_WORD_QUIT;
     }
 
     // When the player presses SHIFT we redraw the item list with highlights

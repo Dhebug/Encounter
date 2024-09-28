@@ -332,36 +332,8 @@ girl_not_here
         INFO_MESSAGE("...when I'm done")
         WAIT(50*2)
 
-        ; Then we show an animated sequence where the digital watch 
-        ; is set to have an alarm in two hours
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
-        FADE_BUFFER();
-        WAIT(50)
-
-        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
-                _IMAGE(24,43)
-                _SCREEN(17,63)
-        INFO_MESSAGE("I only have two hours...")
-
-        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 2 hours patch
-                _IMAGE(24,34)
-                _SCREEN(17,63)
-        INFO_MESSAGE("...make them count!")
-
-        WAIT(50*2)
-
-        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
-        WAIT(50)
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the 1:59:59 patch
-                _IMAGE(24,43)
-                _SCREEN(17,63)
-        WAIT(50)
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
-                _IMAGE(28,34)
-                _SCREEN(21,63)
-        WAIT(50)
+        ; Then we show an animated sequence where the digital watch is set to have an alarm in two hours
+        GOSUB(_WatchSetup)
 
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
@@ -4175,37 +4147,86 @@ end_girl_following
 .)
 
 
+; Animated sequence where the digital watch is set to have an alarm in two hours
+_WatchSetup
+.(
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
+    FADE_BUFFER();
+    WAIT(50)
+
+    PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
+            _IMAGE(24,43)
+            _SCREEN(17,63)
+    INFO_MESSAGE("I only have two hours...")
+
+    PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 2 hours patch
+            _IMAGE(24,34)
+            _SCREEN(17,63)
+    INFO_MESSAGE("...make them count!")
+
+    WAIT(50*2)
+
+    PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+    WAIT(50)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the 1:59:59 patch
+            _IMAGE(24,43)
+            _SCREEN(17,63)
+    WAIT(50)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
+            _IMAGE(28,34)
+            _SCREEN(21,63)
+    WAIT(50)
+    RETURN
+.)
+
+
+; Half-way display, when one hour has elapsed, to remind the player they need to speed up
 _OneHourAlarmWarning
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
-
-    WAIT(50)
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
+            _IMAGE(24,43)
+            _BUFFER(17,63)
+    FADE_BUFFER();
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    WAIT(50)
-    INFO_MESSAGE("Already one hour passed!")
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
 
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
-    WAIT(50)
+    CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
+    INFO_MESSAGE("Already one hour has passed!")
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,9)                                 ; Overlay the 59:59 patch
+            _IMAGE(25,43)
+            _SCREEN(18,63)
+    CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
     INFO_MESSAGE("I need to hurry up!")
+
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
+            _IMAGE(28,34)
+            _SCREEN(21,63)
+
     WAIT(50)
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
 
     END_AND_REFRESH
 .)
 
 
+; Time out, you lost!
 _TimeOutGameOver
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
 
-    WAIT(50)
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    WAIT(50)
+    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    CLEAR_TEXT_AREA(1)                                                  ; RED background
     INFO_MESSAGE("I was too slow...")
 
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
-    WAIT(50)
+    CLEAR_TEXT_AREA(1)                                                  ; RED background
     INFO_MESSAGE("...I have to abort the mission")
     WAIT(50)
 

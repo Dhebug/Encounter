@@ -382,24 +382,24 @@ _WatchButtonPress
     .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
 
-_WatchBeepData  .byt SOUND_COMMAND_SET_BANK,$00,$10,$00,$00,$00,$00,$00,$3E,$06,$00,$00,$00,$00,$00   ; Start sound
-				.byt SOUND_COMMAND_REPEAT,3                                                           ; 3 times
-					.byt SOUND_COMMAND_SET_VALUE,$08,$06,SOUND_COMMAND_END_FRAME                          ; Start sound
-					.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-					.byt SOUND_COMMAND_SET_VALUE,$08,$00,SOUND_COMMAND_END_FRAME                          ; Stop sound
-					.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-				.byt SOUND_COMMAND_ENDREPEAT
-				.byt SOUND_COMMAND_END
-
+_WatchBeepData
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,128            ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,15               ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait a second
+    .byt SOUND_COMMAND_END_FRAME
+    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
 
 ; For some reasons, a flickering light bulb and a drip of water sound close enough
 _WaterDrip
 _FlickeringLight
     .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,5              ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,8                ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,10               ; Channel A volume
     .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111           ; Enable NOISE on channel A
     .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,6                           ; Cut the volume
+    .byt SOUND_COMMAND_SET_VALUE,8,8                           ; Lower the volume
     .byt SOUND_COMMAND_END_FRAME
     .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
