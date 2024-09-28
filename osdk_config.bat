@@ -5,7 +5,10 @@
 :: 0.1 - Most of the original versions sents to XiA
 :: 0.2 - Test version with new intro music
 :: 0.3 - Test version with the new game start that shows the map, and printer output
-SET VERSION=0.4
+:: 0.4 - First version of the game 100% playable from start to finish - 1 second delay per fade  - game finished with 1:30:30 remaining
+:: 0.5 - First pass of bug fixes, added some audio as well, colorful intro title - 4 seconds delay per fade -
+::
+SET VERSION=0.5
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)

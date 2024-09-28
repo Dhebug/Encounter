@@ -105,7 +105,7 @@ _gTextCredits
 
 _gTextGameDescription
     .byt TEXT_CRLF
-    .byt 3," The original game, releaded on tape",TEXT_CRLF
+    .byt 3," The original game, released on tape",TEXT_CRLF
     .byt 3," was written 100% in BASIC and had no",TEXT_CRLF
     .byt 3,"  graphics or audio (except EXPLODE).",TEXT_CRLF
     .byt TEXT_CRLF

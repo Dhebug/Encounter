@@ -718,7 +718,7 @@ _gDescriptionZenGarden
     _BUBBLE_LINE(9,5,0,"Un jardin zen japonais ?")
     _BUBBLE_LINE(5,17,0,"En Angleterre ?")
 #else    
-    _BUBBLE_LINE(4,4,0,"A Japanese Zen Garden?")
+    _BUBBLE_LINE(4,4,0,"A Japanese zen garden?")
     _BUBBLE_LINE(4,15,1,"In England?")
 #endif    
     END
@@ -830,7 +830,7 @@ _gDescriptionFishPond
     _BUBBLE_LINE(5,17,0,"sont étonnamment gros")
 #else    
     _BUBBLE_LINE(5,5,0,"Some of these fishes")
-    _BUBBLE_LINE(5,17,0,"are surprinsingly big")
+    _BUBBLE_LINE(5,17,0,"are surprisingly big")
 #endif    
     END
 .)
@@ -950,8 +950,8 @@ end_dog_check
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       WHITE_BUBBLE(2)
-      _BUBBLE_LINE(5,5,0,"Let's call that a ")
-      .byt 5,17,0,"Collateral Damage",34,0
+      _BUBBLE_LINE(5,5,0,"Let's call that")
+      .byt 5,17,0,"collateral damage",34,0
       END
       
 dog_alive
@@ -1030,8 +1030,8 @@ end_dog_check
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       WHITE_BUBBLE(2)
-      _BUBBLE_LINE(5,5,0,"Let's call that a ")
-      .byt 5,17,0,"Collateral Damage",34,0
+      _BUBBLE_LINE(5,5,0,"Let's call that")
+      .byt 5,17,0,"collateral damage",34,0
       END
       
 dog_alive
@@ -1114,11 +1114,11 @@ _gDescriptionNarrowPassage
     _BUBBLE_LINE(12,68,0,"soit ils ont oublié")
     _BUBBLE_LINE(27,88,0,"de payer leurs")
 #else
-    _BUBBLE_LINE(5,48,0,"Either they love dark")
+    _BUBBLE_LINE(5,48,0,"Either they love the dark")
     _BUBBLE_LINE(12,68,0,"or they forgot to")
     _BUBBLE_LINE(37,88,0,"pay their")
 #endif
-    WHITE_BUBBLE(1)
+    BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(55,108,0,"factures")
 #else
@@ -1631,8 +1631,8 @@ curtain_open
     _BUBBLE_LINE(85,81,0,"Est-ce de l'acier")
     _BUBBLE_LINE(60,92,0,"derrière le rideau ?")
 #else
-    _BUBBLE_LINE(85,81,0,"Is that Steel")
-    _BUBBLE_LINE(60,92,0,"behind the Curtain?")
+    _BUBBLE_LINE(85,81,0,"Is that steel")
+    _BUBBLE_LINE(60,92,0,"behind the curtain?")
 #endif    
     END
 .)
@@ -1730,8 +1730,8 @@ _gDescriptionMasterBedRoom
       _BUBBLE_LINE(10,5,0,"Appelons cela un")
       .byt 5,18,0,34,"dommage collatéral",34,0
 #else
-      _BUBBLE_LINE(5,5,0,"Let's call that a ")
-      .byt 5,17,0,34,"Collateral Damage",34,0
+      _BUBBLE_LINE(5,5,0,"Let's call that")
+      .byt 5,17,0,34,"collateral damage",34,0
 #endif      
       END
 
@@ -1829,7 +1829,7 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(131,53,0,"oppressant")
 #else
         _BUBBLE_LINE(153,70,0,"It's kind of")
-        _BUBBLE_LINE(148,85,0,"oppressing")
+        _BUBBLE_LINE(148,85,0,"claustrophobic")
 #endif    
         END
     ENDIF(suit)
@@ -2040,7 +2040,7 @@ _CombineStickyBombWithSafe
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
     INFO_MESSAGE("Everything is in place...")
     WAIT(50*2)
-    INFO_MESSAGE("...need to safely ignite it though!")
+    INFO_MESSAGE("...need to ignite it safely though!")
     WAIT(50*2)
     END_AND_REFRESH
 .)
@@ -3971,7 +3971,7 @@ _TakeAcid
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID,"ACME XX121 Acid")
     INFO_MESSAGE("This stuff is highly dangerous!")
     WAIT(50*2)
-    INFO_MESSAGE("...could go through a ship hull!")
+    INFO_MESSAGE("...could go through a ship's hull!")
     WAIT(50*2)
 
     JUMP(_TakeCommon)
