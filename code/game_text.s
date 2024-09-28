@@ -323,9 +323,7 @@ girl_not_here
     ; Should probably disable the keyboard inputs
     .(
     DO_ONCE(intro_sequence)
-        //SET_CUT_SCENE(1)
-        //FADE_BUFFER();
-        //SET_DESCRIPTION("")
+        ; First we show the map of where the player needs to go
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
         FADE_BUFFER();
@@ -333,14 +331,38 @@ girl_not_here
         WAIT(50*2)
         INFO_MESSAGE("...when I'm done")
         WAIT(50*2)
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")
+
+        ; Then we show an animated sequence where the digital watch 
+        ; is set to have an alarm in two hours
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
         FADE_BUFFER();
-        PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
+        WAIT(50)
+
+        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
+                _IMAGE(24,43)
+                _SCREEN(17,63)
         INFO_MESSAGE("I only have two hours...")
-        WAIT(50*2)
+
+        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 2 hours patch
+                _IMAGE(24,34)
+                _SCREEN(17,63)
         INFO_MESSAGE("...make them count!")
+
         WAIT(50*2)
-        
+
+        PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
+        WAIT(50)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the 1:59:59 patch
+                _IMAGE(24,43)
+                _SCREEN(17,63)
+        WAIT(50)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
+                _IMAGE(28,34)
+                _SCREEN(21,63)
+        WAIT(50)
+
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
         FADE_BUFFER();

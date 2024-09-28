@@ -370,6 +370,18 @@ _ZapData        .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$00,$3E,$0F,
                 .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END       ; Finally set the volume to 0
                 .byt SOUND_COMMAND_END
 
+_WatchButtonPress 
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,64             ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,8                ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,25,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait half a second
+    .byt SOUND_COMMAND_END_FRAME
+    .byt SOUND_COMMAND_SET_VALUE,8,6                           ; Lower the volume
+    .byt SOUND_COMMAND_END_FRAME
+    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
+
 _WatchBeepData  .byt SOUND_COMMAND_SET_BANK,$00,$10,$00,$00,$00,$00,$00,$3E,$06,$00,$00,$00,$00,$00   ; Start sound
 				.byt SOUND_COMMAND_REPEAT,3                                                           ; 3 times
 					.byt SOUND_COMMAND_SET_VALUE,$08,$06,SOUND_COMMAND_END_FRAME                          ; Start sound
