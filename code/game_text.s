@@ -3970,8 +3970,10 @@ _TakeBlackTape
     SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Le ruban n'est pas réutilisable")
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre")
 #else    
     INFO_MESSAGE("The tape cannot be reused")
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
 #endif    
     WAIT(50)
     END_AND_REFRESH
