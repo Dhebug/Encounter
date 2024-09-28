@@ -160,10 +160,6 @@ void PrintSceneInformation()
 	// Print the description of the place at the top (centered)
     PrintTopDescription(gDescription);  //gCurrentLocationPtr->description);
 
-    // The redefined charcters to draw the bottom part of the directional arrows \v/
-	poke(0xbb80+16*40+16,9);                      // ALT charset
-	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
-
     // Display the score
 	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
 
@@ -604,6 +600,10 @@ void Initializations()
     gCurrentStream = 0;
     gDelayStream = 0;
     gGameOverCondition = 0;
+
+    // The redefined charcters to draw the bottom part of the directional arrows \v/
+	poke(0xbb80+16*40+16,9);                      // ALT charset
+	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
 
 #ifdef ENABLE_GAME
 	LoadScene();
