@@ -1391,12 +1391,10 @@ _gDescriptionDarkerCellar
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
 #ifdef LANGUAGE_FR       
         SET_DESCRIPTION("La fenêtre éclaire la pièce")
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre")
 #else
         SET_DESCRIPTION("The room gets light from the window")
 #endif    
         SET_ITEM_LOCATION(e_ITEM_AlarmPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
 
         ; Is the alarm panel open?
         JUMP_IF_TRUE(alarm_panel_closed,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))
@@ -1446,15 +1444,28 @@ no_ladder
     .)
 
 
+    .(
     WAIT(DELAY_FIRST_BUBBLE)
-    BLACK_BUBBLE(2)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_off)
+        BLACK_BUBBLE(2)
 #ifdef LANGUAGE_FR   
-    _BUBBLE_LINE(5,99,0,"La fenêtre semble")
-    _BUBBLE_LINE(5,106,4,"occultée")
+        _BUBBLE_LINE(5,99,0,"On y voit bien")
+        _BUBBLE_LINE(5,106,4,"mieux maintenant !")
 #else
-    _BUBBLE_LINE(5,99,0,"The window seems")
-    _BUBBLE_LINE(5,109,0,"to be covered")
-#endif    
+        _BUBBLE_LINE(5,99,0,"Can definitely see")
+        _BUBBLE_LINE(5,108,3,"better now!")
+#endif
+    ELSE(tape_off,tape_on)
+        BLACK_BUBBLE(2)
+#ifdef LANGUAGE_FR   
+        _BUBBLE_LINE(5,99,0,"La fenêtre semble")
+        _BUBBLE_LINE(5,106,4,"occultée")
+#else
+        _BUBBLE_LINE(5,99,0,"The window seems")
+        _BUBBLE_LINE(5,107,3,"to be covered")
+#endif
+    ENDIF(tape_on)
+    .)    
     END
 .)
 
