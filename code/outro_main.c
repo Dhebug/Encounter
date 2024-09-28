@@ -46,6 +46,9 @@ void HandleHighScore()
 	// Load the highscores from the disk
 	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
 
+#if 0  // Just to test the different ending conditions
+    gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
+#endif
     // Show a congratulation/failure message related to their actual ending condition
     gPrintWidth = 40;
     gPrintTerminator=0;    
@@ -240,7 +243,11 @@ void main()
     // =============================== About the game ===============================
     DisplayText(gTextGameDescription,50*12);
     
-    AddSprite(10,61,20,20*152,48*40+16);        // Add the third photo
+    AddSprite(10,61,20,20*152,48*40+16);        // Add the third photo (Missing girl)
+    if (gGameOverCondition == e_SCORE_SOLVED_THE_CASE)
+    {
+        AddSprite(10,14,20,20*258,(45+48)*40+16);        // Patch the image with "Rescued" if the player actually won
+    }
     AddSprite(10,22,20,20*215+10,88*40+30);     // Lower the glass content even more
     BlitBufferToHiresWindow();
 
