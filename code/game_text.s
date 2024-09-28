@@ -188,7 +188,7 @@ _gTextItemChemistryRecipes        .byt "a couple chemistry _recipes",0
 _gTextItemUnitedKingdomMap        .byt "a _map of the United Kingdom",0        
 _gTextItemHandheldGame            .byt "a handheld _game",0
 _gTextItemSedativePills           .byt "some sedative _pills",0
-_gTextItemDartGun                 .byt "a dart _gun",0
+_gTextItemDartGun                 .byt "a _dart gun",0
 _gTextItemBlackTape               .byt "some black adhesive _tape",0
 _gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
 _gTextItemAdhesive                .byt "some _adhesive",0
