@@ -719,6 +719,8 @@ _ByteStreamCommandGameOver
     lda (_gCurrentStream),y             // Gameover condition
     sta _gGameOverCondition
 
+    jsr _StopClock                      // Also stop the clock to be fair to the player
+
     lda #1
     jmp _ByteStreamMoveByA
 .)

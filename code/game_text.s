@@ -1770,18 +1770,6 @@ end_thug
     END
 
 
-_gDescriptionThugAttacking
-    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
-    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(14,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
-    ; Draw the message
-    WAIT(50*2)                              ; Wait a couple seconds
-    WHITE_BUBBLE(2)
-    _BUBBLE_LINE(5,5,0,"This was a mistake:")
-    _BUBBLE_LINE(60,16,0,"My last one")
-    WAIT(50*2)                                      ; Wait a couple seconds
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SHOT_BY_THUG)    ; Achievement!
-    GAME_OVER(e_SCORE_SHOT_BY_THUG)                 ; The game is now over
-    JUMP(_gDescriptionGameOverLost)                 ; Game Over
 
 
 // MARK: Panic Room Door
@@ -3615,12 +3603,33 @@ _gSearchtemMappingsArray
 _SearchThug
 .(
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
+        ; If the thug was not disabled, attempting to search him will lead to the player immediate death
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(3,28),40,_SecondImageBuffer+40*100+19,_ImageBuffer+40*37+30)   ; Thug opening his eye
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(5,13),40,_SecondImageBuffer+40*59+14,_ImageBuffer+40*33+33)   ; Erase the Zzzz
+        FADE_BUFFER()
+        CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Il faut d'abord le maitriser");
+        INFO_MESSAGE("Il fallait d'abord le maitriser");
 #else
-    ERROR_MESSAGE("I should subdue him first");
+        INFO_MESSAGE("You should have subdued him first");
 #endif    
-    END
+        WAIT(50*2)
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),40,_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(13,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
+        FADE_BUFFER()
+        PLAY_SOUND(_ShootData)
+        ; Draw the message
+        WAIT(50*2)                              ; Wait a couple seconds
+        PLAY_SOUND(_ShootData)
+        WHITE_BUBBLE(2)
+        _BUBBLE_LINE(5,5,0,"This was a mistake:")
+        _BUBBLE_LINE(60,16,0,"My last one")
+        WAIT(50*2)                                      ; Wait a couple seconds
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SHOT_BY_THUG)    ; Achievement!
+        GAME_OVER(e_SCORE_SHOT_BY_THUG)                 ; The game is now over
+        JUMP(_gDescriptionGameOverLost)                 ; Game Over
+        END
 
 thug_disabled
     JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_NONE))
