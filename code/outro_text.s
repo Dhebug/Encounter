@@ -90,17 +90,18 @@ _gTextThanks
     .byt TEXT_END
 
 _gTextCredits
-    .byt TEXT_CRLF,TEXT_CRLF
+    .byt TEXT_CRLF
     .byt 3," Original game ",96, " 1983 Severn Software",TEXT_CRLF
     .byt 6,"         Game code and story:",TEXT_CRLF
     .byt 7,"           Adrian Sheppard",4,"(*)",7,TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,"  Redux version ",96," 2024 Defence Force",TEXT_CRLF
-    .byt 6,"          Code, and Graphics:",TEXT_CRLF
+    .byt 6,"  Code, design, graphics and sounds:",TEXT_CRLF
     .byt 7,"        Mickael 'Dbug' Pointier",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt 4," (*) we assume",TEXT_CRLF
+    .byt 6,"                  Music:",TEXT_CRLF
+    .byt 7,"               Per Almered",TEXT_CRLF
+    .byt 4," (*) we assume"
     .byt TEXT_END
 
 _gTextGameDescription

@@ -124,8 +124,9 @@ int Wait(int frameCount)
 }
 
 //#define TEST_MODE
+#define SECURITY_OVERWRITE_MARGIN 5   // To catch eventual errors with bad texts, else it will overwrite the code
 
-char TextBuffer[40*12];
+char TextBuffer[40*(12+SECURITY_OVERWRITE_MARGIN)];
 
 int DisplayText(const char* text,int delay)
 {
