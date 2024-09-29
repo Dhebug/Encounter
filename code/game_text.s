@@ -3860,8 +3860,6 @@ acid_hole_knife
 _UseNet
 _ThrowNet
 .(
-    INFO_MESSAGE("_ThrowNet")
-
     // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bred
     JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
