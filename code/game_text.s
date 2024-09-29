@@ -1997,7 +1997,8 @@ _CombineMeatWithPills
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged _meat")
 #endif    
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!
+    INCREASE_SCORE(POINTS_DRUGGED_MEAT)
     END_AND_REFRESH
 .)
 
@@ -2008,6 +2009,7 @@ _CombinePetrolWithTP
     SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_TINY_WC)                   ; The TP is back into the toilets (but useless)
     SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_CURRENT)                         ; We now have a fuse for our bomb
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
+    INCREASE_SCORE(POINTS_BUILT_FUSE)
     END_AND_REFRESH
 .)
 
@@ -2017,6 +2019,7 @@ _CombineSulfurWithSalpetre
     SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_NONE)                       ; The saltpetre is gone
     SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_NONE)                         ; The sulphur is gone
     SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
+    INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
 
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
     INFO_MESSAGE("It's mixed...")
@@ -2033,6 +2036,7 @@ _CombineGunPowderWithFuse
     SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
     SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
+    INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
     INFO_MESSAGE("The explosive is ready...")
@@ -2047,6 +2051,7 @@ _CombineBombWithAdhesive
 .(
     SET_ITEM_LOCATION(e_ITEM_Adhesive,e_LOC_NONE)                        ; The adhesive is gone
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED)                    ; We now have a sticky bomb
+    INCREASE_SCORE(POINTS_COMBINED_BOMB_ADHESIVE)
 #ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe collante")
 #else    
@@ -2075,6 +2080,7 @@ _CombineStickyBombWithSafe
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The bomb is now in the room
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
+    INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
     INFO_MESSAGE("Everything is in place...")
     WAIT(50*2)
@@ -2086,7 +2092,8 @@ _CombineStickyBombWithSafe
 
 _CombineBombWithMatches
 .(
-    SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED);    // Strike the matches!
+    SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED);         ; Strike the matches!
+    INCREASE_SCORE(POINTS_IGNITED_BOMB)
     END_AND_REFRESH
 .)
 
@@ -2104,6 +2111,7 @@ _CombineClayWithWater
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some wet _clay")
 #endif    
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
+    INCREASE_SCORE(POINTS_MADE_CLAY_WET)
     END_AND_REFRESH
 .)
 
@@ -2112,6 +2120,7 @@ _CombineClayWithWater
 _CombineCueWithRope
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE,"A flimsy contraption")
+    INCREASE_SCORE(POINTS_COMBINED_CUE_ROPE)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("La queue ne va pas résister...")
 #else
@@ -2173,6 +2182,7 @@ rope_not_attached
     INFO_MESSAGE("Let's attach the rope")
 #endif    
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)     ; The rope is now attached to the window
+    INCREASE_SCORE(POINTS_WINDOW_ROPE)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde qui pend de la fenêtre")
 #else    
@@ -2234,16 +2244,19 @@ _gReadItemMappingsArray
 
 
 _ReadNewsPaper
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!
+    INCREASE_SCORE(POINTS_READ_NEWSPAPER)    
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
     INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
     INFO_MESSAGE("...I hope she is fine!")
     WAIT(50*2)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!    
     END_AND_REFRESH
 
 
 _ReadHandWrittenNote
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
+    INCREASE_SCORE(POINTS_READ_NOTE)    
     DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note")
     WAIT(50*2)
 #ifdef LANGUAGE_FR
@@ -2256,23 +2269,25 @@ _ReadHandWrittenNote
     INFO_MESSAGE("...if I can access it!")
 #endif    
     WAIT(50*2)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     END_AND_REFRESH
 
 
 _ReadChemistryRecipes
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
+    INCREASE_SCORE(POINTS_READ_RECIPES)    
     DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes")
     WAIT(50*2)
     INFO_MESSAGE("I can definitely use these...")
     WAIT(50*2)
     INFO_MESSAGE("...just need to find the materials.")
     WAIT(50*2)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     END_AND_REFRESH
 
 
 _ReadChemistryBook
 .(
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
+    INCREASE_SCORE(POINTS_READ_BOOK)    
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK,"A science book")
     WAIT(50*2)
     INFO_MESSAGE("I don't understand much...")
@@ -2283,7 +2298,6 @@ _ReadChemistryBook
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_NONE))
     SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_INVENTORY)
 recipe_already_found
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     END_AND_REFRESH
 .)
 
@@ -2321,6 +2335,7 @@ _gInspectItemMappingsArray
 
 
 _InspectMap
+    INCREASE_SCORE(POINTS_INSPECT_MAP)    
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
@@ -2328,6 +2343,7 @@ _InspectMap
 
 
 _InspectGame
+    INCREASE_SCORE(POINTS_INSPECT_GAME)    
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
@@ -2335,6 +2351,7 @@ _InspectGame
 
 
 _InspectChemistryBook
+    INCREASE_SCORE(POINTS_INSPECT_BOOK)    
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un livre épais avec des marques")
 #else    
@@ -2345,6 +2362,7 @@ _InspectChemistryBook
 
 
 _InspectFridgeDoor
+    INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
     INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
@@ -2356,6 +2374,7 @@ _InspectFridgeDoor
 
 _InspectMedicineCabinet
 .(
+    INCREASE_SCORE(POINTS_INSPECT_CABINET)    
     ; Is the medicine cabinet open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN,"Inside the medicine cabinet")
@@ -2371,6 +2390,7 @@ _InspectMedicineCabinet
 
 _InspectPanel
 .(
+    INCREASE_SCORE(POINTS_INSPECT_PANEL)
     ; Is the alarm panel open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN,"An open alarm panel")
@@ -2386,6 +2406,7 @@ _InspectPanel
 
 _InspectBasementWindow
 .(
+    INCREASE_SCORE(POINTS_INSPECT_BASEMENT_WINDOW)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),elsecellar)
     .(
         ; Inspecting the window in the cellar
@@ -2424,6 +2445,7 @@ no_ladder
 
 _InspectPanicRoomWindow
 .(  
+    INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_WINDOW)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room_door)      ; Are we trying to look at the window from the hole in the door?
         DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED,"The window and shutters are closed")
 #ifdef LANGUAGE_FR
@@ -2440,6 +2462,7 @@ _InspectPanicRoomWindow
 
 _InspectPlasticBag
 .(
+    INCREASE_SCORE(POINTS_INSPECT_PLASTIC_BAG)
     //CLEAR_TEXT_AREA(4)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un sac blanc normal")
@@ -2453,6 +2476,7 @@ _InspectPlasticBag
 
 _InspectMixTape
 .(
+    INCREASE_SCORE(POINTS_INSPECT_MIX_TAPE)
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE,"Best Of 1981-1982")
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une compilation faite maison !")
@@ -2466,6 +2490,7 @@ _InspectMixTape
 
 _InspectSafe
 .(
+    INCREASE_SCORE(POINTS_INSPECT_SAFE)
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),elseclose)       ; Is the safe closed?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),else)           ; Is the bomb installed?
             DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
@@ -2501,6 +2526,7 @@ _InspectSafe
 
 _InspectThug
 .(
+    INCREASE_SCORE(POINTS_INSPECT_THUG)
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il dort")
@@ -2527,6 +2553,7 @@ _InspectThug
 
 _InspectPanicRoomDoor
 .(
+    INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_DOOR)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
         DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Home-made peep-hole")
 #ifdef LANGUAGE_FR
@@ -2579,6 +2606,7 @@ _InspectPanicRoomDoor
 
 _InspectProtectionSuit
 .(
+    INCREASE_SCORE(POINTS_INSPECT_PROTECTION_SUIT)
     GOSUB(_ShowProtectionSuit)
     END_AND_REFRESH    
 .)
@@ -2590,6 +2618,7 @@ _InspectProtectionSuit
 ; - The room is empty
 _InspectHoleInDoor
 .(
+    INCREASE_SCORE(POINTS_INSPECT_HOLE)
     ; We only draw the girl if she's actually in the room
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
@@ -3391,6 +3420,7 @@ _UseDartGun
     JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
+        INCREASE_SCORE(POINTS_DART_GUNNED_DOG)
 #ifdef LANGUAGE_FR   
         INFO_MESSAGE("Fait de beau rêves")
 #else    
@@ -3403,6 +3433,7 @@ snoozed_dog
     JUMP_IF_FALSE(snoozed_thug,CHECK_PLAYER_LOCATION(e_LOC_MASTERBEDROOM))
     JUMP_IF_TRUE(snoozed_thug,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_THUG)
+        INCREASE_SCORE(POINTS_DART_GUNNED_THUG)
 #ifdef LANGUAGE_FR   
         INFO_MESSAGE("Fait de beau rêves")
 #else    
@@ -3421,6 +3452,7 @@ _UseKeys
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
+            INCREASE_SCORE(POINTS_USED_KEYS)
             INFO_MESSAGE("The door is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
@@ -3439,6 +3471,7 @@ _UseAlarmSwitch
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
         SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
+        INCREASE_SCORE(POINTS_USED_SWITCH)
         INFO_MESSAGE("The alarm is now disabled")
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position arrêt")
@@ -3486,6 +3519,7 @@ abandonned_car
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose in the petrol tank")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE)
+    INCREASE_SCORE(POINTS_USED_HOSE)
     END_AND_REFRESH
 .)
 
@@ -3692,7 +3726,7 @@ found_items
 #else    
     INFO_MESSAGE("You found something interesting")
 #endif    
-    INCREASE_SCORE(50)
+    INCREASE_SCORE(POINTS_SEARCHED_THUG)
     END_AND_REFRESH
 .)
 
@@ -3760,7 +3794,7 @@ dog_eating_the_meat
     WAIT(50*2)    
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
-    INCREASE_SCORE(50)
+    INCREASE_SCORE(POINTS_DRUGGED_DOG)
     JUMP(_CommonDogDisabled)
 done
     END_AND_REFRESH
@@ -3932,7 +3966,7 @@ acid_hole_cue
 
 _CommonDogDisabled
 .(
-    INCREASE_SCORE(50)
+    INCREASE_SCORE(POINTS_DISABLED_DOG)
     SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
 +_gTextDogLying = *+2
 #ifdef LANGUAGE_FR   
@@ -3946,7 +3980,7 @@ _CommonDogDisabled
 
 _CommonThugDisabled
 .(
-    INCREASE_SCORE(50)
+    INCREASE_SCORE(POINTS_DISABLED_THUG)
     SET_ITEM_FLAGS(e_ITEM_Thug,ITEM_FLAG_DISABLED)
 +_gTextDeadThug = *+2
 #ifdef LANGUAGE_FR   

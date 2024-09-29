@@ -249,3 +249,54 @@
 #define e_SCORE_BLOWN_INTO_BITS  7
 #define e_SCORE_SIMPLY_VANISHED  8
 #define e_SCORE_GAVE_UP          9
+
+// Scoring and points
+// Used INCREASE_SCORE(define)
+#define POINTS_COMBINED_SULPHUR_SALTPETRE 10
+#define POINTS_GRINDED_GUNPOWNDER         10
+#define POINTS_BUILT_FUSE                 10
+#define POINTS_COMBINED_GUNPOWDER_FUSE    10
+#define POINTS_COMBINED_BOMB_ADHESIVE     10
+#define POINTS_ATTACHED_BOMB_TO_SAFE      10
+#define POINTS_IGNITED_BOMB               10
+
+#define POINTS_WINDOW_ROPE                10
+#define POINTS_COMBINED_CUE_ROPE          10
+#define POINTS_MADE_CLAY_WET              10
+
+#define POINTS_DRUGGED_MEAT               10
+#define POINTS_DRUGGED_DOG                50
+#define POINTS_DISABLED_DOG               50
+
+#define POINTS_DART_GUNNED_DOG            50
+#define POINTS_DART_GUNNED_THUG           50
+
+#define POINTS_SEARCHED_THUG              10
+
+#define POINTS_DISABLED_THUG              50
+
+#define POINTS_READ_NEWSPAPER             10
+#define POINTS_READ_NOTE                  10
+#define POINTS_READ_BOOK                  10
+#define POINTS_READ_RECIPES               10
+
+#define POINTS_INSPECT_MAP                10
+#define POINTS_INSPECT_GAME               10
+#define POINTS_INSPECT_BOOK               10
+#define POINTS_INSPECT_FRIDGE             10
+#define POINTS_INSPECT_CABINET            10
+#define POINTS_INSPECT_PANEL              10
+#define POINTS_INSPECT_BASEMENT_WINDOW    10
+#define POINTS_INSPECT_PANIC_ROOM_WINDOW  10
+#define POINTS_INSPECT_PANIC_ROOM_DOOR    10
+#define POINTS_INSPECT_PLASTIC_BAG        10
+#define POINTS_INSPECT_MIX_TAPE           10
+#define POINTS_INSPECT_SAFE               10
+#define POINTS_INSPECT_THUG               10
+#define POINTS_INSPECT_PROTECTION_SUIT    10
+#define POINTS_INSPECT_HOLE               10
+
+#define POINTS_USED_KEYS                  10
+#define POINTS_USED_SWITCH                10
+#define POINTS_USED_HOSE                  10
+

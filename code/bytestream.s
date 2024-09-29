@@ -704,6 +704,7 @@ _ByteStreamCommandIncreaseScore
     sta _gScore+0
 
     lda #0
+    sta (_gCurrentStream),y             // Resets the score value to make sure we don't give points twice if the command is called twice
     adc _gScore+1
     sta _gScore+1
 
