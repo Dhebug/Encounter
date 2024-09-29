@@ -3762,6 +3762,7 @@ _ThrowBread
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
 give_bread_to_dove
     // The bird is now possible to catch
+    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
 #else
@@ -3816,6 +3817,7 @@ _FreeDove
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE,"Run Forrest, Run!")      ; Show the picture with the dog running after the dove
         INFO_MESSAGE("Hopefully he will not catch the dove")
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
+        INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
         SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
         WAIT(50*2)    
 nothing_to_chase_the_dove

@@ -264,6 +264,9 @@
 #define POINTS_COMBINED_CUE_ROPE          10
 #define POINTS_MADE_CLAY_WET              10
 
+#define POINTS_GAVE_BREAD_TO_DOVE         10
+#define POINTS_DOG_CHASED_DOVE            50
+
 #define POINTS_DRUGGED_MEAT               10
 #define POINTS_DRUGGED_DOG                50
 #define POINTS_DISABLED_DOG               50
