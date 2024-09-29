@@ -98,6 +98,8 @@ extern char WatchBeepData[];
 extern char WatchButtonPress[];
 extern char WaterDrip[];
 extern char FlickeringLight[];
+extern char BirdChirp1[];
+extern char BirdChirp2[];
 
 extern unsigned int PsgfreqA;
 extern unsigned int PsgfreqB;

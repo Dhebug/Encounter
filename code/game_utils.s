@@ -18,6 +18,8 @@ IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
+
+    ; Update the sound engine
     jsr SoundUpdate50hz
             
     ; "Realtime" Clock

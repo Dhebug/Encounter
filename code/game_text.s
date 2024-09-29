@@ -657,12 +657,13 @@ no_rope
     _BUBBLE_LINE(111,5,0,"This well looks as old")
     _BUBBLE_LINE(158,16,0,"as the church")
 #endif    
-    END
+    JUMP(_ChirpingBirds)
 .)
 
 
 // MARK: Wooded Avenue
 _gDescriptionWoodedAvenue
+.(
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Vous êtes dans une allée arbroisée")
 #else
@@ -677,7 +678,49 @@ _gDescriptionWoodedAvenue
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
 #endif    
-    END
+    JUMP(_ChirpingBirds)
+.)
+
+
+_ChirpingBirds
+.(
+loop
+    GOSUB(_Chirp1Sequence3)
+    WAIT_RANDOM(5,63)
+    GOSUB(_Chirp2Sequence1)
+    WAIT_RANDOM(5,63)
+    GOSUB(_Chirp1Sequence2)
+    WAIT_RANDOM(5,63)
+    GOSUB(_Chirp2Sequence1)
+    WAIT_RANDOM(5,63)
+    GOSUB(_Chirp1Sequence1)
+    WAIT_RANDOM(5,63)
+    GOSUB(_Chirp2Sequence3)
+    WAIT_RANDOM(5,63)
+    JUMP(loop)
+.)
+
+_Chirp1Sequence3
+    PLAY_SOUND(_BirdChirp1);
+    WAIT_RANDOM(10,15)
+_Chirp1Sequence2
+    PLAY_SOUND(_BirdChirp1);
+    WAIT_RANDOM(10,15)
+_Chirp1Sequence1
+    PLAY_SOUND(_BirdChirp1);
+    WAIT_RANDOM(10,15)
+    RETURN
+
+_Chirp2Sequence3
+    PLAY_SOUND(_BirdChirp2);
+    WAIT_RANDOM(10,15)
+_Chirp2Sequence2
+    PLAY_SOUND(_BirdChirp2);
+    WAIT_RANDOM(10,15)
+_Chirp2Sequence1
+    PLAY_SOUND(_BirdChirp2);
+    WAIT_RANDOM(10,15)
+    RETURN
 
 
 // MARK: Gravel Drive
@@ -920,7 +963,7 @@ _gDescriptionAppleOrchard
     _BUBBLE_LINE(5,5,0,"The best kind of apples:")
     _BUBBLE_LINE(5,17,0,"sweet, crunchy and juicy")
 #endif
-    END
+    JUMP(_ChirpingBirds)
 
 
 // MARK: Entrance Hall

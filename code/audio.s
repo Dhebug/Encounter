@@ -404,3 +404,24 @@ _FlickeringLight
     .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
 
+_BirdChirp1
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,48            ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0              ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,5               ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,10
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,255-1,SOUND_COMMAND_END_FRAME
+	.byt SOUND_COMMAND_ENDREPEAT			
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
+
+_BirdChirp2
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,32            ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0              ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,5               ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,10
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,255-1,SOUND_COMMAND_END_FRAME
+	.byt SOUND_COMMAND_ENDREPEAT			
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
