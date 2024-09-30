@@ -38,7 +38,9 @@ _free_to_use_9b5f     .dsb 1024-768-95
 #endif
 
 * = $9C00             ; ALT charset for HIRES mode: 1024 bytes
-_free_to_use_9c00     .dsb 1024
+_gTableModulo6        .dsb 256           ; Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
+_gTableDivBy6         .dsb 256           ; Given a X value, returns the value divide by 6 (used to locate the proper byte in a scanline)
+_free_to_use_9c00
 
 * = $A000             ; Top of the HIRES screen: 8000 bytes
 _HIRES_MEMORY_START

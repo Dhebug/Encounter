@@ -23,8 +23,9 @@ Count10SecondsDown
 ; No-op to avoid a linker bug
 _PrinterSendStringAsm
 _DrawArrows
+_gFont12x14
     rts
-    
+
 
 /*
     .text   // could be .data if we setup the base address properly
