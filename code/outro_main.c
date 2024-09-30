@@ -10,6 +10,7 @@
 #include "input_system.h"
 #include "score.h"
 
+extern char TypewriterMusic[];
 
 
 // Bunch of "no-op" functions and tables, these are required by the game, but not for the high scores
@@ -177,8 +178,11 @@ int DisplayText(const char* text,int delay)
     }
 }
 
+unsigned char* gSpritBasePointer=SecondImageBuffer;     // So we can point on different images - important when preloading data
+extern unsigned char ThirdImageBuffer[];                // Additional buffer for the image preloading to avoid disturbing the music
 
-#define AddSprite(width,height,stride,src_offset,dst_offset)  {  gDrawWidth=width;gDrawHeight=height;gSourceStride=stride;gDrawSourceAddress=SecondImageBuffer+src_offset; gDrawAddress=ImageBuffer+dst_offset;BlitSprite(); }
+
+#define AddSprite(width,height,stride,src_offset,dst_offset)  {  gDrawWidth=width;gDrawHeight=height;gSourceStride=stride;gDrawSourceAddress=gSpritBasePointer+src_offset; gDrawAddress=ImageBuffer+dst_offset;BlitSprite(); }
 
 void main()
 {
@@ -187,17 +191,18 @@ void main()
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
 
-
+    // We need to preload all the images before we start the music
     // Load the desk picture
     LoadFileAt(OUTRO_PICTURE_DESK,ImageBuffer);
-    //memcpy((char*)0xa000,ImageBuffer,40*128);
+    LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
+    LoadFileAt(OUTRO_SPRITE_PHOTOS,ThirdImageBuffer);  // Photos + glass of whisky
 
     memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
 	BlitBufferToHiresWindow();              // Show the empty desk
 
 #ifndef TEST_MODE
-    LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
-   
+    gSpritBasePointer=SecondImageBuffer;
+
     AddSprite(28,92,40,0,35*40+6);          // Add the letter
     AddSprite(10,62,40,30,61*40+30);        // Add the glass of whisky
     BlitBufferToHiresWindow();
@@ -222,13 +227,16 @@ void main()
     BlitBufferToHiresWindow();
 #endif
 
+    // Now we start the typewriter music
+    PlayMusic(TypewriterMusic);
+
 #ifdef TEST_MODE    
     while (1){
 #endif    
     // =============================== Thank you ===============================
-    DisplayText(gTextThanks,50*5);
+    gSpritBasePointer=ThirdImageBuffer;
 
-    LoadFileAt(OUTRO_SPRITE_PHOTOS,SecondImageBuffer);  // Photos + glass of whisky
+    DisplayText(gTextThanks,50*5);
     
     AddSprite(17,75,20,0,37*40+20);             // Add the first photo hidden behind the glass
     AddSprite(10,62,20,152*20+10,61*40+30);     // Add the glass of whisky on top of the glass
@@ -275,6 +283,8 @@ void main()
 	BlitBufferToHiresWindow();
 
 	System_RestoreIRQ_SimpleVbl();
+    EndMusic();
+    PsgStopSoundAndForceUpdate();
 
 	// Quit and return to the intro
 	InitializeFileAt(LOADER_INTRO_PROGRAM,0x400);

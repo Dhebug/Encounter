@@ -10,6 +10,7 @@ IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
+    jsr _PlayMusicFrame
     jsr SoundUpdate50hz
     rts    
 .)
@@ -42,3 +43,18 @@ _gScoreConditionsArray
   .word _Text_SCORE_SIMPLY_VANISHED
   .word _Text_SCORE_GAVE_UP        
 */
+
+
+
+_TypewriterMusic
+.(
+    .dw events
+    .byt 0+2+4+0+16+32        ; Only channels two and three are used, channel one is available for sound effects
+#include "intro_music_typewriter.s"
+events
+#include "intro_music_typewriter_events.s"
+.)
+
+
+_ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
+
