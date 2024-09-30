@@ -220,8 +220,8 @@ SET CONVERT=CALL bin\_ArkosConv
 %CONVERT% music_jingle splash_music
 %CONVERT% music_intro intro_music
 %CONVERT% music_typewriter intro_music_typewriter
-bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music_events.s
-bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter_events.s
+%CONVERT% music_construction_complete success_music
+
 
 set OSDK_BUILD_END=%time%
 call %OSDK%\bin\ComputeTime.bat

@@ -245,3 +245,14 @@ ArrowDown ; Patch at 18,129
  .byt %000000,%110000
  .byt %000001,%110000
 
+
+
+_SuccessMusic
+.(
+    .dw events
+    .byt 1+2+4+8+16+32        ; All the three channels are used
+#include "success_music.s"
+events
+#include "success_music_events.s"
+.)
+

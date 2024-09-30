@@ -322,12 +322,14 @@ girl_not_here
         ; First we show the map of where the player needs to go
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
+        PLAY_MUSIC(_SuccessMusic)
         FADE_BUFFER();
         INFO_MESSAGE("I'll have to come back here...")
         WAIT(50*2)
         INFO_MESSAGE("...when I'm done")
         WAIT(50*2)
-
+        STOP_MUSIC()
+        
         ; Then we show an animated sequence where the digital watch is set to have an alarm in two hours
         GOSUB(_WatchSetup)
 
@@ -2018,10 +2020,12 @@ _CombineSulfurWithSalpetre
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
 
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
+    PLAY_MUSIC(_SuccessMusic)
     INFO_MESSAGE("It's mixed...")
     WAIT(50*2)
     INFO_MESSAGE("...but there are some large clumps")
     WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
