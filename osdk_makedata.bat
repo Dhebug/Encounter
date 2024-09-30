@@ -38,6 +38,10 @@ SET TARGET_EXTENSION=.fnt
 %CONVERT% font_6x8_typewriter
 %CONVERT% font_6x8_typewriter_fr
 
+:: The 12x14 font
+%CONVERT% font_palatino_linotype_italics_size_10        :: The font used to draw the speech bubble (without any special characters)
+%CONVERT% font_palatino_linotype_italics_size_10_fr     :: The font used to draw the speech bubble (variant with French special characters)
+
 
 :: These are converted to source code and included in the code directly
 SET TARGET_EXTENSION=.s     
@@ -46,11 +50,6 @@ SET TARGET_EXTENSION=.s
 SET PARAMS=-u1 -m0 -f0 -o4;Pattern
 %CONVERT% pattern_6x6_dither_matrix                     :: The 6x6 dither matrix used to do the image cross fades in the game
 %CONVERT% pattern_typewriter_dithering                  :: The dithering pattern used to make the paper out of the typewriter appear darker
-
-:: The 12x14 font
-SET PARAMS=-u1 -m0 -f0 -o4;Font
-%CONVERT% font_palatino_linotype_italics_size_10        :: The font used to draw the speech bubble (without any special characters)
-%CONVERT% font_palatino_linotype_italics_size_10_fr     :: The font used to draw the speech bubble (variant with French special characters)
 
 :: Arrow block (Temp file that needs to be copied in the display.s file)
 SET PARAMS=-u1 -m0 -f0 -o4;ArrowBlockMasks

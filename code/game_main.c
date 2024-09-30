@@ -549,6 +549,7 @@ void Initializations()
 
 	// Load the charset
 	LoadFileAt(LOADER_FONT_6x8,0xb500);
+	LoadFileAt(LOADER_FONT_PALATINO_12x14,gFont12x14);
 
 	// Perform some initializations for the text display system
 	ComputeFancyFontWidth();

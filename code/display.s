@@ -1323,14 +1323,6 @@ _gFont12x14Kerning
 #endif
   .byt 0           ; End of table
 
-; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
-_gFont12x14
-#ifdef LANGUAGE_FR    
-#include "..\build\files\font_palatino_linotype_italics_size_10_fr.s"
-#else
-#include "..\build\files\font_palatino_linotype_italics_size_10.s"
-#endif
-_Font12x14End
 
 ; 16 block of 6x6 pixels arranged vertically, 6x96 pixels bitmap
 ; 13 values on the top for ordered dither

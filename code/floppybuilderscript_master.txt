@@ -104,6 +104,13 @@ AddFile ..\build\files\font_6x8_typewriter.fnt 		; 9900=STD, 9D00=ALT
 #endif
 AddDefine LOADER_FONT_TYPEWRITER_6x8 {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\font_palatino_linotype_italics_size_10_fr.fnt    ; The font used to draw the speech bubble (variant with French special characters)
+#else // LANGUAGE_EN
+AddFile ..\build\files\font_palatino_linotype_italics_size_10.fnt       ; The font used to draw the speech bubble (without any special characters)
+#endif
+AddDefine LOADER_FONT_PALATINO_12x14 {FileIndex}
+
 ;
 ; Some reserved sectors
 ;
