@@ -97,7 +97,6 @@ _gTextItemYellowPowder            .byt "du soufre",0
 _gTextItemPetrol                  .byt "du pétrole",0
 _gTextItemWater                   .byt "de l'eau",0
 // Normal items
-//_gTextItemAlarmSwitch             .byt "un bouton en position marche",0
 _gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
 _gTextItemTwine                   .byt "un peu de _ficelle",0
@@ -117,7 +116,6 @@ _gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
 _gTextItemHose                    .byt "un _tuyau d'arrosage",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
-_gTextItemAcidBurn                .byt "une brulure d'acide",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une _mêche",0
 _gTextItemPowderMix               .byt "un _mix grumeleux",0
@@ -154,7 +152,6 @@ _gTextItemYellowPowder            .byt "some _sulphur",0
 _gTextItemPetrol                  .byt "some _petrol",0                        
 _gTextItemWater                   .byt "some _water",0                         
 // Normal items
-//_gTextItemAlarmSwitch             .byt "a button in ON position",0
 _gTextItemOpenPanel               .byt "an open _panel on wall",0              
 _gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0           
 _gTextItemTwine                   .byt "some _twine",0                         
@@ -174,7 +171,6 @@ _gTextItemRollOfToiletPaper       .byt "a toilet _roll",0
 _gTextItemHose                    .byt "a garden _hose",0                        
 _gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
-_gTextItemAcidBurn                .byt "an acid burn",0                       
 _gTextItemYoungGirl               .byt "a young _girl",0                        
 _gTextItemFuse                    .byt "a _fuse",0                             
 _gTextItemPowderMix               .byt "a rough powder _mix",0
@@ -367,10 +363,10 @@ _gDescriptionDarkAlley
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(145,90,0,"Rats, graffittis,")
+    _BUBBLE_LINE(145,90,0,"Rats, graffitis,")
     _BUBBLE_LINE(160,103,0,"et seringues.")
 #else
-    _BUBBLE_LINE(153,85,0,"Rats, graffitti,")
+    _BUBBLE_LINE(153,85,0,"Rats, graffiti,")
     _BUBBLE_LINE(136,98,0,"and used syringes.")
 #endif    
 
@@ -801,7 +797,7 @@ _gDescriptionGreenHouse
     .byt 4,17,0,34,"Usage thérapeutique",34,0
 #else
     _BUBBLE_LINE(4,96,0,"Obviously for")
-    .byt 4,107,1,34,"Therapeutic use",34,0
+    .byt 4,107,1,34,"therapeutic use",34,0
 #endif
     END
 .)
@@ -3642,7 +3638,9 @@ _UseAcid
 
     ; Cut scene, Action!
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID,"Step 1: Pour the acid")
-    WAIT(50*2)
+    WAIT(50)
+    PLAY_SOUND(_Acid)
+    WAIT(50)
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING,"Step 2: Let it burn")
     WAIT(50*2)
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Result: A large hole!")

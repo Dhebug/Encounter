@@ -100,6 +100,7 @@ extern char WaterDrip[];
 extern char FlickeringLight[];
 extern char BirdChirp1[];
 extern char BirdChirp2[];
+extern char Acid[];
 
 extern unsigned int PsgfreqA;
 extern unsigned int PsgfreqB;
