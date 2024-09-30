@@ -215,11 +215,11 @@ SET TARGET_EXTENSION=.hir
 
 
 :: Music
-bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_jingle.aks code\splash_music.s
-bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music.s
-bin\SongToAky --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter.s
+SET CONVERT=CALL bin\_ArkosConv
 
-bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_jingle.aks code\splash_music_events.s
+%CONVERT% music_jingle splash_music
+%CONVERT% music_intro intro_music
+%CONVERT% music_typewriter intro_music_typewriter
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_intro.aks code\intro_music_events.s
 bin\SongToEvents --sourceProfile 6502acme -spbyte ".byt" -spword ".word" data\music_typewriter.aks code\intro_music_typewriter_events.s
 
