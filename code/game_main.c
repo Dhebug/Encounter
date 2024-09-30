@@ -478,6 +478,7 @@ WORDS ProcessAnswer()
 		// Quit the game
 		PlaySound(KeyClickHData);
         UnlockAchievement(ACHIEVEMENT_GAVE_UP);
+        gGameOverCondition = e_SCORE_GAVE_UP;
 		return e_WORD_QUIT;
     }
 
