@@ -19,6 +19,9 @@ IrqTasks50hz
     ; Process keyboard
     jsr ReadKeyboard
 
+    ; Call the music player
+    jsr _PlayMusicFrame
+
     ; Update the sound engine
     jsr SoundUpdate50hz
             

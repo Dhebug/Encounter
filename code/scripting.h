@@ -44,8 +44,10 @@
 #define COMMAND_PLAY_SOUND      33
 #define COMMAND_WAIT_RANDOM     34
 #define COMMAND_START_CLOCK     35
-#define COMMAND_STOP_CLOCK      36     
-#define _COMMAND_COUNT          37
+#define COMMAND_STOP_CLOCK      36
+#define COMMAND_PLAY_MUSIC      37
+#define COMMAND_STOP_MUSIC      38
+#define _COMMAND_COUNT          39
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -120,6 +122,8 @@
 
 // Sound 
 #define PLAY_SOUND(sound)                            .byt COMMAND_PLAY_SOUND,<sound,>sound
+#define PLAY_MUSIC(music)                            .byt COMMAND_PLAY_MUSIC,<music,>music
+#define STOP_MUSIC()                                 .byt COMMAND_STOP_MUSIC
 
 
 // Audio commands

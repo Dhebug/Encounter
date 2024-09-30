@@ -59,6 +59,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_WAIT_RANDOM
     .word _ByteStreamCommand_START_CLOCK
     .word _ByteStreamCommand_STOP_CLOCK
+    .word _ByteStreamCommand_PLAY_MUSIC
+    .word _ByteStreamCommand_STOP_MUSIC
 
     
 ; _param0=pointer to the new byteStream
@@ -420,6 +422,45 @@ _ByteStreamCommand_PLAY_SOUND
     jsr _PlaySoundAsm
     lda #2
     jmp _ByteStreamMoveByA
+.)
+
+
+;
+; .byt COMMAND_PLAY_MUSIC,<music,>music
+; Music format is:
+; - Pointer to event (16 bit)
+; - Channel mask (8 bit)
+; - Arkos music file
+; - Arkos event file
+;
+_ByteStreamCommand_PLAY_MUSIC
+.(
+    ldy #0
+    lda (_gCurrentStream),y       ; Get the sound file address (low byte)
+    sta _param0+0
+    iny
+    lda (_gCurrentStream),y       ; Get the sound file address (high byte)
+    sta _param0+1
+    iny
+    ; MusicMixerMask=music[2]
+    lda (_param0),y
+    sta _MusicMixerMask
+    clc
+    lda _param0+0
+    adc #3
+    sta _param0+0
+    lda _param0+1
+    adc #0
+    sta _param0+1
+
+    jsr _StartMusic
+    lda #2
+    jmp _ByteStreamMoveByA
+.)
+
+_ByteStreamCommand_STOP_MUSIC
+.(
+    jmp _EndMusic
 .)
 
 ; .byt COMMAND_DO_ONCE,1,<label,>label
