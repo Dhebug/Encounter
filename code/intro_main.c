@@ -799,15 +799,15 @@ void main()
 		}
 #endif
 
-#ifdef INTRO_SHOW_STORY
-		if (DisplayStory())
+#ifdef INTRO_SHOW_ACHIEVEMENTS
+		if (DisplayAchievements())
 		{
 			break;
 		}
 #endif
 
-#ifdef INTRO_SHOW_ACHIEVEMENTS
-		if (DisplayAchievements())
+#ifdef INTRO_SHOW_STORY
+		if (DisplayStory())
 		{
 			break;
 		}
