@@ -479,6 +479,7 @@ WORDS ProcessAnswer()
 		PlaySound(KeyClickHData);
         UnlockAchievement(ACHIEVEMENT_GAVE_UP);
         gGameOverCondition = e_SCORE_GAVE_UP;
+        gScore -= MALUS_POINTS_GIVE_UP;
 		return e_WORD_QUIT;
     }
 

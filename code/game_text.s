@@ -281,6 +281,7 @@ _gDescriptionMarketPlace
         SET_CUT_SCENE(1)
         STOP_CLOCK
         LOAD_MUSIC(LOADER_MUSIC_VICTORY)
+        INCREASE_SCORE(POINTS_WON_THE_GAME)
         FADE_BUFFER();                            ; Show the market place
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
@@ -898,6 +899,7 @@ _gDescriptionTiledPatio
 
     ; Draw the girl if she's here
     JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
+        INCREASE_SCORE(POINTS_MET_THE_GIRL)
         SET_ITEM_FLAGS(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED)                   ; From now on she will follow us
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(23,0)
@@ -2935,6 +2937,7 @@ _OpenPanicRoomWindow
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
         UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
+        INCREASE_SCORE(POINTS_OPENED_PANIC_ROOM_WINDOW)
         ; The description will get updated automatically by _gDescriptionPanicRoomDoor
         GOSUB(_ShowOpeningWindow)
 
@@ -3337,6 +3340,7 @@ _UseRope
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
                 SET_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO) ; The girl is now outside on the patio
                 SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO)      ; And we move the rope outside
+                INCREASE_SCORE(POINTS_GIRL_USES_ROPE)
                 GOSUB(_ShowGirlAtTheWindow)                          ; We show the girl...
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("On y va !!!")
@@ -3349,7 +3353,7 @@ _UseRope
                         _BUFFER(20,0)
 
                 ; Draw the girl going down the rope
-                BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,13,79)    ; Draw the girl with the    message
+                BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,13,79)    ; Draw the girl with the slide message
                         _IMAGE(0,49)
                         _BUFFER(13,49)
                 FADE_BUFFER() 
@@ -3616,6 +3620,7 @@ _UseClay
 
     SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_PANIC_ROOM_DOOR)                ; The clay is now in the room
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_ATTACHED)                      ; The clay is now attached to the door
+    INCREASE_SCORE(POINTS_USED_CLAY)
 
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY,"A real piece of art!")
     INFO_MESSAGE("Ok, that should be good enough...")
@@ -3854,6 +3859,7 @@ thug_knife
     // - We are in front of the panic room and the hole was made
     JUMP_IF_FALSE(acid_hole_knife,CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR))
     JUMP_IF_FALSE(acid_hole_knife,CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR))
+        INCREASE_SCORE(POINTS_GAVE_KNIFE_TO_GIRL)
         JUMP(_CommonGaveTheKnifeToTheGirl)
 acid_hole_knife    
 
@@ -3926,6 +3932,7 @@ thug_snooker_cue
                 GOSUB(_ShowBrokenWindow)
                 SET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED)   ; The window is now broken
                 SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_GONE_FOREVER)     ; We don't need the cue anymore
+                INCREASE_SCORE(POINTS_SMASHED_WINDOW_WITH_CUE)
             ELSE(window_open,window_closed)
                 ; The window is closed
 #ifdef LANGUAGE_FR       

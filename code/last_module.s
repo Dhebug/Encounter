@@ -34,7 +34,7 @@ _gFont12x14Width      .dsb 95
 ; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild
 ; the complete shifted graphics
 _gShiftBuffer         .dsb 64*2*6           ; 768 bytes
-_free_to_use_9b5f     .dsb 1024-768-95
+_free_to_use_9b5f     ;.dsb 1024-768-95
 #endif
 
 * = $9C00             ; ALT charset for HIRES mode: 1024 bytes

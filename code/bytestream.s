@@ -764,21 +764,26 @@ _ByteStreamCommandUnlockAchievement
     jmp _ByteStreamMoveByA
 .)
 
-; .byt COMMAND_INCREASE_SCORE,points
+; .byt COMMAND_INCREASE_SCORE,<points,>points
 _ByteStreamCommandIncreaseScore
 .(
-    ldy #0
-    lda (_gCurrentStream),y             // Number of points
     clc
+
+    ldy #0
+    lda (_gCurrentStream),y             // Number of points (low)
     adc _gScore+0                       // Add to existing score
     sta _gScore+0
-
     lda #0
     sta (_gCurrentStream),y             // Resets the score value to make sure we don't give points twice if the command is called twice
+
+    iny
+    lda (_gCurrentStream),y             // Number of points (high)
     adc _gScore+1
     sta _gScore+1
+    lda #0
+    sta (_gCurrentStream),y             // Resets the score value to make sure we don't give points twice if the command is called twice
 
-    lda #1
+    lda #2
     jmp _ByteStreamMoveByA
 .)
 
