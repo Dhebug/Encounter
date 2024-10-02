@@ -8,6 +8,8 @@
 #pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i
 
 _gTextHighScoreAskForName   .byt "Nouveau top score ! Votre nom SVP ?",0
+_gTextHighScoreInvalidName  .byt "Entre 1 et 15 caractères",0
+
 _gTextThanks   
     .byt TEXT_CRLF,TEXT_CRLF
     .byt 3,10,"Merci d'avoir joué à Encounter Redux",TEXT_CRLF
@@ -75,7 +77,8 @@ _gTextGreetings
     .byt 2,"     DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
     .byt TEXT_END
 #else
-_gTextHighScoreAskForName   .byt "New highscore! Your name please?",0
+_gTextHighScoreAskForName   .byt "New highscore! Your name please?  ",0
+_gTextHighScoreInvalidName  .byt "Choose between 1 and 15 characters",0
 
 _gTextThanks   
     .byt TEXT_CRLF,TEXT_CRLF

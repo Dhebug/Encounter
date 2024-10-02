@@ -42,6 +42,7 @@ extern unsigned char gAchievementsChanged;      // Moved to the last 32 bytes so
 extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so it can be shared with the other modules
 
 extern const char gTextHighScoreAskForName[];   // "New highscore! Your name please?"
+extern const char gTextHighScoreInvalidName[];  // Between 0 and 15 characters
 
 extern const char gTextThanks[];
 extern const char gTextCredits[];

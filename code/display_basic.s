@@ -13,6 +13,7 @@ _gPrintWidth        .byt 40
 _gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
 _gShowHighlights    .byt 0
 
+_gStatusMessageLocation .word $bb80+40*22
 
 _spaceCounter  .dsb 1
 _wasTruncated  .dsb 1

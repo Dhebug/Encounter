@@ -627,6 +627,7 @@ void main()
 	Initializations();	
 
 #ifdef ENABLE_GAME
+    gStatusMessageLocation = (unsigned char*)0xbb80+40*22;
 	AskInput(gTextAskInput,ProcessAnswer,1);
 #else
     // Directly go to the end credits    

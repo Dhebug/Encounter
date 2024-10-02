@@ -51,6 +51,7 @@ extern unsigned char gBitPixelMask[];        // Bitmap with each possible combin
 extern unsigned char gBitPixelMaskLeft[];    // Bitmap with each possible left endings - used to draw horizontal segments
 extern unsigned char gBitPixelMaskRight[];   // Bitmap with each possible right endings - used to draw horizontal segments
 
+extern unsigned char* gStatusMessageLocation;  // Where the prompt and error messages are displayed
 extern unsigned char* gDrawAddress;
 extern unsigned char* gDrawSourceAddress;
 extern unsigned char* gDrawPatternAddress;

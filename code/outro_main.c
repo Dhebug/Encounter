@@ -34,7 +34,7 @@ char ProcessFoundToken(WORDS wordId)
 
 void PrintStatusMessageAsm()
 {
-   sprintf((char*)0xbb80+40*22+1,"%c%s",param1.uchar,param0.ptr);
+   sprintf(gStatusMessageLocation+1,"%c%s",param1.uchar,param0.ptr);
 }
 
 
@@ -58,6 +58,8 @@ void HandleHighScore()
 
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		
+        char nameOk;
+
 		// Check if our score is higher than the next one in the list
 		score=ptrScore->score-32768;
 		if (gScore>score)
@@ -72,15 +74,28 @@ void HandleHighScore()
 			}
 
 			// Ask the player their name
-			AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
+            do
+            {              
+                nameOk=0;  
+                gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
+                AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
+                if ( (gInputBufferPos==0) || (gInputBufferPos>15) )
+                {
+                    PrintStatusMessage(1,gTextHighScoreInvalidName);
+                    WaitFrames(50);
+                }
+                else
+                {
+                    nameOk=1;
+                }
+
+            }
+            while (!nameOk);
+
+
 			ptrScore->score = gScore+32768;
 			ptrScore->condition = gGameOverCondition;   // Need to get that from the game
 			memset(ptrScore->name,' ',15);              // Fill the entry with spaces
-			if (gInputBufferPos>15)
-			{
-				// Just copy the first 16 characters if it's too long
-				gInputBufferPos=15;
-			}
 			// Force the name to the right to be formatted like the rest of the default scores
 			memcpy(ptrScore->name+15-gInputBufferPos,gInputBuffer,gInputBufferPos);
 

@@ -118,7 +118,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
             PrinterSendCrlf();
 #endif    
 			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
-			memset((char*)0xbb80+40*23+1,' ',39);
+			memset(gStatusMessageLocation+40+1,' ',39);
 			gAskQuestion=0;
 		}
 
@@ -131,7 +131,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
                 return callbackOutput;
             }
 			k=ReadKeyNoBounce();
-			sprintf((char*)0xbb80+40*23+1,"%c>%s%c           ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
+			sprintf(gStatusMessageLocation+40+1,"%c>%s%c           ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
 		}
 		while (k==0);
 

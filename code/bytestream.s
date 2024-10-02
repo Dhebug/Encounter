@@ -945,10 +945,10 @@ _PrintStatusMessageAsm
     ;jmp _PrintStatusMessageAsm
 .(
     ; char* ptrScreen=(char*)0xbb80+40*22;
-    lda #<($bb80+40*22)
+    lda _gStatusMessageLocation+0
     sta tmp0+0
     sta tmp1+0
-    lda #>($bb80+40*22)
+    lda _gStatusMessageLocation+1
     sta tmp0+1
     sta tmp1+1
 +_PrintStatusMessageAddr
