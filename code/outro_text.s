@@ -66,9 +66,9 @@ _gTextGreetings
     .byt 6,"Salutations à tous ceux qui continuent",TEXT_CRLF
     .byt 6,"à produire des logiciels pour l'Oric:",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3," Rax - Iss - Andre C - Fabrizio Caruzo",TEXT_CRLF
+    .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
-    .byt 5,"    Xeron - h0ffman - Inufuto - Kyex",TEXT_CRLF
+    .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
     .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
     .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
     .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
@@ -136,9 +136,9 @@ _gTextGreetings
     .byt 6," Greetings to all the people who keep",TEXT_CRLF
     .byt 6,"releasing great software for the Oric:",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3," Rax - Iss - Andre C - Fabrizio Caruzo",TEXT_CRLF
+    .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
-    .byt 5,"    Xeron - h0ffman - Inufuto - Kyex",TEXT_CRLF
+    .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
     .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
     .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
     .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
