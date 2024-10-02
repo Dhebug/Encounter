@@ -249,10 +249,14 @@ ArrowDown ; Patch at 18,129
 
 _SuccessMusic
 .(
+#ifdef USE_MUSIC_EVENTS    
     .dw events
+#endif    
     .byt 1+2+4+8+16+32        ; All the three channels are used
 #include "success_music.s"
+#ifdef USE_MUSIC_EVENTS
 events
 #include "success_music_events.s"
+#endif
 .)
 

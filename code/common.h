@@ -72,7 +72,11 @@ extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded 
 #endif
 
 #ifdef ENABLE_MUSIC
+#ifdef USE_MUSIC_EVENTS
 #define PlayMusic(music)                { param0.ptr=music+1+2;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[2];asm("jsr _StartMusic"); }
+#else
+#define PlayMusic(music)                { param0.ptr=music+1;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[0];asm("jsr _StartMusic"); }
+#endif
 #else
 #define PlayMusic(music)                { }
 #endif

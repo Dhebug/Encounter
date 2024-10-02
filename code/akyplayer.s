@@ -27,8 +27,10 @@
 	.zero
 
 ptr_music           .dsb 2   ; = $02      ; +$03
+#ifdef USE_MUSIC_EVENTS
 ptr_music_events    .dsb 2
 event_counter       .dsb 2
+#endif
 
 pt2_DT              .dsb 2   ;= $04      ; +$05
 
@@ -124,7 +126,7 @@ _MusicEvent     .byt 0          ; Value from the event track for the music
 
 
 ; =============================================================================
-
+#ifdef USE_MUSIC_EVENTS
 ProcessEvent
 .(
     ;jmp ProcessEvent
@@ -181,6 +183,7 @@ end_of_sequence
     sta ptr_music_events+1
     jmp FetchNextEvent
 .)
+#endif
 
 ; Initializes the player.
 ; _param0+0/+1 contains the pointer to the song header
@@ -193,13 +196,13 @@ _StartMusic
     sta ptr_music
     lda _param0+1
     sta ptr_music+1
-
+#ifdef USE_MUSIC_EVENTS
     lda _param1+0           ; And the pointer to the events
     sta ptr_music_events+0
     lda _param1+1
     sta ptr_music_events+1
     jsr FetchNextEvent
-
+#endif
     ;Skips the header.
     ldy #1                                             ;Skips the format version.
     lda (ptr_music),Y                                      ;Channel count.
@@ -260,7 +263,9 @@ _EndMusic
 _PlayMusicFrame
 auto_play_stop 
     rts
+#ifdef USE_MUSIC_EVENTS    
     jsr ProcessEvent
+#endif    
     lda #1
     sta _PsgNeedUpdate
             

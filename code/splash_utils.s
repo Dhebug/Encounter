@@ -77,11 +77,15 @@ loop
 #ifdef ENABLE_MUSIC
 _JingleMusic
 .(
+#ifdef USE_MUSIC_EVENTS    
     .dw events
+#endif    
     .byt 1+2+4+8+16+32        ; All the three channels are used
 #include "splash_music.s"
+#ifdef USE_MUSIC_EVENTS
 events
 #include "splash_music_events.s"
+#endif
 .)
 #endif
 
