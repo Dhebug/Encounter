@@ -60,6 +60,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_START_CLOCK
     .word _ByteStreamCommand_STOP_CLOCK
     .word _ByteStreamCommand_PLAY_MUSIC
+    .word _ByteStreamCommand_LOAD_MUSIC
     .word _ByteStreamCommand_STOP_MUSIC
 
     
@@ -456,6 +457,34 @@ _ByteStreamCommand_PLAY_MUSIC
     jsr _StartMusic
     lda #2
     jmp _ByteStreamMoveByA
+.)
+
+
+; .byt COMMAND_LOAD_MUSIC,musicId
+_ByteStreamCommand_LOAD_MUSIC
+.(
+	; unsigned char loaderId = *gCurrentStream++;
+    jsr _ByteStreamGetNextByte
+    cpx _gFlagCurrentMusicFile
+    beq music_already_loaded             ; We only load the music if it's not already the one in memory
+    
+    ; Load the requested bitmap
+    stx _gFlagCurrentMusicFile
+    stx _LoaderApiEntryIndex
+    lda #<_ArkosMusic
+    sta _LoaderApiAddressLow
+    lda #>_ArkosMusic
+    sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory    
+
+music_already_loaded
+    lda #1+2+4+8+16+32        ; All the three channels are used
+    sta _MusicMixerMask
+    lda #<_ArkosMusic
+    sta _param0+0
+    lda #>_ArkosMusic
+    sta _param0+1
+    jmp _StartMusic
 .)
 
 _ByteStreamCommand_STOP_MUSIC

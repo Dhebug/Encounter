@@ -421,6 +421,18 @@ AddDefine LOADER_SPRITE_HOLE_WITH_CUE {FileIndex}
 AddFile ..\build\files\masked_top_window.msk
 AddDefine LOADER_SPRITE_TOP_WINDOW {FileIndex}
 
+;
+; Music
+;
+AddFile ..\build\files\success_music.mus
+AddDefine LOADER_MUSIC_SUCCESS {FileIndex}
+
+AddFile ..\build\files\you_won_music.mus
+AddDefine LOADER_MUSIC_VICTORY {FileIndex}
+
+AddFile ..\build\files\game_over_music.mus
+AddDefine LOADER_MUSIC_GAME_OVER {FileIndex}
+
 
 ;
 ; The scores: They should be uncompressed because they are going to be overwritten

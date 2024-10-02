@@ -217,10 +217,21 @@ SET TARGET_EXTENSION=.hir
 :: Music
 SET CONVERT=CALL bin\_ArkosConv
 
+:: These are exported as source code and compiled with the executable
 %CONVERT% music_jingle splash_music
 %CONVERT% music_intro intro_music
 %CONVERT% music_typewriter intro_music_typewriter
-%CONVERT% music_construction_complete success_music
+
+:: These are exported as binary files and loaded dynamicaly by the scripting system
+:: The export address should be double checked with the map file
+SET TARGET=build\files
+SET TARGET_EXTENSION=.mus
+SET EXPORT_ADDRESS=0xf3a4  
+
+%CONVERT% music_construction_complete success_music 2000
+%CONVERT% music_game_over_good you_won_music 2000
+%CONVERT% music_game_over_bad game_over_music 2000
+
 
 
 set OSDK_BUILD_END=%time%

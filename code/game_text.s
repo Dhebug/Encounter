@@ -280,6 +280,7 @@ _gDescriptionMarketPlace
         ; Victory!
         SET_CUT_SCENE(1)
         STOP_CLOCK
+        LOAD_MUSIC(LOADER_MUSIC_VICTORY)
         FADE_BUFFER();                            ; Show the market place
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
@@ -291,6 +292,7 @@ _gDescriptionMarketPlace
         _BUBBLE_LINE(70,80,0,"Time to go home!")
 #endif    
         WAIT(50*4)                                ; Wait a couple seconds
+        STOP_MUSIC();
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")
         WAIT(50*2)                                ; Wait a couple seconds
         DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED,"The Daily Telegraph, September 30th")
@@ -322,7 +324,7 @@ girl_not_here
         ; First we show the map of where the player needs to go
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
-        PLAY_MUSIC(_SuccessMusic)
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
         FADE_BUFFER();
         INFO_MESSAGE("I'll have to come back here...")
         WAIT(50*2)
@@ -497,6 +499,7 @@ cannot_escape_pit    ; The player has no way to escape the pit
 #else    
     _BUBBLE_LINE(82,94,0,"from outside")
 #endif    
+    LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(50*2)                                      ; Wait a couple seconds for dramatic effect
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)   ; Achievement!
     GAME_OVER(e_SCORE_FELL_INTO_PIT)                ; The game is now over
@@ -1908,6 +1911,7 @@ _gDescriptionGameOverLost
     DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
     FADE_BUFFER()
+    STOP_MUSIC();
     END
 _EndSceneScripts
 
@@ -2020,7 +2024,7 @@ _CombineSulfurWithSalpetre
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
 
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
-    PLAY_MUSIC(_SuccessMusic)
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("It's mixed...")
     WAIT(50*2)
     INFO_MESSAGE("...but there are some large clumps")
