@@ -50,3 +50,4 @@ extern const char gTextGameDescription[];
 extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];
 
+extern const char gTextBaseScore[];

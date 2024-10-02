@@ -38,23 +38,83 @@ void PrintStatusMessageAsm()
 }
 
 
+// See data/scores.s for some useful comments
+typedef struct 
+{
+    int bonus_value;
+    char character_offset;
+} TimeBonusInfo;
+
+// "1:59:39"
+// Basically we count 0.5 point per second
+TimeBonusInfo TimeBonusInfoTable[]=
+{
+    { 1800, 0},  // Hours
+    {  300, 2},  // 10 of minutes
+    {   30, 3},  // Minutes
+    {    5, 5},  // 10s of seconds
+    {    1, 6},  // Seconds (should be 0.5, but feeling generous)
+    {    0, 0},
+};
+
 void HandleHighScore()
 {
 	int entry;
 	int score;
 	score_entry* ptrScore=gHighScores;
+    char* ptrTimeString=(char*)0xbb80+16*40+31;
+    TimeBonusInfo* timeBonusInfoPtr=TimeBonusInfoTable;
+    char flip=0;
 
 	// Load the highscores from the disk
 	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
 
 #if 0  // Just to test the different ending conditions
+    gScore = 150;
     gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
+  	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,1);   // "Score:"
+  	sprintf(ptrTimeString,"1:59:39");                           // "1:59:39"
 #endif
     // Show a congratulation/failure message related to their actual ending condition
     gPrintWidth = 40;
     gPrintTerminator=0;    
-    PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*17);
+    PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*18);
 
+    // Show the score in yellow to move the atention to it
+    WaitFrames(50);
+    sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
+    WaitFrames(50);
+
+    // Add the time as bonus points (half a point per remaining second)
+    do
+    {
+        char offset=timeBonusInfoPtr->character_offset;
+        if (ptrTimeString[offset]>'0')
+        {
+            ptrTimeString[offset]--;
+            gScore+=timeBonusInfoPtr->bonus_value;
+            if (flip)   
+            {
+                PlaySound(KeyClickLData);
+            }
+            else        
+            {
+                PlaySound(KeyClickHData);
+            }
+            flip=1-flip;
+            WaitFrames(5);
+        }
+        else
+        {
+            ++timeBonusInfoPtr;
+        }
+        sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
+    }
+    while (timeBonusInfoPtr->bonus_value);
+
+    // Erase the remaining time
+    memset(ptrTimeString,32,7);
+    WaitFrames(50*2);
 
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		

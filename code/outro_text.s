@@ -256,3 +256,9 @@ _gScoreConditionsArray
   .word _Text_SCORE_SIMPLY_VANISHED
   .word _Text_SCORE_GAVE_UP        
 
+
+// Bonus texts
+#ifdef LANGUAGE_FR
+#else
+_gTextBaseScore .byt "%cScore:%d",0
+#endif

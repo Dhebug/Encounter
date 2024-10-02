@@ -12,23 +12,37 @@
 
 .text
 
+// Bonus points calculation:
+// If the player quits immediately, they current time is 2:00:00 = 7200 seconds
+// We take half of that as bonus points, so maximum time bonus is 3600 points
+//
+// If the player saved the girl, they had to:
+// -  500 - Get rid of the dog
+// -  500 - Get rid ot the thug
+// - 1000 - Meet the girl on the patio
+// - 1000 - Reach the end 
+// ----------------------
+// - 3000 - Total + bunch of things
+//
+// Not sure if we can reach 5000 by doing all the extra stuff, need to play test
+//
 StartScores
- ENTRY(1, 900,"    Lt. Columbo")
- ENTRY(1, 850,"    Miss Marple")
- ENTRY(1, 800,"Sherlock Holmes")
- ENTRY(6, 750,"   Mma Ramotswe")
- ENTRY(2, 700,"       Wishbone")
- ENTRY(6, 650," Hercule Poirot")
- ENTRY(3, 600," Harry Callahan")
- ENTRY(4, 550,"  Veronica Mars")
- ENTRY(6, 500,"Sergeant Zailer")
- ENTRY(6, 450,"    Ben Matlock")
- ENTRY(6, 400,"      Sam Spade")
- ENTRY(7, 350,"   Robert Goren")
- ENTRY(4, 300,"     Nancy Drew")
- ENTRY(6, 250,"  Alex Delaware")
- ENTRY(3, 200,"  Myron Bolitar")
- ENTRY(2, 150,"     Nero Wolfe")
+ ENTRY(1,5000,"    Lt. Columbo")
+ ENTRY(1,4500,"    Miss Marple")
+ ENTRY(1,3000,"Sherlock Holmes")
+ ENTRY(6,2500,"   Mma Ramotswe")
+ ENTRY(2,2000,"       Wishbone")
+ ENTRY(6,1900," Hercule Poirot")
+ ENTRY(3,1800," Harry Callahan")
+ ENTRY(4,1700,"  Veronica Mars")
+ ENTRY(6,1600,"Sergeant Zailer")
+ ENTRY(6,1500,"    Ben Matlock")
+ ENTRY(6,1400,"      Sam Spade")
+ ENTRY(7,1300,"   Robert Goren")
+ ENTRY(4,1200,"     Nancy Drew")
+ ENTRY(6,1100,"  Alex Delaware")
+ ENTRY(3, 900,"  Myron Bolitar")
+ ENTRY(2, 500,"     Nero Wolfe")
  ENTRY(5, 100," Philip Marlowe")
  ENTRY(7,  50,"      Joe Hardy")
  ENTRY(7,   0,"    Frank Hardy")
