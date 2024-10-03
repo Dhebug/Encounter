@@ -67,11 +67,25 @@ TimeBonusInfo TimeBonusInfoTable[]=
 };
 
 char* ptrTimeString=(char*)0xbb80+16*40+31;
+char flip=0;
+
+void PlayFlipClick()
+{
+    if (flip)   
+    {
+        PlaySound(KeyClickLData);
+    }
+    else        
+    {
+        PlaySound(KeyClickHData);
+    }
+    flip=1-flip;
+}
+
 
 void ApplyTimeBonus()
 {
     TimeBonusInfo* timeBonusInfoPtr=TimeBonusInfoTable;
-    char flip=0;
 
     // Show the score in yellow to move the atention to it
     WaitFrames(50);
@@ -86,15 +100,7 @@ void ApplyTimeBonus()
         {
             ptrTimeString[offset]--;
             gScore+=timeBonusInfoPtr->bonus_value;
-            if (flip)   
-            {
-                PlaySound(KeyClickLData);
-            }
-            else        
-            {
-                PlaySound(KeyClickHData);
-            }
-            flip=1-flip;
+            PlayFlipClick();
             WaitFrames(5);
         }
         else
@@ -136,6 +142,7 @@ void ShowNewAchievements()
             if (achievementByte & (~gSaveGameFile.achievements[achievementOffset]) )
             {
                 sprintf((char*)0xbb80+40*24,gTextNewAchievement,5,3,achievementMessage,0);
+                PlayFlipClick();
                 WaitFrames(50*2);
             }             
         }
