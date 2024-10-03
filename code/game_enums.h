@@ -311,4 +311,5 @@
 #define POINTS_SMASHED_WINDOW_WITH_CUE   500
 #define POINTS_GIRL_USES_ROPE            500
 
-#define MALUS_POINTS_GIVE_UP             7200
+#define MALUS_POINTS_GAME_OVER           1800
+#define MALUS_POINTS_GIVE_UP             3600

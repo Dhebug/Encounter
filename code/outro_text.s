@@ -260,5 +260,5 @@ _gScoreConditionsArray
 // Bonus texts
 #ifdef LANGUAGE_FR
 #else
-_gTextBaseScore .byt "%cScore:%d",0
+_gTextBaseScore .byt "%cScore:%d  ",0     ; The space is required is the earlier score was negative
 #endif

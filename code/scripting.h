@@ -91,6 +91,7 @@
 
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
+#define DECREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,<(65536-points),>(65536-points)
 #define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,<points,>points
 #define GAME_OVER(condition)                 .byt COMMAND_GAME_OVER,condition
 
