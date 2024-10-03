@@ -177,65 +177,65 @@ _gTextGreetings
 ; Results
 ;
 #ifdef LANGUAGE_FR
-_Text_SCORE_SOLVED_THE_CASE      .byt 2,"R{solu le cas",0
-_Text_SCORE_MAIMED_BY_DOG        .byt 5,"Mutil{ par un chien",0
-_Text_SCORE_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
-_Text_SCORE_FELL_INTO_PIT        .byt 3,"Tomb{ dans un trou",0
-_Text_SCORE_TRIPPED_ALARM        .byt 3,"D{clench{ l'alarme",0
-_Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqu{ de temps",0
-_Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
-_Text_SCORE_SIMPLY_VANISHED      .byt 7,"A disparu !",0
-_Text_SCORE_GAVE_UP              .byt 5,"A abandonn{...",0
+_Test_DETAILS_SOLVED_THE_CASE      .byt 2,"R{solu le cas",0
+_Test_DETAILS_MAIMED_BY_DOG        .byt 5,"Mutil{ par un chien",0
+_Test_DETAILS_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
+_Test_DETAILS_FELL_INTO_PIT        .byt 3,"Tomb{ dans un trou",0
+_Test_DETAILS_TRIPPED_ALARM        .byt 3,"D{clench{ l'alarme",0
+_Test_DETAILS_RAN_OUT_OF_TIME      .byt 6,"A manqu{ de temps",0
+_Test_DETAILS_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
+_Test_DETAILS_SIMPLY_VANISHED      .byt 7,"A disparu !",0
+_Test_DETAILS_GAVE_UP              .byt 5,"A abandonn{...",0
 #else // LANGUAGE_EN
-_Text_SCORE_SOLVED_THE_CASE      
+_Test_DETAILS_SOLVED_THE_CASE      
     .byt 2,"Congratulations, you solved the case!",TEXT_CRLF,TEXT_CRLF
     .byt 3,"The hostage has been freed and is now",TEXT_CRLF
     .byt 3,"back with her family. Well done you!",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_MAIMED_BY_DOG        
+_Test_DETAILS_MAIMED_BY_DOG        
     .byt 5,"You probably tried your best, but you",TEXT_CRLF
     .byt 5,"were no match for the four legged beast",TEXT_CRLF
     .byt 5,"and",1,"barely made it alive!",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_SHOT_BY_THUG        
+_Test_DETAILS_SHOT_BY_THUG        
     .byt 1,"You've learnt (a bit late) that waking",TEXT_CRLF
     .byt 1,"up a thug armed with a big gun was not",TEXT_CRLF
     .byt 1,"a super smart idea.    ",3,"Rest In Pieces",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_FELL_INTO_PIT        
+_Test_DETAILS_FELL_INTO_PIT        
     .byt 6,"You fell into the pit and were not able",TEXT_CRLF
     .byt 6,"to climb up. By the time you got out",TEXT_CRLF
     .byt 6,"the hostage was gone:",1,"You were too late",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_TRIPPED_ALARM        
+_Test_DETAILS_TRIPPED_ALARM        
     .byt 3,"You would expect an investigator to see",TEXT_CRLF
     .byt 3,"the warning stickers and the sensors on",TEXT_CRLF
     .byt 3,"the windows,",5,"don't you agree?",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_RAN_OUT_OF_TIME      
+_Test_DETAILS_RAN_OUT_OF_TIME      
     .byt 5,"You had two hours. And you were warned.",TEXT_CRLF
     .byt 5,"You still managed to run out of time!",TEXT_CRLF
     .byt 5,"Would you happen to be a",3,"programmer?",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_BLOWN_INTO_BITS      
+_Test_DETAILS_BLOWN_INTO_BITS      
     .byt 3,"Explosives are dangerous! You were",TEXT_CRLF
     .byt 3,"warned multiple times, and now someone",TEXT_CRLF
     .byt 3,"has to clean the",1,"bloody mess.",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_SIMPLY_VANISHED      
+_Test_DETAILS_SIMPLY_VANISHED      
     .byt 7,"For some reason you are seing this...",TEXT_CRLF
     .byt 7,"But the truth is that it does not map",TEXT_CRLF
     .byt 7,"to anything in the game!",TEXT_CRLF
     .byt 0
 
-_Text_SCORE_GAVE_UP              
+_Test_DETAILS_GAVE_UP              
     .byt 5,"I should hope you had a good excuse to",TEXT_CRLF
     .byt 5,"abandon, because the hostage never had",TEXT_CRLF
     .byt 5,"a chance and was",1,"never seen after...",TEXT_CRLF
@@ -246,19 +246,22 @@ _Text_Empty .byt 0
 
 _gScoreConditionsArray
   .word _Text_Empty
-  .word _Text_SCORE_SOLVED_THE_CASE
-  .word _Text_SCORE_MAIMED_BY_DOG  
-  .word _Text_SCORE_SHOT_BY_THUG   
-  .word _Text_SCORE_FELL_INTO_PIT  
-  .word _Text_SCORE_TRIPPED_ALARM  
-  .word _Text_SCORE_RAN_OUT_OF_TIME
-  .word _Text_SCORE_BLOWN_INTO_BITS
-  .word _Text_SCORE_SIMPLY_VANISHED
-  .word _Text_SCORE_GAVE_UP        
+  .word _Test_DETAILS_SOLVED_THE_CASE
+  .word _Test_DETAILS_MAIMED_BY_DOG  
+  .word _Test_DETAILS_SHOT_BY_THUG   
+  .word _Test_DETAILS_FELL_INTO_PIT  
+  .word _Test_DETAILS_TRIPPED_ALARM  
+  .word _Test_DETAILS_RAN_OUT_OF_TIME
+  .word _Test_DETAILS_BLOWN_INTO_BITS
+  .word _Test_DETAILS_SIMPLY_VANISHED
+  .word _Test_DETAILS_GAVE_UP        
 
 
 // Bonus texts
 #ifdef LANGUAGE_FR
+_gTextBaseScore         .byt "%cScore:%d  ",0     ; The space is required is the earlier score was negative
+_gTextNewAchievement    .byt "%cNew achievement: %s%c",0    ; The last %c is to clear the color
 #else
-_gTextBaseScore .byt "%cScore:%d  ",0     ; The space is required is the earlier score was negative
+_gTextBaseScore         .byt "%cScore:%d  ",0               ; The space is required is the earlier score was negative
+_gTextNewAchievement    .byt "%cNew achievement:%c%s%c",0    ; The last %c is to clear the color
 #endif

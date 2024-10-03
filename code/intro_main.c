@@ -189,7 +189,6 @@ int DisplayIntroPage()
             {
                 return 1;
             }
-
         }
     }
     return FadeToBlack();
@@ -549,11 +548,6 @@ int DisplayHighScoresTable()
     return WaitAndFade(50*7);
 }
 
-
-extern char* AchievementMessages[ACHIEVEMENT_COUNT_];
-extern char Text_AchievementStillLocked[];
-extern char Text_AchievementCount[];
-extern char Text_AchievementNone[];
 
 
 int DisplayAchievements()

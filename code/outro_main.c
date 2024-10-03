@@ -38,6 +38,15 @@ void PrintStatusMessageAsm()
 }
 
 
+void SaveScoreFile()
+{
+    memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
+    SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+    gAchievementsChanged=0;
+}
+
+
+
 // See data/scores.s for some useful comments
 typedef struct 
 {
@@ -57,28 +66,12 @@ TimeBonusInfo TimeBonusInfoTable[]=
     {    0, 0},
 };
 
-void HandleHighScore()
+char* ptrTimeString=(char*)0xbb80+16*40+31;
+
+void ApplyTimeBonus()
 {
-	int entry;
-	int score;
-	score_entry* ptrScore=gHighScores;
-    char* ptrTimeString=(char*)0xbb80+16*40+31;
     TimeBonusInfo* timeBonusInfoPtr=TimeBonusInfoTable;
     char flip=0;
-
-	// Load the highscores from the disk
-	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
-
-#if 0  // Just to test the different ending conditions
-    gScore = 150;
-    gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
-  	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,1);   // "Score:"
-  	sprintf(ptrTimeString,"1:59:39");                           // "1:59:39"
-#endif
-    // Show a congratulation/failure message related to their actual ending condition
-    gPrintWidth = 40;
-    gPrintTerminator=0;    
-    PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*18);
 
     // Show the score in yellow to move the atention to it
     WaitFrames(50);
@@ -115,6 +108,81 @@ void HandleHighScore()
     // Erase the remaining time
     memset(ptrTimeString,32,7);
     WaitFrames(50*2);
+}
+
+// gSaveGameFile.achievements = Achievements from disk
+// gAchievements              = Currently unlocked achievements
+void ShowNewAchievements()
+{
+    int entry;
+    int unlockedCount = 0;
+    unsigned char achievementOffset = 0;
+    unsigned char achievementMask = 1;
+    for (entry=0;entry<ACHIEVEMENT_COUNT_;entry++)
+    {		
+        unsigned char achievementByte;
+        char* achievementMessage = AchievementMessages[entry];
+        if (achievementMask==0)
+        {
+            achievementMask=1;
+            achievementOffset++;
+        }
+        // Is it unlocked?
+        achievementByte = gAchievements[achievementOffset] & achievementMask;
+        if (achievementByte)  
+        {
+            unlockedCount++;
+            // Is it a new unlock (ie: not unlocked in the save game)
+            if (achievementByte & (~gSaveGameFile.achievements[achievementOffset]) )
+            {
+                sprintf((char*)0xbb80+40*24,gTextNewAchievement,5,3,achievementMessage,0);
+                WaitFrames(50*2);
+            }             
+        }
+        achievementMask <<= 1;
+    }
+
+    if (unlockedCount)
+    {
+        sprintf((char*)0xbb80+40*25,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
+        WaitFrames(50*3);
+    }
+
+    // Erase the achievements before proceeding to asking the player name
+    memset((char*)0xbb80+40*24,32,40*2);
+    WaitFrames(50*1);
+}
+
+
+void HandleHighScore()
+{
+	int entry;
+	int score;
+	score_entry* ptrScore=gHighScores;
+
+	// Load the highscores from the disk
+	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+
+#if 0  // Just to test the different ending conditions
+    gScore = -1800;
+    gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
+  	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,1);   // "Score:"
+  	sprintf(ptrTimeString,"1:59:39");                           // "1:59:39"
+    UnlockAchievement(ACHIEVEMENT_MAIMED_BY_DOG);
+    UnlockAchievement(ACHIEVEMENT_USED_THE_ROPE);
+    UnlockAchievement(ACHIEVEMENT_READ_THE_NEWSPAPER);
+    UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
+
+#endif
+    // Show a congratulation/failure message related to their actual ending condition
+    gPrintWidth = 40;
+    gPrintTerminator=0;    
+    PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*18);
+
+    ApplyTimeBonus();
+
+    ShowNewAchievements();
+
 
 	for (entry=0;entry<SCORE_COUNT;entry++)
 	{		
@@ -168,14 +236,13 @@ void HandleHighScore()
             }
 
 			// Save back the highscores in the slot
-            memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
-			SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
-            gAchievementsChanged=0;
+            SaveScoreFile();
 			return;
 		}
 		++ptrScore;
 	}
 }
+
 
 
 // Some quite ugly function which waits a certain number of frames
@@ -233,7 +300,10 @@ int DisplayText(const char* text,int delay)
         }
         screenPtr++;
         sourcePtr++;
-        WaitIRQ();
+        if (Wait(1))
+        {
+            return 1;
+        }
     }
 
     // Wait a bit
@@ -249,8 +319,12 @@ int DisplayText(const char* text,int delay)
         {
             screenPtr[y*40]=' ';   // Space
         }
-        WaitIRQ();
+        if (Wait(1))
+        {
+            return 1;
+        }
     }
+    return 0;
 }
 
 unsigned char* gSpritBasePointer=SecondImageBuffer;     // So we can point on different images - important when preloading data
@@ -290,9 +364,7 @@ void main()
     if (gAchievementsChanged)
     {        
         // Save back the highscores in the slot
-        memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
-        SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
-        gAchievementsChanged=0;
+        SaveScoreFile();
     }
 
 	// Just to let the last click sound to keep playing
@@ -311,21 +383,30 @@ void main()
     // =============================== Thank you ===============================
     gSpritBasePointer=ThirdImageBuffer;
 
-    DisplayText(gTextThanks,50*5);
+    if (DisplayText(gTextThanks,50*5))
+    {
+        goto EndCredits;
+    }
     
     AddSprite(17,75,20,0,37*40+20);             // Add the first photo hidden behind the glass
     AddSprite(10,62,20,152*20+10,61*40+30);     // Add the glass of whisky on top of the glass
     BlitBufferToHiresWindow();
 
     // =============================== Credits ===============================
-    DisplayText(gTextCredits,50*8);
+    if (DisplayText(gTextCredits,50*8))
+    {
+        goto EndCredits;
+    }
     
     AddSprite(17,75,20,20*76,56*40+13);         // Add the second photo
     AddSprite(10,25,20,20*213,84*40+30);        // Lower the glass content
     BlitBufferToHiresWindow();
 
     // =============================== About the game ===============================
-    DisplayText(gTextGameDescription,50*12);
+    if (DisplayText(gTextGameDescription,50*12))
+    {
+        goto EndCredits;
+    }
     
     AddSprite(10,61,20,20*152,48*40+16);        // Add the third photo (Missing girl)
     if (gGameOverCondition == e_SCORE_SOLVED_THE_CASE)
@@ -336,13 +417,19 @@ void main()
     BlitBufferToHiresWindow();
 
     // =============================== External Information ===============================
-    DisplayText(gTextExternalInformation,50*12);
+    if (DisplayText(gTextExternalInformation,50*12))
+    {
+        goto EndCredits;
+    }
 
     AddSprite(10,20,20,20*238,92*40+30);     // Lower the glass content even more
     BlitBufferToHiresWindow();
 
     // =============================== Greetings ===============================
-    DisplayText(gTextGreetings,50*16);
+    if (DisplayText(gTextGreetings,50*16))
+    {
+        goto EndCredits;
+    }
 
     AddSprite(10,17,20,20*238+10,96*40+30);     // Lower the glass content even more
     BlitBufferToHiresWindow();
@@ -351,11 +438,19 @@ void main()
     }
 #endif    
 
-    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
+    UnlockAchievement(ACHIEVEMENT_WATCHED_THE_OUTRO);
+    if (gAchievementsChanged)
+    {        
+        // Save back the highscores in the slot
+        SaveScoreFile();
+    }
 
+EndCredits:
+    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
 
     memset(ImageBuffer,64,40*128);    // Erase the image in the view
 	BlitBufferToHiresWindow();
+
 
 	System_RestoreIRQ_SimpleVbl();
     EndMusic();

@@ -51,3 +51,10 @@ extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];
 
 extern const char gTextBaseScore[];
+extern const char gTextNewAchievement[];
+
+// Achievements related
+extern char* AchievementMessages[ACHIEVEMENT_COUNT_];
+extern char Text_AchievementStillLocked[];
+extern char Text_AchievementCount[];
+extern char Text_AchievementNone[];
