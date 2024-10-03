@@ -1082,7 +1082,9 @@ dog_alive
     ; If the dog is alive, it will jump on our face now
     SET_CUT_SCENE(1)
     FADE_BUFFER()
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
+    FADE_BUFFER()
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
