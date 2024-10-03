@@ -96,7 +96,7 @@ _Text_TypeWriterMessage
 	.byt "...force lethale autoris{e.",13,13,13
 	.byt "Gar{ sur la place du march{",13
     .byt "j'approchais a pied pour ne pas",13
-	.byt "les alerter...",13,13
+	.byt "les alerter..."
     .byt 0
 #else // LANGUAGE_EN
 	.byt "September 29, 1982",13,13
@@ -106,6 +106,55 @@ _Text_TypeWriterMessage
     .byt "With a license to operate freely,",13
     .byt "potentially with force, I stationed",13
     .byt "my car at the local market and",13
-    .byt "advanced covertly by foot.",13,13
+    .byt "advanced covertly by foot."
     .byt 0
 #endif
+
+
+
+
+
+// Bonus texts
+#ifdef LANGUAGE_FR
+_Text_Loading_FirstTimeEver    
+    .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
+    .byt "Some you can READ or INSPECT.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime    
+    .byt "Lethality is always an option but being",TEXT_CRLF
+    .byt "a pacifist will grant you more points.",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime    
+    .byt "Some items have multiple uses, some have",TEXT_CRLF
+    .byt "no specific purpose. Try to guess right!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Some items will have to be built using",TEXT_CRLF
+    .byt "combinations of other items together.",TEXT_CRLF
+    .byt 0
+#else
+_Text_Loading_FirstTimeEver    
+    .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
+    .byt "Some you can READ or INSPECT.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime    
+    .byt "Lethality is always an option but being",TEXT_CRLF
+    .byt "a pacifist will grant you more points.",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime    
+    .byt "Some items have multiple uses, some have",TEXT_CRLF
+    .byt "no specific purpose. Try to guess right!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Some items will have to be built using",TEXT_CRLF
+    .byt "combinations of other items together.",TEXT_CRLF
+    .byt 0
+#endif
+
+
+
+_gLoadingMessagesArray
+  .word _Text_Loading_FirstTimeEver
+  .word _Text_Loading_SecondTime
+  .word _Text_Loading_ThirdTime
+  .word _Text_Loading_FourthTime

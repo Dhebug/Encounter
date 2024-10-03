@@ -170,3 +170,56 @@ loop_column
 
 #endif
 
+
+
+// Bonus texts
+#ifdef LANGUAGE_FR
+_Text_Loading_FirstTimeEver    
+    .byt 6,"We hope you will enjoy this game!",TEXT_CRLF
+    .byt 6,"Remember to keep the floppy writable.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime    
+    .byt "You are expected to fail a couple times",TEXT_CRLF
+    .byt "in order to collect all achievements!",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime    
+    .byt "Some objectives have multiple solutions",TEXT_CRLF
+    .byt "be creative and try something different!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Time matters: The remaining time will be",TEXT_CRLF
+    .byt "added to your score. Ready to speedrun?",TEXT_CRLF
+    .byt 0
+#else
+_Text_Loading_FirstTimeEver    
+    .byt 6,"We hope you will enjoy this game!",TEXT_CRLF
+    .byt 6,"Remember to keep the floppy writable.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime    
+    .byt "You are expected to fail a couple times",TEXT_CRLF
+    .byt "in order to collect all achievements!",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime    
+    .byt "Some objectives have multiple solutions",TEXT_CRLF
+    .byt "be creative and try something different!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Time matters: The remaining time will be",TEXT_CRLF
+    .byt "added to your score. Ready to speedrun?",TEXT_CRLF
+    .byt 0
+#endif
+
+
+
+_gLoadingMessagesArray
+  .word _Text_Loading_FirstTimeEver
+  .word _Text_Loading_SecondTime
+  .word _Text_Loading_ThirdTime
+  .word _Text_Loading_FourthTime
+
+
+;
+; High score storage for the message of the day
+;
+_gSaveGameFile                   ; Same address than _gHighScores
+_gHighScores          .dsb 512   ; 456 bytes of actual score data, padded to 512 bytes for the saving system

@@ -6,7 +6,7 @@
 #include <lib.h>
 
 #include "common.h"
-
+#include "score.h"
 
 
 #ifdef ENABLE_MUSIC
@@ -262,6 +262,7 @@ int DisplayLogosWithPreshift()
 }
 
 
+extern const char* gLoadingMessagesArray[];
 
 void main()
 {
@@ -293,6 +294,17 @@ void main()
     EndMusic();
 #endif    
     PsgStopSoundAndForceUpdate();
+
+	// Load the highscores from the disk
+	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
+    //gSaveGameFile.launchCount=4;
+    // Show some informative message for the player to patient during loading
+    gPrintWidth = 40;
+    gPrintTerminator=0;    
+    PrintStringAt(gLoadingMessagesArray[gSaveGameFile.launchCount&3],(char*)0xbb80+40*25);
+    // Increment the launch count and save back the scores
+    gSaveGameFile.launchCount++;
+    SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_INTRO_PROGRAM,LOADER_INTRO_PROGRAM_ADDRESS);   // 0x400

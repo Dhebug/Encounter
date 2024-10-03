@@ -51,7 +51,9 @@ StartScores
  ENTRY(6,-150,"    Adrian Monk")
  ENTRY(3,-200,"C.Auguste Dupin")
  ENTRY(5,-250,"  Insp Clouseau")
- .dsb 56+24         ; Padding (forced to zero)
+ .dsb 48                             ; 6*8=48 achievements
+ .dsb 80-48-1                        ; Padding (forced to zero)
+ .dsb 1                              ; Number of tiems the game has been launched
 EndScores
 
 

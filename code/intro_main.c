@@ -18,6 +18,7 @@ extern char Text_Leaderboard[];
 extern char Text_Achievements[];
 extern char Text_TypeWriterMessage[];
 
+extern const char* gLoadingMessagesArray[];
 
 extern unsigned char TypeWriterPaperWidth;
 extern unsigned char TypeWriterBorderWidth;
@@ -843,6 +844,13 @@ endIntro:
 #endif
     // Ensure that the screen is erased even if the player pressed a key
     memset((char*)0xa000,64,8000);
+
+	// Show some informative message for the player to patient during loading
+    gSaveGameFile.launchCount=3;  // test
+    gPrintWidth = 40;
+    gPrintTerminator=0;    
+    PrintStringAt(gLoadingMessagesArray[gSaveGameFile.launchCount&3],(char*)0xbb80+40*25);
+
 
 	// Quit and return to the loader
 	InitializeFileAt(LOADER_GAME_PROGRAM,LOADER_GAME_PROGRAM_ADDRESS);   // 0x400
