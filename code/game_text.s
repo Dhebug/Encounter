@@ -1366,7 +1366,7 @@ _gDescriptionCellar
         //DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
         CLEAR_TEXT_AREA(1)
         INFO_MESSAGE("I should go somewhere safe")
-        PLAY_SOUND(_FuseBurning)
+        PLAY_SOUND(_FuseBurningStart)
         WAIT(50*2)
 
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
