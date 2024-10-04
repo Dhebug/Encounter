@@ -7,8 +7,10 @@
 :: 0.3 - Test version with the new game start that shows the map, and printer output
 :: 0.4 - First version of the game 100% playable from start to finish - 1 second delay per fade  - game finished with 1:30:30 remaining
 :: 0.5 - First pass of bug fixes, added some audio as well, colorful intro title - 4 seconds delay per fade -
+:: 0.6 - Added some sound effects, better scores handling, music in the end credits
+:: 0.7 - Game over music, achievements, loading messages
 ::
-SET VERSION=0.5
+SET VERSION=0.7
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)

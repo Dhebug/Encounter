@@ -77,8 +77,8 @@ _Text_AchievementGaveTheRope      .byt "Gave the rope",0
 _Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
 _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
+_Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
 _Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
-_Text_AchievementFree2            .byt "Free 2",0
 _Text_AchievementFree3            .byt "Free 3",0
 _Text_AchievementFree4            .byt "Free 4",0
 _Text_AchievementFree5            .byt "Free 5",0
