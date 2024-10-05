@@ -62,6 +62,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_PLAY_MUSIC
     .word _ByteStreamCommand_LOAD_MUSIC
     .word _ByteStreamCommand_STOP_MUSIC
+    .word _ByteStreamCommand_WAIT_KEYPRESS
 
     
 ; _param0=pointer to the new byteStream
@@ -490,6 +491,12 @@ music_already_loaded
 _ByteStreamCommand_STOP_MUSIC
 .(
     jmp _EndMusic
+.)
+
+; .byt COMMAND_WAIT_KEYPRESS
+_ByteStreamCommand_WAIT_KEYPRESS
+.(
+    jmp _WaitKey
 .)
 
 ; .byt COMMAND_DO_ONCE,1,<label,>label

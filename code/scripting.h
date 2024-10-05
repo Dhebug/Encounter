@@ -48,7 +48,8 @@
 #define COMMAND_PLAY_MUSIC      37
 #define COMMAND_LOAD_MUSIC      38
 #define COMMAND_STOP_MUSIC      39
-#define _COMMAND_COUNT          40
+#define COMMAND_WAIT_KEYPRESS   40
+#define _COMMAND_COUNT          41
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -98,6 +99,7 @@
 #define START_CLOCK                          .byt COMMAND_START_CLOCK
 #define STOP_CLOCK                           .byt COMMAND_STOP_CLOCK
 
+#define WAIT_KEYPRESS                        .byt COMMAND_WAIT_KEYPRESS
 
 // Items
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
