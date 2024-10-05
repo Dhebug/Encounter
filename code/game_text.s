@@ -1669,13 +1669,17 @@ _gDescriptionWestGallery
 #endif    
     ; If the suit is equiped, we remove it
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+        SET_CUT_SCENE(1)
         UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
+        PLAY_SOUND(_Zipper)
 #ifdef LANGUAGE_FR    
         INFO_MESSAGE("Il faut que j'enlève cette combinaison")
 #else
         INFO_MESSAGE("I need to remove that suit")
 #endif        
         WAIT(50*2)
+        CLEAR_TEXT_AREA(4)
+        SET_CUT_SCENE(0)
     ENDIF(suit)
 
     ; Is the curtain closed?
@@ -3610,15 +3614,17 @@ _UseMatches
 _UseProtectionSuit
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES,"PRO-TEC Personal Protection Equipment")
+    PLAY_SOUND(_Zipper)
     INFO_MESSAGE("It seems to fit well...")
     WAIT(50*2)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
         ; The player is in front of the Panic Room, we can now equip the protection suit
         INFO_MESSAGE("...let's experiment!")
-        SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)        
+        SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
         WAIT(50*2)
     ELSE(panic_room,not_panic_room)
         ; The player is anywhere else
+        PLAY_SOUND(_Zipper)
         INFO_MESSAGE("...but it's of no use here")
         WAIT(50*2)
     ENDIF(not_panic_room)

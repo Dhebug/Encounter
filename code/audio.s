@@ -471,3 +471,20 @@ _Acid
 	.byt SOUND_COMMAND_ENDREPEAT			
 	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
+
+_Zipper
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,0          ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,1           ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,16           ; Channel A volume -> Enveloppe
+    .byt SOUND_COMMAND_SET_VALUE,REG_ENV_LOW,64            ; Enveloppe Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_ENV_HI,0              ; Enveloppe Frequency
+	.byt SOUND_COMMAND_SET_VALUE,REG_ENV_SHAPE,%1100       ; Enveloppe Shape ///   = 1100
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110       ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,64
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,256-4,SOUND_COMMAND_END_FRAME
+	.byt SOUND_COMMAND_ENDREPEAT			
+	.byt SOUND_COMMAND_REPEAT,32
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,4,SOUND_COMMAND_END_FRAME
+	.byt SOUND_COMMAND_ENDREPEAT			
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
