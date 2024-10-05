@@ -229,12 +229,6 @@ _Test_DETAILS_BLOWN_INTO_BITS
     .byt 3,"has to clean the",1,"bloody mess.",TEXT_CRLF
     .byt 0
 
-_Test_DETAILS_SIMPLY_VANISHED      
-    .byt 7,"For some reason you are seing this...",TEXT_CRLF
-    .byt 7,"But the truth is that it does not map",TEXT_CRLF
-    .byt 7,"to anything in the game!",TEXT_CRLF
-    .byt 0
-
 _Test_DETAILS_GAVE_UP              
     .byt 5,"I should hope you had a good excuse to",TEXT_CRLF
     .byt 5,"abandon, because the hostage never had",TEXT_CRLF
@@ -253,7 +247,6 @@ _gScoreConditionsArray
   .word _Test_DETAILS_TRIPPED_ALARM  
   .word _Test_DETAILS_RAN_OUT_OF_TIME
   .word _Test_DETAILS_BLOWN_INTO_BITS
-  .word _Test_DETAILS_SIMPLY_VANISHED
   .word _Test_DETAILS_GAVE_UP        
 
 

@@ -60,7 +60,6 @@ _gScoreConditionsArray
   .word _Text_SCORE_TRIPPED_ALARM  
   .word _Text_SCORE_RAN_OUT_OF_TIME
   .word _Text_SCORE_BLOWN_INTO_BITS
-  .word _Text_SCORE_SIMPLY_VANISHED
   .word _Text_SCORE_GAVE_UP        
 
 // Temporary table with the dithering pattern for the paper out of the machine to appear darker

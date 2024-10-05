@@ -18,7 +18,6 @@ _Text_SCORE_FELL_INTO_PIT        .byt 3,"Tomb{ dans un trou",0
 _Text_SCORE_TRIPPED_ALARM        .byt 3,"D{clench{ l'alarme",0
 _Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqu{ de temps",0
 _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
-_Text_SCORE_SIMPLY_VANISHED      .byt 7,"A disparu !",0
 _Text_SCORE_GAVE_UP              .byt 5,"A abandonn{...",0
 #else // LANGUAGE_EN
 _Text_Leaderboard                .byt 16+1,3,"            Leaderboard",TEXT_CRLF,TEXT_END
@@ -29,7 +28,6 @@ _Text_SCORE_FELL_INTO_PIT        .byt 3,"Fell into a pit",0
 _Text_SCORE_TRIPPED_ALARM        .byt 3,"Tripped the alarm",0
 _Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"Ran out of time",0
 _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Blown into bits",0
-_Text_SCORE_SIMPLY_VANISHED      .byt 7,"Simply Vanished!",0
 _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 #endif
 
@@ -43,6 +41,7 @@ _Text_Achievements                .byt 16+3,1,"          Badges collectés",TEXT
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
 _Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
+_Text_AchievementWrongDirection   .byt "Sens interdit",0
 _Text_AchievementLaunchedTheGame  .byt "Launched the game",0
 _Text_AchievementWatchedTheIntro  .byt "Watched the intro",0
 _Text_AchievementReadTheNewspaper .byt "Read the newspaper",0
@@ -69,8 +68,6 @@ _Text_AchievementBuiltABomb       .byt "Built a bomb",0
 _Text_AchievementMadeBlackPowder  .byt "Made blackpowder",0
 _Text_AchievementFrikedTheThug    .byt "Frisked the thug",0
 _Text_AchievementUsedTheAcid      .byt "Used the acid",0
-_Text_AchievementMadeThermite     .byt "Made thermite",0
-_Text_AchievementPiercedTheDoor   .byt "Pierced the door",0
 _Text_AchievementOpenedTheCurtain .byt "Opened the curtain",0
 _Text_AchievementGaveTheKnife     .byt "Gave the knife",0
 _Text_AchievementGaveTheRope      .byt "Gave the rope",0
@@ -79,14 +76,17 @@ _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
 _Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
 _Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
-_Text_AchievementFree3            .byt "Free 3",0
-_Text_AchievementFree4            .byt "Free 4",0
-_Text_AchievementFree5            .byt "Free 5",0
+_Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
+_Text_AchievementUnlimitedPauses  .byt "Pauses infinies",0
+_Text_AchievementCanYouRepeat     .byt "J'ai rien compris",0
+_Text_AchievementPlayedOnMicrodisc .byt "Joué sur Microdisc",0
+_Text_AchievementPlayedOnJasmin    .byt "Joué sur Jasmin",0
 #else // LANGUAGE_EN
 _Text_Achievements                .byt 16+3,1,"        Achievements unlocked",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
 _Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
+_Text_AchievementWrongDirection   .byt "Wrong direction",0
 _Text_AchievementLaunchedTheGame  .byt "Launched the game",0
 _Text_AchievementWatchedTheIntro  .byt "Watched the intro",0
 _Text_AchievementReadTheNewspaper .byt "Read the newspaper",0
@@ -113,8 +113,6 @@ _Text_AchievementBuiltABomb       .byt "Built a bomb",0
 _Text_AchievementMadeBlackPowder  .byt "Made blackpowder",0
 _Text_AchievementFrikedTheThug    .byt "Frisked the thug",0
 _Text_AchievementUsedTheAcid      .byt "Used the acid",0
-_Text_AchievementMadeThermite     .byt "Made thermite",0
-_Text_AchievementPiercedTheDoor   .byt "Pierced the door",0
 _Text_AchievementOpenedTheCurtain .byt "Opened the curtain",0
 _Text_AchievementGaveTheKnife     .byt "Gave the knife",0
 _Text_AchievementGaveTheRope      .byt "Gave the rope",0
@@ -123,9 +121,11 @@ _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
 _Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
 _Text_AchievementUsedHosePipe     .byt "Used the hose pipe",0
-_Text_AchievementFree3            .byt "Free 3",0
-_Text_AchievementFree4            .byt "Free 4",0
-_Text_AchievementFree5            .byt "Free 5",0
+_Text_AchievementPausedTheGame    .byt "Paused the game",0
+_Text_AchievementUnlimitedPauses  .byt "Unlimited pauses",0
+_Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
+_Text_AchievementPlayedOnMicrodisc .byt "Played on Microdisc",0
+_Text_AchievementPlayedOnJasmin    .byt "Played on Jasmin",0
 #endif
 
 _AchievementMessages
@@ -137,9 +137,9 @@ _AchievementMessages
     .word _Text_SCORE_TRIPPED_ALARM+1       ; "Tripped the alarm"
     .word _Text_SCORE_RAN_OUT_OF_TIME+1     ; "Ran out of time"
     .word _Text_SCORE_BLOWN_INTO_BITS+1     ; "Blown into bits"
-    .word _Text_SCORE_SIMPLY_VANISHED+1     ; "Simply Vanished!"
-    ; 8-15
     .word _Text_SCORE_GAVE_UP+1             ; "Gave up..."
+    ; 8-15
+    .word _Text_AchievementWrongDirection   ; "Wrong direction"
     .word _Text_AchievementLaunchedTheGame  ; "Launched the game"
     .word _Text_AchievementWatchedTheIntro  ; "Watched the intro"
     .word _Text_AchievementReadTheNewspaper ; "Read the newspaper"
@@ -169,8 +169,8 @@ _AchievementMessages
     .word _Text_AchievementMadeBlackPowder  ; "Made blackpowder"
     .word _Text_AchievementFrikedTheThug    ; "Frisked the thug"
     .word _Text_AchievementUsedTheAcid      ; "Used the acid"
-    .word _Text_AchievementMadeThermite     ; "Made thermite"
-    .word _Text_AchievementPiercedTheDoor   ; "Pierced the door"
+    .word _Text_AchievementCanYouRepeat     ; "Can you rpeat"
+    .word _Text_AchievementUnlimitedPauses  ; "Unlimited paused"
     .word _Text_AchievementOpenedTheCurtain ; "Opened the curtain"
     .word _Text_AchievementGaveTheKnife     ; "Gave the knife"
     .word _Text_AchievementGaveTheRope      ; "Gave the rope"
@@ -180,7 +180,7 @@ _AchievementMessages
     .word _Text_AchievementGotTheBestScore  ; "Got the best score"
     .word _Text_AchievementDogAteTheMeat    ; "Dog ate the meat"
     .word _Text_AchievementUsedHosePipe     ; "Used the hose pipe"
-    .word _Text_AchievementFree3            ; "Free 3"
-    .word _Text_AchievementFree4            ; "Free 4"
-    .word _Text_AchievementFree5            ; "Free 5"
+    .word _Text_AchievementPausedTheGame    ; "Paused the game"
+    .word _Text_AchievementPlayedOnMicrodisc  ; "Played on Microdisc"
+    .word _Text_AchievementPlayedOnJasmin     ; "Played on Jasmin"
 

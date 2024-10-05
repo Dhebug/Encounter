@@ -223,6 +223,7 @@ void PlayerMove()
 	unsigned char requestedScene = gCurrentLocationPtr->directions[direction];
 	if (requestedScene==e_LOC_NONE)
 	{
+        UnlockAchievement(ACHIEVEMENT_WRONG_DIRECTION)
 		PrintErrorMessage(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
 	}
 	else
@@ -530,6 +531,7 @@ WORDS ProcessAnswer()
     }
 
 	// Not recognized: Warn the player and continue
+    UnlockAchievement(ACHIEVEMENT_CAN_YOU_REPEAT);
 	PlaySound(PingData);
  	return e_WORD_CONTINUE;
 }

@@ -304,6 +304,16 @@ void main()
     PrintStringAt(gLoadingMessagesArray[gSaveGameFile.launchCount&3],(char*)0xbb80+40*25);
     // Increment the launch count and save back the scores
     gSaveGameFile.launchCount++;
+    if (LoaderApiSystemType==0)
+    {
+        UnlockAchievement(ACHIEVEMENT_PLAYED_ON_MICRODISC);
+    }
+    else
+    if (LoaderApiSystemType==1)
+    {
+        UnlockAchievement(ACHIEVEMENT_PLAYED_ON_JASMIN);
+    }
+    memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
     SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 	// Quit and return to the loader
