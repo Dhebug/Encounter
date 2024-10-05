@@ -353,3 +353,46 @@ loop_y
 .)
 
 
+
+_UnlockAchievementAsm
+.(
+    ; unsigned char* assignementPtr = &gAchievements[assignment/8];
+    lda _param0
+    lsr             ; /2
+    lsr             ; /4
+    lsr             ; /8
+    clc
+    adc #<_gAchievements
+    sta tmp0+0
+    lda #0
+    adc #>_gAchievements
+    sta tmp0+1
+
+    ; unsigned char bitmask = 1<<(assignment&7);
+    lda _param0
+    and #7
+    tax
+    lda _BitMaskArray,x
+
+    ; OR with the current byte value
+    ldy #0
+    ora (tmp0),y
+    cmp (tmp0),y
+    beq no_change
+
+    sta (tmp0),y
+    lda #1
+    sta _gAchievementsChanged
+no_change
+    rts
+.)
+
+_BitMaskArray
+    .byt %00000001
+    .byt %00000010
+    .byt %00000100
+    .byt %00001000
+    .byt %00010000
+    .byt %00100000
+    .byt %01000000
+    .byt %10000000
