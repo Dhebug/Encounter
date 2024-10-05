@@ -4351,6 +4351,9 @@ _OneHourAlarmWarning
 
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
     INFO_MESSAGE("Already one hour has passed!")
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 0 patch on the hour
+            _IMAGE(24,52)
+            _SCREEN(17,63)
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,9)                                 ; Overlay the 59:59 patch
             _IMAGE(25,43)
             _SCREEN(18,63)
