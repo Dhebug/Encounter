@@ -282,7 +282,8 @@ _gDescriptionMarketPlace
         STOP_CLOCK
         LOAD_MUSIC(LOADER_MUSIC_VICTORY)
         INCREASE_SCORE(POINTS_WON_THE_GAME)
-        FADE_BUFFER()                            ; Show the market place
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SOLVED_THE_CASE)
+        FADE_BUFFER                            ; Show the market place
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -305,7 +306,7 @@ girl_not_here
     .(
     DO_ONCE(intro_sequence)
         SET_CUT_SCENE(1)
-        FADE_BUFFER()
+        FADE_BUFFER
     ENDDO(intro_sequence)
     .)
     WAIT(DELAY_FIRST_BUBBLE)
@@ -326,7 +327,7 @@ girl_not_here
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-        FADE_BUFFER()
+        FADE_BUFFER
         INFO_MESSAGE("I'll have to come back here...")
         WAIT(50*2)
         INFO_MESSAGE("...when I'm done")
@@ -338,7 +339,7 @@ girl_not_here
 
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
-        FADE_BUFFER()
+        FADE_BUFFER
         START_CLOCK
         SET_CUT_SCENE(0)
     ENDDO(intro_sequence)
@@ -480,7 +481,7 @@ no_rope
 
 cannot_escape_pit    ; The player has no way to escape the pit
     SET_CUT_SCENE(1)
-    FADE_BUFFER()
+    FADE_BUFFER
     WAIT(50*2)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -906,7 +907,7 @@ _gDescriptionTiledPatio
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(23,0)
                 _BUFFER(0,17)
-        FADE_BUFFER() 
+        FADE_BUFFER 
         WAIT(50)
 
         ; Print the "Thank you" message (only once)
@@ -923,7 +924,7 @@ _gDescriptionTiledPatio
                     _IMAGE(6,31)
                     _SCREEN(3,40)
             WAIT(50*2)
-            FADE_BUFFER() 
+            FADE_BUFFER 
             WAIT(50)
         ENDDO(thank_you)
         .)
@@ -1081,10 +1082,10 @@ end_dog_check
 dog_alive
     ; If the dog is alive, it will jump on our face now
     SET_CUT_SCENE(1)
-    FADE_BUFFER()
+    FADE_BUFFER
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
-    FADE_BUFFER()
+    FADE_BUFFER
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
@@ -1254,7 +1255,7 @@ _gDescriptionSunLounge
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,8,40)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(31,78)
                 _BUFFER(8,8)
-        FADE_BUFFER() 
+        FADE_BUFFER 
 girl_is_outside        
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1554,7 +1555,7 @@ _gDescriptionCellarWindow
                 _IMAGE(7,100)
                 _BUFFER(14,101)
     ENDIF(ladder)
-    FADE_BUFFER()      ; Make sure everything appears on the screen
+    FADE_BUFFER      ; Make sure everything appears on the screen
     END
 .)
 
@@ -1825,7 +1826,7 @@ end_thug
     _BUBBLE_LINE(5,5,0,"This was make things")
     _BUBBLE_LINE(5,16,0,"notably easier...")
     ; Should probably have a "game over" command
-    FADE_BUFFER()
+    FADE_BUFFER
     END
 
 
@@ -1926,7 +1927,7 @@ _gDescriptionGameOverLost
 _gDescriptionGameOverWon
     DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
-    FADE_BUFFER()
+    FADE_BUFFER
     STOP_MUSIC()
     END
 _EndSceneScripts
@@ -2057,6 +2058,7 @@ _CombineGunPowderWithFuse
     SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
     INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
     INFO_MESSAGE("The explosive is ready...")
@@ -2114,6 +2116,7 @@ _CombineBombWithMatches
 .(
     SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED)         ; Strike the matches!
     INCREASE_SCORE(POINTS_IGNITED_BOMB)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_SAFE)                   ; The player may not survive the operation, but the safe is definitely open at that point!
     END_AND_REFRESH
 .)
 
@@ -2222,14 +2225,14 @@ rope_not_attached
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                     ; Draw the bottom part of the open window
             _IMAGE(9,84)
             _BUFFER(21,49)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
 
     ; Then add the sprite showing the attached rope
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
             _IMAGE(14,84)
             _BUFFER(19,59)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
 
     ; Now we show the outside view with the girl at the window
@@ -2356,6 +2359,7 @@ _gInspectItemMappingsArray
 
 _InspectMap
     INCREASE_SCORE(POINTS_INSPECT_MAP)    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
@@ -2364,6 +2368,7 @@ _InspectMap
 
 _InspectGame
     INCREASE_SCORE(POINTS_INSPECT_GAME)    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
@@ -2443,7 +2448,7 @@ _InspectBasementWindow
                     _IMAGE(7,100)
                     _BUFFER(14,101)
 no_ladder
-        FADE_BUFFER()      ; Make sure everything appears on the screen
+        FADE_BUFFER      ; Make sure everything appears on the screen
     .)
     ELSE(elsecellar,cellar)
     .(
@@ -2659,14 +2664,14 @@ _ShowGirlInRoomWithBindings
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
             _IMAGE_STRIDE(0,0,17)
             _BUFFER(10,26)
-    FADE_BUFFER()
+    FADE_BUFFER
 
     WAIT(50)
 
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,11,33,17)    ; Draw the patch with the MMPH speech bubble
             _IMAGE_STRIDE(0,75,17)
             _BUFFER(11,26)
-    FADE_BUFFER()
+    FADE_BUFFER
 
     WAIT(50)
 
@@ -2679,7 +2684,7 @@ _ShowGirlInRoomWithBindings
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
             _IMAGE_STRIDE(0,108,17)
             _BUFFER(22,67)
-    FADE_BUFFER()
+    FADE_BUFFER
     WAIT(50)
 
 #ifdef LANGUAGE_FR
@@ -2698,7 +2703,7 @@ _ShowGirlInRoomWithoutBindings
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
             _IMAGE_STRIDE(0,0,17)
             _BUFFER(12,16)
-    FADE_BUFFER()
+    FADE_BUFFER
 
     ; We show the message and the "thank you" only once.
     DO_ONCE(thank_you)
@@ -2720,7 +2725,7 @@ _ShowGirlInRoomWithoutBindings
     ENDDO(thank_you)
 
     WAIT(50*2)
-    FADE_BUFFER()
+    FADE_BUFFER
 
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),closed)
         ; The window is still closed
@@ -2784,7 +2789,7 @@ _ShowOpenWindow
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
             _IMAGE(0,84)
             _BUFFER(0,84)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
     RETURN
 .)
@@ -2795,7 +2800,7 @@ _ShowCueBreakingTheWindow
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,60)                     ; Draw the cue going to smash the window
             _IMAGE(31,0)
             _BUFFER(22,68)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
     RETURN
 .)
@@ -2810,7 +2815,7 @@ _ShowBrokenWindow
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                     ; Draw the broken window pane
             _IMAGE(9,84)
             _BUFFER(21,49)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
     RETURN
 .)
@@ -2823,7 +2828,7 @@ _ShowOpeningWindow
 
     ; Load the base image with the wall and the closed window and shutters
     DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
 
     ; Then add the sprites showing the window being opened
@@ -2833,7 +2838,7 @@ _ShowOpeningWindow
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
             _IMAGE(0,84)
             _BUFFER(0,84)
-    FADE_BUFFER() 
+    FADE_BUFFER 
     WAIT(50*2)
     RETURN
 .)
@@ -2858,7 +2863,7 @@ _ShowGirlAtTheWindow
                     _BUFFER(19,23)
 rope_going_down
                 
-        FADE_BUFFER() 
+        FADE_BUFFER 
         WAIT(50)
 
         ; Show the girl at the window if she's still in the room of course
@@ -2866,7 +2871,7 @@ rope_going_down
             BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,18)                     ; Draw the girl in the window
                     _IMAGE(0,26)
                     _BUFFER(20,4)
-            FADE_BUFFER() 
+            FADE_BUFFER 
             WAIT(50)
 
         ; Is the rope attached?
@@ -2899,7 +2904,7 @@ rope_going_down
 girl_at_the_window        
 
     ELSE(window_open,window_closed)
-        FADE_BUFFER() 
+        FADE_BUFFER 
         INFO_MESSAGE("Impossible to access from here")
         WAIT(50*2)        
     ENDIF(window_closed)
@@ -3373,7 +3378,7 @@ _UseRope
                 BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,13,79)    ; Draw the girl with the slide message
                         _IMAGE(0,49)
                         _BUFFER(13,49)
-                FADE_BUFFER() 
+                FADE_BUFFER 
                 WAIT(50*2)
 
             ELSE(rope_attached,rope_not_attached)
@@ -3389,6 +3394,7 @@ _UseRope
             ; If the rope is not in the room, we pass it to the girl through the hole
             SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT)    
             SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE)
+            UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_THE_ROPE)
 #ifdef LANGUAGE_FR   
             SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde dans la chambre forte")
 #else    
@@ -3398,12 +3404,12 @@ _UseRope
             BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
                     _IMAGE_STRIDE(0,0,17)
                     _BUFFER(12,16)
-            FADE_BUFFER()
+            FADE_BUFFER
 
             BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_ROPE,11,94,11)    ; Draw the patch with the rope through the hole
                     _IMAGE_STRIDE(0,0,11)
                     _BUFFER(16,34)
-            FADE_BUFFER()      ; Make sure everything appears on the screen
+            FADE_BUFFER      ; Make sure everything appears on the screen
             WAIT(50*2)
             ENDIF(rope_not_in_the_room)
         END_AND_REFRESH    
@@ -3708,12 +3714,13 @@ _gSearchtemMappingsArray
 
 _SearchThug
 .(
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FRISKED_THE_THUG)
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         ; If the thug was not disabled, attempting to search him will lead to the player immediate death
         SET_CUT_SCENE(1)
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(3,28),40,_SecondImageBuffer+40*100+19,_ImageBuffer+40*37+30)   ; Thug opening his eye
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(5,13),40,_SecondImageBuffer+40*59+14,_ImageBuffer+40*33+33)   ; Erase the Zzzz
-        FADE_BUFFER()
+        FADE_BUFFER
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il fallait d'abord le maitriser")
@@ -3724,7 +3731,7 @@ _SearchThug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),40,_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(13,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
-        FADE_BUFFER()
+        FADE_BUFFER
         PLAY_SOUND(_ShootData)
         ; Draw the message
         WAIT(50*2)                              ; Wait a couple seconds
@@ -3980,12 +3987,12 @@ thug_snooker_cue
                         _IMAGE_STRIDE(0,0,17)
                         _BUFFER(12,16)
             ENDIF(girl_freed)
-            FADE_BUFFER()
+            FADE_BUFFER
 
             BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_CUE,14,111,14)    ; Draw the patch with the cue through the hole
                     _IMAGE_STRIDE(0,0,14)
                     _BUFFER(12,17)
-            FADE_BUFFER()      ; Make sure everything appears on the screen
+            FADE_BUFFER      ; Make sure everything appears on the screen
             WAIT(50*2)
         ENDIF(cue_not_in_the_room)
         END_AND_REFRESH
@@ -4035,7 +4042,7 @@ _CommonGaveTheKnifeToTheGirl
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_KNIFE,20,111,20)    ; Draw the patch with the knife through the hole
             _IMAGE(0,0)
             _BUFFER(10,17)
-    FADE_BUFFER()      ; Make sure everything appears on the screen
+    FADE_BUFFER      ; Make sure everything appears on the screen
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Le couteau passe par le trou...")
 #else
@@ -4298,7 +4305,7 @@ end_girl_following
 _WatchSetup
 .(
     DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
-    FADE_BUFFER()
+    FADE_BUFFER
     WAIT(50)
 
     PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
@@ -4336,7 +4343,7 @@ _OneHourAlarmWarning
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
             _IMAGE(24,43)
             _BUFFER(17,63)
-    FADE_BUFFER()
+    FADE_BUFFER
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
 
@@ -4381,6 +4388,7 @@ _TimeOutGameOver
     WAIT(50*2)
 
     GAME_OVER(e_SCORE_RAN_OUT_OF_TIME)      ; The game is now over
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_RAN_OUT_OF_TIME)
     JUMP(_gDescriptionGameOverLost)         ; Game Over
 .)
 
