@@ -2067,10 +2067,12 @@ _CombineGunPowderWithFuse
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("The explosive is ready...")
     WAIT(50*2)
     INFO_MESSAGE("...but it needs to be attached")
     WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -2086,10 +2088,12 @@ _CombineBombWithAdhesive
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a sticky _bomb")
 #endif    
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB,"Ready to install!")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("Should be ready to use now...")
     WAIT(50*2)
     INFO_MESSAGE("...need to install it!")
     WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -2110,10 +2114,12 @@ _CombineStickyBombWithSafe
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
     INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("Everything is in place...")
     WAIT(50*2)
     INFO_MESSAGE("...need to ignite it safely though!")
     WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -3384,6 +3390,7 @@ _UseRope
                 BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,13,79)    ; Draw the girl with the slide message
                         _IMAGE(0,49)
                         _BUFFER(13,49)
+                PLAY_SOUND(_ZipDownTheRope)
                 FADE_BUFFER 
                 WAIT(50*2)
 
@@ -3452,6 +3459,7 @@ _UseGame
 _UseDartGun
     DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART,"You shoot your only dart")
     SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_GONE_FOREVER)                      ; The player can only use the dart gun once
+    PLAY_SOUND(_Swoosh)
 
     // - We are in the entrance hall and the dog is still alive
     JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
@@ -3809,6 +3817,7 @@ _ThrowBread
 give_bread_to_dove
     // The bird is now possible to catch
     INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
+    PLAY_SOUND(_Swoosh)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
 #else
@@ -3834,6 +3843,7 @@ _ThrowMeat
     JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
 dog_eating_the_meat
+    PLAY_SOUND(_Swoosh)
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
     INFO_MESSAGE("Glad it's not me there!")
     SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
@@ -3879,6 +3889,7 @@ _ThrowKnife
     JUMP_IF_FALSE(dog_knife,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_TRUE(dog_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
         SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_LARGE_STAIRCASE)
+        PLAY_SOUND(_Swoosh)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
         JUMP(_CommonDogDisabled)
 dog_knife    
@@ -3913,6 +3924,7 @@ _ThrowNet
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
         UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
+        PLAY_SOUND(_Swoosh)
 #ifdef LANGUAGE_FR   
         INFO_MESSAGE("La colombe est prise dans le filet")
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe empêtrée")
@@ -4021,7 +4033,10 @@ _CommonDogDisabled
     SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un _chien immobile")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a _dog lying")
-#endif    
+#endif
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+    WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -4036,6 +4051,9 @@ _CommonThugDisabled
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive _thug")
 #endif    
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+    WAIT(50*2)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 

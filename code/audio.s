@@ -488,3 +488,19 @@ _Zipper
 	.byt SOUND_COMMAND_ENDREPEAT			
 	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
+
+
+_ZipDownTheRope   ; Temporary
+_Swoosh
+    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,0             ; Noise Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0               ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111          ; Enable Noise on channel A
+	.byt SOUND_COMMAND_REPEAT,15
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
+		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,1
+		.byt SOUND_COMMAND_END_FRAME
+		.byt SOUND_COMMAND_END_FRAME
+	.byt SOUND_COMMAND_ENDREPEAT	
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+	.byt SOUND_COMMAND_END
+
