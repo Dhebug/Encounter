@@ -123,10 +123,21 @@
 #define _SCREEN(x,y)                                 .byt <$a000+x+(40*y),>$a000+x+(40*y)
 
 // Sound 
+#ifdef ENABLE_SOUND_EFFECTS
 #define PLAY_SOUND(sound)                            .byt COMMAND_PLAY_SOUND,<sound,>sound
+#else
+#define PLAY_SOUND(sound)                            
+#endif
+
+#ifdef ENABLE_MUSIC
 #define PLAY_MUSIC(music)                            .byt COMMAND_PLAY_MUSIC,<music,>music
 #define LOAD_MUSIC(musicId)                          .byt COMMAND_LOAD_MUSIC,musicId
 #define STOP_MUSIC()                                 .byt COMMAND_STOP_MUSIC
+#else
+#define PLAY_MUSIC(music)                            
+#define LOAD_MUSIC(musicId)                          
+#define STOP_MUSIC()                                 
+#endif
 
 
 // Audio commands
