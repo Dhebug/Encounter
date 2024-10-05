@@ -176,6 +176,8 @@ keyword gWordsArray[] =
     { "INVOKE", e_WORD_INVOKE },
 #endif    
 
+    { "PAUSE", e_WORD_PAUSE },
+
     // Last instruction
     { "QUIT", e_WORD_QUIT },
 

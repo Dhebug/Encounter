@@ -1959,6 +1959,8 @@ _gActionMappingsArray
     WORD_MAPPING(e_WORD_TAKE      ,_TakeItem                  ,FLAG_MAPPING_DEFAULT)
     WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,FLAG_MAPPING_DEFAULT)
 
+    WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
+
 #ifdef ENABLE_CHEATS       
     WORD_MAPPING(e_WORD_INVOKE    ,_Invoke                    ,FLAG_MAPPING_DEFAULT)
 #endif
@@ -4395,6 +4397,70 @@ _TimeOutGameOver
 _EndSceneActions
 
 
+; The player can pause the game, the first time they get a 10 point penalty, then 50, 100, 500, 1000
+; After that pauses are free!
+_PauseGameScript
+.(
+    SET_CUT_SCENE(1)
+    STOP_CLOCK
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSED_THE_GAME)
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"GAME PAUSED - PRESS A KEY TO CONTINUE")
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the PAUSE patch
+            _IMAGE(24,61)
+            _BUFFER(17,63)
+    FADE_BUFFER
+    DO_ONCE(free_pause_message)
+        CLEAR_TEXT_AREA(5)                                                  ; Magenta background
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("La première pause est gratuite !")
+#else
+        INFO_MESSAGE("The first pause is free!")
+#endif    
+        JUMP(wait_key_press)
+    ENDDO(free_pause_message)
+        CLEAR_TEXT_AREA(1)                                                  ; RED background
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Les pauses suivantes coutent !")
+#else
+        INFO_MESSAGE("Now pausing costs you points!")
+#endif    
+wait_key_press
+    WAIT_KEYPRESS
+    DO_ONCE(free_pause)
+        JUMP(_Unpause)
+    ENDDO(free_pause)
+    DO_ONCE(first_pause)
+        JUMP(_UnpauseMinus10)
+    ENDDO(first_pause)
+    DO_ONCE(second_pause)
+        JUMP(_UnpauseMinus50)
+    ENDDO(second_pause)
+    DO_ONCE(third_pause)
+        JUMP(_UnpauseMinus100)
+    ENDDO(third_pause)
+    DO_ONCE(fourth_pause)
+        JUMP(_UnpauseMinus500)
+    ENDDO(fourth_pause)
+    DO_ONCE(fifth_pause)
+        JUMP(_UnpauseMinus1000)
+    ENDDO(fifth_pause)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSES_UNLIMITED)
+
+_UnpauseMinus1000
+    DECREASE_SCORE(1000)
+_UnpauseMinus500
+    DECREASE_SCORE(500)
+_UnpauseMinus100
+    DECREASE_SCORE(100)
+_UnpauseMinus50
+    DECREASE_SCORE(50)
+_UnpauseMinus10
+    DECREASE_SCORE(10)
+_Unpause
+    START_CLOCK
+    SET_CUT_SCENE(0)
+    END_AND_REFRESH
+.)    
 
 _EndGameTextData
 

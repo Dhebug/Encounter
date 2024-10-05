@@ -492,22 +492,32 @@ WORDS ProcessAnswer()
             if (flags & FLAG_MAPPING_STREAM)
             {
                 // Run the stream
-                unsigned char itemId = gWordBuffer[1];
-                if (ItemCheck(itemId))
+                void* stream = actionMappingPtr->u.stream;
+                if (flags & FLAG_MAPPING_STREAM_CALLBACK)
                 {
-                	ClearMessageWindow(16+4);
+                    // Just a simple "script callback"
+                    PlayStream(stream);
+                }
+                else
+                {
+                    // The callback to run require a lookup in a array based on some item numbers
+                    unsigned char itemId = gWordBuffer[1];
+                    if (ItemCheck(itemId))
+                    {
+                        ClearMessageWindow(16+4);
 
-                    if (flags & FLAG_MAPPING_TWO_ITEMS)
-                    {
-                        unsigned char itemId2 = gWordBuffer[2];
-                        if (ItemCheck(itemId2))
+                        if (flags & FLAG_MAPPING_TWO_ITEMS)
                         {
-                            DispatchStream2(actionMappingPtr->u.stream,itemId,itemId2);
+                            unsigned char itemId2 = gWordBuffer[2];
+                            if (ItemCheck(itemId2))
+                            {
+                                DispatchStream2(stream,itemId,itemId2);
+                            }
                         }
-                    }
-                    else
-                    {
-                        DispatchStream(actionMappingPtr->u.stream,itemId);
+                        else
+                        {
+                            DispatchStream(stream,itemId);
+                        }
                     }
                 }
             }

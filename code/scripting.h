@@ -186,7 +186,9 @@
 #define COMBINE_MAPPING(value1,value2,address)  .byt value1,value2,<address,>address,value2,value1,<address,>address
 #define WORD_MAPPING(value,address,flag)        .byt value,flag,<address,>address
 
-#define FLAG_MAPPING_DEFAULT             0
+// This mapping list of flags should probably be redone, but good enough for now
+// Basically, should separate concepts: Is it CODE or STREAM, and does it require an item(s) lookup in a table
+#define FLAG_MAPPING_DEFAULT             0      // Just a simple C or assembler function to call
 #define FLAG_MAPPING_STREAM              1      // 0 = Function pointer,  1 = Stream pointer
 #define FLAG_MAPPING_TWO_ITEMS           2      // 0 = Only one item, 1 = Two items (ex: Combine)
-
+#define FLAG_MAPPING_STREAM_CALLBACK     4      // No item at all, just a stream callback
