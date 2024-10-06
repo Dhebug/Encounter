@@ -907,7 +907,6 @@ _gDescriptionTiledPatio
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(23,0)
                 _BUFFER(0,17)
-        FADE_BUFFER 
         WAIT(50)
 
         ; Print the "Thank you" message (only once)
@@ -924,8 +923,6 @@ _gDescriptionTiledPatio
                     _IMAGE(6,31)
                     _SCREEN(3,40)
             WAIT(50*2)
-            FADE_BUFFER 
-            WAIT(50)
         ENDDO(thank_you)
         .)
 
@@ -1255,7 +1252,6 @@ _gDescriptionSunLounge
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,8,40)                     ; Draw the girl on the small wall outside on the view
                 _IMAGE(31,78)
                 _BUFFER(8,8)
-        FADE_BUFFER 
 girl_is_outside        
 
     WAIT(DELAY_FIRST_BUBBLE)
