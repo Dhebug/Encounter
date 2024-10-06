@@ -122,6 +122,7 @@ void ShowNewAchievements()
 {
     int entry;
     int unlockedCount = 0;
+    int achievementDelay = 70; 
     unsigned char achievementOffset = 0;
     unsigned char achievementMask = 1;
     for (entry=0;entry<ACHIEVEMENT_COUNT_;entry++)
@@ -143,7 +144,11 @@ void ShowNewAchievements()
             {
                 sprintf((char*)0xbb80+40*24,gTextNewAchievement,5,3,achievementMessage,0);
                 PlayFlipClick();
-                WaitFrames(50*2);
+                WaitFrames(1+achievementDelay);
+                if (achievementDelay>10)
+                {
+                    achievementDelay-=3;
+                }
             }             
         }
         achievementMask <<= 1;
@@ -179,7 +184,8 @@ void HandleHighScore()
     UnlockAchievement(ACHIEVEMENT_USED_THE_ROPE);
     UnlockAchievement(ACHIEVEMENT_READ_THE_NEWSPAPER);
     UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
-
+    UnlockAchievement(ACHIEVEMENT_FRISKED_THE_THUG);
+    memset(gAchievements,255,ACHIEVEMENT_BYTE_COUNT);           // Unlock ALL the achievements
 #endif
     // Show a congratulation/failure message related to their actual ending condition
     gPrintWidth = 40;
