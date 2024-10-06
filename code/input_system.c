@@ -131,7 +131,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
                 return callbackOutput;
             }
 			k=ReadKeyNoBounce();
-			sprintf(gStatusMessageLocation+40+1,"%c>%s%c           ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
+			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
 		}
 		while (k==0);
 
