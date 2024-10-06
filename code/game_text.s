@@ -1312,6 +1312,15 @@ _gDescriptionBasementStairs
 #else
     _BUBBLE_LINE(5,5,0,"Watch your step")
 #endif    
+
+    .(
+    ; Then we check if the player stroke the matches
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?
+        GOSUB(_gMiniKaboom)
+        FADE_BUFFER
+    ENDIF(matches)
+    .)
+
     END
 
 
@@ -1352,9 +1361,7 @@ _gDescriptionCellar
         ; If these values are not set before the first WAIT instruction, the game will be broken.
         SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_NONE)                    ; The bomb is gone
         SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE)            ; Don't need the matches anymore
-        //SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CURRENT)                 ; The acid is now visible (need to inspect the safe now)
         UNSET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED)  ; Un-strike the matches (just so the test above does not trigger a second time)
-        UNSET_ITEM_FLAGS(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED)          ; The safe is now open
 
 #ifdef LANGUAGE_FR                                                   ; Rename the safe to "an open safe"
         SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"un _coffre ouvert")
@@ -1364,17 +1371,17 @@ _gDescriptionCellar
 
         //DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
         CLEAR_TEXT_AREA(1)
-        INFO_MESSAGE("I should go somewhere safe")
+        QUICK_MESSAGE("I should go somewhere safe")
         PLAY_SOUND(_FuseBurningStart)
         WAIT(50*2)
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*1,67)
                 _SCREEN(30,43)
 
         WAIT(50)
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*2,67)
                 _SCREEN(30,43)
 
@@ -1382,16 +1389,16 @@ _gDescriptionCellar
         WAIT(50)
 
         CLEAR_TEXT_AREA(5)
-        INFO_MESSAGE("Hello?")
+        QUICK_MESSAGE("Hello?")
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*3,67)
                 _SCREEN(30,43)
 
         PLAY_SOUND(_FuseBurning)
         WAIT(50)
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*4,67)
                 _SCREEN(30,43)
 
@@ -1399,16 +1406,16 @@ _gDescriptionCellar
         WAIT(50)
 
         CLEAR_TEXT_AREA(4)
-        INFO_MESSAGE("Still there?")
+        QUICK_MESSAGE("Still there?")
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*5,67)
                 _SCREEN(30,43)
 
         PLAY_SOUND(_FuseBurning)
         WAIT(50)
 
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the bomb attached to the closed door
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*6,67)
                 _SCREEN(30,43)
 
@@ -1475,26 +1482,8 @@ alarm_panel_closed
         SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)      ; Enable the UP direction
 no_ladder
 
-    ; Make sure the safe looks correct
-    .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
-        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                        ; Draw the open damaged door
-                _IMAGE(14,0)
-                _BUFFER(20,17)
-    ELSE(else,safe_open)
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; Is the bomb installed?
-            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                     ; Draw the bomb attached to the closed door
-                    _IMAGE(17,0)
-                    _BUFFER(20,17)
-        ENDIF(bomb)
-    ENDIF(safe_open)
-    .)
-
-    ; Draw the explosion?
-    .(
-
-    .)
-
+    ; Make sure the safe looks correct before the explosion
+    GOSUB(_gDrawSafeInDarkRom)
 
     .(
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1518,8 +1507,55 @@ no_ladder
 #endif
     ENDIF(tape_on)
     .)    
+
+
+    .(
+    ; Then we check if the player stroke the matches
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?
+        GOSUB(_gMiniKaboom)        
+        GOSUB(_gDrawSafeInDarkRom)            ; Make sure the safe looks correct after the explosion
+        FADE_BUFFER
+    ENDIF(matches)
+    .)
+
     END
 .)
+
+_gMiniKaboom
+.(
+    SET_CUT_SCENE(1)
+    WAIT(50)
+    PLAY_SOUND(_ExplodeData)
+    SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_GONE_FOREVER)           ; Don't need the matches anymore
+    UNSET_ITEM_FLAGS(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED)                 ; The safe is now open
+    BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,7,31)                            ; Draw the Boom!
+            _IMAGE(20,0)
+            _SCREEN(17,24)
+    CLEAR_TEXT_AREA(1)
+    INFO_MESSAGE("Good thing I was not in there!")
+    WAIT(50*2)
+    CLEAR_TEXT_AREA(4)
+    SET_CUT_SCENE(0)
+    RETURN
+.)
+
+; Make sure the safe looks correct
+_gDrawSafeInDarkRom
+.(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                        ; Draw the open damaged door
+                _IMAGE(14,0)
+                _BUFFER(20,17)
+    ELSE(else,safe_open)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)    ; Is the bomb installed?
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                     ; Draw the bomb attached to the closed door
+                    _IMAGE(17,0)
+                    _BUFFER(20,17)
+        ENDIF(bomb)
+    ENDIF(safe_open)
+    RETURN
+.)
+
 
 
 // MARK: Cellar Window
