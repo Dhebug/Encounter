@@ -49,7 +49,8 @@
 #define COMMAND_LOAD_MUSIC      38
 #define COMMAND_STOP_MUSIC      39
 #define COMMAND_WAIT_KEYPRESS   40
-#define _COMMAND_COUNT          41
+#define COMMAND_QUICK_MESSAGE   41
+#define _COMMAND_COUNT          42
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -83,6 +84,7 @@
 
 // Text
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
+#define QUICK_MESSAGE(message)               .byt COMMAND_QUICK_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count

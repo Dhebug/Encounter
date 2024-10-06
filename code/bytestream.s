@@ -63,6 +63,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_LOAD_MUSIC
     .word _ByteStreamCommand_STOP_MUSIC
     .word _ByteStreamCommand_WAIT_KEYPRESS
+    .word _ByteStreamCommand_QUICK_MESSAGE
 
     
 ; _param0=pointer to the new byteStream
@@ -1060,6 +1061,15 @@ _WaitAfterMessage
 ; Uses _gCurrentStream and _gStreamNextPtr
 _ByteStreamCommandINFO_MESSAGE
 .(
+    jsr _ByteStreamCommand_QUICK_MESSAGE
+
+    ; Wait a bit after the message is displayed
+    jmp _WaitAfterMessage
+.)
+
+; .byt COMMAND_QUICK_MESSAGE,message,0
+_ByteStreamCommand_QUICK_MESSAGE
+.(
     ; PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
     ; _param0+0/+1=pointer to message (stored in gCurrentStream)
     lda _gCurrentStream+0
@@ -1083,15 +1093,12 @@ _ByteStreamCommandINFO_MESSAGE
     
     jsr _PrintStatusMessageAddr
 
-
     ; gCurrentStream += strlen(gCurrentStream)+1;
     lda _gStreamNextPtr+0
     sta _gCurrentStream+0
     lda _gStreamNextPtr+1
     sta _gCurrentStream+1
-
-    ; Wait a bit after the message is displayed
-    jmp _WaitAfterMessage
+    rts
 .)
 
 
