@@ -538,6 +538,22 @@ _Pling
 #define TONE(freq,volume)    SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,<freq,SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,>freq,SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,volume 
 #define NOISE(freq)          SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,freq
 
+_DoorOpening
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
+	.byt TONE($194,0)
+	.byt NOISE(31)
+	.byt SOUND_COMMAND_REPEAT,15
+		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,256-2
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,256-1
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
+		.byt SOUND_COMMAND_REPEAT,3
+			.byt SOUND_COMMAND_END_FRAME
+		.byt SOUND_COMMAND_ENDREPEAT			
+	.byt SOUND_COMMAND_ENDREPEAT			
+
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
+
 _DoorClosing
     .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
 	.byt TONE($194,$F)
@@ -585,7 +601,10 @@ _VroomVroom
 		.byt SOUND_COMMAND_END_FRAME
 	.byt SOUND_COMMAND_ENDREPEAT			
 
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+	;.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+	.byt TONE(1435,8)
+	.byt NOISE(21)
+
     .byt SOUND_COMMAND_END
 
     

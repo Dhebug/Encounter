@@ -303,6 +303,7 @@ _gDescriptionMarketPlace
         BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,8,80)                            ; Open the left door
             _IMAGE(0,0)
             _BUFFER(4,15)
+        PLAY_SOUND(_DoorOpening)
         FADE_BUFFER
         WAIT(50)                                ; Wait a second
 
@@ -322,6 +323,7 @@ _gDescriptionMarketPlace
         BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,7,80)                            ; Open the right door
             _IMAGE(8,0)
             _BUFFER(29,15)
+        PLAY_SOUND(_DoorOpening)
         FADE_BUFFER
         WAIT(50)                                ; Wait a second
 
@@ -330,7 +332,7 @@ _gDescriptionMarketPlace
             _BUFFER(22,29)
         FADE_BUFFER
         WAIT(50)                                ; Wait a second
-
+        
         BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,7,80)                            ; Close the right door
             _IMAGE(25,0)
             _BUFFER(29,15)
