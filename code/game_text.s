@@ -2719,6 +2719,7 @@ _ShowGirlInRoomWithoutBindings
 
     ; We show the message and the "thank you" only once.
     DO_ONCE(thank_you)
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle a coupé ses restraintes...")
 #else
@@ -2734,6 +2735,7 @@ _ShowGirlInRoomWithoutBindings
 #else
         INFO_MESSAGE("...now for the escape?")
 #endif    
+        STOP_MUSIC()
     ENDDO(thank_you)
 
     WAIT(50*2)
@@ -3865,7 +3867,12 @@ nothing_to_eat_the_meat
 
 _FreeDove
 .(    
+    CLEAR_TEXT_AREA(4)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La comlombe s'échappe")                                         ; When left anywhere, the dove will manage to fly away
+#else
     INFO_MESSAGE("The dove flies away")                                         ; When left anywhere, the dove will manage to fly away
+#endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
     // The dog will only chase the dove if the dog is where we are and is still alive and kicking
     JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_CURRENT))
@@ -3971,6 +3978,7 @@ thug_snooker_cue
                 ; The window is open: Let's smash it with the cue
                 GOSUB(_ShowOpenWindow)
                 GOSUB(_ShowCueBreakingTheWindow)
+                PLAY_SOUND(_Pling)
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("La queue brise la vitre")
 #else
