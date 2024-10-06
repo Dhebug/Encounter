@@ -504,3 +504,36 @@ _Swoosh
 	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
 	.byt SOUND_COMMAND_END
 
+
+_Pling
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,44         ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0           ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,15           ; Channel A volume
+
+    .byt SOUND_COMMAND_SET_VALUE,REG_B_FREQ_LOW,33        ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_B_FREQ_HI,0           ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_B_VOLUME,15           ; Channel B volume
+
+    .byt SOUND_COMMAND_SET_VALUE,REG_C_FREQ_LOW,50        ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_C_FREQ_HI,0           ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_C_VOLUME,15           ; Channel B volume
+
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%1111000       ; Enable Noise + Tone on channel A
+
+	.byt SOUND_COMMAND_REPEAT,8
+		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,256-1
+		.byt SOUND_COMMAND_ADD_VALUE,REG_B_VOLUME,256-1
+		.byt SOUND_COMMAND_ADD_VALUE,REG_C_VOLUME,256-2
+		.byt SOUND_COMMAND_REPEAT,16
+			.byt SOUND_COMMAND_END_FRAME
+		.byt SOUND_COMMAND_ENDREPEAT	
+	.byt SOUND_COMMAND_ENDREPEAT	
+
+	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
+	.byt SOUND_COMMAND_SET_VALUE,REG_B_VOLUME,0                           ; Cut the volume
+	.byt SOUND_COMMAND_SET_VALUE,REG_C_VOLUME,0                           ; Cut the volume
+	.byt SOUND_COMMAND_END
+
+
+
+    
