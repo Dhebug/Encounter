@@ -280,6 +280,7 @@ _gDescriptionMarketPlace
         ; Victory!
         SET_CUT_SCENE(1)
         STOP_CLOCK
+        
         LOAD_MUSIC(LOADER_MUSIC_VICTORY)
         INCREASE_SCORE(POINTS_WON_THE_GAME)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_SOLVED_THE_CASE)
@@ -295,10 +296,69 @@ _gDescriptionMarketPlace
 #endif    
         WAIT(50*4)                                ; Wait a couple seconds
         STOP_MUSIC()
-        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")
+        
+        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")         ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
+        
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,8,80)                            ; Open the left door
+            _IMAGE(0,0)
+            _BUFFER(4,15)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,3,13)                            ; Add the passenger head
+            _IMAGE(0,80)
+            _BUFFER(15,31)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,8,80)                            ; Close the left door
+            _IMAGE(32,0)
+            _BUFFER(4,15)
+        PLAY_SOUND(_DoorClosing)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,7,80)                            ; Open the right door
+            _IMAGE(8,0)
+            _BUFFER(29,15)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,4,14)                            ; Add the driver head
+            _IMAGE(3,80)
+            _BUFFER(22,29)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,7,80)                            ; Close the right door
+            _IMAGE(25,0)
+            _BUFFER(29,15)
+        PLAY_SOUND(_DoorClosing)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+        
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,6,30)                            ; Draw the small puff of smoke
+            _IMAGE(0,94)
+            _BUFFER(12,94)
+        PLAY_SOUND(_VroomVroom)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+
+        BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,11,48)                            ; Draw the bigger puff of smoke
+            _IMAGE(7,80)
+            _BUFFER(10,80)
+        PLAY_SOUND(_VroomVroom)
+        FADE_BUFFER
+        WAIT(50)                                ; Wait a second
+        PLAY_SOUND(_EngineRunning)
+        WAIT(50)                                ; Wait a second
+
         DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED,"The Daily Telegraph, September 30th")
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
         WAIT(50*4)                                ; Wait a couple seconds
+        STOP_MUSIC()
+
         GAME_OVER(e_SCORE_SOLVED_THE_CASE)        ; The game is now over
         JUMP(_gDescriptionGameOverWon)            ; Draw the 'The End' logo
 girl_not_here

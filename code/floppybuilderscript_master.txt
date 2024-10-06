@@ -421,6 +421,11 @@ AddDefine LOADER_SPRITE_HOLE_WITH_CUE {FileIndex}
 AddFile ..\build\files\masked_top_window.msk
 AddDefine LOADER_SPRITE_TOP_WINDOW {FileIndex}
 
+AddFile ..\build\files\masked_austin_parts.msk
+AddDefine LOADER_SPRITE_AUSTIN_PARTS {FileIndex}
+
+
+
 ;
 ; Music
 ;

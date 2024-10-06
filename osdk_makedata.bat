@@ -95,6 +95,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_hole_with_girl_attached
 %CONVERT% masked_hole_with_girl_free
 %CONVERT% masked_top_window
+%CONVERT% masked_austin_parts
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations
