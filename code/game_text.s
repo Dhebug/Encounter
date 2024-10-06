@@ -3587,11 +3587,12 @@ made_gun_powder
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
 
     DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("Homemade Gun powder...")
     WAIT(50*2)
     INFO_MESSAGE("...need a proper canister to store it")
     WAIT(50*2)
-
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
