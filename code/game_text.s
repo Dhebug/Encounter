@@ -2689,11 +2689,14 @@ _ShowGirlInRoomWithBindings
     INFO_MESSAGE("The victim is restrained...")
 #endif    
     WAIT(50)
-    BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
-            _IMAGE_STRIDE(0,108,17)
-            _BUFFER(22,67)
-    FADE_BUFFER
-    WAIT(50)
+    IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_HOSTAGE_ROOM),giving_knife)
+        ; We don't show the MMHFF if we are passing the knife because that causes some redraw issues
+        BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
+                _IMAGE_STRIDE(0,108,17)
+                _BUFFER(22,67)
+        FADE_BUFFER
+        WAIT(50)
+    ENDIF(giving_knife)
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...elle a besoin de notre aide !")
