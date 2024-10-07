@@ -3088,9 +3088,11 @@ _OpenPanicRoomWindow
 
 ; TODO: Messages to indicate that the fridge it already open or that we have already found something
 ; Probably need a string table/id system to easily reuse messages.
+_SearchFridge
 _OpenFridge
 .(    
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),open)                               ; Is the fridge closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                        ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                       ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
@@ -3106,9 +3108,11 @@ _OpenFridge
 .)
 
 
+_SearchMedicineCabinet
 _OpenMedicineCabinet
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),open)                      ; Is the medicine cabinet closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                               ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
@@ -3124,9 +3128,11 @@ _OpenMedicineCabinet
 .)
 
 
+_SearchGunCabinet
 _OpenGunCabinet
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),open)                           ; Is the gun cabinet closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                    ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
@@ -3156,6 +3162,7 @@ _OpenAlarmPanel
         WAIT(50*2)
     ELSE(locked,unlocked)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
+            PLAY_SOUND(_DoorOpening)
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
             UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_PANEL)                                   ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
@@ -3209,6 +3216,7 @@ _AlarmTriggered
 _OpenCarBoot
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                             ; Is the boot closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                      ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre ouvert")
@@ -3223,6 +3231,7 @@ _OpenCarBoot
 _OpenCarDoor
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                              ; Is the door closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
@@ -3240,6 +3249,7 @@ _OpenCarDoor
 _OpenCarPetrolTank
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                              ; Is the petrol tank closed?
+        PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence ouvert")
@@ -3292,6 +3302,7 @@ _CloseCurtain
 _CloseFridge
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),fridge)                                ; Is the fridge open?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                              ; Close it!
 +_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
@@ -3307,6 +3318,7 @@ _CloseFridge
 _CloseMedicineCabinet
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),cabinet)                      ; Is the cabinet open?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                     ; Close it!
 +_gTextItemMedicineCabinet = *+2                                                                    ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
@@ -3322,6 +3334,7 @@ _CloseMedicineCabinet
 _CloseGunCabinet
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),cabinet)                           ; Is the cabinet open?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                          ; Close it!
 +_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
@@ -3337,6 +3350,7 @@ _CloseGunCabinet
 _CloseAlarmPanel
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                                  ; Close it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                  ; And get an achievement for that action
 +_gTextItemLockedPanel = *+2       
@@ -3354,6 +3368,7 @@ _CloseAlarmPanel
 _CloseCarBoot
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                            ; Is the boot open?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                        ; Close it!
 +_gTextItemCarBoot = *+2        
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
@@ -3369,6 +3384,7 @@ _CloseCarBoot
 _CloseCarDoor
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                             ; Is the door open?
+        PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarDoor = *+2        
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
@@ -3824,7 +3840,10 @@ _UseAcid
 */
 
 _gSearchtemMappingsArray
-    VALUE_MAPPING(e_ITEM_Thug     , _SearchThug)
+    VALUE_MAPPING(e_ITEM_Thug               , _SearchThug)
+    VALUE_MAPPING(e_ITEM_Fridge             , _SearchFridge)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet    , _SearchMedicineCabinet)
+    VALUE_MAPPING(e_ITEM_GunCabinet         , _SearchGunCabinet)
     VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 
