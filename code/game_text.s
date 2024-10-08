@@ -2140,7 +2140,7 @@ _CombineSulfurWithSalpetre
     SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
 
-    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpeter")
+    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpetre")
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("It's mixed...")
     WAIT(50*2)
