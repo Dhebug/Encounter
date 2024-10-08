@@ -142,6 +142,8 @@ void ShowNewAchievements()
             // Is it a new unlock (ie: not unlocked in the save game)
             if (achievementByte & (~gSaveGameFile.achievements[achievementOffset]) )
             {
+                gSaveGameFile.achievements[achievementOffset] |= achievementMask;
+                gAchievementsChanged = 1;
                 sprintf((char*)0xbb80+40*24,gTextNewAchievement,5,3,achievementMessage,0);
                 PlayFlipClick();
                 WaitFrames(1+achievementDelay);

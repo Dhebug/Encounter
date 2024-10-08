@@ -297,11 +297,14 @@ void main()
 
 	// Load the highscores from the disk
 	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
-    //gSaveGameFile.launchCount=4;
+    // Make sure the achievements are copied to high memory
+    memcpy(gAchievements,gSaveGameFile.achievements,ACHIEVEMENT_BYTE_COUNT);
+
     // Show some informative message for the player to patient during loading
     gPrintWidth = 40;
     gPrintTerminator=0;    
     PrintStringAt(gLoadingMessagesArray[gSaveGameFile.launchCount&3],(char*)0xbb80+40*25);
+
     // Increment the launch count and save back the scores
     gSaveGameFile.launchCount++;
     if (LoaderApiSystemType==0)

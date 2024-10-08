@@ -846,7 +846,6 @@ endIntro:
     memset((char*)0xa000,64,8000);
 
 	// Show some informative message for the player to patient during loading
-    gSaveGameFile.launchCount=3;  // test
     gPrintWidth = 40;
     gPrintTerminator=0;    
     PrintStringAt(gLoadingMessagesArray[gSaveGameFile.launchCount&3],(char*)0xbb80+40*25);
