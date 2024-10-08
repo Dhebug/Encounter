@@ -149,11 +149,6 @@ copy_name
     dex
     bpl copy_name
 
-#if 0
-    ; 108 -> ok
-    ; 109 -> corruption
-    .dsb 110   ; 112
-#else
     ;
     ; Read sector data
     ; 
@@ -284,7 +279,6 @@ sector_OK
     
     ldx #0                      ; 0 = Microdisc initialisation code
     jmp FLOPPY_LOADER_ADDRESS
-#endif
 
 sector_counter    .byt (($FFFF-FLOPPY_LOADER_ADDRESS)+1)/256
 
