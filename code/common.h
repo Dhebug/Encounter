@@ -92,7 +92,7 @@ extern char PsgNeedUpdate;
 extern char PsgVirtualRegisters[];
 extern char ExplodeData[];
 extern char ShootData[];
-extern char PingData[];
+extern char PingData[];                 // Used in the typewriter sequence
 extern char ZapData[];
 extern char KeyClickHData[];
 extern char KeyClickLData[];
@@ -108,6 +108,7 @@ extern char BirdChirp2[];
 extern char Acid[];
 extern char FuseBurningStart[];
 extern char FuseBurning[];
+extern char ErrorPlop[];
 
 extern unsigned int PsgfreqA;
 extern unsigned int PsgfreqB;

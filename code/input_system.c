@@ -185,7 +185,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 			else
 			{
 				// No word recognized
-				PlaySound(PingData);
+				PlaySound(ErrorPlop);
 			}
 			break;
 

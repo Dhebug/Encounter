@@ -1038,8 +1038,8 @@ _PrintErrorMessageAsm
     jsr _PrintStatusMessageAsm
 
     ; Play a 'Ping' sound
-    ldx #<_PingData
-    ldy #>_PingData
+    ldx #<_ErrorPlop
+    ldy #>_ErrorPlop
     jsr _PlaySoundAsmXY
 
     ; Wait a bit after the message is displayed

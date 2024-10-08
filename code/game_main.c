@@ -542,7 +542,7 @@ WORDS ProcessAnswer()
 
 	// Not recognized: Warn the player and continue
     UnlockAchievement(ACHIEVEMENT_CAN_YOU_REPEAT);
-	PlaySound(PingData);
+	PlaySound(ErrorPlop);
  	return e_WORD_CONTINUE;
 }
 
