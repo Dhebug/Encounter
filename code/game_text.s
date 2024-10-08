@@ -138,6 +138,7 @@ _gTextItemSecurityDoor            .byt "une _porte blindée",0
 _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
+_gTextItemFrontDoor               .byt "la _porte principale",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -193,6 +194,7 @@ _gTextItemSecurityDoor            .byt "a security _door",0
 _gTextItemDriedOutClay            .byt "some dried out _clay",0
 _gTextItemProtectionSuit          .byt "a protection _suit",0
 _gTextItemHoleInDoor              .byt "a _hole in the door",0
+_gTextItemFrontDoor               .byt "the entrance _door",0
 #endif
 _EndItemNames
 
@@ -1106,7 +1108,7 @@ _gDescriptionFrontDoor
 #ifdef LANGUAGE_FR       
     SET_DESCRIPTION("Une entrée impressionante")
 #else
-    SET_DESCRIPTION("An impressive entrance door")
+    SET_DESCRIPTION("An impressive entrance")
 #endif    
     END
 
@@ -3044,6 +3046,8 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _OpenCarPetrolTank)
     VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _OpenPanicRoomWindow)
+    VALUE_MAPPING(e_ITEM_FrontDoor          , _OpenFrontDoor)
+    VALUE_MAPPING(e_ITEM_SecurityDoor       , _OpenSecurityDoor)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -3257,6 +3261,14 @@ _OpenCarPetrolTank
         SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
 #endif        
     ENDIF(open)
+    END_AND_REFRESH
+.)
+
+
+_OpenSecurityDoor
+_OpenFrontDoor
+.(
+    ERROR_MESSAGE("The door is locked")
     END_AND_REFRESH
 .)
 
