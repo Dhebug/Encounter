@@ -4560,6 +4560,7 @@ _PauseGameScript
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the PAUSE patch
             _IMAGE(24,61)
             _BUFFER(17,63)
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     FADE_BUFFER
     DO_ONCE(free_pause_message)
         CLEAR_TEXT_AREA(5)                                                  ; Magenta background
@@ -4568,19 +4569,8 @@ _PauseGameScript
 #else
         INFO_MESSAGE("The first pause is free!")
 #endif    
-        JUMP(wait_key_press)
-    ENDDO(free_pause_message)
-        CLEAR_TEXT_AREA(1)                                                  ; RED background
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("Les pauses suivantes coutent !")
-#else
-        INFO_MESSAGE("Now pausing costs you points!")
-#endif    
-wait_key_press
-    WAIT_KEYPRESS
-    DO_ONCE(free_pause)
         JUMP(_Unpause)
-    ENDDO(free_pause)
+    ENDDO(free_pause_message)
     DO_ONCE(first_pause)
         JUMP(_UnpauseMinus10)
     ENDDO(first_pause)
@@ -4596,7 +4586,16 @@ wait_key_press
     DO_ONCE(fifth_pause)
         JUMP(_UnpauseMinus1000)
     ENDDO(fifth_pause)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSES_UNLIMITED)
+    DO_ONCE(unlimited_pauses)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSES_UNLIMITED)
+        CLEAR_TEXT_AREA(2)                                               ; GREEN background
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Ok, ok, j'ai compris...")
+#else
+        INFO_MESSAGE("Ok, I give up, have it your way!")
+#endif    
+    ENDDO(unlimited_pauses)
+    JUMP(_Unpause)
 
 _UnpauseMinus1000
     DECREASE_SCORE(1000)
@@ -4608,7 +4607,15 @@ _UnpauseMinus50
     DECREASE_SCORE(50)
 _UnpauseMinus10
     DECREASE_SCORE(10)
+    CLEAR_TEXT_AREA(1)                                                  ; RED background
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Les pauses suivantes coutent !")
+#else
+    INFO_MESSAGE("Now pausing costs you points!")
+#endif    
 _Unpause
+    WAIT_KEYPRESS
+    PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     START_CLOCK
     SET_CUT_SCENE(0)
     END_AND_REFRESH
