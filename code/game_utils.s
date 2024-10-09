@@ -247,7 +247,7 @@ ArrowDown ; Patch at 18,129
 
 
 
-
+; MARK: Keyboard layout
 ; Call SetKeyboardLayout with X pointing on the right offset from KeyboardLayoutBase
 ; Azerty = KeyboardLayoutAzerty-KeyboardLayoutBase = 0
 ; Qwerty = KeyboardLayoutQwerty-KeyboardLayoutBase = 7
@@ -295,4 +295,32 @@ KeyboardLayoutQwertz    .byt "A","Y","Q","W","Z",<_gTextSetKeyboardQwertz,>_gTex
 
 KeyboardLayoutScanCode  .byt 8*6+5,8*2+5,8*1+6,8*6+7,8*6+0
 
-_SetKeyboardLayoutEnd
+
+
+; MARK:Print Directions
+_PrintSceneDirections
+.(
+    ldy #1                  ; Used to shift the bitmask
+    sty tmp0
+    dey                     ; 0
+    ldy _gFlagDirections    ; gFlagDirections = 0;
+loop    
+    lda (_gCurrentLocationPtr),y
+    cmp #e_LOC_NONE         ; if (directions[direction]!=e_LOC_NONE)
+    beq skip
+    lda _gFlagDirections    ; gFlagDirections|= (1<<direction);
+    ora tmp0
+    sta _gFlagDirections
+skip    
+    asl tmp0
+    iny
+    cpy #e_DIRECTION_COUNT_
+    bne loop
+    rts
+.)
+
+
+
+
+
+_EndGameUtils_

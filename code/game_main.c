@@ -15,22 +15,6 @@ extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so
 extern char LoadSceneScript[];
 
 
-// MARK:Print Directions
-void PrintSceneDirections()
-{
-	unsigned char* directions = gCurrentLocationPtr->directions;
-	int direction;
-
-	gFlagDirections = 0;
-	for (direction=0;direction<e_DIRECTION_COUNT_;direction++)
-	{
-		if (directions[direction]!=e_LOC_NONE)
-		{
-			gFlagDirections|= (1<<direction);
-		}
-	}
-}
-
 
 // MARK:Print Inventory
 // The inventory display is done in two passes, using an intermediate buffer to limit flickering.
