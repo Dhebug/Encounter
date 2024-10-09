@@ -3494,8 +3494,13 @@ _UseLadder
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM))
+    JUMP_IF_TRUE(ladder_too_short,CHECK_PLAYER_LOCATION(e_LOC_TILEDPATIO))
 cannot_use_ladder_here
     ERROR_MESSAGE("Can't use it there")
+    END_AND_REFRESH
+
+ladder_too_short
+    ERROR_MESSAGE("It's way too short!")
     END_AND_REFRESH
 
 install_the_ladder
