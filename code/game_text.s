@@ -3069,23 +3069,31 @@ _OpenCurtain
 
 _OpenPanicRoomWindow
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
-        UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
-        INCREASE_SCORE(POINTS_OPENED_PANIC_ROOM_WINDOW)
-        ; The description will get updated automatically by _gDescriptionPanicRoomDoor
-        GOSUB(_ShowOpeningWindow)
-
-        ; Check the status of the alarm... and if it's active, trigger it!
-        JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
-
-        GOSUB(_ShowGirlAtTheWindow)
-    ELSE(open,else)
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TILEDPATIO),tiledpatio)
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Elle est déjà ouverte")
+        ERROR_MESSAGE("Elle est trop haute")
 #else
-        ERROR_MESSAGE("It's already open")
+        ERROR_MESSAGE("It's too high")
 #endif        
-    ENDIF(else)
+    ELSE(tiledpatio,panicroom)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
+            UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
+            INCREASE_SCORE(POINTS_OPENED_PANIC_ROOM_WINDOW)
+            ; The description will get updated automatically by _gDescriptionPanicRoomDoor
+            GOSUB(_ShowOpeningWindow)
+
+            ; Check the status of the alarm... and if it's active, trigger it!
+            JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
+
+            GOSUB(_ShowGirlAtTheWindow)
+        ELSE(open,else)
+#ifdef LANGUAGE_FR
+            ERROR_MESSAGE("Elle est déjà ouverte")
+#else
+            ERROR_MESSAGE("It's already open")
+#endif        
+        ENDIF(else)
+    ENDIF(panicroom)
     END_AND_REFRESH
 .)
 
