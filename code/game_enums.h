@@ -165,9 +165,12 @@
 #define	e_WORD_QUIT                  146
 #define e_WORD_PRINT                 147
 #define e_WORD_PAUSE                 148
-#define	e_WORD_COUNT_                149
+#define e_WORD_KEYBFR                149
+#define e_WORD_KEYBUK                150
+#define e_WORD_KEYBDE                151
+#define	e_WORD_COUNT_                152
 // Additional values for the parser
-#define	e_WORD_CONTINUE              150
+#define	e_WORD_CONTINUE              153
 
 
 // Flags for the items

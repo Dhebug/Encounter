@@ -26,7 +26,8 @@ _KeyBank 		.dsb 8   ; The virtual Key Matrix
 
 ; Usually it is a good idea to keep 0 all the unused
 ; entries, as it speeds up things. Z=1 means no key
-; pressed and there is no need to look in tables later on. 
+; pressed and there is no need to look in tables later on.
+_KeyboardASCIIMapping 
 tab_ascii
     .asc "7","N","5","V",KET_RCTRL,"1","X","3"
     .asc "J","T","R","F",0,KEY_ESC,"Q","D"

@@ -38,12 +38,18 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
+_gTextSetKeyboardAzerty     .byt "Clavier en mode AZERTY",0
+_gTextSetKeyboardQwerty     .byt "Clavier en mode QWERTY",0
+_gTextSetKeyboardQwertz     .byt "Clavier en mode QWERTZ",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
+_gTextSetKeyboardAzerty     .byt "Keyboard set to AZERTY layout",0
+_gTextSetKeyboardQwerty     .byt "Keyboard set to QWERTY layout",0
+_gTextSetKeyboardQwertz     .byt "Keyboard set to QWERTZ layout",0
 #endif
 _EndMessagesAndPrompts
 
@@ -2079,7 +2085,11 @@ _gActionMappingsArray
 #ifdef ENABLE_PRINTER
     WORD_MAPPING(e_WORD_PRINT     ,_PrinterEnableDisable      ,FLAG_MAPPING_DEFAULT)
 #endif    
-    
+
+    WORD_MAPPING(e_WORD_KEYBFR    ,_SetKeyboardAzerty         ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_KEYBUK    ,_SetKeyboardQwerty         ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_KEYBDE    ,_SetKeyboardQwertz         ,FLAG_MAPPING_DEFAULT)
+
     WORD_MAPPING(e_WORD_COUNT_    ,0, 0)
     // End Marker
 
