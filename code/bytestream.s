@@ -1126,15 +1126,19 @@ _ByteStreamCommandERROR_MESSAGE
 
 
 ; _param0=paper color
-_ClearMessageWindowAsm
+_ClearMessageAndInventoryWindow
 .(
+    ldx #1+23+4-18
+    jmp common_bit
++_ClearMessageWindowAsm
+    ldx #1+23-18
+common_bit
     ; Pointer to first line of the "window"
     lda #<$bb80+40*18
     sta tmp0+0
     lda #>$bb80+40*18
     sta tmp0+1
 
-    ldx #1+23-18
 loop_line
     ; Erase the 39 last characters of that line
     ldy #39

@@ -547,6 +547,33 @@ WORDS ProcessAnswer()
 }
 
 
+// MARK: SHOW HELP
+void ShowHelp()
+{
+    keyword* keywordPtr = gWordsArray;
+
+    PrintTopDescription(gTextUsableActionVerbs);  // "Usable action verbs"
+    ClearMessageAndInventoryWindow(16+4);
+
+    gPrintWidth=38;
+    gPrintPos = 0;
+    SetLineAddress((char*)0xbb80+40*19+1);
+
+    while (keywordPtr->word)   // The list is terminated by a null pointer entry
+    {
+        if  ( (keywordPtr->id>e_ITEM_COUNT_) && (keywordPtr->id<e_WORD_COUNT_) )
+        {
+            PrintString(keywordPtr->word);
+            PrintString(" ");
+        }
+        ++keywordPtr;
+    }
+    PrintString(gTextUseShiftToHighligth);    
+    WaitKey();
+    LoadScene();
+}
+
+
 // MARK:Inits
 void Initializations()
 {

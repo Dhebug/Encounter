@@ -67,7 +67,7 @@ _Text_GameInstructions
 	.byt "E:EAST               EXAMINE/INSPECT",TEXT_CRLF
 	.byt "W:WEST             READ SEARCH/FRISK",TEXT_CRLF
     .byt "                     OPEN CLOSE QUIT",TEXT_CRLF
-    .byt 1,"              NOTES",TEXT_CRLF
+    .byt 1,"              NOTES",0,"     HELP PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Everything you need is here but you",TEXT_CRLF
 	.byt "may have to manufacture some items.",TEXT_CRLF

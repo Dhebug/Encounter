@@ -179,6 +179,7 @@ keyword gWordsArray[] =
 #endif    
 
     { "PAUSE", e_WORD_PAUSE },
+    { "HELP", e_WORD_HELP },
 
     { "KEYBFR", e_WORD_KEYBFR },
     { "KEYBUK", e_WORD_KEYBUK },

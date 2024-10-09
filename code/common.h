@@ -169,6 +169,8 @@ extern void HandleByteStream();
 #define DispatchStream2(streamTable,id1,id2)  { param0.uchar=id1;param1.ptr=streamTable;param2.uchar=id2;asm("jsr _DispatchStream2"); }
  
 #define ClearMessageWindow(paperColor)        { param0.uchar=paperColor;asm("jsr _ClearMessageWindowAsm"); }
+#define ClearMessageAndInventoryWindow(paperColor) { param0.uchar=paperColor;asm("jsr _ClearMessageAndInventoryWindow"); }
+
 
 #define DrawRectangleOutline(xPos,yPos,width,height,fillValue)  { param0.uchar=xPos;param0.uchars[1]=yPos;param1.uchar=width;param1.uchars[1]=height;param2.uchar=fillValue;asm("jsr _DrawRectangleOutlineAsm"); }
 

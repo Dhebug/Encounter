@@ -93,3 +93,5 @@ extern const char gTextErrorMissingContainer[]; // "You don't have this containe
 extern const char gTextErrorDropNotHave[];      // "You can only drop something you have"
 extern const char gTextErrorUnknownItem[];      // "I do not know what this item is"
 extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
+extern const char gTextUsableActionVerbs[];     // "Usable action verbs"
+extern const char gTextUseShiftToHighligth[];   // "Use SHIFT to highlighte"
