@@ -817,17 +817,18 @@ _EndLoaderCode
 ; This is free memory that can be used, when it reaches zero then the loader start address should be changed
 ;
 
-    .dsb $FFE8 - _EndLoaderCode
+    .dsb $FFE7 - _EndLoaderCode
 
 _Vectors
 
-#if ( _Vectors <> $FFE8 )
+#if ( _Vectors <> $FFE7 )
 #error - Vector address is incorrect, loader will crash
 #else
 
 ;
 ; Here are the functions that the user can call from his own application
 ;
+_LoaderApiEntryIndex	        .byt 0                                  ; $FFE7 - ID of the file to load
 _LoaderApiSystemType            .byt 0                                  ; $FFE8 - 0=Microdisc, 1=Jasmin
 
 ; Chema: WriteSupport
@@ -896,7 +897,10 @@ _VectorIRQ          .word IrqHandler                ; $FFFE-$FFFF - IRQ Vector (
 
 #if DISPLAYINFO=1
 #echo Remaining space in the loader code: 
-#print (_Vectors - _EndLoaderCode) 
+#print (_Vectors - _EndLoaderCode)
+#if ( (_Vectors - _EndLoaderCode) < 0 )
+#error - Loader ran out of memory, loader will crash
+#endif
 #endif
 #endif
 
