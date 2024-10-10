@@ -11,7 +11,7 @@
 ; The bootloader will be placed in the screen area because we know that this is not going to be used by the operating system.
 ; By chosing an address in HIRES area, we also guarantee that it will not be visible on the screen (the Oric boots in TEXT).
 ;
-#define FINAL_ADRESS	$9800			; First 256 bytes of the STD charset are invisible
+#define FINAL_ADRESS	$200   ; Let's try page 2  $9800			; First 256 bytes of the STD charset are invisible
 
 #define TELESTRAT_ALIGN
 #ifdef TELESTRAT_ALIGN
@@ -41,7 +41,6 @@
     
     *=$00
     
-retry_counter		.dsb 1	; Number of attempts at loading data (ie: not quite clear what happens when this fails...)
     
     
     .text
@@ -152,8 +151,6 @@ copy_name
     ;
     ; Read sector data
     ; 
-    ldy #4
-    sty retry_counter
 read_sectors_loop
 
     
@@ -281,6 +278,8 @@ sector_OK
     jmp FLOPPY_LOADER_ADDRESS
 
 sector_counter    .byt (($FFFF-FLOPPY_LOADER_ADDRESS)+1)/256
+retry_counter	  .byt 4	; Number of attempts at loading data (ie: not quite clear what happens when this fails...)
+
 
 OsdkNameStart
     .byt "OSDKNAME"
