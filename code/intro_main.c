@@ -45,6 +45,21 @@ extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SI
 extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];
 
 
+enum
+{
+    INTRO_TITLE_PICTURE = 0,
+    INTRO_USER_MANUAL,
+    INTRO_LEADERBOARD,
+    INTRO_ACHIEVEMENTS,
+    INTRO_STORY,
+    _INTRO_COUNT_
+};
+
+char gIntroPage = INTRO_TITLE_PICTURE;
+char gShouldExit = 0;
+
+
+
 int gXPos=0;
 int gYPos=0;
 char gStoryShownAlready = 0;
@@ -100,13 +115,25 @@ int Wait(int frameCount)
 	{
 		WaitIRQ();
 
-		k=ReadKey();
+		k=ReadKeyNoBounce();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
-			//PlaySound(KeyClickLData);
-			WaitFrames(4);
+            gShouldExit = 1;
 			return 1;
 		}
+        if (k==KEY_LEFT)
+        {
+            gIntroPage = (gIntroPage+_INTRO_COUNT_)-2;
+            if (gIntroPage>=_INTRO_COUNT_)
+            {
+                gIntroPage-=_INTRO_COUNT_;
+            }
+            return 1;
+        }
+        if (k==KEY_RIGHT)
+        {
+            return 1;
+        }
 	}
 	return 0;
 }
@@ -120,7 +147,7 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 	{
 		WaitIRQ();
 
-		k=ReadKey();
+		k=ReadKeyNoBounce();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
 			//PlaySound(KeyClickLData);
@@ -771,43 +798,49 @@ void main()
 #else    
 #ifdef INTRO_ENABLE_ATTRACT_MODE
     PlayMusic(IntroMusic);
-	while (1)
+	while (!gShouldExit)
 	{
+        switch (gIntroPage)
+        {
 #ifdef INTRO_SHOW_TITLE_PICTURE
-		if (DisplayIntroPage())
-		{
-			break;
-		}
+        case INTRO_TITLE_PICTURE:
+            DisplayIntroPage();
+            break;
 #endif        
 
-#ifdef INTRO_SHOW_LEADERBOARD
-		if (DisplayHighScoresTable())
-		{
-			break;
-		}
+#ifdef INTRO_SHOW_USER_MANUAL
+        case INTRO_USER_MANUAL:
+		    DisplayUserManual();
+            break;
 #endif
 
-#ifdef INTRO_SHOW_USER_MANUAL
-		if (DisplayUserManual())
-		{
-			break;
-		}
+#ifdef INTRO_SHOW_LEADERBOARD
+        case INTRO_LEADERBOARD:
+    		DisplayHighScoresTable();
+            break;
 #endif
 
 #ifdef INTRO_SHOW_ACHIEVEMENTS
-		if (DisplayAchievements())
-		{
-			break;
-		}
+        case INTRO_ACHIEVEMENTS:
+    		DisplayAchievements();
+            break;
 #endif
 
 #ifdef INTRO_SHOW_STORY
-		if (DisplayStory())
-		{
-			break;
-		}
-#endif
-        UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
+        case INTRO_STORY:
+    		DisplayStory();
+            UnlockAchievement(ACHIEVEMENT_WATCHED_THE_INTRO);
+            break;
+#endif        
+        }
+        if (gIntroPage<_INTRO_COUNT_)
+        {
+            gIntroPage++;
+        }
+        else
+        {
+            gIntroPage=0;
+        }
 	}
 #endif
 #endif
