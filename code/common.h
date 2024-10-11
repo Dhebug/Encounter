@@ -186,6 +186,7 @@ extern const char* gCurrentStream;
 extern char gCurrentStreamStop;
 extern unsigned int gDelayStream;
 extern char gStreamCutScene;
+extern const char* gStreamSkipPoint;
 
 #ifdef ENABLE_DEBUG_TEXT
 #define DEBUG_TEXT(text)   { sprintf((char*)0xbb80+40*27,"%c%s(%d): %s%c",16+1,  __FILE__ , __LINE__ , text, 1); }

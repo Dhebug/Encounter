@@ -47,7 +47,15 @@ void HandleByteStream()
                 while (gDelayStream)
                 {
                     gDelayStream--;
-                    WaitIRQ();                   
+                    WaitIRQ();
+                    if (gStreamSkipPoint && ReadKeyNoBounce())
+                    {
+                        // If we have a skip point and the keyboard is pressed, jump there immediately
+                        // This is used to skip the intro sequence when reaching the market place.
+                        gCurrentStream=gStreamSkipPoint;
+                        gStreamSkipPoint=0;
+                        gDelayStream=0;
+                    }
                 }
             }
 		}

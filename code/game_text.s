@@ -398,6 +398,7 @@ girl_not_here
     .(
     DO_ONCE(intro_sequence)
         ; First we show the map of where the player needs to go
+        SET_SKIP_POINT(end_intro_sequence)
         WAIT(50*2)
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
@@ -411,6 +412,8 @@ girl_not_here
         ; Then we show an animated sequence where the digital watch is set to have an alarm in two hours
         GOSUB(_WatchSetup)
 
+end_intro_sequence        
+        STOP_MUSIC()                   ; To ensure sounds are back if we cut before the music ended... (Need to fix that more cleanly, so many hacks now!)
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
         FADE_BUFFER

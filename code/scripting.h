@@ -50,7 +50,8 @@
 #define COMMAND_STOP_MUSIC      39
 #define COMMAND_WAIT_KEYPRESS   40
 #define COMMAND_QUICK_MESSAGE   41
-#define _COMMAND_COUNT          42
+#define COMMAND_SET_SKIP_POINT  42
+#define _COMMAND_COUNT          43
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -73,6 +74,8 @@
 #define GOSUB(label)                         .byt COMMAND_GOSUB,<label,>label
 #define RETURN                               .byt COMMAND_RETURN
 #define SET_CUT_SCENE(flag)                  .byt COMMAND_SET_CUT_SCENE,flag
+#define SET_SKIP_POINT(label)                .byt COMMAND_SET_SKIP_POINT,<label,>label
+
 
 #ifdef ASSEMBLER
 #define IF_TRUE(expression,label)            .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression   

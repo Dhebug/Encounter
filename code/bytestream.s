@@ -12,6 +12,7 @@ _gCurrentStream         .dsb 2
 _gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream           .dsb 2
 _gStreamCutScene        .dsb 1   ; 1 = In a cut scene
+_gStreamSkipPoint       .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
 
 _gCurrentItem           .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
 _gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
@@ -64,6 +65,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_STOP_MUSIC
     .word _ByteStreamCommand_WAIT_KEYPRESS
     .word _ByteStreamCommand_QUICK_MESSAGE
+    .word _ByteStreamCommand_SET_SKIP_POINT
 
     
 ; _param0=pointer to the new byteStream
@@ -500,7 +502,7 @@ music_already_loaded
     lda #>_ArkosMusic
     sta _param0+1
     jmp _StartMusic
-    
+
 no_music
     rts    
 .)
@@ -538,6 +540,18 @@ not_done
     lda #3                         ; Skip counter and address
     jmp _ByteStreamMoveByA
 .)
+
+
+; .byt COMMAND_SET_SKIP_POINT,<label,>label
+_ByteStreamCommand_SET_SKIP_POINT
+.(
+    jsr _ByteStreamGetNextByte
+    stx _gStreamSkipPoint+0
+    jsr _ByteStreamGetNextByte
+    stx _gStreamSkipPoint+1
+    rts
+.)
+
 
 ; .byt COMMAND_JUMP,<label,>label
 _ByteStreamCommandJUMP
