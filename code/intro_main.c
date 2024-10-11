@@ -253,7 +253,8 @@ int DisplayStory()
 
 #ifdef INTRO_SHOW_STORY_SCROLL
 	// Animation scrolling the office and the typewriter for cinematic effect
-    if ( (!gGameStarting) || (gGameStarting && !gStoryShownAlready) )
+    // We only show the paralax scroll in the attract mode, if the player presses space we directly skip to the typewriter story sequence
+    if (!gGameStarting)
     {
         {
             int y;
