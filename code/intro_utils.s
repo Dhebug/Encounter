@@ -17,6 +17,7 @@ IrqTasks50hz
 
 ; No-op to avoid a linker bug
 _PrinterSendStringAsm
+_PrintInformationMessageAsm
 _DrawArrows
     rts
 
@@ -176,3 +177,8 @@ events
 #endif
 .)
 
+
+_gTextSetKeyboardAzerty
+_gTextSetKeyboardQwerty
+_gTextSetKeyboardQwertz
+    .byt 0

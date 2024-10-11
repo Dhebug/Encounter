@@ -18,7 +18,9 @@ extern unsigned char VblCounter;
 extern char WaitKey();
 extern char ReadKey();
 extern char ReadKeyNoBounce();
+extern void SetKeyboardLayout();    // Apply the content of gKeyboardLayout to the keyboard handler
 
+extern char gKeyboardLayout;        // QWERTY / AZERTY / QWERTZ
 extern unsigned char KeyBank[8]; // .dsb 8   ; The virtual Key Matrix
 
 // Time
@@ -199,13 +201,10 @@ extern char gStreamCutScene;
 #define PrinterSendCrlf()            { asm("jsr _PrinterSendCrlfAsm"); }
 #endif
 extern char gUsePrinter;            // 0 or 255
-extern char gKeyboardLayout;        // QWERTY / AZERTY / QWERTZ
 extern char gMusicEnabled;          // 0 or 255
 extern char gSoundEnabled;          // 0 or 255
 
-#define KEYBOARD_QWERTY 0
-#define KEYBOARD_AZERTY 1
-#define KEYBOARD_QWERTZ 2
+
 
 
 // game_text

@@ -47,6 +47,10 @@
 #define KEY_DEL			11
 #define KEY_RETURN		12
 
+#define KEYBOARD_QWERTY 0
+#define KEYBOARD_AZERTY 1
+#define KEYBOARD_QWERTZ 2
+
 // 6502 opcodes for dynamic code patching
 #define OPCODE_NOP              $EA
 #define OPCODE_RTS              $60

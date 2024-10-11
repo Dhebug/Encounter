@@ -21,11 +21,16 @@ Count10SecondsDown
     rts
 
 ; No-op to avoid a linker bug
+_PrintInformationMessageAsm
 _PrinterSendStringAsm
 _DrawArrows
 _gFont12x14
     rts
 
+_gTextSetKeyboardAzerty
+_gTextSetKeyboardQwerty
+_gTextSetKeyboardQwertz
+    .byt 0
 
 _TypewriterMusic
 .(

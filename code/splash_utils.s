@@ -43,6 +43,7 @@ IrqTasks50hz
 
 ; No-op to avoid a linker bug
 _PrinterSendStringAsm
+_PrintInformationMessageAsm
     rts
 
 
@@ -244,3 +245,7 @@ _Text_On                .byt "ON ",0
 _Text_Off               .byt "OFF",0
 
 
+_gTextSetKeyboardAzerty
+_gTextSetKeyboardQwerty
+_gTextSetKeyboardQwertz
+    .byt 0
