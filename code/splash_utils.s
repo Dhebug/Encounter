@@ -223,3 +223,24 @@ _gLoadingMessagesArray
 ;
 _gSaveGameFile                   ; Same address than _gHighScores
 _gHighScores          .dsb 512   ; 456 bytes of actual score data, padded to 512 bytes for the saving system
+
+
+
+_Text_OptionMenu    
+    .byt 3,"Keyboard layout:"
+    .byt 4,"Option menu2",TEXT_CRLF
+    .byt 5,"Option menu3",TEXT_CRLF
+    .byt 0
+
+_Text_OptionKeyboard    .byt "Keyboard layout:",0
+_Text_Azerty            .byt "AZERTY (French)",0
+_Text_Qwerty            .byt "QWERTY         ",0
+_Text_Qwertz            .byt "QWERTZ (German)",0
+
+_Text_OptionMusic        .byt "Music:",0
+_Text_OptionSoundEffects .byt "Sound Effects:",0
+
+_Text_On                .byt "ON ",0
+_Text_Off               .byt "OFF",0
+
+

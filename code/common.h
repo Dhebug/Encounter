@@ -67,16 +67,16 @@ extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded 
 
 // Audio
 #ifdef ENABLE_SOUND_EFFECTS
-#define PlaySound(registerList)         { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }
+#define PlaySound(registerList)         { if (gSoundEnabled) { param0.ptr=registerList;asm("jsr _PlaySoundAsm"); }}
 #else
 #define PlaySound(registerList)         { }
 #endif
 
 #ifdef ENABLE_MUSIC
 #ifdef USE_MUSIC_EVENTS
-#define PlayMusic(music)                { param0.ptr=music+1+2;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[2];asm("jsr _StartMusic"); }
+#define PlayMusic(music)                { param0.ptr=music+1+2;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[2];if (gMusicEnabled) {asm("jsr _StartMusic"); }}
 #else
-#define PlayMusic(music)                { param0.ptr=music+1;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[0];asm("jsr _StartMusic"); }
+#define PlayMusic(music)                { param0.ptr=music+1;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[0];if (gMusicEnabled) { asm("jsr _StartMusic"); }}
 #endif
 #else
 #define PlayMusic(music)                { }
@@ -199,6 +199,13 @@ extern char gStreamCutScene;
 #define PrinterSendCrlf()            { asm("jsr _PrinterSendCrlfAsm"); }
 #endif
 extern char gUsePrinter;            // 0 or 255
+extern char gKeyboardLayout;        // QWERTY / AZERTY / QWERTZ
+extern char gMusicEnabled;          // 0 or 255
+extern char gSoundEnabled;          // 0 or 255
+
+#define KEYBOARD_QWERTY 0
+#define KEYBOARD_AZERTY 1
+#define KEYBOARD_QWERTZ 2
 
 
 // game_text

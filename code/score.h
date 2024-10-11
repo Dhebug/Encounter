@@ -28,9 +28,13 @@ typedef struct
 {
     score_entry scores[SCORE_COUNT];   // 18*24=432
     unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 6*8=48 achievements
-    char free_data[80-1-ACHIEVEMENT_BYTE_COUNT];
+    char free_data[80-4-ACHIEVEMENT_BYTE_COUNT];
+    unsigned char keyboard_layout;
+    unsigned char music_enabled;
+    unsigned char sound_enabled;
     unsigned char launchCount;
 } save_game_file;                      // sizeof(save_game_file)=512
+
 
 extern score_entry gHighScores[SCORE_COUNT];  //char gHighScores[512];  
 extern save_game_file gSaveGameFile;          // Actually points to the same location as gHighScores

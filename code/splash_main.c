@@ -65,6 +65,125 @@ extern void Erase38Bytes();
 BUILD_MARKER
 
 
+enum
+{
+    MENU_KEYBOARD_LAYOUT = 0,
+    MENU_MUSIC_ON_OFF    = 1,
+    MENU_SOUND_ON_OFF    = 2,
+};
+
+char UsedMenu = 0;
+char MenuShouldDraw = 1;
+int MenuPosition = MENU_KEYBOARD_LAYOUT;
+
+
+extern const char Text_OptionMenu[];
+extern const char Text_OptionKeyboard[];
+extern const char Text_Azerty[];
+extern const char Text_Qwerty[];
+extern const char Text_Qwertz[];
+
+extern const char Text_OptionMusic[];
+extern const char Text_OptionSoundEffects[];
+extern const char Text_On[];
+extern const char Text_Off[];
+
+void ApplySettings()
+{
+    if (gMusicEnabled)
+    {
+        MusicMixerMask = 1+2+4;
+#ifdef ENABLE_MUSIC
+    PlayMusic(JingleMusic);
+#endif    
+    }
+    else
+    {
+        MusicMixerMask = 0;
+        PsgStopSound();
+    }
+}
+
+
+
+void HandleSettingsMenu(int k)
+{
+    gPrintWidth=38;
+    gPrintPos = 0;
+    SetLineAddress((char*)0xbb80+40*25+1);
+
+    switch (k)
+    {         
+    case KEY_UP:
+        if (MenuPosition>0)
+        {
+            MenuPosition--;
+            MenuShouldDraw = 1;
+        }
+        UsedMenu = 1;
+        break;
+
+    case KEY_DOWN:
+        if (MenuPosition<2)
+        {
+            MenuPosition++;
+            MenuShouldDraw = 1;
+        }       
+        UsedMenu = 1;
+        break;
+    
+    case KEY_LEFT:
+    case KEY_RIGHT:
+        switch (MenuPosition)
+        {
+        case MENU_KEYBOARD_LAYOUT:
+            if (k==KEY_LEFT)
+            {
+                if (gKeyboardLayout==KEYBOARD_QWERTY) gKeyboardLayout=KEYBOARD_QWERTZ;
+                else                                  gKeyboardLayout--;
+            }
+            else
+            {
+                if (gKeyboardLayout==KEYBOARD_QWERTZ) gKeyboardLayout=KEYBOARD_QWERTY;
+                else                                  gKeyboardLayout++;
+            }
+            break;
+        case MENU_MUSIC_ON_OFF:
+            gMusicEnabled=!gMusicEnabled;
+            break;
+        case MENU_SOUND_ON_OFF:
+            gSoundEnabled=!gSoundEnabled;
+            break;
+        }
+        ApplySettings();
+        MenuShouldDraw=1;
+        UsedMenu = 1;
+        break;
+    }
+
+    if (MenuShouldDraw)
+    {
+        poke(0xbb80+40*25,(MenuPosition==0)?6:4);
+        poke(0xbb80+40*26,(MenuPosition==1)?6:4);
+        poke(0xbb80+40*27,(MenuPosition==2)?6:4);
+
+        PrintStringAt(Text_OptionKeyboard,(char*)0xbb80+40*25+1);
+        
+        PrintStringAt(
+            (gKeyboardLayout==KEYBOARD_QWERTY)?Text_Qwerty:
+            (gKeyboardLayout==KEYBOARD_AZERTY)?Text_Azerty:Text_Qwertz
+            ,(char*)0xbb80+40*25+21);
+
+        PrintStringAt(Text_OptionMusic,(char*)0xbb80+40*26+1);
+        PrintStringAt(gMusicEnabled?Text_On:Text_Off,(char*)0xbb80+40*26+21);
+
+        PrintStringAt(Text_OptionSoundEffects,(char*)0xbb80+40*27+1);
+        PrintStringAt(gSoundEnabled?Text_On:Text_Off,(char*)0xbb80+40*27+21);
+
+        MenuShouldDraw = 0;
+    }
+}
+
 
 // Some quite ugly function which waits a certain number of frames
 // while detecting key presses and returns 1 if either space or enter are pressed
@@ -76,13 +195,14 @@ int Wait(int frameCount)
 	{
 		WaitIRQ();
 
-		k=ReadKey();
+		k=ReadKeyNoBounce();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
 			//PlaySound(KeyClickLData);
 			WaitFrames(4);
 			return 1;
 		}
+        HandleSettingsMenu(k);
 	}
 	return 0;
 }
@@ -171,11 +291,12 @@ int ShowLogoAnimation()
             return 1;
         }
         */
-		k=ReadKey();
+		k=ReadKeyNoBounce();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
 			return 1;
 		}
+        HandleSettingsMenu(k);
 
         if (position<height+5)
         {
@@ -236,27 +357,28 @@ int DisplayLogosWithPreshift()
 
     PatchCosTable();
 
-    //while (1)  // TEST
+    do
     {
-    // Scroll the Servern Software up the river: Logo is 51 lines tall, from line 97 to 147
-    if (SetupColors(16+0,7,16+4,6))       return 1;
-    memcpy(LabelPicture0,ImageBuffer+97*40,51*40);
-    DrawPreshiftLogos();
-    height        = 51;
-    startPosition = 0;
-    frameCount    = 90;
-    if (ShowLogoAnimation())      return 1;
+        // Scroll the Servern Software up the river: Logo is 51 lines tall, from line 97 to 147
+        if (SetupColors(16+0,7,16+4,6))       return 1;
+        memcpy(LabelPicture0,ImageBuffer+97*40,51*40);
+        DrawPreshiftLogos();
+        height        = 51;
+        startPosition = 0;
+        frameCount    = 90;
+        if (ShowLogoAnimation())      return 1;
 
 
-    // Scroll the Defence Force logo up the river: Logo is 74 lines tall, from line 5 to 78
-    if (SetupColors(16+7,0,16+4,0))       return 1;
-    memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
-    DrawPreshiftLogos();
-    height        = 74;
-    startPosition = 74+5;
-    frameCount    = 60;
-    if (ShowLogoAnimation())   return 1;
+        // Scroll the Defence Force logo up the river: Logo is 74 lines tall, from line 5 to 78
+        if (SetupColors(16+7,0,16+4,0))       return 1;
+        memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
+        DrawPreshiftLogos();
+        height        = 74;
+        startPosition = 74+5;
+        frameCount    = 60;
+        if (ShowLogoAnimation())   return 1;
     }
+    while (UsedMenu);  // If the user did not use the menu, we quit after one loop, else we stay there
 
     return 0;
 }
@@ -273,12 +395,17 @@ void main()
 	// Load the first picture at the default address specified in the script
 	LoadFileAt(INTRO_PICTURE_LOGOS,ImageBuffer);
 
+	// Load the highscores from the disk
+	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
+    // Make sure the achievements are copied to high memory
+    memcpy(gAchievements,gSaveGameFile.achievements,ACHIEVEMENT_BYTE_COUNT);
+    gKeyboardLayout = gSaveGameFile.keyboard_layout;
+    gMusicEnabled   = gSaveGameFile.music_enabled;
+    gSoundEnabled   = gSaveGameFile.sound_enabled;
+    ApplySettings();
+
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
-
-#ifdef ENABLE_MUSIC
-    PlayMusic(JingleMusic);
-#endif    
 
     // Display the Severn Software and Defence Force logos
 	DisplayLogosWithPreshift();
@@ -288,17 +415,13 @@ void main()
     
     // Ensure that the screen is erased even if the player pressed a key
     memset((char*)0xa000,64,8000);
+    memset((char*)0xbb80+40*25,32,40*3);
 
 	System_RestoreIRQ_SimpleVbl();
 #ifdef ENABLE_MUSIC
     EndMusic();
 #endif    
     PsgStopSoundAndForceUpdate();
-
-	// Load the highscores from the disk
-	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
-    // Make sure the achievements are copied to high memory
-    memcpy(gAchievements,gSaveGameFile.achievements,ACHIEVEMENT_BYTE_COUNT);
 
     // Show some informative message for the player to patient during loading
     gPrintWidth = 40;
@@ -317,6 +440,10 @@ void main()
         UnlockAchievement(ACHIEVEMENT_PLAYED_ON_JASMIN);
     }
     memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
+    gSaveGameFile.keyboard_layout = gKeyboardLayout;
+    gSaveGameFile.music_enabled   = gMusicEnabled;
+    gSaveGameFile.sound_enabled   = gSoundEnabled;
+
     SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 	// Quit and return to the loader

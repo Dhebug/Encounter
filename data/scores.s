@@ -52,8 +52,11 @@ StartScores
  ENTRY(3,-200,"C.Auguste Dupin")
  ENTRY(5,-250,"  Insp Clouseau")
  .dsb 48                             ; 6*8=48 achievements
- .dsb 80-48-1                        ; Padding (forced to zero)
- .dsb 1                              ; Number of tiems the game has been launched
+ .dsb 80-48-4                        ; Padding (forced to zero)
+ .byt 0                              ; keyboard_layout - QWERTY by default (should be language checked?)
+ .byt 1                              ; music_enabled by default
+ .byt 1                              ; sound_enabled by default
+ .byt 0                              ; launchCount - Number of times the game has been launched
 EndScores
 
 
