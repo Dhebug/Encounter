@@ -148,6 +148,7 @@ _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
+_gTextItemRoughMap                .byt "une _carte sommaire",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -203,6 +204,7 @@ _gTextItemDriedOutClay            .byt "some dried out _clay",0
 _gTextItemProtectionSuit          .byt "a protection _suit",0
 _gTextItemHoleInDoor              .byt "a _hole in the door",0
 _gTextItemFrontDoor               .byt "the entrance _door",0
+_gTextItemRoughMap                .byt "a rough _map",0
 #endif
 _EndItemNames
 
@@ -283,6 +285,20 @@ _gDescriptionMarketPlace
 #else
     SET_DESCRIPTION("You are in a deserted market square")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_MARKETPLACE)
++_gTextItemMyCar = *+2   
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"ma _voiture")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"my _car")
+#endif    
+
+    ; Is the plastic bag on the market place?
+    JUMP_IF_FALSE(no_plastic_bag,CHECK_ITEM_LOCATION(e_ITEM_PlasticBag,e_LOC_MARKETPLACE))    
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,4)                     ; Draw the plastic bag
+                _IMAGE(24,0)
+                _BUFFER(2,79)
+no_plastic_bag    
 
     ; Is the girl here?
     JUMP_IF_FALSE(girl_not_here,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_MARKETPLACE))
@@ -398,15 +414,7 @@ girl_not_here
         ; First we show the map of where the player needs to go
         SET_SKIP_POINT(end_intro_sequence)
         WAIT(50*2)
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ROUGH_MAP,"Let see...")
-        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-        FADE_BUFFER
-        INFO_MESSAGE("I'll have to come back here...")
-        WAIT(50*2)
-        INFO_MESSAGE("...when I'm done")
-        WAIT(50*2)
-        STOP_MUSIC()
-        
+        GOSUB(_ShowRoughMap)        
         ; Then we show an animated sequence where the digital watch is set to have an alarm in two hours
         GOSUB(_WatchSetup)
 
@@ -659,6 +667,14 @@ _gDescriptionParkingPlace
 #else
     SET_DESCRIPTION("You are in an open area of tarmac")
 #endif    
+
+    SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_PARKING_PLACE)
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"une _voiture abandonnée")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"an abandoned _car")
+#endif    
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -2388,6 +2404,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_HandWrittenNote    , _ReadHandWrittenNote)
     VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _ReadChemistryRecipes)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _ReadChemistryBook)
+    VALUE_MAPPING(e_ITEM_RoughMap           , _ReadRoughMap)
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
 
@@ -2479,7 +2496,30 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _InspectProtectionSuit)
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
+    VALUE_MAPPING(e_ITEM_RoughMap           , _InspectRoughMap)
+    VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
+
+
+_UseRoughMap
+_ReadRoughMap
+_InspectRoughMap
+    GOSUB(_ShowRoughMap)
+    END_AND_REFRESH
+_ShowRoughMap
+.(
+    BLIT_BLOCK(LOADER_SPRITE_ROUGH_MAP,40,128)                     ; Draw the map of the location
+            _IMAGE(0,0)
+            _BUFFER(0,0)      
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+    FADE_BUFFER
+    INFO_MESSAGE("I'll have to go back to the market...")
+    WAIT(50*2)
+    INFO_MESSAGE("...when I'm done")
+    WAIT(50*2)
+    STOP_MUSIC()
+    RETURN
+.)
 
 
 _InspectMap
@@ -3487,7 +3527,26 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
     VALUE_MAPPING(e_ITEM_Acid               , _UseAcid)
     VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
+    VALUE_MAPPING(e_ITEM_RoughMap           , _UseRoughMap)
+    VALUE_MAPPING(e_ITEM_Car                , _UseCar)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
+
+
+_InspectCar
+_UseCar
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_MARKETPLACE),marketplace)
+        INFO_MESSAGE("This is my car.")
+        WAIT(50)
+        INFO_MESSAGE("I need to finish the mission first!")
+        END_AND_REFRESH
+    ELSE(marketplace,abandonned_car)
+        INFO_MESSAGE("Let's get closer")
+        WAIT(50)
+        SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
+        END_AND_REFRESH
+    ENDIF(abandonned_car)
+.)
 
 
 _UseLadder

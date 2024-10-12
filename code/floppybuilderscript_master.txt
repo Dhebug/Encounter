@@ -229,10 +229,6 @@ AddDefine LOADER_PICTURE_CELLAR_WINDOW_CLEARED {FileIndex}
 AddFile ..\build\files\loc_steel_door_with_goggles.hir
 AddDefine LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES {FileIndex}
 
-; Additional images
-AddFile ..\build\files\view_rough_map.hir
-AddDefine LOADER_PICTURE_ROUGH_MAP {FileIndex}
-
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_newspaper_fr.hir
 #else // LANGUAGE_EN
@@ -424,6 +420,8 @@ AddDefine LOADER_SPRITE_TOP_WINDOW {FileIndex}
 AddFile ..\build\files\masked_austin_parts.msk
 AddDefine LOADER_SPRITE_AUSTIN_PARTS {FileIndex}
 
+AddFile ..\build\files\masked_rough_map.msk
+AddDefine LOADER_SPRITE_ROUGH_MAP {FileIndex}
 
 
 ;

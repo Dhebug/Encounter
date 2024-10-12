@@ -96,6 +96,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_hole_with_girl_free
 %CONVERT% masked_top_window
 %CONVERT% masked_austin_parts
+%CONVERT% masked_rough_map
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations
@@ -160,7 +161,6 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_steel_door_with_goggles
 
 :: Other 240x128 full screen images which are not locations
-%CONVERT% view_rough_map
 %CONVERT% view_newspaper
 %CONVERT% view_newspaper_fr
 %CONVERT% view_handwritten_note

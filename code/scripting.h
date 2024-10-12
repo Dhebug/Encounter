@@ -51,7 +51,8 @@
 #define COMMAND_WAIT_KEYPRESS   40
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
-#define _COMMAND_COUNT          43
+#define COMMAND_SET_PLAYER_LOCATION 43
+#define _COMMAND_COUNT          44
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -114,6 +115,7 @@
 
 // Locations
 #define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
+#define SET_PLAYER_LOCATION(location)                   .byt COMMAND_SET_PLAYER_LOCATION,location
 #define SET_SCENE_IMAGE(imageId)                     .byt COMMAND_SET_SCENE_IMAGE,imageId
 
 // Graphics

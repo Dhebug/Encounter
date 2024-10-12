@@ -63,6 +63,7 @@ keyword gWordsArray[] =
     { "BULLETS",e_ITEM_Bullets              },  
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
+    { "MAP"    ,e_ITEM_RoughMap             },
     { "CURTAIN",e_ITEM_Curtain              },  
     { "CABINET",e_ITEM_Medicinecabinet      },  
     { "CABINET",e_ITEM_GunCabinet           },  
@@ -80,6 +81,7 @@ keyword gWordsArray[] =
     { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
     { "TANK"    ,e_ITEM_CarTank      },  
+    { "CAR"     ,e_ITEM_Car          },  
 
     { "DOOR"    ,e_ITEM_SecurityDoor },  
     { "HOLE"    ,e_ITEM_HoleInDoor },  

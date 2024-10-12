@@ -66,6 +66,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_WAIT_KEYPRESS
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
+    .word _ByteStreamCommand_SET_PLAYER_LOCATTION
 
     
 ; _param0=pointer to the new byteStream
@@ -627,6 +628,14 @@ _auto_conditionCheckItemFlag
     rts
 .)
 
+
+; .byt COMMAND_SET_PLAYER_LOCATION,location
+_ByteStreamCommand_SET_PLAYER_LOCATTION
+.(
+    jsr _ByteStreamGetNextByte
+    stx _gCurrentLocation
+    rts
+.)
 
 ; Can be used to set the location of any item
 ; .byt COMMAND_SET_ITEM_LOCATION,item,location
