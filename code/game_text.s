@@ -123,7 +123,6 @@ _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre fort",0
 _gTextItemHandWrittenNote         .byt "une _note manuscripte",0
 _gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
-_gTextItemHose                    .byt "un _tuyau d'arrosage",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
@@ -179,7 +178,6 @@ _gTextItemThug                    .byt "a _thug asleep on the bed",0
 _gTextItemHeavySafe               .byt "a heavy _safe",0                       
 _gTextItemHandWrittenNote         .byt "a hand written _note",0                     
 _gTextItemRollOfToiletPaper       .byt "a toilet _roll",0            
-_gTextItemHose                    .byt "a garden _hose",0                        
 _gTextItemOpenSafe                .byt "an open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
 _gTextItemYoungGirl               .byt "a young _girl",0                        
@@ -4271,6 +4269,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_BlackTape         , _TakeBlackTape)
     VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
+    VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -4342,6 +4341,19 @@ _TakeProtectionSuit
     GOSUB(_ShowProtectionSuit)
     JUMP(_TakeCommon)
 .)
+
+
+_TakeHose
+.(
++_gTextItemHose = *+2
+#ifdef LANGUAGE_FR   
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau d'arrosage")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a garden _hose")
+#endif    
+    JUMP(_TakeCommon)
+.)
+
 
 
 _TakeCommon
