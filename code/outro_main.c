@@ -24,7 +24,14 @@ WORDS AskInputCallback()
 WORDS ProcessPlayerNameAnswer()
 {
 	// We accept anything, it's the player name so...
-	return e_WORD_QUIT;
+    if (gInputBufferPos>=1)
+    {
+    	return e_WORD_QUIT;
+    }
+    else
+    {
+        return e_WORD_CONTINUE;   
+    }
 }
 
 char ProcessFoundToken(WORDS wordId)
@@ -217,24 +224,10 @@ void HandleHighScore()
 			}
 
 			// Ask the player their name
-            do
-            {              
-                nameOk=0;  
-                gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
-                SetKeyboardLayout();
-                AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
-                if ( (gInputBufferPos==0) || (gInputBufferPos>15) )
-                {
-                    PrintStatusMessage(1,gTextHighScoreInvalidName);
-                    WaitFrames(50);
-                }
-                else
-                {
-                    nameOk=1;
-                }
-
-            }
-            while (!nameOk);
+            gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
+            SetKeyboardLayout();
+            gInputMaxSize = 15;
+            AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
 
 
 			ptrScore->score = gScore+32768;

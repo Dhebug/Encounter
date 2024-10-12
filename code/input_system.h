@@ -2,6 +2,7 @@
 extern char gAskQuestion;
 extern char gInputBuffer[40];
 extern char gInputBufferPos;
+extern char gInputMaxSize;          // How many characters max are allowed
 
 extern char gWordCount;          	// How many tokens/word did we find in the input buffer
 extern char gWordBuffer[10];     	// One byte identifier of each of the identified words

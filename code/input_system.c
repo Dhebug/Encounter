@@ -12,6 +12,7 @@
 char gAskQuestion;
 char gInputBuffer[40];
 char gInputBufferPos;
+char gInputMaxSize=35;      // How many characters max are allowed
 
 char gWordCount;          	// How many tokens/word did we find in the input buffer
 char gWordBuffer[10];     	// One byte identifier of each of the identified words
@@ -66,6 +67,11 @@ unsigned char ParseInputBuffer()
 			separatorPtr=inputPtr;
 			while (*separatorPtr && (*separatorPtr!=' '))
 			{
+                // For the character to be upper case
+                if ( (*separatorPtr>='a') && (*separatorPtr<='z') )
+                {
+                    *separatorPtr &= ~32;   // Force to upper case
+                }
 				separatorPtr++;
 			}
 			if (*separatorPtr == 0)
@@ -192,17 +198,21 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 		default:
 			if (k>=32)
 			{
-				if ( (k>='A') && (k<='Z') && shift)
+				if ( (k>='A') && (k<='Z') && !shift)
 				{
 					k |= 32;
 				}
 
-				if (gInputBufferPos<35)
+				if (gInputBufferPos<gInputMaxSize)
 				{
 					gInputBuffer[gInputBufferPos++]=k;
 					gInputBuffer[gInputBufferPos]=0;
 					PlaySound(KeyClickLData);
 				}
+                else
+                {
+                    PlaySound(ErrorPlop);
+                }
 			}
 			break;
 		}

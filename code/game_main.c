@@ -518,7 +518,8 @@ WORDS ProcessAnswer()
                 return e_WORD_QUIT;
             }
 
-            // Continue
+            // Continue, clear the prompt
+            gTextAskInput[0]=0;
             return e_WORD_CONTINUE;
         }
         actionMappingPtr++;
@@ -580,6 +581,7 @@ void Initializations()
 	ComputeFancyFontWidth();
 	GenerateShiftBuffer();
 	GenerateMul40Table();
+    SetKeyboardLayout(); 
 
 #ifdef TESTING_MODE
 	// Add here any change to the scenario to easily check things
@@ -650,7 +652,7 @@ void main()
 	Initializations();	
 
 #ifdef ENABLE_GAME
-    gStatusMessageLocation = (unsigned char*)0xbb80+40*22;
+    gStatusMessageLocation = (unsigned char*)0xbb80+40*21;
 	AskInput(gTextAskInput,ProcessAnswer,1);
 #else
     // Directly go to the end credits    
