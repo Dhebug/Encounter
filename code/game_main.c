@@ -302,7 +302,7 @@ char ProcessFoundToken(WORDS wordId)
 
 
 // MARK:Item Checks
-char ItemCheck(unsigned char itemId)
+char ItemCheck(unsigned char itemId,unsigned char requiredItemCount)
 {
 	if (itemId<e_ITEM_COUNT_)
     {
@@ -317,7 +317,14 @@ char ItemCheck(unsigned char itemId)
     }
     else
 	{
-		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"        
+        if (gWordCount<=requiredItemCount)
+        {
+    		PrintErrorMessage(gTextErrorNeedMoreDetails);   // "Could you be more precise please?"
+        }
+        else
+        {
+    		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
+        }
 	}
     return 0; // Cannot use
 }
@@ -329,7 +336,14 @@ void TakeItem()
     item* itemPtr=&gItems[itemId];
 	if (itemId>=e_ITEM_COUNT_)
 	{
-		PrintErrorMessage(gTextErrorCantTakeNoSee);     // "You can only take something you see"
+        if (gWordCount<=1)
+        {
+    		PrintErrorMessage(gTextErrorNeedMoreDetails);   // "Could you be more precise please?"
+        }
+        else
+        {
+    		PrintErrorMessage(gTextErrorCantTakeNoSee);     // "You can only take something you see"
+        }
         return;
 	}
     
@@ -486,14 +500,14 @@ WORDS ProcessAnswer()
                 {
                     // The callback to run require a lookup in a array based on some item numbers
                     unsigned char itemId = gWordBuffer[1];
-                    if (ItemCheck(itemId))
+                    if (ItemCheck(itemId,1))
                     {
                         ClearMessageWindow(16+4);
 
                         if (flags & FLAG_MAPPING_TWO_ITEMS)
                         {
                             unsigned char itemId2 = gWordBuffer[2];
-                            if (ItemCheck(itemId2))
+                            if (ItemCheck(itemId2,2))
                             {
                                 DispatchStream2(stream,itemId,itemId2);
                             }

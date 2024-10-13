@@ -78,6 +78,7 @@ _gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
 _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
+_gTextErrorNeedMoreDetails  .byt "Could you be more precise please?",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
 #endif
 _EndErrorMessages
