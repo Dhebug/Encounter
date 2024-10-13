@@ -4067,8 +4067,18 @@ not_in_wooded_avenue
 .)
 
 
-_UseMeat
 _ThrowMeat
+    // By default we just drop the meat where we are
+    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_CURRENT)
+    GOSUB(MeatCommon)
+    END_AND_REFRESH
+
+_UseMeat
+    GOSUB(MeatCommon)
+    JUMP(_ErrorCannotDo)
+
+
+MeatCommon
 .(
     // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
     JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
@@ -4088,9 +4098,7 @@ done
     END_AND_REFRESH
 
 nothing_to_eat_the_meat
-    // In other locations we just drop the meat where we are
-    SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_CURRENT)
-    END_AND_REFRESH
+    RETURN
  .)
 
 
