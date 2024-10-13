@@ -4117,8 +4117,10 @@ nothing_to_chase_the_dove
  .)
 
 
-_UseKnife
 _ThrowKnife
+    // By default we just drop the knife where we are
+    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
+_UseKnife
 .(
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
@@ -4145,9 +4147,19 @@ thug_knife
         JUMP(_CommonGaveTheKnifeToTheGirl)
 acid_hole_knife    
 
-    // In other locations we just drop the item where we are
-    SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
-    END_AND_REFRESH
+    // - We are in the forest and assume the player want to scare the dove
+    JUMP_IF_FALSE(dove_knife,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(dove_knife,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("La colombe s'envole effrayée")
+#else    
+        INFO_MESSAGE("You scared the dove away")
+#endif    
+        SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
+        END_AND_REFRESH
+dove_knife    
+
+    JUMP(_ErrorCannotDo)
 .)
 
 
