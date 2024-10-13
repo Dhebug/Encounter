@@ -4189,8 +4189,10 @@ dove_net
 .)
 
 
-_UseSnookerCue
 _ThrowSnookerCue
+    // By default we just drop the cue where we are
+    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
+_UseSnookerCue
 .(
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
@@ -4267,9 +4269,7 @@ thug_snooker_cue
         END_AND_REFRESH
 acid_hole_cue
 
-    // In other locations we just drop the item where we are
-    SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
-    END_AND_REFRESH
+    JUMP(_ErrorCannotDo)
 .)
 
 
