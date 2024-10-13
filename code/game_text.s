@@ -68,6 +68,7 @@ _gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
+_gTextErrorNeedMoreDetails  .byt "Pourriez vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
