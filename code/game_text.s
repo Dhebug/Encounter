@@ -151,6 +151,7 @@ _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
 _gTextItemRoughMap                .byt "une _carte sommaire",0
+_gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -207,6 +208,7 @@ _gTextItemProtectionSuit          .byt "a protection _suit",0
 _gTextItemHoleInDoor              .byt "a _hole in the door",0
 _gTextItemFrontDoor               .byt "the entrance _door",0
 _gTextItemRoughMap                .byt "a rough _map",0
+_gTextItemLargeDoveOutOfReach     .byt "a _dove on a tall tree",0
 #endif
 _EndItemNames
 
@@ -4071,6 +4073,8 @@ give_bread_to_dove
     INFO_MESSAGE("Maybe I can catch it now?")
 #endif    
     WAIT(50*2)
+    END_AND_REFRESH
+
 not_in_wooded_avenue
     RETURN
 .)
@@ -4085,7 +4089,6 @@ _ThrowMeat
 _UseMeat
     GOSUB(MeatCommon)
     JUMP(_ErrorCannotDo)
-
 
 MeatCommon
 .(
@@ -4167,21 +4170,39 @@ acid_hole_knife
     // - We are in the forest and assume the player want to scare the dove
     JUMP_IF_FALSE(dove_knife,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_knife,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
-#ifdef LANGUAGE_FR   
-        INFO_MESSAGE("La colombe s'envole effrayée")
-#else    
-        INFO_MESSAGE("You scared the dove away")
-#endif    
-        SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
-        END_AND_REFRESH
+        JUMP(_ScareDoveAway)
 dove_knife    
 
     JUMP(_ErrorCannotDo)
 .)
 
 
-_UseNet
+_ScareDoveAway
+.(
+    CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("La colombe s'envole effrayée")
+#else    
+    INFO_MESSAGE("You scared the dove away")
+#endif    
+    SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
+    END_AND_REFRESH
+.)        
+
+
+
+
 _ThrowNet
+    // By default we just drop the knife where we are
+    SET_ITEM_LOCATION(e_ITEM_FishingNet,e_LOC_CURRENT)
+    GOSUB(NetCommon)
+    END_AND_REFRESH
+
+_UseNet
+    GOSUB(NetCommon)
+    JUMP(_ErrorCannotDo)
+
+NetCommon
 .(
     // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bred
     JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
@@ -4198,11 +4219,9 @@ _ThrowNet
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
 #endif    
         END_AND_REFRESH
+        
 dove_net    
-
-    // In other locations we just drop the item where we are
-    SET_ITEM_LOCATION(e_ITEM_FishingNet,e_LOC_CURRENT)
-    END_AND_REFRESH
+    RETURN
 .)
 
 
@@ -4401,9 +4420,9 @@ _TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une grosse _colombe")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a large _dove")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove")
 #endif    
     JUMP(_TakeCommon)
 .)
