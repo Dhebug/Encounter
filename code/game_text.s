@@ -4140,7 +4140,14 @@ nothing_to_chase_the_dove
 _ThrowKnife
     // By default we just drop the knife where we are
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)
+    GOSUB(KnifeCommon)
+    END_AND_REFRESH
+
 _UseKnife
+    GOSUB(KnifeCommon)
+    JUMP(_ErrorCannotDo)
+
+KnifeCommon
 .(
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
@@ -4171,9 +4178,9 @@ acid_hole_knife
     JUMP_IF_FALSE(dove_knife,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_knife,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
         JUMP(_ScareDoveAway)
-dove_knife    
 
-    JUMP(_ErrorCannotDo)
+dove_knife    
+    RETURN
 .)
 
 
@@ -4228,7 +4235,14 @@ dove_net
 _ThrowSnookerCue
     // By default we just drop the cue where we are
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
+    GOSUB(SnookerCueCommon)
+    END_AND_REFRESH
+
 _UseSnookerCue
+    GOSUB(SnookerCueCommon)
+    JUMP(_ErrorCannotDo)
+
+SnookerCueCommon
 .(
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
@@ -4303,9 +4317,9 @@ thug_snooker_cue
             WAIT(50*2)
         ENDIF(cue_not_in_the_room)
         END_AND_REFRESH
-acid_hole_cue
 
-    JUMP(_ErrorCannotDo)
+acid_hole_cue
+    RETURN
 .)
 
 
