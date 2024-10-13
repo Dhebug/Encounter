@@ -256,7 +256,7 @@ _PrintSceneDirections
     ldy #1                  ; Used to shift the bitmask
     sty tmp0
     dey                     ; 0
-    ldy _gFlagDirections    ; gFlagDirections = 0;
+    sty _gFlagDirections    ; gFlagDirections = 0;
 loop    
     lda (_gCurrentLocationPtr),y
     cmp #e_LOC_NONE         ; if (directions[direction]!=e_LOC_NONE)

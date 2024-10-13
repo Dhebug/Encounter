@@ -1566,12 +1566,16 @@ alarm_panel_closed
     ENDIF(open)
     .)
 
-    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
+    .(
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)  
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     ; Draw the ladder
                 _IMAGE(0,40)
                 _BUFFER(29,7)
-        SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)      ; Enable the UP direction
-no_ladder
+        SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)     ; Enable the UP direction
+    ELSE(ladder,no_ladder)
+        SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_NONE)              ; Disable the UP direction
+    ENDIF(no_ladder)
+    .)
 
     ; Make sure the safe looks correct before the explosion
     GOSUB(_gDrawSafeInDarkRom)
@@ -3249,9 +3253,15 @@ _OpenAlarmPanel
 
 _OpenBasementWindow
 .(
-    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement)                               ; Are we on the basement side...
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),basement)                              ; Are we on the basement side in the room itself...
+        INFO_MESSAGE("I can't reach it...")
+        WAIT(50*2)
+        END_AND_REFRESH
+    ENDIF(basement)
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement_on_ladder)                     ; Are we on the basement side on the ladder...
         INFO_MESSAGE("The frame is stuck...")                                                   
-    ELSE(basement,garden)                                                                      ; ...or on the vegetable garden side of the window?
+    ELSE(basement_on_ladder,garden)                                                            ; ...or on the vegetable garden side of the window?
         DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
         INFO_MESSAGE("It is locked from the inside...")
     ENDIF(garden)
