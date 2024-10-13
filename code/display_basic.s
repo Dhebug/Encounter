@@ -416,7 +416,7 @@ _SetKeyboardAzerty
 SetKeyboardLayout
 .(
     ; Read and push on the stack the entire array from the current offset
-    ldy #7
+    ldy #9
 read_value    
     lda KeyboardLayoutBase,x
     inx
@@ -430,7 +430,7 @@ read_value
     pla
     sta _param0+0
 
-    ldy #5
+    ldy #7
 write_value    
     ldx KeyboardLayoutScanCode-1,y
     pla 
@@ -451,10 +451,10 @@ _SetKeyboardLayout
 .)
 
 KeyboardLayoutBase
-KeyboardLayoutAzerty    .byt "Q","W","A","Z","Y",<_gTextSetKeyboardAzerty,>_gTextSetKeyboardAzerty
-KeyboardLayoutQwerty    .byt "A","Z","Q","W","Y",<_gTextSetKeyboardQwerty,>_gTextSetKeyboardQwerty
-KeyboardLayoutQwertz    .byt "A","Y","Q","W","Z",<_gTextSetKeyboardQwertz,>_gTextSetKeyboardQwertz
+KeyboardLayoutAzerty    .byt "Q","W","A","Z","Y","M",",",<_gTextSetKeyboardAzerty,>_gTextSetKeyboardAzerty
+KeyboardLayoutQwerty    .byt "A","Z","Q","W","Y",":","M",<_gTextSetKeyboardQwerty,>_gTextSetKeyboardQwerty
+KeyboardLayoutQwertz    .byt "A","Y","Q","W","Z",":","M",<_gTextSetKeyboardQwertz,>_gTextSetKeyboardQwertz
 
-KeyboardLayoutScanCode  .byt 8*6+5,8*2+5,8*1+6,8*6+7,8*6+0
+KeyboardLayoutScanCode  .byt 8*6+5,8*2+5,8*1+6,8*6+7,8*6+0,8*3+2,8*2+0
 
 
