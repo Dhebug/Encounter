@@ -4039,14 +4039,22 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_FishingNet         , _ThrowNet)
     VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
-_UseBread
 _ThrowBread
-.(
+    // By default we just drop the bread where we are
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
+    GOSUB(BreadCommon)
+    END_AND_REFRESH
 
+_UseBread
+    GOSUB(BreadCommon)
+    JUMP(_ErrorCannotDo)
+
+BreadCommon
+.(
     JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
 give_bread_to_dove
     // The bird is now possible to catch
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
     INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
     PLAY_SOUND(_Swoosh)
 #ifdef LANGUAGE_FR   
@@ -4063,7 +4071,7 @@ give_bread_to_dove
 #endif    
     WAIT(50*2)
 not_in_wooded_avenue
-    END_AND_REFRESH
+    RETURN
 .)
 
 
