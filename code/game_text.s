@@ -4444,9 +4444,10 @@ _TakeDove
 
 _TakeBread
 .(
-    JUMP_IF_FALSE(dove_there,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(take_bread,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(take_bread,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
         JUMP(_ScareDoveAway)
-dove_there    
+take_bread    
     JUMP(_TakeCommon)
 .)
 
