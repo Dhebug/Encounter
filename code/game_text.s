@@ -4365,6 +4365,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_Rope              , _TakeRope)
     VALUE_MAPPING(e_ITEM_Ladder            , _TakeLadder)
     VALUE_MAPPING(e_ITEM_LargeDove         , _TakeDove)
+    VALUE_MAPPING(e_ITEM_Bread             , _TakeBread)
     VALUE_MAPPING(e_ITEM_BlackTape         , _TakeBlackTape)
     VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
@@ -4404,6 +4405,15 @@ _TakeDove
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a large _dove")
 #endif    
+    JUMP(_TakeCommon)
+.)
+
+
+_TakeBread
+.(
+    JUMP_IF_FALSE(dove_there,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+        JUMP(_ScareDoveAway)
+dove_there    
     JUMP(_TakeCommon)
 .)
 
