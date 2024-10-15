@@ -2782,7 +2782,7 @@ _InspectPanicRoomDoor
 #endif    
             WAIT(50*2)
         ELSE(attached,nothing)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
+            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
 #else
@@ -3727,18 +3727,31 @@ _UseKeys
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
+            SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_GONE_FOREVER)                      ; We don't need the keys anymore
             INCREASE_SCORE(POINTS_USED_KEYS)
-            INFO_MESSAGE("The door is now unlocked")
+            INFO_MESSAGE("The panel is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
 #endif        
             WAIT(50*1)
+            END_AND_REFRESH
         ENDIF(locked)
     ENDIF(cellar)
 
-   END_AND_REFRESH
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)               ; Are we in front of the panic room?
+        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("C'est une serrure numérique !")
+#else
+        INFO_MESSAGE("It uses a digital lock!")
+#endif    
+        WAIT(50*2)
+        END_AND_REFRESH
+    ENDIF(panic_room)
+
+    JUMP(_ErrorCannotDo)
 .)
 
 
