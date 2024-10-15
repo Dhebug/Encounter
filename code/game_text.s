@@ -70,6 +70,7 @@ _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorNeedMoreDetails  .byt "Pourriez vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
+_gTextErrorIventoryFull     .byt "Je doit d'abord déposer quelque chose",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -81,6 +82,7 @@ _gTextErrorDropNotHave      .byt "You can only drop something you have",0
 _gTextErrorUnknownItem      .byt "I do not know what this item is",0
 _gTextErrorNeedMoreDetails  .byt "Could you be more precise please?",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
+_gTextErrorIventoryFull     .byt "I need to drop something first",0
 #endif
 _EndErrorMessages
 

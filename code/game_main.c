@@ -25,11 +25,12 @@ void PrintInventory()
 {	
     int pass;
 	int itemId;
-	int inventoryCell =0;
 
 #ifdef ENABLE_PRINTER    
     PrinterSendString("\n- Inventory: ");
 #endif
+
+    gCurrentItemCount = 0;
 
 	memset((char*)TemporaryBuffer479,' ',40*4);
     gPrintWidth=38;
@@ -40,7 +41,7 @@ void PrintInventory()
         {
             if (itemPtr->location == e_LOC_INVENTORY)
             {
-                char* screenPtr = (char*)TemporaryBuffer479+40*(inventoryCell/2)+(inventoryCell&1)*20;
+                char* screenPtr = (char*)TemporaryBuffer479+40*(gCurrentItemCount/2)+(gCurrentItemCount&1)*20;
                 unsigned char associatedItemId = itemPtr->associated_item;
 
                 if (pass==0)
@@ -51,7 +52,7 @@ void PrintInventory()
                         PrintStringAt(itemPtr->description,screenPtr);  // Print the container
                         PrintString(":");
                         PrintString(gItems[associatedItemId].description);
-                        inventoryCell+=2;
+                        gCurrentItemCount+=2;
                     #ifdef ENABLE_PRINTER    
                         PrinterSendString(", ");
                     #endif
@@ -62,8 +63,8 @@ void PrintInventory()
                     // Second pass: Everything else
                     if (associatedItemId==255)
                     {
-                        PrintStringAt(itemPtr->description,screenPtr);  // Print the container
-                        inventoryCell++;
+                        PrintStringAt(itemPtr->description,screenPtr);  // Print the item
+                        gCurrentItemCount++;
                     #ifdef ENABLE_PRINTER    
                         PrinterSendString(", ");
                     #endif
@@ -138,7 +139,7 @@ void PrintSceneObjects()
 }
 
 
-// MARK:Display Scenes
+// MARK:Display Scene
 void PrintSceneInformation()
 {
 	// Print the description of the place at the top (centered)
@@ -356,6 +357,12 @@ void TakeItem()
     if (itemPtr->location != gCurrentLocation)          // Is the item in the scene?
     {
         PrintErrorMessage(gTextErrorItemNotPresent);    // "This item does not seem to be present"
+        return;
+    }
+
+    if (gCurrentItemCount>=8)
+    {
+        PrintErrorMessage(gTextErrorIventoryFull);      // "I need to drop something first"
         return;
     }
 

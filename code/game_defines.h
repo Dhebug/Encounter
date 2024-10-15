@@ -5,6 +5,7 @@
 typedef unsigned char WORDS;
 
 extern unsigned char gCurrentLocation;
+extern unsigned char gCurrentItemCount;
 extern unsigned char gCurrentItem;
 
 //unsigned char 
@@ -94,5 +95,6 @@ extern const char gTextErrorDropNotHave[];      // "You can only drop something 
 extern const char gTextErrorUnknownItem[];      // "I do not know what this item is"
 extern const char gTextErrorNeedMoreDetails[];  // "Could you be more precise please?"
 extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
+extern const char gTextErrorIventoryFull[];     // "I need to drop something first"
 extern const char gTextUsableActionVerbs[];     // "Usable action verbs"
 extern const char gTextUseShiftToHighligth[];   // "Use SHIFT to highlighte"
