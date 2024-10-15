@@ -61,6 +61,80 @@ _MusicEvent     .byt 0          ; Value from the event track for the music
 ;Is there a loaded Player Configuration source? If no, use a default configuration.
 ; => to generate Player Configuration, see export option in Arkos Tracker 2 
 ; simplified version...
+
+; game_over_music_playerconfig.asm
+#define PLY_CFG_ConfigurationIsPresent 1
+#define PLY_CFG_UseSpeedTracks 1
+#define PLY_CFG_UseTranspositions 1
+#define PLY_CFG_UseEffects 1
+#define PLY_CFG_UseInstrumentLoopTo 1
+#define PLY_CFG_NoSoftNoHard 1
+#define PLY_CFG_SoftOnly 1
+#define PLY_CFG_SoftOnly_SoftwareArpeggio 1
+#define PLY_CFG_UseEffect_PitchGlide 1
+#define PLY_CFG_UseEffect_PitchUp 1
+#define PLY_CFG_UseEffect_PitchTable 1
+#define PLY_CFG_UseEffect_ArpeggioTable 1
+#define PLY_CFG_UseEffect_SetVolume 1
+#define PLY_CFG_UseEffect_VolumeOut 1
+
+; success_music_playerconfig.asm
+#define PLY_CFG_ConfigurationIsPresent 1
+#define PLY_CFG_UseSpeedTracks 1
+#define PLY_CFG_UseEffects 1
+#define PLY_CFG_UseInstrumentLoopTo 1
+#define PLY_CFG_NoSoftNoHard 1
+#define PLY_CFG_SoftOnly 1
+#define PLY_CFG_UseEffect_PitchTable 1
+#define PLY_CFG_UseEffect_SetVolume 1
+#define PLY_CFG_UseEffect_VolumeOut = 1  
+
+; you_won_music_playerconfig.asm
+#define PLY_CFG_ConfigurationIsPresent 1
+#define PLY_CFG_UseSpeedTracks 1
+#define PLY_CFG_UseTranspositions 1
+#define PLY_CFG_UseEffects 1
+#define PLY_CFG_UseInstrumentLoopTo 1
+#define PLY_CFG_NoSoftNoHard 1
+#define PLY_CFG_SoftOnly 1
+#define PLY_CFG_SoftOnly_SoftwareArpeggio 1
+#define PLY_CFG_UseEffect_PitchGlide 1
+#define PLY_CFG_UseEffect_PitchUp 1
+#define PLY_CFG_UseEffect_PitchDown 1
+#define PLY_CFG_UseEffect_PitchTable 1
+#define PLY_CFG_UseEffect_ArpeggioTable 1
+#define PLY_CFG_UseEffect_SetVolume 1
+#define PLY_CFG_UseEffect_VolumeIn 1
+#define PLY_CFG_UseEffect_VolumeOut 1
+
+; intro_music_playerconfig.a
+#define PLY_CFG_ConfigurationIsPresent 1
+#define PLY_CFG_UseSpeedTracks 1
+#define PLY_CFG_UseEffects 1
+#define PLY_CFG_UseInstrumentLoopTo 1
+#define PLY_CFG_NoSoftNoHard 1
+#define PLY_CFG_SoftOnly 1
+#define PLY_CFG_SoftOnly_SoftwareArpeggio 1
+#define PLY_CFG_UseEffect_PitchGlide 1
+#define PLY_CFG_UseEffect_PitchUp 1
+#define PLY_CFG_UseEffect_PitchDown 1
+#define PLY_CFG_UseEffect_PitchTable 1
+#define PLY_CFG_UseEffect_ArpeggioTable 1
+#define PLY_CFG_UseEffect_SetVolume 1
+#define PLY_CFG_UseEffect_VolumeOut 1
+
+; intro_music_typewriter_playerconfig.a
+#define PLY_CFG_ConfigurationIsPresent 1
+#define PLY_CFG_UseSpeedTracks 1
+#define PLY_CFG_UseEffects 1
+#define PLY_CFG_UseInstrumentLoopTo 1
+#define PLY_CFG_NoSoftNoHard 1
+#define PLY_CFG_SoftOnly 1
+#define PLY_CFG_UseEffect_ArpeggioTable 1
+#define PLY_CFG_UseEffect_SetVolume 1
+#define PLY_CFG_UseEffect_VolumeOut = 1  
+
+
 #ifndef PLY_CFG_ConfigurationIsPresent 
 
 #define PLY_CFG_UseHardwareSounds  1

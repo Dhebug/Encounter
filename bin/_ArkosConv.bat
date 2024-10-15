@@ -3,6 +3,7 @@
 ::
 :: Example:
 :: CALL _ArkosConv music_jingle splash_music
+:: Note, can add --exportPlayerConfig to get the config files
 IF "%3"=="" GOTO SourceExport
 
 :BinaryExport
