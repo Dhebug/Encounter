@@ -540,7 +540,10 @@ WORDS ProcessAnswer()
             }
 
             // Continue, clear the prompt
-            gTextAskInput[0]=0;
+            if (gTextAskInput[0])
+            {
+                gTextAskInput[0]=0;
+            }
             return e_WORD_CONTINUE;
         }
         actionMappingPtr++;
@@ -586,7 +589,7 @@ void ShowHelp()
             {
                 counter=0;
             }
-            gColoredSeparator[0]= (counter&1)?7:3;
+            gColoredSeparator[0] = (counter&1)?7:3;  // Alternate the ink colors based on the counter
 
             PrintString(gColoredSeparator);
         }

@@ -123,7 +123,14 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 #ifdef ENABLE_PRINTER
             PrinterSendCrlf();
 #endif    
-			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
+            if (inputMessage[0])
+            {
+    			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
+            }
+            else
+            {
+    			memset(gStatusMessageLocation+1,' ',39);
+            }
 			memset(gStatusMessageLocation+40+1,' ',39);
 			gAskQuestion=0;
 		}
