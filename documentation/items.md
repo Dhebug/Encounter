@@ -64,7 +64,7 @@ These are items you will find around in the various locations
 |-|-|-|
 |**panel on the wall**|Located in the basement dark room and can be opened with the keys|e_ITEM_AlarmPanel|
 |**a large dove**|The dove can be captured with the fishing net and used to distract the dog|e_ITEM_LargeDove|
-|**some twine**|The twine can be used to control the thug|e_ITEM_Twine|
+|**a string**|The string can be used to control the thug|e_ITEM_String|
 |**a silver knife**|The knife is there to help defend the player|e_ITEM_SilverKnife|
 |**a ladder**|The ladder is too short to reach the window but can be used to climb out of the pit|e_ITEM_Ladder<br>e_ITEM_LadderInTheHole|
 |**an abandoned car**|The car is a source of petrol - and possibly rust|e_ITEM_AbandonedCar|

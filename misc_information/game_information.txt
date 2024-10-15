@@ -50,7 +50,7 @@ Frisking:
 - If you search the thug (after it's incapacited) you can find a pistol (not loaded ???)
 
 Killing:
-- The thug can be strangled with the twine, rope or garden hose
+- The thug can be strangled with the string, rope or garden hose
 - The thug can be stabbed with the cue or the knife
 - The thug can be hit with the cue
 - The thug can be made to suffocate from the plastic bag on this head

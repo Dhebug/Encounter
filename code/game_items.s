@@ -40,7 +40,7 @@ _gItems
     ITEM_NORMAL( _gTextItemFridge                ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Fridge
     ITEM_NORMAL( _gTextItemSedativePills         ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SedativePills     
     ITEM_NORMAL( _gTextItemBasementWindow        ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_BasementWindow
-    ITEM_NORMAL( _gTextItemTwine                 ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Twine                
+    ITEM_NORMAL( _gTextItemString                ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_String                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
     ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
     ITEM_NORMAL( _gTextItemMixTape               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MixTape         

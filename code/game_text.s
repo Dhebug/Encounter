@@ -111,7 +111,7 @@ _gTextItemWater                   .byt "de l'eau",0
 // Normal items
 _gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
-_gTextItemTwine                   .byt "un peu de _ficelle",0
+_gTextItemString                  .byt "une _ficelle",0
 _gTextItemSilverKnife             .byt "un _couteau en argent",0
 _gTextItemMixTape                 .byt "une _compil sur K7",0
 _gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
@@ -168,7 +168,7 @@ _gTextItemWater                   .byt "some _water",0
 // Normal items
 _gTextItemOpenPanel               .byt "an open _panel on wall",0              
 _gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0           
-_gTextItemTwine                   .byt "some _twine",0                         
+_gTextItemString                  .byt "a _string",0                         
 _gTextItemSilverKnife             .byt "a silver _knife",0                     
 _gTextItemMixTape                 .byt "a _mixtape",0
 _gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
