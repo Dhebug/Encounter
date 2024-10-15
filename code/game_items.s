@@ -32,7 +32,7 @@ _gItems
     ITEM( _gTextItemYellowPowder          ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
     ITEM( _gTextItemPetrol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Petrol               
     ITEM( _gTextItemWater                 ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Water                
-    ITEM( _gTextItemLargeDove             ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet))                     // e_ITEM_LargeDove            
+    ITEM( _gTextItemLargeDoveOutOfReach   ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_CardboardBox,e_ITEM_FishingNet))                     // e_ITEM_LargeDove            
     ITEM( _gTextItemPowderMix             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_PowderMix            
     ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK1(e_ITEM_TobaccoTin))                                                       // e_ITEM_GunPowder            
 

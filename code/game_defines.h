@@ -76,7 +76,7 @@ extern stream_mapping gTakeItemMappingsArray[];
 extern stream_mapping gDropItemMappingsArray[];
 
 // Small feedback messages and prompts
-extern const char gTextAskInput[];              // "What are you going to do now?"
+extern       char gTextAskInput[];              // "What are you going to do now?" (not const because we patch it)
 extern const char gTextNothingHere[];           // "There is nothing of interest here"
 extern const char gTextCanSee[];                // "I can see"
 extern const char gTextScore[];                 // "Score:"
@@ -92,6 +92,7 @@ extern const char gTextErrorAlreadyFull[];      // "Sorry, that's full already"
 extern const char gTextErrorMissingContainer[]; // "You don't have this container"
 extern const char gTextErrorDropNotHave[];      // "You can only drop something you have"
 extern const char gTextErrorUnknownItem[];      // "I do not know what this item is"
+extern const char gTextErrorNeedMoreDetails[];  // "Could you be more precise please?"
 extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
 extern const char gTextUsableActionVerbs[];     // "Usable action verbs"
 extern const char gTextUseShiftToHighligth[];   // "Use SHIFT to highlighte"
