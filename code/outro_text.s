@@ -252,9 +252,11 @@ _gScoreConditionsArray
 
 // Bonus texts
 #ifdef LANGUAGE_FR
-_gTextBaseScore         .byt "%cScore:%d  ",0     ; The space is required is the earlier score was negative
-_gTextNewAchievement    .byt "%cNew achievement: %s%c",0    ; The last %c is to clear the color
+_gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
+_gTextNewAchievement    .byt "%cNew achievement: %s%c",0     ; The last %c is to clear the color
+_gTextNoTimeBonus       .byt "%cNo time bonus for you!%c",0  ; The last %c is to clear the color
 #else
-_gTextBaseScore         .byt "%cScore:%d  ",0               ; The space is required is the earlier score was negative
+_gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
 _gTextNewAchievement    .byt "%cNew achievement:%c%s%c",0    ; The last %c is to clear the color
+_gTextNoTimeBonus       .byt "%cNo time bonus for you!%c",0  ; The last %c is to clear the color
 #endif

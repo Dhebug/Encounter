@@ -773,13 +773,14 @@ loop
 
   jsr _BlendBufferToHiresWindowInternal
   sei
+  ; Dom thought 6 seconds was too short, he lost when he was busy with the clay and the water
   ;jsr Count10SecondsDown                    ; With 10 seconds decrements, impossible to possibly win the game at all
   jsr Count1SecondsDown                      ; Let's try with 1 second instead: Playtrough duration: 1:30:30 remaining with 1 second per fade
   jsr Count1SecondsDown
   jsr Count1SecondsDown
   jsr Count1SecondsDown                      ; Let's try with 4 seconds: Playtrough duration: 1:04:50
-  jsr Count1SecondsDown
-  jsr Count1SecondsDown                      ; Let's try with 6 seconds: Playtrough duration: 0:37:34
+  ;jsr Count1SecondsDown
+  ;jsr Count1SecondsDown                      ; Let's try with 6 seconds: Playtrough duration: 0:37:34
   cli
 
   .(  

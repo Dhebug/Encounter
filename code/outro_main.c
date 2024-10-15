@@ -99,24 +99,32 @@ void ApplyTimeBonus()
     sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
     WaitFrames(50);
 
-    // Add the time as bonus points (half a point per remaining second)
-    do
+    if (gGameOverCondition == e_SCORE_SOLVED_THE_CASE)
     {
-        char offset=timeBonusInfoPtr->character_offset;
-        if (ptrTimeString[offset]>'0')
+        // Add the time as bonus points (half a point per remaining second)
+        do
         {
-            ptrTimeString[offset]--;
-            gScore+=timeBonusInfoPtr->bonus_value;
-            PlayFlipClick();
-            WaitFrames(5);
+            char offset=timeBonusInfoPtr->character_offset;
+            if (ptrTimeString[offset]>'0')
+            {
+                ptrTimeString[offset]--;
+                gScore+=timeBonusInfoPtr->bonus_value;
+                PlayFlipClick();
+                WaitFrames(5);
+            }
+            else
+            {
+                ++timeBonusInfoPtr;
+            }
+            sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
         }
-        else
-        {
-            ++timeBonusInfoPtr;
-        }
-        sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
+        while (timeBonusInfoPtr->bonus_value);
     }
-    while (timeBonusInfoPtr->bonus_value);
+    else
+    {
+        sprintf((char*)0xbb80+40*24,gTextNoTimeBonus,1,0);        
+        WaitFrames(50*2);
+    }
 
     // Erase the remaining time
     memset(ptrTimeString,32,7);
