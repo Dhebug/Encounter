@@ -141,7 +141,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 		}
 		while (k==0);
 
-		if ((KeyBank[4] & 16))	// SHIFT code
+		if ((KeyBank[4] & 16) || (KeyBank[7] & 16))	// SHIFT code
 		{
 			shift=1;
 		}

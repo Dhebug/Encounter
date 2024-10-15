@@ -5,6 +5,7 @@
 
 _gPrintAddress      .dsb 2
 _gPrintPos          .dsb 1
+_gPrintLineTruncated .dsb 1
 
     .text
 
@@ -63,6 +64,7 @@ _PrintStringInternal
     sta _isHighlighted
     sta _spaceCounter
     sta _wasTruncated
+    sta _gPrintLineTruncated
 
 loop
     ldy #0
@@ -137,6 +139,7 @@ found_word_end
     ; Does not fit
     lda #1
     sta _wasTruncated
+    sta _gPrintLineTruncated
 
     lda #0
     sta _gPrintPos

@@ -546,9 +546,12 @@ WORDS ProcessAnswer()
 }
 
 
+char gColoredSeparator[]=" ";
+
 // MARK: SHOW HELP
 void ShowHelp()
 {
+    char counter=0;
     keyword* keywordPtr = gWordsArray;
 
     PrintTopDescription(gTextUsableActionVerbs);  // "Usable action verbs"
@@ -562,8 +565,23 @@ void ShowHelp()
     {
         if  ( (keywordPtr->id>e_ITEM_COUNT_) && (keywordPtr->id<e_WORD_COUNT_) )
         {
+            if (gPrintPos==0)
+            {
+                // New line
+                counter=0;
+            }
+            else
+            {
+                counter++;
+            }
             PrintString(keywordPtr->word);
-            PrintString(" ");
+            if (gPrintLineTruncated)
+            {
+                counter=0;
+            }
+            gColoredSeparator[0]= (counter&1)?7:3;
+
+            PrintString(gColoredSeparator);
         }
         ++keywordPtr;
     }
