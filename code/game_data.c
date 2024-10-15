@@ -34,7 +34,7 @@ keyword gWordsArray[] =
     { "STRING", e_ITEM_String               },  
     { "KNIFE",  e_ITEM_SilverKnife          },  
     { "LADDER", e_ITEM_Ladder               },  
-    { "DOG",    e_ITEM_AlsatianDog          },  
+    { "DOG",    e_ITEM_Dog                  },  
     { "MEAT",   e_ITEM_Meat                 },  
     { "BREAD",  e_ITEM_Bread                },  
     { "TAPE",   e_ITEM_BlackTape            },  

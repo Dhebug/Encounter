@@ -94,7 +94,7 @@
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
 #define	e_ITEM_Ladder  				 18         // a ladder
 #define	e_ITEM_MixTape      		 19         // a mix tape
-#define	e_ITEM_AlsatianDog  		 20         // Alsatian dog
+#define	e_ITEM_Dog  		         20         // a dog
 #define	e_ITEM_Meat  				 21         // a joint of meat
 #define	e_ITEM_Bread  				 22         // some brown bread
 #define	e_ITEM_BlackTape  			 23         // black tape

@@ -68,7 +68,7 @@ These are items you will find around in the various locations
 |**a silver knife**|The knife is there to help defend the player|e_ITEM_SilverKnife|
 |**a ladder**|The ladder is too short to reach the window but can be used to climb out of the pit|e_ITEM_Ladder<br>e_ITEM_LadderInTheHole|
 |**an abandoned car**|The car is a source of petrol - and possibly rust|e_ITEM_AbandonedCar|
-|**an alsatian growling at you**|The dog is blocking the access to the second level of the house|e_ITEM_AlsatianDog|
+|**an alsatian growling at you**|The dog is blocking the access to the second level of the house|e_ITEM_Dog|
 |**a joint of meat**|The meat can be given to the dog|e_ITEM_Meat|
 |**some brown bread**|The bread can be used to catch the dove|e_ITEM_Bread|
 |**a roll of sticky tape**||e_ITEM_RollOfTape|

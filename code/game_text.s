@@ -116,7 +116,7 @@ _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
 _gTextItemString                  .byt "une _ficelle",0
 _gTextItemSilverKnife             .byt "un _couteau en argent",0
 _gTextItemMixTape                 .byt "une _compil sur K7",0
-_gTextItemAlsatianDog             .byt "un alsacien qui grogne",0
+_gTextItemAlsatianDog             .byt "un _chien qui grogne",0
 _gTextItemMeat                    .byt "un morceau de _viande",0
 _gTextItemBread                   .byt "du _pain complet",0
 _gTextItemRollOfTape              .byt "un rouleau de _bande adhésive",0
@@ -173,7 +173,7 @@ _gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0
 _gTextItemString                  .byt "a _string",0                         
 _gTextItemSilverKnife             .byt "a silver _knife",0                     
 _gTextItemMixTape                 .byt "a _mixtape",0
-_gTextItemAlsatianDog             .byt "an alsatian growling at you",0        
+_gTextItemAlsatianDog             .byt "a _dog growling at you",0        
 _gTextItemMeat                    .byt "a joint of _meat",0                    
 _gTextItemBread                   .byt "some brown _bread",0                   
 _gTextItemRollOfTape              .byt "a roll of sticky _tape",0              
@@ -1075,15 +1075,15 @@ _gDescriptionEntranceHall
     SET_DESCRIPTION("You are in an imposing entrance hall")
 #endif    
     ; If the dog is in the staircase, we move it to the entrance hall to simplify the rest of the code
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL)
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE))
+    SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_ENTRANCEHALL)
 end_dog_check
 
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_ENTRANCEHALL))
 
     ; Is the dog dead?
-    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*24+7,_ImageBuffer+(40*44)+18)    
       ; Text describing the dead dog
@@ -1155,15 +1155,15 @@ _gDescriptionStaircase
     SET_DESCRIPTION("You are on a sweeping staircase")
 #endif    
     ; If the dog is in the entrance hall, we move it to the staircase to simplify the rest of the code
-    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_ENTRANCEHALL))
-    SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE)
+    JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_ENTRANCEHALL))
+    SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE)
 end_dog_check
 
     ; Is there a dog in the entrance
-    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_LARGE_STAIRCASE))
+    JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE))
 
     ; Is the dog dead?
-    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(17,34),40,_SecondImageBuffer+40*95,_ImageBuffer+(40*93)+12)    
       ; Text describing the dead dog
@@ -2508,6 +2508,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
     VALUE_MAPPING(e_ITEM_RoughMap           , _InspectRoughMap)
     VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
+    VALUE_MAPPING(e_ITEM_Dog                , _InspectDog)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2672,6 +2673,16 @@ _InspectPlasticBag
     END_AND_REFRESH
 .)
 
+
+_InspectDog
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il ne vas pas vous laisser passer !")
+#else
+    INFO_MESSAGE("It will not let you pass!")
+#endif    
+    END_AND_REFRESH
+.)
 
 
 _InspectMixTape
@@ -3695,7 +3706,7 @@ _UseDartGun
 
     // - We are in the entrance hall and the dog is still alive
     JUMP_IF_FALSE(snoozed_dog,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
-    JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
         INCREASE_SCORE(POINTS_DART_GUNNED_DOG)
 #ifdef LANGUAGE_FR   
@@ -4109,7 +4120,7 @@ MeatCommon
 .(
     // The meat can only be eaten if we are in the Entrance Hall and the dog is still alive and kicking
     JUMP_IF_FALSE(nothing_to_eat_the_meat,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
-    JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
 dog_eating_the_meat
     PLAY_SOUND(_Swoosh)
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
@@ -4139,13 +4150,13 @@ _FreeDove
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
     // The dog will only chase the dove if the dog is where we are and is still alive and kicking
-    JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_CURRENT))
-    JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_CURRENT))
+    JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE,"Run Forrest, Run!")      ; Show the picture with the dog running after the dove
         INFO_MESSAGE("Hopefully he will not catch the dove")
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
-        SET_ITEM_LOCATION(e_ITEM_AlsatianDog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
+        SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
         WAIT(50*2)    
 nothing_to_chase_the_dove
     END_AND_REFRESH
@@ -4167,7 +4178,7 @@ KnifeCommon
     // We only throw the knife if:
     // - We are in the entrance hall and the dog is still alive
     JUMP_IF_FALSE(dog_knife,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
-    JUMP_IF_TRUE(dog_knife,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_TRUE(dog_knife,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_LARGE_STAIRCASE)
         PLAY_SOUND(_Swoosh)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
@@ -4262,7 +4273,7 @@ SnookerCueCommon
     // We only throw the snooker cue if:
     // - We are in the entrance hall and the dog is still alive
     JUMP_IF_FALSE(dog_snooker_cue,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
-    JUMP_IF_TRUE(dog_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED))
+    JUMP_IF_TRUE(dog_snooker_cue,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_LARGE_STAIRCASE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_KILLED_THE_DOG)
         JUMP(_CommonDogDisabled)
@@ -4341,12 +4352,12 @@ acid_hole_cue
 _CommonDogDisabled
 .(
     INCREASE_SCORE(POINTS_DISABLED_DOG)
-    SET_ITEM_FLAGS(e_ITEM_AlsatianDog,ITEM_FLAG_DISABLED)
+    SET_ITEM_FLAGS(e_ITEM_Dog,ITEM_FLAG_DISABLED)
 +_gTextDogLying = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"un _chien immobile")
+    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"un _chien immobile")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_AlsatianDog,"a _dog lying")
+    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"a _dog lying")
 #endif
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     WAIT(50*2)

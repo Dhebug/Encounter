@@ -44,7 +44,7 @@ _gItems
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
     ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
     ITEM_NORMAL( _gTextItemMixTape               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MixTape         
-    ITEM_NORMAL( _gTextItemAlsatianDog           ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlsatianDog          
+    ITEM_NORMAL( _gTextItemAlsatianDog           ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Dog          
     ITEM_NORMAL( _gTextItemMeat                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Meat                 
     ITEM_NORMAL( _gTextItemBread                 ,e_LOC_DININGROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bread                
     ITEM_NORMAL( _gTextItemBlackTape             ,e_LOC_CELLAR_WINDOW   ,ITEM_FLAG_DEFAULT)                         // e_ITEM_BlackTape
