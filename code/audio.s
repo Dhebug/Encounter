@@ -8,33 +8,33 @@
 _SoundDataPointer 	.dsb 2
 _SoundRoutineTmp    .dsb 2
 
-    .text
-
 _PsgVirtualRegisters
-_PsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
-_PsgfreqB		.byt 0,0    ;  2 3    Chanel B Frequency
-_PsgfreqC		.byt 0,0    ;  4 5    Chanel C Frequency
-_PsgfreqNoise	.byt 0      ;  6      Chanel sound generator
-_Psgmixer		.byt 255    ;  7      Mixer/Selector -> Everything is disabled by default
-_PsgvolumeA		.byt 0      ;  8      Volume A
-_PsgvolumeB		.byt 0      ;  9      Volume B
-_PsgvolumeC		.byt 0      ; 10      Volume C
-_PsgfreqShape   .byt 0,0    ; 11 12   Wave period
-_PsgenvShape    .byt 0      ; 13      Wave form
-_PsgenvReset    .byt 0      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
+_PsgfreqA 		.dsb 2    ;  0 1    Chanel A Frequency
+_PsgfreqB		.dsb 2    ;  2 3    Chanel B Frequency
+_PsgfreqC		.dsb 2    ;  4 5    Chanel C Frequency
+_PsgfreqNoise	.dsb 1      ;  6      Chanel sound generator
+_Psgmixer		.dsb 1    ;  7      Mixer/Selector -> Everything is disabled by default
+_PsgvolumeA		.dsb 1      ;  8      Volume A
+_PsgvolumeB		.dsb 1      ;  9      Volume B
+_PsgvolumeC		.dsb 1      ; 10      Volume C
+_PsgfreqShape   .dsb 2    ; 11 12   Wave period
+_PsgenvShape    .dsb 1      ; 13      Wave form
+_PsgenvReset    .dsb 1      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
 
 _MusicPsgVirtualRegisters
-_MusicPsgfreqA 		.byt 0,0    ;  0 1    Chanel A Frequency
-_MusicPsgfreqB		.byt 0,0    ;  2 3    Chanel B Frequency
-_MusicPsgfreqC		.byt 0,0    ;  4 5    Chanel C Frequency
-_MusicPsgfreqNoise	.byt 0      ;  6      Chanel sound generator
-_MusicPsgmixer		.byt 255    ;  7      Mixer/Selector -> Everything is disabled by default
-_MusicPsgvolumeA	.byt 0      ;  8      Volume A
-_MusicPsgvolumeB	.byt 0      ;  9      Volume B
-_MusicPsgvolumeC	.byt 0      ; 10      Volume C
-_MusicPsgfreqShape  .byt 0,0    ; 11 12   Wave period
-_MusicPsgenvShape   .byt 0      ; 13      Wave form
-_MusicPsgenvReset   .byt 0      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
+_MusicPsgfreqA 		.dsb 2    ;  0 1    Chanel A Frequency
+_MusicPsgfreqB		.dsb 2    ;  2 3    Chanel B Frequency
+_MusicPsgfreqC		.dsb 2    ;  4 5    Chanel C Frequency
+_MusicPsgfreqNoise	.dsb 1      ;  6      Chanel sound generator
+_MusicPsgmixer		.dsb 1    ;  7      Mixer/Selector -> Everything is disabled by default
+_MusicPsgvolumeA	.dsb 1      ;  8      Volume A
+_MusicPsgvolumeB	.dsb 1      ;  9      Volume B
+_MusicPsgvolumeC	.dsb 1      ; 10      Volume C
+_MusicPsgfreqShape  .dsb 2    ; 11 12   Wave period
+_MusicPsgenvShape   .dsb 1      ; 13      Wave form
+_MusicPsgenvReset   .dsb 1      ; If set to 0, do not update register 13 (TODO: could be a bit field in _PsgNeedUpdate)
+
+    .text
 
 _MusicMixerMask     .byt 0      ; By default no channels are reserved for the music
 
