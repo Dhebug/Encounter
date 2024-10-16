@@ -299,6 +299,7 @@ _gDescriptionMarketPlace
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"my _car")
 #endif    
 
+hack_show_plastic_bag_again
     ; Is the plastic bag on the market place?
     JUMP_IF_FALSE(no_plastic_bag,CHECK_ITEM_LOCATION(e_ITEM_PlasticBag,e_LOC_MARKETPLACE))    
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,4)                     ; Draw the plastic bag
@@ -431,6 +432,7 @@ end_intro_sequence
         FADE_BUFFER
         START_CLOCK
         SET_CUT_SCENE(0)
+        JUMP(hack_show_plastic_bag_again)   ; Ugly, quick hack
     ENDDO(intro_sequence)
     .)
 
