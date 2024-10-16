@@ -154,6 +154,7 @@ _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
 _gTextItemRoughMap                .byt "une _carte sommaire",0
 _gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
+_gTextItemGraffiti                .byt "des _graffitis",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -211,6 +212,7 @@ _gTextItemHoleInDoor              .byt "a _hole in the door",0
 _gTextItemFrontDoor               .byt "the entrance _door",0
 _gTextItemRoughMap                .byt "a rough _map",0
 _gTextItemLargeDoveOutOfReach     .byt "a _dove on a tall tree",0
+_gTextItemGraffiti                .byt "some _graffiti",0
 #endif
 _EndItemNames
 
@@ -237,6 +239,8 @@ _gDescriptionDarkTunel
 #else
     SET_DESCRIPTION("You are in a dark, damp tunnel")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_Graffiti,e_LOC_DARKTUNNEL);
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -457,6 +461,8 @@ _gDescriptionDarkAlley
 #else
     SET_DESCRIPTION("You are in a dark, seedy alley")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_Graffiti,e_LOC_DARKALLEY);
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -2511,6 +2517,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_RoughMap           , _InspectRoughMap)
     VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
     VALUE_MAPPING(e_ITEM_Dog                , _InspectDog)
+    VALUE_MAPPING(e_ITEM_Graffiti           , _InspectGraffiti)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2683,6 +2690,26 @@ _InspectDog
 #else
     INFO_MESSAGE("It will not let you pass!")
 #endif    
+    END_AND_REFRESH
+.)
+
+
+_InspectGraffiti
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKTUNNEL),tunnel)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Celui-ci est presque joli !")
+#else
+        INFO_MESSAGE("That one is kind of pretty!")
+#endif    
+    ELSE(tunnel,street)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Aussi moche qu'innintéressant.")
+#else
+        INFO_MESSAGE("The art is as bad as the content.")
+#endif    
+    ENDIF(street)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
