@@ -21,6 +21,7 @@ Count10SecondsDown
     rts
 
 ; No-op to avoid a linker bug
+_InputArrows
 _PrintInformationMessageAsm
 _PrinterSendStringAsm
 _DrawArrows

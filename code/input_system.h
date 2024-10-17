@@ -4,15 +4,17 @@ extern char gInputBuffer[40];
 extern char gInputBufferPos;
 extern char gInputMaxSize;          // How many characters max are allowed
 
-extern char gWordCount;          	// How many tokens/word did we find in the input buffer
-extern char gWordBuffer[10];     	// One byte identifier of each of the identified words
-extern char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
+extern char gInputKey;
+extern char gInputShift;
 
-extern char gTextBuffer[80];    // Temp
+extern char gWordCount;          	        // How many tokens/word did we find in the input buffer
+extern char gWordBuffer[MAX_WORDS];     	// One byte identifier of each of the identified words
+//extern char gWordPosBuffer[MAX_WORDS];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
 
 typedef WORDS (*AnswerProcessingFun)();
+extern AnswerProcessingFun gAnswerProcessingCallback;
 
-extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens);
+extern WORDS AskInput(const char* inputMessage, char checkTockens);
 
 extern void ResetInput();
 

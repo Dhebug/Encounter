@@ -235,7 +235,8 @@ void HandleHighScore()
             gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
             SetKeyboardLayout();
             gInputMaxSize = 15;
-            AskInput(gTextHighScoreAskForName,ProcessPlayerNameAnswer, 0);   // "New highscore! Your name please?"
+            gAnswerProcessingCallback = ProcessPlayerNameAnswer;
+            AskInput(gTextHighScoreAskForName,0);   // "New highscore! Your name please?"
 
 
 			ptrScore->score = gScore+32768;

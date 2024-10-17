@@ -9,28 +9,12 @@
 #include "game_defines.h"
 #include "input_system.h"
 
-char gAskQuestion;
-char gInputBuffer[40];
-char gInputBufferPos;
-char gInputMaxSize=35;      // How many characters max are allowed
 
-char gWordCount;          	// How many tokens/word did we find in the input buffer
-char gWordBuffer[10];     	// One byte identifier of each of the identified words
-char gWordPosBuffer[10];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
-
-char gTextBuffer[80];    // Temp
-
-//typedef WORDS (*AnswerProcessingFun)();
-
-extern WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens);
-
-void ResetInput()
-{
-	gAskQuestion = 1;	
-	gInputBufferPos=0;
-	gInputBuffer[gInputBufferPos]=0;
-}
-
+extern void ResetInput();
+extern void InputCheckKey();
+extern void InputDelete();
+extern void InputDefaultKey();
+extern void InputArrows();
 
 
 // At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
@@ -45,7 +29,6 @@ unsigned char ParseInputBuffer()
 	char* inputPtr = gInputBuffer;
 
 	memset(gWordBuffer,e_WORD_COUNT_,sizeof(gWordBuffer));
-	memset(gWordPosBuffer,0,sizeof(gWordPosBuffer));
 
 	gWordCount=0;
 	done = 0;
@@ -61,7 +44,6 @@ unsigned char ParseInputBuffer()
 		else
 		{
 			// This is not a space, so we assume it is the start of a word
-			gWordPosBuffer[gWordCount] = inputPtr-gInputBuffer;
 
 			// Search the end
 			separatorPtr=inputPtr;
@@ -87,7 +69,7 @@ unsigned char ParseInputBuffer()
 			gWordBuffer[gWordCount]=e_WORD_COUNT_;
 			keywordPtr = gWordsArray;
             keepSearching = 1;
-			while (keepSearching && keywordPtr->word)   // The list is terminated by a null pointer entry
+			while (keepSearching && keywordPtr->word && (gWordCount<MAX_WORDS))   // The list is terminated by a null pointer entry
 			{
 				// Right now we do a full comparison of the words, but technically we could restrict to only a few significant characters.
 				if (strcmp(inputPtr,keywordPtr->word)==0)
@@ -109,12 +91,8 @@ unsigned char ParseInputBuffer()
 
 
 
-WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char checkTockens)
+WORDS AskInput(const char* inputMessage,char checkTockens)
 {
-    WORDS callbackOutput;
-	int k;
-	int shift;
-
 	ResetInput();	
 	while (1)
 	{        
@@ -137,27 +115,18 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 
 		do
 		{
-			WaitIRQ();
-            callbackOutput=AskInputCallback();
+            WORDS callbackOutput=AskInputCallback();
             if (callbackOutput!=e_WORD_CONTINUE)
             {
                 return callbackOutput;
             }
-			k=ReadKeyNoBounce();
-			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(k==KEY_RETURN))?32:32|128);
+			InputCheckKey();
+			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
+			WaitIRQ();
 		}
-		while (k==0);
+		while (gInputKey==0);
 
-		if ((KeyBank[4] & 16) || (KeyBank[7] & 16))	// SHIFT code
-		{
-			shift=1;
-		}
-        else
-        {
-            shift=0;
-        }
-
-		switch (k)
+		switch (gInputKey)
 		{
 #ifdef MODULE_GAME            
 #ifdef ENABLE_CHEATS
@@ -167,13 +136,16 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 #endif            
 #endif
 		case KEY_DEL:  // We use DEL as Backspace
-			if (gInputBufferPos)
-			{
-				gInputBufferPos--;
-				gInputBuffer[gInputBufferPos]=0;
-				PlaySound(KeyClickHData);
-			}
+            InputDelete();
 			break;
+
+        // Magic keyboard trickery to handle UP/DOWNN/LEFT/RIGHT... but should not apply to the credits, so need to be implemented per module
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+            InputArrows();
+            break;
 
 		case KEY_RETURN:
 #ifdef ENABLE_PRINTER
@@ -182,7 +154,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 #endif
 			if (!checkTockens || ParseInputBuffer())
 			{
-				WORDS answer = callback();
+				WORDS answer = gAnswerProcessingCallback();
 				if (answer !=e_WORD_CONTINUE)
 				{
 					// Quit
@@ -203,24 +175,7 @@ WORDS AskInput(const char* inputMessage,AnswerProcessingFun callback, char check
 			break;
 
 		default:
-			if (k>=32)
-			{
-				if ( (k>='A') && (k<='Z') && !shift)
-				{
-					k |= 32;
-				}
-
-				if (gInputBufferPos<gInputMaxSize)
-				{
-					gInputBuffer[gInputBufferPos++]=k;
-					gInputBuffer[gInputBufferPos]=0;
-					PlaySound(KeyClickLData);
-				}
-                else
-                {
-                    PlaySound(ErrorPlop);
-                }
-			}
+            InputDefaultKey();
 			break;
 		}
 	}

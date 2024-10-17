@@ -275,6 +275,59 @@ skip
 
 
 
+_InputArrows
+.(
+    lda #1
+    sta _gWordCount
+
+    ldy _gInputKey
+
+    ldx #e_WORD_WEST
+    cpy #KEY_LEFT
+    beq store_direction
+
+    ldx #e_WORD_EAST
+    cpy #KEY_RIGHT
+    beq store_direction
+
+    lda _KeyBank+2
+    and #16
+    bne control_pressed
+no_control
+    ldx #e_WORD_NORTH
+    cpy #KEY_UP
+    beq store_direction
+
+    ldx #e_WORD_SOUTH
+    cpy #KEY_DOWN
+    beq store_direction
+
+control_pressed
+    ldx #e_WORD_UP
+    cpy #KEY_UP
+    beq store_direction
+
+    ldx #e_WORD_DOWN
+    cpy #KEY_DOWN
+    beq store_direction
+
+store_direction
+    stx _gWordBuffer
+
+    lda _gAnswerProcessingCallback+0
+    sta callback+0
+    lda _gAnswerProcessingCallback+1
+    sta callback+1
+
+callback = *+1
+    jsr $1234
+    jsr _ResetInput
+
+    lda #1
+    sta _gAskQuestion
+    rts
+.)
+
 
 
 _EndGameUtils_

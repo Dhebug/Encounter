@@ -375,7 +375,11 @@ void TakeItem()
     if (itemPtr->usable_containers)
     {
         // Requires a container
-        WORDS containerId = AskInput(gTextCarryInWhat,ProcessContainerAnswer,1 );    // "Carry it in what?"
+        WORDS containerId;
+        AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
+        gAnswerProcessingCallback = ProcessContainerAnswer;
+        containerId = AskInput(gTextCarryInWhat,1 );    // "Carry it in what?"
+        gAnswerProcessingCallback = previousCallback;
         if ( (containerId >= e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
         {
             PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
@@ -695,7 +699,9 @@ void main()
 
 #ifdef ENABLE_GAME
     gStatusMessageLocation = (unsigned char*)0xbb80+40*21;
-	AskInput(gTextAskInput,ProcessAnswer,1);
+    gInputMaxSize = 35;
+    gAnswerProcessingCallback = ProcessAnswer;
+	AskInput(gTextAskInput,1);
 #else
     // Directly go to the end credits    
     gScore = 999;

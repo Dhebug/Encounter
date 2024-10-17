@@ -9,8 +9,13 @@
 :: 0.5 - First pass of bug fixes, added some audio as well, colorful intro title - 4 seconds delay per fade -
 :: 0.6 - Added some sound effects, better scores handling, music in the end credits
 :: 0.7 - Game over music, achievements, loading messages
+:: 0.8 - Version to Dom, Symon, eXplOit3r
+:: 0.8.1 - Changed the title picture, fixed the achievements not saving, added some sounds
+:: 0.8.2 - Added KBFR, KBUK, interactible door, better error sounds and messages
+:: 0.8.3 - Added a configuration menu, quite a few bug fixes as well
+:: 0.8.4 - Added support for second shift key, twine is fully changed, help is colored, new cross, inventory limit
 ::
-SET VERSION=0.7
+SET VERSION=0.8.4
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
@@ -63,5 +68,5 @@ SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R opengl --scanlines on
 :: Obviously remember to enable them again else the changes you make will not be rebuilt!
 SET OSDKFILE_SPLASH=splash_main splash_utils display_basic loader_api irq audio keyboard distorter costable akyplayer last_module
 SET OSDKFILE_INTRO=intro_main score common intro_utils intro_text loader_api irq audio keyboard time display_basic akyplayer last_module
-SET OSDKFILE_GAME=game_main input_system bytestream common game_misc game_data game_items game_locations game_text game_utils loader_api irq printer audio keyboard time display_basic display akyplayer last_module
-SET OSDKFILE_OUTRO=outro_main score outro_text input_system common outro_utils loader_api irq audio keyboard display_basic display akyplayer last_module
+SET OSDKFILE_GAME=game_main input_system input_utils bytestream common game_misc game_data game_items game_locations game_text game_utils loader_api irq printer audio keyboard time display_basic display akyplayer last_module
+SET OSDKFILE_OUTRO=outro_main score outro_text input_system input_utils common outro_utils loader_api irq audio keyboard display_basic display akyplayer last_module
