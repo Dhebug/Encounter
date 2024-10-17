@@ -446,9 +446,6 @@ no_sound
 ;
 _ByteStreamCommand_PLAY_MUSIC
 .(
-    lda _gMusicEnabled
-    beq no_music
-
     ldy #0
     lda (_gCurrentStream),y       ; Get the sound file address (low byte)
     sta _param0+0
@@ -469,7 +466,6 @@ _ByteStreamCommand_PLAY_MUSIC
 
     jsr _StartMusic
 
-no_music    
     lda #2
     jmp _ByteStreamMoveByA
 .)
@@ -493,9 +489,6 @@ _ByteStreamCommand_LOAD_MUSIC
     jsr _LoadApiLoadFileFromDirectory    
 
 music_already_loaded
-    lda _gMusicEnabled
-    beq no_music
-
     lda #1+2+4+8+16+32        ; All the three channels are used
     sta _MusicMixerMask
     lda #<_ArkosMusic
@@ -503,8 +496,6 @@ music_already_loaded
     lda #>_ArkosMusic
     sta _param0+1
     jmp _StartMusic
-
-no_music
     rts    
 .)
 

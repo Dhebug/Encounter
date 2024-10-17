@@ -51,6 +51,8 @@ _PlaySoundAsm                            ; When called from C using the virtual 
     ldx _param0+0                        
     ldy _param0+1
 _PlaySoundAsmXY                          ; Direct assembler call using XY registers
+    lda _gSoundEnabled
+    beq end_sound
 	sei
     stx _SoundDataPointer+0              ; Update the register list
     sty _SoundDataPointer+1
@@ -61,6 +63,7 @@ _PlaySoundAsmXY                          ; Direct assembler call using XY regist
 	sta _PsgPlayLoopIndex                ; Reset the loop position
 
 	cli
+end_sound    
     rts
 
 CommandSetBank

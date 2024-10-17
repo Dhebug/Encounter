@@ -263,6 +263,9 @@ end_of_sequence
 ; _param0+0/+1 contains the pointer to the song header
 _StartMusic
 .(
+    lda _gMusicEnabled
+    beq end
+    
     lda #0
     sta _MusicLoopIndex
 
@@ -322,6 +325,7 @@ end_header_loop
 
     lda #OPCODE_NOP
     sta auto_play_stop   ; Enable the music player frame callback
+end    
     rts
 .)
 
