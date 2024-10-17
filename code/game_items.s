@@ -94,4 +94,7 @@ _gItems
     ITEM_NORMAL( _gTextItemRoadSignn             ,e_LOC_EASTERN_ROAD    ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_RoadSign
     ITEM_NORMAL( _gTextItemTrashCan              ,e_LOC_DARKALLEY       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Trashcan
     ITEM_NORMAL( _gTextItemTombstone             ,e_LOC_PARKING_PLACE   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tombstone
+    ITEM_NORMAL( _gTextItemFishpond              ,e_LOC_FISHPND         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_FishPond
+    ITEM_NORMAL( _gTextItemFish                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fish
+    ITEM_NORMAL( _gTextItemApple                 ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Apple
     

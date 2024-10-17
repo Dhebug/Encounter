@@ -99,6 +99,9 @@ keyword gWordsArray[] =
     { "SIGN"        ,e_ITEM_RoadSign }, 
     { "BIN"         ,e_ITEM_Trashcan }, 
     { "TOMBSTONE"   ,e_ITEM_Tombstone }, 
+    { "POND"        ,e_ITEM_FishPond }, 
+    { "FISH"        ,e_ITEM_Fish }, 
+    { "APPLES"      ,e_ITEM_Apple }, 
 
 
     // Directions

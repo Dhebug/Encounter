@@ -144,7 +144,10 @@
 #define e_ITEM_RoadSign              67         // the sign at the chantier entnrace
 #define e_ITEM_Trashcan              68         // the bins in the dirty alley
 #define e_ITEM_Tombstone             69         // the tombstone near the church
-#define	e_ITEM_COUNT_ 				 70         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_FishPond              70         // the fishpond
+#define e_ITEM_Fish                  71         // a fish
+#define e_ITEM_Apple                 72         // an apple
+#define	e_ITEM_COUNT_ 				 73         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

@@ -160,6 +160,9 @@ _gTextItemWell                    .byt "un _puit",0
 _gTextItemRoadSignn               .byt "un _signe",0
 _gTextItemTrashCan                .byt "une _poubelle",0
 _gTextItemTombstone               .byt "une _tombe",0
+_gTextItemFishpond                .byt "un _bac a poisson",0
+_gTextItemFish                    .byt "un _poisson",0
+_gTextItemApple                   .byt "quelques _pommes",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -223,6 +226,9 @@ _gTextItemWell                    .byt "a _well",0
 _gTextItemRoadSignn               .byt "a _sign",0
 _gTextItemTrashCan                .byt "a rubbish _bin",0
 _gTextItemTombstone               .byt "a _tombstone",0
+_gTextItemFishpond                .byt "a fish _pond",0
+_gTextItemFish                    .byt "a _fish",0
+_gTextItemApple                   .byt "a few _apples",0
 #endif
 _EndItemNames
 
@@ -974,9 +980,9 @@ _gTextItemBasementWindow = *+1
 _gDescriptionFishPond
 .(
 #ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes près d'un bac a poisson")
+    SET_DESCRIPTION("Le coin nord-ouest de la propriété")
 #else
-    SET_DESCRIPTION("You are standing by a fish pond")
+    SET_DESCRIPTION("This is the far corner of the property")
 #endif    
 
     ; Spawn water if required
@@ -2533,6 +2539,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_RoadSign           , _InspectRoadSign)
     VALUE_MAPPING(e_ITEM_Trashcan           , _InspectTrashCan)
     VALUE_MAPPING(e_ITEM_Tombstone          , _InspectTombstone)
+    VALUE_MAPPING(e_ITEM_FishPond           , _InspectFishPond)
+    VALUE_MAPPING(e_ITEM_Apple              , _InspectApples)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2584,6 +2592,16 @@ _InspectChemistryBook
 #endif    
     WAIT(50*2)
     END_AND_REFRESH
+
+
+_InspectApples
+_UseApples
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elles semblent délicieuses...")
+#else    
+    INFO_MESSAGE("They do look tasty...")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
 
 
 _InspectFridgeDoor
@@ -2753,9 +2771,9 @@ _InspectWell
 _InspectRoadSign
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Creuseurs & Fils SARL.")
+    INFO_MESSAGE("Il dit 'Creuseurs & Fils SARL'.")
 #else
-    INFO_MESSAGE("Diggers & Sons Ltd.")
+    INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
 #endif    
     JUMP(_InformatioNotRelevantForMission)
 .)
@@ -2778,6 +2796,17 @@ _InspectTombstone
     INFO_MESSAGE("Seulement 45 ans :(")
 #else
     INFO_MESSAGE("Only 45 years old :(")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectFishPond
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Beaucoup de poissons là dedans !")
+#else
+    INFO_MESSAGE("Quite a few fishes in there!")
 #endif    
     JUMP(_InformatioNotRelevantForMission)
 .)
@@ -3237,6 +3266,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _OpenPanicRoomWindow)
     VALUE_MAPPING(e_ITEM_FrontDoor          , _OpenFrontDoor)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _OpenSecurityDoor)
+    VALUE_MAPPING(e_ITEM_Church             , _OpenChurch)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -3476,6 +3506,16 @@ _OpenFrontDoor
 .)
 
 
+_OpenChurch
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La porte est fermée")
+#else
+    INFO_MESSAGE("The door is locked")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
 
 /* MARK: Close Action ➡📦
 
@@ -3667,8 +3707,8 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
     VALUE_MAPPING(e_ITEM_RoughMap           , _UseRoughMap)
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
+    VALUE_MAPPING(e_ITEM_Car                , _UseApples)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
-
 
 _InspectCar
 _UseCar
@@ -4362,10 +4402,26 @@ NetCommon
         INFO_MESSAGE("The dove is caught in the net")
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
 #endif    
-        END_AND_REFRESH
-        
+        END_AND_REFRESH      
 dove_net    
+
+    // If the player tries to trap the fish we just display some error message
+    JUMP_IF_FALSE(fishpond_net,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
+        JUMP(_ErrorNoFishing)
+fishpond_net    
+
     RETURN
+.)
+
+_ErrorNoFishing
+.(
+    CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Vous pourrier pêcher...")
+#else    
+    INFO_MESSAGE("You could try fishing...")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
 .)
 
 
@@ -4540,6 +4596,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
+    VALUE_MAPPING(e_ITEM_Fish              , _ErrorNoFishing)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
