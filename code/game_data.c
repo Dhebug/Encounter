@@ -81,7 +81,7 @@ keyword gWordsArray[] =
     { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
     { "TANK"    ,e_ITEM_CarTank      },  
-    { "CAR"     ,e_ITEM_Car          },  
+    { "CAR"     ,e_ITEM_Car          }, 
 
     { "DOOR"    ,e_ITEM_SecurityDoor },  
     { "HOLE"    ,e_ITEM_HoleInDoor },  
@@ -92,6 +92,13 @@ keyword gWordsArray[] =
 
     { "CLAY"    ,e_ITEM_Clay },  
     { "SUIT"    ,e_ITEM_ProtectionSuit },  
+
+    { "GRAFFITI"    ,e_ITEM_Graffiti }, 
+    { "CHURCH"      ,e_ITEM_Church }, 
+    { "WELL"        ,e_ITEM_Well }, 
+    { "SIGN"        ,e_ITEM_RoadSign }, 
+    { "BIN"         ,e_ITEM_Trashcan }, 
+    { "TOMBSTONE"   ,e_ITEM_Tombstone }, 
 
 
     // Directions

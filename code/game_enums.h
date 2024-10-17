@@ -139,7 +139,12 @@
 #define e_ITEM_RoughMap              62         // a rough map
 #define e_ITEM_Car                   63         // either "my car" or "a car" depending of the location
 #define e_ITEM_Graffiti              64         // either the graffiti in the tunnel or the dirty alley
-#define	e_ITEM_COUNT_ 				 65         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_Church                65         // the old church in main street
+#define e_ITEM_Well                  66         // the old well in the forest
+#define e_ITEM_RoadSign              67         // the sign at the chantier entnrace
+#define e_ITEM_Trashcan              68         // the bins in the dirty alley
+#define e_ITEM_Tombstone             69         // the tombstone near the church
+#define	e_ITEM_COUNT_ 				 70         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

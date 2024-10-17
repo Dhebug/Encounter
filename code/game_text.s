@@ -155,6 +155,11 @@ _gTextItemFrontDoor               .byt "la _porte principale",0
 _gTextItemRoughMap                .byt "une _carte sommaire",0
 _gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
 _gTextItemGraffiti                .byt "des _graffitis",0
+_gTextItemChurch                  .byt "une _église",0
+_gTextItemWell                    .byt "un _puit",0
+_gTextItemRoadSignn               .byt "un _signe",0
+_gTextItemTrashCan                .byt "une _poubelle",0
+_gTextItemTombstone               .byt "une _tombe",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a tobacco _tin",0               
@@ -213,6 +218,11 @@ _gTextItemFrontDoor               .byt "the entrance _door",0
 _gTextItemRoughMap                .byt "a rough _map",0
 _gTextItemLargeDoveOutOfReach     .byt "a _dove on a tall tree",0
 _gTextItemGraffiti                .byt "some _graffiti",0
+_gTextItemChurch                  .byt "a _church",0
+_gTextItemWell                    .byt "a _well",0
+_gTextItemRoadSignn               .byt "a _sign",0
+_gTextItemTrashCan                .byt "a rubbish _bin",0
+_gTextItemTombstone               .byt "a _tombstone",0
 #endif
 _EndItemNames
 
@@ -2518,6 +2528,11 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
     VALUE_MAPPING(e_ITEM_Dog                , _InspectDog)
     VALUE_MAPPING(e_ITEM_Graffiti           , _InspectGraffiti)
+    VALUE_MAPPING(e_ITEM_Church             , _InspectChurch)
+    VALUE_MAPPING(e_ITEM_Well               , _InspectWell)
+    VALUE_MAPPING(e_ITEM_RoadSign           , _InspectRoadSign)
+    VALUE_MAPPING(e_ITEM_Trashcan           , _InspectTrashCan)
+    VALUE_MAPPING(e_ITEM_Tombstone          , _InspectTombstone)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2709,8 +2724,62 @@ _InspectGraffiti
         INFO_MESSAGE("The art is as bad as the content.")
 #endif    
     ENDIF(street)
-    WAIT(50*2)
-    END_AND_REFRESH
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectChurch
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une petite église de village")
+#else
+    INFO_MESSAGE("A modest village church")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectWell
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Juste un vieux puit")
+#else
+    INFO_MESSAGE("Un vieux puit")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectRoadSign
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Creuseurs & Fils SARL.")
+#else
+    INFO_MESSAGE("Diggers & Sons Ltd.")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectTrashCan
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("L'odeur et l'état sont répugnants !")
+#else
+    INFO_MESSAGE("They look and smell filthy!")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectTombstone
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Seulement 45 ans :(")
+#else
+    INFO_MESSAGE("Only 45 years old :(")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
 .)
 
 
@@ -2723,9 +2792,22 @@ _InspectMixTape
 #else
     INFO_MESSAGE("Home made mixtape!")
 #endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InformatioNotRelevantForMission
+.(
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Mais sans lien avec notre mission")
+#else
+    INFO_MESSAGE("But it's not relevant to our mission")
+#endif    
     WAIT(50*2)
     END_AND_REFRESH
 .)
+
 
 
 _InspectSafe
