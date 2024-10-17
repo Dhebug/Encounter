@@ -3361,7 +3361,7 @@ _OpenCarDoor
 #ifdef LANGUAGE_FR                                                                              ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open _car door")
+        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car _door")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
             SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
