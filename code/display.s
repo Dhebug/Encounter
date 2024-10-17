@@ -109,7 +109,7 @@ _TableMask
   .byt %11111000            ; 10......
   .byt %11111111            ; 11...... Keep the background unmodified
 
-
+#ifdef MODULE_GAME
 ; tmp0  -> screen
 ; tmp1  -> character string
 ; tmp2  -> x / y position
@@ -435,7 +435,7 @@ next_pair
 end_kerning  
   rts
   .)
-
+#endif
 
 _DrawFilledRectangle
 .(
@@ -1071,7 +1071,7 @@ loop
   rts
 .)
 
-
+#ifdef MODULE_GAME
 ; Merges together the 14 scanlines of one character's column
 ; This is used to compute the width of each character
 GetFancyFontColumnMerged
@@ -1146,7 +1146,6 @@ end_byte
   rts
 .)
 
-
 ; Generate the tables used to shift the graphics.
 ;
 ; The first loop just create the first initia 64 values (on the left byte) and zeroes (on the right byte)
@@ -1214,7 +1213,7 @@ loop_scroll_inner
 
   rts
 .)
-
+#endif
 
 ; Generate the 16bit table with y*40 values
 ; This is used to access any specific scanline in the back buffer (or screen) without any multiplication
