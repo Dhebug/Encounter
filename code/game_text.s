@@ -2319,12 +2319,18 @@ _CombineCueWithRope
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE,"A flimsy contraption")
     INCREASE_SCORE(POINTS_COMBINED_CUE_ROPE)
+    UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("La queue ne va pas résister...")
 #else
     INFO_MESSAGE("The cue is not strong enough...")
 #endif    
     WAIT(50*2)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Mais elle peut caser des trucs !")
+#else
+    INFO_MESSAGE("But it could break things!")
+#endif    
     END_AND_REFRESH
 .)
 
@@ -2388,25 +2394,8 @@ rope_not_attached
 #endif    
 
     ; Now we can show that to the player
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
-    ; Then add the sprites showing the window being opened
-    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
-            _IMAGE(0,0)
-            _BUFFER(0,0)
-    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
-            _IMAGE(0,84)
-            _BUFFER(0,84)
-    ; Then add the sprite showing the broken window
-    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                     ; Draw the bottom part of the open window
-            _IMAGE(9,84)
-            _BUFFER(21,49)
-    FADE_BUFFER 
-    WAIT(50*2)
+    GOSUB(_ShowTopWindowOpen)
 
-    ; Then add the sprite showing the attached rope
-    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
-            _IMAGE(14,84)
-            _BUFFER(19,59)
     FADE_BUFFER 
     WAIT(50*2)
 
@@ -2416,6 +2405,39 @@ rope_not_attached
 end    
     WAIT(50*2)
     END_AND_REFRESH
+.)
+
+
+_ShowTopWindowOpen
+.(
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    ; Then add the sprites showing the window being opened
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
+            _IMAGE(0,0)
+            _BUFFER(0,0)
+    BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
+            _IMAGE(0,84)
+            _BUFFER(0,84)
+
+    ; Then add the patch showing the broken window
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
+        BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,5,25)                 ; Draw the broken tile on the right window pane
+            _IMAGE(9,84)
+            _BUFFER(21,49)
+    ENDIF(window_broken)
+
+    ; Then add the sprite showing the attached rope
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+        BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
+            _IMAGE(14,84)
+            _BUFFER(19,59)
+    ENDIF(rope_attached)
+
+
+    FADE_BUFFER
+
+    WAIT(50*2)
+    RETURN
 .)
 
 
@@ -2690,12 +2712,44 @@ _InspectPanicRoomWindow
 .(  
     INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_WINDOW)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room_door)      ; Are we trying to look at the window from the hole in the door?
-        DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED,"The window and shutters are closed")
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_closed)
+            DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED,"The window and shutters are closed")
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Hmmm, intéressant...")
+            INFO_MESSAGE("Hmmm, intéressant...")
 #else
-        INFO_MESSAGE("Hmmm, interesting...")
+            INFO_MESSAGE("Hmmm, interesting...")
 #endif    
+        ELSE(window_closed,window_open)
+            GOSUB(_ShowTopWindowOpen)
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Le cadre de la fenêtre est solide...")
+#else
+            INFO_MESSAGE("The window frame is strong...")
+#endif    
+            WAIT(50*2)
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
+                IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+#ifdef LANGUAGE_FR
+                    INFO_MESSAGE("Il n'y a plus qu'a descendre !")
+#else
+                    INFO_MESSAGE("Should be safe to climb down now!")
+#endif    
+                ELSE(rope_attached,rope_not_attached)
+#ifdef LANGUAGE_FR
+                    INFO_MESSAGE("Y attacher une corde serait facile.")
+#else
+                    INFO_MESSAGE("Could easily attach a rope to it.")
+#endif    
+                ENDIF(rope_not_attached)
+            ELSE(window_broken,window_not_broken)
+#ifdef LANGUAGE_FR
+                INFO_MESSAGE("Mais les carreaux posent problème !")
+#else
+                INFO_MESSAGE("But the glass panes are in the way!")
+#endif    
+            ENDIF(window_not_broken)
+    ENDIF(window_open)
+
         WAIT(50*2)        
     ELSE(panic_room_door,else)                                                 ; Or are we on the tiled patio looking at the window from below?
         GOSUB(_ShowGirlAtTheWindow)
