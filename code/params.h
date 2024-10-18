@@ -51,6 +51,8 @@
 #define KEYBOARD_AZERTY 1
 #define KEYBOARD_QWERTZ 2
 
+#define MAX_WORDS 5         // In practice in the game we have COMBINE A B max, so three words
+
 // 6502 opcodes for dynamic code patching
 #define OPCODE_NOP              $EA
 #define OPCODE_RTS              $60

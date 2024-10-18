@@ -31,7 +31,7 @@ keyword gWordsArray[] =
     { "SULPHUR", e_ITEM_Sulphur             },  
     { "WATER",  e_ITEM_Water                },  
     { "DOVE",   e_ITEM_LargeDove            },  
-    { "STRING", e_ITEM_String               },  
+    { "STONES", e_ITEM_FancyStones          },  
     { "KNIFE",  e_ITEM_SilverKnife          },  
     { "LADDER", e_ITEM_Ladder               },  
     { "DOG",    e_ITEM_Dog                  },  

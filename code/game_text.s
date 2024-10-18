@@ -113,7 +113,7 @@ _gTextItemWater                   .byt "de l'eau",0
 // Normal items
 _gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
-_gTextItemString                  .byt "une _ficelle",0
+_gTextItemFancyStones             .byt "des _pierres décoratives",0
 _gTextItemSilverKnife             .byt "un _couteau en argent",0
 _gTextItemMixTape                 .byt "une _compil sur K7",0
 _gTextItemAlsatianDog             .byt "un _chien qui grogne",0
@@ -179,7 +179,7 @@ _gTextItemWater                   .byt "some _water",0
 // Normal items
 _gTextItemOpenPanel               .byt "an open _panel on wall",0              
 _gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0           
-_gTextItemString                  .byt "a _string",0                         
+_gTextItemFancyStones             .byt "some fancy _stones",0                         
 _gTextItemSilverKnife             .byt "a silver _knife",0                     
 _gTextItemMixTape                 .byt "a _mixtape",0
 _gTextItemAlsatianDog             .byt "a _dog growling at you",0        
@@ -2563,6 +2563,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Tombstone          , _InspectTombstone)
     VALUE_MAPPING(e_ITEM_FishPond           , _InspectFishPond)
     VALUE_MAPPING(e_ITEM_Apple              , _InspectApples)
+    VALUE_MAPPING(e_ITEM_FancyStones        , _InspectFancyStones)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2618,15 +2619,30 @@ _InspectChemistryBook
 
 _InspectApples
 _UseApples
+.(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elles semblent délicieuses...")
 #else    
     INFO_MESSAGE("They do look tasty...")
 #endif    
     JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectFancyStones
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Feng shui de poche")
+#else    
+    INFO_MESSAGE("Pocket sized feng shui")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
 
 
 _InspectFridgeDoor
+.(
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
     INFO_MESSAGE("Looks like a happy familly...")
@@ -2634,7 +2650,7 @@ _InspectFridgeDoor
     INFO_MESSAGE("...I wonder where they are?")
     WAIT(50*2)
     END_AND_REFRESH
-
+.)
 
 
 _InspectMedicineCabinet
@@ -3761,7 +3777,8 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
     VALUE_MAPPING(e_ITEM_RoughMap           , _UseRoughMap)
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
-    VALUE_MAPPING(e_ITEM_Car                , _UseApples)
+    VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
+    VALUE_MAPPING(e_ITEM_FancyStones        , _UseFancyStones)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 _InspectCar
@@ -4173,6 +4190,20 @@ _UseAcid
 
     END_AND_REFRESH
 .)
+
+
+_UseFancyStones
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elles sont seulement décoratives.")
+#else    
+    INFO_MESSAGE("They are just light porous fakes.")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
 
 /* MARK: Search Action 🕵️‍♀️
 
@@ -4744,6 +4775,7 @@ _TakeHose
 #endif    
     JUMP(_TakeCommon)
 .)
+
 
 
 

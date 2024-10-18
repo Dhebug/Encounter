@@ -90,7 +90,7 @@
 #define	e_ITEM_Fridge  			     13         // a fridge
 #define	e_ITEM_SedativePills 		 14         // some sedative pills
 #define e_ITEM_BasementWindow        15         // a basement window
-#define	e_ITEM_String 				 16         // a string
+#define	e_ITEM_FancyStones			 16         // some fancy stones
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
 #define	e_ITEM_Ladder  				 18         // a ladder
 #define	e_ITEM_MixTape      		 19         // a mix tape
