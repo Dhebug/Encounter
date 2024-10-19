@@ -162,6 +162,7 @@ extern unsigned char gPrintPos;
 extern unsigned char gPrintLineTruncated;
 extern unsigned char gPrintTerminator;
 extern unsigned char gShowHighlights;
+extern unsigned char gPrintRemovePrefix;
 extern unsigned char TemporaryBuffer479[479];   // Can be used for temporary operations, like flicker free inventory update
 
 // game_misc

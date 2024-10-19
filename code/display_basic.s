@@ -5,6 +5,7 @@
 
 _gPrintAddress      .dsb 2
 _gPrintPos          .dsb 1
+_gPrintPosStart     .dsb 1      // Used by the prefix removal to know where to start back from
 _gPrintLineTruncated .dsb 1
 
     .text
@@ -13,6 +14,7 @@ _gIsHires           .byt 1
 _gPrintWidth        .byt 40
 _gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
 _gShowHighlights    .byt 0
+_gPrintRemovePrefix .byt 0
 
 _gStatusMessageLocation .word $bb80+40*22
 
@@ -66,6 +68,9 @@ _PrintStringInternal
     sta _wasTruncated
     sta _gPrintLineTruncated
 
+    lda _gPrintPos
+    sta _gPrintPosStart
+
 loop
     ldy #0
     sty _lengthFixing
@@ -76,6 +81,8 @@ loop
     beq carriage_return
     cmp #"_"                // Highlighted word prefix (in this case means "end of highlighte")
     beq highlighter_character
+    cmp #"$"                // Mark where a word actually starts (when the strip suffix is enabled, else printed as a space)
+    beq prefix_marker_character
     cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
     bne normal_character
 
@@ -98,6 +105,16 @@ carriage_return
     jsr _IncrementParam0
     jmp loop
 
+prefix_marker_character
+    lda #" "
+    ldx _gPrintRemovePrefix
+    beq space               // If we are not removing prefixes, then print a space
+active_suffix    
+    ldx _gPrintPosStart    // Reset the starting position
+    stx _gPrintPos
+    jsr _IncrementParam0
+    jmp loop
+
 highlighter_character
     inc _lengthFixing       // The word starts by "_"
 normal_character
@@ -108,6 +125,8 @@ loop_find_word_end
     cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
     beq found_word_end
     cmp #" "                // Space
+    beq found_word_end
+    cmp #"$"                // Mark where a word actually starts (when the strip suffix is enabled, else printed as a space)
     beq found_word_end
     cmp #TEXT_CRLF          // Carriage return
     beq found_word_end

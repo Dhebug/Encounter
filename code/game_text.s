@@ -162,70 +162,70 @@ _gTextItemFish                    .byt "un _poisson",0
 _gTextItemApple                   .byt "quelques _pommes",0
 #else
 // Containers
-_gTextItemTobaccoTin              .byt "a tobacco _tin",0               
-_gTextItemBucket                  .byt "a wooden _bucket",0                    
-_gTextItemCardboardBox            .byt "a cardboard _box",0                    
-_gTextItemFishingNet              .byt "a fishing _net",0                      
-_gTextItemPlasticBag              .byt "a plastic _bag",0                      
-_gTextItemSmallBottle             .byt "a small _bottle",0                     
+_gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
+_gTextItemBucket                  .byt "a$wooden _bucket",0                    
+_gTextItemCardboardBox            .byt "a$cardboard _box",0                    
+_gTextItemFishingNet              .byt "a$fishing _net",0                      
+_gTextItemPlasticBag              .byt "a$plastic _bag",0                      
+_gTextItemSmallBottle             .byt "a$small _bottle",0                     
 // Items requiring containers
-_gTextItemBlackDust               .byt "some _saltpetre",0
-_gTextItemYellowPowder            .byt "some _sulphur",0
-_gTextItemPetrol                  .byt "some _petrol",0                        
-_gTextItemWater                   .byt "some _water",0                         
+_gTextItemBlackDust               .byt "some$_saltpetre",0
+_gTextItemYellowPowder            .byt "some$_sulphur",0
+_gTextItemPetrol                  .byt "some$_petrol",0                        
+_gTextItemWater                   .byt "some$_water",0                         
 // Normal items
-_gTextItemOpenPanel               .byt "an open _panel on wall",0              
-_gTextItemSmallHoleInDoor         .byt "a small _hole in the door",0           
-_gTextItemFancyStones             .byt "some fancy _stones",0                         
-_gTextItemSilverKnife             .byt "a silver _knife",0                     
-_gTextItemMixTape                 .byt "a _mixtape",0
-_gTextItemAlsatianDog             .byt "a _dog growling at you",0        
-_gTextItemMeat                    .byt "a joint of _meat",0                    
-_gTextItemBread                   .byt "some brown _bread",0                   
-_gTextItemRollOfTape              .byt "a roll of sticky _tape",0              
-_gTextItemChemistryBook           .byt "a chemistry _book",0                   
-_gTextItemBoxOfMatches            .byt "a box of _matches",0                   
-_gTextItemSnookerCue              .byt "a snooker _cue",0                      
-_gTextItemThug                    .byt "a _thug asleep on the bed",0           
-_gTextItemHeavySafe               .byt "a heavy _safe",0                       
-_gTextItemHandWrittenNote         .byt "a hand written _note",0                     
-_gTextItemRollOfToiletPaper       .byt "a toilet _roll",0            
-_gTextItemOpenSafe                .byt "an open _safe",0                       
+_gTextItemOpenPanel               .byt "an$open _panel on wall",0              
+_gTextItemSmallHoleInDoor         .byt "a$small _hole in the door",0           
+_gTextItemFancyStones             .byt "some$fancy _stones",0                         
+_gTextItemSilverKnife             .byt "a$silver _knife",0                     
+_gTextItemMixTape                 .byt "a$_mixtape",0
+_gTextItemAlsatianDog             .byt "a$_dog growling at you",0        
+_gTextItemMeat                    .byt "a$joint of _meat",0                    
+_gTextItemBread                   .byt "some$brown _bread",0                   
+_gTextItemRollOfTape              .byt "a$roll of sticky _tape",0              
+_gTextItemChemistryBook           .byt "a$chemistry _book",0                   
+_gTextItemBoxOfMatches            .byt "a$box of _matches",0                   
+_gTextItemSnookerCue              .byt "a$snooker _cue",0                      
+_gTextItemThug                    .byt "a$_thug asleep on the bed",0           
+_gTextItemHeavySafe               .byt "a$heavy _safe",0                       
+_gTextItemHandWrittenNote         .byt "a$hand written _note",0                     
+_gTextItemRollOfToiletPaper       .byt "a$toilet _roll",0            
+_gTextItemOpenSafe                .byt "an$open _safe",0                       
 _gTextItemBrokenGlass             .byt "broken glass",0                       
-_gTextItemYoungGirl               .byt "a young _girl",0                        
-_gTextItemFuse                    .byt "a _fuse",0                             
-_gTextItemPowderMix               .byt "a rough powder _mix",0
-_gTextItemGunPowder               .byt "some _gunpowder",0
-_gTextItemKeys                    .byt "a set of _keys",0                      
-_gTextItemNewspaper               .byt "a _newspaper",0                        
-_gTextItemBomb                    .byt "a _bomb",0                             
-_gTextItemPistol                  .byt "a _pistol",0                           
-_gTextItemBullets                 .byt "three .38 _bullets",0                  
+_gTextItemYoungGirl               .byt "a$young _girl",0                        
+_gTextItemFuse                    .byt "a$_fuse",0                             
+_gTextItemPowderMix               .byt "a$rough powder _mix",0
+_gTextItemGunPowder               .byt "some$_gunpowder",0
+_gTextItemKeys                    .byt "a$set of _keys",0                      
+_gTextItemNewspaper               .byt "a$_newspaper",0                        
+_gTextItemBomb                    .byt "a$_bomb",0                             
+_gTextItemPistol                  .byt "a$_pistol",0                           
+_gTextItemBullets                 .byt "three$.38 _bullets",0                  
 _gTextItemChemistryRecipes        .byt "chemistry _recipes",0         
-_gTextItemUnitedKingdomMap        .byt "a _map of the United Kingdom",0        
-_gTextItemHandheldGame            .byt "a handheld _game",0
-_gTextItemSedativePills           .byt "some sedative _pills",0
-_gTextItemDartGun                 .byt "a _dart gun",0
-_gTextItemBlackTape               .byt "some black adhesive _tape",0
-_gTextItemMortarAndPestle         .byt "a _mortar and pestle",0
-_gTextItemAdhesive                .byt "some _adhesive",0
-_gTextItemAcid                    .byt "some strong _acid",0
-_gTextItemSecurityDoor            .byt "a security _door",0
-_gTextItemDriedOutClay            .byt "some dried out _clay",0
-_gTextItemProtectionSuit          .byt "a protection _suit",0
-_gTextItemHoleInDoor              .byt "a _hole in the door",0
-_gTextItemFrontDoor               .byt "the entrance _door",0
-_gTextItemRoughMap                .byt "a rough _map",0
-_gTextItemLargeDoveOutOfReach     .byt "a _dove on a tall tree",0
-_gTextItemGraffiti                .byt "some _graffiti",0
-_gTextItemChurch                  .byt "a _church",0
-_gTextItemWell                    .byt "a _well",0
-_gTextItemRoadSignn               .byt "a _sign",0
-_gTextItemTrashCan                .byt "a rubbish _bin",0
-_gTextItemTombstone               .byt "a _tombstone",0
-_gTextItemFishpond                .byt "a fish _pond",0
-_gTextItemFish                    .byt "a _fish",0
-_gTextItemApple                   .byt "a few _apples",0
+_gTextItemUnitedKingdomMap        .byt "a$_map of the United Kingdom",0        
+_gTextItemHandheldGame            .byt "a$handheld _game",0
+_gTextItemSedativePills           .byt "some$sedative _pills",0
+_gTextItemDartGun                 .byt "a$_dart gun",0
+_gTextItemBlackTape               .byt "some$black adhesive _tape",0
+_gTextItemMortarAndPestle         .byt "a$_mortar and pestle",0
+_gTextItemAdhesive                .byt "some$_adhesive",0
+_gTextItemAcid                    .byt "some$strong _acid",0
+_gTextItemSecurityDoor            .byt "a$security _door",0
+_gTextItemDriedOutClay            .byt "some$dried out _clay",0
+_gTextItemProtectionSuit          .byt "a$protection _suit",0
+_gTextItemHoleInDoor              .byt "a$_hole in the door",0
+_gTextItemFrontDoor               .byt "the$entrance _door",0
+_gTextItemRoughMap                .byt "a$rough _map",0
+_gTextItemLargeDoveOutOfReach     .byt "a$_dove on a tall tree",0
+_gTextItemGraffiti                .byt "some$_graffiti",0
+_gTextItemChurch                  .byt "a$_church",0
+_gTextItemWell                    .byt "a$_well",0
+_gTextItemRoadSignn               .byt "a$_sign",0
+_gTextItemTrashCan                .byt "a$rubbish _bin",0
+_gTextItemTombstone               .byt "a$_tombstone",0
+_gTextItemFishpond                .byt "a$fish _pond",0
+_gTextItemFish                    .byt "a$_fish",0
+_gTextItemApple                   .byt "a few$_apples",0
 #endif
 _EndItemNames
 
