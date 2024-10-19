@@ -38,9 +38,6 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
-_gTextSetKeyboardAzerty     .byt "Clavier en mode AZERTY",0
-_gTextSetKeyboardQwerty     .byt "Clavier en mode QWERTY",0
-_gTextSetKeyboardQwertz     .byt "Clavier en mode QWERTZ",0
 _gTextUsableActionVerbs     .byt "Verbes utilisables",0
 _gTextUseShiftToHighligth   .byt TEXT_CRLF,"Note: Utilisize SHIFT pour voir les objects",0
 #else
@@ -49,9 +46,6 @@ _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
-_gTextSetKeyboardAzerty     .byt "Keyboard set to AZERTY layout",0
-_gTextSetKeyboardQwerty     .byt "Keyboard set to QWERTY layout",0
-_gTextSetKeyboardQwertz     .byt "Keyboard set to QWERTZ layout",0
 _gTextUsableActionVerbs     .byt "Usable action verbs",0
 _gTextUseShiftToHighligth   .byt TEXT_CRLF,TEXT_CRLF,"Note: Use SHIFT to highlight items",0
 #endif
@@ -2140,10 +2134,6 @@ _gActionMappingsArray
 #ifdef ENABLE_PRINTER
     WORD_MAPPING(e_WORD_PRINT     ,_PrinterEnableDisable      ,FLAG_MAPPING_DEFAULT)
 #endif    
-
-    WORD_MAPPING(e_WORD_KEYBFR    ,_SetKeyboardAzerty         ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_KEYBUK    ,_SetKeyboardQwerty         ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_KEYBDE    ,_SetKeyboardQwertz         ,FLAG_MAPPING_DEFAULT)
 
     WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,FLAG_MAPPING_DEFAULT)
 

@@ -28,11 +28,6 @@ _DrawArrows
 _gFont12x14
     rts
 
-_gTextSetKeyboardAzerty
-_gTextSetKeyboardQwerty
-_gTextSetKeyboardQwertz
-    .byt 0
-
 _TypewriterMusic
 .(
 #ifdef USE_MUSIC_EVENTS    

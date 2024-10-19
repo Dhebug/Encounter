@@ -193,10 +193,6 @@ keyword gWordsArray[] =
     { "PAUSE", e_WORD_PAUSE },
     { "HELP", e_WORD_HELP },
 
-    { "KEYBFR", e_WORD_KEYBFR },
-    { "KEYBUK", e_WORD_KEYBUK },
-    { "KEYBDE", e_WORD_KEYBDE },
-
     // Last instruction
     { "QUIT", e_WORD_QUIT },
 

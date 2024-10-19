@@ -178,7 +178,3 @@ events
 .)
 
 
-_gTextSetKeyboardAzerty
-_gTextSetKeyboardQwerty
-_gTextSetKeyboardQwertz
-    .byt 0

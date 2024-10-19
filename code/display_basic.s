@@ -407,6 +407,12 @@ _BitMaskArray
 ; Azerty = KeyboardLayoutAzerty-KeyboardLayoutBase = 0
 ; Qwerty = KeyboardLayoutQwerty-KeyboardLayoutBase = 7
 ; Qwertz = KeyboardLayoutQwertz-KeyboardLayoutBase = 14
+_SetKeyboardLayout
+    lda _gKeyboardLayout
+    cmp #KEYBOARD_AZERTY
+    beq _SetKeyboardAzerty
+    cmp #KEYBOARD_QWERTZ
+    beq _SetKeyboardQwertz
 _SetKeyboardQwerty
     ldx #KeyboardLayoutQwerty-KeyboardLayoutBase
     bne SetKeyboardLayout
@@ -419,19 +425,13 @@ _SetKeyboardAzerty
 SetKeyboardLayout
 .(
     ; Read and push on the stack the entire array from the current offset
-    ldy #9
+    ldy #7
 read_value    
     lda KeyboardLayoutBase,x
     inx
     pha
     dey
     bne read_value
-
-    ; Pop-out the message to display
-    pla
-    sta _param0+1
-    pla
-    sta _param0+0
 
     ldy #7
 write_value    
@@ -440,23 +440,14 @@ write_value
     sta _KeyboardASCIIMapping,x
     dey
     bne write_value
-    jmp _PrintInformationMessageAsm
+    rts
 .)
 
-_SetKeyboardLayout
-.(
-    lda _gKeyboardLayout
-    cmp #KEYBOARD_AZERTY
-    beq _SetKeyboardAzerty
-    cmp #KEYBOARD_QWERTZ
-    beq _SetKeyboardQwertz
-    bne _SetKeyboardQwerty
-.)
 
 KeyboardLayoutBase
-KeyboardLayoutAzerty    .byt "Q","W","A","Z","Y","M",",",<_gTextSetKeyboardAzerty,>_gTextSetKeyboardAzerty
-KeyboardLayoutQwerty    .byt "A","Z","Q","W","Y",":","M",<_gTextSetKeyboardQwerty,>_gTextSetKeyboardQwerty
-KeyboardLayoutQwertz    .byt "A","Y","Q","W","Z",":","M",<_gTextSetKeyboardQwertz,>_gTextSetKeyboardQwertz
+KeyboardLayoutAzerty    .byt "Q","W","A","Z","Y","M",","
+KeyboardLayoutQwerty    .byt "A","Z","Q","W","Y",":","M"
+KeyboardLayoutQwertz    .byt "A","Y","Q","W","Z",":","M"
 
 KeyboardLayoutScanCode  .byt 8*6+5,8*2+5,8*1+6,8*6+7,8*6+0,8*3+2,8*2+0
 
