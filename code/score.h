@@ -50,6 +50,7 @@ extern const char gTextHighScoreInvalidName[];  // Between 0 and 15 characters
 
 extern const char gTextThanks[];
 extern const char gTextCredits[];
+extern const char gTextAdditionalCredits[];
 extern const char gTextGameDescription[];
 extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];

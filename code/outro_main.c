@@ -417,6 +417,14 @@ void main()
     }
     
     AddSprite(17,75,20,20*76,56*40+13);         // Add the second photo
+    BlitBufferToHiresWindow();
+
+    // =============================== Additional Credits ===============================
+    if (DisplayText(gTextAdditionalCredits,50*8))
+    {
+        goto EndCredits;
+    }
+    
     AddSprite(10,25,20,20*213,84*40+30);        // Lower the glass content
     BlitBufferToHiresWindow();
 

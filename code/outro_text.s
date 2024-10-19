@@ -23,7 +23,7 @@ _gTextThanks
     .byt TEXT_END
 
 _gTextCredits
-    .byt TEXT_CRLF,TEXT_CRLF
+    .byt TEXT_CRLF
     .byt 3," Jeu Original ",96, " 1983 Severn Software",TEXT_CRLF
     .byt 6,"      Histoire et programmation:",TEXT_CRLF
     .byt 7,"          Adrian Sheppard",4,"(*)",7,TEXT_CRLF
@@ -32,8 +32,15 @@ _gTextCredits
     .byt 6,"         Code, et graphismes:",TEXT_CRLF
     .byt 7,"       Mickael 'Dbug' Pointier",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt 4,"(*) supposé",TEXT_CRLF
+    .byt 6,"               Musique:",TEXT_CRLF
+    .byt 7,"  Per Almered (avec Arkos Tracker)",TEXT_CRLF
+    .byt 4," (*) we assume"
+    .byt TEXT_END
+
+_gTextAdditionalCredits
+    .byt TEXT_CRLF,TEXT_CRLF
+    .byt 3,"Game testing and feedbck",TEXT_CRLF
+    .byt 7,"Dom, Lukas, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -105,6 +112,12 @@ _gTextCredits
     .byt 6,"                Music:",TEXT_CRLF
     .byt 7,"  Per Almered (using Arkos Tracker)",TEXT_CRLF
     .byt 4," (*) we assume"
+    .byt TEXT_END
+
+_gTextAdditionalCredits
+    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
+    .byt 6,"      Game testing and feedback",TEXT_CRLF
+    .byt 7,"         Dom, Lukas, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
