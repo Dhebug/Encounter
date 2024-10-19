@@ -2554,6 +2554,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_FishPond           , _InspectFishPond)
     VALUE_MAPPING(e_ITEM_Apple              , _InspectApples)
     VALUE_MAPPING(e_ITEM_FancyStones        , _InspectFancyStones)
+    VALUE_MAPPING(e_ITEM_SnookerCue         , _InspectCue)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2625,6 +2626,23 @@ _InspectFancyStones
     INFO_MESSAGE("Feng shui de poche")
 #else    
     INFO_MESSAGE("Pocket sized feng shui")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)
+.)
+
+
+_InspectCue
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle est de bonne qualité...")
+#else    
+    INFO_MESSAGE("It's a good quality cue...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Parfait pour un bon 'break' !")
+#else    
+    INFO_MESSAGE("Perfect for a clean 'break'!")
 #endif    
     WAIT(50*2)
     END_AND_REFRESH
@@ -4507,8 +4525,19 @@ _ThrowSnookerCue
     END_AND_REFRESH
 
 _UseSnookerCue
+.(
+    JUMP_IF_FALSE(game_room,CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM))
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je n'ai pas le temps de jouer !")
+#else    
+        INFO_MESSAGE("I don't have time to play!")
+#endif    
+        WAIT(50*2)
+        END_AND_REFRESH
+game_room
     GOSUB(SnookerCueCommon)
     JUMP(_ErrorCannotDo)
+.)
 
 SnookerCueCommon
 .(
