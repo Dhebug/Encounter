@@ -2553,6 +2553,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_SnookerCue         , _InspectCue)
     VALUE_MAPPING(e_ITEM_PowderMix          , _InspectPowderMix)
     VALUE_MAPPING(e_ITEM_GunPowder          , _InspectGunPowder)
+    VALUE_MAPPING(e_ITEM_SedativePills      , _InspectPills)
+    VALUE_MAPPING(e_ITEM_Meat               , _InspectMeat)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2672,11 +2674,43 @@ _InspectGunPowder
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-    INFO_MESSAGE("Homemade Gun powder...")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Poudre explosive faite maison,")
+#else
+    INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
+#endif    
     WAIT(50*2)
-    INFO_MESSAGE("...need a proper canister to store it")
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("il faut un contenant adapté.")
+#else
+    INFO_MESSAGE("but that requires a proper container.")
+#endif    
     WAIT(50*2)
     STOP_MUSIC()
+    END_AND_REFRESH
+.)
+
+
+_InspectPills
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ca pourrait calmer quelqu'un")
+#else
+    INFO_MESSAGE("Could be used to calm down someone")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_InspectMeat
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un chien adorerait cette pièce !")
+#else
+    INFO_MESSAGE("A dog would love this juicy morcel!")
+#endif    
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
