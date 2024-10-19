@@ -1304,6 +1304,7 @@ _gFont12x14Kerning
   .byt "ij",2
   .byt "ig",1
   .byt "Ja",2
+  .byt "ll",1
   .byt "op",1
   .byt "Of",1
   .byt "ra",1
@@ -1313,8 +1314,12 @@ _gFont12x14Kerning
   .byt "ro",1
   .byt "rp",1
   .byt "if",1
+  .byt "it",1
+  .byt "ip",2
+  .byt "pp",1
   .byt "da",1
   .byt "ta",1
+  .byt "tc",1
   .byt "te",1
   .byt "th",1
   .byt "to",1
