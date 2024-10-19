@@ -4226,7 +4226,18 @@ _UseAcid
     ENDIF(panic_room)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
-        ERROR_MESSAGE("Needs something to contain the acid")
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il faudrait un barrage sinon")
+#else    
+        INFO_MESSAGE("I need some kind of barrier else")
+#endif    
+        WAIT(50*2)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("l'acide va juste couler au sol")
+#else    
+        INFO_MESSAGE("the acid will just spill to the floor")
+#endif    
+        WAIT(50*2)
         END_AND_REFRESH
     ENDIF(attached)
 
