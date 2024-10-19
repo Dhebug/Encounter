@@ -112,13 +112,14 @@ keyword gWordsArray[] =
     { "O", e_WORD_WEST  },
     { "M", e_WORD_UP    },
     { "D", e_WORD_DOWN  },
-
+    /*
     { "NORD", e_WORD_NORTH },
     { "SUD", e_WORD_SOUTH },
     { "EST", e_WORD_EAST  },
     { "OUEST", e_WORD_WEST  },
     { "MONTE", e_WORD_UP    },
     { "DESCEND", e_WORD_DOWN  },
+    */
 #else
     { "N", e_WORD_NORTH },
     { "S", e_WORD_SOUTH },
@@ -126,13 +127,14 @@ keyword gWordsArray[] =
     { "W", e_WORD_WEST  },
     { "U", e_WORD_UP    },
     { "D", e_WORD_DOWN  },
-
+    /*
     { "NORTH", e_WORD_NORTH },
     { "SOUTH", e_WORD_SOUTH },
     { "EAST", e_WORD_EAST  },
     { "WEST", e_WORD_WEST  },
     { "UP", e_WORD_UP    },
     { "DOWN", e_WORD_DOWN  },
+    */
 #endif    
 
     // Misc instructions
