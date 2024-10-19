@@ -97,4 +97,4 @@ extern const char gTextErrorNeedMoreDetails[];  // "Could you be more precise pl
 extern const char gTextErrorItemNotPresent[];   // "This item does not seem to be present"
 extern const char gTextErrorIventoryFull[];     // "I need to drop something first"
 extern const char gTextUsableActionVerbs[];     // "Usable action verbs"
-extern const char gTextUseShiftToHighligth[];   // "Use SHIFT to highlighte"
+extern const char gTextUseShiftToHighlight[];   // "Use SHIFT to highlight"

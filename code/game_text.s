@@ -39,7 +39,7 @@ _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
 _gTextUsableActionVerbs     .byt "Verbes utilisables",0
-_gTextUseShiftToHighligth   .byt TEXT_CRLF,"Note: Utilisize SHIFT pour voir les objects",0
+_gTextUseShiftToHighlight   .byt TEXT_CRLF,"Note: Utilisez SHIFT pour voir les objects",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -47,7 +47,10 @@ _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUsableActionVerbs     .byt "Usable action verbs",0
-_gTextUseShiftToHighligth   .byt TEXT_CRLF,TEXT_CRLF,"Note: Use SHIFT to highlight items",0
+_gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
+                            .byt "Use",3,"arrow keys",7,"to move around,",3,"CTRL",TEXT_CRLF
+                            .byt "plus",3,"UP",7,"or",3,"DOWN",7,"to climb up or down,",TEXT_CRLF
+                            .byt "and press",3,"SHIFT",7,"to highlight items.",0
 #endif
 _EndMessagesAndPrompts
 

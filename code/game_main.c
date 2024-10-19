@@ -599,7 +599,7 @@ void ShowHelp()
         }
         ++keywordPtr;
     }
-    PrintString(gTextUseShiftToHighligth);    
+    PrintString(gTextUseShiftToHighlight);    
     WaitKey();
     LoadScene();
 }
