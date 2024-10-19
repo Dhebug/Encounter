@@ -2158,6 +2158,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
+    COMBINE_MAPPING(e_ITEM_PowderMix,e_ITEM_MortarAndPestle ,_CombinePowderMixWithMortar)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
@@ -2201,15 +2202,7 @@ _CombineSulfurWithSalpetre
     SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_NONE)                         ; The sulphur is gone
     SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
-
-    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpetre")
-    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-    INFO_MESSAGE("It's mixed...")
-    WAIT(50*2)
-    INFO_MESSAGE("...but there are some large clumps")
-    WAIT(50*2)
-    STOP_MUSIC()
-    END_AND_REFRESH
+    JUMP(_InspectPowderMix)
 .)
 
 
@@ -2558,6 +2551,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Apple              , _InspectApples)
     VALUE_MAPPING(e_ITEM_FancyStones        , _InspectFancyStones)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _InspectCue)
+    VALUE_MAPPING(e_ITEM_PowderMix          , _InspectPowderMix)
+    VALUE_MAPPING(e_ITEM_GunPowder          , _InspectGunPowder)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2650,6 +2645,41 @@ _InspectCue
     WAIT(50*2)
     END_AND_REFRESH
 .)
+
+
+_InspectPowderMix
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpetre")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il y a des gros grumeaux...")
+#else
+    INFO_MESSAGE("There are some large clumps...")
+#endif    
+    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("...le mix doit être bien plus fin.")
+#else
+    INFO_MESSAGE("...That mix must be ground fine.")
+#endif    
+    WAIT(50*2)
+    STOP_MUSIC()
+    END_AND_REFRESH
+.)
+
+
+_InspectGunPowder
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+    INFO_MESSAGE("Homemade Gun powder...")
+    WAIT(50*2)
+    INFO_MESSAGE("...need a proper canister to store it")
+    WAIT(50*2)
+    STOP_MUSIC()
+    END_AND_REFRESH
+.)
+
 
 
 _InspectFridgeDoor
@@ -4059,6 +4089,7 @@ abandonned_car
 
 
 
+_CombinePowderMixWithMortar
 _UseMortar
 .(
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT))
@@ -4072,15 +4103,7 @@ made_gun_powder
     SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT)                    ; We now have proper gun powder
 
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MADE_BLACK_POWDER)                    ; Achievement!    
-
-    DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
-    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-    INFO_MESSAGE("Homemade Gun powder...")
-    WAIT(50*2)
-    INFO_MESSAGE("...need a proper canister to store it")
-    WAIT(50*2)
-    STOP_MUSIC()
-    END_AND_REFRESH
+    JUMP(_InspectGunPowder)
 .)
 
 
