@@ -73,7 +73,7 @@
 #define	e_ITEM_CardboardBox  		 2          // a cardboard box
 #define	e_ITEM_FishingNet    		 3          // a fishing net
 #define	e_ITEM_PlasticBag    		 4          // a plastic bag
-#define	e_ITEM_SmallBottle  		 5          // a small bottle
+#define	e_ITEM_SmallBottle  		 5          // a small bottle - unused
 #define	e_ITEM__Last_Container       5          // ----- END CONTAINERS MARKER
 
 // Items requiring containers

@@ -25,7 +25,7 @@ _gItems
     ITEM_CONTAINER( _gTextItemCardboardBox,e_LOC_GREENHOUSE      )  // e_ITEM_CardboardBox         
     ITEM_CONTAINER( _gTextItemFishingNet  ,e_LOC_FISHPND         )  // e_ITEM_FishingNet           
     ITEM_CONTAINER( _gTextItemPlasticBag  ,e_LOC_MARKETPLACE     )  // e_ITEM_PlasticBag           
-    ITEM_CONTAINER( _gTextItemSmallBottle ,e_LOC_NONE            )  // e_ITEM_SmallBottle          
+    ITEM_CONTAINER( _gTextItemSmallBottle ,e_LOC_NONE            )  // e_ITEM_SmallBottle  - unused         
 
     // Items requiring containers
     ITEM( _gTextItemBlackDust             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre            

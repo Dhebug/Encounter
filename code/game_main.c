@@ -34,6 +34,7 @@ void PrintInventory()
 
 	memset((char*)TemporaryBuffer479,' ',40*4);
     gPrintWidth=38;
+    gPrintRemovePrefix=1;
     for (pass=0;pass<2;pass++)
     {
     	item* itemPtr = gItems;
@@ -75,6 +76,7 @@ void PrintInventory()
         }
     }
 	memcpy((char*)0xbb80+40*24,TemporaryBuffer479,40*4);
+    gPrintRemovePrefix=0;
 }
 
 
@@ -630,42 +632,9 @@ void Initializations()
     SetKeyboardLayout(); 
 
 #ifdef TESTING_MODE
-	// Add here any change to the scenario to easily check things
-	//gCurrentLocation =e_LOC_INSIDE_PIT;
-	//gCurrentLocation =e_LOC_OUTSIDE_PIT;
-    //gItems[e_ITEM_Rope].location           = e_LOC_INVENTORY;
-    //gItems[e_ITEM_Rope].flags |= ITEM_FLAG_ATTACHED;
-
-    //gItems[e_ITEM_Ladder].location           = e_LOC_INVENTORY;
-
-	//gCurrentLocation =e_LOC_WELL;
-	//gCurrentLocation =e_LOC_ENTRANCEHALL;
-	//gCurrentLocation =e_LOC_LAWN;
-	//gCurrentLocation =e_LOC_MASTERBEDROOM;
-	////gCurrentLocation =e_LOC_MARKETPLACE;
-	//gCurrentLocation =e_LOC_EASTERN_ROAD;
-    //gCurrentLocation = e_LOC_LIBRARY;
-	//gItems[e_ITEM_PlasticBag].location = e_LOC_INVENTORY;
-
-    //gItems[e_ITEM_ChemistryBook].location          = e_LOC_INVENTORY;
-    //gItems[e_ITEM_AlsatianDog].location          = e_LOC_LARGE_STAIRCASE;
-    /*
-    gCurrentLocation = e_LOC_ENTRANCEHALL; // e_LOC_LARGE_STAIRCASE; // 40; //e_LOC_EASTERN_ROAD; //e_LOC_WELL; e_LOC_LIBRARY;
-    gItems[e_ITEM_Meat].location = e_LOC_INVENTORY;  // Instead we now have some drugged meat in our inventory    
-    gItems[e_ITEM_Meat].flags |= ITEM_FLAG_TRANSFORMED;   // The drug is 
-    gItems[e_ITEM_Meat].description = gTextItemSedativeLacedMeat;
-
-    gItems[e_ITEM_SilverKnife].location           = e_LOC_INVENTORY;
-    gItems[e_ITEM_SnookerCue].location           = e_LOC_INVENTORY;
-    */
-
-   /*
-   gCurrentLocation = e_LOC_WOODEDAVENUE;
-   gItems[e_ITEM_CardboardBox].location = e_LOC_INVENTORY;
-   gItems[e_ITEM_FishingNet].location   = e_LOC_INVENTORY;
-   */
-   //gCurrentLocation = e_LOC_ENTRANCEHALL;  //e_LOC_KITCHEN;
-   StartClock();
+    // Mike: Only available on my machine, it's a set of preconditions to test the game, but it's technically the game solution, so...
+    #include "game_tests.c"
+    StartClock();
 #else
 	// In normal gameplay, the player starts from the marketplace with an empty inventory
 	gCurrentLocation = e_LOC_MARKETPLACE;
