@@ -152,6 +152,86 @@ void PrintSceneInformation()
 #ifdef ENABLE_SCENE_DESCRIPTIONS   
 	// Print the description of the place at the top (centered)
     PrintTopDescription(gDescription);  //gCurrentLocationPtr->description);
+#else
+    // Let's try a gradient color!
+    // Description line was at    0xbb80+17*40        0xBE28
+    // Matching hires location is 0xa000+17*40*8      0xB540
+    {
+        // Draw some decorative borders using the _ DEL, # and @ characters
+        // Definitely optimizable, but good enough for a test
+        poke(0xbb80+40*17+0,4);    // Blue Ink
+        memset(0xbb80+40*17+1,'_',38);
+        memset(0xbb80+40*17+2,127,36);
+        poke(0xb400+8*'_'+0,0);
+        poke(0xb400+8*'_'+1,0);
+        poke(0xb400+8*'_'+2,0);
+        poke(0xb400+8*'_'+3,0);
+        poke(0xb400+8*'_'+4,1+4+16);
+        poke(0xb400+8*'_'+5,0);
+        poke(0xb400+8*'_'+6,255);
+        poke(0xb400+8*'_'+7,255);
+        
+        poke(0xb400+8*127+0,0);
+        poke(0xb400+8*127+1,0);
+        poke(0xb400+8*127+2,0);
+        poke(0xb400+8*127+3,0);
+        poke(0xb400+8*127+4,255);
+        poke(0xb400+8*127+5,0);
+        poke(0xb400+8*127+6,255);
+        poke(0xb400+8*127+7,255);
+
+        poke(0xbb80+40*23+0,4);    // Blue Ink
+        memset(0xbb80+40*23+1,'#',38);
+        memset(0xbb80+40*23+2,'@',36);
+        poke(0xb400+8*'#'+0,255);
+        poke(0xb400+8*'#'+1,255);
+        poke(0xb400+8*'#'+2,0);
+        poke(0xb400+8*'#'+3,1+4+16);
+        poke(0xb400+8*'#'+4,0);
+        poke(0xb400+8*'#'+5,0);
+        poke(0xb400+8*'#'+6,0);
+        poke(0xb400+8*'#'+7,0);
+        
+        poke(0xb400+8*'@'+0,255);
+        poke(0xb400+8*'@'+1,255);
+        poke(0xb400+8*'@'+2,0);
+        poke(0xb400+8*'@'+3,255);
+        poke(0xb400+8*'@'+4,0);
+        poke(0xb400+8*'@'+5,0);
+        poke(0xb400+8*'@'+6,0);
+        poke(0xb400+8*'@'+7,0);
+    }    
+    /*
+    {
+        // This works, but it corrupts a few of the characters:
+        // 2 7 A F K P happen to be in the same area as the attributes.
+        // to use this method these few characters would have to be remapped
+        poke(0xbb80+40*17+0,'x');    // 0xBE28
+        poke(0xbb80+40*17+39,30);    // HIRES 50hz
+
+        poke(0xa000+40*136+0,16+0);  // Paper color attribute
+        poke(0xa000+40*137+0,16+0);  // Paper color attribute
+        poke(0xa000+40*138+0,16+0);  // Paper color attribute
+        poke(0xa000+40*139+0,16+4);  // Paper color attribute
+        poke(0xa000+40*140+0,16+0);  // Paper color attribute
+        poke(0xa000+40*141+0,16+4);  // Paper color attribute
+        poke(0xa000+40*142+0,16+4);  // Paper color attribute
+        poke(0xa000+40*143+0,16+4);  // Paper color attribute
+        //
+        poke(0xa000+40*144+0,16+4);  // BLUE paper
+        
+        poke(0xa000+40*136+1,26);  // TEXT 50hz
+        poke(0xa000+40*137+1,26);  // TEXT 50hz
+        poke(0xa000+40*138+1,26);  // TEXT 50hz
+        poke(0xa000+40*139+1,26);  // TEXT 50hz
+        poke(0xa000+40*140+1,26);  // TEXT 50hz
+        poke(0xa000+40*141+1,26);  // TEXT 50hz
+        poke(0xa000+40*142+1,26);  // TEXT 50hz        
+        poke(0xa000+40*143+1,26);  // TEXT 50hz
+        //
+        poke(0xa000+40*144+1,26);  // TEXT 50hz
+    } 
+    */   
 #endif    
 
     // Display the score
