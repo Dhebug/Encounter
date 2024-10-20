@@ -364,7 +364,7 @@ void TakeItem()
 
     if (gCurrentItemCount>=8)
     {
-        PrintErrorMessage(gTextErrorIventoryFull);      // "I need to drop something first"
+        PrintErrorMessage(gTextErrorInventoryFull);      // "I need to drop something first"
         return;
     }
 
@@ -401,7 +401,7 @@ void TakeItem()
                 // But it's on the scene, so we pick-it up automatically (except if we don't have room for it)
                 if ((gCurrentItemCount+1)>=8)
                 {
-                    PrintErrorMessage(gTextErrorIventoryFull);      // "I need to drop something first"
+                    PrintErrorMessage(gTextErrorInventoryFull);      // "I need to drop something first"
                     return;
                 }
                 containerPtr->location = e_LOC_INVENTORY;
@@ -562,6 +562,7 @@ WORDS ProcessAnswer()
 
 	// Not recognized: Warn the player and continue
     UnlockAchievement(ACHIEVEMENT_CAN_YOU_REPEAT);
+    PrintErrorMessage(gTextErrorDidNotUnderstand);      // "I do not understand, sorry"
 	PlaySound(ErrorPlop);
  	return e_WORD_CONTINUE;
 }
