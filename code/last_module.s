@@ -22,6 +22,25 @@ _free_to_use_text = osdk_end+1 ; *+256
 
     .bss
 
+#ifdef MODULE_GAME
+* = $bb80+17*40
+_TextDescriptionLine
+
+* = $a000+17*40*8
+_Hires_DescriptionLine
+
+* = $B400+8*48
+_TextCharsetNumbers
+
+* = $B400+8*65
+_TextCharsetUpperCaseLetters
+
+* = $B400+8*97
+_TextCharsetLowerCaseLetters
+
+
+#endif
+
 #ifdef MODULE_INTRO
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
 _STD_Charset
