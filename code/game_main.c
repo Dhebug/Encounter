@@ -144,8 +144,10 @@ void PrintSceneObjects()
 // MARK:Display Scene
 void PrintSceneInformation()
 {
+#ifdef ENABLE_SCENE_DESCRIPTIONS   
 	// Print the description of the place at the top (centered)
     PrintTopDescription(gDescription);  //gCurrentLocationPtr->description);
+#endif    
 
     // Display the score
 	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"

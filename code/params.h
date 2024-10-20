@@ -17,6 +17,7 @@
 
 //#define USE_MUSIC_EVENTS                // Comment out to disable events (not used in Encounter)
 
+//#define ENABLE_SCENE_DESCRIPTIONS       // Comment out to show the "This is the kitchen" messages
 #define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
 #ifdef MODULE_GAME
 #define ENABLE_PRINTER                  // Mostly for testers, to get the game solution

@@ -93,7 +93,11 @@
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
+#ifdef ENABLE_SCENE_DESCRIPTIONS
 #define SET_DESCRIPTION(description)         .byt COMMAND_SET_DESCRIPTION,description,0
+#else
+#define SET_DESCRIPTION(description)         
+#endif
 #define CLEAR_TEXT_AREA(paper_color)         .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
 
 // Meta game
@@ -120,8 +124,13 @@
 
 // Graphics
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
+#ifdef ENABLE_SCENE_DESCRIPTIONS
 #define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId,description,0
 #define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId,description,0
+#else
+#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId
+#define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
+#endif
 #define FADE_BUFFER                                  .byt COMMAND_FADE_BUFFER
 
 #define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h,40

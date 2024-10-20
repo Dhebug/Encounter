@@ -725,6 +725,7 @@ found_zero
 ; .byt COMMAND_SET_DESCRIPTION,description,0
 _ByteStreamCommandSetDescription
 .(
+#ifdef ENABLE_SCENE_DESCRIPTIONS
     ;jsr _Panic
     
     ; Use the current pointer as the string address
@@ -742,6 +743,9 @@ _ByteStreamCommandSetDescription
 
     ; Skip to the end of the string
     jmp FindNullTerminator
+#else
+    jsr _Panic
+#endif    
 .)
 
 
@@ -942,6 +946,7 @@ _Adjust_gStreamNextPtr
 ; _param0+0/+1=pointer to message
 _PrintTopDescriptionAsm
 .(
+#ifdef ENABLE_SCENE_DESCRIPTIONS    
     ;int messageLength = messageLength=strlen(message);
     jsr _GetStringLen
     lsr
@@ -973,6 +978,9 @@ loop
 end_loop2
     ; Adjust the pointer to the next position (_param0+y+1)
     jmp _Adjust_gStreamNextPtr
+#else
+    jsr _Panic
+#endif    
 .)
 
 
@@ -1309,6 +1317,7 @@ _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     sta _LoaderApiAddressHigh
     jsr _LoadApiLoadFileFromDirectory
 
+#ifdef ENABLE_SCENE_DESCRIPTIONS
     ; PrintTopDescription(gCurrentStream);
     lda _gCurrentStream+0
     sta _param0+0
@@ -1321,7 +1330,7 @@ _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     sta _gCurrentStream+0
     lda _gStreamNextPtr+1
     sta _gCurrentStream+1
-
+#endif
     rts
 .)
 
