@@ -14,6 +14,7 @@ extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so
 
 extern char LoadSceneScript[];
 
+char gColoredSeparator[]=" ";
 
 
 // MARK:Print Inventory
@@ -44,13 +45,15 @@ void PrintInventory()
             {
                 char* screenPtr = (char*)TemporaryBuffer479+40*(gCurrentItemCount/2)+(gCurrentItemCount&1)*20;
                 unsigned char associatedItemId = itemPtr->associated_item;
+                 gColoredSeparator[0] = (gCurrentItemCount&1)^((gCurrentItemCount&2)>>1)  ?7:3;  // Alternate the ink colors based on the counter
 
                 if (pass==0)
                 {
                     // First pass: Only the containers with something inside
                     if ( (itemPtr->flags & ITEM_FLAG_IS_CONTAINER) && (associatedItemId!=255) )
                     {
-                        PrintStringAt(itemPtr->description,screenPtr);  // Print the container
+                        PrintStringAt(gColoredSeparator,screenPtr);
+                        PrintStringAt(itemPtr->description,screenPtr+1);  // Print the container
                         PrintString(":");
                         PrintString(gItems[associatedItemId].description);
                         gCurrentItemCount+=2;
@@ -64,7 +67,9 @@ void PrintInventory()
                     // Second pass: Everything else
                     if (associatedItemId==255)
                     {
-                        PrintStringAt(itemPtr->description,screenPtr);  // Print the item
+                        PrintStringAt(gColoredSeparator,screenPtr);
+
+                        PrintStringAt(itemPtr->description,screenPtr+1);  // Print the item
                         gCurrentItemCount++;
                     #ifdef ENABLE_PRINTER    
                         PrinterSendString(", ");
@@ -570,7 +575,6 @@ WORDS ProcessAnswer()
 }
 
 
-char gColoredSeparator[]=" ";
 
 // MARK: SHOW HELP
 void ShowHelp()
