@@ -1181,13 +1181,45 @@ _ClearMessageAndInventoryWindow
     ldx #1+23+4-18
     jmp common_bit
 +_ClearMessageWindowAsm
+#ifdef ENABLE_SCENE_DESCRIPTIONS   
     ldx #1+23-18
+#else
+    ldx #1+23-18-1
+#endif    
 common_bit
     ; Pointer to first line of the "window"
+#ifdef ENABLE_SCENE_DESCRIPTIONS   
     lda #<$bb80+40*18
     sta tmp0+0
     lda #>$bb80+40*18
     sta tmp0+1
+#else
+    lda #<$bb80+40*17
+    sta tmp0+0
+    lda #>$bb80+40*17
+    sta tmp0+1
+
+    ; Top fluff
+    lda _param0
+    and #7          ; Ink color
+    ldy #0
+    sta (tmp0),y
+    iny
+    lda #"_"
+    sta (tmp0),y
+    iny
+    lda #127
+loop_top_fluff    
+    sta (tmp0),y
+    iny
+    cpy #38
+    bne loop_top_fluff
+    lda #"_"
+    sta (tmp0),y
+
+    ; Then start painting the bit area
+    jsr _Add40ToTmp0
+#endif
 
 loop_line
     ; Erase the 39 last characters of that line
@@ -1203,19 +1235,34 @@ loop_column
     sta (tmp0),y
 
     ; Next line
-    clc
-    lda tmp0+0
-    adc #40
-    sta tmp0+0
-    lda tmp0+1
-    adc #0
-    sta tmp0+1
+    jsr _Add40ToTmp0
 
     dex
     bne loop_line
 
+#ifndef ENABLE_SCENE_DESCRIPTIONS   
+    ; Bottom fluff
+    lda _param0
+    and #7          ; Ink color
+    ldy #0
+    sta (tmp0),y
+    iny
+    lda #"#"
+    sta (tmp0),y
+    iny
+    lda #"@"
+loop_bottom_fluff    
+    sta (tmp0),y
+    iny
+    cpy #38
+    bne loop_bottom_fluff
+    lda #"#"
+    sta (tmp0),y
+#endif
     rts
 .)
+
+
 
 ; param0 +0 = xPos
 ; param0 +1 = yPos

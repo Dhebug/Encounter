@@ -157,11 +157,12 @@ void PrintSceneInformation()
     // Description line was at    0xbb80+17*40        0xBE28
     // Matching hires location is 0xa000+17*40*8      0xB540
     {
+        /*
         // Draw some decorative borders using the _ DEL, # and @ characters
         // Definitely optimizable, but good enough for a test
-        poke(0xbb80+40*17+0,4);    // Blue Ink
-        memset(0xbb80+40*17+1,'_',38);
-        memset(0xbb80+40*17+2,127,36);
+        //poke(0xbb80+40*17+0,4);    // Blue Ink
+        //memset(0xbb80+40*17+1,'_',38);
+        //memset(0xbb80+40*17+2,127,36);
         poke(0xb400+8*'_'+0,0);
         poke(0xb400+8*'_'+1,0);
         poke(0xb400+8*'_'+2,0);
@@ -180,9 +181,9 @@ void PrintSceneInformation()
         poke(0xb400+8*127+6,255);
         poke(0xb400+8*127+7,255);
 
-        poke(0xbb80+40*23+0,4);    // Blue Ink
-        memset(0xbb80+40*23+1,'#',38);
-        memset(0xbb80+40*23+2,'@',36);
+        //poke(0xbb80+40*23+0,4);    // Blue Ink
+        //memset(0xbb80+40*23+1,'#',38);
+        //memset(0xbb80+40*23+2,'@',36);
         poke(0xb400+8*'#'+0,255);
         poke(0xb400+8*'#'+1,255);
         poke(0xb400+8*'#'+2,0);
@@ -200,6 +201,7 @@ void PrintSceneInformation()
         poke(0xb400+8*'@'+5,0);
         poke(0xb400+8*'@'+6,0);
         poke(0xb400+8*'@'+7,0);
+        */
     }    
     /*
     {
