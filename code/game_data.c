@@ -102,6 +102,9 @@ keyword gWordsArray[] =
     { "POND"        ,e_ITEM_FishPond }, 
     { "FISH"        ,e_ITEM_Fish }, 
     { "APPLES"      ,e_ITEM_Apple }, 
+    { "TREE"        ,e_ITEM_Tree }, 
+    { "PIT"         ,e_ITEM_Pit }, 
+    { "HEAPS"       ,e_ITEM_Heap }, 
 
 
     // Directions

@@ -162,6 +162,9 @@ _gTextItemTombstone               .byt "une _tombe",0
 _gTextItemFishpond                .byt "un _bac a poisson",0
 _gTextItemFish                    .byt "un _poisson",0
 _gTextItemApple                   .byt "quelques _pommes",0
+_gTextItemTree                    .byt "un$_arbre robuste",0
+_gTextItemPit                     .byt "un$_trou instable",0
+_gTextItemHeap                    .byt "quelques$_tas",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -228,6 +231,9 @@ _gTextItemTombstone               .byt "a$_tombstone",0
 _gTextItemFishpond                .byt "a$fish _pond",0
 _gTextItemFish                    .byt "a$_fish",0
 _gTextItemApple                   .byt "a few$_apples",0
+_gTextItemTree                    .byt "a$sturdy _tree",0
+_gTextItemPit                     .byt "an$unstable _pit",0
+_gTextItemHeap                    .byt "a few$spoil _heaps",0
 #endif
 _EndItemNames
 
@@ -2168,7 +2174,8 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
     COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
-
+    COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
+    COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
@@ -2449,6 +2456,9 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _ReadChemistryRecipes)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _ReadChemistryBook)
     VALUE_MAPPING(e_ITEM_RoughMap           , _ReadRoughMap)
+    VALUE_MAPPING(e_ITEM_RoadSign           , _ReadRoadSign)
+    VALUE_MAPPING(e_ITEM_Tombstone          , _ReadTombstone)
+    VALUE_MAPPING(e_ITEM_Graffiti           , _ReadGraffiti)
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
 
@@ -2557,6 +2567,9 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_GunPowder          , _InspectGunPowder)
     VALUE_MAPPING(e_ITEM_SedativePills      , _InspectPills)
     VALUE_MAPPING(e_ITEM_Meat               , _InspectMeat)
+    VALUE_MAPPING(e_ITEM_Tree               , _InspectTree)
+    VALUE_MAPPING(e_ITEM_Pit                , _InspectPit)
+    VALUE_MAPPING(e_ITEM_Heap               , _InspectHeap)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2711,6 +2724,43 @@ _InspectMeat
     INFO_MESSAGE("Un chien adorerait cette pièce !")
 #else
     INFO_MESSAGE("A dog would love this juicy morcel!")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+
+_InspectTree
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une corde pourrait s'y attacher")
+#else
+    INFO_MESSAGE("A rope could be attached to it")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_InspectPit
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Pas sur qu'on puisse en remonter")
+#else
+    INFO_MESSAGE("Not sure you could climb up again")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_InspectHeap
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ca vient du trou !")
+#else
+    INFO_MESSAGE("This used to be inside the pit!")
 #endif    
     WAIT(50*2)
     END_AND_REFRESH
@@ -2874,6 +2924,7 @@ _InspectDog
 .)
 
 
+_ReadGraffiti
 _InspectGraffiti
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKTUNNEL),tunnel)
@@ -2909,12 +2960,13 @@ _InspectWell
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un vieux puit")
 #else
-    INFO_MESSAGE("Un vieux puit")
+    INFO_MESSAGE("Just an old mossy well")
 #endif    
     JUMP(_InformatioNotRelevantForMission)
 .)
 
 
+_ReadRoadSign
 _InspectRoadSign
 .(
 #ifdef LANGUAGE_FR
@@ -2937,6 +2989,7 @@ _InspectTrashCan
 .)
 
 
+_ReadTombstone
 _InspectTombstone
 .(
 #ifdef LANGUAGE_FR
@@ -3977,6 +4030,7 @@ cannot_use_rope_here
     ERROR_MESSAGE("Can't use it there")
     END_AND_REFRESH
 
++_CombineRopeTree
 around_the_pit
     INFO_MESSAGE("You attach the rope to the tree")
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
@@ -4093,6 +4147,7 @@ _UseAlarmSwitch
 .)
 
 
+_CombineHoseTank
 _UseHosePipe
 .(
     JUMP_IF_TRUE(abandonned_car,CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR))

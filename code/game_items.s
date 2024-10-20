@@ -97,4 +97,6 @@ _gItems
     ITEM_NORMAL( _gTextItemFishpond              ,e_LOC_FISHPND         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_FishPond
     ITEM_NORMAL( _gTextItemFish                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fish
     ITEM_NORMAL( _gTextItemApple                 ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Apple
-    
+    ITEM_NORMAL( _gTextItemTree                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tree
+    ITEM_NORMAL( _gTextItemPit                   ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Pit
+    ITEM_NORMAL( _gTextItemHeap                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Heap
