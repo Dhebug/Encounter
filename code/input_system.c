@@ -90,6 +90,7 @@ unsigned char ParseInputBuffer()
 }
 
 
+char gPrintMessageBackground[40];
 
 WORDS AskInput(const char* inputMessage,char checkTockens)
 {
@@ -103,6 +104,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 #endif    
             if (inputMessage[0])
             {
+                memcpy(gPrintMessageBackground,gStatusMessageLocation+1,39);            
     			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
             }
 			memset(gStatusMessageLocation+40+1,' ',39);
@@ -154,6 +156,10 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 				if (answer !=e_WORD_CONTINUE)
 				{
 					// Quit
+                    if (inputMessage[0])
+                    {
+                        memcpy(gStatusMessageLocation+1,gPrintMessageBackground,39);            
+                    }
 					return answer;
 				}
 				else
