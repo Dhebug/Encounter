@@ -105,10 +105,6 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
             {
     			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
             }
-            else
-            {
-    			memset(gStatusMessageLocation+1,' ',39);
-            }
 			memset(gStatusMessageLocation+40+1,' ',39);
 			gAskQuestion=0;
 		}

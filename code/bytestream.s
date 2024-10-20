@@ -978,6 +978,18 @@ end_loop2
 
 ; _param0+0/+1=pointer to message
 ; _param1=color
+_PrintStatusMessageNextLineAsm
+    clc
+    lda _gStatusMessageLocation+0
+    adc #40
+    sta tmp0+0
+    sta tmp1+0
+    lda _gStatusMessageLocation+1
+    adc #0
+    sta tmp0+1
+    sta tmp1+1
+    jmp _PrintStatusMessageAddr
+
 _PrintStatusMessageAsm
     ;rts
     ;jmp _PrintStatusMessageAsm
@@ -1065,7 +1077,7 @@ _PrintErrorMessageAsm
     sta _param1
 
     ; Print the message
-    jsr _PrintStatusMessageAsm
+    jsr _PrintStatusMessageNextLineAsm
 
     ; Play a 'Ping' sound
     ldx #<_ErrorPlop
