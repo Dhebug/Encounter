@@ -746,7 +746,7 @@ _BlitBufferToHiresWindow
 .(
   jsr _AddFancyImageFrame
   jsr _DrawArrows
-
++_BlitBufferToHiresWindowNoFrameNoArrows
   lda #26
   sta _ImageBuffer+40*128   ; Force back to TEXT
 

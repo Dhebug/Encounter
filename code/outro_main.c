@@ -173,6 +173,7 @@ void ShowNewAchievements()
 
     if (unlockedCount)
     {
+        memset((char*)0xbb80+40*25,0,40);   // Clear the background before printing the text line to avoid having garbage on the right side
         sprintf((char*)0xbb80+40*25,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
         WaitFrames(50*3);
     }
@@ -475,7 +476,7 @@ EndCredits:
     memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
 
     memset(ImageBuffer,64,40*128);    // Erase the image in the view
-	BlitBufferToHiresWindow();
+    BlitBufferToHiresWindowNoFrameNoArrows();
 
 
 	System_RestoreIRQ_SimpleVbl();
