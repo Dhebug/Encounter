@@ -2566,6 +2566,9 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
     VALUE_MAPPING(e_ITEM_RoughMap           , _InspectRoughMap)
     VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
+    VALUE_MAPPING(e_ITEM_CarBoot            , _InspectCarBoot)
+    VALUE_MAPPING(e_ITEM_CarDoor            , _InspectCarDoor)
+    VALUE_MAPPING(e_ITEM_CarTank            , _InspectCarTank)
     VALUE_MAPPING(e_ITEM_Dog                , _InspectDog)
     VALUE_MAPPING(e_ITEM_Graffiti           , _InspectGraffiti)
     VALUE_MAPPING(e_ITEM_Church             , _InspectChurch)
@@ -3939,6 +3942,65 @@ _UseCar
         SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
         END_AND_REFRESH
     ENDIF(abandonned_car)
+.)
+
+_InspectCarBoot
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot_closed)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il est fermé mais pas à clef")
+#else
+        INFO_MESSAGE("It's closed, but not locked.")
+#endif    
+    ELSE(boot_closed,boot_open)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il n'y a que la roue de secour")
+#else
+        INFO_MESSAGE("Other than the spare wheel it's empty")
+#endif    
+    ENDIF(boot_open)
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_InspectCarDoor
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),door_closed)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Elle est fermée mais pas à clef")
+#else
+        INFO_MESSAGE("It's closed, but not locked.")
+#endif    
+    ELSE(door_closed,door_open)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("La porte est boufée par la rouille")
+#else
+        INFO_MESSAGE("The door is rusty and rattles a bit")
+#endif    
+    ENDIF(door_open)
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_InspectCarTank
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),tank_closed)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il est fermé mais pas à clef")
+#else
+        INFO_MESSAGE("It's closed, but not locked.")
+#endif    
+    ELSE(tank_closed,tank_open)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il reste de l'essence dedans")
+#else
+        INFO_MESSAGE("It still has petrol in it")
+#endif    
+    ENDIF(tank_open)
+    WAIT(50*2)
+    END_AND_REFRESH
 .)
 
 
