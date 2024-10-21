@@ -2932,11 +2932,20 @@ _InspectPlasticBag
 
 _InspectDog
 .(
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il ne vas pas vous laisser passer !")
+        INFO_MESSAGE("Il ne vas pas vous laisser passer !")
 #else
-    INFO_MESSAGE("It will not let you pass!")
+        INFO_MESSAGE("It will not let you pass!")
 #endif    
+    ELSE(alive,disabled)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il ne bouge plus")
+#else
+        INFO_MESSAGE("It is not moving")
+#endif    
+    ENDIF(disabled)
+    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -3101,7 +3110,7 @@ _InspectThug
 #else
         INFO_MESSAGE("He is sleeping")
 #endif    
-    ELSE(alive,dead)
+    ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
 #else
@@ -3113,7 +3122,7 @@ _InspectThug
 #else
         INFO_MESSAGE("Maybe he has useful items?")
 #endif    
-    ENDIF(dead)
+    ENDIF(disabled)
 
     END_AND_REFRESH    
 .)
