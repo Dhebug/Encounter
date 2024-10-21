@@ -3386,7 +3386,8 @@ _ShowOpeningWindow
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,9,28)                     ; Draw the bottom part of the open window
             _IMAGE(0,84)
             _BUFFER(0,84)
-    FADE_BUFFER 
+    FADE_BUFFER
+    PLAY_SOUND(_DoorOpening) 
     WAIT(50*2)
     RETURN
 .)
@@ -4085,9 +4086,15 @@ _UseRope
             SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
 #endif    
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
-            BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
-                    _IMAGE_STRIDE(0,0,17)
-                    _BUFFER(12,16)
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
+                BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
+                        _IMAGE_STRIDE(0,0,17)
+                        _BUFFER(10,26)
+            ELSE(girl_restrained,girl_freed)
+                BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
+                        _IMAGE_STRIDE(0,0,17)
+                        _BUFFER(12,16)
+            ENDIF(girl_freed)
             FADE_BUFFER
 
             BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_ROPE,11,94,11)    ; Draw the patch with the rope through the hole
