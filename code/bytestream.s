@@ -67,6 +67,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
+    .word _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
 
     
 ; _param0=pointer to the new byteStream
@@ -1390,6 +1391,17 @@ _ByteStreamCommand_CLEAR_TEXT_AREA
     jsr _ByteStreamGetNextByte
     stx _param0+0
     jmp _ClearMessageWindowAsm
+.)
+
+
+; .byt COMMAND_CLEAR_FULL_TEXT_AREA,16+(paper_color&7)
+_ByteStreamCommand_CLEAR_FULL_TEXT_AREA
+.(
+    ; _param0=paper color
+    ; ClearMessageWindow(16+4);
+    jsr _ByteStreamGetNextByte
+    stx _param0+0
+    jmp _ClearMessageAndInventoryWindow
 .)
 
 

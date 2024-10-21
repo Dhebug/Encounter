@@ -283,6 +283,12 @@ void LoadScene()
 	// And run the first set of commands for this scene
 	HandleByteStream();
 
+    if (gGameOverCondition)
+    {
+        // If we have reach game over, we don't draw the rest of information
+        return;
+    }
+
     // We need to print the scene information *after* the script has been launched, else the moved items will not appear until the next refresh
 	PrintSceneInformation();
 

@@ -337,6 +337,8 @@ no_plastic_bag
         ; She's here, we won!
         ; Victory!
         SET_CUT_SCENE(1)
+        CLEAR_TEXT_AREA(0)
+        CLEAR_FULL_TEXT_AREA(0)
         STOP_CLOCK
         
         LOAD_MUSIC(LOADER_MUSIC_VICTORY)
@@ -357,6 +359,11 @@ no_plastic_bag
         
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")         ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
+#ifdef LANGUAGE_FR    
+        INFO_MESSAGE("Tout le monde a bord !")
+#else
+        INFO_MESSAGE("Everybody on board now!")
+#endif    
         
         BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,8,80)                            ; Open the left door
             _IMAGE(0,0)
@@ -416,6 +423,12 @@ no_plastic_bag
 
         DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED,"The Daily Telegraph, September 30th")
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR    
+        INFO_MESSAGE("Tout est bien qui finit bien")
+#else
+        INFO_MESSAGE("All is well that ends well")
+#endif    
+
         WAIT(50*4)                                ; Wait a couple seconds
         STOP_MUSIC()
 
@@ -2171,6 +2184,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
+    COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_SecurityDoor         ,_CombineClayDoor)    
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
     COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
@@ -4244,6 +4258,7 @@ _UseProtectionSuit
 .)
 
 
+_CombineClayDoor
 _UseClay
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?

@@ -52,7 +52,8 @@
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
-#define _COMMAND_COUNT          44
+#define COMMAND_CLEAR_FULL_TEXT_AREA 44
+#define _COMMAND_COUNT          45
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -99,6 +100,7 @@
 #define SET_DESCRIPTION(description)         
 #endif
 #define CLEAR_TEXT_AREA(paper_color)         .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
+#define CLEAR_FULL_TEXT_AREA(paper_color)    .byt COMMAND_CLEAR_FULL_TEXT_AREA,16+(paper_color&7)
 
 // Meta game
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
