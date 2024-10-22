@@ -325,7 +325,15 @@ _HiresAsm
 
 was_hires_already
 
-  ; memset((char*)0xa000,paperColor,0xbfe0-0xa000);   // Blinks for some reason, bug in memset???
+  ;jsr _Panic
+
+  ; memset((char*)0xbb80,paperColor,0xbfe0-0xbb80);         // First fill the TEXT area with the paper color
+  lda #<$bb80:ldy #0:sta (sp),y:iny:lda #>$bb80:sta (sp),y
+  lda _param0+0:iny:sta (sp),y:iny:lda #0:sta (sp),y
+  lda #<$bfe0-$bb80:iny:sta (sp),y:iny:lda #>$bfe0-$bb80:sta (sp),y
+  jsr _memset
+
+  ; memset((char*)0xa000,paperColor,0xbfe0-0xa000);         // Then fill the rest of the screen (including the charsets)
   lda #<$a000:ldy #0:sta (sp),y:iny:lda #>$a000:sta (sp),y
   lda _param0+0:iny:sta (sp),y:iny:lda #0:sta (sp),y
   lda #<$bfe0-$a000:iny:sta (sp),y:iny:lda #>$bfe0-$a000:sta (sp),y
