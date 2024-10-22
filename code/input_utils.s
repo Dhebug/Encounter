@@ -49,9 +49,14 @@ save_shift
 
 
 _InputDelete
-.(
+.(    
     ldx _gInputBufferPos
     beq InputQuit
+
+    lda _KeyBank+2
+    and #16
+    bne control_pressed
+
     dex
     stx _gInputBufferPos
     lda #0
@@ -60,6 +65,12 @@ _InputDelete
     ldx #<_KeyClickHData
     ldy #>_KeyClickHData
     jmp _PlaySoundAsmXY
+
+control_pressed              ; If CTRL is pressed, we delete the entire input buffer
+    ldx #<_Swoosh
+    ldy #>_Swoosh
+    jsr _PlaySoundAsmXY
+    jmp _ResetInput
 .)
 
 
