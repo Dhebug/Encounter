@@ -43,6 +43,7 @@ tab_ascii
 
 ReadKeyboard
 .(
+    php
 	sei
 	;Write Column Register Number to PortA 
 	lda #$0E 
@@ -113,9 +114,16 @@ skip1   ;Proceed to next column
 skip2   ;Proceed to next row 
 	dex 
 	bpl loop2 
-	cli
+	plp            ; Used to be cli, but technically we want to restore the existing interupt mask
+
+    jsr _ReadKeyInternal
+    beq no_key_pressed
+    stx gInternalKeyPressed
+no_key_pressed
 	rts 
 .)  
+
+gInternalKeyPressed .byt 0
 
 
 ; Some more routines, not actualy needed, but quite useful
@@ -126,7 +134,7 @@ skip2   ;Proceed to next row
 ; Reads a key (single press, but repeating) and returns his ASCII value in reg X. 
 ; Z=1 if no keypress detected.
 
-_ReadKey
+_ReadKeyInternal
 .(
 	ldx #7
 loop
@@ -160,6 +168,13 @@ skip
 	ldx #0
 	rts
 .)
+
+
+_ReadKey
+    ldx gInternalKeyPressed
+    lda #0
+    sta gInternalKeyPressed
+    rts
 
 
 ; Read a single key, same as before but no repeating.

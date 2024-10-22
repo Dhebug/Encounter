@@ -74,6 +74,7 @@ enum
 
 char UsedMenu = 0;
 char MenuShouldDraw = 1;
+char gMenuKeyOption = 0;
 int MenuPosition = MENU_KEYBOARD_LAYOUT;
 
 
@@ -106,13 +107,13 @@ void ApplySettings()
 
 
 
-void HandleSettingsMenu(int k)
+void HandleSettingsMenu()
 {
     gPrintWidth=38;
     gPrintPos = 0;
     SetLineAddress((char*)0xbb80+40*25+1);
 
-    switch (k)
+    switch (gMenuKeyOption)
     {         
     case KEY_UP:
         if (MenuPosition>0)
@@ -137,7 +138,7 @@ void HandleSettingsMenu(int k)
         switch (MenuPosition)
         {
         case MENU_KEYBOARD_LAYOUT:
-            if (k==KEY_LEFT)
+            if (gMenuKeyOption==KEY_LEFT)
             {
                 if (gKeyboardLayout==KEYBOARD_QWERTY) gKeyboardLayout=KEYBOARD_QWERTZ;
                 else                                  gKeyboardLayout--;
@@ -202,7 +203,8 @@ int Wait(int frameCount)
 			WaitFrames(4);
 			return 1;
 		}
-        HandleSettingsMenu(k);
+        gMenuKeyOption=k;
+        HandleSettingsMenu();
 	}
 	return 0;
 }
@@ -296,7 +298,8 @@ int ShowLogoAnimation()
 		{
 			return 1;
 		}
-        HandleSettingsMenu(k);
+        gMenuKeyOption=k;
+        HandleSettingsMenu();
 
         if (position<height+5)
         {

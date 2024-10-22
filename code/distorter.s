@@ -53,6 +53,11 @@ skip_dst
 
 	dex
 	bne LoopDisplayMakeShiftedLogo_Y
+
+    ; Try to get the menu working during pre-calc
+    jsr _ReadKeyNoBounce
+    stx _gMenuKeyOption
+    jsr _HandleSettingsMenu
 	rts
 
 
