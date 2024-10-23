@@ -747,7 +747,7 @@ _BlitBufferToHiresWindow
   jsr _AddFancyImageFrame
   jsr _DrawArrows
 +_BlitBufferToHiresWindowNoFrameNoArrows
-  lda #26
+  lda #ATTRIBUTE_TEXT
   sta _ImageBuffer+40*128   ; Force back to TEXT
 
 #ifdef DISABLE_FADES

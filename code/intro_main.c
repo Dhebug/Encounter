@@ -191,7 +191,6 @@ int DisplayIntroPage()
     // Note: for some reason, using the compressed picture ended up with a corrupted last line
     memcpy(ImageBuffer+40*2,UnCompressedGameTitle,40*39);
 
-
 	Hires(16+3,4);
 
     gPrintWidth=40;

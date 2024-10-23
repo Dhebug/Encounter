@@ -1450,10 +1450,10 @@ _InitializeGraphicMode
 .(
     jsr _ClearTextWindow
 
-    lda #31|128
+    lda #ATTRIBUTE_HIRES|128
     sta $bb80+40*0  	   ; Switch to HIRES, using video inverse to keep the 6 pixels white
 
-    lda #26
+    lda #ATTRIBUTE_TEXT
 	sta $a000+40*128       ; Switch to TEXT
 
 	; from the old BASIC code, will fix later

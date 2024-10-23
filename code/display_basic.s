@@ -250,7 +250,7 @@ was_hires
   lda #<$bfe0-$a000:iny:sta (sp),y:iny:lda #>$bfe0-$a000:sta (sp),y
   jsr _memset  
 
-  lda #26
+  lda #ATTRIBUTE_TEXT
   sta $bfdf
 
   jsr _WaitIRQ
@@ -339,7 +339,7 @@ was_hires_already
   lda #<$bfe0-$a000:iny:sta (sp),y:iny:lda #>$bfe0-$a000:sta (sp),y
   jsr _memset
 
-  lda #31
+  lda #ATTRIBUTE_HIRES
   sta $bfdf
 
   jsr _WaitIRQ

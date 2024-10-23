@@ -20,7 +20,17 @@
 //#define ENABLE_SCENE_DESCRIPTIONS       // Comment out to show the "This is the kitchen" messages
 #define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
 #ifdef MODULE_GAME
-#define ENABLE_PRINTER                  // Mostly for testers, to get the game solution
+//#define ENABLE_PRINTER                  // Mostly for testers, to get the game solution
+#endif
+
+#if 1
+// 60hz
+#define ATTRIBUTE_TEXT    24
+#define ATTRIBUTE_HIRES   28
+#else
+// 50hz
+#define ATTRIBUTE_TEXT    26
+#define ATTRIBUTE_HIRES   31
 #endif
 
 //#define TESTING_MODE         // Comment out to play normally
