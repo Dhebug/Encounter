@@ -95,7 +95,7 @@ void ApplySettings()
     {
         MusicMixerMask = 1+2+4;
 #ifdef ENABLE_MUSIC
-    PlayMusic(JingleMusic);
+        PlayMusic(JingleMusic);
 #endif    
     }
     else
@@ -151,12 +151,12 @@ void HandleSettingsMenu()
             break;
         case MENU_MUSIC_ON_OFF:
             gMusicEnabled=!gMusicEnabled;
+            ApplySettings();
             break;
         case MENU_SOUND_ON_OFF:
             gSoundEnabled=!gSoundEnabled;
             break;
         }
-        ApplySettings();
         MenuShouldDraw=1;
         UsedMenu = 1;
         break;
