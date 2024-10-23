@@ -1,5 +1,9 @@
 #include "params.h"
 
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
+#endif
+
     .zero
 
 _angle          .dsb 1
@@ -176,20 +180,20 @@ loop_column
 // Bonus texts
 #ifdef LANGUAGE_FR
 _Text_Loading_FirstTimeEver    
-    .byt 6,"We hope you will enjoy this game!",TEXT_CRLF
-    .byt 6,"Remember to keep the floppy writable.",TEXT_CRLF
+    .byt 6,"Nous espérons que ce jeu vous plaira!",TEXT_CRLF
+    .byt 6,"La disquette doit rester déprotégée",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
-    .byt "You are expected to fail a couple times",TEXT_CRLF
-    .byt "in order to collect all achievements!",TEXT_CRLF
+    .byt "Vous devez échouer plusieurs fois",TEXT_CRLF
+    .byt "afin de collecter tous les succès !",TEXT_CRLF
     .byt 0
 _Text_Loading_ThirdTime    
-    .byt "Some objectives have multiple solutions",TEXT_CRLF
-    .byt "be creative and try something different!",TEXT_CRLF
+    .byt "Parfois il y a plusieurs solutions",TEXT_CRLF
+    .byt "soyez créatif et expérimentez !",TEXT_CRLF
     .byt 0
 _Text_Loading_FourthTime
-    .byt "Time matters: The remaining time will be",TEXT_CRLF
-    .byt "added to your score. Ready to speedrun?",TEXT_CRLF
+    .byt "Le temps compte: le temps restant sera",TEXT_CRLF
+    .byt "ajouté au score. Prêt pour un speedrun ?",TEXT_CRLF
     .byt 0
 #else
 _Text_Loading_FirstTimeEver    
@@ -227,12 +231,19 @@ _gHighScores          .dsb 512   ; 456 bytes of actual score data, padded to 512
 
 
 
-_Text_OptionMenu    
-    .byt 3,"Keyboard layout:"
-    .byt 4,"Option menu2",TEXT_CRLF
-    .byt 5,"Option menu3",TEXT_CRLF
-    .byt 0
 
+#ifdef LANGUAGE_FR
+_Text_OptionKeyboard    .byt "Choix du clavier:",0
+_Text_Azerty            .byt "AZERTY (Francais)",0
+_Text_Qwerty            .byt "QWERTY         ",0
+_Text_Qwertz            .byt "QWERTZ (Allemand)",0
+
+_Text_OptionMusic        .byt "Musique:",0
+_Text_OptionSoundEffects .byt "Effets sonores:",0
+
+_Text_On                .byt "MARCHE",0
+_Text_Off               .byt "ARRET ",0
+#else
 _Text_OptionKeyboard    .byt "Keyboard layout:",0
 _Text_Azerty            .byt "AZERTY (French)",0
 _Text_Qwerty            .byt "QWERTY         ",0
@@ -243,5 +254,5 @@ _Text_OptionSoundEffects .byt "Sound Effects:",0
 
 _Text_On                .byt "ON ",0
 _Text_Off               .byt "OFF",0
-
+#endif
 
