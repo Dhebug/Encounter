@@ -4056,6 +4056,7 @@ _UseRope
                 SET_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO) ; The girl is now outside on the patio
                 SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO)      ; And we move the rope outside
                 INCREASE_SCORE(POINTS_GIRL_USES_ROPE)
+                UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
                 GOSUB(_ShowGirlAtTheWindow)                          ; We show the girl...
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("On y va !!!")
