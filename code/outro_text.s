@@ -131,7 +131,7 @@ _gTextGameDescription
     .byt 6,"   with a C and assembler program.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 2," The Oric is a quirky machine, but it",TEXT_CRLF
-    .byt 2,"  is rewarding if you can master it",TEXT_CRLF
+    .byt 2,"  is rewarding if you can master it.",TEXT_CRLF
     .byt TEXT_END
 
 _gTextExternalInformation
