@@ -13,7 +13,11 @@
 _Text_TitlePicture               
     .byt 16+3,4,TEXT_CRLF
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
+#ifdef LANGUAGE_FR
+    .byt 16+3,4,"Amméliorations ",96," 2024 Defence-Force "
+#else
     .byt 16+3,4,"Redux Additions ",96," 2024 Defence-Force "
+#endif    
     .byt TEXT_END
 
 ;
@@ -117,8 +121,8 @@ _Text_TypeWriterMessage
 // Bonus texts
 #ifdef LANGUAGE_FR
 _Text_Loading_FirstTimeEver    
-    .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
-    .byt "Some you can READ or INSPECT.",TEXT_CRLF
+    .byt "UTILISE, LACHE, LANCE, COMBINE items.",TEXT_CRLF
+    .byt "Certain peuvent être LU ou INSPECTE.",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
     .byt "Lethality is always an option but being",TEXT_CRLF

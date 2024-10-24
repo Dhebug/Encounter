@@ -39,42 +39,42 @@ _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 #ifdef LANGUAGE_FR
 _Text_Achievements                .byt 16+3,1,"          Badges collectés",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
-_Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
-_Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
+_Text_AchievementNone             .byt 16+3,1,"     Rien de déverrouillé !!!",0
+_Text_AchievementCount            .byt 16+3,1,"  %d sur %d débloqué - %d pour cent",0
 _Text_AchievementWrongDirection   .byt "Sens interdit",0
-_Text_AchievementLaunchedTheGame  .byt "Launched the game",0
+_Text_AchievementLaunchedTheGame  .byt "Lancé le jeu",0
 _Text_AchievementWatchedTheIntro  .byt "Watched the intro",0
-_Text_AchievementReadTheNewspaper .byt "Read the newspaper",0
-_Text_AchievementReadTheBook      .byt "Read the book",0
-_Text_AchievementReadTheNote      .byt "Read the note",0
-_Text_AchievementReadTheRecipes   .byt "Read the recipes",0
-_Text_AchievementOpenedTheFridge  .byt "Opened the fridge",0
-_Text_AchievementOpenedTheCabinet .byt "Opened the cabinet",0
-_Text_AchievementDruggedTheMeat   .byt "Drugged the meat",0
-_Text_AchievementKilledTheDog     .byt "Killed the dog",0
-_Text_AchievementDruggedTheDog    .byt "Drugged the dog",0
-_Text_AchievementChasedTheDog     .byt "Chased the dog",0
-_Text_AchievementKilledTheThug    .byt "Killed the thug",0
-_Text_AchievementDruggedTheThug   .byt "Drugged the thug",0
-_Text_AchievementCapturedTheDove  .byt "Captured the dove",0
-_Text_AchievementUsedTheRope      .byt "Used the rope",0
-_Text_AchievementUsedTheLadder    .byt "Used the ladder",0
-_Text_AchievementExaminedTheMap   .byt "Examined the map",0
-_Text_AchievementExaminedTheGame  .byt "Examined the game",0
-_Text_AchievementOpenedTheSafe    .byt "Opened the safe",0
-_Text_AchievementOpenedThePanel   .byt "Opened the panel",0
-_Text_AchievementBuiltAFuse       .byt "Built a fuse",0
-_Text_AchievementBuiltABomb       .byt "Built a bomb",0
-_Text_AchievementMadeBlackPowder  .byt "Made blackpowder",0
-_Text_AchievementFrikedTheThug    .byt "Frisked the thug",0
-_Text_AchievementUsedTheAcid      .byt "Used the acid",0
-_Text_AchievementOpenedTheCurtain .byt "Opened the curtain",0
-_Text_AchievementGaveTheKnife     .byt "Gave the knife",0
-_Text_AchievementGaveTheRope      .byt "Gave the rope",0
-_Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
-_Text_AchievementGotAHighscore    .byt "Got a highscore",0
-_Text_AchievementGotTheBestScore  .byt "Got the best score",0
-_Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
+_Text_AchievementReadTheNewspaper .byt "Lu le journal",0
+_Text_AchievementReadTheBook      .byt "Lu le livre",0
+_Text_AchievementReadTheNote      .byt "Lu la note",0
+_Text_AchievementReadTheRecipes   .byt "Lu la recette",0
+_Text_AchievementOpenedTheFridge  .byt "Ouvert le frigo",0
+_Text_AchievementOpenedTheCabinet .byt "Ouvert le placard",0
+_Text_AchievementDruggedTheMeat   .byt "Drogué la viande",0
+_Text_AchievementKilledTheDog     .byt "Tué le chien",0
+_Text_AchievementDruggedTheDog    .byt "Drogué le chien",0
+_Text_AchievementChasedTheDog     .byt "Chassé le chien",0
+_Text_AchievementKilledTheThug    .byt "Tué le voyou",0
+_Text_AchievementDruggedTheThug   .byt "Droggué le voyou",0
+_Text_AchievementCapturedTheDove  .byt "Capturé la colombe",0
+_Text_AchievementUsedTheRope      .byt "Utilisé la corde",0
+_Text_AchievementUsedTheLadder    .byt "Utilisé l'échelle",0
+_Text_AchievementExaminedTheMap   .byt "Regardé la carte",0
+_Text_AchievementExaminedTheGame  .byt "Regardé le jeu",0
+_Text_AchievementOpenedTheSafe    .byt "Ouvert le coffre",0
+_Text_AchievementOpenedThePanel   .byt "Ouvert le panneau",0
+_Text_AchievementBuiltAFuse       .byt "Fait un mêche",0
+_Text_AchievementBuiltABomb       .byt "Fait une bombe",0
+_Text_AchievementMadeBlackPowder  .byt "Fait de la poudre",0
+_Text_AchievementFrikedTheThug    .byt "Fouillé le voyou",0
+_Text_AchievementUsedTheAcid      .byt "Utilisé l'acide",0
+_Text_AchievementOpenedTheCurtain .byt "Ouvert le rideau",0
+_Text_AchievementGaveTheKnife     .byt "Donné le couteau",0
+_Text_AchievementGaveTheRope      .byt "Donné la corde",0
+_Text_AchievementWatchedTheOutro  .byt "Regardé la fin",0
+_Text_AchievementGotAHighscore    .byt "Eu un gros score",0
+_Text_AchievementGotTheBestScore  .byt "Meilleur score",0
+_Text_AchievementDogAteTheMeat    .byt "Chien à mangé",0
 _Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
 _Text_AchievementUnlimitedPauses  .byt "Pauses infinies",0
