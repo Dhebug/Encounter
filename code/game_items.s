@@ -101,3 +101,4 @@ _gItems
     ITEM_NORMAL( _gTextItemPit                   ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Pit
     ITEM_NORMAL( _gTextItemHeap                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Heap
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
+    ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator

@@ -166,6 +166,7 @@ _gTextItemTree                    .byt "un$_arbre robuste",0
 _gTextItemPit                     .byt "un$_trou instable",0
 _gTextItemHeap                    .byt "quelques$_tas",0
 _gTextItemNormalWindow            .byt "une _fenêtre",0
+_gTextItemAlarmIndicator          .byt "un _indicateur d'alarme",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -236,6 +237,7 @@ _gTextItemTree                    .byt "a$sturdy _tree",0
 _gTextItemPit                     .byt "an$unstable _pit",0
 _gTextItemHeap                    .byt "a few$spoil _heaps",0
 _gTextItemNormalWindow            .byt "a _window",0
+_gTextItemAlarmIndicator          .byt "an alarm _indicator",0
 #endif
 _EndItemNames
 
@@ -2600,6 +2602,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Pit                , _InspectPit)
     VALUE_MAPPING(e_ITEM_Heap               , _InspectHeap)
     VALUE_MAPPING(e_ITEM_NormalWindow       , _InspectNormalWindow)
+    VALUE_MAPPING(e_ITEM_AlarmIndicator     , _InspectAlarmIndicator)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2980,6 +2983,33 @@ lounge
         INFO_MESSAGE("I can see the tennis court outside")
 #endif    
 dinning_room
+
+    WAIT(50*2)        
+    END_AND_REFRESH
+.)
+
+
+_InspectAlarmIndicator
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),alarm_disabled)      ; Is the alarm active...
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Le système d'alarme est désactivé")
+#else
+        INFO_MESSAGE("The alarm system has been disabled")
+#endif    
+    ELSE(alarm_disabled,alarm_enabled)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Le système d'alarme est actif...")
+#else
+        INFO_MESSAGE("The alarm system is active, but...")
+#endif    
+        WAIT(50*2)        
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("mais les capteurs ont été trafiqués !")
+#else
+        INFO_MESSAGE("the sensors have been tempered with!")
+#endif    
+    ENDIF(alarm_enabled)
 
     WAIT(50*2)        
     END_AND_REFRESH

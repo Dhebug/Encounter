@@ -151,7 +151,8 @@
 #define e_ITEM_Pit                   74         // a pit
 #define e_ITEM_Heap                  75         // a heap
 #define e_ITEM_NormalWindow          76         // a normal window
-#define	e_ITEM_COUNT_ 				 77         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_AlarmIndicator        77         // an alarm indicator
+#define	e_ITEM_COUNT_ 				 78         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
