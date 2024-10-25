@@ -4337,6 +4337,7 @@ _UseKeys
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_gone)
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
+                PLAY_SOUND(_UseKeysOnAlarmPanel)
                 UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
                 SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_GONE_FOREVER)                      ; We don't need the keys anymore
                 INCREASE_SCORE(POINTS_USED_KEYS)
@@ -4377,6 +4378,7 @@ _UseKeys
 
 _UseAlarmSwitch
 .(
+    PLAY_SOUND(_AlarmSwitchPressed)
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
         SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
         INCREASE_SCORE(POINTS_USED_SWITCH)
