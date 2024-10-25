@@ -1179,7 +1179,7 @@ _ByteStreamCommandERROR_MESSAGE
 ; _param0=paper color
 _ClearMessageAndInventoryWindow
 .(
-    ldx #1+23+4-18
+    ldx #1+23+4-18-1
     jmp common_bit
 +_ClearMessageWindowAsm
 #ifdef ENABLE_SCENE_DESCRIPTIONS   

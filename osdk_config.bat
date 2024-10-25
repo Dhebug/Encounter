@@ -14,8 +14,11 @@
 :: 0.8.2 - Added KBFR, KBUK, interactible door, better error sounds and messages
 :: 0.8.3 - Added a configuration menu, quite a few bug fixes as well
 :: 0.8.4 - Added support for second shift key, twine is fully changed, help is colored, new cross, inventory limit
+:: 0.8.5 - The map can be navigated with arrows, quite a few changes all over the place really
+:: 0.8.6 - Keyboard improvements, CTRL+DEL, misc fixes to the end sequence, fixed the intro TEXT to HIRES glitch
+:: 0.8.7 - 
 ::
-SET VERSION=0.8.4
+SET VERSION=0.8.6
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
