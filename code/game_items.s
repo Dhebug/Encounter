@@ -100,3 +100,4 @@ _gItems
     ITEM_NORMAL( _gTextItemTree                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tree
     ITEM_NORMAL( _gTextItemPit                   ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Pit
     ITEM_NORMAL( _gTextItemHeap                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Heap
+    ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow

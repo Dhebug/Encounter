@@ -165,6 +165,7 @@ _gTextItemApple                   .byt "quelques _pommes",0
 _gTextItemTree                    .byt "un$_arbre robuste",0
 _gTextItemPit                     .byt "un$_trou instable",0
 _gTextItemHeap                    .byt "quelques$_tas",0
+_gTextItemNormalWindow            .byt "une _fenêtre",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -234,6 +235,7 @@ _gTextItemApple                   .byt "a few$_apples",0
 _gTextItemTree                    .byt "a$sturdy _tree",0
 _gTextItemPit                     .byt "an$unstable _pit",0
 _gTextItemHeap                    .byt "a few$spoil _heaps",0
+_gTextItemNormalWindow            .byt "a _window",0
 #endif
 _EndItemNames
 
@@ -958,6 +960,7 @@ _gDescriptionTennisCourt
 #else
     SET_DESCRIPTION("You are on a lawn tennis court")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -1002,6 +1005,7 @@ _gDescriptionFishPond
 #else
     SET_DESCRIPTION("This is the far corner of the property")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
@@ -1268,6 +1272,8 @@ _gDescriptionStudyRoom
 #else
     SET_DESCRIPTION("Where serious Business happens")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
     ; Is the gun cabinet open?
     JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,50),40,_SecondImageBuffer+40*0+8,_ImageBuffer+40*13+24)       ; Cabinet open
@@ -1320,6 +1326,8 @@ _gDescriptionEntranceLounge
 #else
     SET_DESCRIPTION("You are in the lounge")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR       
@@ -1339,6 +1347,8 @@ _gDescriptionDiningRoom
 #else
     SET_DESCRIPTION("A dining room, or so it appears")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1358,6 +1368,8 @@ _gDescriptionGamesRoom
 #else
     SET_DESCRIPTION("This looks like a games room")
 #endif    
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -2587,6 +2599,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Tree               , _InspectTree)
     VALUE_MAPPING(e_ITEM_Pit                , _InspectPit)
     VALUE_MAPPING(e_ITEM_Heap               , _InspectHeap)
+    VALUE_MAPPING(e_ITEM_NormalWindow       , _InspectNormalWindow)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2916,6 +2929,62 @@ _InspectPanicRoomWindow
     ENDIF(else)
     END_AND_REFRESH
 .)
+
+
+_InspectNormalWindow
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TENNISCOURT),tennis_court)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir un salon confortable")
+#else
+        INFO_MESSAGE("I can see a comfortable lounge")
+#endif    
+    WAIT(50*2)        
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il y à aussi une salle à manger")
+#else
+        INFO_MESSAGE("There's also a dinning room")
+#endif    
+tennis_court
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),fish_pond)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir une sale de jeux")
+#else
+        INFO_MESSAGE("I can see a game room")
+#endif    
+fish_pond
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_STUDY_ROOM),study_room)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir le jardin dehors")
+#else
+        INFO_MESSAGE("I can see the garden outside")
+#endif    
+study_room
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM),games_room)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir le bac à poissons dehors")
+#else
+        INFO_MESSAGE("I can see the fish pond outside")
+#endif    
+games_room
+
+    JUMP_IF_TRUE(lounge,CHECK_PLAYER_LOCATION(e_LOC_LOUNGE))
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DININGROOM),dinning_room)
+lounge    
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir le court de tennis dehors")
+#else
+        INFO_MESSAGE("I can see the tennis court outside")
+#endif    
+dinning_room
+
+    WAIT(50*2)        
+    END_AND_REFRESH
+.)
+
 
 _InspectPlasticBag
 .(
@@ -3494,6 +3563,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_FrontDoor          , _OpenFrontDoor)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _OpenSecurityDoor)
     VALUE_MAPPING(e_ITEM_Church             , _OpenChurch)
+    VALUE_MAPPING(e_ITEM_NormalWindow       , _OpenNormalWindow)    
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -3650,6 +3720,25 @@ _OpenBasementWindow
         DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
         INFO_MESSAGE("It is locked from the inside...")
     ENDIF(garden)
+    JUMP(_OpenWindowCommon)
+.)
+
+
+_OpenNormalWindow
+    // If we are inside the house, we can open the window
+    JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM))
+    JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_DININGROOM))
+    JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_LOUNGE))
+    JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_STUDY_ROOM))
+
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle semble verruouillée...")
+#else
+    INFO_MESSAGE("It seems to be locked...")
+#endif    
+
+_OpenWindowCommon
+.(
     WAIT(50*2)
     INFO_MESSAGE("...maybe shake it a bit?")
     WAIT(50*2)
@@ -3662,6 +3751,15 @@ _OpenBasementWindow
 #endif    
     END_AND_REFRESH
 .)
+
+_OpenWindowFromInside
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Pas besoin d'ouvrir la fenêtre")
+#else
+    INFO_MESSAGE("There's no need to open the window")
+#endif    
+    END_AND_REFRESH
+
 
 
 _AlarmTriggered

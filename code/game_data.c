@@ -77,6 +77,7 @@ keyword gWordsArray[] =
 
     { "WINDOW"  ,e_ITEM_BasementWindow      },  
     { "WINDOW"  ,e_ITEM_PanicRoomWindow     },  
+    { "WINDOW"  ,e_ITEM_NormalWindow        },
     
     { "BOOT"    ,e_ITEM_CarBoot      },  
     { "DOOR"    ,e_ITEM_CarDoor      },  
