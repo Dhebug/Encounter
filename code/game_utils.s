@@ -277,6 +277,14 @@ skip
 
 _InputArrows
 .(
+    lda _gInputBufferPos
+    beq buffer_empty
+    ; Buffer is not empty, not acceptable, report an error and go back to the user
+    ldx #<_ErrorPlop
+    ldy #>_ErrorPlop
+    jmp _PlaySoundAsmXY
+
+buffer_empty
     lda #1
     sta _gWordCount
 
@@ -314,6 +322,60 @@ control_pressed
 store_direction
     stx _gWordBuffer
 
+    ; Try to find the keyword in the table
+    lda #<_gWordsArray
+    sta tmp0+0
+    lda #>_gWordsArray
+    sta tmp0+1
+loop_search_keyword
+    ldy #2
+    lda (tmp0),y
+    cmp #e_WORD_COUNT_
+    beq reset_input               ; Not supposed to happen if the code above is correct.
+    cmp _gWordBuffer
+    beq found_it
+    ; Next keyword
+    clc
+    lda tmp0+0
+    adc #3
+    sta tmp0+0
+    lda tmp0+1
+    adc #0
+    sta tmp0+1
+    bne loop_search_keyword
+
+found_it
+    ; Get the pointer to the word
+    ldy #0
+    lda (tmp0),y
+    sta tmp1+0
+    iny
+    lda (tmp0),y
+    sta tmp1+1
+
+    ; Print it in the player command field to simulate they typed it in
+    clc
+    lda _gStatusMessageLocation+0
+    adc #40+1+2
+    sta tmp2+0
+    lda _gStatusMessageLocation+1
+    adc #0
+    sta tmp2+1
+
+    ; sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
+    ldy #0
+print_word_loop
+    lda (tmp1),y
+    beq done_printing
+    sta (tmp2),y
+    iny
+    bne print_word_loop
+done_printing
+
+    ; Wait half a second
+    jsr _ShortWait
+
+    ; Run the actual command
     lda _gAnswerProcessingCallback+0
     sta callback+0
     lda _gAnswerProcessingCallback+1
@@ -321,6 +383,7 @@ store_direction
 
 callback = *+1
     jsr $1234
+reset_input    
     jsr _ResetInput
 
     lda #1

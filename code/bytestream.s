@@ -1101,6 +1101,9 @@ _LongWaitAfterMessage
 .(
     lda #150
     bne store
++_ShortWait
+    lda #25
+    bne store
 +_WaitAfterMessage
     ; Wait 75 frames
     lda #75
