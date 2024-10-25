@@ -395,6 +395,16 @@ _WatchBeepData
     .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
 
+_AlarmLedBeeping
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,128            ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,1                ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
+	.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait a second
+    .byt SOUND_COMMAND_END_FRAME
+    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
+    .byt SOUND_COMMAND_END
+
 ; For some reasons, a flickering light bulb and a drip of water sound close enough
 _WaterDrip
 _FlickeringLight

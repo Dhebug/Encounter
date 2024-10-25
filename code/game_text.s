@@ -1675,6 +1675,21 @@ alarm_panel_closed
     ENDIF(matches)
     .)
 
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),alarm_active)      ; Is the alarm active...
+blinking_led_animation
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,1,3)                     ; Draw the led ON
+                _IMAGE(5,88)
+                _SCREEN(25,28)
+        PLAY_SOUND(_AlarmLedBeeping)
+        WAIT(50)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,1,3)                     ; Draw the led OFF
+                _IMAGE(6,88)
+                _SCREEN(25,28)
+        WAIT(50*2)
+
+        JUMP(blinking_led_animation)
+    ENDIF(alarm_active)
+
     END
 .)
 
@@ -1745,6 +1760,14 @@ _gDescriptionCellarWindow
                 _BUFFER(14,101)
     ENDIF(ladder)
     FADE_BUFFER      ; Make sure everything appears on the screen
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),alarm_active)      ; Is the alarm active...
+beeping_alarm_panel_loop
+        PLAY_SOUND(_AlarmLedBeeping)                                ; Play the beep sound of the alarm
+        WAIT(50*3)
+        JUMP(beeping_alarm_panel_loop)
+    ENDIF(alarm_active)
+    
     END
 .)
 
@@ -4312,19 +4335,29 @@ snoozed_thug
 _UseKeys
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
-            UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
-            SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_GONE_FOREVER)                      ; We don't need the keys anymore
-            INCREASE_SCORE(POINTS_USED_KEYS)
-            INFO_MESSAGE("The panel is now unlocked")
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_gone)
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
+                UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
+                SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_GONE_FOREVER)                      ; We don't need the keys anymore
+                INCREASE_SCORE(POINTS_USED_KEYS)
+                INFO_MESSAGE("The panel is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
+                SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
 #else
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
+                SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
 #endif        
-            WAIT(50*1)
+                WAIT(50*1)
+                END_AND_REFRESH
+            ENDIF(locked)
+        ELSE(tape_gone,tape_present)
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Il fait trop sombre !")
+#else
+            INFO_MESSAGE("It's too dark!")
+#endif    
+            WAIT(50*2)
             END_AND_REFRESH
-        ENDIF(locked)
+        ENDIF(tape_present)
     ENDIF(cellar)
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)               ; Are we in front of the panic room?
@@ -4355,7 +4388,7 @@ _UseAlarmSwitch
 #endif        
     ELSE(on,off)
         UNSET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                         ; Enable the alarm 
-        INFO_MESSAGE("The alarm is now disabled")
+        INFO_MESSAGE("The alarm is now enabled")
 +_gTextItemAlarmSwitch = *+2
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position marche")
