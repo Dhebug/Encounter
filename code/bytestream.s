@@ -1094,13 +1094,17 @@ _PrintErrorMessageAsm
     jsr _PlaySoundAsmXY
 
     ; Wait a bit after the message is displayed
-    jmp _WaitAfterMessage
+    jmp _LongWaitAfterMessage
 .)
 
-_WaitAfterMessage
+_LongWaitAfterMessage
 .(
+    lda #150
+    bne store
++_WaitAfterMessage
     ; Wait 75 frames
     lda #75
+store    
     sta _param0+0
     lda #0
     sta _param0+1

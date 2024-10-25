@@ -68,7 +68,7 @@ _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorNeedMoreDetails  .byt "Pourriez vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
 _gTextErrorInventoryFull    .byt "Je doit d'abord déposer quelque chose",0
-_gTextErrorDidNotUnderstand .byt "Je ne comprends pas, désolé",0
+_gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -81,7 +81,7 @@ _gTextErrorUnknownItem      .byt "I do not know what this item is",0
 _gTextErrorNeedMoreDetails  .byt "Could you be more precise please?",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
 _gTextErrorInventoryFull    .byt "I need to drop something first",0
-_gTextErrorDidNotUnderstand .byt "I do not understand, sorry",0
+_gTextErrorDidNotUnderstand .byt "I do not understand, sorry. Try HELP.",0
 #endif
 _EndErrorMessages
 
