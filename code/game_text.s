@@ -2225,6 +2225,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
     COMBINE_MAPPING(e_ITEM_PowderMix,e_ITEM_MortarAndPestle ,_CombinePowderMixWithMortar)
+    COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_MortarAndPestle ,_CombinePillsWithMortar)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
@@ -2237,6 +2238,25 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
+
+_CombinePillsWithMortar
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED),already_crushed)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Elles sont déja écrasées")
+#else    
+        ERROR_MESSAGE("The pills are already crushed")
+#endif    
+    ELSE(already_crushed,not_crushed_yet)
+        SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
+#ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
+        SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pillules écrasées")
+#else    
+        SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"some$crushed _pills")
+#endif    
+    ENDIF(not_crushed_yet)
+    END_AND_REFRESH
+.)
 
 _CombineMeatWithPills
 .(
