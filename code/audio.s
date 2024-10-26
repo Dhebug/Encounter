@@ -568,6 +568,7 @@ _DoorOpening
 	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
     .byt SOUND_COMMAND_END
 
+_AlarmSwitchPressed
 _DoorClosing
     .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
 	.byt TONE($194,$F)

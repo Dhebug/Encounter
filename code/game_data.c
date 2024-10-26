@@ -74,6 +74,7 @@ keyword gWordsArray[] =
 
     { "HANDHELD",e_ITEM_HandheldGame        },  
     { "GAME"    ,e_ITEM_HandheldGame        },  
+    { "CONSOLE" ,e_ITEM_GameConsole         },  
 
     { "WINDOW"  ,e_ITEM_BasementWindow      },  
     { "WINDOW"  ,e_ITEM_PanicRoomWindow     },  
@@ -108,6 +109,9 @@ keyword gWordsArray[] =
     { "TREE"        ,e_ITEM_Tree }, 
     { "PIT"         ,e_ITEM_Pit }, 
     { "HEAPS"       ,e_ITEM_Heap }, 
+    { "COMPUTER"    ,e_ITEM_Computer }, 
+    { "INVOICE"     ,e_ITEM_Invoice }, 
+    { "TELEVISION"  ,e_ITEM_Television }, 
 
 
     // Directions

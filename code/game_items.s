@@ -102,3 +102,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHeap                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Heap
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
     ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator
+    ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
+    ITEM_NORMAL( _gTextItemInvoice               ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Invoice
+    ITEM_NORMAL( _gTextItemTelevision            ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Television
+    ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_GameConsole

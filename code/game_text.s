@@ -167,6 +167,10 @@ _gTextItemPit                     .byt "un$_trou instable",0
 _gTextItemHeap                    .byt "quelques$_tas",0
 _gTextItemNormalWindow            .byt "une _fenêtre",0
 _gTextItemAlarmIndicator          .byt "un _indicateur d'alarme",0
+_gTextItemComputer                .byt "un _ordinateur de bureau",0
+_gTextItemInvoice                 .byt "une$_facture",0
+_gTextItemTelevision              .byt "une _télevision",0
+_gTextItemGameConsole             .byt "une _console de jeu",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -238,6 +242,10 @@ _gTextItemPit                     .byt "an$unstable _pit",0
 _gTextItemHeap                    .byt "a few$spoil _heaps",0
 _gTextItemNormalWindow            .byt "a _window",0
 _gTextItemAlarmIndicator          .byt "an alarm _indicator",0
+_gTextItemComputer                .byt "a desktop _computer",0
+_gTextItemInvoice                 .byt "an$_invoice letter",0
+_gTextItemTelevision              .byt "a _television",0
+_gTextItemGameConsole             .byt "a game _console",0
 #endif
 _EndItemNames
 
@@ -2510,6 +2518,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_RoadSign           , _ReadRoadSign)
     VALUE_MAPPING(e_ITEM_Tombstone          , _ReadTombstone)
     VALUE_MAPPING(e_ITEM_Graffiti           , _ReadGraffiti)
+    VALUE_MAPPING(e_ITEM_Invoice            , _ReadInvoice)
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
 
@@ -2572,6 +2581,22 @@ recipe_already_found
 .)
 
 
+_InspectInvoice
+_ReadInvoice
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une facture pour un voyage de deux ")
+    WAIT(50*2)
+    INFO_MESSAGE("mois en Europe pour toute la famille")
+#else
+    INFO_MESSAGE("An invoice for a two months trip all")
+    WAIT(50*2)
+    INFO_MESSAGE("over Europe. Familly holidays maybe?")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
 
 
 
@@ -2626,6 +2651,10 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Heap               , _InspectHeap)
     VALUE_MAPPING(e_ITEM_NormalWindow       , _InspectNormalWindow)
     VALUE_MAPPING(e_ITEM_AlarmIndicator     , _InspectAlarmIndicator)
+    VALUE_MAPPING(e_ITEM_Invoice            , _InspectInvoice)
+    VALUE_MAPPING(e_ITEM_Computer           , _InspectComputer)
+    VALUE_MAPPING(e_ITEM_Television         , _InspectTelevision)
+    VALUE_MAPPING(e_ITEM_GameConsole        , _InspectGameConsole)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2666,6 +2695,39 @@ _InspectGame
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END_AND_REFRESH
+
+
+_InspectComputer
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un IBM PC modèle 5150 flambant neuf")
+#else    
+    INFO_MESSAGE("A brand new IBM PC model 5150")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)    
+.)
+
+
+_InspectTelevision
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un énorme téléviseur à rétroprojection")
+#else    
+    INFO_MESSAGE("A huge rear-projection TV set")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)    
+.)
+
+
+_InspectGameConsole
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une ColecoVision... importée des USA?")
+#else    
+    INFO_MESSAGE("A ColecoVision... imported from USA?")
+#endif    
+    JUMP(_InformatioNotRelevantForMission)    
+.)
 
 
 _InspectChemistryBook
@@ -4087,6 +4149,9 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
     VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
     VALUE_MAPPING(e_ITEM_FancyStones        , _UseFancyStones)
+    VALUE_MAPPING(e_ITEM_Computer           , _UseComputer)
+    VALUE_MAPPING(e_ITEM_GameConsole        , _UseGameConsole)
+    VALUE_MAPPING(e_ITEM_Television         , _UseTelevision)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 _InspectCar
@@ -4591,6 +4656,31 @@ _UseFancyStones
     INFO_MESSAGE("Elles sont seulement décoratives.")
 #else    
     INFO_MESSAGE("They are just light porous fakes.")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_UseComputer
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il semble être verouillé.")
+#else    
+    INFO_MESSAGE("It seems to have be boot locked.")
+#endif    
+    WAIT(50*2)
+    END_AND_REFRESH
+.)
+
+
+_UseTelevision
+_UseGameConsole
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("C'est tentant, mais mission d'abord !")
+#else    
+    INFO_MESSAGE("It looks cool, but we have a mission!")
 #endif    
     WAIT(50*2)
     END_AND_REFRESH
