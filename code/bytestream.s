@@ -1457,7 +1457,7 @@ _InitializeGraphicMode
 .(
     jsr _ClearTextWindow
 
-    lda #ATTRIBUTE_HIRES|128
+    lda #ATTRIBUTE_HIRES   ; Make the attribute appear black until we need to change it to white (in which case we need to apply |128 to it)
     sta $bb80+40*0  	   ; Switch to HIRES, using video inverse to keep the 6 pixels white
 
     lda #ATTRIBUTE_TEXT

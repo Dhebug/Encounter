@@ -771,6 +771,12 @@ loop
   txa
   pha 
 
+  cpx #5                    ; When we are half-way through the image fade...
+  bne not_middle
+  lda #ATTRIBUTE_HIRES|128  ; We apply the |128 to turn the hires attribute WHITE instead of BLACK
+  sta $bb80+40*0  	        ; Switch to HIRES, using video inverse to keep the 6 pixels white
+not_middle
+
   jsr _BlendBufferToHiresWindowInternal
   sei
   ; Dom thought 6 seconds was too short, he lost when he was busy with the clay and the water
