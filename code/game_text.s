@@ -3954,6 +3954,7 @@ _InspectCar
 _UseCar
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_MARKETPLACE),marketplace)
+        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI)
         INFO_MESSAGE("This is my car.")
         WAIT(50)
         INFO_MESSAGE("I need to finish the mission first!")
