@@ -3222,10 +3222,11 @@ _InspectTrashCan
 _ReadTombstone
 _InspectTombstone
 .(
+    DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE,"Rest in peace")    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Seulement 45 ans :(")
+    INFO_MESSAGE("Il n'avait que 45 ans :(")
 #else
-    INFO_MESSAGE("Only 45 years old :(")
+    INFO_MESSAGE("He was only 45 years old :(")
 #endif    
     JUMP(_InformatioNotRelevantForMission)
 .)
