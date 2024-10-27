@@ -33,7 +33,7 @@
 #define COMMAND_UNLOCK_ACHIEVEMENT 22
 #define COMMAND_INCREASE_SCORE  23
 #define COMMAND_GAME_OVER       24
-#define COMMAND_SET_DESCRIPTION 25
+#define COMMAND_CLEAR_FULL_TEXT_AREA 25
 #define COMMAND_SET_SCENE_IMAGE 26
 #define COMMAND_DISPLAY_IMAGE_NOBLIT 27
 #define COMMAND_CLEAR_TEXT_AREA 28
@@ -52,8 +52,7 @@
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
-#define COMMAND_CLEAR_FULL_TEXT_AREA 44
-#define _COMMAND_COUNT          45
+#define _COMMAND_COUNT          44
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -94,11 +93,6 @@
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
-#ifdef ENABLE_SCENE_DESCRIPTIONS
-#define SET_DESCRIPTION(description)         .byt COMMAND_SET_DESCRIPTION,description,0
-#else
-#define SET_DESCRIPTION(description)         
-#endif
 #define CLEAR_TEXT_AREA(paper_color)         .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
 #define CLEAR_FULL_TEXT_AREA(paper_color)    .byt COMMAND_CLEAR_FULL_TEXT_AREA,16+(paper_color&7)
 
@@ -126,13 +120,8 @@
 
 // Graphics
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
-#ifdef ENABLE_SCENE_DESCRIPTIONS
-#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId,description,0
-#define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId,description,0
-#else
-#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_DISPLAY_IMAGE,imagedId
-#define DISPLAY_IMAGE_NOBLIT(imagedId,description)   .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
-#endif
+#define DISPLAY_IMAGE(imagedId)                      .byt COMMAND_DISPLAY_IMAGE,imagedId
+#define DISPLAY_IMAGE_NOBLIT(imagedId)               .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
 #define FADE_BUFFER                                  .byt COMMAND_FADE_BUFFER
 
 #define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h,40

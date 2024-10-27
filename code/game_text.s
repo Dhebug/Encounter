@@ -38,7 +38,6 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
-_gTextUsableActionVerbs     .byt "Verbes utilisables",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,"Note: Utilisez SHIFT pour voir les objects",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
@@ -46,7 +45,6 @@ _gTextNothingHere           .byt "There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
-_gTextUsableActionVerbs     .byt "Usable action verbs",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
                             .byt "Use",3,"arrow keys",7,"to move around,",3,"CTRL",TEXT_CRLF
                             .byt "plus",3,"UP",7,"or",3,"DOWN",7,"to climb up or down,",TEXT_CRLF
@@ -267,11 +265,6 @@ _gDescriptionNone
 
 // MARK: Dark Tunel
 _gDescriptionDarkTunel
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un tunnel humide")
-#else
-    SET_DESCRIPTION("You are in a dark, damp tunnel")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_Graffiti,e_LOC_DARKTUNNEL);
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -323,11 +316,6 @@ falling_water_drop
 // MARK: Market Place
 _gDescriptionMarketPlace
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur la place du marché")
-#else
-    SET_DESCRIPTION("You are in a deserted market square")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_MARKETPLACE)
 +_gTextItemMyCar = *+2   
 #ifdef LANGUAGE_FR   
@@ -369,7 +357,7 @@ no_plastic_bag
         WAIT(50*4)                                ; Wait a couple seconds
         STOP_MUSIC()
         
-        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI,"Time to go home")         ; Car without passengers
+        DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI) ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
 #ifdef LANGUAGE_FR    
         INFO_MESSAGE("Tout le monde a bord !")
@@ -433,7 +421,7 @@ no_plastic_bag
         PLAY_SOUND(_EngineRunning)
         WAIT(50)                                ; Wait a second
 
-        DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED,"The Daily Telegraph, September 30th")
+        DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR    
         INFO_MESSAGE("Tout est bien qui finit bien")
@@ -478,7 +466,7 @@ girl_not_here
 end_intro_sequence        
         STOP_MUSIC()                   ; To ensure sounds are back if we cut before the music ended... (Need to fix that more cleanly, so many hacks now!)
         ; Back to the market place
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START,"Time passes")
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START)
         FADE_BUFFER
         START_CLOCK
         SET_CUT_SCENE(0)
@@ -502,11 +490,6 @@ blinky_shop
 
 // MARK: Dark Alley
 _gDescriptionDarkAlley
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans une allée sombre")
-#else
-    SET_DESCRIPTION("You are in a dark, seedy alley")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_Graffiti,e_LOC_DARKALLEY);
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -536,11 +519,6 @@ blinky_light_bulb
 
 // MARK: Road
 _gDescriptionRoad
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une longue route s'étend devant vous")
-#else
-    SET_DESCRIPTION("A long road stretches ahead of you")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -555,11 +533,6 @@ _gDescriptionRoad
 
 // MARK: Main Street
 _gDescriptionMainStreet
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans la rue principale")
-#else
-    SET_DESCRIPTION("You are on the main street")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -574,11 +547,6 @@ _gDescriptionMainStreet
 
 // MARK: Eastern Road
 _gDescriptionEasternRoad
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur la route de l'est")
-#else
-    SET_DESCRIPTION("You are along the eastern road")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -594,12 +562,6 @@ _gDescriptionEasternRoad
 // MARK: In the Pit
 _gDescriptionInThePit
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes au fond d'un trou")
-#else
-    SET_DESCRIPTION("You are inside a deep pit")
-#endif    
-
     ; If the rope is outside the pit and is attached to the tree, we move it inside  the pit
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
@@ -671,11 +633,6 @@ rope_attached_to_tree
 // MARK: Outside pit
 _gDescriptionOutsidePit
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("En dehors d'un trou profond")
-#else
-    SET_DESCRIPTION("Outside a deep pit")
-#endif    
     ; If the rope is inside the pit and is attached to the tree, we move it outside the pit
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_INSIDE_PIT))
     JUMP_IF_FALSE(end_rope_check,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
@@ -722,12 +679,6 @@ digging_for_gold
 
 // MARK: Parking Place
 _gDescriptionParkingPlace
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur une zone asphaltée")
-#else
-    SET_DESCRIPTION("You are in an open area of tarmac")
-#endif    
-
     SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_PARKING_PLACE)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"une _voiture abandonnée")
@@ -750,11 +701,6 @@ _gDescriptionParkingPlace
 // MARK: Abandoned Car
 _gDescriptionAbandonedCar
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une voiture abandonnée")
-#else
-    SET_DESCRIPTION("An abandoned car")
-#endif    
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot)     ; Is the boot closed?
         BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,21,94)                       ; Draw the open boot
                 _IMAGE(0,0)
@@ -785,11 +731,6 @@ _gDescriptionAbandonedCar
 // MARK: Old Well
 _gDescriptionOldWell
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes prês d'un vieux puit")
-#else
-    SET_DESCRIPTION("You are near to an old-fashioned well")
-#endif    
     ; Is the Bucket near the Well?    
     JUMP_IF_FALSE(no_bucket,CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOC_WELL))    
       DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(6,35),40,_SecondImageBuffer,_ImageBuffer+(40*86)+24)    ; Draw the Bucket 
@@ -820,11 +761,6 @@ no_rope
 // MARK: Wooded Avenue
 _gDescriptionWoodedAvenue
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans une allée arbroisée")
-#else
-    SET_DESCRIPTION("You are in a wooded avenue")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -881,11 +817,6 @@ _Chirp2Sequence1
 
 // MARK: Gravel Drive
 _gDescriptionGravelDrive
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur un passage gravilloné")
-#else
-    SET_DESCRIPTION("You are on a wide gravel drive")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(3)
 #ifdef LANGUAGE_FR   
@@ -902,11 +833,6 @@ _gDescriptionGravelDrive
 
 // MARK: Zen Garden
 _gDescriptionZenGarden
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un jardin zen relaxant")
-#else
-    SET_DESCRIPTION("You are in a relaxing zen garden")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -921,11 +847,6 @@ _gDescriptionZenGarden
 
 // MARK: Front Lawn
 _gDescriptionFrontLawn
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur une large pelouse")
-#else
-    SET_DESCRIPTION("You are on a huge area of lawn")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -941,12 +862,6 @@ _gDescriptionFrontLawn
 // MARK: Green House
 _gDescriptionGreenHouse
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans une petite serre")
-#else
-    SET_DESCRIPTION("You are in a small greenhouse")
-#endif    
-
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
@@ -965,11 +880,6 @@ _gDescriptionGreenHouse
 
 // MARK: Tennis Court
 _gDescriptionTennisCourt
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur un cours de tennis")
-#else
-    SET_DESCRIPTION("You are on a lawn tennis court")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -989,11 +899,9 @@ _gDescriptionVegetableGarden
 #ifdef LANGUAGE_FR       
 _gTextItemBasementWindow = *+1
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre basse")
-    SET_DESCRIPTION("Vous êtes dans un jardin potagé")
 #else
 _gTextItemBasementWindow = *+1
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement _window")
-    SET_DESCRIPTION("You are in a vegetable plot")
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -1010,11 +918,6 @@ _gTextItemBasementWindow = *+1
 // MARK: Fish Pond
 _gDescriptionFishPond
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Le coin nord-ouest de la propriété")
-#else
-    SET_DESCRIPTION("This is the far corner of the property")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Spawn water if required
@@ -1046,12 +949,6 @@ _gDescriptionTiledPatio
         SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"an inaccessible _window")
 #endif        
     ENDIF(girl_unrestrained)
-
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur un patio carellé")
-#else
-    SET_DESCRIPTION("You are on a tiled patio")
-#endif    
 
     ; Draw the girl if she's here
     JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
@@ -1105,11 +1002,6 @@ girl_is_outside
 
 // MARK: Apple Orchard
 _gDescriptionAppleOrchard
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans une pommeraie")
-#else
-    SET_DESCRIPTION("You are in an apple orchard")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -1125,11 +1017,6 @@ _gDescriptionAppleOrchard
 // MARK: Entrance Hall
 _gDescriptionEntranceHall
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un hall imposant")
-#else
-    SET_DESCRIPTION("You are in an imposing entrance hall")
-#endif    
     ; If the dog is in the staircase, we move it to the entrance hall to simplify the rest of the code
     JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE))
     SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_ENTRANCEHALL)
@@ -1194,22 +1081,13 @@ end_dog
 
 // MARK: Front Entrance
 _gDescriptionFrontDoor
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une entrée impressionante")
-#else
-    SET_DESCRIPTION("An impressive entrance")
-#endif    
+    // TODO: Not much there, maybe we need something to make it interesting?
     END
 
 
 // MARK: Staircase
 _gDescriptionStaircase
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un large escalier")
-#else
-    SET_DESCRIPTION("You are on a sweeping staircase")
-#endif    
     ; If the dog is in the entrance hall, we move it to the staircase to simplify the rest of the code
     JUMP_IF_FALSE(end_dog_check,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_ENTRANCEHALL))
     SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE)
@@ -1257,11 +1135,6 @@ end_dog
 
 // MARK: Library
 _gDescriptionLibrary
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Probablement une bibliothèque")
-#else
-    SET_DESCRIPTION("This looks like a library")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1277,11 +1150,6 @@ _gDescriptionLibrary
 // MARK: Study Room
 _gDescriptionStudyRoom
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Le centre des affaires")
-#else
-    SET_DESCRIPTION("Where serious Business happens")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Is the gun cabinet open?
@@ -1304,11 +1172,6 @@ cabinet_closed
 
 // MARK: Narrow Passage
 _gDescriptionNarrowPassage
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un passage étroit")
-#else
-    SET_DESCRIPTION("You are in a narrow passage")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(3)
 #ifdef LANGUAGE_FR
@@ -1331,11 +1194,6 @@ _gDescriptionNarrowPassage
 
 // MARK: Entrance Lounge
 _gDescriptionEntranceLounge
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un salon")
-#else
-    SET_DESCRIPTION("You are in the lounge")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1352,11 +1210,6 @@ _gDescriptionEntranceLounge
 
 // MARK: Dining Room
 _gDescriptionDiningRoom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Apparement une salle a manger")
-#else
-    SET_DESCRIPTION("A dining room, or so it appears")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1373,11 +1226,6 @@ _gDescriptionDiningRoom
 
 // MARK: Game Room
 _gDescriptionGamesRoom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("La salle de jeux")
-#else
-    SET_DESCRIPTION("This looks like a games room")
-#endif    
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1402,12 +1250,6 @@ _gDescriptionGamesRoom
 
 // MARK: Sun Lounge
 _gDescriptionSunLounge
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Le solarium")
-#else
-    SET_DESCRIPTION("You find yourself in a sun-lounge")
-#endif    
-
     ; Draw the girl if she's on the tiled patio (because we can see it from the sun lounge)
     JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,8,40)                     ; Draw the girl on the small wall outside on the view
@@ -1428,11 +1270,6 @@ girl_is_outside
 // MARK: Kitchen
 _gDescriptionKitchen
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Visiblement la cuisine")
-#else
-    SET_DESCRIPTION("This is obviously the kitchen")
-#endif    
     ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
@@ -1461,11 +1298,6 @@ medicine_cabinet_closed
 
 // MARK: Basement Stairs
 _gDescriptionBasementStairs
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes dans un escalier étroit")
-#else
-    SET_DESCRIPTION("You are on some gloomy, narrow steps")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR       
@@ -1501,11 +1333,6 @@ _gDescriptionCellar
         ENDIF(bomb)
     ENDIF(safe_open)
 
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une cave frigide et humide")
-#else
-    SET_DESCRIPTION("This is a cold, damp cellar")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(2)
 #ifdef LANGUAGE_FR       
@@ -1530,7 +1357,6 @@ _gDescriptionCellar
         SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"a open _safe")
 #endif    
 
-        //DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
         CLEAR_TEXT_AREA(1)
         QUICK_MESSAGE("I should go somewhere safe")
         PLAY_SOUND(_FuseBurningStart)
@@ -1583,7 +1409,7 @@ _gDescriptionCellar
         WAIT(50)
         SET_CUT_SCENE(1)
         PLAY_SOUND(_ExplodeData)
-        DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION,"KA BOOM!")
+        DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
         CLEAR_TEXT_AREA(1)
         INFO_MESSAGE("Well... I warned you, didn't I?")
 
@@ -1609,11 +1435,6 @@ _gDescriptionDarkerCellar
     .(
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
-#ifdef LANGUAGE_FR       
-        SET_DESCRIPTION("La fenêtre éclaire la pièce")
-#else
-        SET_DESCRIPTION("The room gets light from the window")
-#endif    
         SET_ITEM_LOCATION(e_ITEM_AlarmPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
 
         ; Is the alarm panel open?
@@ -1627,10 +1448,8 @@ alarm_panel_closed
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
     ELSE(else,open)
 #ifdef LANGUAGE_FR       
-        SET_DESCRIPTION("Cette pièce est encore plus sombre")
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre noircie")
 #else
-        SET_DESCRIPTION("This room is even darker than the last")
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
 #endif    
     ENDIF(open)
@@ -1745,20 +1564,9 @@ _gDescriptionCellarWindow
 
     ; Inspecting the window in the cellar
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),bright)
-        //DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED,"A basement window")
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
-#ifdef LANGUAGE_FR       
-        SET_DESCRIPTION("Il n'y a plus d'adhésif sur la fenêtre")
-#else
-        SET_DESCRIPTION("The window is now free of tape")
-#endif
     ELSE(bright,dark)
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK,"A dark basement window")
-#ifdef LANGUAGE_FR       
-        SET_DESCRIPTION("La fenêtre est occultée")
-#else
-        SET_DESCRIPTION("The window is covered in black tape")
-#endif    
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
     ENDIF(dark)
 
     ; Is the ladder in place?
@@ -1782,11 +1590,6 @@ beeping_alarm_panel_loop
 
 // MARK: Main Landing
 _gDescriptionMainLanding
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Vous êtes sur le palier principal")
-#else
-    SET_DESCRIPTION("You are on the main landing")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -1799,11 +1602,6 @@ _gDescriptionMainLanding
 
 // MARK: East Gallery
 _gDescriptionEastGallery
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("La gallerie est")
-#else
-    SET_DESCRIPTION("You have found the east gallery")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1818,11 +1616,6 @@ _gDescriptionEastGallery
 
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("La chambre d'un enfant")
-#else
-    SET_DESCRIPTION("This is a child's bedroom")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1837,11 +1630,6 @@ _gDescriptionChildBedroom
 
 // MARK: Guest Bedroom
 _gDescriptionGuestBedroom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une chambre d'amis")
-#else
-    SET_DESCRIPTION("This seems to be a guest bedroom")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1857,12 +1645,6 @@ _gDescriptionGuestBedroom
 // MARK: Shower Room
 _gDescriptionShowerRoom
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une salle de bain carellée")
-#else
-    SET_DESCRIPTION("You are in a tiled shower-room")
-#endif    
-
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
@@ -1882,11 +1664,6 @@ _gDescriptionShowerRoom
 // MARK: West Gallery
 _gDescriptionWestGallery
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("La gallerie ouest")
-#else
-    SET_DESCRIPTION("This is the west gallery")
-#endif    
     ; If the suit is equiped, we remove it
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
         SET_CUT_SCENE(1)
@@ -1931,11 +1708,6 @@ curtain_open
 
 // MARK: Box Room
 _gDescriptionBoxRoom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une petite loge")
-#else
-    SET_DESCRIPTION("This is a small box-room")
-#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
@@ -1951,12 +1723,6 @@ _gDescriptionBoxRoom
 // MARK: Classy Bathroom
 _gDescriptionClassyBathRoom
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Une salle de bain luxieuse")
-#else
-    SET_DESCRIPTION("You are in an ornate bathroom")
-#endif    
-
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
@@ -1974,12 +1740,6 @@ _gDescriptionClassyBathRoom
 // MARK: Tiny Toilet
 _gDescriptionTinyToilet
 .(
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("Des petites toilette")
-#else
-    SET_DESCRIPTION("This is a tiny toilet")
-#endif    
-
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
@@ -1997,11 +1757,6 @@ _gDescriptionTinyToilet
 
 // MARK: Master Bedroom
 _gDescriptionMasterBedRoom
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("La chambre principale")
-#else
-    SET_DESCRIPTION("This must be the master bedroom")
-#endif    
     ; Is there a thug in the master bedroom
     JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOC_MASTERBEDROOM))
 
@@ -2076,12 +1831,6 @@ _gDescriptionPanicRoomDoor
 #endif        
         ENDIF(openened)
     ENDIF(girl_unrestrained)
-
-#ifdef LANGUAGE_FR       
-    SET_DESCRIPTION("L'entrée d'une chambre forte")
-#else
-    SET_DESCRIPTION("A panic room entrance")
-#endif    
 
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,14)                        ; Draw the acid hole
@@ -2303,7 +2052,7 @@ _CombineGunPowderWithFuse
     INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
 
-    DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW,"Ready to blow!")
+    DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("The explosive is ready...")
     WAIT(50*2)
@@ -2324,7 +2073,7 @@ _CombineBombWithAdhesive
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a sticky _bomb")
 #endif    
-    DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB,"Ready to install!")
+    DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("Should be ready to use now...")
     WAIT(50*2)
@@ -2350,7 +2099,7 @@ _CombineStickyBombWithSafe
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The bomb is now in the room
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
     INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
-    DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+    DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     INFO_MESSAGE("Everything is in place...")
     WAIT(50*2)
@@ -2391,7 +2140,7 @@ _CombineClayWithWater
 
 _CombineCueWithRope
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE,"A flimsy contraption")
+    DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE)
     INCREASE_SCORE(POINTS_COMBINED_CUE_ROPE)
     UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
 #ifdef LANGUAGE_FR    
@@ -2484,7 +2233,7 @@ end
 
 _ShowTopWindowOpen
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED)
     ; Then add the sprites showing the window being opened
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
             _IMAGE(0,0)
@@ -2545,7 +2294,7 @@ _gReadItemMappingsArray
 _ReadNewsPaper
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_NEWSPAPER)    
-    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER,"The Daily Telegraph, September 29th")
+    DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER)
     INFO_MESSAGE("I have to find her fast...")
     WAIT(50*2)
     INFO_MESSAGE("...I hope she is fine!")
@@ -2556,7 +2305,7 @@ _ReadNewsPaper
 _ReadHandWrittenNote
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_NOTE)    
-    DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE,"A hand written note")
+    DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE)
     WAIT(50*2)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait être utile...")
@@ -2574,7 +2323,7 @@ _ReadHandWrittenNote
 _ReadChemistryRecipes
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_RECIPES)    
-    DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES,"A few useful recipes")
+    DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES)
     WAIT(50*2)
     INFO_MESSAGE("I can definitely use these...")
     WAIT(50*2)
@@ -2587,7 +2336,7 @@ _ReadChemistryBook
 .(
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_BOOK)    
-    DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK,"A science book")
+    DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
     WAIT(50*2)
     INFO_MESSAGE("I don't understand much...")
     WAIT(50*2)
@@ -2702,7 +2451,7 @@ _ShowRoughMap
 _InspectMap
     INCREASE_SCORE(POINTS_INSPECT_MAP)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
-    DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP,"A map of the United Kingdom")
+    DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP)
     INFO_MESSAGE("It shows Ireland, Wales and England")
     WAIT(50*2)
     END_AND_REFRESH
@@ -2711,7 +2460,7 @@ _InspectMap
 _InspectGame
     INCREASE_SCORE(POINTS_INSPECT_GAME)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
-    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP,"A handheld game")
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
     INFO_MESSAGE("State of the art hardware!")
     WAIT(50*2)
     END_AND_REFRESH
@@ -2804,7 +2553,7 @@ _InspectCue
 
 _InspectPowderMix
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX,"Sulphur & Saltpetre")
+    DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il y a des gros grumeaux...")
@@ -2825,7 +2574,7 @@ _InspectPowderMix
 
 _InspectGunPowder
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE,"There you go!")
+    DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Poudre explosive faite maison,")
@@ -2909,7 +2658,7 @@ _InspectHeap
 _InspectFridgeDoor
 .(
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
-    DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR,"Let's look at that fridge")
+    DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
     INFO_MESSAGE("Looks like a happy familly...")
     WAIT(50*2)
     INFO_MESSAGE("...I wonder where they are?")
@@ -2923,10 +2672,10 @@ _InspectMedicineCabinet
     INCREASE_SCORE(POINTS_INSPECT_CABINET)    
     ; Is the medicine cabinet open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
-        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN,"Inside the medicine cabinet")
+        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN)
         INFO_MESSAGE("I can use some of that.")
     ELSE(else,open)
-        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET,"A closed medicine cabinet")
+        DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET)
         INFO_MESSAGE("Not much to see when closed.")
     ENDIF(open)
     WAIT(50*2)
@@ -2939,10 +2688,10 @@ _InspectPanel
     INCREASE_SCORE(POINTS_INSPECT_PANEL)
     ; Is the alarm panel open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),else)
-        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN,"An open alarm panel")
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN)
         INFO_MESSAGE("Can be used to disable the alarm.")
     ELSE(else,open)
-        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL,"A closed alarm panel")
+        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
         INFO_MESSAGE("Not much to see when closed.")
     ENDIF(open)
     WAIT(50*2)
@@ -2957,10 +2706,10 @@ _InspectBasementWindow
     .(
         ; Inspecting the window in the cellar
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED,"A basement window")
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
             INFO_MESSAGE("C'est plutôt haut")
         ELSE(else,open)
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK,"A dark basement window")
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
             INFO_MESSAGE("It's quite high")
         ENDIF(open)
         ; Is the ladder in place?
@@ -2975,10 +2724,10 @@ no_ladder
     .(
         ; Inspecting the window in the garden (or other places)
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
-            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW,"A basement window")
+            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW)
             INFO_MESSAGE("I can see the basement room")
         ELSE(else,open)
-            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"A dark basement window")
+            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
             INFO_MESSAGE("Was it painted black?")
         ENDIF(open)
     .)
@@ -2994,7 +2743,7 @@ _InspectPanicRoomWindow
     INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_WINDOW)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room_door)      ; Are we trying to look at the window from the hole in the door?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_closed)
-            DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED,"The window and shutters are closed")
+            DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Hmmm, intéressant...")
 #else
@@ -3222,7 +2971,7 @@ _InspectTrashCan
 _ReadTombstone
 _InspectTombstone
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE,"Rest in peace")    
+    DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il n'avait que 45 ans :(")
 #else
@@ -3246,7 +2995,7 @@ _InspectFishPond
 _InspectMixTape
 .(
     INCREASE_SCORE(POINTS_INSPECT_MIX_TAPE)
-    DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE,"Best Of 1981-1982")
+    DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une compilation faite maison !")
 #else
@@ -3275,14 +3024,14 @@ _InspectSafe
     INCREASE_SCORE(POINTS_INSPECT_SAFE)
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),elseclose)       ; Is the safe closed?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),else)           ; Is the bomb installed?
-            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB,"Ready to blow!")
+            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Espérons qu'il va survivre")
 #else
             INFO_MESSAGE("Hopefully it will survive the blow")
 #endif    
         ELSE(else,nobomb)
-            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR,"A big old safe")
+            DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Il est gros, mais semble fragile")
 #else
@@ -3290,7 +3039,7 @@ _InspectSafe
 #endif    
         ENDIF(nobomb)
     ELSE(elseclose,safeopen)
-        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN,"Some stuff broke")
+        DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
             SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
         ENDIF(acid)
@@ -3337,7 +3086,7 @@ _InspectPanicRoomDoor
 .(
     INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_DOOR)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
-        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Home-made peep-hole")
+        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Ils ne plaisantaient pas...")
 #else
@@ -3352,7 +3101,7 @@ _InspectPanicRoomDoor
         WAIT(50*2)
     ELSE(acid,clay)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
-            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY,"First prize at school?")
+            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Un joli petit barrage...")
 #else
@@ -3366,7 +3115,7 @@ _InspectPanicRoomDoor
 #endif    
             WAIT(50*2)
         ELSE(attached,nothing)
-            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
+            DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
 #else
@@ -3417,7 +3166,7 @@ _InspectHoleInDoor
 
 _ShowGirlInRoomWithBindings
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"A damsel in distress")     ; Draw the base image with the hole over an empty room
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)                            ; Draw the base image with the hole over an empty room
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
             _IMAGE_STRIDE(0,0,17)
             _BUFFER(10,26)
@@ -3459,7 +3208,7 @@ _ShowGirlInRoomWithBindings
 
 _ShowGirlInRoomWithoutBindings
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"No more bindings")     ; Draw the base image with the hole over an empty room
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)                        ; Draw the base image with the hole over an empty room
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,14,92,17)    ; Draw the patch with the girl sitting on the floor 
             _IMAGE_STRIDE(0,0,17)
             _BUFFER(12,16)
@@ -3523,7 +3272,7 @@ _ShowGirlInRoomWithoutBindings
 
 _ShowEmptyHostageRoom
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_HOLE,"Empty panic room")
+    DISPLAY_IMAGE(LOADER_PICTURE_HOLE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
 #else
@@ -3543,7 +3292,7 @@ _ShowEmptyHostageRoom
 
 _ShowOpenWindow
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED)
     ; Then add the sprites showing the window being opened
     BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,31,84)                    ; Draw the top part of the open window
             _IMAGE(0,0)
@@ -3585,11 +3334,11 @@ _ShowBrokenWindow
 _ShowOpeningWindow
 .(
     ; Show the view from the outside with the closed shutters
-    DISPLAY_IMAGE(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
+    DISPLAY_IMAGE(LOADER_PICTURE_PANIC_ROOM_WINDOW)
     WAIT(50*2)
 
     ; Load the base image with the wall and the closed window and shutters
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED,"")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_TOP_WINDOW_CLOSED)
     FADE_BUFFER 
     WAIT(50*2)
 
@@ -3609,7 +3358,7 @@ _ShowOpeningWindow
 _ShowGirlAtTheWindow
 .(
     ; Base image with the wall and the closed window
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW,"A high-up window")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_PANIC_ROOM_WINDOW)
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_open)
         ; Show the shutters open
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,18,26)                     ; Draw the open shutters
@@ -3805,7 +3554,7 @@ _OpenGunCabinet
         SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
 #endif        
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
-            DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET,"Gun cabinet upper drawer")         ; Show what we found!
+            DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
             SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Une seule fléchette, mieux que rien!")
@@ -3853,7 +3602,7 @@ _OpenBasementWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement_on_ladder)                     ; Are we on the basement side on the ladder...
         INFO_MESSAGE("The frame is stuck...")                                                   
     ELSE(basement_on_ladder,garden)                                                            ; ...or on the vegetable garden side of the window?
-        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK,"")
+        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
         INFO_MESSAGE("It is locked from the inside...")
     ENDIF(garden)
     JUMP(_OpenWindowCommon)
@@ -3901,7 +3650,7 @@ _OpenWindowFromInside
 _AlarmTriggered
 .(
     SET_CUT_SCENE(1)
-    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED,"")
+    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     ERROR_MESSAGE("You triggered the alarm!")
     WAIT(50*2)
@@ -4332,7 +4081,7 @@ _UseRope
 #else    
             SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
 #endif    
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)                                ; Draw the base image with the hole over an empty room
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
                 BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
                         _IMAGE_STRIDE(0,0,17)
@@ -4376,14 +4125,14 @@ around_the_pit
 
 
 _UseGame
-    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING,"A handheld game")
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING)
     INFO_MESSAGE("Hum... looks like it crashed?")
     WAIT(50*2)
     END_AND_REFRESH
 
 
 _UseDartGun
-    DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART,"You shoot your only dart")
+    DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART)
     SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_GONE_FOREVER)                      ; The player can only use the dart gun once
     PLAY_SOUND(_Swoosh)
 
@@ -4448,7 +4197,7 @@ _UseKeys
     ENDIF(cellar)
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)               ; Are we in front of the panic room?
-        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE,"1982 'State of the Art' security")
+        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("C'est une serrure numérique !")
 #else
@@ -4567,7 +4316,7 @@ _UseMatches
 
 _UseProtectionSuit
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES,"PRO-TEC Personal Protection Equipment")
+    DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES)
     PLAY_SOUND(_Zipper)
     INFO_MESSAGE("It seems to fit well...")
     WAIT(50*2)
@@ -4608,7 +4357,7 @@ _UseClay
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_ATTACHED)                      ; The clay is now attached to the door
     INCREASE_SCORE(POINTS_USED_CLAY)
 
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY,"A real piece of art!")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY)
     INFO_MESSAGE("Ok, that should be good enough...")
     WAIT(50*2)
     INFO_MESSAGE("...now just need to fill it!")
@@ -4647,13 +4396,13 @@ _UseAcid
     ENDIF(suit)
 
     ; Cut scene, Action!
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID,"Step 1: Pour the acid")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_POURING_ACID)
     WAIT(50)
     PLAY_SOUND(_Acid)
     WAIT(50)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING,"Step 2: Let it burn")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING)
     WAIT(50*2)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE,"Result: A large hole!")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE)
     INFO_MESSAGE("Large enough to peek through...")
     WAIT(50*2)
     INFO_MESSAGE("...or even pass objects?")
@@ -4832,7 +4581,7 @@ give_bread_to_dove
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
 #endif    
 //+_gSceneActionDoveEatingBread
-    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS,"Birdy nam nam...")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Elle est attrapable maintenant")
 #else
@@ -4863,7 +4612,7 @@ MeatCommon
     JUMP_IF_TRUE(nothing_to_eat_the_meat,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
 dog_eating_the_meat
     PLAY_SOUND(_Swoosh)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
+    DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT)
     INFO_MESSAGE("Glad it's not me there!")
     SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
@@ -4892,7 +4641,7 @@ _FreeDove
     // The dog will only chase the dove if the dog is where we are and is still alive and kicking
     JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_CURRENT))
     JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
-        DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE,"Run Forrest, Run!")      ; Show the picture with the dog running after the dove
+        DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE)            ; Show the picture with the dog running after the dove
         INFO_MESSAGE("Hopefully he will not catch the dove")
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
@@ -5091,7 +4840,7 @@ thug_snooker_cue
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room")
 #endif       
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE,"")     ; Draw the base image with the hole over an empty room
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)     ; Draw the base image with the hole over an empty room
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
                 BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
                         _IMAGE_STRIDE(0,0,17)
@@ -5263,7 +5012,7 @@ _TakeBlackTape
 
 _TakeAcid
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID,"ACME XX121 Acid")
+    DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
     INFO_MESSAGE("This stuff is highly dangerous!")
     WAIT(50*2)
     INFO_MESSAGE("...could go through a ship's hull!")
@@ -5306,7 +5055,7 @@ _TakeCommon
 
 _ShowProtectionSuit
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT,"PRO-TEC Personal Protection Equipment")
+    DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
     INFO_MESSAGE("Protection against pesticides...")
     WAIT(50*2)
     INFO_MESSAGE("...and other types of noxious fumes")
@@ -5449,7 +5198,7 @@ end_girl_following
 ; Animated sequence where the digital watch is set to have an alarm in two hours
 _WatchSetup
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM)                    ; The watch is shown with 0:00:00 as a base image
     FADE_BUFFER
     WAIT(50)
 
@@ -5484,7 +5233,7 @@ _WatchSetup
 ; Half-way display, when one hour has elapsed, to remind the player they need to speed up
 _OneHourAlarmWarning
 .(
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"Let see...")       ; The watch is shown with 0:00:00 as a base image
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM)                    ; The watch is shown with 0:00:00 as a base image
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
             _IMAGE(24,43)
             _BUFFER(17,63)
@@ -5520,7 +5269,7 @@ _OneHourAlarmWarning
 _TimeOutGameOver
 .(
     SET_CUT_SCENE(1)
-    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM,"Beep! Beep! Beep!")
+    DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM)
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
@@ -5550,7 +5299,7 @@ _PauseGameScript
     SET_CUT_SCENE(1)
     STOP_CLOCK
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSED_THE_GAME)
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM,"GAME PAUSED - PRESS A KEY TO CONTINUE")
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_WATCH_ALARM)
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the PAUSE patch
             _IMAGE(24,61)
             _BUFFER(17,63)

@@ -48,7 +48,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandUnlockAchievement
     .word _ByteStreamCommandIncreaseScore
     .word _ByteStreamCommandGameOver
-    .word _ByteStreamCommandSetDescription
+    .word _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
     .word _ByteStreamCommandSetSceneImage
     .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     .word _ByteStreamCommand_CLEAR_TEXT_AREA
@@ -67,7 +67,6 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
-    .word _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
 
     
 ; _param0=pointer to the new byteStream
@@ -723,31 +722,6 @@ found_zero
     jmp _ByteStreamMoveByA
 .)
 
-; .byt COMMAND_SET_DESCRIPTION,description,0
-_ByteStreamCommandSetDescription
-.(
-#ifdef ENABLE_SCENE_DESCRIPTIONS
-    ;jsr _Panic
-    
-    ; Use the current pointer as the string address
-    ldy #0
-    lda _gCurrentStream+0
-    sta _param0+0
-    sta _gDescription+0
-    iny
-    lda _gCurrentStream+1
-    sta _param0+1
-    sta _gDescription+1
-
-    ; Print the description
-    jsr _PrintTopDescriptionAsm
-
-    ; Skip to the end of the string
-    jmp FindNullTerminator
-#else
-    jsr _Panic
-#endif    
-.)
 
 
 ; .byt COMMAND_SET_LOCATION_PICTURE,imageId
@@ -944,45 +918,6 @@ _Adjust_gStreamNextPtr
     rts
 .)
 
-; _param0+0/+1=pointer to message
-_PrintTopDescriptionAsm
-.(
-#ifdef ENABLE_SCENE_DESCRIPTIONS    
-    ;int messageLength = messageLength=strlen(message);
-    jsr _GetStringLen
-    lsr
-    sta _param1  ; Store len/2 for later
-
-    ; memset((char*)0xbb80+17*40+1,' ',39);
-    lda #<$bb80+17*40+1:ldy #0:sta (sp),y:iny:lda #>$bb80+17*40+1:sta (sp),y
-    lda #" ":iny:sta (sp),y:iny:lda #0:sta (sp),y
-    lda #<39:iny:sta (sp),y:iny:lda #>39:sta (sp),y
-    jsr _memset
-
-	;strcpy((char*)0xbb80+17*40+20-messageLength/2,message);
-    sec
-    lda #<$bb80+17*40+20
-    sbc _param1              ; len/2 from above
-    sta tmp0+0
-    lda #>$bb80+17*40+20
-    sbc #0
-    sta tmp0+1
-
-    ldy #0
-loop
-    lda (_param0),y
-    beq end_loop2
-    sta (tmp0),y
-    iny
-    jmp loop
-
-end_loop2
-    ; Adjust the pointer to the next position (_param0+y+1)
-    jmp _Adjust_gStreamNextPtr
-#else
-    jsr _Panic
-#endif    
-.)
 
 
 ; _param0+0/+1=pointer to message
@@ -1189,19 +1124,9 @@ _ClearMessageAndInventoryWindow
     ldx #1+23+4-18-1
     jmp common_bit
 +_ClearMessageWindowAsm
-#ifdef ENABLE_SCENE_DESCRIPTIONS   
-    ldx #1+23-18
-#else
     ldx #1+23-18-1
-#endif    
 common_bit
     ; Pointer to first line of the "window"
-#ifdef ENABLE_SCENE_DESCRIPTIONS   
-    lda #<$bb80+40*18
-    sta tmp0+0
-    lda #>$bb80+40*18
-    sta tmp0+1
-#else
     lda #<$bb80+40*17
     sta tmp0+0
     lda #>$bb80+40*17
@@ -1227,7 +1152,6 @@ loop_top_fluff
 
     ; Then start painting the bit area
     jsr _Add40ToTmp0
-#endif
 
 loop_line
     ; Erase the 39 last characters of that line
@@ -1248,7 +1172,6 @@ loop_column
     dex
     bne loop_line
 
-#ifndef ENABLE_SCENE_DESCRIPTIONS   
     ; Bottom fluff
     lda _param0
     and #7          ; Ink color
@@ -1266,7 +1189,6 @@ loop_bottom_fluff
     bne loop_bottom_fluff
     lda #"#"
     sta (tmp0),y
-#endif
     rts
 .)
 
@@ -1371,21 +1293,6 @@ _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     lda #>_ImageBuffer
     sta _LoaderApiAddressHigh
     jsr _LoadApiLoadFileFromDirectory
-
-#ifdef ENABLE_SCENE_DESCRIPTIONS
-    ; PrintTopDescription(gCurrentStream);
-    lda _gCurrentStream+0
-    sta _param0+0
-    lda _gCurrentStream+1
-    sta _param0+1
-    jsr _PrintTopDescriptionAsm
-
-	;gCurrentStream += strlen(gCurrentStream)+1;
-    lda _gStreamNextPtr+0
-    sta _gCurrentStream+0
-    lda _gStreamNextPtr+1
-    sta _gCurrentStream+1
-#endif
     rts
 .)
 
