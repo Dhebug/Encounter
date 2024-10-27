@@ -2690,7 +2690,11 @@ _InspectPanel
     INCREASE_SCORE(POINTS_INSPECT_PANEL)
     ; Is the alarm panel open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),else)
-        DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL_OPEN)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_ALARM_PANEL)                ; Load the image with the panel closed
+        BLIT_BLOCK(LOADER_SPRITE_ALARM_PANEL,22,69)                     ; Draw the open panel overlayed on top
+                _IMAGE(0,0)
+                _BUFFER(14,47)
+        FADE_BUFFER
         INFO_MESSAGE("Can be used to disable the alarm.")
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)

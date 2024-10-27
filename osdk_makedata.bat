@@ -97,6 +97,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_top_window
 %CONVERT% masked_austin_parts
 %CONVERT% masked_rough_map
+%CONVERT% masked_alarm_panel
 
 
 :: Here we have the list of 240x128 pictures for the various in-game locations
@@ -172,7 +173,6 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_medicine_cabinet
 %CONVERT% view_medicine_cabinet_open
 %CONVERT% view_alarm_panel
-%CONVERT% view_alarm_panel_open
 %CONVERT% view_donkey_kong_top
 %CONVERT% view_donkey_kong_playing
 %CONVERT% view_dog_eating_meat
