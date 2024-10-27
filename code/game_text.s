@@ -679,12 +679,25 @@ digging_for_gold
 
 // MARK: Parking Place
 _gDescriptionParkingPlace
+.(
     SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_PARKING_PLACE)
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"une _voiture abandonnée")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"an abandoned _car")
 #endif    
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot)     ; Is the boot closed?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,5,19)                        ; Draw the open boot
+                _IMAGE(3,96)
+                _BUFFER(26,51)
+    ENDIF(boot)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),door)     ; Is the door open?
+        BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,3,16)                        ; Draw the open door
+                _IMAGE(9,96)
+                _BUFFER(32,54)
+    ENDIF(door)
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -696,6 +709,7 @@ _gDescriptionParkingPlace
     _BUBBLE_LINE(152,15,0,"Rust to Rust...")
 #endif    
     END
+.)
 
 
 // MARK: Abandoned Car
