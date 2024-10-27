@@ -3100,7 +3100,7 @@ _InspectPanicRoomDoor
 .(
     INCREASE_SCORE(POINTS_INSPECT_PANIC_ROOM_DOOR)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_CURRENT),acid)  ; Is there a hole in the door?
-        DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE)
+        GOSUB(_DrawDoorWithHole)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Ils ne plaisantaient pas...")
 #else
@@ -3146,6 +3146,17 @@ _InspectPanicRoomDoor
     ENDIF(clay)
 
     END_AND_REFRESH    
+.)
+
+
+_DrawDoorWithHole
+.(
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_DOOR_WITH_CLAY)            ; Load the image with the clay dam
+    BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,6,64)                       ; Apply the hole overlay
+            _IMAGE(28,0)
+            _BUFFER(17,64)
+    FADE_BUFFER
+    RETURN
 .)
 
 
@@ -4417,7 +4428,7 @@ _UseAcid
     WAIT(50)
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING)
     WAIT(50*2)
-    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_HOLE)
+    GOSUB(_DrawDoorWithHole)
     INFO_MESSAGE("Large enough to peek through...")
     WAIT(50*2)
     INFO_MESSAGE("...or even pass objects?")

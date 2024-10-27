@@ -348,9 +348,6 @@ AddDefine LOADER_PICTURE_DOOR_POURING_ACID {FileIndex}
 AddFile ..\build\files\view_panic_room_acid_burning.hir
 AddDefine LOADER_PICTURE_DOOR_ACID_BURNING {FileIndex}
 
-AddFile ..\build\files\view_panic_room_acid_hole.hir
-AddDefine LOADER_PICTURE_DOOR_WITH_HOLE {FileIndex}
-
 AddFile ..\build\files\view_panic_room_hole.hir
 AddDefine LOADER_PICTURE_HOLE {FileIndex}
 

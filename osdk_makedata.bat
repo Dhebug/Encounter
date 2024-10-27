@@ -201,7 +201,6 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_panic_room_clay
 %CONVERT% view_panic_room_pouring_acid
 %CONVERT% view_panic_room_acid_burning
-%CONVERT% view_panic_room_acid_hole
 %CONVERT% view_panic_room_hole
 %CONVERT% view_panic_room_window
 %CONVERT% view_top_window_closed
