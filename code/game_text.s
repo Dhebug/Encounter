@@ -1270,6 +1270,8 @@ girl_is_outside
 // MARK: Kitchen
 _gDescriptionKitchen
 .(
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
     ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
@@ -2838,6 +2840,14 @@ lounge
 #endif    
 dinning_room
 
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_KITCHEN),kitchen)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir le passage arrière dehors")
+#else
+        INFO_MESSAGE("I can see the back wall outside")
+#endif    
+kitchen
+
     WAIT(50*2)        
     END_AND_REFRESH
 .)
@@ -3615,6 +3625,7 @@ _OpenNormalWindow
     JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_DININGROOM))
     JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_LOUNGE))
     JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_STUDY_ROOM))
+    JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_KITCHEN))
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle semble verruouillée...")
