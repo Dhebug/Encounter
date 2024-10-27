@@ -17,8 +17,9 @@
 :: 0.8.5 - The map can be navigated with arrows, quite a few changes all over the place really
 :: 0.8.6 - Keyboard improvements, CTRL+DEL, misc fixes to the end sequence, fixed the intro TEXT to HIRES glitch
 :: 0.8.7 - Fixed the HELP bug, improved arrow navigation, added some information on the recipes, interactive windows
+:: 0.8.8 - Numerous little tweaks, added alarm sensor, blinking alarm light, interactive tv and console, tombstone image
 ::
-SET VERSION=0.8.6
+SET VERSION=0.8.8
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
