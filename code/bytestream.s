@@ -1138,7 +1138,7 @@ common_bit
     ldy #0
     sta (tmp0),y
     iny
-    lda #"_"
+    lda #"/"
     sta (tmp0),y
     iny
     lda #127
@@ -1147,7 +1147,7 @@ loop_top_fluff
     iny
     cpy #38
     bne loop_top_fluff
-    lda #"_"
+    lda #"\"
     sta (tmp0),y
 
     ; Then start painting the bit area
@@ -1178,10 +1178,10 @@ loop_column
     ldy #0
     sta (tmp0),y
     iny
-    lda #"#"
+    lda #"<"
     sta (tmp0),y
     iny
-    lda #"@"
+    lda #"="
 loop_bottom_fluff    
     sta (tmp0),y
     iny
