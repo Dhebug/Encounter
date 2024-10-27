@@ -215,7 +215,7 @@ _Test_DETAILS_MAIMED_BY_DOG
 _Test_DETAILS_SHOT_BY_THUG        
     .byt 1,"You've learnt (a bit late) that waking",TEXT_CRLF
     .byt 1,"up a thug armed with a big gun was not",TEXT_CRLF
-    .byt 1,"a super smart idea.    ",3,"Rest In Pieces",TEXT_CRLF
+    .byt 1,"a super smart idea.",3,"You bit the bullet",TEXT_CRLF
     .byt 0
 
 _Test_DETAILS_FELL_INTO_PIT        
@@ -237,9 +237,9 @@ _Test_DETAILS_RAN_OUT_OF_TIME
     .byt 0
 
 _Test_DETAILS_BLOWN_INTO_BITS      
-    .byt 3,"Explosives are dangerous! You were",TEXT_CRLF
+    .byt 3,"Explosives are",1,"dangerous!",3,"You were",TEXT_CRLF
     .byt 3,"warned multiple times, and now someone",TEXT_CRLF
-    .byt 3,"has to clean the",1,"bloody mess.",TEXT_CRLF
+    .byt 3,"has to clean the mess! ",1,"Rest In Pieces",TEXT_CRLF
     .byt 0
 
 _Test_DETAILS_GAVE_UP              
