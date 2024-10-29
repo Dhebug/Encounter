@@ -153,6 +153,7 @@ extern union ParamType param2;
 #define PrintStatusMessage(color,message)  { param0.ptr=message;param1.uchar=color;asm("jsr _PrintStatusMessageAsm"); } 
 #define PrintInformationMessage(message)   { param0.ptr=message;asm("jsr _PrintInformationMessageAsm"); } 
 #define PrintErrorMessage(message)         { param0.ptr=message;asm("jsr _PrintErrorMessageAsm"); } 
+#define PrintErrorMessageShort(message)    { param0.ptr=message;asm("jsr _PrintErrorMessageShortAsm"); } 
 
 extern char gIsHires;
 extern char* gPrintAddress;

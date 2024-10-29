@@ -1014,8 +1014,17 @@ _PrintInformationMessageAsm
 
 
 ; _param0+0/+1=pointer to message
-_PrintErrorMessageAsm
+_PrintErrorMessageShortAsm
 .(
+    ; Set a short delay
+    lda #50
+    pha 
+    jmp print_error_common
++_PrintErrorMessageAsm
+    ; Set a long delay
+    lda #150
+    pha 
+print_error_common
     ; Set the color
     lda #1
     sta _param1
@@ -1029,20 +1038,21 @@ _PrintErrorMessageAsm
     jsr _PlaySoundAsmXY
 
     ; Wait a bit after the message is displayed
-    jmp _LongWaitAfterMessage
+    pla 
+    jmp _WaitAfterMessageCommon
 .)
 
 _LongWaitAfterMessage
 .(
     lda #150
-    bne store
+    bne _WaitAfterMessageCommon
 +_ShortWait
-    lda #25
-    bne store
+    lda #12
+    bne _WaitAfterMessageCommon
 +_WaitAfterMessage
     ; Wait 75 frames
     lda #75
-store    
++_WaitAfterMessageCommon    
     sta _param0+0
     lda #0
     sta _param0+1

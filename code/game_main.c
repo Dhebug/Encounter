@@ -219,7 +219,7 @@ void PlayerMove()
 	if (requestedScene==e_LOC_NONE)
 	{
         UnlockAchievement(ACHIEVEMENT_WRONG_DIRECTION)
-		PrintErrorMessage(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
+		PrintErrorMessageShort(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
 	}
 	else
 	{
