@@ -2360,7 +2360,7 @@ _ReadChemistryBook
     WAIT(50*2)
     // If the recipes were not yet found, they now appear at the current location
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_NONE))
-    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_INVENTORY)
+    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_CURRENT)
 recipe_already_found
     END_AND_REFRESH
 .)
