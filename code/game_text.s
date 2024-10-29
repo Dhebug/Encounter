@@ -1016,6 +1016,14 @@ girl_is_outside
 
 // MARK: Apple Orchard
 _gDescriptionAppleOrchard
+.(
+    ; Is the ladder in the scene?
+    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT))    
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,10,16)                        ; Draw the ladder
+                _IMAGE(7,45)
+                _BUFFER(22,87)
+no_ladder    
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
@@ -1026,7 +1034,7 @@ _gDescriptionAppleOrchard
     _BUBBLE_LINE(5,17,0,"sweet, crunchy and juicy")
 #endif
     JUMP(_ChirpingBirds)
-
+.)
 
 // MARK: Entrance Hall
 _gDescriptionEntranceHall
