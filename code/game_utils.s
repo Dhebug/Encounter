@@ -7,6 +7,7 @@ _gCurrentLocationPtr        .dsb 2
 _gDescription               .dsb 2
 _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1
+_gInventoryOffset           .dsb 2
 
     .text
 
@@ -302,6 +303,12 @@ buffer_empty
     and #16
     bne control_pressed
 no_control
+    ldx #0
+    lda _KeyBank+4          ; Left shift
+    ora _KeyBank+7          ; Right shift 
+    and #16                 ; The two shift keys are on the same column
+    bne shift_pressed
+
     ldx #e_WORD_NORTH
     cpy #KEY_UP
     beq store_direction
@@ -318,6 +325,35 @@ control_pressed
     ldx #e_WORD_DOWN
     cpy #KEY_DOWN
     beq store_direction
+
+; gInventoryOffset-=40
+shift_pressed
+;    jsr _Panic
+    ldx #e_WORD_UP
+    cpy #KEY_UP
+    beq not_scroll_up
+    sec
+    lda _gInventoryOffset+0
+    sbc #40
+    sta _gInventoryOffset+0
+    lda _gInventoryOffset+1
+    sbc #0
+    sta _gInventoryOffset+1
+    jmp _PrintSceneObjects
+not_scroll_up
+    ldx #e_WORD_DOWN
+    cpy #KEY_DOWN
+    beq not_scroll_down
+    clc
+    lda _gInventoryOffset+0
+    adc #40
+    sta _gInventoryOffset+0
+    lda _gInventoryOffset+1
+    adc #0
+    sta _gInventoryOffset+1
+    jmp _PrintSceneObjects
+not_scroll_down
+    rts
 
 store_direction
     stx _gWordBuffer

@@ -90,14 +90,27 @@ void PrintSceneObjects()
 {
     char itemPrinted = 0;
 	int itemCount = 0;
+    int maxOffset = -40*3;
 	int item;
 
 #ifdef ENABLE_PRINTER    
     PrinterSendString("\n- Scene items: ");
 #endif
 
-	//memset((char*)TemporaryBuffer479,' ',40*4);
-    memcpy(TemporaryBuffer479,(char*)0xbb80+40*18,40*4);
+    // The buffer is 479/40=11.975 lines long
+	memset((char*)TemporaryBuffer479,' ',40*10);
+    poke(TemporaryBuffer479+40*0,16+4);
+    poke(TemporaryBuffer479+40*1,16+4);
+    poke(TemporaryBuffer479+40*2,16+4);
+    poke(TemporaryBuffer479+40*3,16+4);
+    poke(TemporaryBuffer479+40*4,16+4);
+    poke(TemporaryBuffer479+40*5,16+4);
+    poke(TemporaryBuffer479+40*6,16+4);
+    poke(TemporaryBuffer479+40*7,16+4);
+    poke(TemporaryBuffer479+40*8,16+4);
+    poke(TemporaryBuffer479+40*9,16+4);
+
+    //memcpy(TemporaryBuffer479,(char*)0xbb80+40*18,40*4);
 
 	for (item=0;item<e_ITEM_COUNT_;item++)
 	{
@@ -122,13 +135,25 @@ void PrintSceneObjects()
                     if ((gPrintPos+1)<=gPrintWidth)
                     {
                         PrintString(",");
+                        if (gPrintLineTruncated)
+                        {
+                            maxOffset+=40;
+                        }
                     }
                     if ((gPrintPos+1)<=gPrintWidth)
                     {
                         PrintString(" ");
+                        if (gPrintLineTruncated)
+                        {
+                            maxOffset+=40;
+                        }
                     }
                 }
                 PrintString(gItems[item].description);
+                if (gPrintLineTruncated)
+                {
+                    maxOffset+=40;
+                }
                 itemPrinted = 1;
             }
         }
@@ -142,7 +167,17 @@ void PrintSceneObjects()
 	{
 		sprintf((char*)TemporaryBuffer479+1,"%c%s",3,gTextNothingHere);  // "There is nothing of interest here"
 	}
-	memcpy((char*)0xbb80+40*18,TemporaryBuffer479,40*4);
+    
+    if (gInventoryOffset>maxOffset)
+    {
+        gInventoryOffset=maxOffset;
+    }
+    if (gInventoryOffset<0)
+    {
+        gInventoryOffset=0;
+    }
+
+	memcpy((char*)0xbb80+40*18,TemporaryBuffer479+gInventoryOffset,40*4);
 }
 
 
@@ -656,6 +691,7 @@ void Initializations()
     gCurrentStream = 0;
     gDelayStream = 0;
     gGameOverCondition = 0;
+    gInventoryOffset = 0;
 
     // The redefined charcters to draw the bottom part of the directional arrows \v/
 	poke(0xbb80+16*40+16,9);                      // ALT charset
