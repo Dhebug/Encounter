@@ -22,6 +22,11 @@ _free_to_use_text = osdk_end+1 ; *+256
 
     .bss
 
+#define OSDK_CUSTOM_STACK 
+* = $200                      ; We move the stack in page 2, hopefully it will not be required by tail.s
+osdk_stack    .dsb 256
+osdk_stack_end
+
 #ifdef MODULE_GAME
 * = $bb80+17*40
 _TextDescriptionLine
