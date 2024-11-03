@@ -1918,9 +1918,11 @@ _gDescriptionPanicRoomDoor
     END
 .)
 
+
 ; This function assumes the GAME_OVER(xxx) has been called already
 _gDescriptionGameOverLost
     DECREASE_SCORE(MALUS_POINTS_GAME_OVER)    
+    STOP_CLOCK
 _gDescriptionGameOverWon
     DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
