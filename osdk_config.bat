@@ -18,8 +18,9 @@
 :: 0.8.6 - Keyboard improvements, CTRL+DEL, misc fixes to the end sequence, fixed the intro TEXT to HIRES glitch
 :: 0.8.7 - Fixed the HELP bug, improved arrow navigation, added some information on the recipes, interactive windows
 :: 0.8.8 - Numerous little tweaks, added alarm sensor, blinking alarm light, interactive tv and console, tombstone image
+:: 0.8.9 - Input checking while entering commands, inventory scroll with the keyboard, visible ladder, keyboard buffer flushed
 ::
-SET VERSION=0.8.8
+SET VERSION=0.8.9
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
