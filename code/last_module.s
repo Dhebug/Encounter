@@ -22,10 +22,6 @@ _free_to_use_text = osdk_end+1 ; *+256
 
     .bss
 
-#define OSDK_CUSTOM_STACK 
-* = $200                      ; We move the stack in page 2, hopefully it will not be required by tail.s
-osdk_stack    .dsb 256
-osdk_stack_end
 
 #ifdef MODULE_GAME
 * = $bb80+17*40
@@ -109,7 +105,6 @@ _gFont12x14           .dsb 2660     ; 95 characters (from space to tilde), each 
 _ArkosMusic           .dsb 1700     ; 1700 bytes for the dynamic loading of musics (largest: 1587 bytes so far)
 _gFont12x14Width      .dsb 95       ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gInputBuffer         .dsb 40
-_free_to_use_e940
 #endif
 
 #ifdef MODULE_INTRO
@@ -117,7 +112,7 @@ _ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
 _OOPS                       .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
 _CompressedOfficeImage      .dsb INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED
 _CompressedTypeWriterImage  .dsb INTRO_PICTURE_TYPEWRITER_COMPRESSED
-_free_to_user_overlay
+
 #endif
 
 #ifdef MODULE_SPLASH
@@ -129,6 +124,10 @@ _ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
 _SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a full image
 _gInputBuffer               .dsb 40
 #endif
+
+#define OSDK_CUSTOM_STACK 
+osdk_stack                  .dsb 256      ; We move the stack in overlay memory
+_free_to_use_overlay
 
 * = $fe00
 _DiskLoader
