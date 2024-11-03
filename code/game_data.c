@@ -63,7 +63,7 @@ keyword gWordsArray[] =
     { "BULLETS",e_ITEM_Bullets              },  
     { "RECIPES",e_ITEM_ChemistryRecipes     },
     { "MAP"    ,e_ITEM_UnitedKingdomMap     },
-    { "MAP"    ,e_ITEM_RoughMap             },
+    { "PLAN"   ,e_ITEM_RoughPlan            },
     { "CURTAIN",e_ITEM_Curtain              },  
     { "CABINET",e_ITEM_Medicinecabinet      },  
     { "CABINET",e_ITEM_GunCabinet           },  

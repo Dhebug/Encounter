@@ -136,7 +136,7 @@
 #define e_ITEM_HoleInDoor            59         // a hole in the door
 #define e_ITEM_PanicRoomWindow       60         // a high-up window
 #define e_ITEM_FrontDoor             61         // an impressive entrance door
-#define e_ITEM_RoughMap              62         // a rough map
+#define e_ITEM_RoughPlan             62         // a rough plan
 #define e_ITEM_Car                   63         // either "my car" or "a car" depending of the location
 #define e_ITEM_Graffiti              64         // either the graffiti in the tunnel or the dirty alley
 #define e_ITEM_Church                65         // the old church in main street

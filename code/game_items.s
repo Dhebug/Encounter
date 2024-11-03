@@ -86,7 +86,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHoleInDoor            ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_HoleInDoor
     ITEM_NORMAL( _gTextItemHighUpWindow          ,e_LOC_TILEDPATIO      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_PanicRoomWindow
     ITEM_NORMAL( _gTextItemFrontDoor             ,e_LOC_FRONT_ENTRANCE  ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_FrontDoor
-    ITEM_NORMAL( _gTextItemRoughMap              ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_RoughMap
+    ITEM_NORMAL( _gTextItemRoughPlan             ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_RoughPlan
     ITEM_NORMAL( _gTextItemMyCar                 ,e_LOC_MARKETPLACE     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Car
     ITEM_NORMAL( _gTextItemGraffiti              ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Graffiti
     ITEM_NORMAL( _gTextItemChurch                ,e_LOC_MAINSTREET      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Church

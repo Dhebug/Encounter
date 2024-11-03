@@ -419,7 +419,7 @@ AddFile ..\build\files\masked_austin_parts.msk
 AddDefine LOADER_SPRITE_AUSTIN_PARTS {FileIndex}
 
 AddFile ..\build\files\masked_rough_map.msk
-AddDefine LOADER_SPRITE_ROUGH_MAP {FileIndex}
+AddDefine LOADER_SPRITE_ROUGH_PLAN {FileIndex}
 
 AddFile ..\build\files\masked_alarm_panel.msk
 AddDefine LOADER_SPRITE_ALARM_PANEL {FileIndex}

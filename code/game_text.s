@@ -149,7 +149,7 @@ _gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
 _gTextItemProtectionSuit          .byt "une tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
-_gTextItemRoughMap                .byt "une _carte sommaire",0
+_gTextItemRoughPlan               .byt "un _plan sommaire",0
 _gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
 _gTextItemGraffiti                .byt "des _graffitis",0
 _gTextItemChurch                  .byt "une _église",0
@@ -224,7 +224,7 @@ _gTextItemDriedOutClay            .byt "some$dried out _clay",0
 _gTextItemProtectionSuit          .byt "a$protection _suit",0
 _gTextItemHoleInDoor              .byt "a$_hole in the door",0
 _gTextItemFrontDoor               .byt "the$entrance _door",0
-_gTextItemRoughMap                .byt "a$rough _map",0
+_gTextItemRoughPlan               .byt "a$rough _plan",0
 _gTextItemLargeDoveOutOfReach     .byt "a$_dove on a tall tree",0
 _gTextItemGraffiti                .byt "some$_graffiti",0
 _gTextItemChurch                  .byt "a$_church",0
@@ -459,7 +459,7 @@ girl_not_here
         ; First we show the map of where the player needs to go
         SET_SKIP_POINT(end_intro_sequence)
         WAIT(50*2)
-        GOSUB(_ShowRoughMap)        
+        GOSUB(_ShowRoughPlan)        
         ; Then we show an animated sequence where the digital watch is set to have an alarm in two hours
         GOSUB(_WatchSetup)
 
@@ -2309,7 +2309,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_HandWrittenNote    , _ReadHandWrittenNote)
     VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _ReadChemistryRecipes)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _ReadChemistryBook)
-    VALUE_MAPPING(e_ITEM_RoughMap           , _ReadRoughMap)
+    VALUE_MAPPING(e_ITEM_RoughPlan          , _ReadRoughPlan)
     VALUE_MAPPING(e_ITEM_RoadSign           , _ReadRoadSign)
     VALUE_MAPPING(e_ITEM_Tombstone          , _ReadTombstone)
     VALUE_MAPPING(e_ITEM_Graffiti           , _ReadGraffiti)
@@ -2421,7 +2421,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _InspectProtectionSuit)
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
-    VALUE_MAPPING(e_ITEM_RoughMap           , _InspectRoughMap)
+    VALUE_MAPPING(e_ITEM_RoughPlan          , _InspectRoughPlan)
     VALUE_MAPPING(e_ITEM_Car                , _InspectCar)
     VALUE_MAPPING(e_ITEM_CarBoot            , _InspectCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _InspectCarDoor)
@@ -2453,14 +2453,14 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
-_UseRoughMap
-_ReadRoughMap
-_InspectRoughMap
-    GOSUB(_ShowRoughMap)
+_UseRoughPlan
+_ReadRoughPlan
+_InspectRoughPlan
+    GOSUB(_ShowRoughPlan)
     END_AND_REFRESH
-_ShowRoughMap
+_ShowRoughPlan
 .(
-    BLIT_BLOCK(LOADER_SPRITE_ROUGH_MAP,40,128)                     ; Draw the map of the location
+    BLIT_BLOCK(LOADER_SPRITE_ROUGH_PLAN,40,128)                     ; Draw the map of the location with the instructions
             _IMAGE(0,0)
             _BUFFER(0,0)      
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
@@ -3965,7 +3965,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
     VALUE_MAPPING(e_ITEM_Acid               , _UseAcid)
     VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
-    VALUE_MAPPING(e_ITEM_RoughMap           , _UseRoughMap)
+    VALUE_MAPPING(e_ITEM_RoughPlan          , _UseRoughPlan)
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
     VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
     VALUE_MAPPING(e_ITEM_FancyStones        , _UseFancyStones)
