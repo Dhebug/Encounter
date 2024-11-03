@@ -77,6 +77,9 @@ control_pressed              ; If CTRL is pressed, we delete the entire input bu
 
 _InputDefaultKey
 .(
+    jsr _ValidateInputSpace
+    beq errorPlop
+    
     lda _gInputKey
     cmp #32                     ; Is it a displayable character?
     bcc InputQuit

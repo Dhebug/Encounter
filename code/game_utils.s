@@ -429,4 +429,68 @@ reset_input
 
 
 
+; extern action_mapping gActionMappingsArray[];
+/*
+typedef struct
+{
+    unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
+    unsigned char flag;             // See: FLAG_MAPPING_DEFAULT, FLAG_MAPPING_STREAM, FLAG_MAPPING_TWO_ITEMS in scripting.h
+    union 
+    {
+        callback function;          // Pointer to the routine to call (ex: TakeItem())
+        void* stream;               // Pointer to a stream
+    } u;
+} action_mapping;
+    WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
+    WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,FLAG_MAPPING_STREAM)
+
+*/
+_ValidateInputSpace
+.(
+    lda _gInputKey
+    cmp #32+1                     ; Is it a displayable character?
+    bcc check_input
+
+good_input     
+    ldx #1   
+    rts
+
+; gWordBuffer[gWordCount] = itemId;
++_ValidateInputReturn
+check_input
+    jsr _ParseInputBuffer
+    ldx _gWordCount
+    cpx #1
+    beq one_word 
+    cpx #2
+    beq two_words    
+    cpx #3
+    beq three_words
+    bne bad_input
+
+three_words
+    lda _gInputKey
+    cmp #32
+    beq bad_input       ; It's fine to have three words in the buffer, but not to add a fourth one
+    lda _gWordBuffer+2
+    cmp #e_WORD_COUNT_
+    beq bad_input
+
+two_words
+    lda _gWordBuffer+1
+    cmp #e_WORD_COUNT_
+    beq bad_input
+
+one_word
+    lda _gWordBuffer+0
+    cmp #e_WORD_COUNT_
+    beq bad_input
+    jmp good_input
+
+bad_input
+    ldx #0           ; Refuse the input
+    rts
+ .)
+
+
 _EndGameUtils_

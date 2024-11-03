@@ -15,7 +15,7 @@ extern void InputCheckKey();
 extern void InputDelete();
 extern void InputDefaultKey();
 extern void InputArrows();
-
+extern char ValidateInputReturn();
 
 // At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
 unsigned char ParseInputBuffer()
@@ -50,10 +50,12 @@ unsigned char ParseInputBuffer()
 			while (*separatorPtr && (*separatorPtr!=' '))
 			{
                 // For the character to be upper case
+                /*
                 if ( (*separatorPtr>='a') && (*separatorPtr<='z') )
                 {
                     *separatorPtr &= ~32;   // Force to upper case
                 }
+                */
 				separatorPtr++;
 			}
 			if (*separatorPtr == 0)
@@ -72,7 +74,7 @@ unsigned char ParseInputBuffer()
 			while (keepSearching && keywordPtr->word && (gWordCount<MAX_WORDS))   // The list is terminated by a null pointer entry
 			{
 				// Right now we do a full comparison of the words, but technically we could restrict to only a few significant characters.
-				if (strcmp(inputPtr,keywordPtr->word)==0)
+				if (strcmpi(inputPtr,keywordPtr->word)==0)
 				{
 					// Found the word in the list, we mark down the token id and continue searching
                     unsigned char itemId = keywordPtr->id;
@@ -83,6 +85,10 @@ unsigned char ParseInputBuffer()
 			}
 			gWordCount++;
 			inputPtr = separatorPtr+1;
+            if (!done)
+            {
+                *separatorPtr=' ';  // Put the space back
+            }
 		}
 	}
 
@@ -150,7 +156,8 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
             PrinterSendMemory((char*)0xbb80+40*23+2,38);    // Player input
             PrinterSendString("\n\n");
 #endif
-			if (!checkTockens || ParseInputBuffer())
+			//if (!checkTockens || ParseInputBuffer())
+            if (ValidateInputReturn())
 			{
 				WORDS answer = gAnswerProcessingCallback();
 				if (answer !=e_WORD_CONTINUE)

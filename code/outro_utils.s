@@ -28,6 +28,11 @@ _DrawArrows
 _gFont12x14
     rts
 
+_ValidateInputReturn
+_ValidateInputSpace
+    ldx #1
+    rts
+
 _TypewriterMusic
 .(
 #ifdef USE_MUSIC_EVENTS    
