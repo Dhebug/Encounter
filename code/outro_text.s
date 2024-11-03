@@ -64,7 +64,7 @@ _gTextExternalInformation
     .byt 6," ou chercher une mise à jour, il vous",TEXT_CRLF
     .byt 6,"        suffit d'allez sur:",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3,"  http://encounter.defence-force.org",TEXT_CRLF
+    .byt 3,"      encounter.defence-force.org",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 5,"Vous y trouverez également nos autres",TEXT_CRLF
     .byt 5,"    jeux et démos pour vos Orics.",TEXT_CRLF
@@ -141,7 +141,7 @@ _gTextExternalInformation
     .byt 6,"   or simply explore the source code...",TEXT_CRLF
     .byt 6,"  just open you favorite browser to:",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3,"   http://encounter.defence-force.org",TEXT_CRLF
+    .byt 3,"      encounter.defence-force.org",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 5," On this site you will also find our",TEXT_CRLF
     .byt 5,"   many other Oric games and demos.",TEXT_CRLF
