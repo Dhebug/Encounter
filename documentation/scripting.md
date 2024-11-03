@@ -315,10 +315,7 @@ The purpose of this script is to do book-keeping and adjustments independently o
 The commands are all defined in [scripting.h](../code/scripting.h) and implemented in [bytestream.s](../code/bytestream.s) and most of them use references to locations and item ids defined in [game_enums.h](../code/game_enums.h).
 
 ```C
-#define OFFSET(x,y) x,y
 #define BLOCK_SIZE(w,h) w,h
-#define STRIDE(b) b
-#define RECTANGLE(x,y,w,h) x,y,w,h
 
 // Command opcodes
 #define COMMAND_RECTANGLE       1

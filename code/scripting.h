@@ -2,11 +2,6 @@
 #define DELAY_FIRST_BUBBLE      25
 #define DELAY_INFO_MESSAGE      50*4
 
-#define OFFSET(x,y) x,y
-#define BLOCK_SIZE(w,h) w,h
-#define STRIDE(b) b
-#define RECTANGLE(x,y,w,h) x,y,w,h
-
 // Command opcodes
 #define COMMAND_END             0
 #define COMMAND_RECTANGLE       1
@@ -119,6 +114,8 @@
 #define SET_SCENE_IMAGE(imageId)                     .byt COMMAND_SET_SCENE_IMAGE,imageId
 
 // Graphics
+#define BLOCK_SIZE(w,h) w,h
+
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 #define DISPLAY_IMAGE(imagedId)                      .byt COMMAND_DISPLAY_IMAGE,imagedId
 #define DISPLAY_IMAGE_NOBLIT(imagedId)               .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
