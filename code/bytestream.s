@@ -1329,6 +1329,7 @@ _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
 .)
 
 
+; .byt COMMAND_BITMAP,imageId,w,h,stride
 _ByteStreamCommandBITMAP
 .( 
 	; unsigned char loaderId = *gCurrentStream++;

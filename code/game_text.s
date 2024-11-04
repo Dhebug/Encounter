@@ -258,10 +258,6 @@ _EndItemNames
 ╚══════╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ */
 
 _StartSceneScripts
-_gDescriptionTeenagerRoom         .byt "Teenager room?",0
-
-_gDescriptionNone
-    END
 
 // MARK: Dark Tunel
 _gDescriptionDarkTunel
@@ -276,9 +272,6 @@ _gDescriptionDarkTunel
     _BUBBLE_LINE(4,4,0,"Like most tunnels: dark, damp,")
     _BUBBLE_LINE(4,13,1,"and somewhat scary.")
 #endif    
-    ; Could probably have an animation of a droplet falling down (like the animated FISH shop)
-    ; and have the plic a single sound that plays at the same time
-    ;PLAY_SOUND(_WaterDrip)                                   ; Play the plic, ploc background sound
 
 falling_water_drop
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,88)                     ; Draw the droplet at the top

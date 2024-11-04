@@ -211,7 +211,6 @@ extern char gSoundEnabled;          // 0 or 255
 
 
 // game_text
-extern char gDescriptionTeenagerRoom[];
 extern char gDescriptionDarkTunel[];
 extern char gDescriptionMarketPlace[];
 extern char gDescriptionDarkAlley[];
