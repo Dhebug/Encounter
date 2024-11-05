@@ -10,6 +10,7 @@ _gWordCount         .dsb 1      ; How many tokens/word did we find in the input 
 _gAnswerProcessingCallback .dsb 2
 _gInputKey          .dsb 1
 _gInputShift        .dsb 1
+_gInputErrorCounter .dsb 1
 
 _gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words
 
@@ -31,6 +32,11 @@ _ResetInput
 
 _InputCheckKey
 .(
+    ldx _gInputErrorCounter
+    beq skip_counter
+    dec _gInputErrorCounter
+skip_counter    
+
     jsr _ReadKeyNoBounce    ; Result in X
     stx _gInputKey
     beq InputQuit
@@ -49,6 +55,20 @@ save_shift
 .)
 
 
+
+_InputDeleteCharacter
+.(
+    ldx _gInputBufferPos
+    beq empty
+    dex
+    stx _gInputBufferPos
+    lda #0
+    sta _gInputBuffer,x
+empty
+    rts
+.)    
+
+
 _InputDelete
 .(    
     ldx _gInputBufferPos
@@ -56,29 +76,41 @@ _InputDelete
 
     lda _KeyBank+2
     and #16
-    bne control_pressed
+    bne delete_word
 
-    dex
-    stx _gInputBufferPos
-    lda #0
-    sta _gInputBuffer,x
+delete_character
+    jsr _InputDeleteCharacter
 
     ldx #<_KeyClickHData
     ldy #>_KeyClickHData
     jmp _PlaySoundAsmXY
 
-control_pressed              ; If CTRL is pressed, we delete the entire input buffer
+delete_word              ; If CTRL is pressed, we delete the entire word from the input buffer
+    ;jmp delete_word
+    lda _gInputBuffer-1,x
+    cmp #32
+    beq done_word
+    jsr _InputDeleteCharacter
+    cpx #0
+    bne delete_word
+
+done_word
+    jsr _InputDeleteCharacter
+
     ldx #<_Swoosh
     ldy #>_Swoosh
     jsr _PlaySoundAsmXY
-    jmp _ResetInput
+
+    lda #1
+    sta _gAskQuestion
+    rts
 .)
 
 
 _InputDefaultKey
 .(
     jsr _ValidateInputSpace
-    beq errorPlop
+    beq _InputError
     
     lda _gInputKey
     cmp #32                     ; Is it a displayable character?
@@ -97,7 +129,7 @@ not_shifted_letter
 
     ldx _gInputBufferPos
     cpx _gInputMaxSize          ; Do we still have room in the buffer?
-    bcs errorPlop
+    bcs _InputError
     
     ldx _gInputBufferPos
     sta _gInputBuffer,x         ; Insert the new character in the input buffer
@@ -111,7 +143,9 @@ clickSound
     ldy #>_KeyClickLData
     jmp _PlaySoundAsmXY
 
-errorPlop    
++_InputError
+    lda #25
+    sta _gInputErrorCounter
     ldx #<_ErrorPlop
     ldy #>_ErrorPlop
     jmp _PlaySoundAsmXY

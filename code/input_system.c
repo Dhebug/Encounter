@@ -125,7 +125,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
                 return callbackOutput;
             }
 			InputCheckKey();
-			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
+			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",gInputErrorCounter?1:2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
 			WaitIRQ();
 		}
 		while (gInputKey==0);
@@ -179,7 +179,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 			else
 			{
 				// No word recognized
-				PlaySound(ErrorPlop);
+                InputError();
 			}
 			break;
 
