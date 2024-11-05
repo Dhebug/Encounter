@@ -62,7 +62,7 @@ _gItems
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOC_HOSTAGE_ROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DISABLED)    // e_ITEM_YoungGirl        
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
-    ITEM_NORMAL( _gTextItemKeys                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Keys                 
+    ITEM_NORMAL( _gTextItemSmallKey              ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SmallKey                 
     ITEM_NORMAL( _gTextItemNewspaper             ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Newspaper            
     ITEM_NORMAL( _gTextItemBomb                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bomb                 
     ITEM_NORMAL( _gTextItemPistol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Pistol               

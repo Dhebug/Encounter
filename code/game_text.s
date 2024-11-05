@@ -130,7 +130,7 @@ _gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une _mêche",0
 _gTextItemPowderMix               .byt "un _mix grumeleux",0
 _gTextItemGunPowder               .byt "de la _poudre à cannon",0
-_gTextItemKeys                    .byt "un jeu de _clefs",0
+_gTextItemSmallKey                .byt "une petite _clef",0
 _gTextItemNewspaper               .byt "un _journal",0
 _gTextItemBomb                    .byt "une _bombe",0
 _gTextItemPistol                  .byt "un _pistolet",0
@@ -205,7 +205,7 @@ _gTextItemYoungGirl               .byt "a$young _girl",0
 _gTextItemFuse                    .byt "a$_fuse",0                             
 _gTextItemPowderMix               .byt "a$rough powder _mix",0
 _gTextItemGunPowder               .byt "some$_gunpowder",0
-_gTextItemKeys                    .byt "a$set of _keys",0                      
+_gTextItemSmallKey                .byt "a$small _key",0                      
 _gTextItemNewspaper               .byt "a$_newspaper",0                        
 _gTextItemBomb                    .byt "a$_bomb",0                             
 _gTextItemPistol                  .byt "a$_pistol",0                           
@@ -2443,6 +2443,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Computer           , _InspectComputer)
     VALUE_MAPPING(e_ITEM_Television         , _InspectTelevision)
     VALUE_MAPPING(e_ITEM_GameConsole        , _InspectGameConsole)
+    VALUE_MAPPING(e_ITEM_SmallKey           , _InspectKey)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2481,6 +2482,16 @@ _InspectGame
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
     INFO_MESSAGE("State of the art hardware!")
+    WAIT(50*2)
+    END_AND_REFRESH
+
+
+_InspectKey
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une étiquette indique 'Alarme'")
+#else    
+    INFO_MESSAGE("It has a label that says 'Alarm'")
+#endif    
     WAIT(50*2)
     END_AND_REFRESH
 
@@ -3948,7 +3959,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_SilverKnife        , _UseKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _UseSnookerCue)
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
-    VALUE_MAPPING(e_ITEM_Keys               , _UseKeys)
+    VALUE_MAPPING(e_ITEM_SmallKey           , _UseKey)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _UseAlarmSwitch)
     VALUE_MAPPING(e_ITEM_Hose               , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
@@ -4211,15 +4222,15 @@ snoozed_thug
     END_AND_REFRESH
 
 
-_UseKeys
+_UseKey
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_gone)
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
-                PLAY_SOUND(_UseKeysOnAlarmPanel)
+                PLAY_SOUND(_UseKeyOnAlarmPanel)
                 UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
-                SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_GONE_FOREVER)                      ; We don't need the keys anymore
-                INCREASE_SCORE(POINTS_USED_KEYS)
+                SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
+                INCREASE_SCORE(POINTS_USED_KEY)
                 INFO_MESSAGE("The panel is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
                 SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
@@ -4250,6 +4261,16 @@ _UseKeys
         WAIT(50*2)
         END_AND_REFRESH
     ENDIF(panic_room)
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),front_entrance)            ; Are we in front of the main entrance door of the house?
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Elle ne rentre pas")
+#else
+        INFO_MESSAGE("It does not fit")
+#endif    
+        WAIT(50*2)
+        END_AND_REFRESH
+    ENDIF(front_entrance)
 
     JUMP(_ErrorCannotDo)
 .)
@@ -4567,7 +4588,7 @@ thug_disabled
 
 found_items
     SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM)
-    SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_MASTERBEDROOM)
+    SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_MASTERBEDROOM)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez trouvé quelque chose")
 #else    

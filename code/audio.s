@@ -503,7 +503,7 @@ _Zipper
     .byt SOUND_COMMAND_END
 
 
-_UseKeysOnAlarmPanel ; Temporary
+_UseKeyOnAlarmPanel ; Temporary
 _ZipDownTheRope   ; Temporary
 _Swoosh
     .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,0             ; Noise Frequency

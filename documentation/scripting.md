@@ -494,8 +494,8 @@ There are a few different types of locations:
   // Move the ladder into the pit
   SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT)
 
-  // Give the keys to the player
-  SET_ITEM_LOCATION(e_ITEM_Keys,e_LOC_INVENTORY)
+  // Give the key to the player
+  SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_INVENTORY)
 
   // Drop the knife at the current location
   SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT)

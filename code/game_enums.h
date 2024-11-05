@@ -112,7 +112,7 @@
 #define e_ITEM_Medicinecabinet       35         // a thick curtain
 #define	e_ITEM_YoungGirl  			 36         // a young girl
 #define	e_ITEM_Fuse  				 37         // a fuse
-#define	e_ITEM_Keys  				 38         // a set of keys
+#define	e_ITEM_SmallKey				 38         // a small key
 #define	e_ITEM_Newspaper     		 39         // A newspaper
 #define	e_ITEM_Bomb  				 40         // a bomb
 #define	e_ITEM_Pistol 				 41         // a pistol
@@ -324,7 +324,7 @@
 #define POINTS_INSPECT_PROTECTION_SUIT    50
 #define POINTS_INSPECT_HOLE               50
 
-#define POINTS_USED_KEYS                 100
+#define POINTS_USED_KEY                  100
 #define POINTS_USED_SWITCH               100
 #define POINTS_USED_HOSE                 100
 #define POINTS_USED_CLAY                 100
