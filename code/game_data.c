@@ -168,9 +168,6 @@ keyword gWordsArray[] =
     { "EXAMINE" , e_WORD_LOOK },
     { "INSPECTE", e_WORD_LOOK },
 
-#ifdef ENABLE_PRINTER
-    { "IMPRIME"   , e_WORD_PRINT  },
-#endif    
 #else
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },
@@ -193,9 +190,6 @@ keyword gWordsArray[] =
     { "LOOK"    , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
     { "INSPECT" , e_WORD_LOOK },
-#ifdef ENABLE_PRINTER
-    { "PRINT"   , e_WORD_PRINT  },
-#endif    
 #endif
 
 #ifdef ENABLE_CHEATS

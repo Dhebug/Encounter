@@ -56,12 +56,6 @@ no_spaces
 _PrintStringInternal
     ;jmp _PrintStringInternal
 .(  
-#ifdef ENABLE_PRINTER    
-    lda _param0+0
-    ldx _param0+1
-    jsr _PrinterSendStringAsm
-#endif
-
     lda #0
     sta _isHighlighted
     sta _spaceCounter

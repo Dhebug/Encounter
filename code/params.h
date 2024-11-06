@@ -19,7 +19,6 @@
 
 #define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
 #ifdef MODULE_GAME
-//#define ENABLE_PRINTER                  // Mostly for testers, to get the game solution
 #endif
 
 #if 1

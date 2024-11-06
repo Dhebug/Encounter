@@ -23,7 +23,6 @@ Count10SecondsDown
 ; No-op to avoid a linker bug
 _InputArrows
 _PrintInformationMessageAsm
-_PrinterSendStringAsm
 _DrawArrows
 _gFont12x14
     rts

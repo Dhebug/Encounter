@@ -197,13 +197,6 @@ extern const char* gStreamSkipPoint;
 #endif
 
 // printer
-#ifdef ENABLE_PRINTER
-#define PrinterSendString(message)   {  param0.ptr=message;asm("lda _param0+0:ldx _param0+1:jsr _PrinterSendStringAsm"); }
-#define PrinterSendMemory(address,size)   {  param0.ptr=address;param1.uchar=size;asm("jsr _PrinterSendMemoryAsm"); }
-#define PrinterSendChar(character)   { asm("lda #character:jsr _PrinterSendCharAsm"); }
-#define PrinterSendCrlf()            { asm("jsr _PrinterSendCrlfAsm"); }
-#endif
-extern char gUsePrinter;            // 0 or 255
 extern char gMusicEnabled;          // 0 or 255
 extern char gSoundEnabled;          // 0 or 255
 

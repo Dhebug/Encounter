@@ -27,10 +27,6 @@ void PrintInventory()
     int pass;
 	int itemId;
 
-#ifdef ENABLE_PRINTER    
-    PrinterSendString("\n- Inventory: ");
-#endif
-
     gCurrentItemCount = 0;
 
 	memset((char*)TemporaryBuffer479,' ',40*4);
@@ -57,9 +53,6 @@ void PrintInventory()
                         PrintString(":");
                         PrintString(gItems[associatedItemId].description);
                         gCurrentItemCount+=2;
-                    #ifdef ENABLE_PRINTER    
-                        PrinterSendString(", ");
-                    #endif
                     }
                 }
                 else
@@ -71,9 +64,6 @@ void PrintInventory()
 
                         PrintStringAt(itemPtr->description,screenPtr+1);  // Print the item
                         gCurrentItemCount++;
-                    #ifdef ENABLE_PRINTER    
-                        PrinterSendString(", ");
-                    #endif
                     }
                 }
             }
@@ -92,10 +82,6 @@ void PrintSceneObjects()
 	int itemCount = 0;
     int maxOffset = -40*3;
 	int item;
-
-#ifdef ENABLE_PRINTER    
-    PrinterSendString("\n- Scene items: ");
-#endif
 
     // The buffer is 479/40=11.975 lines long
 	memset((char*)TemporaryBuffer479,' ',40*10);
@@ -187,27 +173,11 @@ void PrintSceneInformation()
     // Display the score
 	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",4,gTextScore,gScore,7);   // "Score:"
 
-#ifdef ENABLE_PRINTER
-    // If the printer is enable, we print the content
-    // sta $bb80+16*40+39-6-1-2,x
-    PrinterSendString("\n\n--------[");
-    PrinterSendMemory((char*)0xbb80+40*17,40);                    // You are in a deserted market square 
-    PrinterSendString("][");
-    PrinterSendMemory((char*)0xbb80+40*16+30,10);                 // Time stamp
-    PrinterSendString("][");
-    PrinterSendMemory((char*)0xbb80+40*16+0,13);                  // Score
-    PrinterSendString("]--------");
-#endif    
-
 	PrintSceneDirections();
 
 	PrintSceneObjects();
 
 	PrintInventory();
-
-#ifdef ENABLE_PRINTER
-    PrinterSendCrlf();
-#endif    
 }
 
 // MARK:Load Scene
@@ -511,21 +481,6 @@ void Invoke()
 }
 #endif    
 
-#ifdef ENABLE_PRINTER
-void PrinterEnableDisable()
-{
-    if (gUsePrinter)
-    {
-        PrintStatusMessage(5,"Printer Output Disabled");
-    }
-    gUsePrinter = gUsePrinter?0:255;
-    if (gUsePrinter)
-    {
-        PrintStatusMessage(2,"Printer Output Enabled");
-    }
-    WaitFrames(50);
-}
-#endif
 
 // MARK:Answer
 WORDS ProcessAnswer()
@@ -657,8 +612,6 @@ void ShowHelp()
 // MARK:Inits
 void Initializations()
 {
-    PrinterSendString("\n\n\n--------< New Game started >--------\n\n");
-
 	// erase the screen
 	memset((char*)0xa000,0,8000);
 
@@ -708,8 +661,6 @@ void Initializations()
 // MARK:main
 void main()
 {
-    gUsePrinter = 0;
-
     UnlockAchievement(ACHIEVEMENT_LAUNCHED_THE_GAME);
 
 	Initializations();	

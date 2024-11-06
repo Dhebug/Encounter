@@ -16,7 +16,6 @@ IrqTasks50hz
 .)
 
 ; No-op to avoid a linker bug
-_PrinterSendStringAsm
 _PrintInformationMessageAsm
 _DrawArrows
     rts

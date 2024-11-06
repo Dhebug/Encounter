@@ -1968,10 +1968,6 @@ _gActionMappingsArray
     WORD_MAPPING(e_WORD_SEARCH    ,_gSearchtemMappingsArray   ,FLAG_MAPPING_STREAM)
     WORD_MAPPING(e_WORD_THROW     ,_gThrowItemMappingsArray   ,FLAG_MAPPING_STREAM)
 
-#ifdef ENABLE_PRINTER
-    WORD_MAPPING(e_WORD_PRINT     ,_PrinterEnableDisable      ,FLAG_MAPPING_DEFAULT)
-#endif    
-
     WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,FLAG_MAPPING_DEFAULT)
 
     WORD_MAPPING(e_WORD_COUNT_    ,0, 0)

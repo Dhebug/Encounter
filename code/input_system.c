@@ -105,9 +105,6 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 	{        
 		if (gAskQuestion)
 		{
-#ifdef ENABLE_PRINTER
-            PrinterSendCrlf();
-#endif    
             if (inputMessage[0])
             {
                 memcpy(gPrintMessageBackground,gStatusMessageLocation+1,39);            
@@ -152,10 +149,6 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
             break;
 
 		case KEY_RETURN:
-#ifdef ENABLE_PRINTER
-            PrinterSendMemory((char*)0xbb80+40*23+2,38);    // Player input
-            PrinterSendString("\n\n");
-#endif
 			//if (!checkTockens || ParseInputBuffer())
             if (ValidateInputReturn())
 			{

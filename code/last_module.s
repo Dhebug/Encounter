@@ -87,7 +87,6 @@ _gScore                 .dsb 2         ; Current highscore for the player
 _gAchievements          .dsb 6         ; Enough for 6*8=48 achievements
 _gAchievementsChanged   .dsb 1         ; Set to 1 to indicate the game that the achievements have changed and need to be resaved
 _gGameOverCondition     .dsb 1         ; Used to store the way the player exited the game
-_gUsePrinter            .dsb 1         ; Boolean flag (0/255) to indicate if the printer should be used to print information or not
 _gKeyboardLayout        .dsb 1         ; QWERTY / AZERTY / QWERTZ
 _gMusicEnabled          .dsb 1         ; 0 or 255
 _gSoundEnabled          .dsb 1         ; 0 or 255
