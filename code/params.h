@@ -89,3 +89,20 @@
 #define via_porta               $030f 
 
 #include "scripting.h"
+
+
+//
+// Hack-ish code to reduce the size of memset calls from 29 bytes to 5+3
+//
+#ifdef ASSEMBLER    // 6502 Assembler API
+#define MEMSET_ENTRY(address,value,size)   .byt <address,>address,value,<size,>size
+#define MEMSET_JMP(label)                   ldx #<(label-_MemSetDataBase):jmp _MemsetTableSystem
+#define MEMSET_JSR(label)                   ldx #<(label-_MemSetDataBase):jsr _MemsetTableSystem
+#define MEMSET_VALUE_JMP(label,fill_value)  ldx fill_value:stx label+2:ldx #<(label-_MemSetDataBase):jmp _MemsetTableSystem
+#define MEMSET_VALUE_JSR(label,fill_value)  ldx fill_value:stx label+2:ldx #<(label-_MemSetDataBase):jsr _MemsetTableSystem
+
+#define MEMCPY_ENTRY(address1,address2,size)   .byt <address1,>address1,<address2,>address2,<size,>size
+#define MEMCPY_JMP(label)                   ldx #<(label-_MemCpyDataBase):jmp _MemcpyTableSystem
+#define MEMCPY_JSR(label)                   ldx #<(label-_MemCpyDataBase):jsr _MemcpyTableSystem
+#endif
+

@@ -29,7 +29,7 @@ void PrintInventory()
 
     gCurrentItemCount = 0;
 
-	memset((char*)TemporaryBuffer479,' ',40*4);
+    ClearTemporaryBuffer479();  //memset((char*)TemporaryBuffer479,' ',40*4);
     gPrintWidth=38;
     gPrintRemovePrefix=1;
     for (pass=0;pass<2;pass++)
@@ -70,7 +70,7 @@ void PrintInventory()
             ++itemPtr;
         }
     }
-	memcpy((char*)0xbb80+40*24,TemporaryBuffer479,40*4);
+    BlittTemporaryBuffer479();
     gPrintRemovePrefix=0;
 }
 
@@ -84,7 +84,7 @@ void PrintSceneObjects()
 	int item;
 
     // The buffer is 479/40=11.975 lines long
-	memset((char*)TemporaryBuffer479,' ',40*10);
+    ClearTemporaryBuffer479();   //memset((char*)TemporaryBuffer479,' ',40*10);
     poke(TemporaryBuffer479+40*0,16+4);
     poke(TemporaryBuffer479+40*1,16+4);
     poke(TemporaryBuffer479+40*2,16+4);

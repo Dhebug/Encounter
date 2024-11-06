@@ -1395,10 +1395,7 @@ _InitializeGraphicMode
 	sta $BB80+40*27
 
 	; Initialize the ALT charset numbers
-    lda #<$b800+"0"*8:ldy #0:sta (sp),y:iny:lda #>$b800+"0"*8:sta (sp),y
-    lda #<_gSevenDigitDisplay:iny:sta (sp),y:iny:lda #>_gSevenDigitDisplay:sta (sp),y
-    lda #<8*11 :iny:sta (sp),y:iny:lda #>8*11:sta (sp),y
-    jmp _memcpy  
+    MEMCPY_JMP(_MemCpy_B800_0_7DigitDisplay)
 .)
 
 

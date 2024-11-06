@@ -493,4 +493,17 @@ bad_input
  .)
 
 
+; memset((char*)TemporaryBuffer479,' ',40*4);  = 160
+; memset((char*)TemporaryBuffer479,' ',40*10); = 400
+_ClearTemporaryBuffer479
+.(
+    MEMSET_JMP(_MemSetTemporaryBuffer479)
+.)
+
+_BlittTemporaryBuffer479
+.(
+    MEMCPY_JMP(_MemCpy__BlittTemporaryBuffer479)
+.)
+
+
 _EndGameUtils_
