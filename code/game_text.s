@@ -3619,8 +3619,12 @@ _OpenGunCabinet
 
 _OpenAlarmPanel
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                    ; Is the alarm panel locked?
-        ERROR_MESSAGE("The door is locked")
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
+#ifdef LANGUAGE_FR                                                                             ; Show error to the player
+        ERROR_MESSAGE("Le paneau est verrouillé")
+#else
+        ERROR_MESSAGE("The panel is locked")
+#endif        
         WAIT(50*2)
     ELSE(locked,unlocked)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
