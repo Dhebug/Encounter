@@ -2753,7 +2753,7 @@ no_ladder
     ELSE(elsecellar,cellar)
     .(
         ; Inspecting the window in the garden (or other places)
-        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW)
             INFO_MESSAGE("I can see the basement room")
         ELSE(else,open)
