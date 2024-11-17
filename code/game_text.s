@@ -354,9 +354,9 @@ no_plastic_bag
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI) ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
 #ifdef LANGUAGE_FR    
-        INFO_MESSAGE("Tout le monde a bord !")
+        QUICK_MESSAGE("Tout le monde a bord !")
 #else
-        INFO_MESSAGE("Everybody on board now!")
+        QUICK_MESSAGE("Everybody on board now!")
 #endif    
         
         BLIT_BLOCK(LOADER_SPRITE_AUSTIN_PARTS,8,80)                            ; Open the left door
@@ -423,7 +423,7 @@ no_plastic_bag
         INFO_MESSAGE("All is well that ends well")
 #endif    
 
-        WAIT(50*4)                                ; Wait a couple seconds
+        WAIT(50*2)                                ; Wait a couple seconds
         STOP_MUSIC()
 
         GAME_OVER(e_SCORE_SOLVED_THE_CASE)        ; The game is now over
@@ -1429,7 +1429,7 @@ _gDescriptionCellar
         PLAY_SOUND(_ExplodeData)
         DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
         CLEAR_TEXT_AREA(1)
-        INFO_MESSAGE("Well... I warned you, didn't I?")
+        QUICK_MESSAGE("Well... I warned you, didn't I?")
 
         LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
@@ -1549,8 +1549,11 @@ _gMiniKaboom
             _IMAGE(20,0)
             _SCREEN(17,24)
     CLEAR_TEXT_AREA(1)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Heureusement que je n'étais pas là !")
+#else    
     INFO_MESSAGE("Good thing I was not in there!")
-    WAIT(50*2)
+#endif
     CLEAR_TEXT_AREA(4)
     SET_CUT_SCENE(0)
     RETURN
@@ -1692,7 +1695,6 @@ _gDescriptionWestGallery
 #else
         INFO_MESSAGE("I need to remove that suit")
 #endif        
-        WAIT(50*2)
         CLEAR_TEXT_AREA(4)
         SET_CUT_SCENE(0)
     ENDIF(suit)
@@ -2070,10 +2072,13 @@ _CombineGunPowderWithFuse
 
     DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
+    INFO_MESSAGE("L'explosif est prêt...")
+    INFO_MESSAGE("...mais il faut l'attacher")
+#else    
     INFO_MESSAGE("The explosive is ready...")
-    WAIT(50*2)
     INFO_MESSAGE("...but it needs to be attached")
-    WAIT(50*2)
+#endif    
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2091,10 +2096,13 @@ _CombineBombWithAdhesive
 #endif    
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
+    INFO_MESSAGE("Ca devrais être tout bon...")
+    INFO_MESSAGE("...plus qu'a l'installer !")
+#else
     INFO_MESSAGE("Should be ready to use now...")
-    WAIT(50*2)
     INFO_MESSAGE("...need to install it!")
-    WAIT(50*2)
+#endif    
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2117,10 +2125,13 @@ _CombineStickyBombWithSafe
     INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Tout est en place...")
+    INFO_MESSAGE("...attention a l'allumage !")
+#else    
     INFO_MESSAGE("Everything is in place...")
-    WAIT(50*2)
     INFO_MESSAGE("...need to ignite it safely though!")
-    WAIT(50*2)
+#endif    
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2161,13 +2172,9 @@ _CombineCueWithRope
     UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("La queue ne va pas résister...")
-#else
-    INFO_MESSAGE("The cue is not strong enough...")
-#endif    
-    WAIT(50*2)
-#ifdef LANGUAGE_FR    
     INFO_MESSAGE("Mais elle peut caser des trucs !")
 #else
+    INFO_MESSAGE("The cue is not strong enough...")
     INFO_MESSAGE("But it could break things!")
 #endif    
     END_AND_REFRESH
@@ -2311,10 +2318,13 @@ _ReadNewsPaper
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_NEWSPAPER)    
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Il faut que je la trouve vite...")
+    INFO_MESSAGE("...j'espère qu'elle va bien !")
+#else    
     INFO_MESSAGE("I have to find her fast...")
-    WAIT(50*2)
     INFO_MESSAGE("...I hope she is fine!")
-    WAIT(50*2)
+#endif    
     END_AND_REFRESH
 
 
@@ -2322,17 +2332,13 @@ _ReadHandWrittenNote
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_NOTE)    
     DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE)
-    WAIT(50*2)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait être utile...")
-    WAIT(50*2)
     INFO_MESSAGE("...si je peux y accéder !")
 #else
     INFO_MESSAGE("That could be useful...")
-    WAIT(50*2)
     INFO_MESSAGE("...if I can access it!")
 #endif    
-    WAIT(50*2)
     END_AND_REFRESH
 
 
@@ -2340,11 +2346,13 @@ _ReadChemistryRecipes
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_RECIPES)    
     DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES)
-    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ca pourrait être utile...")
+    INFO_MESSAGE("...il faut trouver les composants.")
+#else    
     INFO_MESSAGE("I can definitely use these...")
-    WAIT(50*2)
     INFO_MESSAGE("...just need to find the materials.")
-    WAIT(50*2)
+#endif    
     END_AND_REFRESH
 
 
@@ -2353,11 +2361,13 @@ _ReadChemistryBook
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_BOOK)    
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
-    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Je ne comprend rien...")
+    INFO_MESSAGE("...mais j'ai trouvé un truc !")
+#else    
     INFO_MESSAGE("I don't understand much...")
-    WAIT(50*2)
     INFO_MESSAGE("...oh, I found something!")
-    WAIT(50*2)
+#endif
     // If the recipes were not yet found, they now appear at the current location
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_NONE))
     SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_CURRENT)
@@ -2371,14 +2381,11 @@ _ReadInvoice
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une facture pour un voyage de deux ")
-    WAIT(50*2)
     INFO_MESSAGE("mois en Europe pour toute la famille")
 #else
     INFO_MESSAGE("An invoice for a two months trip all")
-    WAIT(50*2)
     INFO_MESSAGE("over Europe. Familly holidays maybe?")
 #endif    
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -2441,6 +2448,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Television         , _InspectTelevision)
     VALUE_MAPPING(e_ITEM_GameConsole        , _InspectGameConsole)
     VALUE_MAPPING(e_ITEM_SmallKey           , _InspectKey)
+    VALUE_MAPPING(e_ITEM_TobaccoTin         , _InspectTin)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2456,10 +2464,13 @@ _ShowRoughPlan
             _BUFFER(0,0)      
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     FADE_BUFFER
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Je doit revenir au marché...")
+    INFO_MESSAGE("...quand j'ai fini")
+#else    
     INFO_MESSAGE("I'll have to go back to the market...")
-    WAIT(50*2)
     INFO_MESSAGE("...when I'm done")
-    WAIT(50*2)
+#endif    
     STOP_MUSIC()
     RETURN
 .)
@@ -2469,8 +2480,11 @@ _InspectMap
     INCREASE_SCORE(POINTS_INSPECT_MAP)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("On y voit les iles britanniques")
+#else    
     INFO_MESSAGE("It shows Ireland, Wales and England")
-    WAIT(50*2)
+#endif
     END_AND_REFRESH
 
 
@@ -2478,8 +2492,11 @@ _InspectGame
     INCREASE_SCORE(POINTS_INSPECT_GAME)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Du matériel de pointe !")
+#else    
     INFO_MESSAGE("State of the art hardware!")
-    WAIT(50*2)
+#endif    
     END_AND_REFRESH
 
 
@@ -2489,8 +2506,15 @@ _InspectKey
 #else    
     INFO_MESSAGE("It has a label that says 'Alarm'")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
+
+_InspectTin
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une boite en métal ")
+#else    
+    INFO_MESSAGE("It's a sturdy metal box")
+#endif    
+    END_AND_PARTIAL_REFRESH
 
 
 _InspectComputer
@@ -2500,7 +2524,7 @@ _InspectComputer
 #else    
     INFO_MESSAGE("A brand new IBM PC model 5150")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)    
+    END_AND_PARTIAL_REFRESH    
 .)
 
 
@@ -2511,7 +2535,7 @@ _InspectTelevision
 #else    
     INFO_MESSAGE("A huge rear-projection TV set")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)    
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2522,7 +2546,7 @@ _InspectGameConsole
 #else    
     INFO_MESSAGE("A ColecoVision... imported from USA?")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)    
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2533,8 +2557,7 @@ _InspectChemistryBook
 #else    
     INFO_MESSAGE("A thick book with some bookmarks")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 
 
 _InspectApples
@@ -2545,7 +2568,7 @@ _UseApples
 #else    
     INFO_MESSAGE("They do look tasty...")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2556,7 +2579,7 @@ _InspectFancyStones
 #else    
     INFO_MESSAGE("Pocket sized feng shui")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2564,17 +2587,12 @@ _InspectCue
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est de bonne qualité...")
-#else    
-    INFO_MESSAGE("It's a good quality cue...")
-#endif    
-    WAIT(50*2)
-#ifdef LANGUAGE_FR
     INFO_MESSAGE("Parfait pour un bon 'break' !")
 #else    
+    INFO_MESSAGE("It's a good quality cue...")
     INFO_MESSAGE("Perfect for a clean 'break'!")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2584,16 +2602,11 @@ _InspectPowderMix
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il y a des gros grumeaux...")
-#else
-    INFO_MESSAGE("There are some large clumps...")
-#endif    
-    WAIT(50*2)
-#ifdef LANGUAGE_FR
     INFO_MESSAGE("...le mix doit être bien plus fin.")
 #else
+    INFO_MESSAGE("There are some large clumps...")
     INFO_MESSAGE("...That mix must be ground fine.")
 #endif    
-    WAIT(50*2)
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2605,16 +2618,11 @@ _InspectGunPowder
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Poudre explosive faite maison,")
-#else
-    INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
-#endif    
-    WAIT(50*2)
-#ifdef LANGUAGE_FR
     INFO_MESSAGE("il faut un contenant adapté.")
 #else
+    INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
     INFO_MESSAGE("but that requires a proper container.")
 #endif    
-    WAIT(50*2)
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2627,8 +2635,7 @@ _InspectPills
 #else
     INFO_MESSAGE("Could be used to calm down someone")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2639,8 +2646,7 @@ _InspectMeat
 #else
     INFO_MESSAGE("A dog would love this juicy morcel!")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2652,8 +2658,7 @@ _InspectTree
 #else
     INFO_MESSAGE("A rope could be attached to it")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2664,8 +2669,7 @@ _InspectPit
 #else
     INFO_MESSAGE("Not sure you could climb up again")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2676,8 +2680,7 @@ _InspectHeap
 #else
     INFO_MESSAGE("This used to be inside the pit!")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2686,10 +2689,13 @@ _InspectFridgeDoor
 .(
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
+#ifdef LANGUAGE_FR    
     INFO_MESSAGE("Looks like a happy familly...")
-    WAIT(50*2)
     INFO_MESSAGE("...I wonder where they are?")
-    WAIT(50*2)
+#else
+    INFO_MESSAGE("Une famille heureuse...")
+    INFO_MESSAGE("...ou sont ils ?")
+#endif
     END_AND_REFRESH
 .)
 
@@ -2700,12 +2706,19 @@ _InspectMedicineCabinet
     ; Is the medicine cabinet open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN)
+#ifdef LANGUAGE_FR        
+        INFO_MESSAGE("Ca pourrais être utile")
+#else
         INFO_MESSAGE("I can use some of that.")
+#endif        
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET)
+#ifdef LANGUAGE_FR        
+        INFO_MESSAGE("La porte n'est pas transparente.")
+#else
         INFO_MESSAGE("Not much to see when closed.")
+#endif        
     ENDIF(open)
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -2720,12 +2733,19 @@ _InspectPanel
                 _IMAGE(0,0)
                 _BUFFER(14,47)
         FADE_BUFFER
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Sert à désactiver l'alarme.")
+#else        
         INFO_MESSAGE("Can be used to disable the alarm.")
+#endif        
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("La porte n'est pas transparente.")
+#else        
         INFO_MESSAGE("Not much to see when closed.")
+#endif        
     ENDIF(open)
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -2738,10 +2758,8 @@ _InspectBasementWindow
         ; Inspecting the window in the cellar
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
-            INFO_MESSAGE("C'est plutôt haut")
         ELSE(else,open)
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
-            INFO_MESSAGE("It's quite high")
         ENDIF(open)
         ; Is the ladder in place?
         JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
@@ -2750,20 +2768,32 @@ _InspectBasementWindow
                     _BUFFER(14,101)
 no_ladder
         FADE_BUFFER      ; Make sure everything appears on the screen
+#ifdef LANGUAGE_FR            
+        INFO_MESSAGE("C'est plutôt haut")
+#else
+        INFO_MESSAGE("It's quite high")
+#endif            
     .)
     ELSE(elsecellar,cellar)
     .(
         ; Inspecting the window in the garden (or other places)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW)
+#ifdef LANGUAGE_FR            
+            INFO_MESSAGE("Je peux voir la cave")
+#else
             INFO_MESSAGE("I can see the basement room")
+#endif            
         ELSE(else,open)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
+#ifdef LANGUAGE_FR            
+            INFO_MESSAGE("Peinte en noir ?")
+#else
             INFO_MESSAGE("Was it painted black?")
+#endif            
         ENDIF(open)
     .)
     ENDIF(cellar)
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -2787,7 +2817,6 @@ _InspectPanicRoomWindow
 #else
             INFO_MESSAGE("The window frame is strong...")
 #endif    
-            WAIT(50*2)
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
                 IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
 #ifdef LANGUAGE_FR
@@ -2809,9 +2838,7 @@ _InspectPanicRoomWindow
                 INFO_MESSAGE("But the glass panes are in the way!")
 #endif    
             ENDIF(window_not_broken)
-    ENDIF(window_open)
-
-        WAIT(50*2)        
+        ENDIF(window_open)
     ELSE(panic_room_door,else)                                                 ; Or are we on the tiled patio looking at the window from below?
         GOSUB(_ShowGirlAtTheWindow)
     ENDIF(else)
@@ -2824,13 +2851,9 @@ _InspectNormalWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TENNISCOURT),tennis_court)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir un salon confortable")
-#else
-        INFO_MESSAGE("I can see a comfortable lounge")
-#endif    
-    WAIT(50*2)        
-#ifdef LANGUAGE_FR
         INFO_MESSAGE("Il y à aussi une salle à manger")
 #else
+        INFO_MESSAGE("I can see a comfortable lounge")
         INFO_MESSAGE("There's also a dinning room")
 #endif    
 tennis_court
@@ -2876,8 +2899,6 @@ dinning_room
         INFO_MESSAGE("I can see the back wall outside")
 #endif    
 kitchen
-
-    WAIT(50*2)        
     END_AND_REFRESH
 .)
 
@@ -2893,18 +2914,12 @@ _InspectAlarmIndicator
     ELSE(alarm_disabled,alarm_enabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Le système d'alarme est actif...")
-#else
-        INFO_MESSAGE("The alarm system is active, but...")
-#endif    
-        WAIT(50*2)        
-#ifdef LANGUAGE_FR
         INFO_MESSAGE("mais les capteurs ont été trafiqués !")
 #else
+        INFO_MESSAGE("The alarm system is active, but...")
         INFO_MESSAGE("the sensors have been tempered with!")
 #endif    
     ENDIF(alarm_enabled)
-
-    WAIT(50*2)        
     END_AND_REFRESH
 .)
 
@@ -2912,13 +2927,12 @@ _InspectAlarmIndicator
 _InspectPlasticBag
 .(
     INCREASE_SCORE(POINTS_INSPECT_PLASTIC_BAG)
-    //CLEAR_TEXT_AREA(4)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un sac blanc normal")
 #else
     INFO_MESSAGE("It's just a white generic bag")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2937,8 +2951,7 @@ _InspectDog
         INFO_MESSAGE("It is not moving")
 #endif    
     ENDIF(disabled)
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2958,7 +2971,7 @@ _InspectGraffiti
         INFO_MESSAGE("The art is as bad as the content.")
 #endif    
     ENDIF(street)
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2969,7 +2982,7 @@ _InspectChurch
 #else
     INFO_MESSAGE("A modest village church")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2980,7 +2993,7 @@ _InspectWell
 #else
     INFO_MESSAGE("Just an old mossy well")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -2992,7 +3005,7 @@ _InspectRoadSign
 #else
     INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3003,7 +3016,7 @@ _InspectTrashCan
 #else
     INFO_MESSAGE("They look and smell filthy!")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3016,7 +3029,7 @@ _InspectTombstone
 #else
     INFO_MESSAGE("He was only 45 years old :(")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_REFRESH
 .)
 
 
@@ -3027,7 +3040,7 @@ _InspectFishPond
 #else
     INFO_MESSAGE("Quite a few fishes in there!")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3040,19 +3053,6 @@ _InspectMixTape
 #else
     INFO_MESSAGE("Home made mixtape!")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
-.)
-
-
-_InformatioNotRelevantForMission
-.(
-    WAIT(50*2)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Mais sans lien avec notre mission")
-#else
-    INFO_MESSAGE("But it's not relevant to our mission")
-#endif    
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -3088,8 +3088,6 @@ _InspectSafe
         INFO_MESSAGE("Most of the stuff is intact!")
 #endif    
     ENDIF(safeopen)
-
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -3106,18 +3104,13 @@ _InspectThug
     ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
-#else
-        INFO_MESSAGE("He is not moving")
-#endif    
-        WAIT(50*2)
-#ifdef LANGUAGE_FR
         INFO_MESSAGE("Peut-être à t'il des trucs utiles?")
 #else
+        INFO_MESSAGE("He is not moving")
         INFO_MESSAGE("Maybe he has useful items?")
 #endif    
     ENDIF(disabled)
-
-    END_AND_REFRESH    
+    END_AND_PARTIAL_REFRESH    
 .)
 
 
@@ -3128,48 +3121,32 @@ _InspectPanicRoomDoor
         GOSUB(_DrawDoorWithHole)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Ils ne plaisantaient pas...")
-#else
-        INFO_MESSAGE("They were not lying...")
-#endif    
-        WAIT(50*2)
-#ifdef LANGUAGE_FR
         INFO_MESSAGE("...c'était un acide puissant !")
 #else
+        INFO_MESSAGE("They were not lying...")
         INFO_MESSAGE("...that was a strong acid!")
 #endif    
-        WAIT(50*2)
     ELSE(acid,clay)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
             DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Un joli petit barrage...")
-#else
-            INFO_MESSAGE("A nice little damn...")
-#endif    
-            WAIT(50*2)
-#ifdef LANGUAGE_FR
             INFO_MESSAGE("...plus qu'à le remplir !")
 #else
+            INFO_MESSAGE("A nice little damn...")
             INFO_MESSAGE("...just need to fill it!")
 #endif    
-            WAIT(50*2)
         ELSE(attached,nothing)
             DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
-#else
-            INFO_MESSAGE("Impossible to guess that code...")
-#endif    
-            WAIT(50*2)
-#ifdef LANGUAGE_FR
             INFO_MESSAGE("La porte est elle vulnérable?")
 #else
+            INFO_MESSAGE("Impossible to guess that code...")
             INFO_MESSAGE("Maybe the door itself is vulnerable?")
 #endif    
-            WAIT(50*2)
         ENDIF(nothing)
     ENDIF(clay)
-
     END_AND_REFRESH    
 .)
 
@@ -3236,7 +3213,6 @@ _ShowGirlInRoomWithBindings
 #else
     INFO_MESSAGE("The victim is restrained...")
 #endif    
-    WAIT(50)
     IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_HOSTAGE_ROOM),giving_knife)
         ; We don't show the MMHFF if we are passing the knife because that causes some redraw issues
         BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
@@ -3251,7 +3227,6 @@ _ShowGirlInRoomWithBindings
 #else
     INFO_MESSAGE("...she needs our help!")
 #endif    
-    WAIT(50*2)
     RETURN
 .)
 
@@ -3272,7 +3247,6 @@ _ShowGirlInRoomWithoutBindings
 #else
         INFO_MESSAGE("She cut her bindings...")
 #endif    
-        WAIT(50)
         BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,15,59,17)    ; Draw the patch with the Thank You! spech bubble
                 _IMAGE_STRIDE(0,92,17)
                 _SCREEN(18,2)
@@ -3325,16 +3299,11 @@ _ShowEmptyHostageRoom
     DISPLAY_IMAGE(LOADER_PICTURE_HOLE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
-#else
-    INFO_MESSAGE("The room is empty...")
-#endif    
-    WAIT(50*2)
-#ifdef LANGUAGE_FR
     INFO_MESSAGE("...elle doit être dehors maintenant")
 #else
+    INFO_MESSAGE("The room is empty...")
     INFO_MESSAGE("...she must be outside by now")
 #endif    
-    WAIT(50*2)
     RETURN
 .)
 
@@ -3468,9 +3437,7 @@ girl_at_the_window
     ELSE(window_open,window_closed)
         FADE_BUFFER 
         INFO_MESSAGE("Impossible to access from here")
-        WAIT(50*2)        
     ENDIF(window_closed)
-
     RETURN
 .)
 
@@ -3611,7 +3578,6 @@ _OpenGunCabinet
 #else
             INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
-            WAIT(50*2)
         ENDIF(dartgun)
     ENDIF(open)
     END_AND_REFRESH
@@ -3626,7 +3592,7 @@ _OpenAlarmPanel
 #else
         ERROR_MESSAGE("The panel is locked")
 #endif        
-        WAIT(50*2)
+        END_AND_PARTIAL_REFRESH
     ELSE(locked,unlocked)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
             PLAY_SOUND(_DoorOpening)
@@ -3648,16 +3614,27 @@ _OpenAlarmPanel
 _OpenBasementWindow
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),basement)                              ; Are we on the basement side in the room itself...
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Innaccessible...")
+#else
         INFO_MESSAGE("I can't reach it...")
-        WAIT(50*2)
-        END_AND_REFRESH
+#endif
+        END_AND_PARTIAL_REFRESH
     ENDIF(basement)
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement_on_ladder)                     ; Are we on the basement side on the ladder...
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Le cadre est bloqué...")
+#else
         INFO_MESSAGE("The frame is stuck...")                                                   
+#endif        
     ELSE(basement_on_ladder,garden)                                                            ; ...or on the vegetable garden side of the window?
         DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Elle est fermée de l'intérieur...")
+#else
         INFO_MESSAGE("It is locked from the inside...")
+#endif        
     ENDIF(garden)
     JUMP(_OpenWindowCommon)
 .)
@@ -3679,9 +3656,11 @@ _OpenNormalWindow
 
 _OpenWindowCommon
 .(
-    WAIT(50*2)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("...peut-être en secouant ?")
+#else
     INFO_MESSAGE("...maybe shake it a bit?")
-    WAIT(50*2)
+#endif    
     ; Check the status of the alarm... and if it's active, trigger it!
     JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
 #ifdef LANGUAGE_FR
@@ -3689,7 +3668,7 @@ _OpenWindowCommon
 #else
     INFO_MESSAGE("Nothing happens...")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 _OpenWindowFromInside
@@ -3698,7 +3677,7 @@ _OpenWindowFromInside
 #else
     INFO_MESSAGE("There's no need to open the window")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 
 
 
@@ -3765,12 +3744,6 @@ _OpenCarPetrolTank
 
 _OpenSecurityDoor
 _OpenFrontDoor
-.(
-    ERROR_MESSAGE("The door is locked")
-    END_AND_REFRESH
-.)
-
-
 _OpenChurch
 .(
 #ifdef LANGUAGE_FR
@@ -3778,7 +3751,7 @@ _OpenChurch
 #else
     INFO_MESSAGE("The door is locked")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3984,16 +3957,18 @@ _UseCar
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_MARKETPLACE),marketplace)
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("C'est ma voiture.")
+        INFO_MESSAGE("Je dois finir la mission d'abord !")
+#else
         INFO_MESSAGE("This is my car.")
-        WAIT(50)
         INFO_MESSAGE("I need to finish the mission first!")
-        END_AND_REFRESH
+#endif        
     ELSE(marketplace,abandonned_car)
         INFO_MESSAGE("Let's get closer")
-        WAIT(50)
         SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
-        END_AND_REFRESH
     ENDIF(abandonned_car)
+    END_AND_REFRESH
 .)
 
 _InspectCarBoot
@@ -4011,8 +3986,7 @@ _InspectCarBoot
         INFO_MESSAGE("Other than the spare wheel it's empty")
 #endif    
     ENDIF(boot_open)
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4031,8 +4005,7 @@ _InspectCarDoor
         INFO_MESSAGE("The door is rusty and rattles a bit")
 #endif    
     ENDIF(door_open)
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4051,8 +4024,7 @@ _InspectCarTank
         INFO_MESSAGE("It still has petrol in it")
 #endif    
     ENDIF(tank_open)
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4182,8 +4154,11 @@ around_the_pit
 
 _UseGame
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Hum... le jeu est planté ?")
+#else
     INFO_MESSAGE("Hum... looks like it crashed?")
-    WAIT(50*2)
+#endif    
     END_AND_REFRESH
 
 
@@ -4217,9 +4192,6 @@ snoozed_dog
 #endif    
         JUMP(_CommonThugDisabled)
 snoozed_thug    
-
-    ;INFO_MESSAGE("Hum... looks like it crashed?")
-    WAIT(50*2)
     END_AND_REFRESH
 
 
@@ -4247,7 +4219,6 @@ _UseKey
 #else
             INFO_MESSAGE("It's too dark!")
 #endif    
-            WAIT(50*2)
             END_AND_REFRESH
         ENDIF(tape_present)
     ENDIF(cellar)
@@ -4259,7 +4230,6 @@ _UseKey
 #else
         INFO_MESSAGE("It uses a digital lock!")
 #endif    
-        WAIT(50*2)
         END_AND_REFRESH
     ENDIF(panic_room)
 
@@ -4269,7 +4239,6 @@ _UseKey
 #else
         INFO_MESSAGE("It does not fit")
 #endif    
-        WAIT(50*2)
         END_AND_REFRESH
     ENDIF(front_entrance)
 
@@ -4299,7 +4268,6 @@ _UseAlarmSwitch
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in ON position")
 #endif        
     ENDIF(off)
-    WAIT(50*2)
     END_AND_REFRESH
 .)
 
@@ -4309,7 +4277,11 @@ _UseHosePipe
 .(
     JUMP_IF_TRUE(abandonned_car,CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR))
 cannot_use_rope_here
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Pas utilisable ici")
+#else
     ERROR_MESSAGE("Can't use it there")
+#endif    
     END_AND_REFRESH
 
 abandonned_car
@@ -4318,7 +4290,11 @@ abandonned_car
         END_AND_REFRESH
     ENDIF(closed)
 
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous mettez le tuyaux dedans")
+#else
     INFO_MESSAGE("You put the hose in the tank")
+#endif    
     SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR)
     SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
@@ -4343,7 +4319,11 @@ _UseMortar
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT))
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_INVENTORY))
 cannot_use_mortar
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je n'ai rien a moudre")
+#else
     ERROR_MESSAGE("Nothing to use it with")
+#endif    
     END_AND_REFRESH
 
 made_gun_powder
@@ -4359,21 +4339,34 @@ made_gun_powder
 _UseBomb
 .(
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Pas utilisable ici")
+#else
         ERROR_MESSAGE("I can't use it here")
+#endif        
         END_AND_REFRESH
     ENDIF(cellar)
     JUMP(_CombineStickyBombWithSafe)
 
 .)
 
+
 _UseMatches
 .(
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Pas utilisable ici")
+#else
         ERROR_MESSAGE("I can't use it here")
+#endif        
         END_AND_REFRESH
     ENDIF(cellar)
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),safe)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Le coffre est déjà ouvert")
+#else
         ERROR_MESSAGE("The safe is already open")
+#endif        
         END_AND_REFRESH
     ENDIF(safe)
     JUMP(_CombineBombWithMatches)
@@ -4384,18 +4377,27 @@ _UseProtectionSuit
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES)
     PLAY_SOUND(_Zipper)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("C'est la bonne taille...")
+#else
     INFO_MESSAGE("It seems to fit well...")
-    WAIT(50*2)
+#endif    
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
         ; The player is in front of the Panic Room, we can now equip the protection suit
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("...essayons la !")
+#else
         INFO_MESSAGE("...let's experiment!")
+#endif        
         SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
-        WAIT(50*2)
     ELSE(panic_room,not_panic_room)
         ; The player is anywhere else
         PLAY_SOUND(_Zipper)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("...mais pas besoin ici")
+#else
         INFO_MESSAGE("...but it's of no use here")
-        WAIT(50*2)
+#endif        
     ENDIF(not_panic_room)
     END_AND_REFRESH
 .)
@@ -4405,17 +4407,29 @@ _CombineClayDoor
 _UseClay
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("C'est déjà en place !")
+#else
         ERROR_MESSAGE("It's already in place!")
+#endif        
         END_AND_REFRESH
     ENDIF(attached)
 
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Pas utilisable ici")
+#else
         ERROR_MESSAGE("I can't use it here")
+#endif        
         END_AND_REFRESH
     ENDIF(panic_room)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("C'est trop sec !")
+#else
         ERROR_MESSAGE("It's too dry!")
+#endif        
         END_AND_REFRESH
     ENDIF(wet)
 
@@ -4424,11 +4438,13 @@ _UseClay
     INCREASE_SCORE(POINTS_USED_CLAY)
 
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ok, ca devrait suffire...")
+    INFO_MESSAGE("...plus qu'a remplir !")
+#else
     INFO_MESSAGE("Ok, that should be good enough...")
-    WAIT(50*2)
     INFO_MESSAGE("...now just need to fill it!")
-    WAIT(50*2)
-
+#endif        
     END_AND_REFRESH
 .)
 
@@ -4436,23 +4452,22 @@ _UseClay
 _UseAcid
 .(
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)    ; Are we in the proper location to use the acid?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Pas utilisable ici")
+#else
         ERROR_MESSAGE("I can't use it here")
+#endif        
         END_AND_REFRESH
     ENDIF(panic_room)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il faudrait un barrage sinon")
-#else    
-        INFO_MESSAGE("I need some kind of barrier else")
-#endif    
-        WAIT(50*2)
-#ifdef LANGUAGE_FR
         INFO_MESSAGE("l'acide va juste couler au sol")
 #else    
+        INFO_MESSAGE("I need some kind of barrier else")
         INFO_MESSAGE("the acid will just spill to the floor")
 #endif    
-        WAIT(50*2)
         END_AND_REFRESH
     ENDIF(attached)
 
@@ -4469,11 +4484,13 @@ _UseAcid
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_ACID_BURNING)
     WAIT(50*2)
     GOSUB(_DrawDoorWithHole)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Suffisement large pour voir...")
+    INFO_MESSAGE("...ou passer des objets ?")
+#else
     INFO_MESSAGE("Large enough to peek through...")
-    WAIT(50*2)
     INFO_MESSAGE("...or even pass objects?")
-    WAIT(50*2)
-
+#endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ACID)
 
     SET_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR)            ; There is now a hole in the door
@@ -4493,8 +4510,7 @@ _UseFancyStones
 #else    
     INFO_MESSAGE("They are just light porous fakes.")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4505,8 +4521,7 @@ _UseComputer
 #else    
     INFO_MESSAGE("It seems to have be boot locked.")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4518,8 +4533,7 @@ _UseGameConsole
 #else    
     INFO_MESSAGE("It looks cool, but we have a mission!")
 #endif    
-    WAIT(50*2)
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -4558,7 +4572,6 @@ _SearchThug
 #else
         INFO_MESSAGE("You should have subdued him first")
 #endif    
-        WAIT(50*2)
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),40,_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(13,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
@@ -4568,8 +4581,13 @@ _SearchThug
         WAIT(50*2)                              ; Wait a couple seconds
         PLAY_SOUND(_ShootData)
         WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR
+        _BUBBLE_LINE(5,5,0,"C'était une erreur:")
+        _BUBBLE_LINE(60,16,0,"Ma dernière")
+#else
         _BUBBLE_LINE(5,5,0,"This was a mistake:")
         _BUBBLE_LINE(60,16,0,"My last one")
+#endif        
         WAIT(50)                                        ; Wait a seconds
         LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
         WAIT(50*2)                                      ; Wait a couple seconds
@@ -4653,7 +4671,6 @@ give_bread_to_dove
 #else
     INFO_MESSAGE("Maybe I can catch it now?")
 #endif    
-    WAIT(50*2)
     END_AND_REFRESH
 
 not_in_wooded_avenue
@@ -4682,7 +4699,6 @@ dog_eating_the_meat
     INFO_MESSAGE("Glad it's not me there!")
     SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
-    WAIT(50*2)    
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
     INCREASE_SCORE(POINTS_DRUGGED_DOG)
@@ -4712,7 +4728,6 @@ _FreeDove
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
         SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
-        WAIT(50*2)    
 nothing_to_chase_the_dove
     END_AND_REFRESH
  .)
@@ -4825,7 +4840,7 @@ _ErrorNoFishing
 #else    
     INFO_MESSAGE("You could try fishing...")
 #endif    
-    JUMP(_InformatioNotRelevantForMission)
+    END_AND_REFRESH
 .)
 
 
@@ -4843,7 +4858,6 @@ _UseSnookerCue
 #else    
         INFO_MESSAGE("I don't have time to play!")
 #endif    
-        WAIT(50*2)
         END_AND_REFRESH
 game_room
     GOSUB(SnookerCueCommon)
@@ -4983,7 +4997,6 @@ _CommonGaveTheKnifeToTheGirl
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_THE_KNIFE)
     UNSET_ITEM_FLAGS(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED)
-    WAIT(50*2)
 
     ; Draw the picture with the girl without her bindings
     GOSUB(_ShowGirlInRoomWithoutBindings)
@@ -5072,18 +5085,19 @@ _TakeBlackTape
     INFO_MESSAGE("The tape cannot be reused")
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
 #endif    
-    WAIT(50)
     END_AND_REFRESH
 .)
 
 _TakeAcid
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Ce truc est super dangereux !")
+    INFO_MESSAGE("...ca pourrait couler un navire !")
+#else
     INFO_MESSAGE("This stuff is highly dangerous!")
-    WAIT(50*2)
     INFO_MESSAGE("...could go through a ship's hull!")
-    WAIT(50*2)
-
+#endif
     JUMP(_TakeCommon)
 .)
 
@@ -5122,10 +5136,13 @@ _TakeCommon
 _ShowProtectionSuit
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Protection contre pesticides...")
+    INFO_MESSAGE("...et autres fumées toxiques")
+#else
     INFO_MESSAGE("Protection against pesticides...")
-    WAIT(50*2)
     INFO_MESSAGE("...and other types of noxious fumes")
-    WAIT(50*2)
+#endif    
     RETURN
 .)
 
@@ -5272,13 +5289,21 @@ _WatchSetup
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
             _IMAGE(24,43)
             _SCREEN(17,63)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Je n'ais que deux heures...")
+#else
     INFO_MESSAGE("I only have two hours...")
+#endif    
 
     PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 2 hours patch
             _IMAGE(24,34)
             _SCREEN(17,63)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("...ne les gaspillons pas!")
+#else
     INFO_MESSAGE("...make them count!")
+#endif    
 
     WAIT(50*2)
 
@@ -5340,13 +5365,20 @@ _TimeOutGameOver
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("J'étais trop lent...")
+#else
     INFO_MESSAGE("I was too slow...")
+#endif    
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("...Je dois abandonner la mission.")
+#else    
     INFO_MESSAGE("...I have to abort the mission")
-    WAIT(50)
+#endif
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(50*2)
 

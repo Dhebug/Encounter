@@ -38,7 +38,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandINFO_MESSAGE
     .word _ByteStreamCommandDISPLAY_IMAGE
     .word _ByteStreamCommandStopBreakpoint
-    .word _ByteStreamCommandEndAndRefresh
+    .word _ByteStreamCommand_END_AND_REFRESH
     .word _ByteStreamCommandERROR_MESSAGE
     .word _ByteStreamCommandSetItemLocation
     .word _ByteStreamCommandSetItemFlags
@@ -67,6 +67,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
+    .word _ByteStreamCommand_END_AND_PARTIAL_REFRESH
 
     
 ; _param0=pointer to the new byteStream
@@ -99,8 +100,13 @@ loop
 stream_stop
     lda _gCurrentStreamStop
     and #FLAG_REFRESH_SCENE
-    beq quit
+    beq check_partial_refresh
     jmp _LoadScene
+check_partial_refresh    
+    lda _gCurrentStreamStop
+    and #FLAG_PARTIAL_REFRESH
+    beq quit
+    jmp _PrintSceneInformation
 quit    
     rts    
 .)
@@ -317,11 +323,20 @@ _ByteStreamCommandEnd
     rts
 .)
 
-
-_ByteStreamCommandEndAndRefresh
+; .byt COMMAND_END_AND_REFRESH
+_ByteStreamCommand_END_AND_REFRESH
 .(
     ;jmp _ByteStreamCommandEndAndRefresh
     lda #FLAG_END_STREAM|FLAG_REFRESH_SCENE   ; Stop and refresh scene
+    jmp _ByteStreamCommandEndWithStopCode
+.)
+
+
+; .byt COMMAND_END_AND_PARTIAL_REFRESH
+_ByteStreamCommand_END_AND_PARTIAL_REFRESH
+.(
+    ;jmp _ByteStreamCommandEndAndRefresh
+    lda #FLAG_END_STREAM|FLAG_PARTIAL_REFRESH   ; Stop and refresh the scene information (ie: we don't run all the image loading)
     jmp _ByteStreamCommandEndWithStopCode
 .)
 
@@ -1054,14 +1069,17 @@ _LongWaitAfterMessage
     jmp _WaitFramesAsm
 .)
 
+; QUICK_MESSAGE has no pause
+; INFO_MESSAGE has the standard 75 frame, and is generally followed by WAIT(50*2), total = 175 frames
 
 ; Uses _gCurrentStream and _gStreamNextPtr
+; .byt COMMAND_INFO_MESSAGE,message,0
 _ByteStreamCommandINFO_MESSAGE
 .(
     jsr _ByteStreamCommand_QUICK_MESSAGE
 
     ; Wait a bit after the message is displayed
-    jmp _WaitAfterMessage
+    jmp _LongWaitAfterMessage
 .)
 
 ; .byt COMMAND_QUICK_MESSAGE,message,0

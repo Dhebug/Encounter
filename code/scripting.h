@@ -47,7 +47,8 @@
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
-#define _COMMAND_COUNT          44
+#define COMMAND_END_AND_PARTIAL_REFRESH 44
+#define _COMMAND_COUNT          45
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -61,6 +62,7 @@
 // Flow control
 #define END                                  .byt COMMAND_END
 #define END_AND_REFRESH                      .byt COMMAND_END_AND_REFRESH
+#define END_AND_PARTIAL_REFRESH              .byt COMMAND_END_AND_PARTIAL_REFRESH
 #define WAIT(duration)                       .byt COMMAND_WAIT,duration
 #define WAIT_RANDOM(base_duration,rand_mask) .byt COMMAND_WAIT_RANDOM,base_duration,rand_mask
 #define JUMP(label)                          .byt COMMAND_JUMP,<label,>label
@@ -182,6 +184,7 @@
 #define FLAG_END_STREAM          1
 #define FLAG_WAIT                2
 #define FLAG_REFRESH_SCENE       4
+#define FLAG_PARTIAL_REFRESH     8
 
 
 // Value mapping
