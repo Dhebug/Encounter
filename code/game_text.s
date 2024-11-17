@@ -101,58 +101,58 @@ _EndErrorMessages
 _StartItemNames
 #ifdef LANGUAGE_FR
 // Containers
-_gTextItemTobaccoTin              .byt "une tabatière",0
-_gTextItemBucket                  .byt "un seau en bois",0
-_gTextItemCardboardBox            .byt "une boite en carton",0
-_gTextItemFishingNet              .byt "un filet de pêche",0
-_gTextItemPlasticBag              .byt "un sac en plastique",0
+_gTextItemTobaccoTin              .byt "une$_tabatière",0
+_gTextItemBucket                  .byt "un$_seau en bois",0
+_gTextItemCardboardBox            .byt "une$_boite en carton",0
+_gTextItemFishingNet              .byt "un$_filet de pêche",0
+_gTextItemPlasticBag              .byt "un$_sac en plastique",0
 // Items requiring containers
-_gTextItemBlackDust               .byt "du salpêtre",0
-_gTextItemYellowPowder            .byt "du soufre",0
-_gTextItemPetrol                  .byt "du pétrole",0
-_gTextItemWater                   .byt "de l'eau",0
+_gTextItemBlackDust               .byt "du$_salpêtre",0
+_gTextItemYellowPowder            .byt "du$_soufre",0
+_gTextItemPetrol                  .byt "du$_pétrole",0
+_gTextItemWater                   .byt "de l'$_eau",0
 // Normal items
 _gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
-_gTextItemFancyStones             .byt "des _pierres décoratives",0
-_gTextItemSilverKnife             .byt "un _couteau en argent",0
-_gTextItemMixTape                 .byt "une _compil sur K7",0
+_gTextItemFancyStones             .byt "des$_pierres décoratives",0
+_gTextItemSilverKnife             .byt "un$_couteau en argent",0
+_gTextItemMixTape                 .byt "une$_compil sur K7",0
 _gTextItemAlsatianDog             .byt "un _chien qui grogne",0
-_gTextItemMeat                    .byt "un morceau de _viande",0
-_gTextItemBread                   .byt "du _pain complet",0
-_gTextItemRollOfTape              .byt "un rouleau de _bande adhésive",0
-_gTextItemChemistryBook           .byt "un _livre de chimie",0
-_gTextItemBoxOfMatches            .byt "une boite d'_allumettes",0
-_gTextItemSnookerCue              .byt "une _queue de billard",0
+_gTextItemMeat                    .byt "un$morceau de _viande",0
+_gTextItemBread                   .byt "du$_pain complet",0
+_gTextItemRollOfTape              .byt "un rouleau de$_bande adhésive",0
+_gTextItemChemistryBook           .byt "un$_livre de chimie",0
+_gTextItemBoxOfMatches            .byt "une boite d'$_allumettes",0
+_gTextItemSnookerCue              .byt "une$_queue de billard",0
 _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre fort",0
-_gTextItemHandWrittenNote         .byt "une _note manuscripte",0
-_gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
+_gTextItemHandWrittenNote         .byt "une$_note manuscripte",0
+_gTextItemRollOfToiletPaper       .byt "un$_rouleau de PQ",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
-_gTextItemFuse                    .byt "une _mêche",0
-_gTextItemPowderMix               .byt "un _mix grumeleux",0
-_gTextItemGunPowder               .byt "de la _poudre à cannon",0
-_gTextItemSmallKey                .byt "une petite _clef",0
-_gTextItemNewspaper               .byt "un _journal",0
-_gTextItemBomb                    .byt "une _bombe",0
-_gTextItemPistol                  .byt "un _pistolet",0
+_gTextItemFuse                    .byt "une$_mêche",0
+_gTextItemPowderMix               .byt "un$_mix grumeleux",0
+_gTextItemGunPowder               .byt "de la$_poudre à cannon",0
+_gTextItemSmallKey                .byt "une$petite _clef",0
+_gTextItemNewspaper               .byt "un$_journal",0
+_gTextItemBomb                    .byt "une$_bombe",0
+_gTextItemPistol                  .byt "un$_pistolet",0
 _gTextItemBullets                 .byt "trois _balles de calibre .38",0
 _gTextItemChemistryRecipes        .byt "_formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une _carte du royaume uni",0
-_gTextItemHandheldGame            .byt "un _jeu portable",0
-_gTextItemSedativePills           .byt "des _somnifères",0
-_gTextItemDartGun                 .byt "un _lance fléchettes",0
-_gTextItemBlackTape               .byt "du _ruban adhésif noir",0
-_gTextItemMortarAndPestle         .byt "un mortier et pilon",0
-_gTextItemAdhesive                .byt "de l'_adhésif",0
-_gTextItemAcid                    .byt "un _acide puissant",0
+_gTextItemHandheldGame            .byt "un$_jeu portable",0
+_gTextItemSedativePills           .byt "des$_somnifères",0
+_gTextItemDartGun                 .byt "un$_lance fléchettes",0
+_gTextItemBlackTape               .byt "du$_ruban adhésif noir",0
+_gTextItemMortarAndPestle         .byt "un$mortier et pilon",0
+_gTextItemAdhesive                .byt "de l'$_adhésif",0
+_gTextItemAcid                    .byt "un$_acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
-_gTextItemDriedOutClay            .byt "de l'_argile désséchée",0
-_gTextItemProtectionSuit          .byt "une tenue EPI",0
+_gTextItemDriedOutClay            .byt "de l'$_argile désséchée",0
+_gTextItemProtectionSuit          .byt "une$_tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
-_gTextItemRoughPlan               .byt "un _plan sommaire",0
+_gTextItemRoughPlan               .byt "un$_plan sommaire",0
 _gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
 _gTextItemGraffiti                .byt "des _graffitis",0
 _gTextItemChurch                  .byt "une _église",0
@@ -162,7 +162,7 @@ _gTextItemTrashCan                .byt "une _poubelle",0
 _gTextItemTombstone               .byt "une _tombe",0
 _gTextItemFishpond                .byt "un _bac a poisson",0
 _gTextItemFish                    .byt "un _poisson",0
-_gTextItemApple                   .byt "quelques _pommes",0
+_gTextItemApple                   .byt "quelques$_pommes",0
 _gTextItemTree                    .byt "un$_arbre robuste",0
 _gTextItemPit                     .byt "un$_trou instable",0
 _gTextItemHeap                    .byt "quelques$_tas",0
@@ -5032,9 +5032,9 @@ _TakeRope
 .(
 +_gTextItemRope = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une longueur de _corde")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a length of _rope")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope")
 #endif    
     JUMP(_TakeCommon)
 .)

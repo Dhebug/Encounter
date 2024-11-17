@@ -190,15 +190,53 @@ _gTextGreetings
 ; Results
 ;
 #ifdef LANGUAGE_FR
-_Test_DETAILS_SOLVED_THE_CASE      .byt 2,"R{solu le cas",0
-_Test_DETAILS_MAIMED_BY_DOG        .byt 5,"Mutil{ par un chien",0
-_Test_DETAILS_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
-_Test_DETAILS_FELL_INTO_PIT        .byt 3,"Tomb{ dans un trou",0
-_Test_DETAILS_TRIPPED_ALARM        .byt 3,"D{clench{ l'alarme",0
-_Test_DETAILS_RAN_OUT_OF_TIME      .byt 6,"A manqu{ de temps",0
-_Test_DETAILS_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
-_Test_DETAILS_SIMPLY_VANISHED      .byt 7,"A disparu !",0
-_Test_DETAILS_GAVE_UP              .byt 5,"A abandonn{...",0
+_Test_DETAILS_SOLVED_THE_CASE
+    .byt 2,"Bravo, vous avez résolu l'affaire !",TEXT_CRLF,TEXT_CRLF
+    .byt 3,"L'otage a été libérée et est maintenant",TEXT_CRLF
+    .byt 3,"de retour avec sa famille. Bien joué !",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_MAIMED_BY_DOG
+    .byt 5,"Votre mieux n'était pas suffisant. Vous",TEXT_CRLF
+    .byt 5,"n'étiez pas de taille face au monstre",TEXT_CRLF
+    .byt 5,"et",1,"vous en êtes à peine sorti vivant !",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_SHOT_BY_THUG
+    .byt 1,"Vous avez appris (tard) que réveiller",TEXT_CRLF
+    .byt 1,"un voyou armé d'un pistolet n'était pas",TEXT_CRLF
+    .byt 1,"une bonne idée.",3,"Vous avez êté plombé",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_FELL_INTO_PIT
+    .byt 6,"Sortir du trou pris beaucoup de temps.",TEXT_CRLF
+    .byt 6,"Quand vous en êtes sorti l'otage avait",TEXT_CRLF
+    .byt 6,"disparu:",1,"Il étais trop tard",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_TRIPPED_ALARM
+    .byt 3,"Un détective aurait du remarquer les",TEXT_CRLF
+    .byt 3,"avertissements et les capteurs sur les",TEXT_CRLF
+    .byt 3,"fenêtres:",5,"N'êtes vous pas d'accord ?",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_RAN_OUT_OF_TIME
+    .byt 5,"Vous aviez deux heures mais vous avez",TEXT_CRLF
+    .byt 5,"tout de même manqué de temps ! Seriez",TEXT_CRLF
+    .byt 5,"vous par hasard un",3,"programmeur ?",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_BLOWN_INTO_BITS
+    .byt 3,"Les explosifs sont",1,"dangereux !",3,"Et qui",TEXT_CRLF
+    .byt 3,"va devoir doit nettoyer ce désastre ?",TEXT_CRLF
+    .byt 3,"Pas vous en tout cas,",1,"agent éparpillé.",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_GAVE_UP
+    .byt 5,"J'espère que vous aviez une excuse pour",TEXT_CRLF
+    .byt 5,"abandonner, car l'otage n'a jamais été",TEXT_CRLF
+    .byt 5,"revue après...",1,"C'était votre boulot !",TEXT_CRLF
+    .byt 0
 #else // LANGUAGE_EN
 _Test_DETAILS_SOLVED_THE_CASE      
     .byt 2,"Congratulations, you solved the case!",TEXT_CRLF,TEXT_CRLF
@@ -266,8 +304,8 @@ _gScoreConditionsArray
 // Bonus texts
 #ifdef LANGUAGE_FR
 _gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
-_gTextNewAchievement    .byt "%cNew achievement: %s%c",0     ; The last %c is to clear the color
-_gTextNoTimeBonus       .byt "%cNo time bonus for you!%c",0  ; The last %c is to clear the color
+_gTextNewAchievement    .byt "%cNouveau succès:%c%s%c",0     ; The last %c is to clear the color
+_gTextNoTimeBonus       .byt "%cPas de bonus de temps pour vous!%c",0  ; The last %c is to clear the color
 #else
 _gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
 _gTextNewAchievement    .byt "%cNew achievement:%c%s%c",0    ; The last %c is to clear the color
