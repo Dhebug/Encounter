@@ -20,6 +20,17 @@ CALL osdk_config.bat
 IF "%PRODUCT_TYPE%"=="" goto ProductTypeError
 IF "%OSDKDISK%"=="" goto OSDKDISKError
 
+:: Make sure we build the right version
+SET OSDKNAME=%BASENAME%-%LANGUAGE%
+IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-Demo-v%VERSION%.dsk
+IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-v%VERSION%.dsk
+IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-Test-v%VERSION%.dsk
+IF "%FINAL_TARGET_DISK%"=="" GOTO EndDeleteCopy
+IF EXIST %FINAL_TARGET_DISK%\%OSDKNAME%*.DSK  del %FINAL_TARGET_DISK%\%OSDKNAME%*.DSK
+:EndDeleteCopy
+
+
+
 :: Delete the floppy, just to be sure
 IF EXIST build\%OSDKDISK%  del build\%OSDKDISK%
 
@@ -60,7 +71,16 @@ IF ERRORLEVEL 1 GOTO Error
 :: Call FloppyBuilder another time to build the final disk
 ECHO.
 ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
-%osdk%\bin\FloppyBuilder build floppybuilderscript.txt
+%osdk%\bin\FloppyBuilder build floppybuilderscript.txt >..\build\floppy_builder_error.txt
+IF ERRORLEVEL 1 GOTO FloppyBuilderError
+type ..\build\floppy_builder_error.txt
+
+IF "%FINAL_TARGET_DISK%"=="" GOTO EndCopy
+ECHO Copying ..\build\%OSDKDISK% to %FINAL_TARGET_DISK%\%OSDKDISK%
+copy ..\build\%OSDKDISK% %FINAL_TARGET_DISK%\%OSDKDISK%
+:EndCopy
+
+
 popd
 goto End
 

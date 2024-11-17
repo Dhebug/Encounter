@@ -58,15 +58,6 @@ if NOT "%TEST_BUILT%"=="%TEST_LANGUAGE%" (
 
 :Done
 
-::
-:: If the build is succesfull, we try to copy the file to the final test target location (ex: SD card for the Cumulus)
-::
-IF "%FINAL_TARGET_DISK%"=="" GOTO EndCopy
-IF NOT EXIST %FINAL_TARGET_DISK% GOTO EndCopy
-::set 
-ECHO Copying build\%OSDKDISK% to %FINAL_TARGET_DISK%
-copy build\%OSDKDISK% %FINAL_TARGET_DISK%
-:EndCopy
 
 :: Build successfull!
 ECHO.

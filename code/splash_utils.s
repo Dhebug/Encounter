@@ -235,7 +235,7 @@ _gHighScores              .dsb 512-8-5 ; 456 bytes of actual score data, padded 
 #ifdef LANGUAGE_FR
 _Text_OptionKeyboard    .byt "Choix du clavier:",0
 _Text_Azerty            .byt "AZERTY (Francais)",0
-_Text_Qwerty            .byt "QWERTY         ",0
+_Text_Qwerty            .byt "QWERTY           ",0
 _Text_Qwertz            .byt "QWERTZ (Allemand)",0
 
 _Text_OptionMusic        .byt "Musique:",0
