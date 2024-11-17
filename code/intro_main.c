@@ -868,7 +868,7 @@ void main()
     if (gAchievementsChanged)
     {        
         // Save back the highscores in the slot
-        SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+        SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
         gAchievementsChanged=0;
     }
 

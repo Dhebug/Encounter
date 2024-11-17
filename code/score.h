@@ -26,18 +26,21 @@ typedef struct
 
 typedef struct
 {
+    unsigned char start_marker[8];
+    unsigned char version[5];          // 1.2.3
     score_entry scores[SCORE_COUNT];   // 18*24=432
     unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 6*8=48 achievements
-    char free_data[80-4-ACHIEVEMENT_BYTE_COUNT];
+    char free_data[80-4-ACHIEVEMENT_BYTE_COUNT-8-5-8];
     unsigned char keyboard_layout;
     unsigned char music_enabled;
     unsigned char sound_enabled;
     unsigned char launchCount;
+    unsigned char end_marker[8];
 } save_game_file;                      // sizeof(save_game_file)=512
 
 
-extern score_entry gHighScores[SCORE_COUNT];  //char gHighScores[512];  
-extern save_game_file gSaveGameFile;          // Actually points to the same location as gHighScores
+extern save_game_file gSaveGameFile;          // Actually points to the same location as gHighScores - 8 bytes start marker
+extern score_entry gHighScores[SCORE_COUNT];  // char gHighScores[512];  
 extern const char* gScoreConditionsArray[];
 
 extern int gScore;                              // Moved to the last 32 bytes so it can be shared with the other modules

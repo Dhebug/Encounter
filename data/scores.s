@@ -8,6 +8,8 @@
  ;-------------------------------------------
  ; 18 bytes per entry * 24 entries = 432 bytes total - But we save 512 because of the save system
  ;
+ ; In addition we have 8 bytes of start marker and 8 bytes of end marker, plus some settings and the achievements
+ ;
 #define ENTRY(type,score,name) .word (score+32768) : .byt type : .asc name
 
 .text
@@ -27,6 +29,8 @@
 // Not sure if we can reach 5000 by doing all the extra stuff, need to play test
 //
 StartScores
+ .byt "SAVESTRT"                      ; Start marker
+ .byt "VERSION"
  ENTRY(1,5000,"    Lt. Columbo")
  ENTRY(1,4500,"    Miss Marple")
  ENTRY(1,3000,"Sherlock Holmes")
@@ -52,11 +56,12 @@ StartScores
  ENTRY(3,-200,"C.Auguste Dupin")
  ENTRY(5,-250,"  Insp Clouseau")
  .dsb 48                             ; 6*8=48 achievements
- .dsb 80-48-4                        ; Padding (forced to zero)
+ .dsb 80-48-4-8-8-5                  ; Padding (forced to zero)
  .byt 0                              ; keyboard_layout - QWERTY by default (should be language checked?)
  .byt 1                              ; music_enabled by default
  .byt 1                              ; sound_enabled by default
  .byt 0                              ; launchCount - Number of times the game has been launched
+ .byt "SAVE-END"                     ; End marker
 EndScores
 
 

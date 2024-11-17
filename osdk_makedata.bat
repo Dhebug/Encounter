@@ -27,7 +27,7 @@ SET TARGET=build\files
 SET CONVERT=CALL bin\_PictConv
 
 :: Hi-Score table
-%XA% -o %TARGET%\scores.bin data\scores.s
+%XA% -DVERSION=%VERSION% -o %TARGET%\scores.bin data\scores.s
 %HEADER% -h1 %TARGET%\scores.bin %TARGET%\scores.tap $9c00
 
 :: Character sets

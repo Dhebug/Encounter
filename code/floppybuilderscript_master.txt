@@ -449,4 +449,5 @@ SetCompressionMode None 						; So far only two modes: 'None' and 'FilePack'
 AddFile ..\build\files\scores.bin
 AddDefine LOADER_HIGH_SCORES {FileIndex}
 AddDefine LOADER_HIGH_SCORES_SIZE {FileSize}
+AddDefine LOADER_HIGH_SCORES_DISK_OFFSET {FileDiskOffset}
 

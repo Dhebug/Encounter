@@ -362,7 +362,7 @@ void main()
                     PrintWaitMessage("Write test (Ensure Protection OFF!)");
                     gSaveGameFile.launchCount++;
                     // Save back the highscores in the slot
-                    SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+                    SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
                     PrintWaitMessage("Write test finished");
                     WaitFrames(50);
                 }

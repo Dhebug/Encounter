@@ -48,7 +48,7 @@ void PrintStatusMessageAsm()
 void SaveScoreFile()
 {
     memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
-    SaveFileAt(LOADER_HIGH_SCORES,gHighScores);
+    SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
     gAchievementsChanged=0;
 }
 
@@ -191,7 +191,7 @@ void HandleHighScore()
 	score_entry* ptrScore=gHighScores;
 
 	// Load the highscores from the disk
-	LoadFileAt(LOADER_HIGH_SCORES,gHighScores);
+	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 #if 0  // Just to test the different ending conditions
     gScore = -1800;

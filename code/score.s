@@ -1,8 +1,9 @@
 
 #include "params.h"
 
-_gSaveGameFile                   ; Same address than _gHighScores
-_gHighScores          .dsb 512   ; 456 bytes of actual score data, padded to 512 bytes for the saving system
+_gSaveGameFile            .dsb 8       ; SAVESTRT
+_gSaveGameFileVersion     .dsb 5       ; 1.2.3
+_gHighScores              .dsb 512-8-5 ; 456 bytes of actual score data, padded to 512 bytes for the saving system
 
 
 
