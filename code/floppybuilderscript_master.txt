@@ -418,7 +418,11 @@ AddDefine LOADER_SPRITE_TOP_WINDOW {FileIndex}
 AddFile ..\build\files\masked_austin_parts.msk
 AddDefine LOADER_SPRITE_AUSTIN_PARTS {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\masked_rough_map_fr.msk
+#else
 AddFile ..\build\files\masked_rough_map.msk
+#endif
 AddDefine LOADER_SPRITE_ROUGH_PLAN {FileIndex}
 
 AddFile ..\build\files\masked_alarm_panel.msk

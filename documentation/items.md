@@ -47,7 +47,6 @@ These have no purpose their own, they are just here to allow the player to trans
 |**a cardboard box**|Use to transport non liquids stuff|e_ITEM_CardboardBox
 |**a fishing net**|Can be used to catch the dove|e_ITEM_FishingNet
 |**a plastic bag**|Can be used to transport dust|e_ITEM_PlasticBag
-|**a small bottle**|Originally contained a strong acid|e_ITEM_SmallBottle
 
 ## Items requiring containers to use
 These items cannot just be collected, you need some adequate containers to transport them
@@ -88,7 +87,6 @@ These are items you will find around in the various locations
 |**a couple chemistry recipes**|Found in the chemistry book in the library|e_ITEM_ChemistryRecipes|
 |**a map of the United Kingdom**|Some decorative element on the wall of the library, the idea is to provide some information about why there is a kidnapping|e_ITEM_UnitedKingdomMap|
 |**a young girl**|The hostage we need to free|e_ITEM_YoungGirl|
-|**broken glass**|Result of breaking the window|e_ITEM_BrokenGlass|
 
 ## Constructed items
 The following items have to be created by the player by performing some actions on the other items

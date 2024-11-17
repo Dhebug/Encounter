@@ -38,7 +38,12 @@ _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
 _gTextCarryInWhat           .byt "Transporte dans quoi ?",0
-_gTextUseShiftToHighlight   .byt TEXT_CRLF,"Note: Utilisez SHIFT pour voir les objects",0
+_gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
+                            .byt "Naviguez avec",3,"les flèches, CTRL",7,"plus",TEXT_CRLF
+                            .byt "touches",3,"HAUT",7,"ou",3,"BAS",7,"pour grimper,",TEXT_CRLF
+                            .byt "et",3,"MAJ",7,"pour identifier les objets.",0
+
+                            //.byt "Note: Utilisez SHIFT pour voir les objects",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt "There is nothing of interest here",0
@@ -101,7 +106,6 @@ _gTextItemBucket                  .byt "un seau en bois",0
 _gTextItemCardboardBox            .byt "une boite en carton",0
 _gTextItemFishingNet              .byt "un filet de pêche",0
 _gTextItemPlasticBag              .byt "un sac en plastique",0
-_gTextItemSmallBottle             .byt "une petite bouteille",0
 // Items requiring containers
 _gTextItemBlackDust               .byt "du salpêtre",0
 _gTextItemYellowPowder            .byt "du soufre",0
@@ -125,7 +129,6 @@ _gTextItemHeavySafe               .byt "un gros _coffre fort",0
 _gTextItemHandWrittenNote         .byt "une _note manuscripte",0
 _gTextItemRollOfToiletPaper       .byt "un _rouleau de PQ",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
-_gTextItemBrokenGlass             .byt "des morceaux de _glace",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une _mêche",0
 _gTextItemPowderMix               .byt "un _mix grumeleux",0
@@ -176,7 +179,6 @@ _gTextItemBucket                  .byt "a$wooden _bucket",0
 _gTextItemCardboardBox            .byt "a$cardboard _box",0                    
 _gTextItemFishingNet              .byt "a$fishing _net",0                      
 _gTextItemPlasticBag              .byt "a$plastic _bag",0                      
-_gTextItemSmallBottle             .byt "a$small _bottle",0                     
 // Items requiring containers
 _gTextItemBlackDust               .byt "some$_saltpetre",0
 _gTextItemYellowPowder            .byt "some$_sulphur",0
@@ -200,7 +202,6 @@ _gTextItemHeavySafe               .byt "a$heavy _safe",0
 _gTextItemHandWrittenNote         .byt "a$hand written _note",0                     
 _gTextItemRollOfToiletPaper       .byt "a$toilet _roll",0            
 _gTextItemOpenSafe                .byt "an$open _safe",0                       
-_gTextItemBrokenGlass             .byt "broken glass",0                       
 _gTextItemYoungGirl               .byt "a$young _girl",0                        
 _gTextItemFuse                    .byt "a$_fuse",0                             
 _gTextItemPowderMix               .byt "a$rough powder _mix",0

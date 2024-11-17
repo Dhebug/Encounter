@@ -23,11 +23,21 @@ keyword gWordsArray[] =
 #endif    
 
     // Then normal items
+#ifdef LANGUAGE_FR        
     { "GIRL",   e_ITEM_YoungGirl            },  
     { "SALTPETRE",   e_ITEM_Saltpetre       },  
     { "PANEL",  e_ITEM_AlarmPanel           },  
     { "SWITCH", e_ITEM_AlarmSwitch          },  
     { "FRIDGE",  e_ITEM_Fridge              },  
+#else
+    { "FILLE",   e_ITEM_YoungGirl           },  
+    { "SALPETRE",   e_ITEM_Saltpetre        },  
+    { "PANEAU",  e_ITEM_AlarmPanel          },  
+    { "BOUTON", e_ITEM_AlarmSwitch          },  
+    { "REFRIGERATEUR",  e_ITEM_Fridge       },  
+#endif
+
+#ifdef LANGUAGE_FR        
     { "SULPHUR", e_ITEM_Sulphur             },  
     { "WATER",  e_ITEM_Water                },  
     { "DOVE",   e_ITEM_LargeDove            },  
@@ -36,6 +46,18 @@ keyword gWordsArray[] =
     { "LADDER", e_ITEM_Ladder               },  
     { "DOG",    e_ITEM_Dog                  },  
     { "MEAT",   e_ITEM_Meat                 },  
+#else
+    { "SOUFRE", e_ITEM_Sulphur              },  
+    { "EAU",  e_ITEM_Water                  },  
+    { "PIGEON",   e_ITEM_LargeDove          },  
+    { "PIERRES", e_ITEM_FancyStones         },  
+    { "COUTEAU",  e_ITEM_SilverKnife        },  
+    { "ECHELLE", e_ITEM_Ladder              },  
+    { "CHIEN",    e_ITEM_Dog                },  
+    { "VIANDE",   e_ITEM_Meat               },  
+#endif
+
+#ifdef LANGUAGE_FR        
     { "BREAD",  e_ITEM_Bread                },  
     { "TAPE",   e_ITEM_BlackTape            },  
     { "TAPE",   e_ITEM_MixTape              },  
@@ -45,15 +67,36 @@ keyword gWordsArray[] =
     { "CUE",    e_ITEM_SnookerCue           },  
     { "THUG",   e_ITEM_Thug                 },  
     { "SAFE",   e_ITEM_HeavySafe            },  
+#else
+    { "PAIN",  e_ITEM_Bread                },  
+    { "BANDE",   e_ITEM_BlackTape            },  
+    { "CASSETTE",   e_ITEM_MixTape              },  
+    { "MIX",e_ITEM_MixTape              },  // Synonym of Tape
+    { "LIVRE",   e_ITEM_ChemistryBook        },  
+    { "ALLUMETTES",e_ITEM_BoxOfMatches         },  
+    { "QUEUE",    e_ITEM_SnookerCue           },  
+    { "VOYOU",   e_ITEM_Thug                 },  
+    { "COFFRE",   e_ITEM_HeavySafe            },  
+#endif
+
+#ifdef LANGUAGE_FR        
     { "NOTE",   e_ITEM_HandWrittenNote      },  
     { "ROPE",   e_ITEM_Rope                 },  
     { "ROLL",   e_ITEM_ToiletRoll           },  
     { "HOSE",   e_ITEM_Hose                 },  
     { "PETROL", e_ITEM_Petrol               },  
-    { "GLASS",  e_ITEM_BrokenGlass          },  
-    { "BOTTLE", e_ITEM_SmallBottle          },  
     { "FUSE",   e_ITEM_Fuse                 },  
     { "GUNPOWDER", e_ITEM_GunPowder         },  
+#else
+    { "NOTE",   e_ITEM_HandWrittenNote      },  
+    { "CORDE",   e_ITEM_Rope                 },  
+    { "ROULEAU",   e_ITEM_ToiletRoll           },  
+    { "TUYAU",   e_ITEM_Hose                 },  
+    { "PETROLE", e_ITEM_Petrol               },  
+    { "FUSE",   e_ITEM_Fuse                 },  
+    { "GUNPOWDER", e_ITEM_GunPowder         },  
+#endif
+
     { "MIX",    e_ITEM_PowderMix            },  
     { "DART",   e_ITEM_DartGun              },  
     { "KEY",    e_ITEM_SmallKey             },  
@@ -196,11 +239,19 @@ keyword gWordsArray[] =
     { "INVOKE", e_WORD_INVOKE },
 #endif    
 
+#ifdef LANGUAGE_FR    
+    { "PAUSE", e_WORD_PAUSE },
+    { "AIDE", e_WORD_HELP },
+
+    // Last instruction
+    { "QUITTE", e_WORD_QUIT },
+#else
     { "PAUSE", e_WORD_PAUSE },
     { "HELP", e_WORD_HELP },
 
     // Last instruction
     { "QUIT", e_WORD_QUIT },
+#endif
 
     // Sentinelle
     { 0,  e_WORD_COUNT_ }

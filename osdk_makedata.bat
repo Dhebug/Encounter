@@ -97,6 +97,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_top_window
 %CONVERT% masked_austin_parts
 %CONVERT% masked_rough_map
+%CONVERT% masked_rough_map_fr
 %CONVERT% masked_alarm_panel
 
 
