@@ -70,7 +70,7 @@ _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
 _gTextErrorNeedMoreDetails  .byt "Pourriez vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
-_gTextErrorInventoryFull    .byt "Je doit d'abord déposer quelque chose",0
+_gTextErrorInventoryFull    .byt "Je dois d'abord déposer quelque chose",0
 _gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
@@ -2465,7 +2465,7 @@ _ShowRoughPlan
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     FADE_BUFFER
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("Je doit revenir au marché...")
+    INFO_MESSAGE("Je dois revenir au marché...")
     INFO_MESSAGE("...quand j'ai fini")
 #else    
     INFO_MESSAGE("I'll have to go back to the market...")
@@ -5290,7 +5290,7 @@ _WatchSetup
             _IMAGE(24,43)
             _SCREEN(17,63)
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Je n'ais que deux heures...")
+    INFO_MESSAGE("Je n'ai que deux heures...")
 #else
     INFO_MESSAGE("I only have two hours...")
 #endif    
