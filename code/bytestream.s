@@ -60,14 +60,13 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_WAIT_RANDOM
     .word _ByteStreamCommand_START_CLOCK
     .word _ByteStreamCommand_STOP_CLOCK
-    .word _ByteStreamCommand_PLAY_MUSIC
+    .word _ByteStreamCommand_END_AND_PARTIAL_REFRESH
     .word _ByteStreamCommand_LOAD_MUSIC
     .word _ByteStreamCommand_STOP_MUSIC
     .word _ByteStreamCommand_WAIT_KEYPRESS
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
-    .word _ByteStreamCommand_END_AND_PARTIAL_REFRESH
 
     
 ; _param0=pointer to the new byteStream
@@ -451,41 +450,6 @@ no_sound
 .)
 
 
-;
-; .byt COMMAND_PLAY_MUSIC,<music,>music
-; Music format is:
-; - Pointer to event (16 bit)
-; - Channel mask (8 bit)
-; - Arkos music file
-; - Arkos event file
-;
-_ByteStreamCommand_PLAY_MUSIC
-.(
-    ldy #0
-    lda (_gCurrentStream),y       ; Get the sound file address (low byte)
-    sta _param0+0
-    iny
-    lda (_gCurrentStream),y       ; Get the sound file address (high byte)
-    sta _param0+1
-    iny
-    ; MusicMixerMask=music[2]
-    lda (_param0),y
-    sta _MusicMixerMask
-    clc
-    lda _param0+0
-    adc #3
-    sta _param0+0
-    lda _param0+1
-    adc #0
-    sta _param0+1
-
-    jsr _StartMusic
-
-    lda #2
-    jmp _ByteStreamMoveByA
-.)
-
-
 ; .byt COMMAND_LOAD_MUSIC,musicId
 _ByteStreamCommand_LOAD_MUSIC
 .(
@@ -504,6 +468,8 @@ _ByteStreamCommand_LOAD_MUSIC
     jsr _LoadApiLoadFileFromDirectory    
 
 music_already_loaded
+    lda _gMusicEnabled
+    beq no_music
     lda #1+2+4+8+16+32        ; All the three channels are used
     sta _MusicMixerMask
     lda #<_ArkosMusic
@@ -511,6 +477,7 @@ music_already_loaded
     lda #>_ArkosMusic
     sta _param0+1
     jmp _StartMusic
+no_music
     rts    
 .)
 

@@ -40,15 +40,14 @@
 #define COMMAND_WAIT_RANDOM     34
 #define COMMAND_START_CLOCK     35
 #define COMMAND_STOP_CLOCK      36
-#define COMMAND_PLAY_MUSIC      37
+#define COMMAND_END_AND_PARTIAL_REFRESH 37
 #define COMMAND_LOAD_MUSIC      38
 #define COMMAND_STOP_MUSIC      39
 #define COMMAND_WAIT_KEYPRESS   40
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
-#define COMMAND_END_AND_PARTIAL_REFRESH 44
-#define _COMMAND_COUNT          45
+#define _COMMAND_COUNT          44
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -138,11 +137,9 @@
 #endif
 
 #ifdef ENABLE_MUSIC
-#define PLAY_MUSIC(music)                            .byt COMMAND_PLAY_MUSIC,<music,>music
 #define LOAD_MUSIC(musicId)                          .byt COMMAND_LOAD_MUSIC,musicId
 #define STOP_MUSIC()                                 .byt COMMAND_STOP_MUSIC
 #else
-#define PLAY_MUSIC(music)                            
 #define LOAD_MUSIC(musicId)                          
 #define STOP_MUSIC()                                 
 #endif
