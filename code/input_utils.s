@@ -25,6 +25,7 @@ _ResetInput
     lda #0
     sta _gInputBufferPos
     sta _gInputBuffer+0
+    sta _gInputErrorCounter
     
     jmp _ReadKey            ; Remove any key in the buffer
 .)
