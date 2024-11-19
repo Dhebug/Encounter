@@ -395,7 +395,7 @@ void TakeItem()
         gAnswerProcessingCallback = ProcessContainerAnswer;
         containerId = AskInput(gTextCarryInWhat,1 );    // "Carry it in what?"
         gAnswerProcessingCallback = previousCallback;
-        if ( (containerId >= e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
+        if ( (containerId > e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
         {
             PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
             return;
