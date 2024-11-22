@@ -21,6 +21,7 @@ typedef struct
 {
     int             score;          // The score can actually be negative if the player is doing stupid things on purpose (plus or minus 32768 because of assembler reasons)
     unsigned char   condition;      // The reason why the game ended (victory, abandon, death, ...)
+    unsigned char   player_score;   // 0 = initial score, 1 = score made by an actual player
     unsigned char   name[15];       // The name of the character  
 } score_entry;
 
@@ -28,9 +29,9 @@ typedef struct
 {
     unsigned char start_marker[8];
     unsigned char version[5];          // 1.2.3
-    score_entry scores[SCORE_COUNT];   // 18*24=432
+    score_entry scores[SCORE_COUNT];   // 19*24=456
     unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 6*8=48 achievements
-    char free_data[80-4-ACHIEVEMENT_BYTE_COUNT-8-5-8];
+    char free_data[56-4-ACHIEVEMENT_BYTE_COUNT-8-5-8];
     unsigned char keyboard_layout;
     unsigned char music_enabled;
     unsigned char sound_enabled;
