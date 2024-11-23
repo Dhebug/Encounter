@@ -104,7 +104,7 @@ _StartItemNames
 _gTextItemTobaccoTin              .byt "une$_tabatière",0
 _gTextItemBucket                  .byt "un$_seau en bois",0
 _gTextItemCardboardBox            .byt "une$_boite en carton",0
-_gTextItemFishingNet              .byt "un$_filet de pêche",0
+_gTextItemNet                     .byt "un$_filet",0
 _gTextItemPlasticBag              .byt "un$_sac en plastique",0
 // Items requiring containers
 _gTextItemBlackDust               .byt "du$_salpêtre",0
@@ -177,7 +177,7 @@ _gTextItemGameConsole             .byt "une _console de jeu",0
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
 _gTextItemBucket                  .byt "a$wooden _bucket",0                    
 _gTextItemCardboardBox            .byt "a$cardboard _box",0                    
-_gTextItemFishingNet              .byt "a$fishing _net",0                      
+_gTextItemNet                     .byt "a$_net",0                      
 _gTextItemPlasticBag              .byt "a$plastic _bag",0                      
 // Items requiring containers
 _gTextItemBlackDust               .byt "some$_saltpetre",0
@@ -3942,7 +3942,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
     VALUE_MAPPING(e_ITEM_Acid               , _UseAcid)
-    VALUE_MAPPING(e_ITEM_FishingNet         , _UseNet)
+    VALUE_MAPPING(e_ITEM_Net                , _UseNet)
     VALUE_MAPPING(e_ITEM_RoughPlan          , _UseRoughPlan)
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
     VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
@@ -4638,7 +4638,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
     VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
     VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
-    VALUE_MAPPING(e_ITEM_FishingNet         , _ThrowNet)
+    VALUE_MAPPING(e_ITEM_Net                , _ThrowNet)
     VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
 
 _ThrowBread
@@ -4797,7 +4797,7 @@ _ScareDoveAway
 
 _ThrowNet
     // By default we just drop the knife where we are
-    SET_ITEM_LOCATION(e_ITEM_FishingNet,e_LOC_CURRENT)
+    SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)
     GOSUB(NetCommon)
     END_AND_REFRESH
 

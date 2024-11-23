@@ -45,7 +45,7 @@ These have no purpose their own, they are just here to allow the player to trans
 |**an empty tobacco tin**|Used to transport things or build a bomb|e_ITEM_TobaccoTin
 |**a wooden bucket**|Use to transport liquids|e_ITEM_Bucket
 |**a cardboard box**|Use to transport non liquids stuff|e_ITEM_CardboardBox
-|**a fishing net**|Can be used to catch the dove|e_ITEM_FishingNet
+|**a net**|Can be used to catch the dove|e_ITEM_Net
 |**a plastic bag**|Can be used to transport dust|e_ITEM_PlasticBag
 
 ## Items requiring containers to use

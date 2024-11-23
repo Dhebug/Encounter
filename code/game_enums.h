@@ -71,7 +71,7 @@
 #define	e_ITEM_TobaccoTin    		 0          // an empty tobacco tin
 #define	e_ITEM_Bucket        		 1          // a wooden bucket
 #define	e_ITEM_CardboardBox  		 2          // a cardboard box
-#define	e_ITEM_FishingNet    		 3          // a fishing net
+#define	e_ITEM_Net    		         3          // a net
 #define	e_ITEM_PlasticBag    		 4          // a plastic bag
 #define	e_ITEM__Last_Container       4          // ----- END CONTAINERS MARKER
 

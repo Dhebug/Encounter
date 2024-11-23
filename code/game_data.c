@@ -12,13 +12,13 @@ keyword gWordsArray[] =
     { "TABATIERE" ,e_ITEM_TobaccoTin         },      
     { "SEAU"    ,e_ITEM_Bucket               },      
     { "BOITE"   ,e_ITEM_CardboardBox         },      
-    { "FILET"   ,e_ITEM_FishingNet           },      
+    { "FILET"   ,e_ITEM_Net                  },      
     { "SAC"     ,e_ITEM_PlasticBag           },      
 #else
     { "TIN",    e_ITEM_TobaccoTin           },      
     { "BUCKET", e_ITEM_Bucket               },      
     { "BOX",    e_ITEM_CardboardBox         },      
-    { "NET",    e_ITEM_FishingNet           },      
+    { "NET",    e_ITEM_Net                  },      
     { "BAG",    e_ITEM_PlasticBag           },      
 #endif    
 
