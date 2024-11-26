@@ -50,6 +50,7 @@ _Text_AchievementReadTheBook      .byt "Lu le livre",0
 _Text_AchievementReadTheNote      .byt "Lu la note",0
 _Text_AchievementReadTheRecipes   .byt "Lu la recette",0
 _Text_AchievementOpenedTheFridge  .byt "Ouvert le frigo",0
+_Text_AchievementClosedTheFridge  .byt "Fermé le frigo",0
 _Text_AchievementOpenedTheCabinet .byt "Ouvert le placard",0
 _Text_AchievementDruggedTheMeat   .byt "Drogué la viande",0
 _Text_AchievementKilledTheDog     .byt "Tué le chien",0
@@ -78,10 +79,9 @@ _Text_AchievementGotTheBestScore  .byt "Meilleur score",0
 _Text_AchievementDogAteTheMeat    .byt "Chien à mangé",0
 _Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
-_Text_AchievementUnlimitedPauses  .byt "Pauses infinies",0
 _Text_AchievementCanYouRepeat     .byt "J'ai rien compris",0
-_Text_AchievementPlayedOnMicrodisc .byt "Joué sur Microdisc",0
-_Text_AchievementPlayedOnJasmin    .byt "Joué sur Jasmin",0
+_Text_AchievementReadTheInvoice   .byt "Lu la facture",0
+_Text_AchievementReadTheTombstone .byt "Repose en paix",0
 #else // LANGUAGE_EN
 _Text_Achievements                .byt 16+3,1,"        Achievements unlocked",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
@@ -95,6 +95,7 @@ _Text_AchievementReadTheBook      .byt "Read the book",0
 _Text_AchievementReadTheNote      .byt "Read the note",0
 _Text_AchievementReadTheRecipes   .byt "Read the recipes",0
 _Text_AchievementOpenedTheFridge  .byt "Opened the fridge",0
+_Text_AchievementClosedTheFridge  .byt "Closed the fridge",0
 _Text_AchievementOpenedTheCabinet .byt "Opened the cabinet",0
 _Text_AchievementDruggedTheMeat   .byt "Drugged the meat",0
 _Text_AchievementKilledTheDog     .byt "Killed the dog",0
@@ -123,10 +124,9 @@ _Text_AchievementGotTheBestScore  .byt "Got the best score",0
 _Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
 _Text_AchievementUsedHosePipe     .byt "Used the hose pipe",0
 _Text_AchievementPausedTheGame    .byt "Paused the game",0
-_Text_AchievementUnlimitedPauses  .byt "Unlimited pauses",0
 _Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
-_Text_AchievementPlayedOnMicrodisc .byt "Played on Microdisc",0
-_Text_AchievementPlayedOnJasmin    .byt "Played on Jasmin",0
+_Text_AchievementReadTheInvoice   .byt "Read the invoice",0
+_Text_AchievementReadTheTombstone .byt "Rest in peace",0
 #endif
 
 _AchievementMessages
@@ -171,7 +171,7 @@ _AchievementMessages
     .word _Text_AchievementFrikedTheThug    ; "Frisked the thug"
     .word _Text_AchievementUsedTheAcid      ; "Used the acid"
     .word _Text_AchievementCanYouRepeat     ; "Can you rpeat"
-    .word _Text_AchievementUnlimitedPauses  ; "Unlimited paused"
+    .word _Text_AchievementPausedTheGame    ; "Paused the game"
     .word _Text_AchievementOpenedTheCurtain ; "Opened the curtain"
     .word _Text_AchievementGaveTheKnife     ; "Gave the knife"
     .word _Text_AchievementGaveTheRope      ; "Gave the rope"
@@ -181,7 +181,7 @@ _AchievementMessages
     .word _Text_AchievementGotTheBestScore  ; "Got the best score"
     .word _Text_AchievementDogAteTheMeat    ; "Dog ate the meat"
     .word _Text_AchievementUsedHosePipe     ; "Used the hose pipe"
-    .word _Text_AchievementPausedTheGame    ; "Paused the game"
-    .word _Text_AchievementPlayedOnMicrodisc  ; "Played on Microdisc"
-    .word _Text_AchievementPlayedOnJasmin     ; "Played on Jasmin"
+    .word _Text_AchievementClosedTheFridge  ; "Closed the fridge"
+    .word _Text_AchievementReadTheInvoice   ; "Read the invoice"
+    .word _Text_AchievementReadTheTombstone ; "Read the tombstone"
 

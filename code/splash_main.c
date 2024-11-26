@@ -433,15 +433,6 @@ void main()
 
     // Increment the launch count and save back the scores
     gSaveGameFile.launchCount++;
-    if (LoaderApiSystemType==0)
-    {
-        UnlockAchievement(ACHIEVEMENT_PLAYED_ON_MICRODISC);
-    }
-    else
-    if (LoaderApiSystemType==1)
-    {
-        UnlockAchievement(ACHIEVEMENT_PLAYED_ON_JASMIN);
-    }
     memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
     gSaveGameFile.keyboard_layout = gKeyboardLayout;
     gSaveGameFile.music_enabled   = gMusicEnabled;

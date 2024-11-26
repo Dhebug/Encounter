@@ -2379,6 +2379,8 @@ recipe_already_found
 _InspectInvoice
 _ReadInvoice
 .(
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_INVOICE)                                       ; And get an achievement for that action    
+    INCREASE_SCORE(POINTS_READ_INVOICE)    
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une facture pour un voyage de deux ")
     INFO_MESSAGE("mois en Europe pour toute la famille")
@@ -3023,6 +3025,9 @@ _InspectTrashCan
 _ReadTombstone
 _InspectTombstone
 .(
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_TOMBSTONE)   ; Achievement!    
+    INCREASE_SCORE(POINTS_READ_TOMBSTONE)    
+
     DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il n'avait que 45 ans :(")
@@ -3797,6 +3802,7 @@ _CloseFridge
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),fridge)                                ; Is the fridge open?
         PLAY_SOUND(_DoorClosing)
         SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                              ; Close it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CLOSED_THE_FRIDGE)                                           ; And get an achievement for that action
 +_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur")
@@ -5403,58 +5409,12 @@ _PauseGameScript
             _BUFFER(17,63)
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     FADE_BUFFER
-    DO_ONCE(free_pause_message)
-        CLEAR_TEXT_AREA(5)                                                  ; Magenta background
+    CLEAR_TEXT_AREA(5)                                              ; Magenta background
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("La première pause est gratuite !")
+    INFO_MESSAGE("Appuyez sur une touche")
 #else
-        INFO_MESSAGE("The first pause is free!")
+    INFO_MESSAGE("Press a key to continue")
 #endif    
-        JUMP(_Unpause)
-    ENDDO(free_pause_message)
-    DO_ONCE(first_pause)
-        JUMP(_UnpauseMinus10)
-    ENDDO(first_pause)
-    DO_ONCE(second_pause)
-        JUMP(_UnpauseMinus50)
-    ENDDO(second_pause)
-    DO_ONCE(third_pause)
-        JUMP(_UnpauseMinus100)
-    ENDDO(third_pause)
-    DO_ONCE(fourth_pause)
-        JUMP(_UnpauseMinus500)
-    ENDDO(fourth_pause)
-    DO_ONCE(fifth_pause)
-        JUMP(_UnpauseMinus1000)
-    ENDDO(fifth_pause)
-    DO_ONCE(unlimited_pauses)
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_PAUSES_UNLIMITED)
-        CLEAR_TEXT_AREA(2)                                               ; GREEN background
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("Ok, ok, j'ai compris...")
-#else
-        INFO_MESSAGE("Ok, I give up, have it your way!")
-#endif    
-    ENDDO(unlimited_pauses)
-    JUMP(_Unpause)
-
-_UnpauseMinus1000
-    DECREASE_SCORE(1000)
-_UnpauseMinus500
-    DECREASE_SCORE(500)
-_UnpauseMinus100
-    DECREASE_SCORE(100)
-_UnpauseMinus50
-    DECREASE_SCORE(50)
-_UnpauseMinus10
-    DECREASE_SCORE(10)
-    CLEAR_TEXT_AREA(1)                                                  ; RED background
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Les pauses suivantes coutent !")
-#else
-    INFO_MESSAGE("Now pausing costs you points!")
-#endif    
-_Unpause
     WAIT_KEYPRESS
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     START_CLOCK
