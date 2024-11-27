@@ -316,10 +316,6 @@ keyword gWordsArray[] =
     { "INSPECT" , e_WORD_LOOK },
 #endif
 
-#ifdef ENABLE_CHEATS
-    { "INVOKE", e_WORD_INVOKE },
-#endif    
-
 #ifdef LANGUAGE_FR    
     { "PAUSE", e_WORD_PAUSE },
     { "AIDE", e_WORD_HELP },

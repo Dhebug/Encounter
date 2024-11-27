@@ -176,16 +176,13 @@
 #define	e_WORD_FRISK                 142
 #define	e_WORD_SEARCH                143
 #define	e_WORD_THROW                 144
-#ifdef ENABLE_CHEATS
-#define	e_WORD_INVOKE                145
-#endif    
 // Meta instructions
-#define	e_WORD_QUIT                  146
-#define e_WORD_HELP                  147
-#define e_WORD_PAUSE                 148
-#define	e_WORD_COUNT_                149
+#define	e_WORD_QUIT                  145
+#define e_WORD_HELP                  146
+#define e_WORD_PAUSE                 147
+#define	e_WORD_COUNT_                148
 // Additional values for the parser
-#define	e_WORD_CONTINUE              150
+#define	e_WORD_CONTINUE              149
 
 
 // Flags for the items

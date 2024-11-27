@@ -33,7 +33,6 @@
 
 //#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
-//#define ENABLE_CHEATS          // When enabled, allows to use special words to test things, like "Revive"
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16

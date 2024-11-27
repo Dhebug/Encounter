@@ -1956,9 +1956,6 @@ _gActionMappingsArray
 
     WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
 
-#ifdef ENABLE_CHEATS       
-    WORD_MAPPING(e_WORD_INVOKE    ,_Invoke                    ,FLAG_MAPPING_DEFAULT)
-#endif
     ; Implemented as script streams
     WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
     WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,FLAG_MAPPING_STREAM)
