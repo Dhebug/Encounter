@@ -2039,8 +2039,8 @@ _CombineMeatWithPills
 
 _CombinePetrolWithTP
 .(
-    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                          ; The Petrol is back into the car (but useless)
-    SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_TINY_WC)                   ; The TP is back into the toilets (but useless)
+    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_GONE_FOREVER)                          ; The Petrol is gone forever
+    SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_GONE_FOREVER)              ; The TP is gone forever
     SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_CURRENT)                         ; We now have a fuse for our bomb
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
     INCREASE_SCORE(POINTS_BUILT_FUSE)
@@ -2451,6 +2451,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _InspectTin)
     VALUE_MAPPING(e_ITEM_HandWrittenNote    , _InspectHandWrittenNote)
     VALUE_MAPPING(e_ITEM_FrontDoor          , _InspectFrontDoor)
+    VALUE_MAPPING(e_ITEM_Fuse               , _InspectFuse)
+    VALUE_MAPPING(e_ITEM_ToiletRoll         , _InspectToiletRoll)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2500,6 +2502,25 @@ _InspectGame
     INFO_MESSAGE("State of the art hardware!")
 #endif    
     END_AND_REFRESH
+
+
+ _InspectFuse
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Utilisable avec un explosif")
+#else    
+    INFO_MESSAGE("Can be used with an explosive")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+ _InspectToiletRoll
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Long, résistant, et super absorbant")
+#else    
+    INFO_MESSAGE("Long, sturdy, and extra absorbant")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
 
 
 _InspectKey
