@@ -34,11 +34,6 @@ WORDS ProcessPlayerNameAnswer()
     }
 }
 
-char ProcessFoundToken(WORDS wordId)
-{
-    return 1;
-}
-
 void PrintStatusMessageAsm()
 {
    sprintf(gStatusMessageLocation+1,"%c%s",param1.uchar,param0.ptr);

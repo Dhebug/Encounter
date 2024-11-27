@@ -493,6 +493,94 @@ bad_input
  .)
 
 
+// Fill param0.ptr=first;param1.ptr=second; first, returns in X
+_KeywordCompare
+.(
+    ldy #0
+loop_character  
+    ; Read first character
+    lda (_param0),y
+    jsr ConvertChar
+    sta _param2+0
+
+    ; Read second character
+    lda (_param1),y
+    jsr ConvertChar
+    sta _param2+1
+
+    ; Are they the same?
+    cmp _param2+0
+    bne no_match         ; Nope, different characters
+
+    lda _param2+0
+    beq matches          ; Null terminator -> gone
+
+    iny                  ; Next character
+    jmp loop_character
+
+
+end_first_string
+
+matches
+    lda #0
+    ldx #1
+    rts
+
+no_match
+    lda #0
+    ldx #0           ; Refuse the input
+    rts
+.)
+
+
+
+// A=input char
+// X=result
+ConvertChar
+.(
+    ; We replace spaces by zeroes to stop the scan (our keywords are insecable)
+    cmp #" "
+    bne not_space
+    lda #0
+    rts
+not_space    
+
+    ; We convert all characters to the same case (does not matter if it's upper or lower case as long a it's the same)
+    cmp #"A"
+    bcc not_shifted_letter
+    cmp #"Z"+1
+    bcs not_shifted_letter
+letter_a_z
+    ora #32            ; Make the character lower case
+    rts                ; And return
+not_shifted_letter
+
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
+    cmp #"é"
+    beq change_to_e
+    cmp #"è"
+    beq change_to_e
+    cmp #"ê"
+    bne not_e
+change_to_e    
+    lda #"e"
+    rts
+not_e
+
+    cmp #"à"
+    bne not_a
+change_to_a    
+    lda #"a"
+    rts
+not_a
+
+#endif
+    rts
+.)
+
+
+
 ; memset((char*)TemporaryBuffer479,' ',40*4);  = 160
 ; memset((char*)TemporaryBuffer479,' ',40*10); = 400
 _ClearTemporaryBuffer479

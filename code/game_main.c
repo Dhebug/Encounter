@@ -294,27 +294,6 @@ WORDS ProcessContainerAnswer()
     return gWordBuffer[0];
 }
 
-// MARK:Token Check
-char ProcessFoundToken(WORDS wordId)
-{
-    if (wordId < e_ITEM_COUNT_)
-    {
-        // It's an item
-        if (gItems[wordId].location == e_LOC_INVENTORY)
-        {
-            return 1;
-        }
-        if (gItems[wordId].location == gCurrentLocation)
-        {
-            return 1;
-        }
-    }
-    else
-    {
-        return 1;
-    }
-    return 0;
-}
 
 
 // MARK:Item Checks
@@ -470,18 +449,6 @@ void DropItem()
 
 
 
-#ifdef ENABLE_CHEATS
-void Invoke()
-{
-    // Wherever they are, give a specific item to the user
-    unsigned char itemId=gWordBuffer[1];
-    item* itemPtr=&gItems[itemId];
-    itemPtr->location = e_LOC_INVENTORY;
-    LoadScene();            
-}
-#endif    
-
-
 // MARK:Answer
 WORDS ProcessAnswer()
 {
@@ -579,7 +546,7 @@ void ShowHelp()
     gPrintPos = 0;
     SetLineAddress((char*)0xbb80+40*19+1);
 
-    while (keywordPtr->word)   // The list is terminated by a null pointer entry
+    while (keywordPtr->id != e_WORD_COUNT_)
     {
         if  ( (keywordPtr->id>e_ITEM_COUNT_) && (keywordPtr->id<e_WORD_COUNT_) )
         {
@@ -629,7 +596,7 @@ void Initializations()
 	ComputeFancyFontWidth();
 	GenerateShiftBuffer();
 	GenerateMul40Table();
-    SetKeyboardLayout(); 
+    SetKeyboardLayout();
 
 #ifdef TESTING_MODE
     // Mike: Only available on my machine, it's a set of preconditions to test the game, but it's technically the game solution, so...

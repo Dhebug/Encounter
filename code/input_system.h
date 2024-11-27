@@ -19,6 +19,3 @@ extern WORDS AskInput(const char* inputMessage, char checkTockens);
 
 extern void ResetInput();
 
-// At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
-extern unsigned char ParseInputBuffer();
-

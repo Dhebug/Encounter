@@ -137,6 +137,8 @@ extern unsigned char MusicMixerMask;
 #define Text(paperColor,inkColor)          { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _TextAsm"); }
 #define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }
 
+char KeywordCompare(); // Fill param0.ptr=first;param1.ptr=second; first, returns in X
+
 union ParamType
 {
     unsigned char uchar;        // One single byte

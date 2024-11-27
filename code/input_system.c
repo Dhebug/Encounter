@@ -17,86 +17,9 @@ extern void InputDefaultKey();
 extern void InputArrows();
 extern char ValidateInputReturn();
 
-// At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
-unsigned char ParseInputBuffer()
-{
-	unsigned char wordId;
-	char car;
-	char done;
-    char keepSearching;
-	keyword* keywordPtr;
-	char* separatorPtr;
-	char* inputPtr = gInputBuffer;
-
-	memset(gWordBuffer,e_WORD_COUNT_,sizeof(gWordBuffer));
-
-	gWordCount=0;
-	done = 0;
-
-	// While we have not reached the null terminator
-	while ((!done) && (car=*inputPtr))
-	{
-		if (car==' ')
-		{
-			// We automagically filter out the spaces
-			inputPtr++;
-		}
-		else
-		{
-			// This is not a space, so we assume it is the start of a word
-
-			// Search the end
-			separatorPtr=inputPtr;
-			while (*separatorPtr && (*separatorPtr!=' '))
-			{
-                // For the character to be upper case
-                /*
-                if ( (*separatorPtr>='a') && (*separatorPtr<='z') )
-                {
-                    *separatorPtr &= ~32;   // Force to upper case
-                }
-                */
-				separatorPtr++;
-			}
-			if (*separatorPtr == 0)
-			{
-				done = 1;
-			}
-			else
-			{
-				*separatorPtr=0;
-			}
-
-			// Now that we have identified the begining and end of the word, check if it's in our vocabulary list
-			gWordBuffer[gWordCount]=e_WORD_COUNT_;
-			keywordPtr = gWordsArray;
-            keepSearching = 1;
-			while (keepSearching && keywordPtr->word && (gWordCount<MAX_WORDS))   // The list is terminated by a null pointer entry
-			{
-				// Right now we do a full comparison of the words, but technically we could restrict to only a few significant characters.
-				if (strcmpi(inputPtr,keywordPtr->word)==0)
-				{
-					// Found the word in the list, we mark down the token id and continue searching
-                    unsigned char itemId = keywordPtr->id;
-					gWordBuffer[gWordCount] = itemId;
-                    keepSearching = !ProcessFoundToken(itemId);
-				}
-				++keywordPtr;
-			}
-			gWordCount++;
-			inputPtr = separatorPtr+1;
-            if (!done)
-            {
-                *separatorPtr=' ';  // Put the space back
-            }
-		}
-	}
-
-	return gWordCount;
-}
 
 
-char gPrintMessageBackground[40];
+char gPrintMessageBackground[40];   // moved to overlay
 
 WORDS AskInput(const char* inputMessage,char checkTockens)
 {
@@ -129,13 +52,6 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 
 		switch (gInputKey)
 		{
-#ifdef MODULE_GAME            
-#ifdef ENABLE_CHEATS
-        case KEY_ESC:
-            GameDebugger();
-            break;
-#endif            
-#endif
 		case KEY_DEL:  // We use DEL as Backspace
             InputDelete();
 			break;
@@ -149,7 +65,6 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
             break;
 
 		case KEY_RETURN:
-			//if (!checkTockens || ParseInputBuffer())
             if (ValidateInputReturn())
 			{
 				WORDS answer = gAnswerProcessingCallback();
