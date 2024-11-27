@@ -2310,7 +2310,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_Invoice            , _ReadInvoice)
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
-
+_InspectNewspaper
 _ReadNewsPaper
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_NEWSPAPER)    
@@ -2325,6 +2325,7 @@ _ReadNewsPaper
     END_AND_REFRESH
 
 
+_InspectHandWrittenNote
 _ReadHandWrittenNote
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_NOTE)    
@@ -2413,7 +2414,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
     VALUE_MAPPING(e_ITEM_HeavySafe          , _InspectSafe)
     VALUE_MAPPING(e_ITEM_Thug               , _InspectThug)
-    VALUE_MAPPING(e_ITEM_Newspaper          , _ReadNewsPaper)
+    VALUE_MAPPING(e_ITEM_Newspaper          , _InspectNewspaper)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _InspectPanicRoomDoor)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _InspectProtectionSuit)
     VALUE_MAPPING(e_ITEM_HoleInDoor         , _InspectHoleInDoor)
@@ -2448,6 +2449,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_GameConsole        , _InspectGameConsole)
     VALUE_MAPPING(e_ITEM_SmallKey           , _InspectKey)
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _InspectTin)
+    VALUE_MAPPING(e_ITEM_HandWrittenNote    , _InspectHandWrittenNote)
+    VALUE_MAPPING(e_ITEM_FrontDoor          , _InspectFrontDoor)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -3747,7 +3750,7 @@ _OpenCarPetrolTank
     END_AND_REFRESH
 .)
 
-
+_InspectFrontDoor
 _OpenSecurityDoor
 _OpenFrontDoor
 _OpenChurch
@@ -3756,7 +3759,14 @@ _OpenChurch
     INFO_MESSAGE("La porte est fermée")
 #else
     INFO_MESSAGE("The door is locked")
-#endif    
+#endif
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),frontdoor)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Peut-être une entrée arrière ?")
+#else
+        INFO_MESSAGE("Maybe there's a back entrance?")
+#endif
+    ENDIF(frontdoor)
     END_AND_PARTIAL_REFRESH
 .)
 
