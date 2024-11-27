@@ -144,7 +144,7 @@ _gTextItemHandheldGame            .byt "un$_jeu portable",0
 _gTextItemSedativePills           .byt "des$_somnifères",0
 _gTextItemDartGun                 .byt "un$_lance fléchettes",0
 _gTextItemBlackTape               .byt "du$_ruban adhésif noir",0
-_gTextItemMortarAndPestle         .byt "un$mortier et pilon",0
+_gTextItemMortarAndPestle         .byt "un$_mortier et pilon",0
 _gTextItemAdhesive                .byt "de l'$_adhésif",0
 _gTextItemAcid                    .byt "un$_acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
@@ -2151,7 +2151,7 @@ _CombineClayWithWater
     ENDIF(wet)
 
 #ifdef LANGUAGE_FR                                                     ; Rename the dry clay to wet clay
-    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'argile humide")
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'$_argile humide")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some wet _clay")
 #endif    
@@ -3438,7 +3438,11 @@ girl_at_the_window
 
     ELSE(window_open,window_closed)
         FADE_BUFFER 
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Impossible d'accéder à partir d'ici")
+#else
         INFO_MESSAGE("Impossible to access from here")
+#endif        
     ENDIF(window_closed)
     RETURN
 .)
@@ -3968,7 +3972,11 @@ _UseCar
         INFO_MESSAGE("I need to finish the mission first!")
 #endif        
     ELSE(marketplace,abandonned_car)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Rapprochons-nous")
+#else
         INFO_MESSAGE("Let's get closer")
+#endif        
         SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
     ENDIF(abandonned_car)
     END_AND_REFRESH
@@ -4142,7 +4150,11 @@ cannot_use_rope_here
 
 +_CombineRopeTree
 around_the_pit
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Vous attachez la corde à l'arbre")
+#else
     INFO_MESSAGE("You attach the rope to the tree")
+#endif    
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
@@ -4207,11 +4219,12 @@ _UseKey
                 UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
                 SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
                 INCREASE_SCORE(POINTS_USED_KEY)
-                INFO_MESSAGE("The panel is now unlocked")
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
                 SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
+                INFO_MESSAGE("La centrale est déverouillée")
 #else
                 SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
+                INFO_MESSAGE("The panel is now unlocked")
 #endif        
                 WAIT(50*1)
                 END_AND_REFRESH
@@ -4255,20 +4268,22 @@ _UseAlarmSwitch
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
         SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
         INCREASE_SCORE(POINTS_USED_SWITCH)
-        INFO_MESSAGE("The alarm is now disabled")
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position arrêt")
+        INFO_MESSAGE("L'alarme est désactivée")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in OFF position")
+        INFO_MESSAGE("The alarm is now disabled")
 #endif        
     ELSE(on,off)
         UNSET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                         ; Enable the alarm 
-        INFO_MESSAGE("The alarm is now enabled")
 +_gTextItemAlarmSwitch = *+2
 #ifdef LANGUAGE_FR                                                                      ; Update the description 
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position marche")
+        INFO_MESSAGE("L'alarme est activée")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in ON position")
+        INFO_MESSAGE("The alarm is now enabled")
 #endif        
     ENDIF(off)
     END_AND_REFRESH
@@ -4699,7 +4714,11 @@ MeatCommon
 dog_eating_the_meat
     PLAY_SOUND(_Swoosh)
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Content que ce ne soit pas moi !")
+#else
     INFO_MESSAGE("Glad it's not me there!")
+#endif    
     SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
     JUMP_IF_FALSE(done,CHECK_ITEM_FLAG(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED))  // Is the meat drugged?
