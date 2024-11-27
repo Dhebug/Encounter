@@ -34,13 +34,13 @@ _gTextCredits
     .byt TEXT_CRLF
     .byt 6,"               Musique:",TEXT_CRLF
     .byt 7,"  Per Almered (avec Arkos Tracker)",TEXT_CRLF
-    .byt 4," (*) we assume"
+    .byt 4," (*) supposément"
     .byt TEXT_END
 
 _gTextAdditionalCredits
-    .byt TEXT_CRLF,TEXT_CRLF
-    .byt 3,"Game testing and feedbck",TEXT_CRLF
-    .byt 7,"Dom, Lukas, Symoon",TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
+    .byt 6,"    Test du jeu et retour d'expérience",TEXT_CRLF
+    .byt 7,"         Dom, Lukas, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription

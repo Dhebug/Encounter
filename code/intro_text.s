@@ -30,22 +30,21 @@ _Text_GameInstructions
     .byt "Votre tache est de trouver et sauver",TEXT_CRLF
     .byt "une fille kidnappée par des voyous.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Donnez les ordres avec VERBES et NOMS",TEXT_CRLF
-    .byt "ex:VID(e) SEA(u) ou DON(ne) CLE(fs)",TEXT_CRLF
+    .byt "La mission échoue si vous êtes détecté",TEXT_CRLF
+    .byt "ou si vous manquez de temps.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Utilisez des VERBES et des NOMS comme",TEXT_CRLF
+    .byt "ex: PREND CLEF ou COMBINE PAIN BEURRE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"  MOUVEMENT            VERBES",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "N:NORD S:SUD    PRENDS POSE LANCE TUE",TEXT_CRLF
-    .byt "O:OUEST E:EST  FABRIQUE GRIMPE QUITTE",TEXT_CRLF
-    .byt "H:HAUT B:BAS     OUVRE CHARGE FOUILLE",TEXT_CRLF
-    .byt "R:REGARDE           LIT PRESSE FRAPPE",TEXT_CRLF
-    .byt 1,"              NOTES",0,"    TIRE SIPHONE",TEXT_CRLF
+    .byt "N:NORD S:SUD         PREND POSE LANCE",TEXT_CRLF
+    .byt "O:OUEST E:EST          COMBINE QUITTE",TEXT_CRLF
+    .byt "H:HAUT B:BAS            OUVRE FOUILLE",TEXT_CRLF
+    .byt "PAUSE AIDE                LIT UTILISE",TEXT_CRLF
+    .byt 1,"              NOTES",0,"    REGARDE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
     .byt "mais être bricoleur peut aider.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "La mission échoue si le temps restant",TEXT_CRLF
-    .byt "ou l'alarme tombent a zéro.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tracez une carte et annotez la.",TEXT_CRLF
     .byt TEXT_CRLF
@@ -62,7 +61,6 @@ _Text_GameInstructions
 	.byt "or if you run out of time.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Give orders using VERBS and NOUNS",TEXT_CRLF
-	;.byt "eg:DROP BOTTLE or GET KEYS",TEXT_CRLF
     .byt "eg: GET KEYS or COMBINE BREAD BUTTER",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"   MOVEMENT            VERBS",TEXT_CRLF,TEXT_CRLF
@@ -125,16 +123,16 @@ _Text_Loading_FirstTimeEver
     .byt "Certain peuvent être LU ou INSPECTE.",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
-    .byt "Lethality is always an option but being",TEXT_CRLF
-    .byt "a pacifist will grant you more points.",TEXT_CRLF
+    .byt "Tuer est toujours une option, mais être",TEXT_CRLF
+    .byt "pacifiste rapporte plus de points.",TEXT_CRLF
     .byt 0
 _Text_Loading_ThirdTime    
-    .byt "Some items have multiple uses, some have",TEXT_CRLF
-    .byt "no specific purpose. Try to guess right!",TEXT_CRLF
+    .byt "Certains objets ont plusieurs usages...",TEXT_CRLF
+    .byt "but certains autres sont inutiles !",TEXT_CRLF
     .byt 0
 _Text_Loading_FourthTime
-    .byt "Some items will have to be built using",TEXT_CRLF
-    .byt "combinations of other items together.",TEXT_CRLF
+    .byt "Vous devrez construire quelques objets",TEXT_CRLF
+    .byt "en combinant ensemble d'autres objets.",TEXT_CRLF
     .byt 0
 #else
 _Text_Loading_FirstTimeEver    
