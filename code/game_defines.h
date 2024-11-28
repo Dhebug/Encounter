@@ -89,7 +89,7 @@ extern const char gTextErrorInvalidDirection[]; // "Impossible to move in that d
 extern const char gTextErrorCantTakeNoSee[];    // "You can only take something you see"
 extern const char gTextErrorAlreadyHaveItem[];  // "You already have this item"
 extern const char gTextErrorCannotDo[];         // "I can't do it"
-extern const char gTextErrorRidiculous[];       // "Don't be ridiculous"
+extern const char gTextErrorThatWillNotWork[];  // "That will not work"
 extern const char gTextErrorAlreadyFull[];      // "Sorry, that's full already"
 extern const char gTextErrorMissingContainer[]; // "You don't have this container"
 extern const char gTextErrorDropNotHave[];      // "You can only drop something you have"

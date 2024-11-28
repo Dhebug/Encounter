@@ -63,7 +63,7 @@ _StartErrorMessages
 _gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
-_gTextErrorRidiculous       .byt "Ne soyez pas ridicule",0
+_gTextErrorThatWillNotWork  .byt "Ca ne vas pas aller",0
 _gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
@@ -76,7 +76,7 @@ _gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
 _gTextErrorAlreadyHaveItem  .byt "You already have this item",0
-_gTextErrorRidiculous       .byt "Don't be ridiculous",0
+_gTextErrorThatWillNotWork  .byt "That will not work",0
 _gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
 _gTextErrorMissingContainer .byt "You don't have this container",0
 _gTextErrorDropNotHave      .byt "You can only drop something you have",0

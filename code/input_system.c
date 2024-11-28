@@ -65,7 +65,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
             break;
 
 		case KEY_RETURN:
-            if (ValidateInputReturn())
+            if (ValidateInputReturn() || ((gWordCount==0) && gInputAcceptsEmpty))
 			{
 				WORDS answer = gAnswerProcessingCallback();
 				if (answer !=e_WORD_CONTINUE)

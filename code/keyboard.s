@@ -176,6 +176,13 @@ _ReadKey
     sta gInternalKeyPressed
     rts
 
+_WaitReleasedKey
+    jsr _WaitIRQ
+    jsr _ReadKey
+    cpx #0
+    bne _WaitReleasedKey
+    rts
+
 
 ; Read a single key, same as before but no repeating.
 

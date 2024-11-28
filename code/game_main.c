@@ -291,7 +291,14 @@ WORDS AskInputCallback()
 
 WORDS ProcessContainerAnswer()
 {
-    return gWordBuffer[0];
+    if (gWordCount)
+    {
+        return gWordBuffer[0];
+    }
+    else
+    {
+        return e_ITEM_COUNT_;   // Triggers the "will not work" message, can be used to disengage the "in what" requester
+    }
 }
 
 
@@ -372,11 +379,13 @@ void TakeItem()
         WORDS containerId;
         AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
         gAnswerProcessingCallback = ProcessContainerAnswer;
+        gInputAcceptsEmpty = 1;
         containerId = AskInput(gTextCarryInWhat,1 );    // "Carry it in what?"
         gAnswerProcessingCallback = previousCallback;
+        gInputAcceptsEmpty = 0;
         if ( (containerId > e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
         {
-            PrintErrorMessage(gTextErrorRidiculous);    // "Don't be ridiculous"
+            PrintErrorMessage(gTextErrorThatWillNotWork);    // "That will not work"
             return;
         }
         else

@@ -11,11 +11,11 @@ _gAnswerProcessingCallback .dsb 2
 _gInputKey          .dsb 1
 _gInputShift        .dsb 1
 _gInputErrorCounter .dsb 1
-
 _gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words
 
     .text 
 
+_gInputAcceptsEmpty .byt 0
 
 _ResetInput
 .(
@@ -26,8 +26,10 @@ _ResetInput
     sta _gInputBufferPos
     sta _gInputBuffer+0
     sta _gInputErrorCounter
+    sta _gInputKey
+    sta _gInputShift
     
-    jmp _ReadKey            ; Remove any key in the buffer
+    jmp _WaitReleasedKey            ; Remove any key in the buffer and wait for the keys to not be pressed anymoe
 .)
 
 
