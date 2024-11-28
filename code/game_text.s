@@ -2883,7 +2883,7 @@ tennis_court
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),fish_pond)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je peux voir une sale de jeux")
+        INFO_MESSAGE("Je peux voir une salle de jeux")
 #else
         INFO_MESSAGE("I can see a game room")
 #endif    
@@ -5166,9 +5166,9 @@ _TakeHose
 .(
 +_gTextItemHose = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau d'arrosage")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a garden _hose")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose")
 #endif    
     JUMP(_TakeCommon)
 .)
@@ -5286,36 +5286,37 @@ _SpawnWaterIfNotEquipped
 
 _ErrorCannotDo
 .(
+    CLEAR_TEXT_AREA(5)
 +_gTextErrorCannotDo = *+1    
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je ne peux pas le faire")
+    INFO_MESSAGE("Je ne peux pas le faire")
 #else
-    ERROR_MESSAGE("I can't do that")
+    INFO_MESSAGE("I can't do that")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 
 _ErrorCannotRead
 .(
-//+_gTextErrorCannotRead = *+1    
+    CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je ne peux pas lire ca")
+    INFO_MESSAGE("Je ne peux pas lire ca")
 #else
-    ERROR_MESSAGE("I can't read that")
+    INFO_MESSAGE("I can't read that")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 _MessageNothingSpecial
 .(
-//+gTextErrorNothingSpecial = *+1    
+    CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Rien de spécial")
+    INFO_MESSAGE("Rien de spécial")
 #else
-    ERROR_MESSAGE("Nothing special")
+    INFO_MESSAGE("Nothing special")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 .)
 
 

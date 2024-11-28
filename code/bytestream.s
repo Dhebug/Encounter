@@ -105,6 +105,9 @@ check_partial_refresh
     lda _gCurrentStreamStop
     and #FLAG_PARTIAL_REFRESH
     beq quit
+    lda #16+4
+    sta _param0
+    jsr _ClearMessageWindowAsm
     jmp _PrintSceneInformation
 quit    
     rts    
