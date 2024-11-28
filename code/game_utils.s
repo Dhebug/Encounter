@@ -9,6 +9,8 @@ _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1
 _gInventoryOffset           .dsb 2
 
+_gActionMappingPtr          .dsb 2
+
     .text
 
 
@@ -578,6 +580,45 @@ not_a
 #endif
     rts
 .)
+
+
+
+; Input: _gWordBuffer[0]
+; Output: _gActionMappingPtr points to the right entry and return 1, else returns 0
+_FindActionMapping
+.(
+    ; Start of action table
+    lda #<_gActionMappingsArray
+    sta _gActionMappingPtr+0
+    lda #>_gActionMappingsArray
+    sta _gActionMappingPtr+1
+
+search_loop
+    ldy #0
+    lda (_gActionMappingPtr),y       ; Load the word id from the table entry
+    cmp _gWordBuffer+0               ; Compare with the first keyword
+    beq found
+
+    clc
+    lda _gActionMappingPtr+0
+    adc #4
+    sta _gActionMappingPtr+0
+    lda _gActionMappingPtr+1
+    adc #0
+    sta _gActionMappingPtr+1
+    jmp search_loop
+
+not_found
+    lda #0
+    ldx #0
+    rts
+
+found
+    lda #0
+    ldx #1
+    rts
+.)
+
 
 
 

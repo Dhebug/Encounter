@@ -449,72 +449,68 @@ void DropItem()
 
 
 
+char FindActionMapping();
+extern action_mapping* gActionMappingPtr;
+
 // MARK:Answer
 WORDS ProcessAnswer()
 {
-	// Check the first word
-    action_mapping* actionMappingPtr = gActionMappingsArray;
-    unsigned char actionId=gWordBuffer[0];
-
-    while (actionMappingPtr->id!=e_WORD_COUNT_)
+    if (FindActionMapping())
     {
-        if (actionMappingPtr->id==actionId)
-        {            
-            unsigned char flags = actionMappingPtr->flag;
-            if (flags & FLAG_MAPPING_STREAM)
+        unsigned char flags = gActionMappingPtr->flag;
+        if (flags & FLAG_MAPPING_STREAM)
+        {
+            // Run the stream
+            void* stream = gActionMappingPtr->u.stream;
+            if (flags & FLAG_MAPPING_STREAM_CALLBACK)
             {
-                // Run the stream
-                void* stream = actionMappingPtr->u.stream;
-                if (flags & FLAG_MAPPING_STREAM_CALLBACK)
-                {
-                    // Just a simple "script callback"
-                    PlayStream(stream);
-                }
-                else
-                {
-                    // The callback to run require a lookup in a array based on some item numbers
-                    unsigned char itemId = gWordBuffer[1];
-                    if (ItemCheck(itemId,1))
-                    {
-                        ClearMessageWindow(16+4);
-
-                        if (flags & FLAG_MAPPING_TWO_ITEMS)
-                        {
-                            unsigned char itemId2 = gWordBuffer[2];
-                            if (ItemCheck(itemId2,2))
-                            {
-                                DispatchStream2(stream,itemId,itemId2);
-                            }
-                        }
-                        else
-                        {
-                            DispatchStream(stream,itemId);
-                        }
-                    }
-                }
+                // Just a simple "script callback"
+                PlayStream(stream);
             }
             else
             {
-                // call the callback
-                actionMappingPtr->u.function();
-            }
+                // The callback to run require a lookup in a array based on some item numbers
+                unsigned char itemId = gWordBuffer[1];
+                if (ItemCheck(itemId,1))
+                {
+                    ClearMessageWindow(16+4);
 
-            // Test for game over
-            if (gGameOverCondition!=0)
-            {
-                // The player has reached a game over condition
-                return e_WORD_QUIT;
+                    if (flags & FLAG_MAPPING_TWO_ITEMS)
+                    {
+                        unsigned char itemId2 = gWordBuffer[2];
+                        if (ItemCheck(itemId2,2))
+                        {
+                            DispatchStream2(stream,itemId,itemId2);
+                        }
+                    }
+                    else
+                    {
+                        DispatchStream(stream,itemId);
+                    }
+                }
             }
-
-            // Continue, clear the prompt
-            if (gTextAskInput[0])
-            {
-                gTextAskInput[0]=0;
-            }
-            return e_WORD_CONTINUE;
         }
-        actionMappingPtr++;
+        else
+        {
+            // call the callback
+            gActionMappingPtr->u.function();
+        }
+
+        // Test for game over
+        if (gGameOverCondition!=0)
+        {
+            // The player has reached a game over condition
+            return e_WORD_QUIT;
+        }
+
+        // Continue, clear the prompt
+        if (gTextAskInput[0])
+        {
+            gTextAskInput[0]=0;
+        }
+        return e_WORD_CONTINUE;
     }
+
 
 	// Not recognized: Warn the player and continue
     UnlockAchievement(ACHIEVEMENT_CAN_YOU_REPEAT);
@@ -537,7 +533,7 @@ void ShowHelp()
     gPrintPos = 0;
     SetLineAddress((char*)0xbb80+40*19+1);
 
-    while (keywordPtr->id != e_WORD_COUNT_)
+    while (keywordPtr->word)   // The list is terminated by a null pointer entry
     {
         if  ( (keywordPtr->id>e_ITEM_COUNT_) && (keywordPtr->id<e_WORD_COUNT_) )
         {
