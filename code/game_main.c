@@ -455,15 +455,6 @@ WORDS ProcessAnswer()
 	// Check the first word
     action_mapping* actionMappingPtr = gActionMappingsArray;
     unsigned char actionId=gWordBuffer[0];
-    if (actionId==e_WORD_QUIT)
-    {
-		// Quit the game
-		PlaySound(KeyClickHData);
-        UnlockAchievement(ACHIEVEMENT_GAVE_UP);
-        gGameOverCondition = e_SCORE_GAVE_UP;
-        gScore -= MALUS_POINTS_GIVE_UP;
-		return e_WORD_QUIT;
-    }
 
     while (actionMappingPtr->id!=e_WORD_COUNT_)
     {

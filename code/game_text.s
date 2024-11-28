@@ -1955,6 +1955,7 @@ _gActionMappingsArray
     WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,FLAG_MAPPING_DEFAULT)
 
     WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
+    WORD_MAPPING(e_WORD_QUIT      ,_QuitGameScript            ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
 
     ; Implemented as script streams
     WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
@@ -5469,6 +5470,17 @@ _PauseGameScript
     SET_CUT_SCENE(0)
     END_AND_REFRESH
 .)    
+
+
+; Called if the player types QUIT to leave the game
+_QuitGameScript
+.(
+    PLAY_SOUND(_KeyClickHData)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_UP)
+    GAME_OVER(e_SCORE_GAVE_UP)
+    DECREASE_SCORE(MALUS_POINTS_GIVE_UP)
+    END
+.)
 
 _EndGameTextData
 
