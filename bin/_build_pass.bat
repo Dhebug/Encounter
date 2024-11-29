@@ -18,7 +18,7 @@ IF ERRORLEVEL 1 GOTO Error
 
 ECHO.
 ECHO %ESC%[96m== Assembling loader ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o
+%osdk%\bin\xa -DASSEMBLER=XA -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader
 IF ERRORLEVEL 1 GOTO Error
 
 ::IF NOT EXIST BUILD\symbols GOTO NoSymbol
@@ -43,8 +43,8 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_SPLASH
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
-copy build\symbols ..\build\symbols_SplashProgram >NUL
-IF %TEST_MODULE%==SPLASH COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader ..\build\symbols_SplashProgram >NUL
+IF %TEST_MODULE%==SPLASH COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==SPLASH SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
 :EndSplash
 
@@ -66,8 +66,8 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_INTRO
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
-copy build\symbols ..\build\symbols_IntroProgram >NUL
-IF %TEST_MODULE%==INTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader ..\build\symbols_IntroProgram >NUL
+IF %TEST_MODULE%==INTRO COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==INTRO SET BREAKPOINTS=%BREAKPOINTS_INTRO%
 :EndIntro
 
@@ -89,8 +89,8 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_OUTRO
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
-copy build\symbols ..\build\symbols_OutroProgram >NUL
-IF %TEST_MODULE%==OUTRO COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader ..\build\symbols_OutroProgram >NUL
+IF %TEST_MODULE%==OUTRO COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==OUTRO SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
 :EndOutro
 
@@ -112,8 +112,8 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
-copy build\symbols ..\build\symbols_GameProgram >NUL
-IF %TEST_MODULE%==GAME COPY build\symbols %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader ..\build\symbols_GameProgram >NUL
+IF %TEST_MODULE%==GAME COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
 
