@@ -32,7 +32,7 @@ The original "Encounter" game may have been written by "Adrian Sheppard" but it 
 
 Anyone adding a localization of the game is entitled to the work they did on it.
 
-This new version is pretty much a 100% rewrite of the original game, what remains is the core story, the locations and how they connect to each other, and most of the original text.
+This new version is pretty much a 100% rewrite of the original game, what remains is the core story, the locations and how they connect to each other, and some of the original text.
 
 ## How to build and run
 The program is designed to be built with the OSDK (current version is 1.20) which can be downloaded for free at https://osdk.org
