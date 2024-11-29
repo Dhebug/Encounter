@@ -8,6 +8,8 @@ _param2 .dsb 2
 
     .text
 
+#define OSDK_CUSTOM_STACK 
+osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 _EndText
 
 #ifdef MODULE_INTRO
@@ -124,10 +126,11 @@ _SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a ful
 _gInputBuffer               .dsb 40
 #endif
 
-#define OSDK_CUSTOM_STACK 
-osdk_stack                  .dsb 256      ; We move the stack in overlay memory
+// Commented out because this overwrites the loader
+//#define OSDK_CUSTOM_STACK 
+//osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 _free_to_use_overlay
 
-* = $fe00
+* = $fb00
 _DiskLoader
 
