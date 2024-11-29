@@ -281,6 +281,7 @@
 #define POINTS_MADE_CLAY_WET              100
 
 #define POINTS_GAVE_BREAD_TO_DOVE         100
+#define POINTS_GAVE_BREAD_TO_FISHES       100
 #define POINTS_DOG_CHASED_DOVE            200
 
 #define POINTS_DRUGGED_MEAT               100

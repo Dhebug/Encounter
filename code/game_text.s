@@ -1611,6 +1611,7 @@ beeping_alarm_panel_loop
 
 // MARK: Main Landing
 _gDescriptionMainLanding
+    SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
@@ -2404,6 +2405,7 @@ _ReadInvoice
 
 _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _InspectMap)
+    VALUE_MAPPING(e_ITEM_LargeDove          , _InspectDove)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _InspectChemistryBook)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _InspectGame)
     VALUE_MAPPING(e_ITEM_Fridge             , _InspectFridgeDoor)
@@ -2454,6 +2456,16 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_FrontDoor          , _InspectFrontDoor)
     VALUE_MAPPING(e_ITEM_Fuse               , _InspectFuse)
     VALUE_MAPPING(e_ITEM_ToiletRoll         , _InspectToiletRoll)
+    VALUE_MAPPING(e_ITEM_Bucket             , _InspectBucket)
+    VALUE_MAPPING(e_ITEM_Rope               , _InspectRope)
+    VALUE_MAPPING(e_ITEM_BoxOfMatches       , _InspectMatches)
+    VALUE_MAPPING(e_ITEM_CardboardBox       , _InspectCardboardBox)
+    VALUE_MAPPING(e_ITEM_Fish               , _InspectFish)
+    VALUE_MAPPING(e_ITEM_Water              , _InspectWater)
+    VALUE_MAPPING(e_ITEM_Hose               , _InspectHose)
+    VALUE_MAPPING(e_ITEM_Bread              , _InspectBread)
+    VALUE_MAPPING(e_ITEM_Adhesive           , _InspectAdhesive)
+    VALUE_MAPPING(e_ITEM_Curtain            , _InspectCurtain)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2523,6 +2535,86 @@ _InspectGame
     END_AND_PARTIAL_REFRESH
 
 
+_InspectMatches
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Utile pour allumer un feu")
+#else    
+    INFO_MESSAGE("You could start a fire with that")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectRope
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Pratique pour grimper ou descendre")
+#else    
+    INFO_MESSAGE("You could climb up or down with it")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectDove
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle roucoule sur une branche haute")
+#else    
+    INFO_MESSAGE("It's chirping high up on a branch")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectFish
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il semble aimer son bassin")
+#else    
+    INFO_MESSAGE("It seems happy swimming around")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectWater
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle est propre, fraiche et liquide")
+#else    
+    INFO_MESSAGE("It's clean, fresh, and liquid")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectHose
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Sert a transférer les liquides")
+#else    
+    INFO_MESSAGE("Designed to move liquids efficiently")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectAdhesive
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ca maintient les choses en place")
+#else    
+    INFO_MESSAGE("Designed to keep things in place")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectBread
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Facile à émieter")
+#else    
+    INFO_MESSAGE("Easy to crumble")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectCurtain
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Que cache t'il ?")
+#else    
+    INFO_MESSAGE("Anything behind?")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
 
 _InspectKey
 #ifdef LANGUAGE_FR
@@ -2532,13 +2624,6 @@ _InspectKey
 #endif    
     END_AND_PARTIAL_REFRESH
 
-_InspectTin
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une boite en métal ")
-#else    
-    INFO_MESSAGE("It's a sturdy metal box")
-#endif    
-    END_AND_PARTIAL_REFRESH
 
 
 _InspectComputer
@@ -2923,6 +3008,14 @@ dinning_room
         INFO_MESSAGE("I can see the back wall outside")
 #endif    
 kitchen
+
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_UP_STAIRS),up_stairs)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Je peux voir le patio dehors")
+#else
+        INFO_MESSAGE("I can see the patio outside")
+#endif    
+up_stairs
     END_AND_REFRESH
 .)
 
@@ -2948,6 +3041,22 @@ _InspectAlarmIndicator
 .)
 
 
+_InspectCardboardBox
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Format postal standard")
+#else    
+    INFO_MESSAGE("Postal service standard package")
+#endif    
+    JUMP(_InspectContainerGeneric)
+
+_InspectTin
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une boite en métal ")
+#else    
+    INFO_MESSAGE("It's a sturdy metal box")
+#endif    
+    JUMP(_InspectContainerGeneric)
+
 _InspectPlasticBag
 .(
     INCREASE_SCORE(POINTS_INSPECT_PLASTIC_BAG)
@@ -2955,6 +3064,14 @@ _InspectPlasticBag
     INFO_MESSAGE("Juste un sac blanc normal")
 #else
     INFO_MESSAGE("It's just a white generic bag")
+#endif    
+    ;JUMP(_InspectContainerGeneric)
++_InspectBucket
++_InspectContainerGeneric
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Peut servir a transporter des trucs")
+#else    
+    INFO_MESSAGE("Can be used to transport things")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
@@ -3717,7 +3834,12 @@ _AlarmTriggered
     SET_CUT_SCENE(1)
     DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
-    ERROR_MESSAGE("You triggered the alarm!")
+    CLEAR_TEXT_AREA(1)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous avez déclanché l'alarme!")
+#else
+    INFO_MESSAGE("You triggered the alarm!")
+#endif    
     WAIT(50*2)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
     GAME_OVER(e_SCORE_TRIPPED_ALARM)
@@ -4703,7 +4825,10 @@ _UseBread
 
 BreadCommon
 .(
-    JUMP_IF_FALSE(not_in_wooded_avenue,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    JUMP_IF_TRUE(fish_pond,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
+    JUMP_IF_TRUE(give_bread_to_dove,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    RETURN
+
 give_bread_to_dove
     // The bird is now possible to catch
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
@@ -4724,7 +4849,16 @@ give_bread_to_dove
     END_AND_REFRESH
 
 not_in_wooded_avenue
-    RETURN
+fish_pond
+    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
+    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISHES)
+    PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Les poissons mangent les miettes")
+#else
+    INFO_MESSAGE("The fishes eat the crumbs")
+#endif    
+    END_AND_REFRESH
 .)
 
 
