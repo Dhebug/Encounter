@@ -2507,6 +2507,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _InspectSwitch)
     VALUE_MAPPING(e_ITEM_YoungGirl          , _InspectGirl)
     VALUE_MAPPING(e_ITEM_BlackTape          , _InspectBlackTape)
+    VALUE_MAPPING(e_ITEM_Acid               , _InspectAcid)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -5436,6 +5437,8 @@ _TakeBlackTape
     END_AND_REFRESH
 .)
 
+
+_InspectAcid
 _TakeAcid
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
