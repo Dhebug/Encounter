@@ -246,7 +246,11 @@ AddDefine LOADER_PICTURE_HANDWRITTEN_NOTE {FileIndex}
 AddFile ..\build\files\view_science_book.hir
 AddDefine LOADER_PICTURE_SCIENCE_BOOK {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_chemistry_recipes_fr.hir
+#else
 AddFile ..\build\files\view_chemistry_recipes.hir
+#endif
 AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 
 AddFile ..\build\files\view_united_kingdom_map.hir
