@@ -2506,6 +2506,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Clay               , _InspectClay)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _InspectSwitch)
     VALUE_MAPPING(e_ITEM_YoungGirl          , _InspectGirl)
+    VALUE_MAPPING(e_ITEM_BlackTape          , _InspectBlackTape)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2635,6 +2636,15 @@ _InspectAdhesive
     INFO_MESSAGE("Ca maintient les choses en place")
 #else    
     INFO_MESSAGE("Designed to keep things in place")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectBlackTape
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Probablement possible de l'enlever")
+#else    
+    INFO_MESSAGE("It should be possible to remove it")
 #endif    
     END_AND_PARTIAL_REFRESH
 
