@@ -109,7 +109,7 @@ _gTextItemPlasticBag              .byt "un$_sac en plastique",0
 // Items requiring containers
 _gTextItemBlackDust               .byt "du$_salpêtre",0
 _gTextItemYellowPowder            .byt "du$_soufre",0
-_gTextItemPetrol                  .byt "du$_pétrole",0
+_gTextItemPetrol                  .byt "de l'$_essence",0
 _gTextItemWater                   .byt "de l'$_eau",0
 // Normal items
 _gTextItemOpenPanel               .byt "un _panneau mural ouvert",0
@@ -342,8 +342,8 @@ no_plastic_bag
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(4,100,0,"Nous l'avons fait !")
-        _BUBBLE_LINE(4,106,4,"Plus qu'à rentrer à la maison")
+        _BUBBLE_LINE(60,70,0,"Nous avons réussi !")
+        _BUBBLE_LINE(30,81,0,"Plus qu'à rentrer à la maison")
 #else
         _BUBBLE_LINE(90,70,0,"We did it!")
         _BUBBLE_LINE(70,80,0,"Time to go home!")
@@ -1386,7 +1386,11 @@ _gDescriptionCellar
 #endif    
 
         CLEAR_TEXT_AREA(1)
+#ifdef LANGUAGE_FR
+        QUICK_MESSAGE("Je devrais aller m'abriter")
+#else
         QUICK_MESSAGE("I should go somewhere safe")
+#endif        
         PLAY_SOUND(_FuseBurningStart)
         WAIT(50*2)
 
@@ -1421,7 +1425,11 @@ _gDescriptionCellar
         WAIT(50)
 
         CLEAR_TEXT_AREA(4)
+#ifdef LANGUAGE_FR
+        QUICK_MESSAGE("Toujours là ?")
+#else
         QUICK_MESSAGE("Still there?")
+#endif        
 
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*5,67)
@@ -1439,7 +1447,11 @@ _gDescriptionCellar
         PLAY_SOUND(_ExplodeData)
         DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
         CLEAR_TEXT_AREA(1)
+#ifdef LANGUAGE_FR
+        QUICK_MESSAGE("Bon... Vous avez été prévenu, non ?")
+#else
         QUICK_MESSAGE("Well... I warned you, didn't I?")
+#endif        
 
         LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
@@ -1870,8 +1882,8 @@ _gDescriptionPanicRoomDoor
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(135,16,0,"Elle est moins")
-        _BUBBLE_LINE(131,53,0,"sécurisée maintenant")
+        _BUBBLE_LINE(150,10,1,"Elle est moins")
+        _BUBBLE_LINE(120,57,1,"sécurisée maintenant")
 #else
         _BUBBLE_LINE(153,70,0,"Definitely less")
         _BUBBLE_LINE(148,85,0,"secure now")
@@ -2120,7 +2132,11 @@ _CombineBombWithAdhesive
 _CombineStickyBombWithSafe
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Ca doit coller à la porte")
+#else
         ERROR_MESSAGE("It needs to stick to the door")
+#endif        
         END_AND_REFRESH
     ENDIF(sticky)
 
@@ -2158,7 +2174,11 @@ _CombineBombWithMatches
 _CombineClayWithWater
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
+#ifdef LANGUAGE_FR           
+        ERROR_MESSAGE("C'est déjà humide !")
+#else
         ERROR_MESSAGE("It's already wet!")
+#endif        
         END_AND_REFRESH
     ENDIF(wet)
 
@@ -2468,6 +2488,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_ToiletRoll         , _InspectToiletRoll)
     VALUE_MAPPING(e_ITEM_Bucket             , _InspectBucket)
     VALUE_MAPPING(e_ITEM_Rope               , _InspectRope)
+    VALUE_MAPPING(e_ITEM_Ladder             , _InspectLadder)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _InspectMatches)
     VALUE_MAPPING(e_ITEM_CardboardBox       , _InspectCardboardBox)
     VALUE_MAPPING(e_ITEM_Fish               , _InspectFish)
@@ -2476,6 +2497,13 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Bread              , _InspectBread)
     VALUE_MAPPING(e_ITEM_Adhesive           , _InspectAdhesive)
     VALUE_MAPPING(e_ITEM_Curtain            , _InspectCurtain)
+    VALUE_MAPPING(e_ITEM_Saltpetre          , _InspectSaltpetre)
+    VALUE_MAPPING(e_ITEM_Sulphur            , _InspectSulphur)
+    VALUE_MAPPING(e_ITEM_Net                , _InspectNet)
+    VALUE_MAPPING(e_ITEM_GunCabinet         , _InspectGunCabinet)
+    VALUE_MAPPING(e_ITEM_Pistol             , _InspectPistol)
+    VALUE_MAPPING(e_ITEM_Clay               , _InspectClay)
+    VALUE_MAPPING(e_ITEM_AlarmSwitch        , _InspectSwitch)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2554,6 +2582,7 @@ _InspectMatches
     END_AND_PARTIAL_REFRESH
 
 
+_InspectLadder
 _InspectRope
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pratique pour grimper ou descendre")
@@ -2608,6 +2637,24 @@ _InspectAdhesive
     END_AND_PARTIAL_REFRESH
 
 
+_InspectSaltpetre
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Utilisé dans les feux d'artifice")
+#else    
+    INFO_MESSAGE("You can make fireworks with that")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectSulphur
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un minéral naturel utile en chimie")
+#else    
+    INFO_MESSAGE("A very useful natural chemical")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
 _InspectBread
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Facile à émieter")
@@ -2622,6 +2669,15 @@ _InspectCurtain
     INFO_MESSAGE("Que cache t'il ?")
 #else    
     INFO_MESSAGE("Anything behind?")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectNet
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Peut arrêter les objets rapides")
+#else    
+    INFO_MESSAGE("Can catch balls, among other things")
 #endif    
     END_AND_PARTIAL_REFRESH
 
@@ -2842,6 +2898,48 @@ _InspectMedicineCabinet
 .)
 
 
+_InspectGunCabinet
+.(
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Je vois du matériel de chasse")
+#else
+    INFO_MESSAGE("I can see hunting equipment")
+#endif        
+    END_AND_REFRESH
+.)
+
+
+_InspectPistol
+.(
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("C'est un gros calibre")
+#else
+    INFO_MESSAGE("Quite a large caliber")
+#endif        
+    END_AND_REFRESH
+.)
+
+
+_InspectClay
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
+#ifdef LANGUAGE_FR        
+        INFO_MESSAGE("Elle est malléable maintenant")
+#else
+        INFO_MESSAGE("It's malleable now")
+#endif        
+        END_AND_REFRESH
+    ENDIF(wet)
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Il faudrait la réhydrater")
+#else
+    INFO_MESSAGE("It should be rehydrated")
+#endif        
+    END_AND_REFRESH
+.)
+
+
+_InspectSwitch
 _InspectPanel
 .(
     INCREASE_SCORE(POINTS_INSPECT_PANEL)
@@ -3420,8 +3518,8 @@ _ShowGirlInRoomWithoutBindings
         ; The window is still closed
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(135,16,0,"Dites mois quoi faire !")
-        _BUBBLE_LINE(131,53,0,"Je peux aider !")
+        _BUBBLE_LINE(10,50,0,"Dites moi quoi faire !")
+        _BUBBLE_LINE(15,65,0,"Je peux aider !")
 #else
         _BUBBLE_LINE(10,50,0,"Tell me what to do!")
         _BUBBLE_LINE(15,65,0,"I can help!")
@@ -3565,7 +3663,7 @@ rope_going_down
             ; Show the girl's message to the player        
             WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
-            _BUBBLE_LINE(107,15,0,"C'est trop haut pour sauter!")
+            _BUBBLE_LINE(90,25,0,"C'est trop haut pour sauter!")
 #else
             _BUBBLE_LINE(93,25,0,"It's too high to jump!")
 #endif    
@@ -3578,7 +3676,7 @@ rope_going_down
 #ifdef LANGUAGE_FR   
             _BUBBLE_LINE(107,15,0,"Je peux le faire !")
 #else
-            _BUBBLE_LINE(93,25,0,"I can do that!")
+            _BUBBLE_LINE(93,15,0,"I can do that!")
 #endif    
             BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
                     _IMAGE(4,31)
@@ -4210,15 +4308,27 @@ _UseLadder
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM))
     JUMP_IF_TRUE(ladder_too_short,CHECK_PLAYER_LOCATION(e_LOC_TILEDPATIO))
 cannot_use_ladder_here
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("C'est inutile ici")
+#else
     ERROR_MESSAGE("Can't use it there")
+#endif    
     END_AND_REFRESH
 
 ladder_too_short
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Elle est bien trop courte!")
+#else
     ERROR_MESSAGE("It's way too short!")
+#endif    
     END_AND_REFRESH
 
 install_the_ladder
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous installez l'échelle")
+#else
     INFO_MESSAGE("You position the ladder properly")
+#endif    
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
@@ -4309,7 +4419,11 @@ acid_hole_rope
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
 cannot_use_rope_here
+#ifdef LANGUAGE_FR       
+    ERROR_MESSAGE("Pas utilisable ici")
+#else
     ERROR_MESSAGE("Can't use it there")
+#endif    
     END_AND_REFRESH
 
 +_CombineRopeTree
@@ -4468,7 +4582,11 @@ cannot_use_rope_here
 
 abandonned_car
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),closed)                     ; Is the petrol tank open?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Le réservoir est fermé")
+#else
         ERROR_MESSAGE("The tank is closed")
+#endif        
         END_AND_REFRESH
     ENDIF(closed)
 
@@ -4654,7 +4772,11 @@ _UseAcid
     ENDIF(attached)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Pas sans équipement de protection")
+#else
         ERROR_MESSAGE("Needs some protection equipment first")
+#endif        
         END_AND_REFRESH
     ENDIF(suit)
 
@@ -5392,7 +5514,7 @@ _DropPetrol
 .(
     SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Le pétrole s'évapore")
+    INFO_MESSAGE("L'essence s'évapore")
 #else
     INFO_MESSAGE("The petrol evaporates")
 #endif    
@@ -5537,7 +5659,11 @@ _OneHourAlarmWarning
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
 
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Déjà une heure d'écoulée !")
+#else
     INFO_MESSAGE("Already one hour has passed!")
+#endif    
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 0 patch on the hour
             _IMAGE(24,52)
             _SCREEN(17,63)
@@ -5545,7 +5671,11 @@ _OneHourAlarmWarning
             _IMAGE(25,43)
             _SCREEN(18,63)
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Je dois me dépêcher !")
+#else
     INFO_MESSAGE("I need to hurry up!")
+#endif
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!

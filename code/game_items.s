@@ -91,7 +91,7 @@ _gItems
     ITEM_NORMAL( _gTextItemGraffiti              ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Graffiti
     ITEM_NORMAL( _gTextItemChurch                ,e_LOC_MAINSTREET      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Church
     ITEM_NORMAL( _gTextItemWell                  ,e_LOC_WELL            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Well
-    ITEM_NORMAL( _gTextItemRoadSignn             ,e_LOC_EASTERN_ROAD    ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_RoadSign
+    ITEM_NORMAL( _gTextItemRoadSign              ,e_LOC_EASTERN_ROAD    ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_RoadSign
     ITEM_NORMAL( _gTextItemTrashCan              ,e_LOC_DARKALLEY       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Trashcan
     ITEM_NORMAL( _gTextItemTombstone             ,e_LOC_PARKING_PLACE   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tombstone
     ITEM_NORMAL( _gTextItemFishpond              ,e_LOC_FISHPND         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_FishPond

@@ -1091,22 +1091,12 @@ _ByteStreamCommand_QUICK_MESSAGE
 ; Uses _gCurrentStream and _gStreamNextPtr
 _ByteStreamCommandERROR_MESSAGE
 .(
-    ; PrintInformationMessage(gCurrentStream);    // Should probably return the length or pointer to the end of string
-    ; _param0+0/+1=pointer to message (stored in gCurrentStream)
-    lda _gCurrentStream+0
-    sta _param0+0
-    lda  _gCurrentStream+1
-    sta _param0+1
+    ; Make the window purple
+    lda #16+5
+    sta _param0
+    jsr _ClearMessageWindowAsm            ; Clear X
 
-    jsr _PrintErrorMessageAsm  
-
-    ; gCurrentStream += strlen(gCurrentStream)+1;
-    lda _gStreamNextPtr+0
-    sta _gCurrentStream+0
-    lda _gStreamNextPtr+1
-    sta _gCurrentStream+1
-
-    rts
+    jmp _ByteStreamCommandINFO_MESSAGE
 .)
 
 
