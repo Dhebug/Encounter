@@ -2505,6 +2505,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Pistol             , _InspectPistol)
     VALUE_MAPPING(e_ITEM_Clay               , _InspectClay)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _InspectSwitch)
+    VALUE_MAPPING(e_ITEM_YoungGirl          , _InspectGirl)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2905,6 +2906,17 @@ _InspectGunCabinet
     INFO_MESSAGE("Je vois du matériel de chasse")
 #else
     INFO_MESSAGE("I can see hunting equipment")
+#endif        
+    END_AND_REFRESH
+.)
+
+
+_InspectGirl
+.(
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Elle semble indemne et soulagée")
+#else
+    INFO_MESSAGE("She seems unharmed and relieved")
 #endif        
     END_AND_REFRESH
 .)
