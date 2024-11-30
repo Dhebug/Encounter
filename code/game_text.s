@@ -2857,6 +2857,11 @@ _InspectPit
 #else
     INFO_MESSAGE("Not sure you could climb up again")
 #endif    
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Corde ou échelle nécéssaire !")
+#else
+    INFO_MESSAGE("Rope or ladder necessary!")
+#endif    
     END_AND_PARTIAL_REFRESH
 .)
 
