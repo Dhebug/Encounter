@@ -1913,8 +1913,8 @@ _gDescriptionPanicRoomDoor
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(135,16,0,"On dirait")
-        _BUBBLE_LINE(131,53,0,"un sourire :)")
+        _BUBBLE_LINE(153,70,1,"On dirait")
+        _BUBBLE_LINE(148,80,2,"un sourire :)")
 #else
         _BUBBLE_LINE(153,70,0,"Almost looks")
         _BUBBLE_LINE(148,85,0,"like a smile :)")
@@ -1927,8 +1927,8 @@ _gDescriptionPanicRoomDoor
     WHITE_BUBBLE(3)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(135,16,0,"Ils ont mis")
-    _BUBBLE_LINE(131,53,0,"les gros moyen!")
+    _BUBBLE_LINE(168,74,0,"Ils ont mis")
+    _BUBBLE_LINE(150,85,0,"les gros moyen!")
 #else
     _BUBBLE_LINE(5,5,0,"Damn...")
     _BUBBLE_LINE(168,70,0,"That's some")
@@ -2371,7 +2371,7 @@ _ReadHandWrittenNote
 #endif    
     END_AND_REFRESH
 
-
+_InspectChemistryRecipes
 _ReadChemistryRecipes
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_RECIPES)    
@@ -2437,6 +2437,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_UnitedKingdomMap   , _InspectMap)
     VALUE_MAPPING(e_ITEM_LargeDove          , _InspectDove)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _InspectChemistryBook)
+    VALUE_MAPPING(e_ITEM_ChemistryRecipes   , _InspectChemistryRecipes)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _InspectGame)
     VALUE_MAPPING(e_ITEM_Fridge             , _InspectFridgeDoor)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
@@ -2732,7 +2733,7 @@ _InspectChemistryBook
 #else    
     INFO_MESSAGE("A thick book with some bookmarks")
 #endif    
-    END_AND_PARTIAL_REFRESH
+    JUMP(_ReadChemistryBook)
 
 
 _InspectApples

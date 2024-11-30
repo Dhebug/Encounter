@@ -199,6 +199,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_safety_gloves
 %CONVERT% view_cue_with_rope
 %CONVERT% view_panic_room_digicode
+%CONVERT% view_panic_room_digicode_fr
 %CONVERT% view_panic_room_clay
 %CONVERT% view_panic_room_pouring_acid
 %CONVERT% view_panic_room_acid_burning

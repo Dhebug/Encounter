@@ -340,7 +340,11 @@ AddDefine LOADER_PICTURE_SHOWING_GLOVES {FileIndex}
 AddFile ..\build\files\view_cue_with_rope.hir
 AddDefine LOADER_PICTURE_CUE_WITH_ROPE {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_panic_room_digicode_fr.hir
+#else
 AddFile ..\build\files\view_panic_room_digicode.hir
+#endif
 AddDefine LOADER_PICTURE_DOOR_DIGICODE {FileIndex}
 
 AddFile ..\build\files\view_panic_room_clay.hir
