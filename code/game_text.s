@@ -2980,10 +2980,10 @@ _InspectPanel
 #endif        
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("La porte n'est pas transparente.")
-#else        
-        INFO_MESSAGE("Not much to see when closed.")
+#ifdef LANGUAGE_FR        
+        INFO_MESSAGE("Il y à un trou pour une petite clef")
+#else
+        INFO_MESSAGE("There's a hole for a small key")
 #endif        
     ENDIF(open)
     END_AND_REFRESH
@@ -3867,9 +3867,9 @@ _OpenAlarmPanel
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
 #ifdef LANGUAGE_FR                                                                             ; Show error to the player
-        ERROR_MESSAGE("Le panneau est verrouillé")
+        ERROR_MESSAGE("Il faut une clef pour l'ouvrir")
 #else
-        ERROR_MESSAGE("The panel is locked")
+        ERROR_MESSAGE("A key is required to open it")
 #endif        
         END_AND_PARTIAL_REFRESH
     ELSE(locked,unlocked)
