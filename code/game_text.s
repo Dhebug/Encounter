@@ -778,7 +778,9 @@ _gDescriptionWoodedAvenue
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
 #endif    
-    JUMP(_ChirpingBirds)
+    // If the dove is still there, play the  chirping
+    JUMP_IF_TRUE(_ChirpingBirds,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+    END
 .)
 
 
