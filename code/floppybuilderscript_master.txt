@@ -364,7 +364,11 @@ AddDefine LOADER_PICTURE_TOP_WINDOW_CLOSED {FileIndex}
 AddFile ..\build\files\view_austin_mini.hir
 AddDefine LOADER_PICTURE_AUSTIN_MINI {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_news_saved_fr.hir
+#else
 AddFile ..\build\files\view_news_saved.hir
+#endif
 AddDefine LOADER_PICTURE_NEWS_SAVED {FileIndex}
 
 AddFile ..\build\files\view_tombstone.hir
