@@ -3792,11 +3792,7 @@ _OpenPanicRoomWindow
 
             GOSUB(_ShowGirlAtTheWindow)
         ELSE(open,else)
-#ifdef LANGUAGE_FR
-            ERROR_MESSAGE("Elle est déjà ouverte")
-#else
-            ERROR_MESSAGE("It's already open")
-#endif        
+            JUMP(_ErrorAlreadyOpen_Elle)
         ENDIF(else)
     ENDIF(panicroom)
     END_AND_REFRESH
@@ -3988,48 +3984,45 @@ _AlarmTriggered
 
 _OpenCarBoot
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                             ; Is the boot closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                      ; Open it!
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre ouvert")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED))  ; Is the boot closed?
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                     ; Open it!
+#ifdef LANGUAGE_FR                                                                        ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car _boot")
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car _boot")
 #endif        
-    ENDIF(open)
     END_AND_REFRESH
 .)
 
 
 _OpenCarDoor
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                              ; Is the door closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Elle,CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED))  ; Is the door closed?
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
+#ifdef LANGUAGE_FR                                                                          ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car _door")
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car _door")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
-            SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
-        ENDIF(mixtape)
-    ENDIF(open)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
+        SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
+    ENDIF(mixtape)
     END_AND_REFRESH
 .)
 
 
 _OpenCarPetrolTank
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                              ; Is the petrol tank closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence ouvert")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED))    ; Is the petrol tank closed?
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
+#ifdef LANGUAGE_FR                                                                          ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
 #endif        
-    ENDIF(open)
     END_AND_REFRESH
 .)
 
@@ -4160,56 +4153,53 @@ _CloseAlarmPanel
 
 _CloseCarBoot
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),open)                            ; Is the boot open?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                        ; Close it!
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED))   ; Is the boot open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarBoot = *+2        
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre de voiture")
+#ifdef LANGUAGE_FR                                                                          ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre de voiture")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car _boot")
-#endif        
-    ENDIF(open)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car _boot")
+#endif       
     END_AND_REFRESH
 .)
 
 
 _CloseCarDoor
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),open)                             ; Is the door open?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                         ; Close it!
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Elle,CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED))  ; Is the door open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                          ; Close it!
 +_gTextItemCarDoor = *+2        
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière")
+#ifdef LANGUAGE_FR                                                                           ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car _door")
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car _door")
 #endif        
-    ENDIF(open)
     END_AND_REFRESH
 .)
 
 
 _CloseCarPetrolTank
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),open)                            ; Is the petrol tank open?
-        SET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                        ; Close it!
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED))   ; Is the petrol tank open?
+    SET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarPetrolTank = *+2        
-#ifdef LANGUAGE_FR                                                                             ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence")
+#ifdef LANGUAGE_FR                                                                          ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol _tank")
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol _tank")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)                 ; If the petrol was not collected
-            SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
-        ENDIF(petrol)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)                 ; If the petrol was not collected
+        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
+    ENDIF(petrol)
 
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
-            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
-                SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_INVENTORY)                             ; Then we need to remove it again
-            ENDIF(hose2)
-        ENDIF(hose)
-    ENDIF(open)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
+            SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_INVENTORY)                             ; Then we need to remove it again
+        ENDIF(hose2)
+    ENDIF(hose)
     END_AND_REFRESH
 .)
 
@@ -4621,16 +4611,25 @@ abandonned_car
         END_AND_REFRESH
     ENDIF(closed)
 
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),already_inside)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous mettez le tuyaux dedans")
+        ERROR_MESSAGE("Il est déjà dedans")
 #else
-    INFO_MESSAGE("You put the hose in the tank")
+        ERROR_MESSAGE("It's already inside")
 #endif    
-    SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR)
-    SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
-        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
-    ENDIF(petrol)
+        END_AND_PARTIAL_REFRESH
+    ELSE(already_inside,not_inside_yet)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Vous mettez le tuyaux dedans")
+#else
+        INFO_MESSAGE("You put the hose in the tank")
+#endif    
+        SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR)
+        SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
+            SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
+        ENDIF(petrol)
+    ENDIF(not_inside_yet)
 
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyeau dans le réservoir")
@@ -5591,12 +5590,11 @@ _SpawnWaterIfNotEquipped
 
 _ErrorCannotDo
 .(
-    CLEAR_TEXT_AREA(5)
 +_gTextErrorCannotDo = *+1    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je ne peux pas le faire")
+    ERROR_MESSAGE("Je ne peux pas le faire")
 #else
-    INFO_MESSAGE("I can't do that")
+    ERROR_MESSAGE("I can't do that")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
@@ -5604,25 +5602,60 @@ _ErrorCannotDo
 
 _ErrorCannotRead
 .(
-    CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je ne peux pas lire ca")
+    ERROR_MESSAGE("Je ne peux pas lire ca")
 #else
-    INFO_MESSAGE("I can't read that")
+    ERROR_MESSAGE("I can't read that")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
 
 _MessageNothingSpecial
 .(
-    CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Rien de spécial")
+    ERROR_MESSAGE("Rien de spécial")
 #else
-    INFO_MESSAGE("Nothing special")
+    ERROR_MESSAGE("Nothing special")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
+
+
+_ErrorAlreadyOpen_Il
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Il est déjà ouvert")
+#else
+    ERROR_MESSAGE("It's already open")
+#endif        
+    END_AND_PARTIAL_REFRESH
+
+
+_ErrorAlreadyOpen_Elle
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Elle est déjà ouverte")
+#else
+    ERROR_MESSAGE("It's already open")
+#endif        
+    END_AND_PARTIAL_REFRESH
+
+
+_ErrorAlreadyClosed_Il
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Il est déjà fermé")
+#else
+    ERROR_MESSAGE("It's already closed")
+#endif        
+    END_AND_PARTIAL_REFRESH
+
+
+_ErrorAlreadyClosed_Elle
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Elle est déjà fermée")
+#else
+    ERROR_MESSAGE("It's already closed")
+#endif        
+    END_AND_PARTIAL_REFRESH
+
 
 
 ; This is a script that is run before the setup of a scene is done.
