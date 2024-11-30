@@ -1310,8 +1310,11 @@ _gFont12x14Kerning
   .byt "ij",2
   .byt "ig",1
   .byt "Ja",2
+  .byt "la",1
+  .byt "lo",1
   .byt "ll",1
   .byt "le",1
+  .byt "ag",1
   .byt "op",1
   .byt "Of",1
   .byt "ra",1
@@ -1328,6 +1331,7 @@ _gFont12x14Kerning
   .byt "pp",1
   .byt "da",1
   .byt "de",1
+  .byt "do",1
   .byt "dr",1
   .byt "Pa",1
   .byt "ta",1
@@ -1345,6 +1349,7 @@ _gFont12x14Kerning
   .byt "là",2
   .byt "tô",1
   .byt "tè",1
+  .byt "té",1
 #else
 #endif
   .byt 0           ; End of table

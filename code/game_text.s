@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:a
 #endif
 
 
@@ -33,11 +33,11 @@ _StartGameTextData
 // Small feedback messages and prompts
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
-_gTextAskInput              .byt "Quels sont vos instructions ?",0
+_gTextAskInput              .byt "Quelles sont vos instructions ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score:",0
-_gTextCarryInWhat           .byt "Transporte dans quoi ?",0
+_gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "Naviguez avec",3,"les flèches, CTRL",7,"plus",TEXT_CRLF
                             .byt "touches",3,"HAUT",7,"ou",3,"BAS",7,"pour grimper,",TEXT_CRLF
@@ -60,15 +60,15 @@ _EndMessagesAndPrompts
 // Error messages 
 _StartErrorMessages
 #ifdef LANGUAGE_FR
-_gTextErrorInvalidDirection .byt "Impossible d'aller par la",0
+_gTextErrorInvalidDirection .byt "Impossible d'aller par là",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
 _gTextErrorThatWillNotWork  .byt "Ca ne vas pas aller",0
-_gTextErrorAlreadyFull      .byt "Désolé, c'est déja plein",0
+_gTextErrorAlreadyFull      .byt "Désolé, c'est déjà plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
 _gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
-_gTextErrorNeedMoreDetails  .byt "Pourriez vous être plus précis ?",0
+_gTextErrorNeedMoreDetails  .byt "Pourriez-vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
 _gTextErrorInventoryFull    .byt "Je dois d'abord déposer quelque chose",0
 _gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
@@ -112,7 +112,7 @@ _gTextItemYellowPowder            .byt "du$_soufre",0
 _gTextItemPetrol                  .byt "du$_pétrole",0
 _gTextItemWater                   .byt "de l'$_eau",0
 // Normal items
-_gTextItemOpenPanel               .byt "un _paneau mural ouvert",0
+_gTextItemOpenPanel               .byt "un _panneau mural ouvert",0
 _gTextItemSmallHoleInDoor         .byt "un petit _trou dans la porte",0
 _gTextItemFancyStones             .byt "des$_pierres décoratives",0
 _gTextItemSilverKnife             .byt "un$_couteau en argent",0
@@ -126,7 +126,7 @@ _gTextItemBoxOfMatches            .byt "une boite d'$_allumettes",0
 _gTextItemSnookerCue              .byt "une$_queue de billard",0
 _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre fort",0
-_gTextItemHandWrittenNote         .byt "une$_note manuscripte",0
+_gTextItemHandWrittenNote         .byt "une$_note manuscrite",0
 _gTextItemRollOfToiletPaper       .byt "un$_rouleau de PQ",0
 _gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
@@ -156,11 +156,11 @@ _gTextItemRoughPlan               .byt "un$_plan sommaire",0
 _gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
 _gTextItemGraffiti                .byt "des _graffitis",0
 _gTextItemChurch                  .byt "une _église",0
-_gTextItemWell                    .byt "un _puit",0
-_gTextItemRoadSignn               .byt "un _signe",0
+_gTextItemWell                    .byt "un _puits",0
+_gTextItemRoadSign                .byt "un _paneau",0
 _gTextItemTrashCan                .byt "une _poubelle",0
 _gTextItemTombstone               .byt "une _tombe",0
-_gTextItemFishpond                .byt "un _bac a poisson",0
+_gTextItemFishpond                .byt "un _bac a poissons",0
 _gTextItemFish                    .byt "un _poisson",0
 _gTextItemApple                   .byt "quelques$_pommes",0
 _gTextItemTree                    .byt "un$_arbre robuste",0
@@ -185,7 +185,7 @@ _gTextItemYellowPowder            .byt "some$_sulphur",0
 _gTextItemPetrol                  .byt "some$_petrol",0                        
 _gTextItemWater                   .byt "some$_water",0                         
 // Normal items
-_gTextItemOpenPanel               .byt "an$open _panel on wall",0              
+_gTextItemOpenPanel               .byt "an$open _panel on the wall",0              
 _gTextItemSmallHoleInDoor         .byt "a$small _hole in the door",0           
 _gTextItemFancyStones             .byt "some$fancy _stones",0                         
 _gTextItemSilverKnife             .byt "a$silver _knife",0                     
@@ -199,7 +199,7 @@ _gTextItemBoxOfMatches            .byt "a$box of _matches",0
 _gTextItemSnookerCue              .byt "a$snooker _cue",0                      
 _gTextItemThug                    .byt "a$_thug asleep on the bed",0           
 _gTextItemHeavySafe               .byt "a$heavy _safe",0                       
-_gTextItemHandWrittenNote         .byt "a$hand written _note",0                     
+_gTextItemHandWrittenNote         .byt "a$handwritten _note",0
 _gTextItemRollOfToiletPaper       .byt "a$toilet _roll",0            
 _gTextItemOpenSafe                .byt "an$open _safe",0                       
 _gTextItemYoungGirl               .byt "a$young _girl",0                        
@@ -230,7 +230,7 @@ _gTextItemLargeDoveOutOfReach     .byt "a$_dove on a tall tree",0
 _gTextItemGraffiti                .byt "some$_graffiti",0
 _gTextItemChurch                  .byt "a$_church",0
 _gTextItemWell                    .byt "a$_well",0
-_gTextItemRoadSignn               .byt "a$_sign",0
+_gTextItemRoadSign                .byt "a$_sign",0
 _gTextItemTrashCan                .byt "a$rubbish _bin",0
 _gTextItemTombstone               .byt "a$_tombstone",0
 _gTextItemFishpond                .byt "a$fish _pond",0
@@ -343,7 +343,7 @@ no_plastic_bag
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
         _BUBBLE_LINE(4,100,0,"Nous l'avons fait !")
-        _BUBBLE_LINE(4,106,4,"Plus qu'a rentrer à la maison")
+        _BUBBLE_LINE(4,106,4,"Plus qu'à rentrer à la maison")
 #else
         _BUBBLE_LINE(90,70,0,"We did it!")
         _BUBBLE_LINE(70,80,0,"Time to go home!")
@@ -354,7 +354,7 @@ no_plastic_bag
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI) ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
 #ifdef LANGUAGE_FR    
-        QUICK_MESSAGE("Tout le monde a bord !")
+        QUICK_MESSAGE("Tout le monde à bord !")
 #else
         QUICK_MESSAGE("Everybody on board now!")
 #endif    
@@ -598,7 +598,7 @@ cannot_escape_pit    ; The player has no way to escape the pit
     WAIT(50)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(82,94,0,"vu de là haut")
+    _BUBBLE_LINE(82,94,0,"vu de là-haut")
 #else    
     _BUBBLE_LINE(82,94,0,"from outside")
 #endif    
@@ -661,7 +661,7 @@ digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(5,93,0,"Cherchent ils")
+    _BUBBLE_LINE(5,93,0,"Cherchent-ils")
     _BUBBLE_LINE(5,101,4,"de l'or ?")
 #else
     _BUBBLE_LINE(5,90,0,"Are they digging")
@@ -756,7 +756,7 @@ no_rope
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
-    _BUBBLE_LINE(121,5,0,"Ce puit semble aussi")
+    _BUBBLE_LINE(121,5,0,"Ce puits semble aussi")
     _BUBBLE_LINE(138,16,0,"vieux que l'église")
 #else
     _BUBBLE_LINE(111,5,0,"This well looks as old")
@@ -892,7 +892,7 @@ _gDescriptionTennisCourt
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
-    _BUBBLE_LINE(5,5,0,"Bein voila: Un vrai court")
+    _BUBBLE_LINE(5,5,0,"Bien voilà: Un vrai court")
     _BUBBLE_LINE(5,16,0,"de tennis sur gazon")
 #else
     _BUBBLE_LINE(4,4,0,"That's more like it:")
@@ -915,7 +915,7 @@ _gTextItemBasementWindow = *+1
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
     _BUBBLE_LINE(102,5,0,"Pas le meilleur endroit")
-    _BUBBLE_LINE(97,15,0,"faire pousser des tomates")
+    _BUBBLE_LINE(70,15,0,"pour faire pousser des tomates")
 #else    
     _BUBBLE_LINE(134,5,0,"Not the best spot")
     _BUBBLE_LINE(136,15,1,"to grow tomatoes")
@@ -937,7 +937,7 @@ _gDescriptionFishPond
     _BUBBLE_LINE(5,5,0,"Certains de ces poissons")
     _BUBBLE_LINE(5,17,0,"sont étonnamment gros")
 #else    
-    _BUBBLE_LINE(5,5,0,"Some of these fishes")
+    _BUBBLE_LINE(5,5,0,"Some of these fish")
     _BUBBLE_LINE(5,17,0,"are surprisingly big")
 #endif    
     END
@@ -1048,8 +1048,13 @@ end_dog_check
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR   
+      _BUBBLE_LINE(5,5,0,"Appelons ça")
+      .byt 5,17,0,34,"dommages collatéraux",34,0
+#else
       _BUBBLE_LINE(5,5,0,"Let's call that")
-      .byt 5,17,0,"collateral damage",34,0
+      .byt 5,17,0,34,"collateral damage",34,0
+#endif      
       END
       
 dog_alive
@@ -1089,8 +1094,13 @@ end_dog
     ; Some generic message in case the dog is not there (probably not displayed right now)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR
+    _BUBBLE_LINE(120,5,0,"Un escalier vraiment")
+    _BUBBLE_LINE(160,17,0,"impressionant")
+#else
     _BUBBLE_LINE(124,5,0,"Quite an impressive")
     _BUBBLE_LINE(187,17,0,"staircase")
+#endif    
     END
 .)
 
@@ -3130,7 +3140,7 @@ _InspectChurch
 _InspectWell
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Juste un vieux puit")
+    INFO_MESSAGE("Juste un vieux puits")
 #else
     INFO_MESSAGE("Just an old mossy well")
 #endif    
@@ -3736,7 +3746,7 @@ _OpenAlarmPanel
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
 #ifdef LANGUAGE_FR                                                                             ; Show error to the player
-        ERROR_MESSAGE("Le paneau est verrouillé")
+        ERROR_MESSAGE("Le panneau est verrouillé")
 #else
         ERROR_MESSAGE("The panel is locked")
 #endif        
@@ -4902,17 +4912,22 @@ nothing_to_eat_the_meat
 _FreeDove
 .(    
     CLEAR_TEXT_AREA(4)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("La comlombe s'échappe")                                         ; When left anywhere, the dove will manage to fly away
+    // When left anywhere, the dove will manage to fly away
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("La colombe s'échappe")
 #else
-    INFO_MESSAGE("The dove flies away")                                         ; When left anywhere, the dove will manage to fly away
+    INFO_MESSAGE("The dove flies away")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)                 ; No mater where we use the DOVE, it will be out of the game definitely.
     // The dog will only chase the dove if the dog is where we are and is still alive and kicking
     JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_CURRENT))
     JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE)            ; Show the picture with the dog running after the dove
+#ifdef LANGUAGE_FR        
+        INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
+#else
         INFO_MESSAGE("Hopefully he will not catch the dove")
+#endif        
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
         SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
@@ -5024,7 +5039,7 @@ _ErrorNoFishing
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Vous pourrier pêcher...")
+    INFO_MESSAGE("Vous pourriez pêcher...")
 #else    
     INFO_MESSAGE("You could try fishing...")
 #endif    
@@ -5141,7 +5156,7 @@ _CommonDogDisabled
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Dog,"un _chien immobile")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"a _dog lying")
+    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"a lying _dog")
 #endif
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     WAIT(50*2)
