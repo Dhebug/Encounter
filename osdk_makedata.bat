@@ -210,6 +210,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_news_saved
 %CONVERT% view_news_saved_fr
 %CONVERT% view_tombstone
+%CONVERT% view_tombstone_fr
 
 :: Special picture for the system information
 %CONVERT% view_oric_motherboard

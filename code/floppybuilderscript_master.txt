@@ -375,7 +375,11 @@ AddFile ..\build\files\view_news_saved.hir
 #endif
 AddDefine LOADER_PICTURE_NEWS_SAVED {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_tombstone_fr.hir
+#else
 AddFile ..\build\files\view_tombstone.hir
+#endif
 AddDefine LOADER_PICTURE_TOMBSTONE {FileIndex}
 
 
