@@ -2534,6 +2534,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_YoungGirl          , _InspectGirl)
     VALUE_MAPPING(e_ITEM_BlackTape          , _InspectBlackTape)
     VALUE_MAPPING(e_ITEM_Acid               , _InspectAcid)
+    VALUE_MAPPING(e_ITEM_Bomb               , _InspectBomb)
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -2590,6 +2591,15 @@ _InspectGame
     INFO_MESSAGE("Utilisable avec un explosif")
 #else    
     INFO_MESSAGE("Can be used with an explosive")
+#endif    
+    END_AND_PARTIAL_REFRESH
+
+
+_InspectBomb
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un explosif fait maison")
+#else    
+    INFO_MESSAGE("Homemade explosive device")
 #endif    
     END_AND_PARTIAL_REFRESH
 
