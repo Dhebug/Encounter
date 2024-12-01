@@ -23,6 +23,7 @@ _wasTruncated  .dsb 1
 _car           .dsb 1
 _lengthFixing  .dsb 1    // If we find a control character, it does not count as part of the word
 _isHighlighted .dsb 1
+_lastCharacter .dsb 1    // Used to detect if a prefix is behind an apostrophe
 
 
 ; Should probably be in a separate "text.s"
@@ -51,16 +52,46 @@ no_spaces
     rts
 .)
 
+
+; _param0 +0/+1 = pointer to the string
+_MovePointerToAfterPrefixIfFound
+.(
+    ldy #0
+loop    
+    lda (_param0),y
+    beq no_prefix
+    cmp #"$"
+    beq found_prefix
+    iny
+    jmp loop
+
+found_prefix
+    clc
+    tya
+    adc _param0+0
+    sta _param0+0
+    lda _param0+1
+    adc #0
+    sta _param0+1
+no_prefix
+    rts
+.)
+
 #if 1
 ; _param0 +0/+1 = pointer to the string
 _PrintStringInternal
     ;jmp _PrintStringInternal
 .(  
+    lda _gPrintRemovePrefix
+    beq no_prefix_removal
+    jsr _MovePointerToAfterPrefixIfFound
+no_prefix_removal    
     lda #0
     sta _isHighlighted
     sta _spaceCounter
     sta _wasTruncated
     sta _gPrintLineTruncated
+    sta _lastCharacter
 
     lda _gPrintPos
     sta _gPrintPosStart
@@ -86,8 +117,13 @@ quit
     sta _gPrintTerminator   // Resets the terminator to zero (maybe?)
     rts
 
+space_except_after_apostrophe
+    ldx _lastCharacter
+    cpx #"'"
+    beq skip_space
 space    
     inc _spaceCounter
+skip_space    
     jsr _IncrementParam0
     jmp loop
 
@@ -102,7 +138,7 @@ carriage_return
 prefix_marker_character
     lda #" "
     ldx _gPrintRemovePrefix
-    beq space               // If we are not removing prefixes, then print a space
+    beq space_except_after_apostrophe               // If we are not removing prefixes, then print a space
 active_suffix    
     ldx _gPrintPosStart    // Reset the starting position
     stx _gPrintPos
@@ -186,6 +222,7 @@ skip_highlighter
     ora _isHighlighted
     ldy _gPrintPos
     sta (_gPrintAddress),y
+    sta _lastCharacter
     inc _gPrintPos
 next_car
     dex
