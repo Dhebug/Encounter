@@ -48,7 +48,8 @@
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
 #define COMMAND_SET_CURRENT_ITEM 44
-#define _COMMAND_COUNT          45
+#define COMMAND_DISPLAY_IMAGE_ONLY 45
+#define _COMMAND_COUNT          46
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -124,6 +125,7 @@
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 #define DISPLAY_IMAGE(imagedId)                      .byt COMMAND_DISPLAY_IMAGE,imagedId
 #define DISPLAY_IMAGE_NOBLIT(imagedId)               .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
+#define DISPLAY_IMAGE_ONLY(imagedId)                 .byt COMMAND_DISPLAY_IMAGE_ONLY,imagedId
 #define FADE_BUFFER                                  .byt COMMAND_FADE_BUFFER
 
 #define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h,40

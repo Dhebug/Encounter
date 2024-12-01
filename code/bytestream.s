@@ -68,6 +68,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
+    .word _ByteStreamCommandDISPLAY_DISPLAY_IMAGE_ONLY
 
     
 ; _param0=pointer to the new byteStream
@@ -1287,6 +1288,12 @@ _ByteStreamCommandDISPLAY_IMAGE
     jmp _BlitBufferToHiresWindow
 .)
 
+_ByteStreamCommandDISPLAY_DISPLAY_IMAGE_ONLY
+.(
+    jsr _ByteStreamCommandDISPLAY_IMAGE_NO_CLEAR_TEXT
+    jmp _BlitBufferToHiresWindow
+.)    
+
 ; .byt COMMAND_FULLSCREEN_ITEM_NOBLIT,imagedId,description,0
 _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
 .(  
@@ -1295,7 +1302,7 @@ _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     lda #16+4
     sta _param0+0
     jsr _ClearMessageWindowAsm
-
++_ByteStreamCommandDISPLAY_IMAGE_NO_CLEAR_TEXT
 	; unsigned char loaderId = *gCurrentStream++;
     ; LoadFileAt(loaderId,ImageBuffer);
     jsr _ByteStreamGetNextByte

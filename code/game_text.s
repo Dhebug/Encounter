@@ -1445,26 +1445,39 @@ _gDescriptionCellar
                 _SCREEN(30,43)
 
         WAIT(50)
-        SET_CUT_SCENE(1)
-        PLAY_SOUND(_ExplodeData)
-        DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Bon... Vous avez été prévenu, non ?")
 #else
         QUICK_MESSAGE("Well... I warned you, didn't I?")
 #endif        
+        JUMP(_KaboomSafe)
 
-        LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
-        GAME_OVER(e_SCORE_BLOWN_INTO_BITS)                          ; The game is now over
-
-        WAIT(50*2)
-
-        JUMP(_gDescriptionGameOverLost)                             ; Draw the 'The End' logo    
     ENDIF(matches)
 
     END
+.)
+
+
+_Kaboom
+    CLEAR_TEXT_AREA(1)
+#ifdef LANGUAGE_FR
+    QUICK_MESSAGE("Allumettes et articles inflammables")
+#else
+    QUICK_MESSAGE("Matches and flammable items...")
+#endif        
+_KaboomSafe
+.(
+    SET_CUT_SCENE(1)
+    PLAY_SOUND(_ExplodeData)
+    DISPLAY_IMAGE_ONLY(LOADER_PICTURE_EXPLOSION)
+    LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BLOWN_INTO_BITS)             ; Achievement!
+    GAME_OVER(e_SCORE_BLOWN_INTO_BITS)                          ; The game is now over
+
+    WAIT(50*2)
+
+    JUMP(_gDescriptionGameOverLost)                             ; Draw the 'The End' logo    
 .)
 
 
@@ -4685,6 +4698,12 @@ _UseBomb
 
 _UseMatches
 .(
+    // If the user has any flammable items, kaboom!
+    JUMP_IF_TRUE(_Kaboom,CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_CURRENT))
+    JUMP_IF_TRUE(_Kaboom,CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_INVENTORY))
+    JUMP_IF_TRUE(_Kaboom,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_CURRENT))
+    JUMP_IF_TRUE(_Kaboom,CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_INVENTORY))
+
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas utilisable ici")
