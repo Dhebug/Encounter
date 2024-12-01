@@ -233,7 +233,7 @@ void HandleHighScore()
             gInputMaxSize = 15;
             gAnswerProcessingCallback = ProcessPlayerNameAnswer;
             AskInput(gTextHighScoreAskForName,0);   // "New highscore! Your name please?"
-
+            WaitReleasedKey();
 
 			ptrScore->score = gScore+32768;
 			ptrScore->condition = gGameOverCondition;   // Need to get that from the game
