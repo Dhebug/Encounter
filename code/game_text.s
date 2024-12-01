@@ -3557,14 +3557,16 @@ _ShowGirlInRoomWithoutBindings
 #endif    
     ELSE(closed,open)
         ; The window is now opened
-        WHITE_BUBBLE(2)
+        JUMP_IF_TRUE(rope_not_attached,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+            WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(135,16,0,"La fenêtre est ouverte maintenant.")
-        _BUBBLE_LINE(131,53,0,"Mais je ne peux pas descendre...")
+            _BUBBLE_LINE(10,50,0,"La fenêtre est ouverte maintenant.")
+            _BUBBLE_LINE(15,65,0,"Mais je ne peux pas descendre...")
 #else
-        _BUBBLE_LINE(10,50,0,"The window is open now.")
-        _BUBBLE_LINE(15,65,0,"But I can't climb down...")
+            _BUBBLE_LINE(10,50,0,"The window is open now.")
+            _BUBBLE_LINE(15,65,0,"But I can't climb down...")
 #endif    
+rope_not_attached        
     ENDIF(open)
 
     BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_FREE,2,14,17)    ; Draw the small speech bubble triangle to connec to the Thank You! spech bubble
@@ -3694,7 +3696,7 @@ rope_going_down
             ; Show the girl's message to the player        
             WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
-            _BUBBLE_LINE(90,25,0,"C'est trop haut pour sauter!")
+            _BUBBLE_LINE(80,25,0,"C'est trop haut pour sauter!")
 #else
             _BUBBLE_LINE(93,25,0,"It's too high to jump!")
 #endif    
@@ -3705,9 +3707,9 @@ rope_going_down
             ; The rope is attached
             WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR   
-            _BUBBLE_LINE(107,15,0,"Je peux le faire !")
+            _BUBBLE_LINE(107,25,0,"Je peux le faire !")
 #else
-            _BUBBLE_LINE(93,15,0,"I can do that!")
+            _BUBBLE_LINE(93,25,0,"I can do that!")
 #endif    
             BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
                     _IMAGE(4,31)
