@@ -67,6 +67,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
+    .word _ByteStreamCommand_SET_CURRENT_ITEM
 
     
 ; _param0=pointer to the new byteStream
@@ -612,6 +613,17 @@ _ByteStreamCommand_SET_PLAYER_LOCATTION
     stx _gCurrentLocation
     rts
 .)
+
+
+; Can be used to change in a script what the current item is (by default that is set to the item that triggered the script)
+; .byt COMMAND_SET_CURRENT_ITEM,item
+_ByteStreamCommand_SET_CURRENT_ITEM
+.(
+    jsr _ByteStreamGetNextByte
+    stx _gCurrentItem
+    rts
+.)
+
 
 ; Can be used to set the location of any item
 ; .byt COMMAND_SET_ITEM_LOCATION,item,location

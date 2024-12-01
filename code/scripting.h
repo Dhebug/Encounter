@@ -47,7 +47,8 @@
 #define COMMAND_QUICK_MESSAGE   41
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
-#define _COMMAND_COUNT          44
+#define COMMAND_SET_CURRENT_ITEM 44
+#define _COMMAND_COUNT          45
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -104,6 +105,7 @@
 #define WAIT_KEYPRESS                        .byt COMMAND_WAIT_KEYPRESS
 
 // Items
+#define SET_CURRENT_ITEM(item)                  .byt COMMAND_SET_CURRENT_ITEM,item
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
 #define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
 #define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
