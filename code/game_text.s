@@ -4185,10 +4185,9 @@ _CloseCarPetrolTank
         SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
     ENDIF(petrol)
 
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose2)                 ; If the hose is installed
-            SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_INVENTORY)                             ; Then we need to remove it again
-        ENDIF(hose2)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR),hose)                 ; If the hose is installed...
+        SET_CURRENT_ITEM(e_ITEM_Hose)                                                  ; Else we will take the reservoir...
+        JUMP_IF_TRUE(_TakeHose,CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED))        ; ...then we need to remove it again
     ENDIF(hose)
     END_AND_REFRESH
 .)
@@ -4610,7 +4609,7 @@ abandonned_car
         END_AND_PARTIAL_REFRESH
     ELSE(already_inside,not_inside_yet)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Vous mettez le tuyaux dedans")
+        INFO_MESSAGE("Vous mettez le tuyau dedans")
 #else
         INFO_MESSAGE("You put the hose in the tank")
 #endif    
@@ -4622,7 +4621,7 @@ abandonned_car
     ENDIF(not_inside_yet)
 
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyeau dans le réservoir")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau dans le réservoir")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose in the petrol tank")
 #endif    
