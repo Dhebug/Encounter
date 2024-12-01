@@ -553,6 +553,7 @@ common
 .(
     sta _auto_conditionCheckItemLocation+0
     sta _auto_conditionCheckPlayerLocation+0
+    sta _auto_conditionCheckItemContainer+0
     eor #OPCODE_BEQ-OPCODE_BNE               //  0b100000
     sta _auto_conditionCheckItemFlag+0       // Item flags check is inverted
     ldy #2
@@ -581,9 +582,22 @@ _auto_conditionCheckPlayerLocation
     lda #4
     jmp _ByteStreamMoveByA
 
+checkItemContainer
+    ; check =  (gItems[itemId].flags & flagId);
+    iny
+    jsr _ByteStreamFetchItemID
+    lda (_gCurrentStream),y      // flag ID
+    ldy #3
+    cmp (_gStreamItemPtr),y      // gItems->associated_item (+3)
+_auto_conditionCheckItemContainer
+    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    jmp _ByteStreamMoveBy5
+
 checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
-    cmp #OPERATOR_CHECK_ITEM_FLAG
-    bne checkPlayerLocation
+    cmp #OPERATOR_CHECK_PLAYER_LOCATION
+    beq checkPlayerLocation
+    cmp #OPERATOR_CHECK_ITEM_CONTAINER
+    beq checkItemContainer
     ; check =  (gItems[itemId].flags & flagId);
     iny
     jsr _ByteStreamFetchItemID
@@ -637,7 +651,8 @@ _ByteStreamCommandSetItemLocation
     lda _gCurrentLocation        // Use the current player location
 store_location    
     ldy #2
-    sta (_gStreamItemPtr),y      // gItems->location (+2) = location id    
+    sta (_gStreamItemPtr),y      // gItems->location (+2) = location id
+    sta tmp1                     // Save the location in tmp1 (tmp0 is modified by _ByteStreamComputeItemPtr)    
     
     ; If the item is in a container and the location is not the inventory, we need to empty it
     cmp #e_LOC_INVENTORY
@@ -653,6 +668,9 @@ store_location
     jsr _ByteStreamComputeItemPtr  // Get the container pointer
     lda #255
     sta (_gStreamItemPtr),y      // gItems->associated_item (+3) = clear associated_item id  in container
+    dey
+    lda tmp1                     // Reload the saved location so the transported items don't stay in the inventory
+    sta (_gStreamItemPtr),y      // gItems->location (+2) = location id
 end_container
     
     

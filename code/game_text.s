@@ -2013,12 +2013,12 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_Meat        ,_CombineMeatWithPills)
     COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
-    COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
     COMBINE_MAPPING(e_ITEM_PowderMix,e_ITEM_MortarAndPestle ,_CombinePowderMixWithMortar)
-    COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_MortarAndPestle ,_CombinePillsWithMortar)
+    COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
+    COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_MortarAndPestle ,_CombinePillsWithMortar)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_SecurityDoor         ,_CombineClayDoor)    
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
@@ -2086,23 +2086,34 @@ _CombineSulfurWithSalpetre
 
 _CombineGunPowderWithFuse
 .(
-    SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_NONE)                       ; The gunpowder is gone
-    SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
-    SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
-    SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
-    INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
+    IF_TRUE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),in_tin)    ; Is the gunpowder in the tobacco tin?
+        SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_NONE)                       ; The gunpowder is gone
+        SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
+        SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
+        SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
+        INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
 
-    DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW)
-    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
-    INFO_MESSAGE("L'explosif est prêt...")
-    INFO_MESSAGE("...mais il faut l'attacher")
+        DISPLAY_IMAGE(LOADER_PICTURE_READY_TO_BLOW)
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("L'explosif est prêt...")
+        INFO_MESSAGE("...mais il faut l'attacher")
 #else    
-    INFO_MESSAGE("The explosive is ready...")
-    INFO_MESSAGE("...but it needs to be attached")
+        INFO_MESSAGE("The explosive is ready...")
+        INFO_MESSAGE("...but it needs to be attached")
 #endif    
-    STOP_MUSIC()
+        STOP_MUSIC()
+    ELSE(in_tin,not_tin)
+       // We reach this code path if the gun power is in the bucket, plastic bag, etc...
+#ifdef LANGUAGE_FR               
+        ERROR_MESSAGE("La poudre requière un conteneur adapté")
+        ERROR_MESSAGE("Il doit etre solide et refermable")
+#else    
+        ERROR_MESSAGE("The powder needs a proper container")
+        ERROR_MESSAGE("It should be sturdy and closable")
+#endif    
+    ENDIF(not_tin)
     END_AND_REFRESH
 .)
 
