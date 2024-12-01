@@ -1,4 +1,5 @@
 #include "params.h"
+#include "game_enums.h"
 
     .zero
 
@@ -617,6 +618,110 @@ found
     lda #0
     ldx #1
     rts
+.)
+
+
+_RunAction
+.(
+    ; Start by loading the stream pointer since all the comands use that
+    ldy #2
+    lda (_gActionMappingPtr),y      ; Stream pointer (low)
+    sta _param1+0
+    iny
+    lda (_gActionMappingPtr),y      ; Stream pointer (high)
+    sta _param1+1
+
+    ldy #1
+    lda (_gActionMappingPtr),y            ; Load flag
+    tax
+    and #FLAG_MAPPING_STREAM              ; if (flags & FLAG_MAPPING_STREAM)
+    beq play_native_code_callback
+
+    txa
+    and #FLAG_MAPPING_STREAM_CALLBACK     ; if (flags & FLAG_MAPPING_STREAM_CALLBACK)
+    bne play_script_callback
+
+    ; It's one of these case where we need one or two items
+    lda _gWordBuffer+1                    ; First item
+    cmp #e_ITEM_COUNT_                    ; if (itemId<e_ITEM_COUNT_)
+    bcs error_unknown_item                ; No idea what this item is (possibly not possible anymore with the new parser)
+    jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
+
+    ; Check where this first item is located
+    ldy #2
+    lda (_gStreamItemPtr),y               ; Item location
+    cmp #e_LOC_INVENTORY
+    beq first_item_available              ; We have it in our inventory
+    cmp _gCurrentLocation
+    bne error_item_not_present            ; It's not in the scene
+
+first_item_available
+    ; Clear the window
+    lda #16+4
+    sta _param0
+    jsr _ClearMessageWindowAsm            ; Clear X
+
+    ; Do we need a second item?
+    ldy #1
+    lda (_gActionMappingPtr),y            ; Load flag
+    and #FLAG_MAPPING_TWO_ITEMS           ; if (flags & FLAG_MAPPING_TWO_ITEMS)
+    bne requires_two_items
+
+requires_one_item
+    ; Stupidly this command has the table as second parameter...
+    lda _gWordBuffer+1                    ; Item id as the first parameter
+    sta _param0+0
+    jmp _DispatchStream
+
+requires_two_items
+    ; It's one of these case where we need one or two items
+    lda _gWordBuffer+2                    ; Second item
+    cmp #e_ITEM_COUNT_                    ; if (itemId<e_ITEM_COUNT_)
+    bcs error_unknown_item                ; No idea what this item is (possibly not possible anymore with the new parser)
+    jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
+
+    ; Check where this second item is located
+    ldy #2
+    lda (_gStreamItemPtr),y               ; Item location
+    cmp #e_LOC_INVENTORY
+    beq second_item_available              ; We have it in our inventory
+    cmp _gCurrentLocation
+    bne error_item_not_present            ; It's not in the scene
+
+second_item_available
+    ; That one takes three parameters: First item, Dispatcher table, Second item
+    lda _gWordBuffer+1                    ; First Item id as the first parameter
+    sta _param0+0
+    lda _gWordBuffer+2                    ; Second Item id as the third parameter
+    sta _param2+0
+    jmp _DispatchStream2
+
+play_script_callback
+    lda _param1+0
+    sta _gCurrentStream+0
+    lda _param1+1
+    sta _gCurrentStream+1
+    jmp _PlayStreamAsm_gCurrentStream
+
+play_native_code_callback
+    ;gActionMappingPtr->u.function();
+    jmp (_param1)
+
+error_item_not_present
+    lda #<_gTextErrorItemNotPresent
+    sta _param0+0
+    lda #>_gTextErrorItemNotPresent
+    sta _param0+1
+    jmp _PrintErrorMessageAsm
+
+; possibly not possible anymore with the new parser
+error_unknown_item
+    lda #<_gTextErrorUnknownItem
+    sta _param0+0
+    lda #>_gTextErrorUnknownItem
+    sta _param0+1
+    jmp _PrintErrorMessageAsm
+
 .)
 
 

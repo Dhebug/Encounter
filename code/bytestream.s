@@ -77,7 +77,7 @@ _PlayStreamAsm
     sta _gCurrentStream+0
     lda _param0+1
     sta _gCurrentStream+1
-
++_PlayStreamAsm_gCurrentStream
     lda #0
 	sta _gDelayStream
     sta _gCurrentStreamStop

@@ -303,34 +303,6 @@ WORDS ProcessContainerAnswer()
 
 
 
-// MARK:Item Checks
-char ItemCheck(unsigned char itemId,unsigned char requiredItemCount)
-{
-	if (itemId<e_ITEM_COUNT_)
-    {
-        if ( (gItems[itemId].location==e_LOC_INVENTORY) || (gItems[itemId].location==gCurrentLocation) )
-        {
-            return 1;
-        }
-        else
-        {
-            PrintErrorMessage(gTextErrorItemNotPresent);   // "This item does not seem to be present"
-        }
-    }
-    else
-	{
-        if (gWordCount<=requiredItemCount)
-        {
-    		PrintErrorMessage(gTextErrorNeedMoreDetails);   // "Could you be more precise please?"
-        }
-        else
-        {
-    		PrintErrorMessage(gTextErrorUnknownItem);   // "I do not know what this item is"
-        }
-	}
-    return 0; // Cannot use
-}
-
 // MARK:Take Item
 void TakeItem()
 {
@@ -459,6 +431,8 @@ void DropItem()
 
 
 char FindActionMapping();
+void RunAction();
+
 extern action_mapping* gActionMappingPtr;
 
 // MARK:Answer
@@ -466,45 +440,7 @@ WORDS ProcessAnswer()
 {
     if (FindActionMapping())
     {
-        unsigned char flags = gActionMappingPtr->flag;
-        if (flags & FLAG_MAPPING_STREAM)
-        {
-            // Run the stream
-            void* stream = gActionMappingPtr->u.stream;
-            if (flags & FLAG_MAPPING_STREAM_CALLBACK)
-            {
-                // Just a simple "script callback"
-                PlayStream(stream);
-            }
-            else
-            {
-                // The callback to run require a lookup in a array based on some item numbers
-                unsigned char itemId = gWordBuffer[1];
-                if (ItemCheck(itemId,1))
-                {
-                    ClearMessageWindow(16+4);
-
-                    if (flags & FLAG_MAPPING_TWO_ITEMS)
-                    {
-                        unsigned char itemId2 = gWordBuffer[2];
-                        if (ItemCheck(itemId2,2))
-                        {
-                            DispatchStream2(stream,itemId,itemId2);
-                        }
-                    }
-                    else
-                    {
-                        DispatchStream(stream,itemId);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // call the callback
-            gActionMappingPtr->u.function();
-        }
-
+        RunAction();
         // Test for game over
         if (gGameOverCondition!=0)
         {

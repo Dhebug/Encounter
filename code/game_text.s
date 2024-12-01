@@ -2203,7 +2203,7 @@ _CombineCueWithRope
     UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("La queue ne va pas résister...")
-    INFO_MESSAGE("Mais elle peut caser des trucs !")
+    INFO_MESSAGE("Mais elle peut casser des trucs !")
 #else
     INFO_MESSAGE("The cue is not strong enough...")
     INFO_MESSAGE("But it could break things!")

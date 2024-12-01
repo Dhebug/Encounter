@@ -72,6 +72,7 @@ and empty "#pragma osdk replace_characters" cancels the replacement rule.
 ### Fonts
 The game uses a number of fonts, some hand modified, but some are just standard TTF rendered without anti-aliasing.
 - The "Handwritten note" uses "Segoe Print" size 8
+- The "Tombstone" uses "Century Gothic" size 10
 
 ### Selective build
 Since testing things gets frustrating when you have to go through a sequence of irrelevant things before accessing what you want, the system allows disabling a number of things.
