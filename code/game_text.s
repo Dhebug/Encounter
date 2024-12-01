@@ -3758,16 +3758,15 @@ _gOpenItemMappingsArray
 
 _OpenCurtain
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),open)                                  ; Is the curtain closed?
-        UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
-        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PANIC_ROOM_DOOR)           ; We can now access the panic room
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))            ; Is the curtain closed?
+    UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
+    SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PANIC_ROOM_DOOR)           ; We can now access the panic room
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau ouvert")
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
 #endif        
-    ENDIF(open)
     END_AND_REFRESH
 .)
 
@@ -3801,68 +3800,65 @@ _OpenPanicRoomWindow
 
 ; TODO: Messages to indicate that the fridge it already open or that we have already found something
 ; Probably need a string table/id system to easily reuse messages.
-_SearchFridge
 _OpenFridge
 .(    
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),open)                               ; Is the fridge closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                        ; Open it!
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                       ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur ouvert")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))             ; Is the fridge closed?
++_SearchFridge
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                                ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                               ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur ouvert")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open _fridge")
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open _fridge")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
-            SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
-        ENDIF(meat)
-    ENDIF(open)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
+        SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
+    ENDIF(meat)
     END_AND_REFRESH
 .)
 
 
-_SearchMedicineCabinet
 _OpenMedicineCabinet
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),open)                      ; Is the medicine cabinet closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                               ; Open it!
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie ouverte")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Elle,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))    ; Is the medicine cabinet closed?
++_SearchMedicineCabinet
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                       ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine _cabinet")
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine _cabinet")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
-            SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
-        ENDIF(pills)
-    ENDIF(open)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
+        SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
+    ENDIF(pills)
     END_AND_REFRESH
 .)
 
 
-_SearchGunCabinet
 _OpenGunCabinet
 .(
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),open)                           ; Is the gun cabinet closed?
-        PLAY_SOUND(_DoorOpening)
-        UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                    ; Open it!
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                      ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                              ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes ouverte")
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))         ; Is the gun cabinet closed?
++_SearchGunCabinet    
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                            ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes ouverte")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
 #endif        
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
-            DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
-            SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
+        DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
+        SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
-            INFO_MESSAGE("Une seule fléchette, mieux que rien!")
+        INFO_MESSAGE("Une seule fléchette, mieux que rien!")
 #else
-            INFO_MESSAGE("Only one dart, better than nothing!")
+        INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
-        ENDIF(dartgun)
-    ENDIF(open)
+    ENDIF(dartgun)
     END_AND_REFRESH
 .)
 
@@ -3877,17 +3873,16 @@ _OpenAlarmPanel
 #endif        
         END_AND_PARTIAL_REFRESH
     ELSE(locked,unlocked)
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
-            PLAY_SOUND(_DoorOpening)
-            UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
-            UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_PANEL)                                   ; And get an achievement for that action
+        JUMP_IF_FALSE(_ErrorAlreadyOpen_Elle,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))  ; Is the alarm panel locked?
+        PLAY_SOUND(_DoorOpening)
+        UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_PANEL)                                   ; And get an achievement for that action
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme ouverte")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme ouverte")
 #else
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm _panel")
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm _panel")
 #endif        
-            SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_DARKCELLARROOM)                         ; The alarm button is now visible 
-        ENDIF(open)
+        SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_DARKCELLARROOM)                         ; The alarm button is now visible 
         JUMP(_InspectPanel)
     ENDIF(unlocked)
     END_AND_REFRESH
@@ -4070,83 +4065,78 @@ _gCloseItemMappingsArray
 
 _CloseCurtain
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED),curtain)                               ; Is the curtain open?
-        SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                              ; Close it!
-        SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_NONE)             ; The room behind is not accessible anymore
-+_gTextItemClosedCurtain = *+2                                                                       ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                   ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau fermé")
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))           ; Is the curtain open?
+    SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                                 ; Close it!
+    SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_NONE)                          ; The room behind is not accessible anymore
++_gTextItemClosedCurtain = *+2                                                                      ; Description used by default when the game starts
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau fermé")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed _curtain")
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed _curtain")
 #endif    
-    ENDIF(curtain)
     END_AND_REFRESH
 .)
 
 
 _CloseFridge
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED),fridge)                                ; Is the fridge open?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                              ; Close it!
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CLOSED_THE_FRIDGE)                                           ; And get an achievement for that action
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))            ; Is the fridge open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                                  ; Close it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CLOSED_THE_FRIDGE)                                               ; And get an achievement for that action
 +_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur")
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a _fridge")
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a _fridge")
 #endif    
-    ENDIF(fridge)
     END_AND_REFRESH
 .)
 
 
 _CloseMedicineCabinet
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),cabinet)                      ; Is the cabinet open?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                     ; Close it!
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Elle,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))   ; Is the cabinet open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemMedicineCabinet = *+2                                                                    ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie")
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine _cabinet")
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine _cabinet")
 #endif    
-    ENDIF(cabinet)
     END_AND_REFRESH
 .)
 
 
 _CloseGunCabinet
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED),cabinet)                           ; Is the cabinet open?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                          ; Close it!
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))        ; Is the cabinet open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                              ; Close it!
 +_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes")
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun _cabinet")
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun _cabinet")
 #endif    
-    ENDIF(cabinet)
     END_AND_REFRESH
 .)
 
 
 _CloseAlarmPanel
 .(
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),open)                      ; Is the alarm panel closed?
-        PLAY_SOUND(_DoorClosing)
-        SET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                                  ; Close it!
-        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                  ; And get an achievement for that action
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Elle,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))        ; Is the alarm panel closed?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                                              ; Close it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
 +_gTextItemLockedPanel = *+2       
-#ifdef LANGUAGE_FR                                                                          ; Update the description 
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme fermée")
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme fermée")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm _panel")
+    SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm _panel")
 #endif        
-        SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                    ; The alarm button is now invisible 
-    ENDIF(open)
+    SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                                ; The alarm button is now invisible 
     JUMP(_InspectPanel)
 .)
 
