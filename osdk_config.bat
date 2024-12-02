@@ -20,8 +20,10 @@
 :: 0.8.8 - Numerous little tweaks, added alarm sensor, blinking alarm light, interactive tv and console, tombstone image
 :: 0.8.9 - Input checking while entering commands, inventory scroll with the keyboard, visible ladder, keyboard buffer flushed
 :: 0.9.0 - Numerous improvements to the French version, CTRL+DEL removes entire words, fixed the black tape bug, clock is stop when game ends
+:: 0.9.1 - Quite a few bug fixes, 99% finished French version, quite a few things moved around, many descriptions added
+:: 0.9.2 -
 ::
-SET VERSION=0.9.0
+SET VERSION=0.9.2
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
