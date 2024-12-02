@@ -44,7 +44,7 @@ _Text_AchievementNone             .byt 16+3,1,"     Rien de déverrouillé !!!",
 _Text_AchievementCount            .byt 16+3,1,"  %d sur %d débloqué - %d pour cent",0
 _Text_AchievementWrongDirection   .byt "Sens interdit",0
 _Text_AchievementLaunchedTheGame  .byt "Lancé le jeu",0
-_Text_AchievementWatchedTheIntro  .byt "Watched the intro",0
+_Text_AchievementWatchedTheIntro  .byt "Regardé l'intro",0
 _Text_AchievementReadTheNewspaper .byt "Lu le journal",0
 _Text_AchievementReadTheBook      .byt "Lu le livre",0
 _Text_AchievementReadTheNote      .byt "Lu la note",0
