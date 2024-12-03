@@ -294,13 +294,17 @@ buffer_empty
 
     ldy _gInputKey
 
+    ldx #e_WORD_HELP
+    cpy #KEY_ESC
+    beq store_keyword
+
     ldx #e_WORD_WEST
     cpy #KEY_LEFT
-    beq store_direction
+    beq store_keyword
 
     ldx #e_WORD_EAST
     cpy #KEY_RIGHT
-    beq store_direction
+    beq store_keyword
 
     lda _KeyBank+2
     and #16
@@ -314,20 +318,20 @@ no_control
 
     ldx #e_WORD_NORTH
     cpy #KEY_UP
-    beq store_direction
+    beq store_keyword
 
     ldx #e_WORD_SOUTH
     cpy #KEY_DOWN
-    beq store_direction
+    beq store_keyword
 
 control_pressed
     ldx #e_WORD_UP
     cpy #KEY_UP
-    beq store_direction
+    beq store_keyword
 
     ldx #e_WORD_DOWN
     cpy #KEY_DOWN
-    beq store_direction
+    beq store_keyword
 
 ; gInventoryOffset-=40
 shift_pressed
@@ -358,7 +362,7 @@ not_scroll_up
 not_scroll_down
     rts
 
-store_direction
+store_keyword
     stx _gWordBuffer
 
     ; Try to find the keyword in the table

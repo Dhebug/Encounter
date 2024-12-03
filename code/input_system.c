@@ -61,6 +61,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
         case KEY_DOWN:
         case KEY_LEFT:
         case KEY_RIGHT:
+        case KEY_ESC:
             InputArrows();
             break;
 
