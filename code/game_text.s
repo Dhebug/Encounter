@@ -2028,6 +2028,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_PowderMix,e_ITEM_MortarAndPestle ,_CombinePowderMixWithMortar)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
+    COMBINE_MAPPING(e_ITEM_TobaccoTin,e_ITEM_Fuse           ,_CombineTinWithFuse)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_BoxOfMatches         ,_CombineBombWithMatches)
@@ -2097,6 +2098,18 @@ _CombineSulfurWithSalpetre
 .)
 
 
+_CombineTinWithFuse
+.(
+    IF_FALSE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),missing_powder)    ; Is the gunpowder in the tobacco tin?
+       // We reach this code path if the gun power is not in the tin
+#ifdef LANGUAGE_FR               
+        ERROR_MESSAGE("Sans la poudre la meche est inutile")
+#else    
+        ERROR_MESSAGE("Without gunpowder the fuse is useless")
+#endif    
+        END_AND_PARTIAL_REFRESH
+    ENDIF(missing_powder)
+.)
 _CombineGunPowderWithFuse
 .(
     IF_TRUE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),in_tin)    ; Is the gunpowder in the tobacco tin?
@@ -4525,9 +4538,9 @@ snoozed_dog
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_THUG)
         INCREASE_SCORE(POINTS_DART_GUNNED_THUG)
 #ifdef LANGUAGE_FR   
-        INFO_MESSAGE("Fait de beau rêves")
+        INFO_MESSAGE("Dors bien, dur à cuire")
 #else    
-        INFO_MESSAGE("Sweet dreams scumbag")
+        INFO_MESSAGE("Sleep tight, tough guy")
 #endif    
         JUMP(_CommonThugDisabled)
 snoozed_thug    
