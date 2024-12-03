@@ -4720,15 +4720,16 @@ _UseMatches
 #else
         ERROR_MESSAGE("I can't use it here")
 #endif        
-        END_AND_REFRESH
+        END_AND_PARTIAL_REFRESH
     ENDIF(cellar)
-    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),safe)
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),safe)
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Le coffre est déjà ouvert")
+        ERROR_MESSAGE("Il faudrait y attacher un explosif")
 #else
-        ERROR_MESSAGE("The safe is already open")
+        ERROR_MESSAGE("It needs some explosive attached to it")
 #endif        
-        END_AND_REFRESH
+        END_AND_PARTIAL_REFRESH
     ENDIF(safe)
     JUMP(_CombineBombWithMatches)
 .)
