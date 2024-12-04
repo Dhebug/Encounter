@@ -11,7 +11,11 @@
 ; Title screen
 ;
 _Text_TitlePicture               
-    .byt 16+3,4,TEXT_CRLF
+#ifdef LANGUAGE_FR
+    .byt 16+3,2,12,"      <- Selection de page ->",TEXT_CRLF
+#else
+    .byt 16+3,2,12,"       <- Page Navigation ->",TEXT_CRLF
+#endif    
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
     .byt 16+3,4,"Amméliorations ",96," 2024 Defence-Force "
