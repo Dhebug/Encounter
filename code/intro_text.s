@@ -25,23 +25,25 @@ _Text_TitlePicture
 ;
 #ifdef LANGUAGE_FR
 _Text_GameInstructions
-    .byt 1,"           Comment jouer",TEXT_CRLF
+    .byt 1,"        Comment jouer (1/2)",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Votre tache est de trouver et sauver",TEXT_CRLF
     .byt "une fille kidnappée par des voyous.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "La mission échoue si vous êtes détecté",TEXT_CRLF
-    .byt "ou si vous manquez de temps.",TEXT_CRLF
+    .byt "La mission échoue si vous êtes",TEXT_CRLF
+    .byt "détecté ou si vous manquez de temps.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Utilisez des VERBES et des NOMS comme",TEXT_CRLF
     .byt "ex: PREND CLEF ou COMBINE PAIN BEURRE",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 1,"  MOUVEMENT            VERBES",TEXT_CRLF
-    .byt "N:NORD S:SUD         PREND POSE LANCE",TEXT_CRLF
-    .byt "O:OUEST E:EST          COMBINE QUITTE",TEXT_CRLF
-    .byt "H:HAUT B:BAS            OUVRE FOUILLE",TEXT_CRLF
-    .byt "PAUSE AIDE                LIT UTILISE",TEXT_CRLF
-    .byt 1,"              NOTES",0,"    REGARDE",TEXT_CRLF
+
+    .byt 1,"  MOUVEMENT              VERBES",TEXT_CRLF,TEXT_CRLF
+    .byt "N:NORD S:SUD      OUVRE PREND/RAMASSE",TEXT_CRLF
+    .byt "O:OUEST E:EST        FERME POSE/LACHE",TEXT_CRLF
+    .byt "H:HAUT B:BAS          CHERCHE/FOUILLE",TEXT_CRLF
+    .byt "             EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
+    .byt "PAUSE AIDE            COMBINE UTILISE",TEXT_CRLF
+    .byt "QUITTE        ",1,"NOTES",0,"       LIT LANCE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
     .byt "mais être bricoleur peut aider.",TEXT_CRLF
@@ -52,7 +54,7 @@ _Text_GameInstructions
     .byt TEXT_END
 #else// LANGUAGE_EN
 _Text_GameInstructions
-    .byt 1,"           How to play",TEXT_CRLF
+    .byt 1,"         How to play (1/2)",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "You have two hours to find and rescue",TEXT_CRLF
 	.byt "a young girl kidnapped by thugs.",TEXT_CRLF
@@ -77,6 +79,66 @@ _Text_GameInstructions
 	.byt "Drawing and annotating a map helps.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Good luck, you will need it..."
+    .byt TEXT_END
+#endif
+
+
+#ifdef LANGUAGE_FR
+_Text_GameInstructionsPage2
+    .byt 1,"        Comment jouer (2/2)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Presser ESC ou taper AIDE imprime",TEXT_CRLF
+    .byt "la liste des instructions.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "SHIFT et flèches HAUT ou BAS font",TEXT_CRLF
+    .byt "défiler les objets si débordement.",TEXT_CRLF
+    .byt TEXT_CRLF                       
+    .byt "SHIFT met aussi en surbrillance les",TEXT_CRLF
+    .byt "noms des objets interactifs.",TEXT_CRLF
+    .byt TEXT_CRLF     
+    .byt "Parfois le nom d'un conteneur vous",TEXT_CRLF
+    .byt "sera demandé lors de l'obtention de",TEXT_CRLF
+    .byt "certains objets ou substances.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "COMBINE nécessite deux objets :",TEXT_CRLF
+    .byt "leur ordre n'a pas d'importance.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Lire des documents peut révéler des",TEXT_CRLF
+    .byt "informations utiles.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Assurez-vous de vérifier toutes les",TEXT_CRLF
+    .byt "directions indiquées sur le compas.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Les touches fléchées peuvent être",TEXT_CRLF
+    .byt "utilisées pour naviguer.",TEXT_CRLF
+    .byt TEXT_END
+#else// LANGUAGE_EN
+_Text_GameInstructionsPage2
+    .byt 1,"         How to play (2/2)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Pressing ESC or typing HELP will",TEXT_CRLF
+	.byt "print the list of instructions.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "If the items list overflows use SHIFT",TEXT_CRLF
+	.byt "with UP or DOWN arrows to scroll it.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "SHIFT also highlights the names of",TEXT_CRLF
+    .byt "the items you can interact with.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Some items require a valid container",TEXT_CRLF
+	.byt "to be transported: The game will then",TEXT_CRLF
+	.byt "ask you the name of the container.",TEXT_CRLF
+	.byt TEXT_CRLF
+	.byt "The COMBINE command does requires two",TEXT_CRLF
+    .byt "items: their order does not matter.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Reading documents can reveal useful",TEXT_CRLF
+    .byt "tidbits of information.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Make sure to check all the directions",TEXT_CRLF
+    .byt "indicated on the directional cross.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Arrow keys can be used to navigate.",TEXT_CRLF
     .byt TEXT_END
 #endif
 

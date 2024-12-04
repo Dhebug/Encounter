@@ -13,6 +13,7 @@
 extern char Text_TitlePicture[];
 
 extern char Text_GameInstructions[];
+extern char Text_GameInstructionsPage2[];
 
 extern char Text_Leaderboard[];
 extern char Text_Achievements[];
@@ -50,6 +51,7 @@ enum
     INTRO_TITLE_PICTURE = 0,
     INTRO_USER_MANUAL,
     INTRO_LEADERBOARD,
+    INTRO_USER_MANUAL_PAGE2,
     INTRO_ACHIEVEMENTS,
     INTRO_STORY,
     _INTRO_COUNT_
@@ -222,13 +224,13 @@ int DisplayIntroPage()
 }
 
 
-int DisplayUserManual()
+int DisplayUserManual(const char* messaage)
 {
 	Text(16+3,0);
 
     gPrintWidth=40;
     gPrintTerminator=TEXT_END;
-    PrintStringAt(Text_GameInstructions,0xbb80+40*1+2);
+    PrintStringAt(messaage,0xbb80+40*1+2);
     return WaitAndFade(50*12);
  }
 
@@ -814,13 +816,19 @@ void main()
 
 #ifdef INTRO_SHOW_USER_MANUAL
         case INTRO_USER_MANUAL:
-		    DisplayUserManual();
+		    DisplayUserManual(Text_GameInstructions);
             break;
 #endif
 
 #ifdef INTRO_SHOW_LEADERBOARD
         case INTRO_LEADERBOARD:
     		DisplayHighScoresTable();
+            break;
+#endif
+
+#ifdef INTRO_SHOW_USER_MANUAL
+        case INTRO_USER_MANUAL_PAGE2:
+		    DisplayUserManual(Text_GameInstructionsPage2);
             break;
 #endif
 
