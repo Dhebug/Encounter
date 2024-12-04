@@ -2455,7 +2455,7 @@ _ReadInvoice
     INFO_MESSAGE("mois en Europe pour toute la famille")
 #else
     INFO_MESSAGE("An invoice for a two months trip all")
-    INFO_MESSAGE("over Europe. Familly holidays maybe?")
+    INFO_MESSAGE("over Europe. Family holidays maybe?")
 #endif    
     END_AND_REFRESH
 .)
@@ -2932,11 +2932,11 @@ _InspectFridgeDoor
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("Looks like a happy familly...")
-    INFO_MESSAGE("...I wonder where they are?")
-#else
     INFO_MESSAGE("Une famille heureuse...")
     INFO_MESSAGE("...ou sont ils ?")
+#else
+    INFO_MESSAGE("Looks like a happy family...")
+    INFO_MESSAGE("...I wonder where they are?")
 #endif
     END_AND_REFRESH
 .)
