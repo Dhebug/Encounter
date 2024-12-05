@@ -38,6 +38,12 @@ _LabelPicture5	.dsb 2960
 #endif
 
 
+#ifdef MODULE_OUTRO
+* = _EndText
+_ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
+#endif
+
+
 #ifdef MODULE_GAME
 * = $bb80+17*40
 _TextDescriptionLine

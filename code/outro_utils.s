@@ -46,5 +46,4 @@ events
 .)
 
 
-_ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
 
