@@ -154,17 +154,14 @@ _Text_GameInstructionsPage2
 ;
 _Text_TypeWriterMessage 
 #ifdef LANGUAGE_FR
-	.byt "Mercredi 29 septembre 1982",13,13,13
-	.byt "Mon client m'a demand{ de sauver",13
-    .byt "sa fille kidnapp{e par des brigants",13
-	.byt "cach{s dans une maison bourgeoise",13
-    .byt "au milieu de nul part.",13,13
-	.byt "J'avais carte blanche pour",13
-    .byt "regler le probl}me...",13
-	.byt "...force lethale autoris{e.",13,13,13
-	.byt "Gar{ sur la place du march{",13
-    .byt "j'approchais a pied pour ne pas",13
-	.byt "les alerter..."
+    .byt "29 septembre 1982",13,13
+    .byt "Ma mission : Secourir une fille de",13
+    .byt "ses ravisseurs dans une résidence",13
+    .byt "bourgeoise isolée.",13,13
+    .byt "Ayant le droit d'opérer sans entrave,",13         
+    .byt "potentiellement avec force, je garai",13
+    .byt "ma voiture au marché local et",13
+    .byt "avancai discrètement à pied."
     .byt 0
 #else // LANGUAGE_EN
 	.byt "September 29, 1982",13,13
