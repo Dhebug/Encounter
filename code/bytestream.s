@@ -669,11 +669,14 @@ store_location
     jsr _ByteStreamComputeItemPtr  // Get the container pointer
     lda #255
     sta (_gStreamItemPtr),y      // gItems->associated_item (+3) = clear associated_item id  in container
-    dey
+    iny
+    lda (_gStreamItemPtr),y      // gItems->flags (+4) = read flags
+    and #ITEM_FLAG_IS_CONTAINER
+    bne end_container            // If the associated object is a container, it stays where it is
+    ldy #2
     lda tmp1                     // Reload the saved location so the transported items don't stay in the inventory
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id
-end_container
-    
+end_container   
     
     lda #2
     jmp _ByteStreamMoveByA
