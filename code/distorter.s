@@ -120,17 +120,7 @@ _DrawPreshiftLogos
 	jsr DisplayMakeShiftedLogo
 	rts
 
-; Severn Software logo: 215x51    -> 40*51=2040  *6=12240
-; Defence Force logo: 216x74      -> 40*74=2960  *6=17760
-
-
-_LabelPicture0	.dsb 2960
-_LabelPicture1	.dsb 2960
-_LabelPicture2	.dsb 2960
-_LabelPicture3	.dsb 2960
-_LabelPicture4	.dsb 2960
-_LabelPicture5	.dsb 2960
-
+; The buffers are defined in BSS in last_module.s
 _DistorterTable
     .word _LabelPicture0
     .word _LabelPicture1

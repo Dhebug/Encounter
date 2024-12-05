@@ -24,6 +24,19 @@ _free_to_use_text = osdk_end+1 ; *+256
 
     .bss
 
+#ifdef MODULE_SPLASH
+* = _EndText
+
+; Severn Software logo: 215x51    -> 40*51=2040  *6=12240
+; Defence Force logo: 216x74      -> 40*74=2960  *6=17760
+_LabelPicture0	.dsb 2960
+_LabelPicture1	.dsb 2960
+_LabelPicture2	.dsb 2960
+_LabelPicture3	.dsb 2960
+_LabelPicture4	.dsb 2960
+_LabelPicture5	.dsb 2960
+#endif
+
 
 #ifdef MODULE_GAME
 * = $bb80+17*40
@@ -40,8 +53,6 @@ _TextCharsetUpperCaseLetters
 
 * = $B400+8*97
 _TextCharsetLowerCaseLetters
-
-
 #endif
 
 #ifdef MODULE_INTRO
