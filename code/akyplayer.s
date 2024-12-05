@@ -34,9 +34,6 @@ event_counter       .dsb 2
 
 pt2_DT              .dsb 2   ;= $04      ; +$05
 
-    .zero
-    //.text
-
 ; could be relocated anywhere (but slower):
 ACCA            .dsb 2   ;= $06      ; save A
 ACCB            .dsb 2   ;= $07      ; save A (bis)
