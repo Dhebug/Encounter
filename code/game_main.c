@@ -523,6 +523,7 @@ void Initializations()
 
 	gScore = 0;
     gCurrentStream = 0;
+    gStreamSkipPoint = 0;
     gDelayStream = 0;
     gGameOverCondition = 0;
     gInventoryOffset = 0;
@@ -550,6 +551,7 @@ void main()
     gStatusMessageLocation = (unsigned char*)0xbb80+40*21;
     gInputMaxSize = 35;
     gAnswerProcessingCallback = ProcessAnswer;
+    WaitReleasedKey();
 	AskInput(gTextAskInput,1);
 #else
     // Directly go to the end credits    
