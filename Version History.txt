@@ -1,0 +1,183 @@
+== Version history ==
+0.8: First version sent to tester
+
+0.8.1: Fixed a number of things reported:
+- Changed the title picture with a color/monochrome combo which puts focus on the man in the front, and made sure the eyes are visible
+- Added some missing sounds (doors closing and opening)
+- Added the possibility to use "search" in addition to "open" on the containers
+- The PAUSE messages should now match what the game is doing in term of points penalties
+- The word SALTPETER is now properly spelled SALTPETRE 
+- Achievements should now stick to disk when the game is quitted
+
+0.8.2:
+- Replaced the PING by some less aggressive sound
+- Tested a new keyboard sound
+- Added a new error message when commands that take items are missing the parameter
+- Made the front door and security doors interactable
+- Added a KBFR and KBUK command to switch between AZERTY and QWERTY layout (not saved at the moment)
+
+0.8.3:
+- Added a configuration menu to select the keyboard layout, as well as music and sound on/off
+- Added a some error messages regarding item use (but will be revisited later, it's still kind of hacky)
+- Fixed the French layout (forgot the "M")
+- The car is now visible on the market place and can be interacted with
+- The car on the road in the east is also visible and if interacted moves the player to the actual car location
+- The plastic bag on the market place is actually removed from the scene visually when taken
+- Taking back the hose after using it reverts to its proper name
+- The cut-scene with the map and the watch can now be skipped by pressing space
+- Changed the intro sequence to have the user manual before the scores, and made it possible to navigate backward and forward with the left and right arrow keys
+- Fixed a bunch of issues related to the ladder and the windows
+- Changed the way the input field behave: It's now in lower case, appears one line higher, and the prompt message only appears on the first time and then vanishes
+- The rough map is now an actual object that can be used wherever you want
+- Attempting to use the knife with the dove results in the dove flying away
+- Using the Cue where it is not handled will now show an error message instead of dropping the cue to the ground.
+
+0.8.4:
+- Experimented with the directional cross design to make it more obvious
+- The game will now refuse to let the player have more than 8 items in the inventory
+- The time bonus is now only awarded to players who finish the mission successfully
+- Reduced the count down speed by two frames (ie: times passes more slowly during fades)
+- Trying to open the panic room door with the keys now shows a message telling the player that this uses a digital lock
+- The Help page now shows the list of words with alternated colors to make it easier to read
+- The right Shift key is now handled property in the input field
+- Inspecting the dog (renamed from "Alsatian") will now tell the player that it will not let them pass
+- The "Twine" has been renamed to "String"
+- Internal: The music player has been trimmed down to get a few precious bytes back
+
+0.8.5:
+- The plastic bag should not disappear from the screen after the map intro sequence
+- Added some inspectable graffiti item in the tunnel and dark alley, the Church, Well, Road Sign, trash bin, tombstone, fishpond and apples
+- The open car door now properly highlights "door" instead of car
+- It's now possible to move around using the arrow keys on the keyboard, including CTRL UP and CTRL DOWN to climb and go down
+- The C in JCB should be harder to mistake for a O
+- Fixed a number of problems in the panic room related to the state of the window when being inspected
+- Added some hints to the player regarding the use of the window, rope and cue
+- Replaced the twine/string by some decorative stones in the zen garden
+- Removed the PRINT command (did not have enough memory for it anymore)
+- Also removed the KEYBFR, KEYBUK, KEYBDE commands now that we have a configuration menu (that's 150 bytes back!)
+- Disabled the NORTH, SOUTH, EAST, WEST, UP and DOWN commands
+- Added a credit page for the testers of the game (will be modified/extended over time)
+- Inspecting the snooker cue or trying to use it in the game room now gives some specific feedback to the player
+- Added some additional kerning rules to make the cartoony bubble look better
+- Inspecting the mix gives a better indication that it needs to be ground fine
+- Combining the mortar and mix gives the same result as using the mortar
+- Hopefully fixed the inventory limit by now properly handling the case where the user collects and item in a container they don't have yet.
+- It's now possible to inspect the pills and the meat, getting dedicated descriptions for them.
+- Added a missing message to indicate the interpreter does not understand the query
+- Modified the display of error messages to be on the same line as the input line to avoid erasing the scene objects description
+- Added alternated colors for the items in the inventory
+- Added some interactable tree, pit and heaps on the pit area
+
+0.8.6:
+- The inventory and scene descriptions are not shown anymore during the end sequence, and some messages have been added to make the scene more interesting
+- Fixed the white frame staying displayed at the end of the credits
+- Fixed the missing bit of yellow background on the achievement line in the credits
+- Added some messages when inspecting the car boot, door and tank
+- "Use rope" will now show the girl in the proper attached/free state
+- Fixed a problem with the USE THE ROPE achievement not triggering if used by the girl to escape
+- Tweaked the graphics of the girl outside on the patio
+- Inspecting the dog when it was disabled now shows the proper message
+- Added some shading to the final car sequence
+- Fixed the glitch when switching from TEXT to HIRES in the intro
+- CTRL+DEL now deletes the input field while doing a "swoosh" sound
+- Misc fixes here and there to make the keyboard more reactive in the game but also in the intro
+- Changing the keyboard layout does not restart the music anymore
+- Added support to play in 60hz instead of 50hz to play nicely with the aspect ratio and easily unhappy screen
+- Misc text fixes
+
+0.8.7:
+- Typing HELP should not corrupt the screen anymore, leading to the game quitting with a broken score.
+- Added a "Try Help" to the error message when the word is not understood
+- Doubled the time the error messages are shown on screen
+- Using the arrows to move around now prints the actual direction as it if was entered manually
+- Using the arrows now plays an error sound if there is some content already typed-in
+- Fixed the chemistry recipe to replace Carbon by Saltpetre and the right hand side explains how to use the acid
+- Added a normal window that appears all around the house so it can be examined and opened, giving feedback about what is on the other side of the window.
+
+0.8.8:
+- Added an alarm or sensor item in the sun lounge that can be inspected and say that the alarm is active but sensors/contacts were tempered with
+- The alarm panel in the basement now has a blinking light and a low beep sound to attract the player attention so they don't miss it.
+- Fixed the fact you could use the keys to open the panel even if it was not available because the room was still dark.
+- Fixed the text displayed if the player active the alarm again, it was still showing "disabled" instead of "enabled".
+- Added a few audio cues to the alarm panel unlock and switch activation.
+- Added interactable computer, game console, invoice and television to the study room and game room
+- It is now possible to use the pills with the mortar to create "crushed pills", that does not change anything but now it's handled.
+- The top left 6 pixels of the screen now only turn to white when the picture fade is initiated
+- Added a zoomed in picture when inspecting the tombstone
+- The window in the kitchen can now be interacted with (inspected, open)
+- Changed the gameover messages to use "rest in pieces" when being blown out instead of when being shot by the thug
+- Inspecting the car on the market place now shows the large view of the austin mini
+- The boot and the door properly appear open or close on the smaller view of the car.
+- Fixed the issue with the dot patterns around the blue area not being symetrical
+- The TV in the game room should now look like a proper rear-project large screen
+
+0.8.9:
+- The chemistry recipes now spawn in the library items instead of the inventory
+- The delays when moving with the arrows and when going in the wrong direction have been reduced
+- The keyboard buffer is flushed when the prompt is displayed to avoid some confusing inputs
+- The ladder is now visible in the orchard
+- Added an attempt at scrolling the inventory using SHIFT+UP/SHIFT+DOWN
+- Added a primitive input validation on the individual words to see if they are at least valid words (does not check if their presence is legal or not though)
+
+0.9.0:
+- The clock is now stopped during a game over sequence
+- The "rough map" is now a "rough plan" to not conflict with the map of the uk in the library
+- Modified CTRL+DELETE so it erases the input word by word.
+- When a wrong input is detected, the input field briefly turns red
+- The "set of keys" was renamed "a small key", when inspected says it's for the alarm system, and trying to use it on the front door says it does not fit
+- Trying to open the alarm panel now shows that the panel is locked instead of the door being locked
+- When the black tape is removed, the window on the outside now properly appeared cleared
+
+0.9.1:
+- French localization is now almost complete, for both the texts and images ("digicode message", "recipes", "tombstone" and saved" image at the end), kerning and comic bubbles placements have been adapted to the different lenghts
+- Added quite a few item descriptions and interactions.
+- Fixed a bunch of things that can be opened and closed so the game reports they are already open or closed instead of just doing a weird refresh of the screen.
+- Fixed an audio glitch when trying to play musics with music disabled caused by the channel mixer being modified anyway.
+- Fixed some typos, improved the display of error messages so they are on purple background with the large font instead of the small red text.
+- Fixed the pipe character in the font to be a ô in French because I use the word "Plutôt" somewhere and it was showing as a vertical arrow.
+- Fixed the set item location command to make sure it drops the contained item if a non empty container is dropped (or thrown).
+- If the dove fly away, the chirping sound stops in the wooded avenue
+- Inspecting the acid shows the description image again
+- Inspecting the alarm panel now informs there is a hole for a key
+- Inspecting the black tape now suggests it's possible to remove it
+- Inspecting the bomb now shows some comment instead of "nothing special"
+- Inspecting the book shows the usual mesage and then goes on reading it. (and same thing with the recipes).
+- Inspecting the girl now tells the player that she is unharmed and quite relieved.
+- Inspecting the note now makes you read it instead of saying "nothing special".
+- Inspecting the window up stairs is now possible.
+- It should not be possible anymore to use the hose if it's already in use, instead an error message is displayed saying it's already installed.
+- It's now possible to just press enter if we don't have a valid container, before you would get stuck there until you entered somethig invalid.
+- Looking at the front entrance now suggest to look for a back entrance.
+- Made sure that using the wrong container shows a message telling the user they should use something more adapted.
+- Modified the gun powder so it can be transported in any adequate (for powder) container.
+- Modified the pit message to make it clear that without a rope or ladder you are not going to be able to go up again.
+- Modified the script to code to ensure that we can't create a bomb in a plastic bag or cardboard box.
+- Moved the "hose" from the zen garden to the fish pond
+- Moved the "fishing net" to the tennis court instead of the fishing pond and renamed it to just a "net"
+- Opening and closing the parts of the car will now properly report that they are already opened or closed.
+- Removed the complicated pause logic with double achievement, simpler, and more memory available, the second achievement is now hooked to closing the fridge
+- Removed the Microdisc/Jasmin achievements and instead hooked them to the invoice and tombstone.
+- Replaced the "Don't be ridiculous" by "That will not work"
+- Updated the scores to include information about if a score was pre-made or made by an actual player.
+- Using the matches with petrol or gunpowder around will result in an explosion: Kid: Don't play with matches!
+- When building the fuse the petrol and the roll now vanish forever, that was just confusing.
+
+0.9.2
+- The game now loads a bit faster
+- Added a check on the bomb presence when using the matches to avoid triggering the safe explosion without the bomb being installed.
+- Added a second page of documentation to the intro sequence.
+- Added an experimental blinking message on the title picture to indicate that it is possible to use the left and right arrows to move between pages in the intro.
+- Text changes: Changed the "sweet dreams" message to something more palatable, the French version of the typewriter intro text now matches the shorter english version, swapped around the French and English version of the fridge door description, fixed a non translated french text ("watched the intro").
+- Fixed typos: "Dissolving" takes two "s", "Family" only takes one "l", "metallic" takes two "l"
+- Fixed a problem with containers disappearing when the SET_ITEM_LOCATION command is used.
+- It's now possible to build the bomb by combining the fuse with the tin as well as with the powder.
+- Pressing ESC in the game now brings the HELP panel
+
+0.9.3
+- Hardened the startup of the game by making sure the keyboard buffer is emptied and the skip stream pointer is cleared.
+- Formulated differently the way the computer is locked and cannot be accessed.
+- Implemented the container check and keyword highlighting in assembler. Added a check for the error code to highlight all the interesting words in case of mistyping.
+- Fixed a bug in the action mapping search (forgot to check properly for the end marker) that resulted in the game crashing if you just typed the name of an item without a verb before
+
+
+

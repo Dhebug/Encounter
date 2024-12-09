@@ -22,8 +22,10 @@
 :: 0.9.0 - Numerous improvements to the French version, CTRL+DEL removes entire words, fixed the black tape bug, clock is stop when game ends
 :: 0.9.1 - Quite a few bug fixes, 99% finished French version, quite a few things moved around, many descriptions added
 :: 0.9.2 - Faster loads, second documentation page, disapearing containers fix, escape shows help, text fixes
+:: 0.9.3 - Fixed a couple of crash bugs, improved the container check, fixed some typos
+:: 0.9.4
 ::
-SET VERSION=0.9.3
+SET VERSION=0.9.4
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
