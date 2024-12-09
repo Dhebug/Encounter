@@ -601,6 +601,8 @@ _FindActionMapping
 search_loop
     ldy #0
     lda (_gActionMappingPtr),y       ; Load the word id from the table entry
+    cmp #e_WORD_COUNT_
+    beq not_found
     cmp _gWordBuffer+0               ; Compare with the first keyword
     beq found
 
