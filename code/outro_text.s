@@ -40,7 +40,7 @@ _gTextCredits
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"    Test du jeu et retour d'expérience",TEXT_CRLF
-    .byt 7,"         Dom, Lukas, Symoon",TEXT_CRLF
+    .byt 7,"        Dom, Lukas, Phreak, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -117,7 +117,7 @@ _gTextCredits
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"      Game testing and feedback",TEXT_CRLF
-    .byt 7,"         Dom, Lukas, Symoon",TEXT_CRLF
+    .byt 7,"      Dom, Lukas, Phreak, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
