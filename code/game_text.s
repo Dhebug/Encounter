@@ -4898,7 +4898,7 @@ _UseComputer
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il semble être verouillé.")
 #else    
-    INFO_MESSAGE("It seems to have be boot locked.")
+    INFO_MESSAGE("It appears to be boot locked.")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
