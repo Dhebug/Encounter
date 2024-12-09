@@ -17,6 +17,10 @@ extern char LoadSceneScript[];
 char gColoredSeparator[]=" ";
 
 
+extern WORDS ProcessContainerAnswer();
+extern void HandleKeywordHighlight();
+
+
 // MARK:Print Inventory
 // The inventory display is done in two passes, using an intermediate buffer to limit flickering.
 // The first pass displays all the non empty containers and their associated content
@@ -273,33 +277,11 @@ WORDS AskInputCallback()
         return e_WORD_QUIT;
     }
 
-    // When the player presses SHIFT we redraw the item list with highlights
-    ShouldShowKeyWords = (KeyBank[4] & 16);
-    if (ShowingKeyWords != ShouldShowKeyWords)
-    {
-        gShowHighlights = ShouldShowKeyWords;
-
-        PrintSceneObjects();
-
-        PrintInventory();
-
-        ShowingKeyWords = ShouldShowKeyWords;
-    }
+    HandleKeywordHighlight();
 
     return e_WORD_CONTINUE;
 }
 
-WORDS ProcessContainerAnswer()
-{
-    if (gWordCount)
-    {
-        return gWordBuffer[0];
-    }
-    else
-    {
-        return e_ITEM_COUNT_;   // Triggers the "will not work" message, can be used to disengage the "in what" requester
-    }
-}
 
 
 

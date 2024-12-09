@@ -731,6 +731,61 @@ error_unknown_item
 .)
 
 
+_ProcessContainerAnswer
+.(
+    lda #0               ; Par of the 16 bit return code
+    ldx _gWordCount
+    beq not_found
+
+    ldx _gWordBuffer     ; Return the first word
+    rts
+
+not_found
+    ldx #e_ITEM_COUNT_   ; Triggers the "will not work" message, can be used to disengage the "in what" requester
+    rts
+.)
+
+
+
+_HandleKeywordHighlight
+.(
+    ; When the player presses SHIFT we redraw the item list with highlights
+    lda _KeyBank+4
+    and #16
+    sta _ShouldShowKeyWords
+
+    ; If there is an input error, and it's an actual item, we high-light the items
+    lda _gInputErrorCounter
+    beq end_input_error
+    lda _gWordCount                    ; If we have more than one keyword, there's definitely a wrong item
+    cmp #1
+    bcs force_shift
+
+    lda _gAnswerProcessingCallback+0   ; If we were asking for a container, that's also definitely a wrong item
+    cmp #<_ProcessContainerAnswer
+    bne end_input_error
+    lda _gAnswerProcessingCallback+1
+    cmp #>_ProcessContainerAnswer
+    bne end_input_error
+
+force_shift    
+    lda #16
+    sta _ShouldShowKeyWords
+end_input_error
+
+    ; We only redraw when the status change between highlighted and not highlighted
+    lda _ShouldShowKeyWords
+    cmp _ShowingKeyWords
+    beq no_change
+
+    sta _gShowHighlights
+    sta _ShowingKeyWords
+    jsr _PrintSceneObjects
+    jsr _PrintInventory
+
+no_change    
+    rts
+.)
 
 
 ; memset((char*)TemporaryBuffer479,' ',40*4);  = 160
