@@ -169,6 +169,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_handwritten_note_fr
 %CONVERT% view_science_book
 %CONVERT% view_chemistry_recipes
+%CONVERT% view_chemistry_recipes_fr
 %CONVERT% view_united_kingdom_map
 %CONVERT% view_fridge_door
 %CONVERT% view_medicine_cabinet

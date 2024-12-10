@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:a
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:a ù:u
 #endif
 
 
@@ -125,10 +125,10 @@ _gTextItemChemistryBook           .byt "un$_livre de chimie",0
 _gTextItemBoxOfMatches            .byt "une boite d'$_allumettes",0
 _gTextItemSnookerCue              .byt "une$_queue de billard",0
 _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
-_gTextItemHeavySafe               .byt "un gros _coffre fort",0
+_gTextItemHeavySafe               .byt "un gros _coffre",0
 _gTextItemHandWrittenNote         .byt "une$_note manuscrite",0
 _gTextItemRollOfToiletPaper       .byt "un$_rouleau de PQ",0
-_gTextItemOpenSafe                .byt "un _coffre fort ouvert",0
+_gTextItemOpenSafe                .byt "un _coffre ouvert",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une$_mêche",0
 _gTextItemPowderMix               .byt "un$_mix grumeleux",0
@@ -153,14 +153,14 @@ _gTextItemProtectionSuit          .byt "une$_tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
 _gTextItemRoughPlan               .byt "un$_plan sommaire",0
-_gTextItemLargeDoveOutOfReach     .byt "une _colombe haute perchée",0
+_gTextItemLargeDoveOutOfReach     .byt "une _colombe haut perchée",0
 _gTextItemGraffiti                .byt "des _graffitis",0
 _gTextItemChurch                  .byt "une _église",0
 _gTextItemWell                    .byt "un _puits",0
-_gTextItemRoadSign                .byt "un _paneau",0
+_gTextItemRoadSign                .byt "un _panneau",0
 _gTextItemTrashCan                .byt "une _poubelle",0
 _gTextItemTombstone               .byt "une _tombe",0
-_gTextItemFishpond                .byt "un _bac a poissons",0
+_gTextItemFishpond                .byt "un _bac à poissons",0
 _gTextItemFish                    .byt "un _poisson",0
 _gTextItemApple                   .byt "quelques$_pommes",0
 _gTextItemTree                    .byt "un$_arbre robuste",0
@@ -170,7 +170,7 @@ _gTextItemNormalWindow            .byt "une _fenêtre",0
 _gTextItemAlarmIndicator          .byt "un _indicateur d'alarme",0
 _gTextItemComputer                .byt "un _ordinateur de bureau",0
 _gTextItemInvoice                 .byt "une$_facture",0
-_gTextItemTelevision              .byt "une _télevision",0
+_gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
 #else
 // Containers
@@ -773,7 +773,7 @@ _gDescriptionWoodedAvenue
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
     _BUBBLE_LINE(4,4,0,"Ces arbres ont probablement")
-    _BUBBLE_LINE(4,15,0,"été témoin de beaucoup de choses")
+    _BUBBLE_LINE(4,15,0,"été témoins de beaucoup de choses")
 #else
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
@@ -1744,7 +1744,7 @@ curtain_closed
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(70,81,0,"Au théatre ce soir...")
+    _BUBBLE_LINE(70,81,0,"Au théâtre ce soir...")
 #else
     _BUBBLE_LINE(55,81,0,"At the theater tonight...")
 #endif    
@@ -1787,7 +1787,7 @@ _gDescriptionClassyBathRoom
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(132,5,0,"Semble comfortable")
+    _BUBBLE_LINE(132,5,0,"Semble confortable")
 #else
     _BUBBLE_LINE(132,5,0,"Looks comfortable")
 #endif    
@@ -1941,9 +1941,9 @@ _gDescriptionPanicRoomDoor
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(3)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(5,5,0,"Damn...")
-    _BUBBLE_LINE(168,74,0,"Ils ont mis")
-    _BUBBLE_LINE(150,85,0,"les gros moyen!")
+    _BUBBLE_LINE(5,5,0,"Zut!")
+    _BUBBLE_LINE(148,74,0,"Ils ont employé")
+    _BUBBLE_LINE(130,85,0,"les grands moyens!")
 #else
     _BUBBLE_LINE(5,5,0,"Damn...")
     _BUBBLE_LINE(168,70,0,"That's some")
@@ -2431,7 +2431,7 @@ _ReadChemistryBook
     INCREASE_SCORE(POINTS_READ_BOOK)    
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je ne comprend rien...")
+    INFO_MESSAGE("Je ne comprends rien...")
     INFO_MESSAGE("...mais j'ai trouvé un truc !")
 #else    
     INFO_MESSAGE("I don't understand much...")
@@ -2719,7 +2719,7 @@ _InspectSulphur
 
 _InspectBread
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Facile à émieter")
+    INFO_MESSAGE("Facile à émietter")
 #else    
     INFO_MESSAGE("Easy to crumble")
 #endif    
@@ -2949,7 +2949,7 @@ _InspectMedicineCabinet
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN)
 #ifdef LANGUAGE_FR        
-        INFO_MESSAGE("Ca pourrais être utile")
+        INFO_MESSAGE("Ca pourrait être utile")
 #else
         INFO_MESSAGE("I can use some of that.")
 #endif        
@@ -3036,7 +3036,7 @@ _InspectPanel
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
 #ifdef LANGUAGE_FR        
-        INFO_MESSAGE("Il y à un trou pour une petite clef")
+        INFO_MESSAGE("Il y a un trou pour une petite clef")
 #else
         INFO_MESSAGE("There's a hole for a small key")
 #endif        
@@ -3146,7 +3146,7 @@ _InspectNormalWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TENNISCOURT),tennis_court)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir un salon confortable")
-        INFO_MESSAGE("Il y à aussi une salle à manger")
+        INFO_MESSAGE("Il y a aussi une salle à manger")
 #else
         INFO_MESSAGE("I can see a comfortable lounge")
         INFO_MESSAGE("There's also a dinning room")
@@ -3255,7 +3255,7 @@ _InspectPlasticBag
 +_InspectBucket
 +_InspectContainerGeneric
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Peut servir a transporter des trucs")
+    INFO_MESSAGE("Peut servir à transporter des trucs")
 #else    
     INFO_MESSAGE("Can be used to transport things")
 #endif    
@@ -3293,7 +3293,7 @@ _InspectGraffiti
 #endif    
     ELSE(tunnel,street)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Aussi moche qu'innintéressant.")
+        INFO_MESSAGE("Aussi moche qu'inintéressant.")
 #else
         INFO_MESSAGE("The art is as bad as the content.")
 #endif    
@@ -3358,7 +3358,8 @@ _InspectTombstone
     INFO_MESSAGE("Il n'avait que 45 ans :(")
 #else
     INFO_MESSAGE("He was only 45 years old :(")
-#endif    
+#endif
+    WAIT(50*2)    
     END_AND_REFRESH
 .)
 
@@ -3470,7 +3471,7 @@ _InspectPanicRoomDoor
             DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
-            INFO_MESSAGE("La porte est elle vulnérable?")
+            INFO_MESSAGE("La porte est-elle vulnérable?")
 #else
             INFO_MESSAGE("Impossible to guess that code...")
             INFO_MESSAGE("Maybe the door itself is vulnerable?")
@@ -4015,7 +4016,7 @@ _AlarmTriggered
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous avez déclanché l'alarme!")
+    INFO_MESSAGE("Vous avez déclenché l'alarme!")
 #else
     INFO_MESSAGE("You triggered the alarm!")
 #endif    
@@ -4313,7 +4314,7 @@ _InspectCarBoot
 #endif    
     ELSE(boot_closed,boot_open)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Il n'y a que la roue de secour")
+        INFO_MESSAGE("Il n'y a que la roue de secours")
 #else
         INFO_MESSAGE("Other than the spare wheel it's empty")
 #endif    
@@ -4525,7 +4526,7 @@ _UseDartGun
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
         INCREASE_SCORE(POINTS_DART_GUNNED_DOG)
 #ifdef LANGUAGE_FR   
-        INFO_MESSAGE("Fait de beau rêves")
+        INFO_MESSAGE("Fais de beaux rêves")
 #else    
         INFO_MESSAGE("Sweet dreams doggy")
 #endif    
@@ -5811,7 +5812,7 @@ _TimeOutGameOver
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("J'étais trop lent...")
+    INFO_MESSAGE("J'ai été trop lent...")
 #else
     INFO_MESSAGE("I was too slow...")
 #endif    

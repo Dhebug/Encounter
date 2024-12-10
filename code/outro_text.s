@@ -40,7 +40,7 @@ _gTextCredits
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"    Test du jeu et retour d'expérience",TEXT_CRLF
-    .byt 7,"        Dom, Lukas, Phreak, Symoon",TEXT_CRLF
+    .byt 7,"   Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -117,7 +117,7 @@ _gTextCredits
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"      Game testing and feedback",TEXT_CRLF
-    .byt 7,"      Dom, Lukas, Phreak, Symoon",TEXT_CRLF
+    .byt 7," Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -209,9 +209,9 @@ _Test_DETAILS_SHOT_BY_THUG
     .byt 0
 
 _Test_DETAILS_FELL_INTO_PIT
-    .byt 6,"Sortir du trou pris beaucoup de temps.",TEXT_CRLF
+    .byt 6,"Sortir du trou a prit beaucoup de temps",TEXT_CRLF
     .byt 6,"Quand vous en êtes sorti l'otage avait",TEXT_CRLF
-    .byt 6,"disparu:",1,"Il étais trop tard",TEXT_CRLF
+    .byt 6,"disparu:",1,"Il était trop tard",TEXT_CRLF
     .byt 0
 
 _Test_DETAILS_TRIPPED_ALARM

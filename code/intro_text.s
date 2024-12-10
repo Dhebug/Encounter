@@ -191,7 +191,7 @@ _Text_Loading_SecondTime
     .byt 0
 _Text_Loading_ThirdTime    
     .byt "Certains objets ont plusieurs usages...",TEXT_CRLF
-    .byt "but certains autres sont inutiles !",TEXT_CRLF
+    .byt "mais certains autres sont inutiles !",TEXT_CRLF
     .byt 0
 _Text_Loading_FourthTime
     .byt "Vous devrez construire quelques objets",TEXT_CRLF
