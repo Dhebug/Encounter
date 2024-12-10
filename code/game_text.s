@@ -1049,14 +1049,7 @@ end_dog_check
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*24+7,_ImageBuffer+(40*44)+18)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
-      WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
-      _BUBBLE_LINE(5,5,0,"Appelons ça")
-      .byt 5,17,0,34,"dommages collatéraux",34,0
-#else
-      _BUBBLE_LINE(5,5,0,"Let's call that")
-      .byt 5,17,0,34,"collateral damage",34,0
-#endif      
+      GOSUB(_SubCollateralDamage)
       END
       
 dog_alive
@@ -1130,9 +1123,7 @@ end_dog_check
       DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(17,34),40,_SecondImageBuffer+40*95,_ImageBuffer+(40*93)+12)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
-      WHITE_BUBBLE(2)
-      _BUBBLE_LINE(5,5,0,"Let's call that")
-      .byt 5,17,0,"collateral damage",34,0
+      GOSUB(_SubCollateralDamage)
       END
       
 dog_alive
@@ -1829,14 +1820,7 @@ _gDescriptionMasterBedRoom
       DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
       ; Text describing the dead thug
       WAIT(DELAY_FIRST_BUBBLE)
-      WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR
-      _BUBBLE_LINE(10,5,0,"Appelons cela un")
-      .byt 5,18,0,34,"dommage collatéral",34,0
-#else
-      _BUBBLE_LINE(5,5,0,"Let's call that")
-      .byt 5,17,0,34,"collateral damage",34,0
-#endif      
+      GOSUB(_SubCollateralDamage)
       END
 
 thug_alive
@@ -1867,6 +1851,18 @@ end_thug
     END
 
 
+_SubCollateralDamage
+.(
+    WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR
+    _BUBBLE_LINE(10,5,0,"Appelons cela un")
+    .byt 5,18,0,34,"dommage collatéral",34,0
+#else
+    _BUBBLE_LINE(5,5,0,"Let's call that")
+    .byt 5,17,0,34,"collateral damage",34,0
+#endif      
+    RETURN
+.)
 
 
 // MARK: Panic Room Door
