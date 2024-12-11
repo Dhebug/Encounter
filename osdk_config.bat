@@ -23,9 +23,10 @@
 :: 0.9.1 - Quite a few bug fixes, 99% finished French version, quite a few things moved around, many descriptions added
 :: 0.9.2 - Faster loads, second documentation page, disapearing containers fix, escape shows help, text fixes
 :: 0.9.3 - Fixed a couple of crash bugs, improved the container check, fixed some typos
-:: 0.9.4
+:: 0.9.4 - Mostly French fixes, but also a tweak on the count down timer, and inspecting the basement window from the lader now works
+:: 0.9.5
 ::
-SET VERSION=0.9.4
+SET VERSION=0.9.5
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)

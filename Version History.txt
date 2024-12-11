@@ -179,5 +179,11 @@
 - Implemented the container check and keyword highlighting in assembler. Added a check for the error code to highlight all the interesting words in case of mistyping.
 - Fixed a bug in the action mapping search (forgot to check properly for the end marker) that resulted in the game crashing if you just typed the name of an item without a verb before
 
+0.9.4
+- Changed the way the time out condition is detected by using a separate flag instead of detecting the hours moving back to 9 to avoid some temporary glitches on the time display.
+- Fixed an issue with the basement window where inspecting it would not look it from the inside.
+- Fixed the collateral damage text in French
+- Many French localization fixes from Retroric.
+
 
 
