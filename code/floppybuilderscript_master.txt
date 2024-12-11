@@ -172,6 +172,7 @@ AddFile ..\build\files\loc_seedy_alley.hir
 AddFile ..\build\files\loc_road_stretch.hir
 AddFile ..\build\files\loc_tunel.hir
 AddFile ..\build\files\loc_main_street.hir
+AddDefine LOADER_PICTURE_LOCATIONS_MAINSTREET {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_east_road.hir
 AddFile ..\build\files\loc_inside_pit.hir
 AddFile ..\build\files\loc_well.hir

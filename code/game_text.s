@@ -536,6 +536,22 @@ _gDescriptionMainStreet
     _BUBBLE_LINE(4,4,0,"A good old")
     _BUBBLE_LINE(4,16,0,"medieval church")
 #endif    
+
+#if 1  // WIP TEST
+    ; Wait 20 seconds
+    WAIT(50*5)
+    WAIT(50*5)
+    WAIT(50*5)
+    WAIT(50*5)
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
+        _IMAGE(30,49)
+        _BUFFER(7,40)
+    FADE_BUFFER
+    WAIT(50*5)
+    WAIT(50*5)
+    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_MAINSTREET)
+    FADE_BUFFER
+#endif
     END
 
 
