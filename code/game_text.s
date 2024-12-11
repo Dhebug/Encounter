@@ -3044,6 +3044,18 @@ _InspectPanel
 _InspectBasementWindow
 .(
     INCREASE_SCORE(POINTS_INSPECT_BASEMENT_WINDOW)
+    .(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),cellar_on_lader)
+        ; Inspecting the window in the cellar from on top the ladder
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),see_garden)
+            GOSUB(_SubCanSeeGardenOutside)
+        ELSE(see_garden,see_black_tape)
+            GOSUB(_SubBlackTapeOnWindow)
+        ENDIF(see_black_tape)
+        END_AND_PARTIAL_REFRESH
+    ENDIF(cellar_on_lader)
+    .)
+
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),elsecellar)
     .(
         ; Inspecting the window in the cellar
@@ -3077,17 +3089,23 @@ no_ladder
 #endif            
         ELSE(else,open)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
-#ifdef LANGUAGE_FR            
-            INFO_MESSAGE("Peinte en noir ?")
-#else
-            INFO_MESSAGE("Was it painted black?")
-#endif            
+            GOSUB(_SubBlackTapeOnWindow)
         ENDIF(open)
     .)
     ENDIF(cellar)
     END_AND_REFRESH
 .)
 
+
+_SubBlackTapeOnWindow
+.(
+#ifdef LANGUAGE_FR            
+    INFO_MESSAGE("De l'adhésif noir ?")
+#else
+    INFO_MESSAGE("Is that black tape?")
+#endif            
+    RETURN
+.)
 
 
 _InspectPanicRoomWindow
@@ -3158,11 +3176,7 @@ tennis_court
 fish_pond
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_STUDY_ROOM),study_room)
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je peux voir le jardin dehors")
-#else
-        INFO_MESSAGE("I can see the garden outside")
-#endif    
+        GOSUB(_SubCanSeeGardenOutside)
 study_room
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM),games_room)
@@ -3199,6 +3213,17 @@ kitchen
 #endif    
 up_stairs
     END_AND_REFRESH
+.)
+
+
+_SubCanSeeGardenOutside
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Je peux voir le potager dehors")
+#else
+    INFO_MESSAGE("I can see the garden outside")
+#endif    
+    RETURN
 .)
 
 
