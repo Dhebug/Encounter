@@ -41,7 +41,7 @@ CountSecondDown
   ldx #"9"
   stx _TimeSeconds+1
 
-+Count10SecondsDown
+  ; Count down the 10 second digit
   ldx _TimeSeconds+0
   dex
   stx _TimeSeconds+0
@@ -50,7 +50,6 @@ CountSecondDown
   ldx #"5"
   stx _TimeSeconds+0
 
-+CountMinuteDown
   ; Count down the minutes
   ldx _TimeMinutes+1
   dex
@@ -79,9 +78,17 @@ CountSecondDown
   ; We stop the counter
   jsr _StopClock
 
+  ; Force the count down to appear as 0:00:00 instead of 9:59:59
+  lda #"0"
+  sta _TimeHours
+  sta _TimeMinutes+0
+  sta _TimeMinutes+1
+  sta _TimeSeconds+0
+  sta _TimeSeconds+1
+
   ; We inform the game there is a GAME OVER condition
-  ldx #"9"
-  stx _TimeHours
+  ldx #1
+  stx _TimeOut
   rts
   
 end_count_down
@@ -101,7 +108,8 @@ loop
 .)
 
 
-
+_TimeOut
+    .byt 0
 
 _TimeMilliseconds    
     .byt 100

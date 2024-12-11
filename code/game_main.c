@@ -267,7 +267,7 @@ WORDS AskInputCallback()
         gCurrentStream = savedStream;
         OneHourAlarmWarningShown=1;
     }
-    if (TimeHours=='9')
+    if (TimeOut)
     {
         // Should probably add a check to not interrupt import scripts
         // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
