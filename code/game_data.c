@@ -129,7 +129,7 @@ keyword gWordsArray[] =
 
     // Misc instructions
 #ifdef LANGUAGE_FR    
-    { "PREND"   , e_WORD_TAKE },
+    { "PRENDS"  , e_WORD_TAKE },
     { "RAMASSE" , e_WORD_TAKE },
     { "FOUILLE" , e_WORD_FRISK },
     { "CHERCHE" , e_WORD_SEARCH },
@@ -145,7 +145,7 @@ keyword gWordsArray[] =
     { "OUVRE" , e_WORD_OPEN },
     { "FERME" , e_WORD_CLOSE },
 
-    { "LIT"     , e_WORD_READ },
+    { "LIS"     , e_WORD_READ },
 
     { "REGARDE" , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },

@@ -77,7 +77,7 @@ _Text_AchievementWatchedTheOutro  .byt "Regardé la fin",0
 _Text_AchievementGotAHighscore    .byt "Eu un gros score",0
 _Text_AchievementGotTheBestScore  .byt "Meilleur score",0
 _Text_AchievementDogAteTheMeat    .byt "Chien à mangé",0
-_Text_AchievementUsedHosePipe     .byt "Tuyaux utilisé",0
+_Text_AchievementUsedHosePipe     .byt "Tuyau utilisé",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
 _Text_AchievementCanYouRepeat     .byt "J'ai rien compris",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0

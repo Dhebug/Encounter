@@ -3,7 +3,7 @@
     .text   // could be .data if we setup the base address properly
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
 #endif
 
 
@@ -18,7 +18,7 @@ _Text_TitlePicture
 #endif    
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
-    .byt 16+3,4,"Amméliorations ",96," 2024 Defence-Force "
+    .byt 16+3,4," Améliorations ",96," 2024 Defence-Force "
 #else
     .byt 16+3,4,"Redux Additions ",96," 2024 Defence-Force "
 #endif    
@@ -31,28 +31,28 @@ _Text_TitlePicture
 _Text_GameInstructions
     .byt 1,"        Comment jouer (1/2)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Votre tache est de trouver et sauver",TEXT_CRLF
+    .byt "Votre tâche est de trouver et sauver",TEXT_CRLF
     .byt "une fille kidnappée par des voyous.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "La mission échoue si vous êtes",TEXT_CRLF
     .byt "détecté ou si vous manquez de temps.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Utilisez des VERBES et des NOMS comme",TEXT_CRLF
-    .byt "ex: PREND CLEF ou COMBINE PAIN BEURRE",TEXT_CRLF
+    .byt "ex: PRENDS CLE ou COMBINE PAIN BEURRE",TEXT_CRLF
     .byt TEXT_CRLF
 
     .byt 1,"  MOUVEMENT              VERBES",TEXT_CRLF,TEXT_CRLF
-    .byt "N:NORD S:SUD      OUVRE PREND/RAMASSE",TEXT_CRLF
+    .byt "N:NORD S:SUD     OUVRE PRENDS/RAMASSE",TEXT_CRLF
     .byt "O:OUEST E:EST        FERME POSE/LACHE",TEXT_CRLF
     .byt "H:HAUT B:BAS          CHERCHE/FOUILLE",TEXT_CRLF
     .byt "             EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
     .byt "PAUSE AIDE            COMBINE UTILISE",TEXT_CRLF
-    .byt "QUITTE        ",1,"NOTES",0,"       LIT LANCE",TEXT_CRLF
+    .byt "QUITTE        ",1,"NOTES",0,"       LIS LANCE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
     .byt "mais être bricoleur peut aider.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Tracez une carte et annotez la.",TEXT_CRLF
+    .byt "Tracez une carte et annotez-la.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Bonne chance, vous en aurez besoin!"
     .byt TEXT_END
@@ -182,8 +182,8 @@ _Text_TypeWriterMessage
 // Bonus texts
 #ifdef LANGUAGE_FR
 _Text_Loading_FirstTimeEver    
-    .byt "UTILISE, LACHE, LANCE, COMBINE items.",TEXT_CRLF
-    .byt "Certain peuvent être LU ou INSPECTE.",TEXT_CRLF
+    .byt "UTILISE, LACHE, LANCE, COMBINE objets.",TEXT_CRLF
+    .byt "LIS ou INSPECTE certains objets.",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
     .byt "Tuer est toujours une option, mais être",TEXT_CRLF

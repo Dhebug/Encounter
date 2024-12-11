@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:a ù:u
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
 #endif
 
 
@@ -2063,7 +2063,7 @@ _CombineMeatWithPills
     SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_GONE_FOREVER)      ; The sedative are gone from the game
     SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
 #ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
-    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"_viande droggée")
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"_viande sédative")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged _meat")
 #endif    
@@ -5348,7 +5348,7 @@ _CommonDogDisabled
     SET_ITEM_FLAGS(e_ITEM_Dog,ITEM_FLAG_DISABLED)
 +_gTextDogLying = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"un _chien immobile")
+    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"un _chien inanimé")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Dog,"a lying _dog")
 #endif
