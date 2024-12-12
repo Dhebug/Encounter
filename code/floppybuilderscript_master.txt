@@ -326,7 +326,11 @@ AddDefine LOADER_PICTURE_READY_TO_BLOW {FileIndex}
 AddFile ..\build\files\view_sticky_bomb.hir
 AddDefine LOADER_PICTURE_STICKY_BOMB {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_corrosive_liquid_fr.hir
+#else
 AddFile ..\build\files\view_corrosive_liquid.hir
+#endif
 AddDefine LOADER_PICTURE_CORROSIVE_LIQUID {FileIndex}
 
 AddFile ..\build\files\view_watch.hir
@@ -417,7 +421,11 @@ AddDefine LOADER_SPRITE_PANIC_ROOM_WINDOW {FileIndex}
 AddFile ..\build\files\masked_hole_with_girl_attached.msk
 AddDefine LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED {FileIndex}
 
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\masked_hole_with_girl_free_fr.msk
+#else
 AddFile ..\build\files\masked_hole_with_girl_free.msk
+#endif
 AddDefine LOADER_SPRITE_HOLE_WITH_GIRL_FREE {FileIndex}
 
 AddFile ..\build\files\masked_hole_with_knife.msk

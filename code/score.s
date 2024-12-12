@@ -41,7 +41,7 @@ _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
 _Text_Achievements                .byt 16+3,1,"          Badges collectés",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"     Rien de déverrouillé !!!",0
-_Text_AchievementCount            .byt 16+3,1,"  %d sur %d débloqué - %d pour cent",0
+_Text_AchievementCount            .byt 16+3,1," %d sur %d débloqués - %d pour cent",0
 _Text_AchievementWrongDirection   .byt "Sens interdit",0
 _Text_AchievementLaunchedTheGame  .byt "Lancé le jeu",0
 _Text_AchievementWatchedTheIntro  .byt "Regardé l'intro",0
@@ -52,7 +52,7 @@ _Text_AchievementReadTheRecipes   .byt "Lu la recette",0
 _Text_AchievementOpenedTheFridge  .byt "Ouvert le frigo",0
 _Text_AchievementClosedTheFridge  .byt "Fermé le frigo",0
 _Text_AchievementOpenedTheCabinet .byt "Ouvert le placard",0
-_Text_AchievementDruggedTheMeat   .byt "Drogué la viande",0
+_Text_AchievementDruggedTheMeat   .byt "Trafiqué la viande",0
 _Text_AchievementKilledTheDog     .byt "Tué le chien",0
 _Text_AchievementDruggedTheDog    .byt "Drogué le chien",0
 _Text_AchievementChasedTheDog     .byt "Chassé le chien",0
@@ -65,8 +65,8 @@ _Text_AchievementExaminedTheMap   .byt "Regardé la carte",0
 _Text_AchievementExaminedTheGame  .byt "Regardé le jeu",0
 _Text_AchievementOpenedTheSafe    .byt "Ouvert le coffre",0
 _Text_AchievementOpenedThePanel   .byt "Ouvert le panneau",0
-_Text_AchievementBuiltAFuse       .byt "Fait un mêche",0
-_Text_AchievementBuiltABomb       .byt "Fait une bombe",0
+_Text_AchievementBuiltAFuse       .byt "Fait une mèche",0
+_Text_AchievementBuiltABomb       .byt "Fabriqué une bombe",0
 _Text_AchievementMadeBlackPowder  .byt "Fait de la poudre",0
 _Text_AchievementFrikedTheThug    .byt "Fouillé le voyou",0
 _Text_AchievementUsedTheAcid      .byt "Utilisé l'acide",0
@@ -76,8 +76,8 @@ _Text_AchievementGaveTheRope      .byt "Donné la corde",0
 _Text_AchievementWatchedTheOutro  .byt "Regardé la fin",0
 _Text_AchievementGotAHighscore    .byt "Eu un gros score",0
 _Text_AchievementGotTheBestScore  .byt "Meilleur score",0
-_Text_AchievementDogAteTheMeat    .byt "Chien à mangé",0
-_Text_AchievementUsedHosePipe     .byt "Tuyau utilisé",0
+_Text_AchievementDogAteTheMeat    .byt "Nourri le chien",0
+_Text_AchievementUsedHosePipe     .byt "Utilisé le tuyau",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
 _Text_AchievementCanYouRepeat     .byt "J'ai rien compris",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0

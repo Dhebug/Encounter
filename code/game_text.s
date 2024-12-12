@@ -63,7 +63,7 @@ _StartErrorMessages
 _gTextErrorInvalidDirection .byt "Impossible d'aller par là",0
 _gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
-_gTextErrorThatWillNotWork  .byt "Ca ne vas pas aller",0
+_gTextErrorThatWillNotWork  .byt "Ca ne va pas aller",0
 _gTextErrorAlreadyFull      .byt "Désolé, c'est déjà plein",0
 _gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
 _gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
@@ -130,9 +130,9 @@ _gTextItemHandWrittenNote         .byt "une$_note manuscrite",0
 _gTextItemRollOfToiletPaper       .byt "un$_rouleau de PQ",0
 _gTextItemOpenSafe                .byt "un _coffre ouvert",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
-_gTextItemFuse                    .byt "une$_mêche",0
+_gTextItemFuse                    .byt "une$_mèche",0
 _gTextItemPowderMix               .byt "un$_mix grumeleux",0
-_gTextItemGunPowder               .byt "de la$_poudre à cannon",0
+_gTextItemGunPowder               .byt "de la$_poudre à canon",0
 _gTextItemSmallKey                .byt "une$petite _clef",0
 _gTextItemNewspaper               .byt "un$_journal",0
 _gTextItemBomb                    .byt "une$_bombe",0
@@ -148,7 +148,7 @@ _gTextItemMortarAndPestle         .byt "un$_mortier et pilon",0
 _gTextItemAdhesive                .byt "de l'$_adhésif",0
 _gTextItemAcid                    .byt "un$_acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
-_gTextItemDriedOutClay            .byt "de l'$_argile désséchée",0
+_gTextItemDriedOutClay            .byt "de l'$_argile desséchée",0
 _gTextItemProtectionSuit          .byt "une$_tenue EPI",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
@@ -2169,8 +2169,8 @@ _CombineBombWithAdhesive
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
-    INFO_MESSAGE("Ca devrais être tout bon...")
-    INFO_MESSAGE("...plus qu'a l'installer !")
+    INFO_MESSAGE("Ca devrait être tout bon...")
+    INFO_MESSAGE("...plus qu'à l'installer !")
 #else
     INFO_MESSAGE("Should be ready to use now...")
     INFO_MESSAGE("...need to install it!")
@@ -2203,7 +2203,7 @@ _CombineStickyBombWithSafe
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Tout est en place...")
-    INFO_MESSAGE("...attention a l'allumage !")
+    INFO_MESSAGE("...attention à l'allumage !")
 #else    
     INFO_MESSAGE("Everything is in place...")
     INFO_MESSAGE("...need to ignite it safely though!")
@@ -2945,7 +2945,7 @@ _InspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Une famille heureuse...")
-    INFO_MESSAGE("...ou sont ils ?")
+    INFO_MESSAGE("...ou sont-ils ?")
 #else
     INFO_MESSAGE("Looks like a happy family...")
     INFO_MESSAGE("...I wonder where they are?")
@@ -3145,7 +3145,7 @@ _InspectPanicRoomWindow
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
                 IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
 #ifdef LANGUAGE_FR
-                    INFO_MESSAGE("Il n'y a plus qu'a descendre !")
+                    INFO_MESSAGE("Il n'y a plus qu'à descendre !")
 #else
                     INFO_MESSAGE("Should be safe to climb down now!")
 #endif    
@@ -3611,7 +3611,7 @@ _ShowGirlInRoomWithoutBindings
     DO_ONCE(thank_you)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Elle a coupé ses restraintes...")
+        INFO_MESSAGE("Elle a coupé ses entraves...")
 #else
         INFO_MESSAGE("She cut her bindings...")
 #endif    
@@ -3634,7 +3634,7 @@ _ShowGirlInRoomWithoutBindings
         ; The window is still closed
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-        _BUBBLE_LINE(10,50,0,"Dites moi quoi faire !")
+        _BUBBLE_LINE(10,50,0,"Dites-moi quoi faire !")
         _BUBBLE_LINE(15,65,0,"Je peux aider !")
 #else
         _BUBBLE_LINE(10,50,0,"Tell me what to do!")
@@ -4726,7 +4726,7 @@ _UseMortar
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_INVENTORY))
 cannot_use_mortar
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je n'ai rien a moudre")
+    ERROR_MESSAGE("Je n'ai rien à moudre")
 #else
     ERROR_MESSAGE("Nothing to use it with")
 #endif    
@@ -4853,7 +4853,7 @@ _UseClay
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_WITH_CLAY)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ok, ca devrait suffire...")
-    INFO_MESSAGE("...plus qu'a remplir !")
+    INFO_MESSAGE("...plus qu'à remplir !")
 #else
     INFO_MESSAGE("Ok, that should be good enough...")
     INFO_MESSAGE("...now just need to fill it!")
@@ -5020,7 +5020,7 @@ thug_disabled
 #else    
     ERROR_MESSAGE("You've already frisked him")
 #endif    
-    END
+    END_AND_PARTIAL_REFRESH
 
 found_items
     SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM)

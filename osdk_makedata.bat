@@ -94,6 +94,7 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_hole_with_cue
 %CONVERT% masked_hole_with_girl_attached
 %CONVERT% masked_hole_with_girl_free
+%CONVERT% masked_hole_with_girl_free_fr
 %CONVERT% masked_top_window
 %CONVERT% masked_austin_parts
 %CONVERT% masked_rough_map
@@ -195,6 +196,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_ready_to_blow
 %CONVERT% view_sticky_bomb
 %CONVERT% view_corrosive_liquid
+%CONVERT% view_corrosive_liquid_fr
 %CONVERT% view_watch
 %CONVERT% view_protection_suit
 %CONVERT% view_safety_gloves

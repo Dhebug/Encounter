@@ -209,7 +209,7 @@ _Test_DETAILS_SHOT_BY_THUG
     .byt 0
 
 _Test_DETAILS_FELL_INTO_PIT
-    .byt 6,"Sortir du trou a prit beaucoup de temps",TEXT_CRLF
+    .byt 6,"Sortir du trou a pris beaucoup de temps",TEXT_CRLF
     .byt 6,"Quand vous en êtes sorti l'otage avait",TEXT_CRLF
     .byt 6,"disparu:",1,"Il était trop tard",TEXT_CRLF
     .byt 0
@@ -228,7 +228,7 @@ _Test_DETAILS_RAN_OUT_OF_TIME
 
 _Test_DETAILS_BLOWN_INTO_BITS
     .byt 3,"Les explosifs sont",1,"dangereux !",3,"Et qui",TEXT_CRLF
-    .byt 3,"va devoir doit nettoyer ce désastre ?",TEXT_CRLF
+    .byt 3,"va devoir nettoyer tout ce bazar ?",TEXT_CRLF
     .byt 3,"Pas vous en tout cas,",1,"agent éparpillé.",TEXT_CRLF
     .byt 0
 
