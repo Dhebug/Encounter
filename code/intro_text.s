@@ -161,7 +161,7 @@ _Text_TypeWriterMessage
     .byt "Ayant le droit d'opérer sans entrave,",13         
     .byt "potentiellement avec force, je garai",13
     .byt "ma voiture au marché local et",13
-    .byt "avancai discrètement à pied."
+    .byt "avancai discrètement à pieds."
     .byt 0
 #else // LANGUAGE_EN
 	.byt "September 29, 1982",13,13

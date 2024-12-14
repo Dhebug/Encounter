@@ -343,7 +343,7 @@ no_plastic_bag
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
         _BUBBLE_LINE(60,70,0,"Nous avons réussi !")
-        _BUBBLE_LINE(30,81,0,"Plus qu'à rentrer à la maison")
+        _BUBBLE_LINE(30,81,0,"Allez, on rentre !")
 #else
         _BUBBLE_LINE(90,70,0,"We did it!")
         _BUBBLE_LINE(70,80,0,"Time to go home!")
@@ -440,7 +440,7 @@ girl_not_here
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(4,100,0,"La place du marché")
-    _BUBBLE_LINE(4,106,4,"est désertée")
+    _BUBBLE_LINE(4,106,4,"est déserte")
 #else
     _BUBBLE_LINE(4,100,0,"The market place")
     _BUBBLE_LINE(4,106,4,"is deserted")
@@ -910,7 +910,7 @@ _gDescriptionTennisCourt
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
-    _BUBBLE_LINE(5,5,0,"Bien voilà: Un vrai court")
+    _BUBBLE_LINE(5,5,0,"Ah, voilà: Un vrai court")
     _BUBBLE_LINE(5,16,0,"de tennis sur gazon")
 #else
     _BUBBLE_LINE(4,4,0,"That's more like it:")
@@ -1455,7 +1455,7 @@ _gDescriptionCellar
         WAIT(50)
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-        QUICK_MESSAGE("Bon... Vous avez été prévenu, non ?")
+        QUICK_MESSAGE("Bon... Vous aviez été prévenu, non ?")
 #else
         QUICK_MESSAGE("Well... I warned you, didn't I?")
 #endif        
@@ -1673,7 +1673,7 @@ _gDescriptionEastGallery
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(5,5,0,"Couloir sans intérêt:")
-    _BUBBLE_LINE(20,13,4,"Vérifié")
+    _BUBBLE_LINE(20,13,4,"C'est fait")
 #else
     _BUBBLE_LINE(5,5,0,"Boring corridor:")
     _BUBBLE_LINE(20,17,0,"Check")
@@ -1686,7 +1686,7 @@ _gDescriptionChildBedroom
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
-    _BUBBLE_LINE(5,86,0,"Laisse-moi deviner:")
+    _BUBBLE_LINE(5,86,0,"Laissez-moi deviner:")
     _BUBBLE_LINE(5,94,4,"Chambre d'adolescent ?")
 #else
     _BUBBLE_LINE(5,96,0,"Let me guess:")
@@ -2464,8 +2464,8 @@ _ReadInvoice
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_INVOICE)                                       ; And get an achievement for that action    
     INCREASE_SCORE(POINTS_READ_INVOICE)    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une facture pour un voyage de deux ")
-    INFO_MESSAGE("mois en Europe pour toute la famille")
+    INFO_MESSAGE("La facture d'un voyage de deux mois")
+    INFO_MESSAGE("en Europe. Vacances en famille ?")
 #else
     INFO_MESSAGE("An invoice for a two months trip all")
     INFO_MESSAGE("over Europe. Family holidays maybe?")
@@ -2837,7 +2837,7 @@ _InspectCue
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est de bonne qualité...")
-    INFO_MESSAGE("Parfait pour un bon 'break' !")
+    INFO_MESSAGE("Parfait pour bien 'casser' !")
 #else    
     INFO_MESSAGE("It's a good quality cue...")
     INFO_MESSAGE("Perfect for a clean 'break'!")
@@ -4020,7 +4020,7 @@ _OpenNormalWindow
     JUMP_IF_TRUE(_OpenWindowFromInside,CHECK_PLAYER_LOCATION(e_LOC_KITCHEN))
 
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle semble verruouillée...")
+    INFO_MESSAGE("Elle semble verrouillée...")
 #else
     INFO_MESSAGE("It seems to be locked...")
 #endif    

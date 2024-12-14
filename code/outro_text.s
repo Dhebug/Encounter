@@ -5,7 +5,7 @@
 // It comes from the Latin word redux, meaning "back again". 
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:u
 
 _gTextHighScoreAskForName   .byt "Nouveau top score ! Votre nom SVP ?",0
 _gTextHighScoreInvalidName  .byt "Entre 1 et 15 caractères",0
@@ -215,7 +215,7 @@ _Test_DETAILS_FELL_INTO_PIT
     .byt 0
 
 _Test_DETAILS_TRIPPED_ALARM
-    .byt 3,"Un détective aurait du remarquer les",TEXT_CRLF
+    .byt 3,"Un détective aurait dû remarquer les",TEXT_CRLF
     .byt 3,"avertissements et les capteurs sur les",TEXT_CRLF
     .byt 3,"fenêtres:",5,"N'êtes vous pas d'accord ?",TEXT_CRLF
     .byt 0
