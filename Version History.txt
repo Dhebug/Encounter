@@ -187,4 +187,6 @@
 
 0.9.5
 - Fix: The "You already frisked it" text now properly cleans up
-- Fix: Dropping the protection suite now properly reset the "attached" flag
+- Fix: Dropping the protection suit now properly reset the "attached" flag
+- Fix: Trying to use the protection suit twice now shows a message
+- Fix: Few French typos

@@ -4788,6 +4788,16 @@ _UseMatches
 
 _UseProtectionSuit
 .(
+    ; Check if we already have the suit equipped
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
+#ifdef LANGUAGE_FR
+        ERROR_MESSAGE("Elle est déjà sur moi")
+#else
+        ERROR_MESSAGE("It's already equipped")
+#endif        
+        END_AND_PARTIAL_REFRESH
+    ENDIF(suit)
+
     DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES)
     PLAY_SOUND(_Zipper)
 #ifdef LANGUAGE_FR
@@ -4902,7 +4912,7 @@ _UseAcid
     WAIT(50*2)
     GOSUB(_DrawDoorWithHole)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Suffisement large pour voir...")
+    INFO_MESSAGE("Suffisament large pour voir...")
     INFO_MESSAGE("...ou passer des objets ?")
 #else
     INFO_MESSAGE("Large enough to peek through...")
