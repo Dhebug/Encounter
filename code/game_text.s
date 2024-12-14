@@ -139,7 +139,7 @@ _gTextItemBomb                    .byt "une$_bombe",0
 _gTextItemPistol                  .byt "un$_pistolet",0
 _gTextItemBullets                 .byt "trois _balles de calibre .38",0
 _gTextItemChemistryRecipes        .byt "_formules de chimie",0
-_gTextItemUnitedKingdomMap        .byt "une _carte du royaume uni",0
+_gTextItemUnitedKingdomMap        .byt "une _carte du Royaume-Uni",0
 _gTextItemHandheldGame            .byt "un$_jeu portable",0
 _gTextItemSedativePills           .byt "des$_somnifères",0
 _gTextItemDartGun                 .byt "un$_lance fléchettes",0
