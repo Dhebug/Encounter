@@ -338,10 +338,6 @@ int DisplayStory()
 
     if (gGameStarting)
     {
-        // Ensure the music is proper stopped before starting the second one
-        EndMusic();
-        PsgStopSoundAndForceUpdate();
-
         // Now we start the second music
         PlayMusic(TypewriterMusic);
 

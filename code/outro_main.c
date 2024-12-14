@@ -385,7 +385,6 @@ void main()
 	WaitFrames(4);
 
     // Make sure we don't have some ghost sound still playing
-    PsgStopSoundAndForceUpdate();
 
     AddSprite(10,55,40,63*40+30,5*40+1);   // Add the Polaroid camera
     BlitBufferToHiresWindow();
