@@ -4798,7 +4798,7 @@ _UseProtectionSuit
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
         ; The player is in front of the Panic Room, we can now equip the protection suit
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("...essayons la !")
+        INFO_MESSAGE("...essayons-la !")
 #else
         INFO_MESSAGE("...let's experiment!")
 #endif        
@@ -5640,6 +5640,7 @@ _DropPetrol
 _DropCurrentItem
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT)
+    UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
     END_AND_REFRESH
 .)
 

@@ -185,5 +185,6 @@
 - Fixed the collateral damage text in French
 - Many French localization fixes from Retroric.
 
-
-
+0.9.5
+- Fix: The "You already frisked it" text now properly cleans up
+- Fix: Dropping the protection suite now properly reset the "attached" flag
