@@ -193,3 +193,5 @@
 - Fix: Renamed "vitre" into "carreau"
 - Fix: Inspecting the window when the girl is gone now says the room is empty
 - Fix: If the rope or ladder is already installed the game now tells you it's already in place
+- Fix: Dropping the petrol or the water now properly clear the text window before showing the message.
+- Fix: When dropping the petrol it properly stays visible in the car tank

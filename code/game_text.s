@@ -5648,13 +5648,22 @@ _DropWater
 
 _DropPetrol
 .(
-    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)             ; The petrol goes back to the car, or maybe vanishes, need to see what's best
+    ; Depending if the hose is still in the tank or not we show or not the petrol still in the tank
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),hose)       ; Is the hose in the tank?
+        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)            ; It's now visible inside the car
+    ELSE(hose,no_hose)
+        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                     ; The petrol goes back to the car, or maybe vanishes, need to see what's best
+    ENDIF(no_hose)
+
+    ; Are we at the car location?
+    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("L'essence s'évapore")
+        INFO_MESSAGE("L'essence s'évapore")
 #else
-    INFO_MESSAGE("The petrol evaporates")
+        INFO_MESSAGE("The petrol evaporates")
 #endif    
-    END_AND_REFRESH
+    ENDIF(car)
+    END_AND_PARTIAL_REFRESH
 .)
 
 
