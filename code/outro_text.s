@@ -193,7 +193,7 @@ _gTextGreetings
 _Test_DETAILS_SOLVED_THE_CASE
     .byt 2,"Bravo, vous avez résolu l'affaire !",TEXT_CRLF,TEXT_CRLF
     .byt 3,"L'otage a été libérée et est maintenant",TEXT_CRLF
-    .byt 3,"de retour avec sa famille. Bien joué !",TEXT_CRLF
+    .byt 3,"de retour dans sa famille. Bien joué !",TEXT_CRLF
     .byt 0
 
 _Test_DETAILS_MAIMED_BY_DOG

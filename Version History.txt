@@ -190,3 +190,5 @@
 - Fix: Dropping the protection suit now properly reset the "attached" flag
 - Fix: Trying to use the protection suit twice now shows a message
 - Fix: Few French typos
+- Fix: Renamed "vitre" into "carreau"
+- Fix: Inspecting the window when the girl is gone now says the room is empty

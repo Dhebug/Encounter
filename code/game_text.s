@@ -2287,7 +2287,7 @@ window_open
     ; Is the window broken?
     JUMP_IF_TRUE(window_broken,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED))
 #ifdef LANGUAGE_FR       
-        ERROR_MESSAGE("Peut-être casser la vitre?")
+        ERROR_MESSAGE("Peut-être casser un carreau ?")
 #else
         ERROR_MESSAGE("Maybe break the window first?")
 #endif       
@@ -3137,33 +3137,37 @@ _InspectPanicRoomWindow
 #endif    
         ELSE(window_closed,window_open)
             GOSUB(_ShowTopWindowOpen)
+            IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
 #ifdef LANGUAGE_FR
-            INFO_MESSAGE("Le cadre de la fenêtre est solide...")
+                INFO_MESSAGE("Le cadre de la fenêtre est solide...")
 #else
-            INFO_MESSAGE("The window frame is strong...")
+                INFO_MESSAGE("The window frame is strong...")
 #endif    
-            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
-                IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+                IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
+                    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
 #ifdef LANGUAGE_FR
-                    INFO_MESSAGE("Il n'y a plus qu'à descendre !")
+                        INFO_MESSAGE("Il n'y a plus qu'à descendre !")
 #else
-                    INFO_MESSAGE("Should be safe to climb down now!")
+                        INFO_MESSAGE("Should be safe to climb down now!")
 #endif    
-                ELSE(rope_attached,rope_not_attached)
+                    ELSE(rope_attached,rope_not_attached)
 #ifdef LANGUAGE_FR
-                    INFO_MESSAGE("Y attacher une corde serait facile.")
+                        INFO_MESSAGE("Y attacher une corde serait facile.")
 #else
-                    INFO_MESSAGE("Could easily attach a rope to it.")
+                        INFO_MESSAGE("Could easily attach a rope to it.")
 #endif    
-                ENDIF(rope_not_attached)
-            ELSE(window_broken,window_not_broken)
+                    ENDIF(rope_not_attached)
+                ELSE(window_broken,window_not_broken)
 #ifdef LANGUAGE_FR
-                INFO_MESSAGE("Mais les carreaux posent problème !")
+                    INFO_MESSAGE("Mais les carreaux posent problème !")
 #else
-                INFO_MESSAGE("But the glass panes are in the way!")
+                    INFO_MESSAGE("But the glass panes are in the way!")
 #endif    
-            ENDIF(window_not_broken)
-        ENDIF(window_open)
+                ENDIF(window_not_broken)
+            ENDIF(window_open)
+        ELSE(girl_in_room,room_empty)
+            GOSUB(_SubPrintEmptyRoomMessage)
+        ENDIF(room_empty)
     ELSE(panic_room_door,else)                                                 ; Or are we on the tiled patio looking at the window from below?
         GOSUB(_ShowGirlAtTheWindow)
     ENDIF(else)
@@ -3667,6 +3671,7 @@ rope_not_attached
 _ShowEmptyHostageRoom
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_HOLE)
++_SubPrintEmptyRoomMessage
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
     INFO_MESSAGE("...elle doit être dehors maintenant")
@@ -5343,7 +5348,7 @@ thug_snooker_cue
                 GOSUB(_ShowCueBreakingTheWindow)
                 PLAY_SOUND(_Pling)
 #ifdef LANGUAGE_FR
-                INFO_MESSAGE("La queue brise la vitre")
+                INFO_MESSAGE("La queue brise le carreau")
 #else
                 INFO_MESSAGE("The cue smashes the window")
 #endif    
