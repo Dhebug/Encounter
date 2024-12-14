@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:u
 #endif
 
 
@@ -61,7 +61,7 @@ _EndMessagesAndPrompts
 _StartErrorMessages
 #ifdef LANGUAGE_FR
 _gTextErrorInvalidDirection .byt "Impossible d'aller par là",0
-_gTextErrorCantTakeNoSee    .byt "Je ne vois pas ca ici",0
+_gTextErrorCantTakeNoSee    .byt "Je ne vois pas ça ici",0
 _gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
 _gTextErrorThatWillNotWork  .byt "Ca ne va pas aller",0
 _gTextErrorAlreadyFull      .byt "Désolé, c'est déjà plein",0
@@ -1107,7 +1107,7 @@ end_dog
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(120,5,0,"Un escalier vraiment")
-    _BUBBLE_LINE(160,17,0,"impressionant")
+    _BUBBLE_LINE(160,17,0,"impressionnant")
 #else
     _BUBBLE_LINE(124,5,0,"Quite an impressive")
     _BUBBLE_LINE(187,17,0,"staircase")
@@ -1510,7 +1510,7 @@ alarm_panel_closed
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
     ELSE(else,open)
 #ifdef LANGUAGE_FR       
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre noircie")
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre occultée")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
 #endif    
@@ -1671,7 +1671,7 @@ _gDescriptionEastGallery
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(5,5,0,"Couloir ennuyeux:")
+    _BUBBLE_LINE(5,5,0,"Couloir sans intérêt:")
     _BUBBLE_LINE(20,13,4,"Vérifié")
 #else
     _BUBBLE_LINE(5,5,0,"Boring corridor:")
@@ -1736,7 +1736,7 @@ _gDescriptionWestGallery
         UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
         PLAY_SOUND(_Zipper)
 #ifdef LANGUAGE_FR    
-        INFO_MESSAGE("Il faut que j'enlève cette combinaison")
+        INFO_MESSAGE("Il faut que j'enlève cette tenue")
 #else
         INFO_MESSAGE("I need to remove that suit")
 #endif        
@@ -2066,7 +2066,7 @@ _CombinePillsWithMortar
     ELSE(already_crushed,not_crushed_yet)
         SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
 #ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
-        SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pillules écrasées")
+        SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pilules écrasées")
 #else    
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"some$crushed _pills")
 #endif    
@@ -2115,7 +2115,7 @@ _CombineTinWithFuse
     IF_FALSE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),missing_powder)    ; Is the gunpowder in the tobacco tin?
        // We reach this code path if the gun power is not in the tin
 #ifdef LANGUAGE_FR               
-        ERROR_MESSAGE("Sans la poudre la meche est inutile")
+        ERROR_MESSAGE("Sans la poudre la mèche est inutile")
 #else    
         ERROR_MESSAGE("Without gunpowder the fuse is useless")
 #endif    
@@ -2145,8 +2145,8 @@ _CombineGunPowderWithFuse
     ELSE(in_tin,not_tin)
        // We reach this code path if the gun power is in the bucket, plastic bag, etc...
 #ifdef LANGUAGE_FR               
-        ERROR_MESSAGE("La poudre requière un conteneur adapté")
-        ERROR_MESSAGE("Il doit etre solide et refermable")
+        ERROR_MESSAGE("La poudre requiert un conteneur adapté")
+        ERROR_MESSAGE("Il doit être solide et refermable")
 #else    
         ERROR_MESSAGE("The powder needs a proper container")
         ERROR_MESSAGE("It should be sturdy and closable")
@@ -2576,8 +2576,8 @@ _ShowRoughPlan
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     FADE_BUFFER
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("Je dois revenir au marché...")
-    INFO_MESSAGE("...quand j'ai fini")
+    INFO_MESSAGE("Je devrai revenir au marché...")
+    INFO_MESSAGE("...quand j'en aurai terminé")
 #else    
     INFO_MESSAGE("I'll have to go back to the market...")
     INFO_MESSAGE("...when I'm done")
@@ -2686,7 +2686,7 @@ _InspectWater
 
 _InspectHose
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Sert a transférer les liquides")
+    INFO_MESSAGE("Sert à transférer les liquides")
 #else    
     INFO_MESSAGE("Designed to move liquids efficiently")
 #endif    
@@ -2903,7 +2903,7 @@ _InspectMeat
 _InspectTree
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une corde pourrait s'y attacher")
+    INFO_MESSAGE("On pourrait y fixer une corde")
 #else
     INFO_MESSAGE("A rope could be attached to it")
 #endif    
@@ -2914,12 +2914,12 @@ _InspectTree
 _InspectPit
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pas sur qu'on puisse en remonter")
+    INFO_MESSAGE("Pas sûr qu'on puisse en remonter")
 #else
     INFO_MESSAGE("Not sure you could climb up again")
 #endif    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Corde ou échelle nécéssaire !")
+    INFO_MESSAGE("Corde ou échelle nécessaire !")
 #else
     INFO_MESSAGE("Rope or ladder necessary!")
 #endif    
@@ -2945,7 +2945,7 @@ _InspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Une famille heureuse...")
-    INFO_MESSAGE("...ou sont-ils ?")
+    INFO_MESSAGE("...où sont-ils ?")
 #else
     INFO_MESSAGE("Looks like a happy family...")
     INFO_MESSAGE("...I wonder where they are?")
@@ -3261,7 +3261,7 @@ _InspectAlarmIndicator
         INFO_MESSAGE("mais les capteurs ont été trafiqués !")
 #else
         INFO_MESSAGE("The alarm system is active, but...")
-        INFO_MESSAGE("the sensors have been tempered with!")
+        INFO_MESSAGE("the sensors have been tampered with!")
 #endif    
     ENDIF(alarm_enabled)
     END_AND_REFRESH
@@ -3408,7 +3408,7 @@ _InspectTombstone
 _InspectFishPond
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Beaucoup de poissons là dedans !")
+    INFO_MESSAGE("Beaucoup de poissons là-dedans !")
 #else
     INFO_MESSAGE("Quite a few fishes in there!")
 #endif    
@@ -3476,7 +3476,7 @@ _InspectThug
     ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
-        INFO_MESSAGE("Peut-être à t'il des trucs utiles?")
+        INFO_MESSAGE("Peut-être a-t'il des trucs utiles?")
 #else
         INFO_MESSAGE("He is not moving")
         INFO_MESSAGE("Maybe he has useful items?")
@@ -4125,7 +4125,7 @@ _OpenChurch
 #endif
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),frontdoor)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Peut-être une entrée arrière ?")
+        INFO_MESSAGE("Peut-être une entrée à l'arrière ?")
 #else
         INFO_MESSAGE("Maybe there's a back entrance?")
 #endif
@@ -4375,9 +4375,9 @@ _InspectCarDoor
 #endif    
     ELSE(door_closed,door_open)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("La porte est boufée par la rouille")
+        INFO_MESSAGE("La porte est mangée par la rouille")
 #else
-        INFO_MESSAGE("The door is rusty and rattles a bit")
+        INFO_MESSAGE("The door is eaten by rust")
 #endif    
     ENDIF(door_open)
     END_AND_PARTIAL_REFRESH
@@ -4434,7 +4434,7 @@ install_the_ladder
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle prête à grimper")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle prête à l'emploi")
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a _ladder ready to climb")
 #endif    
@@ -4601,7 +4601,7 @@ _UseKey
                 INCREASE_SCORE(POINTS_USED_KEY)
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
                 SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
-                INFO_MESSAGE("La centrale est déverouillée")
+                INFO_MESSAGE("La centrale est déverrouillée")
 #else
                 SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
                 INFO_MESSAGE("The panel is now unlocked")
@@ -4949,7 +4949,7 @@ _UseFancyStones
 _UseComputer
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il semble être verouillé.")
+    INFO_MESSAGE("Il semble être verrouillé.")
 #else    
     INFO_MESSAGE("It appears to be boot locked.")
 #endif    
@@ -5102,7 +5102,7 @@ give_bread_to_dove
 //+_gSceneActionDoveEatingBread
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Elle est attrapable maintenant")
+    INFO_MESSAGE("On peut l'attraper maintenant")
 #else
     INFO_MESSAGE("Maybe I can catch it now?")
 #endif    
@@ -5702,7 +5702,7 @@ _ErrorCannotDo
 _ErrorCannotRead
 .(
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je ne peux pas lire ca")
+    ERROR_MESSAGE("Je ne peux pas lire ça")
 #else
     ERROR_MESSAGE("I can't read that")
 #endif    
