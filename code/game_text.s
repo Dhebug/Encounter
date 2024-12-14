@@ -978,6 +978,7 @@ _gDescriptionTiledPatio
 
     ; Draw the girl if she's here
     JUMP_IF_FALSE(girl_is_outside,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_TILEDPATIO))
+        SET_ITEM_LOCATION(e_ITEM_PanicRoomWindow,e_LOC_NONE)                  ; After all, we don't want the "innacessible window message" anymore
         INCREASE_SCORE(POINTS_MET_THE_GIRL)
         SET_ITEM_FLAGS(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED)                   ; From now on she will follow us
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,16,78)                     ; Draw the girl on the small wall outside on the view
