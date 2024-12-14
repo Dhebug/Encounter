@@ -4426,6 +4426,9 @@ ladder_too_short
     END_AND_REFRESH
 
 install_the_ladder
+    ; If the ladder  is already attached, we don't redo the whole sequence
+    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous installez l'échelle")
 #else
@@ -4530,6 +4533,9 @@ cannot_use_rope_here
 
 +_CombineRopeTree
 around_the_pit
+    ; If the rope is already attached, we don't redo the whole sequence
+    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Vous attachez la corde à l'arbre")
 #else
@@ -5755,6 +5761,14 @@ _ErrorAlreadyClosed_Elle
 #endif        
     END_AND_PARTIAL_REFRESH
 
+
+_ErrorAlreadyPositionned_Elle
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Elle est déjà en position")
+#else
+    ERROR_MESSAGE("It's already positionned")
+#endif        
+    END_AND_PARTIAL_REFRESH
 
 
 ; This is a script that is run before the setup of a scene is done.

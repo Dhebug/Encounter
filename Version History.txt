@@ -192,3 +192,4 @@
 - Fix: Few French typos
 - Fix: Renamed "vitre" into "carreau"
 - Fix: Inspecting the window when the girl is gone now says the room is empty
+- Fix: If the rope or ladder is already installed the game now tells you it's already in place
