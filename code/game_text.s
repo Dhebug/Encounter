@@ -1812,6 +1812,13 @@ _gDescriptionTinyToilet
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
+    ; Draw the roll of toilet paper if present
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_TINY_WC),toilet_paper)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,16)
+                _IMAGE(20,32)
+                _BUFFER(19,13)
+    ENDIF(toilet_paper)
+
     WAIT(DELAY_FIRST_BUBBLE)
 #ifdef LANGUAGE_FR    
     WHITE_BUBBLE(2)
