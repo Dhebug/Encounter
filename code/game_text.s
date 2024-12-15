@@ -796,8 +796,10 @@ _gDescriptionWoodedAvenue
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
 #endif    
-    // If the dove is still there, play the  chirping
+    // If the dove is still there, but not eating, then play the  chirping
+    JUMP_IF_TRUE(no_chirping,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
     JUMP_IF_TRUE(_ChirpingBirds,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+no_chirping    
     END
 .)
 
@@ -2669,12 +2671,33 @@ _InspectRope
 
 
 _InspectDove
+.(
+    ; If the dove is in the inventory or in the net, then inspect it shows some other message.
+    JUMP_IF_FALSE(dove_not_happy,CHECK_ITEM_FLAG(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE))
+    JUMP_IF_TRUE(dove_eating,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+    
+    ; Else it is happy chirping around
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle roucoule sur une branche haute")
 #else    
     INFO_MESSAGE("It's chirping high up on a branch")
 #endif    
     END_AND_PARTIAL_REFRESH
+
+dove_eating
+    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
+    WAIT(50*2)
+    END_AND_REFRESH
+
+dove_not_happy
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle bouge et essaye de s'échapper")
+#else    
+    INFO_MESSAGE("It's not happy and tries to leave")
+#endif    
+    END_AND_PARTIAL_REFRESH
+.)
+
 
 
 _InspectFish
@@ -5190,6 +5213,7 @@ _FreeDove
     JUMP_IF_FALSE(nothing_to_chase_the_dove,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_CURRENT))
     JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE)            ; Show the picture with the dog running after the dove
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR        
         INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
 #else
@@ -5198,6 +5222,7 @@ _FreeDove
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
         SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
+        STOP_MUSIC()
 nothing_to_chase_the_dove
     END_AND_REFRESH
  .)
