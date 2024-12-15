@@ -197,4 +197,4 @@
 - Fix: When dropping the petrol it properly stays visible in the car tank
 - Fix: When the girl is outside on the patio, the "innaccessible window" is not shown anymore
 - Tweak: Reduced the volume of the 1hour and 2hours beeps
-- Tweak: The text area now switches to red when facing the dog
+- Tweak: The text area now switches to red when facing the dog or the pit

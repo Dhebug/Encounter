@@ -598,6 +598,7 @@ cannot_escape_pit    ; The player has no way to escape the pit
     SET_CUT_SCENE(1)
     FADE_BUFFER
     WAIT(50*2)
+    CLEAR_TEXT_AREA(5)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(6,8,0,"Ca ne semblait")
@@ -618,6 +619,7 @@ cannot_escape_pit    ; The player has no way to escape the pit
 #else    
     _BUBBLE_LINE(82,94,0,"from outside")
 #endif    
+    CLEAR_TEXT_AREA(1)
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(50*2)                                      ; Wait a couple seconds for dramatic effect
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)   ; Achievement!
@@ -1146,8 +1148,7 @@ end_dog_check
 dog_alive
     ; If the dog is alive, it will jump on our face now
     SET_CUT_SCENE(1)
-    CLEAR_TEXT_AREA(1)
-    QUICK_MESSAGE("...");                   ; Just to get a red dialog
+    CLEAR_TEXT_AREA(1)                      ; Just to get a red text area
     FADE_BUFFER
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
