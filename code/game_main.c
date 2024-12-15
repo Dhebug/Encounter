@@ -392,6 +392,8 @@ void DropItem()
 		item* itemPtr=&gItems[itemId];
         unsigned char linkedItemId = itemPtr->associated_item;
 
+        ClearMessageWindow(16+4);
+
         itemPtr->location = gCurrentLocation;
         if (linkedItemId != 255)
         {

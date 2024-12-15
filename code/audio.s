@@ -388,7 +388,7 @@ _WatchButtonPress
 _WatchBeepData
     .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,128            ; Channel Frequency
     .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,15               ; Channel A volume
+    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,13               ; Channel A volume
     .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
 	.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait a second
     .byt SOUND_COMMAND_END_FRAME
