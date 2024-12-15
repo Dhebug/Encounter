@@ -562,7 +562,7 @@ int DisplayHighScoresTable()
 		memcpy(gPrintAddress,ptrScore->name,15);
 		
 		score=ptrScore->score-32768;
-		sprintf(gPrintAddress+15+0,"%c%d",4,score);
+		sprintf(gPrintAddress+15+0,"%c%d",6,score);
 
 		condition=ptrScore->condition;
 		if (condition<=e_SCORE_GAVE_UP)
