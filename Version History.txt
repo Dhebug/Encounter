@@ -201,3 +201,7 @@
 - Tweak: The text area now switches to red when facing the dog or the pit
 - Improvement: The roll of toilet paper now disapears from the image when taken by the player
 - Improvement: When using the dove the success music is played
+
+0.9.6
+- Launcher: 1.0.0.6 - The emulator application now appears with "Encounter" as title and icon instead of the default "Oricutron 1.2" and default Oric icon
+
