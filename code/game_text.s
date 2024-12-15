@@ -1146,6 +1146,8 @@ end_dog_check
 dog_alive
     ; If the dog is alive, it will jump on our face now
     SET_CUT_SCENE(1)
+    CLEAR_TEXT_AREA(1)
+    QUICK_MESSAGE("...");                   ; Just to get a red dialog
     FADE_BUFFER
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
