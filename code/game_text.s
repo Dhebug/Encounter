@@ -217,7 +217,7 @@ _gTextItemHandheldGame            .byt "a$handheld _game",0
 _gTextItemSedativePills           .byt "some$sedative _pills",0
 _gTextItemDartGun                 .byt "a$_dart gun",0
 _gTextItemBlackTape               .byt "some$black adhesive _tape",0
-_gTextItemMortarAndPestle         .byt "a$_mortar and pestle",0
+_gTextItemMortarAndPestle         .byt "a$pestle and _mortar",0
 _gTextItemAdhesive                .byt "some$_adhesive",0
 _gTextItemAcid                    .byt "some$strong _acid",0
 _gTextItemSecurityDoor            .byt "a$security _door",0
