@@ -2936,11 +2936,7 @@ _InspectMeat
 
 _InspectTree
 .(
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("On pourrait y fixer une corde")
-#else
-    INFO_MESSAGE("A rope could be attached to it")
-#endif    
+    GOSUB(_SubInspectAttachment)
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3178,19 +3174,7 @@ _InspectPanicRoomWindow
                 INFO_MESSAGE("The window frame is strong...")
 #endif    
                 IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
-                    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
-#ifdef LANGUAGE_FR
-                        INFO_MESSAGE("Il n'y a plus qu'à descendre !")
-#else
-                        INFO_MESSAGE("Should be safe to climb down now!")
-#endif    
-                    ELSE(rope_attached,rope_not_attached)
-#ifdef LANGUAGE_FR
-                        INFO_MESSAGE("Y attacher une corde serait facile.")
-#else
-                        INFO_MESSAGE("Could easily attach a rope to it.")
-#endif    
-                    ENDIF(rope_not_attached)
+                    GOSUB(_SubInspectAttachment)
                 ELSE(window_broken,window_not_broken)
 #ifdef LANGUAGE_FR
                     INFO_MESSAGE("Mais les carreaux posent problème !")
@@ -3206,6 +3190,28 @@ _InspectPanicRoomWindow
         GOSUB(_ShowGirlAtTheWindow)
     ENDIF(else)
     END_AND_REFRESH
+.)
+
+
+; This is called both when inspecting the tree or the window with a rope attached to it
+_SubInspectAttachment
+.(
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Il n'y a plus qu'à descendre !")
+#else
+        INFO_MESSAGE("Should be safe to climb down now!")
+#endif    
+    ELSE(rope_attached,rope_not_attached)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Y attacher une corde serait facile.")
+      //INFO_MESSAGE("On pourrait y fixer une corde")
+#else
+        INFO_MESSAGE("Could easily attach a rope to it.")
+      //INFO_MESSAGE("A rope could be attached to it")
+#endif    
+    ENDIF(rope_not_attached)
+    RETURN
 .)
 
 
@@ -4957,7 +4963,7 @@ _UseAcid
     WAIT(50*2)
     GOSUB(_DrawDoorWithHole)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Suffisament large pour voir...")
+    INFO_MESSAGE("Suffisamment large pour voir...")
     INFO_MESSAGE("...ou passer des objets ?")
 #else
     INFO_MESSAGE("Large enough to peek through...")

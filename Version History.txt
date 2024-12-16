@@ -205,5 +205,6 @@
 0.9.6
 - Launcher: 1.0.0.6 - The emulator application now appears with "Encounter" as title and icon instead of the default "Oricutron 1.2" and default Oric icon
 - Fix: Removed the prefix on the rope and ladder
+- Fix: Inspecting the tree now provides the proper status message
 - Tweak: Changed the color of the scores from dark blue to light blue to be easier to see on dark screens
 - Optimisation: Rewrote a part of the print scene object to assembler to reduce the size of the code
