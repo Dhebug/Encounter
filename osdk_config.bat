@@ -25,9 +25,10 @@
 :: 0.9.3 - Fixed a couple of crash bugs, improved the container check, fixed some typos
 :: 0.9.4 - Mostly French fixes, but also a tweak on the count down timer, and inspecting the basement window from the lader now works
 :: 0.9.5 - Improvements to the TP, dove, sound volume, and plenty of small bug fixes and items behaviors
-:: 0.9.6 -
+:: 0.9.6 - Changed the up and down arrows, scores are now cyan instead of blue, text fixes, improvements to the bomb and safe interactions
+:: 0.9.7 - 
 ::
-SET VERSION=0.9.6
+SET VERSION=0.9.7
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
