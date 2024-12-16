@@ -2104,11 +2104,18 @@ _CombineMeatWithPills
 
 _CombinePetrolWithTP
 .(
-    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_GONE_FOREVER)                          ; The Petrol is gone forever
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Vous avez fabriqué une mèche")
+#else
+    INFO_MESSAGE("You've created a fuse")
+#endif        
+    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_GONE_FOREVER)                  ; The Petrol is gone forever
     SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_GONE_FOREVER)              ; The TP is gone forever
     SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_CURRENT)                         ; We now have a fuse for our bomb
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
     INCREASE_SCORE(POINTS_BUILT_FUSE)
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -5557,9 +5564,9 @@ _TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une $_colombe")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a $_dove")
 #endif    
     JUMP(_TakeCommon)
 .)

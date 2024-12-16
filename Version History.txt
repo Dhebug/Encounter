@@ -208,4 +208,5 @@
 - Fix: Inspecting the tree now provides the proper status message
 - Fix: Corrected a few typos in French
 - Tweak: Changed the color of the scores from dark blue to light blue to be easier to see on dark screens
+- Improvement: Building a fuse now plays the success music and prints a message for the user to know what happened
 - Optimisation: Rewrote a part of the print scene object to assembler to reduce the size of the code
