@@ -733,7 +733,7 @@ error_unknown_item
 
 _ProcessContainerAnswer
 .(
-    lda #0               ; Par of the 16 bit return code
+    lda #0               ; Part of the 16 bit return code
     ldx _gWordCount
     beq not_found
 

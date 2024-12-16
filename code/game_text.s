@@ -2249,7 +2249,7 @@ _CombineClayWithWater
 #ifdef LANGUAGE_FR                                                     ; Rename the dry clay to wet clay
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'$_argile humide")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some wet _clay")
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some $wet _clay")
 #endif    
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
     INCREASE_SCORE(POINTS_MADE_CLAY_WET)
