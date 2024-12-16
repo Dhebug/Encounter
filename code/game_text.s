@@ -5648,9 +5648,9 @@ _TakeHose
 .(
 +_gTextItemHose = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un$_tuyau")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose")
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a$_hose")
 #endif    
     JUMP(_TakeCommon)
 .)
