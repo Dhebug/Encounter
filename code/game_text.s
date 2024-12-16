@@ -2202,6 +2202,9 @@ _CombineBombWithAdhesive
 
 _CombineStickyBombWithSafe
 .(
+    ; If the bomb is already attached, we don't redo the whole sequence
+    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED))
+
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Ca doit coller à la porte")
@@ -2464,18 +2467,31 @@ _ReadChemistryBook
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Je ne comprends rien...")
-    INFO_MESSAGE("...mais j'ai trouvé un truc !")
 #else    
     INFO_MESSAGE("I don't understand much...")
-    INFO_MESSAGE("...oh, I found something!")
 #endif
+
     // If the recipes were not yet found, they now appear at the current location
     JUMP_IF_FALSE(recipe_already_found,CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_NONE))
-    SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_CURRENT)
+        SET_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_CURRENT)
+        GOSUB(_SubFoundSomething)
 recipe_already_found
     END_AND_REFRESH
 .)
 
+
+; Called from reading the chemistry book, searching the thug and searching the safe
+_SubFoundSomething
+.(
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous avez trouvé quelque chose")
+#else    
+    INFO_MESSAGE("You found something interesting")
+#endif    
+    STOP_MUSIC()
+    RETURN
+.)
 
 _InspectInvoice
 _ReadInvoice
@@ -3476,7 +3492,7 @@ _InspectMixTape
 .)
 
 
-
+_SearchSafe
 _InspectSafe
 .(
     INCREASE_SCORE(POINTS_INSPECT_SAFE)
@@ -3498,14 +3514,15 @@ _InspectSafe
         ENDIF(nobomb)
     ELSE(elseclose,safeopen)
         DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN)
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
-            SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
-        ENDIF(acid)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Quasiment rien de brisé!")
 #else
         INFO_MESSAGE("Most of the stuff is intact!")
 #endif    
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
+            SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
+            GOSUB(_SubFoundSomething)
+        ENDIF(acid)
     ENDIF(safeopen)
     END_AND_REFRESH
 .)
@@ -5039,6 +5056,7 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _SearchFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _SearchMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _SearchGunCabinet)
+    VALUE_MAPPING(e_ITEM_HeavySafe          , _SearchSafe)
     VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 
@@ -5093,11 +5111,7 @@ thug_disabled
 found_items
     SET_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM)
     SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_MASTERBEDROOM)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous avez trouvé quelque chose")
-#else    
-    INFO_MESSAGE("You found something interesting")
-#endif    
+    GOSUB(_SubFoundSomething)
     INCREASE_SCORE(POINTS_SEARCHED_THUG)
     END_AND_REFRESH
 .)
