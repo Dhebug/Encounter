@@ -5598,7 +5598,18 @@ _TakeBlackTape
 
 
 _InspectAcid
+.(
+    GOSUB(_SubInspectAcid)
+    END_AND_REFRESH
+.)
+
 _TakeAcid
+.(
+    GOSUB(_SubInspectAcid)
+    JUMP(_TakeCommon)
+.)
+
+_SubInspectAcid
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
 #ifdef LANGUAGE_FR   
@@ -5608,7 +5619,7 @@ _TakeAcid
     INFO_MESSAGE("This stuff is highly dangerous!")
     INFO_MESSAGE("...could go through a ship's hull!")
 #endif
-    JUMP(_TakeCommon)
+    RETURN
 .)
 
 
