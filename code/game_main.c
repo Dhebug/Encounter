@@ -79,6 +79,8 @@ void PrintInventory()
 }
 
 
+extern int PrintSceneObjectsInit();
+
 // MARK:Print Objects
 void PrintSceneObjects()
 {
@@ -87,29 +89,7 @@ void PrintSceneObjects()
     int maxOffset = -40*3;
 	int item;
 
-    // The buffer is 479/40=11.975 lines long
-    ClearTemporaryBuffer479();   //memset((char*)TemporaryBuffer479,' ',40*10);
-    poke(TemporaryBuffer479+40*0,16+4);
-    poke(TemporaryBuffer479+40*1,16+4);
-    poke(TemporaryBuffer479+40*2,16+4);
-    poke(TemporaryBuffer479+40*3,16+4);
-    poke(TemporaryBuffer479+40*4,16+4);
-    poke(TemporaryBuffer479+40*5,16+4);
-    poke(TemporaryBuffer479+40*6,16+4);
-    poke(TemporaryBuffer479+40*7,16+4);
-    poke(TemporaryBuffer479+40*8,16+4);
-    poke(TemporaryBuffer479+40*9,16+4);
-
-    //memcpy(TemporaryBuffer479,(char*)0xbb80+40*18,40*4);
-
-	for (item=0;item<e_ITEM_COUNT_;item++)
-	{
-		if (gItems[item].location == gCurrentLocation)
-		{
-			itemCount++;
-		}
-	}
-
+    itemCount = PrintSceneObjectsInit();
 	// Print any item in the location
 	if (itemCount)
 	{        

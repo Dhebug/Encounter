@@ -788,6 +788,53 @@ no_change
 .)
 
 
+
+_PrintSceneObjectsInit
+.(
+    ; Clear the buffer (479/40=11.975 lines long)
+    jsr _ClearTemporaryBuffer479
+
+    ; Paint the background blue
+    lda #16+4
+	sta _TemporaryBuffer479+40*0
+    sta _TemporaryBuffer479+40*1
+	sta _TemporaryBuffer479+40*2
+	sta _TemporaryBuffer479+40*3
+	sta _TemporaryBuffer479+40*4
+	sta _TemporaryBuffer479+40*5
+	sta _TemporaryBuffer479+40*6
+	sta _TemporaryBuffer479+40*7
+	sta _TemporaryBuffer479+40*8
+	sta _TemporaryBuffer479+40*9
+
+    ; Check if ther are any items present at the current location
+    ldx #0
+loop_search    
+    txa
+    jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
+
+    ldy #2
+    lda (_gStreamItemPtr),y               ; Item location
+    cmp _gCurrentLocation
+    beq found_items                       ; It's int the scene
+
+    inx 
+    cpx #e_ITEM_COUNT_
+    bne loop_search                       ; Next item
+
+no_items    
+    lda #0               ; Par of the 16 bit return code
+    ldx #0
+    rts
+
+found_items    
+    lda #0               ; Par of the 16 bit return code
+    ldx #1
+    rts
+.)
+
+
+
 ; memset((char*)TemporaryBuffer479,' ',40*4);  = 160
 ; memset((char*)TemporaryBuffer479,' ',40*10); = 400
 _ClearTemporaryBuffer479
