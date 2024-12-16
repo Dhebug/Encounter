@@ -57,7 +57,7 @@ _Text_AchievementKilledTheDog     .byt "Tué le chien",0
 _Text_AchievementDruggedTheDog    .byt "Drogué le chien",0
 _Text_AchievementChasedTheDog     .byt "Chassé le chien",0
 _Text_AchievementKilledTheThug    .byt "Tué le voyou",0
-_Text_AchievementDruggedTheThug   .byt "Droggué le voyou",0
+_Text_AchievementDruggedTheThug   .byt "Drogué le voyou",0
 _Text_AchievementCapturedTheDove  .byt "Capturé la colombe",0
 _Text_AchievementUsedTheRope      .byt "Utilisé la corde",0
 _Text_AchievementUsedTheLadder    .byt "Utilisé l'échelle",0

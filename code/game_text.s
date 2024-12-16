@@ -2184,7 +2184,7 @@ _CombineBombWithAdhesive
 #ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe collante")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a sticky _bomb")
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a$sticky _bomb")
 #endif    
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
