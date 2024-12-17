@@ -218,10 +218,11 @@
 
 0.9.7
 - Misc: Added thanks to Oricutron developers in the credits
-- Fix: Reformulated some achivement in French
+- Fix: Reformulated some achievements in French
 - Fix: Trying to use the rope from inside the pit now shows an error message
 - Fix: The net appears in the scene when you use it, instead of staying in the inventory
 - Fix: Examining the dove eating should properly display an information message
 - Tweak: Moved the dog "oops" from the image to the message box
+- Tweak: The score on the main screen is now shown in magenta instead of blue to be easier to read
 - Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog
 
