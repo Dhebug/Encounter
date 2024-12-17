@@ -2076,6 +2076,13 @@ _CombinePillsWithMortar
         ERROR_MESSAGE("The pills are already crushed")
 #endif    
     ELSE(already_crushed,not_crushed_yet)
+        LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Elles sont maintenant écrasées")
+#else    
+        INFO_MESSAGE("The pills are now crushed")
+#endif    
+        DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
 #ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pilules écrasées")
@@ -4808,8 +4815,15 @@ abandonned_car
 _CombinePowderMixWithMortar
 _UseMortar
 .(
+    ; Is the powerder mix available around? If yes crush it!
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT))
     JUMP_IF_TRUE(made_gun_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_INVENTORY))
+
+    ; Next we check the sedative pills: If they are around, and not already crushed, let's crash them!
+    JUMP_IF_TRUE(cannot_use_mortar,CHECK_ITEM_FLAG(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED))
+    JUMP_IF_TRUE(_CombinePillsWithMortar,CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_CURRENT))
+    JUMP_IF_TRUE(_CombinePillsWithMortar,CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_INVENTORY))
+
 cannot_use_mortar
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Je n'ai rien à moudre")
