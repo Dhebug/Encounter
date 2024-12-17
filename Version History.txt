@@ -218,6 +218,7 @@
 
 0.9.7
 - Misc: Added thanks to Oricutron developers in the credits
+- Misc: Updated the ReadMe.txt file and added a LisezMoi.txt version
 - Fix: Reformulated some achievements in French
 - Fix: Trying to use the rope from inside the pit now shows an error message
 - Fix: The net appears in the scene when you use it, instead of staying in the inventory
@@ -228,4 +229,4 @@
 - Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog
 - Improvement: We now get points when capturing the dove, making it on par with the dog handling
 - Improvement: Using the mortar will automatically try to crush the pills if you have them, and plays the success jingle as well
-
+ 

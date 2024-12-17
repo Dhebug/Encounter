@@ -1,0 +1,99 @@
+=======================================
+              Encounter HD
+   un jeu d'aventure Oric 'moderne'
+=======================================
+
+Le jeu est préconfiguré avec un émulateur pour Windows appelé Oricutron (voir https://github.com/pete-gordon/oricutron")
+Vous pouvez appuyer sur F1 à tout moment pour accéder aux paramètres de l'émulateur (comme le mode vidéo, la configuration clavier, etc.).
+
+== Liens ==
+Page d'accueil du jeu: https://encounter.defence-force.org
+Manuel utilisateur:    https://defence-force.org/index.php?page=games&game=encounter&type=manual
+Boutique Steam:        https://store.steampowered.com/app/3319780/Encounter/
+Boutique Itch.io:      https://defenceforce.itch.io/encounter
+
+
+== Introduction ==
+Encounter HD est une réinvention d'une aventure textuelle sortie sur cassette par Severn Software en 1983 pour l'Oric.
+Cette nouvelle version montre ce que l'utilisation d'une disquette, une quantité insensée de temps de développement, une connaissance complète du système aussi bien matériel que logiciel, et 40 ans d'expérience peuvent permettre.
+
+Pour ceux d'entre vous qui ne savent pas ce qu'est un Oric, c'est une machine sortie en Angleterre vers 1983, avec les spécifications typiques d'une machine 8 bits à bas coût de l'époque :
+- Processeur 6502 à 1 MHz
+- 48 Ko de RAM
+- Résolution d'écran de 240x224 utilisant une palette fixe de 8 couleurs (Rouge, Vert, Bleu, Jaune, Cyan, Magenta, Noir, Blanc)
+- Générateur de tonalité à trois canaux AY-3-8912
+
+et c'est à peu près tout : Pas de sprites, pas de blitter, pas de vsync, pas de double buffering, pas de dma
+
+En ajoutant un lecteur de disquettes au système, vous obtenez 16 Ko de RAM supplémentaires, plus évidemment le stockage sur disquette lui-même, qui dans ce cas sont des disquettes de 3" avec une capacité de stockage de 360 Ko (2 faces, 42 pistes, 17 secteurs par piste, 256 octets par secteur)
+
+Si vous avez un véritable ordinateur Oric, vous pouvez trouver le jeu Oric réel (en format .DSK) dans le sous-dossier "Game"
+
+
+== Changements de conception du jeu ==
+Le jeu original était globalement correct, mais pour diverses raisons, il avait quelques défauts que j'ai essayé de corriger dans cette version :
+- Il y avait quelques endroits où le jeu tuait le joueur sans aucun moyen pour lui de savoir que cela allait arriver, il fallait apprendre ces situations par cœur.
+- Il y avait quelques combinaisons d'objets qui semblaient avoir été prévues par les concepteurs mais qui n'étaient que partiellement implémentées.
+- En raison de l'écriture en BASIC, il n'y avait pas d'horloge en temps réel disponible, ils devaient donc se fier à un nombre d'actions que vous pouviez effectuer.
+- Il n'y avait pas de graphismes (même pas une image de titre) et pas d'audio (à part quelques appels aux commandes BASIC SHOOT et EXPLODE)
+Pour adapter le jeu à un public plus moderne, j'ai corrigé ces problèmes et ajouté évidemment une quantité significative de graphismes, d'audio, d'animations, de transitions... mais aussi ajouté quelques moyens alternatifs pour passer certains obstacles.
+
+Le jeu original vous obligeait à utiliser la force létale pour passer certains obstacles, cette nouvelle version les supporte toujours, mais vous pouvez maintenant trouver quelques moyens alternatifs pour résoudre le problème sans avoir à tuer quoi que ce soit ou qui que ce soit.
+
+
+== Vocabulaire ==
+Le jeu n'essaie pas d'avoir le parser de texte le plus avancé connu de l'humanité, il est plutôt proche d'une aventure point'n click comme Day of the Tentacle ou Zac Mc Krakken où vous n'avez que quelques mots que vous utilisez en combinaison pour obtenir ce que vous voulez.
+
+Vous êtes encouragé à consulter le manuel utilisateur en ligne pour une documentation plus complète (https://defence-force.org/index.php?page=games&game=encounter&type=manual") mais voici une version courte.
+
+Voici la liste de vocabulaire :
+
+Directions :
+- N pour aller au nord
+- S pour aller au sud
+- E pour aller à l'est
+- O pour aller à l'ouest
+- M pour monter
+- D pour descendre
+
+Vous pouvez également utiliser les touches fléchées pour vous déplacer dans les quatre directions, et en utilisant CTRL, vous pouvez également monter et descendre lorsque c'est possible.
+
+Lié aux objets :
+- PRENDS ou RAMASSE pour mettre un objet dans votre inventaire
+- LACHE ou POSE pour déposer un objet à l'endroit où vous vous trouvez actuellement
+- OUVRE et FERME pour ouvrir ou fermer des objets tels que des conteneurs, des fenêtres, des portes, des rideaux, etc.
+- UTILISE pour activer certains types d'objets
+- LIS pour lire des objets tels que des livres, des recettes, des notes, des journaux, des magazines, ...
+- REGARDE, EXAMINE ou INSPECTE pour vérifier des éléments spécifiques pour des indices ou des détails
+- COMBINE est suivi de deux objets qui seront assemblés pour créer un nouvel objet, comme par exemple COMBINER GÂTEAU BOUGIES pour créer un gâteau d'anniversaire
+- CHERCHE ou FOUILLE pour regarder à l'intérieur d'un conteneur ou vérifier le corps d'une personne pour des objets
+
+Note : Pour simplifier la vie du joueur, appuyer sur la touche SHIFT affichera en vidéo inversée tous les mots-clés importants sur les objets de la scène et l'inventaire, donc si vous vous demandez si vous devez taper "gâteau d'anniversaire" ou "gâteau", appuyez simplement sur SHIFT et vous verrez quel mot est important.
+
+Note #2 : Appuyer sur CTRL+SUPPRESSION ARRIERE effacera le champ de saisie (ou bien CTRL+DEL si vous utilisez un vrai clavier Oric)
+
+Commandes méta :
+- QUITTE pour quitter le jeu
+- AIDE pour afficher une liste de toutes les commandes connues
+- PAUSE pour arrêter le chronomètre jusqu'à ce qu'une touche soit pressée
+
+
+== Limite de temps ==
+Vous n'avez que deux heures (heures de jeu) pour terminer la mission. Le jeu vous notifiera à mi-chemin, donc vous ne devriez pas être surpris par la rapidité avec laquelle le temps passe !
+Le temps passe à un rythme normal d'une seconde par seconde, mais lors de l'exécution d'actions ou du déplacement de scène en scène, plus de temps est écoulé pour simuler le temps pris pour faire les choses.
+
+En atteignant une condition de game over, le temps restant sera ajouté à votre score sous forme de points bonus
+
+
+== Succès ==
+Il y a 48 succès possibles dans le jeu, certains sont dans le jeu lui-même, d'autres sont plus "méta".
+
+Il n'est pas possible de collecter tous les succès en une seule partie, il est donc prévu que vous deviez jouer au jeu plusieurs fois pour tous les collecter, mais grâce à la durée de jeu relativement courte, cela ne devrait pas détruire votre vie sociale !
+
+Si vous jouez sur Steam, le lanceur essaiera de synchroniser les succès du jeu avec votre compte Steam.
+
+
+== Score ==
+Le jeu est généreux dans la façon dont il attribue des points. Pratiquement toute petite action vous donne des points, plus elle est créative ou compliquée, plus vous obtenez de points !
+
+Vous pouvez également perdre des points en rencontrant certaines conditions de perte.
