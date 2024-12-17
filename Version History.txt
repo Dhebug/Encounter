@@ -222,6 +222,7 @@
 - Fix: Trying to use the rope from inside the pit now shows an error message
 - Fix: The net appears in the scene when you use it, instead of staying in the inventory
 - Fix: Examining the dove eating should properly display an information message
+- Fix: Trying to throwing things like windows, tv, etc... will now show a "can't do this" message instead of nothing
 - Tweak: Moved the dog "oops" from the image to the message box
 - Tweak: The score on the main screen is now shown in magenta instead of blue to be easier to read
 - Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog

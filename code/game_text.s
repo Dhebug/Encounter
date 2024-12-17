@@ -5763,6 +5763,10 @@ _DropPetrol
 
 _DropCurrentItem
 .(
+    ; Since Drop and Throw end up both here, check to see if the item is already in the scene.
+    ; If it is, we show a generic "can't do that" error message, this way we can't throw "windows" or "the girl"
+    JUMP_IF_TRUE(_ErrorCannotDo,CHECK_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT))
+
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT)
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
     END_AND_REFRESH
