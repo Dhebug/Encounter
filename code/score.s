@@ -48,7 +48,7 @@ _Text_AchievementWatchedTheIntro  .byt "Regardé l'intro",0
 _Text_AchievementReadTheNewspaper .byt "Lu le journal",0
 _Text_AchievementReadTheBook      .byt "Lu le livre",0
 _Text_AchievementReadTheNote      .byt "Lu la note",0
-_Text_AchievementReadTheRecipes   .byt "Lu la recette",0
+_Text_AchievementReadTheRecipes   .byt "Lu les formules",0
 _Text_AchievementOpenedTheFridge  .byt "Ouvert le frigo",0
 _Text_AchievementClosedTheFridge  .byt "Fermé le frigo",0
 _Text_AchievementOpenedTheCabinet .byt "Ouvert le placard",0
