@@ -219,3 +219,4 @@
 0.9.7
 - Misc: Added thanks to Oricutron developers in the credits
 - Fix: Reformulated some achivement in French
+- Fix: Trying to use the rope from inside the pit now shows an error message

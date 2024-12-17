@@ -3930,11 +3930,7 @@ _OpenCurtain
 _OpenPanicRoomWindow
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TILEDPATIO),tiledpatio)
-#ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Elle est trop haute")
-#else
-        ERROR_MESSAGE("It's too high")
-#endif        
+        GOSUB(_SubErrorTooHigh)
     ELSE(tiledpatio,panicroom)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),open)                          ; Is the window closed?
             UNSET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED)                                   ; Open it! 
@@ -3951,6 +3947,17 @@ _OpenPanicRoomWindow
         ENDIF(else)
     ENDIF(panicroom)
     END_AND_REFRESH
+.)
+
+
+_SubErrorTooHigh
+.(
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("C'est trop haut")
+#else
+    ERROR_MESSAGE("It's too high")
+#endif        
+    RETURN
 .)
 
 
@@ -4585,7 +4592,7 @@ _UseRope
 acid_hole_rope
 
     ; Else check the pit
-    JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
+    JUMP_IF_TRUE(inside_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
 cannot_use_rope_here
 #ifdef LANGUAGE_FR       
@@ -4594,6 +4601,12 @@ cannot_use_rope_here
     ERROR_MESSAGE("Can't use it there")
 #endif    
     END_AND_REFRESH
+
+; The rope is not possible to attach from the bottom of the pit
+; The only situation you would see this message is if you also have the ladder, else that would be an instant game over
+inside_the_pit
+    GOSUB(_SubErrorTooHigh)
+    END_AND_PARTIAL_REFRESH
 
 +_CombineRopeTree
 around_the_pit
@@ -4613,7 +4626,7 @@ around_the_pit
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope attached to a tree")
 #endif    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
-    END_AND_REFRESH    
+    END_AND_REFRESH
 .)
 
 
