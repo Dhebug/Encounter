@@ -107,6 +107,7 @@ check_partial_refresh
     lda _gCurrentStreamStop
     and #FLAG_PARTIAL_REFRESH
     beq quit
++_RefreshSceneInformation
     lda #16+4
     sta _param0
     jsr _ClearMessageWindowAsm
@@ -1034,9 +1035,16 @@ _PrintErrorMessageShortAsm
     pha 
     jmp print_error_common
 +_PrintErrorMessageAsm
-    ; Set a long delay
-    lda #150
-    pha 
+    jsr _PlayErrorSound
+
+    lda _param0+0
+    sta _gCurrentStream+0
+    lda _param0+1
+    sta _gCurrentStream+1
+    jsr _ByteStreamCommandERROR_MESSAGE
+
+    jmp _RefreshSceneInformation
+
 print_error_common
     ; Set the color
     lda #1
@@ -1046,9 +1054,7 @@ print_error_common
     jsr _PrintStatusMessageNextLineAsm
 
     ; Play a 'Ping' sound
-    ldx #<_ErrorPlop
-    ldy #>_ErrorPlop
-    jsr _PlaySoundAsmXY
+    jsr _PlayErrorSound
 
     ; Wait a bit after the message is displayed
     pla 

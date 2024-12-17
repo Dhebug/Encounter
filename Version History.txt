@@ -222,4 +222,5 @@
 - Fix: Trying to use the rope from inside the pit now shows an error message
 - Fix: The net appears in the scene when you use it, instead of staying in the inventory
 - Tweak: Moved the dog "oops" from the image to the message box
+- Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog
 

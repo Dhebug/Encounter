@@ -284,9 +284,7 @@ _InputArrows
     lda _gInputBufferPos
     beq buffer_empty
     ; Buffer is not empty, not acceptable, report an error and go back to the user
-    ldx #<_ErrorPlop
-    ldy #>_ErrorPlop
-    jmp _PlaySoundAsmXY
+    jmp _PlayErrorSound
 
 buffer_empty
     lda #1

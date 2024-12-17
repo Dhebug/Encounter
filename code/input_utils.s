@@ -149,6 +149,7 @@ clickSound
 +_InputError
     lda #25
     sta _gInputErrorCounter
++_PlayErrorSound    
     ldx #<_ErrorPlop
     ldy #>_ErrorPlop
     jmp _PlaySoundAsmXY
