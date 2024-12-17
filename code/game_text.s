@@ -1362,6 +1362,11 @@ _gDescriptionBasementStairs
 // MARK: Cellar Safe
 _gDescriptionCellar
 .(  
+    ; We check if the player stroke the matches.
+    ; Typically we would be back there in the case the player inspects the safe after starting the fuse
+    ; If they do that, well, sucks to be them.
+    JUMP_IF_TRUE(kaboom,CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE))   ; Are the matches on fire?
+
     ; First, initialize the scene to look proper  
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else)   ; Is the safe door open?
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,6,99)                        ; Draw the open damaged door
@@ -1375,16 +1380,6 @@ _gDescriptionCellar
         ENDIF(bomb)
     ENDIF(safe_open)
 
-    WAIT(DELAY_FIRST_BUBBLE)
-    BLACK_BUBBLE(2)
-#ifdef LANGUAGE_FR       
-    _BUBBLE_LINE(45,15,0,"Est-ce un coffre-fort")
-    _BUBBLE_LINE(70,25,0,"Franz Jager ?")
-#else
-    _BUBBLE_LINE(75,15,0,"Is that a Franz")
-    _BUBBLE_LINE(80,25,0,"Jager safe?")
-#endif    
-
     ; Then we check if the player stroke the matches
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED),matches)    ; Are the matches on fire?
         ; We set a few values right now, because the player can leave the script before it is finished.
@@ -1392,6 +1387,7 @@ _gDescriptionCellar
         SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_NONE)                    ; The bomb is gone
         SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE)            ; Don't need the matches anymore
         UNSET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED)  ; Un-strike the matches (just so the test above does not trigger a second time)
+        WAIT(1)
 
 #ifdef LANGUAGE_FR                                                   ; Rename the safe to "an open safe"
         SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"un _coffre ouvert")
@@ -1457,6 +1453,8 @@ _gDescriptionCellar
                 _SCREEN(30,43)
 
         WAIT(50)
+kaboom        
+        SET_CUT_SCENE(1)
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Bon... Vous aviez été prévenu, non ?")
@@ -1465,8 +1463,18 @@ _gDescriptionCellar
 #endif        
         JUMP(_KaboomSafe)
 
-    ENDIF(matches)
-
+    ELSE(matches,no_matches)
+        ; We only show the Franz Jager message if we are not actively trying to blow up the safe
+        WAIT(DELAY_FIRST_BUBBLE)
+        BLACK_BUBBLE(2)
+#ifdef LANGUAGE_FR       
+        _BUBBLE_LINE(45,15,0,"Est-ce un coffre-fort")
+        _BUBBLE_LINE(70,25,0,"Franz Jager ?")
+#else
+        _BUBBLE_LINE(75,15,0,"Is that a Franz")
+        _BUBBLE_LINE(80,25,0,"Jager safe?")
+#endif    
+    ENDIF(no_matches)
     END
 .)
 
