@@ -225,4 +225,5 @@
 - Tweak: Moved the dog "oops" from the image to the message box
 - Tweak: The score on the main screen is now shown in magenta instead of blue to be easier to read
 - Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog
+- Improvement: We now get points when capturing the dove, making it on par with the dog handling
 
