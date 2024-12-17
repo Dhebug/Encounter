@@ -1043,6 +1043,10 @@ _PrintErrorMessageShortAsm
     sta _gCurrentStream+1
     jsr _ByteStreamCommandERROR_MESSAGE
 
+    lda #0
+	sta _gCurrentStream+0
+    sta _gCurrentStream+1
+
     jmp _RefreshSceneInformation
 
 print_error_common
