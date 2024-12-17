@@ -1151,14 +1151,13 @@ dog_alive
     ; If the dog is alive, it will jump on our face now
     SET_CUT_SCENE(1)
     CLEAR_TEXT_AREA(1)                      ; Just to get a red text area
+    QUICK_MESSAGE("Oops...")
     FADE_BUFFER
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
     FADE_BUFFER
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(1)
-    _BUBBLE_LINE(5,108,0,"Oops...")
     WAIT(50*2)                              ; Wait a couple seconds
     GAME_OVER(e_SCORE_MAIMED_BY_DOG)        ; The game is now over
     JUMP(_gDescriptionGameOverLost)         ; Game Over
