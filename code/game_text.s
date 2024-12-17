@@ -5345,6 +5345,7 @@ NetCommon
     JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+        SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)                      ; Only useful for the Use Net, else it stays in the inventory
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
         UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
         PLAY_SOUND(_Swoosh)
