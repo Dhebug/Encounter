@@ -38,9 +38,11 @@ _gTextCredits
     .byt TEXT_END
 
 _gTextAdditionalCredits
-    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"    Test du jeu et retour d'expérience",TEXT_CRLF
     .byt 7,"   Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF
+    .byt 5,"    Développeurs d'Oricutron, merci !",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -115,9 +117,11 @@ _gTextCredits
     .byt TEXT_END
 
 _gTextAdditionalCredits
-    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
     .byt 6,"      Game testing and feedback",TEXT_CRLF
     .byt 7," Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF
+    .byt 5,"Special thanks to Oricutron developers",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription

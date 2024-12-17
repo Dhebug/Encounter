@@ -215,3 +215,6 @@
 - Improvement: Building a fuse now plays the success music and prints a message for the user to know what happened
 - Improvement: Searching the safe now plays the success music if you find something
 - Optimisation: Rewrote a part of the print scene object to assembler to reduce the size of the code
+
+0.9.7
+- Misc: Added thanks to Oricutron developers in the credits
