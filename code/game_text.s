@@ -2209,7 +2209,7 @@ _CombineBombWithAdhesive
 _CombineStickyBombWithSafe
 .(
     ; If the bomb is already attached, we don't redo the whole sequence
-    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED))
+    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED))
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
 #ifdef LANGUAGE_FR
@@ -4503,7 +4503,7 @@ ladder_too_short
 
 install_the_ladder
     ; If the ladder  is already attached, we don't redo the whole sequence
-    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous installez l'échelle")
@@ -4616,7 +4616,7 @@ inside_the_pit
 +_CombineRopeTree
 around_the_pit
     ; If the rope is already attached, we don't redo the whole sequence
-    JUMP_IF_TRUE(_ErrorAlreadyPositionned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Vous attachez la corde à l'arbre")
@@ -5883,11 +5883,11 @@ _ErrorAlreadyClosed_Elle
     END_AND_PARTIAL_REFRESH
 
 
-_ErrorAlreadyPositionned_Elle
+_ErrorAlreadyPositioned_Elle
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est déjà en position")
 #else
-    ERROR_MESSAGE("It's already positionned")
+    ERROR_MESSAGE("It's already positioned")
 #endif        
     END_AND_PARTIAL_REFRESH
 
