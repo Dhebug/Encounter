@@ -79,7 +79,7 @@ _Text_AchievementGotTheBestScore  .byt "Meilleur score",0
 _Text_AchievementDogAteTheMeat    .byt "Nourri le chien",0
 _Text_AchievementUsedHosePipe     .byt "Utilisé le tuyau",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
-_Text_AchievementCanYouRepeat     .byt "J'ai rien compris",0
+_Text_AchievementCanYouRepeat     .byt "N'a rien compris",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0
 _Text_AchievementReadTheTombstone .byt "Repose en paix",0
 #else // LANGUAGE_EN
