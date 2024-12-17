@@ -2234,7 +2234,7 @@ _CombineStickyBombWithSafe
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a _bomb on the door")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The bomb is now in the room
-    SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED)                           ; The bomb is now attached to the safe
+    SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED|ITEM_FLAG_IMMOVABLE)       ; The bomb is now attached to the safe and cannot be removed
     INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
@@ -4393,6 +4393,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Hose               , _UseHosePipe)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _UseMortar)
     VALUE_MAPPING(e_ITEM_Bomb               , _UseBomb)
+    VALUE_MAPPING(e_ITEM_Adhesive           , _UseAdhesive)
     VALUE_MAPPING(e_ITEM_BoxOfMatches       , _UseMatches)
     VALUE_MAPPING(e_ITEM_ProtectionSuit     , _UseProtectionSuit)
     VALUE_MAPPING(e_ITEM_Clay               , _UseClay)
@@ -4862,6 +4863,15 @@ _UseBomb
     ENDIF(cellar)
     JUMP(_CombineStickyBombWithSafe)
 
+.)
+
+
+_UseAdhesive
+.(
+    ; If the bomb is available, we combine it autoamtically with the adhesive
+    JUMP_IF_TRUE(_CombineBombWithAdhesive,CHECK_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT))
+    JUMP_IF_TRUE(_CombineBombWithAdhesive,CHECK_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_INVENTORY))
+    JUMP(_ErrorCannotDo)
 .)
 
 
