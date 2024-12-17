@@ -2707,8 +2707,7 @@ _InspectDove
     END_AND_PARTIAL_REFRESH
 
 dove_eating
-    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
-    WAIT(50*2)
+    GOSUB(_SubDoveEatingBreadCrumbs)
     END_AND_REFRESH
 
 dove_not_happy
@@ -5179,12 +5178,7 @@ give_bread_to_dove
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
 #endif    
 //+_gSceneActionDoveEatingBread
-    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
-#ifdef LANGUAGE_FR   
-    INFO_MESSAGE("On peut l'attraper maintenant")
-#else
-    INFO_MESSAGE("Maybe I can catch it now?")
-#endif    
+    GOSUB(_SubDoveEatingBreadCrumbs)
     END_AND_REFRESH
 
 not_in_wooded_avenue
@@ -5198,6 +5192,18 @@ fish_pond
     INFO_MESSAGE("The fishes eat the crumbs")
 #endif    
     END_AND_REFRESH
+.)
+
+
+_SubDoveEatingBreadCrumbs
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("On peut l'attraper maintenant")
+#else
+    INFO_MESSAGE("Maybe I can catch it now?")
+#endif    
+    RETURN
 .)
 
 
