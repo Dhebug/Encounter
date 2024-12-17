@@ -228,6 +228,7 @@
 - Fix: Made it impossible to take the bomb out after it's attached to avoid problems with the name not changing
 - Tweak: Moved the dog "oops" from the image to the message box
 - Tweak: The score on the main screen is now shown in magenta instead of blue to be easier to read
+- Tweak: Improved the behavior of taking and droping petrol
 - Improvement: The generic error messages ("can't do this", etc...) are now using the generic double sized purple dialog
 - Improvement: We now get points when capturing the dove, making it on par with the dog handling
 - Improvement: Using the mortar will automatically try to crush the pills if you have them, and plays the success jingle as well

@@ -4771,13 +4771,13 @@ _CombineHoseTank
 _UseHosePipe
 .(
     JUMP_IF_TRUE(abandonned_car,CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR))
-cannot_use_rope_here
+cannot_use_hose_here
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Pas utilisable ici")
 #else
     ERROR_MESSAGE("Can't use it there")
 #endif    
-    END_AND_REFRESH
+    END_AND_PARTIAL_REFRESH
 
 abandonned_car
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),closed)                     ; Is the petrol tank open?
@@ -4786,7 +4786,7 @@ abandonned_car
 #else
         ERROR_MESSAGE("The tank is closed")
 #endif        
-        END_AND_REFRESH
+        END_AND_PARTIAL_REFRESH
     ENDIF(closed)
 
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),already_inside)
@@ -5181,7 +5181,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
     VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
     VALUE_MAPPING(e_ITEM_Net                , _ThrowNet)
-    VALUE_MAPPING(255                       , _DropCurrentItem)  ; Default option
+    VALUE_MAPPING(255                       , _ThrowCurrentItem)  ; Default option
 
 _ThrowBread
     // By default we just drop the bread where we are
@@ -5782,23 +5782,29 @@ _DropPetrol
     ENDIF(no_hose)
 
     ; Are we at the car location?
-    IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Vous remplissez le réservoir")
+#else
+        INFO_MESSAGE("The petrol goes back into the tank")
+#endif    
+    ELSE(car,no_car)
 #ifdef LANGUAGE_FR   
         INFO_MESSAGE("L'essence s'évapore")
 #else
         INFO_MESSAGE("The petrol evaporates")
 #endif    
-    ENDIF(car)
+    ENDIF(no_car)
     END_AND_PARTIAL_REFRESH
 .)
 
 
-_DropCurrentItem
+_ThrowCurrentItem
 .(
-    ; Since Drop and Throw end up both here, check to see if the item is already in the scene.
+    ; Check to see if the item is already in the scene.
     ; If it is, we show a generic "can't do that" error message, this way we can't throw "windows" or "the girl"
     JUMP_IF_TRUE(_ErrorCannotDo,CHECK_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT))
-
++_DropCurrentItem
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT)
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
     END_AND_REFRESH
