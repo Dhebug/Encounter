@@ -49,7 +49,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommandIncreaseScore
     .word _ByteStreamCommandGameOver
     .word _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
-    .word _ByteStreamCommandSetSceneImage
+    .word _ByteStreamCommand_SET_SCENE_IMAGE
     .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
     .word _ByteStreamCommand_CLEAR_TEXT_AREA
     .word _ByteStreamCommand_GOSUB
@@ -744,8 +744,8 @@ found_zero
 
 
 
-; .byt COMMAND_SET_LOCATION_PICTURE,imageId
-_ByteStreamCommandSetSceneImage
+; .byt COMMAND_SET_SCENE_IMAGE,imageId
+_ByteStreamCommand_SET_SCENE_IMAGE
 .(
     ldy #0
     lda (_gCurrentStream),y      // Image ID

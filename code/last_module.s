@@ -45,12 +45,6 @@ _ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
 
 
 #ifdef MODULE_GAME
-* = $bb80+17*40
-_TextDescriptionLine
-
-* = $a000+17*40*8
-_Hires_DescriptionLine
-
 * = $B400+8*48
 _TextCharsetNumbers
 
