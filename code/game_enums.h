@@ -116,7 +116,7 @@
 #define	e_ITEM_Newspaper     		 39         // A newspaper
 #define	e_ITEM_Bomb  				 40         // a bomb
 #define	e_ITEM_Pistol 				 41         // a pistol
-#define	e_ITEM_Bullets  			 42         // three .38 bullets
+#define e_ITEM_Invoice               42         // an invoice letter
 #define	e_ITEM_ChemistryRecipes   	 43         // a sheet of paper with a few recipes on things to build
 #define	e_ITEM_UnitedKingdomMap   	 44         // the map of the UK in the library
 #define e_ITEM_Curtain               45         // a thick curtain
@@ -153,8 +153,7 @@
 #define e_ITEM_NormalWindow          76         // a normal window
 #define e_ITEM_AlarmIndicator        77         // an alarm indicator
 #define e_ITEM_Computer              78         // a desktop computer
-#define e_ITEM_Invoice               79         // an invoice letter
-#define	e_ITEM_COUNT_ 				 80         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_COUNT_ 				 79         //  ----- END MARKER - Free until 127, after are action words
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum

@@ -137,7 +137,6 @@ _gTextItemSmallKey                .byt "une$petite _clef",0
 _gTextItemNewspaper               .byt "un$_journal",0
 _gTextItemBomb                    .byt "une$_bombe",0
 _gTextItemPistol                  .byt "un$_pistolet",0
-_gTextItemBullets                 .byt "trois _balles de calibre .38",0
 _gTextItemChemistryRecipes        .byt "_formules de chimie",0
 _gTextItemUnitedKingdomMap        .byt "une _carte du Royaume-Uni",0
 _gTextItemHandheldGame            .byt "un$_jeu portable",0
@@ -210,7 +209,6 @@ _gTextItemSmallKey                .byt "a$small _key",0
 _gTextItemNewspaper               .byt "a$_newspaper",0                        
 _gTextItemBomb                    .byt "a$_bomb",0                             
 _gTextItemPistol                  .byt "a$_pistol",0                           
-_gTextItemBullets                 .byt "three$.38 _bullets",0                  
 _gTextItemChemistryRecipes        .byt "chemistry _recipes",0         
 _gTextItemUnitedKingdomMap        .byt "a$_map of the United Kingdom",0        
 _gTextItemHandheldGame            .byt "a$handheld _game",0

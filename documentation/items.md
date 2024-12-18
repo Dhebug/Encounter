@@ -83,7 +83,6 @@ These are items you will find around in the various locations
 |**a small key**|Found ouside the house, they open the panel with the alarm (probably fell from the pockets of the owner)|e_ITEM_Keys|
 |**a newspaper**|Present in the inventory of the player at the start to provide some information|e_ITEM_Newspaper|
 |**a pistol**|Owned by the sleeping thug|e_ITEM_Pistol|
-|**three .38 bullets**|Bullets for the pistol, found in another room|e_ITEM_Bullets|
 |**a couple chemistry recipes**|Found in the chemistry book in the library|e_ITEM_ChemistryRecipes|
 |**a map of the United Kingdom**|Some decorative element on the wall of the library, the idea is to provide some information about why there is a kidnapping|e_ITEM_UnitedKingdomMap|
 |**a young girl**|The hostage we need to free|e_ITEM_YoungGirl|

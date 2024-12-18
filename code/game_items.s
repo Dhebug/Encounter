@@ -66,7 +66,7 @@ _gItems
     ITEM_NORMAL( _gTextItemNewspaper             ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Newspaper            
     ITEM_NORMAL( _gTextItemBomb                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bomb                 
     ITEM_NORMAL( _gTextItemPistol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Pistol               
-    ITEM_NORMAL( _gTextItemBullets               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bullets              
+    ITEM_NORMAL( _gTextItemInvoice               ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Invoice
     ITEM_NORMAL( _gTextItemChemistryRecipes      ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ChemistryRecipes     
     ITEM_NORMAL( _gTextItemUnitedKingdomMap      ,e_LOC_LIBRARY         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_UnitedKingdomMap   
     ITEM_NORMAL( _gTextItemClosedCurtain         ,e_LOC_WESTGALLERY     ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Curtain
@@ -103,4 +103,3 @@ _gItems
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
     ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator
     ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
-    ITEM_NORMAL( _gTextItemInvoice               ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Invoice
