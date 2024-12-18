@@ -1,6 +1,10 @@
 
 #include "params.h"
 
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:u
+#endif
+
 _gSaveGameFile            .dsb 8       ; SAVESTRT
 _gSaveGameFileVersion     .dsb 5       ; 1.2.3
 _gHighScores              .dsb 512-8-5 ; 456 bytes of actual score data, padded to 512 bytes for the saving system
@@ -12,14 +16,14 @@ _gHighScores              .dsb 512-8-5 ; 456 bytes of actual score data, padded 
 ;
 #ifdef LANGUAGE_FR
 _Text_Leaderboard                .byt 16+1,3,"            Classement",TEXT_CRLF,TEXT_END
-_Text_SCORE_SOLVED_THE_CASE      .byt 2,"R{solu le cas",0
-_Text_SCORE_MAIMED_BY_DOG        .byt 5,"Mutil{ par un chien",0
+_Text_SCORE_SOLVED_THE_CASE      .byt 2,"A élucidé l'affaire",0
+_Text_SCORE_MAIMED_BY_DOG        .byt 5,"Mutilé par un chien",0
 _Text_SCORE_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
-_Text_SCORE_FELL_INTO_PIT        .byt 3,"Tomb{ dans un trou",0
-_Text_SCORE_TRIPPED_ALARM        .byt 3,"D{clench{ l'alarme",0
-_Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqu{ de temps",0
-_Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Souffl{ en morceaux",0
-_Text_SCORE_GAVE_UP              .byt 5,"A abandonn{...",0
+_Text_SCORE_FELL_INTO_PIT        .byt 3,"Tombé dans un trou",0
+_Text_SCORE_TRIPPED_ALARM        .byt 3,"Déclenché l'alarme",0
+_Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqué de temps",0
+_Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Soufflé en morceaux",0
+_Text_SCORE_GAVE_UP              .byt 5,"A abandonné...",0
 #else // LANGUAGE_EN
 _Text_Leaderboard                .byt 16+1,3,"            Leaderboard",TEXT_CRLF,TEXT_END
 _Text_SCORE_SOLVED_THE_CASE      .byt 2,"Solved the case",0

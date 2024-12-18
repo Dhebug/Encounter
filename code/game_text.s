@@ -127,7 +127,7 @@ _gTextItemSnookerCue              .byt "une$_queue de billard",0
 _gTextItemThug                    .byt "un _voyou endormi sur le lit",0
 _gTextItemHeavySafe               .byt "un gros _coffre",0
 _gTextItemHandWrittenNote         .byt "une$_note manuscrite",0
-_gTextItemRollOfToiletPaper       .byt "un$_rouleau de PQ",0
+_gTextItemRollOfToiletPaper       .byt "du$_papier toilette",0
 _gTextItemOpenSafe                .byt "un _coffre ouvert",0
 _gTextItemYoungGirl               .byt "une jeune _fille",0
 _gTextItemFuse                    .byt "une$_mèche",0
@@ -3382,7 +3382,7 @@ _InspectDog
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Il ne vas pas vous laisser passer !")
+        INFO_MESSAGE("Il ne va pas vous laisser passer !")
 #else
         INFO_MESSAGE("It will not let you pass!")
 #endif    

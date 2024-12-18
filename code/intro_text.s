@@ -41,19 +41,20 @@ _Text_GameInstructions
     .byt "ex: PRENDS CLE ou COMBINE PAIN BEURRE",TEXT_CRLF
     .byt TEXT_CRLF
 
-    .byt 1,"  MOUVEMENT              VERBES",TEXT_CRLF,TEXT_CRLF
+    .byt 1,"  MOUVEMENT              VERBES",TEXT_CRLF
+    .byt TEXT_CRLF
     .byt "N:NORD S:SUD     OUVRE PRENDS/RAMASSE",TEXT_CRLF
     .byt "O:OUEST E:EST        FERME POSE/LACHE",TEXT_CRLF
-    .byt "H:HAUT B:BAS          CHERCHE/FOUILLE",TEXT_CRLF
-    .byt "             EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
+    .byt "D:DESCENDRE           CHERCHE/FOUILLE",TEXT_CRLF
+    .byt "M:MONTER     EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
     .byt "PAUSE AIDE            COMBINE UTILISE",TEXT_CRLF
-    .byt "QUITTE        ",1,"NOTES",0,"       LIS LANCE",TEXT_CRLF
+    .byt "QUITTE                      LIS LANCE",TEXT_CRLF
+    .byt 1,"              NOTES",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
     .byt "mais être bricoleur peut aider.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tracez une carte et annotez-la.",TEXT_CRLF
-    .byt TEXT_CRLF
     .byt "Bonne chance, vous en aurez besoin!"
     .byt TEXT_END
 #else// LANGUAGE_EN
