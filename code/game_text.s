@@ -2085,7 +2085,7 @@ _CombinePillsWithMortar
         DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Elles sont maintenant écrasées")
+        INFO_MESSAGE("Vous pilez les somnifères")
 #else    
         INFO_MESSAGE("The pills are now crushed")
 #endif    
@@ -2095,6 +2095,7 @@ _CombinePillsWithMortar
 #else    
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"some$crushed _pills")
 #endif    
+        STOP_MUSIC()
     ENDIF(not_crushed_yet)
     END_AND_REFRESH
 .)

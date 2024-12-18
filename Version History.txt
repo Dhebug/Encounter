@@ -235,4 +235,6 @@
 - Improvement: Using the adhesive will automatically work if you have the proper item
  
 0.9.8
+- Fix: Multiple French text rewordings and corrections
+- Fix: Sounds should not be corrupted anymore after some music jingles
 - Tweak: The pill crushing sequence should be better timed now
