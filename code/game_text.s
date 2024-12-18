@@ -4015,7 +4015,7 @@ _OpenMedicineCabinet
 
 _OpenGunCabinet
 .(
-    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))         ; Is the gun cabinet closed?
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Elle,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))         ; Is the gun cabinet closed?
 +_SearchGunCabinet    
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                            ; Open it!
