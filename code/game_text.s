@@ -596,7 +596,8 @@ cannot_escape_pit    ; The player has no way to escape the pit
     SET_CUT_SCENE(1)
     FADE_BUFFER
     WAIT(50*2)
-    CLEAR_TEXT_AREA(5)
+    CLEAR_TEXT_AREA(1)
+    QUICK_MESSAGE("Oops...")
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(6,8,0,"Ca ne semblait")
@@ -617,7 +618,6 @@ cannot_escape_pit    ; The player has no way to escape the pit
 #else    
     _BUBBLE_LINE(82,94,0,"from outside")
 #endif    
-    CLEAR_TEXT_AREA(1)
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(50*2)                                      ; Wait a couple seconds for dramatic effect
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_FELL_INTO_PIT)   ; Achievement!

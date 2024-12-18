@@ -239,3 +239,4 @@
 - Fix: Sounds should not be corrupted anymore after some music jingles
 - Tweak: The pill crushing sequence should be better timed now
 - Tweak: Renamed "tenue EPI" into "combinaison" in French
+- Tweak: The pit sequence shows "oops" instead of an empty panel
