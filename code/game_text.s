@@ -2084,13 +2084,13 @@ _CombinePillsWithMortar
         ERROR_MESSAGE("The pills are already crushed")
 #endif    
     ELSE(already_crushed,not_crushed_yet)
+        DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elles sont maintenant écrasées")
 #else    
         INFO_MESSAGE("The pills are now crushed")
 #endif    
-        DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
 #ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pilules écrasées")
