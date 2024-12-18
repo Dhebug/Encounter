@@ -148,7 +148,7 @@ _gTextItemAdhesive                .byt "de l'$_adhésif",0
 _gTextItemAcid                    .byt "un$_acide puissant",0
 _gTextItemSecurityDoor            .byt "une _porte blindée",0
 _gTextItemDriedOutClay            .byt "de l'$_argile desséchée",0
-_gTextItemProtectionSuit          .byt "une$_tenue EPI",0
+_gTextItemProtectionSuit          .byt "une$_combinaison",0
 _gTextItemHoleInDoor              .byt "un _trou dans la porte",0
 _gTextItemFrontDoor               .byt "la _porte principale",0
 _gTextItemRoughPlan               .byt "un$_plan sommaire",0
@@ -1747,7 +1747,7 @@ _gDescriptionWestGallery
         UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
         PLAY_SOUND(_Zipper)
 #ifdef LANGUAGE_FR    
-        INFO_MESSAGE("Il faut que j'enlève cette tenue")
+        INFO_MESSAGE("Il faut que j'enlève la combinaison")
 #else
         INFO_MESSAGE("I need to remove that suit")
 #endif        
