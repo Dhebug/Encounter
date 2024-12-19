@@ -279,7 +279,7 @@
 #define POINTS_COMBINED_CUE_ROPE          100
 #define POINTS_MADE_CLAY_WET              100
 
-#define POINTS_GAVE_BREAD_TO_FISHES       100
+#define POINTS_GAVE_BREAD_TO_FISH         100
 
 #define POINTS_GAVE_BREAD_TO_DOVE         100
 #define POINTS_CAPTURED_THE_DOVE          200

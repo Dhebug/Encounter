@@ -3494,7 +3494,7 @@ _InspectFishPond
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Beaucoup de poissons là-dedans !")
 #else
-    INFO_MESSAGE("Quite a few fishes in there!")
+    INFO_MESSAGE("Quite a few fish in there!")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
@@ -4397,6 +4397,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
     VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
     VALUE_MAPPING(e_ITEM_Meat               , _UseMeat)
+    VALUE_MAPPING(e_ITEM_LargeDove          , _UseDove)
     VALUE_MAPPING(e_ITEM_SilverKnife        , _UseKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _UseSnookerCue)
     VALUE_MAPPING(e_ITEM_DartGun            , _UseDartGun)
@@ -5185,7 +5186,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
     VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
-    VALUE_MAPPING(e_ITEM_LargeDove          , _FreeDove)
+    VALUE_MAPPING(e_ITEM_LargeDove          , _ThrowDove)
     VALUE_MAPPING(e_ITEM_Net                , _ThrowNet)
     VALUE_MAPPING(255                       , _ThrowCurrentItem)  ; Default option
 
@@ -5222,12 +5223,12 @@ give_bread_to_dove
 not_in_wooded_avenue
 fish_pond
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
-    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISHES)
+    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISH)
     PLAY_SOUND(_Swoosh)
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Les poissons mangent les miettes")
 #else
-    INFO_MESSAGE("The fishes eat the crumbs")
+    INFO_MESSAGE("The fish eat the crumbs")
 #endif    
     END_AND_REFRESH
 .)
@@ -5282,6 +5283,9 @@ nothing_to_eat_the_meat
  .)
 
 
+_UseDove
+_ThrowDove
+_DropDove
 _FreeDove
 .(    
     CLEAR_TEXT_AREA(4)
@@ -5300,7 +5304,7 @@ _FreeDove
 #ifdef LANGUAGE_FR        
         INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
 #else
-        INFO_MESSAGE("Hopefully he will not catch the dove")
+        INFO_MESSAGE("Hopefully it will not catch the dove")
 #endif        
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
@@ -5762,7 +5766,7 @@ SSS~YSSY    S*S    SSS    YSSP~YSSY    S*S               SSS    S*S    YSSP     
 _gDropItemMappingsArray
     VALUE_MAPPING(e_ITEM_Water          , _DropWater)
     VALUE_MAPPING(e_ITEM_Petrol         , _DropPetrol)
-    VALUE_MAPPING(e_ITEM_LargeDove      , _FreeDove)
+    VALUE_MAPPING(e_ITEM_LargeDove      , _DropDove)
     VALUE_MAPPING(255                   , _DropCurrentItem)  ; Default option
 
 

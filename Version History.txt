@@ -242,6 +242,7 @@
 - Tweak: The pit sequence shows "oops" instead of an empty panel
 
 0.9.9
+- Launcher: 1.0.0.7 - Added the latest version of Oricutron and the option to disable the status bar
 - Fix: Multiple French text rewordings and corrections
 - Fix: A few items (dove, ladder, rope) had an extra space between the pronoum and the item
 - Fix: Trying to use the rope in the pit now says it's already in place
@@ -250,3 +251,4 @@
 - Tweak: Changed the page selection prompt from green to magenta to make it more visible
 - Tweak: Inspecting the suit when it's already equipped now shows a message instead of showing the combination in its package
 - Tweak: Reformulated the French prompt to match the English one
+- Tweak: The dove can now be "used" as well
