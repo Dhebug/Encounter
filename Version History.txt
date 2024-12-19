@@ -243,4 +243,5 @@
 
 0.9.9
 - Fix: Multiple French text rewordings and corrections
+- Fix: A few items (dove, ladder, rope) had an extra space between the pronoum and the item
 - Tweak: Changed the page selection prompt from green to magenta to make it more visible

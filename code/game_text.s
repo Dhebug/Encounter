@@ -5605,9 +5605,9 @@ _TakeRope
 .(
 +_gTextItemRope = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une $_corde")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une$_corde")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a $_rope")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a$_rope")
 #endif    
     JUMP(_TakeCommon)
 .)
@@ -5617,9 +5617,9 @@ _TakeLadder
 .(
 +_gTextItemLadder = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une $_échelle courte")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une$_échelle courte")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a short $_ladder")
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a short$_ladder")
 #endif    
     JUMP(_TakeCommon)
 .)
@@ -5629,9 +5629,9 @@ _TakeDove
 .(
 +_gTextItemLargeDove = *+2
 #ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une $_colombe")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une$_colombe")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a $_dove")
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a$_dove")
 #endif    
     JUMP(_TakeCommon)
 .)
