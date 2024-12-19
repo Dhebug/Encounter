@@ -125,7 +125,7 @@ _Text_AchievementGaveTheRope      .byt "Gave the rope",0
 _Text_AchievementWatchedTheOutro  .byt "Watched the outro",0
 _Text_AchievementGotAHighscore    .byt "Got a highscore",0
 _Text_AchievementGotTheBestScore  .byt "Got the best score",0
-_Text_AchievementDogAteTheMeat    .byt "Dog ate the meat",0
+_Text_AchievementDogAteTheMeat    .byt "Fed the dog",0
 _Text_AchievementUsedHosePipe     .byt "Used the hose pipe",0
 _Text_AchievementPausedTheGame    .byt "Paused the game",0
 _Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
