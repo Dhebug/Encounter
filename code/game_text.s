@@ -1741,6 +1741,9 @@ _gDescriptionShowerRoom
 // MARK: West Gallery
 _gDescriptionWestGallery
 .(
+    ; Check if we already have the suit equipped
+    JUMP_IF_TRUE(_ErrorAlreadyEquipped_Elle,CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED))
+
     ; If the suit is equiped, we remove it
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
         SET_CUT_SCENE(1)
@@ -2272,7 +2275,7 @@ _CombineClayWithWater
 #ifdef LANGUAGE_FR                                                     ; Rename the dry clay to wet clay
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'$_argile humide")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some $wet _clay")
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some$wet _clay")
 #endif    
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
     INCREASE_SCORE(POINTS_MADE_CLAY_WET)
@@ -3613,6 +3616,10 @@ _DrawDoorWithHole
 _InspectProtectionSuit
 .(
     INCREASE_SCORE(POINTS_INSPECT_PROTECTION_SUIT)
+
+    ; Check if we already have the suit equipped
+    JUMP_IF_TRUE(_ErrorAlreadyEquipped_Elle,CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED))
+
     GOSUB(_ShowProtectionSuit)
     END_AND_REFRESH    
 .)
@@ -4907,14 +4914,7 @@ _UseMatches
 _UseProtectionSuit
 .(
     ; Check if we already have the suit equipped
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
-#ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Elle est déjà sur moi")
-#else
-        ERROR_MESSAGE("It's already equipped")
-#endif        
-        END_AND_PARTIAL_REFRESH
-    ENDIF(suit)
+    JUMP_IF_TRUE(_ErrorAlreadyEquipped_Elle,CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Essayons-la...")
@@ -5912,6 +5912,15 @@ _ErrorAlreadyPositioned_Elle
     ERROR_MESSAGE("Elle est déjà en position")
 #else
     ERROR_MESSAGE("It's already positioned")
+#endif        
+    END_AND_PARTIAL_REFRESH
+
+
+_ErrorAlreadyEquipped_Elle
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Elle est déjà sur moi")
+#else
+    ERROR_MESSAGE("It's already equipped")
 #endif        
     END_AND_PARTIAL_REFRESH
 

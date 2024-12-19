@@ -246,3 +246,4 @@
 - Fix: A few items (dove, ladder, rope) had an extra space between the pronoum and the item
 - Fix: Trying to use the rope in the pit now says it's already in place
 - Tweak: Changed the page selection prompt from green to magenta to make it more visible
+- Tweak: Inspecting the suit when it's already equipped now shows a message instead of showing the combination in its package
