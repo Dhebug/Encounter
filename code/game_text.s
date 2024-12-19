@@ -33,7 +33,7 @@ _StartGameTextData
 // Small feedback messages and prompts
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
-_gTextAskInput              .byt "Que faites vous ?",0
+_gTextAskInput              .byt "Que faites-vous ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score: ",0
