@@ -27,9 +27,10 @@
 :: 0.9.5 - Improvements to the TP, dove, sound volume, and plenty of small bug fixes and items behaviors
 :: 0.9.6 - Changed the up and down arrows, scores are now cyan instead of blue, text fixes, improvements to the bomb and safe interactions
 :: 0.9.7 - Fixed a bunch of issues when throwing, droping or taking some items, escaping the bomb and how error messages are shown
-:: 0.9.8 - 
+:: 0.9.8 - Renamed the suit in French, improved the mortar and pit interactions, fixed sound corruption issue
+:: 0.9.9 -
 ::
-SET VERSION=0.9.8
+SET VERSION=0.9.9
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
