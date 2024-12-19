@@ -12,7 +12,7 @@
 ;
 _Text_TitlePicture               
 #ifdef LANGUAGE_FR
-    .byt 16+3,2,12,"      <- Selection de page ->",TEXT_CRLF
+    .byt 16+3,5,12,"      <- Sélection de page ->",TEXT_CRLF
 #else
     .byt 16+3,2,12,"       <- Page Navigation ->",TEXT_CRLF
 #endif    

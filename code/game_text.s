@@ -3750,7 +3750,7 @@ _ShowEmptyHostageRoom
 +_SubPrintEmptyRoomMessage
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
-    INFO_MESSAGE("...elle doit être dehors maintenant")
+    INFO_MESSAGE("...la fille doit déjà être en bas")
 #else
     INFO_MESSAGE("The room is empty...")
     INFO_MESSAGE("...she must be outside by now")
@@ -4915,19 +4915,19 @@ _UseProtectionSuit
         END_AND_PARTIAL_REFRESH
     ENDIF(suit)
 
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Essayons-la...")
+#else
+    INFO_MESSAGE("Let's try it...")
+#endif    
     DISPLAY_IMAGE(LOADER_PICTURE_SHOWING_GLOVES)
     PLAY_SOUND(_Zipper)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("C'est la bonne taille...")
-#else
-    INFO_MESSAGE("It seems to fit well...")
-#endif    
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
         ; The player is in front of the Panic Room, we can now equip the protection suit
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("...essayons-la !")
+        INFO_MESSAGE("...c'est la bonne taille !")
 #else
-        INFO_MESSAGE("...let's experiment!")
+        INFO_MESSAGE("...it fits perfectly!")
 #endif        
         SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
     ELSE(panic_room,not_panic_room)

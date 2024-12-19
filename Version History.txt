@@ -240,3 +240,7 @@
 - Tweak: The pill crushing sequence should be better timed now
 - Tweak: Renamed "tenue EPI" into "combinaison" in French
 - Tweak: The pit sequence shows "oops" instead of an empty panel
+
+0.9.9
+- Fix: Multiple French text rewordings and corrections
+- Tweak: Changed the page selection prompt from green to magenta to make it more visible
