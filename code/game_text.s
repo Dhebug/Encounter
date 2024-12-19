@@ -1106,16 +1106,22 @@ dog_growls
 
 end_dog
     ; Some generic message in case the dog is not there (probably not displayed right now)
+    GOSUB(_SubImpressiveStaircase)
+    END
+.)
+
+_SubImpressiveStaircase
+.(
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(120,5,0,"Un escalier vraiment")
-    _BUBBLE_LINE(160,17,0,"impressionnant")
+    _BUBBLE_LINE(150,17,0,"impressionnant")
 #else
     _BUBBLE_LINE(124,5,0,"Quite an impressive")
     _BUBBLE_LINE(187,17,0,"staircase")
 #endif    
-    END
+    RETURN
 .)
 
 
@@ -1162,10 +1168,7 @@ dog_alive
 
 end_dog
     ; Some generic message in case the dog is not there (probably not displayed right now)
-    WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(2)
-    _BUBBLE_LINE(124,5,0,"Quite an impressive")
-    _BUBBLE_LINE(187,17,0,"staircase")
+    GOSUB(_SubImpressiveStaircase)
     END
 .)    
 
