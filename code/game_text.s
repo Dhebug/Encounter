@@ -2391,7 +2391,8 @@ _ShowTopWindowOpen
             _BUFFER(21,49)
     ENDIF(window_broken)
 
-    ; Then add the sprite showing the attached rope
+    ; Then add the sprite showing the attached rope if it's both attached and at the proper location
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT),rope_attached)
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
         BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
             _IMAGE(14,84)
@@ -3234,6 +3235,8 @@ _InspectPanicRoomWindow
 ; This is called both when inspecting the tree or the window with a rope attached to it
 _SubInspectAttachment
 .(
+    ; We only show the rope if it's attached and in the hostage room so we don't allow going down if the rope is attached somewhere else
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT),rope_attached)
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il n'y a plus qu'à descendre !")
