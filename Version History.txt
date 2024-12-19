@@ -244,4 +244,5 @@
 0.9.9
 - Fix: Multiple French text rewordings and corrections
 - Fix: A few items (dove, ladder, rope) had an extra space between the pronoum and the item
+- Fix: Trying to use the rope in the pit now says it's already in place
 - Tweak: Changed the page selection prompt from green to magenta to make it more visible

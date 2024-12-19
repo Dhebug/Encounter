@@ -4618,6 +4618,7 @@ cannot_use_rope_here
 ; The rope is not possible to attach from the bottom of the pit
 ; The only situation you would see this message is if you also have the ladder, else that would be an instant game over
 inside_the_pit
+    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
     GOSUB(_SubErrorTooHigh)
     END_AND_PARTIAL_REFRESH
 
