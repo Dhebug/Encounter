@@ -3013,10 +3013,10 @@ _InspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Une famille heureuse...")
-    INFO_MESSAGE("...où sont-ils ?")
+    INFO_MESSAGE("...sont-ils partis ?")
 #else
     INFO_MESSAGE("Looks like a happy family...")
-    INFO_MESSAGE("...I wonder where they are?")
+    INFO_MESSAGE("...I wonder where they are now?")
 #endif
     END_AND_REFRESH
 .)
