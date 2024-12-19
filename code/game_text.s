@@ -33,7 +33,7 @@ _StartGameTextData
 // Small feedback messages and prompts
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
-_gTextAskInput              .byt "Quelles sont vos instructions ?",0
+_gTextAskInput              .byt "Que faites vous ?",0
 _gTextNothingHere           .byt "Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score: ",0
@@ -4466,7 +4466,7 @@ _InspectCarDoor
 #endif    
     ELSE(door_closed,door_open)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("La porte est mangée par la rouille")
+        INFO_MESSAGE("Elle est mangée par la rouille")
 #else
         INFO_MESSAGE("The door is eaten by rust")
 #endif    
