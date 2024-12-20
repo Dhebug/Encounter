@@ -536,19 +536,25 @@ _gDescriptionMainStreet
 #endif    
 
 #if 1  // WIP TEST
+    .(
     ; Wait 20 seconds
     WAIT(50*5)
     WAIT(50*5)
     WAIT(50*5)
     WAIT(50*5)
-    BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
-        _IMAGE(30,49)
-        _BUFFER(7,40)
-    FADE_BUFFER
-    WAIT(50*5)
-    WAIT(50*5)
-    DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_MAINSTREET)
-    FADE_BUFFER
+    DO_ONCE(tardis)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
+            _IMAGE(30,49)
+            _BUFFER(7,40)
+        PLAY_SOUND(_Zipper)
+        FADE_BUFFER
+        WAIT(50*5)
+        WAIT(50*5)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_MAINSTREET)
+        PLAY_SOUND(_Zipper)
+        FADE_BUFFER
+    ENDDO(tardis)
+    .)
 #endif
     END
 
