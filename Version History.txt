@@ -259,3 +259,4 @@
 - Fix: Combining bomb and matches should be more predictable now
 - Fix: The stuck music channel in the credits when no achievement is unlocked should now be fixed
 - Fix: Can't get the petrol anymore if the hose is removed
+- Fix: The automatic removal of the suit should work again now

@@ -1332,7 +1332,7 @@ medicine_cabinet_closed
     _BUBBLE_LINE(5,5,0,"Une cuisine")
     _BUBBLE_LINE(5,16,0,"bien équipée")
 #else
-    _BUBBLE_LINE(5,5,0,"A well equipped")
+    _BUBBLE_LINE(5,5,0,"A well-equipped")
     _BUBBLE_LINE(5,14,4,"kitchen")
 #endif    
     END
@@ -1744,9 +1744,6 @@ _gDescriptionShowerRoom
 // MARK: West Gallery
 _gDescriptionWestGallery
 .(
-    ; Check if we already have the suit equipped
-    JUMP_IF_TRUE(_ErrorAlreadyEquipped_Elle,CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED))
-
     ; If the suit is equiped, we remove it
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
         SET_CUT_SCENE(1)
@@ -3499,7 +3496,7 @@ _InspectMixTape
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une compilation faite maison !")
 #else
-    INFO_MESSAGE("Home made mixtape!")
+    INFO_MESSAGE("Homemade mixtape!")
 #endif    
     END_AND_REFRESH
 .)
