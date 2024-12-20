@@ -391,6 +391,7 @@ void main()
 #endif
 
     // Now we start the typewriter music
+    Psgmixer=255;
     PlayMusic(TypewriterMusic);
 
 #ifdef TEST_MODE    

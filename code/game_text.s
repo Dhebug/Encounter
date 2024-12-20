@@ -3458,7 +3458,7 @@ _InspectTrashCan
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("L'odeur et l'état sont répugnants !")
 #else
-    INFO_MESSAGE("They look and smell filthy!")
+    INFO_MESSAGE("It looks and smells filthy!")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)

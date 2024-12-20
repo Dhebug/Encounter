@@ -257,3 +257,4 @@
 1.0.0
 - Fix: Misc text fixes and reformulations
 - Fix: Combining bomb and matches should be more predictable now
+- Fix: The stuck music channel in the credits when no achievement is unlocked should now be fixed
