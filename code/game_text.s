@@ -1675,7 +1675,7 @@ _gDescriptionMainLanding
 #ifdef LANGUAGE_FR    
     _BUBBLE_LINE(53,70,0,"Belle vue de là-haut")
 #else
-    _BUBBLE_LINE(47,70,0,"Nice view from up there")
+    _BUBBLE_LINE(47,70,0,"Nice view from up here")
 #endif    
     END
 
@@ -2514,7 +2514,7 @@ _ReadInvoice
     INFO_MESSAGE("La facture d'un voyage de deux mois")
     INFO_MESSAGE("en Europe. Vacances en famille ?")
 #else
-    INFO_MESSAGE("An invoice for a two months trip all")
+    INFO_MESSAGE("An invoice for a two-month trip all")
     INFO_MESSAGE("over Europe. Family holidays maybe?")
 #endif    
     END_AND_REFRESH
@@ -5299,7 +5299,7 @@ _FreeDove
 #ifdef LANGUAGE_FR        
         INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
 #else
-        INFO_MESSAGE("Hopefully it will not catch the dove")
+        INFO_MESSAGE("Hopefully, the dog will not catch it")
 #endif        
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
