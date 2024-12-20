@@ -260,3 +260,5 @@
 - Fix: The stuck music channel in the credits when no achievement is unlocked should now be fixed
 - Fix: Can't get the petrol anymore if the hose is removed
 - Fix: The automatic removal of the suit should work again now
+- Fix: The rope was not shown on the window after the escape
+- Improvement: Added combine actions for the rope and the queue to match the knife

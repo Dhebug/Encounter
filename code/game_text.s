@@ -2068,7 +2068,9 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_MortarAndPestle ,_CombinePillsWithMortar)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_SecurityDoor         ,_CombineClayDoor)    
-    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CommonGaveTheKnifeToTheGirl)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CombineKnifeHole)
+    COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_HoleInDoor           ,_CombineRopeHole)
+    COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_HoleInDoor     ,_CombineQueueHole)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
     COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
     COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
@@ -2383,14 +2385,15 @@ _ShowTopWindowOpen
             _BUFFER(21,49)
     ENDIF(window_broken)
 
-    ; Then add the sprite showing the attached rope if it's both attached and at the proper location
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT),rope_attached)
-    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
+    ; Then add the sprite showing the attached rope if it's both attached and at the proper location (either the tiledpatio outside or the panic room)
+    JUMP_IF_FALSE(rope_not_attached,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    JUMP_IF_TRUE(rope_on_window,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
+    JUMP_IF_FALSE(rope_not_attached,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_PANIC_ROOM_DOOR))
+rope_on_window    
         BLIT_BLOCK(LOADER_SPRITE_TOP_WINDOW,4,33)                     ; Draw the rope attached to the window frame
             _IMAGE(14,84)
             _BUFFER(19,59)
-    ENDIF(rope_attached)
-
+rope_not_attached            
 
     FADE_BUFFER
 
@@ -4533,6 +4536,7 @@ install_the_ladder
 .)
 
 
+_CombineRopeHole
 _ThrowRope
 _UseRope
 .(
@@ -5440,6 +5444,7 @@ game_room
     JUMP(_ErrorCannotDo)
 .)
 
+_CombineQueueHole
 SnookerCueCommon
 .(
     // We only throw the snooker cue if:
@@ -5555,6 +5560,7 @@ _CommonThugDisabled
 .)
 
 
+_CombineKnifeHole
 _CommonGaveTheKnifeToTheGirl
 .(
     SET_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_HOSTAGE_ROOM)
