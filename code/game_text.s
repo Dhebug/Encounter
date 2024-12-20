@@ -2358,7 +2358,7 @@ rope_not_attached
 #ifdef LANGUAGE_FR   
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde qui pend de la fenêtre")
 #else    
-    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope hangs from the window")
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope hanging from the window")
 #endif    
 
     ; Now we can show that to the player
@@ -4908,7 +4908,7 @@ _UseMatches
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),safe)
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Il faudrait y attacher un explosif")
+        ERROR_MESSAGE("Il faut d'abord placer la bombe")
 #else
         ERROR_MESSAGE("It needs some explosive attached to it")
 #endif        
