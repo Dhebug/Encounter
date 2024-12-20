@@ -29,7 +29,8 @@
 :: 0.9.7 - Fixed a bunch of issues when throwing, droping or taking some items, escaping the bomb and how error messages are shown
 :: 0.9.8 - Renamed the suit in French, improved the mortar and pit interactions, fixed sound corruption issue
 :: 0.9.9 - Mostly small tweaks and fixed all over
-:: 1.0.0
+:: 1.0.0 - Launch day version: Mostly small tweaks and fixed all over
+:: 1.1.1 -
 ::
 SET VERSION=1.0.0
 SET BASENAME=EncounterHD
