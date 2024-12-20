@@ -2255,14 +2255,6 @@ _CombineStickyBombWithSafe
 .)
 
 
-_CombineBombWithMatches
-.(
-    SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED)         ; Strike the matches!
-    INCREASE_SCORE(POINTS_IGNITED_BOMB)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_SAFE)                   ; The player may not survive the operation, but the safe is definitely open at that point!
-    END_AND_REFRESH
-.)
-
 
 _CombineClayWithWater
 .(
@@ -4888,7 +4880,7 @@ _UseAdhesive
     JUMP(_ErrorCannotDo)
 .)
 
-
+_CombineBombWithMatches
 _UseMatches
 .(
     // If the user has any flammable items, kaboom!
@@ -4914,7 +4906,10 @@ _UseMatches
 #endif        
         END_AND_PARTIAL_REFRESH
     ENDIF(safe)
-    JUMP(_CombineBombWithMatches)
+    SET_ITEM_FLAGS(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED)         ; Strike the matches!
+    INCREASE_SCORE(POINTS_IGNITED_BOMB)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_SAFE)                   ; The player may not survive the operation, but the safe is definitely open at that point!
+    END_AND_REFRESH
 .)
 
 

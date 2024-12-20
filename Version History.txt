@@ -253,3 +253,7 @@
 - Tweak: The dove can now be "used" as well
 ----
 - REVERTED: Launcher: 1.0.0.7 - Added the latest version of Oricutron and the option to disable the status bar
+
+1.0.0
+- Fix: Misc text fixes and reformulations
+- Fix: Combining bomb and matches should be more predictable now
