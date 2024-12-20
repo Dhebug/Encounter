@@ -2,7 +2,7 @@
 #include "params.h"
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:u
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
 #endif
 
 _gSaveGameFile            .dsb 8       ; SAVESTRT
