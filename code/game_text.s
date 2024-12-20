@@ -5709,6 +5709,10 @@ _TakeHose
 #else    
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a$_hose")
 #endif    
+    ; If the petrol was in the scene, then we hide it until the player puts the hose again
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)
+        SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)
+    ENDIF(petrol)
     JUMP(_TakeCommon)
 .)
 
