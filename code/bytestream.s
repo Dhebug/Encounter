@@ -23,34 +23,34 @@ _gStreamReturnPtr       .dsb 2   ; The ONE level of subfunction we are allowed t
     .text 
 
 _ByteStreamCallbacks
-    .word _ByteStreamCommandEnd
-    .word _ByteStreamCommandRECTANGLE
-    .word _ByteStreamCommandFILL_RECTANGLE
-    .word _ByteStreamCommandTEXT
+    .word _ByteStreamCommand_END
+    .word _ByteStreamCommand_RECTANGLE
+    .word _ByteStreamCommand_FILL_RECTANGLE
+    .word _ByteStreamCommand_TEXT
     .word _ByteStreamCommand_WHITE_BUBBLE
     .word _ByteStreamCommand_BLACK_BUBBLE
-    .word _ByteStreamCommandWait
-    .word _ByteStreamCommandBITMAP
-    .word _ByteStreamCommandFADE_BUFFER
-    .word _ByteStreamCommandJUMP
-    .word _ByteStreamCommandJUMP_IF_TRUE
-    .word _ByteStreamCommandJUMP_IF_FALSE
-    .word _ByteStreamCommandINFO_MESSAGE
-    .word _ByteStreamCommandDISPLAY_IMAGE
-    .word _ByteStreamCommandStopBreakpoint
+    .word _ByteStreamCommand_WAIT
+    .word _ByteStreamCommand_BITMAP
+    .word _ByteStreamCommand_FADE_BUFFER
+    .word _ByteStreamCommand_JUMP
+    .word _ByteStreamCommand_JUMP_IF_TRUE
+    .word _ByteStreamCommand_JUMP_IF_FALSE
+    .word _ByteStreamCommand_INFO_MESSAGE
+    .word _ByteStreamCommand_DISPLAY_IMAGE
+    .word _ByteStreamCommand_STOP_BREAKPOINT
     .word _ByteStreamCommand_END_AND_REFRESH
-    .word _ByteStreamCommandERROR_MESSAGE
-    .word _ByteStreamCommandSetItemLocation
-    .word _ByteStreamCommandSetItemFlags
-    .word _ByteStreamCommandUnSetItemFlags
-    .word _ByteStreamCommandSetItemDescription
-    .word _ByteStreamCommandSetLocationDirection
-    .word _ByteStreamCommandUnlockAchievement
-    .word _ByteStreamCommandIncreaseScore
-    .word _ByteStreamCommandGameOver
+    .word _ByteStreamCommand_ERROR_MESSAGE
+    .word _ByteStreamCommand_SET_ITEM_LOCATION
+    .word _ByteStreamCommand_SET_ITEM_FLAGS
+    .word _ByteStreamCommand_UNSET_ITEM_FLAGS
+    .word _ByteStreamCommand_SET_ITEM_DESCRIPTION
+    .word _ByteStreamCommand_SET_LOCATION_DIRECTION
+    .word _ByteStreamCommand_UNLOCK_ACHIEVEMENT
+    .word _ByteStreamCommand_INCREASE_SCORE
+    .word _ByteStreamCommand_GAME_OVER
     .word _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
     .word _ByteStreamCommand_SET_SCENE_IMAGE
-    .word _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
+    .word _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
     .word _ByteStreamCommand_CLEAR_TEXT_AREA
     .word _ByteStreamCommand_GOSUB
     .word _ByteStreamCommand_RETURN
@@ -68,7 +68,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
-    .word _ByteStreamCommandDISPLAY_DISPLAY_IMAGE_ONLY
+    .word _ByteStreamCommand_DISPLAY_DISPLAY_IMAGE_ONLY
 
     
 ; _param0=pointer to the new byteStream
@@ -310,12 +310,12 @@ _ByteStreamComputeLocationPtr
 
 
 
-_ByteStreamCommandStopBreakpoint
-    jmp _ByteStreamCommandStopBreakpoint
+_ByteStreamCommand_STOP_BREAKPOINT
+    jmp _ByteStreamCommand_STOP_BREAKPOINT
     rts
 
 
-_ByteStreamCommandEnd
+_ByteStreamCommand_END
 .(
     lda #FLAG_END_STREAM   ; Stop
 +_ByteStreamCommandEndWithStopCode
@@ -347,7 +347,7 @@ _ByteStreamCommand_END_AND_PARTIAL_REFRESH
 
 
 ; .byt COMMAND_WAIT,duration
-_ByteStreamCommandWait
+_ByteStreamCommand_WAIT
 .(
     ; In theory the delay could be 8 or 16 bits based on the value, but the code does not use that at the moment
     jsr _ByteStreamGetNextByte
@@ -389,7 +389,7 @@ end_stream_stop
 .)
 
 
-_ByteStreamCommandFADE_BUFFER
+_ByteStreamCommand_FADE_BUFFER
     jmp _BlitBufferToHiresWindow
 
 
@@ -534,7 +534,7 @@ _ByteStreamCommand_SET_SKIP_POINT
 
 
 ; .byt COMMAND_JUMP,<label,>label
-_ByteStreamCommandJUMP
+_ByteStreamCommand_JUMP
     ldy #0
     lda (_gCurrentStream),y
     tax                           ; Temporary so we don't change the stream pointer while using it
@@ -546,10 +546,10 @@ _ByteStreamCommandJUMP
 
 
 ; .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
-_ByteStreamCommandJUMP_IF_TRUE
+_ByteStreamCommand_JUMP_IF_TRUE
     lda #OPCODE_BEQ                          // F0
     bne common
-_ByteStreamCommandJUMP_IF_FALSE
+_ByteStreamCommand_JUMP_IF_FALSE
     lda #OPCODE_BNE                          // D0
 common
 .(
@@ -570,7 +570,7 @@ checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0
     ldy #2
     cmp (_gStreamItemPtr),y      // gItems->location (+2)
 _auto_conditionCheckItemLocation
-    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    bne _ByteStreamCommand_JUMP   // BNE/BEQ depending of the command
     jmp _ByteStreamMoveBy5
 
 checkPlayerLocation              // OPERATOR_CHECK_PLAYER_LOCATION 2 
@@ -580,7 +580,7 @@ checkPlayerLocation              // OPERATOR_CHECK_PLAYER_LOCATION 2
     ldy #2
     cmp _gCurrentLocation         // Player position
 _auto_conditionCheckPlayerLocation    
-    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    bne _ByteStreamCommand_JUMP   // BNE/BEQ depending of the command
     lda #4
     jmp _ByteStreamMoveByA
 
@@ -592,7 +592,7 @@ checkItemContainer
     ldy #3
     cmp (_gStreamItemPtr),y      // gItems->associated_item (+3)
 _auto_conditionCheckItemContainer
-    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    bne _ByteStreamCommand_JUMP   // BNE/BEQ depending of the command
     jmp _ByteStreamMoveBy5
 
 checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
@@ -607,7 +607,7 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     ldy #4
     and (_gStreamItemPtr),y      // gItems->flags (+4)
 _auto_conditionCheckItemFlag
-    bne _ByteStreamCommandJUMP   // BNE/BEQ depending of the command
+    bne _ByteStreamCommand_JUMP   // BNE/BEQ depending of the command
 
 +_ByteStreamMoveBy5    ; Continue (jump not taken)
     lda #5
@@ -643,7 +643,7 @@ _ByteStreamCommand_SET_CURRENT_ITEM
 
 ; Can be used to set the location of any item
 ; .byt COMMAND_SET_ITEM_LOCATION,item,location
-_ByteStreamCommandSetItemLocation
+_ByteStreamCommand_SET_ITEM_LOCATION
 .(
     ldy #0
     jsr _ByteStreamFetchItemID
@@ -684,7 +684,7 @@ end_container
 .)
 
 // .byt COMMAND_SET_ITEM_FLAGS,item,flags
- _ByteStreamCommandSetItemFlags
+ _ByteStreamCommand_SET_ITEM_FLAGS
  .(
     ldy #0
     jsr _ByteStreamFetchItemID
@@ -698,7 +698,7 @@ end_container
  .)
 
 ; .byt COMMAND_UNSET_ITEM_FLAGS,item,flags
- _ByteStreamCommandUnSetItemFlags
+ _ByteStreamCommand_UNSET_ITEM_FLAGS
  .(
     ldy #0
     jsr _ByteStreamFetchItemID
@@ -712,7 +712,7 @@ end_container
  .)
 
 ; .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
-_ByteStreamCommandSetItemDescription
+_ByteStreamCommand_SET_ITEM_DESCRIPTION
 .(
     ldy #0
     jsr _ByteStreamFetchItemID
@@ -765,7 +765,7 @@ _ByteStreamCommand_SET_SCENE_IMAGE
 
 ;                                     +0       +1        +2
 ; .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
-_ByteStreamCommandSetLocationDirection
+_ByteStreamCommand_SET_LOCATION_DIRECTION
 .(
     ldy #0
     lda (_gCurrentStream),y      // location ID
@@ -790,7 +790,7 @@ _ByteStreamCommandSetLocationDirection
 
 
 ; .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
-_ByteStreamCommandUnlockAchievement
+_ByteStreamCommand_UNLOCK_ACHIEVEMENT
 .(
     ldy #0
     lda (_gCurrentStream),y             // Achievement value
@@ -802,7 +802,7 @@ _ByteStreamCommandUnlockAchievement
 .)
 
 ; .byt COMMAND_INCREASE_SCORE,<points,>points
-_ByteStreamCommandIncreaseScore
+_ByteStreamCommand_INCREASE_SCORE
 .(
     clc
 
@@ -826,7 +826,7 @@ _ByteStreamCommandIncreaseScore
 
 
 ; .byt COMMAND_GAME_OVER,condition
-_ByteStreamCommandGameOver
+_ByteStreamCommand_GAME_OVER
 .(
     ldy #0
     lda (_gCurrentStream),y             // Gameover condition
@@ -863,17 +863,17 @@ loop
 .)    
 
 
-_ByteStreamCommandRECTANGLE
+_ByteStreamCommand_RECTANGLE
     jsr _ByteStreamCommandFetchRectangleData
 	jmp _DrawFilledRectangle
 
 
-_ByteStreamCommandFILL_RECTANGLE
+_ByteStreamCommand_FILL_RECTANGLE
     jsr _ByteStreamCommandFetchRectangleData
 	jmp _DrawFilledRectangle
 
 
-_ByteStreamCommandTEXT
+_ByteStreamCommand_TEXT
     ; Fetch x/y/pattern
     ldy #0
     lda (_gCurrentStream),y
@@ -1041,7 +1041,7 @@ _PrintErrorMessageShortAsm
     sta _gCurrentStream+0
     lda _param0+1
     sta _gCurrentStream+1
-    jsr _ByteStreamCommandERROR_MESSAGE
+    jsr _ByteStreamCommand_ERROR_MESSAGE
 
     lda #0
 	sta _gCurrentStream+0
@@ -1088,7 +1088,7 @@ _LongWaitAfterMessage
 
 ; Uses _gCurrentStream and _gStreamNextPtr
 ; .byt COMMAND_INFO_MESSAGE,message,0
-_ByteStreamCommandINFO_MESSAGE
+_ByteStreamCommand_INFO_MESSAGE
 .(
     jsr _ByteStreamCommand_QUICK_MESSAGE
 
@@ -1133,14 +1133,14 @@ _ByteStreamCommand_QUICK_MESSAGE
 
 ; PrintErrorMessage(gTextAGenericWhiteBag);    // "It's just a white generic bag"
 ; Uses _gCurrentStream and _gStreamNextPtr
-_ByteStreamCommandERROR_MESSAGE
+_ByteStreamCommand_ERROR_MESSAGE
 .(
     ; Make the window purple
     lda #16+5
     sta _param0
     jsr _ClearMessageWindowAsm            ; Clear X
 
-    jmp _ByteStreamCommandINFO_MESSAGE
+    jmp _ByteStreamCommand_INFO_MESSAGE
 .)
 
 
@@ -1294,28 +1294,28 @@ _DrawRectangleOutlineAsm
 ; - Display a title string
 ; - Fades the image in
 ; .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
-_ByteStreamCommandDISPLAY_IMAGE
+_ByteStreamCommand_DISPLAY_IMAGE
 .(
-    jsr _ByteStreamCommandDISPLAY_IMAGE_NOBLIT
+    jsr _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
     ; BlitBufferToHiresWindow();
     jmp _BlitBufferToHiresWindow
 .)
 
-_ByteStreamCommandDISPLAY_DISPLAY_IMAGE_ONLY
+_ByteStreamCommand_DISPLAY_DISPLAY_IMAGE_ONLY
 .(
-    jsr _ByteStreamCommandDISPLAY_IMAGE_NO_CLEAR_TEXT
+    jsr _ByteStreamCommand_DISPLAY_IMAGE_NO_CLEAR_TEXT
     jmp _BlitBufferToHiresWindow
 .)    
 
 ; .byt COMMAND_FULLSCREEN_ITEM_NOBLIT,imagedId,description,0
-_ByteStreamCommandDISPLAY_IMAGE_NOBLIT
+_ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
 .(  
     ; _param0=paper color
     ; ClearMessageWindow(16+4);
     lda #16+4
     sta _param0+0
     jsr _ClearMessageWindowAsm
-+_ByteStreamCommandDISPLAY_IMAGE_NO_CLEAR_TEXT
++_ByteStreamCommand_DISPLAY_IMAGE_NO_CLEAR_TEXT
 	; unsigned char loaderId = *gCurrentStream++;
     ; LoadFileAt(loaderId,ImageBuffer);
     jsr _ByteStreamGetNextByte
@@ -1352,7 +1352,7 @@ _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
 
 
 ; .byt COMMAND_BITMAP,imageId,w,h,stride
-_ByteStreamCommandBITMAP
+_ByteStreamCommand_BITMAP
 .( 
 	; unsigned char loaderId = *gCurrentStream++;
     jsr _ByteStreamGetNextByte
