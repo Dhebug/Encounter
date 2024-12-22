@@ -264,3 +264,7 @@
 - Fix: The rope was not shown on the window after the escape
 - Improvement: Added combine actions for the rope and the queue to match the knife
 - Improvement: Added the French û character to the charset
+
+1.0.1
+- First patch after release
+- Fix: Misc text fixes and reformulations in both French and English

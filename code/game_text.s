@@ -1048,7 +1048,7 @@ no_ladder
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR   
-    _BUBBLE_LINE(5,5,0,"La meilleure sorte de pommes:")
+    _BUBBLE_LINE(5,5,0,"La meilleure variété  de pommes:")
     _BUBBLE_LINE(5,17,0,"sucrées, croquantes et juteuses")
 #else 
     _BUBBLE_LINE(5,5,0,"The best kind of apples:")
@@ -2733,7 +2733,7 @@ dove_not_happy
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle bouge et essaye de s'échapper")
 #else    
-    INFO_MESSAGE("It's not happy and tries to leave")
+    INFO_MESSAGE("It's not happy and tries to escape")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
@@ -4909,7 +4909,7 @@ _UseMatches
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Il faut d'abord placer la bombe")
 #else
-        ERROR_MESSAGE("It needs some explosive attached to it")
+        ERROR_MESSAGE("You need to place the bomb first")
 #endif        
         END_AND_PARTIAL_REFRESH
     ENDIF(safe)
@@ -5484,7 +5484,7 @@ thug_snooker_cue
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("La queue brise le carreau")
 #else
-                INFO_MESSAGE("The cue smashes the window")
+                INFO_MESSAGE("The cue smashes a window pane")
 #endif    
                 GOSUB(_ShowBrokenWindow)
                 SET_ITEM_FLAGS(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED)   ; The window is now broken
