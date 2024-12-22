@@ -37,7 +37,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_JUMP_IF_FALSE
     .word _ByteStreamCommand_INFO_MESSAGE
     .word _ByteStreamCommand_DISPLAY_IMAGE
-    .word _ByteStreamCommand_STOP_BREAKPOINT
+    .word _ByteStreamCommand_DISPLAY_IMAGE_ONLY
     .word _ByteStreamCommand_END_AND_REFRESH
     .word _ByteStreamCommand_ERROR_MESSAGE
     .word _ByteStreamCommand_SET_ITEM_LOCATION
@@ -62,13 +62,12 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_STOP_CLOCK
     .word _ByteStreamCommand_END_AND_PARTIAL_REFRESH
     .word _ByteStreamCommand_LOAD_MUSIC
-    .word _ByteStreamCommand_STOP_MUSIC
-    .word _ByteStreamCommand_WAIT_KEYPRESS
+    .word _ByteStreamCommand_STOP_MUSIC                  ; Implemented in akyplayer.s
+    .word _ByteStreamCommand_WAIT_KEYPRESS               ; Implemented in keyboard.s
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
-    .word _ByteStreamCommand_DISPLAY_DISPLAY_IMAGE_ONLY
 
     
 ; _param0=pointer to the new byteStream
@@ -96,7 +95,7 @@ loop
     bne loop
     lda _gCurrentStream+1
     bne loop
-
+quit
     rts
 stream_stop
     lda _gCurrentStreamStop
@@ -112,8 +111,6 @@ check_partial_refresh
     sta _param0
     jsr _ClearMessageWindowAsm
     jmp _PrintSceneInformation
-quit    
-    rts    
 .)
 
 
@@ -309,12 +306,6 @@ _ByteStreamComputeLocationPtr
     rts
 
 
-
-_ByteStreamCommand_STOP_BREAKPOINT
-    jmp _ByteStreamCommand_STOP_BREAKPOINT
-    rts
-
-
 _ByteStreamCommand_END
 .(
     lda #FLAG_END_STREAM   ; Stop
@@ -324,7 +315,6 @@ _ByteStreamCommand_END
 	sta _gCurrentStream+0
     sta _gCurrentStream+1
 	sta _gDelayStream
-
     rts
 .)
 
@@ -333,7 +323,7 @@ _ByteStreamCommand_END_AND_REFRESH
 .(
     ;jmp _ByteStreamCommandEndAndRefresh
     lda #FLAG_END_STREAM|FLAG_REFRESH_SCENE   ; Stop and refresh scene
-    jmp _ByteStreamCommandEndWithStopCode
+    bne _ByteStreamCommandEndWithStopCode
 .)
 
 
@@ -342,7 +332,7 @@ _ByteStreamCommand_END_AND_PARTIAL_REFRESH
 .(
     ;jmp _ByteStreamCommandEndAndRefresh
     lda #FLAG_END_STREAM|FLAG_PARTIAL_REFRESH   ; Stop and refresh the scene information (ie: we don't run all the image loading)
-    jmp _ByteStreamCommandEndWithStopCode
+    bne _ByteStreamCommandEndWithStopCode
 .)
 
 
@@ -487,16 +477,7 @@ no_music
     rts    
 .)
 
-_ByteStreamCommand_STOP_MUSIC
-.(
-    jmp _EndMusic
-.)
 
-; .byt COMMAND_WAIT_KEYPRESS
-_ByteStreamCommand_WAIT_KEYPRESS
-.(
-    jmp _WaitKey
-.)
 
 ; .byt COMMAND_DO_ONCE,1,<label,>label
 _ByteStreamCommand_DO_ONCE
@@ -1301,7 +1282,7 @@ _ByteStreamCommand_DISPLAY_IMAGE
     jmp _BlitBufferToHiresWindow
 .)
 
-_ByteStreamCommand_DISPLAY_DISPLAY_IMAGE_ONLY
+_ByteStreamCommand_DISPLAY_IMAGE_ONLY
 .(
     jsr _ByteStreamCommand_DISPLAY_IMAGE_NO_CLEAR_TEXT
     jmp _BlitBufferToHiresWindow
@@ -1427,20 +1408,21 @@ _InitializeGraphicMode
 .)
 
 
-_count        .dsb 1
-_coordinates  .dsb 2
-tmpCount      .dsb 1
 
-_BubblesWidth .dsb 10              ; TODO: Should adjust and check based on the max number of bubbles
+_BubblesWidth .dsb MAX_BUBBLE       ; TODO: Should adjust and check based on the max number of bubbles
 
 
  _ByteStreamCommand_WHITE_BUBBLE
     ldx #64                        ; White on Black Color pattern
-    jmp draw_bubble
+    bne draw_bubble
  _ByteStreamCommand_BLACK_BUBBLE
     ldx #127                       ; White on Black Color pattern
 draw_bubble
 .(
+_count         = reg4
+_coordinates   = reg5
+tmpCount       = reg6
+
     stx _gDrawPattern
 
     jsr _ByteStreamGetNextByte     ; Number of bubbles 

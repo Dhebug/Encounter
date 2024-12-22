@@ -326,6 +326,7 @@ end
     rts
 .)
 
+_ByteStreamCommand_STOP_MUSIC      ; .byt COMMAND_STOP_MUSIC
 _EndMusic
     lda #0
     sta _MusicMixerMask   ; Release all the reserved channels

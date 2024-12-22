@@ -202,6 +202,7 @@ retz
 
 
 ; Wait for a keypress
+_ByteStreamCommand_WAIT_KEYPRESS    ; .byt COMMAND_WAIT_KEYPRESS
 _WaitKey
 .(
 loop

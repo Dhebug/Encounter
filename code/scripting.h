@@ -17,7 +17,7 @@
 #define COMMAND_JUMP_IF_FALSE   11
 #define COMMAND_INFO_MESSAGE    12 
 #define COMMAND_DISPLAY_IMAGE   13
-#define COMMAND_STOP_BREAKPOINT 14
+#define COMMAND_DISPLAY_IMAGE_ONLY 14
 #define COMMAND_END_AND_REFRESH 15
 #define COMMAND_ERROR_MESSAGE   16
 #define COMMAND_SET_ITEM_LOCATION   17
@@ -48,8 +48,7 @@
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
 #define COMMAND_SET_CURRENT_ITEM 44
-#define COMMAND_DISPLAY_IMAGE_ONLY 45
-#define _COMMAND_COUNT          46
+#define _COMMAND_COUNT          45
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -90,6 +89,7 @@
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define QUICK_MESSAGE(message)               .byt COMMAND_QUICK_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define MAX_BUBBLE 3                         // Should find a way to assert that at compile time
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
