@@ -3928,11 +3928,18 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _OpenPanicRoomWindow)
     VALUE_MAPPING(e_ITEM_FrontDoor          , _OpenFrontDoor)
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _OpenSecurityDoor)
+    VALUE_MAPPING(e_ITEM_HeavySafe          , _OpenSafe)
     VALUE_MAPPING(e_ITEM_Church             , _OpenChurch)
     VALUE_MAPPING(e_ITEM_NormalWindow       , _OpenNormalWindow)    
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _OpenChemistryBook)    
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
+
+_OpenSafe
+.(
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED))      ; Is the safe open?
+    JUMP(_ErrorCannotDo)
+.)
 
 _OpenCurtain
 .(
