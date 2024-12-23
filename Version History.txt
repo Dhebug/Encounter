@@ -273,3 +273,6 @@
 - Improvement: If the safe is already opened trying to open it will tell you it's already opened
 - Improvement: Tweaked the keyboard handling to make it more reactive
 - Improvement: Added a few alternative new combinations of items
+- Improvement: There are now 50hz versions in the Game subfolder for people running the game on the real hardware
+- Launcher: 1.0.0.9 - Support for the modified file names that include the frequency
+
