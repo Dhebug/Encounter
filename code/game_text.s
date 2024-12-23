@@ -5194,6 +5194,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_Rope               , _ThrowRope)
     VALUE_MAPPING(e_ITEM_LargeDove          , _ThrowDove)
     VALUE_MAPPING(e_ITEM_Net                , _ThrowNet)
+    VALUE_MAPPING(e_ITEM_CardboardBox       , _ThrowCardboardBox)
     VALUE_MAPPING(255                       , _ThrowCurrentItem)  ; Default option
 
 _ThrowBread
@@ -5382,13 +5383,19 @@ _ScareDoveAway
 
 
 
+_ThrowCardboardBox
+.(
+    // If the dove is in the box then we need to free it
+    JUMP_IF_TRUE(_DropDove,CHECK_ITEM_CONTAINER(e_ITEM_LargeDove,e_ITEM_CardboardBox))
+
+    // By default we just drop the net where we are even if just trying to use it
+    SET_ITEM_LOCATION(e_ITEM_CardboardBox,e_LOC_CURRENT)
+
+    END_AND_PARTIAL_REFRESH
+.)
+
 
 _ThrowNet
-    // By default we just drop the knife where we are
-    SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)
-    GOSUB(NetCommon)
-    END_AND_REFRESH
-
 _UseNet
     GOSUB(NetCommon)
     JUMP(_ErrorCannotDo)
@@ -5419,6 +5426,11 @@ dove_net
         JUMP(_ErrorNoFishing)
 fishpond_net    
 
+    // If the dove is in the net then we need to free it
+    JUMP_IF_TRUE(_DropDove,CHECK_ITEM_CONTAINER(e_ITEM_LargeDove,e_ITEM_Net))
+
+    // By default we just drop the net where we are even if just trying to use it
+    SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)
     RETURN
 .)
 
