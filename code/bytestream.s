@@ -1493,7 +1493,7 @@ end_compute_size
     ; Store the value
     lda _param1+0
     ldx tmpCount
-    sta _BubblesWidth,x
+    sta _BubblesWidth-1,x
 
     jsr _DrawRectangleOutlineAsm
 
@@ -1537,7 +1537,7 @@ loop_compute_size
     ; Restore the computed width
     ldx tmpCount
     sec
-    lda _BubblesWidth,x
+    lda _BubblesWidth-1,x
     sbc #2
     sta _gDrawWidth
 
