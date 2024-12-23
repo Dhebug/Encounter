@@ -1220,20 +1220,16 @@ cabinet_closed
 // MARK: Narrow Passage
 _gDescriptionNarrowPassage
     WAIT(DELAY_FIRST_BUBBLE)
-    BLACK_BUBBLE(3)
+    BLACK_BUBBLE(4)
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,48,0,"Soit ils aiment le noir")
     _BUBBLE_LINE(12,68,0,"soit ils ont oublié")
     _BUBBLE_LINE(27,88,0,"de payer leurs")
+    _BUBBLE_LINE(55,108,0,"factures")
 #else
     _BUBBLE_LINE(5,48,0,"Either they love the dark")
     _BUBBLE_LINE(12,68,0,"or they forgot to")
     _BUBBLE_LINE(37,88,0,"pay their")
-#endif
-    BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR    
-    _BUBBLE_LINE(55,108,0,"factures")
-#else
     _BUBBLE_LINE(75,108,0,"bills")
 #endif    
     END

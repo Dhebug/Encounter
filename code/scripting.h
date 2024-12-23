@@ -89,7 +89,7 @@
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define QUICK_MESSAGE(message)               .byt COMMAND_QUICK_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
-#define MAX_BUBBLE 3                         // Should find a way to assert that at compile time
+#define MAX_BUBBLE 4                         // Should find a way to assert that at compile time
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
 #define _BUBBLE_LINE(x,y,yoffset,text)       .byt x,y,yoffset,text,0
