@@ -21,14 +21,20 @@
 #ifdef MODULE_GAME
 #endif
 
-#if 1
+
+#ifdef FREQUENCY_60HZ
 // 60hz
 #define ATTRIBUTE_TEXT    24
 #define ATTRIBUTE_HIRES   28
 #else
+#ifdef FREQUENCY_50HZ
 // 50hz
 #define ATTRIBUTE_TEXT    26
 #define ATTRIBUTE_HIRES   31
+#else
+// Undefined
+#error "FREQUENCY should be set to either 60 or 50"
+#endif
 #endif
 
 //#define TESTING_MODE         // Comment out to play normally

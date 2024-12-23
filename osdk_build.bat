@@ -44,16 +44,24 @@ SET TEST_BUILT=
 for %%i in (%BUILD_LANGUAGES%) do (
   SET LANGUAGE=%%i
   if "%LANGUAGE%"=="%TEST_LANGUAGE%" (
-    SET TEST_BUILT=%LANGUAGE%
+    SET TEST_BUILT=%TEST_BUILT%X
   )
-  call bin\_build.bat
-  IF ERRORLEVEL 1 GOTO Error
+  for %%l in (%BUILD_FREQUENCIES%) do (
+    SET FREQUENCY=%%l
+    if "%FREQUENCY%"=="%TEST_FREQUENCY%" (
+      SET TEST_BUILT=%TEST_BUILT%X
+    )
+    call bin\_build.bat
+    IF ERRORLEVEL 1 GOTO Error
+  )
 )
 
 :: If the test language was not part of the build list, we build it
-if NOT "%TEST_BUILT%"=="%TEST_LANGUAGE%" (
+if NOT "%TEST_BUILT%"=="XX" (  
   SET LANGUAGE=%TEST_LANGUAGE%
+  SET FREQUENCY=%TEST_FREQUENCY%
   call bin\_build.bat
+  IF ERRORLEVEL 1 GOTO Error
 )
 
 :Done

@@ -9,21 +9,21 @@ IF "%LANGUAGE%"=="" GOTO ErCfg
 
 :: Call XA to rebuild the loader
 ECHO %ESC%[96m== Assembling bootsectors ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DVERSION=%VERSION% sector_1-jasmin.asm -o ..\build\files\sector_1-jasmin.o
+%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DFREQUENCY_%FREQUENCY% -DVERSION=%VERSION% sector_1-jasmin.asm -o ..\build\files\sector_1-jasmin.o
 IF ERRORLEVEL 1 GOTO Error
-%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DVERSION=%VERSION% sector_2-microdisc.asm -o ..\build\files\sector_2-microdisc.o -l ..\build\files\sector_2-microdisc.symbols.txt
+%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DFREQUENCY_%FREQUENCY% -DVERSION=%VERSION% sector_2-microdisc.asm -o ..\build\files\sector_2-microdisc.o -l ..\build\files\sector_2-microdisc.symbols.txt
 IF ERRORLEVEL 1 GOTO Error
-%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DVERSION=%VERSION% sector_3.asm -o ..\build\files\sector_3.o
+%osdk%\bin\xa -DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DFREQUENCY_%FREQUENCY% -DVERSION=%VERSION% sector_3.asm -o ..\build\files\sector_3.o
 IF ERRORLEVEL 1 GOTO Error
 
 ECHO.
 ECHO %ESC%[96m== Assembling loader ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader
+%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader
 IF ERRORLEVEL 1 GOTO Error
 
 ::IF NOT EXIST BUILD\symbols GOTO NoSymbol
 
-SET OSDKCPPFLAGSCOPY=-DLANGUAGE_%LANGUAGE% -DVERSION=\"%VERSION%\" -DPRODUCT_TYPE_%PRODUCT_TYPE% 
+SET OSDKCPPFLAGSCOPY=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DVERSION=\"%VERSION%\" -DPRODUCT_TYPE_%PRODUCT_TYPE% 
 SET OSDKXAPARAMSCOPY=%OSDKXAPARAMS%
 
 ::

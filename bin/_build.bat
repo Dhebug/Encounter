@@ -22,13 +22,13 @@ IF "%OSDKDISK%"=="" goto OSDKDISKError
 
 :: Make sure we build the right version
 SET OSDKNAME=%BASENAME%-%LANGUAGE%
-IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-Demo-v%VERSION%.dsk
-IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-v%VERSION%.dsk
-IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-Test-v%VERSION%.dsk
+IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-%FREQUENCY%-Demo-v%VERSION%.dsk
+IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-%FREQUENCY%-v%VERSION%.dsk
+IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-%FREQUENCY%-Test-v%VERSION%.dsk
 IF "%FINAL_TARGET_DISK%"=="" GOTO EndDeleteCopy
-IF EXIST %FINAL_TARGET_DISK%\%OSDKNAME%*.DSK  del %FINAL_TARGET_DISK%\%OSDKNAME%*.DSK
+IF EXIST %FINAL_TARGET_DISK%\%OSDKNAME%-%FREQUENCY%*.DSK  del %FINAL_TARGET_DISK%\%OSDKNAME%-%FREQUENCY%*.DSK
 IF "%FINAL_TARGET_DISK2%"=="" GOTO EndDeleteCopy
-IF EXIST %FINAL_TARGET_DISK2%\%OSDKNAME%*.DSK  del %FINAL_TARGET_DISK2%\%OSDKNAME%*.DSK
+IF EXIST %FINAL_TARGET_DISK2%\%OSDKNAME%-%FREQUENCY%*.DSK  del %FINAL_TARGET_DISK2%\%OSDKNAME%-%FREQUENCY%*.DSK
 :EndDeleteCopy
 
 
@@ -40,8 +40,8 @@ IF EXIST build\%OSDKDISK%  del build\%OSDKDISK%
 :: Build the slide show parts of the demo
 pushd code
 
-SET OSDKCPPFLAGS=-DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE% 
-SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE% 
+SET OSDKCPPFLAGS=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% 
+SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% 
 
 :: Then this retarded code is called twice in a loop:
 :: The reason is, that we are including 'loader.cod' inside the loader, but the content is valid only after FloppyBuilder created the layout.
@@ -52,7 +52,7 @@ SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE%
 
 :: -P Inhibit generation of linemarkers in the output from the preprocessor. This might be useful when running the preprocessor on something that is not C code, and will be sent to a program which might be confused by the linemarkers.
 :: If you really need to change the search order for system directories, use the -nostdinc and/or -isystem options.
-%OSDK%\bin\cpp.exe -P -DOSDKDISK=%OSDKDISK% -DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE% floppybuilderscript_master.txt floppybuilderscript.txt
+%OSDK%\bin\cpp.exe -P -DOSDKDISK=%OSDKDISK% -DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% floppybuilderscript_master.txt floppybuilderscript.txt
 
 :: Call FloppyBuilder once to create loader.cod
 %osdk%\bin\FloppyBuilder init floppybuilderscript.txt >..\build\floppy_builder_error.txt
@@ -60,13 +60,13 @@ IF ERRORLEVEL 1 GOTO FloppyBuilderError
 
 ECHO ---------------- 1st pass ---------------- 
 set DISPLAYINFO=0
-SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=0
+SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=0
 call ..\bin\_build_pass.bat > NUL
 ::IF ERRORLEVEL 1 GOTO Error
 
 ECHO ---------------- 2nd pass ---------------- 
 set DISPLAYINFO=1
-SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=1
+SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=1
 call ..\bin\_build_pass.bat
 IF ERRORLEVEL 1 GOTO Error
 

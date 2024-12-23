@@ -30,17 +30,22 @@
 :: 0.9.8 - Renamed the suit in French, improved the mortar and pit interactions, fixed sound corruption issue
 :: 0.9.9 - Mostly small tweaks and fixed all over
 :: 1.0.0 - Launch day version: Mostly small tweaks and fixed all over
-:: 1.1.1 -
+:: 1.0.1 -
 ::
-SET VERSION=1.0.0
+SET VERSION=1.0.1
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
 SET BUILD_LANGUAGES=EN,FR
+SET BUILD_FREQUENCIES=60HZ,50HZ
 
 :: Version we want to launch when testing
 SET TEST_LANGUAGE=EN
 SET TEST_LANGUAGE=FR
+
+:: Frequency we want to launch when testing
+SET TEST_FREQUENCY=60HZ
+SET TEST_FREQUENCY=50HZ
 
 :: To distinguish the way the game is built
 ::SET PRODUCT_TYPE=GAME_DEMO
@@ -63,7 +68,7 @@ SET BREAKPOINTS_OUTRO=
 SET OSDKBRIEF=NOPAUSE
 SET OSDKADDR=
 SET OSDKFILE=
-SET OSDKNAME=%BASENAME%-%TEST_LANGUAGE%
+SET OSDKNAME=%BASENAME%-%TEST_LANGUAGE%-%TEST_FREQUENCY%
 IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-Demo-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-Test-v%VERSION%.dsk
