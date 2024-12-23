@@ -2478,6 +2478,8 @@ _ReadChemistryRecipes
     END_AND_REFRESH
 
 
+_OpenChemistryBook
+_UseChemistryBook
 _ReadChemistryBook
 .(
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_BOOK)   ; Achievement!
@@ -3932,6 +3934,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_SecurityDoor       , _OpenSecurityDoor)
     VALUE_MAPPING(e_ITEM_Church             , _OpenChurch)
     VALUE_MAPPING(e_ITEM_NormalWindow       , _OpenNormalWindow)    
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _OpenChemistryBook)    
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -4417,6 +4420,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Computer           , _UseComputer)
     VALUE_MAPPING(e_ITEM_GameConsole        , _UseGameConsole)
     VALUE_MAPPING(e_ITEM_Television         , _UseTelevision)
+    VALUE_MAPPING(e_ITEM_ChemistryBook      , _UseChemistryBook)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 _InspectCar
