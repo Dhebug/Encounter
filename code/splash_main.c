@@ -62,7 +62,7 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
-BUILD_MARKER
+//BUILD_MARKER
 
 
 enum
