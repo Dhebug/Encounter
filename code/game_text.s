@@ -1482,6 +1482,8 @@ kaboom
 .)
 
 
+_CombinePetrolWithMatches
+_CombineGunPowderWithMatches
 _Kaboom
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
@@ -2060,9 +2062,11 @@ Y8b  d8 `8b  d8' 88  88  88 88   8D   .88.   88  V888 88.
 _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SedativePills,e_ITEM_Meat        ,_CombineMeatWithPills)
     COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_ToiletRoll         ,_CombinePetrolWithTP)
+    COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_BoxOfMatches       ,_CombinePetrolWithMatches)
     COMBINE_MAPPING(e_ITEM_Saltpetre,e_ITEM_Sulphur         ,_CombineSulfurWithSalpetre)
     COMBINE_MAPPING(e_ITEM_PowderMix,e_ITEM_MortarAndPestle ,_CombinePowderMixWithMortar)
     COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_Fuse            ,_CombineGunPowderWithFuse)
+    COMBINE_MAPPING(e_ITEM_GunPowder,e_ITEM_BoxOfMatches    ,_CombineGunPowderWithMatches)
     COMBINE_MAPPING(e_ITEM_TobaccoTin,e_ITEM_Fuse           ,_CombineTinWithFuse)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_Adhesive             ,_CombineBombWithAdhesive)
     COMBINE_MAPPING(e_ITEM_Bomb,e_ITEM_HeavySafe            ,_CombineStickyBombWithSafe)

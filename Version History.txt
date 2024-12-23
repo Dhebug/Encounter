@@ -272,3 +272,4 @@
 - Improvement: The book can now be "used" and "open" in addition to "read" and "inspect"
 - Improvement: If the safe is already opened trying to open it will tell you it's already opened
 - Improvement: Tweaked the keyboard handling to make it more reactive
+- Improvement: Added a few alternative new combinations of items
