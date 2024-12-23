@@ -13,6 +13,8 @@
 
 #include "params.h"
 
+#define KEYBOARD_BUFFER_SIZE 5
+
 	.zero
 
 zpTemp01			.byt 0
@@ -118,12 +120,21 @@ skip2   ;Proceed to next row
 
     jsr _ReadKeyInternal
     beq no_key_pressed
-    stx gInternalKeyPressed
+    cpx gInternalLastKeyPressed
+    beq still_pressed
+    ldy gInternalKeyPressedCount
+    cpy #KEYBOARD_BUFFER_SIZE
+    bcs keyboard_buffer_full
+    txa
+    sta gInternalKeyPressedBuffer,y
+    inc gInternalKeyPressedCount
+still_pressed    
+keyboard_buffer_full    
 no_key_pressed
+    stx gInternalLastKeyPressed
 	rts 
 .)  
 
-gInternalKeyPressed .byt 0
 
 
 ; Some more routines, not actualy needed, but quite useful
@@ -169,12 +180,34 @@ skip
 	rts
 .)
 
+zx
+gInternalLastKeyPressed   .byt 0
+gInternalKeyPressedCount  .byt 0
+gInternalKeyPressedBuffer .dsb KEYBOARD_BUFFER_SIZE
+
 
 _ReadKey
-    ldx gInternalKeyPressed
+.(
+    php
+	sei
+
+    ; Are there any keys in the buffer?
+    ldx gInternalKeyPressedCount
+    beq no_key
+
+    lda gInternalKeyPressedBuffer-1,x
+    dec gInternalKeyPressedCount
+    tax
     lda #0
-    sta gInternalKeyPressed
+    plp
     rts
+
+no_key
+    lda #0
+    tax
+    plp
+    rts
+.)
 
 _WaitReleasedKey
     jsr _WaitIRQ

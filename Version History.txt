@@ -270,3 +270,4 @@
 - Fix: Misc text fixes and reformulations in both French and English
 - Fix: Throwing the net and the cardboard box should work better now
 - Improvement: The book can now be "used" and "open" in addition to "read" and "inspect"
+- Improvement: Tweaked the keyboard handling to make it more reactive
