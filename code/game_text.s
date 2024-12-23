@@ -3267,7 +3267,7 @@ _InspectNormalWindow
         INFO_MESSAGE("Il y a aussi une salle à manger")
 #else
         INFO_MESSAGE("I can see a comfortable lounge")
-        INFO_MESSAGE("There's also a dinning room")
+        INFO_MESSAGE("There's also a dining room")
 #endif    
 tennis_court
 
@@ -3292,14 +3292,14 @@ study_room
 games_room
 
     JUMP_IF_TRUE(lounge,CHECK_PLAYER_LOCATION(e_LOC_LOUNGE))
-    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DININGROOM),dinning_room)
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DININGROOM),dining_room)
 lounge    
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir le court de tennis dehors")
 #else
         INFO_MESSAGE("I can see the tennis court outside")
 #endif    
-dinning_room
+dining_room
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_KITCHEN),kitchen)
 #ifdef LANGUAGE_FR
