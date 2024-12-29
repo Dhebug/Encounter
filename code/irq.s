@@ -3,23 +3,10 @@
 
     .zero
 
-_IrqCounter					.dsb 1
-_VblCounter					.dsb 1
+_IrqCounter					.dsb 1    ; Decremented at 200hz and when reaching zero triggers the 50hz callback
+_VblCounter					.dsb 1    ; Incremented every 1/50 th of a second
 
     .text
-
-_IrqSpeedMask 	.byt 1
-
-
-_Sei
-    sei
-    rts
-
-
-_Cli
-    cli
-    rts
-
 
 ; 1 second       = 1000 ms
 ; 1 frame @50hz  = 20ms
@@ -31,7 +18,6 @@ _Cli
 ;  2500 = 400hz = 8 irq per frame
 
 _System_InstallIRQ_SimpleVbl
-	//jmp _System_InstallIRQ_SimpleVbl
 .(
     sei
 
@@ -46,9 +32,9 @@ _System_InstallIRQ_SimpleVbl
     sta IRQ_Restore_High+1
 
     ;  Set the VIA parameters to get a 200hz IRQ
-    lda #<19966/4		; 20000
+    lda #<19966/4		; 4991
     sta $306
-    lda #>19966/4		; 20000
+    lda #>19966/4		; 4991
     sta $307
 
     ; Install interrupt (this works only if overlay ram is accessible)
@@ -58,7 +44,6 @@ _System_InstallIRQ_SimpleVbl
     sta $FFFF
 
     lda #4
-    sta _IrqSpeedMask
     sta _IrqCounter
     
     lda #0
@@ -71,7 +56,6 @@ _System_InstallIRQ_SimpleVbl
 
 
 _System_RestoreIRQ_SimpleVbl
-	//jmp _System_RestoreIRQ_SimpleVbl
 .(
     sei
 
@@ -113,7 +97,7 @@ InterruptHandler
     dec _IrqCounter
     bne skip_50hz_task
 
-    lda _IrqSpeedMask
+    lda #4
     sta _IrqCounter
 
     ; Call the 50hz IRQ handler
@@ -168,12 +152,6 @@ loop
 .)
 
 
-
-_Breakpoint
-	jmp _Breakpoint
-_DoNothing
-	rts
-
 ; Stop the program while blinking the bottom right corner with psychedelic colors
 _Panic
 	lda #16+1
@@ -181,18 +159,6 @@ _Panic
 	lda #16+2
 	sta $BFDF
 	jmp _Panic
+_DoNothing    
 	rts
 
-
-_Temporize
-	ldy #1
-temporize_outer
-	ldx #0
-temporize_inner
-	dex
-	bne temporize_inner
-
-	dey
-	bne temporize_outer
-
-	rts
