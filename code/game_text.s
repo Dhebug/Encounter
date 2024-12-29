@@ -5968,7 +5968,7 @@ _ErrorAlreadyEquipped_Elle
 
 ; This is a script that is run before the setup of a scene is done.
 ; In the current status it is used to get the girl to follow us
-_LoadSceneScript
+_ScenePreLoadScript
 .(
     ; If the girl is "attached" we move her to the playe current location
     JUMP_IF_FALSE(end_girl_following,CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED))

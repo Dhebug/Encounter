@@ -12,7 +12,7 @@
 extern int gScore;          // Moved to the last 32 bytes so it can be shared with the other modules
 extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so it can be shared with the other modules
 
-extern char LoadSceneScript[];
+extern char ScenePreLoadScript[];              // Script that runs before the scene even loads - used to move the girl around
 
 char gColoredSeparator[]=" ";
 
@@ -169,18 +169,16 @@ void LoadScene()
 {
 	gCurrentLocationPtr = &gLocations[gCurrentLocation];
     gSceneImage = LOADER_PICTURE_LOCATIONS_START+gCurrentLocation;
-    PlayStream(LoadSceneScript);    
+
+    // Run the Scene "preload" script
+    PlayStream(ScenePreLoadScript);    
 
 	// Set the byte stream pointer
 	SetByteStream(gCurrentLocationPtr->script);
     
 	ClearMessageWindow(16+4);
 
-#if 1
 	LoadFileAt(gSceneImage,ImageBuffer);	
-#else
-	memset(ImageBuffer,64+1,40*128);
-#endif	
 
 	// And run the first set of commands for this scene
 	HandleByteStream();
@@ -195,8 +193,6 @@ void LoadScene()
 	PrintSceneInformation();
 
 	BlitBufferToHiresWindow();
-
-	//TrashFreeMemory();
 }
 
 

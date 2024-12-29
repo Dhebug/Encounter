@@ -322,7 +322,6 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define COMMAND_FILL_RECTANGLE  2
 #define COMMAND_TEXT            3
 #define COMMAND_FADE_BUFFER     8
-#define COMMAND_STOP_BREAKPOINT 14
 #define _COMMAND_COUNT          24
 ```
 ## END
