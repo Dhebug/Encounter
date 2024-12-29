@@ -65,7 +65,6 @@ typedef struct
 
 extern location gLocations[e_LOC_COUNT_];
 extern location* gCurrentLocationPtr;
-extern char* gDescription;
 extern unsigned char gSceneImage;
 extern item gItems[e_ITEM_COUNT_];
 

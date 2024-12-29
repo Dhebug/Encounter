@@ -9,21 +9,17 @@ IrqTasks50hz
     jmp SoundUpdate50hz
 .)
 
+_ValidateInputReturn
+_ValidateInputSpace
+    ldx #1
 // Called from on the blitt functions
 Count1SecondsDown
 Count10SecondsDown
-    rts
-
 ; No-op to avoid a linker bug
 _InputArrows
 _PrintInformationMessageAsm
 _DrawArrows
 _gFont12x14
-    rts
-
-_ValidateInputReturn
-_ValidateInputSpace
-    ldx #1
     rts
 
 _TypewriterMusic

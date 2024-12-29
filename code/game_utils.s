@@ -5,7 +5,6 @@
 
 _gCurrentLocation           .dsb 1
 _gCurrentLocationPtr        .dsb 2
-_gDescription               .dsb 2
 _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1
 _gInventoryOffset           .dsb 2
