@@ -276,3 +276,8 @@
 - Improvement: There are now 50hz versions in the Game subfolder for people running the game on the real hardware
 - Launcher: 1.0.0.9 - Support for the modified file names that include the frequency
 
+1.0.2
+- Misc: Did some internal code cleaning, should not impact the player experience
+- Improvement: Did some touch ups to the Austin mini doors graphics
+- Improvement: Added a small gate to the rear of the house to make the way more obvious
+- Improvement: Added the possibility to use EAST to go down the basement in addition to Down
