@@ -1,18 +1,13 @@
 
     .text
 
-IrqTasksHighSpeed
-.(
-    jmp SoundUpdateHighSpeed
-.)
 
 IrqTasks50hz
 .(
     ; Process keyboard
     jsr ReadKeyboard
     jsr _PlayMusicFrame
-    jsr SoundUpdate50hz
-    rts    
+    jmp SoundUpdate50hz
 .)
 
 ; No-op to avoid a linker bug

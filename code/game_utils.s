@@ -14,12 +14,6 @@ _gActionMappingPtr          .dsb 2
 
     .text
 
-
-IrqTasksHighSpeed
-.(
-    jmp SoundUpdateHighSpeed
-.)
-
 IrqTasks50hz
 .(
     ; Process keyboard

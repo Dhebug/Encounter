@@ -83,6 +83,7 @@ copy_bank
     ;jsr SendBankToPsg           ; Sent all the sounds to the YM
     jmp read_command
 
+IrqTasksHighSpeed
 SoundUpdateHighSpeed
 .(
 +read_command
