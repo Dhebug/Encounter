@@ -69,7 +69,6 @@ extern char* gDescription;
 extern unsigned char gSceneImage;
 extern item gItems[e_ITEM_COUNT_];
 
-extern const char* gDirectionsArray[];
 extern keyword gWordsArray[];
 
 extern action_mapping gActionMappingsArray[];
