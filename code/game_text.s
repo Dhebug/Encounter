@@ -5059,9 +5059,9 @@ _UseAcid
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ACID)
 
     SET_ITEM_LOCATION(e_ITEM_HoleInDoor,e_LOC_PANIC_ROOM_DOOR)            ; There is now a hole in the door
-    SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_NONE)                             ; The clay has vanished
-    SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE)                             ; The acid is gone as well
-    SET_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_NONE)                   ; We don't need the protection suit
+    SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_GONE_FOREVER)                     ; The clay has vanished
+    SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_GONE_FOREVER)                     ; The acid is gone as well
+    SET_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_GONE_FOREVER)           ; We don't need the protection suit
     UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)            ; 
 
     END_AND_REFRESH
