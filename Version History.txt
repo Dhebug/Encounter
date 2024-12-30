@@ -279,6 +279,7 @@
 1.0.2
 - Misc: Did some internal code cleaning, should not impact the player experience
 - Fix: The acid should not reappear anymore
+- Fix: The message about fishing should be more coherent with what the player can do
 - Improvement: Did some touch ups to the Austin mini doors graphics
 - Improvement: Added a small gate to the rear of the house to make the way more obvious
 - Improvement: The sleeper can now be heard sleeping

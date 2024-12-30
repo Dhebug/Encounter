@@ -5458,9 +5458,9 @@ _ErrorNoFishing
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Vous pourriez pêcher...")
+    INFO_MESSAGE("Je déteste pêcher...")
 #else    
-    INFO_MESSAGE("You could try fishing...")
+    INFO_MESSAGE("I hate fishing...")
 #endif    
     END_AND_REFRESH
 .)
