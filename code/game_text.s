@@ -1847,8 +1847,9 @@ _gDescriptionTinyToilet
 
 // MARK: Master Bedroom
 _gDescriptionMasterBedRoom
+.(
     ; Is there a thug in the master bedroom
-    JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOC_MASTERBEDROOM))
+    //JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOC_MASTERBEDROOM))
 
     ; Draw the shoes at the bottom of the bed
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
@@ -1879,8 +1880,19 @@ thug_alive
     _BUBBLE_LINE(5,16,0,"notably easier...")
 #endif    
     ; Should probably have a "game over" command
+
+.(
+loop_snore
+    PLAY_SOUND(_Snore)
+    WAIT_RANDOM(200,25)
+    WAIT_RANDOM(200,25)
+    JUMP(loop_snore)
+.)
+
     END
-    
+.)
+
+    /*
 end_thug    
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1890,6 +1902,7 @@ end_thug
     ; Should probably have a "game over" command
     FADE_BUFFER
     END
+    */
 
 
 _SubCollateralDamage

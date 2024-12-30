@@ -153,27 +153,66 @@
 
 // Audio commands
 #define SOUND_NOT_PLAYING        255
+#define SOUND_FLAG_END           128    // Can be added to a register value to mark the command as finished
+#define SOUND_FLAG_END_FRAME     64     // Can be added to a register value to mark the command as the last one for that frame
 
-#define SOUND_COMMAND_END        0      // End of the sound
+#define SOUND_COMMAND_END        0      // End of the sound - DO NOT USE DIRECTLY, USE THE FLAG "SOUND_FLAG_END" on the command opcode instead
 #define SOUND_COMMAND_END_FRAME  1      // End of command list for this frame
 #define SOUND_COMMAND_SET_BANK   2      // Change a complete set of sounds: <14 values copied to registers 0 to 13>
 #define SOUND_COMMAND_SET_VALUE  3      // Set a register value: <register index> <value to set>
 #define SOUND_COMMAND_ADD_VALUE  4      // Add to a register:    <register index> <value to add>
 #define SOUND_COMMAND_REPEAT     5      // Defines the start of a block that will repeat "n" times: <repeat count>
 #define SOUND_COMMAND_ENDREPEAT  6      // Defines the end of a repeating block
+#define SOUND_COMMAND_SET_VALUE2 7      // Set a 16 bit register value: <register index> <value to set>
+#define SOUND_COMMAND_WAIT       8      // Wait a number of frames
 
+#define SOUND_WAIT(delay)                 .byt SOUND_COMMAND_WAIT,delay
+#define SOUND_REPEAT(count)               .byt SOUND_COMMAND_REPEAT,count
+#define SOUND_ENDREPEAT()                 .byt SOUND_COMMAND_ENDREPEAT
 
+#define SOUND_ADD_VALUE(register,value)   .byt SOUND_COMMAND_ADD_VALUE,register,value
+#define SOUND_SET_VALUE(register,value)   .byt SOUND_COMMAND_SET_VALUE,register,value
+#define SOUND_SET_VALUE2(register,value)  .byt SOUND_COMMAND_SET_VALUE2,register,<value,>value
+#define SOUND_SET_NOISE(freq)             .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,freq
+#define SOUND_SET_TONE_A(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_A_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,volume 
+#define SOUND_SET_TONE_B(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_B_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE,REG_B_VOLUME,volume 
+#define SOUND_SET_TONE_C(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_C_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE,REG_C_VOLUME,volume 
+
+#define SOUND_SET_VALUE_END(register,value)   .byt SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END,register,value
+#define SOUND_SET_VALUE2_END(register,value)  .byt SOUND_COMMAND_SET_VALUE2|SOUND_FLAG_END,register,<value,>value
+#define SOUND_SET_NOISE_END(freq)             .byt SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END,REG_NOISE_FREQ,freq
+#define SOUND_SET_TONE_A_END(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_A_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END,REG_A_VOLUME,volume 
+#define SOUND_SET_TONE_B_END(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_B_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END,REG_B_VOLUME,volume 
+#define SOUND_SET_TONE_C_END(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_C_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END,REG_C_VOLUME,volume 
+
+#define SOUND_ADD_VALUE_ENDFRAME(register,value)   .byt SOUND_COMMAND_ADD_VALUE|SOUND_FLAG_END_FRAME,register,value
+#define SOUND_SET_VALUE_ENDFRAME(register,value)   .byt SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END_FRAME,register,value
+#define SOUND_SET_VALUE2_ENDFRAME(register,value)  .byt SOUND_COMMAND_SET_VALUE2|SOUND_FLAG_END_FRAME,register,<value,>value
+#define SOUND_SET_NOISE_ENDFRAME(freq)             .byt SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END_FRAME,REG_NOISE_FREQ,freq
+#define SOUND_SET_TONE_A_ENDFRAME(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_A_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END_FRAME,REG_A_VOLUME,volume 
+#define SOUND_SET_TONE_B_ENDFRAME(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_B_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END_FRAME,REG_B_VOLUME,volume 
+#define SOUND_SET_TONE_C_ENDFRAME(freq,volume)      .byt SOUND_COMMAND_SET_VALUE2,REG_C_FREQ,<freq,>freq,SOUND_COMMAND_SET_VALUE|SOUND_FLAG_END_FRAME,REG_C_VOLUME,volume 
+
+#define REG_A_FREQ  	  0     ; Chanel A Frequency
 #define REG_A_FREQ_LOW	  0     ; Chanel A Frequency (lower 8 bits)
 #define REG_A_FREQ_HI	  1     ; Chanel A Frequency (higher 4 bits)
+
+#define REG_B_FREQ        2     ; Chanel B Frequency
 #define REG_B_FREQ_LOW	  2     ; Chanel B Frequency (lower 8 bits)
 #define REG_B_FREQ_HI	  3     ; Chanel B Frequency (higher 4 bits)
+
+#define REG_C_FREQ	      4     ; Chanel C Frequency
 #define REG_C_FREQ_LOW	  4     ; Chanel C Frequency (lower 8 bits)
 #define REG_C_FREQ_HI	  5     ; Chanel C Frequency (higher 4 bits)
+
 #define REG_NOISE_FREQ	  6     ; Chanel sound generator (0-31)
 #define REG_MIXER		  7     ; Mixer/Selector -> Everything is disabled by default
+
 #define REG_A_VOLUME	  8     ; Volume A
 #define REG_B_VOLUME      9     ; Volume B
 #define REG_C_VOLUME	 10     ; Volume C
+
+#define REG_ENV          11     ; Wave period
 #define REG_ENV_LOW      11     ; Wave period
 #define REG_ENV_HI       12     ; Wave period
 #define REG_ENV_SHAPE    13     ; Wave form

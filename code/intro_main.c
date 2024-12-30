@@ -634,7 +634,7 @@ void PrintYMRegisters()
     char i;
     char* address;
     unsigned char mixer=Psgmixer;
-    SetLineAddress((char*)0xbb80+40*4+2);
+    SetLineAddress((char*)0xbb80+40*8+2);
     address=gPrintAddress+10;
     sprintf(address+40*0,"%d   ", PsgfreqA);
     sprintf(address+40*1,"%d   ", PsgfreqB);
@@ -662,33 +662,45 @@ void PrintYMRegisters()
 
 void SoundBoard()
 {
+    char* address;
+
+    gSoundEnabled = 1;
+    gMusicEnabled = 1;
+
     Text(16+3,0);
     SetLineAddress((char*)0xbb80+40*0+2);
 
-    PrintString("1/2=Select music 0=Stop music");
-    PrintString("P=PING Z=ZAP X=Explode S=Shoot");
-    PrintString("K/L=Key click SPACE/Other=Type writer");
+    gPrintWidth=38;
+    gPrintTerminator=0;
 
-    SetLineAddress((char*)0xbb80+40*4+2);
-    PrintString("Freq A");
-    PrintString("Freq B");
-    PrintString("Freq C");
-    PrintString("Noise");
-    PrintString("Mixer");
-    PrintString("Vol A");
-    PrintString("Vol B");
-    PrintString("Vol C");
-    PrintString("Freq Env");
-    PrintString("Shap Env");
+    PrintString("1/2=Select music 0=Stop music ");
+    PrintString("P=PING Z=ZAP X=Explode S=Shoot ");
+    PrintString("K/L=Key click SPACE/Other=Typer R=Scroll D=Drip V=Vroom B=Beep C=Chirp O=dOor");
+
+    address=(char*)0xbb80+40*8+2;
+    PrintStringAt("Freq A",address+40*0);
+    PrintStringAt("Freq B",address+40*1);
+    PrintStringAt("Freq C",address+40*2);
+    PrintStringAt("Noise",address+40*3);
+    PrintStringAt("Mixer",address+40*4);
+    PrintStringAt("Vol A",address+40*5);
+    PrintStringAt("Vol B",address+40*6);
+    PrintStringAt("Vol C",address+40*7);
+    PrintStringAt("Freq Env",address+40*8);
+    PrintStringAt("Shap Env",address+40*9);
 
     while (1)
     {
+        char shift=0;
         char car;
 
         VSync();
         PrintYMRegisters();
 
         car = ReadKeyNoBounce();
+
+        shift = (KeyBank[4]|KeyBank[7])&16;  // Left/Right shift
+
         switch (car)
         {
         case 0:
@@ -711,7 +723,12 @@ void SoundBoard()
 
         case 'Z':
         case 'z':
-            PlaySound(ZapData);
+            PlaySound(shift?ZapData:ErrorPlop);
+            break;
+
+        case 'D':
+        case 'd':
+            PlaySound(shift?WaterDrip:FlickeringLight);
             break;
 
         case 'K':
@@ -726,27 +743,67 @@ void SoundBoard()
 
         case 'X':
         case 'x':
-            PlaySound(ExplodeData);
+            PlaySound(shift?ExplodeData:ShootData);
             break;
 
         case 'S':
         case 's':
-            PlaySound(ShootData);
+            PlaySound(shift?Acid:FuseBurningStart);
             break;
 
         case 'P':
         case 'p':
-            PlaySound(PingData);
+            PlaySound(shift?PingData:Pling);
             break;
 
         case 32:
         case 13:
-            PlaySound(SpaceBarData);
+            PlaySound(shift?SpaceBarData:TypeWriterData); 
+            break;
+
+        case 'R':
+        case 'r':
+            PlaySound(shift?Snore:ScrollPageData);
+            break;
+
+        case 'V':
+        case 'v':
+            PlaySound(shift?VroomVroom:EngineRunning);
+            break;
+
+        case 'W':
+        case 'w':
+            PlaySound(shift?Swoosh:Swoosh);
+            break;
+
+        case 'A':
+        case 'a':
+            PlaySound(AlarmLedBeeping);
+            break;
+
+        case 'B':
+        case 'b':
+            PlaySound(shift?WatchBeepData:WatchButtonPress);
+            break;
+
+        case 'C':
+        case 'c':
+            PlaySound(shift?BirdChirp1:BirdChirp2);
+            break;
+
+        case 'O':
+        case 'o':
+            PlaySound(shift?DoorOpening:DoorClosing);
             break;
 
         case 't':
         case 'T':
             PlaySound(ScrollPageData);
+            break;
+
+        case 'g':
+        case 'G':
+            PlaySound(DogGrowling);
             break;
 
         default:  

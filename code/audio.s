@@ -6,7 +6,7 @@
     .zero
 
 _SoundDataPointer 	.dsb 2
-_SoundRoutineTmp    .dsb 2
+_SoundRoutineTmp    .dsb 3    ; Register ID, Value 1, Value 2
 
 _PsgVirtualRegisters
 _PsgfreqA 		.dsb 2    ;  0 1    Chanel A Frequency
@@ -44,6 +44,9 @@ _PsgPlayPosition        .byt SOUND_NOT_PLAYING
 _PsgPlayLoopCount	    .dsb 10      ; 10 levels of loops
 _PsgPlayLoopPosition    .dsb 10      ; 10 levels of loops
 _PsgPlayLoopIndex	    .byt 255     ; No loop defined
+_PsgPlayDelay           .byt 0       ; No delay
+
+previousCommand .byt SOUND_COMMAND_END
 
     .text
 
@@ -59,8 +62,12 @@ _PlaySoundAsmXY                          ; Direct assembler call using XY regist
 
     lda #0
 	sta _PsgPlayPosition                 ; 255 = Done playing
+    sta _PsgPlayDelay                    ; 0 = No delay
     lda #255
 	sta _PsgPlayLoopIndex                ; Reset the loop position
+
+    ldy #SOUND_COMMAND_END
+    sty previousCommand
 
 	cli
 end_sound    
@@ -83,6 +90,19 @@ copy_bank
     ;jsr SendBankToPsg           ; Sent all the sounds to the YM
     jmp read_command
 
+CommandSoundWait
+    ;jmp CommandSoundWait
+    lda (_SoundDataPointer),y   ; Delay
+    sta _PsgPlayDelay
+    iny
+    sty _PsgPlayPosition        ; Save the new command position and quit
+    rts
+
+CommandEndFrameFlag
+    ldy #SOUND_COMMAND_END
+    sty previousCommand
+    rts
+
 IrqTasksHighSpeed
 SoundUpdateHighSpeed
 .(
@@ -91,32 +111,52 @@ SoundUpdateHighSpeed
     cpy #SOUND_NOT_PLAYING                   ; Playing anything?
     beq end_replay
 
+    ldx _PsgPlayDelay                        ; Are we in a wait command?
+    beq no_delay
+    dec _PsgPlayDelay
+    rts
+no_delay
+
+    lda previousCommand
+    asl
+    bcs CommandEndSound                      ; SOUND_FLAG_END?
+    asl
+    bcs CommandEndFrameFlag
+
     lda (_SoundDataPointer),y                ; Read the next command
+    sta previousCommand
+    and #%00111111                           ; Flush extra flags
     iny                                      ; Increment the pointer
-    cmp #SOUND_COMMAND_END
-    beq CommandEndSound
+    ;cmp #SOUND_COMMAND_END
+    ;beq CommandEndSound
     cmp #SOUND_COMMAND_END_FRAME
     beq CommandEndFrame
     cmp #SOUND_COMMAND_SET_BANK
     beq CommandSetBank
     cmp #SOUND_COMMAND_SET_VALUE
     beq CommandSetValue
+    cmp #SOUND_COMMAND_SET_VALUE2
+    beq CommandSetValue2
     cmp #SOUND_COMMAND_ADD_VALUE
     beq CommandAddValue
     cmp #SOUND_COMMAND_REPEAT
     beq CommandLoopStart
     cmp #SOUND_COMMAND_ENDREPEAT
     beq CommandLoopEnd
+    cmp #SOUND_COMMAND_WAIT
+    beq CommandSoundWait
 
-    ; If we reach here, it means we got some corrupted data
+    ; If we reach here, it means we got some corrupted data or unsupported command like using SOUND_COMMAND_END instead of the SOUND_FLAG_END flag
     jsr _Panic
 
 CommandEndSound
+    ldy #SOUND_COMMAND_END
+    sty previousCommand
     ldy #SOUND_NOT_PLAYING      ; Finishes the sound
     sty _PsgPlayPosition        ; Save the new command position
 end_replay	
     rts
-
+    
 CommandEndFrame
     ldx _PsgPlayLoopIndex       ; 0 is the first valid loop index
     lda _PsgPlayLoopCount,x     ; We are still looping
@@ -130,56 +170,50 @@ CommandEndFrame
     adc #0
     sta _SoundDataPointer+1
 
+    ldy #SOUND_COMMAND_END
+    sty previousCommand
+
     ldy #0
 skip_pointer_update    
     sty _PsgPlayPosition        ; Save the new command position
     rts	
 
 CommandAddValue
-    lda (_SoundDataPointer),y    ; Register to change
-    iny
-    sta _SoundRoutineTmp+0
-    lda (_SoundDataPointer),y    ; Register value
-    iny
-    sta _SoundRoutineTmp+1
-    sty _PsgPlayPosition        ; Save the new command position
+    jsr SoundRead2
 
     ; Add the value to the virtual register (faster than reading the PSG internals)
     ldy _SoundRoutineTmp+0
     lda _PsgVirtualRegisters,y
     clc
     adc _SoundRoutineTmp+1
-    sta _PsgVirtualRegisters,y
-    tax
-
-    ; Update the real register
-    jsr _PsgSetRegister			 ; y=register number, x=register value
-
-    jmp read_command
+    tax  
+    jmp _PsgSetVirtualAndActualRegisterAndLoopForNextCommand     ; Update the real register ; y=register number, x=register value
         
+; Should not be used to set the enveloppe shape register
+CommandSetValue2
+    ;jmp CommandSetValue2
+    jsr SoundRead3
+
+    ; Set the value to the virtual register then update the real register
+    ldy _SoundRoutineTmp+0
+    ldx _SoundRoutineTmp+1
+    jsr _PsgSetVirtualAndActualRegister			 ; y=register number, x=register value
+    iny
+    ldx _SoundRoutineTmp+2
+    jmp _PsgSetVirtualAndActualRegisterAndLoopForNextCommand     ; Update the real register ; y=register number, x=register value
+
 CommandSetValue
-    lda (_SoundDataPointer),y    ; Register to change
-    iny
-    sta _SoundRoutineTmp+0
-    lda (_SoundDataPointer),y    ; Register value
-    iny
-    sta _SoundRoutineTmp+1
-    sty _PsgPlayPosition        ; Save the new command position
+    jsr SoundRead2
 
     ; Set the value to the virtual register
     ldy _SoundRoutineTmp+0
     lda _SoundRoutineTmp+1
-    sta _PsgVirtualRegisters,y
     cpy #13
     bne no_env_change
     sty _PsgenvReset
 no_env_change    
     tax
-
-    ; Update the real register
-    jsr _PsgSetRegister			 ; y=register number, x=register value
-
-    jmp read_command
+    jmp _PsgSetVirtualAndActualRegisterAndLoopForNextCommand     ; Update the real register ; y=register number, x=register value
 
 CommandLoopStart
     inc _PsgPlayLoopIndex
@@ -206,6 +240,37 @@ end_loop
     jmp read_command
 .)
 
+
+SoundRead3    
+    lda (_SoundDataPointer),y    ; Register to change
+    sta _SoundRoutineTmp+0
+    iny
+    lda (_SoundDataPointer),y    ; Register value
+    sta _SoundRoutineTmp+1
+    iny
+    lda (_SoundDataPointer),y    ; Register value
+    sta _SoundRoutineTmp+2
+    iny
+    sty _PsgPlayPosition        ; Save the new command position
+    rts
+
+SoundRead2  
+    lda (_SoundDataPointer),y    ; Register to change
+    sta _SoundRoutineTmp+0
+    iny
+    lda (_SoundDataPointer),y    ; Register value
+    sta _SoundRoutineTmp+1
+    iny
+    sty _PsgPlayPosition        ; Save the new command position
+    rts
+
+
+; The default "StopSound" will only work if the IRQ is running, and does not filter the music mask
+_PsgStopSoundAndForceUpdate
+    lda #0
+    sta _MusicMixerMask
+    jsr _PsgStopSound
+    ;jmp SoundUpdate50hz  -- Fall through
 ; Update the sound generator
 SoundUpdate50hz    
 .(
@@ -312,6 +377,12 @@ skip_update
 
 ; y=register number
 ; x=value to write
+_PsgSetVirtualAndActualRegisterAndLoopForNextCommand
+    jsr _PsgSetVirtualAndActualRegister			 ; y=register number, x=register value
+    jmp read_command
+
+_PsgSetVirtualAndActualRegister
+    stx _PsgVirtualRegisters,y
 _PsgSetRegister
 .(
     sty	via_porta
@@ -341,13 +412,6 @@ _PsgSetRegister
 .)
 
 
-; The default "StopSound" will only work if the IRQ is running, and does not filter the music mask
-_PsgStopSoundAndForceUpdate
-    lda #0
-    sta _MusicMixerMask
-    jsr _PsgStopSound
-    jmp SoundUpdate50hz
-
 _PsgStopSound
 .(
     lda #0
@@ -361,283 +425,303 @@ _PsgStopSound
 
 ; A FREQ (LOW|HIGH), B FREQ (LOW|HIGH), C FREQ (LOW|HIGH), N FREQ, CONTROL, A VOL, B VOL, C VOL, ENV (LOW|HIGH)
 ;                                           0   1   2   3   4   5   6   7   8   9   10  11  12  13
-_ExplodeData    .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$1F,$07,$10,$10,$10,$00,$18,$00,SOUND_COMMAND_END
-_ShootData      .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$12,$07,$10,$10,$10,$00,$08,$00,SOUND_COMMAND_END
-_PingData       .byt SOUND_COMMAND_SET_BANK,$18,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$00,$0F,$00,SOUND_COMMAND_END
-_KeyClickHData  .byt SOUND_COMMAND_SET_BANK,$3F,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00,SOUND_COMMAND_END
-_KeyClickLData  .byt SOUND_COMMAND_SET_BANK,$4F,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00,SOUND_COMMAND_END
+_ExplodeData    .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$00,$00,$00,$00,$00,$00,$1F,$07,$10,$10,$10,$00,$18,$00
+_ShootData      .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$00,$00,$00,$00,$00,$00,$12,$07,$10,$10,$10,$00,$08,$00
+_PingData       .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$18,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$00,$0F,$00
+_KeyClickHData  .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$3F,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+_KeyClickLData  .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$4F,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
 
-_ZapData        .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$00,$3E,$0F,$00,$00,$00,$00,$00,SOUND_COMMAND_END_FRAME
-                .byt SOUND_COMMAND_REPEAT,40
-                .byt SOUND_COMMAND_ADD_VALUE,0,2,SOUND_COMMAND_END_FRAME
-                .byt SOUND_COMMAND_ENDREPEAT			
-                .byt SOUND_COMMAND_SET_VALUE,8,0,SOUND_COMMAND_END       ; Finally set the volume to 0
-                .byt SOUND_COMMAND_END
+_ZapData        
+    .byt SOUND_COMMAND_SET_BANK,$00,$00,$00,$00,$00,$00,$00,$3E,$0F,$00,$00,$00,$00,$00,SOUND_COMMAND_END_FRAME
+    SOUND_REPEAT(40)
+        SOUND_ADD_VALUE_ENDFRAME(0,2)
+    SOUND_ENDREPEAT()
+    SOUND_SET_VALUE_END(8,0)                    ; Finally set the volume to 0
+
 
 _WatchButtonPress 
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,64             ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,8                ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,25,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait half a second
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,6                           ; Lower the volume
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,64)
+    SOUND_SET_VALUE(REG_A_VOLUME,8)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+    SOUND_WAIT(25)                                 ; Wait half a second
+    SOUND_SET_VALUE_ENDFRAME(8,6)                  ; Lower the volume
+    SOUND_SET_VALUE_END(8,0)                       ; Cut the volume
+
 
 _WatchBeepData
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,128            ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,13               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait a second
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,128)
+    SOUND_SET_VALUE(REG_A_VOLUME,13)               ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+    SOUND_WAIT(50)                                 ; Wait a second
+    SOUND_SET_VALUE_END(8,0)                       ; Cut the volume
+
 
 _AlarmLedBeeping
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,128            ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0               ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,1                ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait a second
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,128)               ; Channel Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,1)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+    SOUND_WAIT(50)                                 ; Wait a second
+    SOUND_SET_VALUE_END(8,0)                       ; Cut the volume
+
 
 ; For some reasons, a flickering light bulb and a drip of water sound close enough
 _WaterDrip
 _FlickeringLight
-    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,5              ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,10               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111           ; Enable NOISE on channel A
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,8                           ; Lower the volume
-    .byt SOUND_COMMAND_END_FRAME
-    .byt SOUND_COMMAND_SET_VALUE,8,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE(REG_NOISE_FREQ,5)              ; Noise Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,10)               ; Channel A volume
+    SOUND_SET_VALUE_ENDFRAME(REG_MIXER,%11110111)  ; Enable NOISE on channel A
+    SOUND_SET_VALUE_ENDFRAME(8,8)                  ; Lower the volume
+    SOUND_SET_VALUE_END(8,0)                       ; Cut the volume
+
 
 _BirdChirp1
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,48            ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0              ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,5               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,10
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,255-1,SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,48)                ; Channel Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,5)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+	SOUND_REPEAT(10)
+		SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ_LOW,255-1)
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                ; Cut the volume
+
 
 _BirdChirp2
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,32            ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0              ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,5               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110           ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,10
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,255-1,SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,32)                ; Channel Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,5)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+	SOUND_REPEAT(10)
+		SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ_LOW,255-1)
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                ; Cut the volume
+
 
 _FuseBurningStart
-    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,10            ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111          ; Enable Noise on channel A
-	.byt SOUND_COMMAND_REPEAT,15
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_REPEAT,10,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-	.byt SOUND_COMMAND_ENDREPEAT	
+    SOUND_SET_VALUE(REG_NOISE_FREQ,10)             ; Noise Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,0)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11110111)           ; Enable Noise on channel A
+	SOUND_REPEAT(15)
+		SOUND_ADD_VALUE(REG_A_VOLUME,1)
+        SOUND_WAIT(10)
+	SOUND_ENDREPEAT()
 _FuseBurning    
-    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,10            ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,15              ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111          ; Enable Noise on channel A
-	.byt SOUND_COMMAND_REPEAT,255
-	.byt SOUND_COMMAND_REPEAT,2
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,256-1
-		.byt SOUND_COMMAND_REPEAT,10,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-	.byt SOUND_COMMAND_ENDREPEAT	
-	.byt SOUND_COMMAND_REPEAT,2
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_REPEAT,15,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-	.byt SOUND_COMMAND_ENDREPEAT	
-	.byt SOUND_COMMAND_ENDREPEAT	
+    SOUND_SET_VALUE(REG_NOISE_FREQ,10)             ; Noise Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,15)               ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11110111)           ; Enable Noise on channel A
+	SOUND_REPEAT(255)
+        SOUND_REPEAT(2)
+            SOUND_ADD_VALUE(REG_A_VOLUME,256-1)
+            SOUND_WAIT(10)
+        SOUND_ENDREPEAT()
+        SOUND_REPEAT(2)
+            SOUND_ADD_VALUE(REG_A_VOLUME,1)
+            SOUND_WAIT(15)
+        SOUND_ENDREPEAT()
+	SOUND_ENDREPEAT()
 
 _Acid
-    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,31            ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111          ; Enable Noise on channel A
-	.byt SOUND_COMMAND_REPEAT,15
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,255-1
-		.byt SOUND_COMMAND_REPEAT,10,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-	.byt SOUND_COMMAND_ENDREPEAT			
+    SOUND_SET_VALUE(REG_NOISE_FREQ,31)             ; Noise Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,0)                ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11110111)           ; Enable Noise on channel A
+	SOUND_REPEAT(15)
+		SOUND_ADD_VALUE(REG_A_VOLUME,1)
+		SOUND_ADD_VALUE(REG_NOISE_FREQ,255-1)
+        SOUND_WAIT(10)
+	SOUND_ENDREPEAT()
+    SOUND_WAIT(250)
+    SOUND_WAIT(250)
+	SOUND_REPEAT(15)
+		SOUND_ADD_VALUE_ENDFRAME(REG_A_VOLUME,255-1)
+        SOUND_WAIT(50)
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
-	.byt SOUND_COMMAND_REPEAT,250
-		.byt SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
-
-	.byt SOUND_COMMAND_REPEAT,250,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-
-	.byt SOUND_COMMAND_REPEAT,15
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,255-1,SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_REPEAT,50,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-	.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
 
 _Zipper
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,0          ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,1           ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,16           ; Channel A volume -> Enveloppe
-    .byt SOUND_COMMAND_SET_VALUE,REG_ENV_LOW,64            ; Enveloppe Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_ENV_HI,0              ; Enveloppe Frequency
-	.byt SOUND_COMMAND_SET_VALUE,REG_ENV_SHAPE,%1100       ; Enveloppe Shape ///   = 1100
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110       ; Enable Tone on channel A
-	.byt SOUND_COMMAND_REPEAT,64
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,256-4,SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_REPEAT,32
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,4,SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE2(REG_A_FREQ,256)
+    SOUND_SET_VALUE(REG_A_VOLUME,16)           ; Channel A volume -> Enveloppe
+
+    SOUND_SET_VALUE2(REG_ENV,64)
+	SOUND_SET_VALUE(REG_ENV_SHAPE,%1100)       ; Enveloppe Shape ///   = 1100
+    SOUND_SET_VALUE(REG_MIXER,%11111110)       ; Enable Tone on channel A
+	SOUND_REPEAT(64)
+		SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ_LOW,256-4)
+	SOUND_ENDREPEAT()
+	SOUND_REPEAT(32)
+		SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ_LOW,4)
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
 
 _UseKeyOnAlarmPanel ; Temporary
 _ZipDownTheRope   ; Temporary
 _Swoosh
-    .byt SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,0             ; Noise Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0               ; Channel A volume
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110111          ; Enable Noise on channel A
-	.byt SOUND_COMMAND_REPEAT,15
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,1
+    SOUND_SET_VALUE(REG_NOISE_FREQ,0)             ; Noise Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,0)               ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11110111)          ; Enable Noise on channel A
+	SOUND_REPEAT(15)
+		SOUND_ADD_VALUE(REG_A_VOLUME,1)
+		SOUND_ADD_VALUE_ENDFRAME(REG_NOISE_FREQ,1)
 		.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT	
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt SOUND_COMMAND_END
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
 
 _Pling
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,44         ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,0           ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,15           ; Channel A volume
+    SOUND_SET_VALUE2(REG_A_FREQ,44)                 ; Channel A Frequency
+    SOUND_SET_VALUE(REG_A_VOLUME,15)                ; Channel A volume
 
-    .byt SOUND_COMMAND_SET_VALUE,REG_B_FREQ_LOW,33        ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_B_FREQ_HI,0           ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_B_VOLUME,15           ; Channel B volume
+    SOUND_SET_VALUE2(REG_B_FREQ,33)                 ; Channel B Frequency
+    SOUND_SET_VALUE(REG_B_VOLUME,15)                ; Channel B volume
 
-    .byt SOUND_COMMAND_SET_VALUE,REG_C_FREQ_LOW,50        ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_C_FREQ_HI,0           ; Channel Frequency
-    .byt SOUND_COMMAND_SET_VALUE,REG_C_VOLUME,15           ; Channel B volume
+    SOUND_SET_VALUE2(REG_C_FREQ,50)                 ; Channel C Frequency
+    SOUND_SET_VALUE(REG_C_VOLUME,15)                ; Channel C volume
 
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%1111000       ; Enable Noise + Tone on channel A
+    SOUND_SET_VALUE(REG_MIXER,%1111000)             ; Enable Noise + Tone on channel A
 
-	.byt SOUND_COMMAND_REPEAT,8
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,256-1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_B_VOLUME,256-1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_C_VOLUME,256-2
-		.byt SOUND_COMMAND_REPEAT,16
-			.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_ENDREPEAT	
-	.byt SOUND_COMMAND_ENDREPEAT	
+	SOUND_REPEAT(8)
+		SOUND_ADD_VALUE(REG_A_VOLUME,256-1)
+		SOUND_ADD_VALUE(REG_B_VOLUME,256-1)
+		SOUND_ADD_VALUE(REG_C_VOLUME,256-2)
+        SOUND_WAIT(16)
+	SOUND_ENDREPEAT()
 
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt SOUND_COMMAND_SET_VALUE,REG_B_VOLUME,0                           ; Cut the volume
-	.byt SOUND_COMMAND_SET_VALUE,REG_C_VOLUME,0                           ; Cut the volume
-	.byt SOUND_COMMAND_END
+	SOUND_SET_VALUE(REG_A_VOLUME,0)                 ; Cut the volume
+	SOUND_SET_VALUE(REG_B_VOLUME,0)                 ; Cut the volume
+	SOUND_SET_VALUE_END(REG_C_VOLUME,0)             ; Cut the volume
 
-
-#define TONE(freq,volume)    SOUND_COMMAND_SET_VALUE,REG_A_FREQ_LOW,<freq,SOUND_COMMAND_SET_VALUE,REG_A_FREQ_HI,>freq,SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,volume 
-#define NOISE(freq)          SOUND_COMMAND_SET_VALUE,REG_NOISE_FREQ,freq
 
 _DoorOpening
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
-	.byt TONE($194,0)
-	.byt NOISE(31)
-	.byt SOUND_COMMAND_REPEAT,15
-		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,256-2
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_LOW,256-1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_REPEAT,3
-			.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_ENDREPEAT			
+    SOUND_SET_VALUE(REG_MIXER,%11110110)            ; Enable Tone and Noise on channel A
+	SOUND_SET_TONE_A($194,0)
+	SOUND_SET_NOISE(31)
+	SOUND_REPEAT(15)
+		SOUND_ADD_VALUE(REG_NOISE_FREQ,256-2)
+		SOUND_ADD_VALUE(REG_A_FREQ_LOW,256-1)
+		SOUND_ADD_VALUE(REG_A_VOLUME,1)
+        SOUND_WAIT(3)
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
 
 _AlarmSwitchPressed
 _DoorClosing
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
-	.byt TONE($194,$F)
-	.byt NOISE($1A)
-	.byt SOUND_COMMAND_END_FRAME
-	.byt TONE($21a,$e)
-	.byt NOISE($18)
-	.byt SOUND_COMMAND_END_FRAME
+    SOUND_SET_VALUE(REG_MIXER,%11110110)          ; Enable Tone and Noise on channel A
+	SOUND_SET_TONE_A($194,$F)
+	SOUND_SET_NOISE_ENDFRAME($1A)
+	SOUND_SET_TONE_A($21a,$e)
+	SOUND_SET_NOISE_ENDFRAME($18)
 
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone only channel A
-	.byt TONE($30c,$c)
+    SOUND_SET_VALUE(REG_MIXER,%11110110)          ; Enable Tone only channel A
+	SOUND_SET_TONE_A($30c,$c)
 	.byt SOUND_COMMAND_END_FRAME
-	.byt TONE($3c6,$b)
+	SOUND_SET_TONE_A($3c6,$b)
 	.byt SOUND_COMMAND_END_FRAME
-	.byt TONE($440,$a)
+	SOUND_SET_TONE_A($440,$a)
 	.byt SOUND_COMMAND_END_FRAME
-	.byt TONE($535,$9)
+	SOUND_SET_TONE_A($535,$9)
 	.byt SOUND_COMMAND_END_FRAME
 
 	.byt SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-    .byt SOUND_COMMAND_END
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
 
 _EngineRunning
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt TONE(1435,8)
-	.byt NOISE(21)
-    .byt SOUND_COMMAND_END
+    SOUND_SET_VALUE(REG_MIXER,%11110110)          ; Enable Tone and Noise on channel A
+	SOUND_SET_VALUE(REG_A_VOLUME,0)                           ; Cut the volume
+	SOUND_SET_TONE_A(1435,8)
+	SOUND_SET_NOISE_END(21)
+
 
 _VroomVroom
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11110110          ; Enable Tone and Noise on channel A
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt TONE($F9B,$4)
-	.byt NOISE($1F)
-	.byt SOUND_COMMAND_REPEAT,10
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_FREQ_HI,256-1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_NOISE_FREQ,256-1
-		.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1
-		.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_END_FRAME
-		.byt SOUND_COMMAND_END_FRAME
-	.byt SOUND_COMMAND_ENDREPEAT			
+    SOUND_SET_VALUE(REG_MIXER,%11110110)          ; Enable Tone and Noise on channel A
+	SOUND_SET_VALUE(REG_A_VOLUME,0)                           ; Cut the volume
+	SOUND_SET_TONE_A($F9B,$4)
+	SOUND_SET_NOISE($1F)
+	SOUND_REPEAT(10)
+		SOUND_ADD_VALUE(REG_A_FREQ_HI,256-1)
+		SOUND_ADD_VALUE(REG_NOISE_FREQ,256-1)
+		SOUND_ADD_VALUE(REG_A_VOLUME,1)
+        SOUND_WAIT(5)
+	SOUND_ENDREPEAT()
+	SOUND_SET_TONE_A(1435,8)
+	SOUND_SET_NOISE_END(21)
 
-	;.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt TONE(1435,8)
-	.byt NOISE(21)
 
-    .byt SOUND_COMMAND_END
+
+_Snore
+    SOUND_SET_VALUE(REG_MIXER,%11110111)            ; Enable Noise on channel A
+	SOUND_SET_VALUE(REG_A_VOLUME,0)                 ; Cut the volume
+	SOUND_SET_NOISE($1F)
+
+    SOUND_REPEAT(5)
+        SOUND_ADD_VALUE(REG_A_VOLUME,1)
+        SOUND_WAIT(45)
+    SOUND_ENDREPEAT()
+
+    SOUND_WAIT(50)
+
+    SOUND_REPEAT(5)
+        SOUND_ADD_VALUE(REG_A_VOLUME,256-1)
+        SOUND_WAIT(30)
+    SOUND_ENDREPEAT()
+
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                 ; Cut the volume
+
 
 _ErrorPlop
-    .byt SOUND_COMMAND_SET_VALUE,REG_MIXER,%11111110          ; Enable Tone  on channel A
-	.byt SOUND_COMMAND_REPEAT,2
-		.byt TONE(1300,8)
-		.byt SOUND_COMMAND_REPEAT,3
-			.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,1,SOUND_COMMAND_END_FRAME
-			.byt SOUND_COMMAND_REPEAT,1,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-		.byt SOUND_COMMAND_ENDREPEAT			
-		.byt SOUND_COMMAND_REPEAT,8+3
-			.byt SOUND_COMMAND_ADD_VALUE,REG_A_VOLUME,256-1,SOUND_COMMAND_END_FRAME
-			.byt SOUND_COMMAND_REPEAT,2,SOUND_COMMAND_END_FRAME,SOUND_COMMAND_ENDREPEAT		  ; Wait one second
-		.byt SOUND_COMMAND_ENDREPEAT			
-	.byt SOUND_COMMAND_ENDREPEAT			
+    SOUND_SET_VALUE(REG_MIXER,%11111110)          ; Enable Tone  on channel A
+	SOUND_REPEAT(2)
+		SOUND_SET_TONE_A(1300,8)
+		SOUND_REPEAT(3)
+			SOUND_ADD_VALUE(REG_A_VOLUME,1)
+            SOUND_WAIT(2)
+		SOUND_ENDREPEAT()
+		SOUND_REPEAT(8+3)
+			SOUND_ADD_VALUE(REG_A_VOLUME,256-1)
+            SOUND_WAIT(2)
+		SOUND_ENDREPEAT()
+	SOUND_ENDREPEAT()
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
-	.byt SOUND_COMMAND_SET_VALUE,REG_A_VOLUME,0                           ; Cut the volume
-	.byt SOUND_COMMAND_END
+
+
+#if 0 // Work in progress - not happy
+_DogGrowling
+    SOUND_SET_VALUE(REG_MIXER,%11110110)            ; Enable Noise on channel A
+
+    SOUND_REPEAT(250)
+
+        SOUND_SET_VALUE2(REG_A_FREQ,2048)
+    	SOUND_SET_NOISE(25)
+    	SOUND_SET_VALUE(REG_A_VOLUME,2)                 ; Set the initial volume
+
+        //SOUND_REPEAT(250)
+
+        SOUND_REPEAT(8)
+            SOUND_REPEAT(15)
+                SOUND_ADD_VALUE(REG_NOISE_FREQ,3)
+                SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ,4)
+            SOUND_ENDREPEAT()
+            SOUND_ADD_VALUE(REG_A_VOLUME,1)
+        SOUND_ENDREPEAT()
+
+        SOUND_REPEAT(8)
+            SOUND_REPEAT(15)
+                SOUND_ADD_VALUE(REG_NOISE_FREQ,3)
+                SOUND_ADD_VALUE_ENDFRAME(REG_A_FREQ,256-4)
+            SOUND_ENDREPEAT()
+            SOUND_ADD_VALUE(REG_A_VOLUME,256-1)
+        SOUND_ENDREPEAT()
+
+
+    	//SOUND_SET_VALUE(REG_A_VOLUME,0)                 ; Set the initial volume
+
+        //SOUND_WAIT(250)
+
+    SOUND_ENDREPEAT()
+
+	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                 ; Cut the volume
+#endif
+
+
 
 

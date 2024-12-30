@@ -103,6 +103,8 @@ extern char TypeWriterData[];
 extern char SpaceBarData[];
 extern char ScrollPageData[];
 extern char WatchBeepData[];
+extern char VroomVroom[];
+extern char EngineRunning[];
 extern char WatchButtonPress[];
 extern char WaterDrip[];
 extern char FlickeringLight[];
@@ -112,6 +114,13 @@ extern char Acid[];
 extern char FuseBurningStart[];
 extern char FuseBurning[];
 extern char ErrorPlop[];
+extern char Pling[];
+extern char AlarmLedBeeping[];
+extern char DoorOpening[];
+extern char DoorClosing[];
+extern char Swoosh[];
+extern char Snore[];
+//extern char DogGrowling[];    // Work in progress - not happy
 
 extern unsigned int PsgfreqA;
 extern unsigned int PsgfreqB;
