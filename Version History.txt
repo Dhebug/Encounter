@@ -280,4 +280,4 @@
 - Misc: Did some internal code cleaning, should not impact the player experience
 - Improvement: Did some touch ups to the Austin mini doors graphics
 - Improvement: Added a small gate to the rear of the house to make the way more obvious
-- Improvement: Added the possibility to use EAST to go down the basement in addition to Down
+
