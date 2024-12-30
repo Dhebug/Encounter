@@ -3329,6 +3329,13 @@ kitchen
         INFO_MESSAGE("I can see the patio outside")
 #endif    
 up_stairs
+
+    // Generic alarm sticker message
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Et aussi un signe d'avertissement")
+#else
+    INFO_MESSAGE("And lastly, a warning sticker")
+#endif    
     END_AND_REFRESH
 .)
 
