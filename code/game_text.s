@@ -3952,6 +3952,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
     VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
+    VALUE_MAPPING(e_ITEM_Car                , _OpenCar)
     VALUE_MAPPING(e_ITEM_CarBoot            , _OpenCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _OpenCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _OpenCarPetrolTank)
@@ -4457,6 +4458,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
+_OpenCar
 _SearchCar
 _InspectCar
 _UseCar
