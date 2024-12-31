@@ -282,6 +282,7 @@
 - Fix: The message about fishing should be more coherent with what the player can do
 - Improvement: Did some touch ups to the Austin mini doors graphics
 - Improvement: Added a small gate to the rear of the house to make the way more obvious
+- Improvement: Added a bit of the well and zen garden to the wood scene
 - Improvement: The sleeper can now be heard sleeping
 - Improvement: Inspecting the window now mentions the warning label
 - Improvement: Searching the car, bag, trash can and bin now inspects them
