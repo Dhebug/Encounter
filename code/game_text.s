@@ -3274,6 +3274,14 @@ _SubInspectAttachment
 
 _InspectNormalWindow
 .(
+    // Generic alarm sticker message
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il y à un signe d'avertissement")
+#else
+    INFO_MESSAGE("There is a warning sticker")
+#endif    
+
+    // Then what we see through the window
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TENNISCOURT),tennis_court)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir un salon confortable")
@@ -3329,13 +3337,6 @@ kitchen
         INFO_MESSAGE("I can see the patio outside")
 #endif    
 up_stairs
-
-    // Generic alarm sticker message
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Et aussi un signe d'avertissement")
-#else
-    INFO_MESSAGE("And lastly, a warning sticker")
-#endif    
     END_AND_REFRESH
 .)
 
