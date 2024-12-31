@@ -284,3 +284,4 @@
 - Improvement: Added a small gate to the rear of the house to make the way more obvious
 - Improvement: The sleeper can now be heard sleeping
 - Improvement: Inspecting the window now mentions the warning label
+- Improvement: Searching the car, bag, trash can and bin now inspects them

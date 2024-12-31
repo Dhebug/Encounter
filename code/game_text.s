@@ -3373,6 +3373,7 @@ _InspectAlarmIndicator
 .)
 
 
+_SearchCardboardBox
 _InspectCardboardBox
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Format postal standard")
@@ -3381,6 +3382,7 @@ _InspectCardboardBox
 #endif    
     JUMP(_InspectContainerGeneric)
 
+_SearchTin
 _InspectTin
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une boite en métal ")
@@ -3389,6 +3391,8 @@ _InspectTin
 #endif    
     JUMP(_InspectContainerGeneric)
 
+
+_SearchPlasticBag
 _InspectPlasticBag
 .(
     INCREASE_SCORE(POINTS_INSPECT_PLASTIC_BAG)
@@ -3482,6 +3486,7 @@ _InspectRoadSign
 .)
 
 
+_SearchTrashCan
 _InspectTrashCan
 .(
 #ifdef LANGUAGE_FR
@@ -4451,6 +4456,8 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _UseChemistryBook)
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
+
+_SearchCar
 _InspectCar
 _UseCar
 .(
@@ -5141,6 +5148,11 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _SearchMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _SearchGunCabinet)
     VALUE_MAPPING(e_ITEM_HeavySafe          , _SearchSafe)
+    VALUE_MAPPING(e_ITEM_Car                , _SearchCar)
+    VALUE_MAPPING(e_ITEM_PlasticBag         , _SearchPlasticBag)
+    VALUE_MAPPING(e_ITEM_Trashcan           , _SearchTrashCan)
+    VALUE_MAPPING(e_ITEM_CardboardBox       , _SearchCardboardBox)
+    VALUE_MAPPING(e_ITEM_TobaccoTin         , _SearchTin)
     VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 
