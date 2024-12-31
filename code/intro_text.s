@@ -184,7 +184,7 @@ _Text_TypeWriterMessage
 #ifdef LANGUAGE_FR
 _Text_Loading_FirstTimeEver    
     .byt "UTILISE, LACHE, LANCE, COMBINE objets.",TEXT_CRLF
-    .byt "LIS ou INSPECTE certains objets.",TEXT_CRLF
+    .byt "LIS, REGARDE ou CHERCHE quelques-uns.",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
     .byt "Tuer est toujours une option, mais être",TEXT_CRLF
@@ -201,7 +201,7 @@ _Text_Loading_FourthTime
 #else
 _Text_Loading_FirstTimeEver    
     .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
-    .byt "Some you can READ or INSPECT.",TEXT_CRLF
+    .byt "Some you can READ, INSPECT or SEARCH.",TEXT_CRLF
     .byt 0
 _Text_Loading_SecondTime    
     .byt "Lethality is always an option but being",TEXT_CRLF
