@@ -285,3 +285,4 @@
 - Improvement: The sleeper can now be heard sleeping
 - Improvement: Inspecting the window now mentions the warning label
 - Improvement: Searching the car, bag, trash can and bin now inspects them
+- Improvement: Going backward on the intro increases the duration time of pages

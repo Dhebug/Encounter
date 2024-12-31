@@ -68,6 +68,9 @@ char gStoryShownAlready = 0;
 char gGameStarting = 0;
 
 
+int gWaitAndFadeMultiplicator = 1;
+
+
 int FadeToBlack()
 {
     char y,height;
@@ -124,7 +127,9 @@ int Wait(int frameCount)
 			return 1;
 		}
         if (k==KEY_LEFT)
-        {
+        {            
+            gWaitAndFadeMultiplicator = 4;    // If the player goes left, we quadruple the reading delay
+
             gIntroPage = (gIntroPage+_INTRO_COUNT_)-2;
             if (gIntroPage>=_INTRO_COUNT_)
             {
@@ -133,7 +138,8 @@ int Wait(int frameCount)
             return 1;
         }
         if (k==KEY_RIGHT)
-        {
+        {            
+            gWaitAndFadeMultiplicator = 1;    // If the players goes right, we go back to the normal reading delay
             return 1;
         }
 	}
@@ -163,7 +169,7 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 
 int WaitAndFade(int frameCount)
 {
-	if (Wait(frameCount))
+	if (Wait(frameCount*gWaitAndFadeMultiplicator))
     {
         return 1;
     }
