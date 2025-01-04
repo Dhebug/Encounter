@@ -290,4 +290,4 @@
 
 1.0.3
 - Fixed an accent error introduced in the previous version
-
+- Improvement: Added Scotland to the map
