@@ -287,3 +287,6 @@
 - Improvement: Inspecting the window now mentions the warning label
 - Improvement: Searching the car, bag, trash can and bin now inspects them
 - Improvement: Going backward on the intro increases the duration time of pages
+
+1.0.3
+

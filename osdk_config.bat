@@ -31,9 +31,10 @@
 :: 0.9.9 - Mostly small tweaks and fixed all over
 :: 1.0.0 - Launch day version: Mostly small tweaks and fixed all over
 :: 1.0.1 - Added 50hz versions, typo fixes, more interactions, added a keyboard buffer 
-:: 1.0.2 -
+:: 1.0.2 - Improved some scene graphics, sleeping thung sound, feedback on more items
+:: 1.0.3 -
 ::
-SET VERSION=1.0.2
+SET VERSION=1.0.3
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
