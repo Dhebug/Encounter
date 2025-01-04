@@ -2458,7 +2458,8 @@ _ReadNewsPaper
 #else    
     INFO_MESSAGE("I have to find her fast...")
     INFO_MESSAGE("...I hope she is fine!")
-#endif    
+#endif
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 
@@ -2474,6 +2475,7 @@ _ReadHandWrittenNote
     INFO_MESSAGE("That could be useful...")
     INFO_MESSAGE("...if I can access it!")
 #endif    
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 _InspectChemistryRecipes
@@ -2488,6 +2490,7 @@ _ReadChemistryRecipes
     INFO_MESSAGE("I can definitely use these...")
     INFO_MESSAGE("...just need to find the materials.")
 #endif    
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 
@@ -2636,6 +2639,7 @@ _UseRoughPlan
 _ReadRoughPlan
 _InspectRoughPlan
     GOSUB(_ShowRoughPlan)
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 _ShowRoughPlan
 .(
@@ -2665,6 +2669,7 @@ _InspectMap
 #else    
     INFO_MESSAGE("It shows Ireland, Wales and England")
 #endif
+    WAIT_KEYPRESS
     END_AND_REFRESH
 
 
@@ -2677,6 +2682,7 @@ _InspectGame
 #else    
     INFO_MESSAGE("State of the art hardware!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_REFRESH
 
 
@@ -3035,6 +3041,7 @@ _InspectFridgeDoor
     INFO_MESSAGE("Looks like a happy family...")
     INFO_MESSAGE("...I wonder where they are now?")
 #endif
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3058,6 +3065,7 @@ _InspectMedicineCabinet
         INFO_MESSAGE("Not much to see when closed.")
 #endif        
     ENDIF(open)
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3138,6 +3146,7 @@ _InspectPanel
         INFO_MESSAGE("There's a hole for a small key")
 #endif        
     ENDIF(open)
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3194,6 +3203,7 @@ no_ladder
         ENDIF(open)
     .)
     ENDIF(cellar)
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3220,6 +3230,7 @@ _InspectPanicRoomWindow
 #else
             INFO_MESSAGE("Hmmm, interesting...")
 #endif    
+            WAIT_KEYPRESS    
         ELSE(window_closed,window_open)
             GOSUB(_ShowTopWindowOpen)
             IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
@@ -3238,6 +3249,7 @@ _InspectPanicRoomWindow
 #endif    
                 ENDIF(window_not_broken)
             ENDIF(window_open)
+            WAIT_KEYPRESS    
         ELSE(girl_in_room,room_empty)
             GOSUB(_SubPrintEmptyRoomMessage)
         ENDIF(room_empty)
@@ -3510,7 +3522,7 @@ _InspectTombstone
 #else
     INFO_MESSAGE("He was only 45 years old :(")
 #endif
-    WAIT(50*2)    
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3535,6 +3547,7 @@ _InspectMixTape
 #else
     INFO_MESSAGE("Homemade mixtape!")
 #endif    
+    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3559,6 +3572,7 @@ _InspectSafe
             INFO_MESSAGE("It's big, but not that sturdy")
 #endif    
         ENDIF(nobomb)
+        WAIT_KEYPRESS    
     ELSE(elseclose,safeopen)
         DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN)
 #ifdef LANGUAGE_FR
@@ -3566,6 +3580,7 @@ _InspectSafe
 #else
         INFO_MESSAGE("Most of the stuff is intact!")
 #endif    
+        WAIT_KEYPRESS    
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
             SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
             GOSUB(_SubFoundSomething)
@@ -3628,6 +3643,7 @@ _InspectPanicRoomDoor
             INFO_MESSAGE("Impossible to guess that code...")
             INFO_MESSAGE("Maybe the door itself is vulnerable?")
 #endif    
+        WAIT_KEYPRESS    
         ENDIF(nothing)
     ENDIF(clay)
     END_AND_REFRESH    
@@ -5806,6 +5822,7 @@ _ShowProtectionSuit
     INFO_MESSAGE("Protection against pesticides...")
     INFO_MESSAGE("...and other types of noxious fumes")
 #endif    
+    WAIT_KEYPRESS
     RETURN
 .)
 

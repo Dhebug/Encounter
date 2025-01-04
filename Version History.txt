@@ -290,4 +290,5 @@
 
 1.0.3
 - Fixed an accent error introduced in the previous version
+- Improvement: Added some key press waits after elements that take a long time to read
 - Improvement: Added Scotland to the map
