@@ -3276,7 +3276,7 @@ _InspectNormalWindow
 .(
     // Generic alarm sticker message
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il y à un signe d'avertissement")
+    INFO_MESSAGE("Il y a un signe d'avertissement")
 #else
     INFO_MESSAGE("There is a warning sticker")
 #endif    

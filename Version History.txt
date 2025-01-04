@@ -289,4 +289,5 @@
 - Improvement: Going backward on the intro increases the duration time of pages
 
 1.0.3
+- Fixed an accent error introduced in the previous version
 
