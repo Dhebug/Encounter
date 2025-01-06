@@ -294,3 +294,5 @@
 - Improvement: Added Scotland to the map
 
 1.0.4
+- Tweak: Reduced a tiny bit the timing of the clock at the start of the game
+

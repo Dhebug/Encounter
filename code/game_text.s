@@ -6057,18 +6057,18 @@ _WatchSetup
     INFO_MESSAGE("...make them count!")
 #endif    
 
-    WAIT(50*2)
+    WAIT(50)
 
     PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
-    WAIT(50)
+    WAIT(30)
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,9)                                 ; Overlay the 1:59:59 patch
             _IMAGE(24,43)
             _SCREEN(17,63)
-    WAIT(50)
+    WAIT(30)
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
             _IMAGE(28,34)
             _SCREEN(21,63)
-    WAIT(50)
+    WAIT(25)
     RETURN
 .)
 
