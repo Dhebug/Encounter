@@ -15,8 +15,9 @@ extern char gWordBuffer[MAX_WORDS];     	// One byte identifier of each of the i
 
 typedef WORDS (*AnswerProcessingFun)();
 extern AnswerProcessingFun gAnswerProcessingCallback;
+extern const char* gInputMessage;
 
-extern WORDS AskInput(const char* inputMessage, char checkTockens);
+extern WORDS AskInput();
 
 extern void ResetInput();
 

@@ -308,9 +308,12 @@ void TakeItem()
         // Requires a container
         WORDS containerId;
         AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
+        const char* previousInputMessage = gInputMessage;
         gAnswerProcessingCallback = ProcessContainerAnswer;
         gInputAcceptsEmpty = 1;
-        containerId = AskInput(gTextCarryInWhat,1 );    // "Carry it in what?"
+        gInputMessage = gTextCarryInWhat;
+        containerId = AskInput();    // "Carry it in what?"
+        gInputMessage = previousInputMessage;
         gAnswerProcessingCallback = previousCallback;
         gInputAcceptsEmpty = 0;
         if ( (containerId > e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
@@ -530,7 +533,8 @@ void main()
     gInputMaxSize = 35;
     gAnswerProcessingCallback = ProcessAnswer;
     WaitReleasedKey();
-	AskInput(gTextAskInput,1);
+    gInputMessage = gTextAskInput;
+	AskInput();
 #else
     // Directly go to the end credits    
     gScore = 999;

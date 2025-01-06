@@ -3,6 +3,7 @@
 
     .zero
 
+_gInputMessage      .dsb 2      ; Contains the message prompt shown to the user
 _gAskQuestion       .dsb 1      ; Should the prompt ("what do you want to do now?", "in what?") be shown
 _gInputBufferPos    .dsb 1      ; Position in the edit buffer
 _gInputMaxSize      .dsb 1      ; Maximum number of characters accepted 

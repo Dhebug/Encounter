@@ -21,17 +21,17 @@ extern char ValidateInputReturn();
 
 char gPrintMessageBackground[40];   // moved to overlay
 
-WORDS AskInput(const char* inputMessage,char checkTockens)
+WORDS AskInput()
 {
 	ResetInput();	
 	while (1)
 	{        
 		if (gAskQuestion)
 		{
-            if (inputMessage[0])
+            if (gInputMessage[0])
             {
                 memcpy(gPrintMessageBackground,gStatusMessageLocation+1,39);            
-    			PrintStatusMessage(2,inputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
+    			PrintStatusMessage(2,gInputMessage);   // Implicitely sends to printer with a carriage return, no need to add one
             }
 			memset(gStatusMessageLocation+40+1,' ',39);
 			gAskQuestion=0;
@@ -72,7 +72,7 @@ WORDS AskInput(const char* inputMessage,char checkTockens)
 				if (answer !=e_WORD_CONTINUE)
 				{
 					// Quit
-                    if (inputMessage[0])
+                    if (gInputMessage[0])
                     {
                         memcpy(gStatusMessageLocation+1,gPrintMessageBackground,39);            
                     }
