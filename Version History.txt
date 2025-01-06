@@ -296,4 +296,4 @@
 1.0.4
 - Tweak: Reduced a tiny bit the timing of the clock at the start of the game
 - Improvement: Trying to use the game console now shows a picture
-
+- Improvement: Added some key press waits after a few more elements that took a long time to read

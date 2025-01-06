@@ -2199,6 +2199,7 @@ _CombineGunPowderWithFuse
         INFO_MESSAGE("...but it needs to be attached")
 #endif    
         STOP_MUSIC()
+        WAIT_KEYPRESS
     ELSE(in_tin,not_tin)
        // We reach this code path if the gun power is in the bucket, plastic bag, etc...
 #ifdef LANGUAGE_FR               
@@ -2309,6 +2310,7 @@ _CombineCueWithRope
     INFO_MESSAGE("The cue is not strong enough...")
     INFO_MESSAGE("But it could break things!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -5775,6 +5777,7 @@ _SubInspectAcid
     INFO_MESSAGE("This stuff is highly dangerous!")
     INFO_MESSAGE("...could go through a ship's hull!")
 #endif
+    WAIT_KEYPRESS
     RETURN
 .)
 
