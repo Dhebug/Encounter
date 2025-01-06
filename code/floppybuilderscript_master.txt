@@ -387,6 +387,8 @@ AddFile ..\build\files\view_tombstone.hir
 #endif
 AddDefine LOADER_PICTURE_TOMBSTONE {FileIndex}
 
+AddFile ..\build\files\view_colecovision_boot.hir
+AddDefine LOADER_PICTURE_COLECOVISION {FileIndex}
 
 
 ; All the sprites

@@ -295,4 +295,5 @@
 
 1.0.4
 - Tweak: Reduced a tiny bit the timing of the clock at the start of the game
+- Improvement: Trying to use the game console now shows a picture
 

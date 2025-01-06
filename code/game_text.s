@@ -5136,15 +5136,17 @@ _UseComputer
 .)
 
 
-_UseTelevision
 _UseGameConsole
 .(
+    DISPLAY_IMAGE(LOADER_PICTURE_COLECOVISION)
++_UseTelevision
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("C'est tentant, mais mission d'abord !")
 #else    
     INFO_MESSAGE("It looks cool, but we have a mission!")
-#endif    
-    END_AND_PARTIAL_REFRESH
+#endif
+    WAIT_KEYPRESS    
+    END_AND_REFRESH
 .)
 
 
