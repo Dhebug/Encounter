@@ -451,11 +451,11 @@ _ByteStreamCommand_LOAD_MUSIC
 .(
 	; unsigned char loaderId = *gCurrentStream++;
     jsr _ByteStreamGetNextByte
-    cpx _gFlagCurrentMusicFile
+    cpx _gCurrentMusicFileIndex
     beq music_already_loaded             ; We only load the music if it's not already the one in memory
     
     ; Load the requested bitmap
-    stx _gFlagCurrentMusicFile
+    stx _gCurrentMusicFileIndex
     stx _LoaderApiEntryIndex
     lda #<_ArkosMusic
     sta _LoaderApiAddressLow
@@ -1337,11 +1337,11 @@ _ByteStreamCommand_BITMAP
 .( 
 	; unsigned char loaderId = *gCurrentStream++;
     jsr _ByteStreamGetNextByte
-    cpx _gFlagCurrentSpriteSheet
+    cpx _gCurrentSpriteSheetIndex
     beq image_already_loaded             ; We only load the image if it's not already the one in memory
     
     ; Load the requested bitmap
-    stx _gFlagCurrentSpriteSheet
+    stx _gCurrentSpriteSheetIndex
     stx _LoaderApiEntryIndex
     lda #<_SecondImageBuffer
     sta _LoaderApiAddressLow

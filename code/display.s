@@ -12,8 +12,8 @@ kerning       = reg3
 
     .text
 
-_gFlagCurrentSpriteSheet  .byt 255  ; Index of the currently loaded "sprite" image
-_gFlagCurrentMusicFile    .byt 255  ; Index of the currently loaded Arkos music file
+_gCurrentSpriteSheetIndex  .byt 255  ; Index of the currently loaded "sprite" image
+_gCurrentMusicFileIndex    .byt 255  ; Index of the currently loaded Arkos music file
 
 _gDrawPatternAddress .word 0
 _gDrawSourceAddress  .word 0

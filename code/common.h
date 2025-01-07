@@ -66,7 +66,8 @@ extern unsigned char gDrawHeight;
 extern unsigned char gDrawPattern;
 extern unsigned char gSourceStride;
 
-extern unsigned char gFlagCurrentSpriteSheet;  // Index of the currently loaded "sprite" image
+extern unsigned char gCurrentSpriteSheetIndex;  // Index of the currently loaded "sprite" image
+extern unsigned char gCurrentMusicFileIndex;    // Index of the currently loaded music file
 
 // Audio
 #ifdef ENABLE_SOUND_EFFECTS
