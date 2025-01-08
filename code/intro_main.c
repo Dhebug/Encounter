@@ -39,8 +39,8 @@ extern char TypewriterMusic[];
 extern unsigned char ImageBuffer2[40*200];
 extern unsigned char GradientTable[];
 
-unsigned char CompressedTitleImage[LOADER_PICTURE_TITLE_SIZE_COMPRESSED];
-unsigned char UnCompressedGameTitle[LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED];
+extern unsigned char CompressedTitleImage[LOADER_PICTURE_TITLE_SIZE_COMPRESSED];
+extern unsigned char UnCompressedGameTitle[LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED];
 
 extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED];
 extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];

@@ -8,24 +8,27 @@ _param2 .dsb 2
 
     .text
 
-#define OSDK_CUSTOM_STACK 
-osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 _EndText
 
-#ifdef MODULE_INTRO
-_ImageBuffer2   .dsb 40*200
-_OOPS2          .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
-#endif
 #if DISPLAYINFO=1
+#ifdef MODULE_GAME
+#print Remaining space = ($9900 - *)  
+#else
 #print Remaining space = ($9800 - *)  
 #endif
+#endif
 
-_free_to_use_text = osdk_end+1 ; *+256
+;_free_to_use_text = osdk_end+1 ; *+256
 
     .bss
+* = _EndText           ; By default we make the BSS start immediately after the TEXT section
+_StartBSS
+
+#define OSDK_CUSTOM_STACK 
+osdk_stack                  .dsb 256      ; We move the stack in overlay memory
+osdk_endstack
 
 #ifdef MODULE_SPLASH
-* = _EndText
 
 ; Severn Software logo: 215x51    -> 40*51=2040  *6=12240
 ; Defence Force logo: 216x74      -> 40*74=2960  *6=17760
@@ -39,7 +42,6 @@ _LabelPicture5	.dsb 2960
 
 
 #ifdef MODULE_OUTRO
-* = _EndText
 _ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
 #endif
 
@@ -56,22 +58,26 @@ _TextCharsetLowerCaseLetters
 #endif
 
 #ifdef MODULE_INTRO
+_ImageBuffer2           .dsb 40*200
+_OOPS2                  .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
+_CompressedTitleImage   .dsb LOADER_PICTURE_TITLE_SIZE_COMPRESSED
+_UnCompressedGameTitle  .dsb LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED
+
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
 _STD_Charset
 #else
-* = $9800             ; STD charset for HIRES mode: 1024 bytes
+* = $9800+256         ; STD charset for HIRES mode: 1024 bytes
 
 ; Contains all the combinations of 6 pixels patterns shifted by 0 to 5 pixels to the right.
 ; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild
 ; the complete shifted graphics
 _gShiftBuffer         .dsb 64*2*6           ; 768 bytes
-_free_to_use_9b5f     ;.dsb 1024-768-95
 #endif
 
 * = $9C00             ; ALT charset for HIRES mode: 1024 bytes
 _gTableModulo6        .dsb 256           ; Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
 _gTableDivBy6         .dsb 256           ; Given a X value, returns the value divide by 6 (used to locate the proper byte in a scanline)
-_free_to_use_9c00
+_free_to_use_9e00
 
 * = $A000             ; Top of the HIRES screen: 8000 bytes
 _HIRES_MEMORY_START
@@ -142,8 +148,8 @@ _gInputBuffer               .dsb 40
 //osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 _free_to_use_overlay
 
-* = $fb00
-_DiskLoader
+;* = FLOPPY_LOADER_ADDRESS = $fb00
+; _DiskLoader
 
 // Some sanity checking
 #ifdef MODULE_GAME

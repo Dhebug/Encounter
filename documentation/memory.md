@@ -29,6 +29,7 @@ Memory
     - [Splash/Jingle sequence](#splashjingle-sequence)
     - [Intro sequence](#intro-sequence)
     - [Main game](#main-game)
+      - [Video memory:](#video-memory)
     - [End credits](#end-credits)
 
 ## Memory in general
@@ -299,6 +300,26 @@ This tool is quite practical to find the worse offenders as well as where you ha
 ### Splash/Jingle sequence
 ### Intro sequence
 ### Main game
+Let's try to squeeze out the last remaining bits of memory:
+- The loader is located in $fb00, with the resident part using from $fb88 to $ffff
+- Page 2 is used for the sector buffer when loading and saving
+- The game loads at $400
+
+#### Video memory:
+- HIRES attribute is in the fist byte of the TEXT memory in $bb80
+- TEXT attribute is in the first byte of the 128th HIRES line in $a000+40*128
+- We have 128 HIRES lines (16 TEXT lines) for the HIRES window at the top: All the area from $A000 to $B400 ($a000+40*128) are used by the HIRES graphics
+- We have 12 TEXT lines for the TEXT window at the top: 12+16=28         : All the area from $BE00 ($bb80+40*16) to $BFDF are used by the TEXT mode
+- Since we switch to TEXT for the bottom line, we do not use any of the HIRES charsets
+- We only use the visible part of the STD charset, from $B500 ($B400+32*8) to $B800 ($b400+128*8)
+
+- A000-B3FF - HIRES
+- B400-B4FF - Free
+- B500-B7FF - STD Charset
+- B800-BDFF - Free
+- BE00-BFDF - TEXT
+
+
 ### End credits
 
 
