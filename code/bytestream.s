@@ -69,6 +69,97 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
 
+
+; Checks if there's a stream delay active.
+; If no delay is active, does nothing and returns zero
+; If there's a delay, decrements it and returns 1
+_DecrementDelayStream
+.(
+    lda _gDelayStream+0             ; Are we executing a WAIT command?
+    ora _gDelayStream+1
+    bne decrement
+    rts                             ;  A contains zero value
+
+decrement    
+    lda _gDelayStream+0             ; Decrement and wait
+    bne skip
+    dec _gDelayStream+1
+skip
+    dec _gDelayStream+0
+    lda #1
+    rts
+.)
+
+; Loop that executes a stream stream.
+; Handles the skipable cut scenes as well as timed delays (in numbers of frames)
+_HandleByteStream
+    ;jmp _HandleByteStream
+.(
+    jsr _DecrementDelayStream 
+    bne end_stream                   ; Still decrementing the delay
+
+    lda _gCurrentStream+0            ; Do we have a valid stream pointer?
+    ora _gCurrentStream+1
+    beq end_stream
+
+    lda #<$a000                      ; By default, all the draw commands to to the screen
+    sta _gDrawAddress+0
+    lda #>$a000
+    sta _gDrawAddress+1
+
+    lda #0                           ; And we make sure we are in running mode
+    sta _gCurrentStreamStop
+
+loop_next_command                    ; Command loop
+    jsr _ByteStreamGetNextByte       ; Fetch the next command id (increments the pointer, return the value in X and a)
+    cpx #_COMMAND_COUNT              ; Is it a valid command?
+    bcc valid_command
+    jsr _Panic                       ; Probably corrupted stream, definitely not a valid command
+valid_command
+    
+    asl                              ; Multiply the command id by 2...
+    tax
+    lda _ByteStreamCallbacks+0,x     ; ...and use it as an index in the command callbak table
+    sta auto_callback+0
+    lda _ByteStreamCallbacks+1,x
+    sta auto_callback+1
+auto_callback = *+1
+    jsr $0000                        ; Call the function
+
+    lda _gStreamCutScene             ; Is the cut scene mode enabled?
+    beq check_stream_end
+
+delay_stream_loop                    ; Delay loop
+    jsr _DecrementDelayStream        ; Decrement the delay loop
+    beq check_stream_end             ; Done
+
+    jsr _WaitIRQ                     ; Wait one frame
+
+    lda _gStreamSkipPoint+0           ; If we have a skip point and the keyboard is pressed, jump there immediately
+    ora _gStreamSkipPoint+1           ; This is used to skip the intro sequence when reaching the market place.
+    beq delay_stream_loop
+    jsr _ReadKeyNoBounce
+    beq delay_stream_loop
+
+    lda _gStreamSkipPoint+0           ; Jump the stream to the skip point position
+    sta _gCurrentStream+0
+    lda _gStreamSkipPoint+1
+    sta _gCurrentStream+1
+
+    lda #0
+    sta _gStreamSkipPoint+0           ; Clear the skip point
+    sta _gStreamSkipPoint+1
+    sta _gDelayStream+0
+    sta _gDelayStream+1
+
+check_stream_end
+    lda _gCurrentStreamStop          ; Should we contine the execution of commands?
+    beq loop_next_command            ; Can be triggered by END, WAIT, END_AND_REFRESH
+
+end_stream    
+    rts
+.)
+
     
 ; _param0=pointer to the new byteStream
 _PlayStreamAsm
@@ -186,7 +277,7 @@ no_match
 .)
 
 
-; Fetch the value in _gCurrentStream, increment the pointer, return the value in X
+; Fetch the value in _gCurrentStream, increment the pointer, return the value in X and a
 _ByteStreamGetNextByte
 .(
     ldy #0
