@@ -459,15 +459,19 @@ AddDefine LOADER_SPRITE_ALARM_PANEL {FileIndex}
 ;
 ; Music
 ;
-AddFile ..\build\files\success_music.mus
+AddDefine MUSIC_OVERLAY_BUFFER_SIZE 1587          ; Should be at least the size of the largest music
+
+AddFile ..\build\files\success_music.mus          ; About 647 bytes
 AddDefine LOADER_MUSIC_SUCCESS {FileIndex}
+AddDefine LOADER_MUSIC_SUCCESS_SIZE {FileSize}
 
-AddFile ..\build\files\you_won_music.mus
+AddFile ..\build\files\you_won_music.mus          ; About 1587 bytes
 AddDefine LOADER_MUSIC_VICTORY {FileIndex}
+AddDefine LOADER_MUSIC_VICTORY_SIZE {FileSize}
 
-AddFile ..\build\files\game_over_music.mus
+AddFile ..\build\files\game_over_music.mus        ; About 1214 bytes
 AddDefine LOADER_MUSIC_GAME_OVER {FileIndex}
-
+AddDefine LOADER_MUSIC_GAME_OVER_SIZE {FileSize}
 
 ;
 ; The scores: They should be uncompressed because they are going to be overwritten
