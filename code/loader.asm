@@ -200,39 +200,39 @@ _LoaderTemporaryStart
     beq end_jasmin_init
     
     lda #<FDC_JASMIN_command_register
-    sta 1+__fdc_command_1
-    sta 1+__fdc_command_2
-    sta 1+__fdc_command_3
-    sta 1+__fdc_command_w
+    sta 1+auto_fdc_command_1
+    sta 1+auto_fdc_command_2
+    sta 1+auto_fdc_command_3
+    sta 1+auto_fdc_command_w
     
     lda #<FDC_JASMIN_status_register
-    sta 1+__fdc_status_1
-    sta 1+__fdc_status_2
-    sta 1+__fdc_status_3
-    sta 1+__fdc_status_4
-    sta 1+__fdc_status_w
+    sta 1+auto_fdc_status_1
+    sta 1+auto_fdc_status_2
+    sta 1+auto_fdc_status_3
+    sta 1+auto_fdc_status_4
+    sta 1+auto_fdc_status_w
     
     lda #<FDC_JASMIN_track_register
-    sta 1+__fdc_track_1
+    sta 1+auto_fdc_track_1
     
     lda #<FDC_JASMIN_sector_register
-    sta 1+__fdc_sector_1
+    sta 1+auto_fdc_sector_1
     
     lda #<FDC_JASMIN_data
-    sta 1+__fdc_data_1
-    sta 1+__fdc_data_2
-    sta 1+__fdc_data_w
+    sta 1+auto_fdc_data_1
+    sta 1+auto_fdc_data_2
+    sta 1+auto_fdc_data_w
     
     lda #<FDC_JASMIN_flags
-    sta 1+__fdc_flags_1
-    sta 1+__fdc_flags_2
+    sta 1+auto_fdc_flags_1
+    sta 1+auto_fdc_flags_2
     
     lda #CMD_JASMIN_ReadSector
-    sta 1+__fdc_readsector
+    sta 1+auto_fdc_readsector
     
     lda #FDC_JASMIN_Flag_DiscSide
-    sta 1+__fdc_discside
-    sta 1+__fdc_discside1
+    sta 1+auto_fdc_discside
+    sta 1+auto_fdc_discside1
 
 end_jasmin_init	
     ldx #$ff	; Reset the stack pointer
@@ -258,13 +258,6 @@ end_jasmin_init
     sta via_t1lh
     sta via_t1ch
 
-forever_loop
-    jsr LoadData		; Load the main game  (parameters are directly initialized in the loader variables at the end of the file)
-    cli			; Enable IRQs again	
-    jsr _LoaderApiJump 				   ; Give control to the application and hope it knows what to do
-    jmp forever_loop
-        
-    
 ; -------------------------------------------------------------------------------
 ;                                   Resident section
 ; ------------------------------------------------------------------------------- 
@@ -274,14 +267,18 @@ forever_loop
 ; API to communicated between the main application and the loader.
 ;
 _LoaderResidentStart
-
+    jsr _LoadData		        ; Load the main game (parameters are directly initialized in the loader variables at the end of the file)
+    cli			                ; Enable IRQs again	
+    jsr _LoaderApiJump 		    ; Give control to the application and hope it knows what to do
+    jmp _LoaderResidentStart
+            
 ;
 ; Sets the side,track and sector variables, by using the pair
 ; track/sector value in the file tables
 ;
-SetSideTrackSector
+_SetSideTrackSector
     lda #FDC_Flags_Mask 		; Disable the FDC (Eprom select + FDC Interrupt request)
-__fdc_flags_1
+auto_fdc_flags_1
     sta FDC_flags
     
     ; Starting track	
@@ -289,7 +286,7 @@ __fdc_flags_1
     lda _LoaderApiFileStartTrack    ; If the track id is larger than 128, it means it is on the other side of the floppy
     bpl first_side
     ; The file starts on the second side
-__fdc_discside1	
+auto_fdc_discside1	
     ldy #FDC_Flag_DiscSide	    	; Side 1
     and #%01111111              	; Mask out the extra bit
 first_side
@@ -309,7 +306,7 @@ first_side
 ; the sectors per track, it automatically
 ; changes the track too.
 ;------------------------------------------
-PrepareTrack
+_PrepareTrack
     lda current_sector			; Check if we have reached the end of the track
     cmp #FLOPPY_SECTOR_PER_TRACK+1
     bne end_change_track
@@ -321,7 +318,7 @@ PrepareTrack
     
     lda #0					; Reset to the first track on the other side
     sta current_track
-__fdc_discside
+auto_fdc_discside
     lda #FDC_Flag_DiscSide
     sta current_side	
 end_side_change
@@ -332,7 +329,7 @@ end_change_track
 
     lda current_sector			 ; Update sector to read
     PROTECT(FDC_sector_register)
-__fdc_sector_1	
+auto_fdc_sector_1	
     sta FDC_sector_register
     inc current_sector
         
@@ -353,20 +350,20 @@ __fdc_sector_1
     
     ; If we are already on the correct track, don't issue a SEEK command
     PROTECT(FDC_track_register)
-__fdc_track_1
+auto_fdc_track_1
     cmp FDC_track_register
     beq stay_on_the_track
     
     ; Do a SEEK command
 retryseek
     PROTECT(FDC_data)
-__fdc_data_1	
+auto_fdc_data_1	
     sta FDC_data                             ; Set the new track		
     lda #CMD_Seek
     PROTECT(FDC_command_register)
-__fdc_command_1
+auto_fdc_command_1
     sta FDC_command_register	
-    jsr WaitCompletion			; Wait for the completion of the command
+    jsr _WaitCompletion			; Wait for the completion of the command
 .(
     ; Chema: the same 16 cycle wait as in sector_2-microdisc. I am not sure if this
     ; is needed or why, but it was crucial for the disk to boot in sector_2-microdisc
@@ -381,18 +378,18 @@ waitc
     ; What if there is a seek error???
     ; Do the restore_track0 code
     PROTECT(FDC_status_register)
-__fdc_status_3	
+auto_fdc_status_3	
     lda FDC_status_register
     and #$18
     beq stay_on_the_track
 restore_track0		
     lda #$0c
     PROTECT(FDC_command_register)
-__fdc_command_3
+auto_fdc_command_3
     sta FDC_command_register
-    jsr WaitCompletion
+    jsr _WaitCompletion
     PROTECT(FDC_status_register)
-__fdc_status_4	
+auto_fdc_status_4	
     lda FDC_status_register
     and #$10
     bne restore_track0	; If error restoring track 0 loop forever
@@ -402,7 +399,7 @@ __fdc_status_4
 stay_on_the_track
     lda #FDC_Flags_Mask                      ; Apply the side selection mask
     ora current_side
-__fdc_flags_2
+auto_fdc_flags_2
     sta FDC_flags
     rts
 
@@ -413,13 +410,13 @@ __fdc_flags_2
 ; uncompressed files
 ; X=File index
 ;----------------------------------------
-LoadData
-    jsr StartAccess
+_LoadData
+    jsr _StartAccess
     ldy #0
     sty __fetchByte+1
     
     ; We have to start somewhere no matter what, compressed or not
-    jsr SetSideTrackSector
+    jsr _SetSideTrackSector
     
     clc
     lda _LoaderApiAddressLow
@@ -509,7 +506,7 @@ skip_destination_inc
     sbc ptr_destination_end+1
     bcc unpack_loop  
 ClearLoadingPic	
-    jmp EndAccess
+    jmp _EndAccess
     
 
 back_copy
@@ -568,7 +565,7 @@ GetNextByte
     php
     lda __fetchByte+1
     bne __fetchByte
-    jsr ReadNextSector
+    jsr _ReadNextSector
     ldx #0
     ldy #0
 __fetchByte
@@ -580,15 +577,15 @@ __fetchByte
 ;--------------------------------------------
 ; Reads the next sector of the current file
 ;---------------------------------------------
-ReadNextSector
+_ReadNextSector
     ; CHEMA: this is the critical section. Disable IRQs here
     sei	
-    jsr PrepareTrack
+    jsr _PrepareTrack
 RetryRead
-__fdc_readsector
+auto_fdc_readsector
     lda #CMD_ReadSector
     PROTECT(FDC_command_register)
-__fdc_command_2
+auto_fdc_command_2
     sta FDC_command_register
     
     ; Chema: this loop is needed if checking for partial
@@ -626,14 +623,14 @@ tempoloop
 checkbusy
     bpl end_of_command
 waitdrq
-__fdc_status_1
+auto_fdc_status_1
     lda FDC_status_register
     lsr
     ror
     bcc checkbusy
     
     PROTECT(FDC_data)
-__fdc_data_2    
+auto_fdc_data_2    
     lda FDC_data
     sta LOADER_SECTOR_BUFFER,x ; Store the byte in the sector buffer
     inx
@@ -657,7 +654,7 @@ end_of_command
 ; before reading the status after a write to a command register.
 ; The loop takes a bit longer: 26 us (see sector_2-microdisc)
 ;------------------------------------------------
-WaitCompletion
+_WaitCompletion
     txa
     pha
     ldx #5
@@ -666,7 +663,7 @@ r_wait_completion
     bne r_wait_completion
     PROTECT(FDC_status_register)
 r2_wait_completion
-__fdc_status_2
+auto_fdc_status_2
     lda FDC_status_register
     lsr
     bcs r2_wait_completion	; If s0 (busy) is not zero, wait.
@@ -677,9 +674,9 @@ __fdc_status_2
 ;-----------------------------
 ; Default ISRs for vectors.
 ;-----------------------------
-IrqHandler	
+_IrqHandler	
     bit $304
-    jsr RefreshAccessIndicator            ; So we get the access indicator between modules
+    jsr _RefreshAccessIndicator            ; So we get the access indicator between modules
 IrqDoNothing
     rti	
 
@@ -690,12 +687,12 @@ IrqDoNothing
 ;-------------------------------------	
 ; CHEMA: I am re-using the var ptr_destination, though it
 ; is now the ptr to the buffer to write.
-WriteData
-	;jmp WriteData
+_WriteData
+	;jmp _WriteData
     ; Flag we want to start avoiding the cumulus bug in the write sector command
     inc avoid_cumulus_bug
     
-    jsr SetSideTrackSector
+    jsr _SetSideTrackSector
     lda _LoaderApiAddressLow
     sta ptr_destination+0
     lda _LoaderApiAddressHigh
@@ -703,13 +700,13 @@ WriteData
 loopwrite	
     ; Begin of critical section
     sei
-    jsr PrepareTrack	
+    jsr _PrepareTrack	
 retrywrite	
     ; Writes a sector to disk.
-__fdc_writesector
+auto_fdc_writesector
     lda #CMD_WriteSector
     PROTECT(FDC_command_register)
-__fdc_command_w
+auto_fdc_command_w
     sta FDC_command_register
     
     ; According to the datasheet table of needed delays:
@@ -734,14 +731,14 @@ w_wait_completion
 check_busy2
     bpl end_of_commandw
 waitdrqw
-__fdc_status_w
+auto_fdc_status_w
     lda FDC_status_register
     ; Check DRQ & BUSY
     lsr 
     ror
     bcc check_busy2
     PROTECT(FDC_data)
-__fdc_data_w	
+auto_fdc_data_w	
     stx FDC_data
     iny
 next_byte
@@ -775,7 +772,7 @@ avoid_cumulus_bug	.byt 0
 
 
 ; Blinking light indicator in the bottom right of the screen
-StartAccess
+_StartAccess
     php
     sei
     lda $bfdf                  ; Save the current loading indicator byte value
@@ -785,7 +782,7 @@ StartAccess
     plp
     rts
 
-EndAccess
+_EndAccess
     php
     sei
     lda #OPCODE_RTS             ; Disable the IRQ handler
@@ -797,7 +794,7 @@ auto_restore_indicator=*+1
     rts
 
 
-RefreshAccessIndicator
+_RefreshAccessIndicator
 auto_nop_or_rts    
     nop               ; NOP or RTS depending
     pha
@@ -817,12 +814,13 @@ auto_nop_or_rts
 // - FileSizeHigh - 130 bytes
 #define ASSEMBLER
 #define LOADER                                 ; We request the actual table data to be included in the file
+_FloppyBuilderFileData
 #include "../build/floppy_description.h"       ; This file is generated by the floppy builder
 
 ; Assumes that _LoaderApiEntryIndex contains a valid value (temp)
 ; As well as _LoaderApiAddress
 ; It fills the rest
-InitializeFileFromDirectory
+_InitializeFileFromDirectory
 	ldx _LoaderApiEntryIndex
 
 	lda FileStartSector,x
@@ -839,17 +837,17 @@ InitializeFileFromDirectory
     rts
 
 
-LoadFileFromDirectory
-    jsr InitializeFileFromDirectory
-	jmp LoadData
+_LoadFileFromDirectory
+    jsr _InitializeFileFromDirectory
+	jmp _LoadData
 
 ; CHEMA: Support saving
 ; Assumes that _LoaderApiEntryIndex contains a valid value (temp)
 ; As well as _LoaderApiAddress
 ; It fills the rest
-SaveFileFromDirectory
-	jsr InitializeFileFromDirectory
-	jmp WriteData
+_SaveFileFromDirectory
+	jsr _InitializeFileFromDirectory
+	jmp _WriteData
 
 
 _EndLoaderCode
@@ -869,17 +867,17 @@ _Vectors
 ;
 ; Here are the functions that the user can call from his own application
 ;
-_LoaderApiInitializeFileFromDirectory  .byt OPCODE_JMP,<InitializeFileFromDirectory,>InitializeFileFromDirectory    ; $FFDE-$FFE0
-_LoaderApiLoadFileFromDirectory		   .byt OPCODE_JMP,<LoadFileFromDirectory,>LoadFileFromDirectory                ; $FFE1-$FFE3
-_LoaderApiSaveFileFromDirectory	       .byt OPCODE_JMP,<SaveFileFromDirectory,>SaveFileFromDirectory                ; $FFE4-$FFE6
+_LoaderApiInitializeFileFromDirectory  .byt OPCODE_JMP,<_InitializeFileFromDirectory,>_InitializeFileFromDirectory    ; $FFDE-$FFE0
+_LoaderApiLoadFileFromDirectory		   .byt OPCODE_JMP,<_LoadFileFromDirectory,>_LoadFileFromDirectory                ; $FFE1-$FFE3
+_LoaderApiSaveFileFromDirectory	       .byt OPCODE_JMP,<_SaveFileFromDirectory,>_SaveFileFromDirectory                ; $FFE4-$FFE6
 
 
 _LoaderApiEntryIndex	        .byt 0                                  ; $FFE7 - ID of the file to load
 _LoaderApiSystemType            .byt 0                                  ; $FFE8 - 0=Microdisc, 1=Jasmin
 
 ; Chema: WriteSupport
-_LoaderApiLoadingAnimation      .byt OPCODE_JMP,<RefreshAccessIndicator,>RefreshAccessIndicator   ; $FFE9-$FFEB
-_LoaderApiSaveData              .byt OPCODE_JMP,<WriteData,>WriteData   ; $FFEC-$FFEE
+_LoaderApiLoadingAnimation      .byt OPCODE_JMP,<_RefreshAccessIndicator,>_RefreshAccessIndicator   ; $FFE9-$FFEB
+_LoaderApiSaveData              .byt OPCODE_JMP,<_WriteData,>_WriteData   ; $FFEC-$FFEE
 
 #ifdef ENABLE_SPLASH
 _LoaderApiFileStartSector       .byt LOADER_SPLASH_PROGRAM_SECTOR       ; $FFEF
@@ -895,7 +893,7 @@ _LoaderApiAddress
 _LoaderApiAddressLow            .byt <LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF4
 _LoaderApiAddressHigh           .byt >LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF5
 _LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
+_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
 #else
 #ifdef ENABLE_INTRO
 _LoaderApiFileStartSector       .byt LOADER_INTRO_PROGRAM_SECTOR        ; $FFEF
@@ -911,7 +909,7 @@ _LoaderApiAddress
 _LoaderApiAddressLow            .byt <LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF4
 _LoaderApiAddressHigh           .byt >LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF5
 _LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
+_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
 #else  // Directly load the game
 _LoaderApiFileStartSector       .byt LOADER_GAME_PROGRAM_SECTOR         ; $FFEF
 _LoaderApiFileStartTrack        .byt LOADER_GAME_PROGRAM_TRACK          ; $FFF0
@@ -926,7 +924,7 @@ _LoaderApiAddress
 _LoaderApiAddressLow            .byt <LOADER_GAME_PROGRAM_ADDRESS       ; $FFF4
 _LoaderApiAddressHigh           .byt >LOADER_GAME_PROGRAM_ADDRESS       ; $FFF5
 _LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-$FFF9
+_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
 #endif
 #endif
 
@@ -939,7 +937,7 @@ _LoaderApiLoadFile              .byt OPCODE_JMP,<LoadData,>LoadData     ; $FFF7-
 
 _VectorNMI          .word IrqDoNothing              ; $FFFA-$FFFB - NMI Vector (Usually points to $0247)
 _VectorReset        .word IrqDoNothing              ; $FFFC-$FFFD - RESET Vector (Usually points to $F88F)
-_VectorIRQ          .word IrqHandler                ; $FFFE-$FFFF - IRQ Vector (Normally points to $0244)
+_VectorIRQ          .word _IrqHandler                ; $FFFE-$FFFF - IRQ Vector (Normally points to $0244)
 
 #if DISPLAYINFO=1
 #echo Remaining space in the loader code: 
