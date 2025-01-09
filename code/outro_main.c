@@ -10,8 +10,7 @@
 #include "input_system.h"
 #include "score.h"
 
-extern char TypewriterMusic[];
-
+extern unsigned char TypewriterMusic[LOADER_MUSIC_TYPEWRITER_SIZE];
 
 // Bunch of "no-op" functions and tables, these are required by the game, but not for the high scores
 keyword gWordsArray[] = { { 0,  e_WORD_COUNT_ } };
@@ -360,6 +359,7 @@ void main()
     LoadFileAt(OUTRO_PICTURE_DESK,ImageBuffer);
     LoadFileAt(OUTRO_SPRITE_DESK,SecondImageBuffer);  // Paper + glass of whisky
     LoadFileAt(OUTRO_SPRITE_PHOTOS,ThirdImageBuffer);  // Photos + glass of whisky
+    LoadFileAt(LOADER_MUSIC_TYPEWRITER,TypewriterMusic);    
 
     memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
 	BlitBufferToHiresWindow();              // Show the empty desk
@@ -393,7 +393,7 @@ void main()
 
     // Now we start the typewriter music
     Psgmixer=255;
-    PlayMusic(TypewriterMusic);
+    PlayMusic(0+2+4+0+16+32,TypewriterMusic);
 
 #ifdef TEST_MODE    
     while (1){

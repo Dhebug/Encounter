@@ -59,9 +59,10 @@ _TextCharsetLowerCaseLetters
 
 #ifdef MODULE_INTRO
 _ImageBuffer2           .dsb 40*200
-_OOPS2                  .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
+_OOPS2                  .dsb 32       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much (by about 18 bytes)
 _CompressedTitleImage   .dsb LOADER_PICTURE_TITLE_SIZE_COMPRESSED
 _UnCompressedGameTitle  .dsb LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED
+_free
 
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
 _STD_Charset
@@ -127,7 +128,8 @@ _gInputBuffer         .dsb 40
 
 #ifdef MODULE_INTRO
 _ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
-_OOPS                       .dsb 16       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much
+_TypewriterMusic            .dsb LOADER_MUSIC_TYPEWRITER_SIZE   ; 921 bytes
+_OOPS                       .dsb 32       ; TOD: Apparently there's a bug in the depacking code which sometimes depacks too much (about 18 bytes)
 _CompressedOfficeImage      .dsb INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED
 _CompressedTypeWriterImage  .dsb INTRO_PICTURE_TYPEWRITER_COMPRESSED
 
@@ -139,6 +141,7 @@ _ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
 
 #ifdef MODULE_OUTRO
 _ImageBuffer                .dsb 40*200   ; 200 lines of HIRES
+_TypewriterMusic            .dsb LOADER_MUSIC_TYPEWRITER_SIZE   ; 921 bytes
 _SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a full image
 _gInputBuffer               .dsb 40
 #endif

@@ -345,7 +345,7 @@ int DisplayStory()
     if (gGameStarting)
     {
         // Now we start the second music
-        PlayMusic(TypewriterMusic);
+        PlayMusic(0+2+4+0+16+32,TypewriterMusic);
 
         // Copy the composite image to the image buffer to rebuild the background
         memcpy(ImageBuffer2,(char*)0xa000,8000);
@@ -855,6 +855,10 @@ void main()
     LoadFileUncompressedAt(INTRO_PICTURE_TYPEWRITER,CompressedTypeWriterImage,INTRO_PICTURE_TYPEWRITER_COMPRESSED);
 #endif
 
+#ifdef ENABLE_MUSIC
+    LoadFileAt(LOADER_MUSIC_TYPEWRITER,TypewriterMusic);    
+#endif
+
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
 
@@ -862,7 +866,7 @@ void main()
     SoundBoard();
 #else    
 #ifdef INTRO_ENABLE_ATTRACT_MODE
-    PlayMusic(IntroMusic);
+    PlayMusic(1+2+4+8+16+32,IntroMusic);
 	while (!gShouldExit)
 	{
         switch (gIntroPage)

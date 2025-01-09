@@ -473,6 +473,11 @@ AddFile ..\build\files\game_over_music.mus        ; About 1214 bytes
 AddDefine LOADER_MUSIC_GAME_OVER {FileIndex}
 AddDefine LOADER_MUSIC_GAME_OVER_SIZE {FileSize}
 
+AddFile ..\build\files\intro_music_typewriter.mus ; About 921 bytes
+AddDefine LOADER_MUSIC_TYPEWRITER {FileIndex}
+AddDefine LOADER_MUSIC_TYPEWRITER_SIZE {FileSize}
+
+
 ;
 ; The scores: They should be uncompressed because they are going to be overwritten
 ;

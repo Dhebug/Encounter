@@ -229,7 +229,6 @@ SET CONVERT=CALL bin\_ArkosConv
 :: These are exported as source code and compiled with the executable
 %CONVERT% music_jingle splash_music
 %CONVERT% music_intro intro_music
-%CONVERT% music_typewriter intro_music_typewriter
 
 :: These are exported as binary files and loaded dynamicaly by the scripting system
 :: The export address should be double checked with the map file
@@ -240,6 +239,9 @@ SET EXPORT_ADDRESS=0xf3a4
 %CONVERT% music_construction_complete success_music 2000
 %CONVERT% music_game_over_good you_won_music 2000
 %CONVERT% music_game_over_bad game_over_music 2000
+
+SET EXPORT_ADDRESS=0xdf40
+%CONVERT% music_typewriter intro_music_typewriter 2000
 
 
 

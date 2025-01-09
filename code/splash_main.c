@@ -95,7 +95,7 @@ void ApplySettings()
     {
         MusicMixerMask = 1+2+4;
 #ifdef ENABLE_MUSIC
-        PlayMusic(JingleMusic);
+        PlayMusic(1+2+4+8+16+32,JingleMusic);
 #endif    
     }
     else

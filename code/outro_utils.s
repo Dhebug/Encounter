@@ -22,11 +22,3 @@ _DrawArrows
 _gFont12x14
     rts
 
-_TypewriterMusic
-.(
-    .byt 0+2+4+0+16+32        ; Only channels two and three are used, channel one is available for sound effects
-#include "intro_music_typewriter.s"
-.)
-
-
-

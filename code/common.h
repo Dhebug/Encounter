@@ -77,9 +77,9 @@ extern unsigned char gCurrentMusicFileIndex;    // Index of the currently loaded
 #endif
 
 #ifdef ENABLE_MUSIC
-#define PlayMusic(music)                { param0.ptr=music+1;param1.ptr=(void*)(*((int*)music));MusicMixerMask=music[0];asm("jsr _StartMusic"); }
+#define PlayMusic(mixer,music)                { param0.ptr=music;MusicMixerMask=mixer;asm("jsr _StartMusic"); }
 #else
-#define PlayMusic(music)                { }
+#define PlayMusic(mixer,music)                { }
 #endif
 
 extern const char* SoundDataPointer;

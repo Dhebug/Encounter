@@ -200,16 +200,6 @@ _ScrollPageData
     SOUND_SET_VALUE_END(8,0)                   ; Finally set the volume to 0
 
 
-_IntroMusic
-.(
-    .byt 1+2+4+8+16+32        ; All the three channels are used
+_IntroMusic       ; All the three channels are used
 #include "intro_music.s"
-.)
-
-_TypewriterMusic
-.(
-    .byt 0+2+4+0+16+32        ; Only channels two and three are used, channel one is available for sound effects
-#include "intro_music_typewriter.s"
-.)
-
 

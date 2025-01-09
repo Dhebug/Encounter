@@ -72,11 +72,8 @@ loop
 
 
 #ifdef ENABLE_MUSIC
-_JingleMusic
-.(
-    .byt 1+2+4+8+16+32        ; All the three channels are used
+_JingleMusic            ; All the three channels are used
 #include "splash_music.s"
-.)
 #endif
 
 
