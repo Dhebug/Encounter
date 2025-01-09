@@ -202,28 +202,14 @@ _ScrollPageData
 
 _IntroMusic
 .(
-#ifdef USE_MUSIC_EVENTS    
-    .dw events
-#endif    
     .byt 1+2+4+8+16+32        ; All the three channels are used
 #include "intro_music.s"
-#ifdef USE_MUSIC_EVENTS
-events
-#include "intro_music_events.s"
-#endif
 .)
 
 _TypewriterMusic
 .(
-#ifdef USE_MUSIC_EVENTS
-    .dw events
-#endif    
     .byt 0+2+4+0+16+32        ; Only channels two and three are used, channel one is available for sound effects
 #include "intro_music_typewriter.s"
-#ifdef USE_MUSIC_EVENTS
-events
-#include "intro_music_typewriter_events.s"
-#endif
 .)
 
 

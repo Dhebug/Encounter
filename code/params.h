@@ -15,8 +15,6 @@
 #define ENABLE_MUSIC                    // Comment out to disable the music
 #define ENABLE_SOUND_EFFECTS            // Comment out to disable sound effects
 
-//#define USE_MUSIC_EVENTS                // Comment out to disable events (not used in Encounter)
-
 #define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
 #ifdef MODULE_GAME
 #endif
