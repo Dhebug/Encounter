@@ -171,6 +171,7 @@ _gTextItemComputer                .byt "un _ordinateur de bureau",0
 _gTextItemInvoice                 .byt "une$_facture",0
 _gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
+_gTextItemLockedPanel             .byt "un _clignotant",0
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -243,6 +244,7 @@ _gTextItemComputer                .byt "a desktop _computer",0
 _gTextItemInvoice                 .byt "an$_invoice letter",0
 _gTextItemTelevision              .byt "a _television",0
 _gTextItemGameConsole             .byt "a game _console",0
+_gTextItemLockedPanel             .byt "a _blinker",0
 #endif
 _EndItemNames
 
@@ -3126,7 +3128,17 @@ _InspectClay
 
 _InspectSwitch
 _InspectPanel
-.(
+.(    
+    ; Was the tape removed from the window?
+    IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_removed)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Ca clignote et ca bipe")
+#else        
+        INFO_MESSAGE("It blinks and beeps")
+#endif        
+        END_AND_REFRESH
+    ENDIF(tape_removed)
+
     INCREASE_SCORE(POINTS_INSPECT_PANEL)
     ; Is the alarm panel open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED),else)
@@ -3142,11 +3154,15 @@ _InspectPanel
 #endif        
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)
 #ifdef LANGUAGE_FR        
-        INFO_MESSAGE("Il y a un trou pour une petite clef")
+            INFO_MESSAGE("Il y a un trou pour une petite clef")
 #else
-        INFO_MESSAGE("There's a hole for a small key")
+            INFO_MESSAGE("There's a hole for a small key")
 #endif        
+        ELSE(locked,unlocked)
+            GOSUB(_SubClosedButNotLocked_Elle)
+        ENDIF(unlocked)
     ENDIF(open)
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -4099,6 +4115,7 @@ _OpenGunCabinet
 #else
         INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
+        WAIT_KEYPRESS
     ENDIF(dartgun)
     END_AND_REFRESH
 .)
@@ -4106,6 +4123,8 @@ _OpenGunCabinet
 
 _OpenAlarmPanel
 .(
+    GOSUB(_SubCheckToDark)     ; Was the tape removed from the window?
+
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
 #ifdef LANGUAGE_FR                                                                             ; Show error to the player
         ERROR_MESSAGE("Il faut une clef pour l'ouvrir")
@@ -4367,18 +4386,25 @@ _CloseGunCabinet
 
 _CloseAlarmPanel
 .(
+    GOSUB(_SubCheckToDark)     ; Was the tape removed from the window?
+
     JUMP_IF_TRUE(_ErrorAlreadyClosed_Elle,CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED))        ; Is the alarm panel closed?
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                                              ; Close it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-+_gTextItemLockedPanel = *+2       
+    GOSUB(_SubSetLockedPanelDescription)
+    SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                                ; The alarm button is now invisible 
+    JUMP(_InspectPanel)
+.)
+
+_SubSetLockedPanelDescription
+.(
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
     SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme fermée")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm _panel")
 #endif        
-    SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_NONE)                                                ; The alarm button is now invisible 
-    JUMP(_InspectPanel)
+    RETURN
 .)
 
 
@@ -4523,11 +4549,7 @@ _InspectCarBoot
 _InspectCarDoor
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED),door_closed)
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("Elle est fermée mais pas à clef")
-#else
-        INFO_MESSAGE("It's closed, but not locked.")
-#endif    
+        GOSUB(_SubClosedButNotLocked_Elle)
     ELSE(door_closed,door_open)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est mangée par la rouille")
@@ -4761,31 +4783,25 @@ snoozed_thug
 
 _UseKey
 .(
+    GOSUB(_SubCheckToDark)     ; Was the tape removed from the window?
+
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
-        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_gone)
-            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
-                PLAY_SOUND(_UseKeyOnAlarmPanel)
-                UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
-                SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
-                INCREASE_SCORE(POINTS_USED_KEY)
+        JUMP_IF_FALSE(_ErrorTooDark,CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER))
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
+            PLAY_SOUND(_UseKeyOnAlarmPanel)
+            UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
+            SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
+            INCREASE_SCORE(POINTS_USED_KEY)
 #ifdef LANGUAGE_FR                                                                             ; Update the description 
-                SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
-                INFO_MESSAGE("La centrale est déverrouillée")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
+            INFO_MESSAGE("La centrale est déverrouillée")
 #else
-                SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
-                INFO_MESSAGE("The panel is now unlocked")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
+            INFO_MESSAGE("The panel is now unlocked")
 #endif        
-                WAIT(50*1)
-                END_AND_REFRESH
-            ENDIF(locked)
-        ELSE(tape_gone,tape_present)
-#ifdef LANGUAGE_FR
-            INFO_MESSAGE("Il fait trop sombre !")
-#else
-            INFO_MESSAGE("It's too dark!")
-#endif    
-            END_AND_REFRESH
-        ENDIF(tape_present)
+            WAIT(50*1)
+            END_AND_PARTIAL_REFRESH
+        ENDIF(locked)
     ENDIF(cellar)
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)               ; Are we in front of the panic room?
@@ -4795,6 +4811,7 @@ _UseKey
 #else
         INFO_MESSAGE("It uses a digital lock!")
 #endif    
+        WAIT_KEYPRESS
         END_AND_REFRESH
     ENDIF(panic_room)
 
@@ -4804,7 +4821,7 @@ _UseKey
 #else
         INFO_MESSAGE("It does not fit")
 #endif    
-        END_AND_REFRESH
+        END_AND_PARTIAL_REFRESH
     ENDIF(front_entrance)
 
     JUMP(_ErrorCannotDo)
@@ -5751,6 +5768,7 @@ _TakeBlackTape
     INFO_MESSAGE("The tape cannot be reused")
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
 #endif    
+    GOSUB(_SubSetLockedPanelDescription)
     END_AND_REFRESH
 .)
 
@@ -6023,6 +6041,34 @@ _ErrorAlreadyEquipped_Elle
     END_AND_PARTIAL_REFRESH
 
 
+_SubClosedButNotLocked_Elle
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Elle est fermée mais pas à clef")
+#else
+    INFO_MESSAGE("It's closed, but not locked.")
+#endif    
+    RETURN
+
+
+_SubCheckToDark
+.(
+    JUMP_IF_FALSE(_ErrorTooDark,CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER))
+    RETURN
+.)
+
+
+_ErrorTooDark
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il fait trop sombre !")
+#else
+    INFO_MESSAGE("It's too dark!")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+
 ; This is a script that is run before the setup of a scene is done.
 ; In the current status it is used to get the girl to follow us
 _ScenePreLoadScript
@@ -6114,7 +6160,7 @@ _OneHourAlarmWarning
             _IMAGE(28,34)
             _SCREEN(21,63)
 
-    WAIT(50)
+    WAIT(25)
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
 
     END_AND_REFRESH

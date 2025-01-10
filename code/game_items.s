@@ -79,7 +79,7 @@ _gItems
     ITEM_NORMAL( _gTextItemMortarAndPestle       ,e_LOC_KITCHEN         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MortarAndPestle
     ITEM_NORMAL( _gTextItemAdhesive              ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Adhesive
     ITEM_NORMAL( _gTextItemAcid                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Acid
-    ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED|ITEM_FLAG_LOCKED)      // e_ITEM_AlarmPanel
+    ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_DARKCELLARROOM  ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED|ITEM_FLAG_LOCKED)      // e_ITEM_AlarmPanel
     ITEM_NORMAL( _gTextItemSecurityDoor          ,e_LOC_PANIC_ROOM_DOOR ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_SecurityDoor
     ITEM_NORMAL( _gTextItemDriedOutClay          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Clay
     ITEM_NORMAL( _gTextItemProtectionSuit        ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ProtectionSuit
