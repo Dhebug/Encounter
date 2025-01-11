@@ -77,7 +77,11 @@ no_prefix
     rts
 .)
 
-#if 1
+
+; A/X = pointer to the string -> copied to _param0 +0/+1
+_PrintStringInternalAX
+    sta _param0+0
+    stx _param0+1
 ; _param0 +0/+1 = pointer to the string
 _PrintStringInternal
     ;jmp _PrintStringInternal
@@ -234,7 +238,7 @@ next_car
     jmp loop
 
 .)
-#endif
+
 
 _IncrementParam0
 .(
