@@ -8,17 +8,19 @@
 
     .zero 
 
-_gCurrentStream         .dsb 2
-_gCurrentStreamStop     .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
-_gDelayStream           .dsb 2
-_gStreamCutScene        .dsb 1   ; 1 = In a cut scene
-_gStreamSkipPoint       .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
+_gCurrentStream             .dsb 2
+_gCurrentStreamStop         .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
+_gDelayStream               .dsb 2
+_gStreamCutScene            .dsb 1   ; 1 = In a cut scene
+_gStreamSkipPoint           .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
 
-_gCurrentItem           .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
-_gStreamItemPtr         .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
-_gStreamLocationPtr     .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
-_gStreamNextPtr         .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
-_gStreamReturnPtr       .dsb 2   ; The ONE level of subfunction we are allowed to call using GOSUB and RETURN
+_gCurrentItem               .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
+_gStreamItemPtr             .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
+_gStreamAssociatedItemPtr   .dsb 2   ; associated item pointer, needs to be behind _gStreamItemPtr in memory
+
+_gStreamLocationPtr         .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
+_gStreamNextPtr             .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
+_gStreamReturnPtr           .dsb 2   ; The ONE level of subfunction we are allowed to call using GOSUB and RETURN
 
     .text 
 
@@ -321,44 +323,64 @@ keep_item_id
 ; sizeof(item) = 6
 ; 6 = 4n+2n = n<<2 + n<<1
 +_ByteStreamComputeItemPtr
+    stx tmp1
+    ldx #0
+    jsr _ByteStreamComputeItemPtrIndexX
+    ldx tmp1
+    rts
+
++_ByteStreamComputeItemPtrIndexX    
     // Item ID
-    sta _gStreamItemPtr+0
+    sta _gStreamItemPtr+0,x
     lda #0
-    sta _gStreamItemPtr+1
+    sta _gStreamItemPtr+1,x
 
     // x2
-    asl _gStreamItemPtr+0
-    rol _gStreamItemPtr+1
+    asl _gStreamItemPtr+0,x
+    rol _gStreamItemPtr+1,x
 
     // x4
-    lda _gStreamItemPtr+0
+    lda _gStreamItemPtr+0,x
     asl
     sta tmp0+0
-    lda _gStreamItemPtr+1
+    lda _gStreamItemPtr+1,x
     rol
     sta tmp0+1
 
     // x6
     clc
-    lda _gStreamItemPtr+0
+    lda _gStreamItemPtr+0,x
     adc tmp0+0
-    sta _gStreamItemPtr+0
-    lda _gStreamItemPtr+1
+    sta _gStreamItemPtr+0,x
+    lda _gStreamItemPtr+1,x
     adc tmp0+1
-    sta _gStreamItemPtr+1
+    sta _gStreamItemPtr+1,x
 
     // Item pointer
     clc
-    lda _gStreamItemPtr+0
+    lda _gStreamItemPtr+0,x
     adc #<_gItems
-    sta _gStreamItemPtr+0
-    lda _gStreamItemPtr+1
+    sta _gStreamItemPtr+0,x
+    lda _gStreamItemPtr+1,x
     adc #>_gItems
-    sta _gStreamItemPtr+1
-
+    sta _gStreamItemPtr+1,x
     rts
 .)
 
+; A=Refernce Item ID
+; Return a pointer on the item in _gStreamItemPtr as well as _gStreamAssociatedItemPtr if there's an associated item (or a copy of it if not)
+_ByteStreamComputeDualItemPtr
+.(
+    ; Fetch the first item
+    jsr _ByteStreamComputeItemPtr
+    ldy #3
+    lda (_gStreamItemPtr),y      // gItems->associated_item (+3) = read associated_item id    
+    cmp #255
+    beq end_associated_item
+    ldx #2
+    jsr _ByteStreamComputeItemPtrIndexX
+end_associated_item
+.)
 
 
 

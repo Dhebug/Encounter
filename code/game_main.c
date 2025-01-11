@@ -14,69 +14,12 @@ extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so
 
 extern char ScenePreLoadScript[];              // Script that runs before the scene even loads - used to move the girl around
 
-char gColoredSeparator[]=" ";
+extern char gColoredSeparator[];
 
 
 extern WORDS ProcessContainerAnswer();
 extern void HandleKeywordHighlight();
 
-
-// MARK:Print Inventory
-// The inventory display is done in two passes, using an intermediate buffer to limit flickering.
-// The first pass displays all the non empty containers and their associated content
-// The second pass displays the rest
-// And finally the buffer is copied back to video memory.
-void PrintInventory()
-{	
-    int pass;
-	int itemId;
-
-    gCurrentItemCount = 0;
-
-    ClearTemporaryBuffer479();  //memset((char*)TemporaryBuffer479,' ',40*4);
-    gPrintWidth=38;
-    gPrintRemovePrefix=1;
-    for (pass=0;pass<2;pass++)
-    {
-    	item* itemPtr = gItems;
-        for (itemId=0;itemId<e_ITEM_COUNT_;itemId++)
-        {
-            if (itemPtr->location == e_LOC_INVENTORY)
-            {
-                char* screenPtr = (char*)TemporaryBuffer479+40*(gCurrentItemCount/2)+(gCurrentItemCount&1)*20;
-                unsigned char associatedItemId = itemPtr->associated_item;
-                 gColoredSeparator[0] = (gCurrentItemCount&1)^((gCurrentItemCount&2)>>1)  ?7:3;  // Alternate the ink colors based on the counter
-
-                if (pass==0)
-                {
-                    // First pass: Only the containers with something inside
-                    if ( (itemPtr->flags & ITEM_FLAG_IS_CONTAINER) && (associatedItemId!=255) )
-                    {
-                        PrintStringAt(gColoredSeparator,screenPtr);
-                        PrintStringAt(itemPtr->description,screenPtr+1);  // Print the container
-                        PrintString(":");
-                        PrintString(gItems[associatedItemId].description);
-                        gCurrentItemCount+=2;
-                    }
-                }
-                else
-                {
-                    // Second pass: Everything else
-                    if (associatedItemId==255)
-                    {
-                        PrintStringAt(gColoredSeparator,screenPtr);
-
-                        PrintStringAt(itemPtr->description,screenPtr+1);  // Print the item
-                        gCurrentItemCount++;
-                    }
-                }
-            }
-            ++itemPtr;
-        }
-    }
-    BlittTemporaryBuffer479();
-    gPrintRemovePrefix=0;
-}
 
 
 extern int PrintSceneObjectsInit();

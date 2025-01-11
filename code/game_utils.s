@@ -10,6 +10,7 @@ _gCurrentItemCount          .dsb 1
 _gInventoryOffset           .dsb 2
 
 _gActionMappingPtr          .dsb 2
+_gScreenPtr                 .dsb 2       ; Used ty the routines that prints inventory, items, etc...
 
     .text
 
@@ -812,6 +813,9 @@ found_items
 
 
 
+_gColoredSeparator  .byt " ",0
+_gColonSeparator    .byt ":",0
+
 ; memset((char*)TemporaryBuffer479,' ',40*4);  = 160
 ; memset((char*)TemporaryBuffer479,' ',40*10); = 400
 _ClearTemporaryBuffer479
@@ -822,6 +826,216 @@ _ClearTemporaryBuffer479
 _BlittTemporaryBuffer479
 .(
     MEMCPY_JMP(_MemCpy__BlittTemporaryBuffer479)
+.)
+
+
+// MARK:Print Inventory
+// The inventory display is done in two passes, using an intermediate buffer to limit flickering.
+// The first pass displays all the non empty containers and their associated content
+// The second pass displays the rest
+// And finally the buffer is copied back to video memory.
+_PrintInventory
+.(
+    lda #0
+    sta _gCurrentItemCount
+
+    jsr _ClearTemporaryBuffer479
+
+    lda #38
+    sta _gPrintWidth
+    lda #1
+    sta _gPrintRemovePrefix
+
+    ;
+    ; First pass: Only the containers with something inside
+    ;
+    lda #<_TemporaryBuffer479
+    sta _gScreenPtr+0
+    lda #>_TemporaryBuffer479
+    sta _gScreenPtr+1
+
+    lda #0
+loop_item
+    pha
+    jsr _ByteStreamComputeDualItemPtr     ; Fetch the item information
+
+    ; unsigned char associatedItemId = itemPtr->associated_item;
+    ; if ( (itemPtr->location == e_LOC_INVENTORY) && (itemPtr->flags & ITEM_FLAG_IS_CONTAINER) && (associatedItemId!=255) )
+
+    ldy #4                       ; Is it a container?
+    lda (_gStreamItemPtr),y      ; gItems->flags (+4) = read flags
+    and #ITEM_FLAG_IS_CONTAINER
+    beq skip_item
+
+    dey                          ; Is there an associated item?
+    lda (_gStreamItemPtr),y      ; gItems->associated_item (+3) = read associated_item id    
+    cmp #255
+    beq skip_item
+
+    dey                          ; Is it in the inventory?
+    lda (_gStreamItemPtr),y      ; gItems->location (+2) = location id
+    cmp #e_LOC_INVENTORY
+    bne skip_item
+
+    jsr _PrintInventorySetColor  ; Set the proper color
+
+    ;PrintStringAt(gColoredSeparator,gScreenPtr);
+    lda #0
+    sta _gPrintPos
+
+    lda _gScreenPtr+0
+    sta _gPrintAddress+0
+    lda _gScreenPtr+1
+    sta _gPrintAddress+1
+
+    lda #<_gColoredSeparator
+    ldx #>_gColoredSeparator
+    jsr _PrintStringInternalAX
+
+    ;PrintString(itemPtr->description);  // Print the container
+    ldy #1
+    lda (_gStreamItemPtr),y      ; gItems->description (+0) = item description
+    tax
+    dey
+    lda (_gStreamItemPtr),y      ; gItems->description (+0) = item description
+    jsr _PrintStringInternalAX
+
+    ;PrintString(":");
+    lda #<_gColonSeparator
+    ldx #>_gColonSeparator
+    jsr _PrintStringInternalAX
+
+    ;PrintString(gItems[associatedItemId].description);
+    ldy #1
+    lda (_gStreamAssociatedItemPtr),y      ; gItems->description (+0) = item description
+    tax
+    dey
+    lda (_gStreamAssociatedItemPtr),y      ; gItems->description (+0) = item description
+    jsr _PrintStringInternalAX
+
+
+    inc _gCurrentItemCount       ; gCurrentItemCount+=2;
+    inc _gCurrentItemCount
+
+    clc                          ; gScreenPtr+=40;
+    lda _gScreenPtr+0
+    adc #40
+    sta _gScreenPtr+0
+    lda _gScreenPtr+1
+    adc #0
+    sta _gScreenPtr+1
+
+skip_item
+    pla
+    clc
+    adc #1
+    cmp #e_ITEM_COUNT_
+    bne loop_item
+.)
+.(
+    // Solo items pass
+    // Second pass: Everything else
+   
+    lda #0
+loop_single_items
+    pha
+    jsr _ByteStreamComputeItemPtr     ; Fetch the item information
+
+    ; unsigned char associatedItemId = itemPtr->associated_item;
+    ;if ( (itemPtr->location == e_LOC_INVENTORY) && (associatedItemId==255))
+    ldy #3                       ; Is there an associated item?
+    lda (_gStreamItemPtr),y      ; gItems->associated_item (+3) = read associated_item id    
+    cmp #255
+    bne skip_item
+
+    dey                          ; Is it in the inventory?
+    lda (_gStreamItemPtr),y      ; gItems->location (+2) = location id
+    cmp #e_LOC_INVENTORY
+    bne skip_item
+
+    jsr _PrintInventoryComputeScreenPtr
+    jsr _PrintInventorySetColor  ; Set the proper color
+
+    ;PrintStringAt(gColoredSeparator,gScreenPtr);
+    lda #0
+    sta _gPrintPos
+
+    lda _gScreenPtr+0
+    sta _gPrintAddress+0
+    lda _gScreenPtr+1
+    sta _gPrintAddress+1
+
+    lda #<_gColoredSeparator
+    ldx #>_gColoredSeparator
+    jsr _PrintStringInternalAX
+
+    ;PrintString(itemPtr->description);  // Print the container
+    ldy #1
+    lda (_gStreamItemPtr),y      ; gItems->description (+0) = item description
+    tax
+    dey
+    lda (_gStreamItemPtr),y      ; gItems->description (+0) = item description
+    jsr _PrintStringInternalAX
+
+    inc _gCurrentItemCount
+
+skip_item
+    pla
+    clc
+    adc #1
+    cmp #e_ITEM_COUNT_
+    bne loop_single_items
+
+    jsr _BlittTemporaryBuffer479
+
+    lda #0
+    sta _gPrintRemovePrefix
+    rts
+.)
+
+; CYAN  =7=%111
+; YELLOW=3=%011
+_PrintInventorySetColor
+.(
+    ; gColoredSeparator[0] = (gCurrentItemCount&1)^((gCurrentItemCount&2)>>1)  ?7:3;  // Alternate the ink colors based on the counter
+    ldx #3
+    lda _gCurrentItemCount
+    and #1
+    sta tmp0
+    lda _gCurrentItemCount
+    lsr 
+    and #1
+    eor tmp0
+    beq yellow
+    ldx #7
+yellow    
+    stx _gColoredSeparator
+    rts
+.)
+
+
+_PrintInventoryComputeScreenPtr
+.(
+    ; gScreenPtr = (char*)TemporaryBuffer479+40*(gCurrentItemCount/2)+(gCurrentItemCount&1)*20;  
+    lda #<_TemporaryBuffer479
+    sta _gScreenPtr+0
+    lda #>_TemporaryBuffer479
+    sta _gScreenPtr+1
+
+    ldx _gCurrentItemCount
+    beq end_line
+loop_line
+    clc
+    lda _gScreenPtr+0
+    adc #20
+    sta _gScreenPtr+0
+    lda _gScreenPtr+1
+    adc #0
+    sta _gScreenPtr+1
+    dex
+    bne loop_line
+end_line
+    rts
 .)
 
 

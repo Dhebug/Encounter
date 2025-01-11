@@ -294,7 +294,7 @@
 - Improvement: Added Scotland to the map
 
 1.0.4
-- Misc: Reimplemented HandleByteStream in assembler to reduce the code size
+- Misc: Reimplemented HandleByteStream and PrintInventory in assembler to reduce the code size
 - Tweak: Reduced a tiny bit the timing of the clock at the start of the game
 - Improvement: Trying to use the game console now shows a picture
 - Improvement: Made the alarm panel appear as a blinking light element so players don't miss it
