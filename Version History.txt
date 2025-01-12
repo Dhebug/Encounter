@@ -300,3 +300,5 @@
 - Improvement: Made the alarm panel appear as a blinking light element so players don't miss it
 - Improvement: The alarm panel should now properly report as being unlocked instead of telling there's a hole for a key after being unlocked
 - Improvement: Added some key press waits after a few more elements that took a long time to read
+
+1.0.5
