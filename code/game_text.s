@@ -2478,6 +2478,7 @@ _ReadDemoMessage
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_DARKCELLARROOM)
+    CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Si vous voulez visiter la cave...")
 #else    
@@ -2506,6 +2507,7 @@ _ReadDemoMessage
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_STUDY_ROOM)
+    CLEAR_TEXT_AREA(2)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("alors tentez le jeu complet !")
 #else    
@@ -2513,6 +2515,7 @@ _ReadDemoMessage
 #endif
 
     DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
+    CLEAR_TEXT_AREA(1)
     FADE_BUFFER
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Vaincrez-vous Cerbère ?")
@@ -2541,6 +2544,7 @@ _ReadDemoMessage
     INFO_MESSAGE("Will you use weapons?")
 #endif
 
+    CLEAR_TEXT_AREA(2)
     DISPLAY_IMAGE(LOADER_PICTURE_TO_BE_CONTINUED)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Voulez-vous élucider l'affaire ?")
