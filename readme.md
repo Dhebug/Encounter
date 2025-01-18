@@ -10,7 +10,18 @@ The game is not finished and still being worked on.
 If you are interested by the topic, you can read this [blog post](https://blog.defence-force.org/index.php?page=articles&ref=ART85) which also links to a few related videos on my youtube channel
 
 # Current state
-Here is more or less the current state of the game: 
+The game has been released on [itch.io](https://defenceforce.itch.io/encounter) and [Steam](https://store.steampowered.com/app/3319780/Encounter/) on December 20th 2024 as version 1.0.0.
+
+A certain number of issues have been identified and most of them fixed, and the game was also expended with a few more graphics, a few more interactions, etc...
+
+The game is still in development as of today (January 18th 2025).
+
+## Christmas 2024 gameplay demo
+This is how he game looked like when it was originally released.
+
+[![Video](https://img.youtube.com/vi/Nd-NJREcMVg/0.jpg)](https://www.youtube.com/watch?v=Nd-NJREcMVg)
+
+
 ## Mars 2024 demo
 This video shows the state of the game, including the intro and end credits sequences.
 
