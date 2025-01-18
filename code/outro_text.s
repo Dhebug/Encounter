@@ -12,13 +12,23 @@ _gTextHighScoreInvalidName  .byt "Entre 1 et 15 caractères",0
 
 _gTextThanks   
     .byt TEXT_CRLF,TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 3,10,"Merci d'avoir joué à Encounter Démo",TEXT_CRLF
+    .byt 3,10,"Merci d'avoir joué à Encounter Démo",TEXT_CRLF
+#else
     .byt 3,10,"Merci d'avoir joué à Encounter Redux",TEXT_CRLF
     .byt 3,10,"Merci d'avoir joué à Encounter Redux",TEXT_CRLF
+#endif    
     .byt TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,10," Nous espérons que vous l'avez aimé.",TEXT_CRLF
     .byt 3,10," Nous espérons que vous l'avez aimé.",TEXT_CRLF
     .byt TEXT_CRLF
+    .byt TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 2,10,"Si oui, achetez donc le jeu complet !",TEXT_CRLF
+    .byt 2,10,"Si oui, achetez donc le jeu complet !",TEXT_CRLF
+#endif    
     .byt TEXT_CRLF
     .byt TEXT_END
 
@@ -91,14 +101,23 @@ _gTextHighScoreInvalidName  .byt "Choose between 1 and 15 characters",0
 
 _gTextThanks   
     .byt TEXT_CRLF,TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 3,10," Thanks for playing Encounter Demo",TEXT_CRLF
+    .byt 3,10," Thanks for playing Encounter Demo",TEXT_CRLF
+#else
     .byt 3,10," Thanks for playing Encounter Redux",TEXT_CRLF
     .byt 3,10," Thanks for playing Encounter Redux",TEXT_CRLF
+#endif    
     .byt TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,10," We hope you enjoyed the experience.",TEXT_CRLF
     .byt 3,10," We hope you enjoyed the experience.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 2,10,"If you did, maybe buy the full game?",TEXT_CRLF
+    .byt 2,10,"If you did, maybe buy the full game?",TEXT_CRLF
+#endif    
     .byt TEXT_END
 
 _gTextCredits
@@ -241,6 +260,12 @@ _Test_DETAILS_GAVE_UP
     .byt 5,"abandonner, car l'otage n'a jamais été",TEXT_CRLF
     .byt 5,"revue après...",1,"C'était votre boulot !",TEXT_CRLF
     .byt 0
+
+_Test_DETAILS_FINISHED_DEMO
+    .byt 5,"Vous avez trouvé l'entrée arrière de la",TEXT_CRLF
+    .byt 5,"maison. Qui sait ce qui se cache",TEXT_CRLF
+    .byt 5,"derrière ces portes !",1,"Curieux ?",TEXT_CRLF
+    .byt 0
 #else // LANGUAGE_EN
 _Test_DETAILS_SOLVED_THE_CASE      
     .byt 2,"Congratulations, you solved the case!",TEXT_CRLF,TEXT_CRLF
@@ -289,6 +314,12 @@ _Test_DETAILS_GAVE_UP
     .byt 5,"abandon, because the hostage never had",TEXT_CRLF
     .byt 5,"a chance and was",1,"never seen after...",TEXT_CRLF
     .byt 0
+
+_Test_DETAILS_FINISHED_DEMO
+    .byt 5,"You've found the rear entrance of the",TEXT_CRLF
+    .byt 5,"mansion. Who knows what you would find",TEXT_CRLF
+    .byt 5,"behind these closed doors!",1,"Curious?",TEXT_CRLF
+    .byt 0
 #endif
 
 _Text_Empty .byt 0
@@ -303,6 +334,7 @@ _gScoreConditionsArray
   .word _Test_DETAILS_RAN_OUT_OF_TIME
   .word _Test_DETAILS_BLOWN_INTO_BITS
   .word _Test_DETAILS_GAVE_UP        
+  .word _Test_DETAILS_FINISHED_DEMO
 
 
 // Bonus texts

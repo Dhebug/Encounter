@@ -131,7 +131,11 @@ AddFile ..\build\files\intro_title_picture.hir
 AddDefine LOADER_PICTURE_TITLE {FileIndex}
 AddDefine LOADER_PICTURE_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
 
+#ifdef PRODUCT_TYPE_GAME_DEMO
+AddFile ..\build\files\intro_game_title_demo.hir
+#else
 AddFile ..\build\files\intro_game_title.hir
+#endif
 AddDefine LOADER_PICTURE_GAME_TITLE {FileIndex}
 AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED {FileSize}
 AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
@@ -198,7 +202,11 @@ AddFile ..\build\files\loc_library.hir
 AddFile ..\build\files\loc_dinning_room.hir
 AddFile ..\build\files\loc_staircase.hir
 AddFile ..\build\files\loc_games_room.hir
+#ifdef PRODUCT_TYPE_GAME_DEMO
+AddFile ..\build\files\loc_sun_lounge_demo.hir
+#else
 AddFile ..\build\files\loc_sun_lounge.hir
+#endif
 AddFile ..\build\files\loc_kitchen.hir
 AddFile ..\build\files\loc_narrow_passage.hir
 AddFile ..\build\files\loc_guest_bedroom.hir
@@ -389,6 +397,16 @@ AddDefine LOADER_PICTURE_TOMBSTONE {FileIndex}
 
 AddFile ..\build\files\view_colecovision_boot.hir
 AddDefine LOADER_PICTURE_COLECOVISION {FileIndex}
+
+#ifdef PRODUCT_TYPE_GAME_DEMO
+#ifdef LANGUAGE_FR
+AddFile ..\build\files\view_demo_message_fr.hir
+#else
+AddFile ..\build\files\view_demo_message.hir
+#endif
+AddDefine LOADER_PICTURE_TO_BE_CONTINUED {FileIndex}
+#endif
+
 
 
 ; All the sprites

@@ -172,6 +172,9 @@ _gTextItemInvoice                 .byt "une$_facture",0
 _gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
 _gTextItemLockedPanel             .byt "un _clignotant",0
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_gTextItemDemoReadMe              .byt "un _message sur la porte",0
+#endif
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -245,6 +248,9 @@ _gTextItemInvoice                 .byt "an$_invoice letter",0
 _gTextItemTelevision              .byt "a _television",0
 _gTextItemGameConsole             .byt "a game _console",0
 _gTextItemLockedPanel             .byt "a _blinker",0
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_gTextItemDemoReadMe              .byt "a _message on the door",0
+#endif
 #endif
 _EndItemNames
 
@@ -2449,7 +2455,104 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_Tombstone          , _ReadTombstone)
     VALUE_MAPPING(e_ITEM_Graffiti           , _ReadGraffiti)
     VALUE_MAPPING(e_ITEM_Invoice            , _ReadInvoice)
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    VALUE_MAPPING(e_ITEM_DemoMessage        , _ReadDemoMessage)
+#endif    
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
+
+
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_InspectDemoMessage
+_UseDemoMessage
+_ReadDemoMessage
+.(
+    SET_CUT_SCENE(1)
+    STOP_CLOCK
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Vous avez atteint la fin de la démo !")
+    INFO_MESSAGE("Ces portes sont normalement ouvertes.")
+#else    
+    INFO_MESSAGE("You've reached the end of this demo!")
+    INFO_MESSAGE("These doors are usually unlocked...")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_DARKCELLARROOM)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Si vous voulez visiter la cave...")
+#else    
+    INFO_MESSAGE("If you want to visit the basement...")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("parcourir la bibliothèque...")
+#else    
+    INFO_MESSAGE("investigate the library...")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_GUESTBEDROOM)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("faire une sieste relaxante...")
+#else    
+    INFO_MESSAGE("have a relaxing nap...")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_SHOWERROOM)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("prendre une douche...")
+#else    
+    INFO_MESSAGE("take a shower...")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_STUDY_ROOM)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("alors tentez le jeu complet !")
+#else    
+    INFO_MESSAGE("then consider getting the full game!")
+#endif
+
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
+    FADE_BUFFER
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Vaincrez-vous Cerbère ?")
+#else    
+    INFO_MESSAGE("Will you outsmart Cerberus?")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Pourrez-vous désactiver l'alarme ?")
+#else    
+    INFO_MESSAGE("Will you silence the alarm?")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Souhaitez-vous tout faire sauter ?")
+#else    
+    INFO_MESSAGE("Will you blow things up?")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Allez-vous utiliser des armes ?")
+#else    
+    INFO_MESSAGE("Will you use weapons?")
+#endif
+
+    DISPLAY_IMAGE(LOADER_PICTURE_TO_BE_CONTINUED)
+#ifdef LANGUAGE_FR    
+    INFO_MESSAGE("Voulez-vous élucider l'affaire ?")
+#else    
+    INFO_MESSAGE("Do you want to solve the case?")
+#endif
+    STOP_MUSIC()
+    GAME_OVER(e_SCORE_FINISHED_DEMO)        ; The game is now over
+    END
+.)
+#endif    
+
 
 _InspectNewspaper
 _ReadNewsPaper
@@ -2636,6 +2739,9 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_BlackTape          , _InspectBlackTape)
     VALUE_MAPPING(e_ITEM_Acid               , _InspectAcid)
     VALUE_MAPPING(e_ITEM_Bomb               , _InspectBomb)
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
+#endif    
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -4499,6 +4605,9 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_GameConsole        , _UseGameConsole)
     VALUE_MAPPING(e_ITEM_Television         , _UseTelevision)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _UseChemistryBook)
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    VALUE_MAPPING(e_ITEM_DemoMessage        , _UseDemoMessage)
+#endif    
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 

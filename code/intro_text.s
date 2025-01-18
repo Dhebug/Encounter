@@ -24,6 +24,74 @@ _Text_TitlePicture
 #endif    
     .byt TEXT_END
 
+
+
+;
+; Demo text
+;
+#ifdef PRODUCT_TYPE_GAME_DEMO
+#ifdef LANGUAGE_FR
+_Text_DemoFeatures
+    .byt 1,"          Encounter Démo",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Si vous n'avez jamais joué à ce type",TEXT_CRLF
+    .byt "de jeu, veuillez consulter le manuel",TEXT_CRLF
+    .byt "sur",4,"encounter.defence-force.org",0,"ou",TEXT_CRLF
+    .byt "lisez simplement les pages suivantes.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Les touches flèchées",5,"gauche",0,"et",5,"droite",TEXT_CRLF
+    .byt "servent à naviguer entre les pages.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "La seule limite dans cette démo est",TEXT_CRLF
+    .byt "que vous ne pouvez pas entrer dans le",TEXT_CRLF
+    .byt "manoir, donc vous ne pourrez pas",TEXT_CRLF
+    .byt "terminer la mission !",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Le reste est comme le jeu complet:",TEXT_CRLF
+    .byt "Si vous l'achetez, les",2,"scores",0,"ainsi",TEXT_CRLF
+    .byt "que les",2,"succès",0,"seront conservés.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Dernier mot:",4,"Merci beaucoup",0,"d'avoir",TEXT_CRLF
+    .byt "essayé notre jeu parmi les 19000",TEXT_CRLF
+    .byt "autres jeux sortis rien qu'en 2024 !",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Ce jeu n'est pas une oeuvre d'art",TEXT_CRLF
+    .byt "photo-réaliste avec raytracing",TEXT_CRLF
+    .byt "mais nous avons",1,"fait de notre mieux!",TEXT_CRLF
+    .byt TEXT_END
+#else// LANGUAGE_EN
+_Text_DemoFeatures
+    .byt 1,"          Encounter Demo",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "If you have never played this type of",TEXT_CRLF
+	.byt "game before, please check the manual",TEXT_CRLF
+	.byt "at",4,"encounter.defence-force.org",0,"or",TEXT_CRLF
+	.byt "just read the next two pages!",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "You can use the",5,"left",0,"and",5,"right",0,"arrow",TEXT_CRLF
+	.byt "keys to navigate between the pages.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "The only limit present in this demo",TEXT_CRLF
+	.byt "is that you can't enter the mansion,",TEXT_CRLF
+	.byt "so you will not be able to finish the",TEXT_CRLF
+	.byt "mission!",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "The rest is identical to the complete",TEXT_CRLF
+	.byt "game: if you decide to buy it, your",TEXT_CRLF
+	.byt "scores and",2,"achievements",0,"will follow.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "One last word:",4,"Thank you",0,"very much",TEXT_CRLF
+	.byt "for trying our game among the 19000",TEXT_CRLF
+	.byt "other games released in 2024 alone!",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "It's definitely not a GPU accelerated",TEXT_CRLF
+	.byt "photo-realistic raytraced masterpiece",TEXT_CRLF
+	.byt "but",1,"we tried our best!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt TEXT_END
+#endif
+#endif
+
 ;
 ; Manual
 ;

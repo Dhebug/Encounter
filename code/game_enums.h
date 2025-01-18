@@ -153,7 +153,12 @@
 #define e_ITEM_NormalWindow          76         // a normal window
 #define e_ITEM_AlarmIndicator        77         // an alarm indicator
 #define e_ITEM_Computer              78         // a desktop computer
+#ifdef PRODUCT_TYPE_GAME_DEMO
+#define e_ITEM_DemoMessage           79         // a demo readme message
+#define	e_ITEM_COUNT_ 				 80         //  ----- END MARKER - Free until 127, after are action words
+#else
 #define	e_ITEM_COUNT_ 				 79         //  ----- END MARKER - Free until 127, after are action words
+#endif
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
@@ -264,6 +269,8 @@
 #define e_SCORE_RAN_OUT_OF_TIME  6
 #define e_SCORE_BLOWN_INTO_BITS  7
 #define e_SCORE_GAVE_UP          8
+#define e_SCORE_FINISHED_DEMO    9
+#define e_SCORE_COUNT_           10
 
 // Scoring and points
 // Used INCREASE_SCORE(define)

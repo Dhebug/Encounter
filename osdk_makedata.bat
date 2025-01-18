@@ -67,6 +67,7 @@ SET PARAMS=-u1 -m0 -f0 -o2
 %CONVERT% intro_private_investigator
 %CONVERT% intro_typewriter
 %CONVERT% intro_game_title
+%CONVERT% intro_game_title_demo
 
 :: Outro graphics (black and white)
 SET PARAMS=-u1 -m0 -f0 -o2
@@ -137,6 +138,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_staircase
 %CONVERT% loc_games_room
 %CONVERT% loc_sun_lounge
+%CONVERT% loc_sun_lounge_demo
 %CONVERT% loc_kitchen
 %CONVERT% loc_narrow_passage
 %CONVERT% loc_guest_bedroom
@@ -215,6 +217,8 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_tombstone
 %CONVERT% view_tombstone_fr
 %CONVERT% view_colecovision_boot
+%CONVERT% view_demo_message
+%CONVERT% view_demo_message_fr
 
 :: Special picture for the system information
 %CONVERT% view_oric_motherboard

@@ -12,6 +12,10 @@
 // intro_utils
 extern char Text_TitlePicture[];
 
+#ifdef PRODUCT_TYPE_GAME_DEMO
+extern char Text_DemoFeatures[];
+#endif
+
 extern char Text_GameInstructions[];
 extern char Text_GameInstructionsPage2[];
 
@@ -49,6 +53,9 @@ extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESS
 enum
 {
     INTRO_TITLE_PICTURE = 0,
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    INTRO_DEMO_FEATURES,
+#endif    
     INTRO_USER_MANUAL,
     INTRO_LEADERBOARD,
     INTRO_USER_MANUAL_PAGE2,
@@ -215,10 +222,17 @@ int DisplayIntroPage()
             int y;
             unsigned char* ptr=(unsigned char*)0xa000+40*3;
             unsigned char* ptrGradient=GradientTable+(frame&127);
+#ifdef PRODUCT_TYPE_GAME_DEMO
+            unsigned char* ptr2=(unsigned char*)0xa000+40*(3+39);
+#endif
             for (y=0;y<39;y++)
             {
                 ptr[1]=ptrGradient[y]&7;          // Magenta ink
                 ptr+=40;
+#ifdef PRODUCT_TYPE_GAME_DEMO
+                ptr2[30]=ptrGradient[y]&7;          // Magenta ink
+                ptr2-=40;
+#endif
             }
             if (Wait(1))
             {
@@ -571,7 +585,7 @@ int DisplayHighScoresTable()
 		sprintf(gPrintAddress+15+0,"%c%d",6,score);
 
 		condition=ptrScore->condition;
-		if (condition<=e_SCORE_GAVE_UP)
+		if (condition<e_SCORE_COUNT_)
 		{
 			sprintf(gPrintAddress+20,"%s",gScoreConditionsArray[condition]);
 		}
@@ -876,6 +890,12 @@ void main()
             DisplayIntroPage();
             break;
 #endif        
+
+#ifdef PRODUCT_TYPE_GAME_DEMO
+        case INTRO_DEMO_FEATURES:
+            DisplayUserManual(Text_DemoFeatures);
+            break;
+#endif
 
 #ifdef INTRO_SHOW_USER_MANUAL
         case INTRO_USER_MANUAL:

@@ -24,6 +24,7 @@ _Text_SCORE_TRIPPED_ALARM        .byt 3,"Déclenché l'alarme",0
 _Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqué de temps",0
 _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Soufflé en morceaux",0
 _Text_SCORE_GAVE_UP              .byt 5,"A abandonné...",0
+_Test_SCORE_FINISHED_DEMO        .byt 3,"Demo terminée",0
 #else // LANGUAGE_EN
 _Text_Leaderboard                .byt 16+1,3,"            Leaderboard",TEXT_CRLF,TEXT_END
 _Text_SCORE_SOLVED_THE_CASE      .byt 2,"Solved the case",0
@@ -34,6 +35,7 @@ _Text_SCORE_TRIPPED_ALARM        .byt 3,"Tripped the alarm",0
 _Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"Ran out of time",0
 _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Blown into bits",0
 _Text_SCORE_GAVE_UP              .byt 5,"Gave up...",0
+_Test_SCORE_FINISHED_DEMO        .byt 3,"Finished demo",0
 #endif
 
 

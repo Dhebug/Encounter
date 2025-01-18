@@ -246,6 +246,9 @@ OsdkNameStart
     .byt "OSDKNAME"
     .byt " v"
     .byt "VERSION"
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt "D"
+#endif    
     .byt "J"
 OsdkNameEnd
 

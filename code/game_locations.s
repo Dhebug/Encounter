@@ -52,7 +52,11 @@ _gLocations
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_UP_STAIRS         , e_LOC_ENTRANCEHALL      , _gDescriptionStaircase)         // e_LOC_LARGE_STAIRCASE 
 
     LOCATION(e_LOC_NONE              , e_LOC_DININGROOM        , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGamesRoom)         // e_LOC_GAMESROOM        
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    LOCATION(e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionSunLounge)         // e_LOC_SUNLOUNGE        
+#else
     LOCATION(e_LOC_TILEDPATIO        , e_LOC_NARROWPASSAGE     , e_LOC_KITCHEN           , e_LOC_GAMESROOM         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionSunLounge)         // e_LOC_SUNLOUNGE        
+#endif    
     LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , _gDescriptionKitchen)           // e_LOC_KITCHEN    
 
     LOCATION(e_LOC_SUNLOUNGE         , e_LOC_ENTRANCEHALL      , e_LOC_LIBRARY           , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionNarrowPassage)     // e_LOC_NARROWPASSAGE   
