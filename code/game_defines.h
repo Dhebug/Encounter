@@ -47,7 +47,7 @@ typedef void (*callback)();
 typedef struct
 {
     unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
-    unsigned char flag;             // See: FLAG_MAPPING_DEFAULT, FLAG_MAPPING_STREAM, FLAG_MAPPING_TWO_ITEMS in scripting.h
+    unsigned char flag;             // See: FLAG_MAPPING_DEFAULT, FLAG_MAPPING_STREAM in scripting.h
     union 
     {
         callback function;          // Pointer to the routine to call (ex: TakeItem())

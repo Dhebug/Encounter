@@ -414,67 +414,60 @@ reset_input
 
 
 
-; extern action_mapping gActionMappingsArray[];
-/*
-typedef struct
-{
-    unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
-    unsigned char flag;             // See: FLAG_MAPPING_DEFAULT, FLAG_MAPPING_STREAM, FLAG_MAPPING_TWO_ITEMS in scripting.h
-    union 
-    {
-        callback function;          // Pointer to the routine to call (ex: TakeItem())
-        void* stream;               // Pointer to a stream
-    } u;
-} action_mapping;
-    WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
-    WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,FLAG_MAPPING_STREAM)
-
-*/
 _ValidateInputSpace
 .(
     lda _gInputKey
-    cmp #32+1                     ; Is it a displayable character?
+    cmp #KEY_SPACE+1                     ; Is it a displayable character?
     bcc check_input
 
 good_input     
     ldx #1   
     rts
 
-; gWordBuffer[gWordCount] = itemId;
-+_ValidateInputReturn
-check_input
-    jsr _ParseInputBuffer
-    ldx _gWordCount
-    cpx #1
-    beq one_word 
-    cpx #2
-    beq two_words    
-    cpx #3
-    beq three_words
-    bne bad_input
-
-three_words
-    lda _gInputKey
-    cmp #32
-    beq bad_input       ; It's fine to have three words in the buffer, but not to add a fourth one
-    lda _gWordBuffer+2
-    cmp #e_WORD_COUNT_
-    beq bad_input
-
-two_words
-    lda _gWordBuffer+1
-    cmp #e_WORD_COUNT_
-    beq bad_input
-
-one_word
-    lda _gWordBuffer+0
-    cmp #e_WORD_COUNT_
-    beq bad_input
-    jmp good_input
-
 bad_input
     ldx #0           ; Refuse the input
     rts
+
+; gWordBuffer[gWordCount] = itemId;
++_ValidateInputReturn
+check_input
+    jsr _ParseInputBuffer         ; Convert each of the words into a token id
+
+    ; Validate that all the words are actually valid
+    ldx _gWordCount
+loop_check_valid_word
+    lda _gWordBuffer-1,x
+    cmp #e_WORD_COUNT_
+    beq bad_input
+    dex
+    bne loop_check_valid_word
+
+    ; Then we check that the number of parameters matches the actual instruction    
+    jsr _FindActionMapping        ; Need to get the mapping data to know how many keyword we can have
+
+    ldy #1
+    lda (_gActionMappingPtr),y    ; Load flag
+    and #3                        ; Isolate the item count
+    tax
+
+    lda _gInputKey
+    cmp #KEY_RETURN               ; For return we need the exact matching number of keywords
+    beq check_return
+
+    cmp #KEY_SPACE                ; For space we allow typing as lon as we are missing words
+    beq check_space
+    bne good_input
+
+check_return
+    inx                           ; Max total of keywords we can have
+    cpx _gWordCount               ; Compare with the number of keywords entered
+    beq good_input                ; Exact number of parameters = OK
+    bne bad_input                 ; Different number of parameters = not good
+
+check_space
+    cpx _gWordCount               ; Compare with the number of keywords entered
+    bcs good_input                ; Still some keywords to input = OK
+    bcc bad_input                 ; X>=word count
  .)
 
 
@@ -606,6 +599,7 @@ found
 
 
 _RunAction
+    ;jmp _RunAction
 .(
     ; Start by loading the stream pointer since all the comands use that
     ldy #2
@@ -647,9 +641,10 @@ first_item_available
 
     ; Do we need a second item?
     ldy #1
-    lda (_gActionMappingPtr),y            ; Load flag
-    and #FLAG_MAPPING_TWO_ITEMS           ; if (flags & FLAG_MAPPING_TWO_ITEMS)
-    bne requires_two_items
+    lda (_gActionMappingPtr),y            ; Load flag/item count
+    and #3                                ; Mask out the item count
+    cmp #2
+    beq requires_two_items
 
 requires_one_item
     ; Stupidly this command has the table as second parameter...
@@ -810,6 +805,12 @@ found_items
     ldx #1
     rts
 .)
+
+_PrintSceneObjectsExit
+.(
+    rts
+.)
+
 
 
 

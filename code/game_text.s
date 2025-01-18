@@ -2040,32 +2040,32 @@ YP  YP  YP YP   YP Y888888P VP   V8P      YP   YP  `Y88P'    YP    Y888888P  `Y8
 ;                  Word opcode       Function or Stream          Flags
 _gActionMappingsArray
     ; Implemented as actual C/Assembler functions
-    WORD_MAPPING(e_WORD_NORTH     ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_SOUTH     ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_EAST      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_WEST      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_UP        ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_DOWN      ,_PlayerMove                ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_NORTH     ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_SOUTH     ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_EAST      ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_WEST      ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_UP        ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_DOWN      ,_PlayerMove                ,0+FLAG_MAPPING_DEFAULT)
 
-    WORD_MAPPING(e_WORD_TAKE      ,_TakeItem                  ,FLAG_MAPPING_DEFAULT)
-    WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_TAKE      ,_TakeItem                  ,1+FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,1+FLAG_MAPPING_DEFAULT)
 
-    WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
-    WORD_MAPPING(e_WORD_QUIT      ,_QuitGameScript            ,FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
+    WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,0+FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
+    WORD_MAPPING(e_WORD_QUIT      ,_QuitGameScript            ,0+FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
 
     ; Implemented as script streams
-    WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,FLAG_MAPPING_STREAM|FLAG_MAPPING_TWO_ITEMS)
-    WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_USE       ,_gUseItemMappingsArray     ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_OPEN      ,_gOpenItemMappingsArray    ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_CLOSE     ,_gCloseItemMappingsArray   ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_COMBINE   ,_gCombineItemMappingsArray ,2+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_READ      ,_gReadItemMappingsArray    ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_USE       ,_gUseItemMappingsArray     ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_OPEN      ,_gOpenItemMappingsArray    ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_CLOSE     ,_gCloseItemMappingsArray   ,1+FLAG_MAPPING_STREAM)
 
-    WORD_MAPPING(e_WORD_LOOK      ,_gInspectItemMappingsArray ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_FRISK     ,_gSearchtemMappingsArray   ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_SEARCH    ,_gSearchtemMappingsArray   ,FLAG_MAPPING_STREAM)
-    WORD_MAPPING(e_WORD_THROW     ,_gThrowItemMappingsArray   ,FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_LOOK      ,_gInspectItemMappingsArray ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_FRISK     ,_gSearchtemMappingsArray   ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_SEARCH    ,_gSearchtemMappingsArray   ,1+FLAG_MAPPING_STREAM)
+    WORD_MAPPING(e_WORD_THROW     ,_gThrowItemMappingsArray   ,1+FLAG_MAPPING_STREAM)
 
-    WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,FLAG_MAPPING_DEFAULT)
+    WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,0+FLAG_MAPPING_DEFAULT)
 
     WORD_MAPPING(e_WORD_COUNT_    ,0, 0)
     // End Marker

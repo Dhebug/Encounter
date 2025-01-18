@@ -58,6 +58,7 @@
 #define KEY_ESC			10
 #define KEY_DEL			11
 #define KEY_RETURN		12
+#define KEY_SPACE       32
 
 #define KEYBOARD_QWERTY 0
 #define KEYBOARD_AZERTY 1
