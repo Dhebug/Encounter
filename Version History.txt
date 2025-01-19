@@ -304,3 +304,6 @@
 1.0.5
 - First version with a Demo available
 - Improvement: The parser does not allow anymore adding more keywords than what the command supports
+
+1.0.6
+- 

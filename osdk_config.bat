@@ -34,9 +34,10 @@
 :: 1.0.2 - Improved some scene graphics, sleeping thung sound, feedback on more items
 :: 1.0.3 - Added some key press waits after elements that take a long time to read, fixed the UK map
 :: 1.0.4 - Optimized HandleByteStream and PrintInventory, added a Coleco image, revamped the alarm system, tweaked timings and key presses
-:: 1.0.5 - 
+:: 1.0.5 - The parser does not allow anymore adding more keywords than what the command supports
+:: 1.0.6 - 
 ::
-SET VERSION=1.0.5
+SET VERSION=1.0.6
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
