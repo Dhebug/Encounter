@@ -162,7 +162,7 @@ _gTextExternalInformation
     .byt 6,"  If you want to know more about the",TEXT_CRLF
     .byt 6," game, report bugs, check for updates",TEXT_CRLF
     .byt 6,"   or simply explore the source code...",TEXT_CRLF
-    .byt 6,"  just open you favorite browser to:",TEXT_CRLF
+    .byt 6,"  just open your favorite browser to:",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,"      encounter.defence-force.org",TEXT_CRLF
     .byt TEXT_CRLF

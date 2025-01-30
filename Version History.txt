@@ -306,4 +306,5 @@
 - Improvement: The parser does not allow anymore adding more keywords than what the command supports
 
 1.0.6
-- 
+- Fix: Added a missing "r" on the credits page with the game URL
+
