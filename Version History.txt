@@ -308,3 +308,4 @@
 1.0.6
 - Fix: Added a missing "r" on the credits page with the game URL
 - Fix: Using the small key should now display the proper message instead of "it's too dark"
+- Fix: Trying to open the safe should now display that it's locked instead of "can't do that"

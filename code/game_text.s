@@ -4113,7 +4113,8 @@ _gOpenItemMappingsArray
 _OpenSafe
 .(
     JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED))      ; Is the safe open?
-    JUMP(_ErrorCannotDo)
+    GOSUB(_SubMessageDoorIsLocked)
+    END_AND_PARTIAL_REFRESH
 .)
 
 _OpenCurtain
@@ -4396,11 +4397,7 @@ _OpenSecurityDoor
 _OpenFrontDoor
 _OpenChurch
 .(
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("La porte est fermée")
-#else
-    INFO_MESSAGE("The door is locked")
-#endif
+    GOSUB(_SubMessageDoorIsLocked)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),frontdoor)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Peut-être une entrée à l'arrière ?")
@@ -6095,6 +6092,17 @@ _MessageNothingSpecial
     ERROR_MESSAGE("Nothing special")
 #endif    
     END_AND_PARTIAL_REFRESH
+.)
+
+
+_SubMessageDoorIsLocked
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("La porte est verrouillée")
+#else
+    INFO_MESSAGE("The door is locked")
+#endif
+    RETURN
 .)
 
 
