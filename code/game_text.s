@@ -4896,10 +4896,8 @@ snoozed_thug
 
 _UseKey
 .(
-    GOSUB(_SubCheckToDark)     ; Was the tape removed from the window?
-
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
-        JUMP_IF_FALSE(_ErrorTooDark,CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER))
+        GOSUB(_SubCheckToDark)     ; Was the tape removed from the window?
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)        ; Is the alarm panel locked?
             PLAY_SOUND(_UseKeyOnAlarmPanel)
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
