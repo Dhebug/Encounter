@@ -1351,6 +1351,13 @@ medicine_cabinet_closed
 
 // MARK: Basement Stairs
 _gDescriptionBasementStairs
+    .(
+    ; First we check if the player stroke the matches
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?    
+        GOSUB(_gMiniKaboom)
+        FADE_BUFFER
+    ENDIF(matches)
+    .)
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR       
@@ -1358,15 +1365,6 @@ _gDescriptionBasementStairs
 #else
     _BUBBLE_LINE(5,5,0,"Watch your step")
 #endif    
-
-    .(
-    ; Then we check if the player stroke the matches
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?
-        GOSUB(_gMiniKaboom)
-        FADE_BUFFER
-    ENDIF(matches)
-    .)
-
     END
 
 
@@ -1558,6 +1556,15 @@ alarm_panel_closed
     GOSUB(_gDrawSafeInDarkRom)
 
     .(
+    ; Then we check if the player stroke the matches
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?
+        GOSUB(_gMiniKaboom)        
+        GOSUB(_gDrawSafeInDarkRom)            ; Make sure the safe looks correct after the explosion
+        FADE_BUFFER
+    ENDIF(matches)
+    .)
+
+    .(
     WAIT(DELAY_FIRST_BUBBLE)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_off)
         BLACK_BUBBLE(2)
@@ -1580,16 +1587,6 @@ alarm_panel_closed
     ENDIF(tape_on)
     .)    
 
-
-    .(
-    ; Then we check if the player stroke the matches
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?
-        GOSUB(_gMiniKaboom)        
-        GOSUB(_gDrawSafeInDarkRom)            ; Make sure the safe looks correct after the explosion
-        FADE_BUFFER
-    ENDIF(matches)
-    .)
-
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),alarm_active)      ; Is the alarm active...
 blinking_led_animation
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,1,3)                     ; Draw the led ON
@@ -1611,6 +1608,7 @@ blinking_led_animation
 _gMiniKaboom
 .(
     SET_CUT_SCENE(1)
+    FADE_BUFFER
     WAIT(50)
     PLAY_SOUND(_ExplodeData)
     SET_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_GONE_FOREVER)           ; Don't need the matches anymore
