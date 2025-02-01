@@ -35,9 +35,10 @@
 :: 1.0.3 - Added some key press waits after elements that take a long time to read, fixed the UK map
 :: 1.0.4 - Optimized HandleByteStream and PrintInventory, added a Coleco image, revamped the alarm system, tweaked timings and key presses
 :: 1.0.5 - The parser does not allow anymore adding more keywords than what the command supports
-:: 1.0.6 - 
+:: 1.0.6 - Fixed the "use key", small explosion, some typo fix, and alarm triggering
+:: 1.0.7 - 
 ::
-SET VERSION=1.0.6
+SET VERSION=1.0.7
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)

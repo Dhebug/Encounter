@@ -312,3 +312,5 @@
 - Tweak: The mini explosion has been tweaked so it happed at the right time and place whatever the player do
 - Tweak: Reordered the alarm triggered script code to stop the timer as soon as the event triggers
 
+1.0.7
+- 
