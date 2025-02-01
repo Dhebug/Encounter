@@ -310,3 +310,5 @@
 - Fix: Using the small key should now display the proper message instead of "it's too dark"
 - Fix: Trying to open the safe should now display that it's locked instead of "can't do that"
 - Tweak: The mini explosion has been tweaked so it happed at the right time and place whatever the player do
+- Tweak: Reordered the alarm triggered script code to stop the timer as soon as the event triggers
+

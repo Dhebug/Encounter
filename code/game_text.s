@@ -4331,6 +4331,8 @@ _OpenWindowFromInside
 _AlarmTriggered
 .(
     SET_CUT_SCENE(1)
+    GAME_OVER(e_SCORE_TRIPPED_ALARM)
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
     DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     CLEAR_TEXT_AREA(1)
@@ -4340,8 +4342,6 @@ _AlarmTriggered
     INFO_MESSAGE("You triggered the alarm!")
 #endif    
     WAIT(50*2)
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_TRIPPED_ALARM)   ; Achievement!
-    GAME_OVER(e_SCORE_TRIPPED_ALARM)
     JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
 .)
 
