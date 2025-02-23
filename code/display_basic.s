@@ -515,4 +515,6 @@ _MemCpy_9900_B500               MEMCPY_ENTRY($b9900,$b500,8*96)
 #ifdef MODULE_GAME
 _MemCpy_B800_0_7DigitDisplay        MEMCPY_ENTRY($b800+"0"*8,_gSevenDigitDisplay,8*11)
 _MemCpy__BlittTemporaryBuffer479    MEMCPY_ENTRY($bb80+40*24,_TemporaryBuffer479,40*4)
+
+_MemCpy_BlittInventory      MEMCPY_ENTRY($bb80+40*18,_TemporaryBuffer479,40*4)
 #endif

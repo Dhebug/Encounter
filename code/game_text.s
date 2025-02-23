@@ -34,7 +34,7 @@ _StartGameTextData
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
 _gTextAskInput              .byt "Que faites-vous ?",0
-_gTextNothingHere           .byt "Il n'y a rien d'important ici",0
+_gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextScore                 .byt "Score: ",0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
@@ -46,7 +46,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             //.byt "Note: Utilisez SHIFT pour voir les objects",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
-_gTextNothingHere           .byt "There is nothing of interest here",0
+_gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextScore                 .byt "Score: ",0
 _gTextCarryInWhat           .byt "Carry it in what?",0

@@ -7,7 +7,8 @@ _gCurrentLocation           .dsb 1
 _gCurrentLocationPtr        .dsb 2
 _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1
-_gInventoryOffset           .dsb 2
+_gInventoryOffset           .dsb 1
+_gInventoryMaxOffset        .dsb 1
 
 _gActionMappingPtr          .dsb 2
 _gScreenPtr                 .dsb 2       ; Used ty the routines that prints inventory, items, etc...
@@ -316,26 +317,14 @@ shift_pressed
 ;    jsr _Panic
     ldx #e_WORD_UP
     cpy #KEY_UP
-    beq not_scroll_up
-    sec
-    lda _gInventoryOffset+0
-    sbc #40
-    sta _gInventoryOffset+0
-    lda _gInventoryOffset+1
-    sbc #0
-    sta _gInventoryOffset+1
+    beq not_scroll_up   
+    dec _gInventoryOffset
     jmp _PrintSceneObjects
 not_scroll_up
     ldx #e_WORD_DOWN
     cpy #KEY_DOWN
     beq not_scroll_down
-    clc
-    lda _gInventoryOffset+0
-    adc #40
-    sta _gInventoryOffset+0
-    lda _gInventoryOffset+1
-    adc #0
-    sta _gInventoryOffset+1
+    inc _gInventoryOffset
     jmp _PrintSceneObjects
 not_scroll_down
     rts
@@ -762,23 +751,35 @@ no_change
 
 
 
-_PrintSceneObjectsInit
+
+;
+; This prints the entire list of all objects found in the current location,
+; eventually handling vertical scrolling with clamping if the list does not fit the screen.
+; (Scrolling is done by default using SHIFT+UP or DOWN)
+;
+_PrintSceneObjects
 .(
     ; Clear the buffer (479/40=11.975 lines long)
     jsr _ClearTemporaryBuffer479
 
-    ; Paint the background blue
+    ; Paint the background blue in the intermediate buffer since it's going to be copied to the screen later on
     lda #16+4
-	sta _TemporaryBuffer479+40*0
+    sta _TemporaryBuffer479+40*0
     sta _TemporaryBuffer479+40*1
-	sta _TemporaryBuffer479+40*2
-	sta _TemporaryBuffer479+40*3
-	sta _TemporaryBuffer479+40*4
-	sta _TemporaryBuffer479+40*5
-	sta _TemporaryBuffer479+40*6
-	sta _TemporaryBuffer479+40*7
-	sta _TemporaryBuffer479+40*8
-	sta _TemporaryBuffer479+40*9
+    sta _TemporaryBuffer479+40*2
+    sta _TemporaryBuffer479+40*3
+    sta _TemporaryBuffer479+40*4
+    sta _TemporaryBuffer479+40*5
+    sta _TemporaryBuffer479+40*6
+    sta _TemporaryBuffer479+40*7
+    sta _TemporaryBuffer479+40*8
+    sta _TemporaryBuffer479+40*9
+
+    lda #0
+    sta _gPrintPos
+
+    lda #<-3
+    sta _gInventoryMaxOffset
 
     ; Check if ther are any items present at the current location
     ldx #0
@@ -796,23 +797,161 @@ loop_search
     bne loop_search                       ; Next item
 
 no_items    
-    lda #0               ; Par of the 16 bit return code
-    ldx #0
-    rts
+    ; PrintStringAt(gTextNothingHere,TemporaryBuffer479+1);  // "There is nothing of interest here"
+    lda #<_TemporaryBuffer479+1
+    sta _gPrintAddress+0
+    lda #>_TemporaryBuffer479+1
+    sta _gPrintAddress+1
+
+    lda #<_gTextNothingHere
+    ldx #>_gTextNothingHere
+    jmp print_and_blit_description_buffer
 
 found_items    
-    lda #0               ; Par of the 16 bit return code
-    ldx #1
-    rts
+    ; gPrintWidth=38;
+    lda #38
+    sta _gPrintWidth
+
+    ; PrintStringAt(gTextCanSee,TemporaryBuffer479+2);
+    lda #<_TemporaryBuffer479+2
+    sta _gPrintAddress+0
+    lda #>_TemporaryBuffer479+2
+    sta _gPrintAddress+1
+
+    lda #<_gTextCanSee
+    ldx #>_gTextCanSee
+    jsr _PrintStringInternalAX
+
+    lda #OPCODE_RTS
+    sta _nop_or_rts
+
+    ; for (item=0;item<e_ITEM_COUNT_;item++)
+    ; Check if ther are any items present at the current location
+    ldx #0
+loop_print
+    txa
+    pha
+    jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
+
+    ldy #2
+    lda (_gStreamItemPtr),y               ; Item location
+    cmp _gCurrentLocation
+    bne next_item                         ; It's int the scene
+
+    ; We only print the word separators if it's not the first word
+    jsr _PrintSeparatorIfNeeded
+    lda #OPCODE_NOP
+    sta _nop_or_rts
+
+    ; #define PrintString(message)               { param0.ptr=message;asm("jsr _PrintStringInternal"); } 
+    ldy #1
+    lda (_gStreamItemPtr),y               ; Item description
+    tax
+    dey
+    lda (_gStreamItemPtr),y               ; Item description
+    jsr _PrintStringAndMoveToNextLineIfNeeded
+
+next_item
+    pla
+    tax
+    inx 
+    cpx #e_ITEM_COUNT_
+    bne loop_print                       ; Next item
+    
+    ; Final dot?
+    lda _gPrintPos
+    cmp _gPrintWidth
+    bcs no_dot
+    lda #<_gTextDot
+    ldx #>_gTextDot
+no_dot
+
+print_and_blit_description_buffer
+    jsr _PrintStringInternalAX
+
+    ; Make sure the scroll position of the scene object window is properly clamped    
+    lda _gInventoryOffset
+    cmp _gInventoryMaxOffset    ; Inventory Offset > Max Offset ?
+    bvc no_overflow
+    eor #$80                    ; Flip sign bit if overflow
+ no_overflow
+    bmi negative_clamp
+    lda _gInventoryMaxOffset
+
+negative_clamp
+    cmp #0                      ; Inventory offset < 0 ?
+    bpl done_clamping
+    lda #0
+done_clamping
+    sta _gInventoryOffset
+
+    ; Blitt the buffer to the screen
+    lda #<_TemporaryBuffer479
+    sta _MemCpy_BlittInventory+2
+    lda #>_TemporaryBuffer479
+    sta _MemCpy_BlittInventory+3
+
+    ldx _gInventoryOffset
+    beq end_add
+loop_add
+    clc
+    lda _MemCpy_BlittInventory+2
+    adc #40
+    sta _MemCpy_BlittInventory+2
+    lda _MemCpy_BlittInventory+3
+    adc #0
+    sta _MemCpy_BlittInventory+3
+
+    dex 
+    bne loop_add    
+
+end_add
+    MEMCPY_JMP(_MemCpy_BlittInventory)
 .)
 
-_PrintSceneObjectsExit
+
+
+_PrintSeparatorIfNeeded
 .(
++_nop_or_rts    
+    rts
+    ; Comma separator?
+    lda _gPrintPos
+    cmp _gPrintWidth
+    bcs no_comma
+    lda #<_gTextComma
+    ldx #>_gTextComma
+    jsr _PrintStringAndMoveToNextLineIfNeeded
+no_comma
+
+    ; Space separator?
+    lda _gPrintPos
+    cmp _gPrintWidth
+    bcs no_space
+    lda #<_gTextSpace
+    ldx #>_gTextSpace
+    jsr _PrintStringAndMoveToNextLineIfNeeded
+no_space
+
+    rts
+.)
+
+_PrintStringAndMoveToNextLineIfNeeded
+    jsr _PrintStringInternalAX
+_MoveToNextLineIfNeeded
+.(
+    lda _gPrintLineTruncated
+    beq skip
+    inc _gInventoryMaxOffset
+skip
     rts
 .)
 
 
 
+_gTextComma         .byt ",",0
+_gTextSpace         .byt " ",0
+_gTextDot           .byt ".",0
 
 _gColoredSeparator  .byt " ",0
 _gColonSeparator    .byt ":",0
