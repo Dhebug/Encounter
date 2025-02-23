@@ -64,6 +64,11 @@
 #define KEYBOARD_AZERTY 1
 #define KEYBOARD_QWERTZ 2
 
+#define AUDIO_SILENT            0
+#define AUDIO_EFFECTS           1
+#define AUDIO_MUSIC             2
+#define AUDIO_EFFECTS_AND_MUSIC 3
+
 #define MAX_WORDS 5         // In practice in the game we have COMBINE A B max, so three words
 
 // 6502 opcodes for dynamic code patching

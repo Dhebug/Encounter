@@ -110,6 +110,7 @@ _gGameOverCondition     .dsb 1         ; Used to store the way the player exited
 _gKeyboardLayout        .dsb 1         ; QWERTY / AZERTY / QWERTZ
 _gMusicEnabled          .dsb 1         ; 0 or 255
 _gSoundEnabled          .dsb 1         ; 0 or 255
+_gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
 _32_Bytes_BufferRemaining
 
 * = $C000             ; Start of the ROM/Overlay ram

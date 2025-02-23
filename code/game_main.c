@@ -349,6 +349,9 @@ void Initializations()
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
 
+    OsdkJoystickType = gJoystickType;
+    joystick_type_select();
+
  	// Setup the Hires/Text mixed graphic mode
 	InitializeGraphicMode();      
 

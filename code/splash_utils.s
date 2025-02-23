@@ -221,21 +221,49 @@ _Text_Azerty            .byt "AZERTY (Francais)",0
 _Text_Qwerty            .byt "QWERTY           ",0
 _Text_Qwertz            .byt "QWERTZ (Allemand)",0
 
-_Text_OptionMusic        .byt "Musique:",0
-_Text_OptionSoundEffects .byt "Effets sonores:",0
+_Text_OptionJoystick    .byt "Joystick interface:",0
+_Text_JoystickNone      .byt "Aucune             ",0
 
-_Text_On                .byt "MARCHE",0
-_Text_Off               .byt "ARRET ",0
+_Text_OptionAudio       .byt "Audio:",0
+
+_Text_AudioSilent          .byt "Silencieux        ",0
+_Text_AudioEffects         .byt "Effects seulement ",0
+_Text_AudioMusic           .byt "Musique seulement ",0
+_Text_AudioEffetsAndMusic  .byt "Musique et effets ",0
 #else
 _Text_OptionKeyboard    .byt "Keyboard layout:",0
 _Text_Azerty            .byt "AZERTY (French)",0
 _Text_Qwerty            .byt "QWERTY         ",0
 _Text_Qwertz            .byt "QWERTZ (German)",0
 
-_Text_OptionMusic        .byt "Music:",0
-_Text_OptionSoundEffects .byt "Sound Effects:",0
+_Text_OptionJoystick    .byt "Joystick interface:",0
+_Text_JoystickNone      .byt "NONE              ",0
 
-_Text_On                .byt "ON ",0
-_Text_Off               .byt "OFF",0
+_Text_OptionAudio       .byt "Audio:",0
+
+_Text_AudioSilent          .byt "Silent           ",0
+_Text_AudioEffects         .byt "Effects Only     ",0
+_Text_AudioMusic           .byt "Music Only       ",0
+_Text_AudioEffetsAndMusic  .byt "Music and Effects",0
 #endif
+
+_Text_JoystickIjk       .byt "IJK/Stingy/Egoist ",0
+_Text_JoysticPase       .byt "PASE/Altai/Mageco ",0
+_Text_JoysticTelestrat  .byt "Telestrat/Twilighte",0
+_Text_JoysticOpel       .byt "OPEL               ",0
+_Text_JoysticDkTronics  .byt "Dk'Tronics         ",0
+
+_gJoystickOptionsArray
+  .word _Text_JoystickNone
+  .word _Text_JoystickIjk
+  .word _Text_JoysticPase
+  .word _Text_JoysticTelestrat
+  .word _Text_JoysticOpel
+  .word _Text_JoysticDkTronics
+
+_gAudioOptionsArray
+  .word _Text_AudioSilent
+  .word _Text_AudioEffects
+  .word _Text_AudioMusic
+  .word _Text_AudioEffetsAndMusic
 

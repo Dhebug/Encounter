@@ -202,10 +202,10 @@ extern const char* gStreamSkipPoint;
 #define DEBUG_TEXT(text)   
 #endif
 
-// printer
+// settings
 extern char gMusicEnabled;          // 0 or 255
 extern char gSoundEnabled;          // 0 or 255
-
+extern char gJoystickType;          // See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
 
 
 

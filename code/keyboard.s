@@ -118,6 +118,9 @@ skip2   ;Proceed to next row
 	bpl loop2 
 	plp            ; Used to be cli, but technically we want to restore the existing interupt mask
 
+    ; We insert joystick information in the keyboard matrix
+    jsr _InsertJoystickEvents
+
     jsr _ReadKeyInternal
     beq no_key_pressed
     cpx gInternalLastKeyPressed
@@ -135,6 +138,41 @@ no_key_pressed
 	rts 
 .)  
 
+
+_InsertJoystickEvents
+.(
+    jsr _joystick_read
+
+    lda _KeyBank+4          ; We preload the entire row from the keyboard matrix
+
+    lsr _OsdkJoystick_0     ; Shift the joystick status
+    bcc no_right            ; Check if RIGHT is pressed
+    ora #%10000000          ; RIGHT ARROW key
+no_right
+
+    lsr _OsdkJoystick_0     ; Shift the joystick status
+    bcc no_left             ; Check if LEFT is pressed
+    ora #%00100000          ; LEFT ARROW key
+no_left
+
+    lsr _OsdkJoystick_0     ; Shift the joystick status
+    bcc no_fire             ; Check if FIRE is pressed
+    ora #%00000001          ; SPACE key
+no_fire
+
+    lsr _OsdkJoystick_0     ; Shift the joystick status
+    bcc no_down             ; Check if DOWN is pressed
+    ora #%01000000          ; DOWN ARROW key
+no_down
+
+    lsr _OsdkJoystick_0     ; Shift the joystick status
+    bcc no_up               ; Check if UP is pressed
+    ora #%00001000          ; UP ARROW key
+no_up
+
+    sta _KeyBank+4          ; And we save back the row with the eventual modifications
+    rts
+.)
 
 
 ; Some more routines, not actualy needed, but quite useful

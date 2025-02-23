@@ -876,6 +876,9 @@ void main()
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
 
+    OsdkJoystickType = gJoystickType;
+    joystick_type_select();
+
 #ifdef INTRO_ENABLE_SOUNDBOARD    
     SoundBoard();
 #else    

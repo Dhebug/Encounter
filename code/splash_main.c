@@ -67,14 +67,15 @@ extern void Erase38Bytes();
 
 enum
 {
-    MENU_KEYBOARD_LAYOUT = 0,
-    MENU_MUSIC_ON_OFF    = 1,
-    MENU_SOUND_ON_OFF    = 2,
+    MENU_KEYBOARD_LAYOUT    = 0,
+    MENU_JOYSTICK_INTERFACE = 1,
+    MENU_AUDIO_SETTINGS     = 2,
 };
 
 char UsedMenu = 0;
 char MenuShouldDraw = 1;
 char gMenuKeyOption = 0;
+char gAudioSelection = AUDIO_SILENT;
 int MenuPosition = MENU_KEYBOARD_LAYOUT;
 
 
@@ -84,10 +85,11 @@ extern const char Text_Azerty[];
 extern const char Text_Qwerty[];
 extern const char Text_Qwertz[];
 
-extern const char Text_OptionMusic[];
-extern const char Text_OptionSoundEffects[];
-extern const char Text_On[];
-extern const char Text_Off[];
+extern const char Text_OptionAudio[];
+extern const char Text_OptionJoystick[];
+
+extern const char* gJoystickOptionsArray[];
+extern const char* gAudioOptionsArray[];
 
 void ApplySettings()
 {
@@ -103,6 +105,8 @@ void ApplySettings()
         MusicMixerMask = 0;
         PsgStopSound();
     }
+    OsdkJoystickType = gJoystickType;
+    joystick_type_select();
 }
 
 
@@ -149,12 +153,36 @@ void HandleSettingsMenu()
                 else                                  gKeyboardLayout++;
             }
             break;
-        case MENU_MUSIC_ON_OFF:
-            gMusicEnabled=!gMusicEnabled;
-            ApplySettings();
+
+        case MENU_JOYSTICK_INTERFACE:
+            if (gMenuKeyOption==KEY_LEFT)
+            {
+                if (gJoystickType==JOYSTICK_INTERFACE_NOTHING)      gJoystickType=JOYSTICK_INTERFACE_DKTRONICS;
+                else                                                gJoystickType--;
+            }
+            else
+            {
+                if (gJoystickType==JOYSTICK_INTERFACE_DKTRONICS)    gJoystickType=JOYSTICK_INTERFACE_NOTHING;
+                else                                                gJoystickType++;
+            }
+            OsdkJoystickType = gJoystickType;
+            joystick_type_select();
             break;
-        case MENU_SOUND_ON_OFF:
-            gSoundEnabled=!gSoundEnabled;
+            
+        case MENU_AUDIO_SETTINGS:
+            if (gMenuKeyOption==KEY_LEFT)
+            {
+                if (gAudioSelection==AUDIO_SILENT)              gAudioSelection=AUDIO_EFFECTS_AND_MUSIC;
+                else                                            gAudioSelection--;
+            }
+            else
+            {
+                if (gAudioSelection==AUDIO_EFFECTS_AND_MUSIC)   gAudioSelection=AUDIO_SILENT;
+                else                                            gAudioSelection++;
+            }
+            gMusicEnabled=(gAudioSelection&AUDIO_MUSIC)?1:0;
+            gSoundEnabled=(gAudioSelection&AUDIO_EFFECTS)?1:0;
+            ApplySettings();
             break;
         }
         MenuShouldDraw=1;
@@ -168,18 +196,20 @@ void HandleSettingsMenu()
         poke(0xbb80+40*26,(MenuPosition==1)?6:4);
         poke(0xbb80+40*27,(MenuPosition==2)?6:4);
 
-        PrintStringAt(Text_OptionKeyboard,(char*)0xbb80+40*25+1);
-        
+        // Keyboard
+        PrintStringAt(Text_OptionKeyboard,(char*)0xbb80+40*25+1);        
         PrintStringAt(
             (gKeyboardLayout==KEYBOARD_QWERTY)?Text_Qwerty:
             (gKeyboardLayout==KEYBOARD_AZERTY)?Text_Azerty:Text_Qwertz
             ,(char*)0xbb80+40*25+21);
-
-        PrintStringAt(Text_OptionMusic,(char*)0xbb80+40*26+1);
-        PrintStringAt(gMusicEnabled?Text_On:Text_Off,(char*)0xbb80+40*26+21);
-
-        PrintStringAt(Text_OptionSoundEffects,(char*)0xbb80+40*27+1);
-        PrintStringAt(gSoundEnabled?Text_On:Text_Off,(char*)0xbb80+40*27+21);
+            
+        // Joystick
+        PrintStringAt(Text_OptionJoystick,(char*)0xbb80+40*26+1);
+        PrintStringAt(gJoystickOptionsArray[gJoystickType],(char*)0xbb80+40*26+21);
+        
+        // Audio (Music + Effects)
+        PrintStringAt(Text_OptionAudio,(char*)0xbb80+40*27+1);
+        PrintStringAt(gAudioOptionsArray[gAudioSelection],(char*)0xbb80+40*27+21);
 
         MenuShouldDraw = 0;
     }
@@ -405,6 +435,9 @@ void main()
     gKeyboardLayout = gSaveGameFile.keyboard_layout;
     gMusicEnabled   = gSaveGameFile.music_enabled;
     gSoundEnabled   = gSaveGameFile.sound_enabled;
+    gJoystickType   = gSaveGameFile.joystick_interface;
+    if (gSoundEnabled)  gAudioSelection|=AUDIO_EFFECTS;
+    if (gMusicEnabled)  gAudioSelection|=AUDIO_MUSIC;
     ApplySettings();
 
 	// Install the IRQ so we can use the keyboard
@@ -434,9 +467,10 @@ void main()
     // Increment the launch count and save back the scores
     gSaveGameFile.launchCount++;
     memcpy(gSaveGameFile.achievements,gAchievements,ACHIEVEMENT_BYTE_COUNT);
-    gSaveGameFile.keyboard_layout = gKeyboardLayout;
-    gSaveGameFile.music_enabled   = gMusicEnabled;
-    gSaveGameFile.sound_enabled   = gSoundEnabled;
+    gSaveGameFile.keyboard_layout    = gKeyboardLayout;
+    gSaveGameFile.music_enabled      = gMusicEnabled;
+    gSaveGameFile.sound_enabled      = gSoundEnabled;
+    gSaveGameFile.joystick_interface = gJoystickType;
 
     SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
