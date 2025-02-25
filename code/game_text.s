@@ -36,7 +36,7 @@ _StartMessagesAndPrompts
 _gTextAskInput              .byt "Que faites-vous ?",0
 _gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
-_gTextScore                 .byt "Score: ",0
+_gTextScore                 .byt 5,"Score: ",0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "Naviguez avec",3,"les flèches, CTRL",7,"plus",TEXT_CRLF
@@ -48,7 +48,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
-_gTextScore                 .byt "Score: ",0
+_gTextScore                 .byt 5,"Score: ",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
                             .byt "Use",3,"arrow keys",7,"to move around,",3,"CTRL",TEXT_CRLF

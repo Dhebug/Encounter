@@ -24,7 +24,7 @@ extern void HandleKeywordHighlight();
 void PrintSceneInformation()
 {
     // Display the score
-	sprintf((char*)0xbb80+16*40+1,"%c%s%d%c",5,gTextScore,gScore,7);   // "Score:"
+	sprintf((char*)0xbb80+16*40+1,"%s%d%c",gTextScore,gScore,7);   // "Score:"
 
 	PrintSceneDirections();
 
