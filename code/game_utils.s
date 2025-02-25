@@ -1178,5 +1178,37 @@ end_line
     rts
 .)
 
+; Called when the player moves NSEWUD to a new location
+_PlayerMove
+.(
+    sec
+    lda _gWordBuffer               ; Get the keyword (it's assumed that it's one of the 6 possible directions)
+    sbc #e_WORD_NORTH
+
+    tay
+    lda (_gCurrentLocationPtr),y   ; Get the target location for this direction
+    cmp #e_LOC_NONE                ; Does it actually exist?
+    beq wrong_direction
+
+go_there    
+    sta _gCurrentLocation          ; Store the current location
+
+    ldx #<_KeyClickHData           ; Play the "click" sound
+    ldy #>_KeyClickHData           
+    jsr _PlaySoundAsmXY            
+
+    jmp _LoadScene                 ; Load the actual scene
+
+wrong_direction
+    lda #ACHIEVEMENT_WRONG_DIRECTION     ; Trigger the "can't go there" achievement
+    jsr _UnlockAchievementAsmA
+
+    lda #<_gTextErrorInvalidDirection    ; Print the error message
+    sta _param0+0
+    lda #>_gTextErrorInvalidDirection
+    sta _param0+1
+    jmp _PrintErrorMessageShortAsm
+.)
+
 
 _EndGameUtils_

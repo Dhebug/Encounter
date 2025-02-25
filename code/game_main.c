@@ -65,25 +65,6 @@ void LoadScene()
 }
 
 
-// MARK:Player Move
-void PlayerMove()
-{
-    unsigned char direction = gWordBuffer[0]-e_WORD_NORTH;
-	unsigned char requestedScene = gCurrentLocationPtr->directions[direction];
-	if (requestedScene==e_LOC_NONE)
-	{
-        UnlockAchievement(ACHIEVEMENT_WRONG_DIRECTION)
-		PrintErrorMessageShort(gTextErrorInvalidDirection);   // "Impossible to move in that direction"
-	}
-	else
-	{
-		PlaySound(KeyClickHData);
-		gCurrentLocation=requestedScene;
-		LoadScene();
-	}
-}
-
-
 char ShowingKeyWords = 0;
 char ShouldShowKeyWords = 0;
 
