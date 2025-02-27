@@ -110,50 +110,9 @@ WORDS AskInputCallback()
 
 
 
-
-// MARK:Take Item
-void TakeItem()
+void SelectContainer()
 {
-    unsigned char itemId = gWordBuffer[1];
-    item* itemPtr=&gItems[itemId];
-	if (itemId>=e_ITEM_COUNT_)
-	{
-        if (gWordCount<=1)
-        {
-    		PrintErrorMessage(gTextErrorNeedMoreDetails);   // "Could you be more precise please?"
-        }
-        else
-        {
-    		PrintErrorMessage(gTextErrorCantTakeNoSee);     // "You can only take something you see"
-        }
-        return;
-	}
-    
-    if (itemPtr->location == e_LOC_INVENTORY)           // Do we already have the item?
-    {
-        PrintErrorMessage(gTextErrorAlreadyHaveItem);   // "You already have this item"
-        return;
-    }
-
-    if (itemPtr->location != gCurrentLocation)          // Is the item in the scene?
-    {
-        PrintErrorMessage(gTextErrorItemNotPresent);    // "This item does not seem to be present"
-        return;
-    }
-
-    if (gCurrentItemCount>=8)
-    {
-        PrintErrorMessage(gTextErrorInventoryFull);      // "I need to drop something first"
-        return;
-    }
-
-    if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
-    {
-        PrintErrorMessage(gTextErrorCannotDo);   // "I can't do it");
-        return;
-    }
-
-    if (itemPtr->usable_containers)
+    if (gStreamItemPtr->usable_containers)
     {
         // Requires a container
         WORDS containerId;
@@ -163,10 +122,11 @@ void TakeItem()
         gInputAcceptsEmpty = 1;
         gInputMessage = gTextCarryInWhat;
         containerId = AskInput();    // "Carry it in what?"
+        gSelectedKeyword = e_WORD_COUNT_;
         gInputMessage = previousInputMessage;
         gAnswerProcessingCallback = previousCallback;
         gInputAcceptsEmpty = 0;
-        if ( (containerId > e_ITEM__Last_Container) || (!(itemPtr->usable_containers & (1<<containerId))) )
+        if ( (containerId > e_ITEM__Last_Container) || (!(gStreamItemPtr->usable_containers & (1<<containerId))) )
         {
             PrintErrorMessage(gTextErrorThatWillNotWork);    // "That will not work"
             return;
@@ -198,14 +158,12 @@ void TakeItem()
             }
 
             // Looks like we have both the item and an empty container!
-            itemPtr->associated_item 	  = containerId;
-            containerPtr->associated_item = itemId;
+            gStreamItemPtr->associated_item 	  = containerId;
+            containerPtr->associated_item = gCurrentItem;
         }
     }
-
-    // Common part for all items (in containers or not)
-    DispatchStream(gTakeItemMappingsArray,itemId);
 }
+
 
 
 // MARK:Drop Item

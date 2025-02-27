@@ -1211,4 +1211,88 @@ wrong_direction
 .)
 
 
+
+// MARK:Take Item
+_TakeItem
+.(
+    ; Get itemId from gWordBuffer[1]
+    lda _gWordBuffer+1       ; Load gWordBuffer[1] into A (itemId)
+    sta _gCurrentItem
+
+    ; if (itemId >= e_ITEM_COUNT_)
+    cmp #e_ITEM_COUNT_
+    bcc validate_item        ; It's an actual item (not a verb)
+
+    ; Check gWordCount <= 1
+    lda _gWordCount         ; Load gWordCount
+    cmp #2                  ; Compare with 2
+    bcs item_not_present
+
+need_more_details    
+    lda #<_gTextErrorNeedMoreDetails
+    ldx #>_gTextErrorNeedMoreDetails
+    jmp _PrintErrorMessageAsmAX
+
+item_not_present
+    lda #<_gTextErrorCantTakeNoSee
+    ldx #>_gTextErrorCantTakeNoSee
+    jmp _PrintErrorMessageAsmAX
+
+validate_item
+    jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
+
+    ldy #2                          ; Location offset
+    lda (_gStreamItemPtr),y     
+
+check_if_in_inventory_already       ; if (itemPtr->location == e_LOC_INVENTORY)           // Do we already have the item?
+    cmp #e_LOC_INVENTORY
+    bne check_if_in_scene
+    
+    lda #<_gTextErrorAlreadyHaveItem ; Already in the inventory
+    ldx #>_gTextErrorAlreadyHaveItem
+    jmp _PrintErrorMessageAsmAX
+
+check_if_in_scene                   ; if (itemPtr->location != gCurrentLocation)          // Is the item in the scene?
+    cmp _gCurrentLocation           ; Compare with gCurrentLocation
+    beq check_inventory_space
+    
+    lda #<_gTextErrorItemNotPresent ; The item is not in the scene
+    ldx #>_gTextErrorItemNotPresent
+    jmp _PrintErrorMessageAsmAX
+
+check_inventory_space               ; if (gCurrentItemCount >= 8)
+    lda _gCurrentItemCount          ; Load gCurrentItemCount
+    cmp #8
+    bcc check_if_movable
+    
+    lda #<_gTextErrorInventoryFull  ; The inventory is full
+    ldx #>_gTextErrorInventoryFull
+    jmp _PrintErrorMessageAsmAX
+
+check_if_movable                    ; if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
+    ldy #4                          ; Flags offset
+    lda (_gStreamItemPtr),Y         ; Load itemPtr->flags
+    and #ITEM_FLAG_IMMOVABLE
+    beq check_if_needs_container
+    
+    lda #<_gTextErrorCannotDo       ; This item cannot be moved
+    ldx #>_gTextErrorCannotDo
+    jmp _PrintErrorMessageAsmAX
+
+check_if_needs_container
+    jsr _SelectContainer            ; Additional logic if the item requires a container
+
+    ; DispatchStream(gTakeItemMappingsArray,gCurrentItem);
+    lda _gCurrentItem
+    sta _param0
+
+    lda #<_gTakeItemMappingsArray
+    sta _param1+0
+    lda #>_gTakeItemMappingsArray
+    sta _param1+1
+
+    jmp _DispatchStream
+.)
+
+
 _EndGameUtils_

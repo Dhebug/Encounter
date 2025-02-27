@@ -1128,6 +1128,9 @@ _PrintErrorMessageShortAsm
     lda #50
     pha 
     jmp print_error_common
++_PrintErrorMessageAsmAX    
+    sta _param0+0
+    stx _param0+1
 +_PrintErrorMessageAsm
     jsr _PlayErrorSound
 
