@@ -141,8 +141,12 @@ no_key_pressed
 
 _InsertJoystickEvents
 .(
+    ; Read the status of the joystick: This is an OSDK API that handle 
+    ; most of the known joystick interfaces such a IJK, PASE, Dk'tronic, ...
     jsr _joystick_read
 
+    ; To make the code easier, we simulate key presses in the keyboard matrix
+    ; for each of the direction: JOYSTICK UP translates to the UP arrow key, FIRE to SPACE, etc...
     lda _KeyBank+4          ; We preload the entire row from the keyboard matrix
 
     lsr _OsdkJoystick_0     ; Shift the joystick status

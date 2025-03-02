@@ -18,6 +18,7 @@ _gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identif
 
 _gInputAcceptsEmpty .byt 0
 
+// MARK:Reset Input
 _ResetInput
 .(
     lda #1
@@ -34,6 +35,7 @@ _ResetInput
 .)
 
 
+// MARK:Input Check Key
 _InputCheckKey
 .(
     ldx _gInputErrorCounter
@@ -59,7 +61,7 @@ save_shift
 .)
 
 
-
+// MARK:Input Delete Character
 _InputDeleteCharacter
 .(
     ldx _gInputBufferPos
@@ -73,6 +75,7 @@ empty
 .)    
 
 
+// MARK:Input Delete
 _InputDelete
 .(    
     ldx _gInputBufferPos
@@ -111,6 +114,7 @@ done_word
 .)
 
 
+// MARK:Input Default Key
 _InputDefaultKey
 .(
     jsr _ValidateInputSpace

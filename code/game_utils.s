@@ -276,6 +276,43 @@ buffer_empty
     lda #1
     sta _gWordCount
 
+    ; Diagonal checks:
+    ; If any of the four directions or space/fire are pressed, 
+    ; then we wait to see if some of the other inputs are triggered.
+    lda _KeyBank+4
+    and #MATRIX_KEY_UP+MATRIX_KEY_LEFT+MATRIX_KEY_DOWN+MATRIX_KEY_RIGHT+MATRIX_KEY_SPACE
+    beq end_diagonal_check
+
+    ; 7 IRQ is 7/50th of a second
+    ldx #7
+loop_check_irq
+    ldy _KeyBank+4
+    tya
+    and #MATRIX_KEY_UP
+    beq not_up
+    tya
+    and #MATRIX_KEY_LEFT+MATRIX_KEY_RIGHT+MATRIX_KEY_SPACE
+    beq not_up 
+    ldx #e_WORD_UP             ; The player wants to go UP
+    jmp store_keyword
+
+not_up
+    tya
+    and #MATRIX_KEY_DOWN
+    beq not_down
+    tya
+    and #MATRIX_KEY_LEFT+MATRIX_KEY_RIGHT+MATRIX_KEY_SPACE
+    beq not_down 
+    ldx #e_WORD_DOWN          ; The player wants to go DOWN
+    jmp store_keyword
+    
+not_down
+    jsr _WaitIRQ
+    dex
+    bne loop_check_irq    
+
+end_diagonal_check
+
     ldy _gInputKey
 
     ldx #e_WORD_HELP

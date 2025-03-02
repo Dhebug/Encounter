@@ -60,6 +60,14 @@
 #define KEY_RETURN		12
 #define KEY_SPACE       32
 
+// Matrix key masks (to apply on KeyBank[4]) 
+// These can be used for multiple key press checks
+#define MATRIX_KEY_UP         8
+#define MATRIX_KEY_LEFT      32
+#define MATRIX_KEY_DOWN      64
+#define MATRIX_KEY_RIGHT    128
+#define MATRIX_KEY_SPACE      1
+
 #define KEYBOARD_QWERTY 0
 #define KEYBOARD_AZERTY 1
 #define KEYBOARD_QWERTZ 2
