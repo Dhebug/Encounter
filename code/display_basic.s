@@ -394,6 +394,7 @@ _UnlockAchievementAsm
 .(
     ; unsigned char* assignementPtr = &gAchievements[assignment/8];
     lda _param0
++_UnlockAchievementAsmA    
     lsr             ; /2
     lsr             ; /4
     lsr             ; /8

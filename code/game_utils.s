@@ -13,6 +13,7 @@ _gInventoryMaxOffset        .dsb 1
 _gActionMappingPtr          .dsb 2
 _gScreenPtr                 .dsb 2       ; Used ty the routines that prints inventory, items, etc...
 
+_gSelectedKeyword           .dsb 1
     .text
 
 IrqTasks50hz

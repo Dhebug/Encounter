@@ -20,6 +20,8 @@ extern char gColoredSeparator[];
 extern WORDS ProcessContainerAnswer();
 extern void HandleKeywordHighlight();
 
+extern item* gStreamItemPtr;
+extern char gSelectedKeyword;        // WORDS
 // MARK:Display Scene
 void PrintSceneInformation()
 {
