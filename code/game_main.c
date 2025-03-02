@@ -112,60 +112,6 @@ WORDS AskInputCallback()
 
 
 
-void SelectContainer()
-{
-    if (gStreamItemPtr->usable_containers)
-    {
-        // Requires a container
-        WORDS containerId;
-        AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
-        const char* previousInputMessage = gInputMessage;
-        gAnswerProcessingCallback = ProcessContainerAnswer;
-        gInputAcceptsEmpty = 1;
-        gInputMessage = gTextCarryInWhat;
-        containerId = AskInput();    // "Carry it in what?"
-        gSelectedKeyword = e_WORD_COUNT_;
-        gInputMessage = previousInputMessage;
-        gAnswerProcessingCallback = previousCallback;
-        gInputAcceptsEmpty = 0;
-        if ( (containerId > e_ITEM__Last_Container) || (!(gStreamItemPtr->usable_containers & (1<<containerId))) )
-        {
-            PrintErrorMessage(gTextErrorThatWillNotWork);    // "That will not work"
-            return;
-        }
-        else
-        {
-            item* containerPtr=&gItems[containerId];
-            if (containerPtr->location != e_LOC_INVENTORY)
-            {
-                // We do not have this container...
-                if (containerPtr->location!=gCurrentLocation)
-                {
-                    PrintErrorMessage(gTextErrorMissingContainer);  // "You don't have this container" 
-                    return;
-                }
-                // But it's on the scene, so we pick-it up automatically (except if we don't have room for it)
-                if ((gCurrentItemCount+1)>=8)
-                {
-                    PrintErrorMessage(gTextErrorInventoryFull);      // "I need to drop something first"
-                    return;
-                }
-                containerPtr->location = e_LOC_INVENTORY;
-            }
-
-            if (containerPtr->associated_item != 255)
-            {
-                PrintErrorMessage(gTextErrorAlreadyFull);    // "Sorry, that's full already"
-                return;
-            }
-
-            // Looks like we have both the item and an empty container!
-            gStreamItemPtr->associated_item 	  = containerId;
-            containerPtr->associated_item = gCurrentItem;
-        }
-    }
-}
-
 
 
 // MARK:Drop Item

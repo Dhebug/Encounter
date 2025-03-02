@@ -1243,7 +1243,7 @@ validate_item
     jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
 
     ldy #2                          ; Location offset
-    lda (_gStreamItemPtr),y     
+    lda (_gStreamItemPtr),y         ; Load itemPtr->location
 
 check_if_in_inventory_already       ; if (itemPtr->location == e_LOC_INVENTORY)           // Do we already have the item?
     cmp #e_LOC_INVENTORY
@@ -1272,7 +1272,7 @@ check_inventory_space               ; if (gCurrentItemCount >= 8)
 
 check_if_movable                    ; if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
     ldy #4                          ; Flags offset
-    lda (_gStreamItemPtr),Y         ; Load itemPtr->flags
+    lda (_gStreamItemPtr),y         ; Load itemPtr->flags
     and #ITEM_FLAG_IMMOVABLE
     beq check_if_needs_container
     
@@ -1281,8 +1281,11 @@ check_if_movable                    ; if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
     jmp _PrintErrorMessageAsmAX
 
 check_if_needs_container
-    jsr _SelectContainer            ; Additional logic if the item requires a container
+    ldy #5                          ; Usable containers flags offset
+    lda (_gStreamItemPtr),Y         ; Load itemPtr->usable_containers
+    bne query_container
 
+execute_bytestream
     ; DispatchStream(gTakeItemMappingsArray,gCurrentItem);
     lda _gCurrentItem
     sta _param0
@@ -1293,6 +1296,130 @@ check_if_needs_container
     sta _param1+1
 
     jmp _DispatchStream
+
+query_container
+    ; Save the default input parameters used by the normal command processing
+    ; and put in place another set of parameters to request the container to use
+    lda _gAnswerProcessingCallback+1    ; AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
+    pha
+    lda _gAnswerProcessingCallback+0
+    pha 
+
+    lda #<_ProcessContainerAnswer       ; gAnswerProcessingCallback = ProcessContainerAnswer;
+    sta _gAnswerProcessingCallback+0
+    lda #>_ProcessContainerAnswer
+    sta _gAnswerProcessingCallback+1
+
+    lda _gInputMessage+1                ; const char* previousInputMessage = gInputMessage;
+    pha
+    lda _gInputMessage+0
+    pha 
+
+    lda #<_gTextCarryInWhat             ; gInputMessage = gTextCarryInWhat;
+    sta _gInputMessage+0
+    lda #>_gTextCarryInWhat
+    sta _gInputMessage+1
+
+    lda #1                              ; gInputAcceptsEmpty = 1;
+    sta _gInputAcceptsEmpty        
+
+    ; Ask the user to provide the container to use
+    jsr _AskInput                  ; gCurrentAssociatedItem = AskInput();    // "Carry it in what?"
+    stx _gCurrentAssociatedItem
+
+    lda #e_WORD_COUNT_             ; gSelectedKeyword = e_WORD_COUNT_;
+    sta _gSelectedKeyword
+
+    ; Restore the original parameters
+    pla                            ; gInputMessage = previousInputMessage;
+    sta _gInputMessage+0
+    pla 
+    sta _gInputMessage+1
+
+    pla                            ; gAnswerProcessingCallback = previousCallback;
+    sta _gAnswerProcessingCallback+0
+    pla 
+    sta _gAnswerProcessingCallback+1
+
+    lda #0                         ; gInputAcceptsEmpty = 0;
+    sta _gInputAcceptsEmpty        
+
+    ; Validate the answer
+    lda _gCurrentAssociatedItem         ; if (gCurrentAssociatedItem > e_ITEM__Last_Container)
+    cmp #(e_ITEM__Last_Container + 1)   ; Compare with e_ITEM__Last_Container + 1
+    bcc check_usable_container
+
+print_error
+    lda #<_gTextErrorThatWillNotWork
+    ldx #>_gTextErrorThatWillNotWork
+    jmp _PrintErrorMessageAsmAX
+
+check_usable_container              ; Calculate (1 << gCurrentAssociatedItem)    
+    tax                             ; The item ID will be used as a counter
+    lda #1                          ; Start with 1
+    cpx #0
+    beq test_bit                    ; If shift count is 0, skip shifting
+shift_loop
+    asl                             ; Shift left
+    dex                             ; Decrement shift count
+    bne shift_loop                  ; Repeat until X = 0
+
+test_bit          ; Check !(gStreamItemPtr->usable_containers & (1 << gCurrentAssociatedItem))
+    ldy #5                          ; Offset to usable_containers field
+    and (_gStreamItemPtr),y         ; AND with usable_containers
+    beq print_error                 ; If result is 0, condition fails, go to error
+
+container_is_valid
+    ; gStreamAssociatedItemPtr=&gItems[gCurrentAssociatedItem];
+    lda _gCurrentAssociatedItem            ; ID of the container
+    ldx #2                                 ; Targets gStreamAssociatedItemPtr instead of gStreamItemPtr
+    jsr _ByteStreamComputeItemPtrIndexX    ; Comnpute the pointer
+
+    ldy #2                              ; Location offset
+    lda (_gStreamAssociatedItemPtr),y   ; Load itemPtr->location
+    cmp #e_LOC_INVENTORY                ; if (gStreamAssociatedItemPtr->location != e_LOC_INVENTORY)
+    beq check_container_inventory_space
+
+check_if_container_in_scene             ; if (itemPtr->location != gCurrentLocation)          // Is the item in the scene?
+    cmp _gCurrentLocation               ; Compare with gCurrentLocation
+    beq check_container_inventory_space
+    
+    lda #<_gTextErrorMissingContainer   ; The container is not in the scene
+    ldx #>_gTextErrorMissingContainer
+    jmp _PrintErrorMessageAsmAX
+
+check_container_inventory_space
+    lda _gCurrentItemCount              ; Load gCurrentItemCount
+    cmp #8-1                            ; If the container is in the scene we pick-it up automatically (except if we don't have room for it)
+    bcc put_container_in_inventory
+    
+    lda #<_gTextErrorInventoryFull      ; The inventory is full
+    ldx #>_gTextErrorInventoryFull
+    jmp _PrintErrorMessageAsmAX
+
+put_container_in_inventory    
+    lda #e_LOC_INVENTORY
+    sta (_gStreamAssociatedItemPtr),y   ; Move the container into the inventory
+
+check_if_container_empty
+    ldy #3
+    lda (_gStreamAssociatedItemPtr),y
+    cmp #255                            ; if (gStreamAssociatedItemPtr->associated_item != 255)
+    beq empty_container
+    
+    lda #<_gTextErrorAlreadyFull        ; The container is not empty
+    ldx #>_gTextErrorAlreadyFull
+    jmp _PrintErrorMessageAsmAX
+
+empty_container
+    ; Looks like we have both the item and an empty container!
+    ;ldy #3
+    lda _gCurrentAssociatedItem          ; gStreamItemPtr->associated_item 	      = gCurrentAssociatedItem;
+    sta (_gStreamItemPtr),y
+    lda _gCurrentItem                    ; gStreamAssociatedItemPtr->associated_item = gCurrentItem;
+    sta (_gStreamAssociatedItemPtr),y    
+
+    jmp execute_bytestream
 .)
 
 
