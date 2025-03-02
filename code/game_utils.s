@@ -16,6 +16,7 @@ _gScreenPtr                 .dsb 2       ; Used ty the routines that prints inve
 _gSelectedKeyword           .dsb 1
     .text
 
+// MARK:IRQ 50hz
 IrqTasks50hz
 .(
     ; Process keyboard
@@ -47,6 +48,7 @@ skip_count_down
 
 _gFlagDirections  .byt 0    ; Bit flag containing all the possible directions for the current scene (used to draw the arrows on the scene)
 
+// MARK:Draw Arrows
 _DrawArrows
 .(
   ; Hack the bitmask to add the arrow bitmap background as elements to always draw
@@ -127,6 +129,7 @@ _BlitDataTable
   .byt 0
 
 
+// MARK:Blit Bloc
 _BlitBloc
 .(
 loop_y  
@@ -261,6 +264,7 @@ skip
 
 
 
+// MARK:Input Arrows
 _InputArrows
 .(
     lda _gInputBufferPos
@@ -403,7 +407,7 @@ reset_input
 .)
 
 
-
+// MARK:Validate Input
 _ValidateInputSpace
 .(
     lda _gInputKey
@@ -548,7 +552,7 @@ not_a
 .)
 
 
-
+// MARK:Find Action
 ; Input: _gWordBuffer[0]
 ; Output: _gActionMappingPtr points to the right entry and return 1, else returns 0
 _FindActionMapping
@@ -588,6 +592,7 @@ found
 .)
 
 
+// MARK:Run Action
 _RunAction
     ;jmp _RunAction
 .(
@@ -694,6 +699,7 @@ error_unknown_item
 .)
 
 
+// MARK:Process Container
 _ProcessContainerAnswer
 .(
     lda #0               ; Part of the 16 bit return code
@@ -709,7 +715,7 @@ not_found
 .)
 
 
-
+// MARK:Handle Highlight
 _HandleKeywordHighlight
 .(
     ; When the player presses SHIFT we redraw the item list with highlights
@@ -752,7 +758,7 @@ no_change
 
 
 
-
+// MARK:Print Objects
 ;
 ; This prints the entire list of all objects found in the current location,
 ; eventually handling vertical scrolling with clamping if the list does not fit the screen.
@@ -1134,6 +1140,7 @@ skip_item
     rts
 .)
 
+
 ; CYAN  =7=%111
 ; YELLOW=3=%011
 _PrintInventorySetColor
@@ -1153,6 +1160,7 @@ yellow
     stx _gColoredSeparator
     rts
 .)
+
 
 
 _PrintInventoryComputeScreenPtr
@@ -1180,6 +1188,7 @@ end_line
 .)
 
 ; Called when the player moves NSEWUD to a new location
+// MARK:Player Move
 _PlayerMove
 .(
     sec
