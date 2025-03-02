@@ -235,7 +235,9 @@ void Initializations()
 
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
-
+#ifdef FORCE_JOYSTICK
+    gJoystickType=FORCE_JOYSTICK;
+#endif
     OsdkJoystickType = gJoystickType;
     joystick_type_select();
 

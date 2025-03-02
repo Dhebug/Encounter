@@ -37,6 +37,7 @@
 
 //#define TESTING_MODE         // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
+//#define FORCE_JOYSTICK JOYSTICK_INTERFACE_IJK  // Comment out to use the normal settings system
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16

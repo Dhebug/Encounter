@@ -876,6 +876,9 @@ void main()
 	// Install the IRQ so we can use the keyboard
 	System_InstallIRQ_SimpleVbl();
 
+#ifdef FORCE_JOYSTICK
+    gJoystickType=FORCE_JOYSTICK;
+#endif
     OsdkJoystickType = gJoystickType;
     joystick_type_select();
 

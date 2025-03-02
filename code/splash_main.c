@@ -435,7 +435,11 @@ void main()
     gKeyboardLayout = gSaveGameFile.keyboard_layout;
     gMusicEnabled   = gSaveGameFile.music_enabled;
     gSoundEnabled   = gSaveGameFile.sound_enabled;
+#ifdef FORCE_JOYSTICK
+    gJoystickType   = FORCE_JOYSTICK;
+#else    
     gJoystickType   = gSaveGameFile.joystick_interface;
+#endif    
     if (gSoundEnabled)  gAudioSelection|=AUDIO_EFFECTS;
     if (gMusicEnabled)  gAudioSelection|=AUDIO_MUSIC;
     ApplySettings();

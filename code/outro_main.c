@@ -354,7 +354,10 @@ void main()
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
 
-    OsdkJoystickType = JOYSTICK_INTERFACE_IJK;  // gJoystickType;
+#ifdef FORCE_JOYSTICK
+    gJoystickType=FORCE_JOYSTICK;
+#endif
+    OsdkJoystickType = gJoystickType;
     joystick_type_select();
 
     // We need to preload all the images before we start the music
