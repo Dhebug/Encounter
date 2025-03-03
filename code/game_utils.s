@@ -908,10 +908,9 @@ next_item
     bcs no_dot
     lda #<_gTextDot
     ldx #>_gTextDot
-no_dot
-
 print_and_blit_description_buffer
     jsr _PrintStringInternalAX
+no_dot
 
     ; Make sure the scroll position of the scene object window is properly clamped    
     lda _gInventoryOffset
