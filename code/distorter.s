@@ -14,13 +14,13 @@ LoopDisplayMakeShiftedLogo_Y
 	sta OldByte
 	ldy #0
 LoopDisplayMakeShiftedLogo_X
-	lda (tmp0),y
+	lda (tmp6),y
 	pha
 	and #63
 	lsr 
 	ora	OldByte
 	ora #64
-	sta (tmp1),y
+	sta (tmp7),y
 
 	pla
 	and #1
@@ -36,28 +36,31 @@ LoopDisplayMakeShiftedLogo_X
 	bne LoopDisplayMakeShiftedLogo_X
 
 	clc
-	lda tmp0
+	lda tmp6
 	adc #40
-	sta tmp0
+	sta tmp6
 	bcc skip_src
-	inc tmp0+1
+	inc tmp6+1
 	clc
 skip_src
 
-	lda tmp1
+	lda tmp7
 	adc #40
-	sta tmp1
+	sta tmp7
 	bcc skip_dst
-	inc tmp1+1
+	inc tmp7+1
 skip_dst
+
+    txa
+    pha
+    ; Try to get the menu working during pre-calc
+    jsr _CheckOptionMenuInput
+    pla
+    tax
 
 	dex
 	bne LoopDisplayMakeShiftedLogo_Y
 
-    ; Try to get the menu working during pre-calc
-    jsr _ReadKeyNoBounce
-    stx _gMenuKeyOption
-    jsr _HandleSettingsMenu
 	rts
 
 
@@ -66,57 +69,57 @@ skip_dst
 _DrawPreshiftLogos
 	; 0
 	lda #<_LabelPicture0
-	sta tmp0
+	sta tmp6
 	lda #>_LabelPicture0
-	sta tmp0+1
+	sta tmp6+1
 	lda #<_LabelPicture1
-	sta tmp1
+	sta tmp7
 	lda #>_LabelPicture1
-	sta tmp1+1
+	sta tmp7+1
 	jsr DisplayMakeShiftedLogo
 
 	; 1
 	lda #<_LabelPicture1
-	sta tmp0
+	sta tmp6
 	lda #>_LabelPicture1
-	sta tmp0+1
+	sta tmp6+1
 	lda #<_LabelPicture2
-	sta tmp1
+	sta tmp7
 	lda #>_LabelPicture2
-	sta tmp1+1
+	sta tmp7+1
 	jsr DisplayMakeShiftedLogo
 
 	; 2
 	lda #<_LabelPicture2
-	sta tmp0
+	sta tmp6
 	lda #>_LabelPicture2
-	sta tmp0+1
+	sta tmp6+1
 	lda #<_LabelPicture3
-	sta tmp1
+	sta tmp7
 	lda #>_LabelPicture3
-	sta tmp1+1
+	sta tmp7+1
 	jsr DisplayMakeShiftedLogo
 
 	; 3
 	lda #<_LabelPicture3
-	sta tmp0
+	sta tmp6
 	lda #>_LabelPicture3
-	sta tmp0+1
+	sta tmp6+1
 	lda #<_LabelPicture4
-	sta tmp1
+	sta tmp7
 	lda #>_LabelPicture4
-	sta tmp1+1
+	sta tmp7+1
 	jsr DisplayMakeShiftedLogo
 
 	; 4
 	lda #<_LabelPicture4
-	sta tmp0
+	sta tmp6
 	lda #>_LabelPicture4
-	sta tmp0+1
+	sta tmp6+1
 	lda #<_LabelPicture5
-	sta tmp1
+	sta tmp7
 	lda #>_LabelPicture5
-	sta tmp1+1
+	sta tmp7+1
 	jsr DisplayMakeShiftedLogo
 	rts
 

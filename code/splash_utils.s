@@ -77,6 +77,16 @@ _JingleMusic            ; All the three channels are used
 #endif
 
 
+_CheckOptionMenuInput
+.(
+    ; Try to get the menu working during pre-calc
+    jsr _ReadKeyNoBounce
+    stx _gMenuKeyOption
+    beq skip_menu
+    jmp _HandleSettingsMenu    
+skip_menu    
+    rts
+.)
 
 
 #ifdef PRODUCT_TYPE_TEST_MODE    

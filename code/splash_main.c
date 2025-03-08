@@ -62,14 +62,16 @@ extern unsigned char* Erase38Target;
 extern void Copy38Bytes();
 extern void Erase38Bytes();
 
+extern void CheckOptionMenuInput();
+
 //BUILD_MARKER
 
 
 enum
 {
     MENU_KEYBOARD_LAYOUT    = 0,
-    MENU_JOYSTICK_INTERFACE = 1,
-    MENU_AUDIO_SETTINGS     = 2,
+    MENU_AUDIO_SETTINGS     = 1,
+    MENU_JOYSTICK_INTERFACE = 2,
 };
 
 char UsedMenu = 0;
@@ -120,20 +122,22 @@ void HandleSettingsMenu()
     switch (gMenuKeyOption)
     {         
     case KEY_UP:
-        if (MenuPosition>0)
+        MenuPosition--;
+        if (MenuPosition<0)
         {
-            MenuPosition--;
-            MenuShouldDraw = 1;
-        }
+            MenuPosition=2;
+        }       
+        MenuShouldDraw = 1;
         UsedMenu = 1;
         break;
 
     case KEY_DOWN:
-        if (MenuPosition<2)
+        MenuPosition++;
+        if (MenuPosition>2)
         {
-            MenuPosition++;
-            MenuShouldDraw = 1;
+            MenuPosition=0;
         }       
+        MenuShouldDraw = 1;
         UsedMenu = 1;
         break;
     
@@ -155,16 +159,20 @@ void HandleSettingsMenu()
             break;
 
         case MENU_JOYSTICK_INTERFACE:
-            if (gMenuKeyOption==KEY_LEFT)
-            {
-                if (gJoystickType==JOYSTICK_INTERFACE_NOTHING)      gJoystickType=JOYSTICK_INTERFACE_DKTRONICS;
-                else                                                gJoystickType--;
-            }
-            else
-            {
-                if (gJoystickType==JOYSTICK_INTERFACE_DKTRONICS)    gJoystickType=JOYSTICK_INTERFACE_NOTHING;
-                else                                                gJoystickType++;
-            }
+            do
+            {           
+                if (gMenuKeyOption==KEY_LEFT)
+                {
+                    if (gJoystickType==JOYSTICK_INTERFACE_NOTHING)      gJoystickType=JOYSTICK_INTERFACE_DKTRONICS;
+                    else                                                gJoystickType--;
+                }
+                else
+                {
+                    if (gJoystickType==JOYSTICK_INTERFACE_DKTRONICS)    gJoystickType=JOYSTICK_INTERFACE_NOTHING;
+                    else                                                gJoystickType++;
+                }
+            } 
+            while (gJoystickType==JOYSTICK_INTERFACE_TELESTRAT);   // temporary, to avoid freezing the code when selecting the Telestrat
             OsdkJoystickType = gJoystickType;
             joystick_type_select();
             break;
@@ -202,14 +210,14 @@ void HandleSettingsMenu()
             (gKeyboardLayout==KEYBOARD_QWERTY)?Text_Qwerty:
             (gKeyboardLayout==KEYBOARD_AZERTY)?Text_Azerty:Text_Qwertz
             ,(char*)0xbb80+40*25+21);
-            
-        // Joystick
-        PrintStringAt(Text_OptionJoystick,(char*)0xbb80+40*26+1);
-        PrintStringAt(gJoystickOptionsArray[gJoystickType],(char*)0xbb80+40*26+21);
-        
+                    
         // Audio (Music + Effects)
-        PrintStringAt(Text_OptionAudio,(char*)0xbb80+40*27+1);
-        PrintStringAt(gAudioOptionsArray[gAudioSelection],(char*)0xbb80+40*27+21);
+        PrintStringAt(Text_OptionAudio,(char*)0xbb80+40*26+1);
+        PrintStringAt(gAudioOptionsArray[gAudioSelection],(char*)0xbb80+40*26+21);
+
+        // Joystick
+        PrintStringAt(Text_OptionJoystick,(char*)0xbb80+40*27+1);
+        PrintStringAt(gJoystickOptionsArray[gJoystickType],(char*)0xbb80+40*27+21);
 
         MenuShouldDraw = 0;
     }
@@ -316,6 +324,7 @@ int ShowLogoAnimation()
             }
             ptrDst+=40;
             ptrSrc+=40;
+            CheckOptionMenuInput();
         }
         /*
         if (Wait(1))
@@ -371,6 +380,7 @@ int SetupColors(unsigned char paperTop,unsigned char inkTop,unsigned char paperB
         for (y=0;y<200;y+=spacing)
         {
             SetupLineColors(y,paperTop,inkTop,paperBottom,inkBottom);
+            CheckOptionMenuInput();
         }
         if (Wait(spacing/2))
         {

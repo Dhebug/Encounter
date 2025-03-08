@@ -313,4 +313,4 @@
 - Tweak: Reordered the alarm triggered script code to stop the timer as soon as the event triggers
 
 1.0.7
-- 
+- Modified the settings menu to be more reactive and have the joystick options at the bottom
