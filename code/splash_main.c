@@ -74,6 +74,7 @@ enum
     MENU_JOYSTICK_INTERFACE = 2,
 };
 
+char ShouldQuit = 0;
 char UsedMenu = 0;
 char MenuShouldDraw = 1;
 char gMenuKeyOption = 0;
@@ -120,7 +121,12 @@ void HandleSettingsMenu()
     SetLineAddress((char*)0xbb80+40*25+1);
 
     switch (gMenuKeyOption)
-    {         
+    {   
+    case KEY_SPACE:
+    case KEY_RETURN:
+        ShouldQuit = 1;
+        break;
+
     case KEY_UP:
         MenuPosition--;
         if (MenuPosition<0)
@@ -235,7 +241,7 @@ int Wait(int frameCount)
 		WaitIRQ();
 
 		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') )
+		if ((k==KEY_RETURN) || (k==' ') || ShouldQuit)
 		{
 			//PlaySound(KeyClickLData);
 			WaitFrames(4);
@@ -333,7 +339,7 @@ int ShowLogoAnimation()
         }
         */
 		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') )
+		if ((k==KEY_RETURN) || (k==' ') || ShouldQuit)
 		{
 			return 1;
 		}
