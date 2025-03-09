@@ -15,6 +15,7 @@ _gPrintWidth        .byt 40
 _gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
 _gShowHighlights    .byt 0
 _gPrintRemovePrefix .byt 0
+_gPrintQuitIfSpace  .byt 0          // Used by the option menu to truncate items to the important word
 
 _gStatusMessageLocation .word $bb80+40*22
 
@@ -117,8 +118,10 @@ loop
 
 quit
     jsr _PrintSpacesIfAny
+abort    
     lda #0
     sta _gPrintTerminator   // Resets the terminator to zero (maybe?)
+    sta _gPrintQuitIfSpace
     rts
 
 space_except_after_apostrophe
@@ -127,6 +130,8 @@ space_except_after_apostrophe
     beq skip_space
 space    
     inc _spaceCounter
+    lda _gPrintQuitIfSpace
+    bne abort
 skip_space    
     jsr _IncrementParam0
     jmp loop
@@ -516,6 +521,11 @@ _MemCpy_9900_B500               MEMCPY_ENTRY($b9900,$b500,8*96)
 #ifdef MODULE_GAME
 _MemCpy_B800_0_7DigitDisplay        MEMCPY_ENTRY($b800+"0"*8,_gSevenDigitDisplay,8*11)
 _MemCpy__BlittTemporaryBuffer479    MEMCPY_ENTRY($bb80+40*24,_TemporaryBuffer479,40*4)
+
+_MemSet_CleanWindow1        MEMSET_ENTRY($bb80+40*18+1,32,39)
+_MemSet_CleanWindow2        MEMSET_ENTRY($bb80+40*19+1,32,39)
+_MemSet_CleanWindow3        MEMSET_ENTRY($bb80+40*20+1,32,39)
+_MemSet_CleanWindow4        MEMSET_ENTRY($bb80+40*21+1,32,39)
 
 _MemCpy_BlittInventory      MEMCPY_ENTRY($bb80+40*18,_TemporaryBuffer479,40*4)
 #endif

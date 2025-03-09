@@ -20,8 +20,127 @@ extern char gColoredSeparator[];
 extern WORDS ProcessContainerAnswer();
 extern void HandleKeywordHighlight();
 
-extern item* gStreamItemPtr;
-extern char gSelectedKeyword;        // WORDS
+extern WORDS gActionMappingMenu[12];
+
+char FindActionMapping();
+void RunAction();
+
+extern action_mapping* gActionMappingPtr;
+
+
+
+// MARK:Print Action
+
+extern char gKeywordMenuSelected;
+extern unsigned char gKeywordMenuEntryCount;
+extern WORDS* gKeywordMenuEntries;
+extern char gShouldCleanWindow;
+
+extern WORDS RefreshActionMenu();
+
+extern void BuildItemList();
+extern void BuildContainerList();
+extern void BuildContextualItemList();
+
+
+
+void PrintActionMenu()
+{
+    char maxWordIndex=1;
+
+    gWordCount=0;
+    gShouldCleanWindow=1;
+
+    WaitReleasedKey();
+
+    while (1) 
+    {
+        CleanWindowIfNecessary();
+
+        if (gAnswerProcessingCallback == ProcessContainerAnswer)
+        {
+            // Containers list
+            BuildContainerList();
+            maxWordIndex=1;
+        }
+        else
+        if (gWordCount==0)
+        {
+            // Default input mode - Verb
+            gKeywordMenuEntryCount=12;
+            gKeywordMenuEntries=gActionMappingMenu;
+        }
+        gWordBuffer[gWordCount]=RefreshActionMenu();
+        if (FindActionMapping())
+        {
+            maxWordIndex = 1+gActionMappingPtr->flag&3;  // Number of items after
+        }
+
+        PrintKeywordBuffer();
+
+        switch (WaitKey())
+        {
+        case KEY_UP:
+            gKeywordMenuSelected--;
+            break;
+        case KEY_DOWN:
+            gKeywordMenuSelected++;
+            break;
+        case KEY_LEFT:
+            gKeywordMenuSelected-=4;
+            break;
+        case KEY_RIGHT:
+            gKeywordMenuSelected+=4;
+            break;
+
+        case KEY_DEL:
+            if (gWordCount)
+            {
+                // Delete the currently selected word
+                gWordCount--;
+                gShouldCleanWindow=1;
+            }
+            break;
+
+        case KEY_ESC:
+            gWordCount=0;
+            gWordBuffer[0]=e_WORD_COUNT_;
+            PrintSceneObjects();
+            ResetInput();
+            return;        // Quit violently
+
+        case KEY_SPACE:
+        case KEY_RETURN:
+            if ((gWordCount+1)>=maxWordIndex)
+            {
+                ClearMessageWindow(16+4);
+                if (gAnswerProcessingCallback == ProcessContainerAnswer)
+                {
+                    gInputKey = 0;
+                    gInputDone = 1;
+                }
+                else
+                {
+                    RunWordBufferCommand();
+                }
+                return;
+            }
+            else
+            {
+                gWordCount++;   // Should check if we need this word
+                gShouldCleanWindow=1;
+                BuildContextualItemList();
+            }
+            break;
+        }
+        if (gKeywordMenuSelected<0)                         gKeywordMenuSelected+=gKeywordMenuEntryCount;        
+        if (gKeywordMenuSelected>=gKeywordMenuEntryCount)   gKeywordMenuSelected=0;
+    }    
+}
+
+
+
+
 // MARK:Display Scene
 void PrintSceneInformation()
 {
@@ -77,40 +196,42 @@ extern char TimeOutGameOver[];
 // MARK:Input Callback
 WORDS AskInputCallback()
 {
-    HandleByteStream();
-    if ( (gGameOverCondition!=0) && (gCurrentStream==0) )
+    if (gAnswerProcessingCallback != ProcessContainerAnswer)
     {
-        // The player has reached a game over condition and the end of the current stream
-        return e_WORD_QUIT;
-    }
+        // Normal inputs
+        HandleByteStream();
+        if ( (gGameOverCondition!=0) && (gCurrentStream==0) )
+        {
+            // The player has reached a game over condition and the end of the current stream
+            return e_WORD_QUIT;
+        }
 
-    // We check the Hours digit to see if it reached zero
-    // If it does then we play the "hurry up" sequence!
-    if ( (TimeHours=='0') && (!OneHourAlarmWarningShown) )
-    {
-        // Should probably add a check to not interrupt import scripts
-        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
-        const char* savedStream = gCurrentStream;
-        PlayStream(OneHourAlarmWarning);
-        gCurrentStream = savedStream;
-        OneHourAlarmWarningShown=1;
-    }
-    if (TimeOut)
-    {
-        // Should probably add a check to not interrupt import scripts
-        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
-        const char* savedStream = gCurrentStream;
-        PlayStream(TimeOutGameOver);
-        gCurrentStream = savedStream;
-        return e_WORD_QUIT;
-    }
+        // We check the Hours digit to see if it reached zero
+        // If it does then we play the "hurry up" sequence!
+        if ( (TimeHours=='0') && (!OneHourAlarmWarningShown) )
+        {
+            // Should probably add a check to not interrupt import scripts
+            // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+            const char* savedStream = gCurrentStream;
+            PlayStream(OneHourAlarmWarning);
+            gCurrentStream = savedStream;
+            OneHourAlarmWarningShown=1;
+        }
+        if (TimeOut)
+        {
+            // Should probably add a check to not interrupt import scripts
+            // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+            const char* savedStream = gCurrentStream;
+            PlayStream(TimeOutGameOver);
+            gCurrentStream = savedStream;
+            return e_WORD_QUIT;
+        }
 
-    HandleKeywordHighlight();
-
+        HandleKeywordHighlight();
+    }
+    // Keep asking
     return e_WORD_CONTINUE;
 }
-
-
 
 
 
@@ -149,10 +270,6 @@ void DropItem()
 
 
 
-char FindActionMapping();
-void RunAction();
-
-extern action_mapping* gActionMappingPtr;
 
 // MARK:Answer
 WORDS ProcessAnswer()

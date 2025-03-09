@@ -314,3 +314,6 @@
 
 1.0.7
 - Modified the settings menu to be more reactive and have the joystick options at the bottom
+- Support for joystick interfaces (IJK, Pase, Opel, Dk'Tronic)
+- New control scheme using four direction joysticks and single button selection usable on both Oric and Steam Deck devices
+- Updated Oricutron to a more recent version with better controllers handling, removal of the status bar, immersive mode, etc...

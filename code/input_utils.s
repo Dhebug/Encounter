@@ -12,6 +12,7 @@ _gAnswerProcessingCallback .dsb 2
 _gInputKey          .dsb 1
 _gInputShift        .dsb 1
 _gInputErrorCounter .dsb 1
+_gInputDone         .dsb 1
 _gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words
 
     .text 

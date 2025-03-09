@@ -7,6 +7,7 @@ typedef unsigned char WORDS;
 extern unsigned char gCurrentLocation;
 extern unsigned char gCurrentItemCount;
 extern unsigned char gCurrentItem;
+extern unsigned char gCurrentAssociatedItem;
 extern char gInventoryOffset;
 extern char gInventoryMaxOffset;
 

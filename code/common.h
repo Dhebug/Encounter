@@ -145,6 +145,7 @@ extern unsigned char MusicMixerMask;
 #define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }
 
 char KeywordCompare(); // Fill param0.ptr=first;param1.ptr=second; first, returns in X
+extern const char* gKeywordString;
 
 union ParamType
 {

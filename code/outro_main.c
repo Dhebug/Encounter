@@ -15,9 +15,149 @@ extern unsigned char TypewriterMusic[LOADER_MUSIC_TYPEWRITER_SIZE];
 // Bunch of "no-op" functions and tables, these are required by the game, but not for the high scores
 keyword gWordsArray[] = { { 0,  e_WORD_COUNT_ } };
 
+char gNameInputDone = 0;
+
+
+void PrintKeyboardMenu()
+{
+    char selectedOption=0;
+    char capsLock = 0;
+    gNameInputDone = 0;
+
+    // Clean the window
+    memset((char*)0xbb80+40*18+1,32,38);
+    memset((char*)0xbb80+40*19+1,32,38);
+    memset((char*)0xbb80+40*20+1,32,38);
+    memset((char*)0xbb80+40*21+1,32,38);
+
+    
+    while (!gNameInputDone)
+    {
+        char car;
+        char i,j;
+        char* scanline = (char*)0xbb80+40*18+1;
+        char shifted=(((KeyBank[4]|KeyBank[7])&16)<<1)^capsLock;  // The two shift keys are on the same column
+        char option=0;
+        char letter = 'A'+shifted;
+        char selectedLetter = 0;
+    
+        for (j=0;j<3;j++)
+        {
+            for (i=0;i<11;i++)
+            {
+                char* pos=scanline+i*3;
+                char car = 0;
+
+                if (i<9)
+                {
+                    car = letter;
+                    pos[1]=letter;  //'A'+i+shifted+(j*9);
+                    if (option==29)
+                    {
+                        letter=' ';
+                    }
+                    else
+                    {
+                        letter++;
+                    }
+                }
+                else
+                if (i<10)
+                {
+                    //pos[1]='\'';
+                    const char* strings[] = {"\'", ".", ":"};
+                    car = *strings[j];
+                    PrintStringAt(strings[j] ,pos+1);
+                }
+                else
+                {
+                    const char* strings[] = {"CAPS", "ERASE", "ENTER"};
+                    const char codes[] = { KEY_FUNCT, KEY_DEL, KEY_RETURN};
+                    car = codes[j];
+                    PrintStringAt(strings[j] ,pos+1);
+                }
+
+                if (selectedOption==option)
+                {
+                    pos[0]=2;
+                    selectedLetter = car;
+                }
+                else
+                {
+                    pos[0]=3;
+                }
+
+                option++;
+            }
+            scanline+=40;
+        }
+
+        car=ReadKeyNoBounce();
+        if ( (car==' ') && (selectedLetter<KEY_SPACE) )
+        {
+            // If the user pressed space on one of the three commands on the right, we replace that by some alternate command
+            if (selectedLetter==KEY_FUNCT)
+            {
+                capsLock=32-capsLock;
+                car = 0;
+            }
+            else
+            {
+                car = selectedLetter;
+            }
+        }
+
+        switch (car)
+        {
+        case KEY_UP:
+            selectedOption-=11;
+            break;
+        case KEY_DOWN:
+            selectedOption+=11;
+            break;
+        case KEY_LEFT:
+            selectedOption--;
+            break;
+        case KEY_RIGHT:
+            selectedOption++;
+            break;
+
+        case KEY_DEL:
+            if (gInputBufferPos>0)
+            {
+                gInputBufferPos--;
+            }
+            break;
+
+        case KEY_SPACE:
+            if (selectedLetter && gInputBufferPos<15)
+            {
+                gInputBuffer[gInputBufferPos++]=selectedLetter;
+            }
+            break;
+
+        case KEY_RETURN:
+            gNameInputDone=1;
+            break;
+        }
+        if (selectedOption<0)     selectedOption+=33;        
+        if (selectedOption>=33)   selectedOption-=33;
+
+        gInputBuffer[gInputBufferPos]  =0;
+        sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",gInputErrorCounter?1:2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
+    }
+}
+
 WORDS AskInputCallback()
 {   
-    return e_WORD_CONTINUE;
+    if (gNameInputDone)
+    {
+        return e_WORD_QUIT;
+    }
+    else
+    {
+        return e_WORD_CONTINUE;
+    }
 }
 
 WORDS ProcessPlayerNameAnswer()

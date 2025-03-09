@@ -135,8 +135,8 @@ keyword gWordsArray[] =
     { "CHERCHE" , e_WORD_SEARCH },
     { "LANCE"   , e_WORD_THROW },
 
-    { "LACHE"   , e_WORD_DROP },
     { "POSE"    , e_WORD_DROP },
+    { "LACHE"   , e_WORD_DROP },
 
     { "UTILISE" , e_WORD_USE },
 
@@ -147,9 +147,9 @@ keyword gWordsArray[] =
 
     { "LIS"     , e_WORD_READ },
 
+    { "INSPECTE", e_WORD_LOOK },
     { "REGARDE" , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
-    { "INSPECTE", e_WORD_LOOK },
 #else
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },

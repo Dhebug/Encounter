@@ -21,10 +21,11 @@ extern char ValidateInputReturn();
 
 char gPrintMessageBackground[40];   // moved to overlay
 
-WORDS AskInput()
+void AskInput()
 {
-	ResetInput();	
-	while (1)
+	ResetInput();
+    gInputDone = 0;
+	while (!gInputDone)
 	{        
 		if (gAskQuestion)
 		{
@@ -39,10 +40,10 @@ WORDS AskInput()
 
 		do
 		{
-            WORDS callbackOutput=AskInputCallback();
-            if (callbackOutput!=e_WORD_CONTINUE)
+            if (AskInputCallback()!=e_WORD_CONTINUE)
             {
-                return callbackOutput;
+                // Quit
+                return;
             }
 			InputCheckKey();
 			sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",gInputErrorCounter?1:2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
@@ -68,15 +69,14 @@ WORDS AskInput()
 		case KEY_RETURN:
             if (ValidateInputReturn() || ((gWordCount==0) && gInputAcceptsEmpty))
 			{
-				WORDS answer = gAnswerProcessingCallback();
-				if (answer !=e_WORD_CONTINUE)
+				if (gAnswerProcessingCallback() !=e_WORD_CONTINUE)
 				{
 					// Quit
                     if (gInputMessage[0])
                     {
                         memcpy(gStatusMessageLocation+1,gPrintMessageBackground,39);            
                     }
-					return answer;
+					return;
 				}
 				else
 				{

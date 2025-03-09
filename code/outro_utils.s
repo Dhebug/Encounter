@@ -9,8 +9,18 @@ IrqTasks50hz
     jmp SoundUpdate50hz
 .)
 
-_ValidateInputReturn
+
 _ValidateInputSpace
+.(
+    ldx _gInputBufferPos
+    bne skip
+    jsr _PrintKeyboardMenu
+    ; Make sure that we don't add some "space" to the input buffer
+    lda #0
+    sta _gInputKey
+skip
+.)
++_ValidateInputReturn
     ldx #1
 // Called from on the blitt functions
 Count1SecondsDown

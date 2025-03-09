@@ -12,9 +12,157 @@ _gInventoryMaxOffset        .dsb 1
 
 _gActionMappingPtr          .dsb 2
 _gScreenPtr                 .dsb 2       ; Used ty the routines that prints inventory, items, etc...
+buffer_position             .dsb 1
+_gKeywordString             .dsb 2       ; Initialized by FindKeyword
 
-_gSelectedKeyword           .dsb 1
+_gKeywordMenuEntries        .dsb 2
+_gKeywordMenuEntryCount     .dsb 1
+_gKeywordMenuSelected       .dsb 1
+_gShouldCleanWindow         .dsb 1
+
     .text
+
+;
+; Print the list of selectable options.
+; The display is done over 4 lines and multiple columns.
+;
+; In order to accomodate the variable number of items the width of columns must change:
+; 8 items or less  -> 18 characters (18*2 = 36)
+; 12 items or less -> 12 characters (12*3 = 36)
+; 16 items or less ->  9 characters ( 9*4 = 36)
+; 20 items or less ->  7 characters ( 7*5 = 35)
+;
+_RefreshActionMenu
+.(
+    ; Make sure we don't have overflow
+    lda _gKeywordMenuSelected
+    cmp _gKeywordMenuEntryCount
+    bcc end_selection_overflow
+    lda #0
+    sta _gKeywordMenuSelected
+end_selection_overflow    
+
+    ; No valid item selected
+    lda #e_WORD_COUNT_
+    sta auto_result
+
+    ; Screen pointer
+    lda #<$bb80+40*18
+    sta _gScreenPtr+0
+    lda #>$bb80+40*18
+    sta _gScreenPtr+1
+
+    LDA _gKeywordMenuEntryCount
+    CMP #8+1                     ; Up to 8 items (2 columns)
+    BCC SetWidth18
+    CMP #12+1                    ; Up to 12 items (3 columns)
+    BCC SetWidth12
+    CMP #16+1                    ; Up to 16 items (4 columns)
+    BCC SetWidth9
+    LDA #40*4-7                  ; Default case (5 columns)
+    bne StoreWidth
+
+SetWidth18:
+    LDA #40*4-18                 ; Load 18 (2 bytes)
+    BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
+SetWidth12:
+    LDA #40*4-12                 ; Load 12 (2 bytes)
+    BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
+SetWidth9:
+    LDA #40*4-9                  ; Load 9 (2 bytes)
+    BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
+
+StoreWidth:
+    STA width_patch            ; Store result in _gColumnWidth (1 byte)
+
+    ; Item drawing loop
+    ldy #0
+loop_item_entry
+    cpy _gKeywordMenuEntryCount
+    bcs end_item_loop
+    tya
+    pha
+
+    lda (_gKeywordMenuEntries),y
+    sta _param0
+
+    cpy _gKeywordMenuSelected
+    bne no_selected
+selected
+    sta auto_result              ; Store the currently selected keyword
+    lda #2                       ; Green text
+    jmp set_color
+no_selected
+    lda #7                       ; White text
+set_color    
+    ldy #1
+    sta (_gScreenPtr),y          ; Write the color to the screen
+
+    ; PrintStringAt(gKeywordString,scanline+2);  
+    jsr _GetKeywordString       ; Input in _param0, Result in gKeywordString
+
+    lda _gKeywordString+0       ; Message pointer
+    sta _param0+0
+    lda _gKeywordString+1
+    sta _param0+1
+
+    clc                         ; Screen pointer
+    lda _gScreenPtr+0
+    adc #2
+    sta _gPrintAddress+0
+    lda _gScreenPtr+1
+    adc #0
+    sta _gPrintAddress+1
+
+    ; Enable truncation
+    lda #1
+    sta _gPrintQuitIfSpace
+
+    lda #0                      ; Position
+    sta _gPrintPos
+    jsr _PrintStringInternal
+
+
+    ; Increment the screen pointer to the next line
+    clc
+    lda _gScreenPtr+0 
+    adc #40
+    sta _gScreenPtr+0
+    lda _gScreenPtr+1
+    adc #0
+    sta _gScreenPtr+1
+
+    pla
+    tay
+    iny
+    ;tya
+
+    and #3
+    cmp #3
+    bne loop_item_entry    
+
+    ; Increment the screen pointer to the next column
+    sec
+    lda _gScreenPtr+0 
+width_patch = *+1    
+    sbc #40*4-12          ; Width
+    sta _gScreenPtr+0
+    lda _gScreenPtr+1
+    sbc #0
+    sta _gScreenPtr+1
+
+    bne loop_item_entry    
+
+end_item_loop
+    
+    ; Return the keyword id
+    lda #0
+auto_result = *+1    
+    ldx #e_WORD_COUNT_
+    rts
+.)
+
+
 
 // MARK:IRQ 50hz
 IrqTasks50hz
@@ -373,7 +521,91 @@ not_scroll_down
 
 store_keyword
     stx _gWordBuffer
+    lda #e_WORD_COUNT_           ; Sentinelle word to avoid printing out of the buffer
+    sta _gWordBuffer+1
+    jsr _PrintKeywordBuffer
 
+    ; Wait half a second
+    jsr _ShortWait
+
++_RunWordBufferCommand
+    ; Run the actual command
+    lda _gAnswerProcessingCallback+0
+    sta callback+0
+    lda _gAnswerProcessingCallback+1
+    sta callback+1
+
+callback = *+1
+    jsr $1234
++reset_input    
+    jsr _ResetInput
+
+    lda #1
+    sta _gAskQuestion
+    rts
+.)
+
+
+
+#ifdef LANGUAGE_FR    
+_CancelText .byt "-ANNULE-",0
+#else
+_CancelText .byt "-CANCEL-",0
+#endif
+
+
+; param0 = input keyword
+; Result string in _gKeywordString+0/1
+_GetKeywordString
+.(
+    lda _param0
+    cmp #e_WORD_COUNT_
+    bne valid_keyword
+
+invalid_keyword
+    lda #<_CancelText
+    sta _gKeywordString+0
+    lda #>_CancelText
+    sta _gKeywordString+1
+    rts
+
+valid_keyword    
+    cmp #128
+    bcs find_verb
+
+    ldx #0
+    jsr _ByteStreamComputeItemPtrIndexX
+
+    ; Get the pointer to the word
+    ldy #0
+    lda (_gStreamItemPtr),y
+    sta _gKeywordString+0
+    iny
+    lda (_gStreamItemPtr),y
+    sta _gKeywordString+1
+
+    ldy #0
+search_underscore    
+    lda (_gKeywordString),y
+    beq found_zero
+    cmp #"_"
+    beq found
+    iny
+    bne search_underscore
+found
+    clc
+    iny
+    tya
+    adc _gKeywordString+0
+    sta _gKeywordString+0
+    lda #0
+    adc _gKeywordString+1
+    sta _gKeywordString+1
+
+found_zero
+    rts
+
+find_verb    
     ; Try to find the keyword in the table
     lda #<_gWordsArray
     sta tmp0+0
@@ -384,7 +616,8 @@ loop_search_keyword
     lda (tmp0),y
     cmp #e_WORD_COUNT_
     beq reset_input               ; Not supposed to happen if the code above is correct.
-    cmp _gWordBuffer
+auto_keyword = *+1    
+    cmp _param0                   ; Match with the token 
     beq found_it
     ; Next keyword
     clc
@@ -400,12 +633,18 @@ found_it
     ; Get the pointer to the word
     ldy #0
     lda (tmp0),y
-    sta tmp1+0
+    sta _gKeywordString+0
     iny
     lda (tmp0),y
-    sta tmp1+1
+    sta _gKeywordString+1
 
-    ; Print it in the player command field to simulate they typed it in
+    rts
+.)
+
+
+_PrintKeywordBuffer
+.(
+    ; Initialize the start of the command field location 
     clc
     lda _gStatusMessageLocation+0
     adc #40+1+2
@@ -414,32 +653,67 @@ found_it
     adc #0
     sta tmp2+1
 
+    ldy #0
+    sty buffer_position
+
+    ldx #0
+word_loop    
+    txa
+    ldy _gWordBuffer,x
+    cpy #e_WORD_COUNT_           ; Last keyword in the buffer?
+    beq clear_line
+    sty _param0
+    pha
+    jsr _GetKeywordString
+
+    ; Print it in the player command field to simulate they typed it in
     ; sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
     ldy #0
 print_word_loop
-    lda (tmp1),y
+    lda (_gKeywordString),y
+    beq done_printing
+    cmp #" "
     beq done_printing
     sta (tmp2),y
     iny
+    inc buffer_position
     bne print_word_loop
 done_printing
+    ; Print a space separator character
+    lda #" "
+    sta (tmp2),y
+    iny
+    inc buffer_position
 
-    ; Wait half a second
-    jsr _ShortWait
+    ; Increase buffer position based on the size of the keyword
+    clc
+    tya
+    adc tmp2+0
+    sta tmp2+0
+    lda tmp2+1
+    adc #0
+    sta tmp2+1
 
-    ; Run the actual command
-    lda _gAnswerProcessingCallback+0
-    sta callback+0
-    lda _gAnswerProcessingCallback+1
-    sta callback+1
+    pla
+    tax
+    inx
+    cpx #MAX_WORDS
+    bne word_loop
 
-callback = *+1
-    jsr $1234
-reset_input    
-    jsr _ResetInput
+    ; Complete the rest of the line with spaces to erase whatever content was there before
+clear_line    
+    lda #" "
+    ldy #0
+    ldx buffer_position
+clear_line_loop    
+    cpx #37
+    bcs end_of_line
+    sta (tmp2),y
+    iny
+    inx
+    bne clear_line_loop
 
-    lda #1
-    sta _gAskQuestion
+end_of_line
     rts
 .)
 
@@ -466,6 +740,7 @@ check_input
 
     ; Validate that all the words are actually valid
     ldx _gWordCount
+    beq show_action_menu          ; bad_input                 ; No keyword -> bad input (should use that to show the token selector menu)
 loop_check_valid_word
     lda _gWordBuffer-1,x
     cmp #e_WORD_COUNT_
@@ -499,6 +774,10 @@ check_space
     cpx _gWordCount               ; Compare with the number of keywords entered
     bcs good_input                ; Still some keywords to input = OK
     bcc bad_input                 ; X>=word count
+
+show_action_menu
+    jsr _PrintActionMenu
+    jmp good_input
  .)
 
 
@@ -1223,8 +1502,134 @@ end_line
     rts
 .)
 
+
+
+_CleanWindowIfNecessary
+.(
+    lda _gShouldCleanWindow
+    beq done_cleaning
+
+    MEMSET_JSR(_MemSet_CleanWindow1)
+    MEMSET_JSR(_MemSet_CleanWindow2)
+    MEMSET_JSR(_MemSet_CleanWindow3)
+    MEMSET_JSR(_MemSet_CleanWindow4)
+
+    lda #0
+    sta _gShouldCleanWindow
+    sta _gKeywordMenuSelected
+done_cleaning
+    rts
+.)
+
+
+
+; These filters should leave the X register untouched
+_AllContainersItemsFilterCallback
+    lda _gCurrentItem
+    cmp #e_ITEM__Last_Container+1
+    bcs _ItemFilteredOut          ; >=    
+_AllItemsFilterCallback           ; Returns all the items at the current location or in the inventory
+    ldy #2
+    lda (_gStreamItemPtr),y       ; +2 = location
+    cmp _gCurrentLocation
+    beq _ItemFilteredIn
+    lda (_gStreamItemPtr),y       ; +2 = location
+    cmp #e_LOC_INVENTORY
+    beq _ItemFilteredIn
+    bne _ItemFilteredOut
+
+_AllSceneItemsFilterCallback      ; Use for TAKE
+    ldy #2
+    lda (_gStreamItemPtr),y       ; +2 = location
+    cmp _gCurrentLocation
+    beq _ItemFilteredIn
+    bne _ItemFilteredOut
+
+_AllInventoryItemsFilterCallback  ; Use for DROP
+    ldy #2
+    lda (_gStreamItemPtr),y       ; +2 = location
+    cmp #e_LOC_INVENTORY
+    beq _ItemFilteredIn
+    bne _ItemFilteredOut
+
+_ItemFilteredOut
+    lda #0
+    rts
+
+_ItemFilteredIn
+    lda #1
+    rts
+
+
+
+; Generate a list of items to display using one of the filters
+_BuildContainerList
+    lda #<_AllContainersItemsFilterCallback
+    ldx #>_AllContainersItemsFilterCallback
+    jmp _BuildItemSetCallbackAX
+
+; Generate a list of relevant items depending of the selected action verb
+_BuildContextualItemList
+    ldy _gWordBuffer+0                     ; Action VERB
+
+    lda #<_AllSceneItemsFilterCallback     ; TAKE is only concerned by items in the location
+    ldx #>_AllSceneItemsFilterCallback
+    cpy #e_WORD_TAKE
+    beq _BuildItemSetCallbackAX
+
+    lda #<_AllInventoryItemsFilterCallback  ; DROP only lists the items in the inventory
+    ldx #>_AllInventoryItemsFilterCallback
+    cpy #e_WORD_DROP
+    beq _BuildItemSetCallbackAX
+
+    lda #<_AllItemsFilterCallback           ; Any other command shows everything
+    ldx #>_AllItemsFilterCallback
+    ; Fallback
+_BuildItemSetCallbackAX
+    sta _gKeywordItemsFilter+0
+    stx _gKeywordItemsFilter+1
+    ; Fallback
+_BuildItemList
+.(
+    ; gKeywordMenuEntries=(WORDS*)TemporaryBuffer479;
+    lda #<_TemporaryBuffer479
+    sta _gKeywordMenuEntries+0
+    lda #>_TemporaryBuffer479
+    sta _gKeywordMenuEntries+1
+
+    ; gKeywordMenuEntryCount=1;
+    ldx #0
+    stx _gKeywordMenuEntryCount
+loop_search
+    txa
+    jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
+    
+    stx _gCurrentItem
++_gKeywordItemsFilter = *+1
+    jsr _ItemFilteredOut                  ; Patched by the caller with the proper callback (does not touch X)
+    beq next_item
+
+    ; Item matched the filter
+    txa
+    jsr _AddItemEntry
+
+next_item
+    inx 
+    cpx #e_ITEM_COUNT_
+    bne loop_search                       ; Next item
+
+    ; Add a fake "Cancel" item at the end of the list
+    lda #e_WORD_COUNT_
+_AddItemEntry
+    ldy _gKeywordMenuEntryCount
+    sta (_gKeywordMenuEntries),y          ; Add it to the list
+    inc _gKeywordMenuEntryCount
+    rts
+.)
+
+
+// MARK: Player Move
 ; Called when the player moves NSEWUD to a new location
-// MARK:Player Move
 _PlayerMove
 .(
     sec
@@ -1263,6 +1668,12 @@ _TakeItem
 .(
     ; Get itemId from gWordBuffer[1]
     lda _gWordBuffer+1       ; Load gWordBuffer[1] into A (itemId)
+    cmp #e_WORD_COUNT_
+    bne keep_going
+    ; User cancelled the operation
+    jmp _PrintSceneObjects
+
+keep_going    
     sta _gCurrentItem
 
     ; if (itemId >= e_ITEM_COUNT_)
@@ -1343,6 +1754,10 @@ execute_bytestream
     jmp _DispatchStream
 
 query_container
+    ; Save the current item because it will be overwritten by the AskInput
+    lda _gCurrentItem
+    pha
+
     ; Save the default input parameters used by the normal command processing
     ; and put in place another set of parameters to request the container to use
     lda _gAnswerProcessingCallback+1    ; AnswerProcessingFun previousCallback = gAnswerProcessingCallback;
@@ -1370,10 +1785,12 @@ query_container
 
     ; Ask the user to provide the container to use
     jsr _AskInput                  ; gCurrentAssociatedItem = AskInput();    // "Carry it in what?"
-    stx _gCurrentAssociatedItem
 
-    lda #e_WORD_COUNT_             ; gSelectedKeyword = e_WORD_COUNT_;
-    sta _gSelectedKeyword
+    lda #0
+    sta _gInputDone
+
+    lda _gWordBuffer+0
+    sta _gCurrentAssociatedItem
 
     ; Restore the original parameters
     pla                            ; gInputMessage = previousInputMessage;
@@ -1389,7 +1806,17 @@ query_container
     lda #0                         ; gInputAcceptsEmpty = 0;
     sta _gInputAcceptsEmpty        
 
+    pla
+    sta _gCurrentItem
+    jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
+
     ; Validate the answer
+    cmp #e_WORD_COUNT_
+    bne handle_answer
+    ; The user selected the CANCEL option
+    jmp _PrintSceneObjects
+
+handle_answer    
     lda _gCurrentAssociatedItem         ; if (gCurrentAssociatedItem > e_ITEM__Last_Container)
     cmp #(e_ITEM__Last_Container + 1)   ; Compare with e_ITEM__Last_Container + 1
     bcc check_usable_container
