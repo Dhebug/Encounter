@@ -36,9 +36,10 @@
 :: 1.0.4 - Optimized HandleByteStream and PrintInventory, added a Coleco image, revamped the alarm system, tweaked timings and key presses
 :: 1.0.5 - The parser does not allow anymore adding more keywords than what the command supports
 :: 1.0.6 - Fixed the "use key", small explosion, some typo fix, and alarm triggering
-:: 1.0.7 - 
+:: 1.1.0 - New version of Oricutron, new controller based menu option system
+:: 1.1.1 - 
 ::
-SET VERSION=1.0.7
+SET VERSION=1.1.1
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
