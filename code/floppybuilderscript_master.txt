@@ -262,6 +262,16 @@ AddFile ..\build\files\view_chemistry_recipes.hir
 #endif
 AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 
+#ifdef PRODUCT_TYPE_GAME_DEMO
+// Just defining the images so the compiler is happy, the files are not on disk because the player cannot go there
+AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
+AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
+AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
+AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
+AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
+AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
+#else
+
 AddFile ..\build\files\view_united_kingdom_map.hir
 AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 
@@ -279,6 +289,7 @@ AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
 
 AddFile ..\build\files\view_medicine_cabinet_open.hir
 AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
+#endif
 
 AddFile ..\build\files\view_alarm_panel.hir
 AddDefine LOADER_PICTURE_ALARM_PANEL {FileIndex}
