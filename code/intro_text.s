@@ -96,16 +96,16 @@ _Text_DemoFeatures
 ; Manual
 ;
 #ifdef LANGUAGE_FR
-_Text_GameInstructions
-    .byt 1,"        Comment jouer (1/2)",TEXT_CRLF
+_Text_GameInstructionsPage1
+    .byt 1,"        Comment jouer (1/3)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Votre tâche est de trouver et sauver",TEXT_CRLF
+    .byt "Votre tâche est de trouver et",4,"sauver",TEXT_CRLF
     .byt "une fille kidnappée par des voyous.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "La mission échoue si vous êtes",TEXT_CRLF
+    .byt "La mission",4,"échoue",0,"si vous êtes",TEXT_CRLF
     .byt "détecté ou si vous manquez de temps.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Utilisez des VERBES et des NOMS comme",TEXT_CRLF
+    .byt "Utilisez des",4,"VERBES",0,"et des",4,"NOMS",0,"comme",TEXT_CRLF
     .byt "ex: PRENDS CLE ou COMBINE PAIN BEURRE",TEXT_CRLF
     .byt TEXT_CRLF
 
@@ -120,22 +120,22 @@ _Text_GameInstructions
     .byt 1,"              NOTES",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
-    .byt "mais être bricoleur peut aider.",TEXT_CRLF
+    .byt "mais être",4,"bricoleur",0,"peut aider.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Tracez une carte et annotez-la.",TEXT_CRLF
+    .byt "Tracez une",4,"carte",0,"et annotez-la.",TEXT_CRLF
     .byt "Bonne chance, vous en aurez besoin!"
     .byt TEXT_END
 #else// LANGUAGE_EN
-_Text_GameInstructions
-    .byt 1,"         How to play (1/2)",TEXT_CRLF
+_Text_GameInstructionsPage1
+    .byt 1,"         How to play (1/3)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "You have two hours to find and rescue",TEXT_CRLF
+    .byt "You have",4,"two hours",0,"to find and rescue",TEXT_CRLF
 	.byt "a young girl kidnapped by thugs.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "The mission fails if you get detected",TEXT_CRLF
 	.byt "or if you run out of time.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Give orders using VERBS and NOUNS",TEXT_CRLF
+	.byt "Give orders using",4,"VERBS",0,"and",4,"NOUNS",TEXT_CRLF
     .byt "eg: GET KEYS or COMBINE BREAD BUTTER",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 1,"   MOVEMENT            VERBS",TEXT_CRLF,TEXT_CRLF
@@ -147,9 +147,9 @@ _Text_GameInstructions
     .byt 1,"              NOTES",0,"     HELP PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Everything you need is here but you",TEXT_CRLF
-	.byt "may have to manufacture some items.",TEXT_CRLF
+	.byt "may have to",4,"manufacture",0,"some items.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Drawing and annotating a map helps.",TEXT_CRLF
+	.byt "Drawing and annotating a",4,"map",0,"helps.",TEXT_CRLF
     .byt TEXT_CRLF
 	.byt "Good luck, you will need it..."
     .byt TEXT_END
@@ -158,25 +158,86 @@ _Text_GameInstructions
 
 #ifdef LANGUAGE_FR
 _Text_GameInstructionsPage2
-    .byt 1,"        Comment jouer (2/2)",TEXT_CRLF
+    .byt 1,"        Comment jouer (2/3)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Presser ESC ou taper AIDE imprime",TEXT_CRLF
+    .byt "Au lieu de taper des commandes vous",TEXT_CRLF
+    .byt "pouvez appuyer sur",4,"ESPACE",0,"ou",4,"bouton",TEXT_CRLF
+    .byt "pour afficher un menu d'options.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Utilisez les",4,"flèches",0,"ou le",4,"joystick",TEXT_CRLF
+    .byt "pour changer la sélection, puis",TEXT_CRLF
+    .byt "validez le choix avec espace ou tir.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Si un autre paramètre est requis, une",TEXT_CRLF
+    .byt "seconde page de menu apparaît.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Le joystick permet aussi de se",TEXT_CRLF
+    .byt "déplacer entre les divers lieux.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Les mouvements en diagonale",TEXT_CRLF
+    .byt "comme",4,"BAS+DROITE",0,"ou",4,"HAUT+GAUCHE.",TEXT_CRLF
+    .byt "permettent de",4,"monter",0,"ou",4,"descendre",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Attention: Les joysticks",4,"analogiques",TEXT_CRLF
+    .byt "modernes peuvent ne pas fonctionner !",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Choisissez aussi la bonne interface",TEXT_CRLF
+    .byt "dans le menu",4,"paramètres",0,"!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt TEXT_END
+#else// LANGUAGE_EN
+_Text_GameInstructionsPage2
+    .byt 1,"         How to play (2/3)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Instead of typing commands you can",TEXT_CRLF
+	.byt "simply press",4,"SPACE",0,"or the fire",4,"button",TEXT_CRLF
+	.byt "to bring a menu with all the options.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "You can then simply use the",4,"arrows",0,"or",TEXT_CRLF
+	.byt "the",4,"joystick",0,"to change the selection",TEXT_CRLF
+    .byt "and use space or fire to",4,"validate.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "If an additional parameter is needed",TEXT_CRLF
+	.byt "a second menu page will appear.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "The joystick can also be used to move",TEXT_CRLF
+	.byt "around from location to location.",TEXT_CRLF
+	.byt TEXT_CRLF
+	.byt "To move",4,"UP",0,"or",4,"DOWN",0,"simply use",TEXT_CRLF
+	.byt "diagonals like",4,"DOWN+RIGHT",0,"or",4,"UP+LEFT.",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "Beware: Modern",4,"analog",0,"joysticks may",TEXT_CRLF
+	.byt "not work!",TEXT_CRLF
+    .byt TEXT_CRLF
+	.byt "And make sure to select the proper",TEXT_CRLF
+    .byt "interface in the",4,"settings",0,"menu!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt TEXT_END
+#endif
+
+
+
+#ifdef LANGUAGE_FR
+_Text_GameInstructionsPage3
+    .byt 1,"        Comment jouer (3/3)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Presser",4,"ESC",0,"ou taper",4,"AIDE",0,"imprime",TEXT_CRLF
     .byt "la liste des instructions.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "SHIFT et flèches HAUT ou BAS font",TEXT_CRLF
+    .byt "SHIFT et flèches",4,"HAUT",0,"ou",4,"BAS",0,"font",TEXT_CRLF
     .byt "défiler les objets si débordement.",TEXT_CRLF
     .byt TEXT_CRLF                       
-    .byt "SHIFT met aussi en surbrillance les",TEXT_CRLF
+    .byt "SHIFT met aussi en",4,"surbrillance",0,"les",TEXT_CRLF
     .byt "noms des objets interactifs.",TEXT_CRLF
     .byt TEXT_CRLF     
-    .byt "Parfois le nom d'un conteneur vous",TEXT_CRLF
+    .byt "Parfois le nom d'un",4,"conteneur",0,"vous",TEXT_CRLF
     .byt "sera demandé lors de l'obtention de",TEXT_CRLF
     .byt "certains objets ou substances.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "COMBINE nécessite deux objets :",TEXT_CRLF
     .byt "leur ordre n'a pas d'importance.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Lire des documents peut révéler des",TEXT_CRLF
+    .byt "Lire les",4,"documents",0,"peut révéler des",TEXT_CRLF
     .byt "informations utiles.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Assurez-vous de vérifier toutes les",TEXT_CRLF
@@ -186,26 +247,26 @@ _Text_GameInstructionsPage2
     .byt "utilisées pour naviguer.",TEXT_CRLF
     .byt TEXT_END
 #else// LANGUAGE_EN
-_Text_GameInstructionsPage2
-    .byt 1,"         How to play (2/2)",TEXT_CRLF
+_Text_GameInstructionsPage3
+    .byt 1,"         How to play (3/3)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Pressing ESC or typing HELP will",TEXT_CRLF
+    .byt "Pressing",4,"ESC",0,"or typing",4,"HELP",0,"will",TEXT_CRLF
 	.byt "print the list of instructions.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "If the items list overflows use SHIFT",TEXT_CRLF
-	.byt "with UP or DOWN arrows to scroll it.",TEXT_CRLF
+	.byt "If the items list overflows use",4,"SHIFT",TEXT_CRLF
+	.byt "with",4,"UP",0,"or",4,"DOWN",0,"arrows to scroll it.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "SHIFT also highlights the names of",TEXT_CRLF
+	.byt "SHIFT also",4,"highlight",0,"the names of",TEXT_CRLF
     .byt "the items you can interact with.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Some items require a valid container",TEXT_CRLF
+    .byt "Some items require a valid",4,"container",TEXT_CRLF
 	.byt "to be transported: The game will then",TEXT_CRLF
 	.byt "ask you the name of the container.",TEXT_CRLF
 	.byt TEXT_CRLF
 	.byt "The COMBINE command does requires two",TEXT_CRLF
     .byt "items: their order does not matter.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Reading documents can reveal useful",TEXT_CRLF
+    .byt "Reading",4,"documents",0,"can reveal useful",TEXT_CRLF
     .byt "tidbits of information.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Make sure to check all the directions",TEXT_CRLF

@@ -16,8 +16,9 @@ extern char Text_TitlePicture[];
 extern char Text_DemoFeatures[];
 #endif
 
-extern char Text_GameInstructions[];
+extern char Text_GameInstructionsPage1[];
 extern char Text_GameInstructionsPage2[];
+extern char Text_GameInstructionsPage3[];
 
 extern char Text_Leaderboard[];
 extern char Text_Achievements[];
@@ -56,10 +57,11 @@ enum
 #ifdef PRODUCT_TYPE_GAME_DEMO
     INTRO_DEMO_FEATURES,
 #endif    
-    INTRO_USER_MANUAL,
+    INTRO_USER_MANUAL_PAGE1,
     INTRO_LEADERBOARD,
     INTRO_USER_MANUAL_PAGE2,
     INTRO_ACHIEVEMENTS,
+    INTRO_USER_MANUAL_PAGE3,
     INTRO_STORY,
     _INTRO_COUNT_
 };
@@ -904,8 +906,8 @@ void main()
 #endif
 
 #ifdef INTRO_SHOW_USER_MANUAL
-        case INTRO_USER_MANUAL:
-		    DisplayUserManual(Text_GameInstructions);
+        case INTRO_USER_MANUAL_PAGE1:
+		    DisplayUserManual(Text_GameInstructionsPage1);
             break;
 #endif
 
@@ -924,6 +926,12 @@ void main()
 #ifdef INTRO_SHOW_ACHIEVEMENTS
         case INTRO_ACHIEVEMENTS:
     		DisplayAchievements();
+            break;
+#endif
+
+#ifdef INTRO_SHOW_USER_MANUAL
+        case INTRO_USER_MANUAL_PAGE3:
+		    DisplayUserManual(Text_GameInstructionsPage3);
             break;
 #endif
 

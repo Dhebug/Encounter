@@ -319,4 +319,6 @@
 - Updated Oricutron to a more recent version with better controllers handling, removal of the status bar, immersive mode, etc...
 
 1.1.1
+- Added a third manual page to explain the new alternative controls
+
 
