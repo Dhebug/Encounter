@@ -653,9 +653,26 @@ _PrintKeywordBuffer
     ; Initialize the start of the command field location 
     clc
     lda _gStatusMessageLocation+0
-    adc #40+1+2
+    adc #40+1
     sta tmp2+0
     lda _gStatusMessageLocation+1
+    adc #0
+    sta tmp2+1
+
+    ; Force redraw the prompt in green
+    ldy #0
+    lda #2             ; Green
+    sta (tmp2),y
+    iny 
+    lda #">"           ; Prompt
+    sta (tmp2),y
+
+    ; Increment the pointer to the start of the actual input
+    clc
+    lda tmp2+0
+    adc #2
+    sta tmp2+0
+    lda tmp2+1
     adc #0
     sta tmp2+1
 
