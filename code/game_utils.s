@@ -31,6 +31,7 @@ _gShouldCleanWindow         .dsb 1
 ; 12 items or less -> 12 characters (12*3 = 36)
 ; 16 items or less ->  9 characters ( 9*4 = 36)
 ; 20 items or less ->  7 characters ( 7*5 = 35)
+; 24 items or less ->  6 characters ( 6*6 = 36)
 ;
 _RefreshActionMenu
 .(
@@ -59,7 +60,9 @@ end_selection_overflow
     BCC SetWidth12
     CMP #16+1                    ; Up to 16 items (4 columns)
     BCC SetWidth9
-    LDA #40*4-7                  ; Default case (5 columns)
+    CMP #20+1                    ; Up to 20 items (5 columns)
+    BCC SetWidth7
+    LDA #40*4-6                  ; Default case (6 columns)
     bne StoreWidth
 
 SetWidth18:
@@ -70,6 +73,9 @@ SetWidth12:
     BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
 SetWidth9:
     LDA #40*4-9                  ; Load 9 (2 bytes)
+    BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
+SetWidth7:
+    LDA #40*4-7                  ; Load 7 (2 bytes)
     BNE StoreWidth               ; Jump to store (always taken, 2 bytes)
 
 StoreWidth:

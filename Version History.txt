@@ -320,5 +320,5 @@
 
 1.1.1
 - Added a third manual page to explain the new alternative controls
-
+- Added support for one more column in the item selection menu
 
