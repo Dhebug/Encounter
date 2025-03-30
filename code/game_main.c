@@ -41,12 +41,15 @@ extern WORDS RefreshActionMenu();
 extern void BuildItemList();
 extern void BuildContainerList();
 extern void BuildContextualItemList();
+extern WORDS AskInputCallback();
 
-
+char gActionMenuCount=0;  // Simple counter to detect if we are in the menu system or not
 
 void PrintActionMenu()
 {
     char maxWordIndex=1;
+
+    ++gActionMenuCount;
 
     gWordCount=0;
     gShouldCleanWindow=1;
@@ -78,7 +81,21 @@ void PrintActionMenu()
 
         PrintKeywordBuffer();
 
-        switch (WaitKey())
+        // Input loop the calls the main handler so we can see scene animations
+        // as well as the time out sequence.
+		do
+		{
+            gInputKey = ReadKeyNoBounce();
+            if (AskInputCallback()!=e_WORD_CONTINUE)
+            {
+                // Quit
+                gInputKey = KEY_ESC;
+            }
+			WaitIRQ();
+		}
+		while (gInputKey==0);
+
+        switch (gInputKey)
         {
         case KEY_UP:
             gKeywordMenuSelected--;
@@ -107,6 +124,7 @@ void PrintActionMenu()
             gWordBuffer[0]=e_WORD_COUNT_;
             PrintSceneObjects();
             ResetInput();
+            --gActionMenuCount;
             return;        // Quit violently
 
         case KEY_SPACE:
@@ -123,6 +141,7 @@ void PrintActionMenu()
                 {
                     RunWordBufferCommand();
                 }
+                --gActionMenuCount;
                 return;
             }
             else
@@ -195,37 +214,43 @@ extern char TimeOutGameOver[];
 // MARK:Input Callback
 WORDS AskInputCallback()
 {
-    if (gAnswerProcessingCallback != ProcessContainerAnswer)
+    // Normal inputs
+    HandleByteStream();
+    if ( (gGameOverCondition!=0) && (gCurrentStream==0) )
     {
-        // Normal inputs
-        HandleByteStream();
-        if ( (gGameOverCondition!=0) && (gCurrentStream==0) )
-        {
-            // The player has reached a game over condition and the end of the current stream
-            return e_WORD_QUIT;
-        }
+        // The player has reached a game over condition and the end of the current stream
+        return e_WORD_QUIT;
+    }
 
-        // We check the Hours digit to see if it reached zero
-        // If it does then we play the "hurry up" sequence!
-        if ( (TimeHours=='0') && (!OneHourAlarmWarningShown) )
-        {
-            // Should probably add a check to not interrupt import scripts
-            // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
-            const char* savedStream = gCurrentStream;
-            PlayStream(OneHourAlarmWarning);
-            gCurrentStream = savedStream;
-            OneHourAlarmWarningShown=1;
-        }
-        if (TimeOut)
-        {
-            // Should probably add a check to not interrupt import scripts
-            // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
-            const char* savedStream = gCurrentStream;
-            PlayStream(TimeOutGameOver);
-            gCurrentStream = savedStream;
-            return e_WORD_QUIT;
-        }
+    // We check the Hours digit to see if it reached zero
+    // If it does then we play the "hurry up" sequence!
+    if ( (TimeHours=='0') && (!OneHourAlarmWarningShown) )
+    {
+        // Should probably add a check to not interrupt import scripts
+        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+        const char* savedStream = gCurrentStream;
+        PlayStream(OneHourAlarmWarning);
+        gCurrentStream = savedStream;
+        OneHourAlarmWarningShown=1;
 
+        if (gActionMenuCount)
+        {
+            // Trick to force going out of the input wait and redraw the inputs in case the hurry up message appeared
+            return e_WORD_ABORT_COMMAND;
+        }
+    }
+    if (TimeOut)
+    {
+        // Should probably add a check to not interrupt import scripts
+        // Problematic ones are the market place and the stair case, where the animations make the script to never stop.
+        const char* savedStream = gCurrentStream;
+        PlayStream(TimeOutGameOver);
+        gCurrentStream = savedStream;
+        return e_WORD_QUIT;
+    }
+
+    if (!gActionMenuCount)
+    {
         HandleKeywordHighlight();
     }
     // Keep asking

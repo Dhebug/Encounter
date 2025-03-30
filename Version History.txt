@@ -322,3 +322,6 @@
 - Added a third manual page to explain the new alternative controls
 - Added support for one more column in the item selection menu
 - Made sure that the prompt indicator displays properly even when the alarm trigger happens
+- Renamed the "None" joystick interface to be "arrows+space"
+- Modified the selection menu to handle background animations and "hurry up" events
+
