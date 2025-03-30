@@ -1918,4 +1918,25 @@ empty_container
 .)
 
 
+_PrintActionMenu_Wrap
+.(
+    ; Bounds checking of the menu selection to keep it between 0 and entry count
+    lda _gKeywordMenuSelected
+    bpl check_overflow            ; Check if the selection index is negative
+
+    clc
+    adc _gKeywordMenuEntryCount   ; Make it positive
+
+check_overflow
+    cmp _gKeywordMenuEntryCount   ; Check if we are past the menu size
+    bcc end
+    lda #0                        ; Wrap back to start
+end
+    sta _gKeywordMenuSelected
+
+    rts
+.)
+
+
+
 _EndGameUtils_

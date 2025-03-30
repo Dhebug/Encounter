@@ -133,8 +133,7 @@ void PrintActionMenu()
             }
             break;
         }
-        if (gKeywordMenuSelected<0)                         gKeywordMenuSelected+=gKeywordMenuEntryCount;        
-        if (gKeywordMenuSelected>=gKeywordMenuEntryCount)   gKeywordMenuSelected=0;
+        PrintActionMenu_Wrap();
     }    
 }
 
