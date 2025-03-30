@@ -232,7 +232,7 @@ _Text_Qwerty            .byt "QWERTY           ",0
 _Text_Qwertz            .byt "QWERTZ (Allemand)",0
 
 _Text_OptionJoystick    .byt "Joystick interface:",0
-_Text_JoystickNone      .byt "Aucune             ",0
+_Text_JoystickNone      .byt "Flèches+Espace     ",0
 
 _Text_OptionAudio       .byt "Audio:",0
 
@@ -247,7 +247,7 @@ _Text_Qwerty            .byt "QWERTY         ",0
 _Text_Qwertz            .byt "QWERTZ (German)",0
 
 _Text_OptionJoystick    .byt "Joystick interface:",0
-_Text_JoystickNone      .byt "NONE              ",0
+_Text_JoystickNone      .byt "Arrows+Space      ",0
 
 _Text_OptionAudio       .byt "Audio:",0
 
