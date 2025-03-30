@@ -236,7 +236,7 @@ WORDS AskInputCallback()
         if (gActionMenuCount)
         {
             // Trick to force going out of the input wait and redraw the inputs in case the hurry up message appeared
-            return e_WORD_ABORT_COMMAND;
+            return e_WORD_SKIP;
         }
     }
     if (TimeOut)

@@ -187,7 +187,7 @@
 #define	e_WORD_COUNT_                148
 // Additional values for the parser
 #define	e_WORD_CONTINUE              149
-#define e_WORD_ABORT_COMMAND         150
+#define e_WORD_SKIP                  150  // Special command to modify the behavior of the system
 
 // Flags for the items
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special

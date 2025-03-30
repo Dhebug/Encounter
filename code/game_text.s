@@ -2065,6 +2065,8 @@ _gActionMappingsArray
 
     WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,0+FLAG_MAPPING_DEFAULT)
 
+    WORD_MAPPING(e_WORD_SKIP      ,_DoNothing                 ,0+FLAG_MAPPING_DEFAULT)   // To avoid the double execution of code when using ENTER instead of SPACE
+
     WORD_MAPPING(e_WORD_COUNT_    ,0, 0)
     // End Marker
 

@@ -546,6 +546,9 @@ callback = *+1
 +reset_input    
     jsr _ResetInput
 
+    lda #e_WORD_SKIP              ; To avoid duplicate execution when pressing enter - good_input
+    sta _gWordBuffer+0            
+
     lda #1
     sta _gAskQuestion
     rts
