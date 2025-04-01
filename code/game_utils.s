@@ -1937,7 +1937,42 @@ check_overflow
 end
     sta _gKeywordMenuSelected
 
-    rts
+// MARK:Display Scene
+_PrintSceneInformation
+.(
+    ; Display the score
+    ; sprintf((char*)0xbb80+16*40+1,gTextScore,gScore);   // "Score:"
+    ldy #0 
+	lda #<$bb80+16*40+1
+    sta (sp),y
+
+    iny
+    lda #>$bb80+16*40+1
+    sta (sp),y
+
+    iny
+	lda #<_gTextScore 
+    sta (sp),y
+
+    iny
+    lda #>_gTextScore 
+    sta (sp),y
+
+    iny
+	lda _gScore 
+    sta (sp),y 
+
+    iny 
+    lda _gScore+1 
+    sta (sp),y 
+
+	iny
+    jsr _sprintf
+
+    ; Draw the rest of the information
+	jsr _PrintSceneDirections
+	jsr _PrintSceneObjects
+	jmp _PrintInventory
 .)
 
 

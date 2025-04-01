@@ -157,21 +157,6 @@ void PrintActionMenu()
 }
 
 
-
-
-// MARK:Display Scene
-void PrintSceneInformation()
-{
-    // Display the score
-	sprintf((char*)0xbb80+16*40+1,"%s%d%c",gTextScore,gScore,7);   // "Score:"
-
-	PrintSceneDirections();
-
-	PrintSceneObjects();
-
-	PrintInventory();
-}
-
 // MARK:Load Scene
 void LoadScene()
 {
