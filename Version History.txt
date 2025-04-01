@@ -324,4 +324,5 @@
 - Made sure that the prompt indicator displays properly even when the alarm trigger happens
 - Renamed the "None" joystick interface to be "arrows+space"
 - Modified the selection menu to handle background animations and "hurry up" events
+- Added a small "press enter" indicator when some messages are displayed so the player knows they have to press a key instead of waiting.
 

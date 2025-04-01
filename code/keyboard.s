@@ -278,6 +278,15 @@ retz
 
 ; Wait for a keypress
 _ByteStreamCommand_WAIT_KEYPRESS    ; .byt COMMAND_WAIT_KEYPRESS
+    lda $bb80+40*22+38     ; Save the character
+    pha
+    lda #95                ; Sterling Pound symbol redefined to be an enter key symbol
+    sta $bb80+40*22+38
+    jsr _WaitKey
+    pla
+    sta $bb80+40*22+38     ; Restore the original character
+    rts
+    
 _WaitKey
 .(
 loop
