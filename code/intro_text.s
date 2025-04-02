@@ -18,9 +18,9 @@ _Text_TitlePicture
 #endif    
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
-    .byt 16+3,4," Améliorations ",96," 2024 Defence-Force "
+    .byt 16+3,4,"Améliorations ",96," 2024-25 Defence-Force"
 #else
-    .byt 16+3,4,"Redux Additions ",96," 2024 Defence-Force "
+    .byt 16+3,4,"Enhancements ",96," 2024-25 Defence-Force"
 #endif    
     .byt TEXT_END
 
