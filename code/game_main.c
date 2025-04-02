@@ -19,142 +19,25 @@ extern char gColoredSeparator[];
 
 extern WORDS ProcessContainerAnswer();
 extern void HandleKeywordHighlight();
-
-extern WORDS gActionMappingMenu[12];
-
-char FindActionMapping();
-void RunAction();
+extern void PrintSceneInformation();
+extern char FindActionMapping();
+extern void RunAction();
 
 extern action_mapping* gActionMappingPtr;
 
+extern char gActionMenuCount;  // Simple counter to detect if we are in the menu system or not
 
-
-// MARK:Print Action
-
-extern char gKeywordMenuSelected;
-extern unsigned char gKeywordMenuEntryCount;
-extern WORDS* gKeywordMenuEntries;
-extern char gShouldCleanWindow;
-
-extern WORDS RefreshActionMenu();
-
-extern void BuildItemList();
-extern void BuildContainerList();
-extern void BuildContextualItemList();
 extern WORDS AskInputCallback();
 
-char gActionMenuCount=0;  // Simple counter to detect if we are in the menu system or not
 
-void PrintActionMenu()
-{
-    char maxWordIndex=1;
 
-    ++gActionMenuCount;
+char ShowingKeyWords = 0;
+char ShouldShowKeyWords = 0;
 
-    gWordCount=0;
-    gShouldCleanWindow=1;
+char OneHourAlarmWarningShown = 0;
+extern char OneHourAlarmWarning[];
+extern char TimeOutGameOver[];
 
-    WaitReleasedKey();
-
-    while (1) 
-    {
-        CleanWindowIfNecessary();
-
-        if (gAnswerProcessingCallback == ProcessContainerAnswer)
-        {
-            // Containers list
-            BuildContainerList();
-            maxWordIndex=1;
-        }
-        else
-        if (gWordCount==0)
-        {
-            // Default input mode - Verb
-            gKeywordMenuEntryCount=12;
-            gKeywordMenuEntries=gActionMappingMenu;
-        }
-        gWordBuffer[gWordCount]=RefreshActionMenu();
-        if (FindActionMapping())
-        {
-            maxWordIndex = 1+gActionMappingPtr->flag&3;  // Number of items after
-        }
-
-        PrintKeywordBuffer();
-
-        // Input loop the calls the main handler so we can see scene animations
-        // as well as the time out sequence.
-		do
-		{
-            gInputKey = ReadKeyNoBounce();
-            if (AskInputCallback()!=e_WORD_CONTINUE)
-            {
-                // Quit
-                gInputKey = KEY_ESC;
-            }
-			WaitIRQ();
-		}
-		while (gInputKey==0);
-
-        switch (gInputKey)
-        {
-        case KEY_UP:
-            gKeywordMenuSelected--;
-            break;
-        case KEY_DOWN:
-            gKeywordMenuSelected++;
-            break;
-        case KEY_LEFT:
-            gKeywordMenuSelected-=4;
-            break;
-        case KEY_RIGHT:
-            gKeywordMenuSelected+=4;
-            break;
-
-        case KEY_DEL:
-            if (gWordCount)
-            {
-                // Delete the currently selected word
-                gWordCount--;
-                gShouldCleanWindow=1;
-            }
-            break;
-
-        case KEY_ESC:
-            gWordCount=0;
-            gWordBuffer[0]=e_WORD_COUNT_;
-            PrintSceneObjects();
-            ResetInput();
-            --gActionMenuCount;
-            return;        // Quit violently
-
-        case KEY_SPACE:
-        case KEY_RETURN:
-            if ((gWordCount+1)>=maxWordIndex)
-            {
-                ClearMessageWindow(16+4);
-                if (gAnswerProcessingCallback == ProcessContainerAnswer)
-                {
-                    gInputKey = 0;
-                    gInputDone = 1;
-                }
-                else
-                {
-                    RunWordBufferCommand();
-                }
-                --gActionMenuCount;
-                return;
-            }
-            else
-            {
-                gWordCount++;   // Should check if we need this word
-                gShouldCleanWindow=1;
-                BuildContextualItemList();
-            }
-            break;
-        }
-        PrintActionMenu_Wrap();
-    }    
-}
 
 
 // MARK:Load Scene
@@ -188,13 +71,6 @@ void LoadScene()
 	BlitBufferToHiresWindow();
 }
 
-
-char ShowingKeyWords = 0;
-char ShouldShowKeyWords = 0;
-
-char OneHourAlarmWarningShown = 0;
-extern char OneHourAlarmWarning[];
-extern char TimeOutGameOver[];
 
 // MARK:Input Callback
 WORDS AskInputCallback()
@@ -395,6 +271,7 @@ void Initializations()
     gDelayStream = 0;
     gGameOverCondition = 0;
     gInventoryOffset = 0;
+    gActionMenuCount = 0;
 
     // The redefined charcters to draw the bottom part of the directional arrows \v/
 	poke(0xbb80+16*40+16,9);                      // ALT charset

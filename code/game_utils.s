@@ -19,6 +19,8 @@ _gKeywordMenuEntries        .dsb 2
 _gKeywordMenuEntryCount     .dsb 1
 _gKeywordMenuSelected       .dsb 1
 _gShouldCleanWindow         .dsb 1
+_gActionMenuCount           .dsb 1
+_gMaxWordIndex              .dsb 1
 
     .text
 
@@ -1921,8 +1923,100 @@ empty_container
 .)
 
 
-_PrintActionMenu_Wrap
+
+_PrintActionMenu
 .(
+    inc _gActionMenuCount          ; ++gActionMenuCount;
+
+    ldx #0                         ; gWordCount=0;
+    stx _gWordCount
+
+    inx                            ; gShouldCleanWindow=1;
+    stx _gShouldCleanWindow
+
+    jsr _WaitReleasedKey
+
+forever_loop
+    jsr _CleanWindowIfNecessary
+
+    lda #1
+    sta _gMaxWordIndex
+
+    ; Depending of the context we either show a list of commands or a list of items
+    .(
+    lda #<_ProcessContainerAnswer    ; if (gAnswerProcessingCallback == ProcessContainerAnswer)
+    cmp _gAnswerProcessingCallback+0
+    bne end_container_check
+    lda #>_ProcessContainerAnswer
+    cmp _gAnswerProcessingCallback+1
+    bne end_container_check
+
+    ; Containers list
+    jsr _BuildContainerList
+    jmp show_menu
+
+end_container_check
+    .)
+
+    lda _gWordCount                 ; if (gWordCount==0)
+    bne end_verb_check
+
+    ; Default input mode - Verb
+    lda #12                         ; gKeywordMenuEntryCount=12;
+    sta _gKeywordMenuEntryCount
+
+    lda #<_gActionMappingMenu       ; gKeywordMenuEntries=gActionMappingMenu;
+    sta _gKeywordMenuEntries+0
+    lda #>_gActionMappingMenu
+    sta _gKeywordMenuEntries+1
+end_verb_check
+
+show_menu
+    ; gWordBuffer[gWordCount]=RefreshActionMenu();
+    jsr _RefreshActionMenu
+    ldy _gWordCount
+    stx _gWordBuffer,y
+
+    ; Check if the current entry maps to an action
+    jsr _FindActionMapping       ; if (FindActionMapping())
+    beq end_action_mapping
+
+    ; gMaxWordIndex = 1+gActionMappingPtr->flag&3;  // Number of items after    
+    ldy #1                        ; Flag offset
+    lda (_gActionMappingPtr),y
+    and #3                        ; Number of items associated with the command
+    clc
+    adc #1                        ; + the command itself
+    sta _gMaxWordIndex
+end_action_mapping
+
+    ; Print the content of the keyword buffer into a human readable string
+    jsr _PrintKeywordBuffer
+
+    ; Input loop the calls the main handler so we can see scene animations as well as the time out sequence.
+input_loop
+    ; Read the keyboard
+    jsr _ReadKeyNoBounce
+    stx _gInputKey
+
+    ; Call the animation code
+    jsr _AskInputCallback
+    cpx #e_WORD_CONTINUE
+    beq continue
+    lda #KEY_ESC        ; Simulate a ESCAPE key press
+    sta _gInputKey
+continue
+
+    ; No need to process inputs and animation more than once a 1/50th of a second
+    jsr _WaitIRQ
+
+    lda _gInputKey
+    beq input_loop           ; while (gInputKey==0);
+
+    ; Keyboard dispatcher
+    jsr CheckMenuKeys  
+
+    .(
     ; Bounds checking of the menu selection to keep it between 0 and entry count
     lda _gKeywordMenuSelected
     bpl check_overflow            ; Check if the selection index is negative
@@ -1936,6 +2030,126 @@ check_overflow
     lda #0                        ; Wrap back to start
 end
     sta _gKeywordMenuSelected
+    .)
+
+    jmp forever_loop
+.)
+
+
+
+CheckMenuKeys   
+.(
+    lda _gInputKey 
+    cmp #KEY_UP
+    bne end_up
+    dec _gKeywordMenuSelected
+    rts
+end_up    
+
+    cmp #KEY_DOWN
+    bne end_down
+    inc _gKeywordMenuSelected
+    rts
+end_down
+
+    cmp #KEY_LEFT
+    bne end_left
+    sec
+    lda _gKeywordMenuSelected
+    sbc #4
+    sta _gKeywordMenuSelected
+    rts
+end_left
+
+    cmp #KEY_RIGHT
+    bne end_right
+    clc
+    lda _gKeywordMenuSelected
+    adc #4
+    sta _gKeywordMenuSelected
+    rts
+end_right
+
+    cmp #KEY_DEL
+    bne end_delete
+    lda _gWordCount
+    beq end_delete
+    ; Delete the currently selected word
+    dec _gWordCount
+    lda #1
+    sta _gShouldCleanWindow
+    rts
+end_delete
+
+    cmp #KEY_ESC
+    bne end_escape
+    lda #0                    ; gWordCount=0;
+    sta _gWordCount
+    lda #e_WORD_SKIP          ; gWordBuffer[0]=e_WORD_SKIP;
+    sta _gWordBuffer+0
+    jsr _PrintSceneObjects
+    jsr _ResetInput
+    dec _gActionMenuCount     ; --gActionMenuCount;
+
+quit_menu
+    ; We pop the calling function and just quit violently
+    pla
+    pla
+
+    ;pla
+    ;pla
+    rts
+
+end_escape
+
+    cmp #KEY_SPACE
+    beq validate
+    cmp #KEY_RETURN
+    bne end_validate
+validate
+    lda _gWordCount      ; if ((gWordCount+1)>=gMaxWordIndex)
+    clc
+    adc #1
+    cmp _gMaxWordIndex   ; compare with max
+    bcc more_words            ; skip if < max (carry clear)
+last_word    
+
+    ldx #16+4                           ; ClearMessageWindow(16+4);
+    jsr _ClearMessageWindowAsmX
+
+    .(
+    lda #<_ProcessContainerAnswer    ; if (gAnswerProcessingCallback == ProcessContainerAnswer)
+    cmp _gAnswerProcessingCallback+0
+    bne not_container_list
+    lda #>_ProcessContainerAnswer
+    cmp _gAnswerProcessingCallback+1
+    bne not_container_list
+is_container_list
+    lda #0                        ; gInputKey = 0;
+    sta _gInputKey
+    lda #1                        ; gInputDone = 1;
+    sta _gInputDone
+    dec _gActionMenuCount         ; --gActionMenuCount;
+    jmp quit_menu
+
+not_container_list
+    jsr _RunWordBufferCommand
+    .)
+
+    dec _gActionMenuCount         ; --gActionMenuCount;
+    jmp quit_menu
+
+more_words
+    inc _gWordCount               ; gWordCount++;   // Should check if we need this word
+    lda #1                        ; gShouldCleanWindow=1;
+    sta _gShouldCleanWindow
+    jsr _BuildContextualItemList
+    rts
+
+end_validate
+    rts
+.)
+
 
 // MARK:Display Scene
 _PrintSceneInformation

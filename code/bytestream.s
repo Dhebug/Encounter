@@ -1247,6 +1247,8 @@ _ClearMessageAndInventoryWindow
 .(
     ldx #1+23+4-18-1
     jmp common_bit
++_ClearMessageWindowAsmX
+    stx _param0+0
 +_ClearMessageWindowAsm
     ldx #1+23-18-1
 common_bit
