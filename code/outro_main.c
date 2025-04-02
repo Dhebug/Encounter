@@ -15,23 +15,21 @@ extern unsigned char TypewriterMusic[LOADER_MUSIC_TYPEWRITER_SIZE];
 // Bunch of "no-op" functions and tables, these are required by the game, but not for the high scores
 keyword gWordsArray[] = { { 0,  e_WORD_COUNT_ } };
 
-char gNameInputDone = 0;
-
 
 void PrintKeyboardMenu()
 {
     char selectedOption=0;
     char capsLock = 0;
-    gNameInputDone = 0;
 
     // Clean the window
-    memset((char*)0xbb80+40*18+1,32,38);
-    memset((char*)0xbb80+40*19+1,32,38);
-    memset((char*)0xbb80+40*20+1,32,38);
-    memset((char*)0xbb80+40*21+1,32,38);
+    memset((char*)0xbb80+40*18+1,32,39);
+    memset((char*)0xbb80+40*19+1,32,39);
+    memset((char*)0xbb80+40*20+1,32,39);
+    memset((char*)0xbb80+40*21+1,32,39);
 
-    
-    while (!gNameInputDone)
+    PrintStatusMessage(2,gTextHighScoreAskForName);   // "New highscore! Your name please?"
+
+    while (1)
     {
         char car;
         char i,j;
@@ -93,6 +91,12 @@ void PrintKeyboardMenu()
         }
 
         car=ReadKeyNoBounce();
+        if ( (car>='A') && (car<='Z') )
+        {
+            selectedOption=30;              // Move the virtual cursor to the space character if the player is typing 
+            selectedLetter=car+shifted;    
+            car = KEY_SPACE;
+        }
         if ( (car==' ') && (selectedLetter<KEY_SPACE) )
         {
             // If the user pressed space on one of the three commands on the right, we replace that by some alternate command
@@ -137,7 +141,11 @@ void PrintKeyboardMenu()
             break;
 
         case KEY_RETURN:
-            gNameInputDone=1;
+            if (gInputBufferPos>0)
+            {
+                // We want at least one character
+                return;
+            }
             break;
         }
         if (selectedOption<0)     selectedOption+=33;        
@@ -148,30 +156,6 @@ void PrintKeyboardMenu()
     }
 }
 
-WORDS AskInputCallback()
-{   
-    if (gNameInputDone)
-    {
-        return e_WORD_QUIT;
-    }
-    else
-    {
-        return e_WORD_CONTINUE;
-    }
-}
-
-WORDS ProcessPlayerNameAnswer()
-{
-	// We accept anything, it's the player name so...
-    if (gInputBufferPos>=1)
-    {
-    	return e_WORD_QUIT;
-    }
-    else
-    {
-        return e_WORD_CONTINUE;   
-    }
-}
 
 void PrintStatusMessageAsm()
 {
@@ -369,10 +353,7 @@ void HandleHighScore()
 			// Ask the player their name
             gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
             SetKeyboardLayout();
-            gInputMaxSize = 15;
-            gAnswerProcessingCallback = ProcessPlayerNameAnswer;
-            gInputMessage = gTextHighScoreAskForName;
-            AskInput();          // "New highscore! Your name please?"
+            PrintKeyboardMenu();
             WaitReleasedKey();
 
 			ptrScore->score = gScore+32768;

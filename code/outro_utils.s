@@ -10,18 +10,9 @@ IrqTasks50hz
 .)
 
 
+// Two no-op for input_utils.s
 _ValidateInputSpace
-.(
-    ldx _gInputBufferPos
-    bne skip
-    jsr _PrintKeyboardMenu
-    ; Make sure that we don't add some "space" to the input buffer
-    lda #0
-    sta _gInputKey
-skip
-.)
-+_ValidateInputReturn
-    ldx #1
+_ValidateInputReturn
 // Called from on the blitt functions
 Count1SecondsDown
 Count10SecondsDown
