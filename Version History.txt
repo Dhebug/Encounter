@@ -318,7 +318,7 @@
 - New control scheme using four direction joysticks and single button selection usable on both Oric and Steam Deck devices
 - Updated Oricutron to a more recent version with better controllers handling, removal of the status bar, immersive mode, etc...
 
-1.1.1 
+1.1.1 - 02 April 2025
 - Added a third manual page to explain the new alternative controls
 - Added support for one more column in the item selection menu
 - Made sure that the prompt indicator displays properly even when the alarm trigger happens
@@ -327,4 +327,6 @@
 - Added a small "press enter" indicator when some messages are displayed so the player knows they have to press a key instead of waiting.
 - Modified the name input to accept the menu selection and actual typing all at the same time
 - Updated the copyright on the title page to include 2025
+
+1.2.2
 

@@ -37,9 +37,9 @@
 :: 1.0.5 - The parser does not allow anymore adding more keywords than what the command supports
 :: 1.0.6 - Fixed the "use key", small explosion, some typo fix, and alarm triggering
 :: 1.1.0 - New version of Oricutron, new controller based menu option system
-:: 1.1.1 - 
+:: 1.1.1 - Polished the joystick mode, press key indicator, copyright date updated
 ::
-SET VERSION=1.1.1
+SET VERSION=1.1.2
 SET BASENAME=EncounterHD
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
