@@ -2190,5 +2190,25 @@ _PrintSceneInformation
 .)
 
 
+; On Microdisc, location $314 contains the following flags on write operations
+; bit 7: Eprom select (active low) 
+; bit 6-5: drive select (0 to 3) 
+; bit 4: side select 
+; bit 3: double density enable (0: double density, 1: single density) 
+; bit 2: along with bit 3, selects the data separator clock divisor            (1: double density, 0: single-density) 
+; bit 1: ROMDIS (active low). When 0, internal Basic rom is disabled. 
+; bit 0: enable FDC INTRQ to appear on read location $0314 and to drive cpu IRQ	
+; and $0318 bit 7 contains the state of DRQ
+
+_Reset
+.(
+    sei
+    lda #0
+    sta $3fa        ; Jasmin: Disable overlay RAM
+    sta $3fb        ; Jasmin: Enable ROM
+    lda #%10000010
+    sta $0314       ; Microdisc: Disable overlay and enable ROM
+    jmp ($fffc)
+.)
 
 _EndGameUtils_
