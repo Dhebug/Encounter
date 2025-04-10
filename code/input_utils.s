@@ -9,7 +9,6 @@ _gInputBufferPos    .dsb 1      ; Position in the edit buffer
 _gInputMaxSize      .dsb 1      ; Maximum number of characters accepted 
 _gWordCount         .dsb 1      ; How many tokens/word did we find in the input buffer
 _gAnswerProcessingCallback .dsb 2
-_gInputKey          .dsb 1
 _gInputShift        .dsb 1
 _gInputErrorCounter .dsb 1
 _gInputDone         .dsb 1

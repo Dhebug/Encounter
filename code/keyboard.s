@@ -20,6 +20,7 @@
 zpTemp01			.byt 0
 zpTemp02			.byt 0
 tmprow				.byt 0
+_gInputKey          .dsb 1
 
 	.text 
 
@@ -283,6 +284,7 @@ _ByteStreamCommand_WAIT_KEYPRESS    ; .byt COMMAND_WAIT_KEYPRESS
     lda #95                ; Sterling Pound symbol redefined to be an enter key symbol
     sta $bb80+40*22+38
     jsr _WaitKey
+    stx _gInputKey         ; Store the result so it can be used later
     pla
     sta $bb80+40*22+38     ; Restore the original character
     rts
