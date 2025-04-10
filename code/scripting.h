@@ -56,11 +56,13 @@
 #define OPERATOR_CHECK_ITEM_FLAG       1
 #define OPERATOR_CHECK_PLAYER_LOCATION 2
 #define OPERATOR_CHECK_ITEM_CONTAINER  3
+#define OPERATOR_CHECK_ADDRESS_VALUE   4
 
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
 #define CHECK_ITEM_CONTAINER(item,container) OPERATOR_CHECK_ITEM_CONTAINER,item,container
 #define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
+#define CHECK_ADDRESS_VALUE(address,value)   OPERATOR_CHECK_ADDRESS_VALUE,<address,>address,value
 
 // Flow control
 #define END                                  .byt COMMAND_END

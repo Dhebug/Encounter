@@ -656,6 +656,7 @@ common
     sta _auto_conditionCheckItemLocation+0
     sta _auto_conditionCheckPlayerLocation+0
     sta _auto_conditionCheckItemContainer+0
+    sta _auto_conditionCheckAdressValue+0
     eor #OPCODE_BEQ-OPCODE_BNE               //  0b100000
     sta _auto_conditionCheckItemFlag+0       // Item flags check is inverted
     ldy #2
@@ -684,6 +685,17 @@ _auto_conditionCheckPlayerLocation
     lda #4
     jmp _ByteStreamMoveByA
 
+; .byt COMMAND_JUMP,<label,>label
++_ByteStreamCommand_JUMP
+    ldy #0
+    lda (_gCurrentStream),y
+    tax                           ; Temporary so we don't change the stream pointer while using it
+    iny
+    lda (_gCurrentStream),y
+    stx _gCurrentStream+0
+    sta _gCurrentStream+1
+    rts
+
 checkItemContainer
     ; check =  (gItems[itemId].flags & flagId);
     iny
@@ -700,6 +712,8 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     beq checkPlayerLocation
     cmp #OPERATOR_CHECK_ITEM_CONTAINER
     beq checkItemContainer
+    cmp #OPERATOR_CHECK_ADDRESS_VALUE
+    beq checkAdressValue
     ; check =  (gItems[itemId].flags & flagId);
     iny
     jsr _ByteStreamFetchItemID
@@ -719,6 +733,23 @@ _auto_conditionCheckItemFlag
     adc #0
     sta _gCurrentStream+1
     rts
+
+checkAdressValue                 // OPERATOR_CHECK_ADDRESS_VALUE,<address,>address,value
+    ; check =  (*address == value);
+    iny
+    lda (_gCurrentStream),y      // <address
+    sta _auto_cmp+0
+    iny
+    lda (_gCurrentStream),y      // >address
+    sta _auto_cmp+1
+    iny
+    lda (_gCurrentStream),y      // value
+_auto_cmp = *+1    
+    cmp $1234
+_auto_conditionCheckAdressValue
+    bne _ByteStreamCommand_JUMP   // BNE/BEQ depending of the command
+    lda #6
+    jmp _ByteStreamMoveByA
 .)
 
 
