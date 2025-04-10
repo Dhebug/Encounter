@@ -48,7 +48,8 @@
 #define COMMAND_SET_SKIP_POINT  42
 #define COMMAND_SET_PLAYER_LOCATION 43
 #define COMMAND_SET_CURRENT_ITEM 44
-#define _COMMAND_COUNT          45
+#define COMMAND_CALL_NATIVE     45
+#define _COMMAND_COUNT          46
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -73,6 +74,7 @@
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 #define GOSUB(label)                         .byt COMMAND_GOSUB,<label,>label
 #define RETURN                               .byt COMMAND_RETURN
+#define CALL_NATIVE(address)                 .byt COMMAND_CALL_NATIVE,<address,>address
 #define SET_CUT_SCENE(flag)                  .byt COMMAND_SET_CUT_SCENE,flag
 #define SET_SKIP_POINT(label)                .byt COMMAND_SET_SKIP_POINT,<label,>label
 

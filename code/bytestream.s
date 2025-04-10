@@ -66,11 +66,12 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_END_AND_PARTIAL_REFRESH
     .word _ByteStreamCommand_LOAD_MUSIC
     .word _ByteStreamCommand_STOP_MUSIC                  ; Implemented in akyplayer.s
-    .word _ByteStreamCommand_WAIT_KEYPRESS               ; Implemented in keyboard.s
+    .word _ByteStreamCommand_WAIT_KEYPRESS               ; Implemented in keyboard.s -> Result in _gInputKey
     .word _ByteStreamCommand_QUICK_MESSAGE
     .word _ByteStreamCommand_SET_SKIP_POINT
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
+    .word _ByteStreamCommand_COMMAND_CALL_NATIVE
 
 
 ; Checks if there's a stream delay active.
@@ -628,16 +629,20 @@ _ByteStreamCommand_SET_SKIP_POINT
 .)
 
 
-; .byt COMMAND_JUMP,<label,>label
-_ByteStreamCommand_JUMP
-    ldy #0
-    lda (_gCurrentStream),y
-    tax                           ; Temporary so we don't change the stream pointer while using it
-    iny
-    lda (_gCurrentStream),y
-    stx _gCurrentStream+0
-    sta _gCurrentStream+1
-    rts
+; .byt COMMAND_CALL_NATIVE,<address,>address
+_ByteStreamCommand_COMMAND_CALL_NATIVE
+.(
+    ; Fetch the native routine address
+    jsr _ByteStreamGetNextByte
+    sta _auto_jmp+0
+    jsr _ByteStreamGetNextByte
+    sta _auto_jmp+1
+
+    ; jmp to it
+_auto_jmp = *+1    
+    jmp $1234
+.)
+
 
 
 ; .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
