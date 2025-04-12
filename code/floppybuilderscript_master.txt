@@ -16,7 +16,7 @@
 ; - Possibility to do partial loads, saves, depacking in realtime
 ;
 FormatVersion 0.20
-DefineDisk 2 42 17 6							; 2 sides, 42 tracks, 17 sectors, interleave 6 (best i test!)
+DefineDisk DISK_SIDES DISK_TRACKS DISK_SECTORS DISK_INTERLEAVE  ; Defined in osdk_config.bat, defaults to 2 sides, 42 tracks, 17 sectors, interleave 6 (best i test!)
 
 OutputLayoutFile ..\build\floppy_description.h
 OutputFloppyFile ..\build\OSDKDISK
