@@ -95,7 +95,6 @@ skip_menu
 //
 #include "crc32.s"
 #include "profiler.s"
-#include "score.s"
 
 _InitializeGraphicMode
 .(

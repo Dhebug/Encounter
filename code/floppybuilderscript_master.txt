@@ -262,7 +262,7 @@ AddFile ..\build\files\view_chemistry_recipes.hir
 #endif
 AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 
-#ifdef PRODUCT_TYPE_GAME_DEMO
+#if defined(PRODUCT_TYPE_GAME_DEMO) || defined(PRODUCT_TYPE_TEST_MODE)
 // Just defining the images so the compiler is happy, the files are not on disk because the player cannot go there
 AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}

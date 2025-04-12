@@ -3,7 +3,15 @@
 //
 #include <lib.h>
 
-#include "score.h"
+
+// Some hack to circumvent a dumb cyclic dependency issue
+#ifndef OUTRO_PICTURE_DESK
+#define OUTRO_PICTURE_DESK 1
+#endif
+
+#ifndef LOADER_PICTURE_MOTHERBOARD
+#define LOADER_PICTURE_MOTHERBOARD 1
+#endif
 
 typedef struct 
 {
@@ -345,7 +353,7 @@ void main()
                     // Sound test: Play the Arkos tracker intro music
                     PrintWaitMessage("Playing Music (Press any key to leave)");
                 #ifdef ENABLE_MUSIC
-                    PlayMusic(JingleMusic);
+                    PlayMusic(1+2+4+8+16+32,JingleMusic);
                 #endif    
                     WaitKey();
                 #ifdef ENABLE_MUSIC

@@ -15,6 +15,11 @@ extern char JingleMusic[];
 
 
 #ifdef PRODUCT_TYPE_TEST_MODE
+//
+// System testing code
+//
+char gMenuKeyOption;
+void HandleSettingsMenu() {}
 #include "system_testing.c"
 #else
 //
