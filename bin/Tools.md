@@ -28,3 +28,7 @@ You can find the Arkos Tracker here: https://www.julien-nevo.com/arkostracker/
 
 You can find the HxC project here: https://hxc2001.com
 
+The license for the tool can be found by running **hxcfe.exe -license**
+
+
+

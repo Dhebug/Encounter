@@ -89,7 +89,8 @@ copy ..\build\%OSDKDISK% %FINAL_TARGET_DISK2%\%OSDKDISK%
 :EndCopy
 IF "%FINAL_TARGET_HFE%"=="" GOTO EndCopyHFE
 ECHO Converting ..\build\%OSDKDISK% to %FINAL_TARGET_HFE%
-..\bin\hxcfe.exe -finput:"..\build\%OSDKDISK%" -conv:HXC_HFE -foutput:"%FINAL_TARGET_HFE%"
+..\bin\hxcfe.exe -finput:"..\build\%OSDKDISK%" -conv:HXC_HFE -foutput:"%FINAL_TARGET_HFE%" >..\build\hxc_error.txt
+IF NOT EXIST %FINAL_TARGET_HFE% GOTO HxCError
 :EndCopyHFE
 
 
@@ -114,6 +115,14 @@ ECHO The osdk_config.bat has not been configured properly
 ECHO %ESC%[0m
 EXIT /b 1
 goto End
+
+:HxCError
+:: Prints the floppy builder error in red to make sure we don't miss it
+ECHO %ESC%[41m
+type ..\build\hxc_error.txt
+ECHO %ESC%[0m
+popd
+goto Error
 
 :FloppyBuilderError
 :: Prints the floppy builder error in red to make sure we don't miss it
