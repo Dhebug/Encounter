@@ -91,6 +91,7 @@ SET OSDKVERBOSITY=1
 
 SET FINAL_TARGET_DISK=C:\Projects\Encounter\SteamContent\Game\
 SET FINAL_TARGET_DISK2=C:\Projects\Encounter\ItchIoContent\Game\
+SET FINAL_TARGET_HFE=F:\DiskTest_s%DISK_SECTORS%_i%DISK_INTERLEAVE%.hfe
 
 :: Emulator settings
 SET OSDKEMUL=ORICUTRON
