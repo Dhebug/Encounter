@@ -47,7 +47,7 @@ SET BASENAME=EncounterHD
 :: New versions will use 18 sectors per track (interleave value is still to be determined)
 SET DISK_SIDES=2
 SET DISK_TRACKS=42
-SET DISK_SECTORS=17
+SET DISK_SECTORS=18
 SET DISK_INTERLEAVE=6
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)

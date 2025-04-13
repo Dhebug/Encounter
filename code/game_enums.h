@@ -153,11 +153,13 @@
 #define e_ITEM_NormalWindow          76         // a normal window
 #define e_ITEM_AlarmIndicator        77         // an alarm indicator
 #define e_ITEM_Computer              78         // a desktop computer
+#define e_ITEM_Oric                  79         // a Oric computer
+#define e_ITEM_TVCabinet             80         // a TV cabinet
 #ifdef PRODUCT_TYPE_GAME_DEMO
-#define e_ITEM_DemoMessage           79         // a demo readme message
-#define	e_ITEM_COUNT_ 				 80         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_DemoMessage           81         // a demo readme message
+#define	e_ITEM_COUNT_ 				 82         //  ----- END MARKER - Free until 127, after are action words
 #else
-#define	e_ITEM_COUNT_ 				 79         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_COUNT_ 				 81         //  ----- END MARKER - Free until 127, after are action words
 #endif
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions

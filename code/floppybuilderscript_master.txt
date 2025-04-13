@@ -392,6 +392,9 @@ AddDefine LOADER_PICTURE_TOP_WINDOW_CLOSED {FileIndex}
 AddFile ..\build\files\view_austin_mini.hir
 AddDefine LOADER_PICTURE_AUSTIN_MINI {FileIndex}
 
+AddFile ..\build\files\view_oric_computer.hir
+AddDefine LOADER_PICTURE_ORIC_COMPUTER {FileIndex}
+
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_news_saved_fr.hir
 #else

@@ -103,6 +103,8 @@ _gItems
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
     ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator
     ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
+    ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Oric
+    ITEM_NORMAL( _gTextItemClosedTVCabinet       ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_TVCabinet
 #ifdef PRODUCT_TYPE_GAME_DEMO
     ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
 #endif

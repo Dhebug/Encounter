@@ -168,6 +168,7 @@ _gTextItemHeap                    .byt "quelques$_tas",0
 _gTextItemNormalWindow            .byt "une _fenêtre",0
 _gTextItemAlarmIndicator          .byt "un _indicateur d'alarme",0
 _gTextItemComputer                .byt "un _ordinateur de bureau",0
+_gTextItemOricComputer            .byt "un micro-ordinateur$_Oric 1",0
 _gTextItemInvoice                 .byt "une$_facture",0
 _gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
@@ -244,6 +245,7 @@ _gTextItemHeap                    .byt "a few$spoil _heaps",0
 _gTextItemNormalWindow            .byt "a _window",0
 _gTextItemAlarmIndicator          .byt "an alarm _indicator",0
 _gTextItemComputer                .byt "a desktop _computer",0
+_gTextItemOricComputer            .byt "a$_Oric 1 computer",0
 _gTextItemInvoice                 .byt "an$_invoice letter",0
 _gTextItemTelevision              .byt "a _television",0
 _gTextItemGameConsole             .byt "a game _console",0
@@ -1278,6 +1280,11 @@ _gDescriptionDiningRoom
 // MARK: Game Room
 _gDescriptionGamesRoom
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
+
+    ; Is the tv cabinet open?
+    JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED))
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*100+34,_ImageBuffer+40*58+24)       ; Cabinet open
+cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -2721,6 +2728,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Computer           , _InspectComputer)
     VALUE_MAPPING(e_ITEM_Television         , _InspectTelevision)
     VALUE_MAPPING(e_ITEM_GameConsole        , _InspectGameConsole)
+    VALUE_MAPPING(e_ITEM_Oric               , _InspectOricOmputer)
     VALUE_MAPPING(e_ITEM_SmallKey           , _InspectKey)
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _InspectTin)
     VALUE_MAPPING(e_ITEM_HandWrittenNote    , _InspectHandWrittenNote)
@@ -3011,6 +3019,19 @@ _InspectGameConsole
     INFO_MESSAGE("A ColecoVision... imported from USA?")
 #endif    
     END_AND_PARTIAL_REFRESH
+.)
+
+
+_InspectOricOmputer
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un micro-ordinateur Oric 1 tout neuf")
+#else    
+    INFO_MESSAGE("A brand new Oric 1 micro-computer")
+#endif    
+    WAIT_KEYPRESS
+    END_AND_REFRESH
 .)
 
 
@@ -4113,6 +4134,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_Church             , _OpenChurch)
     VALUE_MAPPING(e_ITEM_NormalWindow       , _OpenNormalWindow)    
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _OpenChemistryBook)    
+    VALUE_MAPPING(e_ITEM_TVCabinet          , _OpenTVCabinet)        
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -4225,6 +4247,7 @@ _OpenGunCabinet
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
 #endif        
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
+        GOSUB(_SubFoundSomething)
         DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
         SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
@@ -4234,6 +4257,27 @@ _OpenGunCabinet
 #endif    
         WAIT_KEYPRESS
     ENDIF(dartgun)
+    END_AND_REFRESH
+.)
+
+
+_OpenTVCabinet
+.(
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED))          ; Is the TV cabinet closed?
++_SearchTVCabinet    
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                             ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"un _meuble TV ouvert")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"an open TV _cabinet")
+#endif        
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Oric,e_LOC_NONE),oric)                          ; Is the Oric still hidden (in the TV cabinet)? 
+        GOSUB(_SubFoundSomething)
+        SET_ITEM_LOCATION(e_ITEM_Oric,e_LOC_GAMESROOM)                                 ; It's now visible inside the game room
+        JUMP(_InspectOricOmputer)                                                      ; Show what we found!
+    ENDIF(oric)
     END_AND_REFRESH
 .)
 
@@ -4433,6 +4477,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarBoot            , _CloseCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _CloseCarPetrolTank)
+    VALUE_MAPPING(e_ITEM_TVCabinet          , _CloseTVCabinet)    
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -4484,7 +4529,7 @@ _CloseMedicineCabinet
 
 _CloseGunCabinet
 .(
-    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))        ; Is the cabinet open?
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Elle,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))      ; Is the cabinet open?
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                              ; Close it!
 +_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
@@ -4492,6 +4537,21 @@ _CloseGunCabinet
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun _cabinet")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_CloseTVCabinet
+.(
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED))         ; Is the cabinet open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                              ; Close it!
++_gTextItemClosedTVCabinet = *+2                                                                    ; Description used by default when the game starts
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"un _meuble TV fermé")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"a closed TV _cabinet")
 #endif    
     END_AND_REFRESH
 .)
@@ -4612,10 +4672,32 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_GameConsole        , _UseGameConsole)
     VALUE_MAPPING(e_ITEM_Television         , _UseTelevision)
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _UseChemistryBook)
+    VALUE_MAPPING(e_ITEM_Oric               , _UseOricComputer)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _UseDemoMessage)
 #endif    
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
+
+
+_UseOricComputer   ; view_oric_computer.png
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
+#ifdef LANGUAGE_FR               
+    QUICK_MESSAGE("Ca va stopper le jeu: Etes-vous sur ?")
+#else    
+    QUICK_MESSAGE("This will end the game: Are you sure?")
+#endif    
+    WAIT_KEYPRESS
+#ifdef LANGUAGE_FR               
+    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"O"),confirmation)
+#else    
+    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"Y"),confirmation)
+#endif    
+        QUICK_MESSAGE("RESET...")
+        CALL_NATIVE(_Reset)
+    ENDIF(confirmation)
+    END_AND_REFRESH
+.)
 
 
 _OpenCar

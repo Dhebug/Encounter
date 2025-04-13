@@ -329,4 +329,5 @@
 - Updated the copyright on the title page to include 2025
 
 1.2.2
-
+- First version of the game using 18 sectors per track instead of 17, this adds 21 KB of storage on disk and should not impact compatibility.
+- Added an Oric 1 computer in the games room, can be used to access the BASIC prompt from the game

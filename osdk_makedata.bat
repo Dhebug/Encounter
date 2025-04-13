@@ -212,6 +212,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_panic_room_window
 %CONVERT% view_top_window_closed
 %CONVERT% view_austin_mini
+%CONVERT% view_oric_computer
 %CONVERT% view_news_saved
 %CONVERT% view_news_saved_fr
 %CONVERT% view_tombstone
