@@ -38,8 +38,10 @@
 :: 1.0.6 - Fixed the "use key", small explosion, some typo fix, and alarm triggering
 :: 1.1.0 - New version of Oricutron, new controller based menu option system
 :: 1.1.1 - Polished the joystick mode, press key indicator, copyright date updated
+:: 1.1.2 - Usable Oric 1, 18 sectors per track, kleptomaniac message
+:: 1.1.3 -
 ::
-SET VERSION=1.1.2
+SET VERSION=1.1.3
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
