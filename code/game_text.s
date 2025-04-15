@@ -2757,6 +2757,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_BlackTape          , _InspectBlackTape)
     VALUE_MAPPING(e_ITEM_Acid               , _InspectAcid)
     VALUE_MAPPING(e_ITEM_Bomb               , _InspectBomb)
+    VALUE_MAPPING(e_ITEM_TVCabinet          , _InspectTVCabinet)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif    
@@ -3018,6 +3019,18 @@ _InspectGameConsole
 #else    
     INFO_MESSAGE("A ColecoVision... imported from USA?")
 #endif    
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+_InspectTVCabinet
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Des portes, des tiroirs et un abattant")
+#else    
+    INFO_MESSAGE("A few doors, a few drawers and a flap")
+#endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -5388,6 +5401,7 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_Trashcan           , _SearchTrashCan)
     VALUE_MAPPING(e_ITEM_CardboardBox       , _SearchCardboardBox)
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _SearchTin)
+    VALUE_MAPPING(e_ITEM_TVCabinet          , _SearchTVCabinet)
     VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 
@@ -5721,6 +5735,19 @@ _ErrorNoFishing
 .)
 
 
+_ErrorNoStealing
+.(
+    CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Un peu kleptomane sur les bords ?")
+#else    
+    INFO_MESSAGE("A bit of a kleptomaniac, huh?")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+
 _ThrowSnookerCue
     // By default we just drop the cue where we are
     SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)
@@ -5904,6 +5931,8 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
     VALUE_MAPPING(e_ITEM_Fish              , _ErrorNoFishing)
+    VALUE_MAPPING(e_ITEM_Oric              , _ErrorNoStealing)
+    VALUE_MAPPING(e_ITEM_GameConsole       , _ErrorNoStealing)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 

@@ -331,3 +331,5 @@
 1.2.2
 - First version of the game using 18 sectors per track instead of 17, this adds 21 KB of storage on disk and should not impact compatibility.
 - Added an Oric 1 computer in the games room, can be used to access the BASIC prompt from the game
+- Changed the default configuration of the emulator to use software rendering instead of OpenGL (except for the full crt emulation mode)
+- Trying to take some of the items will now ask if you are kleptomaniac instead of just printing "can't do this"

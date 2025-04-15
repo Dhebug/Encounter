@@ -58,7 +58,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ToiletRoll    
     ITEM_NORMAL( _gTextItemHose                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Hose             
-    ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_GameConsole
+    ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_GameConsole
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOC_HOSTAGE_ROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DISABLED)    // e_ITEM_YoungGirl        
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
@@ -103,7 +103,7 @@ _gItems
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
     ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator
     ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
-    ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Oric
+    ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Oric
     ITEM_NORMAL( _gTextItemClosedTVCabinet       ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_TVCabinet
 #ifdef PRODUCT_TYPE_GAME_DEMO
     ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
