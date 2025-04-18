@@ -121,8 +121,8 @@ _32_Bytes_BufferRemaining
 _ImageBuffer          .dsb 40*128   ; 128 lines of HIRES
 _ImageBufferEnd       .dsb 40*8     ; an extra 8 lines to make things more practical with the redefined characters
 _SecondImageBuffer    .dsb 40*128   ; A second buffer that can store a full image
-_gFont12x14           .dsb 2660     ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _ArkosMusic           .dsb MUSIC_OVERLAY_BUFFER_SIZE     ; 1700 bytes for the dynamic loading of musics (largest: 1587 bytes so far)
+_gFont12x14           .dsb 2660     ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _gFont12x14Width      .dsb 95       ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gInputBuffer         .dsb 40
 #endif

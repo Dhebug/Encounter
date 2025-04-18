@@ -335,3 +335,5 @@
 - Trying to take some of the items will now ask if you are kleptomaniac instead of just printing "can't do this"
 
 1.1.3 -
+- Internal: Swapped the music buffer location to provide a continuous array for dynamic module loading
+
