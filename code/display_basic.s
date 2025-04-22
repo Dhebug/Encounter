@@ -527,5 +527,17 @@ _MemSet_CleanWindow2        MEMSET_ENTRY($bb80+40*19+1,32,39)
 _MemSet_CleanWindow3        MEMSET_ENTRY($bb80+40*20+1,32,39)
 _MemSet_CleanWindow4        MEMSET_ENTRY($bb80+40*21+1,32,39)
 
+_MemSet_CleanTopMemory      MEMSET_ENTRY(_ImageBuffer,64,_ArkosMusic-_ImageBuffer)
+
 _MemCpy_BlittInventory      MEMCPY_ENTRY($bb80+40*18,_TemporaryBuffer479,40*4)
+
+; Monkey King stuff
+_MemCpy_BlittHiresImageBottom       MEMCPY_ENTRY($a000+5120,_ImageBuffer+5120,2880)     ; Bottom half of the image -> screen
+
+_MemCpy_SaveHiresMemoryBottom       MEMCPY_ENTRY(_ImageBuffer,$a000+5120,3040)          ; Save the bottom part of screen memory
+_MemCpy_RestoreHiresMemoryBottom    MEMCPY_ENTRY($a000+5120,_ImageBuffer,3040)          ; Restore the bottom part of screen memory
+
+_MemCpy_SaveCharsetData             MEMCPY_ENTRY(_ImageBuffer+3040,$9900,1792)          ; Save the charset area data
+_MemCpy_RestoreCharsetData          MEMCPY_ENTRY($9900,_ImageBuffer+3040,1792)          ; Restore the bottom charset area data
+
 #endif

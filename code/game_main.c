@@ -229,6 +229,20 @@ void ShowHelp()
 }
 
 
+void DrawArrowsBottom()
+{
+    // The redefined charcters to draw the bottom part of the directional arrows \v/
+	poke(0xbb80+16*40+16,9);                      // ALT charset
+	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
+}
+
+void LoadFonts()
+{
+	LoadFileAt(LOADER_FONT_6x8,0xb500);
+	LoadFileAt(LOADER_FONT_PALATINO_12x14,gFont12x14);
+}
+
+
 // MARK:Inits
 void Initializations()
 {
@@ -247,8 +261,7 @@ void Initializations()
 	InitializeGraphicMode();      
 
 	// Load the charset
-	LoadFileAt(LOADER_FONT_6x8,0xb500);
-	LoadFileAt(LOADER_FONT_PALATINO_12x14,gFont12x14);
+    LoadFonts();
 
 	// Perform some initializations for the text display system
 	ComputeFancyFontWidth();
@@ -273,9 +286,7 @@ void Initializations()
     gInventoryOffset = 0;
     gActionMenuCount = 0;
 
-    // The redefined charcters to draw the bottom part of the directional arrows \v/
-	poke(0xbb80+16*40+16,9);                      // ALT charset
-	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
+    DrawArrowsBottom();
 
 #ifdef ENABLE_GAME
 	LoadScene();

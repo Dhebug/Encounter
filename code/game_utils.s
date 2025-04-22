@@ -2211,4 +2211,225 @@ _Reset
     jmp ($fffc)
 .)
 
+
+/*
+-- 0xbb80-0x9900 --
+
+$9900 - Shift buffers
+$9900	768	768	_gShiftBuffer
+$9c00	256	256	_gTableModulo6
+$9d00	256	256	_gTableDivBy6
+$9e00	512	512	_free_to_use_9e00
+$a000	5120	5120	_HIRES_MEMORY_START
+--> $9900-$a000 = 1792 bytes
+
+$b400	1	1	_Attribute_TEXT  = $a000+5120
+$b401	383	383	_free_to_use_b401
+$b580	136	136	_TextCharsetNumbers
+$b608	256	256	_TextCharsetUpperCaseLetters
+$b708	248	248	_TextCharsetLowerCaseLetters
+$b800	128	128	_gTableMulBy40Low
+$b880	128	128	_gTableMulBy40High
+$b900	640	640	_maybe_free_to_use
+$bb80	1	1	_Attribute_HIRES, _TEXT_MEMORY_START
+-> $bfe0-$b400 = 3040 bytes
+
+Area that needs preserving:
+$a000+5120-$bb80 = 1920 bytes
+
+
+
+$c000	5120	5120	_ImageBuffer
+$d400	320	320	_ImageBufferEnd
+$d540	5120	5120	_SecondImageBuffer
+$e940	2660	2660	_gFont12x14
+
+
+// Entry #132 '..\build\files\hires_monkey_king.hir'
+// - Starts on the second side on track 37 sector 12 and is 7 sectors long 
+// (1581 compressed bytes: 19% of 8000 bytes).
+
+// Entry #133 '..\build\files\monkey_king.o'
+// - Starts on the second side on track 38 sector 1 and is 16 sectors long 
+// (3874 compressed bytes: 81% of 4739 bytes).
+
+*/
+#ifdef HAS_4KONG
+_PlayMonkeyKing
+.(
+    ; Stop the clock so it does not damage the HIRES content
+    jsr _StopClock
+
+    ; Load the HIRES picture (8000 bytes)      
+    ldx #LOADER_MONKEY_KING_HIRES
+    stx _LoaderApiEntryIndex
+    lda #<_ImageBuffer
+    sta _LoaderApiAddressLow
+    lda #>_ImageBuffer
+    sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory    
+    
+    ; Copy the image
+    jsr _BlitBufferToHiresWindowInternal          ; Copy the top 5120 bytes with the image content
+    
+    ; 3040+1792=4832
+    MEMCPY_JSR(_MemCpy_SaveHiresMemoryBottom)   ; Save the bottom half of screen memory
+    MEMCPY_JSR(_MemCpy_SaveCharsetData)         ; Save the charset area data
+    
+    MEMCPY_JSR(_MemCpy_9900_B500)               ; Move the font from TEXT to HIRES location
+
+    MEMCPY_JSR(_MemCpy_BlittHiresImageBottom)   ; Copy the bottom 2880 bytes with the image content
+
+    ; Fix redefined graphics in the lower border
+    ldx #32
+loop_1
+    txa
+    sta $bb80+40*25-32,x
+    sta $bb80+40*27-32,x
+    inx
+    cpx #40+32
+    bne loop_1
+
+loop_2
+    txa
+    sta $bb80+40*26-32-40,x
+    inx
+    cpx #40+32+40
+    bne loop_2
+
+    lda #9+128
+    sta $bb80+40*27       ; Alternate charset
+
+
+    ; Redefine the characters
+    lda #<_ImageBuffer+8000            ; 
+    sta tmp0+0
+    lda #>_ImageBuffer+8000            ; 
+    sta tmp0+1
+
+    lda #<$9800+32*8
+    sta tmp1+0
+    lda #>$9800+32*8
+    sta tmp1+1
+
+    ldx #0
+loop_char_line
+    txa
+    pha 
+
+    ldx #0
+loop_char_x    
+    txa
+    pha 
+
+    ldx #0
+loop_char_y
+    lda (tmp0),y
+    sta (tmp1),y
+
+    clc
+    lda tmp0+0
+    adc #40
+    sta tmp0+0
+    lda tmp0+1
+    adc #0
+    sta tmp0+1
+
+    clc
+    lda tmp1+0
+    adc #1
+    sta tmp1+0
+    lda tmp1+1
+    adc #0
+    sta tmp1+1
+
+    inx 
+    cpx #8
+    bne loop_char_y    
+
+    pla
+    tax
+
+    ; Move back to point to the next character 
+    sec
+    lda tmp0+0
+    sbc #<40*8-1
+    sta tmp0+0
+    lda tmp0+1
+    sbc #>40*8-1
+    sta tmp0+1
+
+    inx
+    cpx #40
+    bne loop_char_x
+
+    pla
+    tax
+
+    ; Move to the next line of characters
+    clc
+    lda tmp0+0
+    adc #<40*7
+    sta tmp0+0
+    lda tmp0+1
+    adc #>40*7
+    sta tmp0+1
+
+    ;jsr _Panic
+
+    inx
+    cpx #2
+    bcc loop_char_line
+
+    ; Alternate charset
+    lda #<$9c00+32*8
+    sta tmp1+0
+    lda #>$9c00+32*8
+    sta tmp1+1
+
+    cpx #3
+    bne loop_char_line
+
+    ;jsr _Panic
+
+    ; LOADER_MONKEY_KING - About 4721 bytes
+    ldx #LOADER_MONKEY_KING
+    stx _LoaderApiEntryIndex
+    lda #<_ImageBufferEnd
+    sta _LoaderApiAddressLow
+    lda #>_ImageBufferEnd
+    sta _LoaderApiAddressHigh
+    jsr _LoadApiLoadFileFromDirectory
+
+    ;jsr _Panic
+
+    ; Patch the import vectors
+    lda #<_ReadKeyNoBounce
+    sta _ImageBufferEnd+3+1
+    lda #>_ReadKeyNoBounce
+    sta _ImageBufferEnd+3+2
+
+
+    ; Launch the game
+    jsr _ImageBufferEnd
+
+    ; Restore whatever graphics mode we had
+    MEMCPY_JSR(_MemCpy_RestoreHiresMemoryBottom)   ; Restore the bottom half of screen memory
+    MEMCPY_JSR(_MemCpy_RestoreCharsetData)         ; Restore the bottom charset area data
+
+    ; Force clear the upper memory buffers
+    MEMSET_JSR(_MemSet_CleanTopMemory)            ; Clean the masking buffer
+    jsr _BlitBufferToHiresWindowInternal          ; Copy the top 5120 bytes with the image content
+
+    ; Invalidate the cached data 
+    lda #255
+    sta _gCurrentSpriteSheetIndex
+    sta _gCurrentMusicFileIndex
+
+    ; Start the game clock again
+    jsr _StartClock
+    rts
+.)
+#endif
+
 _EndGameUtils_

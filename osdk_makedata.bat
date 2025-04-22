@@ -61,6 +61,7 @@ SET TARGET_EXTENSION=.hir
 :: Title picture (colored)
 SET PARAMS=-u1 -m0 -f6 -o2
 %CONVERT% intro_title_picture
+%CONVERT% hires_monkey_king
 
 :: Intro graphics (black and white)
 SET PARAMS=-u1 -m0 -f0 -o2

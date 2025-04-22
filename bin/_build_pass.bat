@@ -113,10 +113,21 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
-copy build\symbols+..\build\symbols_Loader ..\build\symbols_GameProgram >NUL
-IF %TEST_MODULE%==GAME COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader+..\build\symbols_kong ..\build\symbols_GameProgram >NUL
+::copy build\symbols+..\build\symbols_Loader ..\build\symbols_GameProgram >NUL
+IF %TEST_MODULE%==GAME COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
+
+
+::
+:: Monkey King
+::
+ECHO.
+ECHO %ESC%[96m== Assembling Monkey King ==%ESC%[0m
+%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% monkey_king_main.s -o ..\build\files\monkey_king.o -l ..\build\symbols_kong
+IF ERRORLEVEL 1 GOTO Error
+
 
 ::
 :: Generate the breakpoint file is necessary:

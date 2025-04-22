@@ -4951,11 +4951,17 @@ around_the_pit
 
 _UseGame
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING)
+#ifdef HAS_4KONG
+    // Functional game
+    CALL_NATIVE(_PlayMonkeyKing)
+#else 
+    // Non functional game
 #ifdef LANGUAGE_FR   
     INFO_MESSAGE("Hum... le jeu est planté ?")
 #else
     INFO_MESSAGE("Hum... looks like it crashed?")
 #endif    
+#endif
     END_AND_REFRESH
 
 
