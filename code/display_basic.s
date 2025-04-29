@@ -534,10 +534,12 @@ _MemCpy_BlittInventory      MEMCPY_ENTRY($bb80+40*18,_TemporaryBuffer479,40*4)
 ; Monkey King stuff
 _MemCpy_BlittHiresImageBottom       MEMCPY_ENTRY($a000+5120,_ImageBuffer+5120,2880)     ; Bottom half of the image -> screen
 
-_MemCpy_SaveHiresMemoryBottom       MEMCPY_ENTRY(_ImageBuffer,$a000+5120,3040)          ; Save the bottom part of screen memory
-_MemCpy_RestoreHiresMemoryBottom    MEMCPY_ENTRY($a000+5120,_ImageBuffer,3040)          ; Restore the bottom part of screen memory
+_MemCpy_SaveHiresMemoryBottom       MEMCPY_ENTRY(_SavedData1,$a000+5120,3040)           ; Save the bottom part of screen memory
+_MemCpy_RestoreHiresMemoryBottom    MEMCPY_ENTRY($a000+5120,_SavedData1,3040)           ; Restore the bottom part of screen memory
 
-_MemCpy_SaveCharsetData             MEMCPY_ENTRY(_ImageBuffer+3040,$9900,1792)          ; Save the charset area data
-_MemCpy_RestoreCharsetData          MEMCPY_ENTRY($9900,_ImageBuffer+3040,1792)          ; Restore the bottom charset area data
+_MemCpy_SaveCharsetData             MEMCPY_ENTRY(_SavedData2,$9900,1792)           ; Save the charset area data
+_MemCpy_RestoreCharsetData          MEMCPY_ENTRY($9900,_SavedData2,1792)           ; Restore the bottom charset area data
+
+_MemCpy_MoveBottomGraphics          MEMCPY_ENTRY(_SavedData3,_ImageBuffer+8000,960)     ; Copy the last 24 lines of the image to a saved buffer
 
 #endif

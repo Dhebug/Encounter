@@ -125,6 +125,12 @@ _ArkosMusic           .dsb MUSIC_OVERLAY_BUFFER_SIZE     ; 1700 bytes for the dy
 _gFont12x14           .dsb 2660     ; 95 characters (from space to tilde), each is two byte large and 14 lines tall = 2660 bytes
 _gFont12x14Width      .dsb 95       ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gInputBuffer         .dsb 40
+#ifdef HAS_4KONG
+_SavedData1 = _ImageBuffer
+_SavedData2 = _SavedData1+3040
+_SavedData3 = _SavedData2+1792
+_Minigame   = _SavedData3+960
+#endif
 #endif
 
 #ifdef MODULE_INTRO

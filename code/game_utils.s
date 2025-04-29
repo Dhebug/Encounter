@@ -2270,15 +2270,22 @@ _PlayMonkeyKing
     jsr _LoadApiLoadFileFromDirectory    
     
     ; Copy the image
-    jsr _BlitBufferToHiresWindowInternal          ; Copy the top 5120 bytes with the image content
+    jsr _BlitBufferToHiresWindowInternal        ; Copy the top 5120 bytes with the image content
     
     ; 3040+1792=4832
+    ; 4832+(40*24)=4832+960=5792
+    ; $C000 = _ImageBuffer+0         = 3040 bytes = Bottom of screen memory
+    ; $CBE0 = _ImageBuffer+3040      = 1792 bytes = Saved charsets
+    ; $D2E0 = _ImageBuffer+3040+1792 =  960 bytes = 24 last lines of the HIRES picture
+
     MEMCPY_JSR(_MemCpy_SaveHiresMemoryBottom)   ; Save the bottom half of screen memory
     MEMCPY_JSR(_MemCpy_SaveCharsetData)         ; Save the charset area data
     
     MEMCPY_JSR(_MemCpy_9900_B500)               ; Move the font from TEXT to HIRES location
 
     MEMCPY_JSR(_MemCpy_BlittHiresImageBottom)   ; Copy the bottom 2880 bytes with the image content
+
+    MEMCPY_JSR(_MemCpy_MoveBottomGraphics)      ; Preserve the bottom part of the image
 
     ; Fix redefined graphics in the lower border
     ldx #32
@@ -2395,9 +2402,9 @@ loop_char_y
     ; LOADER_MONKEY_KING - About 4721 bytes
     ldx #LOADER_MONKEY_KING
     stx _LoaderApiEntryIndex
-    lda #<_ImageBufferEnd
+    lda #<_Minigame
     sta _LoaderApiAddressLow
-    lda #>_ImageBufferEnd
+    lda #>_Minigame
     sta _LoaderApiAddressHigh
     jsr _LoadApiLoadFileFromDirectory
 
@@ -2405,13 +2412,12 @@ loop_char_y
 
     ; Patch the import vectors
     lda #<_ReadKeyNoBounce
-    sta _ImageBufferEnd+3+1
+    sta _Minigame+3+1
     lda #>_ReadKeyNoBounce
-    sta _ImageBufferEnd+3+2
-
+    sta _Minigame+3+2
 
     ; Launch the game
-    jsr _ImageBufferEnd
+    jsr _Minigame
 
     ; Restore whatever graphics mode we had
     MEMCPY_JSR(_MemCpy_RestoreHiresMemoryBottom)   ; Restore the bottom half of screen memory
