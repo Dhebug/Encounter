@@ -2,9 +2,9 @@
 #include "params.h"
 
 
-;//
-;// Game sprites defines
-;//
+;
+; Game sprites defines
+;
 #define BAREL_BASE_MAIN		0
 #define BAREL_COUNT_MAIN	17
 
@@ -17,7 +17,7 @@
 
 	*= $1
 
-;// Some two byte values
+; Some two byte values
 _zp_start_
 
 ptr_base_dst
@@ -35,8 +35,8 @@ ph_src			.dsb 1
 current_score	.dsb 2
 
 
-;// Some one byte temporaries
-rand_low		.dsb 1		;// Random number generator, low part
+; Some one byte temporaries
+rand_low		.dsb 1		; Random number generator, low part
 rand_high		.dsb 1		;// Random number generator, high part
 
 offset_src		.dsb 1		;// Position related to ptr_src
@@ -60,8 +60,8 @@ b_tmp1			.dsb 1
 b_tmp2			.dsb 1
 ;b_tmp3			.dsb 1
 
-live_counter	.dsb 1		;// Number of lives remaining
-flag_mario_end	.dsb 1		;// 0=playing 1=mario collide 2=mario falled 3=mario win
+live_counter	.dsb 1		; Number of lives remaining
+flag_mario_end	.dsb 1		; 0=playing 1=mario collide 2=mario falled 3=mario win
 mario_jmp_count	.dsb 1
 death_counter	.dsb 1
 hero_position	.dsb 1
@@ -88,7 +88,7 @@ real_start
     ;rts
 
 
-	;// Initialise the random generator values
+	; Initialise the random generator values
 	lda #23
 	sta rand_low
 	lda #35
@@ -139,7 +139,7 @@ loop_inner
 	bne loop_outer
 
 	;//
-	;// Set some game parameters
+	; Set some game parameters
 	;//
 
 	;// a = 0
@@ -159,9 +159,9 @@ loop_inner
 	sta FixationCount
 
 
-	;//
-	;// Display background graphics
-	;//
+	;
+	; Display background graphics
+	;
 	;jsr _DisplayBackground
 .)
 
@@ -183,18 +183,17 @@ panic
     rts
 #endif
 
-	;//
-	;// Stay into the game loop while the hero
-	;// still has some live to spare
-	;//
+	;
+	; Stay into the game loop while the hero still has some live to spare
+	;
 game_loop
 	jsr ScoreDisplay
 
 
 .(
-	;//
-	;// Display the remaining lives of the hero
-	;//
+	;
+	; Display the remaining lives of the hero
+	;
 	lda live_counter
 	asl
 	asl
@@ -418,7 +417,7 @@ loop
 	dec	death_counter
 	bne platform_blink 
 
-	;// Erase the old kong
+	; Erase the old kong
 	ldx #__FirstKong-__FirstSprite
 	ldy #__LastKong-__FirstKong
 	jsr SpriteErase
@@ -428,7 +427,7 @@ loop
 	sta _SpriteRequestedState+__FirstPlatform-__FirstSprite+1
 	sta _SpriteRequestedState+__FirstPlatform-__FirstSprite+2
 
-	;// Display the falled down platforms as well as kong
+	; Display the falled down platforms as well as kong
 	lda #1
 	sta _SpriteRequestedState+__FirstPlatformFalling-__FirstSprite+0
 	sta _SpriteRequestedState+__FirstPlatformFalling-__FirstSprite+1
@@ -437,12 +436,12 @@ loop
 
 	jsr RefreshAllSprites
 
-	;// Another 20 points bonus
+	; Another 20 points bonus
 	ldx #20
 	jsr ScoreIncrementMulti
 
-	;// Small hearts !
-	;// Because I am worth it
+	; Small hearts !
+	; Because I am worth it
 
 	lda #20
 	sta death_counter
@@ -468,17 +467,17 @@ hearts_blink
 not_last_platform
 
 
-	;//
-	;// Move down to intermediate level
-	;//
+	;
+	; Move down to intermediate level
+	;
 
-	;// Erase previous victory graphics
+	; Erase previous victory graphics
 	lda #0
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite+2
 	sta _SpriteRequestedState+__FirstVictoryPose-__FirstSprite+0
 	sta _SpriteRequestedState+__FirstVictoryPose-__FirstSprite+1
 
-	;// Draw upper crane with hook and mario
+	; Draw upper crane with hook and mario
 	lda #1
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite+1
 	sta _SpriteRequestedState+__FirstCraneHook-__FirstSprite+4
@@ -488,18 +487,18 @@ not_last_platform
 
 			jsr BlinkTemporisation_128
 
-	;//
-	;// Move down to lower level
-	;//
+	;
+	; Move down to lower level
+	;
 
 
-	;// Erase previous victory graphics
+	; Erase previous victory graphics
 	lda #0
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite+1
 	sta _SpriteRequestedState+__FirstCraneHook-__FirstSprite+4
 	sta _SpriteRequestedState+__MarioJump-__FirstSprite
 
-	;// Draw upper crane with hook and mario
+	; Draw upper crane with hook and mario
 	lda #1
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite+0
 	sta _SpriteRequestedState+__FirstVictoryPose-__FirstSprite+2
@@ -565,8 +564,8 @@ check_jump_on_hook
 	cpy #__MarioJump-__FirstSprite
 	bne check_end
 
-	;// 2=mario falling
-	;// 3=mario wining by getting the hook
+	; 2=mario falling
+	; 3=mario wining by getting the hook
 	ldx #2	
 	lda _SpriteRequestedState+__FirstCraneHook-__FirstSprite+4
 	beq mario_failure
@@ -585,13 +584,9 @@ MarioDeadSequence
 
 
 
-
-
-
-
-;// Calculate some RANDOM values
-;// Not accurate at all, but who cares ?
-;// For what I need it's enough.
+; Calculate some RANDOM values
+; Not accurate at all, but who cares ?
+; For what I need it's enough.
 _GetRand
 	lda rand_high
 	sta b_tmp1
@@ -620,10 +615,7 @@ _GetRand
 
 
 
-
-
-
-;// Give the value to add in X
+; Give the value to add in X
 ScoreIncrementMulti
 .(
 	stx death_counter
@@ -655,8 +647,8 @@ ScoreIncrement
 	adc #0
 	sta current_score+0
 
-	;// Sounddemon proposes a 16 bits subtraction
-	;// aeb156 code
+	; Sounddemon proposes a 16 bits subtraction
+	; aeb156 code
     lda     current_score+0
     cmp     best_score+0
     beq     _checktens
@@ -686,10 +678,9 @@ skip_update_best
 ScoreDisplay
 	;//jmp ScoreDisplay
 .(
-	;//
-	;// Push two bytes on the stack to avoid using index
-	;// registers later in the loop.
-	;//
+	;
+	; Push two bytes on the stack to avoid using index registers later in the loop.
+	;
 	lda best_score+0
 	pha
 	lda best_score+1
@@ -705,7 +696,7 @@ ScoreDisplay
 	lda #27
 	pha
 
-	;// two scores to display
+	; two scores to display
 	lda #2
 	lda #2
 	sta b_tmp1
@@ -747,9 +738,9 @@ loop_show_digit
 
 
 
-;// Call with 
-;//   x first sprite to erase
-;//   y number of sprites to erase
+; Call with 
+;   x first sprite to erase
+;   y number of sprites to erase
 SpriteErase
 .(
 	lda #0
@@ -767,10 +758,10 @@ loop
 
 HandleCrane
 .(
-	;//
-	;// Update things depending of tic
-	;// Move the crane and hooks accordingly
-	;//
+	;
+	; Update things depending of tic
+	; Move the crane and hooks accordingly
+	;
 	lda CraneStatus
 	beq end_crane_movement
 
@@ -780,8 +771,8 @@ HandleCrane
 	lda _GameCraneDelayTick
 	sta _GameCraneCurrentTick
 
-	;// 0=down
-	;// 1=mid (need hooks)
+	; 0=down
+	; 1=mid (need hooks)
 	ldx CranePosition
 	bne not_down 
 down
@@ -807,9 +798,9 @@ end_mid
 
 end_crane_movement
 
-	;//
-	;// Display the crane control handle
-	;//
+	;
+	; Display the crane control handle
+	;
 	lda CraneStatus
 	ldx #1
 	sta _SpriteRequestedState+__FirstCraneStick-__FirstSprite,x
@@ -817,23 +808,23 @@ end_crane_movement
 	eor #1
 	sta _SpriteRequestedState+__FirstCraneStick-__FirstSprite,x
 
-	;//
-	;// Erase all crane graphics
-	;//
+	;
+	; Erase all crane graphics
+	;
 	ldx #__FirstCrane-__FirstSprite
 	ldy #__LastCrane-__FirstCrane
 	jsr SpriteErase
 
-	;//
-	;// Draw crane depending of flags
-	;//
+	;
+	; Draw crane depending of flags
+	;
 	lda #1
 	ldx CranePosition
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite,x
 
-	;//
-	;// Draw hooks depending of position
-	;//
+	;
+	; Draw hooks depending of position
+	;
 	ldx CranePosition
 	cpx #1
 	bne end_draw_hooks
@@ -852,15 +843,14 @@ end_draw_hooks
 
 MoveHero
 .(
-	;// Erase all previous position
+	; Erase all previous position
 	ldx #__FirstMario-__FirstSprite
 	ldy #__LastMario-__FirstMario
 	jsr SpriteErase
 
 	ldy	hero_position
 
-	;//
-	;// Check if the hero is jumping
+	; Check if the hero is jumping
 	lda mario_jmp_count
 	beq handle_keyboard
 
@@ -902,9 +892,9 @@ check_end
 
 
 handle_keyboard
-	;//
-	;// Handle keyboard
-	;//  y contains the position of hero during all code, do not alterate
+	;
+	; Handle keyboard
+	;  y contains the position of hero during all code, do not alterate
     jsr read_keyboard
 	;ldx $208
 	cpx #0
@@ -919,15 +909,15 @@ key_pressed
 
 end_keyboard
 
-	;//
-	;// Draw new position
-	;//
+	;
+	; Draw new position
+	;
 	lda #1
 	sta _SpriteRequestedState,y
 
-	;//
-	;// Handle display of mario harm
-	;//
+	;
+	; Handle display of mario harm
+	;
 	lda #0
 	sta _SpriteRequestedState+__FirstMarioHand-__FirstSprite+0
 	sta _SpriteRequestedState+__FirstMarioHand-__FirstSprite+1
@@ -982,7 +972,7 @@ end_of_scan
 
 HeroMoveLeft
 .(
-	;// Third floor
+	; Third floor
 
 check_third_floor
 	cpy #__ThirdFloorMario-__FirstSprite+1
@@ -996,19 +986,19 @@ check_third_floor_crane_control
 	cpy #__ThirdFloorMario-__FirstSprite
 	bne check_second_floor
 
-	;// Activate the crane
+	; Activate the crane
 	lda #1
 	sta	CraneStatus
 	rts
 
-	;// Second floor check (reversed)
+	; Second floor check (reversed)
 check_second_floor
 	cpy #__SecondFloorMario-__FirstSprite
 	bcc check_first_floor
 	cpy #__MarioLader_2-__FirstSprite-1
 	bcs check_end
 
-	;// Test collision with first floor barels
+	; Test collision with first floor barrels
 	tya
 	sec
 	sbc #((__SecondFloorMario-__FirstSprite)-(__SecondFloorBarel-__FirstSprite))
@@ -1018,12 +1008,12 @@ check_second_floor
 	iny
 	rts
 
-	;// First floor check
+	; First floor check
 check_first_floor
 	cpy #__FirstFloorMario-__FirstSprite+1
 	bcc check_end
 
-	;// Test collision with first floor barels
+	; Test collision with first floor barrels
 	tya
 	sec
 	sbc #((__FirstFloorMario-__FirstSprite)-(__FirstBarel-__FirstSprite))
@@ -1047,17 +1037,17 @@ check_end
 
 HeroMoveRight
 .(
-	;// Check the jump position
+	; Check the jump position
 	cpy #__ThirdFloorMario-__FirstSprite+2
 	bne check_third_floor
 
 	ldy #__MarioJump-__FirstSprite+1
-	;// 0=playing 1=mario collide 2=mario falled 3=mario win
+	; 0=playing 1=mario collide 2=mario falled 3=mario win
 	lda #2
 	sta flag_mario_end
 	rts
 
-	;// Third floor
+	; Third floor
 check_third_floor
 	cpy #__ThirdFloorMario-__FirstSprite
 	bcc check_second_floor
@@ -1066,14 +1056,14 @@ check_third_floor
 	iny
 	rts
 
-	;// Second floor check (reversed)
+	; Second floor check (reversed)
 check_second_floor
 	cpy #__SecondFloorMario-__FirstSprite+1
 	bcc check_first_floor
 	cpy #__MarioLader_2-__FirstSprite
 	bcs check_end
 
-	;// Test collision with first floor barels
+	; Test collision with first floor barrels
 	tya
 	sec
 	sbc #((__SecondFloorMario-__FirstSprite)-(__SecondFloorBarel-__FirstSprite))
@@ -1088,7 +1078,7 @@ check_first_floor
 	cpy #__SecondFloorMario-__FirstSprite-1
 	bcs check_end
 
-	;// Test collision with first floor barels
+	; Test collision with first floor barrels
 	tya
 	sec
 	sbc #((__FirstFloorMario-__FirstSprite)-(__FirstBarel-__FirstSprite))
@@ -1199,15 +1189,15 @@ validate_jump
 
 
 
-;// Needs a routine that:
-;// - scrolls a table of "n" values starting at a particular position
-;// - clear the last one
-;// - returns the value of the first that goes out of table...
+; Needs a routine that:
+; - scrolls a table of "n" values starting at a particular position
+; - clear the last one
+; - returns the value of the first that goes out of table...
 
-;// X=counter
-;// Y=start position
+; X=counter
+; Y=start position
 ScrollLeftTable
-	;// Memorise the value that will become ejected
+	; Memorise the value that will become ejected
 	lda _SpriteRequestedState+BAREL_BASE_MAIN,y
 	pha
 .(
@@ -1220,7 +1210,7 @@ loop
 	dex
 	bne loop
 
-	;// Get back the ejected value
+	; Get back the ejected value
 	pla
 	rts
 .)
@@ -1230,9 +1220,9 @@ loop
 
 MoveBarels
 .(
-	;//
-	;// First, check that we don't collide the hero
-	;//
+	;
+	; First, check that we don't collide the hero
+	;
 .(
 	lda #6
 	sta b_tmp1
@@ -1264,9 +1254,9 @@ skip
 	bne outer_loop
 .)
 
-	;//
-	;// Scroll the first serie
-	;//
+	;
+	; Scroll the first serie
+	;
 	ldy #0
 	ldx #__LastBarel-__FirstBarel-1
 	jsr ScrollLeftTable
@@ -1275,9 +1265,9 @@ skip
 	jsr ScoreIncrement
 
 skip_increase_score
-	;//
-	;// Scroll the three top ones
-	;//
+	;
+	; Scroll the three top ones
+	;
 	ldy #__LastBarel+(3*0)-__FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
@@ -1305,7 +1295,7 @@ skip_increase_score
 
 HandlePlateforms
 .(
-	;// Start by erasing all the plateform data
+	; Start by erasing all the platform data
 	ldx #__FirstPlatform-__FirstSprite
 	ldy #__LastHook-__FirstPlatform
 	jsr SpriteErase
@@ -1314,7 +1304,7 @@ HandlePlateforms
 	lda #1
 	ldy FixationCount
 	beq skip
-	;// Display hooks
+	; Display hooks
 loop
 	sta _SpriteRequestedState+__FirstHook-__FirstSprite-1,y
 	dey
@@ -1352,7 +1342,7 @@ update_items
 	lda _GameGirderDelayTick
 	sta _GameGirderTick
 
-	;// Move them all by one tick
+	; Move them all by one tick
 	ldx #0
 	.(
 loop
@@ -1363,7 +1353,7 @@ loop
 	bne loop
 	.)
 
-	;// And clear/set the first one depending of random
+	; And clear/set the first one depending of random
 	lda #0
 	dec _GameGirderSpawnTick
 	bpl no_girder_spawn
@@ -1382,7 +1372,7 @@ no_girder_spawn
 
 MoveKong
 .(
-	;// Start by erasing all the kong data
+	; Start by erasing all the kong data
 	ldx #__FirstKong-__FirstSprite
 	ldy #__LastKong-__FirstKong
 	jsr SpriteErase
@@ -1391,7 +1381,7 @@ MoveKong
 	lda _KongFlagThrow
 	beq handle_movement
 
-	;// Throw a barel
+	; Throw a barrel
 	lda #0
 	sta _KongFlagThrow
 
@@ -1409,7 +1399,7 @@ throw_it
 
 
 handle_movement
-	;// And now move kong
+	; And now move kong
 	jsr _GetRand
 	ldx _KongPosition
 	lda rand_low
@@ -1485,14 +1475,14 @@ loop
 	cmp _SpriteDisplayState,x
 	beq skip_sprite
 
-	;//
-	;// Change sprite status
-	;//
+	;
+	; Change sprite status
+	;
 	sta _SpriteDisplayState,x
 
 	stx tmp_save_sprite
 
-	;// X=Sprite number to display
+	; X=Sprite number to display
 	jsr _DisplaySingleSprite
 
 	ldx tmp_save_sprite
@@ -1508,8 +1498,8 @@ skip_sprite
 
 
 
-;// Note
-;// In all display routines "tmp0" points on the screen
+; Note
+; In all display routines "tmp0" points on the screen
 _DisplaySingleSprite
 	;//
 	;// Set in sprite mode
