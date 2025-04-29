@@ -11,6 +11,8 @@
 #define GIRDER_BASE_MAIN	__FirstGirder-__FirstSprite
 #define GIRDER_COUNT_MAIN	5
 
+#define BREAKPOINT  jmp *
+
 #define GAME_MODE    // Comment out to test
 
 	.zero
@@ -20,29 +22,15 @@
 ; Some two byte values
 _zp_start_
 
-ptr_base_dst
-pl_base_dst		.dsb 1
-ph_base_dst		.dsb 1
-
-ptr_dst
-pl_dst			.dsb 1
-ph_dst			.dsb 1
-
-ptr_src
-pl_src			.dsb 1
-ph_src			.dsb 1
+ptr_src         .dsb 2
+ptr_dst         .dsb 2
 
 current_score	.dsb 2
 
 
 ; Some one byte temporaries
 rand_low		.dsb 1		; Random number generator, low part
-rand_high		.dsb 1		;// Random number generator, high part
-
-offset_src		.dsb 1		;// Position related to ptr_src
-offset_dst		.dsb 1		;// Position related to ptr_dst
-
-base_offset_dst	.dsb 1		;// Position related to ptr_dst
+rand_high		.dsb 1		; Random number generator, high part
 
 meta_bloc_index	.dsb 1
 sub_bloc_index	.dsb 1
@@ -58,7 +46,6 @@ save_y			.dsb 1
 
 b_tmp1			.dsb 1
 b_tmp2			.dsb 1
-;b_tmp3			.dsb 1
 
 live_counter	.dsb 1		; Number of lives remaining
 flag_mario_end	.dsb 1		; 0=playing 1=mario collide 2=mario falled 3=mario win
@@ -66,6 +53,10 @@ mario_jmp_count	.dsb 1
 death_counter	.dsb 1
 hero_position	.dsb 1
 last_key_press	.dsb 1
+
+
+zp_x            .dsb 1
+zp_y            .dsb 1
 
 CraneStatus				.byt 0	; 01	(OFF or ON)
 CranePosition			.byt 0	; 012
@@ -77,8 +68,9 @@ _zp_end_
 
 	.text
     
-    ;*=$c000    ; _ImageBuffer
-    *=$d400    ; _ImageBufferEnd
+    *=$d6a0     ; _Minigame
+
+_BottomGraphics = $D2E0
 
 _main           jmp real_start   ; +0
 read_keyboard   jmp $1234        ; +3
@@ -86,9 +78,6 @@ play_sound      jmp $1234        ; +6
 
 
 real_start    
-    ;rts
-
-
 	; Initialise the random generator values
 	lda #23
 	sta rand_low
@@ -106,8 +95,7 @@ loop
 	bne loop
 .)
 
-
-	; Clear the zero page adresses
+	; Clear the zero page addresses
 	lda #0
 ZpClear
 .(
@@ -124,9 +112,9 @@ BssClear
 	tay
 
 	ldx #<_BssStart_
-	stx pl_dst
+	stx ptr_dst+0
 	ldx #>_BssStart_
-	stx ph_dst
+	stx ptr_dst+1
 
 	ldx #5	;// 5*256
 loop_outer
@@ -135,15 +123,57 @@ loop_inner
 	sta (ptr_dst),y
 	dey
 	bne loop_inner
-	inc ph_dst
+	inc ptr_dst+1
 	dex
 	bne loop_outer
 
-	;//
-	; Set some game parameters
-	;//
+    ; Generate the scanline table
+    lda #<$a000
+    sta _gScanlineTableLow
+    lda #>$a000
+    sta _gScanlineTableHigh
 
-	;// a = 0
+    ldx #1
+loop_hires
+    clc
+    lda _gScanlineTableLow-1,x
+    adc #40
+    sta _gScanlineTableLow,x
+
+    lda _gScanlineTableHigh-1,x
+    adc #0
+    sta _gScanlineTableHigh,x
+
+    inx 
+    cpx #200
+    bne loop_hires  
+
+    ; Point to the "hires buffer"
+    lda #<_BottomGraphics
+    sta _gScanlineTableLow,x
+    lda #>_BottomGraphics
+    sta _gScanlineTableHigh,x
+    inx
+
+loop_text
+    clc
+    lda _gScanlineTableLow-1,x
+    adc #40
+    sta _gScanlineTableLow,x
+
+    lda _gScanlineTableHigh-1,x
+    adc #0
+    sta _gScanlineTableHigh,x
+
+    inx 
+    cpx #224
+    bne loop_text
+
+
+	;
+	; Set some game parameters
+	;
+    lda #0
 	sta flag_mario_end
 	sta _GameCurrentTick
 	sta CraneStatus
@@ -951,9 +981,9 @@ loop_scan
 
 execute_key
 	lda KeyboardRouter_AddrLow,x
-	sta pl_dst
+	sta ptr_dst+0
 	lda KeyboardRouter_AddrHigh,x
-	sta ph_dst
+	sta ptr_dst+1
 	jmp (ptr_dst)
 
 end_of_scan
@@ -1483,39 +1513,23 @@ skip_sprite
 	cpx #95
 	bne loop
 .)
+    jsr _RefineCharacters
 	rts
 
 
-
-
-
-
-; Note
-; In all display routines "tmp0" points on the screen
+; Note: In all display routines "tmp0" points on the screen
 _DisplaySingleSprite
-	;//
-	;// Set in sprite mode
-	;//
-	lda #$51						;// eor (IND),y
-	sta _DisplaySprite_Patch_+0	
-	lda #ptr_dst					;// ptr_dst
-	sta _DisplaySprite_Patch_+1
+	; Screen adress
+	lda _KongSpriteScreenX,x
+	sta zp_x
+	lda _KongSpriteScreenY,x
+	sta zp_y
 
-	;//
-	;// Screen adress
-	;//
-	lda _KongSpriteScreenAddr_Low,x
-	sta pl_base_dst
-	lda _KongSpriteScreenAddr_High,x
-	sta ph_base_dst
-
-	;//
-	;// Sprite data adress
-	;//
+	; Sprite data address
 	lda _KongSpriteAdd_Low,x
-	sta pl_src
+	sta ptr_src+0
 	lda _KongSpriteAdd_High,x
-	sta ph_src
+	sta ptr_src+1
 
 	; Sprite width and height
 	lda _KongSpriteWidth,x
@@ -1524,33 +1538,368 @@ _DisplaySingleSprite
 	lda _KongSpriteHeight,x
 	sta tmp_height
 
-_DisplaySingleSprite_2
-	ldy #0
-	sty offset_src
-	sty offset_dst
-
-loop_x
-	;// Set screen column
-	lda pl_base_dst
-	sta pl_dst
-	lda ph_base_dst
-	sta ph_dst
-
-	ldx tmp_height
-
 loop_y
-	ldy offset_src
-	inc offset_src
+    ldy zp_y    
+    inc zp_y
+    clc 
+    lda _gScanlineTableLow,y
+    adc zp_x
+    sta ptr_dst+0
+    lda _gScanlineTableHigh,y
+    adc #0
+    sta ptr_dst+1
+
+
+    ldy #0
+loop_x
 	lda (ptr_src),y
 	;//beq skip_empty
 
-	ldy offset_dst
-_DisplaySprite_Patch_
 	eor (ptr_dst),y
 	;ora #64               ; ----------- test
 	sta (ptr_dst),y
 skip_empty
 	
+	iny
+    cpy tmp_width
+	bne loop_x
+
+    clc
+    lda ptr_src+0
+    adc tmp_width
+    sta ptr_src+0
+
+    lda ptr_src+1
+    adc #0
+    sta ptr_src+1
+
+	dec tmp_height
+	bne loop_y
+
+	rts
+
+
+
+_RefineCharacters
+.(
+    pha
+    txa
+    pha
+    tya
+    pha
+
+	// First 16 scanlines in STD charset
+    sec
+	ldx #9
+	ldy #9*16
+loop_column_std
+    ; Columns 0-9 
+	lda _BottomGraphics+40*0,x
+	sta $9800+32*8+0,y
+
+	lda _BottomGraphics+40*1,x
+	sta $9800+32*8+1,y
+
+	lda _BottomGraphics+40*2,x
+	sta $9800+32*8+2,y
+
+	lda _BottomGraphics+40*3,x
+	sta $9800+32*8+3,y
+
+	lda _BottomGraphics+40*4,x
+	sta $9800+32*8+4,y
+
+	lda _BottomGraphics+40*5,x
+	sta $9800+32*8+5,y
+
+	lda _BottomGraphics+40*6,x
+	sta $9800+32*8+6,y
+
+	lda _BottomGraphics+40*7,x
+	sta $9800+32*8+7,y
+
+	lda _BottomGraphics+40*8,x
+	sta $9800+32*8+8,y
+
+	lda _BottomGraphics+40*9,x
+	sta $9800+32*8+9,y
+
+	lda _BottomGraphics+40*10,x
+	sta $9800+32*8+10,y
+
+	lda _BottomGraphics+40*11,x
+	sta $9800+32*8+11,y
+
+	lda _BottomGraphics+40*12,x
+	sta $9800+32*8+12,y
+
+	lda _BottomGraphics+40*13,x
+	sta $9800+32*8+13,y
+
+	lda _BottomGraphics+40*14,x
+	sta $9800+32*8+14,y
+
+	lda _BottomGraphics+40*15,x
+	sta $9800+32*8+15,y
+
+    ; Columns 10-19 
+	lda _BottomGraphics+40*0+10,x
+	sta $9800+32*8+0+16*10,y
+
+	lda _BottomGraphics+40*1+10,x
+	sta $9800+32*8+1+16*10,y
+
+	lda _BottomGraphics+40*2+10,x
+	sta $9800+32*8+2+16*10,y
+
+	lda _BottomGraphics+40*3+10,x
+	sta $9800+32*8+3+16*10,y
+
+	lda _BottomGraphics+40*4+10,x
+	sta $9800+32*8+4+16*10,y
+
+	lda _BottomGraphics+40*5+10,x
+	sta $9800+32*8+5+16*10,y
+
+	lda _BottomGraphics+40*6+10,x
+	sta $9800+32*8+6+16*10,y
+
+	lda _BottomGraphics+40*7+10,x
+	sta $9800+32*8+7+16*10,y
+
+	lda _BottomGraphics+40*8+10,x
+	sta $9800+32*8+8+16*10,y
+
+	lda _BottomGraphics+40*9+10,x
+	sta $9800+32*8+9+16*10,y
+
+	lda _BottomGraphics+40*10+10,x
+	sta $9800+32*8+10+16*10,y
+
+	lda _BottomGraphics+40*11+10,x
+	sta $9800+32*8+11+16*10,y
+
+	lda _BottomGraphics+40*12+10,x
+	sta $9800+32*8+12+16*10,y
+
+	lda _BottomGraphics+40*13+10,x
+	sta $9800+32*8+13+16*10,y
+
+	lda _BottomGraphics+40*14+10,x
+	sta $9800+32*8+14+16*10,y
+
+	lda _BottomGraphics+40*15+10,x
+	sta $9800+32*8+15+16*10,y
+
+    ; Columns 20-29 
+	lda _BottomGraphics+40*0+20,x
+	sta $9800+32*8+0+16*20,y
+
+	lda _BottomGraphics+40*1+20,x
+	sta $9800+32*8+1+16*20,y
+
+	lda _BottomGraphics+40*2+20,x
+	sta $9800+32*8+2+16*20,y
+
+	lda _BottomGraphics+40*3+20,x
+	sta $9800+32*8+3+16*20,y
+
+	lda _BottomGraphics+40*4+20,x
+	sta $9800+32*8+4+16*20,y
+
+	lda _BottomGraphics+40*5+20,x
+	sta $9800+32*8+5+16*20,y
+
+	lda _BottomGraphics+40*6+20,x
+	sta $9800+32*8+6+16*20,y
+
+	lda _BottomGraphics+40*7+20,x
+	sta $9800+32*8+7+16*20,y
+
+	lda _BottomGraphics+40*8+20,x
+	sta $9800+32*8+8+16*20,y
+
+	lda _BottomGraphics+40*9+20,x
+	sta $9800+32*8+9+16*20,y
+
+	lda _BottomGraphics+40*10+20,x
+	sta $9800+32*8+10+16*20,y
+
+	lda _BottomGraphics+40*11+20,x
+	sta $9800+32*8+11+16*20,y
+
+	lda _BottomGraphics+40*12+20,x
+	sta $9800+32*8+12+16*20,y
+
+	lda _BottomGraphics+40*13+20,x
+	sta $9800+32*8+13+16*20,y
+
+	lda _BottomGraphics+40*14+20,x
+	sta $9800+32*8+14+16*20,y
+
+	lda _BottomGraphics+40*15+20,x
+	sta $9800+32*8+15+16*20,y
+    
+    ; Columns 30-39 
+	lda _BottomGraphics+40*0+30,x
+	sta $9800+32*8+0+16*30,y
+
+	lda _BottomGraphics+40*1+30,x
+	sta $9800+32*8+1+16*30,y
+
+	lda _BottomGraphics+40*2+30,x
+	sta $9800+32*8+2+16*30,y
+
+	lda _BottomGraphics+40*3+30,x
+	sta $9800+32*8+3+16*30,y
+
+	lda _BottomGraphics+40*4+30,x
+	sta $9800+32*8+4+16*30,y
+
+	lda _BottomGraphics+40*5+30,x
+	sta $9800+32*8+5+16*30,y
+
+	lda _BottomGraphics+40*6+30,x
+	sta $9800+32*8+6+16*30,y
+
+	lda _BottomGraphics+40*7+30,x
+	sta $9800+32*8+7+16*30,y
+
+	lda _BottomGraphics+40*8+30,x
+	sta $9800+32*8+8+16*30,y
+
+	lda _BottomGraphics+40*9+30,x
+	sta $9800+32*8+9+16*30,y
+
+	lda _BottomGraphics+40*10+30,x
+	sta $9800+32*8+10+16*30,y
+
+	lda _BottomGraphics+40*11+30,x
+	sta $9800+32*8+11+16*30,y
+
+	lda _BottomGraphics+40*12+30,x
+	sta $9800+32*8+12+16*30,y
+
+	lda _BottomGraphics+40*13+30,x
+	sta $9800+32*8+13+16*30,y
+
+	lda _BottomGraphics+40*14+30,x
+	sta $9800+32*8+14+16*30,y
+
+	lda _BottomGraphics+40*15+30,x
+	sta $9800+32*8+15+16*30,y
+
+    tya
+    sbc #16
+    tay
+
+	dex
+    bmi end_std
+	jmp loop_column_std
+end_std
+
+    // Last 8 scanlines in ALT charset
+    sec
+	ldx #19
+	ldy #19*8
+loop_column_alt
+    ; Left Half
+	lda _BottomGraphics+40*16,x
+	sta $9c00+32*8+0,y
+
+	lda _BottomGraphics+40*17,x
+	sta $9c00+32*8+1,y
+
+	lda _BottomGraphics+40*18,x
+	sta $9c00+32*8+2,y
+
+	lda _BottomGraphics+40*19,x
+	sta $9c00+32*8+3,y
+
+	lda _BottomGraphics+40*20,x
+	sta $9c00+32*8+4,y
+
+	lda _BottomGraphics+40*21,x
+	sta $9c00+32*8+5,y
+
+	lda _BottomGraphics+40*22,x
+	sta $9c00+32*8+6,y
+
+	lda _BottomGraphics+40*23,x
+	sta $9c00+32*8+7,y
+
+    ; Right Half
+	lda _BottomGraphics+40*16+20,x
+	sta $9c00+32*8+0+20*8,y
+
+	lda _BottomGraphics+40*17+20,x
+	sta $9c00+32*8+1+20*8,y
+
+	lda _BottomGraphics+40*18+20,x
+	sta $9c00+32*8+2+20*8,y
+
+	lda _BottomGraphics+40*19+20,x
+	sta $9c00+32*8+3+20*8,y
+
+	lda _BottomGraphics+40*20+20,x
+	sta $9c00+32*8+4+20*8,y
+
+	lda _BottomGraphics+40*21+20,x
+	sta $9c00+32*8+5+20*8,y
+
+	lda _BottomGraphics+40*22+20,x
+	sta $9c00+32*8+6+20*8,y
+
+	lda _BottomGraphics+40*23+20,x
+	sta $9c00+32*8+7+20*8,y
+
+
+    tya
+    sbc #8
+    tay
+
+	dex
+	bpl loop_column_alt
+
+    pla
+    tay
+    pla
+    tax
+    pla
+
+    rts
+.)
+
+
+_DisplayCharsetMatrix
+.(
+    ; Fix redefined graphics in the lower border
+    ldy #32
+    ldx #0
+loop_1
+    tya
+    sta $bb80+40*25,x
+    iny
+    tya
+    sta $bb80+40*26,x
+    iny
+    inx
+    cpx #40
+    bne loop_1
+
+    ldx #32
+loop_2
+    txa
+    sta $bb80+40*27-32,x
+    inx
+    cpx #40+32
+    bne loop_2
+
+    lda #9+128
+    sta $bb80+40*27       ; Alternate charset
+    rts
+.)
+
 
 Bleep
 .(
@@ -1598,15 +1947,5 @@ _SpriteRequestedState	// Force all the sprites to be on
 
 
 #include "monkey_king_spr.s"
-//#include "monkey_king_sprites.s"
-
 #include "monkey_king_vars.s"
-
-
-
-
-
-
-
-
 

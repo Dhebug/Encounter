@@ -123,6 +123,9 @@ EndData
 
 _BssStart_
 
+_gScanlineTableLow      .dsb 224
+_gScanlineTableHigh     .dsb 224
+
 _SpriteDisplayState		.dsb 256		; 0=not displayed 1=displayed
 
 _GameGirderTick			.byt 0			; Current movement counter
