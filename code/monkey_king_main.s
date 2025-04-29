@@ -82,6 +82,7 @@ _zp_end_
 
 _main           jmp real_start   ; +0
 read_keyboard   jmp $1234        ; +3
+play_sound      jmp $1234        ; +6
 
 
 real_start    
@@ -1562,28 +1563,34 @@ _DisplaySprite_Patch_
 skip_empty
 	
 
-
-	;// Move the screen pointer by 40 bytes...
-	clc
-	lda pl_dst
-	adc #40
-	sta pl_dst
+Bleep
 .(
-	bcc skip
-	inc ph_dst	
-skip
+    ldX #<_GameTickData
+    ldy #>_GameTickData
+    jmp play_sound
 .)
 
-	dex
-	bne loop_y
+Bloop
+.(
+    ldX #<_JumpData
+    ldy #>_JumpData
+    jmp play_sound
+.)
 
-	inc offset_dst
 
-	dec tmp_width
-	bne loop_x
+_GameTickData
+    SOUND_SET_VALUE2(REG_A_FREQ,50)
+    SOUND_SET_VALUE(REG_A_VOLUME,13)               ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+    SOUND_WAIT(1)                                  ; Wait a couple frames
+    SOUND_SET_VALUE_END(REG_A_VOLUME,0)            ; Cut the volume
 
-	rts
-
+_JumpData
+    SOUND_SET_VALUE2(REG_A_FREQ,40)
+    SOUND_SET_VALUE(REG_A_VOLUME,13)               ; Channel A volume
+    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
+    SOUND_WAIT(1)                                  ; Wait a couple frames
+    SOUND_SET_VALUE_END(REG_A_VOLUME,0)            ; Cut the volume
 
 
 #ifdef GAME_MODE

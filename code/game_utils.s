@@ -2416,6 +2416,12 @@ loop_char_y
     lda #>_ReadKeyNoBounce
     sta _Minigame+3+2
 
+    lda #<_PlaySoundAsmXY
+    sta _Minigame+6+1
+    lda #>_PlaySoundAsmXY
+    sta _Minigame+6+2
+   
+
     ; Launch the game
     jsr _Minigame
 
