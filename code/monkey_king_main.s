@@ -226,17 +226,17 @@ loop_draw_lives
 #ifdef GAME_MODE
 	jsr MoveHero
 
-	;//
-	;// Move items
-	;//
+	;
+	; Move items
+	;
 	lda _GameCurrentTick
 	bne end_update_items
 
 		lda _GameDelayTick
 		sta _GameCurrentTick
 
-		;// Call the "click" routine
-		//jsr _kbdclick1
+		; Call the "click" routine
+        jsr Bleep
 
 		jsr HandlePlateforms
 		jsr MoveBarels
@@ -260,13 +260,13 @@ end_update_items
 
 
 
-;// ======================
-;// When mario die, we need to:
-;// - make it blink few times
-;// - decrement the life counter
-;// - if life counter is null full death, reset all
-;// - if life counter is not null, partial death, erase the first barels
-;// ======================
+; ======================
+; When mario die, we need to:
+; - make it blink few times
+; - decrement the life counter
+; - if life counter is null full death, reset all
+; - if life counter is not null, partial death, erase the first barrels
+; ======================
 MarioEndSequence
 	;// Reset lots of things death flag
 	lda #0
@@ -278,10 +278,10 @@ MarioEndSequence
 	sta last_key_press
 
 
-	;// 0=playing 
-	;// 1=mario collide
-	;// 2=mario falled 
-	;// 3=mario win
+	; 0=playing 
+	; 1=mario collide
+	; 2=mario falled 
+	; 3=mario win
 	cpx #1
 	beq MarioCollideSequence 
 	cpx #2
@@ -292,7 +292,8 @@ MarioEndSequence
 MarioCollideSequence
 	lda #8
 	sta death_counter
-	//jsr _kbdclick2
+	jsr Bloop
+
 blink_loop
 	jsr BlinkTemporisation_128
 	ldx hero_position
@@ -300,27 +301,28 @@ blink_loop
 	eor #1
 	sta _SpriteRequestedState,x
 	jsr RefreshAllSprites
-	//jsr _kbdclick1
+    jsr Bleep
+
 	dec death_counter
 	bne blink_loop
 
 	dec live_counter
 	bmi FullDeath
 
-;// Normal death
-;// Reposition mario at the begining
+; Normal death
+; Reposition mario at the beginning
 RestartHero
 	lda #__FirstMario-__FirstSprite 
 	sta hero_position
 
-	;// Erase the first barels
+	; Erase the first barrels
 	ldx #0
 	ldy #3
 	jsr SpriteErase
 
 	jmp game_loop
 
-;// Full death, start again
+; Full death, start again
 FullDeath
 	;jmp _main
     rts             ; Back to Encounter
@@ -328,10 +330,10 @@ FullDeath
 
 
 
-;// We need to make it fall
-;// Then blink
-;// Then check for life
-;// Ok, remove some lifes
+; We need to make it fall
+; Then blink
+; Then check for life
+; Ok, remove some lives
 MarioFallSequence
 	jsr BlinkTemporisation_128
 	ldx hero_position
@@ -347,56 +349,45 @@ MarioFallSequence
 
 
 
-;// Ok, mario managed to grip the hook !
-;// We award mario some points for the operation
+; Ok, mario managed to grip the hook !
+; We award mario some points for the operation
 MarioWinSequence 
 .(
-	;//
-	;// Move mario and the crate to the upper level
-	;//
-			jsr BlinkTemporisation_128
+	; Move mario and the crate to the upper level
+	jsr BlinkTemporisation_128
 
-	;// Erase all crane graphics
+	; Erase all crane graphics
 	ldx #__FirstCrane-__FirstSprite
 	ldy #__LastCrane-__FirstCrane
 	jsr SpriteErase
 
-	;// Erase previous mario position
+	; Erase previous mario position
 	lda #0
 	sta _SpriteRequestedState+__MarioJump-__FirstSprite
 
-	;// Draw upper crane with hook and mario
+	; Draw upper crane with hook and mario
 	lda #1
 	sta _SpriteRequestedState+__FirstCrane-__FirstSprite+2
 	sta _SpriteRequestedState+__FirstVictoryPose-__FirstSprite+0
 	sta _SpriteRequestedState+__FirstVictoryPose-__FirstSprite+1
 
-	;//
-	;// Remove one of the hooks
-	;// And redraw them
-	;//
+	; Remove one of the hooks And redraw them
 	dec FixationCount
 	jsr HandlePlateforms
 
 	jsr RefreshAllSprites
 
-	;//
-	;// Increment score
-	;//
+	; Increment score
 	ldx #20
 	jsr ScoreIncrementMulti
 
-
-	;//
-	;// Check if it was the last platform
-	;//
+	; Check if it was the last platform
 	lda FixationCount
 	bne not_last_platform
 	
 last_platform
-	;// Special case of where there are no more platform under kong
-	;// We need to make them blink, and only after fall down
-
+	; Special case of where there are no more platform under kong
+	; We need to make them blink, and only after fall down
 	lda #4
 	sta death_counter
 
@@ -412,7 +403,7 @@ loop
 	bne loop
 
 	jsr RefreshAllSprites
-	//jsr _kbdclick1
+    jsr Bleep
 	jsr BlinkTemporisation_128
 
 	dec	death_counter
@@ -441,9 +432,7 @@ loop
 	ldx #20
 	jsr ScoreIncrementMulti
 
-	; Small hearts !
-	; Because I am worth it
-
+	; Small hearts! Because I am worth it
 	lda #20
 	sta death_counter
 
@@ -458,7 +447,8 @@ hearts_blink
 	sta _SpriteRequestedState+__FirstHeart-__FirstSprite+1
 
 	jsr RefreshAllSprites
-	//jsr _kbdclick1
+    jsr Bleep
+
 	ldx #64
 	jsr BlinkTemporisation
 
@@ -620,11 +610,12 @@ _GetRand
 ScoreIncrementMulti
 .(
 	stx death_counter
-	//jsr _kbdclick2
+	jsr Bloop
 score_loop
 	jsr ScoreIncrement
 	jsr ScoreDisplay
-	//jsr _kbdclick1
+    jsr Bleep
+
 	ldx #32
 	jsr BlinkTemporisation
 	dec death_counter
@@ -937,8 +928,8 @@ skip_stick
 	cpy hero_position
 	beq no_movement
 	sty hero_position
-	;// Call the "click" routine
-	//jsr _kbdclick2
+	; Call the "click" routine
+	jsr Bloop
 no_movement
 
 	rts
@@ -1526,9 +1517,7 @@ _DisplaySingleSprite
 	lda _KongSpriteAdd_High,x
 	sta ph_src
 
-	;//
-	;// Sprite width and height
-	;//
+	; Sprite width and height
 	lda _KongSpriteWidth,x
 	sta tmp_width
 
