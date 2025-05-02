@@ -1254,25 +1254,25 @@ _KongSpriteScreenX
 _KongSpriteScreenY
 	; All 26 barels
 	; First floor (5)
-	.byt 200
-	.byt 198
-	.byt 196
-	.byt 192
-	.byt 190
+	.byt 200+3
+	.byt 198+4
+	.byt 196+5
+	.byt 192+7
+	.byt 190+7
 	; Second floor (6)
-	.byt 155
-	.byt 155
-	.byt 155
-	.byt 155
-	.byt 155
+	.byt 155+7
+	.byt 155+5
+	.byt 155+4
+	.byt 155+2
+	.byt 155+1
 	.byt 150
 	; Third floor (6)
 	.byt 109
-	.byt 102
-	.byt 102
-	.byt 102
-	.byt 102
-	.byt 102
+	.byt 102-2
+	.byt 102-3
+	.byt 102-4
+	.byt 102-4
+	.byt 102-5
 	; Left fall (3)
 	.byt 87
 	.byt 59
@@ -1287,10 +1287,10 @@ _KongSpriteScreenY
 	.byt 42
 	; Moving girders (5)
 	.byt 115
-	.byt 115
-	.byt 115
-	.byt 115
-	.byt 115
+	.byt 115+2
+	.byt 115+3
+	.byt 115+5
+	.byt 115+6
 	; Kong 1 (4)
 	.byt 2
 	.byt 12
@@ -1323,17 +1323,17 @@ _KongSpriteScreenY
 	.byt 17
 	; All 22 mario sprites
 	; First floor (5)
-	.byt 181+8+5
-	.byt 181+6+5
-	.byt 181+4+4
-	.byt 181+2+3
-	.byt 178+1
+	.byt 181+8+5+1
+	.byt 181+6+5+2
+	.byt 181+4+4+3
+	.byt 181+2+3+5
+	.byt 178+1+7
 	; Second floor (5)
-	.byt 144
-	.byt 144
-	.byt 144
-	.byt 144
-	.byt 144
+	.byt 144+6
+	.byt 144+5
+	.byt 144+4
+	.byt 144+2
+	.byt 144+1
 	; Lader (2)
 	.byt 127
 	.byt 90
@@ -1348,11 +1348,11 @@ _KongSpriteScreenY
 	; Mario gripped to hook
 	.byt 56
 	; Mario jumping First Floor (2)
-	.byt 169
-	.byt 169
+	.byt 169+5
+	.byt 169+5
 	; Mario jumping Second Floor (2)
-	.byt 126
-	.byt 126
+	.byt 126+5
+	.byt 126+3
 	; Crane stick (3 positions)
 	.byt 74
 	.byt 38
