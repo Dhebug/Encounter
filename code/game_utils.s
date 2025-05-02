@@ -2287,26 +2287,13 @@ _PlayMonkeyKing
 
     MEMCPY_JSR(_MemCpy_MoveBottomGraphics)      ; Preserve the bottom part of the image
 
-    ; Fix redefined graphics in the lower border
-    ldx #32
+    ; Erase graphics in the lower border to avoid glitches during loading
+    ldx #40*3
+    lda #0
 loop_1
-    txa
-    sta $bb80+40*25-32,x
-    sta $bb80+40*27-32,x
-    inx
-    cpx #40+32
-    bne loop_1
-
-loop_2
-    txa
-    sta $bb80+40*26-32-40,x
-    inx
-    cpx #40+32+40
-    bne loop_2
-
-    lda #9+128
-    sta $bb80+40*27       ; Alternate charset
-
+    sta $bb80+40*25,x
+    dex
+    bpl loop_1
 
     ; LOADER_MONKEY_KING - About 4721 bytes
     ldx #LOADER_MONKEY_KING

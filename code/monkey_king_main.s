@@ -78,6 +78,10 @@ play_sound      jmp $1234        ; +6
 
 
 real_start    
+    ; Initialize charset with the background image
+    jsr _RefineCharacters
+    jsr _DisplayCharsetMatrix
+
 	; Initialise the random generator values
 	lda #23
 	sta rand_low
