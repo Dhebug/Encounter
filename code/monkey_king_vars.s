@@ -67,7 +67,6 @@ TableCollisionDst
 FixationCount			.byt 1	;4		; Number of fix that keep the platform attached
 _GameCraneCurrentTick	.byt 1
 best_score				.dsb 2
-HexDigits				.byt "0123456789"
 _GameCraneDelayTick		.byt 64
 _GameGirderDelayTick	.byt 200		; Speed of movement
 _GameDelayTick			.byt 255
@@ -100,6 +99,70 @@ KeyboardRouter_AddrHigh
 	.byt >HeroMoveDown
 	.byt >HeroMoveUp
 	.byt >HeroMoveSpace
+
+
+
+SevenDigitPatterns
+    ; 0
+    .byt %110001
+    .byt %101110
+    .byt %111111
+    .byt %101110
+    .byt %110001
+    ; 1
+    .byt %111111
+    .byt %111110
+    .byt %111111
+    .byt %111110
+    .byt %111111
+    ; 2
+    .byt %110001
+    .byt %111110
+    .byt %110001
+    .byt %101111
+    .byt %110001
+    ; 3
+    .byt %110001
+    .byt %111110
+    .byt %110001
+    .byt %111110
+    .byt %110001
+    ; 4
+    .byt %111111
+    .byt %101110
+    .byt %110001
+    .byt %111110
+    .byt %111111
+    ; 5
+    .byt %110001
+    .byt %101111
+    .byt %110001
+    .byt %111110
+    .byt %110001
+    ; 6
+    .byt %110001
+    .byt %101111
+    .byt %110001
+    .byt %101110
+    .byt %110001
+    ; 7
+    .byt %110001
+    .byt %111110
+    .byt %111101
+    .byt %111110
+    .byt %111101
+    ; 8
+    .byt %110001
+    .byt %101110
+    .byt %110001
+    .byt %101110
+    .byt %110001
+    ; 9
+    .byt %110001
+    .byt %101110
+    .byt %110001
+    .byt %111110
+    .byt %110001
 
 
 LifeDisplayTable

@@ -649,6 +649,7 @@ score_loop
 	jsr ScoreIncrement
 	jsr ScoreDisplay
     jsr Bleep
+    jsr _RefineCharacters
 
 	ldx #32
 	jsr BlinkTemporisation
@@ -702,63 +703,70 @@ skip_update_best
 
 
 ScoreDisplay
-	;//jmp ScoreDisplay
-.(
-	;
-	; Push two bytes on the stack to avoid using index registers later in the loop.
-	;
-	lda best_score+0
-	pha
-	lda best_score+1
-	pha
-	lda #38
-	pha
-
+    ldx #0
 
 	lda current_score+0
-	pha
+	lsr
+	lsr
+	lsr
+	lsr
+    jsr PrintScoreDigit
+
+	lda current_score+0
+    and #15
+    jsr PrintScoreDigit
+
 	lda current_score+1
-	pha
-	lda #27
-	pha
-
-	; two scores to display
-	lda #2
-	lda #2
-	sta b_tmp1
-loop_scores
-	lda #2
-	sta b_tmp2
-	pla
-	tay
-loop_show_digit
-	pla
-	pha	
-	and #15
-	tax
-	lda HexDigits,x
-	sta $bb80+40*26,y
-	sta $bb80+40*27,y
-	dey
-
-	pla
 	lsr
 	lsr
 	lsr
 	lsr
-	tax
-	lda HexDigits,x
-	sta $bb80+40*26,y
-	sta $bb80+40*27,y
-	dey
-	dec b_tmp2
-	bne loop_show_digit
+    jsr PrintScoreDigit
 
-	dec b_tmp1
-	bne loop_scores
+	lda current_score+1
+    and #15
+    ; Fall-through
+PrintScoreDigit
+    sta b_tmp1
+    asl           ; x2
+    asl           ; x4
+    clc
+    adc b_tmp1    ; x5
 
-	rts
-.)
+    clc
+    adc #<SevenDigitPatterns
+    sta ptr_src+0
+    lda #0
+    adc #>SevenDigitPatterns
+    sta ptr_src+1
+
+    ldy #0
+    lda (ptr_src),y
+    sta _BottomGraphics+35+40*12,x
+
+    iny
+    lda (ptr_src),y
+    sta _BottomGraphics+35+40*13,x
+    sta _BottomGraphics+35+40*14,x
+    sta _BottomGraphics+35+40*15,x
+
+    iny
+    lda (ptr_src),y
+    sta _BottomGraphics+35+40*16,x
+
+    iny
+    lda (ptr_src),y
+    sta _BottomGraphics+35+40*17,x
+    sta _BottomGraphics+35+40*18,x
+    sta _BottomGraphics+35+40*19,x
+
+    iny
+    lda (ptr_src),y
+    sta _BottomGraphics+35+40*20,x
+
+    inx
+    rts
+
 
 
 
