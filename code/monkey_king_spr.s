@@ -396,18 +396,49 @@ _KongSprite_Plaform_Falling3
 ; =======================================
 ;		Hooks (4 of them)
 ; =======================================
-_KongSprite_Hook
+_KongSprite_Hook_Left
+	; 1x28
+	.byt %000000,%011000
+	.byt %000000,%011000
+	.byt %000000,%110000
+	.byt %000000,%110000
+	.byt %000000,%110000
+	.byt %000000,%110000
+	.byt %000001,%100000
+	.byt %000001,%100000
+	.byt %000001,%100000
+	.byt %000001,%100000
+	.byt %000011,%000000
+	.byt %000011,%000000
+	.byt %000011,%000000
+	.byt %000011,%000000
+	.byt %000110,%000000
+	.byt %000110,%000000
+	.byt %000110,%000000
+	.byt %000110,%000000
+	.byt %001111,%000000
+	.byt %001101,%000000
+	.byt %001011,%000000
+	.byt %001011,%000000
+	.byt %001011,%000000
+	.byt %001011,%000000
+	.byt %001110,%000000
+	.byt %001110,%000000
+	.byt %111100,%000000
+	.byt %011000,%000000
+
+_KongSprite_Hook_CenterLeft
 	; 1x26
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
-	.byt %000110
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
+	.byt %000011
 	.byt %000110
 	.byt %000110
 	.byt %000110
@@ -425,6 +456,65 @@ _KongSprite_Hook
 	.byt %111100
 	.byt %011000
 
+_KongSprite_Hook_CenterRight
+	; 1x26
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %001100
+	.byt %001100
+	.byt %001100
+	.byt %001100
+	.byt %001100
+	.byt %000110
+	.byt %000110
+	.byt %000110
+	.byt %000110
+	.byt %000110
+	.byt %001111
+	.byt %001101
+	.byt %001011
+	.byt %001011
+	.byt %001011
+	.byt %001011
+	.byt %001110
+	.byt %001110
+	.byt %111100
+	.byt %011000
+
+_KongSprite_Hook_Right
+	; 1x28
+	.byt %110000
+	.byt %110000
+	.byt %110000
+	.byt %110000
+	.byt %110000
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %011000
+	.byt %011100
+	.byt %001100
+	.byt %001100
+	.byt %001100
+	.byt %001100
+	.byt %000110
+	.byt %000110
+	.byt %000110
+	.byt %000110
+	.byt %001111
+	.byt %001101
+	.byt %001011
+	.byt %001011
+	.byt %001011
+	.byt %001011
+	.byt %001110
+	.byt %001110
+	.byt %111100
+	.byt %011000
 
 ; =======================================
 ;		Mario sprites (4 of them)
@@ -913,10 +1003,10 @@ __FirstPlatformFalling
 	.byt <_KongSprite_Plaform_Falling3
 	; Hooks that attach platforms (4)
 __FirstHook
-	.byt <_KongSprite_Hook
-	.byt <_KongSprite_Hook
-	.byt <_KongSprite_Hook
-	.byt <_KongSprite_Hook
+	.byt <_KongSprite_Hook_Left
+	.byt <_KongSprite_Hook_CenterLeft
+	.byt <_KongSprite_Hook_CenterRight
+	.byt <_KongSprite_Hook_Right
 __LastHook
 	; All 22 mario sprites
 __FirstMario
@@ -1060,10 +1150,10 @@ _KongSpriteAdd_High
 	.byt >_KongSprite_Plaform_Falling2
 	.byt >_KongSprite_Plaform_Falling3
 	; Hooks that attach platforms (4)
-	.byt >_KongSprite_Hook
-	.byt >_KongSprite_Hook
-	.byt >_KongSprite_Hook
-	.byt >_KongSprite_Hook
+	.byt >_KongSprite_Hook_Left
+	.byt >_KongSprite_Hook_CenterLeft
+	.byt >_KongSprite_Hook_CenterRight
+	.byt >_KongSprite_Hook_Right
 	; All 22 mario sprites
 	; First floor (5)
 	.byt >_KongSprite_Mario_Right_1
@@ -1317,10 +1407,10 @@ _KongSpriteScreenY
 	.byt 44
 	.byt 44
 	; Hooks that attach platforms (4)
+	.byt 15
 	.byt 17
 	.byt 17
-	.byt 17
-	.byt 17
+	.byt 15
 	; All 22 mario sprites
 	; First floor (5)
 	.byt 181+8+5+1
@@ -1449,7 +1539,7 @@ _KongSpriteWidth
 	.byt 3
 	.byt 6
 	; Hooks that attach platforms (4)
-	.byt 1
+	.byt 2
 	.byt 1
 	.byt 1
 	.byt 1
@@ -1578,10 +1668,10 @@ _KongSpriteHeight
 	.byt 34
 	.byt 12
 	; Hooks that attach platforms (4)
+	.byt 28
 	.byt 26
 	.byt 26
-	.byt 26
-	.byt 26
+	.byt 28
 	; All 22 mario sprites
 	; First floor (5)
 	.byt 19
