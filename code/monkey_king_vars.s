@@ -198,3 +198,5 @@ _KongFlagThrow			.byt 0			; Indicate if a throw movement is started
 _GameCurrentTick		.byt 0
 
 _BssEnd_
+	.dsb 256-(*&255)    ; This will be overwriten
+_BssEndClear_

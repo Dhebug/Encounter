@@ -19,7 +19,6 @@
 
 	*= $1
 
-; Some two byte values
 _zp_start_
 
 ptr_src         .dsb 2
@@ -27,22 +26,12 @@ ptr_dst         .dsb 2
 
 current_score	.dsb 2
 
-
-; Some one byte temporaries
 rand_low		.dsb 1		; Random number generator, low part
 rand_high		.dsb 1		; Random number generator, high part
-
-meta_bloc_index	.dsb 1
-sub_bloc_index	.dsb 1
 
 tmp_save_sprite	.dsb 1
 tmp_width		.dsb 1
 tmp_height		.dsb 1
-
-paint_width		.dsb 1
-paint_height	.dsb 1
-
-save_y			.dsb 1
 
 b_tmp1			.dsb 1
 b_tmp2			.dsb 1
@@ -54,14 +43,13 @@ death_counter	.dsb 1
 hero_position	.dsb 1
 last_key_press	.dsb 1
 
-
 zp_x            .dsb 1
 zp_y            .dsb 1
 
-CraneStatus				.byt 0	; 01	(OFF or ON)
-CranePosition			.byt 0	; 012
-HookPosition			.byt 0	; 01234
-_KongPosition			.byt 0			; 0 1 2 (3 when crashed ???)
+CraneStatus		.dsb 1	    ; 01	(OFF or ON)
+CranePosition	.dsb 1	    ; 012
+HookPosition	.dsb 1	    ; 01234
+_KongPosition	.dsb 1		; 0 1 2 (3 when crashed ???)
 
 _zp_end_
 
@@ -81,141 +69,18 @@ real_start
     ; Initialize charset with the background image
     jsr _RefineCharacters
     jsr _DisplayCharsetMatrix
+    jsr _ClearMemory
+    jsr _GenerateScanlineTable
+    jsr _GameInits
 
-	; Initialise the random generator values
-	lda #23
-	sta rand_low
-	lda #35
-	sta rand_high		
-
-	;
-	; Reconfigurate life character 91 92 93 94
-.(
-	ldx #8*4
-loop
-	lda _SpriteMario_Life-1,x
-	sta $9800+91*8-1,x
-	dex
-	bne loop
-.)
-
-	; Clear the zero page addresses
-	lda #0
-ZpClear
-.(
-	ldx #_zp_end_-_zp_start_
-loop
-	sta _zp_start_-1,x
-	dex
-	bne loop
-.)
-
-	; Clear the BSS section
-BssClear
-.(
-	tay
-
-	ldx #<_BssStart_
-	stx ptr_dst+0
-	ldx #>_BssStart_
-	stx ptr_dst+1
-
-	ldx #5	;// 5*256
-loop_outer
-	tay
-loop_inner
-	sta (ptr_dst),y
-	dey
-	bne loop_inner
-	inc ptr_dst+1
-	dex
-	bne loop_outer
-
-    ; Generate the scanline table
-    lda #<$a000
-    sta _gScanlineTableLow
-    lda #>$a000
-    sta _gScanlineTableHigh
-
-    ldx #1
-loop_hires
-    clc
-    lda _gScanlineTableLow-1,x
-    adc #40
-    sta _gScanlineTableLow,x
-
-    lda _gScanlineTableHigh-1,x
-    adc #0
-    sta _gScanlineTableHigh,x
-
-    inx 
-    cpx #200
-    bne loop_hires  
-
-    ; Point to the "hires buffer"
-    lda #<_BottomGraphics
-    sta _gScanlineTableLow,x
-    lda #>_BottomGraphics
-    sta _gScanlineTableHigh,x
-    inx
-
-loop_text
-    clc
-    lda _gScanlineTableLow-1,x
-    adc #40
-    sta _gScanlineTableLow,x
-
-    lda _gScanlineTableHigh-1,x
-    adc #0
-    sta _gScanlineTableHigh,x
-
-    inx 
-    cpx #224
-    bne loop_text
-
-
-	;
-	; Set some game parameters
-	;
-    lda #0
-	sta flag_mario_end
-	sta _GameCurrentTick
-	sta CraneStatus
-	sta CranePosition
-	sta HookPosition
-
-	lda #__FirstMario-__FirstSprite 
-	sta hero_position
-
-	lda #3
-	sta live_counter
-
-	lda #4
-	sta FixationCount
-
-
-	;
-	; Display background graphics
-	;
-	;jsr _DisplayBackground
-.)
-
-
-;#define ATTRIBUTE_TEXT    24
-;#define ATTRIBUTE_HIRES   28
-
-    ;lda ATTRIBUTE_HIRES
-    ;sta $bfdf
-
-
-#if 0
-panic    
-    lda #16+1
-    sta $bb80+40*27
-    lda #16+3
-    sta $bb80+40*27
-    jmp panic
-    rts
+#ifndef GAME_MODE
+    jsr ScoreDisplay
+    jsr RefreshAllSprites
+    sei
+    ;BREAKPOINT
+    jsr _RefineCharacters
+    BREAKPOINT
+    cli
 #endif
 
 	;
@@ -223,46 +88,11 @@ panic
 	;
 game_loop
 	jsr ScoreDisplay
+    jsr _DisplayLives
 
-
-.(
-	;
-	; Display the remaining lives of the hero
-	;
-	lda live_counter
-	asl
-	asl
-	tax
-
-	ldy #9+2+2
-
-	lda #3
-	sta b_tmp1
-loop_draw_lives
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*26+0,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*27+0,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*26+1,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*27+1,y
-	dey
-	dey
-	dec b_tmp1
-	bne loop_draw_lives
-.)
-
-#ifdef GAME_MODE
 	jsr MoveHero
 
-	;
 	; Move items
-	;
 	lda _GameCurrentTick
 	bne end_update_items
 
@@ -275,18 +105,14 @@ loop_draw_lives
 		jsr HandlePlateforms
 		jsr MoveBarels
 		jsr MoveKong
-
 end_update_items
 	dec _GameCurrentTick
 
 	jsr MoveGirders
 	jsr HandleCrane
-#endif
 	jsr RefreshAllSprites
 
-#ifdef GAME_MODE
 	jsr HandleCollisions
-#endif    
 
 	ldx flag_mario_end
 	bne MarioEndSequence
@@ -510,7 +336,7 @@ not_last_platform
 
 	jsr RefreshAllSprites
 
-			jsr BlinkTemporisation_128
+	jsr BlinkTemporisation_128
 
 	;
 	; Move down to lower level
@@ -531,7 +357,7 @@ not_last_platform
 
 	jsr RefreshAllSprites
 
-			jsr BlinkTemporisation_128
+	jsr BlinkTemporisation_128
 
 	lda FixationCount
 	bne skip
@@ -546,7 +372,7 @@ skip
 
 BlinkTemporisation_128
 	ldx #128
-;// Call with X containing the delay
+; Call with X containing the delay
 BlinkTemporisation
 .(
 outer_loop
@@ -888,9 +714,6 @@ MoveHero
 	lda mario_jmp_count
 	beq handle_keyboard
 
-;//zlob
-;//	jmp zlob
-
 	dec mario_jmp_count
 	bne end_keyboard
 
@@ -928,7 +751,7 @@ check_end
 handle_keyboard
 	;
 	; Handle keyboard
-	;  y contains the position of hero during all code, do not alterate
+	;  y contains the position of hero during all code, do not alter
     jsr read_keyboard
 	;ldx $208
 	cpx #0
@@ -1911,6 +1734,148 @@ loop_2
     sta $bb80+40*27       ; Alternate charset
     rts
 .)
+
+
+_ClearMemory
+.(
+	; Clear the zero page addresses
+	lda #0
+	ldx #_zp_end_-_zp_start_
+loop_clear_zp
+	sta _zp_start_-1,x
+	dex
+	bne loop_clear_zp
+
+    ; Clear the BSS section
+	tay
+
+	ldx #(_BssEndClear_-_BssStart_+255)/256
+loop_outer
+	tay
+loop_inner
+_auto_patch = *+1
+	sta _BssStart_,y
+	dey
+	bne loop_inner
+	inc _auto_patch+1
+	dex
+	bne loop_outer
+
+    rts
+.)
+
+
+_GenerateScanlineTable
+.(
+    ; Generate the scanline table
+    lda #<$a000
+    sta _gScanlineTableLow
+    lda #>$a000
+    sta _gScanlineTableHigh
+
+    ldx #1
+loop_hires
+    clc
+    lda _gScanlineTableLow-1,x
+    adc #40
+    sta _gScanlineTableLow,x
+
+    lda _gScanlineTableHigh-1,x
+    adc #0
+    sta _gScanlineTableHigh,x
+
+    inx 
+    cpx #200
+    bne loop_hires  
+
+    ; Point to the "hires buffer"
+    lda #<_BottomGraphics
+    sta _gScanlineTableLow,x
+    lda #>_BottomGraphics
+    sta _gScanlineTableHigh,x
+    inx
+
+loop_text
+    clc
+    lda _gScanlineTableLow-1,x
+    adc #40
+    sta _gScanlineTableLow,x
+
+    lda _gScanlineTableHigh-1,x
+    adc #0
+    sta _gScanlineTableHigh,x
+
+    inx 
+    cpx #224
+    bne loop_text
+    rts
+.)
+
+
+_GameInits
+.(
+	; Initialise the random generator values
+	lda #23
+	sta rand_low
+	lda #35
+	sta rand_high		
+
+	;
+	; Set some game parameters
+	;
+    lda #0
+	sta flag_mario_end
+	sta _GameCurrentTick
+	sta CraneStatus
+	sta CranePosition
+	sta HookPosition
+
+	lda #__FirstMario-__FirstSprite 
+	sta hero_position
+
+	lda #3
+	sta live_counter
+
+	lda #4
+	sta FixationCount
+    rts
+.)
+
+
+; Display the remaining lives of the hero
+_DisplayLives
+.(
+    rts
+
+	lda live_counter
+	asl
+	asl
+	tax
+
+	ldy #9+2+2
+
+	lda #3
+	sta b_tmp1
+loop_draw_lives
+	lda LifeDisplayTable,x
+	inx
+	sta $bb80+40*26+0,y
+	lda LifeDisplayTable,x
+	inx
+	sta $bb80+40*27+0,y
+	lda LifeDisplayTable,x
+	inx
+	sta $bb80+40*26+1,y
+	lda LifeDisplayTable,x
+	inx
+	sta $bb80+40*27+1,y
+	dey
+	dey
+	dec b_tmp1
+	bne loop_draw_lives
+    rts
+.)
+
 
 
 Bleep
