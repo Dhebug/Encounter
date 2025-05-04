@@ -5,8 +5,8 @@
 ;
 ; Game sprites defines
 ;
-#define BAREL_BASE_MAIN		0
-#define BAREL_COUNT_MAIN	17
+#define BARREL_BASE_MAIN	0
+#define BARREL_COUNT_MAIN	17
 
 #define GIRDER_BASE_MAIN	FirstGirder-_FirstSprite
 #define GIRDER_COUNT_MAIN	5
@@ -37,7 +37,7 @@ b_tmp1			.dsb 1
 b_tmp2			.dsb 1
 
 live_counter	.dsb 1		; Number of lives remaining
-flag_mario_end	.dsb 1		; 0=playing 1=mario collide 2=mario falled 3=mario win
+flag_mario_end	.dsb 1		; 0=playing 1=mario collide 2=mario fell 3=mario win
 mario_jmp_count	.dsb 1
 death_counter	.dsb 1
 hero_position	.dsb 1
@@ -111,8 +111,8 @@ game_loop
 		; Call the "click" routine
         jsr Bleep
 
-		jsr HandlePlateforms
-		jsr MoveBarels
+		jsr HandlePlatforms
+		jsr MoveBarrels
 		jsr MoveKong
 end_update_items
 	dec _GameCurrentTick
@@ -149,7 +149,7 @@ MarioEndSequence
 
 	; 0=playing 
 	; 1=mario collide
-	; 2=mario falled 
+	; 2=mario fell
 	; 3=mario win
 	cpx #1
 	beq MarioCollideSequence 
@@ -164,7 +164,7 @@ MarioCollideSequence
 	jsr Bloop
 
 blink_loop
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 	ldx hero_position
 	lda _SpriteRequestedState,x
 	eor #1
@@ -204,7 +204,7 @@ FullDeath
 ; Then check for life
 ; Ok, remove some lives
 MarioFallSequence
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 	ldx hero_position
 	lda #0
 	sta _SpriteRequestedState,x
@@ -223,7 +223,7 @@ MarioFallSequence
 MarioWinSequence 
 .(
 	; Move mario and the crate to the upper level
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 
 	; Erase all crane graphics
 	ldx #FirstCrane-_FirstSprite
@@ -240,7 +240,7 @@ MarioWinSequence
 
 	; Remove one of the hooks And redraw them
 	dec FixationCount
-	jsr HandlePlateforms
+	jsr HandlePlatforms
 
 	jsr RefreshAllSprites
 
@@ -271,7 +271,7 @@ loop
 
 	jsr RefreshAllSprites
     jsr Bleep
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 
 	dec	death_counter
 	bne platform_blink 
@@ -317,7 +317,7 @@ hearts_blink
     jsr Bleep
 
 	ldx #64
-	jsr BlinkTemporisation
+	jsr BlinkTemporization
 
 	lda death_counter
 	bne hearts_blink 
@@ -343,7 +343,7 @@ not_last_platform
 
 	jsr RefreshAllSprites
 
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 
 	;
 	; Move down to lower level
@@ -364,7 +364,7 @@ not_last_platform
 
 	jsr RefreshAllSprites
 
-	jsr BlinkTemporisation_128
+	jsr BlinkTemporization_128
 
 	lda FixationCount
 	bne skip
@@ -377,10 +377,10 @@ skip
 
 
 
-BlinkTemporisation_128
+BlinkTemporization_128
 	ldx #128
 ; Call with X containing the delay
-BlinkTemporisation
+BlinkTemporization
 .(
 outer_loop
 	ldy #0
@@ -485,7 +485,7 @@ score_loop
     jsr _RefineCharacters
 
 	ldx #32
-	jsr BlinkTemporisation
+	jsr BlinkTemporization
 	dec death_counter
 	bne score_loop
 	rts
@@ -857,7 +857,7 @@ check_second_floor
 	; Test collision with first floor barrels
 	tya
 	sec
-	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarel-_FirstSprite))
+	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarrel-_FirstSprite))
 	tax
 	lda _SpriteRequestedState,x
 	bne collided
@@ -872,7 +872,7 @@ check_first_floor
 	; Test collision with first floor barrels
 	tya
 	sec
-	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarel-_FirstSprite))
+	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarrel-_FirstSprite))
 	tax
 	lda _SpriteRequestedState-1,x
 	bne collided
@@ -898,7 +898,7 @@ HeroMoveRight
 	bne check_third_floor
 
 	ldy #MarioJump-_FirstSprite+1
-	; 0=playing 1=mario collide 2=mario falled 3=mario win
+	; 0=playing 1=mario collide 2=mario fell 3=mario win
 	lda #2
 	sta flag_mario_end
 	rts
@@ -922,7 +922,7 @@ check_second_floor
 	; Test collision with first floor barrels
 	tya
 	sec
-	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarel-_FirstSprite))
+	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarrel-_FirstSprite))
 	tax
 	lda _SpriteRequestedState-1,x
 	bne collided
@@ -937,7 +937,7 @@ check_first_floor
 	; Test collision with first floor barrels
 	tya
 	sec
-	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarel-_FirstSprite))
+	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarrel-_FirstSprite))
 	tax
 	lda _SpriteRequestedState,x
 	bne collided
@@ -1053,15 +1053,15 @@ validate_jump
 ; X=counter
 ; Y=start position
 ScrollLeftTable
-	; Memorise the value that will become ejected
-	lda _SpriteRequestedState+BAREL_BASE_MAIN,y
+	; Memorize the value that will become ejected
+	lda _SpriteRequestedState+BARREL_BASE_MAIN,y
 	pha
 .(
 loop
-	lda _SpriteRequestedState+BAREL_BASE_MAIN+1,y
-	sta _SpriteRequestedState+BAREL_BASE_MAIN,y
+	lda _SpriteRequestedState+BARREL_BASE_MAIN+1,y
+	sta _SpriteRequestedState+BARREL_BASE_MAIN,y
 	lda #0
-	sta _SpriteRequestedState+BAREL_BASE_MAIN+1,y
+	sta _SpriteRequestedState+BARREL_BASE_MAIN+1,y
 	iny
 	dex
 	bne loop
@@ -1074,11 +1074,9 @@ loop
 
 
 
-MoveBarels
+MoveBarrels
 .(
-	;
 	; First, check that we don't collide the hero
-	;
 .(
 	lda #6
 	sta b_tmp1
@@ -1110,37 +1108,33 @@ skip
 	bne outer_loop
 .)
 
-	;
-	; Scroll the first serie
-	;
+	; Scroll the first series
 	ldy #0
-	ldx #LastBarel-FirstBarel-1
+	ldx #LastBarrel-FirstBarrel-1
 	jsr ScrollLeftTable
 	beq	skip_increase_score
 
 	jsr ScoreIncrement
 
 skip_increase_score
-	;
 	; Scroll the three top ones
-	;
-	ldy #LastBarel+(3*0)-_FirstSprite
+	ldy #LastBarrel+(3*0)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarelInsertionLeft-_FirstSprite
-	sta _SpriteRequestedState+BarelInsertionLeft-_FirstSprite
+	ora _SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
+	sta _SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
 
-	ldy #LastBarel+(3*1)-_FirstSprite
+	ldy #LastBarrel+(3*1)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarelInsertionMiddle-_FirstSprite
-	sta _SpriteRequestedState+BarelInsertionMiddle-_FirstSprite
+	ora _SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
+	sta _SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
 
-	ldy #LastBarel+(3*2)-_FirstSprite
+	ldy #LastBarrel+(3*2)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarelInsertionRight-_FirstSprite
-	sta _SpriteRequestedState+BarelInsertionRight-_FirstSprite
+	ora _SpriteRequestedState+BarrelInsertionRight-_FirstSprite
+	sta _SpriteRequestedState+BarrelInsertionRight-_FirstSprite
 
 	rts
 .)
@@ -1149,7 +1143,7 @@ skip_increase_score
 
 
 
-HandlePlateforms
+HandlePlatforms
 .(
 	; Start by erasing all the platform data
 	ldx #FirstPlatform-_FirstSprite
@@ -1242,13 +1236,13 @@ MoveKong
 	sta _KongFlagThrow
 
 	lda #1
-	ldx #BarelStartLeft-_FirstSprite
+	ldx #BarrelStartLeft-_FirstSprite
 	ldy _KongPosition
 	beq throw_it
-	ldx #BarelStartMiddle-_FirstSprite
+	ldx #BarrelStartMiddle-_FirstSprite
 	dey
 	beq throw_it
-	ldx #BarelStartRight-_FirstSprite
+	ldx #BarrelStartRight-_FirstSprite
 throw_it
 	sta _SpriteRequestedState,x
 	jmp end
@@ -1260,7 +1254,7 @@ handle_movement
 	ldx _KongPosition
 	lda rand_low
 	cmp #40
-	bcc throw_barel
+	bcc throw_barrel
 	cmp #140
 	bcc left
 	cmp #220
@@ -1272,7 +1266,7 @@ right
 	inc _KongPosition
 	bcc end
 
-throw_barel
+throw_barrel
 	lda #1
 	sta _KongFlagThrow
 	bcc end
@@ -1331,9 +1325,7 @@ loop
 	cmp _SpriteDisplayState,x
 	beq skip_sprite
 
-	;
 	; Change sprite status
-	;
 	sta _SpriteDisplayState,x
 
 	stx tmp_save_sprite
@@ -1813,7 +1805,7 @@ loop_text
 
 _GameInits
 .(
-	; Initialise the random generator values
+	; Initialize the random generator values
 	lda #23
 	sta rand_low
 	lda #35

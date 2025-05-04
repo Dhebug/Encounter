@@ -42,17 +42,17 @@ _SpriteMario_Life
 TableCollisionCount
 	.byt 5	; first floor
 	.byt 5	; second floor
-	.byt 1	; barel comming from the right on third floor
-	.byt 1	; barel from the top left
-	.byt 1	; barel from the top mid
-	.byt 1	; barel from the top right
+	.byt 1	; barrel coming from the right on third floor
+	.byt 1	; barrel from the top left
+	.byt 1	; barrel from the top mid
+	.byt 1	; barrel from the top right
 TableCollisionSrc
-	.byt FirstBarel-_FirstSprite
-	.byt SecondFloorBarel-_FirstSprite
-	.byt BarelInsertionLeft-_FirstSprite
-	.byt BarelCollideFallLeft-_FirstSprite
-	.byt BarelCollideFallMiddle-_FirstSprite
-	.byt BarelCollideFallRight-_FirstSprite
+	.byt FirstBarrel-_FirstSprite
+	.byt SecondFloorBarrel-_FirstSprite
+	.byt BarrelInsertionLeft-_FirstSprite
+	.byt BarrelCollideFallLeft-_FirstSprite
+	.byt BarrelCollideFallMiddle-_FirstSprite
+	.byt BarrelCollideFallRight-_FirstSprite
 TableCollisionDst
 	.byt FirstFloorMario-_FirstSprite
 	.byt SecondFloorMario-_FirstSprite

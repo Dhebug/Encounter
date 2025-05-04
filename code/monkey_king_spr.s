@@ -8,9 +8,9 @@
 
 _StartSpriteGraphics
 ; =======================================
-;			All 26 barels
+;			All 26 barrels
 ; =======================================
-KongSprite_Barel_FallDiagonal_1    ; 2x11
+KongSprite_Barrel_FallDiagonal_1    ; 2x11
 	.byt %000110,%000000
 	.byt %011011,%110000
 	.byt %011010,%011000
@@ -23,7 +23,7 @@ KongSprite_Barel_FallDiagonal_1    ; 2x11
 	.byt %001111,%101100
 	.byt %000111,%111000
 
-KongSprite_Barel_FallDiagonal_2   ; 2x10
+KongSprite_Barrel_FallDiagonal_2   ; 2x10
 	.byt %000111,%111000
 	.byt %001100,%110100
 	.byt %011000,%111010
@@ -35,7 +35,7 @@ KongSprite_Barel_FallDiagonal_2   ; 2x10
 	.byt %011111,%111000
 	.byt %001111,%110000
 
-KongSprite_Barel_FallStraight    ; 2x9
+KongSprite_Barrel_FallStraight    ; 2x9
 	.byt %001111,%111000
 	.byt %010001,%000110
 	.byt %111111,%111101
@@ -46,7 +46,7 @@ KongSprite_Barel_FallStraight    ; 2x9
 	.byt %111111,%111111
 	.byt %011111,%111110
 
-KongSprite_Barel_BottomLeft   ; 2x10
+KongSprite_Barrel_BottomLeft   ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %010111,%111000
@@ -58,7 +58,7 @@ KongSprite_Barel_BottomLeft   ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barel_BottomRight  ; 2x10
+KongSprite_Barrel_BottomRight  ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %011111,%101000
@@ -70,7 +70,7 @@ KongSprite_Barel_BottomRight  ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barel_TopRight   ; 2x10
+KongSprite_Barrel_TopRight   ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010111,%001000
@@ -82,7 +82,7 @@ KongSprite_Barel_TopRight   ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 
-KongSprite_Barel_TopLeft   ; 2x10
+KongSprite_Barrel_TopLeft   ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010011,%101000
@@ -94,7 +94,7 @@ KongSprite_Barel_TopLeft   ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 	
-KongSprite_Barel_Bottom    ; 2x10
+KongSprite_Barrel_Bottom    ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %011111,%111000
@@ -106,7 +106,7 @@ KongSprite_Barel_Bottom    ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barel_Top       ; 2x10
+KongSprite_Barrel_Top       ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010111,%101000
@@ -118,7 +118,7 @@ KongSprite_Barel_Top       ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 
-KongSprite_Barel_Left      ; 2x10
+KongSprite_Barrel_Left      ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%110000
 	.byt %010111,%011000
@@ -130,7 +130,7 @@ KongSprite_Barel_Left      ; 2x10
 	.byt %001000,%110000
 	.byt %000111,%100000
 
-KongSprite_Barel_Right     ; 2x10
+KongSprite_Barrel_Right     ; 2x10
 	.byt %000111,%100000
 	.byt %001100,%010000
 	.byt %011111,%101000
@@ -206,7 +206,7 @@ KongSprite_Kong_Body   ; 3x25
 	.byt %101010,%010010,%010101
 	.byt %111111,%110011,%111111
 
-KongSprite_Kong_Barel   ; 3x13
+KongSprite_Kong_Barrel   ; 3x13
 	.byt %000001,%111111,%100000
 	.byt %000011,%000000,%010000
 	.byt %000110,%101010,%101000
@@ -234,7 +234,7 @@ KongSprite_Kong_LeftHand   ; 2x11
 	.byt %110010,%100000
 	.byt %011111,%000000
 
-KongSprite_Kong_Righthand   ; 2x11
+KongSprite_Kong_RightHand   ; 2x11
 	.byt %000000,%010000
 	.byt %000000,%011000
 	.byt %000000,%011100
