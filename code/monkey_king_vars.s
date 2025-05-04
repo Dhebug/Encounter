@@ -47,19 +47,19 @@ TableCollisionCount
 	.byt 1	; barel from the top mid
 	.byt 1	; barel from the top right
 TableCollisionSrc
-	.byt __FirstBarel-__FirstSprite
-	.byt __SecondFloorBarel-__FirstSprite
-	.byt __BarelInsertionLeft-__FirstSprite
-	.byt __BarelCollideFallLeft-__FirstSprite
-	.byt __BarelCollideFallMiddle-__FirstSprite
-	.byt __BarelCollideFallRight-__FirstSprite
+	.byt FirstBarel-_FirstSprite
+	.byt SecondFloorBarel-_FirstSprite
+	.byt BarelInsertionLeft-_FirstSprite
+	.byt BarelCollideFallLeft-_FirstSprite
+	.byt BarelCollideFallMiddle-_FirstSprite
+	.byt BarelCollideFallRight-_FirstSprite
 TableCollisionDst
-	.byt __FirstFloorMario-__FirstSprite
-	.byt __SecondFloorMario-__FirstSprite
-	.byt __MarioLaderCollide-__FirstSprite
-	.byt __ThirdFloorMario-__FirstSprite
-	.byt __ThirdFloorMario+1-__FirstSprite
-	.byt __ThirdFloorMario+2-__FirstSprite
+	.byt FirstFloorMario-_FirstSprite
+	.byt SecondFloorMario-_FirstSprite
+	.byt MarioLaderCollide-_FirstSprite
+	.byt ThirdFloorMario-_FirstSprite
+	.byt ThirdFloorMario+1-_FirstSprite
+	.byt ThirdFloorMario+2-_FirstSprite
 
 
 
