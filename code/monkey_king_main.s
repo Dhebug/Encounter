@@ -12,6 +12,8 @@
 #define GIRDER_BASE_MAIN	FirstGirder-_FirstSprite
 #define GIRDER_COUNT_MAIN	5
 
+#define SPRITE(value)  value-_FirstSprite
+
 #define BREAKPOINT  jmp *
 
 #define GAME_MODE    // Comment out to test
@@ -145,7 +147,6 @@ MarioEndSequence
 	sta CraneStatus
 	sta CranePosition
 	sta HookPosition
-	sta last_key_press
 
 
 	; 0=playing 
@@ -753,16 +754,6 @@ handle_keyboard
 	;
 	; Handle keyboard
 	;  y contains the position of hero during all code, do not alter
-    jsr read_keyboard
-	;ldx $208
-	cpx #0
-	bne key_pressed
-	stx last_key_press
-	jmp end_keyboard
-key_pressed
-	cpx	last_key_press
-	beq end_keyboard
-	stx last_key_press
 	jsr HandleKeys
 
 end_keyboard
@@ -803,36 +794,10 @@ no_movement
 
 
 
-HandleKeys
-.(
-	ldx #0
-loop_scan
-	lda KeyboardRouter_ScanCode,x
-	beq end_of_scan
-	cmp last_key_press
-	beq execute_key
-
-	inx
-	jmp loop_scan
-
-execute_key
-	lda KeyboardRouter_AddrLow,x
-	sta ptr_dst+0
-	lda KeyboardRouter_AddrHigh,x
-	sta ptr_dst+1
-	jmp (ptr_dst)
-
-end_of_scan
-	rts
-.)
-
-
 
 HeroMoveLeft
 .(
-	; Third floor
-
-check_third_floor
+check_third_floor                                 ; Third floor
 	cpy #ThirdFloorMario-_FirstSprite+1
 	bcc check_third_floor_crane_control
 	cpy #MarioJump-_FirstSprite
@@ -848,9 +813,8 @@ check_third_floor_crane_control
 	lda #1
 	sta	CraneStatus
 	rts
-
-	; Second floor check (reversed)
-check_second_floor
+	
+check_second_floor                                ; Second floor check (reversed)
 	cpy #SecondFloorMario-_FirstSprite
 	bcc check_first_floor
 	cpy #MarioLader_2-_FirstSprite-1
@@ -865,9 +829,8 @@ check_second_floor
 	bne collided
 	iny
 	rts
-
-	; First floor check
-check_first_floor
+	
+check_first_floor                                ; First floor check
 	cpy #FirstFloorMario-_FirstSprite+1
 	bcc check_end
 
@@ -886,11 +849,26 @@ collided
 	sta flag_mario_end
 	rts
 
-
 check_end
 	rts
 .)
 
+
+HandleKeys
+.(
+    jsr read_keyboard
+    cpx #KEY_LEFT
+    beq HeroMoveLeft
+    cpx #KEY_RIGHT
+    beq HeroMoveRight
+    cpx #KEY_DOWN
+    beq HeroMoveDown
+    cpx #KEY_UP
+    beq HeroMoveUp
+    cpx #KEY_SPACE
+    beq HeroMoveSpace
+	rts
+.)
 
 
 HeroMoveRight
@@ -958,22 +936,20 @@ check_end
 
 
 HeroMoveDown
-.(
-check_second_lader
-	cpy #MarioLader_2-_FirstSprite
+.(    
+check_second_lader    
+	cpy #SPRITE(MarioLader_2)
 	bcc check_first_lader
-	cpy #ThirdFloorMario-_FirstSprite+1
+	cpy #SPRITE(ThirdFloorMario+1)
 	bcs check_end
 	dey
+check_end
 	rts
-
-check_first_lader
-	cpy #SecondFloorMario-_FirstSprite
+    
+check_first_lader    
+	cpy #SPRITE(SecondFloorMario)
 	bne check_end
 	dey
-	rts
-
-check_end
 	rts
 .)
 
@@ -982,20 +958,18 @@ check_end
 HeroMoveUp
 .(
 check_second_lader
-	cpy #MarioLader_2-_FirstSprite-1
+	cpy #SPRITE(MarioLader_2-1)
 	bcc check_first_lader
-	cpy #ThirdFloorMario-_FirstSprite
+	cpy #SPRITE(ThirdFloorMario)
 	bcs check_end
 	iny
+check_end
 	rts
 
 check_first_lader
-	cpy #MarioLader_1-_FirstSprite
+	cpy #SPRITE(MarioLader_1)
 	bne check_end
 	iny
-	rts
-
-check_end
 	rts
 .)
 
@@ -1005,41 +979,39 @@ check_end
 HeroMoveSpace
 .(
 check_first_jump
-	cpy #FirstFloorMario-_FirstSprite+0
+	cpy #SPRITE(FirstFloorMario)
 	bne check_second_jump
-	ldy #FirstMarioJump-_FirstSprite+0
+	ldy #SPRITE(FirstMarioJump)
 	jmp validate_jump
 
 check_second_jump
-	cpy #FirstFloorMario-_FirstSprite+3
+	cpy #SPRITE(FirstFloorMario+3)
 	bne check_third_jump
-	ldy #FirstMarioJump-_FirstSprite+1
+	ldy #SPRITE(FirstMarioJump+1)
 	jmp validate_jump
 
 check_third_jump
-	cpy #SecondFloorMario-_FirstSprite+1
+	cpy #SPRITE(SecondFloorMario+1)
 	bne check_fourth_jump
-	ldy #FirstMarioJump-_FirstSprite+2
+	ldy #SPRITE(FirstMarioJump+2)
 	jmp validate_jump
 
 check_fourth_jump
-	cpy #SecondFloorMario-_FirstSprite+2
+	cpy #SPRITE(SecondFloorMario+2)
 	bne check_fifth_jump
-	ldy #FirstMarioJump-_FirstSprite+3
+	ldy #SPRITE(FirstMarioJump+3)
 	jmp validate_jump
 
 check_fifth_jump
-	cpy #ThirdFloorMario-_FirstSprite+2
+	cpy #SPRITE(ThirdFloorMario+2)
 	bne check_end
-	ldy #MarioJump-_FirstSprite
+	ldy #SPRITE(MarioJump)
 	jmp validate_jump
-
-check_end
-	rts
 
 validate_jump
 	lda #255
 	sta mario_jmp_count
+check_end
 	rts
 .)
 

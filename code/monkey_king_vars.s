@@ -53,34 +53,6 @@ _GameGirderDelayTick	.byt 200		; Speed of movement
 _GameDelayTick			.byt 255
 				
 
-; Scan codes:
-; 172 = Left
-; 188 = Right
-; 180 = Down
-; 156 = Up
-; 132 = Space
-KeyboardRouter_ScanCode		
-	.byt KEY_LEFT
-	.byt KEY_RIGHT
-	.byt KEY_DOWN
-	.byt KEY_UP
-	.byt KEY_SPACE
-	.byt 0
-
-KeyboardRouter_AddrLow		
-	.byt <HeroMoveLeft
-	.byt <HeroMoveRight
-	.byt <HeroMoveDown
-	.byt <HeroMoveUp
-	.byt <HeroMoveSpace
-
-KeyboardRouter_AddrHigh		
-	.byt >HeroMoveLeft
-	.byt >HeroMoveRight
-	.byt >HeroMoveDown
-	.byt >HeroMoveUp
-	.byt >HeroMoveSpace
-
 
 
 SevenDigitPatterns
