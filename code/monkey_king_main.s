@@ -358,8 +358,8 @@ not_last_platform
 	; Draw lower crane with hook and mario
 	lda #1
 	sta _SpriteRequestedState+FirstCrane-_FirstSprite+0
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+2
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+3
+	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
+	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
 
 	jsr RefreshAllSprites
 
