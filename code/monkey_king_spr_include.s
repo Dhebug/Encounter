@@ -160,19 +160,22 @@ LABEL(FirstVictoryPose)
 	SPRITE_DATA(32,90,3,20,KongSprite_Mario_GrippedToHook)
 LABEL(LastCrane)
 
-LABEL(FirstMarioHand)
-	; Mario hands (2)
+LABEL(FirstMarioHand)	; Mario hands (2)
 	SPRITE_DATA(7,78,2,8,KongSprite_Mario_HandDown)
 	SPRITE_DATA(6,75,2,5,KongSprite_Mario_HandUp)
 
-LABEL(FirstCraneStick)
-	; Crane control stick (2)
+LABEL(FirstCraneStick)	; Crane control stick (2)
 	SPRITE_DATA(6,82,2,4,KongSprite_Crane_ControlDown)
 	SPRITE_DATA(5,72,2,9,KongSprite_Crane_ControlUp)
 
-LABEL(FirstHeart)
-	; Hearts of victory (2)
+LABEL(FirstHeart)       ; Hearts of victory (2)
 	SPRITE_DATA(6,8,1,7,KongSprite_SmallHeart)
 	SPRITE_DATA(6,2,2,8,KongSprite_BigHeart)
+
+LABEL(PlayerLives)      ; The indicators for remaining lives
+	SPRITE_DATA(38,197,2,16,_SpriteMario_Life)
+	SPRITE_DATA(36,197,2,16,_SpriteMario_Life)
+	SPRITE_DATA(34,197,2,16,_SpriteMario_Life)
+
 LABEL(_LastSprite)
 

@@ -5,6 +5,7 @@
 ;
 ; Game sprites defines
 ;
+#define SPRITE_COUNT        _LastSprite-_FirstSprite
 #define BARREL_BASE_MAIN	0
 #define BARREL_COUNT_MAIN	17
 
@@ -573,27 +574,27 @@ PrintScoreDigit
 
     ldy #0
     lda (ptr_src),y
-    sta _BottomGraphics+35+40*12,x
+    sta _BottomGraphics+36+40*14,x
 
     iny
     lda (ptr_src),y
-    sta _BottomGraphics+35+40*13,x
-    sta _BottomGraphics+35+40*14,x
-    sta _BottomGraphics+35+40*15,x
+    sta _BottomGraphics+36+40*15,x
+    sta _BottomGraphics+36+40*16,x
+    sta _BottomGraphics+36+40*17,x
 
     iny
     lda (ptr_src),y
-    sta _BottomGraphics+35+40*16,x
+    sta _BottomGraphics+36+40*18,x
 
     iny
     lda (ptr_src),y
-    sta _BottomGraphics+35+40*17,x
-    sta _BottomGraphics+35+40*18,x
-    sta _BottomGraphics+35+40*19,x
+    sta _BottomGraphics+36+40*19,x
+    sta _BottomGraphics+36+40*20,x
+    sta _BottomGraphics+36+40*21,x
 
     iny
     lda (ptr_src),y
-    sta _BottomGraphics+35+40*20,x
+    sta _BottomGraphics+36+40*22,x
 
     inx
     rts
@@ -606,8 +607,11 @@ PrintScoreDigit
 ; Call with 
 ;   x first sprite to erase
 ;   y number of sprites to erase
-SpriteErase
+SpriteDraw
 .(
+    lda #1
+    jmp loop
++SpriteErase
 	lda #0
 loop
 	sta _SpriteRequestedState,x
@@ -1834,34 +1838,15 @@ _GameInits
 ; Display the remaining lives of the hero
 _DisplayLives
 .(
-    rts
+    ; We start by erasing the  3 lives
+	ldx #PlayerLives-_FirstSprite
+	ldy #3
+    jsr SpriteErase
 
-	lda live_counter
-	asl
-	asl
-	tax
-
-	ldy #9+2+2
-
-	lda #3
-	sta b_tmp1
-loop_draw_lives
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*26+0,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*27+0,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*26+1,y
-	lda LifeDisplayTable,x
-	inx
-	sta $bb80+40*27+1,y
-	dey
-	dey
-	dec b_tmp1
-	bne loop_draw_lives
+    ; And then we draw the remaining ones
+	ldx #PlayerLives-_FirstSprite
+	ldy live_counter
+    jsr SpriteDraw
     rts
 .)
 
