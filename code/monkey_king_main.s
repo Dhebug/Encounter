@@ -286,7 +286,7 @@ loop
 	sta _SpriteRequestedState+FirstPlatform-_FirstSprite+1
 	sta _SpriteRequestedState+FirstPlatform-_FirstSprite+2
 
-	; Display the falled down platforms as well as kong
+	; Display the fallen down platforms as well as kong
 	lda #1
 	sta _SpriteRequestedState+FirstPlatformFalling-_FirstSprite+0
 	sta _SpriteRequestedState+FirstPlatformFalling-_FirstSprite+1
@@ -324,7 +324,6 @@ hearts_blink
 
 not_last_platform
 
-
 	;
 	; Move down to intermediate level
 	;
@@ -349,14 +348,13 @@ not_last_platform
 	; Move down to lower level
 	;
 
-
 	; Erase previous victory graphics
 	lda #0
 	sta _SpriteRequestedState+FirstCrane-_FirstSprite+1
 	sta _SpriteRequestedState+FirstCraneHook-_FirstSprite+4
 	sta _SpriteRequestedState+MarioJump-_FirstSprite
 
-	; Draw upper crane with hook and mario
+	; Draw lower crane with hook and mario
 	lda #1
 	sta _SpriteRequestedState+FirstCrane-_FirstSprite+0
 	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+2
@@ -1336,7 +1334,7 @@ loop
 	ldx tmp_save_sprite
 skip_sprite
 	inx
-	cpx #93
+	cpx #SPRITE_COUNT
 	bne loop
 .)
     jsr _RefineCharacters

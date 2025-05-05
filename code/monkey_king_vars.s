@@ -72,12 +72,12 @@ _GameGirderDelayTick	.byt 200		; Speed of movement
 _GameDelayTick			.byt 255
 				
 
-;// Scan codes:
-;// 172 = Left
-;// 188 = Right
-;// 180 = Down
-;// 156 = Up
-;// 132 = Space
+; Scan codes:
+; 172 = Left
+; 188 = Right
+; 180 = Down
+; 156 = Up
+; 132 = Space
 KeyboardRouter_ScanCode		
 	.byt KEY_LEFT
 	.byt KEY_RIGHT
