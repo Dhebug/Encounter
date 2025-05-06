@@ -1854,21 +1854,10 @@ _JumpData
     SOUND_SET_VALUE_END(REG_A_VOLUME,0)            ; Cut the volume
 
 
-#ifdef GAME_MODE
-_SpriteRequestedState	.dsb 93		; 0=not displayed 1=displayed
-#else
-_SpriteRequestedState	// Force all the sprites to be on
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1,1,1,1
-    .byt 1,1,1,1,1,1,1,1,1
-#endif
-
-
 #include "monkey_king_spr.s"
+
+_SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
+
 #include "monkey_king_vars.s"
+
 
