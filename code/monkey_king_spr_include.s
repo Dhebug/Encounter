@@ -162,8 +162,8 @@ LABEL(FirstMarioHand)	; Mario hands (2)
 	SPRITE_DATA(6,75,2,5,KongSprite_Mario_HandUp)
 
 LABEL(FirstCraneStick)	; Crane control stick (2)
-	SPRITE_DATA(6,82,2,4,KongSprite_Crane_ControlDown)
-	SPRITE_DATA(5,72,2,9,KongSprite_Crane_ControlUp)
+	SPRITE_DATA(6,79,2,4,KongSprite_Crane_ControlDown)
+	SPRITE_DATA(5,70,2,9,KongSprite_Crane_ControlUp)
 
 LABEL(FirstHeart)       ; Hearts of victory (2)
 	SPRITE_DATA(6,8,1,7,KongSprite_SmallHeart)
