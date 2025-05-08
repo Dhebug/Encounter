@@ -14,9 +14,15 @@
 
 #define SPRITE(value)  value-_FirstSprite
 
+; Game speed 
+#define GAME_DELAY          255
+#define CRANE_DELAY         64
+#define GIRDER_DELAY        200
+#define GIRDER_RAND_MASK    7
+
 #define BREAKPOINT  jmp *
 
-#define GAME_MODE    // Comment out to test
+//#define GAME_MODE    // Comment out to test
 
 	.zero
 
@@ -109,11 +115,11 @@ game_loop
 	jsr MoveHero
 
 	; Move items
-	lda _GameCurrentTick
+	lda GameCurrentTick
 	bne end_update_items
 
-		lda _GameDelayTick
-		sta _GameCurrentTick
+		lda #GAME_DELAY
+		sta GameCurrentTick
 
 		; Call the "click" routine
         jsr Bleep
@@ -122,7 +128,7 @@ game_loop
 		jsr MoveBarrels
 		jsr MoveKong
 end_update_items
-	dec _GameCurrentTick
+	dec GameCurrentTick
 
 	jsr MoveGirders
 	jsr HandleCrane
@@ -147,7 +153,7 @@ MarioEndSequence
 	;// Reset lots of things death flag
 	lda #0
 	sta flag_mario_end
-	sta _GameCurrentTick
+	sta GameCurrentTick
 	sta CraneStatus
 	sta CranePosition
 	sta HookPosition
@@ -172,9 +178,9 @@ MarioCollideSequence
 blink_loop
 	jsr BlinkTemporization_128
 	ldx hero_position
-	lda _SpriteRequestedState,x
+	lda SpriteRequestedState,x
 	eor #1
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	jsr RefreshAllSprites
     jsr Bleep
 
@@ -213,11 +219,11 @@ MarioFallSequence
 	jsr BlinkTemporization_128
 	ldx hero_position
 	lda #0
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	lda #1
 	ldx #MarioJump-_FirstSprite+2
 	stx hero_position
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 
 	jmp MarioCollideSequence
 	
@@ -238,11 +244,11 @@ MarioWinSequence
 
 	; Erase previous mario position
 	lda #0
-	sta _SpriteRequestedState+MarioJump-_FirstSprite
+	sta SpriteRequestedState+MarioJump-_FirstSprite
 
 	; Draw upper crane with hook and mario
 	lda #1
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite+2
+	sta SpriteRequestedState+FirstCrane-_FirstSprite+2
 
 	; Remove one of the hooks And redraw them
 	dec FixationCount
@@ -268,9 +274,9 @@ platform_blink
 	ldx #FirstPlatform-_FirstSprite
 	ldy #3
 loop
-	lda _SpriteRequestedState,x
+	lda SpriteRequestedState,x
 	eor #1
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	inx
 	dey
 	bne loop
@@ -288,16 +294,16 @@ loop
 	jsr SpriteErase
 
 	lda #0
-	sta _SpriteRequestedState+FirstPlatform-_FirstSprite+0
-	sta _SpriteRequestedState+FirstPlatform-_FirstSprite+1
-	sta _SpriteRequestedState+FirstPlatform-_FirstSprite+2
+	sta SpriteRequestedState+FirstPlatform-_FirstSprite+0
+	sta SpriteRequestedState+FirstPlatform-_FirstSprite+1
+	sta SpriteRequestedState+FirstPlatform-_FirstSprite+2
 
 	; Display the fallen down platforms as well as kong
 	lda #1
-	sta _SpriteRequestedState+FirstPlatformFalling-_FirstSprite+0
-	sta _SpriteRequestedState+FirstPlatformFalling-_FirstSprite+1
-	sta _SpriteRequestedState+FirstPlatformFalling-_FirstSprite+2
-	sta _SpriteRequestedState+FirstKongFalling-_FirstSprite
+	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+0
+	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+1
+	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+2
+	sta SpriteRequestedState+FirstKongFalling-_FirstSprite
 
 	jsr RefreshAllSprites
 
@@ -313,11 +319,11 @@ hearts_blink
 	dec	death_counter
 	lda death_counter
 	and #1
-	sta _SpriteRequestedState+FirstHeart-_FirstSprite+0
+	sta SpriteRequestedState+FirstHeart-_FirstSprite+0
 	lda death_counter
 	lsr
 	and #1
-	sta _SpriteRequestedState+FirstHeart-_FirstSprite+1
+	sta SpriteRequestedState+FirstHeart-_FirstSprite+1
 
 	jsr RefreshAllSprites
     jsr Bleep
@@ -336,15 +342,15 @@ not_last_platform
 
 	; Erase previous victory graphics
 	lda #0
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite+2
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
+	sta SpriteRequestedState+FirstCrane-_FirstSprite+2
+	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
+	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
 
 	; Draw upper crane with hook and mario
 	lda #1
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite+1
-	sta _SpriteRequestedState+FirstCraneHook-_FirstSprite+4
-	sta _SpriteRequestedState+MarioJump-_FirstSprite
+	sta SpriteRequestedState+FirstCrane-_FirstSprite+1
+	sta SpriteRequestedState+FirstCraneHook-_FirstSprite+4
+	sta SpriteRequestedState+MarioJump-_FirstSprite
 
 	jsr RefreshAllSprites
 
@@ -356,15 +362,15 @@ not_last_platform
 
 	; Erase previous victory graphics
 	lda #0
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite+1
-	sta _SpriteRequestedState+FirstCraneHook-_FirstSprite+4
-	sta _SpriteRequestedState+MarioJump-_FirstSprite
+	sta SpriteRequestedState+FirstCrane-_FirstSprite+1
+	sta SpriteRequestedState+FirstCraneHook-_FirstSprite+4
+	sta SpriteRequestedState+MarioJump-_FirstSprite
 
 	; Draw lower crane with hook and mario
 	lda #1
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite+0
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
-	sta _SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
+	sta SpriteRequestedState+FirstCrane-_FirstSprite+0
+	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
+	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
 
 	jsr RefreshAllSprites
 
@@ -407,19 +413,19 @@ HandleCollisions
 check_girder_with_jump1
 	cpy #FirstMarioJump-_FirstSprite+2
 	bne check_girder_with_jump2
-	lda _SpriteRequestedState+FirstGirder-_FirstSprite+3
+	lda SpriteRequestedState+FirstGirder-_FirstSprite+3
 	bne MarioDeadSequence
 
 check_girder_with_jump2
 	cpy #FirstMarioJump-_FirstSprite+3
 	bne check_girder_with_lader
-	lda _SpriteRequestedState+FirstGirder-_FirstSprite+2
+	lda SpriteRequestedState+FirstGirder-_FirstSprite+2
 	bne MarioDeadSequence
 
 check_girder_with_lader
 	cpy #MarioLader_2-_FirstSprite
 	bne check_jump_on_hook
-	lda _SpriteRequestedState+FirstGirder-_FirstSprite+0
+	lda SpriteRequestedState+FirstGirder-_FirstSprite+0
 	bne MarioDeadSequence
 
 check_jump_on_hook
@@ -429,7 +435,7 @@ check_jump_on_hook
 	; 2=mario falling
 	; 3=mario wining by getting the hook
 	ldx #2	
-	lda _SpriteRequestedState+FirstCraneHook-_FirstSprite+4
+	lda SpriteRequestedState+FirstCraneHook-_FirstSprite+4
 	beq mario_failure
 	inx
 mario_failure
@@ -619,7 +625,7 @@ SpriteDraw
 +SpriteErase
 	lda #0
 loop
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	inx
 	dey
 	bne loop
@@ -639,11 +645,11 @@ HandleCrane
 	lda CraneStatus
 	beq end_crane_movement
 
-	dec	_GameCraneCurrentTick
+	dec	GameCraneCurrentTick
 	bne end_crane_movement
 	
-	lda _GameCraneDelayTick
-	sta _GameCraneCurrentTick
+	lda #CRANE_DELAY
+	sta GameCraneCurrentTick
 
 	; 0=down
 	; 1=mid (need hooks)
@@ -675,10 +681,10 @@ end_crane_movement
 	; Display the crane control handle
 	lda CraneStatus
 	ldx #1
-	sta _SpriteRequestedState+FirstCraneStick-_FirstSprite,x
+	sta SpriteRequestedState+FirstCraneStick-_FirstSprite,x
 	dex
 	eor #1
-	sta _SpriteRequestedState+FirstCraneStick-_FirstSprite,x
+	sta SpriteRequestedState+FirstCraneStick-_FirstSprite,x
 
 	; Erase all crane graphics
 	ldx #FirstCrane-_FirstSprite
@@ -688,7 +694,7 @@ end_crane_movement
 	; Draw crane depending of flags
 	lda #1
 	ldx CranePosition
-	sta _SpriteRequestedState+FirstCrane-_FirstSprite,x
+	sta SpriteRequestedState+FirstCrane-_FirstSprite,x
 
 	; Draw hooks depending of position
 	ldx CranePosition
@@ -697,7 +703,7 @@ end_crane_movement
 
 	lda #1
 	ldx HookPosition
-	sta _SpriteRequestedState+FirstCraneHook-_FirstSprite,x
+	sta SpriteRequestedState+FirstCraneHook-_FirstSprite,x
 
 end_draw_hooks
 	rts
@@ -766,24 +772,24 @@ end_keyboard
 	; Draw new position
 	;
 	lda #1
-	sta _SpriteRequestedState,y
+	sta SpriteRequestedState,y
 
 	;
 	; Handle display of mario harm
 	;
 	lda #0
-	sta _SpriteRequestedState+FirstMarioHand-_FirstSprite+0
-	sta _SpriteRequestedState+FirstMarioHand-_FirstSprite+1
+	sta SpriteRequestedState+FirstMarioHand-_FirstSprite+0
+	sta SpriteRequestedState+FirstMarioHand-_FirstSprite+1
 
 	cpy #ThirdFloorMario-_FirstSprite
 	bne skip_stick
 
 	lda CraneStatus
 	ldx #1
-	sta _SpriteRequestedState+FirstMarioHand-_FirstSprite,x
+	sta SpriteRequestedState+FirstMarioHand-_FirstSprite,x
 	eor #1
 	dex
-	sta _SpriteRequestedState+FirstMarioHand-_FirstSprite,x
+	sta SpriteRequestedState+FirstMarioHand-_FirstSprite,x
 skip_stick
 
 	cpy hero_position
@@ -829,7 +835,7 @@ check_second_floor                                ; Second floor check (reversed
 	sec
 	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarrel-_FirstSprite))
 	tax
-	lda _SpriteRequestedState,x
+	lda SpriteRequestedState,x
 	bne collided
 	iny
 	rts
@@ -843,7 +849,7 @@ check_first_floor                                ; First floor check
 	sec
 	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarrel-_FirstSprite))
 	tax
-	lda _SpriteRequestedState-1,x
+	lda SpriteRequestedState-1,x
 	bne collided
 	dey
 	rts
@@ -908,7 +914,7 @@ check_second_floor
 	sec
 	sbc #((SecondFloorMario-_FirstSprite)-(SecondFloorBarrel-_FirstSprite))
 	tax
-	lda _SpriteRequestedState-1,x
+	lda SpriteRequestedState-1,x
 	bne collided
 	dey
 	rts
@@ -923,7 +929,7 @@ check_first_floor
 	sec
 	sbc #((FirstFloorMario-_FirstSprite)-(FirstBarrel-_FirstSprite))
 	tax
-	lda _SpriteRequestedState,x
+	lda SpriteRequestedState,x
 	bne collided
 	iny
 	rts
@@ -1032,14 +1038,14 @@ check_end
 ; Y=start position
 ScrollLeftTable
 	; Memorize the value that will become ejected
-	lda _SpriteRequestedState+BARREL_BASE_MAIN,y
+	lda SpriteRequestedState+BARREL_BASE_MAIN,y
 	pha
 .(
 loop
-	lda _SpriteRequestedState+BARREL_BASE_MAIN+1,y
-	sta _SpriteRequestedState+BARREL_BASE_MAIN,y
+	lda SpriteRequestedState+BARREL_BASE_MAIN+1,y
+	sta SpriteRequestedState+BARREL_BASE_MAIN,y
 	lda #0
-	sta _SpriteRequestedState+BARREL_BASE_MAIN+1,y
+	sta SpriteRequestedState+BARREL_BASE_MAIN+1,y
 	iny
 	dex
 	bne loop
@@ -1067,9 +1073,9 @@ outer_loop
 	lda TableCollisionDst-1,y
 	tay
 loop
-	lda _SpriteRequestedState,x
+	lda SpriteRequestedState,x
 	beq skip
-	lda _SpriteRequestedState,y
+	lda SpriteRequestedState,y
 	beq skip
 collided
 	lda #1
@@ -1099,20 +1105,20 @@ skip_increase_score
 	ldy #LastBarrel+(3*0)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
-	sta _SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
+	ora SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
+	sta SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
 
 	ldy #LastBarrel+(3*1)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
-	sta _SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
+	ora SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
+	sta SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
 
 	ldy #LastBarrel+(3*2)-_FirstSprite
 	ldx #2
 	jsr ScrollLeftTable
-	ora _SpriteRequestedState+BarrelInsertionRight-_FirstSprite
-	sta _SpriteRequestedState+BarrelInsertionRight-_FirstSprite
+	ora SpriteRequestedState+BarrelInsertionRight-_FirstSprite
+	sta SpriteRequestedState+BarrelInsertionRight-_FirstSprite
 
 	rts
 .)
@@ -1134,7 +1140,7 @@ HandlePlatforms
 	beq skip
 	; Display hooks
 loop
-	sta _SpriteRequestedState+FirstHook-_FirstSprite-1,y
+	sta SpriteRequestedState+FirstHook-_FirstSprite-1,y
 	dey
 	bne loop
 
@@ -1147,7 +1153,7 @@ skip
 	lda #1
 	ldy #3
 loop
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	inx
 	dey
 	bne loop
@@ -1162,37 +1168,33 @@ skip_platforms
 
 MoveGirders
 .(
-	dec _GameGirderTick
-	beq update_items
-	rts
+	dec GameGirderTick
+	bne end_update
 
-update_items
-	lda _GameGirderDelayTick
-	sta _GameGirderTick
+	lda #GIRDER_DELAY
+	sta GameGirderTick
 
 	; Move them all by one tick
 	ldx #0
-	.(
 loop
-	lda _SpriteRequestedState+GIRDER_BASE_MAIN+1,x
-	sta _SpriteRequestedState+GIRDER_BASE_MAIN,x
+	lda SpriteRequestedState+GIRDER_BASE_MAIN+1,x
+	sta SpriteRequestedState+GIRDER_BASE_MAIN,x
 	inx
 	cpx #GIRDER_COUNT_MAIN-1
 	bne loop
-	.)
 
 	; And clear/set the first one depending of random
 	lda #0
-	dec _GameGirderSpawnTick
-	bpl no_girder_spawn
+	dec GameGirderSpawnTick
+	bpl end_spawn
 
 	jsr _GetRand
-	and #7
-	sta _GameGirderSpawnTick
+	and #GIRDER_RAND_MASK
+	sta GameGirderSpawnTick
 	lda #1
-no_girder_spawn
-	sta _SpriteRequestedState+GIRDER_BASE_MAIN+GIRDER_COUNT_MAIN-1
-
+end_spawn
+	sta SpriteRequestedState+GIRDER_BASE_MAIN+GIRDER_COUNT_MAIN-1
+end_update
 	rts
 .)
 
@@ -1206,12 +1208,12 @@ MoveKong
 	jsr SpriteErase
 
 .(
-	lda _KongFlagThrow
+	lda KongFlagThrow
 	beq handle_movement
 
 	; Throw a barrel
 	lda #0
-	sta _KongFlagThrow
+	sta KongFlagThrow
 
 	lda #1
 	ldx #BarrelStartLeft-_FirstSprite
@@ -1222,7 +1224,7 @@ MoveKong
 	beq throw_it
 	ldx #BarrelStartRight-_FirstSprite
 throw_it
-	sta _SpriteRequestedState,x
+	sta SpriteRequestedState,x
 	jmp end
 
 
@@ -1246,7 +1248,7 @@ right
 
 throw_barrel
 	lda #1
-	sta _KongFlagThrow
+	sta KongFlagThrow
 	bcc end
 
 left
@@ -1275,7 +1277,7 @@ draw_left
 
 	inx 
 	ldy #3
-	lda _KongFlagThrow
+	lda KongFlagThrow
 	beq skip_throw
 	dey
 	dex
@@ -1284,7 +1286,7 @@ skip_throw
 
 	lda #1
 loop_draw
-	sta _SpriteRequestedState+FirstKong-_FirstSprite,x
+	sta SpriteRequestedState+FirstKong-_FirstSprite,x
 	inx
 	dec b_tmp1
 	bne loop_draw
@@ -1299,12 +1301,12 @@ RefreshAllSprites
 .(
 	ldx #0
 loop
-	lda _SpriteRequestedState,x
-	cmp _SpriteDisplayState,x
+	lda SpriteRequestedState,x
+	cmp SpriteDisplayState,x
 	beq skip_sprite
 
 	; Change sprite status
-	sta _SpriteDisplayState,x
+	sta SpriteDisplayState,x
 
 	stx tmp_save_sprite
 
@@ -1346,10 +1348,10 @@ loop_y
     ldy zp_y    
     inc zp_y
     clc 
-    lda _gScanlineTableLow,y
+    lda gScanlineTableLow,y
     adc zp_x
     sta ptr_dst+0
-    lda _gScanlineTableHigh,y
+    lda gScanlineTableHigh,y
     adc #0
     sta ptr_dst+1
 
@@ -1738,20 +1740,20 @@ _GenerateScanlineTable
 .(
     ; Generate the scanline table
     lda #<$a000
-    sta _gScanlineTableLow
+    sta gScanlineTableLow
     lda #>$a000
-    sta _gScanlineTableHigh
+    sta gScanlineTableHigh
 
     ldx #1
 loop_hires
     clc
-    lda _gScanlineTableLow-1,x
+    lda gScanlineTableLow-1,x
     adc #40
-    sta _gScanlineTableLow,x
+    sta gScanlineTableLow,x
 
-    lda _gScanlineTableHigh-1,x
+    lda gScanlineTableHigh-1,x
     adc #0
-    sta _gScanlineTableHigh,x
+    sta gScanlineTableHigh,x
 
     inx 
     cpx #200
@@ -1759,20 +1761,20 @@ loop_hires
 
     ; Point to the "hires buffer"
     lda #<_BottomGraphics
-    sta _gScanlineTableLow,x
+    sta gScanlineTableLow,x
     lda #>_BottomGraphics
-    sta _gScanlineTableHigh,x
+    sta gScanlineTableHigh,x
     inx
 
 loop_text
     clc
-    lda _gScanlineTableLow-1,x
+    lda gScanlineTableLow-1,x
     adc #40
-    sta _gScanlineTableLow,x
+    sta gScanlineTableLow,x
 
-    lda _gScanlineTableHigh-1,x
+    lda gScanlineTableHigh-1,x
     adc #0
-    sta _gScanlineTableHigh,x
+    sta gScanlineTableHigh,x
 
     inx 
     cpx #224
@@ -1794,13 +1796,19 @@ _GameInits
 	;
     lda #0
 	sta flag_mario_end
-	sta _GameCurrentTick
+	sta GameCurrentTick
 	sta CraneStatus
 	sta CranePosition
 	sta HookPosition
 
 	lda #FirstMario-_FirstSprite 
 	sta hero_position
+
+    lda #1
+    sta GameCraneCurrentTick
+
+    lda #GIRDER_DELAY
+    sta GameGirderTick
 
 	lda #3
 	sta live_counter
@@ -1859,9 +1867,6 @@ _JumpData
 
 
 #include "monkey_king_spr.s"
-
-_SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
-
 
 
 _SpriteMario_Life
@@ -1971,15 +1976,6 @@ SevenDigitPatterns
     .byt %100011
 
 
-
-FixationCount			.byt 1	;4		; Number of fix that keep the platform attached
-_GameCraneCurrentTick	.byt 1
-best_score				.dsb 2
-_GameCraneDelayTick		.byt 64
-_GameGirderDelayTick	.byt 200		; Speed of movement
-_GameDelayTick			.byt 255
-				
-
 EndData
 
 	.bss
@@ -1993,16 +1989,22 @@ EndData
 
 _BssStart_
 
-_gScanlineTableLow      .dsb 224
-_gScanlineTableHigh     .dsb 224
+gScanlineTableLow       .dsb 224
+gScanlineTableHigh      .dsb 224
 
-_SpriteDisplayState		.dsb 256		; 0=not displayed 1=displayed
+SpriteDisplayState		.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
+SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
 
-_GameGirderTick			.dsb 1			; Current movement counter
-_GameGirderSpawnTick	.dsb 1			; Current spawning counter
+FixationCount			.dsb 1			; Number of fix that keep the platform attached
 
-_KongFlagThrow			.dsb 1			; Indicate if a throw movement is started
-_GameCurrentTick		.dsb 1
+GameCurrentTick		    .dsb 1          ; Main game tick
+GameCraneCurrentTick	.dsb 1          ; Tick for the crane animation
+GameGirderTick			.dsb 1			; Tick for the handling of moving girders
+GameGirderSpawnTick	    .dsb 1			; Handling of when new girders are added
+
+KongFlagThrow			.dsb 1			; Indicate if a throw movement is started
+
+best_score				.dsb 2
 
 _BssEnd_
 	.dsb 256-(*&255)    ; This will be overwriten
