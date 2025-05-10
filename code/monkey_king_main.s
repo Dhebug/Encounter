@@ -86,7 +86,7 @@ real_start
     jsr _DisplayLives
 
 	ldx #0
-	ldy #_LastSprite-_FirstSprite
+	ldy #SPRITE(_LastSprite)
     jsr SpriteDraw
 
     jsr RefreshAllSprites
@@ -98,7 +98,7 @@ real_start
 
     ; Erase all the sprites
 	ldx #0
-	ldy #_LastSprite-_FirstSprite
+	ldy #SPRITE(_LastSprite)
 	jsr SpriteErase
     jsr RefreshAllSprites
     jsr _RefineCharacters
@@ -193,7 +193,7 @@ blink_loop
 ; Normal death
 ; Reposition mario at the beginning
 RestartHero
-	lda #FirstMario-_FirstSprite 
+	lda #SPRITE(FirstMario)
 	sta hero_position
 
 	; Erase the first barrels
@@ -221,7 +221,7 @@ MarioFallSequence
 	lda #0
 	sta SpriteRequestedState,x
 	lda #1
-	ldx #MarioJump-_FirstSprite+2
+	ldx #SPRITE(MarioJump)+2
 	stx hero_position
 	sta SpriteRequestedState,x
 
@@ -238,7 +238,7 @@ MarioWinSequence
 	jsr BlinkTemporization_128
 
 	; Erase all crane graphics
-	ldx #FirstCrane-_FirstSprite
+	ldx #SPRITE(FirstCrane)
 	ldy #LastCrane-FirstCrane
 	jsr SpriteErase
 
@@ -271,7 +271,7 @@ last_platform
 	sta death_counter
 
 platform_blink
-	ldx #FirstPlatform-_FirstSprite
+	ldx #SPRITE(FirstPlatform)
 	ldy #3
 loop
 	lda SpriteRequestedState,x
@@ -289,21 +289,21 @@ loop
 	bne platform_blink 
 
 	; Erase the old kong
-	ldx #FirstKong-_FirstSprite
+	ldx #SPRITE(FirstKong)
 	ldy #LastKong-FirstKong
 	jsr SpriteErase
 
 	lda #0
-	sta SpriteRequestedState+FirstPlatform-_FirstSprite+0
-	sta SpriteRequestedState+FirstPlatform-_FirstSprite+1
-	sta SpriteRequestedState+FirstPlatform-_FirstSprite+2
+	sta SpriteRequestedState+SPRITE(FirstPlatform)+0
+	sta SpriteRequestedState+SPRITE(FirstPlatform)+1
+	sta SpriteRequestedState+SPRITE(FirstPlatform)+2
 
 	; Display the fallen down platforms as well as kong
 	lda #1
-	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+0
-	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+1
-	sta SpriteRequestedState+FirstPlatformFalling-_FirstSprite+2
-	sta SpriteRequestedState+FirstKongFalling-_FirstSprite
+	sta SpriteRequestedState+SPRITE(FirstPlatformFalling)+0
+	sta SpriteRequestedState+SPRITE(FirstPlatformFalling)+1
+	sta SpriteRequestedState+SPRITE(FirstPlatformFalling)+2
+	sta SpriteRequestedState+SPRITE(FirstKongFalling)
 
 	jsr RefreshAllSprites
 
@@ -319,11 +319,11 @@ hearts_blink
 	dec	death_counter
 	lda death_counter
 	and #1
-	sta SpriteRequestedState+FirstHeart-_FirstSprite+0
+	sta SpriteRequestedState+SPRITE(FirstHeart)+0
 	lda death_counter
 	lsr
 	and #1
-	sta SpriteRequestedState+FirstHeart-_FirstSprite+1
+	sta SpriteRequestedState+SPRITE(FirstHeart)+1
 
 	jsr RefreshAllSprites
     jsr Bleep
@@ -335,42 +335,35 @@ hearts_blink
 	bne hearts_blink 
 
 not_last_platform
-
-	;
 	; Move down to intermediate level
-	;
-
 	; Erase previous victory graphics
 	lda #0
-	sta SpriteRequestedState+FirstCrane-_FirstSprite+2
-	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
-	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
+	sta SpriteRequestedState+SPRITE(FirstCrane)+2
+	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
+	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+1
 
 	; Draw upper crane with hook and mario
 	lda #1
-	sta SpriteRequestedState+FirstCrane-_FirstSprite+1
-	sta SpriteRequestedState+FirstCraneHook-_FirstSprite+4
-	sta SpriteRequestedState+MarioJump-_FirstSprite
+	sta SpriteRequestedState+SPRITE(FirstCrane)+1
+	sta SpriteRequestedState+SPRITE(FirstCraneHook)+4
+	sta SpriteRequestedState+SPRITE(MarioJump)
 
 	jsr RefreshAllSprites
 
 	jsr BlinkTemporization_128
 
-	;
 	; Move down to lower level
-	;
-
 	; Erase previous victory graphics
 	lda #0
-	sta SpriteRequestedState+FirstCrane-_FirstSprite+1
-	sta SpriteRequestedState+FirstCraneHook-_FirstSprite+4
-	sta SpriteRequestedState+MarioJump-_FirstSprite
+	sta SpriteRequestedState+SPRITE(FirstCrane)+1
+	sta SpriteRequestedState+SPRITE(FirstCraneHook)+4
+	sta SpriteRequestedState+SPRITE(MarioJump)
 
 	; Draw lower crane with hook and mario
 	lda #1
-	sta SpriteRequestedState+FirstCrane-_FirstSprite+0
-	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+0
-	sta SpriteRequestedState+FirstVictoryPose-_FirstSprite+1
+	sta SpriteRequestedState+SPRITE(FirstCrane)+0
+	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
+	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+1
 
 	jsr RefreshAllSprites
 
@@ -411,31 +404,31 @@ HandleCollisions
 .(
 	ldy hero_position 
 check_girder_with_jump1
-	cpy #FirstMarioJump-_FirstSprite+2
+	cpy #SPRITE(FirstMarioJump)+2
 	bne check_girder_with_jump2
-	lda SpriteRequestedState+FirstGirder-_FirstSprite+3
+	lda SpriteRequestedState+SPRITE(FirstGirder)+3
 	bne MarioDeadSequence
 
 check_girder_with_jump2
-	cpy #FirstMarioJump-_FirstSprite+3
+	cpy #SPRITE(FirstMarioJump)+3
 	bne check_girder_with_lader
-	lda SpriteRequestedState+FirstGirder-_FirstSprite+2
+	lda SpriteRequestedState+SPRITE(FirstGirder)+2
 	bne MarioDeadSequence
 
 check_girder_with_lader
-	cpy #MarioLader_2-_FirstSprite
+	cpy #SPRITE(MarioLader_2)
 	bne check_jump_on_hook
-	lda SpriteRequestedState+FirstGirder-_FirstSprite+0
+	lda SpriteRequestedState+SPRITE(FirstGirder)+0
 	bne MarioDeadSequence
 
 check_jump_on_hook
-	cpy #MarioJump-_FirstSprite
+	cpy #SPRITE(MarioJump)
 	bne check_end
 
 	; 2=mario falling
 	; 3=mario wining by getting the hook
 	ldx #2	
-	lda SpriteRequestedState+FirstCraneHook-_FirstSprite+4
+	lda SpriteRequestedState+SPRITE(FirstCraneHook)+4
 	beq mario_failure
 	inx
 mario_failure
@@ -681,20 +674,20 @@ end_crane_movement
 	; Display the crane control handle
 	lda CraneStatus
 	ldx #1
-	sta SpriteRequestedState+FirstCraneStick-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstCraneStick),x
 	dex
 	eor #1
-	sta SpriteRequestedState+FirstCraneStick-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstCraneStick),x
 
 	; Erase all crane graphics
-	ldx #FirstCrane-_FirstSprite
+	ldx #SPRITE(FirstCrane)
 	ldy #LastCrane-FirstCrane
 	jsr SpriteErase
 
 	; Draw crane depending of flags
 	lda #1
 	ldx CranePosition
-	sta SpriteRequestedState+FirstCrane-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstCrane),x
 
 	; Draw hooks depending of position
 	ldx CranePosition
@@ -703,7 +696,7 @@ end_crane_movement
 
 	lda #1
 	ldx HookPosition
-	sta SpriteRequestedState+FirstCraneHook-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstCraneHook),x
 
 end_draw_hooks
 	rts
@@ -716,7 +709,7 @@ end_draw_hooks
 MoveHero
 .(
 	; Erase all previous position
-	ldx #FirstMario-_FirstSprite
+	ldx #SPRITE(FirstMario)
 	ldy #LastMario-FirstMario
 	jsr SpriteErase
 
@@ -731,27 +724,27 @@ MoveHero
 
 .(
 check_first_jump
-	cpy #FirstMarioJump-_FirstSprite+0
+	cpy #SPRITE(FirstMarioJump)+0
 	bne check_second_jump
-	ldy #FirstFloorMario-_FirstSprite+0
+	ldy #SPRITE(FirstFloorMario)+0
 	jmp end_keyboard
 
 check_second_jump
-	cpy #FirstMarioJump-_FirstSprite+1
+	cpy #SPRITE(FirstMarioJump)+1
 	bne check_third_jump
-	ldy #FirstFloorMario-_FirstSprite+3
+	ldy #SPRITE(FirstFloorMario)+3
 	jmp end_keyboard
 
 check_third_jump
-	cpy #FirstMarioJump-_FirstSprite+2
+	cpy #SPRITE(FirstMarioJump)+2
 	bne check_fourth_jump
-	ldy #SecondFloorMario-_FirstSprite+1
+	ldy #SPRITE(SecondFloorMario)+1
 	jmp end_keyboard
 
 check_fourth_jump
-	cpy #FirstMarioJump-_FirstSprite+3
+	cpy #SPRITE(FirstMarioJump)+3
 	bne check_end
-	ldy #SecondFloorMario-_FirstSprite+2
+	ldy #SPRITE(SecondFloorMario)+2
 	;jmp end_keyboard
 
 check_end
@@ -775,21 +768,21 @@ end_keyboard
 	sta SpriteRequestedState,y
 
 	;
-	; Handle display of mario harm
+	; Handle display of mario arm
 	;
 	lda #0
-	sta SpriteRequestedState+FirstMarioHand-_FirstSprite+0
-	sta SpriteRequestedState+FirstMarioHand-_FirstSprite+1
+	sta SpriteRequestedState+SPRITE(FirstMarioHand)+0
+	sta SpriteRequestedState+SPRITE(FirstMarioHand)+1
 
-	cpy #ThirdFloorMario-_FirstSprite
+	cpy #SPRITE(ThirdFloorMario)
 	bne skip_stick
 
 	lda CraneStatus
 	ldx #1
-	sta SpriteRequestedState+FirstMarioHand-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstMarioHand),x
 	eor #1
 	dex
-	sta SpriteRequestedState+FirstMarioHand-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstMarioHand),x
 skip_stick
 
 	cpy hero_position
@@ -808,15 +801,15 @@ no_movement
 HeroMoveLeft
 .(
 check_third_floor                                 ; Third floor
-	cpy #ThirdFloorMario-_FirstSprite+1
+	cpy #SPRITE(ThirdFloorMario)+1
 	bcc check_third_floor_crane_control
-	cpy #MarioJump-_FirstSprite
+	cpy #SPRITE(MarioJump)
 	bcs check_end
 	dey
 	rts
 
 check_third_floor_crane_control
-	cpy #ThirdFloorMario-_FirstSprite
+	cpy #SPRITE(ThirdFloorMario)
 	bne check_second_floor
 
 	; Activate the crane
@@ -825,9 +818,9 @@ check_third_floor_crane_control
 	rts
 	
 check_second_floor                                ; Second floor check (reversed)
-	cpy #SecondFloorMario-_FirstSprite
+	cpy #SPRITE(SecondFloorMario)
 	bcc check_first_floor
-	cpy #MarioLader_2-_FirstSprite-1
+	cpy #SPRITE(MarioLader_2)
 	bcs check_end
 
 	; Test collision with first floor barrels
@@ -841,7 +834,7 @@ check_second_floor                                ; Second floor check (reversed
 	rts
 	
 check_first_floor                                ; First floor check
-	cpy #FirstFloorMario-_FirstSprite+1
+	cpy #SPRITE(FirstFloorMario)+1
 	bcc check_end
 
 	; Test collision with first floor barrels
