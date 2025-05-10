@@ -15,7 +15,8 @@
 #define SPRITE(value)  value-_FirstSprite
 
 ; Game speed 
-#define GAME_DELAY          255
+#define GAME_DELAY          128
+#define JUMP_DELAY          128
 #define CRANE_DELAY         64
 #define GIRDER_DELAY        200
 #define GIRDER_RAND_MASK    7
@@ -877,10 +878,10 @@ HandleKeys
 HeroMoveRight
 .(
 	; Check the jump position
-	cpy #ThirdFloorMario-_FirstSprite+2
+	cpy #SPRITE(ThirdFloorMario)+2
 	bne check_third_floor
 
-	ldy #MarioJump-_FirstSprite+1
+	ldy #SPRITE(MarioJump)+1
 	; 0=playing 1=mario collide 2=mario fell 3=mario win
 	lda #2
 	sta flag_mario_end
@@ -888,18 +889,18 @@ HeroMoveRight
 
 	; Third floor
 check_third_floor
-	cpy #ThirdFloorMario-_FirstSprite
+	cpy #SPRITE(ThirdFloorMario)
 	bcc check_second_floor
-	cpy #MarioJump-_FirstSprite-1
+	cpy #SPRITE(MarioJump)-1
 	bcs check_end
 	iny
 	rts
 
 	; Second floor check (reversed)
 check_second_floor
-	cpy #SecondFloorMario-_FirstSprite+1
+	cpy #SPRITE(SecondFloorMario)+1
 	bcc check_first_floor
-	cpy #MarioLader_2-_FirstSprite
+	cpy #SPRITE(MarioLader_2)
 	bcs check_end
 
 	; Test collision with first floor barrels
@@ -914,7 +915,7 @@ check_second_floor
 
 
 check_first_floor
-	cpy #SecondFloorMario-_FirstSprite-1
+	cpy #SPRITE(SecondFloorMario)-1
 	bcs check_end
 
 	; Test collision with first floor barrels
@@ -1012,7 +1013,7 @@ check_fifth_jump
 	jmp validate_jump
 
 validate_jump
-	lda #255
+	lda #JUMP_DELAY
 	sta mario_jmp_count
 check_end
 	rts
@@ -1050,6 +1051,28 @@ loop
 
 
 
+
+TableCollisionCount
+	.byt 5	; first floor
+	.byt 5	; second floor
+	.byt 1	; barrel coming from the right on third floor
+	.byt 1	; barrel from the top left
+	.byt 1	; barrel from the top mid
+	.byt 1	; barrel from the top right
+TableCollisionSrc
+	.byt SPRITE(FirstBarrel)
+	.byt SPRITE(SecondFloorBarrel)
+	.byt SPRITE(BarrelInsertionLeft)
+	.byt SPRITE(BarrelCollideFallLeft)
+	.byt SPRITE(BarrelCollideFallMiddle)
+	.byt SPRITE(BarrelCollideFallRight)
+TableCollisionDst
+	.byt SPRITE(FirstFloorMario)
+	.byt SPRITE(SecondFloorMario)
+	.byt SPRITE(MarioLaderCollide)
+	.byt SPRITE(ThirdFloorMario)
+	.byt SPRITE(ThirdFloorMario)+1
+	.byt SPRITE(ThirdFloorMario)+2
 
 MoveBarrels
 .(
@@ -1095,23 +1118,23 @@ skip
 
 skip_increase_score
 	; Scroll the three top ones
-	ldy #LastBarrel+(3*0)-_FirstSprite
+	ldy #SPRITE(LastBarrel)+(3*0)
 	ldx #2
 	jsr ScrollLeftTable
-	ora SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
-	sta SpriteRequestedState+BarrelInsertionLeft-_FirstSprite
+	ora SpriteRequestedState+SPRITE(BarrelInsertionLeft)
+	sta SpriteRequestedState+SPRITE(BarrelInsertionLeft)
 
-	ldy #LastBarrel+(3*1)-_FirstSprite
+	ldy #SPRITE(LastBarrel)+(3*1)
 	ldx #2
 	jsr ScrollLeftTable
-	ora SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
-	sta SpriteRequestedState+BarrelInsertionMiddle-_FirstSprite
+	ora SpriteRequestedState+SPRITE(BarrelInsertionMiddle)
+	sta SpriteRequestedState+SPRITE(BarrelInsertionMiddle)
 
-	ldy #LastBarrel+(3*2)-_FirstSprite
+	ldy #SPRITE(LastBarrel)+(3*2)
 	ldx #2
 	jsr ScrollLeftTable
-	ora SpriteRequestedState+BarrelInsertionRight-_FirstSprite
-	sta SpriteRequestedState+BarrelInsertionRight-_FirstSprite
+	ora SpriteRequestedState+SPRITE(BarrelInsertionRight)
+	sta SpriteRequestedState+SPRITE(BarrelInsertionRight)
 
 	rts
 .)
@@ -1123,7 +1146,7 @@ skip_increase_score
 HandlePlatforms
 .(
 	; Start by erasing all the platform data
-	ldx #FirstPlatform-_FirstSprite
+	ldx #SPRITE(FirstPlatform)
 	ldy #LastHook-FirstPlatform
 	jsr SpriteErase
 
@@ -1133,16 +1156,15 @@ HandlePlatforms
 	beq skip
 	; Display hooks
 loop
-	sta SpriteRequestedState+FirstHook-_FirstSprite-1,y
+	sta SpriteRequestedState+SPRITE(FirstHook)-1,y
 	dey
 	bne loop
 
 skip
-	
 .)
 
 .(
-	ldx #FirstPlatform-_FirstSprite
+	ldx #SPRITE(FirstPlatform)
 	lda #1
 	ldy #3
 loop
@@ -1196,7 +1218,7 @@ end_update
 MoveKong
 .(
 	; Start by erasing all the kong data
-	ldx #FirstKong-_FirstSprite
+	ldx #SPRITE(FirstKong)
 	ldy #LastKong-FirstKong
 	jsr SpriteErase
 
@@ -1209,13 +1231,13 @@ MoveKong
 	sta KongFlagThrow
 
 	lda #1
-	ldx #BarrelStartLeft-_FirstSprite
+	ldx #SPRITE(BarrelStartLeft)
 	ldy _KongPosition
 	beq throw_it
-	ldx #BarrelStartMiddle-_FirstSprite
+	ldx #SPRITE(BarrelStartMiddle)
 	dey
 	beq throw_it
-	ldx #BarrelStartRight-_FirstSprite
+	ldx #SPRITE(BarrelStartRight)
 throw_it
 	sta SpriteRequestedState,x
 	jmp end
@@ -1279,7 +1301,7 @@ skip_throw
 
 	lda #1
 loop_draw
-	sta SpriteRequestedState+FirstKong-_FirstSprite,x
+	sta SpriteRequestedState+SPRITE(FirstKong),x
 	inx
 	dec b_tmp1
 	bne loop_draw
@@ -1794,7 +1816,7 @@ _GameInits
 	sta CranePosition
 	sta HookPosition
 
-	lda #FirstMario-_FirstSprite 
+	lda #SPRITE(FirstMario)
 	sta hero_position
 
     lda #1
@@ -1816,12 +1838,12 @@ _GameInits
 _DisplayLives
 .(
     ; We start by erasing the  3 lives
-	ldx #PlayerLives-_FirstSprite
+	ldx #SPRITE(PlayerLives)
 	ldy #3
     jsr SpriteErase
 
     ; And then we draw the remaining ones
-	ldx #PlayerLives-_FirstSprite
+	ldx #SPRITE(PlayerLives)
 	ldy live_counter
     jsr SpriteDraw
     rts
@@ -1881,28 +1903,6 @@ _SpriteMario_Life
 	.byt %001100,%000100
 	.byt %000000,%000000
 
-
-TableCollisionCount
-	.byt 5	; first floor
-	.byt 5	; second floor
-	.byt 1	; barrel coming from the right on third floor
-	.byt 1	; barrel from the top left
-	.byt 1	; barrel from the top mid
-	.byt 1	; barrel from the top right
-TableCollisionSrc
-	.byt FirstBarrel-_FirstSprite
-	.byt SecondFloorBarrel-_FirstSprite
-	.byt BarrelInsertionLeft-_FirstSprite
-	.byt BarrelCollideFallLeft-_FirstSprite
-	.byt BarrelCollideFallMiddle-_FirstSprite
-	.byt BarrelCollideFallRight-_FirstSprite
-TableCollisionDst
-	.byt FirstFloorMario-_FirstSprite
-	.byt SecondFloorMario-_FirstSprite
-	.byt MarioLaderCollide-_FirstSprite
-	.byt ThirdFloorMario-_FirstSprite
-	.byt ThirdFloorMario+1-_FirstSprite
-	.byt ThirdFloorMario+2-_FirstSprite
 
 
 
