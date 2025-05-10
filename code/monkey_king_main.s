@@ -1,10 +1,7 @@
 
 #include "params.h"
 
-
-;
 ; Game sprites defines
-;
 #define SPRITE_COUNT        _LastSprite-_FirstSprite
 #define BARREL_BASE_MAIN	0
 #define BARREL_COUNT_MAIN	17
@@ -21,8 +18,14 @@
 #define GIRDER_DELAY        200
 #define GIRDER_RAND_MASK    7
 
-#define BREAKPOINT  jmp *
+; Game status
+#define STATUS_PLAYING  0
+#define STATUS_COLLIDED 1
+#define STATUS_FELL     2
+#define STATUS_WON      3
 
+; Misc
+#define BREAKPOINT  jmp *
 //#define GAME_MODE    // Comment out to test
 
 	.zero
@@ -47,18 +50,30 @@ b_tmp1			.dsb 1
 b_tmp2			.dsb 1
 
 live_counter	.dsb 1		; Number of lives remaining
-flag_mario_end	.dsb 1		; 0=playing 1=mario collide 2=mario fell 3=mario win
+player_status	.dsb 1		; 0=playing 1=mario collide 2=mario fell 3=mario win
 mario_jmp_count	.dsb 1
 death_counter	.dsb 1
-hero_position	.dsb 1
+hero_position	.dsb 1      ; Where the player is in the game 
 
 zp_x            .dsb 1
 zp_y            .dsb 1
 
-CraneStatus		.dsb 1	    ; 01	(OFF or ON)
-CranePosition	.dsb 1	    ; 012
-HookPosition	.dsb 1	    ; 01234
-_KongPosition	.dsb 1		; 0 1 2 (3 when crashed ???)
+crane_status	.dsb 1	    ; 01	(OFF or ON)
+crane_position	.dsb 1	    ; 012
+hook_position	.dsb 1	    ; 01234
+kong_position	.dsb 1		; 0 1 2 (3 when crashed ???)
+
+fixation_count	.dsb 1		; Number of fix that keep the platform attached
+
+game_tick		.dsb 1      ; Main game tick
+crane_tick	    .dsb 1      ; Tick for the crane animation
+girder_tick		.dsb 1		; Tick for the handling of moving girders
+girder_spawn_tick .dsb 1	; Handling of when new girders are added
+
+kong_throw		.dsb 1		; Indicate if a throw movement is started
+
+best_score		.dsb 2
+
 
 _zp_end_
 
@@ -80,29 +95,29 @@ real_start
     jsr _DisplayCharsetMatrix
     jsr _ClearMemory
     jsr _GenerateScanlineTable
-    jsr _GameInits
+    jsr GameInits
 
 #ifndef GAME_MODE
     jsr ScoreDisplay
-    jsr _DisplayLives
+    jsr DisplayLives
 
 	ldx #0
 	ldy #SPRITE(_LastSprite)
     jsr SpriteDraw
 
     jsr RefreshAllSprites
-    sei
+    ;sei
     ;BREAKPOINT
-    jsr _RefineCharacters
+    ;jsr _RefineCharacters
     BREAKPOINT
-    cli
+    ;cli
 
     ; Erase all the sprites
 	ldx #0
 	ldy #SPRITE(_LastSprite)
 	jsr SpriteErase
     jsr RefreshAllSprites
-    jsr _RefineCharacters
+    ;jsr _RefineCharacters
 
 #endif
 
@@ -111,16 +126,16 @@ real_start
 	;
 game_loop
 	jsr ScoreDisplay
-    jsr _DisplayLives
+    jsr DisplayLives
 
 	jsr MoveHero
 
 	; Move items
-	lda GameCurrentTick
+	lda game_tick
 	bne end_update_items
 
 		lda #GAME_DELAY
-		sta GameCurrentTick
+		sta game_tick
 
 		; Call the "click" routine
         jsr Bleep
@@ -129,7 +144,7 @@ game_loop
 		jsr MoveBarrels
 		jsr MoveKong
 end_update_items
-	dec GameCurrentTick
+	dec game_tick
 
 	jsr MoveGirders
 	jsr HandleCrane
@@ -137,7 +152,7 @@ end_update_items
 
 	jsr HandleCollisions
 
-	ldx flag_mario_end
+	ldx player_status
 	bne MarioEndSequence
 	jmp game_loop
 
@@ -151,22 +166,17 @@ end_update_items
 ; - if life counter is not null, partial death, erase the first barrels
 ; ======================
 MarioEndSequence
-	;// Reset lots of things death flag
-	lda #0
-	sta flag_mario_end
-	sta GameCurrentTick
-	sta CraneStatus
-	sta CranePosition
-	sta HookPosition
+	; Reset lots of things death flag
+	lda #STATUS_PLAYING
+	sta player_status
+	sta game_tick
+	sta crane_status
+	sta crane_position
+	sta hook_position
 
-
-	; 0=playing 
-	; 1=mario collide
-	; 2=mario fell
-	; 3=mario win
-	cpx #1
+	cpx #STATUS_COLLIDED
 	beq MarioCollideSequence 
-	cpx #2
+	cpx #STATUS_FELL
 	beq MarioFallSequence 
 	jmp MarioWinSequence 
 
@@ -252,7 +262,7 @@ MarioWinSequence
 	sta SpriteRequestedState+FirstCrane-_FirstSprite+2
 
 	; Remove one of the hooks And redraw them
-	dec FixationCount
+	dec fixation_count
 	jsr HandlePlatforms
 
 	jsr RefreshAllSprites
@@ -262,7 +272,7 @@ MarioWinSequence
 	jsr ScoreIncrementMulti
 
 	; Check if it was the last platform
-	lda FixationCount
+	lda fixation_count
 	bne not_last_platform
 	
 last_platform
@@ -370,10 +380,10 @@ not_last_platform
 
 	jsr BlinkTemporization_128
 
-	lda FixationCount
+	lda fixation_count
 	bne skip
 	lda #4
-	sta FixationCount
+	sta fixation_count
 skip
 
 .)
@@ -433,14 +443,14 @@ check_jump_on_hook
 	beq mario_failure
 	inx
 mario_failure
-	stx flag_mario_end
+	stx player_status
 
 check_end
 	rts
 
 MarioDeadSequence
-	lda #1
-	sta flag_mario_end
+	lda #STATUS_COLLIDED
+	sta player_status
 	rts
 .)
 
@@ -636,21 +646,21 @@ HandleCrane
 	; Update things depending of tic
 	; Move the crane and hooks accordingly
 	;
-	lda CraneStatus
+	lda crane_status
 	beq end_crane_movement
 
-	dec	GameCraneCurrentTick
+	dec	crane_tick
 	bne end_crane_movement
 	
 	lda #CRANE_DELAY
-	sta GameCraneCurrentTick
+	sta crane_tick
 
 	; 0=down
 	; 1=mid (need hooks)
-	ldx CranePosition
+	ldx crane_position
 	bne not_down 
 down
-	inc CranePosition
+	inc crane_position
 	jmp end_crane_movement
 
 not_down
@@ -658,22 +668,22 @@ not_down
 	bne end_mid
 
 mid
-	ldx HookPosition
+	ldx hook_position
 	cpx #4
 	beq end_mid
-	inc HookPosition
+	inc hook_position
 	jmp end_crane_movement
 
 end_mid
 	lda #0
-	sta CranePosition
-	sta CraneStatus
-	sta HookPosition
+	sta crane_position
+	sta crane_status
+	sta hook_position
 
 end_crane_movement
 
 	; Display the crane control handle
-	lda CraneStatus
+	lda crane_status
 	ldx #1
 	sta SpriteRequestedState+SPRITE(FirstCraneStick),x
 	dex
@@ -687,16 +697,16 @@ end_crane_movement
 
 	; Draw crane depending of flags
 	lda #1
-	ldx CranePosition
+	ldx crane_position
 	sta SpriteRequestedState+SPRITE(FirstCrane),x
 
 	; Draw hooks depending of position
-	ldx CranePosition
+	ldx crane_position
 	cpx #1
 	bne end_draw_hooks
 
 	lda #1
-	ldx HookPosition
+	ldx hook_position
 	sta SpriteRequestedState+SPRITE(FirstCraneHook),x
 
 end_draw_hooks
@@ -778,7 +788,7 @@ end_keyboard
 	cpy #SPRITE(ThirdFloorMario)
 	bne skip_stick
 
-	lda CraneStatus
+	lda crane_status
 	ldx #1
 	sta SpriteRequestedState+SPRITE(FirstMarioHand),x
 	eor #1
@@ -815,7 +825,7 @@ check_third_floor_crane_control
 
 	; Activate the crane
 	lda #1
-	sta	CraneStatus
+	sta	crane_status
 	rts
 	
 check_second_floor                                ; Second floor check (reversed)
@@ -849,8 +859,8 @@ check_first_floor                                ; First floor check
 	rts
 
 collided
-	lda #1
-	sta flag_mario_end
+	lda #STATUS_COLLIDED
+	sta player_status
 	rts
 
 check_end
@@ -883,8 +893,8 @@ HeroMoveRight
 
 	ldy #SPRITE(MarioJump)+1
 	; 0=playing 1=mario collide 2=mario fell 3=mario win
-	lda #2
-	sta flag_mario_end
+	lda #STATUS_FELL
+	sta player_status
 	rts
 
 	; Third floor
@@ -929,8 +939,8 @@ check_first_floor
 	rts
 
 collided
-	lda #1
-	sta flag_mario_end
+	lda #STATUS_COLLIDED
+	sta player_status
 	rts
 
 check_end
@@ -1094,8 +1104,8 @@ loop
 	lda SpriteRequestedState,y
 	beq skip
 collided
-	lda #1
-	sta flag_mario_end
+	lda #STATUS_COLLIDED
+	sta player_status
 	rts
 
 skip
@@ -1152,7 +1162,7 @@ HandlePlatforms
 
 .(
 	lda #1
-	ldy FixationCount
+	ldy fixation_count
 	beq skip
 	; Display hooks
 loop
@@ -1183,11 +1193,11 @@ skip_platforms
 
 MoveGirders
 .(
-	dec GameGirderTick
+	dec girder_tick
 	bne end_update
 
 	lda #GIRDER_DELAY
-	sta GameGirderTick
+	sta girder_tick
 
 	; Move them all by one tick
 	ldx #0
@@ -1200,12 +1210,12 @@ loop
 
 	; And clear/set the first one depending of random
 	lda #0
-	dec GameGirderSpawnTick
+	dec girder_spawn_tick
 	bpl end_spawn
 
 	jsr _GetRand
 	and #GIRDER_RAND_MASK
-	sta GameGirderSpawnTick
+	sta girder_spawn_tick
 	lda #1
 end_spawn
 	sta SpriteRequestedState+GIRDER_BASE_MAIN+GIRDER_COUNT_MAIN-1
@@ -1223,16 +1233,16 @@ MoveKong
 	jsr SpriteErase
 
 .(
-	lda KongFlagThrow
+	lda kong_throw
 	beq handle_movement
 
 	; Throw a barrel
 	lda #0
-	sta KongFlagThrow
+	sta kong_throw
 
 	lda #1
 	ldx #SPRITE(BarrelStartLeft)
-	ldy _KongPosition
+	ldy kong_position
 	beq throw_it
 	ldx #SPRITE(BarrelStartMiddle)
 	dey
@@ -1246,7 +1256,7 @@ throw_it
 handle_movement
 	; And now move kong
 	jsr _GetRand
-	ldx _KongPosition
+	ldx kong_position
 	lda rand_low
 	cmp #40
 	bcc throw_barrel
@@ -1258,18 +1268,18 @@ handle_movement
 right
 	cpx #2
 	beq end
-	inc _KongPosition
+	inc kong_position
 	bcc end
 
 throw_barrel
 	lda #1
-	sta KongFlagThrow
+	sta kong_throw
 	bcc end
 
 left
 	cpx #0
 	beq end
-	dec _KongPosition
+	dec kong_position
 
 end
 .)
@@ -1277,7 +1287,7 @@ end
 
 .(
 	lda #0
-	ldx _KongPosition
+	ldx kong_position
 	beq draw_left
 	dex
 	beq draw_midle
@@ -1292,7 +1302,7 @@ draw_left
 
 	inx 
 	ldy #3
-	lda KongFlagThrow
+	lda kong_throw
 	beq skip_throw
 	dey
 	dex
@@ -1333,13 +1343,14 @@ skip_sprite
 	inx
 	cpx #SPRITE_COUNT
 	bne loop
+    ; And immediately copy the content to the charset
+    jmp _RefineCharacters
 .)
-    jsr _RefineCharacters
-	rts
 
 
 ; Note: In all display routines "tmp0" points on the screen
 _DisplaySingleSprite
+.(
 	; Screen adress
 	lda _KongSpriteScreenX,x
 	sta zp_x
@@ -1398,7 +1409,7 @@ skip_empty
 	bne loop_y
 
 	rts
-
+.)
 
 
 _RefineCharacters
@@ -1619,7 +1630,7 @@ loop_column_std
 	jmp loop_column_std
 end_std
 
-    // Last 8 scanlines in ALT charset
+    ; Last 8 scanlines in ALT charset
     sec
 	ldx #19
 	ldy #19*8
@@ -1798,7 +1809,7 @@ loop_text
 .)
 
 
-_GameInits
+GameInits
 .(
 	; Initialize the random generator values
 	lda #23
@@ -1806,36 +1817,34 @@ _GameInits
 	lda #35
 	sta rand_high		
 
-	;
 	; Set some game parameters
-	;
     lda #0
-	sta flag_mario_end
-	sta GameCurrentTick
-	sta CraneStatus
-	sta CranePosition
-	sta HookPosition
+	sta player_status
+	sta game_tick
+	sta crane_status
+	sta crane_position
+	sta hook_position
 
 	lda #SPRITE(FirstMario)
 	sta hero_position
 
     lda #1
-    sta GameCraneCurrentTick
+    sta crane_tick
 
     lda #GIRDER_DELAY
-    sta GameGirderTick
+    sta girder_tick
 
 	lda #3
 	sta live_counter
 
 	lda #4
-	sta FixationCount
+	sta fixation_count
     rts
 .)
 
 
 ; Display the remaining lives of the hero
-_DisplayLives
+DisplayLives
 .(
     ; We start by erasing the  3 lives
 	ldx #SPRITE(PlayerLives)
@@ -1988,16 +1997,6 @@ gScanlineTableHigh      .dsb 224
 SpriteDisplayState		.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
 SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
 
-FixationCount			.dsb 1			; Number of fix that keep the platform attached
-
-GameCurrentTick		    .dsb 1          ; Main game tick
-GameCraneCurrentTick	.dsb 1          ; Tick for the crane animation
-GameGirderTick			.dsb 1			; Tick for the handling of moving girders
-GameGirderSpawnTick	    .dsb 1			; Handling of when new girders are added
-
-KongFlagThrow			.dsb 1			; Indicate if a throw movement is started
-
-best_score				.dsb 2
 
 _BssEnd_
 	.dsb 256-(*&255)    ; This will be overwriten
