@@ -1123,29 +1123,30 @@ KongSprite_BigHeart   ; 2x8
 	.byt %000000,%010000
 _EndSpriteGraphics
 
-
-_KongSpriteAdd_Low
+_SpriteData
+SpriteTableLow
 #define LABEL(label) label
 #define SPRITE_DATA(x,y,width,height,data)     .byt <data
 #include "monkey_king_spr_include.s"
 #define LABEL(label)
 
-_KongSpriteAdd_High
+SpriteTableHigh
 #define SPRITE_DATA(x,y,width,height,data)     .byt >data
 #include "monkey_king_spr_include.s"
 
-_KongSpriteScreenX
+SpriteTableScreenX
 #define SPRITE_DATA(x,y,width,height,data)     .byt x
 #include "monkey_king_spr_include.s"
 
-_KongSpriteScreenY
+SpriteTableScreenY
 #define SPRITE_DATA(x,y,width,height,data)     .byt y
 #include "monkey_king_spr_include.s"
 
-_KongSpriteWidth
+SpriteTableWidth
 #define SPRITE_DATA(x,y,width,height,data)     .byt width
 #include "monkey_king_spr_include.s"
 
-_KongSpriteHeight
+SpriteTableHeight
 #define SPRITE_DATA(x,y,width,height,data)     .byt height
 #include "monkey_king_spr_include.s"
+_EndSpriteData

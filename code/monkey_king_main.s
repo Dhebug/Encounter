@@ -42,7 +42,6 @@ current_score	.dsb 2
 rand_low		.dsb 1		; Random number generator, low part
 rand_high		.dsb 1		; Random number generator, high part
 
-tmp_save_sprite	.dsb 1
 tmp_width		.dsb 1
 tmp_height		.dsb 1
 
@@ -55,7 +54,6 @@ mario_jmp_count	.dsb 1
 death_counter	.dsb 1
 hero_position	.dsb 1      ; Where the player is in the game 
 
-zp_x            .dsb 1
 zp_y            .dsb 1
 
 crane_status	.dsb 1	    ; 01	(OFF or ON)
@@ -105,20 +103,14 @@ real_start
 	ldy #SPRITE(_LastSprite)
     jsr SpriteDraw
 
-    jsr RefreshAllSprites
-    ;sei
-    ;BREAKPOINT
-    ;jsr _RefineCharacters
+    jsr _RefreshAllSprites
     BREAKPOINT
-    ;cli
 
     ; Erase all the sprites
 	ldx #0
 	ldy #SPRITE(_LastSprite)
 	jsr SpriteErase
-    jsr RefreshAllSprites
-    ;jsr _RefineCharacters
-
+    jsr _RefreshAllSprites
 #endif
 
 	;
@@ -148,7 +140,7 @@ end_update_items
 
 	jsr MoveGirders
 	jsr HandleCrane
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
 
 	jsr HandleCollisions
 
@@ -192,7 +184,7 @@ blink_loop
 	lda SpriteRequestedState,x
 	eor #1
 	sta SpriteRequestedState,x
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
     jsr Bleep
 
 	dec death_counter
@@ -265,7 +257,7 @@ MarioWinSequence
 	dec fixation_count
 	jsr HandlePlatforms
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
 
 	; Increment score
 	ldx #20
@@ -292,7 +284,7 @@ loop
 	dey
 	bne loop
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
     jsr Bleep
 	jsr BlinkTemporization_128
 
@@ -316,7 +308,7 @@ loop
 	sta SpriteRequestedState+SPRITE(FirstPlatformFalling)+2
 	sta SpriteRequestedState+SPRITE(FirstKongFalling)
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
 
 	; Another 20 points bonus
 	ldx #20
@@ -336,7 +328,7 @@ hearts_blink
 	and #1
 	sta SpriteRequestedState+SPRITE(FirstHeart)+1
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
     jsr Bleep
 
 	ldx #64
@@ -359,7 +351,7 @@ not_last_platform
 	sta SpriteRequestedState+SPRITE(FirstCraneHook)+4
 	sta SpriteRequestedState+SPRITE(MarioJump)
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
 
 	jsr BlinkTemporization_128
 
@@ -376,7 +368,7 @@ not_last_platform
 	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
 	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+1
 
-	jsr RefreshAllSprites
+	jsr _RefreshAllSprites
 
 	jsr BlinkTemporization_128
 
@@ -1322,76 +1314,48 @@ loop_draw
 
 
 
-RefreshAllSprites
+_RefreshAllSprites
 .(
 	ldx #0
-loop
+loop_sprite
 	lda SpriteRequestedState,x
 	cmp SpriteDisplayState,x
 	beq skip_sprite
-
-	; Change sprite status
-	sta SpriteDisplayState,x
-
-	stx tmp_save_sprite
-
-	; X=Sprite number to display
-	jsr _DisplaySingleSprite
-
-	ldx tmp_save_sprite
-skip_sprite
-	inx
-	cpx #SPRITE_COUNT
-	bne loop
-    ; And immediately copy the content to the charset
-    jmp _RefineCharacters
-.)
-
-
-; Note: In all display routines "tmp0" points on the screen
-_DisplaySingleSprite
-.(
-	; Screen adress
-	lda _KongSpriteScreenX,x
-	sta zp_x
-	lda _KongSpriteScreenY,x
-	sta zp_y
-
-	; Sprite data address
-	lda _KongSpriteAdd_Low,x
+	sta SpriteDisplayState,x        ; Update the sprite status
+		
+	lda SpriteTableLow,x            ; Sprite data address
 	sta ptr_src+0
-	lda _KongSpriteAdd_High,x
+	lda SpriteTableHigh,x
 	sta ptr_src+1
-
-	; Sprite width and height
-	lda _KongSpriteWidth,x
+	
+	lda SpriteTableWidth,x          ; Sprite width and height
 	sta tmp_width
 
-	lda _KongSpriteHeight,x
+	lda SpriteTableHeight,x
 	sta tmp_height
+
+	lda SpriteTableScreenX,x        ; Screen address
+	sta auto_x_offset
+	lda SpriteTableScreenY,x
+	sta zp_y
 
 loop_y
     ldy zp_y    
     inc zp_y
     clc 
-    lda gScanlineTableLow,y
-    adc zp_x
+    lda ScanlineTableLow,y
+auto_x_offset = *+1
+    adc #0
     sta ptr_dst+0
-    lda gScanlineTableHigh,y
+    lda ScanlineTableHigh,y
     adc #0
     sta ptr_dst+1
-
 
     ldy #0
 loop_x
 	lda (ptr_src),y
-	;//beq skip_empty
-
 	eor (ptr_dst),y
-	;ora #64               ; ----------- test
-	sta (ptr_dst),y
-skip_empty
-	
+	sta (ptr_dst),y	
 	iny
     cpy tmp_width
 	bne loop_x
@@ -1408,8 +1372,14 @@ skip_empty
 	dec tmp_height
 	bne loop_y
 
-	rts
+skip_sprite
+	inx
+	cpx #SPRITE_COUNT
+	bne loop_sprite    
+
+    jmp _RefineCharacters      ; And immediately copy the content to the charset
 .)
+
 
 
 _RefineCharacters
@@ -1766,20 +1736,20 @@ _GenerateScanlineTable
 .(
     ; Generate the scanline table
     lda #<$a000
-    sta gScanlineTableLow
+    sta ScanlineTableLow
     lda #>$a000
-    sta gScanlineTableHigh
+    sta ScanlineTableHigh
 
     ldx #1
 loop_hires
     clc
-    lda gScanlineTableLow-1,x
+    lda ScanlineTableLow-1,x
     adc #40
-    sta gScanlineTableLow,x
+    sta ScanlineTableLow,x
 
-    lda gScanlineTableHigh-1,x
+    lda ScanlineTableHigh-1,x
     adc #0
-    sta gScanlineTableHigh,x
+    sta ScanlineTableHigh,x
 
     inx 
     cpx #200
@@ -1787,20 +1757,20 @@ loop_hires
 
     ; Point to the "hires buffer"
     lda #<_BottomGraphics
-    sta gScanlineTableLow,x
+    sta ScanlineTableLow,x
     lda #>_BottomGraphics
-    sta gScanlineTableHigh,x
+    sta ScanlineTableHigh,x
     inx
 
 loop_text
     clc
-    lda gScanlineTableLow-1,x
+    lda ScanlineTableLow-1,x
     adc #40
-    sta gScanlineTableLow,x
+    sta ScanlineTableLow,x
 
-    lda gScanlineTableHigh-1,x
+    lda ScanlineTableHigh-1,x
     adc #0
-    sta gScanlineTableHigh,x
+    sta ScanlineTableHigh,x
 
     inx 
     cpx #224
@@ -1961,9 +1931,9 @@ SevenDigitPatterns
     ; 7
     .byt %100011
     .byt %111101
-    .byt %111011
+    .byt %111111
     .byt %111101
-    .byt %111011
+    .byt %111111
     ; 8
     .byt %100011
     .byt %011101
@@ -1991,8 +1961,8 @@ EndData
 
 _BssStart_
 
-gScanlineTableLow       .dsb 224
-gScanlineTableHigh      .dsb 224
+ScanlineTableLow        .dsb 224
+ScanlineTableHigh       .dsb 224
 
 SpriteDisplayState		.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
 SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
