@@ -98,19 +98,19 @@ LABEL(FirstMario)
 LABEL(FirstFloorMario)
 	; First floor (5)
 	SPRITE_DATA(6,181+8+5+1,3,19,KongSprite_Mario_Right_1)    ; * . . .
-	SPRITE_DATA(11,181+6+5+2,3,19,KongSprite_Mario_Right_1)   ; . * . .
-	SPRITE_DATA(16,181+4+4+3,3,19,KongSprite_Mario_Right_1)   ; . . * .
-	SPRITE_DATA(21,181+2+3+5,3,19,KongSprite_Mario_Right_1)   ; . . . *
+	SPRITE_DATA(11,181+6+5,3,20,KongSprite_Mario_Right_2)     ; . * . .
+	SPRITE_DATA(16,181+4+4+3,3,20,KongSprite_Mario_Right_3)   ; . . * .
+	SPRITE_DATA(21,181+2+3+5,3,20,KongSprite_Mario_Right_4)   ; . . . *
 LABEL(MarioLader_1)
 	SPRITE_DATA(26,178+1+7,3,22,KongSprite_Mario_Climb)
 
 LABEL(SecondFloorMario)
 	; Second floor (5)
-	SPRITE_DATA(26,144+6,3,20,KongSprite_Mario_Left_1)    ; . . . . *
-	SPRITE_DATA(21,144+5,3,20,KongSprite_Mario_Left_1)    ; . . . * .
-	SPRITE_DATA(16,144+4,3,20,KongSprite_Mario_Left_1)    ; . . * . .
-	SPRITE_DATA(11,144+2,3,20,KongSprite_Mario_Left_1)    ; . * . . .
-	SPRITE_DATA(6,144+1,3,20,KongSprite_Mario_Left_1)     ; * . . . .
+    SPRITE_DATA(26,144+6,3,20,KongSprite_Mario_UpFirstLadder)           ; . . . . *
+    SPRITE_DATA(21,144+5,3,20,KongSprite_Mario_CenterRightSecondFloor)  ; . . . * .
+    SPRITE_DATA(16,144+4,3,20,KongSprite_Mario_CenterSecondFloor)       ; . . * . .
+	SPRITE_DATA(11,144+2,3,20,KongSprite_Mario_Left_1)                  ; . * . . .
+    SPRITE_DATA(5,144+1,4,20,KongSprite_Mario_DownSecondLadder)         ; * . . . .
 LABEL(MarioLader_2)
 	; Lader (2)
 	SPRITE_DATA(6,127,3,22,KongSprite_Mario_Climb)
