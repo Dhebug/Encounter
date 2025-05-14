@@ -95,6 +95,8 @@ real_start
     jsr _GenerateScanlineTable
     jsr GameInits
 
+    jsr _PatchSprites
+
 #ifndef GAME_MODE
     jsr ScoreDisplay
     jsr DisplayLives
@@ -1380,6 +1382,73 @@ skip_sprite
     jmp _RefineCharacters      ; And immediately copy the content to the charset
 .)
 
+
+; This should only be called for sprites that are only used once
+_PatchSprites
+.(
+    ;rts
+	ldx #0
+loop_sprite
+	lda SpriteTableScreenX,x        ; Screen address
+    bpl skip_sprite                 ; BIT 7 set = must patch at startup
+    and #127
+	sta SpriteTableScreenX,x        ; Write back the patched value
+
+	sta auto_x_offset
+	lda SpriteTableScreenY,x
+	sta zp_y
+		
+	lda SpriteTableLow,x            ; Sprite data address
+	sta ptr_src+0
+	lda SpriteTableHigh,x
+	sta ptr_src+1
+	
+	lda SpriteTableWidth,x          ; Sprite width and height
+	sta tmp_width
+
+	lda SpriteTableHeight,x
+	sta tmp_height
+
+loop_y
+    ldy zp_y    
+    inc zp_y
+    clc 
+    lda ScanlineTableLow,y
+auto_x_offset = *+1
+    adc #0
+    sta ptr_dst+0
+    lda ScanlineTableHigh,y
+    adc #0
+    sta ptr_dst+1
+
+    ldy #0
+loop_x
+	lda (ptr_dst),y             ; Load from screen
+    and #%00111111              ; Mask out inverse/hires bits
+	and (ptr_src),y             ; Mask with the sprite data
+	sta (ptr_src),y	            ; Write back into the sprite
+	iny
+    cpy tmp_width
+	bne loop_x
+
+    clc
+    lda ptr_src+0
+    adc tmp_width
+    sta ptr_src+0
+
+    lda ptr_src+1
+    adc #0
+    sta ptr_src+1
+
+	dec tmp_height
+	bne loop_y
+
+skip_sprite
+	inx
+	cpx #SPRITE_COUNT
+	bne loop_sprite    
+    rts
+.)
 
 
 _RefineCharacters
