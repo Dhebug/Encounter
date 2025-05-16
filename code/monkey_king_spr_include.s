@@ -87,7 +87,7 @@ LABEL(FirstPlatformFalling)
 
 LABEL(FirstHook)
 	; Hooks that attach platforms (4)
-	SPRITE_DATA(25,15,2,28,KongSprite_Hook_Left)
+	SPRITE_DATA(25,14,2,29,KongSprite_Hook_Left)
 	SPRITE_DATA(26,17,1,26,KongSprite_Hook_CenterLeft)
 	SPRITE_DATA(27,17,1,26,KongSprite_Hook_CenterRight)
 	SPRITE_DATA(28,15,1,28,KongSprite_Hook_Right)
@@ -102,7 +102,7 @@ LABEL(FirstFloorMario)
 	SPRITE_DATA(16,181+4+4+3,3,20,KongSprite_Mario_Right_3)   ; . . * .
 	SPRITE_DATA(21,181+2+3+5,3,20,KongSprite_Mario_Right_4)   ; . . . *
 LABEL(MarioLader_1)
-	SPRITE_DATA(26,178+1+7,3,22,KongSprite_Mario_Climb)
+	SPRITE_DATA(128+26,178+1+7+3,4,19,KongSprite_Mario_FirstClimb)
 
 LABEL(SecondFloorMario)
 	; Second floor (5)
@@ -110,7 +110,7 @@ LABEL(SecondFloorMario)
     SPRITE_DATA(21,144+5,3,20,KongSprite_Mario_CenterRightSecondFloor)  ; . . . * .
     SPRITE_DATA(16,144+4,3,20,KongSprite_Mario_CenterSecondFloor)       ; . . * . .
 	SPRITE_DATA(11,144+2,3,20,KongSprite_Mario_Left_1)                  ; . * . . .
-    SPRITE_DATA(5,144+1,4,20,KongSprite_Mario_DownSecondLadder)         ; * . . . .
+    SPRITE_DATA(128+5,144+1,4,20,KongSprite_Mario_DownSecondLadder)         ; * . . . .
 LABEL(MarioLader_2)
 	; Lader (2)
 	SPRITE_DATA(6,127,3,22,KongSprite_Mario_Climb)
@@ -133,7 +133,7 @@ LABEL(MarioJump)
 
 LABEL(FirstMarioJump)
 	; Mario jumping First Floor (2)
-	SPRITE_DATA(7,169+5,3,17,KongSprite_Mario_Jump_Right)
+	SPRITE_DATA(7,169+5+3,3,17,KongSprite_Mario_Jump_Right)
 	SPRITE_DATA(21,169+5,3,17,KongSprite_Mario_Jump_Right)
 	; Mario jumping Second Floor (2)
 	SPRITE_DATA(21,126+5,3,18,KongSprite_Mario_Jump_Left)
