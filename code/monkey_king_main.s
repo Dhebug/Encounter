@@ -12,8 +12,8 @@
 #define SPRITE(value)  value-_FirstSprite
 
 ; Game speed 
-#define GAME_DELAY          128
-#define JUMP_DELAY          128
+#define GAME_SPEED_UP       250
+#define GAME_DELAY          64     ; Used for the global movement and the jump
 #define CRANE_DELAY         64
 #define GIRDER_DELAY        200
 #define GIRDER_RAND_MASK    7
@@ -63,6 +63,8 @@ kong_position	.dsb 1		; 0 1 2 (3 when crashed ???)
 
 fixation_count	.dsb 1		; Number of fix that keep the platform attached
 
+game_speed_up   .dsb 1      ; When reaches zero, game_speed_tick decreases
+game_speed_tick .dsb 1      ; Current speed of the game
 game_tick		.dsb 1      ; Main game tick
 crane_tick	    .dsb 1      ; Tick for the crane animation
 girder_tick		.dsb 1		; Tick for the handling of moving girders
@@ -85,6 +87,7 @@ _BottomGraphics = $D2E0
 _main           jmp real_start   ; +0
 read_keyboard   jmp $1234        ; +3
 play_sound      jmp $1234        ; +6
+VSync           jmp $1234        ; +9
 
 
 real_start    
@@ -119,6 +122,7 @@ real_start
 	; Stay into the game loop while the hero still has some live to spare
 	;
 game_loop
+    jsr VSync
 	jsr ScoreDisplay
     jsr DisplayLives
 
@@ -128,7 +132,7 @@ game_loop
 	lda game_tick
 	bne end_update_items
 
-		lda #GAME_DELAY
+		lda game_speed_tick
 		sta game_tick
 
 		; Call the "click" routine
@@ -139,6 +143,16 @@ game_loop
 		jsr MoveKong
 end_update_items
 	dec game_tick
+
+    ; Handle game speed
+    ;  50 IRQ = 1 second
+    ; 250 IRQ = 3 seconds
+    dec game_speed_up
+    bne skip_game_speed
+    lda #GAME_SPEED_UP
+    sta game_speed_up
+    dec game_speed_tick
+skip_game_speed
 
 	jsr MoveGirders
 	jsr HandleCrane
@@ -1017,7 +1031,7 @@ check_fifth_jump
 	jmp validate_jump
 
 validate_jump
-	lda #JUMP_DELAY
+	lda game_speed_tick
 	sta mario_jmp_count
 check_end
 	rts
@@ -1863,6 +1877,12 @@ GameInits
 	sta crane_status
 	sta crane_position
 	sta hook_position
+
+    lda #GAME_SPEED_UP
+    sta game_speed_up
+
+    lda #GAME_DELAY
+    sta game_speed_tick
 
 	lda #SPRITE(FirstMario)
 	sta hero_position

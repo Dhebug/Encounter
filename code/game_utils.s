@@ -2316,6 +2316,11 @@ loop_1
     sta _Minigame+6+1
     lda #>_PlaySoundAsmXY
     sta _Minigame+6+2
+
+    lda #<_VSync
+    sta _Minigame+9+1
+    lda #>_VSync
+    sta _Minigame+9+2
    
 
     ; Launch the game
@@ -2333,6 +2338,9 @@ loop_1
     lda #255
     sta _gCurrentSpriteSheetIndex
     sta _gCurrentMusicFileIndex
+
+    ; Reload the font data
+    jsr _LoadFonts
 
     ; Start the game clock again
     jsr _StartClock
