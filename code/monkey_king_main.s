@@ -26,7 +26,6 @@
 
 ; Misc
 #define BREAKPOINT  jmp *
-//#define GAME_MODE    // Comment out to test
 
 	.zero
 
@@ -100,23 +99,24 @@ real_start
 
     jsr _PatchSprites
 
-#ifndef GAME_MODE
     jsr ScoreDisplay
     jsr DisplayLives
 
+    ; Force displaying all the sprites
 	ldx #0
 	ldy #SPRITE(_LastSprite)
     jsr SpriteDraw
 
+    ; Wait for a key press to start the game
     jsr _RefreshAllSprites
-    BREAKPOINT
+
+    jsr _WaitKey
 
     ; Erase all the sprites
 	ldx #0
 	ldy #SPRITE(_LastSprite)
 	jsr SpriteErase
     jsr _RefreshAllSprites
-#endif
 
 	;
 	; Stay into the game loop while the hero still has some live to spare
@@ -873,6 +873,14 @@ collided
 
 check_end
 	rts
+.)
+
+
+_WaitKey
+.(
+    jsr read_keyboard
+    beq _WaitKey
+    rts
 .)
 
 
