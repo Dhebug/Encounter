@@ -170,9 +170,9 @@ LABEL(FirstHeart)       ; Hearts of victory (2)
 	SPRITE_DATA(6,2,2,8,KongSprite_BigHeart)
 
 LABEL(PlayerLives)      ; The indicators for remaining lives
-	SPRITE_DATA(38,197,2,16,_SpriteMario_Life)
-	SPRITE_DATA(36,197,2,16,_SpriteMario_Life)
 	SPRITE_DATA(34,197,2,16,_SpriteMario_Life)
+	SPRITE_DATA(36,197,2,16,_SpriteMario_Life)
+	SPRITE_DATA(38,197,2,16,_SpriteMario_Life)
 
 LABEL(_LastSprite)
 

@@ -100,7 +100,12 @@ real_start
     jsr _PatchSprites
 
     jsr ScoreDisplay
-    jsr DisplayLives
+
+    ; Draw the 3 possible player lives
+	ldx #SPRITE(PlayerLives)
+	ldy live_counter
+    jsr SpriteDraw
+
 
     ; Force displaying all the sprites
 	ldx #0
@@ -112,11 +117,23 @@ real_start
 
     jsr _WaitKey
 
-    ; Erase all the sprites
+    ; Erase all the sprites (except the three last lives)
 	ldx #0
-	ldy #SPRITE(_LastSprite)
+	ldy #SPRITE(PlayerLives)
 	jsr SpriteErase
     jsr _RefreshAllSprites
+
+    jsr BlinkTemporization_128
+
+    ; Remove one life, and put the player in play
+    jsr _RemoveLife
+
+    lda #1
+	sta SpriteRequestedState+SPRITE(FirstMario)
+
+    jsr _RefreshAllSprites
+
+    jsr BlinkTemporization_128
 
 	;
 	; Stay into the game loop while the hero still has some live to spare
@@ -124,7 +141,6 @@ real_start
 game_loop
     jsr VSync
 	jsr ScoreDisplay
-    jsr DisplayLives
 
 	jsr MoveHero
 
@@ -141,6 +157,7 @@ game_loop
 		jsr HandlePlatforms
 		jsr MoveBarrels
 		jsr MoveKong
+        jsr DisplayLives
 end_update_items
 	dec game_tick
 
@@ -212,6 +229,8 @@ blink_loop
 ; Normal death
 ; Reposition mario at the beginning
 RestartHero
+    jsr _RemoveLife
+
 	lda #SPRITE(FirstMario)
 	sta hero_position
 
@@ -219,6 +238,13 @@ RestartHero
 	ldx #0
 	ldy #3
 	jsr SpriteErase
+
+    ; Force refreshing sprites
+    jsr _RefreshAllSprites
+
+    ; Reset the tick
+    lda game_speed_tick
+    sta game_tick
 
 	jmp game_loop
 
@@ -1910,18 +1936,38 @@ GameInits
 .)
 
 
+; Remove life
+_RemoveLife
+.(
+    lda #0
+    sta SpriteRequestedState+SPRITE(PlayerLives)+0
+    rts
+.)
+
 ; Display the remaining lives of the hero
 DisplayLives
 .(
-    ; We start by erasing the  3 lives
-	ldx #SPRITE(PlayerLives)
-	ldy #3
-    jsr SpriteErase
+check_first_slot    
+    lda SpriteRequestedState+SPRITE(PlayerLives)+0    ; Is first slot occupied?
+    bne check_third_slot
 
-    ; And then we draw the remaining ones
-	ldx #SPRITE(PlayerLives)
-	ldy live_counter
-    jsr SpriteDraw
+check_second_slot
+    lda SpriteRequestedState+SPRITE(PlayerLives)+1    ; Is second slot occupied?
+    beq check_third_slot
+    sta SpriteRequestedState+SPRITE(PlayerLives)+0    ; Fill the first slot
+    lda #0
+    sta SpriteRequestedState+SPRITE(PlayerLives)+1    ; Clear the second slot
+    rts
+
+check_third_slot
+    lda SpriteRequestedState+SPRITE(PlayerLives)+1    ; Is second slot occupied?
+    bne done
+    lda SpriteRequestedState+SPRITE(PlayerLives)+2    ; Is third slot occupied?
+    beq done
+    sta SpriteRequestedState+SPRITE(PlayerLives)+1    ; Fill the second slot
+    lda #0
+    sta SpriteRequestedState+SPRITE(PlayerLives)+2    ; Clear the third slot
+done
     rts
 .)
 
