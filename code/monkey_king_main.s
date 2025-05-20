@@ -555,6 +555,21 @@ ScoreIncrement
 	adc #0
 	sta current_score+0
 
+    ; Check if we reached 300 points to get an extra life
+    lda #>$300
+    cmp current_score+0
+    bne end_extra_life
+    lda #<$300
+    cmp current_score+1
+    bne end_extra_life
+    
+    ; Normally should blink to indicate to the player, but will work good enough at the moment
+    inc live_counter
+    lda #1
+    sta SpriteRequestedState+SPRITE(PlayerLives)+2
+
+end_extra_life
+
 	; Sounddemon proposes a 16 bits subtraction
 	; aeb156 code
     lda     current_score+0
@@ -1932,6 +1947,14 @@ GameInits
 
 	lda #4
 	sta fixation_count
+
+#if 0  // TEST
+    lda #>$295
+    sta current_score+0
+    lda #<$295
+    sta current_score+1
+#endif    
+
     rts
 .)
 
