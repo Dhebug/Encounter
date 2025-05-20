@@ -227,10 +227,10 @@ blink_loop
 	bmi FullDeath
 
 ; Normal death
-; Reposition mario at the beginning
-RestartHero
     jsr _RemoveLife
 
+; Reposition mario at the beginning
+RestartHero
 	lda #SPRITE(FirstMario)
 	sta hero_position
 
