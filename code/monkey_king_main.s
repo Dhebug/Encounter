@@ -14,7 +14,7 @@
 ; Game speed 
 #define GAME_SPEED_UP       250
 #define GAME_DELAY          64     ; Used for the global movement and the jump
-#define CRANE_DELAY         64
+#define CRANE_DELAY         32
 #define GIRDER_DELAY        200
 #define GIRDER_RAND_MASK    7
 
@@ -23,6 +23,12 @@
 #define STATUS_COLLIDED 1
 #define STATUS_FELL     2
 #define STATUS_WON      3
+
+; Crane position
+#define CRANE_DOWN      0
+#define CRANE_MID       1
+#define CRANE_HIGH      2
+
 
 ; Misc
 #define BREAKPOINT  jmp *
@@ -196,7 +202,7 @@ MarioEndSequence
 	sta player_status
 	sta game_tick
 	sta crane_status
-	sta crane_position
+	sta crane_position    ; CRANE_DOWN
 	sta hook_position
 
 	cpx #STATUS_COLLIDED
@@ -718,7 +724,7 @@ not_down
 
 mid
 	ldx hook_position
-	cpx #4
+	cpx #HookSequence_End-HookSequence_Start
 	beq end_mid
 	inc hook_position
 	jmp end_crane_movement
@@ -745,23 +751,42 @@ end_crane_movement
 	jsr SpriteErase
 
 	; Draw crane depending of flags
-	lda #1
+	lda #CRANE_MID
 	ldx crane_position
 	sta SpriteRequestedState+SPRITE(FirstCrane),x
 
 	; Draw hooks depending of position
 	ldx crane_position
-	cpx #1
+	cpx #CRANE_MID
 	bne end_draw_hooks
 
-	lda #1
 	ldx hook_position
-	sta SpriteRequestedState+SPRITE(FirstCraneHook),x
+    lda HookSequence_Start,x
+    tax
+	lda #1
+	sta SpriteRequestedState,x
 
 end_draw_hooks
 	rts
 .)
 
+
+; Table with the various positions of hooks for the swinging movement
+HookSequence_Start
+    .byt SPRITE(FirstCraneHook)+4    ; Close to the player
+    .byt SPRITE(FirstCraneHook)+3
+    .byt SPRITE(FirstCraneHook)+2
+    .byt SPRITE(FirstCraneHook)+1
+    .byt SPRITE(FirstCraneHook)+0    ; Far from the player
+    .byt SPRITE(FirstCraneHook)+1
+    .byt SPRITE(FirstCraneHook)+2
+    .byt SPRITE(FirstCraneHook)+3
+    .byt SPRITE(FirstCraneHook)+4    ; Close to the player
+    .byt SPRITE(FirstCraneHook)+3
+    .byt SPRITE(FirstCraneHook)+2
+    .byt SPRITE(FirstCraneHook)+1
+    .byt SPRITE(FirstCraneHook)+0    ; Far from the player
+HookSequence_End
 
 
 
