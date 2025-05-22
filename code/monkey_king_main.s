@@ -15,7 +15,7 @@
 #define GAME_SPEED_UP       250
 #define GAME_DELAY          64     ; Used for the global movement and the jump
 #define CRANE_DELAY         32
-#define GIRDER_DELAY        200
+#define GIRDER_DELAY        128
 #define GIRDER_RAND_MASK    7
 
 ; Game status
@@ -53,7 +53,6 @@ tmp_height		.dsb 1
 b_tmp1			.dsb 1
 b_tmp2			.dsb 1
 
-live_counter	.dsb 1		; Number of lives remaining
 player_status	.dsb 1		; 0=playing 1=mario collide 2=mario fell 3=mario win
 mario_jmp_count	.dsb 1
 death_counter	.dsb 1
@@ -109,7 +108,7 @@ real_start
 
     ; Draw the 3 possible player lives
 	ldx #SPRITE(PlayerLives)
-	ldy live_counter
+	ldy #3
     jsr SpriteDraw
 
 
@@ -229,8 +228,10 @@ blink_loop
 	dec death_counter
 	bne blink_loop
 
-	dec live_counter
-	bmi FullDeath
+    ; Do we still have lives?
+    ldx #SPRITE(PlayerLives)
+	lda SpriteDisplayState,x
+	beq FullDeath
 
 ; Normal death
     jsr _RemoveLife
@@ -570,7 +571,6 @@ ScoreIncrement
     bne end_extra_life
     
     ; Normally should blink to indicate to the player, but will work good enough at the moment
-    inc live_counter
     lda #1
     sta SpriteRequestedState+SPRITE(PlayerLives)+2
 
@@ -1966,9 +1966,6 @@ GameInits
 
     lda #GIRDER_DELAY
     sta girder_tick
-
-	lda #3
-	sta live_counter
 
 	lda #4
 	sta fixation_count
