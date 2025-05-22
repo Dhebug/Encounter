@@ -392,7 +392,6 @@ not_last_platform
 	lda #0
 	sta SpriteRequestedState+SPRITE(FirstCrane)+2
 	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
-	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+1
 
 	; Draw upper crane with hook and mario
 	lda #1
@@ -415,7 +414,6 @@ not_last_platform
 	lda #1
 	sta SpriteRequestedState+SPRITE(FirstCrane)+0
 	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
-	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+1
 
 	jsr _RefreshAllSprites
 
