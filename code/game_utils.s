@@ -2289,7 +2289,7 @@ _PlayMonkeyKing
 
     ; Erase graphics in the lower border to avoid glitches during loading
     ldx #40*3
-    lda #0
+    lda #32|128
 loop_1
     sta $bb80+40*25,x
     dex
