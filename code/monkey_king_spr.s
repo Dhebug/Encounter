@@ -10,7 +10,7 @@ _StartSpriteGraphics
 ; =======================================
 ;			All 26 barrels
 ; =======================================
-KongSprite_Barrel_FallDiagonal_1    ; 2x11
+Barrel_FallDiagonal_1    ; 2x11
 	.byt %000110,%000000
 	.byt %011011,%110000
 	.byt %011010,%011000
@@ -23,7 +23,7 @@ KongSprite_Barrel_FallDiagonal_1    ; 2x11
 	.byt %001111,%101100
 	.byt %000111,%111000
 
-KongSprite_Barrel_FallDiagonal_2   ; 2x10
+Barrel_FallDiagonal_2   ; 2x10
 	.byt %000111,%111000
 	.byt %001100,%110100
 	.byt %011000,%111010
@@ -35,7 +35,7 @@ KongSprite_Barrel_FallDiagonal_2   ; 2x10
 	.byt %011111,%111000
 	.byt %001111,%110000
 
-KongSprite_Barrel_FallDiagonal_3
+Barrel_FallDiagonal_3
 	.byt %000111,%100000
 	.byt %011101,%111000
 	.byt %011011,%001100
@@ -48,7 +48,7 @@ KongSprite_Barrel_FallDiagonal_3
 	.byt %000011,%101100
 	.byt %000000,%110000
 
-KongSprite_Barrel_FallDiagonal_4
+Barrel_FallDiagonal_4
 	.byt %000011,%100000
 	.byt %000111,%111000
 	.byt %001111,%011100
@@ -60,7 +60,7 @@ KongSprite_Barrel_FallDiagonal_4
 	.byt %000111,%000100
 	.byt %000001,%111000
 
-KongSprite_Barrel_FallDiagonal_5
+Barrel_FallDiagonal_5
 	.byt %001111,%100000
 	.byt %011111,%111000
 	.byt %101001,%101100
@@ -71,7 +71,7 @@ KongSprite_Barrel_FallDiagonal_5
 	.byt %011110,%001000
 	.byt %001111,%110000
 
-KongSprite_Barrel_FallDiagonal_6
+Barrel_FallDiagonal_6
 	.byt %001111,%110000
 	.byt %011110,%001000
 	.byt %111011,%100100
@@ -82,7 +82,7 @@ KongSprite_Barrel_FallDiagonal_6
 	.byt %011111,%110000
 	.byt %000111,%000000
 
-KongSprite_Barrel_FallStraight    ; 2x9
+Barrel_FallStraight    ; 2x9
 	.byt %001111,%111000
 	.byt %010001,%000110
 	.byt %111111,%111101
@@ -93,7 +93,7 @@ KongSprite_Barrel_FallStraight    ; 2x9
 	.byt %111111,%111111
 	.byt %011111,%111110
 
-KongSprite_Barrel_BottomLeft   ; 2x10
+Barrel_BottomLeft   ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %010111,%111000
@@ -105,7 +105,7 @@ KongSprite_Barrel_BottomLeft   ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barrel_BottomRight  ; 2x10
+Barrel_BottomRight  ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %011111,%101000
@@ -117,7 +117,7 @@ KongSprite_Barrel_BottomRight  ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barrel_TopRight   ; 2x10
+Barrel_TopRight   ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010111,%001000
@@ -129,7 +129,7 @@ KongSprite_Barrel_TopRight   ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 
-KongSprite_Barrel_TopLeft   ; 2x10
+Barrel_TopLeft   ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010011,%101000
@@ -141,7 +141,7 @@ KongSprite_Barrel_TopLeft   ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 	
-KongSprite_Barrel_Bottom    ; 2x10
+Barrel_Bottom    ; 2x10
 	.byt %000111,%100000
 	.byt %001111,%110000
 	.byt %011111,%111000
@@ -153,7 +153,7 @@ KongSprite_Barrel_Bottom    ; 2x10
 	.byt %001000,%010000
 	.byt %000111,%100000
 
-KongSprite_Barrel_Top       ; 2x10
+Barrel_Top       ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%010000
 	.byt %010111,%101000
@@ -165,7 +165,7 @@ KongSprite_Barrel_Top       ; 2x10
 	.byt %001111,%110000
 	.byt %000111,%100000
 
-KongSprite_Barrel_Left      ; 2x10
+Barrel_Left      ; 2x10
 	.byt %000111,%100000
 	.byt %001000,%110000
 	.byt %010111,%011000
@@ -177,7 +177,7 @@ KongSprite_Barrel_Left      ; 2x10
 	.byt %001000,%110000
 	.byt %000111,%100000
 
-KongSprite_Barrel_Right     ; 2x10
+Barrel_Right     ; 2x10
 	.byt %000111,%100000
 	.byt %001100,%010000
 	.byt %011111,%101000
@@ -195,7 +195,7 @@ KongSprite_Barrel_Right     ; 2x10
 ;			The moving girders
 ; =======================================
 
-KongSprite_Girder_1  ; 4x11
+Girder_1  ; 4x11
 	.byt %000000,%000111,%110000,%000000
 	.byt %000000,%000011,%100000,%000000
 	.byt %000000,%000001,%000000,%000000
@@ -208,7 +208,7 @@ KongSprite_Girder_1  ; 4x11
 	.byt %001100,%111111,%111111,%100000
 	.byt %111111,%100000,%000000,%000000
 
-KongSprite_Girder_2  ; 4x11
+Girder_2  ; 4x11
 	.byt %000000,%000111,%110000,%000000
 	.byt %000000,%000011,%100000,%000000
 	.byt %000000,%000001,%000000,%000000
@@ -226,7 +226,7 @@ KongSprite_Girder_2  ; 4x11
 ;			Donkey kong (3x4=12)
 ; =======================================
 
-KongSprite_Kong_Barrel_Left
+Kong_Barrel_Left
 	.byt %000000,%111111,%111110,%000000
 	.byt %000001,%111111,%111111,%000000
 	.byt %000111,%100010,%000111,%100000
@@ -245,7 +245,7 @@ KongSprite_Kong_Barrel_Left
 	.byt %011000,%000000,%000000,%000100
 	.byt %010000,%000000,%000000,%000000
 
-KongSprite_Kong_Body_Left
+Kong_Body_Left
 	.byt %000000,%000111,%111000,%000000,%000000
 	.byt %000000,%001111,%111100,%000000,%000000
 	.byt %000000,%011101,%100110,%000000,%000000
@@ -271,7 +271,7 @@ KongSprite_Kong_Body_Left
 	.byt %000001,%100000,%100100,%000000,%000000
 	.byt %000001,%111111,%111100,%000000,%000000
 
-KongSprite_Kong_LeftHand_Left
+Kong_LeftHand_Left
 	.byt %000000,%100000
 	.byt %000001,%100000
 	.byt %000001,%100000
@@ -286,7 +286,7 @@ KongSprite_Kong_LeftHand_Left
 	.byt %001101,%000000
 	.byt %000011,%000000
 
-KongSprite_Kong_RightHand_Left
+Kong_RightHand_Left
 	.byt %000011,%100000,%000000
 	.byt %000011,%110000,%000000
 	.byt %000011,%111111,%110000
@@ -299,7 +299,7 @@ KongSprite_Kong_RightHand_Left
 	.byt %000000,%000011,%000000
 
 ; ----------------------------- Center Kong
-KongSprite_Kong_Body   ; 3x25
+Kong_Body   ; 3x25
 	.byt %000000,%011110,%000000
 	.byt %000001,%111111,%100000
 	.byt %000111,%111111,%111000
@@ -326,7 +326,7 @@ KongSprite_Kong_Body   ; 3x25
 	.byt %101010,%010010,%010101
 	.byt %111111,%110011,%111111
 
-KongSprite_Kong_Barrel   ; 3x13
+Kong_Barrel   ; 3x13
 	.byt %000001,%111111,%100000
 	.byt %000011,%000000,%010000
 	.byt %000110,%101010,%101000
@@ -341,7 +341,7 @@ KongSprite_Kong_Barrel   ; 3x13
 	.byt %110000,%000000,%000011
 	.byt %100000,%000000,%000001
 
-KongSprite_Kong_LeftHand   ; 2x11
+Kong_LeftHand   ; 2x11
 	.byt %000010,%000000
 	.byt %000110,%000000
 	.byt %001110,%000000
@@ -354,7 +354,7 @@ KongSprite_Kong_LeftHand   ; 2x11
 	.byt %110010,%100000
 	.byt %011111,%000000
 
-KongSprite_Kong_RightHand   ; 2x11
+Kong_RightHand   ; 2x11
 	.byt %000000,%010000
 	.byt %000000,%011000
 	.byt %000000,%011100
@@ -369,7 +369,7 @@ KongSprite_Kong_RightHand   ; 2x11
 
 ; ----------------------------- Right Kong
 
-KongSprite_Kong_Body_Right
+Kong_Body_Right
 	.byt %000000,%000000,%000010,%000000,%000000
 	.byt %000000,%000000,%000111,%110000,%000000
 	.byt %000000,%000000,%111111,%111000,%000000
@@ -397,7 +397,7 @@ KongSprite_Kong_Body_Right
 	.byt %000000,%000000,%001100,%000000,%110000
 	.byt %000000,%000000,%000111,%111111,%110000
 
-KongSprite_Kong_Barrel_Right
+Kong_Barrel_Right
 	.byt %000000,%000001,%111000,%000000,%000000
 	.byt %000000,%000111,%111110,%000000,%000000
 	.byt %000000,%011011,%000111,%100000,%000000
@@ -417,7 +417,7 @@ KongSprite_Kong_Barrel_Right
 	.byt %000000,%000000,%000000,%000111,%100000
 	.byt %000000,%000000,%000000,%000011,%000000
 
-KongSprite_Kong_LeftHand_Right
+Kong_LeftHand_Right
 	.byt %000111,%110111,%100000
 	.byt %001101,%011111,%000000
 	.byt %010101,%011111,%000000
@@ -427,7 +427,7 @@ KongSprite_Kong_LeftHand_Right
 	.byt %001100,%011100,%000000
 	.byt %000011,%110000,%000000
 
-KongSprite_Kong_RightHand_Right
+Kong_RightHand_Right
 	.byt %000010,%000000
 	.byt %000011,%000000
 	.byt %000111,%110000
@@ -440,7 +440,7 @@ KongSprite_Kong_RightHand_Right
 	.byt %000011,%111000
 
 
-KongSprite_Kong_Falling  	; 4x28
+Kong_Falling  	; 4x28
 	.byt %011110,%000000,%001110,%000000
 	.byt %100001,%111000,%010001,%000000
 	.byt %110000,%000100,%010000,%100000
@@ -475,14 +475,14 @@ KongSprite_Kong_Falling  	; 4x28
 ;		Platforms (3 large ones)
 ; =======================================
 
-KongSprite_Plaform  ; 7x5
+Plaform  ; 7x5
 	.byt %011111,%111111,%111111,%111111,%111111,%111111
 	.byt %011111,%111111,%111111,%111111,%111111,%111111
 	.byt %011110,%000111,%111111,%111111,%111110,%000110
 	.byt %111110,%000100,%000000,%000000,%000010,%000110
 	.byt %111111,%111100,%000000,%000000,%000011,%111110
 
-KongSprite_Plaform_Falling1	; 4x30
+Plaform_Falling1	; 4x30
 	.byt %000000,%000000,%000000,%000001
 	.byt %000000,%000000,%000000,%000011
 	.byt %000000,%000000,%000000,%110110
@@ -514,7 +514,7 @@ KongSprite_Plaform_Falling1	; 4x30
 	.byt %000011,%000000,%000000,%000000
 	.byt %000110,%000000,%000000,%000000
 
-KongSprite_Plaform_Falling2  ; 3x34
+Plaform_Falling2  ; 3x34
 	.byt %000001,%100000,%000000
 	.byt %000001,%100000,%000000
 	.byt %000000,%110000,%000000
@@ -550,7 +550,7 @@ KongSprite_Plaform_Falling2  ; 3x34
 	.byt %000000,%000000,%000110
 	.byt %000000,%000000,%000100
 
-KongSprite_Plaform_Falling3  ; 6x12
+Plaform_Falling3  ; 6x12
 	.byt %000000,%000000,%000000,%000000,%000000,%000110
 	.byt %000000,%000000,%000000,%000000,%000000,%111110
 	.byt %000000,%000000,%000000,%000000,%000111,%111000
@@ -567,7 +567,7 @@ KongSprite_Plaform_Falling3  ; 6x12
 ; =======================================
 ;		Hooks (4 of them)
 ; =======================================
-KongSprite_Hook_Left
+Hook_Left
 	.byt %000000,%010000
 	.byt %000000,%011000
 	.byt %000000,%011000
@@ -598,7 +598,7 @@ KongSprite_Hook_Left
 	.byt %111100,%000000
 	.byt %011000,%000000
 
-KongSprite_Hook_CenterLeft   ; 1x26
+Hook_CenterLeft   ; 1x26
 	.byt %000011
 	.byt %000011
 	.byt %000011
@@ -626,7 +626,7 @@ KongSprite_Hook_CenterLeft   ; 1x26
 	.byt %111100
 	.byt %011000
 
-KongSprite_Hook_CenterRight   ; 1x26
+Hook_CenterRight   ; 1x26
 	.byt %001100
 	.byt %001100
 	.byt %001100
@@ -654,7 +654,7 @@ KongSprite_Hook_CenterRight   ; 1x26
 	.byt %111100
 	.byt %011000
 
-KongSprite_Hook_Right  ; 1x28
+Hook_Right  ; 1x28
 	.byt %010000
 	.byt %110000
 	.byt %110000
@@ -688,7 +688,7 @@ KongSprite_Hook_Right  ; 1x28
 ;		Mario sprites (4 of them)
 ; =======================================
 
-KongSprite_Mario_Right_1  ; 3x19
+Mario_Right_1  ; 3x19
 	.byt %000000,%011111,%111000
 	.byt %000000,%011111,%111000
 	.byt %000000,%111111,%001110
@@ -709,7 +709,7 @@ KongSprite_Mario_Right_1  ; 3x19
 	.byt %001111,%100001,%100000
 	.byt %001111,%000000,%000000
 
-KongSprite_Mario_Right_2
+Mario_Right_2
 	.byt %000000,%000111,%111100
 	.byt %000000,%000111,%111100
 	.byt %000000,%001111,%111110
@@ -731,7 +731,7 @@ KongSprite_Mario_Right_2
 	.byt %000000,%000111,%110000
 	.byt %000000,%000011,%110000
 
-KongSprite_Mario_Right_3
+Mario_Right_3
 	.byt %001111,%111000,%000000
 	.byt %001111,%111000,%000000
 	.byt %111111,%111100,%000000
@@ -753,7 +753,7 @@ KongSprite_Mario_Right_3
 	.byt %000011,%111000,%000000
 	.byt %000011,%111000,%000000
 
-KongSprite_Mario_Right_4
+Mario_Right_4
 	.byt %000000,%011101,%100000
 	.byt %000000,%011111,%110000
 	.byt %000000,%111111,%111100
@@ -775,7 +775,7 @@ KongSprite_Mario_Right_4
 	.byt %000000,%001111,%110000
 	.byt %000000,%001111,%100000
 
-KongSprite_Mario_Left_1  ; 3x20
+Mario_Left_1  ; 3x20
 	.byt %000000,%001001,%100000
 	.byt %000000,%001111,%110000
 	.byt %000000,%000111,%111100
@@ -797,7 +797,7 @@ KongSprite_Mario_Left_1  ; 3x20
 	.byt %000000,%011111,%000000
 	.byt %000000,%011110,%000000
 
-KongSprite_Mario_JumpForHook  ; 3x24
+Mario_JumpForHook  ; 3x24
 	.byt %000011,%010000,%000000
 	.byt %000111,%110000,%000000
 	.byt %001111,%110110,%000000
@@ -823,7 +823,7 @@ KongSprite_Mario_JumpForHook  ; 3x24
 	.byt %000011,%100000,%000000
 	.byt %000011,%100000,%000000
 
-KongSprite_Mario_Fall  ; 3x20
+Mario_Fall  ; 3x20
 	.byt %000000,%000000,%111000
 	.byt %000000,%000011,%111000
 	.byt %000000,%000001,%100000
@@ -845,7 +845,7 @@ KongSprite_Mario_Fall  ; 3x20
 	.byt %000000,%000000,%111000
 	.byt %000000,%000000,%011000
 
-KongSprite_Mario_Crash  ; 3x21
+Mario_Crash  ; 3x21
 	.byt %000000,%000000,%001100
 	.byt %000000,%000000,%011100
 	.byt %000000,%000011,%111000
@@ -868,7 +868,7 @@ KongSprite_Mario_Crash  ; 3x21
 	.byt %000000,%111111,%100000
 	.byt %000000,%001110,%000000
 
-KongSprite_Mario_GrippedToHook  ; 3x20
+Mario_GrippedToHook  ; 3x20
 	.byt %000000,%000000,%010000
 	.byt %001110,%000000,%010000
 	.byt %001111,%110000,%110000
@@ -890,7 +890,7 @@ KongSprite_Mario_GrippedToHook  ; 3x20
 	.byt %000000,%000000,%011000
 	.byt %000000,%000000,%001100
 
-KongSprite_Mario_VictoryGround
+Mario_VictoryGround
 	.byt %000010,%000000,%000000,%000000
 	.byt %000010,%000000,%000000,%000000
 	.byt %000010,%000000,%000000,%000000
@@ -928,7 +928,7 @@ KongSprite_Mario_VictoryGround
 	.byt %000000,%000000,%011111,%000000
 	.byt %000000,%000000,%011000,%000000
 
-KongSprite_Mario_Jump_Right  ; 3x17
+Mario_Jump_Right  ; 3x17
 	.byt %000001,%111111,%100000
 	.byt %000001,%111111,%100000
 	.byt %000001,%111111,%110000
@@ -947,7 +947,7 @@ KongSprite_Mario_Jump_Right  ; 3x17
 	.byt %111011,%111100,%011100
 	.byt %110000,%000000,%001000
 
-KongSprite_Mario_Jump_Left  ; 3x18
+Mario_Jump_Left  ; 3x18
 	.byt %000001,%111111,%000000
 	.byt %000001,%111111,%000000
 	.byt %000111,%111111,%000000
@@ -967,7 +967,7 @@ KongSprite_Mario_Jump_Left  ; 3x18
 	.byt %001110,%001110,%110110
 	.byt %000100,%000000,%000010
 
-KongSprite_Mario_Manette  ; 4x19
+Mario_Manette  ; 4x19
 	.byt %000000,%000010,%000000,%000000
 	.byt %000001,%110110,%000000,%000000
 	.byt %000011,%111100,%000000,%000000
@@ -988,7 +988,7 @@ KongSprite_Mario_Manette  ; 4x19
 	.byt %000000,%000001,%111110,%000000
 	.byt %000000,%000001,%111110,%000000
 
-KongSprite_Mario_WaitForJump
+Mario_WaitForJump
 	.byt %000000,%001000,%000000,%000000
 	.byt %000001,%101000,%000000,%000000
 	.byt %000011,%111000,%000000,%000000
@@ -1010,7 +1010,7 @@ KongSprite_Mario_WaitForJump
 	.byt %000000,%000000,%111100,%000000
 	.byt %000000,%000000,%111000,%000000
 
-KongSprite_Mario_Climb  ; 3x22
+Mario_Climb  ; 3x22
 	.byt %000000,%000011,%101100
 	.byt %000000,%000111,%111000
 	.byt %000000,%001111,%111000
@@ -1034,7 +1034,7 @@ KongSprite_Mario_Climb  ; 3x22
 	.byt %000000,%000111,%110000
 	.byt %000000,%000001,%110000
 
-KongSprite_Mario_Climb2
+Mario_Climb2
 	.byt %000000,%000000,%000001,%100000
 	.byt %000000,%000000,%000111,%101000
 	.byt %000000,%000000,%001111,%111000
@@ -1058,7 +1058,7 @@ KongSprite_Mario_Climb2
 	.byt %000000,%000000,%000001,%100000
 
 
-KongSprite_Mario_FirstClimb
+Mario_FirstClimb
 	.byt %000000,%100000,%000000,%000000
 	.byt %000001,%101100,%000000,%000000
 	.byt %001111,%111100,%000000,%000000
@@ -1079,7 +1079,7 @@ KongSprite_Mario_FirstClimb
 	.byt %000000,%011111,%110000,%000000
 	.byt %000000,%001111,%110000,%000000
 
-KongSprite_Mario_LoopUp  ; 4x18
+Mario_LoopUp  ; 4x18
 	.byt %000000,%000000,%000000,%100000
 	.byt %000000,%000000,%000000,%101000
 	.byt %000000,%000000,%001101,%111100
@@ -1099,7 +1099,7 @@ KongSprite_Mario_LoopUp  ; 4x18
 	.byt %000000,%000001,%111110,%000000
 	.byt %000000,%000001,%111110,%000000
 
-KongSprite_Mario_DownSecondLadder
+Mario_DownSecondLadder
 	.byt %000000,%000111,%000000,%000000
 	.byt %000000,%111111,%110000,%000000
 	.byt %000001,%111111,%110000,%000000
@@ -1121,7 +1121,7 @@ KongSprite_Mario_DownSecondLadder
 	.byt %000000,%001111,%110000,%000000
 	.byt %000000,%000110,%000000,%000000
 
-KongSprite_Mario_CenterSecondFloor
+Mario_CenterSecondFloor
 	.byt %000000,%111000,%000000
 	.byt %001111,%111100,%000000
 	.byt %001111,%111100,%000000
@@ -1143,7 +1143,7 @@ KongSprite_Mario_CenterSecondFloor
 	.byt %000001,%111100,%000000
 	.byt %000001,%110000,%000000
 
-KongSprite_Mario_CenterRightSecondFloor
+Mario_CenterRightSecondFloor
 	.byt %000000,%001110,%000000
 	.byt %000000,%111111,%111000
 	.byt %000000,%011111,%111000
@@ -1165,7 +1165,7 @@ KongSprite_Mario_CenterRightSecondFloor
 	.byt %000000,%001111,%100000
 	.byt %000000,%001110,%000000
 
-KongSprite_Mario_UpFirstLadder
+Mario_UpFirstLadder
 	.byt %000011,%110000,%000000
 	.byt %011111,%110000,%000000
 	.byt %011111,%111000,%000000
@@ -1188,7 +1188,7 @@ KongSprite_Mario_UpFirstLadder
 	.byt %000000,%111000,%000000
 
 
-KongSprite_Mario_HandDown   ; 2x8
+Mario_HandDown   ; 2x8
 	.byt %000000,%000100
 	.byt %000000,%001110
 	.byt %000000,%011000
@@ -1198,7 +1198,7 @@ KongSprite_Mario_HandDown   ; 2x8
 	.byt %000011,%000000
 	.byt %000010,%000000
 
-KongSprite_Mario_HandUp   ; 2x5
+Mario_HandUp   ; 2x5
 	.byt %000011,%000000
 	.byt %000001,%010000
 	.byt %000001,%110000
@@ -1210,7 +1210,7 @@ KongSprite_Mario_HandUp   ; 2x5
 ;		Crane and hook sprites
 ; =======================================
 
-KongSprite_Crane_StickUp
+Crane_StickUp
 	.byt %000000,%000000,%000000,%000000,%000011,%000000,%000000,%000000
 	.byt %000000,%000000,%000000,%000000,%000111,%100000,%000000,%000000
 	.byt %000000,%000000,%000000,%000000,%001100,%110000,%000000,%000000
@@ -1247,7 +1247,7 @@ KongSprite_Crane_StickUp
 	.byt %001111,%000000,%000000,%000000,%000000,%000000,%000000,%000011
 	.byt %000010,%000000,%000000,%000000,%000000,%000000,%000000,%000000
 
-KongSprite_Crane_StickCenter
+Crane_StickCenter
 	.byt %000111,%110000,%000000,%000000,%000000,%000000,%000000
 	.byt %001101,%111111,%000000,%000000,%000000,%000000,%000000
 	.byt %011000,%110111,%111110,%000000,%000000,%000000,%000000
@@ -1269,7 +1269,7 @@ KongSprite_Crane_StickCenter
 	.byt %000000,%000000,%000000,%000000,%000000,%000000,%001111
 	.byt %000000,%000000,%000000,%000000,%000000,%000000,%000001
 
-KongSprite_Crane_StickDown
+Crane_StickDown
 	.byt %000000,%000000,%000000,%000000,%000111
 	.byt %000000,%000000,%000000,%000000,%011111
 	.byt %000000,%000000,%000000,%000001,%111011
@@ -1290,7 +1290,7 @@ KongSprite_Crane_StickDown
 	.byt %001111,%110000,%000000,%000000,%000000
 	.byt %000111,%000000,%000000,%000000,%000000
 
-KongSprite_Crane_Stick   ; 7x8
+Crane_Stick   ; 7x8
 	.byt %000001,%111111,%111111,%111111,%111111,%111111,%111111,%111111
 	.byt %000110,%001010,%001010,%001010,%001010,%001010,%001010,%001010
 	.byt %001100,%010001,%010001,%010001,%010001,%010001,%010001,%010001
@@ -1301,7 +1301,7 @@ KongSprite_Crane_Stick   ; 7x8
 	.byt %001100,%000000,%000000,%000000,%000000,%000000,%000000,%000000
 
 
-KongSprite_Crane_Hook_1
+Crane_Hook_1
 	.byt %100000,%000000
 	.byt %011100,%000000
 	.byt %010010,%000000
@@ -1313,7 +1313,7 @@ KongSprite_Crane_Hook_1
 	.byt %000000,%110010
 	.byt %000000,%011100
 
-KongSprite_Crane_Hook_2
+Crane_Hook_2
 	.byt %100000,%000000
 	.byt %100000,%000000
 	.byt %010000,%000000
@@ -1332,7 +1332,7 @@ KongSprite_Crane_Hook_2
 	.byt %000001,%001000
 	.byt %000000,%110000
 
-KongSprite_Crane_Hook_3
+Crane_Hook_3
 	.byt %001000
 	.byt %001000
 	.byt %001000
@@ -1353,7 +1353,7 @@ KongSprite_Crane_Hook_3
 	.byt %010010
 	.byt %001100
 
-KongSprite_Crane_Hook_4
+Crane_Hook_4
 	.byt %000000,%000000,%100000
 	.byt %000000,%000000,%100000
 	.byt %000000,%000001,%000000
@@ -1373,7 +1373,7 @@ KongSprite_Crane_Hook_4
 	.byt %000100,%100000,%000000
 	.byt %000011,%000000,%000000
 
-KongSprite_Crane_Hook_5
+Crane_Hook_5
 	.byt %000000,%000000,%000001
 	.byt %000000,%000000,%000011
 	.byt %000000,%000000,%000100
@@ -1391,13 +1391,13 @@ KongSprite_Crane_Hook_5
 
 
 
-KongSprite_Crane_ControlDown  ; 2x4
+Crane_ControlDown  ; 2x4
 	.byt %000000,%110000
 	.byt %111111,%111000
 	.byt %000000,%101000
 	.byt %000000,%010000
 
-KongSprite_Crane_ControlUp  ; 2x8
+Crane_ControlUp  ; 2x8
 	.byt %000000,%110000
 	.byt %000001,%111000
 	.byt %000001,%101000
@@ -1411,7 +1411,7 @@ KongSprite_Crane_ControlUp  ; 2x8
 ; =======================================
 ;		Small hearts
 ; =======================================
-KongSprite_SmallHeart  ; 1x7
+SmallHeart  ; 1x7
 	.byt %000100
 	.byt %011010
 	.byt %101010
@@ -1420,7 +1420,7 @@ KongSprite_SmallHeart  ; 1x7
 	.byt %001100
 	.byt %001000
 
-KongSprite_BigHeart   ; 2x8
+BigHeart   ; 2x8
 	.byt %000001,%100110
 	.byt %000010,%011001
 	.byt %000010,%001001
