@@ -589,7 +589,7 @@ int DisplayHighScoresTable()
 		condition=ptrScore->condition;
 		if (condition<e_SCORE_COUNT_)
 		{
-			sprintf(gPrintAddress+20,"%s",gScoreConditionsArray[condition]);
+			sprintf(gPrintAddress+20+((score>9999)?1:0),"%s",gScoreConditionsArray[condition]);
 		}
 		ptrScore++;		
 		if (Wait(10))

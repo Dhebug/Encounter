@@ -16,7 +16,7 @@ _gHighScores              .dsb 512-8-5 ; 456 bytes of actual score data, padded 
 ;
 #ifdef LANGUAGE_FR
 _Text_Leaderboard                .byt 16+1,3,"            Classement",TEXT_CRLF,TEXT_END
-_Text_SCORE_SOLVED_THE_CASE      .byt 2,"A élucidé l'affaire",0
+_Text_SCORE_SOLVED_THE_CASE      .byt 2,"A résolu l'affaire",0
 _Text_SCORE_MAIMED_BY_DOG        .byt 5,"Mutilé par un chien",0
 _Text_SCORE_SHOT_BY_THUG         .byt 1,"Abattu par un voyou",0
 _Text_SCORE_FELL_INTO_PIT        .byt 3,"Tombé dans un trou",0
