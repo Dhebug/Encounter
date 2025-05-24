@@ -311,6 +311,13 @@ void HandleHighScore()
 	// Load the highscores from the disk
 	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
+    // Check the minigame highscore
+    if (gMonkeyKingBestScore!=gSaveGameFile.monkey_king_score)
+    {
+        gSaveGameFile.monkey_king_score=gMonkeyKingBestScore;
+        gAchievementsChanged = 1;
+    }
+
 #if 0  // Just to test the different ending conditions
     gScore = -1800;
     gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
@@ -371,7 +378,7 @@ void HandleHighScore()
             }
 
 			// Save back the highscores in the slot
-            SaveScoreFile();
+            gAchievementsChanged = 1;
 			return;
 		}
 		++ptrScore;

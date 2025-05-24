@@ -76,8 +76,6 @@ girder_spawn_tick .dsb 1	; Handling of when new girders are added
 
 kong_throw		.dsb 1		; Indicate if a throw movement is started
 
-best_score		.dsb 2
-
 
 _zp_end_
 
@@ -104,6 +102,12 @@ real_start
 
     jsr _PatchSprites
 
+    ; Temporarily replace the current score by the highscore
+    lda _gMonkeyKingBestScore+1
+    sta current_score+1
+    lda _gMonkeyKingBestScore+0
+    sta current_score+0
+
     jsr ScoreDisplay
 
     ; Draw the 3 possible player lives
@@ -127,6 +131,12 @@ real_start
 	ldy #SPRITE(PlayerLives)
 	jsr SpriteErase
     jsr _RefreshAllSprites
+
+    ; Reset the score
+    lda #0
+    sta current_score+1
+    sta current_score+0
+
 
     jsr BlinkTemporization_128
 
@@ -310,7 +320,7 @@ MarioWinSequence
 
 	; Increment score
 	ldx #20
-	jsr ScoreIncrementMulti
+	jsr _ScoreIncrementMulti
 
 	; Check if it was the last platform
 	lda fixation_count
@@ -361,7 +371,7 @@ loop
 
 	; Another 20 points bonus
 	ldx #20
-	jsr ScoreIncrementMulti
+	jsr _ScoreIncrementMulti
 
 	; Small hearts! Because I am worth it
 	lda #20
@@ -527,12 +537,12 @@ _GetRand
 
 
 ; Give the value to add in X
-ScoreIncrementMulti
+_ScoreIncrementMulti
 .(
 	stx death_counter
 	jsr Bloop
 score_loop
-	jsr ScoreIncrement
+	jsr _ScoreIncrement
 	jsr ScoreDisplay
     jsr Bleep
     jsr _RefineCharacters
@@ -545,7 +555,7 @@ score_loop
 .)
 
 
-ScoreIncrement
+_ScoreIncrement
 .(
 	pha
 
@@ -574,25 +584,28 @@ ScoreIncrement
 
 end_extra_life
 
-	; Sounddemon proposes a 16 bits subtraction
-	; aeb156 code
+    ; Note: BCD is used for direct display to screen, so the bytes are reversed compared to usual 6502 16bit numbers storage
+    lda     current_score+0          ; Check the high byte 
+    cmp     _gMonkeyKingBestScore+0
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     check_tens               ; If equal we need to check the lower byte
+    bcs     new_high_score           ; If larger that's a new high score
+check_tens
+    lda     current_score+1          ; Check the lower byte
+    cmp     _gMonkeyKingBestScore+1
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     end_high_score           ; If equal, it's not a new high score either
+new_high_score    
     lda     current_score+0
-    cmp     best_score+0
-    beq     _checktens
-    bcs     _newhigh
-    bcc     _nonewhigh
-_checktens
+    sta     _gMonkeyKingBestScore+0
     lda     current_score+1
-    cmp     best_score+1
-    bcc     _nonewhigh
-_newhigh
-    lda     current_score+0
-    sta     best_score+0
-    lda     current_score+1
-    sta     best_score+1
-_nonewhigh
+    sta     _gMonkeyKingBestScore+1
 
-skip_update_best
+    ; Highlight the "Best" marker
+    lda #1
+	sta SpriteRequestedState+SPRITE(BestScore) 
+end_high_score
+
 	plp
 
 	pla
@@ -1204,7 +1217,7 @@ skip
 	jsr ScrollLeftTable
 	beq	skip_increase_score
 
-	jsr ScoreIncrement
+	jsr _ScoreIncrement
 
 skip_increase_score
 	; Scroll the three top ones
@@ -2068,7 +2081,16 @@ _SpriteMario_Life
 	.byt %001100,%000100
 	.byt %000000,%000000
 
-
+_SpriteBestScore
+    .byt %001111,%111111,%111111,%111100
+    .byt %001000,%000000,%000000,%000100
+    .byt %001011,%100111,%001101,%110100
+    .byt %001010,%010100,%010000,%100100
+    .byt %001011,%100110,%011100,%100100
+    .byt %001010,%010100,%000100,%100100
+    .byt %001011,%100111,%011000,%100100
+    .byt %001000,%000000,%000000,%000100
+    .byt %001111,%111111,%111111,%111100
 
 
 SevenDigitPatterns
@@ -2158,4 +2180,4 @@ _BssEnd_
 	.dsb 256-(*&255)    ; This will be overwriten
 _BssEndClear_
 
-
+#include "last_module.s"

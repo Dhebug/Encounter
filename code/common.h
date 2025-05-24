@@ -207,7 +207,7 @@ extern const char* gStreamSkipPoint;
 extern char gMusicEnabled;          // 0 or 255
 extern char gSoundEnabled;          // 0 or 255
 extern char gJoystickType;          // See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
-
+extern unsigned int gMonkeyKingBestScore;    // minigame high score
 
 
 // game_text

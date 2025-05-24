@@ -168,6 +168,9 @@ LABEL(FirstHeart)       ; Hearts of victory (2)
 	SPRITE_DATA(6,8,1,7,SmallHeart)
 	SPRITE_DATA(6,2,2,8,BigHeart)
 
+LABEL(BestScore)      ; The indicators that indicates the best score 
+	SPRITE_DATA(32,214,4,9,_SpriteBestScore)
+
 LABEL(PlayerLives)      ; The indicators for remaining lives
 	SPRITE_DATA(34,197,2,16,_SpriteMario_Life)
 	SPRITE_DATA(36,197,2,16,_SpriteMario_Life)
