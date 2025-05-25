@@ -71,7 +71,7 @@ LABEL(FirstKong)
 	SPRITE_DATA(13+11 ,20,2,10,Kong_RightHand_Right)
 	; Kong falling (1)
 LABEL(FirstKongFalling)
-	SPRITE_DATA(24,84,4,28,Kong_Falling)
+	SPRITE_DATA(24,84,4,28+3,Kong_Falling)
 LABEL(LastKong)
 
 	; Long platforms (3)
