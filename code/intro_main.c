@@ -614,7 +614,7 @@ int DisplayAchievements()
         int unlockedCount = 0;
         unsigned char achievementOffset = 0;
         unsigned char achievementMask = 1;
-        gPrintAddress+=40+1;
+        gPrintAddress+=40+2+40;
         for (entry=0;entry<ACHIEVEMENT_COUNT_;entry++)
         {		
             char* achievementMessage = AchievementMessages[entry];
@@ -637,11 +637,11 @@ int DisplayAchievements()
         }
         if (unlockedCount)
         {
-            sprintf((char*)0xbb80+40*27,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
+            sprintf((char*)0xbb80+40*1,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
         }
         else
         {
-            sprintf((char*)0xbb80+40*27,Text_AchievementNone);
+            sprintf((char*)0xbb80+40*1,Text_AchievementNone);
         }
     }
 

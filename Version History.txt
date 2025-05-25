@@ -337,4 +337,4 @@
 1.2.0 -
 - Internal: Swapped the music buffer location to provide a continuous array for dynamic module loading
 - Modified the display of the leaderboard so scores are not truncated when they reach beyond 9999 points
-
+- New achievements: "Over 9999", and "Falling hazard"

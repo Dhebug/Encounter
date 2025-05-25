@@ -259,6 +259,9 @@
 #define ACHIEVEMENT_READ_INVOICE        46
 #define ACHIEVEMENT_READ_TOMBSTONE      47
 
+#define ACHIEVEMENT_OVER_9999           48
+#define ACHIEVEMENT_MONKEY_FALL         49
+
 #define	ACHIEVEMENT_COUNT_ 				50
 #define ACHIEVEMENT_BYTE_COUNT           7      // Can't have more than 56 achievements
 

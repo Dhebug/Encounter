@@ -88,6 +88,8 @@ _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
 _Text_AchievementCanYouRepeat     .byt "N'a rien compris",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0
 _Text_AchievementReadTheTombstone .byt "Repose en paix",0
+_Text_AchievementOver9999         .byt "Ca dépasse 9999 !",0
+_Text_AchievementMonkeyFall       .byt "Risques de chutes",0
 #else // LANGUAGE_EN
 _Text_Achievements                .byt 16+3,1,"        Achievements unlocked",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
@@ -133,6 +135,8 @@ _Text_AchievementPausedTheGame    .byt "Paused the game",0
 _Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
 _Text_AchievementReadTheInvoice   .byt "Read the invoice",0
 _Text_AchievementReadTheTombstone .byt "Rest in peace",0
+_Text_AchievementOver9999         .byt "It's over 9999!",0
+_Text_AchievementMonkeyFall       .byt "Falling hazard",0
 #endif
 
 _AchievementMessages
@@ -190,4 +194,7 @@ _AchievementMessages
     .word _Text_AchievementClosedTheFridge  ; "Closed the fridge"
     .word _Text_AchievementReadTheInvoice   ; "Read the invoice"
     .word _Text_AchievementReadTheTombstone ; "Read the tombstone"
+    ; 48-49
+    .word _Text_AchievementOver9999         ; "It's over 9999!"
+    .word _Text_AchievementMonkeyFall       ; "Falling hazard"
 

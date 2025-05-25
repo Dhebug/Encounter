@@ -365,6 +365,12 @@ void HandleHighScore()
     ApplyTimeBonus();
     ApplyMonkeyKingBonus();
 
+    // If the player got a cumulated score of 10000 or more, they get an achievement for it
+    if (gScore>9999)
+    {
+        UnlockAchievement(ACHIEVEMENT_OVER_9999);
+    }
+
     ShowNewAchievements();
 
 

@@ -1,5 +1,6 @@
 
 #include "params.h"
+#include "game_enums.h"
 
 ; Game sprites defines
 #define SPRITE_COUNT        _LastSprite-_FirstSprite
@@ -418,6 +419,16 @@ hearts_blink
 
 	lda death_counter
 	bne hearts_blink 
+
+    ; Achievement unlocked
+    lda #1<<(ACHIEVEMENT_MONKEY_FALL&7)
+    bit _gAchievements+(ACHIEVEMENT_MONKEY_FALL/8)
+    bne end_achievement
+    ora _gAchievements+(ACHIEVEMENT_MONKEY_FALL/8)
+    sta _gAchievements+(ACHIEVEMENT_MONKEY_FALL/8)
+    lda #1
+    sta _gAchievementsChanged
+end_achievement
 
 not_last_platform
 	; Move down to intermediate level
