@@ -42,7 +42,8 @@ _zp_start_
 ptr_src         .dsb 2
 ptr_dst         .dsb 2
 
-current_score	.dsb 2
+current_score_bcd .dsb 2
+current_score     .dsb 2
 
 rand_low		.dsb 1		; Random number generator, low part
 rand_high		.dsb 1		; Random number generator, high part
@@ -103,10 +104,10 @@ real_start
     jsr _PatchSprites
 
     ; Temporarily replace the current score by the highscore
-    lda _gMonkeyKingBestScore+1
-    sta current_score+1
-    lda _gMonkeyKingBestScore+0
-    sta current_score+0
+    lda _gMonkeyKingBestScoreBCD+1
+    sta current_score_bcd+1
+    lda _gMonkeyKingBestScoreBCD+0
+    sta current_score_bcd+0
 
     jsr ScoreDisplay
 
@@ -134,8 +135,10 @@ real_start
 
     ; Reset the score
     lda #0
-    sta current_score+1
+    sta current_score_bcd+1
+    sta current_score_bcd+0
     sta current_score+0
+    sta current_score+1
 
 
     jsr BlinkTemporization_128
@@ -268,6 +271,26 @@ RestartHero
 ; Full death, start again
 FullDeath
 	;jmp _main
+
+.(
+    ; At the end of the session we compare if this score is the best of this session
+    lda     current_score+1          ; Check the high byte 
+    cmp     _gMonkeyKingSessionBest+1
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     check_tens               ; If equal we need to check the lower byte
+    bcs     new_high_score           ; If larger that's a new high score
+check_tens
+    lda     current_score+0          ; Check the lower byte
+    cmp     _gMonkeyKingSessionBest+0
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     end_high_score           ; If equal, it's not a new high score either
+new_high_score    
+    lda     current_score+1
+    sta     _gMonkeyKingSessionBest+1
+    lda     current_score+0
+    sta     _gMonkeyKingSessionBest+0
+end_high_score
+.)    
     rts             ; Back to Encounter
 	
 
@@ -559,23 +582,24 @@ _ScoreIncrement
 .(
 	pha
 
+    ; First we do a BCD increment of the internal game score
 	php
 	sei
 	sed
 	clc
-	lda current_score+1
+	lda current_score_bcd+1
 	adc #1
-	sta current_score+1
-	lda current_score+0
+	sta current_score_bcd+1
+	lda current_score_bcd+0
 	adc #0
-	sta current_score+0
+	sta current_score_bcd+0
 
     ; Check if we reached 300 points to get an extra life
     lda #>$300
-    cmp current_score+0
+    cmp current_score_bcd+0
     bne end_extra_life
     lda #<$300
-    cmp current_score+1
+    cmp current_score_bcd+1
     bne end_extra_life
     
     ; Normally should blink to indicate to the player, but will work good enough at the moment
@@ -585,21 +609,21 @@ _ScoreIncrement
 end_extra_life
 
     ; Note: BCD is used for direct display to screen, so the bytes are reversed compared to usual 6502 16bit numbers storage
-    lda     current_score+0          ; Check the high byte 
-    cmp     _gMonkeyKingBestScore+0
+    lda     current_score_bcd+0          ; Check the high byte 
+    cmp     _gMonkeyKingBestScoreBCD+0
     bcc     end_high_score           ; If smaller, it's not a new high score
     beq     check_tens               ; If equal we need to check the lower byte
     bcs     new_high_score           ; If larger that's a new high score
 check_tens
-    lda     current_score+1          ; Check the lower byte
-    cmp     _gMonkeyKingBestScore+1
+    lda     current_score_bcd+1          ; Check the lower byte
+    cmp     _gMonkeyKingBestScoreBCD+1
     bcc     end_high_score           ; If smaller, it's not a new high score
     beq     end_high_score           ; If equal, it's not a new high score either
 new_high_score    
-    lda     current_score+0
-    sta     _gMonkeyKingBestScore+0
-    lda     current_score+1
-    sta     _gMonkeyKingBestScore+1
+    lda     current_score_bcd+0
+    sta     _gMonkeyKingBestScoreBCD+0
+    lda     current_score_bcd+1
+    sta     _gMonkeyKingBestScoreBCD+1
 
     ; Highlight the "Best" marker
     lda #1
@@ -607,6 +631,12 @@ new_high_score
 end_high_score
 
 	plp
+
+    ; Then we increment the actual Encounter score as well!
+    inc current_score+0
+    bne done
+    inc current_score+1
+done
 
 	pla
 	rts
@@ -618,25 +648,25 @@ end_high_score
 ScoreDisplay
     ldx #0
 
-	lda current_score+0
+	lda current_score_bcd+0
 	lsr
 	lsr
 	lsr
 	lsr
     jsr PrintScoreDigit
 
-	lda current_score+0
+	lda current_score_bcd+0
     and #15
     jsr PrintScoreDigit
 
-	lda current_score+1
+	lda current_score_bcd+1
 	lsr
 	lsr
 	lsr
 	lsr
     jsr PrintScoreDigit
 
-	lda current_score+1
+	lda current_score_bcd+1
     and #15
     ; Fall-through
 PrintScoreDigit
@@ -1983,9 +2013,9 @@ GameInits
 
 #if 0  // TEST
     lda #>$295
-    sta current_score+0
+    sta current_score_bcd+0
     lda #<$295
-    sta current_score+1
+    sta current_score_bcd+1
 #endif    
 
     rts

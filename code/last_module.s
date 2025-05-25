@@ -111,7 +111,8 @@ _gKeyboardLayout        .dsb 1         ; QWERTY / AZERTY / QWERTZ
 _gMusicEnabled          .dsb 1         ; 0 or 255
 _gSoundEnabled          .dsb 1         ; 0 or 255
 _gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
-_gMonkeyKingBestScore   .dsb 2         ; Best score of the player in the handheld minigame
+_gMonkeyKingBestScoreBCD .dsb 2         ; Best score of the player in the handheld minigame (BCD format)
+_gMonkeyKingSessionBest  .dsb 2         ; Best score of the player in that session (normal format)
 _32_Bytes_BufferRemaining
 
 * = $C000             ; Start of the ROM/Overlay ram

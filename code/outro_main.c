@@ -212,7 +212,7 @@ void ApplyTimeBonus()
 {
     TimeBonusInfo* timeBonusInfoPtr=TimeBonusInfoTable;
 
-    // Show the score in yellow to move the atention to it
+    // Show the score in yellow to move the attention to it
     WaitFrames(50);
     sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
     WaitFrames(50);
@@ -248,6 +248,34 @@ void ApplyTimeBonus()
     memset(ptrTimeString,32,7);
     WaitFrames(50*2);
 }
+
+
+void ApplyMonkeyKingBonus()
+{
+    gMonkeyKingSessionBest=230;
+
+    if (gMonkeyKingSessionBest)
+    {
+        unsigned int decount=1;
+        // Add the time as bonus points (half a point per remaining second)
+        while (gMonkeyKingSessionBest)
+        {
+            sprintf((char*)0xbb80+40*24+7,gTextMonkeyBonus,5,gMonkeyKingSessionBest);        
+            PlayFlipClick();
+            WaitFrames(5);
+            //if (gMonkeyKingSessionBest>100)   decount=100;
+            //else
+            if (gMonkeyKingSessionBest>10)    decount=10;
+            else                              decount=1;
+
+            gMonkeyKingSessionBest-=decount;
+            gScore+=decount;
+            sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
+        }
+    }
+}
+
+
 
 // gSaveGameFile.achievements = Achievements from disk
 // gAchievements              = Currently unlocked achievements
@@ -312,9 +340,9 @@ void HandleHighScore()
 	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
     // Check the minigame highscore
-    if (gMonkeyKingBestScore!=gSaveGameFile.monkey_king_score)
+    if (!gMonkeyKingBestScoreBCD==gSaveGameFile.monkey_king_score)
     {
-        gSaveGameFile.monkey_king_score=gMonkeyKingBestScore;
+        gSaveGameFile.monkey_king_score=gMonkeyKingBestScoreBCD;
         gAchievementsChanged = 1;
     }
 
@@ -336,6 +364,7 @@ void HandleHighScore()
     PrintStringAt(gScoreConditionsArray[gGameOverCondition],(char*)0xbb80+40*18);
 
     ApplyTimeBonus();
+    ApplyMonkeyKingBonus();
 
     ShowNewAchievements();
 

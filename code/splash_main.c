@@ -456,7 +456,7 @@ void main()
     gKeyboardLayout = gSaveGameFile.keyboard_layout;
     gMusicEnabled   = gSaveGameFile.music_enabled;
     gSoundEnabled   = gSaveGameFile.sound_enabled;
-    gMonkeyKingBestScore = gSaveGameFile.monkey_king_score;
+    gMonkeyKingBestScoreBCD = gSaveGameFile.monkey_king_score;
 #ifdef FORCE_JOYSTICK
     gJoystickType   = FORCE_JOYSTICK;
 #else    
