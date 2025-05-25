@@ -56,8 +56,9 @@ StartScores
  ENTRY(6,-150,"    Adrian Monk")
  ENTRY(3,-200,"C.Auguste Dupin")
  ENTRY(5,-250,"  Insp Clouseau")
- .dsb 6                              ; 6*8=48 achievements
- .dsb 56-6-4-8-8-5-1                 ; Padding (forced to zero)
+ .dsb 7                              ; 7*8=56 achievements
+ .dsb 56-7-4-8-8-5-1-2               ; Padding (forced to zero)
+ .byt 0,0                            ; Monkey King score
  .byt 0                              ; joystick_interface - NONE by default
  .byt 0                              ; keyboard_layout - QWERTY by default (should be language checked?)
  .byt 1                              ; music_enabled by default

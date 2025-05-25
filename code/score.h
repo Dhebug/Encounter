@@ -30,7 +30,7 @@ typedef struct
     unsigned char start_marker[8];
     unsigned char version[5];          // 1.2.3
     score_entry scores[SCORE_COUNT];   // 19*24=456
-    unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 6*8=48 achievements
+    unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 7*8=56 achievements
     char free_data[56-4-ACHIEVEMENT_BYTE_COUNT-8-5-8-1-2];
     unsigned int  monkey_king_score;
     unsigned char joystick_interface;
@@ -61,6 +61,7 @@ extern const char gTextGameDescription[];
 extern const char gTextExternalInformation[];
 extern const char gTextGreetings[];
 
+extern const char gTextMonkeyBonus[];
 extern const char gTextBaseScore[];
 extern const char gTextNewAchievement[];
 extern const char gTextNoTimeBonus[];

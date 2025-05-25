@@ -259,8 +259,8 @@
 #define ACHIEVEMENT_READ_INVOICE        46
 #define ACHIEVEMENT_READ_TOMBSTONE      47
 
-#define	ACHIEVEMENT_COUNT_ 				48      //  Can't have more than 48 achievements
-#define ACHIEVEMENT_BYTE_COUNT           6
+#define	ACHIEVEMENT_COUNT_ 				50
+#define ACHIEVEMENT_BYTE_COUNT           7      // Can't have more than 56 achievements
 
 
 // Game end conditions
