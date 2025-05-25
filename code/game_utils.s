@@ -2288,7 +2288,7 @@ _PlayMonkeyKing
     MEMCPY_JSR(_MemCpy_MoveBottomGraphics)      ; Preserve the bottom part of the image
 
     ; Erase graphics in the lower border to avoid glitches during loading
-    ldx #40*3
+    ldx #40*3-1
     lda #32|128
 loop_1
     sta $bb80+40*25,x
