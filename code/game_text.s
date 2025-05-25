@@ -173,6 +173,7 @@ _gTextItemInvoice                 .byt "une$_facture",0
 _gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
 _gTextItemLockedPanel             .byt "un _clignotant",0
+_gTextItemBatteries               .byt "un paquet de$_piles SR44",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "un _message sur la porte",0
 #endif
@@ -250,6 +251,7 @@ _gTextItemInvoice                 .byt "an$_invoice letter",0
 _gTextItemTelevision              .byt "a _television",0
 _gTextItemGameConsole             .byt "a game _console",0
 _gTextItemLockedPanel             .byt "a _blinker",0
+_gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "a _message on the door",0
 #endif
@@ -1727,6 +1729,12 @@ _gDescriptionChildBedroom
 
 // MARK: Guest Bedroom
 _gDescriptionGuestBedroom
+
+    ; Is the drawer cabinet open?
+    JUMP_IF_TRUE(drawer_closed,CHECK_ITEM_FLAG(e_ITEM_Drawer,ITEM_FLAG_CLOSED))
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,9),40,_SecondImageBuffer+40*117+0,_ImageBuffer+40*69+7)       ; Drawer open
+drawer_closed
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -2115,6 +2123,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
     COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
+    COMBINE_MAPPING(e_ITEM_HandheldGame,e_ITEM_Batteries    ,_CombineGameWithBatteries)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
@@ -2186,6 +2195,23 @@ _CombineSulfurWithSalpetre
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
     JUMP(_InspectPowderMix)
 .)
+
+
+_CombineGameWithBatteries
+.(
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Le jeu devrait fonctionner maintenant")
+#else
+    INFO_MESSAGE("The game should be working now")
+#endif        
+    SET_ITEM_FLAGS(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED)                            ; The game should now be working
+    SET_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_NONE)                                       ; The batteries are now gone
+    INCREASE_SCORE(POINTS_COMBINED_BATTERIES_GAME)
+    STOP_MUSIC()
+    END_AND_REFRESH
+.)
+
 
 
 _CombineTinWithFuse
@@ -2758,6 +2784,8 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Acid               , _InspectAcid)
     VALUE_MAPPING(e_ITEM_Bomb               , _InspectBomb)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _InspectTVCabinet)
+    VALUE_MAPPING(e_ITEM_Batteries          , _InspectBatteries)
+    VALUE_MAPPING(e_ITEM_Drawer             , _InspectDrawer)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif    
@@ -2803,6 +2831,7 @@ _InspectMap
 
 
 _InspectGame
+.(
     INCREASE_SCORE(POINTS_INSPECT_GAME)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
@@ -2811,9 +2840,19 @@ _InspectGame
 #else    
     INFO_MESSAGE("State of the art hardware!")
 #endif    
+
+    IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED),no_batteries)    ; Have the batteries been installed?
+        // Non functional game
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Le compartiment à piles est vide !")
+#else
+        INFO_MESSAGE("The battery compartment is empty!")
+#endif    
+    ENDIF(no_batteries)
+
     WAIT_KEYPRESS
     END_AND_REFRESH
-
+.)
 
  _InspectFuse
 #ifdef LANGUAGE_FR
@@ -3029,6 +3068,31 @@ _InspectTVCabinet
     INFO_MESSAGE("Des portes, des tiroirs et un abattant")
 #else    
     INFO_MESSAGE("A few doors, a few drawers and a flap")
+#endif    
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+_InspectBatteries
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)   
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Idéal pour les petits appareils")
+#else    
+    INFO_MESSAGE("Perfect to power small electronics")
+#endif    
+    WAIT_KEYPRESS
+    END_AND_REFRESH
+.)
+
+
+_InspectDrawer
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un simple tiroir de table de chevet")
+#else    
+    INFO_MESSAGE("A quite standard night stand drawer")
 #endif    
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -4148,6 +4212,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_NormalWindow       , _OpenNormalWindow)    
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _OpenChemistryBook)    
     VALUE_MAPPING(e_ITEM_TVCabinet          , _OpenTVCabinet)        
+    VALUE_MAPPING(e_ITEM_Drawer             , _OpenDrawer)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -4291,6 +4356,27 @@ _OpenTVCabinet
         SET_ITEM_LOCATION(e_ITEM_Oric,e_LOC_GAMESROOM)                                 ; It's now visible inside the game room
         JUMP(_InspectOricOmputer)                                                      ; Show what we found!
     ENDIF(oric)
+    END_AND_REFRESH
+.)
+
+
+_OpenDrawer
+.(
+    JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_Drawer,ITEM_FLAG_CLOSED))             ; Is the drawer closed?
++_SearchDrawer
+    PLAY_SOUND(_DoorOpening)
+    UNSET_ITEM_FLAGS(e_ITEM_Drawer,ITEM_FLAG_CLOSED)                                                ; Open it!
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"un _tiroir ouvert")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"an open _drawer")
+#endif        
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_NONE),batteries)                          ; Are the batteries still hidden (in the drawer)? 
+        GOSUB(_SubFoundSomething)
+        SET_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_GUESTBEDROOM)                                   ; It's now visible inside the guest bedroom
+        JUMP(_InspectBatteries)                                                                  ; Show what we found!
+    ENDIF(batteries)
     END_AND_REFRESH
 .)
 
@@ -4491,6 +4577,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _CloseCarPetrolTank)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _CloseTVCabinet)    
+    VALUE_MAPPING(e_ITEM_Drawer             , _CloseDrawer)        
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
@@ -4559,12 +4646,27 @@ _CloseTVCabinet
 .(
     JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED))         ; Is the cabinet open?
     PLAY_SOUND(_DoorClosing)
-    SET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                              ; Close it!
+    SET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                               ; Close it!
 +_gTextItemClosedTVCabinet = *+2                                                                    ; Description used by default when the game starts
 #ifdef LANGUAGE_FR                                                                                  ; Update the description 
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"un _meuble TV fermé")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"a closed TV _cabinet")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_CloseDrawer
+.(
+    JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_Drawer,ITEM_FLAG_CLOSED))            ; Is the drawer open?
+    PLAY_SOUND(_DoorClosing)
+    SET_ITEM_FLAGS(e_ITEM_Drawer,ITEM_FLAG_CLOSED)                                                  ; Close it!
++_gTextItemClosedDrawer = *+2                                                                       ; Description used by default when the game starts
+#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"un _tiroir fermé")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"a closed _drawer")
 #endif    
     END_AND_REFRESH
 .)
@@ -4950,20 +5052,22 @@ around_the_pit
 
 
 _UseGame
+.(
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_PLAYING)
-#ifdef HAS_4KONG
-    // Functional game
-    CALL_NATIVE(_PlayMonkeyKing)
-#else 
+
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED),batteries)    ; Have the batteries been installed?
+        // Functional game
+        CALL_NATIVE(_PlayMonkeyKing)
+    ELSE(batteries,no_batteries)
     // Non functional game
 #ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Hum... le jeu est planté ?")
+        INFO_MESSAGE("Le jeu ne semble pas fonctionner")
 #else
-    INFO_MESSAGE("Hum... looks like it crashed?")
+        INFO_MESSAGE("The game does not seem to work")
 #endif    
-#endif
+    ENDIF(no_batteries)
     END_AND_REFRESH
-
+.)
 
 _UseDartGun
     DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART)
@@ -5408,6 +5512,7 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_CardboardBox       , _SearchCardboardBox)
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _SearchTin)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _SearchTVCabinet)
+    VALUE_MAPPING(e_ITEM_Drawer             , _SearchDrawer)    
     VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
 
 

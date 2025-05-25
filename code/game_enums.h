@@ -155,11 +155,13 @@
 #define e_ITEM_Computer              78         // a desktop computer
 #define e_ITEM_Oric                  79         // a Oric computer
 #define e_ITEM_TVCabinet             80         // a TV cabinet
+#define e_ITEM_Batteries             81         // a couple SR44 batteries
+#define e_ITEM_Drawer                82         // a drawer
 #ifdef PRODUCT_TYPE_GAME_DEMO
-#define e_ITEM_DemoMessage           81         // a demo readme message
-#define	e_ITEM_COUNT_ 				 82         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_DemoMessage           83         // a demo readme message
+#define	e_ITEM_COUNT_ 				 84         //  ----- END MARKER - Free until 127, after are action words
 #else
-#define	e_ITEM_COUNT_ 				 81         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_COUNT_ 				 83         //  ----- END MARKER - Free until 127, after are action words
 #endif
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
@@ -283,6 +285,8 @@
 #define POINTS_COMBINED_BOMB_ADHESIVE     100
 #define POINTS_ATTACHED_BOMB_TO_SAFE      100
 #define POINTS_IGNITED_BOMB               100
+
+#define POINTS_COMBINED_BATTERIES_GAME    100
 
 #define POINTS_WINDOW_ROPE                100
 #define POINTS_COMBINED_CUE_ROPE          100

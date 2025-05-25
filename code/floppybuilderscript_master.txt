@@ -399,6 +399,9 @@ AddDefine LOADER_PICTURE_AUSTIN_MINI {FileIndex}
 AddFile ..\build\files\view_oric_computer.hir
 AddDefine LOADER_PICTURE_ORIC_COMPUTER {FileIndex}
 
+AddFile ..\build\files\view_battery.hir
+AddDefine LOADER_PICTURE_BATTERIES {FileIndex}
+
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_news_saved_fr.hir
 #else
