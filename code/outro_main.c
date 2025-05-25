@@ -318,7 +318,7 @@ void ShowNewAchievements()
     if (unlockedCount)
     {
         memset((char*)0xbb80+40*25,0,40);   // Clear the background before printing the text line to avoid having garbage on the right side
-        sprintf((char*)0xbb80+40*25,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
+        sprintf((char*)0xbb80+40*25,Text_AchievementCount,unlockedCount*100/ACHIEVEMENT_COUNT_);
         WaitFrames(50*3);
     }
 

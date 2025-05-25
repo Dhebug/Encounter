@@ -21,7 +21,6 @@ extern char Text_GameInstructionsPage2[];
 extern char Text_GameInstructionsPage3[];
 
 extern char Text_Leaderboard[];
-extern char Text_Achievements[];
 extern char Text_TypeWriterMessage[];
 
 extern const char* gLoadingMessagesArray[];
@@ -608,7 +607,7 @@ int DisplayAchievements()
 
     gPrintWidth=40;
     gPrintTerminator=TEXT_END;
-	PrintStringAt(Text_Achievements,0xbb80+40*0+0);
+    SetLineAddress((char*)0xbb80+40*0+0);
     {
     	int entry;
         int unlockedCount = 0;
@@ -637,11 +636,11 @@ int DisplayAchievements()
         }
         if (unlockedCount)
         {
-            sprintf((char*)0xbb80+40*1,Text_AchievementCount,unlockedCount,ACHIEVEMENT_COUNT_,unlockedCount*100/ACHIEVEMENT_COUNT_);
+            sprintf((char*)0xbb80+40*0,Text_AchievementCount,unlockedCount*100/ACHIEVEMENT_COUNT_);
         }
         else
         {
-            sprintf((char*)0xbb80+40*1,Text_AchievementNone);
+            sprintf((char*)0xbb80+40*0,Text_AchievementNone);
         }
     }
 

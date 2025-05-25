@@ -44,10 +44,9 @@ _Test_SCORE_FINISHED_DEMO        .byt 3,"Finished demo",0
 ; Achievements
 ;
 #ifdef LANGUAGE_FR
-_Text_Achievements                .byt 16+3,1,"          Badges collectés",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
-_Text_AchievementNone             .byt 16+3,1,"     Rien de déverrouillé !!!",0
-_Text_AchievementCount            .byt 16+3,1," %d sur %d débloqués - %d pour cent",0
+_Text_AchievementNone             .byt 16+3,1,"     Aucun badges déverrouillé",0
+_Text_AchievementCount            .byt 16+3,1,"     Badges déverrouillés: %d%%",0
 _Text_AchievementWrongDirection   .byt "Sens interdit",0
 _Text_AchievementLaunchedTheGame  .byt "Lancé le jeu",0
 _Text_AchievementWatchedTheIntro  .byt "Regardé l'intro",0
@@ -91,10 +90,9 @@ _Text_AchievementReadTheTombstone .byt "Repose en paix",0
 _Text_AchievementOver9999         .byt "Ca dépasse 9999 !",0
 _Text_AchievementMonkeyFall       .byt "Risques de chutes",0
 #else // LANGUAGE_EN
-_Text_Achievements                .byt 16+3,1,"        Achievements unlocked",TEXT_CRLF,TEXT_END
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
-_Text_AchievementNone             .byt 16+3,1,"        Nothing unlocked!!!",0
-_Text_AchievementCount            .byt 16+3,1,"  %d out of %d unlocked - %d percent",0
+_Text_AchievementNone             .byt 16+3,1,"      No achievement unlocked",0
+_Text_AchievementCount            .byt 16+3,1,"     Achievements unlocked: %d%%",0
 _Text_AchievementWrongDirection   .byt "Wrong direction",0
 _Text_AchievementLaunchedTheGame  .byt "Launched the game",0
 _Text_AchievementWatchedTheIntro  .byt "Watched the intro",0

@@ -339,7 +339,7 @@ _gScoreConditionsArray
 
 // Bonus texts
 #ifdef LANGUAGE_FR
-_gTextMonkeyBonus       .byt "       %cMonkey King points:%d  ",0   ; The spaces is to clear the decrementing number
+_gTextMonkeyBonus       .byt "       %cMonkey King points:%d      ",0   ; The spaces is to clear the decrementing number
 _gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
 _gTextNewAchievement    .byt "%cNouveau succ}s:%c%s%c",0     ; The last %c is to clear the color
 _gTextNoTimeBonus       .byt "%cPas de bonus de temps pour vous!%c",0  ; The last %c is to clear the color
