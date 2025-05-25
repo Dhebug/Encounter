@@ -71,6 +71,7 @@ EndScores
 #if ((EndScores-StartScores)<>512)
 #echo Scores table should be 512 bytes long, but it is:
 #print (EndScores-StartScores) 
+ nop Please fix table size
 #else
 #echo Scores table successfully exported
 #endif

@@ -32,6 +32,7 @@ popd
 :: Build assets (this is for all the versions of the game)
 ::
 call osdk_makedata.bat
+IF ERRORLEVEL 1 GOTO Error
 
 :: Call the config script to get the list of versions to build
 :: Returned into BUILD_LANGUAGES

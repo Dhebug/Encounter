@@ -28,6 +28,7 @@ SET CONVERT=CALL bin\_PictConv
 
 :: Hi-Score table
 %XA% -DVERSION=%VERSION% -o %TARGET%\scores.bin data\scores.s
+IF ERRORLEVEL 1 GOTO Error
 %HEADER% -h1 %TARGET%\scores.bin %TARGET%\scores.tap $9c00
 
 :: Character sets
@@ -254,7 +255,13 @@ SET EXPORT_ADDRESS=0xdf40
 set OSDK_BUILD_END=%time%
 call %OSDK%\bin\ComputeTime.bat
 ECHO Assets conversion finished in %OSDK_BUILD_TIME%
+goto End
 
-::pause
+:Error
+ECHO.
+ECHO %ESC%[41mAn Error has happened. Build stopped%ESC%[0m
+
+:End
+
 
 
