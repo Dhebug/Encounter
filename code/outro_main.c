@@ -252,15 +252,13 @@ void ApplyTimeBonus()
 
 void ApplyMonkeyKingBonus()
 {
-    gMonkeyKingSessionBest=230;
-
     if (gMonkeyKingSessionBest)
     {
         unsigned int decount=1;
         // Add the time as bonus points (half a point per remaining second)
         while (gMonkeyKingSessionBest)
         {
-            sprintf((char*)0xbb80+40*24+7,gTextMonkeyBonus,5,gMonkeyKingSessionBest);        
+            sprintf((char*)0xbb80+40*24,gTextMonkeyBonus,5,gMonkeyKingSessionBest);        
             PlayFlipClick();
             WaitFrames(5);
             //if (gMonkeyKingSessionBest>100)   decount=100;
@@ -348,7 +346,8 @@ void HandleHighScore()
 
 #if 0  // Just to test the different ending conditions
     gScore = -1800;
-    gGameOverCondition = e_SCORE_SOLVED_THE_CASE;
+    gMonkeyKingSessionBest=230;
+    gGameOverCondition = e_SCORE_MAIMED_BY_DOG; //e_SCORE_SOLVED_THE_CASE;
   	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,1);   // "Score:"
   	sprintf(ptrTimeString,"1:59:39");                           // "1:59:39"
     UnlockAchievement(ACHIEVEMENT_MAIMED_BY_DOG);
