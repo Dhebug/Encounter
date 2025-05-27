@@ -26,9 +26,6 @@ OutputFloppyFile ..\build\OSDKDISK
 AddDefine LOADER_SECTOR_BUFFER $200
 AddDefine LOADER_BASE_ZERO_PAGE $F2
 
-AddDefine HAS_4KONG 1
-#define HAS_4KONG 
-
 
 ;
 ; This defines the bootsectors to use for the various operating systems
@@ -519,13 +516,11 @@ AddDefine LOADER_MUSIC_TYPEWRITER_SIZE {FileSize}
 ;
 ; Mini games
 ;
-#ifdef HAS_4KONG
 AddFile ..\build\files\hires_monkey_king.hir
 AddDefine LOADER_MONKEY_KING_HIRES {FileIndex}
 
 AddFile ..\build\files\monkey_king.o
 AddDefine LOADER_MONKEY_KING {FileIndex}
-#endif
 
 
 ;

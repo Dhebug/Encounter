@@ -2254,7 +2254,6 @@ $e940	2660	2660	_gFont12x14
 // (3874 compressed bytes: 81% of 4739 bytes).
 
 */
-#ifdef HAS_4KONG
 _PlayMonkeyKing
 .(
     ; Stop the clock so it does not damage the HIRES content
@@ -2346,6 +2345,5 @@ loop_1
     jsr _StartClock
     rts
 .)
-#endif
 
 _EndGameUtils_
