@@ -125,7 +125,7 @@ IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 ::
 ECHO.
 ECHO %ESC%[96m== Assembling Monkey King ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% monkey_king_main.s -o ..\build\files\monkey_king.o -l ..\build\symbols_kong
+%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% -DLANGUAGE_%LANGUAGE% monkey_king_main.s -o ..\build\files\monkey_king.o -l ..\build\symbols_kong
 IF ERRORLEVEL 1 GOTO Error
 
 
