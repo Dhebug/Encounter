@@ -109,16 +109,11 @@ real_start
     jsr _PatchSprites
 
 game_retry_loop
+    ; Wait until no key is pressed
+    jsr _FlushKey
+
     ; Initialize the game default parameters
     jsr GameInits
-
-    ; Temporarily replace the current score by the highscore
-    lda _gMonkeyKingBestScoreBCD+1
-    sta current_score_bcd+1
-    lda _gMonkeyKingBestScoreBCD+0
-    sta current_score_bcd+0
-
-    jsr ScoreDisplay
 
     ; Draw the 3 possible player lives
 	ldx #SPRITE(PlayerLives)
@@ -140,7 +135,7 @@ menu_loop
 	ldy #3
     jsr SpriteErase
 
-    ; Select the valid option
+    ; Select the valid menu option
     lda #1
     ldx menu_option
     bpl not_negative
@@ -153,13 +148,30 @@ not_overflow
     stx menu_option
     sta SpriteRequestedState+SPRITE(GameMenuOption),x
 
+    ; Temporarily replace the current score by the highscore
+    cpx #MENU_QUIT
+    beq end_score_display
+    lda _gMonkeyKingSlowBestScoreBCD+1    ; Display the slow mode score
+    ldy _gMonkeyKingSlowBestScoreBCD+0
+    cpx #MENU_FAST
+    bne update_score_display
+    lda _gMonkeyKingFastBestScoreBCD+1    ; Display the fast mode score
+    ldy _gMonkeyKingFastBestScoreBCD+0
+update_score_display    
+    sta current_score_bcd+1
+    sty current_score_bcd+0
 
-    ; Wait for a key press to start the game
+    jsr ScoreDisplay
+end_score_display
+
+    ; Refresh the sprites
     jsr _RefreshAllSprites
 
-    ; Minimum menu option
+    ; Wait for a key press to start the game
     jsr _WaitKey
     cpx #KEY_SPACE
+    beq exit_menu_loop
+    cpx #KEY_RETURN
     beq exit_menu_loop
     cpx #KEY_DOWN
     beq down_key
@@ -314,8 +326,22 @@ blink_loop
 ; Normal death
     jsr _RemoveLife
 
-; Reposition mario at the beginning
 RestartHero
+	; Erase lower crane with hook and mario
+	lda #0
+	;sta SpriteRequestedState+SPRITE(FirstCrane)+0
+	sta SpriteRequestedState+SPRITE(FirstVictoryPose)+0
+    jsr _RefreshAllSprites
+    jsr LongDelay
+
+    ; Ensure Kong is there
+    jsr HandlePlatforms
+    jsr MoveKong
+    jsr _RefreshAllSprites
+    ;jsr BlinkTemporization_128
+    jsr LongDelay
+
+    ; Reposition mario at the beginning
 	lda #SPRITE(FirstMario)
 	sta hero_position
 
@@ -331,31 +357,21 @@ RestartHero
     lda game_speed_tick
     sta game_tick
 
+    ; Reset the jump
+    lda #0
+    sta mario_jmp_count
+
+    ; Wait until no key is pressed
+    jsr _FlushKey
+
 	jmp game_loop
 
 ; Full death, start again
 FullDeath
 	;jmp _main
 
-.(
     ; At the end of the session we compare if this score is the best of this session
-    lda     current_score+1          ; Check the high byte 
-    cmp     _gMonkeyKingSessionBest+1
-    bcc     end_high_score           ; If smaller, it's not a new high score
-    beq     check_tens               ; If equal we need to check the lower byte
-    bcs     new_high_score           ; If larger that's a new high score
-check_tens
-    lda     current_score+0          ; Check the lower byte
-    cmp     _gMonkeyKingSessionBest+0
-    bcc     end_high_score           ; If smaller, it's not a new high score
-    beq     end_high_score           ; If equal, it's not a new high score either
-new_high_score    
-    lda     current_score+1
-    sta     _gMonkeyKingSessionBest+1
-    lda     current_score+0
-    sta     _gMonkeyKingSessionBest+0
-end_high_score
-.)    
+    jsr _UpdateSessionScoreBest
     jmp game_retry_loop              ; Back to the selection menu
 	
 
@@ -538,6 +554,17 @@ skip
 
 
 
+LongDelay
+.(
+    ldy #25
+loop    
+    jsr VSync
+    dey
+    bne loop
+    rts
+.)
+
+
 BlinkTemporization_128
 	ldx #128
 ; Call with X containing the delay
@@ -642,7 +669,7 @@ _ScoreIncrementMulti
 score_loop
 	jsr _ScoreIncrement
 	jsr ScoreDisplay
-    jsr Bleep
+    jsr Success
     jsr _RefineCharacters
 
 	ldx #32
@@ -684,21 +711,25 @@ _ScoreIncrement
 end_extra_life
 
     ; Note: BCD is used for direct display to screen, so the bytes are reversed compared to usual 6502 16bit numbers storage
-    lda     current_score_bcd+0          ; Check the high byte 
-    cmp     _gMonkeyKingBestScoreBCD+0
+    lda menu_option                  ; Modify the slow or fast score depending of the option
+    asl 
+    tax
+
+    lda     current_score_bcd+0      ; Check the high byte 
+    cmp     _gMonkeyKingSlowBestScoreBCD+0,x
     bcc     end_high_score           ; If smaller, it's not a new high score
     beq     check_tens               ; If equal we need to check the lower byte
     bcs     new_high_score           ; If larger that's a new high score
 check_tens
-    lda     current_score_bcd+1          ; Check the lower byte
-    cmp     _gMonkeyKingBestScoreBCD+1
+    lda     current_score_bcd+1      ; Check the lower byte
+    cmp     _gMonkeyKingSlowBestScoreBCD+1,x
     bcc     end_high_score           ; If smaller, it's not a new high score
     beq     end_high_score           ; If equal, it's not a new high score either
 new_high_score    
     lda     current_score_bcd+0
-    sta     _gMonkeyKingBestScoreBCD+0
+    sta     _gMonkeyKingSlowBestScoreBCD+0,x
     lda     current_score_bcd+1
-    sta     _gMonkeyKingBestScoreBCD+1
+    sta     _gMonkeyKingSlowBestScoreBCD+1,x
 
     ; Highlight the "Best" marker
     lda #1
@@ -717,6 +748,32 @@ done
 	rts
 .)
 
+
+_UpdateSessionScoreBest
+.(
+    ; At the end of the session we compare if this score is the best of this session
+    lda menu_option                  ; Modify the slow or fast score depending of the option
+    asl 
+    tax
+
+    lda     current_score+1          ; Check the high byte 
+    cmp     _gMonkeyKingSlowSessionBest+1,x
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     check_tens               ; If equal we need to check the lower byte
+    bcs     new_high_score           ; If larger that's a new high score
+check_tens
+    lda     current_score+0          ; Check the lower byte
+    cmp     _gMonkeyKingSlowSessionBest+0,x
+    bcc     end_high_score           ; If smaller, it's not a new high score
+    beq     end_high_score           ; If equal, it's not a new high score either
+new_high_score    
+    lda     current_score+1
+    sta     _gMonkeyKingSlowSessionBest+1,x
+    lda     current_score+0
+    sta     _gMonkeyKingSlowSessionBest+0,x
+end_high_score
+    rts
+.)
 
 
 
@@ -1057,6 +1114,13 @@ check_end
 	rts
 .)
 
+
+_FlushKey
+.(
+    jsr read_keyboard
+    bne _FlushKey
+    rts
+.)
 
 _WaitKey
 .(
@@ -2148,20 +2212,23 @@ Bloop
     jmp play_sound
 .)
 
+Success
+.(
+    ldX #<_SuccessData
+    ldy #>_SuccessData
+    jmp play_sound
+.)
 
-_GameTickData
-    SOUND_SET_VALUE2(REG_A_FREQ,50)
-    SOUND_SET_VALUE(REG_A_VOLUME,13)               ; Channel A volume
-    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
-    SOUND_WAIT(1)                                  ; Wait a couple frames
-    SOUND_SET_VALUE_END(REG_A_VOLUME,0)            ; Cut the volume
 
-_JumpData
-    SOUND_SET_VALUE2(REG_A_FREQ,40)
-    SOUND_SET_VALUE(REG_A_VOLUME,13)               ; Channel A volume
-    SOUND_SET_VALUE(REG_MIXER,%11111110)           ; Enable Tone on channel A
-    SOUND_WAIT(1)                                  ; Wait a couple frames
-    SOUND_SET_VALUE_END(REG_A_VOLUME,0)            ; Cut the volume
+;                                                           A FREQ (LOW|HIGH)           CONTROL         ENV (LOW|HIGH)
+;                                                           |       B FREQ (LOW|HIGH)       A VOL       |
+;                                                           |       |       C FREQ (LOW|HIGH)   B VOL   |
+;                                                           |       |       |       N FREQ          C VOL   
+;                                                           0---1   2---3   4---5   6   7   8   9   10  11--12  13
+_GameTickData   .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$28,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+_JumpData       .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$20,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+_SuccessData    .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$10,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+
 
 
 #include "monkey_king_spr.s"

@@ -207,8 +207,10 @@ extern const char* gStreamSkipPoint;
 extern char gMusicEnabled;          // 0 or 255
 extern char gSoundEnabled;          // 0 or 255
 extern char gJoystickType;          // See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
-extern unsigned int gMonkeyKingBestScoreBCD;    // minigame high score (BCD format)
-extern unsigned int gMonkeyKingSessionBest;     // Best score of the player in that session (normal format)
+extern unsigned int gMonkeyKingSlowBestScoreBCD;    // minigame high score (BCD format)
+extern unsigned int gMonkeyKingSlowSessionBest;     // Best score of the player in that session (normal format)
+extern unsigned int gMonkeyKingFastBestScoreBCD;    // minigame high score (BCD format)
+extern unsigned int gMonkeyKingFastSessionBest;     // Best score of the player in that session (normal format)
 
 
 // game_text

@@ -252,21 +252,23 @@ void ApplyTimeBonus()
 
 void ApplyMonkeyKingBonus()
 {
-    if (gMonkeyKingSessionBest)
+    // Select the highest of the two possible scores
+    unsigned int bonus_score = gMonkeyKingSlowSessionBest>gMonkeyKingFastSessionBest?gMonkeyKingSlowSessionBest:gMonkeyKingFastSessionBest;
+    if (bonus_score)
     {
         unsigned int decount=1;
         // Add the time as bonus points (half a point per remaining second)
-        while (gMonkeyKingSessionBest)
+        while (bonus_score)
         {
-            sprintf((char*)0xbb80+40*24,gTextMonkeyBonus,5,gMonkeyKingSessionBest);        
+            sprintf((char*)0xbb80+40*24,gTextMonkeyBonus,5,bonus_score);        
             PlayFlipClick();
             WaitFrames(5);
             //if (gMonkeyKingSessionBest>100)   decount=100;
             //else
-            if (gMonkeyKingSessionBest>10)    decount=10;
-            else                              decount=1;
+            if (bonus_score>10)    decount=10;
+            else                   decount=1;
 
-            gMonkeyKingSessionBest-=decount;
+            bonus_score-=decount;
             gScore+=decount;
             sprintf((char*)0xbb80+16*40+1,gTextBaseScore,3,gScore);
         }
@@ -338,9 +340,14 @@ void HandleHighScore()
 	LoadFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
     // Check the minigame highscore
-    if (!gMonkeyKingBestScoreBCD==gSaveGameFile.monkey_king_score)
+    if (!gMonkeyKingSlowBestScoreBCD==gSaveGameFile.monkey_king_score_slow)
     {
-        gSaveGameFile.monkey_king_score=gMonkeyKingBestScoreBCD;
+        gSaveGameFile.monkey_king_score_slow=gMonkeyKingSlowBestScoreBCD;
+        gAchievementsChanged = 1;
+    }
+    if (!gMonkeyKingFastBestScoreBCD==gSaveGameFile.monkey_king_score_fast)
+    {
+        gSaveGameFile.monkey_king_score_fast=gMonkeyKingFastBestScoreBCD;
         gAchievementsChanged = 1;
     }
 
