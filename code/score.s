@@ -88,7 +88,7 @@ _Text_AchievementCanYouRepeat     .byt "N'a rien compris",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0
 _Text_AchievementReadTheTombstone .byt "Repose en paix",0
 _Text_AchievementOver9999         .byt "Ca dépasse 9999 !",0
-_Text_AchievementMonkeyFall       .byt "Risques de chutes",0
+_Text_AchievementMonkeyFall       .byt "Chute de gorille",0
 #else // LANGUAGE_EN
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"      No achievement unlocked",0
@@ -134,7 +134,7 @@ _Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
 _Text_AchievementReadTheInvoice   .byt "Read the invoice",0
 _Text_AchievementReadTheTombstone .byt "Rest in peace",0
 _Text_AchievementOver9999         .byt "It's over 9999!",0
-_Text_AchievementMonkeyFall       .byt "Falling hazard",0
+_Text_AchievementMonkeyFall       .byt "Monkey Fall",0
 #endif
 
 _AchievementMessages
