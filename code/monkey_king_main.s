@@ -30,6 +30,11 @@
 #define CRANE_MID       1
 #define CRANE_HIGH      2
 
+; Menu options
+#define MENU_SLOW       0
+#define MENU_FAST       1
+#define MENU_QUIT       2
+
 
 ; Misc
 #define BREAKPOINT  jmp *
@@ -78,6 +83,7 @@ girder_spawn_tick .dsb 1	; Handling of when new girders are added
 
 kong_throw		.dsb 1		; Indicate if a throw movement is started
 
+menu_option     .dsb 1      ; 0=SLOW 1=FAST 2=QUIT
 
 _zp_end_
 
@@ -100,9 +106,11 @@ real_start
     jsr _DisplayCharsetMatrix
     jsr _ClearMemory
     jsr _GenerateScanlineTable
-    jsr GameInits
-
     jsr _PatchSprites
+
+game_retry_loop
+    ; Initialize the game default parameters
+    jsr GameInits
 
     ; Temporarily replace the current score by the highscore
     lda _gMonkeyKingBestScoreBCD+1
@@ -123,14 +131,70 @@ real_start
 	ldy #SPRITE(_LastSprite)
     jsr SpriteDraw
 
+    .(
+    lda #0
+    sta menu_option
+menu_loop
+    ; Show the selected menu option
+	ldx #SPRITE(GameMenuOption)
+	ldy #3
+    jsr SpriteErase
+
+    ; Select the valid option
+    lda #1
+    ldx menu_option
+    bpl not_negative
+    ldx #2
+not_negative    
+    cpx #3
+    bcc not_overflow
+    ldx #0
+not_overflow
+    stx menu_option
+    sta SpriteRequestedState+SPRITE(GameMenuOption),x
+
+
     ; Wait for a key press to start the game
     jsr _RefreshAllSprites
 
+    ; Minimum menu option
     jsr _WaitKey
+    cpx #KEY_SPACE
+    beq exit_menu_loop
+    cpx #KEY_DOWN
+    beq down_key
+    cpx #KEY_UP
+    beq up_key
+    jmp menu_loop
 
-    ; Erase all the sprites (except the three last lives)
+down_key
+    inc menu_option
+    jmp menu_loop
+
+up_key
+    dec menu_option
+    jmp menu_loop
+    .)
+
+exit_menu_loop
+    ldx menu_option
+    cpx #MENU_QUIT
+    bne start_game
+    ; Quit back to Encounter
+    rts
+
+start_game    
+    cpx #MENU_FAST
+    bne end_game_speed
+    ; Fast game:
+    lsr game_speed_tick      ; Double the game tick
+
+end_game_speed
+
+
+    ; Erase all the sprites (except the three last lives and the crane label)
 	ldx #0
-	ldy #SPRITE(PlayerLives)
+	ldy #SPRITE(CraneLabel)
 	jsr SpriteErase
     jsr _RefreshAllSprites
 
@@ -292,7 +356,7 @@ new_high_score
     sta     _gMonkeyKingSessionBest+0
 end_high_score
 .)    
-    rts             ; Back to Encounter
+    jmp game_retry_loop              ; Back to the selection menu
 	
 
 
@@ -2123,16 +2187,92 @@ _SpriteMario_Life
 	.byt %000000,%000000
 
 _SpriteBestScore
-    .byt %001111,%111111,%111111,%111100
-    .byt %001000,%000000,%000000,%000100
-    .byt %001011,%100111,%001101,%110100
-    .byt %001010,%010100,%010000,%100100
-    .byt %001011,%100110,%011100,%100100
-    .byt %001010,%010100,%000100,%100100
-    .byt %001011,%100111,%011000,%100100
-    .byt %001000,%000000,%000000,%000100
-    .byt %001111,%111111,%111111,%111100
+    .byt %000111,%111111,%111111,%111111,%111111,%111100
+    .byt %000100,%000000,%000000,%000000,%000000,%000100
+    .byt %000101,%110011,%100110,%011001,%110011,%100100
+    .byt %000101,%001010,%001000,%100101,%001010,%010100
+    .byt %000101,%110011,%001000,%100101,%110010,%010100
+    .byt %000101,%001010,%001000,%100101,%001010,%010100
+    .byt %000101,%001011,%100110,%011001,%001011,%100100
+    .byt %000100,%000000,%000000,%000000,%000000,%000100
+    .byt %000111,%111111,%111111,%111111,%111111,%111100
 
+_SpriteCraneSign
+#ifdef LANGUAGE_FR
+    ; GRUE
+    .byt %000011,%001110,%010010,%111000
+    .byt %000100,%001001,%010010,%100000
+    .byt %000101,%101110,%010010,%110000
+    .byt %000100,%101001,%010010,%100000
+    .byt %000011,%101001,%001100,%111000
+#else
+    ; CRANE
+    .byt %000110,%110001,%001001,%011100
+    .byt %001000,%101010,%101101,%010000
+    .byt %001000,%110011,%101011,%011000
+    .byt %001000,%101010,%101001,%010000
+    .byt %000110,%101010,%101001,%011100
+#endif
+
+_MenuOptionSelector
+    .byt %000010
+    .byt %000110
+    .byt %001111
+    .byt %000110
+    .byt %000010
+
+_GameMenu
+#ifdef LANGUAGE_FR
+    ; Lent
+    .byt %000000,%000010,%001110,%100101,%110000  
+    .byt %000000,%000010,%001000,%110100,%100000  
+    .byt %000000,%000010,%001100,%101100,%100000  
+    .byt %000000,%000010,%001000,%100100,%100000  
+    .byt %000000,%000011,%101110,%100100,%100000  
+
+    .byt %000000,%000000,%000000,%000000,%000000  
+
+    ; Rapide
+    .byt %011100,%011001,%110010,%111001,%110000  
+    .byt %010010,%100101,%001010,%100101,%000000  
+    .byt %011100,%111101,%110010,%100101,%100000  
+    .byt %010010,%100101,%000010,%100101,%000000  
+    .byt %010010,%100101,%000010,%111001,%110000  
+
+    .byt %000000,%000000,%000000,%000000,%000000  
+
+    ; Quitte
+    .byt %000011,%001001,%010111,%011101,%110000  
+    .byt %000100,%101001,%010010,%001001,%000000  
+    .byt %000100,%101001,%010010,%001001,%100000  
+    .byt %000101,%001001,%010010,%001001,%000000  
+    .byt %000010,%100110,%010010,%001001,%110000  
+#else
+    ; Slow
+    .byt %011101,%000011,%001000,%100000  
+    .byt %010001,%000100,%101000,%100000  
+    .byt %011101,%000100,%101000,%100000  
+    .byt %000101,%000100,%101010,%100000  
+    .byt %011101,%110011,%000101,%000000  
+
+    .byt %000000,%000000,%000000,%000000  
+
+    ; Fast
+    .byt %000111,%001100,%111011,%100000  
+    .byt %000100,%010010,%100001,%000000  
+    .byt %000110,%011110,%111001,%000000  
+    .byt %000100,%010010,%001001,%000000  
+    .byt %000100,%010010,%111001,%000000  
+
+    .byt %000000,%000000,%000000,%000000  
+
+    ; Quit
+    .byt %000001,%100100,%101011,%100000  
+    .byt %000010,%010100,%101001,%000000  
+    .byt %000010,%010100,%101001,%000000  
+    .byt %000010,%100100,%101001,%000000  
+    .byt %000001,%010011,%001001,%000000  
+#endif    
 
 SevenDigitPatterns
     ; 0

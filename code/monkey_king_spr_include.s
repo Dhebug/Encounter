@@ -169,7 +169,22 @@ LABEL(FirstHeart)       ; Hearts of victory (2)
 	SPRITE_DATA(6,2,2,8,BigHeart)
 
 LABEL(BestScore)      ; The indicators that indicates the best score 
-	SPRITE_DATA(32,214,4,9,_SpriteBestScore)
+	SPRITE_DATA(30,214,6,9,_SpriteBestScore)
+
+LABEL(GameMenu)      ; The Slow/Fast/Quit menu options
+#ifdef LANGUAGE_FR
+	SPRITE_DATA(32,149,5,17,_GameMenu)
+#else
+	SPRITE_DATA(33,149,4,17,_GameMenu)
+#endif    
+
+LABEL(GameMenuOption)   ; The marker in front of the selected menu option 
+	SPRITE_DATA(36,149,1,5,_MenuOptionSelector)
+	SPRITE_DATA(36,155,1,5,_MenuOptionSelector)
+	SPRITE_DATA(36,161,1,5,_MenuOptionSelector)
+
+LABEL(CraneLabel)   ; The label to indicate the player it's a control for the crane
+	SPRITE_DATA(1,62,4,5,_SpriteCraneSign)
 
 LABEL(PlayerLives)      ; The indicators for remaining lives
 	SPRITE_DATA(34,197,2,16,_SpriteMario_Life)
