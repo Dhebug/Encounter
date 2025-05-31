@@ -61,8 +61,8 @@ SET TEST_LANGUAGE=EN
 SET TEST_LANGUAGE=FR
 
 :: Frequency we want to launch when testing
-SET TEST_FREQUENCY=60HZ
 SET TEST_FREQUENCY=50HZ
+SET TEST_FREQUENCY=60HZ
 
 :: To distinguish the way the game is built
 SET PRODUCT_TYPE=GAME_DEMO
