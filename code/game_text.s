@@ -1715,6 +1715,9 @@ _gDescriptionEastGallery
 
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
+#ifdef TESTING_MODE
+    CALL_NATIVE(_PlayMonkeyKing)
+#endif    
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
