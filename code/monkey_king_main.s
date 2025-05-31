@@ -249,6 +249,7 @@ game_loop
 		; Call the "click" routine
         jsr Bleep
 
+        jsr _CheckJumpPoints
 		jsr HandlePlatforms
 		jsr MoveBarrels
 		jsr MoveKong
@@ -659,6 +660,50 @@ _GetRand
 	sta rand_high
 	rts
 
+
+_CheckJumpPoints
+.(
+	ldy hero_position 
+.(  ; Check jump over first barrel of the first floor
+	cpy #SPRITE(FirstMarioJump)+0
+	bne end_check
+	lda SpriteRequestedState+SPRITE(FirstBarrel)+0
+	beq end_check
+    jsr _ScoreIncrement              ; 1 point
+end_check
+.)
+
+.(  ; Check jump over second barrel of the first floor
+	cpy #SPRITE(FirstMarioJump)+1
+	bne end_check
+	lda SpriteRequestedState+SPRITE(FirstBarrel)+3
+	beq end_check
+    jsr _ScoreIncrement              ; 1 point
+end_check
+.)
+
+.(  ; Check jump over first barrel of the second floor
+	cpy #SPRITE(FirstMarioJump)+2
+	bne end_check
+	lda SpriteRequestedState+SPRITE(SecondFloorBarrel)+1
+	beq end_check
+    jsr _ScoreIncrement              ; 2 points
+    jsr _ScoreIncrement              ; 2 points
+end_check
+.)
+
+.(  ; Check jump over second barrel of the second floor
+	cpy #SPRITE(FirstMarioJump)+3
+	bne end_check
+	lda SpriteRequestedState+SPRITE(SecondFloorBarrel)+2
+	beq end_check
+    jsr _ScoreIncrement              ; 2 points
+    jsr _ScoreIncrement              ; 2 points
+end_check
+.)
+
+    rts
+.)
 
 
 ; Give the value to add in X
@@ -1384,11 +1429,7 @@ skip
 	ldy #0
 	ldx #LastBarrel-FirstBarrel-1
 	jsr ScrollLeftTable
-	beq	skip_increase_score
 
-	jsr _ScoreIncrement
-
-skip_increase_score
 	; Scroll the three top ones
 	ldy #SPRITE(LastBarrel)+(3*0)
 	ldx #2
@@ -2225,8 +2266,8 @@ Success
 ;                                                           |       |       C FREQ (LOW|HIGH)   B VOL   |
 ;                                                           |       |       |       N FREQ          C VOL   
 ;                                                           0---1   2---3   4---5   6   7   8   9   10  11--12  13
-_GameTickData   .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$28,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
-_JumpData       .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$20,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+_GameTickData   .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$20,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
+_JumpData       .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$18,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
 _SuccessData    .byt SOUND_COMMAND_SET_BANK|SOUND_FLAG_END,$10,$00,$00,$00,$00,$00,$00,$3E,$10,$00,$00,$1F,$00,$00
 
 
