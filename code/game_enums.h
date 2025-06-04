@@ -157,11 +157,12 @@
 #define e_ITEM_TVCabinet             80         // a TV cabinet
 #define e_ITEM_Batteries             81         // a couple SR44 batteries
 #define e_ITEM_Drawer                82         // a drawer
+#define e_ITEM_DuneBook              83         // a dune book
 #ifdef PRODUCT_TYPE_GAME_DEMO
-#define e_ITEM_DemoMessage           83         // a demo readme message
-#define	e_ITEM_COUNT_ 				 84         //  ----- END MARKER - Free until 127, after are action words
+#define e_ITEM_DemoMessage           84         // a demo readme message
+#define	e_ITEM_COUNT_ 				 85         //  ----- END MARKER - Free until 127, after are action words
 #else
-#define	e_ITEM_COUNT_ 				 83         //  ----- END MARKER - Free until 127, after are action words
+#define	e_ITEM_COUNT_ 				 84         //  ----- END MARKER - Free until 127, after are action words
 #endif
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions

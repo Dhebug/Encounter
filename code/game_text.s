@@ -174,6 +174,7 @@ _gTextItemTelevision              .byt "une _télévision",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
 _gTextItemLockedPanel             .byt "un _clignotant",0
 _gTextItemBatteries               .byt "un paquet de$_piles SR44",0
+_gTextItemDuneBook                .byt "un$_roman",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "un _message sur la porte",0
 #endif
@@ -252,6 +253,7 @@ _gTextItemTelevision              .byt "a _television",0
 _gTextItemGameConsole             .byt "a game _console",0
 _gTextItemLockedPanel             .byt "a _blinker",0
 _gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
+_gTextItemDuneBook                .byt "a$_novel",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "a _message on the door",0
 #endif
@@ -2497,6 +2499,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_Tombstone          , _ReadTombstone)
     VALUE_MAPPING(e_ITEM_Graffiti           , _ReadGraffiti)
     VALUE_MAPPING(e_ITEM_Invoice            , _ReadInvoice)
+    VALUE_MAPPING(e_ITEM_DuneBook           , _ReadDuneBook)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _ReadDemoMessage)
 #endif    
@@ -2789,6 +2792,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_TVCabinet          , _InspectTVCabinet)
     VALUE_MAPPING(e_ITEM_Batteries          , _InspectBatteries)
     VALUE_MAPPING(e_ITEM_Drawer             , _InspectDrawer)
+    VALUE_MAPPING(e_ITEM_DuneBook           , _InspectDuneBook)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif    
@@ -3722,6 +3726,21 @@ _InspectWell
     END_AND_REFRESH
 .)
 
+
+
+_InspectDuneBook
+_ReadDuneBook
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_BOOK_DUNE)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Un Dune de 1965, rongé par les vers")
+    INFO_MESSAGE("Il paraît qu'un film est en cours!")
+#else
+    INFO_MESSAGE("A wormed-out 1965 Dune novel")
+    INFO_MESSAGE("I heard a movie was in the works?")
+#endif    
+    WAIT_KEYPRESS    
+    END_AND_REFRESH
 .)
 
 

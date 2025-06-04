@@ -402,6 +402,8 @@ AddDefine LOADER_PICTURE_BATTERIES {FileIndex}
 AddFile ..\build\files\view_inside_well.hir
 AddDefine LOADER_PICTURE_INSIDE_WELL {FileIndex}
 
+AddFile ..\build\files\view_book_dune.hir
+AddDefine LOADER_PICTURE_BOOK_DUNE {FileIndex}
 
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_news_saved_fr.hir

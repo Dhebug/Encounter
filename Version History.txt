@@ -342,3 +342,4 @@
 
 1.2.1
 - Inspecting the old well now shows a view of the inside instead of just a text description
+- Added a Dune book in the guest room, it's the first UK edition from 1965 by Gollancz which explains why it looks a bit wormed-out
