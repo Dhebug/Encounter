@@ -399,6 +399,10 @@ AddDefine LOADER_PICTURE_ORIC_COMPUTER {FileIndex}
 AddFile ..\build\files\view_battery.hir
 AddDefine LOADER_PICTURE_BATTERIES {FileIndex}
 
+AddFile ..\build\files\view_inside_well.hir
+AddDefine LOADER_PICTURE_INSIDE_WELL {FileIndex}
+
+
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_news_saved_fr.hir
 #else

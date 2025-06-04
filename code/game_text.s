@@ -3712,12 +3712,16 @@ _InspectChurch
 
 _InspectWell
 .(
+    DISPLAY_IMAGE(LOADER_PICTURE_INSIDE_WELL)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un vieux puits")
 #else
     INFO_MESSAGE("Just an old mossy well")
 #endif    
-    END_AND_PARTIAL_REFRESH
+    WAIT_KEYPRESS    
+    END_AND_REFRESH
+.)
+
 .)
 
 

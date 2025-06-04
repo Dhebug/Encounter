@@ -334,8 +334,11 @@
 - Changed the default configuration of the emulator to use software rendering instead of OpenGL (except for the full crt emulation mode)
 - Trying to take some of the items will now ask if you are kleptomaniac instead of just printing "can't do this"
 
-1.2.0 -
+1.2.0 - 31 may 2025
 - Internal: Swapped the music buffer location to provide a continuous array for dynamic module loading
 - Modified the display of the leaderboard so scores are not truncated when they reach beyond 9999 points
 - New achievements: "Over 9999", and "Falling hazard"
 - The "Monkey King" game is now fully playable, and the best scores are stored on disk
+
+1.2.1
+- Inspecting the old well now shows a view of the inside instead of just a text description

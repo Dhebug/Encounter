@@ -221,6 +221,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_tombstone_fr
 %CONVERT% view_colecovision_boot
 %CONVERT% view_battery
+%CONVERT% view_inside_well
 %CONVERT% view_demo_message
 %CONVERT% view_demo_message_fr
 
