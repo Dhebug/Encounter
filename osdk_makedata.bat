@@ -223,6 +223,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_battery
 %CONVERT% view_inside_well
 %CONVERT% view_book_dune
+%CONVERT% view_trash_can
 %CONVERT% view_demo_message
 %CONVERT% view_demo_message_fr
 

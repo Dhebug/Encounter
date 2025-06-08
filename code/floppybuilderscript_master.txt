@@ -402,6 +402,9 @@ AddDefine LOADER_PICTURE_BATTERIES {FileIndex}
 AddFile ..\build\files\view_inside_well.hir
 AddDefine LOADER_PICTURE_INSIDE_WELL {FileIndex}
 
+AddFile ..\build\files\view_trash_can.hir
+AddDefine LOADER_PICTURE_TRASH_CAN {FileIndex}
+
 AddFile ..\build\files\view_book_dune.hir
 AddDefine LOADER_PICTURE_BOOK_DUNE {FileIndex}
 
