@@ -40,8 +40,9 @@
 :: 1.1.1 - Polished the joystick mode, press key indicator, copyright date updated
 :: 1.1.2 - Usable Oric 1, 18 sectors per track, kleptomaniac message
 :: 1.2.0 - Fixed highscore truncation, playable minigame, added two achievements
+:: 1.2.1 - Added detailed images for the well and the trashcan, and a new Dune novel item
 ::
-SET VERSION=1.2.0
+SET VERSION=1.2.1
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
