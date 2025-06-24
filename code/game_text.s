@@ -3759,12 +3759,16 @@ _InspectRoadSign
 _SearchTrashCan
 _InspectTrashCan
 .(
+    DISPLAY_IMAGE(LOADER_PICTURE_TRASH_CAN)    
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("L'odeur et l'état sont répugnants !")
+    INFO_MESSAGE("Il n'y a rien d'utilisable dedans")
 #else
     INFO_MESSAGE("It looks and smells filthy!")
+    INFO_MESSAGE("Absolutely nothing useful in it")
 #endif    
-    END_AND_PARTIAL_REFRESH
+    WAIT_KEYPRESS
+    END_AND_REFRESH
 .)
 
 
