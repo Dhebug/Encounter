@@ -6,6 +6,10 @@
     "version": "2.0.0",
     "tasks": [
         {
+            // If this fails and the terminal seems to be using PowerShell, you can:
+            // - Go to the top menu and select File > Preferences > Settings.
+            // - In the Settings search bar, type terminal.integrated.defaultProfile.windows.
+            // - Click on the drop-down menu next to Terminal › Integrated › Default Profile: Windows and select Command Prompt.
             "label": "osdk_build_and_run",
             "type": "shell",
             "command": "osdk_execute.bat",

@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "floppy_description.h": "c"
+        "floppy_description.h": "c",
+        "score.h": "c",
+        "common.h": "c",
+        "loader_api.h": "c"
     },
     "cmake.configureOnOpen": false,
     "workbench.colorCustomizations": {
