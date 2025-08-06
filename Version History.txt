@@ -344,3 +344,6 @@
 - Inspecting the old well now shows a view of the inside instead of just a text description
 - Added a Dune book in the guest room, it's the first UK edition from 1965 by Gollancz which explains why it looks a bit wormed-out
 - Inspecting the trash can in the seedy alley now shows a close up picture
+
+1.2.2
+- Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen

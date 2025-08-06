@@ -613,7 +613,7 @@ int DisplayAchievements()
         int unlockedCount = 0;
         unsigned char achievementOffset = 0;
         unsigned char achievementMask = 1;
-        gPrintAddress+=40+2+40;
+        gPrintAddress+=40+1+40;
         for (entry=0;entry<ACHIEVEMENT_COUNT_;entry++)
         {		
             char* achievementMessage = AchievementMessages[entry];
