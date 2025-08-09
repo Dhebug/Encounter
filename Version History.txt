@@ -347,3 +347,4 @@
 
 1.2.2
 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
+- Cancelling the selection of a container when taking an item will just ignore the operation instead of writing that this will not work.

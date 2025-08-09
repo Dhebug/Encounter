@@ -1839,12 +1839,13 @@ query_container
     jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
 
     ; Validate the answer
+    lda _gCurrentAssociatedItem
     cmp #e_WORD_COUNT_
-    bne handle_answer
+    bne validate_container
     ; The user selected the CANCEL option
     jmp _PrintSceneObjects
 
-handle_answer    
+validate_container    
     lda _gCurrentAssociatedItem         ; if (gCurrentAssociatedItem > e_ITEM__Last_Container)
     cmp #(e_ITEM__Last_Container + 1)   ; Compare with e_ITEM__Last_Container + 1
     bcc check_usable_container
