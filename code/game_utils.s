@@ -1850,9 +1850,9 @@ validate_container
     cmp #(e_ITEM__Last_Container + 1)   ; Compare with e_ITEM__Last_Container + 1
     bcc check_usable_container
 
-print_error
-    lda #<_gTextErrorThatWillNotWork
-    ldx #>_gTextErrorThatWillNotWork
+print_invalid_container
+    lda #<_gTextErrorNotAContainer
+    ldx #>_gTextErrorNotAContainer
     jmp _PrintErrorMessageAsmAX
 
 check_usable_container              ; Calculate (1 << gCurrentAssociatedItem)    
@@ -1868,7 +1868,7 @@ shift_loop
 test_bit          ; Check !(gStreamItemPtr->usable_containers & (1 << gCurrentAssociatedItem))
     ldy #5                          ; Offset to usable_containers field
     and (_gStreamItemPtr),y         ; AND with usable_containers
-    beq print_error                 ; If result is 0, condition fails, go to error
+    beq print_invalid_container     ; If result is 0, condition fails, go to error
 
 container_is_valid
     ; gStreamAssociatedItemPtr=&gItems[gCurrentAssociatedItem];
