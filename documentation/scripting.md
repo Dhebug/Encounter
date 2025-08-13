@@ -1,6 +1,6 @@
 Scripting
 =========
-Somes games have hardcoded logic, some are completely data-driven, Encounter is somewhat in-between, with most of the player actions directly coded in normal language, while the scenes themselves use a tiny scripting system designed to be memory efficient
+Some games have hardcoded logic, some are completely data-driven, Encounter is somewhat in-between, with most of the player actions directly coded in normal language, while the scenes themselves use a tiny scripting system designed to be memory efficient
 
 
 - [Scripting](#scripting)
@@ -40,13 +40,16 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [ERROR\_MESSAGE](#error_message)
     - [CLEAR\_TEXT\_AREA](#clear_text_area)
     - [CLEAR\_FULL\_TEXT\_AREA](#clear_full_text_area)
-  - [Changing item properties](#changing-item-properties)
+  - [Items management](#items-management)
+    - [SET\_CURRENT\_ITEM](#set_current_item)
     - [SET\_ITEM\_LOCATION](#set_item_location)
     - [SET\_ITEM\_FLAGS](#set_item_flags)
     - [UNSET\_ITEM\_FLAGS](#unset_item_flags)
     - [SET\_ITEM\_DESCRIPTION](#set_item_description)
-  - [Changing locations properties](#changing-locations-properties)
+  - [Location management](#location-management)
+    - [SET\_PLAYER\_LOCATION](#set_player_location)
     - [SET\_LOCATION\_DIRECTION](#set_location_direction)
+    - [SET\_SCENE\_IMAGE](#set_scene_image)
   - [Scoring and achievements](#scoring-and-achievements)
     - [UNLOCK\_ACHIEVEMENT](#unlock_achievement)
     - [INCREASE\_SCORE](#increase_score)
@@ -54,8 +57,11 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [GAME\_OVER](#game_over)
     - [START\_CLOCK](#start_clock)
     - [STOP\_CLOCK](#stop_clock)
-  - [DISPLAY\_IMAGE](#display_image)
-  - [DRAW\_BITMAP](#draw_bitmap)
+  - [Graphic stuff](#graphic-stuff)
+    - [DISPLAY\_IMAGE](#display_image)
+    - [DISPLAY\_IMAGE\_ONLY](#display_image_only)
+    - [DISPLAY\_IMAGE\_NOBLIT](#display_image_noblit)
+    - [DRAW\_BITMAP](#draw_bitmap)
 
 
 # Features
@@ -636,7 +642,22 @@ In Encounter it's used at the end when the player wins during the end sequence.
 
 
 ---
-## Changing item properties
+
+## Items management
+
+### SET_CURRENT_ITEM
+```C
+#define COMMAND_SET_CURRENT_ITEM  nn
+#define SET_CURRENT_ITEM(item)              .byt COMMAND_SET_CURRENT_ITEM,item
+```  
+Two bytes command containing the COMMAND_SET_CURRENT_ITEM opcode, followed by id of the item to set as current.
+
+This is used to change the value of e_ITEM_CURRENT which can then be used to call some generic code usable for different items.
+```c
+  // Let use the Hose as the current item.
+  SET_CURRENT_ITEM(e_ITEM_Hose)
+```  
+
 ### SET_ITEM_LOCATION
 ```C
 #define COMMAND_SET_ITEM_LOCATION nn
@@ -693,7 +714,26 @@ Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, fol
   SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed curtain")
 ```
 ---
-## Changing locations properties
+## Location management
+
+### SET_PLAYER_LOCATION
+```C
+#define COMMAND_SET_PLAYER_LOCATION nn
+#define SET_PLAYER_LOCATION(location)       .byt COMMAND_SET_PLAYER_LOCATION,location
+```  
+Two bytes command containing the COMMAND_SET_PLAYER_LOCATION opcode, followed by id of the location.
+
+This command can be used to move the player to another location. In Encounter this is used for example when examining the car.
+```c
+#ifdef LANGUAGE_FR
+  INFO_MESSAGE("Rapprochons-nous")
+#else
+  INFO_MESSAGE("Let's get closer")
+#endif        
+  SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
+```
+---
+
 ### SET_LOCATION_DIRECTION
 ```C
 #define COMMAND_SET_LOCATION_DIRECTION nn
@@ -703,6 +743,19 @@ Four bytes command containing the COMMAND_SET_LOCATION_DIRECTION opcode, followe
 ```c
   // Enable the UP direction
   SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)
+```
+---
+### SET_SCENE_IMAGE
+```C
+#define COMMAND_SET_SCENE_IMAGE nn
+#define SET_SCENE_IMAGE(imageId)            .byt COMMAND_SET_SCENE_IMAGE,imageId
+```  
+Two bytes command containing the COMMAND_SET_SCENE_IMAGE opcode, followed by id of the image to display.
+
+In Encounter this is used to show a different image when something has changed in the scene, like between a dark room and the same room with the curtains open.
+```c
+  // Show the view with the googles on
+  SET_SCENE_IMAGE(LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES)                
 ```
 ---
 ## Scoring and achievements
@@ -781,18 +834,59 @@ This is used to stop the game clock, can be used at the start of a PAUSE operati
 
 
 ---
-## DISPLAY_IMAGE
+## Graphic stuff
+There are a few different ways to display graphics in Encounter.
+
+The main concept is that graphics are located in three different locations:
+- The actual HIRES video memory showing the 240x128 graphical window in memory
+- The internal mixing buffer (_ImageBuffer) where the images are loaded first before being blit to the HIRES screen
+- The secondary buffer (_SecondImageBuffer) where sheets of graphical "patches" are loaded
+
+Depending of which command you use, the data loaded from disk will end up in the primary or secondary image buffer.
+
+### DISPLAY_IMAGE
 ```c
 #define COMMAND_FULLSCREEN_ITEM nn
-#define DISPLAY_IMAGE(imagedId,description)          .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
+#define DISPLAY_IMAGE(imagedId)          .byt COMMAND_FULLSCREEN_ITEM,imagedId
 ```
-Variable number of bytes containing the COMMAND_FULLSCREEN_ITEM opcode, followed by the id of an image to load, and a null terminated string containing a description to display
-Used to display a full screen image, like the map of the UK or the newspapwer with a subtitle
+Two bytes command containing the COMMAND_DISPLAY_IMAGE_NOBLIT opcode, followed by the id of the image to load.
+
+This is the most commonly used variant: It erases the text area, loads the image into _ImageBuffer, and finally blits it to screen.
 ```c
   // Show the image of the dog eating some meat
-  DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT,"Quite a hungry dog!")
+  DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT)
 ```  
-## DRAW_BITMAP
+### DISPLAY_IMAGE_ONLY
+```c
+#define COMMAND_DISPLAY_IMAGE_ONLY nn
+#define DISPLAY_IMAGE_ONLY(imagedId)          .byt COMMAND_DISPLAY_IMAGE_ONLY,imagedId
+```
+Two bytes command containing the COMMAND_DISPLAY_IMAGE_NOBLIT opcode, followed by the id of the image to load.
+
+This variant: Also loads the image into _ImageBuffer and blits it to screen, but it does not erase the text area
+```c
+  // Show the image of the dog eating some meat
+  DISPLAY_IMAGE_ONLY(LOADER_PICTURE_DOG_EATING_MEAT)
+```  
+### DISPLAY_IMAGE_NOBLIT
+```c
+#define COMMAND_DISPLAY_IMAGE_NOBLIT nn
+#define DISPLAY_IMAGE_NOBLIT(imagedId)          .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
+```
+Two bytes command containing the COMMAND_DISPLAY_IMAGE_NOBLIT opcode, followed by the id of the image to load.
+
+This last variant does erase the text area and load the image into _ImageBuffer, but it does not actually blit it to screen.
+It is used to perform a cross fade between images, or to perform controlled copy-pasted of blocks before blitting to the screen
+```c
+  // Draw the base image with the hole over an empty room
+  DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)                            
+  // Draw the patch with the girl restrained on the floor 
+  BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    
+    _IMAGE_STRIDE(0,0,17)
+    _BUFFER(10,26)
+  FADE_BUFFER
+```  
+### DRAW_BITMAP
 ```c
 #define COMMAND_BITMAP nn
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
