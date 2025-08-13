@@ -19,14 +19,17 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [Action scripts](#action-scripts)
     - [Game script](#game-script)
 - [Commands](#commands)
-  - [END](#end)
-  - [END\_AND\_REFRESH](#end_and_refresh)
   - [WAIT](#wait)
   - [WAIT\_KEYPRESS](#wait_keypress)
+  - [Flow Control](#flow-control)
+  - [END](#end)
+  - [END\_AND\_REFRESH](#end_and_refresh)
+  - [END\_AND\_PARTIAL\_REFRESH](#end_and_partial_refresh)
   - [JUMP](#jump)
-  - [Conditional jumps](#conditional-jumps)
     - [JUMP\_IF\_TRUE](#jump_if_true)
     - [JUMP\_IF\_FALSE](#jump_if_false)
+  - [GOSUB](#gosub)
+  - [RETURN](#return)
   - [Operators](#operators)
     - [CHECK\_ITEM\_LOCATION](#check_item_location)
     - [CHECK\_ITEM\_FLAG](#check_item_flag)
@@ -332,29 +335,6 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define COMMAND_FADE_BUFFER     8
 #define _COMMAND_COUNT          24
 ```
-## END
-```c
-#define COMMAND_END nn
-#define END             .byt COMMAND_END
-```
-
-Just a single byte containing the COMMAND_END opcode. 
-This signals the end of the script.
-```c
-  // End of script
-  END
-```
-## END_AND_REFRESH
-```c
-#define COMMAND_END_AND_REFRESH nn
-#define END_AND_REFRESH           .byt COMMAND_END_AND_REFRESH
-```
-Similar to END, except it also forces the entire scene to refresh.
-Generally used when the player perform actions resulting in items being modified or moved.
-```c
-  // End of script (and trigger a full refresh)
-  END_AND_REFRESH
-```
 
 ## WAIT
 ```c
@@ -389,6 +369,48 @@ If you actually need to know which key was pressed, you can just directly read t
   ENDIF(confirmation)
 ```
 
+---
+## Flow Control
+The following commands are related to the lifetime of script and how it flows around when executing code.
+
+## END
+```c
+#define COMMAND_END nn
+#define END             .byt COMMAND_END
+```
+
+Just a single byte containing the COMMAND_END opcode. 
+This signals the end of the script.
+```c
+  // End of script
+  END
+```
+
+## END_AND_REFRESH
+```c
+#define COMMAND_END_AND_REFRESH nn
+#define END_AND_REFRESH           .byt COMMAND_END_AND_REFRESH
+```
+Similar to END, except it also forces the entire scene to refresh.
+Generally used when the player perform actions resulting in items being modified or moved.
+```c
+  // End of script (and triggers a full refresh)
+  END_AND_REFRESH
+```
+
+## END_AND_PARTIAL_REFRESH
+```c
+#define COMMAND_END_AND_PARTIAL_REFRESH nn
+#define END_AND_PARTIAL_REFRESH           .byt COMMAND_END_AND_PARTIAL_REFRESH
+```
+Similar to END, except it also forces the text area (including the inventory) to refresh
+
+Generally used when the player perform actions resulting in items being modified or moved.
+```c
+  // End of script (and triggers a partial refresh of the screen)
+  END_AND_PARTIAL_REFRESH
+```
+
 ## JUMP
 ```c
 #define COMMAND_JUMP nn
@@ -401,9 +423,9 @@ Three bytes command containing the COMMAND_JUMP opcode, followed by the address 
   (...)
 dog_growls
 ```
+
 ---
-## Conditional jumps
-These two instructions require an operator to evaluate if the condition is true or false
+These two following instructions require an operator to evaluate if the condition is true or false
 ### JUMP_IF_TRUE
 ```c
 #define COMMAND_JUMP_IF_TRUE nn
@@ -444,6 +466,42 @@ rope_attached_to_tree
   (...)
 digging_for_gold
 ```
+
+## GOSUB
+```c
+#define COMMAND_GOSUB nn
+#define GOSUB(label)      .byt COMMAND_GOSUB,<label,>label
+```
+Three bytes command containing the COMMAND_GOSUB opcode, followed by the address of the script locations where to jump.
+
+Important: There is no callstack, only one GOSUB level is supported. The subfunction does not need to return, it can call any of the END_ commands.
+```c
+  // Calls the '_SubCollateralDamage' function and comes back after
+  GOSUB(_SubCollateralDamage)
+  (...)
+
+_SubCollateralDamage
+  RETURN
+```
+
+
+## RETURN
+```c
+#define COMMAND_RETURN nn
+#define RETURN                .byt COMMAND_RETURN
+```
+One byte command containing the COMMAND_RETURN opcode.
+
+Important: There is no callstack, only one GOSUB level is supported to only one RETURN level will work.
+```c
+  // Calls the '_SubCollateralDamage' function and comes back after
+  GOSUB(_SubCollateralDamage)
+  (...)
+
+_SubCollateralDamage
+  RETURN
+```
+
 
 ---
 ## Operators
