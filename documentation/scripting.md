@@ -62,6 +62,10 @@ Some games have hardcoded logic, some are completely data-driven, Encounter is s
     - [DISPLAY\_IMAGE\_ONLY](#display_image_only)
     - [DISPLAY\_IMAGE\_NOBLIT](#display_image_noblit)
     - [DRAW\_BITMAP](#draw_bitmap)
+  - [Audio](#audio)
+    - [PLAY\_SOUND](#play_sound)
+    - [LOAD\_MUSIC](#load_music)
+    - [STOP\_MUSIC](#stop_music)
 
 
 # Features
@@ -896,7 +900,43 @@ Nine bytes operator containing the COMMAND_BITMAP opcode, followed by the id of 
   // Draw the ladder
   DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
 ```  
+## Audio
+### PLAY_SOUND
+```c
+#define COMMAND_PLAY_SOUND nn
+#define PLAY_SOUND(sound)         .byt COMMAND_PLAY_SOUND,<sound,>sound
+```
+Three bytes command containing the COMMAND_PLAY_SOUND opcode, followed by the address in memory of the sound to play.
 
+The sounds are two small to be worth loading from disk, so it is assumed they are all present in memory.
+```c
+  // Play the sound of the door opening
+  PLAY_SOUND(_DoorOpening) 
+```  
+
+### LOAD_MUSIC
+```c
+#define COMMAND_LOAD_MUSIC nn
+#define LOAD_MUSIC(sound)         .byt COMMAND_LOAD_MUSIC,musicId
+```
+Two bytes command containing the COMMAND_LOAD_MUSIC opcode, followed by the id of a music to load and play.
+
+Note: When a music is playing, it is highly recommended to avoid doing disk accesses, so if you need to do some animations like in the end sequence of the game, try to load the graphical assets first, then start the music, then display the loaded assets on screen.
+```c
+  // Play the game over music
+  LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
+```  
+
+### STOP_MUSIC
+```c
+#define COMMAND_STOP_MUSIC nn
+#define STOP_MUSIC              .byt COMMAND_STOP_MUSIC
+```
+One byte command containing the COMMAND_STOP_MUSIC opcode.
+```c
+  // Stop whatever music is currently playing
+  STOP_MUSIC() 
+```  
 
 
 **See:**
