@@ -33,7 +33,10 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [CHECK\_PLAYER\_LOCATION](#check_player_location)
   - [Providing information to the player](#providing-information-to-the-player)
     - [INFO\_MESSAGE](#info_message)
+    - [QUICK\_MESSAGE](#quick_message)
     - [ERROR\_MESSAGE](#error_message)
+    - [CLEAR\_TEXT\_AREA](#clear_text_area)
+    - [CLEAR\_FULL\_TEXT\_AREA](#clear_full_text_area)
   - [Changing item properties](#changing-item-properties)
     - [SET\_ITEM\_LOCATION](#set_item_location)
     - [SET\_ITEM\_FLAGS](#set_item_flags)
@@ -482,10 +485,26 @@ Two bytes operator containing the OPERATOR_CHECK_PLAYER_LOCATION opcode, followe
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 ```
 Variable number of bytes containing the COMMAND_INFO_MESSAGE opcode, followed by a null terminated string containing the message to display
+
+There is a 150 frames delay (3 seconds) after the message display.
 ```C
   // Print a message in the main TEXT window
   INFO_MESSAGE("I have to find her fast...")
 ```
+
+### QUICK_MESSAGE
+```C
+#define COMMAND_QUICK_MESSAGE nn
+#define QUICK_MESSAGE(message)                .byt COMMAND_QUICK_MESSAGE,message,0
+```
+Variable number of bytes containing the COMMAND_QUICK_MESSAGE opcode, followed by a null terminated string containing the message to display
+
+Contrary to INFO_MESSAGE, there is no delay at all after the display of the text: The typical use case is when a message is to be displayed while an image is being loaded and displayed.
+```C
+  // Print a message in the main TEXT window
+  QUICK_MESSAGE("Oops...")
+```
+
 ### ERROR_MESSAGE
 ```C
 #define COMMAND_ERROR_MESSAGE nn
@@ -496,6 +515,38 @@ Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the
   // Print an error message with a sound effect 
   ERROR_MESSAGE("I can't do that")
 ```  
+
+
+### CLEAR_TEXT_AREA
+```C
+#define COMMAND_CLEAR_TEXT_AREA nn
+#define CLEAR_TEXT_AREA(paper_color)               .byt COMMAND_CLEAR_TEXT_AREA,16+(paper_color&7)
+```
+Two bytes command containing the COMMAND_CLEAR_TEXT_AREA opcode, followed by the color to use to clear the area.
+
+The most common use is to use colors to change the mood, like switching to yellow when there is danger, or red when the player fails.
+```C
+  // Erase the scene description area with red color (inventory is not impacted)
+  CLEAR_TEXT_AREA(1)
+```  
+
+
+### CLEAR_FULL_TEXT_AREA
+```C
+#define COMMAND_CLEAR_FULL_TEXT_AREA nn
+#define CLEAR_FULL_TEXT_AREA(paper_color)               .byt COMMAND_CLEAR_FULL_TEXT_AREA,16+(paper_color&7)
+```
+Two bytes command containing the COMMAND_CLEAR_FULL_TEXT_AREA opcode, followed by the color to use to clear the area.
+
+Contrarily to CLEAR_TEXT_AREA, this command clears the entire bottom area, including the inventory. 
+
+In Encounter it's used at the end when the player wins during the end sequence.
+```C
+  // Erase the entire bottom area of the game screen, including the player inventory
+  CLEAR_FULL_TEXT_AREA(0)
+```  
+
+
 ---
 ## Changing item properties
 ### SET_ITEM_LOCATION
