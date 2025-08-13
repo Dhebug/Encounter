@@ -43,6 +43,8 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
   - [Scoring and achievements](#scoring-and-achievements)
     - [UNLOCK\_ACHIEVEMENT](#unlock_achievement)
     - [INCREASE\_SCORE](#increase_score)
+    - [DECREASE\_SCORE](#decrease_score)
+    - [GAME\_OVER](#game_over)
   - [DISPLAY\_IMAGE](#display_image)
   - [DRAW\_BITMAP](#draw_bitmap)
 
@@ -330,7 +332,7 @@ The commands are all defined in [scripting.h](../code/scripting.h) and implement
 #define END             .byt COMMAND_END
 ```
 
-Just a single byte containg the COMMAND_END opcode. 
+Just a single byte containing the COMMAND_END opcode. 
 This signals the end of the script.
 ```c
   // End of script
@@ -352,7 +354,7 @@ Generally used when the player perform actions resulting in items being modified
 #define COMMAND_WAIT nn
 #define WAIT(duration)    .byt COMMAND_WAIT,duration
 ```
-Two bytes command containg the COMMAND_WAIT opcode, followed by the number of frames.
+Two bytes command containing the COMMAND_WAIT opcode, followed by the number of frames.
 
 To provide some pacing, delays can be used to interrupt the execution of a script for a period of time.
 
@@ -368,7 +370,7 @@ If you need a longer delay, just put a few more delay instructions.
 #define COMMAND_JUMP nn
 #define JUMP(label)     .byt COMMAND_JUMP,<label,>label
 ```
-Three bytes command containg the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
+Three bytes command containing the COMMAND_JUMP opcode, followed by the address of the script locations where to jump.
 ```c
   // Jumps to the 'dog_growls' label
   JUMP(dog_growls)
@@ -383,7 +385,7 @@ These two instructions require an operator to evaluate if the condition is true 
 #define COMMAND_JUMP_IF_TRUE nn
 #define JUMP_IF_TRUE(label,expression)       .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
 ```
-Seven bytes command containg the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+Seven bytes command containing the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 ```c
   // Jump to the label 'around_the_pit' if the expression is true
   JUMP_IF_TRUE(around_the_pit,/*<check expression>*/)
@@ -396,7 +398,7 @@ around_the_pit
 #define COMMAND_JUMP_IF_FALSE nn
 #define JUMP_IF_FALSE(label,expression)      .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
 ```
-Seven bytes command containg the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+Seven bytes command containing the JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
 ```c
   // Jump to the label 'around_the_pit' if the expression is false
   JUMP_IF_FALSE(around_the_pit,/*<check expression>*/)
@@ -427,12 +429,12 @@ These operators should be used with either JUMP_IF_TRUE or JUMP_IF_FALSE
 #define OPERATOR_CHECK_ITEM_LOCATION
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 ```
-Three bytes operator containg the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
+Three bytes operator containing the OPERATOR_CHECK_ITEM_LOCATION opcode, followed by the id of the item to check, and finally the location we want to check.
 ```c
   /*<conditional jump instruction>*/ CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_OUTSIDE_PIT) 
 ```
 ### CHECK_ITEM_FLAG
-Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
+Three bytes operator containing the OPERATOR_CHECK_ITEM_FLAG opcode, followed by the id of the item to check, and finally the bit mask to apply.
 ```c
 #define OPERATOR_CHECK_ITEM_FLAG
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
@@ -446,7 +448,7 @@ Three bytes operator containg the OPERATOR_CHECK_ITEM_FLAG opcode, followed by t
 #define OPERATOR_CHECK_PLAYER_LOCATION 
 #define CHECK_PLAYER_LOCATION(location)      OPERATOR_CHECK_PLAYER_LOCATION,location
 ```
-Two bytes operator containg the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
+Two bytes operator containing the OPERATOR_CHECK_PLAYER_LOCATION opcode, followed by the location we want to check.
 ```c
   /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT)
 ```
@@ -480,7 +482,7 @@ Similar to INFO_MESSAGE, except it uses the COMMAND_ERROR_MESSAGE opcode and the
 #define COMMAND_SET_ITEM_LOCATION nn
 #define SET_ITEM_LOCATION(item,location)        .byt COMMAND_SET_ITEM_LOCATION,item,location
 ```  
-Three bytes command containg the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it.
+Three bytes command containing the COMMAND_SET_ITEM_LOCATION opcode, followed by id of the item and the location where to move it.
 
 There are a few different types of locations:
 - Actual locations in the game (e_LOC_MARKETPLACE, e_LOC_CELLAR, e_LOC_MAINSTREET ...)
@@ -505,7 +507,7 @@ There are a few different types of locations:
 #define COMMAND_SET_ITEM_FLAGS  nn
 #define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
 ```  
-Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
+Three bytes command containing the COMMAND_SET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to OR with the existing flags
 ```c
   // Mask-in some flags of the ladder
   SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
@@ -515,7 +517,7 @@ Three bytes command containg the COMMAND_SET_ITEM_FLAGS opcode, followed by id o
 #define COMMAND_UNSET_ITEM_FLAGS n
 #define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
 ```  
-Three bytes command containg the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
+Three bytes command containing the COMMAND_UNSET_ITEM_FLAGS opcode, followed by id of the item and the bit mask to AND with the existing flags
 ```c
   // Mask-out some flags on the curtain
   UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)
@@ -537,7 +539,7 @@ Variable number of bytes containing the COMMAND_SET_ITEM_DESCRIPTION opcode, fol
 #define COMMAND_SET_LOCATION_DIRECTION nn
 #define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value
 ```  
-Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
+Four bytes command containing the COMMAND_SET_LOCATION_DIRECTION opcode, followed by id of the location, which of the six directions we want to change, and finally the new location
 ```c
   // Enable the UP direction
   SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)
@@ -549,7 +551,7 @@ Four bytes command containg the COMMAND_SET_LOCATION_DIRECTION opcode, followed 
 #define COMMAND_UNLOCK_ACHIEVEMENT nn
 #define UNLOCK_ACHIEVEMENT(achievement)      .byt COMMAND_UNLOCK_ACHIEVEMENT,achievement
 ```
-Two bytes command containg the COMMAND_UNLOCK_ACHIEVEMENT opcode, followed by the achievement id.
+Two bytes command containing the COMMAND_UNLOCK_ACHIEVEMENT opcode, followed by the achievement id.
 This would typically be used when the player does something worth remembering.
 ```c
   // Achievement unlocked: Fell into the pit
@@ -559,13 +561,38 @@ This would typically be used when the player does something worth remembering.
 ### INCREASE_SCORE
 ```c
 #define COMMAND_INCREASE_SCORE nn
-#define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,points
+#define INCREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,<points,>points
 ```
-Two bytes command containg the COMMAND_INCREASE_SCORE opcode, followed by the number of points to add to the score.
+Three bytes command containing the COMMAND_INCREASE_SCORE opcode, followed by the number of points to add to the score (signed 16 bit).
 This would typically be used when the player does something worthy of rewarding for the high-score.
 ```c
   // Give 50 points to the player
   INCREASE_SCORE(50)
+```
+
+### DECREASE_SCORE
+```c
+// Note: This command calls the increase score code, just with a negated value
+#define COMMAND_INCREASE_SCORE nn
+#define DECREASE_SCORE(points)               .byt COMMAND_INCREASE_SCORE,<(65536-points),>(65536-points)
+```
+Three bytes command containing the COMMAND_INCREASE_SCORE opcode, followed by the number of points to remove from the score (signed 16 bit).
+This would typically be used when the player does something that requires a penalty.
+```c
+  // Remove 1500 points from the player's score
+  DECREASE_SCORE(1500)
+```
+
+### GAME_OVER
+```c
+#define COMMAND_GAME_OVER nn
+#define GAME_OVER(condition)               .byt COMMAND_GAME_OVER,condition
+```
+Two bytes command containing the COMMAND_GAME_OVER opcode, followed by the reason for failing.
+This is used to terminate the game session and go to the outro sequence.
+```c
+  // The player ran out of time
+  GAME_OVER(e_SCORE_RAN_OUT_OF_TIME)
 ```
 
 ---
@@ -585,7 +612,7 @@ Used to display a full screen image, like the map of the UK or the newspapwer wi
 #define COMMAND_BITMAP nn
 #define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
 ```
-Nine bytes operator containg the COMMAND_BITMAP opcode, followed by the id of the image containing the data, width and height of the block to display, source stride, and the address of the source and destination
+Nine bytes operator containing the COMMAND_BITMAP opcode, followed by the id of the image containing the data, width and height of the block to display, source stride, and the address of the source and destination
 ```c
   // Draw the ladder
   DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,50),40,_SecondImageBuffer+36,_ImageBuffer+(40*40)+19)    ; Draw the ladder 
