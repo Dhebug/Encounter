@@ -22,10 +22,10 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
   - [WAIT](#wait)
   - [WAIT\_KEYPRESS](#wait_keypress)
   - [Flow Control](#flow-control)
-  - [END](#end)
-  - [END\_AND\_REFRESH](#end_and_refresh)
-  - [END\_AND\_PARTIAL\_REFRESH](#end_and_partial_refresh)
-  - [JUMP](#jump)
+    - [END](#end)
+    - [END\_AND\_REFRESH](#end_and_refresh)
+    - [END\_AND\_PARTIAL\_REFRESH](#end_and_partial_refresh)
+    - [JUMP](#jump)
     - [JUMP\_IF\_TRUE](#jump_if_true)
     - [JUMP\_IF\_FALSE](#jump_if_false)
   - [GOSUB](#gosub)
@@ -373,7 +373,7 @@ If you actually need to know which key was pressed, you can just directly read t
 ## Flow Control
 The following commands are related to the lifetime of script and how it flows around when executing code.
 
-## END
+### END
 ```c
 #define COMMAND_END nn
 #define END             .byt COMMAND_END
@@ -386,7 +386,7 @@ This signals the end of the script.
   END
 ```
 
-## END_AND_REFRESH
+### END_AND_REFRESH
 ```c
 #define COMMAND_END_AND_REFRESH nn
 #define END_AND_REFRESH           .byt COMMAND_END_AND_REFRESH
@@ -398,7 +398,7 @@ Generally used when the player perform actions resulting in items being modified
   END_AND_REFRESH
 ```
 
-## END_AND_PARTIAL_REFRESH
+### END_AND_PARTIAL_REFRESH
 ```c
 #define COMMAND_END_AND_PARTIAL_REFRESH nn
 #define END_AND_PARTIAL_REFRESH           .byt COMMAND_END_AND_PARTIAL_REFRESH
@@ -411,7 +411,7 @@ Generally used when the player perform actions resulting in items being modified
   END_AND_PARTIAL_REFRESH
 ```
 
-## JUMP
+### JUMP
 ```c
 #define COMMAND_JUMP nn
 #define JUMP(label)     .byt COMMAND_JUMP,<label,>label
