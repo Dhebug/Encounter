@@ -17,7 +17,7 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
   - [Types of scripts](#types-of-scripts)
     - [Location scripts](#location-scripts)
     - [Action scripts](#action-scripts)
-    - [Game script](#game-script)
+    - [Scene Preload Script](#scene-preload-script)
 - [Commands](#commands)
   - [WAIT](#wait)
   - [WAIT\_KEYPRESS](#wait_keypress)
@@ -313,14 +313,44 @@ And here is what that looks like in the game.
 
 Actions can also trigger other scripts, change variables, move things around, etc... 
 
-### Game script
-> [!WARNING]  
-> TODO: This section is possibly not valid anymore.
+### Scene Preload Script
+The game requires a script called **_ScenePreLoadScript** which will be systematically executed from the LoadScene function in the game:
+```C
+void LoadScene()
+{
+	gCurrentLocationPtr = &gLocations[gCurrentLocation];
+    gSceneImage = LOADER_PICTURE_LOCATIONS_START+gCurrentLocation;
 
-There is only a single game script for the entire game, but technically it should be trivial to have multiple ones or change it at run time.
+    // Run the Scene "preload" script
+    PlayStream(ScenePreLoadScript);              <----
 
-The purpose of this script is to do book-keeping and adjustments independently of where the player is located.
+	// Set the byte stream pointer
+	SetByteStream(gCurrentLocationPtr->script);
+    
+	ClearMessageWindow(16+4);
 
+	LoadFileAt(gSceneImage,ImageBuffer);	
+  (...)
+}
+```
+
+The purpose of this script is to do book-keeping and adjustments independently of where the player is located, and even move the player around automatically.
+
+In Encounter this is used to simply have the victim follow the player around after she's been freed:
+
+```
+; This is a script that is run before the setup of a scene is done.
+; In the current status it is used to get the girl to follow us
+_ScenePreLoadScript
+.(
+    ; If the girl is "attached" we move her to the playe current location
+    JUMP_IF_FALSE(end_girl_following,CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_ATTACHED))
+        SET_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_CURRENT)
+end_girl_following
+    END
+.)
+```
+You could also use that to run events independently of where the player is, trigger random events, etc...
 
 # Commands
 The commands are all defined in [scripting.h](../code/scripting.h) and implemented in [bytestream.s](../code/bytestream.s) and most of them use references to locations and item ids defined in [game_enums.h](../code/game_enums.h).
