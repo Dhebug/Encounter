@@ -1,11 +1,12 @@
 # Introduction
-"Encounter" is a text adventure game released in 1983 by Severn Software on multiple 8bit computers of the time, including the Oric 1 and Atmos.
+**"Encounter"** is a text adventure game released in 1983 by Severn Software on multiple 8bit computers of the time, including the Oric 1 and Atmos. This original program itself is quite simple, 100% written in BASIC and sold on tape.
 
-The program itself is quite simple, 100% written in BASIC and sold on tapes, and this repository is my attempt at improving the game:
+**"Encounter HD"** is my attempt at **improving the game**:
 - If you are looking for The **Upgrade Time Episodes** containing snapshots of the work done on the BASIC source code while I was making [YouTube videos](https://www.youtube.com/playlist?list=PLuBEOCYVlum9cOkshSXEkOxALYoe3LVXz) about it, then please check this [other repository](https://github.com/Dhebug/Encounter-BASIC-version-)
 - Here you will find the **FloppyBuilderVersion** version (aka "Encounter HD"), started from scratch to use C and assembler instead
+- There's also a [power point presentation](https://defence-force.org/pages/games/encounter/files/EncounterHD-English.pptx) going in details in what was done on the project ([French version](https://www.defence-force.org/pages/games/encounter/files/EncounterHD-French.pptx))
 
-The game is not finished and still being worked on.
+The game is technically finished, but there are still some tweaks and bug fixes added now and then.
 
 If you are interested by the topic, you can read this [blog post](https://blog.defence-force.org/index.php?page=articles&ref=ART85) which also links to a few related videos on my youtube channel
 
@@ -14,7 +15,7 @@ The game has been released on [itch.io](https://defenceforce.itch.io/encounter) 
 
 A certain number of issues have been identified and most of them fixed, and the game was also expended with a few more graphics, a few more interactions, etc...
 
-The game is still in development as of today (January 18th 2025).
+The game is now in maintenance mode as of today (August 13th 2025).
 
 ## Christmas 2024 gameplay demo
 This is how he game looked like when it was originally released.
