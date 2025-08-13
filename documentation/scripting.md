@@ -22,6 +22,7 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
   - [END](#end)
   - [END\_AND\_REFRESH](#end_and_refresh)
   - [WAIT](#wait)
+  - [WAIT\_KEYPRESS](#wait_keypress)
   - [JUMP](#jump)
   - [Conditional jumps](#conditional-jumps)
     - [JUMP\_IF\_TRUE](#jump_if_true)
@@ -45,6 +46,8 @@ Somes games have hardcoded logic, some are completely data-driven, Encounter is 
     - [INCREASE\_SCORE](#increase_score)
     - [DECREASE\_SCORE](#decrease_score)
     - [GAME\_OVER](#game_over)
+    - [START\_CLOCK](#start_clock)
+    - [STOP\_CLOCK](#stop_clock)
   - [DISPLAY\_IMAGE](#display_image)
   - [DRAW\_BITMAP](#draw_bitmap)
 
@@ -349,6 +352,7 @@ Generally used when the player perform actions resulting in items being modified
   // End of script (and trigger a full refresh)
   END_AND_REFRESH
 ```
+
 ## WAIT
 ```c
 #define COMMAND_WAIT nn
@@ -363,6 +367,23 @@ If you need a longer delay, just put a few more delay instructions.
 ```c
   // Wait one second (50 frames)
   WAIT(50)
+```
+
+## WAIT_KEYPRESS
+```c
+#define COMMAND_WAIT_KEYPRESS
+#define WAIT_KEYPRESS       .byt COMMAND_WAIT_KEYPRESS
+```
+One byte command containing the COMMAND_WAIT_KEYPRESS opcode.
+
+If you actually need to know which key was pressed, you can just directly read the _gInputKey variable value using CHECK_ADDRESS_VALUE.
+
+```c
+  // Wait for the user to press a key
+  COMMAND_WAIT_KEYPRESS
+  IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,KEY_RETURN),confirmation)
+      // Do something
+  ENDIF(confirmation)
 ```
 
 ## JUMP
@@ -594,6 +615,31 @@ This is used to terminate the game session and go to the outro sequence.
   // The player ran out of time
   GAME_OVER(e_SCORE_RAN_OUT_OF_TIME)
 ```
+
+### START_CLOCK
+```c
+#define COMMAND_START_CLOCK
+#define START_CLOCK                        .byt COMMAND_START_CLOCK
+```
+One byte command containing the START_CLOCK opcode.
+This is used to start the game clock, can be used at the start of the game when the player can finally play, or at the end of a PAUSE operation
+```c
+  // Start the game clock
+  START_CLOCK
+```
+
+### STOP_CLOCK
+```c
+#define COMMAND_STOP_CLOCK
+#define STOP_CLOCK                        .byt COMMAND_STOP_CLOCK
+```
+One byte command containing the STOP_CLOCK opcode.
+This is used to stop the game clock, can be used at the start of a PAUSE operation, and when the player session ends to stop counting the time.
+```c
+  // Pause the game clock
+  STOP_CLOCK
+```
+
 
 ---
 ## DISPLAY_IMAGE
