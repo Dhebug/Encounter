@@ -36,6 +36,8 @@ Some games have hardcoded logic, some are completely data-driven, Encounter is s
   - [Flow Control (Dynamic)](#flow-control-dynamic)
     - [JUMP\_IF\_TRUE](#jump_if_true)
     - [JUMP\_IF\_FALSE](#jump_if_false)
+    - [IF\_TRUE](#if_true)
+    - [IF\_FALSE](#if_false)
     - [CHECK\_ITEM\_LOCATION](#check_item_location)
     - [CHECK\_ITEM\_FLAG](#check_item_flag)
     - [CHECK\_ITEM\_CONTAINER](#check_item_container)
@@ -593,11 +595,14 @@ dog_growls
 ```c
 #define COMMAND_DO_ONCE nn
 #define DO_ONCE(label)     .byt COMMAND_DO_ONCE,1,<label,>label
+#define ENDDO(enddo)              enddo
 ```
 
 Three bytes command containing the COMMAND_DO_ONCE opcode, followed by the address of the script locations where to jump.
 
 This command basically implements a self destructing code sequence: The first time the script reaches the DO_ONCE it executes its content, but it also self modifies the script from DO_ONCE to JUMP, so the code block will be skipped any other time it is reached.
+
+The ENDDO command is not technically necessary, all it does is to write the label, but it allows having nicely symmetrical blocks of code.
 
 ```c
 // Print the "Thank you" message (only once)
@@ -690,7 +695,10 @@ end_intro_sequence
 
 ## Flow Control (Dynamic)
 
-These two following instructions require an operator to evaluate if the condition is true or false
+The following instructions require an operator to evaluate if the condition is true or false. There are two functionally equivalent ways of doing conditionals:
+
+- JUMP_IF_TRUE and JUMP_IF_FALSE are similar to assembly language conditional branches
+- IF_TRUE and IF_FALSE are similar to higher level languages and support ELSE and ENDIF
 
 ### JUMP_IF_TRUE
 
@@ -724,7 +732,7 @@ Seven bytes command containing the JUMP_IF_FALSE opcode, followed by the address
 around_the_pit    
 ```
 
-It is possible to use combinations of JUMP_IF_TRUE and JUMP_IF_FALSE to handle more complex scenearios, it's not super elegant but it works just fine.
+It is possible to use combinations of JUMP_IF_TRUE and JUMP_IF_FALSE to handle more complex scenarios, it's not super elegant but it works just fine.
 
 In this example we check if the rope is present outside of the pit, if it is not we jump to the 'no_rope' label, else we check if the rope has the 'attached' flag set, and if true we jump to the 'rope_attached_to_tree' label.
 
@@ -740,8 +748,75 @@ rope_attached_to_tree
 digging_for_gold
 ```
 
+### IF_TRUE
+
+```c
+#define COMMAND_JUMP_IF_FALSE nn
+#define IF_TRUE(expression,label)     .byt COMMAND_JUMP_IF_FALSE,<label,>label,expression
+#define ELSE(else,endif)              else = *+3: .byt COMMAND_JUMP,<endif,>endif  
+#define ENDIF(endif)                  endif                                           
+```
+
+Seven bytes command containing the COMMAND_JUMP_IF_FALSE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+
+The reason for the weird syntax is that the "language" is just some preprocessor trickery, so the user needs to pass labels to where to jump for the else and endif parts of the construct.
+
+If you want to avoid being creative finding unique names for the labels, the simplest way is to use .( and .) around to create local labels not visible outside the scope.
+
+
+```c
+  // Is the ladder in the cellar?
+  IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)  
+    // Draw the ladder
+    BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     
+      _IMAGE(0,40)
+      _BUFFER(29,7)
+    // Enable the UP direction
+    SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_CELLAR_WINDOW)     
+  ELSE(ladder,no_ladder)
+    // Disable the UP direction
+    SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_UP,e_LOC_NONE)              
+  ENDIF(no_ladder)
+```
+
+### IF_FALSE
+
+```c
+#define COMMAND_JUMP_IF_TRUE nn
+#define IF_FALSE(expression,label)     .byt COMMAND_JUMP_IF_TRUE,<label,>label,expression
+#define ELSE(else,endif)              else = *+3: .byt COMMAND_JUMP,<endif,>endif  
+#define ENDIF(endif)                  endif                                           
+```
+
+Seven bytes command containing the COMMAND_JUMP_IF_TRUE opcode, followed by the address of the script locations where to jump, followed by a 3 bytes expression evaluated at run time.
+
+The reason for the weird syntax is that the "language" is just some preprocessor trickery, so the user needs to pass labels to where to jump for the else and endif parts of the construct.
+
+If you want to avoid being creative finding unique names for the labels, the simplest way is to use .( and .) around to create local labels not visible outside the scope.
+
+It's possible to have multiple levels of IF/ENDIF as long as they have unique labels.
+
+```c
+  // Is the safe door open?
+  IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HeavySafe,ITEM_FLAG_CLOSED),else) 
+    // Draw the open damaged door  
+    BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                        
+      _IMAGE(14,0)
+      _BUFFER(20,17)
+  ELSE(else,safe_open)
+    // Is the bomb installed?
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),bomb)  
+      // Draw the bomb attached to the closed door  
+      BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,49)                     
+        _IMAGE(17,0)
+        _BUFFER(20,17)
+    ENDIF(bomb)
+  ENDIF(safe_open)
+```
+
+
 ---
-Here are the operators you can use with either JUMP_IF_TRUE or JUMP_IF_FALSE
+Here are the operators you can use with JUMP_IF_TRUE, JUMP_IF_FALSE, IF_TRUE or IF_FALSE
 
 ### CHECK_ITEM_LOCATION
 
