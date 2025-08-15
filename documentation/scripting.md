@@ -42,6 +42,7 @@ Some games have hardcoded logic, some are completely data-driven, Encounter is s
     - [CHECK\_ITEM\_FLAG](#check_item_flag)
     - [CHECK\_ITEM\_CONTAINER](#check_item_container)
     - [CHECK\_PLAYER\_LOCATION](#check_player_location)
+    - [CHECK\_ADDRESS\_VALUE](#check_address_value)
   - [Providing information to the player](#providing-information-to-the-player)
     - [INFO\_MESSAGE](#info_message)
     - [QUICK\_MESSAGE](#quick_message)
@@ -871,6 +872,23 @@ Two bytes operator containing the OPERATOR_CHECK_PLAYER_LOCATION opcode, followe
   /*<conditional jump instruction>*/ CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT)
 ```
 
+
+### CHECK_ADDRESS_VALUE
+
+```c
+#define OPERATOR_CHECK_ADDRESS_VALUE 
+#define CHECK_ADDRESS_VALUE(address,value)   OPERATOR_CHECK_ADDRESS_VALUE,<address,>address,value
+```
+
+Four bytes operator containing the OPERATOR_CHECK_ADDRESS_VALUE opcode, followed by the address we want to check, and the value to compare it to.
+
+```c
+  // Wait for the user to press a key
+  COMMAND_WAIT_KEYPRESS
+  IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,KEY_RETURN),confirmation)
+      // Do something
+  ENDIF(confirmation)
+```
 
 ---
 
