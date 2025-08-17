@@ -2867,6 +2867,7 @@ _InspectGame
 #else    
     INFO_MESSAGE("Can be used with an explosive")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2876,6 +2877,7 @@ _InspectBomb
 #else    
     INFO_MESSAGE("Homemade explosive device")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2885,6 +2887,7 @@ _InspectBomb
 #else    
     INFO_MESSAGE("Long, sturdy, and extra absorbant")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2894,6 +2897,7 @@ _InspectMatches
 #else    
     INFO_MESSAGE("You could start a fire with that")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2904,6 +2908,7 @@ _InspectRope
 #else    
     INFO_MESSAGE("You could climb up or down with it")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2919,6 +2924,7 @@ _InspectDove
 #else    
     INFO_MESSAGE("It's chirping high up on a branch")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 dove_eating
@@ -2931,6 +2937,7 @@ dove_not_happy
 #else    
     INFO_MESSAGE("It's not happy and tries to escape")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -2942,6 +2949,7 @@ _InspectFish
 #else    
     INFO_MESSAGE("It seems happy swimming around")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2951,6 +2959,7 @@ _InspectWater
 #else    
     INFO_MESSAGE("It's clean, fresh, and liquid")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2960,6 +2969,7 @@ _InspectHose
 #else    
     INFO_MESSAGE("Designed to move liquids efficiently")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2969,6 +2979,7 @@ _InspectAdhesive
 #else    
     INFO_MESSAGE("Designed to keep things in place")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2978,6 +2989,7 @@ _InspectBlackTape
 #else    
     INFO_MESSAGE("It should be possible to remove it")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2987,6 +2999,7 @@ _InspectSaltpetre
 #else    
     INFO_MESSAGE("You can make fireworks with that")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -2996,6 +3009,7 @@ _InspectSulphur
 #else    
     INFO_MESSAGE("A very useful natural chemical")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3005,6 +3019,7 @@ _InspectBread
 #else    
     INFO_MESSAGE("Easy to crumble")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3014,6 +3029,7 @@ _InspectCurtain
 #else    
     INFO_MESSAGE("Anything behind?")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3023,6 +3039,7 @@ _InspectNet
 #else    
     INFO_MESSAGE("Can catch balls, among other things")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3032,6 +3049,7 @@ _InspectKey
 #else    
     INFO_MESSAGE("It has a label that says 'Alarm'")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3043,6 +3061,7 @@ _InspectComputer
 #else    
     INFO_MESSAGE("A brand new IBM PC model 5150")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH    
 .)
 
@@ -3054,6 +3073,7 @@ _InspectTelevision
 #else    
     INFO_MESSAGE("A huge rear-projection TV set")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3065,6 +3085,7 @@ _InspectGameConsole
 #else    
     INFO_MESSAGE("A ColecoVision... imported from USA?")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3126,6 +3147,7 @@ _InspectChemistryBook
 #else    
     INFO_MESSAGE("A thick book with some bookmarks")
 #endif    
+    WAIT_KEYPRESS
     JUMP(_ReadChemistryBook)
 
 
@@ -3148,6 +3170,7 @@ _InspectFancyStones
 #else    
     INFO_MESSAGE("Pocket sized feng shui")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3161,6 +3184,7 @@ _InspectCue
     INFO_MESSAGE("It's a good quality cue...")
     INFO_MESSAGE("Perfect for a clean 'break'!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3177,6 +3201,7 @@ _InspectPowderMix
     INFO_MESSAGE("...That mix must be ground fine.")
 #endif    
     STOP_MUSIC()
+    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -3193,6 +3218,7 @@ _InspectGunPowder
     INFO_MESSAGE("but that requires a proper container.")
 #endif    
     STOP_MUSIC()
+    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -3204,6 +3230,7 @@ _InspectPills
 #else
     INFO_MESSAGE("Could be used to calm down someone")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3215,6 +3242,7 @@ _InspectMeat
 #else
     INFO_MESSAGE("A dog would love this juicy morcel!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3239,6 +3267,7 @@ _InspectPit
 #else
     INFO_MESSAGE("Rope or ladder necessary!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3250,6 +3279,7 @@ _InspectHeap
 #else
     INFO_MESSAGE("This used to be inside the pit!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3302,7 +3332,8 @@ _InspectGunCabinet
 #else
     INFO_MESSAGE("I can see hunting equipment")
 #endif        
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3313,7 +3344,8 @@ _InspectGirl
 #else
     INFO_MESSAGE("She seems unharmed and relieved")
 #endif        
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3519,6 +3551,7 @@ _SubInspectAttachment
       //INFO_MESSAGE("A rope could be attached to it")
 #endif    
     ENDIF(rope_not_attached)
+    WAIT_KEYPRESS
     RETURN
 .)
 
@@ -3588,7 +3621,8 @@ kitchen
         INFO_MESSAGE("I can see the patio outside")
 #endif    
 up_stairs
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3620,7 +3654,8 @@ _InspectAlarmIndicator
         INFO_MESSAGE("the sensors have been tampered with!")
 #endif    
     ENDIF(alarm_enabled)
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3660,6 +3695,7 @@ _InspectPlasticBag
 #else    
     INFO_MESSAGE("Can be used to transport things")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3679,6 +3715,7 @@ _InspectDog
         INFO_MESSAGE("It is not moving")
 #endif    
     ENDIF(disabled)
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3699,6 +3736,7 @@ _InspectGraffiti
         INFO_MESSAGE("The art is as bad as the content.")
 #endif    
     ENDIF(street)
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3710,6 +3748,7 @@ _InspectChurch
 #else
     INFO_MESSAGE("A modest village church")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3752,6 +3791,7 @@ _InspectRoadSign
 #else
     INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3796,6 +3836,7 @@ _InspectFishPond
 #else
     INFO_MESSAGE("Quite a few fish in there!")
 #endif    
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3870,6 +3911,7 @@ _InspectThug
         INFO_MESSAGE("Maybe he has useful items?")
 #endif    
     ENDIF(disabled)
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH    
 .)
 
@@ -5808,6 +5850,7 @@ _ScareDoveAway
     INFO_MESSAGE("You scared the dove away")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
+    WAIT_KEYPRESS
     END_AND_REFRESH
 .)        
 
