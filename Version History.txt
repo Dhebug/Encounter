@@ -354,3 +354,4 @@
 - Fixed a few typos in the texts
 - Added description texts to the knife and dart gun
 
+1.2.3

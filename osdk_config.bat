@@ -41,6 +41,8 @@
 :: 1.1.2 - Usable Oric 1, 18 sectors per track, kleptomaniac message
 :: 1.2.0 - Fixed highscore truncation, playable minigame, added two achievements
 :: 1.2.1 - Added detailed images for the well and the trashcan, and a new Dune novel item
+:: 1.2.2 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
+:: 1.2.3 -
 ::
 SET VERSION=1.2.1
 SET BASENAME=EncounterHD
