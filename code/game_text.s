@@ -2745,6 +2745,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Tombstone          , _InspectTombstone)
     VALUE_MAPPING(e_ITEM_FishPond           , _InspectFishPond)
     VALUE_MAPPING(e_ITEM_Apple              , _InspectApples)
+    VALUE_MAPPING(e_ITEM_SilverKnife        , _InspectKnife)
     VALUE_MAPPING(e_ITEM_FancyStones        , _InspectFancyStones)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _InspectCue)
     VALUE_MAPPING(e_ITEM_PowderMix          , _InspectPowderMix)
@@ -2783,6 +2784,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Net                , _InspectNet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _InspectGunCabinet)
     VALUE_MAPPING(e_ITEM_Pistol             , _InspectPistol)
+    VALUE_MAPPING(e_ITEM_DartGun            , _InspectDartGun)
     VALUE_MAPPING(e_ITEM_Clay               , _InspectClay)
     VALUE_MAPPING(e_ITEM_AlarmSwitch        , _InspectSwitch)
     VALUE_MAPPING(e_ITEM_YoungGirl          , _InspectGirl)
@@ -2885,7 +2887,7 @@ _InspectBomb
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Long, résistant, et super absorbant")
 #else    
-    INFO_MESSAGE("Long, sturdy, and extra absorbant")
+    INFO_MESSAGE("Long, sturdy, and extra absorbent")
 #endif    
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3127,6 +3129,18 @@ _InspectDrawer
 .)
 
 
+_InspectKnife
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Surprenamment affûté!")
+#else    
+    INFO_MESSAGE("Surprisingly sharp!")
+#endif    
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
+.)
+
+
 _InspectOricOmputer
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
@@ -3356,7 +3370,20 @@ _InspectPistol
 #else
     INFO_MESSAGE("Quite a large caliber")
 #endif        
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+_InspectDartGun
+.(
+#ifdef LANGUAGE_FR        
+    INFO_MESSAGE("Ça pourrait endormir un éléphant !")
+#else
+    INFO_MESSAGE("Could knock out an elephant!")
+#endif        
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
