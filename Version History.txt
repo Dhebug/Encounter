@@ -349,6 +349,7 @@
 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
 - Cancelling the selection of a container when taking an item will just ignore the operation instead of writing that this will not work.
 - Changed the text displayed when selecting an incorrect container to "this is not a usable container" instead of "that will not work"
+- It's now possible to eat the apples, chop them, and use them
 - Added a few key press waits after some description texts
 - Fixed a few typos in the texts
 - Added description texts to the knife and dart gun

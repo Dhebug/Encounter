@@ -8,7 +8,7 @@
 _StartGameTextData
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
+#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:c â:[ ù:u û:]
 #endif
 
 
@@ -161,7 +161,6 @@ _gTextItemTrashCan                .byt "une _poubelle",0
 _gTextItemTombstone               .byt "une _tombe",0
 _gTextItemFishpond                .byt "un _bac à poissons",0
 _gTextItemFish                    .byt "un _poisson",0
-_gTextItemApple                   .byt "quelques$_pommes",0
 _gTextItemTree                    .byt "un$_arbre robuste",0
 _gTextItemPit                     .byt "un$_trou instable",0
 _gTextItemHeap                    .byt "quelques$_tas",0
@@ -240,7 +239,6 @@ _gTextItemTrashCan                .byt "a$rubbish _bin",0
 _gTextItemTombstone               .byt "a$_tombstone",0
 _gTextItemFishpond                .byt "a$fish _pond",0
 _gTextItemFish                    .byt "a$_fish",0
-_gTextItemApple                   .byt "a few$_apples",0
 _gTextItemTree                    .byt "a$sturdy _tree",0
 _gTextItemPit                     .byt "an$unstable _pit",0
 _gTextItemHeap                    .byt "a few$spoil _heaps",0
@@ -2122,6 +2120,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_Water                ,_CombineClayWithWater)
     COMBINE_MAPPING(e_ITEM_Clay,e_ITEM_SecurityDoor         ,_CombineClayDoor)    
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_HoleInDoor    ,_CombineKnifeHole)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_Apple         ,_CombineKnifeApple)
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_HoleInDoor           ,_CombineRopeHole)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_HoleInDoor     ,_CombineQueueHole)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
@@ -2930,7 +2929,7 @@ _InspectDove
     END_AND_PARTIAL_REFRESH
 
 dove_eating
-    GOSUB(_SubDoveEatingBreadCrumbs)
+    GOSUB(_SubDoveEating)
     END_AND_REFRESH
 
 dove_not_happy
@@ -3167,14 +3166,37 @@ _InspectChemistryBook
 
 
 _InspectApples
-_UseApples
 .(
+    // Are the apples cut?
+    IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED),apple_cut)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elles semblent délicieuses...")
+        INFO_MESSAGE("Elles sont en morceaux")
 #else    
-    INFO_MESSAGE("They do look tasty...")
+        INFO_MESSAGE("They're chopped to bits")
 #endif    
+    ELSE(apple_cut,apple_not_cut)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Elles semblent délicieuses !")
+#else    
+        INFO_MESSAGE("They do look tasty!")
+#endif    
+    ENDIF(apple_not_cut)
+    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
+.)
+
+
+_SubResetApplesLocation
+.(
+    SET_ITEM_LOCATION(e_ITEM_Apple,e_LOC_ORCHARD)     ; If we eat the apples, they are back to the orchard
+    UNSET_ITEM_FLAGS(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED)
++_gTextItemApple = *+2
+#ifdef LANGUAGE_FR                                    ; Rename the apple back to itself
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"quelques$_pommes")
+#else    
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"a few$_apples")
+#endif    
+    RETURN
 .)
 
 
@@ -4863,6 +4885,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
     VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
+    VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
     VALUE_MAPPING(e_ITEM_Meat               , _UseMeat)
     VALUE_MAPPING(e_ITEM_Water              , _UseWater)
     VALUE_MAPPING(e_ITEM_LargeDove          , _UseDove)
@@ -4882,7 +4905,6 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Net                , _UseNet)
     VALUE_MAPPING(e_ITEM_RoughPlan          , _UseRoughPlan)
     VALUE_MAPPING(e_ITEM_Car                , _UseCar)
-    VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
     VALUE_MAPPING(e_ITEM_FancyStones        , _UseFancyStones)
     VALUE_MAPPING(e_ITEM_Computer           , _UseComputer)
     VALUE_MAPPING(e_ITEM_GameConsole        , _UseGameConsole)
@@ -5689,6 +5711,7 @@ found_items
 
 _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_Bread              , _ThrowBread)
+    VALUE_MAPPING(e_ITEM_Apple              , _ThrowApples)
     VALUE_MAPPING(e_ITEM_Meat               , _ThrowMeat)
     VALUE_MAPPING(e_ITEM_SilverKnife        , _ThrowKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _ThrowSnookerCue)
@@ -5701,49 +5724,121 @@ _gThrowItemMappingsArray
 _ThrowBread
     // By default we just drop the bread where we are
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
-    GOSUB(BreadCommon)
+    GOSUB(_SubBreadCommon)
     END_AND_REFRESH
 
 
 _UseBread
-    GOSUB(BreadCommon)
+    GOSUB(_SubBreadCommon)
     JUMP(_ErrorCannotDo)
 
-BreadCommon
+
+_SubBreadCommon
 .(
-    JUMP_IF_TRUE(fish_pond,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
-    JUMP_IF_TRUE(give_bread_to_dove,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    // Are we at the fish pond?
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),at_the_fish_pond)
+        // The fish eat the crumbs
+        SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
+        INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISH)
+        PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Les poissons mangent les miettes")
+#else
+        INFO_MESSAGE("The fish eat the crumbs")
+#endif    
+        END_AND_PARTIAL_REFRESH
+    ENDIF(at_the_fish_pond)
+
+    // Are we in the woods?
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE),in_the_woods)
+        SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
+        // Is the dove still there?
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
+            // The bird is now possible to catch
+            INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
+            PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR   
+            SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
+#else
+            SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
+#endif    
+            GOSUB(_SubDoveEating)
+            END_AND_REFRESH
+        ENDIF(dove_present)
+    ENDIF(in_the_woods)
+
     RETURN
-
-give_bread_to_dove
-    // The bird is now possible to catch
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
-    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
-    PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
-#else
-    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
-#endif    
-//+_gSceneActionDoveEatingBread
-    GOSUB(_SubDoveEatingBreadCrumbs)
-    END_AND_REFRESH
-
-not_in_wooded_avenue
-fish_pond
-    SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
-    INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISH)
-    PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
-    INFO_MESSAGE("Les poissons mangent les miettes")
-#else
-    INFO_MESSAGE("The fish eat the crumbs")
-#endif    
-    END_AND_REFRESH
 .)
 
 
-_SubDoveEatingBreadCrumbs
+
+_ThrowApples
+    // By default we just drop the apples where we are
+    SET_ITEM_LOCATION(e_ITEM_Apple,e_LOC_CURRENT)
+    GOSUB(_SubApplesCommon)
+    END_AND_PARTIAL_REFRESH
+
+
+_UseApples
+.(
+    GOSUB(_SubApplesCommon)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vraiment très bonnes !")
+#else    
+    INFO_MESSAGE("Really tasty !")
+#endif    
+    GOSUB(_SubResetApplesLocation)
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+_SubApplesCommon
+.(
+    // Are we at the fish pond?
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),at_the_fish_pond)
+        // The fish don't like the apples, whole or cut
+        PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR   
+        INFO_MESSAGE("Ces poissons n'aiment pas les pommes")
+#else
+        INFO_MESSAGE("These fish don't like apples")
+#endif    
+        END_AND_PARTIAL_REFRESH
+    ENDIF(at_the_fish_pond)
+
+    // Are we in the woods?
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE),in_the_woods)
+        // Is the dove still there?
+        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
+            SET_ITEM_LOCATION(e_ITEM_Apple,e_LOC_CURRENT)
+            // Are the apples cut?
+            IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED),apple_cut)
+                // The bird is now possible to catch
+                INCREASE_SCORE(POINTS_GAVE_APPLES_TO_DOVE)
+                PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR   
+                SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe mange des morceaux")
+#else
+                SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating apple chunks")
+#endif    
+                GOSUB(_SubDoveEating)
+                END_AND_REFRESH
+            ELSE(apple_cut,apple_not_cut)
+                // The bird is not interested by an uncut apple
+#ifdef LANGUAGE_FR
+                INFO_MESSAGE("La colombe n'est pas intéressée")
+#else    
+                INFO_MESSAGE("The dove does not seem interested")
+#endif    
+                END_AND_PARTIAL_REFRESH
+            ENDIF(apple_not_cut)
+        ENDIF(dove_present)
+    ENDIF(in_the_woods)
+    RETURN
+.)
+
+
+_SubDoveEating
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
 #ifdef LANGUAGE_FR   
@@ -5865,9 +5960,33 @@ acid_hole_knife
     JUMP_IF_FALSE(dove_knife,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_knife,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
         JUMP(_ScareDoveAway)
-
 dove_knife    
+
+    // - We have some apples and we want to cut them down
+    JUMP_IF_TRUE(apple_knife,CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED))
+    JUMP_IF_TRUE(_SliceApples,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_INVENTORY))
+    JUMP_IF_TRUE(_SliceApples,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_CURRENT))
+apple_knife
+
     RETURN
+.)
+
+
+_CombineKnifeApple
+_SliceApples
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Vous découpez les pommes...")
+    INFO_MESSAGE("...préparation pour un clafoutis ?")
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"des$_pommes en morceaux")
+#else    
+    INFO_MESSAGE("You chop the apples...")
+    INFO_MESSAGE("...are you preparing a clafoutis?")
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"chopped _apples")   // SET_ITEM_DESCRIPTION(e_ITEM_Apple,"$chopped _apples") ???? (space in the description)
+#endif    
+    SET_ITEM_FLAGS(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED)
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -5905,10 +6024,12 @@ _UseNet
 
 NetCommon
 .(
-    // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bred
+    // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bread or the apples
     JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
-    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+    JUMP_IF_TRUE(throw_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
+throw_net    
         SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)                      ; Only useful for the Use Net, else it stays in the inventory
         INCREASE_SCORE(POINTS_CAPTURED_THE_DOVE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
