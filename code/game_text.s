@@ -2955,6 +2955,7 @@ _InspectFish
     END_AND_PARTIAL_REFRESH
 
 
+_UseWater
 _InspectWater
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est propre, fraiche et liquide")
@@ -3395,14 +3396,15 @@ _InspectClay
 #else
         INFO_MESSAGE("It's malleable now")
 #endif        
-        END_AND_REFRESH
-    ENDIF(wet)
+    ELSE(wet,dry)
 #ifdef LANGUAGE_FR        
-    INFO_MESSAGE("Il faudrait la réhydrater")
+        INFO_MESSAGE("Il faudrait la réhydrater")
 #else
-    INFO_MESSAGE("It should be rehydrated")
+        INFO_MESSAGE("It should be rehydrated")
 #endif        
-    END_AND_REFRESH
+    ENDIF(dry)
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
@@ -3460,6 +3462,7 @@ _InspectBasementWindow
         ELSE(see_garden,see_black_tape)
             GOSUB(_SubBlackTapeOnWindow)
         ENDIF(see_black_tape)
+        WAIT_KEYPRESS
         END_AND_PARTIAL_REFRESH
     ENDIF(cellar_on_lader)
     .)
@@ -3528,7 +3531,6 @@ _InspectPanicRoomWindow
 #else
             INFO_MESSAGE("Hmmm, interesting...")
 #endif    
-            WAIT_KEYPRESS    
         ELSE(window_closed,window_open)
             GOSUB(_ShowTopWindowOpen)
             IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
@@ -3572,10 +3574,8 @@ _SubInspectAttachment
     ELSE(rope_attached,rope_not_attached)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Y attacher une corde serait facile.")
-      //INFO_MESSAGE("On pourrait y fixer une corde")
 #else
         INFO_MESSAGE("Could easily attach a rope to it.")
-      //INFO_MESSAGE("A rope could be attached to it")
 #endif    
     ENDIF(rope_not_attached)
     WAIT_KEYPRESS
@@ -3694,6 +3694,7 @@ _InspectCardboardBox
     INFO_MESSAGE("Postal service standard package")
 #endif    
     JUMP(_InspectContainerGeneric)
+
 
 _SearchTin
 _InspectTin
@@ -4863,6 +4864,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
     VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
     VALUE_MAPPING(e_ITEM_Meat               , _UseMeat)
+    VALUE_MAPPING(e_ITEM_Water              , _UseWater)
     VALUE_MAPPING(e_ITEM_LargeDove          , _UseDove)
     VALUE_MAPPING(e_ITEM_SilverKnife        , _UseKnife)
     VALUE_MAPPING(e_ITEM_SnookerCue         , _UseSnookerCue)
@@ -5701,6 +5703,7 @@ _ThrowBread
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
     GOSUB(BreadCommon)
     END_AND_REFRESH
+
 
 _UseBread
     GOSUB(BreadCommon)
