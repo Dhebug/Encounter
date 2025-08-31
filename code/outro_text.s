@@ -18,7 +18,7 @@ _gTextThanks
 #else
     .byt 3,10,"Merci d'avoir joué à Encounter Redux",TEXT_CRLF
     .byt 3,10,"Merci d'avoir joué à Encounter Redux",TEXT_CRLF
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     .byt TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,10," Nous espérons que vous l'avez aimé.",TEXT_CRLF
@@ -28,7 +28,7 @@ _gTextThanks
 #ifdef PRODUCT_TYPE_GAME_DEMO
     .byt 2,10,"Si oui, achetez donc le jeu complet !",TEXT_CRLF
     .byt 2,10,"Si oui, achetez donc le jeu complet !",TEXT_CRLF
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     .byt TEXT_CRLF
     .byt TEXT_END
 
@@ -107,7 +107,7 @@ _gTextThanks
 #else
     .byt 3,10," Thanks for playing Encounter Redux",TEXT_CRLF
     .byt 3,10," Thanks for playing Encounter Redux",TEXT_CRLF
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     .byt TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,10," We hope you enjoyed the experience.",TEXT_CRLF
@@ -117,7 +117,7 @@ _gTextThanks
 #ifdef PRODUCT_TYPE_GAME_DEMO
     .byt 2,10,"If you did, maybe buy the full game?",TEXT_CRLF
     .byt 2,10,"If you did, maybe buy the full game?",TEXT_CRLF
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     .byt TEXT_END
 
 _gTextCredits
@@ -261,11 +261,13 @@ _Test_DETAILS_GAVE_UP
     .byt 5,"revue après...",1,"C'était votre boulot !",TEXT_CRLF
     .byt 0
 
+#ifdef PRODUCT_TYPE_GAME_DEMO
 _Test_DETAILS_FINISHED_DEMO
-    .byt 5,"Vous avez trouvé l'entrée arrière de la",TEXT_CRLF
-    .byt 5,"maison. Qui sait ce qui se cache",TEXT_CRLF
-    .byt 5,"derrière ces portes !",1,"Curieux ?",TEXT_CRLF
+    .byt 5,"Vous avez vaincu Cerbère et conquis",TEXT_CRLF
+    .byt 5,"l'escalier. Qui sait ce qui se cache",TEXT_CRLF
+    .byt 5,"à l'étage supérieur !",1,"Curieux ?",TEXT_CRLF
     .byt 0
+#endif // PRODUCT_TYPE_GAME_DEMO    
 #else // LANGUAGE_EN
 _Test_DETAILS_SOLVED_THE_CASE      
     .byt 2,"Congratulations, you solved the case!",TEXT_CRLF,TEXT_CRLF
@@ -315,11 +317,13 @@ _Test_DETAILS_GAVE_UP
     .byt 5,"a chance and was",1,"never seen after...",TEXT_CRLF
     .byt 0
 
+#ifdef PRODUCT_TYPE_GAME_DEMO
 _Test_DETAILS_FINISHED_DEMO
-    .byt 5,"You've found the rear entrance of the",TEXT_CRLF
-    .byt 5,"mansion. Who knows what you would find",TEXT_CRLF
-    .byt 5,"behind these closed doors!",1,"Curious?",TEXT_CRLF
+    .byt 5,"You defeated Cerberus and conquered",TEXT_CRLF
+    .byt 5,"the stairs. Who knows what's hidden",TEXT_CRLF
+    .byt 5,"on the top floor!",1,"Curious?",TEXT_CRLF
     .byt 0
+#endif // PRODUCT_TYPE_GAME_DEMO
 #endif
 
 _Text_Empty .byt 0
@@ -333,8 +337,10 @@ _gScoreConditionsArray
   .word _Test_DETAILS_TRIPPED_ALARM  
   .word _Test_DETAILS_RAN_OUT_OF_TIME
   .word _Test_DETAILS_BLOWN_INTO_BITS
-  .word _Test_DETAILS_GAVE_UP        
+  .word _Test_DETAILS_GAVE_UP
+#ifdef PRODUCT_TYPE_GAME_DEMO        
   .word _Test_DETAILS_FINISHED_DEMO
+#endif // PRODUCT_TYPE_GAME_DEMO
 
 
 // Bonus texts

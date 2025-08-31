@@ -356,3 +356,4 @@
 
 1.2.3
 - Modified the intro to use ESC to quit instead of space/return to avoid new players skipping the important information about how to play
+- Updated the demo version of the game to give access to the entire first floor and basement of the house (only the top floor is blocked)

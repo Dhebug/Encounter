@@ -175,8 +175,8 @@ _gTextItemLockedPanel             .byt "un _clignotant",0
 _gTextItemBatteries               .byt "un paquet de$_piles SR44",0
 _gTextItemDuneBook                .byt "un$_roman",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
-_gTextItemDemoReadMe              .byt "un _message sur la porte",0
-#endif
+_gTextItemDemoReadMe              .byt "un _message sur le mur",0
+#endif // PRODUCT_TYPE_GAME_DEMO
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -253,8 +253,8 @@ _gTextItemLockedPanel             .byt "a _blinker",0
 _gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
 _gTextItemDuneBook                .byt "a$_novel",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
-_gTextItemDemoReadMe              .byt "a _message on the door",0
-#endif
+_gTextItemDemoReadMe              .byt "a _message on the wall",0
+#endif // PRODUCT_TYPE_GAME_DEMO
 #endif
 _EndItemNames
 
@@ -1712,7 +1712,16 @@ _gDescriptionEastGallery
 #endif    
     END
 
-
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_gDescriptionChildBedroom
+_gDescriptionGuestBedroom
+_gDescriptionShowerRoom
+_gDescriptionWestGallery
+_gDescriptionBoxRoom
+_gDescriptionClassyBathRoom
+_gDescriptionTinyToilet
+_gDescriptionMasterBedRoom
+#else
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
 #ifdef TESTING_MODE
@@ -1915,6 +1924,8 @@ loop_snore
 
     END
 .)
+#endif // PRODUCT_TYPE_GAME_DEMO
+
 
     /*
 end_thug    
@@ -2501,7 +2512,7 @@ _gReadItemMappingsArray
     VALUE_MAPPING(e_ITEM_DuneBook           , _ReadDuneBook)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _ReadDemoMessage)
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
 
 
@@ -2515,42 +2526,44 @@ _ReadDemoMessage
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Vous avez atteint la fin de la démo !")
-    INFO_MESSAGE("Ces portes sont normalement ouvertes.")
+    INFO_MESSAGE("L'étage est évidement visitable...")
+    INFO_MESSAGE("...dans la version complete du jeu.")
 #else    
     INFO_MESSAGE("You've reached the end of this demo!")
-    INFO_MESSAGE("These doors are usually unlocked...")
+    INFO_MESSAGE("The top floor is obviously...")
+    INFO_MESSAGE("...accessible in the full game.")
 #endif
 
-    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_DARKCELLARROOM)
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_UP_STAIRS)
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("Si vous voulez visiter la cave...")
+    INFO_MESSAGE("Si vous voulez découvrir le reste...")
 #else    
-    INFO_MESSAGE("If you want to visit the basement...")
+    INFO_MESSAGE("If you want to discover the rest...")
 #endif
 
-    DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_TINY_WC)
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("parcourir la bibliothèque...")
+    INFO_MESSAGE("si vous avez un besoin pressant...")
 #else    
-    INFO_MESSAGE("investigate the library...")
+    INFO_MESSAGE("if you have some urgent needs...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_GUESTBEDROOM)
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("faire une sieste relaxante...")
+    INFO_MESSAGE("voulez faire une sieste relaxante...")
 #else    
-    INFO_MESSAGE("have a relaxing nap...")
+    INFO_MESSAGE("want to have a relaxing nap...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_SHOWERROOM)
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("prendre une douche...")
+    INFO_MESSAGE("ou prendre une douche...")
 #else    
-    INFO_MESSAGE("take a shower...")
+    INFO_MESSAGE("or take a shower...")
 #endif
 
-    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_STUDY_ROOM)
+    DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_BOXROOM)
     CLEAR_TEXT_AREA(2)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("alors tentez le jeu complet !")
@@ -2558,13 +2571,12 @@ _ReadDemoMessage
     INFO_MESSAGE("then consider getting the full game!")
 #endif
 
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
+    DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
     CLEAR_TEXT_AREA(1)
-    FADE_BUFFER
 #ifdef LANGUAGE_FR    
-    INFO_MESSAGE("Vaincrez-vous Cerbère ?")
+    INFO_MESSAGE("Réussirez vous à entrer ?")
 #else    
-    INFO_MESSAGE("Will you outsmart Cerberus?")
+    INFO_MESSAGE("Will you find a way in?")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
@@ -2575,6 +2587,7 @@ _ReadDemoMessage
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
+    CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR    
     INFO_MESSAGE("Souhaitez-vous tout faire sauter ?")
 #else    
@@ -2599,7 +2612,7 @@ _ReadDemoMessage
     GAME_OVER(e_SCORE_FINISHED_DEMO)        ; The game is now over
     END
 .)
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
 
 
 _InspectNewspaper
@@ -2796,7 +2809,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_DuneBook           , _InspectDuneBook)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
 
 
@@ -4913,7 +4926,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Oric               , _UseOricComputer)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _UseDemoMessage)
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 

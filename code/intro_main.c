@@ -15,7 +15,7 @@ extern char Text_TitleCopyright[];
 
 #ifdef PRODUCT_TYPE_GAME_DEMO
 extern char Text_DemoFeatures[];
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
 
 extern char Text_GameInstructionsPage1[];
 extern char Text_GameInstructionsPage2[];
@@ -56,7 +56,7 @@ enum
     INTRO_TITLE_PICTURE = 0,
 #ifdef PRODUCT_TYPE_GAME_DEMO
     INTRO_DEMO_FEATURES,
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     INTRO_USER_MANUAL_PAGE1,
     INTRO_LEADERBOARD,
     INTRO_USER_MANUAL_PAGE2,
@@ -243,7 +243,7 @@ int DisplayIntroPage()
             unsigned char* ptrGradient=GradientTable+(frame&127);
 #ifdef PRODUCT_TYPE_GAME_DEMO
             unsigned char* ptr2=(unsigned char*)0xa000+40*(3+39);
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
             for (y=0;y<39;y++)
             {
                 ptr[1]=ptrGradient[y]&7;          // Magenta ink
@@ -251,7 +251,7 @@ int DisplayIntroPage()
 #ifdef PRODUCT_TYPE_GAME_DEMO
                 ptr2[30]=ptrGradient[y]&7;          // Magenta ink
                 ptr2-=40;
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
             }
             if (Wait(1))
             {
@@ -920,7 +920,7 @@ void main()
         case INTRO_DEMO_FEATURES:
             DisplayUserManual(Text_DemoFeatures);
             break;
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
 
 #ifdef INTRO_SHOW_USER_MANUAL
         case INTRO_USER_MANUAL_PAGE1:

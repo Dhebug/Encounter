@@ -136,7 +136,7 @@ AddDefine LOADER_PICTURE_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
 AddFile ..\build\files\intro_game_title_demo.hir
 #else
 AddFile ..\build\files\intro_game_title.hir
-#endif
+#endif ; PRODUCT_TYPE_GAME_DEMO
 AddDefine LOADER_PICTURE_GAME_TITLE {FileIndex}
 AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMPRESSED {FileSize}
 AddDefine LOADER_PICTURE_GAME_TITLE_SIZE_COMPRESSED {FileSizeCompressed}
@@ -201,13 +201,13 @@ AddFile ..\build\files\loc_lounge.hir
 AddFile ..\build\files\loc_entrance_hall.hir
 AddFile ..\build\files\loc_library.hir
 AddFile ..\build\files\loc_dinning_room.hir
-AddFile ..\build\files\loc_staircase.hir
-AddFile ..\build\files\loc_games_room.hir
 #ifdef PRODUCT_TYPE_GAME_DEMO
-AddFile ..\build\files\loc_sun_lounge_demo.hir
+AddFile ..\build\files\loc_staircase_demo.hir
 #else
-AddFile ..\build\files\loc_sun_lounge.hir
+AddFile ..\build\files\loc_staircase.hir
 #endif
+AddFile ..\build\files\loc_games_room.hir
+AddFile ..\build\files\loc_sun_lounge.hir
 AddFile ..\build\files\loc_kitchen.hir
 AddFile ..\build\files\loc_narrow_passage.hir
 AddFile ..\build\files\loc_guest_bedroom.hir
@@ -265,22 +265,18 @@ AddDefine LOADER_PICTURE_CHEMISTRY_RECIPES {FileIndex}
 
 #if defined(PRODUCT_TYPE_GAME_DEMO) || defined(PRODUCT_TYPE_TEST_MODE)
 // Just defining the images so the compiler is happy, the files are not on disk because the player cannot go there
-AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
 AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
-AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
-AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
-AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
 #else
-
-AddFile ..\build\files\view_united_kingdom_map.hir
-AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
-
 AddFile ..\build\files\view_donkey_kong_top.hir
 AddDefine LOADER_PICTURE_DONKEY_KONG_TOP {FileIndex}
 
 AddFile ..\build\files\view_donkey_kong_playing.hir
 AddDefine LOADER_PICTURE_DONKEY_KONG_PLAYING {FileIndex}
+#endif
+
+AddFile ..\build\files\view_united_kingdom_map.hir
+AddDefine LOADER_PICTURE_UK_MAP {FileIndex}
 
 AddFile ..\build\files\view_fridge_door.hir
 AddDefine LOADER_PICTURE_FRIDGE_DOOR {FileIndex}
@@ -290,7 +286,6 @@ AddDefine LOADER_PICTURE_MEDICINE_CABINET {FileIndex}
 
 AddFile ..\build\files\view_medicine_cabinet_open.hir
 AddDefine LOADER_PICTURE_MEDICINE_CABINET_OPEN {FileIndex}
-#endif
 
 AddFile ..\build\files\view_alarm_panel.hir
 AddDefine LOADER_PICTURE_ALARM_PANEL {FileIndex}
@@ -430,7 +425,7 @@ AddDefine LOADER_PICTURE_COLECOVISION {FileIndex}
 AddFile ..\build\files\view_demo_message_fr.hir
 #else
 AddFile ..\build\files\view_demo_message.hir
-#endif
+#endif ; PRODUCT_TYPE_GAME_DEMO
 AddDefine LOADER_PICTURE_TO_BE_CONTINUED {FileIndex}
 #endif
 

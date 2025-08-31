@@ -109,5 +109,5 @@ _gItems
     ITEM_NORMAL( _gTextItemClosedDrawer          ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Drawer
     ITEM_NORMAL( _gTextItemDuneBook              ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_DuneBook
 #ifdef PRODUCT_TYPE_GAME_DEMO
-    ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
-#endif
+    ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
+#endif // PRODUCT_TYPE_GAME_DEMO

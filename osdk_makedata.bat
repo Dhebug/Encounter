@@ -138,6 +138,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_library
 %CONVERT% loc_dinning_room
 %CONVERT% loc_staircase
+%CONVERT% loc_staircase_demo
 %CONVERT% loc_games_room
 %CONVERT% loc_sun_lounge
 %CONVERT% loc_sun_lounge_demo

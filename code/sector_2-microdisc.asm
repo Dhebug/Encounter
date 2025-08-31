@@ -288,7 +288,7 @@ OsdkNameStart
     .byt "VERSION"
 #ifdef PRODUCT_TYPE_GAME_DEMO
     .byt "D"
-#endif    
+#endif // PRODUCT_TYPE_GAME_DEMO
     .byt "M"
 OsdkNameEnd
 

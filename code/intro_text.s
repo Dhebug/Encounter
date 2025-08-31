@@ -45,8 +45,8 @@ _Text_DemoFeatures
     .byt "servent à naviguer entre les pages.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "La seule limite dans cette démo est",TEXT_CRLF
-    .byt "que vous ne pouvez pas entrer dans le",TEXT_CRLF
-    .byt "manoir, donc vous ne pourrez pas",TEXT_CRLF
+    .byt "que vous ne pouvez pas monter à",TEXT_CRLF
+    .byt "l'étage, donc vous ne pourrez pas",TEXT_CRLF
     .byt "terminer la mission !",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Le reste est comme le jeu complet:",TEXT_CRLF
@@ -73,8 +73,8 @@ _Text_DemoFeatures
 	.byt "You can use the",5,"left",0,"and",5,"right",0,"arrow",TEXT_CRLF
 	.byt "keys to navigate between the pages.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "The only limit present in this demo",TEXT_CRLF
-	.byt "is that you can't enter the mansion,",TEXT_CRLF
+    .byt "The only limit in this demo is that",TEXT_CRLF
+	.byt "you can't access the top floor,",TEXT_CRLF
 	.byt "so you will not be able to finish the",TEXT_CRLF
 	.byt "mission!",TEXT_CRLF
     .byt TEXT_CRLF

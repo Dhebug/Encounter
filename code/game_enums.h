@@ -163,7 +163,7 @@
 #define	e_ITEM_COUNT_ 				 85         //  ----- END MARKER - Free until 127, after are action words
 #else
 #define	e_ITEM_COUNT_ 				 84         //  ----- END MARKER - Free until 127, after are action words
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
 #define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
@@ -299,6 +299,7 @@
 #define POINTS_GAVE_BREAD_TO_FISH         100
 
 #define POINTS_GAVE_BREAD_TO_DOVE         100
+#define POINTS_GAVE_APPLES_TO_DOVE        100
 #define POINTS_CAPTURED_THE_DOVE          200
 #define POINTS_DOG_CHASED_DOVE            500
 
