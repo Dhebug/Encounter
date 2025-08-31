@@ -10,12 +10,14 @@
 ;
 ; Title screen
 ;
-_Text_TitlePicture               
+_Text_KeyControls
 #ifdef LANGUAGE_FR
-    .byt 16+3,5,12,"      <- Sélection de page ->",TEXT_CRLF
+    .byt 16+3,5,12,"ESC pour jouer   <-> pour naviguer  "
 #else
-    .byt 16+3,5,12,"       <- Page Navigation ->",TEXT_CRLF
+    .byt 16+3,5,12,"Press ESC to play or <-> to browse   "
 #endif    
+    .byt TEXT_END
+_Text_TitleCopyright
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
     .byt 16+3,4,"Améliorations ",96," 2024-25 Defence-Force"
@@ -90,7 +92,7 @@ _Text_DemoFeatures
     .byt TEXT_CRLF
     .byt TEXT_END
 #endif
-#endif
+#endif // PRODUCT_TYPE_GAME_DEMO
 
 ;
 ; Manual

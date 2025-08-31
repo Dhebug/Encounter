@@ -355,3 +355,4 @@
 - Added description texts to the knife and dart gun
 
 1.2.3
+- Modified the intro to use ESC to quit instead of space/return to avoid new players skipping the important information about how to play

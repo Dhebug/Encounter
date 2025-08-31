@@ -10,7 +10,8 @@
 #include "game_enums.h"
 
 // intro_utils
-extern char Text_TitlePicture[];
+extern char Text_KeyControls[];
+extern char Text_TitleCopyright[];
 
 #ifdef PRODUCT_TYPE_GAME_DEMO
 extern char Text_DemoFeatures[];
@@ -129,11 +130,12 @@ int Wait(int frameCount)
 		WaitIRQ();
 
 		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') )
+		if (k==KEY_ESC)
 		{
             gShouldExit = 1;
 			return 1;
 		}
+        else
         if (k==KEY_LEFT)
         {            
             gWaitAndFadeMultiplicator = 4;    // If the player goes left, we quadruple the reading delay
@@ -145,10 +147,24 @@ int Wait(int frameCount)
             }
             return 1;
         }
+        else
         if (k==KEY_RIGHT)
         {            
             gWaitAndFadeMultiplicator = 1;    // If the players goes right, we go back to the normal reading delay
             return 1;
+        }
+        else
+        if (k!=0)
+        {
+            // Any other key: Show the user they should use LEFT, RIGHT or ESCAPE
+            if ((gIntroPage != INTRO_TITLE_PICTURE) && (!gGameStarting))
+            {
+                char* saveAddress=gPrintAddress;
+                gPrintWidth=40;
+                gPrintTerminator=TEXT_END;
+               	PrintStringAt(Text_KeyControls,0xbb80+40*27);
+                gPrintAddress=saveAddress;
+            }
         }
 	}
 	return 0;
@@ -164,7 +180,7 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 		WaitIRQ();
 
 		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') )
+		if ( (k==KEY_RETURN) || (k==' ') || (k==KEY_ESC) )
 		{
 			//PlaySound(KeyClickLData);
 			WaitFrames(4);
@@ -211,7 +227,9 @@ int DisplayIntroPage()
 
     gPrintWidth=40;
     gPrintTerminator=TEXT_END;
-	PrintStringAt(Text_TitlePicture,0xbb80+40*25);
+	PrintStringAt(Text_KeyControls,0xbb80+40*25);
+    gPrintTerminator=TEXT_END;
+	PrintStringAt(Text_TitleCopyright,0xbb80+40*26);
 
 	memcpy((char*)0xa000,ImageBuffer,8000);
 
