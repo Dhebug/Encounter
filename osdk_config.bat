@@ -42,9 +42,10 @@
 :: 1.2.0 - Fixed highscore truncation, playable minigame, added two achievements
 :: 1.2.1 - Added detailed images for the well and the trashcan, and a new Dune novel item
 :: 1.2.2 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
-:: 1.2.3 -
+:: 1.2.3 - The intro now requires ESC to quit, demo updated to give access to the main floor of the mansion
+:: 1.2.4 -
 ::
-SET VERSION=1.2.1
+SET VERSION=1.2.4
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
