@@ -10,6 +10,11 @@ The game is technically finished, but there are still some tweaks and bug fixes 
 
 If you are interested by the topic, you can read this [blog post](https://blog.defence-force.org/index.php?page=articles&ref=ART85) which also links to a few related videos on my youtube channel
 
+## Autumn 2025 game trailer
+If you want a quick idea of what the game looks and plays like, here is a short trailer
+[![Video](https://img.youtube.com/vi/g3o6FD_qOtU/0.jpg)](https://www.youtube.com/watch?v=g3o6FD_qOtU)
+
+
 # Current state
 The game has been released on [itch.io](https://defenceforce.itch.io/encounter) and [Steam](https://store.steampowered.com/app/3319780/Encounter/) on December 20th 2024 as version 1.0.0.
 
