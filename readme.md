@@ -5,7 +5,8 @@
 - If you are looking for The **Upgrade Time Episodes** containing snapshots of the work done on the BASIC source code while I was making [YouTube videos](https://www.youtube.com/playlist?list=PLuBEOCYVlum9cOkshSXEkOxALYoe3LVXz) about it, then please check this [other repository](https://github.com/Dhebug/Encounter-BASIC-version-)
 - Here you will find the **FloppyBuilderVersion** version (aka "Encounter HD"), started from scratch to use C and assembler instead
 - There's also a [power point presentation](https://defence-force.org/pages/games/encounter/files/EncounterHD-English.pptx) going in details in what was done on the project ([French version](https://www.defence-force.org/pages/games/encounter/files/EncounterHD-French.pptx))
-
+- The complete game manual, press kit, media reviews, etc... are available on [Encounter's homepage](http://encounter.defence-force.org)
+ 
 The game is technically finished, but there are still some tweaks and bug fixes added now and then.
 
 If you are interested by the topic, you can read this [blog post](https://blog.defence-force.org/index.php?page=articles&ref=ART85) which also links to a few related videos on my youtube channel
@@ -16,7 +17,7 @@ If you want a quick idea of what the game looks and plays like, here is a short 
 
 
 # Current state
-The game has been released on [itch.io](https://defenceforce.itch.io/encounter) and [Steam](https://store.steampowered.com/app/3319780/Encounter/) on December 20th 2024 as version 1.0.0.
+The game has been released on [itch.io](https://defenceforce.itch.io/encounter) and [Steam](https://store.steampowered.com/app/3319780/Encounter/) on December 20th 2024 as version 1.0.0, and is now (September 2025) at version 1.2.3 with a significantly more polished version including a brand new game demo.
 
 A certain number of issues have been identified and most of them fixed, and the game was also expended with a few more graphics, a few more interactions, etc...
 
