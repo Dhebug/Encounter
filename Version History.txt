@@ -360,3 +360,5 @@
 
 1.2.4
 - Pressing any of the SHIFT key when quitting the splash sequence now resets the achievements (used to test versions)
+- The TARDIS appearance should now break the display of the navigational arrows anymore
+

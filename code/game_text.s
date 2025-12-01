@@ -555,6 +555,7 @@ _gDescriptionMainStreet
     WAIT(50*5)
     WAIT(50*5)
     DO_ONCE(tardis)
+        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
             _IMAGE(30,49)
             _BUFFER(7,40)
@@ -562,6 +563,7 @@ _gDescriptionMainStreet
         FADE_BUFFER
         WAIT(50*5)
         WAIT(50*5)
+        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_MAINSTREET)
         PLAY_SOUND(_Zipper)
         FADE_BUFFER
