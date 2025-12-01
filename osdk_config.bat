@@ -51,10 +51,12 @@ SET BASENAME=EncounterHD
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
 :: The original release of Encounter used 17 sectors per track, 42 tracks, 2 sides, and an interleave of 6.
 :: New versions will use 18 sectors per track (interleave value is still to be determined)
+:: BITMAP is an additional sector used to make the disk compatible with the SEDORIC DIR and BACKUP commands
 SET DISK_SIDES=2
 SET DISK_TRACKS=42
 SET DISK_SECTORS=18
 SET DISK_INTERLEAVE=6
+SET DISK_WITH_BITMAP=0
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
 SET BUILD_LANGUAGES=EN,FR

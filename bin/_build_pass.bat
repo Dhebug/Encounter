@@ -17,6 +17,12 @@ IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa %XAPARAMS% sector_3.asm -o ..\build\files\sector_3.o
 IF ERRORLEVEL 1 GOTO Error
 
+IF NOT "%DISK_WITH_BITMAP%"=="1" GOTO EndBitmapSector
+ECHO %ESC%[96m== Assembling Sedoric compatible bitmap ==%ESC%[0m
+%osdk%\bin\xa %XAPARAMS% sector_bitmap.asm -o ..\build\files\sector_bitmap.o
+IF ERRORLEVEL 1 GOTO Error
+:EndBitmapSector
+
 ECHO.
 ECHO %ESC%[96m== Assembling loader ==%ESC%[0m
 %osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader

@@ -55,7 +55,7 @@ SET OSDKXAPARAMS=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%P
 
 :: -P Inhibit generation of linemarkers in the output from the preprocessor. This might be useful when running the preprocessor on something that is not C code, and will be sent to a program which might be confused by the linemarkers.
 :: If you really need to change the search order for system directories, use the -nostdinc and/or -isystem options.
-%OSDK%\bin\cpp.exe -P -DOSDKDISK=%OSDKDISK% -DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISK_TRACKS=%DISK_TRACKS% -DDISK_SECTORS=%DISK_SECTORS% -DDISK_INTERLEAVE=%DISK_INTERLEAVE% -DDISK_SIDES=%DISK_SIDES% floppybuilderscript_master.txt floppybuilderscript.txt
+%OSDK%\bin\cpp.exe -P -DOSDKDISK=%OSDKDISK% -DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISK_TRACKS=%DISK_TRACKS% -DDISK_SECTORS=%DISK_SECTORS% -DDISK_INTERLEAVE=%DISK_INTERLEAVE% -DDISK_SIDES=%DISK_SIDES% -DDISK_WITH_BITMAP=%DISK_WITH_BITMAP% floppybuilderscript_master.txt floppybuilderscript.txt
 
 :: Call FloppyBuilder once to create loader.cod
 %osdk%\bin\FloppyBuilder init floppybuilderscript.txt >..\build\floppy_builder_error.txt

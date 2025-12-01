@@ -536,3 +536,9 @@ AddDefine LOADER_HIGH_SCORES {FileIndex}
 AddDefine LOADER_HIGH_SCORES_SIZE {FileSize}
 AddDefine LOADER_HIGH_SCORES_DISK_OFFSET {FileDiskOffset}
 
+#if DISK_WITH_BITMAP==1
+; Overwrite the bitmap (TEST)
+SetPosition 20 2
+WriteSector ..\build\files\sector_bitmap.o 		; Sector with the bitmap data
+#endif
+
