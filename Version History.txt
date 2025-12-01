@@ -359,3 +359,4 @@
 - Updated the demo version of the game to give access to the entire first floor and basement of the house (only the top floor is blocked)
 
 1.2.4
+- Pressing any of the SHIFT key when quitting the splash sequence now resets the achievements (used to test versions)

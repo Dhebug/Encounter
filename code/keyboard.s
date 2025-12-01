@@ -32,7 +32,7 @@ _KeyBank 		.dsb 8   ; The virtual Key Matrix
 ; pressed and there is no need to look in tables later on.
 _KeyboardASCIIMapping 
 tab_ascii
-    .asc "7","N","5","V",KET_RCTRL,"1","X","3"
+    .asc "7","N","5","V",KEY_RCTRL,"1","X","3"
     .asc "J","T","R","F",0,KEY_ESC,"Q","D"
     .asc "M","6","B","4",KEY_LCTRL,"Z","2","C"
     .asc "K","9",38,"-",0,0,42,39

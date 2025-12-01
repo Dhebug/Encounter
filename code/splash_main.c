@@ -499,6 +499,13 @@ void main()
     gSaveGameFile.sound_enabled      = gSoundEnabled;
     gSaveGameFile.joystick_interface = gJoystickType;
 
+    // If the user presses SHIFT we reset the achievements
+    if ( (KeyBank[4]|KeyBank[7])&16 )  // Left/Right shift
+    {
+       gSaveGameFile.launchCount = 0;
+       memset(gSaveGameFile.achievements,0,ACHIEVEMENT_BYTE_COUNT);
+    }
+
     SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 	// Quit and return to the loader

@@ -49,7 +49,7 @@
 #define KEY_LSHIFT		1
 #define KEY_RSHIFT		2
 #define KEY_LCTRL		3
-#define KET_RCTRL		4
+#define KEY_RCTRL		4
 #define KEY_FUNCT		5
 // Actual normal keys
 #define KEY_UP			6
