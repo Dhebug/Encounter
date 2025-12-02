@@ -2084,6 +2084,7 @@ end_delete
 
     cmp #KEY_ESC
     bne end_escape
+escape    
     lda #0                    ; gWordCount=0;
     sta _gWordCount
     lda #e_WORD_SKIP          ; gWordBuffer[0]=e_WORD_SKIP;
@@ -2108,10 +2109,14 @@ end_escape
     cmp #KEY_RETURN
     bne end_validate
 validate
-    lda _gWordCount      ; if ((gWordCount+1)>=gMaxWordIndex)
-    clc
-    adc #1
-    cmp _gMaxWordIndex   ; compare with max
+    ; Check if the currently selected word is CANCEL
+    ldx _gWordCount
+    lda _gWordBuffer,x
+    cmp #e_WORD_COUNT_        ; CANCEL?
+    beq escape                ; We simulate a press on the ESCAPE key to quit the menu
+    
+    inx
+    cpx _gMaxWordIndex        ; compare with max - ((gWordCount+1)>=gMaxWordIndex)
     bcc more_words            ; skip if < max (carry clear)
 last_word    
 
