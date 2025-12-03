@@ -2079,7 +2079,7 @@ _gActionMappingsArray
     WORD_MAPPING(e_WORD_TAKE      ,_TakeItem                  ,1+FLAG_MAPPING_DEFAULT)
     WORD_MAPPING(e_WORD_DROP      ,_DropItem                  ,1+FLAG_MAPPING_DEFAULT)
 
-    WORD_MAPPING(e_WORD_PAUSE     ,_PauseGameScript           ,0+FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
+    WORD_MAPPING(e_WORD_HELP      ,_PauseGameScript           ,0+FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
     WORD_MAPPING(e_WORD_QUIT      ,_QuitGameScript            ,0+FLAG_MAPPING_STREAM|FLAG_MAPPING_STREAM_CALLBACK)
 
     ; Implemented as script streams
@@ -2094,8 +2094,6 @@ _gActionMappingsArray
     WORD_MAPPING(e_WORD_SEARCH    ,_gSearchtemMappingsArray   ,1+FLAG_MAPPING_STREAM)
     WORD_MAPPING(e_WORD_THROW     ,_gThrowItemMappingsArray   ,1+FLAG_MAPPING_STREAM)
 
-    WORD_MAPPING(e_WORD_HELP      ,_ShowHelp                  ,0+FLAG_MAPPING_DEFAULT)
-
     WORD_MAPPING(e_WORD_SKIP      ,_DoNothing                 ,0+FLAG_MAPPING_DEFAULT)   // To avoid the double execution of code when using ENTER instead of SPACE
 
     WORD_MAPPING(e_WORD_COUNT_    ,0, 0)
@@ -2104,8 +2102,8 @@ _gActionMappingsArray
 
 _gActionMappingMenu
     .byt e_WORD_TAKE,e_WORD_USE,e_WORD_OPEN,e_WORD_THROW
-    .byt e_WORD_DROP,e_WORD_COMBINE,e_WORD_CLOSE,e_WORD_PAUSE
-    .byt e_WORD_LOOK,e_WORD_READ,e_WORD_SEARCH,e_WORD_QUIT
+    .byt e_WORD_DROP,e_WORD_COMBINE,e_WORD_CLOSE,e_WORD_HELP
+    .byt e_WORD_LOOK,e_WORD_READ,e_WORD_SEARCH,e_WORD_QUIT,e_WORD_COUNT_
 
 
 /* MARK: Combine 👨‍🏭
@@ -6800,13 +6798,7 @@ _PauseGameScript
             _BUFFER(17,63)
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     FADE_BUFFER
-    CLEAR_TEXT_AREA(5)                                              ; Magenta background
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Appuyez sur une touche")
-#else
-    INFO_MESSAGE("Press a key to continue")
-#endif    
-    WAIT_KEYPRESS
+    CALL_NATIVE(_ShowHelp)                                   ; Show the list of all commands
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     START_CLOCK
     SET_CUT_SCENE(0)

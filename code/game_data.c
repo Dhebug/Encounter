@@ -175,14 +175,14 @@ keyword gWordsArray[] =
 #endif
 
 #ifdef LANGUAGE_FR    
-    { "PAUSE", e_WORD_PAUSE },
     { "AIDE", e_WORD_HELP },
+    { "PAUSE", e_WORD_HELP },
 
     // Last instruction
     { "QUITTE", e_WORD_QUIT },
 #else
-    { "PAUSE", e_WORD_PAUSE },
     { "HELP", e_WORD_HELP },
+    { "PAUSE", e_WORD_HELP },
 
     // Last instruction
     { "QUIT", e_WORD_QUIT },

@@ -1963,7 +1963,7 @@ end_container_check
     bne end_verb_check
 
     ; Default input mode - Verb
-    lda #12                         ; gKeywordMenuEntryCount=12;
+    lda #12+1                         ; gKeywordMenuEntryCount=12; +1 for the CANCEL option
     sta _gKeywordMenuEntryCount
 
     lda #<_gActionMappingMenu       ; gKeywordMenuEntries=gActionMappingMenu;

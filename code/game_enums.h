@@ -188,11 +188,10 @@
 // Meta instructions
 #define	e_WORD_QUIT                  145
 #define e_WORD_HELP                  146
-#define e_WORD_PAUSE                 147
-#define	e_WORD_COUNT_                148
+#define	e_WORD_COUNT_                147
 // Additional values for the parser
-#define	e_WORD_CONTINUE              149
-#define e_WORD_SKIP                  150  // Special command to modify the behavior of the system
+#define	e_WORD_CONTINUE              148
+#define e_WORD_SKIP                  149  // Special command to modify the behavior of the system
 
 // Flags for the items
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special

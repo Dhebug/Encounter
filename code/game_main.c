@@ -225,7 +225,7 @@ void ShowHelp()
     }
     PrintString(gTextUseShiftToHighlight);    
     WaitKey();
-    LoadScene();
+    // Note: This code is now called from a script, so no need to reload the scene by code
 }
 
 
