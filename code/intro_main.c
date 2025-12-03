@@ -130,7 +130,7 @@ int Wait(int frameCount)
 		WaitIRQ();
 
 		k=ReadKeyNoBounce();
-		if (k==KEY_ESC)
+		if ( (k==KEY_ESC) || (k==KEY_UP) || (k==KEY_DOWN) ) 
 		{
             gShouldExit = 1;
 			return 1;
