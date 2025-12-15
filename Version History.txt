@@ -366,3 +366,6 @@
 - A new option was added to the selection menu to allow quitting it without selecting anything
 - The PAUSE command now calls the help page, which also now pauses the time.
 - Added the .HFE and .IMD versions of the game to final release folder
+
+1.2.5
+- Fixed a typo in French in the word "Inaccessible"

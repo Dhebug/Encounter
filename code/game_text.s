@@ -4548,7 +4548,7 @@ _OpenBasementWindow
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),basement)                              ; Are we on the basement side in the room itself...
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Innaccessible...")
+        INFO_MESSAGE("Inaccessible...")
 #else
         INFO_MESSAGE("I can't reach it...")
 #endif
