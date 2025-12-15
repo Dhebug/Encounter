@@ -4895,6 +4895,7 @@ _CloseCarPetrolTank
 
 _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Ladder             , _UseLadder)
+    VALUE_MAPPING(e_ITEM_Bucket             , _UseBucket)
     VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
     VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
@@ -5028,6 +5029,18 @@ _InspectCarTank
     END_AND_PARTIAL_REFRESH
 .)
 
+
+_UseBucket
+.(
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),in_dark_room)
+#ifdef LANGUAGE_FR
+        INFO_MESSAGE("Trop petit pour atteindre la fenêtre.")
+#else
+        INFO_MESSAGE("Too small to reach the window.")
+#endif    
+    ENDIF(in_dark_room)
+    END_AND_PARTIAL_REFRESH
+.)
 
 _UseLadder
 .(

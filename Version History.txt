@@ -369,3 +369,5 @@
 
 1.2.5
 - Fixed a typo in French in the word "Inaccessible"
+- Added a message when trying to use the bucket to access something too high
+
