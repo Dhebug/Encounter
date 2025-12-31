@@ -10,5 +10,30 @@
         "activityBar.background": "#243121",
         "titleBar.activeBackground": "#33452E",
         "titleBar.activeForeground": "#FAFCFA"
+    },
+    "VSCodeCounter.languages":{
+        "data":{
+            "filenames": [
+                "costable.s",
+                "crc32.s",
+                "game_items.s",
+                "game_items.s",
+                "game_locations.s",
+                "game_text.s",
+                "outro_text.s",
+                "intro_text.s",
+                "monkey_king_spr.s",
+                "monkey_king_spr_include.s"
+            ],
+        },
+        "music":{
+            "filenames": [
+                "splash_music.s",
+                "success_music.s",
+                "intro_music.s"
+            ],
+        }
+
+
     }
 }
