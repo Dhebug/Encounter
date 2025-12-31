@@ -309,7 +309,7 @@
 - Fix: Added a missing "r" on the credits page with the game URL
 - Fix: Using the small key should now display the proper message instead of "it's too dark"
 - Fix: Trying to open the safe should now display that it's locked instead of "can't do that"
-- Tweak: The mini explosion has been tweaked so it happed at the right time and place whatever the player do
+- Tweak: The mini explosion has been tweaked so it happens at the right time and place whatever the player do
 - Tweak: Reordered the alarm triggered script code to stop the timer as soon as the event triggers
 
 1.1.0 - 09 March 2025
@@ -334,18 +334,18 @@
 - Changed the default configuration of the emulator to use software rendering instead of OpenGL (except for the full crt emulation mode)
 - Trying to take some of the items will now ask if you are kleptomaniac instead of just printing "can't do this"
 
-1.2.0 - 31 may 2025
+1.2.0 - 31 May 2025
 - Internal: Swapped the music buffer location to provide a continuous array for dynamic module loading
 - Modified the display of the leaderboard so scores are not truncated when they reach beyond 9999 points
 - New achievements: "Over 9999", and "Falling hazard"
 - The "Monkey King" game is now fully playable, and the best scores are stored on disk
 
-1.2.1
+1.2.1 - 24 June 2025
 - Inspecting the old well now shows a view of the inside instead of just a text description
 - Added a Dune book in the guest room, it's the first UK edition from 1965 by Gollancz which explains why it looks a bit wormed-out
 - Inspecting the trash can in the seedy alley now shows a close up picture
 
-1.2.2
+1.2.2 - 17 August 2025
 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
 - Cancelling the selection of a container when taking an item will just ignore the operation instead of writing that this will not work.
 - Changed the text displayed when selecting an incorrect container to "this is not a usable container" instead of "that will not work"
@@ -354,11 +354,11 @@
 - Fixed a few typos in the texts
 - Added description texts to the knife and dart gun
 
-1.2.3
+1.2.3 - 2 September 2025
 - Modified the intro to use ESC to quit instead of space/return to avoid new players skipping the important information about how to play
 - Updated the demo version of the game to give access to the entire first floor and basement of the house (only the top floor is blocked)
 
-1.2.4
+1.2.4 - 4 December 2025
 - Pressing any of the SHIFT key when quitting the splash sequence now resets the achievements (used to test versions)
 - The TARDIS appearance should not break the display of the navigational arrows anymore
 - Selecting CANCEL in the selection menu should not show "I do not know what this item is" anymore and just close the menu
@@ -367,7 +367,9 @@
 - The PAUSE command now calls the help page, which also now pauses the time.
 - Added the .HFE and .IMD versions of the game to final release folder
 
-1.2.5
+1.2.5 - 31 December 2025
 - Fixed a typo in French in the word "Inaccessible"
 - Added a message when trying to use the bucket to access something too high
+- Updated Oricutron to the latest version, this should provide a much better support for modern controllers with analog sticks and buttons.
 
+1.2.6 - 
