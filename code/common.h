@@ -134,19 +134,6 @@ extern unsigned char MusicMixerMask;
 
 //#define BUILD_MARKER  const char gBuildMarker[] = "Build ID: " VERSION " " __DATE__ " at " __TIME__;
 
-// Common
-#define SetLineAddress(address)            { gPrintAddress=address; }
-#define PrintStringAt(message,address)     { param0.ptr=message;gPrintAddress=(char*)address;gPrintPos=0;asm("jsr _PrintStringInternal"); } 
-#define PrintString(message)               { param0.ptr=message;asm("jsr _PrintStringInternal"); } 
-
-#define UnlockAchievement(assignment)      { param0.uchar=assignment;asm("jsr _UnlockAchievementAsm"); }
-
-#define Text(paperColor,inkColor)          { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _TextAsm"); }
-#define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }
-
-char KeywordCompare(); // Fill param0.ptr=first;param1.ptr=second; first, returns in X
-extern const char* gKeywordString;
-
 union ParamType
 {
     unsigned char uchar;        // One single byte
@@ -159,11 +146,24 @@ extern union ParamType param0;
 extern union ParamType param1;
 extern union ParamType param2;
 
+// Common
+#define SetLineAddress(address)            { gPrintAddress=address; }
+#define PrintStringAt(message,address)     { param0.ptr=message;gPrintAddress=(char*)address;gPrintPos=0;asm("jsr _PrintStringInternal"); } 
+#define PrintString(message)               { param0.ptr=message;asm("jsr _PrintStringInternal"); } 
+
+#define UnlockAchievement(assignment)      { param0.uchar=assignment;asm("jsr _UnlockAchievementAsm"); }
+
+#define Text(paperColor,inkColor)          { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _TextAsm"); }
+#define Hires(paperColor,inkColor)         { param0.uchar=paperColor;param0.uchars[1]=inkColor;asm("jsr _HiresAsm"); }
+
 #define WaitFrames(frames)                 { param0.uint=frames;asm("jsr _WaitFramesAsm"); }
 #define PrintStatusMessage(color,message)  { param0.ptr=message;param1.uchar=color;asm("jsr _PrintStatusMessageAsm"); } 
 #define PrintInformationMessage(message)   { param0.ptr=message;asm("jsr _PrintInformationMessageAsm"); } 
 #define PrintErrorMessage(message)         { param0.ptr=message;asm("jsr _PrintErrorMessageAsm"); } 
 #define PrintErrorMessageShort(message)    { param0.ptr=message;asm("jsr _PrintErrorMessageShortAsm"); } 
+
+char KeywordCompare(); // Fill param0.ptr=first;param1.ptr=second; first, returns in X
+extern const char* gKeywordString;
 
 extern char gIsHires;
 extern char* gPrintAddress;
