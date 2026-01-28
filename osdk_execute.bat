@@ -2,7 +2,7 @@
 
 ::
 :: Initial check.
-:: Verify if the SDK is correctly configurated,
+:: Verify if the SDK is correctly configured,
 ::
 IF "%OSDK%"=="" GOTO ErCfg
 
