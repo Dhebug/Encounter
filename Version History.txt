@@ -373,3 +373,4 @@
 - Updated Oricutron to the latest version, this should provide a much better support for modern controllers with analog sticks and buttons.
 
 1.2.6 - 
+- Reordered the list of words in the menu so most commonly used words are faster to access
