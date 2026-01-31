@@ -3859,6 +3859,8 @@ _InspectRoadSign
 .)
 
 
+_OpenTrashcan
+_CloseTrashcan
 _SearchTrashCan
 _InspectTrashCan
 .(
@@ -4348,6 +4350,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_ChemistryBook      , _OpenChemistryBook)    
     VALUE_MAPPING(e_ITEM_TVCabinet          , _OpenTVCabinet)        
     VALUE_MAPPING(e_ITEM_Drawer             , _OpenDrawer)
+    VALUE_MAPPING(e_ITEM_Trashcan           , _OpenTrashcan)
     VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
 
 
@@ -4712,7 +4715,8 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarDoor            , _CloseCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _CloseCarPetrolTank)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _CloseTVCabinet)    
-    VALUE_MAPPING(e_ITEM_Drawer             , _CloseDrawer)        
+    VALUE_MAPPING(e_ITEM_Drawer             , _CloseDrawer)
+    VALUE_MAPPING(e_ITEM_Trashcan           , _CloseTrashcan)
     VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
 
 
