@@ -132,8 +132,6 @@ extern unsigned char PsgenvShape;
 
 extern unsigned char MusicMixerMask;
 
-//#define BUILD_MARKER  const char gBuildMarker[] = "Build ID: " VERSION " " __DATE__ " at " __TIME__;
-
 union ParamType
 {
     unsigned char uchar;        // One single byte

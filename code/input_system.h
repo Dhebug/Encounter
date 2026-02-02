@@ -12,7 +12,6 @@ extern char gInputDone;
 
 extern char gWordCount;          	        // How many tokens/word did we find in the input buffer
 extern char gWordBuffer[MAX_WORDS];     	// One byte identifier of each of the identified words
-//extern char gWordPosBuffer[MAX_WORDS];   	// Actual offset in the original input buffer, can be used to print the unrecognized words
 
 typedef WORDS (*AnswerProcessingFun)();
 extern AnswerProcessingFun gAnswerProcessingCallback;

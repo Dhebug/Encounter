@@ -8,7 +8,7 @@
   - [Walkthrough:](#walkthrough)
 - [The 2024 HD version](#the-2024-hd-version)
 
-Here you will find the solution (at last one of them) of both the original 1983 game and this new 2024 versio of Encounter.
+Here you will find the solution (at last one of them) of both the original 1983 game and this new 2024 version of Encounter.
 
 
 # The original game - Severn Software (1983)

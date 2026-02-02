@@ -69,8 +69,6 @@ extern void Erase38Bytes();
 
 extern void CheckOptionMenuInput();
 
-//BUILD_MARKER
-
 
 enum
 {
@@ -248,7 +246,6 @@ int Wait(int frameCount)
 		k=ReadKeyNoBounce();
 		if ((k==KEY_RETURN) || (k==' ') || ShouldQuit)
 		{
-			//PlaySound(KeyClickLData);
 			WaitFrames(4);
 			return 1;
 		}

@@ -441,7 +441,6 @@ int Wait(int frameCount)
 		k=ReadKey();
 		if ((k==KEY_RETURN) || (k==' ') )
 		{
-			//PlaySound(KeyClickLData);
 			WaitFrames(4);
 			return 1;
 		}
@@ -459,8 +458,6 @@ int DisplayText(const char* text,int delay)
     int x;
     char* screenPtr=(char*)0xbb80+40*16;
     char* sourcePtr=TextBuffer;
-
-    //delay=1;
 
 #ifdef TEST_MODE    
     memset(TextBuffer,'.',40*12);   // erase the bottom part of the screen
@@ -492,7 +489,7 @@ int DisplayText(const char* text,int delay)
     // Wait a bit
     Wait(delay);
 
-    // Disppear
+    // Disappear
     for (x=0;x<40;x++)
     {
         int y;

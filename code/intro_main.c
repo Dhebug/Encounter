@@ -182,7 +182,6 @@ int Wait2(unsigned int frameCount,unsigned char referenceFrame)
 		k=ReadKeyNoBounce();
 		if ( (k==KEY_RETURN) || (k==' ') || (k==KEY_ESC) )
 		{
-			//PlaySound(KeyClickLData);
 			WaitFrames(4);
 			return 1;
 		}
@@ -325,7 +324,6 @@ int DisplayStory()
                 screen_position_bottom -=40*2;
                 size_bottom            +=40*2;
 
-                //VSync();
                 if (Wait(1))
                 {
                     return 1;
@@ -348,7 +346,6 @@ int DisplayStory()
                 screen_position_bottom +=40*2*2;
                 size_bottom            -=40*2*2;
 
-                //VSync();
                 if (Wait(1))
                 {
                     return 1;
@@ -409,7 +406,6 @@ int DisplayStory()
         || Wait(50*2);
 
         // And we restore the main music track
-        //PlayMusic(IntroMusic);
         EndMusic();
     }
 
