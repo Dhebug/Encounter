@@ -14,9 +14,10 @@ _gInputErrorCounter .dsb 1
 _gInputDone         .dsb 1
 _gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words
 
-    .text 
+    .text
 
-_gInputAcceptsEmpty .byt 0
+_gInputAcceptsEmpty     .byt 0
+_gContainerRequestMode  .byt 0   ; Set to 1 during "Carry in what?" prompts
 
 // MARK:Reset Input
 _ResetInput

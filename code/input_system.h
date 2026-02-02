@@ -4,6 +4,7 @@ extern char gInputBuffer[40];
 extern char gInputBufferPos;
 extern char gInputMaxSize;          // How many characters max are allowed
 extern char gInputAcceptsEmpty;     // Do we accept nothing as a valid answer?
+extern char gContainerRequestMode;  // Are we in container request mode? (arrow keys disabled, ESC aborts)
 
 extern char gInputKey;
 extern char gInputShift;

@@ -376,3 +376,4 @@
 - Reordered the list of words in the menu so most commonly used words are faster to access
 - Trying to open or close the trashcan now shows the disgusting content scene instead of saying "can't do"
 - Improved the handling of the net to reduce the number of "can't do that" 
+- Fixed some issues regarding the selection of containers and using ESCape to cancel the operation

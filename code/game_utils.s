@@ -423,6 +423,29 @@ skip
 // MARK:Input Arrows
 _InputArrows
 .(
+    ; Check if we're in container request mode
+    lda _gContainerRequestMode
+    beq normal_mode
+
+    ; Container request mode: handle ESC and arrow keys specially
+    lda _gInputKey
+    cmp #KEY_ESC
+    beq container_esc_pressed
+    ; For arrow keys, just ignore them (return immediately)
+    rts
+
+container_esc_pressed
+    ; ESC pressed during container request: abort silently
+    ; Set the answer to e_WORD_SKIP (same as menu cancel) and exit
+    lda #e_WORD_SKIP
+    sta _gWordBuffer+0
+    lda #1
+    sta _gWordCount
+    lda #1
+    sta _gInputDone
+    rts
+
+normal_mode
     lda _gInputBufferPos
     beq buffer_empty
     ; Buffer is not empty, not acceptable, report an error and go back to the user
@@ -1809,13 +1832,15 @@ query_container
     sta _gInputMessage+1
 
     lda #1                              ; gInputAcceptsEmpty = 1;
-    sta _gInputAcceptsEmpty        
+    sta _gInputAcceptsEmpty
+    sta _gContainerRequestMode          ; Enable container request mode (disables arrows, ESC aborts)
 
     ; Ask the user to provide the container to use
     jsr _AskInput                  ; gCurrentAssociatedItem = AskInput();    // "Carry it in what?"
 
     lda #0
     sta _gInputDone
+    sta _gContainerRequestMode          ; Disable container request mode
 
     lda _gWordBuffer+0
     sta _gCurrentAssociatedItem
@@ -1838,11 +1863,16 @@ query_container
     sta _gCurrentItem
     jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
 
+validate_answer
     ; Validate the answer
     lda _gCurrentAssociatedItem
-    cmp #e_WORD_COUNT_
+    cmp #e_WORD_SKIP
+    beq user_canceled
+    cmp #e_ITEM_COUNT_
     bne validate_container
-    ; The user selected the CANCEL option
+
+user_canceled
+    ; The user selected the CANCEL option (or pressed ESC)
     jmp _PrintSceneObjects
 
 validate_container    
