@@ -5751,6 +5751,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_CardboardBox       , _ThrowCardboardBox)
     VALUE_MAPPING(255                       , _ThrowCurrentItem)  ; Default option
 
+_DropBread
 _ThrowBread
     // By default we just drop the bread where we are
     SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
@@ -5943,6 +5944,7 @@ _FreeDove
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
         SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_GONE_FOREVER)           ; And the dog is now gone forever
+        SET_ITEM_FLAGS(e_ITEM_Dog,ITEM_FLAG_DISABLED)              ; And just to make scripting easier, mark it as out of commission
         STOP_MUSIC()
 nothing_to_chase_the_dove
     END_AND_REFRESH
@@ -6047,18 +6049,26 @@ _ThrowCardboardBox
 .)
 
 
+_TakeNet
+.(
+    // Take the net first
+    SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_INVENTORY)
+
+    // If the dove is caught (at same location and not immovable), it flies away
+    JUMP_IF_FALSE(no_dove,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_CURRENT))
+    JUMP_IF_FALSE(_DropDove,CHECK_ITEM_FLAG(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE))
+no_dove
+    END_AND_PARTIAL_REFRESH
+.)
+
 _ThrowNet
 _UseNet
-    GOSUB(NetCommon)
-    JUMP(_ErrorCannotDo)
-
-NetCommon
 .(
     // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bread or the apples
     JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
     JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
     JUMP_IF_TRUE(throw_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
-    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(dove_tree,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
 throw_net    
         SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)                      ; Only useful for the Use Net, else it stays in the inventory
         INCREASE_SCORE(POINTS_CAPTURED_THE_DOVE)
@@ -6072,20 +6082,26 @@ throw_net
         INFO_MESSAGE("The dove is caught in the net")
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
 #endif    
-        END_AND_REFRESH      
+        END_AND_REFRESH
+dove_tree
+        // If the dove is still in the tree, indicate we can't do that
+        GOSUB(_SubErrorTooHigh)              
+        END_AND_REFRESH
 dove_net    
 
     // If the player tries to trap the fish we just display some error message
-    JUMP_IF_FALSE(fishpond_net,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
-        JUMP(_ErrorNoFishing)
-fishpond_net    
+    JUMP_IF_TRUE(_ErrorNoFishing,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
+
+    // If the player tries to trap the dog we just display some error message
+    JUMP_IF_FALSE(dog_net,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
+    JUMP_IF_FALSE(_ErrorTooRisky,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
+dog_net    
 
     // If the dove is in the net then we need to free it
     JUMP_IF_TRUE(_DropDove,CHECK_ITEM_CONTAINER(e_ITEM_LargeDove,e_ITEM_Net))
 
     // By default we just drop the net where we are even if just trying to use it
-    SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)
-    RETURN
+    JUMP(_ErrorNothingToCatch)
 .)
 
 _ErrorNoFishing
@@ -6095,6 +6111,30 @@ _ErrorNoFishing
     INFO_MESSAGE("Je déteste pêcher...")
 #else    
     INFO_MESSAGE("I hate fishing...")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_ErrorTooRisky
+.(
+    CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Trop dangereux !")
+#else    
+    INFO_MESSAGE("Too risky!")
+#endif    
+    END_AND_REFRESH
+.)
+
+
+_ErrorNothingToCatch
+.(
+    CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR   
+    INFO_MESSAGE("Rien à attraper !")
+#else    
+    INFO_MESSAGE("Nothing to catch!")
 #endif    
     END_AND_REFRESH
 .)
@@ -6295,6 +6335,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_Acid              , _TakeAcid)
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
+    VALUE_MAPPING(e_ITEM_Net               , _TakeNet)
     VALUE_MAPPING(e_ITEM_Fish              , _ErrorNoFishing)
     VALUE_MAPPING(e_ITEM_Oric              , _ErrorNoStealing)
     VALUE_MAPPING(e_ITEM_GameConsole       , _ErrorNoStealing)
@@ -6463,6 +6504,7 @@ _gDropItemMappingsArray
     VALUE_MAPPING(e_ITEM_Water          , _DropWater)
     VALUE_MAPPING(e_ITEM_Petrol         , _DropPetrol)
     VALUE_MAPPING(e_ITEM_LargeDove      , _DropDove)
+    VALUE_MAPPING(e_ITEM_Bread          , _DropBread)
     VALUE_MAPPING(255                   , _DropCurrentItem)  ; Default option
 
 
