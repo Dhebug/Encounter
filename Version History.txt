@@ -377,3 +377,5 @@
 - Trying to open or close the trashcan now shows the disgusting content scene instead of saying "can't do"
 - Improved the handling of the net to reduce the number of "can't do that" 
 - Fixed some issues regarding the selection of containers and using ESCape to cancel the operation
+- Hopefully fixed an issue regarding counting the number of items in the inventory when trying to fetch something that requires a container
+

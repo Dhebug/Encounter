@@ -1920,15 +1920,22 @@ check_if_container_in_scene             ; if (itemPtr->location != gCurrentLocat
     jmp _PrintErrorMessageAsmAX
 
 check_container_inventory_space
-    lda _gCurrentItemCount              ; Load gCurrentItemCount
-    cmp #8-1                            ; If the container is in the scene we pick-it up automatically (except if we don't have room for it)
-    bcc put_container_in_inventory
-    
+    ldy #2                              ; Location offset
+    lda (_gStreamAssociatedItemPtr),y   ; Load container location
+    ldx #8-1                            ; Assume container in scene (threshold = 7)
+    cmp #e_LOC_INVENTORY
+    bne check_threshold                 ; If not in inventory, use threshold 7
+    inx                                 ; Container in inventory, increment to 8
+
+check_threshold
+    cpx _gCurrentItemCount              ; Compare threshold with count
+    bcs put_container_in_inventory      ; If threshold >= count, we have room
+
     lda #<_gTextErrorInventoryFull      ; The inventory is full
     ldx #>_gTextErrorInventoryFull
     jmp _PrintErrorMessageAsmAX
 
-put_container_in_inventory    
+put_container_in_inventory
     lda #e_LOC_INVENTORY
     sta (_gStreamAssociatedItemPtr),y   ; Move the container into the inventory
 
