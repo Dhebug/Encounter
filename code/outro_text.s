@@ -38,7 +38,7 @@ _gTextCredits
     .byt 6,"      Histoire et programmation:",TEXT_CRLF
     .byt 7,"          Adrian Sheppard",4,"(*)",7,TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3,"  Redux version ",96," 2024 Defence Force",TEXT_CRLF
+    .byt 3,"Redux version ",96," 2024-26 Defence Force",TEXT_CRLF
     .byt 6,"         Code, et graphismes:",TEXT_CRLF
     .byt 7,"       Mickael 'Dbug' Pointier",TEXT_CRLF
     .byt TEXT_CRLF
@@ -126,7 +126,7 @@ _gTextCredits
     .byt 6,"         Game code and story:",TEXT_CRLF
     .byt 7,"           Adrian Sheppard",4,"(*)",7,TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 3,"  Redux version ",96," 2024 Defence Force",TEXT_CRLF
+    .byt 3,"Redux version ",96," 2024-26 Defence Force",TEXT_CRLF
     .byt 6,"  Code, design, graphics and sounds:",TEXT_CRLF
     .byt 7,"        Mickael 'Dbug' Pointier",TEXT_CRLF
     .byt TEXT_CRLF
