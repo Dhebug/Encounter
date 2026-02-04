@@ -2102,7 +2102,7 @@ _gActionMappingsArray
 
 _gActionMappingMenu
     .byt e_WORD_LOOK,e_WORD_READ,e_WORD_SEARCH,e_WORD_HELP,
-    .byt e_WORD_OPEN,e_WORD_CLOSE,e_WORD_TAKE,e_WORD_DROP,
+    .byt e_WORD_TAKE,e_WORD_DROP,e_WORD_OPEN,e_WORD_CLOSE,
     .byt e_WORD_USE,e_WORD_THROW,e_WORD_COMBINE,e_WORD_QUIT,e_WORD_COUNT_
 
 
