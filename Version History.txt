@@ -358,7 +358,7 @@
 - Modified the intro to use ESC to quit instead of space/return to avoid new players skipping the important information about how to play
 - Updated the demo version of the game to give access to the entire first floor and basement of the house (only the top floor is blocked)
 
-1.2.4 - 4 December 2025
+1.2.4 - 04 December 2025
 - Pressing any of the SHIFT key when quitting the splash sequence now resets the achievements (used to test versions)
 - The TARDIS appearance should not break the display of the navigational arrows anymore
 - Selecting CANCEL in the selection menu should not show "I do not know what this item is" anymore and just close the menu
@@ -378,4 +378,4 @@
 - Improved the handling of the net to reduce the number of "can't do that" 
 - Fixed some issues regarding the selection of containers and using ESCape to cancel the operation
 - Hopefully fixed an issue regarding counting the number of items in the inventory when trying to fetch something that requires a container
-
+- Optimisation: Rewrote ParseInputBuffer to assembler to reduce the size of the code

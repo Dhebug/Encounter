@@ -78,7 +78,7 @@
 #define AUDIO_MUSIC             2
 #define AUDIO_EFFECTS_AND_MUSIC 3
 
-#define MAX_WORDS 5         // In practice in the game we have COMBINE A B max, so three words
+#define MAX_WORDS 3         // In practice in the game we have COMBINE A B max, so three words
 
 // 6502 opcodes for dynamic code patching
 #define OPCODE_NOP              $EA

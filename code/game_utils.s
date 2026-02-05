@@ -832,45 +832,6 @@ show_action_menu
  .)
 
 
-// Fill param0.ptr=first;param1.ptr=second; first, returns in X
-_KeywordCompare
-.(
-    ldy #0
-loop_character  
-    ; Read first character
-    lda (_param0),y
-    jsr ConvertChar
-    sta _param2+0
-
-    ; Read second character
-    lda (_param1),y
-    jsr ConvertChar
-    sta _param2+1
-
-    ; Are they the same?
-    cmp _param2+0
-    bne no_match         ; Nope, different characters
-
-    lda _param2+0
-    beq matches          ; Null terminator -> gone
-
-    iny                  ; Next character
-    jmp loop_character
-
-
-end_first_string
-
-matches
-    lda #0
-    ldx #1
-    rts
-
-no_match
-    lda #0
-    ldx #0           ; Refuse the input
-    rts
-.)
-
 
 
 // A=input char
@@ -2385,7 +2346,189 @@ loop_1
     jsr _LoadFonts
 
     ; Start the game clock again
-    jsr _StartClock
+    jmp _StartClock
+.)
+
+
+
+; ParseInputBuffer - Parses the input buffer and fills gWordBuffer with word IDs
+; At the end of the parsing, each of the words is terminated by a zero so it can be printed individually
+_ParseInputBuffer
+.(
+    lda #e_WORD_COUNT_              ; Clear gWordBuffer to e_WORD_COUNT_
+    sta _gWordBuffer+0
+    sta _gWordBuffer+1
+    sta _gWordBuffer+2
+    
+    ldy #0                          ; Y = index into gInputBuffer
+    sty _gWordCount                 ; gWordCount = 0
+
+main_loop
+    lda _gInputBuffer,y             ; car = gInputBuffer[y]
+    beq done                        ; Null terminator = done
+    
+    cmp #" "
+    bne not_space
+    iny                             ; Skip space
+    bne main_loop                   ; Always branches (Y won't be 0)
+
+not_space
+    sty tmp2                        ; tmp2 = inputPtr (start of word)
+
+find_end_word
+    iny
+    lda _gInputBuffer,y
+    beq end_word_found
+    cmp #" "
+    bne find_end_word
+
+end_word_found
+    sty tmp3                        ; tmp3 = endWordPtr
+
+    ; param0 = &gInputBuffer[inputPtr] (same for verb and item searches)
+    clc
+    lda #<_gInputBuffer
+    adc tmp2
+    sta _param0
+    lda #>_gInputBuffer
+    adc #0
+    sta _param0+1
+
+    ; foundKeywordId = e_WORD_COUNT_ (not found)
+    ldx #e_WORD_COUNT_
+
+    ; If gWordCount == 0, search verbs first
+    lda _gWordCount
+    bne search_items
+    
+    ; Search in gWordsArray (verbs)
+    lda #<_gWordsArray
+    sta tmp5
+    lda #>_gWordsArray
+    sta tmp5+1
+
+search_verbs_loop
+    ldy #2
+    lda (tmp5),y                    ; keywordPtr->id
+    cmp #e_WORD_COUNT_
+    beq search_items                ; End of verb list
+    tax                             ; Save verb ID
+    
+    ldy #0                          ; param1 = keywordPtr->word (param0 already set)
+    lda (tmp5),y
+    sta _param1
+    iny
+    lda (tmp5),y
+    sta _param1+1
+    
+    jsr _KeywordCompare
+    bne next_verb                   ; Z=0 means no match
+    
+store_word
+    ldy _gWordCount
+    stx _gWordBuffer,y
+    inc _gWordCount
+    
+    ldy tmp3                        ; Y = endWordPtr, continue scanning
+    bne main_loop
+
+next_verb
+    clc
+    lda tmp5
+    adc #3                          ; sizeof(keyword) = 3
+    sta tmp5
+    bcc search_verbs_loop
+    inc tmp5+1
+    bne search_verbs_loop           ; Always branches (high byte won't be 0)
+
+done
+    rts
+
+search_items
+    lda #<_gItems
+    sta tmp5
+    lda #>_gItems
+    sta tmp5+1
+    
+    ldx #0                       ; itemId = 0
+search_items_loop
+    cpx #e_ITEM_COUNT_
+    beq store_word
+    
+    ; Get description pointer, find '_'
+    ldy #0
+    lda (tmp5),y
+    sta tmp7
+    iny
+    lda (tmp5),y
+    sta tmp7+1
+    
+    ldy #0
+find_underscore
+    lda (tmp7),y
+    beq compare_item
+    iny
+    cmp #"_"
+    bne find_underscore
+    ; Y now points past the '_'
+
+compare_item
+    ; param1 = description + Y (after '_'), param0 already set
+    tya
+    clc
+    adc tmp7
+    sta _param1
+    lda tmp7+1
+    adc #0
+    sta _param1+1
+    
+    jsr _KeywordCompare
+    bne next_item                   ; Z=0 means no match
+  
+    ; X contains our current match    
+    ; Check if accessible
+    ldy #2
+    lda (tmp5),y                    ; itemPtr->location
+    cmp #e_LOC_INVENTORY
+    beq store_word
+    cmp _gCurrentLocation
+    beq store_word
+    ; Not accessible, keep searching
+
+next_item
+    inx
+    clc
+    lda tmp5
+    adc #6                          ; sizeof(item) = 6
+    sta tmp5
+    bcc search_items_loop
+    inc tmp5+1
+    bne search_items_loop           ; Always branches (high byte won't be 0)
+.)
+
+
+// Fill param0.ptr=first;param1.ptr=second; first, result is in Z
+_KeywordCompare
+.(
+    ldy #0
+loop_character  
+    lda (_param0),y
+    jsr ConvertChar
+    sta _param2+0
+
+    lda (_param1),y
+    jsr ConvertChar
+
+    cmp _param2+0
+    bne compare_done     ; Z=0 (no match)
+
+    lda _param2+0
+    beq compare_done     ; Z=1 (match - null terminator)
+
+    iny
+    bne loop_character
+
+compare_done
     rts
 .)
 
