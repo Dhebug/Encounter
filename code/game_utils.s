@@ -2453,7 +2453,9 @@ search_items
     ldx #0                       ; itemId = 0
 search_items_loop
     cpx #e_ITEM_COUNT_
-    beq store_word
+    bne keep_searching    
+    ldx #e_WORD_COUNT_
+    bne store_word
     
     ; Get description pointer, find '_'
     ldy #0
