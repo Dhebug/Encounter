@@ -44,9 +44,11 @@
 :: 1.2.2 - Shifted back the achievement list to the left to avoid some French achievements to corrupt the screen
 :: 1.2.3 - The intro now requires ESC to quit, demo updated to give access to the main floor of the mansion
 :: 1.2.4 - Improved the controls when playing with Joystick, fixed a few incorrect error messages as well
-:: 1.2.5 - 
+:: 1.2.5 - Updated Joystick support in Oricutron, fixed a typo, added a message when trying to use the bucket
+:: 1.2.6 - Reordered list of words, improved net handling, improved containers selection, fixes to the inventory size limits
+:: 1.2.7
 ::
-SET VERSION=1.2.5
+SET VERSION=1.2.7
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.

@@ -2457,6 +2457,7 @@ search_items_loop
     ldx #e_WORD_COUNT_
     bne store_word
     
+keep_searching    
     ; Get description pointer, find '_'
     ldy #0
     lda (tmp5),y

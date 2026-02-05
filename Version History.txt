@@ -372,7 +372,7 @@
 - Added a message when trying to use the bucket to access something too high
 - Updated Oricutron to the latest version, this should provide a much better support for modern controllers with analog sticks and buttons.
 
-1.2.6 - 
+1.2.6 - 05 February 2026
 - Reordered the list of words in the menu so most commonly used words are faster to access
 - Trying to open or close the trashcan now shows the disgusting content scene instead of saying "can't do"
 - Improved the handling of the net to reduce the number of "can't do that" 
