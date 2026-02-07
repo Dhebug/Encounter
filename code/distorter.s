@@ -120,8 +120,7 @@ _DrawPreshiftLogos
 	sta tmp7
 	lda #>_LabelPicture5
 	sta tmp7+1
-	jsr DisplayMakeShiftedLogo
-	rts
+	jmp DisplayMakeShiftedLogo
 
 ; The buffers are defined in BSS in last_module.s
 _DistorterTable

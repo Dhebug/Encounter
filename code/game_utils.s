@@ -99,7 +99,7 @@ loop_item_entry
 selected
     sta auto_result              ; Store the currently selected keyword
     lda #2                       ; Green text
-    jmp set_color
+    bne set_color
 no_selected
     lda #7                       ; White text
 set_color    
@@ -2147,8 +2147,7 @@ more_words
     inc _gWordCount               ; gWordCount++;   // Should check if we need this word
     lda #1                        ; gShouldCleanWindow=1;
     sta _gShouldCleanWindow
-    jsr _BuildContextualItemList
-    rts
+    jmp _BuildContextualItemList
 
 end_validate
     rts

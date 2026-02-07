@@ -1460,8 +1460,7 @@ _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
     sta _LoaderApiAddressLow
     lda #>_ImageBuffer
     sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory
-    rts
+    jmp _LoadApiLoadFileFromDirectory
 .)
 
 

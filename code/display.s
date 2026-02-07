@@ -549,7 +549,7 @@ repeat_loop
   beq end_repeat
   iny
   sta (tmp0),y
-  jmp repeat_loop
+  bne repeat_loop
 
 end_repeat    
   ; *drawPtr = ((*drawPtr) & (~rightPixeFillMask|64)) | (gDrawPattern & rightPixeFillMask);
@@ -1120,7 +1120,7 @@ loop_character
 
 double_byte                      ; This is a wide character, using two bytes
   ldy #12
-  jmp find_top_bit
+  bne find_top_bit
 
 not_double_byte                      
   dey    ; Read the first merged byte 

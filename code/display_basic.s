@@ -63,7 +63,7 @@ loop
     cmp #"$"
     beq found_prefix
     iny
-    jmp loop
+    bne loop
 
 found_prefix
     clc
@@ -174,7 +174,7 @@ loop_find_word_end
 skip_highlight
     iny
 
-    jmp loop_find_word_end
+    bne loop_find_word_end
 
 //found_word_end_and_eat_character    
 
@@ -295,7 +295,7 @@ was_hires
 
   lda #0
   sta _gIsHires
-  jmp common2
+  beq common2
 
 was_text  
   MEMSET_VALUE_JSR(_MemSet_BB80_BFE0,_param0+0)
@@ -371,12 +371,8 @@ was_hires_already
   sta tmp0+1
 
   ldx #3
-  jsr _FillPaperInk
-  rts    
-.)
-
-_FillPaperInk
-.(
+  ; -- Fall through -- jmp _FillPaperInk
++_FillPaperInk
 loop_y
   ldy #0
   lda _param0+0
