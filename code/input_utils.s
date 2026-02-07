@@ -31,7 +31,8 @@ _ResetInput
     sta _gInputErrorCounter
     sta _gInputKey
     sta _gInputShift
-    
+    sta _gInputDone
+
     jmp _WaitReleasedKey            ; Remove any key in the buffer and wait for the keys to not be pressed anymoe
 .)
 
@@ -155,8 +156,12 @@ clickSound
 +_InputError
     lda #25
     sta _gInputErrorCounter
-+_PlayErrorSound    
++_PlayErrorSound
     ldx #<_ErrorPlop
     ldy #>_ErrorPlop
     jmp _PlaySoundAsmXY
 .)
+
+
+
+_EndInputUtils_

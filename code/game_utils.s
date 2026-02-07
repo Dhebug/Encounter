@@ -2535,4 +2535,188 @@ compare_done
     rts
 .)
 
+
+
+// MARK:AskInput
+_AskInput
+.(
+    jsr _ResetInput             ; Also clears gInputDone
+
+main_loop
+    lda _gInputDone
+    bne done_and_quit
+
+    ; if (gAskQuestion)
+    lda _gAskQuestion
+    beq inner_loop
+
+    ; if (gInputMessage[0])
+    ldy #0
+    sty _gAskQuestion
+    lda (_gInputMessage),y
+    beq skip_save_message
+
+    ; Save the area under the prompt location (offsets 1..39, skipping attribute byte)
+    ldy #39
+save_loop
+    lda (_gStatusMessageLocation),y
+    sta _gPrintMessageBackground-1,y
+    dey
+    bne save_loop
+
+    ; PrintStatusMessage(2, gInputMessage)
+    lda _gInputMessage+0
+    sta _param0+0
+    lda _gInputMessage+1
+    sta _param0+1
+    lda #2
+    sta _param1
+    jsr _PrintStatusMessageAsm
+
+skip_save_message
+    ; Erase the prompt area
+    lda #" "
+    ldy #41                 ; Start Y at the desired offset
+clear_input_loop
+    sta (_gStatusMessageLocation),y  ; Write to Base Address + Y
+    iny
+    cpy #80                 ; Compare against Start Offset (41) + Length (39)
+    bne clear_input_loop
+
+    ; do { ... } while (gInputKey==0)
+inner_loop
+    ; if (AskInputCallback() != e_WORD_CONTINUE) return
+    jsr _AskInputCallback
+    cpx #e_WORD_CONTINUE
+    beq callback_ok
+done_and_quit    
+    rts                             ; Quit AskInput immediately
+callback_ok
+    ; InputCheckKey()
+    jsr _InputCheckKey
+
+    ; --- Render input line (replaces sprintf) ---
+    ; sprintf(gStatusMessageLocation+40+1,"%c>%s%c ",
+    ;         gInputErrorCounter?1:2,gInputBuffer, ((VblCounter&32)||(gInputKey==KEY_RETURN))?32:32|128);
+    ; tmp0 = gStatusMessageLocation + 41 (start of input line, position 1)
+    ldy #41                          ; We start on the second line from the prompt location
+
+    ; Write color code: red (1) if error, green (2) otherwise
+    lda #2                    ; Default to Green
+    ldx _gInputErrorCounter
+    beq write_color
+    lsr                       ; 2 >> 1 = 1 (Red)
+write_color
+    sta (_gStatusMessageLocation),y
+    
+    lda #">"
+    iny
+    sta (_gStatusMessageLocation),y     ; Write ">"
+
+    ; Copy gInputBuffer characters
+    ldx #0
+copy_input
+    iny
+    lda _gInputBuffer,x
+    beq write_cursor
+    sta (_gStatusMessageLocation),y
+    inx
+    bne copy_input                  ; Always branches (buffer < 256)
+
+write_cursor   
+    lda #32                        ; Start with space
+    ldx _gInputKey                 
+    cpx #KEY_RETURN                ; If RETURN pressed, we keep the cursor hidden
+    beq print_cursor
+    and _VblCounter                ; Here we get either 32 or 0
+    bne print_cursor
+cursor_visible    
+    ora #32+128                    ; Set video inverse to show the cursor
+print_cursor
+    sta (_gStatusMessageLocation),y  ; Cursor: space (32) if VblCounter&32 or KEY_RETURN, else inverse space (160)
+    iny
+    
+    lda #32
+    sta (_gStatusMessageLocation),y ; Trailing space (cleans up after character delete)
+
+    jsr _WaitIRQ
+
+    lda _gInputKey                  ; switch (gInputKey)
+    beq inner_loop                  ; while (gInputKey==0)
+    
+    cmp #KEY_DEL
+    bne not_del
+    jsr _InputDelete
+    jmp main_loop
+
+not_del
+    cmp #KEY_RETURN
+    beq handle_return
+
+    ; Range check for arrows/ESC: KEY_UP(6)..KEY_ESC(10)
+    cmp #KEY_UP
+    bcc handle_default
+    cmp #KEY_ESC+1
+    bcc handle_arrow
+
+handle_default
+    jsr _InputDefaultKey
+    jmp main_loop
+
+handle_arrow
+    jsr _InputArrows
+    jmp main_loop
+
+handle_return
+    ; if (ValidateInputReturn() || (gWordCount==0 && gInputAcceptsEmpty))
+    jsr _ValidateInputReturn
+    txa
+    bne valid_input
+
+    ; OR condition
+    lda _gWordCount
+    bne invalid_input
+    lda _gInputAcceptsEmpty
+    beq invalid_input
+
+valid_input
+    ; Call gAnswerProcessingCallback() via self-modifying code.
+    ; Could technically be changed in the call back itself, so don't change it at the start of the function
+    lda _gAnswerProcessingCallback+0
+    sta ask_callback+1
+    lda _gAnswerProcessingCallback+1
+    sta ask_callback+2
+ask_callback
+    jsr $1234
+    cpx #e_WORD_CONTINUE
+    bne quit_return
+
+    ; Continue: reset and ask again
+    jsr _ResetInput
+    lda #1
+    sta _gAskQuestion
+    jmp main_loop
+
+invalid_input
+    jsr _InputError
+    jmp main_loop
+
+quit_return
+    ; if (gInputMessage[0]) restore the status message line
+    ldy #0
+    lda (_gInputMessage),y
+    beq quit_done
+
+    ; Restore the area under the prompt location (offsets 1..39, skipping attribute byte)
+    ldy #39
+restore_loop
+    lda _gPrintMessageBackground-1,y
+    sta (_gStatusMessageLocation),y
+    dey
+    bne restore_loop
+
+quit_done
+    rts
+.)
+
 _EndGameUtils_

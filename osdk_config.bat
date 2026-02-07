@@ -121,5 +121,5 @@ SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R soft --scanlines off
 :: Obviously remember to enable them again else the changes you make will not be rebuilt!
 SET OSDKFILE_SPLASH=splash_main splash_utils display_basic loader_api irq audio keyboard distorter costable akyplayer last_module
 SET OSDKFILE_INTRO=intro_main score common intro_utils intro_text loader_api irq audio keyboard time display_basic akyplayer last_module
-SET OSDKFILE_GAME=game_main input_system input_utils bytestream common game_data game_items game_locations game_text game_utils loader_api irq audio keyboard time display_basic display akyplayer last_module
+SET OSDKFILE_GAME=game_main input_utils bytestream common game_data game_items game_locations game_text game_utils loader_api irq audio keyboard time display_basic display akyplayer last_module
 SET OSDKFILE_OUTRO=outro_main score outro_text  input_utils common outro_utils loader_api irq audio keyboard display_basic display akyplayer last_module

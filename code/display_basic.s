@@ -7,6 +7,7 @@ _gPrintAddress      .dsb 2
 _gPrintPos          .dsb 1
 _gPrintPosStart     .dsb 1      // Used by the prefix removal to know where to start back from
 _gPrintLineTruncated .dsb 1
+_gStatusMessageLocation .dsb 2
 
     .text
 
@@ -16,8 +17,6 @@ _gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to a
 _gShowHighlights    .byt 0
 _gPrintRemovePrefix .byt 0
 _gPrintQuitIfSpace  .byt 0          // Used by the option menu to truncate items to the important word
-
-_gStatusMessageLocation .word $bb80+40*22
 
 _spaceCounter  .dsb 1
 _wasTruncated  .dsb 1

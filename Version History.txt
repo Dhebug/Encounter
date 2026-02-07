@@ -379,3 +379,6 @@
 - Fixed some issues regarding the selection of containers and using ESCape to cancel the operation
 - Hopefully fixed an issue regarding counting the number of items in the inventory when trying to fetch something that requires a container
 - Optimisation: Rewrote ParseInputBuffer to assembler to reduce the size of the code
+
+1.2.7
+- Optimisation: Rewrote AskInput to assembler to reduce the size of the code
