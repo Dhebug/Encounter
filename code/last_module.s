@@ -161,6 +161,10 @@ _SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a ful
 _gInputBuffer               .dsb 40
 #endif
 
+; Audio system loop buffers (used by all four modules)
+_PsgPlayLoopCount	    .dsb 10      ; 10 levels of loops
+_PsgPlayLoopPosition    .dsb 10      ; 10 levels of loops
+
 // Commented out because this overwrites the loader
 //#define OSDK_CUSTOM_STACK 
 //osdk_stack                  .dsb 256      ; We move the stack in overlay memory

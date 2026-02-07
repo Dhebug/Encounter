@@ -41,8 +41,6 @@ _MusicMixerMask     .byt 0      ; By default no channels are reserved for the mu
 _PsgNeedUpdate  .byt 0
 
 _PsgPlayPosition        .byt SOUND_NOT_PLAYING
-_PsgPlayLoopCount	    .dsb 10      ; 10 levels of loops
-_PsgPlayLoopPosition    .dsb 10      ; 10 levels of loops
 _PsgPlayLoopIndex	    .byt 255     ; No loop defined
 _PsgPlayDelay           .byt 0       ; No delay
 
