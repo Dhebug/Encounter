@@ -382,6 +382,7 @@ _ByteStreamComputeDualItemPtr
     ldx #2
     jsr _ByteStreamComputeItemPtrIndexX
 end_associated_item
+    rts
 .)
 
 
