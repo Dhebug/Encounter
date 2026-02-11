@@ -2380,16 +2380,6 @@ _CombineCueWithRope
 ; This operation is only doable if both the window and rope are available
 _CombineWindowWithRope
 .( 
-    ; In order to combine the window and the rope, first she needs to have been given the rope
-    JUMP_IF_TRUE(rope_in_the_room,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE))
-#ifdef LANGUAGE_FR       
-        ERROR_MESSAGE("Peut-être lui passer la corde?")
-#else
-        ERROR_MESSAGE("Maybe give her the rope first?")
-#endif       
-        JUMP(end)
-rope_in_the_room
-
     ; Is the window open?
     JUMP_IF_FALSE(window_open,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED))
 #ifdef LANGUAGE_FR       
@@ -2399,6 +2389,16 @@ rope_in_the_room
 #endif       
         JUMP(end)
 window_open
+
+    ; In order to combine the window and the rope, first she needs to have been given the rope
+    JUMP_IF_TRUE(rope_in_the_room,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE))
+#ifdef LANGUAGE_FR       
+        ERROR_MESSAGE("Peut-être lui passer la corde?")
+#else
+        ERROR_MESSAGE("Maybe give her the rope first?")
+#endif       
+        JUMP(end)
+rope_in_the_room
 
     ; Is the window broken?
     JUMP_IF_TRUE(window_broken,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED))
