@@ -4260,6 +4260,7 @@ _ShowGirlAtTheWindow
                 _BUFFER(11,0)
 
         ; Show the rope going down the window if it's attached
+        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
         JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))            
             BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,9,5)                      ; Draw the snooker cue with the top of the rope
                     _IMAGE(4,26)
@@ -4280,8 +4281,10 @@ rope_going_down
             FADE_BUFFER 
             WAIT(50)
 
-        ; Is the rope attached?
+        ; Is the rope attached to the window?
+        JUMP_IF_FALSE(too_high_to_jump,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_not_attached)
+too_high_to_jump        
             ; The rope is not attached
             ; Show the girl's message to the player        
             WHITE_BUBBLE(1)
