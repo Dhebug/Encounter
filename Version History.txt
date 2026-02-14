@@ -384,4 +384,4 @@
 - Optimisation: Rewrote AskInput to assembler to reduce the size of the code
 - Trying to use the rope from the outside of the top window will now tell you that cannot be done until the window is actually open
 - Attaching the rope to the tree should not mistakenly show the rope visible at the window
-
+- Updated the COMBINE code path to increase the chances that the result of the operation appears where the source elements were

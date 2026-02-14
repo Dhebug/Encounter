@@ -49,7 +49,8 @@
 #define COMMAND_SET_PLAYER_LOCATION 43
 #define COMMAND_SET_CURRENT_ITEM 44
 #define COMMAND_CALL_NATIVE     45
-#define _COMMAND_COUNT          46
+#define COMMAND_COMBINE_ITEMS   46
+#define _COMMAND_COUNT          47
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -117,6 +118,8 @@
 #define SET_ITEM_FLAGS(item,flags)              .byt COMMAND_SET_ITEM_FLAGS,item,flags
 #define UNSET_ITEM_FLAGS(item,flags)            .byt COMMAND_UNSET_ITEM_FLAGS,item,255^flags
 #define SET_ITEM_DESCRIPTION(item,description)  .byt COMMAND_SET_ITEM_DESCRIPTION,item,description,0
+#define COMBINE_ITEMS_2(result,item1,item2)           .byt COMMAND_COMBINE_ITEMS,item1,item2,255,result
+#define COMBINE_ITEMS_3(result,item1,item2,item3)     .byt COMMAND_COMBINE_ITEMS,item1,item2,item3,result
 
 // Locations
 #define SET_LOCATION_DIRECTION(location,direction,value)  .byt COMMAND_SET_LOCATION_DIRECTION,location,direction,value

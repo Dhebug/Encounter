@@ -2191,10 +2191,8 @@ _CombinePetrolWithTP
     INFO_MESSAGE("Vous avez fabriqué une mèche")
 #else
     INFO_MESSAGE("You've created a fuse")
-#endif        
-    SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_GONE_FOREVER)                  ; The Petrol is gone forever
-    SET_ITEM_LOCATION(e_ITEM_ToiletRoll,e_LOC_GONE_FOREVER)              ; The TP is gone forever
-    SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_CURRENT)                         ; We now have a fuse for our bomb
+#endif       
+    COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_ToiletRoll)         ; We now have a fuse for our bomb, the Petrol and TP are gone
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
     INCREASE_SCORE(POINTS_BUILT_FUSE)
     STOP_MUSIC()
@@ -2204,9 +2202,7 @@ _CombinePetrolWithTP
 
 _CombineSulfurWithSalpetre
 .(
-    SET_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_NONE)                       ; The saltpetre is gone
-    SET_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_NONE)                         ; The sulphur is gone
-    SET_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_CURRENT)                    ; We now have a rough powder mix for our bomb
+    COMBINE_ITEMS_2(e_ITEM_PowderMix,e_ITEM_Saltpetre,e_ITEM_Sulphur)    ; We now have a rough powder mix for our bomb, the saltpetre and sulphur are gone
     INCREASE_SCORE(POINTS_COMBINED_SULPHUR_SALTPETRE)
     JUMP(_InspectPowderMix)
 .)
@@ -2244,10 +2240,7 @@ _CombineTinWithFuse
 _CombineGunPowderWithFuse
 .(
     IF_TRUE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),in_tin)    ; Is the gunpowder in the tobacco tin?
-        SET_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_NONE)                       ; The gunpowder is gone
-        SET_ITEM_LOCATION(e_ITEM_Fuse,e_LOC_NONE)                            ; The fuse is gone as well
-        SET_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_NONE)                      ; And so is the tobacco tin
-        SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                         ; We now have a bomb
+        COMBINE_ITEMS_3(e_ITEM_Bomb,e_ITEM_GunPowder,e_ITEM_Fuse,e_ITEM_TobaccoTin) ; We now have a bomb, the Gunpowder, Fuse and Tin are now gone
         INCREASE_SCORE(POINTS_COMBINED_GUNPOWDER_FUSE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_BOMB)                         ; Achievement!    
 

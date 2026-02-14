@@ -72,6 +72,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_PLAYER_LOCATTION
     .word _ByteStreamCommand_SET_CURRENT_ITEM
     .word _ByteStreamCommand_COMMAND_CALL_NATIVE
+    .word _ByteStreamCommand_COMBINE_ITEMS
 
 
 ; Checks if there's a stream delay active.
@@ -813,6 +814,99 @@ end_container
     
     lda #2
     jmp _ByteStreamMoveByA
+.)
+
+
+
+
+; Combines two or three items into a result, intelligently placing it based on input locations
+; .byt COMMAND_COMBINE_ITEMS,item1,item2,item3_or_255,result
+_ByteStreamCommand_COMBINE_ITEMS
+.(
+    ; Start with destination = current location, no container
+destinationLocation   = tmp2
+destinationContainer  = tmp3
+destinationID         = tmp4
+    lda _gCurrentLocation
+    sta destinationLocation         ; Use current location by default
+    lda #255
+    sta destinationContainer        ; no container by default
+
+    ldy #0
+    jsr _CombineProcessSourceItem   ; First source item
+    ldy #1
+    jsr _CombineProcessSourceItem   ; Second source item
+    ldy #2
+    jsr _CombineProcessSourceItem   ; Third source item
+    ldy #3
+    lda (_gCurrentStream),y         ; Target item ID
+    sta destinationID
+
+    lda destinationContainer        ; If one of the source items was in a container, we try to reuse it to store the result...
+    cmp #255
+    beq no_container                ; ...there was not container to reuse
+
+    jsr _ByteStreamComputeItemPtr   ; Fetch the container status
+    ldy #2
+    lda (_gStreamItemPtr),y         ; Location field
+    cmp #e_LOC_GONE_FOREVER
+    beq no_container                ; ...the container was destroyed
+
+    lda destinationID
+    jsr _ByteStreamComputeItemPtr   ; Fetch the destination item status
+    ldy #5
+    lda (_gStreamItemPtr),y         ; Does that item require a container?
+    beq no_container                ; ...no container needed
+
+    ; Put the result in a container 
+    ldy #2
+    lda destinationLocation
+    sta (_gStreamItemPtr),y         ; result->location = destination
+    iny
+    lda destinationContainer
+    sta (_gStreamItemPtr),y         ; result->associated_item = container
+    jsr _ByteStreamComputeItemPtr
+    lda destinationID
+    bne done
+
+no_container
+    lda destinationID
+    jsr _ByteStreamComputeItemPtr
+    ldy #2
+    lda destinationLocation
+    sta (_gStreamItemPtr),y         ; result->location = destination
+    lda #255
+done
+    ldy #3
+    sta (_gStreamItemPtr),y         ; result->associated_item
+    lda #4
+    jmp _ByteStreamMoveByA
+
+; Destructively process a source items from the stream,
+; We need to remember the location and eventual container to reuse that in the final result item
+_CombineProcessSourceItem
+    lda (_gCurrentStream),y 
+    cmp #255                        ; Valid item ID?
+    beq end_process_source_item       
+    jsr _ByteStreamComputeDualItemPtr ; _gStreamItemPtr = item, _gStreamAssociatedItemPtr = container
+    ldy #2
+    lda (_gStreamItemPtr),y         ; item->location
+    cmp _gCurrentLocation
+    beq no_location_update
+    sta destinationLocation         ; Update destination to item's location
+no_location_update
+    lda #e_LOC_GONE_FOREVER
+    sta (_gStreamItemPtr),y         ; item->location = gone forever
+    iny
+    lda (_gStreamItemPtr),y         ; item->associated_item
+    cmp #255
+    beq end_process_source_item
+    sta destinationContainer        ; Update destination container
+    
+    lda #255                        ; Clear the container's back-reference to the consumed item
+    sta (_gStreamAssociatedItemPtr),y ; container->associated_item = 255
+end_process_source_item
+    rts
 .)
 
 // .byt COMMAND_SET_ITEM_FLAGS,item,flags
