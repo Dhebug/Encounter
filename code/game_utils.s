@@ -1545,7 +1545,6 @@ _AllItemsFilterCallback           ; Returns all the items at the current locatio
     lda (_gStreamItemPtr),y       ; +2 = location
     cmp _gCurrentLocation
     beq _ItemFilteredIn
-    lda (_gStreamItemPtr),y       ; +2 = location
     cmp #e_LOC_INVENTORY
     beq _ItemFilteredIn
     bne _ItemFilteredOut
@@ -1554,22 +1553,18 @@ _AllSceneItemsFilterCallback      ; Use for TAKE
     ldy #2
     lda (_gStreamItemPtr),y       ; +2 = location
     cmp _gCurrentLocation
-    beq _ItemFilteredIn
     bne _ItemFilteredOut
+_ItemFilteredIn
+    lda #1
+    rts
 
 _AllInventoryItemsFilterCallback  ; Use for DROP
     ldy #2
     lda (_gStreamItemPtr),y       ; +2 = location
     cmp #e_LOC_INVENTORY
     beq _ItemFilteredIn
-    bne _ItemFilteredOut
-
 _ItemFilteredOut
     lda #0
-    rts
-
-_ItemFilteredIn
-    lda #1
     rts
 
 
