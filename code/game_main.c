@@ -17,7 +17,6 @@ extern char ScenePreLoadScript[];              // Script that runs before the sc
 extern char gColoredSeparator[];
 
 
-extern WORDS ProcessContainerAnswer();
 extern void HandleKeywordHighlight();
 extern void PrintSceneInformation();
 extern char FindActionMapping();
@@ -26,8 +25,6 @@ extern void RunAction();
 extern action_mapping* gActionMappingPtr;
 
 extern char gActionMenuCount;  // Simple counter to detect if we are in the menu system or not
-
-extern WORDS AskInputCallback();
 
 
 

@@ -50,6 +50,9 @@ extern unsigned char UnCompressedGameTitle[LOADER_PICTURE_GAME_TITLE_SIZE_UNCOMP
 extern unsigned char CompressedOfficeImage[INTRO_PICTURE_PRIVATE_INVESTIGATOR_SIZE_COMPRESSED];
 extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESSED];
 
+extern char TableRotateOffset[];
+extern char TableDitherPatternOffset[];
+
 
 enum
 {
@@ -419,8 +422,6 @@ int DisplayStory()
 }
 
 
-extern char TableRotateOffset[];
-extern char TableDitherPatternOffset[];
 
 
 void DisplayPaperSheet()
