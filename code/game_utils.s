@@ -18,6 +18,7 @@ _gKeywordString             .dsb 2       ; Initialized by FindKeyword
 _gKeywordMenuEntries        .dsb 2
 _gKeywordMenuEntryCount     .dsb 1
 _gKeywordMenuSelected       .dsb 1
+_gDisabledItemId            .dsb 1       ; Used to "highlight" the previously selected item when using COMBINE
 _gShouldCleanWindow         .dsb 1
 _gActionMenuCount           .dsb 1
 _gMaxWordIndex              .dsb 1
@@ -28,7 +29,7 @@ _gMaxWordIndex              .dsb 1
 ; Print the list of selectable options.
 ; The display is done over 4 lines and multiple columns.
 ;
-; In order to accomodate the variable number of items the width of columns must change:
+; In order to accommodate the variable number of items the width of columns must change:
 ; 8 items or less  -> 18 characters (18*2 = 36)
 ; 12 items or less -> 12 characters (12*3 = 36)
 ; 16 items or less ->  9 characters ( 9*4 = 36)
@@ -43,7 +44,8 @@ _RefreshActionMenu
     bcc end_selection_overflow
     lda #0
     sta _gKeywordMenuSelected
-end_selection_overflow    
+end_selection_overflow
+    jsr _SkipDisabledItem
 
     ; No valid item selected
     lda #e_WORD_COUNT_
@@ -94,6 +96,11 @@ loop_item_entry
     lda (_gKeywordMenuEntries),y
     sta _param0
 
+    cmp _gDisabledItemId
+    bne not_disabled_display
+    lda #6                       ; Cyan text for disabled item
+    bne set_color
+not_disabled_display
     cpy _gKeywordMenuSelected
     bne no_selected
 selected
@@ -1577,6 +1584,10 @@ _BuildContainerList
 
 ; Generate a list of relevant items depending of the selected action verb
 _BuildContextualItemList
+    ldx _gWordCount
+    lda _gWordBuffer-1,x                   ; Previous word (verb on 1st selection, item on 2nd)
+    sta _gDisabledItemId
+
     ldy _gWordBuffer+0                     ; Action VERB
 
     lda #<_AllSceneItemsFilterCallback     ; TAKE is only concerned by items in the location
@@ -1956,6 +1967,8 @@ end_container_check
     bne end_verb_check
 
     ; Default input mode - Verb
+    lda #255
+    sta _gDisabledItemId              ; Clear the disable item at the start of the interaction
     lda #12+1                         ; gKeywordMenuEntryCount=12; +1 for the CANCEL option
     sta _gKeywordMenuEntryCount
 
@@ -2026,10 +2039,22 @@ end
     sta _gKeywordMenuSelected
     .)
 
+    jsr _SkipDisabledItem
+
     jmp forever_loop
 .)
 
 
+
+; If the current selection is on the disabled item, skip past it
+_SkipDisabledItem
+    ldy _gKeywordMenuSelected
+    lda (_gKeywordMenuEntries),y
+    cmp _gDisabledItemId
+    bne _not_disabled
+    inc _gKeywordMenuSelected
+_not_disabled
+    rts
 
 CheckMenuKeys   
 .(
@@ -2102,9 +2127,10 @@ end_escape
     cmp #KEY_RETURN
     bne end_validate
 validate
-    ; Check if the currently selected word is CANCEL
     ldx _gWordCount
     lda _gWordBuffer,x
+    cmp _gDisabledItemId      ; Disabled item?
+    beq end_validate          ; Can't select it, ignore keypress
     cmp #e_WORD_COUNT_        ; CANCEL?
     beq escape                ; We simulate a press on the ESCAPE key to quit the menu
     

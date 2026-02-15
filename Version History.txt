@@ -386,3 +386,4 @@
 - Attaching the rope to the tree should not mistakenly show the rope visible at the window
 - Updated the COMBINE code path to increase the chances that the result of the operation appears where the source elements were
 - Changed two pixels on the flickering light bulb in the disgusting street because it looked like a face to some players
+- When combining items, the first selected item is now shown in a different color when you are asked for the second item
