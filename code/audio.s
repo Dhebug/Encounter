@@ -7,6 +7,7 @@
 
 _SoundDataPointer 	.dsb 2
 _SoundRoutineTmp    .dsb 3    ; Register ID, Value 1, Value 2
+_SoundPsgTemp       .dsb 1    ; IRQ-safe temp for _PsgSetRegister
 
 _PsgVirtualRegisters
 _PsgfreqA 		.dsb 2    ;  0 1    Chanel A Frequency
@@ -157,9 +158,11 @@ end_replay
     
 CommandEndFrame
     ldx _PsgPlayLoopIndex       ; 0 is the first valid loop index
+    cpx #255                    ; No active loop?
+    beq do_pointer_update
     lda _PsgPlayLoopCount,x     ; We are still looping
     bne skip_pointer_update
-
+do_pointer_update
     tya
     clc
     adc _SoundDataPointer+0
@@ -315,10 +318,8 @@ end_channel_2_for_music
     stx _PsgvolumeC+0
 end_channel_3_for_music    
 
-    lda _MusicMixerMask            ; E CBA CBA
-    and #%1000                     ; E CBA
-    
-    beq end_enveloppe_for_music 
+    ror                            ; bit 3 (envelope) -> carry
+    bcc end_enveloppe_for_music
     ldx _MusicPsgfreqShape+0
     stx _PsgfreqShape+0
     ldx _MusicPsgfreqShape+1
@@ -384,26 +385,19 @@ _PsgSetVirtualAndActualRegister
 _PsgSetRegister
 .(
     sty	via_porta
-    txa
-
-    pha
     lda	via_pcr
-    ora	#$EE		; $EE	238	11101110
+    ora	#$EE		; $EE	238	11101110  BDIR+BC1 = select register
     sta	via_pcr
 
-    and	#$11		; $11	17	00010001
-    ora	#$CC		; $CC	204	11001100
+    eor	#$22		; $EE^$22=$CC  Toggle BDIR+BC1 to idle state
+    sta	via_pcr
+    sta	_SoundPsgTemp	; Save idle PCR value
+
+    stx	via_porta	; Write register value directly from X
+    ora	#$20		; $CC|$20=$EC  BDIR = write mode
     sta	via_pcr
 
-    tax
-    pla
-    sta	via_porta
-    txa
-    ora	#$EC		; $EC	236	11101100
-    sta	via_pcr
-
-    and	#$11		; $11	17	00010001
-    ora	#$CC		; $CC	204	11001100
+    lda	_SoundPsgTemp	; Restore idle state
     sta	via_pcr
 
     rts
@@ -558,7 +552,6 @@ _Swoosh
 	SOUND_REPEAT(15)
 		SOUND_ADD_VALUE(REG_A_VOLUME,1)
 		SOUND_ADD_VALUE_ENDFRAME(REG_NOISE_FREQ,1)
-		.byt SOUND_COMMAND_END_FRAME
 	SOUND_ENDREPEAT()
 	SOUND_SET_VALUE_END(REG_A_VOLUME,0)                           ; Cut the volume
 
