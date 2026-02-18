@@ -3,22 +3,22 @@
 ;
 ; Based on the loader version modified by Chema and Fabrice used in Blake's 7
 ; This version has the following changes:
-; - Uses the Telestrat align macros to compensate for the Telestrat hardware controler bugs
+; - Uses the Telestrat align macros to compensate for the Telestrat hardware controller bugs
 ; - Fixed Jasmin implementation
 ; - Support for saving files
 ;
 #define OPCODE_RTS              $60
 #define OPCODE_JMP              $4C
 
-; These macros aling code to avoid the Telestrat bug
+; These macros align code to avoid the Telestrat bug
 ; It seems that maybe older Microdisc units have the
 ; same bug, so it is safer to keep them on.
 ; The thing is that the instruction following an access to an
 ; FDC register must have the lower two bits (0,1) with the same
 ; value as the register address.
-; Access length is 3 bytes (e.g. lda FDC_Status), so alignmets of
+; Access length is 3 bytes (e.g. lda FDC_Status), so alignment of
 ; accesses must be:
-; FDC Register		Memory address	Alingmment of access instruction
+; FDC Register		Memory address	Alignment of access instruction
 ; Status/Cmd	(00)	$0310		xxxxxx01
 ; Track 	(01)	$0311		xxxxxx10
 ; Sector 	(10)	$0312		xxxxxx11
@@ -133,7 +133,7 @@
 ; In Jasmin there is no location to read DRQ alone.
 ; The corresponding bit in the status register should be polled.
 ; DRQ line is connected to the system IRQ line so it allows for 
-; interrupt-driven transfers (however, two consecutives bytes are separated by 31.25 micro-seconds)
+; interrupt-driven transfers (however, two consecutive bytes are separated by 31.25 micro-seconds)
 ; - $03F8 bit 0: side select 
 ; - $03F9 disk controller reset (writing any value will reset the FDC) 
 ; - $03FA bit 0: overlay ram access (1 means overlay ram enabled) 
@@ -168,7 +168,7 @@ current_track       .dsb 1      ; Index of the track being loaded
 current_sector      .dsb 1      ; Index of the sector being loaded
 current_side        .dsb 1      ; Has the bit 4 set to 0 or 1 to be used as a mask on the Microdisc control register (other bits have to be set to zero)
 
-ptr_destination     .dsb 2      ; Destination adress where we depack
+ptr_destination     .dsb 2      ; Destination address where we depack
 ptr_destination_end .dsb 2      ; Point on the end of the depacked stuff
 ptr_source_back     .dsb 2      ; Temporary used to hold a pointer on depacked stuff
 offset              .dsb 2      ; Used by the LZ depacker
@@ -515,7 +515,7 @@ back_copy
     ; Here we know that Y is null. So no need for clearing it: Just be sure it's still null at the end.
     ; At this point, the source pointer points to a two byte value that actually contains a 4 bits counter, and a 12 bit offset to point back into the depacked stream.
     ; The counter is in the 4 high order bits.
-    ;clc  <== No need, since we access this routie from a BCC
+    ;clc  <== No need, since we access this routine from a BCC
     jsr GetNextByte 	; Read from source stream
     adc #1
     sta offset
