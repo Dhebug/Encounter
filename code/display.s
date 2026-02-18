@@ -569,9 +569,9 @@ next_line
   lda tmp0+0
   adc #40
   sta tmp0+0
-  lda tmp0+1
-  adc #0
-  sta tmp0+1
+  bcc skip_hi
+  inc tmp0+1
+skip_hi
 
   ldx tmp5
   dex
@@ -697,13 +697,13 @@ loop_sides
   ora #%01000001
   sta (tmp0),y
 
-  clc 
+  clc
   lda tmp0+0
   adc #40
   sta tmp0+0
-  lda tmp0+1
-  adc #0
-  sta tmp0+1
+  bcc skip_hi
+  inc tmp0+1
+skip_hi
 
   dex
   bne loop_sides
