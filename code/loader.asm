@@ -533,7 +533,8 @@ back_copy
     clc
     adc #3
     sta nb_dst
-    
+    tax                         ; X = byte count for loop
+
     sec
     lda ptr_destination
     sbc offset
@@ -541,7 +542,7 @@ back_copy
     lda ptr_destination+1
     sbc offset+1
     sta ptr_source_back+1
-    
+
     ; Beware, in that loop, the direction is important since RLE like depacking is done by recopying the
     ; very same byte just copied... Do not make it a reverse loop to achieve some speed gain...
 .(
@@ -549,12 +550,11 @@ copy_loop
     lda (ptr_source_back),y	; Read from already unpacked stream
     sta (ptr_destination),y	; Write to destination buffer
     iny
-    cpy nb_dst
+    dex
     bne copy_loop
 .)
     ldy #0
     beq _UnpackEndLoop
-    rts
 
 ;-----------------------------------------
 ; Gets the next byte from the stream,
