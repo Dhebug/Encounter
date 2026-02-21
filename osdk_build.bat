@@ -22,6 +22,12 @@ set ENCOUNTER_BUILD_START=%time%
 ::
 IF "%OSDK%"=="" GOTO ErCfg
 
+::
+:: Set the build parameters
+::
+CALL osdk_config.bat
+SET LANGUAGE=%TEST_LANGUAGE%
+
 :: Create the folders we need
 if not exist "build" md build
 pushd build
