@@ -74,7 +74,10 @@ The game uses a number of fonts, some hand modified, but some are just standard 
 - The "Handwritten note" uses "Segoe Print" size 8
 - The "Tombstone" uses "Century Gothic" size 10
 - The label on the bottom of the polaroid frames in the achievements is "Segoe Print" size 20, bold, in vector resized to fit
-
+- The "A 8-Bit Noir Adventure" subtitle uses "Britanic Bold" in italics
+- The Typewriter font in the trailer is "Another Typewriter"
+- Elements on the final page of the trailer use "Spartan Black" italics
+ 
 ### Selective build
 Since testing things gets frustrating when you have to go through a sequence of irrelevant things before accessing what you want, the system allows disabling a number of things.
 
