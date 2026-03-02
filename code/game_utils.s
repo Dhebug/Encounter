@@ -588,8 +588,10 @@ callback = *+1
 
 
 
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
 _CancelText .byt "-ANNULE-",0
+#elif defined(LANGUAGE_NO)
+_CancelText .byt "-AVBRYT-",0
 #else
 _CancelText .byt "-CANCEL-",0
 #endif
@@ -863,24 +865,53 @@ letter_a_z
 not_shifted_letter
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
     cmp #"é"
     beq change_to_e
     cmp #"è"
     beq change_to_e
     cmp #"ê"
     bne not_e
-change_to_e    
+change_to_e
     lda #"e"
     rts
 not_e
 
     cmp #"à"
     bne not_a
-change_to_a    
+change_to_a
     lda #"a"
     rts
 not_a
+
+#elif defined(LANGUAGE_NO)
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+    cmp #"æ"
+    beq change_to_a
+    cmp #"Æ"
+    bne not_ae
+change_to_a
+    lda #"a"
+    rts
+not_ae
+
+    cmp #"ø"
+    beq change_to_o
+    cmp #"Ø"
+    bne not_o
+change_to_o
+    lda #"o"
+    rts
+not_o
+
+    cmp #"å"
+    beq change_to_a2
+    cmp #"Å"
+    bne not_aa
+change_to_a2
+    lda #"a"
+    rts
+not_aa
 
 #endif
     rts

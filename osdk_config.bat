@@ -70,6 +70,7 @@ SET BUILD_FREQUENCIES=60HZ,50HZ
 :: Version we want to launch when testing
 SET TEST_LANGUAGE=EN
 SET TEST_LANGUAGE=FR
+SET TEST_LANGUAGE=NO
 
 :: Frequency we want to launch when testing
 SET TEST_FREQUENCY=50HZ

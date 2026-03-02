@@ -5,6 +5,7 @@
   - [Text](#text)
   - [Character set](#character-set)
   - [Fonts](#fonts)
+  - [Images](#images)
   - [Selective build](#selective-build)
 
 ## Localization
@@ -69,14 +70,47 @@ For French, the current mapping is the following:
 
 and empty "#pragma osdk replace_characters" cancels the replacement rule.
 
+> Note: While trying to implement additional language, some limitations were found and the system had to be tweaked to fix a chicken and egg problem in the way the files are processed, so there's now a new version of Link65 and while that syntax is still supported there is a new one that solves the problem:
+>
+> #pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^   
+> #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+
+
+
 ### Fonts
 The game uses a number of fonts, some hand modified, but some are just standard TTF rendered without anti-aliasing.
 - The "Handwritten note" uses "Segoe Print" size 8
 - The "Tombstone" uses "Century Gothic" size 10
 - The label on the bottom of the polaroid frames in the achievements is "Segoe Print" size 20, bold, in vector resized to fit
+- The "THE END" text uses Haettenschweiler with reduced kerning, is then sheared vertically, the top half of each later filled in dark gray and color reduced with Burkes error diffusion method  
 - The "A 8-Bit Noir Adventure" subtitle uses "Britanic Bold" in italics
 - The Typewriter font in the trailer is "Another Typewriter"
 - Elements on the final page of the trailer use "Spartan Black" italics
+
+### Images
+The game contains a certain number of images that have text that needs translating.
+
+The method is similar as for the fonts, with multiple versions of the image with _fr, _no, etc... and the asset building script converts and include the proper one.
+
+Here is a list of the images and the actual text they contain:
+
+- Tombstone: "Anyway, what I gave to the Oric community was always smaller than what I took for myself"
+- Newspaper: "STILL MISSING" and "SAVED!!!"
+- Rough map: "check / tunnel / Church / Market / PARK HERE / 2 HOURS MAX!"
+- Outro sequence photos: "MANOR / MISSING/ RESCUED"
+- Girl rescued: "THANK YOU!!!"
+- End logo "THE END"
+- Handwritten note: "Hi son,I moved all your dangerous stuff into the basement's safe. Ask mum for the key if you need anything but be careful and put them back when you are done with your experimentsI don't want the house to burn down! Dad"
+- Chemistry recipes: "See chap 3, p237
+If you mix saltpetre and sulfur you get gunpowder. Put it in a container, add
+a fuse and you get explosives! / page 385 / Acid acts slowly and thus must be contained for the duration of the dissolving process.  Use of protective equipment is recommended" + "petrol?" "metallic?"
+
+
+
+That one is not translated but probably should have been
+- Thug: "NOW YOU DIE!"
+
+
  
 ### Selective build
 Since testing things gets frustrating when you have to go through a sequence of irrelevant things before accessing what you want, the system allows disabling a number of things.

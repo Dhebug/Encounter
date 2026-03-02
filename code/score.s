@@ -1,9 +1,8 @@
 
 #include "params.h"
 
-#ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
-#endif
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
 _gSaveGameFile            .dsb 8       ; SAVESTRT
 _gSaveGameFileVersion     .dsb 5       ; 1.2.3
@@ -25,6 +24,17 @@ _Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"A manqué de temps",0
 _Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Soufflé en morceaux",0
 _Text_SCORE_GAVE_UP              .byt 5,"A abandonné...",0
 _Test_SCORE_FINISHED_DEMO        .byt 3,"Demo terminée",0
+#elif defined(LANGUAGE_NO)
+_Text_Leaderboard                .byt 16+1,3,"            Toppliste",TEXT_CRLF,TEXT_END
+_Text_SCORE_SOLVED_THE_CASE      .byt 2,"Løste saken",0
+_Text_SCORE_MAIMED_BY_DOG        .byt 5,"Skadet av hund",0
+_Text_SCORE_SHOT_BY_THUG         .byt 1,"Skutt av gangster",0
+_Text_SCORE_FELL_INTO_PIT        .byt 3,"Falt i en grop",0
+_Text_SCORE_TRIPPED_ALARM        .byt 3,"Utløste alarmen",0
+_Text_SCORE_RAN_OUT_OF_TIME      .byt 6,"Gikk tom for tid",0
+_Text_SCORE_BLOWN_INTO_BITS      .byt 1,"Sprengt i luften",0
+_Text_SCORE_GAVE_UP              .byt 5,"Ga opp...",0
+_Test_SCORE_FINISHED_DEMO        .byt 3,"Fullførte demo",0
 #else // LANGUAGE_EN
 _Text_Leaderboard                .byt 16+1,3,"            Leaderboard",TEXT_CRLF,TEXT_END
 _Text_SCORE_SOLVED_THE_CASE      .byt 2,"Solved the case",0
@@ -89,6 +99,52 @@ _Text_AchievementReadTheInvoice   .byt "Lu la facture",0
 _Text_AchievementReadTheTombstone .byt "Repose en paix",0
 _Text_AchievementOver9999         .byt "Ca dépasse 9999 !",0
 _Text_AchievementMonkeyFall       .byt "Chute de gorille",0
+#elif defined(LANGUAGE_NO)
+_Text_AchievementStillLocked      .byt 6,"     <?>",7,0
+_Text_AchievementNone             .byt 16+3,1,"      Ingen prestasjon låst opp",0
+_Text_AchievementCount            .byt 16+3,1,"     Prestasjoner låst opp: %d%%",0
+_Text_AchievementWrongDirection   .byt "Feil retning",0
+_Text_AchievementLaunchedTheGame  .byt "Startet spillet",0
+_Text_AchievementWatchedTheIntro  .byt "Så introen",0
+_Text_AchievementReadTheNewspaper .byt "Leste avisen",0
+_Text_AchievementReadTheBook      .byt "Leste boken",0
+_Text_AchievementReadTheNote      .byt "Leste lappen",0
+_Text_AchievementReadTheRecipes   .byt "Leste oppskriftene",0
+_Text_AchievementOpenedTheFridge  .byt "Åpnet kjøleskapet",0
+_Text_AchievementClosedTheFridge  .byt "Lukket kjøleskapet",0
+_Text_AchievementOpenedTheCabinet .byt "Åpnet skapet",0
+_Text_AchievementDruggedTheMeat   .byt "Drogerte kjøttet",0
+_Text_AchievementKilledTheDog     .byt "Drepte hunden",0
+_Text_AchievementDruggedTheDog    .byt "Drogerte hunden",0
+_Text_AchievementChasedTheDog     .byt "Jaget hunden",0
+_Text_AchievementKilledTheThug    .byt "Drepte gangsteren",0
+_Text_AchievementDruggedTheThug   .byt "Drogerte gangsteren",0
+_Text_AchievementCapturedTheDove  .byt "Fanget duen",0
+_Text_AchievementUsedTheRope      .byt "Brukte tauet",0
+_Text_AchievementUsedTheLadder    .byt "Brukte stigen",0
+_Text_AchievementExaminedTheMap   .byt "Undersøkte kartet",0
+_Text_AchievementExaminedTheGame  .byt "Undersøkte spillet",0
+_Text_AchievementOpenedTheSafe    .byt "Åpnet pengeskapet",0
+_Text_AchievementOpenedThePanel   .byt "Åpnet panelet",0
+_Text_AchievementBuiltAFuse       .byt "Lagde en lunte",0
+_Text_AchievementBuiltABomb       .byt "Lagde en bombe",0
+_Text_AchievementMadeBlackPowder  .byt "Lagde krutt",0
+_Text_AchievementFrikedTheThug    .byt "Visiterte gangster",0
+_Text_AchievementUsedTheAcid      .byt "Brukte syren",0
+_Text_AchievementOpenedTheCurtain .byt "Åpnet gardinet",0
+_Text_AchievementGaveTheKnife     .byt "Ga fra seg kniven",0
+_Text_AchievementGaveTheRope      .byt "Ga fra seg tauet",0
+_Text_AchievementWatchedTheOutro  .byt "Så outroen",0
+_Text_AchievementGotAHighscore    .byt "Fikk høy poengsum",0
+_Text_AchievementGotTheBestScore  .byt "Beste poengsum",0
+_Text_AchievementDogAteTheMeat    .byt "Hunden spiste kjøtt",0
+_Text_AchievementUsedHosePipe     .byt "Brukte slangen",0
+_Text_AchievementPausedTheGame    .byt "La spillet på pause",0
+_Text_AchievementCanYouRepeat     .byt "Kan du gjenta?",0
+_Text_AchievementReadTheInvoice   .byt "Leste fakturaen",0
+_Text_AchievementReadTheTombstone .byt "Hvil i fred",0
+_Text_AchievementOver9999         .byt "Det er over 9999!",0
+_Text_AchievementMonkeyFall       .byt "Apefallet",0
 #else // LANGUAGE_EN
 _Text_AchievementStillLocked      .byt 6,"     <?>",7,0
 _Text_AchievementNone             .byt 16+3,1,"      No achievement unlocked",0

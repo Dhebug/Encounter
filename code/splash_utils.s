@@ -1,8 +1,7 @@
 #include "params.h"
 
-#ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
-#endif
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
     .zero
 
@@ -170,15 +169,15 @@ loop_column
 
 // Bonus texts
 #ifdef LANGUAGE_FR
-_Text_Loading_FirstTimeEver    
+_Text_Loading_FirstTimeEver
     .byt 6,"Nous espérons que ce jeu vous plaira!",TEXT_CRLF
     .byt 6,"La disquette doit rester déprotégée",TEXT_CRLF
     .byt 0
-_Text_Loading_SecondTime    
+_Text_Loading_SecondTime
     .byt "Vous devez échouer plusieurs fois",TEXT_CRLF
     .byt "afin de collecter tous les succès !",TEXT_CRLF
     .byt 0
-_Text_Loading_ThirdTime    
+_Text_Loading_ThirdTime
     .byt "Parfois il y a plusieurs solutions",TEXT_CRLF
     .byt "soyez créatif et expérimentez !",TEXT_CRLF
     .byt 0
@@ -186,16 +185,33 @@ _Text_Loading_FourthTime
     .byt "Le temps compte: le temps restant sera",TEXT_CRLF
     .byt "ajouté au score. Prêt pour un speedrun ?",TEXT_CRLF
     .byt 0
+#elif defined(LANGUAGE_NO)
+_Text_Loading_FirstTimeEver
+    .byt 6,"Vi håper du vil like dette spillet!",TEXT_CRLF
+    .byt 6,"Husk å holde disketten skrivbar.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime
+    .byt "Du må forvente å mislykkes noen ganger",TEXT_CRLF
+    .byt "for å samle alle prestasjonene!",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime
+    .byt "Noen mål har flere løsninger,",TEXT_CRLF
+    .byt "vær kreativ og prøv noe annet!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Tid teller: resterende tid legges til",TEXT_CRLF
+    .byt "poengsummen. Klar for speedrun?",TEXT_CRLF
+    .byt 0
 #else
-_Text_Loading_FirstTimeEver    
+_Text_Loading_FirstTimeEver
     .byt 6,"We hope you will enjoy this game!",TEXT_CRLF
     .byt 6,"Remember to keep the floppy writable.",TEXT_CRLF
     .byt 0
-_Text_Loading_SecondTime    
+_Text_Loading_SecondTime
     .byt "You are expected to fail a couple times",TEXT_CRLF
     .byt "in order to collect all achievements!",TEXT_CRLF
     .byt 0
-_Text_Loading_ThirdTime    
+_Text_Loading_ThirdTime
     .byt "Some objectives have multiple solutions",TEXT_CRLF
     .byt "be creative and try something different!",TEXT_CRLF
     .byt 0
@@ -236,9 +252,24 @@ _Text_JoystickNone      .byt "Flèches+Espace     ",0
 _Text_OptionAudio       .byt "Audio:",0
 
 _Text_AudioSilent          .byt "Silencieux        ",0
-_Text_AudioEffects         .byt "Effects seulement ",0
+_Text_AudioEffects         .byt "Effets seulement  ",0
 _Text_AudioMusic           .byt "Musique seulement ",0
 _Text_AudioEffetsAndMusic  .byt "Musique et effets ",0
+#elif defined(LANGUAGE_NO)
+_Text_OptionKeyboard    .byt "Tastaturlayout:",0
+_Text_Azerty            .byt "AZERTY (Fransk)",0
+_Text_Qwerty            .byt "QWERTY         ",0
+_Text_Qwertz            .byt "QWERTZ (Tysk)  ",0
+
+_Text_OptionJoystick    .byt "Styrespaktype:",0
+_Text_JoystickNone      .byt "Piltaster+Mellomrom",0
+
+_Text_OptionAudio       .byt "Lyd:",0
+
+_Text_AudioSilent          .byt "Stille           ",0
+_Text_AudioEffects         .byt "Bare effekter    ",0
+_Text_AudioMusic           .byt "Bare musikk      ",0
+_Text_AudioEffetsAndMusic  .byt "Musikk & effekter",0
 #else
 _Text_OptionKeyboard    .byt "Keyboard layout:",0
 _Text_Azerty            .byt "AZERTY (French)",0
@@ -256,8 +287,8 @@ _Text_AudioMusic           .byt "Music Only       ",0
 _Text_AudioEffetsAndMusic  .byt "Music and Effects",0
 #endif
 
-_Text_JoystickIjk       .byt "IJK/Stingy/Egoist ",0
-_Text_JoysticPase       .byt "PASE/Altai/Mageco ",0
+_Text_JoystickIjk       .byt "IJK/Stingy/Egoist  ",0
+_Text_JoysticPase       .byt "PASE/Altai/Mageco  ",0
 _Text_JoysticTelestrat  .byt "Telestrat/Twilighte",0
 _Text_JoysticOpel       .byt "OPEL               ",0
 _Text_JoysticDkTronics  .byt "Dk'Tronics         ",0

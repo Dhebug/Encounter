@@ -5,12 +5,19 @@
 keyword gWordsArray[] =
 {
     // Directions
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     { "N", e_WORD_NORTH },
     { "S", e_WORD_SOUTH },
     { "E", e_WORD_EAST  },
-    { "O", e_WORD_WEST  },
-    { "M", e_WORD_UP    },
+    { "O", e_WORD_WEST  },  // Ouest
+    { "M", e_WORD_UP    },  // Monter
+    { "D", e_WORD_DOWN  },  // Descendre
+#elif defined(LANGUAGE_NO)
+    { "N", e_WORD_NORTH },  // We keep the English words in Norwegian
+    { "S", e_WORD_SOUTH },  // The reason is taht the Oric keyboard does not have any Norwegian character
+    { "E", e_WORD_EAST  },  // So typing "OST" (Cheese) instead of "ØST" (East) would be awkward
+    { "W", e_WORD_WEST  },
+    { "U", e_WORD_UP    },
     { "D", e_WORD_DOWN  },
 #else
     { "N", e_WORD_NORTH },
@@ -19,10 +26,10 @@ keyword gWordsArray[] =
     { "W", e_WORD_WEST  },
     { "U", e_WORD_UP    },
     { "D", e_WORD_DOWN  },
-#endif    
+#endif
 
     // Misc instructions
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     { "PRENDS"  , e_WORD_TAKE },
     { "RAMASSE" , e_WORD_TAKE },
     { "FOUILLE" , e_WORD_FRISK },
@@ -44,6 +51,29 @@ keyword gWordsArray[] =
     { "INSPECTE", e_WORD_LOOK },
     { "REGARDE" , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
+#elif defined(LANGUAGE_NO)
+    { "TA"      , e_WORD_TAKE },
+    { "HENT"    , e_WORD_TAKE },
+    { "RANSAK"  , e_WORD_FRISK },   // Ransak
+    { "LET"     , e_WORD_SEARCH },  // Å lete
+    { "KAST"    , e_WORD_THROW },
+
+    { "SLIPP"   , e_WORD_DROP },    // Slipp
+    { "LEGG"    , e_WORD_DROP },    // Legg fra deg
+
+    { "BRUK"    , e_WORD_USE },
+
+    { "KOMBINER", e_WORD_COMBINE },
+    { "BLAND"   , e_WORD_COMBINE },
+
+    { "APNE"    , e_WORD_OPEN },    // Åpne
+    { "LUKK"    , e_WORD_CLOSE },
+
+    { "LES"     , e_WORD_READ },
+
+    { "SJEKK"   , e_WORD_LOOK },    // Examine
+    { "SE"      , e_WORD_LOOK },
+    { "GRANSK"  , e_WORD_LOOK },
 #else
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },
@@ -68,14 +98,20 @@ keyword gWordsArray[] =
     { "INSPECT" , e_WORD_LOOK },
 #endif
 
-#ifdef LANGUAGE_FR    
-    { "AIDE", e_WORD_HELP },
+#ifdef LANGUAGE_FR
+    { "AIDE",  e_WORD_HELP },
     { "PAUSE", e_WORD_HELP },
 
     // Last instruction
     { "QUITTE", e_WORD_QUIT },
+#elif defined(LANGUAGE_NO)
+    { "HJELP",   e_WORD_HELP },
+    { "PAUSE",   e_WORD_HELP },
+
+    // Last instruction
+    { "AVSLUTT", e_WORD_QUIT },
 #else
-    { "HELP", e_WORD_HELP },
+    { "HELP",  e_WORD_HELP },
     { "PAUSE", e_WORD_HELP },
 
     // Last instruction

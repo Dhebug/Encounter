@@ -36,12 +36,15 @@ SET PARAMS=-u1 -m0 -f0 -o2
 SET TARGET_EXTENSION=.fnt
 %CONVERT% font_6x8_mystery
 %CONVERT% font_6x8_mystery_fr
+%CONVERT% font_6x8_mystery_no
 %CONVERT% font_6x8_typewriter
 %CONVERT% font_6x8_typewriter_fr
+%CONVERT% font_6x8_typewriter_no
 
 :: The 12x14 font
 %CONVERT% font_palatino_linotype_italics_size_10        :: The font used to draw the speech bubble (without any special characters)
 %CONVERT% font_palatino_linotype_italics_size_10_fr     :: The font used to draw the speech bubble (variant with French special characters)
+%CONVERT% font_palatino_linotype_italics_size_10_no     :: The font used to draw the speech bubble (variant with Norwegian special characters)
 
 
 :: These are converted to source code and included in the code directly
@@ -82,13 +85,17 @@ SET TARGET_EXTENSION=.msk
 SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_the_end
 %CONVERT% masked_the_end_fr
+%CONVERT% masked_the_end_no
 %CONVERT% masked_dog
 %CONVERT% masked_items
 %CONVERT% masked_thug
+%CONVERT% masked_thug_fr
+%CONVERT% masked_thug_no
 %CONVERT% masked_safe_room
 %CONVERT% masked_element_outro
 %CONVERT% masked_element_outro_photos
 %CONVERT% masked_element_outro_photos_fr
+%CONVERT% masked_element_outro_photos_no
 %CONVERT% masked_car_parts
 %CONVERT% masked_beep
 %CONVERT% masked_panic_room_window
@@ -98,10 +105,12 @@ SET PARAMS=-u1 -m0 -f3 -o2
 %CONVERT% masked_hole_with_girl_attached
 %CONVERT% masked_hole_with_girl_free
 %CONVERT% masked_hole_with_girl_free_fr
+%CONVERT% masked_hole_with_girl_free_no
 %CONVERT% masked_top_window
 %CONVERT% masked_austin_parts
 %CONVERT% masked_rough_map
 %CONVERT% masked_rough_map_fr
+%CONVERT% masked_rough_map_no
 %CONVERT% masked_alarm_panel
 
 
@@ -171,11 +180,14 @@ SET TARGET_EXTENSION=.hir
 :: Other 240x128 full screen images which are not locations
 %CONVERT% view_newspaper
 %CONVERT% view_newspaper_fr
+%CONVERT% view_newspaper_no
 %CONVERT% view_handwritten_note
 %CONVERT% view_handwritten_note_fr
+%CONVERT% view_handwritten_note_no
 %CONVERT% view_science_book
 %CONVERT% view_chemistry_recipes
 %CONVERT% view_chemistry_recipes_fr
+%CONVERT% view_chemistry_recipes_no
 %CONVERT% view_united_kingdom_map
 %CONVERT% view_fridge_door
 %CONVERT% view_medicine_cabinet
@@ -202,12 +214,14 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_sticky_bomb
 %CONVERT% view_corrosive_liquid
 %CONVERT% view_corrosive_liquid_fr
+%CONVERT% view_corrosive_liquid_no
 %CONVERT% view_watch
 %CONVERT% view_protection_suit
 %CONVERT% view_safety_gloves
 %CONVERT% view_cue_with_rope
 %CONVERT% view_panic_room_digicode
 %CONVERT% view_panic_room_digicode_fr
+%CONVERT% view_panic_room_digicode_no
 %CONVERT% view_panic_room_clay
 %CONVERT% view_panic_room_pouring_acid
 %CONVERT% view_panic_room_acid_burning
@@ -218,8 +232,10 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_oric_computer
 %CONVERT% view_news_saved
 %CONVERT% view_news_saved_fr
+%CONVERT% view_news_saved_no
 %CONVERT% view_tombstone
 %CONVERT% view_tombstone_fr
+%CONVERT% view_tombstone_no
 %CONVERT% view_colecovision_boot
 %CONVERT% view_battery
 %CONVERT% view_inside_well
@@ -227,6 +243,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_trash_can
 %CONVERT% view_demo_message
 %CONVERT% view_demo_message_fr
+%CONVERT% view_demo_message_no
 
 :: Special picture for the system information
 %CONVERT% view_oric_motherboard

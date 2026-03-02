@@ -1344,13 +1344,32 @@ _gFont12x14Kerning
   .byt "To",2
   .byt "Us",1
   .byt "'e",2
-#ifdef LANGUAGE_FR    
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^
+#ifdef LANGUAGE_FR
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
   .byt "là",2
   .byt "tô",1
   .byt "tè",1
   .byt "té",1
-#else
+#elif defined(LANGUAGE_NO)
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+  .byt "fø",2
+  .byt "ft",1
+  .byt "fu",1
+  .byt "dd",1
+  .byt "og",2
+  .byt "gj",2
+  .byt "jø",1
+  .byt "kl",1
+  .byt "ng",1
+  .byt "rø",1
+  .byt "rg",1
+  .byt "rr",1
+  .byt "kk",1
+  .byt "ti",1
+  .byt "tt",1
+  .byt "kk",1
+  .byt "No",2
+  .byt "Ty",2
 #endif
   .byt 0           ; End of table
 

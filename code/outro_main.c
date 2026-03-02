@@ -69,7 +69,13 @@ void PrintKeyboardMenu()
                 }
                 else
                 {
+#ifdef LANGUAGE_FR
+                    const char* strings[] = {"MAJS", "EFFACE", "VALIDE"};
+#elif defined(LANGUAGE_NO)
+                    const char* strings[] = {"CAPS", "SLETT", "ENTER"};
+#else                    
                     const char* strings[] = {"CAPS", "ERASE", "ENTER"};
+#endif                    
                     const char codes[] = { KEY_FUNCT, KEY_DEL, KEY_RETURN};
                     car = codes[j];
                     PrintStringAt(strings[j] ,pos+1);

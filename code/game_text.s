@@ -7,9 +7,8 @@
 
 _StartGameTextData
 
-#ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:]
-#endif
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:]
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
 
 /* MARK: Generic Messages
@@ -42,8 +41,17 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "Naviguez avec",3,"les flèches, CTRL",7,"plus",TEXT_CRLF
                             .byt "touches",3,"HAUT",7,"ou",3,"BAS",7,"pour grimper,",TEXT_CRLF
                             .byt "et",3,"MAJ",7,"pour identifier les objets.",0
-
                             //.byt "Note: Utilisez SHIFT pour voir les objects",0
+#elif defined(LANGUAGE_NO)
+_gTextAskInput              .byt "Hva vil du gjøre nå?",0
+_gTextNothingHere           .byt 3,"Det er ingenting interessant her",0
+_gTextCanSee                .byt "Jeg ser ",0
+_gTextScore                 .byt 5,"Poeng: %d",7,0
+_gTextCarryInWhat           .byt "Bær det i hva?",0
+_gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
+                            .byt "Bruk",3,"piltaster",7,"for å bevege deg,",3,"CTRL",TEXT_CRLF
+                            .byt "pluss",3,"OPP",7,"eller",3,"NED",7,"for å klatre,",TEXT_CRLF
+                            .byt "og",3,"SHIFT",7,"for å markere gjenstander.",0
 #else
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
@@ -72,6 +80,19 @@ _gTextErrorNeedMoreDetails  .byt "Pourriez-vous être plus précis ?",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
 _gTextErrorInventoryFull    .byt "Je dois d'abord déposer quelque chose",0
 _gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
+#elif defined(LANGUAGE_NO)
+_gTextErrorInvalidDirection .byt "Umulig å gå den veien",0
+_gTextErrorCantTakeNoSee    .byt "Du kan bare ta noe du ser",0
+_gTextErrorAlreadyHaveItem  .byt "Du har allerede denne gjenstanden",0
+_gTextErrorNotAContainer    .byt "Det er ikke en brukbar beholder",0
+_gTextErrorAlreadyFull      .byt "Beklager, det er allerede fullt",0
+_gTextErrorMissingContainer .byt "Du har ikke denne beholderen",0
+_gTextErrorDropNotHave      .byt "Du kan bare legge fra deg noe du har",0
+_gTextErrorUnknownItem      .byt "Jeg kjenner ikke denne gjenstanden",0
+_gTextErrorNeedMoreDetails  .byt "Kan du være mer spesifikk?",0
+_gTextErrorItemNotPresent   .byt "Ser det ikke her",0
+_gTextErrorInventoryFull    .byt "Jeg må legge fra meg noe først",0
+_gTextErrorDidNotUnderstand .byt "Forstår ikke, beklager. Prøv HJELP.",0
 #else
 _gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
 _gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
@@ -177,6 +198,84 @@ _gTextItemDuneBook                .byt "un$_roman",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "un _message sur le mur",0
 #endif // PRODUCT_TYPE_GAME_DEMO
+#elif defined(LANGUAGE_NO)
+// Beholdere
+_gTextItemTobaccoTin              .byt "en$tobakks _boks",0
+_gTextItemBucket                  .byt "en$tre _bøtte",0
+_gTextItemCardboardBox            .byt "en$papp _eske",0
+_gTextItemNet                     .byt "et$_nett",0
+_gTextItemPlasticBag              .byt "en$_plastpose",0
+// Gjenstander som krever beholder
+_gTextItemBlackDust               .byt "noe$_salpeter",0
+_gTextItemYellowPowder            .byt "noe$_svovel",0
+_gTextItemPetrol                  .byt "noe$_bensin",0
+_gTextItemWater                   .byt "noe$_vann",0
+// Vanlige gjenstander
+_gTextItemOpenPanel               .byt "et$åpent _panel på veggen",0
+_gTextItemSmallHoleInDoor         .byt "et$lite _hull i døren",0
+_gTextItemFancyStones             .byt "noen$dekorative _steiner",0
+_gTextItemSilverKnife             .byt "en$sølv _kniv",0
+_gTextItemMixTape                 .byt "en$_kassett",0
+_gTextItemAlsatianDog             .byt "en$_hund som knurrer",0
+_gTextItemMeat                    .byt "et$stykke _kjøtt",0
+_gTextItemBread                   .byt "noe$grovt _brød",0
+_gTextItemRollOfTape              .byt "en$rull med _teip",0
+_gTextItemChemistryBook           .byt "en$kjemi _bok",0
+_gTextItemBoxOfMatches            .byt "en$eske med _fyrstikker",0
+_gTextItemSnookerCue              .byt "en$snooker _kølle",0
+_gTextItemThug                    .byt "en$_skurk som sover på senga",0
+_gTextItemHeavySafe               .byt "en$tung _safe",0
+_gTextItemHandWrittenNote         .byt "et$håndskrevet _notat",0
+_gTextItemRollOfToiletPaper       .byt "en$_toalettrull",0
+_gTextItemOpenSafe                .byt "en$åpen _safe",0
+_gTextItemYoungGirl               .byt "en$ung _jente",0
+_gTextItemFuse                    .byt "en$_lunte",0
+_gTextItemPowderMix               .byt "en$grov pulver _miks",0
+_gTextItemGunPowder               .byt "noe$_krutt",0
+_gTextItemSmallKey                .byt "en$liten _nøkkel",0
+_gTextItemNewspaper               .byt "en$_avis",0
+_gTextItemBomb                    .byt "en$_bombe",0
+_gTextItemPistol                  .byt "en$_pistol",0
+_gTextItemChemistryRecipes        .byt "kjemi _oppskrifter",0
+_gTextItemUnitedKingdomMap        .byt "et$_kart over Storbritannia",0
+_gTextItemHandheldGame            .byt "et$håndholdt _spill",0
+_gTextItemSedativePills           .byt "noen$sovemiddel _piller",0
+_gTextItemDartGun                 .byt "en$_dartpistol",0
+_gTextItemBlackTape               .byt "noe$svart _tape",0
+_gTextItemMortarAndPestle         .byt "en$_morter og støter",0
+_gTextItemAdhesive                .byt "noe$_lim",0
+_gTextItemAcid                    .byt "noe$sterk _syre",0
+_gTextItemSecurityDoor            .byt "en$sikkerhets _dør",0
+_gTextItemDriedOutClay            .byt "noe$tørr _leire",0
+_gTextItemProtectionSuit          .byt "en$verne _drakt",0
+_gTextItemHoleInDoor              .byt "et$_hull i døren",0
+_gTextItemFrontDoor               .byt "hoved _inngang",0
+_gTextItemRoughPlan               .byt "et$_serviett med kart",0
+_gTextItemLargeDoveOutOfReach     .byt "en$_due på et høyt tre",0
+_gTextItemGraffiti                .byt "noe$_graffiti",0
+_gTextItemChurch                  .byt "en$_kirke",0
+_gTextItemWell                    .byt "en$_brønn",0
+_gTextItemRoadSign                .byt "et$_skilt",0
+_gTextItemTrashCan                .byt "en$søppel _kasse",0
+_gTextItemTombstone               .byt "en$_gravstein",0
+_gTextItemFishpond                .byt "en$fiske _dam",0
+_gTextItemFish                    .byt "en$_fisk",0
+_gTextItemTree                    .byt "et$solid _tre",0
+_gTextItemPit                     .byt "en$ustabil _grop",0
+_gTextItemHeap                    .byt "noen$_jordhauger",0
+_gTextItemNormalWindow            .byt "et _vindu",0
+_gTextItemAlarmIndicator          .byt "en alarm _indikator",0
+_gTextItemComputer                .byt "en stasjonær _PC",0
+_gTextItemOricComputer            .byt "en$_Oric 1 datamaskin",0
+_gTextItemInvoice                 .byt "en$_faktura",0
+_gTextItemTelevision              .byt "en _TV",0
+_gTextItemGameConsole             .byt "en spill _konsoll",0
+_gTextItemLockedPanel             .byt "et alarm _lys",0
+_gTextItemBatteries               .byt "en pakke$SR44 _batterier",0
+_gTextItemDuneBook                .byt "en$_roman",0
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_gTextItemDemoReadMe              .byt "en _melding på veggen",0
+#endif // PRODUCT_TYPE_GAME_DEMO
 #else
 // Containers
 _gTextItemTobaccoTin              .byt "a$tobacco _tin",0               
@@ -276,10 +375,13 @@ _gDescriptionDarkTunel
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(4,4,0,"Un tunnel ordinaire: sombre,")
     _BUBBLE_LINE(4,13,1,"humide et inquiétant.")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,4,0,"Som de fleste tunneler: mørk,")
+    _BUBBLE_LINE(4,13,1,"fuktig og litt skummel.")
+#else
     _BUBBLE_LINE(4,4,0,"Like most tunnels: dark, damp,")
     _BUBBLE_LINE(4,13,1,"and somewhat scary.")
 #endif    
@@ -322,11 +424,13 @@ _gDescriptionMarketPlace
 .(
     SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_MARKETPLACE)
 +_gTextItemMyCar = *+2   
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"ma _voiture")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"_bilen min")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"my _car")
-#endif    
+#endif
 
 hack_show_plastic_bag_again
     ; Is the plastic bag on the market place?
@@ -351,9 +455,12 @@ no_plastic_bag
         FADE_BUFFER                            ; Show the market place
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(60,70,0,"Nous avons réussi !")
         _BUBBLE_LINE(30,81,0,"Allez, on rentre !")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(90,70,0,"Vi klarte det!")
+        _BUBBLE_LINE(70,80,0,"Tid for å dra hjem!")
 #else
         _BUBBLE_LINE(90,70,0,"We did it!")
         _BUBBLE_LINE(70,80,0,"Time to go home!")
@@ -363,8 +470,10 @@ no_plastic_bag
         
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI) ; Car without passengers
         WAIT(50*2)                                ; Wait a couple seconds
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         QUICK_MESSAGE("Tout le monde à bord !")
+#elif defined(LANGUAGE_NO)
+        QUICK_MESSAGE("Alle om bord!")
 #else
         QUICK_MESSAGE("Everybody on board now!")
 #endif    
@@ -427,11 +536,13 @@ no_plastic_bag
 
         DISPLAY_IMAGE(LOADER_PICTURE_NEWS_SAVED)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Tout est bien qui finit bien")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Alt er vel som ender vel")
 #else
         INFO_MESSAGE("All is well that ends well")
-#endif    
+#endif
 
         WAIT(50*2)                                ; Wait a couple seconds
         STOP_MUSIC()
@@ -447,11 +558,15 @@ girl_not_here
     ENDDO(intro_sequence)
     .)
     WAIT(DELAY_FIRST_BUBBLE)
+#ifdef LANGUAGE_FR
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
     _BUBBLE_LINE(4,100,0,"La place du marché")
     _BUBBLE_LINE(4,106,4,"est déserte")
+#elif defined(LANGUAGE_NO)
+    WHITE_BUBBLE(1)
+    _BUBBLE_LINE(4,106,0,"Torget er øde")
 #else
+    WHITE_BUBBLE(2)
     _BUBBLE_LINE(4,100,0,"The market place")
     _BUBBLE_LINE(4,106,4,"is deserted")
 #endif    
@@ -498,9 +613,12 @@ _gDescriptionDarkAlley
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(145,90,0,"Rats, graffitis,")
     _BUBBLE_LINE(160,103,0,"et seringues.")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(150,85,0,"Rotter, graffiti,")
+    _BUBBLE_LINE(133,98,0,"og brukte sprøyter.")
 #else
     _BUBBLE_LINE(153,85,0,"Rats, graffiti,")
     _BUBBLE_LINE(136,98,0,"and used syringes.")
@@ -525,10 +643,13 @@ blinky_light_bulb
 _gDescriptionRoad
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(4,95,0,"Tous les chemins mènent...")
     _BUBBLE_LINE(4,106,0,"...quelque part?")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,100,0,"Alle veier fører...")
+    _BUBBLE_LINE(4,106,4,"...et sted?")
+#else
     _BUBBLE_LINE(4,100,0,"All roads lead...")
     _BUBBLE_LINE(4,106,4,"...somewhere?")
 #endif    
@@ -539,10 +660,13 @@ _gDescriptionRoad
 _gDescriptionMainStreet
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(4,4,0,"Une bonne vieille")
     _BUBBLE_LINE(4,16,0,"église médiévale")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,4,0,"En gammel")
+    _BUBBLE_LINE(4,14,3,"middelalderkirke")
+#else
     _BUBBLE_LINE(4,4,0,"A good old")
     _BUBBLE_LINE(4,16,0,"medieval church")
 #endif    
@@ -577,10 +701,13 @@ _gDescriptionMainStreet
 _gDescriptionEasternRoad
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(130,5,0,"Serait-ce les")
     _BUBBLE_LINE(129,17,0,"portes du Paradis?")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(130,5,0,"Er dette himlens")
+    _BUBBLE_LINE(109,17,0,"åpne porter?")
+#else
     _BUBBLE_LINE(130,5,0,"Are these the open")
     _BUBBLE_LINE(109,17,0,"flood gates of heaven?")
 #endif    
@@ -619,23 +746,29 @@ cannot_escape_pit    ; The player has no way to escape the pit
     CLEAR_TEXT_AREA(1)
     QUICK_MESSAGE("Oops...")
     BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(6,8,0,"Ca ne semblait")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(6,8,0,"Det virket ikke")
+#else
     _BUBBLE_LINE(6,8,0,"It did not look")
 #endif    
     WAIT(50)
     BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(156,42,0,"pas si profond")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(176,42,0,"så dypt")
+#else
     _BUBBLE_LINE(176,42,0,"that deep")
 #endif    
     WAIT(50)
     BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(82,94,0,"vu de là-haut")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(82,94,0,"sett ovenfra")
+#else
     _BUBBLE_LINE(82,94,0,"from outside")
 #endif    
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
@@ -696,9 +829,12 @@ rope_attached_to_tree
 digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,93,0,"Cherchent-ils")
     _BUBBLE_LINE(5,101,4,"de l'or ?")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,90,0,"Graver de etter")
+    _BUBBLE_LINE(8,103,0,"gull?")
 #else
     _BUBBLE_LINE(5,90,0,"Are they digging")
     _BUBBLE_LINE(8,103,0,"for gold?")
@@ -711,11 +847,13 @@ digging_for_gold
 _gDescriptionParkingPlace
 .(
     SET_ITEM_LOCATION(e_ITEM_Car,e_LOC_PARKING_PLACE)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"une _voiture abandonnée")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Car,"en forlatt _bil")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Car,"an abandoned _car")
-#endif    
+#endif
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot)     ; Is the boot closed?
         BLIT_BLOCK(LOADER_SPRITE_CAR_PARTS,5,19)                        ; Draw the open boot
@@ -731,9 +869,12 @@ _gDescriptionParkingPlace
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(119,5,0,"De cendres à cendres")
     _BUBBLE_LINE(124,13,3,"De rouille à rouille")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(149,5,0,"Aske til aske")
+    _BUBBLE_LINE(152,13,2,"Rust til rust...")
 #else
     _BUBBLE_LINE(149,5,0,"Ashes to Ashes")
     _BUBBLE_LINE(152,15,0,"Rust to Rust...")
@@ -791,9 +932,12 @@ no_rope
     ; Then show the messages
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(121,5,0,"Ce puits semble aussi")
     _BUBBLE_LINE(138,16,0,"vieux que l'église")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(107,5,0,"Denne brønnen ser like")
+    _BUBBLE_LINE(121,16,0,"gammel ut som kirken")
 #else
     _BUBBLE_LINE(111,5,0,"This well looks as old")
     _BUBBLE_LINE(158,16,0,"as the church")
@@ -807,9 +951,12 @@ _gDescriptionWoodedAvenue
 .(
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(4,4,0,"Ces arbres ont probablement")
     _BUBBLE_LINE(4,15,0,"été témoins de beaucoup de choses")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,4,0,"Disse trærne har sikkert")
+    _BUBBLE_LINE(4,14,1,"sett mye")
 #else
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
@@ -866,12 +1013,17 @@ _Chirp2Sequence1
 // MARK: Gravel Drive
 _gDescriptionGravelDrive
     WAIT(DELAY_FIRST_BUBBLE)
+#ifdef LANGUAGE_FR
     WHITE_BUBBLE(3)
-#ifdef LANGUAGE_FR   
     _BUBBLE_LINE(180,86,0,"Plutôt")
     _BUBBLE_LINE(150,97,0,"impressionnant")
     _BUBBLE_LINE(176,107,2,"vu de loin")
+#elif defined(LANGUAGE_NO)
+    WHITE_BUBBLE(2)
+    _BUBBLE_LINE(143,97,0,"Ganske imponerende")
+    _BUBBLE_LINE(152,107,0,"sett på avstand")
 #else
+    WHITE_BUBBLE(3)
     _BUBBLE_LINE(127,86,0,"Kind of impressive")
     _BUBBLE_LINE(143,97,0,"when seen from")
     _BUBBLE_LINE(182,107,0,"far away")
@@ -883,10 +1035,13 @@ _gDescriptionGravelDrive
 _gDescriptionZenGarden
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(9,5,0,"Un jardin zen japonais ?")
     _BUBBLE_LINE(5,17,0,"En Angleterre ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,4,0,"En japansk zen-hage?")
+    _BUBBLE_LINE(4,15,1,"I England?")
+#else
     _BUBBLE_LINE(4,4,0,"A Japanese zen garden?")
     _BUBBLE_LINE(4,15,1,"In England?")
 #endif    
@@ -897,10 +1052,13 @@ _gDescriptionZenGarden
 _gDescriptionFrontLawn
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"La maison parfaite")
     _BUBBLE_LINE(5,15,0,"pour les égocentriques")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Det perfekte huset")
+    _BUBBLE_LINE(5,15,1,"for egoister")
+#else
     _BUBBLE_LINE(5,5,0,"The perfect home")
     _BUBBLE_LINE(5,15,1,"for egomaniacs")
 #endif    
@@ -915,9 +1073,12 @@ _gDescriptionGreenHouse
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(4,5,0,"Evidemment pour")
     .byt 4,17,0,34,"Usage thérapeutique",34,0
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,96,0,"Tydeligvis for")
+    .byt 4,107,1,34,"terapeutisk bruk",34,0
 #else
     _BUBBLE_LINE(4,96,0,"Obviously for")
     .byt 4,107,1,34,"therapeutic use",34,0
@@ -931,9 +1092,12 @@ _gDescriptionTennisCourt
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Ah, voilà: Un vrai court")
     _BUBBLE_LINE(5,16,0,"de tennis sur gazon")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(4,4,0,"Det er mer som det:")
+    _BUBBLE_LINE(4,15,0,"en skikkelig gressbane")
 #else
     _BUBBLE_LINE(4,4,0,"That's more like it:")
     _BUBBLE_LINE(4,15,0,"a proper lawn tennis court")
@@ -944,19 +1108,25 @@ _gDescriptionTennisCourt
 // MARK: Vegetable Garden
 _gDescriptionVegetableGarden
     SET_ITEM_LOCATION(e_ITEM_BasementWindow,e_LOC_VEGSGARDEN)     ; The window is in the garden
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
 _gTextItemBasementWindow = *+1
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre basse")
+#elif defined(LANGUAGE_NO)
+_gTextItemBasementWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et kjeller _vindu")
 #else
 _gTextItemBasementWindow = *+1
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement _window")
-#endif    
+#endif
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(102,5,0,"Pas le meilleur endroit")
     _BUBBLE_LINE(70,15,0,"pour faire pousser des tomates")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(124,5,0,"Ikke det beste stedet")
+    _BUBBLE_LINE(136,15,1,"å dyrke tomater")
+#else
     _BUBBLE_LINE(134,5,0,"Not the best spot")
     _BUBBLE_LINE(136,15,1,"to grow tomatoes")
 #endif
@@ -973,10 +1143,13 @@ _gDescriptionFishPond
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Certains de ces poissons")
     _BUBBLE_LINE(5,17,0,"sont étonnamment gros")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Noen av disse fiskene")
+    _BUBBLE_LINE(5,17,0,"er overraskende store")
+#else
     _BUBBLE_LINE(5,5,0,"Some of these fish")
     _BUBBLE_LINE(5,17,0,"are surprisingly big")
 #endif    
@@ -991,11 +1164,13 @@ _gDescriptionTiledPatio
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_unrestrained)
         SET_ITEM_LOCATION(e_ITEM_PanicRoomWindow,e_LOC_TILEDPATIO)
 +_gTextItemHighUpWindow = *+2        
-#ifdef LANGUAGE_FR                                                                                   ; Update the description 
+#ifdef LANGUAGE_FR                                                                                   ; Update the description
         SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"une _fenêtre inaccessible")
-#else        
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"et utilgjengelig _vindu")
+#else
         SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"an inaccessible _window")
-#endif        
+#endif
     ENDIF(girl_unrestrained)
 
     ; Draw the girl if she's here
@@ -1012,8 +1187,10 @@ _gDescriptionTiledPatio
         .(
         DO_ONCE(thank_you)
             WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
             _BUBBLE_LINE(12,50,0,"Merci !")
+#elif defined(LANGUAGE_NO)
+            _BUBBLE_LINE(12,50,0,"Takk!")
 #else
             _BUBBLE_LINE(12,50,0,"Thank you!")
 #endif   
@@ -1027,8 +1204,10 @@ _gDescriptionTiledPatio
 
         ; Print the "I'll follow you" message
         WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(12,50,0,"Je vais vous suivre !")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(12,50,0,"Jeg følger etter deg!")
 #else
         _BUBBLE_LINE(12,50,0,"I'll follow you!")
 #endif           
@@ -1039,9 +1218,12 @@ girl_is_outside
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(107,5,0,"Ici on accède à l'entrée")
     _BUBBLE_LINE(125,13,3,"arrière de la maison")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(93,5,0,"Husets bakinngang")
+    _BUBBLE_LINE(110,17,0,"er tilgjengelig herfra")
 #else
     _BUBBLE_LINE(93,5,0,"The house's back entrance")
     _BUBBLE_LINE(110,15,0,"is accessible from here")
@@ -1061,10 +1243,13 @@ no_ladder
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"La meilleure variété  de pommes:")
     _BUBBLE_LINE(5,17,0,"sucrées, croquantes et juteuses")
-#else 
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Den beste sorten epler:")
+    _BUBBLE_LINE(5,17,0,"søte, sprø og saftige")
+#else
     _BUBBLE_LINE(5,5,0,"The best kind of apples:")
     _BUBBLE_LINE(5,17,0,"sweet, crunchy and juicy")
 #endif
@@ -1100,6 +1285,8 @@ dog_alive
     WHITE_BUBBLE(1)
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,105,0,"Serait-ce Cerbère ?")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,105,0,"Er det Kerberos?")
 #else
     _BUBBLE_LINE(5,105,0,"Is that Cerberus?")
 #endif    
@@ -1137,6 +1324,9 @@ _SubImpressiveStaircase
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(120,5,0,"Un escalier vraiment")
     _BUBBLE_LINE(150,17,0,"impressionnant")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(124,5,0,"En ganske imponerende")
+    _BUBBLE_LINE(187,17,0,"trapp")
 #else
     _BUBBLE_LINE(124,5,0,"Quite an impressive")
     _BUBBLE_LINE(187,17,0,"staircase")
@@ -1198,9 +1388,12 @@ end_dog
 _gDescriptionLibrary
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,99,0,"Livres, cheminée et")
     _BUBBLE_LINE(5,105,4,"un bon fauteuil")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,86,0,"Bøker, peis og")
+    _BUBBLE_LINE(5,97,0,"en behagelig stol")
 #else
     _BUBBLE_LINE(5,86,0,"Books, fireplace, and")
     _BUBBLE_LINE(5,97,0,"a comfortable chair")
@@ -1220,9 +1413,12 @@ cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(150,5,0,"Tradition et")
     _BUBBLE_LINE(177,17,0,"technologie")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(150,5,0,"Tradisjon møter")
+    _BUBBLE_LINE(177,17,0,"teknologi")
 #else
     _BUBBLE_LINE(150,5,0,"Tradition meets")
     _BUBBLE_LINE(177,17,0,"technology")
@@ -1240,6 +1436,11 @@ _gDescriptionNarrowPassage
     _BUBBLE_LINE(12,68,0,"soit ils ont oublié")
     _BUBBLE_LINE(27,88,0,"de payer leurs")
     _BUBBLE_LINE(55,108,0,"factures")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,48,0,"Enten elsker de mørket")
+    _BUBBLE_LINE(12,68,0,"eller glemte de")
+    _BUBBLE_LINE(37,88,0,"å betale")
+    _BUBBLE_LINE(75,108,0,"regningene")
 #else
     _BUBBLE_LINE(5,48,0,"Either they love the dark")
     _BUBBLE_LINE(12,68,0,"or they forgot to")
@@ -1255,10 +1456,13 @@ _gDescriptionEntranceLounge
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"On dirait que quelqu'un")
     _BUBBLE_LINE(12,13,4,"s'est bien amusé")
-#else    
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Det ser ut som noen")
+    _BUBBLE_LINE(5,15,0,"hadde det gøy")
+#else
     _BUBBLE_LINE(5,5,0,"Looks like someone")
     _BUBBLE_LINE(5,15,0,"had fun")
 #endif    
@@ -1274,6 +1478,9 @@ _gDescriptionDiningRoom
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,100,0,"Deux assiettes...")
     _BUBBLE_LINE(5,107,4,"...bon à savoir")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,95,0,"To tallerkener...")
+    _BUBBLE_LINE(5,107,0,"...godt å vite")
 #else
     _BUBBLE_LINE(5,95,0,"Two plates...")
     _BUBBLE_LINE(5,107,0,"...good to know")
@@ -1295,6 +1502,9 @@ cabinet_closed
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(155,5,0,"Système vidéo")
     _BUBBLE_LINE(151,16,0,"haut de gamme")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(142,5,0,"Topp i klassen")
+    _BUBBLE_LINE(164,16,0,"videosystem")
 #else
     _BUBBLE_LINE(142,5,0,"Top of the range")
     _BUBBLE_LINE(164,16,0,"video system")
@@ -1302,8 +1512,10 @@ cabinet_closed
     WAIT(50)
 
     WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(151,40,0,"Impressionnant")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(175,40,0,"Imponerende")
 #else
     _BUBBLE_LINE(175,40,0,"Impressive")
 #endif    
@@ -1321,8 +1533,10 @@ girl_is_outside
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(80,5,0,"Pas de répit pour les braves")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(112,5,0,"Ingen ro for de slitne")
 #else
     _BUBBLE_LINE(112,5,0,"No rest for the weary")
 #endif    
@@ -1349,9 +1563,12 @@ medicine_cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Une cuisine")
     _BUBBLE_LINE(5,16,0,"bien équipée")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Et godt utstyrt")
+    _BUBBLE_LINE(5,14,4,"kjøkken")
 #else
     _BUBBLE_LINE(5,5,0,"A well-equipped")
     _BUBBLE_LINE(5,14,4,"kitchen")
@@ -1371,8 +1588,10 @@ _gDescriptionBasementStairs
     .)
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Attention à la marche")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Se opp for trinnet")
 #else
     _BUBBLE_LINE(5,5,0,"Watch your step")
 #endif    
@@ -1411,13 +1630,17 @@ _gDescriptionCellar
 
 #ifdef LANGUAGE_FR                                                   ; Rename the safe to "an open safe"
         SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"un _coffre ouvert")
-#else    
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"en åpen _safe")
+#else
         SET_ITEM_DESCRIPTION(e_ITEM_HeavySafe,"a open _safe")
-#endif    
+#endif
 
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Je devrais aller m'abriter")
+#elif defined(LANGUAGE_NO)
+        QUICK_MESSAGE("Jeg bør finne et trygt sted")
 #else
         QUICK_MESSAGE("I should go somewhere safe")
 #endif        
@@ -1457,6 +1680,8 @@ _gDescriptionCellar
         CLEAR_TEXT_AREA(4)
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Toujours là ?")
+#elif defined(LANGUAGE_NO)
+        QUICK_MESSAGE("Er du fortsatt der?")
 #else
         QUICK_MESSAGE("Still there?")
 #endif        
@@ -1478,6 +1703,8 @@ kaboom
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Bon... Vous aviez été prévenu, non ?")
+#elif defined(LANGUAGE_NO)
+        QUICK_MESSAGE("Vel... Jeg advarte deg, ikke sant?")
 #else
         QUICK_MESSAGE("Well... I warned you, didn't I?")
 #endif        
@@ -1487,9 +1714,12 @@ kaboom
         ; We only show the Franz Jager message if we are not actively trying to blow up the safe
         WAIT(DELAY_FIRST_BUBBLE)
         BLACK_BUBBLE(2)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(45,15,0,"Est-ce un coffre-fort")
         _BUBBLE_LINE(70,25,0,"Franz Jager ?")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(75,15,0,"Er det en Franz")
+        _BUBBLE_LINE(80,25,0,"Jager safe?")
 #else
         _BUBBLE_LINE(75,15,0,"Is that a Franz")
         _BUBBLE_LINE(80,25,0,"Jager safe?")
@@ -1505,6 +1735,8 @@ _Kaboom
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
     QUICK_MESSAGE("Allumettes et articles inflammables")
+#elif defined(LANGUAGE_NO)
+    QUICK_MESSAGE("Fyrstikker og brannfarlige ting...")
 #else
     QUICK_MESSAGE("Matches and flammable items...")
 #endif        
@@ -1544,11 +1776,13 @@ alarm_panel_closed
 
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
     ELSE(else,open)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre occultée")
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et mørklagt _vindu")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
-#endif    
+#endif
     ENDIF(open)
     .)
 
@@ -1579,18 +1813,24 @@ alarm_panel_closed
     WAIT(DELAY_FIRST_BUBBLE)
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_off)
         BLACK_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(5,99,0,"On y voit bien")
         _BUBBLE_LINE(5,106,4,"mieux maintenant !")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(5,99,0,"Man ser definitivt")
+        _BUBBLE_LINE(5,108,3,"mye bedre nå!")
 #else
         _BUBBLE_LINE(5,99,0,"Can definitely see")
         _BUBBLE_LINE(5,108,3,"better now!")
 #endif
     ELSE(tape_off,tape_on)
         BLACK_BUBBLE(2)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(5,99,0,"La fenêtre semble")
         _BUBBLE_LINE(5,106,4,"occultée")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(5,99,0,"Vinduet virker")
+        _BUBBLE_LINE(5,107,3,"tildekket")
 #else
         _BUBBLE_LINE(5,99,0,"The window seems")
         _BUBBLE_LINE(5,107,3,"to be covered")
@@ -1628,9 +1868,11 @@ _gMiniKaboom
             _IMAGE(20,0)
             _SCREEN(17,24)
     CLEAR_TEXT_AREA(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Heureusement que je n'étais pas là !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Godt at jeg ikke var der inne!")
+#else
     INFO_MESSAGE("Good thing I was not in there!")
 #endif
     CLEAR_TEXT_AREA(4)
@@ -1693,8 +1935,10 @@ _gDescriptionMainLanding
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(53,70,0,"Belle vue de là-haut")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(47,70,0,"Fin utsikt herfra oppe")
 #else
     _BUBBLE_LINE(47,70,0,"Nice view from up here")
 #endif    
@@ -1705,9 +1949,12 @@ _gDescriptionMainLanding
 _gDescriptionEastGallery
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Couloir sans intérêt:")
     _BUBBLE_LINE(20,13,4,"C'est fait")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Kjedelig korridor:")
+    _BUBBLE_LINE(20,17,0,"Hak av")
 #else
     _BUBBLE_LINE(5,5,0,"Boring corridor:")
     _BUBBLE_LINE(20,17,0,"Check")
@@ -1734,6 +1981,9 @@ _gDescriptionChildBedroom
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,86,0,"Laissez-moi deviner:")
     _BUBBLE_LINE(5,94,4,"Chambre d'adolescent ?")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,96,0,"La meg gjette:")
+    _BUBBLE_LINE(5,107,0,"Tenåringrom?")
 #else
     _BUBBLE_LINE(5,96,0,"Let me guess:")
     _BUBBLE_LINE(5,107,0,"Teenager room?")
@@ -1754,6 +2004,9 @@ drawer_closed
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,6,0,"Simple et rafraichissant")
     _BUBBLE_LINE(5,17,0,"pour changer")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,6,0,"Enkelt og friskt")
+    _BUBBLE_LINE(5,17,0,"for en gangs skyld")
 #else
     _BUBBLE_LINE(5,6,0,"Simple and fresh")
     _BUBBLE_LINE(5,17,0,"for a change")
@@ -1769,9 +2022,12 @@ _gDescriptionShowerRoom
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(145,5,0,"J'en aurai besoin")
     _BUBBLE_LINE(136,16,0,"quand j'aurai fini")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(149,5,0,"Jeg trenger en")
+    _BUBBLE_LINE(152,16,0,"når jeg er ferdig")
 #else
     _BUBBLE_LINE(149,5,0,"I will need one")
     _BUBBLE_LINE(152,16,0,"when I'm done")
@@ -1788,11 +2044,13 @@ _gDescriptionWestGallery
         SET_CUT_SCENE(1)
         UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
         PLAY_SOUND(_Zipper)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Il faut que j'enlève la combinaison")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg må ta av meg den dressen")
 #else
         INFO_MESSAGE("I need to remove that suit")
-#endif        
+#endif
         CLEAR_TEXT_AREA(4)
         SET_CUT_SCENE(0)
     ENDIF(suit)
@@ -1803,8 +2061,10 @@ curtain_closed
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(8,62),40,_SecondImageBuffer+0,_ImageBuffer+40*5+20)       ; Closed curtain
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(70,81,0,"Au théâtre ce soir...")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(55,81,0,"Som på teateret i kveld...")
 #else
     _BUBBLE_LINE(55,81,0,"At the theater tonight...")
 #endif    
@@ -1813,9 +2073,12 @@ curtain_closed
 curtain_open    
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(85,81,0,"Est-ce de l'acier")
     _BUBBLE_LINE(60,92,0,"derrière le rideau ?")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(85,81,0,"Er det stål")
+    _BUBBLE_LINE(60,92,0,"bak forhenget?")
 #else
     _BUBBLE_LINE(85,81,0,"Is that steel")
     _BUBBLE_LINE(60,92,0,"behind the curtain?")
@@ -1828,9 +2091,12 @@ curtain_open
 _gDescriptionBoxRoom
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Une petite pièce")
     _BUBBLE_LINE(5,12,4,"utilitaire")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Et praktisk")
+    _BUBBLE_LINE(5,16,0,"lite rom")
 #else
     _BUBBLE_LINE(5,5,0,"A practical")
     _BUBBLE_LINE(5,16,0,"little room")
@@ -1846,8 +2112,10 @@ _gDescriptionClassyBathRoom
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(132,5,0,"Semble confortable")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(132,5,0,"Ser komfortabelt ut")
 #else
     _BUBBLE_LINE(132,5,0,"Looks comfortable")
 #endif    
@@ -1869,10 +2137,13 @@ _gDescriptionTinyToilet
     ENDIF(toilet_paper)
 
     WAIT(DELAY_FIRST_BUBBLE)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     WHITE_BUBBLE(2)
     _BUBBLE_LINE(160,5,0,"Une propreté")
     _BUBBLE_LINE(173,13,4,"étincelante")
+#elif defined(LANGUAGE_NO)
+    WHITE_BUBBLE(1)
+    _BUBBLE_LINE(137,5,0,"Skinnende rent")
 #else
     WHITE_BUBBLE(1)
     _BUBBLE_LINE(137,5,0,"Sparklingly clean")
@@ -1910,6 +2181,9 @@ thug_alive
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Cela rendra les choses")
     _BUBBLE_LINE(5,16,0,"nettement plus faciles...")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Dette vil gjøre ting")
+    _BUBBLE_LINE(5,16,0,"mye enklere...")
 #else
     _BUBBLE_LINE(5,5,0,"This will make things")
     _BUBBLE_LINE(5,16,0,"notably easier...")
@@ -1948,6 +2222,9 @@ _SubCollateralDamage
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(10,5,0,"Appelons cela un")
     .byt 5,18,0,34,"dommage collatéral",34,0
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"La oss kalle det")
+    .byt 5,17,0,34,"kollateral skade",34,0
 #else
     _BUBBLE_LINE(5,5,0,"Let's call that")
     .byt 5,17,0,34,"collateral damage",34,0
@@ -1963,17 +2240,21 @@ _gDescriptionPanicRoomDoor
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_unrestrained)
         SET_ITEM_LOCATION(e_ITEM_PanicRoomWindow,e_LOC_PANIC_ROOM_DOOR)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),closed)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
             SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"la _fenêtre de la chambre forte")
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"et _vindu til panikk rommet")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"the panic room _window")
-#endif        
+#endif
         ELSE(closed,openened)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
             SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"la _fenêtre ouverte de la chambre forte")
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"et åpent _vindu til panikk rommet")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_PanicRoomWindow,"the open panic room _window")
-#endif        
+#endif
         ENDIF(openened)
     ENDIF(girl_unrestrained)
 
@@ -1983,9 +2264,12 @@ _gDescriptionPanicRoomDoor
                 _BUFFER(15,72)
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(150,10,1,"Elle est moins")
         _BUBBLE_LINE(120,57,1,"sécurisée maintenant")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(153,70,0,"Definitivt mindre")
+        _BUBBLE_LINE(148,85,0,"sikker nå")
 #else
         _BUBBLE_LINE(153,70,0,"Definitely less")
         _BUBBLE_LINE(148,85,0,"secure now")
@@ -1997,9 +2281,12 @@ _gDescriptionPanicRoomDoor
         SET_SCENE_IMAGE(LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES)                ; Then we show the view with the googles on
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(135,16,0,"C'est un peu")
         _BUBBLE_LINE(131,53,0,"oppressant")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(153,70,0,"Det er litt")
+        _BUBBLE_LINE(148,85,0,"klaustrofobisk")
 #else
         _BUBBLE_LINE(153,70,0,"It's kind of")
         _BUBBLE_LINE(148,85,0,"claustrophobic")
@@ -2014,9 +2301,12 @@ _gDescriptionPanicRoomDoor
                 _BUFFER(15,73)
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(153,70,1,"On dirait")
         _BUBBLE_LINE(148,80,2,"un sourire :)")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(153,70,0,"Det ligner nesten")
+        _BUBBLE_LINE(148,85,0,"på et smil :)")
 #else
         _BUBBLE_LINE(153,70,0,"Almost looks")
         _BUBBLE_LINE(148,85,0,"like a smile :)")
@@ -2027,10 +2317,14 @@ _gDescriptionPanicRoomDoor
     ; Default message if nothing has been changed (no clay, no hole, no protection suit...)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(3)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     _BUBBLE_LINE(5,5,0,"Zut!")
     _BUBBLE_LINE(148,74,0,"Ils ont employé")
     _BUBBLE_LINE(130,85,0,"les grands moyens!")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"Jøss...")
+    _BUBBLE_LINE(168,70,0,"Det er noe")
+    _BUBBLE_LINE(138,85,0,"seriøst utstyr!")
 #else
     _BUBBLE_LINE(5,5,0,"Damn...")
     _BUBBLE_LINE(168,70,0,"That's some")
@@ -2147,7 +2441,9 @@ _CombinePillsWithMortar
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED),already_crushed)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Elles sont déja écrasées")
-#else    
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Pillene er allerede knust")
+#else
         ERROR_MESSAGE("The pills are already crushed")
 #endif    
     ELSE(already_crushed,not_crushed_yet)
@@ -2155,15 +2451,19 @@ _CombinePillsWithMortar
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Vous pilez les somnifères")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Pillene er nå knust")
+#else
         INFO_MESSAGE("The pills are now crushed")
-#endif    
+#endif
         SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
 #ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"des$_pilules écrasées")
-#else    
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"noen$knuste _piller")
+#else
         SET_ITEM_DESCRIPTION(e_ITEM_SedativePills,"some$crushed _pills")
-#endif    
+#endif
         STOP_MUSIC()
     ENDIF(not_crushed_yet)
     END_AND_REFRESH
@@ -2175,9 +2475,11 @@ _CombineMeatWithPills
     SET_ITEM_FLAGS(e_ITEM_Meat,ITEM_FLAG_TRANSFORMED)                    ; We now have some drugged meat in our inventory
 #ifdef LANGUAGE_FR                                                       ; Rename the meat to "drugged meat"
     SET_ITEM_DESCRIPTION(e_ITEM_Meat,"_viande sédative")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Meat,"_kjøtt med sovemiddel")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Meat,"drugged _meat")
-#endif    
+#endif
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!
     INCREASE_SCORE(POINTS_DRUGGED_MEAT)
     END_AND_REFRESH
@@ -2187,11 +2489,13 @@ _CombineMeatWithPills
 _CombinePetrolWithTP
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez fabriqué une mèche")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du har laget en lunte")
 #else
     INFO_MESSAGE("You've created a fuse")
-#endif       
+#endif
     COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_ToiletRoll)         ; We now have a fuse for our bomb, the Petrol and TP are gone
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
     INCREASE_SCORE(POINTS_BUILT_FUSE)
@@ -2211,11 +2515,13 @@ _CombineSulfurWithSalpetre
 _CombineGameWithBatteries
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Le jeu devrait fonctionner maintenant")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Spillet bør nå fungere")
 #else
     INFO_MESSAGE("The game should be working now")
-#endif        
+#endif
     SET_ITEM_FLAGS(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED)                            ; The game should now be working
     SET_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_NONE)                                       ; The batteries are now gone
     INCREASE_SCORE(POINTS_COMBINED_BATTERIES_GAME)
@@ -2229,9 +2535,11 @@ _CombineTinWithFuse
 .(
     IF_FALSE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),missing_powder)    ; Is the gunpowder in the tobacco tin?
        // We reach this code path if the gun power is not in the tin
-#ifdef LANGUAGE_FR               
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("Sans la poudre la mèche est inutile")
-#else    
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Uten krutt er lunten ubrukelig")
+#else
         ERROR_MESSAGE("Without gunpowder the fuse is useless")
 #endif    
         END_AND_PARTIAL_REFRESH
@@ -2249,18 +2557,24 @@ _CombineGunPowderWithFuse
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("L'explosif est prêt...")
         INFO_MESSAGE("...mais il faut l'attacher")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Sprengstoffet er klart...")
+        INFO_MESSAGE("...men det må festes")
+#else
         INFO_MESSAGE("The explosive is ready...")
         INFO_MESSAGE("...but it needs to be attached")
-#endif    
+#endif
         STOP_MUSIC()
         WAIT_KEYPRESS
     ELSE(in_tin,not_tin)
        // We reach this code path if the gun power is in the bucket, plastic bag, etc...
-#ifdef LANGUAGE_FR               
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("La poudre requiert un conteneur adapté")
         ERROR_MESSAGE("Il doit être solide et refermable")
-#else    
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kruttet trenger en ordentlig beholder")
+        ERROR_MESSAGE("Den bør være solid og lukkbar")
+#else
         ERROR_MESSAGE("The powder needs a proper container")
         ERROR_MESSAGE("It should be sturdy and closable")
 #endif    
@@ -2276,18 +2590,23 @@ _CombineBombWithAdhesive
     INCREASE_SCORE(POINTS_COMBINED_BOMB_ADHESIVE)
 #ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe collante")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"en$klissete _bombe")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a$sticky _bomb")
-#endif    
+#endif
     DISPLAY_IMAGE(LOADER_PICTURE_STICKY_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR                                                       ; Rename the bomb to "sticky bomb"
     INFO_MESSAGE("Ca devrait être tout bon...")
     INFO_MESSAGE("...plus qu'à l'installer !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Bør være klar til bruk nå...")
+    INFO_MESSAGE("...bare å installere den!")
 #else
     INFO_MESSAGE("Should be ready to use now...")
     INFO_MESSAGE("...need to install it!")
-#endif    
+#endif
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2301,6 +2620,8 @@ _CombineStickyBombWithSafe
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Ca doit coller à la porte")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Det må feste seg til døren")
 #else
         ERROR_MESSAGE("It needs to stick to the door")
 #endif        
@@ -2309,21 +2630,26 @@ _CombineStickyBombWithSafe
 
 #ifdef LANGUAGE_FR                                                           ; Rename the sticky bomb to "bomb on the doort"
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"_bombe sur la porte")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"en _bombe på døren")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Bomb,"a _bomb on the door")
-#endif    
+#endif
     SET_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_CURRENT)                             ; The bomb is now in the room
     SET_ITEM_FLAGS(e_ITEM_Bomb,ITEM_FLAG_ATTACHED|ITEM_FLAG_IMMOVABLE)       ; The bomb is now attached to the safe and cannot be removed
     INCREASE_SCORE(POINTS_ATTACHED_BOMB_TO_SAFE)
     DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Tout est en place...")
     INFO_MESSAGE("...attention à l'allumage !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Alt er på plass...")
+    INFO_MESSAGE("...bare å antenne det forsiktig!")
+#else
     INFO_MESSAGE("Everything is in place...")
     INFO_MESSAGE("...need to ignite it safely though!")
-#endif    
+#endif
     STOP_MUSIC()
     END_AND_REFRESH
 .)
@@ -2333,8 +2659,10 @@ _CombineStickyBombWithSafe
 _CombineClayWithWater
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
-#ifdef LANGUAGE_FR           
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("C'est déjà humide !")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Det er allerede vått!")
 #else
         ERROR_MESSAGE("It's already wet!")
 #endif        
@@ -2343,9 +2671,11 @@ _CombineClayWithWater
 
 #ifdef LANGUAGE_FR                                                     ; Rename the dry clay to wet clay
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"de l'$_argile humide")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Clay,"noe$fuktig _leire")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Clay,"some$wet _clay")
-#endif    
+#endif
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
     INCREASE_SCORE(POINTS_MADE_CLAY_WET)
     END_AND_REFRESH
@@ -2358,13 +2688,16 @@ _CombineCueWithRope
     DISPLAY_IMAGE(LOADER_PICTURE_CUE_WITH_ROPE)
     INCREASE_SCORE(POINTS_COMBINED_CUE_ROPE)
     UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("La queue ne va pas résister...")
     INFO_MESSAGE("Mais elle peut casser des trucs !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kølla er ikke sterk nok...")
+    INFO_MESSAGE("...men den kan knuse ting!")
 #else
     INFO_MESSAGE("The cue is not strong enough...")
     INFO_MESSAGE("But it could break things!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_REFRESH
 .)
@@ -2375,8 +2708,10 @@ _CombineWindowWithRope
 .( 
     ; Is the window open?
     JUMP_IF_FALSE(window_open,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED))
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("La fenêtre est toujours fermée!")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Bør nok åpne vinduet først!")
 #else
         ERROR_MESSAGE("Should probably open the window first!")
 #endif       
@@ -2385,8 +2720,10 @@ window_open
 
     ; In order to combine the window and the rope, first she needs to have been given the rope
     JUMP_IF_TRUE(rope_in_the_room,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE))
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("Peut-être lui passer la corde?")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kanskje gi henne tauet først?")
 #else
         ERROR_MESSAGE("Maybe give her the rope first?")
 #endif       
@@ -2395,8 +2732,10 @@ rope_in_the_room
 
     ; Is the window broken?
     JUMP_IF_TRUE(window_broken,CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED))
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("Peut-être casser un carreau ?")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kanskje knuse vinduet først?")
 #else
         ERROR_MESSAGE("Maybe break the window first?")
 #endif       
@@ -2405,8 +2744,10 @@ window_broken
 
     ; Is the rope attached?
     JUMP_IF_FALSE(rope_not_attached,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
         ERROR_MESSAGE("Elle est déjà attachée!")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Det er allerede festet!")
 #else
         ERROR_MESSAGE("It's already attached!")
 #endif       
@@ -2417,16 +2758,20 @@ rope_not_attached
     ; We can attach the rope!
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Attachons la corde")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("La oss feste tauet")
 #else
     INFO_MESSAGE("Let's attach the rope")
-#endif    
+#endif
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)     ; The rope is now attached to the window
     INCREASE_SCORE(POINTS_WINDOW_ROPE)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde qui pend de la fenêtre")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"et _tau hengende fra vinduet")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope hanging from the window")
-#endif    
+#endif
 
     ; Now we can show that to the player
     GOSUB(_ShowTopWindowOpen)
@@ -2517,11 +2862,15 @@ _ReadDemoMessage
     SET_CUT_SCENE(1)
     STOP_CLOCK
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez atteint la fin de la démo !")
     INFO_MESSAGE("L'étage est évidement visitable...")
     INFO_MESSAGE("...dans la version complete du jeu.")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du har nådd slutten av demoen!")
+    INFO_MESSAGE("Øverste etasje er selvfølgelig...")
+    INFO_MESSAGE("...tilgjengelig i fullversjonen.")
+#else
     INFO_MESSAGE("You've reached the end of this demo!")
     INFO_MESSAGE("The top floor is obviously...")
     INFO_MESSAGE("...accessible in the full game.")
@@ -2529,76 +2878,96 @@ _ReadDemoMessage
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_UP_STAIRS)
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Si vous voulez découvrir le reste...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Hvis du vil oppdage resten...")
+#else
     INFO_MESSAGE("If you want to discover the rest...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_TINY_WC)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("si vous avez un besoin pressant...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("hvis du har presserende behov...")
+#else
     INFO_MESSAGE("if you have some urgent needs...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_GUESTBEDROOM)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("voulez faire une sieste relaxante...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("ønsker å ta en avslappende lur...")
+#else
     INFO_MESSAGE("want to have a relaxing nap...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_SHOWERROOM)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("ou prendre une douche...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("eller ta en dusj...")
+#else
     INFO_MESSAGE("or take a shower...")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_LOCATIONS_START+e_LOC_BOXROOM)
     CLEAR_TEXT_AREA(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("alors tentez le jeu complet !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("så prøv fullversjonen av spillet!")
+#else
     INFO_MESSAGE("then consider getting the full game!")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
     CLEAR_TEXT_AREA(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Réussirez vous à entrer ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Klarer du å komme deg inn?")
+#else
     INFO_MESSAGE("Will you find a way in?")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_ALARM_TRIGGERED)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Pourrez-vous désactiver l'alarme ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Klarer du å deaktivere alarmen?")
+#else
     INFO_MESSAGE("Will you silence the alarm?")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_EXPLOSION)
     CLEAR_TEXT_AREA(1)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Souhaitez-vous tout faire sauter ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kommer du til å sprenge ting?")
+#else
     INFO_MESSAGE("Will you blow things up?")
 #endif
 
     DISPLAY_IMAGE(LOADER_PICTURE_SHOOTING_DART)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Allez-vous utiliser des armes ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kommer du til å bruke våpen?")
+#else
     INFO_MESSAGE("Will you use weapons?")
 #endif
 
     CLEAR_TEXT_AREA(2)
     DISPLAY_IMAGE(LOADER_PICTURE_TO_BE_CONTINUED)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Voulez-vous élucider l'affaire ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ønsker du å løse saken?")
+#else
     INFO_MESSAGE("Do you want to solve the case?")
 #endif
     STOP_MUSIC()
@@ -2613,10 +2982,13 @@ _ReadNewsPaper
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NEWSPAPER)   ; Achievement!
     INCREASE_SCORE(POINTS_READ_NEWSPAPER)    
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Il faut que je la trouve vite...")
     INFO_MESSAGE("...j'espère qu'elle va bien !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg må finne henne fort...")
+    INFO_MESSAGE("...håper hun har det bra!")
+#else
     INFO_MESSAGE("I have to find her fast...")
     INFO_MESSAGE("...I hope she is fine!")
 #endif
@@ -2632,6 +3004,9 @@ _ReadHandWrittenNote
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait être utile...")
     INFO_MESSAGE("...si je peux y accéder !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det kan være nyttig...")
+    INFO_MESSAGE("...hvis jeg kan nå den!")
 #else
     INFO_MESSAGE("That could be useful...")
     INFO_MESSAGE("...if I can access it!")
@@ -2647,7 +3022,10 @@ _ReadChemistryRecipes
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait être utile...")
     INFO_MESSAGE("...il faut trouver les composants.")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg kan definitivt bruke disse...")
+    INFO_MESSAGE("...trenger bare å finne materialene.")
+#else
     INFO_MESSAGE("I can definitely use these...")
     INFO_MESSAGE("...just need to find the materials.")
 #endif    
@@ -2664,7 +3042,9 @@ _ReadChemistryBook
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Je ne comprends rien...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg forstår ikke mye...")
+#else
     INFO_MESSAGE("I don't understand much...")
 #endif
 
@@ -2683,9 +3063,11 @@ _SubFoundSomething
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez trouvé quelque chose")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du fant noe interessant")
+#else
     INFO_MESSAGE("You found something interesting")
-#endif    
+#endif
     STOP_MUSIC()
     RETURN
 .)
@@ -2698,10 +3080,13 @@ _ReadInvoice
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La facture d'un voyage de deux mois")
     INFO_MESSAGE("en Europe. Vacances en famille ?")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En faktura for to måneder i Europa")
+    INFO_MESSAGE("Familieferie kanskje?")
 #else
     INFO_MESSAGE("An invoice for a two-month trip all")
     INFO_MESSAGE("over Europe. Family holidays maybe?")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -2819,13 +3204,16 @@ _ShowRoughPlan
             _BUFFER(0,0)      
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     FADE_BUFFER
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Je devrai revenir au marché...")
     INFO_MESSAGE("...quand j'en aurai terminé")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg må tilbake til markedet...")
+    INFO_MESSAGE("...når jeg er ferdig")
+#else
     INFO_MESSAGE("I'll have to go back to the market...")
     INFO_MESSAGE("...when I'm done")
-#endif    
+#endif
     STOP_MUSIC()
     RETURN
 .)
@@ -2835,9 +3223,11 @@ _InspectMap
     INCREASE_SCORE(POINTS_INSPECT_MAP)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("On y voit les iles britanniques")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det viser Irland, Wales og England")
+#else
     INFO_MESSAGE("It shows Ireland, Wales and England")
 #endif
     WAIT_KEYPRESS
@@ -2849,19 +3239,23 @@ _InspectGame
     INCREASE_SCORE(POINTS_INSPECT_GAME)    
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Du matériel de pointe !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Toppmoderne maskinvare!")
+#else
     INFO_MESSAGE("State of the art hardware!")
-#endif    
+#endif
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED),no_batteries)    ; Have the batteries been installed?
         // Non functional game
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Le compartiment à piles est vide !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Batterikammeret er tomt!")
 #else
         INFO_MESSAGE("The battery compartment is empty!")
-#endif    
+#endif
     ENDIF(no_batteries)
 
     WAIT_KEYPRESS
@@ -2871,9 +3265,11 @@ _InspectGame
  _InspectFuse
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Utilisable avec un explosif")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kan brukes med et sprengstoff")
+#else
     INFO_MESSAGE("Can be used with an explosive")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2881,9 +3277,11 @@ _InspectGame
 _InspectBomb
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un explosif fait maison")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Hjemmelaget sprengstoff")
+#else
     INFO_MESSAGE("Homemade explosive device")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2891,9 +3289,11 @@ _InspectBomb
  _InspectToiletRoll
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Long, résistant, et super absorbant")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Lang, solid og ekstra absorberende")
+#else
     INFO_MESSAGE("Long, sturdy, and extra absorbent")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2901,9 +3301,11 @@ _InspectBomb
 _InspectMatches
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Utile pour allumer un feu")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du kan starte en brann med det")
+#else
     INFO_MESSAGE("You could start a fire with that")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2912,9 +3314,11 @@ _InspectLadder
 _InspectRope
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pratique pour grimper ou descendre")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du kan klatre opp eller ned med den")
+#else
     INFO_MESSAGE("You could climb up or down with it")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2928,9 +3332,11 @@ _InspectDove
     ; Else it is happy chirping around
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle roucoule sur une branche haute")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den kvitrer høyt oppe på en gren")
+#else
     INFO_MESSAGE("It's chirping high up on a branch")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2941,9 +3347,11 @@ dove_eating
 dove_not_happy
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle bouge et essaye de s'échapper")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den er misfornøyd og prøver å rømme")
+#else
     INFO_MESSAGE("It's not happy and tries to escape")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -2953,9 +3361,11 @@ dove_not_happy
 _InspectFish
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il semble aimer son bassin")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den ser glad ut mens den svømmer")
+#else
     INFO_MESSAGE("It seems happy swimming around")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2964,9 +3374,11 @@ _UseWater
 _InspectWater
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est propre, fraiche et liquide")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er rent, friskt og flytende")
+#else
     INFO_MESSAGE("It's clean, fresh, and liquid")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2974,9 +3386,11 @@ _InspectWater
 _InspectHose
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Sert à transférer les liquides")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Beregnet på å flytte væsker")
+#else
     INFO_MESSAGE("Designed to move liquids efficiently")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2984,9 +3398,11 @@ _InspectHose
 _InspectAdhesive
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca maintient les choses en place")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Beregnet på å holde ting på plass")
+#else
     INFO_MESSAGE("Designed to keep things in place")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -2994,9 +3410,11 @@ _InspectAdhesive
 _InspectBlackTape
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Probablement possible de l'enlever")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det bør være mulig å fjerne den")
+#else
     INFO_MESSAGE("It should be possible to remove it")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3004,9 +3422,11 @@ _InspectBlackTape
 _InspectSaltpetre
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Utilisé dans les feux d'artifice")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du kan lage fyrverkeri med det")
+#else
     INFO_MESSAGE("You can make fireworks with that")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3014,9 +3434,11 @@ _InspectSaltpetre
 _InspectSulphur
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un minéral naturel utile en chimie")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Et svært nyttig naturlig kjemikalie")
+#else
     INFO_MESSAGE("A very useful natural chemical")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3024,9 +3446,11 @@ _InspectSulphur
 _InspectBread
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Facile à émietter")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Lett å smuldre")
+#else
     INFO_MESSAGE("Easy to crumble")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3034,9 +3458,11 @@ _InspectBread
 _InspectCurtain
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Que cache t'il ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Noe bak?")
+#else
     INFO_MESSAGE("Anything behind?")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3044,9 +3470,11 @@ _InspectCurtain
 _InspectNet
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Peut arrêter les objets rapides")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kan fange baller, blant annet")
+#else
     INFO_MESSAGE("Can catch balls, among other things")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3054,9 +3482,11 @@ _InspectNet
 _InspectKey
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une étiquette indique 'Alarme'")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den har en etikett: 'Alarm'")
+#else
     INFO_MESSAGE("It has a label that says 'Alarm'")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
@@ -3066,9 +3496,11 @@ _InspectComputer
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un IBM PC modèle 5150 flambant neuf")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En splitter ny IBM PC modell 5150")
+#else
     INFO_MESSAGE("A brand new IBM PC model 5150")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH    
 .)
@@ -3078,9 +3510,11 @@ _InspectTelevision
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un énorme téléviseur à rétroprojection")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En enorm bakprojeksjons-TV")
+#else
     INFO_MESSAGE("A huge rear-projection TV set")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3090,9 +3524,11 @@ _InspectGameConsole
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une ColecoVision... importée des USA?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En ColecoVision... fra USA?")
+#else
     INFO_MESSAGE("A ColecoVision... imported from USA?")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3102,9 +3538,11 @@ _InspectTVCabinet
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Des portes, des tiroirs et un abattant")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Noen dører, skuffer og et lokk")
+#else
     INFO_MESSAGE("A few doors, a few drawers and a flap")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3112,12 +3550,14 @@ _InspectTVCabinet
 
 _InspectBatteries
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)   
+    DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Idéal pour les petits appareils")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Perfekt til å drive småelektronikk")
+#else
     INFO_MESSAGE("Perfect to power small electronics")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_REFRESH
 .)
@@ -3127,9 +3567,11 @@ _InspectDrawer
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un simple tiroir de table de chevet")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En ganske standard nattbordskuff")
+#else
     INFO_MESSAGE("A quite standard night stand drawer")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3139,9 +3581,11 @@ _InspectKnife
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Surprenamment affûté!")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Overraskende skarp!")
+#else
     INFO_MESSAGE("Surprisingly sharp!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3152,21 +3596,25 @@ _InspectOricOmputer
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un micro-ordinateur Oric 1 tout neuf")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En splitter ny Oric 1 mikrodatamaskin")
+#else
     INFO_MESSAGE("A brand new Oric 1 micro-computer")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
 
 _InspectChemistryBook
-    INCREASE_SCORE(POINTS_INSPECT_BOOK)    
+    INCREASE_SCORE(POINTS_INSPECT_BOOK)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un livre épais avec des marques")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En tykk bok med noen bokmerker")
+#else
     INFO_MESSAGE("A thick book with some bookmarks")
-#endif    
+#endif
     WAIT_KEYPRESS
     JUMP(_ReadChemistryBook)
 
@@ -3177,15 +3625,19 @@ _InspectApples
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED),apple_cut)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elles sont en morceaux")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("De er hakket i biter")
+#else
         INFO_MESSAGE("They're chopped to bits")
-#endif    
+#endif
     ELSE(apple_cut,apple_not_cut)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elles semblent délicieuses !")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("De ser faktisk appetittlige ut!")
+#else
         INFO_MESSAGE("They do look tasty!")
-#endif    
+#endif
     ENDIF(apple_not_cut)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3199,9 +3651,11 @@ _SubResetApplesLocation
 +_gTextItemApple = *+2
 #ifdef LANGUAGE_FR                                    ; Rename the apple back to itself
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"quelques$_pommes")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"noen$_epler")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"a few$_apples")
-#endif    
+#endif
     RETURN
 .)
 
@@ -3210,9 +3664,11 @@ _InspectFancyStones
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Feng shui de poche")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Lommeformat feng shui")
+#else
     INFO_MESSAGE("Pocket sized feng shui")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3223,10 +3679,13 @@ _InspectCue
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est de bonne qualité...")
     INFO_MESSAGE("Parfait pour bien 'casser' !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er en god kølle...")
+    INFO_MESSAGE("Perfekt for et rent 'break'!")
+#else
     INFO_MESSAGE("It's a good quality cue...")
     INFO_MESSAGE("Perfect for a clean 'break'!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3239,10 +3698,13 @@ _InspectPowderMix
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il y a des gros grumeaux...")
     INFO_MESSAGE("...le mix doit être bien plus fin.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er noen store klumper...")
+    INFO_MESSAGE("...Blandingen må males finere.")
 #else
     INFO_MESSAGE("There are some large clumps...")
     INFO_MESSAGE("...That mix must be ground fine.")
-#endif    
+#endif
     STOP_MUSIC()
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -3256,10 +3718,13 @@ _InspectGunPowder
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Poudre explosive faite maison,")
     INFO_MESSAGE("il faut un contenant adapté.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Hjemmelaget krutt: Ganske eksplosivt,")
+    INFO_MESSAGE("men det trenger en riktig beholder.")
 #else
     INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
     INFO_MESSAGE("but that requires a proper container.")
-#endif    
+#endif
     STOP_MUSIC()
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -3270,9 +3735,11 @@ _InspectPills
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca pourrait calmer quelqu'un")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kan brukes til å roe ned noen")
 #else
     INFO_MESSAGE("Could be used to calm down someone")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3282,9 +3749,11 @@ _InspectMeat
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un chien adorerait cette pièce !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En hund ville elsket dette!")
 #else
     INFO_MESSAGE("A dog would love this juicy morcel!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3302,14 +3771,18 @@ _InspectPit
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pas sûr qu'on puisse en remonter")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ikke sikkert du kan klatre opp igjen")
 #else
     INFO_MESSAGE("Not sure you could climb up again")
-#endif    
+#endif
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Corde ou échelle nécessaire !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Tau eller stige er nødvendig!")
 #else
     INFO_MESSAGE("Rope or ladder necessary!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3319,9 +3792,11 @@ _InspectHeap
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ca vient du trou !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Dette var inne i gropen!")
 #else
     INFO_MESSAGE("This used to be inside the pit!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3332,9 +3807,12 @@ _InspectFridgeDoor
 .(
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Une famille heureuse...")
     INFO_MESSAGE("...sont-ils partis ?")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ser ut som en lykkelig familie...")
+    INFO_MESSAGE("...hvor er de nå mon tro?")
 #else
     INFO_MESSAGE("Looks like a happy family...")
     INFO_MESSAGE("...I wonder where they are now?")
@@ -3350,18 +3828,22 @@ _InspectMedicineCabinet
     ; Is the medicine cabinet open?
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Ca pourrait être utile")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det kan jeg bruke.")
 #else
         INFO_MESSAGE("I can use some of that.")
-#endif        
+#endif
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("La porte n'est pas transparente.")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Lite å se når den er lukket.")
 #else
         INFO_MESSAGE("Not much to see when closed.")
-#endif        
+#endif
     ENDIF(open)
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -3370,11 +3852,13 @@ _InspectMedicineCabinet
 
 _InspectGunCabinet
 .(
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Je vois du matériel de chasse")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg ser jakteutstyr")
 #else
     INFO_MESSAGE("I can see hunting equipment")
-#endif        
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3382,11 +3866,13 @@ _InspectGunCabinet
 
 _InspectGirl
 .(
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle semble indemne et soulagée")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Hun ser uskadd og lettet ut")
 #else
     INFO_MESSAGE("She seems unharmed and relieved")
-#endif        
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3394,11 +3880,13 @@ _InspectGirl
 
 _InspectPistol
 .(
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("C'est un gros calibre")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ganske stort kaliber")
 #else
     INFO_MESSAGE("Quite a large caliber")
-#endif        
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3406,11 +3894,13 @@ _InspectPistol
 
 _InspectDartGun
 .(
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Ça pourrait endormir un éléphant !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kan besvime en elefant!")
 #else
     INFO_MESSAGE("Could knock out an elephant!")
-#endif        
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3419,17 +3909,21 @@ _InspectDartGun
 _InspectClay
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est malléable maintenant")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den er formbar nå")
 #else
         INFO_MESSAGE("It's malleable now")
-#endif        
+#endif
     ELSE(wet,dry)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Il faudrait la réhydrater")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den bør rehydreres")
 #else
         INFO_MESSAGE("It should be rehydrated")
-#endif        
+#endif
     ENDIF(dry)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3443,9 +3937,11 @@ _InspectPanel
     IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),tape_removed)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Ca clignote et ca bipe")
-#else        
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det blinker og piper")
+#else
         INFO_MESSAGE("It blinks and beeps")
-#endif        
+#endif
         END_AND_REFRESH
     ENDIF(tape_removed)
 
@@ -3459,17 +3955,21 @@ _InspectPanel
         FADE_BUFFER
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Sert à désactiver l'alarme.")
-#else        
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Kan brukes til å deaktivere alarmen.")
+#else
         INFO_MESSAGE("Can be used to disable the alarm.")
-#endif        
+#endif
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
             INFO_MESSAGE("Il y a un trou pour une petite clef")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Det er et hull til en liten nøkkel")
 #else
             INFO_MESSAGE("There's a hole for a small key")
-#endif        
+#endif
         ELSE(locked,unlocked)
             GOSUB(_SubClosedButNotLocked_Elle)
         ENDIF(unlocked)
@@ -3510,22 +4010,26 @@ _InspectBasementWindow
                     _BUFFER(14,101)
 no_ladder
         FADE_BUFFER      ; Make sure everything appears on the screen
-#ifdef LANGUAGE_FR            
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("C'est plutôt haut")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det er ganske høyt")
 #else
         INFO_MESSAGE("It's quite high")
-#endif            
+#endif
     .)
     ELSE(elsecellar,cellar)
     .(
         ; Inspecting the window in the garden (or other places)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW)
-#ifdef LANGUAGE_FR            
+#ifdef LANGUAGE_FR
             INFO_MESSAGE("Je peux voir la cave")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Jeg kan se kjelleren")
 #else
             INFO_MESSAGE("I can see the basement room")
-#endif            
+#endif
         ELSE(else,open)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
             GOSUB(_SubBlackTapeOnWindow)
@@ -3539,11 +4043,13 @@ no_ladder
 
 _SubBlackTapeOnWindow
 .(
-#ifdef LANGUAGE_FR            
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("De l'adhésif noir ?")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Er det svart tape?")
 #else
     INFO_MESSAGE("Is that black tape?")
-#endif            
+#endif
     RETURN
 .)
 
@@ -3556,25 +4062,31 @@ _InspectPanicRoomWindow
             DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Hmmm, intéressant...")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Hmmm, interessant...")
 #else
             INFO_MESSAGE("Hmmm, interesting...")
-#endif    
+#endif
         ELSE(window_closed,window_open)
             GOSUB(_ShowTopWindowOpen)
             IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_HOSTAGE_ROOM),girl_in_room)
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("Le cadre de la fenêtre est solide...")
+#elif defined(LANGUAGE_NO)
+                INFO_MESSAGE("Vindusrammen er solid...")
 #else
                 INFO_MESSAGE("The window frame is strong...")
-#endif    
+#endif
                 IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_DISABLED),window_broken)
                     GOSUB(_SubInspectAttachment)
                 ELSE(window_broken,window_not_broken)
 #ifdef LANGUAGE_FR
                     INFO_MESSAGE("Mais les carreaux posent problème !")
+#elif defined(LANGUAGE_NO)
+                    INFO_MESSAGE("Men glassrutene er i veien!")
 #else
                     INFO_MESSAGE("But the glass panes are in the way!")
-#endif    
+#endif
                 ENDIF(window_not_broken)
             ENDIF(window_open)
             WAIT_KEYPRESS    
@@ -3596,15 +4108,19 @@ _SubInspectAttachment
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_attached)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il n'y a plus qu'à descendre !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Trygt å klatre ned nå!")
 #else
         INFO_MESSAGE("Should be safe to climb down now!")
-#endif    
+#endif
     ELSE(rope_attached,rope_not_attached)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Y attacher une corde serait facile.")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Enkelt å feste et tau her.")
 #else
         INFO_MESSAGE("Could easily attach a rope to it.")
-#endif    
+#endif
     ENDIF(rope_not_attached)
     WAIT_KEYPRESS
     RETURN
@@ -3616,27 +4132,34 @@ _InspectNormalWindow
     // Generic alarm sticker message
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il y a un signe d'avertissement")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er et advarselsklistremerke")
 #else
     INFO_MESSAGE("There is a warning sticker")
-#endif    
+#endif
 
     // Then what we see through the window
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_TENNISCOURT),tennis_court)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir un salon confortable")
         INFO_MESSAGE("Il y a aussi une salle à manger")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se en koselig stue")
+        INFO_MESSAGE("Det er også en spisestue")
 #else
         INFO_MESSAGE("I can see a comfortable lounge")
         INFO_MESSAGE("There's also a dining room")
-#endif    
+#endif
 tennis_court
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),fish_pond)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir une salle de jeux")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se et spillerom")
 #else
         INFO_MESSAGE("I can see a game room")
-#endif    
+#endif
 fish_pond
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_STUDY_ROOM),study_room)
@@ -3646,9 +4169,11 @@ study_room
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM),games_room)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir le bac à poissons dehors")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se fiskedammen utenfor")
 #else
         INFO_MESSAGE("I can see the fish pond outside")
-#endif    
+#endif
 games_room
 
     JUMP_IF_TRUE(lounge,CHECK_PLAYER_LOCATION(e_LOC_LOUNGE))
@@ -3656,25 +4181,31 @@ games_room
 lounge    
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir le court de tennis dehors")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se tennisbanen utenfor")
 #else
         INFO_MESSAGE("I can see the tennis court outside")
-#endif    
+#endif
 dining_room
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_KITCHEN),kitchen)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir le passage arrière dehors")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se bakgangen utenfor")
 #else
         INFO_MESSAGE("I can see the back wall outside")
-#endif    
+#endif
 kitchen
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_UP_STAIRS),up_stairs)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je peux voir le patio dehors")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg kan se terrassen utenfor")
 #else
         INFO_MESSAGE("I can see the patio outside")
-#endif    
+#endif
 up_stairs
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3685,9 +4216,11 @@ _SubCanSeeGardenOutside
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Je peux voir le potager dehors")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg kan se hagen utenfor")
 #else
     INFO_MESSAGE("I can see the garden outside")
-#endif    
+#endif
     RETURN
 .)
 
@@ -3697,17 +4230,22 @@ _InspectAlarmIndicator
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),alarm_disabled)      ; Is the alarm active...
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Le système d'alarme est désactivé")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Alarmsystemet er deaktivert")
 #else
         INFO_MESSAGE("The alarm system has been disabled")
-#endif    
+#endif
     ELSE(alarm_disabled,alarm_enabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Le système d'alarme est actif...")
         INFO_MESSAGE("mais les capteurs ont été trafiqués !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Alarmsystemet er aktivt, men...")
+        INFO_MESSAGE("sensorene er sabotert!")
 #else
         INFO_MESSAGE("The alarm system is active, but...")
         INFO_MESSAGE("the sensors have been tampered with!")
-#endif    
+#endif
     ENDIF(alarm_enabled)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3718,9 +4256,11 @@ _SearchCardboardBox
 _InspectCardboardBox
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Format postal standard")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Standard postpakke")
+#else
     INFO_MESSAGE("Postal service standard package")
-#endif    
+#endif
     JUMP(_InspectContainerGeneric)
 
 
@@ -3728,9 +4268,11 @@ _SearchTin
 _InspectTin
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une boite en métal ")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er en solid metallboks")
+#else
     INFO_MESSAGE("It's a sturdy metal box")
-#endif    
+#endif
     JUMP(_InspectContainerGeneric)
 
 
@@ -3740,17 +4282,21 @@ _InspectPlasticBag
     INCREASE_SCORE(POINTS_INSPECT_PLASTIC_BAG)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un sac blanc normal")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Bare en hvit generisk pose")
 #else
     INFO_MESSAGE("It's just a white generic bag")
-#endif    
+#endif
     ;JUMP(_InspectContainerGeneric)
 +_InspectBucket
 +_InspectContainerGeneric
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Peut servir à transporter des trucs")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kan brukes til å frakte ting")
+#else
     INFO_MESSAGE("Can be used to transport things")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3761,15 +4307,19 @@ _InspectDog
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne va pas vous laisser passer !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den slipper deg ikke forbi!")
 #else
         INFO_MESSAGE("It will not let you pass!")
-#endif    
+#endif
     ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den rører seg ikke")
 #else
         INFO_MESSAGE("It is not moving")
-#endif    
+#endif
     ENDIF(disabled)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3782,15 +4332,19 @@ _InspectGraffiti
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKTUNNEL),tunnel)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Celui-ci est presque joli !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den er faktisk ganske pen!")
 #else
         INFO_MESSAGE("That one is kind of pretty!")
-#endif    
+#endif
     ELSE(tunnel,street)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Aussi moche qu'inintéressant.")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Like dårlig kunst som innhold.")
 #else
         INFO_MESSAGE("The art is as bad as the content.")
-#endif    
+#endif
     ENDIF(street)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3801,9 +4355,11 @@ _InspectChurch
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une petite église de village")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En beskjeden landsbykirkje")
 #else
     INFO_MESSAGE("A modest village church")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3814,9 +4370,11 @@ _InspectWell
     DISPLAY_IMAGE(LOADER_PICTURE_INSIDE_WELL)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Juste un vieux puits")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Bare en gammel mosegrodd brønn")
 #else
     INFO_MESSAGE("Just an old mossy well")
-#endif    
+#endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
@@ -3830,10 +4388,13 @@ _ReadDuneBook
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un Dune de 1965, rongé par les vers")
     INFO_MESSAGE("Il paraît qu'un film est en cours!")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En orm-spist Dune-roman fra 1965")
+    INFO_MESSAGE("Hørte at de lager film av den?")
 #else
     INFO_MESSAGE("A wormed-out 1965 Dune novel")
     INFO_MESSAGE("I heard a movie was in the works?")
-#endif    
+#endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
@@ -3844,9 +4405,11 @@ _InspectRoadSign
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il dit 'Creuseurs & Fils SARL'.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det står 'Diggers & Sons Ltd.'")
 #else
     INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3861,10 +4424,13 @@ _InspectTrashCan
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("L'odeur et l'état sont répugnants !")
     INFO_MESSAGE("Il n'y a rien d'utilisable dedans")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den ser skitten ut og lukter vondt!")
+    INFO_MESSAGE("Absolutt ingenting nyttig i den")
 #else
     INFO_MESSAGE("It looks and smells filthy!")
     INFO_MESSAGE("Absolutely nothing useful in it")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_REFRESH
 .)
@@ -3879,6 +4445,8 @@ _InspectTombstone
     DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il n'avait que 45 ans :(")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Han var bare 45 år gammel :(")
 #else
     INFO_MESSAGE("He was only 45 years old :(")
 #endif
@@ -3891,9 +4459,11 @@ _InspectFishPond
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Beaucoup de poissons là-dedans !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ganske mange fisk der inne!")
 #else
     INFO_MESSAGE("Quite a few fish in there!")
-#endif    
+#endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
@@ -3905,9 +4475,11 @@ _InspectMixTape
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une compilation faite maison !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Hjemmelaget mixtape!")
 #else
     INFO_MESSAGE("Homemade mixtape!")
-#endif    
+#endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
@@ -3922,25 +4494,31 @@ _InspectSafe
             DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_WITH_BOMB)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Espérons qu'il va survivre")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Håper det overlever smellet")
 #else
             INFO_MESSAGE("Hopefully it will survive the blow")
-#endif    
+#endif
         ELSE(else,nobomb)
             DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Il est gros, mais semble fragile")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Den er stor, men ikke så stødig")
 #else
             INFO_MESSAGE("It's big, but not that sturdy")
-#endif    
+#endif
         ENDIF(nobomb)
-        WAIT_KEYPRESS    
+        WAIT_KEYPRESS
     ELSE(elseclose,safeopen)
         DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Quasiment rien de brisé!")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det meste er intakt!")
 #else
         INFO_MESSAGE("Most of the stuff is intact!")
-#endif    
+#endif
         WAIT_KEYPRESS    
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
             SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
@@ -3957,6 +4535,8 @@ _InspectThug
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il dort")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Han sover")
 #else
         INFO_MESSAGE("He is sleeping")
 #endif    
@@ -3964,6 +4544,9 @@ _InspectThug
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
         INFO_MESSAGE("Peut-être a-t'il des trucs utiles?")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Han beveger seg ikke")
+        INFO_MESSAGE("Kanskje har han nyttige ting?")
 #else
         INFO_MESSAGE("He is not moving")
         INFO_MESSAGE("Maybe he has useful items?")
@@ -3982,6 +4565,9 @@ _InspectPanicRoomDoor
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Ils ne plaisantaient pas...")
         INFO_MESSAGE("...c'était un acide puissant !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("De løy ikke...")
+        INFO_MESSAGE("...det var en kraftig syre!")
 #else
         INFO_MESSAGE("They were not lying...")
         INFO_MESSAGE("...that was a strong acid!")
@@ -3992,6 +4578,9 @@ _InspectPanicRoomDoor
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Un joli petit barrage...")
             INFO_MESSAGE("...plus qu'à le remplir !")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Et fint lite demningsverk...")
+            INFO_MESSAGE("...bare å fylle det opp!")
 #else
             INFO_MESSAGE("A nice little damn...")
             INFO_MESSAGE("...just need to fill it!")
@@ -4001,6 +4590,9 @@ _InspectPanicRoomDoor
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
             INFO_MESSAGE("La porte est-elle vulnérable?")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Umulig å gjette koden...")
+            INFO_MESSAGE("Er kanskje selve døren sårbar?")
 #else
             INFO_MESSAGE("Impossible to guess that code...")
             INFO_MESSAGE("Maybe the door itself is vulnerable?")
@@ -4075,6 +4667,8 @@ _ShowGirlInRoomWithBindings
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La victime est attachée...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Offeret er bundet...")
 #else
     INFO_MESSAGE("The victim is restrained...")
 #endif    
@@ -4089,6 +4683,8 @@ _ShowGirlInRoomWithBindings
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...elle a besoin de notre aide !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("...hun trenger vår hjelp!")
 #else
     INFO_MESSAGE("...she needs our help!")
 #endif    
@@ -4109,6 +4705,8 @@ _ShowGirlInRoomWithoutBindings
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle a coupé ses entraves...")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Hun kuttet sine bånd...")
 #else
         INFO_MESSAGE("She cut her bindings...")
 #endif    
@@ -4118,6 +4716,8 @@ _ShowGirlInRoomWithoutBindings
         WAIT(50)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("...mais comment s'échapper?")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("...nå for flukten?")
 #else
         INFO_MESSAGE("...now for the escape?")
 #endif    
@@ -4130,9 +4730,12 @@ _ShowGirlInRoomWithoutBindings
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),closed)
         ; The window is still closed
         WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
         _BUBBLE_LINE(10,50,0,"Dites-moi quoi faire !")
         _BUBBLE_LINE(15,65,0,"Je peux aider !")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(10,50,0,"Si meg hva jeg skal gjøre!")
+        _BUBBLE_LINE(15,65,0,"Jeg kan hjelpe!")
 #else
         _BUBBLE_LINE(10,50,0,"Tell me what to do!")
         _BUBBLE_LINE(15,65,0,"I can help!")
@@ -4141,9 +4744,12 @@ _ShowGirlInRoomWithoutBindings
         ; The window is now opened
         JUMP_IF_TRUE(rope_not_attached,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
             WHITE_BUBBLE(2)
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
             _BUBBLE_LINE(10,50,0,"La fenêtre est ouverte maintenant.")
             _BUBBLE_LINE(15,65,0,"Mais je ne peux pas descendre...")
+#elif defined(LANGUAGE_NO)
+            _BUBBLE_LINE(10,50,0,"Vinduet er åpent nå.")
+            _BUBBLE_LINE(15,65,0,"Men jeg kan ikke klatre ned...")
 #else
             _BUBBLE_LINE(10,50,0,"The window is open now.")
             _BUBBLE_LINE(15,65,0,"But I can't climb down...")
@@ -4168,6 +4774,9 @@ _ShowEmptyHostageRoom
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La pièce est vide...")
     INFO_MESSAGE("...la fille doit déjà être en bas")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Rommet er tomt...")
+    INFO_MESSAGE("...hun er nok utenfor nå")
 #else
     INFO_MESSAGE("The room is empty...")
     INFO_MESSAGE("...she must be outside by now")
@@ -4281,8 +4890,10 @@ too_high_to_jump
             ; The rope is not attached
             ; Show the girl's message to the player        
             WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
             _BUBBLE_LINE(80,25,0,"C'est trop haut pour sauter!")
+#elif defined(LANGUAGE_NO)
+            _BUBBLE_LINE(93,25,0,"Det er for høyt til å hoppe!")
 #else
             _BUBBLE_LINE(93,25,0,"It's too high to jump!")
 #endif    
@@ -4292,8 +4903,10 @@ too_high_to_jump
         ELSE(rope_not_attached,rope_attached)
             ; The rope is attached
             WHITE_BUBBLE(1)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
             _BUBBLE_LINE(107,25,0,"Je peux le faire !")
+#elif defined(LANGUAGE_NO)
+            _BUBBLE_LINE(93,25,0,"Det klarer jeg!")
 #else
             _BUBBLE_LINE(93,25,0,"I can do that!")
 #endif    
@@ -4307,8 +4920,10 @@ girl_at_the_window
 
     ELSE(window_open,window_closed)
         FADE_BUFFER 
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Impossible d'accéder à partir d'ici")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Umulig å nå herfra")
 #else
         INFO_MESSAGE("Impossible to access from here")
 #endif        
@@ -4363,11 +4978,13 @@ _OpenCurtain
     UNSET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                           ; Open it!
     SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_PANIC_ROOM_DOOR)           ; We can now access the panic room
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CURTAIN)                                          ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"et åpent _gardin")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
-#endif        
+#endif
     END_AND_REFRESH
 .)
 
@@ -4399,6 +5016,8 @@ _SubErrorTooHigh
 .(
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("C'est trop haut")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det er for høyt")
 #else
     ERROR_MESSAGE("It's too high")
 #endif        
@@ -4415,11 +5034,13 @@ _OpenFridge
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                                ; Open it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_FRIDGE)                                               ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"et åpent _kjøleskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open _fridge")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
         SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
     ENDIF(meat)
@@ -4434,11 +5055,13 @@ _OpenMedicineCabinet
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                       ; Open it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie ouverte")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"et åpent _medisinskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine _cabinet")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
         SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
     ENDIF(pills)
@@ -4453,17 +5076,21 @@ _OpenGunCabinet
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                            ; Open it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes ouverte")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"et åpent _våpenskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"an open gun _cabinet")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_NONE),dartgun)                    ; Is the dart gun still hidden (in the gun cabinet)? 
         GOSUB(_SubFoundSomething)
         DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
         SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Une seule fléchette, mieux que rien!")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Bare én pil, men bedre enn ingenting!")
 #else
         INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
@@ -4480,11 +5107,13 @@ _OpenTVCabinet
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                             ; Open it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"un _meuble TV ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"et åpent _TVskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"an open TV _cabinet")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Oric,e_LOC_NONE),oric)                          ; Is the Oric still hidden (in the TV cabinet)? 
         GOSUB(_SubFoundSomething)
         SET_ITEM_LOCATION(e_ITEM_Oric,e_LOC_GAMESROOM)                                 ; It's now visible inside the game room
@@ -4501,11 +5130,13 @@ _OpenDrawer
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_Drawer,ITEM_FLAG_CLOSED)                                                ; Open it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_CABINET)                                              ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"un _tiroir ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"en åpen _skuff")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"an open _drawer")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_NONE),batteries)                          ; Are the batteries still hidden (in the drawer)? 
         GOSUB(_SubFoundSomething)
         SET_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_GUESTBEDROOM)                                   ; It's now visible inside the guest bedroom
@@ -4522,6 +5153,8 @@ _OpenAlarmPanel
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
 #ifdef LANGUAGE_FR                                                                             ; Show error to the player
         ERROR_MESSAGE("Il faut une clef pour l'ouvrir")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("En nøkkel kreves for å åpne den")
 #else
         ERROR_MESSAGE("A key is required to open it")
 #endif        
@@ -4531,11 +5164,13 @@ _OpenAlarmPanel
         PLAY_SOUND(_DoorOpening)
         UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_CLOSED)                               ; Open it!
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_OPENED_THE_PANEL)                                   ; And get an achievement for that action
-#ifdef LANGUAGE_FR                                                                             ; Update the description 
+#ifdef LANGUAGE_FR                                                                             ; Update the description
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme ouverte")
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"et åpent alarm _panel")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an open alarm _panel")
-#endif        
+#endif
         SET_ITEM_LOCATION(e_ITEM_AlarmSwitch,e_LOC_DARKCELLARROOM)                         ; The alarm button is now visible 
         JUMP(_InspectPanel)
     ENDIF(unlocked)
@@ -4548,6 +5183,8 @@ _OpenBasementWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),basement)                              ; Are we on the basement side in the room itself...
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Inaccessible...")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Utilgjengelig...")
 #else
         INFO_MESSAGE("I can't reach it...")
 #endif
@@ -4557,6 +5194,8 @@ _OpenBasementWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement_on_ladder)                     ; Are we on the basement side on the ladder...
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Le cadre est bloqué...")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Karmen sitter fast...")
 #else
         INFO_MESSAGE("The frame is stuck...")                                                   
 #endif        
@@ -4564,6 +5203,8 @@ _OpenBasementWindow
         DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est fermée de l'intérieur...")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den er låst innenfra...")
 #else
         INFO_MESSAGE("It is locked from the inside...")
 #endif        
@@ -4582,6 +5223,8 @@ _OpenNormalWindow
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle semble verrouillée...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den ser ut til å være låst...")
 #else
     INFO_MESSAGE("It seems to be locked...")
 #endif    
@@ -4590,6 +5233,8 @@ _OpenWindowCommon
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...peut-être en secouant ?")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("...kanskje riste litt på den?")
 #else
     INFO_MESSAGE("...maybe shake it a bit?")
 #endif    
@@ -4597,6 +5242,8 @@ _OpenWindowCommon
     JUMP_IF_FALSE(_AlarmTriggered,CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED))      ; Is the alarm active...
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Rien ne se passe...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ingenting skjer...")
 #else
     INFO_MESSAGE("Nothing happens...")
 #endif    
@@ -4606,6 +5253,8 @@ _OpenWindowCommon
 _OpenWindowFromInside
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pas besoin d'ouvrir la fenêtre")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er ikke nødvendig å åpne vinduet")
 #else
     INFO_MESSAGE("There's no need to open the window")
 #endif    
@@ -4623,6 +5272,8 @@ _AlarmTriggered
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous avez déclenché l'alarme!")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du utløste alarmen!")
 #else
     INFO_MESSAGE("You triggered the alarm!")
 #endif    
@@ -4636,11 +5287,13 @@ _OpenCarBoot
     JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED))  ; Is the boot closed?
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                     ; Open it!
-#ifdef LANGUAGE_FR                                                                        ; Update the description 
+#ifdef LANGUAGE_FR                                                                        ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"et åpent _bagasjerom")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"an open car _boot")
-#endif        
+#endif
     END_AND_REFRESH
 .)
 
@@ -4650,11 +5303,13 @@ _OpenCarDoor
     JUMP_IF_FALSE(_ErrorAlreadyOpen_Elle,CHECK_ITEM_FLAG(e_ITEM_CarDoor,ITEM_FLAG_CLOSED))  ; Is the door closed?
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                       ; Open it!
-#ifdef LANGUAGE_FR                                                                          ; Update the description 
+#ifdef LANGUAGE_FR                                                                          ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière ouverte")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"en åpen bil _dør")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"an open car _door")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_NONE),mixtape)                         ; Is the mixtape still not found?
         SET_ITEM_LOCATION(e_ITEM_MixTape,e_LOC_ABANDONED_CAR)                               ; It's now visible inside the car
     ENDIF(mixtape)
@@ -4667,11 +5322,13 @@ _OpenCarPetrolTank
     JUMP_IF_FALSE(_ErrorAlreadyOpen_Il,CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED))    ; Is the petrol tank closed?
     PLAY_SOUND(_DoorOpening)
     UNSET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                       ; Open it!
-#ifdef LANGUAGE_FR                                                                          ; Update the description 
+#ifdef LANGUAGE_FR                                                                          ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence ouvert")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"en åpen bensin _tank")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"an open petrol _tank")
-#endif        
+#endif
     END_AND_REFRESH
 .)
 
@@ -4684,6 +5341,8 @@ _OpenChurch
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),frontdoor)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Peut-être une entrée à l'arrière ?")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Kanskje finnes det en bakinngang?")
 #else
         INFO_MESSAGE("Maybe there's a back entrance?")
 #endif
@@ -4722,11 +5381,13 @@ _CloseCurtain
     SET_ITEM_FLAGS(e_ITEM_Curtain,ITEM_FLAG_CLOSED)                                                 ; Close it!
     SET_LOCATION_DIRECTION(e_LOC_WESTGALLERY,e_DIRECTION_NORTH,e_LOC_NONE)                          ; The room behind is not accessible anymore
 +_gTextItemClosedCurtain = *+2                                                                      ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"un _rideau fermé")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"et lukket _gardin")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed _curtain")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4738,11 +5399,13 @@ _CloseFridge
     SET_ITEM_FLAGS(e_ITEM_Fridge,ITEM_FLAG_CLOSED)                                                  ; Close it!
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CLOSED_THE_FRIDGE)                                               ; And get an achievement for that action
 +_gTextItemFridge = *+2                                                                             ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"un _réfrigérateur")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"et _kjøleskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"a _fridge")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4753,11 +5416,13 @@ _CloseMedicineCabinet
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemMedicineCabinet = *+2                                                                    ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"une _armoire à pharmacie")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"et _medisinskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"a medicine _cabinet")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4768,11 +5433,13 @@ _CloseGunCabinet
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED)                                              ; Close it!
 +_gTextItemClosedGunCabinet = *+2                                                                   ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"une _armoire à armes")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"et _våpenskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_GunCabinet,"a closed gun _cabinet")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4783,11 +5450,13 @@ _CloseTVCabinet
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED)                                               ; Close it!
 +_gTextItemClosedTVCabinet = *+2                                                                    ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"un _meuble TV fermé")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"et _TVskap")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_TVCabinet,"a closed TV _cabinet")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4798,11 +5467,13 @@ _CloseDrawer
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_Drawer,ITEM_FLAG_CLOSED)                                                  ; Close it!
 +_gTextItemClosedDrawer = *+2                                                                       ; Description used by default when the game starts
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"un _tiroir fermé")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"en _skuff")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Drawer,"a closed _drawer")
-#endif    
+#endif
     END_AND_REFRESH
 .)
 
@@ -4822,11 +5493,13 @@ _CloseAlarmPanel
 
 _SubSetLockedPanelDescription
 .(
-#ifdef LANGUAGE_FR                                                                                  ; Update the description 
+#ifdef LANGUAGE_FR                                                                                  ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme fermée")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"et lukket alarm _panel")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"a closed alarm _panel")
-#endif        
+#endif
     RETURN
 .)
 
@@ -4837,11 +5510,13 @@ _CloseCarBoot
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_CarBoot,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarBoot = *+2        
-#ifdef LANGUAGE_FR                                                                          ; Update the description 
+#ifdef LANGUAGE_FR                                                                          ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"un _coffre de voiture")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"et _bagasjerom")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarBoot,"a car _boot")
-#endif       
+#endif
     END_AND_REFRESH
 .)
 
@@ -4852,11 +5527,13 @@ _CloseCarDoor
     PLAY_SOUND(_DoorClosing)
     SET_ITEM_FLAGS(e_ITEM_CarDoor,ITEM_FLAG_CLOSED)                                          ; Close it!
 +_gTextItemCarDoor = *+2        
-#ifdef LANGUAGE_FR                                                                           ; Update the description 
+#ifdef LANGUAGE_FR                                                                           ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"une _portière")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"en bil _dør")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarDoor,"a car _door")
-#endif        
+#endif
     END_AND_REFRESH
 .)
 
@@ -4866,11 +5543,13 @@ _CloseCarPetrolTank
     JUMP_IF_TRUE(_ErrorAlreadyClosed_Il,CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED))   ; Is the petrol tank open?
     SET_ITEM_FLAGS(e_ITEM_CarTank,ITEM_FLAG_CLOSED)                                         ; Close it!
 +_gTextItemCarPetrolTank = *+2        
-#ifdef LANGUAGE_FR                                                                          ; Update the description 
+#ifdef LANGUAGE_FR                                                                          ; Update the description
     SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"un _réservoir d'essence")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"en bensin _tank")
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_CarTank,"a closed petrol _tank")
-#endif        
+#endif
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)                 ; If the petrol was not collected
         SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)                                        ; Then we hide it again
     ENDIF(petrol)
@@ -4934,15 +5613,19 @@ _gUseItemMappingsArray
 _UseOricComputer   ; view_oric_computer.png
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
-#ifdef LANGUAGE_FR               
+#ifdef LANGUAGE_FR
     QUICK_MESSAGE("Ca va stopper le jeu: Etes-vous sur ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    QUICK_MESSAGE("Dette avslutter spillet: Er du sikker?")
+#else
     QUICK_MESSAGE("This will end the game: Are you sure?")
 #endif    
     WAIT_KEYPRESS
-#ifdef LANGUAGE_FR               
+#ifdef LANGUAGE_FR
     IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"O"),confirmation)
-#else    
+#elif defined(LANGUAGE_NO)
+    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"J"),confirmation)
+#else
     IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"Y"),confirmation)
 #endif    
         QUICK_MESSAGE("RESET...")
@@ -4962,6 +5645,9 @@ _UseCar
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("C'est ma voiture.")
         INFO_MESSAGE("Je dois finir la mission d'abord !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Dette er bilen min.")
+        INFO_MESSAGE("Jeg må fullføre oppdraget først!")
 #else
         INFO_MESSAGE("This is my car.")
         INFO_MESSAGE("I need to finish the mission first!")
@@ -4969,6 +5655,8 @@ _UseCar
     ELSE(marketplace,abandonned_car)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Rapprochons-nous")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("La oss komme nærmere")
 #else
         INFO_MESSAGE("Let's get closer")
 #endif        
@@ -4982,12 +5670,16 @@ _InspectCarBoot
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarBoot,ITEM_FLAG_CLOSED),boot_closed)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il est fermé mais pas à clef")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den er lukket men ikke låst.")
 #else
         INFO_MESSAGE("It's closed, but not locked.")
-#endif    
+#endif
     ELSE(boot_closed,boot_open)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il n'y a que la roue de secours")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det er bare reservehjulet der")
 #else
         INFO_MESSAGE("Other than the spare wheel it's empty")
 #endif    
@@ -5003,6 +5695,8 @@ _InspectCarDoor
     ELSE(door_closed,door_open)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est mangée par la rouille")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Døren er spist opp av rust")
 #else
         INFO_MESSAGE("The door is eaten by rust")
 #endif    
@@ -5016,12 +5710,16 @@ _InspectCarTank
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),tank_closed)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il est fermé mais pas à clef")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den er lukket men ikke låst.")
 #else
         INFO_MESSAGE("It's closed, but not locked.")
-#endif    
+#endif
     ELSE(tank_closed,tank_open)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il reste de l'essence dedans")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Det er fortsatt bensin i den")
 #else
         INFO_MESSAGE("It still has petrol in it")
 #endif    
@@ -5035,6 +5733,8 @@ _UseBucket
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),in_dark_room)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Trop petit pour atteindre la fenêtre.")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("For liten til å nå vinduet.")
 #else
         INFO_MESSAGE("Too small to reach the window.")
 #endif    
@@ -5051,6 +5751,8 @@ _UseLadder
 cannot_use_ladder_here
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("C'est inutile ici")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Kan ikke bruke det her")
 #else
     ERROR_MESSAGE("Can't use it there")
 #endif    
@@ -5059,6 +5761,8 @@ cannot_use_ladder_here
 ladder_too_short
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est bien trop courte!")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er altfor kort!")
 #else
     ERROR_MESSAGE("It's way too short!")
 #endif    
@@ -5070,16 +5774,20 @@ install_the_ladder
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous installez l'échelle")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du plasserer stigen riktig")
 #else
     INFO_MESSAGE("You position the ladder properly")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une _échelle prête à l'emploi")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"en _stige klar til bruk")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a _ladder ready to climb")
-#endif    
+#endif
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_LADDER)
     END_AND_REFRESH
 .)
@@ -5104,6 +5812,8 @@ _UseRope
                 GOSUB(_ShowGirlAtTheWindow)                          ; We show the girl...
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("On y va !!!")
+#elif defined(LANGUAGE_NO)
+                INFO_MESSAGE("La oss dra!!!")
 #else
                 INFO_MESSAGE("Let's go!!!")
 #endif    
@@ -5121,8 +5831,10 @@ _UseRope
                 WAIT(50*2)
 
             ELSE(rope_attached,rope_not_attached)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
                 ERROR_MESSAGE("La corde n'est pas attachée")
+#elif defined(LANGUAGE_NO)
+                ERROR_MESSAGE("Tauet er ikke festet")
 #else
                 ERROR_MESSAGE("The rope is not attached")
 #endif       
@@ -5134,11 +5846,13 @@ _UseRope
             SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_CURRENT)    
             SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_IMMOVABLE)
             UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_THE_ROPE)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
             SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde dans la chambre forte")
-#else    
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_Rope,"et _tau i panikk rommet")
+#else
             SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope in the panic room")
-#endif    
+#endif
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)                                ; Draw the base image with the hole over an empty room
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
                 BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
@@ -5164,8 +5878,10 @@ acid_hole_rope
     JUMP_IF_TRUE(inside_the_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(around_the_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
 cannot_use_rope_here
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
     ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Kan ikke bruke det her")
 #else
     ERROR_MESSAGE("Can't use it there")
 #endif    
@@ -5183,18 +5899,22 @@ around_the_pit
     ; If the rope is already attached, we don't redo the whole sequence
     JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous attachez la corde à l'arbre")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du fester tauet til treet")
 #else
     INFO_MESSAGE("You attach the rope to the tree")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une _corde attachée à un arbre")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"et _tau festet i treet")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a _rope attached to a tree")
-#endif    
+#endif
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
     END_AND_REFRESH
 .)
@@ -5209,8 +5929,10 @@ _UseGame
         CALL_NATIVE(_PlayMonkeyKing)
     ELSE(batteries,no_batteries)
     // Non functional game
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Le jeu ne semble pas fonctionner")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Spillet ser ikke ut til å virke")
 #else
         INFO_MESSAGE("The game does not seem to work")
 #endif    
@@ -5228,9 +5950,11 @@ _UseDartGun
     JUMP_IF_TRUE(snoozed_dog,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
         INCREASE_SCORE(POINTS_DART_GUNNED_DOG)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Fais de beaux rêves")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Sov godt, hunden")
+#else
         INFO_MESSAGE("Sweet dreams doggy")
 #endif    
         JUMP(_CommonDogDisabled)
@@ -5241,9 +5965,11 @@ snoozed_dog
     JUMP_IF_TRUE(snoozed_thug,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_THUG)
         INCREASE_SCORE(POINTS_DART_GUNNED_THUG)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Dors bien, dur à cuire")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Sov godt, tøffing")
+#else
         INFO_MESSAGE("Sleep tight, tough guy")
 #endif    
         JUMP(_CommonThugDisabled)
@@ -5260,13 +5986,16 @@ _UseKey
             UNSET_ITEM_FLAGS(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED)                   ; Unlock it!
             SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
             INCREASE_SCORE(POINTS_USED_KEY)
-#ifdef LANGUAGE_FR                                                                             ; Update the description 
+#ifdef LANGUAGE_FR                                                                             ; Update the description
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
             INFO_MESSAGE("La centrale est déverrouillée")
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"et ulåst alarm _panel")
+            INFO_MESSAGE("Panelet er nå ulåst")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"an unlocked alarm _panel")
             INFO_MESSAGE("The panel is now unlocked")
-#endif        
+#endif
             WAIT(50*1)
             END_AND_PARTIAL_REFRESH
         ENDIF(locked)
@@ -5276,6 +6005,8 @@ _UseKey
         DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("C'est une serrure numérique !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den bruker en digital lås!")
 #else
         INFO_MESSAGE("It uses a digital lock!")
 #endif    
@@ -5286,6 +6017,8 @@ _UseKey
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),front_entrance)            ; Are we in front of the main entrance door of the house?
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle ne rentre pas")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Den passer ikke")
 #else
         INFO_MESSAGE("It does not fit")
 #endif    
@@ -5302,23 +6035,29 @@ _UseAlarmSwitch
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
         SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
         INCREASE_SCORE(POINTS_USED_SWITCH)
-#ifdef LANGUAGE_FR                                                                      ; Update the description 
+#ifdef LANGUAGE_FR                                                                      ; Update the description
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position arrêt")
         INFO_MESSAGE("L'alarme est désactivée")
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"en _bryter i AV-posisjon")
+        INFO_MESSAGE("Alarmen er nå deaktivert")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in OFF position")
         INFO_MESSAGE("The alarm is now disabled")
-#endif        
+#endif
     ELSE(on,off)
         UNSET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                         ; Enable the alarm 
 +_gTextItemAlarmSwitch = *+2
-#ifdef LANGUAGE_FR                                                                      ; Update the description 
+#ifdef LANGUAGE_FR                                                                      ; Update the description
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position marche")
         INFO_MESSAGE("L'alarme est activée")
+#elif defined(LANGUAGE_NO)
+        SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"en _bryter i PÅ-posisjon")
+        INFO_MESSAGE("Alarmen er nå aktivert")
 #else
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"a _switch in ON position")
         INFO_MESSAGE("The alarm is now enabled")
-#endif        
+#endif
     ENDIF(off)
     END_AND_REFRESH
 .)
@@ -5331,6 +6070,8 @@ _UseHosePipe
 cannot_use_hose_here
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Kan ikke bruke det her")
 #else
     ERROR_MESSAGE("Can't use it there")
 #endif    
@@ -5340,6 +6081,8 @@ abandonned_car
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),closed)                     ; Is the petrol tank open?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Le réservoir est fermé")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Tanken er lukket")
 #else
         ERROR_MESSAGE("The tank is closed")
 #endif        
@@ -5349,6 +6092,8 @@ abandonned_car
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Hose,ITEM_FLAG_ATTACHED),already_inside)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Il est déjà dedans")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Den er allerede inni")
 #else
         ERROR_MESSAGE("It's already inside")
 #endif    
@@ -5356,6 +6101,8 @@ abandonned_car
     ELSE(already_inside,not_inside_yet)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Vous mettez le tuyau dedans")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Du stikker slangen i tanken")
 #else
         INFO_MESSAGE("You put the hose in the tank")
 #endif    
@@ -5366,11 +6113,13 @@ abandonned_car
         ENDIF(petrol)
     ENDIF(not_inside_yet)
 
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un _tuyau dans le réservoir")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"en _slange i bensintanken")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a _hose in the petrol tank")
-#endif    
+#endif
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_HOSE)
     INCREASE_SCORE(POINTS_USED_HOSE)
     END_AND_REFRESH
@@ -5393,6 +6142,8 @@ _UseMortar
 cannot_use_mortar
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Je n'ai rien à moudre")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Ingenting å male")
 #else
     ERROR_MESSAGE("Nothing to use it with")
 #endif    
@@ -5413,9 +6164,11 @@ _UseBomb
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kan ikke bruke det her")
 #else
         ERROR_MESSAGE("I can't use it here")
-#endif        
+#endif
         END_AND_REFRESH
     ENDIF(cellar)
     JUMP(_CombineStickyBombWithSafe)
@@ -5443,15 +6196,19 @@ _UseMatches
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR),cellar)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kan ikke bruke det her")
 #else
         ERROR_MESSAGE("I can't use it here")
-#endif        
+#endif
         END_AND_PARTIAL_REFRESH
     ENDIF(cellar)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),safe)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Il faut d'abord placer la bombe")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Du må plassere bomben først")
 #else
         ERROR_MESSAGE("You need to place the bomb first")
 #endif        
@@ -5471,6 +6228,8 @@ _UseProtectionSuit
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Essayons-la...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("La oss prøve den...")
 #else
     INFO_MESSAGE("Let's try it...")
 #endif    
@@ -5480,6 +6239,8 @@ _UseProtectionSuit
         ; The player is in front of the Panic Room, we can now equip the protection suit
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("...c'est la bonne taille !")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("...den passer perfekt!")
 #else
         INFO_MESSAGE("...it fits perfectly!")
 #endif        
@@ -5489,6 +6250,8 @@ _UseProtectionSuit
         PLAY_SOUND(_Zipper)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("...mais pas besoin ici")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("...men den er til ingen nytte her")
 #else
         INFO_MESSAGE("...but it's of no use here")
 #endif        
@@ -5503,6 +6266,8 @@ _UseClay
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)    ; Is the clay attached?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("C'est déjà en place !")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Den er allerede på plass!")
 #else
         ERROR_MESSAGE("It's already in place!")
 #endif        
@@ -5512,6 +6277,8 @@ _UseClay
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kan ikke bruke det her")
 #else
         ERROR_MESSAGE("I can't use it here")
 #endif        
@@ -5521,6 +6288,8 @@ _UseClay
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("C'est trop sec !")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Den er for tørr!")
 #else
         ERROR_MESSAGE("It's too dry!")
 #endif        
@@ -5535,6 +6304,9 @@ _UseClay
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ok, ca devrait suffire...")
     INFO_MESSAGE("...plus qu'à remplir !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ok, det burde holde...")
+    INFO_MESSAGE("...nå bare å fylle det!")
 #else
     INFO_MESSAGE("Ok, that should be good enough...")
     INFO_MESSAGE("...now just need to fill it!")
@@ -5548,6 +6320,8 @@ _UseAcid
     IF_FALSE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)    ; Are we in the proper location to use the acid?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas utilisable ici")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Kan ikke bruke det her")
 #else
         ERROR_MESSAGE("I can't use it here")
 #endif        
@@ -5558,7 +6332,10 @@ _UseAcid
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il faudrait un barrage sinon")
         INFO_MESSAGE("l'acide va juste couler au sol")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg trenger en barriere ellers")
+        INFO_MESSAGE("vil syren bare renne på gulvet")
+#else
         INFO_MESSAGE("I need some kind of barrier else")
         INFO_MESSAGE("the acid will just spill to the floor")
 #endif    
@@ -5568,6 +6345,8 @@ _UseAcid
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
 #ifdef LANGUAGE_FR
         ERROR_MESSAGE("Pas sans équipement de protection")
+#elif defined(LANGUAGE_NO)
+        ERROR_MESSAGE("Trenger verneutstyr først")
 #else
         ERROR_MESSAGE("Needs some protection equipment first")
 #endif        
@@ -5585,6 +6364,9 @@ _UseAcid
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Suffisamment large pour voir...")
     INFO_MESSAGE("...ou passer des objets ?")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Stort nok til å kikke gjennom...")
+    INFO_MESSAGE("...eller sende gjenstander?")
 #else
     INFO_MESSAGE("Large enough to peek through...")
     INFO_MESSAGE("...or even pass objects?")
@@ -5605,7 +6387,9 @@ _UseFancyStones
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elles sont seulement décoratives.")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("De er bare dekorative.")
+#else
     INFO_MESSAGE("They are just light porous fakes.")
 #endif    
     END_AND_PARTIAL_REFRESH
@@ -5616,7 +6400,9 @@ _UseComputer
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il semble être verrouillé.")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den ser ut til å være låst.")
+#else
     INFO_MESSAGE("It appears to be boot locked.")
 #endif    
     END_AND_PARTIAL_REFRESH
@@ -5629,7 +6415,9 @@ _UseGameConsole
 +_UseTelevision
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("C'est tentant, mais mission d'abord !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Fristende, men vi har et oppdrag!")
+#else
     INFO_MESSAGE("It looks cool, but we have a mission!")
 #endif
     WAIT_KEYPRESS    
@@ -5677,6 +6465,8 @@ _SearchThug
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il fallait d'abord le maitriser")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Du burde ha overmannet ham først")
 #else
         INFO_MESSAGE("You should have subdued him first")
 #endif    
@@ -5692,6 +6482,9 @@ _SearchThug
 #ifdef LANGUAGE_FR
         _BUBBLE_LINE(5,5,0,"C'était une erreur:")
         _BUBBLE_LINE(60,16,0,"Ma dernière")
+#elif defined(LANGUAGE_NO)
+        _BUBBLE_LINE(5,5,0,"Dette var en feil:")
+        _BUBBLE_LINE(60,13,3,"Min siste")
 #else
         _BUBBLE_LINE(5,5,0,"This was a mistake:")
         _BUBBLE_LINE(60,16,0,"My last one")
@@ -5708,7 +6501,9 @@ thug_disabled
     JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_NONE))
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Vous l'avez déjà fouillé")
-#else    
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Du har allerede visitert ham")
+#else
     ERROR_MESSAGE("You've already frisked him")
 #endif    
     END_AND_PARTIAL_REFRESH
@@ -5768,8 +6563,10 @@ _SubBreadCommon
         SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_GONE_FOREVER)
         INCREASE_SCORE(POINTS_GAVE_BREAD_TO_FISH)
         PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Les poissons mangent les miettes")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Fiskene spiser smuler")
 #else
         INFO_MESSAGE("The fish eat the crumbs")
 #endif    
@@ -5784,11 +6581,13 @@ _SubBreadCommon
             // The bird is now possible to catch
             INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
             PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
             SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe qui picore")
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"en _due som spiser brødsmuler")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating bread crumbs")
-#endif    
+#endif
             GOSUB(_SubDoveEating)
             END_AND_REFRESH
         ENDIF(dove_present)
@@ -5811,7 +6610,9 @@ _UseApples
     GOSUB(_SubApplesCommon)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vraiment très bonnes !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Virkelig veldig gode!")
+#else
     INFO_MESSAGE("Really tasty !")
 #endif    
     GOSUB(_SubResetApplesLocation)
@@ -5825,8 +6626,10 @@ _SubApplesCommon
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FISHPND),at_the_fish_pond)
         // The fish don't like the apples, whole or cut
         PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Ces poissons n'aiment pas les pommes")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Disse fiskene liker ikke epler")
 #else
         INFO_MESSAGE("These fish don't like apples")
 #endif    
@@ -5843,18 +6646,22 @@ _SubApplesCommon
                 // The bird is now possible to catch
                 INCREASE_SCORE(POINTS_GAVE_APPLES_TO_DOVE)
                 PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
                 SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe mange des morceaux")
+#elif defined(LANGUAGE_NO)
+                SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"en _due som spiser eplebiter")
 #else
                 SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a _dove eating apple chunks")
-#endif    
+#endif
                 GOSUB(_SubDoveEating)
                 END_AND_REFRESH
             ELSE(apple_cut,apple_not_cut)
                 // The bird is not interested by an uncut apple
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("La colombe n'est pas intéressée")
-#else    
+#elif defined(LANGUAGE_NO)
+                INFO_MESSAGE("Duen ser ikke interessert ut")
+#else
                 INFO_MESSAGE("The dove does not seem interested")
 #endif    
                 END_AND_PARTIAL_REFRESH
@@ -5868,8 +6675,10 @@ _SubApplesCommon
 _SubDoveEating
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("On peut l'attraper maintenant")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kanskje jeg kan fange den nå?")
 #else
     INFO_MESSAGE("Maybe I can catch it now?")
 #endif    
@@ -5897,6 +6706,8 @@ dog_eating_the_meat
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Content que ce ne soit pas moi !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Godt at det ikke er meg der!")
 #else
     INFO_MESSAGE("Glad it's not me there!")
 #endif    
@@ -5921,8 +6732,10 @@ _FreeDove
 .(    
     CLEAR_TEXT_AREA(4)
     // When left anywhere, the dove will manage to fly away
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("La colombe s'échappe")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Duen flyr bort")
 #else
     INFO_MESSAGE("The dove flies away")
 #endif    
@@ -5932,8 +6745,10 @@ _FreeDove
     JUMP_IF_TRUE(nothing_to_chase_the_dove,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE)            ; Show the picture with the dog running after the dove
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
-#ifdef LANGUAGE_FR        
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Forhåpentligvis fanger ikke hunden den")
 #else
         INFO_MESSAGE("Hopefully, the dog will not catch it")
 #endif        
@@ -6007,11 +6822,15 @@ _SliceApples
     INFO_MESSAGE("Vous découpez les pommes...")
     INFO_MESSAGE("...préparation pour un clafoutis ?")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"des$_pommes en morceaux")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du skjærer eplene...")
+    INFO_MESSAGE("...klar for en eplekake?")
+    SET_ITEM_DESCRIPTION(e_ITEM_Apple,"noen$_epler i biter")
+#else
     INFO_MESSAGE("You chop the apples...")
     INFO_MESSAGE("...are you preparing a clafoutis?")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"chopped _apples")   // SET_ITEM_DESCRIPTION(e_ITEM_Apple,"$chopped _apples") ???? (space in the description)
-#endif    
+#endif
     SET_ITEM_FLAGS(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED)
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -6021,9 +6840,11 @@ _SliceApples
 _ScareDoveAway
 .(
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("La colombe s'envole effrayée")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Du skremte bort duen")
+#else
     INFO_MESSAGE("You scared the dove away")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
@@ -6071,13 +6892,16 @@ throw_net
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
         UNSET_ITEM_FLAGS(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE)
         PLAY_SOUND(_Swoosh)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("La colombe est prise dans le filet")
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une _colombe empêtrée")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Duen er fanget i nettet")
+        SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"en _due som sitter fast")
+#else
         INFO_MESSAGE("The dove is caught in the net")
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
-#endif    
+#endif
         END_AND_REFRESH
 dove_tree
         // If the dove is still in the tree, indicate we can't do that
@@ -6103,9 +6927,11 @@ dog_net
 _ErrorNoFishing
 .(
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Je déteste pêcher...")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg hater å fiske...")
+#else
     INFO_MESSAGE("I hate fishing...")
 #endif    
     END_AND_REFRESH
@@ -6115,9 +6941,11 @@ _ErrorNoFishing
 _ErrorTooRisky
 .(
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Trop dangereux !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("For risikabelt!")
+#else
     INFO_MESSAGE("Too risky!")
 #endif    
     END_AND_REFRESH
@@ -6127,9 +6955,11 @@ _ErrorTooRisky
 _ErrorNothingToCatch
 .(
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Rien à attraper !")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ingenting å fange!")
+#else
     INFO_MESSAGE("Nothing to catch!")
 #endif    
     END_AND_REFRESH
@@ -6139,9 +6969,11 @@ _ErrorNothingToCatch
 _ErrorNoStealing
 .(
     CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Un peu kleptomane sur les bords ?")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Litt kleptoman kanskje?")
+#else
     INFO_MESSAGE("A bit of a kleptomaniac, huh?")
 #endif    
     END_AND_REFRESH
@@ -6160,7 +6992,9 @@ _UseSnookerCue
     JUMP_IF_FALSE(game_room,CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM))
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Je n'ai pas le temps de jouer !")
-#else    
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Jeg har ikke tid til å spille!")
+#else
         INFO_MESSAGE("I don't have time to play!")
 #endif    
         END_AND_REFRESH
@@ -6202,6 +7036,8 @@ thug_snooker_cue
                 PLAY_SOUND(_Pling)
 #ifdef LANGUAGE_FR
                 INFO_MESSAGE("La queue brise le carreau")
+#elif defined(LANGUAGE_NO)
+                INFO_MESSAGE("Kølla knuser vindusruten")
 #else
                 INFO_MESSAGE("The cue smashes a window pane")
 #endif    
@@ -6211,8 +7047,10 @@ thug_snooker_cue
                 INCREASE_SCORE(POINTS_SMASHED_WINDOW_WITH_CUE)
             ELSE(window_open,window_closed)
                 ; The window is closed
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
                 ERROR_MESSAGE("La fenêtre est toujours fermée!")
+#elif defined(LANGUAGE_NO)
+                ERROR_MESSAGE("Bør nok åpne vinduet først!")
 #else
                 ERROR_MESSAGE("Should probably open the window first!")
 #endif       
@@ -6221,11 +7059,13 @@ thug_snooker_cue
             ; If the cue is not in the room, we pass it to the girl through the hole
             SET_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT)    
             SET_ITEM_FLAGS(e_ITEM_SnookerCue,ITEM_FLAG_IMMOVABLE)
-#ifdef LANGUAGE_FR       
+#ifdef LANGUAGE_FR
             SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"une _queue de billard dans la chambre forte")
+#elif defined(LANGUAGE_NO)
+            SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"en snooker _kølle i sikkerhetsrommet")
 #else
             SET_ITEM_DESCRIPTION(e_ITEM_SnookerCue,"a snooker _cue in the panic room")
-#endif       
+#endif
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_HOLE)     ; Draw the base image with the hole over an empty room
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_YoungGirl,ITEM_FLAG_DISABLED),girl_restrained)
                 BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,17,76,17)    ; Draw the patch with the girl restrained on the floor 
@@ -6256,9 +7096,11 @@ _CommonDogDisabled
     INCREASE_SCORE(POINTS_DISABLED_DOG)
     SET_ITEM_FLAGS(e_ITEM_Dog,ITEM_FLAG_DISABLED)
 +_gTextDogLying = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Dog,"un _chien inanimé")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Dog,"en bevisstløs _hund")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Dog,"a lying _dog")
 #endif
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
@@ -6273,11 +7115,13 @@ _CommonThugDisabled
     INCREASE_SCORE(POINTS_DISABLED_THUG)
     SET_ITEM_FLAGS(e_ITEM_Thug,ITEM_FLAG_DISABLED)
 +_gTextDeadThug = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Thug,"un _voyou hors d'état de nuire")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Thug,"en bevisstløs _skurk")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Thug,"an unresponsive _thug")
-#endif    
+#endif
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     WAIT(50*2)
     STOP_MUSIC()
@@ -6299,6 +7143,8 @@ _CommonGaveTheKnifeToTheGirl
     FADE_BUFFER      ; Make sure everything appears on the screen
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Le couteau passe par le trou...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Kniven passer gjennom hullet...")
 #else
     INFO_MESSAGE("The knife fits the hole...")
 #endif    
@@ -6341,11 +7187,13 @@ _gTakeItemMappingsArray
 _TakeRope
 .(
 +_gTextItemRope = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"une$_corde")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Rope,"et$_tau")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Rope,"a$_rope")
-#endif    
+#endif
     JUMP(_TakeCommon)
 .)
 
@@ -6353,11 +7201,13 @@ _TakeRope
 _TakeLadder
 .(
 +_gTextItemLadder = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"une$_échelle courte")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"en$kort _stige")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Ladder,"a short$_ladder")
-#endif    
+#endif
     JUMP(_TakeCommon)
 .)
 
@@ -6365,11 +7215,13 @@ _TakeLadder
 _TakeDove
 .(
 +_gTextItemLargeDove = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"une$_colombe")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"en$_due")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a$_dove")
-#endif    
+#endif
     JUMP(_TakeCommon)
 .)
 
@@ -6388,13 +7240,16 @@ _TakeBlackTape
 .(
     CLEAR_TEXT_AREA(4)
     SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Le ruban n'est pas réutilisable")
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Teipen kan ikke gjenbrukes")
+    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et _vindu")
+#else
     INFO_MESSAGE("The tape cannot be reused")
     SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
-#endif    
+#endif
     GOSUB(_SubSetLockedPanelDescription)
     END_AND_REFRESH
 .)
@@ -6415,9 +7270,12 @@ _TakeAcid
 _SubInspectAcid
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Ce truc est super dangereux !")
     INFO_MESSAGE("...ca pourrait couler un navire !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Dette er svært farlig stoff!")
+    INFO_MESSAGE("...kan gå gjennom et skips skrog!")
 #else
     INFO_MESSAGE("This stuff is highly dangerous!")
     INFO_MESSAGE("...could go through a ship's hull!")
@@ -6437,11 +7295,13 @@ _TakeProtectionSuit
 _TakeHose
 .(
 +_gTextItemHose = *+2
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"un$_tuyau")
-#else    
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Hose,"en$_slange")
+#else
     SET_ITEM_DESCRIPTION(e_ITEM_Hose,"a$_hose")
-#endif    
+#endif
     ; If the petrol was in the scene, then we hide it until the player puts the hose again
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR),petrol)
         SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE)
@@ -6465,9 +7325,12 @@ _TakeCommon
 _ShowProtectionSuit
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Protection contre pesticides...")
     INFO_MESSAGE("...et autres fumées toxiques")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Beskyttelse mot plantevernmidler...")
+    INFO_MESSAGE("...og andre giftige damper")
 #else
     INFO_MESSAGE("Protection against pesticides...")
     INFO_MESSAGE("...and other types of noxious fumes")
@@ -6507,8 +7370,10 @@ _gDropItemMappingsArray
 _DropWater
 .(
     SET_ITEM_LOCATION(e_ITEM_Water,e_LOC_WELL)             ; Put back the water into the well
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("L'eau s'écoule")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Vannet renner bort")
 #else
     INFO_MESSAGE("The water drains away")
 #endif    
@@ -6527,14 +7392,18 @@ _DropPetrol
 
     ; Are we at the car location?
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("Vous remplissez le réservoir")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Du fyller tanken igjen")
 #else
         INFO_MESSAGE("The petrol goes back into the tank")
-#endif    
+#endif
     ELSE(car,no_car)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
         INFO_MESSAGE("L'essence s'évapore")
+#elif defined(LANGUAGE_NO)
+        INFO_MESSAGE("Bensinet fordamper")
 #else
         INFO_MESSAGE("The petrol evaporates")
 #endif    
@@ -6587,6 +7456,8 @@ _ErrorCannotDo
 +_gTextErrorCannotDo = *+1    
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Je ne peux pas le faire")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Jeg kan ikke gjøre det")
 #else
     ERROR_MESSAGE("I can't do that")
 #endif    
@@ -6598,6 +7469,8 @@ _ErrorCannotRead
 .(
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Je ne peux pas lire ça")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Jeg kan ikke lese det")
 #else
     ERROR_MESSAGE("I can't read that")
 #endif    
@@ -6608,6 +7481,8 @@ _MessageNothingSpecial
 .(
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Rien de spécial")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Ingenting spesielt")
 #else
     ERROR_MESSAGE("Nothing special")
 #endif    
@@ -6619,6 +7494,8 @@ _SubMessageDoorIsLocked
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La porte est verrouillée")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Døren er låst")
 #else
     INFO_MESSAGE("The door is locked")
 #endif
@@ -6629,15 +7506,19 @@ _SubMessageDoorIsLocked
 _ErrorAlreadyOpen_Il
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Il est déjà ouvert")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede åpen")
 #else
     ERROR_MESSAGE("It's already open")
-#endif        
+#endif
     END_AND_PARTIAL_REFRESH
 
 
 _ErrorAlreadyOpen_Elle
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est déjà ouverte")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede åpen")
 #else
     ERROR_MESSAGE("It's already open")
 #endif        
@@ -6647,15 +7528,19 @@ _ErrorAlreadyOpen_Elle
 _ErrorAlreadyClosed_Il
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Il est déjà fermé")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede lukket")
 #else
     ERROR_MESSAGE("It's already closed")
-#endif        
+#endif
     END_AND_PARTIAL_REFRESH
 
 
 _ErrorAlreadyClosed_Elle
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est déjà fermée")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede lukket")
 #else
     ERROR_MESSAGE("It's already closed")
 #endif        
@@ -6665,6 +7550,8 @@ _ErrorAlreadyClosed_Elle
 _ErrorAlreadyPositioned_Elle
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est déjà en position")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede på plass")
 #else
     ERROR_MESSAGE("It's already positioned")
 #endif        
@@ -6674,6 +7561,8 @@ _ErrorAlreadyPositioned_Elle
 _ErrorAlreadyEquipped_Elle
 #ifdef LANGUAGE_FR
     ERROR_MESSAGE("Elle est déjà sur moi")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Den er allerede påsatt")
 #else
     ERROR_MESSAGE("It's already equipped")
 #endif        
@@ -6683,9 +7572,11 @@ _ErrorAlreadyEquipped_Elle
 _SubClosedButNotLocked_Elle
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle est fermée mais pas à clef")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Den er lukket men ikke låst.")
 #else
     INFO_MESSAGE("It's closed, but not locked.")
-#endif    
+#endif
     RETURN
 
 
@@ -6700,6 +7591,8 @@ _ErrorTooDark
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il fait trop sombre !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er for mørkt!")
 #else
     INFO_MESSAGE("It's too dark!")
 #endif    
@@ -6731,8 +7624,10 @@ _WatchSetup
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 1 hours patch
             _IMAGE(24,43)
             _SCREEN(17,63)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("Je n'ai que deux heures...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg har bare to timer...")
 #else
     INFO_MESSAGE("I only have two hours...")
 #endif    
@@ -6741,8 +7636,10 @@ _WatchSetup
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 2 hours patch
             _IMAGE(24,34)
             _SCREEN(17,63)
-#ifdef LANGUAGE_FR   
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("...ne les gaspillons pas!")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("...la dem telle!")
 #else
     INFO_MESSAGE("...make them count!")
 #endif    
@@ -6777,6 +7674,8 @@ _OneHourAlarmWarning
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Déjà une heure d'écoulée !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Allerede én time gått!")
 #else
     INFO_MESSAGE("Already one hour has passed!")
 #endif    
@@ -6789,6 +7688,8 @@ _OneHourAlarmWarning
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Je dois me dépêcher !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg må skynde meg!")
 #else
     INFO_MESSAGE("I need to hurry up!")
 #endif
@@ -6815,8 +7716,10 @@ _TimeOutGameOver
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("J'ai été trop lent...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Jeg var for sakte...")
 #else
     INFO_MESSAGE("I was too slow...")
 #endif    
@@ -6824,9 +7727,11 @@ _TimeOutGameOver
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
-#ifdef LANGUAGE_FR    
+#ifdef LANGUAGE_FR
     INFO_MESSAGE("...Je dois abandonner la mission.")
-#else    
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("...Jeg må avbryte oppdraget.")
+#else
     INFO_MESSAGE("...I have to abort the mission")
 #endif
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)

@@ -1,11 +1,13 @@
 
 #include "params.h"
 
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+
 // Redux is an adjective that means brought back, often used in the titles of films and video games. 
 // It comes from the Latin word redux, meaning "back again". 
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u û:]
 
 _gTextHighScoreAskForName   .byt "Nouveau top score ! Votre nom SVP ?",0
 _gTextHighScoreInvalidName  .byt "Entre 1 et 15 caractères",0
@@ -86,6 +88,94 @@ _gTextGreetings
     .byt TEXT_CRLF
     .byt 6,"Salutations à tous ceux qui continuent",TEXT_CRLF
     .byt 6,"à produire des logiciels pour l'Oric:",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
+    .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
+    .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
+    .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
+    .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
+    .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
+    .byt 2,"     DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
+    .byt TEXT_END
+#elif defined(LANGUAGE_NO)
+
+_gTextHighScoreAskForName   .byt "Ny høyeste poengsum! Ditt navn takk?  ",0
+_gTextHighScoreInvalidName  .byt "Velg mellom 1 og 15 tegn",0
+
+_gTextThanks
+    .byt TEXT_CRLF,TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 3,10,"Takk for at du spilte Encounter Demo",TEXT_CRLF
+    .byt 3,10,"Takk for at du spilte Encounter Demo",TEXT_CRLF
+#else
+    .byt 3,10,"Takk for at du spilte Encounter Redux",TEXT_CRLF
+    .byt 3,10,"Takk for at du spilte Encounter Redux",TEXT_CRLF
+#endif // PRODUCT_TYPE_GAME_DEMO
+    .byt TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 3,10," Vi håper du likte opplevelsen.",TEXT_CRLF
+    .byt 3,10," Vi håper du likte opplevelsen.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt TEXT_CRLF
+#ifdef PRODUCT_TYPE_GAME_DEMO
+    .byt 2,10,"Likte du det? Kjøp da full versjon!",TEXT_CRLF
+    .byt 2,10,"Likte du det? Kjøp da full versjon!",TEXT_CRLF
+#endif // PRODUCT_TYPE_GAME_DEMO
+    .byt TEXT_END
+
+_gTextCredits
+    .byt TEXT_CRLF
+    .byt 3," Originalspill ",96," 1983 Severn Software",TEXT_CRLF
+    .byt 6,"       Kode og spillhistorie:",TEXT_CRLF
+    .byt 7,"           Adrian Sheppard",4,"(*)",7,TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 3,"Redux version ",96," 2024-26 Defence Force",TEXT_CRLF
+    .byt 6,"   Kode, design, grafikk og lyd:",TEXT_CRLF
+    .byt 7,"        Mickael 'Dbug' Pointier",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 6,"                Musikk:",TEXT_CRLF
+    .byt 7,"  Per Almered (med Arkos Tracker)",TEXT_CRLF
+    .byt 4," (*) vi antar"
+    .byt TEXT_END
+
+_gTextAdditionalCredits
+    .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
+    .byt 6,"     Spilltesting og tilbakemelding",TEXT_CRLF
+    .byt 7," Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
+    .byt TEXT_CRLF,TEXT_CRLF
+    .byt 5,"   Takk til utviklerne av Oricutron",TEXT_CRLF
+    .byt TEXT_END
+
+_gTextGameDescription
+    .byt TEXT_CRLF
+    .byt 3,"Originalspillet, utgitt på kassette,",TEXT_CRLF
+    .byt 3,"var 100% BASIC og hadde ikke noe",TEXT_CRLF
+    .byt 3," grafikk eller lyd (unntatt EXPLODE).",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 6,"  Denne versjonen viser hva man kan",TEXT_CRLF
+    .byt 6," gjøre med en diskettstasjon og et",TEXT_CRLF
+    .byt 6,"     program i C og assemblerkode.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 2," Oric er en merkelig maskin, men den",TEXT_CRLF
+    .byt 2,"   er givende når du mestrer den!",TEXT_CRLF
+    .byt TEXT_END
+
+_gTextExternalInformation
+    .byt TEXT_CRLF
+    .byt 6,"  Vil du vite mer om spillet, finne",TEXT_CRLF
+    .byt 6," kildekode eller melde inn en feil,",TEXT_CRLF
+    .byt 6,"       bare åpne nettleseren på:",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 3,"      encounter.defence-force.org",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 5," Her finner du også mange andre",TEXT_CRLF
+    .byt 5,"   Oric-spill og demoer fra oss.",TEXT_CRLF
+    .byt TEXT_END
+
+_gTextGreetings
+    .byt TEXT_CRLF
+    .byt 6,"  Hilsener til alle som fortsetter",TEXT_CRLF
+    .byt 6," med å lage programvare for Oric:",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
@@ -267,9 +357,65 @@ _Test_DETAILS_FINISHED_DEMO
     .byt 5,"l'escalier. Qui sait ce qui se cache",TEXT_CRLF
     .byt 5,"à l'étage supérieur !",1,"Curieux ?",TEXT_CRLF
     .byt 0
-#endif // PRODUCT_TYPE_GAME_DEMO    
+#endif // PRODUCT_TYPE_GAME_DEMO
+#elif defined(LANGUAGE_NO)
+_Test_DETAILS_SOLVED_THE_CASE
+    .byt 2,"Gratulerer, du løste saken!",TEXT_CRLF,TEXT_CRLF
+    .byt 3,"Gisselet er frigjort og er nå tilbake",TEXT_CRLF
+    .byt 3,"hos familien sin. Godt jobbet!",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_MAIMED_BY_DOG
+    .byt 5,"Du prøvde sikkert ditt beste, men",TEXT_CRLF
+    .byt 5,"du var ingen match for det firbeinte",TEXT_CRLF
+    .byt 5,"udyret, og",1,"slapp knapt unna med livet!",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_SHOT_BY_THUG
+    .byt 1,"Du har lært altfor sent at det å vekke",TEXT_CRLF
+    .byt 1,"en sint bevæpnet bølle ikke lønner seg.",TEXT_CRLF
+    .byt 1,"Det var et dumt trekk.",3," Du ble skutt!",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_FELL_INTO_PIT
+    .byt 6,"Du falt i gropen. Det tok lang tid å",TEXT_CRLF
+    .byt 6,"komme deg opp. Da du endelig var ute,",TEXT_CRLF
+    .byt 6,"var gisselet borte:",1,"det var for sent!",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_TRIPPED_ALARM
+    .byt 3,"Man skulle tro en detektiv ville merke",TEXT_CRLF
+    .byt 3,"seg advarslene og sensorene på vinduene",TEXT_CRLF
+    .byt 3,"ikke sant?",5," Er du ikke enig?",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_RAN_OUT_OF_TIME
+    .byt 5,"Du hadde to timer, og du ble advart.",TEXT_CRLF
+    .byt 5,"Likevel klarte du å gå tom for tid!",TEXT_CRLF
+    .byt 5,"Er du kanskje en",3,"programmerer?",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_BLOWN_INTO_BITS
+    .byt 3,"Sprengstoff er",1,"farlig!",3,"Du ble advart",TEXT_CRLF
+    .byt 3,"flere ganger, og nå må noen rydde opp.",TEXT_CRLF
+    .byt 3,"etter deg!",1,"Hvil i biter!",TEXT_CRLF
+    .byt 0
+
+_Test_DETAILS_GAVE_UP
+    .byt 5,"Jeg håper du hadde en god grunn til",TEXT_CRLF
+    .byt 5,"å gi opp, for gisselet ble aldri",TEXT_CRLF
+    .byt 5,"funnet igjen.",1,"Det var jobben din!",TEXT_CRLF
+    .byt 0
+
+#ifdef PRODUCT_TYPE_GAME_DEMO
+_Test_DETAILS_FINISHED_DEMO
+    .byt 5,"Du beseiret Cerberus og erobret",TEXT_CRLF
+    .byt 5,"trappen. Hvem vet hva som gjemmer",TEXT_CRLF
+    .byt 5,"seg i etasjen over!",1,"Nysgjerrig?",TEXT_CRLF
+    .byt 0
+#endif // PRODUCT_TYPE_GAME_DEMO
 #else // LANGUAGE_EN
-_Test_DETAILS_SOLVED_THE_CASE      
+_Test_DETAILS_SOLVED_THE_CASE
     .byt 2,"Congratulations, you solved the case!",TEXT_CRLF,TEXT_CRLF
     .byt 3,"The hostage has been freed and is now",TEXT_CRLF
     .byt 3,"back with her family. Well done you!",TEXT_CRLF
@@ -349,6 +495,11 @@ _gTextMonkeyBonus       .byt "       %cMonkey King points:%d      ",0   ; The sp
 _gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative
 _gTextNewAchievement    .byt "%cNouveau succ}s:%c%s%c",0     ; The last %c is to clear the color
 _gTextNoTimeBonus       .byt "%cPas de bonus de temps pour vous!%c",0  ; The last %c is to clear the color
+#elif defined(LANGUAGE_NO)
+_gTextMonkeyBonus       .byt "       %cMonkey King poeng:%d    ",0  ; The spaces is to clear the decrementing number
+_gTextBaseScore         .byt "%cPoeng:%d  ",0               ; The space is required is the earlier score was negative
+_gTextNewAchievement    .byt "%cNy prestasjon:%c%s%c",0      ; The last %c is to clear the color
+_gTextNoTimeBonus       .byt "%cIngen tidsbonus for deg!%c",0 ; The last %c is to clear the color
 #else
 _gTextMonkeyBonus       .byt "       %cMonkey King points:%d  ",0   ; The spaces is to clear the decrementing number
 _gTextBaseScore         .byt "%cScore:%d  ",0                ; The space is required is the earlier score was negative

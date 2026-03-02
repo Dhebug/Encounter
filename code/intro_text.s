@@ -2,9 +2,8 @@
 
     .text   // could be .data if we setup the base address properly
 
-#ifdef LANGUAGE_FR
-#pragma osdk replace_characters : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
-#endif
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
 
 ;
@@ -13,17 +12,21 @@
 _Text_KeyControls
 #ifdef LANGUAGE_FR
     .byt 16+3,5,12,"ESC pour jouer   <-> pour naviguer  "
+#elif defined(LANGUAGE_NO)
+    .byt 16+3,5,12," ESC for å spille  <-> for å bla     "
 #else
     .byt 16+3,5,12,"Press ESC to play or <-> to browse   "
-#endif    
+#endif
     .byt TEXT_END
 _Text_TitleCopyright
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
     .byt 16+3,4,"Améliorations ",96," 2024-26 Defence-Force"
+#elif defined(LANGUAGE_NO)
+    .byt 16+3,4,"Forbedringer ",96," 2024-26 Defence-Force"
 #else
     .byt 16+3,4,"Enhancements ",96," 2024-26 Defence-Force"
-#endif    
+#endif
     .byt TEXT_END
 
 
@@ -60,6 +63,36 @@ _Text_DemoFeatures
     .byt "Ce jeu n'est pas une oeuvre d'art",TEXT_CRLF
     .byt "photo-réaliste avec raytracing",TEXT_CRLF
     .byt "mais nous avons",1,"fait de notre mieux!",TEXT_CRLF
+    .byt TEXT_END
+#elif defined(LANGUAGE_NO)
+_Text_DemoFeatures
+    .byt 1,"          Encounter Demo",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "   Har du aldri spilt denne typen",TEXT_CRLF
+    .byt "    spill før, sjekk manualen på",TEXT_CRLF
+    .byt 4,"encounter.defence-force.org",0," eller",TEXT_CRLF
+    .byt " les ganske enkelt neste to sider!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "  Du kan bruke",5,"venstre",0,"og",5,"høyre",0,"pil",TEXT_CRLF
+    .byt "       for å bla mellom sidene.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Den eneste begrensningen i demoen er",TEXT_CRLF
+    .byt " at du ikke har tilgang til øverste",TEXT_CRLF
+    .byt "  etasje, så du kan ikke fullføre",TEXT_CRLF
+    .byt "            oppdraget!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Resten er identisk med hele spillet:",TEXT_CRLF
+    .byt " Kjøper du det, følger",2,"poengene",0,"og",TEXT_CRLF
+    .byt "      ",2,"prestasjonene",0,"med over.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "  Siste ord:",4,"Tusen takk",0,"for at du",TEXT_CRLF
+    .byt "   prøvde spillet blant de 19000",TEXT_CRLF
+    .byt " andre spillene utgitt bare i 2024!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "  Det er nok ikke et GPU-akselerert",TEXT_CRLF
+    .byt "   foto-realistisk mesterverk, men",TEXT_CRLF
+    .byt "      ",1,"vi prøvde vårt beste!",TEXT_CRLF
+    .byt TEXT_CRLF
     .byt TEXT_END
 #else// LANGUAGE_EN
 _Text_DemoFeatures
@@ -99,7 +132,7 @@ _Text_DemoFeatures
 ;
 #ifdef LANGUAGE_FR
 _Text_GameInstructionsPage1
-    .byt 1,"        Comment jouer (1/3)",TEXT_CRLF
+    .byt 1,"        Comment jouer (1/2)",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Votre tâche est de trouver et",4,"sauver",TEXT_CRLF
     .byt "une fille kidnappée par des voyous.",TEXT_CRLF
@@ -117,19 +150,45 @@ _Text_GameInstructionsPage1
     .byt "O:OUEST E:EST        FERME POSE/LACHE",TEXT_CRLF
     .byt "D:DESCENDRE           CHERCHE/FOUILLE",TEXT_CRLF
     .byt "M:MONTER     EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
-    .byt "PAUSE AIDE            COMBINE UTILISE",TEXT_CRLF
-    .byt "QUITTE                      LIS LANCE",TEXT_CRLF
-    .byt 1,"              NOTES",TEXT_CRLF
+    .byt "flèches/manette COMBINE UTILISE LANCE",TEXT_CRLF
+    .byt "                LIS QUITTE AIDE PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
-    .byt "mais être",4,"bricoleur",0,"peut aider.",TEXT_CRLF
+    .byt "Utilisez",4,"CTRL+HAUT/BAS",0,"ou diagonales",TEXT_CRLF
+    .byt "pour monter ou descendre.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Tracez une",4,"carte",0,"et annotez-la.",TEXT_CRLF
-    .byt "Bonne chance, vous en aurez besoin!"
+    .byt "Presser",4,"ESC",0,"ou taper",4,"AIDE",0,"imprime",TEXT_CRLF
+    .byt "la liste des instructions."
+    .byt TEXT_END
+#elif defined(LANGUAGE_NO)
+_Text_GameInstructionsPage1
+    .byt 1,"       Slik spiller du (1/2)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Du har",4,"to timer",0,"til å finne og redde",TEXT_CRLF
+    .byt "en ung jente kidnappet av gangstere.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Oppdraget mislykkes om du oppdages",TEXT_CRLF
+    .byt "eller går tom for tid.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Gi ordre med",4,"VERB",0,"og",4,"SUBSTANTIV",TEXT_CRLF
+    .byt "f.eks: TA NØKKEL eller BLAND BRØD OST",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt 1,"   BEVEGELSE            VERB",TEXT_CRLF,TEXT_CRLF
+    .byt "N:NORD U:OPP      TA/HENT LEGG/SLIPP",TEXT_CRLF
+    .byt "S:SYD D:NED      BLAND/KOMBINER BRUK",TEXT_CRLF
+    .byt "E:ØST           KAST SE/SJEKK/GRANSK",TEXT_CRLF
+    .byt "W:VEST                LES LET/RANSAK",TEXT_CRLF
+    .byt "piltaster/styrespak    PAUSE AVSLUTT",TEXT_CRLF
+    .byt "                     HJELP ÅPNE LUKK",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bruk",4,"CTRL+OPP/NED",0,"eller diagonaler",TEXT_CRLF
+    .byt "for å gå opp eller ned.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Trykk",4,"ESC",0,"eller skriv",4,"HJELP",0,"for å se",TEXT_CRLF
+    .byt "kommandolisten."
     .byt TEXT_END
 #else// LANGUAGE_EN
 _Text_GameInstructionsPage1
-    .byt 1,"         How to play (1/3)",TEXT_CRLF
+    .byt 1,"         How to play (1/2)",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "You have",4,"two hours",0,"to find and rescue",TEXT_CRLF
 	.byt "a young girl kidnapped by thugs.",TEXT_CRLF
@@ -145,136 +204,194 @@ _Text_GameInstructionsPage1
 	.byt "S:SOUTH D:DOWN     THROW COMBINE USE",TEXT_CRLF
 	.byt "E:EAST               EXAMINE/INSPECT",TEXT_CRLF
 	.byt "W:WEST             READ SEARCH/FRISK",TEXT_CRLF
-    .byt "                     OPEN CLOSE QUIT",TEXT_CRLF
-    .byt 1,"              NOTES",0,"     HELP PAUSE",TEXT_CRLF
+    .byt "arrows/joystick      OPEN CLOSE QUIT",TEXT_CRLF
+    .byt "                          HELP PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Everything you need is here but you",TEXT_CRLF
-	.byt "may have to",4,"manufacture",0,"some items.",TEXT_CRLF
+    .byt "Use",4,"CTRL+UP/DOWN",0,"or diagonals to",TEXT_CRLF
+    .byt "go up or down.",TEXT_CRLF
     .byt TEXT_CRLF
-	.byt "Drawing and annotating a",4,"map",0,"helps.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "Good luck, you will need it..."
+    .byt "Pressing",4,"ESC",0,"or typing",4,"HELP",0,"will",TEXT_CRLF
+    .byt "print the list of instructions."
     .byt TEXT_END
 #endif
 
 
 #ifdef LANGUAGE_FR
 _Text_GameInstructionsPage2
-    .byt 1,"        Comment jouer (2/3)",TEXT_CRLF
+    .byt 1,"        Comment jouer (2/2)",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Au lieu de taper des commandes vous",TEXT_CRLF
-    .byt "pouvez appuyer sur",4,"ESPACE",0,"ou",4,"bouton",TEXT_CRLF
-    .byt "pour afficher un menu d'options.",TEXT_CRLF
+    .byt "Appuyez sur",4,"ESPACE",0,"ou le",4,"bouton",0,"pour",TEXT_CRLF
+    .byt "choisir les commandes dans un menu.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Utilisez les",4,"flèches",0,"ou le",4,"joystick",TEXT_CRLF
-    .byt "pour changer la sélection, puis",TEXT_CRLF
-    .byt "validez le choix avec espace ou tir.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Si un autre paramètre est requis, une",TEXT_CRLF
-    .byt "seconde page de menu apparaît.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Le joystick permet aussi de se",TEXT_CRLF
-    .byt "déplacer entre les divers lieux.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Les mouvements en diagonale",TEXT_CRLF
-    .byt "comme",4,"BAS+DROITE",0,"ou",4,"HAUT+GAUCHE.",TEXT_CRLF
-    .byt "permettent de",4,"monter",0,"ou",4,"descendre",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Attention: Les joysticks",4,"analogiques",TEXT_CRLF
-    .byt "modernes peuvent ne pas fonctionner !",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Choisissez aussi la bonne interface",TEXT_CRLF
-    .byt "dans le menu",4,"paramètres",0,"!",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt TEXT_END
-#else// LANGUAGE_EN
-_Text_GameInstructionsPage2
-    .byt 1,"         How to play (2/3)",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Instead of typing commands you can",TEXT_CRLF
-	.byt "simply press",4,"SPACE",0,"or the fire",4,"button",TEXT_CRLF
-	.byt "to bring a menu with all the options.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "You can then simply use the",4,"arrows",0,"or",TEXT_CRLF
-	.byt "the",4,"joystick",0,"to change the selection",TEXT_CRLF
-    .byt "and use space or fire to",4,"validate.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "If an additional parameter is needed",TEXT_CRLF
-	.byt "a second menu page will appear.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "The joystick can also be used to move",TEXT_CRLF
-	.byt "around from location to location.",TEXT_CRLF
-	.byt TEXT_CRLF
-	.byt "To move",4,"UP",0,"or",4,"DOWN",0,"simply use",TEXT_CRLF
-	.byt "diagonals like",4,"DOWN+RIGHT",0,"or",4,"UP+LEFT.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "Beware: Modern",4,"analog",0,"joysticks may",TEXT_CRLF
-	.byt "not work!",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "And make sure to select the proper",TEXT_CRLF
-    .byt "interface in the",4,"settings",0,"menu!",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt TEXT_END
-#endif
-
-
-
-#ifdef LANGUAGE_FR
-_Text_GameInstructionsPage3
-    .byt 1,"        Comment jouer (3/3)",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Presser",4,"ESC",0,"ou taper",4,"AIDE",0,"imprime",TEXT_CRLF
-    .byt "la liste des instructions.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "SHIFT et flèches",4,"HAUT",0,"ou",4,"BAS",0,"font",TEXT_CRLF
-    .byt "défiler les objets si débordement.",TEXT_CRLF
-    .byt TEXT_CRLF                       
-    .byt "SHIFT met aussi en",4,"surbrillance",0,"les",TEXT_CRLF
-    .byt "noms des objets interactifs.",TEXT_CRLF
-    .byt TEXT_CRLF     
     .byt "Parfois le nom d'un",4,"conteneur",0,"vous",TEXT_CRLF
     .byt "sera demandé lors de l'obtention de",TEXT_CRLF
     .byt "certains objets ou substances.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "COMBINE nécessite deux objets :",TEXT_CRLF
-    .byt "leur ordre n'a pas d'importance.",TEXT_CRLF
+    .byt "Utilisez",4,"COMBINE",0,"avec deux objets pour",TEXT_CRLF
+    .byt "créer quelque chose de nouveau.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "La touche",4,"SHIFT",0,"met en surbrillance",TEXT_CRLF
+    .byt "les noms des objets interactifs.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Utilisez",4,"SHIFT+HAUT/BAS",0,"pour faire",TEXT_CRLF
+    .byt "défiler les objets si besoin.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Touche",4,"DEL",0,"pour effacer une lettre",TEXT_CRLF
+    .byt "ou",4,"CTRL+DEL",0,"pour effacer un mot.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Seuls les mots",4,"valides",0,"sont acceptés:",TEXT_CRLF
+    .byt "les erreurs clignotent en rouge.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Le",4,"temps",0,"s'écoule en temps réel mais",TEXT_CRLF
+    .byt "vos actions l'accélèrent.",TEXT_CRLF
+    .byt TEXT_END
+#elif defined(LANGUAGE_NO)
+_Text_GameInstructionsPage2
+    .byt 1,"       Slik spiller du (2/2)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Trykk",4,"MELLOMROM",0,"eller",4,"knappen",0,"for å",TEXT_CRLF
+    .byt "velge kommandoer fra en meny.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Noen gjenstander krever en",4,"beholder",TEXT_CRLF
+    .byt "for transport: spillet spør da om",TEXT_CRLF
+    .byt "beholdernavn.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bruk",4,"KOMBINER",0,"med to gjenstander for",TEXT_CRLF
+    .byt "å lage noe nytt.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bruk",4,"SHIFT",0,"for å fremheve navnene på",TEXT_CRLF
+    .byt "gjenstander du kan samhandle med.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bruk",4,"SHIFT+OPP/NED",0,"for å rulle listen",TEXT_CRLF
+    .byt "om gjenstandene ikke får plass.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Trykk",4,"DEL",0,"for å slette et tegn,",TEXT_CRLF
+    .byt "eller",4,"CTRL+DEL",0,"for å slette et ord.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bare",4,"gyldige ord",0,"godtas: feil input",TEXT_CRLF
+    .byt "blinker kort i rødt.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Tiden går i",4,"sanntid",0,"; handlinger",TEXT_CRLF
+    .byt "får den til å gå fortere.",TEXT_CRLF
+    .byt TEXT_END
+#else// LANGUAGE_EN
+_Text_GameInstructionsPage2
+    .byt 1,"         How to play (2/2)",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Press",4,"SPACE",0,"or",4,"fire",0,"to open a menu and",TEXT_CRLF
+    .byt "select commands instead of typing.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Some items require a valid",4,"container",TEXT_CRLF
+    .byt "to be transported: The game will then",TEXT_CRLF
+    .byt "ask you the name of the container.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Use",4,"COMBINE",0,"with two items to create",TEXT_CRLF
+    .byt "something new.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Press",4,"SHIFT",0,"to highlight the names of",TEXT_CRLF
+    .byt "items you can interact with.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Use",4,"SHIFT+UP/DOWN",0,"to scroll the list",TEXT_CRLF
+    .byt "of visible objects if it overflows.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Press",4,"DEL",0,"to delete a character or",TEXT_CRLF
+    .byt "press",4,"CTRL+DEL",0,"to delete a whole word.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Only",4,"valid words",0,"are accepted: wrong",TEXT_CRLF
+    .byt "input will briefly flash red.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "The",4,"clock",0,"ticks in real-time; actions",TEXT_CRLF
+    .byt "make it go faster.",TEXT_CRLF
+    .byt TEXT_END
+#endif
+
+
+
+#ifdef LANGUAGE_FR
+_Text_GameInstructionsPage3
+    .byt 1,"        Trucs et astuces",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Lire les",4,"documents",0,"peut révéler des",TEXT_CRLF
     .byt "informations utiles.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Assurez-vous de vérifier toutes les",TEXT_CRLF
-    .byt "directions indiquées sur le compas.",TEXT_CRLF
+    .byt "Vérifiez toutes les",4,"directions",TEXT_CRLF
+    .byt "indiquées sur le compas.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Les touches fléchées peuvent être",TEXT_CRLF
-    .byt "utilisées pour naviguer.",TEXT_CRLF
+    .byt "Certaines",4,"sorties",0,"sont bien cachées.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "N'oubliez pas d'",4,"ouvrir",0,"et fouiller!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Tracez une",4,"carte",0,"et annotez-la.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Tout n'est pas lié à votre mission.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Ne prenez pas tout: trouvez d'abord",TEXT_CRLF
+    .byt "la",4,"victime",0,"et planifiez le sauvetage.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Le jeu récompense la",4,"curiosité",0,"et",TEXT_CRLF
+    .byt "les solutions non violentes.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Tout ce dont vous avez besoin est là",TEXT_CRLF
+    .byt "mais être",4,"bricoleur",0,"peut aider.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Bonne chance, vous en aurez besoin!"
+    .byt TEXT_END
+#elif defined(LANGUAGE_NO)
+_Text_GameInstructionsPage3
+    .byt 1,"          Tips og triks",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Å lese",4,"dokumenter",0,"kan avsløre",TEXT_CRLF
+    .byt "nyttig informasjon.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Sjekk alle",4,"retningene",0,"på kompasset.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Noen",4,"utganger",0,"kan være godt skjult.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Husk å",4,"åpne",0,"ting og sjekke inni!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Tegn og noter et",4,"kart",0,"- det hjelper.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Ikke alt du finner er relevant.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Ikke ta alt: finn",4,"offeret",0,"først og",TEXT_CRLF
+    .byt "legg en plan for redningen.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Spillet belønner",4,"nysgjerrighet",0,"og",TEXT_CRLF
+    .byt "ikke-voldelige løsninger.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Alt du trenger finnes her, men du",TEXT_CRLF
+    .byt "må kanskje",4,"lage",0,"noen gjenstander.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Lykke til, du vil trenge det..."
     .byt TEXT_END
 #else// LANGUAGE_EN
 _Text_GameInstructionsPage3
-    .byt 1,"         How to play (3/3)",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Pressing",4,"ESC",0,"or typing",4,"HELP",0,"will",TEXT_CRLF
-	.byt "print the list of instructions.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "If the items list overflows use",4,"SHIFT",TEXT_CRLF
-	.byt "with",4,"UP",0,"or",4,"DOWN",0,"arrows to scroll it.",TEXT_CRLF
-    .byt TEXT_CRLF
-	.byt "SHIFT also",4,"highlight",0,"the names of",TEXT_CRLF
-    .byt "the items you can interact with.",TEXT_CRLF
-    .byt TEXT_CRLF
-    .byt "Some items require a valid",4,"container",TEXT_CRLF
-	.byt "to be transported: The game will then",TEXT_CRLF
-	.byt "ask you the name of the container.",TEXT_CRLF
-	.byt TEXT_CRLF
-	.byt "The COMBINE command does requires two",TEXT_CRLF
-    .byt "items: their order does not matter.",TEXT_CRLF
+    .byt 1,"         Hints and tips",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Reading",4,"documents",0,"can reveal useful",TEXT_CRLF
     .byt "tidbits of information.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Make sure to check all the directions",TEXT_CRLF
-    .byt "indicated on the directional cross.",TEXT_CRLF
+    .byt "Check all the",4,"directions",0,"indicated",TEXT_CRLF
+    .byt "on the directional cross.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "Arrow keys can be used to navigate.",TEXT_CRLF
+    .byt "Some",4,"exits",0,"may be hidden from sight.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Remember to",4,"open",0,"things: check inside!",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Drawing and annotating a",4,"map",0,"helps.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Not everything you find is relevant.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Don't try to grab everything: find",TEXT_CRLF
+    .byt "the",4,"victim",0,"first and plan the rescue.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "The game rewards",4,"curiosity",0,"and",TEXT_CRLF
+    .byt "non-violent solutions.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Everything you need is here but you",TEXT_CRLF
+    .byt "may have to",4,"manufacture",0,"some items.",TEXT_CRLF
+    .byt TEXT_CRLF
+    .byt "Good luck, you will need it..."
     .byt TEXT_END
 #endif
 
@@ -294,6 +411,16 @@ _Text_TypeWriterMessage
     .byt "potentiellement avec force, je garai",13
     .byt "ma voiture au marché local et",13
     .byt "avancai discrètement à pied."
+    .byt 0
+#elif defined(LANGUAGE_NO)
+    .byt "29. september 1982",13,13
+    .byt "Mitt oppdrag: Redde en jente fra",13
+    .byt "bortførerne i et avsides og",13
+    .byt "eksklusivt herskapshus.",13,13
+    .byt "Med tillatelse til å operere fritt,",13
+    .byt "om nødvendig med makt, parkerte jeg",13
+    .byt "bilen ved det lokale markedet og",13
+    .byt "avanserte skjult til fots."
     .byt 0
 #else // LANGUAGE_EN
 	.byt "September 29, 1982",13,13
@@ -329,16 +456,33 @@ _Text_Loading_FourthTime
     .byt "Vous devrez construire quelques objets",TEXT_CRLF
     .byt "en combinant ensemble d'autres objets.",TEXT_CRLF
     .byt 0
+#elif defined(LANGUAGE_NO)
+_Text_Loading_FirstTimeEver
+    .byt "Du kan BRUK, LEGG, KAST, KOMBINER.",TEXT_CRLF
+    .byt "Noen kan du LES, UNDERSØK eller SØK.",TEXT_CRLF
+    .byt 0
+_Text_Loading_SecondTime
+    .byt "Å drepe er alltid et alternativ, men",TEXT_CRLF
+    .byt "pasifisme gir deg flere poeng.",TEXT_CRLF
+    .byt 0
+_Text_Loading_ThirdTime
+    .byt "Noen gjenstander har flere bruksområder,",TEXT_CRLF
+    .byt "andre er uten hensikt. Gjett riktig!",TEXT_CRLF
+    .byt 0
+_Text_Loading_FourthTime
+    .byt "Noen gjenstander må lages ved å",TEXT_CRLF
+    .byt "kombinere andre gjenstander.",TEXT_CRLF
+    .byt 0
 #else
-_Text_Loading_FirstTimeEver    
+_Text_Loading_FirstTimeEver
     .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
     .byt "Some you can READ, INSPECT or SEARCH.",TEXT_CRLF
     .byt 0
-_Text_Loading_SecondTime    
+_Text_Loading_SecondTime
     .byt "Lethality is always an option but being",TEXT_CRLF
     .byt "a pacifist will grant you more points.",TEXT_CRLF
     .byt 0
-_Text_Loading_ThirdTime    
+_Text_Loading_ThirdTime
     .byt "Some items have multiple uses, some have",TEXT_CRLF
     .byt "no specific purpose. Try to guess right!",TEXT_CRLF
     .byt 0
