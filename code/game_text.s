@@ -46,6 +46,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
 _gTextAskInput              .byt "Hva vil du gjøre nå?",0
 _gTextNothingHere           .byt 3,"Det er ingenting interessant her",0
 _gTextCanSee                .byt "Jeg ser ",0
+_gTextAnd                   .byt " og ",0
 _gTextScore                 .byt 5,"Poeng: %d",7,0
 _gTextCarryInWhat           .byt "Bær det i hva?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
@@ -56,6 +57,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
+_gTextAnd                   .byt " and ",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,

@@ -1154,22 +1154,28 @@ _PrintSceneObjects
     lda #<-3
     sta _gInventoryMaxOffset
 
-    ; Check if ther are any items present at the current location
+    ; Count how many items are present at the current location
+    lda #0
+    sta _remaining
     ldx #0
-loop_search    
+loop_search
     txa
     jsr _ByteStreamComputeItemPtr         ; Item ID in A result is _gStreamItemPtr (does not touch X or Y)
 
     ldy #2
     lda (_gStreamItemPtr),y               ; Item location
     cmp _gCurrentLocation
-    beq found_items                       ; It's int the scene
-
-    inx 
+    bne not_here
+    inc _remaining                        ; One more item in the scene
+not_here
+    inx
     cpx #e_ITEM_COUNT_
     bne loop_search                       ; Next item
 
-no_items    
+    lda _remaining
+    bne found_items
+
+no_items
     ; PrintStringAt(gTextNothingHere,TemporaryBuffer479+1);  // "There is nothing of interest here"
     lda #<_TemporaryBuffer479+1
     sta _gPrintAddress+0
@@ -1223,6 +1229,7 @@ loop_print
     dey
     lda (_gStreamItemPtr),y               ; Item description
     jsr _PrintStringAndMoveToNextLineIfNeeded
+    dec _remaining
 
 next_item
     pla
@@ -1285,13 +1292,17 @@ end_add
 
 _PrintSeparatorIfNeeded
 .(
-+_nop_or_rts    
++_nop_or_rts
     rts
-    ; Comma separator?
++_remaining = *+1
+    lda #0
+    cmp #1          ; Is that the last item to display?
+    beq use_and
+    ; Comma + space separator (skip comma if line is full)
     lda _gPrintPos
     cmp _gPrintWidth
     bcs no_comma
-    lda #<_gTextComma
+    lda #<_gTextComma    ; Print a comma
     ldx #>_gTextComma
     jsr _PrintStringAndMoveToNextLineIfNeeded
 no_comma
@@ -1299,12 +1310,16 @@ no_comma
     ; Space separator?
     lda _gPrintPos
     cmp _gPrintWidth
-    bcs no_space
-    lda #<_gTextSpace
+    bcs done
+    lda #<_gTextSpace    ; Print a space
     ldx #>_gTextSpace
+    jmp print_sep
+use_and
+    lda #<_gTextAnd      ; Print "and"
+    ldx #>_gTextAnd
+print_sep
     jsr _PrintStringAndMoveToNextLineIfNeeded
-no_space
-
+done
     rts
 .)
 
