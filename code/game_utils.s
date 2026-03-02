@@ -1299,26 +1299,25 @@ _PrintSeparatorIfNeeded
     lda #0
     cmp #1          ; Is that the last item to display?
     beq use_and
-    ; Comma + space separator (skip comma if line is full)
+    ; Comma separator (skip comma if line is full)
     lda _gPrintPos
     cmp _gPrintWidth
-    bcs no_comma
+    bcs print_space
     lda #<_gTextComma    ; Print a comma
     ldx #>_gTextComma
     jsr _PrintStringAndMoveToNextLineIfNeeded
-no_comma
-
-    ; Space separator?
+    jmp print_space
+use_and
+    lda #<_gTextAnd      ; Print "and"
+    ldx #>_gTextAnd
+    jsr _PrintStringAndMoveToNextLineIfNeeded
+print_space
+    ; Space separator (skip if line is full to avoid overwriting attribute)
     lda _gPrintPos
     cmp _gPrintWidth
     bcs done
     lda #<_gTextSpace    ; Print a space
     ldx #>_gTextSpace
-    jmp print_sep
-use_and
-    lda #<_gTextAnd      ; Print "and"
-    ldx #>_gTextAnd
-print_sep
     jsr _PrintStringAndMoveToNextLineIfNeeded
 done
     rts
