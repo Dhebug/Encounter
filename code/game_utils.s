@@ -868,7 +868,6 @@ letter_a_z
 not_shifted_letter
 
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
     cmp #"é"
     beq change_to_e
     cmp #"è"
@@ -888,7 +887,6 @@ change_to_a
 not_a
 
 #elif defined(LANGUAGE_NO)
-#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
     cmp #"æ"
     beq change_to_a
     cmp #"Æ"
@@ -1190,8 +1188,8 @@ no_items
     jmp print_and_blit_description_buffer
 
 found_items    
-    ; gPrintWidth=38;
-    lda #38
+    ; gPrintWidth=36;
+    lda #36
     sta _gPrintWidth
 
     ; PrintStringAt(gTextCanSee,TemporaryBuffer479+2);
