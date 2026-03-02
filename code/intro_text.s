@@ -416,7 +416,7 @@ _Text_TypeWriterMessage
     .byt "29. september 1982",13,13
     .byt "Mitt oppdrag: Redde en jente fra",13
     .byt "bortførerne i et avsides og",13
-    .byt "eksklusivt herskapshus.",13,13
+    .byt "luksuriøst herskapshus.",13,13
     .byt "Med tillatelse til å operere fritt,",13
     .byt "om nødvendig med makt, parkerte jeg",13
     .byt "bilen ved det lokale markedet og",13

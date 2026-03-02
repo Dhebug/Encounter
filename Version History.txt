@@ -392,3 +392,4 @@
 - Reorganized the intro documentation content to make it easier to understand, and extended the duration by 3 seconds
 - Added a missing description on the main entrance door
 - The list of items in the scene now prints "and" instead of a coma for the last displayed item
+- Looking at the basement window the player is now clearly told that the tape cannot be removed from the outside

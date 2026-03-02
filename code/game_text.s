@@ -35,6 +35,7 @@ _StartMessagesAndPrompts
 _gTextAskInput              .byt "Que faites-vous ?",0
 _gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
+_gTextAnd                   .byt " et ",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
@@ -4047,10 +4048,17 @@ no_ladder
         ELSE(else,open)
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
             GOSUB(_SubBlackTapeOnWindow)
+#ifdef LANGUAGE_FR
+            INFO_MESSAGE("Impossible à retirer de l'extérieur")
+#elif defined(LANGUAGE_NO)
+            INFO_MESSAGE("Kan ikke fjernes utenfra")
+#else
+            INFO_MESSAGE("Can't be removed from the outside")
+#endif
         ENDIF(open)
     .)
     ENDIF(cellar)
-    WAIT_KEYPRESS    
+    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -4420,7 +4428,7 @@ _InspectRoadSign
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il dit 'Creuseurs & Fils SARL'.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det står 'Diggers & Sons Ltd.'")
+    INFO_MESSAGE("Det heter 'Graverne & Sønner AS'.")
 #else
     INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
 #endif
