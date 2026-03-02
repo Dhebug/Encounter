@@ -1,6 +1,9 @@
 
 #include "params.h"
 
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A é:e
+
   .zero
 
 width   .dsb 1
@@ -1401,13 +1404,11 @@ _gFont12x14Kerning
   .byt "th",1
   .byt "to",1
 #ifdef LANGUAGE_FR
-#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
   .byt "là",2
   .byt "tô",1
   .byt "té",1
   .byt "tè",1
 #elif defined(LANGUAGE_NO)
-#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
   .byt "Fi",2
   .byt "Fo",2
   .byt "Ha",2

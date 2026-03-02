@@ -73,8 +73,7 @@ and empty "#pragma osdk replace_characters" cancels the replacement rule.
 > Note: While trying to implement additional language, some limitations were found and the system had to be tweaked to fix a chicken and egg problem in the way the files are processed, so there's now a new version of Link65 and while that syntax is still supported there is a new one that solves the problem:
 >
 > #pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^   
-> #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
-
+> #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A é:e
 
 
 ### Fonts
