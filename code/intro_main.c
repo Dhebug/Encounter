@@ -272,7 +272,7 @@ int DisplayUserManual(const char* messaage)
     gPrintWidth=40;
     gPrintTerminator=TEXT_END;
     PrintStringAt(messaage,0xbb80+40*1+2);
-    return WaitAndFade(50*12);
+    return WaitAndFade(50*15);
  }
 
 
