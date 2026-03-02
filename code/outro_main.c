@@ -357,7 +357,7 @@ void HandleHighScore()
         gAchievementsChanged = 1;
     }
 
-#if 0  // Just to test the different ending conditions
+#ifdef TEST_ENDINGS  // Just to test the different ending conditions
     gScore = -1800;
     gMonkeyKingSessionBest=230;
     gGameOverCondition = e_SCORE_MAIMED_BY_DOG; //e_SCORE_SOLVED_THE_CASE;
