@@ -1408,14 +1408,21 @@ _gFont12x14Kerning
   .byt "tè",1
 #elif defined(LANGUAGE_NO)
 #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+  .byt "Fi",2
   .byt "Fo",2
+  .byt "Ha",2
   .byt "Hu",2
+  .byt "Je",2
+  .byt "Jø",2
   .byt "Ne",2
   .byt "No",2
   .byt "So",1
+  .byt "Tr",2
   .byt "Ty",2
+  .byt "Vi",1
   .byt "dd",1
   .byt "fl",1
+  .byt "fr",1
   .byt "ft",1
   .byt "fu",1
   .byt "fø",2
@@ -1423,10 +1430,14 @@ _gFont12x14Kerning
   .byt "id",1
   .byt "ja",1
   .byt "je",1
+  .byt "jo",1
   .byt "jø",1
+  .byt "ka",1
   .byt "ke",1
+  .byt "kj",2
   .byt "kk",1
   .byt "kl",1
+  .byt "ko",1
   .byt "ld",1
   .byt "lg",1
   .byt "ng",1
@@ -1435,6 +1446,7 @@ _gFont12x14Kerning
   .byt "rr",1
   .byt "ræ",1
   .byt "rø",1
+  .byt "sj",1
   .byt "ti",1
   .byt "tt",1
 #endif

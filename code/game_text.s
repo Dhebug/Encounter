@@ -1429,7 +1429,7 @@ cabinet_closed
     _BUBBLE_LINE(150,5,0,"Tradition et")
     _BUBBLE_LINE(177,17,0,"technologie")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(150,5,0,"Tradisjon møter")
+    _BUBBLE_LINE(147,5,0,"Tradisjon møter")
     _BUBBLE_LINE(177,17,0,"teknologi")
 #else
     _BUBBLE_LINE(150,5,0,"Tradition meets")
@@ -1515,7 +1515,7 @@ cabinet_closed
     _BUBBLE_LINE(155,5,0,"Système vidéo")
     _BUBBLE_LINE(151,16,0,"haut de gamme")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(142,5,0,"Topp i klassen")
+    _BUBBLE_LINE(152,5,0,"Topp i klassen")
     _BUBBLE_LINE(164,16,0,"videosystem")
 #else
     _BUBBLE_LINE(142,5,0,"Top of the range")
@@ -1527,7 +1527,7 @@ cabinet_closed
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(151,40,0,"Impressionnant")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(175,40,0,"Imponerende")
+    _BUBBLE_LINE(165,40,0,"Imponerende")
 #else
     _BUBBLE_LINE(175,40,0,"Impressive")
 #endif    
@@ -1580,7 +1580,7 @@ medicine_cabinet_closed
     _BUBBLE_LINE(5,16,0,"bien équipée")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Et godt utstyrt")
-    _BUBBLE_LINE(5,14,4,"kjøkken")
+    _BUBBLE_LINE(5,18,0,"kjøkken")
 #else
     _BUBBLE_LINE(5,5,0,"A well-equipped")
     _BUBBLE_LINE(5,14,4,"kitchen")
@@ -1966,7 +1966,7 @@ _gDescriptionEastGallery
     _BUBBLE_LINE(20,13,4,"C'est fait")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Kjedelig korridor:")
-    _BUBBLE_LINE(20,17,0,"Hak av")
+    _BUBBLE_LINE(20,14,3,"Hak av")
 #else
     _BUBBLE_LINE(5,5,0,"Boring corridor:")
     _BUBBLE_LINE(20,17,0,"Check")
@@ -1994,7 +1994,7 @@ _gDescriptionChildBedroom
     _BUBBLE_LINE(5,86,0,"Laissez-moi deviner:")
     _BUBBLE_LINE(5,94,4,"Chambre d'adolescent ?")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(5,96,0,"La meg gjette:")
+    _BUBBLE_LINE(7,95,0,"La meg gjette:")
     _BUBBLE_LINE(5,107,0,"Tenåringrom?")
 #else
     _BUBBLE_LINE(5,96,0,"Let me guess:")
@@ -2039,7 +2039,7 @@ _gDescriptionShowerRoom
     _BUBBLE_LINE(136,16,0,"quand j'aurai fini")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(149,5,0,"Jeg trenger en")
-    _BUBBLE_LINE(152,16,0,"når jeg er ferdig")
+    _BUBBLE_LINE(142,16,0,"når jeg er ferdig")
 #else
     _BUBBLE_LINE(149,5,0,"I will need one")
     _BUBBLE_LINE(152,16,0,"when I'm done")
@@ -2108,7 +2108,7 @@ _gDescriptionBoxRoom
     _BUBBLE_LINE(5,12,4,"utilitaire")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Et praktisk")
-    _BUBBLE_LINE(5,16,0,"lite rom")
+    _BUBBLE_LINE(5,13,3,"lite rom")
 #else
     _BUBBLE_LINE(5,5,0,"A practical")
     _BUBBLE_LINE(5,16,0,"little room")
@@ -2127,7 +2127,7 @@ _gDescriptionClassyBathRoom
 #ifdef LANGUAGE_FR
     _BUBBLE_LINE(132,5,0,"Semble confortable")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(132,5,0,"Ser komfortabelt ut")
+    _BUBBLE_LINE(128,5,1,"Ser komfortabelt ut")
 #else
     _BUBBLE_LINE(132,5,0,"Looks comfortable")
 #endif    
@@ -2155,7 +2155,7 @@ _gDescriptionTinyToilet
     _BUBBLE_LINE(173,13,4,"étincelante")
 #elif defined(LANGUAGE_NO)
     WHITE_BUBBLE(1)
-    _BUBBLE_LINE(137,5,0,"Skinnende rent")
+    _BUBBLE_LINE(147,5,0,"Skinnende rent")
 #else
     WHITE_BUBBLE(1)
     _BUBBLE_LINE(137,5,0,"Sparklingly clean")
@@ -2236,7 +2236,7 @@ _SubCollateralDamage
     .byt 5,18,0,34,"dommage collatéral",34,0
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"La oss kalle det")
-    .byt 5,17,0,34,"kollateral skade",34,0
+    .byt 5,15,2,34,"kollateral skade",34,0
 #else
     _BUBBLE_LINE(5,5,0,"Let's call that")
     .byt 5,17,0,34,"collateral damage",34,0
@@ -2336,7 +2336,7 @@ _gDescriptionPanicRoomDoor
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Jøss...")
     _BUBBLE_LINE(168,70,0,"Det er noe")
-    _BUBBLE_LINE(138,85,0,"seriøst utstyr!")
+    _BUBBLE_LINE(148,81,0,"seriøst utstyr!")
 #else
     _BUBBLE_LINE(5,5,0,"Damn...")
     _BUBBLE_LINE(168,70,0,"That's some")
