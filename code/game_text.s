@@ -380,7 +380,7 @@ _gDescriptionDarkTunel
     _BUBBLE_LINE(4,13,1,"humide et inquiétant.")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(4,4,0,"Som de fleste tunneler: mørk,")
-    _BUBBLE_LINE(4,13,1,"fuktig og litt skummel.")
+    _BUBBLE_LINE(4,14,0,"fuktig og litt skummel.")
 #else
     _BUBBLE_LINE(4,4,0,"Like most tunnels: dark, damp,")
     _BUBBLE_LINE(4,13,1,"and somewhat scary.")
@@ -665,7 +665,7 @@ _gDescriptionMainStreet
     _BUBBLE_LINE(4,16,0,"église médiévale")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(4,4,0,"En gammel")
-    _BUBBLE_LINE(4,14,3,"middelalderkirke")
+    _BUBBLE_LINE(4,15,3,"middelalderkirke")
 #else
     _BUBBLE_LINE(4,4,0,"A good old")
     _BUBBLE_LINE(4,16,0,"medieval church")
@@ -706,7 +706,7 @@ _gDescriptionEasternRoad
     _BUBBLE_LINE(129,17,0,"portes du Paradis?")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(130,5,0,"Er dette himlens")
-    _BUBBLE_LINE(109,17,0,"åpne porter?")
+    _BUBBLE_LINE(139,17,0,"åpne porter?")
 #else
     _BUBBLE_LINE(130,5,0,"Are these the open")
     _BUBBLE_LINE(109,17,0,"flood gates of heaven?")
@@ -828,14 +828,15 @@ rope_attached_to_tree
 
 digging_for_gold
     WAIT(DELAY_FIRST_BUBBLE)
-    WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
+    WHITE_BUBBLE(2)
     _BUBBLE_LINE(5,93,0,"Cherchent-ils")
     _BUBBLE_LINE(5,101,4,"de l'or ?")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(5,90,0,"Graver de etter")
-    _BUBBLE_LINE(8,103,0,"gull?")
+    WHITE_BUBBLE(1)
+    _BUBBLE_LINE(5,90,0,"Graver de etter gull?")
 #else
+    WHITE_BUBBLE(2)
     _BUBBLE_LINE(5,90,0,"Are they digging")
     _BUBBLE_LINE(8,103,0,"for gold?")
 #endif    
@@ -937,7 +938,7 @@ no_rope
     _BUBBLE_LINE(138,16,0,"vieux que l'église")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(107,5,0,"Denne brønnen ser like")
-    _BUBBLE_LINE(121,16,0,"gammel ut som kirken")
+    _BUBBLE_LINE(111,16,0,"gammel ut som kirken")
 #else
     _BUBBLE_LINE(111,5,0,"This well looks as old")
     _BUBBLE_LINE(158,16,0,"as the church")
@@ -956,7 +957,7 @@ _gDescriptionWoodedAvenue
     _BUBBLE_LINE(4,15,0,"été témoins de beaucoup de choses")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(4,4,0,"Disse trærne har sikkert")
-    _BUBBLE_LINE(4,14,1,"sett mye")
+    _BUBBLE_LINE(4,15,0,"sett mye")
 #else
     _BUBBLE_LINE(4,4,0,"These trees have probably")
     _BUBBLE_LINE(4,14,1,"witnessed many things")
@@ -1020,7 +1021,7 @@ _gDescriptionGravelDrive
     _BUBBLE_LINE(176,107,2,"vu de loin")
 #elif defined(LANGUAGE_NO)
     WHITE_BUBBLE(2)
-    _BUBBLE_LINE(143,97,0,"Ganske imponerende")
+    _BUBBLE_LINE(126,96,0,"Ganske imponerende")
     _BUBBLE_LINE(152,107,0,"sett på avstand")
 #else
     WHITE_BUBBLE(3)
@@ -1040,7 +1041,7 @@ _gDescriptionZenGarden
     _BUBBLE_LINE(5,17,0,"En Angleterre ?")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(4,4,0,"En japansk zen-hage?")
-    _BUBBLE_LINE(4,15,1,"I England?")
+    _BUBBLE_LINE(4,16,0,"I England?")
 #else
     _BUBBLE_LINE(4,4,0,"A Japanese zen garden?")
     _BUBBLE_LINE(4,15,1,"In England?")
@@ -1057,7 +1058,7 @@ _gDescriptionFrontLawn
     _BUBBLE_LINE(5,15,0,"pour les égocentriques")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Det perfekte huset")
-    _BUBBLE_LINE(5,15,1,"for egoister")
+    _BUBBLE_LINE(5,16,0,"for egoister")
 #else
     _BUBBLE_LINE(5,5,0,"The perfect home")
     _BUBBLE_LINE(5,15,1,"for egomaniacs")
@@ -1077,8 +1078,8 @@ _gDescriptionGreenHouse
     _BUBBLE_LINE(4,5,0,"Evidemment pour")
     .byt 4,17,0,34,"Usage thérapeutique",34,0
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(4,96,0,"Tydeligvis for")
-    .byt 4,107,1,34,"terapeutisk bruk",34,0
+    _BUBBLE_LINE(4,95,0,"Tydeligvis for")
+    .byt 4,108,0,34,"terapeutisk bruk",34,0
 #else
     _BUBBLE_LINE(4,96,0,"Obviously for")
     .byt 4,107,1,34,"therapeutic use",34,0
@@ -1125,7 +1126,7 @@ _gTextItemBasementWindow = *+1
     _BUBBLE_LINE(70,15,0,"pour faire pousser des tomates")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(124,5,0,"Ikke det beste stedet")
-    _BUBBLE_LINE(136,15,1,"å dyrke tomater")
+    _BUBBLE_LINE(136,16,0,"å dyrke tomater")
 #else
     _BUBBLE_LINE(134,5,0,"Not the best spot")
     _BUBBLE_LINE(136,15,1,"to grow tomatoes")
@@ -1148,7 +1149,7 @@ _gDescriptionFishPond
     _BUBBLE_LINE(5,17,0,"sont étonnamment gros")
 #elif defined(LANGUAGE_NO)
     _BUBBLE_LINE(5,5,0,"Noen av disse fiskene")
-    _BUBBLE_LINE(5,17,0,"er overraskende store")
+    _BUBBLE_LINE(5,15,2,"er overraskende store")
 #else
     _BUBBLE_LINE(5,5,0,"Some of these fish")
     _BUBBLE_LINE(5,17,0,"are surprisingly big")
@@ -1222,8 +1223,8 @@ girl_is_outside
     _BUBBLE_LINE(107,5,0,"Ici on accède à l'entrée")
     _BUBBLE_LINE(125,13,3,"arrière de la maison")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(93,5,0,"Husets bakinngang")
-    _BUBBLE_LINE(110,17,0,"er tilgjengelig herfra")
+    _BUBBLE_LINE(120,5,0,"Husets bakinngang")
+    _BUBBLE_LINE(120,18,0,"er tilgjengelig herfra")
 #else
     _BUBBLE_LINE(93,5,0,"The house's back entrance")
     _BUBBLE_LINE(110,15,0,"is accessible from here")
