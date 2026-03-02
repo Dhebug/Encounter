@@ -1337,7 +1337,18 @@ _SubImpressiveStaircase
 
 // MARK: Front Entrance
 _gDescriptionFrontDoor
-    // TODO: Not much there, maybe we need something to make it interesting?
+    WAIT(DELAY_FIRST_BUBBLE)
+    WHITE_BUBBLE(2)
+#ifdef LANGUAGE_FR
+    _BUBBLE_LINE(5,5,0,"Quelle entrée !")
+    _BUBBLE_LINE(5,17,0,"On dirait un temple")
+#elif defined(LANGUAGE_NO)
+    _BUBBLE_LINE(5,5,0,"For en inngang!")
+    _BUBBLE_LINE(5,17,0,"Nesten som et tempel")
+#else
+    _BUBBLE_LINE(5,5,0,"What an entrance!")
+    _BUBBLE_LINE(5,17,0,"Almost like a temple")
+#endif
     END
 
 

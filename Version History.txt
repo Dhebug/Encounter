@@ -390,3 +390,4 @@
 - When combining items, the first selected item is now shown in a different color when you are asked for the second item
 - Beta Norwegian localization added
 - Reorganized the intro documentation content to make it easier to understand, and extended the duration by 3 seconds
+- Added a missing description on the main entrance door
