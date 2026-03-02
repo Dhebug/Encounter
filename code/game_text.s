@@ -35,7 +35,7 @@ _StartMessagesAndPrompts
 _gTextAskInput              .byt "Que faites-vous ?",0
 _gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
-_gTextAnd                   .byt " et ",0
+_gTextAnd                   .byt " et",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
@@ -47,7 +47,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
 _gTextAskInput              .byt "Hva vil du gjøre nå?",0
 _gTextNothingHere           .byt 3,"Det er ingenting interessant her",0
 _gTextCanSee                .byt "Jeg ser ",0
-_gTextAnd                   .byt " og ",0
+_gTextAnd                   .byt " og",0
 _gTextScore                 .byt 5,"Poeng: %d",7,0
 _gTextCarryInWhat           .byt "Bær det i hva?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
@@ -58,7 +58,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
 _gTextAskInput              .byt "What are you going to do now?",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
-_gTextAnd                   .byt " and ",0
+_gTextAnd                   .byt " and",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
@@ -1655,7 +1655,7 @@ _gDescriptionCellar
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Je devrais aller m'abriter")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Jeg bør finne et trygt sted")
+        QUICK_MESSAGE("Jeg må finne et trygt sted")
 #else
         QUICK_MESSAGE("I should go somewhere safe")
 #endif        
@@ -1676,7 +1676,13 @@ _gDescriptionCellar
         WAIT(50)
 
         CLEAR_TEXT_AREA(5)
+#ifdef LANGUAGE_FR
+        QUICK_MESSAGE("Allo?")
+#elif defined(LANGUAGE_NO)
+        QUICK_MESSAGE("Hallo?")
+#else
         QUICK_MESSAGE("Hello?")
+#endif        
 
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
                 _IMAGE(8+3*3,67)
@@ -1696,7 +1702,7 @@ _gDescriptionCellar
 #ifdef LANGUAGE_FR
         QUICK_MESSAGE("Toujours là ?")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Er du fortsatt der?")
+        QUICK_MESSAGE("Er du der fortsatt?")
 #else
         QUICK_MESSAGE("Still there?")
 #endif        
@@ -2283,7 +2289,7 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(150,10,1,"Elle est moins")
         _BUBBLE_LINE(120,57,1,"sécurisée maintenant")
 #elif defined(LANGUAGE_NO)
-        _BUBBLE_LINE(153,70,0,"Definitivt mindre")
+        _BUBBLE_LINE(138,70,0,"Definitivt mindre")
         _BUBBLE_LINE(148,85,0,"sikker nå")
 #else
         _BUBBLE_LINE(153,70,0,"Definitely less")
@@ -2320,7 +2326,7 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(153,70,1,"On dirait")
         _BUBBLE_LINE(148,80,2,"un sourire :)")
 #elif defined(LANGUAGE_NO)
-        _BUBBLE_LINE(153,70,0,"Det ligner nesten")
+        _BUBBLE_LINE(138,70,0,"Det ligner nesten")
         _BUBBLE_LINE(148,85,0,"på et smil :)")
 #else
         _BUBBLE_LINE(153,70,0,"Almost looks")
@@ -3021,7 +3027,7 @@ _ReadHandWrittenNote
     INFO_MESSAGE("...si je peux y accéder !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Det kan være nyttig...")
-    INFO_MESSAGE("...hvis jeg kan nå den!")
+    INFO_MESSAGE("...hvis jeg kommer til den!")    
 #else
     INFO_MESSAGE("That could be useful...")
     INFO_MESSAGE("...if I can access it!")
@@ -3038,8 +3044,8 @@ _ReadChemistryRecipes
     INFO_MESSAGE("Ca pourrait être utile...")
     INFO_MESSAGE("...il faut trouver les composants.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg kan definitivt bruke disse...")
-    INFO_MESSAGE("...trenger bare å finne materialene.")
+    INFO_MESSAGE("Disse kan jeg definitivt bruke...")
+    INFO_MESSAGE("...bare finne materialene.")
 #else
     INFO_MESSAGE("I can definitely use these...")
     INFO_MESSAGE("...just need to find the materials.")
@@ -3058,7 +3064,7 @@ _ReadChemistryBook
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Je ne comprends rien...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg forstår ikke mye...")
+    INFO_MESSAGE("Jeg skjønner ingenting...")
 #else
     INFO_MESSAGE("I don't understand much...")
 #endif
@@ -3257,7 +3263,7 @@ _InspectGame
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Du matériel de pointe !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Toppmoderne maskinvare!")
+    INFO_MESSAGE("Toppmoderne spillmaskin!")
 #else
     INFO_MESSAGE("State of the art hardware!")
 #endif
@@ -3734,8 +3740,8 @@ _InspectGunPowder
     INFO_MESSAGE("Poudre explosive faite maison,")
     INFO_MESSAGE("il faut un contenant adapté.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Hjemmelaget krutt: Ganske eksplosivt,")
-    INFO_MESSAGE("men det trenger en riktig beholder.")
+    INFO_MESSAGE("Hjemmelaget krutt: Svært eksplosivt,")
+    INFO_MESSAGE("men det krever en passende beholder.")
 #else
     INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
     INFO_MESSAGE("but that requires a proper container.")
@@ -3981,7 +3987,7 @@ _InspectPanel
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Il y a un trou pour une petite clef")
 #elif defined(LANGUAGE_NO)
-            INFO_MESSAGE("Det er et hull til en liten nøkkel")
+            INFO_MESSAGE("Det er et hull for en liten nøkkel")
 #else
             INFO_MESSAGE("There's a hole for a small key")
 #endif
@@ -4915,7 +4921,7 @@ too_high_to_jump
 #ifdef LANGUAGE_FR
             _BUBBLE_LINE(80,25,0,"C'est trop haut pour sauter!")
 #elif defined(LANGUAGE_NO)
-            _BUBBLE_LINE(93,25,0,"Det er for høyt til å hoppe!")
+            _BUBBLE_LINE(80,25,0,"Det er for høyt til å hoppe!")
 #else
             _BUBBLE_LINE(93,25,0,"It's too high to jump!")
 #endif    
@@ -4945,7 +4951,7 @@ girl_at_the_window
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Impossible d'accéder à partir d'ici")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Umulig å nå herfra")
+        INFO_MESSAGE("Kan ikke komme til herfra")
 #else
         INFO_MESSAGE("Impossible to access from here")
 #endif        
@@ -5112,7 +5118,7 @@ _OpenGunCabinet
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Une seule fléchette, mieux que rien!")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Bare én pil, men bedre enn ingenting!")
+        INFO_MESSAGE("Bare en pil, men bedre enn ingenting!")
 #else
         INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
@@ -7697,7 +7703,7 @@ _OneHourAlarmWarning
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Déjà une heure d'écoulée !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Allerede én time gått!")
+    INFO_MESSAGE("Allerede en time gått!")
 #else
     INFO_MESSAGE("Already one hour has passed!")
 #endif    

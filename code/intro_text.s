@@ -3,7 +3,7 @@
     .text   // could be .data if we setup the base address properly
 
 #pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c â:[ ù:u
-#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
+#pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A é:e
 
 
 ;
