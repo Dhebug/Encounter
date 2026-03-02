@@ -264,6 +264,7 @@ void Initializations()
 	ComputeFancyFontWidth();
 	GenerateShiftBuffer();
 	GenerateMul40Table();
+	SortKerningTable();
     SetKeyboardLayout();
 
 #ifdef TESTING_MODE

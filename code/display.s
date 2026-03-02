@@ -405,9 +405,60 @@ skip
 .)
 
 
-  ; Search in the kerning table for a matching prev/cur combination of characters
-  ; We could store somewhere in the font (size table?) if it's even worth looking at all to avoid the lookup for some letters
-_GetKerningValue  
+  ; Bubble sort the kerning table by (prev_char, cur_char) to enable early-exit lookup in _GetKerningValue.
+  ; Called once at startup from Initializations().
+_SortKerningTable
+  .(
+restart
+  ldx #0
+  stx tmp0                            ; swap flag (0 = no swaps this pass)
+compare_loop
+  lda _gFont12x14Kerning+3,x
+  beq end_pass                        ; Next entry is end marker: pass complete
+  ; A already has next[0], compare against current[0]
+  cmp _gFont12x14Kerning+0,x          ; next[0] - current[0]
+  bcc do_swap                         ; next < current: swap needed
+  bne no_swap                         ; next > current: already in order
+  ; First chars equal, compare second chars
+  lda _gFont12x14Kerning+4,x
+  cmp _gFont12x14Kerning+1,x          ; next[1] - current[1]
+  bcs no_swap                         ; next >= current: already in order
+do_swap
+  ; Swap 3 bytes between entry[x] and entry[x+3] using Y as temp
+  ldy _gFont12x14Kerning+0,x
+  lda _gFont12x14Kerning+3,x
+  sta _gFont12x14Kerning+0,x
+  tya
+  sta _gFont12x14Kerning+3,x
+
+  ldy _gFont12x14Kerning+1,x
+  lda _gFont12x14Kerning+4,x
+  sta _gFont12x14Kerning+1,x
+  tya
+  sta _gFont12x14Kerning+4,x
+
+  ldy _gFont12x14Kerning+2,x
+  lda _gFont12x14Kerning+5,x
+  sta _gFont12x14Kerning+2,x
+  tya
+  sta _gFont12x14Kerning+5,x
+
+  inc tmp0                            ; Mark that a swap happened
+no_swap
+  inx
+  inx
+  inx
+  bne compare_loop                    ; Safe: ~71 entries * 3 = 213 < 255
+end_pass
+  lda tmp0
+  bne restart                         ; If any swaps happened, repeat
+  rts
+  .)
+
+
+  ; Search the sorted kerning table for a matching prev/cur pair.
+  ; Early exit when table entry exceeds target (sorted order).
+_GetKerningValue
   .(
   lda #0
   sta kerning           ; By default, no kerning adjustment to apply
@@ -415,24 +466,27 @@ _GetKerningValue
   lda prev_char
   beq end_kerning       ; No kerning to solve for the very first character
 loop_kerning
-  lda _gFont12x14Kerning+0,x     
-  beq end_kerning
+  lda _gFont12x14Kerning+0,x
+  beq end_kerning                 ; End of table
   cmp prev_char                   ; Check the first character
-  bne next_pair
-  lda cur_char
-  cmp _gFont12x14Kerning+1,x      ; Check the second character
-  bne next_pair
+  bcc next_pair                   ; Table < target: keep scanning
+  bne end_kerning                 ; Table > target: no match (sorted order)
+  ; First character matches, check second
+  lda _gFont12x14Kerning+1,x
+  cmp cur_char
+  bcc next_pair                   ; Table < target: keep scanning within group
+  bne end_kerning                 ; Table > target: no match in this group
 
-  lda _gFont12x14Kerning+2,x      ; Store the associated kerning value
+  lda _gFont12x14Kerning+2,x     ; Store the associated kerning value
   sta kerning
   rts
 
-next_pair  
+next_pair
   inx
   inx
   inx
   bne loop_kerning
-end_kerning  
+end_kerning
   rts
   .)
 #endif
@@ -1301,75 +1355,88 @@ _gBitPixelMaskRight
   .byt %111111
 
 ; Kerning table: Pairs of characters associated with a value subtracted to the x position of the second character
+; Sorted by (first char, second char) ASCII value per section.
+; The sort routine at startup merges the common + language sections into final sorted order.
 _gFont12x14Kerning
-  .byt "ff",2
-  .byt "fi",1
+  .byt "'e",2
+  .byt "Ja",2
+  .byt "Of",1
+  .byt "Pa",1
+  .byt "Te",2
+  .byt "Th",1
+  .byt "To",2
+  .byt "Us",1
+  .byt "ag",1
+  .byt "da",1
+  .byt "de",1
+  .byt "do",1
+  .byt "dr",1
   .byt "fa",2
   .byt "fe",2
+  .byt "ff",2
+  .byt "fi",1
   .byt "fo",2
-  .byt "ij",2
+  .byt "if",1
   .byt "ig",1
-  .byt "Ja",2
+  .byt "ij",2
+  .byt "il",1
+  .byt "ip",2
+  .byt "ir",1
+  .byt "it",1
   .byt "la",1
-  .byt "lo",1
-  .byt "ll",1
   .byt "le",1
-  .byt "ag",1
+  .byt "ll",1
+  .byt "lo",1
   .byt "op",1
-  .byt "Of",1
+  .byt "pp",1
   .byt "ra",1
   .byt "rd",1
   .byt "re",1
   .byt "rk",1
   .byt "ro",1
   .byt "rp",1
-  .byt "if",1
-  .byt "il",1
-  .byt "ir",1
-  .byt "it",1
-  .byt "ip",2
-  .byt "pp",1
-  .byt "da",1
-  .byt "de",1
-  .byt "do",1
-  .byt "dr",1
-  .byt "Pa",1
   .byt "ta",1
   .byt "tc",1
   .byt "te",1
   .byt "th",1
   .byt "to",1
-  .byt "Th",1
-  .byt "Te",2
-  .byt "To",2
-  .byt "Us",1
-  .byt "'e",2
 #ifdef LANGUAGE_FR
 #pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^
   .byt "là",2
   .byt "tô",1
-  .byt "tè",1
   .byt "té",1
+  .byt "tè",1
 #elif defined(LANGUAGE_NO)
 #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
-  .byt "fø",2
+  .byt "Fo",2
+  .byt "Hu",2
+  .byt "Ne",2
+  .byt "No",2
+  .byt "So",1
+  .byt "Ty",2
+  .byt "dd",1
+  .byt "fl",1
   .byt "ft",1
   .byt "fu",1
-  .byt "dd",1
-  .byt "og",2
+  .byt "fø",2
   .byt "gj",2
+  .byt "id",1
+  .byt "ja",1
+  .byt "je",1
   .byt "jø",1
+  .byt "ke",1
+  .byt "kk",1
   .byt "kl",1
+  .byt "ld",1
+  .byt "lg",1
   .byt "ng",1
-  .byt "rø",1
+  .byt "og",1
   .byt "rg",1
   .byt "rr",1
-  .byt "kk",1
+  .byt "ræ",1
+  .byt "rø",1
   .byt "ti",1
   .byt "tt",1
-  .byt "kk",1
-  .byt "No",2
-  .byt "Ty",2
 #endif
   .byt 0           ; End of table
 
