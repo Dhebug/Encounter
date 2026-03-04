@@ -126,11 +126,11 @@ _gTextThanks
 _gTextCredits
     .byt TEXT_CRLF
     .byt 3," Originalspill ",96," 1983 Severn Software",TEXT_CRLF
-    .byt 6,"       Kode og spillhistorie:",TEXT_CRLF
-    .byt 7,"           Adrian Sheppard",4,"(*)",7,TEXT_CRLF
+    .byt 6,"        Kode og spillhistorie:",TEXT_CRLF
+    .byt 7,"            Adrian Sheppard",4,"(*)",7,TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,"Redux version ",96," 2024-26 Defence Force",TEXT_CRLF
-    .byt 6,"   Kode, design, grafikk og lyd:",TEXT_CRLF
+    .byt 6,"     Kode, design, grafikk og lyd:",TEXT_CRLF
     .byt 7,"        Mickael 'Dbug' Pointier",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 6,"                Musikk:",TEXT_CRLF
@@ -140,7 +140,7 @@ _gTextCredits
 
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
-    .byt 6,"     Spilltesting og tilbakemelding",TEXT_CRLF
+    .byt 6,"    Spilltesting og tilbakemelding",TEXT_CRLF
     .byt 7," Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
     .byt TEXT_CRLF,TEXT_CRLF
     .byt 5,"   Takk til utviklerne av Oricutron",TEXT_CRLF
@@ -148,12 +148,12 @@ _gTextAdditionalCredits
 
 _gTextGameDescription
     .byt TEXT_CRLF
-    .byt 3,"Originalspillet, utgitt på kassette,",TEXT_CRLF
-    .byt 3,"var 100% BASIC og hadde ikke noe",TEXT_CRLF
+    .byt 3," Originalspillet, utgitt på kassette,",TEXT_CRLF
+    .byt 3,"   var 100% BASIC og hadde ikke noe",TEXT_CRLF
     .byt 3," grafikk eller lyd (unntatt EXPLODE).",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 6,"  Denne versjonen viser hva man kan",TEXT_CRLF
-    .byt 6," gjøre med en diskettstasjon og et",TEXT_CRLF
+    .byt 6,"  gjøre med en diskettstasjon og et",TEXT_CRLF
     .byt 6,"     program i C og assemblerkode.",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 2," Oric er en merkelig maskin, men den",TEXT_CRLF
@@ -163,19 +163,19 @@ _gTextGameDescription
 _gTextExternalInformation
     .byt TEXT_CRLF
     .byt 6,"  Vil du vite mer om spillet, finne",TEXT_CRLF
-    .byt 6," kildekode eller melde inn en feil,",TEXT_CRLF
+    .byt 6,"  kildekode eller melde inn en feil,",TEXT_CRLF
     .byt 6,"       bare åpne nettleseren på:",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3,"      encounter.defence-force.org",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt 5," Her finner du også mange andre",TEXT_CRLF
-    .byt 5,"   Oric-spill og demoer fra oss.",TEXT_CRLF
+    .byt 5,"    Her finner du også mange andre",TEXT_CRLF
+    .byt 5,"     Oric-spill og demoer fra oss.",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGreetings
     .byt TEXT_CRLF
-    .byt 6,"  Hilsener til alle som fortsetter",TEXT_CRLF
-    .byt 6," med å lage programvare for Oric:",TEXT_CRLF
+    .byt 6,"   Hilsener til alle som fortsetter",TEXT_CRLF
+    .byt 6,"   med å lage programvare for Oric:",TEXT_CRLF
     .byt TEXT_CRLF
     .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
