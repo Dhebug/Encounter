@@ -1807,8 +1807,17 @@ alarm_panel_closed
     ENDIF(open)
     .)
 
+    ; If the ladder is at the cellar window and is in place, we move it back here (same pattern as pit sync)
     .(
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)  
+    JUMP_IF_FALSE(end_ladder_sync,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CELLAR_WINDOW))
+    JUMP_IF_FALSE(end_ladder_sync,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM)
+    UNSET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_IMMOVABLE)     ; Can grab it again from the bottom
+end_ladder_sync
+    .)
+
+    .(
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,87)                     ; Draw the ladder
                 _IMAGE(0,40)
                 _BUFFER(29,7)
@@ -1925,6 +1934,13 @@ _gDescriptionCellarWindow
 .(
     SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_CELLAR_WINDOW)         ; The window is visible
 
+    ; If the ladder is in the dark cellar and is in place, we move it here (same pattern as pit sync)
+    JUMP_IF_FALSE(end_ladder_sync,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))
+    JUMP_IF_FALSE(end_ladder_sync,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CELLAR_WINDOW)
+    SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_IMMOVABLE)       ; Can't grab it from the top
+end_ladder_sync
+
     ; Inspecting the window in the cellar
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),bright)
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
@@ -1933,7 +1949,7 @@ _gDescriptionCellarWindow
     ENDIF(dark)
 
     ; Is the ladder in place?
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM),ladder)
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CELLAR_WINDOW),ladder)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,12,28)                     ; Draw the ladder
                 _IMAGE(7,100)
                 _BUFFER(14,101)
@@ -2290,7 +2306,7 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(120,57,1,"sécurisée maintenant")
 #elif defined(LANGUAGE_NO)
         _BUBBLE_LINE(138,70,0,"Definitivt mindre")
-        _BUBBLE_LINE(148,85,0,"sikker nå")
+        _BUBBLE_LINE(148,82,3,"sikker nå")
 #else
         _BUBBLE_LINE(153,70,0,"Definitely less")
         _BUBBLE_LINE(148,85,0,"secure now")
@@ -4890,8 +4906,10 @@ _ShowGirlAtTheWindow
                 _BUFFER(11,0)
 
         ; Show the rope going down the window if it's attached
-        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
-        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))            
+        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+        JUMP_IF_TRUE(rope_visible,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
+        JUMP_IF_FALSE(rope_going_down,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_PANIC_ROOM_DOOR))
+rope_visible            
             BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,9,5)                      ; Draw the snooker cue with the top of the rope
                     _IMAGE(4,26)
                     _BUFFER(15,18)                    
@@ -4912,7 +4930,9 @@ rope_going_down
             WAIT(50)
 
         ; Is the rope attached to the window?
-        JUMP_IF_FALSE(too_high_to_jump,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
+        JUMP_IF_TRUE(check_rope_flag,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_TILEDPATIO))
+        JUMP_IF_FALSE(too_high_to_jump,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_PANIC_ROOM_DOOR))
+check_rope_flag
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED),rope_not_attached)
 too_high_to_jump        
             ; The rope is not attached
@@ -5772,6 +5792,28 @@ _UseBucket
 
 _UseLadder
 .(
+    ; If already positioned, "use ladder" means climb it
+    JUMP_IF_FALSE(not_yet_attached,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
+    JUMP_IF_TRUE(climb_out_of_pit,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
+    JUMP_IF_TRUE(climb_into_pit,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
+    JUMP_IF_TRUE(climb_up_to_window,CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM))
+    JUMP_IF_TRUE(climb_down_from_window,CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW))
+    JUMP(_ErrorAlreadyPositioned_Elle)
+
+climb_out_of_pit
+    SET_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT)
+    END_AND_REFRESH
+climb_into_pit
+    SET_PLAYER_LOCATION(e_LOC_INSIDE_PIT)
+    END_AND_REFRESH
+climb_up_to_window
+    SET_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW)
+    END_AND_REFRESH
+climb_down_from_window
+    SET_PLAYER_LOCATION(e_LOC_DARKCELLARROOM)
+    END_AND_REFRESH
+
+not_yet_attached
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_INSIDE_PIT))
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT))
     JUMP_IF_TRUE(install_the_ladder,CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM))
@@ -5783,7 +5825,7 @@ cannot_use_ladder_here
     ERROR_MESSAGE("Kan ikke bruke det her")
 #else
     ERROR_MESSAGE("Can't use it there")
-#endif    
+#endif
     END_AND_REFRESH
 
 ladder_too_short
@@ -5793,12 +5835,10 @@ ladder_too_short
     ERROR_MESSAGE("Den er altfor kort!")
 #else
     ERROR_MESSAGE("It's way too short!")
-#endif    
+#endif
     END_AND_REFRESH
 
 install_the_ladder
-    ; If the ladder  is already attached, we don't redo the whole sequence
-    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Ladder,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Vous installez l'échelle")
@@ -5918,13 +5958,23 @@ cannot_use_rope_here
 ; The rope is not possible to attach from the bottom of the pit
 ; The only situation you would see this message is if you also have the ladder, else that would be an instant game over
 inside_the_pit
-    JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    ; If already attached, "use rope" means climb up out of the pit
+    JUMP_IF_FALSE(rope_not_attached_in_pit,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_PLAYER_LOCATION(e_LOC_OUTSIDE_PIT)
+    END_AND_REFRESH
+rope_not_attached_in_pit
     GOSUB(_SubErrorTooHigh)
     END_AND_PARTIAL_REFRESH
 
-+_CombineRopeTree
 around_the_pit
-    ; If the rope is already attached, we don't redo the whole sequence
+    ; If already attached, "use rope" means climb down into the pit
+    JUMP_IF_FALSE(install_rope_on_tree,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
+    SET_PLAYER_LOCATION(e_LOC_INSIDE_PIT)
+    END_AND_REFRESH
+
++_CombineRopeTree
+install_rope_on_tree
+    ; "combine rope tree" when already attached just shows an error
     JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR
