@@ -3231,6 +3231,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Batteries          , _InspectBatteries)
     VALUE_MAPPING(e_ITEM_Drawer             , _InspectDrawer)
     VALUE_MAPPING(e_ITEM_DuneBook           , _InspectDuneBook)
+    VALUE_MAPPING(e_ITEM_MortarAndPestle    , _InspectMortar)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -4456,6 +4457,23 @@ _ReadDuneBook
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
+.)
+
+
+_InspectMortar
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Pour les épices, normalement...")
+    INFO_MESSAGE("...pourrait servir à autre chose.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("For krydder, vanligvis...")
+    INFO_MESSAGE("...kan brukes til annet også.")
+#else
+    INFO_MESSAGE("For grinding spices, usually...")
+    INFO_MESSAGE("...could work on other things.")
+#endif
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 .)
 
 
