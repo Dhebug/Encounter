@@ -175,8 +175,7 @@ WORDS ProcessAnswer()
     }
 
 
-	// Not recognized: Warn the player and continue
-    UnlockAchievement(ACHIEVEMENT_CAN_YOU_REPEAT);
+	// Not recognized: Warn the player and continue    
     PrintErrorMessage(gTextErrorDidNotUnderstand);      // "I do not understand, sorry"
 	PlaySound(ErrorPlop);
  	return e_WORD_CONTINUE;

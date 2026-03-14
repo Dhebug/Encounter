@@ -6111,8 +6111,9 @@ _UseAlarmSwitch
 .(
     PLAY_SOUND(_AlarmSwitchPressed)
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED),on)                 ; Is the alarm active?
-        SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disable the alarm 
+        SET_ITEM_FLAGS(e_ITEM_AlarmSwitch,ITEM_FLAG_DISABLED)                           ; Disabled the alarm
         INCREASE_SCORE(POINTS_USED_SWITCH)
+        UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DISABLED_THE_ALARM)
 #ifdef LANGUAGE_FR                                                                      ; Update the description
         SET_ITEM_DESCRIPTION(e_ITEM_AlarmSwitch,"un _bouton en position arrêt")
         INFO_MESSAGE("L'alarme est désactivée")

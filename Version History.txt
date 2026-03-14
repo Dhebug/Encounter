@@ -395,3 +395,4 @@
 - The list of objects in the scene now has proper padding on the right side instead of touching the border
 - Looking at the basement window the player is now clearly told that the tape cannot be removed from the outside
 - Using the rope or ladder now makes you able to climb up or down
+- Replaced the almost never triggered "not understood" achievement by a new "disabled alarm" one.

@@ -94,7 +94,7 @@ _Text_AchievementGotTheBestScore  .byt "Meilleur score",0
 _Text_AchievementDogAteTheMeat    .byt "Nourri le chien",0
 _Text_AchievementUsedHosePipe     .byt "Utilisé le tuyau",0
 _Text_AchievementPausedTheGame    .byt "Jeu mis en pause",0
-_Text_AchievementCanYouRepeat     .byt "N'a rien compris",0
+_Text_AchievementDisabledTheAlarm .byt "Alarme désactivée",0
 _Text_AchievementReadTheInvoice   .byt "Lu la facture",0
 _Text_AchievementReadTheTombstone .byt "Repose en paix",0
 _Text_AchievementOver9999         .byt "Ca dépasse 9999 !",0
@@ -140,7 +140,7 @@ _Text_AchievementGotTheBestScore  .byt "Beste poengsum",0
 _Text_AchievementDogAteTheMeat    .byt "Hunden spiste kjøtt",0
 _Text_AchievementUsedHosePipe     .byt "Brukte slangen",0
 _Text_AchievementPausedTheGame    .byt "La spillet på pause",0
-_Text_AchievementCanYouRepeat     .byt "Kan du gjenta?",0
+_Text_AchievementDisabledTheAlarm .byt "Deaktiverte alarmen",0
 _Text_AchievementReadTheInvoice   .byt "Leste fakturaen",0
 _Text_AchievementReadTheTombstone .byt "Hvil i fred",0
 _Text_AchievementOver9999         .byt "Det er over 9999!",0
@@ -186,7 +186,7 @@ _Text_AchievementGotTheBestScore  .byt "Got the best score",0
 _Text_AchievementDogAteTheMeat    .byt "Fed the dog",0
 _Text_AchievementUsedHosePipe     .byt "Used the hose pipe",0
 _Text_AchievementPausedTheGame    .byt "Paused the game",0
-_Text_AchievementCanYouRepeat     .byt "Can you repeat?",0
+_Text_AchievementDisabledTheAlarm .byt "Disabled the alarm",0
 _Text_AchievementReadTheInvoice   .byt "Read the invoice",0
 _Text_AchievementReadTheTombstone .byt "Rest in peace",0
 _Text_AchievementOver9999         .byt "It's over 9999!",0
@@ -234,7 +234,7 @@ _AchievementMessages
     .word _Text_AchievementMadeBlackPowder  ; "Made blackpowder"
     .word _Text_AchievementFrikedTheThug    ; "Frisked the thug"
     .word _Text_AchievementUsedTheAcid      ; "Used the acid"
-    .word _Text_AchievementCanYouRepeat     ; "Can you rpeat"
+    .word _Text_AchievementDisabledTheAlarm ; "Disabled the alarm"
     .word _Text_AchievementPausedTheGame    ; "Paused the game"
     .word _Text_AchievementOpenedTheCurtain ; "Opened the curtain"
     .word _Text_AchievementGaveTheKnife     ; "Gave the knife"
