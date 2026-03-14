@@ -32,7 +32,7 @@ _StartGameTextData
 // Small feedback messages and prompts
 _StartMessagesAndPrompts
 #ifdef LANGUAGE_FR
-_gTextAskInput              .byt "Que faites-vous ?",0
+_gTextAskInput              .byt "Bon, par ou commencer...",0
 _gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextAnd                   .byt " et",0
@@ -44,7 +44,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "et",3,"MAJ",7,"pour identifier les objets.",0
                             //.byt "Note: Utilisez SHIFT pour voir les objects",0
 #elif defined(LANGUAGE_NO)
-_gTextAskInput              .byt "Hva vil du gjøre nå?",0
+_gTextAskInput              .byt "Greit, hvor begynner jeg...",0
 _gTextNothingHere           .byt 3,"Det er ingenting interessant her",0
 _gTextCanSee                .byt "Jeg ser ",0
 _gTextAnd                   .byt " og",0
@@ -55,7 +55,7 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "pluss",3,"OPP",7,"eller",3,"NED",7,"for å klatre,",TEXT_CRLF
                             .byt "og",3,"SHIFT",7,"for å markere gjenstander.",0
 #else
-_gTextAskInput              .byt "What are you going to do now?",0
+_gTextAskInput              .byt "Right, where do I start...",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextAnd                   .byt " and",0
@@ -193,9 +193,9 @@ _gTextItemAlarmIndicator          .byt "un _indicateur d'alarme",0
 _gTextItemComputer                .byt "un _ordinateur de bureau",0
 _gTextItemOricComputer            .byt "un micro-ordinateur$_Oric 1",0
 _gTextItemInvoice                 .byt "une$_facture",0
-_gTextItemTelevision              .byt "une _télévision",0
+_gTextItemTelevision              .byt "une _télé",0
 _gTextItemGameConsole             .byt "une _console de jeu",0
-_gTextItemLockedPanel             .byt "un _clignotant",0
+_gTextItemLockedPanel             .byt "un _voyant lumineux",0
 _gTextItemBatteries               .byt "un paquet de$_piles SR44",0
 _gTextItemDuneBook                .byt "un$_roman",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
@@ -349,9 +349,9 @@ _gTextItemAlarmIndicator          .byt "an alarm _indicator",0
 _gTextItemComputer                .byt "a desktop _computer",0
 _gTextItemOricComputer            .byt "a$_Oric 1 computer",0
 _gTextItemInvoice                 .byt "an$_invoice letter",0
-_gTextItemTelevision              .byt "a _television",0
+_gTextItemTelevision              .byt "a _telly",0
 _gTextItemGameConsole             .byt "a game _console",0
-_gTextItemLockedPanel             .byt "a _blinker",0
+_gTextItemLockedPanel             .byt "a flashing _light",0
 _gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
 _gTextItemDuneBook                .byt "a$_novel",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
@@ -1903,7 +1903,7 @@ _gMiniKaboom
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Godt at jeg ikke var der inne!")
 #else
-    INFO_MESSAGE("Good thing I was not in there!")
+    INFO_MESSAGE("Glad I wasn't standing in there.")
 #endif
     CLEAR_TEXT_AREA(4)
     SET_CUT_SCENE(0)
@@ -2477,17 +2477,17 @@ _CombinePillsWithMortar
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED),already_crushed)
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Elles sont déja écrasées")
+        ERROR_MESSAGE("Déjà fait.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Pillene er allerede knust")
+        ERROR_MESSAGE("Allerede gjort.")
 #else
-        ERROR_MESSAGE("The pills are already crushed")
+        ERROR_MESSAGE("Already done that.")
 #endif    
     ELSE(already_crushed,not_crushed_yet)
         DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Vous pilez les somnifères")
+        INFO_MESSAGE("Les somnifères sont pilés.")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Pillene er nå knust")
 #else
@@ -2527,11 +2527,11 @@ _CombinePetrolWithTP
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous avez fabriqué une mèche")
+    INFO_MESSAGE("Et voilà une mèche.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du har laget en lunte")
+    INFO_MESSAGE("Det ble en fin lunte.")
 #else
-    INFO_MESSAGE("You've created a fuse")
+    INFO_MESSAGE("That makes a decent fuse.")
 #endif
     COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_ToiletRoll)         ; We now have a fuse for our bomb, the Petrol and TP are gone
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
@@ -2573,11 +2573,11 @@ _CombineTinWithFuse
     IF_FALSE(CHECK_ITEM_CONTAINER(e_ITEM_GunPowder,e_ITEM_TobaccoTin),missing_powder)    ; Is the gunpowder in the tobacco tin?
        // We reach this code path if the gun power is not in the tin
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Sans la poudre la mèche est inutile")
+        ERROR_MESSAGE("Inutile sans poudre.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Uten krutt er lunten ubrukelig")
+        ERROR_MESSAGE("Ubrukelig uten krutt.")
 #else
-        ERROR_MESSAGE("Without gunpowder the fuse is useless")
+        ERROR_MESSAGE("No good without gunpowder.")
 #endif    
         END_AND_PARTIAL_REFRESH
     ENDIF(missing_powder)
@@ -2656,11 +2656,11 @@ _CombineStickyBombWithSafe
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_TRANSFORMED),sticky)      ; Is the bomb sticky?
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Ca doit coller à la porte")
+        ERROR_MESSAGE("Faut que ça colle à la porte.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Det må feste seg til døren")
+        ERROR_MESSAGE("Må feste seg til døren på noe vis.")
 #else
-        ERROR_MESSAGE("It needs to stick to the door")
+        ERROR_MESSAGE("Needs to stick to the door somehow.")
 #endif        
         END_AND_REFRESH
     ENDIF(sticky)
@@ -2697,11 +2697,11 @@ _CombineClayWithWater
 .(
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("C'est déjà humide !")
+        ERROR_MESSAGE("Encore humide. Pas la peine.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Det er allerede vått!")
+        ERROR_MESSAGE("Fortsatt vått. Ikke nødvendig.")
 #else
-        ERROR_MESSAGE("It's already wet!")
+        ERROR_MESSAGE("Still wet. No need.")
 #endif        
         END_AND_REFRESH
     ENDIF(wet)
@@ -3026,8 +3026,8 @@ _ReadNewsPaper
     INFO_MESSAGE("Jeg må finne henne fort...")
     INFO_MESSAGE("...håper hun har det bra!")
 #else
-    INFO_MESSAGE("I have to find her fast...")
-    INFO_MESSAGE("...I hope she is fine!")
+    INFO_MESSAGE("I need to find her. Quickly.")
+    INFO_MESSAGE("...I hope she's alright.")
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -3038,15 +3038,13 @@ _ReadHandWrittenNote
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_NOTE)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_NOTE)    
     DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE)
+    GOSUB(_SubCouldComeInHandy)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ca pourrait être utile...")
     INFO_MESSAGE("...si je peux y accéder !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det kan være nyttig...")
-    INFO_MESSAGE("...hvis jeg kommer til den!")    
+    INFO_MESSAGE("...hvis jeg kommer til den!")
 #else
-    INFO_MESSAGE("That could be useful...")
-    INFO_MESSAGE("...if I can access it!")
+    INFO_MESSAGE("...if I can get to it.")
 #endif    
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -3056,15 +3054,13 @@ _ReadChemistryRecipes
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_THE_RECIPES)   ; Achievement!    
     INCREASE_SCORE(POINTS_READ_RECIPES)    
     DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES)
+    GOSUB(_SubCouldComeInHandy)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ca pourrait être utile...")
     INFO_MESSAGE("...il faut trouver les composants.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Disse kan jeg definitivt bruke...")
     INFO_MESSAGE("...bare finne materialene.")
 #else
-    INFO_MESSAGE("I can definitely use these...")
-    INFO_MESSAGE("...just need to find the materials.")
+    INFO_MESSAGE("...just need the ingredients.")
 #endif    
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -3078,11 +3074,11 @@ _ReadChemistryBook
     INCREASE_SCORE(POINTS_READ_BOOK)    
     DISPLAY_IMAGE(LOADER_PICTURE_SCIENCE_BOOK)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je ne comprends rien...")
+    INFO_MESSAGE("J'y comprends rien du tout.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg skjønner ingenting...")
+    INFO_MESSAGE("Skjønner ikke et kvekk...")
 #else
-    INFO_MESSAGE("I don't understand much...")
+    INFO_MESSAGE("Can't make head nor tail of this.")
 #endif
 
     // If the recipes were not yet found, they now appear at the current location
@@ -3094,16 +3090,29 @@ recipe_already_found
 .)
 
 
+; Called from reading the handwritten note and the chemistry recipes
+_SubCouldComeInHandy
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ca pourrait servir...")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det kan være nyttig...")
+#else
+    INFO_MESSAGE("That could come in handy...")
+#endif
+    RETURN
+.)
+
 ; Called from reading the chemistry book, searching the thug and searching the safe
 _SubFoundSomething
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous avez trouvé quelque chose")
+    INFO_MESSAGE("Tiens, qu'est-ce qu'on a là ?")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du fant noe interessant")
+    INFO_MESSAGE("Hva har vi her da?")
 #else
-    INFO_MESSAGE("You found something interesting")
+    INFO_MESSAGE("Hello, what have we here?")
 #endif
     STOP_MUSIC()
     RETURN
@@ -3115,14 +3124,14 @@ _ReadInvoice
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_READ_INVOICE)                                       ; And get an achievement for that action    
     INCREASE_SCORE(POINTS_READ_INVOICE)    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("La facture d'un voyage de deux mois")
-    INFO_MESSAGE("en Europe. Vacances en famille ?")
+    INFO_MESSAGE("Deux mois à travers l'Europe...")
+    INFO_MESSAGE("...ça doit être sympa.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En faktura for to måneder i Europa")
-    INFO_MESSAGE("Familieferie kanskje?")
+    INFO_MESSAGE("To måneder i Europa...")
+    INFO_MESSAGE("...ikke dårlig.")
 #else
-    INFO_MESSAGE("An invoice for a two-month trip all")
-    INFO_MESSAGE("over Europe. Family holidays maybe?")
+    INFO_MESSAGE("Two months touring Europe...")
+    INFO_MESSAGE("...must be nice.")
 #endif
     END_AND_REFRESH
 .)
@@ -3248,8 +3257,8 @@ _ShowRoughPlan
     INFO_MESSAGE("Jeg må tilbake til markedet...")
     INFO_MESSAGE("...når jeg er ferdig")
 #else
-    INFO_MESSAGE("I'll have to go back to the market...")
-    INFO_MESSAGE("...when I'm done")
+    INFO_MESSAGE("I need to get back to the market...")
+    INFO_MESSAGE("...once this is over.")
 #endif
     STOP_MUSIC()
     RETURN
@@ -3261,11 +3270,11 @@ _InspectMap
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("On y voit les iles britanniques")
+    INFO_MESSAGE("Bon à savoir où je suis.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det viser Irland, Wales og England")
+    INFO_MESSAGE("Greit å vite hvor jeg er.")
 #else
-    INFO_MESSAGE("It shows Ireland, Wales and England")
+    INFO_MESSAGE("Good to know where I am.")
 #endif
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -3277,21 +3286,21 @@ _InspectGame
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Du matériel de pointe !")
+    INFO_MESSAGE("Les gamins en sont tous fous.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Toppmoderne spillmaskin!")
+    INFO_MESSAGE("Ungene er helt ville etter disse.")
 #else
-    INFO_MESSAGE("State of the art hardware!")
+    INFO_MESSAGE("Kids are going crazy for these.")
 #endif
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED),no_batteries)    ; Have the batteries been installed?
         // Non functional game
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Le compartiment à piles est vide !")
+        INFO_MESSAGE("On dirait qu'il n'y a pas de piles.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Batterikammeret er tomt!")
+        INFO_MESSAGE("Ser ut som det mangler batterier.")
 #else
-        INFO_MESSAGE("The battery compartment is empty!")
+        INFO_MESSAGE("Looks like it's out of batteries.")
 #endif
     ENDIF(no_batteries)
 
@@ -3301,11 +3310,11 @@ _InspectGame
 
  _InspectFuse
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Utilisable avec un explosif")
+    INFO_MESSAGE("A combiner avec un explosif...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan brukes med et sprengstoff")
+    INFO_MESSAGE("Kombinere med noe eksplosivt...")
 #else
-    INFO_MESSAGE("Can be used with an explosive")
+    INFO_MESSAGE("Pair this with something explosive...")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3313,11 +3322,11 @@ _InspectGame
 
 _InspectBomb
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un explosif fait maison")
+    INFO_MESSAGE("Pas mal pour une bombe maison.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Hjemmelaget sprengstoff")
+    INFO_MESSAGE("Ikke verst for en hjemmelaget bombe.")
 #else
-    INFO_MESSAGE("Homemade explosive device")
+    INFO_MESSAGE("Not bad for a homemade bomb.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3339,9 +3348,9 @@ _InspectMatches
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Utile pour allumer un feu")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du kan starte en brann med det")
+    INFO_MESSAGE("Kan starte en brann med det.")
 #else
-    INFO_MESSAGE("You could start a fire with that")
+    INFO_MESSAGE("Could start a fire with that.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3352,9 +3361,9 @@ _InspectRope
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pratique pour grimper ou descendre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du kan klatre opp eller ned med den")
+    INFO_MESSAGE("Kan klatre opp eller ned med den.")
 #else
-    INFO_MESSAGE("You could climb up or down with it")
+    INFO_MESSAGE("Could climb up or down with it.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3460,9 +3469,9 @@ _InspectSaltpetre
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Utilisé dans les feux d'artifice")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du kan lage fyrverkeri med det")
+    INFO_MESSAGE("Kan lage fyrverkeri med det.")
 #else
-    INFO_MESSAGE("You can make fireworks with that")
+    INFO_MESSAGE("Could make fireworks with that.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3771,11 +3780,11 @@ _InspectGunPowder
 _InspectPills
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ca pourrait calmer quelqu'un")
+    INFO_MESSAGE("De quoi assommer quelqu'un.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan brukes til å roe ned noen")
+    INFO_MESSAGE("Kan slå ut noen med disse.")
 #else
-    INFO_MESSAGE("Could be used to calm down someone")
+    INFO_MESSAGE("Could knock someone out with these.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3807,11 +3816,11 @@ _InspectTree
 _InspectPit
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pas sûr qu'on puisse en remonter")
+    INFO_MESSAGE("Pas sûr que je puisse remonter...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ikke sikkert du kan klatre opp igjen")
+    INFO_MESSAGE("Ikke sikkert jeg kommer opp igjen...")
 #else
-    INFO_MESSAGE("Not sure you could climb up again")
+    INFO_MESSAGE("No getting back up without help.")
 #endif
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Corde ou échelle nécessaire !")
@@ -3845,14 +3854,14 @@ _InspectFridgeDoor
     INCREASE_SCORE(POINTS_INSPECT_FRIDGE)    
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une famille heureuse...")
-    INFO_MESSAGE("...sont-ils partis ?")
+    INFO_MESSAGE("Une famille heureuse, on dirait...")
+    INFO_MESSAGE("...où sont-ils passés ?")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Ser ut som en lykkelig familie...")
     INFO_MESSAGE("...hvor er de nå mon tro?")
 #else
-    INFO_MESSAGE("Looks like a happy family...")
-    INFO_MESSAGE("...I wonder where they are now?")
+    INFO_MESSAGE("Happy family, by the looks of it.")
+    INFO_MESSAGE("...wonder where they've gone.")
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -3991,11 +4000,11 @@ _InspectPanel
                 _BUFFER(14,47)
         FADE_BUFFER
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Sert à désactiver l'alarme.")
+        INFO_MESSAGE("De quoi neutraliser l'alarme.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Kan brukes til å deaktivere alarmen.")
+        INFO_MESSAGE("Burde fikse den alarmen.")
 #else
-        INFO_MESSAGE("Can be used to disable the alarm.")
+        INFO_MESSAGE("Should sort out that alarm.")
 #endif
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_ALARM_PANEL)
@@ -4048,11 +4057,11 @@ _InspectBasementWindow
 no_ladder
         FADE_BUFFER      ; Make sure everything appears on the screen
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("C'est plutôt haut")
+        INFO_MESSAGE("Trop haut pour moi...")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Det er ganske høyt")
+        INFO_MESSAGE("Får ikke tak i det...")
 #else
-        INFO_MESSAGE("It's quite high")
+        INFO_MESSAGE("Can't reach that...")
 #endif
     .)
     ELSE(elsecellar,cellar)
@@ -4105,11 +4114,11 @@ _InspectPanicRoomWindow
         IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_PanicRoomWindow,ITEM_FLAG_CLOSED),window_closed)
             DISPLAY_IMAGE(LOADER_PICTURE_TOP_WINDOW_CLOSED)
 #ifdef LANGUAGE_FR
-            INFO_MESSAGE("Hmmm, intéressant...")
+            INFO_MESSAGE("Contacts d'alarme. Noté.")
 #elif defined(LANGUAGE_NO)
-            INFO_MESSAGE("Hmmm, interessant...")
+            INFO_MESSAGE("Alarmkontakter. Notert.")
 #else
-            INFO_MESSAGE("Hmmm, interesting...")
+            INFO_MESSAGE("Alarm contacts. Noted.")
 #endif
         ELSE(window_closed,window_open)
             GOSUB(_ShowTopWindowOpen)
@@ -4335,11 +4344,11 @@ _InspectPlasticBag
 +_InspectBucket
 +_InspectContainerGeneric
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Peut servir à transporter des trucs")
+    INFO_MESSAGE("Pratique pour transporter des trucs.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan brukes til å frakte ting")
+    INFO_MESSAGE("Greit å ha for å bære ting.")
 #else
-    INFO_MESSAGE("Can be used to transport things")
+    INFO_MESSAGE("Handy for carrying things.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -4350,11 +4359,11 @@ _InspectDog
 .(
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED),alive)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Il ne va pas vous laisser passer !")
+        INFO_MESSAGE("Il ne va pas me laisser passer...")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Den slipper deg ikke forbi!")
+        INFO_MESSAGE("Den slipper meg ikke forbi...")
 #else
-        INFO_MESSAGE("It will not let you pass!")
+        INFO_MESSAGE("It won't let me past...")
 #endif
     ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
@@ -4375,11 +4384,11 @@ _InspectGraffiti
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKTUNNEL),tunnel)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Celui-ci est presque joli !")
+        INFO_MESSAGE("Problèmes de père, on dirait ?")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Den er faktisk ganske pen!")
+        INFO_MESSAGE("Pappa-problemer, kanskje?")
 #else
-        INFO_MESSAGE("That one is kind of pretty!")
+        INFO_MESSAGE("Someone's got daddy issues?")
 #endif
     ELSE(tunnel,street)
 #ifdef LANGUAGE_FR
@@ -4398,11 +4407,11 @@ _InspectGraffiti
 _InspectChurch
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une petite église de village")
+    INFO_MESSAGE("Petite église tranquille.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En beskjeden landsbykirkje")
+    INFO_MESSAGE("Stille liten kirke.")
 #else
-    INFO_MESSAGE("A modest village church")
+    INFO_MESSAGE("Quiet little church.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -4466,14 +4475,14 @@ _InspectTrashCan
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_TRASH_CAN)    
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("L'odeur et l'état sont répugnants !")
-    INFO_MESSAGE("Il n'y a rien d'utilisable dedans")
+    INFO_MESSAGE("Ça sent pire que ça en a l'air.")
+    INFO_MESSAGE("Rien qui vaille la peine.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Den ser skitten ut og lukter vondt!")
-    INFO_MESSAGE("Absolutt ingenting nyttig i den")
+    INFO_MESSAGE("Lukter verre enn det ser ut.")
+    INFO_MESSAGE("Ingenting verdt bryet.")
 #else
-    INFO_MESSAGE("It looks and smells filthy!")
-    INFO_MESSAGE("Absolutely nothing useful in it")
+    INFO_MESSAGE("Smells worse than it looks.")
+    INFO_MESSAGE("Nothing worth the trouble.")
 #endif
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -4488,11 +4497,11 @@ _InspectTombstone
 
     DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il n'avait que 45 ans :(")
+    INFO_MESSAGE("Seulement 45 ans. Quel gâchis.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Han var bare 45 år gammel :(")
+    INFO_MESSAGE("Bare 45. For en sløsing.")
 #else
-    INFO_MESSAGE("He was only 45 years old :(")
+    INFO_MESSAGE("Only 45. What a waste.")
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -4502,11 +4511,11 @@ _InspectTombstone
 _InspectFishPond
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Beaucoup de poissons là-dedans !")
+    INFO_MESSAGE("Pas mal de poissons là-dedans.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Ganske mange fisk der inne!")
 #else
-    INFO_MESSAGE("Quite a few fish in there!")
+    INFO_MESSAGE("Plenty of fish in there.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -5063,11 +5072,11 @@ _OpenPanicRoomWindow
 _SubErrorTooHigh
 .(
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("C'est trop haut")
+    ERROR_MESSAGE("Trop haut d'ici.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Det er for høyt")
+    ERROR_MESSAGE("Når ikke opp herfra.")
 #else
-    ERROR_MESSAGE("It's too high")
+    ERROR_MESSAGE("Can't reach that from here.")
 #endif        
     RETURN
 .)
@@ -5200,11 +5209,11 @@ _OpenAlarmPanel
 
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_AlarmPanel,ITEM_FLAG_LOCKED),locked)                        ; Is the alarm panel locked?
 #ifdef LANGUAGE_FR                                                                             ; Show error to the player
-        ERROR_MESSAGE("Il faut une clef pour l'ouvrir")
+        ERROR_MESSAGE("Fermé. Il me faut une clef.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("En nøkkel kreves for å åpne den")
+        ERROR_MESSAGE("Låst. Trenger en nøkkel.")
 #else
-        ERROR_MESSAGE("A key is required to open it")
+        ERROR_MESSAGE("Locked. Need to find a key.")
 #endif        
         END_AND_PARTIAL_REFRESH
     ELSE(locked,unlocked)
@@ -5319,11 +5328,11 @@ _AlarmTriggered
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous avez déclenché l'alarme!")
+    INFO_MESSAGE("J'ai déclenché l'alarme !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du utløste alarmen!")
+    INFO_MESSAGE("Jeg utløste alarmen!")
 #else
-    INFO_MESSAGE("You triggered the alarm!")
+    INFO_MESSAGE("I've triggered the alarm!")
 #endif    
     WAIT(50*2)
     JUMP(_gDescriptionGameOverLost)                 ; Draw the 'The End' logo
@@ -5388,11 +5397,11 @@ _OpenChurch
     GOSUB(_SubMessageDoorIsLocked)
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_FRONT_ENTRANCE),frontdoor)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Peut-être une entrée à l'arrière ?")
+        INFO_MESSAGE("...par derrière peut-être ?")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Kanskje finnes det en bakinngang?")
+        INFO_MESSAGE("...rundt baksiden kanskje?")
 #else
-        INFO_MESSAGE("Maybe there's a back entrance?")
+        INFO_MESSAGE("...round the back maybe?")
 #endif
     ENDIF(frontdoor)
     END_AND_PARTIAL_REFRESH
@@ -5691,22 +5700,22 @@ _UseCar
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_MARKETPLACE),marketplace)
         DISPLAY_IMAGE(LOADER_PICTURE_AUSTIN_MINI)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("C'est ma voiture.")
-        INFO_MESSAGE("Je dois finir la mission d'abord !")
+        INFO_MESSAGE("Mon Austin 850. Passe inaperçue.")
+        INFO_MESSAGE("La mission d'abord. Elle attendra.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Dette er bilen min.")
-        INFO_MESSAGE("Jeg må fullføre oppdraget først!")
+        INFO_MESSAGE("Austin 850. Går i ett med resten.")
+        INFO_MESSAGE("Oppdraget først. Hun kan vente.")
 #else
-        INFO_MESSAGE("This is my car.")
-        INFO_MESSAGE("I need to finish the mission first!")
+        INFO_MESSAGE("My Austin 850. Blends right in.")
+        INFO_MESSAGE("Mission first. She'll wait.")
 #endif        
     ELSE(marketplace,abandonned_car)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Rapprochons-nous")
+        INFO_MESSAGE("Ça mérite un coup d'oeil.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("La oss komme nærmere")
+        INFO_MESSAGE("Verdt en nærmere titt.")
 #else
-        INFO_MESSAGE("Let's get closer")
+        INFO_MESSAGE("Worth a closer look.")
 #endif        
         SET_PLAYER_LOCATION(e_LOC_ABANDONED_CAR)
     ENDIF(abandonned_car)
@@ -5780,11 +5789,11 @@ _UseBucket
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),in_dark_room)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Trop petit pour atteindre la fenêtre.")
+        INFO_MESSAGE("Bien essayé. Toujours trop court.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("For liten til å nå vinduet.")
+        INFO_MESSAGE("Godt forsøk. Når fortsatt ikke.")
 #else
-        INFO_MESSAGE("Too small to reach the window.")
+        INFO_MESSAGE("Nice try. Still can't reach.")
 #endif    
     ENDIF(in_dark_room)
     END_AND_PARTIAL_REFRESH
@@ -5830,22 +5839,22 @@ cannot_use_ladder_here
 
 ladder_too_short
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Elle est bien trop courte!")
+    ERROR_MESSAGE("Bien trop courte pour ça.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Den er altfor kort!")
+    ERROR_MESSAGE("Altfor kort til det.")
 #else
-    ERROR_MESSAGE("It's way too short!")
+    ERROR_MESSAGE("Way too short for that.")
 #endif
     END_AND_REFRESH
 
 install_the_ladder
 
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous installez l'échelle")
+    INFO_MESSAGE("Bien, l'échelle est en place.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du plasserer stigen riktig")
+    INFO_MESSAGE("Så, stigen er på plass.")
 #else
-    INFO_MESSAGE("You position the ladder properly")
+    INFO_MESSAGE("Right, ladder's in place.")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT)
     SET_ITEM_FLAGS(e_ITEM_Ladder,ITEM_FLAG_ATTACHED)
@@ -5879,11 +5888,11 @@ _UseRope
                 UNLOCK_ACHIEVEMENT(ACHIEVEMENT_USED_THE_ROPE)
                 GOSUB(_ShowGirlAtTheWindow)                          ; We show the girl...
 #ifdef LANGUAGE_FR
-                INFO_MESSAGE("On y va !!!")
+                INFO_MESSAGE("Allez, c'est parti !")
 #elif defined(LANGUAGE_NO)
-                INFO_MESSAGE("La oss dra!!!")
+                INFO_MESSAGE("Da så. Av gårde!")
 #else
-                INFO_MESSAGE("Let's go!!!")
+                INFO_MESSAGE("Right then. Off we go!")
 #endif    
                 ; Erase the girl at the window
                 BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,4,22)                     ; Draw the girl in the window
@@ -5900,11 +5909,11 @@ _UseRope
 
             ELSE(rope_attached,rope_not_attached)
 #ifdef LANGUAGE_FR
-                ERROR_MESSAGE("La corde n'est pas attachée")
+                ERROR_MESSAGE("Faudrait d'abord attacher la corde.")
 #elif defined(LANGUAGE_NO)
-                ERROR_MESSAGE("Tauet er ikke festet")
+                ERROR_MESSAGE("Bør nok feste tauet først.")
 #else
-                ERROR_MESSAGE("The rope is not attached")
+                ERROR_MESSAGE("Should probably tie it off first.")
 #endif       
             ENDIF(rope_not_attached)
             WAIT(50*2)
@@ -5978,11 +5987,11 @@ install_rope_on_tree
     JUMP_IF_TRUE(_ErrorAlreadyPositioned_Elle,CHECK_ITEM_FLAG(e_ITEM_Rope,ITEM_FLAG_ATTACHED))
 
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous attachez la corde à l'arbre")
+    INFO_MESSAGE("Attachons la corde à l'arbre.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du fester tauet til treet")
+    INFO_MESSAGE("Fester tauet til treet.")
 #else
-    INFO_MESSAGE("You attach the rope to the tree")
+    INFO_MESSAGE("Let's tie this to the tree.")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Rope,e_LOC_OUTSIDE_PIT)
     SET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)
@@ -6008,11 +6017,11 @@ _UseGame
     ELSE(batteries,no_batteries)
     // Non functional game
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Le jeu ne semble pas fonctionner")
+        INFO_MESSAGE("En panne. Manque de piles ?")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Spillet ser ikke ut til å virke")
+        INFO_MESSAGE("Dødt. Trenger nok batterier.")
 #else
-        INFO_MESSAGE("The game does not seem to work")
+        INFO_MESSAGE("Dead. Probably needs batteries.")
 #endif    
     ENDIF(no_batteries)
     END_AND_REFRESH
@@ -6029,11 +6038,11 @@ _UseDartGun
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_DOG)
         INCREASE_SCORE(POINTS_DART_GUNNED_DOG)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Fais de beaux rêves")
+        INFO_MESSAGE("Bonne nuit, le cabot...")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Sov godt, hunden")
+        INFO_MESSAGE("Natta, bansen...")
 #else
-        INFO_MESSAGE("Sweet dreams doggy")
+        INFO_MESSAGE("Night-night, mutt...")
 #endif    
         JUMP(_CommonDogDisabled)
 snoozed_dog
@@ -6048,7 +6057,7 @@ snoozed_dog
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Sov godt, tøffing")
 #else
-        INFO_MESSAGE("Sleep tight, tough guy")
+        INFO_MESSAGE("Sweet dreams, sunshine...")
 #endif    
         JUMP(_CommonThugDisabled)
 snoozed_thug    
@@ -6159,11 +6168,11 @@ cannot_use_hose_here
 abandonned_car
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_CarTank,ITEM_FLAG_CLOSED),closed)                     ; Is the petrol tank open?
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Le réservoir est fermé")
+        ERROR_MESSAGE("Faut d'abord ouvrir le réservoir.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Tanken er lukket")
+        ERROR_MESSAGE("Må åpne tanken først.")
 #else
-        ERROR_MESSAGE("The tank is closed")
+        ERROR_MESSAGE("Need to open the tank first.")
 #endif        
         END_AND_PARTIAL_REFRESH
     ENDIF(closed)
@@ -6179,11 +6188,11 @@ abandonned_car
         END_AND_PARTIAL_REFRESH
     ELSE(already_inside,not_inside_yet)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Vous mettez le tuyau dedans")
+        INFO_MESSAGE("Le tuyau dans le réservoir...")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Du stikker slangen i tanken")
+        INFO_MESSAGE("Slangen i tanken...")
 #else
-        INFO_MESSAGE("You put the hose in the tank")
+        INFO_MESSAGE("Hose goes in the tank...")
 #endif    
         SET_ITEM_LOCATION(e_ITEM_Hose,e_LOC_ABANDONED_CAR)
         SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
@@ -6220,11 +6229,11 @@ _UseMortar
 
 cannot_use_mortar
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Je n'ai rien à moudre")
+    ERROR_MESSAGE("Rien à moudre pour l'instant.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Ingenting å male")
+    ERROR_MESSAGE("Ingenting å male akkurat nå.")
 #else
-    ERROR_MESSAGE("Nothing to use it with")
+    ERROR_MESSAGE("Nothing to grind.")
 #endif    
     END_AND_REFRESH
 
@@ -6285,11 +6294,11 @@ _UseMatches
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Bomb,ITEM_FLAG_ATTACHED),safe)
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Il faut d'abord placer la bombe")
+        ERROR_MESSAGE("Je devrais d'abord placer la bombe.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Du må plassere bomben først")
+        ERROR_MESSAGE("Bør plassere bomben først.")
 #else
-        ERROR_MESSAGE("You need to place the bomb first")
+        ERROR_MESSAGE("I should place the bomb first.")
 #endif        
         END_AND_PARTIAL_REFRESH
     ENDIF(safe)
@@ -6366,11 +6375,11 @@ _UseClay
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED),wet)    ; Is the clay wet?
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("C'est trop sec !")
+        ERROR_MESSAGE("Trop sec. Il faut de l'eau.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Den er for tørr!")
+        ERROR_MESSAGE("For tørt. Trenger vann.")
 #else
-        ERROR_MESSAGE("It's too dry!")
+        ERROR_MESSAGE("Too dry. Needs water.")
 #endif        
         END_AND_REFRESH
     ENDIF(wet)
@@ -6423,11 +6432,11 @@ _UseAcid
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("Pas sans équipement de protection")
+        ERROR_MESSAGE("Pas sans protection.")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Trenger verneutstyr først")
+        ERROR_MESSAGE("Ikke uten beskyttelse.")
 #else
-        ERROR_MESSAGE("Needs some protection equipment first")
+        ERROR_MESSAGE("Not without protection.")
 #endif        
         END_AND_REFRESH
     ENDIF(suit)
@@ -6493,11 +6502,11 @@ _UseGameConsole
     DISPLAY_IMAGE(LOADER_PICTURE_COLECOVISION)
 +_UseTelevision
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("C'est tentant, mais mission d'abord !")
+    INFO_MESSAGE("Tentant, mais j'ai du boulot.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Fristende, men vi har et oppdrag!")
+    INFO_MESSAGE("Fristende, men jeg har en jobb.")
 #else
-    INFO_MESSAGE("It looks cool, but we have a mission!")
+    INFO_MESSAGE("Tempting, but I'm working.")
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -6543,11 +6552,11 @@ _SearchThug
         FADE_BUFFER
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Il fallait d'abord le maitriser")
+        INFO_MESSAGE("J'aurais dû le maitriser d'abord.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Du burde ha overmannet ham først")
+        INFO_MESSAGE("Burde overmannet ham først.")
 #else
-        INFO_MESSAGE("You should have subdued him first")
+        INFO_MESSAGE("Should have dealt with him first.")
 #endif    
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),40,_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
         DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
@@ -6579,11 +6588,11 @@ _SearchThug
 thug_disabled
     JUMP_IF_TRUE(found_items,CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_NONE))
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Vous l'avez déjà fouillé")
+    ERROR_MESSAGE("Déjà fouillé.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Du har allerede visitert ham")
+    ERROR_MESSAGE("Allerede ransaket ham.")
 #else
-    ERROR_MESSAGE("You've already frisked him")
+    ERROR_MESSAGE("Already searched him.")
 #endif    
     END_AND_PARTIAL_REFRESH
 
@@ -6688,11 +6697,11 @@ _UseApples
 .(
     GOSUB(_SubApplesCommon)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vraiment très bonnes !")
+    INFO_MESSAGE("Pas mauvaises du tout.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Virkelig veldig gode!")
+    INFO_MESSAGE("Ikke verst.")
 #else
-    INFO_MESSAGE("Really tasty !")
+    INFO_MESSAGE("Not bad at all.")
 #endif    
     GOSUB(_SubResetApplesLocation)
     END_AND_PARTIAL_REFRESH
@@ -6706,11 +6715,11 @@ _SubApplesCommon
         // The fish don't like the apples, whole or cut
         PLAY_SOUND(_Swoosh)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Ces poissons n'aiment pas les pommes")
+        INFO_MESSAGE("Difficiles, ces poissons.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Disse fiskene liker ikke epler")
+        INFO_MESSAGE("Kresne, disse fiskene.")
 #else
-        INFO_MESSAGE("These fish don't like apples")
+        INFO_MESSAGE("Fussy lot, these fish.")
 #endif    
         END_AND_PARTIAL_REFRESH
     ENDIF(at_the_fish_pond)
@@ -6737,11 +6746,11 @@ _SubApplesCommon
             ELSE(apple_cut,apple_not_cut)
                 // The bird is not interested by an uncut apple
 #ifdef LANGUAGE_FR
-                INFO_MESSAGE("La colombe n'est pas intéressée")
+                INFO_MESSAGE("Pas intéressée. Oiseau difficile.")
 #elif defined(LANGUAGE_NO)
-                INFO_MESSAGE("Duen ser ikke interessert ut")
+                INFO_MESSAGE("Ikke interessert. Kresen fugl.")
 #else
-                INFO_MESSAGE("The dove does not seem interested")
+                INFO_MESSAGE("Not interested. Fussy bird.")
 #endif    
                 END_AND_PARTIAL_REFRESH
             ENDIF(apple_not_cut)
@@ -6755,11 +6764,11 @@ _SubDoveEating
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("On peut l'attraper maintenant")
+    INFO_MESSAGE("Bon. C'est le moment.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kanskje jeg kan fange den nå?")
+    INFO_MESSAGE("Nå er sjansen min.")
 #else
-    INFO_MESSAGE("Maybe I can catch it now?")
+    INFO_MESSAGE("Right. Now's my chance.")
 #endif    
     RETURN
 .)
@@ -6784,11 +6793,11 @@ dog_eating_the_meat
     PLAY_SOUND(_Swoosh)
     DISPLAY_IMAGE(LOADER_PICTURE_DOG_EATING_MEAT)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Content que ce ne soit pas moi !")
+    INFO_MESSAGE("Mieux le rôti que ma jambe.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Godt at det ikke er meg der!")
+    INFO_MESSAGE("Bedre kjøttet enn beinet mitt.")
 #else
-    INFO_MESSAGE("Glad it's not me there!")
+    INFO_MESSAGE("Better the meat than my leg.")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_GONE_FOREVER)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DOG_ATE_THE_MEAT)
@@ -6825,11 +6834,11 @@ _FreeDove
         DISPLAY_IMAGE(LOADER_PICTURE_DOG_CHASING_DOVE)            ; Show the picture with the dog running after the dove
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Espérons qu'il ne l'attrapera pas")
+        INFO_MESSAGE("Pourvu qu'il attrape pas l'oiseau")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Forhåpentligvis fanger ikke hunden den")
+        INFO_MESSAGE("Bare han ikke tar fuglen...")
 #else
-        INFO_MESSAGE("Hopefully, the dog will not catch it")
+        INFO_MESSAGE("Better not catch the bird...")
 #endif        
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CHASED_THE_DOG)
         INCREASE_SCORE(POINTS_DOG_CHASED_DOVE)
@@ -6898,16 +6907,16 @@ _CombineKnifeApple
 _SliceApples
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Vous découpez les pommes...")
-    INFO_MESSAGE("...préparation pour un clafoutis ?")
+    INFO_MESSAGE("Découpons les pommes...")
+    INFO_MESSAGE("...parfait pour un clafoutis.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"des$_pommes en morceaux")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du skjærer eplene...")
-    INFO_MESSAGE("...klar for en eplekake?")
+    INFO_MESSAGE("La meg skjære opp eplene...")
+    INFO_MESSAGE("...perfekt til en eplekake.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"noen$_epler i biter")
 #else
-    INFO_MESSAGE("You chop the apples...")
-    INFO_MESSAGE("...are you preparing a clafoutis?")
+    INFO_MESSAGE("Let's chop these apples...")
+    INFO_MESSAGE("...perfect for a clafoutis.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"chopped _apples")   // SET_ITEM_DESCRIPTION(e_ITEM_Apple,"$chopped _apples") ???? (space in the description)
 #endif
     SET_ITEM_FLAGS(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED)
@@ -6920,11 +6929,11 @@ _ScareDoveAway
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("La colombe s'envole effrayée")
+    INFO_MESSAGE("Bravo. Elle s'est envolée.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Du skremte bort duen")
+    INFO_MESSAGE("Flott. Skremte den vekk.")
 #else
-    INFO_MESSAGE("You scared the dove away")
+    INFO_MESSAGE("Brilliant. Scared it off.")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
     WAIT_KEYPRESS
@@ -7007,11 +7016,11 @@ _ErrorNoFishing
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je déteste pêcher...")
+    INFO_MESSAGE("Jamais aimé la pêche...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg hater å fiske...")
+    INFO_MESSAGE("Aldri likt å fiske...")
 #else
-    INFO_MESSAGE("I hate fishing...")
+    INFO_MESSAGE("Never did like fishing...")
 #endif    
     END_AND_REFRESH
 .)
@@ -7021,11 +7030,11 @@ _ErrorTooRisky
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Trop dangereux !")
+    INFO_MESSAGE("Ça vaut pas le risque.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("For risikabelt!")
+    INFO_MESSAGE("Ikke verdt risikoen.")
 #else
-    INFO_MESSAGE("Too risky!")
+    INFO_MESSAGE("Not worth the risk.")
 #endif    
     END_AND_REFRESH
 .)
@@ -7049,11 +7058,11 @@ _ErrorNoStealing
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un peu kleptomane sur les bords ?")
+    INFO_MESSAGE("Doucement. Je suis pas un voleur.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Litt kleptoman kanskje?")
+    INFO_MESSAGE("Rolig nå. Jeg er ingen tyv.")
 #else
-    INFO_MESSAGE("A bit of a kleptomaniac, huh?")
+    INFO_MESSAGE("Steady on. I'm no thief.")
 #endif    
     END_AND_REFRESH
 .)
@@ -7070,11 +7079,11 @@ _UseSnookerCue
 .(
     JUMP_IF_FALSE(game_room,CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM))
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je n'ai pas le temps de jouer !")
+        INFO_MESSAGE("Pas le temps. Au boulot.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Jeg har ikke tid til å spille!")
+        INFO_MESSAGE("Ikke tid. Fokus.")
 #else
-        INFO_MESSAGE("I don't have time to play!")
+        INFO_MESSAGE("No time for that. Focus.")
 #endif    
         END_AND_REFRESH
 game_room
@@ -7472,11 +7481,11 @@ _DropPetrol
     ; Are we at the car location?
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Vous remplissez le réservoir")
+        INFO_MESSAGE("Le pétrole retourne au réservoir.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Du fyller tanken igjen")
+        INFO_MESSAGE("Bensinen tilbake i tanken.")
 #else
-        INFO_MESSAGE("The petrol goes back into the tank")
+        INFO_MESSAGE("Petrol back in the tank.")
 #endif
     ELSE(car,no_car)
 #ifdef LANGUAGE_FR
@@ -7559,11 +7568,11 @@ _ErrorCannotRead
 _MessageNothingSpecial
 .(
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("Rien de spécial")
+    ERROR_MESSAGE("Rien à signaler.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Ingenting spesielt")
+    ERROR_MESSAGE("Ingenting verdt å nevne.")
 #else
-    ERROR_MESSAGE("Nothing special")
+    ERROR_MESSAGE("Nothing worth mentioning.")
 #endif    
     END_AND_PARTIAL_REFRESH
 .)
@@ -7576,7 +7585,7 @@ _SubMessageDoorIsLocked
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Døren er låst")
 #else
-    INFO_MESSAGE("The door is locked")
+    INFO_MESSAGE("Door's locked tight.")
 #endif
     RETURN
 .)
@@ -7704,11 +7713,11 @@ _WatchSetup
             _IMAGE(24,43)
             _SCREEN(17,63)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je n'ai que deux heures...")
+    INFO_MESSAGE("Deux heures. C'est tout.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg har bare to timer...")
+    INFO_MESSAGE("To timer. Det er alt.")
 #else
-    INFO_MESSAGE("I only have two hours...")
+    INFO_MESSAGE("Two hours. That's all I've got.")
 #endif    
 
     PLAY_SOUND(_WatchButtonPress)                                       ; Play the "button pressed" sound
@@ -7716,11 +7725,11 @@ _WatchSetup
             _IMAGE(24,34)
             _SCREEN(17,63)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...ne les gaspillons pas!")
+    INFO_MESSAGE("...faut pas les gaspiller.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("...la dem telle!")
+    INFO_MESSAGE("...best å ikke kaste dem bort.")
 #else
-    INFO_MESSAGE("...make them count!")
+    INFO_MESSAGE("...better not waste them.")
 #endif    
 
     WAIT(50)
@@ -7752,11 +7761,11 @@ _OneHourAlarmWarning
 
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Déjà une heure d'écoulée !")
+    INFO_MESSAGE("Déjà une heure de passée.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Allerede en time gått!")
 #else
-    INFO_MESSAGE("Already one hour has passed!")
+    INFO_MESSAGE("One hour gone already.")
 #endif    
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,9)                                 ; Overlay the 0 patch on the hour
             _IMAGE(24,52)
@@ -7766,11 +7775,11 @@ _OneHourAlarmWarning
             _SCREEN(18,63)
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je dois me dépêcher !")
+    INFO_MESSAGE("Faut que j'accélère.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Jeg må skynde meg!")
 #else
-    INFO_MESSAGE("I need to hurry up!")
+    INFO_MESSAGE("I need to get a move on.")
 #endif
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
@@ -7796,22 +7805,22 @@ _TimeOutGameOver
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("J'ai été trop lent...")
+    INFO_MESSAGE("Trop lent. Mince.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg var for sakte...")
+    INFO_MESSAGE("For sakte. Pokker.")
 #else
-    INFO_MESSAGE("I was too slow...")
+    INFO_MESSAGE("Too slow. Blast.")
 #endif    
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
     DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...Je dois abandonner la mission.")
+    INFO_MESSAGE("...plus de temps.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("...Jeg må avbryte oppdraget.")
+    INFO_MESSAGE("...tiden er ute.")
 #else
-    INFO_MESSAGE("...I have to abort the mission")
+    INFO_MESSAGE("...I've run out of time.")
 #endif
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(50*2)

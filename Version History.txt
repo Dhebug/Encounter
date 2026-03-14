@@ -387,7 +387,7 @@
 - Attaching the rope to the tree should not mistakenly show the rope visible at the window
 - Updated the COMBINE code path to increase the chances that the result of the operation appears where the source elements were
 - Changed two pixels on the flickering light bulb in the disgusting street because it looked like a face to some players
-- When combining items, the first selected item is now shown in a different color when you are asked for the second item
+- When combining items using the menu, the first selected item is now shown in a different color when you are asked for the second item
 - Beta Norwegian localization added
 - Reorganized the intro documentation content to make it easier to understand, and extended the duration by 3 seconds
 - Added a missing description on the main entrance door
