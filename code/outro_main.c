@@ -359,7 +359,7 @@ void HandleHighScore()
 
 #ifdef TEST_ENDINGS  // Just to test the different ending conditions
     gScore = -1800;
-    gMonkeyKingSessionBest=230;
+    gMonkeyKingSlowSessionBest=230;
     gGameOverCondition = e_SCORE_MAIMED_BY_DOG; //e_SCORE_SOLVED_THE_CASE;
   	sprintf((char*)0xbb80+16*40+1,"%cScore:%d%c",4,gScore,1);   // "Score:"
   	sprintf(ptrTimeString,"1:59:39");                           // "1:59:39"
