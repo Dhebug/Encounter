@@ -5,8 +5,8 @@
     e_DIRECTION_SOUTH = 1,
     e_DIRECTION_EAST  = 2,
     e_DIRECTION_WEST  = 3,
-    e_DIRECTION_UP    = 4,   // Seldomly used (to go to the house upper floor and basement)
-    e_DIRECTION_DOWN  = 5,   // Seldomly used (to go to the house upper floor and basement)
+    e_DIRECTION_UP    = 4,   // Seldomly used (to go to the house upper floor and cellar)
+    e_DIRECTION_DOWN  = 5,   // Seldomly used (to go to the house upper floor and cellar)
     e_DIRECTION_COUNT_
 */
 
@@ -41,9 +41,9 @@ _gLocations
 
     LOCATION(e_LOC_NONE              , e_LOC_VEGSGARDEN        , e_LOC_NONE              , e_LOC_TILEDPATIO        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionAppleOrchard)      // e_LOC_ORCHARD     
     LOCATION(e_LOC_CELLAR            , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionDarkerCellar)      // e_LOC_DARKCELLARROOM   
-    LOCATION(e_LOC_NONE              , e_LOC_DARKCELLARROOM    , e_LOC_NONE              , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , e_LOC_NONE              , _gDescriptionCellar)            // e_LOC_CELLAR           
+    LOCATION(e_LOC_NONE              , e_LOC_DARKCELLARROOM    , e_LOC_NONE              , e_LOC_NONE              , e_LOC_CELLAR_STAIRS     , e_LOC_NONE              , _gDescriptionCellar)            // e_LOC_CELLAR           
 
-    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_KITCHEN           , e_LOC_CELLAR            , _gDescriptionBasementStairs)    // e_LOC_BASEMENT_STAIRS  
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_KITCHEN           , e_LOC_CELLAR            , _gDescriptionCellarStairs)      // e_LOC_CELLAR_STAIRS  
     LOCATION(e_LOC_DININGROOM        , e_LOC_NONE              , e_LOC_ENTRANCEHALL      , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionEntranceLounge)    // e_LOC_LOUNGE     
     LOCATION(e_LOC_NARROWPASSAGE     , e_LOC_NONE              , e_LOC_NONE              , e_LOC_LOUNGE            , e_LOC_LARGE_STAIRCASE   , e_LOC_NONE              , _gDescriptionEntranceHall)      // e_LOC_ENTRANCEHALL    
 
@@ -57,7 +57,7 @@ _gLocations
 
     LOCATION(e_LOC_NONE              , e_LOC_DININGROOM        , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGamesRoom)         // e_LOC_GAMESROOM        
     LOCATION(e_LOC_TILEDPATIO        , e_LOC_NARROWPASSAGE     , e_LOC_KITCHEN           , e_LOC_GAMESROOM         , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionSunLounge)         // e_LOC_SUNLOUNGE        
-    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_BASEMENT_STAIRS   , _gDescriptionKitchen)           // e_LOC_KITCHEN    
+    LOCATION(e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SUNLOUNGE         , e_LOC_NONE              , e_LOC_CELLAR_STAIRS     , _gDescriptionKitchen)           // e_LOC_KITCHEN    
 
     LOCATION(e_LOC_SUNLOUNGE         , e_LOC_ENTRANCEHALL      , e_LOC_LIBRARY           , e_LOC_NONE              , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionNarrowPassage)     // e_LOC_NARROWPASSAGE   
     LOCATION(e_LOC_WESTGALLERY       , e_LOC_NONE              , e_LOC_NONE              , e_LOC_SHOWERROOM        , e_LOC_NONE              , e_LOC_NONE              , _gDescriptionGuestBedroom)      // e_LOC_GUESTBEDROOM     

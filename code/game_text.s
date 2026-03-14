@@ -1111,16 +1111,16 @@ _gDescriptionTennisCourt
 
 // MARK: Vegetable Garden
 _gDescriptionVegetableGarden
-    SET_ITEM_LOCATION(e_ITEM_BasementWindow,e_LOC_VEGSGARDEN)     ; The window is in the garden
+    SET_ITEM_LOCATION(e_ITEM_CellarWindow,e_LOC_VEGSGARDEN)       ; The window is in the garden
 #ifdef LANGUAGE_FR
-_gTextItemBasementWindow = *+1
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre basse")
+_gTextItemCellarWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre basse")
 #elif defined(LANGUAGE_NO)
-_gTextItemBasementWindow = *+1
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et kjeller _vindu")
+_gTextItemCellarWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et kjeller _vindu")
 #else
-_gTextItemBasementWindow = *+1
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a basement _window")
+_gTextItemCellarWindow = *+1
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a cellar _window")
 #endif
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -1592,8 +1592,8 @@ medicine_cabinet_closed
 .)
 
 
-// MARK: Basement Stairs
-_gDescriptionBasementStairs
+// MARK: Cellar Stairs
+_gDescriptionCellarStairs
     .(
     ; First we check if the player stroke the matches
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_NONE),matches)    ; Are the matches on fire?    
@@ -1781,7 +1781,7 @@ _KaboomSafe
 // TODO: Activate the window "it's too high"
 _gDescriptionDarkerCellar
 .(
-    SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_DARKCELLARROOM)         ; The window is visible
+    SET_ITEM_LOCATION(e_ITEM_CellarWindow, e_LOC_DARKCELLARROOM)           ; The window is visible
     .(
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
         SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
@@ -1798,11 +1798,11 @@ alarm_panel_closed
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
     ELSE(else,open)
 #ifdef LANGUAGE_FR
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre occultée")
+        SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre occultée")
 #elif defined(LANGUAGE_NO)
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et mørklagt _vindu")
+        SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et mørklagt _vindu")
 #else
-        SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a darkened _window")
+        SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a darkened _window")
 #endif
     ENDIF(open)
     .)
@@ -1932,7 +1932,7 @@ _gDrawSafeInDarkRom
 // MARK: Cellar Window
 _gDescriptionCellarWindow
 .(
-    SET_ITEM_LOCATION(e_ITEM_BasementWindow, e_LOC_CELLAR_WINDOW)         ; The window is visible
+    SET_ITEM_LOCATION(e_ITEM_CellarWindow, e_LOC_CELLAR_WINDOW)           ; The window is visible
 
     ; If the ladder is in the dark cellar and is in place, we move it here (same pattern as pit sync)
     JUMP_IF_FALSE(end_ladder_sync,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))
@@ -3157,7 +3157,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _InspectFridgeDoor)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _InspectMedicineCabinet)
     VALUE_MAPPING(e_ITEM_PlasticBag         , _InspectPlasticBag)
-    VALUE_MAPPING(e_ITEM_BasementWindow     , _InspectBasementWindow)
+    VALUE_MAPPING(e_ITEM_CellarWindow       , _InspectCellarWindow)
     VALUE_MAPPING(e_ITEM_PanicRoomWindow    , _InspectPanicRoomWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _InspectPanel)
     VALUE_MAPPING(e_ITEM_MixTape            , _InspectMixTape)
@@ -4031,9 +4031,9 @@ _InspectPanel
 .)
 
 
-_InspectBasementWindow
+_InspectCellarWindow
 .(
-    INCREASE_SCORE(POINTS_INSPECT_BASEMENT_WINDOW)
+    INCREASE_SCORE(POINTS_INSPECT_CELLAR_WINDOW)
     .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),cellar_on_lader)
         ; Inspecting the window in the cellar from on top the ladder
@@ -4050,7 +4050,7 @@ _InspectBasementWindow
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),elsecellar)
     .(
         ; Inspecting the window in the cellar
-        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_BasementWindow,ITEM_FLAG_CLOSED),else)
+        IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CellarWindow,ITEM_FLAG_CLOSED),else)
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
         ELSE(else,open)
             DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
@@ -4074,16 +4074,16 @@ no_ladder
     .(
         ; Inspecting the window in the garden (or other places)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
-            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW)
+            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Je peux voir la cave")
 #elif defined(LANGUAGE_NO)
             INFO_MESSAGE("Jeg kan se kjelleren")
 #else
-            INFO_MESSAGE("I can see the basement room")
+            INFO_MESSAGE("I can see the cellar")
 #endif
         ELSE(else,open)
-            DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
+            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_DARK)
             GOSUB(_SubBlackTapeOnWindow)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible à décoller d'ici.")
@@ -5009,7 +5009,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_Fridge             , _OpenFridge)
     VALUE_MAPPING(e_ITEM_Medicinecabinet    , _OpenMedicineCabinet)
     VALUE_MAPPING(e_ITEM_GunCabinet         , _OpenGunCabinet)
-    VALUE_MAPPING(e_ITEM_BasementWindow     , _OpenBasementWindow)
+    VALUE_MAPPING(e_ITEM_CellarWindow       , _OpenCellarWindow)
     VALUE_MAPPING(e_ITEM_AlarmPanel         , _OpenAlarmPanel)
     VALUE_MAPPING(e_ITEM_Car                , _OpenCar)
     VALUE_MAPPING(e_ITEM_CarBoot            , _OpenCarBoot)
@@ -5241,9 +5241,9 @@ _OpenAlarmPanel
 .)
 
 
-_OpenBasementWindow
+_OpenCellarWindow
 .(
-    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),basement)                              ; Are we on the basement side in the room itself...
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                                ; Are we on the cellar side in the room itself...
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Inaccessible...")
 #elif defined(LANGUAGE_NO)
@@ -5252,9 +5252,9 @@ _OpenBasementWindow
         INFO_MESSAGE("I can't reach it...")
 #endif
         END_AND_PARTIAL_REFRESH
-    ENDIF(basement)
+    ENDIF(cellar)
 
-    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),basement_on_ladder)                     ; Are we on the basement side on the ladder...
+    IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW),cellar_on_ladder)                       ; Are we on the cellar side on the ladder...
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Le cadre est bloqué...")
 #elif defined(LANGUAGE_NO)
@@ -5262,8 +5262,8 @@ _OpenBasementWindow
 #else
         INFO_MESSAGE("The frame is stuck...")                                                   
 #endif        
-    ELSE(basement_on_ladder,garden)                                                            ; ...or on the vegetable garden side of the window?
-        DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
+    ELSE(cellar_on_ladder,garden)                                                              ; ...or on the vegetable garden side of the window?
+        DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_DARK)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est fermée de l'intérieur...")
 #elif defined(LANGUAGE_NO)

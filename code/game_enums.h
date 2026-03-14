@@ -5,8 +5,8 @@
 #define e_DIRECTION_SOUTH  1
 #define e_DIRECTION_EAST   2
 #define e_DIRECTION_WEST   3
-#define e_DIRECTION_UP     4   // Seldomly used (to go to the house upper floor and basement)
-#define e_DIRECTION_DOWN   5   // Seldomly used (to go to the house upper floor and basement)
+#define e_DIRECTION_UP     4   // Seldomly used (to go to the house upper floor and cellar)
+#define e_DIRECTION_DOWN   5   // Seldomly used (to go to the house upper floor and cellar)
 #define e_DIRECTION_COUNT_ 6 
 
 
@@ -32,7 +32,7 @@
 #define	e_LOC_ORCHARD          18
 #define e_LOC_DARKCELLARROOM   19
 #define	e_LOC_CELLAR           20
-#define	e_LOC_BASEMENT_STAIRS  21
+#define	e_LOC_CELLAR_STAIRS    21
 #define	e_LOC_LOUNGE           22
 #define	e_LOC_ENTRANCEHALL     23
 #define	e_LOC_LIBRARY          24
@@ -89,7 +89,7 @@
 #define e_ITEM_Television            12         // a television
 #define	e_ITEM_Fridge  			     13         // a fridge
 #define	e_ITEM_SedativePills 		 14         // some sedative pills
-#define e_ITEM_BasementWindow        15         // a basement window
+#define e_ITEM_CellarWindow          15         // a cellar window
 #define	e_ITEM_FancyStones			 16         // some fancy stones
 #define	e_ITEM_SilverKnife  		 17         // a silver knife
 #define	e_ITEM_Ladder  				 18         // a ladder
@@ -329,7 +329,7 @@
 #define POINTS_INSPECT_FRIDGE             50
 #define POINTS_INSPECT_CABINET            50
 #define POINTS_INSPECT_PANEL              50
-#define POINTS_INSPECT_BASEMENT_WINDOW    50
+#define POINTS_INSPECT_CELLAR_WINDOW      50
 #define POINTS_INSPECT_PANIC_ROOM_WINDOW  50
 #define POINTS_INSPECT_PANIC_ROOM_DOOR    50
 #define POINTS_INSPECT_PLASTIC_BAG        50

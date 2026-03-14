@@ -166,7 +166,7 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% loc_landing
 %CONVERT% loc_outside_pit
 %CONVERT% loc_study_room
-%CONVERT% loc_basement_window_darkened
+%CONVERT% loc_cellar_window_darkened
 %CONVERT% loc_front_entrance
 %CONVERT% loc_abandoned_car
 
@@ -174,7 +174,7 @@ SET TARGET_EXTENSION=.hir
 
 :: Scene variants
 %CONVERT% loc_dark_room_sunlight
-%CONVERT% loc_basement_window_cleared
+%CONVERT% loc_cellar_window_cleared
 %CONVERT% loc_steel_door_with_goggles
 
 :: Other 240x128 full screen images which are not locations
@@ -200,8 +200,8 @@ SET TARGET_EXTENSION=.hir
 %CONVERT% view_dog_chasing_dove
 %CONVERT% view_drawer_gun_cabinet
 %CONVERT% view_shooting_dart
-%CONVERT% view_basement_window
-%CONVERT% view_basement_window_darkened
+%CONVERT% view_cellar_window
+%CONVERT% view_cellar_window_darkened
 %CONVERT% view_alarm_triggered
 %CONVERT% view_mixtape
 %CONVERT% view_rough_powder

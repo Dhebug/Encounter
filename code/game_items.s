@@ -28,8 +28,8 @@ _gItems
 
     // Items requiring containers
     ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_GunPowder            
-    ITEM( _gTextItemBlackDust             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre            
-    ITEM( _gTextItemYellowPowder          ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
+    ITEM( _gTextItemSaltpetre             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre
+    ITEM( _gTextItemSulphur               ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
     ITEM( _gTextItemPetrol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Petrol               
     ITEM( _gTextItemWater                 ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Water                
     ITEM( _gTextItemLargeDoveOutOfReach   ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK2(e_ITEM_CardboardBox,e_ITEM_Net))                                          // e_ITEM_LargeDove            
@@ -39,7 +39,7 @@ _gItems
     ITEM_NORMAL( _gTextItemTelevision            ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Television
     ITEM_NORMAL( _gTextItemFridge                ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Fridge
     ITEM_NORMAL( _gTextItemSedativePills         ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SedativePills     
-    ITEM_NORMAL( _gTextItemBasementWindow        ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_BasementWindow
+    ITEM_NORMAL( _gTextItemCellarWindow          ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CellarWindow
     ITEM_NORMAL( _gTextItemFancyStones           ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_FancyStones                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
     ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               

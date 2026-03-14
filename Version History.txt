@@ -396,3 +396,4 @@
 - Looking at the basement window the player is now clearly told that the tape cannot be removed from the outside
 - Using the rope or ladder now makes you able to climb up or down
 - Replaced the almost never triggered "not understood" achievement by a new "disabled alarm" one.
+- The Sulphur and Saltpeter are now not identified by default, the player needs to inspect them first.
