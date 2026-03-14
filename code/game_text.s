@@ -131,8 +131,8 @@ _gTextItemCardboardBox            .byt "une$_boite en carton",0
 _gTextItemNet                     .byt "un$_filet",0
 _gTextItemPlasticBag              .byt "un$_sac en plastique",0
 // Items requiring containers
-_gTextItemBlackDust               .byt "du$_salpêtre",0
-_gTextItemYellowPowder            .byt "du$_soufre",0
+_gTextItemSaltpetre               .byt "un _dépôt blanc",0
+_gTextItemSulphur                 .byt "des _cristaux jaunes",0
 _gTextItemPetrol                  .byt "de l'$_essence",0
 _gTextItemWater                   .byt "de l'$_eau",0
 // Normal items
@@ -209,8 +209,8 @@ _gTextItemCardboardBox            .byt "en$papp _eske",0
 _gTextItemNet                     .byt "et$_nett",0
 _gTextItemPlasticBag              .byt "en$_plastpose",0
 // Gjenstander som krever beholder
-_gTextItemBlackDust               .byt "noe$_salpeter",0
-_gTextItemYellowPowder            .byt "noe$_svovel",0
+_gTextItemSaltpetre               .byt "et hvitt _belegg",0
+_gTextItemSulphur                 .byt "noen gule _krystaller",0
 _gTextItemPetrol                  .byt "noe$_bensin",0
 _gTextItemWater                   .byt "noe$_vann",0
 // Vanlige gjenstander
@@ -287,8 +287,8 @@ _gTextItemCardboardBox            .byt "a$cardboard _box",0
 _gTextItemNet                     .byt "a$_net",0                      
 _gTextItemPlasticBag              .byt "a$plastic _bag",0                      
 // Items requiring containers
-_gTextItemBlackDust               .byt "some$_saltpetre",0
-_gTextItemYellowPowder            .byt "some$_sulphur",0
+_gTextItemSaltpetre               .byt "a white _deposit",0
+_gTextItemSulphur                 .byt "some yellow _crystals",0
 _gTextItemPetrol                  .byt "some$_petrol",0                        
 _gTextItemWater                   .byt "some$_water",0                         
 // Normal items
@@ -3467,11 +3467,14 @@ _InspectBlackTape
 
 _InspectSaltpetre
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Utilisé dans les feux d'artifice")
+    INFO_MESSAGE("Frais, amer au goût. Du salpêtre.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"du$_salpêtre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan lage fyrverkeri med det.")
+    INFO_MESSAGE("Kjølig, bitter smak. Salpeter.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"noe$_salpeter")
 #else
-    INFO_MESSAGE("Could make fireworks with that.")
+    INFO_MESSAGE("Feels cool, bitter taste. Saltpetre.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"some$_saltpetre")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3479,11 +3482,14 @@ _InspectSaltpetre
 
 _InspectSulphur
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un minéral naturel utile en chimie")
+    INFO_MESSAGE("Du soufre. Ce jaune est typique.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"du$_soufre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Et svært nyttig naturlig kjemikalie")
+    INFO_MESSAGE("Svovel. Umulig å ta feil av gult.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"noe$_svovel")
 #else
-    INFO_MESSAGE("A very useful natural chemical")
+    INFO_MESSAGE("Sulphur. Can't mistake that yellow.")
+    SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"some$_sulphur")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
