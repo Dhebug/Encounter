@@ -2487,11 +2487,11 @@ _CombinePillsWithMortar
         DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
         LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Les somnifères sont pilés.")
+        INFO_MESSAGE("Broyés. Devrait bien se dissoudre.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Pillene er nå knust")
+        INFO_MESSAGE("Knust. Bør løse seg opp fint.")
 #else
-        INFO_MESSAGE("The pills are now crushed")
+        INFO_MESSAGE("Crushed. Should dissolve nicely.")
 #endif
         SET_ITEM_FLAGS(e_ITEM_SedativePills,ITEM_FLAG_TRANSFORMED)       ; We now have some crushed pills
 #ifdef LANGUAGE_FR                                                       ; Rename the pills to "crushed pills"
@@ -3497,11 +3497,11 @@ _InspectSulphur
 
 _InspectBread
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Facile à émietter")
+    INFO_MESSAGE("Rassis. Devrait bien s'émietter.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Lett å smuldre")
+    INFO_MESSAGE("Tørt. Bør smuldre fint.")
 #else
-    INFO_MESSAGE("Easy to crumble")
+    INFO_MESSAGE("Stale. Should crumble nicely.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3509,11 +3509,11 @@ _InspectBread
 
 _InspectCurtain
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Que cache t'il ?")
+    INFO_MESSAGE("Un rideau ici ? C'est étrange.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Noe bak?")
+    INFO_MESSAGE("Et gardin her? Det er rart.")
 #else
-    INFO_MESSAGE("Anything behind?")
+    INFO_MESSAGE("A curtain here? That's odd.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3547,11 +3547,11 @@ _InspectKey
 _InspectComputer
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un IBM PC modèle 5150 flambant neuf")
+    INFO_MESSAGE("Un IBM PC. On ne rigole pas ici.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En splitter ny IBM PC modell 5150")
+    INFO_MESSAGE("En IBM PC. Her er det alvor.")
 #else
-    INFO_MESSAGE("A brand new IBM PC model 5150")
+    INFO_MESSAGE("An IBM PC. Business means business.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH    
@@ -3561,11 +3561,11 @@ _InspectComputer
 _InspectTelevision
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un énorme téléviseur à rétroprojection")
+    INFO_MESSAGE("Énorme. A dû coûter une fortune.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En enorm bakprojeksjons-TV")
+    INFO_MESSAGE("Enorm. Må ha kostet en formue.")
 #else
-    INFO_MESSAGE("A huge rear-projection TV set")
+    INFO_MESSAGE("Massive. Must've cost a fortune.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3575,11 +3575,11 @@ _InspectTelevision
 _InspectGameConsole
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une ColecoVision... importée des USA?")
+    INFO_MESSAGE("ColecoVision. Pas facile à trouver.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En ColecoVision... fra USA?")
+    INFO_MESSAGE("ColecoVision. Ikke lett å få tak i.")
 #else
-    INFO_MESSAGE("A ColecoVision... imported from USA?")
+    INFO_MESSAGE("ColecoVision. Not easy to get here.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3589,11 +3589,11 @@ _InspectGameConsole
 _InspectTVCabinet
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Des portes, des tiroirs et un abattant")
+    INFO_MESSAGE("Il y a peut-être quelque chose.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Noen dører, skuffer og et lokk")
+    INFO_MESSAGE("Kanskje noe der inne.")
 #else
-    INFO_MESSAGE("A few doors, a few drawers and a flap")
+    INFO_MESSAGE("Might be something in there.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3604,11 +3604,11 @@ _InspectBatteries
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Idéal pour les petits appareils")
+    INFO_MESSAGE("Devrait aller dans la plupart.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Perfekt til å drive småelektronikk")
+    INFO_MESSAGE("Bør passe de fleste småting.")
 #else
-    INFO_MESSAGE("Perfect to power small electronics")
+    INFO_MESSAGE("Should fit most small gadgets.")
 #endif
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -3618,11 +3618,11 @@ _InspectBatteries
 _InspectDrawer
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un simple tiroir de table de chevet")
+    INFO_MESSAGE("Table de chevet. Quoi dedans ?")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En ganske standard nattbordskuff")
+    INFO_MESSAGE("Et nattbord. Noe inni?")
 #else
-    INFO_MESSAGE("A quite standard night stand drawer")
+    INFO_MESSAGE("A plain nightstand. Anything inside?")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3632,11 +3632,11 @@ _InspectDrawer
 _InspectKnife
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Surprenamment affûté!")
+    INFO_MESSAGE("Plus tranchant qu'il n'y parait.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Overraskende skarp!")
+    INFO_MESSAGE("Skarpere enn den ser ut.")
 #else
-    INFO_MESSAGE("Surprisingly sharp!")
+    INFO_MESSAGE("Sharper than it looks.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3647,11 +3647,11 @@ _InspectOricOmputer
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un micro-ordinateur Oric 1 tout neuf")
+    INFO_MESSAGE("Un Oric 1. Tout neuf on dirait.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En splitter ny Oric 1 mikrodatamaskin")
+    INFO_MESSAGE("En Oric 1. Splitter ny ser det ut.")
 #else
-    INFO_MESSAGE("A brand new Oric 1 micro-computer")
+    INFO_MESSAGE("An Oric 1. Brand new by the looks.")
 #endif
     WAIT_KEYPRESS
     END_AND_REFRESH
@@ -3729,14 +3729,14 @@ _InspectFancyStones
 _InspectCue
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle est de bonne qualité...")
-    INFO_MESSAGE("Parfait pour bien 'casser' !")
+    INFO_MESSAGE("Bien équilibrée.")
+    INFO_MESSAGE("Pourrait casser plus que des billes.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det er en god kølle...")
-    INFO_MESSAGE("Perfekt for et rent 'break'!")
+    INFO_MESSAGE("God balanse.")
+    INFO_MESSAGE("Kan knuse mer enn bare baller.")
 #else
-    INFO_MESSAGE("It's a good quality cue...")
-    INFO_MESSAGE("Perfect for a clean 'break'!")
+    INFO_MESSAGE("Nicely weighted.")
+    INFO_MESSAGE("Could break more than just balls.")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3748,14 +3748,14 @@ _InspectPowderMix
     DISPLAY_IMAGE(LOADER_PICTURE_ROUGH_POWDER_MIX)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il y a des gros grumeaux...")
-    INFO_MESSAGE("...le mix doit être bien plus fin.")
+    INFO_MESSAGE("Hmm, bien trop grumeleux...")
+    INFO_MESSAGE("Il faut que je broie ça plus fin.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det er noen store klumper...")
-    INFO_MESSAGE("...Blandingen må males finere.")
+    INFO_MESSAGE("Hmm, altfor klumpete...")
+    INFO_MESSAGE("Jeg må male dette finere.")
 #else
-    INFO_MESSAGE("There are some large clumps...")
-    INFO_MESSAGE("...That mix must be ground fine.")
+    INFO_MESSAGE("Hmm, way too lumpy...")
+    INFO_MESSAGE("I need to grind this finer.")
 #endif
     STOP_MUSIC()
     WAIT_KEYPRESS
@@ -3768,14 +3768,14 @@ _InspectGunPowder
     DISPLAY_IMAGE(LOADER_PICTURE_MORTAR_AND_PESTLE)
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Poudre explosive faite maison,")
-    INFO_MESSAGE("il faut un contenant adapté.")
+    INFO_MESSAGE("De la poudre à canon.")
+    INFO_MESSAGE("Il me faut un récipient solide.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Hjemmelaget krutt: Svært eksplosivt,")
-    INFO_MESSAGE("men det krever en passende beholder.")
+    INFO_MESSAGE("Krutt, intet mindre.")
+    INFO_MESSAGE("Trenger noe solid å ha det i.")
 #else
-    INFO_MESSAGE("Homemade Gun powder: Quite explosive,")
-    INFO_MESSAGE("but that requires a proper container.")
+    INFO_MESSAGE("That's gunpowder alright.")
+    INFO_MESSAGE("Need something sturdy to hold it.")
 #endif
     STOP_MUSIC()
     WAIT_KEYPRESS
@@ -3881,20 +3881,20 @@ _InspectMedicineCabinet
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED),else)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET_OPEN)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Ca pourrait être utile")
+        INFO_MESSAGE("Des calmants. Ca peut servir.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Det kan jeg bruke.")
+        INFO_MESSAGE("Beroligende. Kan bli nyttig.")
 #else
-        INFO_MESSAGE("I can use some of that.")
+        INFO_MESSAGE("Sedatives. Could come in handy.")
 #endif
     ELSE(else,open)
         DISPLAY_IMAGE(LOADER_PICTURE_MEDICINE_CABINET)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("La porte n'est pas transparente.")
+        INFO_MESSAGE("Il y a peut-être quelque chose.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Lite å se når den er lukket.")
+        INFO_MESSAGE("Kanskje noe nyttig der inne.")
 #else
-        INFO_MESSAGE("Not much to see when closed.")
+        INFO_MESSAGE("Might be something useful in there.")
 #endif
     ENDIF(open)
     WAIT_KEYPRESS    
@@ -4086,11 +4086,11 @@ no_ladder
             DISPLAY_IMAGE(LOADER_PICTURE_BASEMENT_WINDOW_DARK)
             GOSUB(_SubBlackTapeOnWindow)
 #ifdef LANGUAGE_FR
-            INFO_MESSAGE("Impossible à retirer de l'extérieur")
+            INFO_MESSAGE("Impossible à décoller d'ici.")
 #elif defined(LANGUAGE_NO)
-            INFO_MESSAGE("Kan ikke fjernes utenfra")
+            INFO_MESSAGE("Får ikke løsnet det herfra.")
 #else
-            INFO_MESSAGE("Can't be removed from the outside")
+            INFO_MESSAGE("Can't peel it off from here.")
 #endif
         ENDIF(open)
     .)
@@ -4103,11 +4103,11 @@ no_ladder
 _SubBlackTapeOnWindow
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("De l'adhésif noir ?")
+    INFO_MESSAGE("Scotché de l'intérieur.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Er det svart tape?")
+    INFO_MESSAGE("Tapet fra innsiden.")
 #else
-    INFO_MESSAGE("Is that black tape?")
+    INFO_MESSAGE("Taped from the inside.")
 #endif
     RETURN
 .)
@@ -4296,14 +4296,14 @@ _InspectAlarmIndicator
 #endif
     ELSE(alarm_disabled,alarm_enabled)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Le système d'alarme est actif...")
-        INFO_MESSAGE("mais les capteurs ont été trafiqués !")
+        INFO_MESSAGE("Système actif, mais...")
+        INFO_MESSAGE("les capteurs arrière sont shuntés.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Alarmsystemet er aktivt, men...")
-        INFO_MESSAGE("sensorene er sabotert!")
+        INFO_MESSAGE("Systemet er aktivt, men...")
+        INFO_MESSAGE("noen har omgått baksensorene.")
 #else
-        INFO_MESSAGE("The alarm system is active, but...")
-        INFO_MESSAGE("the sensors have been tampered with!")
+        INFO_MESSAGE("System's active, but...")
+        INFO_MESSAGE("someone's bypassed the rear sensors.")
 #endif
     ENDIF(alarm_enabled)
     WAIT_KEYPRESS
@@ -4314,11 +4314,11 @@ _InspectAlarmIndicator
 _SearchCardboardBox
 _InspectCardboardBox
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Format postal standard")
+    INFO_MESSAGE("Un colis postal standard.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Standard postpakke")
+    INFO_MESSAGE("Helt vanlig postpakke.")
 #else
-    INFO_MESSAGE("Postal service standard package")
+    INFO_MESSAGE("Royal Mail's finest.")
 #endif
     JUMP(_InspectContainerGeneric)
 
@@ -4533,11 +4533,11 @@ _InspectMixTape
     INCREASE_SCORE(POINTS_INSPECT_MIX_TAPE)
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une compilation faite maison !")
+    INFO_MESSAGE("Les morceaux préférés de quelqu'un.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Hjemmelaget mixtape!")
+    INFO_MESSAGE("Noens favoritlåter.")
 #else
-    INFO_MESSAGE("Homemade mixtape!")
+    INFO_MESSAGE("Someone's favourite tunes.")
 #endif
     WAIT_KEYPRESS    
     END_AND_REFRESH
@@ -4561,11 +4561,11 @@ _InspectSafe
         ELSE(else,nobomb)
             DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR)
 #ifdef LANGUAGE_FR
-            INFO_MESSAGE("Il est gros, mais semble fragile")
+            INFO_MESSAGE("Rien qu'un bon boom ne règlerait.")
 #elif defined(LANGUAGE_NO)
-            INFO_MESSAGE("Den er stor, men ikke så stødig")
+            INFO_MESSAGE("Ikke noe et smell ikke fikser.")
 #else
-            INFO_MESSAGE("It's big, but not that sturdy")
+            INFO_MESSAGE("Nothing a good blast couldn't open.")
 #endif
         ENDIF(nobomb)
         WAIT_KEYPRESS
@@ -4984,11 +4984,11 @@ girl_at_the_window
     ELSE(window_open,window_closed)
         FADE_BUFFER 
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Impossible d'accéder à partir d'ici")
+        INFO_MESSAGE("Pas moyen d'y accéder d'ici.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Kan ikke komme til herfra")
+        INFO_MESSAGE("Ingen vei opp herfra.")
 #else
-        INFO_MESSAGE("Impossible to access from here")
+        INFO_MESSAGE("No way up from this side.")
 #endif        
     ENDIF(window_closed)
     RETURN
@@ -5757,11 +5757,11 @@ _InspectCarDoor
         GOSUB(_SubClosedButNotLocked_Elle)
     ELSE(door_closed,door_open)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Elle est mangée par la rouille")
+        INFO_MESSAGE("A peine accrochée aux gonds.")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Døren er spist opp av rust")
+        INFO_MESSAGE("Henger knapt på hengslene.")
 #else
-        INFO_MESSAGE("The door is eaten by rust")
+        INFO_MESSAGE("Barely hanging on its hinges.")
 #endif    
     ENDIF(door_open)
     END_AND_PARTIAL_REFRESH
@@ -7335,14 +7335,14 @@ _TakeBlackTape
     CLEAR_TEXT_AREA(4)
     SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Le ruban n'est pas réutilisable")
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"une _fenêtre")
+    INFO_MESSAGE("En lambeaux. Inutilisable.")
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Teipen kan ikke gjenbrukes")
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"et _vindu")
+    INFO_MESSAGE("Revet i filler. Ubrukelig nå.")
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et _vindu")
 #else
-    INFO_MESSAGE("The tape cannot be reused")
-    SET_ITEM_DESCRIPTION(e_ITEM_BasementWindow,"a _window")
+    INFO_MESSAGE("Ripped to shreds. No use now.")
+    SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a _window")
 #endif
     GOSUB(_SubSetLockedPanelDescription)
     END_AND_REFRESH
@@ -7420,14 +7420,14 @@ _ShowProtectionSuit
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Protection contre pesticides...")
-    INFO_MESSAGE("...et autres fumées toxiques")
+    INFO_MESSAGE("Protection intégrale.")
+    INFO_MESSAGE("Pesticides, chimie... pratique.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Beskyttelse mot plantevernmidler...")
-    INFO_MESSAGE("...og andre giftige damper")
+    INFO_MESSAGE("Full kroppsbeskyttelse.")
+    INFO_MESSAGE("Plantevernmidler, kjemikalier...")
 #else
-    INFO_MESSAGE("Protection against pesticides...")
-    INFO_MESSAGE("...and other types of noxious fumes")
+    INFO_MESSAGE("Full body protection.")
+    INFO_MESSAGE("Pesticides, chemicals... handy.")
 #endif    
     WAIT_KEYPRESS
     RETURN
