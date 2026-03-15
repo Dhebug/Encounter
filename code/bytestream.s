@@ -219,66 +219,110 @@ _DispatchStream
     sta _gCurrentItem
 
     ldy #0
-search_loop    
+search_loop
     lda (_param1),y     ; Check the ID in the table
     iny
     cmp _param0         ; Does that match the ID we are looking for?
-    beq found_it
+    beq _PlayMatchedStream
     cmp #255            ; Or is it the end of the table?
-    beq found_it
+    beq _PlayMatchedStream
 
     iny                 ; Skip the callback/stream pointer
     iny
     jmp search_loop
-
-found_it    
-    lda (_param1),y     ; Copy the stream pointer to _param0
-    sta _param0+0
-    iny
-    lda (_param1),y
-    sta _param0+1
-
-    jmp _PlayStreamAsm
 .)
 
 
-; _param0=id of the first element we are searching for in the table
-; _param1=pointer to a table with id:stream pointer
-; _param2=id of the second element we are searching for in the table
+; Dispatches a two-item action by searching a mapping table for a (param0, param2) pair.
+; Currently used exclusively by the COMBINE instruction.
+;
+; _param0=id of the first item
+; _param1=pointer to a mapping table [id1, id2, stream_lo, stream_hi, ...] terminated by id2=255
+; _param2=id of the second item
+;
+; The two item IDs are sorted (smaller first) before searching, matching the COMBINE_MAPPING
+; macro which auto-sorts its entries the same way. This halves the table size vs storing both
+; orderings, and since containers always have the smallest IDs (0..e_ITEM__Last_Container),
+; the sorted _param0 is the only one that needs checking for the container fallback.
+;
+; If a match is found in the table, plays the associated stream.
+; If no match is found, checks whether _param0 is a container and _param2 a compatible item.
+; If so, interprets as a TAKE command with both items. Otherwise plays the default error stream.
 _DispatchStream2
 .(
-    ; Store the item id into "CurrentItem"
+    ; Store the item id into "CurrentItem" and sort so the smaller ID
+    ; is in _param0, larger in _param2. This matches the COMBINE_MAPPING
+    ; table which auto-sorts entries the same way.
     lda _param0
     sta _gCurrentItem
+    cmp _param2
+    bcc sorted                           ; _param0 < _param2, already in order
+    beq sorted                           ; Equal, no swap needed
+    ldx _param2                          ; Swap: A = _param0 (larger), X = _param2 (smaller)
+    sta _param2
+    stx _param0
+sorted
 
     ldy #0
-search_loop    
+search_loop
     lda (_param1),y     ; Get the first ID from the table
     iny
     tax                 ; Copy to X
     lda (_param1),y     ; Check the second in the table
     iny
     cmp #255            ; Is it the end of the table?
-    beq found_it
+    beq end_of_table
 
     cpx _param0         ; Does that match the first ID we are looking for?
     bne no_match
     cmp _param2         ; Does that match the second ID we are looking for?
-    bne no_match
+    beq _PlayMatchedStream
 
-found_it    
+no_match
+    iny                 ; Skip the stream pointer
+    iny
+    jmp search_loop
+
+    ; Shared by _DispatchStream and _DispatchStream2:
+    ; Reads the stream pointer at (_param1),y and plays it.
++_PlayMatchedStream
     lda (_param1),y     ; Copy the stream pointer to _param0
     sta _param0+0
     iny
     lda (_param1),y
     sta _param0+1
-
     jmp _PlayStreamAsm
 
-no_match
-    iny                 ; Skip the callback/stream pointer
-    iny
-    jmp search_loop
+end_of_table
+    ; No explicit match found in the table.
+    ; Y currently points at the default error stream pointer.
+    ; Since items are sorted, _param0 has the smaller ID.
+    ; Containers have the smallest IDs, so only _param0 can be a container.
+    lda _param0+0
+    cmp #(e_ITEM__Last_Container + 1)
+    bcs _PlayMatchedStream               ; _param0 is NOT a container -> play default error stream
+
+    ; _param0 might be a container. Check if _param2 needs one.
+    sty tmp2                             ; Preserve Y (points to default error stream)
+    ldx _param0+0                        ; X = potential container ID
+    lda _param2+0                        ; A = potential item ID
+    jsr _ByteStreamComputeItemPtr        ; _gStreamItemPtr -> item[_param2]
+    ldy #5
+    lda (_gStreamItemPtr),y              ; usable_containers of _param2
+    ldy tmp2                             ; Restore Y
+    beq _PlayMatchedStream               ; _param2 doesn't need a container -> play default error stream
+
+    ; Match: _param0 = container, _param2 = item needing container
+    ; Set up word buffer as [TAKE, item, container] and hand off to TakeItem
+    lda _param2+0
+    sta _gWordBuffer+1                   ; Item
+    lda _param0+0
+    sta _gWordBuffer+2                   ; Container
+    lda #e_WORD_TAKE
+    sta _gWordBuffer+0
+    lda #3
+    sta _gWordCount
+    jmp _TakeItem
 .)
 
 

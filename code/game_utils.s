@@ -1800,6 +1800,16 @@ execute_bytestream
     jmp _DispatchStream
 
 query_container
+    ; If a container was already specified as a second word (e.g. COMBINE WATER BUCKET -> TAKE WATER BUCKET), skip the prompt
+    lda _gWordCount
+    cmp #3
+    bcc normal_container_query       ; wordCount < 3 (no container word provided), ask user
+
+    lda _gWordBuffer+2
+    sta _gCurrentAssociatedItem
+    jmp validate_answer
+
+normal_container_query
     ; Save the current item because it will be overwritten by the AskInput
     lda _gCurrentItem
     pha
@@ -1954,6 +1964,7 @@ empty_container
 
     jmp execute_bytestream
 .)
+
 
 
 

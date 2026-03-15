@@ -178,8 +178,7 @@ extern void HandleByteStream();
 #define SetByteStream(frames)                 { gCurrentStream=frames;gDelayStream=0; }
 #define PlayStream(byteStream)                { param0.ptr=byteStream;asm("jsr _PlayStreamAsm"); }
 #define DispatchStream(streamTable,id)        { param0.uchar=id;param1.ptr=streamTable;asm("jsr _DispatchStream"); }
-#define DispatchStream2(streamTable,id1,id2)  { param0.uchar=id1;param1.ptr=streamTable;param2.uchar=id2;asm("jsr _DispatchStream2"); }
- 
+
 #define ClearMessageWindow(paperColor)        { param0.uchar=paperColor;asm("jsr _ClearMessageWindowAsm"); }
 #define ClearMessageAndInventoryWindow(paperColor) { param0.uchar=paperColor;asm("jsr _ClearMessageAndInventoryWindow"); }
 
@@ -211,48 +210,3 @@ extern unsigned int gMonkeyKingFastBestScoreBCD;    // minigame high score (BCD 
 extern unsigned int gMonkeyKingFastSessionBest;     // Best score of the player in that session (normal format)
 
 
-// game_text
-extern char gDescriptionDarkTunel[];
-extern char gDescriptionMarketPlace[];
-extern char gDescriptionDarkAlley[];
-extern char gDescriptionRoad[];
-extern char gDescriptionMainStreet[];
-extern char gDescriptionNarrowPath[];
-extern char gDescriptionInThePit[];
-extern char gDescriptionTarmacArea[];
-extern char gDescriptionOldWell[];
-extern char gDescriptionWoodedAvenue[];
-extern char gDescriptionGravelDrive[];
-extern char gDescriptionZenGarden[];
-extern char gDescriptionFrontLawn[];
-extern char gDescriptionGreenHouse[];
-extern char gDescriptionTennisCourt[];
-extern char gDescriptionVegetableGarden[];
-extern char gDescriptionFishPond[];
-extern char gDescriptionTiledPatio[];
-extern char gDescriptionAppleOrchard[];
-extern char gDescriptionEntranceHall[];
-extern char gDescriptionLibrary[];
-extern char gDescriptionNarrowPassage[];
-extern char gDescriptionEntranceLounge[];
-extern char gDescriptionDiningRoom[];
-extern char gDescriptionGamesRoom[];
-extern char gDescriptionSunLounge[];
-extern char gDescriptionKitchen[];
-extern char gDescriptionNarrowStaircase[];
-extern char gDescriptionCellar[];
-extern char gDescriptionDarkerCellar[];
-extern char gDescriptionStaircase[];
-extern char gDescriptionMainLanding[];
-extern char gDescriptionEastGallery[];
-extern char gDescriptionChildBedroom[];
-extern char gDescriptionGuestBedroom[];
-extern char gDescriptionShowerRoom[];
-extern char gDescriptionWestGallery[];
-extern char gDescriptionBoxRoom[];
-extern char gDescriptionClassyBathRoom[];
-extern char gDescriptionTinyToilet[];
-extern char gDescriptionMasterBedRoom[];
-extern char gDescriptionPadlockedRoom[];
-extern char gDescriptionOutsidePit[];
-extern char gDescriptionStudyRoom[];
