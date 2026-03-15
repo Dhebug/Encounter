@@ -193,6 +193,7 @@ AddDefine LOADER_PICTURE_LOCATIONS_WELL {FileIndex}       ; The define is for th
 AddFile ..\build\files\loc_wooded_avenue.hir
 AddFile ..\build\files\loc_gravel_drive.hir
 AddFile ..\build\files\loc_parking.hir
+AddDefine LOADER_PICTURE_LOCATIONS_PARKINGPLACE {FileIndex}       ; The define is for the file entry above.
 AddFile ..\build\files\loc_zen_garden.hir
 AddFile ..\build\files\loc_lawn.hir
 AddFile ..\build\files\loc_greenhouse.hir

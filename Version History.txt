@@ -380,7 +380,7 @@
 - Hopefully fixed an issue regarding counting the number of items in the inventory when trying to fetch something that requires a container
 - Optimisation: Rewrote ParseInputBuffer to assembler to reduce the size of the code
 
-1.2.7
+1.3.0
 - Optimisation: Rewrote AskInput to assembler to reduce the size of the code
 - Optimisation: Implemented a better kerning system to display the fancy text faster
 - Trying to use the rope from the outside of the top window will now tell you that cannot be done until the window is actually open
@@ -397,3 +397,6 @@
 - Using the rope or ladder now makes you able to climb up or down
 - Replaced the almost never triggered "not understood" achievement by a new "disabled alarm" one.
 - The Sulphur and Saltpeter are now not identified by default, the player needs to inspect them first.
+- The "basement" has been renamed "cellar"
+- The mortar can now be inspected
+- The Tardis has now moved to a much more logical location

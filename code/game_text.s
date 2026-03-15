@@ -665,29 +665,6 @@ _gDescriptionMainStreet
     _BUBBLE_LINE(4,16,0,"medieval church")
 #endif    
 
-#if 1  // WIP TEST
-    .(
-    ; Wait 20 seconds
-    WAIT(50*5)
-    WAIT(50*5)
-    WAIT(50*5)
-    WAIT(50*5)
-    DO_ONCE(tardis)
-        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
-            _IMAGE(30,49)
-            _BUFFER(7,40)
-        PLAY_SOUND(_Zipper)
-        FADE_BUFFER
-        WAIT(50*5)
-        WAIT(50*5)
-        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_MAINSTREET)
-        PLAY_SOUND(_Zipper)
-        FADE_BUFFER
-    ENDDO(tardis)
-    .)
-#endif
     END
 
 
@@ -873,7 +850,31 @@ _gDescriptionParkingPlace
 #else
     _BUBBLE_LINE(149,5,0,"Ashes to Ashes")
     _BUBBLE_LINE(152,15,0,"Rust to Rust...")
-#endif    
+#endif
+
+#if 1  // TARDIS Easter Egg - near the tombstone with the anachronistic date
+    .(
+    ; Wait 20 seconds
+    WAIT(50*5)
+    WAIT(50*5)
+    WAIT(50*5)
+    WAIT(50*5)
+    DO_ONCE(tardis)
+        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,5,56)                     ; Draw the TARDIS
+            _IMAGE(30,49)
+            _BUFFER(7,40)
+        PLAY_SOUND(_Zipper)
+        FADE_BUFFER
+        WAIT(50*5)
+        WAIT(50*5)
+        CALL_NATIVE(_PrintSceneDirections)                       ; HACK: Force draw the direction arrows
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_PARKINGPLACE)
+        PLAY_SOUND(_Zipper)
+        FADE_BUFFER
+    ENDDO(tardis)
+    .)
+#endif
     END
 .)
 
