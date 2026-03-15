@@ -1899,7 +1899,7 @@ _gMiniKaboom
             _SCREEN(17,24)
     CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Heureusement que je n'étais pas là !")
+    INFO_MESSAGE("Heureusement que j'étais pas là !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Godt at jeg ikke var der inne!")
 #else
@@ -2553,7 +2553,7 @@ _CombineGameWithBatteries
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Le jeu devrait fonctionner maintenant")
+    INFO_MESSAGE("Le jeu devrait marcher maintenant")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Spillet bør nå fungere")
 #else
@@ -2606,10 +2606,10 @@ _CombineGunPowderWithFuse
     ELSE(in_tin,not_tin)
        // We reach this code path if the gun power is in the bucket, plastic bag, etc...
 #ifdef LANGUAGE_FR
-        ERROR_MESSAGE("La poudre requiert un conteneur adapté")
+        ERROR_MESSAGE("Il faut un contenant pour la poudre")
         ERROR_MESSAGE("Il doit être solide et refermable")
 #elif defined(LANGUAGE_NO)
-        ERROR_MESSAGE("Kruttet trenger en ordentlig beholder")
+        ERROR_MESSAGE("Kruttet trenger en god beholder")
         ERROR_MESSAGE("Den bør være solid og lukkbar")
 #else
         ERROR_MESSAGE("The powder needs a proper container")
@@ -2750,8 +2750,8 @@ _CombineWindowWithRope
 #elif defined(LANGUAGE_NO)
         ERROR_MESSAGE("Bør nok åpne vinduet først!")
 #else
-        ERROR_MESSAGE("Should probably open the window first!")
-#endif       
+        ERROR_MESSAGE("Should open the window first!")
+#endif
         JUMP(end)
 window_open
 
@@ -3315,7 +3315,7 @@ _InspectGame
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Kombinere med noe eksplosivt...")
 #else
-    INFO_MESSAGE("Pair this with something explosive...")
+    INFO_MESSAGE("Pair with something explosive...")
 #endif
     WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
@@ -3522,7 +3522,7 @@ _InspectCurtain
 
 _InspectNet
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Peut arrêter les objets rapides")
+    INFO_MESSAGE("Peut attraper des balles, etc.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Kan fange baller, blant annet")
 #else
@@ -3605,7 +3605,7 @@ _InspectBatteries
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Devrait aller dans la plupart.")
+    INFO_MESSAGE("Idéal pour montres ou petit jeux.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Bør passe de fleste småting.")
 #else
@@ -3801,7 +3801,7 @@ _InspectPills
 _InspectMeat
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un chien adorerait cette pièce !")
+    INFO_MESSAGE("Un chien adorerait ce morceau !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("En hund ville elsket dette!")
 #else
@@ -3950,7 +3950,7 @@ _InspectDartGun
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ça pourrait endormir un éléphant !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan besvime en elefant!")
+    INFO_MESSAGE("Kan bedøve en elefant!")
 #else
     INFO_MESSAGE("Could knock out an elephant!")
 #endif
@@ -4106,7 +4106,7 @@ _SubBlackTapeOnWindow
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Scotché de l'intérieur.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Tapet fra innsiden.")
+    INFO_MESSAGE("Teipt fra innsiden.")
 #else
     INFO_MESSAGE("Taped from the inside.")
 #endif
@@ -4228,7 +4228,7 @@ study_room
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_GAMESROOM),games_room)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je peux voir le bac à poissons dehors")
+        INFO_MESSAGE("Je vois le bac à poissons dehors")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Jeg kan se fiskedammen utenfor")
 #else
@@ -4240,7 +4240,7 @@ games_room
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DININGROOM),dining_room)
 lounge    
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je peux voir le court de tennis dehors")
+        INFO_MESSAGE("Je vois le court de tennis dehors")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Jeg kan se tennisbanen utenfor")
 #else
@@ -4250,7 +4250,7 @@ dining_room
 
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_KITCHEN),kitchen)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Je peux voir le passage arrière dehors")
+        INFO_MESSAGE("Je vois le passage arrière dehors")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Jeg kan se bakgangen utenfor")
 #else
@@ -4327,7 +4327,7 @@ _InspectCardboardBox
 _SearchTin
 _InspectTin
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une boite en métal ")
+    INFO_MESSAGE("Une solide boite en métal")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Det er en solid metallboks")
 #else
@@ -4620,7 +4620,7 @@ _InspectThug
     ELSE(alive,disabled)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Il ne bouge plus")
-        INFO_MESSAGE("Peut-être a-t'il des trucs utiles?")
+        INFO_MESSAGE("Peut-être a-t-il des trucs utiles?")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Han beveger seg ikke")
         INFO_MESSAGE("Kanskje har han nyttige ting?")
@@ -5171,7 +5171,7 @@ _OpenGunCabinet
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Une seule fléchette, mieux que rien!")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Bare en pil, men bedre enn ingenting!")
+        INFO_MESSAGE("Bare en pil, bedre enn ingenting!")
 #else
         INFO_MESSAGE("Only one dart, better than nothing!")
 #endif    
@@ -5695,11 +5695,11 @@ _UseOricComputer   ; view_oric_computer.png
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
 #ifdef LANGUAGE_FR
-    QUICK_MESSAGE("Ca va stopper le jeu: Etes-vous sur ?")
+    QUICK_MESSAGE("Fin du jeu: Êtes-vous sûr ?")
 #elif defined(LANGUAGE_NO)
-    QUICK_MESSAGE("Dette avslutter spillet: Er du sikker?")
+    QUICK_MESSAGE("Avslutte spillet: Er du sikker?")
 #else
-    QUICK_MESSAGE("This will end the game: Are you sure?")
+    QUICK_MESSAGE("End the game: Are you sure?")
 #endif    
     WAIT_KEYPRESS
 #ifdef LANGUAGE_FR
@@ -5762,7 +5762,7 @@ _InspectCarBoot
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Det er bare reservehjulet der")
 #else
-        INFO_MESSAGE("Other than the spare wheel it's empty")
+        INFO_MESSAGE("Other than the spare wheel, empty")
 #endif    
     ENDIF(boot_open)
     END_AND_PARTIAL_REFRESH
@@ -6098,7 +6098,7 @@ _UseKey
             SET_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_GONE_FOREVER)                  ; We don't need the key anymore
             INCREASE_SCORE(POINTS_USED_KEY)
 #ifdef LANGUAGE_FR                                                                             ; Update the description
-            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverouillée")
+            SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"une _centrale d'alarme déverrouillée")
             INFO_MESSAGE("La centrale est déverrouillée")
 #elif defined(LANGUAGE_NO)
             SET_ITEM_DESCRIPTION(e_ITEM_AlarmPanel,"et ulåst alarm _panel")
@@ -6449,7 +6449,7 @@ _UseAcid
         INFO_MESSAGE("vil syren bare renne på gulvet")
 #else
         INFO_MESSAGE("I need some kind of barrier else")
-        INFO_MESSAGE("the acid will just spill to the floor")
+        INFO_MESSAGE("the acid would spill everywhere")
 #endif    
         END_AND_REFRESH
     ENDIF(attached)
@@ -6678,7 +6678,7 @@ _SubBreadCommon
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Les poissons mangent les miettes")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Fiskene spiser smuler")
+        INFO_MESSAGE("Fiskene spiser smulene")
 #else
         INFO_MESSAGE("The fish eat the crumbs")
 #endif    
@@ -7164,8 +7164,8 @@ thug_snooker_cue
 #elif defined(LANGUAGE_NO)
                 ERROR_MESSAGE("Bør nok åpne vinduet først!")
 #else
-                ERROR_MESSAGE("Should probably open the window first!")
-#endif       
+                ERROR_MESSAGE("Should open the window first!")
+#endif
             ENDIF(window_closed)
         ELSE(cue_in_the_room,cue_not_in_the_room)
             ; If the cue is not in the room, we pass it to the girl through the hole
@@ -7505,7 +7505,7 @@ _DropPetrol
     ; Are we at the car location?
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_ABANDONED_CAR),car)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Le pétrole retourne au réservoir.")
+        INFO_MESSAGE("L'essence retourne au réservoir.")
 #elif defined(LANGUAGE_NO)
         INFO_MESSAGE("Bensinen tilbake i tanken.")
 #else
