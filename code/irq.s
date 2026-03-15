@@ -154,11 +154,98 @@ loop
 
 ; Stop the program while blinking the bottom right corner with psychedelic colors
 _Panic
-	lda #16+1
-	sta $BFDF
-	lda #16+2
-	sta $BFDF
-	jmp _Panic
+#ifdef ENABLE_STACK_DUMP
+    ; Display the last return addresses from the stack on screen.
+    ; IMPORTANT: No jsr/rts — we must not modify the stack while reading it.
+    tsx                         ; X = current stack pointer
+    stx tmp3                    ; Save base stack index
+
+    ; Screen pointer: text area line 17, column 0 (line after the clock)
+    lda #<($BB80+17*40)
+    sta tmp0+0
+    lda #>($BB80+17*40)
+    sta tmp0+1
+
+    ; Compute number of valid return addresses on stack: min(($FF - SP) / 2, 10)
+    lda #$FF
+    sec
+    sbc tmp3                    ; A = bytes on stack
+    lsr                         ; A = number of return addresses
+    cmp #10
+    bcc use_count
+    lda #10
+use_count
+    sta tmp1                    ; Loop counter
+    beq panic_blink             ; Nothing to show
+
+dump_loop
+    ldx tmp3
+    inx                         ; Point to high byte of return address
+    inx
+    stx tmp3                    ; Save for next iteration
+
+    ; Print high byte: $0100+X
+    lda $0100,x
+    ldy #0
+    pha
+    lsr
+    lsr
+    lsr
+    lsr
+    tax
+    lda hex_table,x
+    sta (tmp0),y
+    iny
+    pla
+    and #$0F
+    tax
+    lda hex_table,x
+    sta (tmp0),y
+    iny
+
+    ; Print low byte: $0100+(saved X - 1)
+    ldx tmp3
+    dex
+    lda $0100,x
+
+    pha
+    lsr
+    lsr
+    lsr
+    lsr
+    tax
+    lda hex_table,x
+    sta (tmp0),y
+    iny
+    pla
+    and #$0F
+    tax
+    lda hex_table,x
+    sta (tmp0),y
+
+    ; Advance screen pointer to next line (+40 bytes)
+    clc
+    lda tmp0+0
+    adc #40
+    sta tmp0+0
+    lda tmp0+1
+    adc #0
+    sta tmp0+1
+
+    dec tmp1
+    bne dump_loop
+#endif
+
+panic_blink
+    lda #16+1
+    sta $BFDF
+    lda #16+2
+    sta $BFDF
+    jmp panic_blink
+
+#ifdef ENABLE_STACK_DUMP
+hex_table .byt "0123456789ABCDEF"
+#endif
 _DoNothing    
 	rts
 

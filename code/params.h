@@ -16,6 +16,7 @@
 #define ENABLE_SOUND_EFFECTS            // Comment out to disable sound effects
 
 #define ENABLE_DEBUG_TEXT               // Commment out to disabled messages like "main(643): AskInput()"
+//#define ENABLE_STACK_DUMP              // Comment out to disable the stack dump display in Panic
 #ifdef MODULE_GAME
 #endif
 
