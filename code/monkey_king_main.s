@@ -1,6 +1,7 @@
 
 #include "params.h"
 #include "game_enums.h"
+#include "../build/floppy_description.h"
 
 ; Game sprites defines
 #define SPRITE_COUNT        _LastSprite-_FirstSprite

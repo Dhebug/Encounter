@@ -11,10 +11,12 @@ _param2 .dsb 2
 _EndText
 
 #if DISPLAYINFO=1
-#ifdef MODULE_GAME
-#print Remaining space = ($9900 - *)  
+#ifdef MODULE_MONKEY_KING
+#print Remaining space before loader = (FLOPPY_LOADER_RESIDENT_ADDRESS - *)
+#elif MODULE_GAME
+#print Remaining space = ($9900 - *)
 #else
-#print Remaining space = ($9800 - *)  
+#print Remaining space = ($9800 - *)
 #endif
 #endif
 
@@ -170,8 +172,15 @@ _PsgPlayLoopPosition    .dsb 10      ; 10 levels of loops
 //osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 _free_to_use_overlay
 
-;* = FLOPPY_LOADER_ADDRESS = $fb00
+;* = FLOPPY_LOADER_ADDRESS = $fa00
 ; _DiskLoader
+
+// Check that module overlay data does not overlap the loader's resident section
+#ifdef FLOPPY_LOADER_RESIDENT_ADDRESS
+#if _free_to_use_overlay > FLOPPY_LOADER_RESIDENT_ADDRESS
+#error - Module overlay data exceeds FLOPPY_LOADER_RESIDENT_ADDRESS and will overwrite the loader
+#endif
+#endif
 
 // Some sanity checking
 #ifdef MODULE_GAME

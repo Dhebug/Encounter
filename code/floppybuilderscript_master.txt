@@ -45,7 +45,8 @@ WriteSector ..\build\files\sector_3.o 				; Sector 3
 ; Now here is the loader code, that one is Microdisc only
 ;
 SetPosition 0 4
-WriteLoader ..\build\files\loader.o $fb00 			; Sector 4
+WriteLoader ..\build\files\loader.o $fa00 			; Sector 4 - This is the address where the loader actually loads (including init code that can be overwritten later)
+AddDefine FLOPPY_LOADER_RESIDENT_ADDRESS $FB40      ; This is the address of where the resident part of the loader starts: This one should not be overwritten
 
 ;
 ; From now on we compress data (The loader should not be compressed)

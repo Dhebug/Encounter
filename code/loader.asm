@@ -257,6 +257,18 @@ end_jasmin_init
     lda #$27
     sta via_t1lh
     sta via_t1ch
+    jmp _LoaderResidentStart
+
+; -------------------------------------------------------------------------------
+; The space between here and _LoaderResidentStart is temporary and will be
+; overwritten by module overlay data. This is expected and by design.
+; _LoaderResidentStart must be above the highest module overlay address (~$FA90).
+; Adjust LOADER_RESIDENT_START if the resident code outgrows the $FFDE limit.
+; -------------------------------------------------------------------------------
+#if * > FLOPPY_LOADER_RESIDENT_ADDRESS
+#error Temporary init section exceeds FLOPPY_LOADER_RESIDENT_ADDRESS
+#endif
+    .dsb FLOPPY_LOADER_RESIDENT_ADDRESS - *
 
 ; -------------------------------------------------------------------------------
 ;                                   Resident section

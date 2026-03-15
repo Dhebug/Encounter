@@ -301,7 +301,7 @@ This tool is quite practical to find the worse offenders as well as where you ha
 ### Intro sequence
 ### Main game
 Let's try to squeeze out the last remaining bits of memory:
-- The loader is located in $fb00, with the resident part using from $fb88 to $ffff
+- The loader is located in $fa00, with the resident part using from $fa88 to $ffff
 - Page 2 is used for the sector buffer when loading and saving
 - The game loads at $400
 
