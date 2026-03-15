@@ -1653,11 +1653,11 @@ _gDescriptionCellar
 
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-        QUICK_MESSAGE("Je devrais aller m'abriter")
+        QUICK_MESSAGE("Bon, il faut se mettre à l'abri.")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Jeg må finne et trygt sted")
+        QUICK_MESSAGE("Greit, på tide å komme seg unna.")
 #else
-        QUICK_MESSAGE("I should go somewhere safe")
+        QUICK_MESSAGE("Right, time to move to safety.")
 #endif        
         PLAY_SOUND(_FuseBurningStart)
         WAIT(50*2)
@@ -1677,11 +1677,11 @@ _gDescriptionCellar
 
         CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-        QUICK_MESSAGE("Allo?")
+        QUICK_MESSAGE("Pourquoi je suis encore là ?!")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Hallo?")
+        QUICK_MESSAGE("Hvorfor står jeg fortsatt her?!")
 #else
-        QUICK_MESSAGE("Hello?")
+        QUICK_MESSAGE("Why am I still here?!")
 #endif        
 
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
@@ -1700,11 +1700,11 @@ _gDescriptionCellar
 
         CLEAR_TEXT_AREA(4)
 #ifdef LANGUAGE_FR
-        QUICK_MESSAGE("Toujours là ?")
+        QUICK_MESSAGE("BOUGE ! MAINTENANT !")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Er du der fortsatt?")
+        QUICK_MESSAGE("FLYTT DEG! NÅ! NÅ! NÅ!")
 #else
-        QUICK_MESSAGE("Still there?")
+        QUICK_MESSAGE("MOVE! NOW! NOW! NOW!")
 #endif        
 
         BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,61)                     ; Draw the fuse animation sequence frame
@@ -1723,11 +1723,11 @@ kaboom
         SET_CUT_SCENE(1)
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
-        QUICK_MESSAGE("Bon... Vous aviez été prévenu, non ?")
+        QUICK_MESSAGE("On m'avait prévenu...")
 #elif defined(LANGUAGE_NO)
-        QUICK_MESSAGE("Vel... Jeg advarte deg, ikke sant?")
+        QUICK_MESSAGE("Jeg ble advart om dette...")
 #else
-        QUICK_MESSAGE("Well... I warned you, didn't I?")
+        QUICK_MESSAGE("I was told this would happen...")
 #endif        
         JUMP(_KaboomSafe)
 
