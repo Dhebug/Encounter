@@ -171,14 +171,9 @@ WORDS ProcessAnswer()
         {
             gTextAskInput[0]=0;
         }
-        return e_WORD_CONTINUE;
     }
 
-
-	// Not recognized: Warn the player and continue    
-    PrintErrorMessage(gTextErrorDidNotUnderstand);      // "I do not understand, sorry"
-	PlaySound(ErrorPlop);
- 	return e_WORD_CONTINUE;
+    return e_WORD_CONTINUE;
 }
 
 

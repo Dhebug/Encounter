@@ -71,44 +71,35 @@ _EndMessagesAndPrompts
 // Error messages 
 _StartErrorMessages
 #ifdef LANGUAGE_FR
-_gTextErrorInvalidDirection .byt "Impossible d'aller par là",0
-_gTextErrorCantTakeNoSee    .byt "Je ne vois pas ça ici",0
-_gTextErrorAlreadyHaveItem  .byt "Vous avez déjà cet objet",0
-_gTextErrorNotAContainer    .byt "Ca n'est pas un contenant adequat",0
-_gTextErrorAlreadyFull      .byt "Désolé, c'est déjà plein",0
-_gTextErrorMissingContainer .byt "Vous n'avez pas ce contenant",0
-_gTextErrorDropNotHave      .byt "Impossible, vous ne l'avez pas",0
-_gTextErrorUnknownItem      .byt "Je ne connais pas cet objet",0
-_gTextErrorNeedMoreDetails  .byt "Pourriez-vous être plus précis ?",0
+_gTextErrorInvalidDirection .byt "Je ne peux pas aller par là",0
+_gTextErrorAlreadyHaveItem  .byt "Je l'ai déjà",0
+_gTextErrorNotAContainer    .byt "Ca ne marchera pas comme contenant",0
+_gTextErrorAlreadyFull      .byt "Hmm, c'est déjà plein",0
+_gTextErrorMissingContainer .byt "Je n'ai pas ce contenant",0
+_gTextErrorDropNotHave      .byt "Je ne peux lâcher que ce que j'ai",0
+_gTextErrorUnknownItem      .byt "Je ne sais pas ce que c'est",0
 _gTextErrorItemNotPresent   .byt "Cet objet n'est pas présent",0
-_gTextErrorInventoryFull    .byt "Je dois d'abord déposer quelque chose",0
-_gTextErrorDidNotUnderstand .byt "Je ne comprends pas: Essayez AIDE",0
+_gTextErrorInventoryFull    .byt "Faut d'abord poser quelque chose",0
 #elif defined(LANGUAGE_NO)
-_gTextErrorInvalidDirection .byt "Umulig å gå den veien",0
-_gTextErrorCantTakeNoSee    .byt "Du kan bare ta noe du ser",0
-_gTextErrorAlreadyHaveItem  .byt "Du har allerede denne gjenstanden",0
-_gTextErrorNotAContainer    .byt "Det er ikke en brukbar beholder",0
-_gTextErrorAlreadyFull      .byt "Beklager, det er allerede fullt",0
-_gTextErrorMissingContainer .byt "Du har ikke denne beholderen",0
-_gTextErrorDropNotHave      .byt "Du kan bare legge fra deg noe du har",0
-_gTextErrorUnknownItem      .byt "Jeg kjenner ikke denne gjenstanden",0
-_gTextErrorNeedMoreDetails  .byt "Kan du være mer spesifikk?",0
+_gTextErrorInvalidDirection .byt "Jeg kan ikke gå den veien",0
+_gTextErrorAlreadyHaveItem  .byt "Jeg har allerede det",0
+_gTextErrorNotAContainer    .byt "Det fungerer ikke som beholder",0
+_gTextErrorAlreadyFull      .byt "Hmm, det er allerede fullt",0
+_gTextErrorMissingContainer .byt "Jeg har ikke den beholderen",0
+_gTextErrorDropNotHave      .byt "Jeg kan bare slippe det jeg bærer",0
+_gTextErrorUnknownItem      .byt "Jeg vet ikke hva det er",0
 _gTextErrorItemNotPresent   .byt "Ser det ikke her",0
 _gTextErrorInventoryFull    .byt "Jeg må legge fra meg noe først",0
-_gTextErrorDidNotUnderstand .byt "Forstår ikke, beklager. Prøv HJELP.",0
 #else
-_gTextErrorInvalidDirection .byt "Impossible to move in that direction",0
-_gTextErrorCantTakeNoSee    .byt "You can only take something you see",0
-_gTextErrorAlreadyHaveItem  .byt "You already have this item",0
-_gTextErrorNotAContainer    .byt "This is not a usable container",0
-_gTextErrorAlreadyFull      .byt "Sorry, that's full already",0
-_gTextErrorMissingContainer .byt "You don't have this container",0
-_gTextErrorDropNotHave      .byt "You can only drop something you have",0
-_gTextErrorUnknownItem      .byt "I do not know what this item is",0
-_gTextErrorNeedMoreDetails  .byt "Could you be more precise please?",0
+_gTextErrorInvalidDirection .byt "I can't go that way",0
+_gTextErrorAlreadyHaveItem  .byt "I already have that",0
+_gTextErrorNotAContainer    .byt "That won't work as a container",0
+_gTextErrorAlreadyFull      .byt "Hmm, it's already full",0
+_gTextErrorMissingContainer .byt "I don't have that container",0
+_gTextErrorDropNotHave      .byt "I can only drop what I'm carrying",0
+_gTextErrorUnknownItem      .byt "I don't know what that is",0
 _gTextErrorItemNotPresent   .byt "Can't see it here",0
 _gTextErrorInventoryFull    .byt "I need to drop something first",0
-_gTextErrorDidNotUnderstand .byt "I do not understand, sorry. Try HELP.",0
 #endif
 _EndErrorMessages
 

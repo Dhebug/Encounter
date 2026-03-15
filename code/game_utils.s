@@ -1728,6 +1728,9 @@ wrong_direction
 
 
 // MARK:Take Item
+; Note: The input parser (ParseInputBuffer) and validator (ValidateInputReturn) guarantee that:
+; - gWordBuffer[1] is either e_WORD_COUNT_ (cancelled) or a valid item id (< e_ITEM_COUNT_)
+; - Matched items are present in the current scene or in the inventory
 _TakeItem
 .(
     ; Get itemId from gWordBuffer[1]
@@ -1737,29 +1740,8 @@ _TakeItem
     ; User cancelled the operation
     jmp _PrintSceneObjects
 
-keep_going    
+keep_going
     sta _gCurrentItem
-
-    ; if (itemId >= e_ITEM_COUNT_)
-    cmp #e_ITEM_COUNT_
-    bcc validate_item        ; It's an actual item (not a verb)
-
-    ; Check gWordCount <= 1
-    lda _gWordCount         ; Load gWordCount
-    cmp #2                  ; Compare with 2
-    bcs item_not_present
-
-need_more_details    
-    lda #<_gTextErrorNeedMoreDetails
-    ldx #>_gTextErrorNeedMoreDetails
-    jmp _PrintErrorMessageAsmAX
-
-item_not_present
-    lda #<_gTextErrorCantTakeNoSee
-    ldx #>_gTextErrorCantTakeNoSee
-    jmp _PrintErrorMessageAsmAX
-
-validate_item
     jsr _ByteStreamComputeItemPtr   ; Initializes _gStreamItemPtr from A (item id)
 
     ldy #2                          ; Location offset
