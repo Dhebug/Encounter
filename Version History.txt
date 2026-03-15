@@ -400,3 +400,4 @@
 - The "basement" has been renamed "cellar"
 - The mortar can now be inspected
 - The Tardis has now moved to a much more logical location
+- Applied Jasmin specific fixes found by Chema, Iss and Mininaller

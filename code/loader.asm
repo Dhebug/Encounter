@@ -199,6 +199,12 @@ _LoaderTemporaryStart
     cpx #0                          ; If we are on Jasmin, patch all the FDC related values
     beq end_jasmin_init
     
+    ; Important: Most (all?) Oric emulators actually don't properly emulate the Jasmin.
+    ; You can learn about the following changes in this forum thread https://forum.defence-force.org/viewtopic.php?t=2783
+    ; Among the findings:
+    ; - Jasmin hardware is extremely unreliable and subject to bus noise
+    ; - The ROM/Overlay switch was working in emulation but not on the real hardware
+    ; - The Jasmin FDC requires slower step-rates and delays compared to the Microdisc
     lda #<FDC_JASMIN_command_register
     sta 1+auto_fdc_command_1
     sta 1+auto_fdc_command_2
@@ -233,6 +239,16 @@ _LoaderTemporaryStart
     lda #FDC_JASMIN_Flag_DiscSide
     sta 1+auto_fdc_discside
     sta 1+auto_fdc_discside1
+
+    ; Jasmin needs longer delays after issuing FDC commands (Chema: values below 7 fail)
+    lda #17
+    sta 1+auto_tempo_read
+    sta 1+auto_tempo_write
+
+    ; FTDOS uses SEEK command $14 (no head load, verify, 6ms stepping)
+    ; instead of $1F (head load, verify, 30ms stepping)
+    lda #$14
+    sta 1+auto_fdc_seek
 
 end_jasmin_init	
     ldx #$ff	; Reset the stack pointer
@@ -272,7 +288,7 @@ end_jasmin_init
 
 ; -------------------------------------------------------------------------------
 ;                                   Resident section
-; ------------------------------------------------------------------------------- 
+; -------------------------------------------------------------------------------
 ;
 ; This section of the loader stays in memory at all time.
 ; It contains all the code for loading, saving, as well as memory areas used by the
@@ -371,10 +387,11 @@ retryseek
     PROTECT(FDC_data)
 auto_fdc_data_1	
     sta FDC_data                             ; Set the new track		
+auto_fdc_seek
     lda #CMD_Seek
     PROTECT(FDC_command_register)
 auto_fdc_command_1
-    sta FDC_command_register	
+    sta FDC_command_register
     jsr _WaitCompletion			; Wait for the completion of the command
 .(
     ; Chema: the same 16 cycle wait as in sector_2-microdisc. I am not sure if this
@@ -608,8 +625,9 @@ auto_fdc_command_2
     ; Write to Command Reg.	Read Busy Bit (bit 0)	24 µsec
     ; Write to Command Reg.	Read Status bits 1-7	32 µsec
     ; Write Register	Read Same Register	16 µsec
-    ldy #4	
-tempoloop 
+auto_tempo_read
+    ldy #4
+tempoloop
     dey
     bne tempoloop 	
     
@@ -725,6 +743,7 @@ auto_fdc_command_w
     ; Write to Command Reg.	Read Status bits 1-7	32 µsec
     ; The next loop is 23, plus some extra due to the beq / lda /tax /jmp (3+5+2+3=13)
     ; Total is 36... could do with 4 iterations... perhaps
+auto_tempo_write
     ldy #5	;2
 w_wait_completion
     dey	;2
