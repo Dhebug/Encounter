@@ -234,20 +234,20 @@ AddFile ..\build\files\loc_west_gallery.hir
 AddFile ..\build\files\loc_landing.hir
 AddFile ..\build\files\loc_outside_pit.hir
 AddFile ..\build\files\loc_study_room.hir
-AddFile ..\build\files\loc_cellar_window_darkened.hir
-AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
+AddFile ..\build\files\loc_cellar_window_inside_darkened.hir
+AddDefine LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_DARKENED {FileIndex}
 AddFile ..\build\files\loc_front_entrance.hir
 AddFile ..\build\files\loc_abandoned_car.hir
 AddDefine LOADER_PICTURE_LOCATIONS_END {FileIndex}
 
 AddFile ..\build\files\loc_dark_room_sunlight.hir
-AddDefine LOADER_PICTURE_CELLAR_BRIGHT {FileIndex}
+AddDefine LOADER_PICTURE_LOCATIONS_CELLAR_BRIGHT {FileIndex}
 
-AddFile ..\build\files\loc_cellar_window_cleared.hir
-AddDefine LOADER_PICTURE_CELLAR_WINDOW_CLEARED {FileIndex}
+AddFile ..\build\files\loc_cellar_window_inside_cleared.hir
+AddDefine LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_CLEARED {FileIndex}
 
 AddFile ..\build\files\loc_steel_door_with_goggles.hir
-AddDefine LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES {FileIndex}
+AddDefine LOADER_PICTURE_LOCATIONS_STEEL_DOOR_WITH_GOGGLES {FileIndex}
 
 #ifdef LANGUAGE_FR
 AddFile ..\build\files\view_newspaper_fr.hir
@@ -321,11 +321,11 @@ AddDefine LOADER_PICTURE_DRAWER_GUN_CABINET {FileIndex}
 AddFile ..\build\files\view_shooting_dart.hir
 AddDefine LOADER_PICTURE_SHOOTING_DART {FileIndex}
 
-AddFile ..\build\files\view_cellar_window.hir
-AddDefine LOADER_PICTURE_CELLAR_WINDOW {FileIndex}
+AddFile ..\build\files\view_cellar_window_outside_cleared.hir
+AddDefine LOADER_PICTURE_CELLAR_WINDOW_OUTSIDE_CLEARED {FileIndex}
 
-AddFile ..\build\files\view_cellar_window_darkened.hir
-AddDefine LOADER_PICTURE_CELLAR_WINDOW_DARK {FileIndex}
+AddFile ..\build\files\view_cellar_window_outside_darkened.hir
+AddDefine LOADER_PICTURE_CELLAR_WINDOW_OUTSIDE_DARKENED {FileIndex}
 
 AddFile ..\build\files\view_alarm_triggered.hir
 AddDefine LOADER_PICTURE_ALARM_TRIGGERED {FileIndex}

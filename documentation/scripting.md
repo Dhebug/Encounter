@@ -1120,8 +1120,8 @@ Two bytes command containing the COMMAND_SET_SCENE_IMAGE opcode, followed by id 
 In Encounter this is used to show a different image when something has changed in the scene, like between a dark room and the same room with the curtains open.
 
 ```c
-  // Show the view with the googles on
-  SET_SCENE_IMAGE(LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES)                
+  // Show the view with the goggles on
+  SET_SCENE_IMAGE(LOADER_PICTURE_LOCATIONS_STEEL_DOOR_WITH_GOGGLES)                
 ```
 
 ---

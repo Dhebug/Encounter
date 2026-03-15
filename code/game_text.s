@@ -1776,7 +1776,7 @@ _gDescriptionDarkerCellar
     SET_ITEM_LOCATION(e_ITEM_CellarWindow, e_LOC_DARKCELLARROOM)           ; The window is visible
     .(
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
-        SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_BRIGHT)
+        SET_SCENE_IMAGE(LOADER_PICTURE_LOCATIONS_CELLAR_BRIGHT)
         SET_ITEM_LOCATION(e_ITEM_AlarmPanel,e_LOC_DARKCELLARROOM)    ; Make the alarm panel now visible
 
         ; Is the alarm panel open?
@@ -1935,9 +1935,9 @@ end_ladder_sync
 
     ; Inspecting the window in the cellar
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),bright)
-        SET_SCENE_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
+        SET_SCENE_IMAGE(LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_CLEARED)
     ELSE(bright,dark)
-        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
+        DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_DARKENED)
     ENDIF(dark)
 
     ; Is the ladder in place?
@@ -2307,7 +2307,7 @@ _gDescriptionPanicRoomDoor
     ENDIF(acid)
 
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED),suit)    ; Is the protection suit equiped?
-        SET_SCENE_IMAGE(LOADER_PICTURE_STEEL_DOOR_WITH_GOOGLES)                ; Then we show the view with the googles on
+        SET_SCENE_IMAGE(LOADER_PICTURE_LOCATIONS_STEEL_DOOR_WITH_GOGGLES)                ; Then we show the view with the goggles on
         WAIT(DELAY_FIRST_BUBBLE)
         WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -4044,9 +4044,9 @@ _InspectCellarWindow
     .(
         ; Inspecting the window in the cellar
         IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_CellarWindow,ITEM_FLAG_CLOSED),else)
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_CLEARED)
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_CLEARED)
         ELSE(else,open)
-            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_CELLAR_WINDOW_DARK)
+            DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_CELLAR_WINDOW_INSIDE_DARKENED)
         ENDIF(open)
         ; Is the ladder in place?
         JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_DARKCELLARROOM))  
@@ -4067,7 +4067,7 @@ no_ladder
     .(
         ; Inspecting the window in the garden (or other places)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_GONE_FOREVER),else)
-            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW)
+            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_OUTSIDE_CLEARED)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Je peux voir la cave")
 #elif defined(LANGUAGE_NO)
@@ -4076,7 +4076,7 @@ no_ladder
             INFO_MESSAGE("I can see the cellar")
 #endif
         ELSE(else,open)
-            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_DARK)
+            DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_OUTSIDE_DARKENED)
             GOSUB(_SubBlackTapeOnWindow)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible à décoller d'ici.")
@@ -5273,7 +5273,7 @@ _OpenCellarWindow
         INFO_MESSAGE("The frame is stuck...")                                                   
 #endif        
     ELSE(cellar_on_ladder,garden)                                                              ; ...or on the vegetable garden side of the window?
-        DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_DARK)
+        DISPLAY_IMAGE(LOADER_PICTURE_CELLAR_WINDOW_OUTSIDE_DARKENED)
 #ifdef LANGUAGE_FR
         INFO_MESSAGE("Elle est fermée de l'intérieur...")
 #elif defined(LANGUAGE_NO)
