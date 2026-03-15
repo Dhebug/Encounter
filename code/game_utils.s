@@ -886,6 +886,12 @@ change_to_a
     rts
 not_a
 
+    cmp #"ô"
+    bne not_o
+    lda #"o"
+    rts
+not_o
+
 #elif defined(LANGUAGE_NO)
     cmp #"æ"
     beq change_to_a
