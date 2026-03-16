@@ -2458,6 +2458,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_HoleInDoor           ,_CombineRopeHole)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_HoleInDoor     ,_CombineQueueHole)
     COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_Rope           ,_CombineCueWithRope)
+    COMBINE_MAPPING(e_ITEM_SnookerCue,e_ITEM_PanicRoomWindow,_CombineQueueHole)
     COMBINE_MAPPING(e_ITEM_PanicRoomWindow,e_ITEM_Rope      ,_CombineWindowWithRope)
     COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
@@ -4736,13 +4737,16 @@ _ShowGirlInRoomWithBindings
 
     WAIT(50)
 
+    DO_ONCE(victim_speech)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("La victime est attachée...")
+        INFO_MESSAGE("La victime est attachée...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Offeret er bundet...")
+        INFO_MESSAGE("Offeret er bundet...")
 #else
-    INFO_MESSAGE("The victim is restrained...")
-#endif    
+        INFO_MESSAGE("The victim is restrained...")
+#endif
+    ENDDO(victim_speech)
+    
     IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_HOSTAGE_ROOM),giving_knife)
         ; We don't show the MMHFF if we are passing the knife because that causes some redraw issues
         BLIT_BLOCK_STRIDE(LOADER_SPRITE_HOLE_WITH_GIRL_ATTACHED,15,44,17)    ; Draw the patch with the MMMHF!! speech bubble
@@ -4752,13 +4756,15 @@ _ShowGirlInRoomWithBindings
         WAIT(50)
     ENDIF(giving_knife)
 
+    DO_ONCE(victim_reassure)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...elle a besoin de notre aide !")
+        INFO_MESSAGE("Tenez bon, je vais vous sortir de là")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("...hun trenger vår hjelp!")
+        INFO_MESSAGE("Hold ut, jeg skal få deg ut herfra!")
 #else
-    INFO_MESSAGE("...she needs our help!")
-#endif    
+        INFO_MESSAGE("Hang on, I'll get you out of here!")
+#endif
+    ENDDO(victim_reassure)    
     RETURN
 .)
 
@@ -7439,6 +7445,7 @@ _gImmovableItemMappingsArray
     VALUE_MAPPING(e_ITEM_SecurityDoor      , _ImmovableAttached)
     VALUE_MAPPING(e_ITEM_UnitedKingdomMap  , _ImmovableAttached)
     VALUE_MAPPING(e_ITEM_AlarmIndicator    , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_Rope              , _ImmovableAttached)
     VALUE_MAPPING(e_ITEM_Drawer            , _ImmovableAttached)
     VALUE_MAPPING(e_ITEM_CarBoot           , _ImmovablePartOfCar)
     VALUE_MAPPING(e_ITEM_CarDoor           , _ImmovablePartOfCar)
