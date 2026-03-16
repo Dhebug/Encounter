@@ -3164,6 +3164,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_CarBoot            , _InspectCarBoot)
     VALUE_MAPPING(e_ITEM_CarDoor            , _InspectCarDoor)
     VALUE_MAPPING(e_ITEM_CarTank            , _InspectCarTank)
+    VALUE_MAPPING(e_ITEM_Petrol             , _InspectPetrol)
     VALUE_MAPPING(e_ITEM_Dog                , _InspectDog)
     VALUE_MAPPING(e_ITEM_Graffiti           , _InspectGraffiti)
     VALUE_MAPPING(e_ITEM_Church             , _InspectChurch)
@@ -5799,6 +5800,18 @@ _InspectCarTank
     ENDIF(tank_open)
     END_AND_PARTIAL_REFRESH
 .)
+
+
+_InspectPetrol
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Ça sent fort. Encore utilisable.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Lukter sterkt. Fortsatt brukbar.")
+#else
+    INFO_MESSAGE("Smells potent. Still usable.")
+#endif
+    WAIT_KEYPRESS
+    END_AND_PARTIAL_REFRESH
 
 
 _UseBucket
